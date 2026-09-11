@@ -13,8 +13,14 @@ boss, equipamentos, cartas, distribuição de atributos ou save.
 - Escopo: [docs/MVP.md](docs/MVP.md)
 - Contratos e fórmulas: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 - Handoff do Marco 1: [docs/HANDOFF_SOL.md](docs/HANDOFF_SOL.md)
+- Fluxo de revisão e playtest: [docs/WORKFLOW.md](docs/WORKFLOW.md)
+- Aprovação técnica e roteiro de teste: [docs/REVIEW_M1.md](docs/REVIEW_M1.md)
 
 ## Jogar
+
+O diretório habitual permanece em `codex/playtest`: basta executar F5, sem trocar
+branches no Godot. A arena está aprovada tecnicamente; o merge em `master` depende
+do seu aceite após jogar. Se o editor detectar alterações externas, aceite o reload.
 
 Versão fixada: **Godot 4.7.2 standard**, GDScript, renderer Compatibility.
 Importe `project.godot` no editor e pressione F6 na cena principal ou F5.
