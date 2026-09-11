@@ -8,6 +8,21 @@ Título: RagRPG | Sol — Arena e combate do marco 1
 Modelo: gpt-5.6-sol, raciocínio high.
 Executado em tarefa do projeto RagRPG, em worktree isolada, sobre a fundação commitada.
 
+## Revisão técnica incorporada
+
+- UI passou a ter raiz `Control` fullscreen e offsets aplicados após parenting;
+  layout é testado em 1280×720 e 1920×1080, preservando o título das escolhas.
+- Navegação usa grafo A* com arestas diagonais somente quando o segmento completo é
+  caminhável, e atores revalidam cada passo para não atravessar quinas/obstáculos.
+- Recalcular stats preserva simultaneamente HP e mana faltantes; dano letal limita em
+  `float`, incluindo HP fracionário, sem duplicar evento de morte.
+- Flechas seguem direção fixa, podem ser esquivadas, colidem com geometria e expiram.
+- Fluxo integrado cobre vitória e morte com reload real, pausa efetiva, guards de
+  avanço e reset de mana, cooldowns e stacks.
+
+Esses ajustes esclarecem os contratos de navegação e projéteis em
+`docs/ARCHITECTURE.md`; fórmulas de stats e dano permanecem inalteradas.
+
 ## Prompt preparado
 
 Implemente somente o núcleo jogável do marco 1 de RagRPG. Leia AGENTS.md,

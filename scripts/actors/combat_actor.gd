@@ -49,7 +49,7 @@ func _draw() -> void:
 
 func _on_damage_applied(result: Dictionary) -> void:
 	_flash_time = 0.10
-	damage_number.emit(self, int(result["actual_damage"]), bool(result["critical"]))
+	damage_number.emit(self, ceili(float(result["actual_damage"])), bool(result["critical"]))
 	queue_redraw()
 
 func _on_health_died(_actor_id: int) -> void:

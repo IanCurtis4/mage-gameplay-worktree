@@ -25,9 +25,16 @@ var skill_label: Label
 var status_label: Label
 var augment_button: Button
 var next_button: Button
+var ui_root: Control
+var help_panel: PanelContainer
+var bottom_controls: VBoxContainer
 var augment_overlay: Control
 var choice_column: VBoxContainer
+var choice_buttons: VBoxContainer
+var choice_title: Label
+var augment_panel: PanelContainer
 var result_overlay: Control
+var result_panel: PanelContainer
 var result_title: Label
 var result_body: Label
 
@@ -135,8 +142,7 @@ func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActo
 	if source == null:
 		projectile.queue_free()
 		return
-	projectile.configure(request, target_actor)
-	projectile.global_position = source.global_position + Vector2(0, -18)
+	projectile.configure(request, target_actor, source.global_position + Vector2(0, -18), navigation)
 	projectile.hit.connect(_on_attack_requested)
 	add_child(projectile)
 	projectile.add_to_group("enemy_projectiles")
@@ -170,7 +176,7 @@ func _open_augment_menu() -> void:
 	var offer := run_state.build_offer(encounter_active, rng)
 	if offer.is_empty():
 		return
-	for child: Node in choice_column.get_children():
+	for child: Node in choice_buttons.get_children():
 		child.queue_free()
 	for definition: AugmentDefinition in offer:
 		var button := Button.new()
@@ -178,7 +184,7 @@ func _open_augment_menu() -> void:
 		button.text = "%s\n%s\n%s" % [definition.display_name, definition.description, run_state.describe_progress(definition)]
 		button.add_theme_font_size_override("font_size", 17)
 		button.pressed.connect(_confirm_augment.bind(definition.id))
-		choice_column.add_child(button)
+		choice_buttons.add_child(button)
 	augment_overlay.visible = true
 	get_tree().paused = true
 
@@ -196,7 +202,7 @@ func _confirm_augment(augment_id: StringName) -> void:
 		status_label.text = "Augment aplicado — inicie o próximo encontro"
 
 func _start_next_encounter() -> void:
-	if encounter_active or run_state.pending_choices > 0 or encounter_index >= 2:
+	if encounter_active or reward != null or run_state.pending_choices > 0 or encounter_index >= 2:
 		return
 	_spawn_encounter(encounter_index + 1)
 
@@ -257,10 +263,18 @@ func _build_ui() -> void:
 	var canvas := CanvasLayer.new()
 	canvas.layer = 50
 	add_child(canvas)
+	ui_root = Control.new()
+	canvas.add_child(ui_root)
+	ui_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	ui_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
 	var hud := PanelContainer.new()
-	hud.position = Vector2(24, 20)
-	hud.size = Vector2(520, 126)
-	canvas.add_child(hud)
+	ui_root.add_child(hud)
+	hud.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	hud.offset_left = 24.0
+	hud.offset_top = 20.0
+	hud.offset_right = 544.0
+	hud.offset_bottom = 146.0
 	var hud_margin := MarginContainer.new()
 	for side: String in ["left", "top", "right", "bottom"]:
 		hud_margin.add_theme_constant_override("margin_" + side, 14)
@@ -274,27 +288,31 @@ func _build_ui() -> void:
 	hud_column.add_child(mana_label)
 	hud_column.add_child(skill_label)
 
-	var help := PanelContainer.new()
-	help.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	help.position = Vector2(-440, 20)
-	help.size = Vector2(416, 150)
-	canvas.add_child(help)
+	help_panel = PanelContainer.new()
+	ui_root.add_child(help_panel)
+	help_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	help_panel.offset_left = -440.0
+	help_panel.offset_top = 20.0
+	help_panel.offset_right = -24.0
+	help_panel.offset_bottom = 170.0
 	var help_label := _make_label("CLIQUE no chão: mover e cancelar perseguição\nCLIQUE no inimigo: perseguir e autoatacar\nQ: corte no cursor   W: investida no cursor\nE: abrir augment   ESPAÇO: próximo encontro", 16, Color("d7ddea"))
 	help_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	help.add_child(help_label)
+	help_panel.add_child(help_label)
 
-	var bottom := VBoxContainer.new()
-	bottom.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
-	bottom.position = Vector2(-310, -116)
-	bottom.size = Vector2(620, 96)
-	bottom.alignment = BoxContainer.ALIGNMENT_CENTER
-	canvas.add_child(bottom)
+	bottom_controls = VBoxContainer.new()
+	ui_root.add_child(bottom_controls)
+	bottom_controls.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	bottom_controls.offset_left = -310.0
+	bottom_controls.offset_top = -116.0
+	bottom_controls.offset_right = 310.0
+	bottom_controls.offset_bottom = -20.0
+	bottom_controls.alignment = BoxContainer.ALIGNMENT_CENTER
 	status_label = _make_label("", 20, Color.WHITE)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	bottom.add_child(status_label)
+	bottom_controls.add_child(status_label)
 	var buttons := HBoxContainer.new()
 	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
-	bottom.add_child(buttons)
+	bottom_controls.add_child(buttons)
 	augment_button = Button.new()
 	augment_button.custom_minimum_size = Vector2(280, 44)
 	augment_button.pressed.connect(_open_augment_menu)
@@ -306,12 +324,14 @@ func _build_ui() -> void:
 	next_button.visible = false
 	buttons.add_child(next_button)
 
-	augment_overlay = _make_overlay(canvas)
-	var augment_panel := PanelContainer.new()
-	augment_panel.set_anchors_preset(Control.PRESET_CENTER)
-	augment_panel.position = Vector2(-300, -245)
-	augment_panel.size = Vector2(600, 490)
+	augment_overlay = _make_overlay(ui_root)
+	augment_panel = PanelContainer.new()
 	augment_overlay.add_child(augment_panel)
+	augment_panel.set_anchors_preset(Control.PRESET_CENTER)
+	augment_panel.offset_left = -300.0
+	augment_panel.offset_top = -245.0
+	augment_panel.offset_right = 300.0
+	augment_panel.offset_bottom = 245.0
 	var augment_margin := MarginContainer.new()
 	for side: String in ["left", "top", "right", "bottom"]:
 		augment_margin.add_theme_constant_override("margin_" + side, 24)
@@ -319,17 +339,22 @@ func _build_ui() -> void:
 	choice_column = VBoxContainer.new()
 	choice_column.add_theme_constant_override("separation", 14)
 	augment_margin.add_child(choice_column)
-	var choice_title := _make_label("Escolha um augment", 30, Color("e9c67b"))
+	choice_title = _make_label("Escolha um augment", 30, Color("e9c67b"))
 	choice_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	choice_column.add_child(choice_title)
+	choice_buttons = VBoxContainer.new()
+	choice_buttons.add_theme_constant_override("separation", 14)
+	choice_column.add_child(choice_buttons)
 	augment_overlay.visible = false
 
-	result_overlay = _make_overlay(canvas)
-	var result_panel := PanelContainer.new()
-	result_panel.set_anchors_preset(Control.PRESET_CENTER)
-	result_panel.position = Vector2(-280, -150)
-	result_panel.size = Vector2(560, 300)
+	result_overlay = _make_overlay(ui_root)
+	result_panel = PanelContainer.new()
 	result_overlay.add_child(result_panel)
+	result_panel.set_anchors_preset(Control.PRESET_CENTER)
+	result_panel.offset_left = -280.0
+	result_panel.offset_top = -150.0
+	result_panel.offset_right = 280.0
+	result_panel.offset_bottom = 150.0
 	var result_column := VBoxContainer.new()
 	result_column.alignment = BoxContainer.ALIGNMENT_CENTER
 	result_column.add_theme_constant_override("separation", 24)
@@ -348,13 +373,13 @@ func _build_ui() -> void:
 	result_column.add_child(restart)
 	result_overlay.visible = false
 
-func _make_overlay(canvas: CanvasLayer) -> Control:
+func _make_overlay(parent: Control) -> Control:
 	var overlay := ColorRect.new()
-	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	overlay.color = Color(0.02, 0.025, 0.04, 0.82)
 	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	overlay.process_mode = Node.PROCESS_MODE_ALWAYS
-	canvas.add_child(overlay)
+	parent.add_child(overlay)
+	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	return overlay
 
 func _make_label(text_value: String, size: int, color: Color) -> Label:

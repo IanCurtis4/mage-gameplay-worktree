@@ -34,11 +34,17 @@ func configure(nav: ArenaNavigation, run_state: RunState) -> void:
 func apply_run_modifiers(run_state: RunState) -> void:
 	var modifiers := run_state.get_modifiers()
 	var derived := RpgStats.derive(BASE_ATTRIBUTES, modifiers["flat"], _with_passive(modifiers["increased"]))
+	_apply_derived_stats(derived)
+	resources_changed.emit()
+	queue_redraw()
+
+func _apply_derived_stats(derived: Dictionary) -> void:
+	var missing_mana := maxf(0.0, max_mana - mana)
 	stats = derived
 	health.set_max_preserving_missing(float(stats["max_hp"]))
 	health.defense = float(stats["defense"])
-	resources_changed.emit()
-	queue_redraw()
+	max_mana = maxf(0.0, float(stats["max_mana"]))
+	mana = clampf(max_mana - missing_mana, 0.0, max_mana)
 
 func move_to(point: Vector2) -> void:
 	target = null
@@ -141,7 +147,8 @@ func _move_along_path(delta: float) -> void:
 	var direction := global_position.direction_to(point)
 	if not direction.is_zero_approx():
 		_last_facing = direction
-	global_position = global_position.move_toward(point, float(stats["move_speed"]) * delta)
+	var desired := global_position.move_toward(point, float(stats["move_speed"]) * delta)
+	global_position = navigation.move_until_blocked(global_position, desired)
 	if global_position.distance_to(point) < 5.0:
 		_path_index += 1
 

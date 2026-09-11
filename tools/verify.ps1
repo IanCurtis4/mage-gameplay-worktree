@@ -2,6 +2,9 @@ param([Parameter(Mandatory = $true)][string]$GodotPath)
 $ErrorActionPreference = 'Stop'
 $enginePath = (Resolve-Path -LiteralPath $GodotPath).Path
 $projectPath = Split-Path -Parent $PSScriptRoot
+$verificationPath = Join-Path $projectPath '.godot/verification'
+[void](New-Item -ItemType Directory -Force -Path $verificationPath)
+$logPath = Join-Path $verificationPath 'godot.log'
 
 function Invoke-GodotCheck([string[]]$EngineArguments) {
     $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
@@ -10,7 +13,7 @@ function Invoke-GodotCheck([string[]]$EngineArguments) {
     $startInfo.CreateNoWindow = $true
     $startInfo.RedirectStandardOutput = $true
     $startInfo.RedirectStandardError = $true
-    foreach ($argument in $EngineArguments) { $startInfo.ArgumentList.Add($argument) }
+    foreach ($argument in @('--log-file', $logPath) + $EngineArguments) { $startInfo.ArgumentList.Add($argument) }
     $process = [System.Diagnostics.Process]::new()
     $process.StartInfo = $startInfo
     [void]$process.Start()
@@ -33,5 +36,6 @@ Invoke-GodotCheck @('--headless', '--path', $projectPath, '--editor', '--import'
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/foundation_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/milestone_one_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/arena_flow_test.gd')
+Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/ui_layout_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--quit-after', '5')
 Write-Host 'All foundation and milestone-one checks passed.'

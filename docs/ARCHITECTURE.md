@@ -15,7 +15,11 @@ Não criar EventBus global genérico: usar sinais locais nos donos do estado.
 Mundo e colisões usam coordenadas 2D de tela, chão em losangos com proporção 2:1.
 Pés são a origem de atores/obstáculos e a referência de Y-sort. Direções não devem
 ser projetadas duas vezes. Navegação deve usar regiões caminháveis considerando o
-raio do ator; mouse converte para coordenadas globais via câmera.
+raio do ator; mouse converte para coordenadas globais via câmera. Cada aresta do
+caminho e cada passo efetivamente aplicado revalidam o segmento completo contra a
+geometria inflada; pontos finais válidos precisam ser alcançados sem cortar quinas.
+Cliques fora da região ou dentro de obstáculo resolvem para um ponto caminhável,
+sem mover o ator através de área bloqueada.
 
 ## Atributos
 
@@ -68,6 +72,11 @@ vida/eliminação. Eventos não são responsáveis por subtrair HP novamente.
 Filhos de efeitos (DoT/explosão etc.) usam is_secondary=true; o runtime respeita
 can_trigger_effects antes de acionar qualquer efeito secundário. Danos básicos e
 skills diretas podem disparar efeitos. Não usar recursão ilimitada de sinais.
+
+Projéteis direcionais de inimigos fixam a direção quando emitidos: não perseguem o
+alvo depois do disparo. O runtime testa a passagem contínua pelo alvo e pela geometria,
+destrói o projétil ao atingir obstáculo e limita sua vida por distância. Assim, mover-se
+para fora da trajetória é uma esquiva válida e obstáculos oferecem cobertura.
 
 ## Augments
 

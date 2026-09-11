@@ -5,7 +5,8 @@ MVP de RPG de ação 2D isométrico em Godot, para Windows offline.
 ## Estado atual
 
 Arena técnica jogável do Marco 1 sobre a fundação aprovada. Inclui Espadachim,
-navegação por clique ao redor de obstáculos, perseguidor, arqueiro, dois encontros,
+navegação por clique com segmentos seguros ao redor de obstáculos, perseguidor,
+arqueiro com flechas esquiváveis/bloqueáveis, dois encontros,
 três augments gerais, HUD, morte, conclusão e reinício. Ainda não há Mago, fases,
 boss, equipamentos, cartas, distribuição de atributos ou save.
 
@@ -50,10 +51,11 @@ original. A engine e os caches não são copiados pelo Git.
 Não há export templates nem executável distribuível do jogo nesta etapa.
 
 Validação automatizada: importação headless, 11 verificações da fundação,
-23 verificações do Marco 1, 9 verificações do fluxo e smoke da cena principal
-em Godot 4.7.2.
-Sensação, legibilidade e desempenho ainda exigem playtest do usuário; não houve
-medição de FPS nesta entrega.
+37 verificações do Marco 1, 24 verificações do fluxo, 12 verificações de layout
+em 1280×720/1920×1080 e smoke da cena principal em Godot 4.7.2. Logs ficam isolados
+em `.godot/verification/`. Capturas renderizadas confirmaram arena, HUD e menu de
+augments em 1280×720; sensação e desempenho ainda exigem playtest do usuário e não
+houve medição de FPS nesta entrega.
 
 ## Créditos
 

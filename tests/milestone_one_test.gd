@@ -7,6 +7,8 @@ func _initialize() -> void:
 	_test_health_application()
 	_test_augment_flow()
 	_test_navigation()
+	_test_resource_recalculation()
+	_test_projectiles()
 	print("Marco 1: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
 	quit(0 if failures == 0 else 1)
 
@@ -29,6 +31,11 @@ func _test_health_application() -> void:
 	health.current_hp = 60.0
 	health.set_max_preserving_missing(150.0)
 	_check(health.current_hp == 110.0, "maximum HP changes preserve missing HP")
+	health.reset(10.0, 0.0)
+	health.current_hp = 0.4
+	var fractional := health.apply(request, 0.0, 0.0)
+	_check(is_equal_approx(fractional["actual_damage"], 0.4) and fractional["killed"], "fractional remaining HP cannot make a target immortal")
+	_check(death_count[0] == 2, "fractional lethal damage emits one new death after reset")
 
 func _test_augment_flow() -> void:
 	var rng := RandomNumberGenerator.new()
@@ -86,12 +93,92 @@ func _test_navigation() -> void:
 	_check(not navigation.is_walkable(Vector2(110, 100)), "navigation inflates obstacles by actor radius")
 	var path := navigation.get_path(Vector2(48, 48), Vector2(272, 192))
 	_check(path.size() > 2, "navigation produces a route around an obstacle")
-	var clear := true
-	for point: Vector2 in path:
-		clear = clear and navigation.is_walkable(point)
-	_check(clear, "every path point lies in a walkable region")
+	_check(_path_is_densely_clear(navigation, Vector2(48, 48), path), "every path segment clears inflated geometry")
+	var corner_path := navigation.get_path(Vector2(48, 48), Vector2(224, 176))
+	_check(not corner_path.is_empty() and _path_is_densely_clear(navigation, Vector2(48, 48), corner_path), "route near obstacle corner does not cut diagonally")
+	var inside_path := navigation.get_path(Vector2(48, 48), obstacle.get_center())
+	_check(not inside_path.is_empty() and _path_is_densely_clear(navigation, Vector2(48, 48), inside_path) and navigation.is_walkable(inside_path[-1]), "click inside obstacle resolves to reachable safe point")
+	var outside_path := navigation.get_path(Vector2(48, 48), Vector2(900, 900))
+	_check(not outside_path.is_empty() and _path_is_densely_clear(navigation, Vector2(48, 48), outside_path) and navigation.is_walkable(outside_path[-1]), "click outside arena resolves inside walkable bounds")
+	var reproduced_navigation := ArenaNavigation.new()
+	reproduced_navigation.configure(RunController.ARENA_BOUNDS, RunController.ARENA_OBSTACLES, 22.0)
+	_check(not reproduced_navigation.is_segment_walkable(Vector2(992, 544), Vector2(978.6676, 557.6087)), "reproduced corner-cut segment is rejected")
+	var reproduced_target := Vector2(978.6676, 557.6087)
+	var reproduced_path := reproduced_navigation.get_path(Vector2(900, 500), reproduced_target)
+	_check(not reproduced_path.is_empty() and reproduced_path[-1].is_equal_approx(reproduced_target) and _path_is_densely_clear(reproduced_navigation, Vector2(900, 500), reproduced_path), "valid target near reproduced corner is reached without crossing obstacle")
 	var dash_end := navigation.move_until_blocked(Vector2(48, 100), Vector2(280, 100))
 	_check(dash_end.x < obstacle.position.x - 15.0, "dash stops before inflated obstacle")
+	_check(navigation.is_segment_walkable(Vector2(48, 100), dash_end), "clamped dash segment remains fully walkable")
+
+func _test_resource_recalculation() -> void:
+	var navigation := ArenaNavigation.new()
+	navigation.configure(Rect2(0, 0, 400, 300), [], 20.0)
+	var player := PlayerActor.new()
+	player.configure(navigation, RunState.new())
+	root.add_child(player)
+	player.health.current_hp = 140.0
+	player.mana = 30.0
+	var derived: Dictionary = player.stats.duplicate(true)
+	derived["max_hp"] = 220.0
+	derived["max_mana"] = 70.0
+	player._apply_derived_stats(derived)
+	_check(player.health.current_hp == 180.0, "player recalculation preserves missing HP")
+	_check(player.mana == 50.0 and player.max_mana == 70.0, "player recalculation preserves missing mana")
+	player.queue_free()
+
+func _test_projectiles() -> void:
+	var open_navigation := ArenaNavigation.new()
+	open_navigation.configure(Rect2(0, 0, 760, 320), [], 4.0)
+	var target := CombatActor.new()
+	target.setup("Alvo", Color.WHITE, RpgStats.derive({"vit": 1}))
+	target.global_position = Vector2(250, 118)
+	root.add_child(target)
+	var request := DamageRequest.new()
+	request.target_id = target.get_instance_id()
+	request.base_damage = 10.0
+	var hit_count := [0]
+	var hit_projectile := ArrowProjectile.new()
+	hit_projectile.configure(request, target, Vector2(40, 100), open_navigation)
+	hit_projectile.hit.connect(func(_request: DamageRequest, _target: CombatActor) -> void: hit_count[0] += 1)
+	root.add_child(hit_projectile)
+	hit_projectile._process(0.5)
+	_check(hit_count[0] == 1 and hit_projectile.is_queued_for_deletion(), "fixed projectile hits a target crossing its segment")
+
+	var dodge_projectile := ArrowProjectile.new()
+	target.global_position = Vector2(250, 118)
+	dodge_projectile.configure(request, target, Vector2(40, 100), open_navigation)
+	dodge_projectile.hit.connect(func(_request: DamageRequest, _target: CombatActor) -> void: hit_count[0] += 1)
+	root.add_child(dodge_projectile)
+	var fired_direction := dodge_projectile.direction
+	target.global_position = Vector2(250, 250)
+	dodge_projectile._process(0.5)
+	_check(hit_count[0] == 1 and dodge_projectile.direction == fired_direction, "moving target can dodge and projectile does not home")
+	dodge_projectile._process(2.0)
+	_check(dodge_projectile.is_queued_for_deletion(), "missed projectile expires at arena geometry or range")
+
+	var blocked_navigation := ArenaNavigation.new()
+	blocked_navigation.configure(Rect2(0, 0, 420, 260), [Rect2(120, 60, 80, 100)], 4.0)
+	target.global_position = Vector2(300, 118)
+	var blocked_projectile := ArrowProjectile.new()
+	blocked_projectile.configure(request, target, Vector2(40, 100), blocked_navigation)
+	blocked_projectile.hit.connect(func(_request: DamageRequest, _target: CombatActor) -> void: hit_count[0] += 1)
+	root.add_child(blocked_projectile)
+	blocked_projectile._process(0.5)
+	_check(hit_count[0] == 1 and blocked_projectile.is_queued_for_deletion(), "obstacle blocks projectile before target")
+	target.queue_free()
+
+func _path_is_densely_clear(navigation: ArenaNavigation, start: Vector2, path: PackedVector2Array) -> bool:
+	var previous := start
+	for point: Vector2 in path:
+		if not navigation.is_segment_walkable(previous, point):
+			return false
+		var distance := previous.distance_to(point)
+		var samples := maxi(1, ceili(distance / 2.0))
+		for sample: int in range(samples + 1):
+			if not navigation.is_walkable(previous.lerp(point, float(sample) / float(samples))):
+				return false
+		previous = point
+	return true
 
 func _check(condition: bool, label: String) -> void:
 	checks += 1

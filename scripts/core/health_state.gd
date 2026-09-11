@@ -25,8 +25,8 @@ func apply(request: DamageRequest, hit_roll: float, crit_roll: float) -> Diction
 		return {}
 	var result := CombatMath.resolve(request, defense, hit_roll, crit_roll)
 	var previous_hp := current_hp
-	var actual_damage := mini(int(round(previous_hp)), int(result["damage"]))
-	current_hp = maxf(0.0, current_hp - float(actual_damage))
+	var actual_damage := minf(previous_hp, float(result["damage"]))
+	current_hp = maxf(0.0, current_hp - actual_damage)
 	var killed := previous_hp > 0.0 and current_hp <= 0.0
 	result["actual_damage"] = actual_damage
 	result["killed"] = killed

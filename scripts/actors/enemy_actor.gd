@@ -72,7 +72,8 @@ func _move_along_path(delta: float) -> void:
 		_path_index += 1
 	if _path_index >= _path.size():
 		return
-	global_position = global_position.move_toward(_path[_path_index], float(stats["move_speed"]) * delta)
+	var desired := global_position.move_toward(_path[_path_index], float(stats["move_speed"]) * delta)
+	global_position = navigation.move_until_blocked(global_position, desired)
 
 func _draw() -> void:
 	super._draw()
