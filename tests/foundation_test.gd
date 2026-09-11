@@ -1,0 +1,39 @@
+extends SceneTree
+
+var failures: int = 0
+
+func _initialize() -> void:
+	var base := RpgStats.derive({"str": 5, "vit": 5})
+	_check(is_equal_approx(base["max_hp"], 150.0), "VIT changes max HP")
+	var equipped := RpgStats.derive({"str": 5}, {"physical_attack": 10.0}, {"physical_attack": 0.5})
+	_check(is_equal_approx(equipped["physical_attack"], 45.0), "flat bonuses precede additive percentages")
+	var capped := RpgStats.derive({"agi": 10000, "dex": 10000, "luk": 10000})
+	_check(capped["crit_chance"] == 0.75 and capped["cast_multiplier"] == 0.25 and capped["attacks_per_second"] == 4.0, "extreme builds respect caps")
+	var request := DamageRequest.new()
+	request.base_damage = 100.0
+	request.crit_chance = 0.5
+	var hit := CombatMath.resolve(request, 100.0, 0.0, 0.9)
+	_check(hit["damage"] == 50, "defense mitigation")
+	_check(CombatMath.resolve(request, 100.0, 0.0, 0.1)["damage"] == 75, "critical follows mitigation")
+	request.hit_chance = 0.5
+	var miss := CombatMath.resolve(request, 0.0, 0.7, 0.0)
+	_check(miss["damage"] == 0 and not miss["can_trigger_effects"], "miss has no damage or effects")
+	request.is_secondary = true
+	var secondary := CombatMath.resolve(request, 0.0, 0.0, 0.9)
+	_check(secondary["damage"] == 100 and not secondary["can_trigger_effects"], "secondary damage cannot recurse")
+	request.base_damage = 0.0
+	_check(CombatMath.resolve(request, 0.0, 0.0, 0.9)["damage"] == 0, "zero damage cannot manufacture one damage")
+	var augment := AugmentDefinition.new()
+	augment.id = &"wide_slash"
+	augment.effect_id = &"slash_radius"
+	augment.class_id = &"swordsman"
+	_check(augment.is_eligible(&"swordsman", 0), "eligible class can take augment")
+	_check(not augment.is_eligible(&"mage", 0), "foreign class excluded")
+	_check(not augment.is_eligible(&"swordsman", 1), "unique augment excluded after selection")
+	print("Foundation: %s" % ("PASS (11 checks)" if failures == 0 else "FAIL (%d)" % failures))
+	quit(0 if failures == 0 else 1)
+
+func _check(condition: bool, label: String) -> void:
+	if not condition:
+		failures += 1
+		push_error(label)
