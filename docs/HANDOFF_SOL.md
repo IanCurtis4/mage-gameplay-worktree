@@ -1,9 +1,12 @@
-# Próxima ação proposta — aguardando aceite
+# Bloco do Marco 1 — implementado, aguardando revisão
+
+O usuário autorizou a execução deste bloco sobre `41ff198`. A implementação local
+foi concluída na branch `codex/m1-arena-combat`; integração, expansão de escopo e
+marcos seguintes continuam dependendo de aceite separado.
 
 Título: RagRPG | Sol — Arena e combate do marco 1
 Modelo: gpt-5.6-sol, raciocínio high.
-Criar uma tarefa no projeto RagRPG em worktree isolada após aprovação do usuário.
-Usar a fundação commitada como base; não iniciar enquanto ela não estiver disponível.
+Executado em tarefa do projeto RagRPG, em worktree isolada, sobre a fundação commitada.
 
 ## Prompt preparado
 
