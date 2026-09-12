@@ -2,7 +2,7 @@
 
 Pedido de 12/09/2026, base `065a2f3`. Implementação direta por Astra, conforme pedido
 do usuário. Branch `codex/m1-momentum-pursuit`, worktree `.tools/momentum-worktree`.
-O projeto habitual permanece em `codex/playtest` até a validação final.
+O projeto habitual permanece em `codex/playtest`, atualizado após a validação final.
 
 ## Passos e retomada
 
@@ -10,8 +10,8 @@ O projeto habitual permanece em `codex/playtest` até a validação final.
    aproximação e golpe, com breve recuperação após atacar e alcance/parede respeitados.
 2. Concluído: aceleração, frenagem e mudança gradual de direção do jogador, com
    colisões seguras, chegada estável, pausa/morte/dash e perseguição preservados.
-3. Revisão e testes concluídos, integração pendente: preparar candidato no diretório
-   fixo e registrar resultados. Merge em master depende de novo aceite do usuário.
+3. Concluído: revisão, testes e candidato no diretório fixo. As 158 verificações
+   também passaram no projeto real. Merge em master depende de novo aceite do usuário.
 
 Cada etapa terá commit próprio para permitir retomada sem repetir trabalho.
 Esta rodada conclui o retorno do M1; não inicia o M2.
@@ -72,3 +72,8 @@ o inimigo pode fugir durante a recuperação, mas a perseguição deve retomar. 
 experimentar uma curva de 90°, inversão de direção e chegada perto de obstáculos.
 Os valores atuais são um ponto inicial para o peso desejado; não há aprovação da
 sensação ou medição de FPS real por esses testes.
+
+Integração: rebase sobre `codex/playtest` sem conflitos, fast-forward para `8562610`.
+Backup `codex/backup-m1-momentum-before-rebase`; master permanece `41ff198`.
+Validação completa repetida após integração, com GitPlugin local preservado.
+Próximo passo: playtest do usuário. Nenhum marco seguinte foi iniciado.

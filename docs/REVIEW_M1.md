@@ -156,3 +156,7 @@ Revisão técnica do código por Astra; suite completa com 158 checks passou, in
 da arena com uma seleção por alvo. Captura do jogo mostra seleção, golpe e dano.
 Plano, retomada e contratos estão em `docs/PLAYTEST_M1_MOMENTUM.md` e ARCHITECTURE.
 Preparação do candidato autorizada; master continua aguardando aceite do usuário.
+
+Integração concluída: rebase sem mudanças e fast-forward de `codex/playtest` para
+`8562610`; 158 checks, importação e smoke repetidos com sucesso no checkout real.
+Master permanece `41ff198`; project.godot e addons locais do usuário preservados.
