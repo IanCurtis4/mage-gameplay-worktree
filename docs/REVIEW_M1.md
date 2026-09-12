@@ -9,7 +9,8 @@
 - Candidato corrigido aprovado por Astra: `218387b`.
 - Candidato de gameplay após rebase: `97cbde6`, disponível em `codex/playtest`.
 - Backup anterior ao rebase: `codex/backup-m1-before-playtest-rebase` → `218387b`.
-- Status: aprovação técnica concluída; aguardando playtest e aceite do usuário.
+- Status: correções de responsividade `6e84b3d` aprovadas tecnicamente por Astra e
+  disponíveis em `codex/playtest`. Aguardando novo playtest; sem aceite para master.
 
 ## Primeira rodada de revisão
 
@@ -75,3 +76,60 @@ O jogo pode ser testado com F5 no projeto habitual. Se o Godot já estiver abert
 parar a partida anterior e aceitar o reload de arquivos alterados externamente.
 Este relatório não equivale ao aceite do usuário: ainda não houve merge em master,
 aprovação de diversão/dificuldade ou medição de FPS.
+
+## Retorno do primeiro playtest
+
+O usuário conseguiu jogar e relatou três problemas: skills deixam de funcionar
+após alguns usos; movimento pouco fluido com grid muito rígido; seleção/perseguição
+para ataques básicos exige precisão excessiva. A rodada de correção continua em M1.
+
+Diagnóstico independente no candidato anterior:
+
+- Espadachim possui 50 de mana, Q custa 15 e W custa 20; não há regeneração.
+  Após três Q, mana fica em 5 e permanece em 5 mesmo após 10 segundos vivo.
+  O HUD exibe PRONTO com base só na recarga e omite o bloqueio por mana.
+- O segmento caminhável (300,520) → (500,610) retorna 9 waypoints e percorre
+  290,35 unidades, contra distância direta 219,32, desvio de aproximadamente 32%.
+- Seleção usa raio fixo de 46 e autoataque alcance de centro a centro 62;
+  perseguição replana via centros da grade, sem tolerância distinta para manter alcance.
+
+Critérios desta rodada: regeneração com pausa/morte corretas e custo/bloqueio
+explícitos no HUD; movimento direto em região livre, simplificação segura ao redor
+de obstáculos e orçamento de distância contínuo por frame; seleção tolerante com
+prioridade do alvo visual, feedback de alvo e perseguição estável sem ataques através
+de paredes. Sol implementa e testa; Astra verifica e prepara novo candidato neste caminho.
+
+Próximo marco só será liberado após resolver este retorno e obter o aceite do usuário.
+
+### Interrupção e revisão independente
+
+A tarefa de Sol foi interrompida pelo limite de uso antes do commit, com dez arquivos
+de código/testes modificados. O checkout fixo permaneceu em `355cecf`.
+Na cópia independente da implementação em andamento, o percurso aberto já foi
+reduzido a um destino e 219,32 unidades, mas o teste de movimento revelou um loop.
+
+Reprodução: posição (512,480), destino (1500,480), velocidade 220 e delta 1/30.
+O deslocamento real em Vector2 foi 7,33331298828125, deixando orçamento positivo
+0,00002034505208; na iteração seguinte o deslocamento real era zero e nenhum guard
+encerrava o loop. Sol recebeu o caso para corrigir consumo/término do orçamento
+nos dois atores e verificar frames em 30/60/144 Hz antes de concluir a entrega.
+
+### Aprovação técnica da rodada de feedback
+
+Entrega de Sol: `6e84b3d`, sobre `355cecf`, com worktree limpa. Astra revisou os
+laços corrigidos, regeneração, navegação, seleção e alcance; conferiu capturas do
+HUD SEM MANA e anel de seleção. A cópia isolada do commit passou 125 verificações
+(12 fundação, 63 M1, 32 fluxo, 18 layout), importação e smoke.
+
+O probe independente passou 11 verificações: percurso aberto com um destino,
+219,32 unidades; deslocamento consistente em 30/60/144 Hz; desvio contínuo;
+regeneração e reutilização da skill; perseguição móvel com três ataques e zero
+passos para trás; cancelamento e pausa real.
+
+Backup: `codex/backup-m1-feedback-before-rebase`. Rebase sobre `codex/playtest`
+não exigiu mudanças; checkout fixo avançado por fast-forward para `6e84b3d`.
+`tools/verify.ps1` repetido no projeto real com GitPlugin: 125 checks, import e
+smoke aprovados. Configuração local do plugin e `addons/` preservados e não commitados.
+
+Master permanece sem integração. Sensação de movimento, tolerância de seleção,
+balanceamento da mana e FPS real dependem do novo playtest do usuário.
