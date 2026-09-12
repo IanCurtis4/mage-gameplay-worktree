@@ -4,6 +4,7 @@ extends Node2D
 
 signal actor_died(actor: CombatActor)
 signal damage_number(actor: CombatActor, amount: int, critical: bool)
+signal attack_missed(actor: CombatActor)
 
 var actor_name := "Ator"
 var actor_color := Color.WHITE
@@ -77,6 +78,11 @@ func _draw_target_ring(radius: float, color: Color, width: float) -> void:
 		draw_line(edge - Vector2(0, 5), edge + Vector2(0, 5), color, 2.0, true)
 
 func _on_damage_applied(result: Dictionary) -> void:
+	if not bool(result["landed"]):
+		attack_missed.emit(self)
+		return
+	if float(result["actual_damage"]) <= 0.0:
+		return
 	_flash_time = 0.10
 	damage_number.emit(self, ceili(float(result["actual_damage"])), bool(result["critical"]))
 	queue_redraw()

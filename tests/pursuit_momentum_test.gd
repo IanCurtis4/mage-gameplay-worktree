@@ -12,6 +12,7 @@ func _run() -> void:
 	_test_momentum()
 	_test_obstacle_routes()
 	_test_arena_archers()
+	_test_arena_melee()
 	print("Perseguição e inércia: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
 	quit(0 if failures == 0 else 1)
 
@@ -194,6 +195,33 @@ func _test_arena_archers() -> void:
 		_check(not archer.is_alive() and safe, "one pursuit kills real arena archer at %s with safe obstacle movement" % spawn)
 		player.free()
 		archer.free()
+
+func _test_arena_melee() -> void:
+	var nav := ArenaNavigation.new()
+	nav.configure(RunController.ARENA_BOUNDS, RunController.ARENA_OBSTACLES, 22.0)
+	for fps: int in [30, 60, 144]:
+		for enemy_first: bool in [false, true]:
+			var player := _player(nav, Vector2(300, 520))
+			var enemy := EnemyActor.new()
+			enemy.configure(&"chaser", nav, player)
+			root.add_child(enemy)
+			enemy.set_process(false)
+			enemy.position = Vector2(1220, 300)
+			var rng := RandomNumberGenerator.new()
+			rng.seed = 914
+			player.attack_requested.connect(func(request: DamageRequest, victim: CombatActor) -> void: victim.apply_damage(request, rng))
+			player.pursue(enemy)
+			for _frame: int in range(fps * 20):
+				if enemy_first:
+					enemy._process(1.0 / fps)
+				player._process(1.0 / fps)
+				if not enemy_first:
+					enemy._process(1.0 / fps)
+				if not enemy.is_alive():
+					break
+			_check(not enemy.is_alive(), "one pursuit damages and kills real melee with combat RNG at %d Hz, enemy first %s" % [fps, enemy_first])
+			player.free()
+			enemy.free()
 
 func _player(nav: ArenaNavigation, point: Vector2) -> PlayerActor:
 	var player := PlayerActor.new()

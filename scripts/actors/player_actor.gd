@@ -32,8 +32,12 @@ var _path_index := 0
 var _repath_time := 0.0
 var _last_facing := Vector2.RIGHT
 var _slash_visual_time := 0.0
+var _slash_facing := Vector2.RIGHT
+var _slash_origin := Vector2.ZERO
 var _basic_visual_time := 0.0
 var _basic_facing := Vector2.RIGHT
+var _basic_origin := Vector2.ZERO
+var _basic_visual_radius := 62.0
 var _attack_engaged := false
 var _attack_recovery := 0.0
 
@@ -83,6 +87,8 @@ func use_slash(direction: Vector2, enemies: Array[CombatActor]) -> bool:
 	mana -= SLASH_MANA_COST
 	slash_cooldown = 4.0 * float(stats["cast_multiplier"])
 	_slash_visual_time = 0.20
+	_slash_facing = facing
+	_slash_origin = global_position
 	queue_redraw()
 	for enemy: CombatActor in enemies.duplicate():
 		if not enemy.is_alive():
@@ -186,6 +192,8 @@ func _try_basic_attack() -> void:
 	_attack_recovery = BASIC_ATTACK_RECOVERY
 	_basic_visual_time = BASIC_ATTACK_RECOVERY
 	_basic_facing = _last_facing
+	_basic_origin = global_position + Vector2(0, -18)
+	_basic_visual_radius = maxf(12.0, global_position.distance_to(target.global_position))
 	queue_redraw()
 	attack_requested.emit(_make_request(target, &"basic_attack", float(stats["physical_attack"]), float(stats["hit_chance"]), true), target)
 
@@ -286,7 +294,7 @@ func _draw() -> void:
 	draw_circle(Vector2(0, -18), 5.0, Color("dcecff"))
 	if _basic_visual_time > 0.0:
 		var swing_angle := _basic_facing.angle()
-		draw_arc(Vector2(0, -18), 62.0, swing_angle - 0.65, swing_angle + 0.65, 16, Color(1.0, 0.89, 0.60, _basic_visual_time / BASIC_ATTACK_RECOVERY), 4.0)
+		draw_arc(_basic_origin - global_position, _basic_visual_radius, swing_angle - 0.65, swing_angle + 0.65, 16, Color(1.0, 0.89, 0.60, _basic_visual_time / BASIC_ATTACK_RECOVERY), 4.0)
 	if _slash_visual_time > 0.0:
-		var angle := _last_facing.angle()
-		draw_arc(Vector2.ZERO, SLASH_RANGE, angle - SLASH_HALF_ANGLE, angle + SLASH_HALF_ANGLE, 28, Color(0.91, 0.78, 0.48, _slash_visual_time * 3.5), 7.0)
+		var angle := _slash_facing.angle()
+		draw_arc(_slash_origin - global_position, SLASH_RANGE, angle - SLASH_HALF_ANGLE, angle + SLASH_HALF_ANGLE, 28, Color(0.91, 0.78, 0.48, _slash_visual_time * 3.5), 7.0)

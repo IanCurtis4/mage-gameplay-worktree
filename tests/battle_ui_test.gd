@@ -11,6 +11,7 @@ func _run() -> void:
 	_test_intent()
 	_test_targeting()
 	_test_geometry()
+	_test_strike_feedback()
 	_test_preferences()
 	await _test_controller_input()
 	print("UI de batalha: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
@@ -60,6 +61,52 @@ func _test_geometry() -> void:
 	_check(outline.size() == 35 and outline[0] == Vector2.ZERO and outline[-1] == Vector2.ZERO, "cone preview is a closed footprint")
 	_check(SkillGeometry.cone_contains(Vector2(154, 0), Vector2.RIGHT, PlayerActor.SLASH_RANGE, PlayerActor.SLASH_HALF_ANGLE) and not SkillGeometry.cone_contains(Vector2(156, 0), Vector2.RIGHT, PlayerActor.SLASH_RANGE, PlayerActor.SLASH_HALF_ANGLE), "preview and damage share the range boundary")
 
+func _test_strike_feedback() -> void:
+	var nav := ArenaNavigation.new()
+	nav.configure(Rect2(0, 0, 1000, 800), [], 22.0)
+	var player := PlayerActor.new()
+	player.configure(nav, RunState.new())
+	root.add_child(player)
+	player.set_process(false)
+	player.position = Vector2(400, 400)
+	var right := CombatActor.new()
+	var left := CombatActor.new()
+	for actor: CombatActor in [right, left]:
+		actor.setup("Alvo", Color.WHITE, RpgStats.derive({"vit": 10}), 19.0)
+		root.add_child(actor)
+		actor.set_process(false)
+	right.position = Vector2(480, 400)
+	left.position = Vector2(320, 400)
+	player.attack_requested.connect(func(request: DamageRequest, victim: CombatActor) -> void: victim.health.apply(request, 0.0, 0.99))
+	var enemies: Array[CombatActor] = [right, left]
+	var origin := player.position
+	player.use_slash(player.aim_direction(origin + Vector2(1000, 0)), enemies)
+	_check(right.health.current_hp < right.health.max_hp and left.health.current_hp == left.health.max_hp, "distant cursor damages enemies on its side of the cone only")
+	player.pursue(left)
+	player._process(0.01)
+	_check(player._last_facing.x < 0.0 and player._slash_facing == Vector2.RIGHT and player._slash_origin == origin, "opposite automatic strike cannot rotate the active cone effect")
+	_check(is_equal_approx(player._basic_visual_radius, 80.0), "auto effect reaches the target at a valid distance beyond the old 62 px arc")
+	player.move_to(Vector2(600, 500))
+	player._process(0.05)
+	_check(player.position != origin and player._slash_origin == origin, "movement cannot drag an already resolved cone away from its footprint")
+	var feedback := [0, 0]
+	right.attack_missed.connect(func(_actor: CombatActor) -> void: feedback[0] += 1)
+	right.damage_number.connect(func(_actor: CombatActor, _amount: int, _critical: bool) -> void: feedback[1] += 1)
+	right._flash_time = 0.0
+	var hp := right.health.current_hp
+	var request := DamageRequest.new()
+	request.target_id = right.get_instance_id()
+	request.base_damage = 20.0
+	request.hit_chance = 0.0
+	right.health.apply(request, 0.5, 0.99)
+	_check(right.health.current_hp == hp and feedback == [1, 0] and right._flash_time == 0.0, "miss emits distinct feedback without damage or a misleading hit flash")
+	request.hit_chance = 1.0
+	right.health.apply(request, 0.5, 0.99)
+	_check(right.health.current_hp < hp and feedback == [1, 1] and right._flash_time > 0.0, "landed strike reduces HP and emits the damage flash and number")
+	player.free()
+	right.free()
+	left.free()
+
 func _test_preferences() -> void:
 	var preferences := ControlPreferences.new()
 	preferences.path = "res://.godot/verification/controls_test_%d.cfg" % Time.get_ticks_usec()
@@ -90,7 +137,7 @@ func _test_controller_input() -> void:
 	controller.control_preferences.path = "res://.godot/verification/ui_controls_%d.cfg" % Time.get_ticks_usec()
 	await process_frame
 	await process_frame
-	var world_aim := controller.player.position + Vector2(120, 0)
+	var world_aim := controller.player.position + Vector2(300, 0)
 	_move_mouse(controller.get_global_transform_with_canvas() * world_aim)
 	controller.cast_intent.set_mode(CastIntent.Mode.CONFIRM)
 	_key(KEY_Q, true)
@@ -99,6 +146,7 @@ func _test_controller_input() -> void:
 	_check(controller.cast_intent.active_skill == &"slash" and controller.player.mana == 50.0, "confirm mode waits for a mouse click after release")
 	_click(MOUSE_BUTTON_LEFT)
 	_check(controller.player.mana == 35.0 and controller.cast_intent.active_skill == &"" and controller.player._path.is_empty(), "world click casts once without issuing movement")
+	_check(controller.player._slash_facing.dot(Vector2.RIGHT) > 0.999, "mouse confirmation beyond cone range keeps the clicked direction through camera transform")
 	_key(KEY_Q, false)
 	_check(controller.player.mana == 35.0, "late key release does not double cast")
 	controller.player.mana = 50.0

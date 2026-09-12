@@ -70,6 +70,7 @@ func _ready() -> void:
 	player.attack_requested.connect(_on_attack_requested)
 	player.actor_died.connect(_on_player_died)
 	player.damage_number.connect(_show_damage_number)
+	player.attack_missed.connect(_show_miss)
 	add_child(player)
 	var camera := Camera2D.new()
 	camera.position_smoothing_enabled = true
@@ -252,6 +253,7 @@ func _spawn_encounter(index: int) -> void:
 		enemy.attack_requested.connect(_on_enemy_attack_requested)
 		enemy.actor_died.connect(_on_enemy_died)
 		enemy.damage_number.connect(_show_damage_number)
+		enemy.attack_missed.connect(_show_miss)
 		add_child(enemy)
 		enemies.append(enemy)
 	status_label.text = "Encontro %d/2 — elimine todos os inimigos" % index
@@ -393,12 +395,18 @@ func _select_enemy(enemy: CombatActor) -> void:
 func _show_damage_number(actor: CombatActor, amount: int, critical: bool) -> void:
 	if amount <= 0:
 		return
+	_show_combat_text(actor, ("CRÍTICO %d" if critical else "%d") % amount, Color("ffd166") if critical else Color.WHITE, 20 if critical else 17)
+
+func _show_miss(actor: CombatActor) -> void:
+	_show_combat_text(actor, "ERROU", Color("b9cbd3"), 16)
+
+func _show_combat_text(actor: CombatActor, text: String, color: Color, font_size: int) -> void:
 	var label := Label.new()
-	label.text = ("CRÍTICO %d" if critical else "%d") % amount
+	label.text = text
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.global_position = actor.global_position + Vector2(-22, -78)
-	label.add_theme_font_size_override("font_size", 20 if critical else 17)
-	label.add_theme_color_override("font_color", Color("ffd166") if critical else Color.WHITE)
+	label.add_theme_font_size_override("font_size", font_size)
+	label.add_theme_color_override("font_color", color)
 	label.z_index = 20
 	add_child(label)
 	var tween := create_tween()
