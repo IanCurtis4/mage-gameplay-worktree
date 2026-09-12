@@ -11,6 +11,10 @@ const BASIC_REACH_BEYOND_BODIES := 50.0
 const ATTACK_RETENTION := 16.0
 const BASIC_ATTACK_RECOVERY := 0.14
 const MOVEMENT_EPSILON := 0.01
+const MOVE_ACCELERATION := 1100.0
+const MOVE_FRICTION := 1600.0
+const MAX_MOVEMENT_STEP := 1.0 / 120.0
+const ARRIVAL_TOLERANCE := 0.05
 const SLASH_RANGE := 155.0
 const SLASH_HALF_ANGLE := deg_to_rad(52.0)
 
@@ -21,11 +25,14 @@ var attack_cooldown := 0.0
 var slash_cooldown := 0.0
 var dash_cooldown := 0.0
 var target: CombatActor
+var velocity := Vector2.ZERO
 var _path := PackedVector2Array()
 var _path_index := 0
 var _repath_time := 0.0
 var _last_facing := Vector2.RIGHT
 var _slash_visual_time := 0.0
+var _basic_visual_time := 0.0
+var _basic_facing := Vector2.RIGHT
 var _attack_engaged := false
 var _attack_recovery := 0.0
 
@@ -96,12 +103,16 @@ func use_dash(direction: Vector2) -> bool:
 	dash_cooldown = 6.0 * float(stats["cast_multiplier"])
 	global_position = navigation.move_until_blocked(global_position, global_position + facing * 270.0)
 	_path.clear()
+	velocity = Vector2.ZERO
+	_attack_recovery = 0.0
+	_repath_time = 0.0
 	resources_changed.emit()
 	return true
 
 func _process(delta: float) -> void:
 	super._process(delta)
 	if not is_alive():
+		velocity = Vector2.ZERO
 		return
 	var simulation_paused := is_inside_tree() and get_tree().paused
 	if simulation_paused:
@@ -114,6 +125,9 @@ func _process(delta: float) -> void:
 	if _slash_visual_time > 0.0:
 		_slash_visual_time = maxf(0.0, _slash_visual_time - delta)
 		queue_redraw()
+	if _basic_visual_time > 0.0:
+		_basic_visual_time = maxf(0.0, _basic_visual_time - delta)
+		queue_redraw()
 	if target != null and (not is_instance_valid(target) or not target.is_alive()):
 		target = null
 		_attack_engaged = false
@@ -123,11 +137,13 @@ func _process(delta: float) -> void:
 		if can_basic_attack(target, _attack_engaged):
 			_attack_engaged = true
 			_path.clear()
+			velocity = Vector2.ZERO
 			_try_basic_attack()
 			return
 		elif _attack_recovery > 0.0:
 			# Plant briefly after a strike; a fleeing enemy can leave the reach.
 			_path.clear()
+			velocity = Vector2.ZERO
 			return
 		else:
 			_attack_engaged = false
@@ -141,6 +157,7 @@ func _process(delta: float) -> void:
 	if target != null and can_basic_attack(target, _attack_engaged):
 		_attack_engaged = true
 		_path.clear()
+		velocity = Vector2.ZERO
 		_try_basic_attack()
 
 func _regenerate_mana(delta: float, simulation_paused: bool) -> bool:
@@ -159,6 +176,9 @@ func _try_basic_attack() -> void:
 	_last_facing = global_position.direction_to(target.global_position)
 	attack_cooldown = 1.0 / float(stats["attacks_per_second"])
 	_attack_recovery = BASIC_ATTACK_RECOVERY
+	_basic_visual_time = BASIC_ATTACK_RECOVERY
+	_basic_facing = _last_facing
+	queue_redraw()
 	attack_requested.emit(_make_request(target, &"basic_attack", float(stats["physical_attack"]), float(stats["hit_chance"]), true), target)
 
 func _make_request(enemy: CombatActor, skill_id: StringName, power: float, hit_chance: float, can_crit: bool) -> DamageRequest:
@@ -180,30 +200,62 @@ func _set_path(point: Vector2) -> void:
 		_path_index += 1
 
 func _move_along_path(delta: float) -> void:
-	var remaining_distance := float(stats["move_speed"]) * delta
-	while remaining_distance > 0.0 and _path_index < _path.size():
-		var point := _path[_path_index]
-		var distance := global_position.distance_to(point)
-		if distance < MOVEMENT_EPSILON:
-			_path_index += 1
-			continue
-		var direction := global_position.direction_to(point)
-		_last_facing = direction
-		var travel := minf(distance, remaining_distance)
-		var desired := global_position + direction * travel
-		var moved_to := navigation.move_until_blocked(global_position, desired)
-		var actual_travel := global_position.distance_to(moved_to)
-		global_position = moved_to
-		if actual_travel <= 0.0:
-			break
-		if actual_travel + MOVEMENT_EPSILON < travel:
-			_path.clear()
-			break
-		# Consume the planned budget after a successful segment. Vector2 rounding can
-		# otherwise leave a positive subpixel remainder that never makes progress.
-		remaining_distance = maxf(0.0, remaining_distance - travel)
-		if travel >= distance - MOVEMENT_EPSILON:
-			_path_index += 1
+	# Small bounded steps keep braking/collision stable even on a long render frame.
+	var remaining_time := maxf(0.0, delta)
+	while remaining_time > 0.0:
+		var step := minf(MAX_MOVEMENT_STEP, remaining_time)
+		_move_step(step)
+		remaining_time = maxf(0.0, remaining_time - step)
+
+func _move_step(delta: float) -> void:
+	var desired_velocity := Vector2.ZERO
+	var offset := Vector2.ZERO
+	var has_destination := _path_index < _path.size()
+	if has_destination:
+		# Drift can reveal the next leg earlier: turn only when the full shortcut
+		# clears inflated geometry, never by snapping to a grid center.
+		for index: int in range(_path.size() - 1, _path_index, -1):
+			if navigation.is_segment_walkable(global_position, _path[index]):
+				_path_index = index
+				break
+		offset = _path[_path_index] - global_position
+		var desired_speed := minf(float(stats["move_speed"]), sqrt(2.0 * MOVE_FRICTION * offset.length()))
+		desired_velocity = offset.normalized() * desired_speed
+	var previous_velocity := velocity
+	var acceleration := MOVE_FRICTION if desired_velocity.length() < velocity.length() else MOVE_ACCELERATION
+	velocity = velocity.move_toward(desired_velocity, acceleration * delta)
+	var displacement := (previous_velocity + velocity) * 0.5 * delta
+	var desired_position := global_position + displacement
+	var reaches_waypoint := false
+	if has_destination:
+		reaches_waypoint = offset.length() <= ARRIVAL_TOLERANCE or (
+			displacement.length() >= offset.length()
+			and displacement.normalized().dot(offset.normalized()) > 0.99
+		)
+		if reaches_waypoint:
+			desired_position = _path[_path_index]
+	var safe_position := navigation.move_until_blocked(global_position, desired_position)
+	global_position = safe_position
+	if safe_position.distance_to(desired_position) > MOVEMENT_EPSILON:
+		# Contact removes blocked momentum. Rebuild from the actual safe position
+		# so inertia at a corner cannot strand the actor on an obsolete segment.
+		velocity = Vector2.ZERO
+		if has_destination:
+			_set_path(_path[-1])
+		return
+	if reaches_waypoint:
+		_path_index += 1
+		if _path_index >= _path.size():
+			velocity = Vector2.ZERO
+	if not velocity.is_zero_approx():
+		_last_facing = velocity.normalized()
+
+func _on_health_died(actor_id: int) -> void:
+	velocity = Vector2.ZERO
+	_path.clear()
+	target = null
+	_attack_recovery = 0.0
+	super._on_health_died(actor_id)
 
 func basic_attack_distance(enemy: CombatActor) -> float:
 	return collision_radius + enemy.collision_radius + BASIC_REACH_BEYOND_BODIES
@@ -224,6 +276,9 @@ func _draw() -> void:
 	super._draw()
 	draw_line(Vector2(-22, -12), Vector2(23, -40), Color("e9c67b"), 5.0)
 	draw_circle(Vector2(0, -18), 5.0, Color("dcecff"))
+	if _basic_visual_time > 0.0:
+		var swing_angle := _basic_facing.angle()
+		draw_arc(Vector2(0, -18), 62.0, swing_angle - 0.65, swing_angle + 0.65, 16, Color(1.0, 0.89, 0.60, _basic_visual_time / BASIC_ATTACK_RECOVERY), 4.0)
 	if _slash_visual_time > 0.0:
 		var angle := _last_facing.angle()
 		draw_arc(Vector2.ZERO, SLASH_RANGE, angle - SLASH_HALF_ANGLE, angle + SLASH_HALF_ANGLE, 28, Color(0.91, 0.78, 0.48, _slash_visual_time * 3.5), 7.0)

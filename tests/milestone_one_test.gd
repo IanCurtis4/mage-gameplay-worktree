@@ -234,7 +234,8 @@ func _test_fluid_movement() -> void:
 	_check(fine_player.global_position.x > 200.0 and fine_player.can_basic_attack(moving_target), "pursuit closes final 6 px instead of discarding short waypoint")
 	fine_player.move_to(fine_player.global_position + Vector2(5, 0))
 	var before_short_click := fine_player.global_position
-	fine_player._process(0.1)
+	# A short command must arrive, allowing the newly requested acceleration/brake.
+	fine_player._process(0.5)
 	_check(fine_player.global_position.distance_to(before_short_click) >= 4.9, "valid 5 px ground click is not discarded")
 
 	var enemy_fine := EnemyActor.new()

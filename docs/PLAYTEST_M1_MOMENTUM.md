@@ -8,7 +8,7 @@ O projeto habitual permanece em `codex/playtest` até a validação final.
 
 1. Concluído: reproduzir perseguição usando EnemyActor arqueiro real; corrigir
    aproximação e golpe, com breve recuperação após atacar e alcance/parede respeitados.
-2. Pendente: aceleração, frenagem e mudança gradual de direção do jogador, com
+2. Concluído: aceleração, frenagem e mudança gradual de direção do jogador, com
    colisões seguras, chegada estável, pausa/morte/dash e perseguição preservados.
 3. Pendente: revisar, executar tools/verify.ps1, preparar candidato no diretório
    fixo e registrar resultados. Merge em master depende de novo aceite do usuário.
@@ -38,3 +38,20 @@ redução da velocidade do arqueiro, nem alteração das fórmulas de dano/preci
 
 Teste real corrigido: 8–9 autos em 10 s, nas seis combinações de taxa/ordem.
 Suíte anterior passou integralmente; nova suíte inclui essa regressão e recuperação.
+
+## Etapa 2 — peso do movimento
+
+Velocidade vetorial runtime, aceleração 1100 e atrito/frenagem 1600 unidades/s²;
+integração em passos de até 1/120 s, curvas ao redirecionar, chegada com frenagem e
+colisão segura. A velocidade máxima continua 220, derivada em RpgStats. Mudanças de
+direção conservam impulso; morte e dash limpam movimento anterior; pausa congela.
+O auto firma os pés, tem arco visual curto e continua respeitando alcance e precisão.
+
+Regressões novas: partida gradual, giro, reversão, parada curta, chegada/cliques
+pequenos, pausa, dash, morte, consistência em 30/60/144 Hz, 40 rotas com seed 914
+incluindo redirecionamentos, e eliminação dos arqueiros nas posições reais da arena.
+Com peso, o teste em corredor aberto ainda produziu 7–8 autos em 10 s nas seis
+combinações de ordem/taxa. Mantida a IA e velocidade originais dos inimigos.
+
+O teste antigo de clique de 5 unidades agora permite 0,5 s para a chegada; exigir
+chegada em 0,1 s contrariava a nova aceleração. O destino exato continua obrigatório.

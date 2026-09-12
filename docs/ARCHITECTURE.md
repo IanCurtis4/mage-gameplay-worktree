@@ -23,17 +23,34 @@ sem mover o ator através de área bloqueada.
 
 Em área aberta, a navegação retorna o destino real como único waypoint. Rotas que
 contornam obstáculos são simplificadas escolhendo o waypoint visível mais distante,
-sempre revalidando o segmento contra a geometria inflada. Atores consomem todo o
-orçamento de deslocamento do frame ao atravessar waypoints; o orçamento planejado é
-consumido depois de um passo bem-sucedido e qualquer passo sem progresso encerra o
-laço, evitando travas por resíduos subpixel sem descartar cliques curtos válidos.
+sempre revalidando o segmento contra a geometria inflada. Inimigos consomem o
+orçamento planejado de deslocamento ao atravessar waypoints, com saída sem progresso
+para evitar travas por resíduos subpixel.
 
-Seleção assistida de inimigos usa raio total de 68 unidades a partir da origem nos
-pés. Um acerto direto no corpo visual (raio do ator + 4) tem prioridade sobre qualquer
+Jogador mantém `velocity` no runtime: aceleração 1100 unidades/s² e frenagem/atrito
+1600 unidades/s², velocidade máxima derivada em RpgStats (base 220). Acelera em cerca
+de 0,20 s, freia em cerca de 0,14 s e percorre aproximadamente 15 unidades ao parar
+em velocidade máxima. Novos cliques conservam o impulso e mudam a velocidade
+gradualmente. Chegada reduz velocidade por distância de frenagem, tolerância 0,05.
+Integração por passos de até 1/120 s, consumindo todo o delta e revalidando cada
+segmento; contato bloqueado remove impulso e recalcula a rota do ponto seguro.
+Pause congela posição e velocidade; morte limpa ambas intenção/velocidade; dash
+limpa impulso/caminho anterior e permite recalcular perseguição imediatamente.
+
+Seleção assistida de inimigos usa raio total de 68 unidades a partir do centro do
+corpo visual (pés + (0,-18)). Um acerto direto (raio do ator + 4) tem prioridade sobre qualquer
 alvo apenas assistido. Hover e seleção persistente têm anéis distintos; clicar no chão
 cancela a perseguição e a seleção. O ataque básico inicial alcança a soma dos raios dos
 corpos + 50 unidades, com banda de retenção adicional de 16 após engajar. Alcance e
 linha de visão são revalidados antes do golpe, portanto obstáculos continuam bloqueando.
+
+Perseguição busca a posição real do alvo a cada 0,22 s ou quando a rota termina,
+sem parar no ponto de alcance de uma posição antiga. Contato é verificado antes e
+depois do deslocamento. Em alcance, jogador firma os pés e emite auto se pronto;
+cada emissão apresenta um arco curto e inicia recuperação de 0,14 s, durante a qual
+o inimigo pode escapar. Fora do alcance, após essa recuperação, a perseguição retoma
+mesmo com cooldown ainda ativo. Clique no chão cancela perseguição/recuperação,
+mantendo o cooldown. Ataque emitido ainda passa pela precisão normal de CombatMath.
 
 ## Atributos
 
