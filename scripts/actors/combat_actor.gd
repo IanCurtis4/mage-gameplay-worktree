@@ -14,6 +14,20 @@ var collision_radius := 18.0
 var is_hovered := false
 var is_selected := false
 var _flash_time := 0.0
+var sprite_texture: Texture2D
+var sprite_rect := Rect2()
+var _sprite_visible_height := 0.0
+
+func set_pilot_sprite(texture: Texture2D) -> void:
+	sprite_texture = texture
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	var size := texture.get_size()
+	var used := texture.get_image().get_used_rect()
+	var display_scale := 52.0 / maxf(1.0, float(used.size.y))
+	# The lowest opaque row touches the actor's existing ground origin.
+	sprite_rect = Rect2(Vector2(-size.x * 0.5, -float(used.end.y)) * display_scale, size * display_scale)
+	_sprite_visible_height = float(used.size.y) * display_scale
+	queue_redraw()
 
 func setup(display_name: String, color: Color, derived_stats: Dictionary, radius: float = 18.0) -> void:
 	actor_name = display_name
@@ -58,13 +72,18 @@ func _draw() -> void:
 		_draw_target_ring(collision_radius + 14.0, Color("f5cc77"), 3.0)
 	elif is_hovered:
 		_draw_target_ring(collision_radius + 11.0, Color("81dfd0"), 2.0)
-	draw_circle(Vector2(0, -18), collision_radius, color)
-	draw_circle(Vector2(0, -22), collision_radius * 0.55, color.lightened(0.14))
+	if sprite_texture != null:
+		var tint := Color(2.0, 2.0, 2.0) if _flash_time > 0.0 else Color.WHITE
+		draw_texture_rect(sprite_texture, sprite_rect, false, tint)
+	else:
+		draw_circle(Vector2(0, -18), collision_radius, color)
+		draw_circle(Vector2(0, -22), collision_radius * 0.55, color.lightened(0.14))
 	if health != null:
 		var bar_width := 52.0
 		var ratio := health.current_hp / health.max_hp
-		draw_rect(Rect2(-bar_width * 0.5, -54, bar_width, 6), Color(0.08, 0.09, 0.12, 0.9))
-		draw_rect(Rect2(-bar_width * 0.5, -54, bar_width * ratio, 6), Color("dc5757"))
+		var bar_y := -_sprite_visible_height - 8.0 if sprite_texture != null else -54.0
+		draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width, 6), Color(0.08, 0.09, 0.12, 0.9))
+		draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width * ratio, 6), Color("dc5757"))
 
 func _draw_target_ring(radius: float, color: Color, width: float) -> void:
 	var points := PackedVector2Array()

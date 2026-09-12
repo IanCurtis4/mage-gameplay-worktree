@@ -46,6 +46,7 @@ func configure(nav: ArenaNavigation, run_state: RunState) -> void:
 	var modifiers := run_state.get_modifiers()
 	var derived := RpgStats.derive(BASE_ATTRIBUTES, modifiers["flat"], _with_passive(modifiers["increased"]))
 	setup("Espadachim", Color("55a8d9"), derived, 20.0)
+	set_pilot_sprite(preload("res://assets/art/pilot/hero.png"))
 	max_mana = float(stats["max_mana"])
 	mana = max_mana
 	process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -290,8 +291,6 @@ func _with_passive(increased: Dictionary) -> Dictionary:
 
 func _draw() -> void:
 	super._draw()
-	draw_line(Vector2(-22, -12), Vector2(23, -40), Color("e9c67b"), 5.0)
-	draw_circle(Vector2(0, -18), 5.0, Color("dcecff"))
 	if _basic_visual_time > 0.0:
 		var swing_angle := _basic_facing.angle()
 		draw_arc(_basic_origin - global_position, _basic_visual_radius, swing_angle - 0.65, swing_angle + 0.65, 16, Color(1.0, 0.89, 0.60, _basic_visual_time / BASIC_ATTACK_RECOVERY), 4.0)

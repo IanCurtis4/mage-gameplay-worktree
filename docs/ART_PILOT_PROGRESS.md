@@ -27,3 +27,13 @@ preservar e não incluir esses arquivos nos commits desta tarefa.
   e melee real com RNG em 30/60/144 Hz e ambas as ordens de atualização.
 - Não foi reproduzida falta de dano mecânica contra melee nesses testes; a correção
   aborda duas inconsistências visuais concretas. O próximo playtest confirma o relato.
+
+## Piloto de arte concluído
+
+Correções de feedback disponíveis em `21c6473`. Arte implementada na branch
+`codex/art-pilot`, baseada nesse candidato, e revisada por Astra. Seis assets gerados
+com imagegen nativo, copiados para o repositório com prompts registrados. Detalhes,
+capturas, limites e roteiro de aceite em `docs/PLAYTEST_ART_PILOT.md`.
+Próxima ação após integração: playtest do usuário; master permanece `e70e4d4` até
+aceite explícito do candidato com UI, correções e arte. Não iniciar animações ou
+migração 3D automaticamente.

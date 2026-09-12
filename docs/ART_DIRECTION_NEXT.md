@@ -1,9 +1,11 @@
-# Próximo bloco visual — proposta para aceite
+# Direção visual — piloto iniciado e próximos passos
 
 Pedido: fantasia coreana de RPGs de 2000–2006, personagens 2D expressivos, chão com
 profundidade, texturas simples/pixeladas, cores ricas e transições entre materiais.
-Este documento prepara a tarefa futura; não autoriza produção em lote nem muda o
-renderer da arena atual. Direção sugerida por Astra, sujeita à prova visual.
+Em 12/09/2026, o usuário autorizou iniciar os assets. O primeiro piloto está em
+`docs/PLAYTEST_ART_PILOT.md`: três poses, três materiais e integração na arena 2D.
+Os passos de animação, comparação adicional de resoluções e prova de chão 3D abaixo
+continuam propostas futuras, a ajustar após o aceite visual deste piloto.
 
 ## Resolução e linguagem
 

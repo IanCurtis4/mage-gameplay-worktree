@@ -160,6 +160,25 @@ Fluxo: encontro ativo → todos os inimigos eliminados → objeto de recompensa 
 ausência de dano para decidir fim do encontro. UI de pausa processa com árvore pausada.
 Pausar menu também pausa projéteis, timers, IA e cooldowns.
 
+## Apresentação do piloto visual
+
+`CombatActor` desenha texturas importadas em 64×64 com nearest, alinhadas pela última
+linha opaca aos pés e ajustadas para 52 unidades de altura aparente. A imagem não
+define a colisão, a precisão ou o alcance. Sombras, barras e anéis usam a posição
+lógica existente. `attack_missed(actor)` só comunica um erro de precisão; flash e
+número de dano exigem `actual_damage > 0`. O contrato de `HealthState` não mudou.
+
+O efeito do cone guarda origem e direção no lançamento, separadas da orientação de
+movimento/auto. O arco do auto representa a distância ao alvo quando o dano é aplicado.
+
+`ArenaView` mistura três texturas 128×128 em shader CanvasItem; o Control do piso
+ignora mouse. `BattleIndicators` é o único dono dos marcadores de clique e skill.
+`ArenaObstacleView` desenha plataformas baixas ordenadas por Y junto aos atores,
+sem mudar os retângulos de navegação. A arena permanece 2D com profundidade simulada.
+Fontes raster e parâmetros de importação ficam em `assets/art/pilot/`; nenhum asset
+do jogo depende do diretório externo de geração. Texturas são recursos compartilhados
+somente de leitura. A prancha em `docs/art/` é documentação, excluída da importação.
+
 ## Estado futuro e save
 
 Estado de run: classe, nível, XP, pontos, atributos, HP/mana, cartas, stacks,

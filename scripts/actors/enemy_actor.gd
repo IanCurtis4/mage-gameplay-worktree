@@ -20,9 +20,11 @@ func configure(enemy_type: StringName, nav: ArenaNavigation, target_player: Play
 	if archetype == &"archer":
 		var archer_stats := RpgStats.derive({"str": 4, "agi": 5, "vit": 2, "int": 1, "dex": 7, "luk": 1}, {"max_hp": -68.0, "move_speed": -45.0})
 		setup("Arqueiro", Color("d29a4a"), archer_stats, 17.0)
+		set_pilot_sprite(preload("res://assets/art/pilot/archer.png"))
 	else:
 		var chaser_stats := RpgStats.derive({"str": 5, "agi": 3, "vit": 3, "int": 1, "dex": 4, "luk": 1}, {"max_hp": -62.0, "move_speed": -25.0})
-		setup("Perseguidor", Color("c65a68"), chaser_stats, 19.0)
+		setup("Guerreiro", Color("c65a68"), chaser_stats, 19.0)
+		set_pilot_sprite(preload("res://assets/art/pilot/warrior.png"))
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 
 func _process(delta: float) -> void:
@@ -93,12 +95,3 @@ func _move_along_path(delta: float) -> void:
 		remaining_distance = maxf(0.0, remaining_distance - travel)
 		if travel >= distance - MOVEMENT_EPSILON:
 			_path_index += 1
-
-func _draw() -> void:
-	super._draw()
-	if archetype == &"archer":
-		draw_arc(Vector2(0, -20), 15.0, -1.5, 1.5, 18, Color("f6dfad"), 3.0)
-		draw_line(Vector2(0, -35), Vector2(0, -5), Color("f6dfad"), 2.0)
-	else:
-		draw_line(Vector2(-15, -35), Vector2(-27, -12), Color("ffd1d6"), 4.0)
-		draw_line(Vector2(15, -35), Vector2(27, -12), Color("ffd1d6"), 4.0)

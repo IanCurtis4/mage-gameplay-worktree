@@ -60,6 +60,10 @@ func _ready() -> void:
 	arena_view.z_index = -2
 	arena_view.configure(ARENA_BOUNDS, ARENA_OBSTACLES)
 	add_child(arena_view)
+	for obstacle: Rect2 in ARENA_OBSTACLES:
+		var obstacle_view := ArenaObstacleView.new()
+		obstacle_view.configure(obstacle)
+		add_child(obstacle_view)
 	battle_indicators = BattleIndicators.new()
 	battle_indicators.z_index = -1
 	battle_indicators.process_mode = Node.PROCESS_MODE_PAUSABLE
