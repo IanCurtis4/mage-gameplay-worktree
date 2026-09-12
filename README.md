@@ -78,10 +78,10 @@ Em worktrees, passe o caminho absoluto do executável portátil no checkout
 original. A engine e os caches não são copiados pelo Git.
 Não há export templates nem executável distribuível do jogo nesta etapa.
 
-Se uma instância aberta do editor mantiver a DLL do GitPlugin em uso, acrescente
-`-EditorRecoveryMode` ao verificador. Isso usa recuperação somente na importação
-do processo de teste; os testes de gameplay continuam em modo normal. Plugins do
-editor não são validados nessa opção, e sua configuração local não é alterada.
+Se uma instância aberta do editor mantiver a DLL do GitPlugin em uso, valide primeiro
+a suíte completa em uma worktree limpa e use `-SkipEditorImport` somente para repetir
+os testes de gameplay no projeto já importado. Essa opção é explícita: não ignora
+erros nem substitui a importação da worktree limpa. Não altera o plugin local.
 
 Validação automatizada: importação headless, 12 verificações da fundação,
 63 verificações do Marco 1, 33 de perseguição/inércia, 40 de UI/input, 32 do fluxo, 28 de layout

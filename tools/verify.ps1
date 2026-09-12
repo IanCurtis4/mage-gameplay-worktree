@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory = $true)][string]$GodotPath,
-    [switch]$EditorRecoveryMode
+    [switch]$SkipEditorImport
 )
 $ErrorActionPreference = 'Stop'
 $enginePath = (Resolve-Path -LiteralPath $GodotPath).Path
@@ -35,9 +35,11 @@ function Invoke-GodotCheck([string[]]$EngineArguments) {
     }
 }
 
-$editorArguments = @('--headless', '--path', $projectPath, '--editor', '--import', '--quit')
-if ($EditorRecoveryMode) { $editorArguments += '--recovery-mode' }
-Invoke-GodotCheck $editorArguments
+if ($SkipEditorImport) {
+    Write-Host 'Editor import explicitly skipped; verify import in a clean worktree before using this option.'
+} else {
+    Invoke-GodotCheck @('--headless', '--path', $projectPath, '--editor', '--import', '--quit')
+}
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/foundation_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/milestone_one_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/pursuit_momentum_test.gd')

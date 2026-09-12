@@ -50,6 +50,8 @@ master aguarda aceite do usuário sobre este candidato.
 
 Na integração, a importação normal do checkout real encontrou a DLL temporária do
 GitPlugin bloqueada (o plugin é local e não pertence à entrega). Testes de gameplay
-normais passaram. O verificador oferece `-EditorRecoveryMode`, explícito, só para
-importar sem plugins do editor nesse processo. Não encerra o editor, não remove
-arquivos do plugin e não muda project.godot; integração do plugin fica fora desse check.
+normais passaram. O verificador oferece `-SkipEditorImport`, explícito, para repetir
+os testes no projeto já importado depois de validar importação e suíte completa na
+worktree limpa. Não ignora erros de testes, não encerra o editor e não remove nem
+altera arquivos do plugin. A importação com o plugin local permanece bloqueada;
+a importação normal sem plugin e a execução do jogo são verificadas separadamente.
