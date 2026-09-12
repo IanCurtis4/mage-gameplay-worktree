@@ -7,6 +7,7 @@ signal resources_changed
 const BASE_ATTRIBUTES := {"str": 8, "agi": 5, "vit": 8, "int": 2, "dex": 5, "luk": 2}
 const SLASH_MANA_COST := 15.0
 const DASH_MANA_COST := 20.0
+const DASH_DISTANCE := 270.0
 const BASIC_REACH_BEYOND_BODIES := 50.0
 const ATTACK_RETENTION := 16.0
 const BASIC_ATTACK_RECOVERY := 0.14
@@ -87,7 +88,7 @@ func use_slash(direction: Vector2, enemies: Array[CombatActor]) -> bool:
 		if not enemy.is_alive():
 			continue
 		var offset := enemy.global_position - global_position
-		if offset.length() <= SLASH_RANGE and absf(facing.angle_to(offset.normalized())) <= SLASH_HALF_ANGLE:
+		if SkillGeometry.cone_contains(offset, facing, SLASH_RANGE, SLASH_HALF_ANGLE):
 			attack_requested.emit(_make_request(enemy, &"cone_slash", float(stats["physical_attack"]) * 1.45, 1.0, true), enemy)
 	resources_changed.emit()
 	return true
@@ -101,13 +102,20 @@ func use_dash(direction: Vector2) -> bool:
 	_last_facing = facing
 	mana -= DASH_MANA_COST
 	dash_cooldown = 6.0 * float(stats["cast_multiplier"])
-	global_position = navigation.move_until_blocked(global_position, global_position + facing * 270.0)
+	global_position = dash_destination(facing)
 	_path.clear()
 	velocity = Vector2.ZERO
 	_attack_recovery = 0.0
 	_repath_time = 0.0
 	resources_changed.emit()
 	return true
+
+func aim_direction(point: Vector2) -> Vector2:
+	var direction := global_position.direction_to(point)
+	return _last_facing if direction.is_zero_approx() else direction
+
+func dash_destination(direction: Vector2) -> Vector2:
+	return navigation.move_until_blocked(global_position, global_position + direction.normalized() * DASH_DISTANCE)
 
 func _process(delta: float) -> void:
 	super._process(delta)
