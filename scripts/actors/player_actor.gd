@@ -9,6 +9,7 @@ const SLASH_MANA_COST := 15.0
 const DASH_MANA_COST := 20.0
 const BASIC_REACH_BEYOND_BODIES := 50.0
 const ATTACK_RETENTION := 16.0
+const BASIC_ATTACK_RECOVERY := 0.14
 const MOVEMENT_EPSILON := 0.01
 const SLASH_RANGE := 155.0
 const SLASH_HALF_ANGLE := deg_to_rad(52.0)
@@ -26,6 +27,7 @@ var _repath_time := 0.0
 var _last_facing := Vector2.RIGHT
 var _slash_visual_time := 0.0
 var _attack_engaged := false
+var _attack_recovery := 0.0
 
 func configure(nav: ArenaNavigation, run_state: RunState) -> void:
 	navigation = nav
@@ -54,11 +56,13 @@ func _apply_derived_stats(derived: Dictionary) -> void:
 func move_to(point: Vector2) -> void:
 	target = null
 	_attack_engaged = false
+	_attack_recovery = 0.0
 	_set_path(point)
 
 func pursue(enemy: CombatActor) -> void:
 	target = enemy
 	_attack_engaged = false
+	_path.clear()
 	_repath_time = 0.0
 
 func use_slash(direction: Vector2, enemies: Array[CombatActor]) -> bool:
@@ -104,6 +108,7 @@ func _process(delta: float) -> void:
 		return
 	_regenerate_mana(delta, false)
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
+	_attack_recovery = maxf(0.0, _attack_recovery - delta)
 	slash_cooldown = maxf(0.0, slash_cooldown - delta)
 	dash_cooldown = maxf(0.0, dash_cooldown - delta)
 	if _slash_visual_time > 0.0:
@@ -114,19 +119,29 @@ func _process(delta: float) -> void:
 		_attack_engaged = false
 		_path.clear()
 	if target != null:
+		_repath_time -= delta
 		if can_basic_attack(target, _attack_engaged):
 			_attack_engaged = true
 			_path.clear()
 			_try_basic_attack()
+			return
+		elif _attack_recovery > 0.0:
+			# Plant briefly after a strike; a fleeing enemy can leave the reach.
+			_path.clear()
+			return
 		else:
 			_attack_engaged = false
-			_repath_time -= delta
-			if _repath_time <= 0.0:
-				var stop_distance := maxf(1.0, basic_attack_distance(target) - 4.0)
-				var stop_point := target.global_position + target.global_position.direction_to(global_position) * stop_distance
-				_set_path(stop_point)
+			if _repath_time <= 0.0 or _path_index >= _path.size():
+				# Chase the actual target, not an obsolete point on its range border.
+				_set_path(target.global_position)
 				_repath_time = 0.22
 	_move_along_path(delta)
+	# Resolve contact in the same update instead of letting the enemy escape
+	# before the next frame's pre-movement range check.
+	if target != null and can_basic_attack(target, _attack_engaged):
+		_attack_engaged = true
+		_path.clear()
+		_try_basic_attack()
 
 func _regenerate_mana(delta: float, simulation_paused: bool) -> bool:
 	if simulation_paused or not is_alive() or mana >= max_mana:
@@ -143,6 +158,7 @@ func _try_basic_attack() -> void:
 		return
 	_last_facing = global_position.direction_to(target.global_position)
 	attack_cooldown = 1.0 / float(stats["attacks_per_second"])
+	_attack_recovery = BASIC_ATTACK_RECOVERY
 	attack_requested.emit(_make_request(target, &"basic_attack", float(stats["physical_attack"]), float(stats["hit_chance"]), true), target)
 
 func _make_request(enemy: CombatActor, skill_id: StringName, power: float, hit_chance: float, can_crit: bool) -> DamageRequest:
