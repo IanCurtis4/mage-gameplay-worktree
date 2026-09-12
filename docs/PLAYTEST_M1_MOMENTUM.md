@@ -10,7 +10,7 @@ O projeto habitual permanece em `codex/playtest` até a validação final.
    aproximação e golpe, com breve recuperação após atacar e alcance/parede respeitados.
 2. Concluído: aceleração, frenagem e mudança gradual de direção do jogador, com
    colisões seguras, chegada estável, pausa/morte/dash e perseguição preservados.
-3. Pendente: revisar, executar tools/verify.ps1, preparar candidato no diretório
+3. Revisão e testes concluídos, integração pendente: preparar candidato no diretório
    fixo e registrar resultados. Merge em master depende de novo aceite do usuário.
 
 Cada etapa terá commit próprio para permitir retomada sem repetir trabalho.
@@ -55,3 +55,20 @@ combinações de ordem/taxa. Mantida a IA e velocidade originais dos inimigos.
 
 O teste antigo de clique de 5 unidades agora permite 0,5 s para a chegada; exigir
 chegada em 0,1 s contrariava a nova aceleração. O destino exato continua obrigatório.
+
+## Etapa 3 — revisão e entrega
+
+Pontos de retomada: `253bdf2` (perseguição corrigida) e `1f47418` (peso do movimento).
+Revisão do código feita por Astra, também implementador desta rodada a pedido do
+usuário. Não foi solicitada revisão a outro agente nem iniciada nova tarefa.
+
+`tools/verify.ps1`: 158 verificações aprovadas (12 fundação, 63 M1, 33 perseguição/
+inércia, 32 fluxo, 18 layout), importação e smoke. Captura renderizada pelo Godot
+em 1280×720 confirma arco do auto, seleção e dano aplicado ao arqueiro; arquivo
+ignorado `.godot/verification/archer_auto_momentum.png` na worktree desta rodada.
+
+Reteste: um clique no arqueiro deve aproximar e atacar sem cliques de antecipação;
+o inimigo pode fugir durante a recuperação, mas a perseguição deve retomar. No chão,
+experimentar uma curva de 90°, inversão de direção e chegada perto de obstáculos.
+Os valores atuais são um ponto inicial para o peso desejado; não há aprovação da
+sensação ou medição de FPS real por esses testes.

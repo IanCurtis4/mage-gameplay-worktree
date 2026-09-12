@@ -9,8 +9,9 @@
 - Candidato corrigido aprovado por Astra: `218387b`.
 - Candidato de gameplay após rebase: `97cbde6`, disponível em `codex/playtest`.
 - Backup anterior ao rebase: `codex/backup-m1-before-playtest-rebase` → `218387b`.
-- Status: correções de responsividade `6e84b3d` aprovadas tecnicamente por Astra e
-  disponíveis em `codex/playtest`. Aguardando novo playtest; sem aceite para master.
+- Status: retorno sobre `065a2f3` tratado diretamente por Astra: perseguição real de
+  arqueiros e peso do movimento em `1f47418`, aprovado tecnicamente para novo playtest.
+  Sem aceite para master.
 
 ## Primeira rodada de revisão
 
@@ -133,3 +134,25 @@ smoke aprovados. Configuração local do plugin e `addons/` preservados e não c
 
 Master permanece sem integração. Sensação de movimento, tolerância de seleção,
 balanceamento da mana e FPS real dependem do novo playtest do usuário.
+
+## Segunda rodada de feedback — 12/09/2026
+
+O usuário considerou o movimento mais fluido, pediu aceleração/atrito e relatou que
+o auto ainda não alcançava arqueiros. Pediu implementação direta por Astra e passos
+commitados separadamente para retomada após interrupções de limite.
+
+Reprodução com a IA real: zero autos em 10 s em todas as seis combinações de
+30/60/144 Hz e ordem de atualização. A rota antiga parava em uma posição anterior
+do alcance do arqueiro, deixando o jogador a 112–122 unidades (alcance inicial 87).
+O teste anterior com alvo artificial lento não cobria esse comportamento.
+
+- `253bdf2`: perseguir a posição do alvo, conferir contato antes/depois do movimento
+  e recuperar por 0,14 s após emitir o golpe. Alcance, dano e IA inimiga preservados.
+- `1f47418`: impulso vetorial, aceleração, frenagem, curvas, colisão segura e arco do
+  auto. Com o peso aplicado, 7–8 autos em 10 s no mesmo teste de arqueiro em fuga.
+
+Revisão técnica do código por Astra; suite completa com 158 checks passou, incluindo
+40 rotas com obstáculos/redirecionamento e eliminação dos arqueiros nas duas posições
+da arena com uma seleção por alvo. Captura do jogo mostra seleção, golpe e dano.
+Plano, retomada e contratos estão em `docs/PLAYTEST_M1_MOMENTUM.md` e ARCHITECTURE.
+Preparação do candidato autorizada; master continua aguardando aceite do usuário.

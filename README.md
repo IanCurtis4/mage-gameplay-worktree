@@ -16,6 +16,7 @@ boss, equipamentos, cartas, distribuição de atributos ou save.
 - Fluxo de revisão e playtest: [docs/WORKFLOW.md](docs/WORKFLOW.md)
 - Aprovação técnica e roteiro de teste: [docs/REVIEW_M1.md](docs/REVIEW_M1.md)
 - Correções do feedback de playtest: [docs/PLAYTEST_M1_FEEDBACK.md](docs/PLAYTEST_M1_FEEDBACK.md)
+- Peso do movimento e perseguição de arqueiros: [docs/PLAYTEST_M1_MOMENTUM.md](docs/PLAYTEST_M1_MOMENTUM.md)
 
 ## Jogar
 
@@ -40,6 +41,11 @@ ou `RECARGA`) sem arredondar a mana disponível para cima. A seleção tem assis
 de 68 unidades e o corpo clicado diretamente sempre tem prioridade; o alcance corpo
 a corpo tolera 50 unidades além das bordas dos atores, sem atravessar obstáculos.
 
+O personagem ganha velocidade em cerca de 0,2 s, conserva um pouco de impulso ao
+virar e freia em um trajeto curto. A perseguição alcança a posição atual do inimigo;
+cada auto tem um arco visual e uma pausa de 0,14 s antes de retomar a aproximação se
+o alvo escapar. Um clique no chão cancela a perseguição e essa pausa.
+
 A cópia portátil local está em `.tools/godot/` (ignorada pelo Git).
 O executável principal funciona também em headless; o wrapper `_console.exe`
 falhou com erro 193 neste ambiente e não deve ser usado nos comandos abaixo.
@@ -61,7 +67,7 @@ original. A engine e os caches não são copiados pelo Git.
 Não há export templates nem executável distribuível do jogo nesta etapa.
 
 Validação automatizada: importação headless, 12 verificações da fundação,
-63 verificações do Marco 1, 32 verificações do fluxo, 18 verificações de layout
+63 verificações do Marco 1, 33 de perseguição/inércia, 32 do fluxo, 18 de layout
 em 1280×720/1920×1080 e smoke da cena principal em Godot 4.7.2. Logs ficam isolados
 em `.godot/verification/`. Os testes de movimento cobrem 30/60/144 Hz; isso prova
 consistência lógica, não FPS de renderização. Capturas renderizadas confirmam os
