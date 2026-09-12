@@ -78,6 +78,11 @@ Em worktrees, passe o caminho absoluto do executável portátil no checkout
 original. A engine e os caches não são copiados pelo Git.
 Não há export templates nem executável distribuível do jogo nesta etapa.
 
+Se uma instância aberta do editor mantiver a DLL do GitPlugin em uso, acrescente
+`-EditorRecoveryMode` ao verificador. Isso usa recuperação somente na importação
+do processo de teste; os testes de gameplay continuam em modo normal. Plugins do
+editor não são validados nessa opção, e sua configuração local não é alterada.
+
 Validação automatizada: importação headless, 12 verificações da fundação,
 63 verificações do Marco 1, 33 de perseguição/inércia, 40 de UI/input, 32 do fluxo, 28 de layout
 em 1280×720/1920×1080 e smoke da cena principal em Godot 4.7.2. Logs ficam isolados

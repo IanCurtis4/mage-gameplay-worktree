@@ -1,4 +1,7 @@
-param([Parameter(Mandatory = $true)][string]$GodotPath)
+param(
+    [Parameter(Mandatory = $true)][string]$GodotPath,
+    [switch]$EditorRecoveryMode
+)
 $ErrorActionPreference = 'Stop'
 $enginePath = (Resolve-Path -LiteralPath $GodotPath).Path
 $projectPath = Split-Path -Parent $PSScriptRoot
@@ -32,7 +35,9 @@ function Invoke-GodotCheck([string[]]$EngineArguments) {
     }
 }
 
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--editor', '--import', '--quit')
+$editorArguments = @('--headless', '--path', $projectPath, '--editor', '--import', '--quit')
+if ($EditorRecoveryMode) { $editorArguments += '--recovery-mode' }
+Invoke-GodotCheck $editorArguments
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/foundation_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/milestone_one_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/pursuit_momentum_test.gd')
