@@ -17,6 +17,8 @@ boss, equipamentos, cartas, distribuição de atributos ou save.
 - Aprovação técnica e roteiro de teste: [docs/REVIEW_M1.md](docs/REVIEW_M1.md)
 - Correções do feedback de playtest: [docs/PLAYTEST_M1_FEEDBACK.md](docs/PLAYTEST_M1_FEEDBACK.md)
 - Peso do movimento e perseguição de arqueiros: [docs/PLAYTEST_M1_MOMENTUM.md](docs/PLAYTEST_M1_MOMENTUM.md)
+- UI de batalha e validação: [docs/REVIEW_BATTLE_UI.md](docs/REVIEW_BATTLE_UI.md)
+- Próximo passo de arte: [docs/ART_DIRECTION_NEXT.md](docs/ART_DIRECTION_NEXT.md)
 
 ## Jogar
 
@@ -30,7 +32,9 @@ A arena começa imediatamente:
 
 - clique no chão para navegar diretamente quando houver linha livre e cancelar uma perseguição;
 - clique perto de um inimigo para selecioná-lo, se aproximar e autoatacar; hover e seleção têm realces distintos;
-- use `Q` para o corte em cone apontado pelo cursor e `W` para a investida;
+- use `Q` para mirar o corte e `W` para mirar a investida; clique esquerdo lança;
+- botão direito ou `Esc` cancela a mira; os cartões da barra também selecionam skills;
+- sem mira ativa, `Esc` ou **Controles** abre configurações de cast e smart lock;
 - toque no cristal após limpar o encontro, então use `E` para escolher o augment;
 - use `Espaço` para iniciar o segundo encontro e `R` para reiniciar após o fim.
 
@@ -45,6 +49,14 @@ O personagem ganha velocidade em cerca de 0,2 s, conserva um pouco de impulso ao
 virar e freia em um trajeto curto. A perseguição alcança a posição atual do inimigo;
 cada auto tem um arco visual e uma pausa de 0,14 s antes de retomar a aproximação se
 o alvo escapar. Um clique no chão cancela a perseguição e essa pausa.
+
+Padrão escolhido: selecionar e confirmar com clique. Nas configurações também há
+lançamento ao soltar Q/W e smart cast imediato. A preferência fica salva localmente.
+Mirar não gasta mana; o estado da mira mostra se falta mana ou recarga. O cone usa o
+alcance do corte; a investida mostra corredor e círculo de chegada, incluindo paredes.
+Smart lock estabiliza o alvo sob o cursor, sempre priorizando um corpo clicado
+diretamente. Está aplicado aos autos e preparado para futuras skills single-target;
+corte e investida continuam direcionais.
 
 A cópia portátil local está em `.tools/godot/` (ignorada pelo Git).
 O executável principal funciona também em headless; o wrapper `_console.exe`
@@ -67,7 +79,7 @@ original. A engine e os caches não são copiados pelo Git.
 Não há export templates nem executável distribuível do jogo nesta etapa.
 
 Validação automatizada: importação headless, 12 verificações da fundação,
-63 verificações do Marco 1, 33 de perseguição/inércia, 32 do fluxo, 18 de layout
+63 verificações do Marco 1, 33 de perseguição/inércia, 40 de UI/input, 32 do fluxo, 28 de layout
 em 1280×720/1920×1080 e smoke da cena principal em Godot 4.7.2. Logs ficam isolados
 em `.godot/verification/`. Os testes de movimento cobrem 30/60/144 Hz; isso prova
 consistência lógica, não FPS de renderização. Capturas renderizadas confirmam os

@@ -9,9 +9,9 @@
 - Candidato corrigido aprovado por Astra: `218387b`.
 - Candidato de gameplay após rebase: `97cbde6`, disponível em `codex/playtest`.
 - Backup anterior ao rebase: `codex/backup-m1-before-playtest-rebase` → `218387b`.
-- Status: retorno sobre `065a2f3` tratado diretamente por Astra: perseguição real de
-  arqueiros e peso do movimento em `1f47418`, aprovado tecnicamente para novo playtest.
-  Sem aceite para master.
+- Status: candidato `e70e4d4` aceito pelo usuário em 12/09/2026 ("ficou muito bom")
+  e integrado em master por fast-forward, sem trocar a branch do projeto habitual.
+  A UI de batalha seguinte tem revisão e aceite próprios em `docs/REVIEW_BATTLE_UI.md`.
 
 ## Primeira rodada de revisão
 

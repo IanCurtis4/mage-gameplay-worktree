@@ -9,7 +9,7 @@ Base `e70e4d4`, aceita pelo usuário e integrada em master. Trabalho atual em
    compartilhada entre mira/skill e smart lock estável pelo mouse. Testar contratos.
 2. Concluído: indicadores no chão, seleção, botões de skills, configuração persistente,
    cancelamento e proteção contra cliques sobre UI/pausa. Validar visualmente.
-3. Pendente: suíte completa e candidato no caminho fixo. Aceite da nova UI antes de
+3. Testes/revisão concluídos; integração pendente: candidato no caminho fixo. Aceite da nova UI antes de
    merge. Escrever plano de arte futura, sem produzir assets ou migrar o renderer.
 
 Padrão escolhido explicitamente: Q/W seleciona, clique esquerdo confirma. Botão
