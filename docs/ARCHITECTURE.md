@@ -52,6 +52,38 @@ o inimigo pode escapar. Fora do alcance, após essa recuperação, a perseguiç�
 mesmo com cooldown ainda ativo. Clique no chão cancela perseguição/recuperação,
 mantendo o cooldown. Ataque emitido ainda passa pela precisão normal de CombatMath.
 
+<!-- Os controles usam a geometria 2D atual, sem mudar projeção/fórmulas de combate. -->
+
+## Mira, input e controles de batalha
+
+`CastIntent` guarda somente modo e skill selecionada. Padrão CONFIRM: Q/W seleciona,
+clique esquerdo consome intenção uma vez. RELEASE: key-up correspondente consome;
+clique também confirma sem duplicar no key-up posterior. INSTANT: key-down sem echo
+lança. Cartões da barra sempre selecionam para confirmar no mundo.
+
+Direito/Esc, foco perdido, morte, menu de controles e escolha de augment cancelam
+intenção. Soltar sobre UI interativa cancela; UI recebe cliques antes do mundo.
+Mana/cooldown são revalidados no commit; selecionar/mirar não consome recursos.
+Configurações pausam a arena e não podem empilhar o menu de recompensa.
+
+`BattleTargeting.pick` prioriza corpo direto, depois mantém hover a até 80 unidades
+do mouse, depois adquire alvo a até 68. Mortos/objetos inválidos são descartados.
+Clique usa o mesmo resolver do realce. Com assistência desligada, somente corpo
+direto é elegível. Este é o contrato também para skills single-target futuras;
+as duas skills atuais continuam direcionais, sem autoajuste para inimigos.
+
+`SkillGeometry` compartilha raio/ângulo do cone entre teste de acerto e preview.
+`PlayerActor.dash_destination` é usado pela mira e pela execução da investida.
+`BattleIndicators` desenha cone, corredor/círculo de chegada e pulsos de clique;
+verde-água significa disponível, coral indica mana/recarga bloqueada, ouro marca
+alvo selecionado. A mira usa coordenadas de combate da arena 2D atual; anéis elípticos
+nos pés são decorativos. Este bloco não altera a colisão do corte com obstáculos.
+
+`ControlPreferences` persiste somente modo de cast e smart lock em `user://controls.cfg`.
+Valores inválidos retornam ao padrão; falha de gravação mantém a preferência da
+sessão com aviso. Testes usam arquivos próprios em `.godot/verification`, nunca o
+arquivo do usuário. Este arquivo não persiste run, classe, equips ou cartas.
+
 ## Atributos
 
 `RpgStats.derive(attributes, flat, increased) -> Dictionary` é a única fonte dos

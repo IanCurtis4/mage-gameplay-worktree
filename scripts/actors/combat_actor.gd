@@ -54,9 +54,9 @@ func _draw() -> void:
 	draw_colored_polygon(shadow, Color(0.02, 0.03, 0.05, 0.5))
 	var color := Color.WHITE if _flash_time > 0.0 else actor_color
 	if is_selected:
-		draw_arc(Vector2(0, 2), collision_radius + 12.0, 0.0, TAU, 28, Color("e9c67b"), 4.0)
+		_draw_target_ring(collision_radius + 14.0, Color("f5cc77"), 3.0)
 	elif is_hovered:
-		draw_arc(Vector2(0, 2), collision_radius + 9.0, 0.0, TAU, 24, Color("8de0cf"), 3.0)
+		_draw_target_ring(collision_radius + 11.0, Color("81dfd0"), 2.0)
 	draw_circle(Vector2(0, -18), collision_radius, color)
 	draw_circle(Vector2(0, -22), collision_radius * 0.55, color.lightened(0.14))
 	if health != null:
@@ -64,6 +64,17 @@ func _draw() -> void:
 		var ratio := health.current_hp / health.max_hp
 		draw_rect(Rect2(-bar_width * 0.5, -54, bar_width, 6), Color(0.08, 0.09, 0.12, 0.9))
 		draw_rect(Rect2(-bar_width * 0.5, -54, bar_width * ratio, 6), Color("dc5757"))
+
+func _draw_target_ring(radius: float, color: Color, width: float) -> void:
+	var points := PackedVector2Array()
+	for index: int in range(49):
+		var angle := TAU * index / 48.0
+		points.append(Vector2(cos(angle) * radius, sin(angle) * radius * 0.55 + 4.0))
+	draw_polyline(points, Color(0.03, 0.07, 0.09, 0.85), width + 3.0, true)
+	draw_polyline(points, color, width, true)
+	for sign_value: float in [-1.0, 1.0]:
+		var edge := Vector2(sign_value * (radius + 5.0), 4.0)
+		draw_line(edge - Vector2(0, 5), edge + Vector2(0, 5), color, 2.0, true)
 
 func _on_damage_applied(result: Dictionary) -> void:
 	_flash_time = 0.10

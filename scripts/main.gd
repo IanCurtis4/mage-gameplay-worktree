@@ -7,9 +7,9 @@ const ARENA_OBSTACLES: Array[Rect2] = [
 	Rect2(1010, 570, 230, 125),
 	Rect2(390, 700, 185, 105),
 ]
-const TARGET_ASSIST_RADIUS := 68.0
-const TARGET_DIRECT_PADDING := 4.0
-const ACTOR_BODY_OFFSET := Vector2(0, -18)
+const TARGET_ASSIST_RADIUS := BattleTargeting.ASSIST_RADIUS
+const TARGET_DIRECT_PADDING := BattleTargeting.DIRECT_PADDING
+const ACTOR_BODY_OFFSET := BattleTargeting.BODY_OFFSET
 
 var rng := RandomNumberGenerator.new()
 var run_state := RunState.new()
@@ -44,15 +44,26 @@ var result_body: Label
 var _hovered_enemy: CombatActor
 var _selected_enemy: CombatActor
 var _feedback_serial := 0
+var cast_intent := CastIntent.new()
+var control_preferences := ControlPreferences.new()
+var battle_indicators: BattleIndicators
+var battle_controls: BattleControls
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	y_sort_enabled = true
 	rng.seed = Time.get_ticks_usec()
 	navigation.configure(ARENA_BOUNDS, ARENA_OBSTACLES, 22.0)
+	control_preferences.load_settings()
+	cast_intent.set_mode(control_preferences.cast_mode)
 	arena_view = ArenaView.new()
+	arena_view.z_index = -2
 	arena_view.configure(ARENA_BOUNDS, ARENA_OBSTACLES)
 	add_child(arena_view)
+	battle_indicators = BattleIndicators.new()
+	battle_indicators.z_index = -1
+	battle_indicators.process_mode = Node.PROCESS_MODE_PAUSABLE
+	add_child(battle_indicators)
 	player = PlayerActor.new()
 	player.configure(navigation, run_state)
 	player.global_position = Vector2(300, 520)
@@ -74,11 +85,38 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	_update_hud()
 	if not get_tree().paused and not run_finished:
-		_update_hover(get_global_mouse_position())
+		if _world_pointer_available():
+			_update_hover(get_global_mouse_position())
+		else:
+			_clear_hover()
+		_update_aim(get_global_mouse_position())
 	if get_tree().paused or reward == null or not is_instance_valid(reward):
 		return
 	if player.global_position.distance_to(reward.global_position) <= 48.0:
 		_collect_reward()
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed and cast_intent.active_skill != &"":
+		_cancel_aim()
+		get_viewport().set_input_as_handled()
+		return
+	if event is InputEventKey and not event.echo:
+		if event.keycode == KEY_ESCAPE and event.pressed:
+			if battle_controls.settings_overlay.visible:
+				_toggle_settings(false)
+			elif cast_intent.active_skill != &"":
+				_cancel_aim()
+			elif not get_tree().paused and not run_finished:
+				_toggle_settings(true)
+			get_viewport().set_input_as_handled()
+		elif not event.pressed and cast_intent.mode == CastIntent.Mode.RELEASE:
+			var skill := _key_skill(event.keycode)
+			if skill != &"" and skill == cast_intent.active_skill:
+				var to_cast := cast_intent.release(skill)
+				if _world_pointer_available():
+					_commit_skill(to_cast, get_global_mouse_position())
+				_cancel_aim()
+				get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
@@ -90,18 +128,104 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 		if get_tree().paused or not player.is_alive() or run_finished:
 			return
-		if event.keycode == KEY_Q:
-			if not player.use_slash(player.global_position.direction_to(get_global_mouse_position()), enemies):
-				_show_skill_blocked("Corte em cone", player.slash_cooldown, PlayerActor.SLASH_MANA_COST)
-		elif event.keycode == KEY_W:
-			if not player.use_dash(player.global_position.direction_to(get_global_mouse_position())):
-				_show_skill_blocked("Investida", player.dash_cooldown, PlayerActor.DASH_MANA_COST)
+		var skill := _key_skill(event.keycode)
+		if skill != &"":
+			if _world_pointer_available():
+				_commit_skill(cast_intent.press(skill), get_global_mouse_position())
+				_update_aim(get_global_mouse_position())
+			get_viewport().set_input_as_handled()
 		elif event.keycode == KEY_SPACE and next_button.visible:
 			_start_next_encounter()
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+		_cancel_aim()
+		get_viewport().set_input_as_handled()
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		if get_tree().paused or not player.is_alive() or run_finished:
 			return
-		_handle_world_click(get_global_mouse_position())
+		var world_point: Vector2 = get_canvas_transform().affine_inverse() * event.position
+		if cast_intent.active_skill != &"":
+			_commit_skill(cast_intent.confirm(), world_point)
+			_cancel_aim()
+		else:
+			_handle_world_click(world_point)
+		get_viewport().set_input_as_handled()
+
+func _key_skill(key: Key) -> StringName:
+	return &"slash" if key == KEY_Q else (&"dash" if key == KEY_W else &"")
+
+func _commit_skill(skill: StringName, point: Vector2) -> void:
+	if skill == &"" or get_tree().paused or run_finished or not player.is_alive():
+		return
+	var direction := player.aim_direction(point)
+	if skill == &"slash":
+		if not player.use_slash(direction, enemies):
+			_show_skill_blocked("Corte em cone", player.slash_cooldown, PlayerActor.SLASH_MANA_COST)
+	elif skill == &"dash":
+		if not player.use_dash(direction):
+			_show_skill_blocked("Investida", player.dash_cooldown, PlayerActor.DASH_MANA_COST)
+
+func _select_skill_from_bar(skill: StringName) -> void:
+	if get_tree().paused or run_finished or not player.is_alive():
+		return
+	cast_intent.active_skill = skill
+	_update_aim(get_global_mouse_position())
+
+func _update_aim(point: Vector2) -> void:
+	var skill := cast_intent.active_skill
+	if skill == &"" or get_tree().paused or run_finished:
+		battle_indicators.clear_aim()
+		battle_controls.set_aim_text("")
+		bottom_controls.visible = true
+		return
+	var is_slash := skill == &"slash"
+	var cooldown := player.slash_cooldown if is_slash else player.dash_cooldown
+	var cost := PlayerActor.SLASH_MANA_COST if is_slash else PlayerActor.DASH_MANA_COST
+	var state := _skill_state(cooldown, cost)
+	if _world_pointer_available():
+		battle_indicators.show_aim(skill, player, point, state == "PRONTO")
+	else:
+		battle_indicators.clear_aim()
+	var action := "Solte a tecla ou clique" if cast_intent.mode == CastIntent.Mode.RELEASE else "Clique para lançar"
+	battle_controls.set_aim_text("%s · %s  |  %s  |  Direito / Esc cancela" % ["Corte" if is_slash else "Investida", state, action])
+	bottom_controls.visible = false
+
+func _cancel_aim() -> void:
+	cast_intent.cancel()
+	if battle_indicators != null:
+		battle_indicators.clear_aim()
+	if battle_controls != null:
+		battle_controls.set_aim_text("")
+	if bottom_controls != null:
+		bottom_controls.visible = true
+
+func _world_pointer_available() -> bool:
+	return get_viewport().gui_get_hovered_control() == null
+
+func _clear_hover() -> void:
+	if is_instance_valid(_hovered_enemy):
+		_hovered_enemy.set_hovered(false)
+	_hovered_enemy = null
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_WINDOW_FOCUS_OUT:
+		_cancel_aim()
+
+func _toggle_settings(open: bool) -> void:
+	if open and (get_tree().paused or run_finished):
+		return
+	_cancel_aim()
+	_clear_hover()
+	battle_controls.settings_overlay.visible = open
+	get_tree().paused = open
+
+func _change_control_preferences(mode: int, smart_lock: bool) -> void:
+	_cancel_aim()
+	_clear_hover()
+	cast_intent.set_mode(mode)
+	control_preferences.cast_mode = mode
+	control_preferences.smart_lock = smart_lock
+	if control_preferences.save_settings() != OK:
+		status_label.text = "Controles aplicados; não foi possível salvar a preferência."
 
 func _spawn_encounter(index: int) -> void:
 	encounter_index = index
@@ -178,11 +302,13 @@ func _collect_reward() -> void:
 	status_label.text = "Recompensa coletada — abra a escolha com E"
 
 func _open_augment_menu() -> void:
-	if run_finished:
+	if run_finished or get_tree().paused:
 		return
 	var offer := run_state.build_offer(encounter_active, rng)
 	if offer.is_empty():
 		return
+	_cancel_aim()
+	_clear_hover()
 	for child: Node in choice_buttons.get_children():
 		child.queue_free()
 	for definition: AugmentDefinition in offer:
@@ -218,6 +344,8 @@ func _on_player_died(_actor: CombatActor) -> void:
 	_show_result(false)
 
 func _show_result(victory: bool) -> void:
+	_cancel_aim()
+	_clear_hover()
 	run_finished = true
 	result_title.text = "Arena concluída!" if victory else "Você caiu em combate"
 	result_body.text = ("Os dois encontros do Marco 1 foram vencidos.\n" if victory else "A run terminou e todo o estado temporário será descartado.\n") + "Pressione R ou use o botão para reiniciar."
@@ -229,31 +357,20 @@ func _restart_run() -> void:
 	get_tree().reload_current_scene()
 
 func _enemy_at(point: Vector2) -> CombatActor:
-	var direct_hit: CombatActor
-	var direct_distance := INF
-	var assisted_hit: CombatActor
-	var assisted_distance := INF
-	for enemy: CombatActor in enemies:
-		if not enemy.is_alive():
-			continue
-		var distance := point.distance_to(enemy.global_position + ACTOR_BODY_OFFSET)
-		if distance <= enemy.collision_radius + TARGET_DIRECT_PADDING and distance < direct_distance:
-			direct_distance = distance
-			direct_hit = enemy
-		elif distance <= TARGET_ASSIST_RADIUS and distance < assisted_distance:
-			assisted_distance = distance
-			assisted_hit = enemy
-	return direct_hit if direct_hit != null else assisted_hit
+	return BattleTargeting.pick(point, enemies, _hovered_enemy, control_preferences.smart_lock)
 
 func _handle_world_click(point: Vector2) -> void:
 	var clicked_enemy := _enemy_at(point)
 	_select_enemy(clicked_enemy)
 	if clicked_enemy != null:
+		battle_indicators.show_click(clicked_enemy.global_position, true)
 		player.pursue(clicked_enemy)
 		status_label.text = "Perseguindo %s" % clicked_enemy.actor_name
 	else:
 		player.move_to(point)
-		arena_view.set_destination(point)
+		var route := navigation.get_path(player.global_position, point)
+		if not route.is_empty():
+			battle_indicators.show_click(route[-1])
 		status_label.text = "Movendo"
 
 func _update_hover(point: Vector2) -> void:
@@ -296,6 +413,10 @@ func _update_hud() -> void:
 	mana_label.text = "MANA  %d / %d" % [floori(player.mana), floori(player.max_mana)]
 	skill_label.text = "Q  Corte (%d mana) — %s\nW  Investida (%d mana) — %s" % [int(PlayerActor.SLASH_MANA_COST), _skill_state(player.slash_cooldown, PlayerActor.SLASH_MANA_COST), int(PlayerActor.DASH_MANA_COST), _skill_state(player.dash_cooldown, PlayerActor.DASH_MANA_COST)]
 	augment_button.text = "Escolher augment (E) — %d pendente(s)" % run_state.pending_choices
+	augment_button.visible = run_state.pending_choices > 0
+	if battle_controls != null:
+		battle_controls.show_skill_state(&"slash", "Q  ·  CORTE\n%d mana  ·  %s" % [int(PlayerActor.SLASH_MANA_COST), _skill_state(player.slash_cooldown, PlayerActor.SLASH_MANA_COST)], cast_intent.active_skill == &"slash")
+		battle_controls.show_skill_state(&"dash", "W  ·  INVESTIDA\n%d mana  ·  %s" % [int(PlayerActor.DASH_MANA_COST), _skill_state(player.dash_cooldown, PlayerActor.DASH_MANA_COST)], cast_intent.active_skill == &"dash")
 
 func _skill_state(cooldown: float, mana_cost: float) -> String:
 	if cooldown > 0.0:
@@ -330,6 +451,7 @@ func _build_ui() -> void:
 	canvas.add_child(ui_root)
 	ui_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	ui_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ui_root.theme = _battle_theme()
 
 	hud_panel = PanelContainer.new()
 	ui_root.add_child(hud_panel)
@@ -359,10 +481,10 @@ func _build_ui() -> void:
 	help_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	help_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
 	help_panel.offset_left = -440.0
-	help_panel.offset_top = 20.0
+	help_panel.offset_top = 68.0
 	help_panel.offset_right = -24.0
-	help_panel.offset_bottom = 170.0
-	var help_label := _make_label("CLIQUE no chão: mover e cancelar perseguição\nCLIQUE no inimigo: perseguir e autoatacar\nQ: corte no cursor   W: investida no cursor\nE: abrir augment   ESPAÇO: próximo encontro", 16, Color("d7ddea"))
+	help_panel.offset_bottom = 214.0
+	var help_label := _make_label("CLIQUE: mover / autoatacar o alvo\nQ / W: skills no mouse\nDIREITO / ESC: cancelar mira\nE: augment  ·  ESPAÇO: próximo encontro", 16, Color("d7ddea"))
 	help_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	help_panel.add_child(help_label)
 
@@ -371,9 +493,9 @@ func _build_ui() -> void:
 	bottom_controls.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bottom_controls.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	bottom_controls.offset_left = -310.0
-	bottom_controls.offset_top = -116.0
+	bottom_controls.offset_top = -186.0
 	bottom_controls.offset_right = 310.0
-	bottom_controls.offset_bottom = -20.0
+	bottom_controls.offset_bottom = -98.0
 	bottom_controls.alignment = BoxContainer.ALIGNMENT_CENTER
 	status_label = _make_label("", 20, Color.WHITE)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -441,6 +563,39 @@ func _build_ui() -> void:
 	restart.pressed.connect(_restart_run)
 	result_column.add_child(restart)
 	result_overlay.visible = false
+	battle_controls = BattleControls.new()
+	ui_root.add_child(battle_controls)
+	battle_controls.set_options(control_preferences.cast_mode, control_preferences.smart_lock)
+	battle_controls.skill_selected.connect(_select_skill_from_bar)
+	battle_controls.settings_requested.connect(_toggle_settings)
+	battle_controls.preferences_changed.connect(_change_control_preferences)
+	# The battle controls belong below end-of-run and reward modals.
+	ui_root.move_child(battle_controls, augment_overlay.get_index())
+
+func _battle_theme() -> Theme:
+	var theme_value := Theme.new()
+	theme_value.default_font_size = 16
+	var panel := _panel_style(Color(0.045, 0.085, 0.11, 0.92), Color("415b67"))
+	theme_value.set_stylebox("panel", "PanelContainer", panel)
+	theme_value.set_stylebox("normal", "Button", _panel_style(Color("132b35"), Color("587784")))
+	theme_value.set_stylebox("hover", "Button", _panel_style(Color("23454d"), Color("81dfd0")))
+	theme_value.set_stylebox("pressed", "Button", _panel_style(Color("30554f"), Color("f5cc77")))
+	theme_value.set_stylebox("disabled", "Button", _panel_style(Color("17252b"), Color("35454d")))
+	theme_value.set_color("font_color", "Button", Color("e8efee"))
+	theme_value.set_color("font_pressed_color", "Button", Color("ffe0a0"))
+	return theme_value
+
+func _panel_style(fill: Color, border: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = fill
+	style.border_color = border
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(7)
+	style.content_margin_left = 14
+	style.content_margin_right = 14
+	style.content_margin_top = 10
+	style.content_margin_bottom = 10
+	return style
 
 func _make_overlay(parent: Control) -> Control:
 	var overlay := ColorRect.new()

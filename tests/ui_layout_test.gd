@@ -27,6 +27,19 @@ func _run() -> void:
 		_check(_inside(viewport_rect, controller.augment_panel.get_global_rect()), "augment panel remains visible at %s" % viewport_size)
 		_check(_inside(viewport_rect, controller.result_panel.get_global_rect()), "result panel remains visible at %s" % viewport_size)
 		_check(controller.ui_root.get_global_rect().size == Vector2(viewport_size), "fullscreen UI root follows viewport %s" % viewport_size)
+		_check(_inside(viewport_rect, controller.battle_controls.skill_bar.get_global_rect()) and _inside(viewport_rect, controller.battle_controls.settings_button.get_global_rect()), "skill bar and controls button fit viewport %s" % viewport_size)
+		controller._toggle_settings(true)
+		await process_frame
+		_check(_inside(viewport_rect, controller.battle_controls.settings_panel.get_global_rect()), "controls modal fits viewport %s" % viewport_size)
+		controller._toggle_settings(false)
+		for mode: int in [CastIntent.Mode.CONFIRM, CastIntent.Mode.RELEASE, CastIntent.Mode.INSTANT]:
+			controller.battle_controls.set_options(mode, true)
+			controller.cast_intent.set_mode(mode)
+			controller.cast_intent.active_skill = &"dash"
+			controller._update_aim(Vector2(800, 500))
+			await process_frame
+			_check(_inside(viewport_rect, controller.battle_controls.aim_panel.get_global_rect()) and _inside(controller.battle_controls.settings_panel.get_global_rect(), controller.battle_controls.mode_description.get_global_rect()), "aim hint and mode description fit mode %d at %s" % [mode, viewport_size])
+		controller._cancel_aim()
 		controller.encounter_active = false
 		controller.run_state.queue_choice()
 		controller._open_augment_menu()

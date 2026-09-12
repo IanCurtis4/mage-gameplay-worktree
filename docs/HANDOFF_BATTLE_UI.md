@@ -5,9 +5,9 @@ Base `e70e4d4`, aceita pelo usuário e integrada em master. Trabalho atual em
 
 ## Passos de entrega
 
-1. Em andamento: intenção de lançamento (confirmação, soltar, instantâneo), geometria
+1. Concluído em `e3b686b`: intenção de lançamento (confirmação, soltar, instantâneo), geometria
    compartilhada entre mira/skill e smart lock estável pelo mouse. Testar contratos.
-2. Pendente: indicadores no chão, seleção, botões de skills, configuração persistente,
+2. Concluído: indicadores no chão, seleção, botões de skills, configuração persistente,
    cancelamento e proteção contra cliques sobre UI/pausa. Validar visualmente.
 3. Pendente: suíte completa e candidato no caminho fixo. Aceite da nova UI antes de
    merge. Escrever plano de arte futura, sem produzir assets ou migrar o renderer.
