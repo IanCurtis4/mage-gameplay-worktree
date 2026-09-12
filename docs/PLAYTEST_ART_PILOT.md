@@ -1,7 +1,8 @@
 # Playtest — mira, feedback de combate e piloto visual 01
 
 Base: `21c6473` (correções revisadas de cone e auto), com UI anterior `c771d76`.
-Implementação: `codex/art-pilot`. Master aceito continua `e70e4d4`.
+Código e arte revisados: `720e794`, na branch `codex/art-pilot`, integrado por
+fast-forward em `codex/playtest`. Master aceito continua `e70e4d4`.
 Abrir o projeto habitual, aceitar recarregamento se o editor solicitar e rodar F5.
 Parar a partida anterior para carregar o novo candidato; nenhuma operação Git é
 necessária para o usuário.
@@ -47,6 +48,10 @@ Renderização com Compatibility/OpenGL na GTX 1080 conferiu shader, transparên
 escala, HUD e mira. Texturas carregadas no runtime: sprites 64×64 com alpha;
 materiais 128×128 opacos. Isso não substitui medição de FPS em partida real.
 
+Após a integração, o diretório habitual também passou em `tools/verify.ps1`
+**sem** `-SkipEditorImport`: importação completa, os mesmos 221 checks e smoke.
+O cache de novas texturas/classes foi atualizado antes da validação final.
+
 Roteiro sugerido:
 
 1. Andar para um lado, selecionar Q, apontar longe na direção oposta e clicar.
@@ -69,10 +74,9 @@ Roteiro sugerido:
 - Mistura por shader e repetição espelhada suavizam emendas, mas padrões repetidos
   continuam visíveis. Kit com variações, cantos e transições pintadas é um próximo bloco.
 - Gelo e conservação de momento no gelo permanecem futuros.
-- No diretório habitual, a importação de um segundo editor pode encontrar a DLL do
-  GitPlugin ocupada pelo editor do usuário. Validar importação no worktree limpo;
-  usar `-SkipEditorImport` no diretório habitual apenas para repetir os testes de
-  runtime. Preservar GitPlugin, `project.godot`, `build/` e `export_presets.cfg` locais.
+
+GitPlugin, ajustes locais de `project.godot`, `build/` e `export_presets.cfg` foram
+preservados e não fazem parte do candidato versionado.
 
 Após aceite visual deste candidato, registrar merge em master. Só então definir
 com o usuário o próximo bloco de animação ou a prova técnica de chão 3D.

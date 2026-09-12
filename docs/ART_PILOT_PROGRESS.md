@@ -36,4 +36,6 @@ com imagegen nativo, copiados para o repositório com prompts registrados. Detal
 capturas, limites e roteiro de aceite em `docs/PLAYTEST_ART_PILOT.md`.
 Próxima ação após integração: playtest do usuário; master permanece `e70e4d4` até
 aceite explícito do candidato com UI, correções e arte. Não iniciar animações ou
-migração 3D automaticamente.
+migração 3D automaticamente. Código/arte `720e794` integrado; importação completa
+e 221 checks passaram também no diretório habitual. Este registro final só altera
+documentação. Os próximos passos estão parados no aceite do candidato pelo usuário.
