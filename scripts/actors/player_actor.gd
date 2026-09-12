@@ -5,7 +5,11 @@ signal attack_requested(request: DamageRequest, target: CombatActor)
 signal resources_changed
 
 const BASE_ATTRIBUTES := {"str": 8, "agi": 5, "vit": 8, "int": 2, "dex": 5, "luk": 2}
-const MELEE_RANGE := 62.0
+const SLASH_MANA_COST := 15.0
+const DASH_MANA_COST := 20.0
+const BASIC_REACH_BEYOND_BODIES := 50.0
+const ATTACK_RETENTION := 16.0
+const MOVEMENT_EPSILON := 0.01
 const SLASH_RANGE := 155.0
 const SLASH_HALF_ANGLE := deg_to_rad(52.0)
 
@@ -21,6 +25,7 @@ var _path_index := 0
 var _repath_time := 0.0
 var _last_facing := Vector2.RIGHT
 var _slash_visual_time := 0.0
+var _attack_engaged := false
 
 func configure(nav: ArenaNavigation, run_state: RunState) -> void:
 	navigation = nav
@@ -48,20 +53,22 @@ func _apply_derived_stats(derived: Dictionary) -> void:
 
 func move_to(point: Vector2) -> void:
 	target = null
+	_attack_engaged = false
 	_set_path(point)
 
 func pursue(enemy: CombatActor) -> void:
 	target = enemy
+	_attack_engaged = false
 	_repath_time = 0.0
 
 func use_slash(direction: Vector2, enemies: Array[CombatActor]) -> bool:
-	if not is_alive() or slash_cooldown > 0.0 or mana < 15.0:
+	if not is_alive() or slash_cooldown > 0.0 or mana < SLASH_MANA_COST:
 		return false
 	var facing := direction.normalized()
 	if facing.is_zero_approx():
 		facing = _last_facing
 	_last_facing = facing
-	mana -= 15.0
+	mana -= SLASH_MANA_COST
 	slash_cooldown = 4.0 * float(stats["cast_multiplier"])
 	_slash_visual_time = 0.20
 	queue_redraw()
@@ -75,13 +82,13 @@ func use_slash(direction: Vector2, enemies: Array[CombatActor]) -> bool:
 	return true
 
 func use_dash(direction: Vector2) -> bool:
-	if not is_alive() or dash_cooldown > 0.0 or mana < 20.0:
+	if not is_alive() or dash_cooldown > 0.0 or mana < DASH_MANA_COST:
 		return false
 	var facing := direction.normalized()
 	if facing.is_zero_approx():
 		facing = _last_facing
 	_last_facing = facing
-	mana -= 20.0
+	mana -= DASH_MANA_COST
 	dash_cooldown = 6.0 * float(stats["cast_multiplier"])
 	global_position = navigation.move_until_blocked(global_position, global_position + facing * 270.0)
 	_path.clear()
@@ -92,6 +99,10 @@ func _process(delta: float) -> void:
 	super._process(delta)
 	if not is_alive():
 		return
+	var simulation_paused := is_inside_tree() and get_tree().paused
+	if simulation_paused:
+		return
+	_regenerate_mana(delta, false)
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
 	slash_cooldown = maxf(0.0, slash_cooldown - delta)
 	dash_cooldown = maxf(0.0, dash_cooldown - delta)
@@ -100,23 +111,35 @@ func _process(delta: float) -> void:
 		queue_redraw()
 	if target != null and (not is_instance_valid(target) or not target.is_alive()):
 		target = null
+		_attack_engaged = false
 		_path.clear()
 	if target != null:
-		var distance := global_position.distance_to(target.global_position)
-		if distance <= MELEE_RANGE:
+		if can_basic_attack(target, _attack_engaged):
+			_attack_engaged = true
 			_path.clear()
 			_try_basic_attack()
 		else:
+			_attack_engaged = false
 			_repath_time -= delta
 			if _repath_time <= 0.0:
-				var stop_point := target.global_position + target.global_position.direction_to(global_position) * MELEE_RANGE * 0.72
+				var stop_distance := maxf(1.0, basic_attack_distance(target) - 4.0)
+				var stop_point := target.global_position + target.global_position.direction_to(global_position) * stop_distance
 				_set_path(stop_point)
 				_repath_time = 0.22
 	_move_along_path(delta)
+
+func _regenerate_mana(delta: float, simulation_paused: bool) -> bool:
+	if simulation_paused or not is_alive() or mana >= max_mana:
+		return false
+	var previous_mana := mana
+	mana = minf(max_mana, mana + float(stats["mana_regen_per_second"]) * delta)
+	if is_equal_approx(previous_mana, mana):
+		return false
 	resources_changed.emit()
+	return true
 
 func _try_basic_attack() -> void:
-	if target == null or attack_cooldown > 0.0:
+	if target == null or attack_cooldown > 0.0 or not can_basic_attack(target, _attack_engaged):
 		return
 	_last_facing = global_position.direction_to(target.global_position)
 	attack_cooldown = 1.0 / float(stats["attacks_per_second"])
@@ -137,20 +160,43 @@ func _make_request(enemy: CombatActor, skill_id: StringName, power: float, hit_c
 func _set_path(point: Vector2) -> void:
 	_path = navigation.get_path(global_position, point)
 	_path_index = 0
-	while _path_index < _path.size() and global_position.distance_to(_path[_path_index]) < 12.0:
+	while _path_index < _path.size() and global_position.distance_to(_path[_path_index]) < 0.01:
 		_path_index += 1
 
 func _move_along_path(delta: float) -> void:
-	if _path_index >= _path.size():
-		return
-	var point := _path[_path_index]
-	var direction := global_position.direction_to(point)
-	if not direction.is_zero_approx():
+	var remaining_distance := float(stats["move_speed"]) * delta
+	while remaining_distance > 0.0 and _path_index < _path.size():
+		var point := _path[_path_index]
+		var distance := global_position.distance_to(point)
+		if distance < MOVEMENT_EPSILON:
+			_path_index += 1
+			continue
+		var direction := global_position.direction_to(point)
 		_last_facing = direction
-	var desired := global_position.move_toward(point, float(stats["move_speed"]) * delta)
-	global_position = navigation.move_until_blocked(global_position, desired)
-	if global_position.distance_to(point) < 5.0:
-		_path_index += 1
+		var travel := minf(distance, remaining_distance)
+		var desired := global_position + direction * travel
+		var moved_to := navigation.move_until_blocked(global_position, desired)
+		var actual_travel := global_position.distance_to(moved_to)
+		global_position = moved_to
+		if actual_travel <= 0.0:
+			break
+		if actual_travel + MOVEMENT_EPSILON < travel:
+			_path.clear()
+			break
+		# Consume the planned budget after a successful segment. Vector2 rounding can
+		# otherwise leave a positive subpixel remainder that never makes progress.
+		remaining_distance = maxf(0.0, remaining_distance - travel)
+		if travel >= distance - MOVEMENT_EPSILON:
+			_path_index += 1
+
+func basic_attack_distance(enemy: CombatActor) -> float:
+	return collision_radius + enemy.collision_radius + BASIC_REACH_BEYOND_BODIES
+
+func can_basic_attack(enemy: CombatActor, retain: bool = false) -> bool:
+	if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
+		return false
+	var allowed_distance := basic_attack_distance(enemy) + (ATTACK_RETENTION if retain else 0.0)
+	return global_position.distance_to(enemy.global_position) <= allowed_distance and navigation.is_segment_clear(global_position, enemy.global_position, 0.0)
 
 func _with_passive(increased: Dictionary) -> Dictionary:
 	var result: Dictionary = increased.duplicate()

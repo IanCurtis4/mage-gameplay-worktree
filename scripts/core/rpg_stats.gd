@@ -23,6 +23,7 @@ static func derive(attributes: Dictionary, flat: Dictionary = {}, increased: Dic
 		"cast_multiplier": 1.0 - 0.01 * dexterity,
 		"crit_chance": 0.05 + 0.005 * luck,
 		"move_speed": 220.0,
+		"mana_regen_per_second": 6.0,
 	}
 	for key: String in result:
 		result[key] = maxf(0.0, (float(result[key]) + float(flat.get(key, 0.0))) * (1.0 + float(increased.get(key, 0.0))))

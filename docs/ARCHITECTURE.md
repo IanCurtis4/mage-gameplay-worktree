@@ -21,6 +21,20 @@ geometria inflada; pontos finais válidos precisam ser alcançados sem cortar qu
 Cliques fora da região ou dentro de obstáculo resolvem para um ponto caminhável,
 sem mover o ator através de área bloqueada.
 
+Em área aberta, a navegação retorna o destino real como único waypoint. Rotas que
+contornam obstáculos são simplificadas escolhendo o waypoint visível mais distante,
+sempre revalidando o segmento contra a geometria inflada. Atores consomem todo o
+orçamento de deslocamento do frame ao atravessar waypoints; o orçamento planejado é
+consumido depois de um passo bem-sucedido e qualquer passo sem progresso encerra o
+laço, evitando travas por resíduos subpixel sem descartar cliques curtos válidos.
+
+Seleção assistida de inimigos usa raio total de 68 unidades a partir da origem nos
+pés. Um acerto direto no corpo visual (raio do ator + 4) tem prioridade sobre qualquer
+alvo apenas assistido. Hover e seleção persistente têm anéis distintos; clicar no chão
+cancela a perseguição e a seleção. O ataque básico inicial alcança a soma dos raios dos
+corpos + 50 unidades, com banda de retenção adicional de 16 após engajar. Alcance e
+linha de visão são revalidados antes do golpe, portanto obstáculos continuam bloqueando.
+
 ## Atributos
 
 `RpgStats.derive(attributes, flat, increased) -> Dictionary` é a única fonte dos
@@ -41,6 +55,7 @@ Custos de XP por nível seguinte: 100, 150, 200, 250. Conteúdo calibrará XP do
 | cast_multiplier | 1 − 0,01×DES; limite 0,25–2 |
 | crit_chance | 0,05 + 0,005×SOR; limite 0–0,75 |
 | move_speed | 220 unidades/s |
+| mana_regen_per_second | 6 mana/s |
 
 Primeiro aplicar `(base + soma_flat) × (1 + soma_increased)`, depois os limites.
 `increased=0.20` significa +20%; fontes percentuais somam, não multiplicam entre si.
@@ -48,6 +63,9 @@ IDs não reconhecidos não criam stats. Stats não ficam negativos; HP máximo m
 Passivas/equips/cartas/augments fornecem modificadores nessa mesma etapa.
 Ao recalcular máximos, preservar HP/mana faltantes (clamp aos novos limites),
 sem curar ao reequipar repetidamente. Recursos atuais pertencem ao ator.
+Mana regenera pelo stat derivado apenas enquanto o ator está vivo e a simulação não
+está pausada, sempre limitada ao máximo. No Espadachim, corte custa 15 e investida
+20; o HUD exibe os custos e prioriza os estados `RECARGA`, `SEM MANA` e `PRONTO`.
 
 ## Dano e efeitos
 
@@ -105,6 +123,7 @@ validar leitura, tentar backup antes de defaults. Sem save implementado nesta fu
 ## Validação
 
 Import headless detecta scripts/recursos inválidos; testes headless validam fórmulas,
-limites, dano e elegibilidade. Smoke da cena detecta falhas de inicialização.
-Movimento, sensação do combate, legibilidade e performance exigem validação visual
-e partida real no marco 1. Esses testes ainda não são possíveis na tela de fundação.
+limites, dano, elegibilidade, fluxo da arena, layout e invariantes de movimento.
+Smoke da cena detecta falhas de inicialização. Movimento automatizado é exercitado
+em 30/60/144 Hz, inclusive cruzando patamares de precisão; sensação do combate,
+legibilidade e performance percebida ainda exigem partida real do usuário.

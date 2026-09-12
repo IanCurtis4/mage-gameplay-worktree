@@ -10,6 +10,8 @@ var actor_color := Color.WHITE
 var stats: Dictionary = {}
 var health: HealthState
 var collision_radius := 18.0
+var is_hovered := false
+var is_selected := false
 var _flash_time := 0.0
 
 func setup(display_name: String, color: Color, derived_stats: Dictionary, radius: float = 18.0) -> void:
@@ -30,6 +32,18 @@ func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Diction
 func is_alive() -> bool:
 	return health != null and health.is_alive()
 
+func set_hovered(value: bool) -> void:
+	if is_hovered == value:
+		return
+	is_hovered = value
+	queue_redraw()
+
+func set_selected(value: bool) -> void:
+	if is_selected == value:
+		return
+	is_selected = value
+	queue_redraw()
+
 func _process(delta: float) -> void:
 	if _flash_time > 0.0:
 		_flash_time = maxf(0.0, _flash_time - delta)
@@ -39,6 +53,10 @@ func _draw() -> void:
 	var shadow := PackedVector2Array([Vector2(-22, 4), Vector2(0, 14), Vector2(22, 4), Vector2(0, -6)])
 	draw_colored_polygon(shadow, Color(0.02, 0.03, 0.05, 0.5))
 	var color := Color.WHITE if _flash_time > 0.0 else actor_color
+	if is_selected:
+		draw_arc(Vector2(0, 2), collision_radius + 12.0, 0.0, TAU, 28, Color("e9c67b"), 4.0)
+	elif is_hovered:
+		draw_arc(Vector2(0, 2), collision_radius + 9.0, 0.0, TAU, 24, Color("8de0cf"), 3.0)
 	draw_circle(Vector2(0, -18), collision_radius, color)
 	draw_circle(Vector2(0, -22), collision_radius * 0.55, color.lightened(0.14))
 	if health != null:

@@ -7,6 +7,9 @@ const ARENA_OBSTACLES: Array[Rect2] = [
 	Rect2(1010, 570, 230, 125),
 	Rect2(390, 700, 185, 105),
 ]
+const TARGET_ASSIST_RADIUS := 68.0
+const TARGET_DIRECT_PADDING := 4.0
+const ACTOR_BODY_OFFSET := Vector2(0, -18)
 
 var rng := RandomNumberGenerator.new()
 var run_state := RunState.new()
@@ -26,6 +29,7 @@ var status_label: Label
 var augment_button: Button
 var next_button: Button
 var ui_root: Control
+var hud_panel: PanelContainer
 var help_panel: PanelContainer
 var bottom_controls: VBoxContainer
 var augment_overlay: Control
@@ -37,6 +41,9 @@ var result_overlay: Control
 var result_panel: PanelContainer
 var result_title: Label
 var result_body: Label
+var _hovered_enemy: CombatActor
+var _selected_enemy: CombatActor
+var _feedback_serial := 0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -66,6 +73,8 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	_update_hud()
+	if not get_tree().paused and not run_finished:
+		_update_hover(get_global_mouse_position())
 	if get_tree().paused or reward == null or not is_instance_valid(reward):
 		return
 	if player.global_position.distance_to(reward.global_position) <= 48.0:
@@ -82,23 +91,17 @@ func _unhandled_input(event: InputEvent) -> void:
 		if get_tree().paused or not player.is_alive() or run_finished:
 			return
 		if event.keycode == KEY_Q:
-			player.use_slash(player.global_position.direction_to(get_global_mouse_position()), enemies)
+			if not player.use_slash(player.global_position.direction_to(get_global_mouse_position()), enemies):
+				_show_skill_blocked("Corte em cone", player.slash_cooldown, PlayerActor.SLASH_MANA_COST)
 		elif event.keycode == KEY_W:
-			player.use_dash(player.global_position.direction_to(get_global_mouse_position()))
+			if not player.use_dash(player.global_position.direction_to(get_global_mouse_position())):
+				_show_skill_blocked("Investida", player.dash_cooldown, PlayerActor.DASH_MANA_COST)
 		elif event.keycode == KEY_SPACE and next_button.visible:
 			_start_next_encounter()
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		if get_tree().paused or not player.is_alive() or run_finished:
 			return
-		var click := get_global_mouse_position()
-		var clicked_enemy := _enemy_at(click)
-		if clicked_enemy != null:
-			player.pursue(clicked_enemy)
-			status_label.text = "Perseguindo %s" % clicked_enemy.actor_name
-		else:
-			player.move_to(click)
-			arena_view.set_destination(click)
-			status_label.text = "Movendo"
+		_handle_world_click(get_global_mouse_position())
 
 func _spawn_encounter(index: int) -> void:
 	encounter_index = index
@@ -148,6 +151,10 @@ func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActo
 	projectile.add_to_group("enemy_projectiles")
 
 func _on_enemy_died(actor: CombatActor) -> void:
+	if actor == _hovered_enemy:
+		_hovered_enemy = null
+	if actor == _selected_enemy:
+		_selected_enemy = null
 	enemies.erase(actor)
 	actor.queue_free()
 	if not enemies.is_empty():
@@ -222,22 +229,56 @@ func _restart_run() -> void:
 	get_tree().reload_current_scene()
 
 func _enemy_at(point: Vector2) -> CombatActor:
-	var closest: CombatActor
-	var best_distance := 46.0
+	var direct_hit: CombatActor
+	var direct_distance := INF
+	var assisted_hit: CombatActor
+	var assisted_distance := INF
 	for enemy: CombatActor in enemies:
 		if not enemy.is_alive():
 			continue
-		var distance := point.distance_to(enemy.global_position + Vector2(0, -18))
-		if distance < best_distance:
-			best_distance = distance
-			closest = enemy
-	return closest
+		var distance := point.distance_to(enemy.global_position + ACTOR_BODY_OFFSET)
+		if distance <= enemy.collision_radius + TARGET_DIRECT_PADDING and distance < direct_distance:
+			direct_distance = distance
+			direct_hit = enemy
+		elif distance <= TARGET_ASSIST_RADIUS and distance < assisted_distance:
+			assisted_distance = distance
+			assisted_hit = enemy
+	return direct_hit if direct_hit != null else assisted_hit
+
+func _handle_world_click(point: Vector2) -> void:
+	var clicked_enemy := _enemy_at(point)
+	_select_enemy(clicked_enemy)
+	if clicked_enemy != null:
+		player.pursue(clicked_enemy)
+		status_label.text = "Perseguindo %s" % clicked_enemy.actor_name
+	else:
+		player.move_to(point)
+		arena_view.set_destination(point)
+		status_label.text = "Movendo"
+
+func _update_hover(point: Vector2) -> void:
+	var hovered := _enemy_at(point)
+	if hovered == _hovered_enemy:
+		return
+	if _hovered_enemy != null and is_instance_valid(_hovered_enemy):
+		_hovered_enemy.set_hovered(false)
+	_hovered_enemy = hovered
+	if _hovered_enemy != null:
+		_hovered_enemy.set_hovered(true)
+
+func _select_enemy(enemy: CombatActor) -> void:
+	if _selected_enemy != null and is_instance_valid(_selected_enemy):
+		_selected_enemy.set_selected(false)
+	_selected_enemy = enemy
+	if _selected_enemy != null:
+		_selected_enemy.set_selected(true)
 
 func _show_damage_number(actor: CombatActor, amount: int, critical: bool) -> void:
 	if amount <= 0:
 		return
 	var label := Label.new()
 	label.text = ("CRÍTICO %d" if critical else "%d") % amount
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.global_position = actor.global_position + Vector2(-22, -78)
 	label.add_theme_font_size_override("font_size", 20 if critical else 17)
 	label.add_theme_color_override("font_color", Color("ffd166") if critical else Color.WHITE)
@@ -252,12 +293,34 @@ func _update_hud() -> void:
 	if player == null or player.health == null:
 		return
 	health_label.text = "VIDA  %d / %d" % [ceili(player.health.current_hp), ceili(player.health.max_hp)]
-	mana_label.text = "MANA  %d / %d" % [ceili(player.mana), ceili(player.max_mana)]
-	skill_label.text = "Q  Corte em cone  %s     W  Investida  %s" % [_cooldown_text(player.slash_cooldown), _cooldown_text(player.dash_cooldown)]
+	mana_label.text = "MANA  %d / %d" % [floori(player.mana), floori(player.max_mana)]
+	skill_label.text = "Q  Corte (%d mana) — %s\nW  Investida (%d mana) — %s" % [int(PlayerActor.SLASH_MANA_COST), _skill_state(player.slash_cooldown, PlayerActor.SLASH_MANA_COST), int(PlayerActor.DASH_MANA_COST), _skill_state(player.dash_cooldown, PlayerActor.DASH_MANA_COST)]
 	augment_button.text = "Escolher augment (E) — %d pendente(s)" % run_state.pending_choices
 
-func _cooldown_text(value: float) -> String:
-	return "PRONTO" if value <= 0.0 else "%.1fs" % value
+func _skill_state(cooldown: float, mana_cost: float) -> String:
+	if cooldown > 0.0:
+		return "RECARGA %.1fs" % cooldown
+	if player.mana < mana_cost:
+		return "SEM MANA"
+	return "PRONTO"
+
+func _show_skill_blocked(skill_name: String, cooldown: float, mana_cost: float) -> void:
+	_feedback_serial += 1
+	var serial := _feedback_serial
+	status_label.text = "%s indisponível — %s" % [skill_name, _skill_state(cooldown, mana_cost)]
+	get_tree().create_timer(1.2).timeout.connect(_restore_context_status.bind(serial))
+
+func _restore_context_status(serial: int) -> void:
+	if serial != _feedback_serial or run_finished:
+		return
+	if encounter_active:
+		status_label.text = "Encontro %d/2 — elimine todos os inimigos" % encounter_index
+	elif reward != null:
+		status_label.text = "Encontro concluído — toque no cristal dourado"
+	elif run_state.pending_choices > 0:
+		status_label.text = "Recompensa coletada — abra a escolha com E"
+	elif encounter_index < 2:
+		status_label.text = "Augment aplicado — inicie o próximo encontro"
 
 func _build_ui() -> void:
 	var canvas := CanvasLayer.new()
@@ -268,18 +331,21 @@ func _build_ui() -> void:
 	ui_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	ui_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-	var hud := PanelContainer.new()
-	ui_root.add_child(hud)
-	hud.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	hud.offset_left = 24.0
-	hud.offset_top = 20.0
-	hud.offset_right = 544.0
-	hud.offset_bottom = 146.0
+	hud_panel = PanelContainer.new()
+	ui_root.add_child(hud_panel)
+	hud_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hud_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	hud_panel.offset_left = 24.0
+	hud_panel.offset_top = 20.0
+	hud_panel.offset_right = 544.0
+	hud_panel.offset_bottom = 190.0
 	var hud_margin := MarginContainer.new()
+	hud_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	for side: String in ["left", "top", "right", "bottom"]:
 		hud_margin.add_theme_constant_override("margin_" + side, 14)
-	hud.add_child(hud_margin)
+	hud_panel.add_child(hud_margin)
 	var hud_column := VBoxContainer.new()
+	hud_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hud_margin.add_child(hud_column)
 	health_label = _make_label("", 22, Color("ff8b8b"))
 	mana_label = _make_label("", 19, Color("79bfff"))
@@ -290,6 +356,7 @@ func _build_ui() -> void:
 
 	help_panel = PanelContainer.new()
 	ui_root.add_child(help_panel)
+	help_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	help_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
 	help_panel.offset_left = -440.0
 	help_panel.offset_top = 20.0
@@ -301,6 +368,7 @@ func _build_ui() -> void:
 
 	bottom_controls = VBoxContainer.new()
 	ui_root.add_child(bottom_controls)
+	bottom_controls.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bottom_controls.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	bottom_controls.offset_left = -310.0
 	bottom_controls.offset_top = -116.0
@@ -312,6 +380,7 @@ func _build_ui() -> void:
 	bottom_controls.add_child(status_label)
 	var buttons := HBoxContainer.new()
 	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
+	buttons.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bottom_controls.add_child(buttons)
 	augment_button = Button.new()
 	augment_button.custom_minimum_size = Vector2(280, 44)
@@ -385,6 +454,7 @@ func _make_overlay(parent: Control) -> Control:
 func _make_label(text_value: String, size: int, color: Color) -> Label:
 	var label := Label.new()
 	label.text = text_value
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.add_theme_font_size_override("font_size", size)
 	label.add_theme_color_override("font_color", color)
 	return label

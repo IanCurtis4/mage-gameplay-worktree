@@ -13,6 +13,31 @@ func _run() -> void:
 	var controller := current_scene as RunController
 	_check(controller != null and controller.encounter_active and controller.encounter_index == 1, "first encounter starts automatically")
 	_check(controller.enemies.size() == 2, "first encounter contains two chasers")
+	var first_enemy := controller.enemies[0]
+	var second_enemy := controller.enemies[1]
+	first_enemy.global_position = Vector2(600, 300)
+	second_enemy.global_position = Vector2(650, 300)
+	var assisted_click := first_enemy.global_position + RunController.ACTOR_BODY_OFFSET + Vector2(-60, 0)
+	_check(controller._enemy_at(assisted_click) == first_enemy, "selection assistance accepts click within 68 px of body")
+	var direct_overlap_click := second_enemy.global_position + RunController.ACTOR_BODY_OFFSET
+	_check(controller._enemy_at(direct_overlap_click) == second_enemy, "direct visual hit wins over overlapping assisted candidate")
+	controller._update_hover(first_enemy.global_position + RunController.ACTOR_BODY_OFFSET)
+	_check(first_enemy.is_hovered, "hovered enemy exposes visual intent state")
+	controller._handle_world_click(direct_overlap_click)
+	_check(controller.player.target == second_enemy and second_enemy.is_selected, "assisted click starts pursuit and visible selection")
+	controller._handle_world_click(Vector2(300, 520))
+	_check(controller.player.target == null and not second_enemy.is_selected, "ground click immediately cancels pursuit and selection")
+	controller.player.mana = 14.2
+	controller.player.slash_cooldown = 0.0
+	controller._update_hud()
+	_check(controller.mana_label.text.begins_with("MANA  14") and controller.skill_label.text.contains("SEM MANA") and not controller.skill_label.text.contains("Corte (15 mana) — PRONTO"), "HUD floors fractional mana and never shows false ready state")
+	controller.player.slash_cooldown = 2.0
+	controller._update_hud()
+	_check(controller.skill_label.text.contains("RECARGA 2.0s"), "HUD distinguishes cooldown from insufficient mana")
+	controller._show_skill_blocked("Corte em cone", controller.player.slash_cooldown, PlayerActor.SLASH_MANA_COST)
+	_check(controller.status_label.text.contains("indisponível") and controller.status_label.text.contains("RECARGA"), "blocked skill gives immediate non-pausing feedback")
+	controller.player.mana = controller.player.max_mana
+	controller.player.slash_cooldown = 0.0
 	controller._start_next_encounter()
 	_check(controller.encounter_index == 1 and controller.enemies.size() == 2, "active encounter blocks manual advancement")
 

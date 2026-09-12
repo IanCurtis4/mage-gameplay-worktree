@@ -40,24 +40,42 @@ func get_path(from: Vector2, to: Vector2) -> PackedVector2Array:
 	var result := PackedVector2Array()
 	if not is_walkable(from):
 		return result
-	var from_id := _nearest_walkable(_world_to_cell(from), from, true)
 	var destination_is_walkable := is_walkable(to)
 	var to_id := _nearest_walkable(_world_to_cell(to), to, destination_is_walkable)
-	if from_id < 0 or to_id < 0:
+	if to_id < 0:
+		return result
+	var resolved_destination := to if destination_is_walkable else _grid.get_point_position(to_id)
+	if is_segment_walkable(from, resolved_destination):
+		result.append(resolved_destination)
+		return result
+	var from_id := _nearest_walkable(_world_to_cell(from), from, true)
+	if from_id < 0:
 		return result
 	var raw_path := _grid.get_point_path(from_id, to_id)
-	var previous := from
+	var candidates := PackedVector2Array()
 	for point: Vector2 in raw_path:
-		if previous.distance_squared_to(point) < 0.01:
-			continue
-		if not is_segment_clear(previous, point, _actor_radius):
+		if from.distance_squared_to(point) >= 0.01:
+			candidates.append(point)
+	if candidates.is_empty() or candidates[-1].distance_squared_to(resolved_destination) >= 0.01:
+		candidates.append(resolved_destination)
+	return _simplify_path(from, candidates)
+
+func _simplify_path(from: Vector2, candidates: PackedVector2Array) -> PackedVector2Array:
+	var simplified := PackedVector2Array()
+	var current := from
+	var next_index := 0
+	while next_index < candidates.size():
+		var farthest_visible := -1
+		for candidate_index: int in range(candidates.size() - 1, next_index - 1, -1):
+			if is_segment_walkable(current, candidates[candidate_index]):
+				farthest_visible = candidate_index
+				break
+		if farthest_visible < 0:
 			return PackedVector2Array()
-		result.append(point)
-		previous = point
-	if destination_is_walkable and previous.distance_squared_to(to) >= 0.01:
-		if is_segment_clear(previous, to, _actor_radius):
-			result.append(to)
-	return result
+		simplified.append(candidates[farthest_visible])
+		current = candidates[farthest_visible]
+		next_index = farthest_visible + 1
+	return simplified
 
 func is_walkable(point: Vector2) -> bool:
 	return _is_point_clear(point, _actor_radius + EDGE_EPSILON)

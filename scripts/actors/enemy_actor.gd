@@ -3,6 +3,8 @@ extends CombatActor
 
 signal attack_requested(request: DamageRequest, target: CombatActor, ranged: bool)
 
+const MOVEMENT_EPSILON := 0.01
+
 var archetype: StringName
 var navigation: ArenaNavigation
 var player: PlayerActor
@@ -68,12 +70,29 @@ func _update_path(destination: Vector2) -> void:
 	_repath_time = 0.45
 
 func _move_along_path(delta: float) -> void:
-	while _path_index < _path.size() and global_position.distance_to(_path[_path_index]) < 7.0:
-		_path_index += 1
-	if _path_index >= _path.size():
-		return
-	var desired := global_position.move_toward(_path[_path_index], float(stats["move_speed"]) * delta)
-	global_position = navigation.move_until_blocked(global_position, desired)
+	var remaining_distance := float(stats["move_speed"]) * delta
+	while remaining_distance > 0.0 and _path_index < _path.size():
+		var point := _path[_path_index]
+		var distance := global_position.distance_to(point)
+		if distance < MOVEMENT_EPSILON:
+			_path_index += 1
+			continue
+		var direction := global_position.direction_to(point)
+		var travel := minf(distance, remaining_distance)
+		var desired := global_position + direction * travel
+		var moved_to := navigation.move_until_blocked(global_position, desired)
+		var actual_travel := global_position.distance_to(moved_to)
+		global_position = moved_to
+		if actual_travel <= 0.0:
+			break
+		if actual_travel + MOVEMENT_EPSILON < travel:
+			_path.clear()
+			break
+		# Consume the planned budget after a successful segment. Vector2 rounding can
+		# otherwise leave a positive subpixel remainder that never makes progress.
+		remaining_distance = maxf(0.0, remaining_distance - travel)
+		if travel >= distance - MOVEMENT_EPSILON:
+			_path_index += 1
 
 func _draw() -> void:
 	super._draw()

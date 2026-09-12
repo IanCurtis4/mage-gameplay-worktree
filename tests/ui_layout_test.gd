@@ -18,6 +18,11 @@ func _run() -> void:
 		await process_frame
 		var viewport_rect := Rect2(Vector2.ZERO, Vector2(viewport_size))
 		_check(_inside(viewport_rect, controller.help_panel.get_global_rect()), "help remains visible at %s" % viewport_size)
+		_check(_inside(controller.hud_panel.get_global_rect(), controller.skill_label.get_global_rect()), "two-line skill status fits HUD at %s" % viewport_size)
+		var hud_margin := controller.hud_panel.get_child(0) as Control
+		var hud_column := hud_margin.get_child(0) as Control
+		_check(controller.hud_panel.mouse_filter == Control.MOUSE_FILTER_IGNORE and hud_margin.mouse_filter == Control.MOUSE_FILTER_IGNORE and hud_column.mouse_filter == Control.MOUSE_FILTER_IGNORE and controller.help_panel.mouse_filter == Control.MOUSE_FILTER_IGNORE and controller.status_label.mouse_filter == Control.MOUSE_FILTER_IGNORE, "informational UI does not create dead click zones at %s" % viewport_size)
+		_check(controller.augment_button.mouse_filter == Control.MOUSE_FILTER_STOP and controller.augment_overlay.mouse_filter == Control.MOUSE_FILTER_STOP, "buttons and modal overlay still consume world clicks at %s" % viewport_size)
 		_check(_inside(viewport_rect, controller.bottom_controls.get_global_rect()), "status and buttons remain visible at %s" % viewport_size)
 		_check(_inside(viewport_rect, controller.augment_panel.get_global_rect()), "augment panel remains visible at %s" % viewport_size)
 		_check(_inside(viewport_rect, controller.result_panel.get_global_rect()), "result panel remains visible at %s" % viewport_size)

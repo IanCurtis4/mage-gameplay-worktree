@@ -5,6 +5,7 @@ var failures: int = 0
 func _initialize() -> void:
 	var base := RpgStats.derive({"str": 5, "vit": 5})
 	_check(is_equal_approx(base["max_hp"], 150.0), "VIT changes max HP")
+	_check(is_equal_approx(base["mana_regen_per_second"], 6.0), "base mana regeneration is part of derived stats")
 	var equipped := RpgStats.derive({"str": 5}, {"physical_attack": 10.0}, {"physical_attack": 0.5})
 	_check(is_equal_approx(equipped["physical_attack"], 45.0), "flat bonuses precede additive percentages")
 	var capped := RpgStats.derive({"agi": 10000, "dex": 10000, "luk": 10000})
@@ -30,7 +31,7 @@ func _initialize() -> void:
 	_check(augment.is_eligible(&"swordsman", 0), "eligible class can take augment")
 	_check(not augment.is_eligible(&"mage", 0), "foreign class excluded")
 	_check(not augment.is_eligible(&"swordsman", 1), "unique augment excluded after selection")
-	print("Foundation: %s" % ("PASS (11 checks)" if failures == 0 else "FAIL (%d)" % failures))
+	print("Foundation: %s" % ("PASS (12 checks)" if failures == 0 else "FAIL (%d)" % failures))
 	quit(0 if failures == 0 else 1)
 
 func _check(condition: bool, label: String) -> void:
