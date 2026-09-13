@@ -36,7 +36,7 @@ func trigger(name: StringName, direction: Vector2 = Vector2.ZERO, duration: floa
 	if name == &"hurt":
 		hurt_remaining = 0.18
 		return
-	if name == &"cancel_cast":
+	if name == &"cast_cancel":
 		action_remaining = 0.0
 		return
 	face(direction)
