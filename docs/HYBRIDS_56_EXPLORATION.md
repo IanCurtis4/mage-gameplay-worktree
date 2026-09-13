@@ -1,5 +1,9 @@
 # 56 híbridas direcionais — exploração v2
 
+Atualização E00: [E00_MVP_CLASS_CONTRACT.md](E00_MVP_CLASS_CONTRACT.md) incorpora
+o handoff recebido e prevalece para as seis híbridas do primeiro MVP. `mg_ar`
+passa a se chamar **Geômetra**; a matriz ampla permanece exploração para E11.
+
 13/09/2026. Pedido do usuário: explorar inversão da classe de origem e das partes
 herdadas. Documento de design; nenhuma destas classes foi implementada. Substitui
 a simetria da proposta de 28 híbridas em CLASS_ROSTER_BRAINSTORM.md.
@@ -41,7 +45,7 @@ identidade abaixo são sementes de design, ainda sem números ou kit completo.
 | sp_dr · Espadachim → Druida | Defendente + Naturalista: **Guardião de Gaia**. Baluarte vivo enraíza a guarda; Onda mineral abre caminho sem abandonar proteção. | dr_sp · Druida → Espadachim | Metamorfo + Berserker: **Fera de Guerra**. Forma devastadora transforma fúria em ataques naturais; Pisoteio rasga o grupo. |
 | sp_la · Espadachim → Ladino | Defendente + Assassino: **Duelista**. Finta de guarda expõe uma vítima; Riposta fatal usa a abertura criada pelo aparo. | la_sp · Ladino → Espadachim | Dervixe + Berserker: **Corsário**. Abordagem puxa para a luta; Turbilhão de saque transforma prontidão em cleave. |
 | sp_mo · Espadachim → Monge | Defendente + Elevado: **Guardião Cinético**. Guarda vetorial absorve impulso; Repulsão dirigida devolve energia em cone. | mo_sp · Monge → Espadachim | Campeão + Berserker: **Quebra-Montanhas**. Punhos em fúria sustentam combo; Ruptura sísmica termina a sequência com impacto. |
-| mg_ar · Mago → Arqueiro | Elementalista + Sentinela: **Arqueiro Arcano**. Flecha catalisadora escolhe elemento; Constelação de disparos cria linhas de reação. | ar_mg · Arqueiro → Mago | Caçador + Espiritualista: **Caçador de Espectros**. Laço espectral amaldiçoa passagem; Flecha de assombro conduz medo até a armadilha. |
+| mg_ar · Mago → Arqueiro | Elementalista + Sentinela: **Geômetra**. Vértices elementais formam seis paredes direcionadas e 27 triângulos; ver contrato E00. | ar_mg · Arqueiro → Mago | Caçador + Espiritualista: **Caçador de Espectros**. Traps criam pó de alma; tiros que cruzam o rastro se tornam espectrais; ver contrato E00. |
 | mg_ac · Mago → Acólito | Elementalista + Sacerdote: **Taumaturgo**. Prisma votivo refrata elemento em proteção; Aurora convergente une luz e área elemental. | ac_mg · Acólito → Mago | Cultista + Espiritualista: **Oráculo do Abismo**. Sussurro coletivo liga mentes; Liturgia do vazio canaliza dano sobre a rede. |
 | mg_br · Mago → Bruxo | Elementalista + Demonólogo: **Invocador do Cataclismo**. Familiar catalisador carrega um elemento; Conjunção infernal detona a preparação. | br_mg · Bruxo → Mago | Necromante + Espiritualista: **Lich**. Filactério menor sustenta canalização; Procissão fúnebre converte servos em ondas espirituais. |
 | mg_dr · Mago → Druida | Elementalista + Naturalista: **Tempestário**. Raízes condutoras distribuem raio; Monção altera terreno e interações de fogo/gelo. | dr_mg · Druida → Mago | Metamorfo + Espiritualista: **Metamorfo Espectral**. Forma ancestral atravessa brevemente a matéria; Uivo das almas aplica fraqueza. |
@@ -66,7 +70,7 @@ identidade abaixo são sementes de design, ainda sem números ou kit completo.
 ## Recorte do primeiro demo
 
 Três bases, seis puras e estas seis híbridas: Cavaleiro Rúnico, Devastador Astral,
-Baluarte de Cerco, Saqueador, Arqueiro Arcano, Caçador de Espectros.
+Baluarte de Cerco, Saqueador, Geômetra, Caçador de Espectros.
 O catálogo é direcional desde o começo, evitando migração de IDs quando outras
 bases chegarem. Os nomes Emboscador e Tecelão Astral continuam no plano, mas
 dependem de Ladino/Monge; não fazem parte do primeiro demo de três bases.

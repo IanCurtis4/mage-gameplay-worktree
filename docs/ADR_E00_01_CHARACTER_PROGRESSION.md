@@ -2,6 +2,9 @@
 
 Data: 13/09/2026. Autor/revisor técnico: Astra, nesta tarefa, sem delegação.
 Estado: proposta para aceite de design; nenhuma regra abaixo foi implementada.
+Conclusão complementar E00.2/E00.3 e incorporação do PDF em
+[E00_CONTRACT.md](E00_CONTRACT.md). As resoluções desse candidato prevalecem sobre
+pendências históricas e termos provisórios deste primeiro passo.
 Liberação: usuário disse “Pode começar.” na tarefa E00. Entrega deste checkpoint:
 E00.1. Base técnica escolhida por Astra: `79196d5`, que contém o roadmap vigente
 e a verificação do piloto. Essa escolha não declara aceite de produto do piloto.
@@ -237,6 +240,6 @@ Alternativas consideradas: evolução irreversível reforça alts, mas encarece 
 as 15 identidades; árvore integral de duas bases elimina orçamento comparável;
 aplicar ranks durante a run exigiria contratos adicionais de atualização de ação.
 
-E00.2 ainda precisa definir fórmulas, limites e donos de todos os valores do painel,
-inclusive resistências e controle de boss. E00.3 precisa fechar save/migração e
-fixtures executáveis. Este checkpoint não conclui E00 nem libera E01–E11.
+No checkpoint original, E00.2/E00.3 estavam pendentes. Agora suas fórmulas,
+limites, donos, save/migração e fixtures estão no contrato final vinculado acima.
+Este ADR e o aceite técnico não liberam automaticamente E01–E11.

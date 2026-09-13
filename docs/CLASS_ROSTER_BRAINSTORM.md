@@ -1,5 +1,9 @@
 # Classes — proposta para discussão
 
+Contrato posterior: [E00_CONTRACT.md](E00_CONTRACT.md). Para o primeiro MVP,
+consultar seu elenco fechado de 15 identidades e a incorporação do PDF; `mg_ar`
+agora é Geômetra. Tabelas marcadas como históricas abaixo não redefinem esse recorte.
+
 13/09/2026. Direção solicitada pelo usuário; nomes novos, números e regras de
 progressão abaixo são propostas, não implementação aprovada. O bloco jogável atual
 continua sendo Espadachim e Mago. Não iniciar as demais classes automaticamente.

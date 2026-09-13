@@ -10,7 +10,11 @@
 > de revisão Astra a cada passo/proibição absoluta de subagentes. Escopo de
 > produto e playtests permanecem. Mapa atual: docs/EPIC_THREADS.md.
 
-13/09/2026. **RESERVADO — NÃO EXECUTAR**. O usuário autorizou nesta rodada somente planejamento/criação das tarefas; a única implementação atual é o polimento de contato com o chão. Ativação futura exige mensagem explícita do usuário a Astra. Nenhum agendamento ou ciclo em segundo plano foi criado.
+13/09/2026. **E00 liberado e entregue como contrato candidato; demais épicos RESERVADOS.**
+O usuário liberou E00 e pediu incorporar o handoff de híbridas e concluir sua análise.
+Contrato vigente para revisão: [E00_CONTRACT.md](E00_CONTRACT.md); evidências e
+aceite técnico em [REVIEW_E00.md](REVIEW_E00.md). Aceite de design permanece separado.
+Nenhuma implementação de expansão, agendamento ou ciclo em segundo plano foi iniciado.
 
 ## Produto e decisões recebidas
 
@@ -25,11 +29,11 @@ O escopo antigo de MVP.md permanece como histórico do piloto. Esta revisão sub
 
 ## O que significa classe completa
 
-Uma identidade completa tem loop jogável, auto, ativas/passivas, níveis e requisitos, duas builds distinguíveis, opções de augment, ícones/VFX/animações, tooltip consistente, save/reset e contrajogo contra ranged/melee/boss. Proposta de orçamento: base com 6–10 ativas e 2–3 passivas; evolução com 4–6 ativas e 2–3 passivas exclusivas além de fundamentos herdados; híbrida no mesmo orçamento de uma pura. Quantidade equipada por vez será decidida em E00, sem obrigar dez teclas simultâneas. Kit completo não significa implementar indefinidamente todo 'etc.' de uma fantasia.
+Uma identidade completa tem loop jogável, auto, ativas/passivas, níveis e requisitos, duas builds distinguíveis, opções de augment, ícones/VFX/animações, tooltip consistente, save/reset e contrajogo contra ranged/melee/boss. Proposta de orçamento: base com 6–10 ativas e 2–3 passivas; evolução com 4–6 ativas e 2–3 passivas exclusivas além de fundamentos herdados; híbrida no mesmo orçamento de uma pura. O candidato E00 define cinco ativas e duas passivas equipadas por vez, além do auto e de comandos intrínsecos delimitados; aguarda aceite de design. Kit completo não significa implementar indefinidamente todo 'etc.' de uma fantasia.
 
 ## Modelo de dados planejado
 
-Conta/perfil contém personagens e coleção conforme ADR; CharacterState contém identidade/base/evolução, XP base/job, níveis, pontos e alocações, skills aprendidas e presets. RunState contém snapshot da build, HP/SP, cooldowns, efeitos, augments e encontro. Resources de catálogo permanecem imutáveis. Dados de save versionados, transações de recompensa idempotentes e testes em diretório temporário. Loot/cartas compartilhados ou pessoais, respec e limites de nível serão fixados em E00 antes de persistir formatos definitivos.
+Conta/perfil contém personagens e coleção conforme ADR; CharacterState contém identidade/base/evolução, XP base/job, níveis, pontos e alocações, skills aprendidas e presets. RunState contém snapshot da build, HP/SP, cooldowns, efeitos, augments e encontro. Resources de catálogo permanecem imutáveis. Dados de save versionados, transações de recompensa idempotentes e testes em diretório temporário. Propriedade de loot/cartas, respec e limites estão especificados no candidato E00_CONTRACT.md; exigem aceite de design antes da implementação definitiva.
 
 ## Ordem, responsabilidade e custo
 
@@ -39,7 +43,7 @@ Uma conversa reservada por épico principal; subépicos reutilizam a conversa, c
 
 | Épico | Responsável inicial | Dependências | Estado |
 |---|---|---|---|
-| E00 — Contratos do MVP expandido | astra | aceite futuro para iniciar | RESERVADO |
+| E00 — Contratos do MVP expandido | astra | aceite de design do candidato | ACEITE_TÉCNICO |
 | E01 — Personagens persistentes e alts | sol | E00 | RESERVADO |
 | E02 — Menu de personagem e build inicial | terra | E01 | RESERVADO |
 | E03 — Stats, job e níveis de habilidade | sol | E00, E01 | RESERVADO |
@@ -56,7 +60,8 @@ E02 e E03 podem ser independentes após E01, mas só executar em paralelo se Ast
 
 ## E00 — Contratos do MVP expandido
 
-Dono inicial: gpt-6-astra, esforço high. Dependências: nenhuma implementação autorizada.
+Dono inicial: gpt-6-astra, esforço high. E00.1–E00.3 entregues documentalmente;
+ver contrato final e revisão acima. Nenhuma implementação dos novos sistemas autorizada.
 
 Consolidar regras de personagem/conta/run, stats inspirados em RO, evolução 2-1/2-2/2-3 direcional e definição de kit completo.
 
