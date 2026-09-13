@@ -400,6 +400,7 @@ func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActo
 	projectile.add_to_group("enemy_projectiles")
 
 func _on_enemy_died(actor: CombatActor) -> void:
+	_spawn_death_visual(actor)
 	if actor == _hovered_enemy:
 		_hovered_enemy = null
 	if actor == _selected_enemy:
@@ -465,7 +466,20 @@ func _start_next_encounter() -> void:
 		return
 	_spawn_encounter(encounter_index + 1)
 
+func _spawn_death_visual(actor: CombatActor, after_run: bool = false) -> void:
+	if actor.character_animation == null:
+		return
+	var visual := ActorDeathVisual.new()
+	visual.animation = actor.character_animation.death_copy()
+	visual.position = actor.position
+	actor.get_parent().add_child(visual)
+	# Only the terminal cosmetic continues behind the paused result overlay.
+	if after_run:
+		visual.process_mode = Node.PROCESS_MODE_ALWAYS
+	actor.hide()
+
 func _on_player_died(_actor: CombatActor) -> void:
+	_spawn_death_visual(_actor, true)
 	encounter_active = false
 	_show_result(false)
 

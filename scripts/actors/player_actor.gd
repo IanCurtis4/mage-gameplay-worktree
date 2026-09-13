@@ -68,8 +68,7 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 	var modifiers := run_state.get_modifiers()
 	var derived := RpgStats.derive(class_definition.attributes, modifiers["flat"], _with_passive(modifiers["increased"]))
 	setup(class_definition.display_name, Color("8e73de") if class_id == &"mage" else Color("55a8d9"), derived, 20.0)
-	# Placeholder shared with the current pilot until Astra's mage sheet is integrated.
-	set_pilot_sprite(preload("res://assets/art/pilot/hero.png"))
+	set_animation_kind(class_id)
 	max_mana = float(stats["max_mana"])
 	mana = max_mana
 	for skill_id: StringName in class_definition.skill_ids:

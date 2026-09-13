@@ -20,11 +20,11 @@ func configure(enemy_type: StringName, nav: ArenaNavigation, target_player: Play
 	if archetype == &"archer":
 		var archer_stats := RpgStats.derive({"str": 4, "agi": 5, "vit": 2, "int": 1, "dex": 7, "luk": 1}, {"max_hp": -68.0, "move_speed": -45.0})
 		setup("Arqueiro", Color("d29a4a"), archer_stats, 17.0)
-		set_pilot_sprite(preload("res://assets/art/pilot/archer.png"))
+		set_animation_kind(&"archer")
 	else:
 		var chaser_stats := RpgStats.derive({"str": 5, "agi": 3, "vit": 3, "int": 1, "dex": 4, "luk": 1}, {"max_hp": -62.0, "move_speed": -25.0})
 		setup("Guerreiro", Color("c65a68"), chaser_stats, 19.0)
-		set_pilot_sprite(preload("res://assets/art/pilot/warrior.png"))
+		set_animation_kind(&"warrior")
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 
 func _process(delta: float) -> void:
