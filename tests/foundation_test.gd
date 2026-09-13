@@ -31,7 +31,16 @@ func _initialize() -> void:
 	_check(augment.is_eligible(&"swordsman", 0), "eligible class can take augment")
 	_check(not augment.is_eligible(&"mage", 0), "foreign class excluded")
 	_check(not augment.is_eligible(&"swordsman", 1), "unique augment excluded after selection")
-	print("Foundation: %s" % ("PASS (12 checks)" if failures == 0 else "FAIL (%d)" % failures))
+	var mage := ClassCatalog.class_definition(&"mage")
+	_check(mage != null and mage.attributes["int"] == 9 and mage.skill_ids.size() == 5, "mage catalog defines attributes and five initial actions")
+	var fireball := ClassCatalog.skill_definition(&"fireball")
+	_check(fireball != null and fireball.range == 700.0 and fireball.projectile_speed == 680.0, "fireball tuning lives in immutable catalog data")
+	var mage_run := RunState.new(&"mage")
+	_check(mage_run.class_id == &"mage" and mage_run.skill_levels.size() == 5 and mage_run.skill_levels[&"teleport"] == 1, "new mage run owns independent level-one skill state")
+	var swordsman_run := RunState.new()
+	_check(swordsman_run.skill_levels.size() == 2 and not swordsman_run.skill_levels.has(&"fireball"), "class run states do not share foreign skills")
+	_check(mage_run.get_modifiers()["spear_count"] == 1, "spear runtime count starts at one")
+	print("Foundation: %s" % ("PASS (17 checks)" if failures == 0 else "FAIL (%d)" % failures))
 	quit(0 if failures == 0 else 1)
 
 func _check(condition: bool, label: String) -> void:
