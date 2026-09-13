@@ -23,3 +23,9 @@ histórico onde contradizia 56 pares direcionais/personagens permanentes.
 Reservas de conversa serão registradas em EPIC_THREADS.md. Novos turnos dessas
 conversas devem somente reconhecer a reserva, sem ferramentas ou implementação.
 Master continua aguardando aceite de produto. Arquivos locais do usuário preservados.
+
+Atualização no diretório habitual: candidato de código 1cf970f. A importação de
+editor concorrente encontrou DLL do GitPlugin ocupada; não alteramos o addon.
+Importação completa na worktree limpa passou. No diretório habitual, verify com
+SkipEditorImport passou as mesmas 313 verificações e smoke. EPIC_THREADS.md contém
+os 12 IDs de reservas confirmadas; nenhum épico da expansão começou a implementação.
