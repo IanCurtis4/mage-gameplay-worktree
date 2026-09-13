@@ -158,8 +158,11 @@ func _process(delta: float) -> void:
 		queue_redraw()
 
 func _draw() -> void:
-	var shadow := PackedVector2Array([Vector2(-22, 4), Vector2(0, 14), Vector2(22, 4), Vector2(0, -6)])
-	draw_colored_polygon(shadow, Color(0.02, 0.03, 0.05, 0.5))
+	# Compact contact shadow centered under the soles; no detached tile diamond.
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, 0.30))
+	draw_circle(Vector2.ZERO, 15.0, Color(0.02, 0.03, 0.04, 0.14))
+	draw_circle(Vector2.ZERO, 11.0, Color(0.02, 0.03, 0.04, 0.26))
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	var color := Color.WHITE if _flash_time > 0.0 else actor_color
 	if is_selected:
 		_draw_target_ring(collision_radius + 14.0, Color("f5cc77"), 3.0)

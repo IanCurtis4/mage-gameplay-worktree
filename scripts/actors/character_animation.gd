@@ -9,12 +9,19 @@ var atlas: Texture2D
 var actor_kind: StringName = &"swordsman"
 var _last_position := Vector2.ZERO
 var _observed_position := false
+var _ground_offsets := PackedFloat32Array()
 
 func configure(kind: StringName) -> void:
 	actor_kind = kind
 	if actor_kind not in [&"swordsman", &"mage", &"warrior", &"archer"]:
 		actor_kind = &"swordsman"
 	atlas = load("res://assets/art/animations/%s.png" % actor_kind) as Texture2D
+	_ground_offsets.clear()
+	var bitmap := atlas.get_image()
+	for index: int in range(32):
+		var bounds := bitmap.get_region(Rect2i(Vector2i(index % 4 * 64, index / 4 * 64), Vector2i(64, 64))).get_used_rect()
+		# Last opaque pixel rests on the ground rather than above the contact shadow.
+		_ground_offsets.append(PIVOT.y - float(bounds.end.y - 1))
 	state = CombatAnimationState.new()
 	_observed_position = false
 
@@ -33,13 +40,15 @@ func draw_on(canvas: CanvasItem, tint: Color = Color.WHITE) -> void:
 	var frame := state.frame_index()
 	var region := Rect2(Vector2(frame % 4, frame / 4) * CELL, CELL)
 	canvas.draw_set_transform(Vector2.ZERO, 0.0, Vector2(-1.0 if state.flip_h else 1.0, 1.0))
-	canvas.draw_texture_rect_region(atlas, Rect2(-PIVOT, CELL), region, tint)
+	var ground_offset := _ground_offsets[frame] if frame < _ground_offsets.size() else 0.0
+	canvas.draw_texture_rect_region(atlas, Rect2(-PIVOT + Vector2(0, ground_offset), CELL), region, tint)
 	canvas.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 func death_copy() -> CharacterAnimation:
 	var result := CharacterAnimation.new()
 	result.actor_kind = actor_kind
 	result.atlas = atlas
+	result._ground_offsets = _ground_offsets
 	result.state.face(state.facing)
 	result.state.trigger(&"death")
 	return result

@@ -1,5 +1,11 @@
 # Escopo aprovado
 
+> Revisão de direção em 13/09/2026: o usuário pediu um MVP expandido com personagens
+> persistentes, job/skill levels, menu/build, oito bases e evoluções. O plano vigente
+> para trabalho futuro está em LONG_TERM_EPICS.md e HYBRIDS_56_EXPLORATION.md.
+> Este documento preserva o escopo histórico do piloto. A expansão está apenas
+> planejada/reservada; não iniciar implementação sem liberação explícita.
+
 ## Produto
 
 Windows single-player offline, perspectiva 2D isométrica, câmera fixa seguindo

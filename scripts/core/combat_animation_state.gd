@@ -2,6 +2,9 @@ class_name CombatAnimationState
 extends RefCounted
 ## Presentation clock only. It never delays attacks, movement or cooldowns.
 
+# Four compact poses cover 64 world units at native sprite scale.
+const WALK_FRAME_DISTANCE := 16.0
+
 var facing := Vector2.RIGHT
 var back_view := false
 var flip_h := false
@@ -70,5 +73,5 @@ func frame_index() -> int:
 		var progress := 1.0 - action_remaining / action_duration
 		return (20 if back_view else 8) + clampi(int(progress * 4.0 + 0.00001), 0, 3)
 	if moving:
-		return (12 if back_view else 4) + int(floor(walk_distance / 22.0 + 0.00001)) % 4
+		return (12 if back_view else 4) + int(floor(walk_distance / WALK_FRAME_DISTANCE + 0.00001)) % 4
 	return (16 if back_view else 0) + int(idle_time * 4.0) % 4

@@ -31,7 +31,7 @@ func _initialize() -> void:
 		var paced := CombatAnimationState.new()
 		for index: int in range(fps):
 			paced.advance(1.0 / fps, Vector2(220.0 / fps, 0))
-		_check(paced.frame_index() == 6, "walk phase follows distance consistently at %d Hz" % fps)
+		_check(paced.frame_index() == 5, "walk phase follows compact stride consistently at %d Hz" % fps)
 	for id: StringName in [&"swordsman", &"mage", &"warrior", &"archer"]:
 		var animation := CharacterAnimation.new()
 		animation.configure(id)

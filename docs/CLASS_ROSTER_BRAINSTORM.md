@@ -4,7 +4,19 @@
 progressão abaixo são propostas, não implementação aprovada. O bloco jogável atual
 continua sendo Espadachim e Mago. Não iniciar as demais classes automaticamente.
 
-## Estrutura
+## Decisões atualizadas pelo usuário em 13/09/2026
+
+Personagens e alts persistentes, escolhidos num menu com build inicial; níveis de
+personagem e job permanentes, com investimento de pontos. Híbridas são opções de
+evolução 2-3 alternativas a 2-1/2-2. Naturalista é o nome de trabalho do primeiro
+ramo do Druida, com Filho de Gaia como alternativa/título. Primeiro demo: as três
+bases clássicas e as híbridas entre elas. Ver LONG_TERM_EPICS.md para escopo e gates.
+
+A proposta agora explora **56 híbridas direcionais**, não 28 simétricas. A matriz
+atual e as receitas complementares estão em HYBRIDS_56_EXPLORATION.md. A tabela de
+28 abaixo fica como histórico das primeiras ideias, não como catálogo vigente.
+
+## Estrutura original (histórico, substituída pela revisão acima)
 
 Oito classes base, duas evoluções por base (2-1 e 2-2), e uma híbrida para cada
 par não ordenado de bases: 8 bases + 16 evoluções + 28 híbridas = 52 identidades.
@@ -28,13 +40,12 @@ a lista de magias do Mago já solicitada.
 | Arqueiro | Sentinela | Caçador | Dominar linhas longas de tiro / preparar terreno e provocar rotas ruins |
 | Acólito | Sacerdote | Cultista | Luz, cura e proteção / sombra, entidades eldritch e perturbação mental |
 | Bruxo | Demonólogo | Necromante | Pactos e demônios / cadáveres, peste e exército de mortos |
-| Druida | Geoflorista (proposta) | Metamorfo | Terra, plantas e renovação / formas animais e transições corporais |
+| Druida | Naturalista | Metamorfo | Terra, plantas e renovação / formas animais e transições corporais |
 | Ladino | Assassino | Dervixe | Escolher uma vítima e desaparecer / manter movimento circular e limpar grupos |
 | Monge | Elevado | Campeão | Mente, gravidade e projeção / corpo, ritmo e sequências de golpes |
 
-Para o primeiro ramo do Druida, Geoflorista comunica terra e plantas; alternativas:
-Silvano (mais mítico), Guardião do Bosque (mais protetor), Hierofante (mais ritual).
-Recomendo Geoflorista se a manipulação de pedra tiver o mesmo peso das plantas.
+Naturalista abrange plantas, terra, cura e proteção. Filho de Gaia pode ser título
+de evolução ou nome alternativo se o tom mitológico for preferido.
 
 ### Espadachim
 
@@ -86,7 +97,7 @@ minions e DoTs não devem gerar recursão infinita de invocações ou propagaç�
 
 Base: Raízes; Broto restaurador; Pele de casca; Pedra ascendente; Forma de lobo
 curta; Salto felino. Passivas: robustez natural e memória das formas.
-Geoflorista: Jardim de renovação, Muralha mineral e Armadura de seiva (DEF/MDEF).
+Naturalista: Jardim de renovação, Muralha mineral e Armadura de seiva (DEF/MDEF).
 Metamorfo: urso para sustentação, felino para reposicionamento e ave para travessia;
 cada forma altera ações definidas, mantendo controles e custo de troca previsíveis.
 
@@ -97,9 +108,9 @@ Gancho. Passivas: oportunismo pelas costas e cadência móvel.
 Assassino: Marca de execução, Mistura de toxinas e Emboscada.
 Dervixe: Órbita de lâminas, Gancho pendular e Fortuna errante (buff sorteado na
 eliminação). Gancho em obstáculo ancora rotação; no chão puxa em linha reta.
-O pedido de ASPD ao matar o “mesmo inimigo” é ambíguo: proposta é sequência de
-eliminações do mesmo arquétipo, com teto e expiração; mudar arquétipo rerrola buff.
-Não tratar essa interpretação como decisão confirmada.
+Revisão após esclarecimento: ASPD por pressão contínua na mesma vítima, para
+servir contra bosses. Ver a proposta de Prontidão em DERVISH_READINESS.md; o usuário
+delegou a escolha mecânica a Astra. O bônus não depende de matar o boss ou spawns.
 
 ### Monge
 
@@ -116,7 +127,7 @@ Espiritualista manipula almas/assombrações e canaliza: não depende de cadáve
 Cultista distorce percepção com entidades cósmicas: não negocia demônios.
 Demonólogo negocia servos e recursos por pactos. Necromante recicla morte e corpos.
 Isso diferencia quatro classes que, só com “magia sombria”, pareceriam iguais.
-Sacerdote protege com luz; Geoflorista sustenta terreno; Defendente protege pela
+Sacerdote protege com luz; Naturalista sustenta terreno; Defendente protege pela
 posição do corpo. Cada um precisa funcionar sozinho no roguelike, inclusive chefes.
 
 ## As 28 híbridas
@@ -186,7 +197,7 @@ Agora: reutilizar cast_multiplier derivado de DES para conjuração curta do Mag
 as demais fórmulas atuais continuam simplificadas. Uma migração futura de stats
 deve atualizar catálogo, CombatMath, UI e testes juntos, com números aprovados.
 
-## Decisões para a próxima conversa
+## Perguntas originais (respondidas; consultar revisão acima)
 
 1. Evolução dura apenas a run (proposta) ou é identidade persistente escolhida antes?
 2. Híbrida substitui a evolução 2-1/2-2 (proposta) ou é um sistema adicional?
