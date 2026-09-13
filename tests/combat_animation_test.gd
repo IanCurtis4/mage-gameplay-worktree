@@ -42,6 +42,43 @@ func _initialize() -> void:
 		_check(frames_valid, "%s has nonempty aligned frames and genuine alpha gutters" % id)
 		var clone := animation.death_copy()
 		_check(clone.atlas == animation.atlas and clone.state != animation.state and not animation.state.dead, "%s death copy shares immutable art but no runtime state" % id)
+	_test_integration.call_deferred()
+
+func _test_integration() -> void:
+	RunController.selected_class_id = &"mage"
+	var controller := RunController.new()
+	root.add_child(controller)
+	await process_frame
+	var player := controller.player
+	_check(player.character_animation.actor_kind == &"mage", "selected class uses its own integrated atlas")
+	player.presentation_action.emit(&"cast", Vector2.LEFT, 0.3)
+	_check(player.character_animation.state.flip_h, "gameplay presentation signal reaches the animator")
+	var phase := player.character_animation.state.action_remaining
+	paused = true
+	player._process(0.1)
+	_check(is_equal_approx(player.character_animation.state.action_remaining, phase), "paused actors preserve animation phase")
+	paused = false
+	var enemy := controller.enemies[0]
+	var initial_count := controller.enemies.size()
+	var damage := DamageRequest.new()
+	damage.base_damage = 100000.0
+	damage.hit_chance = 1.0
+	damage.can_crit = false
+	damage.target_id = enemy.get_instance_id()
+	enemy.apply_damage(damage, controller.rng)
+	_check(controller.enemies.size() == initial_count - 1 and enemy.is_queued_for_deletion(), "death presentation never delays authoritative enemy removal")
+	var ghosts := 0
+	for child: Node in controller.get_children():
+		if child is ActorDeathVisual:
+			ghosts += 1
+	_check(ghosts == 1, "elimination creates exactly one noninteractive death copy")
+	damage.target_id = player.get_instance_id()
+	player.apply_damage(damage, controller.rng)
+	_check(controller.run_finished and paused and not player.visible, "player death ends the run immediately and hides the live sprite")
+	paused = false
+	controller.queue_free()
+	await process_frame
+	RunController.selected_class_id = &"swordsman"
 	print("Animações: %s (%d checks)" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(0 if failures == 0 else 1)
 

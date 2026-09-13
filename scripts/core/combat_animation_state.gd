@@ -36,9 +36,12 @@ func trigger(name: StringName, direction: Vector2 = Vector2.ZERO, duration: floa
 	if name == &"hurt":
 		hurt_remaining = 0.18
 		return
+	if name == &"cancel_cast":
+		action_remaining = 0.0
+		return
 	face(direction)
 	action = name
-	action_duration = clampf(duration, 0.14, 0.48)
+	action_duration = clampf(duration, 0.14, 5.0)
 	action_remaining = action_duration
 
 func advance(delta: float, displacement: Vector2) -> void:
