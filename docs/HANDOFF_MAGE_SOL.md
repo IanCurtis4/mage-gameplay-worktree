@@ -1,6 +1,6 @@
 # Proposta de delegação — kit jogável inicial do Mago
 
-Escopo do produto autorizado; nova delegação ainda depende do aceite do usuário.
+Escopo do produto e delegação explicitamente autorizados pelo usuário em 12/09/2026.
 Modelo proposto: Sol (gpt-5.6-sol, high). Astra trabalha na arte/animação em paralelo
 e revisa os contratos/interações. Não criar outros agentes nem tarefas.
 
