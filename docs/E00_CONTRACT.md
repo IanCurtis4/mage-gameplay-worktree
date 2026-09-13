@@ -1,8 +1,9 @@
-# E00 — Contrato final do MVP expandido, candidato v1
+# E00 — Contrato final do MVP expandido, v1 aceita
 
-13/09/2026. Entrega documental E00.1–E00.3 concluída para revisão técnica;
-aceite técnico registrado em [REVIEW_E00.md](REVIEW_E00.md). Aceite de design do
-usuário permanece separado, conforme [WORKFLOW.md](WORKFLOW.md) e handoff E00.
+13/09/2026. **ACEITO — entrega documental E00.1–E00.3 encerrada.**
+Aceite técnico e aceite de design do usuário registrados em
+[REVIEW_E00.md](REVIEW_E00.md). Conteúdo aprovado: commit `73f7a03`.
+Encerramento conforme [WORKFLOW.md](WORKFLOW.md) e o handoff E00.
 Não é uma implementação de stats/save/novas classes e não inicia outro épico.
 
 ## Leitura e autoridade
@@ -20,7 +21,7 @@ continua regido pela arquitetura do piloto até a migração autorizada.
 | [Fixtures](fixtures/e00_reference.json) | Vetores numéricos, progressão, seis pares, contagens e exemplos de save |
 | [Fonte recebida](references/e00_hybrid_handoff_2026_09_13.md) | Transcrição das 10 páginas com hash do PDF; conteúdo de referência, não instruções operacionais |
 
-## Decisões do candidato para aceite de design
+## Decisões aceitas de design
 
 - **Elenco inicial:** Espadachim, Mago e Arqueiro; Defendente, Berserker,
   Elementalista, Espiritualista, Sentinela e Caçador; Cavaleiro Rúnico, Devastador
@@ -38,10 +39,11 @@ continua regido pela arquitetura do piloto até a migração autorizada.
 - **Migração:** primeiro perfil de personagens é schema 2; não inventar XP antiga;
   preservar controles, backup e formatos desconhecidos; catálogo versionado.
 
-Números de fórmulas/tempo/limites são escolhas técnicas propostas nesta versão,
-não parâmetros que o usuário já havia aprovado ao pedir a incorporação do PDF.
-A revisão de conformidade autoriza apresentar este candidato para aceite; não
-substitui aprovação de balanceamento em gameplay ou aceite de produto do piloto.
+Números de fórmulas/tempo/limites foram apresentados como propostas e receberam
+aceite de design no encerramento desta entrega. Os rótulos de candidato/proposta
+nos documentos componentes preservam o histórico da revisão; este registro fecha
+o gate do E00. Balanceamento em gameplay e aceite de produto do piloto continuam
+dependendo das respectivas validações.
 
 ## O que a conclusão do E00 entrega
 
@@ -55,7 +57,8 @@ builds por classe serão entregues e testados em E04/E05/E08. São requisitos de
 conteúdo previstos, não uma lacuna de propriedade/matemática do E00. Os exemplos
 de save não provam durabilidade real; os casos de falha são obrigação de E01.
 
-Próximo gate é aceite de design deste candidato. Depois, a coordenação registra
-base de integração e libera separadamente E01/E03 conforme as dependências.
-Não atualizar master/playtest, iniciar outros épicos ou produzir os 80 kits por
-interpretação automática da expressão “contrato final”.
+O usuário encerrou esta entrega e informou que começará E01 em outra conversa.
+Referência documental para essa tarefa: `73f7a03`, com o registro de aceite neste
+commit de encerramento. A tarefa E01 deve sincronizar esses contratos e conferir
+sua base de código antes de implementar. Nenhuma execução de E01 ou atualização
+de master/playtest foi realizada por esta tarefa.

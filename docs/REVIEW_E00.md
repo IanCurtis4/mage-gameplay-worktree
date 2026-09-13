@@ -5,9 +5,15 @@ Não apresentar essa revisão como avaliação independente. Base técnica `7919
 ADR E00.1 registrado no commit `8fd02c4`. Segunda liberação do usuário: incorporar
 ruminações do PDF, terminar o trabalho pendente e analisar para aceite do épico.
 
-Resultado: **ACEITE_TÉCNICO** do contrato candidato v1. E00.1–E00.3 concluídos
+Resultado: **ACEITO** — contrato v1 aprovado técnica e documentalmente. E00.1–E00.3 concluídos
 como entrega documental. Não encontrei bloqueador de contrato após as correções
-abaixo. O gate de aceite de design do usuário permanece aberto.
+abaixo. O gate de aceite de design foi fechado pelo usuário após a entrega.
+
+Aceite explícito sobre o conteúdo `73f7a03`: “Eu acho que ficou bom. Podemos
+encerrar sua entrega aqui e eu vou começar E1 em outro chat.” A presente alteração
+registra somente esse encerramento, sem mudar regras ou executar E01.
+Validação do registro: verificador documental e `git diff --check`; os resultados
+de Godot abaixo pertencem ao conteúdo aprovado, sem alteração de gameplay neste fechamento.
 
 ## Matriz de conformidade
 
@@ -84,7 +90,6 @@ não testes da futura implementação. Durabilidade Windows, migração real,
 interações simultâneas, desempenho, input das 18 runas/33 construções e diversão
 precisam dos épicos próprios. Não houve playtest de classes que ainda não existem.
 
-O aceite técnico fecha a entrega de E00.1–E00.3; o estado **ACEITO** do épico
-exige aceite de design do usuário sobre o candidato concreto, como determina o
-handoff. Não usar pedido de análise para registrar esse aceite em nome do usuário.
+O aceite técnico e o aceite de design explícito fecham a entrega de E00.1–E00.3.
+O estado **ACEITO** refere-se ao contrato documental, conforme o handoff.
 Nenhum merge/push, atualização de playtest ou início de E01–E11 integra esta entrega.
