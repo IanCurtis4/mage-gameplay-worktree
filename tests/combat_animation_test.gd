@@ -21,6 +21,12 @@ func _initialize() -> void:
 	state.trigger(&"cast", Vector2.RIGHT)
 	state.advance(0.3, Vector2(30, 0))
 	_check(state.frame_index() == 31 and state.dead, "death overrides hurt and rejects later actions")
+	var preparation := CombatAnimationState.new()
+	preparation.trigger(&"cast", Vector2.RIGHT, 0.8)
+	preparation.advance(0.5, Vector2.ZERO)
+	_check(preparation.action_remaining > 0.0, "cast presentation respects the complete gameplay preparation duration")
+	preparation.trigger(&"cast_cancel")
+	_check(preparation.action_remaining == 0.0, "cancelling gameplay preparation clears its visual action")
 	for fps: int in [30, 60, 144]:
 		var paced := CombatAnimationState.new()
 		for index: int in range(fps):
