@@ -1,10 +1,13 @@
 class_name RunState
 extends RefCounted
-## Mutable run-only state. AugmentDefinition entries are catalog data only.
+## Mutable run-only state. Persistent character data enters only as a value snapshot.
 
 const DEFAULT_CLASS_ID: StringName = &"swordsman"
 
 var class_id: StringName = DEFAULT_CLASS_ID
+var run_id: String = ""
+var character_id: String = ""
+var build_snapshot: BuildSnapshot
 var skill_levels: Dictionary[StringName, int] = {}
 var augment_stacks: Dictionary[StringName, int] = {}
 var pending_choices: int = 0
@@ -21,10 +24,21 @@ func _init(selected_class: StringName = DEFAULT_CLASS_ID) -> void:
 	]
 	select_class(selected_class)
 
+static func from_build(new_run_id: String, source: BuildSnapshot) -> RunState:
+	assert(source != null)
+	var state := RunState.new()
+	state.run_id = new_run_id
+	state.character_id = source.character_id
+	state.build_snapshot = source.copy_snapshot()
+	state.class_id = state.build_snapshot.base_class_id
+	state.reset()
+	return state
+
 func select_class(selected_class: StringName) -> bool:
 	if ClassCatalog.class_definition(selected_class) == null:
 		return false
 	class_id = selected_class
+	build_snapshot = _pilot_snapshot(selected_class)
 	reset()
 	return true
 
@@ -91,11 +105,19 @@ func describe_progress(definition: AugmentDefinition) -> String:
 
 func reset() -> void:
 	skill_levels.clear()
-	for skill_id: StringName in ClassCatalog.skill_ids(class_id):
-		skill_levels[skill_id] = 1
+	if build_snapshot != null:
+		skill_levels = build_snapshot.skill_ranks.duplicate(true)
 	augment_stacks.clear()
 	pending_choices = 0
 	current_offer.clear()
+
+func _pilot_snapshot(selected_class: StringName) -> BuildSnapshot:
+	var snapshot := BuildSnapshot.new()
+	snapshot.base_class_id = selected_class
+	for skill_id: StringName in ClassCatalog.skill_ids(selected_class):
+		snapshot.skill_ranks[skill_id] = 1
+	snapshot.active_slots = ClassCatalog.skill_ids(selected_class)
+	return snapshot
 
 func _create_augment(augment_id: StringName, display_name: String, description: String, effect_id: StringName, magnitude: float, required_class: StringName = &"") -> AugmentDefinition:
 	var definition := AugmentDefinition.new()
