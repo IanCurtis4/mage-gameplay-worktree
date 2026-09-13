@@ -24,9 +24,6 @@ func select_class(selected_class: StringName) -> bool:
 	if ClassCatalog.class_definition(selected_class) == null:
 		return false
 	class_id = selected_class
-	skill_levels.clear()
-	for skill_id: StringName in ClassCatalog.skill_ids(class_id):
-		skill_levels[skill_id] = 1
 	reset()
 	return true
 
@@ -80,6 +77,9 @@ func describe_progress(definition: AugmentDefinition) -> String:
 	return "Atual: %s  →  Próximo: %s" % [_format_effect(definition.effect_id, current_value), _format_effect(definition.effect_id, next_value)]
 
 func reset() -> void:
+	skill_levels.clear()
+	for skill_id: StringName in ClassCatalog.skill_ids(class_id):
+		skill_levels[skill_id] = 1
 	augment_stacks.clear()
 	pending_choices = 0
 	current_offer.clear()

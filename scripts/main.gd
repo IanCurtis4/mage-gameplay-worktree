@@ -594,9 +594,9 @@ func _build_ui() -> void:
 	help_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	help_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
 	help_panel.offset_left = -440.0
-	help_panel.offset_top = 68.0
+	help_panel.offset_top = 112.0
 	help_panel.offset_right = -24.0
-	help_panel.offset_bottom = 214.0
+	help_panel.offset_bottom = 258.0
 	var help_label := _make_label("CLIQUE: mover / autoatacar o alvo\nQ / W / A / S / D: ações da classe\nDIREITO / ESC: cancelar mira\nE: augment  ·  R: reiniciar ao concluir", 16, Color("d7ddea"))
 	help_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	help_panel.add_child(help_label)
@@ -695,13 +695,13 @@ func _build_ui() -> void:
 	class_button = Button.new()
 	class_button.text = "Classe: %s" % player.class_definition.display_name
 	class_button.custom_minimum_size = Vector2(184, 38)
+	ui_root.add_child(class_button)
 	class_button.set_anchors_preset(Control.PRESET_TOP_RIGHT)
 	class_button.offset_left = -208
 	class_button.offset_top = 64
 	class_button.offset_right = -24
 	class_button.offset_bottom = 102
 	class_button.pressed.connect(_open_class_menu)
-	ui_root.add_child(class_button)
 	ui_root.move_child(class_button, augment_overlay.get_index())
 
 	class_overlay = _make_overlay(ui_root)
