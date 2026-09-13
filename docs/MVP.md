@@ -1,5 +1,11 @@
 # Escopo aprovado
 
+> Revisão de direção em 13/09/2026: o usuário pediu um MVP expandido com personagens
+> persistentes, job/skill levels, menu/build, oito bases e evoluções. O plano vigente
+> para trabalho futuro está em LONG_TERM_EPICS.md e HYBRIDS_56_EXPLORATION.md.
+> Este documento preserva o escopo histórico do piloto. A expansão está apenas
+> planejada/reservada; não iniciar implementação sem liberação explícita.
+
 ## Produto
 
 Windows single-player offline, perspectiva 2D isométrica, câmera fixa seguindo
@@ -13,7 +19,9 @@ alvos direcionais usam o cursor. Mana e cooldowns impedem spam.
 ## Classes e atributos
 
 - Espadachim: ataque corpo a corpo, corte em cone, investida, passiva de resistência.
-- Mago: projétil básico, explosão em área, nova congelante, passiva de regeneração de mana.
+- Mago: projétil básico, Bola de Fogo, Parede de Fogo, Lanças de Fogo e de Gelo
+  separadas, Teleporte e passiva de regeneração de mana. Este kit substitui
+  explosão/nova da proposta inicial, conforme aceite de 12–13/09/2026.
 - Kits fixos disponíveis desde o início; não se perdem entre runs.
 - FOR, AGI, VIT, INT, DES e SOR; níveis 1–5 com três pontos distribuíveis por nível ganho.
 - Nível/pontos reiniciam por run. Fórmulas simplificadas próprias, descritas na arquitetura.
@@ -38,6 +46,12 @@ somente as restantes; se não houver nenhuma, consumir a pendência com aviso.
 Catálogo de 12: gerais (HP, crítico, velocidade de ataque, recuperação pós-encontro),
 Espadachim (sangramento, corte ampliado, escudo após investida, explosão ao eliminar),
 Mago (projétil adicional, queimadura, expansão da nova, redução de recarga ao eliminar).
+
+Revisão do bloco Mago: o piloto já separa augments de quantidade para Lanças de
+Fogo e Lanças de Gelo. A expansão da nova deixa de ser uma implementação prevista
+para este kit; a composição final dos 12 augments exige rebalanceamento posterior.
+As oito bases, evoluções e híbridas de CLASS_ROSTER_BRAINSTORM.md são direção
+futura documentada, sem ampliar este bloco jogável para todas as classes.
 Numéricos acumulam até três; transformações são únicas. UI mostra efeito atual e
 próximo. Dano secundário não pode gerar cascatas de outros efeitos secundários.
 Todos desaparecem ao encerrar a run.

@@ -187,6 +187,23 @@ somente de leitura. A prancha em `docs/art/` é documentação, excluída da imp
 
 ## Estado futuro e save
 
+### Apresentação animada (substitui poses estáticas do piloto)
+
+CombatActor usa CharacterAnimation para atlas 256×512 com células 64×64 e pivô
+(32,58). CombatAnimationState é estado exclusivamente visual: idle por tempo,
+caminhada por distância, direção fixada durante ação, hurt só após dano positivo.
+presentation_action conecta gameplay à pose; cast_cancel encerra preparo visual.
+Frente/costas são desenhadas; esquerda/direita usam espelhamento. Os contratos de
+colisão e combate não dependem do frame. Catálogos e texturas não recebem estado.
+Ao morrer, o ator é removido da contagem imediatamente e cria cópia cosmética
+ActorDeathVisual de 0,7 s. A cópia terminal do jogador pode avançar durante a pausa
+do resultado; ela não causa dano nem processa input. Demais animações pausam.
+Scripts de preparação, fontes e prompts ficam no repositório; ver
+PLAYTEST_MAGE_ANIMATION.md e ANIMATION_PROMPTS_01.md.
+
+CLASS_ROSTER_BRAINSTORM.md registra oito bases, 16 evoluções e 28 híbridas como
+direção de design. Somente Espadachim e Mago estão no catálogo jogável atual.
+
 Estado de run: classe, nível, XP, pontos, atributos, HP/mana, cartas, stacks,
 fase/encontro, pendências e seed. Não persistir essa estrutura no MVP.
 Save v1: schema_version, equipment_collection por classe, equipped por classe/slot,

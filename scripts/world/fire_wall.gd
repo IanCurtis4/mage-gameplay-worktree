@@ -47,10 +47,16 @@ func _process(delta: float) -> void:
 
 func _draw() -> void:
 	var alpha := minf(1.0, remaining * 2.0)
-	for offset: Vector2 in pillar_offsets:
+	for index: int in range(pillar_offsets.size()):
+		var offset := pillar_offsets[index]
+		var flicker := sin((DURATION - remaining) * 13.0 + index * 1.8) * 4.0
 		draw_circle(offset, PILLAR_RADIUS, Color(1.0, 0.24, 0.08, 0.16 * alpha))
 		draw_arc(offset, PILLAR_RADIUS, 0.0, TAU, 24, Color(1.0, 0.50, 0.16, 0.9 * alpha), 3.0, true)
-		draw_line(offset + Vector2(0, 12), offset + Vector2(0, -22), Color(1.0, 0.32, 0.08, 0.8 * alpha), 7.0, true)
+		var flame := PackedVector2Array([Vector2(-13, 4), Vector2(-17, -10), Vector2(-9, -27), Vector2(-5, -17), Vector2(2, -43 - flicker), Vector2(9, -24), Vector2(14, -10), Vector2(12, 4)])
+		for vertex: int in range(flame.size()):
+			flame[vertex] += offset
+		draw_colored_polygon(flame, Color(1.0, 0.32, 0.08, 0.9 * alpha))
+		draw_colored_polygon(PackedVector2Array([offset + Vector2(-7, 3), offset + Vector2(-4, -13), offset + Vector2(3, -25 - flicker), offset + Vector2(8, 3)]), Color(1.0, 0.83, 0.27, alpha))
 
 func _distance_to_segment(point: Vector2, from: Vector2, to: Vector2) -> float:
 	var segment := to - from

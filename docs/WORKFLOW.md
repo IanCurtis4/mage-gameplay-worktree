@@ -57,6 +57,13 @@ Preservar a branch da tarefa até confirmar a integração; não publicar/push a
 
 ## Limites de automação
 
+Revisão 13/09/2026: as conversas de LONG_TERM_EPICS.md são reservas, sem execução.
+Quando o usuário liberar um épico, Astra aprova cada passo e conduz correções com
+o implementador; usuário testa no fechamento do épico/subépico. E10 é separado por
+família de classe e E11 por par direcional, cada qual com seu próprio playtest.
+As reservas não autorizam iniciar código, delegar, agendar ou continuar marcos.
+Estados/checkpoints e handoffs estão em LONG_TERM_EPICS.md e docs/epics/.
+
 O ciclo de revisão é executado durante a tarefa ativa, usando envio de mensagens e
 espera por conclusão. Não há monitor em segundo plano ou automação recorrente criada.
 Aceite técnico não afirma aprovação visual, de diversão ou de FPS sem evidência.

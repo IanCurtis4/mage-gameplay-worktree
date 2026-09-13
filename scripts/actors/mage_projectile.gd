@@ -148,6 +148,10 @@ func _actor_fraction(actor: CombatActor, from: Vector2, to: Vector2) -> float:
 	return -1.0
 
 func _draw() -> void:
+	if request != null and request.skill_id in [&"fire_spear", &"ice_spear"]:
+		draw_colored_polygon(PackedVector2Array([Vector2(-19, -3), Vector2(5, -4), Vector2(16, 0), Vector2(5, 4), Vector2(-19, 3)]), color)
+		draw_line(Vector2(-13, 0), Vector2(9, 0), color.lightened(0.65), 2.0)
+		return
 	draw_circle(Vector2.ZERO, projectile_radius + 2.0, Color(color, 0.25))
 	draw_circle(Vector2.ZERO, projectile_radius, color)
 	draw_line(Vector2(-15, 0), Vector2(-5, 0), Color(color, 0.45), 3.0)

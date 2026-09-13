@@ -25,6 +25,20 @@ var burn_source_id: int = 0
 var burn_damage_per_tick := 0.0
 var slow_remaining := 0.0
 var slow_fraction := 0.0
+var character_animation: CharacterAnimation
+
+func set_animation_kind(kind: StringName) -> void:
+	character_animation = CharacterAnimation.new()
+	character_animation.configure(kind)
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_sprite_visible_height = 52.0
+	if not presentation_action.is_connected(_animate_action):
+		presentation_action.connect(_animate_action)
+	queue_redraw()
+
+func _animate_action(action: StringName, direction: Vector2, duration: float) -> void:
+	if character_animation != null:
+		character_animation.play(action, direction, duration)
 
 func set_pilot_sprite(texture: Texture2D) -> void:
 	sprite_texture = texture
@@ -133,20 +147,30 @@ func set_selected(value: bool) -> void:
 	queue_redraw()
 
 func _process(delta: float) -> void:
-	advance_statuses(delta, is_inside_tree() and get_tree().paused)
+	if is_inside_tree() and get_tree().paused:
+		return
+	if character_animation != null:
+		character_animation.observe(global_position, delta)
+		queue_redraw()
+	advance_statuses(delta)
 	if _flash_time > 0.0:
 		_flash_time = maxf(0.0, _flash_time - delta)
 		queue_redraw()
 
 func _draw() -> void:
-	var shadow := PackedVector2Array([Vector2(-22, 4), Vector2(0, 14), Vector2(22, 4), Vector2(0, -6)])
-	draw_colored_polygon(shadow, Color(0.02, 0.03, 0.05, 0.5))
+	# Compact contact shadow centered under the soles; no detached tile diamond.
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, 0.30))
+	draw_circle(Vector2.ZERO, 15.0, Color(0.02, 0.03, 0.04, 0.14))
+	draw_circle(Vector2.ZERO, 11.0, Color(0.02, 0.03, 0.04, 0.26))
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	var color := Color.WHITE if _flash_time > 0.0 else actor_color
 	if is_selected:
 		_draw_target_ring(collision_radius + 14.0, Color("f5cc77"), 3.0)
 	elif is_hovered:
 		_draw_target_ring(collision_radius + 11.0, Color("81dfd0"), 2.0)
-	if sprite_texture != null:
+	if character_animation != null:
+		character_animation.draw_on(self, Color(2.0, 2.0, 2.0) if _flash_time > 0.0 else Color.WHITE)
+	elif sprite_texture != null:
 		var tint := Color(2.0, 2.0, 2.0) if _flash_time > 0.0 else Color.WHITE
 		draw_texture_rect(sprite_texture, sprite_rect, false, tint)
 	else:
@@ -181,10 +205,14 @@ func _on_damage_applied(result: Dictionary) -> void:
 	if float(result["actual_damage"]) <= 0.0:
 		return
 	_flash_time = 0.10
+	if character_animation != null:
+		character_animation.play(&"hurt")
 	damage_number.emit(self, ceili(float(result["actual_damage"])), bool(result["critical"]))
 	queue_redraw()
 
 func _on_health_died(_actor_id: int) -> void:
+	if character_animation != null:
+		character_animation.play(&"death")
 	clear_statuses()
 	actor_died.emit(self)
 	queue_redraw()
