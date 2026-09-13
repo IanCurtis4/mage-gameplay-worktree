@@ -34,6 +34,11 @@ Preservar project.godot local com GitPlugin, addons, build e export_presets.cfg.
 Usuário abre F5 e escolhe Mago pelo botão Classe; roteiro em PLAYTEST_MAGE_ANIMATION.md.
 Master continua em d76e7d3 aguardando aceite deste candidato pelo usuário.
 
+Integração concluída: candidato de código `a715f05` aplicado ao diretório habitual.
+Verify completo repetido nesse diretório: as mesmas 313 verificações, import e
+smoke passaram. Arquivos locais do usuário preservados; alterações de import
+sem diferença de conteúdo foram normalizadas. Este adendo altera só documentação.
+
 Animações são primeira passagem de quatro orientações, com espelhamento lateral,
 não oito direções únicas. VFX ainda geométricos. Aprendizado de skills, distribuição
 de atributos, revisão integral de fórmulas RO e demais partes do marco 2 não foram
