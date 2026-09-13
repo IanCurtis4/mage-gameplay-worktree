@@ -4,6 +4,7 @@ extends CombatActor
 signal attack_requested(request: DamageRequest, target: CombatActor)
 signal mage_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int)
 signal fire_wall_requested(direction: Vector2, damage_per_tick: float)
+signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
 
 const BASE_ATTRIBUTES := {"str": 8, "agi": 5, "vit": 8, "int": 2, "dex": 5, "luk": 2}
@@ -52,6 +53,12 @@ var _attack_recovery := 0.0
 var _dash_active := false
 var _dash_endpoint := Vector2.ZERO
 var _dash_speed := 0.0
+var active_cast_skill: StringName = &""
+var active_cast_remaining := 0.0
+var active_cast_total := 0.0
+var _active_cast_point := Vector2.ZERO
+var _active_cast_target_id: int = 0
+var _active_cast_direction := Vector2.RIGHT
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
@@ -92,12 +99,14 @@ func _apply_derived_stats(derived: Dictionary) -> void:
 	mana = clampf(max_mana - missing_mana, 0.0, max_mana)
 
 func move_to(point: Vector2) -> void:
+	cancel_active_cast()
 	target = null
 	_attack_engaged = false
 	_attack_recovery = 0.0
 	_set_path(point)
 
 func pursue(enemy: CombatActor) -> void:
+	cancel_active_cast()
 	target = enemy
 	_attack_engaged = false
 	_path.clear()
@@ -145,7 +154,6 @@ func use_fireball(direction: Vector2) -> bool:
 	_spend(&"fireball")
 	var request := _make_magic_request(null, &"fireball", _magic_power(&"fireball"), 1.0, true)
 	mage_projectile_requested.emit(&"fireball", request, null, facing, 1)
-	presentation_action.emit(&"cast", facing, 0.20)
 	resources_changed.emit()
 	return true
 
@@ -155,7 +163,6 @@ func use_fire_wall(direction: Vector2) -> bool:
 	var facing := _resolved_facing(direction)
 	_spend(&"fire_wall")
 	fire_wall_requested.emit(facing, _magic_power(&"fire_wall"))
-	presentation_action.emit(&"cast", facing, 0.24)
 	resources_changed.emit()
 	return true
 
@@ -165,11 +172,49 @@ func use_spear(skill_id: StringName, enemy: CombatActor) -> bool:
 	var facing := _resolved_facing(global_position.direction_to(enemy.global_position))
 	_spend(skill_id)
 	var request := _make_magic_request(enemy, skill_id, _magic_power(skill_id), 1.0, true)
-	var count: int = run_state.get_modifiers()["spear_count"]
+	var count := run_state.projectile_count(skill_id)
 	mage_projectile_requested.emit(skill_id, request, enemy, facing, count)
-	presentation_action.emit(&"cast", facing, 0.20)
 	resources_changed.emit()
 	return true
+
+func begin_skill_cast(skill_id: StringName, point: Vector2, enemy: CombatActor = null) -> bool:
+	var definition := ClassCatalog.skill_definition(skill_id)
+	if definition == null or definition.cast_time <= 0.0 or skill_id not in available_skill_ids() or not _can_spend(skill_id):
+		return false
+	if definition.targeting == SkillDefinition.Targeting.SINGLE_TARGET and not can_target_skill(skill_id, enemy):
+		return false
+	cancel_active_cast()
+	active_cast_skill = skill_id
+	active_cast_total = skill_cast_time(skill_id)
+	active_cast_remaining = active_cast_total
+	_active_cast_point = point
+	_active_cast_target_id = enemy.get_instance_id() if enemy != null else 0
+	_path.clear()
+	velocity = Vector2.ZERO
+	_attack_recovery = 0.0
+	var facing := aim_direction(enemy.global_position if enemy != null else point)
+	_active_cast_direction = facing
+	presentation_action.emit(&"cast", facing, active_cast_total)
+	resources_changed.emit()
+	return true
+
+func cancel_active_cast() -> bool:
+	if active_cast_skill == &"":
+		return false
+	active_cast_skill = &""
+	active_cast_remaining = 0.0
+	active_cast_total = 0.0
+	_active_cast_target_id = 0
+	presentation_action.emit(&"cast_cancel", _active_cast_direction, 0.0)
+	resources_changed.emit()
+	return true
+
+func has_active_cast() -> bool:
+	return active_cast_skill != &""
+
+func skill_cast_time(skill_id: StringName) -> float:
+	var definition := ClassCatalog.skill_definition(skill_id)
+	return maxf(0.0, definition.cast_time * float(stats["cast_multiplier"])) if definition != null else 0.0
 
 func teleport_destination(point: Vector2) -> Vector2:
 	var offset := point - global_position
@@ -242,6 +287,9 @@ func _process(delta: float) -> void:
 	if _basic_visual_time > 0.0:
 		_basic_visual_time = maxf(0.0, _basic_visual_time - delta)
 		queue_redraw()
+	if has_active_cast():
+		_advance_active_cast(delta)
+		return
 	if _dash_active:
 		_advance_dash(delta)
 		return
@@ -272,6 +320,19 @@ func _process(delta: float) -> void:
 		_path.clear()
 		velocity = Vector2.ZERO
 		_try_basic_attack()
+
+func _advance_active_cast(delta: float) -> void:
+	active_cast_remaining = maxf(0.0, active_cast_remaining - delta)
+	if active_cast_remaining > 0.0:
+		return
+	var completed_skill := active_cast_skill
+	var completed_point := _active_cast_point
+	var completed_target_id := _active_cast_target_id
+	active_cast_skill = &""
+	active_cast_total = 0.0
+	_active_cast_target_id = 0
+	resources_changed.emit()
+	skill_cast_ready.emit(completed_skill, completed_point, completed_target_id)
 
 func _advance_dash(delta: float) -> void:
 	var distance := global_position.distance_to(_dash_endpoint)
@@ -341,7 +402,7 @@ func _can_spend(skill_id: StringName) -> bool:
 func _spend(skill_id: StringName) -> void:
 	var definition := ClassCatalog.skill_definition(skill_id)
 	mana -= definition.mana_cost
-	var cooldown := definition.cooldown * float(stats["cast_multiplier"])
+	var cooldown := definition.cooldown
 	if skill_id == &"slash":
 		slash_cooldown = cooldown
 	elif skill_id == &"dash":
@@ -406,6 +467,7 @@ func _move_step(delta: float) -> void:
 		_last_facing = velocity.normalized()
 
 func _on_health_died(actor_id: int) -> void:
+	cancel_active_cast()
 	velocity = Vector2.ZERO
 	_path.clear()
 	target = null

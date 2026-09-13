@@ -47,8 +47,9 @@ func _initialize() -> void:
 	_check(mage_run.class_id == &"mage" and mage_run.skill_levels.size() == 5 and mage_run.skill_levels[&"teleport"] == 1, "new mage run owns independent level-one skill state")
 	var swordsman_run := RunState.new()
 	_check(swordsman_run.skill_levels.size() == 2 and not swordsman_run.skill_levels.has(&"fireball"), "class run states do not share foreign skills")
-	_check(mage_run.get_modifiers()["spear_count"] == 1, "spear runtime count starts at one")
-	print("Foundation: %s" % ("PASS (19 checks)" if failures == 0 else "FAIL (%d)" % failures))
+	_check(mage_run.projectile_count(&"fire_spear") == 1 and mage_run.projectile_count(&"ice_spear") == 1, "each spear runtime count starts independently at one")
+	_check(ClassCatalog.skill_definition(&"fireball").cast_time > ClassCatalog.skill_definition(&"fire_spear").cast_time and ClassCatalog.skill_definition(&"teleport").cast_time == 0.0, "impact skills own short cast tuning while teleport stays instant")
+	print("Foundation: %s" % ("PASS (20 checks)" if failures == 0 else "FAIL (%d)" % failures))
 	quit(0 if failures == 0 else 1)
 
 func _check(condition: bool, label: String) -> void:

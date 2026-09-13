@@ -79,6 +79,7 @@ func _ready() -> void:
 	player.attack_requested.connect(_on_attack_requested)
 	player.mage_projectile_requested.connect(_on_mage_projectile_requested)
 	player.fire_wall_requested.connect(_on_fire_wall_requested)
+	player.skill_cast_ready.connect(_on_skill_cast_ready)
 	player.status_damage_requested.connect(_on_attack_requested)
 	player.actor_died.connect(_on_player_died)
 	player.damage_number.connect(_show_damage_number)
@@ -109,16 +110,18 @@ func _process(_delta: float) -> void:
 		_collect_reward()
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed and cast_intent.active_skill != &"":
-		_cancel_aim()
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed and (cast_intent.active_skill != &"" or player.has_active_cast()):
+		_cancel_casting()
 		get_viewport().set_input_as_handled()
 		return
 	if event is InputEventKey and not event.echo:
 		if event.keycode == KEY_ESCAPE and event.pressed:
-			if battle_controls.settings_overlay.visible:
+			if class_overlay.visible:
+				_close_class_menu()
+			elif battle_controls.settings_overlay.visible:
 				_toggle_settings(false)
-			elif cast_intent.active_skill != &"":
-				_cancel_aim()
+			elif cast_intent.active_skill != &"" or player.has_active_cast():
+				_cancel_casting()
 			elif not get_tree().paused and not run_finished:
 				_toggle_settings(true)
 			get_viewport().set_input_as_handled()
@@ -143,6 +146,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 		var skill := _key_skill(event.keycode)
 		if skill != &"":
+			player.cancel_active_cast()
 			if _world_pointer_available():
 				_commit_skill(cast_intent.press(skill), get_global_mouse_position())
 				_update_aim(get_global_mouse_position())
@@ -150,7 +154,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif event.keycode == KEY_SPACE and next_button.visible:
 			_start_next_encounter()
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-		_cancel_aim()
+		_cancel_casting()
 		get_viewport().set_input_as_handled()
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		if get_tree().paused or not player.is_alive() or run_finished:
@@ -177,6 +181,23 @@ func _key_skill(key: Key) -> StringName:
 func _commit_skill(skill: StringName, point: Vector2) -> void:
 	if skill == &"" or get_tree().paused or run_finished or not player.is_alive():
 		return
+	var definition := ClassCatalog.skill_definition(skill)
+	var selected_target: CombatActor
+	if definition.targeting == SkillDefinition.Targeting.SINGLE_TARGET:
+		selected_target = _enemy_at(point)
+	if definition.cast_time > 0.0:
+		if not player.begin_skill_cast(skill, point, selected_target):
+			_report_skill_failure(skill, selected_target)
+		return
+	_execute_skill(skill, point, selected_target)
+
+func _on_skill_cast_ready(skill: StringName, point: Vector2, target_id: int) -> void:
+	if get_tree().paused or run_finished or not player.is_alive():
+		return
+	var selected_target := instance_from_id(target_id) as CombatActor if target_id != 0 else null
+	_execute_skill(skill, point, selected_target)
+
+func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatActor = null) -> void:
 	var direction := player.aim_direction(point)
 	if skill == &"slash":
 		if not player.use_slash(direction, enemies):
@@ -191,22 +212,28 @@ func _commit_skill(skill: StringName, point: Vector2) -> void:
 		if not player.use_fire_wall(direction):
 			_show_skill_blocked("Parede de Fogo", player.skill_cooldown(skill), player.skill_cost(skill))
 	elif skill in [&"fire_spear", &"ice_spear"]:
-		var enemy := _enemy_at(point)
-		if not player.use_spear(skill, enemy):
-			if enemy == null or not player.can_target_skill(skill, enemy):
-				status_label.text = "%s indisponível — ALVO INVÁLIDO OU FORA DE ALCANCE" % ClassCatalog.skill_definition(skill).display_name
-			else:
-				_show_skill_blocked(ClassCatalog.skill_definition(skill).display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+		if not player.use_spear(skill, selected_target):
+			_report_skill_failure(skill, selected_target)
 	elif skill == &"teleport":
 		if not player.use_teleport(point):
 			if not player.can_teleport(point):
 				status_label.text = "Teleporte indisponível — DESTINO BLOQUEADO"
 			else:
 				_show_skill_blocked("Teleporte", player.skill_cooldown(skill), player.skill_cost(skill))
+		else:
+			_select_enemy(null)
+
+func _report_skill_failure(skill: StringName, selected_target: CombatActor = null) -> void:
+	var definition := ClassCatalog.skill_definition(skill)
+	if definition.targeting == SkillDefinition.Targeting.SINGLE_TARGET and not player.can_target_skill(skill, selected_target):
+		status_label.text = "%s cancelada — ALVO INVÁLIDO OU FORA DE ALCANCE" % definition.display_name
+	else:
+		_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 
 func _select_skill_from_bar(skill: StringName) -> void:
 	if get_tree().paused or run_finished or not player.is_alive():
 		return
+	player.cancel_active_cast()
 	cast_intent.active_skill = skill
 	_update_aim(get_global_mouse_position())
 
@@ -214,8 +241,13 @@ func _update_aim(point: Vector2) -> void:
 	var skill := cast_intent.active_skill
 	if skill == &"" or get_tree().paused or run_finished:
 		battle_indicators.clear_aim()
-		battle_controls.set_aim_text("")
-		bottom_controls.visible = true
+		if player != null and player.has_active_cast() and not get_tree().paused and not run_finished:
+			var cast_definition := ClassCatalog.skill_definition(player.active_cast_skill)
+			battle_controls.set_aim_text("Conjurando %s · %.1fs  |  mover / Direito / Esc cancela" % [cast_definition.display_name, player.active_cast_remaining])
+			bottom_controls.visible = false
+		else:
+			battle_controls.set_aim_text("")
+			bottom_controls.visible = true
 		return
 	var definition := ClassCatalog.skill_definition(skill)
 	var cooldown := player.skill_cooldown(skill)
@@ -234,7 +266,8 @@ func _update_aim(point: Vector2) -> void:
 	else:
 		battle_indicators.clear_aim()
 	var action := "Solte a tecla ou clique" if cast_intent.mode == CastIntent.Mode.RELEASE else "Clique para lançar"
-	battle_controls.set_aim_text("%s · %s  |  %s  |  Direito / Esc cancela" % [definition.display_name, state, action])
+	var prepare := "  |  preparo %.2fs" % player.skill_cast_time(skill) if definition.cast_time > 0.0 else ""
+	battle_controls.set_aim_text("%s · %s  |  %s%s  |  Direito / Esc cancela" % [definition.display_name, state, action, prepare])
 	bottom_controls.visible = false
 
 func _cancel_aim() -> void:
@@ -244,7 +277,12 @@ func _cancel_aim() -> void:
 	if battle_controls != null:
 		battle_controls.set_aim_text("")
 	if bottom_controls != null:
-		bottom_controls.visible = true
+		bottom_controls.visible = player == null or not player.has_active_cast()
+
+func _cancel_casting() -> void:
+	if player != null:
+		player.cancel_active_cast()
+	_cancel_aim()
 
 func _world_pointer_available() -> bool:
 	return get_viewport().gui_get_hovered_control() == null
@@ -256,18 +294,18 @@ func _clear_hover() -> void:
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_WINDOW_FOCUS_OUT:
-		_cancel_aim()
+		_cancel_casting()
 
 func _toggle_settings(open: bool) -> void:
 	if open and (get_tree().paused or run_finished):
 		return
-	_cancel_aim()
+	_cancel_casting()
 	_clear_hover()
 	battle_controls.settings_overlay.visible = open
 	get_tree().paused = open
 
 func _change_control_preferences(mode: int, smart_lock: bool) -> void:
-	_cancel_aim()
+	_cancel_casting()
 	_clear_hover()
 	cast_intent.set_mode(mode)
 	control_preferences.cast_mode = mode
@@ -395,7 +433,7 @@ func _open_augment_menu() -> void:
 	var offer := run_state.build_offer(encounter_active, rng)
 	if offer.is_empty():
 		return
-	_cancel_aim()
+	_cancel_casting()
 	_clear_hover()
 	for child: Node in choice_buttons.get_children():
 		child.queue_free()
@@ -432,7 +470,7 @@ func _on_player_died(_actor: CombatActor) -> void:
 	_show_result(false)
 
 func _show_result(victory: bool) -> void:
-	_cancel_aim()
+	_cancel_casting()
 	_clear_hover()
 	run_finished = true
 	result_title.text = "Arena concluída!" if victory else "Você caiu em combate"
@@ -445,11 +483,19 @@ func _restart_run() -> void:
 	get_tree().reload_current_scene()
 
 func _open_class_menu() -> void:
-	_cancel_aim()
+	if augment_overlay.visible or class_overlay.visible:
+		return
+	if battle_controls.settings_overlay.visible:
+		battle_controls.settings_overlay.visible = false
+	_cancel_casting()
 	_clear_hover()
 	class_label.text = "Classe atual: %s\nEscolher uma classe inicia uma run nova e limpa todo o estado temporário." % player.class_definition.display_name
 	class_overlay.visible = true
 	get_tree().paused = true
+
+func _close_class_menu() -> void:
+	class_overlay.visible = false
+	get_tree().paused = run_finished or augment_overlay.visible or battle_controls.settings_overlay.visible
 
 func _select_class(new_class_id: StringName) -> void:
 	if ClassCatalog.class_definition(new_class_id) == null:
@@ -522,14 +568,16 @@ func _update_hud() -> void:
 	var skill_lines: PackedStringArray = []
 	for skill_id: StringName in player.available_skill_ids():
 		var definition := ClassCatalog.skill_definition(skill_id)
-		skill_lines.append("%s  %s — %s" % [definition.input_key, definition.display_name, _skill_state(player.skill_cooldown(skill_id), definition.mana_cost)])
+		var state := "CONJURANDO %.1fs" % player.active_cast_remaining if player.active_cast_skill == skill_id else _skill_state(player.skill_cooldown(skill_id), definition.mana_cost)
+		skill_lines.append("%s  %s — %s" % [definition.input_key, definition.display_name, state])
 	skill_label.text = "\n".join(skill_lines)
 	augment_button.text = "Escolher augment (E) — %d pendente(s)" % run_state.pending_choices
 	augment_button.visible = run_state.pending_choices > 0
 	if battle_controls != null:
 		for skill_id: StringName in player.available_skill_ids():
 			var definition := ClassCatalog.skill_definition(skill_id)
-			battle_controls.show_skill_state(skill_id, "%s · %s\n%d mana · %s" % [definition.input_key, definition.display_name.to_upper(), int(definition.mana_cost), _skill_state(player.skill_cooldown(skill_id), definition.mana_cost)], cast_intent.active_skill == skill_id)
+			var state := "CONJURANDO %.1fs" % player.active_cast_remaining if player.active_cast_skill == skill_id else _skill_state(player.skill_cooldown(skill_id), definition.mana_cost)
+			battle_controls.show_skill_state(skill_id, "%s · %s\n%d mana · %s" % [definition.input_key, definition.display_name.to_upper(), int(definition.mana_cost), state], cast_intent.active_skill == skill_id or player.active_cast_skill == skill_id)
 
 func _skill_state(cooldown: float, mana_cost: float) -> String:
 	if cooldown > 0.0:
@@ -731,11 +779,7 @@ func _build_ui() -> void:
 	cancel_class.text = "Voltar sem reiniciar"
 	cancel_class.custom_minimum_size = Vector2(300, 44)
 	cancel_class.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	cancel_class.pressed.connect(func() -> void:
-		class_overlay.visible = false
-		if not run_finished:
-			get_tree().paused = false
-	)
+	cancel_class.pressed.connect(_close_class_menu)
 	class_column.add_child(cancel_class)
 	class_overlay.visible = false
 

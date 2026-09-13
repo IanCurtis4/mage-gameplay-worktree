@@ -133,7 +133,7 @@ func set_selected(value: bool) -> void:
 	queue_redraw()
 
 func _process(delta: float) -> void:
-	advance_statuses(delta)
+	advance_statuses(delta, is_inside_tree() and get_tree().paused)
 	if _flash_time > 0.0:
 		_flash_time = maxf(0.0, _flash_time - delta)
 		queue_redraw()

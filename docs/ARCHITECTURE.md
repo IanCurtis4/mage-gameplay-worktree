@@ -116,6 +116,12 @@ Mana regenera pelo stat derivado apenas enquanto o ator está vivo e a simulaç�
 está pausada, sempre limitada ao máximo. No Espadachim, corte custa 15 e investida
 20; o HUD exibe os custos e prioriza os estados `RECARGA`, `SEM MANA` e `PRONTO`.
 
+`cast_multiplier` reduz somente a preparação curta das skills que declaram
+`cast_time` no catálogo. Recargas permanecem nos valores próprios de cada skill;
+DES não concede duas reduções sobre a mesma ação. Preparação é runtime do ator:
+movimento, morte, menus, perda de foco e reset cancelam sem custo. Mana, cooldown,
+alvo e alcance são revalidados uma vez no fim; Teleporte continua instantâneo.
+
 ## Dano e efeitos
 
 `DamageRequest`: source_id, target_id (IDs runtime), skill_id, kind PHYSICAL/MAGIC,

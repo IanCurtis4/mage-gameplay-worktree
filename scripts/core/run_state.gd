@@ -16,7 +16,8 @@ func _init(selected_class: StringName = DEFAULT_CLASS_ID) -> void:
 		_create_augment(&"vitality", "Vitalidade", "+20% de Vida Máxima", &"max_hp_increased", 0.20),
 		_create_augment(&"keen_edge", "Fio Preciso", "+5 pontos percentuais de crítico", &"crit_chance_flat", 0.05),
 		_create_augment(&"battle_rhythm", "Ritmo de Batalha", "+15% de velocidade de ataque", &"attack_speed_increased", 0.15),
-		_create_augment(&"extra_spear", "Lança Duplicada", "+1 lança de fogo e gelo", &"spear_count_flat", 1.0, &"mage"),
+		_create_augment(&"extra_fire_spear", "Fogo Geminado", "+1 Lança de Fogo", &"fire_spear_count_flat", 1.0, &"mage"),
+		_create_augment(&"extra_ice_spear", "Gelo Geminado", "+1 Lança de Gelo", &"ice_spear_count_flat", 1.0, &"mage"),
 	]
 	select_class(selected_class)
 
@@ -68,7 +69,19 @@ func get_modifiers() -> Dictionary:
 	flat["crit_chance"] = 0.05 * float(augment_stacks.get(&"keen_edge", 0))
 	increased["max_hp"] = 0.20 * float(augment_stacks.get(&"vitality", 0))
 	increased["attacks_per_second"] = 0.15 * float(augment_stacks.get(&"battle_rhythm", 0))
-	return {"flat": flat, "increased": increased, "spear_count": 1 + augment_stacks.get(&"extra_spear", 0)}
+	return {
+		"flat": flat,
+		"increased": increased,
+		"projectile_counts": {
+			&"fire_spear": 1 + augment_stacks.get(&"extra_fire_spear", 0),
+			&"ice_spear": 1 + augment_stacks.get(&"extra_ice_spear", 0),
+		},
+	}
+
+func projectile_count(skill_id: StringName) -> int:
+	var counts: Dictionary = get_modifiers()["projectile_counts"]
+	var level_count := maxi(1, skill_levels.get(skill_id, 1))
+	return level_count + maxi(0, int(counts.get(skill_id, 1)) - 1)
 
 func describe_progress(definition: AugmentDefinition) -> String:
 	var current: int = augment_stacks.get(definition.id, 0)
@@ -98,4 +111,6 @@ func _create_augment(augment_id: StringName, display_name: String, description: 
 func _format_effect(effect_id: StringName, value: float) -> String:
 	if effect_id == &"crit_chance_flat":
 		return "+%d p.p." % int(round(value * 100.0))
+	if effect_id in [&"fire_spear_count_flat", &"ice_spear_count_flat"]:
+		return "+%d lança(s)" % int(round(value))
 	return "+%d%%" % int(round(value * 100.0))

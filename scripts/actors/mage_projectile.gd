@@ -133,6 +133,8 @@ func _actor_fraction(actor: CombatActor, from: Vector2, to: Vector2) -> float:
 		return 0.0 if offset.length() <= combined_radius else -1.0
 	var b := 2.0 * offset.dot(segment)
 	var c := offset.length_squared() - combined_radius * combined_radius
+	if c <= 0.0:
+		return 0.0
 	var discriminant := b * b - 4.0 * a * c
 	if discriminant < 0.0:
 		return -1.0

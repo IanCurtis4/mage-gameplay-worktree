@@ -27,32 +27,39 @@ progressão, equipamentos, cartas e o restante do Marco 2 continuam fora do esco
 - A Investida percorre o corredor em 0,18 s e usa `dash_destination` tanto no preview
   quanto na execução. O deslocamento fica visível e nunca ultrapassa o obstáculo.
 - `CombatActor.presentation_action(action, direction, duration)` é o hook comum para
-  a integração visual de Astra. Jogador emite auto, slash, dash, cast e teleport;
+  a integração visual de Astra. Jogador emite auto, slash, dash, cast, cast_cancel e teleport;
   inimigos emitem auto aceito. Gameplay não espera a animação.
+- Bola de Fogo, Parede e cada Lança têm preparação curta no runtime. DES aplica o
+  `cast_multiplier` já centralizado em `RpgStats` a esse tempo; cooldown não recebe
+  a mesma redução. Movimento, morte, menus, foco perdido e reset cancelam sem custo,
+  e alvo/recursos são revalidados antes de gastar no fim da preparação.
 
 ## Valores iniciais de catálogo
 
 | Ação | Custo | Recarga base | Poder | Alcance / velocidade |
 |---|---:|---:|---:|---|
 | Auto do Mago | 0 | ataque básico | 1,00 × ATQM | 250 além dos corpos; 620 u/s; máximo 420 |
-| Bola de Fogo | 18 | 2,5 s | 1,80 × ATQM | 700; 680 u/s |
-| Parede de Fogo | 24 | 7,0 s | 0,30 × ATQM por tick | centro 180; 4 pilares, espaçamento 54, raio 22 |
-| Lança de Fogo | 16 | 3,0 s | 1,35 × ATQM; ×1,5 queimando | 360; 760 u/s |
-| Lança de Gelo | 14 | 3,0 s | 1,10 × ATQM | 360; 760 u/s; slow 30% por 2 s |
+| Bola de Fogo | 18 | 2,5 s | 1,80 × ATQM | preparo 0,32 s; 700; 680 u/s |
+| Parede de Fogo | 24 | 7,0 s | 0,30 × ATQM por tick | preparo 0,48 s; centro 180; 4 pilares, espaçamento 54, raio 22 |
+| Lança de Fogo | 16 | 3,0 s | 1,35 × ATQM; ×1,5 queimando | preparo 0,22 s; 360; 760 u/s |
+| Lança de Gelo | 14 | 3,0 s | 1,10 × ATQM | preparo 0,22 s; 360; 760 u/s; slow 30% por 2 s |
 | Teleporte | 22 | 6,0 s | — | 320 |
 
-Recargas recebem o `cast_multiplier` derivado no lançamento. O Mago usa
-2/5/5/9/7/2, ATQM 28, mana máxima 85 e a passiva acrescenta 50% à regeneração
-compartilhada, resultando em 9 mana/s. O augment `extra_spear` concede +1 lança por
-stack (máximo três stacks), com custo único por lançamento.
+Os tempos de preparo recebem o `cast_multiplier` derivado; as recargas usam o valor
+base do catálogo. O Mago usa 2/5/5/9/7/2, ATQM 28, mana máxima 85 e a passiva
+acrescenta 50% à regeneração compartilhada, resultando em 9 mana/s. Os augments
+`extra_fire_spear` e `extra_ice_spear` concedem +1 somente à respectiva lança por
+stack (máximo três), com níveis e contagens separados e custo único por lançamento.
 
 ## Validação
 
 `tools/verify.ps1` importa o projeto com Godot 4.7.2, roda a suíte headless e faz
 smoke da cena. `mage_gameplay_test.gd` cobre ordem alvo/parede, burn vigente e
-expirado, renovação sem quatro cadências, slow e pausa, multi-lanças com custo único,
-alvo morto, teleporte livre/sólido, dash intermediário/bloqueado, reset de runtime,
-isolamento da barra e auto mágico à distância.
+expirado, renovação sem quatro cadências, slow e pausa, travessia rápida da parede,
+multi-lanças separadas por skill e nível com custo único, alvo morto/liberado durante
+preparo, cancelamentos, último inimigo com projéteis simultâneos, teleporte livre/sólido,
+dash intermediário/bloqueado, reset de runtime, isolamento da barra e auto mágico à
+distância. O seletor de classe também recusa sobreposição com uma escolha de augment.
 
 Também foi feita captura pelo renderer Compatibility real em 1280×720. HUD com cinco
 ações, barra Q/W/A/S/D e preview da Parede de Fogo permaneceram legíveis; o painel de

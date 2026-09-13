@@ -22,10 +22,10 @@ static func _ensure_built() -> void:
 		return
 	_add_skill(&"slash", "Corte em cone", "Q", SkillDefinition.Targeting.DIRECTION, 15.0, 4.0, 1.45, 155.0)
 	_add_skill(&"dash", "Investida", "W", SkillDefinition.Targeting.DIRECTION, 20.0, 6.0, 0.0, 270.0)
-	_add_skill(&"fireball", "Bola de Fogo", "Q", SkillDefinition.Targeting.DIRECTION, 18.0, 2.5, 1.80, 700.0, 680.0)
-	_add_skill(&"fire_wall", "Parede de Fogo", "W", SkillDefinition.Targeting.DIRECTION, 24.0, 7.0, 0.30, 180.0)
-	_add_skill(&"fire_spear", "Lança de Fogo", "A", SkillDefinition.Targeting.SINGLE_TARGET, 16.0, 3.0, 1.35, 360.0, 760.0)
-	_add_skill(&"ice_spear", "Lança de Gelo", "S", SkillDefinition.Targeting.SINGLE_TARGET, 14.0, 3.0, 1.10, 360.0, 760.0)
+	_add_skill(&"fireball", "Bola de Fogo", "Q", SkillDefinition.Targeting.DIRECTION, 18.0, 2.5, 1.80, 700.0, 680.0, 0.32)
+	_add_skill(&"fire_wall", "Parede de Fogo", "W", SkillDefinition.Targeting.DIRECTION, 24.0, 7.0, 0.30, 180.0, 0.0, 0.48)
+	_add_skill(&"fire_spear", "Lança de Fogo", "A", SkillDefinition.Targeting.SINGLE_TARGET, 16.0, 3.0, 1.35, 360.0, 760.0, 0.22)
+	_add_skill(&"ice_spear", "Lança de Gelo", "S", SkillDefinition.Targeting.SINGLE_TARGET, 14.0, 3.0, 1.10, 360.0, 760.0, 0.22)
 	_add_skill(&"teleport", "Teleporte", "D", SkillDefinition.Targeting.POINT, 22.0, 6.0, 0.0, 320.0)
 
 	var swordsman := ClassDefinition.new()
@@ -59,7 +59,8 @@ static func _add_skill(
 	cooldown: float,
 	power: float,
 	range_value: float,
-	projectile_speed: float = 0.0
+	projectile_speed: float = 0.0,
+	cast_time: float = 0.0
 ) -> void:
 	var definition := SkillDefinition.new()
 	definition.id = skill_id
@@ -68,8 +69,8 @@ static func _add_skill(
 	definition.targeting = targeting
 	definition.mana_cost = mana_cost
 	definition.cooldown = cooldown
+	definition.cast_time = cast_time
 	definition.power = power
 	definition.range = range_value
 	definition.projectile_speed = projectile_speed
 	_skills[skill_id] = definition
-
