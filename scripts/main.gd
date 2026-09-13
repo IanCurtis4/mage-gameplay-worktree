@@ -10,9 +10,10 @@ const ARENA_OBSTACLES: Array[Rect2] = [
 const TARGET_ASSIST_RADIUS := BattleTargeting.ASSIST_RADIUS
 const TARGET_DIRECT_PADDING := BattleTargeting.DIRECT_PADDING
 const ACTOR_BODY_OFFSET := BattleTargeting.BODY_OFFSET
+static var selected_class_id: StringName = &"swordsman"
 
 var rng := RandomNumberGenerator.new()
-var run_state := RunState.new()
+var run_state: RunState
 var navigation := ArenaNavigation.new()
 var arena_view: ArenaView
 var player: PlayerActor
@@ -48,11 +49,15 @@ var cast_intent := CastIntent.new()
 var control_preferences := ControlPreferences.new()
 var battle_indicators: BattleIndicators
 var battle_controls: BattleControls
+var class_button: Button
+var class_overlay: Control
+var class_label: Label
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	y_sort_enabled = true
 	rng.seed = Time.get_ticks_usec()
+	run_state = RunState.new(selected_class_id)
 	navigation.configure(ARENA_BOUNDS, ARENA_OBSTACLES, 22.0)
 	control_preferences.load_settings()
 	cast_intent.set_mode(control_preferences.cast_mode)
@@ -72,6 +77,9 @@ func _ready() -> void:
 	player.configure(navigation, run_state)
 	player.global_position = Vector2(300, 520)
 	player.attack_requested.connect(_on_attack_requested)
+	player.mage_projectile_requested.connect(_on_mage_projectile_requested)
+	player.fire_wall_requested.connect(_on_fire_wall_requested)
+	player.status_damage_requested.connect(_on_attack_requested)
 	player.actor_died.connect(_on_player_died)
 	player.damage_number.connect(_show_damage_number)
 	player.attack_missed.connect(_show_miss)
@@ -156,7 +164,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func _key_skill(key: Key) -> StringName:
-	return &"slash" if key == KEY_Q else (&"dash" if key == KEY_W else &"")
+	var by_key: Dictionary[Key, StringName] = {
+		KEY_Q: &"fireball" if player.is_mage() else &"slash",
+		KEY_W: &"fire_wall" if player.is_mage() else &"dash",
+		KEY_A: &"fire_spear",
+		KEY_S: &"ice_spear",
+		KEY_D: &"teleport",
+	}
+	var skill: StringName = by_key.get(key, &"")
+	return skill if skill in player.available_skill_ids() else &""
 
 func _commit_skill(skill: StringName, point: Vector2) -> void:
 	if skill == &"" or get_tree().paused or run_finished or not player.is_alive():
@@ -168,6 +184,25 @@ func _commit_skill(skill: StringName, point: Vector2) -> void:
 	elif skill == &"dash":
 		if not player.use_dash(direction):
 			_show_skill_blocked("Investida", player.dash_cooldown, PlayerActor.DASH_MANA_COST)
+	elif skill == &"fireball":
+		if not player.use_fireball(direction):
+			_show_skill_blocked("Bola de Fogo", player.skill_cooldown(skill), player.skill_cost(skill))
+	elif skill == &"fire_wall":
+		if not player.use_fire_wall(direction):
+			_show_skill_blocked("Parede de Fogo", player.skill_cooldown(skill), player.skill_cost(skill))
+	elif skill in [&"fire_spear", &"ice_spear"]:
+		var enemy := _enemy_at(point)
+		if not player.use_spear(skill, enemy):
+			if enemy == null or not player.can_target_skill(skill, enemy):
+				status_label.text = "%s indisponível — ALVO INVÁLIDO OU FORA DE ALCANCE" % ClassCatalog.skill_definition(skill).display_name
+			else:
+				_show_skill_blocked(ClassCatalog.skill_definition(skill).display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif skill == &"teleport":
+		if not player.use_teleport(point):
+			if not player.can_teleport(point):
+				status_label.text = "Teleporte indisponível — DESTINO BLOQUEADO"
+			else:
+				_show_skill_blocked("Teleporte", player.skill_cooldown(skill), player.skill_cost(skill))
 
 func _select_skill_from_bar(skill: StringName) -> void:
 	if get_tree().paused or run_finished or not player.is_alive():
@@ -182,16 +217,24 @@ func _update_aim(point: Vector2) -> void:
 		battle_controls.set_aim_text("")
 		bottom_controls.visible = true
 		return
-	var is_slash := skill == &"slash"
-	var cooldown := player.slash_cooldown if is_slash else player.dash_cooldown
-	var cost := PlayerActor.SLASH_MANA_COST if is_slash else PlayerActor.DASH_MANA_COST
+	var definition := ClassCatalog.skill_definition(skill)
+	var cooldown := player.skill_cooldown(skill)
+	var cost := player.skill_cost(skill)
 	var state := _skill_state(cooldown, cost)
+	var selected_target: CombatActor
+	if definition.targeting == SkillDefinition.Targeting.SINGLE_TARGET:
+		selected_target = _enemy_at(point)
+		if not player.can_target_skill(skill, selected_target):
+			selected_target = null
+			state = "ALVO INVÁLIDO"
+	elif skill == &"teleport" and not player.can_teleport(point):
+		state = "DESTINO BLOQUEADO"
 	if _world_pointer_available():
-		battle_indicators.show_aim(skill, player, point, state == "PRONTO")
+		battle_indicators.show_aim(skill, player, point, state == "PRONTO", selected_target)
 	else:
 		battle_indicators.clear_aim()
 	var action := "Solte a tecla ou clique" if cast_intent.mode == CastIntent.Mode.RELEASE else "Clique para lançar"
-	battle_controls.set_aim_text("%s · %s  |  %s  |  Direito / Esc cancela" % ["Corte" if is_slash else "Investida", state, action])
+	battle_controls.set_aim_text("%s · %s  |  %s  |  Direito / Esc cancela" % [definition.display_name, state, action])
 	bottom_controls.visible = false
 
 func _cancel_aim() -> void:
@@ -258,6 +301,7 @@ func _spawn_encounter(index: int) -> void:
 		enemy.actor_died.connect(_on_enemy_died)
 		enemy.damage_number.connect(_show_damage_number)
 		enemy.attack_missed.connect(_show_miss)
+		enemy.status_damage_requested.connect(_on_attack_requested)
 		add_child(enemy)
 		enemies.append(enemy)
 	status_label.text = "Encontro %d/2 — elimine todos os inimigos" % index
@@ -265,6 +309,43 @@ func _spawn_encounter(index: int) -> void:
 func _on_attack_requested(request: DamageRequest, target_actor: CombatActor) -> void:
 	if target_actor != null and target_actor.is_alive():
 		target_actor.apply_damage(request, rng)
+
+func _on_mage_projectile_requested(skill_id: StringName, request: DamageRequest, target_actor: CombatActor, direction: Vector2, count: int) -> void:
+	var definition := ClassCatalog.skill_definition(skill_id)
+	for index: int in range(count):
+		var projectile := MageProjectile.new()
+		var side_offset := direction.orthogonal() * (float(index) - float(count - 1) * 0.5) * 14.0
+		var origin := player.global_position + Vector2(0, -18) + side_offset
+		var projectile_request := request.copy()
+		if skill_id == &"fireball":
+			projectile.configure_directional(projectile_request, origin, direction, enemies, navigation, definition.projectile_speed, definition.range)
+		else:
+			var speed := PlayerActor.MAGE_BASIC_SPEED if skill_id == &"basic_attack" else definition.projectile_speed
+			var max_distance := PlayerActor.MAGE_BASIC_MAX_DISTANCE if skill_id == &"basic_attack" else definition.range
+			var visual_color := Color("74c9ff") if skill_id == &"ice_spear" else Color("ff793d")
+			projectile.configure_homing(projectile_request, target_actor, origin, navigation, speed, max_distance, visual_color)
+			if skill_id == &"basic_attack":
+				projectile.homing = false
+				projectile.targets = [target_actor]
+				projectile.direction = direction
+		projectile.hit.connect(_on_mage_projectile_hit)
+		add_child(projectile)
+		projectile.add_to_group("player_projectiles")
+
+func _on_mage_projectile_hit(request: DamageRequest, target_actor: CombatActor) -> void:
+	if target_actor == null or not target_actor.is_alive():
+		return
+	var result := target_actor.apply_damage(request, rng)
+	if result.is_empty() or not bool(result["landed"]) or float(result["actual_damage"]) <= 0.0:
+		return
+	if request.skill_id == &"ice_spear" and target_actor.is_alive():
+		target_actor.apply_slow(0.30, 2.0)
+
+func _on_fire_wall_requested(direction: Vector2, damage_per_tick: float) -> void:
+	var wall := FireWall.new()
+	wall.configure(player, direction, damage_per_tick, enemies)
+	add_child(wall)
+	wall.add_to_group("player_effects")
 
 func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActor, ranged: bool) -> void:
 	if not ranged:
@@ -290,8 +371,9 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	if not enemies.is_empty():
 		return
 	encounter_active = false
-	for projectile: Node in get_tree().get_nodes_in_group("enemy_projectiles"):
-		projectile.queue_free()
+	for group_name: StringName in [&"enemy_projectiles", &"player_projectiles", &"player_effects"]:
+		for runtime_node: Node in get_tree().get_nodes_in_group(group_name):
+			runtime_node.queue_free()
 	reward = RewardPickup.new()
 	reward.global_position = Vector2(880, 500)
 	reward.process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -362,6 +444,20 @@ func _restart_run() -> void:
 	get_tree().paused = false
 	get_tree().reload_current_scene()
 
+func _open_class_menu() -> void:
+	_cancel_aim()
+	_clear_hover()
+	class_label.text = "Classe atual: %s\nEscolher uma classe inicia uma run nova e limpa todo o estado temporário." % player.class_definition.display_name
+	class_overlay.visible = true
+	get_tree().paused = true
+
+func _select_class(new_class_id: StringName) -> void:
+	if ClassCatalog.class_definition(new_class_id) == null:
+		return
+	selected_class_id = new_class_id
+	get_tree().paused = false
+	get_tree().reload_current_scene()
+
 func _enemy_at(point: Vector2) -> CombatActor:
 	return BattleTargeting.pick(point, enemies, _hovered_enemy, control_preferences.smart_lock)
 
@@ -423,12 +519,17 @@ func _update_hud() -> void:
 		return
 	health_label.text = "VIDA  %d / %d" % [ceili(player.health.current_hp), ceili(player.health.max_hp)]
 	mana_label.text = "MANA  %d / %d" % [floori(player.mana), floori(player.max_mana)]
-	skill_label.text = "Q  Corte (%d mana) — %s\nW  Investida (%d mana) — %s" % [int(PlayerActor.SLASH_MANA_COST), _skill_state(player.slash_cooldown, PlayerActor.SLASH_MANA_COST), int(PlayerActor.DASH_MANA_COST), _skill_state(player.dash_cooldown, PlayerActor.DASH_MANA_COST)]
+	var skill_lines: PackedStringArray = []
+	for skill_id: StringName in player.available_skill_ids():
+		var definition := ClassCatalog.skill_definition(skill_id)
+		skill_lines.append("%s  %s — %s" % [definition.input_key, definition.display_name, _skill_state(player.skill_cooldown(skill_id), definition.mana_cost)])
+	skill_label.text = "\n".join(skill_lines)
 	augment_button.text = "Escolher augment (E) — %d pendente(s)" % run_state.pending_choices
 	augment_button.visible = run_state.pending_choices > 0
 	if battle_controls != null:
-		battle_controls.show_skill_state(&"slash", "Q  ·  CORTE\n%d mana  ·  %s" % [int(PlayerActor.SLASH_MANA_COST), _skill_state(player.slash_cooldown, PlayerActor.SLASH_MANA_COST)], cast_intent.active_skill == &"slash")
-		battle_controls.show_skill_state(&"dash", "W  ·  INVESTIDA\n%d mana  ·  %s" % [int(PlayerActor.DASH_MANA_COST), _skill_state(player.dash_cooldown, PlayerActor.DASH_MANA_COST)], cast_intent.active_skill == &"dash")
+		for skill_id: StringName in player.available_skill_ids():
+			var definition := ClassCatalog.skill_definition(skill_id)
+			battle_controls.show_skill_state(skill_id, "%s · %s\n%d mana · %s" % [definition.input_key, definition.display_name.to_upper(), int(definition.mana_cost), _skill_state(player.skill_cooldown(skill_id), definition.mana_cost)], cast_intent.active_skill == skill_id)
 
 func _skill_state(cooldown: float, mana_cost: float) -> String:
 	if cooldown > 0.0:
@@ -472,7 +573,7 @@ func _build_ui() -> void:
 	hud_panel.offset_left = 24.0
 	hud_panel.offset_top = 20.0
 	hud_panel.offset_right = 544.0
-	hud_panel.offset_bottom = 190.0
+	hud_panel.offset_bottom = 270.0
 	var hud_margin := MarginContainer.new()
 	hud_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	for side: String in ["left", "top", "right", "bottom"]:
@@ -496,7 +597,7 @@ func _build_ui() -> void:
 	help_panel.offset_top = 68.0
 	help_panel.offset_right = -24.0
 	help_panel.offset_bottom = 214.0
-	var help_label := _make_label("CLIQUE: mover / autoatacar o alvo\nQ / W: skills no mouse\nDIREITO / ESC: cancelar mira\nE: augment  ·  ESPAÇO: próximo encontro", 16, Color("d7ddea"))
+	var help_label := _make_label("CLIQUE: mover / autoatacar o alvo\nQ / W / A / S / D: ações da classe\nDIREITO / ESC: cancelar mira\nE: augment  ·  R: reiniciar ao concluir", 16, Color("d7ddea"))
 	help_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	help_panel.add_child(help_label)
 
@@ -555,9 +656,9 @@ func _build_ui() -> void:
 	result_overlay.add_child(result_panel)
 	result_panel.set_anchors_preset(Control.PRESET_CENTER)
 	result_panel.offset_left = -280.0
-	result_panel.offset_top = -150.0
+	result_panel.offset_top = -190.0
 	result_panel.offset_right = 280.0
-	result_panel.offset_bottom = 150.0
+	result_panel.offset_bottom = 190.0
 	var result_column := VBoxContainer.new()
 	result_column.alignment = BoxContainer.ALIGNMENT_CENTER
 	result_column.add_theme_constant_override("separation", 24)
@@ -574,6 +675,12 @@ func _build_ui() -> void:
 	restart.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	restart.pressed.connect(_restart_run)
 	result_column.add_child(restart)
+	var result_class := Button.new()
+	result_class.text = "Trocar classe e iniciar nova run"
+	result_class.custom_minimum_size = Vector2(320, 48)
+	result_class.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	result_class.pressed.connect(_open_class_menu)
+	result_column.add_child(result_class)
 	result_overlay.visible = false
 	battle_controls = BattleControls.new()
 	ui_root.add_child(battle_controls)
@@ -581,8 +688,56 @@ func _build_ui() -> void:
 	battle_controls.skill_selected.connect(_select_skill_from_bar)
 	battle_controls.settings_requested.connect(_toggle_settings)
 	battle_controls.preferences_changed.connect(_change_control_preferences)
+	battle_controls.set_class_skills(player.available_skill_ids())
 	# The battle controls belong below end-of-run and reward modals.
 	ui_root.move_child(battle_controls, augment_overlay.get_index())
+
+	class_button = Button.new()
+	class_button.text = "Classe: %s" % player.class_definition.display_name
+	class_button.custom_minimum_size = Vector2(184, 38)
+	class_button.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	class_button.offset_left = -208
+	class_button.offset_top = 64
+	class_button.offset_right = -24
+	class_button.offset_bottom = 102
+	class_button.pressed.connect(_open_class_menu)
+	ui_root.add_child(class_button)
+	ui_root.move_child(class_button, augment_overlay.get_index())
+
+	class_overlay = _make_overlay(ui_root)
+	var class_panel := PanelContainer.new()
+	class_overlay.add_child(class_panel)
+	class_panel.set_anchors_preset(Control.PRESET_CENTER)
+	class_panel.offset_left = -330
+	class_panel.offset_top = -180
+	class_panel.offset_right = 330
+	class_panel.offset_bottom = 180
+	var class_column := VBoxContainer.new()
+	class_column.alignment = BoxContainer.ALIGNMENT_CENTER
+	class_column.add_theme_constant_override("separation", 18)
+	class_panel.add_child(class_column)
+	class_label = _make_label("", 21, Color("d7ddea"))
+	class_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	class_column.add_child(class_label)
+	for class_id: StringName in [&"swordsman", &"mage"]:
+		var definition := ClassCatalog.class_definition(class_id)
+		var choose := Button.new()
+		choose.text = "Jogar de %s — iniciar nova run" % definition.display_name
+		choose.custom_minimum_size = Vector2(420, 54)
+		choose.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		choose.pressed.connect(_select_class.bind(class_id))
+		class_column.add_child(choose)
+	var cancel_class := Button.new()
+	cancel_class.text = "Voltar sem reiniciar"
+	cancel_class.custom_minimum_size = Vector2(300, 44)
+	cancel_class.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	cancel_class.pressed.connect(func() -> void:
+		class_overlay.visible = false
+		if not run_finished:
+			get_tree().paused = false
+	)
+	class_column.add_child(cancel_class)
+	class_overlay.visible = false
 
 func _battle_theme() -> Theme:
 	var theme_value := Theme.new()

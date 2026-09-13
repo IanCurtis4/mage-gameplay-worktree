@@ -2,12 +2,15 @@ class_name PlayerActor
 extends CombatActor
 
 signal attack_requested(request: DamageRequest, target: CombatActor)
+signal mage_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int)
+signal fire_wall_requested(direction: Vector2, damage_per_tick: float)
 signal resources_changed
 
 const BASE_ATTRIBUTES := {"str": 8, "agi": 5, "vit": 8, "int": 2, "dex": 5, "luk": 2}
 const SLASH_MANA_COST := 15.0
 const DASH_MANA_COST := 20.0
 const DASH_DISTANCE := 270.0
+const DASH_DURATION := 0.18
 const BASIC_REACH_BEYOND_BODIES := 50.0
 const ATTACK_RETENTION := 16.0
 const BASIC_ATTACK_RECOVERY := 0.14
@@ -18,13 +21,19 @@ const MAX_MOVEMENT_STEP := 1.0 / 120.0
 const ARRIVAL_TOLERANCE := 0.05
 const SLASH_RANGE := 155.0
 const SLASH_HALF_ANGLE := deg_to_rad(52.0)
+const MAGE_BASIC_SPEED := 620.0
+const MAGE_BASIC_MAX_DISTANCE := 420.0
 
 var navigation: ArenaNavigation
+var run_state: RunState
+var class_id: StringName = &"swordsman"
+var class_definition: ClassDefinition
 var mana := 0.0
 var max_mana := 0.0
 var attack_cooldown := 0.0
 var slash_cooldown := 0.0
 var dash_cooldown := 0.0
+var mage_cooldowns: Dictionary[StringName, float] = {}
 var target: CombatActor
 var velocity := Vector2.ZERO
 var _path := PackedVector2Array()
@@ -40,20 +49,36 @@ var _basic_origin := Vector2.ZERO
 var _basic_visual_radius := 62.0
 var _attack_engaged := false
 var _attack_recovery := 0.0
+var _dash_active := false
+var _dash_endpoint := Vector2.ZERO
+var _dash_speed := 0.0
 
-func configure(nav: ArenaNavigation, run_state: RunState) -> void:
+func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
+	run_state = state
+	class_id = run_state.class_id
+	class_definition = ClassCatalog.class_definition(class_id)
 	var modifiers := run_state.get_modifiers()
-	var derived := RpgStats.derive(BASE_ATTRIBUTES, modifiers["flat"], _with_passive(modifiers["increased"]))
-	setup("Espadachim", Color("55a8d9"), derived, 20.0)
+	var derived := RpgStats.derive(class_definition.attributes, modifiers["flat"], _with_passive(modifiers["increased"]))
+	setup(class_definition.display_name, Color("8e73de") if class_id == &"mage" else Color("55a8d9"), derived, 20.0)
+	# Placeholder shared with the current pilot until Astra's mage sheet is integrated.
 	set_pilot_sprite(preload("res://assets/art/pilot/hero.png"))
 	max_mana = float(stats["max_mana"])
 	mana = max_mana
+	for skill_id: StringName in class_definition.skill_ids:
+		mage_cooldowns[skill_id] = 0.0
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 
-func apply_run_modifiers(run_state: RunState) -> void:
+func is_mage() -> bool:
+	return class_id == &"mage"
+
+func available_skill_ids() -> Array[StringName]:
+	return class_definition.skill_ids.duplicate()
+
+func apply_run_modifiers(state: RunState) -> void:
+	run_state = state
 	var modifiers := run_state.get_modifiers()
-	var derived := RpgStats.derive(BASE_ATTRIBUTES, modifiers["flat"], _with_passive(modifiers["increased"]))
+	var derived := RpgStats.derive(class_definition.attributes, modifiers["flat"], _with_passive(modifiers["increased"]))
 	_apply_derived_stats(derived)
 	resources_changed.emit()
 	queue_redraw()
@@ -79,43 +104,104 @@ func pursue(enemy: CombatActor) -> void:
 	_repath_time = 0.0
 
 func use_slash(direction: Vector2, enemies: Array[CombatActor]) -> bool:
-	if not is_alive() or slash_cooldown > 0.0 or mana < SLASH_MANA_COST:
+	if class_id != &"swordsman" or not _can_spend(&"slash"):
 		return false
-	var facing := direction.normalized()
-	if facing.is_zero_approx():
-		facing = _last_facing
-	_last_facing = facing
-	mana -= SLASH_MANA_COST
-	slash_cooldown = 4.0 * float(stats["cast_multiplier"])
+	var facing := _resolved_facing(direction)
+	_spend(&"slash")
 	_slash_visual_time = 0.20
 	_slash_facing = facing
 	_slash_origin = global_position
+	presentation_action.emit(&"slash", facing, 0.20)
 	queue_redraw()
 	for enemy: CombatActor in enemies.duplicate():
 		if not enemy.is_alive():
 			continue
 		var offset := enemy.global_position - global_position
 		if SkillGeometry.cone_contains(offset, facing, SLASH_RANGE, SLASH_HALF_ANGLE):
-			attack_requested.emit(_make_request(enemy, &"cone_slash", float(stats["physical_attack"]) * 1.45, 1.0, true), enemy)
+			attack_requested.emit(_make_request(enemy, &"cone_slash", float(stats["physical_attack"]) * ClassCatalog.skill_definition(&"slash").power, 1.0, true), enemy)
 	resources_changed.emit()
 	return true
 
 func use_dash(direction: Vector2) -> bool:
-	if not is_alive() or dash_cooldown > 0.0 or mana < DASH_MANA_COST:
+	if class_id != &"swordsman" or not _can_spend(&"dash"):
 		return false
-	var facing := direction.normalized()
-	if facing.is_zero_approx():
-		facing = _last_facing
-	_last_facing = facing
-	mana -= DASH_MANA_COST
-	dash_cooldown = 6.0 * float(stats["cast_multiplier"])
-	global_position = dash_destination(facing)
+	var facing := _resolved_facing(direction)
+	_spend(&"dash")
+	_dash_endpoint = dash_destination(facing)
+	_dash_speed = global_position.distance_to(_dash_endpoint) / DASH_DURATION
+	_dash_active = global_position.distance_to(_dash_endpoint) > MOVEMENT_EPSILON
 	_path.clear()
 	velocity = Vector2.ZERO
 	_attack_recovery = 0.0
 	_repath_time = 0.0
+	presentation_action.emit(&"dash", facing, DASH_DURATION)
 	resources_changed.emit()
 	return true
+
+func use_fireball(direction: Vector2) -> bool:
+	if class_id != &"mage" or not _can_spend(&"fireball"):
+		return false
+	var facing := _resolved_facing(direction)
+	_spend(&"fireball")
+	var request := _make_magic_request(null, &"fireball", _magic_power(&"fireball"), 1.0, true)
+	mage_projectile_requested.emit(&"fireball", request, null, facing, 1)
+	presentation_action.emit(&"cast", facing, 0.20)
+	resources_changed.emit()
+	return true
+
+func use_fire_wall(direction: Vector2) -> bool:
+	if class_id != &"mage" or not _can_spend(&"fire_wall"):
+		return false
+	var facing := _resolved_facing(direction)
+	_spend(&"fire_wall")
+	fire_wall_requested.emit(facing, _magic_power(&"fire_wall"))
+	presentation_action.emit(&"cast", facing, 0.24)
+	resources_changed.emit()
+	return true
+
+func use_spear(skill_id: StringName, enemy: CombatActor) -> bool:
+	if class_id != &"mage" or skill_id not in [&"fire_spear", &"ice_spear"] or not can_target_skill(skill_id, enemy) or not _can_spend(skill_id):
+		return false
+	var facing := _resolved_facing(global_position.direction_to(enemy.global_position))
+	_spend(skill_id)
+	var request := _make_magic_request(enemy, skill_id, _magic_power(skill_id), 1.0, true)
+	var count: int = run_state.get_modifiers()["spear_count"]
+	mage_projectile_requested.emit(skill_id, request, enemy, facing, count)
+	presentation_action.emit(&"cast", facing, 0.20)
+	resources_changed.emit()
+	return true
+
+func teleport_destination(point: Vector2) -> Vector2:
+	var offset := point - global_position
+	if offset.length() > ClassCatalog.skill_definition(&"teleport").range:
+		offset = offset.normalized() * ClassCatalog.skill_definition(&"teleport").range
+	return global_position + offset
+
+func can_teleport(point: Vector2) -> bool:
+	return navigation != null and navigation.is_walkable(teleport_destination(point))
+
+func use_teleport(point: Vector2) -> bool:
+	if class_id != &"mage" or not _can_spend(&"teleport") or not can_teleport(point):
+		return false
+	var destination := teleport_destination(point)
+	var facing := _resolved_facing(global_position.direction_to(destination))
+	_spend(&"teleport")
+	global_position = destination
+	_path.clear()
+	velocity = Vector2.ZERO
+	target = null
+	_attack_engaged = false
+	_attack_recovery = 0.0
+	_repath_time = 0.0
+	presentation_action.emit(&"teleport", facing, 0.12)
+	resources_changed.emit()
+	return true
+
+func can_target_skill(skill_id: StringName, enemy: CombatActor) -> bool:
+	if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
+		return false
+	var definition := ClassCatalog.skill_definition(skill_id)
+	return definition != null and global_position.distance_to(enemy.global_position) <= definition.range
 
 func aim_direction(point: Vector2) -> Vector2:
 	var direction := global_position.direction_to(point)
@@ -123,6 +209,17 @@ func aim_direction(point: Vector2) -> Vector2:
 
 func dash_destination(direction: Vector2) -> Vector2:
 	return navigation.move_until_blocked(global_position, global_position + direction.normalized() * DASH_DISTANCE)
+
+func skill_cooldown(skill_id: StringName) -> float:
+	if skill_id == &"slash":
+		return slash_cooldown
+	if skill_id == &"dash":
+		return dash_cooldown
+	return mage_cooldowns.get(skill_id, 0.0)
+
+func skill_cost(skill_id: StringName) -> float:
+	var definition := ClassCatalog.skill_definition(skill_id)
+	return definition.mana_cost if definition != null else 0.0
 
 func _process(delta: float) -> void:
 	super._process(delta)
@@ -137,12 +234,17 @@ func _process(delta: float) -> void:
 	_attack_recovery = maxf(0.0, _attack_recovery - delta)
 	slash_cooldown = maxf(0.0, slash_cooldown - delta)
 	dash_cooldown = maxf(0.0, dash_cooldown - delta)
+	for skill_id: StringName in mage_cooldowns:
+		mage_cooldowns[skill_id] = maxf(0.0, mage_cooldowns[skill_id] - delta)
 	if _slash_visual_time > 0.0:
 		_slash_visual_time = maxf(0.0, _slash_visual_time - delta)
 		queue_redraw()
 	if _basic_visual_time > 0.0:
 		_basic_visual_time = maxf(0.0, _basic_visual_time - delta)
 		queue_redraw()
+	if _dash_active:
+		_advance_dash(delta)
+		return
 	if target != null and (not is_instance_valid(target) or not target.is_alive()):
 		target = null
 		_attack_engaged = false
@@ -156,24 +258,33 @@ func _process(delta: float) -> void:
 			_try_basic_attack()
 			return
 		elif _attack_recovery > 0.0:
-			# Plant briefly after a strike; a fleeing enemy can leave the reach.
 			_path.clear()
 			velocity = Vector2.ZERO
 			return
 		else:
 			_attack_engaged = false
 			if _repath_time <= 0.0 or _path_index >= _path.size():
-				# Chase the actual target, not an obsolete point on its range border.
 				_set_path(target.global_position)
 				_repath_time = 0.22
 	_move_along_path(delta)
-	# Resolve contact in the same update instead of letting the enemy escape
-	# before the next frame's pre-movement range check.
 	if target != null and can_basic_attack(target, _attack_engaged):
 		_attack_engaged = true
 		_path.clear()
 		velocity = Vector2.ZERO
 		_try_basic_attack()
+
+func _advance_dash(delta: float) -> void:
+	var distance := global_position.distance_to(_dash_endpoint)
+	if distance <= MOVEMENT_EPSILON:
+		global_position = _dash_endpoint
+		_dash_active = false
+		return
+	var next_position := global_position.move_toward(_dash_endpoint, _dash_speed * delta)
+	var safe_position := navigation.move_until_blocked(global_position, next_position)
+	global_position = safe_position
+	if safe_position.distance_to(next_position) > MOVEMENT_EPSILON or global_position.distance_to(_dash_endpoint) <= MOVEMENT_EPSILON:
+		global_position = safe_position if safe_position.distance_to(next_position) > MOVEMENT_EPSILON else _dash_endpoint
+		_dash_active = false
 
 func _regenerate_mana(delta: float, simulation_paused: bool) -> bool:
 	if simulation_paused or not is_alive() or mana >= max_mana:
@@ -196,19 +307,54 @@ func _try_basic_attack() -> void:
 	_basic_origin = global_position + Vector2(0, -18)
 	_basic_visual_radius = maxf(12.0, global_position.distance_to(target.global_position))
 	queue_redraw()
-	attack_requested.emit(_make_request(target, &"basic_attack", float(stats["physical_attack"]), float(stats["hit_chance"]), true), target)
+	var stat_id := "magic_attack" if is_mage() else "physical_attack"
+	var request := _make_request(target, &"basic_attack", float(stats[stat_id]) * class_definition.basic_power, float(stats["hit_chance"]), true)
+	if is_mage():
+		mage_projectile_requested.emit(&"basic_attack", request, target, _last_facing, 1)
+	else:
+		attack_requested.emit(request, target)
+	presentation_action.emit(&"basic_attack", _last_facing, BASIC_ATTACK_RECOVERY)
 
 func _make_request(enemy: CombatActor, skill_id: StringName, power: float, hit_chance: float, can_crit: bool) -> DamageRequest:
 	var request := DamageRequest.new()
 	request.source_id = get_instance_id()
-	request.target_id = enemy.get_instance_id()
+	request.target_id = enemy.get_instance_id() if enemy != null else 0
 	request.skill_id = skill_id
-	request.kind = DamageRequest.Kind.PHYSICAL
+	request.kind = class_definition.basic_kind
 	request.base_damage = power
 	request.hit_chance = hit_chance
 	request.crit_chance = float(stats["crit_chance"])
 	request.can_crit = can_crit
 	return request
+
+func _make_magic_request(enemy: CombatActor, skill_id: StringName, power: float, hit_chance: float, can_crit: bool) -> DamageRequest:
+	var request := _make_request(enemy, skill_id, power, hit_chance, can_crit)
+	request.kind = DamageRequest.Kind.MAGIC
+	return request
+
+func _magic_power(skill_id: StringName) -> float:
+	return float(stats["magic_attack"]) * ClassCatalog.skill_definition(skill_id).power
+
+func _can_spend(skill_id: StringName) -> bool:
+	return is_alive() and skill_cooldown(skill_id) <= 0.0 and mana >= skill_cost(skill_id)
+
+func _spend(skill_id: StringName) -> void:
+	var definition := ClassCatalog.skill_definition(skill_id)
+	mana -= definition.mana_cost
+	var cooldown := definition.cooldown * float(stats["cast_multiplier"])
+	if skill_id == &"slash":
+		slash_cooldown = cooldown
+	elif skill_id == &"dash":
+		dash_cooldown = cooldown
+	else:
+		mage_cooldowns[skill_id] = cooldown
+
+func _resolved_facing(direction: Vector2) -> Vector2:
+	var facing := direction.normalized()
+	if facing.is_zero_approx():
+		facing = _last_facing
+	_last_facing = facing
+	return facing
 
 func _set_path(point: Vector2) -> void:
 	_path = navigation.get_path(global_position, point)
@@ -217,7 +363,6 @@ func _set_path(point: Vector2) -> void:
 		_path_index += 1
 
 func _move_along_path(delta: float) -> void:
-	# Small bounded steps keep braking/collision stable even on a long render frame.
 	var remaining_time := maxf(0.0, delta)
 	while remaining_time > 0.0:
 		var step := minf(MAX_MOVEMENT_STEP, remaining_time)
@@ -229,14 +374,12 @@ func _move_step(delta: float) -> void:
 	var offset := Vector2.ZERO
 	var has_destination := _path_index < _path.size()
 	if has_destination:
-		# Drift can reveal the next leg earlier: turn only when the full shortcut
-		# clears inflated geometry, never by snapping to a grid center.
 		for index: int in range(_path.size() - 1, _path_index, -1):
 			if navigation.is_segment_walkable(global_position, _path[index]):
 				_path_index = index
 				break
 		offset = _path[_path_index] - global_position
-		var desired_speed := minf(float(stats["move_speed"]), sqrt(2.0 * MOVE_FRICTION * offset.length()))
+		var desired_speed := minf(float(stats["move_speed"]) * movement_speed_multiplier(), sqrt(2.0 * MOVE_FRICTION * offset.length()))
 		desired_velocity = offset.normalized() * desired_speed
 	var previous_velocity := velocity
 	var acceleration := MOVE_FRICTION if desired_velocity.length() < velocity.length() else MOVE_ACCELERATION
@@ -245,17 +388,12 @@ func _move_step(delta: float) -> void:
 	var desired_position := global_position + displacement
 	var reaches_waypoint := false
 	if has_destination:
-		reaches_waypoint = offset.length() <= ARRIVAL_TOLERANCE or (
-			displacement.length() >= offset.length()
-			and displacement.normalized().dot(offset.normalized()) > 0.99
-		)
+		reaches_waypoint = offset.length() <= ARRIVAL_TOLERANCE or (displacement.length() >= offset.length() and displacement.normalized().dot(offset.normalized()) > 0.99)
 		if reaches_waypoint:
 			desired_position = _path[_path_index]
 	var safe_position := navigation.move_until_blocked(global_position, desired_position)
 	global_position = safe_position
 	if safe_position.distance_to(desired_position) > MOVEMENT_EPSILON:
-		# Contact removes blocked momentum. Rebuild from the actual safe position
-		# so inertia at a corner cannot strand the actor on an obsolete segment.
 		velocity = Vector2.ZERO
 		if has_destination:
 			_set_path(_path[-1])
@@ -271,11 +409,12 @@ func _on_health_died(actor_id: int) -> void:
 	velocity = Vector2.ZERO
 	_path.clear()
 	target = null
+	_dash_active = false
 	_attack_recovery = 0.0
 	super._on_health_died(actor_id)
 
 func basic_attack_distance(enemy: CombatActor) -> float:
-	return collision_radius + enemy.collision_radius + BASIC_REACH_BEYOND_BODIES
+	return collision_radius + enemy.collision_radius + class_definition.basic_range
 
 func can_basic_attack(enemy: CombatActor, retain: bool = false) -> bool:
 	if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
@@ -285,13 +424,15 @@ func can_basic_attack(enemy: CombatActor, retain: bool = false) -> bool:
 
 func _with_passive(increased: Dictionary) -> Dictionary:
 	var result: Dictionary = increased.duplicate()
-	# Espadachim's fixed passive: +50% defense through the shared stat pipeline.
-	result["defense"] = float(result.get("defense", 0.0)) + 0.50
+	if class_id == &"swordsman":
+		result["defense"] = float(result.get("defense", 0.0)) + 0.50
+	elif class_id == &"mage":
+		result["mana_regen_per_second"] = float(result.get("mana_regen_per_second", 0.0)) + 0.50
 	return result
 
 func _draw() -> void:
 	super._draw()
-	if _basic_visual_time > 0.0:
+	if _basic_visual_time > 0.0 and not is_mage():
 		var swing_angle := _basic_facing.angle()
 		draw_arc(_basic_origin - global_position, _basic_visual_radius, swing_angle - 0.65, swing_angle + 0.65, 16, Color(1.0, 0.89, 0.60, _basic_visual_time / BASIC_ATTACK_RECOVERY), 4.0)
 	if _slash_visual_time > 0.0:

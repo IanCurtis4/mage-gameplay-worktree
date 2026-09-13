@@ -24,6 +24,14 @@ func _initialize() -> void:
 	_check(secondary["damage"] == 100 and not secondary["can_trigger_effects"], "secondary damage cannot recurse")
 	request.base_damage = 0.0
 	_check(CombatMath.resolve(request, 0.0, 0.0, 0.9)["damage"] == 0, "zero damage cannot manufacture one damage")
+	request.base_damage = 100.0
+	request.is_secondary = false
+	request.force_critical = true
+	request.can_crit = true
+	request.hit_chance = 1.0
+	_check(CombatMath.resolve(request, 0.0, 0.0, 0.99)["critical"], "explicit guaranteed critical still resolves through CombatMath")
+	request.can_crit = false
+	_check(not CombatMath.resolve(request, 0.0, 0.0, 0.0)["critical"], "guaranteed critical still respects can_crit")
 	var augment := AugmentDefinition.new()
 	augment.id = &"wide_slash"
 	augment.effect_id = &"slash_radius"
@@ -40,7 +48,7 @@ func _initialize() -> void:
 	var swordsman_run := RunState.new()
 	_check(swordsman_run.skill_levels.size() == 2 and not swordsman_run.skill_levels.has(&"fireball"), "class run states do not share foreign skills")
 	_check(mage_run.get_modifiers()["spear_count"] == 1, "spear runtime count starts at one")
-	print("Foundation: %s" % ("PASS (17 checks)" if failures == 0 else "FAIL (%d)" % failures))
+	print("Foundation: %s" % ("PASS (19 checks)" if failures == 0 else "FAIL (%d)" % failures))
 	quit(0 if failures == 0 else 1)
 
 func _check(condition: bool, label: String) -> void:

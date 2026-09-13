@@ -5,7 +5,7 @@ extends RefCounted
 
 static func resolve(request: DamageRequest, defense: float, hit_roll: float, crit_roll: float) -> Dictionary:
 	var landed := hit_roll < clampf(request.hit_chance, 0.0, 1.0)
-	var critical := landed and request.can_crit and crit_roll < clampf(request.crit_chance, 0.0, 0.75)
+	var critical := landed and request.can_crit and (request.force_critical or crit_roll < clampf(request.crit_chance, 0.0, 0.75))
 	var damage := 0
 	if landed and request.base_damage > 0.0:
 		var mitigated := request.base_damage * 100.0 / (100.0 + maxf(0.0, defense))

@@ -62,6 +62,7 @@ func _try_attack(ranged: bool) -> void:
 	request.hit_chance = float(stats["hit_chance"])
 	request.crit_chance = 0.0
 	request.can_crit = false
+	presentation_action.emit(&"basic_attack", global_position.direction_to(player.global_position), 0.18)
 	attack_requested.emit(request, player, ranged)
 
 func _update_path(destination: Vector2) -> void:
@@ -72,7 +73,7 @@ func _update_path(destination: Vector2) -> void:
 	_repath_time = 0.45
 
 func _move_along_path(delta: float) -> void:
-	var remaining_distance := float(stats["move_speed"]) * delta
+	var remaining_distance := float(stats["move_speed"]) * movement_speed_multiplier() * delta
 	while remaining_distance > 0.0 and _path_index < _path.size():
 		var point := _path[_path_index]
 		var distance := global_position.distance_to(point)

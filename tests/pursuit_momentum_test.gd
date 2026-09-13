@@ -117,10 +117,14 @@ func _test_momentum() -> void:
 	paused = false
 	player._process(0.05)
 	_check(player.position != paused_position, "unpause resumes existing movement intent")
+	var dash_start := player.position
+	var dash_endpoint := player.dash_destination(Vector2.RIGHT)
 	player.use_dash(Vector2.RIGHT)
-	var dash_position := player.position
-	player._process(0.2)
-	_check(player.velocity.is_zero_approx() and player.position == dash_position, "dash clears walking momentum and stale destination")
+	_check(player.position == dash_start and player._dash_active and player.velocity.is_zero_approx() and player._path.is_empty(), "dash clears walking momentum and stale destination before visible movement")
+	player._process(PlayerActor.DASH_DURATION * 0.5)
+	_check(player.position.x > dash_start.x and player.position.x < dash_endpoint.x, "dash has visible intermediate movement")
+	player._process(PlayerActor.DASH_DURATION)
+	_check(player.position.distance_to(dash_endpoint) < 0.01 and not player._dash_active, "dash reaches its preview endpoint")
 	player.move_to(player.position + Vector2(100, 0))
 	player._process(0.1)
 	var lethal := DamageRequest.new()

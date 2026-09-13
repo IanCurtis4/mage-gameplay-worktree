@@ -23,16 +23,8 @@ func _ready() -> void:
 	skill_bar = HBoxContainer.new()
 	add_child(skill_bar)
 	skill_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_center_bottom(skill_bar, 380, -86, -18)
 	skill_bar.add_theme_constant_override("separation", 10)
-	for id: StringName in [&"slash", &"dash"]:
-		var button := Button.new()
-		button.custom_minimum_size = Vector2(185, 68)
-		button.focus_mode = Control.FOCUS_NONE
-		button.toggle_mode = true
-		button.pressed.connect(_choose_skill.bind(id))
-		skill_bar.add_child(button)
-		skill_buttons[id] = button
+	set_class_skills([&"slash", &"dash"])
 	aim_panel = PanelContainer.new()
 	add_child(aim_panel)
 	aim_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -76,7 +68,7 @@ func _build_settings() -> void:
 	title.add_theme_color_override("font_color", Color("f5cc77"))
 	column.add_child(title)
 	var caption := Label.new()
-	caption.text = "Como lançar Q / W"
+	caption.text = "Como lançar Q / W / A / S / D"
 	column.add_child(caption)
 	mode_option = OptionButton.new()
 	mode_option.add_item("Selecionar e confirmar com clique", CastIntent.Mode.CONFIRM)
@@ -110,8 +102,28 @@ func set_options(mode: int, smart_lock: bool) -> void:
 	_update_description(mode)
 
 func show_skill_state(skill: StringName, text: String, active: bool) -> void:
+	if not skill_buttons.has(skill):
+		return
 	skill_buttons[skill].text = text
 	skill_buttons[skill].set_pressed_no_signal(active)
+
+func set_class_skills(skill_ids: Array[StringName]) -> void:
+	if skill_bar == null:
+		return
+	for child: Node in skill_bar.get_children():
+		child.free()
+	skill_buttons.clear()
+	var button_width := 138.0 if skill_ids.size() > 2 else 185.0
+	var bar_width := button_width * skill_ids.size() + 10.0 * maxi(0, skill_ids.size() - 1)
+	_center_bottom(skill_bar, bar_width, -86, -18)
+	for id: StringName in skill_ids:
+		var button := Button.new()
+		button.custom_minimum_size = Vector2(button_width, 68)
+		button.focus_mode = Control.FOCUS_NONE
+		button.toggle_mode = true
+		button.pressed.connect(_choose_skill.bind(id))
+		skill_bar.add_child(button)
+		skill_buttons[id] = button
 
 func set_aim_text(text: String) -> void:
 	aim_panel.visible = not text.is_empty()
@@ -126,9 +138,9 @@ func _mode_changed(mode: int) -> void:
 
 func _update_description(mode: int) -> void:
 	mode_description.text = [
-		"Q/W abre a mira. Mova o mouse e clique para lançar. Soltar a tecla mantém a mira.",
-		"Segure Q/W para mirar. Solte para lançar; um clique também confirma. Só um lançamento por comando.",
-		"Q/W lança imediatamente na direção do mouse. Use um botão da barra quando quiser mirar com calma."
+		"A tecla da ação abre a mira. Mova o mouse e clique para lançar. Soltar mantém a mira.",
+		"Segure a tecla para mirar. Solte para lançar; um clique também confirma. Só um lançamento por comando.",
+		"A tecla lança imediatamente no mouse. Use um botão da barra quando quiser mirar com calma."
 	][mode]
 
 func _center_bottom(control: Control, width: float, top: float, bottom: float) -> void:

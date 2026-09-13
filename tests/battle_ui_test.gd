@@ -203,6 +203,7 @@ func _test_controller_input() -> void:
 	controller.battle_indicators.show_aim(&"dash", controller.player, Vector2(900, 350), true)
 	var preview_endpoint := controller.battle_indicators.endpoint
 	controller.player.use_dash(Vector2.RIGHT)
+	controller.player._process(PlayerActor.DASH_DURATION)
 	_check(controller.player.position.distance_to(preview_endpoint) < 0.01 and preview_endpoint.x < 610.0, "dash endpoint indicator exactly matches obstacle-clipped skill movement")
 	controller.player.mana = 0.0
 	controller.cast_intent.active_skill = &"slash"

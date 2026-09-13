@@ -5,6 +5,8 @@ extends Node2D
 signal actor_died(actor: CombatActor)
 signal damage_number(actor: CombatActor, amount: int, critical: bool)
 signal attack_missed(actor: CombatActor)
+signal status_damage_requested(request: DamageRequest, target: CombatActor)
+signal presentation_action(action: StringName, direction: Vector2, duration: float)
 
 var actor_name := "Ator"
 var actor_color := Color.WHITE
@@ -17,6 +19,12 @@ var _flash_time := 0.0
 var sprite_texture: Texture2D
 var sprite_rect := Rect2()
 var _sprite_visible_height := 0.0
+var burn_remaining := 0.0
+var burn_tick_remaining := 0.0
+var burn_source_id: int = 0
+var burn_damage_per_tick := 0.0
+var slow_remaining := 0.0
+var slow_fraction := 0.0
 
 func set_pilot_sprite(texture: Texture2D) -> void:
 	sprite_texture = texture
@@ -47,6 +55,71 @@ func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Diction
 func is_alive() -> bool:
 	return health != null and health.is_alive()
 
+func is_burning() -> bool:
+	return burn_remaining > 0.0
+
+func apply_burn(source_id: int, damage_per_tick: float, duration: float = 3.0) -> void:
+	if not is_alive() or duration <= 0.0 or damage_per_tick <= 0.0:
+		return
+	var was_burning := is_burning()
+	burn_source_id = source_id
+	burn_damage_per_tick = damage_per_tick
+	burn_remaining = duration
+	if not was_burning:
+		burn_tick_remaining = minf(1.0, duration)
+	queue_redraw()
+
+func apply_slow(fraction: float, duration: float) -> void:
+	if not is_alive() or duration <= 0.0:
+		return
+	slow_fraction = maxf(slow_fraction, clampf(fraction, 0.0, 0.95))
+	slow_remaining = maxf(slow_remaining, duration)
+	queue_redraw()
+
+func movement_speed_multiplier() -> float:
+	return 1.0 - slow_fraction if slow_remaining > 0.0 else 1.0
+
+func clear_statuses() -> void:
+	burn_remaining = 0.0
+	burn_tick_remaining = 0.0
+	burn_source_id = 0
+	burn_damage_per_tick = 0.0
+	slow_remaining = 0.0
+	slow_fraction = 0.0
+	queue_redraw()
+
+func advance_statuses(delta: float, simulation_paused: bool = false) -> void:
+	if simulation_paused or not is_alive() or delta <= 0.0:
+		return
+	if slow_remaining > 0.0:
+		slow_remaining = maxf(0.0, slow_remaining - delta)
+		if slow_remaining <= 0.0:
+			slow_fraction = 0.0
+			queue_redraw()
+	var remaining_delta := delta
+	while burn_remaining > 0.0 and remaining_delta > 0.0:
+		var step := minf(remaining_delta, minf(burn_remaining, burn_tick_remaining))
+		burn_remaining = maxf(0.0, burn_remaining - step)
+		burn_tick_remaining = maxf(0.0, burn_tick_remaining - step)
+		remaining_delta = maxf(0.0, remaining_delta - step)
+		if burn_tick_remaining <= 0.0001:
+			var request := DamageRequest.new()
+			request.source_id = burn_source_id
+			request.target_id = get_instance_id()
+			request.skill_id = &"burn_tick"
+			request.kind = DamageRequest.Kind.MAGIC
+			request.base_damage = burn_damage_per_tick
+			request.hit_chance = 1.0
+			request.can_crit = false
+			request.is_secondary = true
+			status_damage_requested.emit(request, self)
+			if not is_alive():
+				break
+			burn_tick_remaining = 1.0
+	if burn_remaining <= 0.0:
+		burn_damage_per_tick = 0.0
+		queue_redraw()
+
 func set_hovered(value: bool) -> void:
 	if is_hovered == value:
 		return
@@ -60,6 +133,7 @@ func set_selected(value: bool) -> void:
 	queue_redraw()
 
 func _process(delta: float) -> void:
+	advance_statuses(delta)
 	if _flash_time > 0.0:
 		_flash_time = maxf(0.0, _flash_time - delta)
 		queue_redraw()
@@ -84,6 +158,10 @@ func _draw() -> void:
 		var bar_y := -_sprite_visible_height - 8.0 if sprite_texture != null else -54.0
 		draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width, 6), Color(0.08, 0.09, 0.12, 0.9))
 		draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width * ratio, 6), Color("dc5757"))
+	if is_burning():
+		draw_arc(Vector2(0, 3), collision_radius + 6.0, 0.0, TAU, 24, Color("ff7a3d"), 2.0, true)
+	if slow_remaining > 0.0:
+		draw_arc(Vector2(0, 6), collision_radius + 9.0, 0.0, TAU, 24, Color("72c9ff"), 2.0, true)
 
 func _draw_target_ring(radius: float, color: Color, width: float) -> void:
 	var points := PackedVector2Array()
@@ -107,5 +185,6 @@ func _on_damage_applied(result: Dictionary) -> void:
 	queue_redraw()
 
 func _on_health_died(_actor_id: int) -> void:
+	clear_statuses()
 	actor_died.emit(self)
 	queue_redraw()

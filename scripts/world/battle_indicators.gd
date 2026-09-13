@@ -14,12 +14,22 @@ var available := true
 var click_position := Vector2.ZERO
 var click_lifetime := 0.0
 var click_is_target := false
+var target_actor: CombatActor
 
-func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast: bool) -> void:
+func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast: bool, selected_target: CombatActor = null) -> void:
 	skill = skill_id
 	origin = actor.global_position
 	direction = actor.aim_direction(point)
-	endpoint = actor.dash_destination(direction) if skill == &"dash" else origin + direction * PlayerActor.SLASH_RANGE
+	target_actor = selected_target
+	if skill == &"dash":
+		endpoint = actor.dash_destination(direction)
+	elif skill == &"teleport":
+		endpoint = actor.teleport_destination(point)
+	elif selected_target != null:
+		endpoint = selected_target.global_position
+	else:
+		var definition := ClassCatalog.skill_definition(skill)
+		endpoint = origin + direction * (definition.range if definition != null else PlayerActor.SLASH_RANGE)
 	body_radius = actor.collision_radius
 	available = can_cast
 	queue_redraw()
@@ -75,6 +85,23 @@ func _draw() -> void:
 		if endpoint.distance_to(full_endpoint) > 1.0:
 			draw_line(endpoint, full_endpoint, Color(BLOCKED_COLOR, 0.3), 1.0, true)
 			draw_line(endpoint + side, endpoint - side, BLOCKED_COLOR, 4.0, true)
+	elif skill == &"fireball":
+		draw_dashed_line(origin, endpoint, color, 3.0, 12.0, true, true)
+		_draw_endpoint(endpoint, color)
+	elif skill == &"fire_wall":
+		var center := endpoint
+		var wall_axis := direction.orthogonal()
+		draw_dashed_line(origin, center, Color(color, 0.55), 1.5, 9.0, true, true)
+		for index: int in range(FireWall.PILLAR_COUNT):
+			var pillar := center + wall_axis * ((float(index) - 1.5) * FireWall.PILLAR_SPACING)
+			draw_circle(pillar, FireWall.PILLAR_RADIUS, Color(color, 0.13))
+			draw_arc(pillar, FireWall.PILLAR_RADIUS, 0.0, TAU, 24, color, 2.0, true)
+	elif skill in [&"fire_spear", &"ice_spear"]:
+		draw_dashed_line(origin, endpoint, color, 2.0, 10.0, true, true)
+		_draw_endpoint(endpoint, color)
+	elif skill == &"teleport":
+		draw_dashed_line(origin, endpoint, Color(color, 0.65), 2.0, 10.0, true, true)
+		_draw_endpoint(endpoint, color)
 
 func _draw_endpoint(point: Vector2, color: Color) -> void:
 	draw_circle(point, body_radius, Color(color, 0.13))
