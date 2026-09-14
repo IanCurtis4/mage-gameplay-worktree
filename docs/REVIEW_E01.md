@@ -184,3 +184,34 @@ fachada real, sem substituir a cena principal, tocar saves normais ou construir 
 menu E02. A cena tornará a persistência verificável sem terminal, mas não comprova
 combate integrado da campanha. Não houve atualização de `codex/playtest` ou
 `master`, nem aceite de produto.
+
+## E01.3-C — candidato de diagnóstico manual
+
+Data: 14/09/2026. Estado: **AGUARDANDO ACEITE INTEGRADO ASTRA**.
+
+A cena isolada `scenes/diagnostics/e01_profile_diagnostic.tscn`, executável com F6,
+usa a fachada real e grava somente em `user://e01_manual_test/`. Ela não substitui
+a cena principal, não apaga o perfil de teste e nunca abre o save normal. Seus
+controles criam e selecionam os dois alts do diagnóstico, iniciam uma run, concedem
+uma recompensa explicitamente rotulada como simulação local, repetem literalmente
+a última requisição e encerram por vitória, morte ou abandono.
+
+A tela mostra revisão, XP base/job persistente, níveis e snapshot da run. Um augment
+de teste altera apenas a `RunState` em memória, permitindo observar que runtime não
+vaza entre runs ou alts. Reabrir a cena com uma sessão ativa exercita o fechamento
+durável real de sessão abandonada e registra visivelmente o `run_id` recuperado.
+O roteiro completo e os resultados esperados estão em `docs/PLAYTEST_E01.md`.
+
+### Evidência e limites do candidato
+
+O teste dedicado instancia a cena com um diretório temporário injetado, cobre os
+dois alts, retry literal sem XP duplicado, isolamento do runtime, controles em
+1280×720 e reabertura real sem limpeza entre instâncias. A suíte oficial passou com
+**543 verificações PASS**, incluindo 7 de E01.3-C, além de import/editor e smoke
+sem `ERROR`. Uma captura com OpenGL real em 1280×720 confirmou legibilidade e
+ausência de recortes.
+
+Este diagnóstico verifica persistência e recuperação sem terminal; não comprova
+combate integrado, diversão ou desempenho da campanha. Não adiciona menu E02,
+conteúdo/pools E06/E07, arte ou retomada de combate, e não atualiza
+`codex/playtest` ou `master` antes do aceite integrado.
