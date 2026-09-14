@@ -1,5 +1,15 @@
 # Épicos do MVP expandido
 
+> Atualização operacional aprovada em 14/09/2026: E00 aceito na base `247e304`;
+> E01 retomado com Sol, E01.2 em revisão sobre `efb2b48`, E01.3 após esse gate.
+> Adotado docs/REVIEW_WORK_PACKAGES.md: Luna para lotes fechados, Terra para
+> condução rotineira, Sol para sistemas, Astra para contratos críticos/integração.
+> Subagentes delimitados autorizados no épico liberado; modelos dos próximos
+> chats podem mudar na ativação/por pacote. E02–E11 permanecem reservas.
+> Esta atualização substitui abaixo o estado histórico de E00/E01 e as regras
+> de revisão Astra a cada passo/proibição absoluta de subagentes. Escopo de
+> produto e playtests permanecem. Mapa atual: docs/EPIC_THREADS.md.
+
 13/09/2026. **RESERVADO — NÃO EXECUTAR**. O usuário autorizou nesta rodada somente planejamento/criação das tarefas; a única implementação atual é o polimento de contato com o chão. Ativação futura exige mensagem explícita do usuário a Astra. Nenhum agendamento ou ciclo em segundo plano foi criado.
 
 ## Produto e decisões recebidas

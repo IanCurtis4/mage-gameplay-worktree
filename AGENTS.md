@@ -1,16 +1,24 @@
 # RagRPG — instruções para colaboradores
 
 - Leia `docs/MVP.md`, `docs/ARCHITECTURE.md` e o handoff correspondente antes de editar.
-- O usuário autoriza separadamente a criação/escopo de cada tarefa ou novo marco.
-  Dentro do bloco autorizado, o ciclo Astra → revisão → correções pelo mesmo agente
-  → nova revisão é automático, sem solicitar aceite para cada correção.
+- O usuário autoriza separadamente o escopo de cada épico ou novo marco.
+  Revisão proporcional ao risco aprovada em 14/09/2026: Luna executa lotes
+  fechados, Terra conduz pacotes rotineiros, Sol implementa sistemas novos.
+  Astra revisa contratos críticos e o fechamento integrado, não cada commit.
+  Leia docs/REVIEW_WORK_PACKAGES.md e docs/WORKFLOW.md. Correções dentro do
+  escopo são automáticas, sem solicitar aceite a cada rodada.
 - Após aprovação técnica de Astra, rebase e preparação da branch de playtest estão
   autorizados. O diretório habitual do Godot permanece em `codex/playtest`.
 - Merge em `master` somente após aceite explícito do usuário sobre o candidato testado.
   Não confundir aprovação técnica com aprovação do produto. Leia `docs/WORKFLOW.md`.
-- Não crie tarefas, delegue a novos agentes ou inicie marcos seguintes sem aceite.
-- Modelos escolhidos pelo usuário: Astra coordena/revisa decisões críticas e arte;
-  Sol implementa sistemas de gameplay; Terra recebe trabalho delimitado de conteúdo/UI.
+- Não crie novas conversas de épico nem inicie marcos seguintes sem aceite.
+  Dentro de um épico liberado, subagentes Luna/Terra estão autorizados para
+  pacotes delimitados, com trabalho independente útil e dono único por arquivo.
+  Persistência/matemática crítica continuam com Sol e revisão de Astra.
+- E01 mantém Sol na conversa principal. Conversas futuras podem trocar modelo
+  por pacote antes da execução; reserva não é execução. Astra aprova padrões
+  visuais; Terra integra arte/VFX e Luna configura receitas sobre contratos
+  prontos. Não passar toda entrega pelos quatro modelos.
 - Use Godot 4.7.2 standard e GDScript tipado; sem plugins externos nesta fundação.
 - Não duplique fórmulas de atributos/dano em atores ou UI. Mudanças nos contratos
   devem ser documentadas e justificadas no resultado para revisão de Astra.

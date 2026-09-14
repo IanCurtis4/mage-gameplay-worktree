@@ -1,5 +1,29 @@
 # Conversas reservadas dos épicos
 
+## Roteamento aprovado em 14/09/2026
+
+E00 aceito; E01 retomado mantendo Sol, com subagentes Luna/Terra delimitados.
+As demais tarefas continuam reservadas. Na ativação, usar a mesma conversa e
+escolher modelo para o pacote. A tabela histórica registra modelo de criação,
+não obriga mantê-lo. Trocas futuras autorizadas, ainda não enviadas ao app.
+
+| Épico | Condutor na próxima ativação | Apoio por pacote |
+|---|---|---|
+| E02 | Terra | Luna textos/estados |
+| E03 | Sol | Terra painel/árvore; Luna tooltips/dados |
+| E04 | Sol nas novas mecânicas; Terra nos kits sobre primitivas prontas | Luna ranks/textos; Astra identidade/contratos |
+| E05 | Sol na gramática; Terra na UI/integração | Luna combinações definidas; Astra identidade |
+| E06 | Sol no pipeline; Terra no catálogo/UI | Luna pools/textos |
+| E07 | Sol no fluxo/IA/boss; Terra nos encontros sobre IA pronta | Luna composições |
+| E08 | Terra | Luna inventário/receitas; Sol novas fronteiras runtime; Astra padrão visual |
+| E09 | Terra na preparação | Luna evidências; Sol defeitos sistêmicos; Astra auditoria final |
+| E10/E11 | Escolha por família/par depois do demo | Sem execução agora |
+
+Revisão e pacotes: docs/REVIEW_WORK_PACKAGES.md. Não encaminhar toda entrega
+por todos os modelos nem criar conversas duplicadas para trocar modelo.
+
+## Registro histórico de criação
+
 13/09/2026. Todas criadas como reservas; primeiro turno limitado a reconhecimento, sem implementação. Estado de produto: **RESERVADO**, mesmo se o app exibir completed/idle porque o reconhecimento terminou. Ativação somente por liberação futura do usuário a Astra.
 
 | Épico | Título retornado pelo app | ID da conversa | Modelo inicial |
