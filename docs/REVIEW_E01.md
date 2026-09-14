@@ -75,7 +75,10 @@ em E01.3-B após novo gate. Não há aceite de produto nem atualização de
 
 ## E01.3-A — candidato da fachada criar/selecionar
 
-Data: 14/09/2026. Estado: **EM IMPLEMENTAÇÃO / AGUARDANDO REVISÃO ASTRA**.
+Data: 14/09/2026. Estado: **ACEITE TÉCNICO ASTRA**.
+
+- Implementação inicial: `f6d5001`.
+- Candidato aprovado: `ec865acf6068324ed92d30b70608cf83f6729736`.
 
 `ProfileFacade` é a dona da cópia publicada do perfil e recebe um único
 `ProfileStore`; nenhuma operação instancia um escritor alternativo. As APIs
@@ -107,3 +110,12 @@ certificado até uma reabertura explícita bem-sucedida.
 
 Ficam fora deste candidato: menu E02, aprendizado/progressão E03, escolha de
 `legacy_loadout`, `start_run` e concessão idempotente de recompensa E01.3-B.
+
+### Evidência e próximo gate
+
+Sol executou a suíte oficial completa com **482 verificações PASS**, incluindo
+47 da fachada. Astra revisou o delta, reproduziu a tentativa de seleção no-op
+após schema futuro e confirmou sua rejeição; repetiu os 482 checks com
+importação/editor e smoke sem `ERROR`. O aceite libera E01.3-B na mesma fachada:
+`start_run`, recompensa sequencial/idempotente, `end_run` e fechamento durável de
+sessão abandonada. Ainda não é aceite integrado do épico ou do produto.
