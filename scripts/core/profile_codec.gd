@@ -21,8 +21,11 @@ const FORBIDDEN_RUNTIME_FIELDS := [
 	"current_offer", "pending_choices", "rng", "enemies", "phase", "encounter",
 ]
 
-static func encode(profile: ProfileState) -> Dictionary:
-	var validation := validate_profile(profile)
+static func encode(profile: ProfileState, catalog: ProfileCatalog = null) -> Dictionary:
+	var effective_catalog := catalog if catalog != null else ProfileCatalog.pilot()
+	if not effective_catalog.is_valid():
+		return _catalog_error(&"invalid_catalog")
+	var validation := validate_profile(profile, effective_catalog)
 	if not validation["ok"]:
 		return validation
 	var payload := _profile_to_dictionary(profile)
@@ -33,7 +36,10 @@ static func encode(profile: ProfileState) -> Dictionary:
 		return _error(&"profile_too_large")
 	return {"ok": true, "text": text, "data": payload}
 
-static func decode(text: String, known_equipment_ids: Array[StringName] = []) -> Dictionary:
+static func decode(text: String, catalog: ProfileCatalog = null) -> Dictionary:
+	var effective_catalog := catalog if catalog != null else ProfileCatalog.pilot()
+	if not effective_catalog.is_valid():
+		return _catalog_error(&"invalid_catalog")
 	if text.to_utf8_buffer().size() > MAX_FILE_BYTES:
 		return _error(&"profile_too_large")
 	var json := JSON.new()
@@ -46,15 +52,18 @@ static func decode(text: String, known_equipment_ids: Array[StringName] = []) ->
 	if schema_version > ProfileState.SCHEMA_VERSION:
 		return {"ok": false, "error_code": &"unsupported_schema", "future_schema": true}
 	if schema_version == 1:
-		return _migrate_v1(data, known_equipment_ids)
+		return _migrate_v1(data, effective_catalog)
 	if schema_version != ProfileState.SCHEMA_VERSION:
 		return _error(&"unsupported_schema")
-	return _decode_v2(data)
+	return _decode_v2(data, effective_catalog)
 
-static func validate_profile(profile: ProfileState) -> Dictionary:
-	return _decode_v2(_profile_to_dictionary(profile))
+static func validate_profile(profile: ProfileState, catalog: ProfileCatalog = null) -> Dictionary:
+	var effective_catalog := catalog if catalog != null else ProfileCatalog.pilot()
+	if not effective_catalog.is_valid():
+		return _catalog_error(&"invalid_catalog")
+	return _decode_v2(_profile_to_dictionary(profile), effective_catalog)
 
-static func _decode_v2(data: Dictionary) -> Dictionary:
+static func _decode_v2(data: Dictionary, catalog: ProfileCatalog) -> Dictionary:
 	if data.get("format_id") != ProfileState.FORMAT_ID:
 		return _error(&"unsupported_schema")
 	if not _is_exact_integer(data.get("catalog_version")) or int(data["catalog_version"]) != ProfileState.CATALOG_VERSION:
@@ -84,7 +93,7 @@ static func _decode_v2(data: Dictionary) -> Dictionary:
 	profile.next_run_counter = int(data["next_run_counter"])
 	var character_ids: Dictionary[String, bool] = {}
 	for raw_character: Variant in data["characters"]:
-		var decoded_character := _decode_character(raw_character, profile.profile_id, profile.next_character_counter)
+		var decoded_character := _decode_character(raw_character, profile.profile_id, profile.next_character_counter, catalog)
 		if not decoded_character["ok"]:
 			return decoded_character
 		var character: CharacterState = decoded_character["character"]
@@ -100,9 +109,12 @@ static func _decode_v2(data: Dictionary) -> Dictionary:
 	if not collection_result["ok"]:
 		return collection_result
 	profile.equipment_collection = collection_result["ids"]
+	for item_id: StringName in profile.equipment_collection:
+		if not catalog.knows_equipment(item_id):
+			return _catalog_error(&"invalid_catalog")
 	for character: CharacterState in profile.characters:
-		if not _character_equipment_is_owned(character, profile.equipment_collection):
-			return _error(&"invalid_equipment")
+		if not _character_equipment_is_valid(character, profile.equipment_collection, catalog):
+			return _catalog_error(&"invalid_equipment")
 	if not data["settings"] is Dictionary or not data["legacy_loadouts"] is Dictionary or not data["unresolved_legacy"] is Dictionary:
 		return _error(&"invalid_profile_maps")
 	profile.settings = data["settings"].duplicate(true)
@@ -119,7 +131,7 @@ static func _decode_v2(data: Dictionary) -> Dictionary:
 	profile.extension_fields = _unknown_fields(data, ROOT_FIELDS)
 	return {"ok": true, "profile": profile, "migrated": false}
 
-static func _decode_character(raw: Variant, profile_id: String, next_character_counter: int) -> Dictionary:
+static func _decode_character(raw: Variant, profile_id: String, next_character_counter: int, catalog: ProfileCatalog) -> Dictionary:
 	if not raw is Dictionary:
 		return _error(&"invalid_character")
 	var data: Dictionary = raw
@@ -159,7 +171,7 @@ static func _decode_character(raw: Variant, profile_id: String, next_character_c
 	var allocations_result := _decode_allocations(data["attribute_allocations"], base_class_id, base_xp)
 	if not allocations_result["ok"]:
 		return allocations_result
-	var ranks_result := _decode_rank_map(data["purchased_skill_ranks"])
+	var ranks_result := _decode_rank_map(data["purchased_skill_ranks"], base_class_id, job_xp, not evolution_id.is_empty(), catalog)
 	if not ranks_result["ok"]:
 		return ranks_result
 	var equipped_result := _decode_equipped(data["equipped"])
@@ -169,7 +181,7 @@ static func _decode_character(raw: Variant, profile_id: String, next_character_c
 		return _error(&"invalid_presets")
 	var presets: Array[Dictionary] = []
 	for raw_preset: Variant in data["presets"]:
-		var preset_result := _decode_preset(raw_preset)
+		var preset_result := _decode_preset(raw_preset, base_class_id, ranks_result["ranks"], catalog)
 		if not preset_result["ok"]:
 			return preset_result
 		presets.append(preset_result["preset"])
@@ -209,17 +221,29 @@ static func _decode_allocations(raw: Variant, base_class_id: StringName, base_xp
 		return _error(&"overspent_attributes")
 	return {"ok": true, "allocations": allocations}
 
-static func _decode_rank_map(raw: Variant) -> Dictionary:
+static func _decode_rank_map(raw: Variant, base_class_id: StringName, job_xp: int, evolved: bool, catalog: ProfileCatalog) -> Dictionary:
 	if not raw is Dictionary:
 		return _error(&"invalid_skill_ranks")
 	var ranks: Dictionary[StringName, int] = {}
+	var base_spent := 0
+	var evolution_spent := 0
 	for raw_id: Variant in raw:
 		if not raw_id is String or not _valid_technical_id(raw_id) or not _is_exact_integer(raw[raw_id]):
 			return _error(&"invalid_skill_ranks")
 		var rank := int(raw[raw_id])
-		if rank < 0 or rank > 5:
-			return _error(&"invalid_skill_ranks")
-		ranks[StringName(raw_id)] = rank
+		var skill_id := StringName(raw_id)
+		var metadata := catalog.skill_metadata(skill_id)
+		if metadata.is_empty() or not catalog.skill_is_allowed(skill_id, base_class_id):
+			return _catalog_error(&"invalid_catalog")
+		if rank < 0 or rank > int(metadata["max_purchased_rank"]):
+			return _catalog_error(&"invalid_skill_ranks")
+		if metadata["wallet"] == ProfileCatalog.BASE_WALLET:
+			base_spent += rank
+		else:
+			evolution_spent += rank
+		ranks[skill_id] = rank
+	if base_spent > ProgressionRules.base_skill_points_granted(job_xp, evolved) or evolution_spent > ProgressionRules.evolution_skill_points_granted(job_xp, evolved):
+		return _error(&"overspent_skill_points")
 	return {"ok": true, "ranks": ranks}
 
 static func _decode_equipped(raw: Variant) -> Dictionary:
@@ -233,11 +257,11 @@ static func _decode_equipped(raw: Variant) -> Dictionary:
 		equipped[slot] = null if raw[key] == null else StringName(raw[key])
 	return {"ok": true, "equipped": equipped}
 
-static func _decode_preset(raw: Variant) -> Dictionary:
+static func _decode_preset(raw: Variant, base_class_id: StringName, purchased_ranks: Dictionary[StringName, int], catalog: ProfileCatalog) -> Dictionary:
 	if not raw is Dictionary or raw.size() != 3 or not raw.has("active_slots") or not raw.has("passive_slots") or not raw.has("equipped"):
 		return _error(&"invalid_presets")
-	var active_result := _decode_slots(raw["active_slots"], CharacterState.ACTIVE_SLOT_COUNT)
-	var passive_result := _decode_slots(raw["passive_slots"], CharacterState.PASSIVE_SLOT_COUNT)
+	var active_result := _decode_slots(raw["active_slots"], CharacterState.ACTIVE_SLOT_COUNT, ProfileCatalog.ACTIVE, base_class_id, purchased_ranks, catalog)
+	var passive_result := _decode_slots(raw["passive_slots"], CharacterState.PASSIVE_SLOT_COUNT, ProfileCatalog.PASSIVE, base_class_id, purchased_ranks, catalog)
 	var equipped_result := _decode_equipped(raw["equipped"])
 	if not active_result["ok"]:
 		return active_result
@@ -247,14 +271,27 @@ static func _decode_preset(raw: Variant) -> Dictionary:
 		return equipped_result
 	return {"ok": true, "preset": {"active_slots": active_result["slots"], "passive_slots": passive_result["slots"], "equipped": equipped_result["equipped"]}}
 
-static func _decode_slots(raw: Variant, expected_size: int) -> Dictionary:
+static func _decode_slots(raw: Variant, expected_size: int, category: StringName, base_class_id: StringName, purchased_ranks: Dictionary[StringName, int], catalog: ProfileCatalog) -> Dictionary:
 	if not raw is Array or raw.size() != expected_size:
 		return _error(&"invalid_presets")
 	var slots: Array[Variant] = []
+	var seen: Dictionary[StringName, bool] = {}
 	for value: Variant in raw:
 		if value != null and (not value is String or not _valid_technical_id(value)):
 			return _error(&"invalid_presets")
-		slots.append(null if value == null else StringName(value))
+		if value == null:
+			slots.append(null)
+			continue
+		var skill_id := StringName(value)
+		var metadata := catalog.skill_metadata(skill_id)
+		if metadata.is_empty() or not catalog.skill_is_allowed(skill_id, base_class_id):
+			return _catalog_error(&"invalid_catalog")
+		if metadata["category"] != category or seen.has(skill_id):
+			return _catalog_error(&"invalid_presets") if metadata["category"] != category else _error(&"invalid_presets")
+		if int(metadata["free_rank"]) + purchased_ranks.get(skill_id, 0) <= 0:
+			return _error(&"requirements_unmet")
+		seen[skill_id] = true
+		slots.append(skill_id)
 	return {"ok": true, "slots": slots}
 
 static func _decode_unique_ids(raw: Variant) -> Dictionary:
@@ -299,13 +336,10 @@ static func _decode_reward_session(raw: Variant, character_ids: Dictionary[Strin
 		return _error(&"invalid_reward_session")
 	return {"ok": true, "session": {"run_id": raw["run_id"], "character_id": raw["character_id"], "last_committed_seq": int(raw["last_committed_seq"])}}
 
-static func _migrate_v1(data: Dictionary, known_equipment_ids: Array[StringName]) -> Dictionary:
+static func _migrate_v1(data: Dictionary, catalog: ProfileCatalog) -> Dictionary:
 	if not data.has("equipment_collection") or not data.has("equipped") or not data["equipment_collection"] is Dictionary or not data["equipped"] is Dictionary:
 		return _error(&"unsupported_schema")
 	var profile := ProfileState.new(IdentityIds.new_profile_id())
-	var known: Dictionary[StringName, bool] = {}
-	for item_id: StringName in known_equipment_ids:
-		known[item_id] = true
 	var unresolved: Array[String] = []
 	var seen: Dictionary[StringName, bool] = {}
 	for class_items: Variant in data["equipment_collection"].values():
@@ -318,7 +352,7 @@ static func _migrate_v1(data: Dictionary, known_equipment_ids: Array[StringName]
 			if seen.has(item_id):
 				continue
 			seen[item_id] = true
-			if known.has(item_id):
+			if catalog.knows_equipment(item_id):
 				profile.equipment_collection.append(item_id)
 			else:
 				unresolved.append(raw_item_id)
@@ -413,13 +447,15 @@ static func _copy_json_candidate(value: Variant) -> Variant:
 		return value.duplicate(true)
 	return value
 
-static func _character_equipment_is_owned(character: CharacterState, collection: Array[StringName]) -> bool:
-	for value: Variant in character.equipped.values():
-		if value != null and value not in collection:
+static func _character_equipment_is_valid(character: CharacterState, collection: Array[StringName], catalog: ProfileCatalog) -> bool:
+	for slot: StringName in IdentityIds.equipment_slots():
+		var value: Variant = character.equipped[slot]
+		if value != null and (value not in collection or not catalog.equipment_is_allowed(value, slot, character.base_class_id)):
 			return false
 	for preset: Dictionary in character.presets:
-		for value: Variant in preset["equipped"].values():
-			if value != null and value not in collection:
+		for slot: StringName in IdentityIds.equipment_slots():
+			var value: Variant = preset["equipped"][slot]
+			if value != null and (value not in collection or not catalog.equipment_is_allowed(value, slot, character.base_class_id)):
 				return false
 	return true
 
@@ -504,3 +540,6 @@ static func _error(error_code: StringName, field: String = "") -> Dictionary:
 	if not field.is_empty():
 		result["field"] = field
 	return result
+
+static func _catalog_error(error_code: StringName) -> Dictionary:
+	return {"ok": false, "error_code": error_code, "catalog_incompatible": true}

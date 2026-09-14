@@ -7,13 +7,14 @@ const BACKUP_FILE := "profile.backup.json"
 const PENDING_FILE := "profile.pending.json"
 
 var _base_directory: String
-var _known_equipment_ids: Array[StringName]
+var _catalog: ProfileCatalog
 var _write_in_progress := false
 
-func _init(base_directory: String = "user://", known_equipment_ids: Array[StringName] = []) -> void:
+func _init(base_directory: String = "user://", catalog: ProfileCatalog = null) -> void:
 	var requested_directory := base_directory if not base_directory.strip_edges().is_empty() else "user://"
 	_base_directory = requested_directory if requested_directory.ends_with("://") else requested_directory.trim_suffix("/").trim_suffix("\\")
-	_known_equipment_ids = known_equipment_ids.duplicate()
+	var requested_catalog := catalog if catalog != null else ProfileCatalog.pilot()
+	_catalog = requested_catalog.copy_catalog()
 
 func load_profile() -> Dictionary:
 	var primary_exists := FileAccess.file_exists(_path(PRIMARY_FILE))
@@ -58,7 +59,7 @@ func _commit(source: ProfileState, allow_v1_migration: bool) -> Dictionary:
 		return preflight
 	var candidate := source.copy_state()
 	candidate.revision += 1
-	var encoded := ProfileCodec.encode(candidate)
+	var encoded := ProfileCodec.encode(candidate, _catalog)
 	if not encoded["ok"]:
 		_write_in_progress = false
 		return encoded
@@ -135,21 +136,46 @@ func _read_and_decode(file_name: String) -> Dictionary:
 		return {"ok": false, "error_code": &"file_unreadable"}
 	var text := file.get_as_text()
 	file.close()
-	return ProfileCodec.decode(text, _known_equipment_ids)
+	return ProfileCodec.decode(text, _catalog)
 
 func _preflight_commit(source: ProfileState, allow_v1_migration: bool) -> Dictionary:
 	if not FileAccess.file_exists(_path(PRIMARY_FILE)):
+		if FileAccess.file_exists(_path(BACKUP_FILE)) or FileAccess.file_exists(_path(PENDING_FILE)):
+			return {"ok": false, "error_code": &"recovery_required", "read_only": true}
 		if source.revision != 0:
 			return {"ok": false, "error_code": &"stale_revision"}
 		return {"ok": true}
 	var disk := _read_and_decode(PRIMARY_FILE)
 	if not disk["ok"]:
 		return {"ok": false, "error_code": disk["error_code"], "read_only": true}
+	var backup_guard := _guard_existing_backup(disk)
+	if not backup_guard["ok"]:
+		return backup_guard
 	if disk.get("migrated", false):
 		return {"ok": true} if allow_v1_migration and source.revision == 0 else {"ok": false, "error_code": &"unsupported_schema", "read_only": true}
 	var disk_profile: ProfileState = disk["profile"]
 	if disk_profile.profile_id != source.profile_id or disk_profile.revision != source.revision:
 		return {"ok": false, "error_code": &"stale_revision"}
+	if source.next_character_counter < disk_profile.next_character_counter or source.next_run_counter < disk_profile.next_run_counter:
+		return {"ok": false, "error_code": &"counter_regression"}
+	return {"ok": true}
+
+func _guard_existing_backup(primary_result: Dictionary) -> Dictionary:
+	if not FileAccess.file_exists(_path(BACKUP_FILE)):
+		return {"ok": true}
+	var backup := _read_and_decode(BACKUP_FILE)
+	if not backup["ok"]:
+		if _must_preserve_incompatible(backup):
+			return {"ok": false, "error_code": backup["error_code"], "read_only": true}
+		return {"ok": true}
+	if backup.get("migrated", false):
+		return {"ok": true}
+	if primary_result.get("migrated", false):
+		return {"ok": false, "error_code": &"recovery_required", "read_only": true}
+	var primary_profile: ProfileState = primary_result["profile"]
+	var backup_profile: ProfileState = backup["profile"]
+	if backup_profile.profile_id != primary_profile.profile_id or backup_profile.revision > primary_profile.revision:
+		return {"ok": false, "error_code": &"recovery_required", "read_only": true}
 	return {"ok": true}
 
 func _path(file_name: String) -> String:
@@ -165,4 +191,4 @@ func _should_fail(_stage: StringName) -> bool:
 	return false
 
 func _must_preserve_incompatible(result: Dictionary) -> bool:
-	return result.get("future_schema", false) or result.get("error_code", &"") in [&"unsupported_schema", &"invalid_catalog", &"invalid_origin"]
+	return result.get("future_schema", false) or result.get("catalog_incompatible", false) or result.get("error_code", &"") in [&"unsupported_schema", &"invalid_catalog", &"invalid_origin"]

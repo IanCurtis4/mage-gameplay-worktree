@@ -21,6 +21,12 @@ static func job_level_for_xp(total_xp: int, evolved: bool) -> int:
 static func attribute_points_granted(total_xp: int) -> int:
 	return 3 * (base_level_for_xp(total_xp) - 1)
 
+static func base_skill_points_granted(total_xp: int, evolved: bool) -> int:
+	return mini(job_level_for_xp(total_xp, evolved), UNEVOLVED_MAX_JOB_LEVEL) - 1
+
+static func evolution_skill_points_granted(total_xp: int, evolved: bool) -> int:
+	return maxi(0, job_level_for_xp(total_xp, evolved) - UNEVOLVED_MAX_JOB_LEVEL)
+
 static func _level_for_xp(total_xp: int, level_cap: int, first_cost: int, growth: int) -> int:
 	var level := 1
 	var remaining := maxi(0, total_xp)

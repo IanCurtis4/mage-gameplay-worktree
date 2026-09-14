@@ -23,7 +23,9 @@ func _initialize() -> void:
 	DirAccess.make_dir_recursive_absolute(root_directory)
 	_check_reference_fixture()
 	_check_round_trip_and_unknown_fields()
+	_check_catalog_references()
 	_check_atomic_write_failures()
+	_check_counter_monotonicity()
 	_check_backup_recovery()
 	_check_future_and_invalid_files()
 	_check_v1_migration()
@@ -81,6 +83,25 @@ func _check_round_trip_and_unknown_fields() -> void:
 	var invalid_id_payload: Dictionary = encoded["data"].duplicate(true)
 	invalid_id_payload["characters"][0]["purchased_skill_ranks"]["../not_an_id"] = 1
 	_check(ProfileCodec.decode(JSON.stringify(invalid_id_payload))["error_code"] == &"invalid_skill_ranks", "catalog IDs are restricted to lowercase snake_case")
+	var unknown_skill_payload: Dictionary = encoded["data"].duplicate(true)
+	unknown_skill_payload["characters"][0]["purchased_skill_ranks"]["nonexistent_skill"] = 1
+	_check(ProfileCodec.decode(JSON.stringify(unknown_skill_payload))["error_code"] == &"invalid_catalog", "unknown purchased skills block the incompatible profile")
+	var foreign_skill_payload: Dictionary = encoded["data"].duplicate(true)
+	foreign_skill_payload["characters"][0]["purchased_skill_ranks"]["fireball"] = 1
+	_check(ProfileCodec.decode(JSON.stringify(foreign_skill_payload))["error_code"] == &"invalid_catalog", "skills from another base origin are rejected")
+	var wrong_slot_payload: Dictionary = encoded["data"].duplicate(true)
+	wrong_slot_payload["characters"][0]["presets"][0]["active_slots"][0] = "swordsman_resistance"
+	_check(ProfileCodec.decode(JSON.stringify(wrong_slot_payload))["error_code"] == &"invalid_presets", "passive skills cannot occupy active slots")
+	var excessive_rank_payload: Dictionary = encoded["data"].duplicate(true)
+	excessive_rank_payload["characters"][0]["purchased_skill_ranks"]["slash"] = 5
+	_check(ProfileCodec.decode(JSON.stringify(excessive_rank_payload))["error_code"] == &"invalid_skill_ranks", "purchased ranks respect catalog limits")
+	var overspent_skill_payload: Dictionary = encoded["data"].duplicate(true)
+	overspent_skill_payload["characters"][0]["purchased_skill_ranks"]["slash"] = 2
+	_check(ProfileCodec.decode(JSON.stringify(overspent_skill_payload))["error_code"] == &"overspent_skill_points", "purchased ranks cannot exceed granted base skill points")
+	var unknown_owned_item_payload: Dictionary = encoded["data"].duplicate(true)
+	unknown_owned_item_payload["equipment_collection"] = ["nonexistent_item"]
+	unknown_owned_item_payload["characters"][0]["equipped"]["weapon"] = "nonexistent_item"
+	_check(ProfileCodec.decode(JSON.stringify(unknown_owned_item_payload))["error_code"] == &"invalid_catalog", "syntactically valid but unknown equipment blocks the profile")
 	var early_evolution_payload: Dictionary = encoded["data"].duplicate(true)
 	early_evolution_payload["characters"][0]["evolution_id"] = "sp_mg"
 	_check(ProfileCodec.decode(JSON.stringify(early_evolution_payload))["error_code"] == &"requirements_unmet", "evolution cannot be persisted before accepted base and job thresholds")
@@ -110,6 +131,51 @@ func _check_atomic_write_failures() -> void:
 		_check(not failed["ok"] and failed["error_code"] == &"save_failed", "%s failure is reported" % stage)
 		_check(source.revision == 1 and source.characters[0].base_xp_total == 375, "%s failure does not roll back or publish over the caller state" % stage)
 		_check(disk["ok"] and disk["profile"].revision == 1 and disk["profile"].characters[0].base_xp_total == 350, "%s failure leaves the committed primary intact" % stage)
+
+func _check_catalog_references() -> void:
+	var catalog := _catalog_with_training_sword()
+	var profile := _profile_with_character()
+	profile.equipment_collection.append(&"training_sword")
+	profile.characters[0].equipped[&"weapon"] = &"training_sword"
+	var encoded := ProfileCodec.encode(profile, catalog)
+	_check(encoded["ok"], "explicit catalog accepts known equipment in its legal slot and origin")
+	var wrong_slot: Dictionary = encoded["data"].duplicate(true)
+	wrong_slot["characters"][0]["equipped"]["weapon"] = null
+	wrong_slot["characters"][0]["equipped"]["armor"] = "training_sword"
+	var wrong_slot_result := ProfileCodec.decode(JSON.stringify(wrong_slot), catalog)
+	_check(not wrong_slot_result["ok"] and wrong_slot_result["error_code"] == &"invalid_equipment" and wrong_slot_result["catalog_incompatible"], "equipment metadata enforces slot and marks incompatibility as protected")
+
+	var directory := root_directory.path_join("unknown_catalog_reference")
+	_prepare_directory(directory)
+	var valid := ProfileCodec.encode(_profile_with_character())
+	var unknown_skill: Dictionary = valid["data"].duplicate(true)
+	unknown_skill["characters"][0]["purchased_skill_ranks"]["nonexistent_skill"] = 1
+	var unknown_text := JSON.stringify(unknown_skill)
+	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), unknown_text)
+	_write_text(directory.path_join(ProfileStore.BACKUP_FILE), valid["text"])
+	var loaded := ProfileStore.new(directory).load_profile()
+	_check(not loaded["ok"] and loaded["error_code"] == &"invalid_catalog" and loaded["read_only"], "unknown catalog references block the profile without backup rollback")
+	_check(_read_text(directory.path_join(ProfileStore.PRIMARY_FILE)) == unknown_text, "catalog-incompatible primary remains byte-for-byte intact")
+
+func _check_counter_monotonicity() -> void:
+	var directory := root_directory.path_join("counter_regression")
+	_prepare_directory(directory)
+	var profile := ProfileState.new(PROFILE_ID)
+	profile.next_character_counter = 100
+	profile.next_run_counter = 100
+	var store := ProfileStore.new(directory)
+	var committed := store.commit(profile)
+	_check(committed["ok"], "counter regression fixture persists high counters without characters or a reward session")
+	var original_primary := _read_text(directory.path_join(ProfileStore.PRIMARY_FILE))
+	var run_regression: ProfileState = committed["profile"].copy_state()
+	run_regression.next_run_counter = 1
+	var run_result := store.commit(run_regression)
+	_check(not run_result["ok"] and run_result["error_code"] == &"counter_regression", "next_run_counter can never regress")
+	var character_regression: ProfileState = committed["profile"].copy_state()
+	character_regression.next_character_counter = 1
+	var character_result := store.commit(character_regression)
+	_check(not character_result["ok"] and character_result["error_code"] == &"counter_regression", "next_character_counter can never regress")
+	_check(_read_text(directory.path_join(ProfileStore.PRIMARY_FILE)) == original_primary and not FileAccess.file_exists(directory.path_join(ProfileStore.BACKUP_FILE)) and not FileAccess.file_exists(directory.path_join(ProfileStore.PENDING_FILE)), "counter regression leaves all disk artifacts unchanged")
 
 func _check_backup_recovery() -> void:
 	var directory := root_directory.path_join("recovery")
@@ -142,6 +208,35 @@ func _check_future_and_invalid_files() -> void:
 	_check(_read_text(future_directory.path_join(ProfileStore.PRIMARY_FILE)) == future_text, "future schema remains byte-for-byte intact")
 	var overwrite_future := ProfileStore.new(future_directory).commit(_profile_with_character())
 	_check(not overwrite_future["ok"] and overwrite_future["read_only"] and _read_text(future_directory.path_join(ProfileStore.PRIMARY_FILE)) == future_text, "direct commit cannot overwrite a future schema")
+
+	var future_backup_directory := root_directory.path_join("future_backup_only")
+	_prepare_directory(future_backup_directory)
+	_write_text(future_backup_directory.path_join(ProfileStore.BACKUP_FILE), future_text)
+	var future_backup_store := ProfileStore.new(future_backup_directory)
+	var future_backup_load := future_backup_store.load_profile()
+	var future_backup_commit := future_backup_store.commit(_profile_with_character())
+	_check(not future_backup_load["ok"] and future_backup_load["read_only"] and not future_backup_commit["ok"], "future backup without a primary cannot be bypassed by direct commit")
+	_check(_read_text(future_backup_directory.path_join(ProfileStore.BACKUP_FILE)) == future_text and not FileAccess.file_exists(future_backup_directory.path_join(ProfileStore.PRIMARY_FILE)), "rejected future-backup commit preserves bytes and does not install a primary")
+
+	var guarded_backup_directory := root_directory.path_join("future_backup_with_primary")
+	_prepare_directory(guarded_backup_directory)
+	var guarded_store := ProfileStore.new(guarded_backup_directory)
+	var guarded_initial := guarded_store.commit(_profile_with_character())
+	_write_text(guarded_backup_directory.path_join(ProfileStore.BACKUP_FILE), future_text)
+	var guarded_primary_text := _read_text(guarded_backup_directory.path_join(ProfileStore.PRIMARY_FILE))
+	var guarded_commit := guarded_store.commit(guarded_initial["profile"])
+	_check(not guarded_commit["ok"] and guarded_commit["read_only"], "future backup is protected even when a current primary exists")
+	_check(_read_text(guarded_backup_directory.path_join(ProfileStore.PRIMARY_FILE)) == guarded_primary_text and _read_text(guarded_backup_directory.path_join(ProfileStore.BACKUP_FILE)) == future_text, "blocked commit preserves both current primary and future backup")
+
+	for artifact_kind: String in ["valid_backup", "corrupt_backup", "pending"]:
+		var artifact_directory := root_directory.path_join(artifact_kind + "_commit_block")
+		_prepare_directory(artifact_directory)
+		var artifact_name := ProfileStore.PENDING_FILE if artifact_kind == "pending" else ProfileStore.BACKUP_FILE
+		var artifact_text: String = backup_profile["text"] if artifact_kind != "corrupt_backup" else "broken backup"
+		_write_text(artifact_directory.path_join(artifact_name), artifact_text)
+		var artifact_commit := ProfileStore.new(artifact_directory).commit(_profile_with_character())
+		_check(not artifact_commit["ok"] and artifact_commit["error_code"] == &"recovery_required" and artifact_commit["read_only"], "%s blocks normal commit when primary is absent" % artifact_kind)
+		_check(_read_text(artifact_directory.path_join(artifact_name)) == artifact_text and not FileAccess.file_exists(artifact_directory.path_join(ProfileStore.PRIMARY_FILE)), "%s remains intact after rejected commit" % artifact_kind)
 
 	var catalog_directory := root_directory.path_join("catalog_incompatible")
 	_prepare_directory(catalog_directory)
@@ -186,7 +281,8 @@ func _check_v1_migration() -> void:
 	}
 	var legacy_text := JSON.stringify(legacy)
 	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), legacy_text)
-	var store := ProfileStore.new(directory, [&"training_sword"])
+	var migration_catalog := _catalog_with_training_sword()
+	var store := ProfileStore.new(directory, migration_catalog)
 	var migrated := store.load_profile()
 	_check(migrated["ok"] and migrated["migrated"] and migrated["warning"] == &"profile_migrated", "recognized schema 1 migrates once to schema 2")
 	var profile: ProfileState = migrated["profile"]
@@ -199,9 +295,14 @@ func _check_v1_migration() -> void:
 	var backup_directory := root_directory.path_join("migration_from_backup")
 	_prepare_directory(backup_directory)
 	_write_text(backup_directory.path_join(ProfileStore.BACKUP_FILE), legacy_text)
-	var backup_migration := ProfileStore.new(backup_directory, [&"training_sword"]).load_profile()
+	var backup_migration := ProfileStore.new(backup_directory, migration_catalog).load_profile()
 	_check(backup_migration["ok"] and backup_migration["migrated"] and backup_migration["recovered"] and backup_migration["warning"] == &"profile_migrated_from_backup", "schema-1 backup can be recovered and migrated without a primary")
-	_check(ProfileCodec.decode(_read_text(backup_directory.path_join(ProfileStore.PRIMARY_FILE)))["ok"], "backup migration installs a validated schema-2 primary")
+	_check(ProfileCodec.decode(_read_text(backup_directory.path_join(ProfileStore.PRIMARY_FILE)), migration_catalog)["ok"], "backup migration installs a validated schema-2 primary")
+
+func _catalog_with_training_sword() -> ProfileCatalog:
+	return ProfileCatalog.pilot({
+		&"training_sword": {"slot": &"weapon", "allowed_base_classes": [&"swordsman"]},
+	})
 
 func _profile_with_character() -> ProfileState:
 	var profile := ProfileState.new(PROFILE_ID)
