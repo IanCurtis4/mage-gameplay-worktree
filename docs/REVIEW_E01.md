@@ -72,3 +72,33 @@ Este aceite encerra somente E01.2 e libera E01.3-A: fachada transacional mínima
 para criar e selecionar personagem. `start_run` e recompensa idempotente ficam
 em E01.3-B após novo gate. Não há aceite de produto nem atualização de
 `codex/playtest` ou `master`.
+
+## E01.3-A — candidato da fachada criar/selecionar
+
+Data: 14/09/2026. Estado: **EM IMPLEMENTAÇÃO / AGUARDANDO REVISÃO ASTRA**.
+
+`ProfileFacade` é a dona da cópia publicada do perfil e recebe um único
+`ProfileStore`; nenhuma operação instancia um escritor alternativo. As APIs
+`create_character(request_id, expected_revision, display_name, base_class_id)` e
+`select_character(request_id, expected_revision, character_id)` exigem correlação
+e revisão originais. Repetição após commit encontra `stale_revision`, sem reservar
+novo ID ou publicar outra seleção.
+
+A criação ocorre sobre cópia: valida limite de oito e base disponível, deriva do
+catálogo os dois ranks ativos e o passivo gratuitos, desbloqueia/equipa starters,
+reserva o contador monotônico e seleciona o novo alt no mesmo commit. Catálogos
+posteriores podem marcar no máximo um equipamento `starter` por origem/slot; na
+ausência de conteúdo de equipamentos, o loadout vazio continua estruturalmente
+válido. A base só fica disponível quando o catálogo possui exatamente o kit inicial
+E00 (duas ativas e uma passiva gratuitas da carteira base), portanto Arqueiro
+permanece bloqueado até seu catálogo ser implementado.
+
+Se o writer retorna falha depois de um resultado potencialmente durável, a fachada
+relê o perfil. Ela confirma sucesso apenas se o estado inteiro coincide com o
+candidato esperado na revisão seguinte; estado antigo confirma falha sem publicação
+e qualquer terceiro resultado gera `result_uncertain`, mantendo a fachada somente
+leitura até `open_profile()` reconciliar explicitamente o disco. Criação e seleção
+também bloqueiam enquanto existir uma sessão de run durável.
+
+Ficam fora deste candidato: menu E02, aprendizado/progressão E03, escolha de
+`legacy_loadout`, `start_run` e concessão idempotente de recompensa E01.3-B.

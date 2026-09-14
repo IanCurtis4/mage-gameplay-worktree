@@ -49,6 +49,9 @@ func load_profile() -> Dictionary:
 func commit(source: ProfileState) -> Dictionary:
 	return _commit(source, false)
 
+func catalog_copy() -> ProfileCatalog:
+	return _catalog.copy_catalog()
+
 func _commit(source: ProfileState, allow_v1_migration: bool) -> Dictionary:
 	if _write_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress"}

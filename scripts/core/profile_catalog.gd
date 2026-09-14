@@ -28,7 +28,7 @@ static func pilot(additional_equipment: Dictionary = {}, additional_skills: Dict
 		var metadata: Dictionary = additional_equipment[raw_item_id]
 		var allowed_base_classes: Array[StringName] = []
 		allowed_base_classes.assign(metadata.get("allowed_base_classes", []))
-		catalog.add_equipment(StringName(raw_item_id), metadata.get("slot", &""), allowed_base_classes)
+		catalog.add_equipment(StringName(raw_item_id), metadata.get("slot", &""), allowed_base_classes, metadata.get("starter", false))
 	for raw_skill_id: Variant in additional_skills:
 		var metadata: Dictionary = additional_skills[raw_skill_id]
 		var allowed_base_classes: Array[StringName] = []
@@ -65,12 +65,13 @@ func add_skill(
 	}
 	return true
 
-func add_equipment(item_id: StringName, slot: StringName, allowed_base_classes: Array[StringName]) -> bool:
+func add_equipment(item_id: StringName, slot: StringName, allowed_base_classes: Array[StringName], starter: bool = false) -> bool:
 	if _sealed:
 		return false
 	_equipment[item_id] = {
 		"slot": slot,
 		"allowed_base_classes": allowed_base_classes.duplicate(),
+		"starter": starter,
 	}
 	return true
 
@@ -102,9 +103,18 @@ func is_valid() -> bool:
 				return false
 		elif not required_evolution_id.is_empty():
 			return false
+	var starter_slots: Dictionary[StringName, bool] = {}
 	for metadata: Dictionary in _equipment.values():
 		if metadata.get("slot") not in IdentityIds.equipment_slots() or not _valid_origins(metadata.get("allowed_base_classes")):
 			return false
+		if not metadata.get("starter") is bool:
+			return false
+		if metadata["starter"]:
+			for base_class_id: StringName in metadata["allowed_base_classes"]:
+				var starter_key := StringName("%s:%s" % [base_class_id, metadata["slot"]])
+				if starter_slots.has(starter_key):
+					return false
+				starter_slots[starter_key] = true
 	return true
 
 func skill_metadata(skill_id: StringName) -> Dictionary:
@@ -115,6 +125,52 @@ func equipment_metadata(item_id: StringName) -> Dictionary:
 
 func knows_equipment(item_id: StringName) -> bool:
 	return _equipment.has(item_id)
+
+func base_class_is_available(base_class_id: StringName) -> bool:
+	if not IdentityIds.is_base_class(base_class_id):
+		return false
+	var counts := _initial_skill_counts(base_class_id)
+	return counts[ACTIVE] == 2 and counts[PASSIVE] == 1
+
+func initial_skill_slots(base_class_id: StringName) -> Dictionary:
+	var active_slots: Array[Variant] = []
+	var passive_slots: Array[Variant] = []
+	active_slots.resize(CharacterState.ACTIVE_SLOT_COUNT)
+	passive_slots.resize(CharacterState.PASSIVE_SLOT_COUNT)
+	if not base_class_is_available(base_class_id):
+		return {"active_slots": active_slots, "passive_slots": passive_slots}
+	var active_index := 0
+	var passive_index := 0
+	for skill_id: StringName in _skills:
+		var metadata: Dictionary = _skills[skill_id]
+		if not _is_initial_skill(metadata, base_class_id):
+			continue
+		if metadata["category"] == ACTIVE:
+			active_slots[active_index] = skill_id
+			active_index += 1
+		else:
+			passive_slots[passive_index] = skill_id
+			passive_index += 1
+	return {"active_slots": active_slots, "passive_slots": passive_slots}
+
+func starter_equipment(base_class_id: StringName) -> Dictionary[StringName, Variant]:
+	var equipped: Dictionary[StringName, Variant] = {}
+	for slot: StringName in IdentityIds.equipment_slots():
+		equipped[slot] = null
+	for item_id: StringName in _equipment:
+		var metadata: Dictionary = _equipment[item_id]
+		if metadata["starter"] and base_class_id in metadata["allowed_base_classes"]:
+			equipped[metadata["slot"]] = item_id
+	return equipped
+
+func starter_item_ids(base_class_id: StringName) -> Array[StringName]:
+	var item_ids: Array[StringName] = []
+	var equipped := starter_equipment(base_class_id)
+	for slot: StringName in IdentityIds.equipment_slots():
+		var item_id: Variant = equipped[slot]
+		if item_id != null:
+			item_ids.append(item_id)
+	return item_ids
 
 func skill_is_allowed(skill_id: StringName, base_class_id: StringName, evolution_id: StringName) -> bool:
 	var metadata: Dictionary = _skills.get(skill_id, {})
@@ -140,3 +196,18 @@ func _evolution_matches_any_origin(evolution_id: StringName, origins: Array) -> 
 		if IdentityIds.evolution_belongs_to(evolution_id, base_class_id):
 			return true
 	return false
+
+func _initial_skill_counts(base_class_id: StringName) -> Dictionary[StringName, int]:
+	var counts: Dictionary[StringName, int] = {ACTIVE: 0, PASSIVE: 0}
+	for metadata: Dictionary in _skills.values():
+		if _is_initial_skill(metadata, base_class_id):
+			counts[metadata["category"]] += 1
+	return counts
+
+func _is_initial_skill(metadata: Dictionary, base_class_id: StringName) -> bool:
+	return (
+		metadata["wallet"] == BASE_WALLET
+		and StringName(metadata["required_evolution_id"]).is_empty()
+		and int(metadata["free_rank"]) > 0
+		and base_class_id in metadata["allowed_base_classes"]
+	)
