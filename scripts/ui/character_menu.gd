@@ -75,6 +75,9 @@ func _select_roster_index(index: int) -> void:
 		return
 	_selected_index = index
 	roster_list.select(index)
+	var profile: Variant = facade.current_profile() if facade != null else null
+	if profile != null:
+		build_summary_label.text = _build_summary(profile.characters[index])
 	select_button.disabled = false
 
 func _show_result(result: Dictionary) -> Dictionary:

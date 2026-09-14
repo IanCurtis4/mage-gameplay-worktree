@@ -18,6 +18,8 @@ func _initialize() -> void:
 	var swordsman: Dictionary = menu.create_character(&"swordsman")
 	var mage: Dictionary = menu.create_character(&"mage")
 	_check(swordsman["ok"] and mage["ok"] and menu.roster_list.item_count == 2 and menu.roster_list.get_item_text(0).contains("Lina") and menu.roster_list.get_item_text(1).contains("Mago"), "creation uses facade and refreshes the real roster")
+	menu._select_roster_index(1)
+	_check(menu.build_summary_label.text.contains("Bola de fogo"), "roster navigation previews the chosen alt's persisted build before committing selection")
 	var selected: Dictionary = menu.select_character_at(0)
 	var profile: Variant = menu.facade.current_profile()
 	_check(selected["ok"] and profile.selected_character_id == profile.characters[0].character_id and menu.roster_list.get_item_text(0).contains("selecionado") and menu.build_summary_label.text.contains("Corte"), "selection persists through facade and exposes the catalog-backed initial build")
