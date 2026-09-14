@@ -55,6 +55,24 @@ func catalog_copy() -> ProfileCatalog:
 func has_pending_transaction() -> bool:
 	return FileAccess.file_exists(_path(PENDING_FILE))
 
+func discard_failed_pending(before: ProfileState, source_candidate: ProfileState) -> Dictionary:
+	if not has_pending_transaction():
+		return {"ok": true, "discarded_pending": false}
+	var expected := source_candidate.copy_state()
+	expected.revision += 1
+	var pending := _read_and_decode(PENDING_FILE)
+	if not pending["ok"] or pending.get("migrated", false) or not _same_profile(pending["profile"], expected):
+		return {"ok": false, "error_code": &"recovery_required", "read_only": true}
+	if FileAccess.file_exists(_path(PRIMARY_FILE)):
+		var primary := _read_and_decode(PRIMARY_FILE)
+		if not primary["ok"] or primary.get("migrated", false) or not _same_profile(primary["profile"], before):
+			return {"ok": false, "error_code": &"recovery_required", "read_only": true}
+	elif before.revision != 0 or FileAccess.file_exists(_path(BACKUP_FILE)):
+		return {"ok": false, "error_code": &"recovery_required", "read_only": true}
+	if DirAccess.remove_absolute(_absolute_path(PENDING_FILE)) != OK:
+		return {"ok": false, "error_code": &"recovery_required", "read_only": true}
+	return {"ok": true, "discarded_pending": true}
+
 func _commit(source: ProfileState, allow_v1_migration: bool) -> Dictionary:
 	if _write_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress"}
@@ -198,3 +216,8 @@ func _should_fail(_stage: StringName) -> bool:
 
 func _must_preserve_incompatible(result: Dictionary) -> bool:
 	return result.get("future_schema", false) or result.get("catalog_incompatible", false) or result.get("error_code", &"") in [&"unsupported_schema", &"invalid_catalog", &"invalid_origin"]
+
+func _same_profile(left: ProfileState, right: ProfileState) -> bool:
+	var left_encoded := ProfileCodec.encode(left, _catalog)
+	var right_encoded := ProfileCodec.encode(right, _catalog)
+	return left_encoded["ok"] and right_encoded["ok"] and left_encoded["text"] == right_encoded["text"]

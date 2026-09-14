@@ -131,7 +131,7 @@ func start_run(request_id: String, expected_revision: int) -> Dictionary:
 func grant_reward(request_id: String, expected_revision: int, run_id: String, sequence: int, reward_id: StringName) -> Dictionary:
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
-	var ready := _begin_operation(request_id, expected_revision)
+	var ready := _begin_context(request_id)
 	if not ready["ok"]:
 		return _finish_operation(request_id, ready)
 	if _store.has_pending_transaction():
@@ -151,6 +151,9 @@ func grant_reward(request_id: String, expected_revision: int, run_id: String, se
 			"run_id": run_id,
 			"sequence": sequence,
 		})
+	var revision_result := _check_expected_revision(expected_revision)
+	if not revision_result["ok"]:
+		return _finish_operation(request_id, revision_result)
 	if sequence != cursor + 1:
 		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_reward_sequence"})
 	var resolved := _reward_resolver.resolve(reward_id)
@@ -215,6 +218,12 @@ func end_run(request_id: String, expected_revision: int, run_id: String, outcome
 	return _finish_operation(request_id, committed)
 
 func _begin_operation(request_id: String, expected_revision: int) -> Dictionary:
+	var ready := _begin_context(request_id)
+	if not ready["ok"]:
+		return ready
+	return _check_expected_revision(expected_revision)
+
+func _begin_context(request_id: String) -> Dictionary:
 	_operation_in_progress = true
 	if not _valid_request_id(request_id):
 		return {"ok": false, "error_code": &"invalid_request_id"}
@@ -224,6 +233,9 @@ func _begin_operation(request_id: String, expected_revision: int) -> Dictionary:
 		var opened := _open_profile_transaction()
 		if not opened["ok"]:
 			return opened
+	return {"ok": true}
+
+func _check_expected_revision(expected_revision: int) -> Dictionary:
 	if expected_revision != _profile.revision:
 		return {"ok": false, "error_code": &"stale_revision", "current_revision": _profile.revision}
 	return {"ok": true}
@@ -291,10 +303,21 @@ func _resolve_commit(before: ProfileState, candidate: ProfileState, commit_resul
 				"recovered_after_uncertain_result": true,
 			}
 		if _same_profile(durable, before):
-			_profile = durable.copy_state()
-			return commit_result
+			var cleanup := _store.discard_failed_pending(before, candidate)
+			if cleanup["ok"]:
+				_profile = durable.copy_state()
+				return commit_result
+			return _block_with(cleanup)
 		if loaded.get("created_empty", false) and before.revision == 0:
 			return commit_result
+	var cleanup := _store.discard_failed_pending(before, candidate)
+	if cleanup["ok"] and cleanup.get("discarded_pending", false):
+		_profile = before.copy_state()
+		return commit_result
+	if not cleanup["ok"]:
+		return _block_with(cleanup)
+	if not loaded["ok"]:
+		return _block_with(loaded)
 	return _block_with({"ok": false, "error_code": &"result_uncertain", "read_only": true})
 
 func _refresh_after_stale() -> Dictionary:

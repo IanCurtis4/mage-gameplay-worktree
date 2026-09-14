@@ -2,10 +2,10 @@ extends SceneTree
 
 class ToggleFailStore:
 	extends ProfileStore
-	var fail_writes := false
+	var failure_stage: StringName = &""
 
 	func _should_fail(stage: StringName) -> bool:
-		return fail_writes and stage == &"write_pending"
+		return not failure_stage.is_empty() and stage == failure_stage
 
 class ToggleUncertainStore:
 	extends ProfileStore
@@ -73,9 +73,11 @@ func _check_run_reward_and_end_flow() -> void:
 	_check(reward_one["profile"].reward_session["last_committed_seq"] == 1 and reward_one["profile"].lifetime_stats[&"kills"] == 2, "reward stats and cursor advance atomically")
 	_check(&"reward_blade" in reward_one["profile"].equipment_collection and reward_one["profile"].lifetime_stats[&"equipment_unlocked"] == 3, "new reward equipment joins the shared collection and increments its stat once")
 	_check(reward_one["profile"].character_by_id(second["character_id"]).base_xp_total == 0, "reward origin is fixed to the session character, not the other alt")
-	var stale_reward_retry := facade.grant_reward("reward-1", 4, run_id, 1, &"encounter_one")
+	var literal_reward_retry := facade.grant_reward("reward-1", 4, run_id, 1, &"encounter_one")
+	var stale_new_reward := facade.grant_reward("reward-2-stale", 4, run_id, 2, &"encounter_two")
 	var replay := facade.grant_reward("reward-1-confirm", 5, run_id, 1, &"encounter_one")
-	_check(not stale_reward_retry["ok"] and stale_reward_retry["error_code"] == &"stale_revision" and replay["ok"] and replay["already_applied"] and replay["new_revision"] == 5, "original revision cannot duplicate reward and committed seq replays as an explicit no-op")
+	_check(literal_reward_retry["ok"] and literal_reward_retry["already_applied"] and literal_reward_retry["new_revision"] == 5, "literal reward retry with its original revision is recognized from the committed cursor")
+	_check(not stale_new_reward["ok"] and stale_new_reward["error_code"] == &"stale_revision" and replay["ok"] and replay["already_applied"] and replay["new_revision"] == 5, "stale revision still blocks a new reward while confirmed seq remains an explicit no-op")
 
 	var reward_two := facade.grant_reward("reward-2", 5, run_id, 2, &"encounter_two")
 	var twice_rewarded: CharacterState = reward_two["profile"].character_by_id(first["character_id"])
@@ -122,11 +124,15 @@ func _check_start_preconditions() -> void:
 
 	var pending_directory := root_directory.path_join("pending_start")
 	_prepare_directory(pending_directory)
-	var pending_facade := ProfileFacade.new(ProfileStore.new(pending_directory, catalog), _rewards())
+	var pending_store := ProfileStore.new(pending_directory, catalog)
+	var pending_facade := ProfileFacade.new(pending_store, _rewards())
 	var pending_created := pending_facade.create_character("create-pending", 0, "Mia", &"swordsman")
-	_write_text(pending_directory.path_join(ProfileStore.PENDING_FILE), "{}")
+	var orphan_pending := JSON.stringify({"schema_version": 99, "unknown_transaction": true})
+	_write_text(pending_directory.path_join(ProfileStore.PENDING_FILE), orphan_pending)
 	var pending_start := pending_facade.start_run("start-pending", pending_created["new_revision"])
+	var rejected_cleanup := pending_store.discard_failed_pending(pending_facade.current_profile(), pending_facade.current_profile())
 	_check(not pending_start["ok"] and pending_start["error_code"] == &"recovery_required" and pending_start["read_only"], "pending transaction blocks run reservation")
+	_check(not rejected_cleanup["ok"] and rejected_cleanup["error_code"] == &"recovery_required" and _read_text(pending_directory.path_join(ProfileStore.PENDING_FILE)) == orphan_pending, "failed-transaction cleanup rejects and preserves an unknown pending byte-for-byte")
 	_check(pending_facade.current_profile().next_run_counter == 1 and pending_facade.current_profile().reward_session == null, "blocked pending start publishes no run state or counter")
 
 func _check_write_failures_and_uncertainty() -> void:
@@ -136,17 +142,32 @@ func _check_write_failures_and_uncertainty() -> void:
 	var fail_store := ToggleFailStore.new(fail_directory, catalog)
 	var facade := ProfileFacade.new(fail_store, _rewards())
 	var created := facade.create_character("failure-create", 0, "Nina", &"swordsman")
-	fail_store.fail_writes = true
+	fail_store.failure_stage = &"write_pending"
 	var failed_start := facade.start_run("failure-start", created["new_revision"])
 	_check(not failed_start["ok"] and failed_start["error_code"] == &"save_failed" and facade.current_profile().next_run_counter == 1 and facade.current_profile().reward_session == null, "failed start commit publishes neither run ID nor session")
-	fail_store.fail_writes = false
+	fail_store.failure_stage = &""
 	var started := facade.start_run("retry-start", created["new_revision"])
-	fail_store.fail_writes = true
+	fail_store.failure_stage = &"write_pending"
 	var failed_reward := facade.grant_reward("failure-reward", started["new_revision"], started["run_id"], 1, &"encounter_one")
 	_check(not failed_reward["ok"] and failed_reward["error_code"] == &"save_failed" and facade.current_profile().character_by_id(created["character_id"]).base_xp_total == 0 and facade.current_profile().reward_session["last_committed_seq"] == 0, "failed reward commit publishes neither XP nor cursor")
-	fail_store.fail_writes = false
+	fail_store.failure_stage = &""
 	var retried_reward := facade.grant_reward("retry-reward", started["new_revision"], started["run_id"], 1, &"encounter_one")
 	_check(retried_reward["ok"] and retried_reward["profile"].character_by_id(created["character_id"]).base_xp_total == 100, "same uncommitted sequence can succeed after a definite failure")
+
+	for stage: StringName in [&"validate_pending", &"backup", &"replace"]:
+		var stage_directory := root_directory.path_join("reward_failure_" + String(stage))
+		_prepare_directory(stage_directory)
+		var stage_store := ToggleFailStore.new(stage_directory, catalog)
+		var stage_facade := ProfileFacade.new(stage_store, _rewards())
+		var stage_created := stage_facade.create_character("%s-create" % stage, 0, "Falha %s" % stage, &"swordsman")
+		var stage_started := stage_facade.start_run("%s-start" % stage, stage_created["new_revision"])
+		stage_store.failure_stage = stage
+		var stage_failed := stage_facade.grant_reward("%s-reward" % stage, stage_started["new_revision"], stage_started["run_id"], 1, &"encounter_one")
+		_check(not stage_failed["ok"] and stage_failed["error_code"] == &"save_failed", "%s failure reports the uncommitted reward" % stage)
+		_check(not FileAccess.file_exists(stage_directory.path_join(ProfileStore.PENDING_FILE)) and stage_facade.current_profile().reward_session["last_committed_seq"] == 0, "%s failure discards only its exact pending candidate and keeps the old cursor" % stage)
+		stage_store.failure_stage = &""
+		var stage_retry := stage_facade.grant_reward("%s-retry" % stage, stage_started["new_revision"], stage_started["run_id"], 1, &"encounter_one")
+		_check(stage_retry["ok"] and stage_retry["profile"].reward_session["last_committed_seq"] == 1 and stage_retry["profile"].character_by_id(stage_created["character_id"]).base_xp_total == 100, "%s retry applies the reward exactly once" % stage)
 
 	var uncertain_directory := root_directory.path_join("uncertain_reward")
 	_prepare_directory(uncertain_directory)
@@ -157,8 +178,8 @@ func _check_write_failures_and_uncertainty() -> void:
 	uncertain_store.hide_next_success = true
 	var uncertain_reward := uncertain.grant_reward("uncertain-reward", uncertain_started["new_revision"], uncertain_started["run_id"], 1, &"encounter_one")
 	_check(uncertain_reward["ok"] and uncertain_reward["recovered_after_uncertain_result"] and uncertain_reward["profile"].reward_session["last_committed_seq"] == 1, "uncertain reward result is confirmed only by exact durable reread")
-	var uncertain_replay := uncertain.grant_reward("uncertain-replay", uncertain_reward["new_revision"], uncertain_started["run_id"], 1, &"encounter_one")
-	_check(uncertain_replay["ok"] and uncertain_replay["already_applied"] and uncertain.current_profile().character_by_id(uncertain_created["character_id"]).base_xp_total == 100, "confirmed uncertain reward cannot be applied twice")
+	var uncertain_replay := uncertain.grant_reward("uncertain-reward", uncertain_started["new_revision"], uncertain_started["run_id"], 1, &"encounter_one")
+	_check(uncertain_replay["ok"] and uncertain_replay["already_applied"] and uncertain.current_profile().character_by_id(uncertain_created["character_id"]).base_xp_total == 100, "literal retry after uncertain confirmation cannot apply the reward twice")
 	uncertain_store.hide_next_success = true
 	var uncertain_end := uncertain.end_run("uncertain-end", uncertain_reward["new_revision"], uncertain_started["run_id"], &"completed")
 	_check(uncertain_end["ok"] and uncertain_end["recovered_after_uncertain_result"] and uncertain_end["profile"].reward_session == null and uncertain_end["profile"].lifetime_stats[&"runs_completed"] == 1, "uncertain end result closes and counts the run exactly once after reread")
@@ -216,13 +237,13 @@ func _check_abandoned_session_reopen() -> void:
 	var fail_created := bootstrap.create_character("close-fail-create", 0, "Quézia", &"swordsman")
 	var fail_started := bootstrap.start_run("close-fail-start", fail_created["new_revision"])
 	var fail_store := ToggleFailStore.new(fail_directory, catalog)
-	fail_store.fail_writes = true
+	fail_store.failure_stage = &"write_pending"
 	var blocked_facade := ProfileFacade.new(fail_store, _rewards())
 	var failed_open := blocked_facade.open_profile()
 	_check(not failed_open["ok"] and failed_open["error_code"] == &"save_failed" and failed_open["read_only"], "failed abandoned-session close leaves the facade read-only")
 	var blocked_start := blocked_facade.start_run("blocked-new-run", fail_started["new_revision"])
 	_check(not blocked_start["ok"] and blocked_start["error_code"] == &"save_failed" and blocked_start["read_only"], "new run remains blocked after abandoned close failure")
-	fail_store.fail_writes = false
+	fail_store.failure_stage = &""
 	var recovered := blocked_facade.open_profile()
 	_check(recovered["ok"] and recovered["abandoned_run_closed"] and recovered["profile"].reward_session == null, "successful explicit reopen retries and durably closes the abandoned session")
 
@@ -260,6 +281,14 @@ func _write_text(path: String, text: String) -> void:
 		return
 	file.store_string(text)
 	file.close()
+
+func _read_text(path: String) -> String:
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return ""
+	var text := file.get_as_text()
+	file.close()
+	return text
 
 func _prepare_directory(path: String) -> void:
 	_cleanup_directory(path)

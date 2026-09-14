@@ -142,6 +142,22 @@ personagem fixado pela sessão. Item ausente do catálogo bloqueia antes da muta
 Resolver estruturalmente inválido ou com item ausente do catálogo bloqueia o próprio
 `start_run` antes de reservar contador/sessão.
 
+Para recompensa, a fachada valida primeiro contexto somente leitura, pending,
+sessão, `run_id` e sequência. Se o cursor durável já confirmou a sequência, um
+retry literal retorna `already_applied` mesmo carregando a revisão original da
+requisição. A revisão esperada continua obrigatória antes de qualquer recompensa
+nova; portanto, uma sequência ainda não vista com revisão antiga retorna
+`stale_revision` sem resolver nem aplicar o payload.
+
+Se uma gravação falha depois de criar `profile.pending.json`, a reconciliação
+só o descarta quando seu perfil decodificado é exatamente o candidato da operação
+falha, com a revisão incrementada, e o primário ainda é exatamente o estado
+anterior. Esse descarte nunca promove o pending. Artefato órfão, inválido, de
+schema futuro ou divergente é preservado e exige recuperação somente leitura.
+Falhas injetadas em `validate_pending`, `backup` e `replace` provam que o retry da
+mesma sequência pode então gravar uma única vez; falha anterior a `write_pending`
+não deixa artefato.
+
 `end_run` aceita apenas `completed`, `death` ou `abandoned`, fecha a sessão e grava
 o contador correspondente uma vez. Sessão fechada rejeita replay. Ao reabrir um
 perfil com sessão salva, `open_profile()` primeiro grava `reward_session=null`,
