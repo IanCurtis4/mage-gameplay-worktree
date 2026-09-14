@@ -52,6 +52,9 @@ func commit(source: ProfileState) -> Dictionary:
 func catalog_copy() -> ProfileCatalog:
 	return _catalog.copy_catalog()
 
+func has_pending_transaction() -> bool:
+	return FileAccess.file_exists(_path(PENDING_FILE))
+
 func _commit(source: ProfileState, allow_v1_migration: bool) -> Dictionary:
 	if _write_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress"}

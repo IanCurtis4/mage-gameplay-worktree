@@ -203,21 +203,12 @@ func _check_run_active_boundary() -> void:
 	var directory := root_directory.path_join("run_active")
 	_prepare_directory(directory)
 	var catalog := _catalog_with_starters()
-	var bootstrap := ProfileFacade.new(ProfileStore.new(directory, catalog))
-	var created := bootstrap.create_character("bootstrap", 0, "Gabi", &"swordsman")
-	var active_profile: ProfileState = created["profile"]
-	active_profile.next_run_counter = 2
-	active_profile.reward_session = {
-		"run_id": IdentityIds.run_id(active_profile.profile_id, 1),
-		"character_id": created["character_id"],
-		"last_committed_seq": 0,
-	}
-	var activated := ProfileStore.new(directory, catalog).commit(active_profile)
-	_check(activated["ok"], "run-active fixture is durably valid")
 	var facade := ProfileFacade.new(ProfileStore.new(directory, catalog))
-	var opened := facade.open_profile()
-	var create_blocked := facade.create_character("blocked-create", opened["profile"].revision, "Hugo", &"mage")
-	var select_blocked := facade.select_character("blocked-select", opened["profile"].revision, created["character_id"])
+	var created := facade.create_character("bootstrap", 0, "Gabi", &"swordsman")
+	var activated := facade.start_run("bootstrap-run", created["new_revision"])
+	_check(activated["ok"], "run-active fixture is durably valid")
+	var create_blocked := facade.create_character("blocked-create", activated["new_revision"], "Hugo", &"mage")
+	var select_blocked := facade.select_character("blocked-select", activated["new_revision"], created["character_id"])
 	_check(not create_blocked["ok"] and create_blocked["error_code"] == &"run_active" and not select_blocked["ok"] and select_blocked["error_code"] == &"run_active", "create and select remain menu-only while a durable run session is active")
 
 func _catalog_with_starters() -> ProfileCatalog:

@@ -119,3 +119,37 @@ após schema futuro e confirmou sua rejeição; repetiu os 482 checks com
 importação/editor e smoke sem `ERROR`. O aceite libera E01.3-B na mesma fachada:
 `start_run`, recompensa sequencial/idempotente, `end_run` e fechamento durável de
 sessão abandonada. Ainda não é aceite integrado do épico ou do produto.
+
+## E01.3-B — candidato de sessão e recompensas duráveis
+
+Data: 14/09/2026. Estado: **EM IMPLEMENTAÇÃO / AGUARDANDO REVISÃO ASTRA**.
+
+`start_run(request_id, expected_revision)` valida personagem selecionado, preset
+e ausência de transação pendente. O mesmo commit reserva o `run_id`, incrementa o
+contador monotônico e `runs_started`, e abre o cursor durável em zero. Somente
+depois desse commit a fachada constrói e entrega um `RunState` a partir de
+`BuildSnapshot` profundo, com níveis derivados e ranks efetivos centralizados.
+Perfil estruturalmente válido mas sem nenhuma ativa no preset selecionado não está
+pronto para run.
+
+`grant_reward(request_id, expected_revision, run_id, sequence, reward_id)` recebe
+apenas um ID. `ProfileRewardResolver` é uma tabela local copiada e imutável que
+resolve XP, equipamentos e incrementos permitidos de estatísticas; a UI nunca
+fornece esses valores. Run divergente, sequência menor que 1 ou salto rejeitam;
+`sequence <= cursor` é no-op `already_applied`; somente `cursor+1` aplica XP
+saturado nos tetos E00, novos itens, estatísticas e cursor no mesmo commit ao
+personagem fixado pela sessão. Item ausente do catálogo bloqueia antes da mutação.
+Resolver estruturalmente inválido ou com item ausente do catálogo bloqueia o próprio
+`start_run` antes de reservar contador/sessão.
+
+`end_run` aceita apenas `completed`, `death` ou `abandoned`, fecha a sessão e grava
+o contador correspondente uma vez. Sessão fechada rejeita replay. Ao reabrir um
+perfil com sessão salva, `open_profile()` primeiro grava `reward_session=null`,
+preserva recompensas confirmadas e avisos de recovery, mas não retoma combate nem
+inventa conclusão/morte/recompensa final. Falha nesse fechamento mantém a fachada
+somente leitura e impede nova run. Todas as operações reutilizam a reconciliação
+de resultados incertos aprovada em E01.3-A.
+
+O resolver padrão ainda não possui conteúdo; encontros e pools reais pertencem a
+E07/E06. Esta fachada não adiciona menu E02, compra/progressão E03, combate novo,
+arte ou retomada de combate após fechar o aplicativo.

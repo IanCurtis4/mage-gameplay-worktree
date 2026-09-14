@@ -1,29 +1,29 @@
 class_name ProfileFacade
 extends RefCounted
-## Transactional menu-facing profile operations. Runtime/run operations begin in E01.3-B.
+## Transactional profile operations. Runtime combat receives only copied run state.
 
 const MAX_REQUEST_ID_LENGTH := 64
 
 var _store: ProfileStore
 var _catalog: ProfileCatalog
+var _reward_resolver: ProfileRewardResolver
 var _profile: ProfileState = null
 var _operation_in_progress := false
 var _read_only := false
 var _read_only_error_code: StringName = &""
 
-func _init(store: ProfileStore = null) -> void:
+func _init(store: ProfileStore = null, reward_resolver: ProfileRewardResolver = null) -> void:
 	_store = store if store != null else ProfileStore.new()
 	_catalog = _store.catalog_copy()
+	_reward_resolver = reward_resolver.copy_resolver() if reward_resolver != null else ProfileRewardResolver.new()
 
 func open_profile() -> Dictionary:
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress"}
-	var loaded := _store.load_profile()
-	if not loaded["ok"]:
-		return _block_with(loaded)
-	_profile = loaded["profile"].copy_state()
-	_clear_read_only()
-	return _public_result(loaded)
+	_operation_in_progress = true
+	var result := _open_profile_transaction()
+	_operation_in_progress = false
+	return _public_result(result)
 
 func current_profile() -> ProfileState:
 	return _profile.copy_state() if _profile != null else null
@@ -92,6 +92,128 @@ func select_character(request_id: String, expected_revision: int, character_id: 
 		committed["selected_character_id"] = character_id
 	return _finish_operation(request_id, committed)
 
+func start_run(request_id: String, expected_revision: int) -> Dictionary:
+	if _operation_in_progress:
+		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
+	var ready := _begin_operation(request_id, expected_revision)
+	if not ready["ok"]:
+		return _finish_operation(request_id, ready)
+	if _store.has_pending_transaction():
+		return _finish_operation(request_id, _block_with({"ok": false, "error_code": &"recovery_required", "read_only": true}))
+	if not _reward_resolver.is_compatible_with(_catalog):
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_catalog"})
+	if _profile.reward_session != null:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"run_active"})
+	var character := _profile.character_by_id(_profile.selected_character_id)
+	if character == null:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_character_id"})
+	if not _catalog.build_is_ready(character):
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_loadout"})
+
+	var before := _profile.copy_state()
+	var candidate := before.copy_state()
+	var run_id := IdentityIds.run_id(candidate.profile_id, candidate.next_run_counter)
+	candidate.next_run_counter += 1
+	candidate.reward_session = {
+		"run_id": run_id,
+		"character_id": character.character_id,
+		"last_committed_seq": 0,
+	}
+	candidate.lifetime_stats[&"runs_started"] += 1
+	var committed := _resolve_commit(before, candidate, _store.commit(candidate))
+	if committed["ok"]:
+		var committed_character := _profile.character_by_id(character.character_id)
+		var snapshot := _build_snapshot(committed_character)
+		committed["run_id"] = run_id
+		committed["run_state"] = RunState.from_build(run_id, snapshot)
+	return _finish_operation(request_id, committed)
+
+func grant_reward(request_id: String, expected_revision: int, run_id: String, sequence: int, reward_id: StringName) -> Dictionary:
+	if _operation_in_progress:
+		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
+	var ready := _begin_operation(request_id, expected_revision)
+	if not ready["ok"]:
+		return _finish_operation(request_id, ready)
+	if _store.has_pending_transaction():
+		return _finish_operation(request_id, _block_with({"ok": false, "error_code": &"recovery_required", "read_only": true}))
+	if _profile.reward_session == null:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"run_inactive"})
+	var session: Dictionary = _profile.reward_session
+	if run_id != session["run_id"] or sequence < 1:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_reward_sequence"})
+	var cursor: int = session["last_committed_seq"]
+	if sequence <= cursor:
+		return _finish_operation(request_id, {
+			"ok": true,
+			"already_applied": true,
+			"new_revision": _profile.revision,
+			"profile": _profile,
+			"run_id": run_id,
+			"sequence": sequence,
+		})
+	if sequence != cursor + 1:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_reward_sequence"})
+	var resolved := _reward_resolver.resolve(reward_id)
+	if not resolved["ok"]:
+		return _finish_operation(request_id, resolved)
+	var reward: Dictionary = resolved["reward"]
+	for item_id: StringName in reward["equipment_ids"]:
+		if not _catalog.knows_equipment(item_id):
+			return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_catalog"})
+
+	var before := _profile.copy_state()
+	var candidate := before.copy_state()
+	var candidate_session: Dictionary = candidate.reward_session
+	var character := candidate.character_by_id(candidate_session["character_id"])
+	if character == null:
+		return _finish_operation(request_id, _block_with({"ok": false, "error_code": &"invalid_reward_session", "read_only": true}))
+	character.base_xp_total = ProgressionRules.add_base_xp(character.base_xp_total, reward["base_xp"])
+	character.job_xp_total = ProgressionRules.add_job_xp(character.job_xp_total, reward["job_xp"], not character.evolution_id.is_empty())
+	for item_id: StringName in reward["equipment_ids"]:
+		if item_id not in candidate.equipment_collection:
+			candidate.equipment_collection.append(item_id)
+			candidate.lifetime_stats[&"equipment_unlocked"] += 1
+	for stat_id: StringName in reward["stat_increments"]:
+		candidate.lifetime_stats[stat_id] = candidate.lifetime_stats.get(stat_id, 0) + reward["stat_increments"][stat_id]
+	candidate_session["last_committed_seq"] = sequence
+	candidate.reward_session = candidate_session
+	var committed := _resolve_commit(before, candidate, _store.commit(candidate))
+	if committed["ok"]:
+		committed["run_id"] = run_id
+		committed["sequence"] = sequence
+		committed["reward_id"] = reward_id
+		committed["applied_reward"] = reward.duplicate(true)
+	return _finish_operation(request_id, committed)
+
+func end_run(request_id: String, expected_revision: int, run_id: String, outcome: StringName) -> Dictionary:
+	if _operation_in_progress:
+		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
+	var ready := _begin_operation(request_id, expected_revision)
+	if not ready["ok"]:
+		return _finish_operation(request_id, ready)
+	if _store.has_pending_transaction():
+		return _finish_operation(request_id, _block_with({"ok": false, "error_code": &"recovery_required", "read_only": true}))
+	if _profile.reward_session == null:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"run_inactive"})
+	var session: Dictionary = _profile.reward_session
+	if run_id != session["run_id"]:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_reward_sequence"})
+	if outcome not in [&"completed", &"death", &"abandoned"]:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_run_outcome"})
+
+	var before := _profile.copy_state()
+	var candidate := before.copy_state()
+	candidate.reward_session = null
+	if outcome == &"completed":
+		candidate.lifetime_stats[&"runs_completed"] += 1
+	elif outcome == &"death":
+		candidate.lifetime_stats[&"deaths"] += 1
+	var committed := _resolve_commit(before, candidate, _store.commit(candidate))
+	if committed["ok"]:
+		committed["run_id"] = run_id
+		committed["outcome"] = outcome
+	return _finish_operation(request_id, committed)
+
 func _begin_operation(request_id: String, expected_revision: int) -> Dictionary:
 	_operation_in_progress = true
 	if not _valid_request_id(request_id):
@@ -99,13 +221,45 @@ func _begin_operation(request_id: String, expected_revision: int) -> Dictionary:
 	if _read_only:
 		return {"ok": false, "error_code": _read_only_error_code, "read_only": true}
 	if _profile == null:
-		var loaded := _store.load_profile()
-		if not loaded["ok"]:
-			return loaded
-		_profile = loaded["profile"].copy_state()
+		var opened := _open_profile_transaction()
+		if not opened["ok"]:
+			return opened
 	if expected_revision != _profile.revision:
 		return {"ok": false, "error_code": &"stale_revision", "current_revision": _profile.revision}
 	return {"ok": true}
+
+func _open_profile_transaction() -> Dictionary:
+	var loaded := _store.load_profile()
+	if not loaded["ok"]:
+		return _block_with(loaded)
+	_profile = loaded["profile"].copy_state()
+	_clear_read_only()
+	if _profile.reward_session == null:
+		return loaded
+	if _store.has_pending_transaction():
+		return _block_with({"ok": false, "error_code": &"recovery_required", "read_only": true})
+	var before := _profile.copy_state()
+	var abandoned_session: Dictionary = before.reward_session
+	var candidate := before.copy_state()
+	candidate.reward_session = null
+	var closed := _resolve_commit(before, candidate, _store.commit(candidate))
+	if not closed["ok"]:
+		return _block_with(closed)
+	closed["abandoned_run_closed"] = true
+	closed["abandoned_run_id"] = abandoned_session["run_id"]
+	for metadata_key: String in ["warning", "recovered", "migrated"]:
+		if loaded.has(metadata_key):
+			closed[metadata_key] = loaded[metadata_key]
+	return closed
+
+func _build_snapshot(character: CharacterState) -> BuildSnapshot:
+	var effective_ranks := _catalog.effective_skill_ranks(character.base_class_id, character.evolution_id, character.purchased_skill_ranks)
+	return BuildSnapshot.from_character(
+		character,
+		ProgressionRules.base_level_for_xp(character.base_xp_total),
+		ProgressionRules.job_level_for_xp(character.job_xp_total, not character.evolution_id.is_empty()),
+		effective_ranks
+	)
 
 func _resolve_commit(before: ProfileState, candidate: ProfileState, commit_result: Dictionary) -> Dictionary:
 	if commit_result["ok"]:

@@ -228,7 +228,7 @@ static func _decode_rank_map(raw: Variant, base_class_id: StringName, evolution_
 	var base_spent := 0
 	var evolution_spent := 0
 	for raw_id: Variant in raw:
-		if not raw_id is String or not _valid_technical_id(raw_id) or not _is_exact_integer(raw[raw_id]):
+		if not raw_id is String or not IdentityIds.is_technical_id(raw_id) or not _is_exact_integer(raw[raw_id]):
 			return _error(&"invalid_skill_ranks")
 		var rank := int(raw[raw_id])
 		var skill_id := StringName(raw_id)
@@ -253,7 +253,7 @@ static func _decode_equipped(raw: Variant) -> Dictionary:
 	var equipped: Dictionary[StringName, Variant] = {}
 	for slot: StringName in IdentityIds.equipment_slots():
 		var key := String(slot)
-		if not raw.has(key) or (raw[key] != null and (not raw[key] is String or not _valid_technical_id(raw[key]))):
+		if not raw.has(key) or (raw[key] != null and (not raw[key] is String or not IdentityIds.is_technical_id(raw[key]))):
 			return _error(&"invalid_equipment")
 		equipped[slot] = null if raw[key] == null else StringName(raw[key])
 	return {"ok": true, "equipped": equipped}
@@ -278,7 +278,7 @@ static func _decode_slots(raw: Variant, expected_size: int, category: StringName
 	var slots: Array[Variant] = []
 	var seen: Dictionary[StringName, bool] = {}
 	for value: Variant in raw:
-		if value != null and (not value is String or not _valid_technical_id(value)):
+		if value != null and (not value is String or not IdentityIds.is_technical_id(value)):
 			return _error(&"invalid_presets")
 		if value == null:
 			slots.append(null)
@@ -301,7 +301,7 @@ static func _decode_unique_ids(raw: Variant) -> Dictionary:
 	var ids: Array[StringName] = []
 	var seen: Dictionary[StringName, bool] = {}
 	for value: Variant in raw:
-		if not value is String or not _valid_technical_id(value):
+		if not value is String or not IdentityIds.is_technical_id(value):
 			return _error(&"invalid_equipment_collection")
 		var item_id := StringName(value)
 		if seen.has(item_id):
@@ -315,7 +315,7 @@ static func _decode_lifetime_stats(raw: Variant) -> Dictionary:
 		return _error(&"invalid_lifetime_stats")
 	var stats: Dictionary[StringName, int] = {}
 	for raw_id: Variant in raw:
-		if not raw_id is String or not _valid_technical_id(raw_id) or not _is_exact_integer(raw[raw_id]) or int(raw[raw_id]) < 0:
+		if not raw_id is String or not IdentityIds.is_technical_id(raw_id) or not _is_exact_integer(raw[raw_id]) or int(raw[raw_id]) < 0:
 			return _error(&"invalid_lifetime_stats")
 		stats[StringName(raw_id)] = int(raw[raw_id])
 	for stat_id: StringName in [&"runs_started", &"runs_completed", &"deaths", &"kills", &"equipment_unlocked"]:
@@ -347,7 +347,7 @@ static func _migrate_v1(data: Dictionary, catalog: ProfileCatalog) -> Dictionary
 		if not class_items is Array:
 			return _error(&"invalid_legacy_profile")
 		for raw_item_id: Variant in class_items:
-			if not raw_item_id is String or not _valid_technical_id(raw_item_id):
+			if not raw_item_id is String or not IdentityIds.is_technical_id(raw_item_id):
 				return _error(&"invalid_legacy_profile")
 			var item_id := StringName(raw_item_id)
 			if seen.has(item_id):
@@ -493,17 +493,6 @@ static func _valid_display_name(value: String) -> bool:
 	for index: int in value.length():
 		var code := value.unicode_at(index)
 		if code < 32 or (code >= 127 and code <= 159):
-			return false
-	return true
-
-static func _valid_technical_id(value: String) -> bool:
-	if value.is_empty() or value.length() > 64:
-		return false
-	for index: int in value.length():
-		var code := value.unicode_at(index)
-		var is_lowercase := code >= 97 and code <= 122
-		var is_digit := code >= 48 and code <= 57
-		if not is_lowercase and not is_digit and code != 95:
 			return false
 	return true
 

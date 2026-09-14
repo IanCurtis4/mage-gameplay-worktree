@@ -35,6 +35,17 @@ static func attribute_ids() -> Array[StringName]:
 static func equipment_slots() -> Array[StringName]:
 	return [&"weapon", &"armor", &"accessory"]
 
+static func is_technical_id(value: String) -> bool:
+	if value.is_empty() or value.length() > 64:
+		return false
+	for index: int in value.length():
+		var code := value.unicode_at(index)
+		var is_lowercase := code >= 97 and code <= 122
+		var is_digit := code >= 48 and code <= 57
+		if not is_lowercase and not is_digit and code != 95:
+			return false
+	return true
+
 static func initial_attributes(base_class_id: StringName) -> Dictionary[StringName, int]:
 	match base_class_id:
 		SWORDSMAN:

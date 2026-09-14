@@ -51,5 +51,6 @@ Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tes
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/persistent_state_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/profile_store_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/profile_facade_test.gd')
+Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/profile_run_facade_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--quit-after', '5')
 Write-Host 'All foundation and milestone-one checks passed.'

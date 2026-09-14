@@ -172,6 +172,26 @@ func starter_item_ids(base_class_id: StringName) -> Array[StringName]:
 			item_ids.append(item_id)
 	return item_ids
 
+func effective_skill_ranks(base_class_id: StringName, evolution_id: StringName, purchased_ranks: Dictionary[StringName, int]) -> Dictionary[StringName, int]:
+	var effective: Dictionary[StringName, int] = {}
+	for skill_id: StringName in _skills:
+		if not skill_is_allowed(skill_id, base_class_id, evolution_id):
+			continue
+		var metadata: Dictionary = _skills[skill_id]
+		var rank: int = int(metadata["free_rank"]) + int(purchased_ranks.get(skill_id, 0))
+		if rank > 0:
+			effective[skill_id] = rank
+	return effective
+
+func build_is_ready(character: CharacterState) -> bool:
+	if character == null or not base_class_is_available(character.base_class_id):
+		return false
+	var preset: Dictionary = character.presets[character.selected_preset]
+	for skill_id: Variant in preset["active_slots"]:
+		if skill_id != null:
+			return true
+	return false
+
 func skill_is_allowed(skill_id: StringName, base_class_id: StringName, evolution_id: StringName) -> bool:
 	var metadata: Dictionary = _skills.get(skill_id, {})
 	if metadata.is_empty() or base_class_id not in metadata["allowed_base_classes"]:
