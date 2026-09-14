@@ -16,7 +16,25 @@ func _check_stable_ids() -> void:
 	var mutable_copy := IdentityIds.hybrid_evolution_ids()
 	mutable_copy.clear()
 	_check(IdentityIds.hybrid_evolution_ids().size() == 6, "callers cannot mutate the stable identity registry")
-	_check(IdentityIds.evolution_belongs_to(&"sp_mg", &"swordsman") and not IdentityIds.evolution_belongs_to(&"sp_mg", &"mage"), "evolution origin is explicit and directional")
+	var expected_origins: Dictionary[StringName, StringName] = {
+		&"defender": &"swordsman",
+		&"berserker": &"swordsman",
+		&"elementalist": &"mage",
+		&"spiritualist": &"mage",
+		&"sentinel": &"archer",
+		&"hunter": &"archer",
+		&"sp_mg": &"swordsman",
+		&"mg_sp": &"mage",
+		&"sp_ar": &"swordsman",
+		&"ar_sp": &"archer",
+		&"mg_ar": &"mage",
+		&"ar_mg": &"archer",
+	}
+	for evolution_id: StringName in expected_origins:
+		var origin: StringName = expected_origins[evolution_id]
+		_check(IdentityIds.evolution_belongs_to(evolution_id, origin), "%s retains its accepted origin" % evolution_id)
+	_check(not IdentityIds.evolution_belongs_to(&"sp_mg", &"mage"), "directional evolution rejects a different valid origin")
+	_check(not IdentityIds.evolution_belongs_to(&"unknown", &"") and not IdentityIds.evolution_belongs_to(&"", &"") and not IdentityIds.evolution_belongs_to(&"sp_mg", &"unknown"), "unknown and empty identity pairs are rejected")
 	_check(IdentityIds.character_id("profile", 3) == "profile_3" and IdentityIds.run_id("profile", 3) == "profile_3", "profile counters produce deterministic stable IDs")
 
 func _check_profile_and_alt_isolation() -> void:
@@ -57,8 +75,14 @@ func _check_run_snapshot_isolation() -> void:
 	run.queue_choice()
 	_check(character.purchased_skill_ranks.is_empty() and character.base_xp_total == 350, "runtime mutation cannot change persistent progression")
 	_check(not character.get_property_list().any(func(property: Dictionary) -> bool: return property["name"] in [&"augment_stacks", &"pending_choices", &"current_offer"]), "character state exposes no augment or reward-choice runtime fields")
+	var persistent_build := run.build_snapshot
+	_check(not run.select_class(&"mage"), "persistent run rejects the pilot class-switch operation")
+	_check(run.run_id == "profile_7" and run.character_id == "profile_1" and run.build_snapshot == persistent_build and run.class_id == &"swordsman", "rejected class switch preserves persistent run identity and snapshot")
+	_check(run.skill_levels[&"slash"] == 3 and run.augment_stacks[&"vitality"] == 2 and run.pending_choices == 1, "rejected class switch preserves runtime state")
 	run.reset()
 	_check(run.skill_levels[&"slash"] == 2 and run.augment_stacks.is_empty() and run.pending_choices == 0, "run reset restores copied build and clears transient state")
+	var pilot_run := RunState.new()
+	_check(pilot_run.select_class(&"mage") and pilot_run.class_id == &"mage" and pilot_run.skill_levels.has(&"fireball"), "pilot run keeps its legacy class-switch behavior")
 
 func _check(condition: bool, label: String) -> void:
 	checks += 1

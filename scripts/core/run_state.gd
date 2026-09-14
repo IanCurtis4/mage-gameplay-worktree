@@ -13,6 +13,7 @@ var augment_stacks: Dictionary[StringName, int] = {}
 var pending_choices: int = 0
 var current_offer: Array[AugmentDefinition] = []
 var _catalog: Array[AugmentDefinition] = []
+var _uses_persistent_build: bool = false
 
 func _init(selected_class: StringName = DEFAULT_CLASS_ID) -> void:
 	_catalog = [
@@ -31,10 +32,13 @@ static func from_build(new_run_id: String, source: BuildSnapshot) -> RunState:
 	state.character_id = source.character_id
 	state.build_snapshot = source.copy_snapshot()
 	state.class_id = state.build_snapshot.base_class_id
+	state._uses_persistent_build = true
 	state.reset()
 	return state
 
 func select_class(selected_class: StringName) -> bool:
+	if _uses_persistent_build:
+		return false
 	if ClassCatalog.class_definition(selected_class) == null:
 		return false
 	class_id = selected_class

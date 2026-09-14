@@ -42,6 +42,8 @@ static func is_evolution(evolution_id: StringName) -> bool:
 	return evolution_id in pure_evolution_ids() or evolution_id in hybrid_evolution_ids()
 
 static func evolution_belongs_to(evolution_id: StringName, base_class_id: StringName) -> bool:
+	if not is_evolution(evolution_id) or not is_base_class(base_class_id):
+		return false
 	return evolution_origin(evolution_id) == base_class_id
 
 static func evolution_origin(evolution_id: StringName) -> StringName:
