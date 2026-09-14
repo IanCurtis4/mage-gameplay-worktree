@@ -122,7 +122,7 @@ sessão abandonada. Ainda não é aceite integrado do épico ou do produto.
 
 ## E01.3-B — candidato de sessão e recompensas duráveis
 
-Data: 14/09/2026. Estado: **EM IMPLEMENTAÇÃO / AGUARDANDO REVISÃO ASTRA**.
+Data: 14/09/2026. Estado: **ACEITE TÉCNICO ASTRA**.
 
 `start_run(request_id, expected_revision)` valida personagem selecionado, preset
 e ausência de transação pendente. O mesmo commit reserva o `run_id`, incrementa o
@@ -169,3 +169,18 @@ de resultados incertos aprovada em E01.3-A.
 O resolver padrão ainda não possui conteúdo; encontros e pools reais pertencem a
 E07/E06. Esta fachada não adiciona menu E02, compra/progressão E03, combate novo,
 arte ou retomada de combate após fechar o aplicativo.
+
+### Evidência e próximo gate
+
+O candidato inicial `103ce0b` recebeu duas correções no commit `2c04b5e`: replay
+literal de recompensa confirmada antes do teste de revisão e descarte conservador
+do pending exato deixado por falha conhecida. Sol executou **536 verificações
+PASS**, incluindo 54 de E01.3-B. Astra revisou o delta, reproduziu os dois cenários
+com sonda independente e repetiu a suíte completa na worktree limpa; import/editor
+e smoke terminaram sem `ERROR`.
+
+O aceite libera apenas E01.3-C: cena diagnóstica manual isolada e roteiro sobre a
+fachada real, sem substituir a cena principal, tocar saves normais ou construir o
+menu E02. A cena tornará a persistência verificável sem terminal, mas não comprova
+combate integrado da campanha. Não houve atualização de `codex/playtest` ou
+`master`, nem aceite de produto.
