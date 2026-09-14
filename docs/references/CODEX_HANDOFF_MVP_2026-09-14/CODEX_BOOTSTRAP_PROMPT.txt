@@ -1,0 +1,14 @@
+Você está retomando um épico do MVP de mage-gameplay-worktree.
+
+Antes de qualquer implementação:
+- leia CODEX_HANDOFF_README.md;
+- leia o documento do épico correspondente no repo;
+- não reabra decisões marcadas LOCKED;
+- trate STRONG DIRECTION como direção a preservar até playtest;
+- não invente decisões OPEN;
+- informe o commit/base assumido e a menor fatia implementável;
+- liste arquivos que pretende alterar e testes/verify;
+- se a tarefa puder ser executada em modelo mais barato, sinalize antes de consumir um modelo mais forte;
+- não trabalhe em outro épico e não faça refactor cosmético fora do escopo.
+
+Responda primeiro com um plano/delta curto. Não implemente até eu autorizar.
