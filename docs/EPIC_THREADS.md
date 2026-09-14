@@ -2,7 +2,7 @@
 
 ## Roteamento aprovado em 14/09/2026
 
-E00 aceito; E01 retomado mantendo Sol, com subagentes Luna/Terra delimitados.
+E00 aceito; E01 aceito tecnicamente e aguardando playtest, mantendo Sol como dono.
 As demais tarefas continuam reservadas. Na ativação, usar a mesma conversa e
 escolher modelo para o pacote. A tabela histórica registra modelo de criação,
 não obriga mantê-lo. Trocas futuras autorizadas, ainda não enviadas ao app.

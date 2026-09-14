@@ -1,7 +1,7 @@
 # Épicos do MVP expandido
 
 > Atualização operacional aprovada em 14/09/2026: E00 aceito na base `247e304`;
-> E01 retomado com Sol, E01.2 em revisão sobre `efb2b48`, E01.3 após esse gate.
+> E01 aceito tecnicamente (entrega `2127a8e`); aguardando playtest do usuário.
 > Adotado docs/REVIEW_WORK_PACKAGES.md: Luna para lotes fechados, Terra para
 > condução rotineira, Sol para sistemas, Astra para contratos críticos/integração.
 > Subagentes delimitados autorizados no épico liberado; modelos dos próximos

@@ -1,5 +1,10 @@
 # E01 — relatório de retomada
 
+> Estado vigente: E01 completo tecnicamente na entrega `2127a8e`, rebased em
+> `caa7011` sem alteração de código. Aguardando playtest manual pelo usuário.
+> Roteiro: PLAYTEST_E01.md; handoff atual: epics/e01.md. Registros abaixo são
+> históricos e não reabrem gates já aprovados. Master não integrado.
+
 > Checkpoint vigente: E01.3-B aprovado tecnicamente por Astra em `2c04b5e`,
 > com reprodução independente dos dois defeitos corrigidos e 536 checks PASS,
 > importação completa e smoke OK. E01.3-C liberado para teste manual da fachada

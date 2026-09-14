@@ -215,3 +215,25 @@ Este diagnóstico verifica persistência e recuperação sem terminal; não comp
 combate integrado, diversão ou desempenho da campanha. Não adiciona menu E02,
 conteúdo/pools E06/E07, arte ou retomada de combate, e não atualiza
 `codex/playtest` ou `master` antes do aceite integrado.
+
+## Aceite técnico integrado Astra — candidato de playtest
+
+14/09/2026. **ACEITE TÉCNICO; AGUARDANDO ACEITE DO USUÁRIO.**
+Entrega original `2127a8e0c2bd2b399c1734208e75e5b69c12c040`; implementação
+rebased `caa701144935f4026529a15c37c039b5c977a9ba`, sobre `9255a40` (documentos
+do protocolo preservados). Backup em `codex/e01-reviewed-backup`. Branch de
+composição `codex/e01-playtest-candidate`; a branch original de Sol não foi reescrita.
+
+Astra revisou cena/roteiro e a captura OpenGL 1280×720 fornecida por Sol; controles
+e resultados legíveis. Executou independentemente verify completo na entrega e
+novamente na composição rebased: **543 checks PASS**, import/editor e smoke
+sem ERROR. O diff entre entrega e composição em scripts/scenes/tests/tools e
+project.godot é vazio. Conflitos de rebase eram exclusivamente documentais;
+foram preservados os contratos E00, o protocolo aprovado e o histórico de gates.
+
+Preparação autorizada para fast-forward do diretório habitual codex/playtest.
+Preservar project.godot local (GitPlugin), addons, build, export_presets e referências
+locais; não usar reset/stash/clean. F6 na cena de diagnóstico e roteiro PLAYTEST_E01.md.
+Persistência verificada por simulação sobre a fachada real; combate integrado,
+menu E02 e avaliação de diversão/desempenho não estão incluídos neste aceite.
+Master permanece na versão aceita anterior até o usuário aprovar este candidato.
