@@ -220,6 +220,10 @@ func _class_name(base_class_id: StringName) -> String:
 
 func _build_summary(character: Variant) -> String:
 	var preset: Dictionary = character.presets[character.selected_preset]
+	var attributes: Dictionary = IdentityIds.initial_attributes(character.base_class_id)
+	for attribute_id: StringName in IdentityIds.attribute_ids():
+		attributes[attribute_id] = int(attributes.get(attribute_id, 0)) + int(character.attribute_allocations.get(attribute_id, 0))
+	var derived_stats: Dictionary = RpgStats.derive(attributes)
 	var active: Array[String] = []
 	for skill_id: Variant in preset["active_slots"]:
 		if skill_id != null:
@@ -229,7 +233,7 @@ func _build_summary(character: Variant) -> String:
 		if skill_id != null:
 			passive.append(_skill_name(skill_id))
 	var weapon: Variant = preset["equipped"].get(&"weapon")
-	return "Build inicial (somente leitura)\nAtivas: %s\nPassiva: %s\nArma: %s\nAtributos e edição de presets serão liberados com o contrato de build." % [", ".join(active), ", ".join(passive), _equipment_name(weapon)]
+	return "Build inicial\nAtivas: %s\nPassiva: %s\nArma: %s\nStats: Vida %d · Mana %d · Ataque físico %d · Ataque mágico %d\nAtributos livres e progressão serão liberados no contrato E03." % [", ".join(active), ", ".join(passive), _equipment_name(weapon), int(derived_stats["max_hp"]), int(derived_stats["max_mana"]), int(derived_stats["physical_attack"]), int(derived_stats["magic_attack"])]
 
 func _skill_name(skill_id: Variant) -> String:
 	match StringName(skill_id):

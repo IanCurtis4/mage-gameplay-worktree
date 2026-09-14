@@ -19,7 +19,7 @@ func _initialize() -> void:
 	var mage: Dictionary = menu.create_character(&"mage")
 	_check(swordsman["ok"] and mage["ok"] and menu.roster_list.item_count == 2 and menu.roster_list.get_item_text(0).contains("Lina") and menu.roster_list.get_item_text(1).contains("Mago"), "creation uses facade and refreshes the real roster")
 	menu._select_roster_index(1)
-	_check(menu.build_summary_label.text.contains("Bola de fogo"), "roster navigation previews the chosen alt's persisted build before committing selection")
+	_check(menu.build_summary_label.text.contains("Bola de fogo") and menu.build_summary_label.text.contains("Vida 150") and menu.build_summary_label.text.contains("Mana 85"), "roster navigation previews the chosen alt's persisted build and central derived stats before committing selection")
 	var preset_changed: Dictionary = menu._choose_preset(1)
 	_check(preset_changed["ok"] and menu.facade.current_profile().characters[1].selected_preset == 1, "preset selection persists through the facade without editing build fields directly")
 	menu.active_slot_a.select(2)
