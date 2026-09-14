@@ -2,6 +2,10 @@
 
 ## Roteamento aprovado em 14/09/2026
 
+Estado posterior: E01 aprovado pelo usuário e integrado em master no candidato
+`7fdecdd`; E02 explicitamente liberado, Terra conduz na conversa já reservada.
+E03–E11 continuam sem execução. O estado de reserva E02 abaixo é histórico.
+
 E00 aceito; E01 aceito tecnicamente e aguardando playtest, mantendo Sol como dono.
 As demais tarefas continuam reservadas. Na ativação, usar a mesma conversa e
 escolher modelo para o pacote. A tabela histórica registra modelo de criação,

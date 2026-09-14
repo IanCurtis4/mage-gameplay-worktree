@@ -1,5 +1,14 @@
 # Revisão E01 — personagens persistentes e alts
 
+## Aceite do usuário e integração
+
+O usuário aprovou o playtest do candidato `7fdecdd45650eee2c70a4563c85e7cae79929be0`
+e autorizou prosseguir para E02. E01 integrado em master por fast-forward na
+worktree de integração; o diretório habitual permaneceu em codex/playtest.
+Alterações locais de project.godot/addons/build/export/referências preservadas.
+O aceite cobre persistência e diagnóstico entregues, não o menu/combate integrados
+que serão desenvolvidos nos próximos épicos. Relatos anteriores são históricos.
+
 ## E01.1 — separação de estado e IDs estáveis
 
 Data: 13/09/2026. Estado: **ACEITE TÉCNICO ASTRA**.

@@ -1,5 +1,8 @@
 # E01 — relatório de retomada
 
+> Encerramento: usuário aprovou `7fdecdd`; E01 integrado em master e E02
+> liberado para Terra. Os checkpoints seguintes são históricos.
+
 > Estado vigente: E01 completo tecnicamente na entrega `2127a8e`, rebased em
 > `caa7011` sem alteração de código. Aguardando playtest manual pelo usuário.
 > Roteiro: PLAYTEST_E01.md; handoff atual: epics/e01.md. Registros abaixo são
