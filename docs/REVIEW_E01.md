@@ -100,5 +100,10 @@ e qualquer terceiro resultado gera `result_uncertain`, mantendo a fachada soment
 leitura até `open_profile()` reconciliar explicitamente o disco. Criação e seleção
 também bloqueiam enquanto existir uma sessão de run durável.
 
+Falha ao reabrir ou ao atualizar o snapshot depois de `stale_revision` também
+herda o `error_code` e o estado somente leitura do store. O snapshot publicado
+anterior pode continuar visível, mas nenhum comando — nem uma seleção no-op — é
+certificado até uma reabertura explícita bem-sucedida.
+
 Ficam fora deste candidato: menu E02, aprendizado/progressão E03, escolha de
 `legacy_loadout`, `start_run` e concessão idempotente de recompensa E01.3-B.

@@ -9,6 +9,7 @@ var _catalog: ProfileCatalog
 var _profile: ProfileState = null
 var _operation_in_progress := false
 var _read_only := false
+var _read_only_error_code: StringName = &""
 
 func _init(store: ProfileStore = null) -> void:
 	_store = store if store != null else ProfileStore.new()
@@ -19,9 +20,9 @@ func open_profile() -> Dictionary:
 		return {"ok": false, "error_code": &"save_in_progress"}
 	var loaded := _store.load_profile()
 	if not loaded["ok"]:
-		return loaded
+		return _block_with(loaded)
 	_profile = loaded["profile"].copy_state()
-	_read_only = false
+	_clear_read_only()
 	return _public_result(loaded)
 
 func current_profile() -> ProfileState:
@@ -96,7 +97,7 @@ func _begin_operation(request_id: String, expected_revision: int) -> Dictionary:
 	if not _valid_request_id(request_id):
 		return {"ok": false, "error_code": &"invalid_request_id"}
 	if _read_only:
-		return {"ok": false, "error_code": &"result_uncertain", "read_only": true}
+		return {"ok": false, "error_code": _read_only_error_code, "read_only": true}
 	if _profile == null:
 		var loaded := _store.load_profile()
 		if not loaded["ok"]:
@@ -109,14 +110,18 @@ func _begin_operation(request_id: String, expected_revision: int) -> Dictionary:
 func _resolve_commit(before: ProfileState, candidate: ProfileState, commit_result: Dictionary) -> Dictionary:
 	if commit_result["ok"]:
 		_profile = commit_result["profile"].copy_state()
-		_read_only = false
+		_clear_read_only()
 		return commit_result
 	if commit_result.get("error_code", &"") == &"stale_revision":
-		_refresh_after_stale()
+		var refreshed := _refresh_after_stale()
+		if not refreshed["ok"]:
+			return refreshed
 		var stale_result := commit_result.duplicate(true)
 		stale_result["current_revision"] = _profile.revision if _profile != null else -1
 		return stale_result
 	if commit_result.get("error_code", &"") != &"save_failed":
+		if commit_result.get("read_only", false):
+			return _block_with(commit_result)
 		return commit_result
 
 	var loaded := _store.load_profile()
@@ -124,7 +129,7 @@ func _resolve_commit(before: ProfileState, candidate: ProfileState, commit_resul
 		var durable: ProfileState = loaded["profile"]
 		if _matches_committed_candidate(durable, candidate):
 			_profile = durable.copy_state()
-			_read_only = false
+			_clear_read_only()
 			return {
 				"ok": true,
 				"profile": durable,
@@ -136,13 +141,28 @@ func _resolve_commit(before: ProfileState, candidate: ProfileState, commit_resul
 			return commit_result
 		if loaded.get("created_empty", false) and before.revision == 0:
 			return commit_result
-	_read_only = true
-	return {"ok": false, "error_code": &"result_uncertain", "read_only": true}
+	return _block_with({"ok": false, "error_code": &"result_uncertain", "read_only": true})
 
-func _refresh_after_stale() -> void:
+func _refresh_after_stale() -> Dictionary:
 	var loaded := _store.load_profile()
 	if loaded["ok"]:
 		_profile = loaded["profile"].copy_state()
+		_clear_read_only()
+		return {"ok": true}
+	return _block_with(loaded)
+
+func _block_with(result: Dictionary) -> Dictionary:
+	_read_only = true
+	_read_only_error_code = result.get("error_code", &"result_uncertain")
+	var blocked := result.duplicate(true)
+	blocked["ok"] = false
+	blocked["error_code"] = _read_only_error_code
+	blocked["read_only"] = true
+	return blocked
+
+func _clear_read_only() -> void:
+	_read_only = false
+	_read_only_error_code = &""
 
 func _matches_committed_candidate(durable: ProfileState, candidate: ProfileState) -> bool:
 	var expected := candidate.copy_state()

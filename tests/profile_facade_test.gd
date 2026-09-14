@@ -30,6 +30,22 @@ class DefiniteFailStore:
 	func _should_fail(stage: StringName) -> bool:
 		return stage == &"write_pending"
 
+class StaleRefreshFailStore:
+	extends ProfileStore
+	var fail_refresh := false
+
+	func commit(source: ProfileState) -> Dictionary:
+		var result := super.commit(source)
+		if result.get("error_code", &"") == &"stale_revision":
+			fail_refresh = true
+		return result
+
+	func load_profile() -> Dictionary:
+		if fail_refresh:
+			fail_refresh = false
+			return {"ok": false, "error_code": &"unsupported_schema", "read_only": true}
+		return super.load_profile()
+
 var failures := 0
 var checks := 0
 var root_directory: String
@@ -41,6 +57,7 @@ func _initialize() -> void:
 	_check_create_select_and_restart()
 	_check_uncertain_results()
 	_check_definite_failure_does_not_publish()
+	_check_read_only_propagation()
 	_check_run_active_boundary()
 	_cleanup_directory(root_directory)
 	print("Fachada de perfil E01.3-A: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
@@ -146,6 +163,42 @@ func _check_definite_failure_does_not_publish() -> void:
 	_check(current.profile_id == opened["profile"].profile_id and current.revision == 0 and current.characters.is_empty() and current.next_character_counter == 1, "failed commit leaves the published profile and monotonic counter untouched")
 	_check(not FileAccess.file_exists(directory.path_join(ProfileStore.PRIMARY_FILE)) and not FileAccess.file_exists(directory.path_join(ProfileStore.PENDING_FILE)), "failure before pending write leaves no durable transaction artifact")
 
+func _check_read_only_propagation() -> void:
+	var catalog := _catalog_with_starters()
+	var reopen_directory := root_directory.path_join("read_only_reopen")
+	_prepare_directory(reopen_directory)
+	var facade := ProfileFacade.new(ProfileStore.new(reopen_directory, catalog))
+	var created := facade.create_character("create-before-future", 0, "Iara", &"swordsman")
+	var original_text := _read_text(reopen_directory.path_join(ProfileStore.PRIMARY_FILE))
+	_write_text(reopen_directory.path_join(ProfileStore.PRIMARY_FILE), JSON.stringify({"schema_version": 99}))
+	var failed_open := facade.open_profile()
+	_check(not failed_open["ok"] and failed_open["error_code"] == &"unsupported_schema" and failed_open["read_only"], "failed reopen publishes the incompatible reason and enters read-only mode")
+	var blocked_no_op := facade.select_character("blocked-no-op", created["new_revision"], created["character_id"])
+	_check(not blocked_no_op["ok"] and blocked_no_op["error_code"] == &"unsupported_schema" and blocked_no_op["read_only"], "read-only state blocks even a selection that would otherwise be a no-op")
+	_check(facade.current_profile().character_by_id(created["character_id"]) != null, "failed reopen may retain the former snapshot for display without certifying commands")
+	_write_text(reopen_directory.path_join(ProfileStore.PRIMARY_FILE), original_text)
+	var reopened := facade.open_profile()
+	var released_no_op := facade.select_character("released-no-op", reopened["profile"].revision, created["character_id"])
+	_check(reopened["ok"] and released_no_op["ok"] and released_no_op["already_applied"], "successful explicit reopen clears read-only mode and permits commands again")
+
+	var stale_directory := root_directory.path_join("read_only_stale_refresh")
+	_prepare_directory(stale_directory)
+	var stale_store := StaleRefreshFailStore.new(stale_directory, catalog)
+	var stale_facade := ProfileFacade.new(stale_store)
+	var stale_created := stale_facade.create_character("stale-first", 0, "Joana", &"swordsman")
+	var external_store := ProfileStore.new(stale_directory, catalog)
+	var external := external_store.load_profile()
+	var external_profile: ProfileState = external["profile"]
+	external_profile.settings["external_revision"] = true
+	var external_commit := external_store.commit(external_profile)
+	_check(external_commit["ok"], "stale refresh fixture advances disk through a separate test writer")
+	var refresh_failed := stale_facade.create_character("stale-second", stale_created["new_revision"], "Katia", &"mage")
+	_check(not refresh_failed["ok"] and refresh_failed["error_code"] == &"unsupported_schema" and refresh_failed["read_only"], "failed refresh after stale propagates its reason and blocks the facade")
+	var stale_blocked := stale_facade.select_character("stale-blocked", stale_created["new_revision"], stale_created["character_id"])
+	_check(not stale_blocked["ok"] and stale_blocked["error_code"] == &"unsupported_schema" and stale_blocked["read_only"], "stale refresh failure cannot fall through to an old in-memory no-op")
+	var stale_reopened := stale_facade.open_profile()
+	_check(stale_reopened["ok"] and stale_reopened["profile"].revision == external_commit["new_revision"], "explicit successful reload reconciles and releases a stale-blocked facade")
+
 func _check_run_active_boundary() -> void:
 	var directory := root_directory.path_join("run_active")
 	_prepare_directory(directory)
@@ -172,6 +225,22 @@ func _catalog_with_starters() -> ProfileCatalog:
 		&"training_sword": {"slot": &"weapon", "allowed_base_classes": [&"swordsman"], "starter": true},
 		&"apprentice_staff": {"slot": &"weapon", "allowed_base_classes": [&"mage"], "starter": true},
 	})
+
+func _read_text(path: String) -> String:
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return ""
+	var text := file.get_as_text()
+	file.close()
+	return text
+
+func _write_text(path: String, text: String) -> void:
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if file == null:
+		push_error("Could not write test fixture: %s" % path)
+		return
+	file.store_string(text)
+	file.close()
 
 func _prepare_directory(path: String) -> void:
 	_cleanup_directory(path)
