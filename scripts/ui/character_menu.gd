@@ -22,6 +22,14 @@ var create_buttons: Array[Button] = []
 var select_button: Button
 var empty_label: Label
 var build_summary_label: Label
+var preset_selector: OptionButton
+var active_slot_a: OptionButton
+var active_slot_b: OptionButton
+var passive_slot: OptionButton
+var weapon_selector: OptionButton
+var armor_selector: OptionButton
+var accessory_selector: OptionButton
+var save_build_button: Button
 
 func set_profile_directory(directory: String) -> void:
 	profile_directory = directory
@@ -81,8 +89,67 @@ func _select_roster_index(index: int) -> void:
 	roster_list.select(index)
 	var profile: Variant = facade.current_profile() if facade != null else null
 	if profile != null:
+		preset_selector.select(profile.characters[index].selected_preset)
+		_populate_build_editor(profile.characters[index])
 		build_summary_label.text = _build_summary(profile.characters[index])
 	select_button.disabled = false
+	preset_selector.disabled = _read_only
+	save_build_button.disabled = _read_only
+
+func _choose_preset(preset_index: int) -> Dictionary:
+	var profile: Variant = facade.current_profile() if facade != null else null
+	if profile == null or _selected_index < 0:
+		return _show_result({"ok": false, "error_code": &"invalid_character_id"})
+	var character: Variant = profile.characters[_selected_index]
+	return _show_result(facade.select_preset(_request_id("preset"), profile.revision, character.character_id, preset_index))
+
+func _save_build() -> Dictionary:
+	var profile: Variant = facade.current_profile() if facade != null else null
+	if profile == null or _selected_index < 0:
+		return _show_result({"ok": false, "error_code": &"invalid_character_id"})
+	var character: Variant = profile.characters[_selected_index]
+	var preset: Dictionary = character.presets[character.selected_preset].duplicate(true)
+	var active_slots: Array[Variant] = preset["active_slots"].duplicate(true)
+	active_slots[0] = _selected_option(active_slot_a)
+	active_slots[1] = _selected_option(active_slot_b)
+	var passive_slots: Array[Variant] = preset["passive_slots"].duplicate(true)
+	passive_slots[0] = _selected_option(passive_slot)
+	var equipped: Dictionary[StringName, Variant] = preset["equipped"].duplicate(true)
+	equipped[&"weapon"] = _selected_option(weapon_selector)
+	equipped[&"armor"] = _selected_option(armor_selector)
+	equipped[&"accessory"] = _selected_option(accessory_selector)
+	return _show_result(facade.update_preset(_request_id("build"), profile.revision, character.character_id, character.selected_preset, active_slots, passive_slots, equipped))
+
+func _selected_option(selector: OptionButton) -> Variant:
+	if selector.selected < 0:
+		return null
+	return selector.get_item_metadata(selector.selected)
+
+func _populate_build_editor(character: Variant) -> void:
+	var options: Dictionary = facade.available_build_options(character.character_id)
+	if not options.get("ok", false):
+		return
+	var preset: Dictionary = character.presets[character.selected_preset]
+	_populate_selector(active_slot_a, options["active_skills"], preset["active_slots"][0])
+	_populate_selector(active_slot_b, options["active_skills"], preset["active_slots"][1])
+	_populate_selector(passive_slot, options["passive_skills"], preset["passive_slots"][0])
+	_populate_selector(weapon_selector, options["equipment_by_slot"][&"weapon"], preset["equipped"][&"weapon"])
+	_populate_selector(armor_selector, options["equipment_by_slot"][&"armor"], preset["equipped"][&"armor"])
+	_populate_selector(accessory_selector, options["equipment_by_slot"][&"accessory"], preset["equipped"][&"accessory"])
+
+func _populate_selector(selector: OptionButton, values: Array, current: Variant) -> void:
+	selector.clear()
+	selector.add_item("Nenhum")
+	selector.set_item_metadata(0, null)
+	var current_index := 0
+	for value: Variant in values:
+		var item_id: StringName = StringName(value)
+		selector.add_item(_skill_name(item_id) if selector in [active_slot_a, active_slot_b, passive_slot] else _equipment_name(item_id))
+		var index := selector.item_count - 1
+		selector.set_item_metadata(index, item_id)
+		if value == current:
+			current_index = index
+	selector.select(current_index)
 
 func _show_result(result: Dictionary) -> Dictionary:
 	var ok: bool = result.get("ok", false)
@@ -107,6 +174,7 @@ func _refresh() -> void:
 			button.disabled = true
 		select_button.disabled = true
 		build_summary_label.text = "Build indisponível enquanto o perfil não puder ser lido."
+		preset_selector.disabled = true
 		return
 	roster_list.clear()
 	_selected_index = -1
@@ -117,6 +185,8 @@ func _refresh() -> void:
 			_selected_index = roster_list.item_count - 1
 	if _selected_index >= 0:
 		roster_list.select(_selected_index)
+		_populate_build_editor(profile.characters[_selected_index])
+		preset_selector.select(profile.characters[_selected_index].selected_preset)
 		build_summary_label.text = _build_summary(profile.characters[_selected_index])
 	else:
 		build_summary_label.text = "Selecione ou crie um personagem para ver a build inicial."
@@ -126,6 +196,8 @@ func _refresh() -> void:
 	for button: Button in create_buttons:
 		button.disabled = locked or profile.characters.size() >= MAX_CHARACTERS
 	select_button.disabled = locked or _selected_index < 0
+	preset_selector.disabled = locked or _selected_index < 0
+	save_build_button.disabled = locked or _selected_index < 0
 	if profile.characters.size() >= MAX_CHARACTERS:
 		status_label.text = "Limite de %d personagens atingido." % MAX_CHARACTERS
 
@@ -229,10 +301,31 @@ func _build_ui() -> void:
 	select_button.custom_minimum_size = Vector2(0, 44)
 	select_button.pressed.connect(_select_current_character)
 	roster_column.add_child(select_button)
+	preset_selector = OptionButton.new()
+	preset_selector.name = "PresetSelector"
+	preset_selector.add_item("Preset 1")
+	preset_selector.add_item("Preset 2")
+	preset_selector.item_selected.connect(_choose_preset)
+	roster_column.add_child(preset_selector)
 	build_summary_label = Label.new()
 	build_summary_label.name = "BuildSummary"
 	build_summary_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	roster_column.add_child(build_summary_label)
+	var editor_title := Label.new()
+	editor_title.text = "Editar preset legal"
+	editor_title.add_theme_font_size_override("font_size", 18)
+	roster_column.add_child(editor_title)
+	active_slot_a = _build_selector(roster_column, "Ativa 1")
+	active_slot_b = _build_selector(roster_column, "Ativa 2")
+	passive_slot = _build_selector(roster_column, "Passiva")
+	weapon_selector = _build_selector(roster_column, "Arma")
+	armor_selector = _build_selector(roster_column, "Armadura")
+	accessory_selector = _build_selector(roster_column, "Acessório")
+	save_build_button = Button.new()
+	save_build_button.text = "Salvar preset"
+	save_build_button.custom_minimum_size = Vector2(0, 40)
+	save_build_button.pressed.connect(_save_build)
+	roster_column.add_child(save_build_button)
 	var create_column := VBoxContainer.new()
 	create_column.custom_minimum_size = Vector2(310, 0)
 	create_column.add_theme_constant_override("separation", 10)
@@ -263,3 +356,16 @@ func _build_ui() -> void:
 	notice.text = "A arena será liberada após a configuração de build."
 	notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	create_column.add_child(notice)
+
+func _build_selector(parent: Container, label_text: String) -> OptionButton:
+	var row := HBoxContainer.new()
+	parent.add_child(row)
+	var label := Label.new()
+	label.text = label_text
+	label.custom_minimum_size = Vector2(82, 0)
+	row.add_child(label)
+	var selector := OptionButton.new()
+	selector.custom_minimum_size = Vector2(190, 32)
+	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(selector)
+	return selector

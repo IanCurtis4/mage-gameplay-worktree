@@ -92,6 +92,107 @@ func select_character(request_id: String, expected_revision: int, character_id: 
 		committed["selected_character_id"] = character_id
 	return _finish_operation(request_id, committed)
 
+func select_preset(request_id: String, expected_revision: int, character_id: String, preset_index: int) -> Dictionary:
+	if _operation_in_progress:
+		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
+	var ready := _begin_operation(request_id, expected_revision)
+	if not ready["ok"]:
+		return _finish_operation(request_id, ready)
+	if _profile.reward_session != null:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"run_active"})
+	var character := _profile.character_by_id(character_id)
+	if character == null:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_character_id"})
+	if preset_index < 0 or preset_index >= CharacterState.PRESET_COUNT:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_presets"})
+	if character.selected_preset == preset_index:
+		return _finish_operation(request_id, {
+			"ok": true,
+			"already_applied": true,
+			"new_revision": _profile.revision,
+			"profile": _profile,
+			"character_id": character_id,
+			"selected_preset": preset_index,
+		})
+	var before := _profile.copy_state()
+	var candidate := before.copy_state()
+	var candidate_character := candidate.character_by_id(character_id)
+	candidate_character.selected_preset = preset_index
+	candidate_character.equipped = candidate_character.presets[preset_index]["equipped"].duplicate(true)
+	var committed := _resolve_commit(before, candidate, _store.commit(candidate))
+	if committed["ok"]:
+		committed["character_id"] = character_id
+		committed["selected_preset"] = preset_index
+	return _finish_operation(request_id, committed)
+
+func available_build_options(character_id: String) -> Dictionary:
+	var character := _profile.character_by_id(character_id) if _profile != null else null
+	if character == null:
+		return {"ok": false, "error_code": &"invalid_character_id"}
+	var effective_ranks := _catalog.effective_skill_ranks(character.base_class_id, character.evolution_id, character.purchased_skill_ranks)
+	var active_skills: Array[StringName] = []
+	var passive_skills: Array[StringName] = []
+	for skill_id: StringName in effective_ranks:
+		var metadata := _catalog.skill_metadata(skill_id)
+		if metadata["category"] == ProfileCatalog.ACTIVE:
+			active_skills.append(skill_id)
+		else:
+			passive_skills.append(skill_id)
+	var equipment_by_slot: Dictionary[StringName, Array] = {}
+	for slot: StringName in IdentityIds.equipment_slots():
+		equipment_by_slot[slot] = []
+	for item_id: StringName in _profile.equipment_collection:
+		for slot: StringName in IdentityIds.equipment_slots():
+			if _catalog.equipment_is_allowed(item_id, slot, character.base_class_id):
+				equipment_by_slot[slot].append(item_id)
+	return {
+		"ok": true,
+		"character_id": character_id,
+		"active_skills": active_skills,
+		"passive_skills": passive_skills,
+		"equipment_by_slot": equipment_by_slot,
+	}
+
+func update_preset(
+	request_id: String,
+	expected_revision: int,
+	character_id: String,
+	preset_index: int,
+	active_slots: Array[Variant],
+	passive_slots: Array[Variant],
+	equipped: Dictionary[StringName, Variant]
+) -> Dictionary:
+	if _operation_in_progress:
+		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
+	var ready := _begin_operation(request_id, expected_revision)
+	if not ready["ok"]:
+		return _finish_operation(request_id, ready)
+	if _profile.reward_session != null:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"run_active"})
+	var character := _profile.character_by_id(character_id)
+	if character == null:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_character_id"})
+	if preset_index < 0 or preset_index >= CharacterState.PRESET_COUNT:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_presets"})
+	if active_slots.size() != CharacterState.ACTIVE_SLOT_COUNT or passive_slots.size() != CharacterState.PASSIVE_SLOT_COUNT:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_presets"})
+	if equipped.size() != IdentityIds.equipment_slots().size():
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_equipment"})
+	var before := _profile.copy_state()
+	var candidate := before.copy_state()
+	var candidate_character := candidate.character_by_id(character_id)
+	var candidate_preset: Dictionary = candidate_character.presets[preset_index]
+	candidate_preset["active_slots"] = active_slots.duplicate(true)
+	candidate_preset["passive_slots"] = passive_slots.duplicate(true)
+	candidate_preset["equipped"] = equipped.duplicate(true)
+	candidate_character.selected_preset = preset_index
+	candidate_character.equipped = equipped.duplicate(true)
+	var committed := _resolve_commit(before, candidate, _store.commit(candidate))
+	if committed["ok"]:
+		committed["character_id"] = character_id
+		committed["selected_preset"] = preset_index
+	return _finish_operation(request_id, committed)
+
 func start_run(request_id: String, expected_revision: int) -> Dictionary:
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
