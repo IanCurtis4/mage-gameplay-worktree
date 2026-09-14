@@ -21,6 +21,7 @@ var create_button: Button
 var create_buttons: Array[Button] = []
 var select_button: Button
 var empty_label: Label
+var build_summary_label: Label
 
 func set_profile_directory(directory: String) -> void:
 	profile_directory = directory
@@ -98,6 +99,7 @@ func _refresh() -> void:
 		for button: Button in create_buttons:
 			button.disabled = true
 		select_button.disabled = true
+		build_summary_label.text = "Build indisponível enquanto o perfil não puder ser lido."
 		return
 	roster_list.clear()
 	_selected_index = -1
@@ -108,6 +110,9 @@ func _refresh() -> void:
 			_selected_index = roster_list.item_count - 1
 	if _selected_index >= 0:
 		roster_list.select(_selected_index)
+		build_summary_label.text = _build_summary(profile.characters[_selected_index])
+	else:
+		build_summary_label.text = "Selecione ou crie um personagem para ver a build inicial."
 	empty_label.visible = roster_list.item_count == 0
 	empty_label.text = "Nenhum personagem criado. Crie seu primeiro alt para começar."
 	var locked := _read_only
@@ -133,6 +138,36 @@ func _class_name(base_class_id: StringName) -> String:
 		&"swordsman": return "Espadachim"
 		&"mage": return "Mago"
 		_: return "Classe indisponível"
+
+func _build_summary(character: Variant) -> String:
+	var preset: Dictionary = character.presets[character.selected_preset]
+	var active: Array[String] = []
+	for skill_id: Variant in preset["active_slots"]:
+		if skill_id != null:
+			active.append(_skill_name(skill_id))
+	var passive: Array[String] = []
+	for skill_id: Variant in preset["passive_slots"]:
+		if skill_id != null:
+			passive.append(_skill_name(skill_id))
+	var weapon: Variant = preset["equipped"].get(&"weapon")
+	return "Build inicial (somente leitura)\nAtivas: %s\nPassiva: %s\nArma: %s\nAtributos e edição de presets serão liberados com o contrato de build." % [", ".join(active), ", ".join(passive), _equipment_name(weapon)]
+
+func _skill_name(skill_id: Variant) -> String:
+	match StringName(skill_id):
+		&"slash": return "Corte"
+		&"dash": return "Investida"
+		&"swordsman_resistance": return "Resistência"
+		&"fireball": return "Bola de fogo"
+		&"fire_wall": return "Parede de fogo"
+		&"mage_mana_regeneration": return "Regeneração de mana"
+		_: return "Skill indisponível"
+
+func _equipment_name(item_id: Variant) -> String:
+	var normalized_id: StringName = StringName(item_id) if item_id != null else &""
+	match normalized_id:
+		&"training_sword": return "Espada de treino"
+		&"apprentice_staff": return "Cajado de aprendiz"
+		_: return "Nenhuma"
 
 func _request_id(action: String) -> String:
 	_request_serial += 1
@@ -187,6 +222,10 @@ func _build_ui() -> void:
 	select_button.custom_minimum_size = Vector2(0, 44)
 	select_button.pressed.connect(_select_current_character)
 	roster_column.add_child(select_button)
+	build_summary_label = Label.new()
+	build_summary_label.name = "BuildSummary"
+	build_summary_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	roster_column.add_child(build_summary_label)
 	var create_column := VBoxContainer.new()
 	create_column.custom_minimum_size = Vector2(310, 0)
 	create_column.add_theme_constant_override("separation", 10)

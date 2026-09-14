@@ -20,7 +20,7 @@ func _initialize() -> void:
 	_check(swordsman["ok"] and mage["ok"] and menu.roster_list.item_count == 2 and menu.roster_list.get_item_text(0).contains("Lina") and menu.roster_list.get_item_text(1).contains("Mago"), "creation uses facade and refreshes the real roster")
 	var selected: Dictionary = menu.select_character_at(0)
 	var profile: Variant = menu.facade.current_profile()
-	_check(selected["ok"] and profile.selected_character_id == profile.characters[0].character_id and menu.roster_list.get_item_text(0).contains("selecionado"), "selection persists through facade and is visibly identified")
+	_check(selected["ok"] and profile.selected_character_id == profile.characters[0].character_id and menu.roster_list.get_item_text(0).contains("selecionado") and menu.build_summary_label.text.contains("Corte"), "selection persists through facade and exposes the catalog-backed initial build")
 	var viewport := get_root().get_viewport().get_visible_rect()
 	_check(viewport.encloses(menu.get_global_rect()) and menu.select_button.get_global_rect().size.y > 0.0, "menu controls are laid out in the viewport")
 	menu.queue_free()
