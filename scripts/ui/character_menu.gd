@@ -30,6 +30,7 @@ var weapon_selector: OptionButton
 var armor_selector: OptionButton
 var accessory_selector: OptionButton
 var save_build_button: Button
+var start_run_button: Button
 
 func set_profile_directory(directory: String) -> void:
 	profile_directory = directory
@@ -120,6 +121,17 @@ func _save_build() -> Dictionary:
 	equipped[&"accessory"] = _selected_option(accessory_selector)
 	return _show_result(facade.update_preset(_request_id("build"), profile.revision, character.character_id, character.selected_preset, active_slots, passive_slots, equipped))
 
+func _start_run() -> Dictionary:
+	var profile: Variant = facade.current_profile() if facade != null else null
+	if profile == null or profile.selected_character_id.is_empty():
+		return _show_result({"ok": false, "error_code": &"invalid_character_id"})
+	var result: Dictionary = facade.start_run(_request_id("start"), profile.revision)
+	if result.get("ok", false):
+		RunController.pending_run_state = result["run_state"]
+		RunController.pending_run_facade = facade
+		get_tree().change_scene_to_file("res://scenes/main.tscn")
+	return result
+
 func _selected_option(selector: OptionButton) -> Variant:
 	if selector.selected < 0:
 		return null
@@ -175,6 +187,8 @@ func _refresh() -> void:
 		select_button.disabled = true
 		build_summary_label.text = "Build indisponível enquanto o perfil não puder ser lido."
 		preset_selector.disabled = true
+		save_build_button.disabled = true
+		start_run_button.disabled = true
 		return
 	roster_list.clear()
 	_selected_index = -1
@@ -198,6 +212,7 @@ func _refresh() -> void:
 	select_button.disabled = locked or _selected_index < 0
 	preset_selector.disabled = locked or _selected_index < 0
 	save_build_button.disabled = locked or _selected_index < 0
+	start_run_button.disabled = locked or profile.selected_character_id.is_empty()
 	if profile.characters.size() >= MAX_CHARACTERS:
 		status_label.text = "Limite de %d personagens atingido." % MAX_CHARACTERS
 
@@ -330,6 +345,11 @@ func _build_ui() -> void:
 	save_build_button.custom_minimum_size = Vector2(0, 40)
 	save_build_button.pressed.connect(_save_build)
 	roster_column.add_child(save_build_button)
+	start_run_button = Button.new()
+	start_run_button.text = "Iniciar run com este personagem"
+	start_run_button.custom_minimum_size = Vector2(0, 44)
+	start_run_button.pressed.connect(_start_run)
+	roster_column.add_child(start_run_button)
 	var create_column := VBoxContainer.new()
 	create_column.custom_minimum_size = Vector2(310, 0)
 	create_column.add_theme_constant_override("separation", 10)

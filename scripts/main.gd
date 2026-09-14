@@ -11,6 +11,8 @@ const TARGET_ASSIST_RADIUS := BattleTargeting.ASSIST_RADIUS
 const TARGET_DIRECT_PADDING := BattleTargeting.DIRECT_PADDING
 const ACTOR_BODY_OFFSET := BattleTargeting.BODY_OFFSET
 static var selected_class_id: StringName = &"swordsman"
+static var pending_run_state: RunState = null
+static var pending_run_facade: ProfileFacade = null
 
 var rng := RandomNumberGenerator.new()
 var run_state: RunState
@@ -22,6 +24,7 @@ var reward: RewardPickup
 var encounter_index := 0
 var encounter_active := false
 var run_finished := false
+var _terminal_outcome: StringName = &"abandoned"
 
 var health_label: Label
 var mana_label: Label
@@ -57,7 +60,11 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	y_sort_enabled = true
 	rng.seed = Time.get_ticks_usec()
-	run_state = RunState.new(selected_class_id)
+	if pending_run_state != null:
+		run_state = pending_run_state
+		pending_run_state = null
+	else:
+		run_state = RunState.new(selected_class_id)
 	navigation.configure(ARENA_BOUNDS, ARENA_OBSTACLES, 22.0)
 	control_preferences.load_settings()
 	cast_intent.set_mode(control_preferences.cast_mode)
@@ -487,6 +494,7 @@ func _show_result(victory: bool) -> void:
 	_cancel_casting()
 	_clear_hover()
 	run_finished = true
+	_terminal_outcome = &"completed" if victory else &"death"
 	result_title.text = "Arena concluída!" if victory else "Você caiu em combate"
 	result_body.text = ("Os dois encontros do Marco 1 foram vencidos.\n" if victory else "A run terminou e todo o estado temporário será descartado.\n") + "Pressione R ou use o botão para reiniciar."
 	result_overlay.visible = true
@@ -494,7 +502,21 @@ func _show_result(victory: bool) -> void:
 
 func _restart_run() -> void:
 	get_tree().paused = false
+	_close_persistent_run(_terminal_outcome)
 	get_tree().reload_current_scene()
+
+func _return_to_character_menu() -> void:
+	get_tree().paused = false
+	_close_persistent_run(_terminal_outcome)
+	get_tree().change_scene_to_file("res://scenes/character_menu.tscn")
+
+func _close_persistent_run(outcome: StringName) -> void:
+	if pending_run_facade == null or run_state == null or run_state.run_id.is_empty():
+		return
+	var profile := pending_run_facade.current_profile()
+	if profile != null and profile.reward_session != null:
+		pending_run_facade.end_run("run-menu-return", profile.revision, run_state.run_id, outcome)
+	pending_run_facade = null
 
 func _open_class_menu() -> void:
 	if augment_overlay.visible or class_overlay.visible:
@@ -737,6 +759,12 @@ func _build_ui() -> void:
 	restart.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	restart.pressed.connect(_restart_run)
 	result_column.add_child(restart)
+	var return_menu := Button.new()
+	return_menu.text = "Voltar ao menu de personagens"
+	return_menu.custom_minimum_size = Vector2(320, 48)
+	return_menu.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	return_menu.pressed.connect(_return_to_character_menu)
+	result_column.add_child(return_menu)
 	var result_class := Button.new()
 	result_class.text = "Trocar classe e iniciar nova run"
 	result_class.custom_minimum_size = Vector2(320, 48)

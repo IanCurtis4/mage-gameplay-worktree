@@ -29,7 +29,7 @@ func _initialize() -> void:
 	_check(build_saved["ok"] and saved_mage.presets[1]["active_slots"].slice(0, 2) == [&"fire_wall", &"fireball"], "legal skill choices are saved atomically through update_preset")
 	var selected: Dictionary = menu.select_character_at(0)
 	var profile: Variant = menu.facade.current_profile()
-	_check(selected["ok"] and profile.selected_character_id == profile.characters[0].character_id and menu.roster_list.get_item_text(0).contains("selecionado") and menu.build_summary_label.text.contains("Corte"), "selection persists through facade and exposes the catalog-backed initial build")
+	_check(selected["ok"] and profile.selected_character_id == profile.characters[0].character_id and menu.roster_list.get_item_text(0).contains("selecionado") and menu.build_summary_label.text.contains("Corte") and not menu.start_run_button.disabled, "selection persists through facade, exposes the build, and enables an explicit run start")
 	var viewport := get_root().get_viewport().get_visible_rect()
 	var editor_fit := true
 	for control: Control in [menu.preset_selector, menu.active_slot_a, menu.active_slot_b, menu.passive_slot, menu.weapon_selector, menu.armor_selector, menu.accessory_selector, menu.save_build_button]:
@@ -46,6 +46,7 @@ func _initialize() -> void:
 	root.add_child(blocked)
 	await process_frame
 	_check(blocked.status_label.text.contains("somente leitura") and blocked.create_buttons[0].disabled and blocked.create_buttons[1].disabled and blocked.select_button.disabled, "read-only profile state is explained and blocks every roster mutation")
+	_check(blocked.start_run_button.disabled, "read-only profile cannot start a run")
 	blocked.queue_free()
 	_cleanup_directory(root_directory)
 	print("Menu E02.1: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
