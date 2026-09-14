@@ -171,7 +171,7 @@ static func _decode_character(raw: Variant, profile_id: String, next_character_c
 	var allocations_result := _decode_allocations(data["attribute_allocations"], base_class_id, base_xp)
 	if not allocations_result["ok"]:
 		return allocations_result
-	var ranks_result := _decode_rank_map(data["purchased_skill_ranks"], base_class_id, job_xp, not evolution_id.is_empty(), catalog)
+	var ranks_result := _decode_rank_map(data["purchased_skill_ranks"], base_class_id, evolution_id, job_xp, catalog)
 	if not ranks_result["ok"]:
 		return ranks_result
 	var equipped_result := _decode_equipped(data["equipped"])
@@ -181,7 +181,7 @@ static func _decode_character(raw: Variant, profile_id: String, next_character_c
 		return _error(&"invalid_presets")
 	var presets: Array[Dictionary] = []
 	for raw_preset: Variant in data["presets"]:
-		var preset_result := _decode_preset(raw_preset, base_class_id, ranks_result["ranks"], catalog)
+		var preset_result := _decode_preset(raw_preset, base_class_id, evolution_id, ranks_result["ranks"], catalog)
 		if not preset_result["ok"]:
 			return preset_result
 		presets.append(preset_result["preset"])
@@ -221,7 +221,7 @@ static func _decode_allocations(raw: Variant, base_class_id: StringName, base_xp
 		return _error(&"overspent_attributes")
 	return {"ok": true, "allocations": allocations}
 
-static func _decode_rank_map(raw: Variant, base_class_id: StringName, job_xp: int, evolved: bool, catalog: ProfileCatalog) -> Dictionary:
+static func _decode_rank_map(raw: Variant, base_class_id: StringName, evolution_id: StringName, job_xp: int, catalog: ProfileCatalog) -> Dictionary:
 	if not raw is Dictionary:
 		return _error(&"invalid_skill_ranks")
 	var ranks: Dictionary[StringName, int] = {}
@@ -233,7 +233,7 @@ static func _decode_rank_map(raw: Variant, base_class_id: StringName, job_xp: in
 		var rank := int(raw[raw_id])
 		var skill_id := StringName(raw_id)
 		var metadata := catalog.skill_metadata(skill_id)
-		if metadata.is_empty() or not catalog.skill_is_allowed(skill_id, base_class_id):
+		if metadata.is_empty() or not catalog.skill_is_allowed(skill_id, base_class_id, evolution_id):
 			return _catalog_error(&"invalid_catalog")
 		if rank < 0 or rank > int(metadata["max_purchased_rank"]):
 			return _catalog_error(&"invalid_skill_ranks")
@@ -242,6 +242,7 @@ static func _decode_rank_map(raw: Variant, base_class_id: StringName, job_xp: in
 		else:
 			evolution_spent += rank
 		ranks[skill_id] = rank
+	var evolved := not evolution_id.is_empty()
 	if base_spent > ProgressionRules.base_skill_points_granted(job_xp, evolved) or evolution_spent > ProgressionRules.evolution_skill_points_granted(job_xp, evolved):
 		return _error(&"overspent_skill_points")
 	return {"ok": true, "ranks": ranks}
@@ -257,11 +258,11 @@ static func _decode_equipped(raw: Variant) -> Dictionary:
 		equipped[slot] = null if raw[key] == null else StringName(raw[key])
 	return {"ok": true, "equipped": equipped}
 
-static func _decode_preset(raw: Variant, base_class_id: StringName, purchased_ranks: Dictionary[StringName, int], catalog: ProfileCatalog) -> Dictionary:
+static func _decode_preset(raw: Variant, base_class_id: StringName, evolution_id: StringName, purchased_ranks: Dictionary[StringName, int], catalog: ProfileCatalog) -> Dictionary:
 	if not raw is Dictionary or raw.size() != 3 or not raw.has("active_slots") or not raw.has("passive_slots") or not raw.has("equipped"):
 		return _error(&"invalid_presets")
-	var active_result := _decode_slots(raw["active_slots"], CharacterState.ACTIVE_SLOT_COUNT, ProfileCatalog.ACTIVE, base_class_id, purchased_ranks, catalog)
-	var passive_result := _decode_slots(raw["passive_slots"], CharacterState.PASSIVE_SLOT_COUNT, ProfileCatalog.PASSIVE, base_class_id, purchased_ranks, catalog)
+	var active_result := _decode_slots(raw["active_slots"], CharacterState.ACTIVE_SLOT_COUNT, ProfileCatalog.ACTIVE, base_class_id, evolution_id, purchased_ranks, catalog)
+	var passive_result := _decode_slots(raw["passive_slots"], CharacterState.PASSIVE_SLOT_COUNT, ProfileCatalog.PASSIVE, base_class_id, evolution_id, purchased_ranks, catalog)
 	var equipped_result := _decode_equipped(raw["equipped"])
 	if not active_result["ok"]:
 		return active_result
@@ -271,7 +272,7 @@ static func _decode_preset(raw: Variant, base_class_id: StringName, purchased_ra
 		return equipped_result
 	return {"ok": true, "preset": {"active_slots": active_result["slots"], "passive_slots": passive_result["slots"], "equipped": equipped_result["equipped"]}}
 
-static func _decode_slots(raw: Variant, expected_size: int, category: StringName, base_class_id: StringName, purchased_ranks: Dictionary[StringName, int], catalog: ProfileCatalog) -> Dictionary:
+static func _decode_slots(raw: Variant, expected_size: int, category: StringName, base_class_id: StringName, evolution_id: StringName, purchased_ranks: Dictionary[StringName, int], catalog: ProfileCatalog) -> Dictionary:
 	if not raw is Array or raw.size() != expected_size:
 		return _error(&"invalid_presets")
 	var slots: Array[Variant] = []
@@ -284,7 +285,7 @@ static func _decode_slots(raw: Variant, expected_size: int, category: StringName
 			continue
 		var skill_id := StringName(value)
 		var metadata := catalog.skill_metadata(skill_id)
-		if metadata.is_empty() or not catalog.skill_is_allowed(skill_id, base_class_id):
+		if metadata.is_empty() or not catalog.skill_is_allowed(skill_id, base_class_id, evolution_id):
 			return _catalog_error(&"invalid_catalog")
 		if metadata["category"] != category or seen.has(skill_id):
 			return _catalog_error(&"invalid_presets") if metadata["category"] != category else _error(&"invalid_presets")

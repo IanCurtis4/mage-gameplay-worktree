@@ -24,6 +24,7 @@ func _initialize() -> void:
 	_check_reference_fixture()
 	_check_round_trip_and_unknown_fields()
 	_check_catalog_references()
+	_check_evolution_catalog_boundary()
 	_check_atomic_write_failures()
 	_check_counter_monotonicity()
 	_check_backup_recovery()
@@ -176,6 +177,53 @@ func _check_counter_monotonicity() -> void:
 	var character_result := store.commit(character_regression)
 	_check(not character_result["ok"] and character_result["error_code"] == &"counter_regression", "next_character_counter can never regress")
 	_check(_read_text(directory.path_join(ProfileStore.PRIMARY_FILE)) == original_primary and not FileAccess.file_exists(directory.path_join(ProfileStore.BACKUP_FILE)) and not FileAccess.file_exists(directory.path_join(ProfileStore.PENDING_FILE)), "counter regression leaves all disk artifacts unchanged")
+
+func _check_evolution_catalog_boundary() -> void:
+	var catalog := ProfileCatalog.pilot({}, {
+		&"sp_mg_rune_entry": {
+			"allowed_base_classes": [&"swordsman"],
+			"category": ProfileCatalog.ACTIVE,
+			"wallet": ProfileCatalog.EVOLUTION_WALLET,
+			"free_rank": 1,
+			"max_purchased_rank": 4,
+			"required_evolution_id": &"sp_mg",
+		},
+	})
+	var profile := _profile_with_character()
+	var character: CharacterState = profile.characters[0]
+	character.base_xp_total = ProgressionRules.EVOLUTION_MIN_BASE_XP
+	character.job_xp_total = ProgressionRules.EVOLUTION_MIN_JOB_XP
+	character.presets[0]["active_slots"][0] = &"sp_mg_rune_entry"
+	var unevolved := ProfileCodec.encode(profile, catalog)
+	_check(not unevolved["ok"] and unevolved["error_code"] == &"invalid_catalog", "free evolution skill is blocked on an unevolved character")
+	character.evolution_id = &"sp_ar"
+	var wrong_evolution := ProfileCodec.encode(profile, catalog)
+	_check(not wrong_evolution["ok"] and wrong_evolution["error_code"] == &"invalid_catalog", "free evolution skill is blocked on a different evolution of the same origin")
+	character.evolution_id = &"sp_mg"
+	var matching_evolution := ProfileCodec.encode(profile, catalog)
+	_check(matching_evolution["ok"], "free evolution skill is accepted only on its declared evolution")
+
+	var oversized_active := ProfileCatalog.pilot({}, {
+		&"oversized_active": {
+			"allowed_base_classes": [&"mage"],
+			"category": ProfileCatalog.ACTIVE,
+			"wallet": ProfileCatalog.BASE_WALLET,
+			"free_rank": 9,
+			"max_purchased_rank": 99,
+		},
+	})
+	_check(not oversized_active.is_valid(), "catalog rejects active skill metadata above rank 5")
+	_check(ProfileCodec.encode(_profile_with_character(), oversized_active)["error_code"] == &"invalid_catalog", "codec never certifies a catalog with an oversized active rank")
+	var oversized_passive := ProfileCatalog.pilot({}, {
+		&"oversized_passive": {
+			"allowed_base_classes": [&"mage"],
+			"category": ProfileCatalog.PASSIVE,
+			"wallet": ProfileCatalog.BASE_WALLET,
+			"free_rank": 1,
+			"max_purchased_rank": 3,
+		},
+	})
+	_check(not oversized_passive.is_valid(), "catalog rejects passive skill metadata above rank 3")
 
 func _check_backup_recovery() -> void:
 	var directory := root_directory.path_join("recovery")
