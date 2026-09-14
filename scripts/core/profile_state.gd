@@ -26,6 +26,7 @@ var lifetime_stats: Dictionary[StringName, int] = {
 var reward_session: Variant = null
 var legacy_loadouts: Dictionary = {}
 var unresolved_legacy: Dictionary = {}
+var extension_fields: Dictionary = {}
 
 func _init(new_profile_id: String = "") -> void:
 	profile_id = new_profile_id
@@ -47,7 +48,8 @@ func copy_state() -> ProfileState:
 		copy.characters.append(character.copy_state())
 	copy.settings = settings.duplicate(true)
 	copy.lifetime_stats = lifetime_stats.duplicate(true)
-	copy.reward_session = reward_session.duplicate(true) if reward_session != null else null
+	copy.reward_session = reward_session.duplicate(true) if reward_session is Dictionary or reward_session is Array else reward_session
 	copy.legacy_loadouts = legacy_loadouts.duplicate(true)
 	copy.unresolved_legacy = unresolved_legacy.duplicate(true)
+	copy.extension_fields = extension_fields.duplicate(true)
 	return copy

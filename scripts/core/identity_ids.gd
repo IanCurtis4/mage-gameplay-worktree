@@ -35,6 +35,16 @@ static func attribute_ids() -> Array[StringName]:
 static func equipment_slots() -> Array[StringName]:
 	return [&"weapon", &"armor", &"accessory"]
 
+static func initial_attributes(base_class_id: StringName) -> Dictionary[StringName, int]:
+	match base_class_id:
+		SWORDSMAN:
+			return {&"str": 8, &"agi": 5, &"vit": 8, &"int": 2, &"dex": 5, &"luk": 2}
+		MAGE:
+			return {&"str": 2, &"agi": 5, &"vit": 5, &"int": 9, &"dex": 7, &"luk": 2}
+		ARCHER:
+			return {&"str": 3, &"agi": 7, &"vit": 5, &"int": 2, &"dex": 10, &"luk": 3}
+	return {}
+
 static func is_base_class(identity_id: StringName) -> bool:
 	return identity_id in base_class_ids()
 
@@ -66,3 +76,10 @@ static func run_id(profile_id: String, counter: int) -> String:
 	assert(not profile_id.is_empty())
 	assert(counter > 0)
 	return "%s_%d" % [profile_id, counter]
+
+static func new_profile_id() -> String:
+	var bytes := Crypto.new().generate_random_bytes(16)
+	bytes[6] = (bytes[6] & 0x0f) | 0x40
+	bytes[8] = (bytes[8] & 0x3f) | 0x80
+	var hex := bytes.hex_encode()
+	return "%s-%s-%s-%s-%s" % [hex.substr(0, 8), hex.substr(8, 4), hex.substr(12, 4), hex.substr(16, 4), hex.substr(20, 12)]

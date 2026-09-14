@@ -17,6 +17,7 @@ var purchased_skill_ranks: Dictionary[StringName, int] = {}
 var equipped: Dictionary[StringName, Variant] = {}
 var presets: Array[Dictionary] = []
 var selected_preset: int = 0
+var extension_fields: Dictionary = {}
 
 func _init(
 	new_character_id: String = "",
@@ -42,6 +43,7 @@ func copy_state() -> CharacterState:
 	copy.equipped = equipped.duplicate(true)
 	copy.presets = presets.duplicate(true)
 	copy.selected_preset = selected_preset
+	copy.extension_fields = extension_fields.duplicate(true)
 	return copy
 
 static func _empty_equipment() -> Dictionary[StringName, Variant]:

@@ -29,9 +29,9 @@ static func _ensure_built() -> void:
 	_add_skill(&"teleport", "Teleporte", "D", SkillDefinition.Targeting.POINT, 22.0, 6.0, 0.0, 320.0)
 
 	var swordsman := ClassDefinition.new()
-	swordsman.id = &"swordsman"
+	swordsman.id = IdentityIds.SWORDSMAN
 	swordsman.display_name = "Espadachim"
-	swordsman.attributes = {"str": 8, "agi": 5, "vit": 8, "int": 2, "dex": 5, "luk": 2}
+	swordsman.attributes = IdentityIds.initial_attributes(IdentityIds.SWORDSMAN)
 	swordsman.skill_ids = [&"slash", &"dash"]
 	swordsman.passive_id = &"swordsman_resistance"
 	swordsman.basic_kind = DamageRequest.Kind.PHYSICAL
@@ -40,9 +40,9 @@ static func _ensure_built() -> void:
 	_classes[swordsman.id] = swordsman
 
 	var mage := ClassDefinition.new()
-	mage.id = &"mage"
+	mage.id = IdentityIds.MAGE
 	mage.display_name = "Mago"
-	mage.attributes = {"str": 2, "agi": 5, "vit": 5, "int": 9, "dex": 7, "luk": 2}
+	mage.attributes = IdentityIds.initial_attributes(IdentityIds.MAGE)
 	mage.skill_ids = [&"fireball", &"fire_wall", &"fire_spear", &"ice_spear", &"teleport"]
 	mage.passive_id = &"mage_mana_regeneration"
 	mage.basic_kind = DamageRequest.Kind.MAGIC
