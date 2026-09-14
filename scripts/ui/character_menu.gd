@@ -26,6 +26,9 @@ var build_summary_label: Label
 func set_profile_directory(directory: String) -> void:
 	profile_directory = directory
 
+func set_profile_facade(value: RefCounted) -> void:
+	facade = value
+
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_build_ui()
@@ -64,7 +67,8 @@ func select_character_at(index: int) -> Dictionary:
 	return _show_result(facade.select_character(_request_id("select"), profile.revision, character.character_id))
 
 func _open_profile() -> void:
-	facade = ProfileFacadeScript.new(ProfileStoreScript.new(profile_directory, ProfileCatalogScript.pilot()))
+	if facade == null:
+		facade = ProfileFacadeScript.new(ProfileStoreScript.new(profile_directory, ProfileCatalogScript.pilot()))
 	_show_result(facade.open_profile())
 
 func _select_current_character() -> void:
