@@ -243,3 +243,4 @@ aplicar ranks durante a run exigiria contratos adicionais de atualização de a�
 No checkpoint original, E00.2/E00.3 estavam pendentes. Agora suas fórmulas,
 limites, donos, save/migração e fixtures estão no contrato final vinculado acima.
 Este ADR e o aceite técnico não liberam automaticamente E01–E11.
+
