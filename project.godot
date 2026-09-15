@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="RagRPG"
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="res://scenes/character_menu.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 
 [display]
@@ -19,6 +19,11 @@ config/features=PackedStringArray("4.7", "GL Compatibility")
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
+
+[editor]
+
+version_control/plugin_name="GitPlugin"
+version_control/autoload_on_startup=true
 
 [rendering]
 

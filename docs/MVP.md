@@ -1,5 +1,9 @@
 # Escopo aprovado
 
+> E00 entregue documentalmente: [contrato final candidato](E00_CONTRACT.md),
+> incluindo as 15 identidades do primeiro MVP. As regras do piloto abaixo continuam
+> executadas até a implementação autorizada dos novos contratos.
+
 > Revisão de direção em 13/09/2026: o usuário pediu um MVP expandido com personagens
 > persistentes, job/skill levels, menu/build, oito bases e evoluções. O plano vigente
 > para trabalho futuro está em LONG_TERM_EPICS.md e HYBRIDS_56_EXPLORATION.md.

@@ -1,0 +1,60 @@
+{
+  "contract_version": "e00_v1",
+  "roster": {
+    "bases": ["swordsman", "mage", "archer"],
+    "pure": ["defender", "berserker", "elementalist", "spiritualist", "sentinel", "hunter"],
+    "hybrids": {
+      "sp_mg": ["swordsman", "mage", "Cavaleiro Rúnico"],
+      "mg_sp": ["mage", "swordsman", "Devastador Astral"],
+      "sp_ar": ["swordsman", "archer", "Baluarte de Cerco"],
+      "ar_sp": ["archer", "swordsman", "Saqueador"],
+      "mg_ar": ["mage", "archer", "Geômetra"],
+      "ar_mg": ["archer", "mage", "Caçador de Espectros"]
+    }
+  },
+  "progression": [
+    {"track": "base", "xp": 350, "evolved": false, "level": 3, "progress": 125, "free_total": 6},
+    {"track": "base", "xp": 375, "evolved": false, "level": 4, "progress": 0, "free_total": 9},
+    {"track": "base", "xp": 13050, "evolved": true, "level": 30, "progress": 0, "free_total": 87},
+    {"track": "job", "xp": 4940, "evolved": false, "level": 20, "progress": 0, "base_total": 19, "evolution_total": 0},
+    {"track": "job", "xp": 5400, "evolved": true, "level": 21, "progress": 0, "base_total": 19, "evolution_total": 1},
+    {"track": "job", "xp": 7440, "evolved": true, "level": 25, "progress": 0, "base_total": 19, "evolution_total": 5},
+    {"track": "job", "xp": 17940, "evolved": true, "level": 40, "progress": 0, "base_total": 19, "evolution_total": 20},
+    {"track": "job", "xp": 999999, "evolved": false, "level": 20, "progress": 0, "base_total": 19, "evolution_total": 0}
+  ],
+  "stats": [
+    {"class_id": "swordsman", "level": 1, "attributes": [8,5,8,2,5,2], "expected": {"max_hp":180,"max_sp":50,"melee_attack":28,"precision_attack":23.2,"magic_attack":16,"physical_defense":20,"magic_defense":8,"hit_rating":111.4,"flee_rating":108.9,"crit_chance":0.0585,"attacks_per_second":1.1,"variable_cast_multiplier":0.983}},
+    {"class_id": "mage", "level": 1, "attributes": [2,5,5,9,7,2], "expected": {"max_hp":150,"max_sp":85,"melee_attack":16.8,"precision_attack":24.8,"magic_attack":30.8,"physical_defense":11,"magic_defense":20.5,"hit_rating":115.4,"flee_rating":108.9,"crit_chance":0.0595,"attacks_per_second":1.11,"variable_cast_multiplier":0.97}},
+    {"class_id": "archer", "level": 1, "attributes": [3,7,5,2,10,3], "expected": {"max_hp":150,"max_sp":50,"melee_attack":20,"precision_attack":31.2,"magic_attack":18,"physical_defense":11.5,"magic_defense":6.5,"hit_rating":121.6,"flee_rating":112.1,"crit_chance":0.064,"attacks_per_second":1.155,"variable_cast_multiplier":0.968}}
+  ],
+  "damage": [
+    {"name":"physical_crit","physical":100,"magic":0,"def":100,"mdef":0,"critical":1.5,"expected":75},
+    {"name":"hybrid_split","physical":32.4,"magic":29.6,"def":100,"mdef":50,"critical":1,"expected":36},
+    {"name":"zero_power","physical":0,"magic":0,"def":0,"mdef":0,"critical":1.5,"expected":0},
+    {"name":"one_rounding_only","physical":0.4,"magic":0.4,"def":0,"mdef":0,"critical":1,"expected":1},
+    {"name":"defense_cap","physical":100,"magic":0,"def":900,"mdef":0,"critical":1,"expected":10}
+  ],
+  "hit": [
+    {"difference":0,"expected":0.9},
+    {"difference":500,"expected":0.98},
+    {"difference":-500,"expected":0.05}
+  ],
+  "cast": {"fixed":0.2,"variable":0.8,"dex":50,"int":20,"expected":0.864},
+  "grammar": {"runes":18,"walls":6,"triangles":27,"pure":3,"two_plus_one":18,"tricolor":6,"rank_1":3,"rank_3":21,"rank_5":27},
+  "profile": {
+    "format_id":"ragrpg_character_profile","schema_version":2,"catalog_version":1,"ruleset_id":"e00_v1",
+    "profile_id":"00000000-0000-4000-8000-000000000001","revision":1,"next_character_counter":2,"next_run_counter":1,
+    "selected_character_id":"00000000-0000-4000-8000-000000000001_1",
+    "equipment_collection":[],"settings":{},"lifetime_stats":{},"reward_session":null,"legacy_loadouts":{},"unresolved_legacy":{},
+    "characters":[{
+      "character_id":"00000000-0000-4000-8000-000000000001_1","display_name":"Referência","base_class_id":"swordsman","evolution_id":null,
+      "base_xp_total":0,"job_xp_total":0,"attribute_allocations":{"str":0,"agi":0,"vit":0,"int":0,"dex":0,"luk":0},
+      "purchased_skill_ranks":{},"equipped":{"weapon":null,"armor":null,"accessory":null},
+      "presets":[{"active_slots":["slash","dash",null,null,null],"passive_slots":["swordsman_resistance",null],"equipped":{"weapon":null,"armor":null,"accessory":null}},{"active_slots":["slash","dash",null,null,null],"passive_slots":["swordsman_resistance",null],"equipped":{"weapon":null,"armor":null,"accessory":null}}],
+      "selected_preset":0
+    }]
+  },
+  "invalid_profile_cases": [
+    "future_schema", "foreign_evolution", "overspent_attributes", "job_above_base_cap", "duplicate_character_id", "runtime_state_in_save", "boolean_xp"
+  ]
+}

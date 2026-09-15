@@ -1,5 +1,9 @@
 # Contratos de implementação — versão 1
 
+Este arquivo descreve o piloto executado. O contrato candidato da expansão está
+em [E00_CONTRACT.md](E00_CONTRACT.md), incluindo migração de stats/save. Não
+implementar fórmulas novas parcialmente nem tratar exemplos futuros como runtime atual.
+
 ## Organização e limites
 
 `scenes/` contém composição visual; `scripts/core/` regras independentes de cenas;
@@ -201,8 +205,9 @@ do resultado; ela não causa dano nem processa input. Demais animações pausam.
 Scripts de preparação, fontes e prompts ficam no repositório; ver
 PLAYTEST_MAGE_ANIMATION.md e ANIMATION_PROMPTS_01.md.
 
-CLASS_ROSTER_BRAINSTORM.md registra oito bases, 16 evoluções e 28 híbridas como
-direção de design. Somente Espadachim e Mago estão no catálogo jogável atual.
+CLASS_ROSTER_BRAINSTORM.md preserva o brainstorm; HYBRIDS_56_EXPLORATION.md descreve
+o alvo de oito bases, 16 puras e 56 híbridas. E00_MVP_CLASS_CONTRACT.md fecha o demo
+em três bases/seis puras/seis híbridas. Só Espadachim e Mago são jogáveis hoje.
 
 Estado de run: classe, nível, XP, pontos, atributos, HP/mana, cartas, stacks,
 fase/encontro, pendências e seed. Não persistir essa estrutura no MVP.

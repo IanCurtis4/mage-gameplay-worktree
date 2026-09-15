@@ -1,0 +1,248 @@
+# Revisão E01 — personagens persistentes e alts
+
+## Aceite do usuário e integração
+
+O usuário aprovou o playtest do candidato `7fdecdd45650eee2c70a4563c85e7cae79929be0`
+e autorizou prosseguir para E02. E01 integrado em master por fast-forward na
+worktree de integração; o diretório habitual permaneceu em codex/playtest.
+Alterações locais de project.godot/addons/build/export/referências preservadas.
+O aceite cobre persistência e diagnóstico entregues, não o menu/combate integrados
+que serão desenvolvidos nos próximos épicos. Relatos anteriores são históricos.
+
+## E01.1 — separação de estado e IDs estáveis
+
+Data: 13/09/2026. Estado: **ACEITE TÉCNICO ASTRA**.
+
+- Base contratual: `247e304` (encerramento aceito de E00 sobre `73f7a03`).
+- Implementação inicial: `82dd8d1`.
+- Candidato aprovado: `02262cbe88dc8ef0c162c32c2b9d3c960296ea54`.
+- Branch isolada: `codex/e01-persistent-characters`.
+
+O passo introduz `ProfileState`, `CharacterState`, `BuildSnapshot` e o registro
+`IdentityIds`. `RunState` recebe uma cópia profunda da build e conserva apenas
+estado da run. O caminho legado do piloto continua aceitando troca de classe; uma
+run originada de personagem persistente rejeita essa troca sem mutar IDs, build,
+skills ou estado transitório.
+
+A primeira revisão encontrou e devolveu dois defeitos: troca de classe permitida
+numa run persistente e aceitação do par evolução/base vazio. O commit aprovado
+corrige ambos. Regressões cobrem as 12 origens de evolução, pares inválidos,
+isolamento entre alts, cópias de presets/equipamentos e separação da run.
+
+### Evidência
+
+Astra executou independentemente `tools/verify.ps1` com Godot 4.7.2 na worktree
+do E01: Foundation 20, Animações 30, Marco 1 63, Perseguição 41, UI 47,
+Arena 32, Layout 28, Mago 52 e Persistência 33: **346 verificações PASS**.
+Importação e smoke concluídos com exit 0; `git diff --check` sem problemas e
+worktree limpa no candidato revisado.
+
+### Limites e próximo gate
+
+Este aceite encerra somente E01.1. Escrita atômica, backup, migração e recuperação
+pertencem a E01.2; fachada, criação/seleção e XP idempotente pertencem a E01.3.
+Nenhum desses passos foi iniciado. `codex/playtest` e `master` não foram alteradas.
+
+## E01.2 — persistência versionada e recuperação
+
+Data: 14/09/2026. Estado: **ACEITE TÉCNICO ASTRA**.
+
+- Implementação inicial: `5717176`.
+- Correção de invariantes duráveis: `efb2b48`.
+- Candidato aprovado: `deaf37144e7ef78e64b064878e2221ce0e85e6c4`.
+
+O passo introduz o codec do schema 2, um escritor transacional por perfil,
+substituição por arquivo pendente validado, backup conservador, recuperação e
+migração reconhecida do schema 1. Falhas, revisões obsoletas, regressão dos
+contadores monotônicos e artefatos isolados bloqueiam o commit antes de publicar
+estado em memória. Schema futuro e catálogo incompatível permanecem intactos e
+somente leitura, sem recuo silencioso ao backup.
+
+O catálogo mínimo de persistência passou a validar origem, slot, categoria,
+carteira e tetos de rank do contrato E00: rank efetivo máximo 5 para ativas e 3
+para passivas. Skills da carteira de evolução declaram `required_evolution_id`;
+compras e presets só aceitam a evolução exata, inclusive quando o rank gratuito
+já tornaria a skill utilizável. Esta metadata é uma fronteira de validação do
+save, não a árvore completa de requisitos que pertence a E03.
+
+### Evidência
+
+Sol executou `tools/verify.ps1` com Godot 4.7.2: **435 verificações PASS**,
+incluindo 89 de E01.2, importação/editor e smoke com exit 0 e sem `ERROR`.
+Uma reprodução Luna separada aprovou 33 cenários de contadores, artefatos,
+schema futuro, catálogo/equipamentos e preservação byte a byte. Astra revisou o
+delta e repetiu a suíte completa com os mesmos 435 checks; sondas adicionais
+confirmaram rejeição de catálogo superdimensionado e de skill gratuita na
+ausência ou na evolução errada. `git diff --check` e a worktree ficaram limpos.
+
+### Limites e próximo gate
+
+Este aceite encerra somente E01.2 e libera E01.3-A: fachada transacional mínima
+para criar e selecionar personagem. `start_run` e recompensa idempotente ficam
+em E01.3-B após novo gate. Não há aceite de produto nem atualização de
+`codex/playtest` ou `master`.
+
+## E01.3-A — candidato da fachada criar/selecionar
+
+Data: 14/09/2026. Estado: **ACEITE TÉCNICO ASTRA**.
+
+- Implementação inicial: `f6d5001`.
+- Candidato aprovado: `ec865acf6068324ed92d30b70608cf83f6729736`.
+
+`ProfileFacade` é a dona da cópia publicada do perfil e recebe um único
+`ProfileStore`; nenhuma operação instancia um escritor alternativo. As APIs
+`create_character(request_id, expected_revision, display_name, base_class_id)` e
+`select_character(request_id, expected_revision, character_id)` exigem correlação
+e revisão originais. Repetição após commit encontra `stale_revision`, sem reservar
+novo ID ou publicar outra seleção.
+
+A criação ocorre sobre cópia: valida limite de oito e base disponível, deriva do
+catálogo os dois ranks ativos e o passivo gratuitos, desbloqueia/equipa starters,
+reserva o contador monotônico e seleciona o novo alt no mesmo commit. Catálogos
+posteriores podem marcar no máximo um equipamento `starter` por origem/slot; na
+ausência de conteúdo de equipamentos, o loadout vazio continua estruturalmente
+válido. A base só fica disponível quando o catálogo possui exatamente o kit inicial
+E00 (duas ativas e uma passiva gratuitas da carteira base), portanto Arqueiro
+permanece bloqueado até seu catálogo ser implementado.
+
+Se o writer retorna falha depois de um resultado potencialmente durável, a fachada
+relê o perfil. Ela confirma sucesso apenas se o estado inteiro coincide com o
+candidato esperado na revisão seguinte; estado antigo confirma falha sem publicação
+e qualquer terceiro resultado gera `result_uncertain`, mantendo a fachada somente
+leitura até `open_profile()` reconciliar explicitamente o disco. Criação e seleção
+também bloqueiam enquanto existir uma sessão de run durável.
+
+Falha ao reabrir ou ao atualizar o snapshot depois de `stale_revision` também
+herda o `error_code` e o estado somente leitura do store. O snapshot publicado
+anterior pode continuar visível, mas nenhum comando — nem uma seleção no-op — é
+certificado até uma reabertura explícita bem-sucedida.
+
+Ficam fora deste candidato: menu E02, aprendizado/progressão E03, escolha de
+`legacy_loadout`, `start_run` e concessão idempotente de recompensa E01.3-B.
+
+### Evidência e próximo gate
+
+Sol executou a suíte oficial completa com **482 verificações PASS**, incluindo
+47 da fachada. Astra revisou o delta, reproduziu a tentativa de seleção no-op
+após schema futuro e confirmou sua rejeição; repetiu os 482 checks com
+importação/editor e smoke sem `ERROR`. O aceite libera E01.3-B na mesma fachada:
+`start_run`, recompensa sequencial/idempotente, `end_run` e fechamento durável de
+sessão abandonada. Ainda não é aceite integrado do épico ou do produto.
+
+## E01.3-B — candidato de sessão e recompensas duráveis
+
+Data: 14/09/2026. Estado: **ACEITE TÉCNICO ASTRA**.
+
+`start_run(request_id, expected_revision)` valida personagem selecionado, preset
+e ausência de transação pendente. O mesmo commit reserva o `run_id`, incrementa o
+contador monotônico e `runs_started`, e abre o cursor durável em zero. Somente
+depois desse commit a fachada constrói e entrega um `RunState` a partir de
+`BuildSnapshot` profundo, com níveis derivados e ranks efetivos centralizados.
+Perfil estruturalmente válido mas sem nenhuma ativa no preset selecionado não está
+pronto para run.
+
+`grant_reward(request_id, expected_revision, run_id, sequence, reward_id)` recebe
+apenas um ID. `ProfileRewardResolver` é uma tabela local copiada e imutável que
+resolve XP, equipamentos e incrementos permitidos de estatísticas; a UI nunca
+fornece esses valores. Run divergente, sequência menor que 1 ou salto rejeitam;
+`sequence <= cursor` é no-op `already_applied`; somente `cursor+1` aplica XP
+saturado nos tetos E00, novos itens, estatísticas e cursor no mesmo commit ao
+personagem fixado pela sessão. Item ausente do catálogo bloqueia antes da mutação.
+Resolver estruturalmente inválido ou com item ausente do catálogo bloqueia o próprio
+`start_run` antes de reservar contador/sessão.
+
+Para recompensa, a fachada valida primeiro contexto somente leitura, pending,
+sessão, `run_id` e sequência. Se o cursor durável já confirmou a sequência, um
+retry literal retorna `already_applied` mesmo carregando a revisão original da
+requisição. A revisão esperada continua obrigatória antes de qualquer recompensa
+nova; portanto, uma sequência ainda não vista com revisão antiga retorna
+`stale_revision` sem resolver nem aplicar o payload.
+
+Se uma gravação falha depois de criar `profile.pending.json`, a reconciliação
+só o descarta quando seu perfil decodificado é exatamente o candidato da operação
+falha, com a revisão incrementada, e o primário ainda é exatamente o estado
+anterior. Esse descarte nunca promove o pending. Artefato órfão, inválido, de
+schema futuro ou divergente é preservado e exige recuperação somente leitura.
+Falhas injetadas em `validate_pending`, `backup` e `replace` provam que o retry da
+mesma sequência pode então gravar uma única vez; falha anterior a `write_pending`
+não deixa artefato.
+
+`end_run` aceita apenas `completed`, `death` ou `abandoned`, fecha a sessão e grava
+o contador correspondente uma vez. Sessão fechada rejeita replay. Ao reabrir um
+perfil com sessão salva, `open_profile()` primeiro grava `reward_session=null`,
+preserva recompensas confirmadas e avisos de recovery, mas não retoma combate nem
+inventa conclusão/morte/recompensa final. Falha nesse fechamento mantém a fachada
+somente leitura e impede nova run. Todas as operações reutilizam a reconciliação
+de resultados incertos aprovada em E01.3-A.
+
+O resolver padrão ainda não possui conteúdo; encontros e pools reais pertencem a
+E07/E06. Esta fachada não adiciona menu E02, compra/progressão E03, combate novo,
+arte ou retomada de combate após fechar o aplicativo.
+
+### Evidência e próximo gate
+
+O candidato inicial `103ce0b` recebeu duas correções no commit `2c04b5e`: replay
+literal de recompensa confirmada antes do teste de revisão e descarte conservador
+do pending exato deixado por falha conhecida. Sol executou **536 verificações
+PASS**, incluindo 54 de E01.3-B. Astra revisou o delta, reproduziu os dois cenários
+com sonda independente e repetiu a suíte completa na worktree limpa; import/editor
+e smoke terminaram sem `ERROR`.
+
+O aceite libera apenas E01.3-C: cena diagnóstica manual isolada e roteiro sobre a
+fachada real, sem substituir a cena principal, tocar saves normais ou construir o
+menu E02. A cena tornará a persistência verificável sem terminal, mas não comprova
+combate integrado da campanha. Não houve atualização de `codex/playtest` ou
+`master`, nem aceite de produto.
+
+## E01.3-C — candidato de diagnóstico manual
+
+Data: 14/09/2026. Estado: **AGUARDANDO ACEITE INTEGRADO ASTRA**.
+
+A cena isolada `scenes/diagnostics/e01_profile_diagnostic.tscn`, executável com F6,
+usa a fachada real e grava somente em `user://e01_manual_test/`. Ela não substitui
+a cena principal, não apaga o perfil de teste e nunca abre o save normal. Seus
+controles criam e selecionam os dois alts do diagnóstico, iniciam uma run, concedem
+uma recompensa explicitamente rotulada como simulação local, repetem literalmente
+a última requisição e encerram por vitória, morte ou abandono.
+
+A tela mostra revisão, XP base/job persistente, níveis e snapshot da run. Um augment
+de teste altera apenas a `RunState` em memória, permitindo observar que runtime não
+vaza entre runs ou alts. Reabrir a cena com uma sessão ativa exercita o fechamento
+durável real de sessão abandonada e registra visivelmente o `run_id` recuperado.
+O roteiro completo e os resultados esperados estão em `docs/PLAYTEST_E01.md`.
+
+### Evidência e limites do candidato
+
+O teste dedicado instancia a cena com um diretório temporário injetado, cobre os
+dois alts, retry literal sem XP duplicado, isolamento do runtime, controles em
+1280×720 e reabertura real sem limpeza entre instâncias. A suíte oficial passou com
+**543 verificações PASS**, incluindo 7 de E01.3-C, além de import/editor e smoke
+sem `ERROR`. Uma captura com OpenGL real em 1280×720 confirmou legibilidade e
+ausência de recortes.
+
+Este diagnóstico verifica persistência e recuperação sem terminal; não comprova
+combate integrado, diversão ou desempenho da campanha. Não adiciona menu E02,
+conteúdo/pools E06/E07, arte ou retomada de combate, e não atualiza
+`codex/playtest` ou `master` antes do aceite integrado.
+
+## Aceite técnico integrado Astra — candidato de playtest
+
+14/09/2026. **ACEITE TÉCNICO; AGUARDANDO ACEITE DO USUÁRIO.**
+Entrega original `2127a8e0c2bd2b399c1734208e75e5b69c12c040`; implementação
+rebased `caa701144935f4026529a15c37c039b5c977a9ba`, sobre `9255a40` (documentos
+do protocolo preservados). Backup em `codex/e01-reviewed-backup`. Branch de
+composição `codex/e01-playtest-candidate`; a branch original de Sol não foi reescrita.
+
+Astra revisou cena/roteiro e a captura OpenGL 1280×720 fornecida por Sol; controles
+e resultados legíveis. Executou independentemente verify completo na entrega e
+novamente na composição rebased: **543 checks PASS**, import/editor e smoke
+sem ERROR. O diff entre entrega e composição em scripts/scenes/tests/tools e
+project.godot é vazio. Conflitos de rebase eram exclusivamente documentais;
+foram preservados os contratos E00, o protocolo aprovado e o histórico de gates.
+
+Preparação autorizada para fast-forward do diretório habitual codex/playtest.
+Preservar project.godot local (GitPlugin), addons, build, export_presets e referências
+locais; não usar reset/stash/clean. F6 na cena de diagnóstico e roteiro PLAYTEST_E01.md.
+Persistência verificada por simulação sobre a fachada real; combate integrado,
+menu E02 e avaliação de diversão/desempenho não estão incluídos neste aceite.
+Master permanece na versão aceita anterior até o usuário aprovar este candidato.

@@ -7,14 +7,18 @@ que exigiam aceite entre rodadas de revisão e para preparar a versão de playte
 
 1. Usuário autoriza escopo e criação de uma tarefa com o modelo apropriado.
 2. Implementador trabalha em branch/worktree isolada e entrega commit e validações.
-3. Astra revisa código e valida as regras; solicita correções ao mesmo implementador
-   até aprovação técnica. Esse ciclo é automático dentro do bloco autorizado.
+3. O responsável verifica a entrega proporcionalmente ao risco: Luna usa
+   validadores e conferência de lote por Terra; Terra verifica UI/conteúdo sobre
+   padrões aprovados; Sol implementa sistemas críticos com revisão de Astra.
+   Astra aprova o candidato integrado. Correções são automáticas no escopo.
 4. Astra prepara rebase, resolve conflitos e repete verificações na composição final.
 5. Usuário faz playtest no projeto fixo, relata ajustes ou aprova o candidato.
 6. Somente com esse aceite Astra faz merge em master. Novos marcos precisam de autorização.
 
-Astra: arquitetura, revisão, integração e direção de arte. Sol: gameplay e sistemas.
-Terra: conteúdo e UI com contratos delimitados. Não criar tarefas duplicadas para
+Astra: contratos críticos, padrão visual e integração. Sol: gameplay e sistemas.
+Terra: condução de conteúdo/UI/VFX; Luna: lotes/configurações delimitados.
+Protocolo de pacotes aprovado em 14/09/2026: docs/REVIEW_WORK_PACKAGES.md.
+Não criar tarefas duplicadas para
 cada rodada de correção; continuar na tarefa original. Não ampliar o escopo durante revisão.
 
 ## Diretório fixo e branches
@@ -57,11 +61,19 @@ Preservar a branch da tarefa até confirmar a integração; não publicar/push a
 
 ## Limites de automação
 
-Revisão 13/09/2026: as conversas de LONG_TERM_EPICS.md são reservas, sem execução.
-Quando o usuário liberar um épico, Astra aprova cada passo e conduz correções com
-o implementador; usuário testa no fechamento do épico/subépico. E10 é separado por
+Revisão 14/09/2026: E00 aceito; E01 retomado, mantendo Sol na tarefa principal.
+E01.2 ainda exige gate técnico; depois seguem os pacotes E01.3 no mesmo épico.
+Os demais épicos permanecem reservas. Dentro do épico liberado, o condutor pode
+usar subagentes Luna/Terra para trabalho independente útil, sem ampliar escopo.
+Cada arquivo compartilhado tem um dono de escrita. Mudança de contrato, risco
+de perda/duplicação de progresso ou duas correções sem convergir exigem escalada.
+Primeiro padrão novo recebe revisão independente; variantes seguem por lote.
+Não há cadeia obrigatória pelos quatro modelos. O usuário testa no fechamento
+do épico/subépico. E10 é separado por
 família de classe e E11 por par direcional, cada qual com seu próprio playtest.
-As reservas não autorizam iniciar código, delegar, agendar ou continuar marcos.
+As reservas não autorizam iniciar código, delegar execução, agendar ou continuar marcos.
+Trocar modelo no próximo pacote está autorizado; não iniciar um épico apenas
+para alterar seu modelo. E01 conserva Sol.
 Estados/checkpoints e handoffs estão em LONG_TERM_EPICS.md e docs/epics/.
 
 O ciclo de revisão é executado durante a tarefa ativa, usando envio de mensagens e

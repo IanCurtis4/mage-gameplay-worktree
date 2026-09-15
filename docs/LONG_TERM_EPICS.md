@@ -1,12 +1,26 @@
 # Épicos do MVP expandido
 
-13/09/2026. **RESERVADO — NÃO EXECUTAR**. O usuário autorizou nesta rodada somente planejamento/criação das tarefas; a única implementação atual é o polimento de contato com o chão. Ativação futura exige mensagem explícita do usuário a Astra. Nenhum agendamento ou ciclo em segundo plano foi criado.
+> Atualização operacional aprovada em 14/09/2026: E00 aceito na base `247e304`;
+> E01 aceito tecnicamente (entrega `2127a8e`); aguardando playtest do usuário.
+> Adotado docs/REVIEW_WORK_PACKAGES.md: Luna para lotes fechados, Terra para
+> condução rotineira, Sol para sistemas, Astra para contratos críticos/integração.
+> Subagentes delimitados autorizados no épico liberado; modelos dos próximos
+> chats podem mudar na ativação/por pacote. E02–E11 permanecem reservas.
+> Esta atualização substitui abaixo o estado histórico de E00/E01 e as regras
+> de revisão Astra a cada passo/proibição absoluta de subagentes. Escopo de
+> produto e playtests permanecem. Mapa atual: docs/EPIC_THREADS.md.
+
+13/09/2026. **E00 ACEITO e encerrado; demais épicos sem execução nesta tarefa.**
+O usuário liberou E00 e pediu incorporar o handoff de híbridas e concluir sua análise.
+Contrato aprovado (`73f7a03`): [E00_CONTRACT.md](E00_CONTRACT.md); evidências e
+aceite técnico em [REVIEW_E00.md](REVIEW_E00.md). O usuário concedeu aceite de design e informou que iniciará E01 em outra conversa.
+Nenhuma implementação de expansão, agendamento ou ciclo em segundo plano foi iniciado.
 
 ## Produto e decisões recebidas
 
 - Personagem persistente com classe e possibilidade de alts. Menu inicial de seleção e build, expansível para lobby.
 - Base level e job level permanentes; pontos de atributos e pontos de skills distintos. A run limpa augments e estado transitório, não o personagem.
-- Evoluções 2-1/2-2/2-3 alternativas; 2-3 depende da base de origem. Ordem das bases distingue 56 híbridas. Níveis/requisitos/respec ainda precisam de números aprovados.
+- Evoluções 2-1/2-2/2-3 alternativas; 2-3 depende da base de origem. Ordem das bases distingue 56 híbridas. Níveis/requisitos/respec do demo foram aprovados no contrato E00.
 - Druida 2-1: **Naturalista** como nome de trabalho. **Filho de Gaia** é alternativa de nome/título. Nenhum efeito de gameplay depende do rótulo.
 - Primeiro demo: Espadachim, Mago e Arqueiro completos, seis puras e seis híbridas direcionais entre elas. O alvo amplo é oito bases, 16 puras e 56 híbridas: 80 identidades.
 - Augments continuam coletáveis no chão e escolhidos fora do combate. Mais opções significa variedade de pool/build; não necessariamente mais de três cartões por oferta.
@@ -15,11 +29,11 @@ O escopo antigo de MVP.md permanece como histórico do piloto. Esta revisão sub
 
 ## O que significa classe completa
 
-Uma identidade completa tem loop jogável, auto, ativas/passivas, níveis e requisitos, duas builds distinguíveis, opções de augment, ícones/VFX/animações, tooltip consistente, save/reset e contrajogo contra ranged/melee/boss. Proposta de orçamento: base com 6–10 ativas e 2–3 passivas; evolução com 4–6 ativas e 2–3 passivas exclusivas além de fundamentos herdados; híbrida no mesmo orçamento de uma pura. Quantidade equipada por vez será decidida em E00, sem obrigar dez teclas simultâneas. Kit completo não significa implementar indefinidamente todo 'etc.' de uma fantasia.
+Uma identidade completa tem loop jogável, auto, ativas/passivas, níveis e requisitos, duas builds distinguíveis, opções de augment, ícones/VFX/animações, tooltip consistente, save/reset e contrajogo contra ranged/melee/boss. Proposta de orçamento: base com 6–10 ativas e 2–3 passivas; evolução com 4–6 ativas e 2–3 passivas exclusivas além de fundamentos herdados; híbrida no mesmo orçamento de uma pura. O contrato E00 aprovado define cinco ativas e duas passivas equipadas por vez, além do auto e de comandos intrínsecos delimitados. Kit completo não significa implementar indefinidamente todo 'etc.' de uma fantasia.
 
 ## Modelo de dados planejado
 
-Conta/perfil contém personagens e coleção conforme ADR; CharacterState contém identidade/base/evolução, XP base/job, níveis, pontos e alocações, skills aprendidas e presets. RunState contém snapshot da build, HP/SP, cooldowns, efeitos, augments e encontro. Resources de catálogo permanecem imutáveis. Dados de save versionados, transações de recompensa idempotentes e testes em diretório temporário. Loot/cartas compartilhados ou pessoais, respec e limites de nível serão fixados em E00 antes de persistir formatos definitivos.
+Conta/perfil contém personagens e coleção conforme ADR; CharacterState contém identidade/base/evolução, XP base/job, níveis, pontos e alocações, skills aprendidas e presets. RunState contém snapshot da build, HP/SP, cooldowns, efeitos, augments e encontro. Resources de catálogo permanecem imutáveis. Dados de save versionados, transações de recompensa idempotentes e testes em diretório temporário. Propriedade de loot/cartas, respec e limites estão especificados e aceitos em E00_CONTRACT.md; a implementação pertence aos próximos épicos.
 
 ## Ordem, responsabilidade e custo
 
@@ -29,7 +43,7 @@ Uma conversa reservada por épico principal; subépicos reutilizam a conversa, c
 
 | Épico | Responsável inicial | Dependências | Estado |
 |---|---|---|---|
-| E00 — Contratos do MVP expandido | astra | aceite futuro para iniciar | RESERVADO |
+| E00 — Contratos do MVP expandido | astra | contrato 73f7a03 aprovado pelo usuário | ACEITO |
 | E01 — Personagens persistentes e alts | sol | E00 | RESERVADO |
 | E02 — Menu de personagem e build inicial | terra | E01 | RESERVADO |
 | E03 — Stats, job e níveis de habilidade | sol | E00, E01 | RESERVADO |
@@ -46,7 +60,8 @@ E02 e E03 podem ser independentes após E01, mas só executar em paralelo se Ast
 
 ## E00 — Contratos do MVP expandido
 
-Dono inicial: gpt-6-astra, esforço high. Dependências: nenhuma implementação autorizada.
+Dono inicial: gpt-6-astra, esforço high. E00.1–E00.3 entregues documentalmente;
+ver contrato final e revisão acima. Nenhuma implementação dos novos sistemas autorizada.
 
 Consolidar regras de personagem/conta/run, stats inspirados em RO, evolução 2-1/2-2/2-3 direcional e definição de kit completo.
 
