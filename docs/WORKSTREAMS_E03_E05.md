@@ -356,7 +356,7 @@ E02-CLOSE:
   verify_command: tools/verify.ps1 -GodotPath ./.tools/review-engine/Godot.exe
   user_playtest: ACCEPTED_MVP_SCOPE
 
-E03-A: BLOCKED_BY_E02
+E03-A: VERIFY_PENDING
 E03-L1: BLOCKED
 E03-C1: BLOCKED
 E03-B: BLOCKED
