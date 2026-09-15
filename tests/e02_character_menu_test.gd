@@ -31,10 +31,15 @@ func _initialize() -> void:
 	var profile: Variant = menu.facade.current_profile()
 	_check(selected["ok"] and menu.status_label.text == "Personagem selecionado." and profile.selected_character_id == profile.characters[0].character_id and menu.roster_list.get_item_text(0).contains("selecionado") and menu.build_summary_label.text.contains("Corte") and not menu.start_run_button.disabled, "selection persists through facade, exposes the build, and enables an explicit run start")
 	var viewport := get_root().get_viewport().get_visible_rect()
-	var editor_fit := true
-	for control: Control in [menu.preset_selector, menu.active_slot_a, menu.active_slot_b, menu.passive_slot, menu.weapon_selector, menu.armor_selector, menu.accessory_selector, menu.save_build_button]:
-		editor_fit = editor_fit and viewport.encloses(control.get_global_rect())
-	_check(viewport.encloses(menu.get_global_rect()) and menu.select_button.get_global_rect().size.y > 0.0 and editor_fit and menu.menu_scroll != null and viewport.encloses(menu.start_run_button.get_global_rect()), "menu editor scrolls independently and the run action stays visible in the viewport")
+	var editor_initialized := true
+	var editor_controls: Array[Control] = [menu.preset_selector, menu.weapon_selector, menu.armor_selector, menu.accessory_selector, menu.save_build_button]
+	for selector: OptionButton in menu.active_selectors:
+		editor_controls.append(selector)
+	for selector: OptionButton in menu.passive_selectors:
+		editor_controls.append(selector)
+	for control: Control in editor_controls:
+		editor_initialized = editor_initialized and control.get_global_rect().size.y > 0.0
+	_check(menu.active_selectors.size() == CharacterState.ACTIVE_SLOT_COUNT and menu.passive_selectors.size() == CharacterState.PASSIVE_SLOT_COUNT and viewport.encloses(menu.get_global_rect()) and menu.select_button.get_global_rect().size.y > 0.0 and editor_initialized and menu.menu_scroll != null and viewport.encloses(menu.start_run_button.get_global_rect()), "menu exposes every contracted build slot, scrolls the editor, and keeps the run action visible")
 	_check(menu._error_text(&"invalid_loadout", false).contains("skill ativa") and menu._error_text(&"recovery_required", false).contains("gravação pendente"), "start failures explain how the player can resolve the state")
 	menu.queue_free()
 	var blocked_directory := root_directory.path_join("blocked_profile")
@@ -68,4 +73,5 @@ func _cleanup_directory(path: String) -> void:
 func _check(condition: bool, label: String) -> void:
 	checks += 1
 	if not condition:
+		failures += 1
 		push_error(label)

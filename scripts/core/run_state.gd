@@ -36,6 +36,9 @@ static func from_build(new_run_id: String, source: BuildSnapshot) -> RunState:
 	state.reset()
 	return state
 
+func uses_persistent_build() -> bool:
+	return _uses_persistent_build
+
 func select_class(selected_class: StringName) -> bool:
 	if _uses_persistent_build:
 		return false

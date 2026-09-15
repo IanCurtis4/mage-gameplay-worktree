@@ -26,6 +26,8 @@ var preset_selector: OptionButton
 var active_slot_a: OptionButton
 var active_slot_b: OptionButton
 var passive_slot: OptionButton
+var active_selectors: Array[OptionButton] = []
+var passive_selectors: Array[OptionButton] = []
 var weapon_selector: OptionButton
 var armor_selector: OptionButton
 var accessory_selector: OptionButton
@@ -114,11 +116,12 @@ func _save_build() -> Dictionary:
 		return _show_result({"ok": false, "error_code": &"invalid_character_id"})
 	var character: Variant = profile.characters[_selected_index]
 	var preset: Dictionary = character.presets[character.selected_preset].duplicate(true)
-	var active_slots: Array[Variant] = preset["active_slots"].duplicate(true)
-	active_slots[0] = _selected_option(active_slot_a)
-	active_slots[1] = _selected_option(active_slot_b)
-	var passive_slots: Array[Variant] = preset["passive_slots"].duplicate(true)
-	passive_slots[0] = _selected_option(passive_slot)
+	var active_slots: Array[Variant] = []
+	for selector: OptionButton in active_selectors:
+		active_slots.append(_selected_option(selector))
+	var passive_slots: Array[Variant] = []
+	for selector: OptionButton in passive_selectors:
+		passive_slots.append(_selected_option(selector))
 	var equipped: Dictionary[StringName, Variant] = preset["equipped"].duplicate(true)
 	equipped[&"weapon"] = _selected_option(weapon_selector)
 	equipped[&"armor"] = _selected_option(armor_selector)
@@ -146,9 +149,10 @@ func _populate_build_editor(character: Variant) -> void:
 	if not options.get("ok", false):
 		return
 	var preset: Dictionary = character.presets[character.selected_preset]
-	_populate_selector(active_slot_a, options["active_skills"], preset["active_slots"][0])
-	_populate_selector(active_slot_b, options["active_skills"], preset["active_slots"][1])
-	_populate_selector(passive_slot, options["passive_skills"], preset["passive_slots"][0])
+	for index: int in active_selectors.size():
+		_populate_selector(active_selectors[index], options["active_skills"], preset["active_slots"][index])
+	for index: int in passive_selectors.size():
+		_populate_selector(passive_selectors[index], options["passive_skills"], preset["passive_slots"][index])
 	_populate_selector(weapon_selector, options["equipment_by_slot"][&"weapon"], preset["equipped"][&"weapon"])
 	_populate_selector(armor_selector, options["equipment_by_slot"][&"armor"], preset["equipped"][&"armor"])
 	_populate_selector(accessory_selector, options["equipment_by_slot"][&"accessory"], preset["equipped"][&"accessory"])
@@ -158,9 +162,10 @@ func _populate_selector(selector: OptionButton, values: Array, current: Variant)
 	selector.add_item("Nenhum")
 	selector.set_item_metadata(0, null)
 	var current_index := 0
+	var is_skill_selector := selector in active_selectors or selector in passive_selectors
 	for value: Variant in values:
 		var item_id: StringName = StringName(value)
-		selector.add_item(_skill_name(item_id) if selector in [active_slot_a, active_slot_b, passive_slot] else _equipment_name(item_id))
+		selector.add_item(_skill_name(item_id) if is_skill_selector else _equipment_name(item_id))
 		var index := selector.item_count - 1
 		selector.set_item_metadata(index, item_id)
 		if value == current:
@@ -359,9 +364,18 @@ func _build_ui() -> void:
 	editor_title.text = "Editar preset legal"
 	editor_title.add_theme_font_size_override("font_size", 18)
 	roster_column.add_child(editor_title)
-	active_slot_a = _build_selector(roster_column, "Ativa 1")
-	active_slot_b = _build_selector(roster_column, "Ativa 2")
-	passive_slot = _build_selector(roster_column, "Passiva")
+	for index: int in CharacterState.ACTIVE_SLOT_COUNT:
+		var selector := _build_selector(roster_column, "Ativa %d" % (index + 1))
+		active_selectors.append(selector)
+		if index == 0:
+			active_slot_a = selector
+		elif index == 1:
+			active_slot_b = selector
+	for index: int in CharacterState.PASSIVE_SLOT_COUNT:
+		var selector := _build_selector(roster_column, "Passiva %d" % (index + 1))
+		passive_selectors.append(selector)
+		if index == 0:
+			passive_slot = selector
 	weapon_selector = _build_selector(roster_column, "Arma")
 	armor_selector = _build_selector(roster_column, "Armadura")
 	accessory_selector = _build_selector(roster_column, "Acessório")

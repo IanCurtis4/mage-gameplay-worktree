@@ -10,6 +10,7 @@ const ARENA_OBSTACLES: Array[Rect2] = [
 const TARGET_ASSIST_RADIUS := BattleTargeting.ASSIST_RADIUS
 const TARGET_DIRECT_PADDING := BattleTargeting.DIRECT_PADDING
 const ACTOR_BODY_OFFSET := BattleTargeting.BODY_OFFSET
+const SKILL_KEYS := [KEY_Q, KEY_W, KEY_A, KEY_S, KEY_D]
 static var selected_class_id: StringName = &"swordsman"
 static var pending_run_state: RunState = null
 static var pending_run_facade: ProfileFacade = null
@@ -25,6 +26,8 @@ var encounter_index := 0
 var encounter_active := false
 var run_finished := false
 var _terminal_outcome: StringName = &"abandoned"
+var persistent_facade: ProfileFacade = null
+var _close_request_serial := 0
 
 var health_label: Label
 var mana_label: Label
@@ -45,6 +48,7 @@ var result_overlay: Control
 var result_panel: PanelContainer
 var result_title: Label
 var result_body: Label
+var restart_button: Button
 var _hovered_enemy: CombatActor
 var _selected_enemy: CombatActor
 var _feedback_serial := 0
@@ -62,7 +66,9 @@ func _ready() -> void:
 	rng.seed = Time.get_ticks_usec()
 	if pending_run_state != null:
 		run_state = pending_run_state
+		persistent_facade = pending_run_facade
 		pending_run_state = null
+		pending_run_facade = null
 	else:
 		run_state = RunState.new(selected_class_id)
 	navigation.configure(ARENA_BOUNDS, ARENA_OBSTACLES, 22.0)
@@ -175,15 +181,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func _key_skill(key: Key) -> StringName:
-	var by_key: Dictionary[Key, StringName] = {
-		KEY_Q: &"fireball" if player.is_mage() else &"slash",
-		KEY_W: &"fire_wall" if player.is_mage() else &"dash",
-		KEY_A: &"fire_spear",
-		KEY_S: &"ice_spear",
-		KEY_D: &"teleport",
-	}
-	var skill: StringName = by_key.get(key, &"")
-	return skill if skill in player.available_skill_ids() else &""
+	var index := SKILL_KEYS.find(key)
+	var skill_ids := player.available_skill_ids()
+	return skill_ids[index] if index >= 0 and index < skill_ids.size() else &""
 
 func _commit_skill(skill: StringName, point: Vector2) -> void:
 	if skill == &"" or get_tree().paused or run_finished or not player.is_alive():
@@ -496,27 +496,62 @@ func _show_result(victory: bool) -> void:
 	run_finished = true
 	_terminal_outcome = &"completed" if victory else &"death"
 	result_title.text = "Arena concluída!" if victory else "Você caiu em combate"
-	result_body.text = ("Os dois encontros do Marco 1 foram vencidos.\n" if victory else "A run terminou e todo o estado temporário será descartado.\n") + "Pressione R ou use o botão para reiniciar."
+	var next_step := "Pressione R ou use o botão para voltar ao menu e iniciar outra run." if _persistent_run_active() else "Pressione R ou use o botão para reiniciar."
+	restart_button.text = "Voltar ao menu (R)" if _persistent_run_active() else "Reiniciar arena (R)"
+	result_body.text = ("Os dois encontros do Marco 1 foram vencidos.\n" if victory else "A run terminou e todo o estado temporário será descartado.\n") + next_step
 	result_overlay.visible = true
 	get_tree().paused = true
 
 func _restart_run() -> void:
+	if _persistent_run_active():
+		_return_to_character_menu()
+		return
 	get_tree().paused = false
-	_close_persistent_run(_terminal_outcome)
 	get_tree().reload_current_scene()
 
 func _return_to_character_menu() -> void:
+	var closed := _close_persistent_run(_terminal_outcome)
+	if not closed["ok"]:
+		_report_run_close_failure(closed)
+		return
 	get_tree().paused = false
-	_close_persistent_run(_terminal_outcome)
 	get_tree().change_scene_to_file("res://scenes/character_menu.tscn")
 
-func _close_persistent_run(outcome: StringName) -> void:
-	if pending_run_facade == null or run_state == null or run_state.run_id.is_empty():
-		return
-	var profile := pending_run_facade.current_profile()
-	if profile != null and profile.reward_session != null:
-		pending_run_facade.end_run("run-menu-return", profile.revision, run_state.run_id, outcome)
-	pending_run_facade = null
+func _persistent_run_active() -> bool:
+	return persistent_facade != null and run_state != null and not run_state.run_id.is_empty()
+
+func _close_persistent_run(outcome: StringName) -> Dictionary:
+	if not _persistent_run_active():
+		return {"ok": true, "already_closed": true}
+	var profile := persistent_facade.current_profile()
+	if profile == null:
+		return {"ok": false, "error_code": &"profile_unavailable"}
+	if profile.reward_session == null:
+		persistent_facade = null
+		return {"ok": true, "already_closed": true}
+	_close_request_serial += 1
+	var result := persistent_facade.end_run("run-close-%d" % _close_request_serial, profile.revision, run_state.run_id, outcome)
+	if result["ok"]:
+		persistent_facade = null
+	return result
+
+func _report_run_close_failure(result: Dictionary) -> void:
+	var detail := _run_close_error_text(StringName(result.get("error_code", &"unknown")))
+	status_label.text = detail
+	if result_overlay.visible:
+		result_body.text = "A run continua aberta. %s\nTente novamente para voltar ao menu." % detail
+	else:
+		class_label.text = "Não foi possível encerrar esta run.\n%s\nTente novamente ou corrija o perfil antes de sair." % detail
+	get_tree().paused = true
+
+func _run_close_error_text(error_code: StringName) -> String:
+	match error_code:
+		&"save_in_progress": return "O perfil ainda está sendo salvo."
+		&"stale_revision": return "O perfil foi atualizado; tente novamente."
+		&"recovery_required": return "Há uma gravação pendente que precisa ser recuperada."
+		&"save_failed": return "Não foi possível gravar o encerramento da run."
+		&"profile_unavailable": return "O perfil não está disponível."
+		_: return "O encerramento da run falhou (%s)." % error_code
 
 func _open_class_menu() -> void:
 	if augment_overlay.visible or class_overlay.visible:
@@ -525,7 +560,7 @@ func _open_class_menu() -> void:
 		battle_controls.settings_overlay.visible = false
 	_cancel_casting()
 	_clear_hover()
-	class_label.text = "Classe atual: %s\nEscolher uma classe inicia uma run nova e limpa todo o estado temporário." % player.class_definition.display_name
+	class_label.text = "Esta run usa o personagem persistente %s.\nVolte ao menu para trocar personagem ou iniciar outra run." % player.class_definition.display_name if _persistent_run_active() else "Classe atual: %s\nEscolher uma classe inicia uma run nova e limpa todo o estado temporário." % player.class_definition.display_name
 	class_overlay.visible = true
 	get_tree().paused = true
 
@@ -535,6 +570,14 @@ func _close_class_menu() -> void:
 
 func _select_class(new_class_id: StringName) -> void:
 	if ClassCatalog.class_definition(new_class_id) == null:
+		return
+	if _persistent_run_active():
+		var closed := _close_persistent_run(&"abandoned")
+		if not closed["ok"]:
+			_report_run_close_failure(closed)
+			return
+		get_tree().paused = false
+		get_tree().change_scene_to_file("res://scenes/character_menu.tscn")
 		return
 	selected_class_id = new_class_id
 	get_tree().paused = false
@@ -605,7 +648,7 @@ func _update_hud() -> void:
 	for skill_id: StringName in player.available_skill_ids():
 		var definition := ClassCatalog.skill_definition(skill_id)
 		var state := "CONJURANDO %.1fs" % player.active_cast_remaining if player.active_cast_skill == skill_id else _skill_state(player.skill_cooldown(skill_id), definition.mana_cost)
-		skill_lines.append("%s  %s — %s" % [definition.input_key, definition.display_name, state])
+		skill_lines.append("%s  %s — %s" % [_skill_input_label(skill_id), definition.display_name, state])
 	skill_label.text = "\n".join(skill_lines)
 	augment_button.text = "Escolher augment (E) — %d pendente(s)" % run_state.pending_choices
 	augment_button.visible = run_state.pending_choices > 0
@@ -613,7 +656,12 @@ func _update_hud() -> void:
 		for skill_id: StringName in player.available_skill_ids():
 			var definition := ClassCatalog.skill_definition(skill_id)
 			var state := "CONJURANDO %.1fs" % player.active_cast_remaining if player.active_cast_skill == skill_id else _skill_state(player.skill_cooldown(skill_id), definition.mana_cost)
-			battle_controls.show_skill_state(skill_id, "%s · %s\n%d mana · %s" % [definition.input_key, definition.display_name.to_upper(), int(definition.mana_cost), state], cast_intent.active_skill == skill_id or player.active_cast_skill == skill_id)
+			battle_controls.show_skill_state(skill_id, "%s · %s\n%d mana · %s" % [_skill_input_label(skill_id), definition.display_name.to_upper(), int(definition.mana_cost), state], cast_intent.active_skill == skill_id or player.active_cast_skill == skill_id)
+
+func _skill_input_label(skill_id: StringName) -> String:
+	var index := player.available_skill_ids().find(skill_id)
+	var labels := ["Q", "W", "A", "S", "D"]
+	return labels[index] if index >= 0 and index < labels.size() else ClassCatalog.skill_definition(skill_id).input_key
 
 func _skill_state(cooldown: float, mana_cost: float) -> String:
 	if cooldown > 0.0:
@@ -753,12 +801,12 @@ func _build_ui() -> void:
 	result_body = _make_label("", 20, Color("d7ddea"))
 	result_body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	result_column.add_child(result_body)
-	var restart := Button.new()
-	restart.text = "Reiniciar arena (R)"
-	restart.custom_minimum_size = Vector2(260, 54)
-	restart.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	restart.pressed.connect(_restart_run)
-	result_column.add_child(restart)
+	restart_button = Button.new()
+	restart_button.text = "Reiniciar arena (R)"
+	restart_button.custom_minimum_size = Vector2(260, 54)
+	restart_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	restart_button.pressed.connect(_restart_run)
+	result_column.add_child(restart_button)
 	var return_menu := Button.new()
 	return_menu.text = "Voltar ao menu de personagens"
 	return_menu.custom_minimum_size = Vector2(320, 48)

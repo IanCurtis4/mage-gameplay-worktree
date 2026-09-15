@@ -71,7 +71,7 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 	set_animation_kind(class_id)
 	max_mana = float(stats["max_mana"])
 	mana = max_mana
-	for skill_id: StringName in class_definition.skill_ids:
+	for skill_id: StringName in available_skill_ids():
 		mage_cooldowns[skill_id] = 0.0
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 
@@ -79,6 +79,16 @@ func is_mage() -> bool:
 	return class_id == &"mage"
 
 func available_skill_ids() -> Array[StringName]:
+	if run_state != null and run_state.uses_persistent_build():
+		var equipped: Array[StringName] = []
+		for skill_id: Variant in run_state.build_snapshot.active_slots:
+			if skill_id == null:
+				continue
+			var normalized_id := StringName(skill_id)
+			if normalized_id in equipped or ClassCatalog.skill_definition(normalized_id) == null or int(run_state.skill_levels.get(normalized_id, 0)) <= 0:
+				continue
+			equipped.append(normalized_id)
+		return equipped
 	return class_definition.skill_ids.duplicate()
 
 func apply_run_modifiers(state: RunState) -> void:
@@ -396,7 +406,7 @@ func _magic_power(skill_id: StringName) -> float:
 	return float(stats["magic_attack"]) * ClassCatalog.skill_definition(skill_id).power
 
 func _can_spend(skill_id: StringName) -> bool:
-	return is_alive() and skill_cooldown(skill_id) <= 0.0 and mana >= skill_cost(skill_id)
+	return skill_id in available_skill_ids() and is_alive() and skill_cooldown(skill_id) <= 0.0 and mana >= skill_cost(skill_id)
 
 func _spend(skill_id: StringName) -> void:
 	var definition := ClassCatalog.skill_definition(skill_id)
@@ -485,11 +495,16 @@ func can_basic_attack(enemy: CombatActor, retain: bool = false) -> bool:
 
 func _with_passive(increased: Dictionary) -> Dictionary:
 	var result: Dictionary = increased.duplicate()
-	if class_id == &"swordsman":
+	if _has_equipped_passive(&"swordsman_resistance"):
 		result["defense"] = float(result.get("defense", 0.0)) + 0.50
-	elif class_id == &"mage":
+	elif _has_equipped_passive(&"mage_mana_regeneration"):
 		result["mana_regen_per_second"] = float(result.get("mana_regen_per_second", 0.0)) + 0.50
 	return result
+
+func _has_equipped_passive(passive_id: StringName) -> bool:
+	if run_state == null or not run_state.uses_persistent_build():
+		return (class_id == &"swordsman" and passive_id == &"swordsman_resistance") or (class_id == &"mage" and passive_id == &"mage_mana_regeneration")
+	return passive_id in run_state.build_snapshot.passive_slots and int(run_state.skill_levels.get(passive_id, 0)) > 0
 
 func _draw() -> void:
 	super._draw()
