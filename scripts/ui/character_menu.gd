@@ -31,6 +31,8 @@ var armor_selector: OptionButton
 var accessory_selector: OptionButton
 var save_build_button: Button
 var start_run_button: Button
+var menu_scroll: ScrollContainer
+var menu_panel: VBoxContainer
 
 func set_profile_directory(directory: String) -> void:
 	profile_directory = directory
@@ -41,6 +43,8 @@ func set_profile_facade(value: RefCounted) -> void:
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_build_ui()
+	_layout_panel()
+	get_viewport().size_changed.connect(_layout_panel)
 	_open_profile()
 
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -66,19 +70,19 @@ func create_character(base_class_id: StringName) -> Dictionary:
 	var result: Dictionary = facade.create_character(_request_id("create"), profile.revision, display_name, base_class_id)
 	if result.get("ok", false):
 		name_input.clear()
-	return _show_result(result)
+	return _show_result(result, "Personagem criado.")
 
 func select_character_at(index: int) -> Dictionary:
 	var profile: Variant = facade.current_profile() if facade != null else null
 	if profile == null or index < 0 or index >= profile.characters.size():
 		return _show_result({"ok": false, "error_code": &"invalid_character_id"})
 	var character: Variant = profile.characters[index]
-	return _show_result(facade.select_character(_request_id("select"), profile.revision, character.character_id))
+	return _show_result(facade.select_character(_request_id("select"), profile.revision, character.character_id), "Personagem selecionado.")
 
 func _open_profile() -> void:
 	if facade == null:
 		facade = ProfileFacadeScript.new(ProfileStoreScript.new(profile_directory, ProfileCatalogScript.pilot()))
-	_show_result(facade.open_profile())
+	_show_result(facade.open_profile(), "Perfil carregado.")
 
 func _select_current_character() -> void:
 	select_character_at(_selected_index)
@@ -102,7 +106,7 @@ func _choose_preset(preset_index: int) -> Dictionary:
 	if profile == null or _selected_index < 0:
 		return _show_result({"ok": false, "error_code": &"invalid_character_id"})
 	var character: Variant = profile.characters[_selected_index]
-	return _show_result(facade.select_preset(_request_id("preset"), profile.revision, character.character_id, preset_index))
+	return _show_result(facade.select_preset(_request_id("preset"), profile.revision, character.character_id, preset_index), "Preset selecionado.")
 
 func _save_build() -> Dictionary:
 	var profile: Variant = facade.current_profile() if facade != null else null
@@ -119,7 +123,7 @@ func _save_build() -> Dictionary:
 	equipped[&"weapon"] = _selected_option(weapon_selector)
 	equipped[&"armor"] = _selected_option(armor_selector)
 	equipped[&"accessory"] = _selected_option(accessory_selector)
-	return _show_result(facade.update_preset(_request_id("build"), profile.revision, character.character_id, character.selected_preset, active_slots, passive_slots, equipped))
+	return _show_result(facade.update_preset(_request_id("build"), profile.revision, character.character_id, character.selected_preset, active_slots, passive_slots, equipped), "Preset salvo.")
 
 func _start_run() -> Dictionary:
 	var profile: Variant = facade.current_profile() if facade != null else null
@@ -130,7 +134,7 @@ func _start_run() -> Dictionary:
 		RunController.pending_run_state = result["run_state"]
 		RunController.pending_run_facade = facade
 		get_tree().change_scene_to_file("res://scenes/main.tscn")
-	return result
+	return _show_result(result, "Run iniciada.")
 
 func _selected_option(selector: OptionButton) -> Variant:
 	if selector.selected < 0:
@@ -163,14 +167,14 @@ func _populate_selector(selector: OptionButton, values: Array, current: Variant)
 			current_index = index
 	selector.select(current_index)
 
-func _show_result(result: Dictionary) -> Dictionary:
+func _show_result(result: Dictionary, success_text: String = "Perfil atualizado.") -> Dictionary:
 	var ok: bool = result.get("ok", false)
 	if ok:
 		_read_only = false
 	elif result.has("read_only"):
 		_read_only = result["read_only"]
 	if ok:
-		status_label.text = "Perfil atualizado." if not result.get("already_applied", false) else "Este personagem já está selecionado."
+		status_label.text = success_text if not result.get("already_applied", false) else "Essa escolha já está ativa."
 	else:
 		status_label.text = _error_text(StringName(result.get("error_code", &"unknown")), result.get("read_only", false))
 	_refresh()
@@ -218,13 +222,21 @@ func _refresh() -> void:
 
 func _error_text(error_code: StringName, read_only: bool) -> String:
 	if read_only:
-		return "Perfil em modo somente leitura (%s). Nenhuma alteração foi feita." % error_code
+		return "Perfil em modo somente leitura. %s" % _error_text(error_code, false)
 	match error_code:
 		&"save_in_progress": return "O perfil ainda está sendo salvo. Tente novamente em instantes."
 		&"stale_revision": return "O perfil mudou; a lista foi atualizada. Escolha novamente."
 		&"character_limit": return "Você atingiu o limite de personagens."
 		&"run_active": return "Há uma run ativa. Volte ao menu após encerrá-la."
 		&"invalid_origin": return "Essa classe ainda não está disponível."
+		&"invalid_character_id": return "O personagem selecionado não existe mais. Escolha outro personagem."
+		&"invalid_presets": return "O preset contém skills inválidas ou repetidas. Revise os slots escolhidos."
+		&"invalid_equipment": return "O equipamento escolhido não pertence a este personagem ou ao slot informado."
+		&"invalid_loadout": return "Configure ao menos uma skill ativa válida antes de iniciar a run."
+		&"recovery_required": return "Há uma gravação pendente que precisa ser recuperada antes de iniciar uma run."
+		&"unsupported_schema": return "Este perfil foi criado por uma versão mais nova do jogo."
+		&"invalid_catalog": return "O catálogo de personagem está incompatível com este perfil."
+		&"save_failed": return "Não foi possível salvar o perfil. Nenhuma alteração foi confirmada."
 		_: return "Não foi possível atualizar o perfil (%s)." % error_code
 
 func _class_name(base_class_id: StringName) -> String:
@@ -271,33 +283,46 @@ func _request_id(action: String) -> String:
 	_request_serial += 1
 	return "character-menu-%s-%d" % [action, _request_serial]
 
+func _layout_panel() -> void:
+	if menu_panel == null:
+		return
+	var half_height := clampf(get_viewport_rect().size.y * 0.5 - 20.0, 96.0, 300.0)
+	menu_panel.offset_top = -half_height
+	menu_panel.offset_bottom = half_height
+
 func _build_ui() -> void:
 	var background := ColorRect.new()
 	background.color = Color("101722")
 	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(background)
-	var panel := VBoxContainer.new()
-	panel.set_anchors_preset(Control.PRESET_CENTER)
-	panel.offset_left = -410
-	panel.offset_top = -300
-	panel.offset_right = 410
-	panel.offset_bottom = 300
-	panel.add_theme_constant_override("separation", 14)
-	add_child(panel)
+	menu_panel = VBoxContainer.new()
+	menu_panel.set_anchors_preset(Control.PRESET_CENTER)
+	menu_panel.offset_left = -410
+	menu_panel.offset_right = 410
+	menu_panel.add_theme_constant_override("separation", 14)
+	add_child(menu_panel)
 	var title := Label.new()
 	title.text = "RagRPG — Personagens"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 32)
-	panel.add_child(title)
+	menu_panel.add_child(title)
 	status_label = Label.new()
 	status_label.name = "ProfileStatus"
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	panel.add_child(status_label)
+	menu_panel.add_child(status_label)
+	menu_scroll = ScrollContainer.new()
+	menu_scroll.name = "MenuScroll"
+	menu_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	menu_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	menu_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	menu_scroll.follow_focus = true
+	menu_panel.add_child(menu_scroll)
 	var content := HBoxContainer.new()
-	content.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	content.add_theme_constant_override("separation", 18)
-	panel.add_child(content)
+	menu_scroll.add_child(content)
 	var roster_column := VBoxContainer.new()
 	roster_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	content.add_child(roster_column)
@@ -345,11 +370,6 @@ func _build_ui() -> void:
 	save_build_button.custom_minimum_size = Vector2(0, 40)
 	save_build_button.pressed.connect(_save_build)
 	roster_column.add_child(save_build_button)
-	start_run_button = Button.new()
-	start_run_button.text = "Iniciar run com este personagem"
-	start_run_button.custom_minimum_size = Vector2(0, 44)
-	start_run_button.pressed.connect(_start_run)
-	roster_column.add_child(start_run_button)
 	var create_column := VBoxContainer.new()
 	create_column.custom_minimum_size = Vector2(310, 0)
 	create_column.add_theme_constant_override("separation", 10)
@@ -380,6 +400,13 @@ func _build_ui() -> void:
 	notice.text = "A arena será liberada após a configuração de build."
 	notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	create_column.add_child(notice)
+	start_run_button = Button.new()
+	start_run_button.name = "StartRun"
+	start_run_button.text = "Iniciar run com este personagem"
+	start_run_button.tooltip_text = "Abrir a arena usando o personagem selecionado"
+	start_run_button.custom_minimum_size = Vector2(0, 48)
+	start_run_button.pressed.connect(_start_run)
+	menu_panel.add_child(start_run_button)
 
 func _build_selector(parent: Container, label_text: String) -> OptionButton:
 	var row := HBoxContainer.new()
