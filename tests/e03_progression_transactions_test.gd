@@ -175,6 +175,13 @@ func _check_failure_retry_reload_and_uncertainty() -> void:
 	_check(uncertain.current_profile().character_by_id(uncertain_seed["character_id"]).attribute_allocations[&"dex"] == 2, "uncertain recovery exposes exactly the committed allocation")
 
 func _check_catalog_invariants() -> void:
+	var sealed := ProfileCatalog.pilot()
+	var sealed_slash := sealed.skill_metadata(&"slash")
+	var rejected_sealed_skill := sealed.add_skill(&"sealed_skill", [&"swordsman"], ProfileCatalog.ACTIVE, ProfileCatalog.BASE_WALLET, 0, 1)
+	var rejected_sealed_equipment := sealed.add_equipment(&"sealed_sword", &"weapon", [&"swordsman"])
+	_check(not rejected_sealed_skill and not rejected_sealed_equipment and sealed.is_valid(), "rejected writes cannot invalidate a sealed catalog")
+	_check(sealed.skill_metadata(&"slash") == sealed_slash and sealed.skill_metadata(&"sealed_skill").is_empty() and sealed.equipment_metadata(&"sealed_sword").is_empty(), "sealed catalog content remains unchanged after rejected writes")
+
 	var cyclic := ProfileCatalog.pilot({}, {
 		&"cycle_a": _skill(ProfileCatalog.BASE_WALLET, 0, 1, &"", {1: {"job_level": 2, "skill_ranks": {&"cycle_b": 1}}}),
 		&"cycle_b": _skill(ProfileCatalog.BASE_WALLET, 0, 1, &"", {1: {"job_level": 2, "skill_ranks": {&"cycle_a": 1}}}),
@@ -182,8 +189,38 @@ func _check_catalog_invariants() -> void:
 	var duplicate := ProfileCatalog.pilot({}, {
 		&"slash": _skill(ProfileCatalog.BASE_WALLET, 0, 1),
 	})
+	var unknown_rank := ProfileCatalog.pilot({}, {
+		&"unknown_rank": _skill(ProfileCatalog.BASE_WALLET, 0, 1, &"", {
+			"wrong_rank": {"job_level": 40, "skill_ranks": {&"missing": 5}},
+		}),
+	})
+	var out_of_range := ProfileCatalog.pilot({}, {
+		&"out_of_range": _skill(ProfileCatalog.BASE_WALLET, 0, 1, &"", {
+			2: {"job_level": 2},
+		}),
+	})
+	var unknown_field := ProfileCatalog.pilot({}, {
+		&"unknown_field": _skill(ProfileCatalog.BASE_WALLET, 0, 1, &"", {
+			1: {"job_level": 2, "skill_ranks": {}, "job_lvel": 3},
+		}),
+	})
+	var conflicting_aliases := ProfileCatalog.pilot({}, {
+		&"alias_conflict": _skill(ProfileCatalog.BASE_WALLET, 0, 1, &"", {
+			1: {"job_level": 2},
+			"1": {"job_level": 3},
+		}),
+	})
+	var defaults := ProfileCatalog.pilot({}, {
+		&"defaults": _skill(ProfileCatalog.BASE_WALLET, 0, 2, &"", {
+			"1": {"job_level": 2},
+		}),
+	})
 	_check(not cyclic.is_valid(), "catalog rejects cyclic skill prerequisites before any profile is loaded")
 	_check(not duplicate.is_valid(), "catalog rejects duplicate skill IDs instead of silently replacing immutable definitions")
+	_check(not unknown_rank.is_valid() and not out_of_range.is_valid(), "catalog rejects unknown and out-of-range rank requirement keys")
+	_check(not unknown_field.is_valid() and not conflicting_aliases.is_valid(), "catalog rejects unknown fields and conflicting numeric aliases before normalization")
+	var default_requirements: Dictionary = defaults.skill_metadata(&"defaults")["rank_requirements"]
+	_check(defaults.is_valid() and default_requirements[1]["job_level"] == 2 and default_requirements[1]["skill_ranks"].is_empty() and default_requirements[2]["job_level"] == 1, "omitted known fields and ranks keep documented wallet defaults")
 
 func _catalog() -> ProfileCatalog:
 	return ProfileCatalog.pilot({}, {

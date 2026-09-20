@@ -56,10 +56,16 @@ func add_skill(
 	required_evolution_id: StringName = &"",
 	rank_requirements: Dictionary = {}
 ) -> bool:
-	if _sealed or _skills.has(skill_id):
+	if _sealed:
+		return false
+	if _skills.has(skill_id):
 		_build_error = true
 		return false
 	var total_rank := free_rank + max_purchased_rank
+	var requirements_result := _validated_rank_requirements(total_rank, wallet, rank_requirements)
+	if not requirements_result["ok"]:
+		_build_error = true
+		return false
 	_skills[skill_id] = {
 		"allowed_base_classes": allowed_base_classes.duplicate(),
 		"category": category,
@@ -67,12 +73,14 @@ func add_skill(
 		"free_rank": free_rank,
 		"max_purchased_rank": max_purchased_rank,
 		"required_evolution_id": required_evolution_id,
-		"rank_requirements": _normalized_rank_requirements(total_rank, wallet, rank_requirements),
+		"rank_requirements": requirements_result["requirements"],
 	}
 	return true
 
 func add_equipment(item_id: StringName, slot: StringName, allowed_base_classes: Array[StringName], starter: bool = false) -> bool:
-	if _sealed or _equipment.has(item_id):
+	if _sealed:
+		return false
+	if _equipment.has(item_id):
 		_build_error = true
 		return false
 	_equipment[item_id] = {
@@ -297,19 +305,56 @@ func _is_initial_skill(metadata: Dictionary, base_class_id: StringName) -> bool:
 		and base_class_id in metadata["allowed_base_classes"]
 	)
 
-func _normalized_rank_requirements(total_rank: int, wallet: StringName, provided: Dictionary) -> Dictionary:
+func _validated_rank_requirements(total_rank: int, wallet: StringName, provided: Dictionary) -> Dictionary:
+	if total_rank < 1:
+		return {"ok": false}
+	var declarations: Dictionary[int, Dictionary] = {}
+	for raw_rank: Variant in provided:
+		var rank := _rank_key(raw_rank)
+		if rank < 1 or rank > total_rank or declarations.has(rank):
+			return {"ok": false}
+		var raw_requirement: Variant = provided[raw_rank]
+		if not raw_requirement is Dictionary:
+			return {"ok": false}
+		var fields: Dictionary[String, Variant] = {}
+		for raw_field: Variant in raw_requirement:
+			if not (raw_field is String or raw_field is StringName):
+				return {"ok": false}
+			var field := String(raw_field)
+			if field not in ["job_level", "skill_ranks"] or fields.has(field):
+				return {"ok": false}
+			fields[field] = raw_requirement[raw_field]
+		var default_job_level: int = ProgressionRules.UNEVOLVED_MAX_JOB_LEVEL if wallet == EVOLUTION_WALLET else 1
+		var job_level: Variant = fields.get("job_level", default_job_level)
+		var skill_ranks: Variant = fields.get("skill_ranks", {})
+		if not job_level is int or int(job_level) < 1 or int(job_level) > ProgressionRules.MAX_JOB_LEVEL:
+			return {"ok": false}
+		if not skill_ranks is Dictionary:
+			return {"ok": false}
+		declarations[rank] = {
+			"job_level": int(job_level),
+			"skill_ranks": skill_ranks.duplicate(true),
+		}
+
 	var normalized: Dictionary = {}
 	for rank: int in range(1, total_rank + 1):
-		var raw: Variant = provided.get(rank, provided.get(str(rank), {}))
-		if not raw is Dictionary:
-			normalized[rank] = raw
-			continue
 		var default_job_level: int = ProgressionRules.UNEVOLVED_MAX_JOB_LEVEL if wallet == EVOLUTION_WALLET else 1
-		normalized[rank] = {
-			"job_level": raw.get("job_level", default_job_level),
-			"skill_ranks": raw.get("skill_ranks", {}).duplicate(true) if raw.get("skill_ranks", {}) is Dictionary else raw.get("skill_ranks"),
-		}
-	return normalized
+		normalized[rank] = declarations.get(rank, {
+			"job_level": default_job_level,
+			"skill_ranks": {},
+		}).duplicate(true)
+	return {"ok": true, "requirements": normalized}
+
+func _rank_key(raw_rank: Variant) -> int:
+	if raw_rank is int:
+		return int(raw_rank)
+	if not (raw_rank is String or raw_rank is StringName):
+		return -1
+	var text := String(raw_rank)
+	if text.is_empty():
+		return -1
+	var parsed := text.to_int()
+	return parsed if text == str(parsed) else -1
 
 func _rank_requirements_are_valid(skill_id: StringName, metadata: Dictionary) -> bool:
 	var total_rank := int(metadata["free_rank"]) + int(metadata["max_purchased_rank"])
