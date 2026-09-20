@@ -1,5 +1,25 @@
 # Revisão E03-B — 20/09/2026
 
+## Aceite da nova entrega
+
+**APROVADO tecnicamente:** `690d092369341ddee8bd6be6a97e14331f54db4a`,
+incluindo correção `4c24ec4`. Revisão focalizada confirmou os dois reparos.
+Reprodução independente: escrita rejeitada conserva catálogo válido;
+declaração malformada resulta em catálogo inválido. Regressões cobrem também
+equipamentos, campos desconhecidos, ranks fora de faixa e aliases conflitantes.
+
+`tools/verify.ps1` com Godot 4.7.2 passou integralmente, com importação e smoke;
+suíte E03-B: 42 checks. Handoff de APIs/erros/limites entregue em
+`docs/E03_B_PROGRESSION.md` na branch E03. Nenhum bloqueador novo identificado.
+Os dez `.import` alterados pela validação são efeitos locais da importação,
+fora da entrega revisada; não foram descartados nem integrados.
+
+E03-C1 liberado: migração coerente dos consumidores de stats com Sol responsável
+pelo combate compartilhado. E03 completo ainda depende da integração e UI.
+Não houve merge em master nem atualização do código de playtest nesta revisão.
+
+## Parecer anterior (superado pelas correções)
+
 Candidato `f217d9954c895dc3e24c7095a5b78e49de454088`.
 **Aceite pendente de duas correções de catálogo.**
 
