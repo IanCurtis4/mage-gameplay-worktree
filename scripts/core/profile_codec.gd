@@ -245,6 +245,14 @@ static func _decode_rank_map(raw: Variant, base_class_id: StringName, evolution_
 	var evolved := not evolution_id.is_empty()
 	if base_spent > ProgressionRules.base_skill_points_granted(job_xp, evolved) or evolution_spent > ProgressionRules.evolution_skill_points_granted(job_xp, evolved):
 		return _error(&"overspent_skill_points")
+	var requirements := catalog.validate_purchased_ranks(
+		base_class_id,
+		evolution_id,
+		ProgressionRules.job_level_for_xp(job_xp, evolved),
+		ranks
+	)
+	if not requirements["ok"]:
+		return requirements
 	return {"ok": true, "ranks": ranks}
 
 static func _decode_equipped(raw: Variant) -> Dictionary:

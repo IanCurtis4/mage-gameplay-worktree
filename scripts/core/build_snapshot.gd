@@ -53,3 +53,15 @@ func copy_snapshot() -> BuildSnapshot:
 	copy.equipped = equipped.duplicate(true)
 	copy.build_version = build_version
 	return copy
+
+func stat_breakdown(modifier_sources: Array[Dictionary] = []) -> StatBreakdown:
+	var result := try_stat_breakdown(modifier_sources)
+	return result.get("breakdown") if result["ok"] else null
+
+func try_stat_breakdown(modifier_sources: Array[Dictionary] = []) -> Dictionary:
+	return StatCalculator.try_calculate(
+		IdentityIds.initial_attributes(base_class_id),
+		attribute_allocations.duplicate(true),
+		base_level,
+		modifier_sources.duplicate(true)
+	)

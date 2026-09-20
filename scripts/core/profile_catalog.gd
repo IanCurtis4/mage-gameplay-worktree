@@ -12,6 +12,7 @@ const MAX_PASSIVE_RANK := 3
 var _skills: Dictionary[StringName, Dictionary] = {}
 var _equipment: Dictionary[StringName, Dictionary] = {}
 var _sealed := false
+var _build_error := false
 
 static func pilot(additional_equipment: Dictionary = {}, additional_skills: Dictionary = {}) -> ProfileCatalog:
 	var catalog := ProfileCatalog.new()
@@ -40,7 +41,8 @@ static func pilot(additional_equipment: Dictionary = {}, additional_skills: Dict
 			metadata.get("wallet", &""),
 			int(metadata.get("free_rank", -1)),
 			int(metadata.get("max_purchased_rank", -1)),
-			metadata.get("required_evolution_id", &"")
+			metadata.get("required_evolution_id", &""),
+			metadata.get("rank_requirements", {})
 		)
 	return catalog.seal()
 
@@ -51,10 +53,13 @@ func add_skill(
 	wallet: StringName,
 	free_rank: int,
 	max_purchased_rank: int,
-	required_evolution_id: StringName = &""
+	required_evolution_id: StringName = &"",
+	rank_requirements: Dictionary = {}
 ) -> bool:
-	if _sealed:
+	if _sealed or _skills.has(skill_id):
+		_build_error = true
 		return false
+	var total_rank := free_rank + max_purchased_rank
 	_skills[skill_id] = {
 		"allowed_base_classes": allowed_base_classes.duplicate(),
 		"category": category,
@@ -62,11 +67,13 @@ func add_skill(
 		"free_rank": free_rank,
 		"max_purchased_rank": max_purchased_rank,
 		"required_evolution_id": required_evolution_id,
+		"rank_requirements": _normalized_rank_requirements(total_rank, wallet, rank_requirements),
 	}
 	return true
 
 func add_equipment(item_id: StringName, slot: StringName, allowed_base_classes: Array[StringName], starter: bool = false) -> bool:
-	if _sealed:
+	if _sealed or _equipment.has(item_id):
+		_build_error = true
 		return false
 	_equipment[item_id] = {
 		"slot": slot,
@@ -83,13 +90,19 @@ func copy_catalog() -> ProfileCatalog:
 	var copy := ProfileCatalog.new()
 	copy._skills = _skills.duplicate(true)
 	copy._equipment = _equipment.duplicate(true)
+	copy._build_error = _build_error
 	return copy.seal()
 
 func is_valid() -> bool:
-	for metadata: Dictionary in _skills.values():
+	if _build_error:
+		return false
+	for skill_id: StringName in _skills:
+		if not IdentityIds.is_technical_id(String(skill_id)):
+			return false
+		var metadata: Dictionary = _skills[skill_id]
 		if metadata.get("category") not in [ACTIVE, PASSIVE] or metadata.get("wallet") not in [BASE_WALLET, EVOLUTION_WALLET]:
 			return false
-		if int(metadata.get("free_rank", -1)) < 0 or int(metadata.get("max_purchased_rank", -1)) < 0:
+		if int(metadata.get("free_rank", -1)) < 0 or int(metadata.get("free_rank", -1)) > 1 or int(metadata.get("max_purchased_rank", -1)) < 0:
 			return false
 		var total_rank := int(metadata["free_rank"]) + int(metadata["max_purchased_rank"])
 		var rank_cap := MAX_ACTIVE_RANK if metadata["category"] == ACTIVE else MAX_PASSIVE_RANK
@@ -103,6 +116,10 @@ func is_valid() -> bool:
 				return false
 		elif not required_evolution_id.is_empty():
 			return false
+		if not _rank_requirements_are_valid(skill_id, metadata):
+			return false
+	if _has_requirement_cycle():
+		return false
 	var starter_slots: Dictionary[StringName, bool] = {}
 	for metadata: Dictionary in _equipment.values():
 		if metadata.get("slot") not in IdentityIds.equipment_slots() or not _valid_origins(metadata.get("allowed_base_classes")):
@@ -183,6 +200,54 @@ func effective_skill_ranks(base_class_id: StringName, evolution_id: StringName, 
 			effective[skill_id] = rank
 	return effective
 
+func skill_points_spent(purchased_ranks: Dictionary[StringName, int], wallet: StringName) -> int:
+	var spent := 0
+	for skill_id: StringName in purchased_ranks:
+		var metadata: Dictionary = _skills.get(skill_id, {})
+		if not metadata.is_empty() and metadata["wallet"] == wallet:
+			spent += int(purchased_ranks[skill_id])
+	return spent
+
+func check_rank_requirements(
+	skill_id: StringName,
+	target_rank: int,
+	job_level: int,
+	effective_ranks: Dictionary[StringName, int]
+) -> Dictionary:
+	var metadata: Dictionary = _skills.get(skill_id, {})
+	if metadata.is_empty() or target_rank < 1:
+		return {"ok": false, "error_code": &"invalid_skill_id"}
+	var requirements: Dictionary = metadata["rank_requirements"]
+	if not requirements.has(target_rank):
+		return {"ok": false, "error_code": &"rank_cap_reached"}
+	var requirement: Dictionary = requirements[target_rank]
+	if job_level < int(requirement["job_level"]):
+		return {"ok": false, "error_code": &"requirements_unmet"}
+	for prerequisite_id: StringName in requirement["skill_ranks"]:
+		if effective_ranks.get(prerequisite_id, 0) < int(requirement["skill_ranks"][prerequisite_id]):
+			return {"ok": false, "error_code": &"requirements_unmet"}
+	return {"ok": true}
+
+func validate_purchased_ranks(
+	base_class_id: StringName,
+	evolution_id: StringName,
+	job_level: int,
+	purchased_ranks: Dictionary[StringName, int]
+) -> Dictionary:
+	var effective := effective_skill_ranks(base_class_id, evolution_id, purchased_ranks)
+	for skill_id: StringName in purchased_ranks:
+		if not skill_is_allowed(skill_id, base_class_id, evolution_id):
+			return {"ok": false, "error_code": &"invalid_catalog"}
+		var metadata := _skills[skill_id]
+		var purchased := int(purchased_ranks[skill_id])
+		if purchased < 0 or purchased > int(metadata["max_purchased_rank"]):
+			return {"ok": false, "error_code": &"invalid_skill_ranks"}
+		for target_rank: int in range(int(metadata["free_rank"]) + 1, int(metadata["free_rank"]) + purchased + 1):
+			var requirement := check_rank_requirements(skill_id, target_rank, job_level, effective)
+			if not requirement["ok"]:
+				return requirement
+	return {"ok": true}
+
 func build_is_ready(character: CharacterState) -> bool:
 	if character == null or not base_class_is_available(character.base_class_id):
 		return false
@@ -231,3 +296,84 @@ func _is_initial_skill(metadata: Dictionary, base_class_id: StringName) -> bool:
 		and int(metadata["free_rank"]) > 0
 		and base_class_id in metadata["allowed_base_classes"]
 	)
+
+func _normalized_rank_requirements(total_rank: int, wallet: StringName, provided: Dictionary) -> Dictionary:
+	var normalized: Dictionary = {}
+	for rank: int in range(1, total_rank + 1):
+		var raw: Variant = provided.get(rank, provided.get(str(rank), {}))
+		if not raw is Dictionary:
+			normalized[rank] = raw
+			continue
+		var default_job_level: int = ProgressionRules.UNEVOLVED_MAX_JOB_LEVEL if wallet == EVOLUTION_WALLET else 1
+		normalized[rank] = {
+			"job_level": raw.get("job_level", default_job_level),
+			"skill_ranks": raw.get("skill_ranks", {}).duplicate(true) if raw.get("skill_ranks", {}) is Dictionary else raw.get("skill_ranks"),
+		}
+	return normalized
+
+func _rank_requirements_are_valid(skill_id: StringName, metadata: Dictionary) -> bool:
+	var total_rank := int(metadata["free_rank"]) + int(metadata["max_purchased_rank"])
+	if total_rank < 1:
+		return false
+	var requirements: Variant = metadata.get("rank_requirements")
+	if not requirements is Dictionary or requirements.size() != total_rank:
+		return false
+	for rank: int in range(1, total_rank + 1):
+		if not requirements.has(rank) or not requirements[rank] is Dictionary:
+			return false
+		var requirement: Dictionary = requirements[rank]
+		if requirement.size() != 2 or not requirement.has("job_level") or not requirement.has("skill_ranks"):
+			return false
+		if not requirement["job_level"] is int or int(requirement["job_level"]) < 1 or int(requirement["job_level"]) > ProgressionRules.MAX_JOB_LEVEL:
+			return false
+		if not requirement["skill_ranks"] is Dictionary:
+			return false
+		if rank <= int(metadata["free_rank"]):
+			var free_job_cap := ProgressionRules.UNEVOLVED_MAX_JOB_LEVEL if metadata["wallet"] == EVOLUTION_WALLET else 1
+			if int(requirement["job_level"]) > free_job_cap:
+				return false
+		for raw_prerequisite_id: Variant in requirement["skill_ranks"]:
+			if not (raw_prerequisite_id is String or raw_prerequisite_id is StringName):
+				return false
+			var prerequisite_id := StringName(raw_prerequisite_id)
+			if prerequisite_id == skill_id or not _skills.has(prerequisite_id):
+				return false
+			var prerequisite_rank: Variant = requirement["skill_ranks"][raw_prerequisite_id]
+			if not prerequisite_rank is int or int(prerequisite_rank) < 1:
+				return false
+			var prerequisite: Dictionary = _skills[prerequisite_id]
+			if int(prerequisite_rank) > int(prerequisite["free_rank"]) + int(prerequisite["max_purchased_rank"]):
+				return false
+			if rank <= int(metadata["free_rank"]) and int(prerequisite_rank) > int(prerequisite["free_rank"]):
+				return false
+			if metadata["wallet"] == BASE_WALLET and prerequisite["wallet"] != BASE_WALLET:
+				return false
+			if prerequisite["wallet"] == EVOLUTION_WALLET and prerequisite["required_evolution_id"] != metadata["required_evolution_id"]:
+				return false
+			for origin: StringName in metadata["allowed_base_classes"]:
+				if origin not in prerequisite["allowed_base_classes"]:
+					return false
+	return true
+
+func _has_requirement_cycle() -> bool:
+	var visiting: Dictionary[StringName, bool] = {}
+	var visited: Dictionary[StringName, bool] = {}
+	for skill_id: StringName in _skills:
+		if _requirement_cycle_from(skill_id, visiting, visited):
+			return true
+	return false
+
+func _requirement_cycle_from(skill_id: StringName, visiting: Dictionary[StringName, bool], visited: Dictionary[StringName, bool]) -> bool:
+	if visiting.has(skill_id):
+		return true
+	if visited.has(skill_id):
+		return false
+	visiting[skill_id] = true
+	var metadata: Dictionary = _skills[skill_id]
+	for requirement: Dictionary in metadata["rank_requirements"].values():
+		for raw_prerequisite_id: Variant in requirement["skill_ranks"]:
+			if _requirement_cycle_from(StringName(raw_prerequisite_id), visiting, visited):
+				return true
+	visiting.erase(skill_id)
+	visited[skill_id] = true
+	return false

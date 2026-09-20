@@ -193,6 +193,93 @@ func update_preset(
 		committed["selected_preset"] = preset_index
 	return _finish_operation(request_id, committed)
 
+func progression_summary(character_id: String) -> Dictionary:
+	if _profile == null:
+		var opened := open_profile()
+		if not opened["ok"]:
+			return opened
+	var character := _profile.character_by_id(character_id)
+	if character == null:
+		return {"ok": false, "error_code": &"invalid_character_id"}
+	var result := CharacterProgression.summary(character, _catalog)
+	result["character_id"] = character_id
+	return result.duplicate(true)
+
+func build_preview(character_id: String, modifier_sources: Array[Dictionary] = []) -> Dictionary:
+	if _profile == null:
+		var opened := open_profile()
+		if not opened["ok"]:
+			return opened
+	var character := _profile.character_by_id(character_id)
+	if character == null:
+		return {"ok": false, "error_code": &"invalid_character_id"}
+	var snapshot := _build_snapshot(character)
+	var stats_result := snapshot.try_stat_breakdown(modifier_sources)
+	if not stats_result["ok"]:
+		return stats_result
+	return {
+		"ok": true,
+		"character_id": character_id,
+		"snapshot": snapshot,
+		"stat_breakdown": stats_result["breakdown"],
+	}
+
+func allocate_attributes(request_id: String, expected_revision: int, character_id: String, increments: Dictionary) -> Dictionary:
+	if _operation_in_progress:
+		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
+	var ready := _begin_operation(request_id, expected_revision)
+	if not ready["ok"]:
+		return _finish_operation(request_id, ready)
+	var boundary := _progression_boundary(character_id)
+	if not boundary["ok"]:
+		return _finish_operation(request_id, boundary)
+	var before := _profile.copy_state()
+	var candidate := before.copy_state()
+	var mutation := CharacterProgression.allocate_attributes(candidate.character_by_id(character_id), increments)
+	return _finish_progression_mutation(request_id, before, candidate, character_id, mutation)
+
+func learn_skill(request_id: String, expected_revision: int, character_id: String, skill_id: StringName) -> Dictionary:
+	if _operation_in_progress:
+		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
+	var ready := _begin_operation(request_id, expected_revision)
+	if not ready["ok"]:
+		return _finish_operation(request_id, ready)
+	var boundary := _progression_boundary(character_id)
+	if not boundary["ok"]:
+		return _finish_operation(request_id, boundary)
+	var before := _profile.copy_state()
+	var candidate := before.copy_state()
+	var mutation := CharacterProgression.learn_skill(candidate.character_by_id(character_id), _catalog, skill_id)
+	return _finish_progression_mutation(request_id, before, candidate, character_id, mutation)
+
+func respec_attributes(request_id: String, expected_revision: int, character_id: String) -> Dictionary:
+	if _operation_in_progress:
+		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
+	var ready := _begin_operation(request_id, expected_revision)
+	if not ready["ok"]:
+		return _finish_operation(request_id, ready)
+	var boundary := _progression_boundary(character_id)
+	if not boundary["ok"]:
+		return _finish_operation(request_id, boundary)
+	var before := _profile.copy_state()
+	var candidate := before.copy_state()
+	var mutation := CharacterProgression.respec_attributes(candidate.character_by_id(character_id))
+	return _finish_progression_mutation(request_id, before, candidate, character_id, mutation)
+
+func respec_skills(request_id: String, expected_revision: int, character_id: String) -> Dictionary:
+	if _operation_in_progress:
+		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
+	var ready := _begin_operation(request_id, expected_revision)
+	if not ready["ok"]:
+		return _finish_operation(request_id, ready)
+	var boundary := _progression_boundary(character_id)
+	if not boundary["ok"]:
+		return _finish_operation(request_id, boundary)
+	var before := _profile.copy_state()
+	var candidate := before.copy_state()
+	var mutation := CharacterProgression.respec_skills(candidate.character_by_id(character_id), _catalog)
+	return _finish_progression_mutation(request_id, before, candidate, character_id, mutation)
+
 func start_run(request_id: String, expected_revision: int) -> Dictionary:
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
@@ -323,6 +410,38 @@ func _begin_operation(request_id: String, expected_revision: int) -> Dictionary:
 	if not ready["ok"]:
 		return ready
 	return _check_expected_revision(expected_revision)
+
+func _progression_boundary(character_id: String) -> Dictionary:
+	if _profile.reward_session != null:
+		return {"ok": false, "error_code": &"run_active"}
+	if _profile.character_by_id(character_id) == null:
+		return {"ok": false, "error_code": &"invalid_character_id"}
+	return {"ok": true}
+
+func _finish_progression_mutation(
+	request_id: String,
+	before: ProfileState,
+	candidate: ProfileState,
+	character_id: String,
+	mutation: Dictionary
+) -> Dictionary:
+	if not mutation["ok"]:
+		return _finish_operation(request_id, mutation)
+	if mutation.get("already_applied", false):
+		var no_op := mutation.duplicate(true)
+		no_op["new_revision"] = _profile.revision
+		no_op["profile"] = _profile
+		no_op["character_id"] = character_id
+		no_op["progression"] = CharacterProgression.summary(_profile.character_by_id(character_id), _catalog)
+		return _finish_operation(request_id, no_op)
+	var committed := _resolve_commit(before, candidate, _store.commit(candidate))
+	if committed["ok"]:
+		committed["character_id"] = character_id
+		committed["progression"] = CharacterProgression.summary(_profile.character_by_id(character_id), _catalog)
+		for key: Variant in mutation:
+			if key != "ok":
+				committed[key] = mutation[key]
+	return _finish_operation(request_id, committed)
 
 func _begin_context(request_id: String) -> Dictionary:
 	_operation_in_progress = true

@@ -27,6 +27,23 @@ static func base_skill_points_granted(total_xp: int, evolved: bool) -> int:
 static func evolution_skill_points_granted(total_xp: int, evolved: bool) -> int:
 	return maxi(0, job_level_for_xp(total_xp, evolved) - UNEVOLVED_MAX_JOB_LEVEL)
 
+static func skill_points_granted(wallet: StringName, total_xp: int, evolved: bool) -> int:
+	match wallet:
+		&"base":
+			return base_skill_points_granted(total_xp, evolved)
+		&"evolution":
+			return evolution_skill_points_granted(total_xp, evolved)
+	return 0
+
+static func attribute_points_spent(allocations: Dictionary[StringName, int]) -> int:
+	var spent := 0
+	for value: int in allocations.values():
+		spent += value
+	return spent
+
+static func attribute_points_available(total_xp: int, allocations: Dictionary[StringName, int]) -> int:
+	return attribute_points_granted(total_xp) - attribute_points_spent(allocations)
+
 static func add_base_xp(current_xp: int, gained_xp: int) -> int:
 	assert(current_xp >= 0 and gained_xp >= 0)
 	return mini(MAX_BASE_XP, current_xp + gained_xp)
