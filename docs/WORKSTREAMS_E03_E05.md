@@ -1,5 +1,11 @@
 # RagRPG — Workstreams operacionais E02→E05
 
+> Atualização 20/09/2026: checkpoint vigente em `RECOVERY_2026_09_20.md`.
+> E02 corrigido e aprovado tecnicamente; E03-A/L1 verificados; E03-B é o próximo
+> pacote com Sol. A migração C1 será sequencial após esse pacote. Branches
+> work/e03-* foram substituídas pelo fluxo isolado codex/e03-progression;
+> diretório fixo volta a codex/playtest. Não trocar branches nesse diretório.
+
 > Base inspecionada: `codex/e02-character-menu` @ `7476698f6ab6ab8ebf8a4fc09a5bbf93d71f3f91`.
 >
 > Este arquivo é um handoff operacional. Em conflito, prevalecem `AGENTS.md`,
@@ -356,8 +362,13 @@ E02-CLOSE:
   verify_command: tools/verify.ps1 -GodotPath ./.tools/review-engine/Godot.exe
   user_playtest: ACCEPTED_MVP_SCOPE
 
-E03-A: VERIFY_PENDING
-E03-L1: BLOCKED
+E03-A: 
+  status: DONE
+  verified_commit: 6984b4265c82a22a755d684ef1500058dcd89df6
+  verify_result: PASS — tools/verify.ps1 completed; all checks passed
+  verified_at: 2026-09-15
+  verify_command: tools/verify.ps1 -GodotPath ./.tools/review-engine/Godot.exe
+E03-L1: READY
 E03-C1: BLOCKED
 E03-B: BLOCKED
 E03-L2: BLOCKED

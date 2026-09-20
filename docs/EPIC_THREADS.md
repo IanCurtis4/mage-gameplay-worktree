@@ -1,5 +1,9 @@
 # Conversas reservadas dos épicos
 
+> Estado vigente em 20/09/2026: ver `RECOVERY_2026_09_20.md`. E02 corrigido,
+> E03 ativo com Sol na tarefa já existente; E04–E11 continuam reservados.
+> Worktrees antigas de reservas foram removidas; recriar na ativação.
+
 ## Roteamento aprovado em 14/09/2026
 
 Estado posterior: E01 aprovado pelo usuário e integrado em master no candidato

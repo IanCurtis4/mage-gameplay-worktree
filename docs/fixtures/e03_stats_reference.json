@@ -1,0 +1,217 @@
+{
+  "contract_version": "e00_v1",
+  "description": "Matriz determinística de casos para E03-L1; expectativas vêm de E00.2.",
+  "cases": [
+    {
+      "id": "swordsman_level_1",
+      "initial": {"str": 8, "agi": 5, "vit": 8, "int": 2, "dex": 5, "luk": 2},
+      "allocations": {},
+      "base_level": 1,
+      "expected": {
+        "primary": {"str": 8, "agi": 5, "vit": 8, "int": 2, "dex": 5, "luk": 2},
+        "derived": {
+          "max_hp": 180, "max_sp": 50, "hp_regen": 0.9, "sp_regen": 2.24,
+          "melee_attack": 28, "precision_attack": 23.2, "magic_attack": 16,
+          "physical_defense": 20, "magic_defense": 8, "hit_rating": 111.4,
+          "flee_rating": 108.9, "crit_chance": 0.0585, "crit_multiplier": 1.5,
+          "crit_resistance": 0, "attacks_per_second": 1.1, "attack_speed_index": 110,
+          "move_speed": 220, "variable_cast_multiplier": 0.983,
+          "fixed_cast_reduction": 0, "after_cast_reduction": 0,
+          "cooldown_reduction": 0, "physical_cc_resistance": 0.016,
+          "magic_cc_resistance": 0.004, "damage_dealt_multiplier": 1
+        }
+      }
+    },
+    {
+      "id": "mage_level_1",
+      "initial": {"str": 2, "agi": 5, "vit": 5, "int": 9, "dex": 7, "luk": 2},
+      "allocations": {},
+      "base_level": 1,
+      "expected": {
+        "primary": {"str": 2, "agi": 5, "vit": 5, "int": 9, "dex": 7, "luk": 2},
+        "derived": {
+          "max_hp": 150, "max_sp": 85, "hp_regen": 0.75, "sp_regen": 3.08,
+          "melee_attack": 16.8, "precision_attack": 24.8, "magic_attack": 30.8,
+          "physical_defense": 11, "magic_defense": 20.5, "hit_rating": 115.4,
+          "flee_rating": 108.9, "crit_chance": 0.0595, "crit_multiplier": 1.5,
+          "crit_resistance": 0, "attacks_per_second": 1.11, "attack_speed_index": 111,
+          "move_speed": 220, "variable_cast_multiplier": 0.97,
+          "fixed_cast_reduction": 0, "after_cast_reduction": 0,
+          "cooldown_reduction": 0, "physical_cc_resistance": 0.01,
+          "magic_cc_resistance": 0.018, "damage_dealt_multiplier": 1
+        }
+      }
+    },
+    {
+      "id": "archer_level_1",
+      "initial": {"str": 3, "agi": 7, "vit": 5, "int": 2, "dex": 10, "luk": 3},
+      "allocations": {},
+      "base_level": 1,
+      "expected": {
+        "primary": {"str": 3, "agi": 7, "vit": 5, "int": 2, "dex": 10, "luk": 3},
+        "derived": {
+          "max_hp": 150, "max_sp": 50, "hp_regen": 0.75, "sp_regen": 2.24,
+          "melee_attack": 20, "precision_attack": 31.2, "magic_attack": 18,
+          "physical_defense": 11.5, "magic_defense": 6.5, "hit_rating": 121.6,
+          "flee_rating": 112.1, "crit_chance": 0.064, "crit_multiplier": 1.5,
+          "crit_resistance": 0, "attacks_per_second": 1.155, "attack_speed_index": 115.5,
+          "move_speed": 220, "variable_cast_multiplier": 0.968,
+          "fixed_cast_reduction": 0, "after_cast_reduction": 0,
+          "cooldown_reduction": 0, "physical_cc_resistance": 0.01,
+          "magic_cc_resistance": 0.004, "damage_dealt_multiplier": 1
+        }
+      }
+    },
+    {
+      "id": "zero_attributes_level_1",
+      "initial": {},
+      "allocations": {},
+      "base_level": 1,
+      "expected": {
+        "primary": {"str": 0, "agi": 0, "vit": 0, "int": 0, "dex": 0, "luk": 0},
+        "derived": {
+          "max_hp": 100, "max_sp": 40, "hp_regen": 0.5, "sp_regen": 2,
+          "melee_attack": 10, "precision_attack": 10, "magic_attack": 10,
+          "physical_defense": 0, "magic_defense": 0, "hit_rating": 101,
+          "flee_rating": 101, "crit_chance": 0.05, "crit_multiplier": 1.5,
+          "crit_resistance": 0, "attacks_per_second": 1, "attack_speed_index": 100,
+          "move_speed": 220, "variable_cast_multiplier": 1,
+          "fixed_cast_reduction": 0, "after_cast_reduction": 0,
+          "cooldown_reduction": 0, "physical_cc_resistance": 0,
+          "magic_cc_resistance": 0, "damage_dealt_multiplier": 1
+        }
+      }
+    },
+    {
+      "id": "allocated_extreme_level_1",
+      "initial": {},
+      "allocations": {"str": 60, "agi": 60, "vit": 60, "int": 60, "dex": 60, "luk": 60},
+      "base_level": 1,
+      "expected": {
+        "primary": {"str": 60, "agi": 60, "vit": 60, "int": 60, "dex": 60, "luk": 60},
+        "derived": {
+          "max_hp": 700, "max_sp": 340, "hp_regen": 3.5, "sp_regen": 9.2,
+          "melee_attack": 154, "precision_attack": 154, "magic_attack": 154,
+          "physical_defense": 150, "magic_defense": 150, "hit_rating": 233,
+          "flee_rating": 203, "crit_chance": 0.26, "crit_multiplier": 1.5,
+          "crit_resistance": 0, "attacks_per_second": 2.2, "attack_speed_index": 220,
+          "move_speed": 220, "variable_cast_multiplier": 0.76,
+          "fixed_cast_reduction": 0, "after_cast_reduction": 0,
+          "cooldown_reduction": 0, "physical_cc_resistance": 0.12,
+          "magic_cc_resistance": 0.12, "damage_dealt_multiplier": 1
+        }
+      }
+    },
+    {
+      "id": "base_level_cap_level_30",
+      "initial": {},
+      "allocations": {},
+      "base_level": 30,
+      "expected": {
+        "derived": {
+          "max_hp": 332, "max_sp": 127, "hit_rating": 130, "flee_rating": 130,
+          "attacks_per_second": 1, "attack_speed_index": 100,
+          "variable_cast_multiplier": 1
+        }
+      }
+    },
+    {
+      "id": "flat_and_additive_increased",
+      "initial": {"str": 8, "vit": 8, "dex": 5},
+      "allocations": {},
+      "base_level": 1,
+      "sources": [
+        {
+          "source_id": "equipment:matrix",
+          "label": "Equipamento de matriz",
+          "primary_flat": {"str": 2.5},
+          "flat": {"max_hp": 10, "melee_attack": 5},
+          "increased": {"max_hp": 0.1, "melee_attack": 0.1}
+        },
+        {
+          "source_id": "augment:matrix",
+          "flat": {},
+          "increased": {"max_hp": 0.2, "melee_attack": 0.2}
+        }
+      ],
+      "expected": {
+        "primary": {"str": 10.5},
+        "derived": {"max_hp": 247, "melee_attack": 49.4}
+      }
+    },
+    {
+      "id": "primary_effective_upper_clamp",
+      "initial": {"str": 60},
+      "allocations": {},
+      "base_level": 1,
+      "sources": [{"source_id": "buff:primary_cap", "primary_flat": {"str": 100}}],
+      "expected": {"primary": {"str": 120}, "derived": {"melee_attack": 250}}
+    },
+    {
+      "id": "derived_lower_clamps",
+      "initial": {},
+      "allocations": {},
+      "base_level": 1,
+      "sources": [{
+        "source_id": "debuff:lower_caps",
+        "flat": {
+          "max_hp": -999999, "max_sp": -999999, "hp_regen": -999999, "sp_regen": -999999,
+          "melee_attack": -999999, "precision_attack": -999999, "magic_attack": -999999,
+          "physical_defense": -999999, "magic_defense": -999999, "hit_rating": -999999,
+          "flee_rating": -999999, "crit_chance": -999999, "crit_multiplier": -999999,
+          "crit_resistance": -999999, "attacks_per_second": -999999, "move_speed": -999999,
+          "variable_cast_multiplier": -999999, "fixed_cast_reduction": -999999,
+          "after_cast_reduction": -999999, "cooldown_reduction": -999999,
+          "physical_cc_resistance": -999999, "magic_cc_resistance": -999999,
+          "damage_dealt_multiplier": -999999
+        }
+      }],
+      "expected": {
+        "derived": {
+          "max_hp": 1, "max_sp": 0, "hp_regen": 0, "sp_regen": 0,
+          "melee_attack": 0, "precision_attack": 0, "magic_attack": 0,
+          "physical_defense": 0, "magic_defense": 0, "hit_rating": 0,
+          "flee_rating": 0, "crit_chance": 0, "crit_multiplier": 1,
+          "crit_resistance": 0, "attacks_per_second": 0.2, "attack_speed_index": 20,
+          "move_speed": 80, "variable_cast_multiplier": 0.25,
+          "fixed_cast_reduction": 0, "after_cast_reduction": -1,
+          "cooldown_reduction": -1, "physical_cc_resistance": 0,
+          "magic_cc_resistance": 0, "damage_dealt_multiplier": 0
+        }
+      }
+    },
+    {
+      "id": "derived_upper_clamps",
+      "initial": {},
+      "allocations": {},
+      "base_level": 1,
+      "sources": [{
+        "source_id": "buff:upper_caps",
+        "flat": {
+          "max_hp": 999999, "max_sp": 999999, "hp_regen": 999999, "sp_regen": 999999,
+          "melee_attack": 999999, "precision_attack": 999999, "magic_attack": 999999,
+          "physical_defense": 999999, "magic_defense": 999999, "hit_rating": 999999,
+          "flee_rating": 999999, "crit_chance": 999999, "crit_multiplier": 999999,
+          "crit_resistance": 999999, "attacks_per_second": 999999, "move_speed": 999999,
+          "variable_cast_multiplier": 999999, "fixed_cast_reduction": 999999,
+          "after_cast_reduction": 999999, "cooldown_reduction": 999999,
+          "physical_cc_resistance": 999999, "magic_cc_resistance": 999999,
+          "damage_dealt_multiplier": 999999
+        }
+      }],
+      "expected": {
+        "derived": {
+          "max_hp": 100000, "max_sp": 100000, "hp_regen": 100, "sp_regen": 100,
+          "melee_attack": 10000, "precision_attack": 10000, "magic_attack": 10000,
+          "physical_defense": 900, "magic_defense": 900, "hit_rating": 1000,
+          "flee_rating": 1000, "crit_chance": 0.75, "crit_multiplier": 3,
+          "crit_resistance": 0.5, "attacks_per_second": 4, "attack_speed_index": 400,
+          "move_speed": 440, "variable_cast_multiplier": 2,
+          "fixed_cast_reduction": 0.5, "after_cast_reduction": 0.8,
+          "cooldown_reduction": 0.8, "physical_cc_resistance": 0.5,
+          "magic_cc_resistance": 0.5, "damage_dealt_multiplier": 4
+        }
+      }
+    }
+  ]
+}

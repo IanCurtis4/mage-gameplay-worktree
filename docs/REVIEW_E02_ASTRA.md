@@ -1,5 +1,10 @@
 # Revisão integrada E02 — Astra
 
+> Atualização 20/09/2026: os achados abaixo foram corrigidos em `9ac921f`.
+> Revisão de código e suíte integrada passaram nesta retomada. Aceite técnico
+> concedido; evidências e limites em `RECOVERY_2026_09_20.md`.
+> O restante deste documento preserva o parecer original.
+
 Data: 14/09/2026. Candidato: `7bc3dd4818b5e91ce43906a4fcf693eb24549453`,
 branch `codex/e02-character-menu`. Comparação de escopo com `docs/epics/e02.md`.
 Alterações do usuário incorporadas de `codex/playtest` não são defeitos do épico.
