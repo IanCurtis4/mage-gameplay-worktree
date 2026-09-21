@@ -67,8 +67,8 @@ func _test_integration() -> void:
 	var enemy := controller.enemies[0]
 	var initial_count := controller.enemies.size()
 	var damage := DamageRequest.new()
-	damage.base_damage = 100000.0
-	damage.hit_chance = 1.0
+	damage.physical_damage = 100000.0
+	damage.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
 	damage.can_crit = false
 	damage.target_id = enemy.get_instance_id()
 	enemy.apply_damage(damage, controller.rng)

@@ -10,7 +10,7 @@ signal presentation_action(action: StringName, direction: Vector2, duration: flo
 
 var actor_name := "Ator"
 var actor_color := Color.WHITE
-var stats: Dictionary = {}
+var stat_breakdown: StatBreakdown
 var health: HealthState
 var collision_radius := 18.0
 var is_hovered := false
@@ -51,12 +51,13 @@ func set_pilot_sprite(texture: Texture2D) -> void:
 	_sprite_visible_height = float(used.size.y) * display_scale
 	queue_redraw()
 
-func setup(display_name: String, color: Color, derived_stats: Dictionary, radius: float = 18.0) -> void:
+func setup(display_name: String, color: Color, derived_stats: StatBreakdown, radius: float = 18.0) -> void:
+	assert(derived_stats != null)
 	actor_name = display_name
 	actor_color = color
-	stats = derived_stats.duplicate(true)
+	stat_breakdown = derived_stats
 	collision_radius = radius
-	health = HealthState.new(get_instance_id(), float(stats["max_hp"]), float(stats["defense"]))
+	health = HealthState.new(get_instance_id(), stat_breakdown)
 	health.damage_applied.connect(_on_damage_applied)
 	health.actor_died.connect(_on_health_died)
 	queue_redraw()
@@ -121,9 +122,8 @@ func advance_statuses(delta: float, simulation_paused: bool = false) -> void:
 			request.source_id = burn_source_id
 			request.target_id = get_instance_id()
 			request.skill_id = &"burn_tick"
-			request.kind = DamageRequest.Kind.MAGIC
-			request.base_damage = burn_damage_per_tick
-			request.hit_chance = 1.0
+			request.magic_damage = burn_damage_per_tick
+			request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
 			request.can_crit = false
 			request.is_secondary = true
 			status_damage_requested.emit(request, self)

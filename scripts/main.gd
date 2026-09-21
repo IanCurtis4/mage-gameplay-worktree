@@ -30,7 +30,7 @@ var persistent_facade: ProfileFacade = null
 var _close_request_serial := 0
 
 var health_label: Label
-var mana_label: Label
+var sp_label: Label
 var skill_label: Label
 var status_label: Label
 var augment_button: Button
@@ -208,10 +208,10 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	var direction := player.aim_direction(point)
 	if skill == &"slash":
 		if not player.use_slash(direction, enemies):
-			_show_skill_blocked("Corte em cone", player.slash_cooldown, PlayerActor.SLASH_MANA_COST)
+			_show_skill_blocked("Corte em cone", player.slash_cooldown, PlayerActor.SLASH_SP_COST)
 	elif skill == &"dash":
 		if not player.use_dash(direction):
-			_show_skill_blocked("Investida", player.dash_cooldown, PlayerActor.DASH_MANA_COST)
+			_show_skill_blocked("Investida", player.dash_cooldown, PlayerActor.DASH_SP_COST)
 	elif skill == &"fireball":
 		if not player.use_fireball(direction):
 			_show_skill_blocked("Bola de Fogo", player.skill_cooldown(skill), player.skill_cost(skill))
@@ -643,11 +643,11 @@ func _update_hud() -> void:
 	if player == null or player.health == null:
 		return
 	health_label.text = "VIDA  %d / %d" % [ceili(player.health.current_hp), ceili(player.health.max_hp)]
-	mana_label.text = "MANA  %d / %d" % [floori(player.mana), floori(player.max_mana)]
+	sp_label.text = "SP  %d / %d" % [floori(player.current_sp), floori(player.max_sp)]
 	var skill_lines: PackedStringArray = []
 	for skill_id: StringName in player.available_skill_ids():
 		var definition := ClassCatalog.skill_definition(skill_id)
-		var state := "CONJURANDO %.1fs" % player.active_cast_remaining if player.active_cast_skill == skill_id else _skill_state(player.skill_cooldown(skill_id), definition.mana_cost)
+		var state := "CONJURANDO %.1fs" % player.active_cast_remaining if player.active_cast_skill == skill_id else _skill_state(player.skill_cooldown(skill_id), definition.sp_cost)
 		skill_lines.append("%s  %s — %s" % [_skill_input_label(skill_id), definition.display_name, state])
 	skill_label.text = "\n".join(skill_lines)
 	augment_button.text = "Escolher augment (E) — %d pendente(s)" % run_state.pending_choices
@@ -655,25 +655,25 @@ func _update_hud() -> void:
 	if battle_controls != null:
 		for skill_id: StringName in player.available_skill_ids():
 			var definition := ClassCatalog.skill_definition(skill_id)
-			var state := "CONJURANDO %.1fs" % player.active_cast_remaining if player.active_cast_skill == skill_id else _skill_state(player.skill_cooldown(skill_id), definition.mana_cost)
-			battle_controls.show_skill_state(skill_id, "%s · %s\n%d mana · %s" % [_skill_input_label(skill_id), definition.display_name.to_upper(), int(definition.mana_cost), state], cast_intent.active_skill == skill_id or player.active_cast_skill == skill_id)
+			var state := "CONJURANDO %.1fs" % player.active_cast_remaining if player.active_cast_skill == skill_id else _skill_state(player.skill_cooldown(skill_id), definition.sp_cost)
+			battle_controls.show_skill_state(skill_id, "%s · %s\n%d SP · %s" % [_skill_input_label(skill_id), definition.display_name.to_upper(), int(definition.sp_cost), state], cast_intent.active_skill == skill_id or player.active_cast_skill == skill_id)
 
 func _skill_input_label(skill_id: StringName) -> String:
 	var index := player.available_skill_ids().find(skill_id)
 	var labels := ["Q", "W", "A", "S", "D"]
 	return labels[index] if index >= 0 and index < labels.size() else ClassCatalog.skill_definition(skill_id).input_key
 
-func _skill_state(cooldown: float, mana_cost: float) -> String:
+func _skill_state(cooldown: float, sp_cost: float) -> String:
 	if cooldown > 0.0:
 		return "RECARGA %.1fs" % cooldown
-	if player.mana < mana_cost:
-		return "SEM MANA"
+	if player.current_sp < sp_cost:
+		return "SEM SP"
 	return "PRONTO"
 
-func _show_skill_blocked(skill_name: String, cooldown: float, mana_cost: float) -> void:
+func _show_skill_blocked(skill_name: String, cooldown: float, sp_cost: float) -> void:
 	_feedback_serial += 1
 	var serial := _feedback_serial
-	status_label.text = "%s indisponível — %s" % [skill_name, _skill_state(cooldown, mana_cost)]
+	status_label.text = "%s indisponível — %s" % [skill_name, _skill_state(cooldown, sp_cost)]
 	get_tree().create_timer(1.2).timeout.connect(_restore_context_status.bind(serial))
 
 func _restore_context_status(serial: int) -> void:
@@ -715,10 +715,10 @@ func _build_ui() -> void:
 	hud_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hud_margin.add_child(hud_column)
 	health_label = _make_label("", 22, Color("ff8b8b"))
-	mana_label = _make_label("", 19, Color("79bfff"))
+	sp_label = _make_label("", 19, Color("79bfff"))
 	skill_label = _make_label("", 17, Color("e9c67b"))
 	hud_column.add_child(health_label)
-	hud_column.add_child(mana_label)
+	hud_column.add_child(sp_label)
 	hud_column.add_child(skill_label)
 
 	help_panel = PanelContainer.new()

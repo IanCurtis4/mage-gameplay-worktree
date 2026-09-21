@@ -106,7 +106,7 @@ func _prepare_impact(victim: CombatActor) -> void:
 	if request.skill_id == &"fireball" and victim.is_burning():
 		request.force_critical = true
 	elif request.skill_id == &"fire_spear" and victim.is_burning():
-		request.base_damage *= 1.5
+		request.magic_damage *= 1.5
 
 func _wall_fraction(from: Vector2, to: Vector2) -> float:
 	if navigation == null or navigation.is_segment_clear(from, to, projectile_radius):

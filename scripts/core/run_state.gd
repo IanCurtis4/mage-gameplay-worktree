@@ -84,25 +84,26 @@ func confirm(augment_id: StringName, encounter_active: bool) -> bool:
 		return true
 	return false
 
-func get_modifiers() -> Dictionary:
-	var flat: Dictionary = {}
-	var increased: Dictionary = {}
-	flat["crit_chance"] = 0.05 * float(augment_stacks.get(&"keen_edge", 0))
-	increased["max_hp"] = 0.20 * float(augment_stacks.get(&"vitality", 0))
-	increased["attacks_per_second"] = 0.15 * float(augment_stacks.get(&"battle_rhythm", 0))
-	return {
-		"flat": flat,
-		"increased": increased,
-		"projectile_counts": {
-			&"fire_spear": 1 + augment_stacks.get(&"extra_fire_spear", 0),
-			&"ice_spear": 1 + augment_stacks.get(&"extra_ice_spear", 0),
+func stat_modifier_sources() -> Array[Dictionary]:
+	return [{
+		"source_id": &"run_augments",
+		"label": "Aprimoramentos da run",
+		"flat": {
+			&"crit_chance": 0.05 * float(augment_stacks.get(&"keen_edge", 0)),
 		},
-	}
+		"increased": {
+			&"max_hp": 0.20 * float(augment_stacks.get(&"vitality", 0)),
+			&"attacks_per_second": 0.15 * float(augment_stacks.get(&"battle_rhythm", 0)),
+		},
+	}]
 
 func projectile_count(skill_id: StringName) -> int:
-	var counts: Dictionary = get_modifiers()["projectile_counts"]
 	var level_count := maxi(1, skill_levels.get(skill_id, 1))
-	return level_count + maxi(0, int(counts.get(skill_id, 1)) - 1)
+	if skill_id not in [&"fire_spear", &"ice_spear"]:
+		return level_count
+	var augment_id := &"extra_fire_spear" if skill_id == &"fire_spear" else &"extra_ice_spear"
+	var augment_count: int = 1 + int(augment_stacks.get(augment_id, 0))
+	return level_count + maxi(0, augment_count - 1)
 
 func describe_progress(definition: AugmentDefinition) -> String:
 	var current: int = augment_stacks.get(definition.id, 0)
@@ -124,6 +125,10 @@ func _pilot_snapshot(selected_class: StringName) -> BuildSnapshot:
 	for skill_id: StringName in ClassCatalog.skill_ids(selected_class):
 		snapshot.skill_ranks[skill_id] = 1
 	snapshot.active_slots = ClassCatalog.skill_ids(selected_class)
+	var definition := ClassCatalog.class_definition(selected_class)
+	if definition != null and definition.passive_id != &"":
+		snapshot.skill_ranks[definition.passive_id] = 1
+		snapshot.passive_slots = [definition.passive_id]
 	return snapshot
 
 func _create_augment(augment_id: StringName, display_name: String, description: String, effect_id: StringName, magnitude: float, required_class: StringName = &"") -> AugmentDefinition:

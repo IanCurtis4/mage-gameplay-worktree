@@ -18,11 +18,19 @@ func configure(enemy_type: StringName, nav: ArenaNavigation, target_player: Play
 	navigation = nav
 	player = target_player
 	if archetype == &"archer":
-		var archer_stats := RpgStats.derive({"str": 4, "agi": 5, "vit": 2, "int": 1, "dex": 7, "luk": 1}, {"max_hp": -68.0, "move_speed": -45.0})
+		var archer_sources: Array[Dictionary] = [{
+			"source_id": &"enemy_archer_tuning",
+			"flat": {&"max_hp": -68.0, &"move_speed": -45.0},
+		}]
+		var archer_stats := StatCalculator.calculate({"str": 4, "agi": 5, "vit": 2, "int": 1, "dex": 7, "luk": 1}, {}, 1, archer_sources)
 		setup("Arqueiro", Color("d29a4a"), archer_stats, 17.0)
 		set_animation_kind(&"archer")
 	else:
-		var chaser_stats := RpgStats.derive({"str": 5, "agi": 3, "vit": 3, "int": 1, "dex": 4, "luk": 1}, {"max_hp": -62.0, "move_speed": -25.0})
+		var chaser_sources: Array[Dictionary] = [{
+			"source_id": &"enemy_warrior_tuning",
+			"flat": {&"max_hp": -62.0, &"move_speed": -25.0},
+		}]
+		var chaser_stats := StatCalculator.calculate({"str": 5, "agi": 3, "vit": 3, "int": 1, "dex": 4, "luk": 1}, {}, 1, chaser_sources)
 		setup("Guerreiro", Color("c65a68"), chaser_stats, 19.0)
 		set_animation_kind(&"warrior")
 	process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -57,9 +65,11 @@ func _try_attack(ranged: bool) -> void:
 	request.source_id = get_instance_id()
 	request.target_id = player.get_instance_id()
 	request.skill_id = &"enemy_arrow" if ranged else &"enemy_claw"
-	request.kind = DamageRequest.Kind.PHYSICAL
-	request.base_damage = float(stats["physical_attack"]) * (0.45 if ranged else 0.45)
-	request.hit_chance = float(stats["hit_chance"])
+	var attack_id := &"precision_attack" if ranged else &"melee_attack"
+	request.physical_damage = stat_breakdown.value(attack_id) * 0.45
+	request.damage_dealt_multiplier = stat_breakdown.value(&"damage_dealt_multiplier")
+	request.accuracy_mode = DamageRequest.AccuracyMode.CONTESTED
+	request.hit_rating = stat_breakdown.value(&"hit_rating")
 	request.crit_chance = 0.0
 	request.can_crit = false
 	presentation_action.emit(&"basic_attack", global_position.direction_to(player.global_position), 0.18)
@@ -73,7 +83,7 @@ func _update_path(destination: Vector2) -> void:
 	_repath_time = 0.45
 
 func _move_along_path(delta: float) -> void:
-	var remaining_distance := float(stats["move_speed"]) * movement_speed_multiplier() * delta
+	var remaining_distance := stat_breakdown.value(&"move_speed") * movement_speed_multiplier() * delta
 	while remaining_distance > 0.0 and _path_index < _path.size():
 		var point := _path[_path_index]
 		var distance := global_position.distance_to(point)

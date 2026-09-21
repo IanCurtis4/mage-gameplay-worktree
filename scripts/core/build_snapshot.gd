@@ -59,9 +59,27 @@ func stat_breakdown(modifier_sources: Array[Dictionary] = []) -> StatBreakdown:
 	return result.get("breakdown") if result["ok"] else null
 
 func try_stat_breakdown(modifier_sources: Array[Dictionary] = []) -> Dictionary:
+	var all_sources := intrinsic_modifier_sources()
+	all_sources.append_array(modifier_sources.duplicate(true))
 	return StatCalculator.try_calculate(
 		IdentityIds.initial_attributes(base_class_id),
 		attribute_allocations.duplicate(true),
 		base_level,
-		modifier_sources.duplicate(true)
+		all_sources
 	)
+
+func intrinsic_modifier_sources() -> Array[Dictionary]:
+	var sources: Array[Dictionary] = []
+	if &"swordsman_resistance" in passive_slots and int(skill_ranks.get(&"swordsman_resistance", 0)) > 0:
+		sources.append({
+			"source_id": &"passive_swordsman_resistance",
+			"label": "Resistência do Espadachim",
+			"increased": {&"physical_defense": 0.50},
+		})
+	if &"mage_mana_regeneration" in passive_slots and int(skill_ranks.get(&"mage_mana_regeneration", 0)) > 0:
+		sources.append({
+			"source_id": &"passive_mage_sp_regeneration",
+			"label": "Regeneração de SP do Mago",
+			"increased": {&"sp_regen": 0.50},
+		})
+	return sources

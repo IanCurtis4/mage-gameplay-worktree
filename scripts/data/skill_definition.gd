@@ -8,7 +8,9 @@ enum Targeting { DIRECTION, SINGLE_TARGET, POINT }
 @export var display_name: String
 @export var input_key: String
 @export var targeting: Targeting = Targeting.DIRECTION
-@export var mana_cost: float = 0.0
+@export var accuracy_mode: DamageRequest.AccuracyMode = DamageRequest.AccuracyMode.CONTESTED
+@export var can_crit: bool = false
+@export var sp_cost: float = 0.0
 @export var cooldown: float = 0.0
 @export var cast_time: float = 0.0
 @export var power: float = 0.0

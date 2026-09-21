@@ -38,8 +38,8 @@ func _test_intent() -> void:
 func _test_targeting() -> void:
 	var first := CombatActor.new()
 	var second := CombatActor.new()
-	first.setup("A", Color.WHITE, RpgStats.derive({}), 19.0)
-	second.setup("B", Color.WHITE, RpgStats.derive({}), 19.0)
+	first.setup("A", Color.WHITE, StatCalculator.calculate({}), 19.0)
+	second.setup("B", Color.WHITE, StatCalculator.calculate({}), 19.0)
 	root.add_child(first)
 	root.add_child(second)
 	first.position = Vector2(300, 300)
@@ -72,7 +72,7 @@ func _test_strike_feedback() -> void:
 	var right := CombatActor.new()
 	var left := CombatActor.new()
 	for actor: CombatActor in [right, left]:
-		actor.setup("Alvo", Color.WHITE, RpgStats.derive({"vit": 10}), 19.0)
+		actor.setup("Alvo", Color.WHITE, StatCalculator.calculate({"vit": 10}), 19.0)
 		root.add_child(actor)
 		actor.set_process(false)
 	right.position = Vector2(480, 400)
@@ -96,11 +96,11 @@ func _test_strike_feedback() -> void:
 	var hp := right.health.current_hp
 	var request := DamageRequest.new()
 	request.target_id = right.get_instance_id()
-	request.base_damage = 20.0
-	request.hit_chance = 0.0
+	request.physical_damage = 20.0
+	request.accuracy_mode = DamageRequest.AccuracyMode.CONTESTED
 	right.health.apply(request, 0.5, 0.99)
 	_check(right.health.current_hp == hp and feedback == [1, 0] and right._flash_time == 0.0, "miss emits distinct feedback without damage or a misleading hit flash")
-	request.hit_chance = 1.0
+	request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
 	right.health.apply(request, 0.5, 0.99)
 	_check(right.health.current_hp < hp and feedback == [1, 1] and right._flash_time > 0.0, "landed strike reduces HP and emits the damage flash and number")
 	player.free()
@@ -141,48 +141,48 @@ func _test_controller_input() -> void:
 	_move_mouse(controller.get_global_transform_with_canvas() * world_aim)
 	controller.cast_intent.set_mode(CastIntent.Mode.CONFIRM)
 	_key(KEY_Q, true)
-	_check(controller.cast_intent.active_skill == &"slash" and controller.player.mana == 50.0 and controller.battle_indicators.skill == &"slash", "real Q event opens cone preview without spending mana")
+	_check(controller.cast_intent.active_skill == &"slash" and controller.player.current_sp == 50.0 and controller.battle_indicators.skill == &"slash", "real Q event opens cone preview without spending SP")
 	_key(KEY_Q, false)
-	_check(controller.cast_intent.active_skill == &"slash" and controller.player.mana == 50.0, "confirm mode waits for a mouse click after release")
+	_check(controller.cast_intent.active_skill == &"slash" and controller.player.current_sp == 50.0, "confirm mode waits for a mouse click after release")
 	_click(MOUSE_BUTTON_LEFT)
-	_check(controller.player.mana == 35.0 and controller.cast_intent.active_skill == &"" and controller.player._path.is_empty(), "world click casts once without issuing movement")
+	_check(controller.player.current_sp == 35.0 and controller.cast_intent.active_skill == &"" and controller.player._path.is_empty(), "world click casts once without issuing movement")
 	_check(controller.player._slash_facing.dot(Vector2.RIGHT) > 0.999, "mouse confirmation beyond cone range keeps the clicked direction through camera transform")
 	_key(KEY_Q, false)
-	_check(controller.player.mana == 35.0, "late key release does not double cast")
-	controller.player.mana = 50.0
+	_check(controller.player.current_sp == 35.0, "late key release does not double cast")
+	controller.player.current_sp = 50.0
 	controller.player.slash_cooldown = 0.0
 	controller.cast_intent.set_mode(CastIntent.Mode.RELEASE)
 	_key(KEY_Q, true)
 	_key(KEY_Q, false)
-	_check(controller.player.mana == 35.0 and controller.cast_intent.active_skill == &"", "release mode launches through actual key-up dispatch")
-	controller.player.mana = 50.0
+	_check(controller.player.current_sp == 35.0 and controller.cast_intent.active_skill == &"", "release mode launches through actual key-up dispatch")
+	controller.player.current_sp = 50.0
 	controller.player.slash_cooldown = 0.0
 	_key(KEY_Q, true)
 	_click(MOUSE_BUTTON_RIGHT)
 	_key(KEY_Q, false)
-	_check(controller.player.mana == 50.0 and controller.cast_intent.active_skill == &"", "right-click cancels and suppresses later key-up casting")
+	_check(controller.player.current_sp == 50.0 and controller.cast_intent.active_skill == &"", "right-click cancels and suppresses later key-up casting")
 	_key(KEY_Q, true)
 	_key(KEY_ESCAPE, true)
 	_key(KEY_Q, false)
-	_check(controller.player.mana == 50.0 and not paused, "Escape cancels aim without opening settings or spending resources")
+	_check(controller.player.current_sp == 50.0 and not paused, "Escape cancels aim without opening settings or spending resources")
 	_key(KEY_Q, true)
 	_move_mouse(controller.battle_controls.settings_button.get_global_rect().get_center())
 	_key(KEY_Q, false)
-	_check(controller.player.mana == 50.0 and controller.cast_intent.active_skill == &"", "release over interactive UI cancels instead of casting into the world")
+	_check(controller.player.current_sp == 50.0 and controller.cast_intent.active_skill == &"", "release over interactive UI cancels instead of casting into the world")
 	_move_mouse(controller.get_global_transform_with_canvas() * world_aim)
 	controller.cast_intent.set_mode(CastIntent.Mode.INSTANT)
 	_key(KEY_Q, true)
-	_check(controller.player.mana == 35.0 and controller.cast_intent.active_skill == &"", "smart cast acts immediately through real input")
+	_check(controller.player.current_sp == 35.0 and controller.cast_intent.active_skill == &"", "smart cast acts immediately through real input")
 	controller.player.slash_cooldown = 0.0
 	_key(KEY_Q, true, true)
 	_key(KEY_Q, false)
-	_check(controller.player.mana == 35.0, "key repeat and release never recast smart cast")
-	controller.player.mana = 50.0
+	_check(controller.player.current_sp == 35.0, "key repeat and release never recast smart cast")
+	controller.player.current_sp = 50.0
 	controller.cast_intent.set_mode(CastIntent.Mode.CONFIRM)
 	_key(KEY_W, true)
 	_move_mouse(controller.battle_controls.settings_button.get_global_rect().get_center())
 	_click(MOUSE_BUTTON_LEFT)
-	_check(paused and controller.battle_controls.settings_overlay.visible and controller.player.mana == 50.0 and controller.cast_intent.active_skill == &"", "settings click consumes input, cancels aim, and pauses without casting")
+	_check(paused and controller.battle_controls.settings_overlay.visible and controller.player.current_sp == 50.0 and controller.cast_intent.active_skill == &"", "settings click consumes input, cancels aim, and pauses without casting")
 	controller.battle_controls.mode_option.select(CastIntent.Mode.RELEASE)
 	controller.battle_controls.mode_option.item_selected.emit(CastIntent.Mode.RELEASE)
 	_check(controller.cast_intent.mode == CastIntent.Mode.RELEASE and controller.control_preferences.cast_mode == CastIntent.Mode.RELEASE, "visible mode selector applies the chosen preference")
@@ -198,37 +198,37 @@ func _test_controller_input() -> void:
 	_key(KEY_Q, true)
 	controller.notification(Node.NOTIFICATION_WM_WINDOW_FOCUS_OUT)
 	_key(KEY_Q, false)
-	_check(controller.cast_intent.active_skill == &"" and controller.player.mana == 50.0, "window focus loss discards held aim")
+	_check(controller.cast_intent.active_skill == &"" and controller.player.current_sp == 50.0, "window focus loss discards held aim")
 	controller.player.position = Vector2(500, 350)
 	controller.battle_indicators.show_aim(&"dash", controller.player, Vector2(900, 350), true)
 	var preview_endpoint := controller.battle_indicators.endpoint
 	controller.player.use_dash(Vector2.RIGHT)
 	controller.player._process(PlayerActor.DASH_DURATION)
 	_check(controller.player.position.distance_to(preview_endpoint) < 0.01 and preview_endpoint.x < 610.0, "dash endpoint indicator exactly matches obstacle-clipped skill movement")
-	controller.player.mana = 0.0
+	controller.player.current_sp = 0.0
 	controller.cast_intent.active_skill = &"slash"
 	_move_mouse(Vector2(700, 450))
 	controller._update_aim(world_aim)
-	_check(not controller.battle_indicators.available and controller.battle_controls.aim_label.text.contains("SEM MANA"), "unavailable preview communicates a blocked skill")
+	_check(not controller.battle_indicators.available and controller.battle_controls.aim_label.text.contains("SEM SP"), "unavailable preview communicates a blocked skill")
 	_click(MOUSE_BUTTON_LEFT)
-	_check(controller.player.mana == 0.0 and controller.status_label.text.contains("indisponível"), "confirmation revalidates mana and reports failure without movement")
-	controller.player.mana = 50.0
+	_check(controller.player.current_sp == 0.0 and controller.status_label.text.contains("indisponível"), "confirmation revalidates SP and reports failure without movement")
+	controller.player.current_sp = 50.0
 	controller.player.slash_cooldown = 0.0
 	_move_mouse(controller.battle_controls.skill_buttons[&"slash"].get_global_rect().get_center())
 	_click(MOUSE_BUTTON_LEFT)
-	_check(controller.cast_intent.active_skill == &"slash" and controller.player.mana == 50.0, "clicking a skill card selects without casting through the card")
+	_check(controller.cast_intent.active_skill == &"slash" and controller.player.current_sp == 50.0, "clicking a skill card selects without casting through the card")
 	controller.encounter_active = false
 	controller.run_state.queue_choice()
 	controller._open_augment_menu()
 	_check(paused and controller.cast_intent.active_skill == &"", "reward pause clears outstanding targeting intent")
 	_key(KEY_Q, false)
-	_check(controller.player.mana == 50.0, "release during reward pause never queues a delayed cast")
+	_check(controller.player.current_sp == 50.0, "release during reward pause never queues a delayed cast")
 	controller._confirm_augment(controller.run_state.current_offer[0].id)
 	controller.cast_intent.active_skill = &"slash"
 	var lethal := DamageRequest.new()
 	lethal.target_id = controller.player.get_instance_id()
-	lethal.base_damage = 9999.0
-	lethal.hit_chance = 1.0
+	lethal.physical_damage = 9999.0
+	lethal.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
 	controller.player.health.apply(lethal, 0.0, 0.99)
 	_check(controller.run_finished and controller.cast_intent.active_skill == &"" and controller.battle_indicators.skill == &"", "death removes pending aim and preview")
 	paused = false

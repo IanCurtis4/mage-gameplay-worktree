@@ -28,7 +28,8 @@ func _test_real_archer_pursuit() -> void:
 			archer.set_process(false)
 			archer.position = Vector2(550, 300)
 			# Keep the real AI active after contact to verify repeated attacks/escape.
-			archer.health.reset(1000.0, 0.0)
+			var durable_sources: Array[Dictionary] = [{"source_id": &"durable_test_target", "flat": {&"max_hp": 900.0}}]
+			archer.health.reset(StatCalculator.calculate({}, {}, 1, durable_sources))
 			var hits := [0]
 			player.attack_requested.connect(func(request: DamageRequest, victim: CombatActor) -> void:
 				hits[0] += 1
@@ -51,7 +52,7 @@ func _test_attack_recovery() -> void:
 	nav.configure(Rect2(0, 0, 800, 500), [], 22.0)
 	var player := _player(nav, Vector2(200, 200))
 	var enemy := CombatActor.new()
-	enemy.setup("Alvo", Color.WHITE, RpgStats.derive({"vit": 1}), 17.0)
+	enemy.setup("Alvo", Color.WHITE, StatCalculator.calculate({"vit": 1}), 17.0)
 	root.add_child(enemy)
 	enemy.position = Vector2(286, 200)
 	var hits := [0]
@@ -128,8 +129,8 @@ func _test_momentum() -> void:
 	player.move_to(player.position + Vector2(100, 0))
 	player._process(0.1)
 	var lethal := DamageRequest.new()
-	lethal.base_damage = 9999.0
-	lethal.hit_chance = 1.0
+	lethal.physical_damage = 9999.0
+	lethal.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
 	lethal.target_id = player.get_instance_id()
 	player.health.apply(lethal, 0.0, 0.99)
 	_check(not player.is_alive() and player.velocity.is_zero_approx() and player._path.is_empty(), "death discards momentum synchronously before death pause")

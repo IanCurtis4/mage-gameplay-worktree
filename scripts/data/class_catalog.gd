@@ -20,13 +20,13 @@ static func skill_ids(class_id: StringName) -> Array[StringName]:
 static func _ensure_built() -> void:
 	if not _classes.is_empty():
 		return
-	_add_skill(&"slash", "Corte em cone", "Q", SkillDefinition.Targeting.DIRECTION, 15.0, 4.0, 1.45, 155.0)
-	_add_skill(&"dash", "Investida", "W", SkillDefinition.Targeting.DIRECTION, 20.0, 6.0, 0.0, 270.0)
-	_add_skill(&"fireball", "Bola de Fogo", "Q", SkillDefinition.Targeting.DIRECTION, 18.0, 2.5, 1.80, 700.0, 680.0, 0.32)
-	_add_skill(&"fire_wall", "Parede de Fogo", "W", SkillDefinition.Targeting.DIRECTION, 24.0, 7.0, 0.30, 180.0, 0.0, 0.48)
-	_add_skill(&"fire_spear", "Lança de Fogo", "A", SkillDefinition.Targeting.SINGLE_TARGET, 16.0, 3.0, 1.35, 360.0, 760.0, 0.22)
-	_add_skill(&"ice_spear", "Lança de Gelo", "S", SkillDefinition.Targeting.SINGLE_TARGET, 14.0, 3.0, 1.10, 360.0, 760.0, 0.22)
-	_add_skill(&"teleport", "Teleporte", "D", SkillDefinition.Targeting.POINT, 22.0, 6.0, 0.0, 320.0)
+	_add_skill(&"slash", "Corte em cone", "Q", SkillDefinition.Targeting.DIRECTION, 15.0, 4.0, 1.45, 155.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, true)
+	_add_skill(&"dash", "Investida", "W", SkillDefinition.Targeting.DIRECTION, 20.0, 6.0, 0.0, 270.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
+	_add_skill(&"fireball", "Bola de Fogo", "Q", SkillDefinition.Targeting.DIRECTION, 18.0, 2.5, 1.80, 700.0, 680.0, 0.32, DamageRequest.AccuracyMode.GEOMETRY, true)
+	_add_skill(&"fire_wall", "Parede de Fogo", "W", SkillDefinition.Targeting.DIRECTION, 24.0, 7.0, 0.30, 180.0, 0.0, 0.48, DamageRequest.AccuracyMode.GEOMETRY, false)
+	_add_skill(&"fire_spear", "Lança de Fogo", "A", SkillDefinition.Targeting.SINGLE_TARGET, 16.0, 3.0, 1.35, 360.0, 760.0, 0.22, DamageRequest.AccuracyMode.CONTESTED, true)
+	_add_skill(&"ice_spear", "Lança de Gelo", "S", SkillDefinition.Targeting.SINGLE_TARGET, 14.0, 3.0, 1.10, 360.0, 760.0, 0.22, DamageRequest.AccuracyMode.CONTESTED, true)
+	_add_skill(&"teleport", "Teleporte", "D", SkillDefinition.Targeting.POINT, 22.0, 6.0, 0.0, 320.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -34,7 +34,6 @@ static func _ensure_built() -> void:
 	swordsman.attributes = IdentityIds.initial_attributes(IdentityIds.SWORDSMAN)
 	swordsman.skill_ids = [&"slash", &"dash"]
 	swordsman.passive_id = &"swordsman_resistance"
-	swordsman.basic_kind = DamageRequest.Kind.PHYSICAL
 	swordsman.basic_power = 1.0
 	swordsman.basic_range = 50.0
 	_classes[swordsman.id] = swordsman
@@ -45,7 +44,6 @@ static func _ensure_built() -> void:
 	mage.attributes = IdentityIds.initial_attributes(IdentityIds.MAGE)
 	mage.skill_ids = [&"fireball", &"fire_wall", &"fire_spear", &"ice_spear", &"teleport"]
 	mage.passive_id = &"mage_mana_regeneration"
-	mage.basic_kind = DamageRequest.Kind.MAGIC
 	mage.basic_power = 1.0
 	mage.basic_range = 250.0
 	_classes[mage.id] = mage
@@ -55,19 +53,23 @@ static func _add_skill(
 	display_name: String,
 	input_key: String,
 	targeting: SkillDefinition.Targeting,
-	mana_cost: float,
+	sp_cost: float,
 	cooldown: float,
 	power: float,
 	range_value: float,
 	projectile_speed: float = 0.0,
-	cast_time: float = 0.0
+	cast_time: float = 0.0,
+	accuracy_mode: DamageRequest.AccuracyMode = DamageRequest.AccuracyMode.CONTESTED,
+	can_crit: bool = false
 ) -> void:
 	var definition := SkillDefinition.new()
 	definition.id = skill_id
 	definition.display_name = display_name
 	definition.input_key = input_key
 	definition.targeting = targeting
-	definition.mana_cost = mana_cost
+	definition.accuracy_mode = accuracy_mode
+	definition.can_crit = can_crit
+	definition.sp_cost = sp_cost
 	definition.cooldown = cooldown
 	definition.cast_time = cast_time
 	definition.power = power

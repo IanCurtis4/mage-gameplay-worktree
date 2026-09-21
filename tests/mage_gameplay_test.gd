@@ -18,7 +18,7 @@ func _run() -> void:
 
 func _test_statuses() -> void:
 	var actor := CombatActor.new()
-	actor.setup("Alvo", Color.WHITE, RpgStats.derive({"vit": 20}))
+	actor.setup("Alvo", Color.WHITE, StatCalculator.calculate({"vit": 20}))
 	root.add_child(actor)
 	actor.set_process(false)
 	var tick_count := [0]
@@ -38,10 +38,10 @@ func _test_statuses() -> void:
 	actor._process(1.0)
 	paused = false
 	_check(is_equal_approx(actor.burn_remaining, 3.0), "actor process defensively preserves burn during tree pause")
-	var base_stats := actor.stats.duplicate(true)
+	var base_stats := actor.stat_breakdown.values()
 	actor.apply_slow(0.30, 2.0)
 	actor.apply_slow(0.30, 2.0)
-	_check(is_equal_approx(actor.movement_speed_multiplier(), 0.70) and actor.stats == base_stats, "slow is non-stacking runtime state and does not mutate base stats")
+	_check(is_equal_approx(actor.movement_speed_multiplier(), 0.70) and actor.stat_breakdown.values() == base_stats, "slow is non-stacking runtime state and does not mutate base stats")
 	actor.advance_statuses(2.1)
 	_check(is_equal_approx(actor.movement_speed_multiplier(), 1.0), "slow expires back to the original movement multiplier")
 	actor.free()
@@ -76,13 +76,13 @@ func _test_projectile_order_and_burning() -> void:
 	_check(burning_hit[0], "fireball marks guaranteed critical only when burn is active at impact")
 	var spear_request := DamageRequest.new()
 	spear_request.skill_id = &"fire_spear"
-	spear_request.base_damage = 40.0
-	spear_request.hit_chance = 1.0
+	spear_request.magic_damage = 40.0
+	spear_request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
 	spear_request.target_id = after.get_instance_id()
 	var spear := MageProjectile.new()
 	spear.configure_homing(spear_request, after, Vector2(50, 100), open_nav, 760.0, 360.0, Color("ff793d"))
 	var boosted_power := [0.0]
-	spear.hit.connect(func(request: DamageRequest, _actor: CombatActor) -> void: boosted_power[0] = request.base_damage)
+	spear.hit.connect(func(request: DamageRequest, _actor: CombatActor) -> void: boosted_power[0] = request.magic_damage)
 	root.add_child(spear)
 	spear._process(1.0)
 	_check(is_equal_approx(boosted_power[0], 60.0), "fire spear gains exactly 50 percent when burn is active at impact")
@@ -100,7 +100,7 @@ func _test_projectile_order_and_burning() -> void:
 	after.free()
 
 	var caster := CombatActor.new()
-	caster.setup("Mago", Color.WHITE, RpgStats.derive({}))
+	caster.setup("Mago", Color.WHITE, StatCalculator.calculate({}))
 	caster.position = Vector2(100, 100)
 	root.add_child(caster)
 	var crossing := _target(Vector2(230, 19))
@@ -128,28 +128,28 @@ func _test_spears_and_teleport() -> void:
 	var target := _target(Vector2(380, 118))
 	var emitted_count := [0]
 	mage.mage_projectile_requested.connect(func(_skill: StringName, _request: DamageRequest, _target_actor: CombatActor, _direction: Vector2, count: int) -> void: emitted_count[0] = count)
-	var mana_before := mage.mana
+	var sp_before := mage.current_sp
 	_check(mage.use_spear(&"fire_spear", target), "valid assisted-range target accepts fire spear")
-	_check(emitted_count[0] == 2 and state.projectile_count(&"ice_spear") == 1 and is_equal_approx(mage.mana, mana_before - mage.skill_cost(&"fire_spear")), "fire-spear augment emits two fire projectiles for one cost without changing ice")
+	_check(emitted_count[0] == 2 and state.projectile_count(&"ice_spear") == 1 and is_equal_approx(mage.current_sp, sp_before - mage.skill_cost(&"fire_spear")), "fire-spear augment emits two fire projectiles for one cost without changing ice")
 	state.augment_stacks[&"extra_ice_spear"] = 1
 	_check(state.projectile_count(&"fire_spear") == 2 and state.projectile_count(&"ice_spear") == 2 and state.skill_levels[&"fire_spear"] == 1 and state.skill_levels[&"ice_spear"] == 1, "fire and ice spear counts and levels remain independent")
 	state.skill_levels[&"fire_spear"] = 3
 	_check(state.projectile_count(&"fire_spear") == 4 and state.projectile_count(&"ice_spear") == 2 and ClassCatalog.skill_definition(&"fire_spear").id == &"fire_spear", "fire spear level adds only fire projectiles without mutating catalog data")
-	var spent := mage.mana
+	var spent := mage.current_sp
 	target.health.current_hp = 0.0
 	mage.mage_cooldowns[&"fire_spear"] = 0.0
-	_check(not mage.use_spear(&"fire_spear", target) and mage.mana == spent, "dead target rejects spear without spending resources")
+	_check(not mage.use_spear(&"fire_spear", target) and mage.current_sp == spent, "dead target rejects spear without spending resources")
 
 	mage.target = target
 	mage._path = PackedVector2Array([Vector2(100, 118)])
 	mage.velocity = Vector2(50, 0)
 	var teleport_cost := mage.skill_cost(&"teleport")
-	var teleport_mana := mage.mana
+	var teleport_sp := mage.current_sp
 	_check(mage.use_teleport(Vector2(300, 118)), "teleport crosses an obstacle when its destination is free")
-	_check(mage.position.is_equal_approx(Vector2(300, 118)) and mage.target == null and mage._path.is_empty() and mage.velocity == Vector2.ZERO and is_equal_approx(mage.mana, teleport_mana - teleport_cost), "teleport clears prior walking and pursuit state")
+	_check(mage.position.is_equal_approx(Vector2(300, 118)) and mage.target == null and mage._path.is_empty() and mage.velocity == Vector2.ZERO and is_equal_approx(mage.current_sp, teleport_sp - teleport_cost), "teleport clears prior walking and pursuit state")
 	mage.mage_cooldowns[&"teleport"] = 0.0
-	var rejected_mana := mage.mana
-	_check(not mage.use_teleport(Vector2(180, 118)) and mage.mana == rejected_mana and mage.position == Vector2(300, 118), "solid teleport destination is rejected without cost or movement")
+	var rejected_sp := mage.current_sp
+	_check(not mage.use_teleport(Vector2(180, 118)) and mage.current_sp == rejected_sp and mage.position == Vector2(300, 118), "solid teleport destination is rejected without cost or movement")
 	mage.free()
 	target.free()
 
@@ -163,26 +163,26 @@ func _test_cast_runtime() -> void:
 	mage.set_process(false)
 	var completed := [0]
 	mage.skill_cast_ready.connect(func(_skill: StringName, _point: Vector2, _target_id: int) -> void: completed[0] += 1)
-	var mana_before := mage.mana
-	var expected_time := ClassCatalog.skill_definition(&"fireball").cast_time * float(mage.stats["cast_multiplier"])
+	var sp_before := mage.current_sp
+	var expected_time := StatCalculator.effective_cast_time(0.0, ClassCatalog.skill_definition(&"fireball").cast_time, mage.stat_breakdown)
 	_check(mage.begin_skill_cast(&"fireball", Vector2(400, 100)) and is_equal_approx(mage.active_cast_total, expected_time), "fireball begins a short DEX-scaled preparation")
 	mage._process(expected_time * 0.5)
-	_check(completed[0] == 0 and mage.mana == mana_before and mage.skill_cooldown(&"fireball") == 0.0, "preparation does not spend mana or start cooldown early")
+	_check(completed[0] == 0 and mage.current_sp == sp_before and mage.skill_cooldown(&"fireball") == 0.0, "preparation does not spend SP or start cooldown early")
 	paused = true
 	var paused_remaining := mage.active_cast_remaining
 	mage._process(expected_time)
 	paused = false
 	_check(is_equal_approx(mage.active_cast_remaining, paused_remaining), "tree pause freezes active cast time")
 	mage.move_to(Vector2(120, 100))
-	_check(not mage.has_active_cast() and mage.mana == mana_before, "movement cancels cast preparation without spending")
+	_check(not mage.has_active_cast() and mage.current_sp == sp_before, "movement cancels cast preparation without spending")
 	mage.begin_skill_cast(&"fireball", Vector2(400, 100))
 	mage._process(expected_time + 0.01)
-	_check(completed[0] == 1 and not mage.has_active_cast() and mage.mana == mana_before, "completed preparation requests one revalidated commit and still owns no resource spending")
+	_check(completed[0] == 1 and not mage.has_active_cast() and mage.current_sp == sp_before, "completed preparation requests one revalidated commit and still owns no resource spending")
 	mage.begin_skill_cast(&"fire_wall", Vector2(400, 100))
 	var lethal := DamageRequest.new()
 	lethal.target_id = mage.get_instance_id()
-	lethal.base_damage = 9999.0
-	lethal.hit_chance = 1.0
+	lethal.physical_damage = 9999.0
+	lethal.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
 	lethal.can_crit = false
 	mage.health.apply(lethal, 0.0, 0.99)
 	_check(not mage.has_active_cast(), "death cancels active cast synchronously")
@@ -212,15 +212,15 @@ func _test_class_reset_and_ui() -> void:
 	await process_frame
 	var controller := current_scene as RunController
 	var old_player := controller.player
-	controller.player.mana = 1.0
+	controller.player.current_sp = 1.0
 	controller.run_state.augment_stacks[&"vitality"] = 2
 	controller._select_class(&"mage")
 	await scene_changed
 	await process_frame
 	controller = current_scene as RunController
 	_check(controller.player != old_player and controller.run_state.class_id == &"mage" and controller.player.is_mage(), "class selection rebuilds the run with a new player instance")
-	_check(controller.run_state.augment_stacks.is_empty() and controller.player.mana == controller.player.max_mana and controller.encounter_index == 1, "class change clears augments, resources, cooldowns and encounter progress")
-	_check(is_equal_approx(controller.player.stats["mana_regen_per_second"], 9.0), "mage passive increases mana regeneration through the shared stat pipeline")
+	_check(controller.run_state.augment_stacks.is_empty() and controller.player.current_sp == controller.player.max_sp and controller.encounter_index == 1, "class change clears augments, resources, cooldowns and encounter progress")
+	_check(is_equal_approx(controller.player.stat_breakdown.value(&"sp_regen"), 4.62), "mage passive increases SP regeneration through the shared stat pipeline")
 	_check(controller.battle_controls.skill_buttons.size() == 5 and controller.battle_controls.skill_buttons.has(&"teleport") and not controller.battle_controls.skill_buttons.has(&"slash"), "mage UI exposes only Q/W/A/S/D mage actions")
 	_check(controller._key_skill(KEY_A) == &"fire_spear" and controller._key_skill(KEY_D) == &"teleport" and controller._key_skill(KEY_E) == &"", "mage input mapping preserves E for augments")
 	controller.augment_overlay.visible = true
@@ -244,7 +244,7 @@ func _test_class_reset_and_ui() -> void:
 	controller.player._process(0.01)
 	_check(get_nodes_in_group("player_projectiles").size() == 1, "mage basic attack emits a ranged projectile at the selected target")
 	controller.player.mage_cooldowns[&"teleport"] = 0.0
-	controller.player.mana = controller.player.max_mana
+	controller.player.current_sp = controller.player.max_sp
 	var teleport_point := controller.player.position + Vector2(0, 100)
 	controller._execute_skill(&"teleport", teleport_point)
 	_check(controller.player.target == null and not first_enemy.is_selected and controller._selected_enemy == null, "successful teleport clears pending pursuit and its visible selection")
@@ -252,62 +252,61 @@ func _test_class_reset_and_ui() -> void:
 	ice_request.source_id = controller.player.get_instance_id()
 	ice_request.target_id = first_enemy.get_instance_id()
 	ice_request.skill_id = &"ice_spear"
-	ice_request.kind = DamageRequest.Kind.MAGIC
-	ice_request.base_damage = 5.0
-	ice_request.hit_chance = 1.0
+	ice_request.magic_damage = 5.0
+	ice_request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
 	ice_request.can_crit = false
 	controller._on_mage_projectile_hit(ice_request, first_enemy)
 	_check(is_equal_approx(first_enemy.movement_speed_multiplier(), 0.70), "landed ice spear applies the typed 30 percent slow")
 	for projectile: Node in get_nodes_in_group("player_projectiles"):
 		projectile.free()
-	controller.player.mana = controller.player.max_mana
+	controller.player.current_sp = controller.player.max_sp
 	controller.player.mage_cooldowns[&"fireball"] = 0.0
-	var fireball_mana := controller.player.mana
+	var fireball_sp := controller.player.current_sp
 	var fireball_point := controller.player.position + Vector2(300, 0)
 	controller._commit_skill(&"fireball", fireball_point)
-	_check(controller.player.has_active_cast() and controller.player.mana == fireball_mana and controller.player.skill_cooldown(&"fireball") == 0.0, "controller starts fireball preparation without early mana or cooldown")
+	_check(controller.player.has_active_cast() and controller.player.current_sp == fireball_sp and controller.player.skill_cooldown(&"fireball") == 0.0, "controller starts fireball preparation without early SP or cooldown")
 	controller.cast_intent.cancel()
 	controller._update_hud()
 	controller._update_aim(fireball_point)
 	_check(controller.battle_controls.aim_label.text.contains("Conjurando") and controller.skill_label.text.contains("CONJURANDO"), "HUD exposes remaining cast time after target confirmation")
 	controller.player._process(controller.player.active_cast_remaining + 0.01)
-	_check(not controller.player.has_active_cast() and is_equal_approx(controller.player.mana, fireball_mana - controller.player.skill_cost(&"fireball")) and controller.player.skill_cooldown(&"fireball") == ClassCatalog.skill_definition(&"fireball").cooldown, "completed fireball spends and starts base cooldown exactly once")
+	_check(not controller.player.has_active_cast() and is_equal_approx(controller.player.current_sp, fireball_sp - controller.player.skill_cost(&"fireball")) and controller.player.skill_cooldown(&"fireball") == ClassCatalog.skill_definition(&"fireball").cooldown, "completed fireball spends and starts base cooldown exactly once")
 
 	controller.player.mage_cooldowns[&"fire_wall"] = 0.0
-	controller.player.mana = controller.player.max_mana
-	var wall_mana := controller.player.mana
+	controller.player.current_sp = controller.player.max_sp
+	var wall_sp := controller.player.current_sp
 	controller._commit_skill(&"fire_wall", controller.player.position + Vector2.RIGHT * 300.0)
 	controller._toggle_settings(true)
-	_check(not controller.player.has_active_cast() and controller.player.mana == wall_mana and controller.player.skill_cooldown(&"fire_wall") == 0.0, "opening controls cancels preparation without spending")
+	_check(not controller.player.has_active_cast() and controller.player.current_sp == wall_sp and controller.player.skill_cooldown(&"fire_wall") == 0.0, "opening controls cancels preparation without spending")
 	controller._toggle_settings(false)
 	controller.player.use_fire_wall(Vector2.RIGHT)
 	_check(not get_nodes_in_group("player_projectiles").is_empty() and not get_nodes_in_group("player_effects").is_empty(), "mage runtime owns projectiles and persistent walls before reset")
 
 	controller.player.mage_cooldowns[&"fire_spear"] = 0.0
-	controller.player.mana = controller.player.max_mana
-	var invalid_mana := controller.player.mana
+	controller.player.current_sp = controller.player.max_sp
+	var invalid_sp := controller.player.current_sp
 	first_enemy.position = controller.player.position + Vector2(240, 0)
 	var target_point := first_enemy.position + RunController.ACTOR_BODY_OFFSET
 	controller._commit_skill(&"fire_spear", target_point)
 	first_enemy.position = controller.player.position + Vector2(500, 0)
 	controller.player._process(controller.player.active_cast_remaining + 0.01)
-	_check(controller.player.mana == invalid_mana and controller.player.skill_cooldown(&"fire_spear") == 0.0 and get_nodes_in_group("player_projectiles").size() == 1, "spear revalidates target after cast and spends nothing when it leaves range")
+	_check(controller.player.current_sp == invalid_sp and controller.player.skill_cooldown(&"fire_spear") == 0.0 and get_nodes_in_group("player_projectiles").size() == 1, "spear revalidates target after cast and spends nothing when it leaves range")
 	var dead_during_cast := _target(controller.player.position + Vector2(180, 0))
 	controller.player.mage_cooldowns[&"fire_spear"] = 0.0
-	controller.player.mana = controller.player.max_mana
-	var dead_cast_mana := controller.player.mana
+	controller.player.current_sp = controller.player.max_sp
+	var dead_cast_sp := controller.player.current_sp
 	controller.player.begin_skill_cast(&"fire_spear", dead_during_cast.position, dead_during_cast)
 	dead_during_cast.health.current_hp = 0.0
 	controller.player._process(controller.player.active_cast_remaining + 0.01)
-	_check(controller.player.mana == dead_cast_mana and controller.player.skill_cooldown(&"fire_spear") == 0.0, "target dying during preparation cancels spear commit without spending")
+	_check(controller.player.current_sp == dead_cast_sp and controller.player.skill_cooldown(&"fire_spear") == 0.0, "target dying during preparation cancels spear commit without spending")
 	dead_during_cast.free()
 	var freed_during_cast := _target(controller.player.position + Vector2(180, 0))
 	controller.player.begin_skill_cast(&"fire_spear", freed_during_cast.position, freed_during_cast)
 	freed_during_cast.queue_free()
 	await process_frame
-	var freed_cast_mana := controller.player.mana
+	var freed_cast_sp := controller.player.current_sp
 	controller.player._process(controller.player.active_cast_remaining + 0.01)
-	_check(not controller.player.has_active_cast() and controller.player.mana == freed_cast_mana and controller.player.skill_cooldown(&"fire_spear") == 0.0, "freed target crosses typed cast signal safely and cancels without spending")
+	_check(not controller.player.has_active_cast() and controller.player.current_sp == freed_cast_sp and controller.player.skill_cooldown(&"fire_spear") == 0.0, "freed target crosses typed cast signal safely and cancels without spending")
 
 	for projectile: Node in get_nodes_in_group("player_projectiles"):
 		projectile.free()
@@ -318,13 +317,13 @@ func _test_class_reset_and_ui() -> void:
 	var lethal := DamageRequest.new()
 	lethal.source_id = controller.player.get_instance_id()
 	lethal.target_id = first_enemy.get_instance_id()
-	lethal.base_damage = 9999.0
-	lethal.hit_chance = 1.0
+	lethal.physical_damage = 9999.0
+	lethal.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
 	lethal.can_crit = false
 	first_enemy.apply_damage(lethal, controller.rng)
 	controller.run_state.augment_stacks[&"extra_fire_spear"] = 1
 	controller.player.mage_cooldowns[&"fire_spear"] = 0.0
-	controller.player.mana = controller.player.max_mana
+	controller.player.current_sp = controller.player.max_sp
 	var last_target_point := second_enemy.position + RunController.ACTOR_BODY_OFFSET
 	second_enemy.position = controller.player.position + Vector2(220, 0)
 	last_target_point = second_enemy.position + RunController.ACTOR_BODY_OFFSET
@@ -338,7 +337,7 @@ func _test_class_reset_and_ui() -> void:
 	_check(controller.enemies.is_empty() and controller.reward != null and get_nodes_in_group("player_projectiles").is_empty(), "twin projectiles kill the last enemy once and clean remaining shots")
 
 	controller.player.mage_cooldowns[&"fire_wall"] = 0.0
-	controller.player.mana = controller.player.max_mana
+	controller.player.current_sp = controller.player.max_sp
 	controller._commit_skill(&"fire_wall", controller.player.position + Vector2.RIGHT * 300.0)
 	controller._select_class(&"swordsman")
 	await scene_changed
@@ -351,16 +350,15 @@ func _test_class_reset_and_ui() -> void:
 func _fireball(nav: ArenaNavigation, actors: Array[CombatActor]) -> MageProjectile:
 	var request := DamageRequest.new()
 	request.skill_id = &"fireball"
-	request.kind = DamageRequest.Kind.MAGIC
-	request.base_damage = 50.0
-	request.hit_chance = 1.0
+	request.magic_damage = 50.0
+	request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
 	var projectile := MageProjectile.new()
 	projectile.configure_directional(request, Vector2(50, 100), Vector2.RIGHT, actors, nav, 680.0, 700.0)
 	return projectile
 
 func _target(position_value: Vector2) -> CombatActor:
 	var actor := CombatActor.new()
-	actor.setup("Alvo", Color.WHITE, RpgStats.derive({"vit": 20}), 18.0)
+	actor.setup("Alvo", Color.WHITE, StatCalculator.calculate({"vit": 20}), 18.0)
 	actor.position = position_value
 	root.add_child(actor)
 	actor.set_process(false)

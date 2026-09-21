@@ -1,6 +1,6 @@
 # E03-B — Progressão e transações de build
 
-Estado: **implementado; correções da primeira revisão Astra entregues para revisão focalizada**.
+Estado: **aceito tecnicamente por Astra em `690d092`; E03-C1 liberado separadamente**.
 
 Base do pacote: `fa8f966`. Implementação inicial: `f217d9954c895dc3e24c7095a5b78e49de454088`.
 Correções de catálogo solicitadas por Astra: `4c24ec44912b5232ad29e03492fc0faff9a66ce8`.

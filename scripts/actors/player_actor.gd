@@ -7,9 +7,8 @@ signal fire_wall_requested(direction: Vector2, damage_per_tick: float)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
 
-const BASE_ATTRIBUTES := {"str": 8, "agi": 5, "vit": 8, "int": 2, "dex": 5, "luk": 2}
-const SLASH_MANA_COST := 15.0
-const DASH_MANA_COST := 20.0
+const SLASH_SP_COST := 15.0
+const DASH_SP_COST := 20.0
 const DASH_DISTANCE := 270.0
 const DASH_DURATION := 0.18
 const BASIC_REACH_BEYOND_BODIES := 50.0
@@ -29,8 +28,8 @@ var navigation: ArenaNavigation
 var run_state: RunState
 var class_id: StringName = &"swordsman"
 var class_definition: ClassDefinition
-var mana := 0.0
-var max_mana := 0.0
+var current_sp := 0.0
+var max_sp := 0.0
 var attack_cooldown := 0.0
 var slash_cooldown := 0.0
 var dash_cooldown := 0.0
@@ -65,12 +64,11 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 	run_state = state
 	class_id = run_state.class_id
 	class_definition = ClassCatalog.class_definition(class_id)
-	var modifiers := run_state.get_modifiers()
-	var derived := RpgStats.derive(class_definition.attributes, modifiers["flat"], _with_passive(modifiers["increased"]))
+	var derived := _build_stat_breakdown()
 	setup(class_definition.display_name, Color("8e73de") if class_id == &"mage" else Color("55a8d9"), derived, 20.0)
 	set_animation_kind(class_id)
-	max_mana = float(stats["max_mana"])
-	mana = max_mana
+	max_sp = stat_breakdown.value(&"max_sp")
+	current_sp = max_sp
 	for skill_id: StringName in available_skill_ids():
 		mage_cooldowns[skill_id] = 0.0
 	process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -93,19 +91,18 @@ func available_skill_ids() -> Array[StringName]:
 
 func apply_run_modifiers(state: RunState) -> void:
 	run_state = state
-	var modifiers := run_state.get_modifiers()
-	var derived := RpgStats.derive(class_definition.attributes, modifiers["flat"], _with_passive(modifiers["increased"]))
+	var derived := _build_stat_breakdown()
 	_apply_derived_stats(derived)
 	resources_changed.emit()
 	queue_redraw()
 
-func _apply_derived_stats(derived: Dictionary) -> void:
-	var missing_mana := maxf(0.0, max_mana - mana)
-	stats = derived
-	health.set_max_preserving_missing(float(stats["max_hp"]))
-	health.defense = float(stats["defense"])
-	max_mana = maxf(0.0, float(stats["max_mana"]))
-	mana = clampf(max_mana - missing_mana, 0.0, max_mana)
+func _apply_derived_stats(derived: StatBreakdown) -> void:
+	assert(derived != null)
+	var missing_sp := maxf(0.0, max_sp - current_sp)
+	stat_breakdown = derived
+	health.set_stats_preserving_missing(stat_breakdown)
+	max_sp = maxf(0.0, stat_breakdown.value(&"max_sp"))
+	current_sp = clampf(max_sp - missing_sp, 0.0, max_sp)
 
 func move_to(point: Vector2) -> void:
 	cancel_active_cast()
@@ -136,7 +133,8 @@ func use_slash(direction: Vector2, enemies: Array[CombatActor]) -> bool:
 			continue
 		var offset := enemy.global_position - global_position
 		if SkillGeometry.cone_contains(offset, facing, SLASH_RANGE, SLASH_HALF_ANGLE):
-			attack_requested.emit(_make_request(enemy, &"cone_slash", float(stats["physical_attack"]) * ClassCatalog.skill_definition(&"slash").power, 1.0, true), enemy)
+			var definition := ClassCatalog.skill_definition(&"slash")
+			attack_requested.emit(_make_physical_request(enemy, &"cone_slash", stat_breakdown.value(&"melee_attack") * definition.power, definition.accuracy_mode, definition.can_crit), enemy)
 	resources_changed.emit()
 	return true
 
@@ -161,7 +159,8 @@ func use_fireball(direction: Vector2) -> bool:
 		return false
 	var facing := _resolved_facing(direction)
 	_spend(&"fireball")
-	var request := _make_magic_request(null, &"fireball", _magic_power(&"fireball"), 1.0, true)
+	var definition := ClassCatalog.skill_definition(&"fireball")
+	var request := _make_magic_request(null, &"fireball", _magic_power(&"fireball"), definition.accuracy_mode, definition.can_crit)
 	mage_projectile_requested.emit(&"fireball", request, null, facing, 1)
 	resources_changed.emit()
 	return true
@@ -180,7 +179,8 @@ func use_spear(skill_id: StringName, enemy: CombatActor) -> bool:
 		return false
 	var facing := _resolved_facing(global_position.direction_to(enemy.global_position))
 	_spend(skill_id)
-	var request := _make_magic_request(enemy, skill_id, _magic_power(skill_id), 1.0, true)
+	var definition := ClassCatalog.skill_definition(skill_id)
+	var request := _make_magic_request(enemy, skill_id, _magic_power(skill_id), definition.accuracy_mode, definition.can_crit)
 	var count := run_state.projectile_count(skill_id)
 	mage_projectile_requested.emit(skill_id, request, enemy, facing, count)
 	resources_changed.emit()
@@ -223,7 +223,7 @@ func has_active_cast() -> bool:
 
 func skill_cast_time(skill_id: StringName) -> float:
 	var definition := ClassCatalog.skill_definition(skill_id)
-	return maxf(0.0, definition.cast_time * float(stats["cast_multiplier"])) if definition != null else 0.0
+	return StatCalculator.effective_cast_time(0.0, definition.cast_time, stat_breakdown) if definition != null else 0.0
 
 func teleport_destination(point: Vector2) -> Vector2:
 	var offset := point - global_position
@@ -273,7 +273,7 @@ func skill_cooldown(skill_id: StringName) -> float:
 
 func skill_cost(skill_id: StringName) -> float:
 	var definition := ClassCatalog.skill_definition(skill_id)
-	return definition.mana_cost if definition != null else 0.0
+	return definition.sp_cost if definition != null else 0.0
 
 func _process(delta: float) -> void:
 	super._process(delta)
@@ -283,7 +283,7 @@ func _process(delta: float) -> void:
 	var simulation_paused := is_inside_tree() and get_tree().paused
 	if simulation_paused:
 		return
-	_regenerate_mana(delta, false)
+	_regenerate_sp(delta, false)
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
 	_attack_recovery = maxf(0.0, _attack_recovery - delta)
 	slash_cooldown = maxf(0.0, slash_cooldown - delta)
@@ -356,12 +356,12 @@ func _advance_dash(delta: float) -> void:
 		global_position = safe_position if safe_position.distance_to(next_position) > MOVEMENT_EPSILON else _dash_endpoint
 		_dash_active = false
 
-func _regenerate_mana(delta: float, simulation_paused: bool) -> bool:
-	if simulation_paused or not is_alive() or mana >= max_mana:
+func _regenerate_sp(delta: float, simulation_paused: bool) -> bool:
+	if simulation_paused or not is_alive() or current_sp >= max_sp:
 		return false
-	var previous_mana := mana
-	mana = minf(max_mana, mana + float(stats["mana_regen_per_second"]) * delta)
-	if is_equal_approx(previous_mana, mana):
+	var previous_sp := current_sp
+	current_sp = minf(max_sp, current_sp + stat_breakdown.value(&"sp_regen") * delta)
+	if is_equal_approx(previous_sp, current_sp):
 		return false
 	resources_changed.emit()
 	return true
@@ -370,48 +370,57 @@ func _try_basic_attack() -> void:
 	if target == null or attack_cooldown > 0.0 or not can_basic_attack(target, _attack_engaged):
 		return
 	_last_facing = global_position.direction_to(target.global_position)
-	attack_cooldown = 1.0 / float(stats["attacks_per_second"])
+	attack_cooldown = 1.0 / stat_breakdown.value(&"attacks_per_second")
 	_attack_recovery = BASIC_ATTACK_RECOVERY
 	_basic_visual_time = BASIC_ATTACK_RECOVERY
 	_basic_facing = _last_facing
 	_basic_origin = global_position + Vector2(0, -18)
 	_basic_visual_radius = maxf(12.0, global_position.distance_to(target.global_position))
 	queue_redraw()
-	var stat_id := "magic_attack" if is_mage() else "physical_attack"
-	var request := _make_request(target, &"basic_attack", float(stats[stat_id]) * class_definition.basic_power, float(stats["hit_chance"]), true)
+	var request: DamageRequest
+	if is_mage():
+		request = _make_magic_request(target, &"basic_attack", stat_breakdown.value(&"magic_attack") * class_definition.basic_power, DamageRequest.AccuracyMode.CONTESTED, true)
+	else:
+		request = _make_physical_request(target, &"basic_attack", stat_breakdown.value(&"melee_attack") * class_definition.basic_power, DamageRequest.AccuracyMode.CONTESTED, true)
 	if is_mage():
 		mage_projectile_requested.emit(&"basic_attack", request, target, _last_facing, 1)
 	else:
 		attack_requested.emit(request, target)
 	presentation_action.emit(&"basic_attack", _last_facing, BASIC_ATTACK_RECOVERY)
 
-func _make_request(enemy: CombatActor, skill_id: StringName, power: float, hit_chance: float, can_crit: bool) -> DamageRequest:
+func _make_request(enemy: CombatActor, skill_id: StringName, accuracy_mode: DamageRequest.AccuracyMode, can_crit: bool) -> DamageRequest:
 	var request := DamageRequest.new()
 	request.source_id = get_instance_id()
 	request.target_id = enemy.get_instance_id() if enemy != null else 0
 	request.skill_id = skill_id
-	request.kind = class_definition.basic_kind
-	request.base_damage = power
-	request.hit_chance = hit_chance
-	request.crit_chance = float(stats["crit_chance"])
+	request.accuracy_mode = accuracy_mode
+	request.hit_rating = stat_breakdown.value(&"hit_rating")
+	request.crit_chance = stat_breakdown.value(&"crit_chance")
+	request.crit_multiplier = stat_breakdown.value(&"crit_multiplier")
+	request.damage_dealt_multiplier = stat_breakdown.value(&"damage_dealt_multiplier")
 	request.can_crit = can_crit
 	return request
 
-func _make_magic_request(enemy: CombatActor, skill_id: StringName, power: float, hit_chance: float, can_crit: bool) -> DamageRequest:
-	var request := _make_request(enemy, skill_id, power, hit_chance, can_crit)
-	request.kind = DamageRequest.Kind.MAGIC
+func _make_physical_request(enemy: CombatActor, skill_id: StringName, power: float, accuracy_mode: DamageRequest.AccuracyMode, can_crit: bool) -> DamageRequest:
+	var request := _make_request(enemy, skill_id, accuracy_mode, can_crit)
+	request.physical_damage = power
+	return request
+
+func _make_magic_request(enemy: CombatActor, skill_id: StringName, power: float, accuracy_mode: DamageRequest.AccuracyMode, can_crit: bool) -> DamageRequest:
+	var request := _make_request(enemy, skill_id, accuracy_mode, can_crit)
+	request.magic_damage = power
 	return request
 
 func _magic_power(skill_id: StringName) -> float:
-	return float(stats["magic_attack"]) * ClassCatalog.skill_definition(skill_id).power
+	return stat_breakdown.value(&"magic_attack") * ClassCatalog.skill_definition(skill_id).power
 
 func _can_spend(skill_id: StringName) -> bool:
-	return skill_id in available_skill_ids() and is_alive() and skill_cooldown(skill_id) <= 0.0 and mana >= skill_cost(skill_id)
+	return skill_id in available_skill_ids() and is_alive() and skill_cooldown(skill_id) <= 0.0 and current_sp >= skill_cost(skill_id)
 
 func _spend(skill_id: StringName) -> void:
 	var definition := ClassCatalog.skill_definition(skill_id)
-	mana -= definition.mana_cost
-	var cooldown := definition.cooldown
+	current_sp -= definition.sp_cost
+	var cooldown := StatCalculator.effective_cooldown(definition.cooldown, stat_breakdown)
 	if skill_id == &"slash":
 		slash_cooldown = cooldown
 	elif skill_id == &"dash":
@@ -449,7 +458,7 @@ func _move_step(delta: float) -> void:
 				_path_index = index
 				break
 		offset = _path[_path_index] - global_position
-		var desired_speed := minf(float(stats["move_speed"]) * movement_speed_multiplier(), sqrt(2.0 * MOVE_FRICTION * offset.length()))
+		var desired_speed := minf(stat_breakdown.value(&"move_speed") * movement_speed_multiplier(), sqrt(2.0 * MOVE_FRICTION * offset.length()))
 		desired_velocity = offset.normalized() * desired_speed
 	var previous_velocity := velocity
 	var acceleration := MOVE_FRICTION if desired_velocity.length() < velocity.length() else MOVE_ACCELERATION
@@ -493,18 +502,8 @@ func can_basic_attack(enemy: CombatActor, retain: bool = false) -> bool:
 	var allowed_distance := basic_attack_distance(enemy) + (ATTACK_RETENTION if retain else 0.0)
 	return global_position.distance_to(enemy.global_position) <= allowed_distance and navigation.is_segment_clear(global_position, enemy.global_position, 0.0)
 
-func _with_passive(increased: Dictionary) -> Dictionary:
-	var result: Dictionary = increased.duplicate()
-	if _has_equipped_passive(&"swordsman_resistance"):
-		result["defense"] = float(result.get("defense", 0.0)) + 0.50
-	elif _has_equipped_passive(&"mage_mana_regeneration"):
-		result["mana_regen_per_second"] = float(result.get("mana_regen_per_second", 0.0)) + 0.50
-	return result
-
-func _has_equipped_passive(passive_id: StringName) -> bool:
-	if run_state == null or not run_state.uses_persistent_build():
-		return (class_id == &"swordsman" and passive_id == &"swordsman_resistance") or (class_id == &"mage" and passive_id == &"mage_mana_regeneration")
-	return passive_id in run_state.build_snapshot.passive_slots and int(run_state.skill_levels.get(passive_id, 0)) > 0
+func _build_stat_breakdown() -> StatBreakdown:
+	return run_state.build_snapshot.stat_breakdown(run_state.stat_modifier_sources())
 
 func _draw() -> void:
 	super._draw()

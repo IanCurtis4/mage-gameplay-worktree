@@ -252,10 +252,8 @@ func _class_name(base_class_id: StringName) -> String:
 
 func _build_summary(character: Variant) -> String:
 	var preset: Dictionary = character.presets[character.selected_preset]
-	var attributes: Dictionary = IdentityIds.initial_attributes(character.base_class_id)
-	for attribute_id: StringName in IdentityIds.attribute_ids():
-		attributes[attribute_id] = int(attributes.get(attribute_id, 0)) + int(character.attribute_allocations.get(attribute_id, 0))
-	var derived_stats: Dictionary = RpgStats.derive(attributes)
+	var preview: Dictionary = facade.build_preview(character.character_id)
+	var derived_stats: StatBreakdown = preview.get("stat_breakdown") if preview.get("ok", false) else null
 	var active: Array[String] = []
 	for skill_id: Variant in preset["active_slots"]:
 		if skill_id != null:
@@ -265,7 +263,9 @@ func _build_summary(character: Variant) -> String:
 		if skill_id != null:
 			passive.append(_skill_name(skill_id))
 	var weapon: Variant = preset["equipped"].get(&"weapon")
-	return "Build inicial\nAtivas: %s\nPassiva: %s\nArma: %s\nStats: Vida %d · Mana %d · Ataque físico %d · Ataque mágico %d\nAtributos livres e progressão serão liberados no contrato E03." % [", ".join(active), ", ".join(passive), _equipment_name(weapon), int(derived_stats["max_hp"]), int(derived_stats["max_mana"]), int(derived_stats["physical_attack"]), int(derived_stats["magic_attack"])]
+	if derived_stats == null:
+		return "Build indisponível (%s)." % preview.get("error_code", &"preview_failed")
+	return "Build inicial\nAtivas: %s\nPassiva: %s\nArma: %s\nStats: Vida %d · SP %d · ATQ corpo %d · ATQ precisão %d · ATQ mágico %d" % [", ".join(active), ", ".join(passive), _equipment_name(weapon), int(derived_stats.value(&"max_hp")), int(derived_stats.value(&"max_sp")), int(derived_stats.value(&"melee_attack")), int(derived_stats.value(&"precision_attack")), int(derived_stats.value(&"magic_attack"))]
 
 func _skill_name(skill_id: Variant) -> String:
 	match StringName(skill_id):
@@ -274,7 +274,7 @@ func _skill_name(skill_id: Variant) -> String:
 		&"swordsman_resistance": return "Resistência"
 		&"fireball": return "Bola de fogo"
 		&"fire_wall": return "Parede de fogo"
-		&"mage_mana_regeneration": return "Regeneração de mana"
+		&"mage_mana_regeneration": return "Regeneração de SP"
 		_: return "Skill indisponível"
 
 func _equipment_name(item_id: Variant) -> String:

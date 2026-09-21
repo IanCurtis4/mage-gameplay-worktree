@@ -15,25 +15,26 @@ func _initialize() -> void:
 	quit(0 if failures == 0 else 1)
 
 func _test_health_application() -> void:
-	var health := HealthState.new(22, 50.0, 0.0)
+	var initial_stats := _stats({&"max_hp": -50.0})
+	var health := HealthState.new(22, initial_stats)
 	var death_count := [0]
 	health.actor_died.connect(func(_id: int) -> void: death_count[0] += 1)
 	var request := DamageRequest.new()
 	request.source_id = 10
 	request.target_id = 22
-	request.base_damage = 80.0
-	request.hit_chance = 1.0
+	request.physical_damage = 80.0
+	request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
 	request.can_crit = false
 	var result := health.apply(request, 0.0, 0.0)
 	_check(result["actual_damage"] == 50 and result["killed"], "lethal damage is capped to remaining HP")
 	_check(death_count[0] == 1, "death is emitted once")
 	_check(health.apply(request, 0.0, 0.0).is_empty() and death_count[0] == 1, "dead target rejects repeated application")
-	health.reset(100.0, 10.0)
+	health.reset(_stats({}))
 	_check(health.is_alive() and health.current_hp == 100.0 and death_count[0] == 1, "health reset restores state without emitting death")
 	health.current_hp = 60.0
-	health.set_max_preserving_missing(150.0)
+	health.set_stats_preserving_missing(_stats({&"max_hp": 50.0}))
 	_check(health.current_hp == 110.0, "maximum HP changes preserve missing HP")
-	health.reset(10.0, 0.0)
+	health.reset(_stats({&"max_hp": -90.0}))
 	health.current_hp = 0.4
 	var fractional := health.apply(request, 0.0, 0.0)
 	_check(is_equal_approx(fractional["actual_damage"], 0.4) and fractional["killed"], "fractional remaining HP cannot make a target immortal")
@@ -85,8 +86,8 @@ func _test_augment_flow() -> void:
 		if definition.id == &"vitality":
 			hp_available = hp_state.confirm(definition.id, false)
 			break
-	var hp_modifiers := hp_state.get_modifiers()
-	_check(hp_available and is_equal_approx(hp_modifiers["increased"]["max_hp"], 0.20), "HP augment feeds shared stat modifiers")
+	var hp_modifiers := hp_state.stat_modifier_sources()
+	_check(hp_available and is_equal_approx(hp_modifiers[0]["increased"][&"max_hp"], 0.20), "HP augment feeds shared stat modifiers")
 
 func _test_navigation() -> void:
 	var navigation := ArenaNavigation.new()
@@ -119,44 +120,46 @@ func _test_resource_recalculation() -> void:
 	player.configure(navigation, RunState.new())
 	root.add_child(player)
 	player.health.current_hp = 140.0
-	player.mana = 30.0
+	player.current_sp = 30.0
 	var no_enemies: Array[CombatActor] = []
-	var derived: Dictionary = player.stats.duplicate(true)
-	derived["max_hp"] = 220.0
-	derived["max_mana"] = 70.0
+	var sources: Array[Dictionary] = [{"source_id": &"recalculation_test", "flat": {&"max_hp": 40.0, &"max_sp": 20.0}}]
+	var derived := player.run_state.build_snapshot.stat_breakdown(sources)
+	player.attack_cooldown = 0.75
+	player.slash_cooldown = 1.25
 	player._apply_derived_stats(derived)
 	_check(player.health.current_hp == 180.0, "player recalculation preserves missing HP")
-	_check(player.mana == 50.0 and player.max_mana == 70.0, "player recalculation preserves missing mana")
-	player.mana = 50.0
+	_check(player.current_sp == 50.0 and player.max_sp == 70.0, "player recalculation preserves missing SP")
+	_check(player.attack_cooldown == 0.75 and player.slash_cooldown == 1.25, "stat recalculation preserves active cooldowns")
+	player.current_sp = 50.0
 	for _cast: int in range(3):
 		player.slash_cooldown = 0.0
-		_check(player.use_slash(Vector2.RIGHT, no_enemies), "slash spends mana while available")
+		_check(player.use_slash(Vector2.RIGHT, no_enemies), "slash spends SP while available")
 	player.slash_cooldown = 0.0
-	_check(player.mana == 5.0 and not player.use_slash(Vector2.RIGHT, no_enemies), "slash blocks when mana is exhausted")
-	player._process(2.0)
+	_check(player.current_sp == 5.0 and not player.use_slash(Vector2.RIGHT, no_enemies), "slash blocks when SP is exhausted")
+	player._process(5.0)
 	player.slash_cooldown = 0.0
-	_check(player.mana >= PlayerActor.SLASH_MANA_COST and player.use_slash(Vector2.RIGHT, no_enemies), "living player regenerates and can reuse blocked skill")
-	player.mana = player.max_mana - 1.0
+	_check(player.current_sp >= PlayerActor.SLASH_SP_COST and player.use_slash(Vector2.RIGHT, no_enemies), "living player regenerates and can reuse blocked skill")
+	player.current_sp = player.max_sp - 1.0
 	player._process(10.0)
-	_check(player.mana == player.max_mana, "mana regeneration clamps at maximum")
-	player.mana = 0.0
-	player._regenerate_mana(1.0, true)
-	_check(player.mana == 0.0, "paused player does not regenerate mana")
+	_check(player.current_sp == player.max_sp, "SP regeneration clamps at maximum")
+	player.current_sp = 0.0
+	player._regenerate_sp(1.0, true)
+	_check(player.current_sp == 0.0, "paused player does not regenerate SP")
 	player.health.current_hp = 0.0
-	player._regenerate_mana(1.0, false)
-	_check(player.mana == 0.0, "dead player does not regenerate mana")
+	player._regenerate_sp(1.0, false)
+	_check(player.current_sp == 0.0, "dead player does not regenerate SP")
 	player.queue_free()
 
 func _test_projectiles() -> void:
 	var open_navigation := ArenaNavigation.new()
 	open_navigation.configure(Rect2(0, 0, 760, 320), [], 4.0)
 	var target := CombatActor.new()
-	target.setup("Alvo", Color.WHITE, RpgStats.derive({"vit": 1}))
+	target.setup("Alvo", Color.WHITE, StatCalculator.calculate({"vit": 1}))
 	target.global_position = Vector2(250, 118)
 	root.add_child(target)
 	var request := DamageRequest.new()
 	request.target_id = target.get_instance_id()
-	request.base_damage = 10.0
+	request.physical_damage = 10.0
 	var hit_count := [0]
 	var hit_projectile := ArrowProjectile.new()
 	hit_projectile.configure(request, target, Vector2(40, 100), open_navigation)
@@ -216,7 +219,7 @@ func _test_fluid_movement() -> void:
 	_check(fine_player.global_position.is_equal_approx(coarse_player.global_position), "player movement consumes distance uniformly across delta sizes")
 
 	var moving_target := CombatActor.new()
-	moving_target.setup("Alvo móvel", Color.WHITE, RpgStats.derive({"vit": 1}), 19.0)
+	moving_target.setup("Alvo móvel", Color.WHITE, StatCalculator.calculate({"vit": 1}), 19.0)
 	moving_target.global_position = Vector2(420, 100)
 	root.add_child(moving_target)
 	fine_player.global_position = Vector2(80, 100)
@@ -291,7 +294,7 @@ func _test_basic_attack_tolerance() -> void:
 	player.global_position = Vector2(80, 100)
 	root.add_child(player)
 	var enemy := CombatActor.new()
-	enemy.setup("Alvo", Color.WHITE, RpgStats.derive({"vit": 1}), 19.0)
+	enemy.setup("Alvo", Color.WHITE, StatCalculator.calculate({"vit": 1}), 19.0)
 	enemy.global_position = Vector2(169, 100)
 	root.add_child(enemy)
 	_check(is_equal_approx(player.basic_attack_distance(enemy), 89.0) and player.can_basic_attack(enemy), "basic attack reaches 50 px beyond actor edges")
@@ -332,3 +335,9 @@ func _check(condition: bool, label: String) -> void:
 	if not condition:
 		failures += 1
 		push_error(label)
+
+func _stats(flat: Dictionary) -> StatBreakdown:
+	var sources: Array[Dictionary] = []
+	if not flat.is_empty():
+		sources.append({"source_id": &"test_tuning", "flat": flat})
+	return StatCalculator.calculate({}, {}, 1, sources)

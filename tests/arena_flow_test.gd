@@ -27,16 +27,16 @@ func _run() -> void:
 	_check(controller.player.target == second_enemy and second_enemy.is_selected, "assisted click starts pursuit and visible selection")
 	controller._handle_world_click(Vector2(300, 520))
 	_check(controller.player.target == null and not second_enemy.is_selected, "ground click immediately cancels pursuit and selection")
-	controller.player.mana = 14.2
+	controller.player.current_sp = 14.2
 	controller.player.slash_cooldown = 0.0
 	controller._update_hud()
-	_check(controller.mana_label.text.begins_with("MANA  14") and controller.skill_label.text.contains("SEM MANA") and not controller.skill_label.text.contains("Corte (15 mana) — PRONTO"), "HUD floors fractional mana and never shows false ready state")
+	_check(controller.sp_label.text.begins_with("SP  14") and controller.skill_label.text.contains("SEM SP"), "HUD floors fractional SP and never shows false ready state")
 	controller.player.slash_cooldown = 2.0
 	controller._update_hud()
-	_check(controller.skill_label.text.contains("RECARGA 2.0s"), "HUD distinguishes cooldown from insufficient mana")
-	controller._show_skill_blocked("Corte em cone", controller.player.slash_cooldown, PlayerActor.SLASH_MANA_COST)
+	_check(controller.skill_label.text.contains("RECARGA 2.0s"), "HUD distinguishes cooldown from insufficient SP")
+	controller._show_skill_blocked("Corte em cone", controller.player.slash_cooldown, PlayerActor.SLASH_SP_COST)
 	_check(controller.status_label.text.contains("indisponível") and controller.status_label.text.contains("RECARGA"), "blocked skill gives immediate non-pausing feedback")
-	controller.player.mana = controller.player.max_mana
+	controller.player.current_sp = controller.player.max_sp
 	controller.player.slash_cooldown = 0.0
 	controller._start_next_encounter()
 	_check(controller.encounter_index == 1 and controller.enemies.size() == 2, "active encounter blocks manual advancement")
@@ -65,7 +65,7 @@ func _run() -> void:
 	await process_frame
 	controller._open_augment_menu()
 	var second_offer := controller.run_state.current_offer
-	controller.player.mana = 5.0
+	controller.player.current_sp = 5.0
 	controller.player.attack_cooldown = 1.0
 	controller.player.slash_cooldown = 2.0
 	controller.player.dash_cooldown = 3.0
@@ -80,7 +80,7 @@ func _run() -> void:
 	controller = current_scene as RunController
 	_check(controller != completed_controller and not paused and controller.encounter_index == 1, "victory restart creates a fresh first encounter")
 	_check(controller.run_state.augment_stacks.is_empty() and controller.run_state.pending_choices == 0, "victory restart clears augment state")
-	_check(controller.player.mana == controller.player.max_mana and controller.player.attack_cooldown == 0.0 and controller.player.slash_cooldown == 0.0 and controller.player.dash_cooldown == 0.0, "victory restart clears mana deficits and cooldowns")
+	_check(controller.player.current_sp == controller.player.max_sp and controller.player.attack_cooldown == 0.0 and controller.player.slash_cooldown == 0.0 and controller.player.dash_cooldown == 0.0, "victory restart clears SP deficits and cooldowns")
 
 	var shooter := controller.enemies[0] as EnemyActor
 	shooter._try_attack(true)
@@ -103,7 +103,7 @@ func _run() -> void:
 	await scene_changed
 	await process_frame
 	controller = current_scene as RunController
-	_check(controller != dead_controller and controller.player.is_alive() and controller.player.mana == controller.player.max_mana, "death restart creates a healthy fresh run")
+	_check(controller != dead_controller and controller.player.is_alive() and controller.player.current_sp == controller.player.max_sp, "death restart creates a healthy fresh run")
 	_check(not paused and controller.run_state.augment_stacks.is_empty() and controller.player.slash_cooldown == 0.0, "death restart clears pause, stacks and cooldowns")
 
 	print("Fluxo da arena: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
@@ -114,8 +114,8 @@ func _defeat_all(controller: RunController) -> void:
 		var lethal := DamageRequest.new()
 		lethal.source_id = controller.player.get_instance_id()
 		lethal.target_id = enemy.get_instance_id()
-		lethal.base_damage = 9999.0
-		lethal.hit_chance = 1.0
+		lethal.physical_damage = 9999.0
+		lethal.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
 		lethal.can_crit = false
 		enemy.apply_damage(lethal, controller.rng)
 
@@ -123,8 +123,8 @@ func _kill_player(controller: RunController) -> void:
 	var lethal := DamageRequest.new()
 	lethal.source_id = 999
 	lethal.target_id = controller.player.get_instance_id()
-	lethal.base_damage = 9999.0
-	lethal.hit_chance = 1.0
+	lethal.physical_damage = 9999.0
+	lethal.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
 	lethal.can_crit = false
 	controller.player.apply_damage(lethal, controller.rng)
 

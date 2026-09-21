@@ -58,5 +58,6 @@ Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tes
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e03_stat_calculator_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e03_stat_matrix_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e03_progression_transactions_test.gd')
+Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e03_consumer_integration_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--quit-after', '5')
 Write-Host 'All foundation and milestone-one checks passed.'
