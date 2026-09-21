@@ -12,6 +12,7 @@ var profile_directory := DEFAULT_PROFILE_DIRECTORY
 var facade: RefCounted
 var _request_serial := 0
 var _selected_index := -1
+var _focused_character_id := ""
 var _read_only := false
 var _progression_retries: Dictionary[String, Dictionary] = {}
 
@@ -106,6 +107,7 @@ func _select_roster_index(index: int) -> void:
 	roster_list.select(index)
 	var profile: Variant = facade.current_profile() if facade != null else null
 	if profile != null:
+		_focused_character_id = profile.characters[index].character_id
 		preset_selector.select(profile.characters[index].selected_preset)
 		_populate_build_editor(profile.characters[index])
 		build_summary_label.text = _build_summary(profile.characters[index])
@@ -191,6 +193,10 @@ func _show_result(result: Dictionary, success_text: String = "Perfil atualizado.
 		_read_only = result["read_only"]
 	if ok:
 		status_label.text = success_text if not result.get("already_applied", false) else "Essa escolha já está ativa."
+		if result.has("character_id"):
+			_focused_character_id = result["character_id"]
+		elif result.has("selected_character_id"):
+			_focused_character_id = result["selected_character_id"]
 	else:
 		status_label.text = _error_text(StringName(result.get("error_code", &"unknown")), result.get("read_only", false))
 	_refresh()
@@ -215,12 +221,18 @@ func _refresh() -> void:
 		return
 	roster_list.clear()
 	_selected_index = -1
+	var persisted_index := -1
+	var focused_index := -1
 	for character: Variant in profile.characters:
 		var selected := "  • selecionado" if character.character_id == profile.selected_character_id else ""
 		roster_list.add_item("%s — %s%s" % [character.display_name, _class_name(character.base_class_id), selected])
 		if character.character_id == profile.selected_character_id:
-			_selected_index = roster_list.item_count - 1
+			persisted_index = roster_list.item_count - 1
+		if character.character_id == _focused_character_id:
+			focused_index = roster_list.item_count - 1
+	_selected_index = focused_index if focused_index >= 0 else persisted_index
 	if _selected_index >= 0:
+		_focused_character_id = profile.characters[_selected_index].character_id
 		roster_list.select(_selected_index)
 		_populate_build_editor(profile.characters[_selected_index])
 		preset_selector.select(profile.characters[_selected_index].selected_preset)
@@ -310,7 +322,7 @@ func _refresh_progression_panel(character: Variant, profile: Variant) -> void:
 	var attribute_lines: Array[String] = ["Atributos"]
 	for attribute_id: StringName in IdentityIds.attribute_ids():
 		var detail := breakdown.primary_detail(attribute_id)
-		attribute_lines.append("%s: base %d · investido %d · efetivo %d · limite %d" % [_attribute_name(attribute_id), int(detail["initial"]), int(detail["allocated"]), int(detail["effective"]), int(detail["maximum"])])
+		attribute_lines.append("%s: base %d · investido %d · base + investido: teto %d · efetivo %d · limite efetivo %d" % [_attribute_name(attribute_id), int(detail["initial"]), int(detail["allocated"]), StatCalculator.INVESTED_ATTRIBUTE_MAX, int(detail["effective"]), int(detail["maximum"])])
 	progression_attributes_label.text = "\n".join(attribute_lines)
 	_clear_progression_skill_tree()
 	for option: Dictionary in options["skills"]:
@@ -439,7 +451,7 @@ func _skill_progression_tooltip(option: Dictionary) -> String:
 		lines.append("Pré-requisitos: %s" % (", ".join(prerequisites) if not prerequisites.is_empty() else "nenhum"))
 	else:
 		lines.append("Rank máximo atingido.")
-	lines.append("Efeitos e valores por rank serão definidos em E04.")
+	lines.append("Efeitos adicionais por rank ainda não estão disponíveis.")
 	return "\n".join(lines)
 
 func _skill_purchase_tooltip(option: Dictionary) -> String:

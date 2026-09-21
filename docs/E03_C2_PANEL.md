@@ -11,6 +11,12 @@ interface consome somente `ProfileFacade.progression_summary`,
 Valores efetivos de atributo vêm de `StatBreakdown`; a UI não reproduz curvas,
 custos, ranks ou requisitos.
 
+O foco de edição do menu é um `character_id` separado da seleção persistida para
+iniciar a run. Atualizações, falhas e retries preservam esse foco; portanto editar
+um alt apenas navegado não troca o personagem persistente nem aplica a operação ao
+alt errado. Para cada atributo, o painel distingue o teto de `base + investido`
+da autoridade de progressão (60) do limite efetivo de `StatCalculator` (120).
+
 Cada atributo oferece investimento unitário e respec; cada skill expõe rank,
 carteira, requisitos e compra apenas quando a projeção autoritativa permite. Os
 respecs passam pelas transações da fachada. Falha definida de gravação conserva o
@@ -24,7 +30,8 @@ continuam em E04.
 ## Evidências
 
 `tests/e02_character_menu_test.gd` cobre painel de leitura, personagem correto,
-estados, ações de atributo/skill, requisitos, respec e retry. O teste integrado
+estados, ações de atributo/skill, requisitos, respec e retry, incluindo dois alts
+com foco separado da seleção persistente. O teste integrado
 `tests/e03_progression_panel_integration_test.gd` cobre painel → atributo/rank →
 reload → preview/snapshot de run.
 
