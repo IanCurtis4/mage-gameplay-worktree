@@ -3,11 +3,27 @@ extends Resource
 ## Read-only catalog data. Cooldowns, levels and counts belong to run/actor state.
 
 enum Targeting { DIRECTION, SINGLE_TARGET, POINT }
+enum Category { ACTIVE, PASSIVE }
+enum Handler {
+	UNASSIGNED,
+	SLASH,
+	DASH,
+	FIREBALL,
+	FIRE_WALL,
+	SPEAR,
+	TELEPORT,
+}
+
+const MAX_ACTIVE_RANK := 5
+const MAX_PASSIVE_RANK := 3
 
 @export var id: StringName
 @export var display_name: String
 @export var input_key: String
 @export var targeting: Targeting = Targeting.DIRECTION
+@export var category: Category = Category.ACTIVE
+@export var handler_id: Handler = Handler.UNASSIGNED
+@export var ranks: Array[SkillRankDefinition] = []
 @export var accuracy_mode: DamageRequest.AccuracyMode = DamageRequest.AccuracyMode.CONTESTED
 @export var can_crit: bool = false
 @export var sp_cost: float = 0.0
@@ -16,3 +32,22 @@ enum Targeting { DIRECTION, SINGLE_TARGET, POINT }
 @export var power: float = 0.0
 @export var range: float = 0.0
 @export var projectile_speed: float = 0.0
+
+func is_rank_catalog_valid() -> bool:
+	if category < Category.ACTIVE or category > Category.PASSIVE:
+		return false
+	if handler_id <= Handler.UNASSIGNED or handler_id > Handler.TELEPORT:
+		return false
+	var maximum_rank := MAX_ACTIVE_RANK if category == Category.ACTIVE else MAX_PASSIVE_RANK
+	if ranks.is_empty() or ranks.size() > maximum_rank:
+		return false
+	for index: int in ranks.size():
+		var definition := ranks[index]
+		if definition == null or definition.rank != index + 1 or not definition.is_valid():
+			return false
+	return true
+
+func rank_definition(rank: int) -> SkillRankDefinition:
+	if not is_rank_catalog_valid() or rank < 1 or rank > ranks.size():
+		return null
+	return ranks[rank - 1].duplicate(true) as SkillRankDefinition
