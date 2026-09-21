@@ -3,7 +3,7 @@ extends CombatActor
 
 signal attack_requested(request: DamageRequest, target: CombatActor)
 signal mage_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int)
-signal fire_wall_requested(direction: Vector2, damage_per_tick: float)
+signal fire_wall_requested(direction: Vector2, burn_request: DamageRequest)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
 
@@ -170,7 +170,9 @@ func use_fire_wall(direction: Vector2) -> bool:
 		return false
 	var facing := _resolved_facing(direction)
 	_spend(&"fire_wall")
-	fire_wall_requested.emit(facing, _magic_power(&"fire_wall"))
+	var definition := ClassCatalog.skill_definition(&"fire_wall")
+	var request := _make_magic_request(null, &"fire_wall", _magic_power(&"fire_wall"), definition.accuracy_mode, definition.can_crit)
+	fire_wall_requested.emit(facing, request)
 	resources_changed.emit()
 	return true
 
@@ -364,6 +366,17 @@ func _regenerate_sp(delta: float, simulation_paused: bool) -> bool:
 	if is_equal_approx(previous_sp, current_sp):
 		return false
 	resources_changed.emit()
+	return true
+
+func regenerate_hp(delta: float, encounter_active: bool, simulation_paused: bool) -> bool:
+	if encounter_active or simulation_paused or delta <= 0.0 or not is_alive() or health.current_hp >= health.max_hp:
+		return false
+	var previous_hp := health.current_hp
+	health.current_hp = minf(health.max_hp, health.current_hp + stat_breakdown.value(&"hp_regen") * delta)
+	if is_equal_approx(previous_hp, health.current_hp):
+		return false
+	resources_changed.emit()
+	queue_redraw()
 	return true
 
 func _try_basic_attack() -> void:

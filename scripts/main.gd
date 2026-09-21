@@ -110,6 +110,7 @@ func _ready() -> void:
 	_spawn_encounter(1)
 
 func _process(_delta: float) -> void:
+	player.regenerate_hp(_delta, encounter_active, get_tree().paused or run_finished)
 	_update_hud()
 	if not get_tree().paused and not run_finished:
 		if _world_pointer_available():
@@ -386,9 +387,9 @@ func _on_mage_projectile_hit(request: DamageRequest, target_actor: CombatActor) 
 	if request.skill_id == &"ice_spear" and target_actor.is_alive():
 		target_actor.apply_slow(0.30, 2.0)
 
-func _on_fire_wall_requested(direction: Vector2, damage_per_tick: float) -> void:
+func _on_fire_wall_requested(direction: Vector2, burn_request: DamageRequest) -> void:
 	var wall := FireWall.new()
-	wall.configure(player, direction, damage_per_tick, enemies)
+	wall.configure(player, direction, burn_request, enemies)
 	add_child(wall)
 	wall.add_to_group("player_effects")
 

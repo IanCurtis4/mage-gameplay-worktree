@@ -9,16 +9,15 @@ const PILLAR_RADIUS := 22.0
 const DURATION := 5.0
 const BURN_DURATION := 3.0
 
-var source_id: int
-var burn_damage := 0.0
+var burn_request: DamageRequest
 var targets: Array[CombatActor] = []
 var remaining := DURATION
 var pillar_offsets := PackedVector2Array()
 var _previous_positions: Dictionary[int, Vector2] = {}
 
-func configure(caster: CombatActor, facing: Vector2, damage_per_tick: float, potential_targets: Array[CombatActor]) -> void:
-	source_id = caster.get_instance_id()
-	burn_damage = damage_per_tick
+func configure(caster: CombatActor, facing: Vector2, damage_request: DamageRequest, potential_targets: Array[CombatActor]) -> void:
+	assert(damage_request != null)
+	burn_request = damage_request.copy()
 	targets = potential_targets.duplicate()
 	global_position = caster.global_position + facing.normalized() * ClassCatalog.skill_definition(&"fire_wall").range
 	var wall_axis := facing.normalized().orthogonal()
@@ -38,7 +37,7 @@ func _process(delta: float) -> void:
 		var previous: Vector2 = _previous_positions.get(actor_id, actor.global_position)
 		for offset: Vector2 in pillar_offsets:
 			if _distance_to_segment(global_position + offset, previous, actor.global_position) <= actor.collision_radius + PILLAR_RADIUS:
-				actor.apply_burn(source_id, burn_damage, BURN_DURATION)
+				actor.apply_burn(burn_request, BURN_DURATION)
 				break
 		_previous_positions[actor_id] = actor.global_position
 	if remaining <= 0.0:

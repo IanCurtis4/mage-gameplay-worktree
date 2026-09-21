@@ -1,6 +1,6 @@
 # E03-C1 — Migração dos consumidores de stats
 
-Estado: **implementado; aguardando revisão técnica Astra**.
+Estado: **correções da primeira revisão Astra implementadas; aguardando revisão focalizada**.
 
 Base do pacote: `690d092`. Este handoff cobre somente E03-C1. Não libera a árvore
 e o painel de progressão de E03-C2, kits/ranks de E04, evolução de E05 nem efeitos
@@ -40,7 +40,15 @@ Não há mais `kind`, `base_damage` nem chance de acerto pré-calculada.
 Autos e projéteis direcionados a alvo usam `CONTESTED`; cone, bola direcional,
 área e DoT que já dependem de geometria usam `GEOMETRY`. O catálogo atual declara
 `accuracy_mode` e `can_crit` por skill. Projéteis e DoTs capturam o poder ofensivo
-na emissão, mas consultam as defesas atuais somente no impacto/tick.
+na emissão, incluindo `damage_dealt_multiplier`, mas consultam as defesas atuais
+somente no impacto/tick. A Parede de Fogo transporta um `DamageRequest` copiado até
+o burn; cada tick copia esse snapshot ofensivo sem recalcular o emissor nem aplicar
+o multiplicador duas vezes.
+
+`hp_regen` é consumido pelo fluxo real do `RunController`: regenera somente com o
+jogador vivo, fora de encontro e sem pausa. Morte, encontro ativo e pausa bloqueiam;
+o valor é limitado ao HP máximo e não interfere na preservação de déficit durante
+recálculo de stats.
 
 ## Validação
 
@@ -50,7 +58,9 @@ na emissão, mas consultam as defesas atuais somente no impacto/tick.
 - valores de HP/SP do HUD iguais ao runtime;
 - menu derivado do preview canônico;
 - recálculo sem cura, sem recuperar SP e sem reiniciar cooldown;
+- `hp_regen` fora/dentro de encontro, pausa, morte e limite do HP;
 - HIT/FLEE, resistência/multiplicador crítico, acerto geométrico e dano misto;
+- captura imutável do poder/multiplicador de DoT, defesa atual por tick e fator zero;
 - aplicação única do resultado canônico por `HealthState`.
 
 A suíte completa é executada por:
@@ -60,7 +70,7 @@ A suíte completa é executada por:
   'C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/review-engine/Godot.exe'
 ```
 
-Resultado da entrega: **942 verificações headless aprovadas**, importação do editor
+Resultado após as correções Astra: **952 verificações headless aprovadas**, importação do editor
 e smoke da cena principal em Godot 4.7.2. O verificador numérico independente do
 E00 também permanece obrigatório no fechamento.
 

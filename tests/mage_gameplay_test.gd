@@ -28,10 +28,10 @@ func _test_statuses() -> void:
 		all_secondary[0] = all_secondary[0] and request.is_secondary and not request.can_crit
 	)
 	for _pillar: int in range(4):
-		actor.apply_burn(42, 9.0, 3.0)
+		actor.apply_burn(_burn_request(42, 9.0), 3.0)
 	actor.advance_statuses(3.0)
 	_check(tick_count[0] == 3 and all_secondary[0], "four overlapping pillars renew one three-tick secondary burn")
-	actor.apply_burn(42, 9.0, 3.0)
+	actor.apply_burn(_burn_request(42, 9.0), 3.0)
 	actor.advance_statuses(1.0, true)
 	_check(is_equal_approx(actor.burn_remaining, 3.0), "pause freezes burn duration and ticks")
 	paused = true
@@ -67,7 +67,7 @@ func _test_projectile_order_and_burning() -> void:
 
 	var open_nav := ArenaNavigation.new()
 	open_nav.configure(Rect2(0, 0, 440, 240), [], 4.0)
-	after.apply_burn(7, 2.0, 3.0)
+	after.apply_burn(_burn_request(7, 2.0), 3.0)
 	var burning_hit := [false]
 	var critical_ball := _fireball(open_nav, [after])
 	critical_ball.hit.connect(func(request: DamageRequest, _actor: CombatActor) -> void: burning_hit[0] = request.force_critical)
@@ -105,7 +105,7 @@ func _test_projectile_order_and_burning() -> void:
 	root.add_child(caster)
 	var crossing := _target(Vector2(230, 19))
 	var wall := FireWall.new()
-	wall.configure(caster, Vector2.RIGHT, 5.0, [crossing])
+	wall.configure(caster, Vector2.RIGHT, _burn_request(caster.get_instance_id(), 5.0), [crossing])
 	root.add_child(wall)
 	wall._process(0.01)
 	crossing.position = Vector2(330, 19)
@@ -363,6 +363,16 @@ func _target(position_value: Vector2) -> CombatActor:
 	root.add_child(actor)
 	actor.set_process(false)
 	return actor
+
+func _burn_request(source_id: int, magic_damage: float, damage_multiplier: float = 1.0) -> DamageRequest:
+	var request := DamageRequest.new()
+	request.source_id = source_id
+	request.skill_id = &"fire_wall"
+	request.magic_damage = magic_damage
+	request.damage_dealt_multiplier = damage_multiplier
+	request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
+	request.can_crit = false
+	return request
 
 func _check(condition: bool, label: String) -> void:
 	checks += 1

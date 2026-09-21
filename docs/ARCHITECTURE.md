@@ -107,7 +107,9 @@ ator e HUD consomem o mesmo cálculo.
 Ao recalcular máximos, preservar HP/SP faltantes (clamp aos novos limites), sem
 curar nem reiniciar cooldowns. Recursos atuais pertencem ao ator. SP regenera pelo
 stat derivado apenas enquanto o ator está vivo e a simulação não está pausada,
-sempre limitado ao máximo. O HUD prioriza `RECARGA`, `SEM SP` e `PRONTO`.
+sempre limitado ao máximo. HP regenera por `hp_regen` somente enquanto o jogador
+está vivo, fora de encontro e sem pausa, também limitado ao máximo. O HUD prioriza
+`RECARGA`, `SEM SP` e `PRONTO`.
 
 Preparações usam `StatCalculator.effective_cast_time`; recargas capturadas no commit
 usam `effective_cooldown`. Movimento, morte, menus, perda de foco e reset cancelam

@@ -21,8 +21,7 @@ var sprite_rect := Rect2()
 var _sprite_visible_height := 0.0
 var burn_remaining := 0.0
 var burn_tick_remaining := 0.0
-var burn_source_id: int = 0
-var burn_damage_per_tick := 0.0
+var burn_request: DamageRequest
 var slow_remaining := 0.0
 var slow_fraction := 0.0
 var character_animation: CharacterAnimation
@@ -73,12 +72,17 @@ func is_alive() -> bool:
 func is_burning() -> bool:
 	return burn_remaining > 0.0
 
-func apply_burn(source_id: int, damage_per_tick: float, duration: float = 3.0) -> void:
-	if not is_alive() or duration <= 0.0 or damage_per_tick <= 0.0:
+func apply_burn(request: DamageRequest, duration: float = 3.0) -> void:
+	if not is_alive() or request == null or duration <= 0.0 or request.physical_damage + request.magic_damage <= 0.0:
 		return
 	var was_burning := is_burning()
-	burn_source_id = source_id
-	burn_damage_per_tick = damage_per_tick
+	burn_request = request.copy()
+	burn_request.target_id = get_instance_id()
+	burn_request.skill_id = &"burn_tick"
+	burn_request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
+	burn_request.can_crit = false
+	burn_request.force_critical = false
+	burn_request.is_secondary = true
 	burn_remaining = duration
 	if not was_burning:
 		burn_tick_remaining = minf(1.0, duration)
@@ -97,8 +101,7 @@ func movement_speed_multiplier() -> float:
 func clear_statuses() -> void:
 	burn_remaining = 0.0
 	burn_tick_remaining = 0.0
-	burn_source_id = 0
-	burn_damage_per_tick = 0.0
+	burn_request = null
 	slow_remaining = 0.0
 	slow_fraction = 0.0
 	queue_redraw()
@@ -118,20 +121,13 @@ func advance_statuses(delta: float, simulation_paused: bool = false) -> void:
 		burn_tick_remaining = maxf(0.0, burn_tick_remaining - step)
 		remaining_delta = maxf(0.0, remaining_delta - step)
 		if burn_tick_remaining <= 0.0001:
-			var request := DamageRequest.new()
-			request.source_id = burn_source_id
-			request.target_id = get_instance_id()
-			request.skill_id = &"burn_tick"
-			request.magic_damage = burn_damage_per_tick
-			request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
-			request.can_crit = false
-			request.is_secondary = true
+			var request := burn_request.copy()
 			status_damage_requested.emit(request, self)
 			if not is_alive():
 				break
 			burn_tick_remaining = 1.0
 	if burn_remaining <= 0.0:
-		burn_damage_per_tick = 0.0
+		burn_request = null
 		queue_redraw()
 
 func set_hovered(value: bool) -> void:

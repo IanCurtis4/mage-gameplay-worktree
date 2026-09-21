@@ -13,6 +13,7 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(root_directory)
 	await _test_preview_snapshot_runtime_hud()
 	_test_combat_contract()
+	_test_dot_offense_capture()
 	_cleanup_directory(root_directory)
 	print("E03 consumidores: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
 	quit(0 if failures == 0 else 1)
@@ -70,6 +71,26 @@ func _test_preview_snapshot_runtime_hud() -> void:
 	_check(_same_values(expected_after, controller.player.stat_breakdown), "runtime recalculation still delegates every stat to StatCalculator")
 	_check(controller.player.health.current_hp == controller.player.health.max_hp - 25.0 and controller.player.current_sp == controller.player.max_sp - 17.0, "recalculation preserves missing HP and SP instead of healing")
 	_check(controller.player.attack_cooldown == 0.75 and controller.player.mage_cooldowns[&"fireball"] == 1.25, "recalculation preserves active attack and skill cooldowns")
+
+	var hp_regen := controller.player.stat_breakdown.value(&"hp_regen")
+	controller.encounter_active = true
+	var hp_before := controller.player.health.current_hp
+	controller._process(10.0)
+	_check(controller.player.health.current_hp == hp_before, "HP does not regenerate during an active encounter")
+	controller.encounter_active = false
+	paused = true
+	controller._process(10.0)
+	paused = false
+	_check(controller.player.health.current_hp == hp_before, "tree pause freezes out-of-encounter HP regeneration")
+	controller.player.health.current_hp = 0.0
+	controller._process(10.0)
+	_check(controller.player.health.current_hp == 0.0, "dead player does not regenerate HP")
+	controller.player.health.current_hp = controller.player.health.max_hp - 10.0
+	controller._process(2.0)
+	_check(is_equal_approx(controller.player.health.current_hp, controller.player.health.max_hp - 10.0 + hp_regen * 2.0), "living player consumes canonical hp_regen outside encounters")
+	controller.player.health.current_hp = controller.player.health.max_hp - 0.1
+	controller._process(10.0)
+	_check(controller.player.health.current_hp == controller.player.health.max_hp, "HP regeneration clamps at the current maximum")
 	controller.queue_free()
 	await process_frame
 
@@ -108,6 +129,60 @@ func _test_combat_contract() -> void:
 	mixed.target_id = 77
 	var applied := health.apply(mixed, 0.999, 0.999)
 	_check(applied["actual_damage"] == 75.0 and health.current_hp == 925.0, "HealthState applies the canonical mixed result exactly once")
+
+func _test_dot_offense_capture() -> void:
+	var navigation := ArenaNavigation.new()
+	navigation.configure(Rect2(0, 0, 600, 300), [], 20.0)
+	var player := PlayerActor.new()
+	player.configure(navigation, RunState.new(&"mage"))
+	player.position = Vector2(100, 120)
+	root.add_child(player)
+	player.set_process(false)
+	var doubled_sources: Array[Dictionary] = [{"source_id": &"dot_offense", "increased": {&"damage_dealt_multiplier": 1.0}}]
+	player._apply_derived_stats(player.run_state.build_snapshot.stat_breakdown(doubled_sources))
+	var emitted: Array[DamageRequest] = []
+	player.fire_wall_requested.connect(func(_direction: Vector2, request: DamageRequest) -> void: emitted.append(request))
+	_check(player.use_fire_wall(Vector2.RIGHT) and emitted.size() == 1 and emitted[0].damage_dealt_multiplier == 2.0, "fire wall emission captures the canonical offensive multiplier")
+
+	var target_sources: Array[Dictionary] = [{"source_id": &"dot_target", "flat": {&"max_hp": 900.0}}]
+	var target := CombatActor.new()
+	target.setup("Alvo DoT", Color.WHITE, StatCalculator.calculate({}, {}, 1, target_sources))
+	target.position = player.position + Vector2(180, -27)
+	root.add_child(target)
+	target.set_process(false)
+	var tick_results: Array[Dictionary] = []
+	target.status_damage_requested.connect(func(request: DamageRequest, actor: CombatActor) -> void:
+		tick_results.append(actor.health.apply(request, 0.0, 0.0))
+	)
+	var captured := emitted[0].copy()
+	var wall := FireWall.new()
+	wall.configure(player, Vector2.RIGHT, emitted[0], [target])
+	root.add_child(wall)
+	wall.set_process(false)
+	wall._process(0.01)
+	_check(target.is_burning(), "fire wall transfers its captured request into one burn stream")
+	emitted[0].magic_damage = 999.0
+	emitted[0].damage_dealt_multiplier = 4.0
+	var later_sources: Array[Dictionary] = [{"source_id": &"later_offense", "increased": {&"damage_dealt_multiplier": 3.0}}]
+	player._apply_derived_stats(player.run_state.build_snapshot.stat_breakdown(later_sources))
+	var expected_first := CombatMath.resolve(captured, target.health.physical_defense, target.health.magic_defense, target.health.flee_rating, target.health.crit_resistance, 0.0, 0.0)
+	target.advance_statuses(1.0)
+	_check(tick_results.size() == 1 and tick_results[0]["damage"] == expected_first["damage"], "burn keeps launch offense immutable and applies its multiplier exactly once")
+
+	var defended_sources: Array[Dictionary] = [{"source_id": &"dot_target_defense", "flat": {&"max_hp": 900.0, &"magic_defense": 100.0}}]
+	target.health.set_stats_preserving_missing(StatCalculator.calculate({}, {}, 1, defended_sources))
+	var expected_second := CombatMath.resolve(captured, target.health.physical_defense, target.health.magic_defense, target.health.flee_rating, target.health.crit_resistance, 0.0, 0.0)
+	target.advance_statuses(1.0)
+	_check(tick_results.size() == 2 and tick_results[1]["damage"] == expected_second["damage"] and int(expected_second["damage"]) < int(expected_first["damage"]), "burn consults the target's current magic defense on every tick")
+
+	var zero_multiplier := captured.copy()
+	zero_multiplier.damage_dealt_multiplier = 0.0
+	target.apply_burn(zero_multiplier, 1.0)
+	target.advance_statuses(1.0)
+	_check(tick_results.size() == 3 and tick_results[2]["damage"] == 0, "captured zero damage multiplier produces no DoT minimum damage")
+	wall.free()
+	player.free()
+	target.free()
 
 func _same_values(left: StatBreakdown, right: StatBreakdown) -> bool:
 	if left == null or right == null:
