@@ -8,7 +8,7 @@ Depende do [ADR](ADR_E00_01_CHARACTER_PROGRESSION.md) e da
 
 | Tipo futuro | Campos obrigatórios / invariantes |
 |---|---|
-| `ClassDefinition` | `id`, nome, vetor inicial com seis primários/soma 30, skills iniciais gratuitas, auto, restrições de equipamentos |
+| `ClassDefinition` | `id`, nome, vetor inicial com seis primários/soma 30, biblioteca base disponível para aprendizado desde R0, auto, restrições de equipamentos |
 | `EvolutionDefinition` | `id`, `origin_class_id`, `branch_kind`, `affinity_class_id` opcional, requisitos base/job, skills próprias, ranks gratuitos, definição intrínseca; origem != afinidade |
 | `SkillDefinition` | ID global, nome/descrição, dono de carteira, targeting, categoria ativa/passiva, lista explícita de ranks; não conter tecla física fixa |
 | `SkillRankDefinition` | rank contínuo 1..5 ou 1..3, custo 1 por incremento não gratuito, job mínimo, dependências, SP, cast fixo/variável, pós-cast, cooldown, alcance, poder/pesos/tags/efeitos; sem números inferidos pela UI |
@@ -17,9 +17,11 @@ Depende do [ADR](ADR_E00_01_CHARACTER_PROGRESSION.md) e da
 | `AugmentDefinition` | ID, identidade/tag de elegibilidade, limite de stacks, handler tipado, valores atual/próximo; não guarda stacks |
 | `ProgressionDefinition` | versão do contrato, curvas e tetos do ADR, requisitos de evolução; matemática central consome essa definição |
 
-Catálogo registra `catalog_version` (inteiro inicial 1) e `ruleset_id=e00_v1`;
-ambos diferentes do formato do save. Novas versões exigem migração explícita das
-alocações se custos, IDs, ranks ou limites mudarem. Não usar nome traduzido como ID.
+Catálogo registra `catalog_version` e `ruleset_id`, ambos diferentes do formato do
+save. A [decisão E04](E04_LEARNING_AND_ARCHER.md) elevou o piloto para
+`catalog_version=2` e `ruleset_id=e04_learn_from_zero_v1`; o par anterior era
+`1/e00_v1`. Novas versões exigem migração explícita das alocações se custos, IDs,
+ranks ou limites mudarem. Não usar nome traduzido como ID.
 Híbridas preservam `sp_mg`, `mg_sp`, `sp_ar`, `ar_sp`, `mg_ar`, `ar_mg`.
 Renomear Arqueiro Arcano para Geômetra não troca `mg_ar` nem exige respec.
 
@@ -57,10 +59,10 @@ resultado `ok/error_code/new_revision`. Falha não altera parte do estado.
 
 | Operação | Pré-condição / resultado |
 |---|---|
-| `create_character` | Menu, limite 8, classe disponível; novo ID, XP0, ranks gratuitos, starter loadout válido |
+| `create_character` | Menu, limite 8, classe disponível; novo ID, XP0, skills base R0, barra vazia e starter de equipamento válido |
 | `allocate_attributes` / `learn_skill` | Menu sem run, revisão atual, custo e requisitos válidos; recalcular carteira pela origem dos pontos |
 | `respec` / `change_evolution` | Menu, mesma origem, regras do ADR; reembolso exato e normalização de presets atômicos |
-| `start_run` | Loadout válido, nenhum save pendente; reserva run_counter em disco antes de entregar snapshot |
+| `start_run` | Build válida (barra de skills pode estar vazia), nenhum save pendente; reserva run_counter em disco antes de entregar snapshot |
 | `grant_reward` | Sessão ativa correspondente, seq exata, origem fixa; XP/coleção/recibo no mesmo commit |
 | `equip_between_encounters` | Encontro encerrado, item desbloqueado/legal; preferência salva e nova cópia runtime; HP/SP sem cura |
 | `end_run` | Fecha sessão de recompensas uma vez, descarta runtime, grava resultado quando aplicável |
@@ -92,11 +94,12 @@ Campos da raiz:
 Cada personagem: `character_id` derivado do UUID do perfil + contador monotônico,
 `display_name` (1–24 caracteres Unicode, sem controles), `base_class_id`,
 `evolution_id` nullable, `base_xp_total`, `job_xp_total`, `attribute_allocations`
-com as seis chaves, `purchased_skill_ranks` (incrementos além dos ranks gratuitos),
-`equipped` (arma/armadura/acessório), `presets` (2 seleções de slots/equipamentos),
-`selected_preset` em 0..1. Rank aprendido efetivo = gratuito do catálogo ativo +
-incrementos comprados, limitado ao teto. Pontos, níveis e derivados não são salvos
-em duplicidade; derivá-los após validar XP/alocações evita saldos divergentes.
+com as seis chaves, `granted_skill_ranks` (somente direitos legados reconhecidos) e
+`purchased_skill_ranks` (ranks pagos), `equipped` (arma/armadura/acessório), `presets`
+(2 seleções de slots/equipamentos), `selected_preset` em 0..1. Rank efetivo =
+gratuito do catálogo ativo + concessão legada + compras, limitado ao teto. Somente
+compras debitam e retornam à carteira. Pontos, níveis e derivados não são salvos em
+duplicidade; derivá-los após validar XP/alocações evita saldos divergentes.
 
 Coleção contém também starters desbloqueados ao criar cada base; escolher um preset
 revalida restrições da identidade e itens possuídos. JSON contém somente escalares,
@@ -163,6 +166,7 @@ commit; isso deve ser informado, não apresentado como recuperação sem perdas.
 |---|---|
 | Só `controls.cfg`, sem perfil (situação atual) | Perfil schema 2 vazio; manter controles; pedir criação de personagem; não importar níveis transitórios |
 | v1 planejado do piloto, se encontrado | Só migrar envelope reconhecido com schema 1, equipment_collection/equipped por classe, settings/lifetime_stats válidos. União de equipamentos reconhecidos para coleção; seleções antigas em legacy_loadouts; characters vazio. Backup original, conversão única para schema 2 |
+| Schema 2, catálogo 1 / `e00_v1` | Manter UUID, revisão, contadores, identidade, XP, alocações, compras e presets; materializar as três skills gratuitas antigas da base em `granted_skill_ranks`; não alterar carteiras. Backup original e conversão única para catálogo 2 |
 | ID de item antigo desconhecido na migração v1 | Preservar em unresolved_legacy, informar; nunca conceder item substituto aleatório |
 | Schema 2 com catálogo incompatível/ID de identidade ausente | Bloquear personagem afetado sem reescrever/perder alocações; exigir mapa de migração de catálogo |
 | Versão futura / formato desconhecido | Não converter, não sobrescrever, manter original para recuperação |

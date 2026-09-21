@@ -73,11 +73,11 @@ func discard_failed_pending(before: ProfileState, source_candidate: ProfileState
 		return {"ok": false, "error_code": &"recovery_required", "read_only": true}
 	return {"ok": true, "discarded_pending": true}
 
-func _commit(source: ProfileState, allow_v1_migration: bool) -> Dictionary:
+func _commit(source: ProfileState, allow_migration: bool) -> Dictionary:
 	if _write_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress"}
 	_write_in_progress = true
-	var preflight := _preflight_commit(source, allow_v1_migration)
+	var preflight := _preflight_commit(source, allow_migration)
 	if not preflight["ok"]:
 		_write_in_progress = false
 		return preflight
@@ -162,7 +162,7 @@ func _read_and_decode(file_name: String) -> Dictionary:
 	file.close()
 	return ProfileCodec.decode(text, _catalog)
 
-func _preflight_commit(source: ProfileState, allow_v1_migration: bool) -> Dictionary:
+func _preflight_commit(source: ProfileState, allow_migration: bool) -> Dictionary:
 	if not FileAccess.file_exists(_path(PRIMARY_FILE)):
 		if FileAccess.file_exists(_path(BACKUP_FILE)) or FileAccess.file_exists(_path(PENDING_FILE)):
 			return {"ok": false, "error_code": &"recovery_required", "read_only": true}
@@ -176,7 +176,15 @@ func _preflight_commit(source: ProfileState, allow_v1_migration: bool) -> Dictio
 	if not backup_guard["ok"]:
 		return backup_guard
 	if disk.get("migrated", false):
-		return {"ok": true} if allow_v1_migration and source.revision == 0 else {"ok": false, "error_code": &"unsupported_schema", "read_only": true}
+		if not allow_migration:
+			return {"ok": false, "error_code": &"unsupported_schema", "read_only": true}
+		var migration_kind: StringName = disk.get("migration_kind", &"")
+		var migrated_disk_profile: ProfileState = disk["profile"]
+		if migration_kind == &"catalog_v1" and _same_profile(migrated_disk_profile, source):
+			return {"ok": true}
+		if migration_kind == &"schema_v1" and source.revision == 0 and source.characters.is_empty():
+			return {"ok": true}
+		return {"ok": false, "error_code": &"stale_revision", "read_only": true}
 	var disk_profile: ProfileState = disk["profile"]
 	if disk_profile.profile_id != source.profile_id or disk_profile.revision != source.revision:
 		return {"ok": false, "error_code": &"stale_revision"}

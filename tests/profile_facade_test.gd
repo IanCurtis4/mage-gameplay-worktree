@@ -79,7 +79,7 @@ func _check_create_select_and_restart() -> void:
 	_check(first["ok"] and first["new_revision"] == 1 and first["character_id"] == first_id and first["request_id"] == "create-ana", "first creation commits once and correlates its request")
 	var first_character: CharacterState = first["profile"].character_by_id(first_id)
 	_check(first_character != null and first_character.base_xp_total == 0 and first_character.job_xp_total == 0 and first_character.evolution_id.is_empty(), "new character starts with zero progression and no evolution")
-	_check(first_character.purchased_skill_ranks.is_empty() and first_character.presets[0]["active_slots"].slice(0, 2) == [&"slash", &"dash"] and first_character.presets[0]["passive_slots"][0] == &"swordsman_resistance", "free base ranks come from catalog slots and are never stored as purchases")
+	_check(first_character.purchased_skill_ranks.is_empty() and first_character.granted_skill_ranks.is_empty() and first_character.presets[0]["active_slots"] == [null, null, null, null, null] and first_character.presets[0]["passive_slots"] == [null, null], "new characters begin without learned or equipped skills")
 	_check(first_character.equipped[&"weapon"] == &"training_sword" and first["profile"].equipment_collection == [&"training_sword"], "creation unlocks and equips the catalog starter atomically")
 	_check(first["profile"].selected_character_id == first_id and first["profile"].next_character_counter == 2, "creation selects the alt and reserves its monotonic ID")
 
@@ -90,7 +90,7 @@ func _check_create_select_and_restart() -> void:
 	var second_id := IdentityIds.character_id(profile_id, 2)
 	_check(second["ok"] and second["new_revision"] == 2 and second["character_id"] == second_id, "second alt consumes the next ID after restart")
 	var second_character: CharacterState = second["profile"].character_by_id(second_id)
-	_check(second_character.presets[0]["active_slots"].slice(0, 2) == [&"fireball", &"fire_wall"] and second_character.presets[0]["passive_slots"][0] == &"mage_mana_regeneration", "each origin receives only its catalog-declared free loadout")
+	_check(second_character.presets[0]["active_slots"] == [null, null, null, null, null] and second_character.presets[0]["passive_slots"] == [null, null], "each new origin accepts an empty skill bar")
 	_check(second_character.equipped[&"weapon"] == &"apprentice_staff" and second["profile"].equipment_collection == [&"training_sword", &"apprentice_staff"], "starters are shared in the collection without replacing another alt loadout")
 	_check(second["profile"].character_by_id(first_id).equipped[&"weapon"] == &"training_sword" and second["profile"].lifetime_stats[&"equipment_unlocked"] == 2, "creating another alt does not leak its build and counts only new starter unlocks")
 
@@ -104,16 +104,14 @@ func _check_create_select_and_restart() -> void:
 	_check(not invalid_preset["ok"] and invalid_preset["error_code"] == &"invalid_presets" and restarted.current_profile().revision == 4, "invalid preset index cannot change the profile")
 	var mage_for_build: CharacterState = restarted.current_profile().character_by_id(second_id)
 	var active_build: Array[Variant] = mage_for_build.presets[1]["active_slots"].duplicate(true)
-	active_build[0] = &"fire_wall"
-	active_build[1] = &"fireball"
 	var passive_build: Array[Variant] = mage_for_build.presets[1]["passive_slots"].duplicate(true)
 	var equipment_build: Dictionary[StringName, Variant] = mage_for_build.presets[1]["equipped"].duplicate(true)
 	var updated_build := restarted.update_preset("update-build", 4, second_id, 1, active_build, passive_build, equipment_build)
-	_check(updated_build["ok"] and updated_build["new_revision"] == 5 and updated_build["profile"].character_by_id(second_id).presets[1]["active_slots"].slice(0, 2) == [&"fire_wall", &"fireball"], "legal catalog skills and equipment update one preset atomically")
+	_check(updated_build["ok"] and updated_build["new_revision"] == 5 and updated_build["profile"].character_by_id(second_id).presets[1]["active_slots"] == [null, null, null, null, null], "an empty skill bar and legal equipment update one preset atomically")
 	var build_options := restarted.available_build_options(second_id)
-	_check(build_options["ok"] and &"fireball" in build_options["active_skills"] and &"fire_wall" in build_options["active_skills"] and &"apprentice_staff" in build_options["equipment_by_slot"][&"weapon"], "build options expose only effective class skills and owned legal equipment")
+	_check(build_options["ok"] and build_options["active_skills"].is_empty() and build_options["passive_skills"].is_empty() and &"apprentice_staff" in build_options["equipment_by_slot"][&"weapon"], "build options expose no skill before learning while retaining owned legal equipment")
 	var duplicate_build := restarted.update_preset("duplicate-build", 5, second_id, 1, [&"fire_wall", &"fire_wall", null, null, null], passive_build, equipment_build)
-	_check(not duplicate_build["ok"] and duplicate_build["error_code"] == &"invalid_presets" and restarted.current_profile().revision == 5, "duplicate skills are rejected without publishing a partial build")
+	_check(not duplicate_build["ok"] and duplicate_build["error_code"] == &"requirements_unmet" and restarted.current_profile().revision == 5, "unlearned skills are rejected without publishing a partial build")
 	var missing := restarted.select_character("select-missing", 5, profile_id + "_99")
 	_check(not missing["ok"] and missing["error_code"] == &"invalid_character_id" and restarted.current_profile().revision == 5, "unknown selection fails without a revision")
 	var unavailable := restarted.create_character("create-archer", 5, "Cris", &"archer")

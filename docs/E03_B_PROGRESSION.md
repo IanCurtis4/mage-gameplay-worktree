@@ -1,5 +1,10 @@
 # E03-B — Progressão e transações de build
 
+Atualização E04 L0: a [decisão de aprendizado](E04_LEARNING_AND_ARCHER.md)
+substituiu os ranks gratuitos das bases. Personagens novos aprendem R1 por um ponto;
+gratuitos antigos são concessões legadas persistentes e não reembolsáveis. A
+entrada gratuita das evoluções permanece inalterada até o contrato E05.
+
 Estado: **aceito tecnicamente por Astra em `690d092`; E03-C1 liberado separadamente**.
 
 Base do pacote: `fa8f966`. Implementação inicial: `f217d9954c895dc3e24c7095a5b78e49de454088`.
@@ -21,7 +26,8 @@ As três carteiras são independentes:
 - skills de evolução: 1 por job level de 21 a 40.
 
 Investimento de atributo respeita `initial + allocated <= 60`. Rank comprado custa
-um ponto da carteira declarada; ranks gratuitos não entram no save nem no reembolso.
+um ponto da carteira declarada; gratuitos do catálogo não entram no reembolso e
+concessões legadas entram no save apenas para preservar direitos antigos.
 Respec de skills é completo, devolve cada carteira separadamente e remove de ambos
 os presets somente referências que deixaram de ter rank efetivo.
 

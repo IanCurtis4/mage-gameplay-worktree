@@ -26,16 +26,26 @@ func _run() -> void:
 	quit(0 if failures == 0 else 1)
 
 func _check_persistent_preset_runtime_flow() -> void:
-	var facade := ProfileFacade.new(ProfileStore.new(root_directory.path_join("preset_runtime")))
+	var directory := root_directory.path_join("preset_runtime")
+	var facade := ProfileFacade.new(ProfileStore.new(directory))
 	var created := facade.create_character("create-mage", 0, "Lina", &"mage")
 	var mage: CharacterState = created["profile"].character_by_id(created["character_id"])
+	mage.job_xp_total = ProgressionRules.UNEVOLVED_MAX_JOB_XP
+	mage.purchased_skill_ranks = {&"fireball": 1, &"fire_wall": 1, &"mage_mana_regeneration": 1}
+	mage.presets[0]["active_slots"][0] = &"fireball"
+	mage.presets[0]["active_slots"][1] = &"fire_wall"
+	mage.presets[0]["passive_slots"][0] = &"mage_mana_regeneration"
+	var seeded := ProfileStore.new(directory).commit(created["profile"])
+	facade = ProfileFacade.new(ProfileStore.new(directory))
+	var opened := facade.open_profile()
+	mage = opened["profile"].character_by_id(created["character_id"])
 	var active: Array[Variant] = mage.presets[1]["active_slots"].duplicate(true)
 	active[0] = &"fire_wall"
 	active[1] = &"fireball"
 	var passive: Array[Variant] = mage.presets[1]["passive_slots"].duplicate(true)
 	passive[0] = null
 	var equipped: Dictionary[StringName, Variant] = mage.presets[1]["equipped"].duplicate(true)
-	var preset := facade.update_preset("save-reordered", 1, mage.character_id, 1, active, passive, equipped)
+	var preset := facade.update_preset("save-reordered", seeded["new_revision"], mage.character_id, 1, active, passive, equipped)
 	var menu_scene := load("res://scenes/character_menu.tscn") as PackedScene
 	var menu: CharacterMenu = menu_scene.instantiate()
 	menu.set_profile_facade(facade)
@@ -46,7 +56,7 @@ func _check_persistent_preset_runtime_flow() -> void:
 	await scene_changed
 	await process_frame
 	var controller := current_scene as RunController
-	_check(created["ok"] and preset["ok"] and started["ok"] and controller != null and controller.player.class_id == &"mage", "menu-selected persistent mage reaches the real arena controller")
+	_check(created["ok"] and seeded["ok"] and preset["ok"] and started["ok"] and controller != null and controller.player.class_id == &"mage", "menu-selected persistent mage reaches the real arena controller")
 	_check(controller.player.available_skill_ids() == [&"fire_wall", &"fireball"] and controller._key_skill(KEY_Q) == &"fire_wall" and controller._key_skill(KEY_W) == &"fireball" and controller._key_skill(KEY_A) == &"", "equipped active slots determine persistent HUD order and Q/W/A bindings")
 	_check(controller.battle_controls.skill_buttons.keys() == [&"fire_wall", &"fireball"] and is_equal_approx(controller.player.stat_breakdown.value(&"sp_regen"), 3.08), "persistent loadout hides unselected mage skills and excludes an unequipped passive")
 	var closed := controller._close_persistent_run(&"death")

@@ -16,15 +16,15 @@ var _build_error := false
 
 static func pilot(additional_equipment: Dictionary = {}, additional_skills: Dictionary = {}) -> ProfileCatalog:
 	var catalog := ProfileCatalog.new()
-	catalog.add_skill(&"slash", [&"swordsman"], ACTIVE, BASE_WALLET, 1, 4)
-	catalog.add_skill(&"dash", [&"swordsman"], ACTIVE, BASE_WALLET, 1, 4)
-	catalog.add_skill(&"swordsman_resistance", [&"swordsman"], PASSIVE, BASE_WALLET, 1, 2)
-	catalog.add_skill(&"fireball", [&"mage"], ACTIVE, BASE_WALLET, 1, 4)
-	catalog.add_skill(&"fire_wall", [&"mage"], ACTIVE, BASE_WALLET, 1, 4)
+	catalog.add_skill(&"slash", [&"swordsman"], ACTIVE, BASE_WALLET, 0, 5)
+	catalog.add_skill(&"dash", [&"swordsman"], ACTIVE, BASE_WALLET, 0, 5)
+	catalog.add_skill(&"swordsman_resistance", [&"swordsman"], PASSIVE, BASE_WALLET, 0, 3)
+	catalog.add_skill(&"fireball", [&"mage"], ACTIVE, BASE_WALLET, 0, 5)
+	catalog.add_skill(&"fire_wall", [&"mage"], ACTIVE, BASE_WALLET, 0, 5)
 	catalog.add_skill(&"fire_spear", [&"mage"], ACTIVE, BASE_WALLET, 0, 5)
 	catalog.add_skill(&"ice_spear", [&"mage"], ACTIVE, BASE_WALLET, 0, 5)
 	catalog.add_skill(&"teleport", [&"mage"], ACTIVE, BASE_WALLET, 0, 5)
-	catalog.add_skill(&"mage_mana_regeneration", [&"mage"], PASSIVE, BASE_WALLET, 1, 2)
+	catalog.add_skill(&"mage_mana_regeneration", [&"mage"], PASSIVE, BASE_WALLET, 0, 3)
 	for raw_item_id: Variant in additional_equipment:
 		var metadata: Dictionary = additional_equipment[raw_item_id]
 		var allowed_base_classes: Array[StringName] = []
@@ -154,28 +154,14 @@ func knows_equipment(item_id: StringName) -> bool:
 func base_class_is_available(base_class_id: StringName) -> bool:
 	if not IdentityIds.is_base_class(base_class_id):
 		return false
-	var counts := _initial_skill_counts(base_class_id)
-	return counts[ACTIVE] == 2 and counts[PASSIVE] == 1
+	var counts := _base_skill_counts(base_class_id)
+	return counts[ACTIVE] >= 2 and counts[PASSIVE] >= 1
 
 func initial_skill_slots(base_class_id: StringName) -> Dictionary:
 	var active_slots: Array[Variant] = []
 	var passive_slots: Array[Variant] = []
 	active_slots.resize(CharacterState.ACTIVE_SLOT_COUNT)
 	passive_slots.resize(CharacterState.PASSIVE_SLOT_COUNT)
-	if not base_class_is_available(base_class_id):
-		return {"active_slots": active_slots, "passive_slots": passive_slots}
-	var active_index := 0
-	var passive_index := 0
-	for skill_id: StringName in _skills:
-		var metadata: Dictionary = _skills[skill_id]
-		if not _is_initial_skill(metadata, base_class_id):
-			continue
-		if metadata["category"] == ACTIVE:
-			active_slots[active_index] = skill_id
-			active_index += 1
-		else:
-			passive_slots[passive_index] = skill_id
-			passive_index += 1
 	return {"active_slots": active_slots, "passive_slots": passive_slots}
 
 func starter_equipment(base_class_id: StringName) -> Dictionary[StringName, Variant]:
@@ -197,13 +183,18 @@ func starter_item_ids(base_class_id: StringName) -> Array[StringName]:
 			item_ids.append(item_id)
 	return item_ids
 
-func effective_skill_ranks(base_class_id: StringName, evolution_id: StringName, purchased_ranks: Dictionary[StringName, int]) -> Dictionary[StringName, int]:
+func effective_skill_ranks(
+	base_class_id: StringName,
+	evolution_id: StringName,
+	purchased_ranks: Dictionary[StringName, int],
+	granted_ranks: Dictionary[StringName, int] = {}
+) -> Dictionary[StringName, int]:
 	var effective: Dictionary[StringName, int] = {}
 	for skill_id: StringName in _skills:
 		if not skill_is_allowed(skill_id, base_class_id, evolution_id):
 			continue
 		var metadata: Dictionary = _skills[skill_id]
-		var rank: int = int(metadata["free_rank"]) + int(purchased_ranks.get(skill_id, 0))
+		var rank: int = int(metadata["free_rank"]) + int(granted_ranks.get(skill_id, 0)) + int(purchased_ranks.get(skill_id, 0))
 		if rank > 0:
 			effective[skill_id] = rank
 	return effective
@@ -240,30 +231,34 @@ func validate_purchased_ranks(
 	base_class_id: StringName,
 	evolution_id: StringName,
 	job_level: int,
-	purchased_ranks: Dictionary[StringName, int]
+	purchased_ranks: Dictionary[StringName, int],
+	granted_ranks: Dictionary[StringName, int] = {}
 ) -> Dictionary:
-	var effective := effective_skill_ranks(base_class_id, evolution_id, purchased_ranks)
+	var effective := effective_skill_ranks(base_class_id, evolution_id, purchased_ranks, granted_ranks)
+	for skill_id: StringName in granted_ranks:
+		if not skill_is_allowed(skill_id, base_class_id, evolution_id):
+			return {"ok": false, "error_code": &"invalid_catalog"}
+		var granted := int(granted_ranks[skill_id])
+		var granted_metadata := _skills[skill_id]
+		if granted < 1 or granted > int(granted_metadata["free_rank"]) + int(granted_metadata["max_purchased_rank"]):
+			return {"ok": false, "error_code": &"invalid_skill_ranks"}
 	for skill_id: StringName in purchased_ranks:
 		if not skill_is_allowed(skill_id, base_class_id, evolution_id):
 			return {"ok": false, "error_code": &"invalid_catalog"}
 		var metadata := _skills[skill_id]
 		var purchased := int(purchased_ranks[skill_id])
-		if purchased < 0 or purchased > int(metadata["max_purchased_rank"]):
+		var granted: int = int(granted_ranks.get(skill_id, 0))
+		var maximum_rank: int = int(metadata["free_rank"]) + int(metadata["max_purchased_rank"])
+		if purchased < 0 or purchased > int(metadata["max_purchased_rank"]) or granted + purchased > maximum_rank:
 			return {"ok": false, "error_code": &"invalid_skill_ranks"}
-		for target_rank: int in range(int(metadata["free_rank"]) + 1, int(metadata["free_rank"]) + purchased + 1):
+		for target_rank: int in range(int(metadata["free_rank"]) + granted + 1, int(metadata["free_rank"]) + granted + purchased + 1):
 			var requirement := check_rank_requirements(skill_id, target_rank, job_level, effective)
 			if not requirement["ok"]:
 				return requirement
 	return {"ok": true}
 
 func build_is_ready(character: CharacterState) -> bool:
-	if character == null or not base_class_is_available(character.base_class_id):
-		return false
-	var preset: Dictionary = character.presets[character.selected_preset]
-	for skill_id: Variant in preset["active_slots"]:
-		if skill_id != null:
-			return true
-	return false
+	return character != null and base_class_is_available(character.base_class_id)
 
 func skill_is_allowed(skill_id: StringName, base_class_id: StringName, evolution_id: StringName) -> bool:
 	var metadata: Dictionary = _skills.get(skill_id, {})
@@ -290,20 +285,12 @@ func _evolution_matches_any_origin(evolution_id: StringName, origins: Array) -> 
 			return true
 	return false
 
-func _initial_skill_counts(base_class_id: StringName) -> Dictionary[StringName, int]:
+func _base_skill_counts(base_class_id: StringName) -> Dictionary[StringName, int]:
 	var counts: Dictionary[StringName, int] = {ACTIVE: 0, PASSIVE: 0}
 	for metadata: Dictionary in _skills.values():
-		if _is_initial_skill(metadata, base_class_id):
+		if metadata["wallet"] == BASE_WALLET and StringName(metadata["required_evolution_id"]).is_empty() and base_class_id in metadata["allowed_base_classes"]:
 			counts[metadata["category"]] += 1
 	return counts
-
-func _is_initial_skill(metadata: Dictionary, base_class_id: StringName) -> bool:
-	return (
-		metadata["wallet"] == BASE_WALLET
-		and StringName(metadata["required_evolution_id"]).is_empty()
-		and int(metadata["free_rank"]) > 0
-		and base_class_id in metadata["allowed_base_classes"]
-	)
 
 func _validated_rank_requirements(total_rank: int, wallet: StringName, provided: Dictionary) -> Dictionary:
 	if total_rank < 1:

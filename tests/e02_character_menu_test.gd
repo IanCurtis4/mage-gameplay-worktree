@@ -26,18 +26,16 @@ func _initialize() -> void:
 	var mage: Dictionary = menu.create_character(&"mage")
 	_check(swordsman["ok"] and mage["ok"] and menu.status_label.text == "Personagem criado." and menu.roster_list.item_count == 2 and menu.roster_list.get_item_text(0).contains("Lina") and menu.roster_list.get_item_text(1).contains("Mago"), "creation uses facade, explains success, and refreshes the real roster")
 	menu._select_roster_index(1)
-	_check(menu.build_summary_label.text.contains("Bola de fogo") and menu.build_summary_label.text.contains("Vida 150") and menu.build_summary_label.text.contains("SP 85"), "roster navigation previews the chosen alt's persisted build and central derived stats before committing selection")
+	_check(not menu.build_summary_label.text.contains("Bola de fogo") and menu.build_summary_label.text.contains("Vida 150") and menu.build_summary_label.text.contains("SP 85"), "roster navigation previews the chosen alt's empty skill bar and central derived stats before committing selection")
 	_check(menu.progression_state_label.text.contains("XP base: 0") and menu.progression_wallets_label.text.contains("Atributos: 0/0 livres") and menu.progression_attributes_label.text.contains("INT: base 9 · investido 0 · base + investido: teto 60 · efetivo 9 · limite efetivo 120") and menu.progression_skill_tree.get_node("ProgressionSkill_fire_spear").text.contains("Rank 0/5") and menu.progression_skill_tree.get_node("ProgressionSkill_fire_spear").tooltip_text.contains("ainda não estão disponíveis"), "progression panel reads XP, wallet, investment and effective caps, rank-zero skills, and limited tooltips from the selected character")
 	var preset_changed: Dictionary = menu._choose_preset(1)
 	_check(preset_changed["ok"] and menu.status_label.text == "Preset selecionado." and menu.facade.current_profile().characters[1].selected_preset == 1, "preset selection persists through the facade without editing build fields directly")
-	menu.active_slot_a.select(2)
-	menu.active_slot_b.select(1)
 	var build_saved: Dictionary = menu._save_build()
 	var saved_mage: Variant = menu.facade.current_profile().characters[1]
-	_check(build_saved["ok"] and menu.status_label.text == "Preset salvo." and saved_mage.presets[1]["active_slots"].slice(0, 2) == [&"fire_wall", &"fireball"], "legal skill choices are saved atomically through update_preset")
+	_check(build_saved["ok"] and menu.status_label.text == "Preset salvo." and saved_mage.presets[1]["active_slots"] == [null, null, null, null, null], "an empty skill bar is saved atomically through update_preset")
 	var selected: Dictionary = menu.select_character_at(0)
 	var profile: Variant = menu.facade.current_profile()
-	_check(selected["ok"] and menu.status_label.text == "Personagem selecionado." and profile.selected_character_id == profile.characters[0].character_id and menu.roster_list.get_item_text(0).contains("selecionado") and menu.build_summary_label.text.contains("Corte") and not menu.start_run_button.disabled, "selection persists through facade, exposes the build, and enables an explicit run start")
+	_check(selected["ok"] and menu.status_label.text == "Personagem selecionado." and profile.selected_character_id == profile.characters[0].character_id and menu.roster_list.get_item_text(0).contains("selecionado") and not menu.build_summary_label.text.contains("Corte") and not menu.start_run_button.disabled, "selection persists through facade, exposes the empty build, and enables an explicit run start")
 	_check(menu.progression_attributes_label.text.contains("FOR: base 8 · investido 0 · base + investido: teto 60 · efetivo 8 · limite efetivo 120") and menu.progression_skill_tree.get_node_or_null("ProgressionSkill_slash") != null and menu.progression_skill_tree.get_node_or_null("ProgressionSkill_fireball") == null, "progression panel follows the browsed character instead of retaining another alt's class tree")
 	var running_profile: ProfileState = menu.facade.current_profile()
 	running_profile.reward_session = {"run_id": "test"}
@@ -54,7 +52,7 @@ func _initialize() -> void:
 	for control: Control in editor_controls:
 		editor_initialized = editor_initialized and control.get_global_rect().size.y > 0.0
 	_check(menu.active_selectors.size() == CharacterState.ACTIVE_SLOT_COUNT and menu.passive_selectors.size() == CharacterState.PASSIVE_SLOT_COUNT and viewport.encloses(menu.get_global_rect()) and menu.roster_list.get_global_rect().size.y >= 96.0 and menu.select_button.get_global_rect().size.y > 0.0 and editor_initialized and menu.menu_scroll != null and viewport.encloses(menu.start_run_button.get_global_rect()), "menu keeps the roster readable, exposes every contracted build slot, scrolls the editor, and keeps the run action visible")
-	_check(menu._error_text(&"invalid_loadout", false).contains("skill ativa") and menu._error_text(&"recovery_required", false).contains("gravação pendente"), "start failures explain how the player can resolve the state")
+	_check(menu._error_text(&"invalid_loadout", false).contains("build") and menu._error_text(&"recovery_required", false).contains("gravação pendente"), "start failures explain how the player can resolve the state")
 	menu.queue_free()
 	var blocked_directory := root_directory.path_join("blocked_profile")
 	DirAccess.make_dir_recursive_absolute(blocked_directory)
@@ -152,7 +150,7 @@ func _check_skill_controls(scene: PackedScene) -> void:
 	var after_retry: ProfileState = menu.facade.current_profile()
 	_check(not failed["ok"] and failed["error_code"] == &"save_failed" and retried["ok"] and failed["request_id"] == retried["request_id"] and after_retry.revision == seeded["new_revision"] + 1 and after_retry.character_by_id(character_id).purchased_skill_ranks[&"slash"] == 1, "a definite skill-save failure retries the original request ID and revision exactly once")
 	var respec: Dictionary = menu._respec_skills()
-	_check(respec["ok"] and menu.status_label.text == "Skills redistribuídas." and menu.facade.current_profile().character_by_id(character_id).purchased_skill_ranks.is_empty() and menu.progression_skill_tree.get_node("ProgressionSkill_slash").text.contains("Rank 1/5"), "skill respec uses the facade and restores free ranks in the rendered tree")
+	_check(respec["ok"] and menu.status_label.text == "Skills redistribuídas." and menu.facade.current_profile().character_by_id(character_id).purchased_skill_ranks.is_empty() and menu.progression_skill_tree.get_node("ProgressionSkill_slash").text.contains("Rank 0/5"), "skill respec uses the facade and returns purchased ranks to zero in the rendered tree")
 	_check(menu._error_text(&"requirements_unmet", false).contains("requisitos") and menu._error_text(&"rank_cap_reached", false).contains("máximo"), "rank failures have pt-BR menu messages without new progression rules")
 	menu.queue_free()
 

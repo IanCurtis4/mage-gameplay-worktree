@@ -75,33 +75,34 @@ func _check_levels_attributes_ranks_and_snapshot() -> void:
 
 	var prereq_fail := reloaded.learn_skill("heavy-too-early", 3, character_id, &"heavy_slash")
 	_check(not prereq_fail["ok"] and prereq_fail["error_code"] == &"requirements_unmet", "rank purchase rejects an unmet skill prerequisite without a revision")
-	var slash_two := reloaded.learn_skill("slash-2", 3, character_id, &"slash")
-	var slash_three := reloaded.learn_skill("slash-3", 4, character_id, &"slash")
-	var heavy_one := reloaded.learn_skill("heavy-1", 5, character_id, &"heavy_slash")
-	_check(slash_two["rank"] == 2 and slash_three["rank"] == 3 and heavy_one["ok"] and heavy_one["rank"] == 1, "sequential purchases use explicit next-rank requirements and effective free ranks")
-	var late_fail := reloaded.learn_skill("late-job", 6, character_id, &"late_mastery")
+	var slash_one := reloaded.learn_skill("slash-1", 3, character_id, &"slash")
+	var slash_two := reloaded.learn_skill("slash-2", 4, character_id, &"slash")
+	var slash_three := reloaded.learn_skill("slash-3", 5, character_id, &"slash")
+	var heavy_one := reloaded.learn_skill("heavy-1", 6, character_id, &"heavy_slash")
+	_check(slash_one["rank"] == 1 and slash_two["rank"] == 2 and slash_three["rank"] == 3 and heavy_one["ok"] and heavy_one["rank"] == 1, "sequential purchases learn rank one and use explicit next-rank requirements")
+	var late_fail := reloaded.learn_skill("late-job", 7, character_id, &"late_mastery")
 	_check(not late_fail["ok"] and late_fail["error_code"] == &"requirements_unmet", "job requirement is evaluated from durable accumulated XP")
 
 	var profile := reloaded.current_profile()
 	var character: CharacterState = profile.character_by_id(character_id)
 	var active: Array[Variant] = character.presets[0]["active_slots"].duplicate(true)
 	active[0] = &"heavy_slash"
-	var preset := reloaded.update_preset("equip-heavy", 6, character_id, 0, active, character.presets[0]["passive_slots"], character.presets[0]["equipped"])
-	var slash_four := reloaded.learn_skill("slash-4", 7, character_id, &"slash")
-	var slash_five := reloaded.learn_skill("slash-5", 8, character_id, &"slash")
-	var slash_cap := reloaded.learn_skill("slash-cap", 9, character_id, &"slash")
+	var preset := reloaded.update_preset("equip-heavy", 7, character_id, 0, active, character.presets[0]["passive_slots"], character.presets[0]["equipped"])
+	var slash_four := reloaded.learn_skill("slash-4", 8, character_id, &"slash")
+	var slash_five := reloaded.learn_skill("slash-5", 9, character_id, &"slash")
+	var slash_cap := reloaded.learn_skill("slash-cap", 10, character_id, &"slash")
 	_check(preset["ok"] and slash_four["ok"] and slash_five["rank"] == 5 and not slash_cap["ok"] and slash_cap["error_code"] == &"rank_cap_reached", "active rank stops at five and learned purchased-only skill can enter a preset")
 
-	var skill_respec := reloaded.respec_skills("respec-skills", 9, character_id)
+	var skill_respec := reloaded.respec_skills("respec-skills", 10, character_id)
 	var after_skill_respec: CharacterState = skill_respec["profile"].character_by_id(character_id)
-	_check(skill_respec["ok"] and skill_respec["base_refund"] == 5 and skill_respec["evolution_refund"] == 0 and skill_respec["progression"]["base_skill_points_available"] == 19, "skill respec refunds exact wallet costs without persisting a balance")
-	_check(after_skill_respec.purchased_skill_ranks.is_empty() and after_skill_respec.presets[0]["active_slots"][0] == null and skill_respec["progression"]["effective_skill_ranks"][&"slash"] == 1, "skill respec prunes illegal preset references and restores free ranks")
+	_check(skill_respec["ok"] and skill_respec["base_refund"] == 6 and skill_respec["evolution_refund"] == 0 and skill_respec["progression"]["base_skill_points_available"] == 19, "skill respec refunds exact wallet costs without persisting a balance")
+	_check(after_skill_respec.purchased_skill_ranks.is_empty() and after_skill_respec.presets[0]["active_slots"][0] == null and skill_respec["progression"]["effective_skill_ranks"].get(&"slash", 0) == 0, "skill respec prunes illegal preset references and returns non-legacy skills to rank zero")
 
-	var attribute_respec := reloaded.respec_attributes("respec-attributes", 10, character_id)
-	var stale_retry := reloaded.respec_attributes("respec-attributes", 10, character_id)
-	var no_op := reloaded.respec_attributes("respec-empty", 11, character_id)
+	var attribute_respec := reloaded.respec_attributes("respec-attributes", 11, character_id)
+	var stale_retry := reloaded.respec_attributes("respec-attributes", 11, character_id)
+	var no_op := reloaded.respec_attributes("respec-empty", 12, character_id)
 	_check(attribute_respec["ok"] and attribute_respec["refunded"] == 87 and attribute_respec["progression"]["attribute_points_available"] == 87, "attribute respec restores the whole allocation wallet and preserves XP")
-	_check(not stale_retry["ok"] and stale_retry["error_code"] == &"stale_revision" and no_op["ok"] and no_op["already_applied"] and no_op["new_revision"] == 11, "stale retry cannot duplicate respec and an already-empty respec does not write")
+	_check(not stale_retry["ok"] and stale_retry["error_code"] == &"stale_revision" and no_op["ok"] and no_op["already_applied"] and no_op["new_revision"] == 12, "stale retry cannot duplicate respec and an already-empty respec does not write")
 
 	var preview := reloaded.build_preview(character_id, [{"source_id": &"preview", "primary_flat": {&"str": 2.0}}])
 	preview["snapshot"].attribute_allocations[&"str"] = 50
@@ -111,7 +112,7 @@ func _check_levels_attributes_ranks_and_snapshot() -> void:
 	var invalid_preview := reloaded.build_preview(character_id, [{"source_id": &"bad_preview", "increased": {&"str": 1.0}}])
 	_check(not invalid_preview["ok"] and invalid_preview["error_code"] == &"invalid_stat_id", "preview returns calculator validation errors without publishing or duplicating formulas")
 
-	var started := reloaded.start_run("snapshot-run", 11)
+	var started := reloaded.start_run("snapshot-run", 12)
 	var run_state: RunState = started["run_state"]
 	var snapshot := run_state.build_snapshot
 	var source := {"source_id": &"snapshot_test", "primary_flat": {&"str": 2.0}}
@@ -121,9 +122,9 @@ func _check_levels_attributes_ranks_and_snapshot() -> void:
 	source["primary_flat"][&"str"] = 999.0
 	breakdown.primary[&"str"]["effective"] = 777.0 # Consumer violation must remain local to this instance.
 	var isolated := snapshot.stat_breakdown([{"source_id": &"snapshot_test", "primary_flat": {&"str": 2.0}}])
-	_check(snapshot.base_level == 30 and snapshot.job_level == 20 and snapshot.skill_ranks[&"slash"] == 1 and snapshot.attribute_allocations[&"str"] == 0, "run snapshot carries effective levels, free ranks and copied investments")
+	_check(snapshot.base_level == 30 and snapshot.job_level == 20 and snapshot.skill_ranks.is_empty() and snapshot.attribute_allocations[&"str"] == 0, "run snapshot carries effective levels, an empty skill build and copied investments")
 	_check(is_equal_approx(isolated.primary_value(&"str"), 10.0) and is_equal_approx(isolated.value(&"melee_attack"), 32.0), "snapshot stats always come from StatCalculator and separate StatBreakdown instances")
-	_check(not reloaded.allocate_attributes("during-run", 12, character_id, {&"str": 1})["ok"] and not reloaded.learn_skill("learn-during-run", 12, character_id, &"slash")["ok"], "allocation and rank purchases remain menu-only while a run is active")
+	_check(not reloaded.allocate_attributes("during-run", 13, character_id, {&"str": 1})["ok"] and not reloaded.learn_skill("learn-during-run", 13, character_id, &"slash")["ok"], "allocation and rank purchases remain menu-only while a run is active")
 
 func _check_evolution_wallet_and_requirements() -> void:
 	var directory := root_directory.path_join("evolution_wallet")

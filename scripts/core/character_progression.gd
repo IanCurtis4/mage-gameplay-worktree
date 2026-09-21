@@ -28,7 +28,12 @@ static func summary(character: CharacterState, catalog: ProfileCatalog) -> Dicti
 		"evolution_skill_points_granted": evolution_granted,
 		"evolution_skill_points_spent": evolution_spent,
 		"evolution_skill_points_available": evolution_granted - evolution_spent,
-		"effective_skill_ranks": catalog.effective_skill_ranks(character.base_class_id, character.evolution_id, character.purchased_skill_ranks),
+		"effective_skill_ranks": catalog.effective_skill_ranks(
+			character.base_class_id,
+			character.evolution_id,
+			character.purchased_skill_ranks,
+			character.granted_skill_ranks
+		),
 	}
 
 static func allocate_attributes(character: CharacterState, increments: Dictionary) -> Dictionary:
@@ -68,7 +73,10 @@ static func learn_skill(character: CharacterState, catalog: ProfileCatalog, skil
 	if not catalog.skill_is_allowed(skill_id, character.base_class_id, character.evolution_id):
 		return _failure(&"requirements_unmet")
 	var purchased: int = character.purchased_skill_ranks.get(skill_id, 0)
-	if purchased >= int(metadata["max_purchased_rank"]):
+	var legacy_grant: int = character.granted_skill_ranks.get(skill_id, 0)
+	var maximum_rank: int = int(metadata["free_rank"]) + int(metadata["max_purchased_rank"])
+	var current_rank: int = int(metadata["free_rank"]) + legacy_grant + purchased
+	if current_rank >= maximum_rank:
 		return _failure(&"rank_cap_reached")
 	var wallet: StringName = metadata["wallet"]
 	var evolved: bool = not character.evolution_id.is_empty()
@@ -76,8 +84,13 @@ static func learn_skill(character: CharacterState, catalog: ProfileCatalog, skil
 	var spent: int = catalog.skill_points_spent(character.purchased_skill_ranks, wallet)
 	if spent >= granted:
 		return _failure(&"insufficient_points")
-	var effective_ranks: Dictionary[StringName, int] = catalog.effective_skill_ranks(character.base_class_id, character.evolution_id, character.purchased_skill_ranks)
-	var target_rank: int = int(metadata["free_rank"]) + purchased + 1
+	var effective_ranks: Dictionary[StringName, int] = catalog.effective_skill_ranks(
+		character.base_class_id,
+		character.evolution_id,
+		character.purchased_skill_ranks,
+		character.granted_skill_ranks
+	)
+	var target_rank: int = current_rank + 1
 	var requirement: Dictionary = catalog.check_rank_requirements(
 		skill_id,
 		target_rank,
@@ -107,7 +120,12 @@ static func respec_skills(character: CharacterState, catalog: ProfileCatalog) ->
 	if base_refund == 0 and evolution_refund == 0:
 		return {"ok": true, "already_applied": true, "base_refund": 0, "evolution_refund": 0}
 	character.purchased_skill_ranks.clear()
-	var effective := catalog.effective_skill_ranks(character.base_class_id, character.evolution_id, character.purchased_skill_ranks)
+	var effective := catalog.effective_skill_ranks(
+		character.base_class_id,
+		character.evolution_id,
+		character.purchased_skill_ranks,
+		character.granted_skill_ranks
+	)
 	for preset: Dictionary in character.presets:
 		_prune_slots(preset["active_slots"], ProfileCatalog.ACTIVE, effective, catalog)
 		_prune_slots(preset["passive_slots"], ProfileCatalog.PASSIVE, effective, catalog)

@@ -40,8 +40,9 @@ func _check_reference_fixture() -> void:
 	var fixture: Dictionary = JSON.parse_string(fixture_file.get_as_text())
 	fixture_file.close()
 	var decoded := ProfileCodec.decode(JSON.stringify(fixture["profile"]))
-	_check(decoded["ok"] and decoded["profile"].characters.size() == 1, "schema decoder consumes the accepted E00 profile fixture")
+	_check(decoded["ok"] and decoded["migrated"] and decoded["profile"].characters.size() == 1, "schema decoder migrates the accepted E00 profile fixture")
 	_check(decoded["profile"].characters[0].display_name == "Referência", "Unicode display names survive fixture decoding")
+	_check(decoded["profile"].characters[0].granted_skill_ranks == {&"slash": 1, &"dash": 1, &"swordsman_resistance": 1}, "E00 free ranks become explicit legacy grants")
 
 func _check_round_trip_and_unknown_fields() -> void:
 	var directory := root_directory.path_join("round_trip")
@@ -94,7 +95,7 @@ func _check_round_trip_and_unknown_fields() -> void:
 	wrong_slot_payload["characters"][0]["presets"][0]["active_slots"][0] = "swordsman_resistance"
 	_check(ProfileCodec.decode(JSON.stringify(wrong_slot_payload))["error_code"] == &"invalid_presets", "passive skills cannot occupy active slots")
 	var excessive_rank_payload: Dictionary = encoded["data"].duplicate(true)
-	excessive_rank_payload["characters"][0]["purchased_skill_ranks"]["slash"] = 5
+	excessive_rank_payload["characters"][0]["purchased_skill_ranks"]["slash"] = 6
 	_check(ProfileCodec.decode(JSON.stringify(excessive_rank_payload))["error_code"] == &"invalid_skill_ranks", "purchased ranks respect catalog limits")
 	var overspent_skill_payload: Dictionary = encoded["data"].duplicate(true)
 	overspent_skill_payload["characters"][0]["purchased_skill_ranks"]["slash"] = 2
@@ -289,7 +290,7 @@ func _check_future_and_invalid_files() -> void:
 	var catalog_directory := root_directory.path_join("catalog_incompatible")
 	_prepare_directory(catalog_directory)
 	var catalog_payload: Dictionary = backup_profile["data"].duplicate(true)
-	catalog_payload["catalog_version"] = 2
+	catalog_payload["catalog_version"] = 99
 	var catalog_text := JSON.stringify(catalog_payload)
 	_write_text(catalog_directory.path_join(ProfileStore.PRIMARY_FILE), catalog_text)
 	_write_text(catalog_directory.path_join(ProfileStore.BACKUP_FILE), backup_profile["text"])
@@ -358,6 +359,7 @@ func _profile_with_character() -> ProfileState:
 	character.base_xp_total = 350
 	character.job_xp_total = 80
 	character.attribute_allocations[&"str"] = 3
+	character.purchased_skill_ranks[&"slash"] = 1
 	character.presets[0]["active_slots"][0] = &"slash"
 	profile.characters.append(character)
 	profile.selected_character_id = character.character_id

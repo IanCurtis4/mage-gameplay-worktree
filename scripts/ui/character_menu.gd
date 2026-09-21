@@ -271,7 +271,7 @@ func _error_text(error_code: StringName, read_only: bool) -> String:
 		&"invalid_character_id": return "O personagem selecionado não existe mais. Escolha outro personagem."
 		&"invalid_presets": return "O preset contém skills inválidas ou repetidas. Revise os slots escolhidos."
 		&"invalid_equipment": return "O equipamento escolhido não pertence a este personagem ou ao slot informado."
-		&"invalid_loadout": return "Configure ao menos uma skill ativa válida antes de iniciar a run."
+		&"invalid_loadout": return "A build selecionada não é válida para iniciar a run."
 		&"invalid_attribute_allocations": return "A distribuição de atributos informada é inválida."
 		&"attribute_cap_reached": return "Este atributo já atingiu o limite de investimento."
 		&"insufficient_points": return "Você não tem pontos suficientes para essa escolha."
@@ -305,7 +305,9 @@ func _build_summary(character: Variant) -> String:
 	var weapon: Variant = preset["equipped"].get(&"weapon")
 	if derived_stats == null:
 		return "Build indisponível (%s)." % preview.get("error_code", &"preview_failed")
-	return "Build inicial\nAtivas: %s\nPassiva: %s\nArma: %s\nStats: Vida %d · SP %d · ATQ corpo %d · ATQ precisão %d · ATQ mágico %d" % [", ".join(active), ", ".join(passive), _equipment_name(weapon), int(derived_stats.value(&"max_hp")), int(derived_stats.value(&"max_sp")), int(derived_stats.value(&"melee_attack")), int(derived_stats.value(&"precision_attack")), int(derived_stats.value(&"magic_attack"))]
+	var active_text := "Nenhuma" if active.is_empty() else ", ".join(active)
+	var passive_text := "Nenhuma" if passive.is_empty() else ", ".join(passive)
+	return "Build inicial\nAtivas: %s\nPassiva: %s\nArma: %s\nStats: Vida %d · SP %d · ATQ corpo %d · ATQ precisão %d · ATQ mágico %d" % [active_text, passive_text, _equipment_name(weapon), int(derived_stats.value(&"max_hp")), int(derived_stats.value(&"max_sp")), int(derived_stats.value(&"melee_attack")), int(derived_stats.value(&"precision_attack")), int(derived_stats.value(&"magic_attack"))]
 
 func _refresh_progression_panel(character: Variant, profile: Variant) -> void:
 	if character == null or facade == null:
@@ -390,7 +392,8 @@ func _learn_skill(skill_id: StringName) -> Dictionary:
 		_progression_retries.erase(retry_key)
 	else:
 		_progression_retries[retry_key] = {"request_id": request_id, "revision": revision}
-	return _show_result(result, "%s aprimorada." % _skill_name(skill_id))
+	var success_text := "Skill aprendida: %s." % _skill_name(skill_id) if result.get("rank", 0) == 1 else "Skill aprimorada: %s." % _skill_name(skill_id)
+	return _show_result(result, success_text)
 
 func _respec_skills() -> Dictionary:
 	var context := _selected_progression_context()

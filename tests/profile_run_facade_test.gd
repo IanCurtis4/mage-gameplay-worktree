@@ -51,7 +51,7 @@ func _check_run_reward_and_end_flow() -> void:
 	_check(started["ok"] and started["new_revision"] == 4 and run_id == IdentityIds.run_id(started["profile"].profile_id, 1), "start_run reserves and commits the first monotonic run ID")
 	_check(started["profile"].next_run_counter == 2 and started["profile"].reward_session["last_committed_seq"] == 0 and started["profile"].lifetime_stats[&"runs_started"] == 1, "run counter, reward cursor and runs_started share the start commit")
 	_check(run_state.character_id == first["character_id"] and run_state.build_snapshot.base_level == 1 and run_state.build_snapshot.job_level == 1, "runtime receives the selected character and derived levels")
-	_check(run_state.skill_levels[&"slash"] == 1 and run_state.skill_levels[&"dash"] == 1 and run_state.build_snapshot.equipped[&"weapon"] == &"training_sword", "snapshot contains effective free ranks and selected preset equipment")
+	_check(run_state.skill_levels.is_empty() and run_state.build_snapshot.active_slots == [null, null, null, null, null] and run_state.build_snapshot.equipped[&"weapon"] == &"training_sword", "snapshot accepts an empty skill bar and selected preset equipment")
 	run_state.build_snapshot.attribute_allocations[&"str"] = 50
 	run_state.skill_levels[&"slash"] = 5
 	run_state.augment_stacks[&"vitality"] = 3
@@ -120,7 +120,7 @@ func _check_start_preconditions() -> void:
 	var invalid_facade := ProfileFacade.new(ProfileStore.new(loadout_directory, catalog), _rewards())
 	var invalid_open := invalid_facade.open_profile()
 	var invalid_start := invalid_facade.start_run("start-invalid-loadout", invalid_open["profile"].revision)
-	_check(invalid_commit["ok"] and not invalid_start["ok"] and invalid_start["error_code"] == &"invalid_loadout", "structurally valid empty active slots do not prove run readiness")
+	_check(invalid_commit["ok"] and invalid_start["ok"] and invalid_start["run_state"].skill_levels.is_empty(), "structurally valid empty active slots are a run-ready build")
 
 	var pending_directory := root_directory.path_join("pending_start")
 	_prepare_directory(pending_directory)

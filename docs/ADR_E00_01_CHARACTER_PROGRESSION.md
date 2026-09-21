@@ -108,9 +108,10 @@ essas adaptações têm IDs e custos próprios e usam a carteira de evolução. 
 pura nem híbrida recebe automaticamente todas as passivas de seus temas.
 
 Respec de atributos devolve apenas os pontos investidos; não altera vetor inicial,
-níveis ou XP. Respec de skills devolve cada custo à carteira correspondente e
-restaura os ranks gratuitos iniciais. Respec completo evita manter skills com
-pré-requisitos removidos; não propor reembolso parcial em cascata neste demo.
+níveis ou XP. Conforme a [decisão E04](E04_LEARNING_AND_ARCHER.md), respec de skills
+devolve cada compra à carteira correspondente; concessões legadas não entram no
+reembolso. Respec completo evita manter skills com pré-requisitos removidos; não
+propor reembolso parcial em cascata neste demo.
 
 Trocar evolução só é permitido no menu e dentro da mesma origem. Conserva XP,
 job level e a árvore base; devolve todos os pontos gastos da evolução antiga e
@@ -136,11 +137,12 @@ se necessária para o loop, deve ser explícita e revisada no orçamento do kit;
 usar essa exceção para esconder várias passivas gratuitas. Auto/intrínseca não têm
 rank comprado. Skills aprendidas podem ficar fora da barra sem perder o investimento.
 
-Ativas com ranks 1–5 e passivas com ranks 1–3; 1 ponto por rank comprado. Cada base
-começa com duas ativas em rank 1 e uma passiva em rank 1, especificadas em catálogo,
-gratuitas e não reembolsáveis. A evolução libera uma ativa exclusiva em rank 1,
-gratuita; as demais começam em 0 (não aprendidas). Melhorias desses ranks iniciais
-custam normalmente. Não há obrigação de preencher todos os slots no nível 1.
+Ativas com ranks 1–5 e passivas com ranks 1–3; 1 ponto por rank aprendido ou
+melhorado. A [decisão E04](E04_LEARNING_AND_ARCHER.md) substitui os gratuitos das
+bases: personagem novo começa apenas com auto, biblioteca base em R0 e barra vazia
+válida. Aprender não equipa automaticamente. A evolução continua liberando uma
+ativa exclusiva em rank 1, gratuita, até revisão do contrato E05; as demais começam
+em 0. Direitos gratuitos de saves anteriores são concessões legadas persistentes.
 
 Catálogo declara requisitos de job, identidade e ranks de outras skills por rank
 desbloqueável. A árvore deve ser acíclica e alcançável com os pontos disponíveis;
@@ -150,9 +152,9 @@ exigir fundamentos da origem; trocar identidade não deve invalidar a árvore ba
 Dois presets por personagem guardam seleção de slots/equipamentos, sem criar
 carteiras adicionais ou memorizar outra distribuição de ranks. Trocar preset não
 é respec. Após respec/troca de evolução, remover referências ilegais de todos os
-presets, informar slots vazios e pedir configuração antes de iniciar, caso nenhum
-slot ativo seja válido. Não substituir por skills aleatórias nem apagar presets
-inteiros. Auto permanece disponível.
+presets e informar slots vazios. Nenhum slot ativo é uma configuração válida para
+iniciar a run. Não substituir por skills aleatórias nem apagar presets inteiros.
+Auto permanece disponível.
 
 “Completo” exige auto e loop funcional sem augments, duas builds que mudam a tomada
 de decisão, pré-requisitos/ranks alcançáveis, tooltips coerentes, opções de augment,
@@ -220,7 +222,8 @@ Estes são resultados esperados do desenho; não são testes de sistema implemen
 | Ganhar 460 XP job após evoluir no caso anterior | Job 21 (limiar 5.400), 1 ponto de evolução; carteira base continua 19 |
 | Trocar evolução com job 25 e 5 pontos exclusivos gastos | Devolve 5 à carteira de evolução; remove skills antigas, não concede outros 5 |
 | Respec de Espadachim base 30 com 87 pontos investidos | Restitui 87; vetor volta a 8/5/8/2/5/2; XP permanece 13.050 |
-| Aprender ativa inicial de rank 1 até rank 5 | Gasta 4; respec devolve 4 e mantém rank 1 |
+| Aprender ativa base de rank 0 até rank 5 | Gasta 5; respec devolve 5 e retorna a rank 0 |
+| Save anterior com ativa base gratuita R1 e uma melhoria comprada | Migra para concessão legada R1 + compra R1; respec devolve 1 e mantém o direito legado R1 |
 | Aplicar duas vezes a mesma recompensa confirmada | Segunda aplicação não muda XP, coleção ou pontos |
 | Morrer com dois augments e uma carta após ganhar XP salva | XP permanece no personagem; nova run tem zero augments e cartas |
 | Equipar/retirar item que dá +20 HP com déficit de 30 | Déficit continua 30 onde comportado pelos máximos; nenhuma cura pela troca |

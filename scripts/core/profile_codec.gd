@@ -1,9 +1,15 @@
 class_name ProfileCodec
 extends RefCounted
-## Pure schema-2 encoding, validation and conservative schema-1 migration.
+## Pure schema-2 encoding, validation and conservative schema/catalog migration.
 
 const MAX_FILE_BYTES := 4 * 1024 * 1024
 const MAX_EXACT_JSON_INTEGER := 9007199254740991
+const LEGACY_CATALOG_VERSION := 1
+const LEGACY_RULESET_ID := "e00_v1"
+const LEGACY_BASE_GRANTS := {
+	"swordsman": {"slash": 1, "dash": 1, "swordsman_resistance": 1},
+	"mage": {"fireball": 1, "fire_wall": 1, "mage_mana_regeneration": 1},
+}
 const ROOT_FIELDS := [
 	"format_id", "schema_version", "catalog_version", "ruleset_id", "profile_id",
 	"revision", "next_character_counter", "next_run_counter", "selected_character_id",
@@ -12,7 +18,7 @@ const ROOT_FIELDS := [
 ]
 const CHARACTER_FIELDS := [
 	"character_id", "display_name", "base_class_id", "evolution_id", "base_xp_total",
-	"job_xp_total", "attribute_allocations", "purchased_skill_ranks", "equipped",
+	"job_xp_total", "attribute_allocations", "granted_skill_ranks", "purchased_skill_ranks", "equipped",
 	"presets", "selected_preset",
 ]
 const FORBIDDEN_RUNTIME_FIELDS := [
@@ -55,6 +61,12 @@ static func decode(text: String, catalog: ProfileCatalog = null) -> Dictionary:
 		return _migrate_v1(data, effective_catalog)
 	if schema_version != ProfileState.SCHEMA_VERSION:
 		return _error(&"unsupported_schema")
+	if (
+		_is_exact_integer(data.get("catalog_version"))
+		and int(data["catalog_version"]) == LEGACY_CATALOG_VERSION
+		and data.get("ruleset_id") == LEGACY_RULESET_ID
+	):
+		return _migrate_catalog_v1(data, effective_catalog)
 	return _decode_v2(data, effective_catalog)
 
 static func validate_profile(profile: ProfileState, catalog: ProfileCatalog = null) -> Dictionary:
@@ -171,7 +183,17 @@ static func _decode_character(raw: Variant, profile_id: String, next_character_c
 	var allocations_result := _decode_allocations(data["attribute_allocations"], base_class_id, base_xp)
 	if not allocations_result["ok"]:
 		return allocations_result
-	var ranks_result := _decode_rank_map(data["purchased_skill_ranks"], base_class_id, evolution_id, job_xp, catalog)
+	var grants_result := _decode_granted_rank_map(data["granted_skill_ranks"], base_class_id, evolution_id, catalog)
+	if not grants_result["ok"]:
+		return grants_result
+	var ranks_result := _decode_rank_map(
+		data["purchased_skill_ranks"],
+		base_class_id,
+		evolution_id,
+		job_xp,
+		grants_result["ranks"],
+		catalog
+	)
 	if not ranks_result["ok"]:
 		return ranks_result
 	var equipped_result := _decode_equipped(data["equipped"])
@@ -180,8 +202,14 @@ static func _decode_character(raw: Variant, profile_id: String, next_character_c
 	if not data["presets"] is Array or data["presets"].size() != CharacterState.PRESET_COUNT:
 		return _error(&"invalid_presets")
 	var presets: Array[Dictionary] = []
+	var effective_ranks := catalog.effective_skill_ranks(
+		base_class_id,
+		evolution_id,
+		ranks_result["ranks"],
+		grants_result["ranks"]
+	)
 	for raw_preset: Variant in data["presets"]:
-		var preset_result := _decode_preset(raw_preset, base_class_id, evolution_id, ranks_result["ranks"], catalog)
+		var preset_result := _decode_preset(raw_preset, base_class_id, evolution_id, effective_ranks, catalog)
 		if not preset_result["ok"]:
 			return preset_result
 		presets.append(preset_result["preset"])
@@ -195,6 +223,7 @@ static func _decode_character(raw: Variant, profile_id: String, next_character_c
 	character.base_xp_total = base_xp
 	character.job_xp_total = job_xp
 	character.attribute_allocations = allocations_result["allocations"]
+	character.granted_skill_ranks = grants_result["ranks"]
 	character.purchased_skill_ranks = ranks_result["ranks"]
 	character.equipped = equipped_result["equipped"]
 	character.presets = presets
@@ -221,7 +250,34 @@ static func _decode_allocations(raw: Variant, base_class_id: StringName, base_xp
 		return _error(&"overspent_attributes")
 	return {"ok": true, "allocations": allocations}
 
-static func _decode_rank_map(raw: Variant, base_class_id: StringName, evolution_id: StringName, job_xp: int, catalog: ProfileCatalog) -> Dictionary:
+static func _decode_granted_rank_map(raw: Variant, base_class_id: StringName, evolution_id: StringName, catalog: ProfileCatalog) -> Dictionary:
+	if not raw is Dictionary:
+		return _error(&"invalid_skill_ranks")
+	var ranks: Dictionary[StringName, int] = {}
+	var expected: Dictionary = LEGACY_BASE_GRANTS.get(String(base_class_id), {})
+	for raw_id: Variant in raw:
+		if not raw_id is String or not IdentityIds.is_technical_id(raw_id) or not _is_exact_integer(raw[raw_id]):
+			return _error(&"invalid_skill_ranks")
+		var skill_id := StringName(raw_id)
+		var rank := int(raw[raw_id])
+		if int(expected.get(raw_id, 0)) != rank:
+			return _error(&"invalid_skill_ranks")
+		var metadata := catalog.skill_metadata(skill_id)
+		if metadata.is_empty() or not catalog.skill_is_allowed(skill_id, base_class_id, evolution_id):
+			return _catalog_error(&"invalid_catalog")
+		ranks[skill_id] = rank
+	if not ranks.is_empty() and ranks.size() != expected.size():
+		return _error(&"invalid_skill_ranks")
+	return {"ok": true, "ranks": ranks}
+
+static func _decode_rank_map(
+	raw: Variant,
+	base_class_id: StringName,
+	evolution_id: StringName,
+	job_xp: int,
+	granted_ranks: Dictionary[StringName, int],
+	catalog: ProfileCatalog
+) -> Dictionary:
 	if not raw is Dictionary:
 		return _error(&"invalid_skill_ranks")
 	var ranks: Dictionary[StringName, int] = {}
@@ -249,7 +305,8 @@ static func _decode_rank_map(raw: Variant, base_class_id: StringName, evolution_
 		base_class_id,
 		evolution_id,
 		ProgressionRules.job_level_for_xp(job_xp, evolved),
-		ranks
+		ranks,
+		granted_ranks
 	)
 	if not requirements["ok"]:
 		return requirements
@@ -266,11 +323,11 @@ static func _decode_equipped(raw: Variant) -> Dictionary:
 		equipped[slot] = null if raw[key] == null else StringName(raw[key])
 	return {"ok": true, "equipped": equipped}
 
-static func _decode_preset(raw: Variant, base_class_id: StringName, evolution_id: StringName, purchased_ranks: Dictionary[StringName, int], catalog: ProfileCatalog) -> Dictionary:
+static func _decode_preset(raw: Variant, base_class_id: StringName, evolution_id: StringName, effective_ranks: Dictionary[StringName, int], catalog: ProfileCatalog) -> Dictionary:
 	if not raw is Dictionary or raw.size() != 3 or not raw.has("active_slots") or not raw.has("passive_slots") or not raw.has("equipped"):
 		return _error(&"invalid_presets")
-	var active_result := _decode_slots(raw["active_slots"], CharacterState.ACTIVE_SLOT_COUNT, ProfileCatalog.ACTIVE, base_class_id, evolution_id, purchased_ranks, catalog)
-	var passive_result := _decode_slots(raw["passive_slots"], CharacterState.PASSIVE_SLOT_COUNT, ProfileCatalog.PASSIVE, base_class_id, evolution_id, purchased_ranks, catalog)
+	var active_result := _decode_slots(raw["active_slots"], CharacterState.ACTIVE_SLOT_COUNT, ProfileCatalog.ACTIVE, base_class_id, evolution_id, effective_ranks, catalog)
+	var passive_result := _decode_slots(raw["passive_slots"], CharacterState.PASSIVE_SLOT_COUNT, ProfileCatalog.PASSIVE, base_class_id, evolution_id, effective_ranks, catalog)
 	var equipped_result := _decode_equipped(raw["equipped"])
 	if not active_result["ok"]:
 		return active_result
@@ -280,7 +337,7 @@ static func _decode_preset(raw: Variant, base_class_id: StringName, evolution_id
 		return equipped_result
 	return {"ok": true, "preset": {"active_slots": active_result["slots"], "passive_slots": passive_result["slots"], "equipped": equipped_result["equipped"]}}
 
-static func _decode_slots(raw: Variant, expected_size: int, category: StringName, base_class_id: StringName, evolution_id: StringName, purchased_ranks: Dictionary[StringName, int], catalog: ProfileCatalog) -> Dictionary:
+static func _decode_slots(raw: Variant, expected_size: int, category: StringName, base_class_id: StringName, evolution_id: StringName, effective_ranks: Dictionary[StringName, int], catalog: ProfileCatalog) -> Dictionary:
 	if not raw is Array or raw.size() != expected_size:
 		return _error(&"invalid_presets")
 	var slots: Array[Variant] = []
@@ -297,7 +354,7 @@ static func _decode_slots(raw: Variant, expected_size: int, category: StringName
 			return _catalog_error(&"invalid_catalog")
 		if metadata["category"] != category or seen.has(skill_id):
 			return _catalog_error(&"invalid_presets") if metadata["category"] != category else _error(&"invalid_presets")
-		if int(metadata["free_rank"]) + purchased_ranks.get(skill_id, 0) <= 0:
+		if effective_ranks.get(skill_id, 0) <= 0:
 			return _error(&"requirements_unmet")
 		seen[skill_id] = true
 		slots.append(skill_id)
@@ -376,7 +433,29 @@ static func _migrate_v1(data: Dictionary, catalog: ProfileCatalog) -> Dictionary
 		if not stats_result["ok"]:
 			return stats_result
 		profile.lifetime_stats = stats_result["stats"]
-	return {"ok": true, "profile": profile, "migrated": true}
+	return {"ok": true, "profile": profile, "migrated": true, "migration_kind": &"schema_v1"}
+
+static func _migrate_catalog_v1(data: Dictionary, catalog: ProfileCatalog) -> Dictionary:
+	if not data.get("characters") is Array:
+		return _error(&"invalid_characters")
+	var migrated := data.duplicate(true)
+	migrated["catalog_version"] = ProfileState.CATALOG_VERSION
+	migrated["ruleset_id"] = ProfileState.RULESET_ID
+	for index: int in migrated["characters"].size():
+		var raw_character: Variant = migrated["characters"][index]
+		if not raw_character is Dictionary or not raw_character.get("base_class_id") is String:
+			return _error(&"invalid_character")
+		if raw_character.has("granted_skill_ranks"):
+			return _error(&"invalid_skill_ranks")
+		var grants: Dictionary = LEGACY_BASE_GRANTS.get(raw_character["base_class_id"], {}).duplicate(true)
+		raw_character["granted_skill_ranks"] = grants
+		migrated["characters"][index] = raw_character
+	var decoded := _decode_v2(migrated, catalog)
+	if not decoded["ok"]:
+		return decoded
+	decoded["migrated"] = true
+	decoded["migration_kind"] = &"catalog_v1"
+	return decoded
 
 static func _profile_to_dictionary(profile: ProfileState) -> Dictionary:
 	var data := profile.extension_fields.duplicate(true)
@@ -419,6 +498,7 @@ static func _character_to_dictionary(character: CharacterState) -> Dictionary:
 		"base_xp_total": character.base_xp_total,
 		"job_xp_total": character.job_xp_total,
 		"attribute_allocations": _integer_map_to_dictionary(character.attribute_allocations),
+		"granted_skill_ranks": _integer_map_to_dictionary(character.granted_skill_ranks),
 		"purchased_skill_ranks": _integer_map_to_dictionary(character.purchased_skill_ranks),
 		"equipped": _equipped_to_dictionary(character.equipped),
 		"presets": presets,

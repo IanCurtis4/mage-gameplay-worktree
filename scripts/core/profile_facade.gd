@@ -129,7 +129,12 @@ func available_build_options(character_id: String) -> Dictionary:
 	var character := _profile.character_by_id(character_id) if _profile != null else null
 	if character == null:
 		return {"ok": false, "error_code": &"invalid_character_id"}
-	var effective_ranks := _catalog.effective_skill_ranks(character.base_class_id, character.evolution_id, character.purchased_skill_ranks)
+	var effective_ranks := _catalog.effective_skill_ranks(
+		character.base_class_id,
+		character.evolution_id,
+		character.purchased_skill_ranks,
+		character.granted_skill_ranks
+	)
 	var active_skills: Array[StringName] = []
 	var passive_skills: Array[StringName] = []
 	for skill_id: StringName in effective_ranks:
@@ -539,7 +544,12 @@ func _open_profile_transaction() -> Dictionary:
 	return closed
 
 func _build_snapshot(character: CharacterState) -> BuildSnapshot:
-	var effective_ranks := _catalog.effective_skill_ranks(character.base_class_id, character.evolution_id, character.purchased_skill_ranks)
+	var effective_ranks := _catalog.effective_skill_ranks(
+		character.base_class_id,
+		character.evolution_id,
+		character.purchased_skill_ranks,
+		character.granted_skill_ranks
+	)
 	return BuildSnapshot.from_character(
 		character,
 		ProgressionRules.base_level_for_xp(character.base_xp_total),

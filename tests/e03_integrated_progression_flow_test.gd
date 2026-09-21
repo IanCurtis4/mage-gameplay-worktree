@@ -65,7 +65,7 @@ func _check_menu_reward_investment_new_run_reload() -> void:
 	var learned := investment_menu._learn_skill(&"slash")
 	var invested_preview := facade.build_preview(created["character_id"])
 	var invested_summary := facade.progression_summary(created["character_id"])
-	_check(allocated["ok"] and learned["ok"] and invested_summary["attribute_points_available"] == 5 and invested_summary["base_skill_points_available"] == 1 and invested_summary["effective_skill_ranks"][&"slash"] == 2, "menu spends one attribute point and one base-skill point through persistent transactions")
+	_check(allocated["ok"] and learned["ok"] and invested_summary["attribute_points_available"] == 5 and invested_summary["base_skill_points_available"] == 1 and invested_summary["effective_skill_ranks"][&"slash"] == 1, "menu spends one attribute point and learns slash rank one through persistent transactions")
 
 	var next_started := investment_menu._start_run()
 	await scene_changed
@@ -73,7 +73,7 @@ func _check_menu_reward_investment_new_run_reload() -> void:
 	var next_controller := current_scene as RunController
 	_freeze_controller(next_controller)
 	var expected_stats: StatBreakdown = invested_preview["stat_breakdown"]
-	_check(next_started["ok"] and _same_values(expected_stats, next_controller.player.stat_breakdown) and next_controller.run_state.skill_levels[&"slash"] == 2, "new run consumes the invested preview and purchased rank")
+	_check(next_started["ok"] and _same_values(expected_stats, next_controller.player.stat_breakdown) and next_controller.run_state.skill_levels[&"slash"] == 1, "new run consumes the invested preview and learned rank")
 	next_controller._update_hud()
 	_check(next_controller.health_label.text.contains("%d" % int(expected_stats.value(&"max_hp"))) and next_controller.sp_label.text.contains("%d" % int(expected_stats.value(&"max_sp"))), "new-run HUD reads the same canonical HP and SP values")
 	var combat_request := next_controller.player._make_physical_request(next_controller.enemies[0], &"basic_attack", expected_stats.value(&"melee_attack"), DamageRequest.AccuracyMode.CONTESTED, true)
@@ -88,7 +88,7 @@ func _check_menu_reward_investment_new_run_reload() -> void:
 	var reloaded_character: CharacterState = reopened["profile"].character_by_id(created["character_id"])
 	var reloaded_summary := reloaded.progression_summary(created["character_id"])
 	_check(second_close["ok"] and reopened["ok"] and reloaded_character.base_xp_total == 250 and reloaded_character.job_xp_total == 180, "reload preserves both real encounter rewards")
-	_check(reloaded_character.attribute_allocations[&"str"] == 1 and reloaded_summary["effective_skill_ranks"][&"slash"] == 2, "reload preserves attribute investment and purchased rank")
+	_check(reloaded_character.attribute_allocations[&"str"] == 1 and reloaded_summary["effective_skill_ranks"][&"slash"] == 1, "reload preserves attribute investment and learned rank")
 
 func _check_reward_save_retry() -> void:
 	var store := ToggleFailStore.new(root_directory.path_join("reward_retry"), ProfileCatalog.pilot())
