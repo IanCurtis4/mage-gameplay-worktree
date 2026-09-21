@@ -1,5 +1,25 @@
 # Revisão E03-C1 — Astra
 
+## Nova entrega aprovada
+
+**Aceite técnico concedido a `48a01be`, em 20/09/2026.**
+Revisão focalizada confirmou cópias do DamageRequest na parede/aplicação/tick,
+preservando componente e multiplicador ofensivos sem duplicação e consultando
+defesas atuais. Regeneração de HP ligada ao controller com bloqueios de encontro,
+pausa, morte e fim de run, limitada ao máximo. Handoff atualizado está coerente.
+
+Verificação independente: `tools/verify.ps1` em Godot 4.7.2 passou com importação,
+952 checks (28 de consumidores) e smoke. Regressões incluem multiplicador zero,
+alteração posterior de ofensiva, mudança de defesa e condições de regeneração.
+Nenhum bloqueador novo identificado no delta. Não houve teste visual de gameplay.
+
+Liberado E03-C2 com Terra: painel/árvore de progressão sobre APIs aprovadas,
+com apoio Luna delimitado para casos/textos de E03-L2 se útil. E03-I e aceite
+de gameplay continuam pendentes. Sem merge em master nem integração de código
+ao playtest nesta revisão.
+
+## Parecer anterior (resolvido)
+
 Candidato: `21681b2`. Aceite técnico pendente de duas correções.
 
 Handoff `E03_C1_CONSUMERS.md` descreve a migração entregue. O delta centraliza
