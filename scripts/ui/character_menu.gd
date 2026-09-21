@@ -552,6 +552,7 @@ func _build_ui() -> void:
 	roster_column.add_child(roster_title)
 	roster_list = ItemList.new()
 	roster_list.name = "CharacterRoster"
+	roster_list.custom_minimum_size = Vector2(0, 96)
 	roster_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	roster_list.item_selected.connect(_select_roster_index)
 	roster_list.item_activated.connect(select_character_at)

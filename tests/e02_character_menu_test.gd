@@ -53,7 +53,7 @@ func _initialize() -> void:
 		editor_controls.append(selector)
 	for control: Control in editor_controls:
 		editor_initialized = editor_initialized and control.get_global_rect().size.y > 0.0
-	_check(menu.active_selectors.size() == CharacterState.ACTIVE_SLOT_COUNT and menu.passive_selectors.size() == CharacterState.PASSIVE_SLOT_COUNT and viewport.encloses(menu.get_global_rect()) and menu.select_button.get_global_rect().size.y > 0.0 and editor_initialized and menu.menu_scroll != null and viewport.encloses(menu.start_run_button.get_global_rect()), "menu exposes every contracted build slot, scrolls the editor, and keeps the run action visible")
+	_check(menu.active_selectors.size() == CharacterState.ACTIVE_SLOT_COUNT and menu.passive_selectors.size() == CharacterState.PASSIVE_SLOT_COUNT and viewport.encloses(menu.get_global_rect()) and menu.roster_list.get_global_rect().size.y >= 96.0 and menu.select_button.get_global_rect().size.y > 0.0 and editor_initialized and menu.menu_scroll != null and viewport.encloses(menu.start_run_button.get_global_rect()), "menu keeps the roster readable, exposes every contracted build slot, scrolls the editor, and keeps the run action visible")
 	_check(menu._error_text(&"invalid_loadout", false).contains("skill ativa") and menu._error_text(&"recovery_required", false).contains("gravação pendente"), "start failures explain how the player can resolve the state")
 	menu.queue_free()
 	var blocked_directory := root_directory.path_join("blocked_profile")
