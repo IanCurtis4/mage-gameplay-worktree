@@ -28,8 +28,7 @@ func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast
 	elif selected_target != null:
 		endpoint = selected_target.global_position
 	else:
-		var definition := ClassCatalog.skill_definition(skill)
-		endpoint = origin + direction * (definition.range if definition != null else PlayerActor.SLASH_RANGE)
+		endpoint = origin + direction * actor.skill_range(skill)
 	body_radius = actor.collision_radius
 	available = can_cast
 	queue_redraw()
@@ -64,13 +63,14 @@ func _draw() -> void:
 	var color := READY_COLOR if available else BLOCKED_COLOR
 	draw_arc(origin, body_radius + 5.0, 0.0, TAU, 40, Color(color, 0.6), 1.5, true)
 	if skill == &"slash":
-		var outline := SkillGeometry.cone_outline(origin, direction, PlayerActor.SLASH_RANGE, PlayerActor.SLASH_HALF_ANGLE)
+		var skill_range := origin.distance_to(endpoint)
+		var outline := SkillGeometry.cone_outline(origin, direction, skill_range, PlayerActor.SLASH_HALF_ANGLE)
 		# Drop the closing duplicate for triangulation.
 		var fill := outline.slice(0, outline.size() - 1)
 		draw_colored_polygon(fill, Color(color, 0.16))
 		draw_polyline(outline, Color(0.04, 0.09, 0.12, 0.9), 5.0, true)
 		draw_polyline(outline, color, 2.0, true)
-		var inner := SkillGeometry.cone_outline(origin, direction, PlayerActor.SLASH_RANGE * 0.55, PlayerActor.SLASH_HALF_ANGLE)
+		var inner := SkillGeometry.cone_outline(origin, direction, skill_range * 0.55, PlayerActor.SLASH_HALF_ANGLE)
 		draw_polyline(inner.slice(1, inner.size() - 1), Color(color, 0.35), 1.0, true)
 	elif skill == &"dash":
 		var side := direction.orthogonal() * body_radius

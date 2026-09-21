@@ -43,6 +43,7 @@ var _last_facing := Vector2.RIGHT
 var _slash_visual_time := 0.0
 var _slash_facing := Vector2.RIGHT
 var _slash_origin := Vector2.ZERO
+var _slash_visual_range := SLASH_RANGE
 var _basic_visual_time := 0.0
 var _basic_facing := Vector2.RIGHT
 var _basic_origin := Vector2.ZERO
@@ -58,12 +59,14 @@ var active_cast_total := 0.0
 var _active_cast_point := Vector2.ZERO
 var _active_cast_target_id: int = 0
 var _active_cast_direction := Vector2.RIGHT
+var _rank_definitions: Dictionary[StringName, SkillRankDefinition] = {}
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
 	run_state = state
 	class_id = run_state.class_id
 	class_definition = ClassCatalog.class_definition(class_id)
+	_capture_rank_definitions()
 	var derived := _build_stat_breakdown()
 	setup(class_definition.display_name, Color("8e73de") if class_id == &"mage" else Color("55a8d9"), derived, 20.0)
 	set_animation_kind(class_id)
@@ -119,22 +122,24 @@ func pursue(enemy: CombatActor) -> void:
 	_repath_time = 0.0
 
 func use_slash(direction: Vector2, enemies: Array[CombatActor]) -> bool:
-	if class_id != &"swordsman" or not _can_spend(&"slash"):
+	var rank_definition := _runtime_rank_definition(&"slash")
+	if class_id != &"swordsman" or rank_definition == null or not _can_spend(&"slash"):
 		return false
 	var facing := _resolved_facing(direction)
 	_spend(&"slash")
 	_slash_visual_time = 0.20
 	_slash_facing = facing
 	_slash_origin = global_position
+	_slash_visual_range = rank_definition.range
 	presentation_action.emit(&"slash", facing, 0.20)
 	queue_redraw()
 	for enemy: CombatActor in enemies.duplicate():
 		if not enemy.is_alive():
 			continue
 		var offset := enemy.global_position - global_position
-		if SkillGeometry.cone_contains(offset, facing, SLASH_RANGE, SLASH_HALF_ANGLE):
+		if SkillGeometry.cone_contains(offset, facing, rank_definition.range, SLASH_HALF_ANGLE):
 			var definition := ClassCatalog.skill_definition(&"slash")
-			attack_requested.emit(_make_physical_request(enemy, &"cone_slash", stat_breakdown.value(&"melee_attack") * definition.power, definition.accuracy_mode, definition.can_crit), enemy)
+			attack_requested.emit(_make_physical_request(enemy, &"cone_slash", stat_breakdown.value(&"melee_attack") * rank_definition.power, definition.accuracy_mode, definition.can_crit), enemy)
 	resources_changed.emit()
 	return true
 
@@ -224,7 +229,12 @@ func has_active_cast() -> bool:
 	return active_cast_skill != &""
 
 func skill_cast_time(skill_id: StringName) -> float:
+	var rank_definition := _runtime_rank_definition(skill_id)
+	if rank_definition != null:
+		return StatCalculator.effective_cast_time(rank_definition.fixed_cast_time, rank_definition.variable_cast_time, stat_breakdown)
 	var definition := ClassCatalog.skill_definition(skill_id)
+	if definition != null and not definition.ranks.is_empty():
+		return 0.0
 	return StatCalculator.effective_cast_time(0.0, definition.cast_time, stat_breakdown) if definition != null else 0.0
 
 func teleport_destination(point: Vector2) -> Vector2:
@@ -256,8 +266,7 @@ func use_teleport(point: Vector2) -> bool:
 func can_target_skill(skill_id: StringName, enemy: CombatActor) -> bool:
 	if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
 		return false
-	var definition := ClassCatalog.skill_definition(skill_id)
-	return definition != null and global_position.distance_to(enemy.global_position) <= definition.range
+	return global_position.distance_to(enemy.global_position) <= skill_range(skill_id)
 
 func aim_direction(point: Vector2) -> Vector2:
 	var direction := global_position.direction_to(point)
@@ -274,8 +283,42 @@ func skill_cooldown(skill_id: StringName) -> float:
 	return mage_cooldowns.get(skill_id, 0.0)
 
 func skill_cost(skill_id: StringName) -> float:
+	var rank_definition := _runtime_rank_definition(skill_id)
+	if rank_definition != null:
+		return rank_definition.sp_cost
 	var definition := ClassCatalog.skill_definition(skill_id)
+	if definition != null and not definition.ranks.is_empty():
+		return 0.0
 	return definition.sp_cost if definition != null else 0.0
+
+func skill_range(skill_id: StringName) -> float:
+	var rank_definition := _runtime_rank_definition(skill_id)
+	if rank_definition != null:
+		return rank_definition.range
+	var definition := ClassCatalog.skill_definition(skill_id)
+	if definition != null and not definition.ranks.is_empty():
+		return 0.0
+	return definition.range if definition != null else 0.0
+
+func skill_rank(skill_id: StringName) -> int:
+	return int(run_state.skill_levels.get(skill_id, 0)) if run_state != null else 0
+
+func skill_rank_definition(skill_id: StringName) -> SkillRankDefinition:
+	var definition := _runtime_rank_definition(skill_id)
+	return definition.duplicate(true) as SkillRankDefinition if definition != null else null
+
+func _capture_rank_definitions() -> void:
+	_rank_definitions.clear()
+	for skill_id: StringName in run_state.skill_levels:
+		var catalog_definition := ClassCatalog.skill_definition(skill_id)
+		if catalog_definition == null or catalog_definition.ranks.is_empty():
+			continue
+		var rank_definition := catalog_definition.rank_definition(skill_rank(skill_id))
+		if rank_definition != null:
+			_rank_definitions[skill_id] = rank_definition
+
+func _runtime_rank_definition(skill_id: StringName) -> SkillRankDefinition:
+	return _rank_definitions.get(skill_id)
 
 func _process(delta: float) -> void:
 	super._process(delta)
@@ -428,12 +471,17 @@ func _magic_power(skill_id: StringName) -> float:
 	return stat_breakdown.value(&"magic_attack") * ClassCatalog.skill_definition(skill_id).power
 
 func _can_spend(skill_id: StringName) -> bool:
-	return skill_id in available_skill_ids() and is_alive() and skill_cooldown(skill_id) <= 0.0 and current_sp >= skill_cost(skill_id)
+	var definition := ClassCatalog.skill_definition(skill_id)
+	var has_runtime_definition := definition != null and (definition.ranks.is_empty() or _runtime_rank_definition(skill_id) != null)
+	return has_runtime_definition and skill_id in available_skill_ids() and is_alive() and skill_cooldown(skill_id) <= 0.0 and current_sp >= skill_cost(skill_id)
 
 func _spend(skill_id: StringName) -> void:
 	var definition := ClassCatalog.skill_definition(skill_id)
-	current_sp -= definition.sp_cost
-	var cooldown := StatCalculator.effective_cooldown(definition.cooldown, stat_breakdown)
+	var rank_definition := _runtime_rank_definition(skill_id)
+	var cost := rank_definition.sp_cost if rank_definition != null else definition.sp_cost
+	var base_cooldown := rank_definition.cooldown if rank_definition != null else definition.cooldown
+	current_sp -= cost
+	var cooldown := StatCalculator.effective_cooldown(base_cooldown, stat_breakdown)
 	if skill_id == &"slash":
 		slash_cooldown = cooldown
 	elif skill_id == &"dash":
@@ -525,4 +573,4 @@ func _draw() -> void:
 		draw_arc(_basic_origin - global_position, _basic_visual_radius, swing_angle - 0.65, swing_angle + 0.65, 16, Color(1.0, 0.89, 0.60, _basic_visual_time / BASIC_ATTACK_RECOVERY), 4.0)
 	if _slash_visual_time > 0.0:
 		var angle := _slash_facing.angle()
-		draw_arc(_slash_origin - global_position, SLASH_RANGE, angle - SLASH_HALF_ANGLE, angle + SLASH_HALF_ANGLE, 28, Color(0.91, 0.78, 0.48, _slash_visual_time * 3.5), 7.0)
+		draw_arc(_slash_origin - global_position, _slash_visual_range, angle - SLASH_HALF_ANGLE, angle + SLASH_HALF_ANGLE, 28, Color(0.91, 0.78, 0.48, _slash_visual_time * 3.5), 7.0)

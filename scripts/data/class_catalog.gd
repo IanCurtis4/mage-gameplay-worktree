@@ -27,6 +27,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"fire_spear", "Lança de Fogo", "A", SkillDefinition.Targeting.SINGLE_TARGET, 16.0, 3.0, 1.35, 360.0, 760.0, 0.22, DamageRequest.AccuracyMode.CONTESTED, true)
 	_add_skill(&"ice_spear", "Lança de Gelo", "S", SkillDefinition.Targeting.SINGLE_TARGET, 14.0, 3.0, 1.10, 360.0, 760.0, 0.22, DamageRequest.AccuracyMode.CONTESTED, true)
 	_add_skill(&"teleport", "Teleporte", "D", SkillDefinition.Targeting.POINT, 22.0, 6.0, 0.0, 320.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
+	_configure_slash_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -76,3 +77,20 @@ static func _add_skill(
 	definition.range = range_value
 	definition.projectile_speed = projectile_speed
 	_skills[skill_id] = definition
+
+static func _configure_slash_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"slash"]
+	definition.category = SkillDefinition.Category.ACTIVE
+	definition.handler_id = SkillDefinition.Handler.SLASH
+	var powers: Array[float] = [1.45, 1.65, 1.85, 2.05, 2.25]
+	var costs: Array[float] = [15.0, 17.0, 18.0, 19.0, 20.0]
+	for index: int in powers.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 4.0
+		rank.range = 155.0
+		rank.power = powers[index]
+		rank.physical_weight = 1.0
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())

@@ -199,7 +199,7 @@ func _commit_skill(skill: StringName, point: Vector2) -> void:
 	var selected_target: CombatActor
 	if definition.targeting == SkillDefinition.Targeting.SINGLE_TARGET:
 		selected_target = _enemy_at(point)
-	if definition.cast_time > 0.0:
+	if player.skill_cast_time(skill) > 0.0:
 		if not player.begin_skill_cast(skill, point, selected_target):
 			_report_skill_failure(skill, selected_target)
 		return
@@ -213,9 +213,12 @@ func _on_skill_cast_ready(skill: StringName, point: Vector2, target_id: int) -> 
 
 func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatActor = null) -> void:
 	var direction := player.aim_direction(point)
-	if skill == &"slash":
+	var definition := ClassCatalog.skill_definition(skill)
+	if definition == null:
+		return
+	if definition.handler_id == SkillDefinition.Handler.SLASH:
 		if not player.use_slash(direction, enemies):
-			_show_skill_blocked("Corte em cone", player.slash_cooldown, PlayerActor.SLASH_SP_COST)
+			_show_skill_blocked(definition.display_name, player.slash_cooldown, player.skill_cost(skill))
 	elif skill == &"dash":
 		if not player.use_dash(direction):
 			_show_skill_blocked("Investida", player.dash_cooldown, PlayerActor.DASH_SP_COST)
@@ -280,7 +283,8 @@ func _update_aim(point: Vector2) -> void:
 	else:
 		battle_indicators.clear_aim()
 	var action := "Solte a tecla ou clique" if cast_intent.mode == CastIntent.Mode.RELEASE else "Clique para lançar"
-	var prepare := "  |  preparo %.2fs" % player.skill_cast_time(skill) if definition.cast_time > 0.0 else ""
+	var prepare_time := player.skill_cast_time(skill)
+	var prepare := "  |  preparo %.2fs" % prepare_time if prepare_time > 0.0 else ""
 	battle_controls.set_aim_text("%s · %s  |  %s%s  |  Direito / Esc cancela" % [definition.display_name, state, action, prepare])
 	bottom_controls.visible = false
 
@@ -694,16 +698,20 @@ func _update_hud() -> void:
 	var skill_lines: PackedStringArray = []
 	for skill_id: StringName in player.available_skill_ids():
 		var definition := ClassCatalog.skill_definition(skill_id)
-		var state := "CONJURANDO %.1fs" % player.active_cast_remaining if player.active_cast_skill == skill_id else _skill_state(player.skill_cooldown(skill_id), definition.sp_cost)
-		skill_lines.append("%s  %s — %s" % [_skill_input_label(skill_id), definition.display_name, state])
+		var cost := player.skill_cost(skill_id)
+		var rank_text := " R%d" % player.skill_rank(skill_id) if not definition.ranks.is_empty() else ""
+		var state := "CONJURANDO %.1fs" % player.active_cast_remaining if player.active_cast_skill == skill_id else _skill_state(player.skill_cooldown(skill_id), cost)
+		skill_lines.append("%s  %s%s — %s" % [_skill_input_label(skill_id), definition.display_name, rank_text, state])
 	skill_label.text = "\n".join(skill_lines)
 	augment_button.text = "Escolher augment (E) — %d pendente(s)" % run_state.pending_choices
 	augment_button.visible = run_state.pending_choices > 0
 	if battle_controls != null:
 		for skill_id: StringName in player.available_skill_ids():
 			var definition := ClassCatalog.skill_definition(skill_id)
-			var state := "CONJURANDO %.1fs" % player.active_cast_remaining if player.active_cast_skill == skill_id else _skill_state(player.skill_cooldown(skill_id), definition.sp_cost)
-			battle_controls.show_skill_state(skill_id, "%s · %s\n%d SP · %s" % [_skill_input_label(skill_id), definition.display_name.to_upper(), int(definition.sp_cost), state], cast_intent.active_skill == skill_id or player.active_cast_skill == skill_id)
+			var cost := player.skill_cost(skill_id)
+			var rank_text := " R%d" % player.skill_rank(skill_id) if not definition.ranks.is_empty() else ""
+			var state := "CONJURANDO %.1fs" % player.active_cast_remaining if player.active_cast_skill == skill_id else _skill_state(player.skill_cooldown(skill_id), cost)
+			battle_controls.show_skill_state(skill_id, "%s · %s%s\n%d SP · %s" % [_skill_input_label(skill_id), definition.display_name.to_upper(), rank_text, int(cost), state], cast_intent.active_skill == skill_id or player.active_cast_skill == skill_id)
 
 func _skill_input_label(skill_id: StringName) -> String:
 	var index := player.available_skill_ids().find(skill_id)
