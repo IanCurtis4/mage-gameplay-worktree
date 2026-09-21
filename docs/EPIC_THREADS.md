@@ -1,5 +1,9 @@
 # Conversas reservadas dos épicos
 
+> Atualização 21/09/2026: usuário aceitou E03 `495ee16`, integrado em master.
+> E04 ativo na tarefa existente, um pacote por mensagem conforme
+> `E04_SMALL_PACKAGES.md`. E05–E11 continuam reservados.
+
 > Estado vigente em 20/09/2026: ver `RECOVERY_2026_09_20.md`. E02 corrigido,
 > E03 ativo com Sol na tarefa já existente; E04–E11 continuam reservados.
 > Worktrees antigas de reservas foram removidas; recriar na ativação.
