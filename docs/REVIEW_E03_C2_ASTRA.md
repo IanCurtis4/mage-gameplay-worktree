@@ -1,5 +1,23 @@
 # Revisão E03-C2 A–D — 21/09/2026
 
+## Correção aprovada
+
+**Aceite técnico concedido a `647665b`.** Foco agora é preservado por ID de
+personagem, separado da seleção da run. Probe independente: foco 1 permanece 1;
+dois investimentos produzem Alt1=0, Alt2=2. Testes adicionais cobrem falha/retry,
+compra de skill, ambos os respecs e reload com dois alts.
+
+UI distingue teto inicial+investido 60 e teto efetivo 120, ambos obtidos das
+autoridades existentes. Tooltip não expõe mais o ID do épico futuro.
+Verificação independente completa em Godot 4.7.2 passou com importação, 975
+checks e smoke. Nenhum bloqueador novo identificado no delta.
+
+E03-I liberado com Sol para fechamento integrado, incluindo conferência visual,
+contrato numérico E00, cobertura L2 e roteiro de playtest. Aceite de produto,
+integração de código no projeto fixo e merge em master ainda não ocorreram.
+
+## Parecer anterior (corrigido)
+
 Candidato `fe3a93c`; base `48a01be`. Aceite pendente de correção de foco.
 
 Pacotes inspecionados: API de consulta `714d641`, leitura A `f0d1aeb`, atributos
