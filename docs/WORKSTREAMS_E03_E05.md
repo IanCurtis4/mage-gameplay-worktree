@@ -209,10 +209,14 @@ XP 0, multi-level, cap, JL20 sem evolução, ranks gratuitos, falta de pontos,
 requisitos, respec, reload.
 
 ## E03-C2 — PAINEL/ÁRVORE
-**BLOCKED por E03-B + E03-C1 — COPILOT_AUTO**
+**ENTREGUE — COPILOT_AUTO**
 
 XP base/job, pontos, seis atributos, ranks, requisitos e tooltips via APIs públicas.
 UI não deriva fórmulas.
+
+O painel foi entregue em lotes C2-A–D na branch `codex/e03-progression`:
+leitura/estados, atributos, skills e integração painel→reload→preview. Handoff:
+`docs/E03_C2_PANEL.md`. Isto não inicia E03-I, E04 ou E05.
 
 ## E03-I — INTEGRAÇÃO
 **BLOCKED pelos anteriores — SOL_HIGH**
