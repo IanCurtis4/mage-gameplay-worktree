@@ -1,5 +1,12 @@
 extends SceneTree
 
+class ToggleFailStore:
+	extends ProfileStore
+	var failure_stage: StringName = &""
+
+	func _should_fail(stage: StringName) -> bool:
+		return stage == failure_stage
+
 var failures := 0
 var checks := 0
 var root_directory: String
@@ -61,9 +68,46 @@ func _initialize() -> void:
 	_check(blocked.status_label.text.contains("somente leitura") and blocked.create_buttons[0].disabled and blocked.create_buttons[1].disabled and blocked.select_button.disabled and blocked.progression_state_label.text.contains("indisponível"), "read-only profile state is explained and blocks every roster mutation or progression consultation")
 	_check(blocked.start_run_button.disabled, "read-only profile cannot start a run")
 	blocked.queue_free()
+	await _check_attribute_controls(scene)
 	_cleanup_directory(root_directory)
 	print("Menu E02.1: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
 	quit(0 if failures == 0 else 1)
+
+func _check_attribute_controls(scene: PackedScene) -> void:
+	var directory := root_directory.path_join("attribute_controls")
+	DirAccess.make_dir_recursive_absolute(directory)
+	var catalog := ProfileCatalog.pilot()
+	var profile := ProfileState.new("123e4567-e89b-42d3-a456-426614174000")
+	var character_id := IdentityIds.character_id(profile.profile_id, 1)
+	var character := CharacterState.new(character_id, "Pontos", &"swordsman")
+	character.base_xp_total = 100
+	var slots := catalog.initial_skill_slots(&"swordsman")
+	for preset: Dictionary in character.presets:
+		preset["active_slots"] = slots["active_slots"].duplicate(true)
+		preset["passive_slots"] = slots["passive_slots"].duplicate(true)
+	profile.characters.append(character)
+	profile.selected_character_id = character_id
+	profile.next_character_counter = 2
+	var seeded := ProfileStore.new(directory, catalog).commit(profile)
+	var store := ToggleFailStore.new(directory, catalog)
+	var menu: Variant = scene.instantiate()
+	menu.set_profile_facade(ProfileFacade.new(store))
+	root.add_child(menu)
+	await process_frame
+	_check(menu.attribute_increment_buttons.size() == 6 and menu.respec_attributes_button != null and not menu.attribute_increment_buttons[&"str"].disabled, "attribute controls expose one facade-backed action for each canonical primary stat")
+	store.failure_stage = &"write_pending"
+	var failed: Dictionary = menu._allocate_attribute(&"str")
+	store.failure_stage = &""
+	var retried: Dictionary = menu._allocate_attribute(&"str")
+	var after_retry: ProfileState = menu.facade.current_profile()
+	_check(not failed["ok"] and failed["error_code"] == &"save_failed" and retried["ok"] and failed["request_id"] == retried["request_id"] and after_retry.revision == seeded["new_revision"] + 1 and after_retry.character_by_id(character_id).attribute_allocations[&"str"] == 1, "a definite attribute-save failure retries the original request ID and revision exactly once")
+	var respec: Dictionary = menu._respec_attributes()
+	_check(respec["ok"] and menu.status_label.text == "Atributos redistribuídos." and menu.facade.current_profile().character_by_id(character_id).attribute_allocations[&"str"] == 0 and menu.progression_attributes_label.text.contains("FOR: base 8 · investido 0"), "attribute respec uses the facade and refreshes the canonical preview")
+	for _index: int in 3:
+		menu._allocate_attribute(&"str")
+	var no_points: Dictionary = menu._allocate_attribute(&"str")
+	_check(not no_points["ok"] and no_points["error_code"] == &"insufficient_points" and menu.status_label.text.contains("pontos"), "attribute errors remain pt-BR UI messages and never mutate the character directly")
+	menu.queue_free()
 
 func _cleanup_directory(path: String) -> void:
 	if not DirAccess.dir_exists_absolute(path):

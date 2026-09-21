@@ -13,6 +13,7 @@ var facade: RefCounted
 var _request_serial := 0
 var _selected_index := -1
 var _read_only := false
+var _attribute_retries: Dictionary[String, Dictionary] = {}
 
 var status_label: Label
 var roster_list: ItemList
@@ -26,6 +27,9 @@ var progression_panel: VBoxContainer
 var progression_state_label: Label
 var progression_wallets_label: Label
 var progression_attributes_label: Label
+var progression_attribute_actions: VBoxContainer
+var attribute_increment_buttons: Dictionary[StringName, Button] = {}
+var respec_attributes_button: Button
 var progression_skill_tree: VBoxContainer
 var preset_selector: OptionButton
 var active_slot_a: OptionButton
@@ -205,6 +209,7 @@ func _refresh() -> void:
 		preset_selector.disabled = true
 		save_build_button.disabled = true
 		start_run_button.disabled = true
+		_set_attribute_actions_disabled(true)
 		return
 	roster_list.clear()
 	_selected_index = -1
@@ -231,6 +236,7 @@ func _refresh() -> void:
 	preset_selector.disabled = locked or _selected_index < 0
 	save_build_button.disabled = locked or _selected_index < 0
 	start_run_button.disabled = locked or profile.selected_character_id.is_empty()
+	_set_attribute_actions_disabled(locked or profile.reward_session != null)
 	if profile.characters.size() >= MAX_CHARACTERS:
 		status_label.text = "Limite de %d personagens atingido." % MAX_CHARACTERS
 
@@ -247,6 +253,9 @@ func _error_text(error_code: StringName, read_only: bool) -> String:
 		&"invalid_presets": return "O preset contém skills inválidas ou repetidas. Revise os slots escolhidos."
 		&"invalid_equipment": return "O equipamento escolhido não pertence a este personagem ou ao slot informado."
 		&"invalid_loadout": return "Configure ao menos uma skill ativa válida antes de iniciar a run."
+		&"invalid_attribute_allocations": return "A distribuição de atributos informada é inválida."
+		&"attribute_cap_reached": return "Este atributo já atingiu o limite de investimento."
+		&"insufficient_points": return "Você não tem pontos suficientes para essa escolha."
 		&"recovery_required": return "Há uma gravação pendente que precisa ser recuperada antes de iniciar uma run."
 		&"unsupported_schema": return "Este perfil foi criado por uma versão mais nova do jogo."
 		&"invalid_catalog": return "O catálogo de personagem está incompatível com este perfil."
@@ -306,6 +315,51 @@ func _refresh_progression_panel(character: Variant, profile: Variant) -> void:
 		skill_label.text = "%s — Rank %d/%d%s" % [_skill_name(skill_id), option["rank"], option["maximum_rank"], " · ramo futuro" if not option["available"] else ""]
 		skill_label.tooltip_text = _skill_progression_tooltip(option)
 		progression_skill_tree.add_child(skill_label)
+	_set_attribute_actions_disabled(_read_only or profile.reward_session != null)
+
+func _allocate_attribute(attribute_id: StringName) -> Dictionary:
+	var context := _selected_progression_context()
+	if not context["ok"]:
+		return _show_result(context)
+	var retry_key := "allocate:%s:%s" % [context["character_id"], attribute_id]
+	var retry: Dictionary = _attribute_retries.get(retry_key, {})
+	var request_id: String = retry.get("request_id", _request_id("attribute-%s" % attribute_id))
+	var revision: int = retry.get("revision", context["revision"])
+	var result: Dictionary = facade.allocate_attributes(request_id, revision, context["character_id"], {attribute_id: 1})
+	if result.get("ok", false) or result.get("error_code", &"") != &"save_failed":
+		_attribute_retries.erase(retry_key)
+	else:
+		_attribute_retries[retry_key] = {"request_id": request_id, "revision": revision}
+	return _show_result(result, "%s aumentado." % _attribute_name(attribute_id))
+
+func _respec_attributes() -> Dictionary:
+	var context := _selected_progression_context()
+	if not context["ok"]:
+		return _show_result(context)
+	var retry_key := "respec:%s" % context["character_id"]
+	var retry: Dictionary = _attribute_retries.get(retry_key, {})
+	var request_id: String = retry.get("request_id", _request_id("respec-attributes"))
+	var revision: int = retry.get("revision", context["revision"])
+	var result: Dictionary = facade.respec_attributes(request_id, revision, context["character_id"])
+	if result.get("ok", false) or result.get("error_code", &"") != &"save_failed":
+		_attribute_retries.erase(retry_key)
+	else:
+		_attribute_retries[retry_key] = {"request_id": request_id, "revision": revision}
+	return _show_result(result, "Atributos redistribuídos.")
+
+func _selected_progression_context() -> Dictionary:
+	var profile: Variant = facade.current_profile() if facade != null else null
+	if profile == null or _selected_index < 0 or _selected_index >= profile.characters.size():
+		return {"ok": false, "error_code": &"invalid_character_id"}
+	if profile.reward_session != null:
+		return {"ok": false, "error_code": &"run_active"}
+	return {"ok": true, "character_id": profile.characters[_selected_index].character_id, "revision": profile.revision}
+
+func _set_attribute_actions_disabled(disabled: bool) -> void:
+	for button: Button in attribute_increment_buttons.values():
+		button.disabled = disabled
+	if respec_attributes_button != null:
+		respec_attributes_button.disabled = disabled
 
 func _show_progression_message(message: String) -> void:
 	if progression_state_label == null:
@@ -465,6 +519,24 @@ func _build_ui() -> void:
 	progression_attributes_label.name = "ProgressionAttributes"
 	progression_attributes_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	progression_panel.add_child(progression_attributes_label)
+	progression_attribute_actions = VBoxContainer.new()
+	progression_attribute_actions.name = "ProgressionAttributeActions"
+	progression_attribute_actions.add_theme_constant_override("separation", 2)
+	progression_panel.add_child(progression_attribute_actions)
+	for attribute_id: StringName in IdentityIds.attribute_ids():
+		var increment_button := Button.new()
+		increment_button.name = "Allocate_%s" % attribute_id
+		increment_button.text = "+1 %s" % _attribute_name(attribute_id)
+		increment_button.tooltip_text = "Investir 1 ponto de atributo via perfil."
+		increment_button.pressed.connect(_allocate_attribute.bind(attribute_id))
+		progression_attribute_actions.add_child(increment_button)
+		attribute_increment_buttons[attribute_id] = increment_button
+	respec_attributes_button = Button.new()
+	respec_attributes_button.name = "RespecAttributes"
+	respec_attributes_button.text = "Redistribuir atributos"
+	respec_attributes_button.tooltip_text = "Devolve os pontos de atributos investidos."
+	respec_attributes_button.pressed.connect(_respec_attributes)
+	progression_attribute_actions.add_child(respec_attributes_button)
 	var skill_tree_title := Label.new()
 	skill_tree_title.text = "Árvore de skills"
 	skill_tree_title.add_theme_font_size_override("font_size", 16)
