@@ -205,6 +205,60 @@ func progression_summary(character_id: String) -> Dictionary:
 	result["character_id"] = character_id
 	return result.duplicate(true)
 
+func progression_skill_options(character_id: String) -> Dictionary:
+	if _profile == null:
+		var opened := open_profile()
+		if not opened["ok"]:
+			return opened
+	var character := _profile.character_by_id(character_id)
+	if character == null:
+		return {"ok": false, "error_code": &"invalid_character_id"}
+	var progression := CharacterProgression.summary(character, _catalog)
+	var effective_ranks: Dictionary[StringName, int] = progression["effective_skill_ranks"]
+	var skill_ids: Array[StringName] = []
+	for raw_skill_id: Variant in _catalog._skills:
+		var skill_id := StringName(raw_skill_id)
+		var metadata := _catalog.skill_metadata(skill_id)
+		if character.base_class_id in metadata["allowed_base_classes"]:
+			skill_ids.append(skill_id)
+	skill_ids.sort_custom(func(left: StringName, right: StringName) -> bool: return String(left) < String(right))
+	var skills: Array[Dictionary] = []
+	for skill_id: StringName in skill_ids:
+		var metadata := _catalog.skill_metadata(skill_id)
+		var rank: int = effective_ranks.get(skill_id, 0)
+		var purchased_rank: int = character.purchased_skill_ranks.get(skill_id, 0)
+		var maximum_rank: int = int(metadata["free_rank"]) + int(metadata["max_purchased_rank"])
+		var available := _catalog.skill_is_allowed(skill_id, character.base_class_id, character.evolution_id)
+		var next_rank := rank + 1
+		var next_result: Dictionary = {"ok": false, "error_code": &"rank_cap_reached"}
+		var next_requirement: Dictionary = {}
+		if next_rank <= maximum_rank:
+			next_requirement = metadata["rank_requirements"][next_rank].duplicate(true)
+			var wallet_key: StringName = &"base_skill_points_available" if metadata["wallet"] == ProfileCatalog.BASE_WALLET else &"evolution_skill_points_available"
+			if not available:
+				next_result = {"ok": false, "error_code": &"requirements_unmet"}
+			elif int(progression[wallet_key]) <= 0:
+				next_result = {"ok": false, "error_code": &"insufficient_points"}
+			else:
+				next_result = _catalog.check_rank_requirements(skill_id, next_rank, int(progression["job_level"]), effective_ranks)
+		skills.append({
+			"skill_id": skill_id,
+			"metadata": metadata,
+			"rank": rank,
+			"purchased_rank": purchased_rank,
+			"maximum_rank": maximum_rank,
+			"available": available,
+			"next_rank": next_rank if next_rank <= maximum_rank else null,
+			"next_rank_requirement": next_requirement,
+			"next_rank_available": next_result["ok"],
+			"next_rank_error_code": next_result.get("error_code", &""),
+		})
+	return {
+		"ok": true,
+		"character_id": character_id,
+		"skills": skills,
+	}
+
 func build_preview(character_id: String, modifier_sources: Array[Dictionary] = []) -> Dictionary:
 	if _profile == null:
 		var opened := open_profile()

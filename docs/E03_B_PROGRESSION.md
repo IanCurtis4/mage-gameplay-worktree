@@ -31,6 +31,7 @@ Consultas de `ProfileFacade`, sem escrita:
 
 ```gdscript
 facade.progression_summary(character_id)
+facade.progression_skill_options(character_id)
 facade.build_preview(character_id, modifier_sources)
 ```
 
@@ -38,6 +39,13 @@ facade.build_preview(character_id, modifier_sources)
 concedidos/gastos/livres nas três carteiras e ranks efetivos. `build_preview`
 retorna um `BuildSnapshot` por valor e um `StatBreakdown` novo produzido pela
 autoridade `StatCalculator`; erros de modificadores são propagados sem escrever.
+`progression_skill_options` retorna, em ordem determinística, todas as skills do
+catálogo compatíveis com a origem do personagem — inclusive rank zero e ramos de
+evolução ainda indisponíveis. Cada item contém cópias dos metadados do catálogo,
+rank efetivo/comprado, teto e o requisito/estado autoritativo do próximo rank.
+É uma projeção somente leitura: não substitui `learn_skill` nem expõe o catálogo
+mutável. O estado do próximo rank segue a mesma ordem de bloqueio da transação:
+ramo indisponível, carteira vazia ou requisito de job/pré-requisito.
 
 Transações de menu, todas com `request_id`, `expected_revision` e personagem:
 

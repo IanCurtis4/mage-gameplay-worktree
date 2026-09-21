@@ -48,6 +48,15 @@ func _check_levels_attributes_ranks_and_snapshot() -> void:
 	_check(opened["ok"] and summary["base_level"] == 30 and summary["job_level"] == 20, "capped accumulated XP derives base 30 and unevolved job 20 after reload")
 	_check(summary["attribute_points_granted"] == 87 and summary["attribute_points_available"] == 87 and summary["base_skill_points_available"] == 19 and summary["evolution_skill_points_available"] == 0, "three independent wallets derive from XP without persisted balances")
 	_check(summary["evolution_eligible"] and summary["job_progress_blocked"], "unevolved base 30/job 20 exposes eligibility and the accepted job-XP gate without evolving the character")
+	var skill_options := facade.progression_skill_options(character_id)
+	var heavy_slash: Dictionary = _skill_option(skill_options["skills"], &"heavy_slash")
+	var rune_entry: Dictionary = _skill_option(skill_options["skills"], &"rune_entry")
+	_check(skill_options["ok"] and skill_options["character_id"] == character_id and skill_options["skills"].map(func(option: Dictionary) -> StringName: return option["skill_id"]) == [&"dash", &"heavy_slash", &"late_mastery", &"rune_chain", &"rune_entry", &"slash", &"swordsman_resistance"], "progression skill options list every origin catalog skill in deterministic order, including rank-zero and future evolution entries")
+	_check(heavy_slash["rank"] == 0 and heavy_slash["purchased_rank"] == 0 and heavy_slash["maximum_rank"] == 5 and heavy_slash["available"] and heavy_slash["next_rank"] == 1 and heavy_slash["next_rank_requirement"] == {"job_level": 5, "skill_ranks": {&"slash": 3}} and not heavy_slash["next_rank_available"] and heavy_slash["next_rank_error_code"] == &"requirements_unmet", "rank-zero options expose copied catalog metadata and the authoritative next-rank requirement without UI formulas")
+	_check(not rune_entry["available"] and rune_entry["rank"] == 0 and rune_entry["next_rank"] == 1 and rune_entry["next_rank_requirement"]["job_level"] == 20 and not rune_entry["next_rank_available"] and rune_entry["next_rank_error_code"] == &"requirements_unmet", "unevolved characters can render their future evolution branch as unavailable without inventing a rank state")
+	heavy_slash["metadata"]["rank_requirements"][1]["job_level"] = 99
+	var clean_heavy_slash: Dictionary = _skill_option(facade.progression_skill_options(character_id)["skills"], &"heavy_slash")
+	_check(clean_heavy_slash["metadata"]["rank_requirements"][1]["job_level"] == 5 and not facade.progression_skill_options("missing")["ok"], "skill-option metadata is disposable and an unknown character remains a query error")
 	_check(ProgressionRules.base_level_for_xp(350) == 3 and ProgressionRules.base_level_for_xp(375) == 4 and ProgressionRules.attribute_points_granted(375) == 9, "one accumulated reward can cross multiple base levels and grant each level exactly once")
 
 	var invalid := facade.allocate_attributes("bad-attributes", 1, character_id, {&"str": 1, &"banana": 1})
@@ -153,6 +162,8 @@ func _check_failure_retry_reload_and_uncertainty() -> void:
 	var store := ToggleFailStore.new(directory, catalog)
 	var facade := ProfileFacade.new(store)
 	var opened := facade.open_profile()
+	var dash_option: Dictionary = _skill_option(facade.progression_skill_options(character_id)["skills"], &"dash")
+	_check(not dash_option["next_rank_available"] and dash_option["next_rank_error_code"] == &"insufficient_points", "next-rank state includes the matching empty wallet error before the menu attempts a transaction")
 	store.failure_stage = &"write_pending"
 	var failed := facade.allocate_attributes("failed-allocation", opened["profile"].revision, character_id, {&"str": 1})
 	_check(not failed["ok"] and failed["error_code"] == &"save_failed" and facade.current_profile().character_by_id(character_id).attribute_allocations[&"str"] == 0, "definite save failure publishes no partial allocation")
@@ -235,6 +246,12 @@ func _catalog() -> ProfileCatalog:
 			1: {"job_level": 21, "skill_ranks": {&"rune_entry": 2}},
 		}),
 	})
+
+func _skill_option(options: Array, skill_id: StringName) -> Dictionary:
+	for option: Dictionary in options:
+		if option["skill_id"] == skill_id:
+			return option
+	return {}
 
 func _skill(wallet: StringName, free_rank: int, max_purchased_rank: int, evolution_id: StringName = &"", requirements: Dictionary = {}) -> Dictionary:
 	return {
