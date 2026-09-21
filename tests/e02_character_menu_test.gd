@@ -13,13 +13,14 @@ func _initialize() -> void:
 	menu.set_profile_directory(root_directory.path_join("profile"))
 	root.add_child(menu)
 	await process_frame
-	_check(menu.roster_list.item_count == 0 and menu.empty_label.visible and menu.select_button.disabled, "empty roster has an explicit state and cannot select")
+	_check(menu.roster_list.item_count == 0 and menu.empty_label.visible and menu.select_button.disabled and menu.progression_state_label.text.contains("Crie ou selecione") and menu.progression_skill_tree.get_child_count() == 0, "empty roster has an explicit state and cannot select or render a progression tree")
 	menu.name_input.text = "Lina"
 	var swordsman: Dictionary = menu.create_character(&"swordsman")
 	var mage: Dictionary = menu.create_character(&"mage")
 	_check(swordsman["ok"] and mage["ok"] and menu.status_label.text == "Personagem criado." and menu.roster_list.item_count == 2 and menu.roster_list.get_item_text(0).contains("Lina") and menu.roster_list.get_item_text(1).contains("Mago"), "creation uses facade, explains success, and refreshes the real roster")
 	menu._select_roster_index(1)
 	_check(menu.build_summary_label.text.contains("Bola de fogo") and menu.build_summary_label.text.contains("Vida 150") and menu.build_summary_label.text.contains("SP 85"), "roster navigation previews the chosen alt's persisted build and central derived stats before committing selection")
+	_check(menu.progression_state_label.text.contains("XP base: 0") and menu.progression_wallets_label.text.contains("Atributos: 0/0 livres") and menu.progression_attributes_label.text.contains("INT: base 9 · investido 0 · efetivo 9 · limite 120") and menu.progression_skill_tree.get_node("ProgressionSkill_fire_spear").text.contains("Rank 0/5") and menu.progression_skill_tree.get_node("ProgressionSkill_fire_spear").tooltip_text.contains("definidos em E04"), "progression panel reads XP, wallets, calculator attributes, rank-zero skills, and E04-limited tooltips from the selected character")
 	var preset_changed: Dictionary = menu._choose_preset(1)
 	_check(preset_changed["ok"] and menu.status_label.text == "Preset selecionado." and menu.facade.current_profile().characters[1].selected_preset == 1, "preset selection persists through the facade without editing build fields directly")
 	menu.active_slot_a.select(2)
@@ -30,6 +31,12 @@ func _initialize() -> void:
 	var selected: Dictionary = menu.select_character_at(0)
 	var profile: Variant = menu.facade.current_profile()
 	_check(selected["ok"] and menu.status_label.text == "Personagem selecionado." and profile.selected_character_id == profile.characters[0].character_id and menu.roster_list.get_item_text(0).contains("selecionado") and menu.build_summary_label.text.contains("Corte") and not menu.start_run_button.disabled, "selection persists through facade, exposes the build, and enables an explicit run start")
+	_check(menu.progression_attributes_label.text.contains("FOR: base 8 · investido 0 · efetivo 8 · limite 120") and menu.progression_skill_tree.get_node_or_null("ProgressionSkill_slash") != null and menu.progression_skill_tree.get_node_or_null("ProgressionSkill_fireball") == null, "progression panel follows the browsed character instead of retaining another alt's class tree")
+	var running_profile: ProfileState = menu.facade.current_profile()
+	running_profile.reward_session = {"run_id": "test"}
+	menu._refresh_progression_panel(running_profile.characters[0], running_profile)
+	_check(menu.progression_state_label.text.contains("Run ativa") and menu.progression_skill_tree.get_child_count() > 0, "active-run progression remains visible as a read-only consultation")
+	menu._refresh()
 	var viewport := get_root().get_viewport().get_visible_rect()
 	var editor_initialized := true
 	var editor_controls: Array[Control] = [menu.preset_selector, menu.weapon_selector, menu.armor_selector, menu.accessory_selector, menu.save_build_button]
@@ -51,7 +58,7 @@ func _initialize() -> void:
 	blocked.set_profile_facade(ProfileFacade.new(ProfileStore.new(blocked_directory)))
 	root.add_child(blocked)
 	await process_frame
-	_check(blocked.status_label.text.contains("somente leitura") and blocked.create_buttons[0].disabled and blocked.create_buttons[1].disabled and blocked.select_button.disabled, "read-only profile state is explained and blocks every roster mutation")
+	_check(blocked.status_label.text.contains("somente leitura") and blocked.create_buttons[0].disabled and blocked.create_buttons[1].disabled and blocked.select_button.disabled and blocked.progression_state_label.text.contains("indisponível"), "read-only profile state is explained and blocks every roster mutation or progression consultation")
 	_check(blocked.start_run_button.disabled, "read-only profile cannot start a run")
 	blocked.queue_free()
 	_cleanup_directory(root_directory)

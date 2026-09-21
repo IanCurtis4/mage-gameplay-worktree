@@ -22,6 +22,11 @@ var create_buttons: Array[Button] = []
 var select_button: Button
 var empty_label: Label
 var build_summary_label: Label
+var progression_panel: VBoxContainer
+var progression_state_label: Label
+var progression_wallets_label: Label
+var progression_attributes_label: Label
+var progression_skill_tree: VBoxContainer
 var preset_selector: OptionButton
 var active_slot_a: OptionButton
 var active_slot_b: OptionButton
@@ -99,6 +104,7 @@ func _select_roster_index(index: int) -> void:
 		preset_selector.select(profile.characters[index].selected_preset)
 		_populate_build_editor(profile.characters[index])
 		build_summary_label.text = _build_summary(profile.characters[index])
+		_refresh_progression_panel(profile.characters[index], profile)
 	select_button.disabled = false
 	preset_selector.disabled = _read_only
 	save_build_button.disabled = _read_only
@@ -195,6 +201,7 @@ func _refresh() -> void:
 			button.disabled = true
 		select_button.disabled = true
 		build_summary_label.text = "Build indisponível enquanto o perfil não puder ser lido."
+		_show_progression_message("Progressão indisponível enquanto o perfil não puder ser lido.")
 		preset_selector.disabled = true
 		save_build_button.disabled = true
 		start_run_button.disabled = true
@@ -211,8 +218,10 @@ func _refresh() -> void:
 		_populate_build_editor(profile.characters[_selected_index])
 		preset_selector.select(profile.characters[_selected_index].selected_preset)
 		build_summary_label.text = _build_summary(profile.characters[_selected_index])
+		_refresh_progression_panel(profile.characters[_selected_index], profile)
 	else:
 		build_summary_label.text = "Selecione ou crie um personagem para ver a build inicial."
+		_show_progression_message("Crie ou selecione um personagem para consultar a progressão.")
 	empty_label.visible = roster_list.item_count == 0
 	empty_label.text = "Nenhum personagem criado. Crie seu primeiro alt para começar."
 	var locked := _read_only
@@ -267,6 +276,79 @@ func _build_summary(character: Variant) -> String:
 		return "Build indisponível (%s)." % preview.get("error_code", &"preview_failed")
 	return "Build inicial\nAtivas: %s\nPassiva: %s\nArma: %s\nStats: Vida %d · SP %d · ATQ corpo %d · ATQ precisão %d · ATQ mágico %d" % [", ".join(active), ", ".join(passive), _equipment_name(weapon), int(derived_stats.value(&"max_hp")), int(derived_stats.value(&"max_sp")), int(derived_stats.value(&"melee_attack")), int(derived_stats.value(&"precision_attack")), int(derived_stats.value(&"magic_attack"))]
 
+func _refresh_progression_panel(character: Variant, profile: Variant) -> void:
+	if character == null or facade == null:
+		_show_progression_message("Crie ou selecione um personagem para consultar a progressão.")
+		return
+	var summary: Dictionary = facade.progression_summary(character.character_id)
+	var options: Dictionary = facade.progression_skill_options(character.character_id)
+	var preview: Dictionary = facade.build_preview(character.character_id)
+	if not summary.get("ok", false) or not options.get("ok", false) or not preview.get("ok", false):
+		_show_progression_message("Não foi possível consultar a progressão deste personagem.")
+		return
+	var evolution_state := "Evolução disponível para este personagem." if summary["evolution_eligible"] else "Job bloqueado até evoluir." if summary["job_progress_blocked"] else "Evolução ainda não disponível."
+	if profile.reward_session != null:
+		evolution_state = "Run ativa: a progressão é somente leitura até o encerramento."
+	progression_state_label.text = "XP base: %d · Nível base: %d\nXP job: %d · Nível de job: %d\n%s" % [character.base_xp_total, summary["base_level"], character.job_xp_total, summary["job_level"], evolution_state]
+	progression_wallets_label.text = "Pontos livres\nAtributos: %d/%d livres\nSkills base: %d/%d livres\nSkills de evolução: %d/%d livres" % [summary["attribute_points_available"], summary["attribute_points_granted"], summary["base_skill_points_available"], summary["base_skill_points_granted"], summary["evolution_skill_points_available"], summary["evolution_skill_points_granted"]]
+	var breakdown: StatBreakdown = preview["stat_breakdown"]
+	var attribute_lines: Array[String] = ["Atributos"]
+	for attribute_id: StringName in IdentityIds.attribute_ids():
+		var detail := breakdown.primary_detail(attribute_id)
+		attribute_lines.append("%s: base %d · investido %d · efetivo %d · limite %d" % [_attribute_name(attribute_id), int(detail["initial"]), int(detail["allocated"]), int(detail["effective"]), int(detail["maximum"])])
+	progression_attributes_label.text = "\n".join(attribute_lines)
+	_clear_progression_skill_tree()
+	for option: Dictionary in options["skills"]:
+		var skill_label := Label.new()
+		var skill_id: StringName = option["skill_id"]
+		skill_label.name = "ProgressionSkill_%s" % skill_id
+		skill_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		skill_label.text = "%s — Rank %d/%d%s" % [_skill_name(skill_id), option["rank"], option["maximum_rank"], " · ramo futuro" if not option["available"] else ""]
+		skill_label.tooltip_text = _skill_progression_tooltip(option)
+		progression_skill_tree.add_child(skill_label)
+
+func _show_progression_message(message: String) -> void:
+	if progression_state_label == null:
+		return
+	progression_state_label.text = message
+	progression_wallets_label.text = ""
+	progression_attributes_label.text = ""
+	_clear_progression_skill_tree()
+
+func _clear_progression_skill_tree() -> void:
+	if progression_skill_tree == null:
+		return
+	for child: Node in progression_skill_tree.get_children():
+		progression_skill_tree.remove_child(child)
+		child.queue_free()
+
+func _skill_progression_tooltip(option: Dictionary) -> String:
+	var metadata: Dictionary = option["metadata"]
+	var category := "Ativa" if metadata["category"] == ProfileCatalog.ACTIVE else "Passiva"
+	var wallet := "base" if metadata["wallet"] == ProfileCatalog.BASE_WALLET else "evolução"
+	var lines: Array[String] = ["%s · carteira %s" % [category, wallet], "Rank atual: %d/%d" % [option["rank"], option["maximum_rank"]]]
+	if option["next_rank"] != null:
+		var requirement: Dictionary = option["next_rank_requirement"]
+		lines.append("Próximo rank: %d · Job %d" % [option["next_rank"], requirement["job_level"]])
+		var prerequisites: Array[String] = []
+		for prerequisite_id: StringName in requirement["skill_ranks"]:
+			prerequisites.append("%s R%d" % [_skill_name(prerequisite_id), requirement["skill_ranks"][prerequisite_id]])
+		lines.append("Pré-requisitos: %s" % (", ".join(prerequisites) if not prerequisites.is_empty() else "nenhum"))
+	else:
+		lines.append("Rank máximo atingido.")
+	lines.append("Efeitos e valores por rank serão definidos em E04.")
+	return "\n".join(lines)
+
+func _attribute_name(attribute_id: StringName) -> String:
+	match attribute_id:
+		&"str": return "FOR"
+		&"agi": return "AGI"
+		&"vit": return "VIT"
+		&"int": return "INT"
+		&"dex": return "DES"
+		&"luk": return "SOR"
+		_: return "Atributo indisponível"
+
 func _skill_name(skill_id: Variant) -> String:
 	match StringName(skill_id):
 		&"slash": return "Corte"
@@ -274,6 +356,9 @@ func _skill_name(skill_id: Variant) -> String:
 		&"swordsman_resistance": return "Resistência"
 		&"fireball": return "Bola de fogo"
 		&"fire_wall": return "Parede de fogo"
+		&"fire_spear": return "Lança de fogo"
+		&"ice_spear": return "Lança de gelo"
+		&"teleport": return "Teleporte"
 		&"mage_mana_regeneration": return "Regeneração de SP"
 		_: return "Skill indisponível"
 
@@ -360,6 +445,34 @@ func _build_ui() -> void:
 	build_summary_label.name = "BuildSummary"
 	build_summary_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	roster_column.add_child(build_summary_label)
+	progression_panel = VBoxContainer.new()
+	progression_panel.name = "ProgressionPanel"
+	progression_panel.add_theme_constant_override("separation", 6)
+	roster_column.add_child(progression_panel)
+	var progression_title := Label.new()
+	progression_title.text = "Progressão"
+	progression_title.add_theme_font_size_override("font_size", 18)
+	progression_panel.add_child(progression_title)
+	progression_state_label = Label.new()
+	progression_state_label.name = "ProgressionState"
+	progression_state_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	progression_panel.add_child(progression_state_label)
+	progression_wallets_label = Label.new()
+	progression_wallets_label.name = "ProgressionWallets"
+	progression_wallets_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	progression_panel.add_child(progression_wallets_label)
+	progression_attributes_label = Label.new()
+	progression_attributes_label.name = "ProgressionAttributes"
+	progression_attributes_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	progression_panel.add_child(progression_attributes_label)
+	var skill_tree_title := Label.new()
+	skill_tree_title.text = "Árvore de skills"
+	skill_tree_title.add_theme_font_size_override("font_size", 16)
+	progression_panel.add_child(skill_tree_title)
+	progression_skill_tree = VBoxContainer.new()
+	progression_skill_tree.name = "ProgressionSkillTree"
+	progression_skill_tree.add_theme_constant_override("separation", 2)
+	progression_panel.add_child(progression_skill_tree)
 	var editor_title := Label.new()
 	editor_title.text = "Editar preset legal"
 	editor_title.add_theme_font_size_override("font_size", 18)
