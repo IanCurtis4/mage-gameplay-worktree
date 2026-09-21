@@ -4,9 +4,23 @@ extends RefCounted
 
 const MAX_EXACT_INTEGER := 9007199254740991
 const ALLOWED_STAT_INCREMENTS: Array[StringName] = [&"kills"]
+const PILOT_ENCOUNTER_REWARD_IDS: Array[StringName] = [&"encounter_one", &"encounter_two"]
 
 var _definitions: Dictionary[StringName, Dictionary] = {}
 var _valid := true
+
+static func pilot_progression() -> ProfileRewardResolver:
+	# E03 integration values for the two current pilot encounters. E07 owns the
+	# final encounter/reward table and can replace this resolver at composition.
+	return ProfileRewardResolver.new({
+		PILOT_ENCOUNTER_REWARD_IDS[0]: {"base_xp": 100, "job_xp": 80},
+		PILOT_ENCOUNTER_REWARD_IDS[1]: {"base_xp": 150, "job_xp": 100},
+	})
+
+static func pilot_encounter_reward_id(encounter_number: int) -> StringName:
+	if encounter_number < 1 or encounter_number > PILOT_ENCOUNTER_REWARD_IDS.size():
+		return &""
+	return PILOT_ENCOUNTER_REWARD_IDS[encounter_number - 1]
 
 func _init(definitions: Dictionary = {}) -> void:
 	for raw_reward_id: Variant in definitions:

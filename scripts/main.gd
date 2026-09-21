@@ -28,6 +28,7 @@ var run_finished := false
 var _terminal_outcome: StringName = &"abandoned"
 var persistent_facade: ProfileFacade = null
 var _close_request_serial := 0
+var _reward_retry_pending := false
 
 var health_label: Label
 var sp_label: Label
@@ -118,7 +119,7 @@ func _process(_delta: float) -> void:
 		else:
 			_clear_hover()
 		_update_aim(get_global_mouse_position())
-	if get_tree().paused or reward == null or not is_instance_valid(reward):
+	if get_tree().paused or _reward_retry_pending or reward == null or not is_instance_valid(reward):
 		return
 	if player.global_position.distance_to(reward.global_position) <= 48.0:
 		_collect_reward()
@@ -150,6 +151,11 @@ func _input(event: InputEvent) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_E and _reward_retry_pending:
+			_reward_retry_pending = false
+			_collect_reward()
+			get_viewport().set_input_as_handled()
+			return
 		if event.keycode == KEY_R and (not player.is_alive() or run_finished):
 			_restart_run()
 			return
@@ -324,6 +330,7 @@ func _change_control_preferences(mode: int, smart_lock: bool) -> void:
 func _spawn_encounter(index: int) -> void:
 	encounter_index = index
 	encounter_active = true
+	_reward_retry_pending = false
 	next_button.visible = false
 	augment_button.disabled = true
 	var entries: Array[Dictionary]
@@ -427,14 +434,53 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	add_child(reward)
 	status_label.text = "Encontro concluído — toque no cristal dourado"
 
-func _collect_reward() -> void:
+func _collect_reward() -> Dictionary:
 	if reward == null:
-		return
+		return {"ok": false, "error_code": &"reward_unavailable"}
+	var progression_result := _grant_persistent_encounter_reward()
+	if not progression_result.get("ok", false):
+		_reward_retry_pending = true
+		status_label.text = "%s Pressione E para tentar novamente ou use Personagem para sair; a coleta ainda não foi consumida." % _reward_error_text(StringName(progression_result.get("error_code", &"unknown")))
+		return progression_result
 	reward.queue_free()
 	reward = null
 	run_state.queue_choice()
 	augment_button.disabled = false
-	status_label.text = "Recompensa coletada — abra a escolha com E"
+	if progression_result.get("persistent", false):
+		var applied: Dictionary = progression_result.get("applied_reward", {})
+		if applied.is_empty():
+			status_label.text = "XP persistente já salvo — abra a escolha com E"
+		else:
+			status_label.text = "XP salvo: +%d base · +%d job — abra a escolha com E" % [applied["base_xp"], applied["job_xp"]]
+	else:
+		status_label.text = "Recompensa coletada — abra a escolha com E"
+	return progression_result
+
+func _grant_persistent_encounter_reward() -> Dictionary:
+	if not _persistent_run_active():
+		return {"ok": true, "persistent": false}
+	var profile := persistent_facade.current_profile()
+	if profile == null:
+		return {"ok": false, "error_code": &"profile_unavailable"}
+	var reward_id := ProfileRewardResolver.pilot_encounter_reward_id(encounter_index)
+	if reward_id.is_empty():
+		return {"ok": false, "error_code": &"invalid_reward"}
+	var request_id := "reward-%s-%d" % [run_state.run_id.md5_text(), encounter_index]
+	var result := persistent_facade.grant_reward(request_id, profile.revision, run_state.run_id, encounter_index, reward_id)
+	if result.get("ok", false):
+		result["persistent"] = true
+	return result
+
+func _reward_error_text(error_code: StringName) -> String:
+	match error_code:
+		&"save_in_progress": return "O perfil ainda está sendo salvo."
+		&"stale_revision": return "O perfil mudou antes desta coleta."
+		&"recovery_required": return "Há uma gravação pendente que precisa ser recuperada."
+		&"save_failed": return "Não foi possível salvar o XP."
+		&"result_uncertain": return "Não foi possível confirmar se o XP foi salvo."
+		&"profile_unavailable": return "O perfil não está disponível."
+		&"invalid_reward", &"invalid_reward_sequence", &"invalid_catalog": return "A recompensa persistente desta etapa está inválida."
+		_: return "A recompensa persistente falhou (%s)." % error_code
 
 func _open_augment_menu() -> void:
 	if run_finished or get_tree().paused:

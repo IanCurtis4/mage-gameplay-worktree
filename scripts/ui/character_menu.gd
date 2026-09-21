@@ -7,6 +7,7 @@ const MAX_CHARACTERS := 8
 const ProfileFacadeScript := preload("res://scripts/core/profile_facade.gd")
 const ProfileStoreScript := preload("res://scripts/core/profile_store.gd")
 const ProfileCatalogScript := preload("res://scripts/core/profile_catalog.gd")
+const ProfileRewardResolverScript := preload("res://scripts/core/profile_reward_resolver.gd")
 
 var profile_directory := DEFAULT_PROFILE_DIRECTORY
 var facade: RefCounted
@@ -94,7 +95,10 @@ func select_character_at(index: int) -> Dictionary:
 
 func _open_profile() -> void:
 	if facade == null:
-		facade = ProfileFacadeScript.new(ProfileStoreScript.new(profile_directory, ProfileCatalogScript.pilot()))
+		facade = ProfileFacadeScript.new(
+			ProfileStoreScript.new(profile_directory, ProfileCatalogScript.pilot()),
+			ProfileRewardResolverScript.pilot_progression()
+		)
 	_show_result(facade.open_profile(), "Perfil carregado.")
 
 func _select_current_character() -> void:
