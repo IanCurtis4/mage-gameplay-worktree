@@ -13,7 +13,7 @@ var facade: RefCounted
 var _request_serial := 0
 var _selected_index := -1
 var _read_only := false
-var _attribute_retries: Dictionary[String, Dictionary] = {}
+var _progression_retries: Dictionary[String, Dictionary] = {}
 
 var status_label: Label
 var roster_list: ItemList
@@ -31,6 +31,7 @@ var progression_attribute_actions: VBoxContainer
 var attribute_increment_buttons: Dictionary[StringName, Button] = {}
 var respec_attributes_button: Button
 var progression_skill_tree: VBoxContainer
+var respec_skills_button: Button
 var preset_selector: OptionButton
 var active_slot_a: OptionButton
 var active_slot_b: OptionButton
@@ -210,6 +211,7 @@ func _refresh() -> void:
 		save_build_button.disabled = true
 		start_run_button.disabled = true
 		_set_attribute_actions_disabled(true)
+		_set_skill_actions_disabled(true)
 		return
 	roster_list.clear()
 	_selected_index = -1
@@ -237,6 +239,7 @@ func _refresh() -> void:
 	save_build_button.disabled = locked or _selected_index < 0
 	start_run_button.disabled = locked or profile.selected_character_id.is_empty()
 	_set_attribute_actions_disabled(locked or profile.reward_session != null)
+	_set_skill_actions_disabled(locked or profile.reward_session != null)
 	if profile.characters.size() >= MAX_CHARACTERS:
 		status_label.text = "Limite de %d personagens atingido." % MAX_CHARACTERS
 
@@ -256,6 +259,9 @@ func _error_text(error_code: StringName, read_only: bool) -> String:
 		&"invalid_attribute_allocations": return "A distribuição de atributos informada é inválida."
 		&"attribute_cap_reached": return "Este atributo já atingiu o limite de investimento."
 		&"insufficient_points": return "Você não tem pontos suficientes para essa escolha."
+		&"invalid_skill_id": return "Esta skill não está disponível para o personagem."
+		&"requirements_unmet": return "Os requisitos desta skill ainda não foram atendidos."
+		&"rank_cap_reached": return "Esta skill já atingiu o rank máximo."
 		&"recovery_required": return "Há uma gravação pendente que precisa ser recuperada antes de iniciar uma run."
 		&"unsupported_schema": return "Este perfil foi criado por uma versão mais nova do jogo."
 		&"invalid_catalog": return "O catálogo de personagem está incompatível com este perfil."
@@ -315,21 +321,29 @@ func _refresh_progression_panel(character: Variant, profile: Variant) -> void:
 		skill_label.text = "%s — Rank %d/%d%s" % [_skill_name(skill_id), option["rank"], option["maximum_rank"], " · ramo futuro" if not option["available"] else ""]
 		skill_label.tooltip_text = _skill_progression_tooltip(option)
 		progression_skill_tree.add_child(skill_label)
+		var learn_button := Button.new()
+		learn_button.name = "Learn_%s" % skill_id
+		learn_button.text = "Comprar rank %d" % option["next_rank"] if option["next_rank"] != null else "Rank máximo"
+		learn_button.tooltip_text = _skill_purchase_tooltip(option)
+		learn_button.disabled = _read_only or profile.reward_session != null or not option["next_rank_available"]
+		learn_button.pressed.connect(_learn_skill.bind(skill_id))
+		progression_skill_tree.add_child(learn_button)
 	_set_attribute_actions_disabled(_read_only or profile.reward_session != null)
+	_set_skill_actions_disabled(_read_only or profile.reward_session != null)
 
 func _allocate_attribute(attribute_id: StringName) -> Dictionary:
 	var context := _selected_progression_context()
 	if not context["ok"]:
 		return _show_result(context)
 	var retry_key := "allocate:%s:%s" % [context["character_id"], attribute_id]
-	var retry: Dictionary = _attribute_retries.get(retry_key, {})
+	var retry: Dictionary = _progression_retries.get(retry_key, {})
 	var request_id: String = retry.get("request_id", _request_id("attribute-%s" % attribute_id))
 	var revision: int = retry.get("revision", context["revision"])
 	var result: Dictionary = facade.allocate_attributes(request_id, revision, context["character_id"], {attribute_id: 1})
 	if result.get("ok", false) or result.get("error_code", &"") != &"save_failed":
-		_attribute_retries.erase(retry_key)
+		_progression_retries.erase(retry_key)
 	else:
-		_attribute_retries[retry_key] = {"request_id": request_id, "revision": revision}
+		_progression_retries[retry_key] = {"request_id": request_id, "revision": revision}
 	return _show_result(result, "%s aumentado." % _attribute_name(attribute_id))
 
 func _respec_attributes() -> Dictionary:
@@ -337,15 +351,45 @@ func _respec_attributes() -> Dictionary:
 	if not context["ok"]:
 		return _show_result(context)
 	var retry_key := "respec:%s" % context["character_id"]
-	var retry: Dictionary = _attribute_retries.get(retry_key, {})
+	var retry: Dictionary = _progression_retries.get(retry_key, {})
 	var request_id: String = retry.get("request_id", _request_id("respec-attributes"))
 	var revision: int = retry.get("revision", context["revision"])
 	var result: Dictionary = facade.respec_attributes(request_id, revision, context["character_id"])
 	if result.get("ok", false) or result.get("error_code", &"") != &"save_failed":
-		_attribute_retries.erase(retry_key)
+		_progression_retries.erase(retry_key)
 	else:
-		_attribute_retries[retry_key] = {"request_id": request_id, "revision": revision}
+		_progression_retries[retry_key] = {"request_id": request_id, "revision": revision}
 	return _show_result(result, "Atributos redistribuídos.")
+
+func _learn_skill(skill_id: StringName) -> Dictionary:
+	var context := _selected_progression_context()
+	if not context["ok"]:
+		return _show_result(context)
+	var retry_key := "learn:%s:%s" % [context["character_id"], skill_id]
+	var retry: Dictionary = _progression_retries.get(retry_key, {})
+	var request_id: String = retry.get("request_id", _request_id("learn-%s" % skill_id))
+	var revision: int = retry.get("revision", context["revision"])
+	var result: Dictionary = facade.learn_skill(request_id, revision, context["character_id"], skill_id)
+	if result.get("ok", false) or result.get("error_code", &"") != &"save_failed":
+		_progression_retries.erase(retry_key)
+	else:
+		_progression_retries[retry_key] = {"request_id": request_id, "revision": revision}
+	return _show_result(result, "%s aprimorada." % _skill_name(skill_id))
+
+func _respec_skills() -> Dictionary:
+	var context := _selected_progression_context()
+	if not context["ok"]:
+		return _show_result(context)
+	var retry_key := "respec-skills:%s" % context["character_id"]
+	var retry: Dictionary = _progression_retries.get(retry_key, {})
+	var request_id: String = retry.get("request_id", _request_id("respec-skills"))
+	var revision: int = retry.get("revision", context["revision"])
+	var result: Dictionary = facade.respec_skills(request_id, revision, context["character_id"])
+	if result.get("ok", false) or result.get("error_code", &"") != &"save_failed":
+		_progression_retries.erase(retry_key)
+	else:
+		_progression_retries[retry_key] = {"request_id": request_id, "revision": revision}
+	return _show_result(result, "Skills redistribuídas.")
 
 func _selected_progression_context() -> Dictionary:
 	var profile: Variant = facade.current_profile() if facade != null else null
@@ -361,6 +405,10 @@ func _set_attribute_actions_disabled(disabled: bool) -> void:
 	if respec_attributes_button != null:
 		respec_attributes_button.disabled = disabled
 
+func _set_skill_actions_disabled(disabled: bool) -> void:
+	if respec_skills_button != null:
+		respec_skills_button.disabled = disabled
+
 func _show_progression_message(message: String) -> void:
 	if progression_state_label == null:
 		return
@@ -368,6 +416,7 @@ func _show_progression_message(message: String) -> void:
 	progression_wallets_label.text = ""
 	progression_attributes_label.text = ""
 	_clear_progression_skill_tree()
+	_set_skill_actions_disabled(true)
 
 func _clear_progression_skill_tree() -> void:
 	if progression_skill_tree == null:
@@ -392,6 +441,17 @@ func _skill_progression_tooltip(option: Dictionary) -> String:
 		lines.append("Rank máximo atingido.")
 	lines.append("Efeitos e valores por rank serão definidos em E04.")
 	return "\n".join(lines)
+
+func _skill_purchase_tooltip(option: Dictionary) -> String:
+	if option["next_rank"] == null:
+		return "Esta skill já atingiu o rank máximo."
+	if option["next_rank_available"]:
+		return "Comprar o rank %d pela carteira indicada." % option["next_rank"]
+	match StringName(option["next_rank_error_code"]):
+		&"insufficient_points": return "Pontos insuficientes na carteira desta skill."
+		&"requirements_unmet": return "Os requisitos do próximo rank ainda não foram atendidos."
+		&"rank_cap_reached": return "Esta skill já atingiu o rank máximo."
+		_: return "Este rank não está disponível agora."
 
 func _attribute_name(attribute_id: StringName) -> String:
 	match attribute_id:
@@ -545,6 +605,12 @@ func _build_ui() -> void:
 	progression_skill_tree.name = "ProgressionSkillTree"
 	progression_skill_tree.add_theme_constant_override("separation", 2)
 	progression_panel.add_child(progression_skill_tree)
+	respec_skills_button = Button.new()
+	respec_skills_button.name = "RespecSkills"
+	respec_skills_button.text = "Redistribuir skills"
+	respec_skills_button.tooltip_text = "Devolve as compras das carteiras base e de evolução."
+	respec_skills_button.pressed.connect(_respec_skills)
+	progression_panel.add_child(respec_skills_button)
 	var editor_title := Label.new()
 	editor_title.text = "Editar preset legal"
 	editor_title.add_theme_font_size_override("font_size", 18)

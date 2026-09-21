@@ -69,6 +69,7 @@ func _initialize() -> void:
 	_check(blocked.start_run_button.disabled, "read-only profile cannot start a run")
 	blocked.queue_free()
 	await _check_attribute_controls(scene)
+	await _check_skill_controls(scene)
 	_cleanup_directory(root_directory)
 	print("Menu E02.1: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
 	quit(0 if failures == 0 else 1)
@@ -107,6 +108,51 @@ func _check_attribute_controls(scene: PackedScene) -> void:
 		menu._allocate_attribute(&"str")
 	var no_points: Dictionary = menu._allocate_attribute(&"str")
 	_check(not no_points["ok"] and no_points["error_code"] == &"insufficient_points" and menu.status_label.text.contains("pontos"), "attribute errors remain pt-BR UI messages and never mutate the character directly")
+	menu.queue_free()
+
+func _check_skill_controls(scene: PackedScene) -> void:
+	var directory := root_directory.path_join("skill_controls")
+	DirAccess.make_dir_recursive_absolute(directory)
+	var catalog := ProfileCatalog.pilot({}, {
+		&"heavy_slash": {
+			"allowed_base_classes": [&"swordsman"],
+			"category": ProfileCatalog.ACTIVE,
+			"wallet": ProfileCatalog.BASE_WALLET,
+			"free_rank": 0,
+			"max_purchased_rank": 5,
+			"rank_requirements": {1: {"job_level": 5, "skill_ranks": {&"slash": 3}}},
+		},
+	})
+	var profile := ProfileState.new("123e4567-e89b-42d3-a456-426614174001")
+	var character_id := IdentityIds.character_id(profile.profile_id, 1)
+	var character := CharacterState.new(character_id, "Ranks", &"swordsman")
+	character.job_xp_total = ProgressionRules.UNEVOLVED_MAX_JOB_XP
+	var slots := catalog.initial_skill_slots(&"swordsman")
+	for preset: Dictionary in character.presets:
+		preset["active_slots"] = slots["active_slots"].duplicate(true)
+		preset["passive_slots"] = slots["passive_slots"].duplicate(true)
+	profile.characters.append(character)
+	profile.selected_character_id = character_id
+	profile.next_character_counter = 2
+	var seeded := ProfileStore.new(directory, catalog).commit(profile)
+	var store := ToggleFailStore.new(directory, catalog)
+	var menu: Variant = scene.instantiate()
+	menu.set_profile_facade(ProfileFacade.new(store))
+	root.add_child(menu)
+	await process_frame
+	var heavy_label: Label = menu.progression_skill_tree.get_node("ProgressionSkill_heavy_slash")
+	var heavy_button: Button = menu.progression_skill_tree.get_node("Learn_heavy_slash")
+	var slash_button: Button = menu.progression_skill_tree.get_node("Learn_slash")
+	_check(menu.respec_skills_button != null and not slash_button.disabled and heavy_button.disabled and heavy_label.tooltip_text.contains("Job 5") and heavy_label.tooltip_text.contains("Corte R3") and heavy_button.tooltip_text.contains("requisitos"), "skill tree exposes the catalog prerequisite tooltip and enables only the authoritative next rank")
+	store.failure_stage = &"write_pending"
+	var failed: Dictionary = menu._learn_skill(&"slash")
+	store.failure_stage = &""
+	var retried: Dictionary = menu._learn_skill(&"slash")
+	var after_retry: ProfileState = menu.facade.current_profile()
+	_check(not failed["ok"] and failed["error_code"] == &"save_failed" and retried["ok"] and failed["request_id"] == retried["request_id"] and after_retry.revision == seeded["new_revision"] + 1 and after_retry.character_by_id(character_id).purchased_skill_ranks[&"slash"] == 1, "a definite skill-save failure retries the original request ID and revision exactly once")
+	var respec: Dictionary = menu._respec_skills()
+	_check(respec["ok"] and menu.status_label.text == "Skills redistribuídas." and menu.facade.current_profile().character_by_id(character_id).purchased_skill_ranks.is_empty() and menu.progression_skill_tree.get_node("ProgressionSkill_slash").text.contains("Rank 1/5"), "skill respec uses the facade and restores free ranks in the rendered tree")
+	_check(menu._error_text(&"requirements_unmet", false).contains("requisitos") and menu._error_text(&"rank_cap_reached", false).contains("máximo"), "rank failures have pt-BR menu messages without new progression rules")
 	menu.queue_free()
 
 func _cleanup_directory(path: String) -> void:
