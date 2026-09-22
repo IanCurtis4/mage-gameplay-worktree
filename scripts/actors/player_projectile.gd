@@ -74,39 +74,55 @@ func _process(delta: float) -> void:
 		if direction.is_zero_approx():
 			direction = Vector2.RIGHT
 	rotation = direction.angle()
-	var step := minf(speed * delta, max_distance - travelled)
-	var next_position := global_position + direction * step
-	var wall_fraction := _wall_fraction(global_position, next_position)
-	var victim: CombatActor
-	var victim_fraction := 2.0
-	if homing:
-		victim = target
-		victim_fraction = _actor_fraction(victim, global_position, next_position)
-	else:
-		for actor: CombatActor in targets:
-			if actor == null or not is_instance_valid(actor) or not actor.is_alive() or _hit_actor_ids.has(actor.get_instance_id()):
-				continue
-			var fraction := _actor_fraction(actor, global_position, next_position)
-			if fraction >= 0.0 and fraction < victim_fraction:
-				victim = actor
-				victim_fraction = fraction
-	if victim != null and victim_fraction >= 0.0 and victim_fraction <= wall_fraction:
-		global_position = global_position.lerp(next_position, victim_fraction)
-		travelled += step * victim_fraction
-		_hit_actor_ids[victim.get_instance_id()] = true
-		_prepare_impact(victim)
-		hit.emit(request, victim)
-		if _hit_actor_ids.size() >= max_hits:
+	var remaining_step := minf(speed * delta, max_distance - travelled)
+	while remaining_step > 0.0:
+		var segment_start := global_position
+		var segment_end := segment_start + direction * remaining_step
+		var wall_fraction := _wall_fraction(segment_start, segment_end)
+		var impact := _nearest_impact(segment_start, segment_end)
+		var victim: CombatActor = impact.get("actor") as CombatActor
+		var victim_fraction: float = impact.get("fraction", 2.0)
+		if victim != null and victim_fraction <= wall_fraction:
+			var distance_to_victim := remaining_step * victim_fraction
+			global_position = segment_start.lerp(segment_end, victim_fraction)
+			travelled += distance_to_victim
+			remaining_step -= distance_to_victim
+			_hit_actor_ids[victim.get_instance_id()] = true
+			_prepare_impact(victim)
+			hit.emit(request, victim)
+			if _hit_actor_ids.size() >= max_hits:
+				queue_free()
+				return
+			continue
+		if wall_fraction <= 1.0:
+			global_position = segment_start.lerp(segment_end, wall_fraction)
+			travelled += remaining_step * wall_fraction
 			queue_free()
-		return
-	if wall_fraction <= 1.0:
-		global_position = global_position.lerp(next_position, wall_fraction)
-		queue_free()
-		return
-	global_position = next_position
-	travelled += step
+			return
+		global_position = segment_end
+		travelled += remaining_step
+		remaining_step = 0.0
 	if travelled >= max_distance:
 		queue_free()
+
+func _nearest_impact(from: Vector2, to: Vector2) -> Dictionary:
+	var victim: CombatActor
+	var victim_fraction := 2.0
+	var candidates: Array[CombatActor] = []
+	if homing:
+		candidates.append(target)
+	else:
+		candidates = targets
+	for actor: CombatActor in candidates:
+		if actor == null or not is_instance_valid(actor) or not actor.is_alive() or _hit_actor_ids.has(actor.get_instance_id()):
+			continue
+		var fraction := _actor_fraction(actor, from, to)
+		if fraction < 0.0:
+			continue
+		if fraction < victim_fraction or (is_equal_approx(fraction, victim_fraction) and (victim == null or actor.get_instance_id() < victim.get_instance_id())):
+			victim = actor
+			victim_fraction = fraction
+	return {"actor": victim, "fraction": victim_fraction}
 
 func _prepare_impact(victim: CombatActor) -> void:
 	request.target_id = victim.get_instance_id()

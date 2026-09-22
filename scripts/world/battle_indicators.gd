@@ -106,6 +106,13 @@ func _draw() -> void:
 		draw_line(origin + direction.orthogonal() * 7.0, endpoint + direction.orthogonal() * 7.0, Color(color, 0.35), 1.0, true)
 		draw_line(origin - direction.orthogonal() * 7.0, endpoint - direction.orthogonal() * 7.0, Color(color, 0.35), 1.0, true)
 		_draw_endpoint(endpoint, color)
+	elif skill == &"piercing_arrow":
+		draw_line(origin, endpoint, Color(0.04, 0.09, 0.12, 0.9), 5.0, true)
+		draw_line(origin, endpoint, color, 2.0, true)
+		for ratio: float in [0.25, 0.50, 0.75]:
+			var marker := origin.lerp(endpoint, ratio)
+			draw_line(marker - direction.orthogonal() * 5.0, marker + direction.orthogonal() * 5.0, Color(color, 0.7), 1.5, true)
+		_draw_endpoint(endpoint, color)
 	elif skill == &"teleport":
 		draw_dashed_line(origin, endpoint, Color(color, 0.65), 2.0, 10.0, true, true)
 		_draw_endpoint(endpoint, color)

@@ -50,6 +50,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"ice_spear", "Lança de Gelo", "S", SkillDefinition.Targeting.SINGLE_TARGET, 14.0, 3.0, 1.10, 360.0, 760.0, 0.22, DamageRequest.AccuracyMode.CONTESTED, true)
 	_add_skill(&"teleport", "Teleporte", "D", SkillDefinition.Targeting.POINT, 22.0, 6.0, 0.0, 320.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_skill(&"double_shot", "Disparo Duplo", "Q", SkillDefinition.Targeting.DIRECTION, 14.0, 4.0, 0.70, 520.0, 880.0, 0.0, DamageRequest.AccuracyMode.CONTESTED, true)
+	_add_skill(&"piercing_arrow", "Flecha Perfurante", "W", SkillDefinition.Targeting.DIRECTION, 18.0, 5.0, 1.05, 600.0, 920.0, 0.0, DamageRequest.AccuracyMode.CONTESTED, true)
 	_add_passive_skill(&"swordsman_resistance", "Resistência")
 	_add_passive_skill(&"mage_mana_regeneration", "Regeneração de SP")
 	_configure_slash_ranks()
@@ -62,6 +63,7 @@ static func _ensure_built() -> void:
 	_configure_teleport_ranks()
 	_configure_mage_sp_regeneration_ranks()
 	_configure_double_shot_ranks()
+	_configure_piercing_arrow_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -87,7 +89,7 @@ static func _ensure_built() -> void:
 	archer.id = IdentityIds.ARCHER
 	archer.display_name = "Arqueiro"
 	archer.attributes = IdentityIds.initial_attributes(IdentityIds.ARCHER)
-	archer.skill_ids = [&"double_shot"]
+	archer.skill_ids = [&"double_shot", &"piercing_arrow"]
 	archer.passive_id = &""
 	archer.basic_power = 1.0
 	archer.basic_range = 340.0
@@ -291,5 +293,23 @@ static func _configure_double_shot_ranks() -> void:
 		rank.power = powers[index]
 		rank.precision_weight = 1.0
 		rank.projectile_speed = 880.0
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_piercing_arrow_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"piercing_arrow"]
+	definition.category = SkillDefinition.Category.ACTIVE
+	definition.handler_id = SkillDefinition.Handler.PIERCING_ARROW
+	var powers: Array[float] = [1.05, 1.20, 1.35, 1.50, 1.65]
+	var costs: Array[float] = [18.0, 20.0, 22.0, 23.0, 24.0]
+	for index: int in powers.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 5.0
+		rank.range = 600.0
+		rank.power = powers[index]
+		rank.precision_weight = 1.0
+		rank.projectile_speed = 920.0
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())

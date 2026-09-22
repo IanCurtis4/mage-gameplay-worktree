@@ -3,7 +3,7 @@ extends CombatActor
 
 signal attack_requested(request: DamageRequest, target: CombatActor)
 signal mage_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int)
-signal precision_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int)
+signal precision_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int, hit_limit: int)
 signal fire_wall_requested(direction: Vector2, burn_request: DamageRequest)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
@@ -24,6 +24,7 @@ const MAGE_BASIC_SPEED := 620.0
 const MAGE_BASIC_MAX_DISTANCE := 420.0
 const ARCHER_BASIC_SPEED := 880.0
 const ARCHER_BASIC_MAX_DISTANCE := 520.0
+const PIERCING_ARROW_MAX_HITS := 3
 
 var navigation: ArenaNavigation
 var run_state: RunState
@@ -210,7 +211,20 @@ func use_double_shot(direction: Vector2) -> bool:
 	var definition := ClassCatalog.skill_definition(&"double_shot")
 	var power := stat_breakdown.value(&"precision_attack") * rank_definition.power
 	var request := _make_physical_request(null, &"double_shot", power, definition.accuracy_mode, definition.can_crit)
-	precision_projectile_requested.emit(&"double_shot", request, null, facing, 2)
+	precision_projectile_requested.emit(&"double_shot", request, null, facing, 2, 1)
+	resources_changed.emit()
+	return true
+
+func use_piercing_arrow(direction: Vector2) -> bool:
+	var rank_definition := _runtime_rank_definition(&"piercing_arrow")
+	if class_id != &"archer" or rank_definition == null or not _can_spend(&"piercing_arrow"):
+		return false
+	var facing := _resolved_facing(direction)
+	_spend(&"piercing_arrow")
+	var definition := ClassCatalog.skill_definition(&"piercing_arrow")
+	var power := stat_breakdown.value(&"precision_attack") * rank_definition.power
+	var request := _make_physical_request(null, &"piercing_arrow", power, definition.accuracy_mode, definition.can_crit)
+	precision_projectile_requested.emit(&"piercing_arrow", request, null, facing, 1, PIERCING_ARROW_MAX_HITS)
 	resources_changed.emit()
 	return true
 
@@ -475,7 +489,7 @@ func _try_basic_attack() -> void:
 	if is_mage():
 		mage_projectile_requested.emit(&"basic_attack", request, target, _last_facing, 1)
 	elif is_archer():
-		precision_projectile_requested.emit(&"basic_attack", request, target, _last_facing, 1)
+		precision_projectile_requested.emit(&"basic_attack", request, target, _last_facing, 1, 1)
 	else:
 		attack_requested.emit(request, target)
 	presentation_action.emit(&"basic_attack", _last_facing, BASIC_ATTACK_RECOVERY)

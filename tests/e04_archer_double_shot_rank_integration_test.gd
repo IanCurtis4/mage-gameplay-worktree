@@ -40,13 +40,15 @@ func _check_ranked_emission_and_sp() -> void:
 	var rank_five_requests: Array[DamageRequest] = []
 	var rank_one_count := [0]
 	var rank_five_count := [0]
-	rank_one.precision_projectile_requested.connect(func(_skill: StringName, request: DamageRequest, _target: CombatActor, _direction: Vector2, count: int) -> void:
+	rank_one.precision_projectile_requested.connect(func(_skill: StringName, request: DamageRequest, _target: CombatActor, _direction: Vector2, count: int, hit_limit: int) -> void:
 		rank_one_requests.append(request)
 		rank_one_count[0] = count
+		_check(hit_limit == 1, "Disparo Duplo keeps the one-hit policy on each arrow")
 	)
-	rank_five.precision_projectile_requested.connect(func(_skill: StringName, request: DamageRequest, _target: CombatActor, _direction: Vector2, count: int) -> void:
+	rank_five.precision_projectile_requested.connect(func(_skill: StringName, request: DamageRequest, _target: CombatActor, _direction: Vector2, count: int, hit_limit: int) -> void:
 		rank_five_requests.append(request)
 		rank_five_count[0] = count
+		_check(hit_limit == 1, "Disparo Duplo R5 keeps the one-hit policy on each arrow")
 	)
 	var rank_one_sp := rank_one.current_sp
 	var rank_five_sp := rank_five.current_sp

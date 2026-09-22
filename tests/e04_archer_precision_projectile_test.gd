@@ -17,9 +17,9 @@ func _run() -> void:
 func _check_minimal_catalog_and_gate() -> void:
 	var definition := ClassCatalog.class_definition(&"archer")
 	_check(definition != null and definition.display_name == "Arqueiro" and definition.attributes == IdentityIds.initial_attributes(&"archer"), "catalog exposes the accepted Archer identity and attributes")
-	_check(definition.skill_ids == [&"double_shot"] and definition.passive_id.is_empty() and definition.basic_power == 1.0 and definition.basic_range == 340.0, "Archer definition preserves basic tuning while exposing only the first delivered skill")
+	_check(definition.skill_ids == [&"double_shot", &"piercing_arrow"] and definition.passive_id.is_empty() and definition.basic_power == 1.0 and definition.basic_range == 340.0, "Archer definition preserves basic tuning while exposing both delivered skills")
 	var state := RunState.new(&"archer")
-	_check(state.class_id == &"archer" and state.skill_levels == {&"double_shot": 1} and state.build_snapshot.active_slots == [&"double_shot"] and state.build_snapshot.passive_slots.is_empty(), "pilot run now equips only the delivered Archer skill")
+	_check(state.class_id == &"archer" and state.skill_levels == {&"double_shot": 1, &"piercing_arrow": 1} and state.build_snapshot.active_slots == [&"double_shot", &"piercing_arrow"] and state.build_snapshot.passive_slots.is_empty(), "pilot run equips both delivered Archer skills")
 	_check(not ProfileCatalog.pilot().base_class_is_available(&"archer"), "persistent profile keeps Archer unavailable before two active skills and one passive")
 
 func _check_archer_basic_emission() -> void:
@@ -35,7 +35,7 @@ func _check_archer_basic_emission() -> void:
 	var emitted_targets: Array[CombatActor] = []
 	var directions: Array[Vector2] = []
 	var immediate_hits := [0]
-	archer.precision_projectile_requested.connect(func(_skill: StringName, request: DamageRequest, target_actor: CombatActor, direction: Vector2, _count: int) -> void:
+	archer.precision_projectile_requested.connect(func(_skill: StringName, request: DamageRequest, target_actor: CombatActor, direction: Vector2, _count: int, _hit_limit: int) -> void:
 		emitted.append(request)
 		emitted_targets.append(target_actor)
 		directions.append(direction)
