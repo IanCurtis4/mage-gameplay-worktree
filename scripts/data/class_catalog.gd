@@ -55,6 +55,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"extended_aim", "Mira Estendida", "S", SkillDefinition.Targeting.SELF, 16.0, 12.0, 4.0, 0.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_skill(&"snare_trap", "Armadilha de Laço", "D", SkillDefinition.Targeting.POINT, 18.0, 8.0, 1.4, 360.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_skill(&"explosive_trap", "Armadilha Explosiva", "D", SkillDefinition.Targeting.POINT, 20.0, 9.0, 1.35, 360.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, true)
+	_add_skill(&"slowing_arrow", "Flecha Entorpecente", "D", SkillDefinition.Targeting.DIRECTION, 15.0, 5.0, 0.90, 560.0, 880.0, 0.0, DamageRequest.AccuracyMode.CONTESTED, true)
 	_add_passive_skill(&"swordsman_resistance", "Resistência")
 	_add_passive_skill(&"mage_mana_regeneration", "Regeneração de SP")
 	_configure_slash_ranks()
@@ -72,6 +73,7 @@ static func _ensure_built() -> void:
 	_configure_extended_aim_ranks()
 	_configure_snare_trap_ranks()
 	_configure_explosive_trap_ranks()
+	_configure_slowing_arrow_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -386,5 +388,25 @@ static func _configure_explosive_trap_ranks() -> void:
 		rank.range = 360.0
 		rank.power = powers[index]
 		rank.precision_weight = 1.0
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_slowing_arrow_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"slowing_arrow"]
+	definition.category = SkillDefinition.Category.ACTIVE
+	definition.handler_id = SkillDefinition.Handler.SLOWING_ARROW
+	var durations: Array[float] = [1.4, 1.8, 2.2, 2.6, 3.0]
+	var costs: Array[float] = [15.0, 16.0, 17.0, 18.0, 19.0]
+	for index: int in durations.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 5.0
+		rank.range = 560.0
+		# This skill's rank axis is control duration; direct damage stays at definition.power.
+		rank.power = durations[index]
+		rank.precision_weight = 1.0
+		rank.projectile_speed = 880.0
+		rank.effect_ids = [&"slow"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())

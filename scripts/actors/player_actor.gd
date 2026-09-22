@@ -7,6 +7,7 @@ signal precision_projectile_requested(skill_id: StringName, request: DamageReque
 signal arrow_rain_requested(center: Vector2, request: DamageRequest)
 signal snare_trap_requested(center: Vector2, root_duration: float)
 signal explosive_trap_requested(center: Vector2, request: DamageRequest)
+signal slowing_arrow_requested(request: DamageRequest, direction: Vector2, slow_fraction: float, slow_duration: float)
 signal fire_wall_requested(direction: Vector2, burn_request: DamageRequest)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
@@ -29,6 +30,7 @@ const ARCHER_BASIC_SPEED := 880.0
 const ARCHER_BASIC_MAX_DISTANCE := 520.0
 const PIERCING_ARROW_MAX_HITS := 3
 const EXTENDED_AIM_RANGE_BONUS := 120.0
+const SLOWING_ARROW_SLOW_FRACTION := 0.35
 
 var navigation: ArenaNavigation
 var run_state: RunState
@@ -302,6 +304,19 @@ func use_explosive_trap(point: Vector2) -> bool:
 	var request := _make_physical_request(null, &"explosive_trap", power, definition.accuracy_mode, definition.can_crit)
 	explosive_trap_requested.emit(center, request)
 	presentation_action.emit(&"cast", aim_direction(center), 0.18)
+	resources_changed.emit()
+	return true
+
+func use_slowing_arrow(direction: Vector2) -> bool:
+	var rank_definition := _runtime_rank_definition(&"slowing_arrow")
+	if class_id != &"archer" or rank_definition == null or not _can_spend(&"slowing_arrow"):
+		return false
+	var facing := _resolved_facing(direction)
+	_spend(&"slowing_arrow")
+	var definition := ClassCatalog.skill_definition(&"slowing_arrow")
+	var power := stat_breakdown.value(&"precision_attack") * definition.power
+	var request := _make_physical_request(null, &"slowing_arrow", power, definition.accuracy_mode, definition.can_crit)
+	slowing_arrow_requested.emit(request, facing, SLOWING_ARROW_SLOW_FRACTION, rank_definition.power)
 	resources_changed.emit()
 	return true
 
@@ -717,7 +732,7 @@ func has_extended_aim() -> bool:
 	return is_archer() and extended_aim_remaining > 0.0
 
 func _extended_aim_bonus(skill_id: StringName) -> float:
-	if not has_extended_aim() or skill_id not in [&"basic_attack", &"double_shot", &"piercing_arrow", &"arrow_rain"]:
+	if not has_extended_aim() or skill_id not in [&"basic_attack", &"double_shot", &"piercing_arrow", &"arrow_rain", &"slowing_arrow"]:
 		return 0.0
 	return EXTENDED_AIM_RANGE_BONUS
 

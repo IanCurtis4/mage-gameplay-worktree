@@ -100,6 +100,7 @@ func _ready() -> void:
 	player.arrow_rain_requested.connect(_on_arrow_rain_requested)
 	player.snare_trap_requested.connect(_on_snare_trap_requested)
 	player.explosive_trap_requested.connect(_on_explosive_trap_requested)
+	player.slowing_arrow_requested.connect(_on_slowing_arrow_requested)
 	player.fire_wall_requested.connect(_on_fire_wall_requested)
 	player.skill_cast_ready.connect(_on_skill_cast_ready)
 	player.status_damage_requested.connect(_on_attack_requested)
@@ -276,6 +277,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 				status_label.text = "Armadilha Explosiva cancelada — POSIÇÃO BLOQUEADA"
 			else:
 				_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.SLOWING_ARROW:
+		if not player.use_slowing_arrow(direction):
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 
 func _report_skill_failure(skill: StringName, selected_target: CombatActor = null) -> void:
 	var definition := ClassCatalog.skill_definition(skill)
@@ -437,14 +441,17 @@ func _on_mage_projectile_requested(skill_id: StringName, request: DamageRequest,
 		projectile.add_to_group("player_projectiles")
 
 func _on_precision_projectile_requested(skill_id: StringName, request: DamageRequest, _target_actor: CombatActor, direction: Vector2, count: int, hit_limit: int) -> void:
+	_spawn_precision_projectiles(skill_id, request, direction, count, hit_limit, _on_precision_projectile_hit)
+
+func _spawn_precision_projectiles(skill_id: StringName, request: DamageRequest, direction: Vector2, count: int, hit_limit: int, hit_callback: Callable, visual_color: Color = Color("f6dfad")) -> void:
 	for index: int in range(count):
 		var projectile := PlayerProjectile.new()
 		var side_offset := direction.orthogonal() * (float(index) - float(count - 1) * 0.5) * 14.0
 		var origin := player.global_position + PlayerProjectile.BODY_OFFSET + side_offset
 		var speed := PlayerActor.ARCHER_BASIC_SPEED if skill_id == &"basic_attack" else player.skill_projectile_speed(skill_id)
 		var max_distance := player.archer_basic_projectile_range() if skill_id == &"basic_attack" else player.skill_range(skill_id)
-		projectile.configure_directional(request.copy(), origin, direction, enemies, navigation, speed, max_distance, hit_limit)
-		projectile.hit.connect(_on_precision_projectile_hit)
+		projectile.configure_directional(request.copy(), origin, direction, enemies, navigation, speed, max_distance, hit_limit, visual_color)
+		projectile.hit.connect(hit_callback)
 		add_child(projectile)
 		projectile.add_to_group("player_projectiles")
 
@@ -469,6 +476,19 @@ func _on_explosive_trap_requested(center: Vector2, request: DamageRequest) -> vo
 	trap.configure_explosive(player.get_instance_id(), center, request, enemies)
 	trap.hit.connect(_on_precision_projectile_hit)
 	trap_registry.register_trap(trap)
+
+func _on_slowing_arrow_requested(request: DamageRequest, direction: Vector2, slow_fraction: float, slow_duration: float) -> void:
+	var hit_callback := _on_slowing_arrow_hit.bind(slow_fraction, slow_duration)
+	_spawn_precision_projectiles(&"slowing_arrow", request, direction, 1, 1, hit_callback, Color("72c9ff"))
+
+func _on_slowing_arrow_hit(request: DamageRequest, target_actor: CombatActor, slow_fraction: float, slow_duration: float) -> void:
+	if target_actor == null or not target_actor.is_alive():
+		return
+	var result := target_actor.apply_damage(request, rng)
+	if result.is_empty() or not bool(result["landed"]) or float(result["actual_damage"]) <= 0.0:
+		return
+	if target_actor.is_alive():
+		target_actor.apply_slow(slow_fraction, slow_duration)
 
 func _on_mage_projectile_hit(request: DamageRequest, target_actor: CombatActor) -> void:
 	if target_actor == null or not target_actor.is_alive():

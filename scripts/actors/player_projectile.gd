@@ -28,7 +28,8 @@ func configure_directional(
 	arena_navigation: ArenaNavigation,
 	speed_value: float,
 	range_value: float,
-	hit_limit: int = 1
+	hit_limit: int = 1,
+	visual_color: Color = Color("f6dfad")
 ) -> void:
 	request = damage_request
 	targets = potential_targets.duplicate()
@@ -38,6 +39,7 @@ func configure_directional(
 	speed = speed_value
 	max_distance = range_value
 	max_hits = maxi(1, hit_limit)
+	color = visual_color
 	homing = false
 	rotation = direction.angle()
 	process_mode = Node.PROCESS_MODE_PAUSABLE

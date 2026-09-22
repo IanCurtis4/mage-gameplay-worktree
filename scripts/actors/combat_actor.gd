@@ -2,6 +2,8 @@ class_name CombatActor
 extends Node2D
 ## Shared runtime presentation and health ownership for combat actors.
 
+const MAX_SLOW_FRACTION := 0.50
+
 signal actor_died(actor: CombatActor)
 signal damage_number(actor: CombatActor, amount: int, critical: bool)
 signal attack_missed(actor: CombatActor)
@@ -93,7 +95,7 @@ func apply_burn(request: DamageRequest, duration: float = 3.0) -> void:
 func apply_slow(fraction: float, duration: float) -> void:
 	if not is_alive() or duration <= 0.0:
 		return
-	slow_fraction = maxf(slow_fraction, clampf(fraction, 0.0, 0.95))
+	slow_fraction = maxf(slow_fraction, clampf(fraction, 0.0, MAX_SLOW_FRACTION))
 	slow_remaining = maxf(slow_remaining, duration)
 	queue_redraw()
 

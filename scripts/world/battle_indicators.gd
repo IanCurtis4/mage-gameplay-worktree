@@ -106,7 +106,7 @@ func _draw() -> void:
 			var pillar := center + wall_axis * ((float(index) - 1.5) * FireWall.PILLAR_SPACING)
 			draw_circle(pillar, FireWall.PILLAR_RADIUS, Color(color, 0.13))
 			draw_arc(pillar, FireWall.PILLAR_RADIUS, 0.0, TAU, 24, color, 2.0, true)
-	elif skill in [&"fire_spear", &"ice_spear"]:
+	elif skill in [&"fire_spear", &"ice_spear", &"slowing_arrow"]:
 		draw_dashed_line(origin, endpoint, color, 2.0, 10.0, true, true)
 		_draw_endpoint(endpoint, color)
 	elif skill == &"double_shot":
