@@ -56,6 +56,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"snare_trap", "Armadilha de Laço", "D", SkillDefinition.Targeting.POINT, 18.0, 8.0, 1.4, 360.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_skill(&"explosive_trap", "Armadilha Explosiva", "D", SkillDefinition.Targeting.POINT, 20.0, 9.0, 1.35, 360.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, true)
 	_add_skill(&"slowing_arrow", "Flecha Entorpecente", "D", SkillDefinition.Targeting.DIRECTION, 15.0, 5.0, 0.90, 560.0, 880.0, 0.0, DamageRequest.AccuracyMode.CONTESTED, true)
+	_add_skill(&"foliage_shelter", "Abrigo de Folhagem", "D", SkillDefinition.Targeting.POINT, 18.0, 12.0, 4.0, 360.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_passive_skill(&"swordsman_resistance", "Resistência")
 	_add_passive_skill(&"mage_mana_regeneration", "Regeneração de SP")
 	_configure_slash_ranks()
@@ -74,6 +75,7 @@ static func _ensure_built() -> void:
 	_configure_snare_trap_ranks()
 	_configure_explosive_trap_ranks()
 	_configure_slowing_arrow_ranks()
+	_configure_foliage_shelter_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -408,5 +410,22 @@ static func _configure_slowing_arrow_ranks() -> void:
 		rank.precision_weight = 1.0
 		rank.projectile_speed = 880.0
 		rank.effect_ids = [&"slow"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_foliage_shelter_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"foliage_shelter"]
+	definition.category = SkillDefinition.Category.ACTIVE
+	definition.handler_id = SkillDefinition.Handler.FOLIAGE_SHELTER
+	var durations: Array[float] = [4.0, 5.0, 6.0, 7.0, 8.0]
+	var costs: Array[float] = [18.0, 19.0, 20.0, 21.0, 22.0]
+	for index: int in durations.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 12.0
+		rank.range = 360.0
+		rank.power = durations[index]
+		rank.effect_ids = [&"concealment_area"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())

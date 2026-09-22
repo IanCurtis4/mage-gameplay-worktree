@@ -8,6 +8,7 @@ signal arrow_rain_requested(center: Vector2, request: DamageRequest)
 signal snare_trap_requested(center: Vector2, root_duration: float)
 signal explosive_trap_requested(center: Vector2, request: DamageRequest)
 signal slowing_arrow_requested(request: DamageRequest, direction: Vector2, slow_fraction: float, slow_duration: float)
+signal foliage_shelter_requested(center: Vector2, duration: float)
 signal fire_wall_requested(direction: Vector2, burn_request: DamageRequest)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
@@ -31,6 +32,7 @@ const ARCHER_BASIC_MAX_DISTANCE := 520.0
 const PIERCING_ARROW_MAX_HITS := 3
 const EXTENDED_AIM_RANGE_BONUS := 120.0
 const SLOWING_ARROW_SLOW_FRACTION := 0.35
+const CONCEALMENT_REVEAL_DURATION := 1.25
 
 var navigation: ArenaNavigation
 var run_state: RunState
@@ -65,15 +67,18 @@ var active_cast_skill: StringName = &""
 var active_cast_remaining := 0.0
 var active_cast_total := 0.0
 var extended_aim_remaining := 0.0
+var concealment_reveal_remaining := 0.0
 var _active_cast_point := Vector2.ZERO
 var _active_cast_target_id: int = 0
 var _active_cast_direction := Vector2.RIGHT
 var _rank_definitions: Dictionary[StringName, SkillRankDefinition] = {}
+var _foliage_shelters: Dictionary[int, Dictionary] = {}
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
 	run_state = state
 	extended_aim_remaining = 0.0
+	clear_foliage_shelters()
 	class_id = run_state.class_id
 	class_definition = ClassCatalog.class_definition(class_id)
 	_capture_rank_definitions()
@@ -141,6 +146,7 @@ func use_slash(direction: Vector2, enemies: Array[CombatActor]) -> bool:
 		return false
 	var facing := _resolved_facing(direction)
 	_spend(&"slash")
+	reveal_from_offense()
 	_slash_visual_time = 0.20
 	_slash_facing = facing
 	_slash_origin = global_position
@@ -180,6 +186,7 @@ func use_fireball(direction: Vector2) -> bool:
 		return false
 	var facing := _resolved_facing(direction)
 	_spend(&"fireball")
+	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"fireball")
 	var request := _make_magic_request(null, &"fireball", _magic_power(&"fireball"), definition.accuracy_mode, definition.can_crit)
 	mage_projectile_requested.emit(&"fireball", request, null, facing, 1)
@@ -192,6 +199,7 @@ func use_fire_wall(direction: Vector2) -> bool:
 		return false
 	var facing := _resolved_facing(direction)
 	_spend(&"fire_wall")
+	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"fire_wall")
 	var request := _make_magic_request(null, &"fire_wall", _magic_power(&"fire_wall"), definition.accuracy_mode, definition.can_crit)
 	fire_wall_requested.emit(facing, request)
@@ -203,6 +211,7 @@ func use_spear(skill_id: StringName, enemy: CombatActor) -> bool:
 		return false
 	var facing := _resolved_facing(global_position.direction_to(enemy.global_position))
 	_spend(skill_id)
+	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var request := _make_magic_request(enemy, skill_id, _magic_power(skill_id), definition.accuracy_mode, definition.can_crit)
 	var count := run_state.projectile_count(skill_id)
@@ -216,6 +225,7 @@ func use_double_shot(direction: Vector2) -> bool:
 		return false
 	var facing := _resolved_facing(direction)
 	_spend(&"double_shot")
+	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"double_shot")
 	var power := stat_breakdown.value(&"precision_attack") * rank_definition.power
 	var request := _make_physical_request(null, &"double_shot", power, definition.accuracy_mode, definition.can_crit)
@@ -229,6 +239,7 @@ func use_piercing_arrow(direction: Vector2) -> bool:
 		return false
 	var facing := _resolved_facing(direction)
 	_spend(&"piercing_arrow")
+	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"piercing_arrow")
 	var power := stat_breakdown.value(&"precision_attack") * rank_definition.power
 	var request := _make_physical_request(null, &"piercing_arrow", power, definition.accuracy_mode, definition.can_crit)
@@ -242,6 +253,7 @@ func use_arrow_rain(point: Vector2) -> bool:
 		return false
 	var center := arrow_rain_center(point)
 	_spend(&"arrow_rain")
+	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"arrow_rain")
 	var volley_power := stat_breakdown.value(&"precision_attack") * rank_definition.power / float(ArrowRain.VOLLEY_COUNT)
 	var request := _make_physical_request(null, &"arrow_rain", volley_power, definition.accuracy_mode, definition.can_crit)
@@ -282,6 +294,7 @@ func use_snare_trap(point: Vector2) -> bool:
 		return false
 	var center := snare_trap_center(point)
 	_spend(&"snare_trap")
+	reveal_from_offense()
 	snare_trap_requested.emit(center, rank_definition.power)
 	presentation_action.emit(&"cast", aim_direction(center), 0.18)
 	resources_changed.emit()
@@ -299,6 +312,7 @@ func use_explosive_trap(point: Vector2) -> bool:
 		return false
 	var center := explosive_trap_center(point)
 	_spend(&"explosive_trap")
+	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"explosive_trap")
 	var power := stat_breakdown.value(&"precision_attack") * rank_definition.power
 	var request := _make_physical_request(null, &"explosive_trap", power, definition.accuracy_mode, definition.can_crit)
@@ -313,12 +327,83 @@ func use_slowing_arrow(direction: Vector2) -> bool:
 		return false
 	var facing := _resolved_facing(direction)
 	_spend(&"slowing_arrow")
+	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"slowing_arrow")
 	var power := stat_breakdown.value(&"precision_attack") * definition.power
 	var request := _make_physical_request(null, &"slowing_arrow", power, definition.accuracy_mode, definition.can_crit)
 	slowing_arrow_requested.emit(request, facing, SLOWING_ARROW_SLOW_FRACTION, rank_definition.power)
 	resources_changed.emit()
 	return true
+
+func foliage_shelter_center(point: Vector2) -> Vector2:
+	var offset := point - global_position
+	var maximum_range := skill_range(&"foliage_shelter")
+	if offset.length() > maximum_range:
+		offset = offset.normalized() * maximum_range
+	return global_position + offset
+
+func can_place_foliage_shelter(point: Vector2) -> bool:
+	return skill_range(&"foliage_shelter") > 0.0 and navigation != null and navigation.is_walkable(foliage_shelter_center(point))
+
+func use_foliage_shelter(point: Vector2) -> bool:
+	var rank_definition := _runtime_rank_definition(&"foliage_shelter")
+	if class_id != &"archer" or rank_definition == null or not _can_spend(&"foliage_shelter") or not can_place_foliage_shelter(point):
+		return false
+	var center := foliage_shelter_center(point)
+	_spend(&"foliage_shelter")
+	foliage_shelter_requested.emit(center, rank_definition.power)
+	presentation_action.emit(&"cast", aim_direction(center), 0.18)
+	resources_changed.emit()
+	return true
+
+func register_foliage_shelter(source_id: int, center: Vector2, radius: float) -> bool:
+	if source_id <= 0 or not center.is_finite() or not is_finite(radius) or radius <= 0.0:
+		return false
+	_foliage_shelters[source_id] = {"center": center, "radius": radius}
+	queue_redraw()
+	return true
+
+func unregister_foliage_shelter(source_id: int) -> bool:
+	if not _foliage_shelters.erase(source_id):
+		return false
+	if _foliage_shelters.is_empty():
+		concealment_reveal_remaining = 0.0
+	queue_redraw()
+	return true
+
+func clear_foliage_shelters() -> void:
+	_foliage_shelters.clear()
+	concealment_reveal_remaining = 0.0
+	queue_redraw()
+
+func is_concealed() -> bool:
+	return is_alive() and concealment_reveal_remaining <= 0.0 and not _containing_foliage_shelters().is_empty()
+
+func can_be_acquired_by(observer_position: Vector2) -> bool:
+	if not is_alive():
+		return false
+	var containing := _containing_foliage_shelters()
+	if concealment_reveal_remaining > 0.0 or containing.is_empty():
+		return true
+	for shelter: Dictionary in containing:
+		if observer_position.distance_to(shelter["center"]) <= float(shelter["radius"]):
+			return true
+	return false
+
+func reveal_from_offense(duration: float = CONCEALMENT_REVEAL_DURATION) -> bool:
+	if _foliage_shelters.is_empty() or duration <= 0.0:
+		return false
+	concealment_reveal_remaining = maxf(concealment_reveal_remaining, duration)
+	queue_redraw()
+	return true
+
+func _containing_foliage_shelters() -> Array[Dictionary]:
+	var containing: Array[Dictionary] = []
+	for raw_source_id: Variant in _foliage_shelters:
+		var shelter: Dictionary = _foliage_shelters[raw_source_id]
+		if global_position.distance_to(shelter["center"]) <= float(shelter["radius"]):
+			containing.append(shelter)
+	return containing
 
 func begin_skill_cast(skill_id: StringName, point: Vector2, enemy: CombatActor = null) -> bool:
 	var definition := ClassCatalog.skill_definition(skill_id)
@@ -488,6 +573,9 @@ func _process(delta: float) -> void:
 		if previous_extended_aim > 0.0 and extended_aim_remaining <= 0.0:
 			resources_changed.emit()
 		queue_redraw()
+	if concealment_reveal_remaining > 0.0:
+		concealment_reveal_remaining = maxf(0.0, concealment_reveal_remaining - delta)
+		queue_redraw()
 	if _slash_visual_time > 0.0:
 		_slash_visual_time = maxf(0.0, _slash_visual_time - delta)
 		queue_redraw()
@@ -589,6 +677,7 @@ func _try_basic_attack() -> void:
 	_basic_facing = _last_facing
 	_basic_origin = global_position + Vector2(0, -18)
 	_basic_visual_radius = maxf(12.0, global_position.distance_to(target.global_position))
+	reveal_from_offense()
 	queue_redraw()
 	var request: DamageRequest
 	if is_mage():
@@ -715,6 +804,7 @@ func _move_step(delta: float) -> void:
 func _on_health_died(actor_id: int) -> void:
 	cancel_active_cast()
 	extended_aim_remaining = 0.0
+	clear_foliage_shelters()
 	velocity = Vector2.ZERO
 	_path.clear()
 	target = null
@@ -747,6 +837,9 @@ func _build_stat_breakdown() -> StatBreakdown:
 
 func _draw() -> void:
 	super._draw()
+	if is_concealed():
+		draw_circle(Vector2(0, -18), collision_radius + 10.0, Color(0.20, 0.48, 0.22, 0.12))
+		draw_arc(Vector2(0, -18), collision_radius + 10.0, 0.0, TAU, 36, Color(0.48, 0.78, 0.38, 0.85), 2.0, true)
 	if has_extended_aim():
 		draw_circle(Vector2(0, -18), collision_radius + 13.0, Color(0.67, 0.89, 0.44, 0.10))
 		draw_arc(Vector2(0, -18), collision_radius + 13.0, 0.0, TAU, 36, Color(0.75, 0.95, 0.50, 0.8), 2.0, true)

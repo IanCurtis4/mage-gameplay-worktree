@@ -101,6 +101,7 @@ func _ready() -> void:
 	player.snare_trap_requested.connect(_on_snare_trap_requested)
 	player.explosive_trap_requested.connect(_on_explosive_trap_requested)
 	player.slowing_arrow_requested.connect(_on_slowing_arrow_requested)
+	player.foliage_shelter_requested.connect(_on_foliage_shelter_requested)
 	player.fire_wall_requested.connect(_on_fire_wall_requested)
 	player.skill_cast_ready.connect(_on_skill_cast_ready)
 	player.status_damage_requested.connect(_on_attack_requested)
@@ -280,6 +281,12 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.SLOWING_ARROW:
 		if not player.use_slowing_arrow(direction):
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.FOLIAGE_SHELTER:
+		if not player.use_foliage_shelter(point):
+			if not player.can_place_foliage_shelter(point):
+				status_label.text = "Abrigo de Folhagem cancelado — POSIÇÃO BLOQUEADA"
+			else:
+				_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 
 func _report_skill_failure(skill: StringName, selected_target: CombatActor = null) -> void:
 	var definition := ClassCatalog.skill_definition(skill)
@@ -328,6 +335,8 @@ func _update_aim(point: Vector2) -> void:
 	elif skill == &"snare_trap" and not player.can_place_snare_trap(point):
 		state = "POSIÇÃO BLOQUEADA"
 	elif skill == &"explosive_trap" and not player.can_place_explosive_trap(point):
+		state = "POSIÇÃO BLOQUEADA"
+	elif skill == &"foliage_shelter" and not player.can_place_foliage_shelter(point):
 		state = "POSIÇÃO BLOQUEADA"
 	if _world_pointer_available():
 		battle_indicators.show_aim(skill, player, point, state == "PRONTO", selected_target)
@@ -490,6 +499,12 @@ func _on_slowing_arrow_hit(request: DamageRequest, target_actor: CombatActor, sl
 	if target_actor.is_alive():
 		target_actor.apply_slow(slow_fraction, slow_duration)
 
+func _on_foliage_shelter_requested(center: Vector2, duration: float) -> void:
+	var shelter := FoliageShelter.new()
+	add_child(shelter)
+	shelter.configure(player, center, duration)
+	shelter.add_to_group("player_effects")
+
 func _on_mage_projectile_hit(request: DamageRequest, target_actor: CombatActor) -> void:
 	if target_actor == null or not target_actor.is_alive():
 		return
@@ -533,7 +548,10 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	trap_registry.clear_all(&"encounter_end")
 	for group_name: StringName in [&"enemy_projectiles", &"player_projectiles", &"player_effects"]:
 		for runtime_node: Node in get_tree().get_nodes_in_group(group_name):
-			runtime_node.queue_free()
+			if runtime_node is FoliageShelter:
+				(runtime_node as FoliageShelter).expire(&"encounter_end")
+			else:
+				runtime_node.queue_free()
 	reward = RewardPickup.new()
 	reward.global_position = Vector2(880, 500)
 	reward.process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -648,6 +666,10 @@ func _show_result(victory: bool) -> void:
 	_clear_hover()
 	if trap_registry != null:
 		trap_registry.clear_all(&"run_end")
+	player.clear_foliage_shelters()
+	for shelter: Node in get_tree().get_nodes_in_group("foliage_shelters"):
+		if shelter is FoliageShelter:
+			(shelter as FoliageShelter).expire(&"run_end")
 	run_finished = true
 	_terminal_outcome = &"completed" if victory else &"death"
 	result_title.text = "Arena concluída!" if victory else "Você caiu em combate"

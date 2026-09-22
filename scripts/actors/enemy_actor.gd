@@ -12,6 +12,7 @@ var attack_cooldown := 0.0
 var _path := PackedVector2Array()
 var _path_index := 0
 var _repath_time := 0.0
+var player_target_acquired := false
 
 func configure(enemy_type: StringName, nav: ArenaNavigation, target_player: PlayerActor) -> void:
 	archetype = enemy_type
@@ -34,12 +35,17 @@ func configure(enemy_type: StringName, nav: ArenaNavigation, target_player: Play
 		setup("Guerreiro", Color("c65a68"), chaser_stats, 19.0)
 		set_animation_kind(&"warrior")
 	process_mode = Node.PROCESS_MODE_PAUSABLE
+	_refresh_player_acquisition()
 
 func _process(delta: float) -> void:
 	super._process(delta)
 	if not is_alive() or player == null or not player.is_alive():
 		return
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
+	if not _refresh_player_acquisition():
+		_path.clear()
+		_path_index = 0
+		return
 	_repath_time -= delta
 	var distance := global_position.distance_to(player.global_position)
 	if archetype == &"archer":
@@ -58,7 +64,7 @@ func _process(delta: float) -> void:
 	_move_along_path(delta)
 
 func _try_attack(ranged: bool) -> void:
-	if attack_cooldown > 0.0:
+	if attack_cooldown > 0.0 or not player_target_acquired or not player.can_be_acquired_by(global_position):
 		return
 	attack_cooldown = 1.70 if ranged else 1.30
 	var request := DamageRequest.new()
@@ -74,6 +80,10 @@ func _try_attack(ranged: bool) -> void:
 	request.can_crit = false
 	presentation_action.emit(&"basic_attack", global_position.direction_to(player.global_position), 0.18)
 	attack_requested.emit(request, player, ranged)
+
+func _refresh_player_acquisition() -> bool:
+	player_target_acquired = player != null and is_instance_valid(player) and player.can_be_acquired_by(global_position)
+	return player_target_acquired
 
 func _update_path(destination: Vector2) -> void:
 	if _repath_time > 0.0:
