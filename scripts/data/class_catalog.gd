@@ -17,6 +17,22 @@ static func skill_ids(class_id: StringName) -> Array[StringName]:
 	var definition := class_definition(class_id)
 	return definition.skill_ids.duplicate() if definition != null else []
 
+static func passive_modifier_source(skill_id: StringName, rank: int) -> Dictionary:
+	var definition := skill_definition(skill_id)
+	if definition == null or definition.category != SkillDefinition.Category.PASSIVE:
+		return {}
+	var rank_definition := definition.rank_definition(rank)
+	if rank_definition == null:
+		return {}
+	match definition.handler_id:
+		SkillDefinition.Handler.SWORDSMAN_RESISTANCE:
+			return {
+				"source_id": &"passive_swordsman_resistance",
+				"label": "Resistência do Espadachim",
+				"increased": {&"physical_defense": rank_definition.power},
+			}
+	return {}
+
 static func _ensure_built() -> void:
 	if not _classes.is_empty():
 		return
@@ -27,8 +43,10 @@ static func _ensure_built() -> void:
 	_add_skill(&"fire_spear", "Lança de Fogo", "A", SkillDefinition.Targeting.SINGLE_TARGET, 16.0, 3.0, 1.35, 360.0, 760.0, 0.22, DamageRequest.AccuracyMode.CONTESTED, true)
 	_add_skill(&"ice_spear", "Lança de Gelo", "S", SkillDefinition.Targeting.SINGLE_TARGET, 14.0, 3.0, 1.10, 360.0, 760.0, 0.22, DamageRequest.AccuracyMode.CONTESTED, true)
 	_add_skill(&"teleport", "Teleporte", "D", SkillDefinition.Targeting.POINT, 22.0, 6.0, 0.0, 320.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
+	_add_passive_skill(&"swordsman_resistance", "Resistência")
 	_configure_slash_ranks()
 	_configure_dash_ranks()
+	_configure_swordsman_resistance_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -79,6 +97,13 @@ static func _add_skill(
 	definition.projectile_speed = projectile_speed
 	_skills[skill_id] = definition
 
+static func _add_passive_skill(skill_id: StringName, display_name: String) -> void:
+	var definition := SkillDefinition.new()
+	definition.id = skill_id
+	definition.display_name = display_name
+	definition.category = SkillDefinition.Category.PASSIVE
+	_skills[skill_id] = definition
+
 static func _configure_slash_ranks() -> void:
 	var definition: SkillDefinition = _skills[&"slash"]
 	definition.category = SkillDefinition.Category.ACTIVE
@@ -107,5 +132,17 @@ static func _configure_dash_ranks() -> void:
 		rank.sp_cost = 20.0
 		rank.cooldown = cooldowns[index]
 		rank.range = 270.0
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_swordsman_resistance_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"swordsman_resistance"]
+	definition.handler_id = SkillDefinition.Handler.SWORDSMAN_RESISTANCE
+	var defense_increases: Array[float] = [0.50, 0.75, 1.00]
+	for index: int in defense_increases.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.power = defense_increases[index]
+		rank.effect_ids = [&"physical_defense_increased"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
