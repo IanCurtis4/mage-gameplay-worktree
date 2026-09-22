@@ -42,6 +42,10 @@ func _process(delta: float) -> void:
 	if not is_alive() or player == null or not player.is_alive():
 		return
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
+	if is_stunned():
+		_path.clear()
+		_path_index = 0
+		return
 	if not _refresh_player_acquisition():
 		_path.clear()
 		_path_index = 0
@@ -64,7 +68,7 @@ func _process(delta: float) -> void:
 	_move_along_path(delta)
 
 func _try_attack(ranged: bool) -> void:
-	if attack_cooldown > 0.0 or not player_target_acquired or not player.can_be_acquired_by(global_position):
+	if is_stunned() or attack_cooldown > 0.0 or not player_target_acquired or not player.can_be_acquired_by(global_position):
 		return
 	attack_cooldown = 1.70 if ranged else 1.30
 	var request := DamageRequest.new()
@@ -93,7 +97,7 @@ func _update_path(destination: Vector2) -> void:
 	_repath_time = 0.45
 
 func _move_along_path(delta: float) -> void:
-	if is_rooted():
+	if is_rooted() or is_stunned():
 		return
 	var remaining_distance := stat_breakdown.value(&"move_speed") * movement_speed_multiplier() * delta
 	while remaining_distance > 0.0 and _path_index < _path.size():

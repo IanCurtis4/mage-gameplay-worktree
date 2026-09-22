@@ -3,6 +3,7 @@ extends CombatActor
 
 signal attack_requested(request: DamageRequest, target: CombatActor)
 signal mage_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int)
+signal discharge_requested(request: DamageRequest, direction: Vector2, bonus_magic_damage: float)
 signal precision_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int, hit_limit: int)
 signal arrow_rain_requested(center: Vector2, request: DamageRequest)
 signal snare_trap_requested(center: Vector2, root_duration: float)
@@ -33,6 +34,7 @@ const PIERCING_ARROW_MAX_HITS := 3
 const EXTENDED_AIM_RANGE_BONUS := 120.0
 const SLOWING_ARROW_SLOW_FRACTION := 0.35
 const CONCEALMENT_REVEAL_DURATION := 1.25
+const DISCHARGE_MARK_BONUS_WEIGHT := 0.45
 
 var navigation: ArenaNavigation
 var run_state: RunState
@@ -228,6 +230,19 @@ func use_lightning(enemy: CombatActor) -> bool:
 	var definition := ClassCatalog.skill_definition(&"lightning")
 	var request := _make_magic_request(enemy, &"lightning", _magic_power(&"lightning"), definition.accuracy_mode, definition.can_crit)
 	mage_projectile_requested.emit(&"lightning", request, enemy, facing, 1)
+	resources_changed.emit()
+	return true
+
+func use_electric_discharge(direction: Vector2) -> bool:
+	if class_id != &"mage" or _runtime_rank_definition(&"electric_discharge") == null or not _can_spend(&"electric_discharge"):
+		return false
+	var facing := _resolved_facing(direction)
+	_spend(&"electric_discharge")
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(&"electric_discharge")
+	var request := _make_magic_request(null, &"electric_discharge", _magic_power(&"electric_discharge"), definition.accuracy_mode, definition.can_crit)
+	var bonus_magic_damage := stat_breakdown.value(&"magic_attack") * DISCHARGE_MARK_BONUS_WEIGHT
+	discharge_requested.emit(request, facing, bonus_magic_damage)
 	resources_changed.emit()
 	return true
 

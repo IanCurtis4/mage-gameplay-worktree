@@ -2,6 +2,8 @@ class_name MageProjectile
 extends PlayerProjectile
 ## Mage-specific impact modifiers and presentation over shared projectile collision.
 
+var electrified_bonus_magic_damage := 0.0
+
 func _init() -> void:
 	projectile_radius = 6.0
 
@@ -11,9 +13,11 @@ func _prepare_impact(victim: CombatActor) -> void:
 		request.force_critical = true
 	elif request.skill_id == &"fire_spear" and victim.is_burning():
 		request.magic_damage *= 1.5
+	elif request.skill_id == &"electric_discharge" and victim.is_electrified():
+		request.magic_damage += electrified_bonus_magic_damage
 
 func _draw() -> void:
-	if request != null and request.skill_id == &"lightning":
+	if request != null and request.skill_id in [&"lightning", &"electric_discharge"]:
 		draw_polyline(PackedVector2Array([Vector2(-18, -5), Vector2(-8, 2), Vector2(-2, -5), Vector2(5, 3), Vector2(16, 0)]), color, 3.0, true)
 		return
 	if request != null and request.skill_id in [&"fire_spear", &"ice_spear"]:

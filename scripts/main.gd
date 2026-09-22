@@ -96,6 +96,7 @@ func _ready() -> void:
 	player.global_position = Vector2(300, 520)
 	player.attack_requested.connect(_on_attack_requested)
 	player.mage_projectile_requested.connect(_on_mage_projectile_requested)
+	player.discharge_requested.connect(_on_discharge_requested)
 	player.precision_projectile_requested.connect(_on_precision_projectile_requested)
 	player.arrow_rain_requested.connect(_on_arrow_rain_requested)
 	player.snare_trap_requested.connect(_on_snare_trap_requested)
@@ -249,6 +250,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.LIGHTNING:
 		if not player.use_lightning(selected_target):
 			_report_skill_failure(skill, selected_target)
+	elif definition.handler_id == SkillDefinition.Handler.ELECTRIC_DISCHARGE:
+		if not player.use_electric_discharge(direction):
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif definition.handler_id == SkillDefinition.Handler.TELEPORT:
 		if not player.use_teleport(point):
 			if not player.can_teleport(point):
@@ -454,6 +458,27 @@ func _on_mage_projectile_requested(skill_id: StringName, request: DamageRequest,
 
 func _on_precision_projectile_requested(skill_id: StringName, request: DamageRequest, _target_actor: CombatActor, direction: Vector2, count: int, hit_limit: int) -> void:
 	_spawn_precision_projectiles(skill_id, request, direction, count, hit_limit, _on_precision_projectile_hit)
+
+func _on_discharge_requested(request: DamageRequest, direction: Vector2, bonus_magic_damage: float) -> void:
+	var projectile := MageProjectile.new()
+	var origin := player.global_position + PlayerProjectile.BODY_OFFSET
+	projectile.configure_directional(request.copy(), origin, direction, enemies, navigation, player.skill_projectile_speed(&"electric_discharge"), player.skill_range(&"electric_discharge"), 1, Color("ffe37a"))
+	projectile.electrified_bonus_magic_damage = bonus_magic_damage
+	projectile.hit.connect(_on_discharge_hit)
+	add_child(projectile)
+	projectile.add_to_group("player_projectiles")
+
+func _on_discharge_hit(request: DamageRequest, target_actor: CombatActor) -> void:
+	if target_actor == null or not target_actor.is_alive():
+		return
+	var marked := target_actor.is_electrified()
+	var result := target_actor.apply_damage(request, rng)
+	if result.is_empty() or not bool(result["landed"]) or float(result["actual_damage"]) <= 0.0 or not marked:
+		return
+	target_actor.consume_electrified()
+	var stun_roll := rng.randf()
+	if target_actor.is_alive() and stun_roll < 0.25:
+		target_actor.apply_stun(0.6)
 
 func _spawn_precision_projectiles(skill_id: StringName, request: DamageRequest, direction: Vector2, count: int, hit_limit: int, hit_callback: Callable, visual_color: Color = Color("f6dfad")) -> void:
 	for index: int in range(count):

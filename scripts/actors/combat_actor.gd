@@ -80,6 +80,13 @@ func is_burning() -> bool:
 func is_electrified() -> bool:
 	return electrified_remaining > 0.0
 
+func consume_electrified() -> bool:
+	if not is_electrified():
+		return false
+	electrified_remaining = 0.0
+	queue_redraw()
+	return true
+
 func apply_electrified(duration: float) -> void:
 	if not is_alive() or duration <= 0.0:
 		return
@@ -128,6 +135,20 @@ func is_rooted() -> bool:
 func root_remaining() -> float:
 	return hard_controls.remaining(&"root")
 
+func apply_stun(base_duration: float) -> float:
+	if not is_alive():
+		return 0.0
+	var applied_duration := hard_controls.apply(&"stun", base_duration, stat_breakdown.value(&"magic_cc_resistance"))
+	if applied_duration > 0.0:
+		queue_redraw()
+	return applied_duration
+
+func is_stunned() -> bool:
+	return hard_controls.is_active(&"stun")
+
+func stun_remaining() -> float:
+	return hard_controls.remaining(&"stun")
+
 func set_unstoppable(duration: float) -> bool:
 	var changed := hard_controls.set_unstoppable(duration)
 	if changed:
@@ -151,8 +172,9 @@ func advance_statuses(delta: float, simulation_paused: bool = false) -> void:
 	if simulation_paused or not is_alive() or delta <= 0.0:
 		return
 	var was_rooted := is_rooted()
+	var was_stunned := is_stunned()
 	hard_controls.advance(delta)
-	if was_rooted != is_rooted():
+	if was_rooted != is_rooted() or was_stunned != is_stunned():
 		queue_redraw()
 	if slow_remaining > 0.0:
 		slow_remaining = maxf(0.0, slow_remaining - delta)
@@ -236,6 +258,8 @@ func _draw() -> void:
 			draw_polyline(PackedVector2Array([Vector2(x, -34), Vector2(x - side * 5.0, -24), Vector2(x + side * 2.0, -24), Vector2(x - side * 4.0, -13)]), Color("e9d76a"), 2.5, true)
 	if is_rooted():
 		draw_arc(Vector2(0, 7), collision_radius + 12.0, 0.0, TAU, 24, Color("d9bd72"), 3.0, true)
+	if is_stunned():
+		draw_arc(Vector2(0, -18), collision_radius + 13.0, -PI * 0.9, -PI * 0.1, 20, Color("f9e585"), 3.0, true)
 
 func _draw_target_ring(radius: float, color: Color, width: float) -> void:
 	var points := PackedVector2Array()

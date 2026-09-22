@@ -76,6 +76,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"fire_spear", "Lança de Fogo", "A", SkillDefinition.Targeting.SINGLE_TARGET, 16.0, 3.0, 1.35, 360.0, 760.0, 0.22, DamageRequest.AccuracyMode.CONTESTED, true)
 	_add_skill(&"ice_spear", "Lança de Gelo", "S", SkillDefinition.Targeting.SINGLE_TARGET, 14.0, 3.0, 1.10, 360.0, 760.0, 0.22, DamageRequest.AccuracyMode.CONTESTED, true)
 	_add_skill(&"lightning", "Relâmpago", "D", SkillDefinition.Targeting.SINGLE_TARGET, 16.0, 4.0, 1.25, 380.0, 820.0, 0.26, DamageRequest.AccuracyMode.CONTESTED, true)
+	_add_skill(&"electric_discharge", "Descarga Elétrica", "D", SkillDefinition.Targeting.DIRECTION, 18.0, 5.0, 1.10, 560.0, 800.0, 0.30, DamageRequest.AccuracyMode.CONTESTED, true)
 	_add_skill(&"teleport", "Teleporte", "D", SkillDefinition.Targeting.POINT, 22.0, 6.0, 0.0, 320.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_skill(&"double_shot", "Disparo Duplo", "Q", SkillDefinition.Targeting.DIRECTION, 14.0, 4.0, 0.70, 520.0, 880.0, 0.0, DamageRequest.AccuracyMode.CONTESTED, true)
 	_add_skill(&"piercing_arrow", "Flecha Perfurante", "W", SkillDefinition.Targeting.DIRECTION, 18.0, 5.0, 1.05, 600.0, 920.0, 0.0, DamageRequest.AccuracyMode.CONTESTED, true)
@@ -98,6 +99,7 @@ static func _ensure_built() -> void:
 	_configure_fire_spear_ranks()
 	_configure_ice_spear_ranks()
 	_configure_lightning_ranks()
+	_configure_electric_discharge_ranks()
 	_configure_teleport_ranks()
 	_configure_mage_sp_regeneration_ranks()
 	_configure_double_shot_ranks()
@@ -316,6 +318,26 @@ static func _configure_lightning_ranks() -> void:
 		rank.magic_weight = 1.0
 		rank.projectile_speed = 820.0
 		rank.effect_ids = [&"electrified"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_electric_discharge_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"electric_discharge"]
+	definition.category = SkillDefinition.Category.ACTIVE
+	definition.handler_id = SkillDefinition.Handler.ELECTRIC_DISCHARGE
+	var powers: Array[float] = [1.10, 1.28, 1.44, 1.58, 1.70]
+	var costs: Array[float] = [18.0, 20.0, 22.0, 23.0, 24.0]
+	for index: int in powers.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.variable_cast_time = 0.30
+		rank.cooldown = 5.0
+		rank.range = 560.0
+		rank.power = powers[index]
+		rank.magic_weight = 1.0
+		rank.projectile_speed = 800.0
+		rank.effect_ids = [&"electrified_detonation"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
 
