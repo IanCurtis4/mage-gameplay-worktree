@@ -477,12 +477,12 @@ func _on_arrow_rain_requested(center: Vector2, request: DamageRequest) -> void:
 
 func _on_snare_trap_requested(center: Vector2, root_duration: float) -> void:
 	var trap := SnareTrap.new()
-	trap.configure_snare(player.get_instance_id(), center, root_duration, enemies)
+	trap.configure_snare(player.get_instance_id(), center, root_duration, enemies, player.trap_armed_duration(SnareTrap.ARMED_DURATION))
 	trap_registry.register_trap(trap)
 
 func _on_explosive_trap_requested(center: Vector2, request: DamageRequest) -> void:
 	var trap := ExplosiveTrap.new()
-	trap.configure_explosive(player.get_instance_id(), center, request, enemies)
+	trap.configure_explosive(player.get_instance_id(), center, request, enemies, player.trap_armed_duration(ExplosiveTrap.ARMED_DURATION))
 	trap.hit.connect(_on_precision_projectile_hit)
 	trap_registry.register_trap(trap)
 

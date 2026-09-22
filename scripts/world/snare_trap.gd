@@ -13,12 +13,12 @@ var root_duration := 0.0
 var applied_root_duration := 0.0
 var _targets: Array[CombatActor] = []
 
-func configure_snare(trap_owner_id: int, placement: Vector2, duration: float, targets: Array[CombatActor]) -> void:
+func configure_snare(trap_owner_id: int, placement: Vector2, duration: float, targets: Array[CombatActor], armed_lifetime: float = ARMED_DURATION) -> void:
 	assert(is_finite(duration) and duration > 0.0)
 	root_duration = duration
 	_targets = targets.duplicate()
 	triggered.connect(_on_triggered)
-	configure(trap_owner_id, &"snare_trap", placement, TRIGGER_RADIUS, ARMING_TIME, ARMED_DURATION)
+	configure(trap_owner_id, &"snare_trap", placement, TRIGGER_RADIUS, ARMING_TIME, armed_lifetime)
 
 func _process(delta: float) -> void:
 	super._process(delta)

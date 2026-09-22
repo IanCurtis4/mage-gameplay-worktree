@@ -282,6 +282,9 @@ func trap_center(skill_id: StringName, point: Vector2) -> Vector2:
 func can_place_trap(skill_id: StringName, point: Vector2) -> bool:
 	return skill_id in [&"snare_trap", &"explosive_trap"] and skill_range(skill_id) > 0.0 and navigation != null and navigation.is_walkable(trap_center(skill_id, point))
 
+func trap_armed_duration(base_duration: float) -> float:
+	return run_state.build_snapshot.trap_armed_duration(base_duration)
+
 func snare_trap_center(point: Vector2) -> Vector2:
 	return trap_center(&"snare_trap", point)
 

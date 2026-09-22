@@ -13,13 +13,13 @@ const ARMED_DURATION := 12.0
 var damage_request: DamageRequest
 var _targets: Array[CombatActor] = []
 
-func configure_explosive(trap_owner_id: int, placement: Vector2, request: DamageRequest, targets: Array[CombatActor]) -> void:
+func configure_explosive(trap_owner_id: int, placement: Vector2, request: DamageRequest, targets: Array[CombatActor], armed_lifetime: float = ARMED_DURATION) -> void:
 	assert(request != null)
 	assert(request.skill_id == &"explosive_trap")
 	damage_request = request.copy()
 	_targets = targets.duplicate()
 	triggered.connect(_on_triggered)
-	configure(trap_owner_id, &"explosive_trap", placement, TRIGGER_RADIUS, ARMING_TIME, ARMED_DURATION)
+	configure(trap_owner_id, &"explosive_trap", placement, TRIGGER_RADIUS, ARMING_TIME, armed_lifetime)
 
 func _process(delta: float) -> void:
 	super._process(delta)

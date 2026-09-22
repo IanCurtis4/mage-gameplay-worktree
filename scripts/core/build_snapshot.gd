@@ -85,3 +85,28 @@ func intrinsic_modifier_sources() -> Array[Dictionary]:
 		if not source.is_empty():
 			sources.append(source)
 	return sources
+
+func intrinsic_rule_sources() -> Array[Dictionary]:
+	var sources: Array[Dictionary] = []
+	var seen: Dictionary[StringName, bool] = {}
+	for raw_passive_id: Variant in passive_slots:
+		if raw_passive_id == null:
+			continue
+		var passive_id := StringName(raw_passive_id)
+		if seen.has(passive_id):
+			continue
+		seen[passive_id] = true
+		var source := ClassCatalog.passive_rule_source(
+			passive_id,
+			int(skill_ranks.get(passive_id, 0))
+		)
+		if not source.is_empty():
+			sources.append(source)
+	return sources
+
+func trap_armed_duration(base_duration: float) -> float:
+	assert(is_finite(base_duration) and base_duration > 0.0)
+	var bonus := 0.0
+	for source: Dictionary in intrinsic_rule_sources():
+		bonus += float(source.get("armed_duration_bonus", 0.0))
+	return base_duration + bonus

@@ -51,6 +51,21 @@ static func passive_modifier_source(skill_id: StringName, rank: int) -> Dictiona
 			}
 	return {}
 
+static func passive_rule_source(skill_id: StringName, rank: int) -> Dictionary:
+	var definition := skill_definition(skill_id)
+	if definition == null or definition.category != SkillDefinition.Category.PASSIVE:
+		return {}
+	var rank_definition := definition.rank_definition(rank)
+	if rank_definition == null:
+		return {}
+	if definition.handler_id == SkillDefinition.Handler.TRAP_TECHNIQUE:
+		return {
+			"source_id": &"passive_trap_technique",
+			"label": "Técnica de Armadilhas do Arqueiro",
+			"armed_duration_bonus": rank_definition.power,
+		}
+	return {}
+
 static func _ensure_built() -> void:
 	if not _classes.is_empty():
 		return
@@ -73,6 +88,7 @@ static func _ensure_built() -> void:
 	_add_passive_skill(&"mage_mana_regeneration", "Regeneração de SP")
 	_add_passive_skill(&"archer_precision", "Precisão")
 	_add_passive_skill(&"archer_cadence", "Cadência")
+	_add_passive_skill(&"trap_technique", "Técnica de Armadilhas")
 	_configure_slash_ranks()
 	_configure_dash_ranks()
 	_configure_swordsman_resistance_ranks()
@@ -92,6 +108,7 @@ static func _ensure_built() -> void:
 	_configure_foliage_shelter_ranks()
 	_configure_archer_precision_ranks()
 	_configure_archer_cadence_ranks()
+	_configure_trap_technique_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -467,5 +484,17 @@ static func _configure_archer_cadence_ranks() -> void:
 		rank.rank = index + 1
 		rank.power = cadence_increases[index]
 		rank.effect_ids = [&"attacks_per_second_increased"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_trap_technique_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"trap_technique"]
+	definition.handler_id = SkillDefinition.Handler.TRAP_TECHNIQUE
+	var armed_duration_bonuses: Array[float] = [3.0, 6.0, 9.0]
+	for index: int in armed_duration_bonuses.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.power = armed_duration_bonuses[index]
+		rank.effect_ids = [&"trap_armed_duration_flat"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
