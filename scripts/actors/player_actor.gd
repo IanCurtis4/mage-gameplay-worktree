@@ -159,7 +159,8 @@ func use_dash(direction: Vector2) -> bool:
 	return true
 
 func use_fireball(direction: Vector2) -> bool:
-	if class_id != &"mage" or not _can_spend(&"fireball"):
+	var rank_definition := _runtime_rank_definition(&"fireball")
+	if class_id != &"mage" or rank_definition == null or not _can_spend(&"fireball"):
 		return false
 	var facing := _resolved_facing(direction)
 	_spend(&"fireball")
@@ -194,13 +195,14 @@ func use_spear(skill_id: StringName, enemy: CombatActor) -> bool:
 
 func begin_skill_cast(skill_id: StringName, point: Vector2, enemy: CombatActor = null) -> bool:
 	var definition := ClassCatalog.skill_definition(skill_id)
-	if definition == null or definition.cast_time <= 0.0 or skill_id not in available_skill_ids() or not _can_spend(skill_id):
+	var cast_time := skill_cast_time(skill_id)
+	if definition == null or cast_time <= 0.0 or skill_id not in available_skill_ids() or not _can_spend(skill_id):
 		return false
 	if definition.targeting == SkillDefinition.Targeting.SINGLE_TARGET and not can_target_skill(skill_id, enemy):
 		return false
 	cancel_active_cast()
 	active_cast_skill = skill_id
-	active_cast_total = skill_cast_time(skill_id)
+	active_cast_total = cast_time
 	active_cast_remaining = active_cast_total
 	_active_cast_point = point
 	_active_cast_target_id = enemy.get_instance_id() if enemy != null else 0
@@ -298,6 +300,15 @@ func skill_range(skill_id: StringName) -> float:
 	if definition != null and not definition.ranks.is_empty():
 		return 0.0
 	return definition.range if definition != null else 0.0
+
+func skill_projectile_speed(skill_id: StringName) -> float:
+	var rank_definition := _runtime_rank_definition(skill_id)
+	if rank_definition != null:
+		return rank_definition.projectile_speed
+	var definition := ClassCatalog.skill_definition(skill_id)
+	if definition != null and not definition.ranks.is_empty():
+		return 0.0
+	return definition.projectile_speed if definition != null else 0.0
 
 func skill_rank(skill_id: StringName) -> int:
 	return int(run_state.skill_levels.get(skill_id, 0)) if run_state != null else 0
@@ -467,7 +478,10 @@ func _make_magic_request(enemy: CombatActor, skill_id: StringName, power: float,
 	return request
 
 func _magic_power(skill_id: StringName) -> float:
-	return stat_breakdown.value(&"magic_attack") * ClassCatalog.skill_definition(skill_id).power
+	var rank_definition := _runtime_rank_definition(skill_id)
+	var definition := ClassCatalog.skill_definition(skill_id)
+	var power := rank_definition.power if rank_definition != null else definition.power
+	return stat_breakdown.value(&"magic_attack") * power
 
 func _can_spend(skill_id: StringName) -> bool:
 	var definition := ClassCatalog.skill_definition(skill_id)

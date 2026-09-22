@@ -222,9 +222,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.DASH:
 		if not player.use_dash(direction):
 			_show_skill_blocked(definition.display_name, player.dash_cooldown, player.skill_cost(skill))
-	elif skill == &"fireball":
+	elif definition.handler_id == SkillDefinition.Handler.FIREBALL:
 		if not player.use_fireball(direction):
-			_show_skill_blocked("Bola de Fogo", player.skill_cooldown(skill), player.skill_cost(skill))
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif skill == &"fire_wall":
 		if not player.use_fire_wall(direction):
 			_show_skill_blocked("Parede de Fogo", player.skill_cooldown(skill), player.skill_cost(skill))
@@ -375,7 +375,7 @@ func _on_mage_projectile_requested(skill_id: StringName, request: DamageRequest,
 		var origin := player.global_position + Vector2(0, -18) + side_offset
 		var projectile_request := request.copy()
 		if skill_id == &"fireball":
-			projectile.configure_directional(projectile_request, origin, direction, enemies, navigation, definition.projectile_speed, definition.range)
+			projectile.configure_directional(projectile_request, origin, direction, enemies, navigation, player.skill_projectile_speed(skill_id), player.skill_range(skill_id))
 		else:
 			var speed := PlayerActor.MAGE_BASIC_SPEED if skill_id == &"basic_attack" else definition.projectile_speed
 			var max_distance := PlayerActor.MAGE_BASIC_MAX_DISTANCE if skill_id == &"basic_attack" else definition.range
