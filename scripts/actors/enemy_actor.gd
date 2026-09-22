@@ -83,6 +83,8 @@ func _update_path(destination: Vector2) -> void:
 	_repath_time = 0.45
 
 func _move_along_path(delta: float) -> void:
+	if is_rooted():
+		return
 	var remaining_distance := stat_breakdown.value(&"move_speed") * movement_speed_multiplier() * delta
 	while remaining_distance > 0.0 and _path_index < _path.size():
 		var point := _path[_path_index]

@@ -53,6 +53,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"piercing_arrow", "Flecha Perfurante", "W", SkillDefinition.Targeting.DIRECTION, 18.0, 5.0, 1.05, 600.0, 920.0, 0.0, DamageRequest.AccuracyMode.CONTESTED, true)
 	_add_skill(&"arrow_rain", "Chuva de Flechas", "A", SkillDefinition.Targeting.POINT, 22.0, 7.0, 1.80, 480.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, true)
 	_add_skill(&"extended_aim", "Mira Estendida", "S", SkillDefinition.Targeting.SELF, 16.0, 12.0, 4.0, 0.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
+	_add_skill(&"snare_trap", "Armadilha de Laço", "D", SkillDefinition.Targeting.POINT, 18.0, 8.0, 1.4, 360.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_passive_skill(&"swordsman_resistance", "Resistência")
 	_add_passive_skill(&"mage_mana_regeneration", "Regeneração de SP")
 	_configure_slash_ranks()
@@ -68,6 +69,7 @@ static func _ensure_built() -> void:
 	_configure_piercing_arrow_ranks()
 	_configure_arrow_rain_ranks()
 	_configure_extended_aim_ranks()
+	_configure_snare_trap_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -93,7 +95,7 @@ static func _ensure_built() -> void:
 	archer.id = IdentityIds.ARCHER
 	archer.display_name = "Arqueiro"
 	archer.attributes = IdentityIds.initial_attributes(IdentityIds.ARCHER)
-	archer.skill_ids = [&"double_shot", &"piercing_arrow", &"arrow_rain", &"extended_aim"]
+	archer.skill_ids = [&"double_shot", &"piercing_arrow", &"arrow_rain", &"extended_aim", &"snare_trap"]
 	archer.passive_id = &""
 	archer.basic_power = 1.0
 	archer.basic_range = 340.0
@@ -348,5 +350,22 @@ static func _configure_extended_aim_ranks() -> void:
 		rank.cooldown = 12.0
 		rank.power = durations[index]
 		rank.effect_ids = [&"extended_aim"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_snare_trap_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"snare_trap"]
+	definition.category = SkillDefinition.Category.ACTIVE
+	definition.handler_id = SkillDefinition.Handler.SNARE_TRAP
+	var durations: Array[float] = [1.4, 1.8, 2.2, 2.6, 3.0]
+	var costs: Array[float] = [18.0, 19.0, 20.0, 21.0, 22.0]
+	for index: int in durations.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 8.0
+		rank.range = 360.0
+		rank.power = durations[index]
+		rank.effect_ids = [&"physical_root"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())

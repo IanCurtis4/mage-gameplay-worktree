@@ -24,6 +24,7 @@ var burn_tick_remaining := 0.0
 var burn_request: DamageRequest
 var slow_remaining := 0.0
 var slow_fraction := 0.0
+var hard_controls := HardControlState.new()
 var character_animation: CharacterAnimation
 
 func set_animation_kind(kind: StringName) -> void:
@@ -52,6 +53,7 @@ func set_pilot_sprite(texture: Texture2D) -> void:
 
 func setup(display_name: String, color: Color, derived_stats: StatBreakdown, radius: float = 18.0) -> void:
 	assert(derived_stats != null)
+	hard_controls.configure(false)
 	actor_name = display_name
 	actor_color = color
 	stat_breakdown = derived_stats
@@ -95,6 +97,31 @@ func apply_slow(fraction: float, duration: float) -> void:
 	slow_remaining = maxf(slow_remaining, duration)
 	queue_redraw()
 
+func configure_hard_control_profile(is_boss: bool) -> void:
+	hard_controls.configure(is_boss)
+	queue_redraw()
+
+func apply_root(base_duration: float, control_tag: StringName = &"physical") -> float:
+	if not is_alive() or control_tag not in [&"physical", &"magic"]:
+		return 0.0
+	var resistance_id := &"physical_cc_resistance" if control_tag == &"physical" else &"magic_cc_resistance"
+	var applied_duration := hard_controls.apply(&"root", base_duration, stat_breakdown.value(resistance_id))
+	if applied_duration > 0.0:
+		queue_redraw()
+	return applied_duration
+
+func is_rooted() -> bool:
+	return hard_controls.is_active(&"root")
+
+func root_remaining() -> float:
+	return hard_controls.remaining(&"root")
+
+func set_unstoppable(duration: float) -> bool:
+	var changed := hard_controls.set_unstoppable(duration)
+	if changed:
+		queue_redraw()
+	return changed
+
 func movement_speed_multiplier() -> float:
 	return 1.0 - slow_fraction if slow_remaining > 0.0 else 1.0
 
@@ -104,11 +131,16 @@ func clear_statuses() -> void:
 	burn_request = null
 	slow_remaining = 0.0
 	slow_fraction = 0.0
+	hard_controls.clear()
 	queue_redraw()
 
 func advance_statuses(delta: float, simulation_paused: bool = false) -> void:
 	if simulation_paused or not is_alive() or delta <= 0.0:
 		return
+	var was_rooted := is_rooted()
+	hard_controls.advance(delta)
+	if was_rooted != is_rooted():
+		queue_redraw()
 	if slow_remaining > 0.0:
 		slow_remaining = maxf(0.0, slow_remaining - delta)
 		if slow_remaining <= 0.0:
@@ -182,6 +214,8 @@ func _draw() -> void:
 		draw_arc(Vector2(0, 3), collision_radius + 6.0, 0.0, TAU, 24, Color("ff7a3d"), 2.0, true)
 	if slow_remaining > 0.0:
 		draw_arc(Vector2(0, 6), collision_radius + 9.0, 0.0, TAU, 24, Color("72c9ff"), 2.0, true)
+	if is_rooted():
+		draw_arc(Vector2(0, 7), collision_radius + 12.0, 0.0, TAU, 24, Color("d9bd72"), 3.0, true)
 
 func _draw_target_ring(radius: float, color: Color, width: float) -> void:
 	var points := PackedVector2Array()

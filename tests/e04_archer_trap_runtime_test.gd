@@ -126,7 +126,7 @@ func _check_controller_cleanup() -> void:
 	_check(controller.run_finished and paused, "player death enters terminal run state")
 	_check(controller.trap_registry.active_count() == 0 and events["triggered"] == 0, "run termination synchronously clears traps without activating their effects")
 	_check(runtime_traps[1].removal_reason == &"run_end" and runtime_traps[2].removal_reason == &"run_end" and runtime_traps[3].removal_reason == &"run_end", "death cleanup records the common run-end reason on all active traps")
-	_check(ClassCatalog.skill_definition(&"snare_trap") == null and ClassCatalog.skill_definition(&"explosive_trap") == null, "runtime package does not publish either concrete trap skill")
+	_check(ClassCatalog.skill_definition(&"snare_trap") != null and ClassCatalog.skill_definition(&"explosive_trap") == null, "shared runtime accepts the delivered Snare Trap while Explosive Trap remains unpublished")
 	paused = false
 	controller.queue_free()
 	await process_frame

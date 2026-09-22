@@ -5,6 +5,7 @@ signal attack_requested(request: DamageRequest, target: CombatActor)
 signal mage_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int)
 signal precision_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int, hit_limit: int)
 signal arrow_rain_requested(center: Vector2, request: DamageRequest)
+signal snare_trap_requested(center: Vector2, root_duration: float)
 signal fire_wall_requested(direction: Vector2, burn_request: DamageRequest)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
@@ -155,7 +156,7 @@ func use_slash(direction: Vector2, enemies: Array[CombatActor]) -> bool:
 
 func use_dash(direction: Vector2) -> bool:
 	var rank_definition := _runtime_rank_definition(&"dash")
-	if class_id != &"swordsman" or rank_definition == null or not _can_spend(&"dash"):
+	if class_id != &"swordsman" or rank_definition == null or not _can_spend(&"dash") or is_rooted():
 		return false
 	var facing := _resolved_facing(direction)
 	_spend(&"dash")
@@ -256,6 +257,27 @@ func use_extended_aim() -> bool:
 	queue_redraw()
 	return true
 
+func snare_trap_center(point: Vector2) -> Vector2:
+	var offset := point - global_position
+	var maximum_range := skill_range(&"snare_trap")
+	if offset.length() > maximum_range:
+		offset = offset.normalized() * maximum_range
+	return global_position + offset
+
+func can_place_snare_trap(point: Vector2) -> bool:
+	return skill_range(&"snare_trap") > 0.0 and navigation != null and navigation.is_walkable(snare_trap_center(point))
+
+func use_snare_trap(point: Vector2) -> bool:
+	var rank_definition := _runtime_rank_definition(&"snare_trap")
+	if class_id != &"archer" or rank_definition == null or not _can_spend(&"snare_trap") or not can_place_snare_trap(point):
+		return false
+	var center := snare_trap_center(point)
+	_spend(&"snare_trap")
+	snare_trap_requested.emit(center, rank_definition.power)
+	presentation_action.emit(&"cast", aim_direction(center), 0.18)
+	resources_changed.emit()
+	return true
+
 func begin_skill_cast(skill_id: StringName, point: Vector2, enemy: CombatActor = null) -> bool:
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var cast_time := skill_cast_time(skill_id)
@@ -309,7 +331,7 @@ func teleport_destination(point: Vector2) -> Vector2:
 	return global_position + offset
 
 func can_teleport(point: Vector2) -> bool:
-	return skill_range(&"teleport") > 0.0 and navigation != null and navigation.is_walkable(teleport_destination(point))
+	return not is_rooted() and skill_range(&"teleport") > 0.0 and navigation != null and navigation.is_walkable(teleport_destination(point))
 
 func use_teleport(point: Vector2) -> bool:
 	if class_id != &"mage" or not _can_spend(&"teleport") or not can_teleport(point):
@@ -345,6 +367,8 @@ func arrow_rain_center(point: Vector2) -> Vector2:
 	return global_position + offset
 
 func dash_destination(direction: Vector2) -> Vector2:
+	if is_rooted():
+		return global_position
 	return navigation.move_until_blocked(global_position, global_position + direction.normalized() * skill_range(&"dash"))
 
 func skill_cooldown(skill_id: StringName) -> float:
@@ -432,6 +456,10 @@ func _process(delta: float) -> void:
 		_advance_active_cast(delta)
 		return
 	if _dash_active:
+		if is_rooted():
+			_dash_active = false
+			velocity = Vector2.ZERO
+			return
 		_advance_dash(delta)
 		return
 	if target != null and (not is_instance_valid(target) or not target.is_alive()):
@@ -597,6 +625,9 @@ func _set_path(point: Vector2) -> void:
 		_path_index += 1
 
 func _move_along_path(delta: float) -> void:
+	if is_rooted():
+		velocity = Vector2.ZERO
+		return
 	var remaining_time := maxf(0.0, delta)
 	while remaining_time > 0.0:
 		var step := minf(MAX_MOVEMENT_STEP, remaining_time)
