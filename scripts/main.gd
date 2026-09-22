@@ -56,6 +56,7 @@ var _feedback_serial := 0
 var cast_intent := CastIntent.new()
 var control_preferences := ControlPreferences.new()
 var battle_indicators: BattleIndicators
+var trap_registry: PlayerTrapRegistry
 var battle_controls: BattleControls
 var class_button: Button
 var class_overlay: Control
@@ -87,6 +88,9 @@ func _ready() -> void:
 	battle_indicators.z_index = -1
 	battle_indicators.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(battle_indicators)
+	trap_registry = PlayerTrapRegistry.new()
+	trap_registry.y_sort_enabled = true
+	add_child(trap_registry)
 	player = PlayerActor.new()
 	player.configure(navigation, run_state)
 	player.global_position = Vector2(300, 520)
@@ -477,6 +481,7 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	if not enemies.is_empty():
 		return
 	encounter_active = false
+	trap_registry.clear_all(&"encounter_end")
 	for group_name: StringName in [&"enemy_projectiles", &"player_projectiles", &"player_effects"]:
 		for runtime_node: Node in get_tree().get_nodes_in_group(group_name):
 			runtime_node.queue_free()
@@ -592,6 +597,8 @@ func _on_player_died(_actor: CombatActor) -> void:
 func _show_result(victory: bool) -> void:
 	_cancel_casting()
 	_clear_hover()
+	if trap_registry != null:
+		trap_registry.clear_all(&"run_end")
 	run_finished = true
 	_terminal_outcome = &"completed" if victory else &"death"
 	result_title.text = "Arena concluída!" if victory else "Você caiu em combate"
