@@ -24,5 +24,7 @@ continuam melhorias de apresentação futuras, sem bloquear esta correção.
 
 Validação: tools/verify.ps1 passou importação, 46 suítes / 1.969 checks e smoke
 com Godot 4.7.2. O cenário integrado passou 82 checks, incluindo os nomes visíveis.
-Aceite do candidato corrigido depende do playtest;
-o feedback positivo sobre combate/progressão não encerra a pendência do menu.
+Usuário aprovou o candidato corrigido `034e86e` após playtest em 22/09/2026.
+Candidato integrado em master. Completude dos kits de Espadachim e Mago
+autorizada dentro de E04; desenho das novas habilidades do Mago em discussão,
+sem transformar propostas de brainstorming em contratos aprovados.
