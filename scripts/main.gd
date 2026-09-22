@@ -93,6 +93,7 @@ func _ready() -> void:
 	player.attack_requested.connect(_on_attack_requested)
 	player.mage_projectile_requested.connect(_on_mage_projectile_requested)
 	player.precision_projectile_requested.connect(_on_precision_projectile_requested)
+	player.arrow_rain_requested.connect(_on_arrow_rain_requested)
 	player.fire_wall_requested.connect(_on_fire_wall_requested)
 	player.skill_cast_ready.connect(_on_skill_cast_ready)
 	player.status_damage_requested.connect(_on_attack_requested)
@@ -245,6 +246,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif definition.handler_id == SkillDefinition.Handler.PIERCING_ARROW:
 		if not player.use_piercing_arrow(direction):
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.ARROW_RAIN:
+		if not player.use_arrow_rain(point):
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 
 func _report_skill_failure(skill: StringName, selected_target: CombatActor = null) -> void:
@@ -411,6 +415,13 @@ func _on_precision_projectile_requested(skill_id: StringName, request: DamageReq
 func _on_precision_projectile_hit(request: DamageRequest, target_actor: CombatActor) -> void:
 	if target_actor != null and target_actor.is_alive():
 		target_actor.apply_damage(request, rng)
+
+func _on_arrow_rain_requested(center: Vector2, request: DamageRequest) -> void:
+	var rain := ArrowRain.new()
+	rain.configure(center, request, enemies)
+	rain.hit.connect(_on_precision_projectile_hit)
+	add_child(rain)
+	rain.add_to_group("player_effects")
 
 func _on_mage_projectile_hit(request: DamageRequest, target_actor: CombatActor) -> void:
 	if target_actor == null or not target_actor.is_alive():

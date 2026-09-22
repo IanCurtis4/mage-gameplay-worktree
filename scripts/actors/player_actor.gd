@@ -4,6 +4,7 @@ extends CombatActor
 signal attack_requested(request: DamageRequest, target: CombatActor)
 signal mage_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int)
 signal precision_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int, hit_limit: int)
+signal arrow_rain_requested(center: Vector2, request: DamageRequest)
 signal fire_wall_requested(direction: Vector2, burn_request: DamageRequest)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
@@ -228,6 +229,19 @@ func use_piercing_arrow(direction: Vector2) -> bool:
 	resources_changed.emit()
 	return true
 
+func use_arrow_rain(point: Vector2) -> bool:
+	var rank_definition := _runtime_rank_definition(&"arrow_rain")
+	if class_id != &"archer" or rank_definition == null or not _can_spend(&"arrow_rain"):
+		return false
+	var center := arrow_rain_center(point)
+	_spend(&"arrow_rain")
+	var definition := ClassCatalog.skill_definition(&"arrow_rain")
+	var volley_power := stat_breakdown.value(&"precision_attack") * rank_definition.power / float(ArrowRain.VOLLEY_COUNT)
+	var request := _make_physical_request(null, &"arrow_rain", volley_power, definition.accuracy_mode, definition.can_crit)
+	arrow_rain_requested.emit(center, request)
+	resources_changed.emit()
+	return true
+
 func begin_skill_cast(skill_id: StringName, point: Vector2, enemy: CombatActor = null) -> bool:
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var cast_time := skill_cast_time(skill_id)
@@ -308,6 +322,13 @@ func can_target_skill(skill_id: StringName, enemy: CombatActor) -> bool:
 func aim_direction(point: Vector2) -> Vector2:
 	var direction := global_position.direction_to(point)
 	return _last_facing if direction.is_zero_approx() else direction
+
+func arrow_rain_center(point: Vector2) -> Vector2:
+	var offset := point - global_position
+	var maximum_range := skill_range(&"arrow_rain")
+	if offset.length() > maximum_range:
+		offset = offset.normalized() * maximum_range
+	return global_position + offset
 
 func dash_destination(direction: Vector2) -> Vector2:
 	return navigation.move_until_blocked(global_position, global_position + direction.normalized() * skill_range(&"dash"))

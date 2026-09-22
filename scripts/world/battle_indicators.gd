@@ -26,6 +26,8 @@ func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast
 		endpoint = actor.dash_destination(direction)
 	elif skill == &"teleport":
 		endpoint = actor.teleport_destination(point)
+	elif skill == &"arrow_rain":
+		endpoint = actor.arrow_rain_center(point)
 	elif selected_target != null:
 		endpoint = selected_target.global_position
 	else:
@@ -113,6 +115,11 @@ func _draw() -> void:
 			var marker := origin.lerp(endpoint, ratio)
 			draw_line(marker - direction.orthogonal() * 5.0, marker + direction.orthogonal() * 5.0, Color(color, 0.7), 1.5, true)
 		_draw_endpoint(endpoint, color)
+	elif skill == &"arrow_rain":
+		draw_dashed_line(origin, endpoint, Color(color, 0.55), 1.5, 9.0, true, true)
+		draw_circle(endpoint, ArrowRain.RADIUS, Color(color, 0.13))
+		draw_arc(endpoint, ArrowRain.RADIUS, 0.0, TAU, 56, Color(0.04, 0.09, 0.12, 0.9), 5.0, true)
+		draw_arc(endpoint, ArrowRain.RADIUS, 0.0, TAU, 56, color, 2.0, true)
 	elif skill == &"teleport":
 		draw_dashed_line(origin, endpoint, Color(color, 0.65), 2.0, 10.0, true, true)
 		_draw_endpoint(endpoint, color)
