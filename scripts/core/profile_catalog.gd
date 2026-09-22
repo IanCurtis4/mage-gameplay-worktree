@@ -34,6 +34,7 @@ static func pilot(additional_equipment: Dictionary = {}, additional_skills: Dict
 	catalog.add_skill(&"slowing_arrow", [&"archer"], ACTIVE, BASE_WALLET, 0, 5)
 	catalog.add_skill(&"foliage_shelter", [&"archer"], ACTIVE, BASE_WALLET, 0, 5)
 	catalog.add_skill(&"archer_precision", [&"archer"], PASSIVE, BASE_WALLET, 0, 3)
+	catalog.add_skill(&"archer_cadence", [&"archer"], PASSIVE, BASE_WALLET, 0, 3)
 	for raw_item_id: Variant in additional_equipment:
 		var metadata: Dictionary = additional_equipment[raw_item_id]
 		var allowed_base_classes: Array[StringName] = []

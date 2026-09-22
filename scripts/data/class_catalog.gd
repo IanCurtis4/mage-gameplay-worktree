@@ -43,6 +43,12 @@ static func passive_modifier_source(skill_id: StringName, rank: int) -> Dictiona
 				"label": "Precisão do Arqueiro",
 				"flat": {&"hit_rating": rank_definition.power},
 			}
+		SkillDefinition.Handler.ARCHER_CADENCE:
+			return {
+				"source_id": &"passive_archer_cadence",
+				"label": "Cadência do Arqueiro",
+				"increased": {&"attacks_per_second": rank_definition.power},
+			}
 	return {}
 
 static func _ensure_built() -> void:
@@ -66,6 +72,7 @@ static func _ensure_built() -> void:
 	_add_passive_skill(&"swordsman_resistance", "Resistência")
 	_add_passive_skill(&"mage_mana_regeneration", "Regeneração de SP")
 	_add_passive_skill(&"archer_precision", "Precisão")
+	_add_passive_skill(&"archer_cadence", "Cadência")
 	_configure_slash_ranks()
 	_configure_dash_ranks()
 	_configure_swordsman_resistance_ranks()
@@ -84,6 +91,7 @@ static func _ensure_built() -> void:
 	_configure_slowing_arrow_ranks()
 	_configure_foliage_shelter_ranks()
 	_configure_archer_precision_ranks()
+	_configure_archer_cadence_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -447,5 +455,17 @@ static func _configure_archer_precision_ranks() -> void:
 		rank.rank = index + 1
 		rank.power = hit_bonuses[index]
 		rank.effect_ids = [&"hit_rating_flat"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_archer_cadence_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"archer_cadence"]
+	definition.handler_id = SkillDefinition.Handler.ARCHER_CADENCE
+	var cadence_increases: Array[float] = [0.10, 0.15, 0.20]
+	for index: int in cadence_increases.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.power = cadence_increases[index]
+		rank.effect_ids = [&"attacks_per_second_increased"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
