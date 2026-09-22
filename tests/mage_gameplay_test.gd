@@ -134,7 +134,8 @@ func _test_spears_and_teleport() -> void:
 	state.augment_stacks[&"extra_ice_spear"] = 1
 	_check(state.projectile_count(&"fire_spear") == 2 and state.projectile_count(&"ice_spear") == 2 and state.skill_levels[&"fire_spear"] == 1 and state.skill_levels[&"ice_spear"] == 1, "fire and ice spear counts and levels remain independent")
 	state.skill_levels[&"fire_spear"] = 3
-	_check(state.projectile_count(&"fire_spear") == 2 and state.projectile_count(&"ice_spear") == 2 and ClassCatalog.skill_definition(&"fire_spear").id == &"fire_spear", "fire spear rank no longer multiplies projectile count while each augment remains isolated")
+	state.skill_levels[&"ice_spear"] = 4
+	_check(state.projectile_count(&"fire_spear") == 2 and state.projectile_count(&"ice_spear") == 2 and ClassCatalog.skill_definition(&"fire_spear").id == &"fire_spear", "spear ranks no longer multiply projectile count while each augment remains isolated")
 	var spent := mage.current_sp
 	target.health.current_hp = 0.0
 	mage.mage_cooldowns[&"fire_spear"] = 0.0
