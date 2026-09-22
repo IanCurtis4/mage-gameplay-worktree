@@ -69,6 +69,18 @@ func can_trigger(target: CombatActor) -> bool:
 		and global_position.distance_to(target.global_position) <= radius + target.collision_radius
 	)
 
+func first_trigger_target(targets: Array[CombatActor]) -> CombatActor:
+	var selected_target: CombatActor
+	var selected_distance := INF
+	for target: CombatActor in targets:
+		if target == null or not is_instance_valid(target) or target.get_instance_id() == owner_id or not can_trigger(target):
+			continue
+		var distance := global_position.distance_squared_to(target.global_position)
+		if selected_target == null or distance < selected_distance or (is_equal_approx(distance, selected_distance) and target.get_instance_id() < selected_target.get_instance_id()):
+			selected_target = target
+			selected_distance = distance
+	return selected_target
+
 func try_trigger(target: CombatActor) -> bool:
 	if not can_trigger(target):
 		return false

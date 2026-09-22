@@ -54,6 +54,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"arrow_rain", "Chuva de Flechas", "A", SkillDefinition.Targeting.POINT, 22.0, 7.0, 1.80, 480.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, true)
 	_add_skill(&"extended_aim", "Mira Estendida", "S", SkillDefinition.Targeting.SELF, 16.0, 12.0, 4.0, 0.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_skill(&"snare_trap", "Armadilha de Laço", "D", SkillDefinition.Targeting.POINT, 18.0, 8.0, 1.4, 360.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
+	_add_skill(&"explosive_trap", "Armadilha Explosiva", "D", SkillDefinition.Targeting.POINT, 20.0, 9.0, 1.35, 360.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, true)
 	_add_passive_skill(&"swordsman_resistance", "Resistência")
 	_add_passive_skill(&"mage_mana_regeneration", "Regeneração de SP")
 	_configure_slash_ranks()
@@ -70,6 +71,7 @@ static func _ensure_built() -> void:
 	_configure_arrow_rain_ranks()
 	_configure_extended_aim_ranks()
 	_configure_snare_trap_ranks()
+	_configure_explosive_trap_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -367,5 +369,22 @@ static func _configure_snare_trap_ranks() -> void:
 		rank.range = 360.0
 		rank.power = durations[index]
 		rank.effect_ids = [&"physical_root"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_explosive_trap_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"explosive_trap"]
+	definition.category = SkillDefinition.Category.ACTIVE
+	definition.handler_id = SkillDefinition.Handler.EXPLOSIVE_TRAP
+	var powers: Array[float] = [1.35, 1.60, 1.85, 2.10, 2.35]
+	var costs: Array[float] = [20.0, 22.0, 24.0, 26.0, 28.0]
+	for index: int in powers.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 9.0
+		rank.range = 360.0
+		rank.power = powers[index]
+		rank.precision_weight = 1.0
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())

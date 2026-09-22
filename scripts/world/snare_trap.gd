@@ -24,15 +24,7 @@ func _process(delta: float) -> void:
 	super._process(delta)
 	if state != State.ARMED:
 		return
-	var selected_target: CombatActor
-	var selected_distance := INF
-	for target: CombatActor in _targets:
-		if target == null or not is_instance_valid(target) or target.get_instance_id() == owner_id or not can_trigger(target):
-			continue
-		var distance := global_position.distance_squared_to(target.global_position)
-		if selected_target == null or distance < selected_distance or (is_equal_approx(distance, selected_distance) and target.get_instance_id() < selected_target.get_instance_id()):
-			selected_target = target
-			selected_distance = distance
+	var selected_target := first_trigger_target(_targets)
 	if selected_target != null:
 		try_trigger(selected_target)
 

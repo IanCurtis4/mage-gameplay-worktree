@@ -99,6 +99,7 @@ func _ready() -> void:
 	player.precision_projectile_requested.connect(_on_precision_projectile_requested)
 	player.arrow_rain_requested.connect(_on_arrow_rain_requested)
 	player.snare_trap_requested.connect(_on_snare_trap_requested)
+	player.explosive_trap_requested.connect(_on_explosive_trap_requested)
 	player.fire_wall_requested.connect(_on_fire_wall_requested)
 	player.skill_cast_ready.connect(_on_skill_cast_ready)
 	player.status_damage_requested.connect(_on_attack_requested)
@@ -269,6 +270,12 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 				status_label.text = "Armadilha de Laço cancelada — POSIÇÃO BLOQUEADA"
 			else:
 				_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.EXPLOSIVE_TRAP:
+		if not player.use_explosive_trap(point):
+			if not player.can_place_explosive_trap(point):
+				status_label.text = "Armadilha Explosiva cancelada — POSIÇÃO BLOQUEADA"
+			else:
+				_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 
 func _report_skill_failure(skill: StringName, selected_target: CombatActor = null) -> void:
 	var definition := ClassCatalog.skill_definition(skill)
@@ -315,6 +322,8 @@ func _update_aim(point: Vector2) -> void:
 	elif skill == &"teleport" and not player.can_teleport(point):
 		state = "DESTINO BLOQUEADO"
 	elif skill == &"snare_trap" and not player.can_place_snare_trap(point):
+		state = "POSIÇÃO BLOQUEADA"
+	elif skill == &"explosive_trap" and not player.can_place_explosive_trap(point):
 		state = "POSIÇÃO BLOQUEADA"
 	if _world_pointer_available():
 		battle_indicators.show_aim(skill, player, point, state == "PRONTO", selected_target)
@@ -453,6 +462,12 @@ func _on_arrow_rain_requested(center: Vector2, request: DamageRequest) -> void:
 func _on_snare_trap_requested(center: Vector2, root_duration: float) -> void:
 	var trap := SnareTrap.new()
 	trap.configure_snare(player.get_instance_id(), center, root_duration, enemies)
+	trap_registry.register_trap(trap)
+
+func _on_explosive_trap_requested(center: Vector2, request: DamageRequest) -> void:
+	var trap := ExplosiveTrap.new()
+	trap.configure_explosive(player.get_instance_id(), center, request, enemies)
+	trap.hit.connect(_on_precision_projectile_hit)
 	trap_registry.register_trap(trap)
 
 func _on_mage_projectile_hit(request: DamageRequest, target_actor: CombatActor) -> void:

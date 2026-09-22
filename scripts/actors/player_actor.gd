@@ -6,6 +6,7 @@ signal mage_projectile_requested(skill_id: StringName, request: DamageRequest, t
 signal precision_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int, hit_limit: int)
 signal arrow_rain_requested(center: Vector2, request: DamageRequest)
 signal snare_trap_requested(center: Vector2, root_duration: float)
+signal explosive_trap_requested(center: Vector2, request: DamageRequest)
 signal fire_wall_requested(direction: Vector2, burn_request: DamageRequest)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
@@ -257,15 +258,21 @@ func use_extended_aim() -> bool:
 	queue_redraw()
 	return true
 
-func snare_trap_center(point: Vector2) -> Vector2:
+func trap_center(skill_id: StringName, point: Vector2) -> Vector2:
 	var offset := point - global_position
-	var maximum_range := skill_range(&"snare_trap")
+	var maximum_range := skill_range(skill_id)
 	if offset.length() > maximum_range:
 		offset = offset.normalized() * maximum_range
 	return global_position + offset
 
+func can_place_trap(skill_id: StringName, point: Vector2) -> bool:
+	return skill_id in [&"snare_trap", &"explosive_trap"] and skill_range(skill_id) > 0.0 and navigation != null and navigation.is_walkable(trap_center(skill_id, point))
+
+func snare_trap_center(point: Vector2) -> Vector2:
+	return trap_center(&"snare_trap", point)
+
 func can_place_snare_trap(point: Vector2) -> bool:
-	return skill_range(&"snare_trap") > 0.0 and navigation != null and navigation.is_walkable(snare_trap_center(point))
+	return can_place_trap(&"snare_trap", point)
 
 func use_snare_trap(point: Vector2) -> bool:
 	var rank_definition := _runtime_rank_definition(&"snare_trap")
@@ -274,6 +281,26 @@ func use_snare_trap(point: Vector2) -> bool:
 	var center := snare_trap_center(point)
 	_spend(&"snare_trap")
 	snare_trap_requested.emit(center, rank_definition.power)
+	presentation_action.emit(&"cast", aim_direction(center), 0.18)
+	resources_changed.emit()
+	return true
+
+func explosive_trap_center(point: Vector2) -> Vector2:
+	return trap_center(&"explosive_trap", point)
+
+func can_place_explosive_trap(point: Vector2) -> bool:
+	return can_place_trap(&"explosive_trap", point)
+
+func use_explosive_trap(point: Vector2) -> bool:
+	var rank_definition := _runtime_rank_definition(&"explosive_trap")
+	if class_id != &"archer" or rank_definition == null or not _can_spend(&"explosive_trap") or not can_place_explosive_trap(point):
+		return false
+	var center := explosive_trap_center(point)
+	_spend(&"explosive_trap")
+	var definition := ClassCatalog.skill_definition(&"explosive_trap")
+	var power := stat_breakdown.value(&"precision_attack") * rank_definition.power
+	var request := _make_physical_request(null, &"explosive_trap", power, definition.accuracy_mode, definition.can_crit)
+	explosive_trap_requested.emit(center, request)
 	presentation_action.emit(&"cast", aim_direction(center), 0.18)
 	resources_changed.emit()
 	return true
