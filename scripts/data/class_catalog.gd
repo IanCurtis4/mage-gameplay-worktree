@@ -52,6 +52,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"double_shot", "Disparo Duplo", "Q", SkillDefinition.Targeting.DIRECTION, 14.0, 4.0, 0.70, 520.0, 880.0, 0.0, DamageRequest.AccuracyMode.CONTESTED, true)
 	_add_skill(&"piercing_arrow", "Flecha Perfurante", "W", SkillDefinition.Targeting.DIRECTION, 18.0, 5.0, 1.05, 600.0, 920.0, 0.0, DamageRequest.AccuracyMode.CONTESTED, true)
 	_add_skill(&"arrow_rain", "Chuva de Flechas", "A", SkillDefinition.Targeting.POINT, 22.0, 7.0, 1.80, 480.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, true)
+	_add_skill(&"extended_aim", "Mira Estendida", "S", SkillDefinition.Targeting.SELF, 16.0, 12.0, 4.0, 0.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_passive_skill(&"swordsman_resistance", "Resistência")
 	_add_passive_skill(&"mage_mana_regeneration", "Regeneração de SP")
 	_configure_slash_ranks()
@@ -66,6 +67,7 @@ static func _ensure_built() -> void:
 	_configure_double_shot_ranks()
 	_configure_piercing_arrow_ranks()
 	_configure_arrow_rain_ranks()
+	_configure_extended_aim_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -91,7 +93,7 @@ static func _ensure_built() -> void:
 	archer.id = IdentityIds.ARCHER
 	archer.display_name = "Arqueiro"
 	archer.attributes = IdentityIds.initial_attributes(IdentityIds.ARCHER)
-	archer.skill_ids = [&"double_shot", &"piercing_arrow", &"arrow_rain"]
+	archer.skill_ids = [&"double_shot", &"piercing_arrow", &"arrow_rain", &"extended_aim"]
 	archer.passive_id = &""
 	archer.basic_power = 1.0
 	archer.basic_range = 340.0
@@ -330,5 +332,21 @@ static func _configure_arrow_rain_ranks() -> void:
 		rank.range = 480.0
 		rank.power = powers[index]
 		rank.precision_weight = 1.0
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_extended_aim_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"extended_aim"]
+	definition.category = SkillDefinition.Category.ACTIVE
+	definition.handler_id = SkillDefinition.Handler.EXTENDED_AIM
+	var durations: Array[float] = [4.0, 5.0, 6.0, 7.0, 8.0]
+	var costs: Array[float] = [16.0, 17.0, 18.0, 19.0, 20.0]
+	for index: int in durations.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 12.0
+		rank.power = durations[index]
+		rank.effect_ids = [&"extended_aim"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())

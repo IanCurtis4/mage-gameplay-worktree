@@ -2,7 +2,7 @@ class_name SkillDefinition
 extends Resource
 ## Read-only catalog data. Cooldowns, levels and counts belong to run/actor state.
 
-enum Targeting { DIRECTION, SINGLE_TARGET, POINT }
+enum Targeting { DIRECTION, SINGLE_TARGET, POINT, SELF }
 enum Category { ACTIVE, PASSIVE }
 enum Handler {
 	UNASSIGNED,
@@ -17,6 +17,7 @@ enum Handler {
 	DOUBLE_SHOT,
 	PIERCING_ARROW,
 	ARROW_RAIN,
+	EXTENDED_AIM,
 }
 
 const MAX_ACTIVE_RANK := 5
@@ -41,7 +42,7 @@ const MAX_PASSIVE_RANK := 3
 func is_rank_catalog_valid() -> bool:
 	if category < Category.ACTIVE or category > Category.PASSIVE:
 		return false
-	if handler_id <= Handler.UNASSIGNED or handler_id > Handler.ARROW_RAIN:
+	if handler_id <= Handler.UNASSIGNED or handler_id > Handler.EXTENDED_AIM:
 		return false
 	var maximum_rank := MAX_ACTIVE_RANK if category == Category.ACTIVE else MAX_PASSIVE_RANK
 	if ranks.is_empty() or ranks.size() > maximum_rank:

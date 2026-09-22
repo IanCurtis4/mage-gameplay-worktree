@@ -26,6 +26,7 @@ const MAGE_BASIC_MAX_DISTANCE := 420.0
 const ARCHER_BASIC_SPEED := 880.0
 const ARCHER_BASIC_MAX_DISTANCE := 520.0
 const PIERCING_ARROW_MAX_HITS := 3
+const EXTENDED_AIM_RANGE_BONUS := 120.0
 
 var navigation: ArenaNavigation
 var run_state: RunState
@@ -59,6 +60,7 @@ var _dash_speed := 0.0
 var active_cast_skill: StringName = &""
 var active_cast_remaining := 0.0
 var active_cast_total := 0.0
+var extended_aim_remaining := 0.0
 var _active_cast_point := Vector2.ZERO
 var _active_cast_target_id: int = 0
 var _active_cast_direction := Vector2.RIGHT
@@ -67,6 +69,7 @@ var _rank_definitions: Dictionary[StringName, SkillRankDefinition] = {}
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
 	run_state = state
+	extended_aim_remaining = 0.0
 	class_id = run_state.class_id
 	class_definition = ClassCatalog.class_definition(class_id)
 	_capture_rank_definitions()
@@ -242,6 +245,17 @@ func use_arrow_rain(point: Vector2) -> bool:
 	resources_changed.emit()
 	return true
 
+func use_extended_aim() -> bool:
+	var rank_definition := _runtime_rank_definition(&"extended_aim")
+	if class_id != &"archer" or rank_definition == null or not _can_spend(&"extended_aim"):
+		return false
+	_spend(&"extended_aim")
+	extended_aim_remaining = rank_definition.power
+	presentation_action.emit(&"cast", _last_facing, 0.18)
+	resources_changed.emit()
+	queue_redraw()
+	return true
+
 func begin_skill_cast(skill_id: StringName, point: Vector2, enemy: CombatActor = null) -> bool:
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var cast_time := skill_cast_time(skill_id)
@@ -352,7 +366,7 @@ func skill_cost(skill_id: StringName) -> float:
 func skill_range(skill_id: StringName) -> float:
 	var rank_definition := _runtime_rank_definition(skill_id)
 	if rank_definition != null:
-		return rank_definition.range
+		return rank_definition.range + _extended_aim_bonus(skill_id)
 	var definition := ClassCatalog.skill_definition(skill_id)
 	if definition != null and not definition.ranks.is_empty():
 		return 0.0
@@ -402,6 +416,12 @@ func _process(delta: float) -> void:
 	dash_cooldown = maxf(0.0, dash_cooldown - delta)
 	for skill_id: StringName in mage_cooldowns:
 		mage_cooldowns[skill_id] = maxf(0.0, mage_cooldowns[skill_id] - delta)
+	if extended_aim_remaining > 0.0:
+		var previous_extended_aim := extended_aim_remaining
+		extended_aim_remaining = maxf(0.0, extended_aim_remaining - delta)
+		if previous_extended_aim > 0.0 and extended_aim_remaining <= 0.0:
+			resources_changed.emit()
+		queue_redraw()
 	if _slash_visual_time > 0.0:
 		_slash_visual_time = maxf(0.0, _slash_visual_time - delta)
 		queue_redraw()
@@ -621,6 +641,7 @@ func _move_step(delta: float) -> void:
 
 func _on_health_died(actor_id: int) -> void:
 	cancel_active_cast()
+	extended_aim_remaining = 0.0
 	velocity = Vector2.ZERO
 	_path.clear()
 	target = null
@@ -629,7 +650,18 @@ func _on_health_died(actor_id: int) -> void:
 	super._on_health_died(actor_id)
 
 func basic_attack_distance(enemy: CombatActor) -> float:
-	return collision_radius + enemy.collision_radius + class_definition.basic_range
+	return collision_radius + enemy.collision_radius + class_definition.basic_range + _extended_aim_bonus(&"basic_attack")
+
+func archer_basic_projectile_range() -> float:
+	return ARCHER_BASIC_MAX_DISTANCE + _extended_aim_bonus(&"basic_attack")
+
+func has_extended_aim() -> bool:
+	return is_archer() and extended_aim_remaining > 0.0
+
+func _extended_aim_bonus(skill_id: StringName) -> float:
+	if not has_extended_aim() or skill_id not in [&"basic_attack", &"double_shot", &"piercing_arrow", &"arrow_rain"]:
+		return 0.0
+	return EXTENDED_AIM_RANGE_BONUS
 
 func can_basic_attack(enemy: CombatActor, retain: bool = false) -> bool:
 	if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
@@ -642,6 +674,9 @@ func _build_stat_breakdown() -> StatBreakdown:
 
 func _draw() -> void:
 	super._draw()
+	if has_extended_aim():
+		draw_circle(Vector2(0, -18), collision_radius + 13.0, Color(0.67, 0.89, 0.44, 0.10))
+		draw_arc(Vector2(0, -18), collision_radius + 13.0, 0.0, TAU, 36, Color(0.75, 0.95, 0.50, 0.8), 2.0, true)
 	if _basic_visual_time > 0.0 and class_id == &"swordsman":
 		var swing_angle := _basic_facing.angle()
 		draw_arc(_basic_origin - global_position, _basic_visual_radius, swing_angle - 0.65, swing_angle + 0.65, 16, Color(1.0, 0.89, 0.60, _basic_visual_time / BASIC_ATTACK_RECOVERY), 4.0)

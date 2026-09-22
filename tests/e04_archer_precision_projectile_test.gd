@@ -17,9 +17,9 @@ func _run() -> void:
 func _check_minimal_catalog_and_gate() -> void:
 	var definition := ClassCatalog.class_definition(&"archer")
 	_check(definition != null and definition.display_name == "Arqueiro" and definition.attributes == IdentityIds.initial_attributes(&"archer"), "catalog exposes the accepted Archer identity and attributes")
-	_check(definition.skill_ids == [&"double_shot", &"piercing_arrow", &"arrow_rain"] and definition.passive_id.is_empty() and definition.basic_power == 1.0 and definition.basic_range == 340.0, "Archer definition preserves basic tuning while exposing the three delivered skills")
+	_check(definition.skill_ids == [&"double_shot", &"piercing_arrow", &"arrow_rain", &"extended_aim"] and definition.passive_id.is_empty() and definition.basic_power == 1.0 and definition.basic_range == 340.0, "Archer definition preserves basic tuning while exposing the four delivered skills")
 	var state := RunState.new(&"archer")
-	_check(state.class_id == &"archer" and state.skill_levels == {&"double_shot": 1, &"piercing_arrow": 1, &"arrow_rain": 1} and state.build_snapshot.active_slots == [&"double_shot", &"piercing_arrow", &"arrow_rain"] and state.build_snapshot.passive_slots.is_empty(), "pilot run equips the three delivered Archer skills")
+	_check(state.class_id == &"archer" and state.skill_levels == {&"double_shot": 1, &"piercing_arrow": 1, &"arrow_rain": 1, &"extended_aim": 1} and state.build_snapshot.active_slots == [&"double_shot", &"piercing_arrow", &"arrow_rain", &"extended_aim"] and state.build_snapshot.passive_slots.is_empty(), "pilot run equips the four delivered Archer skills")
 	_check(not ProfileCatalog.pilot().base_class_is_available(&"archer"), "persistent profile keeps Archer unavailable before two active skills and one passive")
 
 func _check_archer_basic_emission() -> void:

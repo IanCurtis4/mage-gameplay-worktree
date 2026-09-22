@@ -169,7 +169,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		var skill := _key_skill(event.keycode)
 		if skill != &"":
 			player.cancel_active_cast()
-			if _world_pointer_available():
+			var definition := ClassCatalog.skill_definition(skill)
+			if definition != null and definition.targeting == SkillDefinition.Targeting.SELF:
+				cast_intent.cancel()
+				_commit_skill(skill, player.global_position)
+				_cancel_aim()
+			elif _world_pointer_available():
 				_commit_skill(cast_intent.press(skill), get_global_mouse_position())
 				_update_aim(get_global_mouse_position())
 			get_viewport().set_input_as_handled()
@@ -250,6 +255,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.ARROW_RAIN:
 		if not player.use_arrow_rain(point):
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.EXTENDED_AIM:
+		if not player.use_extended_aim():
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 
 func _report_skill_failure(skill: StringName, selected_target: CombatActor = null) -> void:
 	var definition := ClassCatalog.skill_definition(skill)
@@ -262,6 +270,12 @@ func _select_skill_from_bar(skill: StringName) -> void:
 	if get_tree().paused or run_finished or not player.is_alive():
 		return
 	player.cancel_active_cast()
+	var definition := ClassCatalog.skill_definition(skill)
+	if definition != null and definition.targeting == SkillDefinition.Targeting.SELF:
+		cast_intent.cancel()
+		_commit_skill(skill, player.global_position)
+		_cancel_aim()
+		return
 	cast_intent.active_skill = skill
 	_update_aim(get_global_mouse_position())
 
@@ -406,7 +420,7 @@ func _on_precision_projectile_requested(skill_id: StringName, request: DamageReq
 		var side_offset := direction.orthogonal() * (float(index) - float(count - 1) * 0.5) * 14.0
 		var origin := player.global_position + PlayerProjectile.BODY_OFFSET + side_offset
 		var speed := PlayerActor.ARCHER_BASIC_SPEED if skill_id == &"basic_attack" else player.skill_projectile_speed(skill_id)
-		var max_distance := PlayerActor.ARCHER_BASIC_MAX_DISTANCE if skill_id == &"basic_attack" else player.skill_range(skill_id)
+		var max_distance := player.archer_basic_projectile_range() if skill_id == &"basic_attack" else player.skill_range(skill_id)
 		projectile.configure_directional(request.copy(), origin, direction, enemies, navigation, speed, max_distance, hit_limit)
 		projectile.hit.connect(_on_precision_projectile_hit)
 		add_child(projectile)
@@ -734,7 +748,7 @@ func _update_hud() -> void:
 		var definition := ClassCatalog.skill_definition(skill_id)
 		var cost := player.skill_cost(skill_id)
 		var rank_text := " R%d" % player.skill_rank(skill_id) if not definition.ranks.is_empty() else ""
-		var state := "CONJURANDO %.1fs" % player.active_cast_remaining if player.active_cast_skill == skill_id else _skill_state(player.skill_cooldown(skill_id), cost)
+		var state := _display_skill_state(skill_id, cost)
 		skill_lines.append("%s  %s%s — %s" % [_skill_input_label(skill_id), definition.display_name, rank_text, state])
 	skill_label.text = "\n".join(skill_lines)
 	augment_button.text = "Escolher augment (E) — %d pendente(s)" % run_state.pending_choices
@@ -744,13 +758,20 @@ func _update_hud() -> void:
 			var definition := ClassCatalog.skill_definition(skill_id)
 			var cost := player.skill_cost(skill_id)
 			var rank_text := " R%d" % player.skill_rank(skill_id) if not definition.ranks.is_empty() else ""
-			var state := "CONJURANDO %.1fs" % player.active_cast_remaining if player.active_cast_skill == skill_id else _skill_state(player.skill_cooldown(skill_id), cost)
+			var state := _display_skill_state(skill_id, cost)
 			battle_controls.show_skill_state(skill_id, "%s · %s%s\n%d SP · %s" % [_skill_input_label(skill_id), definition.display_name.to_upper(), rank_text, int(cost), state], cast_intent.active_skill == skill_id or player.active_cast_skill == skill_id)
 
 func _skill_input_label(skill_id: StringName) -> String:
 	var index := player.available_skill_ids().find(skill_id)
 	var labels := ["Q", "W", "A", "S", "D"]
 	return labels[index] if index >= 0 and index < labels.size() else ClassCatalog.skill_definition(skill_id).input_key
+
+func _display_skill_state(skill_id: StringName, sp_cost: float) -> String:
+	if player.active_cast_skill == skill_id:
+		return "CONJURANDO %.1fs" % player.active_cast_remaining
+	if skill_id == &"extended_aim" and player.has_extended_aim():
+		return "ATIVA %.1fs" % player.extended_aim_remaining
+	return _skill_state(player.skill_cooldown(skill_id), sp_cost)
 
 func _skill_state(cooldown: float, sp_cost: float) -> String:
 	if cooldown > 0.0:
