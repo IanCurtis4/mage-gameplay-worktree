@@ -13,6 +13,9 @@ func _prepare_impact(victim: CombatActor) -> void:
 		request.magic_damage *= 1.5
 
 func _draw() -> void:
+	if request != null and request.skill_id == &"lightning":
+		draw_polyline(PackedVector2Array([Vector2(-18, -5), Vector2(-8, 2), Vector2(-2, -5), Vector2(5, 3), Vector2(16, 0)]), color, 3.0, true)
+		return
 	if request != null and request.skill_id in [&"fire_spear", &"ice_spear"]:
 		draw_colored_polygon(PackedVector2Array([Vector2(-19, -3), Vector2(5, -4), Vector2(16, 0), Vector2(5, 4), Vector2(-19, 3)]), color)
 		draw_line(Vector2(-13, 0), Vector2(9, 0), color.lightened(0.65), 2.0)

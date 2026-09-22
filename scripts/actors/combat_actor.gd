@@ -26,6 +26,7 @@ var burn_tick_remaining := 0.0
 var burn_request: DamageRequest
 var slow_remaining := 0.0
 var slow_fraction := 0.0
+var electrified_remaining := 0.0
 var hard_controls := HardControlState.new()
 var character_animation: CharacterAnimation
 
@@ -75,6 +76,15 @@ func is_alive() -> bool:
 
 func is_burning() -> bool:
 	return burn_remaining > 0.0
+
+func is_electrified() -> bool:
+	return electrified_remaining > 0.0
+
+func apply_electrified(duration: float) -> void:
+	if not is_alive() or duration <= 0.0:
+		return
+	electrified_remaining = duration
+	queue_redraw()
 
 func apply_burn(request: DamageRequest, duration: float = 3.0) -> void:
 	if not is_alive() or request == null or duration <= 0.0 or request.physical_damage + request.magic_damage <= 0.0:
@@ -133,6 +143,7 @@ func clear_statuses() -> void:
 	burn_request = null
 	slow_remaining = 0.0
 	slow_fraction = 0.0
+	electrified_remaining = 0.0
 	hard_controls.clear()
 	queue_redraw()
 
@@ -148,6 +159,9 @@ func advance_statuses(delta: float, simulation_paused: bool = false) -> void:
 		if slow_remaining <= 0.0:
 			slow_fraction = 0.0
 			queue_redraw()
+	if electrified_remaining > 0.0:
+		electrified_remaining = maxf(0.0, electrified_remaining - delta)
+		queue_redraw()
 	var remaining_delta := delta
 	while burn_remaining > 0.0 and remaining_delta > 0.0:
 		var step := minf(remaining_delta, minf(burn_remaining, burn_tick_remaining))
@@ -216,6 +230,10 @@ func _draw() -> void:
 		draw_arc(Vector2(0, 3), collision_radius + 6.0, 0.0, TAU, 24, Color("ff7a3d"), 2.0, true)
 	if slow_remaining > 0.0:
 		draw_arc(Vector2(0, 6), collision_radius + 9.0, 0.0, TAU, 24, Color("72c9ff"), 2.0, true)
+	if is_electrified():
+		for side: float in [-1.0, 1.0]:
+			var x := side * (collision_radius + 8.0)
+			draw_polyline(PackedVector2Array([Vector2(x, -34), Vector2(x - side * 5.0, -24), Vector2(x + side * 2.0, -24), Vector2(x - side * 4.0, -13)]), Color("e9d76a"), 2.5, true)
 	if is_rooted():
 		draw_arc(Vector2(0, 7), collision_radius + 12.0, 0.0, TAU, 24, Color("d9bd72"), 3.0, true)
 

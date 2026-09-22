@@ -246,6 +246,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.SPEAR:
 		if not player.use_spear(skill, selected_target):
 			_report_skill_failure(skill, selected_target)
+	elif definition.handler_id == SkillDefinition.Handler.LIGHTNING:
+		if not player.use_lightning(selected_target):
+			_report_skill_failure(skill, selected_target)
 	elif definition.handler_id == SkillDefinition.Handler.TELEPORT:
 		if not player.use_teleport(point):
 			if not player.can_teleport(point):
@@ -439,7 +442,7 @@ func _on_mage_projectile_requested(skill_id: StringName, request: DamageRequest,
 		else:
 			var speed := PlayerActor.MAGE_BASIC_SPEED if skill_id == &"basic_attack" else player.skill_projectile_speed(skill_id)
 			var max_distance := PlayerActor.MAGE_BASIC_MAX_DISTANCE if skill_id == &"basic_attack" else player.skill_range(skill_id)
-			var visual_color := Color("74c9ff") if skill_id == &"ice_spear" else Color("ff793d")
+			var visual_color := Color("e9d76a") if skill_id == &"lightning" else Color("74c9ff") if skill_id == &"ice_spear" else Color("ff793d")
 			projectile.configure_homing(projectile_request, target_actor, origin, navigation, speed, max_distance, visual_color)
 			if skill_id == &"basic_attack":
 				projectile.homing = false
@@ -513,6 +516,8 @@ func _on_mage_projectile_hit(request: DamageRequest, target_actor: CombatActor) 
 		return
 	if request.skill_id == &"ice_spear" and target_actor.is_alive():
 		target_actor.apply_slow(0.30, 2.0)
+	elif request.skill_id == &"lightning" and target_actor.is_alive():
+		target_actor.apply_electrified(4.0)
 
 func _on_fire_wall_requested(direction: Vector2, burn_request: DamageRequest) -> void:
 	var wall := FireWall.new()

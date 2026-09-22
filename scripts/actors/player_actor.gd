@@ -219,6 +219,18 @@ func use_spear(skill_id: StringName, enemy: CombatActor) -> bool:
 	resources_changed.emit()
 	return true
 
+func use_lightning(enemy: CombatActor) -> bool:
+	if class_id != &"mage" or not can_target_skill(&"lightning", enemy) or not _can_spend(&"lightning"):
+		return false
+	var facing := _resolved_facing(global_position.direction_to(enemy.global_position))
+	_spend(&"lightning")
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(&"lightning")
+	var request := _make_magic_request(enemy, &"lightning", _magic_power(&"lightning"), definition.accuracy_mode, definition.can_crit)
+	mage_projectile_requested.emit(&"lightning", request, enemy, facing, 1)
+	resources_changed.emit()
+	return true
+
 func use_double_shot(direction: Vector2) -> bool:
 	var rank_definition := _runtime_rank_definition(&"double_shot")
 	if class_id != &"archer" or rank_definition == null or not _can_spend(&"double_shot"):
