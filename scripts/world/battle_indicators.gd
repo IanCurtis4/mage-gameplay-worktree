@@ -101,6 +101,11 @@ func _draw() -> void:
 	elif skill in [&"fire_spear", &"ice_spear"]:
 		draw_dashed_line(origin, endpoint, color, 2.0, 10.0, true, true)
 		_draw_endpoint(endpoint, color)
+	elif skill == &"double_shot":
+		draw_dashed_line(origin, endpoint, color, 2.0, 10.0, true, true)
+		draw_line(origin + direction.orthogonal() * 7.0, endpoint + direction.orthogonal() * 7.0, Color(color, 0.35), 1.0, true)
+		draw_line(origin - direction.orthogonal() * 7.0, endpoint - direction.orthogonal() * 7.0, Color(color, 0.35), 1.0, true)
+		_draw_endpoint(endpoint, color)
 	elif skill == &"teleport":
 		draw_dashed_line(origin, endpoint, Color(color, 0.65), 2.0, 10.0, true, true)
 		_draw_endpoint(endpoint, color)

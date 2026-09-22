@@ -14,6 +14,7 @@ enum Handler {
 	TELEPORT,
 	SWORDSMAN_RESISTANCE,
 	MAGE_SP_REGENERATION,
+	DOUBLE_SHOT,
 }
 
 const MAX_ACTIVE_RANK := 5
@@ -38,7 +39,7 @@ const MAX_PASSIVE_RANK := 3
 func is_rank_catalog_valid() -> bool:
 	if category < Category.ACTIVE or category > Category.PASSIVE:
 		return false
-	if handler_id <= Handler.UNASSIGNED or handler_id > Handler.MAGE_SP_REGENERATION:
+	if handler_id <= Handler.UNASSIGNED or handler_id > Handler.DOUBLE_SHOT:
 		return false
 	var maximum_rank := MAX_ACTIVE_RANK if category == Category.ACTIVE else MAX_PASSIVE_RANK
 	if ranks.is_empty() or ranks.size() > maximum_rank:

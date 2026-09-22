@@ -240,6 +240,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 				_show_skill_blocked("Teleporte", player.skill_cooldown(skill), player.skill_cost(skill))
 		else:
 			_select_enemy(null)
+	elif definition.handler_id == SkillDefinition.Handler.DOUBLE_SHOT:
+		if not player.use_double_shot(direction):
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 
 func _report_skill_failure(skill: StringName, selected_target: CombatActor = null) -> void:
 	var definition := ClassCatalog.skill_definition(skill)
@@ -390,13 +393,17 @@ func _on_mage_projectile_requested(skill_id: StringName, request: DamageRequest,
 		add_child(projectile)
 		projectile.add_to_group("player_projectiles")
 
-func _on_precision_projectile_requested(request: DamageRequest, _target_actor: CombatActor, direction: Vector2) -> void:
-	var projectile := PlayerProjectile.new()
-	var origin := player.global_position + PlayerProjectile.BODY_OFFSET
-	projectile.configure_directional(request.copy(), origin, direction, enemies, navigation, PlayerActor.ARCHER_BASIC_SPEED, PlayerActor.ARCHER_BASIC_MAX_DISTANCE)
-	projectile.hit.connect(_on_precision_projectile_hit)
-	add_child(projectile)
-	projectile.add_to_group("player_projectiles")
+func _on_precision_projectile_requested(skill_id: StringName, request: DamageRequest, _target_actor: CombatActor, direction: Vector2, count: int) -> void:
+	for index: int in range(count):
+		var projectile := PlayerProjectile.new()
+		var side_offset := direction.orthogonal() * (float(index) - float(count - 1) * 0.5) * 14.0
+		var origin := player.global_position + PlayerProjectile.BODY_OFFSET + side_offset
+		var speed := PlayerActor.ARCHER_BASIC_SPEED if skill_id == &"basic_attack" else player.skill_projectile_speed(skill_id)
+		var max_distance := PlayerActor.ARCHER_BASIC_MAX_DISTANCE if skill_id == &"basic_attack" else player.skill_range(skill_id)
+		projectile.configure_directional(request.copy(), origin, direction, enemies, navigation, speed, max_distance)
+		projectile.hit.connect(_on_precision_projectile_hit)
+		add_child(projectile)
+		projectile.add_to_group("player_projectiles")
 
 func _on_precision_projectile_hit(request: DamageRequest, target_actor: CombatActor) -> void:
 	if target_actor != null and target_actor.is_alive():

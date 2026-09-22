@@ -3,7 +3,7 @@ extends CombatActor
 
 signal attack_requested(request: DamageRequest, target: CombatActor)
 signal mage_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int)
-signal precision_projectile_requested(request: DamageRequest, target: CombatActor, direction: Vector2)
+signal precision_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int)
 signal fire_wall_requested(direction: Vector2, burn_request: DamageRequest)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
@@ -198,6 +198,19 @@ func use_spear(skill_id: StringName, enemy: CombatActor) -> bool:
 	var request := _make_magic_request(enemy, skill_id, _magic_power(skill_id), definition.accuracy_mode, definition.can_crit)
 	var count := run_state.projectile_count(skill_id)
 	mage_projectile_requested.emit(skill_id, request, enemy, facing, count)
+	resources_changed.emit()
+	return true
+
+func use_double_shot(direction: Vector2) -> bool:
+	var rank_definition := _runtime_rank_definition(&"double_shot")
+	if class_id != &"archer" or rank_definition == null or not _can_spend(&"double_shot"):
+		return false
+	var facing := _resolved_facing(direction)
+	_spend(&"double_shot")
+	var definition := ClassCatalog.skill_definition(&"double_shot")
+	var power := stat_breakdown.value(&"precision_attack") * rank_definition.power
+	var request := _make_physical_request(null, &"double_shot", power, definition.accuracy_mode, definition.can_crit)
+	precision_projectile_requested.emit(&"double_shot", request, null, facing, 2)
 	resources_changed.emit()
 	return true
 
@@ -462,7 +475,7 @@ func _try_basic_attack() -> void:
 	if is_mage():
 		mage_projectile_requested.emit(&"basic_attack", request, target, _last_facing, 1)
 	elif is_archer():
-		precision_projectile_requested.emit(request, target, _last_facing)
+		precision_projectile_requested.emit(&"basic_attack", request, target, _last_facing, 1)
 	else:
 		attack_requested.emit(request, target)
 	presentation_action.emit(&"basic_attack", _last_facing, BASIC_ATTACK_RECOVERY)
