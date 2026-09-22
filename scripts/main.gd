@@ -228,7 +228,10 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.FIRE_WALL:
 		if not player.use_fire_wall(direction):
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
-	elif skill in [&"fire_spear", &"ice_spear"]:
+	elif definition.handler_id == SkillDefinition.Handler.SPEAR:
+		if not player.use_spear(skill, selected_target):
+			_report_skill_failure(skill, selected_target)
+	elif skill == &"ice_spear":
 		if not player.use_spear(skill, selected_target):
 			_report_skill_failure(skill, selected_target)
 	elif skill == &"teleport":
@@ -377,8 +380,8 @@ func _on_mage_projectile_requested(skill_id: StringName, request: DamageRequest,
 		if skill_id == &"fireball":
 			projectile.configure_directional(projectile_request, origin, direction, enemies, navigation, player.skill_projectile_speed(skill_id), player.skill_range(skill_id))
 		else:
-			var speed := PlayerActor.MAGE_BASIC_SPEED if skill_id == &"basic_attack" else definition.projectile_speed
-			var max_distance := PlayerActor.MAGE_BASIC_MAX_DISTANCE if skill_id == &"basic_attack" else definition.range
+			var speed := PlayerActor.MAGE_BASIC_SPEED if skill_id == &"basic_attack" else player.skill_projectile_speed(skill_id)
+			var max_distance := PlayerActor.MAGE_BASIC_MAX_DISTANCE if skill_id == &"basic_attack" else player.skill_range(skill_id)
 			var visual_color := Color("74c9ff") if skill_id == &"ice_spear" else Color("ff793d")
 			projectile.configure_homing(projectile_request, target_actor, origin, navigation, speed, max_distance, visual_color)
 			if skill_id == &"basic_attack":

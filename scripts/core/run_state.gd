@@ -103,7 +103,8 @@ func projectile_count(skill_id: StringName) -> int:
 		return level_count
 	var augment_id := &"extra_fire_spear" if skill_id == &"fire_spear" else &"extra_ice_spear"
 	var augment_count: int = 1 + int(augment_stacks.get(augment_id, 0))
-	return level_count + maxi(0, augment_count - 1)
+	var base_count := 1 if skill_id == &"fire_spear" else level_count
+	return base_count + maxi(0, augment_count - 1)
 
 func describe_progress(definition: AugmentDefinition) -> String:
 	var current: int = augment_stacks.get(definition.id, 0)
