@@ -219,9 +219,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	if definition.handler_id == SkillDefinition.Handler.SLASH:
 		if not player.use_slash(direction, enemies):
 			_show_skill_blocked(definition.display_name, player.slash_cooldown, player.skill_cost(skill))
-	elif skill == &"dash":
+	elif definition.handler_id == SkillDefinition.Handler.DASH:
 		if not player.use_dash(direction):
-			_show_skill_blocked("Investida", player.dash_cooldown, PlayerActor.DASH_SP_COST)
+			_show_skill_blocked(definition.display_name, player.dash_cooldown, player.skill_cost(skill))
 	elif skill == &"fireball":
 		if not player.use_fireball(direction):
 			_show_skill_blocked("Bola de Fogo", player.skill_cooldown(skill), player.skill_cost(skill))

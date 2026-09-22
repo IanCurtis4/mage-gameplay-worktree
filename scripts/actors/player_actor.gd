@@ -8,8 +8,6 @@ signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
 
 const SLASH_SP_COST := 15.0
-const DASH_SP_COST := 20.0
-const DASH_DISTANCE := 270.0
 const DASH_DURATION := 0.18
 const BASIC_REACH_BEYOND_BODIES := 50.0
 const ATTACK_RETENTION := 16.0
@@ -144,7 +142,8 @@ func use_slash(direction: Vector2, enemies: Array[CombatActor]) -> bool:
 	return true
 
 func use_dash(direction: Vector2) -> bool:
-	if class_id != &"swordsman" or not _can_spend(&"dash"):
+	var rank_definition := _runtime_rank_definition(&"dash")
+	if class_id != &"swordsman" or rank_definition == null or not _can_spend(&"dash"):
 		return false
 	var facing := _resolved_facing(direction)
 	_spend(&"dash")
@@ -273,7 +272,7 @@ func aim_direction(point: Vector2) -> Vector2:
 	return _last_facing if direction.is_zero_approx() else direction
 
 func dash_destination(direction: Vector2) -> Vector2:
-	return navigation.move_until_blocked(global_position, global_position + direction.normalized() * DASH_DISTANCE)
+	return navigation.move_until_blocked(global_position, global_position + direction.normalized() * skill_range(&"dash"))
 
 func skill_cooldown(skill_id: StringName) -> float:
 	if skill_id == &"slash":

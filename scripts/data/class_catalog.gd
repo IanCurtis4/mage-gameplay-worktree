@@ -28,6 +28,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"ice_spear", "Lança de Gelo", "S", SkillDefinition.Targeting.SINGLE_TARGET, 14.0, 3.0, 1.10, 360.0, 760.0, 0.22, DamageRequest.AccuracyMode.CONTESTED, true)
 	_add_skill(&"teleport", "Teleporte", "D", SkillDefinition.Targeting.POINT, 22.0, 6.0, 0.0, 320.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_configure_slash_ranks()
+	_configure_dash_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -92,5 +93,19 @@ static func _configure_slash_ranks() -> void:
 		rank.range = 155.0
 		rank.power = powers[index]
 		rank.physical_weight = 1.0
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_dash_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"dash"]
+	definition.category = SkillDefinition.Category.ACTIVE
+	definition.handler_id = SkillDefinition.Handler.DASH
+	var cooldowns: Array[float] = [6.0, 5.7, 5.4, 5.1, 4.8]
+	for index: int in cooldowns.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = 20.0
+		rank.cooldown = cooldowns[index]
+		rank.range = 270.0
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())

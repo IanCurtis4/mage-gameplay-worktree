@@ -10,6 +10,7 @@ var origin := Vector2.ZERO
 var direction := Vector2.RIGHT
 var endpoint := Vector2.ZERO
 var body_radius := 20.0
+var active_range := 0.0
 var available := true
 var click_position := Vector2.ZERO
 var click_lifetime := 0.0
@@ -30,6 +31,7 @@ func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast
 	else:
 		endpoint = origin + direction * actor.skill_range(skill)
 	body_radius = actor.collision_radius
+	active_range = actor.skill_range(skill_id)
 	available = can_cast
 	queue_redraw()
 
@@ -81,7 +83,7 @@ func _draw() -> void:
 			draw_line(origin - side, endpoint - side, color, 2.0, true)
 			draw_dashed_line(origin, endpoint, Color(color, 0.65), 1.5, 9.0, true, true)
 		_draw_endpoint(endpoint, color)
-		var full_endpoint := origin + direction * PlayerActor.DASH_DISTANCE
+		var full_endpoint := origin + direction * active_range
 		if endpoint.distance_to(full_endpoint) > 1.0:
 			draw_line(endpoint, full_endpoint, Color(BLOCKED_COLOR, 0.3), 1.0, true)
 			draw_line(endpoint + side, endpoint - side, BLOCKED_COLOR, 4.0, true)
