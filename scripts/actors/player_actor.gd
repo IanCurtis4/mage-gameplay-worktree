@@ -241,12 +241,13 @@ func skill_cast_time(skill_id: StringName) -> float:
 
 func teleport_destination(point: Vector2) -> Vector2:
 	var offset := point - global_position
-	if offset.length() > ClassCatalog.skill_definition(&"teleport").range:
-		offset = offset.normalized() * ClassCatalog.skill_definition(&"teleport").range
+	var maximum_range := skill_range(&"teleport")
+	if offset.length() > maximum_range:
+		offset = offset.normalized() * maximum_range
 	return global_position + offset
 
 func can_teleport(point: Vector2) -> bool:
-	return navigation != null and navigation.is_walkable(teleport_destination(point))
+	return skill_range(&"teleport") > 0.0 and navigation != null and navigation.is_walkable(teleport_destination(point))
 
 func use_teleport(point: Vector2) -> bool:
 	if class_id != &"mage" or not _can_spend(&"teleport") or not can_teleport(point):

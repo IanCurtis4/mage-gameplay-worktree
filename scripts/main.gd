@@ -231,7 +231,7 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.SPEAR:
 		if not player.use_spear(skill, selected_target):
 			_report_skill_failure(skill, selected_target)
-	elif skill == &"teleport":
+	elif definition.handler_id == SkillDefinition.Handler.TELEPORT:
 		if not player.use_teleport(point):
 			if not player.can_teleport(point):
 				status_label.text = "Teleporte indisponível — DESTINO BLOQUEADO"

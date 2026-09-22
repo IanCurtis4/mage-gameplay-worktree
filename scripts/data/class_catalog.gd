@@ -51,6 +51,7 @@ static func _ensure_built() -> void:
 	_configure_fire_wall_ranks()
 	_configure_fire_spear_ranks()
 	_configure_ice_spear_ranks()
+	_configure_teleport_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -226,5 +227,19 @@ static func _configure_ice_spear_ranks() -> void:
 		rank.magic_weight = 1.0
 		rank.projectile_speed = 760.0
 		rank.effect_ids = [&"slow"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_teleport_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"teleport"]
+	definition.category = SkillDefinition.Category.ACTIVE
+	definition.handler_id = SkillDefinition.Handler.TELEPORT
+	var cooldowns: Array[float] = [6.0, 5.7, 5.4, 5.1, 4.8]
+	for index: int in cooldowns.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = 22.0
+		rank.cooldown = cooldowns[index]
+		rank.range = 320.0
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
