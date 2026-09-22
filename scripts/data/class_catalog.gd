@@ -81,6 +81,16 @@ static func _ensure_built() -> void:
 	mage.basic_range = 250.0
 	_classes[mage.id] = mage
 
+	var archer := ClassDefinition.new()
+	archer.id = IdentityIds.ARCHER
+	archer.display_name = "Arqueiro"
+	archer.attributes = IdentityIds.initial_attributes(IdentityIds.ARCHER)
+	archer.skill_ids = []
+	archer.passive_id = &""
+	archer.basic_power = 1.0
+	archer.basic_range = 340.0
+	_classes[archer.id] = archer
+
 static func _add_skill(
 	skill_id: StringName,
 	display_name: String,

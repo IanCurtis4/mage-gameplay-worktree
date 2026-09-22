@@ -3,6 +3,7 @@ extends CombatActor
 
 signal attack_requested(request: DamageRequest, target: CombatActor)
 signal mage_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int)
+signal precision_projectile_requested(request: DamageRequest, target: CombatActor, direction: Vector2)
 signal fire_wall_requested(direction: Vector2, burn_request: DamageRequest)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
@@ -21,6 +22,8 @@ const SLASH_RANGE := 155.0
 const SLASH_HALF_ANGLE := deg_to_rad(52.0)
 const MAGE_BASIC_SPEED := 620.0
 const MAGE_BASIC_MAX_DISTANCE := 420.0
+const ARCHER_BASIC_SPEED := 880.0
+const ARCHER_BASIC_MAX_DISTANCE := 520.0
 
 var navigation: ArenaNavigation
 var run_state: RunState
@@ -66,7 +69,8 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 	class_definition = ClassCatalog.class_definition(class_id)
 	_capture_rank_definitions()
 	var derived := _build_stat_breakdown()
-	setup(class_definition.display_name, Color("8e73de") if class_id == &"mage" else Color("55a8d9"), derived, 20.0)
+	var class_color := Color("8e73de") if class_id == &"mage" else Color("6fa85a") if class_id == &"archer" else Color("55a8d9")
+	setup(class_definition.display_name, class_color, derived, 20.0)
 	set_animation_kind(class_id)
 	max_sp = stat_breakdown.value(&"max_sp")
 	current_sp = max_sp
@@ -76,6 +80,9 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 
 func is_mage() -> bool:
 	return class_id == &"mage"
+
+func is_archer() -> bool:
+	return class_id == &"archer"
 
 func available_skill_ids() -> Array[StringName]:
 	if run_state != null and run_state.uses_persistent_build():
@@ -448,10 +455,14 @@ func _try_basic_attack() -> void:
 	var request: DamageRequest
 	if is_mage():
 		request = _make_magic_request(target, &"basic_attack", stat_breakdown.value(&"magic_attack") * class_definition.basic_power, DamageRequest.AccuracyMode.CONTESTED, true)
+	elif is_archer():
+		request = _make_physical_request(target, &"basic_attack", stat_breakdown.value(&"precision_attack") * class_definition.basic_power, DamageRequest.AccuracyMode.CONTESTED, true)
 	else:
 		request = _make_physical_request(target, &"basic_attack", stat_breakdown.value(&"melee_attack") * class_definition.basic_power, DamageRequest.AccuracyMode.CONTESTED, true)
 	if is_mage():
 		mage_projectile_requested.emit(&"basic_attack", request, target, _last_facing, 1)
+	elif is_archer():
+		precision_projectile_requested.emit(request, target, _last_facing)
 	else:
 		attack_requested.emit(request, target)
 	presentation_action.emit(&"basic_attack", _last_facing, BASIC_ATTACK_RECOVERY)
@@ -583,7 +594,7 @@ func _build_stat_breakdown() -> StatBreakdown:
 
 func _draw() -> void:
 	super._draw()
-	if _basic_visual_time > 0.0 and not is_mage():
+	if _basic_visual_time > 0.0 and class_id == &"swordsman":
 		var swing_angle := _basic_facing.angle()
 		draw_arc(_basic_origin - global_position, _basic_visual_radius, swing_angle - 0.65, swing_angle + 0.65, 16, Color(1.0, 0.89, 0.60, _basic_visual_time / BASIC_ATTACK_RECOVERY), 4.0)
 	if _slash_visual_time > 0.0:

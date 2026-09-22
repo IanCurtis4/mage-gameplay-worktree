@@ -92,6 +92,7 @@ func _ready() -> void:
 	player.global_position = Vector2(300, 520)
 	player.attack_requested.connect(_on_attack_requested)
 	player.mage_projectile_requested.connect(_on_mage_projectile_requested)
+	player.precision_projectile_requested.connect(_on_precision_projectile_requested)
 	player.fire_wall_requested.connect(_on_fire_wall_requested)
 	player.skill_cast_ready.connect(_on_skill_cast_ready)
 	player.status_damage_requested.connect(_on_attack_requested)
@@ -388,6 +389,18 @@ func _on_mage_projectile_requested(skill_id: StringName, request: DamageRequest,
 		projectile.hit.connect(_on_mage_projectile_hit)
 		add_child(projectile)
 		projectile.add_to_group("player_projectiles")
+
+func _on_precision_projectile_requested(request: DamageRequest, _target_actor: CombatActor, direction: Vector2) -> void:
+	var projectile := PlayerProjectile.new()
+	var origin := player.global_position + PlayerProjectile.BODY_OFFSET
+	projectile.configure_directional(request.copy(), origin, direction, enemies, navigation, PlayerActor.ARCHER_BASIC_SPEED, PlayerActor.ARCHER_BASIC_MAX_DISTANCE)
+	projectile.hit.connect(_on_precision_projectile_hit)
+	add_child(projectile)
+	projectile.add_to_group("player_projectiles")
+
+func _on_precision_projectile_hit(request: DamageRequest, target_actor: CombatActor) -> void:
+	if target_actor != null and target_actor.is_alive():
+		target_actor.apply_damage(request, rng)
 
 func _on_mage_projectile_hit(request: DamageRequest, target_actor: CombatActor) -> void:
 	if target_actor == null or not target_actor.is_alive():
