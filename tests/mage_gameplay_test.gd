@@ -105,7 +105,7 @@ func _test_projectile_order_and_burning() -> void:
 	root.add_child(caster)
 	var crossing := _target(Vector2(230, 19))
 	var wall := FireWall.new()
-	wall.configure(caster, Vector2.RIGHT, _burn_request(caster.get_instance_id(), 5.0), [crossing])
+	wall.configure(caster, Vector2.RIGHT, _burn_request(caster.get_instance_id(), 5.0), [crossing], 180.0)
 	root.add_child(wall)
 	wall._process(0.01)
 	crossing.position = Vector2(330, 19)

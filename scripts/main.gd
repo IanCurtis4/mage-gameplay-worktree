@@ -225,9 +225,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.FIREBALL:
 		if not player.use_fireball(direction):
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
-	elif skill == &"fire_wall":
+	elif definition.handler_id == SkillDefinition.Handler.FIRE_WALL:
 		if not player.use_fire_wall(direction):
-			_show_skill_blocked("Parede de Fogo", player.skill_cooldown(skill), player.skill_cost(skill))
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif skill in [&"fire_spear", &"ice_spear"]:
 		if not player.use_spear(skill, selected_target):
 			_report_skill_failure(skill, selected_target)
@@ -400,7 +400,7 @@ func _on_mage_projectile_hit(request: DamageRequest, target_actor: CombatActor) 
 
 func _on_fire_wall_requested(direction: Vector2, burn_request: DamageRequest) -> void:
 	var wall := FireWall.new()
-	wall.configure(player, direction, burn_request, enemies)
+	wall.configure(player, direction, burn_request, enemies, player.skill_range(&"fire_wall"))
 	add_child(wall)
 	wall.add_to_group("player_effects")
 

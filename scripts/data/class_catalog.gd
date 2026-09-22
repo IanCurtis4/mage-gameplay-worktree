@@ -48,6 +48,7 @@ static func _ensure_built() -> void:
 	_configure_dash_ranks()
 	_configure_swordsman_resistance_ranks()
 	_configure_fireball_ranks()
+	_configure_fire_wall_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -164,5 +165,24 @@ static func _configure_fireball_ranks() -> void:
 		rank.power = powers[index]
 		rank.magic_weight = 1.0
 		rank.projectile_speed = 680.0
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_fire_wall_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"fire_wall"]
+	definition.category = SkillDefinition.Category.ACTIVE
+	definition.handler_id = SkillDefinition.Handler.FIRE_WALL
+	var powers: Array[float] = [0.30, 0.34, 0.38, 0.42, 0.46]
+	var costs: Array[float] = [24.0, 27.0, 29.0, 30.0, 32.0]
+	for index: int in powers.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.variable_cast_time = 0.48
+		rank.cooldown = 7.0
+		rank.range = 180.0
+		rank.power = powers[index]
+		rank.magic_weight = 1.0
+		rank.effect_ids = [&"burn"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())

@@ -15,11 +15,12 @@ var remaining := DURATION
 var pillar_offsets := PackedVector2Array()
 var _previous_positions: Dictionary[int, Vector2] = {}
 
-func configure(caster: CombatActor, facing: Vector2, damage_request: DamageRequest, potential_targets: Array[CombatActor]) -> void:
+func configure(caster: CombatActor, facing: Vector2, damage_request: DamageRequest, potential_targets: Array[CombatActor], placement_range: float) -> void:
 	assert(damage_request != null)
+	assert(is_finite(placement_range) and placement_range >= 0.0)
 	burn_request = damage_request.copy()
 	targets = potential_targets.duplicate()
-	global_position = caster.global_position + facing.normalized() * ClassCatalog.skill_definition(&"fire_wall").range
+	global_position = caster.global_position + facing.normalized() * placement_range
 	var wall_axis := facing.normalized().orthogonal()
 	for index: int in range(PILLAR_COUNT):
 		pillar_offsets.append(wall_axis * ((float(index) - 1.5) * PILLAR_SPACING))

@@ -171,7 +171,8 @@ func use_fireball(direction: Vector2) -> bool:
 	return true
 
 func use_fire_wall(direction: Vector2) -> bool:
-	if class_id != &"mage" or not _can_spend(&"fire_wall"):
+	var rank_definition := _runtime_rank_definition(&"fire_wall")
+	if class_id != &"mage" or rank_definition == null or not _can_spend(&"fire_wall"):
 		return false
 	var facing := _resolved_facing(direction)
 	_spend(&"fire_wall")

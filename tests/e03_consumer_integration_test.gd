@@ -156,7 +156,7 @@ func _test_dot_offense_capture() -> void:
 	)
 	var captured := emitted[0].copy()
 	var wall := FireWall.new()
-	wall.configure(player, Vector2.RIGHT, emitted[0], [target])
+	wall.configure(player, Vector2.RIGHT, emitted[0], [target], 180.0)
 	root.add_child(wall)
 	wall.set_process(false)
 	wall._process(0.01)
