@@ -24,6 +24,24 @@ func _run() -> void:
 	_check(store.commit(seeded).get("ok", false), "fixture concede XP de job válido pelo armazenamento transacional")
 	facade = ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
 	_check(facade.open_profile().get("ok", false), "perfil com XP reabre sem migração")
+	var learning_menu := (load("res://scenes/character_menu.tscn") as PackedScene).instantiate() as CharacterMenu
+	learning_menu.set_profile_facade(facade)
+	root.add_child(learning_menu)
+	await process_frame
+	learning_menu._select_roster_index(0)
+	var expected_names := {
+		&"double_shot": "Disparo Duplo", &"piercing_arrow": "Flecha Perfurante",
+		&"arrow_rain": "Chuva de Flechas", &"extended_aim": "Mira Estendida",
+		&"snare_trap": "Armadilha de Laço", &"explosive_trap": "Armadilha Explosiva",
+		&"slowing_arrow": "Flecha Entorpecente", &"foliage_shelter": "Abrigo de Folhagem",
+		&"archer_precision": "Precisão", &"archer_cadence": "Cadência",
+		&"trap_technique": "Técnica de Armadilhas",
+	}
+	for skill_id: StringName in expected_names:
+		var label := learning_menu.progression_skill_tree.get_node("ProgressionSkill_%s" % skill_id) as Label
+		var button := learning_menu.progression_skill_tree.get_node("Learn_%s" % skill_id) as Button
+		_check(label.text.begins_with(expected_names[skill_id]) and label.text.contains("Rank 0/") and not button.disabled, "árvore identifica e permite aprender %s em R0" % skill_id)
+		_check(not label.tooltip_text.contains("ainda não estão disponíveis") and label.tooltip_text.contains("não equipa automaticamente"), "tooltip de %s descreve o fluxo vigente" % skill_id)
 	var purchases: Array[StringName] = [
 		&"double_shot", &"piercing_arrow", &"arrow_rain", &"extended_aim",
 		&"snare_trap", &"explosive_trap", &"slowing_arrow", &"foliage_shelter",
@@ -33,8 +51,14 @@ func _run() -> void:
 	]
 	for index: int in purchases.size():
 		var skill_id := purchases[index]
-		var result := facade.learn_skill("archer-learn-%d" % index, facade.current_profile().revision, character_id, skill_id)
+		var result := learning_menu._learn_skill(skill_id)
 		_check(result.get("ok", false), "compra persistente %d: %s" % [index + 1, skill_id])
+	for selector: OptionButton in [learning_menu.active_selectors[0], learning_menu.passive_selectors[0]]:
+		for index: int in range(1, selector.item_count):
+			var skill_id: StringName = selector.get_item_metadata(index)
+			_check(selector.get_item_text(index) == expected_names[skill_id], "slot identifica habilidade aprendida %s" % skill_id)
+	learning_menu.queue_free()
+	await process_frame
 	var progression := facade.progression_summary(character_id)
 	_check(progression["base_skill_points_available"] == 0 and progression["effective_skill_ranks"].size() == 11, "19 pontos compram oito ativas e três passivas com ranks distintos")
 

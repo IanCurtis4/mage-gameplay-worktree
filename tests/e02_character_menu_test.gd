@@ -27,7 +27,7 @@ func _initialize() -> void:
 	_check(swordsman["ok"] and mage["ok"] and menu.status_label.text == "Personagem criado." and menu.roster_list.item_count == 2 and menu.roster_list.get_item_text(0).contains("Lina") and menu.roster_list.get_item_text(1).contains("Mago"), "creation uses facade, explains success, and refreshes the real roster")
 	menu._select_roster_index(1)
 	_check(not menu.build_summary_label.text.contains("Bola de fogo") and menu.build_summary_label.text.contains("Vida 150") and menu.build_summary_label.text.contains("SP 85"), "roster navigation previews the chosen alt's empty skill bar and central derived stats before committing selection")
-	_check(menu.progression_state_label.text.contains("XP base: 0") and menu.progression_wallets_label.text.contains("Atributos: 0/0 livres") and menu.progression_attributes_label.text.contains("INT: base 9 · investido 0 · base + investido: teto 60 · efetivo 9 · limite efetivo 120") and menu.progression_skill_tree.get_node("ProgressionSkill_fire_spear").text.contains("Rank 0/5") and menu.progression_skill_tree.get_node("ProgressionSkill_fire_spear").tooltip_text.contains("ainda não estão disponíveis"), "progression panel reads XP, wallet, investment and effective caps, rank-zero skills, and limited tooltips from the selected character")
+	_check(menu.progression_state_label.text.contains("XP base: 0") and menu.progression_wallets_label.text.contains("Atributos: 0/0 livres") and menu.progression_attributes_label.text.contains("INT: base 9 · investido 0 · base + investido: teto 60 · efetivo 9 · limite efetivo 120") and menu.progression_skill_tree.get_node("ProgressionSkill_fire_spear").text.contains("Rank 0/5") and menu.progression_skill_tree.get_node("ProgressionSkill_fire_spear").tooltip_text.contains("não equipa automaticamente"), "progression panel reads XP, wallet, investment and effective caps, rank-zero skills, and equip guidance from the selected character")
 	var preset_changed: Dictionary = menu._choose_preset(1)
 	_check(preset_changed["ok"] and menu.status_label.text == "Preset selecionado." and menu.facade.current_profile().characters[1].selected_preset == 1, "preset selection persists through the facade without editing build fields directly")
 	var build_saved: Dictionary = menu._save_build()
@@ -142,7 +142,7 @@ func _check_skill_controls(scene: PackedScene) -> void:
 	var heavy_label: Label = menu.progression_skill_tree.get_node("ProgressionSkill_heavy_slash")
 	var heavy_button: Button = menu.progression_skill_tree.get_node("Learn_heavy_slash")
 	var slash_button: Button = menu.progression_skill_tree.get_node("Learn_slash")
-	_check(menu.respec_skills_button != null and not slash_button.disabled and heavy_button.disabled and heavy_label.tooltip_text.contains("Job 5") and heavy_label.tooltip_text.contains("Corte R3") and heavy_button.tooltip_text.contains("requisitos"), "skill tree exposes the catalog prerequisite tooltip and enables only the authoritative next rank")
+	_check(menu.respec_skills_button != null and not slash_button.disabled and heavy_button.disabled and heavy_label.tooltip_text.contains("Job 5") and heavy_label.tooltip_text.contains("Corte em cone R3") and heavy_button.tooltip_text.contains("requisitos"), "skill tree exposes the catalog prerequisite tooltip and enables only the authoritative next rank")
 	store.failure_stage = &"write_pending"
 	var failed: Dictionary = menu._learn_skill(&"slash")
 	store.failure_stage = &""

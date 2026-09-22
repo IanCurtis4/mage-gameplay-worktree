@@ -459,7 +459,7 @@ func _skill_progression_tooltip(option: Dictionary) -> String:
 		lines.append("Pré-requisitos: %s" % (", ".join(prerequisites) if not prerequisites.is_empty() else "nenhum"))
 	else:
 		lines.append("Rank máximo atingido.")
-	lines.append("Efeitos adicionais por rank ainda não estão disponíveis.")
+	lines.append("Aprender não equipa automaticamente. Escolha a habilidade nos slots da build.")
 	return "\n".join(lines)
 
 func _skill_purchase_tooltip(option: Dictionary) -> String:
@@ -484,17 +484,8 @@ func _attribute_name(attribute_id: StringName) -> String:
 		_: return "Atributo indisponível"
 
 func _skill_name(skill_id: Variant) -> String:
-	match StringName(skill_id):
-		&"slash": return "Corte"
-		&"dash": return "Investida"
-		&"swordsman_resistance": return "Resistência"
-		&"fireball": return "Bola de fogo"
-		&"fire_wall": return "Parede de fogo"
-		&"fire_spear": return "Lança de fogo"
-		&"ice_spear": return "Lança de gelo"
-		&"teleport": return "Teleporte"
-		&"mage_mana_regeneration": return "Regeneração de SP"
-		_: return "Skill indisponível"
+	var definition := ClassCatalog.skill_definition(StringName(skill_id))
+	return definition.display_name if definition != null else "Habilidade não implementada"
 
 func _equipment_name(item_id: Variant) -> String:
 	var normalized_id: StringName = StringName(item_id) if item_id != null else &""
