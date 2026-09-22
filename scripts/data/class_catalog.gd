@@ -31,6 +31,12 @@ static func passive_modifier_source(skill_id: StringName, rank: int) -> Dictiona
 				"label": "Resistência do Espadachim",
 				"increased": {&"physical_defense": rank_definition.power},
 			}
+		SkillDefinition.Handler.MAGE_SP_REGENERATION:
+			return {
+				"source_id": &"passive_mage_sp_regeneration",
+				"label": "Regeneração de SP do Mago",
+				"increased": {&"sp_regen": rank_definition.power},
+			}
 	return {}
 
 static func _ensure_built() -> void:
@@ -44,6 +50,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"ice_spear", "Lança de Gelo", "S", SkillDefinition.Targeting.SINGLE_TARGET, 14.0, 3.0, 1.10, 360.0, 760.0, 0.22, DamageRequest.AccuracyMode.CONTESTED, true)
 	_add_skill(&"teleport", "Teleporte", "D", SkillDefinition.Targeting.POINT, 22.0, 6.0, 0.0, 320.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_passive_skill(&"swordsman_resistance", "Resistência")
+	_add_passive_skill(&"mage_mana_regeneration", "Regeneração de SP")
 	_configure_slash_ranks()
 	_configure_dash_ranks()
 	_configure_swordsman_resistance_ranks()
@@ -52,6 +59,7 @@ static func _ensure_built() -> void:
 	_configure_fire_spear_ranks()
 	_configure_ice_spear_ranks()
 	_configure_teleport_ranks()
+	_configure_mage_sp_regeneration_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -241,5 +249,17 @@ static func _configure_teleport_ranks() -> void:
 		rank.sp_cost = 22.0
 		rank.cooldown = cooldowns[index]
 		rank.range = 320.0
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_mage_sp_regeneration_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"mage_mana_regeneration"]
+	definition.handler_id = SkillDefinition.Handler.MAGE_SP_REGENERATION
+	var regeneration_increases: Array[float] = [0.50, 0.75, 1.00]
+	for index: int in regeneration_increases.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.power = regeneration_increases[index]
+		rank.effect_ids = [&"sp_regen_increased"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())

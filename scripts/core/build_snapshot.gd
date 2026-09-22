@@ -70,17 +70,18 @@ func try_stat_breakdown(modifier_sources: Array[Dictionary] = []) -> Dictionary:
 
 func intrinsic_modifier_sources() -> Array[Dictionary]:
 	var sources: Array[Dictionary] = []
-	if &"swordsman_resistance" in passive_slots:
-		var resistance_source := ClassCatalog.passive_modifier_source(
-			&"swordsman_resistance",
-			int(skill_ranks.get(&"swordsman_resistance", 0))
+	var seen: Dictionary[StringName, bool] = {}
+	for raw_passive_id: Variant in passive_slots:
+		if raw_passive_id == null:
+			continue
+		var passive_id := StringName(raw_passive_id)
+		if seen.has(passive_id):
+			continue
+		seen[passive_id] = true
+		var source := ClassCatalog.passive_modifier_source(
+			passive_id,
+			int(skill_ranks.get(passive_id, 0))
 		)
-		if not resistance_source.is_empty():
-			sources.append(resistance_source)
-	if &"mage_mana_regeneration" in passive_slots and int(skill_ranks.get(&"mage_mana_regeneration", 0)) > 0:
-		sources.append({
-			"source_id": &"passive_mage_sp_regeneration",
-			"label": "Regeneração de SP do Mago",
-			"increased": {&"sp_regen": 0.50},
-		})
+		if not source.is_empty():
+			sources.append(source)
 	return sources
