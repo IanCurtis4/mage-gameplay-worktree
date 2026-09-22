@@ -17,10 +17,10 @@ func _run() -> void:
 func _check_minimal_catalog_and_gate() -> void:
 	var definition := ClassCatalog.class_definition(&"archer")
 	_check(definition != null and definition.display_name == "Arqueiro" and definition.attributes == IdentityIds.initial_attributes(&"archer"), "catalog exposes the accepted Archer identity and attributes")
-	_check(definition.skill_ids == [&"double_shot", &"piercing_arrow", &"arrow_rain", &"extended_aim", &"snare_trap"] and definition.passive_id.is_empty() and definition.basic_power == 1.0 and definition.basic_range == 340.0, "Archer definition preserves basic tuning while exposing the five delivered skills")
+	_check(definition.skill_ids == [&"double_shot", &"piercing_arrow", &"arrow_rain", &"extended_aim", &"snare_trap"] and definition.passive_id == &"archer_precision" and definition.basic_power == 1.0 and definition.basic_range == 340.0, "Archer definition preserves basic tuning while exposing its delivered skills and default passive")
 	var state := RunState.new(&"archer")
-	_check(state.class_id == &"archer" and state.skill_levels == {&"double_shot": 1, &"piercing_arrow": 1, &"arrow_rain": 1, &"extended_aim": 1, &"snare_trap": 1} and state.build_snapshot.active_slots == [&"double_shot", &"piercing_arrow", &"arrow_rain", &"extended_aim", &"snare_trap"] and state.build_snapshot.passive_slots.is_empty(), "pilot run equips the five delivered Archer skills")
-	_check(not ProfileCatalog.pilot().base_class_is_available(&"archer"), "persistent profile keeps Archer unavailable before its first passive")
+	_check(state.class_id == &"archer" and state.skill_levels == {&"double_shot": 1, &"piercing_arrow": 1, &"arrow_rain": 1, &"extended_aim": 1, &"snare_trap": 1, &"archer_precision": 1} and state.build_snapshot.active_slots == [&"double_shot", &"piercing_arrow", &"arrow_rain", &"extended_aim", &"snare_trap"] and state.build_snapshot.passive_slots == [&"archer_precision"], "pilot run equips the five default Archer skills and Precision R1")
+	_check(ProfileCatalog.pilot().base_class_is_available(&"archer"), "persistent profile exposes Archer after its first passive is delivered")
 
 func _check_archer_basic_emission() -> void:
 	var navigation := ArenaNavigation.new()

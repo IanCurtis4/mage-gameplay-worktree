@@ -28,7 +28,7 @@ func _check_catalog_and_profile_gate() -> void:
 		_check(values.physical_weight == 0.0 and values.precision_weight == 0.0 and values.magic_weight == 0.0 and values.effect_ids == [&"physical_root"], "Snare Trap R%d carries control without damage weights" % rank)
 	var profile := ProfileCatalog.pilot()
 	_check(profile.skill_metadata(&"snare_trap").get("max_purchased_rank") == 5, "profile progression recognizes all five Snare Trap ranks")
-	_check(not profile.base_class_is_available(&"archer"), "fifth Archer active does not bypass the missing-passive availability gate")
+	_check(profile.base_class_is_available(&"archer"), "delivered Precision passive now satisfies the Archer availability gate")
 	_check(ClassCatalog.skill_definition(&"explosive_trap") != null, "Snare contract coexists with the later Explosive Trap catalog entry")
 
 func _check_hard_control_contract() -> void:

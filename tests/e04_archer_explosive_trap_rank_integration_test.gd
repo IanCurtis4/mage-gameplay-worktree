@@ -28,7 +28,7 @@ func _check_catalog_library_and_slot_boundary() -> void:
 		_check(values.precision_weight == 1.0 and values.physical_weight == 0.0 and values.magic_weight == 0.0 and values.effect_ids.is_empty(), "Explosive Trap R%d scales only physical precision damage without control" % rank)
 	var profile := ProfileCatalog.pilot()
 	_check(profile.skill_metadata(&"explosive_trap").get("max_purchased_rank") == 5, "profile progression recognizes all five Explosive Trap ranks")
-	_check(not profile.base_class_is_available(&"archer"), "sixth Archer library active does not bypass the missing-passive availability gate")
+	_check(profile.base_class_is_available(&"archer"), "delivered Precision passive keeps the Archer availability gate open")
 	var pilot := RunState.new(&"archer")
 	_check(ClassCatalog.class_definition(&"archer").skill_ids.size() == CharacterState.ACTIVE_SLOT_COUNT and pilot.build_snapshot.active_slots.size() == CharacterState.ACTIVE_SLOT_COUNT, "legacy pilot remains bounded to exactly five active slots")
 	_check(not pilot.skill_levels.has(&"explosive_trap") and &"explosive_trap" not in pilot.build_snapshot.active_slots, "sixth library skill is not silently auto-equipped into a nonexistent slot")

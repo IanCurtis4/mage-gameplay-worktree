@@ -25,7 +25,7 @@ func _check_catalog_table_and_gate() -> void:
 		_check(values.fixed_cast_time == 0.0 and values.variable_cast_time == 0.0 and values.post_cast_time == 0.0, "Mira Estendida R%d remains instant" % rank)
 		_check(values.precision_weight == 0.0 and values.physical_weight == 0.0 and values.magic_weight == 0.0 and values.effect_ids == [&"extended_aim"], "Mira Estendida R%d is a typed non-damaging buff" % rank)
 	var profile := ProfileCatalog.pilot()
-	_check(profile.skill_metadata(&"extended_aim").get("max_purchased_rank") == 5 and not profile.base_class_is_available(&"archer"), "profile knows the fourth Archer active but keeps the class gated until a passive exists")
+	_check(profile.skill_metadata(&"extended_aim").get("max_purchased_rank") == 5 and profile.base_class_is_available(&"archer"), "profile keeps Extended Aim progression while the delivered passive opens the Archer gate")
 
 func _check_ranked_buff_runtime() -> void:
 	var navigation := ArenaNavigation.new()

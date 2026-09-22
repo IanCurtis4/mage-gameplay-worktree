@@ -288,6 +288,7 @@ func _class_name(base_class_id: StringName) -> String:
 	match base_class_id:
 		&"swordsman": return "Espadachim"
 		&"mage": return "Mago"
+		&"archer": return "Arqueiro"
 		_: return "Classe indisponível"
 
 func _build_summary(character: Variant) -> String:
@@ -672,7 +673,7 @@ func _build_ui() -> void:
 	name_input.placeholder_text = "Nome do personagem (opcional)"
 	name_input.max_length = 48
 	create_column.add_child(name_input)
-	for class_id: StringName in [&"swordsman", &"mage"]:
+	for class_id: StringName in [&"swordsman", &"mage", &"archer"]:
 		var button := Button.new()
 		button.text = "Criar %s" % _class_name(class_id)
 		button.custom_minimum_size = Vector2(0, 44)

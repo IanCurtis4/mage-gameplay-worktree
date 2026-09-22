@@ -20,7 +20,7 @@ func _initialize() -> void:
 	menu.set_profile_directory(root_directory.path_join("profile"))
 	root.add_child(menu)
 	await process_frame
-	_check(menu.roster_list.item_count == 0 and menu.empty_label.visible and menu.select_button.disabled and menu.progression_state_label.text.contains("Crie ou selecione") and menu.progression_skill_tree.get_child_count() == 0, "empty roster has an explicit state and cannot select or render a progression tree")
+	_check(menu.roster_list.item_count == 0 and menu.empty_label.visible and menu.select_button.disabled and menu.progression_state_label.text.contains("Crie ou selecione") and menu.progression_skill_tree.get_child_count() == 0 and menu.create_buttons.size() == 3 and menu.create_buttons[2].text == "Criar Arqueiro", "empty roster has an explicit state, cannot select or render a progression tree, and exposes all available base classes")
 	menu.name_input.text = "Lina"
 	var swordsman: Dictionary = menu.create_character(&"swordsman")
 	var mage: Dictionary = menu.create_character(&"mage")
@@ -63,7 +63,7 @@ func _initialize() -> void:
 	blocked.set_profile_facade(ProfileFacade.new(ProfileStore.new(blocked_directory)))
 	root.add_child(blocked)
 	await process_frame
-	_check(blocked.status_label.text.contains("somente leitura") and blocked.create_buttons[0].disabled and blocked.create_buttons[1].disabled and blocked.select_button.disabled and blocked.progression_state_label.text.contains("indisponível"), "read-only profile state is explained and blocks every roster mutation or progression consultation")
+	_check(blocked.status_label.text.contains("somente leitura") and blocked.create_buttons[0].disabled and blocked.create_buttons[1].disabled and blocked.create_buttons[2].disabled and blocked.select_button.disabled and blocked.progression_state_label.text.contains("indisponível"), "read-only profile state is explained and blocks every roster mutation or progression consultation")
 	_check(blocked.start_run_button.disabled, "read-only profile cannot start a run")
 	blocked.queue_free()
 	await _check_attribute_controls(scene)

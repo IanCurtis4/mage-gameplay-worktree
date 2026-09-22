@@ -114,7 +114,7 @@ func _check_create_select_and_restart() -> void:
 	_check(not duplicate_build["ok"] and duplicate_build["error_code"] == &"requirements_unmet" and restarted.current_profile().revision == 5, "unlearned skills are rejected without publishing a partial build")
 	var missing := restarted.select_character("select-missing", 5, profile_id + "_99")
 	_check(not missing["ok"] and missing["error_code"] == &"invalid_character_id" and restarted.current_profile().revision == 5, "unknown selection fails without a revision")
-	var unavailable := restarted.create_character("create-archer", 5, "Cris", &"archer")
+	var unavailable := restarted.create_character("create-unavailable", 5, "Cris", &"novice")
 	_check(not unavailable["ok"] and unavailable["error_code"] == &"invalid_origin" and restarted.current_profile().next_character_counter == 3, "an unavailable base cannot consume a character ID")
 	var invalid_name := restarted.create_character("create-invalid", 5, "", &"swordsman")
 	_check(not invalid_name["ok"] and invalid_name["error_code"] == &"invalid_display_name" and restarted.current_profile().next_character_counter == 3, "invalid character data is rejected before publication and preserves the counter")

@@ -28,7 +28,7 @@ func _check_catalog_library_and_slot_boundary() -> void:
 		_check(values.precision_weight == 0.0 and values.physical_weight == 0.0 and values.magic_weight == 0.0 and values.effect_ids == [&"concealment_area"], "Foliage Shelter R%d exposes concealment without hidden damage scaling" % rank)
 	var profile := ProfileCatalog.pilot()
 	_check(profile.skill_metadata(&"foliage_shelter").get("max_purchased_rank") == 5, "profile progression recognizes all five Foliage Shelter ranks")
-	_check(not profile.base_class_is_available(&"archer"), "eighth Archer library active does not bypass the missing-passive availability gate")
+	_check(profile.base_class_is_available(&"archer"), "delivered Precision passive keeps the Archer availability gate open")
 	var pilot := RunState.new(&"archer")
 	_check(ClassCatalog.class_definition(&"archer").skill_ids.size() == CharacterState.ACTIVE_SLOT_COUNT and pilot.build_snapshot.active_slots.size() == CharacterState.ACTIVE_SLOT_COUNT, "legacy pilot remains bounded to exactly five active slots")
 	_check(not pilot.skill_levels.has(&"foliage_shelter") and &"foliage_shelter" not in pilot.build_snapshot.active_slots, "eighth library skill is not silently auto-equipped")

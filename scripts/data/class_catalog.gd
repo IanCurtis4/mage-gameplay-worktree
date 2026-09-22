@@ -37,6 +37,12 @@ static func passive_modifier_source(skill_id: StringName, rank: int) -> Dictiona
 				"label": "Regeneração de SP do Mago",
 				"increased": {&"sp_regen": rank_definition.power},
 			}
+		SkillDefinition.Handler.ARCHER_PRECISION:
+			return {
+				"source_id": &"passive_archer_precision",
+				"label": "Precisão do Arqueiro",
+				"flat": {&"hit_rating": rank_definition.power},
+			}
 	return {}
 
 static func _ensure_built() -> void:
@@ -59,6 +65,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"foliage_shelter", "Abrigo de Folhagem", "D", SkillDefinition.Targeting.POINT, 18.0, 12.0, 4.0, 360.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_passive_skill(&"swordsman_resistance", "Resistência")
 	_add_passive_skill(&"mage_mana_regeneration", "Regeneração de SP")
+	_add_passive_skill(&"archer_precision", "Precisão")
 	_configure_slash_ranks()
 	_configure_dash_ranks()
 	_configure_swordsman_resistance_ranks()
@@ -76,6 +83,7 @@ static func _ensure_built() -> void:
 	_configure_explosive_trap_ranks()
 	_configure_slowing_arrow_ranks()
 	_configure_foliage_shelter_ranks()
+	_configure_archer_precision_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -102,7 +110,7 @@ static func _ensure_built() -> void:
 	archer.display_name = "Arqueiro"
 	archer.attributes = IdentityIds.initial_attributes(IdentityIds.ARCHER)
 	archer.skill_ids = [&"double_shot", &"piercing_arrow", &"arrow_rain", &"extended_aim", &"snare_trap"]
-	archer.passive_id = &""
+	archer.passive_id = &"archer_precision"
 	archer.basic_power = 1.0
 	archer.basic_range = 340.0
 	_classes[archer.id] = archer
@@ -427,5 +435,17 @@ static func _configure_foliage_shelter_ranks() -> void:
 		rank.range = 360.0
 		rank.power = durations[index]
 		rank.effect_ids = [&"concealment_area"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_archer_precision_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"archer_precision"]
+	definition.handler_id = SkillDefinition.Handler.ARCHER_PRECISION
+	var hit_bonuses: Array[float] = [8.0, 12.0, 16.0]
+	for index: int in hit_bonuses.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.power = hit_bonuses[index]
+		rank.effect_ids = [&"hit_rating_flat"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
