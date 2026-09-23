@@ -31,6 +31,13 @@ sempre revalidando o segmento contra a geometria inflada. Inimigos consomem o
 orçamento planejado de deslocamento ao atravessar waypoints, com saída sem progresso
 para evitar travas por resíduos subpixel.
 
+Parede de Gelo registra um segmento sólido temporário na mesma navegação usada por
+atores e projéteis. Colocação revalida toda a faixa contra bordas, obstáculos e
+atores vivos antes de cobrar recursos. Registro/retirada reconstruídos mudam a
+revisão da malha; atores descartam rotas antigas e replanejam. Expiração, fim do
+encontro e morte retiram o segmento sincronicamente, inclusive com a árvore
+pausada. Detalhes e tuning estão em E04_MG7_ICE_WALL_HANDOFF.md.
+
 Jogador mantém `velocity` no runtime: aceleração 1100 unidades/s² e frenagem/atrito
 1600 unidades/s², velocidade máxima derivada em `StatCalculator` (base 220). Acelera em cerca
 de 0,20 s, freia em cerca de 0,14 s e percorre aproximadamente 15 unidades ao parar

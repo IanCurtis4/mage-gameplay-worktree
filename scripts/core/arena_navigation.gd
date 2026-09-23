@@ -8,16 +8,50 @@ const EDGE_EPSILON := 0.5
 var _grid := AStar2D.new()
 var _bounds := Rect2()
 var _obstacles: Array[Rect2] = []
+var _temporary_segments: Dictionary[int, Dictionary] = {}
 var _actor_radius := 18.0
 var _columns := 0
 var _rows := 0
+var revision := 0
 
 func configure(bounds: Rect2, obstacles: Array[Rect2], actor_radius: float) -> void:
 	_bounds = bounds
 	_obstacles = obstacles.duplicate()
+	_temporary_segments.clear()
 	_actor_radius = maxf(0.0, actor_radius)
 	_columns = ceili(bounds.size.x / CELL_SIZE)
 	_rows = ceili(bounds.size.y / CELL_SIZE)
+	revision += 1
+	_rebuild_grid()
+
+func can_add_temporary_segment(from: Vector2, to: Vector2, half_width: float, occupied_positions: Array[Vector2]) -> bool:
+	if not from.is_finite() or not to.is_finite() or not is_finite(half_width) or half_width <= 0.0 or from.distance_squared_to(to) < 1.0:
+		return false
+	if not is_segment_clear(from, to, half_width):
+		return false
+	for point: Vector2 in occupied_positions:
+		if not point.is_finite() or _segment_distance(point, point, from, to) <= _actor_radius + half_width + EDGE_EPSILON:
+			return false
+	return true
+
+func add_temporary_segment(id: int, from: Vector2, to: Vector2, half_width: float, occupied_positions: Array[Vector2]) -> bool:
+	if id <= 0 or _temporary_segments.has(id) or not can_add_temporary_segment(from, to, half_width, occupied_positions):
+		return false
+	_temporary_segments[id] = {"from": from, "to": to, "half_width": half_width}
+	revision += 1
+	_rebuild_grid()
+	return true
+
+func remove_temporary_segment(id: int) -> void:
+	if not _temporary_segments.erase(id):
+		return
+	revision += 1
+	_rebuild_grid()
+
+func has_temporary_segment(id: int) -> bool:
+	return _temporary_segments.has(id)
+
+func _rebuild_grid() -> void:
 	_grid.clear()
 	for y: int in range(_rows):
 		for x: int in range(_columns):
@@ -90,6 +124,9 @@ func is_segment_clear(from: Vector2, to: Vector2, clearance: float) -> bool:
 	for obstacle: Rect2 in _obstacles:
 		if _segment_intersects_rect(from, to, obstacle.grow(safe_clearance)):
 			return false
+	for segment: Dictionary in _temporary_segments.values():
+		if _segment_distance(from, to, segment["from"], segment["to"]) <= safe_clearance + float(segment["half_width"]):
+			return false
 	return true
 
 func move_until_blocked(from: Vector2, to: Vector2) -> Vector2:
@@ -115,7 +152,18 @@ func _is_point_clear(point: Vector2, clearance: float) -> bool:
 	for obstacle: Rect2 in _obstacles:
 		if obstacle.grow(clearance).has_point(point):
 			return false
+	for segment: Dictionary in _temporary_segments.values():
+		if _segment_distance(point, point, segment["from"], segment["to"]) <= clearance + float(segment["half_width"]):
+			return false
 	return true
+
+func _segment_distance(first_start: Vector2, first_end: Vector2, second_start: Vector2, second_end: Vector2) -> float:
+	if Geometry2D.segment_intersects_segment(first_start, first_end, second_start, second_end) != null:
+		return 0.0
+	return minf(
+		minf(first_start.distance_to(Geometry2D.get_closest_point_to_segment(first_start, second_start, second_end)), first_end.distance_to(Geometry2D.get_closest_point_to_segment(first_end, second_start, second_end))),
+		minf(second_start.distance_to(Geometry2D.get_closest_point_to_segment(second_start, first_start, first_end)), second_end.distance_to(Geometry2D.get_closest_point_to_segment(second_end, first_start, first_end)))
+	)
 
 func _segment_intersects_rect(from: Vector2, to: Vector2, rect: Rect2) -> bool:
 	if rect.has_point(from) or rect.has_point(to):

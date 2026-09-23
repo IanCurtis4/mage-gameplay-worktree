@@ -12,11 +12,13 @@ var attack_cooldown := 0.0
 var _path := PackedVector2Array()
 var _path_index := 0
 var _repath_time := 0.0
+var _navigation_revision := 0
 var player_target_acquired := false
 
 func configure(enemy_type: StringName, nav: ArenaNavigation, target_player: PlayerActor) -> void:
 	archetype = enemy_type
 	navigation = nav
+	_navigation_revision = nav.revision
 	player = target_player
 	if archetype == &"archer":
 		var archer_sources: Array[Dictionary] = [{
@@ -42,6 +44,11 @@ func _process(delta: float) -> void:
 	super._process(delta)
 	if not is_alive() or player == null or not player.is_alive():
 		return
+	if navigation != null and _navigation_revision != navigation.revision:
+		_navigation_revision = navigation.revision
+		_path.clear()
+		_path_index = 0
+		_repath_time = 0.0
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
 	if was_feared and not is_feared():
 		_path.clear()

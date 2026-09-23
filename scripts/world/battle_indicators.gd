@@ -123,6 +123,13 @@ func _draw() -> void:
 		draw_dashed_line(origin, endpoint, Color(spirit_color, 0.55), 1.5, 9.0, true, true)
 		draw_line(wall_start, wall_end, Color(spirit_color, 0.16), PhantomBarrier.HALF_WIDTH * 2.0, true)
 		draw_line(wall_start, wall_end, spirit_color, 2.0, true)
+	elif skill == &"ice_wall":
+		var wall_axis := direction.orthogonal()
+		var wall_start := endpoint - wall_axis * IceWall.HALF_LENGTH
+		var wall_end := endpoint + wall_axis * IceWall.HALF_LENGTH
+		draw_dashed_line(origin, endpoint, Color(color, 0.55), 1.5, 9.0, true, true)
+		draw_line(wall_start, wall_end, Color(color, 0.17), IceWall.HALF_WIDTH * 2.0, true)
+		draw_line(wall_start, wall_end, color, 2.0, true)
 	elif skill == &"soul_impact":
 		draw_dashed_line(origin, endpoint, Color(color, 0.65), 1.5, 9.0, true, true)
 		for index: int in 3:

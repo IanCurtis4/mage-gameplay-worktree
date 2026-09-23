@@ -29,6 +29,7 @@ static func pilot(additional_equipment: Dictionary = {}, additional_skills: Dict
 	catalog.add_skill(&"soul_impact", [&"mage"], ACTIVE, BASE_WALLET, 0, 5)
 	catalog.add_skill(&"haunt", [&"mage"], ACTIVE, BASE_WALLET, 0, 5)
 	catalog.add_skill(&"phantom_barrier", [&"mage"], ACTIVE, BASE_WALLET, 0, 5)
+	catalog.add_skill(&"ice_wall", [&"mage"], ACTIVE, BASE_WALLET, 0, 5)
 	catalog.add_skill(&"teleport", [&"mage"], ACTIVE, BASE_WALLET, 0, 5)
 	catalog.add_skill(&"mage_mana_regeneration", [&"mage"], PASSIVE, BASE_WALLET, 0, 3)
 	catalog.add_skill(&"double_shot", [&"archer"], ACTIVE, BASE_WALLET, 0, 5)

@@ -108,6 +108,7 @@ func _ready() -> void:
 	player.soul_impact_requested.connect(_on_soul_impact_requested)
 	player.haunt_requested.connect(_on_haunt_requested)
 	player.phantom_barrier_requested.connect(_on_phantom_barrier_requested)
+	player.ice_wall_requested.connect(_on_ice_wall_requested)
 	player.skill_cast_ready.connect(_on_skill_cast_ready)
 	player.status_damage_requested.connect(_on_attack_requested)
 	player.actor_died.connect(_on_player_died)
@@ -260,6 +261,12 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.PHANTOM_BARRIER:
 		if not player.use_phantom_barrier(direction):
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.ICE_WALL:
+		if not player.use_ice_wall(direction, enemies):
+			if not player.can_place_ice_wall(direction, enemies):
+				status_label.text = "Parede de Gelo cancelada — POSIÇÃO BLOQUEADA"
+			else:
+				_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif definition.handler_id == SkillDefinition.Handler.SPEAR:
 		if not player.use_spear(skill, selected_target):
 			_report_skill_failure(skill, selected_target)
@@ -360,6 +367,8 @@ func _update_aim(point: Vector2) -> void:
 	elif skill == &"explosive_trap" and not player.can_place_explosive_trap(point):
 		state = "POSIÇÃO BLOQUEADA"
 	elif skill == &"foliage_shelter" and not player.can_place_foliage_shelter(point):
+		state = "POSIÇÃO BLOQUEADA"
+	elif skill == &"ice_wall" and not player.can_place_ice_wall(player.aim_direction(point), enemies):
 		state = "POSIÇÃO BLOQUEADA"
 	if _world_pointer_available():
 		battle_indicators.show_aim(skill, player, point, state == "PRONTO", selected_target)
@@ -612,6 +621,10 @@ func _on_phantom_barrier_requested(direction: Vector2, placement_range: float, c
 	add_child(barrier)
 	barrier.add_to_group("player_effects")
 
+func _on_ice_wall_requested(wall: IceWall) -> void:
+	add_child(wall)
+	wall.add_to_group("player_effects")
+
 func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActor, ranged: bool) -> void:
 	if not ranged:
 		_on_attack_requested(request, target_actor)
@@ -642,6 +655,8 @@ func _on_enemy_died(actor: CombatActor) -> void:
 		for runtime_node: Node in get_tree().get_nodes_in_group(group_name):
 			if runtime_node is FoliageShelter:
 				(runtime_node as FoliageShelter).expire(&"encounter_end")
+			elif runtime_node is IceWall:
+				(runtime_node as IceWall).expire()
 			else:
 				runtime_node.queue_free()
 	reward = RewardPickup.new()
@@ -763,7 +778,9 @@ func _show_result(victory: bool) -> void:
 		if shelter is FoliageShelter:
 			(shelter as FoliageShelter).expire(&"run_end")
 	for effect: Node in get_tree().get_nodes_in_group("player_effects"):
-		if effect is LightningWall or effect is SoulImpactSequence or effect is HauntConeVisual or effect is PhantomBarrier:
+		if effect is IceWall:
+			(effect as IceWall).expire()
+		elif effect is LightningWall or effect is SoulImpactSequence or effect is HauntConeVisual or effect is PhantomBarrier:
 			effect.queue_free()
 	run_finished = true
 	_terminal_outcome = &"completed" if victory else &"death"

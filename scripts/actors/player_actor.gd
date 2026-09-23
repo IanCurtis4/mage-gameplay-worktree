@@ -15,6 +15,7 @@ signal lightning_wall_requested(direction: Vector2, request: DamageRequest)
 signal soul_impact_requested(request: DamageRequest, target: CombatActor)
 signal haunt_requested(origin: Vector2, direction: Vector2, cone_range: float, request: DamageRequest)
 signal phantom_barrier_requested(direction: Vector2, placement_range: float, capacity: int)
+signal ice_wall_requested(wall: IceWall)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
 
@@ -59,6 +60,9 @@ var velocity := Vector2.ZERO
 var _path := PackedVector2Array()
 var _path_index := 0
 var _repath_time := 0.0
+var _navigation_revision := 0
+var _path_goal := Vector2.ZERO
+var _has_path_goal := false
 var _last_facing := Vector2.RIGHT
 var _slash_visual_time := 0.0
 var _slash_facing := Vector2.RIGHT
@@ -86,6 +90,7 @@ var _foliage_shelters: Dictionary[int, Dictionary] = {}
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
+	_navigation_revision = nav.revision
 	run_state = state
 	extended_aim_remaining = 0.0
 	clear_foliage_shelters()
@@ -141,12 +146,15 @@ func move_to(point: Vector2) -> void:
 	target = null
 	_attack_engaged = false
 	_attack_recovery = 0.0
+	_path_goal = point
+	_has_path_goal = true
 	_set_path(point)
 
 func pursue(enemy: CombatActor) -> void:
 	cancel_active_cast()
 	target = enemy
 	_attack_engaged = false
+	_has_path_goal = false
 	_path.clear()
 	_repath_time = 0.0
 
@@ -183,6 +191,7 @@ func use_dash(direction: Vector2) -> bool:
 	_dash_speed = global_position.distance_to(_dash_endpoint) / DASH_DURATION
 	_dash_active = global_position.distance_to(_dash_endpoint) > MOVEMENT_EPSILON
 	_path.clear()
+	_has_path_goal = false
 	velocity = Vector2.ZERO
 	_attack_recovery = 0.0
 	_repath_time = 0.0
@@ -276,6 +285,37 @@ func use_phantom_barrier(direction: Vector2) -> bool:
 	phantom_barrier_requested.emit(facing, rank_definition.range, roundi(rank_definition.power))
 	resources_changed.emit()
 	return true
+
+func can_place_ice_wall(direction: Vector2, nearby_actors: Array[CombatActor]) -> bool:
+	var rank_definition := _runtime_rank_definition(&"ice_wall")
+	if class_id != &"mage" or rank_definition == null or navigation == null or not is_alive():
+		return false
+	var facing := direction.normalized() if not direction.is_zero_approx() else _last_facing
+	var points := IceWall.endpoints(global_position, facing, rank_definition.range)
+	return navigation.can_add_temporary_segment(points[0], points[1], IceWall.HALF_WIDTH, _ice_wall_occupied_positions(nearby_actors))
+
+func use_ice_wall(direction: Vector2, nearby_actors: Array[CombatActor]) -> bool:
+	var rank_definition := _runtime_rank_definition(&"ice_wall")
+	if class_id != &"mage" or rank_definition == null or not _can_spend(&"ice_wall") or not can_place_ice_wall(direction, nearby_actors):
+		return false
+	var facing := _resolved_facing(direction)
+	var occupied := _ice_wall_occupied_positions(nearby_actors)
+	var wall := IceWall.new()
+	if not wall.configure(navigation, global_position, facing, rank_definition.range, rank_definition.power, occupied):
+		wall.free()
+		return false
+	_spend(&"ice_wall")
+	reveal_from_offense()
+	ice_wall_requested.emit(wall)
+	resources_changed.emit()
+	return true
+
+func _ice_wall_occupied_positions(nearby_actors: Array[CombatActor]) -> Array[Vector2]:
+	var positions: Array[Vector2] = [global_position]
+	for actor: CombatActor in nearby_actors:
+		if actor != null and is_instance_valid(actor) and actor.is_alive():
+			positions.append(actor.global_position)
+	return positions
 
 func use_lightning(enemy: CombatActor) -> bool:
 	if class_id != &"mage" or not can_target_skill(&"lightning", enemy) or not _can_spend(&"lightning"):
@@ -505,6 +545,7 @@ func begin_skill_cast(skill_id: StringName, point: Vector2, enemy: CombatActor =
 	_active_cast_point = point
 	_active_cast_target_id = enemy.get_instance_id() if enemy != null else 0
 	_path.clear()
+	_has_path_goal = false
 	velocity = Vector2.ZERO
 	_attack_recovery = 0.0
 	var facing := aim_direction(enemy.global_position if enemy != null else point)
@@ -554,6 +595,7 @@ func use_teleport(point: Vector2) -> bool:
 	_spend(&"teleport")
 	global_position = destination
 	_path.clear()
+	_has_path_goal = false
 	velocity = Vector2.ZERO
 	target = null
 	_attack_engaged = false
@@ -646,6 +688,13 @@ func _process(delta: float) -> void:
 	var simulation_paused := is_inside_tree() and get_tree().paused
 	if simulation_paused:
 		return
+	if navigation != null and _navigation_revision != navigation.revision:
+		_navigation_revision = navigation.revision
+		_path.clear()
+		_path_index = 0
+		_repath_time = 0.0
+		if target == null and _has_path_goal:
+			_set_path(_path_goal)
 	_regenerate_sp(delta, false)
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
 	_attack_recovery = maxf(0.0, _attack_recovery - delta)
@@ -884,6 +933,7 @@ func _move_step(delta: float) -> void:
 		_path_index += 1
 		if _path_index >= _path.size():
 			velocity = Vector2.ZERO
+			_has_path_goal = false
 	if not velocity.is_zero_approx():
 		_last_facing = velocity.normalized()
 
@@ -893,6 +943,7 @@ func _on_health_died(actor_id: int) -> void:
 	clear_foliage_shelters()
 	velocity = Vector2.ZERO
 	_path.clear()
+	_has_path_goal = false
 	target = null
 	_dash_active = false
 	_attack_recovery = 0.0
