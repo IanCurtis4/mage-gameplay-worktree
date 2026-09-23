@@ -108,6 +108,13 @@ func _draw() -> void:
 			var pillar := center + wall_axis * ((float(index) - 1.5) * FireWall.PILLAR_SPACING)
 			draw_circle(pillar, FireWall.PILLAR_RADIUS, Color(color, 0.13))
 			draw_arc(pillar, FireWall.PILLAR_RADIUS, 0.0, TAU, 24, color, 2.0, true)
+	elif skill == &"lightning_wall":
+		var wall_axis := direction.orthogonal()
+		var wall_start := endpoint - wall_axis * LightningWall.HALF_LENGTH
+		var wall_end := endpoint + wall_axis * LightningWall.HALF_LENGTH
+		draw_dashed_line(origin, endpoint, Color(color, 0.55), 1.5, 9.0, true, true)
+		draw_line(wall_start, wall_end, Color(color, 0.15), LightningWall.HALF_WIDTH * 2.0, true)
+		draw_line(wall_start, wall_end, color, 2.0, true)
 	elif skill in [&"fire_spear", &"ice_spear", &"lightning", &"electric_discharge", &"slowing_arrow"]:
 		draw_dashed_line(origin, endpoint, color, 2.0, 10.0, true, true)
 		_draw_endpoint(endpoint, color)

@@ -104,6 +104,7 @@ func _ready() -> void:
 	player.slowing_arrow_requested.connect(_on_slowing_arrow_requested)
 	player.foliage_shelter_requested.connect(_on_foliage_shelter_requested)
 	player.fire_wall_requested.connect(_on_fire_wall_requested)
+	player.lightning_wall_requested.connect(_on_lightning_wall_requested)
 	player.skill_cast_ready.connect(_on_skill_cast_ready)
 	player.status_damage_requested.connect(_on_attack_requested)
 	player.actor_died.connect(_on_player_died)
@@ -243,6 +244,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif definition.handler_id == SkillDefinition.Handler.FIRE_WALL:
 		if not player.use_fire_wall(direction):
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.LIGHTNING_WALL:
+		if not player.use_lightning_wall(direction):
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif definition.handler_id == SkillDefinition.Handler.SPEAR:
 		if not player.use_spear(skill, selected_target):
@@ -550,6 +554,20 @@ func _on_fire_wall_requested(direction: Vector2, burn_request: DamageRequest) ->
 	add_child(wall)
 	wall.add_to_group("player_effects")
 
+func _on_lightning_wall_requested(direction: Vector2, request: DamageRequest) -> void:
+	var wall := LightningWall.new()
+	wall.configure(player, direction, request, enemies, player.skill_range(&"lightning_wall"))
+	wall.crossed.connect(_on_lightning_wall_crossed)
+	add_child(wall)
+	wall.add_to_group("player_effects")
+
+func _on_lightning_wall_crossed(request: DamageRequest, target_actor: CombatActor) -> void:
+	if target_actor == null or not target_actor.is_alive():
+		return
+	var result := target_actor.apply_damage(request, rng)
+	if not result.is_empty() and bool(result["landed"]) and float(result["actual_damage"]) > 0.0 and target_actor.is_alive():
+		target_actor.apply_electrified(4.0)
+
 func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActor, ranged: bool) -> void:
 	if not ranged:
 		_on_attack_requested(request, target_actor)
@@ -700,6 +718,9 @@ func _show_result(victory: bool) -> void:
 	for shelter: Node in get_tree().get_nodes_in_group("foliage_shelters"):
 		if shelter is FoliageShelter:
 			(shelter as FoliageShelter).expire(&"run_end")
+	for effect: Node in get_tree().get_nodes_in_group("player_effects"):
+		if effect is LightningWall:
+			effect.queue_free()
 	run_finished = true
 	_terminal_outcome = &"completed" if victory else &"death"
 	result_title.text = "Arena concluída!" if victory else "Você caiu em combate"

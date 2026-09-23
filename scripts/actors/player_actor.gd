@@ -11,6 +11,7 @@ signal explosive_trap_requested(center: Vector2, request: DamageRequest)
 signal slowing_arrow_requested(request: DamageRequest, direction: Vector2, slow_fraction: float, slow_duration: float)
 signal foliage_shelter_requested(center: Vector2, duration: float)
 signal fire_wall_requested(direction: Vector2, burn_request: DamageRequest)
+signal lightning_wall_requested(direction: Vector2, request: DamageRequest)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
 
@@ -218,6 +219,19 @@ func use_spear(skill_id: StringName, enemy: CombatActor) -> bool:
 	var request := _make_magic_request(enemy, skill_id, _magic_power(skill_id), definition.accuracy_mode, definition.can_crit)
 	var count := run_state.projectile_count(skill_id)
 	mage_projectile_requested.emit(skill_id, request, enemy, facing, count)
+	resources_changed.emit()
+	return true
+
+func use_lightning_wall(direction: Vector2) -> bool:
+	if class_id != &"mage" or _runtime_rank_definition(&"lightning_wall") == null or not _can_spend(&"lightning_wall"):
+		return false
+	var facing := _resolved_facing(direction)
+	_spend(&"lightning_wall")
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(&"lightning_wall")
+	var request := _make_magic_request(null, &"lightning_wall", _magic_power(&"lightning_wall"), definition.accuracy_mode, definition.can_crit)
+	request.is_secondary = true
+	lightning_wall_requested.emit(facing, request)
 	resources_changed.emit()
 	return true
 
