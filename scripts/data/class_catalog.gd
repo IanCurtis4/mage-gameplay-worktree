@@ -66,6 +66,20 @@ static func passive_rule_source(skill_id: StringName, rank: int) -> Dictionary:
 		}
 	return {}
 
+static func active_modifier_source(skill_id: StringName, rank_definition: SkillRankDefinition) -> Dictionary:
+	if skill_id == &"fury" and rank_definition != null:
+		return {
+			"source_id": &"active_fury",
+			"label": "Fúria ativa",
+			"increased": {
+				&"melee_attack": rank_definition.power,
+				&"attacks_per_second": rank_definition.power * 0.60,
+				&"physical_defense": -0.25,
+				&"magic_defense": -0.25,
+			},
+		}
+	return {}
+
 static func _ensure_built() -> void:
 	if not _classes.is_empty():
 		return
@@ -75,6 +89,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"provoke", "Provocar", "D", SkillDefinition.Targeting.SINGLE_TARGET, 14.0, 10.0, 2.0, 300.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.DEFENSIVE)
 	_add_skill(&"perseverance", "Perseverança", "D", SkillDefinition.Targeting.SELF, 18.0, 10.0, 40.0, 0.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.DEFENSIVE)
 	_add_skill(&"piercing_shout", "Grito Perfurante", "D", SkillDefinition.Targeting.SELF, 17.0, 8.0, 1.5, 140.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.OFFENSIVE)
+	_add_skill(&"fury", "Fúria", "D", SkillDefinition.Targeting.SELF, 22.0, 14.0, 0.30, 0.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.OFFENSIVE)
 	_add_skill(&"fireball", "Bola de Fogo", "Q", SkillDefinition.Targeting.DIRECTION, 18.0, 2.5, 1.80, 700.0, 680.0, 0.32, DamageRequest.AccuracyMode.GEOMETRY, true)
 	_add_skill(&"fire_wall", "Parede de Fogo", "W", SkillDefinition.Targeting.DIRECTION, 24.0, 7.0, 0.30, 180.0, 0.0, 0.48, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_skill(&"fire_spear", "Lança de Fogo", "A", SkillDefinition.Targeting.SINGLE_TARGET, 16.0, 3.0, 1.35, 360.0, 760.0, 0.22, DamageRequest.AccuracyMode.CONTESTED, true)
@@ -106,6 +121,7 @@ static func _ensure_built() -> void:
 	_configure_provoke_ranks()
 	_configure_perseverance_ranks()
 	_configure_piercing_shout_ranks()
+	_configure_fury_ranks()
 	_configure_swordsman_resistance_ranks()
 	_configure_fireball_ranks()
 	_configure_fire_wall_ranks()
@@ -293,6 +309,21 @@ static func _configure_piercing_shout_ranks() -> void:
 		rank.power = durations[index]
 		rank.physical_weight = 1.0
 		rank.effect_ids = [&"slow", &"attack_speed_reduction"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_fury_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"fury"]
+	definition.handler_id = SkillDefinition.Handler.FURY
+	var bonuses: Array[float] = [0.30, 0.38, 0.45, 0.51, 0.56]
+	var costs: Array[float] = [22.0, 24.0, 26.0, 27.0, 28.0]
+	for index: int in bonuses.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 14.0
+		rank.power = bonuses[index]
+		rank.effect_ids = [&"melee_attack_increase", &"attack_speed_increase", &"defense_penalty"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
 

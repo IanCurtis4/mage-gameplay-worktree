@@ -259,6 +259,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.PIERCING_SHOUT:
 		if not player.use_piercing_shout():
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.FURY:
+		if not player.use_fury():
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif definition.handler_id == SkillDefinition.Handler.FIREBALL:
 		if not player.use_fireball(direction):
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
@@ -690,6 +693,7 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	encounter_active = false
 	player.clear_shield_stance()
 	player.clear_perseverance()
+	player.clear_fury()
 	trap_registry.clear_all(&"encounter_end")
 	for group_name: StringName in [&"enemy_projectiles", &"player_projectiles", &"player_effects"]:
 		for runtime_node: Node in get_tree().get_nodes_in_group(group_name):
@@ -815,6 +819,7 @@ func _show_result(victory: bool) -> void:
 		trap_registry.clear_all(&"run_end")
 	player.clear_shield_stance()
 	player.clear_perseverance()
+	player.clear_fury()
 	player.clear_foliage_shelters()
 	for shelter: Node in get_tree().get_nodes_in_group("foliage_shelters"):
 		if shelter is FoliageShelter:
@@ -1005,6 +1010,8 @@ func _display_skill_state(skill_id: StringName, sp_cost: float) -> String:
 		return "ATIVA %.1fs · %d cargas · DESLIGAR" % [player.shield_remaining, player.shield_resistance]
 	if skill_id == &"perseverance" and player.perseverance_remaining > 0.0:
 		return "ESCUDO %d · %.1fs" % [ceili(player.health.shield_hp), player.perseverance_remaining]
+	if skill_id == &"fury" and player.fury_remaining > 0.0:
+		return "ATIVA %.1fs" % player.fury_remaining
 	if skill_id == &"extended_aim" and player.has_extended_aim():
 		return "ATIVA %.1fs" % player.extended_aim_remaining
 	return _skill_state(player.skill_cooldown(skill_id), sp_cost)

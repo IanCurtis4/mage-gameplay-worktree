@@ -28,7 +28,7 @@ func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast
 		endpoint = actor.dash_destination(direction)
 	elif skill == &"teleport":
 		endpoint = actor.teleport_destination(point)
-	elif skill in [&"extended_aim", &"perseverance"]:
+	elif skill in [&"extended_aim", &"perseverance", &"fury"]:
 		endpoint = origin
 	elif skill == &"arrow_rain":
 		endpoint = actor.arrow_rain_center(point)
@@ -176,6 +176,9 @@ func _draw() -> void:
 	elif skill == &"perseverance":
 		draw_circle(origin + Vector2(0, -18), body_radius + 11.0, Color(color, 0.12))
 		draw_arc(origin + Vector2(0, -18), body_radius + 11.0, 0.0, TAU, 40, color, 2.0, true)
+	elif skill == &"fury":
+		draw_circle(origin + Vector2(0, -18), body_radius + 14.0, Color(color, 0.12))
+		draw_arc(origin + Vector2(0, -18), body_radius + 14.0, 0.0, TAU, 40, color, 2.0, true)
 	elif skill == &"piercing_shout":
 		draw_circle(origin, active_range, Color(color, 0.10))
 		draw_arc(origin, active_range, 0.0, TAU, 48, color, 2.0, true)

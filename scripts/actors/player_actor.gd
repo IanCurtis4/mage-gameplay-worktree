@@ -59,6 +59,7 @@ const PERSEVERANCE_DURATION := 6.0
 const PIERCING_SHOUT_DAMAGE_WEIGHT := 0.45
 const PIERCING_SHOUT_SLOW_FRACTION := 0.30
 const PIERCING_SHOUT_ASPD_FRACTION := 0.25
+const FURY_DURATION := 6.0
 
 var navigation: ArenaNavigation
 var run_state: RunState
@@ -107,6 +108,7 @@ var shield_resistance := 0
 var shield_facing := Vector2.RIGHT
 var perseverance_remaining := 0.0
 var piercing_shout_visual_time := 0.0
+var fury_remaining := 0.0
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
@@ -117,6 +119,7 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 	class_id = run_state.class_id
 	class_definition = ClassCatalog.class_definition(class_id)
 	_capture_rank_definitions()
+	fury_remaining = 0.0
 	var derived := _build_stat_breakdown()
 	var class_color := Color("8e73de") if class_id == &"mage" else Color("6fa85a") if class_id == &"archer" else Color("55a8d9")
 	setup(class_definition.display_name, class_color, derived, 20.0)
@@ -349,6 +352,27 @@ func use_piercing_shout() -> bool:
 	resources_changed.emit()
 	queue_redraw()
 	return true
+
+func use_fury() -> bool:
+	if class_id != &"swordsman" or _runtime_rank_definition(&"fury") == null or not _can_spend(&"fury"):
+		return false
+	_commit_action(ClassCatalog.skill_definition(&"fury").action_kind)
+	_spend(&"fury")
+	fury_remaining = FURY_DURATION
+	_apply_derived_stats(_build_stat_breakdown())
+	reveal_from_offense()
+	presentation_action.emit(&"cast", _last_facing, 0.20)
+	resources_changed.emit()
+	queue_redraw()
+	return true
+
+func clear_fury() -> void:
+	if fury_remaining <= 0.0:
+		return
+	fury_remaining = 0.0
+	_apply_derived_stats(_build_stat_breakdown())
+	resources_changed.emit()
+	queue_redraw()
 
 func clear_perseverance() -> void:
 	if perseverance_remaining <= 0.0 and health.shield_hp <= 0.0:
@@ -889,6 +913,12 @@ func _process(delta: float) -> void:
 	if piercing_shout_visual_time > 0.0:
 		piercing_shout_visual_time = maxf(0.0, piercing_shout_visual_time - delta)
 		queue_redraw()
+	if fury_remaining > 0.0:
+		if delta >= fury_remaining:
+			clear_fury()
+		else:
+			fury_remaining -= delta
+			queue_redraw()
 	_regenerate_sp(delta, false)
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
 	_attack_recovery = maxf(0.0, _attack_recovery - delta)
@@ -1136,6 +1166,7 @@ func _on_health_died(actor_id: int) -> void:
 	cancel_active_cast()
 	clear_shield_stance()
 	clear_perseverance()
+	clear_fury()
 	piercing_shout_visual_time = 0.0
 	extended_aim_remaining = 0.0
 	clear_foliage_shelters()
@@ -1168,10 +1199,18 @@ func can_basic_attack(enemy: CombatActor, retain: bool = false) -> bool:
 	return global_position.distance_to(enemy.global_position) <= allowed_distance and navigation.is_segment_clear(global_position, enemy.global_position, 0.0)
 
 func _build_stat_breakdown() -> StatBreakdown:
-	return run_state.build_snapshot.stat_breakdown(run_state.stat_modifier_sources())
+	var sources := run_state.stat_modifier_sources()
+	if fury_remaining > 0.0:
+		var source := ClassCatalog.active_modifier_source(&"fury", _runtime_rank_definition(&"fury"))
+		if not source.is_empty():
+			sources.append(source)
+	return run_state.build_snapshot.stat_breakdown(sources)
 
 func _draw() -> void:
 	super._draw()
+	if fury_remaining > 0.0:
+		draw_circle(Vector2(0, -18), collision_radius + 12.0, Color(0.95, 0.29, 0.13, 0.10))
+		draw_arc(Vector2(0, -18), collision_radius + 12.0, 0.0, TAU, 32, Color("f7784b"), 2.5, true)
 	if piercing_shout_visual_time > 0.0:
 		var progress := 1.0 - piercing_shout_visual_time / 0.25
 		draw_arc(Vector2(0, -18), lerpf(20.0, skill_range(&"piercing_shout"), progress), 0.0, TAU, 48, Color(0.96, 0.68, 0.42, 1.0 - progress), 4.0, true)

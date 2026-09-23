@@ -66,6 +66,11 @@ Grito Perfurante emite um pulso físico baixo e aplica slow e redução de ASPD
 somente após dano positivo. Os canais independentes usam o mesmo estado por
 fonte do SW2; rank escala duração limitada. Ver E04_SW4_PIERCING_SHOUT_HANDOFF.md.
 
+Fúria injeta uma fonte temporária identificada no `StatCalculator` enquanto
+ativa. Recalcular a build mantém exatamente uma fonte; expiração, morte e
+limpeza retiram bônus e penalidades sem trocar HP/SP ou cooldown. Ver
+E04_SW5_FURY_HANDOFF.md.
+
 Jogador mantém `velocity` no runtime: aceleração 1100 unidades/s² e frenagem/atrito
 1600 unidades/s², velocidade máxima derivada em `StatCalculator` (base 220). Acelera em cerca
 de 0,20 s, freia em cerca de 0,14 s e percorre aproximadamente 15 unidades ao parar
