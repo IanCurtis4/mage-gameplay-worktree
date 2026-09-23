@@ -34,6 +34,8 @@ dano recebido 50%. `StatCalculator.runtime_reduced_value` aplica limites dos
 stats derivados; defesa não fica negativa. Dano recebido compõe uma cópia de
 `DamageRequest` no impacto, sem alterar o snapshot emitido. Assombro, Barreira
 Fantasma, Lança de Gelo e Flecha Entorpecente agora informam IDs de fonte.
+Cada instância da Barreira Fantasma usa seu próprio ID runtime, preservando
+durações independentes de duas barreiras simultâneas.
 DoT, marcas e hard CC permanecem separados.
 
 ## Evidência e limite

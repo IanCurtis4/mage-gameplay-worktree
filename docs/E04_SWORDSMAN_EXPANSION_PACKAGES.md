@@ -1,5 +1,9 @@
 # E04 — Espadachim: pacotes aprovados
 
+> Estado de implementação em 23/09/2026: SW1–SW10 e SWI executados na branch
+> `codex/e04-base-classes`; ver `E04_SWORDSMAN_INTEGRATED_HANDOFF.md` para
+> evidências. Revisão técnica de Astra e playtest ainda são gates separados.
+
 23/09/2026. Usuário aprovou a dualidade Defendente/Berserker e autorizou
 encaminhamento ao Sol, com execução granular como no Mago.
 Base de trabalho: playtest 00de812, com integração visual do Impacto das Almas.
