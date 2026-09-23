@@ -89,6 +89,9 @@ func _check_sequence() -> void:
 	sequence.impact.connect(func(request: DamageRequest, _target_actor: CombatActor) -> void: pulses.append(request))
 	sequence._process(0.0)
 	_check(pulses.size() == 1 and pulses[0].magic_damage == 30.0 and not pulses[0].is_secondary, "primeiro pulso divide orçamento capturado e mantém origem primária")
+	_check(SoulImpactSequence.ORB_TEXTURE.get_size() == Vector2(64, 64) and sequence.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST and sequence.z_index > target.z_index, "esfera 64×64 usa nearest e aparece acima do alvo")
+	sequence._process(SoulImpactSequence.IMPACT_INTERVAL * 0.5)
+	_check(pulses.size() == 1 and sequence.visual_remaining < SoulImpactSequence.VISUAL_TAIL and sequence.visual_remaining > 0.0, "esfera expande e perde opacidade entre impactos sem novo dano")
 	var clock := sequence.time_to_next
 	paused = true
 	sequence._process(2.0)

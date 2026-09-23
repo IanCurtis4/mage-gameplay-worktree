@@ -7,6 +7,8 @@ signal impact(request: DamageRequest, target: CombatActor)
 const IMPACT_COUNT := 3
 const IMPACT_INTERVAL := 0.12
 const VISUAL_TAIL := 0.16
+const ORB_TEXTURE: Texture2D = preload("res://assets/art/vfx/soul_impact_orb.png")
+const ORB_DIAMETER := 88.0
 
 var target_id := 0
 var impact_request: DamageRequest
@@ -26,6 +28,8 @@ func configure(total_request: DamageRequest, target: CombatActor) -> void:
 	time_to_next = 0.0
 	visual_remaining = VISUAL_TAIL
 	process_mode = Node.PROCESS_MODE_PAUSABLE
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	z_index = 3
 
 func _process(delta: float) -> void:
 	if is_queued_for_deletion() or (is_inside_tree() and get_tree().paused):
@@ -35,8 +39,9 @@ func _process(delta: float) -> void:
 		queue_free()
 		return
 	global_position = target.global_position
-	if emitted == IMPACT_COUNT:
+	if emitted > 0:
 		visual_remaining = maxf(0.0, visual_remaining - delta)
+	if emitted == IMPACT_COUNT:
 		if visual_remaining <= 0.0:
 			queue_free()
 		else:
@@ -58,8 +63,11 @@ func _process(delta: float) -> void:
 func _draw() -> void:
 	if emitted <= 0:
 		return
-	var alpha := clampf(visual_remaining / VISUAL_TAIL, 0.0, 1.0)
-	var radius := 14.0 + float(emitted) * 5.0 + (1.0 - alpha) * 8.0
-	draw_circle(Vector2(0, -18), radius * 0.55, Color(0.74, 0.55, 0.95, 0.10 * alpha))
-	draw_arc(Vector2(0, -18), radius, 0.0, TAU, 32, Color(0.84, 0.71, 1.0, 0.85 * alpha), 2.5, true)
-	draw_arc(Vector2(0, -18), radius * 0.55, 0.0, TAU, 24, Color(0.96, 0.87, 1.0, 0.55 * alpha), 1.5, true)
+	var progress := 1.0 - clampf(visual_remaining / VISUAL_TAIL, 0.0, 1.0)
+	var scale_factor := lerpf(0.88, 1.27, sin(progress * PI * 0.5))
+	var alpha := 0.96 * pow(1.0 - progress, 0.55)
+	var diameter := ORB_DIAMETER * scale_factor
+	var center := Vector2(0, -18)
+	draw_circle(center, diameter * 0.45, Color(0.64, 0.38, 0.89, 0.11 * alpha))
+	draw_texture_rect(ORB_TEXTURE, Rect2(center - Vector2.ONE * diameter * 0.5, Vector2.ONE * diameter), false, Color(1.0, 1.0, 1.0, alpha))
+	draw_arc(center, diameter * 0.37, 0.0, TAU, 32, Color(0.91, 0.77, 1.0, 0.36 * alpha), 1.5, true)
