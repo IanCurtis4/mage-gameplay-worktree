@@ -3,6 +3,7 @@ extends Node2D
 ## Shared runtime presentation and health ownership for combat actors.
 
 const MAX_SLOW_FRACTION := 0.50
+const MAX_WEAKEN_FRACTION := 0.50
 
 signal actor_died(actor: CombatActor)
 signal damage_number(actor: CombatActor, amount: int, critical: bool)
@@ -27,6 +28,8 @@ var burn_request: DamageRequest
 var slow_remaining := 0.0
 var slow_fraction := 0.0
 var electrified_remaining := 0.0
+var weaken_remaining := 0.0
+var weaken_fraction := 0.0
 var hard_controls := HardControlState.new()
 var character_animation: CharacterAnimation
 
@@ -149,6 +152,30 @@ func is_stunned() -> bool:
 func stun_remaining() -> float:
 	return hard_controls.remaining(&"stun")
 
+func apply_fear(base_duration: float) -> float:
+	if not is_alive():
+		return 0.0
+	var applied_duration := hard_controls.apply(&"fear", base_duration, stat_breakdown.value(&"magic_cc_resistance"))
+	if applied_duration > 0.0:
+		queue_redraw()
+	return applied_duration
+
+func is_feared() -> bool:
+	return hard_controls.is_active(&"fear")
+
+func fear_remaining() -> float:
+	return hard_controls.remaining(&"fear")
+
+func apply_weaken(fraction: float, duration: float) -> void:
+	if not is_alive() or not is_finite(fraction) or not is_finite(duration) or fraction <= 0.0 or duration <= 0.0:
+		return
+	weaken_fraction = maxf(weaken_fraction, clampf(fraction, 0.0, MAX_WEAKEN_FRACTION))
+	weaken_remaining = maxf(weaken_remaining, duration)
+	queue_redraw()
+
+func outgoing_damage_multiplier() -> float:
+	return stat_breakdown.value(&"damage_dealt_multiplier") * (1.0 - weaken_fraction if weaken_remaining > 0.0 else 1.0)
+
 func set_unstoppable(duration: float) -> bool:
 	var changed := hard_controls.set_unstoppable(duration)
 	if changed:
@@ -165,6 +192,8 @@ func clear_statuses() -> void:
 	slow_remaining = 0.0
 	slow_fraction = 0.0
 	electrified_remaining = 0.0
+	weaken_remaining = 0.0
+	weaken_fraction = 0.0
 	hard_controls.clear()
 	queue_redraw()
 
@@ -173,8 +202,9 @@ func advance_statuses(delta: float, simulation_paused: bool = false) -> void:
 		return
 	var was_rooted := is_rooted()
 	var was_stunned := is_stunned()
+	var was_feared := is_feared()
 	hard_controls.advance(delta)
-	if was_rooted != is_rooted() or was_stunned != is_stunned():
+	if was_rooted != is_rooted() or was_stunned != is_stunned() or was_feared != is_feared():
 		queue_redraw()
 	if slow_remaining > 0.0:
 		slow_remaining = maxf(0.0, slow_remaining - delta)
@@ -183,6 +213,11 @@ func advance_statuses(delta: float, simulation_paused: bool = false) -> void:
 			queue_redraw()
 	if electrified_remaining > 0.0:
 		electrified_remaining = maxf(0.0, electrified_remaining - delta)
+		queue_redraw()
+	if weaken_remaining > 0.0:
+		weaken_remaining = maxf(0.0, weaken_remaining - delta)
+		if weaken_remaining <= 0.0:
+			weaken_fraction = 0.0
 		queue_redraw()
 	var remaining_delta := delta
 	while burn_remaining > 0.0 and remaining_delta > 0.0:
@@ -260,6 +295,10 @@ func _draw() -> void:
 		draw_arc(Vector2(0, 7), collision_radius + 12.0, 0.0, TAU, 24, Color("d9bd72"), 3.0, true)
 	if is_stunned():
 		draw_arc(Vector2(0, -18), collision_radius + 13.0, -PI * 0.9, -PI * 0.1, 20, Color("f9e585"), 3.0, true)
+	if is_feared():
+		draw_arc(Vector2(0, -18), collision_radius + 16.0, -PI * 0.8, PI * 0.8, 28, Color("ba8de9"), 3.0, true)
+	if weaken_remaining > 0.0:
+		draw_arc(Vector2(0, 8), collision_radius + 17.0, 0.0, TAU, 28, Color("a889c4", 0.8), 1.5, true)
 
 func _draw_target_ring(radius: float, color: Color, width: float) -> void:
 	var points := PackedVector2Array()

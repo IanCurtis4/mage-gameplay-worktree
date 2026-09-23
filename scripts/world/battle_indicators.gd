@@ -119,6 +119,11 @@ func _draw() -> void:
 		draw_dashed_line(origin, endpoint, Color(color, 0.65), 1.5, 9.0, true, true)
 		for index: int in 3:
 			draw_arc(endpoint + Vector2(0, -18), 13.0 + float(index) * 8.0, 0.0, TAU, 32, Color(color, 0.85 - float(index) * 0.2), 1.5, true)
+	elif skill == &"haunt":
+		var outline := SkillGeometry.cone_outline(origin, direction, active_range, PlayerActor.HAUNT_HALF_ANGLE)
+		draw_colored_polygon(outline.slice(0, outline.size() - 1), Color(color, 0.16))
+		draw_polyline(outline, color, 2.0, true)
+		draw_arc(origin, active_range * 0.55, direction.angle() - PlayerActor.HAUNT_HALF_ANGLE, direction.angle() + PlayerActor.HAUNT_HALF_ANGLE, 22, Color(color, 0.5), 1.0, true)
 	elif skill in [&"fire_spear", &"ice_spear", &"lightning", &"electric_discharge", &"slowing_arrow"]:
 		draw_dashed_line(origin, endpoint, color, 2.0, 10.0, true, true)
 		_draw_endpoint(endpoint, color)

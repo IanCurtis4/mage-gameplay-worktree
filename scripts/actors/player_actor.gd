@@ -13,6 +13,7 @@ signal foliage_shelter_requested(center: Vector2, duration: float)
 signal fire_wall_requested(direction: Vector2, burn_request: DamageRequest)
 signal lightning_wall_requested(direction: Vector2, request: DamageRequest)
 signal soul_impact_requested(request: DamageRequest, target: CombatActor)
+signal haunt_requested(origin: Vector2, direction: Vector2, cone_range: float, request: DamageRequest)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
 
@@ -28,6 +29,10 @@ const MAX_MOVEMENT_STEP := 1.0 / 120.0
 const ARRIVAL_TOLERANCE := 0.05
 const SLASH_RANGE := 155.0
 const SLASH_HALF_ANGLE := deg_to_rad(52.0)
+const HAUNT_HALF_ANGLE := deg_to_rad(42.0)
+const HAUNT_FEAR_DURATION := 0.90
+const HAUNT_WEAKEN_FRACTION := 0.25
+const HAUNT_WEAKEN_DURATION := 3.0
 const MAGE_BASIC_SPEED := 620.0
 const MAGE_BASIC_MAX_DISTANCE := 420.0
 const ARCHER_BASIC_SPEED := 880.0
@@ -244,6 +249,19 @@ func use_soul_impact(enemy: CombatActor) -> bool:
 	var definition := ClassCatalog.skill_definition(&"soul_impact")
 	var request := _make_magic_request(enemy, &"soul_impact", _magic_power(&"soul_impact"), definition.accuracy_mode, definition.can_crit)
 	soul_impact_requested.emit(request, enemy)
+	resources_changed.emit()
+	return true
+
+func use_haunt(direction: Vector2) -> bool:
+	var rank_definition := _runtime_rank_definition(&"haunt")
+	if class_id != &"mage" or rank_definition == null or not _can_spend(&"haunt"):
+		return false
+	var facing := _resolved_facing(direction)
+	_spend(&"haunt")
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(&"haunt")
+	var request := _make_magic_request(null, &"haunt", _magic_power(&"haunt"), definition.accuracy_mode, definition.can_crit)
+	haunt_requested.emit(global_position, facing, rank_definition.range, request)
 	resources_changed.emit()
 	return true
 
@@ -759,7 +777,7 @@ func _make_request(enemy: CombatActor, skill_id: StringName, accuracy_mode: Dama
 	request.hit_rating = stat_breakdown.value(&"hit_rating")
 	request.crit_chance = stat_breakdown.value(&"crit_chance")
 	request.crit_multiplier = stat_breakdown.value(&"crit_multiplier")
-	request.damage_dealt_multiplier = stat_breakdown.value(&"damage_dealt_multiplier")
+	request.damage_dealt_multiplier = outgoing_damage_multiplier()
 	request.can_crit = can_crit
 	return request
 
