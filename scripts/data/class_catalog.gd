@@ -74,6 +74,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"shield_wall", "Parede de Escudos", "D", SkillDefinition.Targeting.DIRECTION, 18.0, 12.0, 2.0, 34.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.DEFENSIVE)
 	_add_skill(&"provoke", "Provocar", "D", SkillDefinition.Targeting.SINGLE_TARGET, 14.0, 10.0, 2.0, 300.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.DEFENSIVE)
 	_add_skill(&"perseverance", "Perseverança", "D", SkillDefinition.Targeting.SELF, 18.0, 10.0, 40.0, 0.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.DEFENSIVE)
+	_add_skill(&"piercing_shout", "Grito Perfurante", "D", SkillDefinition.Targeting.SELF, 17.0, 8.0, 1.5, 140.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.OFFENSIVE)
 	_add_skill(&"fireball", "Bola de Fogo", "Q", SkillDefinition.Targeting.DIRECTION, 18.0, 2.5, 1.80, 700.0, 680.0, 0.32, DamageRequest.AccuracyMode.GEOMETRY, true)
 	_add_skill(&"fire_wall", "Parede de Fogo", "W", SkillDefinition.Targeting.DIRECTION, 24.0, 7.0, 0.30, 180.0, 0.0, 0.48, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_skill(&"fire_spear", "Lança de Fogo", "A", SkillDefinition.Targeting.SINGLE_TARGET, 16.0, 3.0, 1.35, 360.0, 760.0, 0.22, DamageRequest.AccuracyMode.CONTESTED, true)
@@ -104,6 +105,7 @@ static func _ensure_built() -> void:
 	_configure_shield_wall_ranks()
 	_configure_provoke_ranks()
 	_configure_perseverance_ranks()
+	_configure_piercing_shout_ranks()
 	_configure_swordsman_resistance_ranks()
 	_configure_fireball_ranks()
 	_configure_fire_wall_ranks()
@@ -274,6 +276,23 @@ static func _configure_perseverance_ranks() -> void:
 		rank.cooldown = 10.0
 		rank.power = bases[index]
 		rank.effect_ids = [&"personal_shield"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_piercing_shout_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"piercing_shout"]
+	definition.handler_id = SkillDefinition.Handler.PIERCING_SHOUT
+	var durations: Array[float] = [1.5, 1.9, 2.2, 2.4, 2.5]
+	var costs: Array[float] = [17.0, 19.0, 21.0, 22.0, 23.0]
+	for index: int in durations.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 8.0
+		rank.range = 140.0
+		rank.power = durations[index]
+		rank.physical_weight = 1.0
+		rank.effect_ids = [&"slow", &"attack_speed_reduction"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
 

@@ -112,6 +112,7 @@ func _ready() -> void:
 	player.phantom_barrier_requested.connect(_on_phantom_barrier_requested)
 	player.ice_wall_requested.connect(_on_ice_wall_requested)
 	player.provoke_requested.connect(_on_provoke_requested)
+	player.piercing_shout_requested.connect(_on_piercing_shout_requested)
 	player.skill_cast_ready.connect(_on_skill_cast_ready)
 	player.status_damage_requested.connect(_on_attack_requested)
 	player.actor_died.connect(_on_player_died)
@@ -254,6 +255,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 			_report_skill_failure(skill, selected_target)
 	elif definition.handler_id == SkillDefinition.Handler.PERSEVERANCE:
 		if not player.use_perseverance():
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.PIERCING_SHOUT:
+		if not player.use_piercing_shout():
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif definition.handler_id == SkillDefinition.Handler.FIREBALL:
 		if not player.use_fireball(direction):
@@ -646,6 +650,18 @@ func _on_provoke_requested(target_actor: CombatActor, duration: float) -> void:
 	enemy.apply_taunt(duration)
 	enemy.apply_attribute_debuff(AttributeDebuffState.PHYSICAL_DEFENSE, &"provoke", PlayerActor.PROVOKE_DEFENSE_REDUCTION, PlayerActor.PROVOKE_DEBUFF_DURATION)
 	enemy.apply_attribute_debuff(AttributeDebuffState.FLEE, &"provoke", PlayerActor.PROVOKE_FLEE_REDUCTION, PlayerActor.PROVOKE_DEBUFF_DURATION)
+
+func _on_piercing_shout_requested(origin: Vector2, request: DamageRequest, radius: float, duration: float) -> void:
+	for target_actor: CombatActor in enemies.duplicate():
+		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive() or origin.distance_to(target_actor.global_position) > radius:
+			continue
+		var impact := request.copy()
+		impact.target_id = target_actor.get_instance_id()
+		var result := target_actor.apply_damage(impact, rng)
+		if result.is_empty() or not bool(result["landed"]) or float(result["actual_damage"]) <= 0.0 or not target_actor.is_alive():
+			continue
+		target_actor.apply_attribute_debuff(AttributeDebuffState.MOVE_SPEED, &"piercing_shout", PlayerActor.PIERCING_SHOUT_SLOW_FRACTION, duration)
+		target_actor.apply_attribute_debuff(AttributeDebuffState.ATTACK_SPEED, &"piercing_shout", PlayerActor.PIERCING_SHOUT_ASPD_FRACTION, duration)
 
 func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActor, ranged: bool) -> void:
 	if not ranged:

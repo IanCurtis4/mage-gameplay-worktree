@@ -19,6 +19,7 @@ signal haunt_requested(origin: Vector2, direction: Vector2, cone_range: float, r
 signal phantom_barrier_requested(direction: Vector2, placement_range: float, capacity: int)
 signal ice_wall_requested(wall: IceWallScript)
 signal provoke_requested(target: CombatActor, duration: float)
+signal piercing_shout_requested(origin: Vector2, request: DamageRequest, radius: float, duration: float)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
 
@@ -55,6 +56,9 @@ const PROVOKE_DEFENSE_REDUCTION := 0.25
 const PROVOKE_FLEE_REDUCTION := 0.30
 const PROVOKE_DEBUFF_DURATION := 4.0
 const PERSEVERANCE_DURATION := 6.0
+const PIERCING_SHOUT_DAMAGE_WEIGHT := 0.45
+const PIERCING_SHOUT_SLOW_FRACTION := 0.30
+const PIERCING_SHOUT_ASPD_FRACTION := 0.25
 
 var navigation: ArenaNavigation
 var run_state: RunState
@@ -102,6 +106,7 @@ var shield_remaining := 0.0
 var shield_resistance := 0
 var shield_facing := Vector2.RIGHT
 var perseverance_remaining := 0.0
+var piercing_shout_visual_time := 0.0
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
@@ -325,6 +330,22 @@ func use_perseverance() -> bool:
 	_spend(&"perseverance")
 	perseverance_remaining = PERSEVERANCE_DURATION
 	presentation_action.emit(&"cast", _last_facing, 0.15)
+	resources_changed.emit()
+	queue_redraw()
+	return true
+
+func use_piercing_shout() -> bool:
+	var rank_definition := _runtime_rank_definition(&"piercing_shout")
+	if class_id != &"swordsman" or rank_definition == null or not _can_spend(&"piercing_shout"):
+		return false
+	_commit_action(ClassCatalog.skill_definition(&"piercing_shout").action_kind)
+	_spend(&"piercing_shout")
+	reveal_from_offense()
+	piercing_shout_visual_time = 0.25
+	var definition := ClassCatalog.skill_definition(&"piercing_shout")
+	var request := _make_physical_request(null, &"piercing_shout", stat_breakdown.value(&"melee_attack") * PIERCING_SHOUT_DAMAGE_WEIGHT, definition.accuracy_mode, definition.can_crit)
+	piercing_shout_requested.emit(global_position, request, rank_definition.range, rank_definition.power)
+	presentation_action.emit(&"cast", _last_facing, 0.25)
 	resources_changed.emit()
 	queue_redraw()
 	return true
@@ -865,6 +886,9 @@ func _process(delta: float) -> void:
 			clear_perseverance()
 		else:
 			queue_redraw()
+	if piercing_shout_visual_time > 0.0:
+		piercing_shout_visual_time = maxf(0.0, piercing_shout_visual_time - delta)
+		queue_redraw()
 	_regenerate_sp(delta, false)
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
 	_attack_recovery = maxf(0.0, _attack_recovery - delta)
@@ -1112,6 +1136,7 @@ func _on_health_died(actor_id: int) -> void:
 	cancel_active_cast()
 	clear_shield_stance()
 	clear_perseverance()
+	piercing_shout_visual_time = 0.0
 	extended_aim_remaining = 0.0
 	clear_foliage_shelters()
 	velocity = Vector2.ZERO
@@ -1147,6 +1172,9 @@ func _build_stat_breakdown() -> StatBreakdown:
 
 func _draw() -> void:
 	super._draw()
+	if piercing_shout_visual_time > 0.0:
+		var progress := 1.0 - piercing_shout_visual_time / 0.25
+		draw_arc(Vector2(0, -18), lerpf(20.0, skill_range(&"piercing_shout"), progress), 0.0, TAU, 48, Color(0.96, 0.68, 0.42, 1.0 - progress), 4.0, true)
 	if perseverance_remaining > 0.0 and health != null and health.shield_hp > 0.0:
 		draw_circle(Vector2(0, -18), collision_radius + 8.0, Color(0.53, 0.80, 0.97, 0.09))
 		draw_arc(Vector2(0, -18), collision_radius + 8.0, 0.0, TAU, 32, Color("a7dbfb"), 2.0, true)
