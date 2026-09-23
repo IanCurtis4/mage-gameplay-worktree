@@ -63,6 +63,7 @@ const PIERCING_SHOUT_ASPD_FRACTION := 0.25
 const FURY_DURATION := 6.0
 const BRUTAL_STRIKE_DEFENSE_REDUCTION := 0.30
 const BRUTAL_STRIKE_DEBUFF_DURATION := 4.0
+const CONCENTRATED_RAGE_HALF_WIDTH := 19.0
 
 var navigation: ArenaNavigation
 var run_state: RunState
@@ -114,6 +115,10 @@ var piercing_shout_visual_time := 0.0
 var fury_remaining := 0.0
 var brutal_strike_visual_time := 0.0
 var brutal_strike_visual_point := Vector2.ZERO
+var concentrated_rage_visual_time := 0.0
+var concentrated_rage_visual_origin := Vector2.ZERO
+var concentrated_rage_visual_direction := Vector2.RIGHT
+var concentrated_rage_visual_range := 0.0
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
@@ -385,6 +390,35 @@ func use_brutal_strike(enemy: CombatActor) -> bool:
 	var request := _make_physical_request(enemy, &"brutal_strike", stat_breakdown.value(&"melee_attack") * rank_definition.power, definition.accuracy_mode, definition.can_crit)
 	brutal_strike_requested.emit(request, enemy)
 	presentation_action.emit(&"slash", facing, 0.20)
+	resources_changed.emit()
+	queue_redraw()
+	return true
+
+func use_concentrated_rage(direction: Vector2, enemies: Array[CombatActor]) -> bool:
+	var rank_definition := _runtime_rank_definition(&"concentrated_rage")
+	if class_id != &"swordsman" or rank_definition == null or not _can_spend(&"concentrated_rage"):
+		return false
+	_commit_action(ClassCatalog.skill_definition(&"concentrated_rage").action_kind)
+	var facing := _resolved_facing(direction)
+	_spend(&"concentrated_rage")
+	reveal_from_offense()
+	target = null
+	_path.clear()
+	_has_path_goal = false
+	velocity = Vector2.ZERO
+	_dash_active = false
+	concentrated_rage_visual_time = 0.22
+	concentrated_rage_visual_origin = global_position
+	concentrated_rage_visual_direction = facing
+	concentrated_rage_visual_range = rank_definition.range
+	var definition := ClassCatalog.skill_definition(&"concentrated_rage")
+	var power := stat_breakdown.value(&"melee_attack") * rank_definition.power
+	for enemy: CombatActor in enemies.duplicate():
+		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
+			continue
+		if SkillGeometry.strip_contains(enemy.global_position - global_position, facing, rank_definition.range, CONCENTRATED_RAGE_HALF_WIDTH, enemy.collision_radius):
+			attack_requested.emit(_make_physical_request(enemy, &"concentrated_rage", power, definition.accuracy_mode, definition.can_crit), enemy)
+	presentation_action.emit(&"slash", facing, 0.22)
 	resources_changed.emit()
 	queue_redraw()
 	return true
@@ -947,6 +981,9 @@ func _process(delta: float) -> void:
 	if brutal_strike_visual_time > 0.0:
 		brutal_strike_visual_time = maxf(0.0, brutal_strike_visual_time - delta)
 		queue_redraw()
+	if concentrated_rage_visual_time > 0.0:
+		concentrated_rage_visual_time = maxf(0.0, concentrated_rage_visual_time - delta)
+		queue_redraw()
 	_regenerate_sp(delta, false)
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
 	_attack_recovery = maxf(0.0, _attack_recovery - delta)
@@ -1196,6 +1233,7 @@ func _on_health_died(actor_id: int) -> void:
 	clear_perseverance()
 	clear_fury()
 	brutal_strike_visual_time = 0.0
+	concentrated_rage_visual_time = 0.0
 	piercing_shout_visual_time = 0.0
 	extended_aim_remaining = 0.0
 	clear_foliage_shelters()
@@ -1237,6 +1275,10 @@ func _build_stat_breakdown() -> StatBreakdown:
 
 func _draw() -> void:
 	super._draw()
+	if concentrated_rage_visual_time > 0.0:
+		var origin := concentrated_rage_visual_origin - global_position
+		var endpoint := origin + concentrated_rage_visual_direction * concentrated_rage_visual_range
+		draw_line(origin, endpoint, Color(1.0, 0.51, 0.31, concentrated_rage_visual_time / 0.22), CONCENTRATED_RAGE_HALF_WIDTH * 2.0, true)
 	if brutal_strike_visual_time > 0.0:
 		draw_line(Vector2(0, -18), brutal_strike_visual_point - global_position + Vector2(0, -18), Color(1.0, 0.48, 0.33, brutal_strike_visual_time / 0.20), 6.0, true)
 	if fury_remaining > 0.0:

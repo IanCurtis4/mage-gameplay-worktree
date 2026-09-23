@@ -148,6 +148,11 @@ func _draw() -> void:
 	elif skill == &"brutal_strike":
 		draw_line(origin, endpoint, color, 3.0, true)
 		_draw_endpoint(endpoint, color)
+	elif skill == &"concentrated_rage":
+		var side := direction.orthogonal() * PlayerActor.CONCENTRATED_RAGE_HALF_WIDTH
+		var corridor := PackedVector2Array([origin + side, endpoint + side, endpoint - side, origin - side])
+		draw_colored_polygon(corridor, Color(color, 0.15))
+		draw_polyline(PackedVector2Array([origin + side, endpoint + side, endpoint - side, origin - side, origin + side]), color, 2.0, true)
 	elif skill == &"haunt":
 		var outline := SkillGeometry.cone_outline(origin, direction, active_range, PlayerActor.HAUNT_HALF_ANGLE)
 		draw_colored_polygon(outline.slice(0, outline.size() - 1), Color(color, 0.16))

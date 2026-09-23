@@ -76,6 +76,11 @@ O impacto resolve contra a defesa atual anterior ao efeito; só depois de dano
 positivo aplica redução temporária de DEF pela fonte da skill. Ver
 E04_SW6_BRUTAL_STRIKE_HANDOFF.md.
 
+Raiva Concentrada usa faixa direcional estreita de `SkillGeometry`, compartilhada
+entre mira e hit-test, e emite um pedido de dano por alvo na faixa. O jogador
+zera caminho, impulso e perseguição no golpe, sem deslocamento tipo Investida;
+ver E04_SW7_CONCENTRATED_RAGE_HANDOFF.md.
+
 Jogador mantém `velocity` no runtime: aceleração 1100 unidades/s² e frenagem/atrito
 1600 unidades/s², velocidade máxima derivada em `StatCalculator` (base 220). Acelera em cerca
 de 0,20 s, freia em cerca de 0,14 s e percorre aproximadamente 15 unidades ao parar

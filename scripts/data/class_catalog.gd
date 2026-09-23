@@ -91,6 +91,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"piercing_shout", "Grito Perfurante", "D", SkillDefinition.Targeting.SELF, 17.0, 8.0, 1.5, 140.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.OFFENSIVE)
 	_add_skill(&"fury", "Fúria", "D", SkillDefinition.Targeting.SELF, 22.0, 14.0, 0.30, 0.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.OFFENSIVE)
 	_add_skill(&"brutal_strike", "Golpe Brutal", "D", SkillDefinition.Targeting.SINGLE_TARGET, 20.0, 8.0, 2.20, 110.0, 0.0, 0.55, DamageRequest.AccuracyMode.GEOMETRY, true, SkillDefinition.ActionKind.OFFENSIVE)
+	_add_skill(&"concentrated_rage", "Raiva Concentrada", "D", SkillDefinition.Targeting.DIRECTION, 19.0, 7.5, 1.45, 230.0, 0.0, 0.35, DamageRequest.AccuracyMode.GEOMETRY, true, SkillDefinition.ActionKind.OFFENSIVE)
 	_add_skill(&"fireball", "Bola de Fogo", "Q", SkillDefinition.Targeting.DIRECTION, 18.0, 2.5, 1.80, 700.0, 680.0, 0.32, DamageRequest.AccuracyMode.GEOMETRY, true)
 	_add_skill(&"fire_wall", "Parede de Fogo", "W", SkillDefinition.Targeting.DIRECTION, 24.0, 7.0, 0.30, 180.0, 0.0, 0.48, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_skill(&"fire_spear", "Lança de Fogo", "A", SkillDefinition.Targeting.SINGLE_TARGET, 16.0, 3.0, 1.35, 360.0, 760.0, 0.22, DamageRequest.AccuracyMode.CONTESTED, true)
@@ -124,6 +125,7 @@ static func _ensure_built() -> void:
 	_configure_piercing_shout_ranks()
 	_configure_fury_ranks()
 	_configure_brutal_strike_ranks()
+	_configure_concentrated_rage_ranks()
 	_configure_swordsman_resistance_ranks()
 	_configure_fireball_ranks()
 	_configure_fire_wall_ranks()
@@ -344,6 +346,23 @@ static func _configure_brutal_strike_ranks() -> void:
 		rank.power = powers[index]
 		rank.physical_weight = 1.0
 		rank.effect_ids = [&"physical_defense_reduction"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_concentrated_rage_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"concentrated_rage"]
+	definition.handler_id = SkillDefinition.Handler.CONCENTRATED_RAGE
+	var powers: Array[float] = [1.45, 1.65, 1.83, 1.99, 2.12]
+	var costs: Array[float] = [19.0, 21.0, 23.0, 24.0, 25.0]
+	for index: int in powers.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.variable_cast_time = 0.35
+		rank.cooldown = 7.5
+		rank.range = 230.0
+		rank.power = powers[index]
+		rank.physical_weight = 1.0
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
 
