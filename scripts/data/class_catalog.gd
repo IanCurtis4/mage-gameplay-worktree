@@ -49,6 +49,12 @@ static func passive_modifier_source(skill_id: StringName, rank: int) -> Dictiona
 				"label": "Cadência do Arqueiro",
 				"increased": {&"attacks_per_second": rank_definition.power},
 			}
+		SkillDefinition.Handler.VIGOR:
+			return {
+				"source_id": &"passive_swordsman_vigor",
+				"label": "Vigor do Espadachim",
+				"increased": {&"hp_regen": rank_definition.power},
+			}
 	return {}
 
 static func passive_rule_source(skill_id: StringName, rank: int) -> Dictionary:
@@ -114,6 +120,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"slowing_arrow", "Flecha Entorpecente", "D", SkillDefinition.Targeting.DIRECTION, 15.0, 5.0, 0.90, 560.0, 880.0, 0.0, DamageRequest.AccuracyMode.CONTESTED, true)
 	_add_skill(&"foliage_shelter", "Abrigo de Folhagem", "D", SkillDefinition.Targeting.POINT, 18.0, 12.0, 4.0, 360.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_passive_skill(&"swordsman_resistance", "Resistência")
+	_add_passive_skill(&"vigor", "Vigor")
 	_add_passive_skill(&"mage_mana_regeneration", "Regeneração de SP")
 	_add_passive_skill(&"archer_precision", "Precisão")
 	_add_passive_skill(&"archer_cadence", "Cadência")
@@ -129,6 +136,7 @@ static func _ensure_built() -> void:
 	_configure_concentrated_rage_ranks()
 	_configure_terrifying_shout_ranks()
 	_configure_swordsman_resistance_ranks()
+	_configure_vigor_ranks()
 	_configure_fireball_ranks()
 	_configure_fire_wall_ranks()
 	_configure_fire_spear_ranks()
@@ -471,6 +479,18 @@ static func _configure_ice_spear_ranks() -> void:
 		rank.magic_weight = 1.0
 		rank.projectile_speed = 760.0
 		rank.effect_ids = [&"slow"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_vigor_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"vigor"]
+	definition.handler_id = SkillDefinition.Handler.VIGOR
+	var bonuses: Array[float] = [0.50, 0.80, 1.10]
+	for index: int in bonuses.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.power = bonuses[index]
+		rank.effect_ids = [&"hp_regeneration_increase"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
 
