@@ -92,6 +92,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"fury", "Fúria", "D", SkillDefinition.Targeting.SELF, 22.0, 14.0, 0.30, 0.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.OFFENSIVE)
 	_add_skill(&"brutal_strike", "Golpe Brutal", "D", SkillDefinition.Targeting.SINGLE_TARGET, 20.0, 8.0, 2.20, 110.0, 0.0, 0.55, DamageRequest.AccuracyMode.GEOMETRY, true, SkillDefinition.ActionKind.OFFENSIVE)
 	_add_skill(&"concentrated_rage", "Raiva Concentrada", "D", SkillDefinition.Targeting.DIRECTION, 19.0, 7.5, 1.45, 230.0, 0.0, 0.35, DamageRequest.AccuracyMode.GEOMETRY, true, SkillDefinition.ActionKind.OFFENSIVE)
+	_add_skill(&"terrifying_shout", "Grito Aterrorizante", "D", SkillDefinition.Targeting.SELF, 20.0, 11.0, 0.75, 170.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.OFFENSIVE)
 	_add_skill(&"fireball", "Bola de Fogo", "Q", SkillDefinition.Targeting.DIRECTION, 18.0, 2.5, 1.80, 700.0, 680.0, 0.32, DamageRequest.AccuracyMode.GEOMETRY, true)
 	_add_skill(&"fire_wall", "Parede de Fogo", "W", SkillDefinition.Targeting.DIRECTION, 24.0, 7.0, 0.30, 180.0, 0.0, 0.48, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_skill(&"fire_spear", "Lança de Fogo", "A", SkillDefinition.Targeting.SINGLE_TARGET, 16.0, 3.0, 1.35, 360.0, 760.0, 0.22, DamageRequest.AccuracyMode.CONTESTED, true)
@@ -126,6 +127,7 @@ static func _ensure_built() -> void:
 	_configure_fury_ranks()
 	_configure_brutal_strike_ranks()
 	_configure_concentrated_rage_ranks()
+	_configure_terrifying_shout_ranks()
 	_configure_swordsman_resistance_ranks()
 	_configure_fireball_ranks()
 	_configure_fire_wall_ranks()
@@ -363,6 +365,22 @@ static func _configure_concentrated_rage_ranks() -> void:
 		rank.range = 230.0
 		rank.power = powers[index]
 		rank.physical_weight = 1.0
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_terrifying_shout_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"terrifying_shout"]
+	definition.handler_id = SkillDefinition.Handler.TERRIFYING_SHOUT
+	var durations: Array[float] = [0.75, 0.90, 1.00, 1.10, 1.15]
+	var costs: Array[float] = [20.0, 22.0, 24.0, 25.0, 26.0]
+	for index: int in durations.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 11.0
+		rank.range = 170.0
+		rank.power = durations[index]
+		rank.effect_ids = [&"fear", &"damage_received_increase"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
 

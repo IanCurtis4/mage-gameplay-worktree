@@ -81,6 +81,10 @@ entre mira e hit-test, e emite um pedido de dano por alvo na faixa. O jogador
 zera caminho, impulso e perseguição no golpe, sem deslocamento tipo Investida;
 ver E04_SW7_CONCENTRATED_RAGE_HANDOFF.md.
 
+Grito Aterrorizante aplica fear do `HardControlState` e, independentemente de
+imunidade a controle, aumento temporário de dano recebido por fonte. Não causa
+dano direto nem cancela projéteis emitidos; ver E04_SW8_TERRIFYING_SHOUT_HANDOFF.md.
+
 Jogador mantém `velocity` no runtime: aceleração 1100 unidades/s² e frenagem/atrito
 1600 unidades/s², velocidade máxima derivada em `StatCalculator` (base 220). Acelera em cerca
 de 0,20 s, freia em cerca de 0,14 s e percorre aproximadamente 15 unidades ao parar

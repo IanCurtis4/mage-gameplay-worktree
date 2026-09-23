@@ -114,6 +114,7 @@ func _ready() -> void:
 	player.provoke_requested.connect(_on_provoke_requested)
 	player.piercing_shout_requested.connect(_on_piercing_shout_requested)
 	player.brutal_strike_requested.connect(_on_brutal_strike_requested)
+	player.terrifying_shout_requested.connect(_on_terrifying_shout_requested)
 	player.skill_cast_ready.connect(_on_skill_cast_ready)
 	player.status_damage_requested.connect(_on_attack_requested)
 	player.actor_died.connect(_on_player_died)
@@ -268,6 +269,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 			_report_skill_failure(skill, selected_target)
 	elif definition.handler_id == SkillDefinition.Handler.CONCENTRATED_RAGE:
 		if not player.use_concentrated_rage(direction, enemies):
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.TERRIFYING_SHOUT:
+		if not player.use_terrifying_shout():
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif definition.handler_id == SkillDefinition.Handler.FIREBALL:
 		if not player.use_fireball(direction):
@@ -679,6 +683,13 @@ func _on_brutal_strike_requested(request: DamageRequest, target_actor: CombatAct
 	var result := target_actor.apply_damage(request, rng)
 	if not result.is_empty() and bool(result["landed"]) and float(result["actual_damage"]) > 0.0 and target_actor.is_alive():
 		target_actor.apply_attribute_debuff(AttributeDebuffState.PHYSICAL_DEFENSE, &"brutal_strike", PlayerActor.BRUTAL_STRIKE_DEFENSE_REDUCTION, PlayerActor.BRUTAL_STRIKE_DEBUFF_DURATION)
+
+func _on_terrifying_shout_requested(origin: Vector2, radius: float, fear_duration: float) -> void:
+	for target_actor: CombatActor in enemies.duplicate():
+		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive() or origin.distance_to(target_actor.global_position) > radius:
+			continue
+		target_actor.apply_fear(fear_duration)
+		target_actor.apply_attribute_debuff(AttributeDebuffState.DAMAGE_RECEIVED, &"terrifying_shout", PlayerActor.TERRIFYING_SHOUT_DAMAGE_RECEIVED_INCREASE, PlayerActor.TERRIFYING_SHOUT_DEBUFF_DURATION)
 
 func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActor, ranged: bool) -> void:
 	if not ranged:

@@ -21,6 +21,7 @@ signal ice_wall_requested(wall: IceWallScript)
 signal provoke_requested(target: CombatActor, duration: float)
 signal piercing_shout_requested(origin: Vector2, request: DamageRequest, radius: float, duration: float)
 signal brutal_strike_requested(request: DamageRequest, target: CombatActor)
+signal terrifying_shout_requested(origin: Vector2, radius: float, fear_duration: float)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
 
@@ -64,6 +65,8 @@ const FURY_DURATION := 6.0
 const BRUTAL_STRIKE_DEFENSE_REDUCTION := 0.30
 const BRUTAL_STRIKE_DEBUFF_DURATION := 4.0
 const CONCENTRATED_RAGE_HALF_WIDTH := 19.0
+const TERRIFYING_SHOUT_DAMAGE_RECEIVED_INCREASE := 0.20
+const TERRIFYING_SHOUT_DEBUFF_DURATION := 3.0
 
 var navigation: ArenaNavigation
 var run_state: RunState
@@ -119,6 +122,7 @@ var concentrated_rage_visual_time := 0.0
 var concentrated_rage_visual_origin := Vector2.ZERO
 var concentrated_rage_visual_direction := Vector2.RIGHT
 var concentrated_rage_visual_range := 0.0
+var terrifying_shout_visual_time := 0.0
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
@@ -419,6 +423,20 @@ func use_concentrated_rage(direction: Vector2, enemies: Array[CombatActor]) -> b
 		if SkillGeometry.strip_contains(enemy.global_position - global_position, facing, rank_definition.range, CONCENTRATED_RAGE_HALF_WIDTH, enemy.collision_radius):
 			attack_requested.emit(_make_physical_request(enemy, &"concentrated_rage", power, definition.accuracy_mode, definition.can_crit), enemy)
 	presentation_action.emit(&"slash", facing, 0.22)
+	resources_changed.emit()
+	queue_redraw()
+	return true
+
+func use_terrifying_shout() -> bool:
+	var rank_definition := _runtime_rank_definition(&"terrifying_shout")
+	if class_id != &"swordsman" or rank_definition == null or not _can_spend(&"terrifying_shout"):
+		return false
+	_commit_action(ClassCatalog.skill_definition(&"terrifying_shout").action_kind)
+	_spend(&"terrifying_shout")
+	reveal_from_offense()
+	terrifying_shout_visual_time = 0.28
+	terrifying_shout_requested.emit(global_position, rank_definition.range, rank_definition.power)
+	presentation_action.emit(&"cast", _last_facing, 0.28)
 	resources_changed.emit()
 	queue_redraw()
 	return true
@@ -984,6 +1002,9 @@ func _process(delta: float) -> void:
 	if concentrated_rage_visual_time > 0.0:
 		concentrated_rage_visual_time = maxf(0.0, concentrated_rage_visual_time - delta)
 		queue_redraw()
+	if terrifying_shout_visual_time > 0.0:
+		terrifying_shout_visual_time = maxf(0.0, terrifying_shout_visual_time - delta)
+		queue_redraw()
 	_regenerate_sp(delta, false)
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
 	_attack_recovery = maxf(0.0, _attack_recovery - delta)
@@ -1234,6 +1255,7 @@ func _on_health_died(actor_id: int) -> void:
 	clear_fury()
 	brutal_strike_visual_time = 0.0
 	concentrated_rage_visual_time = 0.0
+	terrifying_shout_visual_time = 0.0
 	piercing_shout_visual_time = 0.0
 	extended_aim_remaining = 0.0
 	clear_foliage_shelters()
@@ -1275,6 +1297,9 @@ func _build_stat_breakdown() -> StatBreakdown:
 
 func _draw() -> void:
 	super._draw()
+	if terrifying_shout_visual_time > 0.0:
+		var progress := 1.0 - terrifying_shout_visual_time / 0.28
+		draw_arc(Vector2(0, -18), lerpf(20.0, skill_range(&"terrifying_shout"), progress), 0.0, TAU, 48, Color(0.70, 0.44, 0.90, 1.0 - progress), 4.0, true)
 	if concentrated_rage_visual_time > 0.0:
 		var origin := concentrated_rage_visual_origin - global_position
 		var endpoint := origin + concentrated_rage_visual_direction * concentrated_rage_visual_range

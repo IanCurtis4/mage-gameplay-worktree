@@ -190,6 +190,9 @@ func _draw() -> void:
 	elif skill == &"piercing_shout":
 		draw_circle(origin, active_range, Color(color, 0.10))
 		draw_arc(origin, active_range, 0.0, TAU, 48, color, 2.0, true)
+	elif skill == &"terrifying_shout":
+		draw_circle(origin, active_range, Color(color, 0.10))
+		draw_arc(origin, active_range, 0.0, TAU, 48, color, 2.0, true)
 	elif skill == &"snare_trap":
 		draw_dashed_line(origin, endpoint, Color(color, 0.55), 1.5, 9.0, true, true)
 		draw_circle(endpoint, SnareTrap.TRIGGER_RADIUS, Color(color, 0.13))
