@@ -38,6 +38,14 @@ revisão da malha; atores descartam rotas antigas e replanejam. Expiração, fim
 encontro e morte retiram o segmento sincronicamente, inclusive com a árvore
 pausada. Detalhes e tuning estão em E04_MG7_ICE_WALL_HANDOFF.md.
 
+Parede de Escudos é postura defensiva do Espadachim, sem obstáculo de navegação
+ou penalidade de movimento. Sua frente é capturada na ativação e não gira com
+deslocamento/Investida. Projéteis inimigos frontais consultam o arco antes do
+corpo; dano direto frontal usa cópia do pedido e a mitigação passa pelo resolver
+canônico. Ações têm classificação explícita ofensiva/mobilidade/defensiva;
+somente ação ofensiva validada cancela a postura antes de emitir dano.
+Tuning, toggle e limpeza estão em E04_SW1_SHIELD_WALL_HANDOFF.md.
+
 Jogador mantém `velocity` no runtime: aceleração 1100 unidades/s² e frenagem/atrito
 1600 unidades/s², velocidade máxima derivada em `StatCalculator` (base 220). Acelera em cerca
 de 0,20 s, freia em cerca de 0,14 s e percorre aproximadamente 15 unidades ao parar

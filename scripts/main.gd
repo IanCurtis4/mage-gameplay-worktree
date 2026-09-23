@@ -245,6 +245,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.DASH:
 		if not player.use_dash(direction):
 			_show_skill_blocked(definition.display_name, player.dash_cooldown, player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.SHIELD_WALL:
+		if not player.use_shield_wall(direction):
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif definition.handler_id == SkillDefinition.Handler.FIREBALL:
 		if not player.use_fireball(direction):
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
@@ -356,6 +359,8 @@ func _update_aim(point: Vector2) -> void:
 	var cooldown := player.skill_cooldown(skill)
 	var cost := player.skill_cost(skill)
 	var state := _skill_state(cooldown, cost)
+	if skill == &"shield_wall" and player.has_shield_stance():
+		state = "DESLIGAR"
 	var selected_target: CombatActor
 	if definition.targeting == SkillDefinition.Targeting.SINGLE_TARGET:
 		selected_target = _enemy_at(point)
@@ -373,7 +378,7 @@ func _update_aim(point: Vector2) -> void:
 	elif skill == &"ice_wall" and not player.can_place_ice_wall(player.aim_direction(point), enemies):
 		state = "POSIÇÃO BLOQUEADA"
 	if _world_pointer_available():
-		battle_indicators.show_aim(skill, player, point, state == "PRONTO", selected_target)
+		battle_indicators.show_aim(skill, player, point, state in ["PRONTO", "DESLIGAR"], selected_target)
 	else:
 		battle_indicators.clear_aim()
 	var action := "Solte a tecla ou clique" if cast_intent.mode == CastIntent.Mode.RELEASE else "Clique para lançar"
@@ -652,6 +657,7 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	if not enemies.is_empty():
 		return
 	encounter_active = false
+	player.clear_shield_stance()
 	trap_registry.clear_all(&"encounter_end")
 	for group_name: StringName in [&"enemy_projectiles", &"player_projectiles", &"player_effects"]:
 		for runtime_node: Node in get_tree().get_nodes_in_group(group_name):
@@ -775,6 +781,7 @@ func _show_result(victory: bool) -> void:
 	_clear_hover()
 	if trap_registry != null:
 		trap_registry.clear_all(&"run_end")
+	player.clear_shield_stance()
 	player.clear_foliage_shelters()
 	for shelter: Node in get_tree().get_nodes_in_group("foliage_shelters"):
 		if shelter is FoliageShelter:
@@ -938,7 +945,7 @@ func _update_hud() -> void:
 	var skill_lines: PackedStringArray = []
 	for skill_id: StringName in player.available_skill_ids():
 		var definition := ClassCatalog.skill_definition(skill_id)
-		var cost := player.skill_cost(skill_id)
+		var cost := 0.0 if skill_id == &"shield_wall" and player.has_shield_stance() else player.skill_cost(skill_id)
 		var rank_text := " R%d" % player.skill_rank(skill_id) if not definition.ranks.is_empty() else ""
 		var state := _display_skill_state(skill_id, cost)
 		skill_lines.append("%s  %s%s — %s" % [_skill_input_label(skill_id), definition.display_name, rank_text, state])
@@ -948,7 +955,7 @@ func _update_hud() -> void:
 	if battle_controls != null:
 		for skill_id: StringName in player.available_skill_ids():
 			var definition := ClassCatalog.skill_definition(skill_id)
-			var cost := player.skill_cost(skill_id)
+			var cost := 0.0 if skill_id == &"shield_wall" and player.has_shield_stance() else player.skill_cost(skill_id)
 			var rank_text := " R%d" % player.skill_rank(skill_id) if not definition.ranks.is_empty() else ""
 			var state := _display_skill_state(skill_id, cost)
 			battle_controls.show_skill_state(skill_id, "%s · %s%s\n%d SP · %s" % [_skill_input_label(skill_id), definition.display_name.to_upper(), rank_text, int(cost), state], cast_intent.active_skill == skill_id or player.active_cast_skill == skill_id)
@@ -961,6 +968,8 @@ func _skill_input_label(skill_id: StringName) -> String:
 func _display_skill_state(skill_id: StringName, sp_cost: float) -> String:
 	if player.active_cast_skill == skill_id:
 		return "CONJURANDO %.1fs" % player.active_cast_remaining
+	if skill_id == &"shield_wall" and player.has_shield_stance():
+		return "ATIVA %.1fs · %d cargas · DESLIGAR" % [player.shield_remaining, player.shield_resistance]
 	if skill_id == &"extended_aim" and player.has_extended_aim():
 		return "ATIVA %.1fs" % player.extended_aim_remaining
 	return _skill_state(player.skill_cooldown(skill_id), sp_cost)

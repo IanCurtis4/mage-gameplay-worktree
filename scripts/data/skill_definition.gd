@@ -4,6 +4,7 @@ extends Resource
 
 enum Targeting { DIRECTION, SINGLE_TARGET, POINT, SELF }
 enum Category { ACTIVE, PASSIVE }
+enum ActionKind { OFFENSIVE, MOBILITY, DEFENSIVE }
 enum Handler {
 	UNASSIGNED,
 	SLASH,
@@ -32,6 +33,7 @@ enum Handler {
 	HAUNT,
 	PHANTOM_BARRIER,
 	ICE_WALL,
+	SHIELD_WALL,
 }
 
 const MAX_ACTIVE_RANK := 5
@@ -42,6 +44,7 @@ const MAX_PASSIVE_RANK := 3
 @export var input_key: String
 @export var targeting: Targeting = Targeting.DIRECTION
 @export var category: Category = Category.ACTIVE
+@export var action_kind: ActionKind = ActionKind.OFFENSIVE
 @export var handler_id: Handler = Handler.UNASSIGNED
 @export var ranks: Array[SkillRankDefinition] = []
 @export var accuracy_mode: DamageRequest.AccuracyMode = DamageRequest.AccuracyMode.CONTESTED
@@ -56,7 +59,9 @@ const MAX_PASSIVE_RANK := 3
 func is_rank_catalog_valid() -> bool:
 	if category < Category.ACTIVE or category > Category.PASSIVE:
 		return false
-	if handler_id <= Handler.UNASSIGNED or handler_id > Handler.ICE_WALL:
+	if handler_id <= Handler.UNASSIGNED or handler_id > Handler.SHIELD_WALL:
+		return false
+	if action_kind < ActionKind.OFFENSIVE or action_kind > ActionKind.DEFENSIVE:
 		return false
 	var maximum_rank := MAX_ACTIVE_RANK if category == Category.ACTIVE else MAX_PASSIVE_RANK
 	if ranks.is_empty() or ranks.size() > maximum_rank:

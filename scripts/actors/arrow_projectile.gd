@@ -39,6 +39,8 @@ func _process(delta: float) -> void:
 	var next_position := global_position + direction * step
 	var target_center := target.global_position + BODY_OFFSET
 	var target_fraction := _target_hit_fraction(target_center, global_position, next_position, target.collision_radius + projectile_radius)
+	var shielded_player := target as PlayerActor
+	var shield_fraction := shielded_player.shield_interception_fraction(global_position, next_position, projectile_radius) if shielded_player != null else -1.0
 	var first_barrier: PhantomBarrier
 	var first_barrier_fraction := 2.0
 	if is_inside_tree():
@@ -50,7 +52,13 @@ func _process(delta: float) -> void:
 			if fraction >= 0.0 and fraction < first_barrier_fraction:
 				first_barrier = barrier
 				first_barrier_fraction = fraction
-	if first_barrier != null and (target_fraction < 0.0 or first_barrier_fraction <= target_fraction):
+	if shield_fraction >= 0.0 and (target_fraction < 0.0 or shield_fraction <= target_fraction) and shield_fraction <= first_barrier_fraction:
+		var shield_point := global_position.lerp(next_position, shield_fraction)
+		if navigation.is_segment_clear(global_position, shield_point, projectile_radius) and shielded_player.absorb_shield_projectile():
+			global_position = shield_point
+			queue_free()
+			return
+	if first_barrier != null and (target_fraction < 0.0 or first_barrier_fraction <= target_fraction) and (shield_fraction < 0.0 or first_barrier_fraction < shield_fraction):
 		var intercept_point := global_position.lerp(next_position, first_barrier_fraction)
 		if navigation.is_segment_clear(global_position, intercept_point, projectile_radius) and first_barrier.absorb_projectile():
 			global_position = intercept_point

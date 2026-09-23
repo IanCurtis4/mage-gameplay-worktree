@@ -22,7 +22,7 @@ var target_actor: CombatActor
 func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast: bool, selected_target: CombatActor = null) -> void:
 	skill = skill_id
 	origin = actor.global_position
-	direction = actor.aim_direction(point)
+	direction = actor.shield_facing if skill_id == &"shield_wall" and actor.has_shield_stance() else actor.aim_direction(point)
 	target_actor = selected_target
 	if skill == &"dash":
 		endpoint = actor.dash_destination(direction)
@@ -86,6 +86,11 @@ func _draw() -> void:
 		draw_polyline(outline, color, 2.0, true)
 		var inner := SkillGeometry.cone_outline(origin, direction, skill_range * 0.55, PlayerActor.SLASH_HALF_ANGLE)
 		draw_polyline(inner.slice(1, inner.size() - 1), Color(color, 0.35), 1.0, true)
+	elif skill == &"shield_wall":
+		var center := origin + Vector2(0, -18)
+		var angle := direction.angle()
+		draw_arc(center, PlayerActor.SHIELD_RADIUS, angle - PlayerActor.SHIELD_HALF_ANGLE, angle + PlayerActor.SHIELD_HALF_ANGLE, 26, Color(color, 0.18), 12.0, true)
+		draw_arc(center, PlayerActor.SHIELD_RADIUS, angle - PlayerActor.SHIELD_HALF_ANGLE, angle + PlayerActor.SHIELD_HALF_ANGLE, 26, color, 3.0, true)
 	elif skill == &"dash":
 		var side := direction.orthogonal() * body_radius
 		var corridor := PackedVector2Array([origin + side, endpoint + side, endpoint - side, origin - side])

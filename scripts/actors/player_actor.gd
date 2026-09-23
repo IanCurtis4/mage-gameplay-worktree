@@ -46,6 +46,10 @@ const EXTENDED_AIM_RANGE_BONUS := 120.0
 const SLOWING_ARROW_SLOW_FRACTION := 0.35
 const CONCEALMENT_REVEAL_DURATION := 1.25
 const DISCHARGE_MARK_BONUS_WEIGHT := 0.45
+const SHIELD_HALF_ANGLE := deg_to_rad(65.0)
+const SHIELD_RADIUS := 34.0
+const SHIELD_DURATION := 6.0
+const SHIELD_FRONT_REDUCTION := 0.30
 
 var navigation: ArenaNavigation
 var run_state: RunState
@@ -89,6 +93,9 @@ var _active_cast_target_id: int = 0
 var _active_cast_direction := Vector2.RIGHT
 var _rank_definitions: Dictionary[StringName, SkillRankDefinition] = {}
 var _foliage_shelters: Dictionary[int, Dictionary] = {}
+var shield_remaining := 0.0
+var shield_resistance := 0
+var shield_facing := Vector2.RIGHT
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
@@ -105,6 +112,8 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 	set_animation_kind(class_id)
 	max_sp = stat_breakdown.value(&"max_sp")
 	current_sp = max_sp
+	shield_remaining = 0.0
+	shield_resistance = 0
 	for skill_id: StringName in available_skill_ids():
 		mage_cooldowns[skill_id] = 0.0
 	process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -154,6 +163,8 @@ func move_to(point: Vector2) -> void:
 
 func pursue(enemy: CombatActor) -> void:
 	cancel_active_cast()
+	if enemy != null and is_instance_valid(enemy) and enemy.is_alive():
+		_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
 	target = enemy
 	_attack_engaged = false
 	_has_path_goal = false
@@ -164,6 +175,7 @@ func use_slash(direction: Vector2, enemies: Array[CombatActor]) -> bool:
 	var rank_definition := _runtime_rank_definition(&"slash")
 	if class_id != &"swordsman" or rank_definition == null or not _can_spend(&"slash"):
 		return false
+	_commit_action(ClassCatalog.skill_definition(&"slash").action_kind)
 	var facing := _resolved_facing(direction)
 	_spend(&"slash")
 	reveal_from_offense()
@@ -187,6 +199,7 @@ func use_dash(direction: Vector2) -> bool:
 	var rank_definition := _runtime_rank_definition(&"dash")
 	if class_id != &"swordsman" or rank_definition == null or not _can_spend(&"dash") or is_rooted():
 		return false
+	_commit_action(ClassCatalog.skill_definition(&"dash").action_kind)
 	var facing := _resolved_facing(direction)
 	_spend(&"dash")
 	_dash_endpoint = dash_destination(facing)
@@ -252,6 +265,97 @@ func use_lightning_wall(direction: Vector2) -> bool:
 	lightning_wall_requested.emit(facing, request)
 	resources_changed.emit()
 	return true
+
+func has_shield_stance() -> bool:
+	return is_alive() and shield_remaining > 0.0 and shield_resistance > 0
+
+func use_shield_wall(direction: Vector2) -> bool:
+	if class_id != &"swordsman" or not is_alive():
+		return false
+	if has_shield_stance():
+		clear_shield_stance()
+		return true
+	var rank_definition := _runtime_rank_definition(&"shield_wall")
+	if rank_definition == null or not _can_spend(&"shield_wall"):
+		return false
+	_commit_action(ClassCatalog.skill_definition(&"shield_wall").action_kind)
+	var facing := _resolved_facing(direction)
+	_spend(&"shield_wall")
+	shield_remaining = SHIELD_DURATION
+	shield_resistance = roundi(rank_definition.power)
+	shield_facing = facing
+	if target != null:
+		target = null
+		_path.clear()
+		_path_index = 0
+		_repath_time = 0.0
+		_attack_engaged = false
+		_attack_recovery = 0.0
+	resources_changed.emit()
+	queue_redraw()
+	return true
+
+func clear_shield_stance() -> void:
+	if shield_remaining <= 0.0 and shield_resistance <= 0:
+		return
+	shield_remaining = 0.0
+	shield_resistance = 0
+	resources_changed.emit()
+	queue_redraw()
+
+func shield_interception_fraction(from: Vector2, to: Vector2, projectile_radius: float) -> float:
+	if not has_shield_stance():
+		return -1.0
+	var center := global_position + Vector2(0, -18)
+	var radius := SHIELD_RADIUS + maxf(0.0, projectile_radius)
+	var offset := from - center
+	if offset.length_squared() <= radius * radius:
+		return -1.0
+	var travel := to - from
+	var a := travel.length_squared()
+	if a <= 0.0001:
+		return -1.0
+	var b := 2.0 * offset.dot(travel)
+	var c := offset.length_squared() - radius * radius
+	var discriminant := b * b - 4.0 * a * c
+	if discriminant < 0.0:
+		return -1.0
+	var fraction := (-b - sqrt(discriminant)) / (2.0 * a)
+	if fraction < 0.0 or fraction > 1.0:
+		return -1.0
+	var contact_direction := (from.lerp(to, fraction) - center).normalized()
+	return fraction if contact_direction.dot(shield_facing) >= cos(SHIELD_HALF_ANGLE) else -1.0
+
+func absorb_shield_projectile() -> bool:
+	if not has_shield_stance():
+		return false
+	shield_resistance -= 1
+	if shield_resistance <= 0:
+		clear_shield_stance()
+	else:
+		resources_changed.emit()
+		queue_redraw()
+	return true
+
+func _commit_action(action_kind: SkillDefinition.ActionKind) -> void:
+	if action_kind == SkillDefinition.ActionKind.OFFENSIVE:
+		clear_shield_stance()
+
+func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Dictionary:
+	if request == null:
+		return {}
+	if not has_shield_stance() or request.is_secondary or request.target_id != get_instance_id():
+		return super.apply_damage(request, rng)
+	var source := instance_from_id(request.source_id) as Node2D
+	if source == null or not is_instance_valid(source) or not _shield_faces_position(source.global_position):
+		return super.apply_damage(request, rng)
+	var reduced := request.copy()
+	reduced.damage_dealt_multiplier *= 1.0 - SHIELD_FRONT_REDUCTION
+	return super.apply_damage(reduced, rng)
+
+func _shield_faces_position(position: Vector2) -> bool:
+	var offset := position - global_position
+	return not offset.is_zero_approx() and offset.normalized().dot(shield_facing) >= cos(SHIELD_HALF_ANGLE)
 
 func use_soul_impact(enemy: CombatActor) -> bool:
 	if class_id != &"mage" or _runtime_rank_definition(&"soul_impact") == null or not can_target_skill(&"soul_impact", enemy) or not _can_spend(&"soul_impact"):
@@ -697,6 +801,12 @@ func _process(delta: float) -> void:
 		_repath_time = 0.0
 		if target == null and _has_path_goal:
 			_set_path(_path_goal)
+	if has_shield_stance():
+		shield_remaining = maxf(0.0, shield_remaining - delta)
+		if shield_remaining <= 0.0:
+			clear_shield_stance()
+		else:
+			queue_redraw()
 	_regenerate_sp(delta, false)
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
 	_attack_recovery = maxf(0.0, _attack_recovery - delta)
@@ -807,6 +917,7 @@ func regenerate_hp(delta: float, encounter_active: bool, simulation_paused: bool
 func _try_basic_attack() -> void:
 	if target == null or attack_cooldown > 0.0 or not can_basic_attack(target, _attack_engaged):
 		return
+	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
 	_last_facing = global_position.direction_to(target.global_position)
 	attack_cooldown = 1.0 / stat_breakdown.value(&"attacks_per_second")
 	_attack_recovery = BASIC_ATTACK_RECOVERY
@@ -941,6 +1052,7 @@ func _move_step(delta: float) -> void:
 
 func _on_health_died(actor_id: int) -> void:
 	cancel_active_cast()
+	clear_shield_stance()
 	extended_aim_remaining = 0.0
 	clear_foliage_shelters()
 	velocity = Vector2.ZERO
@@ -976,6 +1088,16 @@ func _build_stat_breakdown() -> StatBreakdown:
 
 func _draw() -> void:
 	super._draw()
+	if has_shield_stance():
+		var center := Vector2(0, -18)
+		var shield_angle := shield_facing.angle()
+		var ratio := float(shield_resistance) / 6.0
+		draw_arc(center, SHIELD_RADIUS + 5.0, shield_angle - SHIELD_HALF_ANGLE, shield_angle + SHIELD_HALF_ANGLE, 26, Color(0.12, 0.28, 0.40, 0.72), 9.0, true)
+		draw_arc(center, SHIELD_RADIUS, shield_angle - SHIELD_HALF_ANGLE, shield_angle + SHIELD_HALF_ANGLE, 26, Color(0.53, 0.78, 0.96, 0.75 + ratio * 0.20), 5.0, true)
+		for offset_angle: float in [-0.55, 0.0, 0.55]:
+			var angle := shield_angle + offset_angle
+			var marker := center + Vector2.from_angle(angle) * SHIELD_RADIUS
+			draw_circle(marker, 3.5, Color(0.87, 0.95, 1.0, 0.88))
 	if is_concealed():
 		draw_circle(Vector2(0, -18), collision_radius + 10.0, Color(0.20, 0.48, 0.22, 0.12))
 		draw_arc(Vector2(0, -18), collision_radius + 10.0, 0.0, TAU, 36, Color(0.48, 0.78, 0.38, 0.85), 2.0, true)
