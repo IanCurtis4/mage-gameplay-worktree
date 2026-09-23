@@ -10,15 +10,16 @@ Integrado em master sem incorporar alterações locais do editor/exportação.
 - Arqueiro: biblioteca e fechamento integrado entregues e aceitos.
 - Espadachim: SW1–SW10/SWI revisados e candidato aceito em playtest.
 - Mago: MG1–MG7 e sprite/animação provisórios implementados e testados;
-  fechamento integrado MGI com duas builds ainda não entregue.
-- E04 permanece aberto somente para verificar/fechar as pendências de seu
-  contrato. E05 foi autorizado condicionalmente ao fechamento de E04;
-  não iniciar implementação de evoluções enquanto MGI estiver pendente.
+  fechamento integrado MGI com duas builds entregue para revisão técnica
+  ([handoff](E04_MAGE_INTEGRATED_HANDOFF.md)).
+- E04 permanece aberto até o gate técnico de Astra para MGI e a auditoria
+  final do contrato. E05 foi autorizado condicionalmente ao fechamento de E04;
+  não iniciar implementação de evoluções antes desse gate.
 
-## Próximo pacote: MGI
+## Pacote submetido: MGI
 
-Sol deve executar somente o fechamento integrado do Mago na tarefa E04
-existente. Usar duas builds distintas de até cinco ativas e duas passivas,
+Sol executou somente o fechamento integrado do Mago na tarefa E04
+existente. O cenário usa duas builds distintas de até cinco ativas e duas passivas,
 compradas dentro da carteira real de 19 pontos, sem augments obrigatórios:
 uma elemental e outra espiritual/defensiva. Usar as passivas já implementadas;
 não inventar skills para preencher slots opcionais.
