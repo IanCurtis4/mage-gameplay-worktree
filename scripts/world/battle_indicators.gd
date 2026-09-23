@@ -115,6 +115,10 @@ func _draw() -> void:
 		draw_dashed_line(origin, endpoint, Color(color, 0.55), 1.5, 9.0, true, true)
 		draw_line(wall_start, wall_end, Color(color, 0.15), LightningWall.HALF_WIDTH * 2.0, true)
 		draw_line(wall_start, wall_end, color, 2.0, true)
+	elif skill == &"soul_impact":
+		draw_dashed_line(origin, endpoint, Color(color, 0.65), 1.5, 9.0, true, true)
+		for index: int in 3:
+			draw_arc(endpoint + Vector2(0, -18), 13.0 + float(index) * 8.0, 0.0, TAU, 32, Color(color, 0.85 - float(index) * 0.2), 1.5, true)
 	elif skill in [&"fire_spear", &"ice_spear", &"lightning", &"electric_discharge", &"slowing_arrow"]:
 		draw_dashed_line(origin, endpoint, color, 2.0, 10.0, true, true)
 		_draw_endpoint(endpoint, color)

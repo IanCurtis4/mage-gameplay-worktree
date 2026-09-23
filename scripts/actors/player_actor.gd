@@ -12,6 +12,7 @@ signal slowing_arrow_requested(request: DamageRequest, direction: Vector2, slow_
 signal foliage_shelter_requested(center: Vector2, duration: float)
 signal fire_wall_requested(direction: Vector2, burn_request: DamageRequest)
 signal lightning_wall_requested(direction: Vector2, request: DamageRequest)
+signal soul_impact_requested(request: DamageRequest, target: CombatActor)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
 
@@ -232,6 +233,17 @@ func use_lightning_wall(direction: Vector2) -> bool:
 	var request := _make_magic_request(null, &"lightning_wall", _magic_power(&"lightning_wall"), definition.accuracy_mode, definition.can_crit)
 	request.is_secondary = true
 	lightning_wall_requested.emit(facing, request)
+	resources_changed.emit()
+	return true
+
+func use_soul_impact(enemy: CombatActor) -> bool:
+	if class_id != &"mage" or _runtime_rank_definition(&"soul_impact") == null or not can_target_skill(&"soul_impact", enemy) or not _can_spend(&"soul_impact"):
+		return false
+	_spend(&"soul_impact")
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(&"soul_impact")
+	var request := _make_magic_request(enemy, &"soul_impact", _magic_power(&"soul_impact"), definition.accuracy_mode, definition.can_crit)
+	soul_impact_requested.emit(request, enemy)
 	resources_changed.emit()
 	return true
 
