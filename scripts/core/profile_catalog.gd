@@ -28,6 +28,7 @@ static func pilot(additional_equipment: Dictionary = {}, additional_skills: Dict
 	catalog.add_skill(&"terrifying_shout", [&"swordsman"], ACTIVE, BASE_WALLET, 0, 5)
 	catalog.add_skill(&"swordsman_resistance", [&"swordsman"], PASSIVE, BASE_WALLET, 0, 3)
 	catalog.add_skill(&"vigor", [&"swordsman"], PASSIVE, BASE_WALLET, 0, 3)
+	catalog.add_skill(&"blood_thirst", [&"swordsman"], PASSIVE, BASE_WALLET, 0, 3)
 	catalog.add_skill(&"fireball", [&"mage"], ACTIVE, BASE_WALLET, 0, 5)
 	catalog.add_skill(&"fire_wall", [&"mage"], ACTIVE, BASE_WALLET, 0, 5)
 	catalog.add_skill(&"fire_spear", [&"mage"], ACTIVE, BASE_WALLET, 0, 5)

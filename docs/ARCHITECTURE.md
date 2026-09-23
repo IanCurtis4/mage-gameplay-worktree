@@ -89,6 +89,11 @@ Vigor é fonte passiva de `hp_regen` em `StatCalculator`; o runtime continua
 aplicando HP regen exclusivamente fora de encontros, sem timer ou fórmula nova
 no ator. Ver E04_SW9_VIGOR_HANDOFF.md.
 
+Sede de Sangue usa a alocação de VIT da build como fonte identificada de
+ATQ corpo a corpo, sem modificar a VIT efetiva. `RunController` credita uma
+única cura por alvo morto com `source_id` do jogador, inclusive DoT, e ignora
+notificações duplicadas. Ver E04_SW10_BLOOD_THIRST_HANDOFF.md.
+
 Jogador mantém `velocity` no runtime: aceleração 1100 unidades/s² e frenagem/atrito
 1600 unidades/s², velocidade máxima derivada em `StatCalculator` (base 220). Acelera em cerca
 de 0,20 s, freia em cerca de 0,14 s e percorre aproximadamente 15 unidades ao parar

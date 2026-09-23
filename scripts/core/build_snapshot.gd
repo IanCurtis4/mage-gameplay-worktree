@@ -80,7 +80,8 @@ func intrinsic_modifier_sources() -> Array[Dictionary]:
 		seen[passive_id] = true
 		var source := ClassCatalog.passive_modifier_source(
 			passive_id,
-			int(skill_ranks.get(passive_id, 0))
+			int(skill_ranks.get(passive_id, 0)),
+			float(attribute_allocations.get(&"vit", 0))
 		)
 		if not source.is_empty():
 			sources.append(source)

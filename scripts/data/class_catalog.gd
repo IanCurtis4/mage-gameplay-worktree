@@ -17,7 +17,7 @@ static func skill_ids(class_id: StringName) -> Array[StringName]:
 	var definition := class_definition(class_id)
 	return definition.skill_ids.duplicate() if definition != null else []
 
-static func passive_modifier_source(skill_id: StringName, rank: int) -> Dictionary:
+static func passive_modifier_source(skill_id: StringName, rank: int, invested_vit: float = 0.0) -> Dictionary:
 	var definition := skill_definition(skill_id)
 	if definition == null or definition.category != SkillDefinition.Category.PASSIVE:
 		return {}
@@ -55,7 +55,16 @@ static func passive_modifier_source(skill_id: StringName, rank: int) -> Dictiona
 				"label": "Vigor do Espadachim",
 				"increased": {&"hp_regen": rank_definition.power},
 			}
+		SkillDefinition.Handler.BLOOD_THIRST:
+			return {
+				"source_id": &"passive_swordsman_blood_thirst",
+				"label": "Sede de Sangue do Espadachim",
+				"flat": {&"melee_attack": maxf(0.0, invested_vit) * rank_definition.power},
+			}
 	return {}
+
+static func blood_thirst_heal_fraction(rank: int) -> float:
+	return 0.01 + float(rank) * 0.01 if rank >= 1 and rank <= 3 else 0.0
 
 static func passive_rule_source(skill_id: StringName, rank: int) -> Dictionary:
 	var definition := skill_definition(skill_id)
@@ -121,6 +130,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"foliage_shelter", "Abrigo de Folhagem", "D", SkillDefinition.Targeting.POINT, 18.0, 12.0, 4.0, 360.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_passive_skill(&"swordsman_resistance", "Resistência")
 	_add_passive_skill(&"vigor", "Vigor")
+	_add_passive_skill(&"blood_thirst", "Sede de Sangue")
 	_add_passive_skill(&"mage_mana_regeneration", "Regeneração de SP")
 	_add_passive_skill(&"archer_precision", "Precisão")
 	_add_passive_skill(&"archer_cadence", "Cadência")
@@ -137,6 +147,7 @@ static func _ensure_built() -> void:
 	_configure_terrifying_shout_ranks()
 	_configure_swordsman_resistance_ranks()
 	_configure_vigor_ranks()
+	_configure_blood_thirst_ranks()
 	_configure_fireball_ranks()
 	_configure_fire_wall_ranks()
 	_configure_fire_spear_ranks()
@@ -491,6 +502,18 @@ static func _configure_vigor_ranks() -> void:
 		rank.rank = index + 1
 		rank.power = bonuses[index]
 		rank.effect_ids = [&"hp_regeneration_increase"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_blood_thirst_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"blood_thirst"]
+	definition.handler_id = SkillDefinition.Handler.BLOOD_THIRST
+	var ratios: Array[float] = [0.60, 0.90, 1.20]
+	for index: int in ratios.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.power = ratios[index]
+		rank.effect_ids = [&"invested_vit_melee_attack", &"kill_heal"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
 

@@ -23,6 +23,7 @@ var navigation := ArenaNavigation.new()
 var arena_view: ArenaView
 var player: PlayerActor
 var enemies: Array[CombatActor] = []
+var _credited_kills: Dictionary[int, bool] = {}
 var reward: RewardPickup
 var encounter_index := 0
 var encounter_active := false
@@ -458,6 +459,7 @@ func _change_control_preferences(mode: int, smart_lock: bool) -> void:
 func _spawn_encounter(index: int) -> void:
 	encounter_index = index
 	encounter_active = true
+	_credited_kills.clear()
 	_reward_retry_pending = false
 	next_button.visible = false
 	augment_button.disabled = true
@@ -480,6 +482,7 @@ func _spawn_encounter(index: int) -> void:
 		enemy.global_position = entry["position"]
 		enemy.attack_requested.connect(_on_enemy_attack_requested)
 		enemy.actor_died.connect(_on_enemy_died)
+		enemy.health.damage_applied.connect(_on_enemy_damage_resolved)
 		enemy.damage_number.connect(_show_damage_number)
 		enemy.attack_missed.connect(_show_miss)
 		enemy.status_damage_requested.connect(_on_attack_requested)
@@ -733,6 +736,15 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	reward.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(reward)
 	status_label.text = "Encontro concluído — toque no cristal dourado"
+
+func _on_enemy_damage_resolved(result: Dictionary) -> void:
+	if not bool(result.get("killed", false)) or player == null or not is_instance_valid(player) or not player.is_alive() or int(result.get("source_id", 0)) != player.get_instance_id():
+		return
+	var victim_id := int(result.get("target_id", 0))
+	if victim_id <= 0 or _credited_kills.has(victim_id):
+		return
+	_credited_kills[victim_id] = true
+	player.heal_from_kill()
 
 func _collect_reward() -> Dictionary:
 	if reward == null:

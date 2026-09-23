@@ -1112,6 +1112,21 @@ func regenerate_hp(delta: float, encounter_active: bool, simulation_paused: bool
 	queue_redraw()
 	return true
 
+func heal_from_kill() -> float:
+	if not is_alive() or run_state == null or not (&"blood_thirst" in run_state.build_snapshot.passive_slots):
+		return 0.0
+	var rank := int(run_state.skill_levels.get(&"blood_thirst", 0))
+	var fraction := ClassCatalog.blood_thirst_heal_fraction(rank)
+	if fraction <= 0.0:
+		return 0.0
+	var previous_hp := health.current_hp
+	health.current_hp = minf(health.max_hp, health.current_hp + health.max_hp * fraction)
+	var healed := health.current_hp - previous_hp
+	if healed > 0.0:
+		resources_changed.emit()
+		queue_redraw()
+	return healed
+
 func _try_basic_attack() -> void:
 	if target == null or attack_cooldown > 0.0 or not can_basic_attack(target, _attack_engaged):
 		return
