@@ -76,11 +76,16 @@ func _target_hit_fraction(center: Vector2, segment_start: Vector2, segment_end: 
 		return 0.0 if segment_start.distance_to(center) <= radius else -1.0
 	if segment_start.distance_squared_to(center) <= radius * radius:
 		return 0.0
-	var projection := clampf((center - segment_start).dot(segment) / length_squared, 0.0, 1.0)
+	# Solve against the infinite line first; clamping before the root moves
+	# contact forward when the target center lies beyond this frame's endpoint.
+	var projection := (center - segment_start).dot(segment) / length_squared
 	var distance_squared := center.distance_squared_to(segment_start + segment * projection)
 	if distance_squared > radius * radius:
 		return -1.0
-	return maxf(0.0, projection - sqrt(maxf(0.0, radius * radius - distance_squared) / length_squared))
+	var half_chord := sqrt(maxf(0.0, radius * radius - distance_squared) / length_squared)
+	var entry := projection - half_chord
+	var exit := projection + half_chord
+	return maxf(0.0, entry) if entry <= 1.0 and exit >= 0.0 else -1.0
 
 func _draw() -> void:
 	draw_line(Vector2(-13, 0), Vector2(12, 0), Color("f6dfad"), 3.0)

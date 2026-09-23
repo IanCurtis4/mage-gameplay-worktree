@@ -128,6 +128,12 @@ func _check_crossing_and_lifetime() -> void:
 	await process_frame
 
 func _check_projectile_ordering() -> void:
+	var probe := ArrowProjectile.new()
+	var entry := probe._target_hit_fraction(Vector2(15, 0), Vector2.ZERO, Vector2(10, 0), 6.0)
+	_check(is_equal_approx(entry, 0.9) and entry > 0.8, "alvo além do endpoint não antecipa impacto diante de barreira em t=0.8")
+	_check(probe._target_hit_fraction(Vector2(17, 0), Vector2.ZERO, Vector2(10, 0), 6.0) < 0.0, "alvo ainda não alcançado não é atingido")
+	_check(probe._target_hit_fraction(Vector2(-7, 0), Vector2.ZERO, Vector2(10, 0), 6.0) < 0.0, "alvo atrás da origem não é atingido")
+	probe.free()
 	var navigation := ArenaNavigation.new()
 	navigation.configure(Rect2(0, 0, 800, 400), [], 4.0)
 	var player := _target(Vector2(100, 100))
