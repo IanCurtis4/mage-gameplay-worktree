@@ -1,3 +1,5 @@
+> Estado vigente em 23/09/2026: E04 encerrado e aceito; E05 liberado, somente E05-S0 em execução (docs/E05_START.md). E06–E11 reservados. As atualizações abaixo são históricas.
+
 # Conversas reservadas dos épicos
 
 > Atualização 21/09/2026: usuário aceitou E03 `495ee16`, integrado em master.
@@ -62,4 +64,5 @@ A criação do E10 foi interrompida na preparação do ambiente durante reinicia
 da conexão do app, antes de existir conversa; houve nova criação após verificar
 os registros locais. Há uma worktree órfã cf66 sem conversa, preservada sem exclusão.
 Os 12 IDs acima são as reservas efetivas, verificadas por read_thread/wait_threads.
+
 

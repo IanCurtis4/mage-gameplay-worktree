@@ -1,3 +1,5 @@
+> Estado vigente em 23/09/2026: E04 encerrado e aceito; E05 liberado, somente E05-S0 em execução (docs/E05_START.md). E06–E11 reservados. As atualizações abaixo são históricas.
+
 # Épicos do MVP expandido
 
 > Atualização operacional aprovada em 14/09/2026: E00 aceito na base `247e304`;
@@ -244,4 +246,5 @@ Referência do ambiente: [OpenAI Docs — worktrees](https://learn.chatgpt.com/d
 ## Planos que exigem decisão antes da execução
 
 Fórmulas e números de nível, respec de evolução, builds/slots, limites de CC em boss, propriedade de equipamentos e política de progresso ao abandonar a run. E00 deve apresentar opções concretas. Escolher Naturalista ou Filho de Gaia não bloqueia nenhum contrato. A matriz de 56 é exploração: nomes e kits novos ainda exigem revisão por par.
+
 
