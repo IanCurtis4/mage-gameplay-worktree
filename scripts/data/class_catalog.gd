@@ -73,6 +73,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"dash", "Investida", "W", SkillDefinition.Targeting.DIRECTION, 20.0, 6.0, 0.0, 270.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.MOBILITY)
 	_add_skill(&"shield_wall", "Parede de Escudos", "D", SkillDefinition.Targeting.DIRECTION, 18.0, 12.0, 2.0, 34.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.DEFENSIVE)
 	_add_skill(&"provoke", "Provocar", "D", SkillDefinition.Targeting.SINGLE_TARGET, 14.0, 10.0, 2.0, 300.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.DEFENSIVE)
+	_add_skill(&"perseverance", "Perseverança", "D", SkillDefinition.Targeting.SELF, 18.0, 10.0, 40.0, 0.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.DEFENSIVE)
 	_add_skill(&"fireball", "Bola de Fogo", "Q", SkillDefinition.Targeting.DIRECTION, 18.0, 2.5, 1.80, 700.0, 680.0, 0.32, DamageRequest.AccuracyMode.GEOMETRY, true)
 	_add_skill(&"fire_wall", "Parede de Fogo", "W", SkillDefinition.Targeting.DIRECTION, 24.0, 7.0, 0.30, 180.0, 0.0, 0.48, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_skill(&"fire_spear", "Lança de Fogo", "A", SkillDefinition.Targeting.SINGLE_TARGET, 16.0, 3.0, 1.35, 360.0, 760.0, 0.22, DamageRequest.AccuracyMode.CONTESTED, true)
@@ -102,6 +103,7 @@ static func _ensure_built() -> void:
 	_configure_dash_ranks()
 	_configure_shield_wall_ranks()
 	_configure_provoke_ranks()
+	_configure_perseverance_ranks()
 	_configure_swordsman_resistance_ranks()
 	_configure_fireball_ranks()
 	_configure_fire_wall_ranks()
@@ -257,6 +259,21 @@ static func _configure_provoke_ranks() -> void:
 		rank.range = 300.0
 		rank.power = durations[index]
 		rank.effect_ids = [&"taunt", &"physical_defense_reduction", &"flee_reduction"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_perseverance_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"perseverance"]
+	definition.handler_id = SkillDefinition.Handler.PERSEVERANCE
+	var bases: Array[float] = [40.0, 55.0, 68.0, 80.0, 90.0]
+	var costs: Array[float] = [18.0, 20.0, 22.0, 23.0, 24.0]
+	for index: int in bases.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 10.0
+		rank.power = bases[index]
+		rank.effect_ids = [&"personal_shield"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
 

@@ -56,6 +56,12 @@ Reaplicação renova a instância da mesma fonte e uma fonte fraca reaparece ap�
 expiração da forte. DEF/FLEE passam pelo resolver canônico via HealthState;
 o valor base continua em StatBreakdown. Detalhes em E04_SW2_PROVOKE_HANDOFF.md.
 
+Perseverança mantém duração no jogador e capacidade de escudo em HealthState.
+O resolver calcula o dano uma vez; HealthState consome o escudo antes do HP e
+informa as parcelas absorvida/real, sem afetar o snapshot do pedido. Capacidade
+usa VIT/INT efetivas via StatCalculator e reaplicação não soma cargas; ver
+E04_SW3_PERSEVERANCE_HANDOFF.md.
+
 Jogador mantém `velocity` no runtime: aceleração 1100 unidades/s² e frenagem/atrito
 1600 unidades/s², velocidade máxima derivada em `StatCalculator` (base 220). Acelera em cerca
 de 0,20 s, freia em cerca de 0,14 s e percorre aproximadamente 15 unidades ao parar

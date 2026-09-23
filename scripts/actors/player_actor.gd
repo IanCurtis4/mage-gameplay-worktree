@@ -54,6 +54,7 @@ const SHIELD_FRONT_REDUCTION := 0.30
 const PROVOKE_DEFENSE_REDUCTION := 0.25
 const PROVOKE_FLEE_REDUCTION := 0.30
 const PROVOKE_DEBUFF_DURATION := 4.0
+const PERSEVERANCE_DURATION := 6.0
 
 var navigation: ArenaNavigation
 var run_state: RunState
@@ -100,6 +101,7 @@ var _foliage_shelters: Dictionary[int, Dictionary] = {}
 var shield_remaining := 0.0
 var shield_resistance := 0
 var shield_facing := Vector2.RIGHT
+var perseverance_remaining := 0.0
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
@@ -118,6 +120,7 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 	current_sp = max_sp
 	shield_remaining = 0.0
 	shield_resistance = 0
+	perseverance_remaining = 0.0
 	for skill_id: StringName in available_skill_ids():
 		mage_cooldowns[skill_id] = 0.0
 	process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -311,6 +314,29 @@ func use_provoke(enemy: CombatActor) -> bool:
 	resources_changed.emit()
 	return true
 
+func use_perseverance() -> bool:
+	var rank_definition := _runtime_rank_definition(&"perseverance")
+	if class_id != &"swordsman" or rank_definition == null or not _can_spend(&"perseverance"):
+		return false
+	_commit_action(ClassCatalog.skill_definition(&"perseverance").action_kind)
+	var capacity := StatCalculator.personal_shield_capacity(rank_definition.power, stat_breakdown)
+	if not health.grant_shield(capacity):
+		return false
+	_spend(&"perseverance")
+	perseverance_remaining = PERSEVERANCE_DURATION
+	presentation_action.emit(&"cast", _last_facing, 0.15)
+	resources_changed.emit()
+	queue_redraw()
+	return true
+
+func clear_perseverance() -> void:
+	if perseverance_remaining <= 0.0 and health.shield_hp <= 0.0:
+		return
+	perseverance_remaining = 0.0
+	health.clear_shield()
+	resources_changed.emit()
+	queue_redraw()
+
 func clear_shield_stance() -> void:
 	if shield_remaining <= 0.0 and shield_resistance <= 0:
 		return
@@ -361,13 +387,23 @@ func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Diction
 	if request == null:
 		return {}
 	if not has_shield_stance() or request.is_secondary or request.target_id != get_instance_id():
-		return super.apply_damage(request, rng)
+		return _apply_damage_with_shield(request, rng)
 	var source := instance_from_id(request.source_id) as Node2D
 	if source == null or not is_instance_valid(source) or not _shield_faces_position(source.global_position):
-		return super.apply_damage(request, rng)
+		return _apply_damage_with_shield(request, rng)
 	var reduced := request.copy()
 	reduced.damage_dealt_multiplier *= 1.0 - SHIELD_FRONT_REDUCTION
-	return super.apply_damage(reduced, rng)
+	return _apply_damage_with_shield(reduced, rng)
+
+func _apply_damage_with_shield(request: DamageRequest, rng: RandomNumberGenerator) -> Dictionary:
+	var result := super.apply_damage(request, rng)
+	if not result.is_empty() and float(result.get("absorbed_damage", 0.0)) > 0.0:
+		if health.shield_hp <= 0.0:
+			clear_perseverance()
+		else:
+			resources_changed.emit()
+			queue_redraw()
+	return result
 
 func _shield_faces_position(position: Vector2) -> bool:
 	var offset := position - global_position
@@ -823,6 +859,12 @@ func _process(delta: float) -> void:
 			clear_shield_stance()
 		else:
 			queue_redraw()
+	if perseverance_remaining > 0.0:
+		perseverance_remaining = maxf(0.0, perseverance_remaining - delta)
+		if perseverance_remaining <= 0.0:
+			clear_perseverance()
+		else:
+			queue_redraw()
 	_regenerate_sp(delta, false)
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
 	_attack_recovery = maxf(0.0, _attack_recovery - delta)
@@ -1069,6 +1111,7 @@ func _move_step(delta: float) -> void:
 func _on_health_died(actor_id: int) -> void:
 	cancel_active_cast()
 	clear_shield_stance()
+	clear_perseverance()
 	extended_aim_remaining = 0.0
 	clear_foliage_shelters()
 	velocity = Vector2.ZERO
@@ -1104,6 +1147,9 @@ func _build_stat_breakdown() -> StatBreakdown:
 
 func _draw() -> void:
 	super._draw()
+	if perseverance_remaining > 0.0 and health != null and health.shield_hp > 0.0:
+		draw_circle(Vector2(0, -18), collision_radius + 8.0, Color(0.53, 0.80, 0.97, 0.09))
+		draw_arc(Vector2(0, -18), collision_radius + 8.0, 0.0, TAU, 32, Color("a7dbfb"), 2.0, true)
 	if has_shield_stance():
 		var center := Vector2(0, -18)
 		var shield_angle := shield_facing.angle()

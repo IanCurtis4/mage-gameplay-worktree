@@ -12,6 +12,7 @@ var physical_defense: float
 var magic_defense: float
 var flee_rating: float
 var crit_resistance: float
+var shield_hp := 0.0
 var _death_emitted: bool = false
 
 func _init(runtime_id: int = 0, initial_stats: StatBreakdown = null) -> void:
@@ -43,10 +44,14 @@ func apply(request: DamageRequest, hit_roll: float, crit_roll: float, debuffs: A
 		crit_roll
 	)
 	var previous_hp := current_hp
-	var actual_damage := minf(previous_hp, float(result["damage"]))
+	var absorbed_damage := minf(shield_hp, float(result["damage"]))
+	shield_hp = maxf(0.0, shield_hp - absorbed_damage)
+	var actual_damage := minf(previous_hp, float(result["damage"]) - absorbed_damage)
 	current_hp = maxf(0.0, current_hp - actual_damage)
 	var killed := previous_hp > 0.0 and current_hp <= 0.0
 	result["actual_damage"] = actual_damage
+	result["absorbed_damage"] = absorbed_damage
+	result["can_trigger_effects"] = bool(result["can_trigger_effects"]) and actual_damage > 0.0
 	result["killed"] = killed
 	damage_applied.emit(result)
 	if killed and not _death_emitted:
@@ -65,8 +70,18 @@ func reset(new_stats: StatBreakdown) -> void:
 	assert(new_stats != null)
 	max_hp = maxf(1.0, new_stats.value(&"max_hp"))
 	current_hp = max_hp
+	shield_hp = 0.0
 	_set_defensive_stats(new_stats)
 	_death_emitted = false
+
+func grant_shield(capacity: float) -> bool:
+	if not is_alive() or not is_finite(capacity) or capacity <= 0.0:
+		return false
+	shield_hp = maxf(shield_hp, capacity)
+	return true
+
+func clear_shield() -> void:
+	shield_hp = 0.0
 
 func _set_defensive_stats(new_stats: StatBreakdown) -> void:
 	physical_defense = maxf(0.0, new_stats.value(&"physical_defense")) if new_stats != null else 0.0

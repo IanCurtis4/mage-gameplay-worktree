@@ -204,6 +204,11 @@ static func runtime_reduced_value(stat_id: StringName, base_value: float, fracti
 	var limits: Vector2 = DERIVED_LIMITS[stat_id]
 	return clampf(base_value * (1.0 - clampf(fraction, 0.0, 1.0)), limits.x, limits.y)
 
+static func personal_shield_capacity(rank_base: float, stats: StatBreakdown) -> float:
+	if stats == null or not is_finite(rank_base) or rank_base < 0.0:
+		return NAN
+	return rank_base + 2.0 * stats.primary_value(&"vit") + 1.5 * stats.primary_value(&"int")
+
 static func effective_crit_chance(attacker_crit_chance: float, target_crit_resistance: float) -> float:
 	return clampf(attacker_crit_chance - target_crit_resistance, 0.0, 0.75)
 

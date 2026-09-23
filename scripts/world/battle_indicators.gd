@@ -28,7 +28,7 @@ func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast
 		endpoint = actor.dash_destination(direction)
 	elif skill == &"teleport":
 		endpoint = actor.teleport_destination(point)
-	elif skill == &"extended_aim":
+	elif skill in [&"extended_aim", &"perseverance"]:
 		endpoint = origin
 	elif skill == &"arrow_rain":
 		endpoint = actor.arrow_rain_center(point)
@@ -173,6 +173,9 @@ func _draw() -> void:
 	elif skill == &"extended_aim":
 		draw_circle(origin, body_radius + 15.0, Color(color, 0.13))
 		draw_arc(origin, body_radius + 15.0, 0.0, TAU, 40, color, 2.0, true)
+	elif skill == &"perseverance":
+		draw_circle(origin + Vector2(0, -18), body_radius + 11.0, Color(color, 0.12))
+		draw_arc(origin + Vector2(0, -18), body_radius + 11.0, 0.0, TAU, 40, color, 2.0, true)
 	elif skill == &"snare_trap":
 		draw_dashed_line(origin, endpoint, Color(color, 0.55), 1.5, 9.0, true, true)
 		draw_circle(endpoint, SnareTrap.TRIGGER_RADIUS, Color(color, 0.13))
