@@ -83,8 +83,8 @@ func _process(delta: float) -> void:
 		var previous: Vector2 = _previous_positions.get(actor_id, current)
 		var inside_now := _within_band(current, actor.collision_radius)
 		if not _inside.get(actor_id, inside_now) and current.distance_squared_to(previous) > 0.0001 and _entry_fraction(previous, current, actor.collision_radius) >= 0.0 and _cooldowns.get(actor_id, 0.0) <= 0.0:
-			actor.apply_slow(SLOW_FRACTION, SLOW_DURATION)
-			actor.apply_weaken(WEAKEN_FRACTION, WEAKEN_DURATION)
+			actor.apply_slow(SLOW_FRACTION, SLOW_DURATION, &"phantom_barrier")
+			actor.apply_weaken(WEAKEN_FRACTION, WEAKEN_DURATION, &"phantom_barrier")
 			_cooldowns[actor_id] = TARGET_INTERVAL
 		_inside[actor_id] = inside_now
 		_previous_positions[actor_id] = current

@@ -197,6 +197,13 @@ static func try_calculate(
 static func contested_hit_chance(attacker_hit_rating: float, target_flee_rating: float) -> float:
 	return clampf(0.90 + (attacker_hit_rating - target_flee_rating) / 200.0, 0.05, 0.98)
 
+static func runtime_reduced_value(stat_id: StringName, base_value: float, fraction: float) -> float:
+	# Timed debuffs do not mutate a build snapshot or stack with other sources.
+	if stat_id not in DIRECT_MODIFIER_IDS or not is_finite(base_value) or not is_finite(fraction):
+		return base_value
+	var limits: Vector2 = DERIVED_LIMITS[stat_id]
+	return clampf(base_value * (1.0 - clampf(fraction, 0.0, 1.0)), limits.x, limits.y)
+
 static func effective_crit_chance(attacker_crit_chance: float, target_crit_resistance: float) -> float:
 	return clampf(attacker_crit_chance - target_crit_resistance, 0.0, 0.75)
 

@@ -18,6 +18,7 @@ signal soul_impact_requested(request: DamageRequest, target: CombatActor)
 signal haunt_requested(origin: Vector2, direction: Vector2, cone_range: float, request: DamageRequest)
 signal phantom_barrier_requested(direction: Vector2, placement_range: float, capacity: int)
 signal ice_wall_requested(wall: IceWallScript)
+signal provoke_requested(target: CombatActor, duration: float)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
 
@@ -50,6 +51,9 @@ const SHIELD_HALF_ANGLE := deg_to_rad(65.0)
 const SHIELD_RADIUS := 34.0
 const SHIELD_DURATION := 6.0
 const SHIELD_FRONT_REDUCTION := 0.30
+const PROVOKE_DEFENSE_REDUCTION := 0.25
+const PROVOKE_FLEE_REDUCTION := 0.30
+const PROVOKE_DEBUFF_DURATION := 4.0
 
 var navigation: ArenaNavigation
 var run_state: RunState
@@ -293,6 +297,18 @@ func use_shield_wall(direction: Vector2) -> bool:
 		_attack_recovery = 0.0
 	resources_changed.emit()
 	queue_redraw()
+	return true
+
+func use_provoke(enemy: CombatActor) -> bool:
+	var rank_definition := _runtime_rank_definition(&"provoke")
+	if class_id != &"swordsman" or rank_definition == null or not can_target_skill(&"provoke", enemy) or not _can_spend(&"provoke"):
+		return false
+	_commit_action(ClassCatalog.skill_definition(&"provoke").action_kind)
+	var facing := _resolved_facing(global_position.direction_to(enemy.global_position))
+	_spend(&"provoke")
+	presentation_action.emit(&"cast", facing, 0.15)
+	provoke_requested.emit(enemy, rank_definition.power)
+	resources_changed.emit()
 	return true
 
 func clear_shield_stance() -> void:
@@ -919,7 +935,7 @@ func _try_basic_attack() -> void:
 		return
 	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
 	_last_facing = global_position.direction_to(target.global_position)
-	attack_cooldown = 1.0 / stat_breakdown.value(&"attacks_per_second")
+	attack_cooldown = 1.0 / attacks_per_second()
 	_attack_recovery = BASIC_ATTACK_RECOVERY
 	_basic_visual_time = BASIC_ATTACK_RECOVERY
 	_basic_facing = _last_facing

@@ -14,6 +14,7 @@ var _path_index := 0
 var _repath_time := 0.0
 var _navigation_revision := 0
 var player_target_acquired := false
+var taunt_remaining := 0.0
 
 func configure(enemy_type: StringName, nav: ArenaNavigation, target_player: PlayerActor) -> void:
 	archetype = enemy_type
@@ -40,6 +41,8 @@ func configure(enemy_type: StringName, nav: ArenaNavigation, target_player: Play
 	_refresh_player_acquisition()
 
 func _process(delta: float) -> void:
+	if is_inside_tree() and get_tree().paused:
+		return
 	var was_feared := is_feared()
 	super._process(delta)
 	if not is_alive() or player == null or not player.is_alive():
@@ -50,6 +53,9 @@ func _process(delta: float) -> void:
 		_path_index = 0
 		_repath_time = 0.0
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
+	if taunt_remaining > 0.0:
+		taunt_remaining = maxf(0.0, taunt_remaining - delta)
+		queue_redraw()
 	if was_feared and not is_feared():
 		_path.clear()
 		_path_index = 0
@@ -73,6 +79,15 @@ func _process(delta: float) -> void:
 		return
 	_repath_time -= delta
 	var distance := global_position.distance_to(player.global_position)
+	if taunt_remaining > 0.0:
+		var attack_range := 390.0 if archetype == &"archer" else 55.0
+		if distance <= attack_range:
+			_path.clear()
+			_try_attack(archetype == &"archer")
+		else:
+			_update_path(player.global_position)
+		_move_along_path(delta)
+		return
 	if archetype == &"archer":
 		if distance <= 390.0 and distance >= 150.0:
 			_path.clear()
@@ -89,9 +104,9 @@ func _process(delta: float) -> void:
 	_move_along_path(delta)
 
 func _try_attack(ranged: bool) -> void:
-	if is_stunned() or is_feared() or attack_cooldown > 0.0 or not player_target_acquired or not player.can_be_acquired_by(global_position):
+	if is_stunned() or is_feared() or attack_cooldown > 0.0 or not player_target_acquired or (taunt_remaining <= 0.0 and not player.can_be_acquired_by(global_position)):
 		return
-	attack_cooldown = 1.70 if ranged else 1.30
+	attack_cooldown = (1.70 if ranged else 1.30) * stat_breakdown.value(&"attacks_per_second") / attacks_per_second()
 	var request := DamageRequest.new()
 	request.source_id = get_instance_id()
 	request.target_id = player.get_instance_id()
@@ -113,6 +128,25 @@ func apply_fear(base_duration: float) -> float:
 		_path_index = 0
 		_repath_time = 0.0
 	return applied_duration
+
+func apply_taunt(duration: float) -> bool:
+	if not is_alive() or not is_finite(duration) or duration <= 0.0:
+		return false
+	taunt_remaining = duration
+	_path.clear()
+	_path_index = 0
+	_repath_time = 0.0
+	queue_redraw()
+	return true
+
+func clear_statuses() -> void:
+	taunt_remaining = 0.0
+	super.clear_statuses()
+
+func _draw() -> void:
+	super._draw()
+	if taunt_remaining > 0.0:
+		draw_arc(Vector2(0, -18), collision_radius + 21.0, 0.0, TAU, 32, Color("efb453"), 2.5, true)
 
 func _update_fear_path() -> void:
 	if _repath_time > 0.0:
@@ -137,7 +171,7 @@ func _update_fear_path() -> void:
 				_path = candidate_path
 
 func _refresh_player_acquisition() -> bool:
-	player_target_acquired = player != null and is_instance_valid(player) and player.can_be_acquired_by(global_position)
+	player_target_acquired = player != null and is_instance_valid(player) and player.is_alive() and (taunt_remaining > 0.0 or player.can_be_acquired_by(global_position))
 	return player_target_acquired
 
 func _update_path(destination: Vector2) -> void:

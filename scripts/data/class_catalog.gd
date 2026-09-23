@@ -72,6 +72,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"slash", "Corte em cone", "Q", SkillDefinition.Targeting.DIRECTION, 15.0, 4.0, 1.45, 155.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, true, SkillDefinition.ActionKind.OFFENSIVE)
 	_add_skill(&"dash", "Investida", "W", SkillDefinition.Targeting.DIRECTION, 20.0, 6.0, 0.0, 270.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.MOBILITY)
 	_add_skill(&"shield_wall", "Parede de Escudos", "D", SkillDefinition.Targeting.DIRECTION, 18.0, 12.0, 2.0, 34.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.DEFENSIVE)
+	_add_skill(&"provoke", "Provocar", "D", SkillDefinition.Targeting.SINGLE_TARGET, 14.0, 10.0, 2.0, 300.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.DEFENSIVE)
 	_add_skill(&"fireball", "Bola de Fogo", "Q", SkillDefinition.Targeting.DIRECTION, 18.0, 2.5, 1.80, 700.0, 680.0, 0.32, DamageRequest.AccuracyMode.GEOMETRY, true)
 	_add_skill(&"fire_wall", "Parede de Fogo", "W", SkillDefinition.Targeting.DIRECTION, 24.0, 7.0, 0.30, 180.0, 0.0, 0.48, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_skill(&"fire_spear", "Lança de Fogo", "A", SkillDefinition.Targeting.SINGLE_TARGET, 16.0, 3.0, 1.35, 360.0, 760.0, 0.22, DamageRequest.AccuracyMode.CONTESTED, true)
@@ -100,6 +101,7 @@ static func _ensure_built() -> void:
 	_configure_slash_ranks()
 	_configure_dash_ranks()
 	_configure_shield_wall_ranks()
+	_configure_provoke_ranks()
 	_configure_swordsman_resistance_ranks()
 	_configure_fireball_ranks()
 	_configure_fire_wall_ranks()
@@ -239,6 +241,22 @@ static func _configure_shield_wall_ranks() -> void:
 		rank.range = 34.0
 		rank.power = capacities[index]
 		rank.effect_ids = [&"front_projectile_block", &"front_damage_reduction"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_provoke_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"provoke"]
+	definition.handler_id = SkillDefinition.Handler.PROVOKE
+	var durations: Array[float] = [2.0, 2.4, 2.8, 3.2, 3.6]
+	var costs: Array[float] = [14.0, 16.0, 18.0, 19.0, 20.0]
+	for index: int in durations.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 10.0
+		rank.range = 300.0
+		rank.power = durations[index]
+		rank.effect_ids = [&"taunt", &"physical_defense_reduction", &"flee_reduction"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
 

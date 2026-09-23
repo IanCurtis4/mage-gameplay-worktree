@@ -111,6 +111,7 @@ func _ready() -> void:
 	player.haunt_requested.connect(_on_haunt_requested)
 	player.phantom_barrier_requested.connect(_on_phantom_barrier_requested)
 	player.ice_wall_requested.connect(_on_ice_wall_requested)
+	player.provoke_requested.connect(_on_provoke_requested)
 	player.skill_cast_ready.connect(_on_skill_cast_ready)
 	player.status_damage_requested.connect(_on_attack_requested)
 	player.actor_died.connect(_on_player_died)
@@ -248,6 +249,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.SHIELD_WALL:
 		if not player.use_shield_wall(direction):
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.PROVOKE:
+		if not player.use_provoke(selected_target):
+			_report_skill_failure(skill, selected_target)
 	elif definition.handler_id == SkillDefinition.Handler.FIREBALL:
 		if not player.use_fireball(direction):
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
@@ -557,7 +561,7 @@ func _on_slowing_arrow_hit(request: DamageRequest, target_actor: CombatActor, sl
 	if result.is_empty() or not bool(result["landed"]) or float(result["actual_damage"]) <= 0.0:
 		return
 	if target_actor.is_alive():
-		target_actor.apply_slow(slow_fraction, slow_duration)
+		target_actor.apply_slow(slow_fraction, slow_duration, &"slowing_arrow")
 
 func _on_foliage_shelter_requested(center: Vector2, duration: float) -> void:
 	var shelter := FoliageShelter.new()
@@ -572,7 +576,7 @@ func _on_mage_projectile_hit(request: DamageRequest, target_actor: CombatActor) 
 	if result.is_empty() or not bool(result["landed"]) or float(result["actual_damage"]) <= 0.0:
 		return
 	if request.skill_id == &"ice_spear" and target_actor.is_alive():
-		target_actor.apply_slow(0.30, 2.0)
+		target_actor.apply_slow(0.30, 2.0, &"ice_spear")
 	elif request.skill_id == &"lightning" and target_actor.is_alive():
 		target_actor.apply_electrified(4.0)
 
@@ -620,7 +624,7 @@ func _on_haunt_requested(origin: Vector2, direction: Vector2, cone_range: float,
 		var result := target_actor.apply_damage(impact, rng)
 		if not result.is_empty() and bool(result["landed"]) and float(result["actual_damage"]) > 0.0 and target_actor.is_alive():
 			target_actor.apply_fear(PlayerActor.HAUNT_FEAR_DURATION)
-			target_actor.apply_weaken(PlayerActor.HAUNT_WEAKEN_FRACTION, PlayerActor.HAUNT_WEAKEN_DURATION)
+			target_actor.apply_weaken(PlayerActor.HAUNT_WEAKEN_FRACTION, PlayerActor.HAUNT_WEAKEN_DURATION, &"haunt")
 
 func _on_phantom_barrier_requested(direction: Vector2, placement_range: float, capacity: int) -> void:
 	var barrier := PhantomBarrier.new()
@@ -631,6 +635,14 @@ func _on_phantom_barrier_requested(direction: Vector2, placement_range: float, c
 func _on_ice_wall_requested(wall: IceWallScript) -> void:
 	add_child(wall)
 	wall.add_to_group("player_effects")
+
+func _on_provoke_requested(target_actor: CombatActor, duration: float) -> void:
+	var enemy := target_actor as EnemyActor
+	if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
+		return
+	enemy.apply_taunt(duration)
+	enemy.apply_attribute_debuff(AttributeDebuffState.PHYSICAL_DEFENSE, &"provoke", PlayerActor.PROVOKE_DEFENSE_REDUCTION, PlayerActor.PROVOKE_DEBUFF_DURATION)
+	enemy.apply_attribute_debuff(AttributeDebuffState.FLEE, &"provoke", PlayerActor.PROVOKE_FLEE_REDUCTION, PlayerActor.PROVOKE_DEBUFF_DURATION)
 
 func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActor, ranged: bool) -> void:
 	if not ranged:

@@ -46,6 +46,16 @@ canônico. Ações têm classificação explícita ofensiva/mobilidade/defensiva
 somente ação ofensiva validada cancela a postura antes de emitir dano.
 Tuning, toggle e limpeza estão em E04_SW1_SHIELD_WALL_HANDOFF.md.
 
+Provocar usa alvo único e não encerra Parede de Escudos. Enquanto provocado,
+o inimigo persegue/ataca o jogador; arqueiros não executam a fuga habitual.
+Fear/stun/root ainda têm prioridade e projéteis já emitidos não são cancelados.
+Debuffs temporários de DEF física/mágica, FLEE, movimento, ASPD, dano causado
+e dano recebido são instâncias separadas por atributo e fonte. Em cada canal
+vale apenas a maior fração, limitada por atributo; durações não são fundidas.
+Reaplicação renova a instância da mesma fonte e uma fonte fraca reaparece após
+expiração da forte. DEF/FLEE passam pelo resolver canônico via HealthState;
+o valor base continua em StatBreakdown. Detalhes em E04_SW2_PROVOKE_HANDOFF.md.
+
 Jogador mantém `velocity` no runtime: aceleração 1100 unidades/s² e frenagem/atrito
 1600 unidades/s², velocidade máxima derivada em `StatCalculator` (base 220). Acelera em cerca
 de 0,20 s, freia em cerca de 0,14 s e percorre aproximadamente 15 unidades ao parar

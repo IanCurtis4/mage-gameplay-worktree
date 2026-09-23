@@ -30,6 +30,7 @@ var slow_fraction := 0.0
 var electrified_remaining := 0.0
 var weaken_remaining := 0.0
 var weaken_fraction := 0.0
+var attribute_debuffs := AttributeDebuffState.new()
 var hard_controls := HardControlState.new()
 var character_animation: CharacterAnimation
 
@@ -70,9 +71,14 @@ func setup(display_name: String, color: Color, derived_stats: StatBreakdown, rad
 	queue_redraw()
 
 func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Dictionary:
-	if health == null:
+	if health == null or request == null:
 		return {}
-	return health.apply(request, rng.randf(), rng.randf())
+	var received_increase := attribute_debuffs.fraction(AttributeDebuffState.DAMAGE_RECEIVED)
+	var effective_request := request
+	if received_increase > 0.0:
+		effective_request = request.copy()
+		effective_request.damage_dealt_multiplier *= 1.0 + received_increase
+	return health.apply(effective_request, rng.randf(), rng.randf(), attribute_debuffs)
 
 func is_alive() -> bool:
 	return health != null and health.is_alive()
@@ -112,12 +118,17 @@ func apply_burn(request: DamageRequest, duration: float = 3.0) -> void:
 		burn_tick_remaining = minf(1.0, duration)
 	queue_redraw()
 
-func apply_slow(fraction: float, duration: float) -> void:
-	if not is_alive() or duration <= 0.0:
-		return
-	slow_fraction = maxf(slow_fraction, clampf(fraction, 0.0, MAX_SLOW_FRACTION))
-	slow_remaining = maxf(slow_remaining, duration)
+func apply_attribute_debuff(attribute: StringName, source: StringName, fraction: float, duration: float) -> bool:
+	if not is_alive() or not attribute_debuffs.apply(attribute, source, fraction, duration):
+		return false
+	_sync_debuff_display()
 	queue_redraw()
+	return true
+
+func apply_slow(fraction: float, duration: float, source: StringName = &"") -> void:
+	# Legacy direct callers use the magnitude as identity; skill callers provide an ID.
+	var resolved_source := source if not source.is_empty() else StringName("slow_%d" % roundi(fraction * 1000.0))
+	apply_attribute_debuff(AttributeDebuffState.MOVE_SPEED, resolved_source, fraction, duration)
 
 func configure_hard_control_profile(is_boss: bool) -> void:
 	hard_controls.configure(is_boss)
@@ -166,15 +177,15 @@ func is_feared() -> bool:
 func fear_remaining() -> float:
 	return hard_controls.remaining(&"fear")
 
-func apply_weaken(fraction: float, duration: float) -> void:
-	if not is_alive() or not is_finite(fraction) or not is_finite(duration) or fraction <= 0.0 or duration <= 0.0:
-		return
-	weaken_fraction = maxf(weaken_fraction, clampf(fraction, 0.0, MAX_WEAKEN_FRACTION))
-	weaken_remaining = maxf(weaken_remaining, duration)
-	queue_redraw()
+func apply_weaken(fraction: float, duration: float, source: StringName = &"") -> void:
+	var resolved_source := source if not source.is_empty() else StringName("weaken_%d" % roundi(fraction * 1000.0))
+	apply_attribute_debuff(AttributeDebuffState.DAMAGE_DEALT, resolved_source, fraction, duration)
 
 func outgoing_damage_multiplier() -> float:
-	return stat_breakdown.value(&"damage_dealt_multiplier") * (1.0 - weaken_fraction if weaken_remaining > 0.0 else 1.0)
+	return StatCalculator.runtime_reduced_value(&"damage_dealt_multiplier", stat_breakdown.value(&"damage_dealt_multiplier"), attribute_debuffs.fraction(AttributeDebuffState.DAMAGE_DEALT))
+
+func attacks_per_second() -> float:
+	return StatCalculator.runtime_reduced_value(&"attacks_per_second", stat_breakdown.value(&"attacks_per_second"), attribute_debuffs.fraction(AttributeDebuffState.ATTACK_SPEED))
 
 func set_unstoppable(duration: float) -> bool:
 	var changed := hard_controls.set_unstoppable(duration)
@@ -183,17 +194,21 @@ func set_unstoppable(duration: float) -> bool:
 	return changed
 
 func movement_speed_multiplier() -> float:
-	return 1.0 - slow_fraction if slow_remaining > 0.0 else 1.0
+	return 1.0 - attribute_debuffs.fraction(AttributeDebuffState.MOVE_SPEED)
+
+func _sync_debuff_display() -> void:
+	slow_fraction = attribute_debuffs.fraction(AttributeDebuffState.MOVE_SPEED)
+	slow_remaining = attribute_debuffs.remaining(AttributeDebuffState.MOVE_SPEED)
+	weaken_fraction = attribute_debuffs.fraction(AttributeDebuffState.DAMAGE_DEALT)
+	weaken_remaining = attribute_debuffs.remaining(AttributeDebuffState.DAMAGE_DEALT)
 
 func clear_statuses() -> void:
 	burn_remaining = 0.0
 	burn_tick_remaining = 0.0
 	burn_request = null
-	slow_remaining = 0.0
-	slow_fraction = 0.0
+	attribute_debuffs.clear()
+	_sync_debuff_display()
 	electrified_remaining = 0.0
-	weaken_remaining = 0.0
-	weaken_fraction = 0.0
 	hard_controls.clear()
 	queue_redraw()
 
@@ -206,18 +221,14 @@ func advance_statuses(delta: float, simulation_paused: bool = false) -> void:
 	hard_controls.advance(delta)
 	if was_rooted != is_rooted() or was_stunned != is_stunned() or was_feared != is_feared():
 		queue_redraw()
-	if slow_remaining > 0.0:
-		slow_remaining = maxf(0.0, slow_remaining - delta)
-		if slow_remaining <= 0.0:
-			slow_fraction = 0.0
-			queue_redraw()
+	var previous_slow := slow_fraction
+	var previous_weaken := weaken_fraction
+	attribute_debuffs.advance(delta)
+	_sync_debuff_display()
+	if previous_slow != slow_fraction or previous_weaken != weaken_fraction:
+		queue_redraw()
 	if electrified_remaining > 0.0:
 		electrified_remaining = maxf(0.0, electrified_remaining - delta)
-		queue_redraw()
-	if weaken_remaining > 0.0:
-		weaken_remaining = maxf(0.0, weaken_remaining - delta)
-		if weaken_remaining <= 0.0:
-			weaken_fraction = 0.0
 		queue_redraw()
 	var remaining_delta := delta
 	while burn_remaining > 0.0 and remaining_delta > 0.0:

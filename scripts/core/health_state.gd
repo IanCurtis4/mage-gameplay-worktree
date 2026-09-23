@@ -23,14 +23,21 @@ func _init(runtime_id: int = 0, initial_stats: StatBreakdown = null) -> void:
 func is_alive() -> bool:
 	return current_hp > 0.0
 
-func apply(request: DamageRequest, hit_roll: float, crit_roll: float) -> Dictionary:
+func apply(request: DamageRequest, hit_roll: float, crit_roll: float, debuffs: AttributeDebuffState = null) -> Dictionary:
 	if not is_alive() or request.target_id != actor_id:
 		return {}
+	var effective_physical_defense := physical_defense
+	var effective_magic_defense := magic_defense
+	var effective_flee := flee_rating
+	if debuffs != null:
+		effective_physical_defense = StatCalculator.runtime_reduced_value(&"physical_defense", physical_defense, debuffs.fraction(AttributeDebuffState.PHYSICAL_DEFENSE))
+		effective_magic_defense = StatCalculator.runtime_reduced_value(&"magic_defense", magic_defense, debuffs.fraction(AttributeDebuffState.MAGIC_DEFENSE))
+		effective_flee = StatCalculator.runtime_reduced_value(&"flee_rating", flee_rating, debuffs.fraction(AttributeDebuffState.FLEE))
 	var result := CombatMath.resolve(
 		request,
-		physical_defense,
-		magic_defense,
-		flee_rating,
+		effective_physical_defense,
+		effective_magic_defense,
+		effective_flee,
 		crit_resistance,
 		hit_roll,
 		crit_roll
