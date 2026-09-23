@@ -71,6 +71,11 @@ ativa. Recalcular a build mantém exatamente uma fonte; expiração, morte e
 limpeza retiram bônus e penalidades sem trocar HP/SP ou cooldown. Ver
 E04_SW5_FURY_HANDOFF.md.
 
+Golpe Brutal revalida alvo corpo a corpo/linha de visão após preparo por DES.
+O impacto resolve contra a defesa atual anterior ao efeito; só depois de dano
+positivo aplica redução temporária de DEF pela fonte da skill. Ver
+E04_SW6_BRUTAL_STRIKE_HANDOFF.md.
+
 Jogador mantém `velocity` no runtime: aceleração 1100 unidades/s² e frenagem/atrito
 1600 unidades/s², velocidade máxima derivada em `StatCalculator` (base 220). Acelera em cerca
 de 0,20 s, freia em cerca de 0,14 s e percorre aproximadamente 15 unidades ao parar

@@ -38,6 +38,7 @@ enum Handler {
 	PERSEVERANCE,
 	PIERCING_SHOUT,
 	FURY,
+	BRUTAL_STRIKE,
 }
 
 const MAX_ACTIVE_RANK := 5
@@ -63,7 +64,7 @@ const MAX_PASSIVE_RANK := 3
 func is_rank_catalog_valid() -> bool:
 	if category < Category.ACTIVE or category > Category.PASSIVE:
 		return false
-	if handler_id <= Handler.UNASSIGNED or handler_id > Handler.FURY:
+	if handler_id <= Handler.UNASSIGNED or handler_id > Handler.BRUTAL_STRIKE:
 		return false
 	if action_kind < ActionKind.OFFENSIVE or action_kind > ActionKind.DEFENSIVE:
 		return false

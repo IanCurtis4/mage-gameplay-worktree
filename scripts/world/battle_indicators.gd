@@ -145,6 +145,9 @@ func _draw() -> void:
 		draw_dashed_line(origin, endpoint, Color(color, 0.65), 2.0, 10.0, true, true)
 		_draw_endpoint(endpoint, color)
 		draw_arc(endpoint + Vector2(0, -18), body_radius + 10.0, 0.0, TAU, 28, Color("efb453") if available else BLOCKED_COLOR, 2.0, true)
+	elif skill == &"brutal_strike":
+		draw_line(origin, endpoint, color, 3.0, true)
+		_draw_endpoint(endpoint, color)
 	elif skill == &"haunt":
 		var outline := SkillGeometry.cone_outline(origin, direction, active_range, PlayerActor.HAUNT_HALF_ANGLE)
 		draw_colored_polygon(outline.slice(0, outline.size() - 1), Color(color, 0.16))

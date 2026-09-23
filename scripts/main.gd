@@ -113,6 +113,7 @@ func _ready() -> void:
 	player.ice_wall_requested.connect(_on_ice_wall_requested)
 	player.provoke_requested.connect(_on_provoke_requested)
 	player.piercing_shout_requested.connect(_on_piercing_shout_requested)
+	player.brutal_strike_requested.connect(_on_brutal_strike_requested)
 	player.skill_cast_ready.connect(_on_skill_cast_ready)
 	player.status_damage_requested.connect(_on_attack_requested)
 	player.actor_died.connect(_on_player_died)
@@ -262,6 +263,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.FURY:
 		if not player.use_fury():
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.BRUTAL_STRIKE:
+		if not player.use_brutal_strike(selected_target):
+			_report_skill_failure(skill, selected_target)
 	elif definition.handler_id == SkillDefinition.Handler.FIREBALL:
 		if not player.use_fireball(direction):
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
@@ -665,6 +669,13 @@ func _on_piercing_shout_requested(origin: Vector2, request: DamageRequest, radiu
 			continue
 		target_actor.apply_attribute_debuff(AttributeDebuffState.MOVE_SPEED, &"piercing_shout", PlayerActor.PIERCING_SHOUT_SLOW_FRACTION, duration)
 		target_actor.apply_attribute_debuff(AttributeDebuffState.ATTACK_SPEED, &"piercing_shout", PlayerActor.PIERCING_SHOUT_ASPD_FRACTION, duration)
+
+func _on_brutal_strike_requested(request: DamageRequest, target_actor: CombatActor) -> void:
+	if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
+		return
+	var result := target_actor.apply_damage(request, rng)
+	if not result.is_empty() and bool(result["landed"]) and float(result["actual_damage"]) > 0.0 and target_actor.is_alive():
+		target_actor.apply_attribute_debuff(AttributeDebuffState.PHYSICAL_DEFENSE, &"brutal_strike", PlayerActor.BRUTAL_STRIKE_DEFENSE_REDUCTION, PlayerActor.BRUTAL_STRIKE_DEBUFF_DURATION)
 
 func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActor, ranged: bool) -> void:
 	if not ranged:

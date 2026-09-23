@@ -20,6 +20,7 @@ signal phantom_barrier_requested(direction: Vector2, placement_range: float, cap
 signal ice_wall_requested(wall: IceWallScript)
 signal provoke_requested(target: CombatActor, duration: float)
 signal piercing_shout_requested(origin: Vector2, request: DamageRequest, radius: float, duration: float)
+signal brutal_strike_requested(request: DamageRequest, target: CombatActor)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
 
@@ -60,6 +61,8 @@ const PIERCING_SHOUT_DAMAGE_WEIGHT := 0.45
 const PIERCING_SHOUT_SLOW_FRACTION := 0.30
 const PIERCING_SHOUT_ASPD_FRACTION := 0.25
 const FURY_DURATION := 6.0
+const BRUTAL_STRIKE_DEFENSE_REDUCTION := 0.30
+const BRUTAL_STRIKE_DEBUFF_DURATION := 4.0
 
 var navigation: ArenaNavigation
 var run_state: RunState
@@ -109,6 +112,8 @@ var shield_facing := Vector2.RIGHT
 var perseverance_remaining := 0.0
 var piercing_shout_visual_time := 0.0
 var fury_remaining := 0.0
+var brutal_strike_visual_time := 0.0
+var brutal_strike_visual_point := Vector2.ZERO
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
@@ -362,6 +367,24 @@ func use_fury() -> bool:
 	_apply_derived_stats(_build_stat_breakdown())
 	reveal_from_offense()
 	presentation_action.emit(&"cast", _last_facing, 0.20)
+	resources_changed.emit()
+	queue_redraw()
+	return true
+
+func use_brutal_strike(enemy: CombatActor) -> bool:
+	var rank_definition := _runtime_rank_definition(&"brutal_strike")
+	if class_id != &"swordsman" or rank_definition == null or not can_target_skill(&"brutal_strike", enemy) or not _can_spend(&"brutal_strike"):
+		return false
+	_commit_action(ClassCatalog.skill_definition(&"brutal_strike").action_kind)
+	var facing := _resolved_facing(global_position.direction_to(enemy.global_position))
+	_spend(&"brutal_strike")
+	reveal_from_offense()
+	brutal_strike_visual_time = 0.20
+	brutal_strike_visual_point = enemy.global_position
+	var definition := ClassCatalog.skill_definition(&"brutal_strike")
+	var request := _make_physical_request(enemy, &"brutal_strike", stat_breakdown.value(&"melee_attack") * rank_definition.power, definition.accuracy_mode, definition.can_crit)
+	brutal_strike_requested.emit(request, enemy)
+	presentation_action.emit(&"slash", facing, 0.20)
 	resources_changed.emit()
 	queue_redraw()
 	return true
@@ -811,7 +834,9 @@ func use_teleport(point: Vector2) -> bool:
 func can_target_skill(skill_id: StringName, enemy: CombatActor) -> bool:
 	if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
 		return false
-	return global_position.distance_to(enemy.global_position) <= skill_range(skill_id)
+	if global_position.distance_to(enemy.global_position) > skill_range(skill_id):
+		return false
+	return skill_id != &"brutal_strike" or navigation.is_segment_clear(global_position, enemy.global_position, 0.0)
 
 func aim_direction(point: Vector2) -> Vector2:
 	var direction := global_position.direction_to(point)
@@ -919,6 +944,9 @@ func _process(delta: float) -> void:
 		else:
 			fury_remaining -= delta
 			queue_redraw()
+	if brutal_strike_visual_time > 0.0:
+		brutal_strike_visual_time = maxf(0.0, brutal_strike_visual_time - delta)
+		queue_redraw()
 	_regenerate_sp(delta, false)
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
 	_attack_recovery = maxf(0.0, _attack_recovery - delta)
@@ -1167,6 +1195,7 @@ func _on_health_died(actor_id: int) -> void:
 	clear_shield_stance()
 	clear_perseverance()
 	clear_fury()
+	brutal_strike_visual_time = 0.0
 	piercing_shout_visual_time = 0.0
 	extended_aim_remaining = 0.0
 	clear_foliage_shelters()
@@ -1208,6 +1237,8 @@ func _build_stat_breakdown() -> StatBreakdown:
 
 func _draw() -> void:
 	super._draw()
+	if brutal_strike_visual_time > 0.0:
+		draw_line(Vector2(0, -18), brutal_strike_visual_point - global_position + Vector2(0, -18), Color(1.0, 0.48, 0.33, brutal_strike_visual_time / 0.20), 6.0, true)
 	if fury_remaining > 0.0:
 		draw_circle(Vector2(0, -18), collision_radius + 12.0, Color(0.95, 0.29, 0.13, 0.10))
 		draw_arc(Vector2(0, -18), collision_radius + 12.0, 0.0, TAU, 32, Color("f7784b"), 2.5, true)
