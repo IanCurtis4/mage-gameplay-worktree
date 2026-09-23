@@ -50,3 +50,13 @@ desvio pelas pontas do gelo, expiração/limpeza e preservação do preset no re
 Não alterar saves para fornecer pontos; redistribuição existente é suficiente.
 Aceite técnico do recorte não substitui MGI com duas builds integradas nem
 aceite de produto do usuário antes de merge em master.
+
+## Correção de carregamento no editor aberto
+
+O usuário reportou `Could not find type "IceWall" in the current scope` em
+PlayerActor, seguido de falhas de inferência. Execuções novas reconheciam a
+classe, compatível com registro global desatualizado no editor aberto.
+PlayerActor, RunController e BattleIndicators agora carregam o script por
+preload explícito e usam esse alias também nas anotações de tipo, mantendo a
+tipagem sem depender do registro global de IceWall nesses consumidores.
+O teste específico da Parede de Gelo passou seus 76 checks após a alteração.

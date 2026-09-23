@@ -1,6 +1,8 @@
 class_name PlayerActor
 extends CombatActor
 
+const IceWallScript = preload("res://scripts/world/ice_wall.gd")
+
 signal attack_requested(request: DamageRequest, target: CombatActor)
 signal mage_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int)
 signal discharge_requested(request: DamageRequest, direction: Vector2, bonus_magic_damage: float)
@@ -15,7 +17,7 @@ signal lightning_wall_requested(direction: Vector2, request: DamageRequest)
 signal soul_impact_requested(request: DamageRequest, target: CombatActor)
 signal haunt_requested(origin: Vector2, direction: Vector2, cone_range: float, request: DamageRequest)
 signal phantom_barrier_requested(direction: Vector2, placement_range: float, capacity: int)
-signal ice_wall_requested(wall: IceWall)
+signal ice_wall_requested(wall: IceWallScript)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
 
@@ -291,8 +293,8 @@ func can_place_ice_wall(direction: Vector2, nearby_actors: Array[CombatActor]) -
 	if class_id != &"mage" or rank_definition == null or navigation == null or not is_alive():
 		return false
 	var facing := direction.normalized() if not direction.is_zero_approx() else _last_facing
-	var points := IceWall.endpoints(global_position, facing, rank_definition.range)
-	return navigation.can_add_temporary_segment(points[0], points[1], IceWall.HALF_WIDTH, _ice_wall_occupied_positions(nearby_actors))
+	var points := IceWallScript.endpoints(global_position, facing, rank_definition.range)
+	return navigation.can_add_temporary_segment(points[0], points[1], IceWallScript.HALF_WIDTH, _ice_wall_occupied_positions(nearby_actors))
 
 func use_ice_wall(direction: Vector2, nearby_actors: Array[CombatActor]) -> bool:
 	var rank_definition := _runtime_rank_definition(&"ice_wall")
@@ -300,7 +302,7 @@ func use_ice_wall(direction: Vector2, nearby_actors: Array[CombatActor]) -> bool
 		return false
 	var facing := _resolved_facing(direction)
 	var occupied := _ice_wall_occupied_positions(nearby_actors)
-	var wall := IceWall.new()
+	var wall := IceWallScript.new()
 	if not wall.configure(navigation, global_position, facing, rank_definition.range, rank_definition.power, occupied):
 		wall.free()
 		return false

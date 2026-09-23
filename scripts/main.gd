@@ -1,6 +1,8 @@
 class_name RunController
 extends Node2D
 
+const IceWallScript = preload("res://scripts/world/ice_wall.gd")
+
 const ARENA_BOUNDS := Rect2(80, 80, 1640, 920)
 const ARENA_OBSTACLES: Array[Rect2] = [
 	Rect2(610, 280, 190, 140),
@@ -621,7 +623,7 @@ func _on_phantom_barrier_requested(direction: Vector2, placement_range: float, c
 	add_child(barrier)
 	barrier.add_to_group("player_effects")
 
-func _on_ice_wall_requested(wall: IceWall) -> void:
+func _on_ice_wall_requested(wall: IceWallScript) -> void:
 	add_child(wall)
 	wall.add_to_group("player_effects")
 
@@ -655,8 +657,8 @@ func _on_enemy_died(actor: CombatActor) -> void:
 		for runtime_node: Node in get_tree().get_nodes_in_group(group_name):
 			if runtime_node is FoliageShelter:
 				(runtime_node as FoliageShelter).expire(&"encounter_end")
-			elif runtime_node is IceWall:
-				(runtime_node as IceWall).expire()
+			elif runtime_node is IceWallScript:
+				(runtime_node as IceWallScript).expire()
 			else:
 				runtime_node.queue_free()
 	reward = RewardPickup.new()
@@ -778,8 +780,8 @@ func _show_result(victory: bool) -> void:
 		if shelter is FoliageShelter:
 			(shelter as FoliageShelter).expire(&"run_end")
 	for effect: Node in get_tree().get_nodes_in_group("player_effects"):
-		if effect is IceWall:
-			(effect as IceWall).expire()
+		if effect is IceWallScript:
+			(effect as IceWallScript).expire()
 		elif effect is LightningWall or effect is SoulImpactSequence or effect is HauntConeVisual or effect is PhantomBarrier:
 			effect.queue_free()
 	run_finished = true
