@@ -14,6 +14,7 @@ signal fire_wall_requested(direction: Vector2, burn_request: DamageRequest)
 signal lightning_wall_requested(direction: Vector2, request: DamageRequest)
 signal soul_impact_requested(request: DamageRequest, target: CombatActor)
 signal haunt_requested(origin: Vector2, direction: Vector2, cone_range: float, request: DamageRequest)
+signal phantom_barrier_requested(direction: Vector2, placement_range: float, capacity: int)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
 signal resources_changed
 
@@ -262,6 +263,17 @@ func use_haunt(direction: Vector2) -> bool:
 	var definition := ClassCatalog.skill_definition(&"haunt")
 	var request := _make_magic_request(null, &"haunt", _magic_power(&"haunt"), definition.accuracy_mode, definition.can_crit)
 	haunt_requested.emit(global_position, facing, rank_definition.range, request)
+	resources_changed.emit()
+	return true
+
+func use_phantom_barrier(direction: Vector2) -> bool:
+	var rank_definition := _runtime_rank_definition(&"phantom_barrier")
+	if class_id != &"mage" or rank_definition == null or not _can_spend(&"phantom_barrier"):
+		return false
+	var facing := _resolved_facing(direction)
+	_spend(&"phantom_barrier")
+	reveal_from_offense()
+	phantom_barrier_requested.emit(facing, rank_definition.range, roundi(rank_definition.power))
 	resources_changed.emit()
 	return true
 

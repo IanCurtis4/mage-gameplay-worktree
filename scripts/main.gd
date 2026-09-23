@@ -107,6 +107,7 @@ func _ready() -> void:
 	player.lightning_wall_requested.connect(_on_lightning_wall_requested)
 	player.soul_impact_requested.connect(_on_soul_impact_requested)
 	player.haunt_requested.connect(_on_haunt_requested)
+	player.phantom_barrier_requested.connect(_on_phantom_barrier_requested)
 	player.skill_cast_ready.connect(_on_skill_cast_ready)
 	player.status_damage_requested.connect(_on_attack_requested)
 	player.actor_died.connect(_on_player_died)
@@ -255,6 +256,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 			_report_skill_failure(skill, selected_target)
 	elif definition.handler_id == SkillDefinition.Handler.HAUNT:
 		if not player.use_haunt(direction):
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.PHANTOM_BARRIER:
+		if not player.use_phantom_barrier(direction):
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif definition.handler_id == SkillDefinition.Handler.SPEAR:
 		if not player.use_spear(skill, selected_target):
@@ -602,6 +606,12 @@ func _on_haunt_requested(origin: Vector2, direction: Vector2, cone_range: float,
 			target_actor.apply_fear(PlayerActor.HAUNT_FEAR_DURATION)
 			target_actor.apply_weaken(PlayerActor.HAUNT_WEAKEN_FRACTION, PlayerActor.HAUNT_WEAKEN_DURATION)
 
+func _on_phantom_barrier_requested(direction: Vector2, placement_range: float, capacity: int) -> void:
+	var barrier := PhantomBarrier.new()
+	barrier.configure(player, direction, enemies, placement_range, capacity)
+	add_child(barrier)
+	barrier.add_to_group("player_effects")
+
 func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActor, ranged: bool) -> void:
 	if not ranged:
 		_on_attack_requested(request, target_actor)
@@ -753,7 +763,7 @@ func _show_result(victory: bool) -> void:
 		if shelter is FoliageShelter:
 			(shelter as FoliageShelter).expire(&"run_end")
 	for effect: Node in get_tree().get_nodes_in_group("player_effects"):
-		if effect is LightningWall or effect is SoulImpactSequence or effect is HauntConeVisual:
+		if effect is LightningWall or effect is SoulImpactSequence or effect is HauntConeVisual or effect is PhantomBarrier:
 			effect.queue_free()
 	run_finished = true
 	_terminal_outcome = &"completed" if victory else &"death"
