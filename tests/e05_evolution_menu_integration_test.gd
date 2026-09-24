@@ -1,0 +1,199 @@
+extends SceneTree
+
+class ToggleFailStore:
+	extends ProfileStore
+	var failure_stage: StringName = &""
+
+	func _should_fail(stage: StringName) -> bool:
+		return stage == failure_stage
+
+const PROFILE_ID := "123e4567-e89b-42d3-a456-426614174051"
+
+var failures := 0
+var checks := 0
+var root_directory: String
+
+func _initialize() -> void:
+	root_directory = ProjectSettings.globalize_path("res://.godot/verification/e05_evolution_menu")
+	_cleanup_directory(root_directory)
+	DirAccess.make_dir_recursive_absolute(root_directory)
+	var scene := load("res://scenes/character_menu.tscn") as PackedScene
+	await _check_production_unavailable_and_run_message(scene)
+	await _check_confirmation_cancel_and_first_choice(scene)
+	await _check_switch_retry_and_focused_alt(scene)
+	await _check_run_active_and_read_only_states(scene)
+	_cleanup_directory(root_directory)
+	print("E05-S1C seletor de evolução: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
+	quit(0 if failures == 0 else 1)
+
+func _check_production_unavailable_and_run_message(scene: PackedScene) -> void:
+	var directory := root_directory.path_join("production_unavailable")
+	_prepare_directory(directory)
+	var catalog := ProfileCatalog.pilot()
+	var profile := _profile_with_character(catalog, "Produção", &"defender", false)
+	var character_id: String = profile.characters[0].character_id
+	_check(ProfileStore.new(directory, catalog).commit(profile)["ok"], "production-unavailable menu fixture is durably seeded")
+	var menu: CharacterMenu = await _open_menu(scene, ProfileFacade.new(ProfileStore.new(directory, catalog)))
+	var defender_label: Label = menu.evolution_options_list.get_node("EvolutionOption_defender")
+	var defender_button: Button = menu.evolution_options_list.get_node("ChooseEvolution_defender")
+	_check(menu.evolution_panel != null and menu.evolution_state_label.text.contains("Origem: Espadachim") and menu.evolution_state_label.text.contains("Evolução atual: Defendente"), "selector renders the focused character origin and persisted current evolution from facade options")
+	_check(defender_label.text.contains("conteúdo indisponível") and defender_label.text.contains("Atual") and defender_button.disabled, "current production evolution remains visible with its independent unavailable-content reason and cannot be selected")
+	var before_revision: int = menu.facade.current_profile().revision
+	var blocked_start := menu._start_run()
+	_check(not blocked_start["ok"] and blocked_start["error_code"] == &"content_unavailable" and menu.status_label.text.contains("conteúdo pronto") and menu.facade.current_profile().revision == before_revision and menu.facade.current_profile().character_by_id(character_id).evolution_id == &"defender", "blocked production run explains unavailable content without erasing identity or writing")
+	menu.queue_free()
+
+func _check_confirmation_cancel_and_first_choice(scene: PackedScene) -> void:
+	var directory := root_directory.path_join("confirmation")
+	_prepare_directory(directory)
+	var catalog := _ready_catalog()
+	var profile := _profile_with_character(catalog, "Confirmação", &"", false)
+	var character_id: String = profile.characters[0].character_id
+	_check(ProfileStore.new(directory, catalog).commit(profile)["ok"], "confirmation menu fixture is durably seeded")
+	var menu: CharacterMenu = await _open_menu(scene, ProfileFacade.new(ProfileStore.new(directory, catalog)))
+	var revision: int = menu.facade.current_profile().revision
+	var opened := menu._begin_evolution_change(&"defender")
+	_check(opened["ok"] and opened["pending_confirmation"] and menu.confirm_evolution_button.disabled == false and menu.evolution_confirmation_label.text.contains("Compras exclusivas") and menu.facade.current_profile().revision == revision, "choosing an available option only opens explicit confirmation and does not write")
+	menu._cancel_evolution_change()
+	_check(menu.confirm_evolution_button.disabled and menu.facade.current_profile().revision == revision and menu.facade.current_profile().character_by_id(character_id).evolution_id.is_empty(), "canceling evolution confirmation does not mutate the focused character")
+	menu._begin_evolution_change(&"defender")
+	var external: Dictionary = menu.facade.allocate_attributes("external-stale", revision, character_id, {&"str": 1})
+	var stale: Dictionary = menu._confirm_evolution_change()
+	_check(external["ok"] and not stale["ok"] and stale["error_code"] == &"stale_revision" and menu._evolution_pending.is_empty() and menu.facade.current_profile().character_by_id(character_id).evolution_id.is_empty(), "stale confirmation refreshes facade state and clears intent instead of retrying evolution with a newer revision")
+	menu._begin_evolution_change(&"defender")
+	var confirmed := menu._confirm_evolution_change()
+	var after: CharacterState = menu.facade.current_profile().character_by_id(character_id)
+	_check(confirmed["ok"] and after.evolution_id == &"defender" and menu.status_label.text.contains("Reembolso de evolução: 0") and menu.evolution_state_label.text.contains("Evolução atual: Defendente"), "confirmation calls the facade once and refreshes the current-evolution summary")
+	_check(after.presets[0]["active_slots"] == [null, null, null, null, null] and menu.progression_skill_tree.get_node_or_null("ProgressionSkill_defender_entry") != null, "first choice refreshes progression and preserves empty presets instead of auto-equipping the free entry")
+	_check(menu.get_global_rect().size.y > 0.0 and menu.evolution_panel.get_global_rect().size.y > 0.0 and menu.menu_scroll != null, "selector is built inside the scrollable menu with a visible layout footprint")
+	menu.queue_free()
+
+func _check_switch_retry_and_focused_alt(scene: PackedScene) -> void:
+	var directory := root_directory.path_join("switch_retry_focus")
+	_prepare_directory(directory)
+	var catalog := _ready_catalog()
+	var profile := ProfileState.new(PROFILE_ID)
+	var first_id := _append_character(profile, catalog, "Persistido", &"", false)
+	var second_id := _append_character(profile, catalog, "Em foco", &"defender", true)
+	profile.selected_character_id = first_id
+	_check(ProfileStore.new(directory, catalog).commit(profile)["ok"], "switch/retry focused-alt fixture is durably seeded")
+	var store := ToggleFailStore.new(directory, catalog)
+	var menu: CharacterMenu = await _open_menu(scene, ProfileFacade.new(store))
+	menu._select_roster_index(1)
+	var before_revision: int = menu.facade.current_profile().revision
+	var opened := menu._begin_evolution_change(&"berserker")
+	store.failure_stage = &"write_pending"
+	var failed := menu._confirm_evolution_change()
+	_check(opened["ok"] and not failed["ok"] and failed["error_code"] == &"save_failed" and not menu.confirm_evolution_button.disabled and menu.evolution_confirmation_label.text.contains("Berserker"), "definite save failure preserves evolution intent, confirmation and retry affordance")
+	store.failure_stage = &""
+	var retried := menu._confirm_evolution_change()
+	var current: ProfileState = menu.facade.current_profile()
+	var focused: CharacterState = current.character_by_id(second_id)
+	_check(retried["ok"] and failed["request_id"] == retried["request_id"] and current.revision == before_revision + 1 and current.selected_character_id == first_id and menu._focused_character_id == second_id, "retry reuses the original request/revision and keeps the browsed alt separate from persisted selection")
+	_check(focused.evolution_id == &"berserker" and focused.purchased_skill_ranks.is_empty() and focused.presets[0]["active_slots"] == [null, null, null, null, null] and focused.presets[1]["active_slots"] == [null, null, null, null, null], "successful branch switch refreshes both presets after removing only obsolete evolution ranks")
+	var berserker_entry: Label = menu.progression_skill_tree.get_node_or_null("ProgressionSkill_berserker_entry")
+	var defender_entry: Label = menu.progression_skill_tree.get_node_or_null("ProgressionSkill_defender_entry")
+	_check(menu.evolution_state_label.text.contains("Evolução atual: Berserker") and berserker_entry != null and berserker_entry.text.contains("Rank 1/5") and defender_entry != null and defender_entry.text.contains("ramo futuro") and menu.status_label.text.contains("Slots esvaziados: 4"), "selector refreshes summary, progression tree and exact cleanup feedback from the transaction response")
+	menu.queue_free()
+
+func _check_run_active_and_read_only_states(scene: PackedScene) -> void:
+	var directory := root_directory.path_join("run_active")
+	_prepare_directory(directory)
+	var catalog := _ready_catalog()
+	var profile := _profile_with_character(catalog, "Run", &"", false)
+	var character_id: String = profile.characters[0].character_id
+	_check(ProfileStore.new(directory, catalog).commit(profile)["ok"], "run-active menu fixture is durably seeded")
+	var facade := ProfileFacade.new(ProfileStore.new(directory, catalog))
+	var menu: CharacterMenu = await _open_menu(scene, facade)
+	var started := facade.start_run("s1c-run", facade.current_profile().revision)
+	menu._refresh()
+	var run_button: Button = menu.evolution_options_list.get_node("ChooseEvolution_defender")
+	var run_attempt := menu._begin_evolution_change(&"defender")
+	_check(started["ok"] and run_button.disabled and not run_attempt["ok"] and run_attempt["error_code"] == &"run_active" and menu.status_label.text.contains("run ativa"), "active run makes every option read-only through facade state and explains the blocked attempt")
+	menu.queue_free()
+
+	var blocked_directory := root_directory.path_join("read_only")
+	_prepare_directory(blocked_directory)
+	var future_file := FileAccess.open(blocked_directory.path_join(ProfileStore.PRIMARY_FILE), FileAccess.WRITE)
+	future_file.store_string(JSON.stringify({"schema_version": 99}))
+	future_file.close()
+	var blocked: CharacterMenu = await _open_menu(scene, ProfileFacade.new(ProfileStore.new(blocked_directory)))
+	_check(blocked.evolution_state_label.text.contains("indisponível") and blocked.confirm_evolution_button.disabled and blocked.cancel_evolution_button.disabled and blocked.status_label.text.contains("somente leitura"), "read-only profile disables the evolution confirmation controls and reports the state in pt-BR")
+	menu = null
+	blocked.queue_free()
+
+func _open_menu(scene: PackedScene, facade: ProfileFacade) -> CharacterMenu:
+	var menu := scene.instantiate() as CharacterMenu
+	menu.set_profile_facade(facade)
+	root.add_child(menu)
+	await process_frame
+	return menu
+
+func _ready_catalog() -> ProfileCatalog:
+	return ProfileCatalog.pilot({}, {
+		&"defender_entry": _evolution_skill(ProfileCatalog.ACTIVE, 1, 4, &"defender", {1: {"job_level": 20, "skill_ranks": {}}}),
+		&"defender_guard": _evolution_skill(ProfileCatalog.ACTIVE, 0, 5, &"defender"),
+		&"defender_anchor": _evolution_skill(ProfileCatalog.PASSIVE, 0, 3, &"defender"),
+		&"berserker_entry": _evolution_skill(ProfileCatalog.ACTIVE, 1, 4, &"berserker", {1: {"job_level": 20, "skill_ranks": {}}}),
+		&"berserker_rage": _evolution_skill(ProfileCatalog.ACTIVE, 0, 5, &"berserker"),
+	}, {
+		&"defender": {"entry_skill_id": &"defender_entry", "exclusive_skill_ids": [&"defender_entry", &"defender_guard", &"defender_anchor"], "content_ready": true},
+		&"berserker": {"entry_skill_id": &"berserker_entry", "exclusive_skill_ids": [&"berserker_entry", &"berserker_rage"], "content_ready": true},
+	})
+
+func _evolution_skill(category: StringName, free_rank: int, max_purchased_rank: int, evolution_id: StringName, requirements: Dictionary = {}) -> Dictionary:
+	return {
+		"allowed_base_classes": [&"swordsman"],
+		"category": category,
+		"wallet": ProfileCatalog.EVOLUTION_WALLET,
+		"free_rank": free_rank,
+		"max_purchased_rank": max_purchased_rank,
+		"required_evolution_id": evolution_id,
+		"rank_requirements": requirements,
+	}
+
+func _profile_with_character(catalog: ProfileCatalog, display_name: String, evolution_id: StringName, branch_build: bool) -> ProfileState:
+	var profile := ProfileState.new(PROFILE_ID)
+	var character_id := _append_character(profile, catalog, display_name, evolution_id, branch_build)
+	profile.selected_character_id = character_id
+	return profile
+
+func _append_character(profile: ProfileState, catalog: ProfileCatalog, display_name: String, evolution_id: StringName, branch_build: bool) -> String:
+	var character_id := IdentityIds.character_id(profile.profile_id, profile.next_character_counter)
+	var character := CharacterState.new(character_id, display_name, &"swordsman")
+	character.evolution_id = evolution_id
+	character.base_xp_total = ProgressionRules.EVOLUTION_MIN_BASE_XP
+	character.job_xp_total = ProgressionRules.MAX_JOB_XP if branch_build else ProgressionRules.EVOLUTION_MIN_JOB_XP
+	if branch_build:
+		character.purchased_skill_ranks[&"defender_entry"] = 1
+		character.purchased_skill_ranks[&"defender_guard"] = 1
+		character.purchased_skill_ranks[&"defender_anchor"] = 1
+		character.presets[0]["active_slots"][0] = &"defender_entry"
+		character.presets[0]["active_slots"][1] = &"defender_guard"
+		character.presets[0]["passive_slots"][0] = &"defender_anchor"
+		character.presets[1]["active_slots"][0] = &"defender_guard"
+	profile.characters.append(character)
+	profile.next_character_counter += 1
+	return character_id
+
+func _prepare_directory(path: String) -> void:
+	_cleanup_directory(path)
+	DirAccess.make_dir_recursive_absolute(path)
+
+func _cleanup_directory(path: String) -> void:
+	if not DirAccess.dir_exists_absolute(path):
+		return
+	var directory := DirAccess.open(path)
+	if directory == null:
+		return
+	for child: String in directory.get_files():
+		DirAccess.remove_absolute(path.path_join(child))
+	for child: String in directory.get_directories():
+		_cleanup_directory(path.path_join(child))
+		DirAccess.remove_absolute(path.path_join(child))
+
+func _check(condition: bool, label: String) -> void:
+	checks += 1
+	if not condition:
+		failures += 1
+		push_error(label)

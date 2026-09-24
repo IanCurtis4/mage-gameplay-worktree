@@ -16,6 +16,8 @@ var _selected_index := -1
 var _focused_character_id := ""
 var _read_only := false
 var _progression_retries: Dictionary[String, Dictionary] = {}
+var _evolution_pending: Dictionary = {}
+var _evolution_retries: Dictionary[String, Dictionary] = {}
 
 var status_label: Label
 var roster_list: ItemList
@@ -34,6 +36,12 @@ var attribute_increment_buttons: Dictionary[StringName, Button] = {}
 var respec_attributes_button: Button
 var progression_skill_tree: VBoxContainer
 var respec_skills_button: Button
+var evolution_panel: VBoxContainer
+var evolution_state_label: Label
+var evolution_options_list: VBoxContainer
+var evolution_confirmation_label: Label
+var confirm_evolution_button: Button
+var cancel_evolution_button: Button
 var preset_selector: OptionButton
 var active_slot_a: OptionButton
 var active_slot_b: OptionButton
@@ -111,6 +119,8 @@ func _select_roster_index(index: int) -> void:
 	roster_list.select(index)
 	var profile: Variant = facade.current_profile() if facade != null else null
 	if profile != null:
+		if _focused_character_id != profile.characters[index].character_id:
+			_evolution_pending.clear()
 		_focused_character_id = profile.characters[index].character_id
 		preset_selector.select(profile.characters[index].selected_preset)
 		_populate_build_editor(profile.characters[index])
@@ -217,6 +227,7 @@ func _refresh() -> void:
 		select_button.disabled = true
 		build_summary_label.text = "Build indisponível enquanto o perfil não puder ser lido."
 		_show_progression_message("Progressão indisponível enquanto o perfil não puder ser lido.")
+		_show_evolution_message("Evolução indisponível enquanto o perfil não puder ser lido.")
 		preset_selector.disabled = true
 		save_build_button.disabled = true
 		start_run_button.disabled = true
@@ -245,6 +256,7 @@ func _refresh() -> void:
 	else:
 		build_summary_label.text = "Selecione ou crie um personagem para ver a build inicial."
 		_show_progression_message("Crie ou selecione um personagem para consultar a progressão.")
+		_show_evolution_message("Crie ou selecione um personagem para consultar a evolução.")
 	empty_label.visible = roster_list.item_count == 0
 	empty_label.text = "Nenhum personagem criado. Crie seu primeiro alt para começar."
 	var locked := _read_only
@@ -272,6 +284,7 @@ func _error_text(error_code: StringName, read_only: bool) -> String:
 		&"invalid_presets": return "O preset contém skills inválidas ou repetidas. Revise os slots escolhidos."
 		&"invalid_equipment": return "O equipamento escolhido não pertence a este personagem ou ao slot informado."
 		&"invalid_loadout": return "A build selecionada não é válida para iniciar a run."
+		&"content_unavailable": return "A evolução escolhida ainda não possui conteúdo pronto para iniciar uma run."
 		&"invalid_attribute_allocations": return "A distribuição de atributos informada é inválida."
 		&"attribute_cap_reached": return "Este atributo já atingiu o limite de investimento."
 		&"insufficient_points": return "Você não tem pontos suficientes para essa escolha."
@@ -313,12 +326,14 @@ func _build_summary(character: Variant) -> String:
 func _refresh_progression_panel(character: Variant, profile: Variant) -> void:
 	if character == null or facade == null:
 		_show_progression_message("Crie ou selecione um personagem para consultar a progressão.")
+		_show_evolution_message("Crie ou selecione um personagem para consultar a evolução.")
 		return
 	var summary: Dictionary = facade.progression_summary(character.character_id)
 	var options: Dictionary = facade.progression_skill_options(character.character_id)
 	var preview: Dictionary = facade.build_preview(character.character_id)
 	if not summary.get("ok", false) or not options.get("ok", false) or not preview.get("ok", false):
 		_show_progression_message("Não foi possível consultar a progressão deste personagem.")
+		_show_evolution_message("Não foi possível consultar a evolução deste personagem.")
 		return
 	var evolution_state := "Evolução disponível para este personagem." if summary["evolution_eligible"] else "Job bloqueado até evoluir." if summary["job_progress_blocked"] else "Evolução ainda não disponível."
 	if profile.reward_session != null:
@@ -349,6 +364,173 @@ func _refresh_progression_panel(character: Variant, profile: Variant) -> void:
 		progression_skill_tree.add_child(learn_button)
 	_set_attribute_actions_disabled(_read_only or profile.reward_session != null)
 	_set_skill_actions_disabled(_read_only or profile.reward_session != null)
+	_refresh_evolution_panel(character, profile)
+
+func _refresh_evolution_panel(character: Variant, profile: Variant) -> void:
+	if evolution_panel == null:
+		return
+	_clear_evolution_options()
+	if character == null or facade == null:
+		_show_evolution_message("Crie ou selecione um personagem para consultar a evolução.")
+		return
+	if not _evolution_pending.is_empty() and _evolution_pending.get("character_id", "") != character.character_id:
+		_evolution_pending.clear()
+	var result: Dictionary = facade.evolution_options(character.character_id)
+	if not result.get("ok", false):
+		_show_evolution_message("Não foi possível consultar as evoluções deste personagem.")
+		return
+	var current_name := "Nenhuma"
+	for option: Dictionary in result["options"]:
+		if option["is_current"]:
+			current_name = option["display_name"]
+	evolution_state_label.text = "Origem: %s\nEvolução atual: %s\nNível base %d · Job %d" % [_class_name(result["base_class_id"]), current_name, result["base_level"], result["job_level"]]
+	for option: Dictionary in result["options"]:
+		var option_label := Label.new()
+		option_label.name = "EvolutionOption_%s" % option["evolution_id"]
+		option_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		option_label.text = "%s · ramo %s\nRequisitos: base %d / job %d\n%s" % [option["display_name"], option["branch_kind"], option["required_base_level"], option["required_job_level"], _evolution_option_state(option)]
+		evolution_options_list.add_child(option_label)
+		var choose_button := Button.new()
+		choose_button.name = "ChooseEvolution_%s" % option["evolution_id"]
+		choose_button.text = "Escolher %s" % option["display_name"]
+		choose_button.disabled = not option["can_select"]
+		choose_button.tooltip_text = _evolution_option_tooltip(option)
+		choose_button.pressed.connect(_begin_evolution_change.bind(option["evolution_id"]))
+		evolution_options_list.add_child(choose_button)
+	if _evolution_pending.is_empty():
+		evolution_confirmation_label.text = "Escolher ou trocar uma evolução pede confirmação. A entrada gratuita não será equipada automaticamente."
+		confirm_evolution_button.disabled = true
+		cancel_evolution_button.disabled = true
+	else:
+		var pending_name: String = _evolution_pending.get("display_name", "Evolução")
+		evolution_confirmation_label.text = "Confirmar %s? Compras exclusivas serão reembolsadas e slots que deixarem de ser legais podem ser esvaziados." % pending_name
+		confirm_evolution_button.disabled = _read_only or profile.reward_session != null
+		cancel_evolution_button.disabled = false
+
+func _begin_evolution_change(evolution_id: StringName) -> Dictionary:
+	var context := _selected_progression_context()
+	if not context["ok"]:
+		return _show_result(context)
+	var options: Dictionary = facade.evolution_options(context["character_id"])
+	if not options.get("ok", false):
+		return _show_result(options)
+	var option := _evolution_option(options["options"], evolution_id)
+	if option.is_empty():
+		return _show_result({"ok": false, "error_code": &"invalid_origin"})
+	if not option["can_select"]:
+		status_label.text = "Esta evolução não pode ser escolhida: %s" % _evolution_option_state(option)
+		_refresh()
+		return {"ok": false, "error_code": _evolution_blocking_error(option)}
+	_evolution_pending = {
+		"character_id": context["character_id"],
+		"evolution_id": evolution_id,
+		"display_name": option["display_name"],
+		"revision": context["revision"],
+	}
+	_refresh()
+	return {"ok": true, "pending_confirmation": true, "character_id": context["character_id"], "evolution_id": evolution_id}
+
+func _confirm_evolution_change() -> Dictionary:
+	if _evolution_pending.is_empty():
+		return _show_result({"ok": false, "error_code": &"invalid_origin"})
+	var context := _selected_progression_context()
+	if not context["ok"]:
+		return _show_result(context)
+	if context["character_id"] != _evolution_pending["character_id"]:
+		_evolution_pending.clear()
+		return _show_result({"ok": false, "error_code": &"invalid_character_id"})
+	var evolution_id: StringName = _evolution_pending["evolution_id"]
+	var retry_key := "evolution:%s:%s" % [context["character_id"], evolution_id]
+	var retry: Dictionary = _evolution_retries.get(retry_key, {})
+	var request_id: String = retry.get("request_id", _request_id("evolution-%s" % evolution_id))
+	var revision: int = retry.get("revision", _evolution_pending["revision"])
+	var result: Dictionary = facade.change_evolution(request_id, revision, context["character_id"], evolution_id)
+	var error_code: StringName = result.get("error_code", &"")
+	if result.get("ok", false):
+		_evolution_retries.erase(retry_key)
+		var success_text := _evolution_success_text(result, String(_evolution_pending["display_name"]))
+		_evolution_pending.clear()
+		return _show_result(result, success_text)
+	if error_code == &"save_failed":
+		_evolution_retries[retry_key] = {"request_id": request_id, "revision": revision}
+	else:
+		_evolution_retries.erase(retry_key)
+		_evolution_pending.clear()
+	return _show_result(result)
+
+func _cancel_evolution_change() -> void:
+	_evolution_pending.clear()
+	_refresh()
+
+func _clear_evolution_options() -> void:
+	if evolution_options_list == null:
+		return
+	for child: Node in evolution_options_list.get_children():
+		evolution_options_list.remove_child(child)
+		child.queue_free()
+
+func _show_evolution_message(message: String) -> void:
+	if evolution_state_label == null:
+		return
+	_clear_evolution_options()
+	evolution_state_label.text = message
+	if evolution_confirmation_label != null:
+		evolution_confirmation_label.text = ""
+	if confirm_evolution_button != null:
+		confirm_evolution_button.disabled = true
+	if cancel_evolution_button != null:
+		cancel_evolution_button.disabled = true
+
+func _evolution_option(option_list: Array, evolution_id: StringName) -> Dictionary:
+	for option: Dictionary in option_list:
+		if option["evolution_id"] == evolution_id:
+			return option
+	return {}
+
+func _evolution_option_state(option: Dictionary) -> String:
+	var states: Array[String] = []
+	if option["is_current"]:
+		states.append("Atual")
+	if option["requirements_met"]:
+		states.append("requisitos atendidos")
+	else:
+		states.append("requisitos pendentes")
+	states.append("conteúdo pronto" if option["content_ready"] else "conteúdo indisponível")
+	var reasons: Array[String] = []
+	for reason: StringName in option["blocking_reasons"]:
+		reasons.append(_evolution_blocking_text(reason))
+	if not reasons.is_empty():
+		states.append("bloqueios: %s" % ", ".join(reasons))
+	return " · ".join(states)
+
+func _evolution_option_tooltip(option: Dictionary) -> String:
+	if option["can_select"]:
+		return "Abrir confirmação para esta evolução."
+	return "Indisponível: %s" % _evolution_option_state(option)
+
+func _evolution_blocking_text(reason: StringName) -> String:
+	match reason:
+		&"requirements_unmet": return "requisitos não atendidos"
+		&"content_unavailable": return "conteúdo indisponível"
+		&"run_active": return "run ativa"
+		&"profile_read_only": return "perfil somente leitura"
+		&"already_current": return "já ativa"
+		_: return "indisponível"
+
+func _evolution_blocking_error(option: Dictionary) -> StringName:
+	for reason: StringName in option["blocking_reasons"]:
+		match reason:
+			&"run_active": return &"run_active"
+			&"profile_read_only": return &"recovery_required"
+			&"content_unavailable": return &"content_unavailable"
+			&"requirements_unmet": return &"requirements_unmet"
+	return &"invalid_origin"
+
+func _evolution_success_text(result: Dictionary, display_name: String) -> String:
+	var cleared := 0
+	for preset: Dictionary in result.get("cleared_slots_by_preset", []):
+		cleared += preset["active_slot_indices"].size() + preset["passive_slot_indices"].size()
+	return "%s confirmada. Reembolso de evolução: %d ponto(s). Slots esvaziados: %d." % [display_name, result.get("evolution_refund", 0), cleared]
 
 func _allocate_attribute(attribute_id: StringName) -> Dictionary:
 	var context := _selected_progression_context()
@@ -623,6 +805,39 @@ func _build_ui() -> void:
 	respec_skills_button.tooltip_text = "Devolve as compras das carteiras base e de evolução."
 	respec_skills_button.pressed.connect(_respec_skills)
 	progression_panel.add_child(respec_skills_button)
+	evolution_panel = VBoxContainer.new()
+	evolution_panel.name = "EvolutionPanel"
+	evolution_panel.add_theme_constant_override("separation", 4)
+	roster_column.add_child(evolution_panel)
+	var evolution_title := Label.new()
+	evolution_title.text = "Evolução"
+	evolution_title.add_theme_font_size_override("font_size", 18)
+	evolution_panel.add_child(evolution_title)
+	evolution_state_label = Label.new()
+	evolution_state_label.name = "EvolutionState"
+	evolution_state_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	evolution_panel.add_child(evolution_state_label)
+	evolution_options_list = VBoxContainer.new()
+	evolution_options_list.name = "EvolutionOptions"
+	evolution_options_list.add_theme_constant_override("separation", 2)
+	evolution_panel.add_child(evolution_options_list)
+	evolution_confirmation_label = Label.new()
+	evolution_confirmation_label.name = "EvolutionConfirmation"
+	evolution_confirmation_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	evolution_panel.add_child(evolution_confirmation_label)
+	var evolution_actions := HBoxContainer.new()
+	evolution_actions.name = "EvolutionActions"
+	evolution_panel.add_child(evolution_actions)
+	confirm_evolution_button = Button.new()
+	confirm_evolution_button.name = "ConfirmEvolution"
+	confirm_evolution_button.text = "Confirmar evolução"
+	confirm_evolution_button.pressed.connect(_confirm_evolution_change)
+	evolution_actions.add_child(confirm_evolution_button)
+	cancel_evolution_button = Button.new()
+	cancel_evolution_button.name = "CancelEvolution"
+	cancel_evolution_button.text = "Cancelar"
+	cancel_evolution_button.pressed.connect(_cancel_evolution_change)
+	evolution_actions.add_child(cancel_evolution_button)
 	var editor_title := Label.new()
 	editor_title.text = "Editar preset legal"
 	editor_title.add_theme_font_size_override("font_size", 18)
