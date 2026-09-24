@@ -120,7 +120,7 @@ func _select_roster_index(index: int) -> void:
 	var profile: Variant = facade.current_profile() if facade != null else null
 	if profile != null:
 		if _focused_character_id != profile.characters[index].character_id:
-			_evolution_pending.clear()
+			_discard_evolution_intent()
 		_focused_character_id = profile.characters[index].character_id
 		preset_selector.select(profile.characters[index].selected_preset)
 		_populate_build_editor(profile.characters[index])
@@ -374,7 +374,7 @@ func _refresh_evolution_panel(character: Variant, profile: Variant) -> void:
 		_show_evolution_message("Crie ou selecione um personagem para consultar a evolução.")
 		return
 	if not _evolution_pending.is_empty() and _evolution_pending.get("character_id", "") != character.character_id:
-		_evolution_pending.clear()
+		_discard_evolution_intent()
 	var result: Dictionary = facade.evolution_options(character.character_id)
 	if not result.get("ok", false):
 		_show_evolution_message("Não foi possível consultar as evoluções deste personagem.")
@@ -421,6 +421,7 @@ func _begin_evolution_change(evolution_id: StringName) -> Dictionary:
 		status_label.text = "Esta evolução não pode ser escolhida: %s" % _evolution_option_state(option)
 		_refresh()
 		return {"ok": false, "error_code": _evolution_blocking_error(option)}
+	_discard_evolution_intent()
 	_evolution_pending = {
 		"character_id": context["character_id"],
 		"evolution_id": evolution_id,
@@ -437,7 +438,7 @@ func _confirm_evolution_change() -> Dictionary:
 	if not context["ok"]:
 		return _show_result(context)
 	if context["character_id"] != _evolution_pending["character_id"]:
-		_evolution_pending.clear()
+		_discard_evolution_intent()
 		return _show_result({"ok": false, "error_code": &"invalid_character_id"})
 	var evolution_id: StringName = _evolution_pending["evolution_id"]
 	var retry_key := "evolution:%s:%s" % [context["character_id"], evolution_id]
@@ -447,20 +448,26 @@ func _confirm_evolution_change() -> Dictionary:
 	var result: Dictionary = facade.change_evolution(request_id, revision, context["character_id"], evolution_id)
 	var error_code: StringName = result.get("error_code", &"")
 	if result.get("ok", false):
-		_evolution_retries.erase(retry_key)
 		var success_text := _evolution_success_text(result, String(_evolution_pending["display_name"]))
-		_evolution_pending.clear()
+		_discard_evolution_intent()
 		return _show_result(result, success_text)
 	if error_code == &"save_failed":
 		_evolution_retries[retry_key] = {"request_id": request_id, "revision": revision}
 	else:
-		_evolution_retries.erase(retry_key)
-		_evolution_pending.clear()
+		_discard_evolution_intent()
 	return _show_result(result)
 
 func _cancel_evolution_change() -> void:
-	_evolution_pending.clear()
+	_discard_evolution_intent()
 	_refresh()
+
+func _discard_evolution_intent() -> void:
+	if _evolution_pending.is_empty():
+		return
+	var character_id: String = _evolution_pending["character_id"]
+	var evolution_id: StringName = _evolution_pending["evolution_id"]
+	_evolution_retries.erase("evolution:%s:%s" % [character_id, evolution_id])
+	_evolution_pending.clear()
 
 func _clear_evolution_options() -> void:
 	if evolution_options_list == null:

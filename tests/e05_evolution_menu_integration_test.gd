@@ -21,6 +21,7 @@ func _initialize() -> void:
 	await _check_production_unavailable_and_run_message(scene)
 	await _check_confirmation_cancel_and_first_choice(scene)
 	await _check_switch_retry_and_focused_alt(scene)
+	await _check_cancelled_retry_is_discarded(scene)
 	await _check_run_active_and_read_only_states(scene)
 	_cleanup_directory(root_directory)
 	print("E05-S1C seletor de evolução: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
@@ -95,6 +96,49 @@ func _check_switch_retry_and_focused_alt(scene: PackedScene) -> void:
 	var defender_entry: Label = menu.progression_skill_tree.get_node_or_null("ProgressionSkill_defender_entry")
 	_check(menu.evolution_state_label.text.contains("Evolução atual: Berserker") and berserker_entry != null and berserker_entry.text.contains("Rank 1/5") and defender_entry != null and defender_entry.text.contains("ramo futuro") and menu.status_label.text.contains("Slots esvaziados: 4"), "selector refreshes summary, progression tree and exact cleanup feedback from the transaction response")
 	menu.queue_free()
+
+func _check_cancelled_retry_is_discarded(scene: PackedScene) -> void:
+	var catalog := _ready_catalog()
+	var directory := root_directory.path_join("cancelled_retry")
+	_prepare_directory(directory)
+	var profile := _profile_with_character(catalog, "Cancelar", &"", false)
+	var character_id: String = profile.characters[0].character_id
+	_check(ProfileStore.new(directory, catalog).commit(profile)["ok"], "cancelled-retry fixture is durably seeded")
+	var store := ToggleFailStore.new(directory, catalog)
+	var menu: CharacterMenu = await _open_menu(scene, ProfileFacade.new(store))
+	menu._begin_evolution_change(&"defender")
+	store.failure_stage = &"write_pending"
+	var failed: Dictionary = menu._confirm_evolution_change()
+	store.failure_stage = &""
+	menu._cancel_evolution_change()
+	var advanced: Dictionary = menu.facade.allocate_attributes("advance-after-cancel", menu.facade.current_profile().revision, character_id, {&"str": 1})
+	menu._begin_evolution_change(&"defender")
+	var fresh: Dictionary = menu._confirm_evolution_change()
+	_check(not failed["ok"] and failed["error_code"] == &"save_failed" and advanced["ok"] and fresh["ok"] and fresh["request_id"] != failed["request_id"] and menu.facade.current_profile().character_by_id(character_id).evolution_id == &"defender", "canceling a failed confirmation discards its retry so a later explicit choice captures the new revision")
+	menu.queue_free()
+
+	var alt_directory := root_directory.path_join("cancelled_retry_alt")
+	_prepare_directory(alt_directory)
+	var alt_profile := ProfileState.new(PROFILE_ID)
+	var first_id := _append_character(alt_profile, catalog, "Primeiro", &"", false)
+	var second_id := _append_character(alt_profile, catalog, "Segundo", &"", false)
+	alt_profile.selected_character_id = first_id
+	_check(ProfileStore.new(alt_directory, catalog).commit(alt_profile)["ok"], "alternate focused-retry fixture is durably seeded")
+	var alt_store := ToggleFailStore.new(alt_directory, catalog)
+	var alt_menu: CharacterMenu = await _open_menu(scene, ProfileFacade.new(alt_store))
+	alt_menu._select_roster_index(1)
+	alt_menu._begin_evolution_change(&"defender")
+	alt_store.failure_stage = &"write_pending"
+	var alt_failed: Dictionary = alt_menu._confirm_evolution_change()
+	alt_store.failure_stage = &""
+	alt_menu._cancel_evolution_change()
+	alt_menu._select_roster_index(0)
+	var alt_advanced: Dictionary = alt_menu.facade.allocate_attributes("advance-alt-after-cancel", alt_menu.facade.current_profile().revision, second_id, {&"str": 1})
+	alt_menu._select_roster_index(1)
+	alt_menu._begin_evolution_change(&"defender")
+	var alt_fresh: Dictionary = alt_menu._confirm_evolution_change()
+	_check(not alt_failed["ok"] and alt_advanced["ok"] and alt_fresh["ok"] and alt_fresh["request_id"] != alt_failed["request_id"] and alt_menu.facade.current_profile().selected_character_id == first_id and alt_menu.facade.current_profile().character_by_id(second_id).evolution_id == &"defender", "changing focused alt and returning also drops a canceled retry while preserving the persisted selection")
+	alt_menu.queue_free()
 
 func _check_run_active_and_read_only_states(scene: PackedScene) -> void:
 	var directory := root_directory.path_join("run_active")

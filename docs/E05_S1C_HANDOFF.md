@@ -35,6 +35,9 @@ informados pela resposta. A entrada gratuita não é equipada pela UI.
   sem repetir a evolução com uma revisão nova.
 - Em `save_failed`, intenção, `request_id` e revisão são preservados para que a
   confirmação seguinte repita exatamente a operação original.
+- Cancelar, trocar de alt ou abrir uma nova confirmação descarta o retry ligado
+  à intenção anterior. Assim uma confirmação nova sempre captura seu próprio
+  contexto e não reutiliza uma revisão cancelada.
 - Em sucesso, erro obsoleto ou resultado incerto, o menu não faz retry
   automático. Ele atualiza o estado pela fachada.
 - O personagem em foco é sempre o alvo, sem trocar `selected_character_id`.
@@ -58,7 +61,7 @@ fixture isolada de teste.
 
 ## Evidências
 
-A suíte S1C executa 19 checks headless em Godot 4.7.2 standard e cobre:
+A suíte S1C executa 23 checks headless em Godot 4.7.2 standard e cobre:
 
 - evolução atual de produção indisponível, sem escrita, e mensagem do bloqueio
   de run;
@@ -69,6 +72,8 @@ A suíte S1C executa 19 checks headless em Godot 4.7.2 standard e cobre:
 - troca Defendente→Berserker, limpeza dos dois presets e feedback retornado pela
   transação;
 - falha definida com retry do mesmo `request_id`/revisão;
+- falha, cancelamento, avanço de revisão e nova confirmação; inclusive após
+  trocar de alt e retornar ao personagem em foco;
 - personagem em foco distinto da seleção persistida;
 - run ativa e perfil somente leitura.
 
@@ -79,10 +84,12 @@ pwsh -NoProfile -File .\tools\verify.ps1 `
   -GodotPath 'C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\review-engine\Godot.exe'
 ```
 
-Resultado: importação, **68 suítes / 3.095 checks** e smoke aprovados. A nova
-suíte passou com **19 checks**; as regressões `e02_character_menu` (23),
-`e05_evolution_catalog` (56) e `e05_evolution_transaction` (50) passaram na
-mesma execução integral.
+Antes da correção localizada, a verificação integral passou com importação,
+**68 suítes / 3.095 checks** e smoke. Para esta rodada autorizada por Astra,
+passaram a suíte S1C atualizada (**23 checks**) e a regressão
+`e02_character_menu` (**23 checks**). O delta não altera core, catálogo,
+persistência nem a cena; a repetição integral fica reservada para o próximo
+gate integrado.
 
 ## Limites e próximo gate
 
