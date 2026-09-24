@@ -325,8 +325,14 @@ func validate_purchased_ranks(
 				return requirement
 	return {"ok": true}
 
+func evolution_is_ready(evolution_id: StringName, base_class_id: StringName) -> bool:
+	var definition: EvolutionDefinition = _evolutions.get(evolution_id)
+	return definition != null and definition.origin_class_id == base_class_id and definition.content_ready
+
 func build_is_ready(character: CharacterState) -> bool:
-	return character != null and base_class_is_available(character.base_class_id)
+	if character == null or not base_class_is_available(character.base_class_id):
+		return false
+	return character.evolution_id.is_empty() or evolution_is_ready(character.evolution_id, character.base_class_id)
 
 func skill_is_allowed(skill_id: StringName, base_class_id: StringName, evolution_id: StringName) -> bool:
 	var metadata: Dictionary = _skills.get(skill_id, {})

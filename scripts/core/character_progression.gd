@@ -131,7 +131,75 @@ static func respec_skills(character: CharacterState, catalog: ProfileCatalog) ->
 		_prune_slots(preset["passive_slots"], ProfileCatalog.PASSIVE, effective, catalog)
 	return {"ok": true, "base_refund": base_refund, "evolution_refund": evolution_refund}
 
-static func _prune_slots(slots: Array, category: StringName, effective: Dictionary[StringName, int], catalog: ProfileCatalog) -> void:
+static func change_evolution(character: CharacterState, catalog: ProfileCatalog, evolution_id: StringName) -> Dictionary:
+	if character == null:
+		return _failure(&"invalid_character_id")
+	var definition := catalog.evolution_definition(evolution_id)
+	if definition == null or definition.origin_class_id != character.base_class_id:
+		return _failure(&"invalid_origin")
+	if character.evolution_id == evolution_id:
+		return {
+			"ok": true,
+			"already_applied": true,
+			"evolution_id": evolution_id,
+			"evolution_refund": 0,
+			"cleared_slots_by_preset": _empty_cleared_slots(),
+		}
+	if not definition.content_ready:
+		return _failure(&"content_unavailable")
+	var base_level := ProgressionRules.base_level_for_xp(character.base_xp_total)
+	var job_level := ProgressionRules.job_level_for_xp(character.job_xp_total, not character.evolution_id.is_empty())
+	if base_level < definition.required_base_level or job_level < definition.required_job_level:
+		return _failure(&"requirements_unmet")
+
+	var evolution_refund := catalog.skill_points_spent(character.purchased_skill_ranks, ProfileCatalog.EVOLUTION_WALLET)
+	_remove_wallet_ranks(character.purchased_skill_ranks, catalog, ProfileCatalog.EVOLUTION_WALLET)
+	# Legacy grants are rights carried by the base catalog. Evolution entry ranks
+	# are derived from the selected definition and must never survive a branch swap.
+	_remove_wallet_ranks(character.granted_skill_ranks, catalog, ProfileCatalog.EVOLUTION_WALLET)
+	character.evolution_id = evolution_id
+	var effective := catalog.effective_skill_ranks(
+		character.base_class_id,
+		character.evolution_id,
+		character.purchased_skill_ranks,
+		character.granted_skill_ranks
+	)
+	var cleared_slots: Array[Dictionary] = []
+	for preset_index: int in character.presets.size():
+		var preset: Dictionary = character.presets[preset_index]
+		cleared_slots.append({
+			"preset_index": preset_index,
+			"active_slot_indices": _prune_slots(preset["active_slots"], ProfileCatalog.ACTIVE, effective, catalog),
+			"passive_slot_indices": _prune_slots(preset["passive_slots"], ProfileCatalog.PASSIVE, effective, catalog),
+		})
+	return {
+		"ok": true,
+		"evolution_id": evolution_id,
+		"evolution_refund": evolution_refund,
+		"cleared_slots_by_preset": cleared_slots,
+	}
+
+static func _remove_wallet_ranks(ranks: Dictionary[StringName, int], catalog: ProfileCatalog, wallet: StringName) -> void:
+	var removed_ids: Array[StringName] = []
+	for skill_id: StringName in ranks:
+		var metadata := catalog.skill_metadata(skill_id)
+		if not metadata.is_empty() and metadata["wallet"] == wallet:
+			removed_ids.append(skill_id)
+	for skill_id: StringName in removed_ids:
+		ranks.erase(skill_id)
+
+static func _empty_cleared_slots() -> Array[Dictionary]:
+	var cleared_slots: Array[Dictionary] = []
+	for preset_index: int in CharacterState.PRESET_COUNT:
+		cleared_slots.append({
+			"preset_index": preset_index,
+			"active_slot_indices": [],
+			"passive_slot_indices": [],
+		})
+	return cleared_slots
+
+static func _prune_slots(slots: Array, category: StringName, effective: Dictionary[StringName, int], catalog: ProfileCatalog) -> Array[int]:
+	var cleared_indices: Array[int] = []
 	for index: int in slots.size():
 		var value: Variant = slots[index]
 		if value == null:
@@ -140,6 +208,8 @@ static func _prune_slots(slots: Array, category: StringName, effective: Dictiona
 		var metadata := catalog.skill_metadata(skill_id)
 		if metadata.is_empty() or metadata["category"] != category or effective.get(skill_id, 0) <= 0:
 			slots[index] = null
+			cleared_indices.append(index)
+	return cleared_indices
 
 static func _failure(error_code: StringName) -> Dictionary:
 	return {"ok": false, "error_code": error_code}

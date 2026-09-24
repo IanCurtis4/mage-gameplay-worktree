@@ -394,6 +394,20 @@ func respec_skills(request_id: String, expected_revision: int, character_id: Str
 	var mutation := CharacterProgression.respec_skills(candidate.character_by_id(character_id), _catalog)
 	return _finish_progression_mutation(request_id, before, candidate, character_id, mutation)
 
+func change_evolution(request_id: String, expected_revision: int, character_id: String, evolution_id: StringName) -> Dictionary:
+	if _operation_in_progress:
+		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
+	var ready := _begin_operation(request_id, expected_revision)
+	if not ready["ok"]:
+		return _finish_operation(request_id, ready)
+	var boundary := _progression_boundary(character_id)
+	if not boundary["ok"]:
+		return _finish_operation(request_id, boundary)
+	var before := _profile.copy_state()
+	var candidate := before.copy_state()
+	var mutation := CharacterProgression.change_evolution(candidate.character_by_id(character_id), _catalog, evolution_id)
+	return _finish_progression_mutation(request_id, before, candidate, character_id, mutation)
+
 func start_run(request_id: String, expected_revision: int) -> Dictionary:
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
@@ -409,6 +423,8 @@ func start_run(request_id: String, expected_revision: int) -> Dictionary:
 	var character := _profile.character_by_id(_profile.selected_character_id)
 	if character == null:
 		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_character_id"})
+	if not character.evolution_id.is_empty() and not _catalog.evolution_is_ready(character.evolution_id, character.base_class_id):
+		return _finish_operation(request_id, {"ok": false, "error_code": &"content_unavailable"})
 	if not _catalog.build_is_ready(character):
 		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_loadout"})
 
