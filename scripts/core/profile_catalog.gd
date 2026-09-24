@@ -251,6 +251,18 @@ func starter_item_ids(base_class_id: StringName) -> Array[StringName]:
 			item_ids.append(item_id)
 	return item_ids
 
+func skill_ids_for_identity(base_class_id: StringName, evolution_id: StringName = &"") -> Array[StringName]:
+	## Legal catalog library, including unlearned skills; a directional affinity never grants its other origin's library.
+	var skill_ids: Array[StringName] = []
+	if not IdentityIds.is_base_class(base_class_id):
+		return skill_ids
+	if not evolution_id.is_empty() and not IdentityIds.evolution_belongs_to(evolution_id, base_class_id):
+		return skill_ids
+	for skill_id: StringName in _skills:
+		if skill_is_allowed(skill_id, base_class_id, evolution_id):
+			skill_ids.append(skill_id)
+	return skill_ids
+
 func effective_skill_ranks(
 	base_class_id: StringName,
 	evolution_id: StringName,
@@ -258,9 +270,7 @@ func effective_skill_ranks(
 	granted_ranks: Dictionary[StringName, int] = {}
 ) -> Dictionary[StringName, int]:
 	var effective: Dictionary[StringName, int] = {}
-	for skill_id: StringName in _skills:
-		if not skill_is_allowed(skill_id, base_class_id, evolution_id):
-			continue
+	for skill_id: StringName in skill_ids_for_identity(base_class_id, evolution_id):
 		var metadata: Dictionary = _skills[skill_id]
 		var rank: int = int(metadata["free_rank"]) + int(granted_ranks.get(skill_id, 0)) + int(purchased_ranks.get(skill_id, 0))
 		if rank > 0:
@@ -335,6 +345,10 @@ func build_is_ready(character: CharacterState) -> bool:
 	return character.evolution_id.is_empty() or evolution_is_ready(character.evolution_id, character.base_class_id)
 
 func skill_is_allowed(skill_id: StringName, base_class_id: StringName, evolution_id: StringName) -> bool:
+	if not IdentityIds.is_base_class(base_class_id):
+		return false
+	if not evolution_id.is_empty() and not IdentityIds.evolution_belongs_to(evolution_id, base_class_id):
+		return false
 	var metadata: Dictionary = _skills.get(skill_id, {})
 	if metadata.is_empty() or base_class_id not in metadata["allowed_base_classes"]:
 		return false

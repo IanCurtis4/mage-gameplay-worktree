@@ -625,7 +625,8 @@ func _build_snapshot(character: CharacterState) -> BuildSnapshot:
 		character,
 		ProgressionRules.base_level_for_xp(character.base_xp_total),
 		ProgressionRules.job_level_for_xp(character.job_xp_total, not character.evolution_id.is_empty()),
-		effective_ranks
+		effective_ranks,
+		_catalog.skill_ids_for_identity(character.base_class_id, character.evolution_id)
 	)
 
 func _resolve_commit(before: ProfileState, candidate: ProfileState, commit_result: Dictionary) -> Dictionary:

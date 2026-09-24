@@ -11,6 +11,7 @@ var base_level: int = 1
 var job_level: int = 1
 var attribute_allocations: Dictionary[StringName, int] = {}
 var skill_ranks: Dictionary[StringName, int] = {}
+var library_skill_ids: Array[StringName] = []
 var active_slots: Array[Variant] = []
 var passive_slots: Array[Variant] = []
 var equipped: Dictionary[StringName, Variant] = {}
@@ -20,7 +21,8 @@ static func from_character(
 	character: CharacterState,
 	derived_base_level: int,
 	derived_job_level: int,
-	effective_skill_ranks: Dictionary[StringName, int]
+	effective_skill_ranks: Dictionary[StringName, int],
+	identity_skill_ids: Array[StringName] = []
 ) -> BuildSnapshot:
 	assert(character != null)
 	var snapshot := BuildSnapshot.new()
@@ -31,6 +33,7 @@ static func from_character(
 	snapshot.job_level = derived_job_level
 	snapshot.attribute_allocations = character.attribute_allocations.duplicate(true)
 	snapshot.skill_ranks = effective_skill_ranks.duplicate(true)
+	snapshot.library_skill_ids = identity_skill_ids.duplicate()
 	var preset: Dictionary = character.presets[character.selected_preset]
 	snapshot.active_slots = preset["active_slots"].duplicate(true)
 	snapshot.passive_slots = preset["passive_slots"].duplicate(true)
@@ -48,6 +51,7 @@ func copy_snapshot() -> BuildSnapshot:
 	copy.job_level = job_level
 	copy.attribute_allocations = attribute_allocations.duplicate(true)
 	copy.skill_ranks = skill_ranks.duplicate(true)
+	copy.library_skill_ids = library_skill_ids.duplicate()
 	copy.active_slots = active_slots.duplicate(true)
 	copy.passive_slots = passive_slots.duplicate(true)
 	copy.equipped = equipped.duplicate(true)
