@@ -210,6 +210,61 @@ func progression_summary(character_id: String) -> Dictionary:
 	result["character_id"] = character_id
 	return result.duplicate(true)
 
+func evolution_options(character_id: String) -> Dictionary:
+	# Unlike the older queries, this contract never opens or repairs a profile as
+	# a side effect. The caller must establish the facade state explicitly.
+	if _profile == null:
+		return {"ok": false, "error_code": &"profile_unavailable"}
+	var character := _profile.character_by_id(character_id)
+	if character == null:
+		return {"ok": false, "error_code": &"invalid_character_id"}
+	var base_level := ProgressionRules.base_level_for_xp(character.base_xp_total)
+	var job_level := ProgressionRules.job_level_for_xp(character.job_xp_total, not character.evolution_id.is_empty())
+	var run_active := _profile.reward_session != null
+	var options: Array[Dictionary] = []
+	for definition: EvolutionDefinition in _catalog.evolution_definitions_for_origin(character.base_class_id):
+		var requirements_met := base_level >= definition.required_base_level and job_level >= definition.required_job_level
+		var is_current := character.evolution_id == definition.id
+		var blocking_reasons: Array[StringName] = []
+		if not requirements_met:
+			blocking_reasons.append(&"requirements_unmet")
+		if not definition.content_ready:
+			blocking_reasons.append(&"content_unavailable")
+		if run_active:
+			blocking_reasons.append(&"run_active")
+		if _read_only:
+			blocking_reasons.append(&"profile_read_only")
+		if is_current:
+			blocking_reasons.append(&"already_current")
+		options.append({
+			"evolution_id": definition.id,
+			"display_name": definition.display_name,
+			"origin_class_id": definition.origin_class_id,
+			"branch_kind": definition.branch_kind,
+			"affinity_class_id": definition.affinity_class_id,
+			"required_base_level": definition.required_base_level,
+			"required_job_level": definition.required_job_level,
+			"entry_skill_id": definition.entry_skill_id,
+			"exclusive_skill_ids": definition.exclusive_skill_ids.duplicate(),
+			"is_current": is_current,
+			"requirements_met": requirements_met,
+			"content_ready": definition.content_ready,
+			"can_select": blocking_reasons.is_empty(),
+			"blocking_reasons": blocking_reasons.duplicate(),
+		})
+	return {
+		"ok": true,
+		"character_id": character_id,
+		"base_class_id": character.base_class_id,
+		"current_evolution_id": character.evolution_id,
+		"base_level": base_level,
+		"job_level": job_level,
+		"run_active": run_active,
+		"profile_read_only": _read_only,
+		"profile_revision": _profile.revision,
+		"options": options,
+	}
+
 func progression_skill_options(character_id: String) -> Dictionary:
 	if _profile == null:
 		var opened := open_profile()

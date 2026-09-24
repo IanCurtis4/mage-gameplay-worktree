@@ -11,10 +11,16 @@ const MAX_PASSIVE_RANK := 3
 
 var _skills: Dictionary[StringName, Dictionary] = {}
 var _equipment: Dictionary[StringName, Dictionary] = {}
+var _evolutions: Dictionary[StringName, EvolutionDefinition] = {}
+var _evolution_order: Array[StringName] = []
 var _sealed := false
 var _build_error := false
 
-static func pilot(additional_equipment: Dictionary = {}, additional_skills: Dictionary = {}) -> ProfileCatalog:
+static func pilot(
+	additional_equipment: Dictionary = {},
+	additional_skills: Dictionary = {},
+	evolution_overrides: Dictionary = {}
+) -> ProfileCatalog:
 	var catalog := ProfileCatalog.new()
 	catalog.add_skill(&"slash", [&"swordsman"], ACTIVE, BASE_WALLET, 0, 5)
 	catalog.add_skill(&"dash", [&"swordsman"], ACTIVE, BASE_WALLET, 0, 5)
@@ -72,6 +78,7 @@ static func pilot(additional_equipment: Dictionary = {}, additional_skills: Dict
 			metadata.get("required_evolution_id", &""),
 			metadata.get("rank_requirements", {})
 		)
+	catalog._register_e00_evolutions(evolution_overrides)
 	return catalog.seal()
 
 func add_skill(
@@ -105,6 +112,16 @@ func add_skill(
 	}
 	return true
 
+func add_evolution(definition: EvolutionDefinition) -> bool:
+	if _sealed:
+		return false
+	if definition == null or _evolutions.has(definition.id):
+		_build_error = true
+		return false
+	_evolutions[definition.id] = definition.copy_definition()
+	_evolution_order.append(definition.id)
+	return true
+
 func add_equipment(item_id: StringName, slot: StringName, allowed_base_classes: Array[StringName], starter: bool = false) -> bool:
 	if _sealed:
 		return false
@@ -126,6 +143,9 @@ func copy_catalog() -> ProfileCatalog:
 	var copy := ProfileCatalog.new()
 	copy._skills = _skills.duplicate(true)
 	copy._equipment = _equipment.duplicate(true)
+	for evolution_id: StringName in _evolution_order:
+		copy._evolutions[evolution_id] = _evolutions[evolution_id].copy_definition()
+	copy._evolution_order = _evolution_order.duplicate()
 	copy._build_error = _build_error
 	return copy.seal()
 
@@ -156,6 +176,8 @@ func is_valid() -> bool:
 			return false
 	if _has_requirement_cycle():
 		return false
+	if not _evolution_definitions_are_valid():
+		return false
 	var starter_slots: Dictionary[StringName, bool] = {}
 	for metadata: Dictionary in _equipment.values():
 		if metadata.get("slot") not in IdentityIds.equipment_slots() or not _valid_origins(metadata.get("allowed_base_classes")):
@@ -175,6 +197,24 @@ func skill_metadata(skill_id: StringName) -> Dictionary:
 
 func equipment_metadata(item_id: StringName) -> Dictionary:
 	return _equipment.get(item_id, {}).duplicate(true)
+
+func evolution_definition(evolution_id: StringName) -> EvolutionDefinition:
+	var definition: EvolutionDefinition = _evolutions.get(evolution_id)
+	return definition.copy_definition() if definition != null else null
+
+func evolution_definitions() -> Array[EvolutionDefinition]:
+	var definitions: Array[EvolutionDefinition] = []
+	for evolution_id: StringName in _evolution_order:
+		definitions.append(_evolutions[evolution_id].copy_definition())
+	return definitions
+
+func evolution_definitions_for_origin(base_class_id: StringName) -> Array[EvolutionDefinition]:
+	var definitions: Array[EvolutionDefinition] = []
+	for evolution_id: StringName in _evolution_order:
+		var definition: EvolutionDefinition = _evolutions[evolution_id]
+		if definition.origin_class_id == base_class_id:
+			definitions.append(definition.copy_definition())
+	return definitions
 
 func knows_equipment(item_id: StringName) -> bool:
 	return _equipment.has(item_id)
@@ -298,6 +338,154 @@ func skill_is_allowed(skill_id: StringName, base_class_id: StringName, evolution
 func equipment_is_allowed(item_id: StringName, slot: StringName, base_class_id: StringName) -> bool:
 	var metadata: Dictionary = _equipment.get(item_id, {})
 	return not metadata.is_empty() and metadata["slot"] == slot and base_class_id in metadata["allowed_base_classes"]
+
+func _register_e00_evolutions(overrides: Dictionary) -> void:
+	var specs: Array[Dictionary] = [
+		{"id": IdentityIds.DEFENDER, "name": "Defendente", "branch": EvolutionDefinition.BRANCH_2_1, "affinity": &""},
+		{"id": IdentityIds.BERSERKER, "name": "Berserker", "branch": EvolutionDefinition.BRANCH_2_2, "affinity": &""},
+		{"id": IdentityIds.SP_MG, "name": "Cavaleiro Rúnico", "branch": EvolutionDefinition.BRANCH_2_3, "affinity": IdentityIds.MAGE},
+		{"id": IdentityIds.SP_AR, "name": "Baluarte de Cerco", "branch": EvolutionDefinition.BRANCH_2_3, "affinity": IdentityIds.ARCHER},
+		{"id": IdentityIds.ELEMENTALIST, "name": "Elementalista", "branch": EvolutionDefinition.BRANCH_2_1, "affinity": &""},
+		{"id": IdentityIds.SPIRITUALIST, "name": "Espiritualista", "branch": EvolutionDefinition.BRANCH_2_2, "affinity": &""},
+		{"id": IdentityIds.MG_SP, "name": "Devastador Astral", "branch": EvolutionDefinition.BRANCH_2_3, "affinity": IdentityIds.SWORDSMAN},
+		{"id": IdentityIds.MG_AR, "name": "Geômetra", "branch": EvolutionDefinition.BRANCH_2_3, "affinity": IdentityIds.ARCHER},
+		{"id": IdentityIds.SENTINEL, "name": "Sentinela", "branch": EvolutionDefinition.BRANCH_2_1, "affinity": &""},
+		{"id": IdentityIds.HUNTER, "name": "Caçador", "branch": EvolutionDefinition.BRANCH_2_2, "affinity": &""},
+		{"id": IdentityIds.AR_SP, "name": "Saqueador", "branch": EvolutionDefinition.BRANCH_2_3, "affinity": IdentityIds.SWORDSMAN},
+		{"id": IdentityIds.AR_MG, "name": "Caçador de Espectros", "branch": EvolutionDefinition.BRANCH_2_3, "affinity": IdentityIds.MAGE},
+	]
+	var normalized_overrides: Dictionary[StringName, Dictionary] = {}
+	for raw_id: Variant in overrides:
+		if not (raw_id is String or raw_id is StringName) or not overrides[raw_id] is Dictionary:
+			_build_error = true
+			continue
+		normalized_overrides[StringName(raw_id)] = overrides[raw_id].duplicate(true)
+	var known_ids: Dictionary[StringName, bool] = {}
+	for spec: Dictionary in specs:
+		known_ids[spec["id"]] = true
+	for evolution_id: StringName in normalized_overrides:
+		if not known_ids.has(evolution_id):
+			_build_error = true
+	for spec: Dictionary in specs:
+		var definition := EvolutionDefinition.new()
+		definition.id = spec["id"]
+		definition.display_name = spec["name"]
+		definition.origin_class_id = IdentityIds.evolution_origin(definition.id)
+		definition.branch_kind = spec["branch"]
+		definition.affinity_class_id = spec["affinity"]
+		if normalized_overrides.has(definition.id):
+			_apply_evolution_override(definition, normalized_overrides[definition.id])
+		add_evolution(definition)
+
+func _apply_evolution_override(definition: EvolutionDefinition, override: Dictionary) -> void:
+	for raw_field: Variant in override:
+		if not (raw_field is String or raw_field is StringName):
+			_build_error = true
+			continue
+		var field := String(raw_field)
+		var value: Variant = override[raw_field]
+		match field:
+			"entry_skill_id":
+				if not (value is String or value is StringName):
+					_build_error = true
+				else:
+					definition.entry_skill_id = StringName(value)
+			"exclusive_skill_ids":
+				if not value is Array:
+					_build_error = true
+				else:
+					var skill_ids: Array[StringName] = []
+					for raw_skill_id: Variant in value:
+						if not (raw_skill_id is String or raw_skill_id is StringName):
+							_build_error = true
+							continue
+						skill_ids.append(StringName(raw_skill_id))
+					definition.exclusive_skill_ids = skill_ids
+			"content_ready":
+				if not value is bool:
+					_build_error = true
+				else:
+					definition.content_ready = value
+			_:
+				_build_error = true
+
+func _evolution_definitions_are_valid() -> bool:
+	if _evolution_order.size() != _evolutions.size():
+		return false
+	var seen: Dictionary[StringName, bool] = {}
+	for evolution_id: StringName in _evolution_order:
+		if seen.has(evolution_id) or not _evolutions.has(evolution_id):
+			return false
+		seen[evolution_id] = true
+		if not _evolution_definition_is_valid(_evolutions[evolution_id]):
+			return false
+	return true
+
+func _evolution_definition_is_valid(definition: EvolutionDefinition) -> bool:
+	if definition == null or not IdentityIds.is_evolution(definition.id):
+		return false
+	if definition.origin_class_id != IdentityIds.evolution_origin(definition.id):
+		return false
+	if definition.display_name.strip_edges().is_empty():
+		return false
+	if definition.required_base_level != 10 or definition.required_job_level != ProgressionRules.UNEVOLVED_MAX_JOB_LEVEL:
+		return false
+	var is_pure := definition.id in IdentityIds.pure_evolution_ids()
+	if is_pure:
+		if definition.branch_kind not in [EvolutionDefinition.BRANCH_2_1, EvolutionDefinition.BRANCH_2_2] or not definition.affinity_class_id.is_empty():
+			return false
+	else:
+		if definition.branch_kind != EvolutionDefinition.BRANCH_2_3:
+			return false
+		if not IdentityIds.is_base_class(definition.affinity_class_id) or definition.affinity_class_id == definition.origin_class_id:
+			return false
+	var seen_skills: Dictionary[StringName, bool] = {}
+	for skill_id: StringName in definition.exclusive_skill_ids:
+		if not IdentityIds.is_technical_id(String(skill_id)) or seen_skills.has(skill_id):
+			return false
+		seen_skills[skill_id] = true
+		if not _evolution_skill_reference_is_valid(skill_id, definition):
+			return false
+	if not definition.entry_skill_id.is_empty():
+		if definition.entry_skill_id not in definition.exclusive_skill_ids:
+			return false
+		if not _entry_skill_is_valid(definition.entry_skill_id, definition):
+			return false
+	if not definition.content_ready:
+		return true
+	if definition.entry_skill_id.is_empty() or definition.exclusive_skill_ids.is_empty():
+		return false
+	var declared_skills: Dictionary[StringName, bool] = {}
+	for skill_id: StringName in definition.exclusive_skill_ids:
+		declared_skills[skill_id] = true
+	var catalog_skills: Dictionary[StringName, bool] = {}
+	var free_skill_ids: Array[StringName] = []
+	for skill_id: StringName in _skills:
+		var metadata: Dictionary = _skills[skill_id]
+		if metadata["required_evolution_id"] != definition.id:
+			continue
+		catalog_skills[skill_id] = true
+		if int(metadata["free_rank"]) > 0:
+			free_skill_ids.append(skill_id)
+	return declared_skills == catalog_skills and free_skill_ids == [definition.entry_skill_id]
+
+func _evolution_skill_reference_is_valid(skill_id: StringName, definition: EvolutionDefinition) -> bool:
+	var metadata: Dictionary = _skills.get(skill_id, {})
+	if metadata.is_empty() or metadata["wallet"] != EVOLUTION_WALLET:
+		return false
+	if metadata["required_evolution_id"] != definition.id:
+		return false
+	var origins: Array = metadata["allowed_base_classes"]
+	return origins.size() == 1 and origins[0] == definition.origin_class_id
+
+func _entry_skill_is_valid(skill_id: StringName, definition: EvolutionDefinition) -> bool:
+	if not _evolution_skill_reference_is_valid(skill_id, definition):
+		return false
+	var metadata: Dictionary = _skills[skill_id]
+	if metadata["category"] != ACTIVE or int(metadata["free_rank"]) != 1 or int(metadata["max_purchased_rank"]) != 4:
+		return false
+	var requirement: Dictionary = metadata["rank_requirements"].get(1, {})
+	return int(requirement.get("job_level", -1)) == definition.required_job_level and requirement.get("skill_ranks", {}) == {}
 
 func _valid_origins(value: Variant) -> bool:
 	if not value is Array or value.is_empty():
