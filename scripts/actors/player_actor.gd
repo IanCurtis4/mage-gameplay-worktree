@@ -160,6 +160,9 @@ func available_skill_ids() -> Array[StringName]:
 			if skill_id == null:
 				continue
 			var normalized_id := StringName(skill_id)
+			var library: Array[StringName] = run_state.build_snapshot.library_skill_ids
+			if not library.is_empty() and normalized_id not in library:
+				continue
 			if normalized_id in equipped or ClassCatalog.skill_definition(normalized_id) == null or int(run_state.skill_levels.get(normalized_id, 0)) <= 0:
 				continue
 			equipped.append(normalized_id)
