@@ -131,7 +131,6 @@ func _check_cancelled_retry_is_discarded(scene: PackedScene) -> void:
 	alt_store.failure_stage = &"write_pending"
 	var alt_failed: Dictionary = alt_menu._confirm_evolution_change()
 	alt_store.failure_stage = &""
-	alt_menu._cancel_evolution_change()
 	alt_menu._select_roster_index(0)
 	var alt_advanced: Dictionary = alt_menu.facade.allocate_attributes("advance-alt-after-cancel", alt_menu.facade.current_profile().revision, second_id, {&"str": 1})
 	alt_menu._select_roster_index(1)
@@ -241,3 +240,4 @@ func _check(condition: bool, label: String) -> void:
 	if not condition:
 		failures += 1
 		push_error(label)
+
