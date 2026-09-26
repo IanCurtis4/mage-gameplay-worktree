@@ -81,3 +81,33 @@ e de balanceamento, não confundir teste headless com playtest.
 Entrega única da classe: hash, resumo funcional, testes e roteiro de playtest
 neste documento. Parar para revisão integrada Astra. Não atualizar master ou
 playtest; integração e aceite do usuário continuam no fluxo habitual.
+
+## Revisão integrada Astra — rodada 1
+
+Candidato a6eedf7: verify.ps1 independente passou integralmente, mas o gate
+permanece aberto pelos achados abaixo. Não atualizar playtest/master.
+
+1. P1, ProfileStore._guard_existing_backup: o novo migrated=true de catálogo 2
+   causa retorno antecipado antes de comparar profile_id/revision do backup.
+   Primary cat2 rev4 + backup cat2 rev9 (ou outro profile_id) pode migrar e
+   sobrescrever o backup protegido. Separar migração de catálogo (identidade e
+   revisão preservadas) de schema legado. Fixtures devem exigir preservação
+   byte a byte dos dois arquivos e readonly/recovery_required nesses casos;
+   migração normal com backup compatível continua funcionando.
+2. P2, PlayerActor: Avanço ativa defender_advance_guard_active, mas Raiva
+   Concentrada cancela _dash_active sem limpar guarda/alvos. Pode deixar 20%
+   de mitigação frontal após o fim do movimento. Centralizar limpeza em toda
+   interrupção/substituição do dash (incluindo Investida base), morte e fim.
+   Testar Avanço -> Raiva, dano frontal após cancelamento, e troca por Investida.
+3. P2, RunController._on_enemy_damage_resolved: whitelist de Vigília omite
+   brutal_strike e concentrated_rage, ambos golpes melee diretos da base.
+   Incluir os golpes corretos e testar ambos com passiva equipada, ausência
+   da passiva, miss/escudo/secondary; não ampliar para DoT ou gritos por acidente.
+4. Feedback necessário para playtest: token e janela frontal de Contraforte
+   só existem em estado interno. Mostrar token disponível/consumo/expiração
+   e frente da guarda por indicador simples/HUD, alimentados pelo runtime.
+   Não produzir arte final nem alterar dano por animação.
+
+Correção consolidada autorizada na tarefa E05; mesmo checkpoint, pequenos
+commits, uma entrega final da classe. Testes dirigidos dos achados e verificação
+integral final, pois há persistência/combate compartilhados. Sem novo kit.
