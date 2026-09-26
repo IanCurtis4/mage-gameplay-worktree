@@ -149,3 +149,28 @@ reload, inclusive migração a partir de backup e pares legados conflitantes.
 Manter o original recuperável e nenhum save real usado como fixture.
 Uma entrega consolidada da correção com regressões de persistência e verificação
 final. Playtest/master não atualizados até resolver este bloqueio.
+
+## Correção consolidada — rodada 2
+
+O schema 1 agora guarda seus bytes originais em `profile.legacy.json` antes
+da primeira migração transacional. O perfil schema 2 registra a impressão
+SHA-256 desses bytes em `legacy_source_sha256` (campo de extensão persistido).
+Enquanto o backup ainda é schema 1, o próximo commit só pode girá-lo se
+backup, arquivo legado e impressão no perfil coincidirem. Em seguida o backup
+volta a ser o schema 2 anterior; o original schema 1 permanece recuperável
+no arquivo legado. Esta é uma mudança explícita do contrato de persistência,
+necessária porque schema 1 não possui identidade comparável ao schema 2.
+
+`tests/profile_store_test.gd` cobre migração de primário ou backup, reload,
+primeira criação de personagem/commit, novo reload, recuperação tanto do
+backup schema 1 antes do primeiro save quanto do backup schema 2 depois,
+preservação exata do legado e bloqueio sem escrita de pares schema 1
+divergentes ou de backup legado estranho ao perfil. Persistência: 113 checks.
+Backups de catálogo 2 mais novos/de outro perfil continuam protegidos pelos
+testes da rodada 1. Pares já migrados por builds anteriores, sem arquivo
+legado e sem impressão de origem, continuam exigindo recuperação explícita;
+não é seguro inferir a identidade do schema 1 apenas pela revisão schema 2.
+
+Verificação final: `tools/verify.ps1` no Godot 4.7.2 standard, importação,
+76 suítes e smoke headless aprovados. Revisão técnica Astra e playtest
+interativo seguem pendentes; `master` e `codex/playtest` não foram alterados.

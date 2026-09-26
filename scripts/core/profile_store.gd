@@ -5,6 +5,8 @@ extends RefCounted
 const PRIMARY_FILE := "profile.json"
 const BACKUP_FILE := "profile.backup.json"
 const PENDING_FILE := "profile.pending.json"
+const LEGACY_FILE := "profile.legacy.json"
+const LEGACY_SOURCE_HASH_FIELD := "legacy_source_sha256"
 
 var _base_directory: String
 var _catalog: ProfileCatalog
@@ -24,7 +26,7 @@ func load_profile() -> Dictionary:
 		var primary_result := _read_and_decode(PRIMARY_FILE)
 		if primary_result["ok"]:
 			if primary_result.get("migrated", false):
-				return _commit_migration(primary_result["profile"])
+				return _commit_migration(primary_result["profile"], primary_result.get("migration_kind", &""))
 			return primary_result
 		if _must_preserve_incompatible(primary_result):
 			return {"ok": false, "error_code": primary_result["error_code"], "read_only": true}
@@ -87,15 +89,22 @@ func _commit(source: ProfileState, allow_migration: bool) -> Dictionary:
 	if not encoded["ok"]:
 		_write_in_progress = false
 		return encoded
-	var result := _write_transaction(encoded["text"], candidate)
+	var result := _write_transaction(encoded["text"], candidate, preflight.get("archive_legacy", false))
 	_write_in_progress = false
 	return result
 
-func _write_transaction(text: String, candidate: ProfileState) -> Dictionary:
+func _write_transaction(text: String, candidate: ProfileState, archive_legacy: bool) -> Dictionary:
 	if _should_fail(&"write_pending"):
 		return {"ok": false, "error_code": &"save_failed"}
 	if DirAccess.make_dir_recursive_absolute(_absolute_base_directory()) != OK and not DirAccess.dir_exists_absolute(_absolute_base_directory()):
 		return {"ok": false, "error_code": &"save_failed"}
+	if archive_legacy:
+		var legacy_bytes := FileAccess.get_file_as_bytes(_path(PRIMARY_FILE))
+		if FileAccess.file_exists(_path(LEGACY_FILE)):
+			if FileAccess.get_file_as_bytes(_path(LEGACY_FILE)) != legacy_bytes:
+				return {"ok": false, "error_code": &"recovery_required", "read_only": true}
+		elif DirAccess.copy_absolute(_absolute_path(PRIMARY_FILE), _absolute_path(LEGACY_FILE)) != OK:
+			return {"ok": false, "error_code": &"save_failed"}
 	var pending := FileAccess.open(_path(PENDING_FILE), FileAccess.WRITE)
 	if pending == null:
 		return {"ok": false, "error_code": &"save_failed"}
@@ -117,7 +126,12 @@ func _write_transaction(text: String, candidate: ProfileState) -> Dictionary:
 		return {"ok": false, "error_code": &"save_failed"}
 	return {"ok": true, "profile": candidate, "new_revision": candidate.revision}
 
-func _commit_migration(migrated_profile: ProfileState) -> Dictionary:
+func _commit_migration(migrated_profile: ProfileState, migration_kind: StringName) -> Dictionary:
+	if migration_kind == &"schema_v1":
+		var source_hash := FileAccess.get_sha256(_path(PRIMARY_FILE))
+		if source_hash.length() != 64:
+			return {"ok": false, "error_code": &"recovery_required", "read_only": true}
+		migrated_profile.extension_fields[LEGACY_SOURCE_HASH_FIELD] = source_hash
 	var result := _commit(migrated_profile, true)
 	if result["ok"]:
 		result["migrated"] = true
@@ -140,7 +154,7 @@ func _recover_from_backup(preserve_corrupt_primary: bool) -> Dictionary:
 	if DirAccess.rename_absolute(_absolute_path(PENDING_FILE), _absolute_path(PRIMARY_FILE)) != OK:
 		return {"ok": false, "error_code": &"recovery_required"}
 	if backup_result.get("migrated", false):
-		var migration := _commit_migration(backup_result["profile"])
+		var migration := _commit_migration(backup_result["profile"], backup_result.get("migration_kind", &""))
 		if migration["ok"]:
 			migration["recovered"] = true
 			migration["warning"] = &"profile_migrated_from_backup"
@@ -183,7 +197,7 @@ func _preflight_commit(source: ProfileState, allow_migration: bool) -> Dictionar
 		if migration_kind in [&"catalog_v1", &"catalog_v2"] and _same_profile(migrated_disk_profile, source):
 			return {"ok": true}
 		if migration_kind == &"schema_v1" and source.revision == 0 and source.characters.is_empty():
-			return {"ok": true}
+			return {"ok": true, "archive_legacy": true}
 		return {"ok": false, "error_code": &"stale_revision", "read_only": true}
 	var disk_profile: ProfileState = disk["profile"]
 	if disk_profile.profile_id != source.profile_id or disk_profile.revision != source.revision:
@@ -202,12 +216,18 @@ func _guard_existing_backup(primary_result: Dictionary) -> Dictionary:
 		return {"ok": true}
 	# Catalog migrations retain profile identity and revision, so their decoded
 	# states must obey the same backup ordering guard as current-catalog saves.
-	# Schema-1 has no comparable identity and needs explicit recovery instead.
+	# Schema-1 has no comparable identity. The exact source archive and its
+	# fingerprint in the migrated primary establish lineage across later saves.
 	if primary_result.get("migration_kind", &"") == &"schema_v1" or backup.get("migration_kind", &"") == &"schema_v1":
 		# Recovery first copies a schema-1 backup verbatim to primary; only that
 		# identical pair can be safely advanced without a stable legacy ID.
 		if primary_result.get("migration_kind", &"") == &"schema_v1" and backup.get("migration_kind", &"") == &"schema_v1" and FileAccess.get_file_as_bytes(_path(PRIMARY_FILE)) == FileAccess.get_file_as_bytes(_path(BACKUP_FILE)):
 			return {"ok": true}
+		if not primary_result.get("migrated", false) and backup.get("migration_kind", &"") == &"schema_v1" and FileAccess.file_exists(_path(LEGACY_FILE)):
+			var backup_bytes := FileAccess.get_file_as_bytes(_path(BACKUP_FILE))
+			var primary_profile: ProfileState = primary_result["profile"]
+			if FileAccess.get_file_as_bytes(_path(LEGACY_FILE)) == backup_bytes and primary_profile.extension_fields.get(LEGACY_SOURCE_HASH_FIELD, "") == FileAccess.get_sha256(_path(BACKUP_FILE)):
+				return {"ok": true}
 		return {"ok": false, "error_code": &"recovery_required", "read_only": true}
 	var primary_profile: ProfileState = primary_result["profile"]
 	var backup_profile: ProfileState = backup["profile"]
