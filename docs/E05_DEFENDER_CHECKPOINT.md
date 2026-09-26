@@ -111,3 +111,18 @@ permanece aberto pelos achados abaixo. Não atualizar playtest/master.
 Correção consolidada autorizada na tarefa E05; mesmo checkpoint, pequenos
 commits, uma entrega final da classe. Testes dirigidos dos achados e verificação
 integral final, pois há persistência/combate compartilhados. Sem novo kit.
+
+## Correção consolidada — rodada 1
+
+| Commit | Fechamento dirigido |
+|---|---|
+| `b521ae7` | Backup de catálogo 2 mais novo ou de outro perfil exige `recovery_required` somente leitura sem alterar nenhum dos dois arquivos; backup compatível migra. Schema 1 não tem identidade comparável: dois arquivos distintos ficam para recuperação explícita, mas a cópia byte a byte do backup para o primário segue migrando. Migração E05: 13 checks; persistência E01: 90 checks. |
+| `1f918e4` | Uma rotina encerra deslocamento, guarda e alvos do Avanço em Raiva Concentrada, substituição por Investida, interrupção, morte e fim de encontro. Reproduções dirigidas: Avanço→Raiva, dano frontal sem mitigação residual, troca por Investida e limpeza. |
+| `9eb7f4e` | Vigília inclui Golpe Brutal e Raiva Concentrada entre os golpes melee diretos; não se aplica sem passiva equipada, em erro, escudo integral, dano secundário ou grito. Teste novo: 7 checks. |
+| `43656aa` | HUD indica token disponível, consumido e expirado; arco no personagem indica a frente da guarda do Contraforte/Avanço. Estado e prazos vêm do runtime e pausam com a simulação. Guarda: 17 checks. |
+
+`tools/verify.ps1` passou integralmente após os quatro commits no Godot 4.7.2:
+76 suítes, importação e smoke headless. Worktree limpo, sem saves reais como
+fixture e sem alterações em `master` ou `codex/playtest`. O feedback visual é
+provisório e requer conferência no playtest interativo; aprovação técnica Astra
+e aceite do usuário continuam pendentes antes do fluxo de integração/merge.
