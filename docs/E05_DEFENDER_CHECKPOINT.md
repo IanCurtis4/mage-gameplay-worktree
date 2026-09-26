@@ -30,7 +30,8 @@ usado por novas fixtures de evolução. Sem novas skills ou migração no SP1.
 | Commit | Comportamento fechado e teste | Pendência / próximo passo |
 |---|---|---|
 | `9ea8bcf` | Catálogo 3 aceita catálogo 2 por migração aditiva, preservando schema 2, ruleset e backup; fixture isolada valida round-trip e rejeição de versão futura. | Registrar sete IDs do Defendente mantendo `content_ready=false`, depois integrar a guarda e as skills. |
-| a registrar | Sete IDs, ranks e gates job do Defendente; biblioteca de produção ainda indisponível. Geometria de mira/VFX provisória, sem dano. Testes dirigidos de catálogo, identidade e indicadores passaram. | Integrar guarda/token, cinco ativas, duas passivas e consumidores. |
+| `8f8b602` | Sete IDs, ranks e gates job do Defendente; biblioteca de produção ainda indisponível. Geometria de mira/VFX provisória, sem dano. Testes dirigidos de catálogo, identidade e indicadores passaram. | Integrar guarda/token, cinco ativas, duas passivas e consumidores. |
+| a registrar | Contraforte R1, janela frontal capturada, mitigação máxima (sem soma), token de 8 s, consumo no commit, interceptação e Resguardo equipável; fixture de ator cobre 11 invariantes. | Conectar input/HUD/controller, Marco, Trava, Avanço, Onda e Vigília. |
 
 Decisão de versionamento: os IDs de skill exclusivos passarão a ser ranks
 persistíveis, então `catalog_version` sobe de 2 para 3 antes do registro. O

@@ -67,6 +67,14 @@ const BRUTAL_STRIKE_DEBUFF_DURATION := 4.0
 const CONCENTRATED_RAGE_HALF_WIDTH := 19.0
 const TERRIFYING_SHOUT_DAMAGE_RECEIVED_INCREASE := 0.20
 const TERRIFYING_SHOUT_DEBUFF_DURATION := 3.0
+const DEFENDER_COUNTER_GUARD_DURATION := 1.2
+const DEFENDER_COUNTER_GUARD_REDUCTION := 0.15
+const DEFENDER_ADVANCE_GUARD_REDUCTION := 0.20
+const DEFENDER_TOKEN_DURATION := 8.0
+const DEFENDER_WATCH_DURATION := 2.5
+const DEFENDER_ANCHOR_DEFENSE_BONUS := 0.10
+const DEFENDER_ANCHOR_SLOW_FRACTION := 0.20
+const DEFENDER_PUSH_DISTANCE := 35.0
 
 var navigation: ArenaNavigation
 var run_state: RunState
@@ -123,6 +131,15 @@ var concentrated_rage_visual_origin := Vector2.ZERO
 var concentrated_rage_visual_direction := Vector2.RIGHT
 var concentrated_rage_visual_range := 0.0
 var terrifying_shout_visual_time := 0.0
+var defender_token_remaining := 0.0
+var defender_counter_guard_remaining := 0.0
+var defender_counter_guard_facing := Vector2.RIGHT
+var defender_advance_guard_active := false
+var defender_advance_guard_facing := Vector2.RIGHT
+var defender_guard_return_cooldown := 0.0
+var defender_anchor_remaining := 0.0
+var defender_anchor_center := Vector2.INF
+var _defender_inside_anchor := false
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
@@ -134,6 +151,7 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 	class_definition = ClassCatalog.class_definition(class_id)
 	_capture_rank_definitions()
 	fury_remaining = 0.0
+	clear_defender_state()
 	var derived := _build_stat_breakdown()
 	var class_color := Color("8e73de") if class_id == &"mage" else Color("6fa85a") if class_id == &"archer" else Color("55a8d9")
 	setup(class_definition.display_name, class_color, derived, 20.0)
@@ -225,6 +243,35 @@ func use_slash(direction: Vector2, enemies: Array[CombatActor]) -> bool:
 			var definition := ClassCatalog.skill_definition(&"slash")
 			attack_requested.emit(_make_physical_request(enemy, &"cone_slash", stat_breakdown.value(&"melee_attack") * rank_definition.power, definition.accuracy_mode, definition.can_crit), enemy)
 	resources_changed.emit()
+	return true
+
+func use_defender_counterstroke(direction: Vector2, enemies: Array[CombatActor]) -> bool:
+	var rank_definition := _runtime_rank_definition(&"defender_counterstroke")
+	if not _is_defender() or rank_definition == null or not _can_spend(&"defender_counterstroke"):
+		return false
+	var facing := _resolved_facing(direction)
+	var empowered := has_defender_token()
+	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
+	_spend(&"defender_counterstroke")
+	if empowered:
+		defender_token_remaining = 0.0
+	defender_counter_guard_remaining = DEFENDER_COUNTER_GUARD_DURATION
+	defender_counter_guard_facing = facing
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(&"defender_counterstroke")
+	var weight := rank_definition.power + (rank_definition.secondary_power if empowered else 0.0)
+	for enemy: CombatActor in enemies.duplicate():
+		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
+			continue
+		var offset := enemy.global_position - global_position
+		if not SkillGeometry.cone_contains(offset, facing, SkillGeometry.DEFENDER_COUNTERSTROKE_RANGE, SkillGeometry.DEFENDER_COUNTERSTROKE_HALF_ANGLE):
+			continue
+		if not navigation.is_segment_clear(global_position, enemy.global_position, 0.0):
+			continue
+		attack_requested.emit(_make_physical_request(enemy, &"defender_counterstroke", stat_breakdown.value(&"melee_attack") * weight, definition.accuracy_mode, definition.can_crit), enemy)
+	presentation_action.emit(&"slash", facing, 0.20)
+	resources_changed.emit()
+	queue_redraw()
 	return true
 
 func use_dash(direction: Vector2) -> bool:
@@ -494,6 +541,7 @@ func shield_interception_fraction(from: Vector2, to: Vector2, projectile_radius:
 func absorb_shield_projectile() -> bool:
 	if not has_shield_stance():
 		return false
+	_grant_defender_front_event()
 	shield_resistance -= 1
 	if shield_resistance <= 0:
 		clear_shield_stance()
@@ -509,14 +557,26 @@ func _commit_action(action_kind: SkillDefinition.ActionKind) -> void:
 func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Dictionary:
 	if request == null:
 		return {}
-	if not has_shield_stance() or request.is_secondary or request.target_id != get_instance_id():
+	if request.is_secondary or request.target_id != get_instance_id():
 		return _apply_damage_with_shield(request, rng)
 	var source := instance_from_id(request.source_id) as Node2D
-	if source == null or not is_instance_valid(source) or not _shield_faces_position(source.global_position):
+	if source == null or not is_instance_valid(source):
 		return _apply_damage_with_shield(request, rng)
-	var reduced := request.copy()
-	reduced.damage_dealt_multiplier *= 1.0 - SHIELD_FRONT_REDUCTION
-	return _apply_damage_with_shield(reduced, rng)
+	var front_reduction := 0.0
+	if has_shield_stance() and _faces_position(shield_facing, source.global_position):
+		front_reduction = SHIELD_FRONT_REDUCTION
+	if _is_defender() and defender_counter_guard_remaining > 0.0 and _faces_position(defender_counter_guard_facing, source.global_position):
+		front_reduction = maxf(front_reduction, DEFENDER_COUNTER_GUARD_REDUCTION)
+	if _is_defender() and defender_advance_guard_active and _faces_position(defender_advance_guard_facing, source.global_position):
+		front_reduction = maxf(front_reduction, DEFENDER_ADVANCE_GUARD_REDUCTION)
+	var effective_request := request.copy() if front_reduction > 0.0 else request
+	if front_reduction > 0.0:
+		effective_request.damage_dealt_multiplier *= 1.0 - front_reduction
+	var result := _apply_damage_with_shield(effective_request, rng)
+	var frontal_shield_absorption := _faces_position(_defender_event_facing(), source.global_position) and float(result.get("absorbed_damage", 0.0)) > 0.0
+	if bool(result.get("landed", false)) and float(result.get("damage", 0.0)) > 0.0 and (front_reduction > 0.0 or frontal_shield_absorption):
+		_grant_defender_front_event()
+	return result
 
 func _apply_damage_with_shield(request: DamageRequest, rng: RandomNumberGenerator) -> Dictionary:
 	var result := super.apply_damage(request, rng)
@@ -529,8 +589,61 @@ func _apply_damage_with_shield(request: DamageRequest, rng: RandomNumberGenerato
 	return result
 
 func _shield_faces_position(position: Vector2) -> bool:
+	return _faces_position(shield_facing, position)
+
+func _faces_position(facing: Vector2, position: Vector2) -> bool:
 	var offset := position - global_position
-	return not offset.is_zero_approx() and offset.normalized().dot(shield_facing) >= cos(SHIELD_HALF_ANGLE)
+	return not offset.is_zero_approx() and offset.normalized().dot(facing) >= cos(SkillGeometry.DEFENDER_GUARD_HALF_ANGLE)
+
+func _defender_event_facing() -> Vector2:
+	if defender_advance_guard_active:
+		return defender_advance_guard_facing
+	if defender_counter_guard_remaining > 0.0:
+		return defender_counter_guard_facing
+	return shield_facing if has_shield_stance() else _last_facing
+
+func _is_defender() -> bool:
+	return run_state != null and run_state.uses_persistent_build() and run_state.build_snapshot.evolution_id == &"defender" and class_id == &"swordsman"
+
+func _grant_defender_front_event() -> void:
+	if not _is_defender() or skill_rank(&"defender_counterstroke") <= 0 or not is_alive():
+		return
+	defender_token_remaining = DEFENDER_TOKEN_DURATION
+	var return_rank := _runtime_rank_definition(&"defender_guard_return")
+	if return_rank != null and &"defender_guard_return" in run_state.build_snapshot.passive_slots and defender_guard_return_cooldown <= 0.0:
+		current_sp = minf(max_sp, current_sp + return_rank.power)
+		defender_guard_return_cooldown = return_rank.cooldown
+	resources_changed.emit()
+	queue_redraw()
+
+func clear_defender_state() -> void:
+	defender_token_remaining = 0.0
+	defender_counter_guard_remaining = 0.0
+	defender_advance_guard_active = false
+	defender_guard_return_cooldown = 0.0
+	defender_anchor_remaining = 0.0
+	defender_anchor_center = Vector2.INF
+	if _defender_inside_anchor:
+		_defender_inside_anchor = false
+		if run_state != null and stat_breakdown != null:
+			_apply_derived_stats(_build_stat_breakdown())
+	resources_changed.emit()
+	queue_redraw()
+
+func has_defender_token() -> bool:
+	return _is_defender() and defender_token_remaining > 0.0 and is_alive()
+
+func has_defender_anchor() -> bool:
+	return _is_defender() and defender_anchor_remaining > 0.0 and defender_anchor_center.is_finite() and is_alive()
+
+func _update_defender_anchor_presence() -> void:
+	var inside := has_defender_anchor() and global_position.distance_to(defender_anchor_center) <= SkillGeometry.DEFENDER_ANCHOR_RADIUS
+	if inside == _defender_inside_anchor:
+		return
+	_defender_inside_anchor = inside
+	_apply_derived_stats(_build_stat_breakdown())
+	resources_changed.emit()
+	queue_redraw()
 
 func use_soul_impact(enemy: CombatActor) -> bool:
 	if class_id != &"mage" or _runtime_rank_definition(&"soul_impact") == null or not can_target_skill(&"soul_impact", enemy) or not _can_spend(&"soul_impact"):
@@ -971,6 +1084,14 @@ func _process(delta: float) -> void:
 	var simulation_paused := is_inside_tree() and get_tree().paused
 	if simulation_paused:
 		return
+	defender_token_remaining = maxf(0.0, defender_token_remaining - delta)
+	defender_counter_guard_remaining = maxf(0.0, defender_counter_guard_remaining - delta)
+	defender_guard_return_cooldown = maxf(0.0, defender_guard_return_cooldown - delta)
+	if defender_anchor_remaining > 0.0:
+		defender_anchor_remaining = maxf(0.0, defender_anchor_remaining - delta)
+		if defender_anchor_remaining <= 0.0:
+			defender_anchor_center = Vector2.INF
+			_update_defender_anchor_presence()
 	if navigation != null and _navigation_revision != navigation.revision:
 		_navigation_revision = navigation.revision
 		_path.clear()
@@ -1086,13 +1207,18 @@ func _advance_dash(delta: float) -> void:
 	if distance <= MOVEMENT_EPSILON:
 		global_position = _dash_endpoint
 		_dash_active = false
+		defender_advance_guard_active = false
+		_update_defender_anchor_presence()
 		return
 	var next_position := global_position.move_toward(_dash_endpoint, _dash_speed * delta)
 	var safe_position := navigation.move_until_blocked(global_position, next_position)
 	global_position = safe_position
+	_update_defender_anchor_presence()
 	if safe_position.distance_to(next_position) > MOVEMENT_EPSILON or global_position.distance_to(_dash_endpoint) <= MOVEMENT_EPSILON:
 		global_position = safe_position if safe_position.distance_to(next_position) > MOVEMENT_EPSILON else _dash_endpoint
 		_dash_active = false
+		defender_advance_guard_active = false
+		_update_defender_anchor_presence()
 
 func _regenerate_sp(delta: float, simulation_paused: bool) -> bool:
 	if simulation_paused or not is_alive() or current_sp >= max_sp:
@@ -1253,6 +1379,7 @@ func _move_step(delta: float) -> void:
 			desired_position = _path[_path_index]
 	var safe_position := navigation.move_until_blocked(global_position, desired_position)
 	global_position = safe_position
+	_update_defender_anchor_presence()
 	if safe_position.distance_to(desired_position) > MOVEMENT_EPSILON:
 		velocity = Vector2.ZERO
 		if has_destination:
@@ -1271,6 +1398,7 @@ func _on_health_died(actor_id: int) -> void:
 	clear_shield_stance()
 	clear_perseverance()
 	clear_fury()
+	clear_defender_state()
 	brutal_strike_visual_time = 0.0
 	concentrated_rage_visual_time = 0.0
 	terrifying_shout_visual_time = 0.0
@@ -1311,6 +1439,8 @@ func _build_stat_breakdown() -> StatBreakdown:
 		var source := ClassCatalog.active_modifier_source(&"fury", _runtime_rank_definition(&"fury"))
 		if not source.is_empty():
 			sources.append(source)
+	if _defender_inside_anchor and has_defender_anchor():
+		sources.append({"source_id": &"defender_anchor", "label": "Marco de Guarda", "increased": {&"physical_defense": DEFENDER_ANCHOR_DEFENSE_BONUS, &"magic_defense": DEFENDER_ANCHOR_DEFENSE_BONUS}})
 	return run_state.build_snapshot.stat_breakdown(sources)
 
 func _draw() -> void:
