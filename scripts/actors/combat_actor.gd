@@ -125,6 +125,13 @@ func apply_attribute_debuff(attribute: StringName, source: StringName, fraction:
 	queue_redraw()
 	return true
 
+func remove_attribute_debuff(attribute: StringName, source: StringName) -> bool:
+	if not attribute_debuffs.remove(attribute, source):
+		return false
+	_sync_debuff_display()
+	queue_redraw()
+	return true
+
 func apply_slow(fraction: float, duration: float, source: StringName = &"") -> void:
 	# Legacy direct callers use the magnitude as identity; skill callers provide an ID.
 	var resolved_source := source if not source.is_empty() else StringName("slow_%d" % roundi(fraction * 1000.0))

@@ -4,6 +4,7 @@ extends CombatActor
 const IceWallScript = preload("res://scripts/world/ice_wall.gd")
 
 signal attack_requested(request: DamageRequest, target: CombatActor)
+signal defender_hit_requested(request: DamageRequest, target: CombatActor, root_duration: float, push_direction: Vector2)
 signal mage_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int)
 signal discharge_requested(request: DamageRequest, direction: Vector2, bonus_magic_damage: float)
 signal precision_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int, hit_limit: int)
@@ -108,6 +109,8 @@ var _attack_recovery := 0.0
 var _dash_active := false
 var _dash_endpoint := Vector2.ZERO
 var _dash_speed := 0.0
+var _defender_advance_targets: Array[CombatActor] = []
+var _defender_advance_hit := false
 var active_cast_skill: StringName = &""
 var active_cast_remaining := 0.0
 var active_cast_total := 0.0
@@ -272,6 +275,99 @@ func use_defender_counterstroke(direction: Vector2, enemies: Array[CombatActor])
 	presentation_action.emit(&"slash", facing, 0.20)
 	resources_changed.emit()
 	queue_redraw()
+	return true
+
+func defender_wall_advance_destination(direction: Vector2) -> Vector2:
+	if navigation == null or is_rooted():
+		return global_position
+	return navigation.move_until_blocked(global_position, global_position + _resolved_facing(direction) * skill_range(&"defender_wall_advance"))
+
+func use_defender_anchor(point: Vector2) -> bool:
+	var rank_definition := _runtime_rank_definition(&"defender_anchor")
+	if not _is_defender() or rank_definition == null or not _can_spend(&"defender_anchor") or navigation == null:
+		return false
+	var center := global_position + (point - global_position).limit_length(rank_definition.range)
+	if not center.is_finite() or not navigation.is_walkable(center):
+		return false
+	_spend(&"defender_anchor")
+	defender_anchor_center = center
+	defender_anchor_remaining = rank_definition.power
+	_update_defender_anchor_presence()
+	resources_changed.emit()
+	return true
+
+func use_defender_line_lock(direction: Vector2, enemies: Array[CombatActor]) -> bool:
+	var rank_definition := _runtime_rank_definition(&"defender_line_lock")
+	if not _is_defender() or rank_definition == null or not _can_spend(&"defender_line_lock"):
+		return false
+	var facing := _resolved_facing(direction)
+	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
+	_spend(&"defender_line_lock")
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(&"defender_line_lock")
+	for enemy: CombatActor in enemies.duplicate():
+		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
+			continue
+		if not SkillGeometry.strip_contains(enemy.global_position - global_position, facing, SkillGeometry.DEFENDER_LINE_LOCK_LENGTH, SkillGeometry.DEFENDER_LINE_LOCK_HALF_WIDTH, enemy.collision_radius):
+			continue
+		if not navigation.is_segment_clear(global_position, enemy.global_position, 0.0):
+			continue
+		var request := _make_physical_request(enemy, &"defender_line_lock", stat_breakdown.value(&"melee_attack") * rank_definition.power, definition.accuracy_mode, definition.can_crit)
+		defender_hit_requested.emit(request, enemy, rank_definition.secondary_power, Vector2.ZERO)
+	presentation_action.emit(&"slash", facing, 0.20)
+	resources_changed.emit()
+	return true
+
+func use_defender_wall_advance(direction: Vector2, enemies: Array[CombatActor]) -> bool:
+	var rank_definition := _runtime_rank_definition(&"defender_wall_advance")
+	if not _is_defender() or rank_definition == null or not _can_spend(&"defender_wall_advance") or is_rooted():
+		return false
+	var facing := _resolved_facing(direction)
+	var endpoint := defender_wall_advance_destination(facing)
+	var distance := global_position.distance_to(endpoint)
+	if distance <= MOVEMENT_EPSILON:
+		return false
+	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
+	_spend(&"defender_wall_advance")
+	reveal_from_offense()
+	_dash_endpoint = endpoint
+	_dash_speed = distance / DASH_DURATION
+	_dash_active = true
+	defender_advance_guard_active = true
+	defender_advance_guard_facing = facing
+	_defender_advance_targets = enemies.duplicate()
+	_defender_advance_hit = false
+	_path.clear()
+	_has_path_goal = false
+	velocity = Vector2.ZERO
+	_attack_recovery = 0.0
+	_repath_time = 0.0
+	presentation_action.emit(&"dash", facing, DASH_DURATION)
+	resources_changed.emit()
+	return true
+
+func use_defender_reprisal_wave(enemies: Array[CombatActor]) -> bool:
+	var rank_definition := _runtime_rank_definition(&"defender_reprisal_wave")
+	if not _is_defender() or rank_definition == null or not _can_spend(&"defender_reprisal_wave"):
+		return false
+	var center := defender_anchor_center if has_defender_anchor() else global_position
+	var empowered := has_defender_token()
+	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
+	_spend(&"defender_reprisal_wave")
+	if empowered:
+		defender_token_remaining = 0.0
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(&"defender_reprisal_wave")
+	var weight := rank_definition.power + (0.35 if empowered else 0.0)
+	for enemy: CombatActor in enemies.duplicate():
+		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive() or center.distance_to(enemy.global_position) > SkillGeometry.DEFENDER_REPRISAL_WAVE_RADIUS + enemy.collision_radius:
+			continue
+		if not navigation.is_segment_clear(center, enemy.global_position, 0.0):
+			continue
+		var request := _make_physical_request(enemy, &"defender_reprisal_wave", stat_breakdown.value(&"melee_attack") * weight, definition.accuracy_mode, definition.can_crit)
+		var push := (enemy.global_position - center).normalized() if empowered else Vector2.ZERO
+		defender_hit_requested.emit(request, enemy, 0.0, push)
+	resources_changed.emit()
 	return true
 
 func use_dash(direction: Vector2) -> bool:
@@ -620,6 +716,8 @@ func clear_defender_state() -> void:
 	defender_token_remaining = 0.0
 	defender_counter_guard_remaining = 0.0
 	defender_advance_guard_active = false
+	_defender_advance_targets.clear()
+	_defender_advance_hit = false
 	defender_guard_return_cooldown = 0.0
 	defender_anchor_remaining = 0.0
 	defender_anchor_center = Vector2.INF
@@ -1157,6 +1255,8 @@ func _process(delta: float) -> void:
 	if _dash_active:
 		if is_rooted():
 			_dash_active = false
+			defender_advance_guard_active = false
+			_defender_advance_targets.clear()
 			velocity = Vector2.ZERO
 			return
 		_advance_dash(delta)
@@ -1203,22 +1303,42 @@ func _advance_active_cast(delta: float) -> void:
 	skill_cast_ready.emit(completed_skill, completed_point, completed_target_id)
 
 func _advance_dash(delta: float) -> void:
+	var previous_position := global_position
 	var distance := global_position.distance_to(_dash_endpoint)
 	if distance <= MOVEMENT_EPSILON:
 		global_position = _dash_endpoint
 		_dash_active = false
 		defender_advance_guard_active = false
+		_defender_advance_targets.clear()
 		_update_defender_anchor_presence()
 		return
 	var next_position := global_position.move_toward(_dash_endpoint, _dash_speed * delta)
 	var safe_position := navigation.move_until_blocked(global_position, next_position)
 	global_position = safe_position
+	_try_defender_advance_hit(previous_position, global_position)
 	_update_defender_anchor_presence()
 	if safe_position.distance_to(next_position) > MOVEMENT_EPSILON or global_position.distance_to(_dash_endpoint) <= MOVEMENT_EPSILON:
 		global_position = safe_position if safe_position.distance_to(next_position) > MOVEMENT_EPSILON else _dash_endpoint
 		_dash_active = false
 		defender_advance_guard_active = false
+		_defender_advance_targets.clear()
 		_update_defender_anchor_presence()
+
+func _try_defender_advance_hit(from: Vector2, to: Vector2) -> void:
+	if not defender_advance_guard_active or _defender_advance_hit or from.distance_to(to) <= MOVEMENT_EPSILON:
+		return
+	var definition := ClassCatalog.skill_definition(&"defender_wall_advance")
+	var rank_definition := _runtime_rank_definition(&"defender_wall_advance")
+	for enemy: CombatActor in _defender_advance_targets:
+		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
+			continue
+		var closest := Geometry2D.get_closest_point_to_segment(enemy.global_position, from, to)
+		if closest.distance_to(enemy.global_position) > collision_radius + enemy.collision_radius:
+			continue
+		_defender_advance_hit = true
+		var request := _make_physical_request(enemy, &"defender_wall_advance", stat_breakdown.value(&"melee_attack") * rank_definition.power, definition.accuracy_mode, definition.can_crit)
+		defender_hit_requested.emit(request, enemy, 0.0, defender_advance_guard_facing)
+		return
 
 func _regenerate_sp(delta: float, simulation_paused: bool) -> bool:
 	if simulation_paused or not is_alive() or current_sp >= max_sp:

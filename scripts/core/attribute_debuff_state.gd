@@ -46,6 +46,17 @@ func remaining(attribute: StringName, source: StringName = &"") -> float:
 		longest = maxf(longest, float(entry["remaining"]))
 	return longest
 
+func remove(attribute: StringName, source: StringName) -> bool:
+	var entries: Dictionary = _entries.get(attribute, {})
+	if not entries.has(source):
+		return false
+	entries.erase(source)
+	if entries.is_empty():
+		_entries.erase(attribute)
+	else:
+		_entries[attribute] = entries
+	return true
+
 func advance(delta: float) -> bool:
 	if not is_finite(delta) or delta <= 0.0:
 		return false

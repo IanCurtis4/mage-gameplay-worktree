@@ -24,6 +24,7 @@ var arena_view: ArenaView
 var player: PlayerActor
 var enemies: Array[CombatActor] = []
 var _credited_kills: Dictionary[int, bool] = {}
+var _defender_slowed_enemies: Dictionary[int, CombatActor] = {}
 var reward: RewardPickup
 var encounter_index := 0
 var encounter_active := false
@@ -98,6 +99,7 @@ func _ready() -> void:
 	player.configure(navigation, run_state)
 	player.global_position = Vector2(300, 520)
 	player.attack_requested.connect(_on_attack_requested)
+	player.defender_hit_requested.connect(_on_defender_hit_requested)
 	player.mage_projectile_requested.connect(_on_mage_projectile_requested)
 	player.discharge_requested.connect(_on_discharge_requested)
 	player.precision_projectile_requested.connect(_on_precision_projectile_requested)
@@ -135,6 +137,8 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	player.regenerate_hp(_delta, encounter_active, get_tree().paused or run_finished)
+	if not get_tree().paused and not run_finished:
+		_sync_defender_anchor()
 	_update_hud()
 	if not get_tree().paused and not run_finished:
 		if _world_pointer_available():
@@ -348,6 +352,27 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 				status_label.text = "Abrigo de Folhagem cancelado — POSIÇÃO BLOQUEADA"
 			else:
 				_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.DEFENDER_COUNTERSTROKE:
+		if not player.use_defender_counterstroke(direction, enemies):
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.DEFENDER_ANCHOR:
+		if player.use_defender_anchor(point):
+			battle_indicators.show_defender_anchor(player.defender_anchor_center, player.defender_anchor_remaining)
+			_sync_defender_anchor()
+		else:
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.DEFENDER_LINE_LOCK:
+		if not player.use_defender_line_lock(direction, enemies):
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.DEFENDER_WALL_ADVANCE:
+		if not player.use_defender_wall_advance(direction, enemies):
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.DEFENDER_REPRISAL_WAVE:
+		var center := player.defender_anchor_center if player.has_defender_anchor() else player.global_position
+		if player.use_defender_reprisal_wave(enemies):
+			battle_indicators.show_defender_reprisal_wave(center)
+		else:
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 
 func _report_skill_failure(skill: StringName, selected_target: CombatActor = null) -> void:
 	var definition := ClassCatalog.skill_definition(skill)
@@ -403,8 +428,16 @@ func _update_aim(point: Vector2) -> void:
 		state = "POSIÇÃO BLOQUEADA"
 	elif skill == &"ice_wall" and not player.can_place_ice_wall(player.aim_direction(point), enemies):
 		state = "POSIÇÃO BLOQUEADA"
+	elif skill == &"defender_anchor" and not navigation.is_walkable(BattleIndicators.defender_clamped_point(player.global_position, point, player.skill_range(skill))):
+		state = "POSIÇÃO BLOQUEADA"
+	elif skill == &"defender_wall_advance" and player.defender_wall_advance_destination(player.aim_direction(point)).distance_to(player.global_position) <= PlayerActor.MOVEMENT_EPSILON:
+		state = "TRAJETO BLOQUEADO"
 	if _world_pointer_available():
-		battle_indicators.show_aim(skill, player, point, state in ["PRONTO", "DESLIGAR"], selected_target)
+		if skill in [&"defender_counterstroke", &"defender_anchor", &"defender_line_lock", &"defender_wall_advance", &"defender_reprisal_wave"]:
+			var advance_endpoint := player.defender_wall_advance_destination(player.aim_direction(point)) if skill == &"defender_wall_advance" else Vector2.INF
+			battle_indicators.show_defender_aim(skill, player, point, state == "PRONTO", advance_endpoint, player.skill_range(skill), player.defender_anchor_center if player.has_defender_anchor() else Vector2.INF)
+		else:
+			battle_indicators.show_aim(skill, player, point, state in ["PRONTO", "DESLIGAR"], selected_target)
 	else:
 		battle_indicators.clear_aim()
 	var action := "Solte a tecla ou clique" if cast_intent.mode == CastIntent.Mode.RELEASE else "Clique para lançar"
@@ -493,6 +526,34 @@ func _spawn_encounter(index: int) -> void:
 func _on_attack_requested(request: DamageRequest, target_actor: CombatActor) -> void:
 	if target_actor != null and target_actor.is_alive():
 		target_actor.apply_damage(request, rng)
+
+func _on_defender_hit_requested(request: DamageRequest, target_actor: CombatActor, root_duration: float, push_direction: Vector2) -> void:
+	if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
+		return
+	var result := target_actor.apply_damage(request, rng)
+	if not bool(result.get("can_trigger_effects", false)) or float(result.get("actual_damage", 0.0)) <= 0.0 or not target_actor.is_alive():
+		return
+	if root_duration > 0.0:
+		target_actor.apply_root(root_duration, &"physical")
+	if not push_direction.is_zero_approx() and target_actor is EnemyActor:
+		(target_actor as EnemyActor).apply_defender_push(push_direction, PlayerActor.DEFENDER_PUSH_DISTANCE)
+
+func _sync_defender_anchor() -> void:
+	var active := player != null and is_instance_valid(player) and player.has_defender_anchor()
+	for enemy_id: int in _defender_slowed_enemies.keys():
+		var previous: CombatActor = _defender_slowed_enemies[enemy_id]
+		if not is_instance_valid(previous) or not active or previous.global_position.distance_to(player.defender_anchor_center) > SkillGeometry.DEFENDER_ANCHOR_RADIUS:
+			if is_instance_valid(previous):
+				previous.remove_attribute_debuff(AttributeDebuffState.MOVE_SPEED, &"defender_anchor")
+			_defender_slowed_enemies.erase(enemy_id)
+	if not active:
+		return
+	for enemy: CombatActor in enemies:
+		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive() or enemy.global_position.distance_to(player.defender_anchor_center) > SkillGeometry.DEFENDER_ANCHOR_RADIUS:
+			continue
+		if not _defender_slowed_enemies.has(enemy.get_instance_id()):
+			_defender_slowed_enemies[enemy.get_instance_id()] = enemy
+			enemy.apply_slow(PlayerActor.DEFENDER_ANCHOR_SLOW_FRACTION, player.defender_anchor_remaining, &"defender_anchor")
 
 func _on_mage_projectile_requested(skill_id: StringName, request: DamageRequest, target_actor: CombatActor, direction: Vector2, count: int) -> void:
 	var definition := ClassCatalog.skill_definition(skill_id)
@@ -709,6 +770,7 @@ func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActo
 	projectile.add_to_group("enemy_projectiles")
 
 func _on_enemy_died(actor: CombatActor) -> void:
+	_defender_slowed_enemies.erase(actor.get_instance_id())
 	_spawn_death_visual(actor)
 	if actor == _hovered_enemy:
 		_hovered_enemy = null
@@ -722,6 +784,7 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	player.clear_shield_stance()
 	player.clear_perseverance()
 	player.clear_fury()
+	_clear_defender_runtime()
 	trap_registry.clear_all(&"encounter_end")
 	for group_name: StringName in [&"enemy_projectiles", &"player_projectiles", &"player_effects"]:
 		for runtime_node: Node in get_tree().get_nodes_in_group(group_name):
@@ -738,7 +801,14 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	status_label.text = "Encontro concluído — toque no cristal dourado"
 
 func _on_enemy_damage_resolved(result: Dictionary) -> void:
-	if not bool(result.get("killed", false)) or player == null or not is_instance_valid(player) or not player.is_alive() or int(result.get("source_id", 0)) != player.get_instance_id():
+	if player == null or not is_instance_valid(player) or not player.is_alive() or int(result.get("source_id", 0)) != player.get_instance_id():
+		return
+	if player.run_state != null and player.run_state.uses_persistent_build() and player.run_state.build_snapshot.evolution_id == &"defender" and &"defender_watch" in player.run_state.build_snapshot.passive_slots and bool(result.get("can_trigger_effects", false)) and float(result.get("actual_damage", 0.0)) > 0.0 and StringName(result.get("skill_id", &"")) in [&"basic_attack", &"cone_slash", &"defender_counterstroke", &"defender_line_lock", &"defender_wall_advance", &"defender_reprisal_wave"]:
+		var watch_rank := ClassCatalog.skill_definition(&"defender_watch").rank_definition(player.skill_rank(&"defender_watch"))
+		var watch_target := instance_from_id(int(result.get("target_id", 0))) as CombatActor
+		if watch_rank != null and watch_target != null and is_instance_valid(watch_target) and watch_target.is_alive():
+			watch_target.apply_weaken(watch_rank.power, PlayerActor.DEFENDER_WATCH_DURATION, &"defender_watch")
+	if not bool(result.get("killed", false)):
 		return
 	var victim_id := int(result.get("target_id", 0))
 	if victim_id <= 0 or _credited_kills.has(victim_id):
@@ -857,6 +927,7 @@ func _show_result(victory: bool) -> void:
 	player.clear_shield_stance()
 	player.clear_perseverance()
 	player.clear_fury()
+	_clear_defender_runtime()
 	player.clear_foliage_shelters()
 	for shelter: Node in get_tree().get_nodes_in_group("foliage_shelters"):
 		if shelter is FoliageShelter:
@@ -874,6 +945,16 @@ func _show_result(victory: bool) -> void:
 	result_body.text = ("Os dois encontros do Marco 1 foram vencidos.\n" if victory else "A run terminou e todo o estado temporário será descartado.\n") + next_step
 	result_overlay.visible = true
 	get_tree().paused = true
+
+func _clear_defender_runtime() -> void:
+	for enemy: CombatActor in _defender_slowed_enemies.values():
+		if is_instance_valid(enemy):
+			enemy.remove_attribute_debuff(AttributeDebuffState.MOVE_SPEED, &"defender_anchor")
+	_defender_slowed_enemies.clear()
+	if player != null and is_instance_valid(player):
+		player.clear_defender_state()
+	if battle_indicators != null and is_instance_valid(battle_indicators):
+		battle_indicators.clear_defender_anchor()
 
 func _restart_run() -> void:
 	if _persistent_run_active():

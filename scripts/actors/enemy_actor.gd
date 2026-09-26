@@ -16,6 +16,16 @@ var _navigation_revision := 0
 var player_target_acquired := false
 var taunt_remaining := 0.0
 
+func apply_defender_push(direction: Vector2, distance: float) -> float:
+	if not is_alive() or hard_controls.boss or navigation == null or direction.is_zero_approx() or distance <= 0.0:
+		return 0.0
+	var before := global_position
+	global_position = navigation.move_until_blocked(before, before + direction.normalized() * distance)
+	_path.clear()
+	_path_index = 0
+	_repath_time = 0.0
+	return before.distance_to(global_position)
+
 func configure(enemy_type: StringName, nav: ArenaNavigation, target_player: PlayerActor) -> void:
 	archetype = enemy_type
 	navigation = nav
