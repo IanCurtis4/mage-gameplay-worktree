@@ -1,3 +1,12 @@
+> Atualização normativa de 26/09/2026: usuário determinou entregas granulares
+> com revisão Astra somente por escopo completo (agora: uma classe).
+> Sem handoff/gate por microtarefa; manter um checkpoint consolidado por classe.
+> Sol conduz e valida Terra/Luna internamente. Escalar antes apenas bloqueios
+> ou mudanças relevantes fora do contrato aprovado. Instruções antigas de
+> parar/acionar Astra após cada pacote ficam substituídas por esta regra.
+> Escopo atual: docs/E05_DEFENDER_CHECKPOINT.md. Aceite de produto e merge
+> após playtest permanecem. Demais épicos não são liberados por esta mudança.
+
 # Desenvolvimento, revisão e playtest
 
 Fluxo autorizado pelo usuário em 11/09/2026. Substitui as restrições anteriores
@@ -80,3 +89,4 @@ O ciclo de revisão é executado durante a tarefa ativa, usando envio de mensage
 espera por conclusão. Não há monitor em segundo plano ou automação recorrente criada.
 Aceite técnico não afirma aprovação visual, de diversão ou de FPS sem evidência.
 O jogo permanece no mesmo caminho mesmo que a tarefa original esteja em outra worktree.
+

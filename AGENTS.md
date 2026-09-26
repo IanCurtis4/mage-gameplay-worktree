@@ -1,3 +1,12 @@
+> Atualização normativa de 26/09/2026: usuário determinou entregas granulares
+> com revisão Astra somente por escopo completo (agora: uma classe).
+> Sem handoff/gate por microtarefa; manter um checkpoint consolidado por classe.
+> Sol conduz e valida Terra/Luna internamente. Escalar antes apenas bloqueios
+> ou mudanças relevantes fora do contrato aprovado. Instruções antigas de
+> parar/acionar Astra após cada pacote ficam substituídas por esta regra.
+> Escopo atual: docs/E05_DEFENDER_CHECKPOINT.md. Aceite de produto e merge
+> após playtest permanecem. Demais épicos não são liberados por esta mudança.
+
 # RagRPG — instruções para colaboradores
 
 - Leia `docs/MVP.md`, `docs/ARCHITECTURE.md` e o handoff correspondente antes de editar.
@@ -27,3 +36,4 @@
 - Preserve arquivos do usuário. Não adicione `.tools`, `.godot` ou builds ao Git.
 - Execute `tools/verify.ps1`; acrescente testes de invariantes para mudanças em regras.
 - Encerre com resumo de mudanças, evidências de validação e limitações concretas.
+

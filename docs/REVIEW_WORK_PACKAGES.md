@@ -1,3 +1,12 @@
+> Atualização normativa de 26/09/2026: usuário determinou entregas granulares
+> com revisão Astra somente por escopo completo (agora: uma classe).
+> Sem handoff/gate por microtarefa; manter um checkpoint consolidado por classe.
+> Sol conduz e valida Terra/Luna internamente. Escalar antes apenas bloqueios
+> ou mudanças relevantes fora do contrato aprovado. Instruções antigas de
+> parar/acionar Astra após cada pacote ficam substituídas por esta regra.
+> Escopo atual: docs/E05_DEFENDER_CHECKPOINT.md. Aceite de produto e merge
+> após playtest permanecem. Demais épicos não são liberados por esta mudança.
+
 # Revisão dos documentos Luna e proposta de pacotes de trabalho
 
 14/09/2026 — **PROTOCOLO APROVADO pelo usuário na retomada de E01.**
@@ -258,3 +267,4 @@ Sol para sistemas e Astra para contratos críticos e fechamento. Atualizar os
 quatro documentos operacionais citados após aceite dessa proposta, preservando
 os épicos reservados e o playtest por épico/subépico. Esse é o próximo passo
 documental; execução dos pacotes continua dependendo da liberação do escopo.
+
