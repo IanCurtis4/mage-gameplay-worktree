@@ -32,7 +32,16 @@ usado por novas fixtures de evolução. Sem novas skills ou migração no SP1.
 | `9ea8bcf` | Catálogo 3 aceita catálogo 2 por migração aditiva, preservando schema 2, ruleset e backup; fixture isolada valida round-trip e rejeição de versão futura. | Registrar sete IDs do Defendente mantendo `content_ready=false`, depois integrar a guarda e as skills. |
 | `8f8b602` | Sete IDs, ranks e gates job do Defendente; biblioteca de produção ainda indisponível. Geometria de mira/VFX provisória, sem dano. Testes dirigidos de catálogo, identidade e indicadores passaram. | Integrar guarda/token, cinco ativas, duas passivas e consumidores. |
 | `219dbfe` | Contraforte R1, janela frontal capturada, mitigação máxima (sem soma), token de 8 s, consumo no commit, interceptação e Resguardo equipável; fixture de ator cobre 11 invariantes. | Conectar input/HUD/controller, Marco, Trava, Avanço, Onda e Vigília. |
-| a registrar | Cinco ativas e duas passivas conectadas ao ator/controller; Marco aplica/retira slow por posição, Trava usa CC canônico, Avanço/Onda empurram só normais após dano real. Teste dirigido 15 checks; `tools/verify.ps1` passou integralmente com `content_ready=false`. | Fechar invariantes de boss, duas builds e persistência/UI; só então habilitar Defendente e repetir verify. |
+| `a5857da` | Cinco ativas e duas passivas conectadas ao ator/controller; Marco aplica/retira slow por posição, Trava usa CC canônico, Avanço/Onda empurram só normais após dano real. Teste dirigido 15 checks; `tools/verify.ps1` passou integralmente com `content_ready=false`. | Fechar invariantes de boss, duas builds e persistência/UI; só então habilitar Defendente e repetir verify. |
+| `5315f4d` | Duas builds de 13/19 base e 16/20 ou 15/20 evolução compradas/equipadas, persistidas e carregadas em run; R0/R1/R5, boss sem adds, pausa, flanco, saída do Marco e procs secundários testados. Apenas Defendente recebe `content_ready=true`. `tools/verify.ps1` integral (75 suítes) e smoke headless passaram no Godot 4.7.2. | Checkpoint consolidado para revisão técnica Astra; depois rebase/branch de playtest, sem merge antes do aceite do usuário. |
+
+## Roteiro de playtest após revisão Astra
+
+1. No menu, evoluir um Espadachim elegível, confirmar o Contraforte R1 gratuito sem autoequipamento, comprar/equipar cada uma das duas builds da tabela do contrato e reiniciar o jogo para verificar o reload.
+2. Na arena, observar mira de cone/faixa/Marco/Avanço, bônus de DEF e slow só dentro do Marco; testar Onda no Marco e fora dele, parede frontal/flanco, escudo de Perseverança, Fúria e SP de Resguardo.
+3. Em boss sem adds, confirmar dano da Trava/Onda com CC dentro do orçamento e sem empurrão; testar pausa, morte, fim de encontro e volta ao menu para ausência de zona/token remanescente.
+
+VFX e mira são provisórios, sem arte final. Os testes headless cobrem regras e fluxos de UI/persistência, mas não substituem percepção visual, jogabilidade nem balanceamento no Godot interativo. Nenhum save real foi usado nos testes. `master` e `codex/playtest` não foram alteradas.
 
 Decisão de versionamento: os IDs de skill exclusivos passarão a ser ranks
 persistíveis, então `catalog_version` sobe de 2 para 3 antes do registro. O
