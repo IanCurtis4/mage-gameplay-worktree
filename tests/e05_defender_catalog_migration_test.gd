@@ -48,9 +48,47 @@ func _run() -> void:
 	future_data["catalog_version"] = 4
 	var future := ProfileCodec.decode(JSON.stringify(future_data))
 	_check(not future["ok"] and future["error_code"] == &"invalid_catalog", "unknown future catalog stays incompatible")
+	_check_catalog_backup_guard(profile, old_text)
 	_cleanup_directory()
 	print("E05 Defendente migração catálogo: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
 	quit(0 if failures == 0 else 1)
+
+func _check_catalog_backup_guard(source: ProfileState, primary_text: String) -> void:
+	var newer := source.copy_state()
+	newer.revision = source.revision + 5
+	var newer_encoded := ProfileCodec.encode(newer)
+	var newer_data: Dictionary = newer_encoded["data"].duplicate(true)
+	newer_data["catalog_version"] = ProfileCodec.PRE_DEFENDER_CATALOG_VERSION
+	var newer_text := JSON.stringify(newer_data, "\t")
+	_assert_protected_backup(primary_text, newer_text, "newer same-profile catalog-2 backup")
+	var foreign := ProfileState.new("123e4567-e89b-42d3-a456-426614174067")
+	foreign.revision = 1
+	var foreign_encoded := ProfileCodec.encode(foreign)
+	var foreign_data: Dictionary = foreign_encoded["data"].duplicate(true)
+	foreign_data["catalog_version"] = ProfileCodec.PRE_DEFENDER_CATALOG_VERSION
+	var foreign_text := JSON.stringify(foreign_data, "\t")
+	_assert_protected_backup(primary_text, foreign_text, "different-profile catalog-2 backup")
+	_cleanup_directory()
+	DirAccess.make_dir_recursive_absolute(directory)
+	var older := source.copy_state()
+	older.revision = source.revision - 1
+	var older_encoded := ProfileCodec.encode(older)
+	var older_data: Dictionary = older_encoded["data"].duplicate(true)
+	older_data["catalog_version"] = ProfileCodec.PRE_DEFENDER_CATALOG_VERSION
+	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), primary_text)
+	_write_text(directory.path_join(ProfileStore.BACKUP_FILE), JSON.stringify(older_data, "\t"))
+	var migrated := ProfileStore.new(directory).load_profile()
+	_check(migrated["ok"] and migrated.get("migrated", false) and migrated["profile"].revision == source.revision + 1, "compatible older catalog-2 backup permits normal migration")
+	_check(_read_text(directory.path_join(ProfileStore.BACKUP_FILE)) == primary_text, "successful migration preserves exact former primary as backup")
+
+func _assert_protected_backup(primary_text: String, backup_text: String, description: String) -> void:
+	_cleanup_directory()
+	DirAccess.make_dir_recursive_absolute(directory)
+	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), primary_text)
+	_write_text(directory.path_join(ProfileStore.BACKUP_FILE), backup_text)
+	var result := ProfileStore.new(directory).load_profile()
+	_check(not result["ok"] and result["error_code"] == &"recovery_required" and result.get("read_only", false), "%s requires read-only recovery" % description)
+	_check(_read_text(directory.path_join(ProfileStore.PRIMARY_FILE)) == primary_text and _read_text(directory.path_join(ProfileStore.BACKUP_FILE)) == backup_text and not FileAccess.file_exists(directory.path_join(ProfileStore.PENDING_FILE)), "%s preserves both payloads byte-for-byte" % description)
 
 func _write_text(path: String, value: String) -> void:
 	var file := FileAccess.open(path, FileAccess.WRITE)

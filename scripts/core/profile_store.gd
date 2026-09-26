@@ -200,9 +200,14 @@ func _guard_existing_backup(primary_result: Dictionary) -> Dictionary:
 		if _must_preserve_incompatible(backup):
 			return {"ok": false, "error_code": backup["error_code"], "read_only": true}
 		return {"ok": true}
-	if backup.get("migrated", false):
-		return {"ok": true}
-	if primary_result.get("migrated", false):
+	# Catalog migrations retain profile identity and revision, so their decoded
+	# states must obey the same backup ordering guard as current-catalog saves.
+	# Schema-1 has no comparable identity and needs explicit recovery instead.
+	if primary_result.get("migration_kind", &"") == &"schema_v1" or backup.get("migration_kind", &"") == &"schema_v1":
+		# Recovery first copies a schema-1 backup verbatim to primary; only that
+		# identical pair can be safely advanced without a stable legacy ID.
+		if primary_result.get("migration_kind", &"") == &"schema_v1" and backup.get("migration_kind", &"") == &"schema_v1" and FileAccess.get_file_as_bytes(_path(PRIMARY_FILE)) == FileAccess.get_file_as_bytes(_path(BACKUP_FILE)):
+			return {"ok": true}
 		return {"ok": false, "error_code": &"recovery_required", "read_only": true}
 	var primary_profile: ProfileState = primary_result["profile"]
 	var backup_profile: ProfileState = backup["profile"]
