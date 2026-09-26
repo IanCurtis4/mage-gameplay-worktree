@@ -25,6 +25,19 @@ Lista vazia em snapshots sintéticos mantém compatibilidade dos testes antigos;
 a fachada persistente sempre fornece biblioteca. Este fallback não deve ser
 usado por novas fixtures de evolução. Sem novas skills ou migração no SP1.
 
+## Progresso da classe
+
+| Commit | Comportamento fechado e teste | Pendência / próximo passo |
+|---|---|---|
+| a registrar | Catálogo 3 aceita catálogo 2 por migração aditiva, preservando schema 2, ruleset e backup; fixture isolada valida round-trip e rejeição de versão futura. | Registrar sete IDs do Defendente mantendo `content_ready=false`, depois integrar a guarda e as skills. |
+
+Decisão de versionamento: os IDs de skill exclusivos passarão a ser ranks
+persistíveis, então `catalog_version` sobe de 2 para 3 antes do registro. O
+codec só aceita o catálogo 2 com o ruleset atual; valida todos os campos no
+catálogo novo antes de o store publicar a migração transacional. O original
+fica no backup. Schema e ruleset não mudam, pois o formato e as fórmulas base
+não mudam. Nenhum save real é usado como fixture ou regravado nesta tarefa.
+
 ## Escopo liberado até a próxima revisão: Defendente completo
 
 Implementar cinco ativas e duas passivas de defender conforme
