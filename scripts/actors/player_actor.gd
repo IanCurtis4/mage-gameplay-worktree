@@ -72,6 +72,7 @@ const DEFENDER_COUNTER_GUARD_DURATION := 1.2
 const DEFENDER_COUNTER_GUARD_REDUCTION := 0.15
 const DEFENDER_ADVANCE_GUARD_REDUCTION := 0.20
 const DEFENDER_TOKEN_DURATION := 8.0
+const DEFENDER_TOKEN_NOTICE_DURATION := 1.5
 const DEFENDER_WATCH_DURATION := 2.5
 const DEFENDER_ANCHOR_DEFENSE_BONUS := 0.10
 const DEFENDER_ANCHOR_SLOW_FRACTION := 0.20
@@ -135,6 +136,8 @@ var concentrated_rage_visual_direction := Vector2.RIGHT
 var concentrated_rage_visual_range := 0.0
 var terrifying_shout_visual_time := 0.0
 var defender_token_remaining := 0.0
+var defender_token_notice := ""
+var defender_token_notice_remaining := 0.0
 var defender_counter_guard_remaining := 0.0
 var defender_counter_guard_facing := Vector2.RIGHT
 var defender_advance_guard_active := false
@@ -257,7 +260,7 @@ func use_defender_counterstroke(direction: Vector2, enemies: Array[CombatActor])
 	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
 	_spend(&"defender_counterstroke")
 	if empowered:
-		defender_token_remaining = 0.0
+		_consume_defender_token()
 	defender_counter_guard_remaining = DEFENDER_COUNTER_GUARD_DURATION
 	defender_counter_guard_facing = facing
 	reveal_from_offense()
@@ -359,7 +362,7 @@ func use_defender_reprisal_wave(enemies: Array[CombatActor]) -> bool:
 	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
 	_spend(&"defender_reprisal_wave")
 	if empowered:
-		defender_token_remaining = 0.0
+		_consume_defender_token()
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"defender_reprisal_wave")
 	var weight := rank_definition.power + (rank_definition.secondary_power if empowered else 0.0)
@@ -712,7 +715,9 @@ func _defender_active_equipped(skill_id: StringName) -> bool:
 func _grant_defender_front_event() -> void:
 	if not _is_defender() or skill_rank(&"defender_counterstroke") <= 0 or not is_alive():
 		return
+	var renewed := has_defender_token()
 	defender_token_remaining = DEFENDER_TOKEN_DURATION
+	_set_defender_token_notice("TOKEN RENOVADO" if renewed else "TOKEN PRONTO")
 	var return_rank := _runtime_rank_definition(&"defender_guard_return")
 	if return_rank != null and &"defender_guard_return" in run_state.build_snapshot.passive_slots and defender_guard_return_cooldown <= 0.0:
 		current_sp = minf(max_sp, current_sp + return_rank.power)
@@ -720,8 +725,35 @@ func _grant_defender_front_event() -> void:
 	resources_changed.emit()
 	queue_redraw()
 
+func _consume_defender_token() -> void:
+	defender_token_remaining = 0.0
+	_set_defender_token_notice("TOKEN CONSUMIDO")
+
+func _set_defender_token_notice(message: String) -> void:
+	defender_token_notice = message
+	defender_token_notice_remaining = DEFENDER_TOKEN_NOTICE_DURATION
+	queue_redraw()
+
+func defender_feedback_text() -> String:
+	if not _is_defender() or not is_alive():
+		return ""
+	var lines := PackedStringArray()
+	if has_defender_token():
+		lines.append("CONTRA-ATAQUE PRONTO · %.1fs" % defender_token_remaining)
+	elif defender_token_notice_remaining > 0.0:
+		lines.append(defender_token_notice)
+	else:
+		lines.append("CONTRA-ATAQUE SEM TOKEN")
+	if defender_counter_guard_remaining > 0.0:
+		lines.append("GUARDA FRONTAL · %.1fs" % defender_counter_guard_remaining)
+	elif defender_advance_guard_active:
+		lines.append("GUARDA FRONTAL · AVANÇO")
+	return "\n".join(lines)
+
 func clear_defender_state() -> void:
 	defender_token_remaining = 0.0
+	defender_token_notice = ""
+	defender_token_notice_remaining = 0.0
 	defender_counter_guard_remaining = 0.0
 	_stop_dash()
 	defender_guard_return_cooldown = 0.0
@@ -1188,8 +1220,14 @@ func _process(delta: float) -> void:
 	var simulation_paused := is_inside_tree() and get_tree().paused
 	if simulation_paused:
 		return
+	defender_token_notice_remaining = maxf(0.0, defender_token_notice_remaining - delta)
+	var token_was_active := defender_token_remaining > 0.0
 	defender_token_remaining = maxf(0.0, defender_token_remaining - delta)
+	if token_was_active and defender_token_remaining <= 0.0:
+		_set_defender_token_notice("TOKEN EXPIROU")
 	defender_counter_guard_remaining = maxf(0.0, defender_counter_guard_remaining - delta)
+	if defender_token_remaining > 0.0 or defender_counter_guard_remaining > 0.0 or defender_advance_guard_active:
+		queue_redraw()
 	defender_guard_return_cooldown = maxf(0.0, defender_guard_return_cooldown - delta)
 	if defender_anchor_remaining > 0.0:
 		defender_anchor_remaining = maxf(0.0, defender_anchor_remaining - delta)
@@ -1571,6 +1609,14 @@ func _build_stat_breakdown() -> StatBreakdown:
 
 func _draw() -> void:
 	super._draw()
+	if has_defender_token():
+		draw_arc(Vector2(0, -18), collision_radius + 25.0, 0.0, TAU, 40, Color("f5cc77", 0.75), 2.0, true)
+	if defender_counter_guard_remaining > 0.0:
+		var angle := defender_counter_guard_facing.angle()
+		draw_arc(Vector2(0, -18), SHIELD_RADIUS + 15.0, angle - SkillGeometry.DEFENDER_GUARD_HALF_ANGLE, angle + SkillGeometry.DEFENDER_GUARD_HALF_ANGLE, 26, Color("f5cc77", 0.92), 4.0, true)
+	elif defender_advance_guard_active:
+		var angle := defender_advance_guard_facing.angle()
+		draw_arc(Vector2(0, -18), SHIELD_RADIUS + 15.0, angle - SkillGeometry.DEFENDER_GUARD_HALF_ANGLE, angle + SkillGeometry.DEFENDER_GUARD_HALF_ANGLE, 26, Color("7bd5e5", 0.92), 4.0, true)
 	if terrifying_shout_visual_time > 0.0:
 		var progress := 1.0 - terrifying_shout_visual_time / 0.28
 		draw_arc(Vector2(0, -18), lerpf(20.0, skill_range(&"terrifying_shout"), progress), 0.0, TAU, 48, Color(0.70, 0.44, 0.90, 1.0 - progress), 4.0, true)

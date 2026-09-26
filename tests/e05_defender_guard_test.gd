@@ -26,6 +26,7 @@ func _run() -> void:
 	var front := _request(enemy, player, false)
 	var guarded := player.apply_damage(front, rng)
 	_check(guarded["landed"] and guarded["actual_damage"] > 0.0 and player.has_defender_token(), "front direct hit grants one token after real guard mitigation")
+	_check(player.defender_feedback_text().contains("CONTRA-ATAQUE PRONTO") and player.defender_feedback_text().contains("GUARDA FRONTAL"), "runtime feedback exposes token and captured frontal guard")
 	var first_expiry := player.defender_token_remaining
 	var back_source := _enemy(Vector2(330, 350))
 	root.add_child(back_source)
@@ -35,6 +36,7 @@ func _run() -> void:
 	player.mage_cooldowns[&"defender_counterstroke"] = 0.0
 	emitted.clear()
 	_check(player.use_defender_counterstroke(Vector2.RIGHT, [enemy]) and emitted.size() == 1 and is_equal_approx(emitted[0].physical_damage, player.stat_breakdown.value(&"melee_attack") * 1.35) and not player.has_defender_token(), "next valid counterstroke consumes token once at commit for R1 bonus")
+	_check(player.defender_feedback_text().contains("TOKEN CONSUMIDO"), "token consumption has transient runtime feedback")
 	var sp_before_fail := player.current_sp
 	var cooldown_before_fail := player.skill_cooldown(&"defender_counterstroke")
 	_check(not player.use_defender_counterstroke(Vector2.RIGHT, [enemy]) and player.current_sp == sp_before_fail and player.skill_cooldown(&"defender_counterstroke") == cooldown_before_fail, "failed cooldown check spends neither SP nor token")
@@ -57,6 +59,25 @@ func _run() -> void:
 	_check(not shield_player.use_defender_counterstroke(Vector2.RIGHT, []) and shield_player.has_defender_token() and shield_player.current_sp == unequipped_sp, "learned but unequipped entry cannot spend the token")
 	var after_return := shield_player.current_sp
 	_check(shield_player.absorb_shield_projectile() and is_equal_approx(shield_player.current_sp, after_return), "second interception in the 2s internal window renews token without duplicate SP")
+	var hud := RunController.new()
+	hud.player = shield_player
+	hud.run_state = shield_player.run_state
+	hud.health_label = Label.new()
+	hud.sp_label = Label.new()
+	hud.skill_label = Label.new()
+	hud.defender_status_label = Label.new()
+	hud.augment_button = Button.new()
+	for widget: Control in [hud.health_label, hud.sp_label, hud.skill_label, hud.defender_status_label, hud.augment_button]:
+		hud.add_child(widget)
+	hud._update_hud()
+	_check(hud.defender_status_label.visible and hud.defender_status_label.text.contains("CONTRA-ATAQUE PRONTO"), "HUD reflects live token availability without an equipped entry")
+	shield_player._process(PlayerActor.DEFENDER_TOKEN_DURATION + 0.1)
+	hud._update_hud()
+	_check(not shield_player.has_defender_token() and hud.defender_status_label.text.contains("TOKEN EXPIROU"), "token expiry appears in the HUD")
+	shield_player._process(PlayerActor.DEFENDER_TOKEN_NOTICE_DURATION + 0.1)
+	hud._update_hud()
+	_check(hud.defender_status_label.text.contains("CONTRA-ATAQUE SEM TOKEN"), "expiry notice returns to the neutral HUD state")
+	hud.free()
 	shield_player.clear_defender_state()
 	var secondary_enemy := _enemy(Vector2(470, 350))
 	root.add_child(secondary_enemy)

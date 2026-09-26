@@ -41,6 +41,7 @@ var _reward_retry_pending := false
 var health_label: Label
 var sp_label: Label
 var skill_label: Label
+var defender_status_label: Label
 var status_label: Label
 var augment_button: Button
 var next_button: Button
@@ -1110,6 +1111,9 @@ func _update_hud() -> void:
 		var state := _display_skill_state(skill_id, cost)
 		skill_lines.append("%s  %s%s — %s" % [_skill_input_label(skill_id), definition.display_name, rank_text, state])
 	skill_label.text = "\n".join(skill_lines)
+	if defender_status_label != null:
+		defender_status_label.text = player.defender_feedback_text()
+		defender_status_label.visible = not defender_status_label.text.is_empty()
 	augment_button.text = "Escolher augment (E) — %d pendente(s)" % run_state.pending_choices
 	augment_button.visible = run_state.pending_choices > 0
 	if battle_controls != null:
@@ -1195,6 +1199,8 @@ func _build_ui() -> void:
 	hud_column.add_child(health_label)
 	hud_column.add_child(sp_label)
 	hud_column.add_child(skill_label)
+	defender_status_label = _make_label("", 16, Color("f5cc77"))
+	hud_column.add_child(defender_status_label)
 
 	help_panel = PanelContainer.new()
 	ui_root.add_child(help_panel)
