@@ -43,6 +43,13 @@ enum Handler {
 	TERRIFYING_SHOUT,
 	VIGOR,
 	BLOOD_THIRST,
+	DEFENDER_COUNTERSTROKE,
+	DEFENDER_WATCH,
+	DEFENDER_ANCHOR,
+	DEFENDER_LINE_LOCK,
+	DEFENDER_GUARD_RETURN,
+	DEFENDER_WALL_ADVANCE,
+	DEFENDER_REPRISAL_WAVE,
 }
 
 const MAX_ACTIVE_RANK := 5
@@ -68,7 +75,7 @@ const MAX_PASSIVE_RANK := 3
 func is_rank_catalog_valid() -> bool:
 	if category < Category.ACTIVE or category > Category.PASSIVE:
 		return false
-	if handler_id <= Handler.UNASSIGNED or handler_id > Handler.BLOOD_THIRST:
+	if handler_id <= Handler.UNASSIGNED or handler_id > Handler.DEFENDER_REPRISAL_WAVE:
 		return false
 	if action_kind < ActionKind.OFFENSIVE or action_kind > ActionKind.DEFENSIVE:
 		return false

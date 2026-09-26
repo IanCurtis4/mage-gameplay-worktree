@@ -135,6 +135,13 @@ static func _ensure_built() -> void:
 	_add_passive_skill(&"archer_precision", "Precisão")
 	_add_passive_skill(&"archer_cadence", "Cadência")
 	_add_passive_skill(&"trap_technique", "Técnica de Armadilhas")
+	_add_skill(&"defender_counterstroke", "Contraforte", "D", SkillDefinition.Targeting.DIRECTION, 16.0, 6.0, 1.05, 120.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, true, SkillDefinition.ActionKind.OFFENSIVE)
+	_add_passive_skill(&"defender_watch", "Vigília")
+	_add_skill(&"defender_anchor", "Marco de Guarda", "D", SkillDefinition.Targeting.POINT, 20.0, 12.0, 4.0, 150.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.DEFENSIVE)
+	_add_skill(&"defender_line_lock", "Trava de Linha", "D", SkillDefinition.Targeting.DIRECTION, 18.0, 9.0, 0.70, 170.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, true, SkillDefinition.ActionKind.OFFENSIVE)
+	_add_passive_skill(&"defender_guard_return", "Resguardo")
+	_add_skill(&"defender_wall_advance", "Avanço de Muralha", "D", SkillDefinition.Targeting.DIRECTION, 22.0, 10.0, 0.80, 80.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, true, SkillDefinition.ActionKind.OFFENSIVE)
+	_add_skill(&"defender_reprisal_wave", "Onda de Represália", "D", SkillDefinition.Targeting.SELF, 24.0, 12.0, 0.60, 130.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, true, SkillDefinition.ActionKind.OFFENSIVE)
 	_configure_slash_ranks()
 	_configure_dash_ranks()
 	_configure_shield_wall_ranks()
@@ -172,6 +179,13 @@ static func _ensure_built() -> void:
 	_configure_archer_precision_ranks()
 	_configure_archer_cadence_ranks()
 	_configure_trap_technique_ranks()
+	_configure_defender_counterstroke_ranks()
+	_configure_defender_watch_ranks()
+	_configure_defender_anchor_ranks()
+	_configure_defender_line_lock_ranks()
+	_configure_defender_guard_return_ranks()
+	_configure_defender_wall_advance_ranks()
+	_configure_defender_reprisal_wave_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -848,5 +862,118 @@ static func _configure_trap_technique_ranks() -> void:
 		rank.rank = index + 1
 		rank.power = armed_duration_bonuses[index]
 		rank.effect_ids = [&"trap_armed_duration_flat"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_defender_counterstroke_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"defender_counterstroke"]
+	definition.handler_id = SkillDefinition.Handler.DEFENDER_COUNTERSTROKE
+	var powers: Array[float] = [1.05, 1.25, 1.42, 1.56, 1.68]
+	var token_bonuses: Array[float] = [0.30, 0.40, 0.50, 0.60, 0.70]
+	var costs: Array[float] = [16.0, 18.0, 20.0, 21.0, 22.0]
+	for index: int in powers.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 6.0
+		rank.range = 120.0
+		rank.power = powers[index]
+		rank.secondary_power = token_bonuses[index]
+		rank.physical_weight = 1.0
+		rank.effect_ids = [&"direct_damage", &"front_guard_1_2s_15pct_130deg", &"guard_token_on_valid_front_event", &"consume_guard_token", &"damage_cone_90deg_120"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_defender_watch_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"defender_watch"]
+	definition.handler_id = SkillDefinition.Handler.DEFENDER_WATCH
+	var reductions: Array[float] = [0.08, 0.11, 0.14]
+	for index: int in reductions.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.power = reductions[index]
+		rank.effect_ids = [&"direct_melee_damage_dealt_reduction"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_defender_anchor_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"defender_anchor"]
+	definition.handler_id = SkillDefinition.Handler.DEFENDER_ANCHOR
+	var durations: Array[float] = [4.0, 4.5, 5.0, 5.5, 6.0]
+	var costs: Array[float] = [20.0, 22.0, 24.0, 25.0, 26.0]
+	for index: int in durations.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 12.0
+		rank.range = 150.0
+		rank.power = durations[index]
+		rank.effect_ids = [&"anchor_radius_100", &"defense_increased_physical_and_magic_10pct", &"enemy_slow_20pct"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_defender_line_lock_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"defender_line_lock"]
+	definition.handler_id = SkillDefinition.Handler.DEFENDER_LINE_LOCK
+	var root_durations: Array[float] = [0.5, 0.6, 0.7, 0.8, 0.9]
+	var costs: Array[float] = [18.0, 20.0, 22.0, 23.0, 24.0]
+	for index: int in root_durations.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 9.0
+		rank.range = 170.0
+		rank.power = 0.70
+		rank.secondary_power = root_durations[index]
+		rank.physical_weight = 1.0
+		rank.effect_ids = [&"direct_damage", &"line_width_44", &"physical_root_after_positive_damage", &"boss_cc_budget"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_defender_guard_return_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"defender_guard_return"]
+	definition.handler_id = SkillDefinition.Handler.DEFENDER_GUARD_RETURN
+	var sp_returns: Array[float] = [2.0, 3.0, 4.0]
+	for index: int in sp_returns.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.power = sp_returns[index]
+		rank.cooldown = 2.0
+		rank.effect_ids = [&"equipped_passive_front_guard_event_sp_return"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_defender_wall_advance_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"defender_wall_advance"]
+	definition.handler_id = SkillDefinition.Handler.DEFENDER_WALL_ADVANCE
+	var distances: Array[float] = [80.0, 95.0, 110.0, 120.0, 130.0]
+	var costs: Array[float] = [22.0, 24.0, 26.0, 27.0, 28.0]
+	for index: int in distances.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 10.0
+		rank.range = distances[index]
+		rank.power = 0.80
+		rank.physical_weight = 1.0
+		rank.effect_ids = [&"direct_damage_0_80_atk_body_one_target_per_path", &"front_guard_130deg_mitigation_20pct_during_displacement", &"normal_enemy_push_35", &"navigation_validate_segment", &"end_shield_wall"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_defender_reprisal_wave_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"defender_reprisal_wave"]
+	definition.handler_id = SkillDefinition.Handler.DEFENDER_REPRISAL_WAVE
+	var powers: Array[float] = [0.60, 0.73, 0.84, 0.93, 1.00]
+	var costs: Array[float] = [24.0, 26.0, 28.0, 29.0, 30.0]
+	for index: int in powers.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 12.0
+		rank.range = 130.0
+		rank.power = powers[index]
+		rank.secondary_power = 0.35
+		rank.physical_weight = 1.0
+		rank.effect_ids = [&"direct_area_pulse_radius_130", &"consume_guard_token_for_bonus_0_35_atk_body_and_normal_knockback_35", &"boss_damage_without_displacement"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())

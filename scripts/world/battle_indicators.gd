@@ -7,6 +7,17 @@ const READY_COLOR := Color("81dfd0")
 const BLOCKED_COLOR := Color("ff9a85")
 const TARGET_COLOR := Color("f5cc77")
 
+# Closed Defender geometry. These values are presentation-only; the combat
+# resolver remains the authority for valid targets and navigation.
+const DEFENDER_COUNTERSTROKE_RANGE := SkillGeometry.DEFENDER_COUNTERSTROKE_RANGE
+const DEFENDER_COUNTERSTROKE_HALF_ANGLE := SkillGeometry.DEFENDER_COUNTERSTROKE_HALF_ANGLE
+const DEFENDER_ANCHOR_RANGE := SkillGeometry.DEFENDER_ANCHOR_RANGE
+const DEFENDER_ANCHOR_RADIUS := SkillGeometry.DEFENDER_ANCHOR_RADIUS
+const DEFENDER_LINE_LOCK_LENGTH := SkillGeometry.DEFENDER_LINE_LOCK_LENGTH
+const DEFENDER_LINE_LOCK_HALF_WIDTH := SkillGeometry.DEFENDER_LINE_LOCK_HALF_WIDTH
+const DEFENDER_WALL_ADVANCE_MAX_DISTANCE := 130.0
+const DEFENDER_REPRISAL_WAVE_RADIUS := SkillGeometry.DEFENDER_REPRISAL_WAVE_RADIUS
+
 var skill: StringName = &""
 var origin := Vector2.ZERO
 var direction := Vector2.RIGHT
@@ -18,6 +29,10 @@ var click_position := Vector2.ZERO
 var click_lifetime := 0.0
 var click_is_target := false
 var target_actor: CombatActor
+var defender_anchor_position := Vector2.INF
+var defender_anchor_remaining := 0.0
+var defender_wave_position := Vector2.INF
+var defender_wave_lifetime := 0.0
 
 func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast: bool, selected_target: CombatActor = null) -> void:
 	skill = skill_id
@@ -47,6 +62,60 @@ func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast
 	available = can_cast
 	queue_redraw()
 
+# Defender call-site contract for RunController. For wall advance, pass the
+# endpoint already cleared by navigation and its current rank distance; this
+# view deliberately does not perform a second navigation decision.
+func show_defender_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast: bool, wall_advance_destination: Vector2 = Vector2.INF, wall_advance_range: float = DEFENDER_WALL_ADVANCE_MAX_DISTANCE, active_anchor: Vector2 = Vector2.INF) -> void:
+	show_aim(skill_id, actor, point, can_cast)
+	if skill_id == &"defender_counterstroke":
+		active_range = DEFENDER_COUNTERSTROKE_RANGE
+		endpoint = origin + direction * active_range
+	elif skill_id == &"defender_anchor":
+		active_range = DEFENDER_ANCHOR_RANGE
+		endpoint = defender_clamped_point(origin, point, active_range)
+	elif skill_id == &"defender_line_lock":
+		active_range = DEFENDER_LINE_LOCK_LENGTH
+		endpoint = origin + direction * active_range
+	elif skill_id == &"defender_wall_advance":
+		active_range = clampf(wall_advance_range, 0.0, DEFENDER_WALL_ADVANCE_MAX_DISTANCE)
+		endpoint = defender_wall_advance_endpoint(origin, direction, wall_advance_destination, active_range)
+	elif skill_id == &"defender_reprisal_wave":
+		active_range = DEFENDER_REPRISAL_WAVE_RADIUS
+		endpoint = active_anchor if active_anchor.is_finite() else origin
+	queue_redraw()
+
+func show_defender_anchor(center: Vector2, remaining: float) -> void:
+	defender_anchor_position = center
+	defender_anchor_remaining = maxf(0.0, remaining)
+	queue_redraw()
+
+func clear_defender_anchor() -> void:
+	defender_anchor_position = Vector2.INF
+	defender_anchor_remaining = 0.0
+	queue_redraw()
+
+func show_defender_reprisal_wave(center: Vector2) -> void:
+	defender_wave_position = center
+	defender_wave_lifetime = 0.32
+	queue_redraw()
+
+static func defender_clamped_point(origin_value: Vector2, point: Vector2, maximum_range: float) -> Vector2:
+	var offset := point - origin_value
+	return origin_value + offset.limit_length(maxf(0.0, maximum_range))
+
+static func defender_wall_advance_endpoint(origin_value: Vector2, direction_value: Vector2, safe_destination: Vector2, maximum_distance: float) -> Vector2:
+	var direction_normalized := direction_value.normalized()
+	if direction_normalized.is_zero_approx():
+		direction_normalized = Vector2.RIGHT
+	var requested := origin_value + direction_normalized * maxf(0.0, maximum_distance)
+	if not safe_destination.is_finite():
+		return requested
+	var safe_offset := safe_destination - origin_value
+	# A supplied destination may only shorten the requested rank distance.
+	if safe_offset.length() > maximum_distance or safe_offset.dot(direction_normalized) < 0.0:
+		return requested
+	return safe_destination
+
 func clear_aim() -> void:
 	skill = &""
 	queue_redraw()
@@ -61,6 +130,14 @@ func _process(delta: float) -> void:
 	if click_lifetime > 0.0:
 		click_lifetime = maxf(0.0, click_lifetime - delta)
 		queue_redraw()
+	if defender_anchor_remaining > 0.0:
+		defender_anchor_remaining = maxf(0.0, defender_anchor_remaining - delta)
+		if defender_anchor_remaining <= 0.0:
+			defender_anchor_position = Vector2.INF
+		queue_redraw()
+	if defender_wave_lifetime > 0.0:
+		defender_wave_lifetime = maxf(0.0, defender_wave_lifetime - delta)
+		queue_redraw()
 
 func _draw() -> void:
 	if click_lifetime > 0.0:
@@ -72,11 +149,30 @@ func _draw() -> void:
 		draw_arc(click_position, radius + 5.0, 0.0, TAU, 40, Color(color, color.a * 0.35), 1.0, true)
 		for axis: Vector2 in [Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT, Vector2.UP]:
 			draw_line(click_position + axis * (radius + 4), click_position + axis * (radius + 9), color, 2.0, true)
+	_draw_defender_anchor()
+	_draw_defender_wave()
 	if skill == &"":
 		return
 	var color := READY_COLOR if available else BLOCKED_COLOR
 	draw_arc(origin, body_radius + 5.0, 0.0, TAU, 40, Color(color, 0.6), 1.5, true)
-	if skill == &"slash":
+	if skill == &"defender_counterstroke":
+		_draw_defender_cone(color)
+	elif skill == &"defender_anchor":
+		draw_dashed_line(origin, endpoint, Color(color, 0.60), 1.5, 9.0, true, true)
+		draw_circle(endpoint, DEFENDER_ANCHOR_RADIUS, Color(color, 0.11))
+		draw_arc(endpoint, DEFENDER_ANCHOR_RADIUS, 0.0, TAU, 56, Color(0.04, 0.09, 0.12, 0.9), 5.0, true)
+		draw_arc(endpoint, DEFENDER_ANCHOR_RADIUS, 0.0, TAU, 56, color, 2.0, true)
+		draw_line(endpoint - Vector2(9, 0), endpoint + Vector2(9, 0), Color(color, 0.75), 1.5, true)
+		draw_line(endpoint - Vector2(0, 9), endpoint + Vector2(0, 9), Color(color, 0.75), 1.5, true)
+	elif skill == &"defender_line_lock":
+		_draw_defender_strip(color)
+	elif skill == &"defender_wall_advance":
+		_draw_defender_wall_advance(color)
+	elif skill == &"defender_reprisal_wave":
+		draw_dashed_line(origin, endpoint, Color(color, 0.55), 1.5, 9.0, true, true)
+		draw_circle(endpoint, DEFENDER_REPRISAL_WAVE_RADIUS, Color(color, 0.11))
+		draw_arc(endpoint, DEFENDER_REPRISAL_WAVE_RADIUS, 0.0, TAU, 56, color, 2.0, true)
+	elif skill == &"slash":
 		var skill_range := origin.distance_to(endpoint)
 		var outline := SkillGeometry.cone_outline(origin, direction, skill_range, PlayerActor.SLASH_HALF_ANGLE)
 		# Drop the closing duplicate for triangulation.
@@ -219,3 +315,49 @@ func _draw_endpoint(point: Vector2, color: Color) -> void:
 	draw_arc(point, body_radius, 0.0, TAU, 48, color, 2.0, true)
 	draw_line(point - Vector2(5, 0), point + Vector2(5, 0), color, 1.5, true)
 	draw_line(point - Vector2(0, 5), point + Vector2(0, 5), color, 1.5, true)
+
+func _draw_defender_cone(color: Color) -> void:
+	var outline := SkillGeometry.cone_outline(origin, direction, DEFENDER_COUNTERSTROKE_RANGE, DEFENDER_COUNTERSTROKE_HALF_ANGLE)
+	draw_colored_polygon(outline.slice(0, outline.size() - 1), Color(color, 0.16))
+	draw_polyline(outline, Color(0.04, 0.09, 0.12, 0.9), 5.0, true)
+	draw_polyline(outline, color, 2.0, true)
+	draw_arc(origin, DEFENDER_COUNTERSTROKE_RANGE * 0.58, direction.angle() - DEFENDER_COUNTERSTROKE_HALF_ANGLE, direction.angle() + DEFENDER_COUNTERSTROKE_HALF_ANGLE, 18, Color(color, 0.42), 1.0, true)
+
+func _draw_defender_strip(color: Color) -> void:
+	var side := direction.orthogonal() * DEFENDER_LINE_LOCK_HALF_WIDTH
+	var outline := PackedVector2Array([origin + side, endpoint + side, endpoint - side, origin - side, origin + side])
+	draw_colored_polygon(outline.slice(0, outline.size() - 1), Color(color, 0.15))
+	draw_polyline(outline, color, 2.0, true)
+	draw_dashed_line(origin, endpoint, Color(color, 0.58), 1.5, 9.0, true, true)
+
+func _draw_defender_wall_advance(color: Color) -> void:
+	var side := direction.orthogonal() * body_radius
+	var corridor := PackedVector2Array([origin + side, endpoint + side, endpoint - side, origin - side])
+	if origin.distance_to(endpoint) > 0.1:
+		draw_colored_polygon(corridor, Color(color, 0.13))
+		draw_line(origin + side, endpoint + side, color, 2.0, true)
+		draw_line(origin - side, endpoint - side, color, 2.0, true)
+		draw_dashed_line(origin, endpoint, Color(color, 0.65), 1.5, 9.0, true, true)
+	_draw_endpoint(endpoint, color)
+	var full_endpoint := origin + direction * active_range
+	if endpoint.distance_to(full_endpoint) > 1.0:
+		draw_line(endpoint, full_endpoint, Color(BLOCKED_COLOR, 0.3), 1.0, true)
+		draw_line(endpoint + side, endpoint - side, BLOCKED_COLOR, 4.0, true)
+
+func _draw_defender_anchor() -> void:
+	if not defender_anchor_position.is_finite() or defender_anchor_remaining <= 0.0:
+		return
+	var pulse := 0.55 + 0.15 * sin(defender_anchor_remaining * 5.0)
+	var color := Color("7faeeb")
+	draw_circle(defender_anchor_position, DEFENDER_ANCHOR_RADIUS, Color(color, 0.07))
+	draw_arc(defender_anchor_position, DEFENDER_ANCHOR_RADIUS, 0.0, TAU, 56, Color(color, pulse), 2.0, true)
+	draw_arc(defender_anchor_position, DEFENDER_ANCHOR_RADIUS * 0.42, 0.0, TAU, 40, Color(color, 0.32), 1.0, true)
+
+func _draw_defender_wave() -> void:
+	if not defender_wave_position.is_finite() or defender_wave_lifetime <= 0.0:
+		return
+	var progress := 1.0 - defender_wave_lifetime / 0.32
+	var radius := lerpf(22.0, DEFENDER_REPRISAL_WAVE_RADIUS, progress)
+	var color := Color("f5cc77", 1.0 - progress)
+	draw_arc(defender_wave_position, radius, 0.0, TAU, 56, color, 3.0, true)
+	draw_arc(defender_wave_position, maxf(0.0, radius - 10.0), 0.0, TAU, 48, Color(color, 0.34), 1.0, true)

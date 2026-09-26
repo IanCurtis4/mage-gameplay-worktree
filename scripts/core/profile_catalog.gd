@@ -59,6 +59,9 @@ static func pilot(
 	catalog.add_skill(&"archer_precision", [&"archer"], PASSIVE, BASE_WALLET, 0, 3)
 	catalog.add_skill(&"archer_cadence", [&"archer"], PASSIVE, BASE_WALLET, 0, 3)
 	catalog.add_skill(&"trap_technique", [&"archer"], PASSIVE, BASE_WALLET, 0, 3)
+	# A fixture may replace Defender's entire exclusive library; production never mixes both sets.
+	if not evolution_overrides.has(&"defender") and not evolution_overrides.has("defender"):
+		catalog._register_defender_skills()
 	for raw_item_id: Variant in additional_equipment:
 		var metadata: Dictionary = additional_equipment[raw_item_id]
 		var allowed_base_classes: Array[StringName] = []
@@ -359,6 +362,22 @@ func equipment_is_allowed(item_id: StringName, slot: StringName, base_class_id: 
 	var metadata: Dictionary = _equipment.get(item_id, {})
 	return not metadata.is_empty() and metadata["slot"] == slot and base_class_id in metadata["allowed_base_classes"]
 
+func _register_defender_skills() -> void:
+	var origin: Array[StringName] = [&"swordsman"]
+	add_skill(&"defender_counterstroke", origin, ACTIVE, EVOLUTION_WALLET, 1, 4, &"defender", _defender_rank_requirements(5, 20))
+	add_skill(&"defender_watch", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"defender", _defender_rank_requirements(3, 23))
+	add_skill(&"defender_anchor", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _defender_rank_requirements(5, 25))
+	add_skill(&"defender_line_lock", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _defender_rank_requirements(5, 28))
+	add_skill(&"defender_guard_return", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"defender", _defender_rank_requirements(3, 31))
+	add_skill(&"defender_wall_advance", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _defender_rank_requirements(5, 34))
+	add_skill(&"defender_reprisal_wave", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _defender_rank_requirements(5, 37))
+
+func _defender_rank_requirements(max_rank: int, job_level: int) -> Dictionary:
+	var requirements: Dictionary = {}
+	for rank: int in range(1, max_rank + 1):
+		requirements[rank] = {"job_level": job_level}
+	return requirements
+
 func _register_e00_evolutions(overrides: Dictionary) -> void:
 	var specs: Array[Dictionary] = [
 		{"id": IdentityIds.DEFENDER, "name": "Defendente", "branch": EvolutionDefinition.BRANCH_2_1, "affinity": &""},
@@ -393,6 +412,13 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 		definition.origin_class_id = IdentityIds.evolution_origin(definition.id)
 		definition.branch_kind = spec["branch"]
 		definition.affinity_class_id = spec["affinity"]
+		if definition.id == &"defender" and not normalized_overrides.has(definition.id):
+			definition.entry_skill_id = &"defender_counterstroke"
+			definition.exclusive_skill_ids = [
+				&"defender_counterstroke", &"defender_watch", &"defender_anchor",
+				&"defender_line_lock", &"defender_guard_return",
+				&"defender_wall_advance", &"defender_reprisal_wave",
+			]
 		if normalized_overrides.has(definition.id):
 			_apply_evolution_override(definition, normalized_overrides[definition.id])
 		add_evolution(definition)

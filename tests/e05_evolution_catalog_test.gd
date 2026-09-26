@@ -53,14 +53,26 @@ func _check_production_roster() -> void:
 			and definition.affinity_class_id == values[3],
 			"%s preserves accepted name, origin, branch and affinity" % definition.id
 		)
-		_check(
-			not definition.content_ready and definition.entry_skill_id.is_empty() and definition.exclusive_skill_ids.is_empty(),
-			"%s remains unavailable without pretending that identity metadata is a playable kit" % definition.id
-		)
+		var has_defender_metadata := definition.id == &"defender" and definition.entry_skill_id == &"defender_counterstroke" and definition.exclusive_skill_ids.size() == 7
+		var has_no_kit := definition.id != &"defender" and definition.entry_skill_id.is_empty() and definition.exclusive_skill_ids.is_empty()
+		_check(not definition.content_ready and (has_defender_metadata or has_no_kit), "%s remains unavailable until its complete kit is verified" % definition.id)
 	var mage_options := catalog.evolution_definitions_for_origin(&"mage")
 	_check(mage_options.map(func(definition: EvolutionDefinition) -> StringName: return definition.id) == [&"elementalist", &"spiritualist", &"mg_sp", &"mg_ar"], "origin query includes only the four Mage destinations")
 	var geometer := catalog.evolution_definition(&"mg_ar")
 	_check(geometer.origin_class_id == &"mage" and geometer.affinity_class_id == &"archer", "mg_ar remains Mage origin with Archer affinity")
+	var defender := catalog.evolution_definition(&"defender")
+	var expected_defender_ids: Array[StringName] = [
+		&"defender_counterstroke", &"defender_watch", &"defender_anchor",
+		&"defender_line_lock", &"defender_guard_return",
+		&"defender_wall_advance", &"defender_reprisal_wave",
+	]
+	var defender_library := catalog.skill_ids_for_identity(&"swordsman", &"defender")
+	_check(defender.entry_skill_id == &"defender_counterstroke" and defender.exclusive_skill_ids == expected_defender_ids and not defender.content_ready, "production declares the complete Defender library but does not enable gameplay")
+	_check(&"slash" in defender_library and defender_library.slice(defender_library.size() - 7) == expected_defender_ids and &"defender_counterstroke" not in catalog.skill_ids_for_identity(&"mage", &"mg_sp") and &"defender_counterstroke" not in catalog.skill_ids_for_identity(&"swordsman", &"berserker"), "resolved library combines Swordsman base and only the Defender-exclusive seven")
+	var job_gates: Array[int] = [20, 23, 25, 28, 31, 34, 37]
+	for index: int in expected_defender_ids.size():
+		var metadata := catalog.skill_metadata(expected_defender_ids[index])
+		_check(metadata["rank_requirements"][1]["job_level"] == job_gates[index] and metadata["wallet"] == ProfileCatalog.EVOLUTION_WALLET and metadata["required_evolution_id"] == &"defender", "%s keeps its approved job gate and evolution wallet" % expected_defender_ids[index])
 
 func _check_validation_and_isolation() -> void:
 	var source := _definition(&"defender", "Defendente", &"swordsman", &"2-1")

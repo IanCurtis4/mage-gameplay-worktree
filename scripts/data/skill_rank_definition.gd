@@ -10,6 +10,7 @@ extends Resource
 @export var cooldown: float = 0.0
 @export var range: float = 0.0
 @export var power: float = 0.0
+@export var secondary_power: float = 0.0
 @export var physical_weight: float = 0.0
 @export var precision_weight: float = 0.0
 @export var magic_weight: float = 0.0
@@ -19,7 +20,7 @@ extends Resource
 func is_valid() -> bool:
 	if rank < 1:
 		return false
-	for value: float in [sp_cost, fixed_cast_time, variable_cast_time, post_cast_time, cooldown, range, power, projectile_speed]:
+	for value: float in [sp_cost, fixed_cast_time, variable_cast_time, post_cast_time, cooldown, range, power, secondary_power, projectile_speed]:
 		if not is_finite(value) or value < 0.0:
 			return false
 	var weight_sum := 0.0
