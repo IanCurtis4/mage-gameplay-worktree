@@ -126,3 +126,26 @@ integral final, pois há persistência/combate compartilhados. Sem novo kit.
 fixture e sem alterações em `master` ou `codex/playtest`. O feedback visual é
 provisório e requer conferência no playtest interativo; aprovação técnica Astra
 e aceite do usuário continuam pendentes antes do fluxo de integração/merge.
+
+## Revisão Astra — rodada 2
+
+7937683: correções de Vigília, cancelamento do Avanço e feedback conferidas.
+Proteção de backups cat2 também corrigida. verify.ps1 independente passou.
+Gate permanece bloqueado por regressão introduzida no tratamento schema1:
+
+ProfileStore._guard_existing_backup agora rejeita qualquer combinação que
+contenha migration_kind=schema_v1, exceto dois arquivos schema1 idênticos.
+Após migração normal, primary é schema2 e backup é o schema1 original; portanto
+a próxima gravação retorna recovery_required. Reproduzido isoladamente em
+.godot/verification/astra_schema1_followup.gd: MIGRATION_OK=true,
+NEXT_COMMIT_OK=false ERROR=recovery_required. Reload isolado passa, por isso
+os testes existentes não detectam o bloqueio da primeira mutação posterior.
+
+Corrigir preservando a proteção de backups mais novos/de outro perfil. Não
+remover genericamente a proteção de backup legado: reconhecer com segurança
+o backup de origem da migração ou preservar o legado por estratégia explícita
+compatível. Testar migração schema1 -> reload -> criar personagem/commit ->
+reload, inclusive migração a partir de backup e pares legados conflitantes.
+Manter o original recuperável e nenhum save real usado como fixture.
+Uma entrega consolidada da correção com regressões de persistência e verificação
+final. Playtest/master não atualizados até resolver este bloqueio.
