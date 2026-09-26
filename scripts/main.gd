@@ -13,6 +13,10 @@ const TARGET_ASSIST_RADIUS := BattleTargeting.ASSIST_RADIUS
 const TARGET_DIRECT_PADDING := BattleTargeting.DIRECT_PADDING
 const ACTOR_BODY_OFFSET := BattleTargeting.BODY_OFFSET
 const SKILL_KEYS := [KEY_Q, KEY_W, KEY_A, KEY_S, KEY_D]
+const DEFENDER_WATCH_DIRECT_MELEE_IDS := [
+	&"basic_attack", &"cone_slash", &"brutal_strike", &"concentrated_rage",
+	&"defender_counterstroke", &"defender_line_lock", &"defender_wall_advance", &"defender_reprisal_wave",
+]
 static var selected_class_id: StringName = &"swordsman"
 static var pending_run_state: RunState = null
 static var pending_run_facade: ProfileFacade = null
@@ -803,7 +807,7 @@ func _on_enemy_died(actor: CombatActor) -> void:
 func _on_enemy_damage_resolved(result: Dictionary) -> void:
 	if player == null or not is_instance_valid(player) or not player.is_alive() or int(result.get("source_id", 0)) != player.get_instance_id():
 		return
-	if player.run_state != null and player.run_state.uses_persistent_build() and player.run_state.build_snapshot.evolution_id == &"defender" and &"defender_watch" in player.run_state.build_snapshot.passive_slots and bool(result.get("can_trigger_effects", false)) and float(result.get("actual_damage", 0.0)) > 0.0 and StringName(result.get("skill_id", &"")) in [&"basic_attack", &"cone_slash", &"defender_counterstroke", &"defender_line_lock", &"defender_wall_advance", &"defender_reprisal_wave"]:
+	if player.run_state != null and player.run_state.uses_persistent_build() and player.run_state.build_snapshot.evolution_id == &"defender" and &"defender_watch" in player.run_state.build_snapshot.passive_slots and bool(result.get("can_trigger_effects", false)) and float(result.get("actual_damage", 0.0)) > 0.0 and StringName(result.get("skill_id", &"")) in DEFENDER_WATCH_DIRECT_MELEE_IDS:
 		var watch_rank := ClassCatalog.skill_definition(&"defender_watch").rank_definition(player.skill_rank(&"defender_watch"))
 		var watch_target := instance_from_id(int(result.get("target_id", 0))) as CombatActor
 		if watch_rank != null and watch_target != null and is_instance_valid(watch_target) and watch_target.is_alive():
