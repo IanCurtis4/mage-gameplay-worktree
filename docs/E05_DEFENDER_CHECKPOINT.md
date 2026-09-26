@@ -174,3 +174,22 @@ não é seguro inferir a identidade do schema 1 apenas pela revisão schema 2.
 Verificação final: `tools/verify.ps1` no Godot 4.7.2 standard, importação,
 76 suítes e smoke headless aprovados. Revisão técnica Astra e playtest
 interativo seguem pendentes; `master` e `codex/playtest` não foram alterados.
+
+## Aceite técnico Astra — revisão final
+
+Entrega original aca63e6 aprovada para playtest. Correções de combate e
+feedback das rodadas anteriores mantidas; migração schema1 agora permite
+save posterior com rastreabilidade do legado e preservação do original.
+Validação independente completa: Godot 4.7.2, importação, 76 suítes / 3394
+checks e smoke aprovados. Casos incluem migração, criação/commit posterior,
+reload, recuperação, backups incompatíveis e regressões das três bases.
+
+Rebase sobre codex/playtest preserva a alteração do usuário 3343a95 no caminho
+de exportação. Comparação das árvores após rebase: somente export_presets.cfg
+difere da entrega validada; nenhuma alteração no runtime nessa integração.
+Referência de recuperação: codex/defender-pre-playtest-aca63e6.
+
+Classe Defendente liberada para candidato no diretório fixo. Master não recebe
+esta entrega até o aceite do usuário sobre o playtest. As outras evoluções
+permanecem indisponíveis. VFX provisório e balanceamento exigem avaliação
+interativa; testes headless não certificam percepção visual nem diversão.
