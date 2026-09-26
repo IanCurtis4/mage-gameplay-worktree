@@ -152,8 +152,52 @@ func _run() -> void:
 	max_player.queue_free()
 	controller.free()
 	await process_frame
+	await _test_advance_interruptions(nav)
 	print("E05 Defendente skills: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
 	quit(0 if failures == 0 else 1)
+
+func _test_advance_interruptions(nav: ArenaNavigation) -> void:
+	var snapshot := BuildSnapshot.new()
+	snapshot.base_class_id = &"swordsman"
+	snapshot.evolution_id = &"defender"
+	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"defender")
+	snapshot.skill_ranks = {&"defender_counterstroke": 1, &"defender_wall_advance": 1, &"concentrated_rage": 1, &"dash": 1}
+	snapshot.active_slots = [&"defender_wall_advance", &"concentrated_rage", &"dash", null, null]
+	var player := PlayerActor.new()
+	player.configure(nav, RunState.from_build("defender-interrupt", snapshot))
+	player.global_position = Vector2(400, 350)
+	root.add_child(player)
+	player.set_process(false)
+	_check(player.use_defender_wall_advance(Vector2.RIGHT, []) and player._dash_active and player.defender_advance_guard_active, "advance opens moving frontal guard")
+	player.current_sp = player.max_sp
+	_check(player.use_concentrated_rage(Vector2.RIGHT, []) and not player._dash_active and not player.defender_advance_guard_active and player._defender_advance_targets.is_empty(), "Concentrated Rage cancels the advance and its guard")
+	var source := CombatActor.new()
+	source.setup("Fonte", Color.WHITE, StatCalculator.calculate({&"vit": 10}), 18.0)
+	source.global_position = Vector2(500, 350)
+	root.add_child(source)
+	source.set_process(false)
+	var request := DamageRequest.new()
+	request.source_id = source.get_instance_id()
+	request.target_id = player.get_instance_id()
+	request.physical_damage = 35.0
+	request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
+	request.can_crit = false
+	var unguarded := CombatMath.resolve(request, player.health.physical_defense, player.health.magic_defense, player.health.flee_rating, player.health.crit_resistance, 0.0, 1.0)
+	var applied := player.apply_damage(request, RandomNumberGenerator.new())
+	_check(applied["damage"] == unguarded["damage"], "frontal damage after Rage cancellation has no stale 20 percent mitigation")
+	player.current_sp = player.max_sp
+	player.mage_cooldowns[&"defender_wall_advance"] = 0.0
+	_check(player.use_defender_wall_advance(Vector2.RIGHT, []) and player.defender_advance_guard_active, "advance can be started again")
+	player.current_sp = player.max_sp
+	_check(player.use_dash(Vector2.UP) and player._dash_active and not player.defender_advance_guard_active and player._defender_advance_targets.is_empty(), "base Dash replaces advance without retaining its guard")
+	player.current_sp = player.max_sp
+	player.mage_cooldowns[&"defender_wall_advance"] = 0.0
+	_check(player.use_defender_wall_advance(Vector2.RIGHT, []) and player.defender_advance_guard_active, "advance can replace base Dash")
+	player.clear_defender_state()
+	_check(not player._dash_active and not player.defender_advance_guard_active, "encounter cleanup cancels displacement and guard together")
+	player.queue_free()
+	source.queue_free()
+	await process_frame
 
 func _check(condition: bool, description: String) -> void:
 	checks += 1

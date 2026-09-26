@@ -333,6 +333,7 @@ func use_defender_wall_advance(direction: Vector2, enemies: Array[CombatActor]) 
 	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
 	_spend(&"defender_wall_advance")
 	reveal_from_offense()
+	_stop_dash()
 	_dash_endpoint = endpoint
 	_dash_speed = distance / DASH_DURATION
 	_dash_active = true
@@ -380,6 +381,7 @@ func use_dash(direction: Vector2) -> bool:
 	_commit_action(ClassCatalog.skill_definition(&"dash").action_kind)
 	var facing := _resolved_facing(direction)
 	_spend(&"dash")
+	_stop_dash()
 	_dash_endpoint = dash_destination(facing)
 	_dash_speed = global_position.distance_to(_dash_endpoint) / DASH_DURATION
 	_dash_active = global_position.distance_to(_dash_endpoint) > MOVEMENT_EPSILON
@@ -559,7 +561,7 @@ func use_concentrated_rage(direction: Vector2, enemies: Array[CombatActor]) -> b
 	_path.clear()
 	_has_path_goal = false
 	velocity = Vector2.ZERO
-	_dash_active = false
+	_stop_dash()
 	concentrated_rage_visual_time = 0.22
 	concentrated_rage_visual_origin = global_position
 	concentrated_rage_visual_direction = facing
@@ -721,9 +723,7 @@ func _grant_defender_front_event() -> void:
 func clear_defender_state() -> void:
 	defender_token_remaining = 0.0
 	defender_counter_guard_remaining = 0.0
-	defender_advance_guard_active = false
-	_defender_advance_targets.clear()
-	_defender_advance_hit = false
+	_stop_dash()
 	defender_guard_return_cooldown = 0.0
 	defender_anchor_remaining = 0.0
 	defender_anchor_center = Vector2.INF
@@ -1260,10 +1260,7 @@ func _process(delta: float) -> void:
 		return
 	if _dash_active:
 		if is_rooted():
-			_dash_active = false
-			defender_advance_guard_active = false
-			_defender_advance_targets.clear()
-			velocity = Vector2.ZERO
+			_stop_dash()
 			return
 		_advance_dash(delta)
 		return
@@ -1313,9 +1310,7 @@ func _advance_dash(delta: float) -> void:
 	var distance := global_position.distance_to(_dash_endpoint)
 	if distance <= MOVEMENT_EPSILON:
 		global_position = _dash_endpoint
-		_dash_active = false
-		defender_advance_guard_active = false
-		_defender_advance_targets.clear()
+		_stop_dash()
 		_update_defender_anchor_presence()
 		return
 	var next_position := global_position.move_toward(_dash_endpoint, _dash_speed * delta)
@@ -1325,10 +1320,15 @@ func _advance_dash(delta: float) -> void:
 	_update_defender_anchor_presence()
 	if safe_position.distance_to(next_position) > MOVEMENT_EPSILON or global_position.distance_to(_dash_endpoint) <= MOVEMENT_EPSILON:
 		global_position = safe_position if safe_position.distance_to(next_position) > MOVEMENT_EPSILON else _dash_endpoint
-		_dash_active = false
-		defender_advance_guard_active = false
-		_defender_advance_targets.clear()
+		_stop_dash()
 		_update_defender_anchor_presence()
+
+func _stop_dash() -> void:
+	_dash_active = false
+	defender_advance_guard_active = false
+	_defender_advance_targets.clear()
+	_defender_advance_hit = false
+	velocity = Vector2.ZERO
 
 func _try_defender_advance_hit(from: Vector2, to: Vector2) -> void:
 	if not defender_advance_guard_active or _defender_advance_hit or from.distance_to(to) <= MOVEMENT_EPSILON:
@@ -1535,7 +1535,7 @@ func _on_health_died(actor_id: int) -> void:
 	_path.clear()
 	_has_path_goal = false
 	target = null
-	_dash_active = false
+	_stop_dash()
 	_attack_recovery = 0.0
 	super._on_health_died(actor_id)
 
