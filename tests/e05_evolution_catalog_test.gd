@@ -55,7 +55,7 @@ func _check_production_roster() -> void:
 		)
 		var has_defender_metadata := definition.id == &"defender" and definition.entry_skill_id == &"defender_counterstroke" and definition.exclusive_skill_ids.size() == 7
 		var has_no_kit := definition.id != &"defender" and definition.entry_skill_id.is_empty() and definition.exclusive_skill_ids.is_empty()
-		_check(not definition.content_ready and (has_defender_metadata or has_no_kit), "%s remains unavailable until its complete kit is verified" % definition.id)
+		_check((definition.content_ready and has_defender_metadata) if definition.id == &"defender" else (not definition.content_ready and has_no_kit), "%s readiness matches its completed production kit" % definition.id)
 	var mage_options := catalog.evolution_definitions_for_origin(&"mage")
 	_check(mage_options.map(func(definition: EvolutionDefinition) -> StringName: return definition.id) == [&"elementalist", &"spiritualist", &"mg_sp", &"mg_ar"], "origin query includes only the four Mage destinations")
 	var geometer := catalog.evolution_definition(&"mg_ar")
@@ -67,7 +67,7 @@ func _check_production_roster() -> void:
 		&"defender_wall_advance", &"defender_reprisal_wave",
 	]
 	var defender_library := catalog.skill_ids_for_identity(&"swordsman", &"defender")
-	_check(defender.entry_skill_id == &"defender_counterstroke" and defender.exclusive_skill_ids == expected_defender_ids and not defender.content_ready, "production declares the complete Defender library but does not enable gameplay")
+	_check(defender.entry_skill_id == &"defender_counterstroke" and defender.exclusive_skill_ids == expected_defender_ids and defender.content_ready, "production enables only the complete Defender library")
 	_check(&"slash" in defender_library and defender_library.slice(defender_library.size() - 7) == expected_defender_ids and &"defender_counterstroke" not in catalog.skill_ids_for_identity(&"mage", &"mg_sp") and &"defender_counterstroke" not in catalog.skill_ids_for_identity(&"swordsman", &"berserker"), "resolved library combines Swordsman base and only the Defender-exclusive seven")
 	var job_gates: Array[int] = [20, 23, 25, 28, 31, 34, 37]
 	for index: int in expected_defender_ids.size():
@@ -180,8 +180,8 @@ func _check_query_states() -> void:
 	var current_facade := ProfileFacade.new(ProfileStore.new(current_directory, production_catalog))
 	var current_open := current_facade.open_profile()
 	var current := _option(current_facade.evolution_options(current_id)["options"], &"defender")
-	_check(current_open["ok"] and current["is_current"] and current["requirements_met"] and not current["content_ready"], "current identity remains visible even when its production content is unavailable")
-	_check(&"content_unavailable" in current["blocking_reasons"] and &"already_current" in current["blocking_reasons"], "current flag does not hide the independent content-unavailable reason")
+	_check(current_open["ok"] and current["is_current"] and current["requirements_met"] and current["content_ready"], "current completed identity remains visible")
+	_check(&"already_current" in current["blocking_reasons"] and &"content_unavailable" not in current["blocking_reasons"], "current ready identity retains only its already-current selection reason")
 	_check(current_facade.current_profile().character_by_id(current_id).evolution_id == &"defender", "read-only query never clears an unavailable persisted identity")
 
 	var run_directory := root_directory.path_join("run_active")

@@ -250,7 +250,7 @@ func use_slash(direction: Vector2, enemies: Array[CombatActor]) -> bool:
 
 func use_defender_counterstroke(direction: Vector2, enemies: Array[CombatActor]) -> bool:
 	var rank_definition := _runtime_rank_definition(&"defender_counterstroke")
-	if not _is_defender() or rank_definition == null or not _can_spend(&"defender_counterstroke"):
+	if not _defender_active_equipped(&"defender_counterstroke") or rank_definition == null or not _can_spend(&"defender_counterstroke"):
 		return false
 	var facing := _resolved_facing(direction)
 	var empowered := has_defender_token()
@@ -280,11 +280,14 @@ func use_defender_counterstroke(direction: Vector2, enemies: Array[CombatActor])
 func defender_wall_advance_destination(direction: Vector2) -> Vector2:
 	if navigation == null or is_rooted():
 		return global_position
-	return navigation.move_until_blocked(global_position, global_position + _resolved_facing(direction) * skill_range(&"defender_wall_advance"))
+	var facing := direction.normalized()
+	if facing.is_zero_approx():
+		facing = _last_facing
+	return navigation.move_until_blocked(global_position, global_position + facing * skill_range(&"defender_wall_advance"))
 
 func use_defender_anchor(point: Vector2) -> bool:
 	var rank_definition := _runtime_rank_definition(&"defender_anchor")
-	if not _is_defender() or rank_definition == null or not _can_spend(&"defender_anchor") or navigation == null:
+	if not _defender_active_equipped(&"defender_anchor") or rank_definition == null or not _can_spend(&"defender_anchor") or navigation == null:
 		return false
 	var center := global_position + (point - global_position).limit_length(rank_definition.range)
 	if not center.is_finite() or not navigation.is_walkable(center):
@@ -298,7 +301,7 @@ func use_defender_anchor(point: Vector2) -> bool:
 
 func use_defender_line_lock(direction: Vector2, enemies: Array[CombatActor]) -> bool:
 	var rank_definition := _runtime_rank_definition(&"defender_line_lock")
-	if not _is_defender() or rank_definition == null or not _can_spend(&"defender_line_lock"):
+	if not _defender_active_equipped(&"defender_line_lock") or rank_definition == null or not _can_spend(&"defender_line_lock"):
 		return false
 	var facing := _resolved_facing(direction)
 	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
@@ -320,7 +323,7 @@ func use_defender_line_lock(direction: Vector2, enemies: Array[CombatActor]) -> 
 
 func use_defender_wall_advance(direction: Vector2, enemies: Array[CombatActor]) -> bool:
 	var rank_definition := _runtime_rank_definition(&"defender_wall_advance")
-	if not _is_defender() or rank_definition == null or not _can_spend(&"defender_wall_advance") or is_rooted():
+	if not _defender_active_equipped(&"defender_wall_advance") or rank_definition == null or not _can_spend(&"defender_wall_advance") or is_rooted():
 		return false
 	var facing := _resolved_facing(direction)
 	var endpoint := defender_wall_advance_destination(facing)
@@ -348,7 +351,7 @@ func use_defender_wall_advance(direction: Vector2, enemies: Array[CombatActor]) 
 
 func use_defender_reprisal_wave(enemies: Array[CombatActor]) -> bool:
 	var rank_definition := _runtime_rank_definition(&"defender_reprisal_wave")
-	if not _is_defender() or rank_definition == null or not _can_spend(&"defender_reprisal_wave"):
+	if not _defender_active_equipped(&"defender_reprisal_wave") or rank_definition == null or not _can_spend(&"defender_reprisal_wave"):
 		return false
 	var center := defender_anchor_center if has_defender_anchor() else global_position
 	var empowered := has_defender_token()
@@ -358,7 +361,7 @@ func use_defender_reprisal_wave(enemies: Array[CombatActor]) -> bool:
 		defender_token_remaining = 0.0
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"defender_reprisal_wave")
-	var weight := rank_definition.power + (0.35 if empowered else 0.0)
+	var weight := rank_definition.power + (rank_definition.secondary_power if empowered else 0.0)
 	for enemy: CombatActor in enemies.duplicate():
 		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive() or center.distance_to(enemy.global_position) > SkillGeometry.DEFENDER_REPRISAL_WAVE_RADIUS + enemy.collision_radius:
 			continue
@@ -700,6 +703,9 @@ func _defender_event_facing() -> Vector2:
 
 func _is_defender() -> bool:
 	return run_state != null and run_state.uses_persistent_build() and run_state.build_snapshot.evolution_id == &"defender" and class_id == &"swordsman"
+
+func _defender_active_equipped(skill_id: StringName) -> bool:
+	return _is_defender() and skill_id in available_skill_ids()
 
 func _grant_defender_front_event() -> void:
 	if not _is_defender() or skill_rank(&"defender_counterstroke") <= 0 or not is_alive():

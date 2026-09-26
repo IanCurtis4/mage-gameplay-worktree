@@ -414,6 +414,7 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 		definition.affinity_class_id = spec["affinity"]
 		if definition.id == &"defender" and not normalized_overrides.has(definition.id):
 			definition.entry_skill_id = &"defender_counterstroke"
+			definition.content_ready = true
 			definition.exclusive_skill_ids = [
 				&"defender_counterstroke", &"defender_watch", &"defender_anchor",
 				&"defender_line_lock", &"defender_guard_return",

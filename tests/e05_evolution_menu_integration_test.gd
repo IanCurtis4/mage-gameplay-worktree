@@ -38,10 +38,10 @@ func _check_production_unavailable_and_run_message(scene: PackedScene) -> void:
 	var defender_label: Label = menu.evolution_options_list.get_node("EvolutionOption_defender")
 	var defender_button: Button = menu.evolution_options_list.get_node("ChooseEvolution_defender")
 	_check(menu.evolution_panel != null and menu.evolution_state_label.text.contains("Origem: Espadachim") and menu.evolution_state_label.text.contains("Evolução atual: Defendente"), "selector renders the focused character origin and persisted current evolution from facade options")
-	_check(defender_label.text.contains("conteúdo indisponível") and defender_label.text.contains("Atual") and defender_button.disabled, "current production evolution remains visible with its independent unavailable-content reason and cannot be selected")
+	_check(not defender_label.text.contains("conteúdo indisponível") and defender_label.text.contains("Atual") and defender_button.disabled, "current completed Defender remains visible and cannot be selected twice")
 	var before_revision: int = menu.facade.current_profile().revision
-	var blocked_start := menu._start_run()
-	_check(not blocked_start["ok"] and blocked_start["error_code"] == &"content_unavailable" and menu.status_label.text.contains("conteúdo pronto") and menu.facade.current_profile().revision == before_revision and menu.facade.current_profile().character_by_id(character_id).evolution_id == &"defender", "blocked production run explains unavailable content without erasing identity or writing")
+	var started: Dictionary = menu.facade.start_run("production-defender", before_revision)
+	_check(started["ok"] and started["run_state"].build_snapshot.evolution_id == &"defender" and menu.facade.current_profile().character_by_id(character_id).evolution_id == &"defender", "production Defender run starts with the persisted identity")
 	menu.queue_free()
 
 func _check_confirmation_cancel_and_first_choice(scene: PackedScene) -> void:

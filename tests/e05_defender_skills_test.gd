@@ -40,18 +40,28 @@ func _run() -> void:
 	_check(enemy.attribute_debuffs.remaining(AttributeDebuffState.DAMAGE_DEALT, &"defender_watch") > 0.0, "equipped Watch applies from direct melee HP damage")
 	player.mage_cooldowns[&"defender_anchor"] = 0.0
 	player.current_sp = player.max_sp
-	_check(player.use_defender_anchor(Vector2(470, 350)), "anchor places within range")
-	_check(player.has_defender_anchor() and player.defender_anchor_center == Vector2(470, 350), "anchor records one center")
+	_check(player.use_defender_anchor(Vector2(550, 350)), "anchor places within range")
+	_check(player.has_defender_anchor() and player.defender_anchor_center == Vector2(550, 350), "anchor records one center")
 	controller._sync_defender_anchor()
 	_check(enemy.attribute_debuffs.fraction(AttributeDebuffState.MOVE_SPEED) >= 0.20, "anchor slows enemies inside")
 	enemy.global_position = Vector2(700, 350)
 	controller._sync_defender_anchor()
 	_check(enemy.attribute_debuffs.fraction(AttributeDebuffState.MOVE_SPEED) == 0.0, "anchor slow clears immediately on leaving")
-	player.global_position = Vector2(470, 350)
+	player.global_position = Vector2(550, 350)
+	var base_defense := player.stat_breakdown.value(&"physical_defense")
 	player._update_defender_anchor_presence()
-	_check(player._defender_inside_anchor, "anchor grants owner defense only inside")
+	_check(player._defender_inside_anchor and player.stat_breakdown.value(&"physical_defense") > base_defense, "anchor grants owner defense only inside through derived stats")
+	player.defender_token_remaining = 5.0
+	paused = true
+	player._process(1.0)
+	paused = false
+	_check(player.defender_token_remaining == 5.0, "pause freezes Defender token and zone timers")
+	enemy.global_position = Vector2(550, 350)
+	controller._sync_defender_anchor()
 	player.clear_defender_state()
 	_check(not player._defender_inside_anchor and not player.has_defender_anchor(), "cleanup removes anchor defense and zone")
+	controller._sync_defender_anchor()
+	_check(enemy.attribute_debuffs.fraction(AttributeDebuffState.MOVE_SPEED) == 0.0, "controller cleanup leaves no anchor debuff")
 	player.global_position = Vector2(400, 350)
 	enemy.global_position = Vector2(450, 350)
 	enemy.health.current_hp = enemy.health.max_hp
@@ -67,6 +77,37 @@ func _run() -> void:
 	enemy.health.current_hp = enemy.health.max_hp
 	_check(player.use_defender_reprisal_wave([enemy]) and not player.has_defender_token(), "wave consumes one token at commit")
 	_check(enemy.health.current_hp < enemy.health.max_hp and enemy.global_position.x > player.global_position.x + 70.0, "empowered wave damages and pushes normal enemy")
+	enemy.clear_statuses()
+	enemy.configure_hard_control_profile(true)
+	enemy.global_position = player.global_position + Vector2(80, 0)
+	enemy.health.current_hp = enemy.health.max_hp
+	player.mage_cooldowns[&"defender_line_lock"] = 0.0
+	player.current_sp = player.max_sp
+	var boss_hp := enemy.health.current_hp
+	_check(player.use_defender_line_lock(Vector2.RIGHT, [enemy]) and enemy.health.current_hp < boss_hp and enemy.root_remaining() > 0.0 and enemy.root_remaining() <= HardControlState.BOSS_DURATION_CAP, "boss receives line damage with canonical physical CC cap")
+	enemy.health.current_hp = enemy.health.max_hp
+	player.mage_cooldowns[&"defender_reprisal_wave"] = 0.0
+	player.current_sp = player.max_sp
+	player.defender_token_remaining = 8.0
+	var boss_position := enemy.global_position
+	_check(player.use_defender_reprisal_wave([enemy]) and enemy.health.current_hp < enemy.health.max_hp and enemy.global_position == boss_position, "single boss takes empowered wave damage without adds or displacement")
+	enemy.clear_statuses()
+	enemy.health.current_hp = enemy.health.max_hp
+	var secondary := DamageRequest.new()
+	secondary.source_id = player.get_instance_id()
+	secondary.target_id = enemy.get_instance_id()
+	secondary.skill_id = &"defender_counterstroke"
+	secondary.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
+	secondary.physical_damage = 10.0
+	secondary.is_secondary = true
+	enemy.apply_damage(secondary, controller.rng)
+	_check(enemy.attribute_debuffs.fraction(AttributeDebuffState.DAMAGE_DEALT) == 0.0, "secondary HP damage never triggers Watch")
+	enemy.health.current_hp = enemy.health.max_hp
+	enemy.health.shield_hp = 100.0
+	secondary.is_secondary = false
+	enemy.apply_damage(secondary, controller.rng)
+	_check(enemy.attribute_debuffs.fraction(AttributeDebuffState.DAMAGE_DEALT) == 0.0, "shield-only damage never triggers Watch")
+	enemy.health.shield_hp = 0.0
 	var blocked_nav := ArenaNavigation.new()
 	blocked_nav.configure(Rect2(0, 0, 1000, 700), [Rect2(425, 300, 100, 100)], 20.0)
 	var blocked_player := PlayerActor.new()
@@ -78,9 +119,37 @@ func _run() -> void:
 	blocked_player.apply_root(2.0)
 	_check(not blocked_player.use_defender_wall_advance(Vector2.RIGHT, []) and blocked_player.current_sp == before_block, "rooted advance leaves SP and cooldown unchanged")
 	_check(not blocked_player.use_defender_anchor(Vector2(500, 350)) and blocked_player.current_sp == before_block, "blocked anchor does not spend")
+	player._last_facing = Vector2.LEFT
+	player.defender_wall_advance_destination(Vector2.RIGHT)
+	_check(player._last_facing == Vector2.LEFT, "aim preview does not alter the actor's captured facing")
+	var rank_zero := snapshot.copy_snapshot()
+	rank_zero.skill_ranks.erase(&"defender_anchor")
+	var zero_player := PlayerActor.new()
+	zero_player.configure(nav, RunState.from_build("defender-r0", rank_zero))
+	zero_player.global_position = Vector2(400, 350)
+	root.add_child(zero_player)
+	zero_player.set_process(false)
+	_check(&"defender_anchor" not in zero_player.available_skill_ids() and not zero_player.use_defender_anchor(Vector2(500, 350)), "rank-zero Anchor cannot appear or cast")
+	var rank_five := snapshot.copy_snapshot()
+	for skill_id: StringName in [&"defender_counterstroke", &"defender_anchor", &"defender_line_lock", &"defender_wall_advance", &"defender_reprisal_wave"]:
+		rank_five.skill_ranks[skill_id] = 5
+	var max_player := PlayerActor.new()
+	max_player.configure(nav, RunState.from_build("defender-r5", rank_five))
+	max_player.global_position = Vector2(400, 350)
+	root.add_child(max_player)
+	max_player.set_process(false)
+	_check(max_player.use_defender_anchor(Vector2(550, 350)) and is_equal_approx(max_player.defender_anchor_remaining, 6.0) and is_equal_approx(max_player.skill_range(&"defender_wall_advance"), 130.0), "R5 uses rank-specific Anchor duration and Advance range")
+	var rank_five_hits: Array[DamageRequest] = []
+	max_player.defender_hit_requested.connect(func(request: DamageRequest, _target: CombatActor, _root: float, _push: Vector2) -> void: rank_five_hits.append(request))
+	max_player.current_sp = max_player.max_sp
+	max_player.defender_token_remaining = 8.0
+	enemy.global_position = Vector2(550, 350)
+	_check(max_player.use_defender_reprisal_wave([enemy]) and rank_five_hits.size() == 1 and is_equal_approx(rank_five_hits[0].physical_damage, max_player.stat_breakdown.value(&"melee_attack") * 1.35), "R5 empowered Wave uses rank power plus the catalog token bonus")
 	player.queue_free()
 	enemy.queue_free()
 	blocked_player.queue_free()
+	zero_player.queue_free()
+	max_player.queue_free()
 	controller.free()
 	await process_frame
 	print("E05 Defendente skills: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))

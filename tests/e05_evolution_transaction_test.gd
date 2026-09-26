@@ -170,11 +170,11 @@ func _check_unavailable_identity_blocks_run() -> void:
 	var revision: int = opened["profile"].revision
 	var repeated := facade.change_evolution("current-unavailable", revision, seeded["character_id"], &"defender")
 	var blocked := facade.start_run("blocked-run", revision)
-	_check(repeated["ok"] and repeated["already_applied"] and repeated["new_revision"] == revision, "retrying an already-persisted unavailable identity remains a non-writing idempotent acknowledgement")
-	_check(not blocked["ok"] and blocked["error_code"] == &"content_unavailable" and facade.current_profile().revision == revision, "start_run rejects an evolved identity whose production content is not ready without writing")
-	_check(not catalog.build_is_ready(opened["profile"].character_by_id(seeded["character_id"])), "full build readiness now includes the selected evolution content declaration")
+	_check(repeated["ok"] and repeated["already_applied"] and repeated["new_revision"] == revision, "retrying an already-persisted identity remains a non-writing idempotent acknowledgement")
+	_check(blocked["ok"] and blocked["run_state"].build_snapshot.evolution_id == &"defender", "completed production Defender starts a persistent run")
+	_check(catalog.build_is_ready(opened["profile"].character_by_id(seeded["character_id"])), "full build readiness includes the completed evolution content declaration")
 	var reload_open := ProfileFacade.new(ProfileStore.new(directory, catalog)).open_profile()
-	_check(reload_open["ok"] and reload_open["profile"].character_by_id(seeded["character_id"]).evolution_id == &"defender", "blocked run never erases the persisted identity or its progress and the profile remains loadable")
+	_check(reload_open["ok"] and reload_open["profile"].character_by_id(seeded["character_id"]).evolution_id == &"defender", "run start preserves persisted identity and the profile remains loadable")
 
 func _catalog() -> ProfileCatalog:
 	return ProfileCatalog.pilot({

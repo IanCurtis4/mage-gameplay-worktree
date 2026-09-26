@@ -53,6 +53,8 @@ func _run() -> void:
 	_check(shield_player.use_shield_wall(Vector2.RIGHT), "learned entry need not be equipped to activate the base shield posture")
 	var before_return := shield_player.current_sp
 	_check(shield_player.absorb_shield_projectile() and shield_player.has_defender_token() and is_equal_approx(shield_player.current_sp, before_return + 2.0), "one intercepted frontal projectile grants token and equipped Resguardo SP")
+	var unequipped_sp := shield_player.current_sp
+	_check(not shield_player.use_defender_counterstroke(Vector2.RIGHT, []) and shield_player.has_defender_token() and shield_player.current_sp == unequipped_sp, "learned but unequipped entry cannot spend the token")
 	var after_return := shield_player.current_sp
 	_check(shield_player.absorb_shield_projectile() and is_equal_approx(shield_player.current_sp, after_return), "second interception in the 2s internal window renews token without duplicate SP")
 	shield_player.clear_defender_state()
