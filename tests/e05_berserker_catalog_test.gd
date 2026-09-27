@@ -12,7 +12,7 @@ func _initialize() -> void:
 	]
 	var gates: Array[int] = [20, 23, 25, 28, 31, 34, 37]
 	var evolution := catalog.evolution_definition(&"berserker")
-	_check(catalog.is_valid() and evolution != null and not evolution.content_ready and evolution.entry_skill_id == &"berserker_rupture" and evolution.exclusive_skill_ids == ids, "Berserker has a complete but unavailable exclusive library")
+	_check(catalog.is_valid() and evolution != null and evolution.content_ready and evolution.entry_skill_id == &"berserker_rupture" and evolution.exclusive_skill_ids == ids, "Berserker enables its complete exclusive library")
 	var library := catalog.skill_ids_for_identity(&"swordsman", &"berserker")
 	_check(&"slash" in library and library.slice(library.size() - 7) == ids and &"defender_counterstroke" not in library and &"berserker_rupture" not in catalog.skill_ids_for_identity(&"swordsman", &"defender"), "Berserker resolves only its own branch and inherited Swordsman skills")
 	for index: int in ids.size():
@@ -22,7 +22,7 @@ func _initialize() -> void:
 		_check(not metadata.is_empty() and metadata["wallet"] == ProfileCatalog.EVOLUTION_WALLET and metadata["required_evolution_id"] == &"berserker" and metadata["rank_requirements"][1]["job_level"] == gates[index], "%s uses approved evolution wallet and job gate" % id)
 		_check(definition != null and definition.is_rank_catalog_valid() and definition.ranks.size() == (3 if id in [&"berserker_obstinacy", &"berserker_pursuit"] else 5), "%s has a complete valid rank table" % id)
 		_check(not catalog.skill_is_allowed(id, &"mage", &"berserker") and not catalog.skill_is_allowed(id, &"swordsman", &"defender"), "%s cannot leak into another origin or branch" % id)
-	_check(not catalog.evolution_is_ready(&"berserker", &"swordsman"), "catalog-only Berserker cannot be selected in production")
+	_check(catalog.evolution_is_ready(&"berserker", &"swordsman"), "completed Berserker can be selected in production")
 	_check(ClassCatalog.skill_definition(&"berserker_wound_leap").action_kind == SkillDefinition.ActionKind.OFFENSIVE and ClassCatalog.skill_definition(&"berserker_blood_rift").rank_definition(1).variable_cast_time == 0.3, "Leap is offensive and Rift has approved variable preparation")
 	_check_active(&"berserker_rupture", [17.0, 19.0, 21.0, 22.0, 23.0], [1.00, 1.12, 1.22, 1.31, 1.38], [0.40, 0.52, 0.63, 0.72, 0.80], 110.0, 5.0)
 	_check_active(&"berserker_wound_leap", [18.0, 20.0, 22.0, 23.0, 24.0], [0.80, 0.96, 1.08, 1.17, 1.24], [], 140.0, 8.0)

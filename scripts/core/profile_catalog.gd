@@ -434,7 +434,7 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 			]
 		if definition.id == &"berserker" and not normalized_overrides.has(definition.id):
 			definition.entry_skill_id = &"berserker_rupture"
-			definition.content_ready = false
+			definition.content_ready = true
 			definition.exclusive_skill_ids = [
 				&"berserker_rupture", &"berserker_obstinacy", &"berserker_wound_leap",
 				&"berserker_execution", &"berserker_pursuit",

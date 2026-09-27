@@ -14,7 +14,7 @@ func _initialize() -> void:
 
 func _run() -> void:
 	var production := ProfileCatalog.pilot()
-	_check(production.is_valid() and production.evolution_is_ready(&"defender", &"swordsman") and not production.evolution_is_ready(&"berserker", &"swordsman"), "only completed Defender is available in production")
+	_check(production.is_valid() and production.evolution_is_ready(&"defender", &"swordsman") and production.evolution_is_ready(&"berserker", &"swordsman"), "completed Swordsman branches are available in production")
 	var catalog := _catalog()
 	_check(catalog.is_valid(), "isolated identity fixture is valid")
 	var base_ids := catalog.skill_ids_for_identity(&"swordsman")

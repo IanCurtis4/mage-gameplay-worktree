@@ -56,7 +56,7 @@ func _check_production_roster() -> void:
 		var has_defender_metadata := definition.id == &"defender" and definition.entry_skill_id == &"defender_counterstroke" and definition.exclusive_skill_ids.size() == 7
 		var has_berserker_metadata := definition.id == &"berserker" and definition.entry_skill_id == &"berserker_rupture" and definition.exclusive_skill_ids.size() == 7
 		var has_no_kit := definition.id not in [&"defender", &"berserker"] and definition.entry_skill_id.is_empty() and definition.exclusive_skill_ids.is_empty()
-		_check((definition.content_ready and has_defender_metadata) if definition.id == &"defender" else (not definition.content_ready and (has_berserker_metadata if definition.id == &"berserker" else has_no_kit)), "%s readiness matches completed or catalog-only production kit" % definition.id)
+		_check((definition.content_ready and has_defender_metadata) if definition.id == &"defender" else ((definition.content_ready and has_berserker_metadata) if definition.id == &"berserker" else (not definition.content_ready and has_no_kit)), "%s readiness matches completed production kits and future placeholders" % definition.id)
 	var mage_options := catalog.evolution_definitions_for_origin(&"mage")
 	_check(mage_options.map(func(definition: EvolutionDefinition) -> StringName: return definition.id) == [&"elementalist", &"spiritualist", &"mg_sp", &"mg_ar"], "origin query includes only the four Mage destinations")
 	var geometer := catalog.evolution_definition(&"mg_ar")
