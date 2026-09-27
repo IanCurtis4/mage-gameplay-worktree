@@ -26,6 +26,9 @@ var burn_remaining := 0.0
 var burn_tick_remaining := 0.0
 var burn_request: DamageRequest
 var bleed_streams: Dictionary[String, Dictionary] = {}
+var berserker_wound_visual_stacks := 0
+var berserker_wound_visual_remaining := 0.0
+var _berserker_wound_visual_pulse := 0.0
 var slow_remaining := 0.0
 var slow_fraction := 0.0
 var electrified_remaining := 0.0
@@ -133,6 +136,17 @@ func apply_bleed(request: DamageRequest, duration: float = 4.0) -> void:
 	bleed_streams[key] = {"request": captured, "remaining": duration, "tick_remaining": tick_remaining}
 	queue_redraw()
 
+func set_berserker_wound_visual(stacks: int, remaining: float) -> void:
+	var normalized_stacks := clampi(stacks, 0, 3)
+	var normalized_remaining := maxf(0.0, remaining) if normalized_stacks > 0 else 0.0
+	if normalized_stacks > berserker_wound_visual_stacks:
+		_berserker_wound_visual_pulse = 0.25
+	if normalized_stacks == berserker_wound_visual_stacks and is_equal_approx(normalized_remaining, berserker_wound_visual_remaining):
+		return
+	berserker_wound_visual_stacks = normalized_stacks
+	berserker_wound_visual_remaining = normalized_remaining
+	queue_redraw()
+
 func apply_attribute_debuff(attribute: StringName, source: StringName, fraction: float, duration: float) -> bool:
 	if not is_alive() or not attribute_debuffs.apply(attribute, source, fraction, duration):
 		return false
@@ -229,6 +243,9 @@ func clear_statuses() -> void:
 	burn_tick_remaining = 0.0
 	burn_request = null
 	bleed_streams.clear()
+	berserker_wound_visual_stacks = 0
+	berserker_wound_visual_remaining = 0.0
+	_berserker_wound_visual_pulse = 0.0
 	attribute_debuffs.clear()
 	_sync_debuff_display()
 	electrified_remaining = 0.0
@@ -312,6 +329,9 @@ func _process(delta: float) -> void:
 	if _flash_time > 0.0:
 		_flash_time = maxf(0.0, _flash_time - delta)
 		queue_redraw()
+	if _berserker_wound_visual_pulse > 0.0:
+		_berserker_wound_visual_pulse = maxf(0.0, _berserker_wound_visual_pulse - delta)
+		queue_redraw()
 
 func _draw() -> void:
 	# Compact contact shadow centered under the soles; no detached tile diamond.
@@ -338,6 +358,19 @@ func _draw() -> void:
 		var bar_y := -_sprite_visible_height - 8.0 if sprite_texture != null else -54.0
 		draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width, 6), Color(0.08, 0.09, 0.12, 0.9))
 		draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width * ratio, 6), Color("dc5757"))
+	if berserker_wound_visual_stacks > 0:
+		var wound_y := -_sprite_visible_height - 15.0
+		for index: int in range(3):
+			var center := Vector2((float(index) - 1.0) * 11.0, wound_y)
+			var diamond := PackedVector2Array([center + Vector2(0, -4), center + Vector2(4, 0), center + Vector2(0, 4), center + Vector2(-4, 0)])
+			draw_colored_polygon(diamond, Color("f6dfc0") if index < berserker_wound_visual_stacks else Color("3e3440"))
+			draw_polyline(PackedVector2Array([diamond[0], diamond[1], diamond[2], diamond[3], diamond[0]]), Color("4b2434"), 1.0, true)
+		var expiry_ratio := clampf(berserker_wound_visual_remaining / 8.0, 0.0, 1.0)
+		draw_arc(Vector2(0, wound_y), 21.0, -PI * 0.5, -PI * 0.5 + TAU * expiry_ratio, 32, Color("f6dfc0"), 1.5, true)
+		if _berserker_wound_visual_pulse > 0.0:
+			var alpha := _berserker_wound_visual_pulse / 0.25
+			draw_line(Vector2(-12, -32), Vector2(5, -17), Color(0.98, 0.93, 0.79, alpha), 2.5, true)
+			draw_line(Vector2(1, -32), Vector2(16, -21), Color(0.88, 0.30, 0.37, alpha), 2.5, true)
 	if is_burning():
 		draw_arc(Vector2(0, 3), collision_radius + 6.0, 0.0, TAU, 24, Color("ff7a3d"), 2.0, true)
 	if not bleed_streams.is_empty():

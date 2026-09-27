@@ -32,7 +32,7 @@ func _initialize() -> void:
 		for index: int in range(fps):
 			paced.advance(1.0 / fps, Vector2(220.0 / fps, 0))
 		_check(paced.frame_index() == 5, "walk phase follows compact stride consistently at %d Hz" % fps)
-	for id: StringName in [&"swordsman", &"mage", &"warrior", &"archer", &"defender"]:
+	for id: StringName in [&"swordsman", &"mage", &"warrior", &"archer", &"defender", &"berserker"]:
 		var animation := CharacterAnimation.new()
 		animation.configure(id)
 		_check(animation.atlas != null and animation.atlas.get_size() == Vector2(256, 512), "%s contains 32 native 64 px animation frames" % id)
@@ -64,8 +64,15 @@ func _test_integration() -> void:
 	var defender_player := PlayerActor.new()
 	defender_player.configure(navigation, RunState.from_build("defender-visual", defender_snapshot))
 	_check(defender_player.class_id == &"swordsman" and defender_player.character_animation.actor_kind == &"defender" and defender_player.character_animation.atlas != base_player.character_animation.atlas, "Defender changes only the visual atlas, preserving base gameplay identity")
+	var berserker_snapshot := BuildSnapshot.new()
+	berserker_snapshot.base_class_id = &"swordsman"
+	berserker_snapshot.evolution_id = &"berserker"
+	var berserker_player := PlayerActor.new()
+	berserker_player.configure(navigation, RunState.from_build("berserker-visual", berserker_snapshot))
+	_check(berserker_player.class_id == &"swordsman" and berserker_player.character_animation.actor_kind == &"berserker" and berserker_player.character_animation.atlas != base_player.character_animation.atlas and berserker_player.character_animation.atlas != defender_player.character_animation.atlas, "Berserker has a distinct 32-frame atlas without changing Swordsman gameplay identity")
 	base_player.free()
 	defender_player.free()
+	berserker_player.free()
 	RunController.selected_class_id = &"mage"
 	var controller := RunController.new()
 	root.add_child(controller)

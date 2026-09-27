@@ -181,7 +181,12 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 	var derived := _build_stat_breakdown()
 	var class_color := Color("8e73de") if class_id == &"mage" else Color("6fa85a") if class_id == &"archer" else Color("55a8d9")
 	setup(class_definition.display_name, class_color, derived, 20.0)
-	set_animation_kind(&"defender" if _is_defender() else class_id)
+	var animation_kind := class_id
+	if _is_defender():
+		animation_kind = &"defender"
+	elif _is_berserker():
+		animation_kind = &"berserker"
+	set_animation_kind(animation_kind)
 	max_sp = stat_breakdown.value(&"max_sp")
 	current_sp = max_sp
 	shield_remaining = 0.0
@@ -441,6 +446,12 @@ func berserker_wound_stacks(target_id: int) -> int:
 		return 0
 	var wound: Dictionary = berserker_wounds[target_id]
 	return int(wound.get("stacks", 0)) if float(wound.get("remaining", 0.0)) > 0.0 else 0
+
+func berserker_wound_remaining(target_id: int) -> float:
+	if berserker_wound_stacks(target_id) <= 0:
+		return 0.0
+	var wound: Dictionary = berserker_wounds[target_id]
+	return float(wound.get("remaining", 0.0))
 
 func record_berserker_damage(result: Dictionary) -> void:
 	if not _is_berserker() or not is_alive() or int(result.get("source_id", 0)) != get_instance_id():

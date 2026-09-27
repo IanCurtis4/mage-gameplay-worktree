@@ -146,6 +146,7 @@ func _process(_delta: float) -> void:
 	player.regenerate_hp(_delta, encounter_active, get_tree().paused or run_finished)
 	if not get_tree().paused and not run_finished:
 		_sync_defender_anchor()
+		_sync_berserker_wound_visuals()
 	_update_hud()
 	if not get_tree().paused and not run_finished:
 		if _world_pointer_available():
@@ -575,6 +576,15 @@ func _on_berserker_breath_hit_requested(request: DamageRequest, target_actor: Co
 	var result := target_actor.apply_damage(request, rng)
 	if marked_before_hit and target_actor.is_alive() and player != null and is_instance_valid(player):
 		player.heal_from_berserker_breath_steal(result, heal_fraction)
+
+func _sync_berserker_wound_visuals() -> void:
+	if player == null or not is_instance_valid(player):
+		return
+	for enemy: CombatActor in enemies:
+		if enemy == null or not is_instance_valid(enemy):
+			continue
+		var enemy_id := enemy.get_instance_id()
+		enemy.set_berserker_wound_visual(player.berserker_wound_stacks(enemy_id), player.berserker_wound_remaining(enemy_id))
 
 func _sync_defender_anchor() -> void:
 	var active := player != null and is_instance_valid(player) and player.has_defender_anchor()

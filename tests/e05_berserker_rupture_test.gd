@@ -28,15 +28,20 @@ func _run() -> void:
 	enemy.health.current_hp = 10000.0
 	var controller := RunController.new()
 	controller.player = player
+	controller.enemies = [enemy]
 	player.attack_requested.connect(_on_attack_requested)
 	enemy.health.damage_applied.connect(controller._on_enemy_damage_resolved)
 	_check(player.use_berserker_rupture(enemy) and requests.size() == 1 and not requests[0].is_secondary and player.berserker_wound_stacks(enemy.get_instance_id()) == 1, "first direct Rupture creates exactly one wound stack after real HP damage")
+	controller._sync_berserker_wound_visuals()
+	_check(enemy.berserker_wound_visual_stacks == 1 and is_equal_approx(enemy.berserker_wound_visual_remaining, PlayerActor.BERSERKER_WOUND_DURATION), "wound indicator exposes a count and expiry for the first charge")
 	_check(player.skill_cooldown(&"berserker_rupture") > 0.0 and player.current_sp < player.max_sp, "valid Rupture commit spends SP and starts cooldown")
 	_resolve_direct(player, enemy, &"basic_attack", false, 0.0)
 	_check(player.berserker_wound_stacks(enemy.get_instance_id()) == 2, "direct melee adds exactly one wound stack")
 	_resolve_direct(player, enemy, &"brutal_strike", false, 0.0)
 	_resolve_direct(player, enemy, &"concentrated_rage", false, 0.0)
 	_check(player.berserker_wound_stacks(enemy.get_instance_id()) == 3, "wound stacks cap at three across direct melee attacks")
+	controller._sync_berserker_wound_visuals()
+	_check(enemy.berserker_wound_visual_stacks == 3, "indicator has three discrete marks at the wound cap")
 	_resolve_direct(player, enemy, &"basic_attack", false, 1.0)
 	_resolve_direct(player, enemy, &"basic_attack", true, 0.0)
 	_check(player.berserker_wound_stacks(enemy.get_instance_id()) == 3, "misses and secondary damage cannot add wound stacks")
@@ -68,6 +73,8 @@ func _run() -> void:
 	paused = false
 	player._process(PlayerActor.BERSERKER_WOUND_DURATION + 0.1)
 	_check(player.berserker_wound_stacks(enemy.get_instance_id()) == 0, "wound expires on simulation time")
+	controller._sync_berserker_wound_visuals()
+	_check(enemy.berserker_wound_visual_stacks == 0 and enemy.berserker_wound_visual_remaining == 0.0, "expired wound clears its visual indicator")
 	player.clear_berserker_state()
 	_check(player.berserker_wounds.is_empty(), "encounter/run cleanup removes all wounds")
 	player.free()
