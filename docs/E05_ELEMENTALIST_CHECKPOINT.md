@@ -1,0 +1,82 @@
+# E05 — checkpoint único do Elementalista
+
+## Autorização e base — 27/09/2026
+
+O usuário jogou e aprovou Berserker no candidato `21c7793`; `master` e
+`codex/playtest` já apontam para ele. Autorizou Elementalista como próxima
+evolução do Mago, incluindo atlas e VFX, com commits pequenos por comportamento
+e revisão Astra somente após fechar a classe. Espiritualista e demais classes
+não estão liberadas. Tamanhos/alcances e separação baseline versus augment são
+balanceamento transversal futuro, não escopo deste kit.
+
+Usar esta branch `codex/e05-evolutions`; não mover playtest/master durante a
+implementação. Sol é dono do runtime e persistência; Terra pode ter arquivos
+visuais próprios, Luna dados fechados. Um dono de escrita por arquivo. Antes e
+depois de cada habilidade, informar brevemente o passo; guardar aqui hash,
+testes e próximo passo para retomada. Não inferir tokens por skill sem medição
+atribuível disponível. Ao esgotar limite, retomar a primeira linha pendente.
+
+## Base normativa e identidade
+
+E00_MVP_CLASS_CONTRACT fixa origem `mage`, sete exclusivas com gates job
+20/23/25/28/31/34/37, entrada R1 gratuita não autoequipada, carteira base
+19/evolução20 e limite 5 ativas/2 passivas equipadas. Ranks ativos1–5 e
+passivos1–3; rank pago custa um ponto. Mago E04 já tem fogo projétil/parede,
+gelo lança/parede sólida, raio marca Eletrizado e Descarga que consome marca
+para bônus/chance de stun. Reutilizar DamageRequest, StatCalculator, cast DES,
+HardControlState e regras de pausa/limpeza. O brainstorm cita tempestade,
+geada e meteoro como inspiração histórica, não números fechados. A linguagem
+visual aprovada é cristal/energia, formas prismáticas e radiais, azul/branco
+com acentos fogo/raio; continuidade do Mago sem roupa RGB nem cópia de sprites.
+
+## Kit implementável — escolhas locais dentro do contrato
+
+Fogo causa somente dano, sem CC ou queimadura baseline. Gelo causa dano mágico
+e slow garantido após dano positivo em alvo sobrevivente, sujeito ao teto
+compartilhado de 50%. Raio tem dano adicional no alvo previamente Eletrizado;
+consome a marca apenas após dano positivo e faz uma rolagem de 25% para stun
+0,6 s, sempre pelo orçamento/resistência de boss de HardControlState. Se não
+estava marcado, um acerto positivo em sobrevivente aplica Eletrizado por 4 s.
+Nenhum tick secundário dispara passivas, augments ou novas cadeias.
+
+| Gate | Skill / ID | Forma R1 e números iniciais | Papel e distinção da base |
+|---|---|---|---|
+| 20 ativa gratuita | Explosão de Chamas `elementalist_flame_burst` | Ponto até 380; raio 90; cast DES 0,45 s; SP 20, CD 6 s; 1,30× ATQM | Detonação pontual única, dano puro; não é projétil nem parede. |
+| 23 passiva | Foco Prismático `elementalist_prismatic_focus` | Após dois acertos diretos positivos de elementos diferentes no mesmo alvo em até 5 s, restitui 2/3/4 SP por rank; no máximo uma vez/s por jogador e uma vez por emissão. | Incentiva alternar elementos herdados/exclusivos, inclusive no boss; não aciona em DoT/secundário. |
+| 25 ativa | Anel Glacial `elementalist_glacial_ring` | Centro no Mago; raio 145; cast DES 0,35 s; SP 19, CD 8 s; 0,90× ATQM; slow 40% por 2,5 s. | Defesa radial de espaço, não lança nem parede sólida; slow após dano positivo. |
+| 28 ativa | Arco Voltaico `elementalist_lightning_arc` | Alvo único inicial até 380; salta a até dois outros alvos a 110 do anterior, sem repetir; cast DES 0,35 s; SP 22, CD 8 s; principal 1,10× ATQM, saltos 0,60×; marcado +0,40×. | Acerto direto/único no boss; cadeia finita, saltos secundários sem proc; marca/bônus/stun somente com regra Eletrizado. |
+| 31 passiva | Ressonância Prismática `elementalist_prismatic_resonance` | Três elementos distintos com dano direto positivo no mesmo alvo em até 6 s: o terceiro golpe ganha +0,25/0,35/0,45× ATQM por rank antes da mitigação e reinicia sequência. | Payoff de sequência sem nova barra de recurso; não proca em acertos secundários, misses ou dano zero. |
+| 34 ativa | Trilha de Brasas `elementalist_ember_path` | Direção até 240; três círculos de raio 55 a 80/160/240 do Mago, com 0,15 s entre erupções; cast DES 0,50 s; SP 24, CD 10 s; 1,10× ATQM no máximo uma vez/alvo/emissão. | Dano puro em progressão espacial; não é Fire Wall persistente nem a detonação pontual de job20. |
+| 37 ativa | Nova Tríplice `elementalist_tri_nova` | Centro no Mago; raio 170; cast DES 0,65 s; SP 30, CD 16 s; três pulsos a 0/0,25/0,50 s: fogo 0,70×, gelo 0,55× + slow, raio 0,60× + regra Eletrizado. | Assinatura das três formas. Só primeiro pulso é raiz de procs; demais são secundários, sem cascata. |
+
+Ranks superiores crescem com margens decrescentes e custo SP moderado, sem
+alterar geometria/alcance silenciosamente. Passivas só funcionam equipadas.
+Passivas reconhecem fogo (Bola/Lança de Fogo e exclusivas), gelo (Lança de Gelo
+e exclusivas) e raio (Relâmpago/Descarga e exclusivas); paredes/ticks passivos
+não alimentam sequência. Combos não exigem kills ou adds. Fraqueza deliberada:
+exposição durante conjuração e custo SP alto se não alternar elementos.
+
+## Critérios e progresso
+
+Migrar catálogo 4→5 de modo aditivo antes de salvar novos IDs; schema/ruleset
+não mudam, backup preservado. Nenhum save real como fixture. Habilitar
+`content_ready` somente após sete skills, atlas/VFX, duas builds legais,
+menu→evolução→XP job→compra/equipamento→reload→run→recompensa, boss solo,
+rank R0/R1/R5, SP/cast DES, colisão/áreas, pausa/cleanup e regressões de
+Mago/Defendente/Berserker/bases. Executar `tools/verify.ps1` integral.
+
+| Passo | Status / commit | Evidências | Próximo passo / bloqueio |
+|---|---|---|---|
+| Catálogo 4→5 e dados | Concluído `7b62c8f` + `cc2b2ab` | 99 checks de dados; migração 4→5 em 11 checks, regressões das migrações 2/3 em 13/10. `tools/verify.ps1` integral passou no Godot 4.7.2 após atualização de expectativa S1A; schema/ruleset iguais, backup exato, `content_ready=false`. | Implementar Explosão de Chamas. |
+| Explosão de Chamas | Pendente | — | Runtime e testes dirigidos. |
+| Foco Prismático | Pendente | — | Sequência direta sem cascata. |
+| Anel Glacial | Pendente | — | Slow garantido/teto/pausa. |
+| Arco Voltaico | Pendente | — | Marca, saltos e boss. |
+| Ressonância Prismática | Pendente | — | Terceiro elemento e pré-mitigação. |
+| Trilha de Brasas | Pendente | — | Geometria e um hit/alvo. |
+| Nova Tríplice | Pendente | — | Três pulsos sem proc recursivo. |
+| Atlas e VFX | Atlas concluído `11bb421`; VFX pendentes | Atlas original 256×512 e teste visual 3 checks; importação 4.7.2 passou. Geração entregou seis linhas distintas úteis, com poses compatíveis reutilizadas nas demais células; pivô/hitbox preservados. | Ligar `evolution_id` ao atlas no ator; previews/VFX das skills ficam para integração. |
+| Fechamento integrado | Pendente | — | Entrega única para Astra; não mover playtest/master. |
+
+Tokens por passo: medição atribuível indisponível nesta tarefa; não estimar
+consumo semanal a partir de tempo ou número de testes.

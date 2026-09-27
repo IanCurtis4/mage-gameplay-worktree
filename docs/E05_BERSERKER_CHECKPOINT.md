@@ -127,8 +127,13 @@ Conferir a silhueta de espada larga e as 1–3 marcas/expiração em combate;
 num boss sem adds, abrir ferida, curar com Arrancar Fôlego em alvo sobrevivente
 e converter com Execução. Testar também Fenda em alvo protegido por escudo.
 
-Limitações: ainda não houve playtest humano deste candidato nem merge. A
-inspeção estática e os testes automatizados não comprovam legibilidade durante
-combate, sensação, balanceamento ou FPS; o boss automatizado não representa
-uma partida humana completa. `master` permanece inalterada até aceite explícito
-do usuário sobre o candidato testado.
+Aceite de produto — 27/09/2026: o usuário jogou o candidato `21c7793`, testou
+as skills necessárias e aprovou o Berserker. `codex/playtest` e `master`
+estão nesse commit. O usuário deixou para balanceamento transversal futuro
+tamanhos/alcances das skills e a divisão entre efeitos baseline e augments;
+isso não reabre o kit nesta entrega nem autoriza implementar augments agora.
+
+Limitações do aceite: ele não é medição de FPS nem revisão de balanceamento
+transversal. O roteiro automatizado de boss não representa uma partida humana
+completa. O próximo escopo autorizado é apenas Elementalista, registrado em
+`docs/E05_ELEMENTALIST_CHECKPOINT.md`.
