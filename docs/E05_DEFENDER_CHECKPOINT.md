@@ -209,3 +209,35 @@ atingiu baseXP7500/jobXP4940 antes da aplicação; nenhuma alteração necessár
 Backup separado criado antes das verificações. Evolução ainda null; diagnóstico
 do fluxo de confirmação delegado à tarefa E05 Sol. Não afirmar correção desse
 fluxo até receber a entrega. Master não foi atualizado.
+
+## Correção integrada do fluxo de playtest — 27/09/2026
+
+Reprodução isolada, sem usar o save real como fixture: candidato Espadachim em
+baseXP7500/jobXP4940, mas outro personagem persistido como selecionado. Antes
+da correção, `Escolher Defendente` deixava apenas uma intenção pendente sem
+aviso destacado nem confirmação visível; mesmo após confirmar, `Iniciar run`
+abria o personagem anteriormente selecionado. O cenário falhou em 6 de 15
+checks: confirmação, identidade/snapshot da run, HUD e crédito de job XP.
+
+O menu agora anuncia a confirmação pendente no status, coloca seu botão em
+foco e rola até ele. O roster distingue `Espadachim → Defendente`. O botão de
+run nomeia o personagem em foco e, ao ser acionado, seleciona-o pela transação
+existente antes de iniciar a run; falha nessa seleção impede iniciar. Não há
+mudança de schema, XP, rank ou fórmula. Esta decisão de UI muda a semântica
+anterior de iniciar sempre com a seleção persistida, para corresponder ao
+personagem que o jogador está editando e vê no botão.
+
+Com a evolução apenas escolhida, sem confirmação, o job continua travado em
+20 (4940 XP). Após confirmar, Contraforte R1 é gratuito, mas não autoequipado;
+compras exigem pontos de evolução e o job indicado, e equipamentos/slots
+precisam ser salvos. O sprite provisório mantém a origem Espadachim; o
+snapshot/runtime usa `evolution_id=defender` e skills equipadas. O novo teste
+integrado cobre escolha→confirmação→XP acima de 20→compra→slot→reload→run,
+HUD/dispatch→recompensa job acima de 20→fim/reload, inclusive dois personagens
+com seleção prévia diferente. Passou com 17 checks. Nenhum save real foi
+alterado por esta correção. Revisão Astra e playtest interativo permanecem
+pendentes; não atualizar `codex/playtest` ou `master` nesta etapa.
+
+Verificação integral após o delta: `tools/verify.ps1` no Godot 4.7.2 standard,
+importação, 78 suítes / 3423 checks e smoke headless aprovados. Inclui as
+regressões de menu E02/E05, admin de playtest, persistência e combate base.

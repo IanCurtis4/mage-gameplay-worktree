@@ -129,6 +129,7 @@ func _select_roster_index(index: int) -> void:
 		_populate_build_editor(profile.characters[index])
 		build_summary_label.text = _build_summary(profile.characters[index])
 		_refresh_progression_panel(profile.characters[index], profile)
+		_refresh_start_run_action(profile)
 	select_button.disabled = false
 	preset_selector.disabled = _read_only
 	save_build_button.disabled = _read_only
@@ -160,8 +161,14 @@ func _save_build() -> Dictionary:
 
 func _start_run() -> Dictionary:
 	var profile: Variant = facade.current_profile() if facade != null else null
-	if profile == null or profile.selected_character_id.is_empty():
+	if profile == null or _selected_index < 0 or _selected_index >= profile.characters.size():
 		return _show_result({"ok": false, "error_code": &"invalid_character_id"})
+	var focused_id: String = profile.characters[_selected_index].character_id
+	if profile.selected_character_id != focused_id:
+		var selected: Dictionary = facade.select_character(_request_id("select-for-run"), profile.revision, focused_id)
+		if not selected.get("ok", false):
+			return _show_result(selected)
+		profile = facade.current_profile()
 	var result: Dictionary = facade.start_run(_request_id("start"), profile.revision)
 	if result.get("ok", false):
 		RunController.pending_run_state = result["run_state"]
@@ -234,6 +241,7 @@ func _refresh() -> void:
 		preset_selector.disabled = true
 		save_build_button.disabled = true
 		start_run_button.disabled = true
+		start_run_button.text = "Iniciar run"
 		_set_attribute_actions_disabled(true)
 		_set_skill_actions_disabled(true)
 		_refresh_playtest_controls(null)
@@ -244,7 +252,7 @@ func _refresh() -> void:
 	var focused_index := -1
 	for character: Variant in profile.characters:
 		var selected := "  • selecionado" if character.character_id == profile.selected_character_id else ""
-		roster_list.add_item("%s — %s%s" % [character.display_name, _class_name(character.base_class_id), selected])
+		roster_list.add_item("%s — %s%s" % [character.display_name, _roster_identity_name(character), selected])
 		if character.character_id == profile.selected_character_id:
 			persisted_index = roster_list.item_count - 1
 		if character.character_id == _focused_character_id:
@@ -269,12 +277,24 @@ func _refresh() -> void:
 	select_button.disabled = locked or _selected_index < 0
 	preset_selector.disabled = locked or _selected_index < 0
 	save_build_button.disabled = locked or _selected_index < 0
-	start_run_button.disabled = locked or profile.selected_character_id.is_empty()
+	_refresh_start_run_action(profile)
 	_set_attribute_actions_disabled(locked or profile.reward_session != null)
 	_set_skill_actions_disabled(locked or profile.reward_session != null)
 	_refresh_playtest_controls(profile)
 	if profile.characters.size() >= MAX_CHARACTERS:
 		status_label.text = "Limite de %d personagens atingido." % MAX_CHARACTERS
+
+func _refresh_start_run_action(profile: ProfileState) -> void:
+	if start_run_button == null:
+		return
+	if profile == null or _selected_index < 0 or _selected_index >= profile.characters.size():
+		start_run_button.text = "Iniciar run"
+		start_run_button.disabled = true
+		return
+	var focused: CharacterState = profile.characters[_selected_index]
+	start_run_button.text = "Iniciar run com %s" % focused.display_name
+	start_run_button.tooltip_text = "Seleciona %s e inicia a arena com a build salva deste personagem." % focused.display_name
+	start_run_button.disabled = _read_only or profile.reward_session != null
 
 func _error_text(error_code: StringName, read_only: bool) -> String:
 	if read_only:
@@ -310,6 +330,17 @@ func _class_name(base_class_id: StringName) -> String:
 		&"mage": return "Mago"
 		&"archer": return "Arqueiro"
 		_: return "Classe indisponível"
+
+func _roster_identity_name(character: CharacterState) -> String:
+	var origin := _class_name(character.base_class_id)
+	if character.evolution_id.is_empty():
+		return origin
+	var options: Dictionary = facade.evolution_options(character.character_id)
+	if options.get("ok", false):
+		for option: Dictionary in options["options"]:
+			if option["is_current"]:
+				return "%s → %s" % [origin, option["display_name"]]
+	return origin
 
 func _build_summary(character: Variant) -> String:
 	var preset: Dictionary = character.presets[character.selected_preset]
@@ -406,11 +437,13 @@ func _refresh_evolution_panel(character: Variant, profile: Variant) -> void:
 		evolution_options_list.add_child(choose_button)
 	if _evolution_pending.is_empty():
 		evolution_confirmation_label.text = "Escolher ou trocar uma evolução pede confirmação. A entrada gratuita não será equipada automaticamente."
+		confirm_evolution_button.text = "Confirmar evolução"
 		confirm_evolution_button.disabled = true
 		cancel_evolution_button.disabled = true
 	else:
 		var pending_name: String = _evolution_pending.get("display_name", "Evolução")
 		evolution_confirmation_label.text = "Confirmar %s? Compras exclusivas serão reembolsadas e slots que deixarem de ser legais podem ser esvaziados." % pending_name
+		confirm_evolution_button.text = "Confirmar %s" % pending_name
 		confirm_evolution_button.disabled = _read_only or profile.reward_session != null
 		cancel_evolution_button.disabled = false
 
@@ -436,6 +469,9 @@ func _begin_evolution_change(evolution_id: StringName) -> Dictionary:
 		"revision": context["revision"],
 	}
 	_refresh()
+	status_label.text = "Escolha pendente: %s. Confirme a evolução para salvá-la." % option["display_name"]
+	confirm_evolution_button.call_deferred("grab_focus")
+	menu_scroll.call_deferred("ensure_control_visible", confirm_evolution_button)
 	return {"ok": true, "pending_confirmation": true, "character_id": context["character_id"], "evolution_id": evolution_id}
 
 func _confirm_evolution_change() -> Dictionary:
@@ -467,6 +503,7 @@ func _confirm_evolution_change() -> Dictionary:
 func _cancel_evolution_change() -> void:
 	_discard_evolution_intent()
 	_refresh()
+	status_label.text = "Escolha de evolução cancelada."
 
 func _discard_evolution_intent() -> void:
 	if _evolution_pending.is_empty():
