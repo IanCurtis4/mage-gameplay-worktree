@@ -149,6 +149,13 @@ static func _ensure_built() -> void:
 	_add_passive_skill(&"berserker_pursuit", "Caça Persistente")
 	_add_skill(&"berserker_blood_rift", "Fenda Sangrenta", "D", SkillDefinition.Targeting.DIRECTION, 21.0, 9.0, 0.90, 220.0, 0.0, 0.3, DamageRequest.AccuracyMode.GEOMETRY, true)
 	_add_skill(&"berserker_breath_steal", "Arrancar Fôlego", "D", SkillDefinition.Targeting.SINGLE_TARGET, 18.0, 12.0, 1.0, 110.0, 0.0, 0.0, DamageRequest.AccuracyMode.CONTESTED, true)
+	_add_skill(&"elementalist_flame_burst", "Explosão de Chamas", "D", SkillDefinition.Targeting.POINT, 20.0, 6.0, 1.30, 380.0, 0.0, 0.45, DamageRequest.AccuracyMode.GEOMETRY, true)
+	_add_passive_skill(&"elementalist_prismatic_focus", "Foco Prismático")
+	_add_skill(&"elementalist_glacial_ring", "Anel Glacial", "D", SkillDefinition.Targeting.SELF, 19.0, 8.0, 0.90, 145.0, 0.0, 0.35, DamageRequest.AccuracyMode.GEOMETRY, true)
+	_add_skill(&"elementalist_lightning_arc", "Arco Voltaico", "D", SkillDefinition.Targeting.SINGLE_TARGET, 22.0, 8.0, 1.10, 380.0, 0.0, 0.35, DamageRequest.AccuracyMode.CONTESTED, true)
+	_add_passive_skill(&"elementalist_prismatic_resonance", "Ressonância Prismática")
+	_add_skill(&"elementalist_ember_path", "Trilha de Brasas", "D", SkillDefinition.Targeting.DIRECTION, 24.0, 10.0, 1.10, 240.0, 0.0, 0.50, DamageRequest.AccuracyMode.GEOMETRY, true)
+	_add_skill(&"elementalist_tri_nova", "Nova Tríplice", "D", SkillDefinition.Targeting.SELF, 30.0, 16.0, 0.70, 170.0, 0.0, 0.65, DamageRequest.AccuracyMode.GEOMETRY, true)
 	_configure_slash_ranks()
 	_configure_dash_ranks()
 	_configure_shield_wall_ranks()
@@ -194,6 +201,7 @@ static func _ensure_built() -> void:
 	_configure_defender_wall_advance_ranks()
 	_configure_defender_reprisal_wave_ranks()
 	_configure_berserker_ranks()
+	_configure_elementalist_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -1001,6 +1009,43 @@ static func _configure_berserker_ranks() -> void:
 	_berserker_active_ranks(&"berserker_blood_rift", [21.0, 23.0, 25.0, 26.0, 27.0], [0.90, 0.90, 0.90, 0.90, 0.90], [0.10, 0.12, 0.14, 0.16, 0.18], 220.0, 9.0, 0.3, [&"directional_strip_width_44", &"direct_damage", &"secondary_bleed_four_seconds"])
 	_skills[&"berserker_breath_steal"].handler_id = SkillDefinition.Handler.BERSERKER_BREATH_STEAL
 	_berserker_active_ranks(&"berserker_breath_steal", [18.0, 20.0, 22.0, 23.0, 24.0], [1.00, 1.08, 1.16, 1.23, 1.30], [0.15, 0.18, 0.21, 0.24, 0.27], 110.0, 12.0, 0.0, [&"direct_melee", &"heal_if_previously_wounded_and_survives_cap_five_percent_max_hp"])
+
+static func _configure_elementalist_ranks() -> void:
+	_elementalist_active_ranks(&"elementalist_flame_burst", SkillDefinition.Handler.ELEMENTALIST_FLAME_BURST, [20.0, 22.0, 24.0, 25.0, 26.0], [1.30, 1.50, 1.67, 1.82, 1.95], 380.0, 6.0, 0.45, [&"direct_magic_damage"])
+	_elementalist_passive_ranks(&"elementalist_prismatic_focus", SkillDefinition.Handler.ELEMENTALIST_PRISMATIC_FOCUS, [2.0, 3.0, 4.0], [&"two_direct_distinct_elements_within_five_seconds_sp_return_once_per_second"])
+	_elementalist_active_ranks(&"elementalist_glacial_ring", SkillDefinition.Handler.ELEMENTALIST_GLACIAL_RING, [19.0, 21.0, 23.0, 24.0, 25.0], [0.90, 1.05, 1.18, 1.29, 1.38], 145.0, 8.0, 0.35, [&"direct_magic_damage", &"slow_40pct_2_5s_after_positive_damage"])
+	_elementalist_active_ranks(&"elementalist_lightning_arc", SkillDefinition.Handler.ELEMENTALIST_LIGHTNING_ARC, [22.0, 24.0, 26.0, 27.0, 28.0], [1.10, 1.25, 1.38, 1.49, 1.58], 380.0, 8.0, 0.35, [&"direct_magic_damage", &"chain_up_to_two_targets_110_no_repeat", &"chain_jump_power_0_60", &"marked_target_bonus_secondary_power", &"electric_mark_and_stun_rule"] , 0.40)
+	_elementalist_passive_ranks(&"elementalist_prismatic_resonance", SkillDefinition.Handler.ELEMENTALIST_PRISMATIC_RESONANCE, [0.25, 0.35, 0.45], [&"three_direct_distinct_elements_within_six_seconds_third_hit_bonus_before_mitigation"])
+	_elementalist_active_ranks(&"elementalist_ember_path", SkillDefinition.Handler.ELEMENTALIST_EMBER_PATH, [24.0, 26.0, 28.0, 29.0, 30.0], [1.10, 1.25, 1.38, 1.49, 1.58], 240.0, 10.0, 0.50, [&"three_eruptions_at_80_160_240", &"direct_magic_damage_once_per_target_emission"])
+	_elementalist_active_ranks(&"elementalist_tri_nova", SkillDefinition.Handler.ELEMENTALIST_TRI_NOVA, [30.0, 32.0, 34.0, 35.0, 36.0], [0.70, 0.80, 0.88, 0.95, 1.01], 170.0, 16.0, 0.65, [&"three_pulses_fire_ice_lightning_at_0_0_25_0_50", &"ice_pulse_0_55_slow", &"lightning_pulse_0_60_electrified", &"root_only_first_pulse"] , 0.55)
+
+static func _elementalist_active_ranks(skill_id: StringName, handler: SkillDefinition.Handler, costs: Array[float], powers: Array[float], skill_range: float, cooldown: float, variable_cast: float, effects: Array[StringName], secondary_power: float = 0.0) -> void:
+	var definition: SkillDefinition = _skills[skill_id]
+	definition.handler_id = handler
+	for index: int in powers.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = cooldown
+		rank.range = skill_range
+		rank.variable_cast_time = variable_cast
+		rank.power = powers[index]
+		rank.secondary_power = secondary_power
+		rank.magic_weight = 1.0
+		rank.effect_ids = effects.duplicate()
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _elementalist_passive_ranks(skill_id: StringName, handler: SkillDefinition.Handler, powers: Array[float], effects: Array[StringName]) -> void:
+	var definition: SkillDefinition = _skills[skill_id]
+	definition.handler_id = handler
+	for index: int in powers.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.power = powers[index]
+		rank.effect_ids = effects.duplicate()
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
 
 static func _berserker_active_ranks(skill_id: StringName, costs: Array[float], powers: Array[float], secondary_powers: Array[float], skill_range: float, cooldown: float, variable_cast: float, effects: Array[StringName]) -> void:
 	var definition: SkillDefinition = _skills[skill_id]
