@@ -78,6 +78,7 @@ ou master, não iniciar outra classe. Sem monitor/automação recorrente.
 | Passo | Status / commit | Testes e evidência | Próximo passo / impedimentos |
 |---|---|---|---|
 | Catálogo 3→4 | Concluído `23bb710` | Migração aditiva de catálogo 3, preservação de build/XP e backup byte a byte, bloqueio de backup mais novo/estranho; 10 checks dirigidos. `tools/verify.ps1` integral passou no Godot 4.7.2. | Registrar sete skills Berserker com `content_ready=false`; nenhum impedimento. |
+| Dados das sete skills | Concluído `09b41ec` | Biblioteca, gates job 20/23/25/28/31/34/37, R1 gratuito de Ruptura e ranks/custos registrados; 57 checks de catálogo e 65 de regressão E05 S1A passaram. `content_ready=false` permanece. | Implementar Ruptura e ferida no runtime; nenhum impedimento. |
 
 Tokens por passo: medição atribuível não disponível; não inferir uso semanal.
 O schema e o ruleset não mudam. Catálogos 1/2/3 migram ao 4 somente após
