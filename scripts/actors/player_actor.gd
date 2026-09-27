@@ -77,6 +77,9 @@ const DEFENDER_WATCH_DURATION := 2.5
 const DEFENDER_ANCHOR_DEFENSE_BONUS := 0.10
 const DEFENDER_ANCHOR_SLOW_FRACTION := 0.20
 const DEFENDER_PUSH_DISTANCE := 35.0
+const BERSERKER_WOUND_DURATION := 8.0
+const BERSERKER_WOUND_MAX_STACKS := 3
+const BERSERKER_DIRECT_MELEE_IDS := [&"basic_attack", &"cone_slash", &"brutal_strike", &"concentrated_rage", &"berserker_rupture"]
 
 var navigation: ArenaNavigation
 var run_state: RunState
@@ -146,6 +149,7 @@ var defender_guard_return_cooldown := 0.0
 var defender_anchor_remaining := 0.0
 var defender_anchor_center := Vector2.INF
 var _defender_inside_anchor := false
+var berserker_wounds: Dictionary[int, Dictionary] = {}
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
@@ -158,6 +162,7 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 	_capture_rank_definitions()
 	fury_remaining = 0.0
 	clear_defender_state()
+	clear_berserker_state()
 	var derived := _build_stat_breakdown()
 	var class_color := Color("8e73de") if class_id == &"mage" else Color("6fa85a") if class_id == &"archer" else Color("55a8d9")
 	setup(class_definition.display_name, class_color, derived, 20.0)
@@ -279,6 +284,55 @@ func use_defender_counterstroke(direction: Vector2, enemies: Array[CombatActor])
 	resources_changed.emit()
 	queue_redraw()
 	return true
+
+func use_berserker_rupture(enemy: CombatActor) -> bool:
+	var rank_definition := _runtime_rank_definition(&"berserker_rupture")
+	if not _is_berserker() or rank_definition == null or not can_target_skill(&"berserker_rupture", enemy) or not _can_spend(&"berserker_rupture"):
+		return false
+	var facing := _resolved_facing(global_position.direction_to(enemy.global_position))
+	var stacks := berserker_wound_stacks(enemy.get_instance_id())
+	var detonate := stacks > 0
+	var power := stat_breakdown.value(&"melee_attack") * (rank_definition.secondary_power * stacks if detonate else rank_definition.power)
+	var definition := ClassCatalog.skill_definition(&"berserker_rupture")
+	_commit_action(definition.action_kind)
+	_spend(&"berserker_rupture")
+	reveal_from_offense()
+	var request := _make_physical_request(enemy, &"berserker_rupture_detonation" if detonate else &"berserker_rupture", power, definition.accuracy_mode, definition.can_crit and not detonate)
+	request.is_secondary = detonate
+	attack_requested.emit(request, enemy)
+	presentation_action.emit(&"slash", facing, 0.20)
+	resources_changed.emit()
+	return true
+
+func berserker_wound_stacks(target_id: int) -> int:
+	if not _is_berserker() or not berserker_wounds.has(target_id):
+		return 0
+	var wound: Dictionary = berserker_wounds[target_id]
+	return int(wound.get("stacks", 0)) if float(wound.get("remaining", 0.0)) > 0.0 else 0
+
+func record_berserker_damage(result: Dictionary) -> void:
+	if not _is_berserker() or not is_alive() or int(result.get("source_id", 0)) != get_instance_id():
+		return
+	var target_id := int(result.get("target_id", 0))
+	if target_id <= 0:
+		return
+	var skill_id := StringName(result.get("skill_id", &""))
+	if skill_id == &"berserker_rupture_detonation":
+		if float(result.get("actual_damage", 0.0)) > 0.0:
+			berserker_wounds.erase(target_id)
+		return
+	if not bool(result.get("can_trigger_effects", false)) or float(result.get("actual_damage", 0.0)) <= 0.0 or skill_id not in BERSERKER_DIRECT_MELEE_IDS or skill_rank(&"berserker_rupture") <= 0:
+		return
+	var previous := berserker_wound_stacks(target_id)
+	if previous == 0 and skill_id != &"berserker_rupture":
+		return
+	berserker_wounds[target_id] = {"stacks": mini(BERSERKER_WOUND_MAX_STACKS, previous + 1), "remaining": BERSERKER_WOUND_DURATION}
+
+func remove_berserker_wound(target_id: int) -> void:
+	berserker_wounds.erase(target_id)
+
+func clear_berserker_state() -> void:
+	berserker_wounds.clear()
 
 func defender_wall_advance_destination(direction: Vector2) -> Vector2:
 	if navigation == null or is_rooted():
@@ -708,6 +762,9 @@ func _defender_event_facing() -> Vector2:
 
 func _is_defender() -> bool:
 	return run_state != null and run_state.uses_persistent_build() and run_state.build_snapshot.evolution_id == &"defender" and class_id == &"swordsman"
+
+func _is_berserker() -> bool:
+	return run_state != null and run_state.uses_persistent_build() and run_state.build_snapshot.evolution_id == &"berserker" and class_id == &"swordsman"
 
 func _defender_active_equipped(skill_id: StringName) -> bool:
 	return _is_defender() and skill_id in available_skill_ids()
@@ -1140,7 +1197,7 @@ func can_target_skill(skill_id: StringName, enemy: CombatActor) -> bool:
 		return false
 	if global_position.distance_to(enemy.global_position) > skill_range(skill_id):
 		return false
-	return skill_id != &"brutal_strike" or navigation.is_segment_clear(global_position, enemy.global_position, 0.0)
+	return skill_id not in [&"brutal_strike", &"berserker_rupture"] or (navigation != null and navigation.is_segment_clear(global_position, enemy.global_position, 0.0))
 
 func aim_direction(point: Vector2) -> Vector2:
 	var direction := global_position.direction_to(point)
@@ -1220,6 +1277,13 @@ func _process(delta: float) -> void:
 	var simulation_paused := is_inside_tree() and get_tree().paused
 	if simulation_paused:
 		return
+	for target_id: int in berserker_wounds.keys():
+		var wound: Dictionary = berserker_wounds[target_id]
+		wound["remaining"] = maxf(0.0, float(wound["remaining"]) - delta)
+		if wound["remaining"] <= 0.0:
+			berserker_wounds.erase(target_id)
+		else:
+			berserker_wounds[target_id] = wound
 	defender_token_notice_remaining = maxf(0.0, defender_token_notice_remaining - delta)
 	var token_was_active := defender_token_remaining > 0.0
 	defender_token_remaining = maxf(0.0, defender_token_remaining - delta)

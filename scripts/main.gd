@@ -378,6 +378,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 			battle_indicators.show_defender_reprisal_wave(center)
 		else:
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.BERSERKER_RUPTURE:
+		if not player.use_berserker_rupture(selected_target):
+			_report_skill_failure(skill, selected_target)
 
 func _report_skill_failure(skill: StringName, selected_target: CombatActor = null) -> void:
 	var definition := ClassCatalog.skill_definition(skill)
@@ -776,6 +779,7 @@ func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActo
 
 func _on_enemy_died(actor: CombatActor) -> void:
 	_defender_slowed_enemies.erase(actor.get_instance_id())
+	player.remove_berserker_wound(actor.get_instance_id())
 	_spawn_death_visual(actor)
 	if actor == _hovered_enemy:
 		_hovered_enemy = null
@@ -790,6 +794,7 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	player.clear_perseverance()
 	player.clear_fury()
 	_clear_defender_runtime()
+	player.clear_berserker_state()
 	trap_registry.clear_all(&"encounter_end")
 	for group_name: StringName in [&"enemy_projectiles", &"player_projectiles", &"player_effects"]:
 		for runtime_node: Node in get_tree().get_nodes_in_group(group_name):
@@ -808,6 +813,7 @@ func _on_enemy_died(actor: CombatActor) -> void:
 func _on_enemy_damage_resolved(result: Dictionary) -> void:
 	if player == null or not is_instance_valid(player) or not player.is_alive() or int(result.get("source_id", 0)) != player.get_instance_id():
 		return
+	player.record_berserker_damage(result)
 	if player.run_state != null and player.run_state.uses_persistent_build() and player.run_state.build_snapshot.evolution_id == &"defender" and &"defender_watch" in player.run_state.build_snapshot.passive_slots and bool(result.get("can_trigger_effects", false)) and float(result.get("actual_damage", 0.0)) > 0.0 and StringName(result.get("skill_id", &"")) in DEFENDER_WATCH_DIRECT_MELEE_IDS:
 		var watch_rank := ClassCatalog.skill_definition(&"defender_watch").rank_definition(player.skill_rank(&"defender_watch"))
 		var watch_target := instance_from_id(int(result.get("target_id", 0))) as CombatActor
@@ -933,6 +939,7 @@ func _show_result(victory: bool) -> void:
 	player.clear_perseverance()
 	player.clear_fury()
 	_clear_defender_runtime()
+	player.clear_berserker_state()
 	player.clear_foliage_shelters()
 	for shelter: Node in get_tree().get_nodes_in_group("foliage_shelters"):
 		if shelter is FoliageShelter:
