@@ -87,8 +87,36 @@ ou master, não iniciar outra classe. Sem monitor/automação recorrente.
 | Fenda Sangrenta | Concluído `94cb471` | Faixa direcional 220×44 compartilhada com preview, preparo variável de 0,3 s antes dos atributos, hit direto e bleed físico de 4 s só após HP positivo. Um fluxo por dono/skill/alvo substitui sem empilhar, mantém cadência, coexiste com burn e congela em pausa; ticks secundários não alimentam ferida. 18 checks próprios e `tools/verify.ps1` integral passaram. | Implementar Arrancar Fôlego; sem impedimento. |
 | Arrancar Fôlego | Concluído `3a8d214` | Cura só em alvo previamente ferido que sobrevive ao dano real, limitada a 5% do HP máximo e HP faltante; abate usa apenas Sede de Sangue. R0/R1/R5, SP, alcance/parede, erro, absorção e cap cobertos em 16 checks, três reruns dirigidos e `tools/verify.ps1` integral. | Fechamento integrado: builds legais, boss sem adds, fluxo menu→run, indicador/VFX e atlas exclusivo; sem impedimento. |
 | Atlas e leitura da ferida | Concluído `ec2af70` | Dois sheets originais 4×4 transparentes gerados com `imagegen` a partir do Espadachim e reduzidos a um atlas 32×64×64; `CharacterAnimation` escolhe Berserker sem alterar a identidade de regras. Ferida mostra 1–3 marcas, arco de expiração e cortes breves, não só vermelho; testes dirigidos de animação (39) e Ruptura/indicador (16) passaram. | Validar builds/fluxo/boss, abrir `content_ready` somente após fechamento local e executar `verify.ps1` integral. |
+| Fechamento integrado | Concluído `2fbf2e3` | `content_ready=true` só para Berserker; duas builds legais 13/19 base e 16/20 ou 15/20 evolução, boss solo com marca→cura→Execução (76 checks), menu→evolução→+1.000 XP job→compra/equipamento→reload→run→recompensa (16 checks). `tools/verify.ps1` integral passou no Godot 4.7.2 com as regressões Defendente e das três bases. | Revisão técnica consolidada de Astra; não mover playtest/master antes dela. |
 
 Tokens por passo: medição atribuível não disponível; não inferir uso semanal.
 O schema e o ruleset não mudam. Catálogos 1/2/3 migram ao 4 somente após
 validação completa; a migração transacional guarda o original no backup.
 Nenhum save real foi usado como fixture ou regravado.
+
+## Entrega consolidada para revisão Astra
+
+Base da revisão: `codex/e05-evolutions` em `2fbf2e3`, mais este checkpoint.
+Os commits Defendente `6f24322` e `9ddf668` também estão apenas nesta branch;
+não foram cobertos pelo aceite de playtest anterior do usuário. Revisar esses
+deltas conjuntamente antes de preparar novo candidato. Contratos de
+persistência mantêm schema e ruleset; catálogo 4 é migração aditiva com backup.
+
+Arte gerada pelo modo embutido `imagegen`, editando a folha original do
+Espadachim para manter grade/poses/pivôs. Prompt resumido: evolução de fantasia
+cartunesca compacta, cabelo reconhecível, espada larga de duas mãos, postura
+agressiva, ferro escuro assimétrico, couro e tecido vermelho; fundo transparente,
+sem escudo, gore ou cópia de franquia. Fontes finais:
+`assets/art/animation_sources/berserker.png` e `berserker_extra.png`;
+atlas integrado: `assets/art/animations/berserker.png`.
+
+Roteiro manual de playtest após revisão técnica: evoluir um Espadachim no
+job 20; um clique em `+1.000 XP job` deve mostrar job 22 e dois pontos livres,
+mas Obstinação continua exigindo job 23. Ganhar mais XP, comprar/equipar a
+passiva e Ruptura, salvar/reabrir e iniciar run com o personagem focado.
+Conferir a silhueta de espada larga e as 1–3 marcas/expiração em combate;
+num boss sem adds, abrir ferida, curar com Arrancar Fôlego em alvo sobrevivente
+e converter com Execução. Testar também Fenda em alvo protegido por escudo.
+
+Limitações: ainda não houve playtest humano deste candidato, aprovação técnica
+de Astra ou merge. Playtest e master não foram alterados por esta entrega.
