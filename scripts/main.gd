@@ -381,6 +381,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.BERSERKER_RUPTURE:
 		if not player.use_berserker_rupture(selected_target):
 			_report_skill_failure(skill, selected_target)
+	elif definition.handler_id == SkillDefinition.Handler.BERSERKER_EXECUTION:
+		if not player.use_berserker_execution(selected_target):
+			_report_skill_failure(skill, selected_target)
 
 func _report_skill_failure(skill: StringName, selected_target: CombatActor = null) -> void:
 	var definition := ClassCatalog.skill_definition(skill)

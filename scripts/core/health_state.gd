@@ -24,6 +24,12 @@ func _init(runtime_id: int = 0, initial_stats: StatBreakdown = null) -> void:
 func is_alive() -> bool:
 	return current_hp > 0.0
 
+func spend_hp_nonlethal(cost: float) -> bool:
+	if not is_finite(cost) or cost < 0.0 or current_hp <= cost:
+		return false
+	current_hp -= cost
+	return true
+
 func apply(request: DamageRequest, hit_roll: float, crit_roll: float, debuffs: AttributeDebuffState = null) -> Dictionary:
 	if not is_alive() or request.target_id != actor_id:
 		return {}

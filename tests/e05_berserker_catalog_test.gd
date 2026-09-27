@@ -26,7 +26,7 @@ func _initialize() -> void:
 	_check(ClassCatalog.skill_definition(&"berserker_wound_leap").action_kind == SkillDefinition.ActionKind.OFFENSIVE and ClassCatalog.skill_definition(&"berserker_blood_rift").rank_definition(1).variable_cast_time == 0.3, "Leap is offensive and Rift has approved variable preparation")
 	_check_active(&"berserker_rupture", [17.0, 19.0, 21.0, 22.0, 23.0], [1.00, 1.12, 1.22, 1.31, 1.38], [0.40, 0.52, 0.63, 0.72, 0.80], 110.0, 5.0)
 	_check_active(&"berserker_wound_leap", [18.0, 20.0, 22.0, 23.0, 24.0], [0.80, 0.96, 1.08, 1.17, 1.24], [], 140.0, 8.0)
-	_check_active(&"berserker_execution", [22.0, 25.0, 27.0, 29.0, 30.0], [1.20, 1.40, 1.60, 1.75, 1.90], [], 110.0, 9.0)
+	_check_active(&"berserker_execution", [22.0, 25.0, 27.0, 29.0, 30.0], [1.20, 1.40, 1.60, 1.75, 1.90], [0.40, 0.40, 0.40, 0.40, 0.40], 110.0, 9.0)
 	_check_active(&"berserker_blood_rift", [21.0, 23.0, 25.0, 26.0, 27.0], [0.90, 0.90, 0.90, 0.90, 0.90], [0.10, 0.12, 0.14, 0.16, 0.18], 220.0, 9.0)
 	_check_active(&"berserker_breath_steal", [18.0, 20.0, 22.0, 23.0, 24.0], [1.00, 1.08, 1.16, 1.23, 1.30], [0.15, 0.18, 0.21, 0.24, 0.27], 110.0, 12.0)
 	_check_passive(&"berserker_obstinacy", [0.08, 0.11, 0.14])

@@ -994,7 +994,7 @@ static func _configure_berserker_ranks() -> void:
 	_skills[&"berserker_wound_leap"].handler_id = SkillDefinition.Handler.BERSERKER_WOUND_LEAP
 	_berserker_active_ranks(&"berserker_wound_leap", [18.0, 20.0, 22.0, 23.0, 24.0], [0.80, 0.96, 1.08, 1.17, 1.24], [], 140.0, 8.0, 0.0, [&"offensive_mobility_safe_segment", &"direct_melee_one_target"])
 	_skills[&"berserker_execution"].handler_id = SkillDefinition.Handler.BERSERKER_EXECUTION
-	_berserker_active_ranks(&"berserker_execution", [22.0, 25.0, 27.0, 29.0, 30.0], [1.20, 1.40, 1.60, 1.75, 1.90], [], 110.0, 9.0, 0.0, [&"nonlethal_hp_cost_three_percent", &"consume_existing_wound_on_positive_damage", &"target_hp_at_most_35pct_bonus_20pct"])
+	_berserker_active_ranks(&"berserker_execution", [22.0, 25.0, 27.0, 29.0, 30.0], [1.20, 1.40, 1.60, 1.75, 1.90], [0.40, 0.40, 0.40, 0.40, 0.40], 110.0, 9.0, 0.0, [&"nonlethal_hp_cost_three_percent", &"consume_existing_wound_on_positive_damage", &"target_hp_at_most_35pct_bonus_20pct"])
 	_skills[&"berserker_pursuit"].handler_id = SkillDefinition.Handler.BERSERKER_PURSUIT
 	_berserker_passive_ranks(&"berserker_pursuit", [2.0, 3.0, 4.0], [&"wounded_direct_melee_sp_return_once_per_second"])
 	_skills[&"berserker_blood_rift"].handler_id = SkillDefinition.Handler.BERSERKER_BLOOD_RIFT

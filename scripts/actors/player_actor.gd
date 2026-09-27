@@ -79,6 +79,9 @@ const DEFENDER_ANCHOR_SLOW_FRACTION := 0.20
 const DEFENDER_PUSH_DISTANCE := 35.0
 const BERSERKER_WOUND_DURATION := 8.0
 const BERSERKER_WOUND_MAX_STACKS := 3
+const BERSERKER_EXECUTION_HP_COST_FRACTION := 0.03
+const BERSERKER_EXECUTION_LOW_TARGET_THRESHOLD := 0.35
+const BERSERKER_EXECUTION_LOW_TARGET_BONUS := 0.20
 const BERSERKER_DIRECT_MELEE_IDS := [&"basic_attack", &"cone_slash", &"brutal_strike", &"concentrated_rage", &"berserker_rupture"]
 
 var navigation: ArenaNavigation
@@ -304,6 +307,31 @@ func use_berserker_rupture(enemy: CombatActor) -> bool:
 	resources_changed.emit()
 	return true
 
+func use_berserker_execution(enemy: CombatActor) -> bool:
+	var rank_definition := _runtime_rank_definition(&"berserker_execution")
+	if not _is_berserker() or rank_definition == null or not can_target_skill(&"berserker_execution", enemy) or not _can_spend(&"berserker_execution"):
+		return false
+	var hp_cost := maxf(1.0, ceilf(health.max_hp * BERSERKER_EXECUTION_HP_COST_FRACTION))
+	if health.current_hp <= hp_cost:
+		return false
+	var stacks := berserker_wound_stacks(enemy.get_instance_id())
+	var target_low := enemy.health.current_hp <= enemy.health.max_hp * BERSERKER_EXECUTION_LOW_TARGET_THRESHOLD
+	var weight := rank_definition.power + rank_definition.secondary_power * stacks
+	if target_low:
+		weight *= 1.0 + BERSERKER_EXECUTION_LOW_TARGET_BONUS
+	var facing := _resolved_facing(global_position.direction_to(enemy.global_position))
+	if not health.spend_hp_nonlethal(hp_cost):
+		return false
+	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
+	_spend(&"berserker_execution")
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(&"berserker_execution")
+	var request := _make_physical_request(enemy, &"berserker_execution", stat_breakdown.value(&"melee_attack") * weight, definition.accuracy_mode, definition.can_crit)
+	attack_requested.emit(request, enemy)
+	presentation_action.emit(&"slash", facing, 0.20)
+	resources_changed.emit()
+	return true
+
 func berserker_wound_stacks(target_id: int) -> int:
 	if not _is_berserker() or not berserker_wounds.has(target_id):
 		return 0
@@ -318,6 +346,10 @@ func record_berserker_damage(result: Dictionary) -> void:
 		return
 	var skill_id := StringName(result.get("skill_id", &""))
 	if skill_id == &"berserker_rupture_detonation":
+		if float(result.get("actual_damage", 0.0)) > 0.0:
+			berserker_wounds.erase(target_id)
+		return
+	if skill_id == &"berserker_execution":
 		if float(result.get("actual_damage", 0.0)) > 0.0:
 			berserker_wounds.erase(target_id)
 		return
@@ -1197,7 +1229,7 @@ func can_target_skill(skill_id: StringName, enemy: CombatActor) -> bool:
 		return false
 	if global_position.distance_to(enemy.global_position) > skill_range(skill_id):
 		return false
-	return skill_id not in [&"brutal_strike", &"berserker_rupture"] or (navigation != null and navigation.is_segment_clear(global_position, enemy.global_position, 0.0))
+	return skill_id not in [&"brutal_strike", &"berserker_rupture", &"berserker_execution"] or (navigation != null and navigation.is_segment_clear(global_position, enemy.global_position, 0.0))
 
 func aim_direction(point: Vector2) -> Vector2:
 	var direction := global_position.direction_to(point)
