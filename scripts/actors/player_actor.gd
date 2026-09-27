@@ -16,6 +16,7 @@ signal explosive_trap_requested(center: Vector2, request: DamageRequest)
 signal slowing_arrow_requested(request: DamageRequest, direction: Vector2, slow_fraction: float, slow_duration: float)
 signal foliage_shelter_requested(center: Vector2, duration: float)
 signal fire_wall_requested(direction: Vector2, burn_request: DamageRequest)
+signal elementalist_flame_burst_requested(center: Vector2, request: DamageRequest)
 signal lightning_wall_requested(direction: Vector2, request: DamageRequest)
 signal soul_impact_requested(request: DamageRequest, target: CombatActor)
 signal haunt_requested(origin: Vector2, direction: Vector2, cone_range: float, request: DamageRequest)
@@ -186,6 +187,8 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 		animation_kind = &"defender"
 	elif _is_berserker():
 		animation_kind = &"berserker"
+	elif _is_elementalist():
+		animation_kind = &"elementalist"
 	set_animation_kind(animation_kind)
 	max_sp = stat_breakdown.value(&"max_sp")
 	current_sp = max_sp
@@ -646,6 +649,27 @@ func use_fire_wall(direction: Vector2) -> bool:
 	resources_changed.emit()
 	return true
 
+func elementalist_flame_burst_center(point: Vector2) -> Vector2:
+	return global_position + (point - global_position).limit_length(skill_range(&"elementalist_flame_burst"))
+
+func can_place_elementalist_flame_burst(point: Vector2) -> bool:
+	if navigation == null or skill_range(&"elementalist_flame_burst") <= 0.0:
+		return false
+	var center := elementalist_flame_burst_center(point)
+	return navigation.is_walkable(center) and navigation.is_segment_clear(global_position, center, 0.0)
+
+func use_elementalist_flame_burst(point: Vector2) -> bool:
+	if not _is_elementalist() or _runtime_rank_definition(&"elementalist_flame_burst") == null or not _can_spend(&"elementalist_flame_burst") or not can_place_elementalist_flame_burst(point):
+		return false
+	var center := elementalist_flame_burst_center(point)
+	_spend(&"elementalist_flame_burst")
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(&"elementalist_flame_burst")
+	var request := _make_magic_request(null, &"elementalist_flame_burst", _magic_power(&"elementalist_flame_burst"), definition.accuracy_mode, definition.can_crit)
+	elementalist_flame_burst_requested.emit(center, request)
+	resources_changed.emit()
+	return true
+
 func use_spear(skill_id: StringName, enemy: CombatActor) -> bool:
 	if class_id != &"mage" or skill_id not in [&"fire_spear", &"ice_spear"] or not can_target_skill(skill_id, enemy) or not _can_spend(skill_id):
 		return false
@@ -934,6 +958,9 @@ func _is_defender() -> bool:
 
 func _is_berserker() -> bool:
 	return run_state != null and run_state.uses_persistent_build() and run_state.build_snapshot.evolution_id == &"berserker" and class_id == &"swordsman"
+
+func _is_elementalist() -> bool:
+	return run_state != null and run_state.uses_persistent_build() and run_state.build_snapshot.evolution_id == &"elementalist" and class_id == &"mage"
 
 func _defender_active_equipped(skill_id: StringName) -> bool:
 	return _is_defender() and skill_id in available_skill_ids()

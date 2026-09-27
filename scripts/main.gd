@@ -116,6 +116,7 @@ func _ready() -> void:
 	player.slowing_arrow_requested.connect(_on_slowing_arrow_requested)
 	player.foliage_shelter_requested.connect(_on_foliage_shelter_requested)
 	player.fire_wall_requested.connect(_on_fire_wall_requested)
+	player.elementalist_flame_burst_requested.connect(_on_elementalist_flame_burst_requested)
 	player.lightning_wall_requested.connect(_on_lightning_wall_requested)
 	player.soul_impact_requested.connect(_on_soul_impact_requested)
 	player.haunt_requested.connect(_on_haunt_requested)
@@ -292,6 +293,12 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.FIRE_WALL:
 		if not player.use_fire_wall(direction):
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.ELEMENTALIST_FLAME_BURST:
+		if not player.use_elementalist_flame_burst(point):
+			if not player.can_place_elementalist_flame_burst(point):
+				status_label.text = "Explosão de Chamas cancelada — POSIÇÃO BLOQUEADA"
+			else:
+				_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif definition.handler_id == SkillDefinition.Handler.LIGHTNING_WALL:
 		if not player.use_lightning_wall(direction):
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
@@ -450,6 +457,8 @@ func _update_aim(point: Vector2) -> void:
 	elif skill == &"foliage_shelter" and not player.can_place_foliage_shelter(point):
 		state = "POSIÇÃO BLOQUEADA"
 	elif skill == &"ice_wall" and not player.can_place_ice_wall(player.aim_direction(point), enemies):
+		state = "POSIÇÃO BLOQUEADA"
+	elif skill == &"elementalist_flame_burst" and not player.can_place_elementalist_flame_burst(point):
 		state = "POSIÇÃO BLOQUEADA"
 	elif skill == &"defender_anchor" and not navigation.is_walkable(BattleIndicators.defender_clamped_point(player.global_position, point, player.skill_range(skill))):
 		state = "POSIÇÃO BLOQUEADA"
@@ -718,6 +727,18 @@ func _on_fire_wall_requested(direction: Vector2, burn_request: DamageRequest) ->
 	wall.configure(player, direction, burn_request, enemies, player.skill_range(&"fire_wall"))
 	add_child(wall)
 	wall.add_to_group("player_effects")
+
+func _on_elementalist_flame_burst_requested(center: Vector2, request: DamageRequest) -> void:
+	for target_actor: CombatActor in enemies.duplicate():
+		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
+			continue
+		if center.distance_to(target_actor.global_position) > SkillGeometry.ELEMENTALIST_FLAME_BURST_RADIUS + target_actor.collision_radius:
+			continue
+		if not navigation.is_segment_clear(center, target_actor.global_position, 0.0):
+			continue
+		var target_request := request.copy()
+		target_request.target_id = target_actor.get_instance_id()
+		target_actor.apply_damage(target_request, rng)
 
 func _on_lightning_wall_requested(direction: Vector2, request: DamageRequest) -> void:
 	var wall := LightningWall.new()

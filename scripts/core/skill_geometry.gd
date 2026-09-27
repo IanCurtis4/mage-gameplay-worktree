@@ -11,6 +11,12 @@ const DEFENDER_LINE_LOCK_HALF_WIDTH := 22.0
 const DEFENDER_REPRISAL_WAVE_RADIUS := 130.0
 const BERSERKER_RIFT_LENGTH := 220.0
 const BERSERKER_RIFT_HALF_WIDTH := 22.0
+const ELEMENTALIST_FLAME_BURST_RADIUS := 90.0
+const ELEMENTALIST_GLACIAL_RING_RADIUS := 145.0
+const ELEMENTALIST_LIGHTNING_CHAIN_RANGE := 110.0
+const ELEMENTALIST_EMBER_PATH_STEP := 80.0
+const ELEMENTALIST_EMBER_PATH_RADIUS := 55.0
+const ELEMENTALIST_TRI_NOVA_RADIUS := 170.0
 
 static func strip_contains(offset: Vector2, direction: Vector2, length: float, half_width: float, target_radius: float = 0.0) -> bool:
 	if direction.is_zero_approx() or length <= 0.0 or half_width < 0.0:
