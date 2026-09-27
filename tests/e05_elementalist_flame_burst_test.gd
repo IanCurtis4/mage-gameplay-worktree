@@ -24,6 +24,7 @@ func _run() -> void:
 	var outside := _enemy(Vector2(480, 470))
 	var controller := RunController.new()
 	controller.player = player
+	controller.battle_indicators = BattleIndicators.new()
 	controller.navigation.configure(Rect2(0, 0, 1000, 700), [Rect2(510, 300, 40, 100)], 20.0)
 	controller.enemies = [inside, behind_wall, outside]
 	player.elementalist_flame_burst_requested.connect(controller._on_elementalist_flame_burst_requested)
@@ -56,6 +57,7 @@ func _run() -> void:
 	inside.free()
 	behind_wall.free()
 	outside.free()
+	controller.battle_indicators.free()
 	controller.free()
 	print("E05 Elementalista Explosão de Chamas: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
 	quit(0 if failures == 0 else 1)

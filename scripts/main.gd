@@ -729,6 +729,7 @@ func _on_fire_wall_requested(direction: Vector2, burn_request: DamageRequest) ->
 	wall.add_to_group("player_effects")
 
 func _on_elementalist_flame_burst_requested(center: Vector2, request: DamageRequest) -> void:
+	battle_indicators.show_elementalist_pulse(&"elementalist_flame_burst", center, SkillGeometry.ELEMENTALIST_FLAME_BURST_RADIUS, &"fire")
 	for target_actor: CombatActor in enemies.duplicate():
 		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
 			continue
