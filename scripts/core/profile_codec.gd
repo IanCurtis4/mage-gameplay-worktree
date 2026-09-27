@@ -8,6 +8,7 @@ const LEGACY_CATALOG_VERSION := 1
 const LEGACY_RULESET_ID := "e00_v1"
 const PRE_DEFENDER_CATALOG_VERSION := 2
 const PRE_BERSERKER_CATALOG_VERSION := 3
+const PRE_ELEMENTALIST_CATALOG_VERSION := 4
 const LEGACY_BASE_GRANTS := {
 	"swordsman": {"slash": 1, "dash": 1, "swordsman_resistance": 1},
 	"mage": {"fireball": 1, "fire_wall": 1, "mage_mana_regeneration": 1},
@@ -81,6 +82,12 @@ static func decode(text: String, catalog: ProfileCatalog = null) -> Dictionary:
 		and data.get("ruleset_id") == ProfileState.RULESET_ID
 	):
 		return _migrate_catalog_v3(data, effective_catalog)
+	if (
+		_is_exact_integer(data.get("catalog_version"))
+		and int(data["catalog_version"]) == PRE_ELEMENTALIST_CATALOG_VERSION
+		and data.get("ruleset_id") == ProfileState.RULESET_ID
+	):
+		return _migrate_catalog_v4(data, effective_catalog)
 	return _decode_v2(data, effective_catalog)
 
 static func validate_profile(profile: ProfileState, catalog: ProfileCatalog = null) -> Dictionary:
@@ -491,6 +498,17 @@ static func _migrate_catalog_v3(data: Dictionary, catalog: ProfileCatalog) -> Di
 		return decoded
 	decoded["migrated"] = true
 	decoded["migration_kind"] = &"catalog_v3"
+	return decoded
+
+static func _migrate_catalog_v4(data: Dictionary, catalog: ProfileCatalog) -> Dictionary:
+	# Elementalist adds exclusive IDs without reinterpreting catalog-4 fields.
+	var migrated := data.duplicate(true)
+	migrated["catalog_version"] = ProfileState.CATALOG_VERSION
+	var decoded := _decode_v2(migrated, catalog)
+	if not decoded["ok"]:
+		return decoded
+	decoded["migrated"] = true
+	decoded["migration_kind"] = &"catalog_v4"
 	return decoded
 
 static func _profile_to_dictionary(profile: ProfileState) -> Dictionary:

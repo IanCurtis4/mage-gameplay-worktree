@@ -64,6 +64,8 @@ static func pilot(
 		catalog._register_defender_skills()
 	if not evolution_overrides.has(&"berserker") and not evolution_overrides.has("berserker"):
 		catalog._register_berserker_skills()
+	if not evolution_overrides.has(&"elementalist") and not evolution_overrides.has("elementalist"):
+		catalog._register_elementalist_skills()
 	for raw_item_id: Variant in additional_equipment:
 		var metadata: Dictionary = additional_equipment[raw_item_id]
 		var allowed_base_classes: Array[StringName] = []
@@ -384,6 +386,16 @@ func _register_berserker_skills() -> void:
 	add_skill(&"berserker_blood_rift", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"berserker", _evolution_rank_requirements(5, 34))
 	add_skill(&"berserker_breath_steal", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"berserker", _evolution_rank_requirements(5, 37))
 
+func _register_elementalist_skills() -> void:
+	var origin: Array[StringName] = [&"mage"]
+	add_skill(&"elementalist_flame_burst", origin, ACTIVE, EVOLUTION_WALLET, 1, 4, &"elementalist", _evolution_rank_requirements(5, 20))
+	add_skill(&"elementalist_prismatic_focus", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"elementalist", _evolution_rank_requirements(3, 23))
+	add_skill(&"elementalist_glacial_ring", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"elementalist", _evolution_rank_requirements(5, 25))
+	add_skill(&"elementalist_lightning_arc", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"elementalist", _evolution_rank_requirements(5, 28))
+	add_skill(&"elementalist_prismatic_resonance", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"elementalist", _evolution_rank_requirements(3, 31))
+	add_skill(&"elementalist_ember_path", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"elementalist", _evolution_rank_requirements(5, 34))
+	add_skill(&"elementalist_tri_nova", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"elementalist", _evolution_rank_requirements(5, 37))
+
 func _evolution_rank_requirements(max_rank: int, job_level: int) -> Dictionary:
 	var requirements: Dictionary = {}
 	for rank: int in range(1, max_rank + 1):
@@ -439,6 +451,14 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 				&"berserker_rupture", &"berserker_obstinacy", &"berserker_wound_leap",
 				&"berserker_execution", &"berserker_pursuit",
 				&"berserker_blood_rift", &"berserker_breath_steal",
+			]
+		if definition.id == &"elementalist" and not normalized_overrides.has(definition.id):
+			definition.entry_skill_id = &"elementalist_flame_burst"
+			definition.exclusive_skill_ids = [
+				&"elementalist_flame_burst", &"elementalist_prismatic_focus",
+				&"elementalist_glacial_ring", &"elementalist_lightning_arc",
+				&"elementalist_prismatic_resonance", &"elementalist_ember_path",
+				&"elementalist_tri_nova",
 			]
 		if normalized_overrides.has(definition.id):
 			_apply_evolution_override(definition, normalized_overrides[definition.id])
