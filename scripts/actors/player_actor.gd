@@ -5,6 +5,7 @@ const IceWallScript = preload("res://scripts/world/ice_wall.gd")
 
 signal attack_requested(request: DamageRequest, target: CombatActor)
 signal defender_hit_requested(request: DamageRequest, target: CombatActor, root_duration: float, push_direction: Vector2)
+signal berserker_rift_hit_requested(request: DamageRequest, target: CombatActor, bleed_request: DamageRequest)
 signal mage_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int)
 signal discharge_requested(request: DamageRequest, direction: Vector2, bonus_magic_damage: float)
 signal precision_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int, hit_limit: int)
@@ -82,6 +83,7 @@ const BERSERKER_WOUND_MAX_STACKS := 3
 const BERSERKER_EXECUTION_HP_COST_FRACTION := 0.03
 const BERSERKER_EXECUTION_LOW_TARGET_THRESHOLD := 0.35
 const BERSERKER_EXECUTION_LOW_TARGET_BONUS := 0.20
+const BERSERKER_RIFT_BLEED_DURATION := 4.0
 const BERSERKER_DIRECT_MELEE_IDS := [
 	&"basic_attack", &"cone_slash", &"brutal_strike", &"concentrated_rage",
 	&"berserker_rupture", &"berserker_execution", &"berserker_wound_leap",
@@ -373,6 +375,35 @@ func use_berserker_wound_leap(direction: Vector2, enemies: Array[CombatActor]) -
 	_attack_recovery = 0.0
 	_repath_time = 0.0
 	presentation_action.emit(&"dash", facing, DASH_DURATION)
+	resources_changed.emit()
+	return true
+
+func use_berserker_blood_rift(direction: Vector2, enemies: Array[CombatActor]) -> bool:
+	var rank_definition := _runtime_rank_definition(&"berserker_blood_rift")
+	if not _is_berserker() or rank_definition == null or not _can_spend(&"berserker_blood_rift") or navigation == null:
+		return false
+	var facing := _resolved_facing(direction)
+	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
+	_spend(&"berserker_blood_rift")
+	reveal_from_offense()
+	target = null
+	_path.clear()
+	_has_path_goal = false
+	velocity = Vector2.ZERO
+	var definition := ClassCatalog.skill_definition(&"berserker_blood_rift")
+	var melee_attack := stat_breakdown.value(&"melee_attack")
+	for enemy: CombatActor in enemies.duplicate():
+		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
+			continue
+		if not SkillGeometry.strip_contains(enemy.global_position - global_position, facing, SkillGeometry.BERSERKER_RIFT_LENGTH, SkillGeometry.BERSERKER_RIFT_HALF_WIDTH, enemy.collision_radius):
+			continue
+		if not navigation.is_segment_clear(global_position, enemy.global_position, 0.0):
+			continue
+		var direct := _make_physical_request(enemy, &"berserker_blood_rift", melee_attack * rank_definition.power, definition.accuracy_mode, definition.can_crit)
+		var bleed := _make_physical_request(enemy, &"berserker_blood_rift_tick", melee_attack * rank_definition.secondary_power, DamageRequest.AccuracyMode.GEOMETRY, false)
+		bleed.is_secondary = true
+		berserker_rift_hit_requested.emit(direct, enemy, bleed)
+	presentation_action.emit(&"slash", facing, 0.25)
 	resources_changed.emit()
 	return true
 

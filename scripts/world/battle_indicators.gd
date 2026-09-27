@@ -168,6 +168,8 @@ func _draw() -> void:
 		draw_line(endpoint - Vector2(0, 9), endpoint + Vector2(0, 9), Color(color, 0.75), 1.5, true)
 	elif skill == &"defender_line_lock":
 		_draw_defender_strip(color)
+	elif skill == &"berserker_blood_rift":
+		_draw_strip(color, SkillGeometry.BERSERKER_RIFT_HALF_WIDTH)
 	elif skill == &"defender_wall_advance":
 		_draw_defender_wall_advance(color)
 	elif skill == &"defender_reprisal_wave":
@@ -326,7 +328,10 @@ func _draw_defender_cone(color: Color) -> void:
 	draw_arc(origin, DEFENDER_COUNTERSTROKE_RANGE * 0.58, direction.angle() - DEFENDER_COUNTERSTROKE_HALF_ANGLE, direction.angle() + DEFENDER_COUNTERSTROKE_HALF_ANGLE, 18, Color(color, 0.42), 1.0, true)
 
 func _draw_defender_strip(color: Color) -> void:
-	var side := direction.orthogonal() * DEFENDER_LINE_LOCK_HALF_WIDTH
+	_draw_strip(color, DEFENDER_LINE_LOCK_HALF_WIDTH)
+
+func _draw_strip(color: Color, half_width: float) -> void:
+	var side := direction.orthogonal() * half_width
 	var outline := PackedVector2Array([origin + side, endpoint + side, endpoint - side, origin - side, origin + side])
 	draw_colored_polygon(outline.slice(0, outline.size() - 1), Color(color, 0.15))
 	draw_polyline(outline, color, 2.0, true)

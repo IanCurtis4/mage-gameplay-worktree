@@ -105,6 +105,7 @@ func _ready() -> void:
 	player.global_position = Vector2(300, 520)
 	player.attack_requested.connect(_on_attack_requested)
 	player.defender_hit_requested.connect(_on_defender_hit_requested)
+	player.berserker_rift_hit_requested.connect(_on_berserker_rift_hit_requested)
 	player.mage_projectile_requested.connect(_on_mage_projectile_requested)
 	player.discharge_requested.connect(_on_discharge_requested)
 	player.precision_projectile_requested.connect(_on_precision_projectile_requested)
@@ -387,6 +388,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.BERSERKER_WOUND_LEAP:
 		if not player.use_berserker_wound_leap(direction, enemies):
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.BERSERKER_BLOOD_RIFT:
+		if not player.use_berserker_blood_rift(direction, enemies):
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 
 func _report_skill_failure(skill: StringName, selected_target: CombatActor = null) -> void:
 	var definition := ClassCatalog.skill_definition(skill)
@@ -553,6 +557,13 @@ func _on_defender_hit_requested(request: DamageRequest, target_actor: CombatActo
 		target_actor.apply_root(root_duration, &"physical")
 	if not push_direction.is_zero_approx() and target_actor is EnemyActor:
 		(target_actor as EnemyActor).apply_defender_push(push_direction, PlayerActor.DEFENDER_PUSH_DISTANCE)
+
+func _on_berserker_rift_hit_requested(request: DamageRequest, target_actor: CombatActor, bleed_request: DamageRequest) -> void:
+	if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
+		return
+	var result := target_actor.apply_damage(request, rng)
+	if bool(result.get("can_trigger_effects", false)) and float(result.get("actual_damage", 0.0)) > 0.0 and target_actor.is_alive():
+		target_actor.apply_bleed(bleed_request, PlayerActor.BERSERKER_RIFT_BLEED_DURATION)
 
 func _sync_defender_anchor() -> void:
 	var active := player != null and is_instance_valid(player) and player.has_defender_anchor()

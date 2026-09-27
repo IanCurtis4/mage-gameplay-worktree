@@ -25,6 +25,7 @@ var _sprite_visible_height := 0.0
 var burn_remaining := 0.0
 var burn_tick_remaining := 0.0
 var burn_request: DamageRequest
+var bleed_streams: Dictionary[String, Dictionary] = {}
 var slow_remaining := 0.0
 var slow_fraction := 0.0
 var electrified_remaining := 0.0
@@ -116,6 +117,20 @@ func apply_burn(request: DamageRequest, duration: float = 3.0) -> void:
 	burn_remaining = duration
 	if not was_burning:
 		burn_tick_remaining = minf(1.0, duration)
+	queue_redraw()
+
+func apply_bleed(request: DamageRequest, duration: float = 4.0) -> void:
+	if not is_alive() or request == null or duration <= 0.0 or request.physical_damage <= 0.0 or request.source_id <= 0 or request.skill_id.is_empty():
+		return
+	var key := "%d:%s" % [request.source_id, request.skill_id]
+	var tick_remaining := float(bleed_streams[key].get("tick_remaining", 1.0)) if bleed_streams.has(key) else 1.0
+	var captured := request.copy()
+	captured.target_id = get_instance_id()
+	captured.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
+	captured.can_crit = false
+	captured.force_critical = false
+	captured.is_secondary = true
+	bleed_streams[key] = {"request": captured, "remaining": duration, "tick_remaining": tick_remaining}
 	queue_redraw()
 
 func apply_attribute_debuff(attribute: StringName, source: StringName, fraction: float, duration: float) -> bool:
@@ -213,6 +228,7 @@ func clear_statuses() -> void:
 	burn_remaining = 0.0
 	burn_tick_remaining = 0.0
 	burn_request = null
+	bleed_streams.clear()
 	attribute_debuffs.clear()
 	_sync_debuff_display()
 	electrified_remaining = 0.0
@@ -252,6 +268,27 @@ func advance_statuses(delta: float, simulation_paused: bool = false) -> void:
 	if burn_remaining <= 0.0:
 		burn_request = null
 		queue_redraw()
+	for key: String in bleed_streams.keys():
+		if not bleed_streams.has(key) or not is_alive():
+			break
+		var stream: Dictionary = bleed_streams[key]
+		var bleed_delta := delta
+		while float(stream["remaining"]) > 0.0 and bleed_delta > 0.0:
+			var step := minf(bleed_delta, minf(float(stream["remaining"]), float(stream["tick_remaining"])))
+			stream["remaining"] = maxf(0.0, float(stream["remaining"]) - step)
+			stream["tick_remaining"] = maxf(0.0, float(stream["tick_remaining"]) - step)
+			bleed_delta = maxf(0.0, bleed_delta - step)
+			if float(stream["tick_remaining"]) <= 0.0001:
+				var tick: DamageRequest = (stream["request"] as DamageRequest).copy()
+				status_damage_requested.emit(tick, self)
+				if not is_alive():
+					break
+				stream["tick_remaining"] = 1.0
+		if not is_alive():
+			break
+		if float(stream["remaining"]) <= 0.0:
+			bleed_streams.erase(key)
+			queue_redraw()
 
 func set_hovered(value: bool) -> void:
 	if is_hovered == value:
@@ -303,6 +340,8 @@ func _draw() -> void:
 		draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width * ratio, 6), Color("dc5757"))
 	if is_burning():
 		draw_arc(Vector2(0, 3), collision_radius + 6.0, 0.0, TAU, 24, Color("ff7a3d"), 2.0, true)
+	if not bleed_streams.is_empty():
+		draw_arc(Vector2(0, 4), collision_radius + 7.0, -PI * 0.75, PI * 0.25, 20, Color("d65572"), 2.0, true)
 	if slow_remaining > 0.0:
 		draw_arc(Vector2(0, 6), collision_radius + 9.0, 0.0, TAU, 24, Color("72c9ff"), 2.0, true)
 	if is_electrified():
