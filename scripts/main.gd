@@ -384,6 +384,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.BERSERKER_EXECUTION:
 		if not player.use_berserker_execution(selected_target):
 			_report_skill_failure(skill, selected_target)
+	elif definition.handler_id == SkillDefinition.Handler.BERSERKER_WOUND_LEAP:
+		if not player.use_berserker_wound_leap(direction, enemies):
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 
 func _report_skill_failure(skill: StringName, selected_target: CombatActor = null) -> void:
 	var definition := ClassCatalog.skill_definition(skill)
@@ -442,6 +445,8 @@ func _update_aim(point: Vector2) -> void:
 	elif skill == &"defender_anchor" and not navigation.is_walkable(BattleIndicators.defender_clamped_point(player.global_position, point, player.skill_range(skill))):
 		state = "POSIÇÃO BLOQUEADA"
 	elif skill == &"defender_wall_advance" and player.defender_wall_advance_destination(player.aim_direction(point)).distance_to(player.global_position) <= PlayerActor.MOVEMENT_EPSILON:
+		state = "TRAJETO BLOQUEADO"
+	elif skill == &"berserker_wound_leap" and player.berserker_wound_leap_destination(player.aim_direction(point)).distance_to(player.global_position) <= PlayerActor.MOVEMENT_EPSILON:
 		state = "TRAJETO BLOQUEADO"
 	if _world_pointer_available():
 		if skill in [&"defender_counterstroke", &"defender_anchor", &"defender_line_lock", &"defender_wall_advance", &"defender_reprisal_wave"]:

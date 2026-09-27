@@ -122,6 +122,9 @@ var _dash_endpoint := Vector2.ZERO
 var _dash_speed := 0.0
 var _defender_advance_targets: Array[CombatActor] = []
 var _defender_advance_hit := false
+var _berserker_leap_targets: Array[CombatActor] = []
+var _berserker_leap_active := false
+var _berserker_leap_hit := false
 var active_cast_skill: StringName = &""
 var active_cast_remaining := 0.0
 var active_cast_total := 0.0
@@ -336,6 +339,42 @@ func use_berserker_execution(enemy: CombatActor) -> bool:
 	resources_changed.emit()
 	return true
 
+func berserker_wound_leap_destination(direction: Vector2) -> Vector2:
+	if navigation == null or is_rooted():
+		return global_position
+	var facing := direction.normalized()
+	if facing.is_zero_approx():
+		facing = _last_facing
+	return navigation.move_until_blocked(global_position, global_position + facing * skill_range(&"berserker_wound_leap"))
+
+func use_berserker_wound_leap(direction: Vector2, enemies: Array[CombatActor]) -> bool:
+	var rank_definition := _runtime_rank_definition(&"berserker_wound_leap")
+	if not _is_berserker() or rank_definition == null or not _can_spend(&"berserker_wound_leap") or is_rooted():
+		return false
+	var facing := _resolved_facing(direction)
+	var endpoint := berserker_wound_leap_destination(facing)
+	var distance := global_position.distance_to(endpoint)
+	if distance <= MOVEMENT_EPSILON:
+		return false
+	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
+	_spend(&"berserker_wound_leap")
+	reveal_from_offense()
+	_stop_dash()
+	_dash_endpoint = endpoint
+	_dash_speed = distance / DASH_DURATION
+	_dash_active = true
+	_berserker_leap_active = true
+	_berserker_leap_targets = enemies.duplicate()
+	_berserker_leap_hit = false
+	_path.clear()
+	_has_path_goal = false
+	velocity = Vector2.ZERO
+	_attack_recovery = 0.0
+	_repath_time = 0.0
+	presentation_action.emit(&"dash", facing, DASH_DURATION)
+	resources_changed.emit()
+	return true
+
 func berserker_wound_stacks(target_id: int) -> int:
 	if not _is_berserker() or not berserker_wounds.has(target_id):
 		return 0
@@ -369,6 +408,8 @@ func remove_berserker_wound(target_id: int) -> void:
 
 func clear_berserker_state() -> void:
 	berserker_wounds.clear()
+	if _berserker_leap_active:
+		_stop_dash()
 
 func defender_wall_advance_destination(direction: Vector2) -> Vector2:
 	if navigation == null or is_rooted():
@@ -1455,6 +1496,7 @@ func _advance_dash(delta: float) -> void:
 	var safe_position := navigation.move_until_blocked(global_position, next_position)
 	global_position = safe_position
 	_try_defender_advance_hit(previous_position, global_position)
+	_try_berserker_leap_hit(previous_position, global_position)
 	_update_defender_anchor_presence()
 	if safe_position.distance_to(next_position) > MOVEMENT_EPSILON or global_position.distance_to(_dash_endpoint) <= MOVEMENT_EPSILON:
 		global_position = safe_position if safe_position.distance_to(next_position) > MOVEMENT_EPSILON else _dash_endpoint
@@ -1466,6 +1508,9 @@ func _stop_dash() -> void:
 	defender_advance_guard_active = false
 	_defender_advance_targets.clear()
 	_defender_advance_hit = false
+	_berserker_leap_active = false
+	_berserker_leap_targets.clear()
+	_berserker_leap_hit = false
 	velocity = Vector2.ZERO
 
 func _try_defender_advance_hit(from: Vector2, to: Vector2) -> void:
@@ -1483,6 +1528,29 @@ func _try_defender_advance_hit(from: Vector2, to: Vector2) -> void:
 		var request := _make_physical_request(enemy, &"defender_wall_advance", stat_breakdown.value(&"melee_attack") * rank_definition.power, definition.accuracy_mode, definition.can_crit)
 		defender_hit_requested.emit(request, enemy, 0.0, defender_advance_guard_facing)
 		return
+
+func _try_berserker_leap_hit(from: Vector2, to: Vector2) -> void:
+	if not _berserker_leap_active or _berserker_leap_hit or from.distance_to(to) <= MOVEMENT_EPSILON:
+		return
+	var chosen: CombatActor
+	var chosen_distance := INF
+	for enemy: CombatActor in _berserker_leap_targets:
+		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
+			continue
+		var closest := Geometry2D.get_closest_point_to_segment(enemy.global_position, from, to)
+		if closest.distance_to(enemy.global_position) > collision_radius + enemy.collision_radius or not navigation.is_segment_clear(from, enemy.global_position, 0.0):
+			continue
+		var along := from.distance_to(closest)
+		if along < chosen_distance:
+			chosen = enemy
+			chosen_distance = along
+	if chosen == null:
+		return
+	_berserker_leap_hit = true
+	var definition := ClassCatalog.skill_definition(&"berserker_wound_leap")
+	var rank_definition := _runtime_rank_definition(&"berserker_wound_leap")
+	var request := _make_physical_request(chosen, &"berserker_wound_leap", stat_breakdown.value(&"melee_attack") * rank_definition.power, definition.accuracy_mode, definition.can_crit)
+	attack_requested.emit(request, chosen)
 
 func _regenerate_sp(delta: float, simulation_paused: bool) -> bool:
 	if simulation_paused or not is_alive() or current_sp >= max_sp:

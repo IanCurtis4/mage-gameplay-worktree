@@ -41,6 +41,8 @@ func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast
 	target_actor = selected_target
 	if skill == &"dash":
 		endpoint = actor.dash_destination(direction)
+	elif skill == &"berserker_wound_leap":
+		endpoint = actor.berserker_wound_leap_destination(direction)
 	elif skill == &"teleport":
 		endpoint = actor.teleport_destination(point)
 	elif skill in [&"extended_aim", &"perseverance", &"fury"]:
@@ -187,7 +189,7 @@ func _draw() -> void:
 		var angle := direction.angle()
 		draw_arc(center, PlayerActor.SHIELD_RADIUS, angle - PlayerActor.SHIELD_HALF_ANGLE, angle + PlayerActor.SHIELD_HALF_ANGLE, 26, Color(color, 0.18), 12.0, true)
 		draw_arc(center, PlayerActor.SHIELD_RADIUS, angle - PlayerActor.SHIELD_HALF_ANGLE, angle + PlayerActor.SHIELD_HALF_ANGLE, 26, color, 3.0, true)
-	elif skill == &"dash":
+	elif skill in [&"dash", &"berserker_wound_leap"]:
 		var side := direction.orthogonal() * body_radius
 		var corridor := PackedVector2Array([origin + side, endpoint + side, endpoint - side, origin - side])
 		if origin.distance_to(endpoint) > 0.1:
