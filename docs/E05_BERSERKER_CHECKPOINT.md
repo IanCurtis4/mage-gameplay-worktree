@@ -72,3 +72,14 @@ integral no fechamento, testes dirigidos entre passos.
 Entrega consolidada aqui: hash, síntese, evidências e roteiro curto de playtest,
 com imagem do atlas se útil. Parar para revisão Astra; não atualizar playtest
 ou master, não iniciar outra classe. Sem monitor/automação recorrente.
+
+## Progresso retomável
+
+| Passo | Status / commit | Testes e evidência | Próximo passo / impedimentos |
+|---|---|---|---|
+| Catálogo 3→4 | Concluído `23bb710` | Migração aditiva de catálogo 3, preservação de build/XP e backup byte a byte, bloqueio de backup mais novo/estranho; 10 checks dirigidos. `tools/verify.ps1` integral passou no Godot 4.7.2. | Registrar sete skills Berserker com `content_ready=false`; nenhum impedimento. |
+
+Tokens por passo: medição atribuível não disponível; não inferir uso semanal.
+O schema e o ruleset não mudam. Catálogos 1/2/3 migram ao 4 somente após
+validação completa; a migração transacional guarda o original no backup.
+Nenhum save real foi usado como fixture ou regravado.
