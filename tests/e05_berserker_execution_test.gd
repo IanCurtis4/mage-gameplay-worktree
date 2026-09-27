@@ -78,8 +78,41 @@ func _run() -> void:
 	player.free()
 	enemy.free()
 	controller.free()
+	await _test_execution_ui(snapshot)
 	print("E05 Berserker Execução: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
 	quit(0 if failures == 0 else 1)
+
+func _test_execution_ui(snapshot: BuildSnapshot) -> void:
+	RunController.pending_run_state = RunState.from_build("execution-ui", snapshot)
+	change_scene_to_file("res://scenes/main.tscn")
+	await scene_changed
+	var ui := current_scene as RunController
+	ui.set_process(false)
+	ui.player.set_process(false)
+	for actor: CombatActor in ui.enemies:
+		actor.set_process(false)
+	var target_actor := ui.enemies[0]
+	target_actor.global_position = ui.player.global_position + Vector2(70, 0)
+	var hp_cost := ui.player.berserker_execution_hp_cost()
+	ui.player.health.current_hp = hp_cost
+	ui.player.current_sp = ui.player.max_sp
+	ui._update_hud()
+	_check(ui.skill_label.text.contains("HP INSUFICIENTE") and ui.battle_controls.skill_buttons[&"berserker_execution"].text.contains("HP INSUFICIENTE"), "HUD and skill card expose the same insufficient-HP gate as the commit")
+	ui.cast_intent.active_skill = &"berserker_execution"
+	var motion := InputEventMouseMotion.new()
+	motion.position = ui.get_global_transform_with_canvas() * target_actor.global_position
+	root.push_input(motion, true)
+	ui._update_aim(target_actor.global_position)
+	_check(ui.battle_controls.aim_label.text.contains("HP INSUFICIENTE") and not ui.battle_indicators.available, "valid-target aim explicitly blocks Execution at insufficient HP")
+	var before_sp := ui.player.current_sp
+	ui._commit_skill(&"berserker_execution", target_actor.global_position)
+	_check(ui.status_label.text.contains("HP INSUFICIENTE") and ui.player.health.current_hp == hp_cost and ui.player.current_sp == before_sp, "failed confirmation reports HP gate without spending HP or SP")
+	ui.player.health.current_hp = hp_cost + 1.0
+	ui._update_hud()
+	ui._update_aim(target_actor.global_position)
+	_check(ui.skill_label.text.contains("PRONTO") and ui.battle_controls.aim_label.text.contains("PRONTO"), "UI returns to ready when HP rises above the exact nonlethal cost")
+	ui.queue_free()
+	await process_frame
 
 func _on_attack_requested(request: DamageRequest, target: CombatActor) -> void:
 	requests.append(request)

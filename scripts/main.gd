@@ -402,7 +402,7 @@ func _report_skill_failure(skill: StringName, selected_target: CombatActor = nul
 	if definition.targeting == SkillDefinition.Targeting.SINGLE_TARGET and not player.can_target_skill(skill, selected_target):
 		status_label.text = "%s cancelada — ALVO INVÁLIDO OU FORA DE ALCANCE" % definition.display_name
 	else:
-		_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+		_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill), skill)
 
 func _select_skill_from_bar(skill: StringName) -> void:
 	if get_tree().paused or run_finished or not player.is_alive():
@@ -432,7 +432,7 @@ func _update_aim(point: Vector2) -> void:
 	var definition := ClassCatalog.skill_definition(skill)
 	var cooldown := player.skill_cooldown(skill)
 	var cost := player.skill_cost(skill)
-	var state := _skill_state(cooldown, cost)
+	var state := _skill_state(cooldown, cost, skill)
 	if skill == &"shield_wall" and player.has_shield_stance():
 		state = "DESLIGAR"
 	var selected_target: CombatActor
@@ -1187,19 +1187,21 @@ func _display_skill_state(skill_id: StringName, sp_cost: float) -> String:
 		return "ATIVA %.1fs" % player.fury_remaining
 	if skill_id == &"extended_aim" and player.has_extended_aim():
 		return "ATIVA %.1fs" % player.extended_aim_remaining
-	return _skill_state(player.skill_cooldown(skill_id), sp_cost)
+	return _skill_state(player.skill_cooldown(skill_id), sp_cost, skill_id)
 
-func _skill_state(cooldown: float, sp_cost: float) -> String:
+func _skill_state(cooldown: float, sp_cost: float, skill_id: StringName = &"") -> String:
 	if cooldown > 0.0:
 		return "RECARGA %.1fs" % cooldown
 	if player.current_sp < sp_cost:
 		return "SEM SP"
+	if skill_id == &"berserker_execution" and not player.can_pay_berserker_execution_hp():
+		return "HP INSUFICIENTE"
 	return "PRONTO"
 
-func _show_skill_blocked(skill_name: String, cooldown: float, sp_cost: float) -> void:
+func _show_skill_blocked(skill_name: String, cooldown: float, sp_cost: float, skill_id: StringName = &"") -> void:
 	_feedback_serial += 1
 	var serial := _feedback_serial
-	status_label.text = "%s indisponível — %s" % [skill_name, _skill_state(cooldown, sp_cost)]
+	status_label.text = "%s indisponível — %s" % [skill_name, _skill_state(cooldown, sp_cost, skill_id)]
 	get_tree().create_timer(1.2).timeout.connect(_restore_context_status.bind(serial))
 
 func _restore_context_status(serial: int) -> void:

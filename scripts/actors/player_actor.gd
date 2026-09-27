@@ -328,8 +328,8 @@ func use_berserker_execution(enemy: CombatActor) -> bool:
 	var rank_definition := _runtime_rank_definition(&"berserker_execution")
 	if not _is_berserker() or rank_definition == null or not can_target_skill(&"berserker_execution", enemy) or not _can_spend(&"berserker_execution"):
 		return false
-	var hp_cost := maxf(1.0, ceilf(health.max_hp * BERSERKER_EXECUTION_HP_COST_FRACTION))
-	if health.current_hp <= hp_cost:
+	var hp_cost := berserker_execution_hp_cost()
+	if not can_pay_berserker_execution_hp():
 		return false
 	var stacks := berserker_wound_stacks(enemy.get_instance_id())
 	var target_low := enemy.health.current_hp <= enemy.health.max_hp * BERSERKER_EXECUTION_LOW_TARGET_THRESHOLD
@@ -348,6 +348,12 @@ func use_berserker_execution(enemy: CombatActor) -> bool:
 	presentation_action.emit(&"slash", facing, 0.20)
 	resources_changed.emit()
 	return true
+
+func berserker_execution_hp_cost() -> float:
+	return maxf(1.0, ceilf(health.max_hp * BERSERKER_EXECUTION_HP_COST_FRACTION)) if health != null else INF
+
+func can_pay_berserker_execution_hp() -> bool:
+	return health != null and health.current_hp > berserker_execution_hp_cost()
 
 func use_berserker_breath_steal(enemy: CombatActor) -> bool:
 	var rank_definition := _runtime_rank_definition(&"berserker_breath_steal")
