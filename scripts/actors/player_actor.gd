@@ -82,7 +82,11 @@ const BERSERKER_WOUND_MAX_STACKS := 3
 const BERSERKER_EXECUTION_HP_COST_FRACTION := 0.03
 const BERSERKER_EXECUTION_LOW_TARGET_THRESHOLD := 0.35
 const BERSERKER_EXECUTION_LOW_TARGET_BONUS := 0.20
-const BERSERKER_DIRECT_MELEE_IDS := [&"basic_attack", &"cone_slash", &"brutal_strike", &"concentrated_rage", &"berserker_rupture"]
+const BERSERKER_DIRECT_MELEE_IDS := [
+	&"basic_attack", &"cone_slash", &"brutal_strike", &"concentrated_rage",
+	&"berserker_rupture", &"berserker_execution", &"berserker_wound_leap",
+	&"berserker_blood_rift", &"berserker_breath_steal",
+]
 
 var navigation: ArenaNavigation
 var run_state: RunState
@@ -1560,6 +1564,10 @@ func _make_request(enemy: CombatActor, skill_id: StringName, accuracy_mode: Dama
 func _make_physical_request(enemy: CombatActor, skill_id: StringName, power: float, accuracy_mode: DamageRequest.AccuracyMode, can_crit: bool) -> DamageRequest:
 	var request := _make_request(enemy, skill_id, accuracy_mode, can_crit)
 	request.physical_damage = power
+	if _is_berserker() and skill_id in BERSERKER_DIRECT_MELEE_IDS and run_state.build_snapshot.passive_slots.has(&"berserker_obstinacy") and health.current_hp <= health.max_hp * 0.50:
+		var rank_definition := _runtime_rank_definition(&"berserker_obstinacy")
+		if rank_definition != null:
+			request.damage_dealt_multiplier *= 1.0 + rank_definition.power
 	return request
 
 func _make_magic_request(enemy: CombatActor, skill_id: StringName, power: float, accuracy_mode: DamageRequest.AccuracyMode, can_crit: bool) -> DamageRequest:
