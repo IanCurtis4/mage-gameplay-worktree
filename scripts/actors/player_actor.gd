@@ -6,6 +6,7 @@ const IceWallScript = preload("res://scripts/world/ice_wall.gd")
 signal attack_requested(request: DamageRequest, target: CombatActor)
 signal defender_hit_requested(request: DamageRequest, target: CombatActor, root_duration: float, push_direction: Vector2)
 signal berserker_rift_hit_requested(request: DamageRequest, target: CombatActor, bleed_request: DamageRequest)
+signal berserker_breath_hit_requested(request: DamageRequest, target: CombatActor, heal_fraction: float, marked_before_hit: bool)
 signal mage_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int)
 signal discharge_requested(request: DamageRequest, direction: Vector2, bonus_magic_damage: float)
 signal precision_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int, hit_limit: int)
@@ -84,6 +85,7 @@ const BERSERKER_EXECUTION_HP_COST_FRACTION := 0.03
 const BERSERKER_EXECUTION_LOW_TARGET_THRESHOLD := 0.35
 const BERSERKER_EXECUTION_LOW_TARGET_BONUS := 0.20
 const BERSERKER_RIFT_BLEED_DURATION := 4.0
+const BERSERKER_BREATH_HEAL_CAP_FRACTION := 0.05
 const BERSERKER_DIRECT_MELEE_IDS := [
 	&"basic_attack", &"cone_slash", &"brutal_strike", &"concentrated_rage",
 	&"berserker_rupture", &"berserker_execution", &"berserker_wound_leap",
@@ -341,6 +343,33 @@ func use_berserker_execution(enemy: CombatActor) -> bool:
 	presentation_action.emit(&"slash", facing, 0.20)
 	resources_changed.emit()
 	return true
+
+func use_berserker_breath_steal(enemy: CombatActor) -> bool:
+	var rank_definition := _runtime_rank_definition(&"berserker_breath_steal")
+	if not _is_berserker() or rank_definition == null or not can_target_skill(&"berserker_breath_steal", enemy) or not _can_spend(&"berserker_breath_steal"):
+		return false
+	var marked_before_hit := berserker_wound_stacks(enemy.get_instance_id()) > 0
+	var facing := _resolved_facing(global_position.direction_to(enemy.global_position))
+	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
+	_spend(&"berserker_breath_steal")
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(&"berserker_breath_steal")
+	var request := _make_physical_request(enemy, &"berserker_breath_steal", stat_breakdown.value(&"melee_attack") * rank_definition.power, definition.accuracy_mode, definition.can_crit)
+	berserker_breath_hit_requested.emit(request, enemy, rank_definition.secondary_power, marked_before_hit)
+	presentation_action.emit(&"slash", facing, 0.20)
+	resources_changed.emit()
+	return true
+
+func heal_from_berserker_breath_steal(result: Dictionary, heal_fraction: float) -> float:
+	if not _is_berserker() or not is_alive() or int(result.get("source_id", 0)) != get_instance_id() or StringName(result.get("skill_id", &"")) != &"berserker_breath_steal" or not bool(result.get("can_trigger_effects", false)) or bool(result.get("killed", false)) or heal_fraction <= 0.0:
+		return 0.0
+	var amount := minf(float(result.get("actual_damage", 0.0)) * heal_fraction, health.max_hp * BERSERKER_BREATH_HEAL_CAP_FRACTION)
+	var healed := minf(maxf(0.0, amount), health.max_hp - health.current_hp)
+	if healed > 0.0:
+		health.current_hp += healed
+		resources_changed.emit()
+		queue_redraw()
+	return healed
 
 func berserker_wound_leap_destination(direction: Vector2) -> Vector2:
 	if navigation == null or is_rooted():
@@ -1320,7 +1349,7 @@ func can_target_skill(skill_id: StringName, enemy: CombatActor) -> bool:
 		return false
 	if global_position.distance_to(enemy.global_position) > skill_range(skill_id):
 		return false
-	return skill_id not in [&"brutal_strike", &"berserker_rupture", &"berserker_execution"] or (navigation != null and navigation.is_segment_clear(global_position, enemy.global_position, 0.0))
+	return skill_id not in [&"brutal_strike", &"berserker_rupture", &"berserker_execution", &"berserker_breath_steal"] or (navigation != null and navigation.is_segment_clear(global_position, enemy.global_position, 0.0))
 
 func aim_direction(point: Vector2) -> Vector2:
 	var direction := global_position.direction_to(point)
