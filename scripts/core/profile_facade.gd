@@ -408,6 +408,39 @@ func change_evolution(request_id: String, expected_revision: int, character_id: 
 	var mutation := CharacterProgression.change_evolution(candidate.character_by_id(character_id), _catalog, evolution_id)
 	return _finish_progression_mutation(request_id, before, candidate, character_id, mutation)
 
+## Menu-only playtest shortcut. XP remains ordinary persisted progression; no ranks,
+## allocations, evolution, or catalog availability are changed here.
+func grant_playtest_progression(request_id: String, expected_revision: int, character_id: String, action: StringName, amount: int = 0) -> Dictionary:
+	if _operation_in_progress:
+		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
+	var ready := _begin_operation(request_id, expected_revision)
+	if not ready["ok"]:
+		return _finish_operation(request_id, ready)
+	var boundary := _progression_boundary(character_id)
+	if not boundary["ok"]:
+		return _finish_operation(request_id, boundary)
+	if (action == &"base_xp" or action == &"job_xp") and amount <= 0:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_playtest_amount"})
+	if action not in [&"base_xp", &"job_xp", &"prepare_evolution", &"max_levels"]:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_playtest_action"})
+	var before := _profile.copy_state()
+	var candidate := before.copy_state()
+	var character: CharacterState = candidate.character_by_id(character_id)
+	var evolved := not character.evolution_id.is_empty()
+	match action:
+		&"base_xp":
+			character.base_xp_total = ProgressionRules.add_base_xp(character.base_xp_total, mini(amount, ProgressionRules.MAX_BASE_XP))
+		&"job_xp":
+			character.job_xp_total = ProgressionRules.add_job_xp(character.job_xp_total, mini(amount, ProgressionRules.MAX_JOB_XP), evolved)
+		&"prepare_evolution":
+			character.base_xp_total = maxi(character.base_xp_total, ProgressionRules.EVOLUTION_MIN_BASE_XP)
+			character.job_xp_total = maxi(character.job_xp_total, ProgressionRules.EVOLUTION_MIN_JOB_XP)
+		&"max_levels":
+			character.base_xp_total = ProgressionRules.MAX_BASE_XP
+			character.job_xp_total = ProgressionRules.MAX_JOB_XP if evolved else ProgressionRules.UNEVOLVED_MAX_JOB_XP
+	var unchanged := character.base_xp_total == before.character_by_id(character_id).base_xp_total and character.job_xp_total == before.character_by_id(character_id).job_xp_total
+	return _finish_progression_mutation(request_id, before, candidate, character_id, {"ok": true, "already_applied": unchanged, "playtest_action": action})
+
 func start_run(request_id: String, expected_revision: int) -> Dictionary:
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}

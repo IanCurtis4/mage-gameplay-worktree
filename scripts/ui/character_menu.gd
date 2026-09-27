@@ -30,6 +30,9 @@ var build_summary_label: Label
 var progression_panel: VBoxContainer
 var progression_state_label: Label
 var progression_wallets_label: Label
+var playtest_toggle: CheckButton
+var playtest_panel: VBoxContainer
+var playtest_buttons: Array[Button] = []
 var progression_attributes_label: Label
 var progression_attribute_actions: VBoxContainer
 var attribute_increment_buttons: Dictionary[StringName, Button] = {}
@@ -233,6 +236,7 @@ func _refresh() -> void:
 		start_run_button.disabled = true
 		_set_attribute_actions_disabled(true)
 		_set_skill_actions_disabled(true)
+		_refresh_playtest_controls(null)
 		return
 	roster_list.clear()
 	_selected_index = -1
@@ -268,6 +272,7 @@ func _refresh() -> void:
 	start_run_button.disabled = locked or profile.selected_character_id.is_empty()
 	_set_attribute_actions_disabled(locked or profile.reward_session != null)
 	_set_skill_actions_disabled(locked or profile.reward_session != null)
+	_refresh_playtest_controls(profile)
 	if profile.characters.size() >= MAX_CHARACTERS:
 		status_label.text = "Limite de %d personagens atingido." % MAX_CHARACTERS
 
@@ -295,6 +300,8 @@ func _error_text(error_code: StringName, read_only: bool) -> String:
 		&"unsupported_schema": return "Este perfil foi criado por uma versão mais nova do jogo."
 		&"invalid_catalog": return "O catálogo de personagem está incompatível com este perfil."
 		&"save_failed": return "Não foi possível salvar o perfil. Nenhuma alteração foi confirmada."
+		&"invalid_playtest_amount": return "Informe uma quantidade positiva de XP para o atalho de playtest."
+		&"invalid_playtest_action": return "Atalho de playtest desconhecido."
 		_: return "Não foi possível atualizar o perfil (%s)." % error_code
 
 func _class_name(base_class_id: StringName) -> String:
@@ -608,6 +615,24 @@ func _selected_progression_context() -> Dictionary:
 		return {"ok": false, "error_code": &"run_active"}
 	return {"ok": true, "character_id": profile.characters[_selected_index].character_id, "revision": profile.revision}
 
+func _apply_playtest_progression(action: StringName, amount: int = 0) -> Dictionary:
+	if playtest_toggle == null or not playtest_toggle.button_pressed:
+		return {"ok": false, "error_code": &"playtest_panel_closed"}
+	var context := _selected_progression_context()
+	if not context["ok"]:
+		return _show_result(context)
+	var result: Dictionary = facade.grant_playtest_progression(_request_id("playtest"), context["revision"], context["character_id"], action, amount)
+	return _show_result(result, "XP de playtest salvo neste personagem.")
+
+func _refresh_playtest_controls(profile: Variant) -> void:
+	if playtest_toggle == null:
+		return
+	var disabled := profile == null or _read_only or _selected_index < 0 or profile.reward_session != null
+	playtest_toggle.disabled = disabled
+	playtest_panel.visible = playtest_toggle.button_pressed
+	for button: Button in playtest_buttons:
+		button.disabled = disabled or not playtest_toggle.button_pressed
+
 func _set_attribute_actions_disabled(disabled: bool) -> void:
 	for button: Button in attribute_increment_buttons.values():
 		button.disabled = disabled
@@ -772,6 +797,32 @@ func _build_ui() -> void:
 	progression_state_label.name = "ProgressionState"
 	progression_state_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	progression_panel.add_child(progression_state_label)
+	playtest_toggle = CheckButton.new()
+	playtest_toggle.name = "PlaytestAdminToggle"
+	playtest_toggle.text = "Atalhos de playtest (alteram o save)"
+	playtest_toggle.tooltip_text = "Abre ações de XP para o personagem destacado. O XP salvo persiste ao fechar este painel."
+	playtest_toggle.toggled.connect(func(_pressed: bool) -> void: _refresh_playtest_controls(facade.current_profile() if facade != null else null))
+	progression_panel.add_child(playtest_toggle)
+	playtest_panel = VBoxContainer.new()
+	playtest_panel.name = "PlaytestAdminPanel"
+	playtest_panel.visible = false
+	progression_panel.add_child(playtest_panel)
+	var playtest_notice := Label.new()
+	playtest_notice.text = "Personagem destacado · XP salvo permanentemente · skills e evolução seguem as regras normais."
+	playtest_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	playtest_panel.add_child(playtest_notice)
+	for shortcut: Dictionary in [
+		{"name": "PlaytestBaseXP", "text": "+1.000 XP base", "action": &"base_xp", "amount": 1000},
+		{"name": "PlaytestJobXP", "text": "+1.000 XP job", "action": &"job_xp", "amount": 1000},
+		{"name": "PlaytestPrepareEvolution", "text": "Preparar evolução (mín. base 10 / job 20)", "action": &"prepare_evolution", "amount": 0},
+		{"name": "PlaytestMaxLevels", "text": "Níveis máximos legais", "action": &"max_levels", "amount": 0},
+	]:
+		var button := Button.new()
+		button.name = shortcut["name"]
+		button.text = shortcut["text"]
+		button.pressed.connect(_apply_playtest_progression.bind(shortcut["action"], shortcut["amount"]))
+		playtest_panel.add_child(button)
+		playtest_buttons.append(button)
 	progression_wallets_label = Label.new()
 	progression_wallets_label.name = "ProgressionWallets"
 	progression_wallets_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

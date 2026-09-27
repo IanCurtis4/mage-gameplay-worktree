@@ -193,3 +193,19 @@ Classe Defendente liberada para candidato no diretório fixo. Master não recebe
 esta entrega até o aceite do usuário sobre o playtest. As outras evoluções
 permanecem indisponíveis. VFX provisório e balanceamento exigem avaliação
 interativa; testes headless não certificam percepção visual nem diversão.
+
+## Atalhos de playtest autorizados — 27/09/2026
+
+Menu inclui toggle desativado por padrão: +1000 XP base, +1000 XP job,
+preparar evolução e níveis máximos legais. A fachada aplica alteração
+transacional apenas fora da run, respeitando revisão, limites e personagem
+em foco; não compra/equipa skills nem habilita conteúdo indisponível.
+XP permanece salvo após fechar painel. Teste isolado cobre foco, limites,
+repetição sem escrita, reload, job40 evoluído e bloqueio durante run.
+Validação integral: 77 suítes/3406 checks, importação e smoke aprovados.
+
+Save real lido para a preparação solicitada: Espadachim mais avançado já
+atingiu baseXP7500/jobXP4940 antes da aplicação; nenhuma alteração necessária.
+Backup separado criado antes das verificações. Evolução ainda null; diagnóstico
+do fluxo de confirmação delegado à tarefa E05 Sol. Não afirmar correção desse
+fluxo até receber a entrega. Master não foi atualizado.
