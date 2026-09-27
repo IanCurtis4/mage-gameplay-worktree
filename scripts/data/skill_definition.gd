@@ -50,6 +50,13 @@ enum Handler {
 	DEFENDER_GUARD_RETURN,
 	DEFENDER_WALL_ADVANCE,
 	DEFENDER_REPRISAL_WAVE,
+	BERSERKER_RUPTURE,
+	BERSERKER_OBSTINACY,
+	BERSERKER_WOUND_LEAP,
+	BERSERKER_EXECUTION,
+	BERSERKER_PURSUIT,
+	BERSERKER_BLOOD_RIFT,
+	BERSERKER_BREATH_STEAL,
 }
 
 const MAX_ACTIVE_RANK := 5
@@ -75,7 +82,7 @@ const MAX_PASSIVE_RANK := 3
 func is_rank_catalog_valid() -> bool:
 	if category < Category.ACTIVE or category > Category.PASSIVE:
 		return false
-	if handler_id <= Handler.UNASSIGNED or handler_id > Handler.DEFENDER_REPRISAL_WAVE:
+	if handler_id <= Handler.UNASSIGNED or handler_id > Handler.BERSERKER_BREATH_STEAL:
 		return false
 	if action_kind < ActionKind.OFFENSIVE or action_kind > ActionKind.DEFENSIVE:
 		return false

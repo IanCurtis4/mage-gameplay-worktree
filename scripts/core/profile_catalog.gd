@@ -62,6 +62,8 @@ static func pilot(
 	# A fixture may replace Defender's entire exclusive library; production never mixes both sets.
 	if not evolution_overrides.has(&"defender") and not evolution_overrides.has("defender"):
 		catalog._register_defender_skills()
+	if not evolution_overrides.has(&"berserker") and not evolution_overrides.has("berserker"):
+		catalog._register_berserker_skills()
 	for raw_item_id: Variant in additional_equipment:
 		var metadata: Dictionary = additional_equipment[raw_item_id]
 		var allowed_base_classes: Array[StringName] = []
@@ -364,15 +366,25 @@ func equipment_is_allowed(item_id: StringName, slot: StringName, base_class_id: 
 
 func _register_defender_skills() -> void:
 	var origin: Array[StringName] = [&"swordsman"]
-	add_skill(&"defender_counterstroke", origin, ACTIVE, EVOLUTION_WALLET, 1, 4, &"defender", _defender_rank_requirements(5, 20))
-	add_skill(&"defender_watch", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"defender", _defender_rank_requirements(3, 23))
-	add_skill(&"defender_anchor", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _defender_rank_requirements(5, 25))
-	add_skill(&"defender_line_lock", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _defender_rank_requirements(5, 28))
-	add_skill(&"defender_guard_return", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"defender", _defender_rank_requirements(3, 31))
-	add_skill(&"defender_wall_advance", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _defender_rank_requirements(5, 34))
-	add_skill(&"defender_reprisal_wave", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _defender_rank_requirements(5, 37))
+	add_skill(&"defender_counterstroke", origin, ACTIVE, EVOLUTION_WALLET, 1, 4, &"defender", _evolution_rank_requirements(5, 20))
+	add_skill(&"defender_watch", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"defender", _evolution_rank_requirements(3, 23))
+	add_skill(&"defender_anchor", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _evolution_rank_requirements(5, 25))
+	add_skill(&"defender_line_lock", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _evolution_rank_requirements(5, 28))
+	add_skill(&"defender_guard_return", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"defender", _evolution_rank_requirements(3, 31))
+	add_skill(&"defender_wall_advance", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _evolution_rank_requirements(5, 34))
+	add_skill(&"defender_reprisal_wave", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _evolution_rank_requirements(5, 37))
 
-func _defender_rank_requirements(max_rank: int, job_level: int) -> Dictionary:
+func _register_berserker_skills() -> void:
+	var origin: Array[StringName] = [&"swordsman"]
+	add_skill(&"berserker_rupture", origin, ACTIVE, EVOLUTION_WALLET, 1, 4, &"berserker", _evolution_rank_requirements(5, 20))
+	add_skill(&"berserker_obstinacy", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"berserker", _evolution_rank_requirements(3, 23))
+	add_skill(&"berserker_wound_leap", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"berserker", _evolution_rank_requirements(5, 25))
+	add_skill(&"berserker_execution", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"berserker", _evolution_rank_requirements(5, 28))
+	add_skill(&"berserker_pursuit", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"berserker", _evolution_rank_requirements(3, 31))
+	add_skill(&"berserker_blood_rift", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"berserker", _evolution_rank_requirements(5, 34))
+	add_skill(&"berserker_breath_steal", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"berserker", _evolution_rank_requirements(5, 37))
+
+func _evolution_rank_requirements(max_rank: int, job_level: int) -> Dictionary:
 	var requirements: Dictionary = {}
 	for rank: int in range(1, max_rank + 1):
 		requirements[rank] = {"job_level": job_level}
@@ -419,6 +431,14 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 				&"defender_counterstroke", &"defender_watch", &"defender_anchor",
 				&"defender_line_lock", &"defender_guard_return",
 				&"defender_wall_advance", &"defender_reprisal_wave",
+			]
+		if definition.id == &"berserker" and not normalized_overrides.has(definition.id):
+			definition.entry_skill_id = &"berserker_rupture"
+			definition.content_ready = false
+			definition.exclusive_skill_ids = [
+				&"berserker_rupture", &"berserker_obstinacy", &"berserker_wound_leap",
+				&"berserker_execution", &"berserker_pursuit",
+				&"berserker_blood_rift", &"berserker_breath_steal",
 			]
 		if normalized_overrides.has(definition.id):
 			_apply_evolution_override(definition, normalized_overrides[definition.id])

@@ -142,6 +142,13 @@ static func _ensure_built() -> void:
 	_add_passive_skill(&"defender_guard_return", "Resguardo")
 	_add_skill(&"defender_wall_advance", "Avanço de Muralha", "D", SkillDefinition.Targeting.DIRECTION, 22.0, 10.0, 0.80, 80.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, true, SkillDefinition.ActionKind.OFFENSIVE)
 	_add_skill(&"defender_reprisal_wave", "Onda de Represália", "D", SkillDefinition.Targeting.SELF, 24.0, 12.0, 0.60, 130.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, true, SkillDefinition.ActionKind.OFFENSIVE)
+	_add_skill(&"berserker_rupture", "Ruptura", "D", SkillDefinition.Targeting.SINGLE_TARGET, 17.0, 5.0, 1.0, 110.0, 0.0, 0.0, DamageRequest.AccuracyMode.CONTESTED, true)
+	_add_passive_skill(&"berserker_obstinacy", "Obstinação")
+	_add_skill(&"berserker_wound_leap", "Salto Cruento", "D", SkillDefinition.Targeting.DIRECTION, 18.0, 8.0, 0.80, 140.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, true)
+	_add_skill(&"berserker_execution", "Execução", "D", SkillDefinition.Targeting.SINGLE_TARGET, 22.0, 9.0, 1.20, 110.0, 0.0, 0.0, DamageRequest.AccuracyMode.CONTESTED, true)
+	_add_passive_skill(&"berserker_pursuit", "Caça Persistente")
+	_add_skill(&"berserker_blood_rift", "Fenda Sangrenta", "D", SkillDefinition.Targeting.DIRECTION, 21.0, 9.0, 0.90, 220.0, 0.0, 0.3, DamageRequest.AccuracyMode.GEOMETRY, true)
+	_add_skill(&"berserker_breath_steal", "Arrancar Fôlego", "D", SkillDefinition.Targeting.SINGLE_TARGET, 18.0, 12.0, 1.0, 110.0, 0.0, 0.0, DamageRequest.AccuracyMode.CONTESTED, true)
 	_configure_slash_ranks()
 	_configure_dash_ranks()
 	_configure_shield_wall_ranks()
@@ -186,6 +193,7 @@ static func _ensure_built() -> void:
 	_configure_defender_guard_return_ranks()
 	_configure_defender_wall_advance_ranks()
 	_configure_defender_reprisal_wave_ranks()
+	_configure_berserker_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -975,5 +983,47 @@ static func _configure_defender_reprisal_wave_ranks() -> void:
 		rank.secondary_power = 0.35
 		rank.physical_weight = 1.0
 		rank.effect_ids = [&"direct_area_pulse_radius_130", &"consume_guard_token_for_bonus_0_35_atk_body_and_normal_knockback_35", &"boss_damage_without_displacement"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_berserker_ranks() -> void:
+	_skills[&"berserker_rupture"].handler_id = SkillDefinition.Handler.BERSERKER_RUPTURE
+	_berserker_active_ranks(&"berserker_rupture", [17.0, 19.0, 21.0, 22.0, 23.0], [1.00, 1.12, 1.22, 1.31, 1.38], [0.40, 0.52, 0.63, 0.72, 0.80], 110.0, 5.0, 0.0, [&"direct_melee_first_activation", &"wound_max_three_eight_seconds", &"secondary_contested_detonation"])
+	_skills[&"berserker_obstinacy"].handler_id = SkillDefinition.Handler.BERSERKER_OBSTINACY
+	_berserker_passive_ranks(&"berserker_obstinacy", [0.08, 0.11, 0.14], [&"low_hp_direct_melee_bonus"])
+	_skills[&"berserker_wound_leap"].handler_id = SkillDefinition.Handler.BERSERKER_WOUND_LEAP
+	_berserker_active_ranks(&"berserker_wound_leap", [18.0, 20.0, 22.0, 23.0, 24.0], [0.80, 0.96, 1.08, 1.17, 1.24], [], 140.0, 8.0, 0.0, [&"offensive_mobility_safe_segment", &"direct_melee_one_target"])
+	_skills[&"berserker_execution"].handler_id = SkillDefinition.Handler.BERSERKER_EXECUTION
+	_berserker_active_ranks(&"berserker_execution", [22.0, 25.0, 27.0, 29.0, 30.0], [1.20, 1.40, 1.60, 1.75, 1.90], [], 110.0, 9.0, 0.0, [&"nonlethal_hp_cost_three_percent", &"consume_existing_wound_on_positive_damage", &"target_hp_at_most_35pct_bonus_20pct"])
+	_skills[&"berserker_pursuit"].handler_id = SkillDefinition.Handler.BERSERKER_PURSUIT
+	_berserker_passive_ranks(&"berserker_pursuit", [2.0, 3.0, 4.0], [&"wounded_direct_melee_sp_return_once_per_second"])
+	_skills[&"berserker_blood_rift"].handler_id = SkillDefinition.Handler.BERSERKER_BLOOD_RIFT
+	_berserker_active_ranks(&"berserker_blood_rift", [21.0, 23.0, 25.0, 26.0, 27.0], [0.90, 0.90, 0.90, 0.90, 0.90], [0.10, 0.12, 0.14, 0.16, 0.18], 220.0, 9.0, 0.3, [&"directional_strip_width_44", &"direct_damage", &"secondary_bleed_four_seconds"])
+	_skills[&"berserker_breath_steal"].handler_id = SkillDefinition.Handler.BERSERKER_BREATH_STEAL
+	_berserker_active_ranks(&"berserker_breath_steal", [18.0, 20.0, 22.0, 23.0, 24.0], [1.00, 1.08, 1.16, 1.23, 1.30], [0.15, 0.18, 0.21, 0.24, 0.27], 110.0, 12.0, 0.0, [&"direct_melee", &"heal_if_previously_wounded_and_survives_cap_five_percent_max_hp"])
+
+static func _berserker_active_ranks(skill_id: StringName, costs: Array[float], powers: Array[float], secondary_powers: Array[float], skill_range: float, cooldown: float, variable_cast: float, effects: Array[StringName]) -> void:
+	var definition: SkillDefinition = _skills[skill_id]
+	for index: int in powers.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = cooldown
+		rank.range = skill_range
+		rank.variable_cast_time = variable_cast
+		rank.power = powers[index]
+		rank.secondary_power = secondary_powers[index] if index < secondary_powers.size() else 0.0
+		rank.physical_weight = 1.0
+		rank.effect_ids = effects.duplicate()
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _berserker_passive_ranks(skill_id: StringName, powers: Array[float], effects: Array[StringName]) -> void:
+	var definition: SkillDefinition = _skills[skill_id]
+	for index: int in powers.size():
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.power = powers[index]
+		rank.effect_ids = effects.duplicate()
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
