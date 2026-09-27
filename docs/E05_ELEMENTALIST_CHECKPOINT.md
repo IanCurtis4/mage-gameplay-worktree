@@ -68,14 +68,14 @@ Mago/Defendente/Berserker/bases. Executar `tools/verify.ps1` integral.
 | Passo | Status / commit | Evidências | Próximo passo / bloqueio |
 |---|---|---|---|
 | Catálogo 4→5 e dados | Concluído `7b62c8f` + `cc2b2ab` | 99 checks de dados; migração 4→5 em 11 checks, regressões das migrações 2/3 em 13/10. `tools/verify.ps1` integral passou no Godot 4.7.2 após atualização de expectativa S1A; schema/ruleset iguais, backup exato, `content_ready=false`. | Implementar Explosão de Chamas. |
-| Explosão de Chamas | Pendente | — | Runtime e testes dirigidos. |
+| Explosão de Chamas | Concluído `d0855df` + VFX `63b8c00` | 10 checks: cast DES cancelável, sem SP no cancelamento/posição bloqueada, raio real 90, não atravessa obstáculo, request direto por alvo; indicadores passaram 7 checks. | Implementar Foco Prismático. |
 | Foco Prismático | Pendente | — | Sequência direta sem cascata. |
 | Anel Glacial | Pendente | — | Slow garantido/teto/pausa. |
 | Arco Voltaico | Pendente | — | Marca, saltos e boss. |
 | Ressonância Prismática | Pendente | — | Terceiro elemento e pré-mitigação. |
 | Trilha de Brasas | Pendente | — | Geometria e um hit/alvo. |
 | Nova Tríplice | Pendente | — | Três pulsos sem proc recursivo. |
-| Atlas e VFX | Atlas concluído `11bb421`; VFX pendentes | Atlas original 256×512 e teste visual 3 checks; importação 4.7.2 passou. Geração entregou seis linhas distintas úteis, com poses compatíveis reutilizadas nas demais células; pivô/hitbox preservados. | Ligar `evolution_id` ao atlas no ator; previews/VFX das skills ficam para integração. |
+| Atlas e VFX | Atlas `11bb421`; previews/impactos `2bc8676` + `63b8c00` | Atlas original 256×512, teste visual 3 checks, importação 4.7.2; `PlayerActor` seleciona pelo `evolution_id`. Cinco previews usam geometria compartilhada, indicadores 7 checks; impacto da Explosão ligado. Geração entregou seis linhas distintas úteis, com poses compatíveis reutilizadas nas demais células; pivô/hitbox preservados. | Ligar impactos restantes durante cada skill e conferir legibilidade integrada. |
 | Fechamento integrado | Pendente | — | Entrega única para Astra; não mover playtest/master. |
 
 Tokens por passo: medição atribuível indisponível nesta tarefa; não estimar
