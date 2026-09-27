@@ -161,7 +161,7 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 	var derived := _build_stat_breakdown()
 	var class_color := Color("8e73de") if class_id == &"mage" else Color("6fa85a") if class_id == &"archer" else Color("55a8d9")
 	setup(class_definition.display_name, class_color, derived, 20.0)
-	set_animation_kind(class_id)
+	set_animation_kind(&"defender" if _is_defender() else class_id)
 	max_sp = stat_breakdown.value(&"max_sp")
 	current_sp = max_sp
 	shield_remaining = 0.0

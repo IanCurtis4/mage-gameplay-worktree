@@ -32,7 +32,7 @@ func _initialize() -> void:
 		for index: int in range(fps):
 			paced.advance(1.0 / fps, Vector2(220.0 / fps, 0))
 		_check(paced.frame_index() == 5, "walk phase follows compact stride consistently at %d Hz" % fps)
-	for id: StringName in [&"swordsman", &"mage", &"warrior", &"archer"]:
+	for id: StringName in [&"swordsman", &"mage", &"warrior", &"archer", &"defender"]:
 		var animation := CharacterAnimation.new()
 		animation.configure(id)
 		_check(animation.atlas != null and animation.atlas.get_size() == Vector2(256, 512), "%s contains 32 native 64 px animation frames" % id)
@@ -51,6 +51,21 @@ func _initialize() -> void:
 	_test_integration.call_deferred()
 
 func _test_integration() -> void:
+	var navigation := ArenaNavigation.new()
+	navigation.configure(Rect2(0, 0, 1000, 700), [], 20.0)
+	var base_snapshot := BuildSnapshot.new()
+	base_snapshot.base_class_id = &"swordsman"
+	var base_player := PlayerActor.new()
+	base_player.configure(navigation, RunState.from_build("base-visual", base_snapshot))
+	_check(base_player.character_animation.actor_kind == &"swordsman", "base Swordsman keeps its original atlas")
+	var defender_snapshot := BuildSnapshot.new()
+	defender_snapshot.base_class_id = &"swordsman"
+	defender_snapshot.evolution_id = &"defender"
+	var defender_player := PlayerActor.new()
+	defender_player.configure(navigation, RunState.from_build("defender-visual", defender_snapshot))
+	_check(defender_player.class_id == &"swordsman" and defender_player.character_animation.actor_kind == &"defender" and defender_player.character_animation.atlas != base_player.character_animation.atlas, "Defender changes only the visual atlas, preserving base gameplay identity")
+	base_player.free()
+	defender_player.free()
 	RunController.selected_class_id = &"mage"
 	var controller := RunController.new()
 	root.add_child(controller)

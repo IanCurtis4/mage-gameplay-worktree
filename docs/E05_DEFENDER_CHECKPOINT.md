@@ -241,3 +241,27 @@ pendentes; não atualizar `codex/playtest` ou `master` nesta etapa.
 Verificação integral após o delta: `tools/verify.ps1` no Godot 4.7.2 standard,
 importação, 78 suítes / 3423 checks e smoke headless aprovados. Inclui as
 regressões de menu E02/E05, admin de playtest, persistência e combate base.
+
+## Candidato visual do Defendente — 27/09/2026
+
+Pedido posterior do usuário amplia o playtest para distinguir visualmente o
+Defendente do Espadachim. O atlas candidato tem 32 quadros de 64×64 e usa o
+mesmo pivô/animações da base. A silhueta passa a ser comandada pelo escudo alto
+retangular, com armadura de ferro escuro e marfim, tabardo claro e ouro velho
+discreto; cabelo castanho e espada curta preservam a continuidade da origem.
+É desenho original de fantasia coreana cartunesca, sem aproveitar sprites de
+Ragnarok. As duas folhas geradas por imagegen nativo ficam preservadas em
+`assets/art/animation_sources/defender*.png`; o atlas de jogo está em
+`assets/art/animations/defender.png`, preparado pelo pipeline existente.
+
+O runtime escolhe apenas o atlas `defender` quando o snapshot persistente é
+Espadachim evoluído para Defendente. `class_id` segue `swordsman`, sem mudar
+fórmula, hitbox, skills ou save. O Espadachim não evoluído conserva seu atlas.
+Teste de animação verifica 32 quadros com alpha/pivô e a separação dos dois
+visuais. `tools/verify.ps1` passou integralmente no Godot 4.7.2 standard,
+incluindo importação, animações (35 checks), regressões E01–E05 e smoke.
+Revisão visual Astra e playtest interativo ainda são necessários:
+legibilidade do escudo em movimento, consistência da mão entre vistas espelhadas
+e timing dos golpes/queda não são certificados por testes headless. VFX de skill
+e retrato de menu continuam provisórios; não há aprovação de arte final nem
+aceite do produto nesta etapa.
