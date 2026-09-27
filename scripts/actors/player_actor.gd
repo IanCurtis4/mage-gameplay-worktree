@@ -160,6 +160,7 @@ var defender_anchor_remaining := 0.0
 var defender_anchor_center := Vector2.INF
 var _defender_inside_anchor := false
 var berserker_wounds: Dictionary[int, Dictionary] = {}
+var berserker_pursuit_cooldown := 0.0
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
@@ -393,7 +394,8 @@ func record_berserker_damage(result: Dictionary) -> void:
 			berserker_wounds.erase(target_id)
 		return
 	if skill_id == &"berserker_execution":
-		if float(result.get("actual_damage", 0.0)) > 0.0:
+		if bool(result.get("can_trigger_effects", false)) and float(result.get("actual_damage", 0.0)) > 0.0:
+			_trigger_berserker_pursuit(target_id)
 			berserker_wounds.erase(target_id)
 		return
 	if not bool(result.get("can_trigger_effects", false)) or float(result.get("actual_damage", 0.0)) <= 0.0 or skill_id not in BERSERKER_DIRECT_MELEE_IDS or skill_rank(&"berserker_rupture") <= 0:
@@ -401,13 +403,26 @@ func record_berserker_damage(result: Dictionary) -> void:
 	var previous := berserker_wound_stacks(target_id)
 	if previous == 0 and skill_id != &"berserker_rupture":
 		return
+	if previous > 0:
+		_trigger_berserker_pursuit(target_id)
 	berserker_wounds[target_id] = {"stacks": mini(BERSERKER_WOUND_MAX_STACKS, previous + 1), "remaining": BERSERKER_WOUND_DURATION}
+
+func _trigger_berserker_pursuit(target_id: int) -> void:
+	if berserker_wound_stacks(target_id) <= 0 or berserker_pursuit_cooldown > 0.0 or not run_state.build_snapshot.passive_slots.has(&"berserker_pursuit"):
+		return
+	var rank_definition := _runtime_rank_definition(&"berserker_pursuit")
+	if rank_definition == null:
+		return
+	current_sp = minf(max_sp, current_sp + rank_definition.power)
+	berserker_pursuit_cooldown = 1.0
+	resources_changed.emit()
 
 func remove_berserker_wound(target_id: int) -> void:
 	berserker_wounds.erase(target_id)
 
 func clear_berserker_state() -> void:
 	berserker_wounds.clear()
+	berserker_pursuit_cooldown = 0.0
 	if _berserker_leap_active:
 		_stop_dash()
 
@@ -1354,6 +1369,7 @@ func _process(delta: float) -> void:
 	var simulation_paused := is_inside_tree() and get_tree().paused
 	if simulation_paused:
 		return
+	berserker_pursuit_cooldown = maxf(0.0, berserker_pursuit_cooldown - delta)
 	for target_id: int in berserker_wounds.keys():
 		var wound: Dictionary = berserker_wounds[target_id]
 		wound["remaining"] = maxf(0.0, float(wound["remaining"]) - delta)
