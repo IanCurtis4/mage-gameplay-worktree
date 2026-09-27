@@ -88,6 +88,7 @@ ou master, não iniciar outra classe. Sem monitor/automação recorrente.
 | Arrancar Fôlego | Concluído `3a8d214` | Cura só em alvo previamente ferido que sobrevive ao dano real, limitada a 5% do HP máximo e HP faltante; abate usa apenas Sede de Sangue. R0/R1/R5, SP, alcance/parede, erro, absorção e cap cobertos em 16 checks, três reruns dirigidos e `tools/verify.ps1` integral. | Fechamento integrado: builds legais, boss sem adds, fluxo menu→run, indicador/VFX e atlas exclusivo; sem impedimento. |
 | Atlas e leitura da ferida | Concluído `ec2af70` | Dois sheets originais 4×4 transparentes gerados com `imagegen` a partir do Espadachim e reduzidos a um atlas 32×64×64; `CharacterAnimation` escolhe Berserker sem alterar a identidade de regras. Ferida mostra 1–3 marcas, arco de expiração e cortes breves, não só vermelho; testes dirigidos de animação (39) e Ruptura/indicador (16) passaram. | Validar builds/fluxo/boss, abrir `content_ready` somente após fechamento local e executar `verify.ps1` integral. |
 | Fechamento integrado | Concluído `2fbf2e3` | `content_ready=true` só para Berserker; duas builds legais 13/19 base e 16/20 ou 15/20 evolução, boss solo com marca→cura→Execução (76 checks), menu→evolução→+1.000 XP job→compra/equipamento→reload→run→recompensa (16 checks). `tools/verify.ps1` integral passou no Godot 4.7.2 com as regressões Defendente e das três bases. | Revisão técnica consolidada de Astra; não mover playtest/master antes dela. |
+| Gate de HP de Execução na UI | Concluído `f6c555c` | O mesmo predicado de custo HP do runtime agora informa HUD, card, mira e status: quando falta HP, exibe `HP INSUFICIENTE` em vez de `PRONTO`. A suíte dirigida de Execução passou com 16 checks, incluindo cena real; `tools/verify.ps1` integral passou novamente no Godot 4.7.2. | Retomar revisão consolidada de Astra; parecer técnico ainda pendente. |
 
 Tokens por passo: medição atribuível não disponível; não inferir uso semanal.
 O schema e o ruleset não mudam. Catálogos 1/2/3 migram ao 4 somente após
@@ -96,11 +97,15 @@ Nenhum save real foi usado como fixture ou regravado.
 
 ## Entrega consolidada para revisão Astra
 
-Base da revisão: `codex/e05-evolutions` em `2fbf2e3`, mais este checkpoint.
+Base da revisão: `codex/e05-evolutions` em `f6c555c`, mais este checkpoint.
 Os commits Defendente `6f24322` e `9ddf668` também estão apenas nesta branch;
 não foram cobertos pelo aceite de playtest anterior do usuário. Revisar esses
 deltas conjuntamente antes de preparar novo candidato. Contratos de
 persistência mantêm schema e ruleset; catálogo 4 é migração aditiva com backup.
+O gate de Execução segue a clarificação de contrato HP atual > custo: mesmo
+quando o HP é fracionário, o custo não pode zerá-lo. Isso difere da redação
+anterior que dizia restar pelo menos 1 HP; não há mudança de regra neste
+checkpoint. O achado de UX sobre `PRONTO` com HP insuficiente foi corrigido.
 
 Arte gerada pelo modo embutido `imagegen`, editando a folha original do
 Espadachim para manter grade/poses/pivôs. Prompt resumido: evolução de fantasia
@@ -119,4 +124,6 @@ num boss sem adds, abrir ferida, curar com Arrancar Fôlego em alvo sobrevivente
 e converter com Execução. Testar também Fenda em alvo protegido por escudo.
 
 Limitações: ainda não houve playtest humano deste candidato, aprovação técnica
-de Astra ou merge. Playtest e master não foram alterados por esta entrega.
+de Astra ou merge. A revisão integrada iniciada por Astra foi interrompida pelo
+limite de uso antes do parecer final; portanto não equivale a aprovação.
+Playtest e master não foram alterados por esta entrega.
