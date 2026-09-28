@@ -17,6 +17,7 @@ signal slowing_arrow_requested(request: DamageRequest, direction: Vector2, slow_
 signal foliage_shelter_requested(center: Vector2, duration: float)
 signal fire_wall_requested(direction: Vector2, burn_request: DamageRequest)
 signal elementalist_flame_burst_requested(center: Vector2, request: DamageRequest)
+signal elementalist_area_requested(skill_id: StringName, center: Vector2, radius: float, request: DamageRequest, element: StringName)
 signal lightning_wall_requested(direction: Vector2, request: DamageRequest)
 signal soul_impact_requested(request: DamageRequest, target: CombatActor)
 signal haunt_requested(origin: Vector2, direction: Vector2, cone_range: float, request: DamageRequest)
@@ -706,6 +707,17 @@ func use_elementalist_flame_burst(point: Vector2) -> bool:
 	var definition := ClassCatalog.skill_definition(&"elementalist_flame_burst")
 	var request := _make_magic_request(null, &"elementalist_flame_burst", _magic_power(&"elementalist_flame_burst"), definition.accuracy_mode, definition.can_crit)
 	elementalist_flame_burst_requested.emit(center, request)
+	resources_changed.emit()
+	return true
+
+func use_elementalist_glacial_ring() -> bool:
+	if not _is_elementalist() or not _can_spend(&"elementalist_glacial_ring"):
+		return false
+	_spend(&"elementalist_glacial_ring")
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(&"elementalist_glacial_ring")
+	var request := _make_magic_request(null, &"elementalist_glacial_ring", _magic_power(&"elementalist_glacial_ring"), definition.accuracy_mode, definition.can_crit)
+	elementalist_area_requested.emit(&"elementalist_glacial_ring", global_position, SkillGeometry.ELEMENTALIST_GLACIAL_RING_RADIUS, request, &"ice")
 	resources_changed.emit()
 	return true
 

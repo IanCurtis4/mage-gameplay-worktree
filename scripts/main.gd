@@ -117,6 +117,7 @@ func _ready() -> void:
 	player.foliage_shelter_requested.connect(_on_foliage_shelter_requested)
 	player.fire_wall_requested.connect(_on_fire_wall_requested)
 	player.elementalist_flame_burst_requested.connect(_on_elementalist_flame_burst_requested)
+	player.elementalist_area_requested.connect(_on_elementalist_area_requested)
 	player.lightning_wall_requested.connect(_on_lightning_wall_requested)
 	player.soul_impact_requested.connect(_on_soul_impact_requested)
 	player.haunt_requested.connect(_on_haunt_requested)
@@ -387,6 +388,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 		if player.use_defender_reprisal_wave(enemies):
 			battle_indicators.show_defender_reprisal_wave(center)
 		else:
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.ELEMENTALIST_GLACIAL_RING:
+		if not player.use_elementalist_glacial_ring():
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif definition.handler_id == SkillDefinition.Handler.BERSERKER_RUPTURE:
 		if not player.use_berserker_rupture(selected_target):
@@ -729,17 +733,22 @@ func _on_fire_wall_requested(direction: Vector2, burn_request: DamageRequest) ->
 	wall.add_to_group("player_effects")
 
 func _on_elementalist_flame_burst_requested(center: Vector2, request: DamageRequest) -> void:
-	battle_indicators.show_elementalist_pulse(&"elementalist_flame_burst", center, SkillGeometry.ELEMENTALIST_FLAME_BURST_RADIUS, &"fire")
+	_on_elementalist_area_requested(&"elementalist_flame_burst", center, SkillGeometry.ELEMENTALIST_FLAME_BURST_RADIUS, request, &"fire")
+
+func _on_elementalist_area_requested(skill_id: StringName, center: Vector2, radius: float, request: DamageRequest, element: StringName) -> void:
+	battle_indicators.show_elementalist_pulse(skill_id, center, radius, element)
 	for target_actor: CombatActor in enemies.duplicate():
 		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
 			continue
-		if center.distance_to(target_actor.global_position) > SkillGeometry.ELEMENTALIST_FLAME_BURST_RADIUS + target_actor.collision_radius:
+		if center.distance_to(target_actor.global_position) > radius + target_actor.collision_radius:
 			continue
 		if not navigation.is_segment_clear(center, target_actor.global_position, 0.0):
 			continue
 		var target_request := request.copy()
 		target_request.target_id = target_actor.get_instance_id()
-		target_actor.apply_damage(target_request, rng)
+		var result := target_actor.apply_damage(target_request, rng)
+		if element == &"ice" and float(result.get("actual_damage", 0.0)) > 0.0 and target_actor.is_alive():
+			target_actor.apply_slow(0.40, 2.5, skill_id)
 
 func _on_lightning_wall_requested(direction: Vector2, request: DamageRequest) -> void:
 	var wall := LightningWall.new()

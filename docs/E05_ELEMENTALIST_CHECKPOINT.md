@@ -69,8 +69,8 @@ Mago/Defendente/Berserker/bases. Executar `tools/verify.ps1` integral.
 |---|---|---|---|
 | Catálogo 4→5 e dados | Concluído `7b62c8f` + `cc2b2ab` | 99 checks de dados; migração 4→5 em 11 checks, regressões das migrações 2/3 em 13/10. `tools/verify.ps1` integral passou no Godot 4.7.2 após atualização de expectativa S1A; schema/ruleset iguais, backup exato, `content_ready=false`. | Implementar Explosão de Chamas. |
 | Explosão de Chamas | Concluído `d0855df` + VFX `63b8c00` | 10 checks: cast DES cancelável, sem SP no cancelamento/posição bloqueada, raio real 90, não atravessa obstáculo, request direto por alvo; indicadores passaram 7 checks. | Implementar Foco Prismático. |
-| Foco Prismático | Implementado (commit deste pacote) | 13 checks: alternância por alvo, janela 5 s, gate 1 s, ranks R1/R3, somente equipada, callback de dano real, pausa, limpeza e teto SP; Explosão regressão 10 checks. | Implementar Anel Glacial. |
-| Anel Glacial | Pendente | — | Slow garantido/teto/pausa. |
+| Foco Prismático | Concluído `5b1e3a1` | 13 checks: alternância por alvo, janela 5 s, gate 1 s, ranks R1/R3, somente equipada, callback de dano real, pausa, limpeza e teto SP; Explosão regressão 10 checks. | Implementar Anel Glacial. |
+| Anel Glacial | Implementado (commit deste pacote) | 11 checks: cast/cancelamento/SP, área/obstáculo, slow positivo garantido, absorção, teto compartilhado, pausa/expiração, R0/R5; Explosão regressão 10 checks. | Implementar Arco Voltaico. |
 | Arco Voltaico | Pendente | — | Marca, saltos e boss. |
 | Ressonância Prismática | Pendente | — | Terceiro elemento e pré-mitigação. |
 | Trilha de Brasas | Pendente | — | Geometria e um hit/alvo. |
