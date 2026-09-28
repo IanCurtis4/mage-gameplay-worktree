@@ -118,6 +118,7 @@ func _ready() -> void:
 	player.fire_wall_requested.connect(_on_fire_wall_requested)
 	player.elementalist_flame_burst_requested.connect(_on_elementalist_flame_burst_requested)
 	player.elementalist_area_requested.connect(_on_elementalist_area_requested)
+	player.elementalist_lightning_arc_requested.connect(_on_elementalist_lightning_arc_requested)
 	player.lightning_wall_requested.connect(_on_lightning_wall_requested)
 	player.soul_impact_requested.connect(_on_soul_impact_requested)
 	player.haunt_requested.connect(_on_haunt_requested)
@@ -392,6 +393,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.ELEMENTALIST_GLACIAL_RING:
 		if not player.use_elementalist_glacial_ring():
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.ELEMENTALIST_LIGHTNING_ARC:
+		if not player.use_elementalist_lightning_arc(selected_target):
+			_report_skill_failure(skill, selected_target)
 	elif definition.handler_id == SkillDefinition.Handler.BERSERKER_RUPTURE:
 		if not player.use_berserker_rupture(selected_target):
 			_report_skill_failure(skill, selected_target)
@@ -746,9 +750,62 @@ func _on_elementalist_area_requested(skill_id: StringName, center: Vector2, radi
 			continue
 		var target_request := request.copy()
 		target_request.target_id = target_actor.get_instance_id()
-		var result := target_actor.apply_damage(target_request, rng)
-		if element == &"ice" and float(result.get("actual_damage", 0.0)) > 0.0 and target_actor.is_alive():
-			target_actor.apply_slow(0.40, 2.5, skill_id)
+		_apply_elementalist_hit(target_request, target_actor, element)
+
+func _apply_elementalist_hit(request: DamageRequest, target_actor: CombatActor, element: StringName, marked_bonus: float = 0.0) -> Dictionary:
+	if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
+		return {}
+	var marked := element == &"lightning" and target_actor.is_electrified()
+	var resolved_request := request.copy()
+	resolved_request.target_id = target_actor.get_instance_id()
+	if marked:
+		resolved_request.magic_damage += marked_bonus
+	var result := target_actor.apply_damage(resolved_request, rng)
+	if float(result.get("actual_damage", 0.0)) <= 0.0:
+		return result
+	if element == &"ice" and target_actor.is_alive():
+		target_actor.apply_slow(0.40, 2.5, request.skill_id)
+	elif element == &"lightning":
+		if marked:
+			target_actor.consume_electrified()
+			var stun_roll := rng.randf()
+			if target_actor.is_alive() and stun_roll < 0.25:
+				target_actor.apply_stun(0.6)
+		elif target_actor.is_alive():
+			target_actor.apply_electrified(4.0)
+	return result
+
+func _on_elementalist_lightning_arc_requested(request: DamageRequest, target_actor: CombatActor, jump_damage: float, marked_bonus: float) -> void:
+	var visited: Array[int] = []
+	var current := target_actor
+	for index: int in range(3):
+		if current == null or not is_instance_valid(current) or not current.is_alive():
+			break
+		visited.append(current.get_instance_id())
+		var center := current.global_position
+		battle_indicators.show_elementalist_pulse(&"elementalist_lightning_arc", center, 30.0, &"lightning")
+		var hit_request := request.copy()
+		if index > 0:
+			hit_request.magic_damage = jump_damage
+			hit_request.is_secondary = true
+		var result := _apply_elementalist_hit(hit_request, current, &"lightning", marked_bonus)
+		if float(result.get("actual_damage", 0.0)) <= 0.0:
+			break
+		current = _elementalist_chain_target(center, visited)
+
+func _elementalist_chain_target(origin: Vector2, visited: Array[int]) -> CombatActor:
+	var chosen: CombatActor
+	var nearest := INF
+	for enemy: CombatActor in enemies:
+		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive() or visited.has(enemy.get_instance_id()):
+			continue
+		var distance := origin.distance_to(enemy.global_position)
+		if distance > SkillGeometry.ELEMENTALIST_LIGHTNING_CHAIN_RANGE or not navigation.is_segment_clear(origin, enemy.global_position, 0.0):
+			continue
+		if distance < nearest or (is_equal_approx(distance, nearest) and chosen != null and enemy.get_instance_id() < chosen.get_instance_id()):
+			chosen = enemy
+			nearest = distance
+	return chosen
 
 func _on_lightning_wall_requested(direction: Vector2, request: DamageRequest) -> void:
 	var wall := LightningWall.new()

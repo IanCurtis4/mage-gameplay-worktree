@@ -18,6 +18,7 @@ signal foliage_shelter_requested(center: Vector2, duration: float)
 signal fire_wall_requested(direction: Vector2, burn_request: DamageRequest)
 signal elementalist_flame_burst_requested(center: Vector2, request: DamageRequest)
 signal elementalist_area_requested(skill_id: StringName, center: Vector2, radius: float, request: DamageRequest, element: StringName)
+signal elementalist_lightning_arc_requested(request: DamageRequest, target: CombatActor, jump_damage: float, marked_bonus: float)
 signal lightning_wall_requested(direction: Vector2, request: DamageRequest)
 signal soul_impact_requested(request: DamageRequest, target: CombatActor)
 signal haunt_requested(origin: Vector2, direction: Vector2, cone_range: float, request: DamageRequest)
@@ -718,6 +719,19 @@ func use_elementalist_glacial_ring() -> bool:
 	var definition := ClassCatalog.skill_definition(&"elementalist_glacial_ring")
 	var request := _make_magic_request(null, &"elementalist_glacial_ring", _magic_power(&"elementalist_glacial_ring"), definition.accuracy_mode, definition.can_crit)
 	elementalist_area_requested.emit(&"elementalist_glacial_ring", global_position, SkillGeometry.ELEMENTALIST_GLACIAL_RING_RADIUS, request, &"ice")
+	resources_changed.emit()
+	return true
+
+func use_elementalist_lightning_arc(enemy: CombatActor) -> bool:
+	if not _is_elementalist() or not _can_spend(&"elementalist_lightning_arc") or not can_target_skill(&"elementalist_lightning_arc", enemy):
+		return false
+	_spend(&"elementalist_lightning_arc")
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(&"elementalist_lightning_arc")
+	var rank_definition := _runtime_rank_definition(&"elementalist_lightning_arc")
+	var magic_attack := stat_breakdown.value(&"magic_attack")
+	var request := _make_magic_request(enemy, &"elementalist_lightning_arc", magic_attack * rank_definition.power, definition.accuracy_mode, definition.can_crit)
+	elementalist_lightning_arc_requested.emit(request, enemy, magic_attack * 0.60, magic_attack * rank_definition.secondary_power)
 	resources_changed.emit()
 	return true
 
