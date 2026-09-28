@@ -126,6 +126,29 @@ Preparação de playtest autorizada pelo workflow após este parecer; aceite
 de produto e merge em master continuam dependentes do usuário. Espiritualista
 e demais classes não foram liberados.
 
+### Preparação do diretório habitual
+
+Ambos os worktrees estavam limpos. Base `master`/`codex/playtest` verificada
+em `21c7793`; backup `codex/e05-elementalist-pre-playtest-d2a131c` criado
+em `d2a131c` antes do rebase. A base já era ancestral: rebase sem alterações
+ou conflitos. `codex/playtest` avançou por fast-forward até `d2a131c`.
+Neste diretório, importação Godot 4.7.2, fechamento integrado33, Arco15 e
+indicadores13 passaram novamente. O ajuste seguinte é apenas este registro
+documental, sem mudança do runtime aprovado `52ea1b5`.
+
+Projeto de playtest: `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/project.godot`.
+Editor existente preservado; aceitar reload de arquivos se solicitado e usar
+F5. Nenhum merge em master ou push foi executado. `master` continua `21c7793`.
+O candidato final pode incluir este registro documental; conferir o HEAD de
+`codex/playtest` na entrega. Atlas importado sem delta de conteúdo; worktrees
+limpos ao concluir a preparação.
+
+Roteiro curto: evoluir Mago no job20, confirmar entrada gratuita sem autoequip,
+ganhar XP job pelos controles de playtest e equipar exclusivas/herdadas.
+Reabrir perfil e iniciar a build focada. Alternar fogo/gelo/raio num alvo,
+observar SP/ressonância e os três impactos do Arco; testar Trilha junto a
+obstáculos, Nova em movimento, pausa e morte. Avaliar silhueta e VFX no jogo.
+
 Base aceita `21c7793` (master/playtest); runtime final `1921857` sobre
 `7130053`. As sete exclusivas, catálogo aditivo 4→5, atlas, cinco previews e
 impactos, persistência/menu/run/recompensas estão fechados. Revisar a classe
