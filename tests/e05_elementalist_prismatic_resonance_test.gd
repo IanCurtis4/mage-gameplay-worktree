@@ -29,7 +29,7 @@ func _run() -> void:
 	var ice := _request(player, enemy, &"ice_spear")
 	var lightning := _request(player, enemy, &"lightning")
 	var captured_bonus := player.stat_breakdown.value(&"magic_attack") * 0.25
-	_check(is_equal_approx(lightning.prismatic_resonance_damage, captured_bonus) and lightning.copy().prismatic_resonance_damage == captured_bonus, "passive bonus captured at commit and copied through projectile")
+	_check(is_equal_approx(lightning.prismatic_resonance_damage, captured_bonus) and lightning.copy().prismatic_resonance_damage == captured_bonus and lightning.emission_id > 0 and lightning.copy().emission_id == lightning.emission_id, "passive bonus and cast identity captured at commit and copied through projectile")
 	controller._on_mage_projectile_hit(fire, enemy)
 	controller._on_mage_projectile_hit(fire, enemy)
 	_check(not player.elementalist_resonance_ready(target_id, &"lightning"), "same element cannot fill second slot")

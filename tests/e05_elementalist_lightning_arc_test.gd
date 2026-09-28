@@ -40,7 +40,7 @@ func _run() -> void:
 	request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
 	request.can_crit = false
 	controller._on_elementalist_lightning_arc_requested(request, targets[0], 60.0, 40.0)
-	_check(hits.size() == 3 and hits[0]["can_trigger_effects"] and not hits[1]["can_trigger_effects"] and not hits[2]["can_trigger_effects"], "exactly one direct root and at most two secondary jumps")
+	_check(hits.size() == 3 and hits[0]["can_trigger_effects"] and not hits[1]["can_trigger_effects"] and not hits[2]["can_trigger_effects"] and hits[0]["emission_id"] == captured.emission_id and hits[1]["emission_id"] == captured.emission_id, "exactly one direct root and at most two secondary jumps preserve cast identity in results")
 	_check(targets[3].health.current_hp == 10000.0 and targets[0].is_electrified() and targets[1].is_electrified(), "chain never repeats or reaches fourth target, positive unmarked hits apply mark")
 	_check(player.elementalist_focus_history.size() == 1, "secondary jumps cannot feed prism history")
 	var first := targets[0]
