@@ -71,8 +71,8 @@ Mago/Defendente/Berserker/bases. Executar `tools/verify.ps1` integral.
 | Explosão de Chamas | Concluído `d0855df` + VFX `63b8c00` | 10 checks: cast DES cancelável, sem SP no cancelamento/posição bloqueada, raio real 90, não atravessa obstáculo, request direto por alvo; indicadores passaram 7 checks. | Implementar Foco Prismático. |
 | Foco Prismático | Concluído `5b1e3a1` | 13 checks: alternância por alvo, janela 5 s, gate 1 s, ranks R1/R3, somente equipada, callback de dano real, pausa, limpeza e teto SP; Explosão regressão 10 checks. | Implementar Anel Glacial. |
 | Anel Glacial | Concluído `b90187d` | 11 checks: cast/cancelamento/SP, área/obstáculo, slow positivo garantido, absorção, teto compartilhado, pausa/expiração, R0/R5; Explosão regressão 10 checks. | Implementar Arco Voltaico. |
-| Arco Voltaico | Implementado (commit deste pacote) | 14 checks: cast/SP/request contested, três alvos sem repetição, saltos secundários, marca/bônus/absorção, boss solo e teto/budget stun, alcance/obstáculo. Cadeia só continua após dano positivo (inclui raiz); sem alvo válido termina. Anel regressão 11 checks. | Implementar Ressonância Prismática. |
-| Ressonância Prismática | Pendente | — | Terceiro elemento e pré-mitigação. |
+| Arco Voltaico | Concluído `c7f2ebb` | 14 checks: cast/SP/request contested, três alvos sem repetição, saltos secundários, marca/bônus/absorção, boss solo e teto/budget stun, alcance/obstáculo. Cadeia só continua após dano positivo (inclui raiz); sem alvo válido termina. Anel regressão 11 checks. | Implementar Ressonância Prismática. |
+| Ressonância Prismática | Implementado (commit deste pacote) | 14 checks: três distintos, janela desde primeiro golpe, bônus bruto copiado/pré-mitigação, absorção preserva sequência, terceiro positivo reinicia, secundário excluído, pausa/expiração/limpeza, R1/R3/equipamento; Foco 13, Relâmpago 66, Descarga 69 regressões. | Implementar Trilha de Brasas. |
 | Trilha de Brasas | Pendente | — | Geometria e um hit/alvo. |
 | Nova Tríplice | Pendente | — | Três pulsos sem proc recursivo. |
 | Atlas e VFX | Atlas `11bb421`; previews/impactos `2bc8676` + `63b8c00` | Atlas original 256×512, teste visual 3 checks, importação 4.7.2; `PlayerActor` seleciona pelo `evolution_id`. Cinco previews usam geometria compartilhada, indicadores 7 checks; impacto da Explosão ligado. Geração entregou seis linhas distintas úteis, com poses compatíveis reutilizadas nas demais células; pivô/hitbox preservados. | Ligar impactos restantes durante cada skill e conferir legibilidade integrada. |
@@ -80,3 +80,10 @@ Mago/Defendente/Berserker/bases. Executar `tools/verify.ps1` integral.
 
 Tokens por passo: medição atribuível indisponível nesta tarefa; não estimar
 consumo semanal a partir de tempo ou número de testes.
+
+Contrato crítico para Astra: `DamageRequest.prismatic_resonance_damage` é um
+campo runtime opcional (default 0) e copiado, capturado com ATQM/rank no commit
+da ação. No impacto, apenas o alvo com dois elementos diretos distintos e a
+passiva equipada recebe esse valor somado ao componente mágico antes de
+CombatMath; misses/absorção/secundários não consomem a sequência. Não muda
+serialização, catálogo, fórmulas nem o comportamento do Mago base.

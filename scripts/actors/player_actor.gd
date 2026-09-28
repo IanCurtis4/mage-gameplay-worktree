@@ -90,6 +90,7 @@ const BERSERKER_EXECUTION_LOW_TARGET_BONUS := 0.20
 const BERSERKER_RIFT_BLEED_DURATION := 4.0
 const BERSERKER_BREATH_HEAL_CAP_FRACTION := 0.05
 const ELEMENTALIST_FOCUS_WINDOW := 5.0
+const ELEMENTALIST_RESONANCE_WINDOW := 6.0
 const BERSERKER_DIRECT_MELEE_IDS := [
 	&"basic_attack", &"cone_slash", &"brutal_strike", &"concentrated_rage",
 	&"berserker_rupture", &"berserker_execution", &"berserker_wound_leap",
@@ -171,6 +172,7 @@ var berserker_wounds: Dictionary[int, Dictionary] = {}
 var berserker_pursuit_cooldown := 0.0
 var elementalist_focus_history: Dictionary[int, Dictionary] = {}
 var elementalist_focus_cooldown := 0.0
+var elementalist_resonance_history: Dictionary[int, Dictionary] = {}
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
@@ -530,13 +532,30 @@ func record_elementalist_damage(result: Dictionary) -> void:
 			if current_sp > previous_sp:
 				resources_changed.emit()
 	elementalist_focus_history[target_id] = {"element": element, "remaining": ELEMENTALIST_FOCUS_WINDOW}
+	var resonance: Dictionary = elementalist_resonance_history.get(target_id, {})
+	var elements: Array = resonance.get("elements", [])
+	if elements.size() == 2 and not elements.has(element):
+		elementalist_resonance_history.erase(target_id)
+	elif not elements.has(element):
+		elements.append(element)
+		elementalist_resonance_history[target_id] = {"elements": elements, "remaining": float(resonance.get("remaining", ELEMENTALIST_RESONANCE_WINDOW))}
+
+func elementalist_resonance_ready(target_id: int, skill_id: StringName) -> bool:
+	if not _is_elementalist() or not is_alive() or not run_state.build_snapshot.passive_slots.has(&"elementalist_prismatic_resonance") or _runtime_rank_definition(&"elementalist_prismatic_resonance") == null:
+		return false
+	var element := _elementalist_direct_element(skill_id)
+	var history: Dictionary = elementalist_resonance_history.get(target_id, {})
+	var elements: Array = history.get("elements", [])
+	return element != &"" and float(history.get("remaining", 0.0)) > 0.0 and elements.size() == 2 and not elements.has(element)
 
 func remove_elementalist_target(target_id: int) -> void:
 	elementalist_focus_history.erase(target_id)
+	elementalist_resonance_history.erase(target_id)
 
 func clear_elementalist_state() -> void:
 	elementalist_focus_history.clear()
 	elementalist_focus_cooldown = 0.0
+	elementalist_resonance_history.clear()
 
 func _elementalist_direct_element(skill_id: StringName) -> StringName:
 	if skill_id in [&"fireball", &"fire_spear", &"elementalist_flame_burst", &"elementalist_ember_path", &"elementalist_tri_nova"]:
@@ -1547,6 +1566,13 @@ func _process(delta: float) -> void:
 			elementalist_focus_history.erase(target_id)
 		else:
 			elementalist_focus_history[target_id] = focus
+	for target_id: int in elementalist_resonance_history.keys():
+		var resonance: Dictionary = elementalist_resonance_history[target_id]
+		resonance["remaining"] = maxf(0.0, float(resonance["remaining"]) - delta)
+		if float(resonance["remaining"]) <= 0.0:
+			elementalist_resonance_history.erase(target_id)
+		else:
+			elementalist_resonance_history[target_id] = resonance
 	for target_id: int in berserker_wounds.keys():
 		var wound: Dictionary = berserker_wounds[target_id]
 		wound["remaining"] = maxf(0.0, float(wound["remaining"]) - delta)
@@ -1834,6 +1860,10 @@ func _make_physical_request(enemy: CombatActor, skill_id: StringName, power: flo
 func _make_magic_request(enemy: CombatActor, skill_id: StringName, power: float, accuracy_mode: DamageRequest.AccuracyMode, can_crit: bool) -> DamageRequest:
 	var request := _make_request(enemy, skill_id, accuracy_mode, can_crit)
 	request.magic_damage = power
+	if _is_elementalist() and run_state.build_snapshot.passive_slots.has(&"elementalist_prismatic_resonance"):
+		var resonance_rank := _runtime_rank_definition(&"elementalist_prismatic_resonance")
+		if resonance_rank != null:
+			request.prismatic_resonance_damage = stat_breakdown.value(&"magic_attack") * resonance_rank.power
 	return request
 
 func _magic_power(skill_id: StringName) -> float:

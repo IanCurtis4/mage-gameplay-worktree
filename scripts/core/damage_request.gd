@@ -11,6 +11,9 @@ var skill_id: StringName = &"basic_attack"
 ## on impact so projectiles and damage over time obey the E00 timing contract.
 var physical_damage: float = 0.0
 var magic_damage: float = 0.0
+## Optional Elementalist passive power captured at commit; applied at impact
+## only when that target's direct elemental sequence is ready.
+var prismatic_resonance_damage: float = 0.0
 var damage_dealt_multiplier: float = 1.0
 var accuracy_mode: AccuracyMode = AccuracyMode.CONTESTED
 var hit_rating: float = 0.0
@@ -29,6 +32,7 @@ func copy() -> DamageRequest:
 	result.skill_id = skill_id
 	result.physical_damage = physical_damage
 	result.magic_damage = magic_damage
+	result.prismatic_resonance_damage = prismatic_resonance_damage
 	result.damage_dealt_multiplier = damage_dealt_multiplier
 	result.accuracy_mode = accuracy_mode
 	result.hit_rating = hit_rating

@@ -658,7 +658,7 @@ func _on_discharge_hit(request: DamageRequest, target_actor: CombatActor) -> voi
 	if target_actor == null or not target_actor.is_alive():
 		return
 	var marked := target_actor.is_electrified()
-	var result := target_actor.apply_damage(request, rng)
+	var result := target_actor.apply_damage(_elementalist_resonance_request(request, target_actor), rng)
 	if result.is_empty() or not bool(result["landed"]) or float(result["actual_damage"]) <= 0.0 or not marked:
 		return
 	target_actor.consume_electrified()
@@ -722,7 +722,7 @@ func _on_foliage_shelter_requested(center: Vector2, duration: float) -> void:
 func _on_mage_projectile_hit(request: DamageRequest, target_actor: CombatActor) -> void:
 	if target_actor == null or not target_actor.is_alive():
 		return
-	var result := target_actor.apply_damage(request, rng)
+	var result := target_actor.apply_damage(_elementalist_resonance_request(request, target_actor), rng)
 	if result.is_empty() or not bool(result["landed"]) or float(result["actual_damage"]) <= 0.0:
 		return
 	if request.skill_id == &"ice_spear" and target_actor.is_alive():
@@ -756,7 +756,7 @@ func _apply_elementalist_hit(request: DamageRequest, target_actor: CombatActor, 
 	if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
 		return {}
 	var marked := element == &"lightning" and target_actor.is_electrified()
-	var resolved_request := request.copy()
+	var resolved_request := _elementalist_resonance_request(request, target_actor)
 	resolved_request.target_id = target_actor.get_instance_id()
 	if marked:
 		resolved_request.magic_damage += marked_bonus
@@ -774,6 +774,12 @@ func _apply_elementalist_hit(request: DamageRequest, target_actor: CombatActor, 
 		elif target_actor.is_alive():
 			target_actor.apply_electrified(4.0)
 	return result
+
+func _elementalist_resonance_request(request: DamageRequest, target_actor: CombatActor) -> DamageRequest:
+	var resolved := request.copy()
+	if not request.is_secondary and request.source_id == player.get_instance_id() and request.prismatic_resonance_damage > 0.0 and player.elementalist_resonance_ready(target_actor.get_instance_id(), request.skill_id):
+		resolved.magic_damage += request.prismatic_resonance_damage
+	return resolved
 
 func _on_elementalist_lightning_arc_requested(request: DamageRequest, target_actor: CombatActor, jump_damage: float, marked_bonus: float) -> void:
 	var visited: Array[int] = []
