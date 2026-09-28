@@ -87,6 +87,7 @@ const BERSERKER_EXECUTION_LOW_TARGET_THRESHOLD := 0.35
 const BERSERKER_EXECUTION_LOW_TARGET_BONUS := 0.20
 const BERSERKER_RIFT_BLEED_DURATION := 4.0
 const BERSERKER_BREATH_HEAL_CAP_FRACTION := 0.05
+const ELEMENTALIST_FOCUS_WINDOW := 5.0
 const BERSERKER_DIRECT_MELEE_IDS := [
 	&"basic_attack", &"cone_slash", &"brutal_strike", &"concentrated_rage",
 	&"berserker_rupture", &"berserker_execution", &"berserker_wound_leap",
@@ -166,6 +167,8 @@ var defender_anchor_center := Vector2.INF
 var _defender_inside_anchor := false
 var berserker_wounds: Dictionary[int, Dictionary] = {}
 var berserker_pursuit_cooldown := 0.0
+var elementalist_focus_history: Dictionary[int, Dictionary] = {}
+var elementalist_focus_cooldown := 0.0
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
@@ -179,6 +182,7 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 	fury_remaining = 0.0
 	clear_defender_state()
 	clear_berserker_state()
+	clear_elementalist_state()
 	var derived := _build_stat_breakdown()
 	var class_color := Color("8e73de") if class_id == &"mage" else Color("6fa85a") if class_id == &"archer" else Color("55a8d9")
 	setup(class_definition.display_name, class_color, derived, 20.0)
@@ -505,6 +509,41 @@ func clear_berserker_state() -> void:
 	berserker_pursuit_cooldown = 0.0
 	if _berserker_leap_active:
 		_stop_dash()
+
+func record_elementalist_damage(result: Dictionary) -> void:
+	if not _is_elementalist() or not is_alive() or not bool(result.get("can_trigger_effects", false)) or float(result.get("actual_damage", 0.0)) <= 0.0 or int(result.get("source_id", 0)) != get_instance_id():
+		return
+	var target_id := int(result.get("target_id", 0))
+	var element := _elementalist_direct_element(StringName(result.get("skill_id", &"")))
+	if target_id <= 0 or element == &"":
+		return
+	var previous: Dictionary = elementalist_focus_history.get(target_id, {})
+	var alternating := float(previous.get("remaining", 0.0)) > 0.0 and StringName(previous.get("element", &"")) != element
+	if alternating and elementalist_focus_cooldown <= 0.0 and run_state.build_snapshot.passive_slots.has(&"elementalist_prismatic_focus"):
+		var rank_definition := _runtime_rank_definition(&"elementalist_prismatic_focus")
+		if rank_definition != null:
+			var previous_sp := current_sp
+			current_sp = minf(max_sp, current_sp + rank_definition.power)
+			elementalist_focus_cooldown = 1.0
+			if current_sp > previous_sp:
+				resources_changed.emit()
+	elementalist_focus_history[target_id] = {"element": element, "remaining": ELEMENTALIST_FOCUS_WINDOW}
+
+func remove_elementalist_target(target_id: int) -> void:
+	elementalist_focus_history.erase(target_id)
+
+func clear_elementalist_state() -> void:
+	elementalist_focus_history.clear()
+	elementalist_focus_cooldown = 0.0
+
+func _elementalist_direct_element(skill_id: StringName) -> StringName:
+	if skill_id in [&"fireball", &"fire_spear", &"elementalist_flame_burst", &"elementalist_ember_path", &"elementalist_tri_nova"]:
+		return &"fire"
+	if skill_id in [&"ice_spear", &"elementalist_glacial_ring"]:
+		return &"ice"
+	if skill_id in [&"lightning", &"electric_discharge", &"elementalist_lightning_arc"]:
+		return &"lightning"
+	return &""
 
 func defender_wall_advance_destination(direction: Vector2) -> Vector2:
 	if navigation == null or is_rooted():
@@ -1474,6 +1513,14 @@ func _process(delta: float) -> void:
 	if simulation_paused:
 		return
 	berserker_pursuit_cooldown = maxf(0.0, berserker_pursuit_cooldown - delta)
+	elementalist_focus_cooldown = maxf(0.0, elementalist_focus_cooldown - delta)
+	for target_id: int in elementalist_focus_history.keys():
+		var focus: Dictionary = elementalist_focus_history[target_id]
+		focus["remaining"] = maxf(0.0, float(focus["remaining"]) - delta)
+		if float(focus["remaining"]) <= 0.0:
+			elementalist_focus_history.erase(target_id)
+		else:
+			elementalist_focus_history[target_id] = focus
 	for target_id: int in berserker_wounds.keys():
 		var wound: Dictionary = berserker_wounds[target_id]
 		wound["remaining"] = maxf(0.0, float(wound["remaining"]) - delta)
@@ -1855,6 +1902,7 @@ func _on_health_died(actor_id: int) -> void:
 	clear_perseverance()
 	clear_fury()
 	clear_defender_state()
+	clear_elementalist_state()
 	brutal_strike_visual_time = 0.0
 	concentrated_rage_visual_time = 0.0
 	terrifying_shout_visual_time = 0.0
