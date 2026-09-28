@@ -33,6 +33,7 @@ static func resolve(
 		"source_id": request.source_id,
 		"target_id": request.target_id,
 		"skill_id": request.skill_id,
+		"emission_id": request.emission_id,
 		"hit_chance": hit_chance,
 		"effective_crit_chance": effective_crit,
 		"physical_component": physical_component,

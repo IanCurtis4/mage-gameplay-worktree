@@ -7,6 +7,8 @@ enum AccuracyMode { CONTESTED, GEOMETRY }
 var source_id: int = 0
 var target_id: int = 0
 var skill_id: StringName = &"basic_attack"
+## Runtime cast identity shared by copies/projectiles, never serialized.
+var emission_id: int = 0
 ## Raw components captured when the action commits. Target defenses are read only
 ## on impact so projectiles and damage over time obey the E00 timing contract.
 var physical_damage: float = 0.0
@@ -30,6 +32,7 @@ func copy() -> DamageRequest:
 	result.source_id = source_id
 	result.target_id = target_id
 	result.skill_id = skill_id
+	result.emission_id = emission_id
 	result.physical_damage = physical_damage
 	result.magic_damage = magic_damage
 	result.prismatic_resonance_damage = prismatic_resonance_damage

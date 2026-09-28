@@ -39,9 +39,11 @@ var elementalist_pulse_center := Vector2.INF
 var elementalist_pulse_radius := 0.0
 var elementalist_pulse_element: StringName = &""
 var elementalist_pulse_lifetime := 0.0
+var elementalist_ember_preview := PackedVector2Array()
 
 func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast: bool, selected_target: CombatActor = null) -> void:
 	skill = skill_id
+	elementalist_ember_preview.clear()
 	origin = actor.global_position
 	direction = actor.shield_facing if skill_id == &"shield_wall" and actor.has_shield_stance() else actor.aim_direction(point)
 	target_actor = selected_target
@@ -52,7 +54,8 @@ func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast
 	elif skill == &"elementalist_lightning_arc":
 		endpoint = selected_target.global_position if selected_target != null else elemental_clamped_point(origin, point, actor.skill_range(skill))
 	elif skill == &"elementalist_ember_path":
-		endpoint = origin + direction * minf(actor.skill_range(skill), SkillGeometry.ELEMENTALIST_EMBER_PATH_STEP * 3.0)
+		elementalist_ember_preview = PackedVector2Array(actor.elementalist_ember_centers(direction))
+		endpoint = elementalist_ember_preview[-1] if not elementalist_ember_preview.is_empty() else origin
 	elif skill == &"dash":
 		endpoint = actor.dash_destination(direction)
 	elif skill == &"berserker_wound_leap":
@@ -225,7 +228,7 @@ func _draw() -> void:
 		draw_dashed_line(origin, endpoint, Color("f4d35e") if available else BLOCKED_COLOR, 2.0, 10.0, true, true)
 		_draw_lightning_chain(endpoint, SkillGeometry.ELEMENTALIST_LIGHTNING_CHAIN_RANGE, Color("f4d35e") if available else BLOCKED_COLOR)
 	elif skill == &"elementalist_ember_path":
-		for center: Vector2 in elementalist_ember_centers(origin, direction):
+		for center: Vector2 in elementalist_ember_preview:
 			draw_circle(center, SkillGeometry.ELEMENTALIST_EMBER_PATH_RADIUS, Color("ef6a54", 0.09))
 			draw_arc(center, SkillGeometry.ELEMENTALIST_EMBER_PATH_RADIUS, 0.0, TAU, 36, Color("ef6a54") if available else BLOCKED_COLOR, 1.8, true)
 			draw_line(center - direction.orthogonal() * 8.0, center + direction.orthogonal() * 8.0, Color("f4d35e", 0.75), 1.0, true)

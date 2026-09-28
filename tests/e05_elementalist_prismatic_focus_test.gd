@@ -58,6 +58,17 @@ func _run() -> void:
 	player._process(6.0)
 	_check(player.elementalist_focus_cooldown == 1.0 and player.elementalist_focus_history.has(101), "pause freezes both timers")
 	paused = false
+	player.clear_elementalist_state()
+	player.current_sp = 10.0
+	player.record_elementalist_damage(_hit(actor_id, 101, &"fire_spear", 1))
+	player.record_elementalist_damage(_hit(actor_id, 101, &"ice_spear", 10))
+	player._process(1.2)
+	player.current_sp = 20.0
+	player.record_elementalist_damage(_hit(actor_id, 202, &"fire_spear", 2))
+	player.record_elementalist_damage(_hit(actor_id, 202, &"ice_spear", 10))
+	_check(player.current_sp == 20.0, "late hit from same emission cannot refund again after cooldown")
+	player.record_elementalist_damage(_hit(actor_id, 202, &"lightning", 11))
+	_check(player.current_sp == 22.0, "new emission can refund after player cooldown")
 	var unequipped := snapshot.copy_snapshot()
 	unequipped.passive_slots = [null, null]
 	var inactive := PlayerActor.new()
@@ -93,8 +104,8 @@ func _run() -> void:
 	print("E05 Elementalista Foco Prismático: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
 	quit(0 if failures == 0 else 1)
 
-func _hit(source_id: int, target_id: int, skill_id: StringName) -> Dictionary:
-	return {"source_id": source_id, "target_id": target_id, "skill_id": skill_id, "can_trigger_effects": true, "actual_damage": 1.0}
+func _hit(source_id: int, target_id: int, skill_id: StringName, emission_id: int = 0) -> Dictionary:
+	return {"source_id": source_id, "target_id": target_id, "skill_id": skill_id, "emission_id": emission_id, "can_trigger_effects": true, "actual_damage": 1.0}
 
 func _check(condition: bool, description: String) -> void:
 	checks += 1

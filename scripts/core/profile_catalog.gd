@@ -454,6 +454,7 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 			]
 		if definition.id == &"elementalist" and not normalized_overrides.has(definition.id):
 			definition.entry_skill_id = &"elementalist_flame_burst"
+			definition.content_ready = true
 			definition.exclusive_skill_ids = [
 				&"elementalist_flame_burst", &"elementalist_prismatic_focus",
 				&"elementalist_glacial_ring", &"elementalist_lightning_arc",

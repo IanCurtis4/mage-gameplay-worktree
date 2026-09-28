@@ -476,6 +476,8 @@ func _update_aim(point: Vector2) -> void:
 		state = "POSIÇÃO BLOQUEADA"
 	elif skill == &"foliage_shelter" and not player.can_place_foliage_shelter(point):
 		state = "POSIÇÃO BLOQUEADA"
+	elif skill == &"elementalist_ember_path" and player.elementalist_ember_centers(player.aim_direction(point)).is_empty():
+		state = "POSIÇÃO BLOQUEADA"
 	elif skill == &"ice_wall" and not player.can_place_ice_wall(player.aim_direction(point), enemies):
 		state = "POSIÇÃO BLOQUEADA"
 	elif skill == &"elementalist_flame_burst" and not player.can_place_elementalist_flame_burst(point):

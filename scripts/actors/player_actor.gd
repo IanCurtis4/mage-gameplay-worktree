@@ -175,6 +175,8 @@ var berserker_pursuit_cooldown := 0.0
 var elementalist_focus_history: Dictionary[int, Dictionary] = {}
 var elementalist_focus_cooldown := 0.0
 var elementalist_resonance_history: Dictionary[int, Dictionary] = {}
+var _elementalist_emission_serial := 0
+var _elementalist_refunded_emissions: Dictionary[int, bool] = {}
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
@@ -525,12 +527,16 @@ func record_elementalist_damage(result: Dictionary) -> void:
 		return
 	var previous: Dictionary = elementalist_focus_history.get(target_id, {})
 	var alternating := float(previous.get("remaining", 0.0)) > 0.0 and StringName(previous.get("element", &"")) != element
-	if alternating and elementalist_focus_cooldown <= 0.0 and run_state.build_snapshot.passive_slots.has(&"elementalist_prismatic_focus"):
+	var emission_id := int(result.get("emission_id", 0))
+	var emission_available := emission_id <= 0 or not _elementalist_refunded_emissions.has(emission_id)
+	if alternating and emission_available and elementalist_focus_cooldown <= 0.0 and run_state.build_snapshot.passive_slots.has(&"elementalist_prismatic_focus"):
 		var rank_definition := _runtime_rank_definition(&"elementalist_prismatic_focus")
 		if rank_definition != null:
 			var previous_sp := current_sp
 			current_sp = minf(max_sp, current_sp + rank_definition.power)
 			elementalist_focus_cooldown = 1.0
+			if emission_id > 0:
+				_elementalist_refunded_emissions[emission_id] = true
 			if current_sp > previous_sp:
 				resources_changed.emit()
 	elementalist_focus_history[target_id] = {"element": element, "remaining": ELEMENTALIST_FOCUS_WINDOW}
@@ -558,6 +564,7 @@ func clear_elementalist_state() -> void:
 	elementalist_focus_history.clear()
 	elementalist_focus_cooldown = 0.0
 	elementalist_resonance_history.clear()
+	_elementalist_refunded_emissions.clear()
 
 func _elementalist_direct_element(skill_id: StringName) -> StringName:
 	if skill_id in [&"fireball", &"fire_spear", &"elementalist_flame_burst", &"elementalist_ember_path", &"elementalist_tri_nova"]:
@@ -1906,6 +1913,9 @@ func _make_physical_request(enemy: CombatActor, skill_id: StringName, power: flo
 func _make_magic_request(enemy: CombatActor, skill_id: StringName, power: float, accuracy_mode: DamageRequest.AccuracyMode, can_crit: bool) -> DamageRequest:
 	var request := _make_request(enemy, skill_id, accuracy_mode, can_crit)
 	request.magic_damage = power
+	if _is_elementalist():
+		_elementalist_emission_serial += 1
+		request.emission_id = _elementalist_emission_serial
 	if _is_elementalist() and run_state.build_snapshot.passive_slots.has(&"elementalist_prismatic_resonance"):
 		var resonance_rank := _runtime_rank_definition(&"elementalist_prismatic_resonance")
 		if resonance_rank != null:
