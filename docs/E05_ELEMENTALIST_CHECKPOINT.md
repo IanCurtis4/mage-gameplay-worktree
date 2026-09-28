@@ -101,6 +101,31 @@ foram iniciados. Nenhum save real é fixture; nenhum master/playtest foi movido.
 
 ## Entrega técnica — 27/09/2026
 
+### Parecer Astra — classe integrada aprovada
+
+Revisão independente do delta `21c7793..52ea1b5`: aprovação técnica sem
+bloqueios remanescentes. O P2 de impactos simultâneos do Arco foi corrigido
+em `52ea1b5`: cada pulso conserva centro, elemento e prazo próprios, com
+limite de 64 instâncias, pausa e expiração; a correção não altera dano.
+
+Astra revisou catálogo/migração e backup, carteiras/gates, cópia e propagação
+de `emission_id`/bônus de Ressonância, precisão/Eletrizado, limites de procs,
+sequências finitas, limpeza e integração menu→run. Reproduziu de forma
+independente `tools/verify.ps1` integral após a correção, com importação no
+Godot 4.7.2, exit 0 e todos os 101 scripts passando. Entre eles: migração11,
+catálogo99, indicadores13, Arco15, Foco15, Ressonância14, integrado33 e
+regressões das bases, Defendente e Berserker. `git diff --check` limpo.
+
+Atlas inspecionado estaticamente e aceito como apresentação provisória:
+continuidade do Mago, azul/branco/cristal e silhueta própria. As poses
+reaproveitadas e VFX nativos continuam limitações declaradas; não há evidência
+de FPS, sensação, balanceamento ou legibilidade em partida humana. O boss
+automatizado é um ator com perfil de boss, não uma partida completa.
+
+Preparação de playtest autorizada pelo workflow após este parecer; aceite
+de produto e merge em master continuam dependentes do usuário. Espiritualista
+e demais classes não foram liberados.
+
 Base aceita `21c7793` (master/playtest); runtime final `1921857` sobre
 `7130053`. As sete exclusivas, catálogo aditivo 4→5, atlas, cinco previews e
 impactos, persistência/menu/run/recompensas estão fechados. Revisar a classe
