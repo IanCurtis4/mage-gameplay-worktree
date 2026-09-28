@@ -2,6 +2,7 @@ class_name RunController
 extends Node2D
 
 const IceWallScript = preload("res://scripts/world/ice_wall.gd")
+const ElementalistSequenceScript = preload("res://scripts/world/elementalist_sequence.gd")
 
 const ARENA_BOUNDS := Rect2(80, 80, 1640, 920)
 const ARENA_OBSTACLES: Array[Rect2] = [
@@ -120,6 +121,7 @@ func _ready() -> void:
 	player.elementalist_area_requested.connect(_on_elementalist_area_requested)
 	player.elementalist_lightning_arc_requested.connect(_on_elementalist_lightning_arc_requested)
 	player.elementalist_ember_path_requested.connect(_on_elementalist_ember_path_requested)
+	player.elementalist_tri_nova_requested.connect(_on_elementalist_tri_nova_requested)
 	player.lightning_wall_requested.connect(_on_lightning_wall_requested)
 	player.soul_impact_requested.connect(_on_soul_impact_requested)
 	player.haunt_requested.connect(_on_haunt_requested)
@@ -403,6 +405,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 				status_label.text = "Trilha de Brasas cancelada — POSIÇÃO BLOQUEADA"
 			else:
 				_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.ELEMENTALIST_TRI_NOVA:
+		if not player.use_elementalist_tri_nova():
+			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif definition.handler_id == SkillDefinition.Handler.BERSERKER_RUPTURE:
 		if not player.use_berserker_rupture(selected_target):
 			_report_skill_failure(skill, selected_target)
@@ -769,11 +774,20 @@ func _on_elementalist_ember_path_requested(centers: Array[Vector2], request: Dam
 	for _center: Vector2 in centers:
 		requests.append(request.copy())
 		elements.append(&"fire")
-	var sequence := preload("res://scripts/world/elementalist_sequence.gd").new()
+	var sequence := ElementalistSequenceScript.new()
 	sequence.pulse_requested.connect(_on_elementalist_area_requested)
 	add_child(sequence)
 	sequence.add_to_group("player_effects")
 	sequence.configure(player, centers, requests, elements, SkillGeometry.ELEMENTALIST_EMBER_PATH_RADIUS, 0.15, true)
+
+func _on_elementalist_tri_nova_requested(center: Vector2, requests: Array[DamageRequest], marked_bonus: float) -> void:
+	var centers: Array[Vector2] = [center, center, center]
+	var elements: Array[StringName] = [&"fire", &"ice", &"lightning"]
+	var sequence := ElementalistSequenceScript.new()
+	sequence.pulse_requested.connect(_on_elementalist_area_requested)
+	add_child(sequence)
+	sequence.add_to_group("player_effects")
+	sequence.configure(player, centers, requests, elements, SkillGeometry.ELEMENTALIST_TRI_NOVA_RADIUS, 0.25, false, marked_bonus)
 
 func _apply_elementalist_hit(request: DamageRequest, target_actor: CombatActor, element: StringName, marked_bonus: float = 0.0) -> Dictionary:
 	if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
@@ -1108,7 +1122,7 @@ func _show_result(victory: bool) -> void:
 	for effect: Node in get_tree().get_nodes_in_group("player_effects"):
 		if effect is IceWallScript:
 			(effect as IceWallScript).expire()
-		elif effect is LightningWall or effect is SoulImpactSequence or effect is HauntConeVisual or effect is PhantomBarrier:
+		elif effect is LightningWall or effect is SoulImpactSequence or effect is HauntConeVisual or effect is PhantomBarrier or effect is ElementalistSequenceScript:
 			effect.queue_free()
 	run_finished = true
 	_terminal_outcome = &"completed" if victory else &"death"

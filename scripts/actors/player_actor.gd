@@ -20,6 +20,7 @@ signal elementalist_flame_burst_requested(center: Vector2, request: DamageReques
 signal elementalist_area_requested(skill_id: StringName, center: Vector2, radius: float, request: DamageRequest, element: StringName)
 signal elementalist_lightning_arc_requested(request: DamageRequest, target: CombatActor, jump_damage: float, marked_bonus: float)
 signal elementalist_ember_path_requested(centers: Array[Vector2], request: DamageRequest)
+signal elementalist_tri_nova_requested(center: Vector2, requests: Array[DamageRequest], marked_bonus: float)
 signal lightning_wall_requested(direction: Vector2, request: DamageRequest)
 signal soul_impact_requested(request: DamageRequest, target: CombatActor)
 signal haunt_requested(origin: Vector2, direction: Vector2, cone_range: float, request: DamageRequest)
@@ -778,6 +779,24 @@ func use_elementalist_ember_path(direction: Vector2) -> bool:
 	var definition := ClassCatalog.skill_definition(&"elementalist_ember_path")
 	var request := _make_magic_request(null, &"elementalist_ember_path", _magic_power(&"elementalist_ember_path"), definition.accuracy_mode, definition.can_crit)
 	elementalist_ember_path_requested.emit(centers, request)
+	resources_changed.emit()
+	return true
+
+func use_elementalist_tri_nova() -> bool:
+	if not _is_elementalist() or not _can_spend(&"elementalist_tri_nova"):
+		return false
+	_spend(&"elementalist_tri_nova")
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(&"elementalist_tri_nova")
+	var rank_definition := _runtime_rank_definition(&"elementalist_tri_nova")
+	var magic_attack := stat_breakdown.value(&"magic_attack")
+	var requests: Array[DamageRequest] = []
+	var powers: Array[float] = [rank_definition.power, rank_definition.secondary_power, 0.60]
+	for index: int in range(3):
+		var request := _make_magic_request(null, &"elementalist_tri_nova", magic_attack * powers[index], definition.accuracy_mode, definition.can_crit)
+		request.is_secondary = index > 0
+		requests.append(request)
+	elementalist_tri_nova_requested.emit(global_position, requests, magic_attack * 0.40)
 	resources_changed.emit()
 	return true
 
