@@ -116,6 +116,8 @@ func _check_elementalist_boss(run_state: RunState) -> void:
 	boss.health.current_hp = 100000.0
 	var controller := RunController.new()
 	controller.player = player
+	controller.navigation.configure(Rect2(0, 0, 1000, 700), [], 20.0)
+	controller.battle_indicators = BattleIndicators.new()
 	controller.enemies = [boss]
 	player.elementalist_flame_burst_requested.connect(controller._on_elementalist_flame_burst_requested)
 	var hp_before := boss.health.current_hp
@@ -123,6 +125,7 @@ func _check_elementalist_boss(run_state: RunState) -> void:
 	_check(emitted and boss.health.current_hp < hp_before and boss.is_alive(), "boss solo recebe dano real pelo callback da habilidade Elementalista")
 	player.free()
 	boss.free()
+	controller.battle_indicators.free()
 	controller.free()
 
 func _cleanup(path: String) -> void:
