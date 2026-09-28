@@ -19,6 +19,7 @@ signal fire_wall_requested(direction: Vector2, burn_request: DamageRequest)
 signal elementalist_flame_burst_requested(center: Vector2, request: DamageRequest)
 signal elementalist_area_requested(skill_id: StringName, center: Vector2, radius: float, request: DamageRequest, element: StringName)
 signal elementalist_lightning_arc_requested(request: DamageRequest, target: CombatActor, jump_damage: float, marked_bonus: float)
+signal elementalist_ember_path_requested(centers: Array[Vector2], request: DamageRequest)
 signal lightning_wall_requested(direction: Vector2, request: DamageRequest)
 signal soul_impact_requested(request: DamageRequest, target: CombatActor)
 signal haunt_requested(origin: Vector2, direction: Vector2, cone_range: float, request: DamageRequest)
@@ -751,6 +752,32 @@ func use_elementalist_lightning_arc(enemy: CombatActor) -> bool:
 	var magic_attack := stat_breakdown.value(&"magic_attack")
 	var request := _make_magic_request(enemy, &"elementalist_lightning_arc", magic_attack * rank_definition.power, definition.accuracy_mode, definition.can_crit)
 	elementalist_lightning_arc_requested.emit(request, enemy, magic_attack * 0.60, magic_attack * rank_definition.secondary_power)
+	resources_changed.emit()
+	return true
+
+func elementalist_ember_centers(direction: Vector2) -> Array[Vector2]:
+	var centers: Array[Vector2] = []
+	if navigation == null or not direction.is_finite():
+		return centers
+	var facing := direction.normalized() if not direction.is_zero_approx() else _last_facing
+	for index: int in range(1, 4):
+		var center := global_position + facing * SkillGeometry.ELEMENTALIST_EMBER_PATH_STEP * float(index)
+		if not navigation.is_walkable(center) or not navigation.is_segment_clear(global_position, center, 0.0):
+			break
+		centers.append(center)
+	return centers
+
+func use_elementalist_ember_path(direction: Vector2) -> bool:
+	if not _is_elementalist() or not _can_spend(&"elementalist_ember_path"):
+		return false
+	var centers := elementalist_ember_centers(direction)
+	if centers.is_empty():
+		return false
+	_spend(&"elementalist_ember_path")
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(&"elementalist_ember_path")
+	var request := _make_magic_request(null, &"elementalist_ember_path", _magic_power(&"elementalist_ember_path"), definition.accuracy_mode, definition.can_crit)
+	elementalist_ember_path_requested.emit(centers, request)
 	resources_changed.emit()
 	return true
 

@@ -119,6 +119,7 @@ func _ready() -> void:
 	player.elementalist_flame_burst_requested.connect(_on_elementalist_flame_burst_requested)
 	player.elementalist_area_requested.connect(_on_elementalist_area_requested)
 	player.elementalist_lightning_arc_requested.connect(_on_elementalist_lightning_arc_requested)
+	player.elementalist_ember_path_requested.connect(_on_elementalist_ember_path_requested)
 	player.lightning_wall_requested.connect(_on_lightning_wall_requested)
 	player.soul_impact_requested.connect(_on_soul_impact_requested)
 	player.haunt_requested.connect(_on_haunt_requested)
@@ -396,6 +397,12 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.ELEMENTALIST_LIGHTNING_ARC:
 		if not player.use_elementalist_lightning_arc(selected_target):
 			_report_skill_failure(skill, selected_target)
+	elif definition.handler_id == SkillDefinition.Handler.ELEMENTALIST_EMBER_PATH:
+		if not player.use_elementalist_ember_path(direction):
+			if player.elementalist_ember_centers(direction).is_empty():
+				status_label.text = "Trilha de Brasas cancelada — POSIÇÃO BLOQUEADA"
+			else:
+				_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif definition.handler_id == SkillDefinition.Handler.BERSERKER_RUPTURE:
 		if not player.use_berserker_rupture(selected_target):
 			_report_skill_failure(skill, selected_target)
@@ -739,7 +746,7 @@ func _on_fire_wall_requested(direction: Vector2, burn_request: DamageRequest) ->
 func _on_elementalist_flame_burst_requested(center: Vector2, request: DamageRequest) -> void:
 	_on_elementalist_area_requested(&"elementalist_flame_burst", center, SkillGeometry.ELEMENTALIST_FLAME_BURST_RADIUS, request, &"fire")
 
-func _on_elementalist_area_requested(skill_id: StringName, center: Vector2, radius: float, request: DamageRequest, element: StringName) -> void:
+func _on_elementalist_area_requested(skill_id: StringName, center: Vector2, radius: float, request: DamageRequest, element: StringName, marked_bonus: float = 0.0, once_per_target: bool = false, hit_ids: Dictionary = {}) -> void:
 	battle_indicators.show_elementalist_pulse(skill_id, center, radius, element)
 	for target_actor: CombatActor in enemies.duplicate():
 		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
@@ -748,9 +755,25 @@ func _on_elementalist_area_requested(skill_id: StringName, center: Vector2, radi
 			continue
 		if not navigation.is_segment_clear(center, target_actor.global_position, 0.0):
 			continue
+		if once_per_target:
+			if hit_ids.has(target_actor.get_instance_id()):
+				continue
+			hit_ids[target_actor.get_instance_id()] = true
 		var target_request := request.copy()
 		target_request.target_id = target_actor.get_instance_id()
-		_apply_elementalist_hit(target_request, target_actor, element)
+		_apply_elementalist_hit(target_request, target_actor, element, marked_bonus)
+
+func _on_elementalist_ember_path_requested(centers: Array[Vector2], request: DamageRequest) -> void:
+	var requests: Array[DamageRequest] = []
+	var elements: Array[StringName] = []
+	for _center: Vector2 in centers:
+		requests.append(request.copy())
+		elements.append(&"fire")
+	var sequence := preload("res://scripts/world/elementalist_sequence.gd").new()
+	sequence.pulse_requested.connect(_on_elementalist_area_requested)
+	add_child(sequence)
+	sequence.add_to_group("player_effects")
+	sequence.configure(player, centers, requests, elements, SkillGeometry.ELEMENTALIST_EMBER_PATH_RADIUS, 0.15, true)
 
 func _apply_elementalist_hit(request: DamageRequest, target_actor: CombatActor, element: StringName, marked_bonus: float = 0.0) -> Dictionary:
 	if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
