@@ -823,11 +823,13 @@ func _elementalist_resonance_request(request: DamageRequest, target_actor: Comba
 func _on_elementalist_lightning_arc_requested(request: DamageRequest, target_actor: CombatActor, jump_damage: float, marked_bonus: float) -> void:
 	var visited: Array[int] = []
 	var current := target_actor
+	var visual_origin := player.global_position + Vector2(0, -24)
 	for index: int in range(3):
 		if current == null or not is_instance_valid(current) or not current.is_alive():
 			break
 		visited.append(current.get_instance_id())
 		var center := current.global_position
+		battle_indicators.show_elementalist_arc_link(visual_origin, center + Vector2(0, -18))
 		battle_indicators.show_elementalist_pulse(&"elementalist_lightning_arc", center, 30.0, &"lightning")
 		var hit_request := request.copy()
 		if index > 0:
@@ -836,6 +838,7 @@ func _on_elementalist_lightning_arc_requested(request: DamageRequest, target_act
 		var result := _apply_elementalist_hit(hit_request, current, &"lightning", marked_bonus)
 		if float(result.get("actual_damage", 0.0)) <= 0.0:
 			break
+		visual_origin = center + Vector2(0, -18)
 		current = _elementalist_chain_target(center, visited)
 
 func _elementalist_chain_target(origin: Vector2, visited: Array[int]) -> CombatActor:
@@ -989,7 +992,16 @@ func _on_enemy_damage_resolved(result: Dictionary) -> void:
 	if player == null or not is_instance_valid(player) or not player.is_alive() or int(result.get("source_id", 0)) != player.get_instance_id():
 		return
 	player.record_berserker_damage(result)
+	var previous_sp := player.current_sp
+	var resonance_feedback := bool(result.get("can_trigger_effects", false)) and float(result.get("actual_damage", 0.0)) > 0.0 and player.elementalist_resonance_ready(int(result.get("target_id", 0)), StringName(result.get("skill_id", &"")))
 	player.record_elementalist_damage(result)
+	if battle_indicators != null:
+		if player.current_sp > previous_sp:
+			battle_indicators.show_elementalist_prism(player.global_position, &"elementalist_prismatic_focus")
+		if resonance_feedback:
+			var resonance_target := instance_from_id(int(result.get("target_id", 0))) as CombatActor
+			if resonance_target != null and is_instance_valid(resonance_target):
+				battle_indicators.show_elementalist_prism(resonance_target.global_position, &"elementalist_prismatic_resonance")
 	if player.run_state != null and player.run_state.uses_persistent_build() and player.run_state.build_snapshot.evolution_id == &"defender" and &"defender_watch" in player.run_state.build_snapshot.passive_slots and bool(result.get("can_trigger_effects", false)) and float(result.get("actual_damage", 0.0)) > 0.0 and StringName(result.get("skill_id", &"")) in DEFENDER_WATCH_DIRECT_MELEE_IDS:
 		var watch_rank := ClassCatalog.skill_definition(&"defender_watch").rank_definition(player.skill_rank(&"defender_watch"))
 		var watch_target := instance_from_id(int(result.get("target_id", 0))) as CombatActor
@@ -1499,6 +1511,8 @@ func _build_ui() -> void:
 
 	class_button = Button.new()
 	class_button.text = "Classe: %s" % player.class_definition.display_name
+	if player.run_state != null and player.run_state.uses_persistent_build() and player.run_state.build_snapshot.evolution_id == &"elementalist":
+		class_button.text = "Classe: %s" % ProfileCatalog.pilot().evolution_definition(&"elementalist").display_name
 	class_button.custom_minimum_size = Vector2(184, 38)
 	ui_root.add_child(class_button)
 	class_button.set_anchors_preset(Control.PRESET_TOP_RIGHT)

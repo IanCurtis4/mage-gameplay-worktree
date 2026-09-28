@@ -38,11 +38,19 @@ func draw_on(canvas: CanvasItem, tint: Color = Color.WHITE) -> void:
 	if atlas == null:
 		return
 	var frame := state.frame_index()
-	var region := Rect2(Vector2(frame % 4, frame / 4) * CELL, CELL)
+	var region := source_region(frame)
 	canvas.draw_set_transform(Vector2.ZERO, 0.0, Vector2(-1.0 if state.flip_h else 1.0, 1.0))
-	var ground_offset := _ground_offsets[frame] if frame < _ground_offsets.size() else 0.0
-	canvas.draw_texture_rect_region(atlas, Rect2(-PIVOT + Vector2(0, ground_offset), CELL), region, tint)
+	canvas.draw_texture_rect_region(atlas, destination_rect(frame), region, tint)
 	canvas.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+func source_region(frame: int) -> Rect2:
+	# Integer cell coordinates are explicit; no fractional atlas-row sampling.
+	var cell_index := Vector2i(frame % 4, frame >> 2)
+	return Rect2(Vector2(cell_index) * CELL, CELL)
+
+func destination_rect(frame: int) -> Rect2:
+	var ground_offset := _ground_offsets[frame] if frame >= 0 and frame < _ground_offsets.size() else 0.0
+	return Rect2(-PIVOT + Vector2(0, ground_offset), CELL)
 
 func death_copy() -> CharacterAnimation:
 	var result := CharacterAnimation.new()

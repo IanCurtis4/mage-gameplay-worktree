@@ -104,6 +104,7 @@ func _run() -> void:
 	var controller := current_scene as RunController
 	_check(started["ok"] and started["run_state"].build_snapshot.evolution_id == &"elementalist" and started["run_state"].build_snapshot.skill_ranks[&"elementalist_flame_burst"] == 5 and started["run_state"].build_snapshot.active_slots == build_b_active, "run snapshot preserva evolução, R5 e a build selecionada")
 	_check(controller != null and controller.player.character_animation.actor_kind == &"elementalist" and controller.battle_controls.skill_buttons.has(&"elementalist_lightning_arc"), "real scene dispatch and HUD use evolved atlas and equipped Elementalist kit")
+	_check(controller != null and controller.class_button.text == "Classe: Elementalista", "run header shows evolved identity without changing the Mage origin contract")
 	if started["ok"]:
 		_check_elementalist_boss(started["run_state"])
 		var run_id: String = started["run_id"]

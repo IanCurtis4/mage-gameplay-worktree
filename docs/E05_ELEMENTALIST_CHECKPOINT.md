@@ -1,5 +1,51 @@
 # E05 — checkpoint único do Elementalista
 
+## Ajuste visual solicitado no playtest — 28/09/2026
+
+Usuário reprovou a simplicidade/ausência percebida dos VFX e a apresentação do
+sprite no candidato `dd94ffb`. Autorizou esta correção apenas do Elementalista:
+fogo crepitante visível, raio estilizado trepidante e gelo cristalino protuberante.
+O pedido de pacote visual das outras classes será feito separadamente pelo usuário;
+não foi iniciado. Aprovação anterior não cobre automaticamente este delta.
+
+Diagnóstico: atlas anterior repetia poses e usava caminhada de frente na linha
+de caminhada de costas. Nova fonte imagegen preserva identidade azul/branco/cajado,
+com passos alternados e orientações corretas. Preparação mecânica reproduzível por
+`tools/prepare_elementalist_atlas.gd`, fonte e prompt em
+`assets/art/animation_sources/elementalist_visual_polish.*`. Pivô medido nas botas
+na resolução final, contato y=58 e recortes inteiros explícitos de 64×64; offsets
+também preservados em cópia de morte. Teste cobre todas as 32 regiões, chão, centro
+das botas e distinção de passos/orientações. Não afirmamos que divisão fracionária
+era a causa: extração explícita é proteção/testabilidade do recorte de runtime.
+
+VFX code-native: Explosão produz erupção radial de línguas preenchidas com núcleo
+amarelo, flicker e brasas; Trilha conserva seus três centros sequenciais, com focos
+compactos de fogo. Anel tem espinhos verticais facetados distribuídos radialmente,
+crescimento e estilhaços. Arco liga cajado→alvo→saltos com descargas multicamada,
+jitter por tempo de simulação e ramificações, além dos três impactos independentes.
+Nova mantém sua emissão fogo/gelo/raio a 0/0,25/0,50 s e respectivas leituras.
+Foco exibe prisma no jogador somente após SP realmente recuperado; Ressonância
+exibe prisma no alvo no terceiro elemento direto positivo elegível. Cabeçalho da
+run agora diz Elementalista, mantendo origem de gameplay `mage`.
+
+Nenhum dano, alcance, SP/cooldown, gate, seleção de alvo, marca, stun, RNG de combate,
+perfil ou migração alterado. Caudas exclusivamente visuais: impactos 0,65 s,
+links 0,40 s, prismas 0,45 s. Três filas independentes com cap 64 cada (máximo
+192 registros), pausa, finitude e expiração. Não são persistências de dano/CC.
+
+Validação local: `tools/verify.ps1` integral com importação no Godot 4.7.2, exit 0,
+103 scripts PASS. Após acabamento final de desenho/normalização, repetir testes
+dirigidos e renderer, e submeter o delta consolidado a Astra antes de playtest.
+Capturas pelo OpenGL Compatibility real: três tempos 0,10/0,35/0,60 s e arena/HUD
+real com escala nativa; helper `tools/elementalist_visual_review.gd`, resultados
+locais ignorados em `.godot/verification/elementalist_visual/`. Prancha selecionada
+em `docs/art/elementalist_visual_polish.png`. A arena usa fixture isolada, não save
+do usuário, e os VFX são injetados para inspeção visual; os testes dirigidos cobrem
+callbacks reais. Não é evidência de FPS, áudio, satisfação visual ou partida humana.
+
+Estado: revisão consolidada pendente. Não mover playtest até aprovação técnica;
+master permanece `21c7793`, sem merge/push. Cabe ao usuário aceitar o novo candidato.
+
 ## Autorização e base — 27/09/2026
 
 O usuário jogou e aprovou Berserker no candidato `21c7793`; `master` e

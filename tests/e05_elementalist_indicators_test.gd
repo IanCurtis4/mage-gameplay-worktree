@@ -36,7 +36,7 @@ func _run() -> void:
 	_check(indicators.endpoint == actor.global_position and is_equal_approx(SkillGeometry.ELEMENTALIST_TRI_NOVA_RADIUS, 170.0), "Tri Nova preview remains centered with its closed radius")
 	indicators.show_elementalist_pulse(&"elementalist_tri_nova", actor.global_position, SkillGeometry.ELEMENTALIST_TRI_NOVA_RADIUS, &"lightning")
 	_check(indicators.elementalist_pulses.size() == 1 and is_equal_approx(float(indicators.elementalist_pulses[0]["remaining"]), BattleIndicators.ELEMENTALIST_PULSE_DURATION) and indicators.elementalist_pulses[0]["element"] == &"lightning", "elemental pulse is presentation state with an explicit element")
-	indicators._process(0.31)
+	indicators._process(BattleIndicators.ELEMENTALIST_PULSE_DURATION + 0.01)
 	_check(indicators.elementalist_pulses.is_empty(), "expired elemental pulse clears without gameplay side effects")
 	for index: int in range(3):
 		indicators.show_elementalist_pulse(&"elementalist_lightning_arc", Vector2(200 + index * 80, 300), 30.0, &"lightning")
@@ -47,7 +47,7 @@ func _run() -> void:
 	paused = false
 	indicators._process(0.2)
 	indicators.show_elementalist_pulse(&"elementalist_glacial_ring", actor.global_position, 145.0, &"ice")
-	indicators._process(0.11)
+	indicators._process(BattleIndicators.ELEMENTALIST_PULSE_DURATION - 0.19)
 	_check(indicators.elementalist_pulses.size() == 1 and indicators.elementalist_pulses[0]["element"] == &"ice", "older pulses expire independently from newer impact")
 	for index: int in range(100):
 		indicators.show_elementalist_pulse(&"elementalist_lightning_arc", Vector2(index, 300), 30.0, &"lightning")

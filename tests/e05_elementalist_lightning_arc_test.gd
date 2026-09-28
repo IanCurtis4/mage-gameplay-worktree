@@ -43,6 +43,7 @@ func _run() -> void:
 	_check(hits.size() == 3 and hits[0]["can_trigger_effects"] and not hits[1]["can_trigger_effects"] and not hits[2]["can_trigger_effects"] and hits[0]["emission_id"] == captured.emission_id and hits[1]["emission_id"] == captured.emission_id, "exactly one direct root and at most two secondary jumps preserve cast identity in results")
 	_check(targets[3].health.current_hp == 10000.0 and targets[0].is_electrified() and targets[1].is_electrified(), "chain never repeats or reaches fourth target, positive unmarked hits apply mark")
 	_check(controller.battle_indicators.elementalist_pulses.size() == 3 and controller.battle_indicators.elementalist_pulses[0]["center"] == targets[0].global_position and controller.battle_indicators.elementalist_pulses[2]["center"] == targets[2].global_position, "real chain handler preserves all three impact pulses before first rendered frame")
+	_check(controller.battle_indicators.elementalist_arc_links.size() == 3 and controller.battle_indicators.elementalist_arc_links[0]["from"] == player.global_position + Vector2(0, -24) and controller.battle_indicators.elementalist_arc_links[2]["to"] == targets[2].global_position + Vector2(0, -18), "real Arc draws caster-to-target and both resolved jumps without replacing ground impacts")
 	_check(player.elementalist_focus_history.size() == 1, "secondary jumps cannot feed prism history")
 	var first := targets[0]
 	first.health.grant_shield(10000.0)
