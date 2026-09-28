@@ -69,14 +69,14 @@ Mago/Defendente/Berserker/bases. Executar `tools/verify.ps1` integral.
 |---|---|---|---|
 | Catálogo 4→5 e dados | Concluído `7b62c8f` + `cc2b2ab` | 99 checks de dados; migração 4→5 em 11 checks, regressões das migrações 2/3 em 13/10. `tools/verify.ps1` integral passou no Godot 4.7.2 após atualização de expectativa S1A; schema/ruleset iguais, backup exato, `content_ready=false`. | Implementar Explosão de Chamas. |
 | Explosão de Chamas | Concluído `d0855df` + VFX `63b8c00` | 10 checks: cast DES cancelável, sem SP no cancelamento/posição bloqueada, raio real 90, não atravessa obstáculo, request direto por alvo; indicadores passaram 7 checks. | Implementar Foco Prismático. |
-| Foco Prismático | Concluído `5b1e3a1` + fechamento | 15 checks: alternância por alvo, janela 5 s, gate 1 s e uma restituição/emissão mesmo em hit tardio, ranks R1/R3, somente equipada, callback de dano real, pausa, limpeza e teto SP; Explosão regressão 10 checks. | Revisão consolidada. |
+| Foco Prismático | Concluído `5b1e3a1` + `7130053` | 15 checks: alternância por alvo, janela 5 s, gate 1 s e uma restituição/emissão mesmo em hit tardio, ranks R1/R3, somente equipada, callback de dano real, pausa, limpeza e teto SP; Explosão regressão 10 checks. | Revisão consolidada. |
 | Anel Glacial | Concluído `b90187d` | 11 checks: cast/cancelamento/SP, área/obstáculo, slow positivo garantido, absorção, teto compartilhado, pausa/expiração, R0/R5; Explosão regressão 10 checks. | Implementar Arco Voltaico. |
 | Arco Voltaico | Concluído `c7f2ebb` | 14 checks: cast/SP/request contested, três alvos sem repetição, saltos secundários, marca/bônus/absorção, boss solo e teto/budget stun, alcance/obstáculo. Cadeia só continua após dano positivo (inclui raiz); sem alvo válido termina. Anel regressão 11 checks. | Implementar Ressonância Prismática. |
 | Ressonância Prismática | Concluído `845db52` | 14 checks: três distintos, janela desde primeiro golpe, bônus bruto copiado/pré-mitigação, absorção preserva sequência, terceiro positivo reinicia, secundário excluído, pausa/expiração/limpeza, R1/R3/equipamento; Foco 13, Relâmpago 66, Descarga 69 regressões. | Implementar Trilha de Brasas. |
 | Trilha de Brasas | Concluído `156b5f1` | 11 checks: círculos 80/160/240, intervalos 0,15, centro capturado, um hit/alvo mesmo sobreposto, pausa, raio, truncamento antes de parede, bloqueio atômico, cancelamento por morte e R5; Anel 11 regressão. | Implementar Nova Tríplice. |
 | Nova Tríplice | Concluído `900483d` | 12 checks: cast/SP, componentes 0,70/0,55/0,60, só raiz fogo, pulsos 0/0,25/0,50, centro capturado, slow/marca, sem auto-procs, pausa/raio/R0/R5; Trilha 11, Arco 14 regressões. Sequências são descartadas em morte e fim da run/encontro. | Revisão consolidada. |
 | Atlas e VFX | Atlas `11bb421`; previews/impactos `2bc8676` + `63b8c00` + runtimes acima | Atlas original 256×512, teste visual 3 checks, importação 4.7.2; `PlayerActor` seleciona pelo `evolution_id`. Cinco previews/impactos ligados; indicadores 9 checks incluem preview truncado da Trilha usando a geometria real. Geração entregou seis linhas distintas úteis, com poses compatíveis reutilizadas nas demais células; pivô/hitbox preservados. | Aprovação visual depende de Astra e playtest; não alegar 32 poses únicas. |
-| Fechamento integrado | Implementado; validação final em andamento | `content_ready=true` somente Elementalista; teste produção 33 checks: confirmação/XP pelos botões reais, gates/carteiras, duas builds (pura e herdadas), reload, cena/HUD/atlas/snapshot R5, boss solo/dano real, recompensa e reload final. Suíte integral passou antes do ajuste final de deduplicação por emissão; reexecução obrigatória após ele. | Entrega única para Astra após suíte final; não mover playtest/master. |
+| Fechamento integrado | Concluído `7130053` + `1921857`; revisão Astra pendente | `content_ready=true` somente Elementalista; teste produção 33 checks: confirmação/XP pelos botões reais, gates/carteiras, duas builds (pura e herdadas), reload, cena/HUD/atlas/snapshot R5, boss solo/dano real, recompensa e reload final. `tools/verify.ps1` integral com importação Godot 4.7.2 passou (exit 0, 101 scripts de teste) após ajuste final de deduplicação por emissão; `git diff --check` e worktree limpa. | Entrega única para Astra; candidato só vai ao diretório habitual após aprovação técnica. Merge depende do aceite explícito do usuário. |
 
 Tokens por passo: medição atribuível indisponível nesta tarefa; não estimar
 consumo semanal a partir de tempo ou número de testes.
@@ -98,3 +98,14 @@ Limites concretos: testes headless não provam diversão, balanço de raios,
 FPS nem legibilidade em combate real. Atlas tem poses reaproveitadas; VFX são
 formas nativas provisórias. Balanceamento transversal e augments novos não
 foram iniciados. Nenhum save real é fixture; nenhum master/playtest foi movido.
+
+## Entrega técnica — 27/09/2026
+
+Base aceita `21c7793` (master/playtest); runtime final `1921857` sobre
+`7130053`. As sete exclusivas, catálogo aditivo 4→5, atlas, cinco previews e
+impactos, persistência/menu/run/recompensas estão fechados. Revisar a classe
+integrada, especialmente campos runtime novos de DamageRequest, precisão e
+marca/budget de boss, emissão única, pausa/limpeza e fonte de geometria.
+Se houver achados, corrigir neste escopo e repetir testes afetados; não
+liberar Espiritualista nem iniciar balanceamento transversal. Aprovação
+técnica não equivale a aceite do produto.
