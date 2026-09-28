@@ -109,3 +109,14 @@ marca/budget de boss, emissão única, pausa/limpeza e fonte de geometria.
 Se houver achados, corrigir neste escopo e repetir testes afetados; não
 liberar Espiritualista nem iniciar balanceamento transversal. Aprovação
 técnica não equivale a aceite do produto.
+
+## Rodada Astra — correção de impactos simultâneos
+
+Astra identificou sobrescrita visual no Arco: três chamadas síncronas do
+impacto usavam um único registro, escondendo os dois primeiros alvos antes
+do frame. BattleIndicators agora mantém até 64 pulsos independentes,
+desenha todos e expira cada um em tempo de simulação; nenhuma regra de dano
+mudou. Testes dirigidos após correção: indicadores Elementalista 13, Arco15
+(inclui três centros pelo handler real), Nova12, Trilha11, indicadores
+Defendente11 e fluxo integrado33, todos PASS. Astra conduz a execução
+integral independente e o parecer final antes de preparar playtest.

@@ -35,9 +35,23 @@ func _run() -> void:
 	indicators.show_aim(&"elementalist_tri_nova", actor, actor.global_position + Vector2.RIGHT * 900.0, true)
 	_check(indicators.endpoint == actor.global_position and is_equal_approx(SkillGeometry.ELEMENTALIST_TRI_NOVA_RADIUS, 170.0), "Tri Nova preview remains centered with its closed radius")
 	indicators.show_elementalist_pulse(&"elementalist_tri_nova", actor.global_position, SkillGeometry.ELEMENTALIST_TRI_NOVA_RADIUS, &"lightning")
-	_check(is_equal_approx(indicators.elementalist_pulse_lifetime, BattleIndicators.ELEMENTALIST_PULSE_DURATION) and indicators.elementalist_pulse_element == &"lightning", "elemental pulse is presentation state with an explicit element")
+	_check(indicators.elementalist_pulses.size() == 1 and is_equal_approx(float(indicators.elementalist_pulses[0]["remaining"]), BattleIndicators.ELEMENTALIST_PULSE_DURATION) and indicators.elementalist_pulses[0]["element"] == &"lightning", "elemental pulse is presentation state with an explicit element")
 	indicators._process(0.31)
-	_check(is_zero_approx(indicators.elementalist_pulse_lifetime) and not indicators.elementalist_pulse_center.is_finite(), "expired elemental pulse clears without gameplay side effects")
+	_check(indicators.elementalist_pulses.is_empty(), "expired elemental pulse clears without gameplay side effects")
+	for index: int in range(3):
+		indicators.show_elementalist_pulse(&"elementalist_lightning_arc", Vector2(200 + index * 80, 300), 30.0, &"lightning")
+	_check(indicators.elementalist_pulses.size() == 3 and indicators.elementalist_pulses[0]["center"] == Vector2(200, 300) and indicators.elementalist_pulses[2]["center"] == Vector2(360, 300), "three synchronous impacts remain visible in the same frame")
+	paused = true
+	indicators._process(0.5)
+	_check(indicators.elementalist_pulses.size() == 3, "pause freezes simultaneous pulse lifetimes")
+	paused = false
+	indicators._process(0.2)
+	indicators.show_elementalist_pulse(&"elementalist_glacial_ring", actor.global_position, 145.0, &"ice")
+	indicators._process(0.11)
+	_check(indicators.elementalist_pulses.size() == 1 and indicators.elementalist_pulses[0]["element"] == &"ice", "older pulses expire independently from newer impact")
+	for index: int in range(100):
+		indicators.show_elementalist_pulse(&"elementalist_lightning_arc", Vector2(index, 300), 30.0, &"lightning")
+	_check(indicators.elementalist_pulses.size() == BattleIndicators.ELEMENTALIST_MAX_PULSES, "visual pulse list has a finite memory cap")
 	actor.free()
 	indicators.free()
 	print("Indicadores Elementalista: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))

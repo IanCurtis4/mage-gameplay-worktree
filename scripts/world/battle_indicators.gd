@@ -18,6 +18,7 @@ const DEFENDER_LINE_LOCK_HALF_WIDTH := SkillGeometry.DEFENDER_LINE_LOCK_HALF_WID
 const DEFENDER_WALL_ADVANCE_MAX_DISTANCE := 130.0
 const DEFENDER_REPRISAL_WAVE_RADIUS := SkillGeometry.DEFENDER_REPRISAL_WAVE_RADIUS
 const ELEMENTALIST_PULSE_DURATION := 0.30
+const ELEMENTALIST_MAX_PULSES := 64
 
 var skill: StringName = &""
 var origin := Vector2.ZERO
@@ -34,11 +35,7 @@ var defender_anchor_position := Vector2.INF
 var defender_anchor_remaining := 0.0
 var defender_wave_position := Vector2.INF
 var defender_wave_lifetime := 0.0
-var elementalist_pulse_skill: StringName = &""
-var elementalist_pulse_center := Vector2.INF
-var elementalist_pulse_radius := 0.0
-var elementalist_pulse_element: StringName = &""
-var elementalist_pulse_lifetime := 0.0
+var elementalist_pulses: Array[Dictionary] = []
 var elementalist_ember_preview := PackedVector2Array()
 
 func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast: bool, selected_target: CombatActor = null) -> void:
@@ -92,11 +89,11 @@ static func elementalist_ember_centers(origin_value: Vector2, direction_value: V
 	return PackedVector2Array([origin_value + normalized * step, origin_value + normalized * step * 2.0, origin_value + normalized * step * 3.0])
 
 func show_elementalist_pulse(skill_id: StringName, center: Vector2, radius: float, element: StringName) -> void:
-	elementalist_pulse_skill = skill_id
-	elementalist_pulse_center = center
-	elementalist_pulse_radius = maxf(0.0, radius)
-	elementalist_pulse_element = element
-	elementalist_pulse_lifetime = ELEMENTALIST_PULSE_DURATION
+	if not center.is_finite() or not is_finite(radius) or radius <= 0.0:
+		return
+	if elementalist_pulses.size() >= ELEMENTALIST_MAX_PULSES:
+		elementalist_pulses.pop_front()
+	elementalist_pulses.append({"skill_id": skill_id, "center": center, "radius": radius, "element": element, "remaining": ELEMENTALIST_PULSE_DURATION})
 	queue_redraw()
 
 # Defender call-site contract for RunController. For wall advance, pass the
@@ -164,6 +161,8 @@ func show_click(point: Vector2, is_target: bool = false) -> void:
 	queue_redraw()
 
 func _process(delta: float) -> void:
+	if is_inside_tree() and get_tree().paused:
+		return
 	if click_lifetime > 0.0:
 		click_lifetime = maxf(0.0, click_lifetime - delta)
 		queue_redraw()
@@ -175,12 +174,12 @@ func _process(delta: float) -> void:
 	if defender_wave_lifetime > 0.0:
 		defender_wave_lifetime = maxf(0.0, defender_wave_lifetime - delta)
 		queue_redraw()
-	if elementalist_pulse_lifetime > 0.0:
-		elementalist_pulse_lifetime = maxf(0.0, elementalist_pulse_lifetime - delta)
-		if elementalist_pulse_lifetime <= 0.0:
-			elementalist_pulse_skill = &""
-			elementalist_pulse_center = Vector2.INF
-			elementalist_pulse_element = &""
+	if not elementalist_pulses.is_empty():
+		for index: int in range(elementalist_pulses.size() - 1, -1, -1):
+			var pulse: Dictionary = elementalist_pulses[index]
+			pulse["remaining"] = maxf(0.0, float(pulse["remaining"]) - delta)
+			if float(pulse["remaining"]) <= 0.0:
+				elementalist_pulses.remove_at(index)
 		queue_redraw()
 
 func _draw() -> void:
@@ -195,7 +194,8 @@ func _draw() -> void:
 			draw_line(click_position + axis * (radius + 4), click_position + axis * (radius + 9), color, 2.0, true)
 	_draw_defender_anchor()
 	_draw_defender_wave()
-	_draw_elementalist_pulse()
+	for pulse: Dictionary in elementalist_pulses:
+		_draw_elementalist_pulse(pulse)
 	if skill == &"":
 		return
 	var color := READY_COLOR if available else BLOCKED_COLOR
@@ -456,18 +456,19 @@ func _draw_tri_nova(center: Vector2, radius: float, is_available: bool) -> void:
 	draw_arc(center, radius * 0.67, 0.0, TAU, 48, Color(colors[1], 0.62), 1.5, true)
 	draw_arc(center, radius * 0.34, 0.0, TAU, 32, Color(colors[2], 0.72), 1.0, true)
 
-func _draw_elementalist_pulse() -> void:
-	if not elementalist_pulse_center.is_finite() or elementalist_pulse_lifetime <= 0.0:
-		return
-	var progress := 1.0 - elementalist_pulse_lifetime / ELEMENTALIST_PULSE_DURATION
-	var radius := lerpf(elementalist_pulse_radius * 0.32, elementalist_pulse_radius, progress)
+func _draw_elementalist_pulse(pulse: Dictionary) -> void:
+	var center: Vector2 = pulse["center"]
+	var maximum_radius: float = pulse["radius"]
+	var element: StringName = pulse["element"]
+	var progress := 1.0 - float(pulse["remaining"]) / ELEMENTALIST_PULSE_DURATION
+	var radius := lerpf(maximum_radius * 0.32, maximum_radius, progress)
 	var alpha := (1.0 - progress) * 0.78
-	if elementalist_pulse_element == &"fire":
-		var flame := PackedVector2Array([elementalist_pulse_center + Vector2(0, -radius), elementalist_pulse_center + Vector2(radius * 0.60, radius * 0.52), elementalist_pulse_center + Vector2(0, radius * 0.28), elementalist_pulse_center + Vector2(-radius * 0.60, radius * 0.52), elementalist_pulse_center + Vector2(0, -radius)])
+	if element == &"fire":
+		var flame := PackedVector2Array([center + Vector2(0, -radius), center + Vector2(radius * 0.60, radius * 0.52), center + Vector2(0, radius * 0.28), center + Vector2(-radius * 0.60, radius * 0.52), center + Vector2(0, -radius)])
 		draw_polyline(flame, Color("ef6a54", alpha), 2.5, true)
-	elif elementalist_pulse_element == &"ice":
-		var diamond := PackedVector2Array([elementalist_pulse_center + Vector2(0, -radius), elementalist_pulse_center + Vector2(radius, 0), elementalist_pulse_center + Vector2(0, radius), elementalist_pulse_center + Vector2(-radius, 0), elementalist_pulse_center + Vector2(0, -radius)])
+	elif element == &"ice":
+		var diamond := PackedVector2Array([center + Vector2(0, -radius), center + Vector2(radius, 0), center + Vector2(0, radius), center + Vector2(-radius, 0), center + Vector2(0, -radius)])
 		draw_polyline(diamond, Color("82cdf4", alpha), 2.5, true)
 	else:
-		var bolt := PackedVector2Array([elementalist_pulse_center + Vector2(-radius, -radius * 0.18), elementalist_pulse_center + Vector2(-radius * 0.18, -radius * 0.18), elementalist_pulse_center + Vector2(-radius * 0.42, radius * 0.42), elementalist_pulse_center + Vector2(radius, -radius * 0.18)])
+		var bolt := PackedVector2Array([center + Vector2(-radius, -radius * 0.18), center + Vector2(-radius * 0.18, -radius * 0.18), center + Vector2(-radius * 0.42, radius * 0.42), center + Vector2(radius, -radius * 0.18)])
 		draw_polyline(bolt, Color("f4d35e", alpha), 3.0, true)
