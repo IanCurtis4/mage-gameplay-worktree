@@ -47,9 +47,17 @@ Estado: Astra aprovou tecnicamente o delta runtime `8970733` em 29/09/2026,
 sem bloqueios, após `tools/verify.ps1` integral no Godot 4.7.2 (103 scripts,
 exit 0). Parecer: `docs/REVIEW_E05_ELEMENTALIST_VISUAL_ASTRA.md`. O único
 acréscimo posterior ao runtime é documentação de revisão/preparação.
-Preparar `codex/playtest` por fast-forward e repetir verificação dirigida no
-destino; `master` permanece `21c7793`, sem merge/push. Cabe ao usuário aceitar
-o novo candidato após playtest. Outras classes não foram iniciadas.
+Preparação concluída em 29/09: `codex/playtest` estava limpo em `dd94ffb`,
+ancestral do candidato. A referência
+`codex/e05-elementalist-playtest-before-visual-dd94ffb` preserva o estado
+anterior. Após o parecer de Astra, `codex/playtest` avançou por fast-forward
+até `4085a5b` (runtime `8970733` mais documentação). No diretório habitual do
+Godot, importação e testes dirigidos passaram: animação7, visuais8, integração
+visual6, indicadores13, Arco16, fechamento integrado34 e smoke exit0. Este
+registro final é apenas documental e será incluído no mesmo candidato, sem
+alteração adicional do runtime aprovado. `master` permanece `21c7793`, sem
+merge/push. Cabe ao usuário aceitar o novo candidato após playtest. Outras
+classes não foram iniciadas.
 
 ## Autorização e base — 27/09/2026
 
