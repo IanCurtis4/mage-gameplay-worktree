@@ -1,5 +1,13 @@
 # E05 — checkpoint único do Elementalista
 
+## Aceite de produto — 29/09/2026
+
+O usuário jogou o candidato visual `ce87065`, aprovou o Elementalista e liberou
+o Espiritualista como próxima classe do Mago. Astra integrou o candidato aceito
+em `master`; o usuário exige playtest do Espiritualista antes das classes do
+Arqueiro. O balanceamento transversal de tamanho/alcance das skills e a divisão
+entre baseline e augments permanecem futuros, sem reabrir o kit aceito aqui.
+
 ## Ajuste visual solicitado no playtest — 28/09/2026
 
 Usuário reprovou a simplicidade/ausência percebida dos VFX e a apresentação do
