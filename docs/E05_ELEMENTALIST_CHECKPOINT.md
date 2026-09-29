@@ -43,8 +43,13 @@ em `docs/art/elementalist_visual_polish.png`. A arena usa fixture isolada, não 
 do usuário, e os VFX são injetados para inspeção visual; os testes dirigidos cobrem
 callbacks reais. Não é evidência de FPS, áudio, satisfação visual ou partida humana.
 
-Estado: revisão consolidada pendente. Não mover playtest até aprovação técnica;
-master permanece `21c7793`, sem merge/push. Cabe ao usuário aceitar o novo candidato.
+Estado: Astra aprovou tecnicamente o delta runtime `8970733` em 29/09/2026,
+sem bloqueios, após `tools/verify.ps1` integral no Godot 4.7.2 (103 scripts,
+exit 0). Parecer: `docs/REVIEW_E05_ELEMENTALIST_VISUAL_ASTRA.md`. O único
+acréscimo posterior ao runtime é documentação de revisão/preparação.
+Preparar `codex/playtest` por fast-forward e repetir verificação dirigida no
+destino; `master` permanece `21c7793`, sem merge/push. Cabe ao usuário aceitar
+o novo candidato após playtest. Outras classes não foram iniciadas.
 
 ## Autorização e base — 27/09/2026
 
