@@ -81,6 +81,10 @@ func _check_switch_retry_and_focused_alt(scene: PackedScene) -> void:
 	var store := ToggleFailStore.new(directory, catalog)
 	var menu: CharacterMenu = await _open_menu(scene, ProfileFacade.new(store))
 	menu._select_roster_index(1)
+	var locked := menu._begin_evolution_change(&"berserker")
+	_check(not locked["ok"] and locked["error_code"] == &"evolution_locked", "normal menu blocks switching an evolved character")
+	menu.playtest_toggle.button_pressed = true
+	_check(menu.evolution_state_label.text.contains("Modo admin") and not (menu.evolution_options_list.get_node("ChooseEvolution_berserker") as Button).disabled, "admin toggle exposes eligible alternative and labels its exceptional scope")
 	var before_revision: int = menu.facade.current_profile().revision
 	var opened := menu._begin_evolution_change(&"berserker")
 	store.failure_stage = &"write_pending"

@@ -8,6 +8,7 @@ const ProfileFacadeScript := preload("res://scripts/core/profile_facade.gd")
 const ProfileStoreScript := preload("res://scripts/core/profile_store.gd")
 const ProfileCatalogScript := preload("res://scripts/core/profile_catalog.gd")
 const ProfileRewardResolverScript := preload("res://scripts/core/profile_reward_resolver.gd")
+static var pending_focus_character_id := ""
 
 var profile_directory := DEFAULT_PROFILE_DIRECTORY
 var facade: RefCounted
@@ -66,6 +67,8 @@ func set_profile_facade(value: RefCounted) -> void:
 	facade = value
 
 func _ready() -> void:
+	_focused_character_id = pending_focus_character_id
+	pending_focus_character_id = ""
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_build_ui()
 	_layout_panel()
@@ -175,6 +178,21 @@ func _start_run() -> Dictionary:
 		RunController.pending_run_facade = facade
 		get_tree().change_scene_to_file("res://scenes/main.tscn")
 	return _show_result(result, "Run iniciada.")
+
+func _start_playtest_training() -> Dictionary:
+	if playtest_toggle == null or not playtest_toggle.button_pressed:
+		return {"ok": false, "error_code": &"playtest_panel_closed"}
+	var context := _selected_progression_context()
+	if not context["ok"]:
+		return _show_result(context)
+	var result: Dictionary = facade.prepare_playtest_training(context["character_id"])
+	if result.get("ok", false):
+		pending_focus_character_id = context["character_id"]
+		RunController.pending_run_state = result["run_state"]
+		RunController.pending_run_facade = null
+		RunController.pending_training_mode = true
+		get_tree().change_scene_to_file("res://scenes/main.tscn")
+	return _show_result(result, "Treino iniciado sem alterar o perfil.")
 
 func _selected_option(selector: OptionButton) -> Variant:
 	if selector.selected < 0:
@@ -304,6 +322,7 @@ func _error_text(error_code: StringName, read_only: bool) -> String:
 		&"stale_revision": return "O perfil mudou; a lista foi atualizada. Escolha novamente."
 		&"character_limit": return "Você atingiu o limite de personagens."
 		&"run_active": return "Há uma run ativa. Volte ao menu após encerrá-la."
+		&"evolution_locked": return "A evolução já foi fixada. Trocas só estão disponíveis no modo admin de testes."
 		&"invalid_origin": return "Essa classe ainda não está disponível."
 		&"invalid_character_id": return "O personagem selecionado não existe mais. Escolha outro personagem."
 		&"invalid_presets": return "O preset contém skills inválidas ou repetidas. Revise os slots escolhidos."
@@ -413,7 +432,8 @@ func _refresh_evolution_panel(character: Variant, profile: Variant) -> void:
 		return
 	if not _evolution_pending.is_empty() and _evolution_pending.get("character_id", "") != character.character_id:
 		_discard_evolution_intent()
-	var result: Dictionary = facade.evolution_options(character.character_id)
+	var admin_mode := playtest_toggle != null and playtest_toggle.button_pressed
+	var result: Dictionary = facade.playtest_evolution_options(character.character_id) if admin_mode else facade.evolution_options(character.character_id)
 	if not result.get("ok", false):
 		_show_evolution_message("Não foi possível consultar as evoluções deste personagem.")
 		return
@@ -421,7 +441,7 @@ func _refresh_evolution_panel(character: Variant, profile: Variant) -> void:
 	for option: Dictionary in result["options"]:
 		if option["is_current"]:
 			current_name = option["display_name"]
-	evolution_state_label.text = "Origem: %s\nEvolução atual: %s\nNível base %d · Job %d" % [_class_name(result["base_class_id"]), current_name, result["base_level"], result["job_level"]]
+	evolution_state_label.text = "Origem: %s\nEvolução atual: %s\nNível base %d · Job %d%s" % [_class_name(result["base_class_id"]), current_name, result["base_level"], result["job_level"], "\nModo admin: trocas de evolução liberadas para testes." if admin_mode else "\nA evolução fica fixa após a primeira escolha."]
 	for option: Dictionary in result["options"]:
 		var option_label := Label.new()
 		option_label.name = "EvolutionOption_%s" % option["evolution_id"]
@@ -430,19 +450,20 @@ func _refresh_evolution_panel(character: Variant, profile: Variant) -> void:
 		evolution_options_list.add_child(option_label)
 		var choose_button := Button.new()
 		choose_button.name = "ChooseEvolution_%s" % option["evolution_id"]
-		choose_button.text = "Escolher %s" % option["display_name"]
+		choose_button.text = "%s %s" % ["Trocar para" if admin_mode and not result["current_evolution_id"].is_empty() else "Escolher", option["display_name"]]
 		choose_button.disabled = not option["can_select"]
 		choose_button.tooltip_text = _evolution_option_tooltip(option)
 		choose_button.pressed.connect(_begin_evolution_change.bind(option["evolution_id"]))
 		evolution_options_list.add_child(choose_button)
 	if _evolution_pending.is_empty():
-		evolution_confirmation_label.text = "Escolher ou trocar uma evolução pede confirmação. A entrada gratuita não será equipada automaticamente."
+		evolution_confirmation_label.text = "Escolher uma evolução pede confirmação; depois ela fica fixa. Trocas exigem modo admin de testes."
 		confirm_evolution_button.text = "Confirmar evolução"
 		confirm_evolution_button.disabled = true
 		cancel_evolution_button.disabled = true
 	else:
 		var pending_name: String = _evolution_pending.get("display_name", "Evolução")
-		evolution_confirmation_label.text = "Confirmar %s? Compras exclusivas serão reembolsadas e slots que deixarem de ser legais podem ser esvaziados." % pending_name
+		var current_display: String = _evolution_pending.get("current_name", "Nenhuma")
+		evolution_confirmation_label.text = "Confirmar %s → %s? Compras exclusivas serão reembolsadas e slots dos dois presets que deixarem de ser legais serão esvaziados." % [current_display, pending_name]
 		confirm_evolution_button.text = "Confirmar %s" % pending_name
 		confirm_evolution_button.disabled = _read_only or profile.reward_session != null
 		cancel_evolution_button.disabled = false
@@ -451,7 +472,8 @@ func _begin_evolution_change(evolution_id: StringName) -> Dictionary:
 	var context := _selected_progression_context()
 	if not context["ok"]:
 		return _show_result(context)
-	var options: Dictionary = facade.evolution_options(context["character_id"])
+	var admin_mode := playtest_toggle != null and playtest_toggle.button_pressed
+	var options: Dictionary = facade.playtest_evolution_options(context["character_id"]) if admin_mode else facade.evolution_options(context["character_id"])
 	if not options.get("ok", false):
 		return _show_result(options)
 	var option := _evolution_option(options["options"], evolution_id)
@@ -461,11 +483,17 @@ func _begin_evolution_change(evolution_id: StringName) -> Dictionary:
 		status_label.text = "Esta evolução não pode ser escolhida: %s" % _evolution_option_state(option)
 		_refresh()
 		return {"ok": false, "error_code": _evolution_blocking_error(option)}
+	var current_name := "Nenhuma"
+	for current_option: Dictionary in options["options"]:
+		if current_option["is_current"]:
+			current_name = current_option["display_name"]
 	_discard_evolution_intent()
 	_evolution_pending = {
 		"character_id": context["character_id"],
 		"evolution_id": evolution_id,
 		"display_name": option["display_name"],
+		"current_name": current_name,
+		"admin_mode": admin_mode,
 		"revision": context["revision"],
 	}
 	_refresh()
@@ -484,11 +512,14 @@ func _confirm_evolution_change() -> Dictionary:
 		_discard_evolution_intent()
 		return _show_result({"ok": false, "error_code": &"invalid_character_id"})
 	var evolution_id: StringName = _evolution_pending["evolution_id"]
+	if bool(_evolution_pending.get("admin_mode", false)) != (playtest_toggle != null and playtest_toggle.button_pressed):
+		_discard_evolution_intent()
+		return _show_result({"ok": false, "error_code": &"evolution_locked"})
 	var retry_key := "evolution:%s:%s" % [context["character_id"], evolution_id]
 	var retry: Dictionary = _evolution_retries.get(retry_key, {})
 	var request_id: String = retry.get("request_id", _request_id("evolution-%s" % evolution_id))
 	var revision: int = retry.get("revision", _evolution_pending["revision"])
-	var result: Dictionary = facade.change_evolution(request_id, revision, context["character_id"], evolution_id)
+	var result: Dictionary = facade.change_playtest_evolution(request_id, revision, context["character_id"], evolution_id) if bool(_evolution_pending["admin_mode"]) else facade.change_evolution(request_id, revision, context["character_id"], evolution_id)
 	var error_code: StringName = result.get("error_code", &"")
 	if result.get("ok", false):
 		var success_text := _evolution_success_text(result, String(_evolution_pending["display_name"]))
@@ -566,6 +597,7 @@ func _evolution_blocking_text(reason: StringName) -> String:
 		&"run_active": return "run ativa"
 		&"profile_read_only": return "perfil somente leitura"
 		&"already_current": return "já ativa"
+		&"evolution_locked": return "evolução fixa; trocas só no modo admin"
 		_: return "indisponível"
 
 func _evolution_blocking_error(option: Dictionary) -> StringName:
@@ -575,6 +607,7 @@ func _evolution_blocking_error(option: Dictionary) -> StringName:
 			&"profile_read_only": return &"recovery_required"
 			&"content_unavailable": return &"content_unavailable"
 			&"requirements_unmet": return &"requirements_unmet"
+			&"evolution_locked": return &"evolution_locked"
 	return &"invalid_origin"
 
 func _evolution_success_text(result: Dictionary, display_name: String) -> String:
@@ -836,16 +869,19 @@ func _build_ui() -> void:
 	progression_panel.add_child(progression_state_label)
 	playtest_toggle = CheckButton.new()
 	playtest_toggle.name = "PlaytestAdminToggle"
-	playtest_toggle.text = "Atalhos de playtest (alteram o save)"
-	playtest_toggle.tooltip_text = "Abre ações de XP para o personagem destacado. O XP salvo persiste ao fechar este painel."
-	playtest_toggle.toggled.connect(func(_pressed: bool) -> void: _refresh_playtest_controls(facade.current_profile() if facade != null else null))
+	playtest_toggle.text = "Modo admin de testes"
+	playtest_toggle.tooltip_text = "Abre XP e troca de evolução no save, além do treino isolado sem recompensa."
+	playtest_toggle.toggled.connect(func(_pressed: bool) -> void:
+		_discard_evolution_intent()
+		_refresh()
+	)
 	progression_panel.add_child(playtest_toggle)
 	playtest_panel = VBoxContainer.new()
 	playtest_panel.name = "PlaytestAdminPanel"
 	playtest_panel.visible = false
 	progression_panel.add_child(playtest_panel)
 	var playtest_notice := Label.new()
-	playtest_notice.text = "Personagem destacado · XP salvo permanentemente · skills e evolução seguem as regras normais."
+	playtest_notice.text = "XP e troca de evolução alteram o save. Treino usa a build atual sem recompensa persistente."
 	playtest_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	playtest_panel.add_child(playtest_notice)
 	for shortcut: Dictionary in [
@@ -860,6 +896,12 @@ func _build_ui() -> void:
 		button.pressed.connect(_apply_playtest_progression.bind(shortcut["action"], shortcut["amount"]))
 		playtest_panel.add_child(button)
 		playtest_buttons.append(button)
+	var training_button := Button.new()
+	training_button.name = "PlaytestTrainingBoss"
+	training_button.text = "Treinar contra boss e reforços (sem salvar XP)"
+	training_button.pressed.connect(_start_playtest_training)
+	playtest_panel.add_child(training_button)
+	playtest_buttons.append(training_button)
 	progression_wallets_label = Label.new()
 	progression_wallets_label.name = "ProgressionWallets"
 	progression_wallets_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

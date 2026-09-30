@@ -211,6 +211,12 @@ func progression_summary(character_id: String) -> Dictionary:
 	return result.duplicate(true)
 
 func evolution_options(character_id: String) -> Dictionary:
+	return _evolution_options(character_id, false)
+
+func playtest_evolution_options(character_id: String) -> Dictionary:
+	return _evolution_options(character_id, true)
+
+func _evolution_options(character_id: String, allow_switch: bool) -> Dictionary:
 	# Unlike the older queries, this contract never opens or repairs a profile as
 	# a side effect. The caller must establish the facade state explicitly.
 	if _profile == null:
@@ -236,6 +242,8 @@ func evolution_options(character_id: String) -> Dictionary:
 			blocking_reasons.append(&"profile_read_only")
 		if is_current:
 			blocking_reasons.append(&"already_current")
+		if not allow_switch and not character.evolution_id.is_empty() and not is_current:
+			blocking_reasons.append(&"evolution_locked")
 		options.append({
 			"evolution_id": definition.id,
 			"display_name": definition.display_name,
@@ -395,6 +403,12 @@ func respec_skills(request_id: String, expected_revision: int, character_id: Str
 	return _finish_progression_mutation(request_id, before, candidate, character_id, mutation)
 
 func change_evolution(request_id: String, expected_revision: int, character_id: String, evolution_id: StringName) -> Dictionary:
+	return _change_evolution(request_id, expected_revision, character_id, evolution_id, false)
+
+func change_playtest_evolution(request_id: String, expected_revision: int, character_id: String, evolution_id: StringName) -> Dictionary:
+	return _change_evolution(request_id, expected_revision, character_id, evolution_id, true)
+
+func _change_evolution(request_id: String, expected_revision: int, character_id: String, evolution_id: StringName, allow_switch: bool) -> Dictionary:
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
 	var ready := _begin_operation(request_id, expected_revision)
@@ -403,10 +417,32 @@ func change_evolution(request_id: String, expected_revision: int, character_id: 
 	var boundary := _progression_boundary(character_id)
 	if not boundary["ok"]:
 		return _finish_operation(request_id, boundary)
+	var current: CharacterState = _profile.character_by_id(character_id)
+	if not allow_switch and not current.evolution_id.is_empty() and current.evolution_id != evolution_id:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"evolution_locked"})
 	var before := _profile.copy_state()
 	var candidate := before.copy_state()
 	var mutation := CharacterProgression.change_evolution(candidate.character_by_id(character_id), _catalog, evolution_id)
 	return _finish_progression_mutation(request_id, before, candidate, character_id, mutation)
+
+## Training copies the saved build but never creates a reward session or writes a profile.
+func prepare_playtest_training(character_id: String) -> Dictionary:
+	if _operation_in_progress:
+		return {"ok": false, "error_code": &"save_in_progress"}
+	if _profile == null:
+		return {"ok": false, "error_code": &"profile_unavailable"}
+	if _read_only or _store.has_pending_transaction():
+		return {"ok": false, "error_code": &"recovery_required"}
+	if _profile.reward_session != null:
+		return {"ok": false, "error_code": &"run_active"}
+	var character := _profile.character_by_id(character_id)
+	if character == null:
+		return {"ok": false, "error_code": &"invalid_character_id"}
+	if not character.evolution_id.is_empty() and not _catalog.evolution_is_ready(character.evolution_id, character.base_class_id):
+		return {"ok": false, "error_code": &"content_unavailable"}
+	if not _catalog.build_is_ready(character):
+		return {"ok": false, "error_code": &"invalid_loadout"}
+	return {"ok": true, "run_state": RunState.from_build("", _build_snapshot(character))}
 
 ## Menu-only playtest shortcut. XP remains ordinary persisted progression; no ranks,
 ## allocations, evolution, or catalog availability are changed here.

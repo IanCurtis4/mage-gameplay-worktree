@@ -113,12 +113,16 @@ devolve cada compra à carteira correspondente; concessões legadas não entram 
 reembolso. Respec completo evita manter skills com pré-requisitos removidos; não
 propor reembolso parcial em cascata neste demo.
 
-Trocar evolução só é permitido no menu e dentro da mesma origem. Conserva XP,
-job level e a árvore base; devolve todos os pontos gastos da evolução antiga e
-remove seus ranks gratuitos. Instala os ranks gratuitos da nova identidade uma
-única vez. Não acumula carteiras de ramos anteriores. Depois de evoluir, trocar
-entre destinos é permitido, mas voltar ao estágio sem evolução fica fora do demo:
-isso evita personagem sem destino com job acima de 20.
+Decisão de produto de 30/09/2026, que substitui a permissão original de troca
+livre: a primeira evolução fica fixa no fluxo normal. A UI e a transação normal
+rejeitam outro destino sem modificar save ou revisão. Somente o modo admin de
+testes expõe uma operação explícita de troca, com confirmação de identidade
+atual → nova, reembolso e aviso sobre slots dos dois presets. A troca admin
+continua restrita ao menu, à mesma origem, ao conteúdo pronto e à ausência de
+run persistente ativa. Conserva XP, job level e a árvore base; devolve todos os
+pontos gastos da evolução antiga e remove seus ranks gratuitos. Instala os ranks
+gratuitos da nova identidade uma única vez. Não acumula carteiras de ramos
+anteriores nem permite voltar ao estágio sem evolução.
 
 A confirmação valida personagem, catálogo, requisitos, saldos, skills e loadout
 como uma transação única. Se algo falha, mantém a versão anterior inteira. Repetir
@@ -220,7 +224,8 @@ Estes são resultados esperados do desenho; não são testes de sistema implemen
 | 4.940 XP job, base level 9 | Job 20 e 19 pontos da base; evolução bloqueada pelo base level |
 | Mesmo job, base level 10, escolher `sp_mg` como Espadachim | Evolui, conserva job 20, carteira de evolução 0, ativa inicial gratuita em rank 1 |
 | Ganhar 460 XP job após evoluir no caso anterior | Job 21 (limiar 5.400), 1 ponto de evolução; carteira base continua 19 |
-| Trocar evolução com job 25 e 5 pontos exclusivos gastos | Devolve 5 à carteira de evolução; remove skills antigas, não concede outros 5 |
+| Tentar trocar evolução pelo fluxo normal com job 25 | Rejeita sem alterar save ou revisão |
+| Trocar evolução no modo admin com job 25 e 5 pontos exclusivos gastos | Devolve 5 à carteira de evolução; remove skills antigas, não concede outros 5 |
 | Respec de Espadachim base 30 com 87 pontos investidos | Restitui 87; vetor volta a 8/5/8/2/5/2; XP permanece 13.050 |
 | Aprender ativa base de rank 0 até rank 5 | Gasta 5; respec devolve 5 e retorna a rank 0 |
 | Save anterior com ativa base gratuita R1 e uma melhoria comprada | Migra para concessão legada R1 + compra R1; respec devolve 1 e mantém o direito legado R1 |

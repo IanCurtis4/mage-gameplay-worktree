@@ -15,6 +15,7 @@ var _repath_time := 0.0
 var _navigation_revision := 0
 var player_target_acquired := false
 var taunt_remaining := 0.0
+var scenario_damage_multiplier := 1.0
 
 func apply_defender_push(direction: Vector2, distance: float) -> float:
 	if not is_alive() or hard_controls.boss or navigation == null or direction.is_zero_approx() or distance <= 0.0:
@@ -123,7 +124,7 @@ func _try_attack(ranged: bool) -> void:
 	request.skill_id = &"enemy_arrow" if ranged else &"enemy_claw"
 	var attack_id := &"precision_attack" if ranged else &"melee_attack"
 	request.physical_damage = stat_breakdown.value(attack_id) * 0.45
-	request.damage_dealt_multiplier = outgoing_damage_multiplier()
+	request.damage_dealt_multiplier = outgoing_damage_multiplier() * scenario_damage_multiplier
 	request.accuracy_mode = DamageRequest.AccuracyMode.CONTESTED
 	request.hit_rating = stat_breakdown.value(&"hit_rating")
 	request.crit_chance = 0.0

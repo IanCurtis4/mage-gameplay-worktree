@@ -148,3 +148,32 @@ o usuário ainda precisa avaliar a leitura na partida.
 | Rito de Dissipação | `07e71e9` | 18 checks novos + catálogo de evolução 65 checks | 9 — fechamento |
 | Fechamento integrado | `f8c59f0` | 72 checks de builds/menu→run/boss + 18 visuais; `tools/verify.ps1` integral | revisão técnica Astra |
 | Ajustes da revisão Astra | `a4c34f3` | Drenagem 28, visuais 23, integração 86 checks; renderer real e nova regressão integral | playtest do usuário |
+
+## Adendo de playtest — treino de boss e evolução fixa (30/09/2026)
+
+Solicitação posterior ao candidato `08c7817`, ainda não incorporada ao
+`codex/playtest` até revisão técnica consolidada. No menu, o modo admin de testes
+agora abre um treino com a build salva do personagem em foco, sem criar sessão de
+recompensa, incrementar contadores ou escrever no perfil. A arena contém um
+Guardião de Treino com 50.000 HP, silhueta ampliada usando o sprite existente e
+barra de vida legível. A cada 8 segundos ativos entram até dois reforços de
+1.500 HP, alternando melee/ranged e limitados a seis simultâneos. Posições são
+validadas contra navegação, obstáculos, jogador e outros inimigos. Pausa, morte,
+vitória, saída e reinício encerram ou reiniciam o agendamento; não há pickup,
+XP ou augments no treino. O menu oferece saída e reinício antes e após o combate.
+O dano recebido no treino usa multiplicadores de cenário de 0,18 no boss e 0,15
+nos adds para permitir observar rotações longas; a resolução central de dano não
+é alterada. Os valores são constantes explícitas da cena.
+
+A primeira evolução continua no fluxo normal. Após escolhida, outra identidade
+fica bloqueada tanto na lista quanto na API transacional comum. A troca existe
+apenas como operação explícita do modo admin: confirmação atual → nova, aviso de
+reembolso/slots dos dois presets e a mesma transação atômica pré-existente.
+Fechar o modo admin, cancelar, mudar personagem ou falhar por estado inválido
+descarta a intenção. Saves anteriores não são migrados nem alterados por essa
+regra. O ADR E00.1 registra a substituição da permissão antiga de troca livre.
+
+Validação deste adendo: `tests/e05_training_boss_test.gd` (menu→cena real,
+snapshot isolado, pausa, reforços/cap, navegação, vitória sem recompensa e
+reinício), testes E05 de catálogo/transação/menu e `tools/verify.ps1` completo.
+A legibilidade visual e o ritmo de combate ainda dependem do playtest do usuário.

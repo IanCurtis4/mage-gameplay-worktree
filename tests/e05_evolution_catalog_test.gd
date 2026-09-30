@@ -187,6 +187,9 @@ func _check_query_states() -> void:
 	_check(current_open["ok"] and current["is_current"] and current["requirements_met"] and current["content_ready"], "current completed identity remains visible")
 	_check(&"already_current" in current["blocking_reasons"] and &"content_unavailable" not in current["blocking_reasons"], "current ready identity retains only its already-current selection reason")
 	_check(current_facade.current_profile().character_by_id(current_id).evolution_id == &"defender", "read-only query never clears an unavailable persisted identity")
+	var normal_switch := _option(current_facade.evolution_options(current_id)["options"], &"berserker")
+	var admin_switch := _option(current_facade.playtest_evolution_options(current_id)["options"], &"berserker")
+	_check(not normal_switch["can_select"] and &"evolution_locked" in normal_switch["blocking_reasons"] and admin_switch["can_select"], "evolved character may change identity only through explicit admin query")
 
 	var run_directory := root_directory.path_join("run_active")
 	_prepare_directory(run_directory)

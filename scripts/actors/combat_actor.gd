@@ -16,6 +16,7 @@ var actor_color := Color.WHITE
 var stat_breakdown: StatBreakdown
 var health: HealthState
 var collision_radius := 18.0
+var sprite_visual_scale := 1.0
 var is_hovered := false
 var is_selected := false
 var _flash_time := 0.0
@@ -345,7 +346,9 @@ func _draw() -> void:
 	elif is_hovered:
 		_draw_target_ring(collision_radius + 11.0, Color("81dfd0"), 2.0)
 	if character_animation != null:
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE * sprite_visual_scale)
 		character_animation.draw_on(self, Color(2.0, 2.0, 2.0) if _flash_time > 0.0 else Color.WHITE)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	elif sprite_texture != null:
 		var tint := Color(2.0, 2.0, 2.0) if _flash_time > 0.0 else Color.WHITE
 		draw_texture_rect(sprite_texture, sprite_rect, false, tint)
@@ -353,9 +356,9 @@ func _draw() -> void:
 		draw_circle(Vector2(0, -18), collision_radius, color)
 		draw_circle(Vector2(0, -22), collision_radius * 0.55, color.lightened(0.14))
 	if health != null:
-		var bar_width := 52.0
+		var bar_width := 104.0 if sprite_visual_scale > 1.0 else 52.0
 		var ratio := health.current_hp / health.max_hp
-		var bar_y := -_sprite_visible_height - 8.0 if sprite_texture != null else -54.0
+		var bar_y := -_sprite_visible_height * sprite_visual_scale - 8.0 if sprite_texture != null else -54.0 * sprite_visual_scale
 		draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width, 6), Color(0.08, 0.09, 0.12, 0.9))
 		draw_rect(Rect2(-bar_width * 0.5, bar_y, bar_width * ratio, 6), Color("dc5757"))
 	if berserker_wound_visual_stacks > 0:

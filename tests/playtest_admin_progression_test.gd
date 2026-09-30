@@ -33,7 +33,7 @@ func _run() -> void:
 	menu.set_profile_facade(facade)
 	root.add_child(menu)
 	await process_frame
-	_check(not menu.playtest_toggle.button_pressed and not menu.playtest_panel.visible and menu.playtest_buttons.size() == 4, "admin controls start closed and expose four shortcuts")
+	_check(not menu.playtest_toggle.button_pressed and not menu.playtest_panel.visible and menu.playtest_buttons.size() == 5 and menu.playtest_panel.get_node_or_null("PlaytestTrainingBoss") != null, "admin controls start closed and expose four XP shortcuts plus isolated training")
 	menu.playtest_toggle.button_pressed = true
 	menu._select_roster_index(1)
 	var added: Dictionary = menu._apply_playtest_progression(&"base_xp", 1000)

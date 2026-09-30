@@ -72,7 +72,10 @@ func _check_switch_refund_and_presets() -> void:
 	var facade := ProfileFacade.new(ProfileStore.new(directory, catalog))
 	var opened := facade.open_profile()
 	var before: CharacterState = opened["profile"].character_by_id(character_id)
-	var switched := facade.change_evolution("switch-branch", opened["profile"].revision, character_id, &"berserker")
+	var before_disk := FileAccess.get_file_as_string(directory.path_join(ProfileStore.PRIMARY_FILE))
+	var locked := facade.change_evolution("normal-switch-blocked", opened["profile"].revision, character_id, &"berserker")
+	_check(not locked["ok"] and locked["error_code"] == &"evolution_locked" and facade.current_profile().revision == opened["profile"].revision and FileAccess.get_file_as_string(directory.path_join(ProfileStore.PRIMARY_FILE)) == before_disk, "ordinary evolution transaction rejects a second identity without writing or changing revision")
+	var switched := facade.change_playtest_evolution("switch-branch", opened["profile"].revision, character_id, &"berserker")
 	var after: CharacterState = switched["profile"].character_by_id(character_id)
 	_check(switched["ok"] and switched["evolution_refund"] == 4 and after.evolution_id == &"berserker", "branch switch refunds the exact four purchased evolution ranks and commits the new identity")
 	_check(after.purchased_skill_ranks == {&"slash": 2} and after.granted_skill_ranks == {&"slash": 1, &"dash": 1, &"swordsman_resistance": 1}, "switch removes only evolution-wallet ranks while preserving base purchases and legacy base grants")
@@ -126,7 +129,8 @@ func _check_rejections_are_atomic() -> void:
 	var run_open := run_facade.open_profile()
 	var started := run_facade.start_run("base-run", run_open["profile"].revision)
 	var during := run_facade.change_evolution("during-run", started["new_revision"], run_seed["character_id"], &"defender")
-	_check(started["ok"] and not during["ok"] and during["error_code"] == &"run_active" and run_facade.current_profile().character_by_id(run_seed["character_id"]).evolution_id.is_empty(), "active run blocks evolution and leaves its existing snapshot/profile identity untouched")
+	var admin_during := run_facade.change_playtest_evolution("admin-during-run", started["new_revision"], run_seed["character_id"], &"defender")
+	_check(started["ok"] and not during["ok"] and during["error_code"] == &"run_active" and not admin_during["ok"] and admin_during["error_code"] == &"run_active" and run_facade.current_profile().character_by_id(run_seed["character_id"]).evolution_id.is_empty(), "active run blocks ordinary and admin evolution without changing the snapshot/profile identity")
 
 func _check_save_failure_retry_and_uncertainty() -> void:
 	var catalog := _catalog()

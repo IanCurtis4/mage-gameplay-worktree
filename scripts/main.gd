@@ -18,9 +18,20 @@ const DEFENDER_WATCH_DIRECT_MELEE_IDS := [
 	&"basic_attack", &"cone_slash", &"brutal_strike", &"concentrated_rage",
 	&"defender_counterstroke", &"defender_line_lock", &"defender_wall_advance", &"defender_reprisal_wave",
 ]
+const TRAINING_BOSS_HP := 50000.0
+const TRAINING_ADD_HP := 1500.0
+const TRAINING_BOSS_DAMAGE_MULTIPLIER := 0.18
+const TRAINING_ADD_DAMAGE_MULTIPLIER := 0.15
+const TRAINING_ADD_INTERVAL := 8.0
+const TRAINING_ADD_CAP := 6
+const TRAINING_ADD_OFFSETS: Array[Vector2] = [
+	Vector2(210, -125), Vector2(-210, -125), Vector2(220, 145), Vector2(-220, 145),
+	Vector2(320, 30), Vector2(-320, 30), Vector2(80, -260), Vector2(-80, 260),
+]
 static var selected_class_id: StringName = &"swordsman"
 static var pending_run_state: RunState = null
 static var pending_run_facade: ProfileFacade = null
+static var pending_training_mode := false
 
 var rng := RandomNumberGenerator.new()
 var run_state: RunState
@@ -44,11 +55,16 @@ var _terminal_outcome: StringName = &"abandoned"
 var persistent_facade: ProfileFacade = null
 var _close_request_serial := 0
 var _reward_retry_pending := false
+var training_mode := false
+var training_boss: EnemyActor = null
+var _training_add_elapsed := 0.0
+var _training_wave_index := 0
 
 var health_label: Label
 var sp_label: Label
 var skill_label: Label
 var defender_status_label: Label
+var training_status_label: Label
 var status_label: Label
 var augment_button: Button
 var next_button: Button
@@ -85,8 +101,10 @@ func _ready() -> void:
 	if pending_run_state != null:
 		run_state = pending_run_state
 		persistent_facade = pending_run_facade
+		training_mode = pending_training_mode
 		pending_run_state = null
 		pending_run_facade = null
+		pending_training_mode = false
 	else:
 		run_state = RunState.new(selected_class_id)
 	navigation.configure(ARENA_BOUNDS, ARENA_OBSTACLES, 22.0)
@@ -161,11 +179,16 @@ func _ready() -> void:
 	camera.limit_bottom = int(ARENA_BOUNDS.end.y + 40.0)
 	player.add_child(camera)
 	_build_ui()
-	_spawn_encounter(1)
+	if training_mode:
+		_spawn_training_boss()
+	else:
+		_spawn_encounter(1)
 
 func _process(_delta: float) -> void:
 	player.regenerate_hp(_delta, encounter_active, get_tree().paused or run_finished)
 	if not get_tree().paused and not run_finished:
+		if training_mode and player.is_alive() and training_boss != null and training_boss.is_alive():
+			_advance_training_adds(_delta)
 		_sync_defender_anchor()
 		_sync_berserker_wound_visuals()
 		if player.is_alive():
@@ -616,18 +639,75 @@ func _spawn_encounter(index: int) -> void:
 			{"type": &"archer", "position": Vector2(960, 850)},
 		]
 	for entry: Dictionary in entries:
-		var enemy := EnemyActor.new()
-		enemy.configure(entry["type"], navigation, player)
-		enemy.global_position = entry["position"]
-		enemy.attack_requested.connect(_on_enemy_attack_requested)
-		enemy.actor_died.connect(_on_enemy_died)
-		enemy.health.damage_applied.connect(_on_enemy_damage_resolved)
-		enemy.damage_number.connect(_show_damage_number)
-		enemy.attack_missed.connect(_show_miss)
-		enemy.status_damage_requested.connect(_on_attack_requested)
-		add_child(enemy)
-		enemies.append(enemy)
+		_spawn_enemy(entry["type"], entry["position"])
 	status_label.text = "Encontro %d/2 — elimine todos os inimigos" % index
+
+func _spawn_enemy(enemy_type: StringName, spawn_position: Vector2) -> EnemyActor:
+	var enemy := EnemyActor.new()
+	enemy.configure(enemy_type, navigation, player)
+	enemy.global_position = spawn_position
+	enemy.attack_requested.connect(_on_enemy_attack_requested)
+	enemy.actor_died.connect(_on_enemy_died)
+	enemy.health.damage_applied.connect(_on_enemy_damage_resolved)
+	enemy.damage_number.connect(_show_damage_number)
+	enemy.attack_missed.connect(_show_miss)
+	enemy.status_damage_requested.connect(_on_attack_requested)
+	add_child(enemy)
+	enemies.append(enemy)
+	return enemy
+
+func _spawn_training_boss() -> void:
+	encounter_active = true
+	encounter_index = 1
+	training_boss = _spawn_enemy(&"chaser", Vector2(1370, 450))
+	training_boss.actor_name = "Guardião de Treino"
+	training_boss.collision_radius = 33.0
+	training_boss.sprite_visual_scale = 1.8
+	training_boss.scenario_damage_multiplier = TRAINING_BOSS_DAMAGE_MULTIPLIER
+	training_boss.configure_hard_control_profile(true)
+	training_boss.health.max_hp = TRAINING_BOSS_HP
+	training_boss.health.current_hp = TRAINING_BOSS_HP
+	training_boss.queue_redraw()
+	status_label.text = "Treino isolado · Guardião 50.000 HP · reforços a cada 8 s"
+
+func _advance_training_adds(delta: float) -> void:
+	_training_add_elapsed += delta
+	if _training_add_elapsed < TRAINING_ADD_INTERVAL:
+		return
+	_training_add_elapsed = fmod(_training_add_elapsed, TRAINING_ADD_INTERVAL)
+	_spawn_training_add_wave()
+
+func _spawn_training_add_wave() -> void:
+	if not training_mode or run_finished or training_boss == null or not training_boss.is_alive() or not player.is_alive():
+		return
+	var living_adds := enemies.size() - 1
+	var spawn_count := mini(2, TRAINING_ADD_CAP - living_adds)
+	for spawn_index: int in range(spawn_count):
+		var spawn_position := _training_add_position()
+		if spawn_position == Vector2.INF:
+			break
+		var enemy_type: StringName = &"chaser" if (_training_wave_index + spawn_index) % 2 == 0 else &"archer"
+		var enemy := _spawn_enemy(enemy_type, spawn_position)
+		enemy.actor_name = "Reforço de Treino"
+		enemy.scenario_damage_multiplier = TRAINING_ADD_DAMAGE_MULTIPLIER
+		enemy.health.max_hp = TRAINING_ADD_HP
+		enemy.health.current_hp = TRAINING_ADD_HP
+		enemy.queue_redraw()
+	_training_wave_index += 1
+
+func _training_add_position() -> Vector2:
+	for offset: Vector2 in TRAINING_ADD_OFFSETS:
+		var candidate := training_boss.global_position + offset
+		if not navigation.is_walkable(candidate) or candidate.distance_to(player.global_position) < 130.0:
+			continue
+		var occupied := false
+		for enemy: CombatActor in enemies:
+			if is_instance_valid(enemy) and enemy.is_alive() and candidate.distance_to(enemy.global_position) < 95.0:
+				occupied = true
+				break
+		if not occupied:
+			return candidate
+	return Vector2.INF
 
 func _on_attack_requested(request: DamageRequest, target_actor: CombatActor) -> void:
 	if target_actor != null and target_actor.is_alive():
@@ -1196,6 +1276,12 @@ func _on_enemy_died(actor: CombatActor) -> void:
 		_selected_enemy = null
 	enemies.erase(actor)
 	actor.queue_free()
+	if training_mode:
+		if actor == training_boss:
+			training_boss = null
+			encounter_active = false
+			_show_result(true)
+		return
 	if not enemies.is_empty():
 		return
 	encounter_active = false
@@ -1356,6 +1442,7 @@ func _spawn_death_visual(actor: CombatActor, after_run: bool = false) -> void:
 	var visual := ActorDeathVisual.new()
 	visual.animation = actor.character_animation.death_copy()
 	visual.position = actor.position
+	visual.scale = Vector2.ONE * actor.sprite_visual_scale
 	actor.get_parent().add_child(visual)
 	# Only the terminal cosmetic continues behind the paused result overlay.
 	if after_run:
@@ -1394,11 +1481,15 @@ func _show_result(victory: bool) -> void:
 		elif effect is LightningWall or effect is SoulImpactSequence or effect is HauntConeVisual or effect is PhantomBarrier or effect is ElementalistSequenceScript:
 			effect.queue_free()
 	run_finished = true
+	_training_add_elapsed = 0.0
 	_terminal_outcome = &"completed" if victory else &"death"
-	result_title.text = "Arena concluída!" if victory else "Você caiu em combate"
+	result_title.text = ("Treino concluído!" if training_mode else "Arena concluída!") if victory else "Você caiu em combate"
 	var next_step := "Pressione R ou use o botão para voltar ao menu e iniciar outra run." if _persistent_run_active() else "Pressione R ou use o botão para reiniciar."
 	restart_button.text = "Voltar ao menu (R)" if _persistent_run_active() else "Reiniciar arena (R)"
-	result_body.text = ("Os dois encontros do Marco 1 foram vencidos.\n" if victory else "A run terminou e todo o estado temporário será descartado.\n") + next_step
+	if training_mode:
+		result_body.text = ("O Guardião caiu.\n" if victory else "Treino encerrado.\n") + "Nenhum XP ou recompensa foi salvo.\n" + next_step
+	else:
+		result_body.text = ("Os dois encontros do Marco 1 foram vencidos.\n" if victory else "A run terminou e todo o estado temporário será descartado.\n") + next_step
 	result_overlay.visible = true
 	get_tree().paused = true
 
@@ -1416,6 +1507,9 @@ func _restart_run() -> void:
 	if _persistent_run_active():
 		_return_to_character_menu()
 		return
+	if training_mode:
+		pending_run_state = RunState.from_build("", run_state.build_snapshot)
+		pending_training_mode = true
 	get_tree().paused = false
 	get_tree().reload_current_scene()
 
@@ -1425,6 +1519,9 @@ func _return_to_character_menu() -> void:
 		_report_run_close_failure(closed)
 		return
 	get_tree().paused = false
+	pending_run_state = null
+	pending_run_facade = null
+	pending_training_mode = false
 	get_tree().change_scene_to_file("res://scenes/character_menu.tscn")
 
 func _persistent_run_active() -> bool:
@@ -1470,7 +1567,7 @@ func _open_class_menu() -> void:
 		battle_controls.settings_overlay.visible = false
 	_cancel_casting()
 	_clear_hover()
-	class_label.text = "Esta run usa o personagem persistente %s.\nVolte ao menu para trocar personagem ou iniciar outra run." % player.class_definition.display_name if _persistent_run_active() else "Classe atual: %s\nEscolher uma classe inicia uma run nova e limpa todo o estado temporário." % player.class_definition.display_name
+	class_label.text = "Treino isolado da build atual. Saia pelo botão de treino para mudar a build." if training_mode else ("Esta run usa o personagem persistente %s.\nVolte ao menu para trocar personagem ou iniciar outra run." % player.class_definition.display_name if _persistent_run_active() else "Classe atual: %s\nEscolher uma classe inicia uma run nova e limpa todo o estado temporário." % player.class_definition.display_name)
 	class_overlay.visible = true
 	get_tree().paused = true
 
@@ -1480,6 +1577,9 @@ func _close_class_menu() -> void:
 
 func _select_class(new_class_id: StringName) -> void:
 	if ClassCatalog.class_definition(new_class_id) == null:
+		return
+	if training_mode:
+		_return_to_character_menu()
 		return
 	if _persistent_run_active():
 		var closed := _close_persistent_run(&"abandoned")
@@ -1554,6 +1654,8 @@ func _update_hud() -> void:
 		return
 	health_label.text = "VIDA  %d / %d" % [ceili(player.health.current_hp), ceili(player.health.max_hp)]
 	sp_label.text = "SP  %d / %d" % [floori(player.current_sp), floori(player.max_sp)]
+	if training_mode and training_boss != null and training_boss.is_alive():
+		training_status_label.text = "TREINO · Guardião %d/%d HP · reforços %d/%d" % [ceili(training_boss.health.current_hp), ceili(training_boss.health.max_hp), enemies.size() - 1, TRAINING_ADD_CAP]
 	var skill_lines: PackedStringArray = []
 	for skill_id: StringName in player.available_skill_ids():
 		var definition := ClassCatalog.skill_definition(skill_id)
@@ -1611,6 +1713,9 @@ func _show_skill_blocked(skill_name: String, cooldown: float, sp_cost: float, sk
 func _restore_context_status(serial: int) -> void:
 	if serial != _feedback_serial or run_finished:
 		return
+	if training_mode:
+		status_label.text = "Treino isolado · pratique a rotação ou saia para mudar build"
+		return
 	if encounter_active:
 		status_label.text = "Encontro %d/2 — elimine todos os inimigos" % encounter_index
 	elif reward != null:
@@ -1651,6 +1756,9 @@ func _build_ui() -> void:
 	skill_label = _make_label("", 17, Color("e9c67b"))
 	hud_column.add_child(health_label)
 	hud_column.add_child(sp_label)
+	if training_mode:
+		training_status_label = _make_label("Treino isolado", 16, Color("f5cc77"))
+		hud_column.add_child(training_status_label)
 	hud_column.add_child(skill_label)
 	defender_status_label = _make_label("", 16, Color("f5cc77"))
 	hud_column.add_child(defender_status_label)
@@ -1663,7 +1771,8 @@ func _build_ui() -> void:
 	help_panel.offset_top = 112.0
 	help_panel.offset_right = -24.0
 	help_panel.offset_bottom = 258.0
-	var help_label := _make_label("CLIQUE: mover / autoatacar o alvo\nQ / W / A / S / D: ações da classe\nDIREITO / ESC: cancelar mira\nE: augment  ·  R: reiniciar ao concluir", 16, Color("d7ddea"))
+	var help_text := "CLIQUE: mover / autoatacar o alvo\nQ / W / A / S / D: ações da classe\nDIREITO / ESC: cancelar mira\nR: reiniciar ao concluir · sem XP/recompensas" if training_mode else "CLIQUE: mover / autoatacar o alvo\nQ / W / A / S / D: ações da classe\nDIREITO / ESC: cancelar mira\nE: augment  ·  R: reiniciar ao concluir"
+	var help_label := _make_label(help_text, 16, Color("d7ddea"))
 	help_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	help_panel.add_child(help_label)
 
@@ -1693,6 +1802,15 @@ func _build_ui() -> void:
 	next_button.pressed.connect(_start_next_encounter)
 	next_button.visible = false
 	buttons.add_child(next_button)
+	if training_mode:
+		var restart_training := Button.new()
+		restart_training.text = "Reiniciar treino"
+		restart_training.pressed.connect(_restart_run)
+		buttons.add_child(restart_training)
+		var exit_training := Button.new()
+		exit_training.text = "Sair e mudar build"
+		exit_training.pressed.connect(_return_to_character_menu)
+		buttons.add_child(exit_training)
 
 	augment_overlay = _make_overlay(ui_root)
 	augment_panel = PanelContainer.new()
@@ -1748,10 +1866,10 @@ func _build_ui() -> void:
 	return_menu.pressed.connect(_return_to_character_menu)
 	result_column.add_child(return_menu)
 	var result_class := Button.new()
-	result_class.text = "Trocar classe e iniciar nova run"
+	result_class.text = "Mudar build" if training_mode else "Trocar classe e iniciar nova run"
 	result_class.custom_minimum_size = Vector2(320, 48)
 	result_class.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	result_class.pressed.connect(_open_class_menu)
+	result_class.pressed.connect(_return_to_character_menu if training_mode else _open_class_menu)
 	result_column.add_child(result_class)
 	result_overlay.visible = false
 	battle_controls = BattleControls.new()
@@ -1795,14 +1913,20 @@ func _build_ui() -> void:
 	class_label = _make_label("", 21, Color("d7ddea"))
 	class_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	class_column.add_child(class_label)
-	for class_id: StringName in [&"swordsman", &"mage"]:
-		var definition := ClassCatalog.class_definition(class_id)
-		var choose := Button.new()
-		choose.text = "Jogar de %s — iniciar nova run" % definition.display_name
-		choose.custom_minimum_size = Vector2(420, 54)
-		choose.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-		choose.pressed.connect(_select_class.bind(class_id))
-		class_column.add_child(choose)
+	if training_mode:
+		var exit_class := Button.new()
+		exit_class.text = "Sair do treino e mudar build"
+		exit_class.pressed.connect(_return_to_character_menu)
+		class_column.add_child(exit_class)
+	else:
+		for class_id: StringName in [&"swordsman", &"mage"]:
+			var definition := ClassCatalog.class_definition(class_id)
+			var choose := Button.new()
+			choose.text = "Jogar de %s — iniciar nova run" % definition.display_name
+			choose.custom_minimum_size = Vector2(420, 54)
+			choose.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+			choose.pressed.connect(_select_class.bind(class_id))
+			class_column.add_child(choose)
 	var cancel_class := Button.new()
 	cancel_class.text = "Voltar sem reiniciar"
 	cancel_class.custom_minimum_size = Vector2(300, 44)
