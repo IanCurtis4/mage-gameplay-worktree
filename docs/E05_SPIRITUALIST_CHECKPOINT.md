@@ -187,3 +187,34 @@ mediu a área opaca do sprite em 45×50 px (normal), 81×90 px (boss) e 81×90 p
 (boss espelhado), com a borda dos pés preservada em até 1 px. Capturas ficam
 somente em `.godot/verification/`, ignoradas pelo Git. Esta evidência não
 substitui a avaliação visual e de ritmo do usuário durante a partida.
+
+## Aceite técnico do adendo e candidato de playtest — Astra, 30/09/2026
+
+Candidato de runtime aprovado: `8214162`, sobre `812a49f`. A revisão inicial
+confirmou isolamento do treino e bloqueio da troca normal na fachada, mas
+identificou que CharacterAnimation sobrescrevia a escala externa do boss.
+A correção compõe escala e espelhamento dentro do desenho da animação,
+preservando o pivô dos pés e escala padrão 1 para as demais classes.
+
+Astra reproduziu a suíte integral em `812a49f` (exit 0, log local ignorado
+`.tools/training_astra_verify.log`). A suíte integral do delta `8214162`
+passou na execução do implementador. Astra reproduziu independentemente o
+probe OpenGL real: sprite normal 45×50, boss 81×90, espelhado 81×90,
+borda inferior 181/182 px, PASS; também repetiu treino integrado17.
+
+Projeto habitual estava limpo em `08c7817`; referência de backup
+`codex/backup-training-pre-playtest-20260930` preserva o candidato `8214162`.
+Base já ancestral, sem necessidade de reescrever commits. Avanço fast-forward
+para `8214162`; importação Godot4.7.2 sem erros. No destino, treino17,
+transação51, menu25 e admin12 passaram (105 checks). Checkout limpo antes
+deste registro exclusivamente documental. Master continua `ce87065`.
+
+Para testar: abrir projeto habitual, recarregar se solicitado, F5, destacar
+personagem e ativar Modo admin de testes → Treinar contra boss e reforços.
+Boss50.000HP, adds1.500HP a cada8s (até6 vivos), reiniciar/sair disponíveis.
+Primeira evolução permanece normal; troca posterior exige admin e confirmação.
+Treino não concede XP/recompensas. Não foram usados saves reais como fixtures.
+
+Aceite técnico não substitui avaliação de ritmo, legibilidade e balanceamento
+pelo usuário. Espiritualista/adendo aguardam aceite de produto; Arqueiro não
+foi liberado e nenhum merge em master foi realizado.
