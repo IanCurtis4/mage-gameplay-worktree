@@ -50,6 +50,7 @@ var elementalist_prisms: Array[Dictionary] = []
 var elementalist_ember_preview := PackedVector2Array()
 var spiritualist_marks: Array[int] = []
 var spiritualist_events: Array[Dictionary] = []
+var spiritualist_wisps: Array[Dictionary] = []
 var spiritualist_visual_clock := 0.0
 var spiritualist_drain_caster_id := 0
 var spiritualist_drain_target_id := 0
@@ -77,6 +78,18 @@ func sync_spiritualist_marks(mark_ids: Array) -> void:
 	spiritualist_marks.assign(mark_ids)
 	queue_redraw()
 
+func show_spiritualist_procession_wisp(source: Vector2, target_id: int) -> void:
+	if not source.is_finite() or target_id <= 0:
+		return
+	if spiritualist_wisps.size() >= 16:
+		spiritualist_wisps.pop_front()
+	spiritualist_wisps.append({"source": source, "target_id": target_id, "remaining": 0.22, "duration": 0.22})
+	queue_redraw()
+
+func clear_spiritualist_procession_wisps() -> void:
+	spiritualist_wisps.clear()
+	queue_redraw()
+
 func show_spiritualist_event(kind: StringName, center: Vector2) -> void:
 	if kind not in [&"sigil", &"break", &"burst", &"recovery", &"drain", &"focus_grant", &"focus_consume"] or not center.is_finite():
 		return
@@ -89,6 +102,7 @@ func show_spiritualist_event(kind: StringName, center: Vector2) -> void:
 func clear_spiritualist_visuals() -> void:
 	spiritualist_marks.clear()
 	spiritualist_events.clear()
+	spiritualist_wisps.clear()
 	spiritualist_drain_caster_id = 0
 	spiritualist_drain_target_id = 0
 	spiritualist_veil_center = Vector2.INF
@@ -249,7 +263,14 @@ func _process(delta: float) -> void:
 			spiritualist_events.remove_at(index)
 		else:
 			spiritualist_events[index] = event
-	if not spiritualist_events.is_empty() or not spiritualist_marks.is_empty() or spiritualist_drain_caster_id > 0 or spiritualist_veil_remaining > 0.0 or spiritualist_focus_remaining > 0.0:
+	for index: int in range(spiritualist_wisps.size() - 1, -1, -1):
+		var wisp: Dictionary = spiritualist_wisps[index]
+		wisp["remaining"] = maxf(0.0, float(wisp["remaining"]) - delta)
+		if float(wisp["remaining"]) <= 0.0:
+			spiritualist_wisps.remove_at(index)
+		else:
+			spiritualist_wisps[index] = wisp
+	if not spiritualist_events.is_empty() or not spiritualist_wisps.is_empty() or not spiritualist_marks.is_empty() or spiritualist_drain_caster_id > 0 or spiritualist_veil_remaining > 0.0 or spiritualist_focus_remaining > 0.0:
 		queue_redraw()
 	if click_lifetime > 0.0:
 		click_lifetime = maxf(0.0, click_lifetime - delta)
@@ -713,6 +734,19 @@ func _draw_elementalist_prism(prism: Dictionary) -> void:
 	_draw_prism_pulse(prism)
 
 func _draw_spiritualist_visuals() -> void:
+	for wisp: Dictionary in spiritualist_wisps:
+		var wisp_target := instance_from_id(int(wisp["target_id"])) as CombatActor
+		if wisp_target == null or not is_instance_valid(wisp_target) or not wisp_target.is_alive():
+			continue
+		var source: Vector2 = wisp["source"]
+		var destination := wisp_target.global_position + Vector2(0, -18)
+		var progress := 1.0 - float(wisp["remaining"]) / float(wisp["duration"])
+		var head := source.lerp(destination, progress)
+		var angle := (destination - source).angle()
+		var frame := mini(3, int(progress * 4.0))
+		draw_set_transform(head, angle, Vector2.ONE)
+		draw_texture_rect_region(SPIRITUALIST_WISP, Rect2(-42, -24, 48, 48), Rect2(float(frame * 96), 0, 96, 96), Color(1.0, 1.0, 1.0, 0.94))
+		draw_set_transform(Vector2.ZERO)
 	if spiritualist_focus_remaining > 0.0 and spiritualist_focus_caster_id > 0:
 		var focus_caster := instance_from_id(spiritualist_focus_caster_id) as CombatActor
 		if focus_caster != null and is_instance_valid(focus_caster) and focus_caster.is_alive():

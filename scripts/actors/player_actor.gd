@@ -24,6 +24,7 @@ signal elementalist_tri_nova_requested(center: Vector2, requests: Array[DamageRe
 signal spiritualist_echo_curse_requested(request: DamageRequest, target: CombatActor, echo_power: float)
 signal spiritualist_drain_requested(request: DamageRequest, target: CombatActor)
 signal spiritualist_veil_requested(center: Vector2, duration: float, weaken_fraction: float)
+signal spiritualist_procession_requested(request: DamageRequest, target: CombatActor)
 signal spiritualist_channel_interrupt_requested
 signal spiritualist_focus_event(kind: StringName)
 signal lightning_wall_requested(direction: Vector2, request: DamageRequest)
@@ -881,6 +882,18 @@ func use_spiritualist_spectral_veil(point: Vector2) -> bool:
 	resources_changed.emit()
 	return true
 
+func use_spiritualist_procession(enemy: CombatActor) -> bool:
+	var skill_id := &"spiritualist_procession"
+	if not _is_spiritualist() or _runtime_rank_definition(skill_id) == null or not can_target_skill(skill_id, enemy) or not _can_spend(skill_id):
+		return false
+	_spend(skill_id)
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(skill_id)
+	var request := _make_magic_request(enemy, skill_id, _magic_power(skill_id), definition.accuracy_mode, definition.can_crit)
+	spiritualist_procession_requested.emit(request, enemy)
+	resources_changed.emit()
+	return true
+
 func heal_from_spiritualist_drain(result: Dictionary, already_healed: float) -> float:
 	if not _is_spiritualist() or not is_alive() or int(result.get("source_id", 0)) != get_instance_id() or StringName(result.get("skill_id", &"")) != &"spiritualist_soul_drain":
 		return 0.0
@@ -1662,7 +1675,7 @@ func can_target_skill(skill_id: StringName, enemy: CombatActor) -> bool:
 		return false
 	if global_position.distance_to(enemy.global_position) > skill_range(skill_id):
 		return false
-	return skill_id not in [&"brutal_strike", &"berserker_rupture", &"berserker_execution", &"berserker_breath_steal", &"spiritualist_echo_curse", &"spiritualist_soul_drain"] or (navigation != null and navigation.is_segment_clear(global_position, enemy.global_position, 0.0))
+	return skill_id not in [&"brutal_strike", &"berserker_rupture", &"berserker_execution", &"berserker_breath_steal", &"spiritualist_echo_curse", &"spiritualist_soul_drain", &"spiritualist_procession"] or (navigation != null and navigation.is_segment_clear(global_position, enemy.global_position, 0.0))
 
 func aim_direction(point: Vector2) -> Vector2:
 	var direction := global_position.direction_to(point)
