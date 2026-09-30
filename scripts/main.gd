@@ -31,6 +31,7 @@ var enemies: Array[CombatActor] = []
 var _credited_kills: Dictionary[int, bool] = {}
 var _defender_slowed_enemies: Dictionary[int, CombatActor] = {}
 var spiritualist_echo_state := SpiritualistEchoState.new()
+var spiritualist_drain_state := SpiritualistDrainState.new()
 var reward: RewardPickup
 var encounter_index := 0
 var encounter_active := false
@@ -124,6 +125,9 @@ func _ready() -> void:
 	player.elementalist_ember_path_requested.connect(_on_elementalist_ember_path_requested)
 	player.elementalist_tri_nova_requested.connect(_on_elementalist_tri_nova_requested)
 	player.spiritualist_echo_curse_requested.connect(_on_spiritualist_echo_curse_requested)
+	player.spiritualist_drain_requested.connect(_on_spiritualist_drain_requested)
+	player.spiritualist_channel_interrupt_requested.connect(_cancel_spiritualist_drain)
+	player.health.damage_applied.connect(_on_player_damage_resolved)
 	player.lightning_wall_requested.connect(_on_lightning_wall_requested)
 	player.soul_impact_requested.connect(_on_soul_impact_requested)
 	player.haunt_requested.connect(_on_haunt_requested)
@@ -160,6 +164,7 @@ func _process(_delta: float) -> void:
 			for echo: Dictionary in spiritualist_echo_state.advance(_delta):
 				_apply_spiritualist_echo(echo)
 			battle_indicators.sync_spiritualist_marks(spiritualist_echo_state.marks.keys())
+			_advance_spiritualist_drain(_delta)
 	_update_hud()
 	if not get_tree().paused and not run_finished:
 		if _world_pointer_available():
@@ -248,6 +253,8 @@ func _key_skill(key: Key) -> StringName:
 func _commit_skill(skill: StringName, point: Vector2) -> void:
 	if skill == &"" or get_tree().paused or run_finished or not player.is_alive():
 		return
+	if spiritualist_drain_state.active:
+		_cancel_spiritualist_drain()
 	var definition := ClassCatalog.skill_definition(skill)
 	var selected_target: CombatActor
 	if definition.targeting == SkillDefinition.Targeting.SINGLE_TARGET:
@@ -408,6 +415,9 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 			_report_skill_failure(skill, selected_target)
 	elif definition.handler_id == SkillDefinition.Handler.SPIRITUALIST_ECHO_CURSE:
 		if not player.use_spiritualist_echo_curse(selected_target):
+			_report_skill_failure(skill, selected_target)
+	elif definition.handler_id == SkillDefinition.Handler.SPIRITUALIST_SOUL_DRAIN:
+		if not player.use_spiritualist_soul_drain(selected_target):
 			_report_skill_failure(skill, selected_target)
 	elif definition.handler_id == SkillDefinition.Handler.ELEMENTALIST_EMBER_PATH:
 		if not player.use_elementalist_ember_path(direction):
@@ -906,6 +916,47 @@ func _apply_spiritualist_echo(echo: Dictionary) -> void:
 	if float(result.get("actual_damage", 0.0)) > 0.0 and battle_indicators != null:
 		battle_indicators.show_spiritualist_event(&"burst", target_actor.global_position + Vector2(0, -18))
 
+func _on_spiritualist_drain_requested(request: DamageRequest, target_actor: CombatActor) -> void:
+	spiritualist_drain_state.start(target_actor, player.global_position, request)
+	if battle_indicators != null and spiritualist_drain_state.active:
+		battle_indicators.sync_spiritualist_drain(player.get_instance_id(), spiritualist_drain_state.target_id)
+
+func _advance_spiritualist_drain(delta: float) -> void:
+	if not spiritualist_drain_state.active:
+		return
+	if not player.is_alive() or player.global_position.distance_to(spiritualist_drain_state.origin) > PlayerActor.MOVEMENT_EPSILON or player.is_stunned() or player.is_feared() or player.is_rooted():
+		_cancel_spiritualist_drain()
+		return
+	var target_actor := instance_from_id(spiritualist_drain_state.target_id) as CombatActor
+	if target_actor == null or not is_instance_valid(target_actor) or not player.can_target_skill(&"spiritualist_soul_drain", target_actor):
+		_cancel_spiritualist_drain()
+		return
+	for request: DamageRequest in spiritualist_drain_state.advance(delta):
+		if not spiritualist_drain_state.active or not player.can_target_skill(&"spiritualist_soul_drain", target_actor):
+			_cancel_spiritualist_drain()
+			return
+		var healed_before := spiritualist_drain_state.healed_total
+		spiritualist_drain_state.resolve_tick()
+		var result := target_actor.apply_damage(request, rng)
+		var healed := player.heal_from_spiritualist_drain(result, healed_before)
+		spiritualist_drain_state.healed_total = healed_before + healed
+		if battle_indicators != null and float(result.get("actual_damage", 0.0)) > 0.0:
+			battle_indicators.show_spiritualist_event(&"drain", target_actor.global_position + Vector2(0, -18))
+		if not target_actor.is_alive():
+			_cancel_spiritualist_drain()
+			return
+	if not spiritualist_drain_state.active and battle_indicators != null:
+		battle_indicators.sync_spiritualist_drain(0, 0)
+
+func _cancel_spiritualist_drain() -> void:
+	spiritualist_drain_state.cancel()
+	if battle_indicators != null:
+		battle_indicators.sync_spiritualist_drain(0, 0)
+
+func _on_player_damage_resolved(result: Dictionary) -> void:
+	if float(result.get("actual_damage", 0.0)) > 0.0:
+		_cancel_spiritualist_drain()
+
 func _on_haunt_requested(origin: Vector2, direction: Vector2, cone_range: float, request: DamageRequest) -> void:
 	var visual := HauntConeVisual.new()
 	visual.configure(origin, direction, cone_range, PlayerActor.HAUNT_HALF_ANGLE)
@@ -986,6 +1037,8 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	player.remove_berserker_wound(actor.get_instance_id())
 	player.remove_elementalist_target(actor.get_instance_id())
 	spiritualist_echo_state.remove_target(actor.get_instance_id())
+	if spiritualist_drain_state.target_id == actor.get_instance_id():
+		_cancel_spiritualist_drain()
 	_spawn_death_visual(actor)
 	if actor == _hovered_enemy:
 		_hovered_enemy = null
@@ -1004,6 +1057,7 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	player.clear_elementalist_state()
 	player.clear_spiritualist_state()
 	spiritualist_echo_state.clear()
+	_cancel_spiritualist_drain()
 	battle_indicators.clear_spiritualist_visuals()
 	trap_registry.clear_all(&"encounter_end")
 	for group_name: StringName in [&"enemy_projectiles", &"player_projectiles", &"player_effects"]:
@@ -1172,6 +1226,7 @@ func _show_result(victory: bool) -> void:
 	player.clear_elementalist_state()
 	player.clear_spiritualist_state()
 	spiritualist_echo_state.clear()
+	_cancel_spiritualist_drain()
 	battle_indicators.clear_spiritualist_visuals()
 	player.clear_foliage_shelters()
 	for shelter: Node in get_tree().get_nodes_in_group("foliage_shelters"):

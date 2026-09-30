@@ -158,6 +158,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"elementalist_tri_nova", "Nova Tríplice", "D", SkillDefinition.Targeting.SELF, 30.0, 16.0, 0.70, 170.0, 0.0, 0.65, DamageRequest.AccuracyMode.GEOMETRY, true)
 	_add_skill(&"spiritualist_echo_curse", "Maldição do Eco", "D", SkillDefinition.Targeting.SINGLE_TARGET, 18.0, 6.0, 0.85, 380.0, 0.0, 0.35, DamageRequest.AccuracyMode.CONTESTED, true)
 	_add_passive_skill(&"spiritualist_echo_recovery", "Recolhimento")
+	_add_skill(&"spiritualist_soul_drain", "Drenagem Espiritual", "D", SkillDefinition.Targeting.SINGLE_TARGET, 22.0, 10.0, 0.36, 350.0, 0.0, 0.30, DamageRequest.AccuracyMode.CONTESTED, false)
 	_configure_slash_ranks()
 	_configure_dash_ranks()
 	_configure_shield_wall_ranks()
@@ -206,6 +207,7 @@ static func _ensure_built() -> void:
 	_configure_elementalist_ranks()
 	_configure_spiritualist_curse_ranks()
 	_configure_spiritualist_recovery_ranks()
+	_configure_spiritualist_drain_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -1052,6 +1054,24 @@ static func _configure_spiritualist_recovery_ranks() -> void:
 		rank.rank = index + 1
 		rank.power = refunds[index]
 		rank.effect_ids = [&"echo_trigger_sp_refund_once_per_emission_and_second"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_spiritualist_drain_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"spiritualist_soul_drain"]
+	definition.handler_id = SkillDefinition.Handler.SPIRITUALIST_SOUL_DRAIN
+	var costs: Array[float] = [22.0, 24.0, 26.0, 28.0, 30.0]
+	var powers: Array[float] = [0.36, 0.42, 0.48, 0.54, 0.60]
+	for index: int in range(powers.size()):
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 10.0
+		rank.range = 350.0
+		rank.variable_cast_time = 0.30
+		rank.power = powers[index]
+		rank.magic_weight = 1.0
+		rank.effect_ids = [&"four_ticks_each_half_second", &"heal_fifteen_percent_actual_hp_damage_capped_five_percent_caster_max_hp", &"interrupt_on_movement_cast_control_damage_or_death"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
 

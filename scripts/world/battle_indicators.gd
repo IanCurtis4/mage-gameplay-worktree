@@ -5,6 +5,7 @@ const IceWallScript = preload("res://scripts/world/ice_wall.gd")
 const SPIRITUALIST_SIGIL: Texture2D = preload("res://assets/art/vfx/spiritualist_curse_sigil.png")
 const SPIRITUALIST_BURST: Texture2D = preload("res://assets/art/vfx/spiritualist_spectral_burst.png")
 const SPIRITUALIST_WISP: Texture2D = preload("res://assets/art/vfx/spiritualist_soul_wisp.png")
+const SPIRITUALIST_HALO: Texture2D = preload("res://assets/art/vfx/spiritualist_ritual_halo.png")
 
 const READY_COLOR := Color("81dfd0")
 const BLOCKED_COLOR := Color("ff9a85")
@@ -50,13 +51,20 @@ var elementalist_ember_preview := PackedVector2Array()
 var spiritualist_marks: Array[int] = []
 var spiritualist_events: Array[Dictionary] = []
 var spiritualist_visual_clock := 0.0
+var spiritualist_drain_caster_id := 0
+var spiritualist_drain_target_id := 0
+
+func sync_spiritualist_drain(caster_id: int, target_id: int) -> void:
+	spiritualist_drain_caster_id = caster_id
+	spiritualist_drain_target_id = target_id
+	queue_redraw()
 
 func sync_spiritualist_marks(mark_ids: Array) -> void:
 	spiritualist_marks.assign(mark_ids)
 	queue_redraw()
 
 func show_spiritualist_event(kind: StringName, center: Vector2) -> void:
-	if kind not in [&"sigil", &"break", &"burst", &"recovery"] or not center.is_finite():
+	if kind not in [&"sigil", &"break", &"burst", &"recovery", &"drain"] or not center.is_finite():
 		return
 	if spiritualist_events.size() >= 64:
 		spiritualist_events.pop_front()
@@ -67,6 +75,8 @@ func show_spiritualist_event(kind: StringName, center: Vector2) -> void:
 func clear_spiritualist_visuals() -> void:
 	spiritualist_marks.clear()
 	spiritualist_events.clear()
+	spiritualist_drain_caster_id = 0
+	spiritualist_drain_target_id = 0
 	queue_redraw()
 
 func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast: bool, selected_target: CombatActor = null) -> void:
@@ -219,7 +229,7 @@ func _process(delta: float) -> void:
 			spiritualist_events.remove_at(index)
 		else:
 			spiritualist_events[index] = event
-	if not spiritualist_events.is_empty() or not spiritualist_marks.is_empty():
+	if not spiritualist_events.is_empty() or not spiritualist_marks.is_empty() or spiritualist_drain_caster_id > 0:
 		queue_redraw()
 	if click_lifetime > 0.0:
 		click_lifetime = maxf(0.0, click_lifetime - delta)
@@ -679,6 +689,15 @@ func _draw_elementalist_prism(prism: Dictionary) -> void:
 	_draw_prism_pulse(prism)
 
 func _draw_spiritualist_visuals() -> void:
+	if spiritualist_drain_caster_id > 0 and spiritualist_drain_target_id > 0:
+		var caster := instance_from_id(spiritualist_drain_caster_id) as CombatActor
+		var drain_target := instance_from_id(spiritualist_drain_target_id) as CombatActor
+		if caster != null and is_instance_valid(caster) and caster.is_alive() and drain_target != null and is_instance_valid(drain_target) and drain_target.is_alive():
+			var from := caster.global_position + Vector2(0, -24)
+			var to := drain_target.global_position + Vector2(0, -18)
+			draw_line(from, to, Color("b9cfda", 0.28), 8.0, true)
+			draw_line(from, to, Color("e5f5f8", 0.82), 2.0, true)
+			_draw_spiritualist_frame(SPIRITUALIST_HALO, int(spiritualist_visual_clock * 6.0) % 4, caster.global_position, 44.0, 0.45)
 	for target_id: int in spiritualist_marks:
 		var target := instance_from_id(target_id) as CombatActor
 		if target == null or not is_instance_valid(target) or not target.is_alive():
@@ -690,8 +709,8 @@ func _draw_spiritualist_visuals() -> void:
 		var center: Vector2 = event["center"]
 		var progress := 1.0 - float(event["remaining"]) / float(event["duration"])
 		var frame := 3 if kind == &"break" else mini(3, int(progress * 4.0))
-		var texture := SPIRITUALIST_BURST if kind == &"burst" else SPIRITUALIST_WISP if kind == &"recovery" else SPIRITUALIST_SIGIL
-		var size := 65.0 if kind == &"burst" else 35.0 if kind == &"recovery" else 48.0
+		var texture := SPIRITUALIST_BURST if kind == &"burst" else SPIRITUALIST_WISP if kind in [&"recovery", &"drain"] else SPIRITUALIST_SIGIL
+		var size := 65.0 if kind == &"burst" else 35.0 if kind == &"recovery" else 42.0 if kind == &"drain" else 48.0
 		_draw_spiritualist_frame(texture, frame, center, size, 1.0 - progress * 0.55)
 
 func _draw_spiritualist_frame(texture: Texture2D, frame: int, center: Vector2, size: float, alpha: float) -> void:

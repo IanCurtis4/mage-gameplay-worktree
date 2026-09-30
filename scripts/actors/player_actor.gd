@@ -22,6 +22,8 @@ signal elementalist_lightning_arc_requested(request: DamageRequest, target: Comb
 signal elementalist_ember_path_requested(centers: Array[Vector2], request: DamageRequest)
 signal elementalist_tri_nova_requested(center: Vector2, requests: Array[DamageRequest], marked_bonus: float)
 signal spiritualist_echo_curse_requested(request: DamageRequest, target: CombatActor, echo_power: float)
+signal spiritualist_drain_requested(request: DamageRequest, target: CombatActor)
+signal spiritualist_channel_interrupt_requested
 signal lightning_wall_requested(direction: Vector2, request: DamageRequest)
 signal soul_impact_requested(request: DamageRequest, target: CombatActor)
 signal haunt_requested(origin: Vector2, direction: Vector2, cone_range: float, request: DamageRequest)
@@ -835,6 +837,37 @@ func make_spiritualist_echo_request(enemy: CombatActor, magic_damage: float) -> 
 	request.is_secondary = true
 	return request
 
+func use_spiritualist_soul_drain(enemy: CombatActor) -> bool:
+	var skill_id := &"spiritualist_soul_drain"
+	if not _is_spiritualist() or _runtime_rank_definition(skill_id) == null or not can_target_skill(skill_id, enemy) or not _can_spend(skill_id):
+		return false
+	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
+	_spend(skill_id)
+	reveal_from_offense()
+	_path.clear()
+	_has_path_goal = false
+	target = null
+	_attack_engaged = false
+	velocity = Vector2.ZERO
+	var definition := ClassCatalog.skill_definition(skill_id)
+	var request := _make_magic_request(enemy, skill_id, _magic_power(skill_id), definition.accuracy_mode, definition.can_crit)
+	spiritualist_drain_requested.emit(request, enemy)
+	presentation_action.emit(&"cast", global_position.direction_to(enemy.global_position), 2.0)
+	resources_changed.emit()
+	return true
+
+func heal_from_spiritualist_drain(result: Dictionary, already_healed: float) -> float:
+	if not _is_spiritualist() or not is_alive() or int(result.get("source_id", 0)) != get_instance_id() or StringName(result.get("skill_id", &"")) != &"spiritualist_soul_drain":
+		return 0.0
+	var actual_damage := maxf(0.0, float(result.get("actual_damage", 0.0)))
+	var remaining_channel_cap := maxf(0.0, health.max_hp * 0.05 - already_healed)
+	var healed := minf(minf(actual_damage * 0.15, remaining_channel_cap), health.max_hp - health.current_hp)
+	if healed > 0.0:
+		health.current_hp += healed
+		resources_changed.emit()
+		queue_redraw()
+	return healed
+
 func recover_spiritualist_echo_sp(emission_id: int) -> float:
 	if not _is_spiritualist() or not is_alive() or spiritualist_recovery_cooldown > 0.0 or not run_state.build_snapshot.passive_slots.has(&"spiritualist_echo_recovery"):
 		return 0.0
@@ -1526,6 +1559,7 @@ func begin_skill_cast(skill_id: StringName, point: Vector2, enemy: CombatActor =
 	return true
 
 func cancel_active_cast() -> bool:
+	spiritualist_channel_interrupt_requested.emit()
 	if active_cast_skill == &"":
 		return false
 	active_cast_skill = &""
@@ -1581,7 +1615,7 @@ func can_target_skill(skill_id: StringName, enemy: CombatActor) -> bool:
 		return false
 	if global_position.distance_to(enemy.global_position) > skill_range(skill_id):
 		return false
-	return skill_id not in [&"brutal_strike", &"berserker_rupture", &"berserker_execution", &"berserker_breath_steal", &"spiritualist_echo_curse"] or (navigation != null and navigation.is_segment_clear(global_position, enemy.global_position, 0.0))
+	return skill_id not in [&"brutal_strike", &"berserker_rupture", &"berserker_execution", &"berserker_breath_steal", &"spiritualist_echo_curse", &"spiritualist_soul_drain"] or (navigation != null and navigation.is_segment_clear(global_position, enemy.global_position, 0.0))
 
 func aim_direction(point: Vector2) -> Vector2:
 	var direction := global_position.direction_to(point)
