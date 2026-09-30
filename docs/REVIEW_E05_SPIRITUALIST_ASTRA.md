@@ -66,3 +66,22 @@ Esta aprovação não substitui o playtest do usuário: sensação de combate,
 legibilidade sob múltiplos efeitos, FPS e balanceamento ainda precisam de
 avaliação na partida. `master` e as classes do Arqueiro continuam aguardando
 aceite explícito do usuário.
+
+## Candidato de playtest preparado
+
+Base anterior no diretório habitual: `ce87065` (Elementalista aceito).
+Após aprovação técnica, a branch de implementação limpa foi confirmada
+descendente de `codex/playtest`; o rebase não precisou reescrever commits.
+Foi criada a referência de backup
+`codex/backup-e05-spiritualist-pre-playtest-20260930` antes do avanço.
+`codex/playtest` no projeto fixo avançou por fast-forward para o candidato,
+sem tocar em `master` ou saves reais.
+
+No destino, Godot 4.7.2 importou os novos assets; verificações dirigidas de
+migração, Maldição, Recolhimento, Drenagem, visuais, fluxo integrado e
+progressão de playtest passaram (208 checks), sem ERROR. A suíte integral
+já havia passado na worktree no mesmo código. A importação normalizou
+metadados `.import` sem diferença de conteúdo e o checkout ficou limpo.
+Código de gameplay/arte aprovado em `a4c34f3`; o candidato efetivo inclui
+este registro documental. Playtest do usuário é o próximo gate. Nenhum merge
+em `master` foi realizado.
