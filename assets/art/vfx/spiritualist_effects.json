@@ -1,0 +1,41 @@
+{
+  "cell": [
+    96,
+    96
+  ],
+  "columns": 4,
+  "rows": {
+    "soul_wisp": {
+      "row": 0,
+      "pivot": [
+        48,
+        48
+      ],
+      "frames": 4
+    },
+    "curse_sigil": {
+      "row": 1,
+      "pivot": [
+        48,
+        48
+      ],
+      "frames": 4
+    },
+    "spectral_burst": {
+      "row": 2,
+      "pivot": [
+        48,
+        48
+      ],
+      "frames": 4
+    },
+    "ritual_halo": {
+      "row": 3,
+      "pivot": [
+        48,
+        63
+      ],
+      "frames": 4
+    }
+  }
+}
