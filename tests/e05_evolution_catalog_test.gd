@@ -56,7 +56,7 @@ func _check_production_roster() -> void:
 		var has_defender_metadata := definition.id == &"defender" and definition.entry_skill_id == &"defender_counterstroke" and definition.exclusive_skill_ids.size() == 7
 		var has_berserker_metadata := definition.id == &"berserker" and definition.entry_skill_id == &"berserker_rupture" and definition.exclusive_skill_ids.size() == 7
 		var has_elementalist_metadata := definition.id == &"elementalist" and definition.entry_skill_id == &"elementalist_flame_burst" and definition.exclusive_skill_ids.size() == 7
-		var has_spiritualist_work_in_progress := definition.id == &"spiritualist" and definition.entry_skill_id == &"spiritualist_echo_curse" and definition.exclusive_skill_ids == [&"spiritualist_echo_curse"]
+		var has_spiritualist_work_in_progress := definition.id == &"spiritualist" and definition.entry_skill_id == &"spiritualist_echo_curse" and definition.exclusive_skill_ids == [&"spiritualist_echo_curse", &"spiritualist_echo_recovery"]
 		var has_no_kit := definition.id not in [&"defender", &"berserker", &"elementalist", &"spiritualist"] and definition.entry_skill_id.is_empty() and definition.exclusive_skill_ids.is_empty()
 		var expected_state := (definition.content_ready and has_defender_metadata) if definition.id == &"defender" else ((definition.content_ready and has_berserker_metadata) if definition.id == &"berserker" else ((definition.content_ready and has_elementalist_metadata) if definition.id == &"elementalist" else ((not definition.content_ready and has_spiritualist_work_in_progress) if definition.id == &"spiritualist" else (not definition.content_ready and has_no_kit))))
 		_check(expected_state, "%s readiness matches completed kits and future placeholders" % definition.id)

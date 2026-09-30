@@ -401,6 +401,7 @@ func _register_elementalist_skills() -> void:
 func _register_spiritualist_skills() -> void:
 	var origin: Array[StringName] = [&"mage"]
 	add_skill(&"spiritualist_echo_curse", origin, ACTIVE, EVOLUTION_WALLET, 1, 4, &"spiritualist", _evolution_rank_requirements(5, 20))
+	add_skill(&"spiritualist_echo_recovery", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"spiritualist", _evolution_rank_requirements(3, 23))
 
 func _evolution_rank_requirements(max_rank: int, job_level: int) -> Dictionary:
 	var requirements: Dictionary = {}
@@ -469,7 +470,7 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 			]
 		if definition.id == &"spiritualist" and not normalized_overrides.has(definition.id):
 			definition.entry_skill_id = &"spiritualist_echo_curse"
-			definition.exclusive_skill_ids = [&"spiritualist_echo_curse"]
+			definition.exclusive_skill_ids = [&"spiritualist_echo_curse", &"spiritualist_echo_recovery"]
 		if normalized_overrides.has(definition.id):
 			_apply_evolution_override(definition, normalized_overrides[definition.id])
 		add_evolution(definition)

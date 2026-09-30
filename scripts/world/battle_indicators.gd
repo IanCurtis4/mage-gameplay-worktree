@@ -4,6 +4,7 @@ extends Node2D
 const IceWallScript = preload("res://scripts/world/ice_wall.gd")
 const SPIRITUALIST_SIGIL: Texture2D = preload("res://assets/art/vfx/spiritualist_curse_sigil.png")
 const SPIRITUALIST_BURST: Texture2D = preload("res://assets/art/vfx/spiritualist_spectral_burst.png")
+const SPIRITUALIST_WISP: Texture2D = preload("res://assets/art/vfx/spiritualist_soul_wisp.png")
 
 const READY_COLOR := Color("81dfd0")
 const BLOCKED_COLOR := Color("ff9a85")
@@ -55,11 +56,12 @@ func sync_spiritualist_marks(mark_ids: Array) -> void:
 	queue_redraw()
 
 func show_spiritualist_event(kind: StringName, center: Vector2) -> void:
-	if kind not in [&"sigil", &"break", &"burst"] or not center.is_finite():
+	if kind not in [&"sigil", &"break", &"burst", &"recovery"] or not center.is_finite():
 		return
 	if spiritualist_events.size() >= 64:
 		spiritualist_events.pop_front()
-	spiritualist_events.append({"kind": kind, "center": center, "remaining": 0.32, "duration": 0.32})
+	var duration := 0.24 if kind == &"recovery" else 0.32
+	spiritualist_events.append({"kind": kind, "center": center, "remaining": duration, "duration": duration})
 	queue_redraw()
 
 func clear_spiritualist_visuals() -> void:
@@ -688,8 +690,8 @@ func _draw_spiritualist_visuals() -> void:
 		var center: Vector2 = event["center"]
 		var progress := 1.0 - float(event["remaining"]) / float(event["duration"])
 		var frame := 3 if kind == &"break" else mini(3, int(progress * 4.0))
-		var texture := SPIRITUALIST_BURST if kind == &"burst" else SPIRITUALIST_SIGIL
-		var size := 65.0 if kind == &"burst" else 48.0
+		var texture := SPIRITUALIST_BURST if kind == &"burst" else SPIRITUALIST_WISP if kind == &"recovery" else SPIRITUALIST_SIGIL
+		var size := 65.0 if kind == &"burst" else 35.0 if kind == &"recovery" else 48.0
 		_draw_spiritualist_frame(texture, frame, center, size, 1.0 - progress * 0.55)
 
 func _draw_spiritualist_frame(texture: Texture2D, frame: int, center: Vector2, size: float, alpha: float) -> void:

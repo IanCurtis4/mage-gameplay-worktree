@@ -157,6 +157,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"elementalist_ember_path", "Trilha de Brasas", "D", SkillDefinition.Targeting.DIRECTION, 24.0, 10.0, 1.10, 240.0, 0.0, 0.50, DamageRequest.AccuracyMode.GEOMETRY, true)
 	_add_skill(&"elementalist_tri_nova", "Nova Tríplice", "D", SkillDefinition.Targeting.SELF, 30.0, 16.0, 0.70, 170.0, 0.0, 0.65, DamageRequest.AccuracyMode.GEOMETRY, true)
 	_add_skill(&"spiritualist_echo_curse", "Maldição do Eco", "D", SkillDefinition.Targeting.SINGLE_TARGET, 18.0, 6.0, 0.85, 380.0, 0.0, 0.35, DamageRequest.AccuracyMode.CONTESTED, true)
+	_add_passive_skill(&"spiritualist_echo_recovery", "Recolhimento")
 	_configure_slash_ranks()
 	_configure_dash_ranks()
 	_configure_shield_wall_ranks()
@@ -204,6 +205,7 @@ static func _ensure_built() -> void:
 	_configure_berserker_ranks()
 	_configure_elementalist_ranks()
 	_configure_spiritualist_curse_ranks()
+	_configure_spiritualist_recovery_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -1038,6 +1040,18 @@ static func _configure_spiritualist_curse_ranks() -> void:
 		rank.secondary_power = echoes[index]
 		rank.magic_weight = 1.0
 		rank.effect_ids = [&"direct_magic_damage", &"mark_five_seconds", &"next_direct_positive_hit_echo_after_0_35s"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_spiritualist_recovery_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"spiritualist_echo_recovery"]
+	definition.handler_id = SkillDefinition.Handler.SPIRITUALIST_ECHO_RECOVERY
+	var refunds: Array[float] = [2.0, 3.0, 4.0]
+	for index: int in range(refunds.size()):
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.power = refunds[index]
+		rank.effect_ids = [&"echo_trigger_sp_refund_once_per_emission_and_second"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
 

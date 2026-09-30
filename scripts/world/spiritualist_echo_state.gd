@@ -28,6 +28,9 @@ func record_hit(result: Dictionary, magic_attack_at_trigger: float) -> bool:
 		return false
 	if StringName(result.get("skill_id", &"")) in [&"spiritualist_echo_curse", &"spiritualist_dissipation"]:
 		return false
+	if bool(result.get("killed", false)):
+		marks.erase(target_id)
+		return false
 	var mark_data: Dictionary = marks[target_id]
 	marks.erase(target_id)
 	pending.append({

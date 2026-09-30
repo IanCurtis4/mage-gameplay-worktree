@@ -178,6 +178,9 @@ var elementalist_focus_cooldown := 0.0
 var elementalist_resonance_history: Dictionary[int, Dictionary] = {}
 var _elementalist_emission_serial := 0
 var _elementalist_refunded_emissions: Dictionary[int, bool] = {}
+var spiritualist_recovery_cooldown := 0.0
+var _spiritualist_emission_serial := 0
+var _spiritualist_refunded_emissions: Dictionary[int, bool] = {}
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
@@ -192,6 +195,7 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 	clear_defender_state()
 	clear_berserker_state()
 	clear_elementalist_state()
+	clear_spiritualist_state()
 	var derived := _build_stat_breakdown()
 	var class_color := Color("8e73de") if class_id == &"mage" else Color("6fa85a") if class_id == &"archer" else Color("55a8d9")
 	setup(class_definition.display_name, class_color, derived, 20.0)
@@ -830,6 +834,26 @@ func make_spiritualist_echo_request(enemy: CombatActor, magic_damage: float) -> 
 	var request := _make_magic_request(enemy, &"spiritualist_echo_curse", magic_damage, DamageRequest.AccuracyMode.GEOMETRY, false)
 	request.is_secondary = true
 	return request
+
+func recover_spiritualist_echo_sp(emission_id: int) -> float:
+	if not _is_spiritualist() or not is_alive() or spiritualist_recovery_cooldown > 0.0 or not run_state.build_snapshot.passive_slots.has(&"spiritualist_echo_recovery"):
+		return 0.0
+	var rank_definition := _runtime_rank_definition(&"spiritualist_echo_recovery")
+	if rank_definition == null or (emission_id > 0 and _spiritualist_refunded_emissions.has(emission_id)):
+		return 0.0
+	var recovered := minf(rank_definition.power, maxf(0.0, max_sp - current_sp))
+	if recovered <= 0.0:
+		return 0.0
+	current_sp += recovered
+	spiritualist_recovery_cooldown = 1.0
+	if emission_id > 0:
+		_spiritualist_refunded_emissions[emission_id] = true
+	resources_changed.emit()
+	return recovered
+
+func clear_spiritualist_state() -> void:
+	spiritualist_recovery_cooldown = 0.0
+	_spiritualist_refunded_emissions.clear()
 
 func use_spear(skill_id: StringName, enemy: CombatActor) -> bool:
 	if class_id != &"mage" or skill_id not in [&"fire_spear", &"ice_spear"] or not can_target_skill(skill_id, enemy) or not _can_spend(skill_id):
@@ -1639,6 +1663,7 @@ func _process(delta: float) -> void:
 		return
 	berserker_pursuit_cooldown = maxf(0.0, berserker_pursuit_cooldown - delta)
 	elementalist_focus_cooldown = maxf(0.0, elementalist_focus_cooldown - delta)
+	spiritualist_recovery_cooldown = maxf(0.0, spiritualist_recovery_cooldown - delta)
 	for target_id: int in elementalist_focus_history.keys():
 		var focus: Dictionary = elementalist_focus_history[target_id]
 		focus["remaining"] = maxf(0.0, float(focus["remaining"]) - delta)
@@ -1943,6 +1968,9 @@ func _make_magic_request(enemy: CombatActor, skill_id: StringName, power: float,
 	if _is_elementalist():
 		_elementalist_emission_serial += 1
 		request.emission_id = _elementalist_emission_serial
+	elif _is_spiritualist():
+		_spiritualist_emission_serial += 1
+		request.emission_id = _spiritualist_emission_serial
 	if _is_elementalist() and run_state.build_snapshot.passive_slots.has(&"elementalist_prismatic_resonance"):
 		var resonance_rank := _runtime_rank_definition(&"elementalist_prismatic_resonance")
 		if resonance_rank != null:

@@ -1002,6 +1002,7 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	_clear_defender_runtime()
 	player.clear_berserker_state()
 	player.clear_elementalist_state()
+	player.clear_spiritualist_state()
 	spiritualist_echo_state.clear()
 	battle_indicators.clear_spiritualist_visuals()
 	trap_registry.clear_all(&"encounter_end")
@@ -1023,10 +1024,15 @@ func _on_enemy_damage_resolved(result: Dictionary) -> void:
 	if player == null or not is_instance_valid(player) or not player.is_alive() or int(result.get("source_id", 0)) != player.get_instance_id():
 		return
 	player.record_berserker_damage(result)
-	if spiritualist_echo_state.record_hit(result, player.spiritualist_magic_attack()) and battle_indicators != null:
-		var mark_target := instance_from_id(int(result.get("target_id", 0))) as CombatActor
-		if mark_target != null and is_instance_valid(mark_target):
-			battle_indicators.show_spiritualist_event(&"break", mark_target.global_position + Vector2(0, -22))
+	var echo_triggered := spiritualist_echo_state.record_hit(result, player.spiritualist_magic_attack())
+	if echo_triggered:
+		if battle_indicators != null:
+			var mark_target := instance_from_id(int(result.get("target_id", 0))) as CombatActor
+			if mark_target != null and is_instance_valid(mark_target):
+				battle_indicators.show_spiritualist_event(&"break", mark_target.global_position + Vector2(0, -22))
+		var recovered := player.recover_spiritualist_echo_sp(int(result.get("emission_id", 0)))
+		if recovered > 0.0 and battle_indicators != null:
+			battle_indicators.show_spiritualist_event(&"recovery", player.global_position + Vector2(0, -22))
 	var previous_sp := player.current_sp
 	var resonance_feedback := bool(result.get("can_trigger_effects", false)) and float(result.get("actual_damage", 0.0)) > 0.0 and player.elementalist_resonance_ready(int(result.get("target_id", 0)), StringName(result.get("skill_id", &"")))
 	player.record_elementalist_damage(result)
@@ -1164,6 +1170,7 @@ func _show_result(victory: bool) -> void:
 	_clear_defender_runtime()
 	player.clear_berserker_state()
 	player.clear_elementalist_state()
+	player.clear_spiritualist_state()
 	spiritualist_echo_state.clear()
 	battle_indicators.clear_spiritualist_visuals()
 	player.clear_foliage_shelters()
