@@ -37,6 +37,21 @@ func fraction(attribute: StringName) -> float:
 			strongest = maxf(strongest, float(entry["fraction"]))
 	return strongest
 
+func effective_state(attribute: StringName) -> Dictionary:
+	var strongest := 0.0
+	var remaining := 0.0
+	for entry: Dictionary in _entries.get(attribute, {}).values():
+		var entry_remaining := float(entry["remaining"])
+		if entry_remaining <= 0.0:
+			continue
+		var entry_fraction := float(entry["fraction"])
+		if entry_fraction > strongest:
+			strongest = entry_fraction
+			remaining = entry_remaining
+		elif is_equal_approx(entry_fraction, strongest):
+			remaining = maxf(remaining, entry_remaining)
+	return {"fraction": strongest, "remaining": remaining}
+
 func remaining(attribute: StringName, source: StringName = &"") -> float:
 	var entries: Dictionary = _entries.get(attribute, {})
 	if not source.is_empty():

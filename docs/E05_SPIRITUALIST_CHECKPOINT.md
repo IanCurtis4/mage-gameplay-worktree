@@ -218,3 +218,35 @@ Treino não concede XP/recompensas. Não foram usados saves reais como fixtures.
 Aceite técnico não substitui avaliação de ritmo, legibilidade e balanceamento
 pelo usuário. Espiritualista/adendo aguardam aceite de produto; Arqueiro não
 foi liberado e nenhum merge em master foi realizado.
+
+## Adendo de legibilidade de combate — candidato para revisão Astra
+
+O playtest apontou que os efeitos do Espiritualista eram bonitos, mas não
+permitiam distinguir com segurança a marca, o Eco preparado e o dano do Eco.
+O pacote conserva fórmulas, durações, custo, slots, persistência e bitmaps. A
+Maldição agora apresenta anel de duração e elo aberto; o acerto direto troca a
+marca por arcos convergentes e aviso `ECO PREPARADO`; somente dano efetivo do
+Eco produz `ECO! N` e pulso duplo. Absorção completa informa `ABSORVIDO`, sem
+falso sucesso. Rito positivo rompe a marca com fragmentos e `MARCA DISSIPADA`,
+sem armar Eco. Expiração focada é discreta e não usa pulso de impacto.
+
+Drenagem expõe ticks resolvidos `N/4`, interrupção e cura efetiva; Foco usa
+losango/temporizador no personagem, com feedback de concessão/consumo. O
+enfraquecimento mostra somente a fonte efetiva mais forte de dano causado,
+com tempo restante, sem somar fontes. O painel contextual compacto mostra o
+alvo focado e estados reais, com transições recentes quando o texto de mundo
+fica encoberto. As rotas expandidas aparecem apenas para ações equipadas e
+passiva de Foco instalada. Textos de combate ganham contorno e empilhamento
+somente em runs do Espiritualista; outras classes mantêm sua apresentação.
+
+Evidência: `tests/e05_spiritualist_readability_test.gd` cobre 31 checks de
+marca, preparo, absorção, múltiplos alvos, Rito, debuff, pausa, expiração,
+Drenagem 0/1/3/4 ticks, Foco e limpeza. O probe OpenGL real
+`tools/spiritualist_readability_renderer_probe.gd` reproduz boss e reforços
+com capturas locais ignoradas em `.godot/verification/`, verificando as seis
+etapas (inclusive ajuda expandida) e ausência de sobreposição entre painéis
+em 1280×720. `tools/verify.ps1`
+integral passou com Godot 4.7.2 standard após a implementação. Permanecem
+para o playtest humano a leitura em movimento, densidade de efeitos e FPS em
+combate prolongado. Este adendo é do mesmo checkpoint de classe; não libera
+outros épicos nem autoriza merge em `master` antes do aceite do usuário.

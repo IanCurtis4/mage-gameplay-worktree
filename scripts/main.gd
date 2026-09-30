@@ -47,6 +47,11 @@ var spiritualist_veil_state := SpiritualistVeilState.new()
 var spiritualist_procession_state := SpiritualistProcessionState.new()
 var spiritualist_veil_fraction := 0.0
 var _spiritualist_veil_members: Dictionary[int, CombatActor] = {}
+var _spiritualist_echo_number_target_id := 0
+var _spiritualist_feedback_labels: Array[Label] = []
+var _spiritualist_channel_notice_remaining := 0.0
+var _spiritualist_recent_feedback := ""
+var _spiritualist_recent_feedback_remaining := 0.0
 var reward: RewardPickup
 var encounter_index := 0
 var encounter_active := false
@@ -71,6 +76,11 @@ var next_button: Button
 var ui_root: Control
 var hud_panel: PanelContainer
 var help_panel: PanelContainer
+var spiritualist_panel: PanelContainer
+var spiritualist_state_label: Label
+var spiritualist_hint_label: Label
+var spiritualist_help_label: Label
+var spiritualist_help_toggle: Button
 var bottom_controls: VBoxContainer
 var augment_overlay: Control
 var choice_column: VBoxContainer
@@ -187,17 +197,20 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	player.regenerate_hp(_delta, encounter_active, get_tree().paused or run_finished)
 	if not get_tree().paused and not run_finished:
+		_spiritualist_channel_notice_remaining = maxf(0.0, _spiritualist_channel_notice_remaining - _delta)
+		_spiritualist_recent_feedback_remaining = maxf(0.0, _spiritualist_recent_feedback_remaining - _delta)
 		if training_mode and player.is_alive() and training_boss != null and training_boss.is_alive():
 			_advance_training_adds(_delta)
 		_sync_defender_anchor()
 		_sync_berserker_wound_visuals()
 		if player.is_alive():
+			var marks_before := spiritualist_echo_state.marks.keys()
 			for echo: Dictionary in spiritualist_echo_state.advance(_delta):
 				_apply_spiritualist_echo(echo)
-			battle_indicators.sync_spiritualist_marks(spiritualist_echo_state.marks.keys())
 			_advance_spiritualist_drain(_delta)
 			_advance_spiritualist_veil(_delta)
 			_advance_spiritualist_procession(_delta)
+			_sync_spiritualist_combat_state(marks_before)
 			battle_indicators.sync_spiritualist_focus(player.get_instance_id(), player.spiritualist_focus_remaining)
 	_update_hud()
 	if not get_tree().paused and not run_finished:
@@ -1016,15 +1029,47 @@ func _on_spiritualist_echo_curse_requested(request: DamageRequest, target_actor:
 		spiritualist_echo_state.mark(target_actor.get_instance_id(), echo_power)
 		if battle_indicators != null:
 			battle_indicators.show_spiritualist_event(&"sigil", target_actor.global_position + Vector2(0, -22))
+		_show_spiritualist_feedback(target_actor, "AMALDIÇOADO", Color("e6d9f2"))
 
 func _apply_spiritualist_echo(echo: Dictionary) -> void:
 	var target_actor := instance_from_id(int(echo["target_id"])) as CombatActor
 	if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
 		return
 	var request := player.make_spiritualist_echo_request(target_actor, float(echo["magic_damage"]))
+	_spiritualist_echo_number_target_id = target_actor.get_instance_id()
 	var result := target_actor.apply_damage(request, rng)
+	_spiritualist_echo_number_target_id = 0
 	if float(result.get("actual_damage", 0.0)) > 0.0 and battle_indicators != null:
-		battle_indicators.show_spiritualist_event(&"burst", target_actor.global_position + Vector2(0, -18))
+		battle_indicators.show_spiritualist_event(&"echo_hit", target_actor.global_position + Vector2(0, -18))
+	elif float(result.get("absorbed_damage", 0.0)) > 0.0 and float(result.get("actual_damage", 0.0)) <= 0.0:
+		_show_spiritualist_feedback(target_actor, "ABSORVIDO", Color("b9cbd3"))
+
+func _sync_spiritualist_combat_state(marks_before: Array = []) -> void:
+	if battle_indicators == null or player.run_state == null or player.run_state.build_snapshot.evolution_id != &"spiritualist":
+		return
+	var focus := _focused_spiritualist_target()
+	for target_id: int in marks_before:
+		if spiritualist_echo_state.marks.has(target_id):
+			continue
+		var target := instance_from_id(target_id) as CombatActor
+		if target != null and is_instance_valid(target) and target == focus and target.is_alive():
+			battle_indicators.show_spiritualist_event(&"expire", target.global_position + Vector2(0, -37))
+			_show_spiritualist_feedback(target, "MALDIÇÃO EXPIROU", Color("b9cbd3"))
+	var weakened: Dictionary[int, Dictionary] = {}
+	for enemy: CombatActor in enemies:
+		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
+			continue
+		var state := enemy.attribute_debuffs.effective_state(AttributeDebuffState.DAMAGE_DEALT)
+		if float(state["fraction"]) > 0.0:
+			weakened[enemy.get_instance_id()] = state
+	battle_indicators.sync_spiritualist_combat_state(spiritualist_echo_state.marks, spiritualist_echo_state.pending, weakened)
+
+func _focused_spiritualist_target() -> CombatActor:
+	if _selected_enemy != null and is_instance_valid(_selected_enemy) and _selected_enemy.is_alive():
+		return _selected_enemy
+	if _hovered_enemy != null and is_instance_valid(_hovered_enemy) and _hovered_enemy.is_alive():
+		return _hovered_enemy
+	return null
 
 func _on_spiritualist_drain_requested(request: DamageRequest, target_actor: CombatActor) -> void:
 	spiritualist_drain_state.start(target_actor, player.global_position, request)
@@ -1052,6 +1097,8 @@ func _advance_spiritualist_drain(delta: float) -> void:
 		var result := target_actor.apply_damage(request, rng)
 		var healed := player.heal_from_spiritualist_drain(result, healed_before)
 		spiritualist_drain_state.healed_total = healed_before + healed
+		if healed > 0.0:
+			_show_spiritualist_feedback(player, "+%d HP" % ceili(healed), Color("9ce6c7"))
 		if battle_indicators != null and float(result.get("actual_damage", 0.0)) > 0.0:
 			battle_indicators.show_spiritualist_return_wisp(target_actor.global_position + Vector2(0, -18), player.get_instance_id(), &"drain")
 		if not target_actor.is_alive():
@@ -1063,6 +1110,8 @@ func _advance_spiritualist_drain(delta: float) -> void:
 func _cancel_spiritualist_drain() -> void:
 	var was_active := spiritualist_drain_state.active
 	spiritualist_drain_state.cancel()
+	if was_active and player != null and is_instance_valid(player) and player.is_alive() and encounter_active and not run_finished:
+		_spiritualist_channel_notice_remaining = 1.1
 	if was_active and player != null and is_instance_valid(player) and player.character_animation != null and player.character_animation.state.action == &"cast":
 		player.presentation_action.emit(&"cast_cancel", Vector2.ZERO, 0.0)
 	if battle_indicators != null:
@@ -1077,6 +1126,7 @@ func _on_player_damage_resolved(result: Dictionary) -> void:
 func _on_spiritualist_focus_event(kind: StringName) -> void:
 	if battle_indicators != null:
 		battle_indicators.show_spiritualist_event(&"focus_grant" if kind == &"grant" else &"focus_consume", player.global_position + Vector2(0, -28))
+	_show_spiritualist_feedback(player, "FOCO PRONTO" if kind == &"grant" else "FOCO CONSUMIDO", Color("e9d9f5"))
 
 func _on_spiritualist_veil_requested(center: Vector2, duration: float, weaken_fraction: float) -> void:
 	_clear_spiritualist_veil()
@@ -1178,9 +1228,10 @@ func _on_spiritualist_dissipation_requested(center: Vector2, request: DamageRequ
 		if float(result.get("actual_damage", 0.0)) <= 0.0:
 			continue
 		if was_marked:
-			spiritualist_echo_state.consume_mark(target_id)
-			if battle_indicators != null:
-				battle_indicators.show_spiritualist_event(&"break", target_actor.global_position + Vector2(0, -22))
+			if spiritualist_echo_state.consume_mark(target_id):
+				if battle_indicators != null:
+					battle_indicators.show_spiritualist_event(&"break", target_actor.global_position + Vector2(0, -22))
+				_show_spiritualist_feedback(target_actor, "MARCA DISSIPADA", Color("f5dacf"))
 		if target_actor.is_alive():
 			target_actor.apply_weaken(0.20, 2.0, &"spiritualist_dissipation")
 
@@ -1297,6 +1348,7 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	_clear_spiritualist_veil()
 	_cancel_spiritualist_procession()
 	battle_indicators.clear_spiritualist_visuals()
+	_clear_spiritualist_feedback()
 	trap_registry.clear_all(&"encounter_end")
 	for group_name: StringName in [&"enemy_projectiles", &"player_projectiles", &"player_effects"]:
 		for runtime_node: Node in get_tree().get_nodes_in_group(group_name):
@@ -1321,8 +1373,11 @@ func _on_enemy_damage_resolved(result: Dictionary) -> void:
 		if battle_indicators != null:
 			var mark_target := instance_from_id(int(result.get("target_id", 0))) as CombatActor
 			if mark_target != null and is_instance_valid(mark_target):
-				battle_indicators.show_spiritualist_event(&"break", mark_target.global_position + Vector2(0, -22))
+				battle_indicators.show_spiritualist_event(&"echo_ready", mark_target.global_position + Vector2(0, -37))
+				_show_spiritualist_feedback(mark_target, "ECO PREPARADO", Color("d9eafa"))
 		var recovered := player.recover_spiritualist_echo_sp(int(result.get("emission_id", 0)))
+		if recovered > 0.0:
+			_show_spiritualist_feedback(player, "+%d SP" % ceili(recovered), Color("9fcdf2"))
 		if recovered > 0.0 and battle_indicators != null:
 			var recovery_target := instance_from_id(int(result.get("target_id", 0))) as CombatActor
 			var source := recovery_target.global_position + Vector2(0, -18) if recovery_target != null and is_instance_valid(recovery_target) else player.global_position + Vector2(0, -42)
@@ -1471,6 +1526,7 @@ func _show_result(victory: bool) -> void:
 	_clear_spiritualist_veil()
 	_cancel_spiritualist_procession()
 	battle_indicators.clear_spiritualist_visuals()
+	_clear_spiritualist_feedback()
 	player.clear_foliage_shelters()
 	for shelter: Node in get_tree().get_nodes_in_group("foliage_shelters"):
 		if shelter is FoliageShelter:
@@ -1630,16 +1686,64 @@ func _select_enemy(enemy: CombatActor) -> void:
 func _show_damage_number(actor: CombatActor, amount: int, critical: bool) -> void:
 	if amount <= 0:
 		return
+	if _spiritualist_echo_number_target_id == actor.get_instance_id():
+		_remember_spiritualist_feedback(actor, "ECO! %d" % amount)
+		_show_combat_text(actor, "ECO! %d" % amount, Color("d9eafa"), 22)
+		return
 	_show_combat_text(actor, ("CRÍTICO %d" if critical else "%d") % amount, Color("ffd166") if critical else Color.WHITE, 20 if critical else 17)
 
 func _show_miss(actor: CombatActor) -> void:
 	_show_combat_text(actor, "ERROU", Color("b9cbd3"), 16)
 
-func _show_combat_text(actor: CombatActor, text: String, color: Color, font_size: int) -> void:
+func _show_spiritualist_feedback(actor: CombatActor, message: String, color: Color) -> void:
+	if actor == null or not is_instance_valid(actor):
+		return
+	for index: int in range(_spiritualist_feedback_labels.size() - 1, -1, -1):
+		if not is_instance_valid(_spiritualist_feedback_labels[index]):
+			_spiritualist_feedback_labels.remove_at(index)
+	while _spiritualist_feedback_labels.size() >= 12:
+		var oldest: Label = _spiritualist_feedback_labels.pop_front()
+		if is_instance_valid(oldest):
+			oldest.queue_free()
+	var stacked := 0
+	for label: Label in _spiritualist_feedback_labels:
+		if is_instance_valid(label) and label.get_meta("actor_id", 0) == actor.get_instance_id():
+			stacked += 1
+	var feedback_label := _show_combat_text(actor, message, color, 15, mini(stacked, 2) * 20.0)
+	feedback_label.set_meta("actor_id", actor.get_instance_id())
+	_spiritualist_feedback_labels.append(feedback_label)
+	_remember_spiritualist_feedback(actor, message)
+
+func _remember_spiritualist_feedback(actor: CombatActor, message: String) -> void:
+	if actor != player and actor != _focused_spiritualist_target():
+		return
+	if message.begins_with("+") and _spiritualist_recent_feedback_remaining > 0.0 and not _spiritualist_recent_feedback.begins_with("+"):
+		return
+	_spiritualist_recent_feedback = message
+	_spiritualist_recent_feedback_remaining = 0.9
+
+func _clear_spiritualist_feedback() -> void:
+	for label: Label in _spiritualist_feedback_labels:
+		if is_instance_valid(label):
+			label.queue_free()
+	_spiritualist_feedback_labels.clear()
+	_spiritualist_channel_notice_remaining = 0.0
+	_spiritualist_recent_feedback_remaining = 0.0
+	_spiritualist_recent_feedback = ""
+
+func _show_combat_text(actor: CombatActor, text: String, color: Color, font_size: int, vertical_offset: float = 0.0) -> Label:
 	var label := Label.new()
 	label.text = text
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	label.global_position = actor.global_position + Vector2(-22, -78)
+	var spiritualist_style := run_state != null and run_state.build_snapshot != null and run_state.build_snapshot.evolution_id == &"spiritualist"
+	if spiritualist_style:
+		label.custom_minimum_size = Vector2(200, 0)
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.global_position = actor.global_position + Vector2(-100, -maxf(78.0, 52.0 * actor.sprite_visual_scale + 20.0) - vertical_offset)
+		label.add_theme_color_override("font_outline_color", Color("101725"))
+		label.add_theme_constant_override("outline_size", 3)
+	else:
+		label.global_position = actor.global_position + Vector2(-22, -78 - vertical_offset)
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", color)
 	label.z_index = 20
@@ -1648,6 +1752,7 @@ func _show_combat_text(actor: CombatActor, text: String, color: Color, font_size
 	tween.tween_property(label, "position", label.position + Vector2(0, -34), 0.55)
 	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.55)
 	tween.tween_callback(label.queue_free)
+	return label
 
 func _update_hud() -> void:
 	if player == null or player.health == null:
@@ -1667,6 +1772,7 @@ func _update_hud() -> void:
 	if defender_status_label != null:
 		defender_status_label.text = player.defender_feedback_text()
 		defender_status_label.visible = not defender_status_label.text.is_empty()
+	_update_spiritualist_panel()
 	augment_button.text = "Escolher augment (E) — %d pendente(s)" % run_state.pending_choices
 	augment_button.visible = run_state.pending_choices > 0
 	if battle_controls != null:
@@ -1725,6 +1831,113 @@ func _restore_context_status(serial: int) -> void:
 	elif encounter_index < 2:
 		status_label.text = "Augment aplicado — inicie o próximo encontro"
 
+func _update_spiritualist_panel() -> void:
+	if spiritualist_panel == null:
+		return
+	var target := _focused_spiritualist_target()
+	var lines: Array[String] = []
+	if target == null:
+		lines.append("Alvo: nenhum · clique ou mire um inimigo")
+	else:
+		var target_id := target.get_instance_id()
+		lines.append("Alvo: %s" % target.actor_name)
+		if spiritualist_echo_state.marks.has(target_id):
+			lines.append("MALDIÇÃO %.1fs · próximo acerto direto prepara Eco" % float(spiritualist_echo_state.marks[target_id]["remaining"]))
+		else:
+			for echo: Dictionary in spiritualist_echo_state.pending:
+				if int(echo["target_id"]) == target_id:
+					lines.append("ECO PREPARADO %.1fs" % float(echo["remaining"]))
+					break
+		var weakened := target.attribute_debuffs.effective_state(AttributeDebuffState.DAMAGE_DEALT)
+		if float(weakened["fraction"]) > 0.0:
+			lines.append("DANO CAUSADO −%d%% · %.1fs" % [roundi(float(weakened["fraction"]) * 100.0), float(weakened["remaining"])])
+	if spiritualist_drain_state.active:
+		lines.append("CANALIZANDO %d/%d" % [spiritualist_drain_state.ticks_resolved, SpiritualistDrainState.TICK_COUNT])
+	elif _spiritualist_channel_notice_remaining > 0.0:
+		lines.append("CANAL INTERROMPIDO")
+	if player.spiritualist_focus_remaining > 0.0:
+		lines.append("FOCO PRONTO %.1fs" % player.spiritualist_focus_remaining)
+	var state_text := "\n".join(lines)
+	if spiritualist_state_label.text != state_text:
+		spiritualist_state_label.text = state_text
+	var equipped := player.available_skill_ids()
+	var hint := "Selecione um alvo para ler os efeitos ativos."
+	if target != null:
+		var target_id := target.get_instance_id()
+		if spiritualist_echo_state.marks.has(target_id):
+			hint = "Autoataque/acerto direto → Eco."
+			if equipped.has(&"spiritualist_dissipation"):
+				hint += " Rito rompe a marca sem gerar Eco."
+		elif spiritualist_echo_state.pending.any(func(echo: Dictionary) -> bool: return int(echo["target_id"]) == target_id):
+			hint = "Eco preparado; confirme o dano no impacto."
+		elif equipped.has(&"spiritualist_echo_curse"):
+			hint = "Maldição → acerto direto → Eco."
+		else:
+			hint = "Use as ações equipadas; Maldição não está na barra."
+	if player.spiritualist_focus_remaining > 0.0:
+		var consumers: Array[String] = []
+		if equipped.has(&"spiritualist_echo_curse"):
+			consumers.append("Maldição")
+		if equipped.has(&"spiritualist_dissipation"):
+			consumers.append("Rito")
+		if not consumers.is_empty():
+			hint += " Foco fortalece %s." % " ou ".join(consumers)
+	if _spiritualist_recent_feedback_remaining > 0.0:
+		hint = _spiritualist_recent_feedback
+	if spiritualist_hint_label.text != hint:
+		spiritualist_hint_label.text = hint
+	var help_text := _spiritualist_route_help(equipped)
+	if spiritualist_help_label.text != help_text:
+		spiritualist_help_label.text = help_text
+
+func _spiritualist_route_help(equipped: Array) -> String:
+	var lines: Array[String] = []
+	if equipped.has(&"spiritualist_echo_curse"):
+		lines.append("Maldição → auto/acerto direto → Eco após %.2fs." % SpiritualistEchoState.ECHO_DELAY)
+		if equipped.has(&"spiritualist_dissipation"):
+			lines.append("Alternativa: Maldição → Rito → marca dissipada; sem Eco.")
+	if equipped.has(&"spiritualist_soul_drain"):
+		if player.run_state.build_snapshot.passive_slots.has(&"spiritualist_channel_focus"):
+			lines.append("Drenagem completa (4 ticks) → Foco por 5s.")
+		lines.append("Movimento, dano e controle interrompem Drenagem.")
+	if lines.is_empty():
+		lines.append("Equipe ações do Espiritualista no preset para ver rotas.")
+	return "\n".join(lines)
+
+func _build_spiritualist_panel() -> void:
+	spiritualist_panel = PanelContainer.new()
+	spiritualist_panel.name = "SpiritualistReadability"
+	spiritualist_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	spiritualist_panel.offset_left = -440.0
+	spiritualist_panel.offset_top = 265.0
+	spiritualist_panel.offset_right = -24.0
+	spiritualist_panel.offset_bottom = 445.0
+	ui_root.add_child(spiritualist_panel)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 5)
+	spiritualist_panel.add_child(column)
+	var title := _make_label("Leitura espiritual", 17, Color("e9d9f5"))
+	column.add_child(title)
+	spiritualist_state_label = _make_label("", 14, Color("e5eff3"))
+	spiritualist_state_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	column.add_child(spiritualist_state_label)
+	spiritualist_hint_label = _make_label("", 14, Color("ddcce7"))
+	spiritualist_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	column.add_child(spiritualist_hint_label)
+	spiritualist_help_toggle = Button.new()
+	spiritualist_help_toggle.text = "Como combinar ▾"
+	spiritualist_help_toggle.toggle_mode = true
+	spiritualist_help_toggle.toggled.connect(func(expanded: bool) -> void:
+		spiritualist_help_label.visible = expanded
+		spiritualist_help_toggle.text = "Ocultar rotas ▴" if expanded else "Como combinar ▾"
+		spiritualist_panel.offset_bottom = 515.0 if expanded else 445.0
+	)
+	column.add_child(spiritualist_help_toggle)
+	spiritualist_help_label = _make_label("", 13, Color("cbd4df"))
+	spiritualist_help_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	spiritualist_help_label.visible = false
+	column.add_child(spiritualist_help_label)
+
 func _build_ui() -> void:
 	var canvas := CanvasLayer.new()
 	canvas.layer = 50
@@ -1775,6 +1988,8 @@ func _build_ui() -> void:
 	var help_label := _make_label(help_text, 16, Color("d7ddea"))
 	help_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	help_panel.add_child(help_label)
+	if run_state.build_snapshot != null and run_state.build_snapshot.evolution_id == &"spiritualist":
+		_build_spiritualist_panel()
 
 	bottom_controls = VBoxContainer.new()
 	ui_root.add_child(bottom_controls)

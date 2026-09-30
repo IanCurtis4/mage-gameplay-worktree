@@ -49,6 +49,9 @@ var elementalist_arc_links: Array[Dictionary] = []
 var elementalist_prisms: Array[Dictionary] = []
 var elementalist_ember_preview := PackedVector2Array()
 var spiritualist_marks: Array[int] = []
+var spiritualist_mark_remaining: Dictionary[int, float] = {}
+var spiritualist_pending_remaining: Dictionary[int, float] = {}
+var spiritualist_weakened: Dictionary[int, Dictionary] = {}
 var spiritualist_events: Array[Dictionary] = []
 var spiritualist_wisps: Array[Dictionary] = []
 var spiritualist_return_wisps: Array[Dictionary] = []
@@ -77,6 +80,20 @@ func sync_spiritualist_drain(caster_id: int, target_id: int) -> void:
 
 func sync_spiritualist_marks(mark_ids: Array) -> void:
 	spiritualist_marks.assign(mark_ids)
+	spiritualist_mark_remaining.clear()
+	queue_redraw()
+
+func sync_spiritualist_combat_state(marks: Dictionary, pending: Array[Dictionary], weakened: Dictionary[int, Dictionary]) -> void:
+	spiritualist_marks.clear()
+	spiritualist_mark_remaining.clear()
+	for target_id: int in marks.keys():
+		spiritualist_marks.append(target_id)
+		spiritualist_mark_remaining[target_id] = maxf(0.0, float(marks[target_id].get("remaining", 0.0)))
+	spiritualist_pending_remaining.clear()
+	for echo: Dictionary in pending:
+		var target_id := int(echo["target_id"])
+		spiritualist_pending_remaining[target_id] = maxf(0.0, float(echo["remaining"]))
+	spiritualist_weakened = weakened.duplicate(true)
 	queue_redraw()
 
 func show_spiritualist_procession_wisp(source: Vector2, target_id: int) -> void:
@@ -107,7 +124,7 @@ func clear_spiritualist_drain_wisps() -> void:
 	queue_redraw()
 
 func show_spiritualist_event(kind: StringName, center: Vector2) -> void:
-	if kind not in [&"sigil", &"break", &"burst", &"focus_grant", &"focus_consume", &"ritual"] or not center.is_finite():
+	if kind not in [&"sigil", &"break", &"burst", &"echo_hit", &"echo_ready", &"expire", &"focus_grant", &"focus_consume", &"ritual"] or not center.is_finite():
 		return
 	if spiritualist_events.size() >= 64:
 		spiritualist_events.pop_front()
@@ -116,6 +133,9 @@ func show_spiritualist_event(kind: StringName, center: Vector2) -> void:
 
 func clear_spiritualist_visuals() -> void:
 	spiritualist_marks.clear()
+	spiritualist_mark_remaining.clear()
+	spiritualist_pending_remaining.clear()
+	spiritualist_weakened.clear()
 	spiritualist_events.clear()
 	spiritualist_wisps.clear()
 	spiritualist_return_wisps.clear()
@@ -794,7 +814,9 @@ func _draw_spiritualist_visuals() -> void:
 	if spiritualist_focus_remaining > 0.0 and spiritualist_focus_caster_id > 0:
 		var focus_caster := instance_from_id(spiritualist_focus_caster_id) as CombatActor
 		if focus_caster != null and is_instance_valid(focus_caster) and focus_caster.is_alive():
-			_draw_spiritualist_frame(SPIRITUALIST_SIGIL, 2, focus_caster.global_position + Vector2(0, -29), 28.0, 0.64)
+			var focus_center := focus_caster.global_position + Vector2(0, -46)
+			_draw_spiritualist_diamond(focus_center, 9.0, Color("e4e7f3", 0.92))
+			draw_arc(focus_center, 14.0, -PI * 0.5, -PI * 0.5 + TAU * clampf(spiritualist_focus_remaining / 5.0, 0.0, 1.0), 24, Color("b9d9ee", 0.82), 1.5, true)
 	if spiritualist_veil_remaining > 0.0 and spiritualist_veil_center.is_finite():
 		var veil_frame := int(spiritualist_visual_clock * 6.0) % 4
 		_draw_spiritualist_frame(SPIRITUALIST_HALO, veil_frame, spiritualist_veil_center, 135.0, 0.68, Vector2(48, 63))
@@ -814,15 +836,62 @@ func _draw_spiritualist_visuals() -> void:
 		if target == null or not is_instance_valid(target) or not target.is_alive():
 			continue
 		var frame := 1 if int(spiritualist_visual_clock * 3.0) % 2 == 0 else 2
-		_draw_spiritualist_frame(SPIRITUALIST_SIGIL, frame, target.global_position + Vector2(0, -22), 48.0, 0.78)
+		var center := target.global_position + Vector2(0, -37)
+		_draw_spiritualist_frame(SPIRITUALIST_SIGIL, frame, center, 39.0, 0.78)
+		var remaining: float = spiritualist_mark_remaining.get(target_id, 0.0)
+		if remaining > 0.0:
+			draw_arc(center, 21.0, -PI * 0.5, -PI * 0.5 + TAU * clampf(remaining / SpiritualistEchoState.MARK_DURATION, 0.0, 1.0), 32, Color("e9e7fb", 0.9), 2.0, true)
+		# A gap at the top makes the unconverted mark read as an open link.
+		draw_arc(center, 14.0, PI * 0.12, PI * 0.82, 14, Color("b6a8e4", 0.9), 2.0, true)
+		draw_arc(center, 14.0, PI * 1.12, PI * 1.82, 14, Color("b6a8e4", 0.9), 2.0, true)
+	for target_id: int in spiritualist_pending_remaining.keys():
+		var target := instance_from_id(target_id) as CombatActor
+		if target == null or not is_instance_valid(target) or not target.is_alive():
+			continue
+		var progress := 1.0 - clampf(spiritualist_pending_remaining[target_id] / SpiritualistEchoState.ECHO_DELAY, 0.0, 1.0)
+		var center := target.global_position + Vector2(0, -37)
+		var radius := lerpf(30.0, 12.0, progress)
+		draw_arc(center, radius, -PI * 0.85, -PI * 0.15, 20, Color("eaf5ff", 0.9), 2.5, true)
+		draw_arc(center, radius, PI * 0.15, PI * 0.85, 20, Color("eaf5ff", 0.9), 2.5, true)
+	for target_id: int in spiritualist_weakened.keys():
+		var target := instance_from_id(target_id) as CombatActor
+		if target == null or not is_instance_valid(target) or not target.is_alive():
+			continue
+		var center := target.global_position + Vector2(24, -43)
+		var icon := PackedVector2Array([center + Vector2(-4, -7), center + Vector2(2, -7), center + Vector2(2, 1), center + Vector2(6, 1), center + Vector2(-1, 10), center + Vector2(-8, 1), center + Vector2(-4, 1)])
+		draw_colored_polygon(icon, Color("bd9cc7", 0.88))
+		draw_line(center + Vector2(-9, -10), center + Vector2(8, -10), Color("eddaef", 0.9), 2.0, true)
 	for event: Dictionary in spiritualist_events:
 		var kind: StringName = event["kind"]
 		var center: Vector2 = event["center"]
 		var progress := 1.0 - float(event["remaining"]) / float(event["duration"])
-		var frame := 3 if kind == &"break" else mini(3, int(progress * 4.0))
-		var texture := SPIRITUALIST_BURST if kind in [&"burst", &"focus_consume", &"ritual"] else SPIRITUALIST_SIGIL
+		if kind == &"focus_grant" or kind == &"focus_consume":
+			var size := lerpf(3.0, 13.0, progress) if kind == &"focus_grant" else lerpf(13.0, 2.0, progress)
+			_draw_spiritualist_diamond(center + Vector2(0, -17), size, Color("edf0fa", 1.0 - progress * 0.45))
+			continue
+		var frame := 3 if kind in [&"break", &"expire"] else mini(3, int(progress * 4.0))
+		var texture := SPIRITUALIST_BURST if kind in [&"burst", &"echo_hit", &"focus_consume", &"ritual"] else SPIRITUALIST_SIGIL
 		var size := 112.0 if kind == &"ritual" else 65.0 if kind == &"burst" else 32.0 if kind in [&"focus_grant", &"focus_consume"] else 48.0
+		if kind == &"echo_ready":
+			continue # Pending arcs above use the authoritative 0.35 s countdown.
+		if kind == &"expire":
+			size = lerpf(39.0, 59.0, progress)
+		if kind == &"echo_hit":
+			size = 75.0
+			for wave_index: int in range(2):
+				var wave_progress := clampf(progress * 1.4 - float(wave_index) * 0.32, 0.0, 1.0)
+				if wave_progress > 0.0 and wave_progress < 1.0:
+					draw_arc(center, lerpf(22.0, 43.0, wave_progress), 0.0, TAU, 32, Color("d9eafa", 1.0 - wave_progress), 2.0, true)
 		_draw_spiritualist_frame(texture, frame, center, size, 1.0 - progress * 0.55)
+		if kind == &"break":
+			for index: int in range(4):
+				var direction := Vector2.RIGHT.rotated(TAU * float(index) / 4.0)
+				draw_line(center + direction * lerpf(9.0, 19.0, progress), center + direction * lerpf(15.0, 29.0, progress), Color("f6dbd2", 1.0 - progress), 2.0, true)
+
+func _draw_spiritualist_diamond(center: Vector2, radius: float, color: Color) -> void:
+	var points := PackedVector2Array([center + Vector2(0, -radius), center + Vector2(radius * 0.72, 0), center + Vector2(0, radius), center + Vector2(-radius * 0.72, 0)])
+	draw_colored_polygon(points, color)
+	draw_polyline(PackedVector2Array([points[0], points[1], points[2], points[3], points[0]]), Color("6e7294", color.a), 1.0, true)
 
 func spiritualist_frame_rect(anchor: Vector2, size: float, pivot: Vector2 = Vector2(48, 48)) -> Rect2:
 	return Rect2(anchor - pivot * (size / 96.0), Vector2.ONE * size)

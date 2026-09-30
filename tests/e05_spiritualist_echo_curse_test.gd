@@ -63,14 +63,14 @@ func _run() -> void:
 	trigger.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
 	enemy.apply_damage(trigger, controller.rng)
 	_check(not state.has_mark(enemy.get_instance_id()) and state.pending.size() == 1 and enemy.health.current_hp < first_health, "one direct positive hit consumes mark and schedules one echo")
-	_check(controller.battle_indicators.spiritualist_events[-1]["kind"] == &"break", "real consumption breaks target sigil")
+	_check(controller.battle_indicators.spiritualist_events[-1]["kind"] == &"echo_ready", "real consumption announces the delayed echo without claiming damage")
 	_check(is_equal_approx(float(state.pending[0]["magic_damage"]), player.spiritualist_magic_attack() * 0.35), "echo captures ATQM at trigger")
 	_check(state.advance(0.34).is_empty() and state.pending.size() == 1, "echo does not hit early")
 	var before_echo := enemy.health.current_hp
 	for due: Dictionary in state.advance(0.02):
 		controller._apply_spiritualist_echo(due)
 	_check(enemy.health.current_hp < before_echo and state.pending.is_empty() and not state.has_mark(enemy.get_instance_id()), "echo hits after 0.35s without cascade")
-	_check(controller.battle_indicators.spiritualist_events[-1]["kind"] == &"burst", "echo impact uses spectral burst only after real damage")
+	_check(controller.battle_indicators.spiritualist_events[-1]["kind"] == &"echo_hit", "echo impact uses spectral burst only after real damage")
 	state.mark(enemy.get_instance_id(), 0.60)
 	_check(state.advance(5.01).is_empty() and not state.has_mark(enemy.get_instance_id()), "mark expires after five simulated seconds")
 	state.mark(enemy.get_instance_id(), 0.35)
