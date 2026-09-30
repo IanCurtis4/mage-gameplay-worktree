@@ -25,6 +25,7 @@ signal spiritualist_echo_curse_requested(request: DamageRequest, target: CombatA
 signal spiritualist_drain_requested(request: DamageRequest, target: CombatActor)
 signal spiritualist_veil_requested(center: Vector2, duration: float, weaken_fraction: float)
 signal spiritualist_procession_requested(request: DamageRequest, target: CombatActor)
+signal spiritualist_dissipation_requested(center: Vector2, request: DamageRequest, marked_bonus: float, focus_bonus: float)
 signal spiritualist_channel_interrupt_requested
 signal spiritualist_focus_event(kind: StringName)
 signal lightning_wall_requested(direction: Vector2, request: DamageRequest)
@@ -891,6 +892,31 @@ func use_spiritualist_procession(enemy: CombatActor) -> bool:
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var request := _make_magic_request(enemy, skill_id, _magic_power(skill_id), definition.accuracy_mode, definition.can_crit)
 	spiritualist_procession_requested.emit(request, enemy)
+	resources_changed.emit()
+	return true
+
+func spiritualist_dissipation_center(point: Vector2) -> Vector2:
+	return global_position + (point - global_position).limit_length(skill_range(&"spiritualist_dissipation"))
+
+func can_place_spiritualist_dissipation(point: Vector2) -> bool:
+	if navigation == null or skill_range(&"spiritualist_dissipation") <= 0.0:
+		return false
+	var center := spiritualist_dissipation_center(point)
+	return navigation.is_walkable(center) and navigation.is_segment_clear(global_position, center, 0.0)
+
+func use_spiritualist_dissipation(point: Vector2) -> bool:
+	var skill_id := &"spiritualist_dissipation"
+	var rank_definition := _runtime_rank_definition(skill_id)
+	if not _is_spiritualist() or rank_definition == null or not _can_spend(skill_id) or not can_place_spiritualist_dissipation(point):
+		return false
+	var center := spiritualist_dissipation_center(point)
+	_spend(skill_id)
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(skill_id)
+	var magic_attack := spiritualist_magic_attack()
+	var focus_bonus := consume_spiritualist_focus()
+	var request := _make_magic_request(null, skill_id, magic_attack * rank_definition.power, definition.accuracy_mode, definition.can_crit)
+	spiritualist_dissipation_requested.emit(center, request, magic_attack * rank_definition.secondary_power, focus_bonus)
 	resources_changed.emit()
 	return true
 

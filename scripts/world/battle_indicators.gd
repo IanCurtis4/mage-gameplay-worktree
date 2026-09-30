@@ -91,7 +91,7 @@ func clear_spiritualist_procession_wisps() -> void:
 	queue_redraw()
 
 func show_spiritualist_event(kind: StringName, center: Vector2) -> void:
-	if kind not in [&"sigil", &"break", &"burst", &"recovery", &"drain", &"focus_grant", &"focus_consume"] or not center.is_finite():
+	if kind not in [&"sigil", &"break", &"burst", &"recovery", &"drain", &"focus_grant", &"focus_consume", &"ritual"] or not center.is_finite():
 		return
 	if spiritualist_events.size() >= 64:
 		spiritualist_events.pop_front()
@@ -121,6 +121,8 @@ func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast
 		endpoint = elemental_clamped_point(origin, point, actor.skill_range(skill))
 	elif skill == &"spiritualist_spectral_veil":
 		endpoint = actor.spiritualist_veil_center(point)
+	elif skill == &"spiritualist_dissipation":
+		endpoint = actor.spiritualist_dissipation_center(point)
 	elif skill in [&"elementalist_glacial_ring", &"elementalist_tri_nova"]:
 		endpoint = origin
 	elif skill == &"elementalist_lightning_arc":
@@ -346,6 +348,10 @@ func _draw() -> void:
 		draw_dashed_line(origin, endpoint, Color(color, 0.55), 1.5, 9.0, true, true)
 		draw_circle(endpoint, SpiritualistVeilState.RADIUS, Color(color, 0.08))
 		draw_arc(endpoint, SpiritualistVeilState.RADIUS, 0.0, TAU, 64, color, 2.0, true)
+	elif skill == &"spiritualist_dissipation":
+		draw_dashed_line(origin, endpoint, Color(color, 0.55), 1.5, 9.0, true, true)
+		draw_circle(endpoint, SkillGeometry.SPIRITUALIST_DISSIPATION_RADIUS, Color(color, 0.08))
+		draw_arc(endpoint, SkillGeometry.SPIRITUALIST_DISSIPATION_RADIUS, 0.0, TAU, 64, color, 2.0, true)
 	elif skill == &"elementalist_glacial_ring":
 		_draw_glacial_ring_preview(origin, SkillGeometry.ELEMENTALIST_GLACIAL_RING_RADIUS, available)
 	elif skill == &"elementalist_lightning_arc":
@@ -776,8 +782,8 @@ func _draw_spiritualist_visuals() -> void:
 		var center: Vector2 = event["center"]
 		var progress := 1.0 - float(event["remaining"]) / float(event["duration"])
 		var frame := 3 if kind == &"break" else mini(3, int(progress * 4.0))
-		var texture := SPIRITUALIST_BURST if kind in [&"burst", &"focus_consume"] else SPIRITUALIST_WISP if kind in [&"recovery", &"drain"] else SPIRITUALIST_SIGIL
-		var size := 65.0 if kind == &"burst" else 35.0 if kind == &"recovery" else 42.0 if kind == &"drain" else 32.0 if kind in [&"focus_grant", &"focus_consume"] else 48.0
+		var texture := SPIRITUALIST_BURST if kind in [&"burst", &"focus_consume", &"ritual"] else SPIRITUALIST_WISP if kind in [&"recovery", &"drain"] else SPIRITUALIST_SIGIL
+		var size := 112.0 if kind == &"ritual" else 65.0 if kind == &"burst" else 35.0 if kind == &"recovery" else 42.0 if kind == &"drain" else 32.0 if kind in [&"focus_grant", &"focus_consume"] else 48.0
 		_draw_spiritualist_frame(texture, frame, center, size, 1.0 - progress * 0.55)
 
 func _draw_spiritualist_frame(texture: Texture2D, frame: int, center: Vector2, size: float, alpha: float) -> void:

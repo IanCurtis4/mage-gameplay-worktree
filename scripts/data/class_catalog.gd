@@ -162,6 +162,7 @@ static func _ensure_built() -> void:
 	_add_skill(&"spiritualist_spectral_veil", "Véu Espectral", "D", SkillDefinition.Targeting.POINT, 20.0, 12.0, 0.15, 250.0, 0.0, 0.25, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_passive_skill(&"spiritualist_channel_focus", "Foco do Além")
 	_add_skill(&"spiritualist_procession", "Procissão de Espectros", "D", SkillDefinition.Targeting.SINGLE_TARGET, 24.0, 10.0, 0.45, 380.0, 0.0, 0.40, DamageRequest.AccuracyMode.CONTESTED, true)
+	_add_skill(&"spiritualist_dissipation", "Rito de Dissipação", "D", SkillDefinition.Targeting.POINT, 27.0, 14.0, 0.85, 330.0, 0.0, 0.60, DamageRequest.AccuracyMode.GEOMETRY, true)
 	_configure_slash_ranks()
 	_configure_dash_ranks()
 	_configure_shield_wall_ranks()
@@ -214,6 +215,7 @@ static func _ensure_built() -> void:
 	_configure_spiritualist_veil_ranks()
 	_configure_spiritualist_focus_ranks()
 	_configure_spiritualist_procession_ranks()
+	_configure_spiritualist_dissipation_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -1126,6 +1128,25 @@ static func _configure_spiritualist_procession_ranks() -> void:
 		rank.power = powers[index]
 		rank.magic_weight = 1.0
 		rank.effect_ids = [&"three_apparitions_depart_0_0_20_0_40", &"impacts_after_0_22s", &"root_only_first_impact", &"cancel_on_invalid_target_or_line"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_spiritualist_dissipation_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"spiritualist_dissipation"]
+	definition.handler_id = SkillDefinition.Handler.SPIRITUALIST_DISSIPATION
+	var costs: Array[float] = [27.0, 29.0, 31.0, 32.0, 33.0]
+	var powers: Array[float] = [0.85, 1.00, 1.12, 1.23, 1.32]
+	for index: int in range(powers.size()):
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 14.0
+		rank.range = 330.0
+		rank.variable_cast_time = 0.60
+		rank.power = powers[index]
+		rank.secondary_power = 0.55
+		rank.magic_weight = 1.0
+		rank.effect_ids = [&"point_radius_100_root_direct", &"marked_target_add_0_55_atqm_same_request", &"consume_mark_only_after_positive_damage", &"weaken_damage_dealt_20pct_2s_after_positive_damage"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
 

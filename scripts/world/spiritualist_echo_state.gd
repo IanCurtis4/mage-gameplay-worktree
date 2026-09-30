@@ -20,6 +20,12 @@ func mark(target_id: int, echo_power: float) -> void:
 func has_mark(target_id: int) -> bool:
 	return marks.has(target_id)
 
+func consume_mark(target_id: int) -> bool:
+	if not marks.has(target_id):
+		return false
+	marks.erase(target_id)
+	return true
+
 func record_hit(result: Dictionary, magic_attack_at_trigger: float) -> bool:
 	var target_id := int(result.get("target_id", 0))
 	if int(result.get("source_id", 0)) != source_id or not marks.has(target_id):

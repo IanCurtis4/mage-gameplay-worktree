@@ -132,6 +132,7 @@ func _ready() -> void:
 	player.spiritualist_drain_requested.connect(_on_spiritualist_drain_requested)
 	player.spiritualist_veil_requested.connect(_on_spiritualist_veil_requested)
 	player.spiritualist_procession_requested.connect(_on_spiritualist_procession_requested)
+	player.spiritualist_dissipation_requested.connect(_on_spiritualist_dissipation_requested)
 	player.spiritualist_channel_interrupt_requested.connect(_cancel_spiritualist_drain)
 	player.spiritualist_focus_event.connect(_on_spiritualist_focus_event)
 	player.health.damage_applied.connect(_on_player_damage_resolved)
@@ -438,6 +439,12 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.SPIRITUALIST_PROCESSION:
 		if not player.use_spiritualist_procession(selected_target):
 			_report_skill_failure(skill, selected_target)
+	elif definition.handler_id == SkillDefinition.Handler.SPIRITUALIST_DISSIPATION:
+		if not player.use_spiritualist_dissipation(point):
+			if not player.can_place_spiritualist_dissipation(point):
+				status_label.text = "Rito de Dissipação cancelado — POSIÇÃO BLOQUEADA"
+			else:
+				_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif definition.handler_id == SkillDefinition.Handler.ELEMENTALIST_EMBER_PATH:
 		if not player.use_elementalist_ember_path(direction):
 			if player.elementalist_ember_centers(direction).is_empty():
@@ -522,6 +529,8 @@ func _update_aim(point: Vector2) -> void:
 	elif skill == &"elementalist_flame_burst" and not player.can_place_elementalist_flame_burst(point):
 		state = "POSIÇÃO BLOQUEADA"
 	elif skill == &"spiritualist_spectral_veil" and not player.can_place_spiritualist_veil(point):
+		state = "POSIÇÃO BLOQUEADA"
+	elif skill == &"spiritualist_dissipation" and not player.can_place_spiritualist_dissipation(point):
 		state = "POSIÇÃO BLOQUEADA"
 	elif skill == &"defender_anchor" and not navigation.is_walkable(BattleIndicators.defender_clamped_point(player.global_position, point, player.skill_range(skill))):
 		state = "POSIÇÃO BLOQUEADA"
@@ -1059,6 +1068,36 @@ func _cancel_spiritualist_procession() -> void:
 	spiritualist_procession_state.cancel()
 	if battle_indicators != null:
 		battle_indicators.clear_spiritualist_procession_wisps()
+
+func _on_spiritualist_dissipation_requested(center: Vector2, request: DamageRequest, marked_bonus: float, focus_bonus: float) -> void:
+	if battle_indicators != null:
+		battle_indicators.show_spiritualist_event(&"ritual", center)
+	var target_index := 0
+	for target_actor: CombatActor in enemies.duplicate():
+		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
+			continue
+		if center.distance_to(target_actor.global_position) > SkillGeometry.SPIRITUALIST_DISSIPATION_RADIUS + target_actor.collision_radius:
+			continue
+		if not navigation.is_segment_clear(center, target_actor.global_position, 0.0):
+			continue
+		var target_id := target_actor.get_instance_id()
+		var was_marked := spiritualist_echo_state.has_mark(target_id)
+		var target_request := request.copy()
+		target_request.target_id = target_id
+		if target_index == 0:
+			target_request.magic_damage += focus_bonus
+		if was_marked:
+			target_request.magic_damage += marked_bonus
+		target_index += 1
+		var result := target_actor.apply_damage(target_request, rng)
+		if float(result.get("actual_damage", 0.0)) <= 0.0:
+			continue
+		if was_marked:
+			spiritualist_echo_state.consume_mark(target_id)
+			if battle_indicators != null:
+				battle_indicators.show_spiritualist_event(&"break", target_actor.global_position + Vector2(0, -22))
+		if target_actor.is_alive():
+			target_actor.apply_weaken(0.20, 2.0, &"spiritualist_dissipation")
 
 func _on_haunt_requested(origin: Vector2, direction: Vector2, cone_range: float, request: DamageRequest) -> void:
 	var visual := HauntConeVisual.new()
