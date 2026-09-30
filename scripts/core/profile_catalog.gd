@@ -404,6 +404,7 @@ func _register_spiritualist_skills() -> void:
 	add_skill(&"spiritualist_echo_recovery", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"spiritualist", _evolution_rank_requirements(3, 23))
 	add_skill(&"spiritualist_soul_drain", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"spiritualist", _evolution_rank_requirements(5, 25))
 	add_skill(&"spiritualist_spectral_veil", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"spiritualist", _evolution_rank_requirements(5, 28))
+	add_skill(&"spiritualist_channel_focus", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"spiritualist", _evolution_rank_requirements(3, 31))
 
 func _evolution_rank_requirements(max_rank: int, job_level: int) -> Dictionary:
 	var requirements: Dictionary = {}
@@ -472,7 +473,7 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 			]
 		if definition.id == &"spiritualist" and not normalized_overrides.has(definition.id):
 			definition.entry_skill_id = &"spiritualist_echo_curse"
-			definition.exclusive_skill_ids = [&"spiritualist_echo_curse", &"spiritualist_echo_recovery", &"spiritualist_soul_drain", &"spiritualist_spectral_veil"]
+			definition.exclusive_skill_ids = [&"spiritualist_echo_curse", &"spiritualist_echo_recovery", &"spiritualist_soul_drain", &"spiritualist_spectral_veil", &"spiritualist_channel_focus"]
 		if normalized_overrides.has(definition.id):
 			_apply_evolution_override(definition, normalized_overrides[definition.id])
 		add_evolution(definition)

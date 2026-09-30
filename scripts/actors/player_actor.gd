@@ -25,6 +25,7 @@ signal spiritualist_echo_curse_requested(request: DamageRequest, target: CombatA
 signal spiritualist_drain_requested(request: DamageRequest, target: CombatActor)
 signal spiritualist_veil_requested(center: Vector2, duration: float, weaken_fraction: float)
 signal spiritualist_channel_interrupt_requested
+signal spiritualist_focus_event(kind: StringName)
 signal lightning_wall_requested(direction: Vector2, request: DamageRequest)
 signal soul_impact_requested(request: DamageRequest, target: CombatActor)
 signal haunt_requested(origin: Vector2, direction: Vector2, cone_range: float, request: DamageRequest)
@@ -184,6 +185,8 @@ var _elementalist_refunded_emissions: Dictionary[int, bool] = {}
 var spiritualist_recovery_cooldown := 0.0
 var _spiritualist_emission_serial := 0
 var _spiritualist_refunded_emissions: Dictionary[int, bool] = {}
+var spiritualist_focus_remaining := 0.0
+var spiritualist_focus_power := 0.0
 
 func configure(nav: ArenaNavigation, state: RunState) -> void:
 	navigation = nav
@@ -825,7 +828,7 @@ func use_spiritualist_echo_curse(enemy: CombatActor) -> bool:
 	_spend(skill_id)
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(skill_id)
-	var request := _make_magic_request(enemy, skill_id, _magic_power(skill_id), definition.accuracy_mode, definition.can_crit)
+	var request := _make_magic_request(enemy, skill_id, _magic_power(skill_id) + consume_spiritualist_focus(), definition.accuracy_mode, definition.can_crit)
 	spiritualist_echo_curse_requested.emit(request, enemy, rank_definition.secondary_power)
 	resources_changed.emit()
 	return true
@@ -909,6 +912,28 @@ func recover_spiritualist_echo_sp(emission_id: int) -> float:
 func clear_spiritualist_state() -> void:
 	spiritualist_recovery_cooldown = 0.0
 	_spiritualist_refunded_emissions.clear()
+	spiritualist_focus_remaining = 0.0
+	spiritualist_focus_power = 0.0
+
+func grant_spiritualist_focus() -> bool:
+	if not _is_spiritualist() or not is_alive() or not run_state.build_snapshot.passive_slots.has(&"spiritualist_channel_focus"):
+		return false
+	var rank_definition := _runtime_rank_definition(&"spiritualist_channel_focus")
+	if rank_definition == null:
+		return false
+	spiritualist_focus_power = rank_definition.power
+	spiritualist_focus_remaining = 5.0
+	spiritualist_focus_event.emit(&"grant")
+	return true
+
+func consume_spiritualist_focus() -> float:
+	if not _is_spiritualist() or not is_alive() or spiritualist_focus_remaining <= 0.0 or spiritualist_focus_power <= 0.0:
+		return 0.0
+	var bonus := stat_breakdown.value(&"magic_attack") * spiritualist_focus_power
+	spiritualist_focus_remaining = 0.0
+	spiritualist_focus_power = 0.0
+	spiritualist_focus_event.emit(&"consume")
+	return bonus
 
 func use_spear(skill_id: StringName, enemy: CombatActor) -> bool:
 	if class_id != &"mage" or skill_id not in [&"fire_spear", &"ice_spear"] or not can_target_skill(skill_id, enemy) or not _can_spend(skill_id):
@@ -1720,6 +1745,9 @@ func _process(delta: float) -> void:
 	berserker_pursuit_cooldown = maxf(0.0, berserker_pursuit_cooldown - delta)
 	elementalist_focus_cooldown = maxf(0.0, elementalist_focus_cooldown - delta)
 	spiritualist_recovery_cooldown = maxf(0.0, spiritualist_recovery_cooldown - delta)
+	spiritualist_focus_remaining = maxf(0.0, spiritualist_focus_remaining - delta)
+	if spiritualist_focus_remaining <= 0.0:
+		spiritualist_focus_power = 0.0
 	for target_id: int in elementalist_focus_history.keys():
 		var focus: Dictionary = elementalist_focus_history[target_id]
 		focus["remaining"] = maxf(0.0, float(focus["remaining"]) - delta)

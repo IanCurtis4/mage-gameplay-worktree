@@ -131,6 +131,7 @@ func _ready() -> void:
 	player.spiritualist_drain_requested.connect(_on_spiritualist_drain_requested)
 	player.spiritualist_veil_requested.connect(_on_spiritualist_veil_requested)
 	player.spiritualist_channel_interrupt_requested.connect(_cancel_spiritualist_drain)
+	player.spiritualist_focus_event.connect(_on_spiritualist_focus_event)
 	player.health.damage_applied.connect(_on_player_damage_resolved)
 	player.lightning_wall_requested.connect(_on_lightning_wall_requested)
 	player.soul_impact_requested.connect(_on_soul_impact_requested)
@@ -170,6 +171,7 @@ func _process(_delta: float) -> void:
 			battle_indicators.sync_spiritualist_marks(spiritualist_echo_state.marks.keys())
 			_advance_spiritualist_drain(_delta)
 			_advance_spiritualist_veil(_delta)
+			battle_indicators.sync_spiritualist_focus(player.get_instance_id(), player.spiritualist_focus_remaining)
 	_update_hud()
 	if not get_tree().paused and not run_finished:
 		if _world_pointer_available():
@@ -949,7 +951,9 @@ func _advance_spiritualist_drain(delta: float) -> void:
 			_cancel_spiritualist_drain()
 			return
 		var healed_before := spiritualist_drain_state.healed_total
-		spiritualist_drain_state.resolve_tick()
+		var channel_completed := spiritualist_drain_state.resolve_tick()
+		if channel_completed:
+			player.grant_spiritualist_focus()
 		var result := target_actor.apply_damage(request, rng)
 		var healed := player.heal_from_spiritualist_drain(result, healed_before)
 		spiritualist_drain_state.healed_total = healed_before + healed
@@ -969,6 +973,10 @@ func _cancel_spiritualist_drain() -> void:
 func _on_player_damage_resolved(result: Dictionary) -> void:
 	if float(result.get("actual_damage", 0.0)) > 0.0:
 		_cancel_spiritualist_drain()
+
+func _on_spiritualist_focus_event(kind: StringName) -> void:
+	if battle_indicators != null:
+		battle_indicators.show_spiritualist_event(&"focus_grant" if kind == &"grant" else &"focus_consume", player.global_position + Vector2(0, -28))
 
 func _on_spiritualist_veil_requested(center: Vector2, duration: float, weaken_fraction: float) -> void:
 	_clear_spiritualist_veil()

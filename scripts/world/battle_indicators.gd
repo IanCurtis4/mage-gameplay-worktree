@@ -55,6 +55,13 @@ var spiritualist_drain_caster_id := 0
 var spiritualist_drain_target_id := 0
 var spiritualist_veil_center := Vector2.INF
 var spiritualist_veil_remaining := 0.0
+var spiritualist_focus_caster_id := 0
+var spiritualist_focus_remaining := 0.0
+
+func sync_spiritualist_focus(caster_id: int, remaining: float) -> void:
+	spiritualist_focus_caster_id = caster_id if remaining > 0.0 else 0
+	spiritualist_focus_remaining = maxf(0.0, remaining)
+	queue_redraw()
 
 func sync_spiritualist_veil(center: Vector2, remaining: float) -> void:
 	spiritualist_veil_center = center if center.is_finite() and remaining > 0.0 else Vector2.INF
@@ -71,7 +78,7 @@ func sync_spiritualist_marks(mark_ids: Array) -> void:
 	queue_redraw()
 
 func show_spiritualist_event(kind: StringName, center: Vector2) -> void:
-	if kind not in [&"sigil", &"break", &"burst", &"recovery", &"drain"] or not center.is_finite():
+	if kind not in [&"sigil", &"break", &"burst", &"recovery", &"drain", &"focus_grant", &"focus_consume"] or not center.is_finite():
 		return
 	if spiritualist_events.size() >= 64:
 		spiritualist_events.pop_front()
@@ -86,6 +93,8 @@ func clear_spiritualist_visuals() -> void:
 	spiritualist_drain_target_id = 0
 	spiritualist_veil_center = Vector2.INF
 	spiritualist_veil_remaining = 0.0
+	spiritualist_focus_caster_id = 0
+	spiritualist_focus_remaining = 0.0
 	queue_redraw()
 
 func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast: bool, selected_target: CombatActor = null) -> void:
@@ -240,7 +249,7 @@ func _process(delta: float) -> void:
 			spiritualist_events.remove_at(index)
 		else:
 			spiritualist_events[index] = event
-	if not spiritualist_events.is_empty() or not spiritualist_marks.is_empty() or spiritualist_drain_caster_id > 0 or spiritualist_veil_remaining > 0.0:
+	if not spiritualist_events.is_empty() or not spiritualist_marks.is_empty() or spiritualist_drain_caster_id > 0 or spiritualist_veil_remaining > 0.0 or spiritualist_focus_remaining > 0.0:
 		queue_redraw()
 	if click_lifetime > 0.0:
 		click_lifetime = maxf(0.0, click_lifetime - delta)
@@ -704,6 +713,10 @@ func _draw_elementalist_prism(prism: Dictionary) -> void:
 	_draw_prism_pulse(prism)
 
 func _draw_spiritualist_visuals() -> void:
+	if spiritualist_focus_remaining > 0.0 and spiritualist_focus_caster_id > 0:
+		var focus_caster := instance_from_id(spiritualist_focus_caster_id) as CombatActor
+		if focus_caster != null and is_instance_valid(focus_caster) and focus_caster.is_alive():
+			_draw_spiritualist_frame(SPIRITUALIST_SIGIL, 2, focus_caster.global_position + Vector2(0, -29), 28.0, 0.64)
 	if spiritualist_veil_remaining > 0.0 and spiritualist_veil_center.is_finite():
 		var veil_frame := int(spiritualist_visual_clock * 6.0) % 4
 		_draw_spiritualist_frame(SPIRITUALIST_HALO, veil_frame, spiritualist_veil_center, 135.0, 0.68)
@@ -729,8 +742,8 @@ func _draw_spiritualist_visuals() -> void:
 		var center: Vector2 = event["center"]
 		var progress := 1.0 - float(event["remaining"]) / float(event["duration"])
 		var frame := 3 if kind == &"break" else mini(3, int(progress * 4.0))
-		var texture := SPIRITUALIST_BURST if kind == &"burst" else SPIRITUALIST_WISP if kind in [&"recovery", &"drain"] else SPIRITUALIST_SIGIL
-		var size := 65.0 if kind == &"burst" else 35.0 if kind == &"recovery" else 42.0 if kind == &"drain" else 48.0
+		var texture := SPIRITUALIST_BURST if kind in [&"burst", &"focus_consume"] else SPIRITUALIST_WISP if kind in [&"recovery", &"drain"] else SPIRITUALIST_SIGIL
+		var size := 65.0 if kind == &"burst" else 35.0 if kind == &"recovery" else 42.0 if kind == &"drain" else 32.0 if kind in [&"focus_grant", &"focus_consume"] else 48.0
 		_draw_spiritualist_frame(texture, frame, center, size, 1.0 - progress * 0.55)
 
 func _draw_spiritualist_frame(texture: Texture2D, frame: int, center: Vector2, size: float, alpha: float) -> void:

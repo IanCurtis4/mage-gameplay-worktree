@@ -160,6 +160,7 @@ static func _ensure_built() -> void:
 	_add_passive_skill(&"spiritualist_echo_recovery", "Recolhimento")
 	_add_skill(&"spiritualist_soul_drain", "Drenagem Espiritual", "D", SkillDefinition.Targeting.SINGLE_TARGET, 22.0, 10.0, 0.36, 350.0, 0.0, 0.30, DamageRequest.AccuracyMode.CONTESTED, false)
 	_add_skill(&"spiritualist_spectral_veil", "Véu Espectral", "D", SkillDefinition.Targeting.POINT, 20.0, 12.0, 0.15, 250.0, 0.0, 0.25, DamageRequest.AccuracyMode.GEOMETRY, false)
+	_add_passive_skill(&"spiritualist_channel_focus", "Foco do Além")
 	_configure_slash_ranks()
 	_configure_dash_ranks()
 	_configure_shield_wall_ranks()
@@ -210,6 +211,7 @@ static func _ensure_built() -> void:
 	_configure_spiritualist_recovery_ranks()
 	_configure_spiritualist_drain_ranks()
 	_configure_spiritualist_veil_ranks()
+	_configure_spiritualist_focus_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -1092,6 +1094,18 @@ static func _configure_spiritualist_veil_ranks() -> void:
 		rank.power = 0.15
 		rank.secondary_power = durations[index]
 		rank.effect_ids = [&"ground_radius_110", &"one_zone_per_caster_replaces", &"damage_dealt_reduction_same_channel_as_dissipation"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
+
+static func _configure_spiritualist_focus_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"spiritualist_channel_focus"]
+	definition.handler_id = SkillDefinition.Handler.SPIRITUALIST_CHANNEL_FOCUS
+	var bonuses: Array[float] = [0.20, 0.30, 0.40]
+	for index: int in range(bonuses.size()):
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.power = bonuses[index]
+		rank.effect_ids = [&"four_valid_drain_ticks_grant_one_charge_five_seconds", &"next_valid_curse_or_dissipation_root_bonus"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
 
