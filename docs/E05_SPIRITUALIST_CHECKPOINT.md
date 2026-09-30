@@ -112,9 +112,25 @@ execução. Tempo/tokens por skill só se houver medição atribuível real, nã
 estimativa inventada. As sete skills, dois presets de personagens distintos,
 menu→run e boss solo estão implementados. `content_ready=true`. O teste
 integrado revelou e corrigiu o cabeçalho que mostrava “Mago” mesmo usando o
-Espiritualista; agora toda evolução pronta usa o próprio nome. Falta revisão
-técnica consolidada de Astra e, depois, playtest do usuário. A inspeção de
-legibilidade/FPS com muitas skills simultâneas continua dependente do playtest.
+Espiritualista; agora toda evolução pronta usa o próprio nome. A primeira
+revisão consolidada de Astra (`docs/REVIEW_E05_SPIRITUALIST_ASTRA.md`) encontrou
+quatro ajustes de integração, corrigidos em rodada única: canal interrompido
+solta a pose de cast sem apagar um novo cast, halo usa pivô de chão `(48,63)`,
+ticks de Drenagem e restituição real de SP têm wisps alvo→caster em fila
+finita, e as duas builds executam loops determinísticos contra boss solo.
+O redraw cobre também o frame em que o último efeito expira. Falta aprovação
+do delta por Astra e, depois, playtest do usuário. A inspeção de legibilidade
+e FPS com muitas skills simultâneas continua dependente do playtest.
+
+Renderização com Godot 4.7.2 standard/OpenGL real: o probe opcional
+`tools/spiritualist_renderer_probe.gd` gerou
+`.godot/verification/spiritualist_renderer_probe.png` (halo/ritual) e
+`.godot/verification/spiritualist_return_renderer_probe.png` (wisp em trânsito).
+Inspeção visual confirmou a âncora do halo no círculo autoritativo e o pulso
+entre alvo e caster. O modo `--headless` usa renderer fictício e não serve
+para capturar a imagem; rodar o probe com `--rendering-method gl_compatibility`
+sem `--headless` quando necessário. Capturas são locais/ignoradas pelo Git;
+o usuário ainda precisa avaliar a leitura na partida.
 
 | Item concluído | Commit | Testes | Próximo |
 |---|---|---|---|
@@ -128,4 +144,5 @@ legibilidade/FPS com muitas skills simultâneas continua dependente do playtest.
 | Foco do Além | `2c0b9ed` | 17 checks novos + regressões Drenagem e catálogo | 7 — Procissão |
 | Procissão de Espectros | `9f94f6e` | 18 checks novos + catálogo de evolução 65 checks | 8 — Dissipação |
 | Rito de Dissipação | `07e71e9` | 18 checks novos + catálogo de evolução 65 checks | 9 — fechamento |
-| Fechamento integrado | commit desta alteração | 72 checks de builds/menu→run/boss + 18 visuais; `tools/verify.ps1` integral | revisão técnica Astra |
+| Fechamento integrado | `f8c59f0` | 72 checks de builds/menu→run/boss + 18 visuais; `tools/verify.ps1` integral | revisão técnica Astra |
+| Ajustes da revisão Astra | commit desta alteração | Drenagem 28, visuais 23, integração 86 checks; renderer real e nova regressão integral | aprovação do delta e candidato de playtest |

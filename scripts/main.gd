@@ -973,7 +973,7 @@ func _advance_spiritualist_drain(delta: float) -> void:
 		var healed := player.heal_from_spiritualist_drain(result, healed_before)
 		spiritualist_drain_state.healed_total = healed_before + healed
 		if battle_indicators != null and float(result.get("actual_damage", 0.0)) > 0.0:
-			battle_indicators.show_spiritualist_event(&"drain", target_actor.global_position + Vector2(0, -18))
+			battle_indicators.show_spiritualist_return_wisp(target_actor.global_position + Vector2(0, -18), player.get_instance_id(), &"drain")
 		if not target_actor.is_alive():
 			_cancel_spiritualist_drain()
 			return
@@ -981,9 +981,14 @@ func _advance_spiritualist_drain(delta: float) -> void:
 		battle_indicators.sync_spiritualist_drain(0, 0)
 
 func _cancel_spiritualist_drain() -> void:
+	var was_active := spiritualist_drain_state.active
 	spiritualist_drain_state.cancel()
+	if was_active and player != null and is_instance_valid(player) and player.character_animation != null and player.character_animation.state.action == &"cast":
+		player.presentation_action.emit(&"cast_cancel", Vector2.ZERO, 0.0)
 	if battle_indicators != null:
 		battle_indicators.sync_spiritualist_drain(0, 0)
+		if was_active:
+			battle_indicators.clear_spiritualist_drain_wisps()
 
 func _on_player_damage_resolved(result: Dictionary) -> void:
 	if float(result.get("actual_damage", 0.0)) > 0.0:
@@ -1233,7 +1238,9 @@ func _on_enemy_damage_resolved(result: Dictionary) -> void:
 				battle_indicators.show_spiritualist_event(&"break", mark_target.global_position + Vector2(0, -22))
 		var recovered := player.recover_spiritualist_echo_sp(int(result.get("emission_id", 0)))
 		if recovered > 0.0 and battle_indicators != null:
-			battle_indicators.show_spiritualist_event(&"recovery", player.global_position + Vector2(0, -22))
+			var recovery_target := instance_from_id(int(result.get("target_id", 0))) as CombatActor
+			var source := recovery_target.global_position + Vector2(0, -18) if recovery_target != null and is_instance_valid(recovery_target) else player.global_position + Vector2(0, -42)
+			battle_indicators.show_spiritualist_return_wisp(source, player.get_instance_id(), &"recovery")
 	var previous_sp := player.current_sp
 	var resonance_feedback := bool(result.get("can_trigger_effects", false)) and float(result.get("actual_damage", 0.0)) > 0.0 and player.elementalist_resonance_ready(int(result.get("target_id", 0)), StringName(result.get("skill_id", &"")))
 	player.record_elementalist_damage(result)

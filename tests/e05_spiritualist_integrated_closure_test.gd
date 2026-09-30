@@ -83,6 +83,15 @@ func _run() -> void:
 		_check_boss(started["run_state"])
 		var ended := reloaded.end_run("spiritualist-end", started["new_revision"], started["run_id"], &"completed")
 		_check(ended["ok"], "run encerra sem alterar a identidade")
+		if ended["ok"]:
+			var field_selected := reloaded.select_character("spiritualist-select-field", ended["new_revision"], field_id)
+			_check(field_selected["ok"], "segundo personagem pode iniciar run com outra carteira legal")
+			if field_selected["ok"]:
+				var field_started := reloaded.start_run("spiritualist-field-run", field_selected["new_revision"])
+				_check(field_started["ok"] and field_started["run_state"].build_snapshot.active_slots == field_active, "snapshot da segunda run conserva build de campo")
+				if field_started["ok"]:
+					_check_field_boss(field_started["run_state"])
+					_check(reloaded.end_run("spiritualist-field-end", field_started["new_revision"], field_started["run_id"], &"completed")["ok"], "segunda run encerra sem vazar sessão")
 	if controller != null:
 		controller.queue_free()
 	entry.queue_free()
@@ -117,10 +126,89 @@ func _check_boss(run_state: RunState) -> void:
 	controller.player = player
 	controller.battle_indicators = BattleIndicators.new()
 	controller.enemies = [boss]
-	player.spiritualist_echo_curse_requested.connect(controller._on_spiritualist_echo_curse_requested)
+	controller.navigation.configure(Rect2(0, 0, 1000, 700), [], 20.0)
+	controller.rng.seed = 11
+	controller.spiritualist_echo_state.source_id = player.get_instance_id()
+	boss.health.damage_applied.connect(controller._on_enemy_damage_resolved)
+	player.spiritualist_echo_curse_requested.connect(func(request: DamageRequest, target: CombatActor, power: float) -> void:
+		request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
+		request.can_crit = false
+		controller._on_spiritualist_echo_curse_requested(request, target, power)
+	)
+	player.spiritualist_drain_requested.connect(func(request: DamageRequest, target: CombatActor) -> void:
+		request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
+		request.can_crit = false
+		controller._on_spiritualist_drain_requested(request, target)
+	)
+	player.spiritualist_procession_requested.connect(func(request: DamageRequest, target: CombatActor) -> void:
+		request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
+		request.can_crit = false
+		controller._on_spiritualist_procession_requested(request, target)
+	)
 	var hp_before := boss.health.current_hp
 	var used := player.use_spiritualist_echo_curse(boss)
 	_check(used and boss.health.current_hp < hp_before and controller.spiritualist_echo_state.has_mark(boss.get_instance_id()), "Maldição da build causa dano e marca boss solo")
+	var after_curse := boss.health.current_hp
+	_check(player.use_spiritualist_soul_drain(boss) and controller.spiritualist_drain_state.active, "Drenagem abre canal no mesmo boss")
+	for tick_index: int in range(4):
+		controller._advance_spiritualist_drain(0.5)
+	_check(boss.health.current_hp < after_curse and controller.spiritualist_drain_state.ticks_resolved == 4 and not controller.spiritualist_drain_state.active and player.spiritualist_focus_remaining > 0.0, "quatro ticks reduzem HP e geram Foco no boss sem adds")
+	var drain_pulses := controller.battle_indicators.spiritualist_return_wisps.filter(func(wisp: Dictionary) -> bool: return wisp["kind"] == &"drain")
+	var recovery_pulses := controller.battle_indicators.spiritualist_return_wisps.filter(func(wisp: Dictionary) -> bool: return wisp["kind"] == &"recovery")
+	_check(controller.spiritualist_echo_state.pending.size() == 1 and not controller.spiritualist_echo_state.has_mark(boss.get_instance_id()) and drain_pulses.size() == 4 and recovery_pulses.size() == 1, "primeiro tick consome marca uma vez; quatro pulsos de Drenagem e um Recolhimento real retornam ao caster")
+	var before_echo := boss.health.current_hp
+	for echo: Dictionary in controller.spiritualist_echo_state.advance(0.36):
+		controller._apply_spiritualist_echo(echo)
+	_check(boss.health.current_hp < before_echo and controller.spiritualist_echo_state.pending.is_empty(), "eco secundário atinge uma vez sem cascata")
+	player.mage_cooldowns[&"spiritualist_echo_curse"] = 0.0
+	player.current_sp = player.max_sp
+	_check(player.use_spiritualist_echo_curse(boss) and player.spiritualist_focus_remaining == 0.0 and controller.spiritualist_echo_state.has_mark(boss.get_instance_id()), "segunda Maldição consome Foco no commit e renova marca")
+	var before_procession := boss.health.current_hp
+	_check(player.use_spiritualist_procession(boss), "Procissão é utilizável contra boss solo")
+	controller._advance_spiritualist_procession(0.23)
+	controller._advance_spiritualist_procession(0.20)
+	controller._advance_spiritualist_procession(0.20)
+	_check(boss.health.current_hp < before_procession and not controller.spiritualist_procession_state.active and controller.spiritualist_echo_state.pending.size() == 1, "três aparições completam e só o primeiro impacto gera um eco")
+	player.free()
+	boss.free()
+	controller.battle_indicators.free()
+	controller.free()
+
+func _check_field_boss(run_state: RunState) -> void:
+	var navigation := ArenaNavigation.new()
+	navigation.configure(Rect2(0, 0, 1000, 700), [], 20.0)
+	var player := PlayerActor.new()
+	player.configure(navigation, run_state)
+	player.global_position = Vector2(400, 350)
+	var boss := CombatActor.new()
+	boss.setup("Boss de campo", Color.WHITE, StatCalculator.calculate({&"vit": 20}), 24.0)
+	boss.global_position = Vector2(480, 350)
+	boss.health.max_hp = 100000.0
+	boss.health.current_hp = 100000.0
+	var controller := RunController.new()
+	controller.player = player
+	controller.battle_indicators = BattleIndicators.new()
+	controller.enemies = [boss]
+	controller.navigation.configure(Rect2(0, 0, 1000, 700), [], 20.0)
+	controller.rng.seed = 17
+	controller.spiritualist_echo_state.source_id = player.get_instance_id()
+	boss.health.damage_applied.connect(controller._on_enemy_damage_resolved)
+	player.spiritualist_echo_curse_requested.connect(func(request: DamageRequest, target: CombatActor, power: float) -> void:
+		request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
+		request.can_crit = false
+		controller._on_spiritualist_echo_curse_requested(request, target, power)
+	)
+	player.spiritualist_veil_requested.connect(controller._on_spiritualist_veil_requested)
+	player.spiritualist_dissipation_requested.connect(func(center: Vector2, request: DamageRequest, marked_bonus: float, focus_bonus: float) -> void:
+		request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
+		request.can_crit = false
+		controller._on_spiritualist_dissipation_requested(center, request, marked_bonus, focus_bonus)
+	)
+	_check(player.use_spiritualist_echo_curse(boss) and controller.spiritualist_echo_state.has_mark(boss.get_instance_id()), "build de campo também marca boss solo")
+	_check(player.use_spiritualist_spectral_veil(boss.global_position) and boss.attribute_debuffs.fraction(AttributeDebuffState.DAMAGE_DEALT) >= 0.15, "Véu enfraquece boss dentro da área")
+	var hp_before := boss.health.current_hp
+	_check(player.use_spiritualist_dissipation(boss.global_position) and boss.health.current_hp < hp_before and not controller.spiritualist_echo_state.has_mark(boss.get_instance_id()) and controller.spiritualist_echo_state.pending.is_empty(), "Dissipação rompe marca em dano real sem eco da própria skill")
+	_check(boss.attribute_debuffs.fraction(AttributeDebuffState.DAMAGE_DEALT) >= 0.20, "fraqueza do Rito prevalece sobre Véu sem somar fontes")
 	player.free()
 	boss.free()
 	controller.battle_indicators.free()

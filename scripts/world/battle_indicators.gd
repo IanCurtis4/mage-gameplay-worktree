@@ -51,6 +51,7 @@ var elementalist_ember_preview := PackedVector2Array()
 var spiritualist_marks: Array[int] = []
 var spiritualist_events: Array[Dictionary] = []
 var spiritualist_wisps: Array[Dictionary] = []
+var spiritualist_return_wisps: Array[Dictionary] = []
 var spiritualist_visual_clock := 0.0
 var spiritualist_drain_caster_id := 0
 var spiritualist_drain_target_id := 0
@@ -90,19 +91,34 @@ func clear_spiritualist_procession_wisps() -> void:
 	spiritualist_wisps.clear()
 	queue_redraw()
 
+func show_spiritualist_return_wisp(source: Vector2, caster_id: int, kind: StringName) -> void:
+	if not source.is_finite() or caster_id <= 0 or kind not in [&"drain", &"recovery"]:
+		return
+	if spiritualist_return_wisps.size() >= 16:
+		spiritualist_return_wisps.pop_front()
+	var duration := 0.24 if kind == &"recovery" else 0.32
+	spiritualist_return_wisps.append({"source": source, "caster_id": caster_id, "kind": kind, "remaining": duration, "duration": duration})
+	queue_redraw()
+
+func clear_spiritualist_drain_wisps() -> void:
+	for index: int in range(spiritualist_return_wisps.size() - 1, -1, -1):
+		if spiritualist_return_wisps[index]["kind"] == &"drain":
+			spiritualist_return_wisps.remove_at(index)
+	queue_redraw()
+
 func show_spiritualist_event(kind: StringName, center: Vector2) -> void:
-	if kind not in [&"sigil", &"break", &"burst", &"recovery", &"drain", &"focus_grant", &"focus_consume", &"ritual"] or not center.is_finite():
+	if kind not in [&"sigil", &"break", &"burst", &"focus_grant", &"focus_consume", &"ritual"] or not center.is_finite():
 		return
 	if spiritualist_events.size() >= 64:
 		spiritualist_events.pop_front()
-	var duration := 0.24 if kind == &"recovery" else 0.32
-	spiritualist_events.append({"kind": kind, "center": center, "remaining": duration, "duration": duration})
+	spiritualist_events.append({"kind": kind, "center": center, "remaining": 0.32, "duration": 0.32})
 	queue_redraw()
 
 func clear_spiritualist_visuals() -> void:
 	spiritualist_marks.clear()
 	spiritualist_events.clear()
 	spiritualist_wisps.clear()
+	spiritualist_return_wisps.clear()
 	spiritualist_drain_caster_id = 0
 	spiritualist_drain_target_id = 0
 	spiritualist_veil_center = Vector2.INF
@@ -257,6 +273,7 @@ func show_click(point: Vector2, is_target: bool = false) -> void:
 func _process(delta: float) -> void:
 	if is_inside_tree() and get_tree().paused:
 		return
+	var had_spiritualist_visuals := not spiritualist_events.is_empty() or not spiritualist_wisps.is_empty() or not spiritualist_return_wisps.is_empty()
 	spiritualist_visual_clock += delta
 	for index: int in range(spiritualist_events.size() - 1, -1, -1):
 		var event: Dictionary = spiritualist_events[index]
@@ -272,7 +289,14 @@ func _process(delta: float) -> void:
 			spiritualist_wisps.remove_at(index)
 		else:
 			spiritualist_wisps[index] = wisp
-	if not spiritualist_events.is_empty() or not spiritualist_wisps.is_empty() or not spiritualist_marks.is_empty() or spiritualist_drain_caster_id > 0 or spiritualist_veil_remaining > 0.0 or spiritualist_focus_remaining > 0.0:
+	for index: int in range(spiritualist_return_wisps.size() - 1, -1, -1):
+		var return_wisp: Dictionary = spiritualist_return_wisps[index]
+		return_wisp["remaining"] = maxf(0.0, float(return_wisp["remaining"]) - delta)
+		if float(return_wisp["remaining"]) <= 0.0:
+			spiritualist_return_wisps.remove_at(index)
+		else:
+			spiritualist_return_wisps[index] = return_wisp
+	if had_spiritualist_visuals or not spiritualist_events.is_empty() or not spiritualist_wisps.is_empty() or not spiritualist_return_wisps.is_empty() or not spiritualist_marks.is_empty() or spiritualist_drain_caster_id > 0 or spiritualist_veil_remaining > 0.0 or spiritualist_focus_remaining > 0.0:
 		queue_redraw()
 	if click_lifetime > 0.0:
 		click_lifetime = maxf(0.0, click_lifetime - delta)
@@ -753,13 +777,27 @@ func _draw_spiritualist_visuals() -> void:
 		draw_set_transform(head, angle, Vector2.ONE)
 		draw_texture_rect_region(SPIRITUALIST_WISP, Rect2(-42, -24, 48, 48), Rect2(float(frame * 96), 0, 96, 96), Color(1.0, 1.0, 1.0, 0.94))
 		draw_set_transform(Vector2.ZERO)
+	for return_wisp: Dictionary in spiritualist_return_wisps:
+		var return_caster := instance_from_id(int(return_wisp["caster_id"])) as CombatActor
+		if return_caster == null or not is_instance_valid(return_caster) or not return_caster.is_alive():
+			continue
+		var source: Vector2 = return_wisp["source"]
+		var destination := return_caster.global_position + Vector2(0, -24)
+		var progress := 1.0 - float(return_wisp["remaining"]) / float(return_wisp["duration"])
+		var head := source.lerp(destination, progress)
+		var angle := (destination - source).angle()
+		var frame := mini(3, int(progress * 4.0))
+		var size := 35.0 if return_wisp["kind"] == &"recovery" else 42.0
+		draw_set_transform(head, angle, Vector2.ONE)
+		draw_texture_rect_region(SPIRITUALIST_WISP, Rect2(-size * 84.0 / 96.0, -size * 0.5, size, size), Rect2(float(frame * 96), 0, 96, 96), Color(1.0, 1.0, 1.0, 0.82))
+		draw_set_transform(Vector2.ZERO)
 	if spiritualist_focus_remaining > 0.0 and spiritualist_focus_caster_id > 0:
 		var focus_caster := instance_from_id(spiritualist_focus_caster_id) as CombatActor
 		if focus_caster != null and is_instance_valid(focus_caster) and focus_caster.is_alive():
 			_draw_spiritualist_frame(SPIRITUALIST_SIGIL, 2, focus_caster.global_position + Vector2(0, -29), 28.0, 0.64)
 	if spiritualist_veil_remaining > 0.0 and spiritualist_veil_center.is_finite():
 		var veil_frame := int(spiritualist_visual_clock * 6.0) % 4
-		_draw_spiritualist_frame(SPIRITUALIST_HALO, veil_frame, spiritualist_veil_center, 135.0, 0.68)
+		_draw_spiritualist_frame(SPIRITUALIST_HALO, veil_frame, spiritualist_veil_center, 135.0, 0.68, Vector2(48, 63))
 		draw_circle(spiritualist_veil_center, SpiritualistVeilState.RADIUS, Color("b9cfda", 0.045))
 		draw_arc(spiritualist_veil_center, SpiritualistVeilState.RADIUS, 0.0, TAU, 64, Color("cfe5e9", 0.65), 1.5, true)
 	if spiritualist_drain_caster_id > 0 and spiritualist_drain_target_id > 0:
@@ -770,7 +808,7 @@ func _draw_spiritualist_visuals() -> void:
 			var to := drain_target.global_position + Vector2(0, -18)
 			draw_line(from, to, Color("b9cfda", 0.28), 8.0, true)
 			draw_line(from, to, Color("e5f5f8", 0.82), 2.0, true)
-			_draw_spiritualist_frame(SPIRITUALIST_HALO, int(spiritualist_visual_clock * 6.0) % 4, caster.global_position, 44.0, 0.45)
+			_draw_spiritualist_frame(SPIRITUALIST_HALO, int(spiritualist_visual_clock * 6.0) % 4, caster.global_position, 44.0, 0.45, Vector2(48, 63))
 	for target_id: int in spiritualist_marks:
 		var target := instance_from_id(target_id) as CombatActor
 		if target == null or not is_instance_valid(target) or not target.is_alive():
@@ -782,11 +820,14 @@ func _draw_spiritualist_visuals() -> void:
 		var center: Vector2 = event["center"]
 		var progress := 1.0 - float(event["remaining"]) / float(event["duration"])
 		var frame := 3 if kind == &"break" else mini(3, int(progress * 4.0))
-		var texture := SPIRITUALIST_BURST if kind in [&"burst", &"focus_consume", &"ritual"] else SPIRITUALIST_WISP if kind in [&"recovery", &"drain"] else SPIRITUALIST_SIGIL
-		var size := 112.0 if kind == &"ritual" else 65.0 if kind == &"burst" else 35.0 if kind == &"recovery" else 42.0 if kind == &"drain" else 32.0 if kind in [&"focus_grant", &"focus_consume"] else 48.0
+		var texture := SPIRITUALIST_BURST if kind in [&"burst", &"focus_consume", &"ritual"] else SPIRITUALIST_SIGIL
+		var size := 112.0 if kind == &"ritual" else 65.0 if kind == &"burst" else 32.0 if kind in [&"focus_grant", &"focus_consume"] else 48.0
 		_draw_spiritualist_frame(texture, frame, center, size, 1.0 - progress * 0.55)
 
-func _draw_spiritualist_frame(texture: Texture2D, frame: int, center: Vector2, size: float, alpha: float) -> void:
+func spiritualist_frame_rect(anchor: Vector2, size: float, pivot: Vector2 = Vector2(48, 48)) -> Rect2:
+	return Rect2(anchor - pivot * (size / 96.0), Vector2.ONE * size)
+
+func _draw_spiritualist_frame(texture: Texture2D, frame: int, center: Vector2, size: float, alpha: float, pivot: Vector2 = Vector2(48, 48)) -> void:
 	var source := Rect2(float(frame * 96), 0.0, 96.0, 96.0)
-	var destination := Rect2(center - Vector2.ONE * (size * 0.5), Vector2.ONE * size)
+	var destination := spiritualist_frame_rect(center, size, pivot)
 	draw_texture_rect_region(texture, destination, source, Color(1.0, 1.0, 1.0, alpha))
