@@ -22,8 +22,8 @@ func _run() -> void:
 	snapshot.base_level = 30
 	snapshot.job_level = 40
 	snapshot.library_skill_ids = catalog.skill_ids_for_identity(&"mage", &"spiritualist")
-	snapshot.skill_ranks = {&"spiritualist_echo_curse": 1, &"spiritualist_soul_drain": 1, &"spiritualist_dissipation": 1, &"spiritualist_echo_recovery": 1, &"spiritualist_channel_focus": 1}
-	snapshot.active_slots = [&"spiritualist_echo_curse", &"spiritualist_soul_drain", &"spiritualist_dissipation", null, null]
+	snapshot.skill_ranks = {&"spiritualist_echo_curse": 1, &"spiritualist_soul_drain": 1, &"spiritualist_dissipation": 1, &"spiritualist_procession": 1, &"spiritualist_echo_recovery": 1, &"spiritualist_channel_focus": 1}
+	snapshot.active_slots = [&"spiritualist_echo_curse", &"spiritualist_soul_drain", &"spiritualist_dissipation", &"spiritualist_procession", null]
 	snapshot.passive_slots = [&"spiritualist_echo_recovery", &"spiritualist_channel_focus"]
 	RunController.pending_run_state = RunState.from_build("", snapshot)
 	RunController.pending_training_mode = true
@@ -66,6 +66,7 @@ func _run() -> void:
 	for echo: Dictionary in arena.spiritualist_echo_state.advance(0.36):
 		arena._apply_spiritualist_echo(echo)
 	_check(arena.battle_indicators.spiritualist_events[-1]["kind"] == &"echo_hit" and _has_label(arena, "ECO! "), "positive Echo uses one real damage number labelled ECO and two-wave event")
+	_check(_combat_lanes_unique(arena, boss), "damage numbers and status labels share three non-overlapping lanes per target")
 	arena._update_spiritualist_panel()
 	_check(arena.spiritualist_hint_label.text.begins_with("ECO! "), "focused panel confirms Echo's real damage")
 	arena._spawn_training_add_wave()
@@ -139,11 +140,47 @@ func _run() -> void:
 	arena.player.run_state.build_snapshot.passive_slots.clear()
 	_check(not arena.player.grant_spiritualist_focus(), "unequipped Focus passive cannot create a fake charge")
 
+	arena.spiritualist_echo_state.clear()
+	arena.spiritualist_echo_state.mark(boss_id, 0.50)
+	arena._on_spiritualist_drain_requested(drain_request, boss)
+	var expiry_before := _event_count(arena, &"expire")
+	arena._process(0.5)
+	_check(_event_count(arena, &"expire") == expiry_before and arena.spiritualist_echo_state.pending.size() == 1, "real frame: Drain converts mark to pending Echo without false expiration")
+	arena._cancel_spiritualist_drain()
+	arena.spiritualist_echo_state.clear()
+	arena.spiritualist_echo_state.mark(boss_id, 0.50)
+	var procession_request := _request(arena.player, boss, &"spiritualist_procession", 100.0)
+	arena._on_spiritualist_procession_requested(procession_request, boss)
+	expiry_before = _event_count(arena, &"expire")
+	arena._process(0.5)
+	_check(_event_count(arena, &"expire") == expiry_before and arena.spiritualist_echo_state.pending.size() == 1, "real frame: Procession converts mark to pending Echo without false expiration")
+	arena._cancel_spiritualist_procession()
+	var saved_snapshot := arena.player.run_state.build_snapshot
+	arena.player.run_state.build_snapshot = null
+	arena._sync_spiritualist_combat_state()
+	_check(arena.player.run_state.build_snapshot == null, "snapshot-null sync is a safe no-op")
+	arena.player.run_state.build_snapshot = saved_snapshot
+
 	arena._show_result(false)
 	_check(arena.battle_indicators.spiritualist_marks.is_empty() and arena.battle_indicators.spiritualist_pending_remaining.is_empty() and arena._spiritualist_feedback_labels.is_empty() and arena._spiritualist_recent_feedback.is_empty(), "run end clears world markers and finite feedback queue")
 	paused = false
 	arena.queue_free()
 	current_scene = null
+	await process_frame
+	var previous_class := RunController.selected_class_id
+	RunController.selected_class_id = &"mage"
+	var pilot := load("res://scenes/main.tscn").instantiate() as RunController
+	root.add_child(pilot)
+	current_scene = pilot
+	await process_frame
+	pilot._process(0.1)
+	_check(pilot.spiritualist_panel == null and pilot.battle_indicators.spiritualist_marks.is_empty(), "non-persistent Mage pilot scene has no Spiritualist UI")
+	pilot.run_state.build_snapshot = null
+	pilot._sync_spiritualist_combat_state()
+	_check(pilot.run_state.build_snapshot == null and pilot.battle_indicators.spiritualist_marks.is_empty(), "snapshot-null sync in pilot scene is a safe no-op")
+	pilot.queue_free()
+	current_scene = null
+	RunController.selected_class_id = previous_class
 	await process_frame
 	print("E05 legibilidade Espiritualista: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
 	quit(0 if failures == 0 else 1)
@@ -169,6 +206,17 @@ func _event_count(arena: RunController, kind: StringName) -> int:
 		if event["kind"] == kind:
 			count += 1
 	return count
+
+func _combat_lanes_unique(arena: RunController, actor: CombatActor) -> bool:
+	var lanes: Array[int] = []
+	for label: Label in arena._spiritualist_feedback_labels:
+		if not is_instance_valid(label) or label.is_queued_for_deletion() or label.get_meta("actor_id", 0) != actor.get_instance_id():
+			continue
+		var lane := int(label.get_meta("lane", -1))
+		if lane < 0 or lanes.has(lane):
+			return false
+		lanes.append(lane)
+	return lanes.size() <= 3
 
 func _check(condition: bool, message: String) -> void:
 	checks += 1

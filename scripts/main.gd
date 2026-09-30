@@ -205,12 +205,14 @@ func _process(_delta: float) -> void:
 		_sync_berserker_wound_visuals()
 		if player.is_alive():
 			var marks_before := spiritualist_echo_state.marks.keys()
-			for echo: Dictionary in spiritualist_echo_state.advance(_delta):
+			var due_echoes := spiritualist_echo_state.advance(_delta)
+			_announce_spiritualist_mark_expiry(marks_before)
+			for echo: Dictionary in due_echoes:
 				_apply_spiritualist_echo(echo)
 			_advance_spiritualist_drain(_delta)
 			_advance_spiritualist_veil(_delta)
 			_advance_spiritualist_procession(_delta)
-			_sync_spiritualist_combat_state(marks_before)
+			_sync_spiritualist_combat_state()
 			battle_indicators.sync_spiritualist_focus(player.get_instance_id(), player.spiritualist_focus_remaining)
 	_update_hud()
 	if not get_tree().paused and not run_finished:
@@ -1044,8 +1046,8 @@ func _apply_spiritualist_echo(echo: Dictionary) -> void:
 	elif float(result.get("absorbed_damage", 0.0)) > 0.0 and float(result.get("actual_damage", 0.0)) <= 0.0:
 		_show_spiritualist_feedback(target_actor, "ABSORVIDO", Color("b9cbd3"))
 
-func _sync_spiritualist_combat_state(marks_before: Array = []) -> void:
-	if battle_indicators == null or player.run_state == null or player.run_state.build_snapshot.evolution_id != &"spiritualist":
+func _announce_spiritualist_mark_expiry(marks_before: Array) -> void:
+	if not _is_spiritualist_run() or battle_indicators == null:
 		return
 	var focus := _focused_spiritualist_target()
 	for target_id: int in marks_before:
@@ -1055,6 +1057,10 @@ func _sync_spiritualist_combat_state(marks_before: Array = []) -> void:
 		if target != null and is_instance_valid(target) and target == focus and target.is_alive():
 			battle_indicators.show_spiritualist_event(&"expire", target.global_position + Vector2(0, -37))
 			_show_spiritualist_feedback(target, "MALDIÇÃO EXPIROU", Color("b9cbd3"))
+
+func _sync_spiritualist_combat_state() -> void:
+	if battle_indicators == null or not _is_spiritualist_run():
+		return
 	var weakened: Dictionary[int, Dictionary] = {}
 	for enemy: CombatActor in enemies:
 		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
@@ -1688,31 +1694,58 @@ func _show_damage_number(actor: CombatActor, amount: int, critical: bool) -> voi
 		return
 	if _spiritualist_echo_number_target_id == actor.get_instance_id():
 		_remember_spiritualist_feedback(actor, "ECO! %d" % amount)
-		_show_combat_text(actor, "ECO! %d" % amount, Color("d9eafa"), 22)
+		_show_spiritualist_combat_text(actor, "ECO! %d" % amount, Color("d9eafa"), 22)
 		return
-	_show_combat_text(actor, ("CRÍTICO %d" if critical else "%d") % amount, Color("ffd166") if critical else Color.WHITE, 20 if critical else 17)
+	var label_text := ("CRÍTICO %d" if critical else "%d") % amount
+	var label_color := Color("ffd166") if critical else Color.WHITE
+	var label_size := 20 if critical else 17
+	if _is_spiritualist_run():
+		_show_spiritualist_combat_text(actor, label_text, label_color, label_size)
+	else:
+		_show_combat_text(actor, label_text, label_color, label_size)
 
 func _show_miss(actor: CombatActor) -> void:
-	_show_combat_text(actor, "ERROU", Color("b9cbd3"), 16)
+	if _is_spiritualist_run():
+		_show_spiritualist_combat_text(actor, "ERROU", Color("b9cbd3"), 16)
+	else:
+		_show_combat_text(actor, "ERROU", Color("b9cbd3"), 16)
 
 func _show_spiritualist_feedback(actor: CombatActor, message: String, color: Color) -> void:
 	if actor == null or not is_instance_valid(actor):
 		return
+	_show_spiritualist_combat_text(actor, message, color, 15)
+	_remember_spiritualist_feedback(actor, message)
+
+func _show_spiritualist_combat_text(actor: CombatActor, message: String, color: Color, font_size: int) -> void:
 	for index: int in range(_spiritualist_feedback_labels.size() - 1, -1, -1):
-		if not is_instance_valid(_spiritualist_feedback_labels[index]):
+		if not is_instance_valid(_spiritualist_feedback_labels[index]) or _spiritualist_feedback_labels[index].is_queued_for_deletion():
 			_spiritualist_feedback_labels.remove_at(index)
 	while _spiritualist_feedback_labels.size() >= 12:
 		var oldest: Label = _spiritualist_feedback_labels.pop_front()
 		if is_instance_valid(oldest):
 			oldest.queue_free()
-	var stacked := 0
+	var used_lanes: Array[int] = []
 	for label: Label in _spiritualist_feedback_labels:
 		if is_instance_valid(label) and label.get_meta("actor_id", 0) == actor.get_instance_id():
-			stacked += 1
-	var feedback_label := _show_combat_text(actor, message, color, 15, mini(stacked, 2) * 20.0)
+			used_lanes.append(int(label.get_meta("lane", 0)))
+	if used_lanes.size() >= 3:
+		for index: int in range(_spiritualist_feedback_labels.size()):
+			var oldest_for_actor := _spiritualist_feedback_labels[index]
+			if is_instance_valid(oldest_for_actor) and oldest_for_actor.get_meta("actor_id", 0) == actor.get_instance_id():
+				used_lanes.erase(int(oldest_for_actor.get_meta("lane", 0)))
+				oldest_for_actor.queue_free()
+				_spiritualist_feedback_labels.remove_at(index)
+				break
+	var lane := 0
+	while used_lanes.has(lane):
+		lane += 1
+	var feedback_label := _show_combat_text(actor, message, color, font_size, lane * 28.0)
 	feedback_label.set_meta("actor_id", actor.get_instance_id())
+	feedback_label.set_meta("lane", lane)
 	_spiritualist_feedback_labels.append(feedback_label)
-	_remember_spiritualist_feedback(actor, message)
+
+func _is_spiritualist_run() -> bool:
+	return run_state != null and run_state.build_snapshot != null and run_state.build_snapshot.evolution_id == &"spiritualist"
 
 func _remember_spiritualist_feedback(actor: CombatActor, message: String) -> void:
 	if actor != player and actor != _focused_spiritualist_target():
@@ -1735,7 +1768,7 @@ func _show_combat_text(actor: CombatActor, text: String, color: Color, font_size
 	var label := Label.new()
 	label.text = text
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var spiritualist_style := run_state != null and run_state.build_snapshot != null and run_state.build_snapshot.evolution_id == &"spiritualist"
+	var spiritualist_style := _is_spiritualist_run()
 	if spiritualist_style:
 		label.custom_minimum_size = Vector2(200, 0)
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

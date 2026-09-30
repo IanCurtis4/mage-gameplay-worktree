@@ -239,12 +239,24 @@ fica encoberto. As rotas expandidas aparecem apenas para ações equipadas e
 passiva de Foco instalada. Textos de combate ganham contorno e empilhamento
 somente em runs do Espiritualista; outras classes mantêm sua apresentação.
 
-Evidência: `tests/e05_spiritualist_readability_test.gd` cobre 31 checks de
+Evidência: `tests/e05_spiritualist_readability_test.gd` cobre 37 checks de
 marca, preparo, absorção, múltiplos alvos, Rito, debuff, pausa, expiração,
-Drenagem 0/1/3/4 ticks, Foco e limpeza. O probe OpenGL real
+Drenagem 0/1/3/4 ticks, Foco, limpeza, conversão dentro do `_process` por
+Drenagem/Procissão e ausência de dereferência em run piloto sem snapshot.
+Uma revisão Astra de `ca2f66c` detectou que a sincronização ao fim do frame
+confundia consumo da marca com expiração e que números/status competiam pela
+mesma posição. O ajuste anuncia expiração imediatamente após o avanço temporal
+da marca, antes de qualquer impacto de skill no frame. Números e estados agora
+compartilham até três faixas finitas por ator, com remoção do aviso mais antigo
+sob pressão, sem depender do painel para leitura no mundo. O probe ignorado
+do Astra (`.godot/verification/astra_readability_probe.gd`) passou 32 checks
+após as correções; os casos relevantes estão cobertos no teste versionado.
+
+O probe OpenGL real
 `tools/spiritualist_readability_renderer_probe.gd` reproduz boss e reforços
-com capturas locais ignoradas em `.godot/verification/`, verificando as seis
-etapas (inclusive ajuda expandida) e ausência de sobreposição entre painéis
+com capturas locais ignoradas em `.godot/verification/`, verificando dez
+etapas (inclusive ajuda expandida, Drenagem, Foco, enfraquecimento e dois alvos)
+e ausência de sobreposição entre painéis
 em 1280×720. `tools/verify.ps1`
 integral passou com Godot 4.7.2 standard após a implementação. Permanecem
 para o playtest humano a leitura em movimento, densidade de efeitos e FPS em
