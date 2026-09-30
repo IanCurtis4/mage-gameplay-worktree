@@ -156,6 +156,7 @@ static func _ensure_built() -> void:
 	_add_passive_skill(&"elementalist_prismatic_resonance", "Ressonância Prismática")
 	_add_skill(&"elementalist_ember_path", "Trilha de Brasas", "D", SkillDefinition.Targeting.DIRECTION, 24.0, 10.0, 1.10, 240.0, 0.0, 0.50, DamageRequest.AccuracyMode.GEOMETRY, true)
 	_add_skill(&"elementalist_tri_nova", "Nova Tríplice", "D", SkillDefinition.Targeting.SELF, 30.0, 16.0, 0.70, 170.0, 0.0, 0.65, DamageRequest.AccuracyMode.GEOMETRY, true)
+	_add_skill(&"spiritualist_echo_curse", "Maldição do Eco", "D", SkillDefinition.Targeting.SINGLE_TARGET, 18.0, 6.0, 0.85, 380.0, 0.0, 0.35, DamageRequest.AccuracyMode.CONTESTED, true)
 	_configure_slash_ranks()
 	_configure_dash_ranks()
 	_configure_shield_wall_ranks()
@@ -202,6 +203,7 @@ static func _ensure_built() -> void:
 	_configure_defender_reprisal_wave_ranks()
 	_configure_berserker_ranks()
 	_configure_elementalist_ranks()
+	_configure_spiritualist_curse_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -1018,6 +1020,26 @@ static func _configure_elementalist_ranks() -> void:
 	_elementalist_passive_ranks(&"elementalist_prismatic_resonance", SkillDefinition.Handler.ELEMENTALIST_PRISMATIC_RESONANCE, [0.25, 0.35, 0.45], [&"three_direct_distinct_elements_within_six_seconds_third_hit_bonus_before_mitigation"])
 	_elementalist_active_ranks(&"elementalist_ember_path", SkillDefinition.Handler.ELEMENTALIST_EMBER_PATH, [24.0, 26.0, 28.0, 29.0, 30.0], [1.10, 1.25, 1.38, 1.49, 1.58], 240.0, 10.0, 0.50, [&"three_eruptions_at_80_160_240", &"direct_magic_damage_once_per_target_emission"])
 	_elementalist_active_ranks(&"elementalist_tri_nova", SkillDefinition.Handler.ELEMENTALIST_TRI_NOVA, [30.0, 32.0, 34.0, 35.0, 36.0], [0.70, 0.80, 0.88, 0.95, 1.01], 170.0, 16.0, 0.65, [&"three_pulses_fire_ice_lightning_at_0_0_25_0_50", &"ice_pulse_0_55_slow", &"lightning_pulse_0_60_electrified", &"root_only_first_pulse"] , 0.55)
+
+static func _configure_spiritualist_curse_ranks() -> void:
+	var definition: SkillDefinition = _skills[&"spiritualist_echo_curse"]
+	definition.handler_id = SkillDefinition.Handler.SPIRITUALIST_ECHO_CURSE
+	var costs: Array[float] = [18.0, 20.0, 22.0, 23.0, 24.0]
+	var powers: Array[float] = [0.85, 1.00, 1.12, 1.22, 1.30]
+	var echoes: Array[float] = [0.35, 0.42, 0.49, 0.55, 0.60]
+	for index: int in range(powers.size()):
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.sp_cost = costs[index]
+		rank.cooldown = 6.0
+		rank.range = 380.0
+		rank.variable_cast_time = 0.35
+		rank.power = powers[index]
+		rank.secondary_power = echoes[index]
+		rank.magic_weight = 1.0
+		rank.effect_ids = [&"direct_magic_damage", &"mark_five_seconds", &"next_direct_positive_hit_echo_after_0_35s"]
+		definition.ranks.append(rank)
+	assert(definition.is_rank_catalog_valid())
 
 static func _elementalist_active_ranks(skill_id: StringName, handler: SkillDefinition.Handler, costs: Array[float], powers: Array[float], skill_range: float, cooldown: float, variable_cast: float, effects: Array[StringName], secondary_power: float = 0.0) -> void:
 	var definition: SkillDefinition = _skills[skill_id]

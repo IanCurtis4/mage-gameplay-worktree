@@ -2,6 +2,8 @@ class_name BattleIndicators
 extends Node2D
 
 const IceWallScript = preload("res://scripts/world/ice_wall.gd")
+const SPIRITUALIST_SIGIL: Texture2D = preload("res://assets/art/vfx/spiritualist_curse_sigil.png")
+const SPIRITUALIST_BURST: Texture2D = preload("res://assets/art/vfx/spiritualist_spectral_burst.png")
 
 const READY_COLOR := Color("81dfd0")
 const BLOCKED_COLOR := Color("ff9a85")
@@ -44,6 +46,26 @@ var elementalist_pulses: Array[Dictionary] = []
 var elementalist_arc_links: Array[Dictionary] = []
 var elementalist_prisms: Array[Dictionary] = []
 var elementalist_ember_preview := PackedVector2Array()
+var spiritualist_marks: Array[int] = []
+var spiritualist_events: Array[Dictionary] = []
+var spiritualist_visual_clock := 0.0
+
+func sync_spiritualist_marks(mark_ids: Array) -> void:
+	spiritualist_marks.assign(mark_ids)
+	queue_redraw()
+
+func show_spiritualist_event(kind: StringName, center: Vector2) -> void:
+	if kind not in [&"sigil", &"break", &"burst"] or not center.is_finite():
+		return
+	if spiritualist_events.size() >= 64:
+		spiritualist_events.pop_front()
+	spiritualist_events.append({"kind": kind, "center": center, "remaining": 0.32, "duration": 0.32})
+	queue_redraw()
+
+func clear_spiritualist_visuals() -> void:
+	spiritualist_marks.clear()
+	spiritualist_events.clear()
+	queue_redraw()
 
 func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast: bool, selected_target: CombatActor = null) -> void:
 	skill = skill_id
@@ -187,6 +209,16 @@ func show_click(point: Vector2, is_target: bool = false) -> void:
 func _process(delta: float) -> void:
 	if is_inside_tree() and get_tree().paused:
 		return
+	spiritualist_visual_clock += delta
+	for index: int in range(spiritualist_events.size() - 1, -1, -1):
+		var event: Dictionary = spiritualist_events[index]
+		event["remaining"] = maxf(0.0, float(event["remaining"]) - delta)
+		if float(event["remaining"]) <= 0.0:
+			spiritualist_events.remove_at(index)
+		else:
+			spiritualist_events[index] = event
+	if not spiritualist_events.is_empty() or not spiritualist_marks.is_empty():
+		queue_redraw()
 	if click_lifetime > 0.0:
 		click_lifetime = maxf(0.0, click_lifetime - delta)
 		queue_redraw()
@@ -230,6 +262,7 @@ func _draw() -> void:
 		_draw_elementalist_arc_link(link)
 	for prism: Dictionary in elementalist_prisms:
 		_draw_elementalist_prism(prism)
+	_draw_spiritualist_visuals()
 	if skill == &"":
 		return
 	var color := READY_COLOR if available else BLOCKED_COLOR
@@ -642,3 +675,24 @@ func _draw_elementalist_arc_link(link: Dictionary) -> void:
 
 func _draw_elementalist_prism(prism: Dictionary) -> void:
 	_draw_prism_pulse(prism)
+
+func _draw_spiritualist_visuals() -> void:
+	for target_id: int in spiritualist_marks:
+		var target := instance_from_id(target_id) as CombatActor
+		if target == null or not is_instance_valid(target) or not target.is_alive():
+			continue
+		var frame := 1 if int(spiritualist_visual_clock * 3.0) % 2 == 0 else 2
+		_draw_spiritualist_frame(SPIRITUALIST_SIGIL, frame, target.global_position + Vector2(0, -22), 48.0, 0.78)
+	for event: Dictionary in spiritualist_events:
+		var kind: StringName = event["kind"]
+		var center: Vector2 = event["center"]
+		var progress := 1.0 - float(event["remaining"]) / float(event["duration"])
+		var frame := 3 if kind == &"break" else mini(3, int(progress * 4.0))
+		var texture := SPIRITUALIST_BURST if kind == &"burst" else SPIRITUALIST_SIGIL
+		var size := 65.0 if kind == &"burst" else 48.0
+		_draw_spiritualist_frame(texture, frame, center, size, 1.0 - progress * 0.55)
+
+func _draw_spiritualist_frame(texture: Texture2D, frame: int, center: Vector2, size: float, alpha: float) -> void:
+	var source := Rect2(float(frame * 96), 0.0, 96.0, 96.0)
+	var destination := Rect2(center - Vector2.ONE * (size * 0.5), Vector2.ONE * size)
+	draw_texture_rect_region(texture, destination, source, Color(1.0, 1.0, 1.0, alpha))

@@ -21,6 +21,7 @@ signal elementalist_area_requested(skill_id: StringName, center: Vector2, radius
 signal elementalist_lightning_arc_requested(request: DamageRequest, target: CombatActor, jump_damage: float, marked_bonus: float)
 signal elementalist_ember_path_requested(centers: Array[Vector2], request: DamageRequest)
 signal elementalist_tri_nova_requested(center: Vector2, requests: Array[DamageRequest], marked_bonus: float)
+signal spiritualist_echo_curse_requested(request: DamageRequest, target: CombatActor, echo_power: float)
 signal lightning_wall_requested(direction: Vector2, request: DamageRequest)
 signal soul_impact_requested(request: DamageRequest, target: CombatActor)
 signal haunt_requested(origin: Vector2, direction: Vector2, cone_range: float, request: DamageRequest)
@@ -201,6 +202,8 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 		animation_kind = &"berserker"
 	elif _is_elementalist():
 		animation_kind = &"elementalist"
+	elif _is_spiritualist():
+		animation_kind = &"spiritualist"
 	set_animation_kind(animation_kind)
 	max_sp = stat_breakdown.value(&"max_sp")
 	current_sp = max_sp
@@ -807,6 +810,27 @@ func use_elementalist_tri_nova() -> bool:
 	resources_changed.emit()
 	return true
 
+func use_spiritualist_echo_curse(enemy: CombatActor) -> bool:
+	var skill_id := &"spiritualist_echo_curse"
+	var rank_definition := _runtime_rank_definition(skill_id)
+	if not _is_spiritualist() or rank_definition == null or not can_target_skill(skill_id, enemy) or not _can_spend(skill_id):
+		return false
+	_spend(skill_id)
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(skill_id)
+	var request := _make_magic_request(enemy, skill_id, _magic_power(skill_id), definition.accuracy_mode, definition.can_crit)
+	spiritualist_echo_curse_requested.emit(request, enemy, rank_definition.secondary_power)
+	resources_changed.emit()
+	return true
+
+func spiritualist_magic_attack() -> float:
+	return stat_breakdown.value(&"magic_attack")
+
+func make_spiritualist_echo_request(enemy: CombatActor, magic_damage: float) -> DamageRequest:
+	var request := _make_magic_request(enemy, &"spiritualist_echo_curse", magic_damage, DamageRequest.AccuracyMode.GEOMETRY, false)
+	request.is_secondary = true
+	return request
+
 func use_spear(skill_id: StringName, enemy: CombatActor) -> bool:
 	if class_id != &"mage" or skill_id not in [&"fire_spear", &"ice_spear"] or not can_target_skill(skill_id, enemy) or not _can_spend(skill_id):
 		return false
@@ -1098,6 +1122,9 @@ func _is_berserker() -> bool:
 
 func _is_elementalist() -> bool:
 	return run_state != null and run_state.uses_persistent_build() and run_state.build_snapshot.evolution_id == &"elementalist" and class_id == &"mage"
+
+func _is_spiritualist() -> bool:
+	return run_state != null and run_state.uses_persistent_build() and run_state.build_snapshot.evolution_id == &"spiritualist" and class_id == &"mage"
 
 func _defender_active_equipped(skill_id: StringName) -> bool:
 	return _is_defender() and skill_id in available_skill_ids()
@@ -1530,7 +1557,7 @@ func can_target_skill(skill_id: StringName, enemy: CombatActor) -> bool:
 		return false
 	if global_position.distance_to(enemy.global_position) > skill_range(skill_id):
 		return false
-	return skill_id not in [&"brutal_strike", &"berserker_rupture", &"berserker_execution", &"berserker_breath_steal"] or (navigation != null and navigation.is_segment_clear(global_position, enemy.global_position, 0.0))
+	return skill_id not in [&"brutal_strike", &"berserker_rupture", &"berserker_execution", &"berserker_breath_steal", &"spiritualist_echo_curse"] or (navigation != null and navigation.is_segment_clear(global_position, enemy.global_position, 0.0))
 
 func aim_direction(point: Vector2) -> Vector2:
 	var direction := global_position.direction_to(point)

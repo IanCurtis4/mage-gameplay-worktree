@@ -13,7 +13,7 @@ var _ground_offsets := PackedFloat32Array()
 
 func configure(kind: StringName) -> void:
 	actor_kind = kind
-	if actor_kind not in [&"swordsman", &"mage", &"warrior", &"archer", &"defender", &"berserker", &"elementalist"]:
+	if actor_kind not in [&"swordsman", &"mage", &"warrior", &"archer", &"defender", &"berserker", &"elementalist", &"spiritualist"]:
 		actor_kind = &"swordsman"
 	atlas = load("res://assets/art/animations/%s.png" % actor_kind) as Texture2D
 	_ground_offsets.clear()
