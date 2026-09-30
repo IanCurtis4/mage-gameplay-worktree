@@ -50,3 +50,19 @@ Sol recebeu os achados e o aviso de término da execução independente. Próxim
 passo: corrigir dentro do mesmo escopo, atualizar checkpoint único, repetir
 testes afetados e regressão integral, devolver o delta para revisão consolidada.
 Esta revisão não atesta legibilidade em partida, FPS ou balanceamento.
+
+## Reavaliação do delta — 30/09/2026
+
+Após o pacote de correção `a4c34f3`, Astra aprovou tecnicamente a integração
+do Espiritualista. O parecer de ajustes acima fica preservado como histórico;
+os quatro achados estão resolvidos no delta. Foram inspecionados diff de
+runtime/testes e as duas capturas do renderer real. Astra repetiu de modo
+independente Drenagem (28 checks), visuais (23), Recolhimento (16) e fluxo
+integrado (86): 153 checks PASS, sem ERROR. A suíte integral do delta passou
+na execução do implementador, além da suíte independente do candidato anterior.
+Sem bloqueio técnico remanescente para preparar `codex/playtest`.
+
+Esta aprovação não substitui o playtest do usuário: sensação de combate,
+legibilidade sob múltiplos efeitos, FPS e balanceamento ainda precisam de
+avaliação na partida. `master` e as classes do Arqueiro continuam aguardando
+aceite explícito do usuário.

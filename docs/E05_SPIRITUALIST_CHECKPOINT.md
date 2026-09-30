@@ -118,8 +118,9 @@ quatro ajustes de integração, corrigidos em rodada única: canal interrompido
 solta a pose de cast sem apagar um novo cast, halo usa pivô de chão `(48,63)`,
 ticks de Drenagem e restituição real de SP têm wisps alvo→caster em fila
 finita, e as duas builds executam loops determinísticos contra boss solo.
-O redraw cobre também o frame em que o último efeito expira. Falta aprovação
-do delta por Astra e, depois, playtest do usuário. A inspeção de legibilidade
+O redraw cobre também o frame em que o último efeito expira. Astra aprovou
+tecnicamente o delta `a4c34f3` após inspeção e 153 checks independentes.
+Segue a preparação do candidato de playtest para o usuário. A inspeção de legibilidade
 e FPS com muitas skills simultâneas continua dependente do playtest.
 
 Renderização com Godot 4.7.2 standard/OpenGL real: o probe opcional
@@ -145,4 +146,4 @@ o usuário ainda precisa avaliar a leitura na partida.
 | Procissão de Espectros | `9f94f6e` | 18 checks novos + catálogo de evolução 65 checks | 8 — Dissipação |
 | Rito de Dissipação | `07e71e9` | 18 checks novos + catálogo de evolução 65 checks | 9 — fechamento |
 | Fechamento integrado | `f8c59f0` | 72 checks de builds/menu→run/boss + 18 visuais; `tools/verify.ps1` integral | revisão técnica Astra |
-| Ajustes da revisão Astra | commit desta alteração | Drenagem 28, visuais 23, integração 86 checks; renderer real e nova regressão integral | aprovação do delta e candidato de playtest |
+| Ajustes da revisão Astra | `a4c34f3` | Drenagem 28, visuais 23, integração 86 checks; renderer real e nova regressão integral | playtest do usuário após preparo do candidato |
