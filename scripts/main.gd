@@ -1759,8 +1759,10 @@ func _build_ui() -> void:
 
 	class_button = Button.new()
 	class_button.text = "Classe: %s" % player.class_definition.display_name
-	if player.run_state != null and player.run_state.uses_persistent_build() and player.run_state.build_snapshot.evolution_id == &"elementalist":
-		class_button.text = "Classe: %s" % ProfileCatalog.pilot().evolution_definition(&"elementalist").display_name
+	if player.run_state != null and player.run_state.uses_persistent_build() and not player.run_state.build_snapshot.evolution_id.is_empty():
+		var evolution := ProfileCatalog.pilot().evolution_definition(player.run_state.build_snapshot.evolution_id)
+		if evolution != null:
+			class_button.text = "Classe: %s" % evolution.display_name
 	class_button.custom_minimum_size = Vector2(184, 38)
 	ui_root.add_child(class_button)
 	class_button.set_anchors_preset(Control.PRESET_TOP_RIGHT)

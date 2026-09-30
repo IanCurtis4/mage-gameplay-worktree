@@ -10,7 +10,7 @@ func _initialize() -> void:
 func _run() -> void:
 	var catalog := ProfileCatalog.pilot()
 	var evolution := catalog.evolution_definition(&"spiritualist")
-	_check(catalog.is_valid() and evolution != null and not evolution.content_ready and evolution.entry_skill_id == &"spiritualist_echo_curse", "partial kit remains unavailable for real evolution")
+	_check(catalog.is_valid() and evolution != null and evolution.content_ready and evolution.entry_skill_id == &"spiritualist_echo_curse", "complete Spiritualist kit is available for real evolution")
 	var metadata := catalog.skill_metadata(&"spiritualist_echo_curse")
 	_check(metadata["free_rank"] == 1 and metadata["max_purchased_rank"] == 4 and metadata["rank_requirements"][1]["job_level"] == 20, "entry is free R1 at job 20 with four paid ranks")
 	var definition := ClassCatalog.skill_definition(&"spiritualist_echo_curse")

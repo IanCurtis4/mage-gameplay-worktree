@@ -475,6 +475,7 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 			]
 		if definition.id == &"spiritualist" and not normalized_overrides.has(definition.id):
 			definition.entry_skill_id = &"spiritualist_echo_curse"
+			definition.content_ready = true
 			definition.exclusive_skill_ids = [&"spiritualist_echo_curse", &"spiritualist_echo_recovery", &"spiritualist_soul_drain", &"spiritualist_spectral_veil", &"spiritualist_channel_focus", &"spiritualist_procession", &"spiritualist_dissipation"]
 		if normalized_overrides.has(definition.id):
 			_apply_evolution_override(definition, normalized_overrides[definition.id])

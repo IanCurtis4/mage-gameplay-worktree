@@ -7,15 +7,16 @@ O usuário aprovou o Elementalista no candidato `ce87065` e liberou a evolução
 classe. Astra cuida do atlas e dos sprites/animações das skills, em arquivos
 visuais próprios; Sol é dono de runtime, dados críticos, testes, integração e
 deste checkpoint. Sem handoff/gate por microtarefa. Revisão de Astra somente
-após o escopo completo, seguida de playtest do usuário. Não mover `master` nem
-`codex/playtest` por esta tarefa; não começar Arqueiro ou próximo épico.
+após o escopo completo, seguida de playtest do usuário. `codex/playtest` só
+pode avançar após aprovação técnica de Astra; `master` aguarda aceite de
+produto explícito. Não começar Arqueiro ou próximo épico.
 
 Base `ce87065`, branch `codex/e05-evolutions`. Contratos: E00_MVP_CLASS_CONTRACT,
 ADR_E00_01_CHARACTER_PROGRESSION, MVP/ARCHITECTURE e WORKFLOW. Origem persistente
 `mage`; sete exclusivas nos jobs 20/23/25/28/31/34/37; primeira ativa R1
 gratuita sem autoequip; carteiras base19/evolução20, cinco ativas e dois
 passivos equipados. Herança do Mago segue comprada. O kit precisa de duas builds
-legais e loop em boss solo. `content_ready=false` até integração validada.
+legais e loop em boss solo. `content_ready=true` após integração validada.
 
 ## Kit finito — escolhas de implementação dentro do contrato
 
@@ -55,8 +56,9 @@ Atlas `spiritualist` 4 colunas × 8 linhas de células 64×64, pivô lógico
 costas walk/idle/cast, frente/costas hurt/death. Passos distintos, botas no
 chão, transparência genuína e silhueta do Espiritualista puro (não ranger do
 mood antigo). Fenômeno pálido/prata/azul-cinza/carvão, tecido ritual, névoa,
-véus e crescentes; não recolorir Elementalista. Sol integra o atlas no registry
-quando o arquivo e o contrato visual do Astra estiverem prontos.
+véus e crescentes; não recolorir Elementalista. O pacote final do Astra está
+em `649db5e`, com atlas, quatro famílias VFX e pranchas. As texturas já foram
+importadas no Godot 4.7.2; Sol integra o atlas e conecta os VFX aos eventos.
 
 Sprites/VFX necessários, com âncoras/tempo autoritativos:
 
@@ -107,8 +109,23 @@ disponível para compra futura, sem compra/equipagem implícita.
 Commits pequenos e testes dirigidos ao fim de cada item; revisão Astra somente
 no fechamento. Registro de hash/resultados abaixo será atualizado conforme
 execução. Tempo/tokens por skill só se houver medição atribuível real, não
-estimativa inventada. Primeiro passo incompleto atual: **1 — migração**.
+estimativa inventada. As sete skills, dois presets de personagens distintos,
+menu→run e boss solo estão implementados. `content_ready=true`. O teste
+integrado revelou e corrigiu o cabeçalho que mostrava “Mago” mesmo usando o
+Espiritualista; agora toda evolução pronta usa o próprio nome. Falta revisão
+técnica consolidada de Astra e, depois, playtest do usuário. A inspeção de
+legibilidade/FPS com muitas skills simultâneas continua dependente do playtest.
 
 | Item concluído | Commit | Testes | Próximo |
 |---|---|---|---|
-| Contrato do kit | pendente | conferência documental | 1 — migração |
+| Contrato do kit | `c129fb0` | conferência documental | 1 — migração |
+| Migração aditiva 5→6 | `8a38869` | 14 checks novos + 34 regressões anteriores | 2 — Maldição |
+| Arte fonte e atlas Astra | `649db5e` | importação Godot 4.7.2 sem erro; inspeção Astra documentada | integração visual após regras |
+| Maldição do Eco | `2f868d5` | 29 checks novos; catálogo de evolução 65 checks | 3 — Recolhimento |
+| Recolhimento | `ff8f99b` | 16 checks novos + 29 de Maldição | 4 — Drenagem |
+| Drenagem Espiritual | `1a01628` | 24 checks novos + catálogo de evolução 65 checks | 5 — Véu |
+| Véu Espectral | `067447f` | 19 checks novos + catálogo de evolução 65 checks | 6 — Foco |
+| Foco do Além | `2c0b9ed` | 17 checks novos + regressões Drenagem e catálogo | 7 — Procissão |
+| Procissão de Espectros | `9f94f6e` | 18 checks novos + catálogo de evolução 65 checks | 8 — Dissipação |
+| Rito de Dissipação | `07e71e9` | 18 checks novos + catálogo de evolução 65 checks | 9 — fechamento |
+| Fechamento integrado | commit desta alteração | 72 checks de builds/menu→run/boss + 18 visuais; `tools/verify.ps1` integral | revisão técnica Astra |
