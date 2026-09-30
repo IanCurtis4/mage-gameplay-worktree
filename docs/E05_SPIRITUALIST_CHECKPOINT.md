@@ -177,3 +177,13 @@ Validação deste adendo: `tests/e05_training_boss_test.gd` (menu→cena real,
 snapshot isolado, pausa, reforços/cap, navegação, vitória sem recompensa e
 reinício), testes E05 de catálogo/transação/menu e `tools/verify.ps1` completo.
 A legibilidade visual e o ritmo de combate ainda dependem do playtest do usuário.
+
+Revisão Astra do commit `812a49f`: a suíte independente passou, mas identificou
+um P2 visual — `CharacterAnimation.draw_on` substituía a transformação do
+`CombatActor`, anulando a ampliação do sprite vivo. A correção compõe escala e
+flip no próprio desenho da animação, com padrão 1 para todas as outras classes.
+`tools/training_boss_renderer_probe.gd`, executado com renderer OpenGL real,
+mediu a área opaca do sprite em 45×50 px (normal), 81×90 px (boss) e 81×90 px
+(boss espelhado), com a borda dos pés preservada em até 1 px. Capturas ficam
+somente em `.godot/verification/`, ignoradas pelo Git. Esta evidência não
+substitui a avaliação visual e de ritmo do usuário durante a partida.

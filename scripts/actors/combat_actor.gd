@@ -346,9 +346,7 @@ func _draw() -> void:
 	elif is_hovered:
 		_draw_target_ring(collision_radius + 11.0, Color("81dfd0"), 2.0)
 	if character_animation != null:
-		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE * sprite_visual_scale)
-		character_animation.draw_on(self, Color(2.0, 2.0, 2.0) if _flash_time > 0.0 else Color.WHITE)
-		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		character_animation.draw_on(self, Color(2.0, 2.0, 2.0) if _flash_time > 0.0 else Color.WHITE, sprite_visual_scale)
 	elif sprite_texture != null:
 		var tint := Color(2.0, 2.0, 2.0) if _flash_time > 0.0 else Color.WHITE
 		draw_texture_rect(sprite_texture, sprite_rect, false, tint)

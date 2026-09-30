@@ -34,12 +34,14 @@ func observe(position: Vector2, delta: float) -> void:
 func play(action: StringName, direction: Vector2 = Vector2.ZERO, duration: float = 0.25) -> void:
 	state.trigger(action, direction, duration)
 
-func draw_on(canvas: CanvasItem, tint: Color = Color.WHITE) -> void:
+func draw_on(canvas: CanvasItem, tint: Color = Color.WHITE, visual_scale: float = 1.0) -> void:
 	if atlas == null:
 		return
 	var frame := state.frame_index()
 	var region := source_region(frame)
-	canvas.draw_set_transform(Vector2.ZERO, 0.0, Vector2(-1.0 if state.flip_h else 1.0, 1.0))
+	# draw_set_transform replaces the prior transform, so compose flip and scale here.
+	# The zero translation keeps the sprite pivot anchored at the actor's feet.
+	canvas.draw_set_transform(Vector2.ZERO, 0.0, Vector2(-visual_scale if state.flip_h else visual_scale, visual_scale))
 	canvas.draw_texture_rect_region(atlas, destination_rect(frame), region, tint)
 	canvas.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
