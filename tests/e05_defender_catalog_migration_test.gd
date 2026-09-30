@@ -27,7 +27,7 @@ func _run() -> void:
 	profile.characters.append(character)
 	profile.selected_character_id = character_id
 	var encoded := ProfileCodec.encode(profile)
-	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 2 and ProfileState.CATALOG_VERSION == 5, "current catalog keeps schema 2 and accepts the earlier Defender migration")
+	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 2 and ProfileState.CATALOG_VERSION == 6, "current catalog keeps schema 2 and accepts the earlier Defender migration")
 	var old_data: Dictionary = encoded["data"].duplicate(true)
 	old_data["catalog_version"] = ProfileCodec.PRE_DEFENDER_CATALOG_VERSION
 	var old_text := JSON.stringify(old_data, "\t")
@@ -41,11 +41,11 @@ func _run() -> void:
 	_check(migrated_character.evolution_id == &"defender" and migrated_character.purchased_skill_ranks == {&"slash": 1} and migrated_character.presets[0]["active_slots"][0] == &"slash" and migrated_character.base_xp_total == character.base_xp_total and migrated_character.job_xp_total == character.job_xp_total, "migration preserves identity, XP, purchases and preset")
 	var backup_text := _read_text(directory.path_join(ProfileStore.BACKUP_FILE))
 	var durable_data: Dictionary = JSON.parse_string(_read_text(directory.path_join(ProfileStore.PRIMARY_FILE)))
-	_check(backup_text == old_text and durable_data["catalog_version"] == 5 and durable_data["schema_version"] == 2, "transaction preserves exact old bytes as backup and writes current catalog")
+	_check(backup_text == old_text and durable_data["catalog_version"] == 6 and durable_data["schema_version"] == 2, "transaction preserves exact old bytes as backup and writes current catalog")
 	var reloaded := ProfileStore.new(directory).load_profile()
 	_check(reloaded["ok"] and not reloaded.get("migrated", false) and reloaded["profile"].revision == 5, "catalog migration is idempotent on reload")
 	var future_data: Dictionary = durable_data.duplicate(true)
-	future_data["catalog_version"] = 6
+	future_data["catalog_version"] = ProfileState.CATALOG_VERSION + 1
 	var future := ProfileCodec.decode(JSON.stringify(future_data))
 	_check(not future["ok"] and future["error_code"] == &"invalid_catalog", "unknown future catalog stays incompatible")
 	_check_catalog_backup_guard(profile, old_text)
