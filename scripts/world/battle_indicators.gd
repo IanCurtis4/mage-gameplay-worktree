@@ -53,6 +53,13 @@ var spiritualist_events: Array[Dictionary] = []
 var spiritualist_visual_clock := 0.0
 var spiritualist_drain_caster_id := 0
 var spiritualist_drain_target_id := 0
+var spiritualist_veil_center := Vector2.INF
+var spiritualist_veil_remaining := 0.0
+
+func sync_spiritualist_veil(center: Vector2, remaining: float) -> void:
+	spiritualist_veil_center = center if center.is_finite() and remaining > 0.0 else Vector2.INF
+	spiritualist_veil_remaining = maxf(0.0, remaining)
+	queue_redraw()
 
 func sync_spiritualist_drain(caster_id: int, target_id: int) -> void:
 	spiritualist_drain_caster_id = caster_id
@@ -77,6 +84,8 @@ func clear_spiritualist_visuals() -> void:
 	spiritualist_events.clear()
 	spiritualist_drain_caster_id = 0
 	spiritualist_drain_target_id = 0
+	spiritualist_veil_center = Vector2.INF
+	spiritualist_veil_remaining = 0.0
 	queue_redraw()
 
 func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast: bool, selected_target: CombatActor = null) -> void:
@@ -87,6 +96,8 @@ func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast
 	target_actor = selected_target
 	if skill == &"elementalist_flame_burst":
 		endpoint = elemental_clamped_point(origin, point, actor.skill_range(skill))
+	elif skill == &"spiritualist_spectral_veil":
+		endpoint = actor.spiritualist_veil_center(point)
 	elif skill in [&"elementalist_glacial_ring", &"elementalist_tri_nova"]:
 		endpoint = origin
 	elif skill == &"elementalist_lightning_arc":
@@ -229,7 +240,7 @@ func _process(delta: float) -> void:
 			spiritualist_events.remove_at(index)
 		else:
 			spiritualist_events[index] = event
-	if not spiritualist_events.is_empty() or not spiritualist_marks.is_empty() or spiritualist_drain_caster_id > 0:
+	if not spiritualist_events.is_empty() or not spiritualist_marks.is_empty() or spiritualist_drain_caster_id > 0 or spiritualist_veil_remaining > 0.0:
 		queue_redraw()
 	if click_lifetime > 0.0:
 		click_lifetime = maxf(0.0, click_lifetime - delta)
@@ -301,6 +312,10 @@ func _draw() -> void:
 	elif skill == &"elementalist_flame_burst":
 		draw_dashed_line(origin, endpoint, Color(color, 0.55), 1.5, 9.0, true, true)
 		_draw_flame_burst_preview(endpoint, SkillGeometry.ELEMENTALIST_FLAME_BURST_RADIUS, available)
+	elif skill == &"spiritualist_spectral_veil":
+		draw_dashed_line(origin, endpoint, Color(color, 0.55), 1.5, 9.0, true, true)
+		draw_circle(endpoint, SpiritualistVeilState.RADIUS, Color(color, 0.08))
+		draw_arc(endpoint, SpiritualistVeilState.RADIUS, 0.0, TAU, 64, color, 2.0, true)
 	elif skill == &"elementalist_glacial_ring":
 		_draw_glacial_ring_preview(origin, SkillGeometry.ELEMENTALIST_GLACIAL_RING_RADIUS, available)
 	elif skill == &"elementalist_lightning_arc":
@@ -689,6 +704,11 @@ func _draw_elementalist_prism(prism: Dictionary) -> void:
 	_draw_prism_pulse(prism)
 
 func _draw_spiritualist_visuals() -> void:
+	if spiritualist_veil_remaining > 0.0 and spiritualist_veil_center.is_finite():
+		var veil_frame := int(spiritualist_visual_clock * 6.0) % 4
+		_draw_spiritualist_frame(SPIRITUALIST_HALO, veil_frame, spiritualist_veil_center, 135.0, 0.68)
+		draw_circle(spiritualist_veil_center, SpiritualistVeilState.RADIUS, Color("b9cfda", 0.045))
+		draw_arc(spiritualist_veil_center, SpiritualistVeilState.RADIUS, 0.0, TAU, 64, Color("cfe5e9", 0.65), 1.5, true)
 	if spiritualist_drain_caster_id > 0 and spiritualist_drain_target_id > 0:
 		var caster := instance_from_id(spiritualist_drain_caster_id) as CombatActor
 		var drain_target := instance_from_id(spiritualist_drain_target_id) as CombatActor

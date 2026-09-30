@@ -23,6 +23,7 @@ signal elementalist_ember_path_requested(centers: Array[Vector2], request: Damag
 signal elementalist_tri_nova_requested(center: Vector2, requests: Array[DamageRequest], marked_bonus: float)
 signal spiritualist_echo_curse_requested(request: DamageRequest, target: CombatActor, echo_power: float)
 signal spiritualist_drain_requested(request: DamageRequest, target: CombatActor)
+signal spiritualist_veil_requested(center: Vector2, duration: float, weaken_fraction: float)
 signal spiritualist_channel_interrupt_requested
 signal lightning_wall_requested(direction: Vector2, request: DamageRequest)
 signal soul_impact_requested(request: DamageRequest, target: CombatActor)
@@ -853,6 +854,27 @@ func use_spiritualist_soul_drain(enemy: CombatActor) -> bool:
 	var request := _make_magic_request(enemy, skill_id, _magic_power(skill_id), definition.accuracy_mode, definition.can_crit)
 	spiritualist_drain_requested.emit(request, enemy)
 	presentation_action.emit(&"cast", global_position.direction_to(enemy.global_position), 2.0)
+	resources_changed.emit()
+	return true
+
+func spiritualist_veil_center(point: Vector2) -> Vector2:
+	return global_position + (point - global_position).limit_length(skill_range(&"spiritualist_spectral_veil"))
+
+func can_place_spiritualist_veil(point: Vector2) -> bool:
+	if navigation == null or skill_range(&"spiritualist_spectral_veil") <= 0.0:
+		return false
+	var center := spiritualist_veil_center(point)
+	return navigation.is_walkable(center) and navigation.is_segment_clear(global_position, center, 0.0)
+
+func use_spiritualist_spectral_veil(point: Vector2) -> bool:
+	var skill_id := &"spiritualist_spectral_veil"
+	var rank_definition := _runtime_rank_definition(skill_id)
+	if not _is_spiritualist() or rank_definition == null or not _can_spend(skill_id) or not can_place_spiritualist_veil(point):
+		return false
+	var center := spiritualist_veil_center(point)
+	_spend(skill_id)
+	reveal_from_offense()
+	spiritualist_veil_requested.emit(center, rank_definition.secondary_power, rank_definition.power)
 	resources_changed.emit()
 	return true
 

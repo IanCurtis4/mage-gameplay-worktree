@@ -32,6 +32,9 @@ var _credited_kills: Dictionary[int, bool] = {}
 var _defender_slowed_enemies: Dictionary[int, CombatActor] = {}
 var spiritualist_echo_state := SpiritualistEchoState.new()
 var spiritualist_drain_state := SpiritualistDrainState.new()
+var spiritualist_veil_state := SpiritualistVeilState.new()
+var spiritualist_veil_fraction := 0.0
+var _spiritualist_veil_members: Dictionary[int, CombatActor] = {}
 var reward: RewardPickup
 var encounter_index := 0
 var encounter_active := false
@@ -126,6 +129,7 @@ func _ready() -> void:
 	player.elementalist_tri_nova_requested.connect(_on_elementalist_tri_nova_requested)
 	player.spiritualist_echo_curse_requested.connect(_on_spiritualist_echo_curse_requested)
 	player.spiritualist_drain_requested.connect(_on_spiritualist_drain_requested)
+	player.spiritualist_veil_requested.connect(_on_spiritualist_veil_requested)
 	player.spiritualist_channel_interrupt_requested.connect(_cancel_spiritualist_drain)
 	player.health.damage_applied.connect(_on_player_damage_resolved)
 	player.lightning_wall_requested.connect(_on_lightning_wall_requested)
@@ -165,6 +169,7 @@ func _process(_delta: float) -> void:
 				_apply_spiritualist_echo(echo)
 			battle_indicators.sync_spiritualist_marks(spiritualist_echo_state.marks.keys())
 			_advance_spiritualist_drain(_delta)
+			_advance_spiritualist_veil(_delta)
 	_update_hud()
 	if not get_tree().paused and not run_finished:
 		if _world_pointer_available():
@@ -419,6 +424,12 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.SPIRITUALIST_SOUL_DRAIN:
 		if not player.use_spiritualist_soul_drain(selected_target):
 			_report_skill_failure(skill, selected_target)
+	elif definition.handler_id == SkillDefinition.Handler.SPIRITUALIST_SPECTRAL_VEIL:
+		if not player.use_spiritualist_spectral_veil(point):
+			if not player.can_place_spiritualist_veil(point):
+				status_label.text = "Véu Espectral cancelado — POSIÇÃO BLOQUEADA"
+			else:
+				_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif definition.handler_id == SkillDefinition.Handler.ELEMENTALIST_EMBER_PATH:
 		if not player.use_elementalist_ember_path(direction):
 			if player.elementalist_ember_centers(direction).is_empty():
@@ -501,6 +512,8 @@ func _update_aim(point: Vector2) -> void:
 	elif skill == &"ice_wall" and not player.can_place_ice_wall(player.aim_direction(point), enemies):
 		state = "POSIÇÃO BLOQUEADA"
 	elif skill == &"elementalist_flame_burst" and not player.can_place_elementalist_flame_burst(point):
+		state = "POSIÇÃO BLOQUEADA"
+	elif skill == &"spiritualist_spectral_veil" and not player.can_place_spiritualist_veil(point):
 		state = "POSIÇÃO BLOQUEADA"
 	elif skill == &"defender_anchor" and not navigation.is_walkable(BattleIndicators.defender_clamped_point(player.global_position, point, player.skill_range(skill))):
 		state = "POSIÇÃO BLOQUEADA"
@@ -957,6 +970,48 @@ func _on_player_damage_resolved(result: Dictionary) -> void:
 	if float(result.get("actual_damage", 0.0)) > 0.0:
 		_cancel_spiritualist_drain()
 
+func _on_spiritualist_veil_requested(center: Vector2, duration: float, weaken_fraction: float) -> void:
+	_clear_spiritualist_veil()
+	spiritualist_veil_state.start(center, duration)
+	spiritualist_veil_fraction = weaken_fraction
+	if battle_indicators != null:
+		battle_indicators.sync_spiritualist_veil(center, duration)
+	_advance_spiritualist_veil(0.0)
+
+func _advance_spiritualist_veil(delta: float) -> void:
+	if not spiritualist_veil_state.active:
+		return
+	if spiritualist_veil_state.advance(delta):
+		_clear_spiritualist_veil()
+		return
+	var current_members: Dictionary[int, CombatActor] = {}
+	for enemy: CombatActor in enemies:
+		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
+			continue
+		if not spiritualist_veil_state.contains(enemy.global_position) or not navigation.is_segment_clear(spiritualist_veil_state.center, enemy.global_position, 0.0):
+			continue
+		enemy.apply_weaken(spiritualist_veil_fraction, 0.20, &"spiritualist_spectral_veil")
+		current_members[enemy.get_instance_id()] = enemy
+	for target_id: int in _spiritualist_veil_members.keys():
+		if current_members.has(target_id):
+			continue
+		var previous := _spiritualist_veil_members[target_id]
+		if previous != null and is_instance_valid(previous):
+			previous.remove_attribute_debuff(AttributeDebuffState.DAMAGE_DEALT, &"spiritualist_spectral_veil")
+	_spiritualist_veil_members = current_members
+	if battle_indicators != null:
+		battle_indicators.sync_spiritualist_veil(spiritualist_veil_state.center, spiritualist_veil_state.remaining)
+
+func _clear_spiritualist_veil() -> void:
+	for enemy: CombatActor in _spiritualist_veil_members.values():
+		if enemy != null and is_instance_valid(enemy):
+			enemy.remove_attribute_debuff(AttributeDebuffState.DAMAGE_DEALT, &"spiritualist_spectral_veil")
+	_spiritualist_veil_members.clear()
+	spiritualist_veil_state.clear()
+	spiritualist_veil_fraction = 0.0
+	if battle_indicators != null:
+		battle_indicators.sync_spiritualist_veil(Vector2.INF, 0.0)
+
 func _on_haunt_requested(origin: Vector2, direction: Vector2, cone_range: float, request: DamageRequest) -> void:
 	var visual := HauntConeVisual.new()
 	visual.configure(origin, direction, cone_range, PlayerActor.HAUNT_HALF_ANGLE)
@@ -1039,6 +1094,7 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	spiritualist_echo_state.remove_target(actor.get_instance_id())
 	if spiritualist_drain_state.target_id == actor.get_instance_id():
 		_cancel_spiritualist_drain()
+	_spiritualist_veil_members.erase(actor.get_instance_id())
 	_spawn_death_visual(actor)
 	if actor == _hovered_enemy:
 		_hovered_enemy = null
@@ -1058,6 +1114,7 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	player.clear_spiritualist_state()
 	spiritualist_echo_state.clear()
 	_cancel_spiritualist_drain()
+	_clear_spiritualist_veil()
 	battle_indicators.clear_spiritualist_visuals()
 	trap_registry.clear_all(&"encounter_end")
 	for group_name: StringName in [&"enemy_projectiles", &"player_projectiles", &"player_effects"]:
@@ -1227,6 +1284,7 @@ func _show_result(victory: bool) -> void:
 	player.clear_spiritualist_state()
 	spiritualist_echo_state.clear()
 	_cancel_spiritualist_drain()
+	_clear_spiritualist_veil()
 	battle_indicators.clear_spiritualist_visuals()
 	player.clear_foliage_shelters()
 	for shelter: Node in get_tree().get_nodes_in_group("foliage_shelters"):
