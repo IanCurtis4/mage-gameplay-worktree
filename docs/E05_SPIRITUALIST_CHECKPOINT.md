@@ -420,11 +420,17 @@ apenas de transmissão e de vínculos cosméticos. A restituição de SP continu
 limitada pela emissão/cooldown existente; o Eco secundário não invoca procs
 genéricos. Limpeza de alvo e de run remove pendências e identidades.
 
-`tests/e05_spiritualist_echo_spread_test.gd` cobre 31 checks de marca coletiva,
+`tests/e05_spiritualist_echo_spread_test.gd` cobre 37 checks de marca coletiva,
 autoataque inerte, antecipação, duas gerações, rearmamento, par único, emissão
 AoE compartilhada, marca criada após o snapshot, linha de visão na aplicação
 e na explosão, entrada/saída móvel do raio, reaplicação da própria Maldição,
-escudo, Rito, seis adds, limite visual e tooltips. Com pedido sintético fixo
+escudo, Rito, seis adds, limite visual e tooltips. A revisão Astra identificou
+um caso letal da aplicação inicial: quando o add escolhido morria, a condição
+antiga de sobrevivência impedia a marca nos vizinhos. O centro é capturado
+antes dos callbacks de morte; um acerto positivo ainda marca sobreviventes
+válidos, nunca o cadáver nem alvos de run encerrada. Testes adicionais cobrem
+escudo total da Maldição, morte do portador antes dos 0,35 s e morte durante
+a resolução com transmissão a um vizinho vivo. Com pedido sintético fixo
 de 100 de dano mágico para ativação, no mesmo boss de treino, a janela de
 0,72 s produziu 10 HP de dano de Eco solo (1 explosão) e 30 HP com dois
 vizinhos marcados (3 explosões). É comparação estrutural controlada, não

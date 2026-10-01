@@ -1030,24 +1030,27 @@ func _on_soul_impact_requested(request: DamageRequest, target_actor: CombatActor
 func _on_spiritualist_echo_curse_requested(request: DamageRequest, target_actor: CombatActor, echo_power: float) -> void:
 	if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
 		return
+	var origin := target_actor.global_position
 	var result := target_actor.apply_damage(request, rng)
-	if bool(result.get("can_trigger_effects", false)) and target_actor.is_alive():
-		var candidates: Array[CombatActor] = [target_actor]
+	if bool(result.get("can_trigger_effects", false)) and not run_finished:
+		var candidates: Array[CombatActor] = []
+		if is_instance_valid(target_actor) and target_actor.is_alive():
+			candidates.append(target_actor)
 		for enemy: CombatActor in enemies.duplicate():
 			if enemy != target_actor:
 				candidates.append(enemy)
 		for candidate: CombatActor in candidates:
 			if candidate == null or not is_instance_valid(candidate) or not candidate.is_alive():
 				continue
-			if candidate != target_actor and target_actor.global_position.distance_to(candidate.global_position) > SkillGeometry.SPIRITUALIST_ECHO_SPREAD_RADIUS + candidate.collision_radius:
+			if candidate != target_actor and origin.distance_to(candidate.global_position) > SkillGeometry.SPIRITUALIST_ECHO_SPREAD_RADIUS + candidate.collision_radius:
 				continue
-			if candidate != target_actor and not navigation.is_segment_clear(target_actor.global_position, candidate.global_position, 0.0):
+			if candidate != target_actor and not navigation.is_segment_clear(origin, candidate.global_position, 0.0):
 				continue
 			spiritualist_echo_state.mark(candidate.get_instance_id(), echo_power)
 			if battle_indicators != null:
 				battle_indicators.show_spiritualist_event(&"sigil", candidate.global_position + Vector2(0, -22), candidate)
 				if candidate != target_actor:
-					battle_indicators.show_spiritualist_spread(target_actor.global_position, candidate.global_position)
+					battle_indicators.show_spiritualist_spread(origin, candidate.global_position)
 			_show_spiritualist_feedback(candidate, "AMALDIÇOADO", Color("e6d9f2"))
 
 func _apply_spiritualist_echo(echo: Dictionary) -> void:
