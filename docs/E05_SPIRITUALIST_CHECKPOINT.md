@@ -302,3 +302,36 @@ expiração, Rito, Véu e combate com seis reforços. O resultado é visualmente
 inspecionável, mas FPS sustentado e clareza durante movimento livre ainda
 dependem de playtest humano. Astra revisa este pacote integrado antes de
 preparar o projeto habitual; não há aceite de produto nem merge em `master`.
+
+## Aceite técnico de VFX corporais — Astra, 30/09/2026
+
+Runtime aprovado para playtest: b204086, sobre a direção ad3b1db. Revisão de
+código não identificou bloqueadores: composição consulta estados/resultados
+reais, mantém filas finitas e não altera fórmulas/save/progressão. Almas no
+torso comunicam marca/preparo; expulsão e vestígio distinguem Eco efetivo de
+absorção/expiração. Enfraquecimento fica junto aos pés; painel e avisos
+espirituais são opcionais internamente e ficam desligados por padrão.
+
+Evidência independente Astra: apresentação26 PASS, renderer OpenGL real22
+PASS e inspeção de marca/convergência móvel/expulsão/absorção/expiração/Véu,
+Drenagem/Foco e seis adds, sem textos/números. tools/verify.ps1 integral em
+b204086 estável terminou exit0, sem alterações concorrentes. Log local ignorado:
+.tools/souls_astra_verify.log no projeto fixo. O implementador também relatou
+suíte integral exit0; esta rodada foi reproduzida independentemente.
+
+Base ad3b1db já ancestral; não foi necessário novo rebase. Backup
+codex/backup-souls-pre-playtest-20260930 preserva a base anterior. Projeto fixo
+avançado por fast-forward para b204086. No destino, apresentação26 PASS e
+inicialização headless da cena principal PASS. Importação adicional do editor
+registrou erro de cópia/carregamento da DLL do Godot Git Plugin local, com outro
+editor aberto. Não houve parse error GDScript. A DLL temporária versionada
+removida por essa importação foi restaurada exatamente de HEAD; configuração
+e instalação do usuário preservadas. A árvore ficou limpa antes deste registro.
+
+Para testar, parar a partida anterior, recarregar alterações no Godot e F5;
+Modo admin de testes → Treinar contra boss e reforços com o Espiritualista.
+Avaliar principalmente leitura dos estados em movimento e densidade de almas.
+Capturas controladas não comprovam FPS sustentado nem aceite subjetivo do loop.
+Master permanece ce87065; merge e classes do Arqueiro aguardam aceite do usuário.
+Puxada de almas, contágio, intangibilidade e fantasmas homing são brainstorming
+futuro e não foram incluídos nesta implementação.
