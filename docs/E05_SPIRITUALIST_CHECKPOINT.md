@@ -335,3 +335,64 @@ Capturas controladas não comprovam FPS sustentado nem aceite subjetivo do loop.
 Master permanece ce87065; merge e classes do Arqueiro aguardam aceite do usuário.
 Puxada de almas, contágio, intangibilidade e fantasmas homing são brainstorming
 futuro e não foram incluídos nesta implementação.
+
+## Próximo experimento autorizado — Maldição em área, 30/09/2026
+
+Após testar VFX, o usuário redefiniu a Maldição como infestação propagável e
+relatou tanto pouco dano no boss quanto poucas oportunidades de atacar. Pediu
+avaliar primeiro a mudança AoE, antes de concluir se boss ou kit sufocam demais.
+Este adendo autoriza mudar a regra da Maldição; substitui, nesse escopo, a
+restrição anterior a alterações puramente visuais. Candidato anterior:4a0a4f9.
+
+Pacote a implementar por Sol, com revisão integrada Astra:
+
+- Maldição mantém seleção single target e aplica marca no alvo e nos vizinhos.
+  Raio inicial de experimento:110 unidades, centralizado no inimigo, com geometria
+  compartilhada e LoS contra obstáculos. Manter custo/CD/cast/duração/ranks e
+  coeficientes atuais para observar primeiro a diferença estrutural.
+- Impacto direto positivo de skill do jogador sobre marcado inicia uma onda.
+  A própria Maldição pode ativar marca anterior; uma aplicação nova não detona
+  a si mesma no mesmo impacto. Autos não iniciam a onda neste experimento.
+  DoT, ticks secundários e efeitos secundários genéricos não iniciam ondas.
+- Explosão de Eco no portador atinge a vizinhança real de raio110. Sobrevivente
+  limpo atingido positivamente recebe marca; previamente marcado pode transmitir
+  explosão. Cada portador explode no máximo uma vez na mesma onda, com IDs e
+  fila finita. Reaplicar marca em sobreviventes não permite reentrar na onda.
+- Preservar antecipação real de0,35s por explosão agendada e dano via resolver
+  central. Propagação é exceção explícita e local do Eco; não habilitar cascatas
+  genéricas de efeitos secundários. Um mesmo par origem/destino não resolve
+  explosão duas vezes na onda. Inimigos podem receber explosões de origens
+  diferentes: registrar essa sobreposição e testar limites no cenário denso.
+- Todos os primeiros impactos elegíveis de uma mesma emissão/cast compartilham
+  uma onda (skills AoE não criam uma onda inteira por alvo). Ticks secundários
+  de Drenagem/Procissão não produzem novas ondas. Snapshot anterior ao impacto
+  distingue marca preexistente de marca recém-criada; iteração não muda resultado.
+- Rito passa a poder ativar a onda como outra skill ofensiva; preservar seu bônus
+  direto por alvo previamente marcado e enfraquecimento, eliminando consumo
+  duplicado/exclusão antiga. Documentar essa mudança nos tooltips e testes.
+- Recolhimento continua limitado a uma restituição por emissão e seu cooldown;
+  propagação não multiplica SP/cura/Foco. Escudo total/erro não simula dano ou
+  consumo bem-sucedido. Revalidar vida/posição/LoS, e limpar ondas no fim da run.
+- VFX mostram aplicação coletiva, progressão espacial da onda e almas novamente
+  vinculadas em sobreviventes. Não depender de texto para ler a propagação.
+
+Não adicionar agora crescimento numérico de Ressonância, mudar Drenagem/Foco,
+reduzir boss, alterar slots/save ou implementar ideias de híbridos. Esses itens
+não são necessários para isolar o efeito da propagação no próximo playtest.
+
+Próxima proposta, ainda não implementada: substituir Drenagem canalizada por
+terreno quadrado ao estilo desejado pelo usuário, com redução de dano causado,
+slow e Ressonância após permanência por um tempo. O terreno persiste sem manter
+canal. Ao desenvolver essa proposta, definir relação com Véu e origem de Foco:
+o atual Foco depende de completar quatro ticks de Drenagem e não pode ficar
+inalcançável após a substituição. Ressonância exigirá contrato próprio de
+aplicação/consumo/limites; a Maldição atual não deve receber esse nome por atalho.
+
+Validação: boss solo, dois alvos próximos sem ciclo infinito, grupo de seis,
+alvo limpo versus marcado, impactos simultâneos/emissão AoE, reaplicação pela
+própria Maldição, Rito, auto/DoT/secundário, escudo/morte/movimento/LoS,
+restituição limitada, pausa/cleanup. Comparar dano por janela fixa e número de
+explosões no boss solo e grupo; separar teste controlado de balanceamento humano.
+Executar verify integral. Um checkpoint e um handoff no fechamento, commits
+pequenos retomáveis. Playtest só após revisão; master/Arqueiro seguem bloqueados
+até aceite do usuário. O terreno quadrado fica apenas como proposta documentada.
