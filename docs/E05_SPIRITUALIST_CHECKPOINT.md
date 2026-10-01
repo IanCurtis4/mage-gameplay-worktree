@@ -448,3 +448,32 @@ ficam em escala real 1280×720, sem painel/avisos/números. Clareza em movimento
 FPS sustentado e pressão do boss ainda exigem playtest humano; nem o terreno
 quadrado nem Ressonância numérica foram implementados. Revisão Astra precede
 qualquer atualização do projeto habitual; `master` continua sem merge.
+
+## Aceite técnico e playtest da propagação — Astra, 01/10/2026
+
+Candidato de runtime964bf4e aprovado. O bloqueador de cfa3cf0 foi corrigido:
+aplicação inicial letal em add marca vizinhos sobreviventes válidos a partir
+do centro capturado, sem marcar cadáver nem continuar run encerrada. Portador
+morto antes do delay cancela a explosão; morte durante explosão já iniciada
+não impede resolução nos vizinhos vivos. Ondas/pairs permanecem finitos.
+
+Evidência independente: probe letal Astra32 PASS, teste versionado37 PASS,
+tools/verify.ps1 integral em964bf4e estável exit0 (log local ignorado
+.tools/spread_astra_verify.log). Renderer OpenGL12 e inspeção de marca coletiva,
+propagação e seis adds reproduzidos emcfa3cf0; delta964bf4e altera somente
+aplicação letal, testes e documentação, sem mudança na composição visual.
+Comparativo controlado10HP solo/30HP com dois vizinhos confirma sobreposição,
+não mede DPS de build nem resolve balanceamento/pressão do boss.
+
+Projeto fixo avançado FF de e10b096 para964bf4e, base ancestral sem necessidade
+de novo rebase; backup codex/backup-spread-pre-playtest-20261001 preserva a base.
+No destino, propagação37 PASS e inicialização headless PASS. A ausência local
+preexistente de addons/godot-git-plugin/windows/~libgit_plugin.windows.editor.x86_64.dll
+foi preservada (arquivo temporário do plugin); não há outras mudanças locais
+além deste registro antes do commit documental. Master permanece ce87065.
+
+Testar no projeto habitual, recarregar e F5, treino boss/reforços. Aplicar
+Maldição e usar skill ofensiva direta, incluindo Rito, para iniciar onda;
+autos não iniciam. Sobreviventes ficam remarcados para próximas ações. Alvo
+único também é remarcado, sem ciclo autônomo. Terreno quadrado e Ressonância
+numérica não implementados. Aceite de produto/merge e Arqueiro aguardam usuário.
