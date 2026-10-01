@@ -477,3 +477,28 @@ Maldição e usar skill ofensiva direta, incluindo Rito, para iniciar onda;
 autos não iniciam. Sobreviventes ficam remarcados para próximas ações. Alvo
 único também é remarcado, sem ciclo autônomo. Terreno quadrado e Ressonância
 numérica não implementados. Aceite de produto/merge e Arqueiro aguardam usuário.
+
+## Revisão visual pós-playtest — halos coletivos (candidato Astra)
+
+Após testar a propagação, o usuário relatou poluição por fantasmas simultâneos
+e pediu uma forma branca acumulada no chão com uma figura acima dos afetados.
+O desenho de duas almas grandes por portador e o vestígio do corpo por explosão
+foram substituídos apenas na apresentação da Maldição/Eco. Cada alvo marcado
+ou pendente mantém halo próprio translúcido e um pequeno espírito na borda;
+interseções somam brilho. Halos que se tocam formam grupos cosméticos, com
+uma alma grande elevada por grupo. Eco pendente comprime/clareia os halos;
+o impacto usa um pulso local, sem clonar o sprite do inimigo. Vínculos voadores
+da propagação foram reduzidos. Alvos isolados ainda têm sinal claro.
+
+O agrupamento não altera a lista autoritativa de portadores, transmissão,
+raio, LoS, dano, tempo ou procs. A malha cosmética é recalculada com posições
+atuais, então um alvo móvel pode separar/juntar grupos sem afetar combate.
+`tests/e05_spiritualist_soul_presentation_test.gd` agora verifica grupos
+conectados/separados e deduplicação de pending com marca (29 checks). Probes
+OpenGL de 12 estágios de propagação e 22 estágios de almas passaram na escala
+1280×720, inclusive seis adds, com HUD diagnóstico oculto. `tools/verify.ps1`
+integral passou com Godot 4.7.2, incluindo a propagação (37 checks) e esta
+apresentação (29 checks). Aceite técnico de Astra ainda pendente para esta
+revisão; o `codex/playtest`
+habitual continua no candidato anterior enquanto isso. Aceite de produto/merge
+segue reservado ao usuário.

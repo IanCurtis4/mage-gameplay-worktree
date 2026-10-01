@@ -54,7 +54,7 @@ func _run() -> void:
 	await _shot("01_before")
 	arena._on_spiritualist_echo_curse_requested(_request(boss, &"spiritualist_echo_curse", 100.0, 1), boss, 0.35)
 	arena._sync_spiritualist_combat_state()
-	valid = valid and arena.spiritualist_echo_state.marks.size() == 3
+	valid = valid and arena.spiritualist_echo_state.marks.size() == 3 and arena.battle_indicators.spiritualist_halo_groups().size() == 1
 	await _shot("02_collective_mark")
 	boss.apply_damage(_request(boss, &"soul_impact", 100.0, 2), arena.rng)
 	arena._sync_spiritualist_combat_state()
@@ -91,7 +91,7 @@ func _run() -> void:
 	arena.spiritualist_echo_state.clear()
 	arena._on_spiritualist_echo_curse_requested(_request(boss, &"spiritualist_echo_curse", 100.0, 3), boss, 0.35)
 	arena._sync_spiritualist_combat_state()
-	valid = valid and index == 6 and arena.spiritualist_echo_state.marks.size() == 7
+	valid = valid and index == 6 and arena.spiritualist_echo_state.marks.size() == 7 and arena.battle_indicators.spiritualist_halo_groups().size() == 1
 	await _shot("09_six_adds_bound")
 	boss.apply_damage(_request(boss, &"soul_impact", 100.0, 4), arena.rng)
 	for echo: Dictionary in arena.spiritualist_echo_state.advance(0.36):

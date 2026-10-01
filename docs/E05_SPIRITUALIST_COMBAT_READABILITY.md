@@ -1,5 +1,23 @@
 # Espiritualista — almas que comunicam estado e reação
 
+## Ajuste de densidade solicitado no playtest — 01/10/2026
+
+Com a propagação coletiva, o usuário observou excesso de fantasmas na tela e
+pediu um efeito branco de halos sobrepostos no chão, com pequenos espíritos nas
+bordas e um fantasma maior voando acima do conjunto. Esta direção substitui,
+para a Maldição/Eco em grupos, a receita abaixo de duas almas grandes por alvo,
+convergência de múltiplas silhuetas e cópias do corpo a cada explosão. Os demais
+estados/skills continuam seguindo o vocabulário visual aplicável.
+
+Cada alvo realmente marcado ou pendente recebe seu próprio halo translúcido;
+as interseções acumulam opacidade, formando uma área contínua sem disco opaco.
+Alvos com halos que se tocam compartilham uma única alma grande acima do grupo;
+um isolado mantém uma própria. O agrupamento é estritamente cosmético: não cria
+marca, dano, alcance, linha de visão nem transmissão. Eco pendente contrai e
+clareia apenas os halos correspondentes; impactos efetivos geram pulsos locais,
+sem duplicar o sprite dos inimigos. Vínculos de propagação são pequenos e breves.
+O teste de jogo pelo usuário ainda decide se a densidade e o contraste bastam.
+
 ## Direção revisada por Astra — 30/09/2026
 
 O usuário considerou a primeira rodada funcional, mas simples e dependente

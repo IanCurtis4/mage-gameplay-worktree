@@ -56,7 +56,7 @@ func _run() -> void:
 	for echo: Dictionary in arena.spiritualist_echo_state.advance(0.36):
 		arena._apply_spiritualist_echo(echo)
 	var hit := _last_event(arena, &"echo_hit")
-	_check(not hit.is_empty() and hit.has("ghost_atlas") and hit.has("ghost_source") and hit.has("ghost_scale"), "effective Echo snapshots target-body ghost and expulsion from real impact")
+	_check(not hit.is_empty() and hit.has("actor_scale") and not hit.has("ghost_atlas"), "effective Echo uses a scaled local impact pulse without duplicating the target body")
 	arena.spiritualist_echo_state.mark(boss_id, 0.50)
 	boss.apply_damage(direct, arena.rng)
 	boss.health.grant_shield(1000.0)
@@ -124,6 +124,21 @@ func _run() -> void:
 		adds += 1
 	arena._sync_spiritualist_combat_state()
 	_check(adds == 6 and arena.battle_indicators.spiritualist_marks.size() == 6 and arena.battle_indicators.spiritualist_weakened.size() >= 6, "six adds preserve independent bounded mark/weakness compositions")
+	var clustered_ids: Array[int] = []
+	var clustered_actors: Array[CombatActor] = []
+	for enemy: CombatActor in arena.enemies:
+		if enemy != boss:
+			clustered_ids.append(enemy.get_instance_id())
+			clustered_actors.append(enemy)
+	for index: int in range(clustered_actors.size()):
+		clustered_actors[index].global_position = Vector2(500.0 + float(index) * 55.0, 420.0)
+	arena.battle_indicators.sync_spiritualist_marks(clustered_ids)
+	arena.battle_indicators.spiritualist_pending_remaining.clear()
+	_check(arena.battle_indicators.spiritualist_halo_groups().size() == 1, "overlapping marked halos share one elevated soul without changing the marked actors")
+	clustered_actors[-1].global_position += Vector2(500.0, 0.0)
+	_check(arena.battle_indicators.spiritualist_halo_groups().size() == 2, "a separated marked actor receives its own visible soul")
+	arena.battle_indicators.spiritualist_pending_remaining[clustered_ids[0]] = SpiritualistEchoState.ECHO_DELAY
+	_check(arena.battle_indicators.spiritualist_halo_groups().size() == 2, "pending Echo does not duplicate a marked actor in visual groups")
 	for index: int in range(90):
 		arena.battle_indicators.show_spiritualist_event(&"burst", boss.global_position)
 	_check(arena.battle_indicators.spiritualist_events.size() == BattleIndicators.SPIRITUALIST_MAX_EVENTS, "transient soul-event queue stays capped in dense scenes")

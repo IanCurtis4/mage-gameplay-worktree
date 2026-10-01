@@ -6,7 +6,7 @@ const SPIRITUALIST_SIGIL: Texture2D = preload("res://assets/art/vfx/spiritualist
 const SPIRITUALIST_BURST: Texture2D = preload("res://assets/art/vfx/spiritualist_spectral_burst.png")
 const SPIRITUALIST_WISP: Texture2D = preload("res://assets/art/vfx/spiritualist_soul_wisp.png")
 const SPIRITUALIST_HALO: Texture2D = preload("res://assets/art/vfx/spiritualist_ritual_halo.png")
-const SPIRITUALIST_SOUL_SIZE := 48.0
+const SPIRITUALIST_HALO_RADIUS := 58.0
 const SPIRITUALIST_MAX_EVENTS := 64
 
 const READY_COLOR := Color("81dfd0")
@@ -142,14 +142,6 @@ func show_spiritualist_event(kind: StringName, center: Vector2, actor: CombatAct
 		spiritualist_events.pop_front()
 	var duration := 0.62 if kind == &"expire" else 0.45 if kind == &"echo_hit" else 0.40 if kind in [&"veil_apply", &"focus_expire"] else 0.32
 	var event := {"kind": kind, "center": center, "remaining": duration, "duration": duration, "target_id": actor.get_instance_id() if actor != null and is_instance_valid(actor) else 0, "actor_scale": actor.sprite_visual_scale if actor != null and is_instance_valid(actor) else 1.0}
-	if kind == &"echo_hit" and actor != null and actor.character_animation != null:
-		var animation := actor.character_animation
-		var frame := animation.state.frame_index()
-		event["ghost_atlas"] = animation.atlas
-		event["ghost_source"] = animation.source_region(frame)
-		event["ghost_destination"] = animation.destination_rect(frame)
-		event["ghost_scale"] = actor.sprite_visual_scale
-		event["ghost_flip"] = animation.state.flip_h
 	spiritualist_events.append(event)
 	queue_redraw()
 
@@ -866,19 +858,14 @@ func _draw_spiritualist_visuals() -> void:
 				strand.append(from.lerp(to, t) + normal * sin(t * TAU * 1.5 + spiritualist_visual_clock * 7.0) * sin(t * PI) * 7.0)
 			draw_polyline(strand, Color("8a779f", 0.58), 7.0, true)
 			draw_polyline(strand, Color("e4edf6", 0.82), 2.0, true)
-	for target_id: int in spiritualist_marks:
-		if spiritualist_pending_remaining.has(target_id):
-			continue # The same two souls converge during the higher-priority pending Echo.
-		var target := instance_from_id(target_id) as CombatActor
-		if target == null or not is_instance_valid(target) or not target.is_alive():
-			continue
-		_draw_spiritualist_bound_souls(target, 0.0)
-	for target_id: int in spiritualist_pending_remaining.keys():
-		var target := instance_from_id(target_id) as CombatActor
-		if target == null or not is_instance_valid(target) or not target.is_alive():
-			continue
-		var progress := 1.0 - clampf(spiritualist_pending_remaining[target_id] / SpiritualistEchoState.ECHO_DELAY, 0.0, 1.0)
-		_draw_spiritualist_bound_souls(target, progress)
+	for group: Dictionary in spiritualist_halo_groups():
+		for target: CombatActor in group["members"]:
+			var target_id := target.get_instance_id()
+			var progress := 0.0
+			if spiritualist_pending_remaining.has(target_id):
+				progress = 1.0 - clampf(spiritualist_pending_remaining[target_id] / SpiritualistEchoState.ECHO_DELAY, 0.0, 1.0)
+			_draw_spiritualist_ground_halo(target, progress)
+		_draw_spiritualist_group_soul(group)
 	for target_id: int in spiritualist_weakened.keys():
 		var target := instance_from_id(target_id) as CombatActor
 		if target == null or not is_instance_valid(target) or not target.is_alive():
@@ -900,38 +887,89 @@ func _draw_spiritualist_soul(center: Vector2, size: float, face_right: bool, alp
 	draw_texture_rect_region(SPIRITUALIST_WISP, Rect2(-size * 0.5, -size * 0.43, size, size * 0.86), source, Color(1.0, 1.0, 1.0, clampf(alpha, 0.0, 1.0)))
 	draw_set_transform(Vector2.ZERO)
 
-func _draw_spiritualist_bound_souls(actor: CombatActor, convergence: float) -> void:
-	var scale_factor := actor.sprite_visual_scale
-	var torso := _spiritualist_torso(actor)
-	var size := SPIRITUALIST_SOUL_SIZE * sqrt(scale_factor)
-	var frame := int(spiritualist_visual_clock * (11.0 if convergence > 0.0 else 6.0)) % 4
-	for side: int in [-1, 1]:
-		var phase := spiritualist_visual_clock * 2.2 + float(side) * 1.7
-		var orbit := Vector2(float(side) * (33.0 * scale_factor + sin(phase) * 5.0), cos(phase * 0.7) * 8.0)
-		var compressed := Vector2(float(side) * lerpf(33.0 * scale_factor, 7.0 * scale_factor, convergence), sin(phase * 1.8) * 2.0)
-		var position := torso + orbit.lerp(compressed, convergence)
-		var face := position + Vector2(-float(side) * size * 0.23, 0)
-		var grasp := torso + Vector2(float(side) * 16.0 * scale_factor, 4.0)
-		var tether := PackedVector2Array([face, face.lerp(grasp, 0.5) + Vector2(0, sin(phase) * 5.0), grasp])
-		draw_polyline(tether, Color("6f557e", 0.58), 3.0, true)
-		draw_polyline(tether, Color("d7d8ef", 0.52), 1.0, true)
-		_draw_spiritualist_soul(position, size * (1.0 + convergence * 0.10), side < 0, 0.90 + convergence * 0.10, frame, sin(phase) * 0.12)
-		if convergence > 0.0:
-			draw_line(position + Vector2(float(side) * 9.0, 0), torso + Vector2(float(side) * 28.0 * scale_factor, 3.0), Color("a597bb", 0.24 + convergence * 0.34), 1.5, true)
+func spiritualist_halo_groups() -> Array[Dictionary]:
+	# Cosmetic connected components only. Authoritative marks/pending decide who
+	# receives a halo; proximity merely shares the elevated silhouette.
+	var ids: Array[int] = spiritualist_marks.duplicate()
+	for target_id: int in spiritualist_pending_remaining.keys():
+		if not ids.has(target_id):
+			ids.append(target_id)
+	ids.sort()
+	var actors: Array[CombatActor] = []
+	for target_id: int in ids:
+		var actor := instance_from_id(target_id) as CombatActor
+		if actor != null and is_instance_valid(actor) and actor.is_alive():
+			actors.append(actor)
+	var visited: Array[bool] = []
+	visited.resize(actors.size())
+	var groups: Array[Dictionary] = []
+	for start: int in range(actors.size()):
+		if visited[start]:
+			continue
+		visited[start] = true
+		var members: Array[CombatActor] = [actors[start]]
+		var cursor := 0
+		while cursor < members.size():
+			var member := members[cursor]
+			for candidate_index: int in range(actors.size()):
+				if visited[candidate_index]:
+					continue
+				var candidate := actors[candidate_index]
+				var reach_x := SPIRITUALIST_HALO_RADIUS * (sqrt(member.sprite_visual_scale) + sqrt(candidate.sprite_visual_scale))
+				var reach_y := reach_x * 0.64
+				var distance := member.global_position - candidate.global_position
+				if pow(distance.x / reach_x, 2.0) + pow(distance.y / reach_y, 2.0) <= 1.0:
+					visited[candidate_index] = true
+					members.append(candidate)
+			cursor += 1
+		groups.append({"members": members})
+	return groups
+
+func _draw_spiritualist_ground_halo(actor: CombatActor, convergence: float) -> void:
+	var radius := SPIRITUALIST_HALO_RADIUS * sqrt(actor.sprite_visual_scale)
+	var center := actor.global_position + Vector2(0, -3.0 * actor.sprite_visual_scale)
+	var pulse := 0.5 + 0.5 * sin(spiritualist_visual_clock * 3.0 + float(actor.get_instance_id() % 7))
+	var compression := 1.0 - convergence * 0.25
+	draw_set_transform(center, 0.0, Vector2(compression, 0.64 * compression))
+	draw_circle(Vector2.ZERO, radius, Color("e9f5ff", 0.15 + convergence * 0.11))
+	draw_circle(Vector2.ZERO, radius * 0.72, Color("ffffff", 0.065 + convergence * 0.08))
+	draw_arc(Vector2.ZERO, radius, 0.0, TAU, 40, Color("f5fbff", 0.17 + pulse * 0.06 + convergence * 0.30), 1.3, true)
+	draw_arc(Vector2.ZERO, radius * (0.76 - convergence * 0.18), -PI * 0.7, PI * 0.6, 26, Color("ccbce5", 0.23 + convergence * 0.35), 1.1, true)
+	draw_set_transform(Vector2.ZERO)
+	# One tiny ground spirit per affected actor keeps the source readable without
+	# covering its body. The shared, large soul is drawn once per cluster below.
+	var phase := spiritualist_visual_clock * (1.4 + convergence * 2.0) + float(actor.get_instance_id() % 11)
+	var spirit := center + Vector2(cos(phase) * radius * 0.76, sin(phase) * radius * 0.29)
+	_draw_spiritualist_soul(spirit, 18.0 * sqrt(actor.sprite_visual_scale), cos(phase) < 0.0, 0.58 + convergence * 0.25, int(spiritualist_visual_clock * 5.0) % 4)
+
+func _draw_spiritualist_group_soul(group: Dictionary) -> void:
+	var members: Array[CombatActor] = group["members"]
+	var sum_x := 0.0
+	var top := INF
+	var largest_scale := 1.0
+	var has_pending := false
+	for actor: CombatActor in members:
+		sum_x += actor.global_position.x
+		top = minf(top, actor.global_position.y - 70.0 * actor.sprite_visual_scale)
+		largest_scale = maxf(largest_scale, actor.sprite_visual_scale)
+		has_pending = has_pending or spiritualist_pending_remaining.has(actor.get_instance_id())
+	var center := Vector2(sum_x / float(members.size()), top - 5.0 + sin(spiritualist_visual_clock * 2.4) * 5.0)
+	var size := 48.0 * sqrt(largest_scale)
+	var frame := int(spiritualist_visual_clock * (9.0 if has_pending else 5.0)) % 4
+	_draw_spiritualist_soul(center, size, true, 0.88, frame, sin(spiritualist_visual_clock * 1.7) * 0.08)
+	if has_pending:
+		draw_arc(center, size * 0.61, -PI * 0.8, PI * 0.4, 28, Color("ffffff", 0.58), 1.5, true)
 
 func _draw_spiritualist_weaken_souls(actor: CombatActor, from_veil: bool, with_mark: bool) -> void:
 	var scale_factor := actor.sprite_visual_scale
 	var center := actor.global_position + Vector2(0, -7.0 * scale_factor)
-	var size := (29.0 if with_mark else 35.0) * sqrt(scale_factor)
+	var size := (18.0 if with_mark else 25.0) * sqrt(scale_factor)
 	var frame := int(spiritualist_visual_clock * 4.0) % 4
-	for side: int in [-1, 1]:
-		if with_mark and side < 0:
-			continue
-		var phase := spiritualist_visual_clock * 1.25 + float(side) * 2.1
-		var pull := 6.0 + 5.0 * sin(phase)
-		var position := center + Vector2(float(side) * (24.0 * scale_factor + pull), 5.0 + 4.0 * cos(phase))
-		var alpha := 0.48 if with_mark else 0.68 if from_veil else 0.57
-		_draw_spiritualist_soul(position, size, side > 0, alpha, frame, float(side) * 0.20)
+	var phase := spiritualist_visual_clock * 1.25 + float(actor.get_instance_id() % 13)
+	var pull := 6.0 + 5.0 * sin(phase)
+	var position := center + Vector2(24.0 * scale_factor + pull, 5.0 + 4.0 * cos(phase))
+	var alpha := 0.42 if with_mark else 0.62 if from_veil else 0.54
+	_draw_spiritualist_soul(position, size, true, alpha, frame, 0.20)
 
 func _draw_spiritualist_soul_event(event: Dictionary) -> void:
 	var kind: StringName = event["kind"]
@@ -945,19 +983,12 @@ func _draw_spiritualist_soul_event(event: Dictionary) -> void:
 			var head := center.lerp(destination, progress) + Vector2(0, -20.0 * sin(progress * PI))
 			var tail := center.lerp(destination, maxf(0.0, progress - 0.17)) + Vector2(0, -20.0 * sin(maxf(0.0, progress - 0.17) * PI))
 			draw_line(tail, head, Color("b9a9d4", 0.60 * (1.0 - progress)), 2.0, true)
-			_draw_spiritualist_soul(head + Vector2(0, -20), 35.0, destination.x >= center.x, 0.86 * (1.0 - progress * 0.45), frame)
+			_draw_spiritualist_soul(head + Vector2(0, -20), 23.0, destination.x >= center.x, 0.74 * (1.0 - progress * 0.45), frame)
 		&"echo_hit":
-			if event.has("ghost_atlas"):
-				var scale_factor := float(event["ghost_scale"])
-				var ghost_scale := Vector2(-scale_factor if bool(event["ghost_flip"]) else scale_factor, scale_factor)
-				draw_set_transform(center + Vector2(progress * 22.0, 18.0 - progress * 18.0), 0.0, ghost_scale)
-				draw_texture_rect_region(event["ghost_atlas"], event["ghost_destination"], event["ghost_source"], Color(0.68, 0.86, 1.0, 0.50 * (1.0 - progress * progress)))
-				draw_set_transform(Vector2.ZERO)
-			for index: int in range(3):
-				var direction := Vector2((float(index) - 1.0) * 0.95, -0.60).normalized()
-				var head := center + Vector2(0, -12) + direction * lerpf(18.0, 150.0, progress) * actor_scale
-				_draw_spiritualist_soul(head, lerpf(42.0, 48.0, progress), direction.x >= 0.0, 0.95 * (1.0 - pow(progress, 3.0)), frame)
-			draw_arc(center + Vector2(0, -12), lerpf(17.0, 48.0, progress), 0, TAU, 32, Color("e4ecfa", 0.65 * (1.0 - progress)), 2.0, true)
+			var flash_center := center + Vector2(0, -12.0 * actor_scale)
+			draw_circle(flash_center, lerpf(12.0, 27.0, progress) * actor_scale, Color("f5fbff", 0.16 * (1.0 - progress)))
+			draw_arc(flash_center, lerpf(18.0, 48.0, progress) * actor_scale, 0.0, TAU, 32, Color("e4ecfa", 0.72 * (1.0 - progress)), 2.0, true)
+			draw_arc(flash_center, lerpf(13.0, 38.0, progress) * actor_scale, -PI * 0.7, PI * 0.4, 24, Color("b9a9d4", 0.65 * (1.0 - progress)), 1.5, true)
 		&"echo_absorbed":
 			for side: int in [-1, 1]:
 				var head := center + Vector2(float(side) * lerpf(44.0, 26.0, progress) * actor_scale, -16.0)
