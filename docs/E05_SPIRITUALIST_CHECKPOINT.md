@@ -508,3 +508,30 @@ Aceite técnico de Astra ainda pendente para esta
 revisão; o `codex/playtest`
 habitual continua no candidato anterior enquanto isso. Aceite de produto/merge
 segue reservado ao usuário.
+
+## Aceite técnico dos halos compartilhados — Astra, 01/10/2026
+
+Candidato15e521d aprovado para playtest, após correção de profundidade sobre
+c6df07b. Agrupamento é somente cosmético; não muda marcas, ondas ou resolução
+de dano. Composição de chão desenha abaixo dos atores e acima do piso, com
+fantasma elevado/impactos separados. Componentes conexos usam posições atuais;
+marca+pending não duplica membros. Custo quadrático é restrito aos portadores
+existentes; não se afirma FPS sustentado sem medição de partida prolongada.
+
+Astra reproduziu apresentação30 e renderer OpenGL12 no candidato corrigido,
+inspecionando cena densa antes e durante propagação: corpos preservados e um
+fantasma elevado por grupo. No delta anterior reproduziu apresentação29 e
+propagação37. Suíte integral exit0 foi executada por Sol após a correção;
+Astra concentrou a reprodução deste ajuste visual nos testes direcionados.
+
+Base f98613b já ancestral; playtest atualizado FF15e521d, backup preservado em
+codex/backup-halos-pre-playtest-20261001. A primeira execução no destino encontrou
+cache de classes ainda sem SpiritualistHaloUnderlay. Importação headless do
+editor renovou o cache sem erros; após isso apresentação30 e propagação37
+passaram no projeto fixo. Importação também regenerou a DLL temporária local
+do GitPlugin; status limpo antes deste registro documental, sem alterações
+versionadas fora do pacote. Log ignorado:.tools/halos_import.log.
+
+Recarregar projeto e F5 para avaliar no treino. Intensidade dos halos, leitura
+com movimento livre e densidade final dependem do aceite humano. Master segue
+ce87065; terreno quadrado/Ressonância e Arqueiro não foram iniciados.
