@@ -1772,7 +1772,7 @@ func _show_combat_text(actor: CombatActor, text: String, color: Color, font_size
 	if spiritualist_style:
 		label.custom_minimum_size = Vector2(200, 0)
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		label.global_position = actor.global_position + Vector2(-100, -maxf(78.0, 52.0 * actor.sprite_visual_scale + 20.0) - vertical_offset)
+		label.global_position = actor.global_position + Vector2(-100, -maxf(82.0, 64.0 * actor.sprite_visual_scale + 20.0) - vertical_offset)
 		label.add_theme_color_override("font_outline_color", Color("101725"))
 		label.add_theme_constant_override("outline_size", 3)
 	else:
@@ -1782,8 +1782,11 @@ func _show_combat_text(actor: CombatActor, text: String, color: Color, font_size
 	label.z_index = 20
 	add_child(label)
 	var tween := create_tween()
-	tween.tween_property(label, "position", label.position + Vector2(0, -34), 0.55)
-	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.55)
+	if not spiritualist_style:
+		tween.tween_property(label, "position", label.position + Vector2(0, -34), 0.55)
+		tween.parallel().tween_property(label, "modulate:a", 0.0, 0.55)
+	else:
+		tween.tween_property(label, "modulate:a", 0.0, 0.55)
 	tween.tween_callback(label.queue_free)
 	return label
 

@@ -68,6 +68,8 @@ func _run() -> void:
 	arena._update_hud()
 	var success: bool = arena.battle_indicators.spiritualist_events[-1]["kind"] == &"echo_hit"
 	captured = (await _capture("echo_hit")) and captured
+	await create_timer(0.18).timeout
+	captured = (await _capture("echo_hit_late")) and captured
 	arena.spiritualist_echo_state.mark(boss.get_instance_id(), 0.50)
 	arena._sync_spiritualist_combat_state()
 	arena._on_spiritualist_dissipation_requested(boss.global_position, _request(boss, &"spiritualist_dissipation", 110.0), 0.0, 0.0)

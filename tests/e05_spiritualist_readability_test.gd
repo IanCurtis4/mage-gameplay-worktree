@@ -67,6 +67,10 @@ func _run() -> void:
 		arena._apply_spiritualist_echo(echo)
 	_check(arena.battle_indicators.spiritualist_events[-1]["kind"] == &"echo_hit" and _has_label(arena, "ECO! "), "positive Echo uses one real damage number labelled ECO and two-wave event")
 	_check(_combat_lanes_unique(arena, boss), "damage numbers and status labels share three non-overlapping lanes per target")
+	var echo_label := _feedback_label(arena, "ECO! ")
+	var echo_position := echo_label.position if echo_label != null else Vector2.INF
+	await create_timer(0.18).timeout
+	_check(echo_label != null and is_instance_valid(echo_label) and echo_label.position.distance_to(echo_position) < 0.01 and _combat_lanes_unique(arena, boss), "Spiritualist labels fade in stationary lanes instead of drifting into neighboring text")
 	arena._update_spiritualist_panel()
 	_check(arena.spiritualist_hint_label.text.begins_with("ECO! "), "focused panel confirms Echo's real damage")
 	arena._spawn_training_add_wave()
@@ -195,10 +199,13 @@ func _request(player: PlayerActor, target: CombatActor, skill_id: StringName, po
 	return request
 
 func _has_label(arena: RunController, fragment: String) -> bool:
+	return _feedback_label(arena, fragment) != null
+
+func _feedback_label(arena: RunController, fragment: String) -> Label:
 	for child: Node in arena.get_children():
 		if child is Label and (child as Label).text.contains(fragment):
-			return true
-	return false
+			return child as Label
+	return null
 
 func _event_count(arena: RunController, kind: StringName) -> int:
 	var count := 0
