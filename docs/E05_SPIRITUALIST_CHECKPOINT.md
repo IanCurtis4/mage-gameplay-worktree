@@ -396,3 +396,49 @@ explosões no boss solo e grupo; separar teste controlado de balanceamento human
 Executar verify integral. Um checkpoint e um handoff no fechamento, commits
 pequenos retomáveis. Playtest só após revisão; master/Arqueiro seguem bloqueados
 até aceite do usuário. O terreno quadrado fica apenas como proposta documentada.
+
+## Implementação do experimento de propagação — candidato para revisão Astra
+
+A Maldição preserva seleção, custo, cooldown, cast, duração e coeficientes; um
+acerto positivo no alvo marca também inimigos vivos em raio 110 e linha de visão.
+A aplicação nova não detona a si própria. Reaplicá-la num portador anterior
+ativa uma onda e renova a marca para a próxima ação. Apenas impacto direto
+positivo de skill do jogador inicia onda; autoataque, DoT e ticks secundários
+não iniciam. Rito mantém bônus direto no marcado e enfraquecimento, mas agora
+ativa Eco após o acerto, sem o antigo consumo manual duplicado. As descrições
+de progressão do menu foram atualizadas em pt-BR para as duas skills.
+
+Cada emissão compartilha uma identidade de onda e um snapshot dos portadores
+anteriores ao primeiro impacto elegível. O portador agenda uma explosão após
+0,35 s; cada explosão usa o resolver central no próprio portador e em alvos
+vivos no raio 110 com linha de visão revalidada. Alvo atingido que sobreviver
+termina marcado; somente quem já estava marcado no snapshot pode transmitir
+na mesma onda. Portador agenda no máximo uma explosão, e o par origem/destino
+é reivindicado antes do dano. Filas de ondas/pedidos e VFX são finitas. Alvos
+podem tomar dano de origens distintas: não há deduplicação global de dano,
+apenas de transmissão e de vínculos cosméticos. A restituição de SP continua
+limitada pela emissão/cooldown existente; o Eco secundário não invoca procs
+genéricos. Limpeza de alvo e de run remove pendências e identidades.
+
+`tests/e05_spiritualist_echo_spread_test.gd` cobre 31 checks de marca coletiva,
+autoataque inerte, antecipação, duas gerações, rearmamento, par único, emissão
+AoE compartilhada, marca criada após o snapshot, linha de visão na aplicação
+e na explosão, entrada/saída móvel do raio, reaplicação da própria Maldição,
+escudo, Rito, seis adds, limite visual e tooltips. Com pedido sintético fixo
+de 100 de dano mágico para ativação, no mesmo boss de treino, a janela de
+0,72 s produziu 10 HP de dano de Eco solo (1 explosão) e 30 HP com dois
+vizinhos marcados (3 explosões). É comparação estrutural controlada, não
+estimativa de DPS da build nem aceite de balanceamento. Testes anteriores de
+Recolhimento, Drenagem/Procissão secundárias, morte, pausa, limpeza,
+integração e apresentação foram migrados quando a expectativa antiga de
+autoataque/Rito deixou de valer.
+
+O probe OpenGL `tools/spiritualist_spread_renderer_probe.gd` captura 12
+estágios em `.godot/verification/spiritualist_spread_*.png`, ignorados pelo
+Git: marca coletiva, preparo, primeira propagação, segunda geração,
+sobreviventes remarcados e seis adds. Vínculos transitórios aparecem uma vez
+por alvo/onda para reduzir densidade, sem alterar o dano sobreposto. As cenas
+ficam em escala real 1280×720, sem painel/avisos/números. Clareza em movimento,
+FPS sustentado e pressão do boss ainda exigem playtest humano; nem o terreno
+quadrado nem Ressonância numérica foram implementados. Revisão Astra precede
+qualquer atualização do projeto habitual; `master` continua sem merge.

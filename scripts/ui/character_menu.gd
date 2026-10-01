@@ -743,6 +743,12 @@ func _skill_progression_tooltip(option: Dictionary) -> String:
 		lines.append("Pré-requisitos: %s" % (", ".join(prerequisites) if not prerequisites.is_empty() else "nenhum"))
 	else:
 		lines.append("Rank máximo atingido.")
+	match StringName(option["skill_id"]):
+		&"spiritualist_echo_curse":
+			lines.append("Maldição marca o alvo e inimigos próximos em raio de 110 com linha de visão.")
+			lines.append("Skill direta em marcado ativa uma onda de Eco após 0,35 s; autoataque não ativa.")
+		&"spiritualist_dissipation":
+			lines.append("Rito mantém o bônus direto contra marcados e também ativa uma onda de Eco.")
 	lines.append("Aprender não equipa automaticamente. Escolha a habilidade nos slots da build.")
 	return "\n".join(lines)
 

@@ -59,7 +59,7 @@ func _run() -> void:
 	arena._sync_spiritualist_combat_state()
 	arena._update_hud()
 	captured = (await _capture("mark")) and captured
-	boss.apply_damage(_request(boss, &"basic_attack", 100.0), arena.rng)
+	boss.apply_damage(_request(boss, &"soul_impact", 100.0), arena.rng)
 	arena._sync_spiritualist_combat_state()
 	arena._update_hud()
 	var prepared: bool = arena.spiritualist_echo_state.pending.size() == 1

@@ -153,6 +153,14 @@ func show_spiritualist_event(kind: StringName, center: Vector2, actor: CombatAct
 	spiritualist_events.append(event)
 	queue_redraw()
 
+func show_spiritualist_spread(source: Vector2, destination: Vector2) -> void:
+	if not source.is_finite() or not destination.is_finite():
+		return
+	if spiritualist_events.size() >= SPIRITUALIST_MAX_EVENTS:
+		spiritualist_events.pop_front()
+	spiritualist_events.append({"kind": &"spread_link", "center": source, "destination": destination, "remaining": 0.32, "duration": 0.32})
+	queue_redraw()
+
 func clear_spiritualist_visuals() -> void:
 	spiritualist_marks.clear()
 	spiritualist_mark_remaining.clear()
@@ -859,6 +867,8 @@ func _draw_spiritualist_visuals() -> void:
 			draw_polyline(strand, Color("8a779f", 0.58), 7.0, true)
 			draw_polyline(strand, Color("e4edf6", 0.82), 2.0, true)
 	for target_id: int in spiritualist_marks:
+		if spiritualist_pending_remaining.has(target_id):
+			continue # The same two souls converge during the higher-priority pending Echo.
 		var target := instance_from_id(target_id) as CombatActor
 		if target == null or not is_instance_valid(target) or not target.is_alive():
 			continue
@@ -930,6 +940,12 @@ func _draw_spiritualist_soul_event(event: Dictionary) -> void:
 	var actor_scale := sqrt(float(event.get("actor_scale", 1.0)))
 	var frame := mini(3, int(progress * 4.0))
 	match kind:
+		&"spread_link":
+			var destination: Vector2 = event["destination"]
+			var head := center.lerp(destination, progress) + Vector2(0, -20.0 * sin(progress * PI))
+			var tail := center.lerp(destination, maxf(0.0, progress - 0.17)) + Vector2(0, -20.0 * sin(maxf(0.0, progress - 0.17) * PI))
+			draw_line(tail, head, Color("b9a9d4", 0.60 * (1.0 - progress)), 2.0, true)
+			_draw_spiritualist_soul(head + Vector2(0, -20), 35.0, destination.x >= center.x, 0.86 * (1.0 - progress * 0.45), frame)
 		&"echo_hit":
 			if event.has("ghost_atlas"):
 				var scale_factor := float(event["ghost_scale"])

@@ -32,10 +32,10 @@ func _run() -> void:
 	controller.spiritualist_echo_state.source_id = player.get_instance_id()
 	var state := controller.spiritualist_echo_state
 	state.mark(101, 0.35)
+	state.mark(102, 0.35)
 	controller._on_enemy_damage_resolved(_hit(player.get_instance_id(), 101, 7))
 	_check(player.current_sp == 12.0 and state.pending.size() == 1 and player.spiritualist_recovery_cooldown == 1.0, "real mark trigger grants R1 SP once")
 	_check(controller.battle_indicators.spiritualist_return_wisps.size() == 1 and controller.battle_indicators.spiritualist_return_wisps[0]["kind"] == &"recovery" and controller.battle_indicators.spiritualist_return_wisps[0]["caster_id"] == player.get_instance_id(), "actual SP return creates one traveling wisp to caster")
-	state.mark(102, 0.35)
 	controller._on_enemy_damage_resolved(_hit(player.get_instance_id(), 102, 7))
 	_check(player.current_sp == 12.0 and state.pending.size() == 2, "same emission may echo another target but cannot refund again")
 	player._process(1.1)
@@ -86,7 +86,7 @@ func _run() -> void:
 	quit(0 if failures == 0 else 1)
 
 func _hit(source_id: int, target_id: int, emission_id: int) -> Dictionary:
-	return {"source_id": source_id, "target_id": target_id, "skill_id": &"basic_attack", "emission_id": emission_id, "can_trigger_effects": true, "actual_damage": 5.0, "killed": false}
+	return {"source_id": source_id, "target_id": target_id, "skill_id": &"soul_impact", "emission_id": emission_id, "can_trigger_effects": true, "actual_damage": 5.0, "killed": false}
 
 func _check(condition: bool, label: String) -> void:
 	checks += 1

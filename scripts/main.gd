@@ -212,6 +212,7 @@ func _process(_delta: float) -> void:
 			_announce_spiritualist_mark_expiry(marks_before)
 			for echo: Dictionary in due_echoes:
 				_apply_spiritualist_echo(echo)
+			spiritualist_echo_state.finish_resolution()
 			_advance_spiritualist_drain(_delta)
 			_advance_spiritualist_veil(_delta)
 			_advance_spiritualist_procession(_delta)
@@ -1031,25 +1032,59 @@ func _on_spiritualist_echo_curse_requested(request: DamageRequest, target_actor:
 		return
 	var result := target_actor.apply_damage(request, rng)
 	if bool(result.get("can_trigger_effects", false)) and target_actor.is_alive():
-		spiritualist_echo_state.mark(target_actor.get_instance_id(), echo_power)
-		if battle_indicators != null:
-			battle_indicators.show_spiritualist_event(&"sigil", target_actor.global_position + Vector2(0, -22), target_actor)
-		_show_spiritualist_feedback(target_actor, "AMALDIÇOADO", Color("e6d9f2"))
+		var candidates: Array[CombatActor] = [target_actor]
+		for enemy: CombatActor in enemies.duplicate():
+			if enemy != target_actor:
+				candidates.append(enemy)
+		for candidate: CombatActor in candidates:
+			if candidate == null or not is_instance_valid(candidate) or not candidate.is_alive():
+				continue
+			if candidate != target_actor and target_actor.global_position.distance_to(candidate.global_position) > SkillGeometry.SPIRITUALIST_ECHO_SPREAD_RADIUS + candidate.collision_radius:
+				continue
+			if candidate != target_actor and not navigation.is_segment_clear(target_actor.global_position, candidate.global_position, 0.0):
+				continue
+			spiritualist_echo_state.mark(candidate.get_instance_id(), echo_power)
+			if battle_indicators != null:
+				battle_indicators.show_spiritualist_event(&"sigil", candidate.global_position + Vector2(0, -22), candidate)
+				if candidate != target_actor:
+					battle_indicators.show_spiritualist_spread(target_actor.global_position, candidate.global_position)
+			_show_spiritualist_feedback(candidate, "AMALDIÇOADO", Color("e6d9f2"))
 
 func _apply_spiritualist_echo(echo: Dictionary) -> void:
-	var target_actor := instance_from_id(int(echo["target_id"])) as CombatActor
-	if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
+	var carrier := instance_from_id(int(echo["target_id"])) as CombatActor
+	if carrier == null or not is_instance_valid(carrier) or not carrier.is_alive():
 		return
-	var request := player.make_spiritualist_echo_request(target_actor, float(echo["magic_damage"]))
-	_spiritualist_echo_number_target_id = target_actor.get_instance_id()
-	var result := target_actor.apply_damage(request, rng)
-	_spiritualist_echo_number_target_id = 0
-	if float(result.get("actual_damage", 0.0)) > 0.0 and battle_indicators != null:
-		battle_indicators.show_spiritualist_event(&"echo_hit", target_actor.global_position + Vector2(0, -18), target_actor)
-	elif float(result.get("absorbed_damage", 0.0)) > 0.0 and float(result.get("actual_damage", 0.0)) <= 0.0:
-		if battle_indicators != null:
-			battle_indicators.show_spiritualist_event(&"echo_absorbed", target_actor.global_position + Vector2(0, -18), target_actor)
-		_show_spiritualist_feedback(target_actor, "ABSORVIDO", Color("b9cbd3"))
+	var center := carrier.global_position
+	var affected: Array[CombatActor] = [carrier]
+	for candidate: CombatActor in enemies.duplicate():
+		if candidate == null or candidate == carrier or not is_instance_valid(candidate) or not candidate.is_alive():
+			continue
+		if center.distance_to(candidate.global_position) <= SkillGeometry.SPIRITUALIST_ECHO_SPREAD_RADIUS + candidate.collision_radius and navigation.is_segment_clear(center, candidate.global_position, 0.0):
+			affected.append(candidate)
+	for target_actor: CombatActor in affected:
+		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
+			continue
+		# Recheck geometry at resolution, not only when the wave was scheduled.
+		if target_actor != carrier and (center.distance_to(target_actor.global_position) > SkillGeometry.SPIRITUALIST_ECHO_SPREAD_RADIUS + target_actor.collision_radius or not navigation.is_segment_clear(center, target_actor.global_position, 0.0)):
+			continue
+		if not spiritualist_echo_state.claim_pair(int(echo["wave_id"]), int(echo["target_id"]), target_actor.get_instance_id()):
+			continue
+		var request := player.make_spiritualist_echo_request(target_actor, float(echo["magic_damage"]))
+		_spiritualist_echo_number_target_id = target_actor.get_instance_id()
+		var result := target_actor.apply_damage(request, rng)
+		_spiritualist_echo_number_target_id = 0
+		var actual := float(result.get("actual_damage", 0.0))
+		if actual > 0.0:
+			var first_spread := spiritualist_echo_state.record_echo_impact(int(echo["wave_id"]), result, float(echo["echo_power"]))
+			if battle_indicators != null:
+				if target_actor == carrier:
+					battle_indicators.show_spiritualist_event(&"echo_hit", target_actor.global_position + Vector2(0, -18), target_actor)
+				elif first_spread:
+					battle_indicators.show_spiritualist_spread(center, target_actor.global_position)
+		elif float(result.get("absorbed_damage", 0.0)) > 0.0:
+			if battle_indicators != null:
+				battle_indicators.show_spiritualist_event(&"echo_absorbed", target_actor.global_position + Vector2(0, -18), target_actor)
+			_show_spiritualist_feedback(target_actor, "ABSORVIDO", Color("b9cbd3"))
 
 func _announce_spiritualist_mark_expiry(marks_before: Array) -> void:
 	if not _is_spiritualist_run() or battle_indicators == null:
@@ -1245,10 +1280,9 @@ func _on_spiritualist_dissipation_requested(center: Vector2, request: DamageRequ
 		if float(result.get("actual_damage", 0.0)) <= 0.0:
 			continue
 		if was_marked:
-			if spiritualist_echo_state.consume_mark(target_id):
-				if battle_indicators != null:
-					battle_indicators.show_spiritualist_event(&"break", target_actor.global_position + Vector2(0, -22), target_actor)
-				_show_spiritualist_feedback(target_actor, "MARCA DISSIPADA", Color("f5dacf"))
+			if battle_indicators != null:
+				battle_indicators.show_spiritualist_event(&"break", target_actor.global_position + Vector2(0, -22), target_actor)
+			_show_spiritualist_feedback(target_actor, "ECO PREPARADO", Color("f5dacf"))
 		if target_actor.is_alive():
 			target_actor.apply_weaken(0.20, 2.0, &"spiritualist_dissipation")
 
@@ -1898,7 +1932,7 @@ func _update_spiritualist_panel() -> void:
 		var target_id := target.get_instance_id()
 		lines.append("Alvo: %s" % target.actor_name)
 		if spiritualist_echo_state.marks.has(target_id):
-			lines.append("MALDIÇÃO %.1fs · próximo acerto direto prepara Eco" % float(spiritualist_echo_state.marks[target_id]["remaining"]))
+			lines.append("MALDIÇÃO %.1fs · próxima skill direta prepara onda" % float(spiritualist_echo_state.marks[target_id]["remaining"]))
 		else:
 			for echo: Dictionary in spiritualist_echo_state.pending:
 				if int(echo["target_id"]) == target_id:
@@ -1921,13 +1955,13 @@ func _update_spiritualist_panel() -> void:
 	if target != null:
 		var target_id := target.get_instance_id()
 		if spiritualist_echo_state.marks.has(target_id):
-			hint = "Autoataque/acerto direto → Eco."
+			hint = "Skill direta → onda de Eco em área."
 			if equipped.has(&"spiritualist_dissipation"):
-				hint += " Rito rompe a marca sem gerar Eco."
+				hint += " Rito também ativa a onda."
 		elif spiritualist_echo_state.pending.any(func(echo: Dictionary) -> bool: return int(echo["target_id"]) == target_id):
 			hint = "Eco preparado; confirme o dano no impacto."
 		elif equipped.has(&"spiritualist_echo_curse"):
-			hint = "Maldição → acerto direto → Eco."
+			hint = "Maldição em área → skill direta → onda de Eco."
 		else:
 			hint = "Use as ações equipadas; Maldição não está na barra."
 	if player.spiritualist_focus_remaining > 0.0:
@@ -1949,9 +1983,9 @@ func _update_spiritualist_panel() -> void:
 func _spiritualist_route_help(equipped: Array) -> String:
 	var lines: Array[String] = []
 	if equipped.has(&"spiritualist_echo_curse"):
-		lines.append("Maldição → auto/acerto direto → Eco após %.2fs." % SpiritualistEchoState.ECHO_DELAY)
+		lines.append("Maldição em área → skill direta → onda após %.2fs." % SpiritualistEchoState.ECHO_DELAY)
 		if equipped.has(&"spiritualist_dissipation"):
-			lines.append("Alternativa: Maldição → Rito → marca dissipada; sem Eco.")
+			lines.append("Rito ativa a onda e preserva bônus contra marcados.")
 	if equipped.has(&"spiritualist_soul_drain"):
 		if player.run_state.build_snapshot.passive_slots.has(&"spiritualist_channel_focus"):
 			lines.append("Drenagem completa (4 ticks) → Foco por 5s.")

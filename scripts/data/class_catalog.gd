@@ -1049,7 +1049,7 @@ static func _configure_spiritualist_curse_ranks() -> void:
 		rank.power = powers[index]
 		rank.secondary_power = echoes[index]
 		rank.magic_weight = 1.0
-		rank.effect_ids = [&"direct_magic_damage", &"mark_five_seconds", &"next_direct_positive_hit_echo_after_0_35s"]
+		rank.effect_ids = [&"direct_magic_damage", &"mark_target_and_neighbors_radius_110_five_seconds", &"direct_skill_on_existing_mark_starts_finite_echo_wave_after_0_35s"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
 
@@ -1146,7 +1146,7 @@ static func _configure_spiritualist_dissipation_ranks() -> void:
 		rank.power = powers[index]
 		rank.secondary_power = 0.55
 		rank.magic_weight = 1.0
-		rank.effect_ids = [&"point_radius_100_root_direct", &"marked_target_add_0_55_atqm_same_request", &"consume_mark_only_after_positive_damage", &"weaken_damage_dealt_20pct_2s_after_positive_damage"]
+		rank.effect_ids = [&"point_radius_100_root_direct", &"marked_target_add_0_55_atqm_same_request", &"positive_direct_hit_on_mark_starts_echo_wave", &"weaken_damage_dealt_20pct_2s_after_positive_damage"]
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
 

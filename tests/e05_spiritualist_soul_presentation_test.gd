@@ -39,7 +39,7 @@ func _run() -> void:
 	boss.global_position += Vector2(55, 0)
 	_check(arena.battle_indicators._spiritualist_torso(boss).distance_to(torso_before + Vector2(55, 0)) < 0.01, "bound souls follow a moving boss and scaled torso")
 	boss.global_position -= Vector2(55, 0)
-	var direct := _request(arena, boss, &"basic_attack", 100.0)
+	var direct := _request(arena, boss, &"soul_impact", 100.0)
 	boss.health.grant_shield(1000.0)
 	boss.apply_damage(direct, arena.rng)
 	_check(arena.spiritualist_echo_state.has_mark(boss_id) and arena.spiritualist_echo_state.pending.is_empty(), "fully absorbed trigger keeps the bound souls")
@@ -72,7 +72,7 @@ func _run() -> void:
 	arena.spiritualist_echo_state.mark(boss_id, 0.50)
 	var pending_count := arena.spiritualist_echo_state.pending.size()
 	arena._on_spiritualist_dissipation_requested(boss.global_position, _request(arena, boss, &"spiritualist_dissipation", 110.0), 0.0, 0.0)
-	_check(not _last_event(arena, &"break").is_empty() and arena.spiritualist_echo_state.pending.size() == pending_count, "Rito tears bound souls away immediately without pending Echo")
+	_check(not _last_event(arena, &"break").is_empty() and arena.spiritualist_echo_state.pending.size() == pending_count + 1, "Rito tears bound souls outward and prepares a delayed Echo")
 	var veil_center := boss.global_position
 	arena._on_spiritualist_veil_requested(veil_center, 2.0, 0.15)
 	_check(arena.battle_indicators.spiritualist_veil_members.has(boss_id) and _count_event(arena, &"veil_apply") == 1, "Véu entry creates one local soul and effective low-body weakness")

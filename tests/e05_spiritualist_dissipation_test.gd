@@ -60,7 +60,7 @@ func _run() -> void:
 	_check(base_request != null and is_equal_approx(base_request.magic_damage, magic_attack * 0.85) and is_equal_approx(captured_marked_bonus, magic_attack * 0.55) and is_equal_approx(captured_focus_bonus, magic_attack * 0.20), "base, mark and Focus components captured separately at commit")
 	_check(not marked_result.is_empty() and not unmarked_result.is_empty() and float(marked_result["actual_damage"]) > 0.0 and float(unmarked_result["actual_damage"]) > 0.0 and outside.health.current_hp == outside_hp, "one root hits each visible target inside area only")
 	_check(float(marked_result["magic_component"]) > float(unmarked_result["magic_component"]) and player.spiritualist_focus_remaining == 0.0, "first target gets mark and Focus in same request; later target does not get Focus")
-	_check(not controller.spiritualist_echo_state.has_mark(marked.get_instance_id()) and controller.spiritualist_echo_state.pending.is_empty(), "positive Rite consumes mark without creating echo")
+	_check(not controller.spiritualist_echo_state.has_mark(marked.get_instance_id()) and controller.spiritualist_echo_state.pending.size() == 1, "positive Rite schedules one Echo wave")
 	_check(is_equal_approx(marked.attribute_debuffs.fraction(AttributeDebuffState.DAMAGE_DEALT), 0.20) and is_equal_approx(unmarked.attribute_debuffs.fraction(AttributeDebuffState.DAMAGE_DEALT), 0.20), "positive surviving targets receive 20 percent weakness")
 	_check(outside.attribute_debuffs.fraction(AttributeDebuffState.DAMAGE_DEALT) == 0.0 and controller.battle_indicators.spiritualist_events[0]["kind"] == &"focus_grant", "outside target untouched and actual visual events are queued")
 	controller.spiritualist_echo_state.mark(marked.get_instance_id(), 0.35)

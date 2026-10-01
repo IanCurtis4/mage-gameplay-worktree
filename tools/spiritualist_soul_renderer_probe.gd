@@ -54,7 +54,7 @@ func _run() -> void:
 	arena._sync_spiritualist_combat_state()
 	await _shot("03_bound_moving")
 	boss.global_position -= Vector2(38, 0)
-	boss.apply_damage(_request(boss, &"basic_attack", 100.0), arena.rng)
+	boss.apply_damage(_request(boss, &"soul_impact", 100.0), arena.rng)
 	arena._sync_spiritualist_combat_state()
 	valid = valid and arena.spiritualist_echo_state.pending.size() == 1
 	await _shot("04_pending_000ms")
@@ -76,7 +76,7 @@ func _run() -> void:
 	arena.battle_indicators._process(0.50)
 	boss.global_position -= Vector2(30, 0)
 	arena.spiritualist_echo_state.mark(boss.get_instance_id(), 0.50)
-	boss.apply_damage(_request(boss, &"basic_attack", 100.0), arena.rng)
+	boss.apply_damage(_request(boss, &"soul_impact", 100.0), arena.rng)
 	boss.health.grant_shield(1000.0)
 	for echo: Dictionary in arena.spiritualist_echo_state.advance(0.36):
 		arena._apply_spiritualist_echo(echo)

@@ -1,13 +1,18 @@
 class_name SpiritualistEchoState
 extends RefCounted
-## Run-only mark and delayed echoes. Damage remains in CombatActor/CombatMath.
+## Run-only marks and finite delayed waves. Damage remains in CombatActor/CombatMath.
 
 const MARK_DURATION := 5.0
 const ECHO_DELAY := 0.35
+const MAX_PENDING := 64
+const MAX_WAVES := 64
 
 var source_id := 0
 var marks: Dictionary[int, Dictionary] = {}
 var pending: Array[Dictionary] = []
+var waves: Dictionary[int, Dictionary] = {}
+var wave_by_emission: Dictionary[int, int] = {}
+var next_wave_id := 1
 
 func _init(owner_id: int = 0) -> void:
 	source_id = owner_id
@@ -32,19 +37,75 @@ func record_hit(result: Dictionary, magic_attack_at_trigger: float) -> bool:
 		return false
 	if not bool(result.get("can_trigger_effects", false)) or float(result.get("actual_damage", 0.0)) <= 0.0:
 		return false
-	if StringName(result.get("skill_id", &"")) in [&"spiritualist_echo_curse", &"spiritualist_dissipation"]:
+	if StringName(result.get("skill_id", &"")) in [&"", &"basic_attack", &"burn_tick", &"bleed_tick"]:
 		return false
 	if bool(result.get("killed", false)):
 		marks.erase(target_id)
 		return false
-	var mark_data: Dictionary = marks[target_id]
-	marks.erase(target_id)
-	pending.append({
-		"target_id": target_id,
-		"remaining": ECHO_DELAY,
-		"magic_damage": maxf(0.0, magic_attack_at_trigger) * float(mark_data["echo_power"]),
-	})
+	var emission_id := int(result.get("emission_id", 0))
+	var wave_id := int(wave_by_emission.get(emission_id, 0)) if emission_id > 0 else 0
+	if wave_id <= 0 or not waves.has(wave_id):
+		if waves.size() >= MAX_WAVES:
+			return false
+		wave_id = next_wave_id
+		next_wave_id += 1
+		var eligible: Dictionary[int, float] = {}
+		for marked_id: int in marks:
+			eligible[marked_id] = float(marks[marked_id]["echo_power"])
+		waves[wave_id] = {"eligible": eligible, "scheduled": {}, "pairs": {}, "shown_targets": {}, "magic_attack": maxf(0.0, magic_attack_at_trigger)}
+		if emission_id > 0:
+			wave_by_emission[emission_id] = wave_id
+	return _schedule_carrier(wave_id, target_id)
+
+func record_echo_impact(wave_id: int, result: Dictionary, echo_power: float) -> bool:
+	if not waves.has(wave_id) or int(result.get("source_id", 0)) != source_id or float(result.get("actual_damage", 0.0)) <= 0.0:
+		return false
+	var target_id := int(result.get("target_id", 0))
+	var wave: Dictionary = waves[wave_id]
+	var first_visual: bool = not wave["shown_targets"].has(target_id)
+	wave["shown_targets"][target_id] = true
+	if bool(result.get("killed", false)):
+		return first_visual
+	if wave["eligible"].has(target_id):
+		_schedule_carrier(wave_id, target_id)
+	# Reapplication is for the next player action, never reentry into this wave.
+	mark(target_id, echo_power)
+	return first_visual
+
+func claim_pair(wave_id: int, carrier_id: int, target_id: int) -> bool:
+	if not waves.has(wave_id):
+		return false
+	var wave: Dictionary = waves[wave_id]
+	if not wave["scheduled"].has(carrier_id):
+		return false
+	var pair_key := "%d:%d" % [carrier_id, target_id]
+	if wave["pairs"].has(pair_key):
+		return false
+	wave["pairs"][pair_key] = true
 	return true
+
+func _schedule_carrier(wave_id: int, target_id: int) -> bool:
+	if not waves.has(wave_id) or pending.size() >= MAX_PENDING:
+		return false
+	var wave: Dictionary = waves[wave_id]
+	if not wave["eligible"].has(target_id) or wave["scheduled"].has(target_id):
+		return false
+	wave["scheduled"][target_id] = true
+	marks.erase(target_id)
+	var power := float(wave["eligible"][target_id])
+	pending.append({"target_id": target_id, "wave_id": wave_id, "remaining": ECHO_DELAY, "magic_damage": float(wave["magic_attack"]) * power, "echo_power": power})
+	return true
+
+func finish_resolution() -> void:
+	var active: Dictionary[int, bool] = {}
+	for echo: Dictionary in pending:
+		active[int(echo["wave_id"])] = true
+	for wave_id: int in waves.keys():
+		if not active.has(wave_id):
+			waves.erase(wave_id)
+	for emission_id: int in wave_by_emission.keys():
+		if not waves.has(wave_by_emission[emission_id]):
+			wave_by_emission.erase(emission_id)
 
 func advance(delta: float) -> Array[Dictionary]:
 	var due: Array[Dictionary] = []
@@ -76,3 +137,6 @@ func remove_target(target_id: int) -> void:
 func clear() -> void:
 	marks.clear()
 	pending.clear()
+	waves.clear()
+	wave_by_emission.clear()
+	next_wave_id = 1

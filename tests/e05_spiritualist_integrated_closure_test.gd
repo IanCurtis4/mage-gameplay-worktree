@@ -168,7 +168,7 @@ func _check_boss(run_state: RunState) -> void:
 	controller._advance_spiritualist_procession(0.23)
 	controller._advance_spiritualist_procession(0.20)
 	controller._advance_spiritualist_procession(0.20)
-	_check(boss.health.current_hp < before_procession and not controller.spiritualist_procession_state.active and controller.spiritualist_echo_state.pending.size() == 1, "três aparições completam e só o primeiro impacto gera um eco")
+	_check(boss.health.current_hp < before_procession and not controller.spiritualist_procession_state.active and controller.spiritualist_echo_state.pending.size() == 2, "Maldição reaplicada e primeiro impacto de Procissão criam ondas; impactos secundários não")
 	player.free()
 	boss.free()
 	controller.battle_indicators.free()
@@ -207,7 +207,7 @@ func _check_field_boss(run_state: RunState) -> void:
 	_check(player.use_spiritualist_echo_curse(boss) and controller.spiritualist_echo_state.has_mark(boss.get_instance_id()), "build de campo também marca boss solo")
 	_check(player.use_spiritualist_spectral_veil(boss.global_position) and boss.attribute_debuffs.fraction(AttributeDebuffState.DAMAGE_DEALT) >= 0.15, "Véu enfraquece boss dentro da área")
 	var hp_before := boss.health.current_hp
-	_check(player.use_spiritualist_dissipation(boss.global_position) and boss.health.current_hp < hp_before and not controller.spiritualist_echo_state.has_mark(boss.get_instance_id()) and controller.spiritualist_echo_state.pending.is_empty(), "Dissipação rompe marca em dano real sem eco da própria skill")
+	_check(player.use_spiritualist_dissipation(boss.global_position) and boss.health.current_hp < hp_before and not controller.spiritualist_echo_state.has_mark(boss.get_instance_id()) and controller.spiritualist_echo_state.pending.size() == 1, "Dissipação ativa onda após dano real em marcado")
 	_check(boss.attribute_debuffs.fraction(AttributeDebuffState.DAMAGE_DEALT) >= 0.20, "fraqueza do Rito prevalece sobre Véu sem somar fontes")
 	player.free()
 	boss.free()

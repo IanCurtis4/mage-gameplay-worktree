@@ -18,6 +18,7 @@ const ELEMENTALIST_EMBER_PATH_STEP := 80.0
 const ELEMENTALIST_EMBER_PATH_RADIUS := 55.0
 const ELEMENTALIST_TRI_NOVA_RADIUS := 170.0
 const SPIRITUALIST_DISSIPATION_RADIUS := 100.0
+const SPIRITUALIST_ECHO_SPREAD_RADIUS := 110.0
 
 static func strip_contains(offset: Vector2, direction: Vector2, length: float, half_width: float, target_radius: float = 0.0) -> bool:
 	if direction.is_zero_approx() or length <= 0.0 or half_width < 0.0:
