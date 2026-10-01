@@ -52,6 +52,9 @@ var _spiritualist_feedback_labels: Array[Label] = []
 var _spiritualist_channel_notice_remaining := 0.0
 var _spiritualist_recent_feedback := ""
 var _spiritualist_recent_feedback_remaining := 0.0
+# Internal presentation switches for diagnostics/probes; never persisted or exposed in the UI.
+var spiritualist_debug_text := false
+var combat_numbers_visible := true
 var reward: RewardPickup
 var encounter_index := 0
 var encounter_active := false
@@ -129,7 +132,7 @@ func _ready() -> void:
 		obstacle_view.configure(obstacle)
 		add_child(obstacle_view)
 	battle_indicators = BattleIndicators.new()
-	battle_indicators.z_index = -1
+	battle_indicators.z_index = 2 if run_state.build_snapshot != null and run_state.build_snapshot.evolution_id == &"spiritualist" else -1
 	battle_indicators.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(battle_indicators)
 	trap_registry = PlayerTrapRegistry.new()
@@ -1030,7 +1033,7 @@ func _on_spiritualist_echo_curse_requested(request: DamageRequest, target_actor:
 	if bool(result.get("can_trigger_effects", false)) and target_actor.is_alive():
 		spiritualist_echo_state.mark(target_actor.get_instance_id(), echo_power)
 		if battle_indicators != null:
-			battle_indicators.show_spiritualist_event(&"sigil", target_actor.global_position + Vector2(0, -22))
+			battle_indicators.show_spiritualist_event(&"sigil", target_actor.global_position + Vector2(0, -22), target_actor)
 		_show_spiritualist_feedback(target_actor, "AMALDIÇOADO", Color("e6d9f2"))
 
 func _apply_spiritualist_echo(echo: Dictionary) -> void:
@@ -1042,21 +1045,23 @@ func _apply_spiritualist_echo(echo: Dictionary) -> void:
 	var result := target_actor.apply_damage(request, rng)
 	_spiritualist_echo_number_target_id = 0
 	if float(result.get("actual_damage", 0.0)) > 0.0 and battle_indicators != null:
-		battle_indicators.show_spiritualist_event(&"echo_hit", target_actor.global_position + Vector2(0, -18))
+		battle_indicators.show_spiritualist_event(&"echo_hit", target_actor.global_position + Vector2(0, -18), target_actor)
 	elif float(result.get("absorbed_damage", 0.0)) > 0.0 and float(result.get("actual_damage", 0.0)) <= 0.0:
+		if battle_indicators != null:
+			battle_indicators.show_spiritualist_event(&"echo_absorbed", target_actor.global_position + Vector2(0, -18), target_actor)
 		_show_spiritualist_feedback(target_actor, "ABSORVIDO", Color("b9cbd3"))
 
 func _announce_spiritualist_mark_expiry(marks_before: Array) -> void:
 	if not _is_spiritualist_run() or battle_indicators == null:
 		return
-	var focus := _focused_spiritualist_target()
 	for target_id: int in marks_before:
 		if spiritualist_echo_state.marks.has(target_id):
 			continue
 		var target := instance_from_id(target_id) as CombatActor
-		if target != null and is_instance_valid(target) and target == focus and target.is_alive():
-			battle_indicators.show_spiritualist_event(&"expire", target.global_position + Vector2(0, -37))
-			_show_spiritualist_feedback(target, "MALDIÇÃO EXPIROU", Color("b9cbd3"))
+		if target != null and is_instance_valid(target) and target.is_alive():
+			battle_indicators.show_spiritualist_event(&"expire", target.global_position + Vector2(0, -37), target)
+			if target == _focused_spiritualist_target():
+				_show_spiritualist_feedback(target, "MALDIÇÃO EXPIROU", Color("b9cbd3"))
 
 func _sync_spiritualist_combat_state() -> void:
 	if battle_indicators == null or not _is_spiritualist_run():
@@ -1104,6 +1109,8 @@ func _advance_spiritualist_drain(delta: float) -> void:
 		var healed := player.heal_from_spiritualist_drain(result, healed_before)
 		spiritualist_drain_state.healed_total = healed_before + healed
 		if healed > 0.0:
+			if battle_indicators != null:
+				battle_indicators.show_spiritualist_event(&"heal_receive", player.global_position + Vector2(0, -24), player)
 			_show_spiritualist_feedback(player, "+%d HP" % ceili(healed), Color("9ce6c7"))
 		if battle_indicators != null and float(result.get("actual_damage", 0.0)) > 0.0:
 			battle_indicators.show_spiritualist_return_wisp(target_actor.global_position + Vector2(0, -18), player.get_instance_id(), &"drain")
@@ -1155,6 +1162,8 @@ func _advance_spiritualist_veil(delta: float) -> void:
 		if not spiritualist_veil_state.contains(enemy.global_position) or not navigation.is_segment_clear(spiritualist_veil_state.center, enemy.global_position, 0.0):
 			continue
 		enemy.apply_weaken(spiritualist_veil_fraction, 0.20, &"spiritualist_spectral_veil")
+		if not _spiritualist_veil_members.has(enemy.get_instance_id()) and enemy.attribute_debuffs.remaining(AttributeDebuffState.DAMAGE_DEALT, &"spiritualist_spectral_veil") > 0.0 and battle_indicators != null:
+			battle_indicators.show_spiritualist_event(&"veil_apply", enemy.global_position + Vector2(0, -12), enemy)
 		current_members[enemy.get_instance_id()] = enemy
 	for target_id: int in _spiritualist_veil_members.keys():
 		if current_members.has(target_id):
@@ -1165,6 +1174,7 @@ func _advance_spiritualist_veil(delta: float) -> void:
 	_spiritualist_veil_members = current_members
 	if battle_indicators != null:
 		battle_indicators.sync_spiritualist_veil(spiritualist_veil_state.center, spiritualist_veil_state.remaining)
+		battle_indicators.sync_spiritualist_veil_members(_spiritualist_veil_members.keys())
 
 func _clear_spiritualist_veil() -> void:
 	for enemy: CombatActor in _spiritualist_veil_members.values():
@@ -1175,6 +1185,7 @@ func _clear_spiritualist_veil() -> void:
 	spiritualist_veil_fraction = 0.0
 	if battle_indicators != null:
 		battle_indicators.sync_spiritualist_veil(Vector2.INF, 0.0)
+		battle_indicators.sync_spiritualist_veil_members([])
 
 func _on_spiritualist_procession_requested(request: DamageRequest, target_actor: CombatActor) -> void:
 	spiritualist_procession_state.start(player.global_position + Vector2(0, -24), target_actor, request)
@@ -1198,7 +1209,7 @@ func _advance_spiritualist_procession(delta: float) -> void:
 		var request: DamageRequest = event["request"]
 		var result := target_actor.apply_damage(request, rng)
 		if battle_indicators != null and float(result.get("actual_damage", 0.0)) > 0.0:
-			battle_indicators.show_spiritualist_event(&"burst", target_actor.global_position + Vector2(0, -18))
+			battle_indicators.show_spiritualist_event(&"procession_hit", target_actor.global_position + Vector2(0, -18), target_actor)
 		if not target_actor.is_alive():
 			_cancel_spiritualist_procession()
 			return
@@ -1236,7 +1247,7 @@ func _on_spiritualist_dissipation_requested(center: Vector2, request: DamageRequ
 		if was_marked:
 			if spiritualist_echo_state.consume_mark(target_id):
 				if battle_indicators != null:
-					battle_indicators.show_spiritualist_event(&"break", target_actor.global_position + Vector2(0, -22))
+					battle_indicators.show_spiritualist_event(&"break", target_actor.global_position + Vector2(0, -22), target_actor)
 				_show_spiritualist_feedback(target_actor, "MARCA DISSIPADA", Color("f5dacf"))
 		if target_actor.is_alive():
 			target_actor.apply_weaken(0.20, 2.0, &"spiritualist_dissipation")
@@ -1379,7 +1390,7 @@ func _on_enemy_damage_resolved(result: Dictionary) -> void:
 		if battle_indicators != null:
 			var mark_target := instance_from_id(int(result.get("target_id", 0))) as CombatActor
 			if mark_target != null and is_instance_valid(mark_target):
-				battle_indicators.show_spiritualist_event(&"echo_ready", mark_target.global_position + Vector2(0, -37))
+				battle_indicators.show_spiritualist_event(&"echo_ready", mark_target.global_position + Vector2(0, -37), mark_target)
 				_show_spiritualist_feedback(mark_target, "ECO PREPARADO", Color("d9eafa"))
 		var recovered := player.recover_spiritualist_echo_sp(int(result.get("emission_id", 0)))
 		if recovered > 0.0:
@@ -1690,7 +1701,7 @@ func _select_enemy(enemy: CombatActor) -> void:
 		_selected_enemy.set_selected(true)
 
 func _show_damage_number(actor: CombatActor, amount: int, critical: bool) -> void:
-	if amount <= 0:
+	if amount <= 0 or not combat_numbers_visible:
 		return
 	if _spiritualist_echo_number_target_id == actor.get_instance_id():
 		_remember_spiritualist_feedback(actor, "ECO! %d" % amount)
@@ -1705,13 +1716,15 @@ func _show_damage_number(actor: CombatActor, amount: int, critical: bool) -> voi
 		_show_combat_text(actor, label_text, label_color, label_size)
 
 func _show_miss(actor: CombatActor) -> void:
+	if not combat_numbers_visible:
+		return
 	if _is_spiritualist_run():
 		_show_spiritualist_combat_text(actor, "ERROU", Color("b9cbd3"), 16)
 	else:
 		_show_combat_text(actor, "ERROU", Color("b9cbd3"), 16)
 
 func _show_spiritualist_feedback(actor: CombatActor, message: String, color: Color) -> void:
-	if actor == null or not is_instance_valid(actor):
+	if not spiritualist_debug_text or actor == null or not is_instance_valid(actor):
 		return
 	_show_spiritualist_combat_text(actor, message, color, 15)
 	_remember_spiritualist_feedback(actor, message)
@@ -1746,6 +1759,13 @@ func _show_spiritualist_combat_text(actor: CombatActor, message: String, color: 
 
 func _is_spiritualist_run() -> bool:
 	return run_state != null and run_state.build_snapshot != null and run_state.build_snapshot.evolution_id == &"spiritualist"
+
+func set_spiritualist_debug_text(enabled: bool) -> void:
+	spiritualist_debug_text = enabled
+	if spiritualist_panel != null:
+		spiritualist_panel.visible = enabled
+		if enabled:
+			_update_spiritualist_panel()
 
 func _remember_spiritualist_feedback(actor: CombatActor, message: String) -> void:
 	if actor != player and actor != _focused_spiritualist_target():
@@ -1868,7 +1888,7 @@ func _restore_context_status(serial: int) -> void:
 		status_label.text = "Augment aplicado — inicie o próximo encontro"
 
 func _update_spiritualist_panel() -> void:
-	if spiritualist_panel == null:
+	if spiritualist_panel == null or not spiritualist_debug_text:
 		return
 	var target := _focused_spiritualist_target()
 	var lines: Array[String] = []
@@ -1948,6 +1968,7 @@ func _build_spiritualist_panel() -> void:
 	spiritualist_panel.offset_top = 265.0
 	spiritualist_panel.offset_right = -24.0
 	spiritualist_panel.offset_bottom = 445.0
+	spiritualist_panel.visible = spiritualist_debug_text
 	ui_root.add_child(spiritualist_panel)
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", 5)

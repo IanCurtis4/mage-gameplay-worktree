@@ -36,6 +36,8 @@ func _run() -> void:
 	boss.set_process(false)
 	arena.player.global_position = boss.global_position + Vector2(-65, 0)
 	arena._select_enemy(boss)
+	_check(not arena.spiritualist_panel.visible and not arena.spiritualist_debug_text, "Spiritualist explanation panel and floating notices are opt-in diagnostics")
+	arena.set_spiritualist_debug_text(true)
 	_check(arena.spiritualist_panel != null and arena.spiritualist_help_toggle != null and arena.training_mode, "real training arena builds the compact class panel")
 	arena._update_spiritualist_panel()
 	_check(arena.spiritualist_help_label.text.contains("Maldição") and arena.spiritualist_help_label.text.contains("Rito") and arena.spiritualist_help_label.text.contains("Foco"), "help describes only equipped combo routes and passive")

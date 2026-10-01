@@ -24,6 +24,8 @@ func _run() -> void:
 	root.add_child(arena)
 	current_scene = arena
 	await process_frame
+	arena.combat_numbers_visible = false
+	arena.help_panel.visible = false
 	var boss := arena.training_boss
 	boss.set_process(false)
 	arena._spawn_training_add_wave()

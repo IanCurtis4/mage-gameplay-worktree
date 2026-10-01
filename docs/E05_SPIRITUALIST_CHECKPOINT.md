@@ -265,3 +265,40 @@ integral passou com Godot 4.7.2 standard após a implementação. Permanecem
 para o playtest humano a leitura em movimento, densidade de efeitos e FPS em
 combate prolongado. Este adendo é do mesmo checkpoint de classe; não libera
 outros épicos nem autoriza merge em `master` antes do aceite do usuário.
+
+## Direção visual revisada — almas incorporadas ao combate
+
+A direção de `E05_SPIRITUALIST_COMBAT_READABILITY.md` substitui o aceite visual
+do adendo acima: avisos espirituais flutuantes e painel contextual ficam
+desligados por padrão, preservados apenas por um interruptor interno de
+depuração. A explicação principal agora é a alma de quatro frames já aprovada
+(`spiritualist_soul_wisp.png`), com rosto legível, contorno local e movimento
+preso ao estado real. Os números gerais de dano continuam disponíveis na
+partida; o probe de renderer os desliga somente para comprovar a leitura sem
+texto. Nenhuma fórmula, duração, custo, slot, save ou progressão foi alterado.
+
+Duas almas orbitam o torso marcado e seguem o alvo móvel; as mesmas convergem
+durante o Eco pendente. Eco efetivo desprende vestígio do sprite do alvo e
+expulsa almas, enquanto absorção total é amortecida, expiração sobe sem pulso
+de dano e Rito arranca almas radialmente. Enfraquecimento usa almas baixas,
+reduzidas a uma quando a marca já ocupa a silhueta. Véu mantém wisps no chão e
+sinaliza entrada/saída do alvo conforme a aplicação autoritativa, sem novo
+burst em cada refresh. Drenagem liga os torsos com caudas ondulantes e só
+apresenta extração/recepção quando há dano/cura reais; Procissão reage a cada
+impacto real; Foco permanece como alma-companheira no ombro até consumo ou
+expiração. A fila cosmética é finita e limpa no fim da run.
+
+Evidência automatizada: `tests/e05_spiritualist_soul_presentation_test.gd`
+cobre 26 checks em arena real, incluindo boss móvel, escudo, expiração,
+Rito, Véu com entrada/saída/reentrada/fim e sem spam de refresh, Drenagem
+com e sem cura, interrupção, Foco, seis adds, limite da fila, pausa e limpeza.
+O teste de legibilidade anterior permanece, com texto de diagnóstico ativado
+explicitamente, para proteger os contratos já corrigidos. O probe OpenGL real
+`tools/spiritualist_soul_renderer_probe.gd` captura 22 estágios em
+`.godot/verification/spiritualist_souls_*.png`, ignorados pelo Git, em
+1280×720 e escala de gameplay, sem painel, avisos espirituais ou números.
+As sequências incluem convergência temporal, expulsão, absorção, subida da
+expiração, Rito, Véu e combate com seis reforços. O resultado é visualmente
+inspecionável, mas FPS sustentado e clareza durante movimento livre ainda
+dependem de playtest humano. Astra revisa este pacote integrado antes de
+preparar o projeto habitual; não há aceite de produto nem merge em `master`.
