@@ -101,6 +101,7 @@ var _feedback_serial := 0
 var cast_intent := CastIntent.new()
 var control_preferences := ControlPreferences.new()
 var battle_indicators: BattleIndicators
+var spiritualist_ground: SpiritualistHaloUnderlay
 var trap_registry: PlayerTrapRegistry
 var battle_controls: BattleControls
 var class_button: Button
@@ -135,6 +136,12 @@ func _ready() -> void:
 	battle_indicators.z_index = 2 if run_state.build_snapshot != null and run_state.build_snapshot.evolution_id == &"spiritualist" else -1
 	battle_indicators.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(battle_indicators)
+	if run_state.build_snapshot != null and run_state.build_snapshot.evolution_id == &"spiritualist":
+		spiritualist_ground = SpiritualistHaloUnderlay.new()
+		spiritualist_ground.indicators = battle_indicators
+		spiritualist_ground.z_index = -1
+		spiritualist_ground.process_mode = Node.PROCESS_MODE_PAUSABLE
+		add_child(spiritualist_ground)
 	trap_registry = PlayerTrapRegistry.new()
 	trap_registry.y_sort_enabled = true
 	add_child(trap_registry)

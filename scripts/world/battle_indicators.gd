@@ -9,6 +9,8 @@ const SPIRITUALIST_HALO: Texture2D = preload("res://assets/art/vfx/spiritualist_
 const SPIRITUALIST_HALO_RADIUS := 58.0
 const SPIRITUALIST_MAX_EVENTS := 64
 
+signal spiritualist_ground_changed
+
 const READY_COLOR := Color("81dfd0")
 const BLOCKED_COLOR := Color("ff9a85")
 const TARGET_COLOR := Color("f5cc77")
@@ -93,6 +95,7 @@ func sync_spiritualist_drain(caster_id: int, target_id: int) -> void:
 func sync_spiritualist_marks(mark_ids: Array) -> void:
 	spiritualist_marks.assign(mark_ids)
 	spiritualist_mark_remaining.clear()
+	spiritualist_ground_changed.emit()
 	queue_redraw()
 
 func sync_spiritualist_combat_state(marks: Dictionary, pending: Array[Dictionary], weakened: Dictionary[int, Dictionary]) -> void:
@@ -106,6 +109,7 @@ func sync_spiritualist_combat_state(marks: Dictionary, pending: Array[Dictionary
 		var target_id := int(echo["target_id"])
 		spiritualist_pending_remaining[target_id] = maxf(0.0, float(echo["remaining"]))
 	spiritualist_weakened = weakened.duplicate(true)
+	spiritualist_ground_changed.emit()
 	queue_redraw()
 
 func show_spiritualist_procession_wisp(source: Vector2, target_id: int) -> void:
@@ -168,6 +172,7 @@ func clear_spiritualist_visuals() -> void:
 	spiritualist_veil_remaining = 0.0
 	spiritualist_focus_caster_id = 0
 	spiritualist_focus_remaining = 0.0
+	spiritualist_ground_changed.emit()
 	queue_redraw()
 
 func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast: bool, selected_target: CombatActor = null) -> void:
@@ -859,12 +864,6 @@ func _draw_spiritualist_visuals() -> void:
 			draw_polyline(strand, Color("8a779f", 0.58), 7.0, true)
 			draw_polyline(strand, Color("e4edf6", 0.82), 2.0, true)
 	for group: Dictionary in spiritualist_halo_groups():
-		for target: CombatActor in group["members"]:
-			var target_id := target.get_instance_id()
-			var progress := 0.0
-			if spiritualist_pending_remaining.has(target_id):
-				progress = 1.0 - clampf(spiritualist_pending_remaining[target_id] / SpiritualistEchoState.ECHO_DELAY, 0.0, 1.0)
-			_draw_spiritualist_ground_halo(target, progress)
 		_draw_spiritualist_group_soul(group)
 	for target_id: int in spiritualist_weakened.keys():
 		var target := instance_from_id(target_id) as CombatActor
@@ -924,23 +923,6 @@ func spiritualist_halo_groups() -> Array[Dictionary]:
 			cursor += 1
 		groups.append({"members": members})
 	return groups
-
-func _draw_spiritualist_ground_halo(actor: CombatActor, convergence: float) -> void:
-	var radius := SPIRITUALIST_HALO_RADIUS * sqrt(actor.sprite_visual_scale)
-	var center := actor.global_position + Vector2(0, -3.0 * actor.sprite_visual_scale)
-	var pulse := 0.5 + 0.5 * sin(spiritualist_visual_clock * 3.0 + float(actor.get_instance_id() % 7))
-	var compression := 1.0 - convergence * 0.25
-	draw_set_transform(center, 0.0, Vector2(compression, 0.64 * compression))
-	draw_circle(Vector2.ZERO, radius, Color("e9f5ff", 0.15 + convergence * 0.11))
-	draw_circle(Vector2.ZERO, radius * 0.72, Color("ffffff", 0.065 + convergence * 0.08))
-	draw_arc(Vector2.ZERO, radius, 0.0, TAU, 40, Color("f5fbff", 0.17 + pulse * 0.06 + convergence * 0.30), 1.3, true)
-	draw_arc(Vector2.ZERO, radius * (0.76 - convergence * 0.18), -PI * 0.7, PI * 0.6, 26, Color("ccbce5", 0.23 + convergence * 0.35), 1.1, true)
-	draw_set_transform(Vector2.ZERO)
-	# One tiny ground spirit per affected actor keeps the source readable without
-	# covering its body. The shared, large soul is drawn once per cluster below.
-	var phase := spiritualist_visual_clock * (1.4 + convergence * 2.0) + float(actor.get_instance_id() % 11)
-	var spirit := center + Vector2(cos(phase) * radius * 0.76, sin(phase) * radius * 0.29)
-	_draw_spiritualist_soul(spirit, 18.0 * sqrt(actor.sprite_visual_scale), cos(phase) < 0.0, 0.58 + convergence * 0.25, int(spiritualist_visual_clock * 5.0) % 4)
 
 func _draw_spiritualist_group_soul(group: Dictionary) -> void:
 	var members: Array[CombatActor] = group["members"]

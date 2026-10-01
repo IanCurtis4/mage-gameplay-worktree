@@ -494,11 +494,17 @@ O agrupamento não altera a lista autoritativa de portadores, transmissão,
 raio, LoS, dano, tempo ou procs. A malha cosmética é recalculada com posições
 atuais, então um alvo móvel pode separar/juntar grupos sem afetar combate.
 `tests/e05_spiritualist_soul_presentation_test.gd` agora verifica grupos
-conectados/separados e deduplicação de pending com marca (29 checks). Probes
+conectados/separados e deduplicação de pending com marca. A revisão de Astra
+identificou halos originalmente desenhados na camada frontal, sobre pernas e
+corpos. A correção cria `SpiritualistHaloUnderlay` abaixo dos atores e acima do
+piso para halos e espíritos pequenos; almas elevadas/impactos continuam no
+`BattleIndicators` frontal. Ambas leem o mesmo estado; a camada de chão não
+mantém uma segunda lista de marcas. O teste verifica z-order (30 checks). Probes
 OpenGL de 12 estágios de propagação e 22 estágios de almas passaram na escala
 1280×720, inclusive seis adds, com HUD diagnóstico oculto. `tools/verify.ps1`
 integral passou com Godot 4.7.2, incluindo a propagação (37 checks) e esta
-apresentação (29 checks). Aceite técnico de Astra ainda pendente para esta
+apresentação (30 checks após correção da camada).
+Aceite técnico de Astra ainda pendente para esta
 revisão; o `codex/playtest`
 habitual continua no candidato anterior enquanto isso. Aceite de produto/merge
 segue reservado ao usuário.

@@ -11,6 +11,8 @@ estados/skills continuam seguindo o vocabulário visual aplicável.
 
 Cada alvo realmente marcado ou pendente recebe seu próprio halo translúcido;
 as interseções acumulam opacidade, formando uma área contínua sem disco opaco.
+Halos e espíritos pequenos de borda pertencem à camada do chão, sob os corpos;
+a alma elevada e os pulsos de impacto ficam acima dos atores.
 Alvos com halos que se tocam compartilham uma única alma grande acima do grupo;
 um isolado mantém uma própria. O agrupamento é estritamente cosmético: não cria
 marca, dano, alcance, linha de visão nem transmissão. Eco pendente contrai e

@@ -31,6 +31,7 @@ func _run() -> void:
 	arena._select_enemy(boss)
 	arena.combat_numbers_visible = false
 	_check(not arena.spiritualist_panel.visible and not arena.spiritualist_debug_text and arena.battle_indicators.z_index > boss.z_index, "soul presentation is above actors while optional explanation stays hidden")
+	_check(arena.spiritualist_ground != null and arena.arena_view.z_index < arena.spiritualist_ground.z_index and arena.spiritualist_ground.z_index < boss.z_index and arena.spiritualist_ground.indicators == arena.battle_indicators, "ground halos draw above the floor but below actor bodies; elevated souls keep their own layer")
 	var labels_before := _world_label_count(arena)
 	arena._on_spiritualist_echo_curse_requested(_request(arena, boss, &"spiritualist_echo_curse", 110.0), boss, 0.50)
 	arena._sync_spiritualist_combat_state()
