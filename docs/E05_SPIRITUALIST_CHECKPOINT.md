@@ -1,5 +1,10 @@
 # E05 — checkpoint único do Espiritualista
 
+> Estado atual — 02/10/2026: Espiritualista aceito pelo usuário após playtest de
+> `cea5e24` (runtime `15e521d`), liberado para integração em master. O histórico
+> abaixo preserva revisões anteriores; pendências antigas de aceite desta classe
+> foram encerradas. Próximas classes e propostas de gameplay não estão liberadas.
+
 ## Autorização, base e divisão de trabalho — 29/09/2026
 
 O usuário aprovou o Elementalista no candidato `ce87065` e liberou a evolução
@@ -535,3 +540,28 @@ versionadas fora do pacote. Log ignorado:.tools/halos_import.log.
 Recarregar projeto e F5 para avaliar no treino. Intensidade dos halos, leitura
 com movimento livre e densidade final dependem do aceite humano. Master segue
 ce87065; terreno quadrado/Ressonância e Arqueiro não foram iniciados.
+
+## Aceite de produto e fechamento — 02/10/2026
+
+Aceite humano confirmado diretamente na mensagem da conversa E05/Sol
+01a09ba0-0734-71b2-9c51-30f570b22db2, turno01a0fed5-4e4c-7e21-a740-8c96d9b72f4e:
+“o playtest foi bom” e “vamos entregar o Espiritualista”. HEAD do projeto fixo
+confirmado emcea5e24, runtime15e521d, sem alterações locais; checkout de master
+limpo emce87065 e ancestral do candidato. Integração autorizada por WORKFLOW.
+
+Feedback preservado: sensação de precisar de quatro skills ofensivas para
+manter o Eco ativo. É questão futura de ritmo/rotação, não bloqueador do aceite
+nem autorização para alterar fórmulas agora. Painel de edição em tempo real de
+atributos do personagem/skills é ideia para discutir com Astra; não implementado.
+Terreno quadrado, Ressonância numérica e classes do Arqueiro seguem não liberados.
+
+Validação proporcional do fechamento: Astra repetiu no candidato aceito
+fechamento integrado86, apresentação30 e propagação37:153 checks PASS. Não houve
+mudança de runtime desde o playtest; as suítes integrais e capturas anteriores
+continuam registradas acima. Este fechamento altera somente documentação.
+
+Master será avançado por fast-forward para incluir o candidato aceito e este
+registro, preservando exatamente seu runtime e a branch codex/playtest no
+diretório habitual do Godot. Sem push, sem limpeza de worktrees em uso e sem
+iniciar novo marco. A confirmação do hash final de integração fica no relatório
+de conclusão da conversa, evitando autorreferência de hash neste commit.
