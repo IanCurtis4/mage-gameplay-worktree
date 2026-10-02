@@ -31,6 +31,11 @@ integrado; master somente após aceite humano, sem push automático.
   desbloqueado transforma a figura em triângulo. Dois iguais são preparação
   tracejada, sem parede ativa, permitindo triângulos puros depois do desbloqueio.
   Não ativar por tempo sem disparar. Triângulo encerra efeitos da parede anterior.
+- Esclarecimento G0 aprovado por Astra: Traçado dispara primeiro/segundo;
+  Triangulação aprendida/equipada e explicitamente selecionada dispara terceiro,
+  pagando somente seu custo/CD. Traçado não seleciona ou lança Triangulação.
+  Terceiro impacto válido fecha a área automaticamente. Semânticas consolidadas
+  em E05_GEOMETER_G0_PROPOSAL.md após retorno de design de02/10/2026.
 - Até três vértices confirmados e uma figura ativa; sem munição/recarregador
   adicional. Custos por skills/SP/CD/duração. Quarta flecha não substitui ponto
   silenciosamente: edição por Translação/Reescrita, ou nova construção explícita.
@@ -67,21 +72,19 @@ G6 pode preparar APIs emG2/G3, mas validar comportamento completo apósG5.
 G7 não significa deixar VFX para o fim: preview e sinais mínimos acompanham
 cada camada. Só arte/polimento final e composição densa fecham emG7.
 
-## Definições ainda abertas e trabalho independente
+## Fechamento G0 e próximos passos
 
-G0 precisa especificar antes dos efeitos: direção de cruzamento versus ordem
-A→B, significado de condução/desvio de projétil, gatilho da resolução interna
-versus Colapso, efeitos exatos das27 receitas, repetição de elemento em parede,
-semântica de Translação sobre âncora móvel e cobrança quando alvo se invalida
-entre cast/impacto. As decisões aprovadas acima resolvem a preparação com dois
-iguais; não criar uma sétima parede para isso.
+As decisões de direção, condução/desvio, resolução versus Colapso,27 receitas,
+edição móvel e cobrança no voo foram agrupadas e aprovadas por Astra em02/10.
+O contrato consolidado está em E05_GEOMETER_G0_PROPOSAL.md; o nome do arquivo
+é preservado para manter referências existentes. Não criar uma sétima parede
+para dois elementos iguais. Tuning inicial permanece sujeito a playtest.
 
-Sol propõe um contrato composicional enxuto e tuning inicial. Valores rotineiros
-podem ser escolhidos e registrados; mudanças na fantasia/gramática ou efeitos
-não especificados devem ser agrupados numa única pergunta de design a Astra,
-sem bloquear trabalho independente G1–G3 nem pedir revisão a cada commit.
-Não transformar termos vagos como 'contenção' em regra definitiva silenciosamente.
-Não cortar receitas da entrega final para evitar essa definição.
+A próxima unidade é validar geometria e reservas ordenadas com testes de
+invariantes, antes de integrar disparos ao combate. A pedido do usuário, esta
+rodada fecha apenas documentaçãoG0, em ritmo gradual; não conclui G1–G7.
+Mudanças futuras na fantasia/gramática ou efeitos fora desse contrato devem
+ser agrupadas para Astra. Não há novo gate por camada, nem corte de receitas.
 
 ## Direção visual Astra e orçamento
 
