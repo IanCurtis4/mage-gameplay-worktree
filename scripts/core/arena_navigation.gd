@@ -129,6 +129,23 @@ func is_segment_clear(from: Vector2, to: Vector2, clearance: float) -> bool:
 			return false
 	return true
 
+func is_polygon_clear(points: PackedVector2Array, clearance: float = 0.0) -> bool:
+	# Edge visibility alone misses an obstacle wholly enclosed by an area.
+	if points.size() < 3 or not is_finite(clearance) or clearance < 0.0:
+		return false
+	for index: int in range(points.size()):
+		if not points[index].is_finite() or not is_segment_clear(points[index], points[(index + 1) % points.size()], clearance):
+			return false
+	for obstacle: Rect2 in _obstacles:
+		var padded := obstacle.grow(clearance + EDGE_EPSILON)
+		var polygon := PackedVector2Array([padded.position, Vector2(padded.end.x, padded.position.y), padded.end, Vector2(padded.position.x, padded.end.y)])
+		if not Geometry2D.intersect_polygons(points, polygon).is_empty():
+			return false
+	for segment: Dictionary in _temporary_segments.values():
+		if Geometry2D.is_point_in_polygon(segment["from"], points) or Geometry2D.is_point_in_polygon(segment["to"], points):
+			return false
+	return true
+
 func move_until_blocked(from: Vector2, to: Vector2) -> Vector2:
 	if not is_walkable(from):
 		return from

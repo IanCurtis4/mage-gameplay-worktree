@@ -6,10 +6,10 @@ obrigatórias do E00. G0 consolidado; runtime da classe ainda não integrado.
 
 | Camada | Estado | Commit/evidência | Próximo passo |
 |---|---|---|---|
-| G0 contratos | DONE (design) | E05_GEOMETER_G0_PROPOSAL.md; ajustes aprovados por Astra em02/10 | Semânticas fechadas; tuning ainda não aceito |
-| G1 input/disparo | PENDING | rascunho local de reservas, não validado | Testar ordem/timeout; depois integrar input |
-| G2 geometria estática | PENDING | rascunhos locais de geometria/estado, não validados | Testar limites, obstáculos e transações |
-| G3 âncoras móveis | PENDING | rascunho local de âncora, não validado | Testar morte, suspensão e relógios |
+| G0 contratos | DONE (design) | 9527541; ajustes aprovados por Astra em02/10 | Semânticas fechadas; tuning ainda não aceito |
+| G1 input/disparo | PARTIAL (núcleo) | reservas ordenadas/timeout no teste de construção107 PASS | Integrar seleção, mira e projétil ao combate |
+| G2 geometria estática | PARTIAL (núcleo) | limites, obstáculos e transações no teste107 PASS | Preview/runtime compartilhados ainda não conectados |
+| G3 âncoras móveis | PARTIAL (núcleo) | morte, suspensão e relógios no teste107 PASS | Integrar posições reais do encontro e validar boss móvel |
 | G4 paredes6 | PENDING | semânticas emG0 | Implementar gatilhos reais e dedup |
 | G5 triângulos27 | PENDING | — | Puros → mistos → tricolores |
 | G6 edição/progressão | PENDING | — | Duas builds legais |
@@ -31,3 +31,30 @@ Evidência desta rodada: conferência documental e `git diff --check`. Sem mudan
 de runtime entregue, sem nova execução de `tools/verify.ps1` ou teste de gameplay.
 Próxima retomada: testes direcionados dos rascunhos de geometria/reservas/âncoras;
 não começar efeitosG4/G5 antes de validar essa base. Playtest permanece intacto.
+
+## Núcleo de construção validado — 02/10/2026
+
+Rodada pequena autorizada pelo usuário: quatro estados puros (`GeometerGeometry`,
+`GeometerGrammarState`, `GeometerAnchor`, `GeometerConstructionState`) e consulta
+de área livre na navegação. Até três vértices, reservas finitas em ordem de comando,
+elemento/intenção congelados, preparação/parede/triângulo, transações de edição,
+identidades monotônicas e expiração inteira. Sem custo, dano, Nodes ou save.
+
+O teste `e05_geometer_construction_test.gd` passou107 checks em Godot4.7.2:
+limites exatos24/600/256,27 receitas e gates3/21/27, obstáculo encerrado na área
+(incluindo barreira temporária), caso de AABB sem interseção, hit-test de círculo,
+impactos fora de ordem/falhos/duplicados/tardios, timeout, captura isolada de
+contexto, Colapso finito, edição FIFO/atômica, morte na última posição livre,
+suspensão/retomada e expiração sem renovar relógios ou resoluçãoC.
+
+Correções dentro do contrato: rejeitar duração inválida antes de reservar;
+revalidar posições móveis atuais ao receber impacto; recusar vértices não finitos
+no hit-test. Catálogo ainda não habilitado, UI/projétil/cobrança/efeitos não
+integrados. O teste entrou em `tools/verify.ps1`; suíte integral PASS (exit0),
+incluindo importação do editor, navegação, Parede de Gelo e regressões das classes.
+`git diff --check` também passou.
+Não afirma pausa real de Nodes, dano ou clareza visual sem integração ao encontro.
+
+Próximo lote: seleção direta e contexto congelado do cast, mira chão/inimigo e
+projétil especial, conectando o núcleo validado (G1). Sem entregar código parcial
+no diretório habitual. Revisão Astra continua única no fechamento da classe.
