@@ -155,6 +155,10 @@ como mero cosmético. `Sintaxe Bélica` distingue repetição/especialização d
 tricolor/utilidade, sem multiplicar três bônus de dano. Todas 18 ficam no escopo
 do kit final; valores por rank e telegráficos entram no gate E05.
 
+> Revisão autorizada em 02/10/2026: para Geômetra, ver E05_GEOMETER_PLAN.md.
+> Âncoras estáticas e dinâmicas passam a ser baseline; triângulos atuam somente
+> na área, com arestas delimitadoras. Trechos conflitantes abaixo são históricos.
+
 **Geômetra:** parede usa dois elementos diferentes, ordenados, 3×2=6. O primeiro
 define interação na entrada (F dano ao cruzar, G lentidão ao cruzar, R condução de
 projétil); o segundo define saída (F detonação localizada, G barreira de projétil,
