@@ -35,10 +35,8 @@ func _check_production_unavailable_and_run_message(scene: PackedScene) -> void:
 	var character_id: String = profile.characters[0].character_id
 	_check(ProfileStore.new(directory, catalog).commit(profile)["ok"], "production-unavailable menu fixture is durably seeded")
 	var menu: CharacterMenu = await _open_menu(scene, ProfileFacade.new(ProfileStore.new(directory, catalog)))
-	var defender_label: Label = menu.evolution_options_list.get_node("EvolutionOption_defender")
-	var defender_button: Button = menu.evolution_options_list.get_node("ChooseEvolution_defender")
-	_check(menu.evolution_panel != null and menu.evolution_state_label.text.contains("Origem: Espadachim") and menu.evolution_state_label.text.contains("Evolução atual: Defendente"), "selector renders the focused character origin and persisted current evolution from facade options")
-	_check(not defender_label.text.contains("conteúdo indisponível") and defender_label.text.contains("Atual") and defender_button.disabled, "current completed Defender remains visible and cannot be selected twice")
+	_check(menu.evolution_panel != null and menu.evolution_state_label.text.contains("Origem: Espadachim") and menu.evolution_state_label.text.contains("Evolução atual: Defendente"), "summary retains the chosen evolution")
+	_check(menu.evolution_options_list.get_child_count() == 0 and not menu.confirm_evolution_button.get_parent().visible, "normal evolved character hides all choice and confirmation controls")
 	var before_revision: int = menu.facade.current_profile().revision
 	var started: Dictionary = menu.facade.start_run("production-defender", before_revision)
 	_check(started["ok"] and started["run_state"].build_snapshot.evolution_id == &"defender" and menu.facade.current_profile().character_by_id(character_id).evolution_id == &"defender", "production Defender run starts with the persisted identity")
@@ -98,7 +96,7 @@ func _check_switch_retry_and_focused_alt(scene: PackedScene) -> void:
 	_check(focused.evolution_id == &"berserker" and focused.purchased_skill_ranks.is_empty() and focused.presets[0]["active_slots"] == [null, null, null, null, null] and focused.presets[1]["active_slots"] == [null, null, null, null, null], "successful branch switch refreshes both presets after removing only obsolete evolution ranks")
 	var berserker_entry: Label = menu.progression_skill_tree.get_node_or_null("ProgressionSkill_berserker_entry")
 	var defender_entry: Label = menu.progression_skill_tree.get_node_or_null("ProgressionSkill_defender_entry")
-	_check(menu.evolution_state_label.text.contains("Evolução atual: Berserker") and berserker_entry != null and berserker_entry.text.contains("Rank 1/5") and defender_entry != null and defender_entry.text.contains("ramo futuro") and menu.status_label.text.contains("Slots esvaziados: 4"), "selector refreshes summary, progression tree and exact cleanup feedback from the transaction response")
+	_check(menu.evolution_state_label.text.contains("Evolução atual: Berserker") and berserker_entry != null and berserker_entry.text.contains("Rank 1/5") and defender_entry == null and menu.status_label.text.contains("Slots esvaziados: 4"), "selector refreshes summary, progression tree and exact cleanup feedback from the transaction response")
 	menu.queue_free()
 
 func _check_cancelled_retry_is_discarded(scene: PackedScene) -> void:
