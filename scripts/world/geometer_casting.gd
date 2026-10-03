@@ -1,16 +1,21 @@
 class_name GeometerCasting
 extends Node2D
-## G1 orchestration and underlay. Field damage/transformations belong to G4/G5.
+## Casting, spatial candidates and underlay. Recipes belong to field consumers.
 
 signal hit(request: DamageRequest, target: CombatActor)
 signal feedback(message: String)
 signal construction_closed(result: Dictionary)
+## Spatial candidate only; recipes must claim effects through interaction_ledger.
+signal wall_crossed(contact: Dictionary, actor: CombatActor)
 
 var player: PlayerActor
 var targets: Array[CombatActor] = []
 var construction := GeometerConstructionState.new()
 var preview_command: GeometerCastCommand
 var preview_valid := false
+var wall_contacts := GeometerWallContactState.new()
+var interaction_ledger := GeometerInteractionLedger.new()
+var _watched_walkers: Dictionary[int, EnemyActor] = {}
 
 func configure(caster: PlayerActor) -> void:
 	player = caster
@@ -72,6 +77,7 @@ func _on_delivered(ticket: int, success: bool, point: Vector2, victim: CombatAct
 	for result: Dictionary in construction.resolve_shot(ticket, success, point, alive_positions(), player.navigation):
 		_report_delivery(result)
 	_retire_invalid_flights()
+	_sync_wall_observers()
 	queue_redraw()
 
 func _report_delivery(result: Dictionary) -> void:
@@ -83,10 +89,44 @@ func _report_delivery(result: Dictionary) -> void:
 func advance(delta: float) -> void:
 	if not is_instance_valid(player) or not player.is_alive() or (is_inside_tree() and get_tree().paused):
 		return
+	interaction_ledger.sync(construction.construction_id)
+	interaction_ledger.advance(delta)
 	for result: Dictionary in construction.advance(delta, alive_positions(), player.navigation):
 		_report_delivery(result)
 	_retire_invalid_flights()
+	_sync_wall_observers()
 	queue_redraw()
+
+func _sync_wall_observers() -> void:
+	interaction_ledger.sync(construction.construction_id)
+	wall_contacts.sync(construction.construction_id, construction.shape == GeometerConstructionState.Shape.WALL and construction.has_active_figure())
+	var alive_ids: Array[int] = []
+	for actor: CombatActor in targets:
+		if is_instance_valid(actor) and actor is EnemyActor and actor.is_alive():
+			var identity := actor.get_instance_id()
+			alive_ids.append(identity)
+			if not _watched_walkers.has(identity):
+				actor.ground_walked.connect(_on_ground_walked.bind(actor))
+				_watched_walkers[identity] = actor
+	for identity: int in _watched_walkers.keys():
+		if identity not in alive_ids:
+			var actor := _watched_walkers[identity]
+			if is_instance_valid(actor):
+				actor.ground_walked.disconnect(_on_ground_walked.bind(actor))
+			_watched_walkers.erase(identity)
+	wall_contacts.prune(alive_ids)
+
+func _on_ground_walked(from: Vector2, to: Vector2, actor: EnemyActor) -> void:
+	if not is_instance_valid(player) or not player.is_alive() or not actor.is_alive() or actor not in targets or (is_inside_tree() and get_tree().paused):
+		return
+	construction.refresh(alive_positions(), player.navigation)
+	_sync_wall_observers()
+	if construction.shape != GeometerConstructionState.Shape.WALL or not construction.has_active_figure():
+		return
+	var points := construction.positions()
+	var contact := wall_contacts.observe(actor.get_instance_id(), from, to, points[0], points[1], actor.collision_radius)
+	if not contact.is_empty():
+		wall_crossed.emit(contact, actor)
 
 func _retire_invalid_flights() -> void:
 	var active_tickets: Array[int] = []
@@ -105,11 +145,19 @@ func select(element: StringName) -> bool:
 func clear_construction() -> void:
 	player.cancel_active_cast()
 	construction.clear()
+	interaction_ledger.sync(0)
+	wall_contacts.sync(0, false)
 	preview_command = null
 	for child: Node in get_children():
 		if child is GeometerTraceProjectile:
 			child.queue_free()
 	queue_redraw()
+
+func _exit_tree() -> void:
+	for actor: EnemyActor in _watched_walkers.values():
+		if is_instance_valid(actor):
+			actor.ground_walked.disconnect(_on_ground_walked.bind(actor))
+	_watched_walkers.clear()
 
 func outline_segments() -> Array[PackedVector2Array]:
 	var points := construction.positions()

@@ -2,6 +2,8 @@ class_name EnemyActor
 extends CombatActor
 
 signal attack_requested(request: DamageRequest, target: CombatActor, ranged: bool)
+## Actual navigation-applied walking only. Direct placement/push is not walking.
+signal ground_walked(from: Vector2, to: Vector2)
 
 const MOVEMENT_EPSILON := 0.01
 
@@ -205,11 +207,15 @@ func _move_along_path(delta: float) -> void:
 		var direction := global_position.direction_to(point)
 		var travel := minf(distance, remaining_distance)
 		var desired := global_position + direction * travel
-		var moved_to := navigation.move_until_blocked(global_position, desired)
-		var actual_travel := global_position.distance_to(moved_to)
+		var before := global_position
+		var moved_to := navigation.move_until_blocked(before, desired)
+		var actual_travel := before.distance_to(moved_to)
 		global_position = moved_to
 		if actual_travel <= 0.0:
 			break
+		ground_walked.emit(before, moved_to)
+		if not is_alive():
+			return
 		if actual_travel + MOVEMENT_EPSILON < travel:
 			_path.clear()
 			break

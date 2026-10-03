@@ -11,7 +11,7 @@ ainda indisponível no catálogo de produção.
 | G1 input/disparo | DONE (interno) | construção107 + casting61 PASS; renderer4 PASS | Efeitos/progressão/arte final continuam pendentes |
 | G2 geometria estática | DONE (interno) | núcleo109 + integração46 PASS; renderer6 PASS | Sem efeitosG4/G5 nem aceite de produto |
 | G3 âncoras móveis | DONE (interno) | matriz real de morte/fila/suspensão/expiração; 30/60/144Hz | Cadências de efeitos móveis ainda serão validadas emG4/G5 |
-| G4 paredes6 | PENDING | semânticas emG0 | Implementar gatilhos reais e dedup |
+| G4 paredes6 | PARTIAL (primitivas) | contato/travessia/ledger74 PASS | Integrar receitas e transformação contínua de projéteis |
 | G5 triângulos27 | PENDING | — | Puros → mistos → tricolores |
 | G6 edição/progressão | PENDING | — | Duas builds legais |
 | G7 visual/integração | PENDING | — | Revisão Astra e playtest |
@@ -144,3 +144,52 @@ Próximo lote pequeno: primitivasG4 de travessia real (ator move, parede não
 varre vítimas), contato contínuo e registros de deduplicação por construção.
 Depois integrar as seis receitas e transformações dentro do contratoG0.
 Sem habilitar catálogo parcial, sem gate por camada ou atualização de playtest/master.
+
+## G4-A — contato, travessia real e registros compartilhados — 03/10/2026
+
+Usuário autorizouG4 após6e45de6. Esta unidade fecha as primitivas do próximo
+lote pequeno, não as seis receitas completas. `GeometerGeometry` fornece
+primeiro contato contínuo com a faixa finita de meia largura12 + raio do corpo,
+com extremidades arredondadas, e ponto de travessia da linha. Diferencia posição
+real na trajetória de projeção na aresta: não autoriza teleporte paraA/B.
+
+`EnemyActor.ground_walked(from,to)` informa apenas cada segmento de caminhada
+aplicado pela navegação, depois da colisão. Não é uma diferença de posição
+entre frames, nem é emitido por spawn, reposicionamento ou push. Não modifica
+fórmulas, orçamento de deslocamento ou comportamento das outras classes.
+`GeometerCasting` observa esses sinais somente no contexto da Geômetra,
+revalida a figura atual e emite candidato espacial `wall_crossed`, sem efeito
+de combate. Remove observadores de mortos/retirados e desconecta ao sair.
+
+`GeometerWallContactState` arma a passagem fora da faixa finita. Cruzar o centro
+pela caminhada gera um candidato; parar na linha ou oscilar dentro da faixa
+não gera ticks. Suspensão limpa histórico espacial; triângulo/preparação não
+detecta travessia de parede. Parede sobre ator parado não conta, tampouco um
+movimento pequeno posterior consumindo uma mudança de lado antiga.
+
+`GeometerInteractionLedger` é da instância da construção: mesma janela2s por
+vítima para consumidores de entrada/saída/pulsos, flags únicas por projétil
+(transporte, carga de fogo e duas funções futuras de raio), e janela2s para
+restituição de interceptação com capacidade a recuperar. Dono errado, Traçado,
+Triangulação e secundários não recebem transformações próprias. Detecção não
+consome esses registros; os futuros efeitos devem reivindicar somente uma
+interação efetiva. Edição/suspensão/parede→triângulo não troca identidade nem
+renova flags/relógios; construção nova e limpeza invalidam o registro anterior.
+Tolerância temporal1µs evita atrasar o limite2s um frame por arredondamento.
+
+Evidência: `e05_geometer_wall_primitives_test.gd`74 PASS (geometria finita,
+contato rápido, extremidades/raios, continuidade, oscilações, retirada/cleanup,
+exclusões, dedup por componente e janelas em30/60/144Hz). Fixture real verifica
+boss caminhando, caminho bloqueado, reposicionamento, parede móvel, edição,
+pausa, triângulo sem herança e remoção de listeners; nenhum dano/SP de receita.
+Suíte integral `tools/verify.ps1` PASS (exit0,73 checksG4 nessa execução);
+refinamento final da armação nas extremidades passou74 checks direcionados.
+Núcleo109, casting61 e integraçãoG2/G3 46 também repetidos PASS após esse ajuste.
+Regressão do rendererG2/G3: seis capturas PASS; nenhuma mudança visual nova.
+`git diff --check` PASS. Sem habilitar catálogo, preparar candidato parcial,
+mandar microgate para Astra ou alterar o menu reservado por Astra em paralelo.
+
+Próxima unidadeG4-B: receitas de travessia F/G e pulso de saídaF com LoS,
+resolver canônico, snapshot e janela compartilhada das vítimas. DepoisG4-C:
+interceptação, condução/desvio reais preservando alcance/vida/colisões e Teorema.
+Isso mantém as seis receitas do contrato, sem cortar ou chamarG4 de concluído.
