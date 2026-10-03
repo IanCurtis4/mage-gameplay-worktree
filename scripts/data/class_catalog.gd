@@ -166,6 +166,7 @@ static func _ensure_built() -> void:
 	# Execution data only: ProfileCatalog keeps mg_ar unavailable until G7.
 	_add_skill(&"geometer_trace", "Traçado Elemental", "Q", SkillDefinition.Targeting.POINT, 8.0, 0.4, 0.30, 600.0, 900.0, 0.12, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_skill(&"geometer_triangulation", "Triangulação", "W", SkillDefinition.Targeting.POINT, 16.0, 3.0, 0.0, 600.0, 900.0, 0.12, DamageRequest.AccuracyMode.GEOMETRY, false)
+	_add_passive_skill(&"geometer_incidence", "Teorema de Incidência")
 	_configure_slash_ranks()
 	_configure_dash_ranks()
 	_configure_shield_wall_ranks()
@@ -1038,6 +1039,16 @@ static func _configure_elementalist_ranks() -> void:
 	_elementalist_active_ranks(&"elementalist_tri_nova", SkillDefinition.Handler.ELEMENTALIST_TRI_NOVA, [30.0, 32.0, 34.0, 35.0, 36.0], [0.70, 0.80, 0.88, 0.95, 1.01], 170.0, 16.0, 0.65, [&"three_pulses_fire_ice_lightning_at_0_0_25_0_50", &"ice_pulse_0_55_slow", &"lightning_pulse_0_60_electrified", &"root_only_first_pulse"] , 0.55)
 
 static func _configure_geometer_trace_ranks() -> void:
+	var incidence: SkillDefinition = _skills[&"geometer_incidence"]
+	incidence.handler_id = SkillDefinition.Handler.GEOMETER_INCIDENCE
+	for index: int in range(3):
+		var passive := SkillRankDefinition.new()
+		passive.rank = index + 1
+		passive.power = 0.10 + 0.05 * index
+		passive.secondary_power = 2.0 + index
+		passive.effect_ids = [&"actual_wall_interaction_bonus", &"hostile_interception_sp_refund_two_seconds"]
+		incidence.ranks.append(passive)
+	assert(incidence.is_rank_catalog_valid())
 	for skill_id: StringName in [&"geometer_trace", &"geometer_triangulation"]:
 		var definition: SkillDefinition = _skills[skill_id]
 		definition.handler_id = SkillDefinition.Handler.GEOMETER_TRACE if skill_id == &"geometer_trace" else SkillDefinition.Handler.GEOMETER_TRIANGULATION
@@ -1055,6 +1066,11 @@ static func _configure_geometer_trace_ranks() -> void:
 			rank.effect_ids = [&"explicit_ground_or_actor_anchor", &"ordered_frozen_element_delivery"]
 			definition.ranks.append(rank)
 		assert(definition.is_rank_catalog_valid())
+
+static func geometer_wall_tuning(rank: int) -> Dictionary:
+	if rank < 1 or rank > 5:
+		return {}
+	return {"entry_power": 0.35 + 0.05 * (rank - 1), "exit_power": 0.30 + 0.05 * (rank - 1), "slow_fraction": 0.20 + 0.025 * (rank - 1)}
 
 static func _configure_spiritualist_curse_ranks() -> void:
 	var definition: SkillDefinition = _skills[&"spiritualist_echo_curse"]

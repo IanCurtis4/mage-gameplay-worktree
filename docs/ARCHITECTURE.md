@@ -269,6 +269,30 @@ validar leitura, tentar backup antes de defaults. Sem save implementado nesta fu
 
 ## Validação
 
+### Geômetra G4 — execução isolada, catálogo parcial indisponível
+
+`GeometerCasting` adapta comandos/vínculos e observa `EnemyActor.ground_walked`
+somente após caminhada aplicada pela navegação. `GeometerWallField` consome
+travessias reais/contato contínuo da faixa finita; não registra barreira física.
+`GeometerInteractionLedger` pertence à instância da construção, preservando janelas
+e flags por vítima/projétil durante edição, suspensão e parede→triângulo.
+Snapshots de parede são criados no jogador a partir de `StatBreakdown` e ranks
+do catálogo, capturados no lançamento pago e consumidos em ordem por ticket.
+Catálogos permanecem imutáveis; HP/SP/relógios continuam exclusivamente na run.
+
+O gancho opcional em `PlayerProjectile` concorre com colisões contínuas existentes:
+contato posterior a vítima/terreno não transforma. Condução percorre contato→B
+com orçamento físico original e retomada da direção, sem renovar alcance/piercing;
+desvio muda direção uma vez com alvo/LoS limitados. `ArrowProjectile` consulta
+interceptação antes do alvo, respeitando terreno/escudo/Barreira Fantasma.
+Adicionais usam `DamageRequest` secundário e resolver central, sem cascatas.
+Parede inativa não concede efeitos nem resolve carga pendente; condução ativa
+é interrompida sem teleportar o projétil base. Sem mudança no schema/save.
+Figuras são underlay; reações curtas de interação usam filho visual acima dos
+corpos. Regras completas, tuning e evidências: `E05_GEOMETER_CHECKPOINT.md`.
+
+### Procedimento
+
 Import headless detecta scripts/recursos inválidos; testes headless validam fórmulas,
 limites, dano, elegibilidade, fluxo da arena, layout e invariantes de movimento.
 Smoke da cena detecta falhas de inicialização. Movimento automatizado é exercitado

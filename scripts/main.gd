@@ -892,6 +892,8 @@ func _on_mage_projectile_requested(skill_id: StringName, request: DamageRequest,
 				projectile.targets = [target_actor]
 				projectile.direction = direction
 		projectile.hit.connect(_on_mage_projectile_hit)
+		if geometer_casting != null:
+			projectile.geometer_field = geometer_casting.wall_field
 		add_child(projectile)
 		projectile.add_to_group("player_projectiles")
 
@@ -904,6 +906,8 @@ func _on_discharge_requested(request: DamageRequest, direction: Vector2, bonus_m
 	projectile.configure_directional(request.copy(), origin, direction, enemies, navigation, player.skill_projectile_speed(&"electric_discharge"), player.skill_range(&"electric_discharge"), 1, Color("ffe37a"))
 	projectile.electrified_bonus_magic_damage = bonus_magic_damage
 	projectile.hit.connect(_on_discharge_hit)
+	if geometer_casting != null:
+		projectile.geometer_field = geometer_casting.wall_field
 	add_child(projectile)
 	projectile.add_to_group("player_projectiles")
 
@@ -928,6 +932,8 @@ func _spawn_precision_projectiles(skill_id: StringName, request: DamageRequest, 
 		var max_distance := player.archer_basic_projectile_range() if skill_id == &"basic_attack" else player.skill_range(skill_id)
 		projectile.configure_directional(request.copy(), origin, direction, enemies, navigation, speed, max_distance, hit_limit, visual_color)
 		projectile.hit.connect(hit_callback)
+		if geometer_casting != null:
+			projectile.geometer_field = geometer_casting.wall_field
 		add_child(projectile)
 		projectile.add_to_group("player_projectiles")
 
@@ -1451,6 +1457,8 @@ func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActo
 		return
 	projectile.configure(request, target_actor, source.global_position + Vector2(0, -18), navigation)
 	projectile.hit.connect(_on_attack_requested)
+	if geometer_casting != null:
+		projectile.geometer_field = geometer_casting.wall_field
 	add_child(projectile)
 	projectile.add_to_group("enemy_projectiles")
 

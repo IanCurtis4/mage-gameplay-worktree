@@ -144,6 +144,7 @@ func _real_walking() -> void:
 	arena.navigation.configure(Rect2(0, 0, 1400, 1000), [], 18)
 	var boss := arena.training_boss
 	var casting := arena.geometer_casting
+	casting.wall_field.enabled = false # Isolate spatial primitives from recipe effects.
 	var state := casting.construction
 	state.add_vertex(&"fire", Vector2(200, 200), 0, 5, arena.navigation)
 	state.add_vertex(&"ice", Vector2(500, 200), 0, 5, arena.navigation)

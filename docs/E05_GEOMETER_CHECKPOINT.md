@@ -2,16 +2,16 @@
 
 03/10/2026 — autorizada pelo usuário; condutor Sol6.1; base aceita8df3a67.
 Contrato vigente:E05_GEOMETER_PLAN.md, com precedência sobre âncoras estáticas
-obrigatórias do E00. G0–G3 integrados e validados internamente em fixture; classe completa
+obrigatórias do E00. G0–G4 integrados e validados internamente em fixture; classe completa
 ainda indisponível no catálogo de produção.
 
 | Camada | Estado | Commit/evidência | Próximo passo |
 |---|---|---|---|
 | G0 contratos | DONE (design) | 9527541; ajustes aprovados por Astra em02/10 | Semânticas fechadas; tuning ainda não aceito |
 | G1 input/disparo | DONE (interno) | construção107 + casting61 PASS; renderer4 PASS | Efeitos/progressão/arte final continuam pendentes |
-| G2 geometria estática | DONE (interno) | núcleo109 + integração46 PASS; renderer6 PASS | Sem efeitosG4/G5 nem aceite de produto |
-| G3 âncoras móveis | DONE (interno) | matriz real de morte/fila/suspensão/expiração; 30/60/144Hz | Cadências de efeitos móveis ainda serão validadas emG4/G5 |
-| G4 paredes6 | PARTIAL (primitivas) | contato/travessia/ledger74 PASS | Integrar receitas e transformação contínua de projéteis |
+| G2 geometria estática | DONE (interno) | núcleo109 + integração46 PASS; renderer6 PASS | EfeitosG5 e aceite de produto pendentes |
+| G3 âncoras móveis | DONE (interno) | matriz real de morte/fila/suspensão/expiração; 30/60/144Hz | Manutenção dos campos móveis será validada emG5 |
+| G4 paredes6 | DONE (interno) | primitivas74 + receitas106 + projéteis96 PASS; renderer7 PASS | Próximo loteG5; tuning e classe completa ainda não aceitos |
 | G5 triângulos27 | PENDING | — | Puros → mistos → tricolores |
 | G6 edição/progressão | PENDING | — | Duas builds legais |
 | G7 visual/integração | PENDING | — | Revisão Astra e playtest |
@@ -193,3 +193,71 @@ Próxima unidadeG4-B: receitas de travessia F/G e pulso de saídaF com LoS,
 resolver canônico, snapshot e janela compartilhada das vítimas. DepoisG4-C:
 interceptação, condução/desvio reais preservando alcance/vida/colisões e Teorema.
 Isso mantém as seis receitas do contrato, sem cortar ou chamarG4 de concluído.
+
+## G4 completo — seis paredes, projéteis e Teorema — 03/10/2026
+
+Retomada autorizada para terminarG4, sobre78d0f58. Menu revisado de Astra
+0c008d4 incorporado pelo mergecb0f0d3 sem perder Geômetra nem o teste menu_tabs.
+Não foi enviado outro microgate; nenhuma alteração no projeto habitual ou master
+foi feita por esta rodada. Próximo passo éG5, não publicar esta classe parcial.
+
+`GeometerWallField` consome a mesma geometria/ledger da construção e implementa
+as seis receitas ordenadas. EntradaF causa dano mágico; entradaG aplica slow2s;
+saídaF emite pulso local45 com LoS e janela2s por vítima compartilhada entre
+cruzadores e impactos. R→G não consome a janela de ator sem efeito. Parede não
+é obstáculo de navegação. Reposicionamento/parede móvel não simula caminhada.
+
+Pedidos são snapshots do lançamento pago que inicia a instância, retidos por
+ticket inclusive na chegada fora de ordem. MAG/rank/passiva equipada não são
+recapturados no impacto, edição ou retomada. Defense atual continua no resolver
+canônico; pedidos adicionais são cópias secundárias, GEOMETRY, sem crítico ou
+cascata genérica. Coeficientes permanecem o tuning inicial doG0, não balanceamento
+aceito. Teorema tem três ranks10/15/20% e devolve2/3/4SP somente na interceptação
+efetiva, com capacidade disponível e janela global2s da construção.
+
+Projéteis próprios primários recebem condução seA=R, desvio único seB=R e carga
+de fogo no próximo impacto seB=F. Traçado/Triangulação, dono errado e secundários
+são excluídos. Condução começa no contato físico, percorre atéB capturado naquele
+contato e sai na direção original: conserva distância percorrida, alcance/vida,
+colisão e piercing. Desvio escolhe deterministicamente o vivo mais próximo deB
+em raio110 com LoS deB e do contato real, sem homing ou projétil novo. O raio110
+é tuning inicial explícito, não alcance global ou nova semântica aprovada.
+
+Contato de terreno/vítima anterior impede transformação posterior. Flecha hostil
+só é dissipada por saídaG; prioridade espacial de alvo, escudo, Barreira Fantasma
+e terreno é conservada. Interceptar não converte a flecha nem causa dano aliado.
+Flags são únicas por componente/projétil/instância e persistem nas edições e
+parede→triângulo. Nenhum novo efeito de parede é concedido por um triângulo.
+
+Limpeza, expiração, suspensão ou passagem para triângulo encerram a condução
+em andamento no próximo avanço do projétil, retomando sua direção original
+sem teleporte. Carga/Teorema pendentes exigem a mesma parede ativa no impacto;
+não resolvem através de uma construção nova, extinta, suspensa ou triangular.
+Retomada não renova flags nem refaz condução já interrompida. O projétil base
+permanece independente e pode atingir normalmente sem esses adicionais.
+
+Apresentação mínima acompanha eventos reais: fissura/arcoF, cristalG e traço
+quebradoR, com duração0,25s e no máximo12 reações. Figura/vértices continuam sob
+atores; camada separada de impacto evita ocultação pelo boss. Travessia sem
+vítima elegível não finge novo proc visual. Arte de personagem ainda é fallback
+Mago e não houve aprovação visual final ou medição de FPS.
+
+Evidências internas: receitas106 PASS (seis pares, ranks1/5, passiva equipada,
+LoS, pulso/vítimas, cadência, pausa, suspensão, snapshot e sem herança triangular).
+Projéteis96 PASS (condução30/60/144Hz, alcance curto, obstáculo, desvio determinístico,
+carga única/piercing, prioridades, reembolso, ciclo de vida, FIFO/snapshot no voo,
+auto real contra boss solo e emissão real de flecha hostil). Primitivas74,
+casting61 e integraçãoG2/G3 46 continuam no verificador. Fixtures antigas agora
+contam/removem apenas projéteis, preservando o novo filho visual permanente.
+
+`geometer_g4_renderer_probe.gd` PASS em sete capturas OpenGL1280×720 inspecionadas:
+travessiaF/G, contato de condução, impactoF, desvio, interceptação e expiração.
+Capturas ignoradas em `.godot/verification/geometer_g4_*.png`. O probe usa eventos
+reais da cena, sem perfil persistente ou aprovação de produto.
+
+`tools/verify.ps1` integral final PASS (exit0), incluindo importação do editor,
+276 checksG4, núcleo109, casting61, integração46, menu_tabs38, smoke da cena,
+regressões de classes aceitas/persistência e administração12. `git diff --check`
+PASS. Evidências do implementador não equivalem a revisão independente de Astra.
+G5/G6/G7 permanecem pendentes:27 campos, edição/progressão completa e arte/onboarding/
+composição densa. Revisão Astra será integrada no fechamento da classe.

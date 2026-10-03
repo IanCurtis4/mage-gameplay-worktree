@@ -19,6 +19,21 @@ var homing := false
 var max_hits := 1
 var color := Color("f6dfad")
 var _hit_actor_ids: Dictionary[int, bool] = {}
+var geometer_field: GeometerWallField
+var geometer_conduction_endpoint := Vector2.INF
+var geometer_resume_direction := Vector2.RIGHT
+var geometer_transport_identity := 0
+var geometer_fire_request: DamageRequest
+var geometer_bonus_request: DamageRequest
+var geometer_payload_identity := 0
+
+func start_geometer_conduction(endpoint: Vector2, identity: int) -> void:
+	geometer_resume_direction = direction
+	geometer_conduction_endpoint = endpoint
+	geometer_transport_identity = identity
+	if homing:
+		targets = [target] if is_instance_valid(target) else []
+	homing = false
 
 func configure_directional(
 	damage_request: DamageRequest,
@@ -65,9 +80,14 @@ func configure_homing(
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 
 func _process(delta: float) -> void:
+	if is_queued_for_deletion() or (is_inside_tree() and get_tree().paused) or not is_finite(delta) or delta <= 0.0:
+		return
 	if request == null or travelled >= max_distance:
 		queue_free()
 		return
+	if geometer_conduction_endpoint.is_finite() and (geometer_field == null or not geometer_field.conduction_active(geometer_transport_identity)):
+		geometer_conduction_endpoint = Vector2.INF
+		direction = geometer_resume_direction
 	if homing:
 		if target == null or not is_instance_valid(target) or not target.is_alive():
 			queue_free()
@@ -78,32 +98,54 @@ func _process(delta: float) -> void:
 	rotation = direction.angle()
 	var remaining_step := minf(speed * delta, max_distance - travelled)
 	while remaining_step > 0.0:
+		var segment_step := remaining_step
+		if geometer_conduction_endpoint.is_finite():
+			var distance := global_position.distance_to(geometer_conduction_endpoint)
+			if distance <= 0.001:
+				geometer_conduction_endpoint = Vector2.INF
+				direction = geometer_resume_direction
+			else:
+				direction = global_position.direction_to(geometer_conduction_endpoint)
+				segment_step = minf(segment_step, distance)
+		rotation = direction.angle()
 		var segment_start := global_position
-		var segment_end := segment_start + direction * remaining_step
+		var segment_end := segment_start + direction * segment_step
 		var wall_fraction := _wall_fraction(segment_start, segment_end)
 		var impact := _nearest_impact(segment_start, segment_end)
 		var victim: CombatActor = impact.get("actor") as CombatActor
 		var victim_fraction: float = impact.get("fraction", 2.0)
+		var contact := geometer_field.owned_contact(self, segment_start, segment_end) if geometer_field != null else {}
+		if not contact.is_empty() and float(contact["fraction"]) < minf(wall_fraction, victim_fraction):
+			var distance := segment_step * float(contact["fraction"])
+			global_position = segment_start.lerp(segment_end, float(contact["fraction"]))
+			travelled += distance
+			remaining_step -= distance
+			geometer_field.apply_owned_contact(self)
+			continue
 		if victim != null and victim_fraction <= wall_fraction:
-			var distance_to_victim := remaining_step * victim_fraction
+			var distance_to_victim := segment_step * victim_fraction
 			global_position = segment_start.lerp(segment_end, victim_fraction)
 			travelled += distance_to_victim
 			remaining_step -= distance_to_victim
 			_hit_actor_ids[victim.get_instance_id()] = true
 			_prepare_impact(victim)
 			hit.emit(request, victim)
+			if geometer_field != null:
+				geometer_field.projectile_impact(self, victim)
+			if is_queued_for_deletion():
+				return
 			if _hit_actor_ids.size() >= max_hits:
 				queue_free()
 				return
 			continue
 		if wall_fraction <= 1.0:
 			global_position = segment_start.lerp(segment_end, wall_fraction)
-			travelled += remaining_step * wall_fraction
+			travelled += segment_step * wall_fraction
 			queue_free()
 			return
 		global_position = segment_end
-		travelled += remaining_step
-		remaining_step = 0.0
+		travelled += segment_step
+		remaining_step = maxf(0.0, remaining_step - segment_step)
 	if travelled >= max_distance:
 		queue_free()
 

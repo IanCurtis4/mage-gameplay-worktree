@@ -14,6 +14,7 @@ var speed := 430.0
 var max_distance := 680.0
 var projectile_radius := 4.0
 var travelled := 0.0
+var geometer_field: GeometerWallField
 
 func configure(damage_request: DamageRequest, target_actor: CombatActor, origin: Vector2, arena_navigation: ArenaNavigation) -> void:
 	request = damage_request
@@ -27,7 +28,7 @@ func configure(damage_request: DamageRequest, target_actor: CombatActor, origin:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 
 func _process(delta: float) -> void:
-	if is_inside_tree() and get_tree().paused:
+	if is_queued_for_deletion() or (is_inside_tree() and get_tree().paused) or not is_finite(delta) or delta <= 0.0:
 		return
 	if target == null or not is_instance_valid(target) or not target.is_alive() or travelled >= max_distance:
 		queue_free()
@@ -52,6 +53,17 @@ func _process(delta: float) -> void:
 			if fraction >= 0.0 and fraction < first_barrier_fraction:
 				first_barrier = barrier
 				first_barrier_fraction = fraction
+	var geometer_contact := geometer_field.hostile_contact(self, global_position, next_position) if geometer_field != null else {}
+	if not geometer_contact.is_empty():
+		var fraction: float = geometer_contact["fraction"]
+		if (target_fraction < 0.0 or fraction <= target_fraction) and (shield_fraction < 0.0 or fraction < shield_fraction) and fraction < first_barrier_fraction:
+			var point := global_position.lerp(next_position, fraction)
+			if navigation.is_segment_clear(global_position, point, projectile_radius):
+				travelled += step * fraction
+				global_position = point
+				geometer_field.intercept_hostile(point - BODY_OFFSET)
+				queue_free()
+				return
 	if shield_fraction >= 0.0 and (target_fraction < 0.0 or shield_fraction <= target_fraction) and shield_fraction <= first_barrier_fraction:
 		var shield_point := global_position.lerp(next_position, shield_fraction)
 		if navigation.is_segment_clear(global_position, shield_point, projectile_radius) and shielded_player.absorb_shield_projectile():

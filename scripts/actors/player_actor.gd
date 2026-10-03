@@ -1669,11 +1669,30 @@ func commit_geometer_shot(command: GeometerCastCommand, construction: GeometerCo
 	var request := _make_magic_request(check["target"], command.skill_id, _magic_power(command.skill_id), definition.accuracy_mode, definition.can_crit)
 	check["ticket"] = ticket
 	check["request"] = request
+	check["wall_snapshot"] = geometer_wall_snapshot()
 	check["speed"] = skill_projectile_speed(command.skill_id)
 	check["range"] = skill_range(command.skill_id)
 	presentation_action.emit(&"cast_release", _resolved_facing(aim_direction(check["point"])), 0.12)
 	resources_changed.emit()
 	return check
+
+func geometer_wall_snapshot() -> Dictionary:
+	var tuning := ClassCatalog.geometer_wall_tuning(skill_rank(&"geometer_trace"))
+	if not is_geometer() or tuning.is_empty():
+		return {}
+	var bonus := 0.0
+	var refund := 0.0
+	if run_state.build_snapshot.passive_slots.has(&"geometer_incidence"):
+		var passive := _runtime_rank_definition(&"geometer_incidence")
+		if passive != null:
+			bonus = passive.power
+			refund = passive.secondary_power
+	var magic := stat_breakdown.value(&"magic_attack")
+	var entry := _make_magic_request(null, &"geometer_wall_entry", magic * float(tuning["entry_power"]) * (1.0 + bonus), DamageRequest.AccuracyMode.GEOMETRY, false)
+	var exit := _make_magic_request(null, &"geometer_wall_exit", magic * float(tuning["exit_power"]) * (1.0 + bonus), DamageRequest.AccuracyMode.GEOMETRY, false)
+	entry.is_secondary = true
+	exit.is_secondary = true
+	return {"entry_request": entry, "exit_request": exit, "slow_fraction": tuning["slow_fraction"], "incidence_fraction": bonus, "incidence_sp": refund}
 
 func begin_skill_cast(skill_id: StringName, point: Vector2, enemy: CombatActor = null, geometer_command: GeometerCastCommand = null) -> bool:
 	var definition := ClassCatalog.skill_definition(skill_id)

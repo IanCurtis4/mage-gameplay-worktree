@@ -43,6 +43,9 @@ func claim_owned_projectile(projectile_id: int, component: Component, request: D
 	_projectile_components[projectile_id] = current | mask
 	return true
 
+func projectile_claimed(projectile_id: int, component: Component) -> bool:
+	return (_projectile_components.get(projectile_id, 0) & (1 << int(component))) != 0
+
 func claim_interception_refund(has_capacity: bool) -> bool:
 	if construction_id <= 0 or not has_capacity or elapsed + TIME_EPSILON < _interception_ready:
 		return false

@@ -294,7 +294,8 @@ func _kill(actor: CombatActor) -> void:
 func _reset() -> void:
 	casting.clear_construction()
 	for child: Node in casting.get_children():
-		child.free()
+		if child is GeometerTraceProjectile:
+			child.free()
 	for actor: CombatActor in arena.enemies.duplicate():
 		if actor != boss:
 			arena.enemies.erase(actor)

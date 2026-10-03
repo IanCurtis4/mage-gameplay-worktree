@@ -16,12 +16,19 @@ var preview_valid := false
 var wall_contacts := GeometerWallContactState.new()
 var interaction_ledger := GeometerInteractionLedger.new()
 var _watched_walkers: Dictionary[int, EnemyActor] = {}
+var wall_field := GeometerWallField.new()
+var _shot_wall_snapshots: Dictionary[int, Dictionary] = {}
+var _wall_reactions: Array[Dictionary] = []
+var _reaction_visual := WallReactionVisual.new()
 
 func configure(caster: PlayerActor) -> void:
 	player = caster
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 	z_index = -1
+	_reaction_visual.z_index = 2
+	add_child(_reaction_visual)
 	player.geometer_cast_ready.connect(launch)
+	wall_field.configure(self)
 
 func alive_positions() -> Dictionary[int, Vector2]:
 	var positions: Dictionary[int, Vector2] = {}
@@ -63,6 +70,7 @@ func launch(command: GeometerCastCommand) -> void:
 	add_child(projectile)
 	projectile.z_index = 2
 	projectile.configure_trace(result, command, player.global_position, player.navigation)
+	_shot_wall_snapshots[int(result["ticket"])] = result["wall_snapshot"]
 	projectile.delivered.connect(_on_delivered.bind(projectile))
 	projectile.add_to_group("player_projectiles")
 	queue_redraw()
@@ -81,21 +89,46 @@ func _on_delivered(ticket: int, success: bool, point: Vector2, victim: CombatAct
 	queue_redraw()
 
 func _report_delivery(result: Dictionary) -> void:
+	if result["ok"]:
+		wall_field.capture_construction(_shot_wall_snapshots.get(int(result.get("ticket", 0)), {}))
+	_shot_wall_snapshots.erase(int(result.get("ticket", 0)))
 	if not result["ok"]:
 		feedback.emit(result["reason"])
 	elif result.get("formation", false):
 		construction_closed.emit(result)
 
 func advance(delta: float) -> void:
-	if not is_instance_valid(player) or not player.is_alive() or (is_inside_tree() and get_tree().paused):
+	if not is_finite(delta) or delta <= 0.0 or not is_instance_valid(player) or not player.is_alive() or (is_inside_tree() and get_tree().paused):
 		return
 	interaction_ledger.sync(construction.construction_id)
 	interaction_ledger.advance(delta)
+	for reaction: Dictionary in _wall_reactions:
+		reaction["remaining"] = float(reaction["remaining"]) - delta
+	_wall_reactions = _wall_reactions.filter(func(reaction: Dictionary) -> bool: return float(reaction["remaining"]) > 0.0)
+	_redraw_wall_reactions()
 	for result: Dictionary in construction.advance(delta, alive_positions(), player.navigation):
 		_report_delivery(result)
 	_retire_invalid_flights()
 	_sync_wall_observers()
+	wall_field.capture_construction()
+	var pending_ids: Array[int] = []
+	for pending: Dictionary in construction.grammar.pending_snapshot():
+		pending_ids.append(int(pending["ticket"]))
+	for ticket: int in _shot_wall_snapshots.keys():
+		if ticket not in pending_ids:
+			_shot_wall_snapshots.erase(ticket)
 	queue_redraw()
+
+func show_wall_reaction(point: Vector2, element: StringName) -> void:
+	if point.is_finite():
+		if _wall_reactions.size() >= 12:
+			_wall_reactions.pop_front()
+		_wall_reactions.append({"point": point, "element": element, "remaining": 0.25})
+		_redraw_wall_reactions()
+
+func _redraw_wall_reactions() -> void:
+	_reaction_visual.reactions = _wall_reactions
+	_reaction_visual.queue_redraw()
 
 func _sync_wall_observers() -> void:
 	interaction_ledger.sync(construction.construction_id)
@@ -147,6 +180,10 @@ func clear_construction() -> void:
 	construction.clear()
 	interaction_ledger.sync(0)
 	wall_contacts.sync(0, false)
+	wall_field.capture_construction()
+	_shot_wall_snapshots.clear()
+	_wall_reactions.clear()
+	_redraw_wall_reactions()
 	preview_command = null
 	for child: Node in get_children():
 		if child is GeometerTraceProjectile:
@@ -205,3 +242,23 @@ func _draw_vertex(point: Vector2, element: StringName, mobile: bool) -> void:
 	draw_polyline(glyph, tint, 2.0)
 	if mobile:
 		draw_arc(point, 12.0, 0.0, TAU, 20, tint, 1.0)
+
+class WallReactionVisual extends Node2D:
+	## Sparse, short actual-interaction accents above bodies, separate from underlay.
+	var reactions: Array[Dictionary] = []
+
+	func _draw() -> void:
+		for reaction: Dictionary in reactions:
+			var center := to_local(reaction["point"])
+			var alpha := float(reaction["remaining"]) / 0.25
+			var element: StringName = reaction["element"]
+			var color := Color("ffb574", alpha) if element == &"fire" else (Color("a9e9ff", alpha) if element == &"ice" else Color("f4e48b", alpha))
+			if element == &"fire":
+				draw_arc(center, 45.0 * (1.0 - alpha * 0.65), 0.0, TAU, 24, color, 2.0)
+				for index: int in range(6):
+					var axis := Vector2.from_angle(index * TAU / 6.0)
+					draw_line(center + axis * 8.0, center + axis * 24.0, color, 1.5)
+			elif element == &"ice":
+				draw_polyline(PackedVector2Array([center + Vector2(0, -22), center + Vector2(14, 0), center + Vector2(0, 22), center + Vector2(-14, 0), center + Vector2(0, -22)]), color, 2.0)
+			else:
+				draw_polyline(PackedVector2Array([center + Vector2(-24, -5), center + Vector2(-9, 6), center + Vector2(0, -5), center + Vector2(11, 6), center + Vector2(24, -5)]), color, 2.0)

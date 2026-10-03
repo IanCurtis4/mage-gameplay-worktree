@@ -86,7 +86,7 @@ func _run() -> void:
 	initial_sp = player.current_sp
 	_check(casting.begin(casting.capture(&"geometer_trace", Vector2(240, 200), true)), "cancel fixture starts cast")
 	arena._notification(Node.NOTIFICATION_WM_WINDOW_FOCUS_OUT)
-	_check(not player.has_active_cast() and player.current_sp == initial_sp and casting.get_child_count() == 0, "focus loss cancels before charge or flight")
+	_check(not player.has_active_cast() and player.current_sp == initial_sp and _flight_count() == 0, "focus loss cancels before charge or flight")
 	casting.begin(casting.capture(&"geometer_trace", Vector2(240, 200), true))
 	player.move_to(Vector2(120, 100))
 	_check(not player.has_active_cast() and player.current_sp == initial_sp, "movement cancels frozen preparation without cost")
@@ -204,7 +204,7 @@ func _input_modes() -> void:
 	_check(player.has_active_cast() and arena.cast_intent.active_skill == &"", "real world click starts frozen preparation without movement")
 	_key(KEY_Q, false)
 	player._advance_active_cast(player.active_cast_remaining + 0.001)
-	_check(casting.get_child_count() == 1 and player.current_sp == sp - 8.0, "late key-up cannot double confirmed launch")
+	_check(_flight_count() == 1 and player.current_sp == sp - 8.0, "late key-up cannot double confirmed launch")
 	_reset()
 	arena.cast_intent.set_mode(CastIntent.Mode.RELEASE)
 	_key(KEY_Q, true)
@@ -278,10 +278,14 @@ func _projectile() -> GeometerTraceProjectile:
 func _reset() -> void:
 	casting.clear_construction()
 	for child: Node in casting.get_children():
-		child.free()
+		if child is GeometerTraceProjectile:
+			child.free()
 	player.mage_cooldowns.clear()
 	player.target = null
 	player.velocity = Vector2.ZERO
+
+func _flight_count() -> int:
+	return casting.get_children().filter(func(child: Node) -> bool: return child is GeometerTraceProjectile).size()
 
 func _check(condition: bool, label: String) -> void:
 	checks += 1
