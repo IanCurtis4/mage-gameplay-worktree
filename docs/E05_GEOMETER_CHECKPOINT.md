@@ -2,7 +2,7 @@
 
 03/10/2026 — autorizada pelo usuário; condutor Sol6.1; base aceita8df3a67.
 Contrato vigente:E05_GEOMETER_PLAN.md, com precedência sobre âncoras estáticas
-obrigatórias do E00. G0–G5 integrados e validados internamente em fixture; classe completa
+obrigatórias do E00. G0–G6 integrados e validados internamente em fixture; classe completa
 ainda indisponível no catálogo de produção.
 
 | Camada | Estado | Commit/evidência | Próximo passo |
@@ -12,8 +12,8 @@ ainda indisponível no catálogo de produção.
 | G2 geometria estática | DONE (interno) | núcleo109 + integração46 PASS; renderer6 PASS | EfeitosG5 e aceite de produto pendentes |
 | G3 âncoras móveis | DONE (interno) | matriz real de morte/fila/suspensão/expiração; 30/60/144Hz | Manutenção da área móvel validada emG5; composição densa emG7 |
 | G4 paredes6 | DONE (interno) | primitivas74 + receitas106 + projéteis96 PASS; renderer7 PASS | Regressão mantida emG5; tuning ainda não aceito |
-| G5 triângulos27 | DONE (interno) | receitas597 + projéteis192 PASS; renderer9 PASS | Próximo loteG6; arte final e classe completa pendentes |
-| G6 edição/progressão | PENDING | — | Duas builds legais |
+| G5 triângulos27 | DONE (interno) | receitas597 + projéteis192 PASS; renderer9 PASS | Regressão mantida emG6; arte final pendente |
+| G6 edição/progressão | DONE (interno) | edição375 + builds341 PASS; renderer8 PASS | Duas builds legais; fechamentoG7 pendente |
 | G7 visual/integração | PENDING | — | Revisão Astra e playtest |
 
 Master permanece na entrega aceita do Espiritualista. Não iniciar outras
@@ -330,3 +330,93 @@ de master ou microgate a Astra. Evidências internas não são aceite de produto
 Próximo lote, mediante autorização do usuário: G6 — Translação, Reescrita,
 Colapso, Memória Vetorial e progressão/menu/build/save com duas builds legais.
 G7 fecha apresentação/integração e o único pacote de revisão da classe para Astra.
+
+## G6 — edição, Colapso, Memória Vetorial e builds — 03/10/2026
+
+Usuário autorizou G6 sobre `b466a0a`. Translação, Reescrita, Colapso e Memória
+Vetorial agora têm catálogo de ranks, execução e descrições no menu. As sete
+skills de Geômetra estão registradas na progressão; `content_ready=false` segue
+intencionalmente fechado em produção até G7. Não houve microgate a Astra,
+publicação de classe parcial, mudança de master ou do diretório habitual de playtest.
+
+Translação conserva o elemento do último vértice; Reescrita passa A/B/C para
+B/C/D, usando o elemento escolhido no comando. Clique no corpo vincula àquela
+instância viva; chão/Shift desprende. Alcance600, LoS, geometria inteira e gate
+da receita candidata são revalidados antes de mutar ou cobrar. Sem SP/CD em
+edição inválida, sem editar enquanto há disparos pagos na fila. Identidade,
+deadline da figura, cadência, ledger e snapshots sobrevivem à edição e à
+suspensão/retomada. Somente a âncora substituída ganha TTL normal novo; não
+repeteC. Translação custa12 SP/CD4 s; Reescrita14 SP/CD5 s, instantâneas.
+
+Memória Vetorial é passiva equipada, três ranks: vértice +1/+2/+4 s, figura
++1/+2/+3 s, ambos limitados a12 s. Durações são capturadas no lançamento pago
+e na edição, sem benefício retroativo ao equipar/desequipar. Editar não renova
+o deadline existente da figura; a âncora antiga retém o próprio prazo.
+
+Colapso custa18 SP/CD8 s, SELF instantâneo, somente parede/triângulo válido e
+ativo sem reservas pendentes. Consome e limpa a construção antes dos callbacks
+de dano. Seu pedido usa MAG atual e rank próprio, nunca o snapshot de formação.
+Parede: um pulso na faixa física finita12+raio com LoS, sem atingir vizinho fora
+da faixa ou executar travessia/interceptação/Teorema. Triângulo: uma resoluçãoC
+na área atual, explosãoF/rootG/cadeiaR existente, com limites de área/LoS,
+três alvos únicos/elos110 e orçamento de controle do boss. Sem manutenção,
+crítico, Teorema ou cascatas; segunda tentativa após consumir não cobra.
+
+Tuning inicial de Colapso, para posterior balanceamento/aceite de produto:
+
+| Rank | Parede | C-Fogo | C-Gelo | C-Raio |
+|---|---|---|---|---|
+| R1 | 0,60 MAG | 0,80 MAG | 0,30 MAG | 0,60 MAG |
+| R5 | 1,00 MAG | 1,20 MAG | 0,50 MAG | 1,00 MAG |
+
+Ranks intermediários interpolam linearmente. RootG continua0,7 s pelas regras
+existentes. Ranks de Translação/Reescrita conservam os mesmos custos/CD/alcance;
+não foi inventado um benefício numérico fora do contrato. Esses números não
+equivalem a tuning final aprovado por Astra ou pelo usuário.
+
+Progressão: origem Mago, sem biblioteca de Arqueiro/irmãos; gates20/23/25/28/31/
+34/37 e caps5/3/5/5/3/5/5. TraçadoR1 é grátis, até quatro ranks comprados.
+O codec vigente salva ranks e cinco slots ativos/dois passivos, sem schema novo
+nem persistência de construção. Override de fixture só abre `content_ready`;
+override de biblioteca substitui explicitamente os metadados, sem mistura.
+Respec devolve as carteiras e conserva apenas a entrada grátis.
+
+Duas builds reais de job40, compradas via `ProfileFacade`, esgotam legalmente
+19 pontos base e20 de evolução, salvam/recarregam e iniciam run isolada:
+
+- Paredes: TraçadoR5, IncidênciaR3, TranslaçãoR5, MemóriaR3, ColapsoR5;
+  ativos Traçado/Translação/Colapso/Bola de Fogo/Lança de Gelo, duas passivas.
+- Triângulos: TraçadoR3, IncidênciaR3, TriangulaçãoR5, MemóriaR3, ColapsoR2,
+  ReescritaR5; ativos Traçado/Triangulação/Reescrita/Colapso/Relâmpago, duas passivas.
+
+Correções encontradas na integração: inicializar o ledger ao capturar uma nova
+parede/triângulo, antes de um projétil nascido dentro avançar, evita contato0
+sem progresso. A barra limita a largura dos cinco botões e usa elipse com
+tooltip completo: nomes longos não empurram o quinto botão para fora da tela.
+O teste headless compara coordenadas com o viewport lógico, não a janela física.
+O teste histórico do roster agora exige explicitamente os sete metadados de
+Geômetra sem liberar seu gate; demais placeholders continuam estritos.
+
+Evidências internas: `e05_geometer_editing_test.gd`375 PASS — transações reais,
+27 receitas emR1/R5, seis paredes, inválidos atômicos, binding/morte, TTL equipado,
+cadência30/60/144Hz, snapshot/payload, consumo antes de dano e três modos de input.
+`e05_geometer_builds_test.gd`341 PASS — catálogo/gates/carteiras, duas builds
+legais, save/load/codec/respec, corrupção rejeitada e menu emjob22/23/40.
+Fixtures usam somente `.godot/verification`, nunca o perfil persistente do usuário.
+
+`geometer_g6_renderer_probe.gd` PASS em oito capturas OpenGL1280×720 inspecionadas:
+preview/edição de Translação e Reescrita, Colapso triangular, pulso finito de
+parede e limpeza de ambos; todos os cinco botões dentro da tela. Regressão do
+rendererG5 também PASS em nove estados. Capturas ignoradas em `.godot/verification`.
+Arte do personagem ainda é fallback de Mago; densidade/FPS, onboarding, tuning
+e aceite da classe completa não são evidências desta rodada.
+
+`tools/verify.ps1` integral final PASS (exit0), incluindo importação do editor,
+716 checks novosG6, núcleo109/casting61/integração46, paredes276/triângulos789,
+UI de batalha47/layout28/menu_tabs38, persistência e classes já aceitas,
+smoke da cena e administração12. `git diff --check` PASS. Evidências do
+implementador não substituem revisão independente de Astra ou playtest humano.
+
+Próximo lote, mediante autorização: G7 — apresentação final, onboarding e
+integração densa; então um único checkpoint da classe completa para revisão
+de Astra e candidato de playtest, sem confundir gate técnico com aceite humano.

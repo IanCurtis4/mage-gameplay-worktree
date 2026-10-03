@@ -1660,7 +1660,8 @@ func commit_geometer_shot(command: GeometerCastCommand, construction: GeometerCo
 	var check := geometer_shot_check(command, construction, actors)
 	if not check["ok"]:
 		return check
-	var ticket := construction.reserve_shot(check["point"], command.actor_id, command.skill_id == &"geometer_triangulation", skill_rank(&"geometer_triangulation"), navigation, 8.0, 6.0, command.element)
+	var durations := geometer_durations()
+	var ticket := construction.reserve_shot(check["point"], command.actor_id, command.skill_id == &"geometer_triangulation", skill_rank(&"geometer_triangulation"), navigation, durations.x, durations.y, command.element)
 	if ticket == 0:
 		return {"ok": false, "reason": "Construção indisponível."}
 	_spend(command.skill_id)
@@ -1676,6 +1677,76 @@ func commit_geometer_shot(command: GeometerCastCommand, construction: GeometerCo
 	presentation_action.emit(&"cast_release", _resolved_facing(aim_direction(check["point"])), 0.12)
 	resources_changed.emit()
 	return check
+
+func geometer_durations() -> Vector2:
+	var durations := Vector2(8.0, 6.0)
+	if is_geometer() and run_state.build_snapshot.passive_slots.has(&"geometer_vector_memory"):
+		var memory := _runtime_rank_definition(&"geometer_vector_memory")
+		if memory != null:
+			durations += Vector2(memory.power, memory.secondary_power)
+	return Vector2(minf(12.0, durations.x), minf(12.0, durations.y))
+
+func geometer_action_check(command: GeometerCastCommand, construction: GeometerConstructionState, actors: Array[CombatActor]) -> Dictionary:
+	if command != null and GeometerCastCommand.is_trace_skill(command.skill_id):
+		return geometer_shot_check(command, construction, actors)
+	if not is_geometer() or command == null or construction == null or not GeometerCastCommand.is_grammar_skill(command.skill_id) or command.element not in GeometerGeometry.ELEMENTS or command.actor_id < 0 or not command.point.is_finite():
+		return {"ok": false, "reason": "Comando geométrico inválido."}
+	if (is_inside_tree() and get_tree().paused) or not _can_spend(command.skill_id):
+		return {"ok": false, "reason": "Skill indisponível, em recarga, pausada ou sem SP."}
+	if construction.grammar.pending_count() > 0:
+		return {"ok": false, "reason": "Aguarde os disparos em trânsito."}
+	if command.skill_id == &"geometer_collapse":
+		return {"ok": construction.has_active_figure(), "reason": "Colapso requer parede ou triângulo válido."}
+	var point := command.point
+	if command.actor_id > 0:
+		var found := false
+		for actor: CombatActor in actors:
+			if is_instance_valid(actor) and actor.is_alive() and actor.get_instance_id() == command.actor_id:
+				point = actor.global_position
+				found = true
+				break
+		if not found:
+			return {"ok": false, "reason": "Vínculo da edição inválido."}
+	if navigation == null or global_position.distance_to(point) > skill_range(command.skill_id) or not navigation.is_segment_clear(global_position, point, 0.0):
+		return {"ok": false, "reason": "Edição fora de alcance ou bloqueada."}
+	var durations := geometer_durations()
+	var result := construction.preview_edit(point, command.actor_id, command.skill_id == &"geometer_rewrite", skill_rank(&"geometer_triangulation"), navigation, durations.x, durations.y, command.element)
+	result.erase("candidate")
+	result["point"] = point
+	return result
+
+func commit_geometer_edit(command: GeometerCastCommand, construction: GeometerConstructionState, actors: Array[CombatActor]) -> Dictionary:
+	var check := geometer_action_check(command, construction, actors)
+	if not check["ok"] or not GeometerCastCommand.is_edit_skill(command.skill_id):
+		return check if not check["ok"] else {"ok": false, "reason": "Skill não é edição."}
+	var durations := geometer_durations()
+	var result := construction.edit(check["point"], command.actor_id, command.skill_id == &"geometer_rewrite", skill_rank(&"geometer_triangulation"), navigation, durations.x, durations.y, command.element)
+	if result["ok"]:
+		cancel_active_cast()
+		_spend(command.skill_id)
+		reveal_from_offense()
+		presentation_action.emit(&"cast_release", _resolved_facing(aim_direction(check["point"])), 0.12)
+		resources_changed.emit()
+	return result
+
+func commit_geometer_collapse(command: GeometerCastCommand, construction: GeometerConstructionState, actors: Array[CombatActor]) -> Dictionary:
+	var check := geometer_action_check(command, construction, actors)
+	if not check["ok"] or command.skill_id != &"geometer_collapse":
+		return check if not check["ok"] else {"ok": false, "reason": "Skill não é Colapso."}
+	var captured := construction.consume_collapse()
+	if captured.is_empty():
+		return {"ok": false, "reason": "Sem figura ativa."}
+	# Consume before any signal/damage; callbacks cannot finalize the same instance twice.
+	cancel_active_cast()
+	_spend(command.skill_id)
+	var element: StringName = captured["elements"][2] if captured["shape"] == GeometerConstructionState.Shape.TRIANGLE else &"wall"
+	var tuning := ClassCatalog.geometer_collapse_tuning(skill_rank(command.skill_id))
+	var request := _make_magic_request(null, command.skill_id, stat_breakdown.value(&"magic_attack") * float(tuning[element]), DamageRequest.AccuracyMode.GEOMETRY, false)
+	request.is_secondary = true
+	captured["request"] = request
+	captured["ok"] = true
+	reveal_from_offense()
+	return captured
 
 func geometer_wall_snapshot() -> Dictionary:
 	var tuning := ClassCatalog.geometer_wall_tuning(skill_rank(&"geometer_trace"))

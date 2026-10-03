@@ -17,3 +17,9 @@ func copy_command() -> GeometerCastCommand:
 
 static func is_trace_skill(skill: StringName) -> bool:
 	return skill in [&"geometer_trace", &"geometer_triangulation"]
+
+static func is_edit_skill(skill: StringName) -> bool:
+	return skill in [&"geometer_translation", &"geometer_rewrite"]
+
+static func is_grammar_skill(skill: StringName) -> bool:
+	return is_trace_skill(skill) or is_edit_skill(skill) or skill == &"geometer_collapse"

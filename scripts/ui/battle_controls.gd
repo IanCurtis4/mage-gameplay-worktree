@@ -105,6 +105,7 @@ func show_skill_state(skill: StringName, text: String, active: bool) -> void:
 	if not skill_buttons.has(skill):
 		return
 	skill_buttons[skill].text = text
+	skill_buttons[skill].tooltip_text = text
 	skill_buttons[skill].set_pressed_no_signal(active)
 
 func set_class_skills(skill_ids: Array[StringName]) -> void:
@@ -113,12 +114,16 @@ func set_class_skills(skill_ids: Array[StringName]) -> void:
 	for child: Node in skill_bar.get_children():
 		child.free()
 	skill_buttons.clear()
-	var button_width := 138.0 if skill_ids.size() > 2 else 185.0
+	var button_width := minf(232.0, (get_viewport_rect().size.x - 48.0 - 10.0 * maxi(0, skill_ids.size() - 1)) / skill_ids.size()) if skill_ids.size() > 2 else 185.0
 	var bar_width := button_width * skill_ids.size() + 10.0 * maxi(0, skill_ids.size() - 1)
 	_center_bottom(skill_bar, bar_width, -86, -18)
 	for id: StringName in skill_ids:
 		var button := Button.new()
 		button.custom_minimum_size = Vector2(button_width, 68)
+		# Long five-slot names must not grow the row beyond its centered width.
+		button.clip_text = true
+		button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.focus_mode = Control.FOCUS_NONE
 		button.toggle_mode = true
 		button.pressed.connect(_choose_skill.bind(id))

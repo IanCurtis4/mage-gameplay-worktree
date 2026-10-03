@@ -51,16 +51,67 @@ func capture(skill: StringName, point: Vector2, force_ground: bool = false) -> G
 
 func check(command: GeometerCastCommand) -> Dictionary:
 	construction.refresh(alive_positions(), player.navigation)
-	return player.geometer_shot_check(command, construction, targets)
+	return player.geometer_action_check(command, construction, targets)
 
 func begin(command: GeometerCastCommand) -> bool:
 	var result := check(command)
 	if not result["ok"]:
 		feedback.emit(result["reason"])
 		return false
+	if GeometerCastCommand.is_edit_skill(command.skill_id):
+		return edit(command)
+	if command.skill_id == &"geometer_collapse":
+		return collapse(command)
 	if player.skill_cast_time(command.skill_id) > 0.0:
 		return player.begin_geometer_cast(command, construction, targets)
 	launch(command)
+	return true
+
+func edit(command: GeometerCastCommand) -> bool:
+	construction.refresh(alive_positions(), player.navigation)
+	var result := player.commit_geometer_edit(command, construction, targets)
+	if not result["ok"]:
+		feedback.emit(result["reason"])
+		return false
+	# Preserve ledger/cadence and snapshots, but never infer a walk from the edit.
+	wall_contacts.sync(0, false)
+	_sync_wall_observers()
+	wall_field.capture_construction()
+	queue_redraw()
+	return true
+
+func collapse(command: GeometerCastCommand) -> bool:
+	construction.refresh(alive_positions(), player.navigation)
+	var captured := player.commit_geometer_collapse(command, construction, targets)
+	if not captured["ok"]:
+		feedback.emit(captured["reason"])
+		return false
+	# Construction is already empty: cleanup cannot erase a new construction created by a hit callback.
+	clear_construction()
+	player.presentation_action.emit(&"cast_release", player._last_facing, 0.12)
+	player.resources_changed.emit()
+	var points: PackedVector2Array = captured["points"]
+	var request: DamageRequest = captured["request"]
+	if captured["shape"] == GeometerConstructionState.Shape.TRIANGLE:
+		triangle_field.resolve_captured(points, captured["elements"][2], request)
+	else:
+		for actor: CombatActor in targets.duplicate():
+			if not player.is_alive() or (is_inside_tree() and get_tree().paused):
+				break
+			if not is_instance_valid(actor) or not actor.is_alive() or actor == player:
+				continue
+			var closest := Geometry2D.get_closest_point_to_segment(actor.global_position, points[0], points[1])
+			if GeometerGeometry.wall_contains(points, actor.global_position, actor.collision_radius) and player.navigation.is_segment_clear(closest, actor.global_position, 0.0):
+				var hit_request := request.copy()
+				hit_request.target_id = actor.get_instance_id()
+				hit.emit(hit_request, actor)
+		# One finite line accent, not a chain of wall crossing detonations.
+		if player.is_alive() and not (is_inside_tree() and get_tree().paused):
+			if _wall_reactions.size() >= 12:
+				_wall_reactions.pop_front()
+			_wall_reactions.append({"line": points, "element": captured["elements"][1], "remaining": 0.25})
+			_redraw_wall_reactions()
+	queue_redraw()
 	return true
 
 func launch(command: GeometerCastCommand) -> void:
@@ -257,6 +308,8 @@ func _draw() -> void:
 			_draw_vertex(to_local(points[index]), construction.vertices[index].element, construction.vertices[index].actor_id > 0)
 			draw_string(ThemeDB.fallback_font, to_local(points[index]) + Vector2(14, 4), str(index + 1), HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, tint)
 	if preview_command != null:
+		if preview_command.skill_id == &"geometer_collapse":
+			return
 		var point := preview_command.point
 		for actor: CombatActor in targets:
 			if is_instance_valid(actor) and actor.is_alive() and actor.get_instance_id() == preview_command.actor_id:
@@ -264,10 +317,14 @@ func _draw() -> void:
 		if point.is_finite():
 			var preview_tint := Color("87e0cf") if preview_valid else Color("ff8b8b")
 			draw_arc(to_local(point), 15.0, 0.0, TAU, 24, preview_tint, 1.5)
-			if not points.is_empty() and points[-1].is_finite():
-				draw_dashed_line(to_local(points[-1]), to_local(point), preview_tint, 1.0, 7.0)
-			if points.size() == 2 and points[0].is_finite():
-				draw_dashed_line(to_local(point), to_local(points[0]), preview_tint, 1.0, 7.0)
+			var candidate := points.duplicate()
+			if GeometerCastCommand.is_edit_skill(preview_command.skill_id) and not candidate.is_empty():
+				candidate.remove_at(0 if preview_command.skill_id == &"geometer_rewrite" else candidate.size() - 1)
+			candidate.append(point)
+			for index: int in range(candidate.size() if candidate.size() == 3 else candidate.size() - 1):
+				var next := (index + 1) % candidate.size()
+				if candidate[index].is_finite() and candidate[next].is_finite():
+					draw_dashed_line(to_local(candidate[index]), to_local(candidate[next]), preview_tint, 1.0, 7.0)
 
 func _draw_vertex(point: Vector2, element: StringName, mobile: bool) -> void:
 	var tint := Color("ffac68") if element == &"fire" else (Color("a9e9ff") if element == &"ice" else Color("ebe29b"))
@@ -289,6 +346,11 @@ class WallReactionVisual extends Node2D:
 			var alpha := float(reaction["remaining"]) / float(reaction.get("duration", 0.25))
 			var element: StringName = reaction["element"]
 			var color := Color("ffb574", alpha) if element == &"fire" else (Color("a9e9ff", alpha) if element == &"ice" else Color("f4e48b", alpha))
+			if reaction.has("line"):
+				var points: PackedVector2Array = reaction["line"]
+				draw_line(to_local(points[0]), to_local(points[1]), Color(color, alpha * 0.20), GeometerGeometry.WALL_HALF_WIDTH * 2.0)
+				draw_line(to_local(points[0]), to_local(points[1]), color, 2.0)
+				continue
 			if reaction.has("points"):
 				var polygon := PackedVector2Array()
 				for point: Vector2 in reaction["points"]:

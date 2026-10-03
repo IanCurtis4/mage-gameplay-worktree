@@ -35,6 +35,8 @@ func form(snapshot: Dictionary = {}) -> void:
 	if not _valid_triangle() or _identity == casting.construction.construction_id:
 		return
 	_identity = casting.construction.construction_id
+	# A projectile can be born inside immediately after formation, before the next frame.
+	casting.interaction_ledger.sync(_identity)
 	_snapshot = snapshot if not snapshot.is_empty() else casting.player.geometer_triangle_snapshot()
 	_elapsed = 0.0
 	_next_tick = INTERVAL
@@ -42,29 +44,35 @@ func form(snapshot: Dictionary = {}) -> void:
 		return
 	# Claim closure before emitting any damage: death/clear callbacks cannot replay C.
 	var element := casting.construction.elements()[2]
-	var occupants := _occupants()
-	var points := casting.construction.positions()
+	resolve_captured(casting.construction.positions(), element, _snapshot[StringName("resolution_" + String(element))], _identity)
+
+func resolve_captured(points: PackedVector2Array, element: StringName, prototype: DamageRequest, formation_identity: int = 0) -> void:
+	# Also used by explicit collapse AFTER consumption. No maintenance or snapshot replay.
+	var occupants := _occupants_for(points)
 	var links := PackedVector2Array()
 	if element == &"lightning":
 		var origin := points[2]
 		for index: int in range(3):
 			var victim := _nearest(occupants, origin, INF if index == 0 else LINK_RANGE)
-			if victim == null or not _active():
+			if victim == null or not _can_resolve(formation_identity):
 				break
 			occupants.erase(victim)
 			links.append(origin)
 			links.append(victim.global_position)
 			origin = victim.global_position
-			_damage(_snapshot[&"resolution_lightning"], victim)
+			_damage(prototype, victim)
 	else:
 		for victim: CombatActor in occupants:
-			if not _active():
+			if not _can_resolve(formation_identity):
 				break
-			_damage(_snapshot[StringName("resolution_" + String(element))], victim)
+			_damage(prototype, victim)
 			if element == &"ice" and is_instance_valid(victim) and victim.is_alive():
 				victim.apply_root(ROOT_DURATION, &"magic")
-	if _active():
+	if _can_resolve(formation_identity):
 		casting.show_triangle_reaction(points, element, links)
+
+func _can_resolve(formation_identity: int) -> bool:
+	return is_instance_valid(casting.player) and casting.player.is_alive() and not (casting.is_inside_tree() and casting.get_tree().paused) and (formation_identity == 0 or (_identity == formation_identity and _active()))
 
 func advance(delta: float) -> void:
 	if not is_finite(delta) or delta <= 0.0 or not is_instance_valid(casting) or (casting.is_inside_tree() and casting.get_tree().paused):
@@ -104,14 +112,19 @@ func advance(delta: float) -> void:
 		casting.show_triangle_reaction(casting.construction.positions(), &"fire", PackedVector2Array(), 0.20)
 
 func _occupants() -> Array[CombatActor]:
+	return _occupants_for(casting.construction.positions())
+
+func _occupants_for(points: PackedVector2Array) -> Array[CombatActor]:
 	var occupants: Array[CombatActor] = []
 	for actor: CombatActor in casting.targets.duplicate():
-		if is_instance_valid(actor) and actor.is_alive() and actor != casting.player and _inside_visible(actor):
+		if is_instance_valid(actor) and actor.is_alive() and actor != casting.player and _inside_visible_points(actor, points):
 			occupants.append(actor)
 	return occupants
 
 func _inside_visible(actor: CombatActor) -> bool:
-	var points := casting.construction.positions()
+	return _inside_visible_points(actor, casting.construction.positions())
+
+func _inside_visible_points(actor: CombatActor, points: PackedVector2Array) -> bool:
 	return GeometerGeometry.triangle_contains(points, actor.global_position, actor.collision_radius) and casting.player.navigation.is_segment_clear((points[0] + points[1] + points[2]) / 3.0, actor.global_position, 0.0)
 
 func _nearest(candidates: Array[CombatActor], origin: Vector2, limit: float) -> CombatActor:

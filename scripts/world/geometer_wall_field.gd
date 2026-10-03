@@ -18,6 +18,7 @@ func capture_construction(snapshot: Dictionary = {}) -> void:
 	if identity == _identity:
 		return
 	_identity = identity
+	casting.interaction_ledger.sync(identity)
 	_snapshot = (snapshot if not snapshot.is_empty() else casting.player.geometer_wall_snapshot()) if identity > 0 else {}
 
 func _available() -> bool:

@@ -74,6 +74,10 @@ enum Handler {
 	GEOMETER_TRACE,
 	GEOMETER_TRIANGULATION,
 	GEOMETER_INCIDENCE,
+	GEOMETER_TRANSLATION,
+	GEOMETER_VECTOR_MEMORY,
+	GEOMETER_COLLAPSE,
+	GEOMETER_REWRITE,
 }
 
 const MAX_ACTIVE_RANK := 5
@@ -99,7 +103,7 @@ const MAX_PASSIVE_RANK := 3
 func is_rank_catalog_valid() -> bool:
 	if category < Category.ACTIVE or category > Category.PASSIVE:
 		return false
-	if handler_id <= Handler.UNASSIGNED or handler_id > Handler.GEOMETER_INCIDENCE:
+	if handler_id <= Handler.UNASSIGNED or handler_id > Handler.GEOMETER_REWRITE:
 		return false
 	if action_kind < ActionKind.OFFENSIVE or action_kind > ActionKind.DEFENSIVE:
 		return false

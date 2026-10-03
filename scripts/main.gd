@@ -337,7 +337,7 @@ func _commit_skill(skill: StringName, point: Vector2) -> void:
 		return
 	if spiritualist_drain_state.active:
 		_cancel_spiritualist_drain()
-	if GeometerCastCommand.is_trace_skill(skill):
+	if GeometerCastCommand.is_grammar_skill(skill):
 		if geometer_casting != null:
 			geometer_casting.targets = enemies
 			geometer_casting.begin(geometer_casting.capture(skill, point, Input.is_key_pressed(KEY_SHIFT)))
@@ -580,7 +580,7 @@ func _update_aim(point: Vector2) -> void:
 			battle_controls.set_aim_text("")
 			bottom_controls.visible = true
 		return
-	if GeometerCastCommand.is_trace_skill(skill) and geometer_casting != null:
+	if GeometerCastCommand.is_grammar_skill(skill) and geometer_casting != null:
 		battle_indicators.clear_aim()
 		geometer_casting.targets = enemies
 		var command := geometer_casting.capture(skill, point, Input.is_key_pressed(KEY_SHIFT))
@@ -589,8 +589,10 @@ func _update_aim(point: Vector2) -> void:
 			geometer_casting.preview_command = command
 			geometer_casting.preview_valid = preview["ok"]
 		var destination := "INIMIGO · vínculo móvel" if command.actor_id > 0 else "CHÃO · vértice fixo"
+		if skill == &"geometer_collapse":
+			destination = "FIGURA ATUAL · consome uma vez"
 		var availability: String = "PRONTO" if preview["ok"] else preview["reason"]
-		var action := "Solte a tecla ou clique" if cast_intent.mode == CastIntent.Mode.RELEASE else "Clique para lançar"
+		var action := "Solte a tecla ou clique" if cast_intent.mode == CastIntent.Mode.RELEASE else ("Clique para editar" if GeometerCastCommand.is_edit_skill(skill) else "Clique para confirmar")
 		battle_controls.set_aim_text("%s · %s · %s | %s | Shift: chão · Esc cancela" % [ClassCatalog.skill_definition(skill).display_name, destination, availability, action])
 		bottom_controls.visible = false
 		geometer_casting.queue_redraw()

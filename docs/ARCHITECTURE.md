@@ -316,6 +316,39 @@ descartam payloads, não o projétil base. Não há condução/desvio/intercepta
 Teorema herdados da parede. Figura, preenchimento e hit-test usam o mesmo triângulo.
 Sem alteração de save, disponibilidade da classe ou candidato de playtest emG5.
 
+### Geômetra G6 — edição atômica, Colapso e progressão fechada
+
+`GeometerCastCommand` distingue disparos, edições e Colapso. O adaptador atualiza
+âncoras móveis antes de validar; `GeometerConstructionState.preview_edit` monta
+e valida a figura candidata inteira sem mutar o estado. Translação substitui o
+último vértice conservando seu elemento; Reescrita remove o primeiro e acrescenta
+o elemento/vínculo congelado no comando. Somente uma edição válida é aplicada
+e cobrada. Preservam-se identidade, prazo da figura, agenda, snapshots e ledger;
+apenas o vértice substituído recebe novo prazo. Observadores de caminhada são
+ressincronizados sem reaproveitar o segmento anterior como uma nova travessia.
+
+Memória Vetorial equipada altera apenas durações capturadas no lançamento pago
+ou na edição: +1/+2/+4 s por vértice e +1/+2/+3 s por figura, teto12 s. Equipar,
+desequipar ou editar não prolonga o prazo de uma figura já formada.
+
+Colapso é SELF instantâneo: exige figura válida/ativa e nenhuma reserva pendente,
+consome a construção antes de callbacks, e captura MAG atual/rank próprio em um
+pedido secundário GEOMETRY, sem crítico. O adaptador limpa campos/payloads antes
+de resolver dano. Parede usa uma única faixa finita12+raio com LoS, sem travessia,
+interceptação ou Teorema; triângulo reutiliza a resoluçãoC sobre pontos/elemento
+capturados, com coeficiente próprio, sem manutenção ou repetição da formação.
+O ledger é inicializado ao capturar uma nova construção, inclusive antes do
+primeiro avanço de um projétil que já nasceu dentro da figura.
+
+`ProfileCatalog` registra as sete skills exclusivas de origem Mago, gates de job
+20/23/25/28/31/34/37, TraçadoR1 grátis e os caps5/3/5/5/3/5/5. O codec existente
+persiste ranks/presets sem mudança de schema; a construção continua efêmera.
+`content_ready=false` permanece até o fechamentoG7, apesar dos metadados completos.
+Fixtures habilitam somente esse gate para testar duas builds com compras legais,
+19 pontos base/20 evolução, cinco slots ativos e dois passivos.
+Tooltips explicam edição, prazos e consumo; nomes longos na barra não expandem
+a linha para fora da tela, conservando texto completo no hover/HUD.
+
 ### Procedimento
 
 Import headless detecta scripts/recursos inválidos; testes headless validam fórmulas,

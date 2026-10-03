@@ -113,6 +113,11 @@ static func wall_contact(from: Vector2, to: Vector2, first: Vector2, second: Vec
 	var point := from.lerp(to, fraction)
 	return {"fraction": fraction, "position": point, "wall_point": Geometry2D.get_closest_point_to_segment(point, first, second)}
 
+static func wall_contains(points: PackedVector2Array, center: Vector2, radius: float = 0.0) -> bool:
+	if points.size() != 2 or not center.is_finite() or not is_finite(radius) or radius < 0.0 or not points[0].is_finite() or not points[1].is_finite():
+		return false
+	return center.distance_to(Geometry2D.get_closest_point_to_segment(center, points[0], points[1])) <= WALL_HALF_WIDTH + radius
+
 static func triangle_contact(points: PackedVector2Array, from: Vector2, to: Vector2, radius: float = 0.0) -> Dictionary:
 	if points.size() != 3 or not from.is_finite() or not to.is_finite() or not is_finite(radius) or radius < 0.0 or triangle_area(points) < MIN_TRIANGLE_AREA:
 		return {}

@@ -68,6 +68,10 @@ static func pilot(
 		catalog._register_elementalist_skills()
 	if not evolution_overrides.has(&"spiritualist") and not evolution_overrides.has("spiritualist"):
 		catalog._register_spiritualist_skills()
+	var raw_geometer_override: Variant = evolution_overrides.get(&"mg_ar", evolution_overrides.get("mg_ar", {}))
+	var geometer_override: Dictionary = raw_geometer_override if raw_geometer_override is Dictionary else {}
+	if not geometer_override.has("exclusive_skill_ids") and not geometer_override.has(&"exclusive_skill_ids"):
+		catalog._register_geometer_skills()
 	for raw_item_id: Variant in additional_equipment:
 		var metadata: Dictionary = additional_equipment[raw_item_id]
 		var allowed_base_classes: Array[StringName] = []
@@ -408,6 +412,16 @@ func _register_spiritualist_skills() -> void:
 	add_skill(&"spiritualist_procession", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"spiritualist", _evolution_rank_requirements(5, 34))
 	add_skill(&"spiritualist_dissipation", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"spiritualist", _evolution_rank_requirements(5, 37))
 
+func _register_geometer_skills() -> void:
+	var origin: Array[StringName] = [&"mage"]
+	add_skill(&"geometer_trace", origin, ACTIVE, EVOLUTION_WALLET, 1, 4, &"mg_ar", _evolution_rank_requirements(5, 20))
+	add_skill(&"geometer_incidence", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"mg_ar", _evolution_rank_requirements(3, 23))
+	add_skill(&"geometer_translation", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"mg_ar", _evolution_rank_requirements(5, 25))
+	add_skill(&"geometer_triangulation", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"mg_ar", _evolution_rank_requirements(5, 28))
+	add_skill(&"geometer_vector_memory", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"mg_ar", _evolution_rank_requirements(3, 31))
+	add_skill(&"geometer_collapse", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"mg_ar", _evolution_rank_requirements(5, 34))
+	add_skill(&"geometer_rewrite", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"mg_ar", _evolution_rank_requirements(5, 37))
+
 func _evolution_rank_requirements(max_rank: int, job_level: int) -> Dictionary:
 	var requirements: Dictionary = {}
 	for rank: int in range(1, max_rank + 1):
@@ -477,6 +491,11 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 			definition.entry_skill_id = &"spiritualist_echo_curse"
 			definition.content_ready = true
 			definition.exclusive_skill_ids = [&"spiritualist_echo_curse", &"spiritualist_echo_recovery", &"spiritualist_soul_drain", &"spiritualist_spectral_veil", &"spiritualist_channel_focus", &"spiritualist_procession", &"spiritualist_dissipation"]
+		if definition.id == &"mg_ar" and (not normalized_overrides.has(definition.id) or (not normalized_overrides[definition.id].has("exclusive_skill_ids") and not normalized_overrides[definition.id].has(&"exclusive_skill_ids"))):
+			definition.entry_skill_id = &"geometer_trace"
+			# System library complete in G6; presentation/integrated gate remains G7.
+			definition.content_ready = false
+			definition.exclusive_skill_ids = [&"geometer_trace", &"geometer_incidence", &"geometer_translation", &"geometer_triangulation", &"geometer_vector_memory", &"geometer_collapse", &"geometer_rewrite"]
 		if normalized_overrides.has(definition.id):
 			_apply_evolution_override(definition, normalized_overrides[definition.id])
 		add_evolution(definition)

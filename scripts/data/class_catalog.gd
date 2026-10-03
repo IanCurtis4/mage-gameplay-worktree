@@ -167,6 +167,10 @@ static func _ensure_built() -> void:
 	_add_skill(&"geometer_trace", "Traçado Elemental", "Q", SkillDefinition.Targeting.POINT, 8.0, 0.4, 0.30, 600.0, 900.0, 0.12, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_skill(&"geometer_triangulation", "Triangulação", "W", SkillDefinition.Targeting.POINT, 16.0, 3.0, 0.0, 600.0, 900.0, 0.12, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_add_passive_skill(&"geometer_incidence", "Teorema de Incidência")
+	_add_skill(&"geometer_translation", "Translação", "A", SkillDefinition.Targeting.POINT, 12.0, 4.0, 0.0, 600.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
+	_add_passive_skill(&"geometer_vector_memory", "Memória Vetorial")
+	_add_skill(&"geometer_collapse", "Colapso Geométrico", "S", SkillDefinition.Targeting.SELF, 18.0, 8.0, 0.60, 0.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
+	_add_skill(&"geometer_rewrite", "Reescrita", "D", SkillDefinition.Targeting.POINT, 14.0, 5.0, 0.0, 600.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_configure_slash_ranks()
 	_configure_dash_ranks()
 	_configure_shield_wall_ranks()
@@ -221,6 +225,7 @@ static func _ensure_built() -> void:
 	_configure_spiritualist_procession_ranks()
 	_configure_spiritualist_dissipation_ranks()
 	_configure_geometer_trace_ranks()
+	_configure_geometer_edit_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -1066,6 +1071,39 @@ static func _configure_geometer_trace_ranks() -> void:
 			rank.effect_ids = [&"explicit_ground_or_actor_anchor", &"ordered_frozen_element_delivery"]
 			definition.ranks.append(rank)
 		assert(definition.is_rank_catalog_valid())
+
+static func _configure_geometer_edit_ranks() -> void:
+	var memory: SkillDefinition = _skills[&"geometer_vector_memory"]
+	memory.handler_id = SkillDefinition.Handler.GEOMETER_VECTOR_MEMORY
+	for index: int in range(3):
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.power = [1.0, 2.0, 4.0][index]
+		rank.secondary_power = index + 1.0
+		rank.effect_ids = [&"new_vertex_duration_bonus", &"new_figure_duration_bonus_capped_twelve"]
+		memory.ranks.append(rank)
+	assert(memory.is_rank_catalog_valid())
+	var handlers := {&"geometer_translation": SkillDefinition.Handler.GEOMETER_TRANSLATION, &"geometer_rewrite": SkillDefinition.Handler.GEOMETER_REWRITE, &"geometer_collapse": SkillDefinition.Handler.GEOMETER_COLLAPSE}
+	for skill: StringName in handlers:
+		var definition: SkillDefinition = _skills[skill]
+		definition.handler_id = handlers[skill]
+		for index: int in range(5):
+			var rank := SkillRankDefinition.new()
+			rank.rank = index + 1
+			rank.sp_cost = definition.sp_cost
+			rank.cooldown = definition.cooldown
+			rank.range = definition.range
+			rank.magic_weight = 1.0
+			rank.power = 0.60 + 0.10 * index if skill == &"geometer_collapse" else 0.0
+			rank.effect_ids.assign([&"consume_current_figure_once"] if skill == &"geometer_collapse" else [&"atomic_explicit_anchor_edit", &"preserve_instance_and_figure_deadline"])
+			definition.ranks.append(rank)
+		assert(definition.is_rank_catalog_valid())
+
+static func geometer_collapse_tuning(rank: int) -> Dictionary:
+	# Initial tuning: independent rank/MAG at explicit collapse, never stored C damage.
+	if rank < 1 or rank > 5:
+		return {}
+	return {&"wall": 0.60 + 0.10 * (rank - 1), &"fire": 0.80 + 0.10 * (rank - 1), &"ice": 0.30 + 0.05 * (rank - 1), &"lightning": 0.60 + 0.10 * (rank - 1)}
 
 static func geometer_wall_tuning(rank: int) -> Dictionary:
 	if rank < 1 or rank > 5:

@@ -830,6 +830,20 @@ func _skill_progression_tooltip(option: Dictionary) -> String:
 			lines.append("Skill direta em marcado ativa uma onda de Eco após 0,35 s; autoataque não ativa.")
 		&"spiritualist_dissipation":
 			lines.append("Rito mantém o bônus direto contra marcados e também ativa uma onda de Eco.")
+		&"geometer_trace":
+			lines.append("1/2/3 selecionam Fogo/Gelo/Raio sem custo. Traçado coloca A/B; terceiro exige Triangulação selecionada.")
+		&"geometer_incidence":
+			lines.append("Equipada: recompensa interação efetiva de parede; não aumenta triângulos ou Colapso.")
+		&"geometer_translation":
+			lines.append("Move o último vértice sem mudar seu elemento. Chão solta vínculo; corpo de inimigo prende.")
+		&"geometer_triangulation":
+			lines.append("R1: 3 puros. R3: 21 receitas. R5: 27 receitas. Fecha C uma vez; não herda efeitos de parede.")
+		&"geometer_vector_memory":
+			lines.append("Equipada: novos vértices +1/+2/+4s e figuras +1/+2/+3s, teto 12s. Não renova figura editada.")
+		&"geometer_collapse":
+			lines.append("Consome parede/triângulo válido uma vez com poder próprio. Parede: pulso na faixa; triângulo: resolução de C.")
+		&"geometer_rewrite":
+			lines.append("Remove o mais antigo e acrescenta o elemento selecionado: B/C/D. Preserva identidade/prazo, sem repetir C.")
 	lines.append("Aprender não equipa automaticamente. Escolha a habilidade nos slots da build.")
 	return "\n".join(lines)
 

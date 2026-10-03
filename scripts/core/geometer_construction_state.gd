@@ -96,11 +96,11 @@ func add_vertex(element: StringName, point: Vector2, carrier_id: int, triangle_r
 		result["formation"] = true
 	return result
 
-func edit(point: Vector2, carrier_id: int, rewrite: bool, triangle_rank: int, navigation: ArenaNavigation, vertex_duration: float = 8.0, figure_duration: float = 6.0) -> Dictionary:
+func preview_edit(point: Vector2, carrier_id: int, rewrite: bool, triangle_rank: int, navigation: ArenaNavigation, vertex_duration: float = 8.0, figure_duration: float = 6.0, selected_element: StringName = &"") -> Dictionary:
 	if vertices.is_empty() or grammar.pending_count() > 0 or carrier_id < 0 or not _valid_durations(vertex_duration, figure_duration):
 		return {"ok": false, "reason": "Sem vértice editável ou disparo em trânsito."}
 	var candidate: Array[GeometerAnchor] = vertices.duplicate()
-	var element := grammar.selected_element if rewrite else candidate[-1].element
+	var element := (grammar.selected_element if selected_element == &"" else selected_element) if rewrite else candidate[-1].element
 	if rewrite:
 		candidate.pop_front()
 	else:
@@ -112,10 +112,17 @@ func edit(point: Vector2, carrier_id: int, rewrite: bool, triangle_rank: int, na
 		points.append(anchor.position)
 		tokens.append(anchor.element)
 	var result := _validate_candidate(points, tokens, triangle_rank, navigation)
+	if result["ok"]:
+		result["candidate"] = candidate
+	return result
+
+func edit(point: Vector2, carrier_id: int, rewrite: bool, triangle_rank: int, navigation: ArenaNavigation, vertex_duration: float = 8.0, figure_duration: float = 6.0, selected_element: StringName = &"") -> Dictionary:
+	var result := preview_edit(point, carrier_id, rewrite, triangle_rank, navigation, vertex_duration, figure_duration, selected_element)
 	if not result["ok"]:
 		return result
-	vertices = candidate
-	shape = _classify(tokens)
+	vertices = result["candidate"]
+	result.erase("candidate")
+	shape = _classify(elements())
 	suspended = false
 	if shape in [Shape.WALL, Shape.TRIANGLE] and figure_remaining <= 0.0:
 		figure_remaining = figure_duration

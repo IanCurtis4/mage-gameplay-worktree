@@ -59,6 +59,9 @@ func _check_production_roster() -> void:
 		var has_spiritualist_metadata := definition.id == &"spiritualist" and definition.entry_skill_id == &"spiritualist_echo_curse" and definition.exclusive_skill_ids == [&"spiritualist_echo_curse", &"spiritualist_echo_recovery", &"spiritualist_soul_drain", &"spiritualist_spectral_veil", &"spiritualist_channel_focus", &"spiritualist_procession", &"spiritualist_dissipation"]
 		var has_no_kit := definition.id not in [&"defender", &"berserker", &"elementalist", &"spiritualist"] and definition.entry_skill_id.is_empty() and definition.exclusive_skill_ids.is_empty()
 		var expected_state := (definition.content_ready and has_defender_metadata) if definition.id == &"defender" else ((definition.content_ready and has_berserker_metadata) if definition.id == &"berserker" else ((definition.content_ready and has_elementalist_metadata) if definition.id == &"elementalist" else ((definition.content_ready and has_spiritualist_metadata) if definition.id == &"spiritualist" else (not definition.content_ready and has_no_kit))))
+		if definition.id == &"mg_ar":
+			# G6 has complete system metadata, but G7 integrated/presentation gate stays closed.
+			expected_state = not definition.content_ready and definition.entry_skill_id == &"geometer_trace" and definition.exclusive_skill_ids == [&"geometer_trace", &"geometer_incidence", &"geometer_translation", &"geometer_triangulation", &"geometer_vector_memory", &"geometer_collapse", &"geometer_rewrite"]
 		_check(expected_state, "%s readiness matches completed kits and future placeholders" % definition.id)
 	var mage_options := catalog.evolution_definitions_for_origin(&"mage")
 	_check(mage_options.map(func(definition: EvolutionDefinition) -> StringName: return definition.id) == [&"elementalist", &"spiritualist", &"mg_sp", &"mg_ar"], "origin query includes only the four Mage destinations")
