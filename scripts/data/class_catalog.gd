@@ -163,6 +163,9 @@ static func _ensure_built() -> void:
 	_add_passive_skill(&"spiritualist_channel_focus", "Foco do Além")
 	_add_skill(&"spiritualist_procession", "Procissão de Espectros", "D", SkillDefinition.Targeting.SINGLE_TARGET, 24.0, 10.0, 0.45, 380.0, 0.0, 0.40, DamageRequest.AccuracyMode.CONTESTED, true)
 	_add_skill(&"spiritualist_dissipation", "Rito de Dissipação", "D", SkillDefinition.Targeting.POINT, 27.0, 14.0, 0.85, 330.0, 0.0, 0.60, DamageRequest.AccuracyMode.GEOMETRY, true)
+	# Execution data only: ProfileCatalog keeps mg_ar unavailable until G7.
+	_add_skill(&"geometer_trace", "Traçado Elemental", "Q", SkillDefinition.Targeting.POINT, 8.0, 0.4, 0.30, 600.0, 900.0, 0.12, DamageRequest.AccuracyMode.GEOMETRY, false)
+	_add_skill(&"geometer_triangulation", "Triangulação", "W", SkillDefinition.Targeting.POINT, 16.0, 3.0, 0.0, 600.0, 900.0, 0.12, DamageRequest.AccuracyMode.GEOMETRY, false)
 	_configure_slash_ranks()
 	_configure_dash_ranks()
 	_configure_shield_wall_ranks()
@@ -216,6 +219,7 @@ static func _ensure_built() -> void:
 	_configure_spiritualist_focus_ranks()
 	_configure_spiritualist_procession_ranks()
 	_configure_spiritualist_dissipation_ranks()
+	_configure_geometer_trace_ranks()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -1032,6 +1036,25 @@ static func _configure_elementalist_ranks() -> void:
 	_elementalist_passive_ranks(&"elementalist_prismatic_resonance", SkillDefinition.Handler.ELEMENTALIST_PRISMATIC_RESONANCE, [0.25, 0.35, 0.45], [&"three_direct_distinct_elements_within_six_seconds_third_hit_bonus_before_mitigation"])
 	_elementalist_active_ranks(&"elementalist_ember_path", SkillDefinition.Handler.ELEMENTALIST_EMBER_PATH, [24.0, 26.0, 28.0, 29.0, 30.0], [1.10, 1.25, 1.38, 1.49, 1.58], 240.0, 10.0, 0.50, [&"three_eruptions_at_80_160_240", &"direct_magic_damage_once_per_target_emission"])
 	_elementalist_active_ranks(&"elementalist_tri_nova", SkillDefinition.Handler.ELEMENTALIST_TRI_NOVA, [30.0, 32.0, 34.0, 35.0, 36.0], [0.70, 0.80, 0.88, 0.95, 1.01], 170.0, 16.0, 0.65, [&"three_pulses_fire_ice_lightning_at_0_0_25_0_50", &"ice_pulse_0_55_slow", &"lightning_pulse_0_60_electrified", &"root_only_first_pulse"] , 0.55)
+
+static func _configure_geometer_trace_ranks() -> void:
+	for skill_id: StringName in [&"geometer_trace", &"geometer_triangulation"]:
+		var definition: SkillDefinition = _skills[skill_id]
+		definition.handler_id = SkillDefinition.Handler.GEOMETER_TRACE if skill_id == &"geometer_trace" else SkillDefinition.Handler.GEOMETER_TRIANGULATION
+		for index: int in range(5):
+			var rank := SkillRankDefinition.new()
+			rank.rank = index + 1
+			rank.sp_cost = definition.sp_cost
+			rank.cooldown = definition.cooldown
+			rank.range = definition.range
+			rank.projectile_speed = definition.projectile_speed
+			rank.variable_cast_time = definition.cast_time
+			# Third shot carries grammar only; resolution damage belongs to G5.
+			rank.power = 0.30 + 0.05 * index if skill_id == &"geometer_trace" else 0.0
+			rank.magic_weight = 1.0
+			rank.effect_ids = [&"explicit_ground_or_actor_anchor", &"ordered_frozen_element_delivery"]
+			definition.ranks.append(rank)
+		assert(definition.is_rank_catalog_valid())
 
 static func _configure_spiritualist_curse_ranks() -> void:
 	var definition: SkillDefinition = _skills[&"spiritualist_echo_curse"]

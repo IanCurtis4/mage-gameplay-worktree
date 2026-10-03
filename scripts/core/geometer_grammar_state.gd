@@ -12,12 +12,15 @@ func select_element(element: StringName) -> bool:
 	selected_element = element
 	return true
 
-func reserve(point: Vector2, actor_id: int, confirmed_count: int, context: Dictionary = {}, timeout: float = 3.0) -> int:
+func reserve(point: Vector2, actor_id: int, confirmed_count: int, context: Dictionary = {}, timeout: float = 3.0, element: StringName = &"") -> int:
+	var captured_element := selected_element if element == &"" else element
+	if captured_element not in GeometerGeometry.ELEMENTS:
+		return 0
 	if not point.is_finite() or actor_id < 0 or confirmed_count < 0 or confirmed_count + _pending.size() >= GeometerGeometry.MAX_VERTICES or not is_finite(timeout) or timeout <= 0.0 or timeout > 12.0:
 		return 0
 	var ticket := _next_ticket
 	_next_ticket += 1
-	_pending.append({"ticket": ticket, "element": selected_element, "point": point, "actor_id": actor_id, "resolved": false, "success": false, "remaining": timeout, "context": context.duplicate(true)})
+	_pending.append({"ticket": ticket, "element": captured_element, "point": point, "actor_id": actor_id, "resolved": false, "success": false, "remaining": timeout, "context": context.duplicate(true)})
 	return ticket
 
 func resolve(ticket: int, success: bool, position: Vector2) -> Array[Dictionary]:

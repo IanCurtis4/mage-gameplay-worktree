@@ -38,6 +38,7 @@ signal piercing_shout_requested(origin: Vector2, request: DamageRequest, radius:
 signal brutal_strike_requested(request: DamageRequest, target: CombatActor)
 signal terrifying_shout_requested(origin: Vector2, radius: float, fear_duration: float)
 signal skill_cast_ready(skill_id: StringName, point: Vector2, target_id: int)
+signal geometer_cast_ready(command: GeometerCastCommand)
 signal resources_changed
 
 const SLASH_SP_COST := 15.0
@@ -150,6 +151,7 @@ var extended_aim_remaining := 0.0
 var concealment_reveal_remaining := 0.0
 var _active_cast_point := Vector2.ZERO
 var _active_cast_target_id: int = 0
+var _active_geometer_command: GeometerCastCommand
 var _active_cast_direction := Vector2.RIGHT
 var _rank_definitions: Dictionary[StringName, SkillRankDefinition] = {}
 var _foliage_shelters: Dictionary[int, Dictionary] = {}
@@ -1621,7 +1623,59 @@ func _containing_foliage_shelters() -> Array[Dictionary]:
 			containing.append(shelter)
 	return containing
 
-func begin_skill_cast(skill_id: StringName, point: Vector2, enemy: CombatActor = null) -> bool:
+func is_geometer() -> bool:
+	return class_id == &"mage" and run_state != null and run_state.uses_persistent_build() and run_state.build_snapshot.evolution_id == &"mg_ar"
+
+func geometer_shot_check(command: GeometerCastCommand, construction: GeometerConstructionState, actors: Array[CombatActor]) -> Dictionary:
+	if not is_geometer() or command == null or construction == null or not GeometerCastCommand.is_trace_skill(command.skill_id) or command.element not in GeometerGeometry.ELEMENTS or command.actor_id < 0 or not command.point.is_finite():
+		return {"ok": false, "reason": "Comando de Traçado inválido."}
+	if is_inside_tree() and get_tree().paused:
+		return {"ok": false, "reason": "Combate pausado."}
+	if not _can_spend(command.skill_id):
+		return {"ok": false, "reason": "Skill indisponível, em recarga ou sem SP."}
+	var point := command.point
+	var enemy: CombatActor
+	if command.actor_id > 0:
+		for actor: CombatActor in actors:
+			if is_instance_valid(actor) and actor.is_alive() and actor.get_instance_id() == command.actor_id:
+				enemy = actor
+				point = actor.global_position
+				break
+		if enemy == null:
+			return {"ok": false, "reason": "Alvo do Traçado inválido."}
+	if navigation == null or not point.is_finite() or global_position.distance_to(point) > skill_range(command.skill_id) or not navigation.is_segment_clear(global_position, point, 4.0):
+		return {"ok": false, "reason": "Traçado fora de alcance ou bloqueado."}
+	var result := construction.preview_shot(point, command.skill_id == &"geometer_triangulation", skill_rank(&"geometer_triangulation"), navigation, command.element)
+	result["point"] = point
+	result["target"] = enemy
+	return result
+
+func begin_geometer_cast(command: GeometerCastCommand, construction: GeometerConstructionState, actors: Array[CombatActor]) -> bool:
+	var check := geometer_shot_check(command, construction, actors)
+	if not check["ok"]:
+		return false
+	return begin_skill_cast(command.skill_id, check["point"], check["target"], command)
+
+func commit_geometer_shot(command: GeometerCastCommand, construction: GeometerConstructionState, actors: Array[CombatActor]) -> Dictionary:
+	var check := geometer_shot_check(command, construction, actors)
+	if not check["ok"]:
+		return check
+	var ticket := construction.reserve_shot(check["point"], command.actor_id, command.skill_id == &"geometer_triangulation", skill_rank(&"geometer_triangulation"), navigation, 8.0, 6.0, command.element)
+	if ticket == 0:
+		return {"ok": false, "reason": "Construção indisponível."}
+	_spend(command.skill_id)
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(command.skill_id)
+	var request := _make_magic_request(check["target"], command.skill_id, _magic_power(command.skill_id), definition.accuracy_mode, definition.can_crit)
+	check["ticket"] = ticket
+	check["request"] = request
+	check["speed"] = skill_projectile_speed(command.skill_id)
+	check["range"] = skill_range(command.skill_id)
+	presentation_action.emit(&"cast_release", _resolved_facing(aim_direction(check["point"])), 0.12)
+	resources_changed.emit()
+	return check
+
+func begin_skill_cast(skill_id: StringName, point: Vector2, enemy: CombatActor = null, geometer_command: GeometerCastCommand = null) -> bool:
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var cast_time := skill_cast_time(skill_id)
 	if definition == null or cast_time <= 0.0 or skill_id not in available_skill_ids() or not _can_spend(skill_id):
@@ -1634,6 +1688,7 @@ func begin_skill_cast(skill_id: StringName, point: Vector2, enemy: CombatActor =
 	active_cast_remaining = active_cast_total
 	_active_cast_point = point
 	_active_cast_target_id = enemy.get_instance_id() if enemy != null else 0
+	_active_geometer_command = geometer_command.copy_command() if geometer_command != null else null
 	_path.clear()
 	_has_path_goal = false
 	velocity = Vector2.ZERO
@@ -1652,6 +1707,7 @@ func cancel_active_cast() -> bool:
 	active_cast_remaining = 0.0
 	active_cast_total = 0.0
 	_active_cast_target_id = 0
+	_active_geometer_command = null
 	presentation_action.emit(&"cast_cancel", _active_cast_direction, 0.0)
 	resources_changed.emit()
 	return true
@@ -1925,11 +1981,16 @@ func _advance_active_cast(delta: float) -> void:
 	var completed_skill := active_cast_skill
 	var completed_point := _active_cast_point
 	var completed_target_id := _active_cast_target_id
+	var completed_geometer_command := _active_geometer_command
 	active_cast_skill = &""
 	active_cast_total = 0.0
 	_active_cast_target_id = 0
+	_active_geometer_command = null
 	resources_changed.emit()
-	skill_cast_ready.emit(completed_skill, completed_point, completed_target_id)
+	if completed_geometer_command != null:
+		geometer_cast_ready.emit(completed_geometer_command)
+	else:
+		skill_cast_ready.emit(completed_skill, completed_point, completed_target_id)
 
 func _advance_dash(delta: float) -> void:
 	var previous_position := global_position

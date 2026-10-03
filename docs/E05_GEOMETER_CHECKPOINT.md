@@ -2,14 +2,15 @@
 
 02/10/2026 — autorizada pelo usuário; condutor Sol6.1; base aceita8df3a67.
 Contrato vigente:E05_GEOMETER_PLAN.md, com precedência sobre âncoras estáticas
-obrigatórias do E00. G0 consolidado; runtime da classe ainda não integrado.
+obrigatórias do E00. G0 e input/disparo G1 integrados em fixture; classe completa
+ainda indisponível no catálogo de produção.
 
 | Camada | Estado | Commit/evidência | Próximo passo |
 |---|---|---|---|
 | G0 contratos | DONE (design) | 9527541; ajustes aprovados por Astra em02/10 | Semânticas fechadas; tuning ainda não aceito |
-| G1 input/disparo | PARTIAL (núcleo) | reservas ordenadas/timeout no teste de construção107 PASS | Integrar seleção, mira e projétil ao combate |
-| G2 geometria estática | PARTIAL (núcleo) | limites, obstáculos e transações no teste107 PASS | Preview/runtime compartilhados ainda não conectados |
-| G3 âncoras móveis | PARTIAL (núcleo) | morte, suspensão e relógios no teste107 PASS | Integrar posições reais do encontro e validar boss móvel |
+| G1 input/disparo | DONE (interno) | construção107 + casting61 PASS; renderer4 PASS | Efeitos/progressão/arte final continuam pendentes |
+| G2 geometria estática | PARTIAL (integração) | núcleo7292583; preview e projétil conectados emG1 | Completar matriz de falhas no encontro real |
+| G3 âncoras móveis | PARTIAL (integração) | vínculo real ao boss em casting61/renderer4 | Completar morte/suspensão/expiração integrada |
 | G4 paredes6 | PENDING | semânticas emG0 | Implementar gatilhos reais e dedup |
 | G5 triângulos27 | PENDING | — | Puros → mistos → tricolores |
 | G6 edição/progressão | PENDING | — | Duas builds legais |
@@ -58,3 +59,47 @@ Não afirma pausa real de Nodes, dano ou clareza visual sem integração ao enco
 Próximo lote: seleção direta e contexto congelado do cast, mira chão/inimigo e
 projétil especial, conectando o núcleo validado (G1). Sem entregar código parcial
 no diretório habitual. Revisão Astra continua única no fechamento da classe.
+
+## G1 — seleção, mira e disparo especial — 03/10/2026
+
+Comandos intrínsecos1/2/3 selecionam Fogo/Gelo/Raio, com botões próprios que não
+ocupam slots de skill nem gastam SP. Mira direta no corpo captura vínculo móvel;
+fora dele captura chão, sem assistência atraindo cliques de piso. Shift força
+chão. Backspace/botão Desfazer limpa figura e voos; Direito/Esc cancela somente
+intenção/preparo. Preview compartilha validação com commit e distingue vínculo.
+
+`GeometerCastCommand` é copiado no início do preparo. Mudar elemento/objeto do
+comando depois disso não muda o disparo. SP/CD são cobrados pelo PlayerActor uma
+vez no lançamento validado, usando os cálculos canônicos; geometria/alvo inválido
+antes não cobra, invalidação no voo não restitui. `GeometerTraceProjectile` usa
+colisão contínua compartilhada em espaço de chão e só entrega o alvo escolhido
+ou o ponto fixo; limite600, velocidade900, vida3s, pausa e callback únicos.
+Limpeza/timeout invalida dano e âncora de uma entrega tardia.
+
+`GeometerCasting` conecta posições reais, entrega ordenada, dano ao resolver,
+vida das âncoras e underlay. Comandos por teclado da Geômetra usam o último evento
+de mouse em coordenadas do viewport, convertido pela câmera na confirmação,
+como os cliques; sem mudar a origem do cursor nas outras classes. CastIntent
+CONFIRM/RELEASE/INSTANT permanece o existente. Foco/menu/movimento cancela preparo.
+
+Só Traçado/Triangulação ganharam dados de execução neste lote; ProfileCatalog
+não habilita mg_ar, não há migração de save nem operação sobre perfil real.
+Traçado captura0,30→0,50×ATQM no lançamento. Triangulação nesta entrega apenas
+entregaC, com16SP/CD3s; resolução da figura pertence aG5 e ainda não causa dano.
+Não interpretar esse estado intermediário como tuning final aceito.
+
+Evidência: `e05_geometer_casting_test.gd`61 PASS em fixture da cena real, incluindo
+inputs de teclado/mouse, botões, três modos, foco, pausa, no-SP/CD/slot/identidade,
+alvo móvel/morto, obstáculo antes/depois do lançamento, cancelamento/limpeza,
+cobrança única e emissão real do auto Mago sem colocar âncora. Núcleo107 PASS.
+`tools/geometer_g1_renderer_probe.gd`4 capturas OpenGL1280×720 PASS; inspeção de
+preview de triângulo e vínculo móvel confirma camada sob atores e HUD sem corte.
+Arte do personagem é fallback Mago; sem padrão visual final, testes de FPS ou
+efeitos G4/G5. Capturas ficam ignoradas em `.godot/verification/geometer_g1_*.png`.
+Suíte integral `tools/verify.ps1` PASS (exit0), incluindo importação do editor,
+regressões de input/combate e classes aceitas. `git diff --check` PASS. Nenhum
+gate/handoff micro a Astra, nenhuma atualização de playtest/master.
+
+Próxima rodada pequena: fechar matrizG2/G3 no encontro real (duas entregas fora de
+ordem, morte com outros portadores, degeneração/obstáculos, retorno e expiração),
+antes dos cruzamentos/transformações das seis paredesG4.

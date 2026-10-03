@@ -25,7 +25,7 @@ func elements() -> Array[StringName]:
 		tokens.append(anchor.element)
 	return tokens
 
-func preview_shot(point: Vector2, third: bool, triangle_rank: int, navigation: ArenaNavigation) -> Dictionary:
+func preview_shot(point: Vector2, third: bool, triangle_rank: int, navigation: ArenaNavigation, element: StringName = &"") -> Dictionary:
 	var points := positions()
 	var tokens := elements()
 	for pending: Dictionary in grammar.pending_snapshot():
@@ -34,13 +34,13 @@ func preview_shot(point: Vector2, third: bool, triangle_rank: int, navigation: A
 	if (third and (vertices.size() != 2 or grammar.pending_count() > 0)) or (not third and points.size() >= 2):
 		return {"ok": false, "reason": "Use Triangulação para o terceiro vértice." if not third else "Confirme dois vértices antes de triangular."}
 	points.append(point)
-	tokens.append(grammar.selected_element)
+	tokens.append(grammar.selected_element if element == &"" else element)
 	return _validate_candidate(points, tokens, triangle_rank, navigation)
 
-func reserve_shot(point: Vector2, actor_id: int, third: bool, triangle_rank: int, navigation: ArenaNavigation, vertex_duration: float = 8.0, figure_duration: float = 6.0) -> int:
-	if not _valid_durations(vertex_duration, figure_duration) or not preview_shot(point, third, triangle_rank, navigation)["ok"] or actor_id < 0:
+func reserve_shot(point: Vector2, actor_id: int, third: bool, triangle_rank: int, navigation: ArenaNavigation, vertex_duration: float = 8.0, figure_duration: float = 6.0, element: StringName = &"") -> int:
+	if not _valid_durations(vertex_duration, figure_duration) or not preview_shot(point, third, triangle_rank, navigation, element)["ok"] or actor_id < 0:
 		return 0
-	return grammar.reserve(point, actor_id, vertices.size(), {"triangle_rank": triangle_rank, "vertex_duration": vertex_duration, "figure_duration": figure_duration})
+	return grammar.reserve(point, actor_id, vertices.size(), {"triangle_rank": triangle_rank, "vertex_duration": vertex_duration, "figure_duration": figure_duration}, 3.0, element)
 
 func resolve_shot(ticket: int, success: bool, point: Vector2, alive_positions: Dictionary[int, Vector2], navigation: ArenaNavigation) -> Array[Dictionary]:
 	refresh(alive_positions, navigation)

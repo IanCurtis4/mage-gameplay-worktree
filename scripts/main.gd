@@ -102,6 +102,9 @@ var cast_intent := CastIntent.new()
 var control_preferences := ControlPreferences.new()
 var battle_indicators: BattleIndicators
 var spiritualist_ground: SpiritualistHaloUnderlay
+var geometer_casting: GeometerCasting
+var geometer_element_buttons: Dictionary[StringName, Button] = {}
+var _geometer_pointer_screen := Vector2.INF
 var trap_registry: PlayerTrapRegistry
 var battle_controls: BattleControls
 var class_button: Button
@@ -189,6 +192,13 @@ func _ready() -> void:
 	player.damage_number.connect(_show_damage_number)
 	player.attack_missed.connect(_show_miss)
 	add_child(player)
+	if player.is_geometer():
+		geometer_casting = GeometerCasting.new()
+		add_child(geometer_casting)
+		geometer_casting.configure(player)
+		geometer_casting.targets = enemies
+		geometer_casting.hit.connect(_on_attack_requested)
+		geometer_casting.feedback.connect(_on_geometer_feedback)
 	spiritualist_echo_state.source_id = player.get_instance_id()
 	var camera := Camera2D.new()
 	camera.position_smoothing_enabled = true
@@ -214,6 +224,9 @@ func _process(_delta: float) -> void:
 		_sync_defender_anchor()
 		_sync_berserker_wound_visuals()
 		if player.is_alive():
+			if geometer_casting != null:
+				geometer_casting.targets = enemies
+				geometer_casting.advance(_delta)
 			var marks_before := spiritualist_echo_state.marks.keys()
 			var due_echoes := spiritualist_echo_state.advance(_delta)
 			_announce_spiritualist_mark_expiry(marks_before)
@@ -226,18 +239,24 @@ func _process(_delta: float) -> void:
 			_sync_spiritualist_combat_state()
 			battle_indicators.sync_spiritualist_focus(player.get_instance_id(), player.spiritualist_focus_remaining)
 	_update_hud()
+	for element: StringName in geometer_element_buttons:
+		var element_button := geometer_element_buttons[element]
+		element_button.disabled = get_tree().paused or run_finished or not player.is_alive()
+		element_button.set_pressed_no_signal(element == geometer_casting.construction.grammar.selected_element)
 	if not get_tree().paused and not run_finished:
 		if _world_pointer_available():
-			_update_hover(get_global_mouse_position())
+			_update_hover(_world_mouse_point())
 		else:
 			_clear_hover()
-		_update_aim(get_global_mouse_position())
+		_update_aim(_world_mouse_point())
 	if get_tree().paused or _reward_retry_pending or reward == null or not is_instance_valid(reward):
 		return
 	if player.global_position.distance_to(reward.global_position) <= 48.0:
 		_collect_reward()
 
 func _input(event: InputEvent) -> void:
+	if geometer_casting != null and event is InputEventMouse:
+		_geometer_pointer_screen = event.position
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed and (cast_intent.active_skill != &"" or player.has_active_cast()):
 		_cancel_casting()
 		get_viewport().set_input_as_handled()
@@ -258,7 +277,7 @@ func _input(event: InputEvent) -> void:
 			if skill != &"" and skill == cast_intent.active_skill:
 				var to_cast := cast_intent.release(skill)
 				if _world_pointer_available():
-					_commit_skill(to_cast, get_global_mouse_position())
+					_commit_skill(to_cast, _world_mouse_point())
 				_cancel_aim()
 				get_viewport().set_input_as_handled()
 
@@ -277,6 +296,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 		if get_tree().paused or not player.is_alive() or run_finished:
 			return
+		if _handle_geometer_key(event.keycode):
+			get_viewport().set_input_as_handled()
+			return
 		var skill := _key_skill(event.keycode)
 		if skill != &"":
 			player.cancel_active_cast()
@@ -286,8 +308,8 @@ func _unhandled_input(event: InputEvent) -> void:
 				_commit_skill(skill, player.global_position)
 				_cancel_aim()
 			elif _world_pointer_available():
-				_commit_skill(cast_intent.press(skill), get_global_mouse_position())
-				_update_aim(get_global_mouse_position())
+				_commit_skill(cast_intent.press(skill), _world_mouse_point())
+				_update_aim(_world_mouse_point())
 			get_viewport().set_input_as_handled()
 		elif event.keycode == KEY_SPACE and next_button.visible:
 			_start_next_encounter()
@@ -315,6 +337,11 @@ func _commit_skill(skill: StringName, point: Vector2) -> void:
 		return
 	if spiritualist_drain_state.active:
 		_cancel_spiritualist_drain()
+	if GeometerCastCommand.is_trace_skill(skill):
+		if geometer_casting != null:
+			geometer_casting.targets = enemies
+			geometer_casting.begin(geometer_casting.capture(skill, point, Input.is_key_pressed(KEY_SHIFT)))
+		return
 	var definition := ClassCatalog.skill_definition(skill)
 	var selected_target: CombatActor
 	if definition.targeting == SkillDefinition.Targeting.SINGLE_TARGET:
@@ -537,10 +564,12 @@ func _select_skill_from_bar(skill: StringName) -> void:
 		_cancel_aim()
 		return
 	cast_intent.active_skill = skill
-	_update_aim(get_global_mouse_position())
+	_update_aim(_world_mouse_point())
 
 func _update_aim(point: Vector2) -> void:
 	var skill := cast_intent.active_skill
+	if geometer_casting != null:
+		geometer_casting.preview_command = null
 	if skill == &"" or get_tree().paused or run_finished:
 		battle_indicators.clear_aim()
 		if player != null and player.has_active_cast() and not get_tree().paused and not run_finished:
@@ -550,6 +579,21 @@ func _update_aim(point: Vector2) -> void:
 		else:
 			battle_controls.set_aim_text("")
 			bottom_controls.visible = true
+		return
+	if GeometerCastCommand.is_trace_skill(skill) and geometer_casting != null:
+		battle_indicators.clear_aim()
+		geometer_casting.targets = enemies
+		var command := geometer_casting.capture(skill, point, Input.is_key_pressed(KEY_SHIFT))
+		var preview := geometer_casting.check(command)
+		if _world_pointer_available():
+			geometer_casting.preview_command = command
+			geometer_casting.preview_valid = preview["ok"]
+		var destination := "INIMIGO · vínculo móvel" if command.actor_id > 0 else "CHÃO · vértice fixo"
+		var availability: String = "PRONTO" if preview["ok"] else preview["reason"]
+		var action := "Solte a tecla ou clique" if cast_intent.mode == CastIntent.Mode.RELEASE else "Clique para lançar"
+		battle_controls.set_aim_text("%s · %s · %s | %s | Shift: chão · Esc cancela" % [ClassCatalog.skill_definition(skill).display_name, destination, availability, action])
+		bottom_controls.visible = false
+		geometer_casting.queue_redraw()
 		return
 	var definition := ClassCatalog.skill_definition(skill)
 	var cooldown := player.skill_cooldown(skill)
@@ -603,6 +647,9 @@ func _update_aim(point: Vector2) -> void:
 
 func _cancel_aim() -> void:
 	cast_intent.cancel()
+	if geometer_casting != null:
+		geometer_casting.preview_command = null
+		geometer_casting.queue_redraw()
 	if battle_indicators != null:
 		battle_indicators.clear_aim()
 	if battle_controls != null:
@@ -615,8 +662,44 @@ func _cancel_casting() -> void:
 		player.cancel_active_cast()
 	_cancel_aim()
 
+func _world_mouse_point() -> Vector2:
+	# Geometer keyboard casts use the same viewport event coordinates as clicks.
+	# Keep screen space so camera motion is still resolved at confirmation time.
+	if geometer_casting != null and _geometer_pointer_screen.is_finite():
+		return get_canvas_transform().affine_inverse() * _geometer_pointer_screen
+	return get_global_mouse_position()
+
 func _world_pointer_available() -> bool:
 	return get_viewport().gui_get_hovered_control() == null
+
+func _handle_geometer_key(key: Key) -> bool:
+	if geometer_casting == null or not _world_pointer_available():
+		return false
+	if key in [KEY_1, KEY_2, KEY_3]:
+		_select_geometer_element(GeometerGeometry.ELEMENTS[[KEY_1, KEY_2, KEY_3].find(key)])
+		return true
+	if key == KEY_BACKSPACE:
+		_clear_geometer_construction()
+		return true
+	return false
+
+func _select_geometer_element(element: StringName) -> void:
+	if geometer_casting == null or run_finished or get_tree().paused or not player.is_alive():
+		return
+	if geometer_casting.select(element):
+		for token: StringName in geometer_element_buttons:
+			geometer_element_buttons[token].set_pressed_no_signal(token == element)
+
+func _clear_geometer_construction() -> void:
+	if geometer_casting == null or run_finished or get_tree().paused or not player.is_alive():
+		return
+	_cancel_casting()
+	geometer_casting.clear_construction()
+	status_label.text = "Construção desfeita — elemento selecionado preservado"
+
+func _on_geometer_feedback(message: String) -> void:
+	if not run_finished and status_label != null:
+		status_label.text = "Traçado: " + message
 
 func _clear_hover() -> void:
 	if is_instance_valid(_hovered_enemy):
@@ -1405,6 +1488,8 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	player.clear_elementalist_state()
 	player.clear_spiritualist_state()
 	spiritualist_echo_state.clear()
+	if geometer_casting != null:
+		geometer_casting.clear_construction()
 	_cancel_spiritualist_drain()
 	_clear_spiritualist_veil()
 	_cancel_spiritualist_procession()
@@ -1572,6 +1657,8 @@ func _on_player_died(_actor: CombatActor) -> void:
 
 func _show_result(victory: bool) -> void:
 	_cancel_casting()
+	if geometer_casting != null:
+		geometer_casting.clear_construction()
 	_clear_hover()
 	if trap_registry != null:
 		trap_registry.clear_all(&"run_end")
@@ -1711,6 +1798,8 @@ func _select_class(new_class_id: StringName) -> void:
 	get_tree().reload_current_scene()
 
 func _enemy_at(point: Vector2) -> CombatActor:
+	if GeometerCastCommand.is_trace_skill(cast_intent.active_skill):
+		return BattleTargeting.pick(point, enemies, null, false)
 	return BattleTargeting.pick(point, enemies, _hovered_enemy, control_preferences.smart_lock)
 
 func _handle_world_click(point: Vector2) -> void:
@@ -2039,6 +2128,29 @@ func _build_spiritualist_panel() -> void:
 	spiritualist_help_label.visible = false
 	column.add_child(spiritualist_help_label)
 
+func _build_geometer_controls() -> void:
+	var panel := HBoxContainer.new()
+	panel.position = Vector2(24, 284)
+	panel.add_theme_constant_override("separation", 6)
+	ui_root.add_child(panel)
+	var names := ["1 · Fogo", "2 · Gelo", "3 · Raio"]
+	for index: int in range(3):
+		var element := GeometerGeometry.ELEMENTS[index]
+		var button := Button.new()
+		button.text = names[index]
+		button.toggle_mode = true
+		button.custom_minimum_size = Vector2(110, 38)
+		button.button_pressed = element == &"fire"
+		button.pressed.connect(_select_geometer_element.bind(element))
+		panel.add_child(button)
+		geometer_element_buttons[element] = button
+	var clear_button := Button.new()
+	clear_button.text = "⌫ · Desfazer"
+	clear_button.custom_minimum_size = Vector2(132, 38)
+	clear_button.tooltip_text = "Remove figura e flechas em trânsito sem Colapso. Esc apenas cancela a mira."
+	clear_button.pressed.connect(_clear_geometer_construction)
+	panel.add_child(clear_button)
+
 func _build_ui() -> void:
 	var canvas := CanvasLayer.new()
 	canvas.layer = 50
@@ -2086,11 +2198,15 @@ func _build_ui() -> void:
 	help_panel.offset_right = -24.0
 	help_panel.offset_bottom = 258.0
 	var help_text := "CLIQUE: mover / autoatacar o alvo\nQ / W / A / S / D: ações da classe\nDIREITO / ESC: cancelar mira\nR: reiniciar ao concluir · sem XP/recompensas" if training_mode else "CLIQUE: mover / autoatacar o alvo\nQ / W / A / S / D: ações da classe\nDIREITO / ESC: cancelar mira\nE: augment  ·  R: reiniciar ao concluir"
+	if player.is_geometer():
+		help_text = "1 / 2 / 3: Fogo / Gelo / Raio\nTraçado: corpo = vínculo; fora = chão\nShift: forçar chão · Backspace: desfazer\nQ / W / A / S / D: skills · Esc: cancelar mira"
 	var help_label := _make_label(help_text, 16, Color("d7ddea"))
 	help_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	help_panel.add_child(help_label)
 	if run_state.build_snapshot != null and run_state.build_snapshot.evolution_id == &"spiritualist":
 		_build_spiritualist_panel()
+	if geometer_casting != null:
+		_build_geometer_controls()
 
 	bottom_controls = VBoxContainer.new()
 	ui_root.add_child(bottom_controls)

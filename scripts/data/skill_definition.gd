@@ -71,6 +71,8 @@ enum Handler {
 	SPIRITUALIST_CHANNEL_FOCUS,
 	SPIRITUALIST_PROCESSION,
 	SPIRITUALIST_DISSIPATION,
+	GEOMETER_TRACE,
+	GEOMETER_TRIANGULATION,
 }
 
 const MAX_ACTIVE_RANK := 5
@@ -96,7 +98,7 @@ const MAX_PASSIVE_RANK := 3
 func is_rank_catalog_valid() -> bool:
 	if category < Category.ACTIVE or category > Category.PASSIVE:
 		return false
-	if handler_id <= Handler.UNASSIGNED or handler_id > Handler.SPIRITUALIST_DISSIPATION:
+	if handler_id <= Handler.UNASSIGNED or handler_id > Handler.GEOMETER_TRIANGULATION:
 		return false
 	if action_kind < ActionKind.OFFENSIVE or action_kind > ActionKind.DEFENSIVE:
 		return false
