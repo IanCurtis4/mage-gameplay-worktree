@@ -63,6 +63,8 @@ func conduction_active(identity: int) -> bool:
 	return _available() and identity == casting.construction.construction_id
 
 func owned_contact(projectile: PlayerProjectile, from: Vector2, to: Vector2) -> Dictionary:
+	if is_instance_valid(casting) and casting.construction.shape == GeometerConstructionState.Shape.TRIANGLE:
+		return casting.triangle_field.owned_contact(projectile, from, to)
 	if not _available() or projectile is GeometerTraceProjectile or projectile.request == null or projectile.request.is_secondary or GeometerCastCommand.is_trace_skill(projectile.request.skill_id) or projectile.request.source_id != casting.player.get_instance_id():
 		return {}
 	var elements := casting.construction.elements()
@@ -80,6 +82,9 @@ func owned_contact(projectile: PlayerProjectile, from: Vector2, to: Vector2) -> 
 	return contact
 
 func apply_owned_contact(projectile: PlayerProjectile) -> void:
+	if is_instance_valid(casting) and casting.construction.shape == GeometerConstructionState.Shape.TRIANGLE:
+		casting.triangle_field.apply_owned_contact(projectile)
+		return
 	if not _available():
 		return
 	var elements := casting.construction.elements()
@@ -132,6 +137,8 @@ func _redirect_target(projectile: PlayerProjectile, exit: Vector2, origin: Vecto
 	return {"actor": best} if best != null else {}
 
 func projectile_impact(projectile: PlayerProjectile, victim: CombatActor) -> void:
+	if is_instance_valid(casting):
+		casting.triangle_field.projectile_impact(projectile, victim)
 	var fire := projectile.geometer_fire_request
 	var bonus := projectile.geometer_bonus_request
 	var identity := projectile.geometer_payload_identity

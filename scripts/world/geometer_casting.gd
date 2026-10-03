@@ -17,7 +17,9 @@ var wall_contacts := GeometerWallContactState.new()
 var interaction_ledger := GeometerInteractionLedger.new()
 var _watched_walkers: Dictionary[int, EnemyActor] = {}
 var wall_field := GeometerWallField.new()
+var triangle_field := GeometerTriangleField.new()
 var _shot_wall_snapshots: Dictionary[int, Dictionary] = {}
+var _shot_triangle_snapshots: Dictionary[int, Dictionary] = {}
 var _wall_reactions: Array[Dictionary] = []
 var _reaction_visual := WallReactionVisual.new()
 
@@ -29,6 +31,7 @@ func configure(caster: PlayerActor) -> void:
 	add_child(_reaction_visual)
 	player.geometer_cast_ready.connect(launch)
 	wall_field.configure(self)
+	triangle_field.configure(self)
 
 func alive_positions() -> Dictionary[int, Vector2]:
 	var positions: Dictionary[int, Vector2] = {}
@@ -71,6 +74,7 @@ func launch(command: GeometerCastCommand) -> void:
 	projectile.z_index = 2
 	projectile.configure_trace(result, command, player.global_position, player.navigation)
 	_shot_wall_snapshots[int(result["ticket"])] = result["wall_snapshot"]
+	_shot_triangle_snapshots[int(result["ticket"])] = result["triangle_snapshot"]
 	projectile.delivered.connect(_on_delivered.bind(projectile))
 	projectile.add_to_group("player_projectiles")
 	queue_redraw()
@@ -92,6 +96,9 @@ func _report_delivery(result: Dictionary) -> void:
 	if result["ok"]:
 		wall_field.capture_construction(_shot_wall_snapshots.get(int(result.get("ticket", 0)), {}))
 	_shot_wall_snapshots.erase(int(result.get("ticket", 0)))
+	if result.get("formation", false):
+		triangle_field.form(_shot_triangle_snapshots.get(int(result.get("ticket", 0)), {}))
+	_shot_triangle_snapshots.erase(int(result.get("ticket", 0)))
 	if not result["ok"]:
 		feedback.emit(result["reason"])
 	elif result.get("formation", false):
@@ -111,12 +118,14 @@ func advance(delta: float) -> void:
 	_retire_invalid_flights()
 	_sync_wall_observers()
 	wall_field.capture_construction()
+	triangle_field.advance(delta)
 	var pending_ids: Array[int] = []
 	for pending: Dictionary in construction.grammar.pending_snapshot():
 		pending_ids.append(int(pending["ticket"]))
 	for ticket: int in _shot_wall_snapshots.keys():
 		if ticket not in pending_ids:
 			_shot_wall_snapshots.erase(ticket)
+			_shot_triangle_snapshots.erase(ticket)
 	queue_redraw()
 
 func show_wall_reaction(point: Vector2, element: StringName) -> void:
@@ -125,6 +134,17 @@ func show_wall_reaction(point: Vector2, element: StringName) -> void:
 			_wall_reactions.pop_front()
 		_wall_reactions.append({"point": point, "element": element, "remaining": 0.25})
 		_redraw_wall_reactions()
+
+func show_triangle_reaction(points: PackedVector2Array, element: StringName, links: PackedVector2Array = PackedVector2Array(), duration: float = 0.4) -> void:
+	if points.size() != 3 or not is_finite(duration) or duration <= 0.0:
+		return
+	for point: Vector2 in points + links:
+		if not point.is_finite():
+			return
+	if _wall_reactions.size() >= 12:
+		_wall_reactions.pop_front()
+	_wall_reactions.append({"points": points, "links": links, "element": element, "remaining": duration, "duration": duration})
+	_redraw_wall_reactions()
 
 func _redraw_wall_reactions() -> void:
 	_reaction_visual.reactions = _wall_reactions
@@ -182,6 +202,8 @@ func clear_construction() -> void:
 	wall_contacts.sync(0, false)
 	wall_field.capture_construction()
 	_shot_wall_snapshots.clear()
+	_shot_triangle_snapshots.clear()
+	triangle_field.clear()
 	_wall_reactions.clear()
 	_redraw_wall_reactions()
 	preview_command = null
@@ -209,6 +231,21 @@ func outline_segments() -> Array[PackedVector2Array]:
 
 func _draw() -> void:
 	var points := construction.positions()
+	if construction.shape == GeometerConstructionState.Shape.TRIANGLE and construction.has_active_figure():
+		var polygon := PackedVector2Array()
+		for point: Vector2 in points:
+			polygon.append(to_local(point))
+		var elements := construction.elements()
+		var tint := Color("ffac68", 0.045) if elements[0] == &"fire" else (Color("a9e9ff", 0.055) if elements[0] == &"ice" else Color("ebe29b", 0.045))
+		draw_colored_polygon(polygon, tint)
+		var center := (polygon[0] + polygon[1] + polygon[2]) / 3.0
+		var mark := Color("cde6ed", 0.45)
+		if elements[1] == &"fire":
+			draw_arc(center, 10.0, 0.0, TAU, 16, Color("ffac68", 0.5), 1.0)
+		elif elements[1] == &"ice":
+			draw_polyline(PackedVector2Array([center + Vector2(0, -9), center + Vector2(7, 0), center + Vector2(0, 9), center + Vector2(-7, 0), center + Vector2(0, -9)]), mark, 1.0)
+		else:
+			draw_polyline(PackedVector2Array([center + Vector2(-8, 0), center + Vector2(-2, -6), center + Vector2(2, 6), center + Vector2(8, 0)]), Color("ebe29b", 0.5), 1.0)
 	var tint := Color("b5dce8", 0.6)
 	for segment: PackedVector2Array in outline_segments():
 		if construction.suspended or construction.shape == GeometerConstructionState.Shape.PREPARATION:
@@ -249,10 +286,30 @@ class WallReactionVisual extends Node2D:
 
 	func _draw() -> void:
 		for reaction: Dictionary in reactions:
-			var center := to_local(reaction["point"])
-			var alpha := float(reaction["remaining"]) / 0.25
+			var alpha := float(reaction["remaining"]) / float(reaction.get("duration", 0.25))
 			var element: StringName = reaction["element"]
 			var color := Color("ffb574", alpha) if element == &"fire" else (Color("a9e9ff", alpha) if element == &"ice" else Color("f4e48b", alpha))
+			if reaction.has("points"):
+				var polygon := PackedVector2Array()
+				for point: Vector2 in reaction["points"]:
+					polygon.append(to_local(point))
+				polygon.append(polygon[0])
+				draw_polyline(polygon, Color(color, alpha * 0.55), 2.0)
+				var centroid := (polygon[0] + polygon[1] + polygon[2]) / 3.0
+				if element == &"fire":
+					for index: int in range(3):
+						var edge_center := (polygon[index] + polygon[index + 1]) / 2.0
+						draw_line(centroid.lerp(edge_center, 0.2), centroid.lerp(edge_center, 0.2 + 0.5 * (1.0 - alpha)), color, 1.5)
+				elif element == &"ice":
+					for index: int in range(3):
+						draw_line(polygon[index].lerp(centroid, 0.15), polygon[index].lerp(centroid, 0.35 + 0.4 * (1.0 - alpha)), color, 1.5)
+				var links: PackedVector2Array = reaction["links"]
+				for index: int in range(0, links.size() - 1, 2):
+					var first := to_local(links[index])
+					var second := to_local(links[index + 1])
+					draw_polyline(PackedVector2Array([first, first.lerp(second, 0.4) + Vector2(4, -4), first.lerp(second, 0.6) + Vector2(-4, 4), second]), color, 1.5)
+				continue
+			var center := to_local(reaction["point"])
 			if element == &"fire":
 				draw_arc(center, 45.0 * (1.0 - alpha * 0.65), 0.0, TAU, 24, color, 2.0)
 				for index: int in range(6):

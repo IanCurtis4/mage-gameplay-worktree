@@ -291,6 +291,31 @@ Parede inativa não concede efeitos nem resolve carga pendente; condução ativa
 Figuras são underlay; reações curtas de interação usam filho visual acima dos
 corpos. Regras completas, tuning e evidências: `E05_GEOMETER_CHECKPOINT.md`.
 
+### Geômetra G5 — campos compostos, sem herança de aresta
+
+`GeometerTriangleField` é estado runtime separado do catálogo, associado à identidade da
+construção. Compõe A/B/C a partir dos elementos e tuning imutável do catálogo;
+o jogador captura pedidos secundários GEOMETRY de MAG/rank no lançamento pago
+de Triangulação. O adaptador retém esse snapshot por ticket até fecharC.
+Defesa e aplicação de dano continuam exclusivamente no resolver central.
+
+A/B usam agenda compartilhada1s, com poderF somado em um pedido por ocupante,
+sem catch-up nem tick inicial. Slow usa o maior10/20% e residual0,6s. C é
+reivindicado antes de emitir dano e resolve uma vez por identidade; gelo usa
+controle mágico existente e raio limita três alvos únicos/elos110 com LoS.
+Área móvel atua na posição atual, sem varredura. Edição/suspensão/retomada não
+recapturam atributos, renovam agenda ou repetemC; pausa congela os relógios.
+
+O gancho opcional `GeometerWallField` delega contato/impacto próprios quando
+a figura é triangular, preservando o pipeline de colisão contínua existente.
+`GeometerGeometry.triangle_contact` usa círculo versus área sem espessura extra
+de parede. Flags de raio usam o mesmo ledger por projétil/instância. A-R entrega
+um adicional no próximo impacto elegível na área; B-R entrega um arco a outro
+ocupante<=110, sem cascata. Inatividade/outra identidade/impacto fora da área
+descartam payloads, não o projétil base. Não há condução/desvio/interceptação ou
+Teorema herdados da parede. Figura, preenchimento e hit-test usam o mesmo triângulo.
+Sem alteração de save, disponibilidade da classe ou candidato de playtest emG5.
+
 ### Procedimento
 
 Import headless detecta scripts/recursos inválidos; testes headless validam fórmulas,

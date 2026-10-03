@@ -1670,6 +1670,7 @@ func commit_geometer_shot(command: GeometerCastCommand, construction: GeometerCo
 	check["ticket"] = ticket
 	check["request"] = request
 	check["wall_snapshot"] = geometer_wall_snapshot()
+	check["triangle_snapshot"] = geometer_triangle_snapshot()
 	check["speed"] = skill_projectile_speed(command.skill_id)
 	check["range"] = skill_range(command.skill_id)
 	presentation_action.emit(&"cast_release", _resolved_facing(aim_direction(check["point"])), 0.12)
@@ -1693,6 +1694,17 @@ func geometer_wall_snapshot() -> Dictionary:
 	entry.is_secondary = true
 	exit.is_secondary = true
 	return {"entry_request": entry, "exit_request": exit, "slow_fraction": tuning["slow_fraction"], "incidence_fraction": bonus, "incidence_sp": refund}
+
+func geometer_triangle_snapshot() -> Dictionary:
+	var tuning := ClassCatalog.geometer_triangle_tuning(skill_rank(&"geometer_triangulation"))
+	if not is_geometer() or tuning.is_empty():
+		return {}
+	var captured: Dictionary = {}
+	for component: StringName in tuning:
+		var request := _make_magic_request(null, StringName("geometer_" + String(component)), stat_breakdown.value(&"magic_attack") * float(tuning[component]), DamageRequest.AccuracyMode.GEOMETRY, false)
+		request.is_secondary = true
+		captured[component] = request
+	return captured
 
 func begin_skill_cast(skill_id: StringName, point: Vector2, enemy: CombatActor = null, geometer_command: GeometerCastCommand = null) -> bool:
 	var definition := ClassCatalog.skill_definition(skill_id)

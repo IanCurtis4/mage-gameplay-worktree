@@ -1979,6 +1979,12 @@ func _update_hud() -> void:
 			var rank_text := " R%d" % player.skill_rank(skill_id) if not definition.ranks.is_empty() else ""
 			var state := _display_skill_state(skill_id, cost)
 			battle_controls.show_skill_state(skill_id, "%s · %s%s\n%d SP · %s" % [_skill_input_label(skill_id), definition.display_name.to_upper(), rank_text, int(cost), state], cast_intent.active_skill == skill_id or player.active_cast_skill == skill_id)
+			if skill_id == &"geometer_triangulation" and geometer_casting != null:
+				var elements := geometer_casting.construction.elements()
+				if elements.size() == 2:
+					elements.append(geometer_casting.construction.grammar.selected_element)
+				var suspended_text := "Construção suspensa — sem efeitos.\n" if geometer_casting.construction.suspended else ""
+				battle_controls.skill_buttons[skill_id].tooltip_text = suspended_text + ClassCatalog.geometer_triangle_description(elements)
 
 func _skill_input_label(skill_id: StringName) -> String:
 	var index := player.available_skill_ids().find(skill_id)

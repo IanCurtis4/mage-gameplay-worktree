@@ -26,6 +26,9 @@ var geometer_transport_identity := 0
 var geometer_fire_request: DamageRequest
 var geometer_bonus_request: DamageRequest
 var geometer_payload_identity := 0
+var geometer_triangle_foundation_request: DamageRequest
+var geometer_triangle_arc_request: DamageRequest
+var geometer_triangle_identity := 0
 
 func start_geometer_conduction(endpoint: Vector2, identity: int) -> void:
 	geometer_resume_direction = direction

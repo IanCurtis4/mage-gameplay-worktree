@@ -1072,6 +1072,23 @@ static func geometer_wall_tuning(rank: int) -> Dictionary:
 		return {}
 	return {"entry_power": 0.35 + 0.05 * (rank - 1), "exit_power": 0.30 + 0.05 * (rank - 1), "slow_fraction": 0.20 + 0.025 * (rank - 1)}
 
+static func geometer_triangle_tuning(rank: int) -> Dictionary:
+	if rank < 1 or rank > 5:
+		return {}
+	var step := rank - 1
+	return {&"foundation_fire": 0.12 + 0.02 * step, &"rule_fire": 0.18 + 0.03 * step,
+		&"foundation_lightning": 0.12 + 0.02 * step, &"rule_lightning": 0.20 + 0.0375 * step,
+		&"resolution_fire": 0.80 + 0.10 * step, &"resolution_ice": 0.30 + 0.05 * step,
+		&"resolution_lightning": 0.60 + 0.10 * step}
+
+static func geometer_triangle_description(elements: Array[StringName]) -> String:
+	if GeometerGeometry.triangle_rank(elements) == 0:
+		return "Confirme dois vértices e selecione Triangulação para lançar o terceiro."
+	var foundations := {&"fire": "Brasas: dano a ocupantes a cada 1s.", &"ice": "Geada: slow de 10%; residual de 0,6s.", &"lightning": "Condutor: componente mágico no próximo impacto de projétil próprio na área."}
+	var rules := {&"fire": "Pulso: dano a ocupantes a cada 1s, somado às brasas.", &"ice": "Lento: slow de 20%; não soma com Geada.", &"lightning": "Condução: próximo impacto na área emite um arco para outro ocupante a até 110."}
+	var resolutions := {&"fire": "Explosão: dano à área uma vez no fechamento.", &"ice": "Contenção: dano e root mágico curto no fechamento, limitado pela resistência do boss.", &"lightning": "Descarga: até três ocupantes únicos, por elos de até 110, no fechamento."}
+	return "Fundação — %s\nRegra — %s\nResolução — %s\nRequer Triangulação R%d. Sem efeitos de parede; alvos exigem área e visão." % [foundations[elements[0]], rules[elements[1]], resolutions[elements[2]], GeometerGeometry.triangle_rank(elements)]
+
 static func _configure_spiritualist_curse_ranks() -> void:
 	var definition: SkillDefinition = _skills[&"spiritualist_echo_curse"]
 	definition.handler_id = SkillDefinition.Handler.SPIRITUALIST_ECHO_CURSE

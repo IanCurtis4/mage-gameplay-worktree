@@ -63,10 +63,10 @@ static func triangle_rank(elements: Array[StringName]) -> int:
 			distinct.append(element)
 	return 1 if distinct.size() == 1 else 3 if distinct.size() == 2 else 5
 
-static func wall_contact(from: Vector2, to: Vector2, first: Vector2, second: Vector2, radius: float = 0.0) -> Dictionary:
+static func wall_contact(from: Vector2, to: Vector2, first: Vector2, second: Vector2, radius: float = 0.0, half_width: float = WALL_HALF_WIDTH) -> Dictionary:
 	# First contact with the finite capsule. Position stays on the actual motion;
 	# wall_point is its closest point on A/B, not a teleport destination.
-	if not valid_wall_motion(from, to, first, second, radius):
+	if not is_finite(half_width) or half_width < 0.0 or not valid_wall_motion(from, to, first, second, radius):
 		return {}
 	var axis := (second - first).normalized()
 	var normal := Vector2(-axis.y, axis.x)
@@ -74,7 +74,7 @@ static func wall_contact(from: Vector2, to: Vector2, first: Vector2, second: Vec
 	var step := to - from
 	var local_from := Vector2(offset.dot(axis), offset.dot(normal))
 	var local_step := Vector2(step.dot(axis), step.dot(normal))
-	var width := WALL_HALF_WIDTH + radius
+	var width := half_width + radius
 	var length := first.distance_to(second)
 	var low := 0.0
 	var high := 1.0
@@ -112,6 +112,22 @@ static func wall_contact(from: Vector2, to: Vector2, first: Vector2, second: Vec
 		return {}
 	var point := from.lerp(to, fraction)
 	return {"fraction": fraction, "position": point, "wall_point": Geometry2D.get_closest_point_to_segment(point, first, second)}
+
+static func triangle_contact(points: PackedVector2Array, from: Vector2, to: Vector2, radius: float = 0.0) -> Dictionary:
+	if points.size() != 3 or not from.is_finite() or not to.is_finite() or not is_finite(radius) or radius < 0.0 or triangle_area(points) < MIN_TRIANGLE_AREA:
+		return {}
+	for point: Vector2 in points:
+		if not point.is_finite():
+			return {}
+	if triangle_contains(points, from, radius):
+		return {"fraction": 0.0, "position": from}
+	var first: Dictionary = {}
+	for index: int in range(3):
+		# Zero edge thickness: exactly the same circle-versus-area boundary as occupancy.
+		var contact := wall_contact(from, to, points[index], points[(index + 1) % 3], radius, 0.0)
+		if not contact.is_empty() and (first.is_empty() or float(contact["fraction"]) < float(first["fraction"])):
+			first = contact
+	return first
 
 static func wall_crossing(from: Vector2, to: Vector2, first: Vector2, second: Vector2, radius: float = 0.0) -> Dictionary:
 	if not valid_wall_motion(from, to, first, second, radius):

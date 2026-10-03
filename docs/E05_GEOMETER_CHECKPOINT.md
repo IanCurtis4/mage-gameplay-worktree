@@ -2,7 +2,7 @@
 
 03/10/2026 — autorizada pelo usuário; condutor Sol6.1; base aceita8df3a67.
 Contrato vigente:E05_GEOMETER_PLAN.md, com precedência sobre âncoras estáticas
-obrigatórias do E00. G0–G4 integrados e validados internamente em fixture; classe completa
+obrigatórias do E00. G0–G5 integrados e validados internamente em fixture; classe completa
 ainda indisponível no catálogo de produção.
 
 | Camada | Estado | Commit/evidência | Próximo passo |
@@ -10,9 +10,9 @@ ainda indisponível no catálogo de produção.
 | G0 contratos | DONE (design) | 9527541; ajustes aprovados por Astra em02/10 | Semânticas fechadas; tuning ainda não aceito |
 | G1 input/disparo | DONE (interno) | construção107 + casting61 PASS; renderer4 PASS | Efeitos/progressão/arte final continuam pendentes |
 | G2 geometria estática | DONE (interno) | núcleo109 + integração46 PASS; renderer6 PASS | EfeitosG5 e aceite de produto pendentes |
-| G3 âncoras móveis | DONE (interno) | matriz real de morte/fila/suspensão/expiração; 30/60/144Hz | Manutenção dos campos móveis será validada emG5 |
-| G4 paredes6 | DONE (interno) | primitivas74 + receitas106 + projéteis96 PASS; renderer7 PASS | Próximo loteG5; tuning e classe completa ainda não aceitos |
-| G5 triângulos27 | PENDING | — | Puros → mistos → tricolores |
+| G3 âncoras móveis | DONE (interno) | matriz real de morte/fila/suspensão/expiração; 30/60/144Hz | Manutenção da área móvel validada emG5; composição densa emG7 |
+| G4 paredes6 | DONE (interno) | primitivas74 + receitas106 + projéteis96 PASS; renderer7 PASS | Regressão mantida emG5; tuning ainda não aceito |
+| G5 triângulos27 | DONE (interno) | receitas597 + projéteis192 PASS; renderer9 PASS | Próximo loteG6; arte final e classe completa pendentes |
 | G6 edição/progressão | PENDING | — | Duas builds legais |
 | G7 visual/integração | PENDING | — | Revisão Astra e playtest |
 
@@ -261,3 +261,72 @@ regressões de classes aceitas/persistência e administração12. `git diff --ch
 PASS. Evidências do implementador não equivalem a revisão independente de Astra.
 G5/G6/G7 permanecem pendentes:27 campos, edição/progressão completa e arte/onboarding/
 composição densa. Revisão Astra será integrada no fechamento da classe.
+
+## G5 — 27 campos compostos, manutenção e resolução — 03/10/2026
+
+Usuário autorizouG5 sobre0569cde. `GeometerTriangleField` compõe as três funções
+por elemento: três puros,18 mistos e seis tricolores, com gatesR1/R3/R5. Não há
+27 skills novas nem efeitos de aresta herdados. `ClassCatalog` guarda tuning e
+descrições compostas; tooltip de Triangulação informa as funções atuais ou a
+receita prevista com o elemento selecionado. Catálogo de produção continua fechado.
+
+Fundação/regraF compartilham agenda1s e somam o poder em um único pedido por
+ocupante, resolvido uma vez contra a defesa atual. Sem dano inicial de manutenção,
+sem catch-up; avanço longo entrega no máximo um tick e conserva a fase da agenda.
+Pausa congela tudo; suspensão continua consumindo os prazos sem aplicar efeitos.
+SlowA/B usa o maior10/20%, com residual0,6s; campo móvel considera somente a área
+atual, não sua varredura. Todos os alvos exigem círculo versus triângulo e LoS.
+
+C resolve uma vez ao fechar: explosãoF, dano/rootG0,7s via `HardControlState`
+com resistência/orçamento do boss, ou descargaR até três ocupantes únicos, a
+partir do mais próximo deC, com elos<=110 e LoS. Identidade é reivindicada antes
+de emitir dano. Edição, Reescrita, suspensão/retomada, expiração e notificação
+duplicada não repetemC. Colapso e sua resolução própria pertencem ao futuroG6.
+
+Snapshot de MAG/rank é capturado no lançamento pago do terceiro disparo e
+retido por ticket até formação. Recalcular atributos/ranks, editar ou retomar
+não recaptura a construção. Pedidos são cópias secundárias GEOMETRY, sem crítico,
+Teorema ou cascatas genéricas; nenhuma fórmula de defesa foi duplicada no campo.
+
+O gancho opcional existente dos projéteis delega triângulos ao novo campo.
+Contato contínuo usa a mesma área de ocupação, sem a faixa12 das paredes, e
+respeita vítima/terreno anterior. A-R acrescenta componente mágico uma vez no
+próximo impacto elegível; B-R emite um único arco para outro ocupante<=110.
+Para ambos, o impacto primário deve permanecer na área com LoS; se estiver fora,
+suspenso, expirado ou em outra identidade, os adicionais são descartados sem
+alterar o projétil base. Essa leitura conservadora do requisito de alvos na área
+está explícita no tooltip e nos testes. Nenhum alcance/piercing é renovado.
+Nascer dentro permite transformação; sair/reentrar não renova flags da instância.
+Traçado/Triangulação, secundários e outro dono não recebem esses adicionais.
+RRR funciona com o auto Mago real contra boss solo, sem inventar vizinho para arco.
+
+Apresentação mínima: preenchimento discreto da área sob os atores, marca pequena
+da regraB e um efeito dominanteC sobre o contorno real. Fogo expande/fissura,
+gelo converge/segmenta e raio percorre elos reais. Sem tempestades contínuas
+sobre cada vítima; reações compartilham o limite12 existente. Isso não fecha
+arte do personagem, onboarding, cenário denso, FPS ou balanceamento deG7.
+
+Evidências internas: `e05_geometer_triangle_recipes_test.gd`597 PASS, cobrindo
+27 receitas no rank mínimo/R5, gates, manutenção somada, slow, área/LoS, cadeia
+limitada, boss, snapshot, edição/Reescrita, mobilidade, pausa/suspensão/expiração.
+`e05_geometer_triangle_projectile_test.gd`192 PASS, cobrindo27 composições,
+contato finito/contínuo, prioridades, exclusões, payload único/piercing, ciclo
+de vida, snapshot do terceiro disparo pago, tooltip e auto solo30/60/144Hz.
+A fixtureG2/G3 desliga apenas o novo campo para continuar isolando geometria
+e morte; as suitesG5 exercitam dano/controle real pelo aplicador central.
+
+`geometer_g5_renderer_probe.gd` PASS em nove capturas OpenGL1280×720 inspecionadas:
+FFF fechamento/piso, GGG contenção, RRR fechamento/arco real, FGR composto,
+âncora móvel suspensa/retomada sem replay e expiração limpa. Capturas ignoradas
+em `.godot/verification/geometer_g5_*.png`. Regressão do rendererG4: sete estados
+PASS após os novos efeitos. Nenhuma fixture grava perfil persistente do usuário.
+
+`tools/verify.ps1` integral PASS (exit0): importação do editor,789 checksG5,
+276 checksG4, núcleo109, casting61, integração46, menu_tabs38, smoke, classes
+aceitas, persistência e administração12. Importação final também PASS.
+`git diff --check` PASS. Não houve publicação no diretório habitual, alteração
+de master ou microgate a Astra. Evidências internas não são aceite de produto.
+
+Próximo lote, mediante autorização do usuário: G6 — Translação, Reescrita,
+Colapso, Memória Vetorial e progressão/menu/build/save com duas builds legais.
+G7 fecha apresentação/integração e o único pacote de revisão da classe para Astra.

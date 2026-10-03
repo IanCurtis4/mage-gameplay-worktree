@@ -35,6 +35,7 @@ func _run() -> void:
 	boss = arena.training_boss
 	boss.set_process(false)
 	casting = arena.geometer_casting
+	casting.triangle_field.enabled = false # Isolate the geometry/death matrix from G5 resolution.
 	casting.construction_closed.connect(func(_result: Dictionary) -> void: closures += 1)
 	arena._training_add_elapsed = -1000.0
 	_reset()
