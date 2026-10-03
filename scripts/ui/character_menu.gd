@@ -58,6 +58,14 @@ var accessory_selector: OptionButton
 var save_build_button: Button
 var start_run_button: Button
 var menu_scroll: ScrollContainer
+var menu_tabs: TabContainer
+var identity_label: Label
+var skill_points_label: Label
+var skill_empty_label: Label
+var skill_search: LineEdit
+var equipment_empty_label: Label
+var create_panel: VBoxContainer
+var create_toggle: Button
 var menu_panel: VBoxContainer
 
 func set_profile_directory(directory: String) -> void:
@@ -76,7 +84,7 @@ func _ready() -> void:
 	_open_profile()
 
 func _unhandled_key_input(event: InputEvent) -> void:
-	if not event.is_pressed() or event.is_echo() or roster_list == null or roster_list.item_count == 0:
+	if not event.is_pressed() or event.is_echo() or roster_list == null or not roster_list.has_focus() or roster_list.item_count == 0:
 		return
 	if event.is_action_pressed(&"ui_up"):
 		_select_roster_index(maxi(0, _selected_index - 1))
@@ -133,9 +141,8 @@ func _select_roster_index(index: int) -> void:
 		build_summary_label.text = _build_summary(profile.characters[index])
 		_refresh_progression_panel(profile.characters[index], profile)
 		_refresh_start_run_action(profile)
-	select_button.disabled = false
-	preset_selector.disabled = _read_only
-	save_build_button.disabled = _read_only
+	select_button.disabled = _read_only
+	_set_build_controls_disabled(_read_only or profile.reward_session != null)
 
 func _choose_preset(preset_index: int) -> Dictionary:
 	var profile: Variant = facade.current_profile() if facade != null else null
@@ -200,6 +207,7 @@ func _selected_option(selector: OptionButton) -> Variant:
 	return selector.get_item_metadata(selector.selected)
 
 func _populate_build_editor(character: Variant) -> void:
+	identity_label.text = "%s  /  %s" % [character.display_name, _roster_identity_name(character)]
 	var options: Dictionary = facade.available_build_options(character.character_id)
 	if not options.get("ok", false):
 		return
@@ -211,6 +219,7 @@ func _populate_build_editor(character: Variant) -> void:
 	_populate_selector(weapon_selector, options["equipment_by_slot"][&"weapon"], preset["equipped"][&"weapon"])
 	_populate_selector(armor_selector, options["equipment_by_slot"][&"armor"], preset["equipped"][&"armor"])
 	_populate_selector(accessory_selector, options["equipment_by_slot"][&"accessory"], preset["equipped"][&"accessory"])
+	equipment_empty_label.visible = not weapon_selector.get_parent().visible and not armor_selector.get_parent().visible and not accessory_selector.get_parent().visible
 
 func _populate_selector(selector: OptionButton, values: Array, current: Variant) -> void:
 	selector.clear()
@@ -226,6 +235,8 @@ func _populate_selector(selector: OptionButton, values: Array, current: Variant)
 		if value == current:
 			current_index = index
 	selector.select(current_index)
+	if not is_skill_selector:
+		selector.get_parent().visible = not values.is_empty() or current != null
 
 func _show_result(result: Dictionary, success_text: String = "Perfil atualizado.") -> Dictionary:
 	var ok: bool = result.get("ok", false)
@@ -250,6 +261,7 @@ func _refresh() -> void:
 		roster_list.clear()
 		empty_label.visible = true
 		empty_label.text = "Não foi possível carregar os personagens."
+		identity_label.text = "Perfil indisponível"
 		for button: Button in create_buttons:
 			button.disabled = true
 		select_button.disabled = true
@@ -260,6 +272,7 @@ func _refresh() -> void:
 		save_build_button.disabled = true
 		start_run_button.disabled = true
 		start_run_button.text = "Iniciar run"
+		_set_build_controls_disabled(true)
 		_set_attribute_actions_disabled(true)
 		_set_skill_actions_disabled(true)
 		_refresh_playtest_controls(null)
@@ -269,7 +282,7 @@ func _refresh() -> void:
 	var persisted_index := -1
 	var focused_index := -1
 	for character: Variant in profile.characters:
-		var selected := "  • selecionado" if character.character_id == profile.selected_character_id else ""
+		var selected := "  • padrão" if character.character_id == profile.selected_character_id else ""
 		roster_list.add_item("%s — %s%s" % [character.display_name, _roster_identity_name(character), selected])
 		if character.character_id == profile.selected_character_id:
 			persisted_index = roster_list.item_count - 1
@@ -287,6 +300,8 @@ func _refresh() -> void:
 		build_summary_label.text = "Selecione ou crie um personagem para ver a build inicial."
 		_show_progression_message("Crie ou selecione um personagem para consultar a progressão.")
 		_show_evolution_message("Crie ou selecione um personagem para consultar a evolução.")
+	create_panel.visible = create_toggle.button_pressed or roster_list.item_count == 0
+	create_toggle.visible = roster_list.item_count > 0
 	empty_label.visible = roster_list.item_count == 0
 	empty_label.text = "Nenhum personagem criado. Crie seu primeiro alt para começar."
 	var locked := _read_only
@@ -294,10 +309,10 @@ func _refresh() -> void:
 		button.disabled = locked or profile.characters.size() >= MAX_CHARACTERS
 	select_button.disabled = locked or _selected_index < 0
 	preset_selector.disabled = locked or _selected_index < 0
-	save_build_button.disabled = locked or _selected_index < 0
+	_set_build_controls_disabled(locked or _selected_index < 0 or profile.reward_session != null)
 	_refresh_start_run_action(profile)
-	_set_attribute_actions_disabled(locked or profile.reward_session != null)
-	_set_skill_actions_disabled(locked or profile.reward_session != null)
+	_set_attribute_actions_disabled(locked or _selected_index < 0 or profile.reward_session != null)
+	_set_skill_actions_disabled(locked or _selected_index < 0 or profile.reward_session != null)
 	_refresh_playtest_controls(profile)
 	if profile.characters.size() >= MAX_CHARACTERS:
 		status_label.text = "Limite de %d personagens atingido." % MAX_CHARACTERS
@@ -378,7 +393,7 @@ func _build_summary(character: Variant) -> String:
 		return "Build indisponível (%s)." % preview.get("error_code", &"preview_failed")
 	var active_text := "Nenhuma" if active.is_empty() else ", ".join(active)
 	var passive_text := "Nenhuma" if passive.is_empty() else ", ".join(passive)
-	return "Build inicial\nAtivas: %s\nPassiva: %s\nArma: %s\nStats: Vida %d · SP %d · ATQ corpo %d · ATQ precisão %d · ATQ mágico %d" % [active_text, passive_text, _equipment_name(weapon), int(derived_stats.value(&"max_hp")), int(derived_stats.value(&"max_sp")), int(derived_stats.value(&"melee_attack")), int(derived_stats.value(&"precision_attack")), int(derived_stats.value(&"magic_attack"))]
+	return "Build salva\nAtivas: %s\nPassiva: %s\nArma: %s\nStats: Vida %d · SP %d · ATQ corpo %d · ATQ precisão %d · ATQ mágico %d" % [active_text, passive_text, _equipment_name(weapon), int(derived_stats.value(&"max_hp")), int(derived_stats.value(&"max_sp")), int(derived_stats.value(&"melee_attack")), int(derived_stats.value(&"precision_attack")), int(derived_stats.value(&"magic_attack"))]
 
 func _refresh_progression_panel(character: Variant, profile: Variant) -> void:
 	if character == null or facade == null:
@@ -393,35 +408,76 @@ func _refresh_progression_panel(character: Variant, profile: Variant) -> void:
 		_show_evolution_message("Não foi possível consultar a evolução deste personagem.")
 		return
 	var evolution_state := "Evolução disponível para este personagem." if summary["evolution_eligible"] else "Job bloqueado até evoluir." if summary["job_progress_blocked"] else "Evolução ainda não disponível."
+	if not character.evolution_id.is_empty():
+		evolution_state = "Evolução escolhida. Continue avançando seu job para liberar habilidades."
 	if profile.reward_session != null:
 		evolution_state = "Run ativa: a progressão é somente leitura até o encerramento."
 	progression_state_label.text = "XP base: %d · Nível base: %d\nXP job: %d · Nível de job: %d\n%s" % [character.base_xp_total, summary["base_level"], character.job_xp_total, summary["job_level"], evolution_state]
-	progression_wallets_label.text = "Pontos livres\nAtributos: %d/%d livres\nSkills base: %d/%d livres\nSkills de evolução: %d/%d livres" % [summary["attribute_points_available"], summary["attribute_points_granted"], summary["base_skill_points_available"], summary["base_skill_points_granted"], summary["evolution_skill_points_available"], summary["evolution_skill_points_granted"]]
+	progression_wallets_label.text = "Atributos: %d/%d livres" % [summary["attribute_points_available"], summary["attribute_points_granted"]]
 	var breakdown: StatBreakdown = preview["stat_breakdown"]
-	var attribute_lines: Array[String] = ["Atributos"]
+	var attribute_lines: Array[String] = []
+	var attribute_details: Array[String] = []
 	for attribute_id: StringName in IdentityIds.attribute_ids():
 		var detail := breakdown.primary_detail(attribute_id)
-		attribute_lines.append("%s: base %d · investido %d · base + investido: teto %d · efetivo %d · limite efetivo %d" % [_attribute_name(attribute_id), int(detail["initial"]), int(detail["allocated"]), StatCalculator.INVESTED_ATTRIBUTE_MAX, int(detail["effective"]), int(detail["maximum"])])
+		attribute_details.append("%s: base %d · investido %d · base + investido: teto %d · efetivo %d · limite efetivo %d" % [_attribute_name(attribute_id), int(detail["initial"]), int(detail["allocated"]), StatCalculator.INVESTED_ATTRIBUTE_MAX, int(detail["effective"]), int(detail["maximum"])])
+		attribute_increment_buttons[attribute_id].text = "%s  %d   /   +1" % [_attribute_name(attribute_id), int(detail["effective"])]
+		attribute_increment_buttons[attribute_id].tooltip_text = attribute_details[-1]
+		attribute_lines.append("%s   %d   (+%d investidos)" % [_attribute_name(attribute_id), int(detail["effective"]), int(detail["allocated"])])
 	progression_attributes_label.text = "\n".join(attribute_lines)
+	progression_attributes_label.tooltip_text = "\n".join(attribute_details)
+	skill_points_label.text = "Pontos de skills · Base: %d · Evolução: %d" % [summary["base_skill_points_available"], summary["evolution_skill_points_available"]]
 	_clear_progression_skill_tree()
-	for option: Dictionary in options["skills"]:
+	var skill_options: Array = options["skills"].duplicate()
+	skill_options.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		if a["metadata"]["wallet"] != b["metadata"]["wallet"]:
+			return a["metadata"]["wallet"] == ProfileCatalog.BASE_WALLET
+		return _skill_name(a["skill_id"]).naturalnocasecmp_to(_skill_name(b["skill_id"])) < 0
+	)
+	var previous_wallet: StringName = &""
+	for option: Dictionary in skill_options:
+		if not _skill_is_revealed(option, summary):
+			continue
+		if not skill_search.text.strip_edges().is_empty() and not _skill_name(option["skill_id"]).to_lower().contains(skill_search.text.strip_edges().to_lower()):
+			continue
+		var wallet: StringName = option["metadata"]["wallet"]
+		if previous_wallet != wallet:
+			_section_label(progression_skill_tree, "Classe base" if wallet == ProfileCatalog.BASE_WALLET else "Evolução", 19)
+			previous_wallet = wallet
 		var skill_label := Label.new()
 		var skill_id: StringName = option["skill_id"]
 		skill_label.name = "ProgressionSkill_%s" % skill_id
 		skill_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		skill_label.text = "%s — Rank %d/%d%s" % [_skill_name(skill_id), option["rank"], option["maximum_rank"], " · ramo futuro" if not option["available"] else ""]
+		skill_label.text = "%s — Rank %d/%d%s" % [_skill_name(skill_id), option["rank"], option["maximum_rank"], " · Passiva" if option["metadata"]["category"] == ProfileCatalog.PASSIVE else " · Ativa"]
 		skill_label.tooltip_text = _skill_progression_tooltip(option)
 		progression_skill_tree.add_child(skill_label)
 		var learn_button := Button.new()
 		learn_button.name = "Learn_%s" % skill_id
-		learn_button.text = "Comprar rank %d" % option["next_rank"] if option["next_rank"] != null else "Rank máximo"
+		learn_button.text = ("Aprender · 1 ponto" if option["rank"] == 0 else "Aprimorar para rank %d · 1 ponto" % option["next_rank"]) if option["next_rank"] != null else "Rank máximo"
+		if option["next_rank"] != null and not option["next_rank_available"]:
+			learn_button.text += " · %s" % ("sem pontos" if option["next_rank_error_code"] == &"insufficient_points" else "requisitos pendentes")
 		learn_button.tooltip_text = _skill_purchase_tooltip(option)
 		learn_button.disabled = _read_only or profile.reward_session != null or not option["next_rank_available"]
 		learn_button.pressed.connect(_learn_skill.bind(skill_id))
 		progression_skill_tree.add_child(learn_button)
+	skill_empty_label.visible = progression_skill_tree.get_child_count() == 0
+	skill_empty_label.text = "Nenhuma habilidade liberada corresponde à busca." if not skill_search.text.is_empty() else "As habilidades aparecem conforme seu job e os pré-requisitos avançam."
 	_set_attribute_actions_disabled(_read_only or profile.reward_session != null)
 	_set_skill_actions_disabled(_read_only or profile.reward_session != null)
 	_refresh_evolution_panel(character, profile)
+
+func _skill_is_revealed(option: Dictionary, summary: Dictionary) -> bool:
+	if not option["available"]:
+		return false
+	if int(option["rank"]) > 0:
+		return true
+	var requirement: Dictionary = option["next_rank_requirement"]
+	if int(summary["job_level"]) < int(requirement.get("job_level", 1)):
+		return false
+	var ranks: Dictionary = summary["effective_skill_ranks"]
+	for skill_id: Variant in requirement.get("skill_ranks", {}):
+		if int(ranks.get(skill_id, 0)) < int(requirement["skill_ranks"][skill_id]):
+			return false
+	return true
 
 func _refresh_evolution_panel(character: Variant, profile: Variant) -> void:
 	if evolution_panel == null:
@@ -443,10 +499,14 @@ func _refresh_evolution_panel(character: Variant, profile: Variant) -> void:
 			current_name = option["display_name"]
 	evolution_state_label.text = "Origem: %s\nEvolução atual: %s\nNível base %d · Job %d%s" % [_class_name(result["base_class_id"]), current_name, result["base_level"], result["job_level"], "\nModo admin: trocas de evolução liberadas para testes." if admin_mode else "\nA evolução fica fixa após a primeira escolha."]
 	for option: Dictionary in result["options"]:
+		if not option["content_ready"] or not option["requirements_met"] or option["is_current"]:
+			continue
+		if not admin_mode and not result["current_evolution_id"].is_empty():
+			continue
 		var option_label := Label.new()
 		option_label.name = "EvolutionOption_%s" % option["evolution_id"]
 		option_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		option_label.text = "%s · ramo %s\nRequisitos: base %d / job %d\n%s" % [option["display_name"], option["branch_kind"], option["required_base_level"], option["required_job_level"], _evolution_option_state(option)]
+		option_label.text = "%s · %s\nBase %d / job %d" % [option["display_name"], "Híbrida" if str(option["branch_kind"]) == "2-3" else "Evolução %s" % option["branch_kind"], option["required_base_level"], option["required_job_level"]]
 		evolution_options_list.add_child(option_label)
 		var choose_button := Button.new()
 		choose_button.name = "ChooseEvolution_%s" % option["evolution_id"]
@@ -455,6 +515,11 @@ func _refresh_evolution_panel(character: Variant, profile: Variant) -> void:
 		choose_button.tooltip_text = _evolution_option_tooltip(option)
 		choose_button.pressed.connect(_begin_evolution_change.bind(option["evolution_id"]))
 		evolution_options_list.add_child(choose_button)
+	var confirming := not _evolution_pending.is_empty()
+	evolution_confirmation_label.visible = confirming
+	confirm_evolution_button.get_parent().visible = confirming
+	if evolution_options_list.get_child_count() == 0 and result["current_evolution_id"].is_empty():
+		evolution_state_label.text += "\nNovas escolhas aparecem quando os requisitos de evolução forem atingidos."
 	if _evolution_pending.is_empty():
 		evolution_confirmation_label.text = "Escolher uma evolução pede confirmação; depois ela fica fixa. Trocas exigem modo admin de testes."
 		confirm_evolution_button.text = "Confirmar evolução"
@@ -498,6 +563,7 @@ func _begin_evolution_change(evolution_id: StringName) -> Dictionary:
 	}
 	_refresh()
 	status_label.text = "Escolha pendente: %s. Confirme a evolução para salvá-la." % option["display_name"]
+	menu_tabs.current_tab = 2
 	confirm_evolution_button.call_deferred("grab_focus")
 	menu_scroll.call_deferred("ensure_control_visible", confirm_evolution_button)
 	return {"ok": true, "pending_confirmation": true, "character_id": context["character_id"], "evolution_id": evolution_id}
@@ -560,6 +626,7 @@ func _show_evolution_message(message: String) -> void:
 		evolution_confirmation_label.text = ""
 	if confirm_evolution_button != null:
 		confirm_evolution_button.disabled = true
+		confirm_evolution_button.get_parent().visible = false
 	if cancel_evolution_button != null:
 		cancel_evolution_button.disabled = true
 
@@ -703,9 +770,21 @@ func _refresh_playtest_controls(profile: Variant) -> void:
 	for button: Button in playtest_buttons:
 		button.disabled = disabled or not playtest_toggle.button_pressed
 
+func _set_build_controls_disabled(disabled: bool) -> void:
+	preset_selector.disabled = disabled
+	save_build_button.disabled = disabled
+	for selector: OptionButton in active_selectors + passive_selectors + [weapon_selector, armor_selector, accessory_selector]:
+		selector.disabled = disabled
+
 func _set_attribute_actions_disabled(disabled: bool) -> void:
 	for button: Button in attribute_increment_buttons.values():
 		button.disabled = disabled
+	if not disabled and _selected_index >= 0:
+		var profile: ProfileState = facade.current_profile()
+		var summary: Dictionary = facade.progression_summary(profile.characters[_selected_index].character_id)
+		if summary.get("ok", false) and int(summary["attribute_points_available"]) <= 0:
+			for button: Button in attribute_increment_buttons.values():
+				button.disabled = true
 	if respec_attributes_button != null:
 		respec_attributes_button.disabled = disabled
 
@@ -719,6 +798,8 @@ func _show_progression_message(message: String) -> void:
 	progression_state_label.text = message
 	progression_wallets_label.text = ""
 	progression_attributes_label.text = ""
+	skill_points_label.text = "Selecione um personagem."
+	skill_empty_label.visible = true
 	_clear_progression_skill_tree()
 	_set_skill_actions_disabled(true)
 
@@ -791,46 +872,52 @@ func _request_id(action: String) -> String:
 func _layout_panel() -> void:
 	if menu_panel == null:
 		return
-	var half_height := clampf(get_viewport_rect().size.y * 0.5 - 20.0, 96.0, 300.0)
-	menu_panel.offset_top = -half_height
-	menu_panel.offset_bottom = half_height
+	var extent := get_viewport_rect().size
+	var width := minf(extent.x - 48.0, 1200.0)
+	menu_panel.position = Vector2((extent.x - width) * 0.5, 20)
+	menu_panel.size = Vector2(width, maxf(300, extent.y - 40))
 
 func _build_ui() -> void:
 	var background := ColorRect.new()
 	background.color = Color("101722")
 	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(background)
+	theme = _menu_theme()
 	menu_panel = VBoxContainer.new()
-	menu_panel.set_anchors_preset(Control.PRESET_CENTER)
-	menu_panel.offset_left = -410
-	menu_panel.offset_right = 410
-	menu_panel.add_theme_constant_override("separation", 14)
+	menu_panel.add_theme_constant_override("separation", 12)
 	add_child(menu_panel)
+	var header := HBoxContainer.new()
+	header.add_theme_constant_override("separation", 20)
+	menu_panel.add_child(header)
 	var title := Label.new()
-	title.text = "RagRPG — Personagens"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 32)
-	menu_panel.add_child(title)
-	status_label = Label.new()
-	status_label.name = "ProfileStatus"
-	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	menu_panel.add_child(status_label)
-	menu_scroll = ScrollContainer.new()
-	menu_scroll.name = "MenuScroll"
-	menu_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	menu_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	menu_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	menu_scroll.follow_focus = true
-	menu_panel.add_child(menu_scroll)
-	var content := HBoxContainer.new()
-	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	content.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-	content.add_theme_constant_override("separation", 18)
-	menu_scroll.add_child(content)
-	var roster_column := VBoxContainer.new()
-	roster_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	content.add_child(roster_column)
+	title.text = "RagRPG"
+	title.add_theme_font_size_override("font_size", 26)
+	header.add_child(title)
+	identity_label = Label.new()
+	identity_label.text = "Crie seu primeiro personagem"
+	identity_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	identity_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	header.add_child(identity_label)
+	preset_selector = OptionButton.new()
+	preset_selector.name = "PresetSelector"
+	preset_selector.add_item("Preset 1")
+	preset_selector.add_item("Preset 2")
+	preset_selector.item_selected.connect(_choose_preset)
+	header.add_child(preset_selector)
+	menu_tabs = TabContainer.new()
+	menu_tabs.name = "PreparationTabs"
+	menu_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	menu_panel.add_child(menu_tabs)
+	var character_page := _new_page("Personagem e atributos")
+	var skills_page := _new_page("Skills")
+	var class_page := _new_page("Classe e equipamento")
+	var roster_column := _scroll_column(character_page, 0.85)
+	var stats_column := _scroll_column(character_page, 1.15)
+	var skills_column := _scroll_column(skills_page, 1.2)
+	var slots_column := _scroll_column(skills_page, 1.0)
+	var class_column := _scroll_column(class_page, 1.0)
+	menu_scroll = class_column.get_parent().get_parent() as ScrollContainer
+	var gear_column := _scroll_column(class_page, 1.0)
 	var roster_title := Label.new()
 	roster_title.text = "Seus personagens"
 	roster_title.add_theme_font_size_override("font_size", 22)
@@ -838,7 +925,7 @@ func _build_ui() -> void:
 	roster_list = ItemList.new()
 	roster_list.name = "CharacterRoster"
 	roster_list.custom_minimum_size = Vector2(0, 96)
-	roster_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	roster_list.custom_minimum_size.y = 180
 	roster_list.item_selected.connect(_select_roster_index)
 	roster_list.item_activated.connect(select_character_at)
 	roster_column.add_child(roster_list)
@@ -847,24 +934,44 @@ func _build_ui() -> void:
 	empty_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	roster_column.add_child(empty_label)
 	select_button = Button.new()
-	select_button.text = "Selecionar personagem"
+	select_button.text = "Definir como personagem padrão"
 	select_button.custom_minimum_size = Vector2(0, 44)
 	select_button.pressed.connect(_select_current_character)
 	roster_column.add_child(select_button)
-	preset_selector = OptionButton.new()
-	preset_selector.name = "PresetSelector"
-	preset_selector.add_item("Preset 1")
-	preset_selector.add_item("Preset 2")
-	preset_selector.item_selected.connect(_choose_preset)
-	roster_column.add_child(preset_selector)
-	build_summary_label = Label.new()
-	build_summary_label.name = "BuildSummary"
-	build_summary_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	roster_column.add_child(build_summary_label)
+	create_toggle = Button.new()
+	create_toggle.text = "+ Novo personagem"
+	create_toggle.toggle_mode = true
+	roster_column.add_child(create_toggle)
+	create_panel = VBoxContainer.new()
+	create_panel.add_theme_constant_override("separation", 10)
+	roster_column.add_child(create_panel)
+	create_toggle.toggled.connect(func(expanded: bool) -> void: create_panel.visible = expanded)
+	var create_title := Label.new()
+	create_title.text = "Criar personagem"
+	create_title.add_theme_font_size_override("font_size", 22)
+	create_panel.add_child(create_title)
+	var description := Label.new()
+	description.text = "Escolha a classe de origem do novo personagem."
+	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	create_panel.add_child(description)
+	name_input = LineEdit.new()
+	name_input.name = "CharacterName"
+	name_input.placeholder_text = "Nome do personagem (opcional)"
+	name_input.max_length = 48
+	create_panel.add_child(name_input)
+	for class_id: StringName in [&"swordsman", &"mage", &"archer"]:
+		var button := Button.new()
+		button.text = "Criar %s" % _class_name(class_id)
+		button.custom_minimum_size = Vector2(0, 44)
+		button.pressed.connect(create_character.bind(class_id))
+		create_panel.add_child(button)
+		create_buttons.append(button)
+		if class_id == &"swordsman":
+			create_button = button
 	progression_panel = VBoxContainer.new()
 	progression_panel.name = "ProgressionPanel"
 	progression_panel.add_theme_constant_override("separation", 6)
-	roster_column.add_child(progression_panel)
+	stats_column.add_child(progression_panel)
 	var progression_title := Label.new()
 	progression_title.text = "Progressão"
 	progression_title.add_theme_font_size_override("font_size", 18)
@@ -873,41 +980,6 @@ func _build_ui() -> void:
 	progression_state_label.name = "ProgressionState"
 	progression_state_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	progression_panel.add_child(progression_state_label)
-	playtest_toggle = CheckButton.new()
-	playtest_toggle.name = "PlaytestAdminToggle"
-	playtest_toggle.text = "Modo admin de testes"
-	playtest_toggle.tooltip_text = "Abre XP e troca de evolução no save, além do treino isolado sem recompensa."
-	playtest_toggle.toggled.connect(func(_pressed: bool) -> void:
-		_discard_evolution_intent()
-		_refresh()
-	)
-	progression_panel.add_child(playtest_toggle)
-	playtest_panel = VBoxContainer.new()
-	playtest_panel.name = "PlaytestAdminPanel"
-	playtest_panel.visible = false
-	progression_panel.add_child(playtest_panel)
-	var playtest_notice := Label.new()
-	playtest_notice.text = "XP e troca de evolução alteram o save. Treino usa a build atual sem recompensa persistente."
-	playtest_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	playtest_panel.add_child(playtest_notice)
-	for shortcut: Dictionary in [
-		{"name": "PlaytestBaseXP", "text": "+1.000 XP base", "action": &"base_xp", "amount": 1000},
-		{"name": "PlaytestJobXP", "text": "+1.000 XP job", "action": &"job_xp", "amount": 1000},
-		{"name": "PlaytestPrepareEvolution", "text": "Preparar evolução (mín. base 10 / job 20)", "action": &"prepare_evolution", "amount": 0},
-		{"name": "PlaytestMaxLevels", "text": "Níveis máximos legais", "action": &"max_levels", "amount": 0},
-	]:
-		var button := Button.new()
-		button.name = shortcut["name"]
-		button.text = shortcut["text"]
-		button.pressed.connect(_apply_playtest_progression.bind(shortcut["action"], shortcut["amount"]))
-		playtest_panel.add_child(button)
-		playtest_buttons.append(button)
-	var training_button := Button.new()
-	training_button.name = "PlaytestTrainingBoss"
-	training_button.text = "Treinar contra boss e reforços (sem salvar XP)"
-	training_button.pressed.connect(_start_playtest_training)
-	playtest_panel.add_child(training_button)
-	playtest_buttons.append(training_button)
 	progression_wallets_label = Label.new()
 	progression_wallets_label.name = "ProgressionWallets"
 	progression_wallets_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -916,17 +988,24 @@ func _build_ui() -> void:
 	progression_attributes_label.name = "ProgressionAttributes"
 	progression_attributes_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	progression_panel.add_child(progression_attributes_label)
+	progression_attributes_label.visible = false
 	progression_attribute_actions = VBoxContainer.new()
 	progression_attribute_actions.name = "ProgressionAttributeActions"
 	progression_attribute_actions.add_theme_constant_override("separation", 2)
 	progression_panel.add_child(progression_attribute_actions)
+	var attribute_grid := GridContainer.new()
+	attribute_grid.columns = 2
+	attribute_grid.add_theme_constant_override("h_separation", 8)
+	attribute_grid.add_theme_constant_override("v_separation", 8)
+	progression_attribute_actions.add_child(attribute_grid)
 	for attribute_id: StringName in IdentityIds.attribute_ids():
 		var increment_button := Button.new()
 		increment_button.name = "Allocate_%s" % attribute_id
 		increment_button.text = "+1 %s" % _attribute_name(attribute_id)
 		increment_button.tooltip_text = "Investir 1 ponto de atributo via perfil."
 		increment_button.pressed.connect(_allocate_attribute.bind(attribute_id))
-		progression_attribute_actions.add_child(increment_button)
+		increment_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		attribute_grid.add_child(increment_button)
 		attribute_increment_buttons[attribute_id] = increment_button
 	respec_attributes_button = Button.new()
 	respec_attributes_button.name = "RespecAttributes"
@@ -934,24 +1013,54 @@ func _build_ui() -> void:
 	respec_attributes_button.tooltip_text = "Devolve os pontos de atributos investidos."
 	respec_attributes_button.pressed.connect(_respec_attributes)
 	progression_attribute_actions.add_child(respec_attributes_button)
+	build_summary_label = Label.new()
+	build_summary_label.name = "BuildSummary"
+	build_summary_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	stats_column.add_child(build_summary_label)
+	skill_points_label = _section_label(skills_column, "Pontos de skills", 18)
+	_section_label(skills_column, "Só habilidades liberadas para este personagem. Passe o mouse para ver requisitos e detalhes.", 14)
+	skill_search = LineEdit.new()
+	skill_search.placeholder_text = "Buscar habilidade..."
+	skill_search.clear_button_enabled = true
+	skills_column.add_child(skill_search)
+	skill_search.text_changed.connect(func(_text: String) -> void:
+		var profile: ProfileState = facade.current_profile() if facade != null else null
+		if profile != null and _selected_index >= 0:
+			_refresh_progression_panel(profile.characters[_selected_index], profile)
+	)
 	var skill_tree_title := Label.new()
 	skill_tree_title.text = "Árvore de skills"
 	skill_tree_title.add_theme_font_size_override("font_size", 16)
-	progression_panel.add_child(skill_tree_title)
+	skills_column.add_child(skill_tree_title)
 	progression_skill_tree = VBoxContainer.new()
 	progression_skill_tree.name = "ProgressionSkillTree"
 	progression_skill_tree.add_theme_constant_override("separation", 2)
-	progression_panel.add_child(progression_skill_tree)
+	skills_column.add_child(progression_skill_tree)
 	respec_skills_button = Button.new()
 	respec_skills_button.name = "RespecSkills"
 	respec_skills_button.text = "Redistribuir skills"
 	respec_skills_button.tooltip_text = "Devolve as compras das carteiras base e de evolução."
 	respec_skills_button.pressed.connect(_respec_skills)
-	progression_panel.add_child(respec_skills_button)
+	skills_column.add_child(respec_skills_button)
+	skill_empty_label = _section_label(skills_column, "As habilidades aparecem aqui conforme seu job e os pré-requisitos avançam.", 16)
+	_section_label(slots_column, "Skills equipadas", 22)
+	_section_label(slots_column, "Aprender libera a habilidade; escolha abaixo onde equipá-la. Alterações de slots são salvas ao escolher.", 14)
+	for index: int in CharacterState.ACTIVE_SLOT_COUNT:
+		var selector := _build_selector(slots_column, "Ativa %d" % (index + 1))
+		active_selectors.append(selector)
+		if index == 0:
+			active_slot_a = selector
+		elif index == 1:
+			active_slot_b = selector
+	for index: int in CharacterState.PASSIVE_SLOT_COUNT:
+		var selector := _build_selector(slots_column, "Passiva %d" % (index + 1))
+		passive_selectors.append(selector)
+		if index == 0:
+			passive_slot = selector
 	evolution_panel = VBoxContainer.new()
 	evolution_panel.name = "EvolutionPanel"
 	evolution_panel.add_theme_constant_override("separation", 4)
-	roster_column.add_child(evolution_panel)
+	class_column.add_child(evolution_panel)
 	var evolution_title := Label.new()
 	evolution_title.text = "Evolução"
 	evolution_title.add_theme_font_size_override("font_size", 18)
@@ -981,67 +1090,121 @@ func _build_ui() -> void:
 	cancel_evolution_button.text = "Cancelar"
 	cancel_evolution_button.pressed.connect(_cancel_evolution_change)
 	evolution_actions.add_child(cancel_evolution_button)
-	var editor_title := Label.new()
-	editor_title.text = "Editar preset legal"
-	editor_title.add_theme_font_size_override("font_size", 18)
-	roster_column.add_child(editor_title)
-	for index: int in CharacterState.ACTIVE_SLOT_COUNT:
-		var selector := _build_selector(roster_column, "Ativa %d" % (index + 1))
-		active_selectors.append(selector)
-		if index == 0:
-			active_slot_a = selector
-		elif index == 1:
-			active_slot_b = selector
-	for index: int in CharacterState.PASSIVE_SLOT_COUNT:
-		var selector := _build_selector(roster_column, "Passiva %d" % (index + 1))
-		passive_selectors.append(selector)
-		if index == 0:
-			passive_slot = selector
-	weapon_selector = _build_selector(roster_column, "Arma")
-	armor_selector = _build_selector(roster_column, "Armadura")
-	accessory_selector = _build_selector(roster_column, "Acessório")
-	save_build_button = Button.new()
-	save_build_button.text = "Salvar preset"
-	save_build_button.custom_minimum_size = Vector2(0, 40)
-	save_build_button.pressed.connect(_save_build)
-	roster_column.add_child(save_build_button)
-	var create_column := VBoxContainer.new()
-	create_column.custom_minimum_size = Vector2(310, 0)
-	create_column.add_theme_constant_override("separation", 10)
-	content.add_child(create_column)
-	var create_title := Label.new()
-	create_title.text = "Criar personagem"
-	create_title.add_theme_font_size_override("font_size", 22)
-	create_column.add_child(create_title)
-	var description := Label.new()
-	description.text = "Escolha uma classe disponível. A build será configurada no próximo passo do menu."
-	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	create_column.add_child(description)
-	name_input = LineEdit.new()
-	name_input.name = "CharacterName"
-	name_input.placeholder_text = "Nome do personagem (opcional)"
-	name_input.max_length = 48
-	create_column.add_child(name_input)
-	for class_id: StringName in [&"swordsman", &"mage", &"archer"]:
+	_section_label(gear_column, "Equipamento da build", 22)
+	weapon_selector = _build_selector(gear_column, "Arma")
+	armor_selector = _build_selector(gear_column, "Armadura")
+	accessory_selector = _build_selector(gear_column, "Acessório")
+	equipment_empty_label = _section_label(gear_column, "Ainda não há equipamentos disponíveis para esta classe. Os slots aparecem quando você obtiver itens compatíveis.", 16)
+	_section_label(gear_column, "Ferramentas de teste", 18)
+	playtest_toggle = CheckButton.new()
+	playtest_toggle.name = "PlaytestAdminToggle"
+	playtest_toggle.text = "Modo admin de testes"
+	playtest_toggle.tooltip_text = "Abre XP e troca de evolução no save, além do treino isolado sem recompensa."
+	playtest_toggle.toggled.connect(func(_pressed: bool) -> void:
+		_discard_evolution_intent()
+		_refresh()
+	)
+	gear_column.add_child(playtest_toggle)
+	playtest_panel = VBoxContainer.new()
+	playtest_panel.name = "PlaytestAdminPanel"
+	playtest_panel.visible = false
+	gear_column.add_child(playtest_panel)
+	var playtest_notice := Label.new()
+	playtest_notice.text = "XP e troca de evolução alteram o save. Treino usa a build atual sem recompensa persistente."
+	playtest_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	playtest_panel.add_child(playtest_notice)
+	for shortcut: Dictionary in [
+		{"name": "PlaytestBaseXP", "text": "+1.000 XP base", "action": &"base_xp", "amount": 1000},
+		{"name": "PlaytestJobXP", "text": "+1.000 XP job", "action": &"job_xp", "amount": 1000},
+		{"name": "PlaytestPrepareEvolution", "text": "Preparar evolução (mín. base 10 / job 20)", "action": &"prepare_evolution", "amount": 0},
+		{"name": "PlaytestMaxLevels", "text": "Níveis máximos legais", "action": &"max_levels", "amount": 0},
+	]:
 		var button := Button.new()
-		button.text = "Criar %s" % _class_name(class_id)
-		button.custom_minimum_size = Vector2(0, 44)
-		button.pressed.connect(create_character.bind(class_id))
-		create_column.add_child(button)
-		create_buttons.append(button)
-		if class_id == &"swordsman":
-			create_button = button
-	var notice := Label.new()
-	notice.text = "A arena será liberada após a configuração de build."
-	notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	create_column.add_child(notice)
+		button.name = shortcut["name"]
+		button.text = shortcut["text"]
+		button.pressed.connect(_apply_playtest_progression.bind(shortcut["action"], shortcut["amount"]))
+		playtest_panel.add_child(button)
+		playtest_buttons.append(button)
+	var training_button := Button.new()
+	training_button.name = "PlaytestTrainingBoss"
+	training_button.text = "Treinar contra boss e reforços (sem salvar XP)"
+	training_button.pressed.connect(_start_playtest_training)
+	playtest_panel.add_child(training_button)
+	playtest_buttons.append(training_button)
+	status_label = Label.new()
+	status_label.name = "ProfileStatus"
+	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	status_label.add_theme_color_override("font_color", Color("9ddbd3"))
+	menu_panel.add_child(status_label)
+	var footer := HBoxContainer.new()
+	footer.add_theme_constant_override("separation", 12)
+	menu_panel.add_child(footer)
+	save_build_button = Button.new()
+	save_build_button.text = "Salvar build"
+	save_build_button.tooltip_text = "Salva todas as skills e equipamentos da build selecionada."
+	save_build_button.pressed.connect(_save_build)
+	footer.add_child(save_build_button)
 	start_run_button = Button.new()
 	start_run_button.name = "StartRun"
 	start_run_button.text = "Iniciar run com este personagem"
 	start_run_button.tooltip_text = "Abrir a arena usando o personagem selecionado"
 	start_run_button.custom_minimum_size = Vector2(0, 48)
 	start_run_button.pressed.connect(_start_run)
-	menu_panel.add_child(start_run_button)
+	footer.add_child(start_run_button)
+	start_run_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	for selector: OptionButton in active_selectors + passive_selectors + [weapon_selector, armor_selector, accessory_selector]:
+		selector.item_selected.connect(func(_index: int) -> void: _save_build())
+
+func _new_page(title: String) -> HBoxContainer:
+	var page := HBoxContainer.new()
+	page.name = title
+	page.add_theme_constant_override("separation", 16)
+	menu_tabs.add_child(page)
+	return page
+
+func _scroll_column(parent: Container, ratio: float) -> VBoxContainer:
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_stretch_ratio = ratio
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.follow_focus = true
+	parent.add_child(scroll)
+	var margin := MarginContainer.new()
+	margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	for side: String in ["left", "right", "top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 16)
+	scroll.add_child(margin)
+	var column := VBoxContainer.new()
+	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	column.add_theme_constant_override("separation", 12)
+	margin.add_child(column)
+	return column
+
+func _section_label(parent: Container, text: String, font_size: int) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.add_theme_font_size_override("font_size", font_size)
+	parent.add_child(label)
+	return label
+
+func _menu_theme() -> Theme:
+	var result := Theme.new()
+	result.default_font_size = 16
+	result.set_color("font_color", "Label", Color("dce5ef"))
+	for type: String in ["Button", "OptionButton", "TabContainer"]:
+		for state: String in ["normal", "hover", "pressed", "disabled", "tab_selected", "tab_unselected", "panel"]:
+			var style := StyleBoxFlat.new()
+			style.bg_color = Color("25384a") if state in ["hover", "pressed", "tab_selected"] else Color("182331")
+			style.border_color = Color("71bdb7") if state in ["pressed", "tab_selected"] else Color("304155")
+			style.set_border_width_all(1)
+			style.set_corner_radius_all(5)
+			style.content_margin_left = 12
+			style.content_margin_right = 12
+			style.content_margin_top = 9
+			style.content_margin_bottom = 9
+			result.set_stylebox(state, type, style)
+	return result
 
 func _build_selector(parent: Container, label_text: String) -> OptionButton:
 	var row := HBoxContainer.new()
@@ -1051,7 +1214,9 @@ func _build_selector(parent: Container, label_text: String) -> OptionButton:
 	label.custom_minimum_size = Vector2(82, 0)
 	row.add_child(label)
 	var selector := OptionButton.new()
-	selector.custom_minimum_size = Vector2(190, 32)
+	selector.custom_minimum_size = Vector2(0, 38)
+	selector.fit_to_longest_item = false
+	selector.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(selector)
 	return selector
