@@ -103,6 +103,7 @@ var control_preferences := ControlPreferences.new()
 var battle_indicators: BattleIndicators
 var spiritualist_ground: SpiritualistHaloUnderlay
 var geometer_casting: GeometerCasting
+var geometer_onboarding: GeometerOnboarding
 var geometer_element_buttons: Dictionary[StringName, Button] = {}
 var _geometer_pointer_screen := Vector2.INF
 var trap_registry: PlayerTrapRegistry
@@ -756,6 +757,8 @@ func _spawn_encounter(index: int) -> void:
 func _spawn_enemy(enemy_type: StringName, spawn_position: Vector2) -> EnemyActor:
 	var enemy := EnemyActor.new()
 	enemy.configure(enemy_type, navigation, player)
+	# The Geometer's area already defines occupancy; do not cover it with status rings.
+	enemy.compact_control_visuals = player.is_geometer()
 	enemy.global_position = spawn_position
 	enemy.attack_requested.connect(_on_enemy_attack_requested)
 	enemy.actor_died.connect(_on_enemy_died)
@@ -1954,6 +1957,8 @@ func _show_combat_text(actor: CombatActor, text: String, color: Color, font_size
 	return label
 
 func _update_hud() -> void:
+	if geometer_onboarding != null:
+		geometer_onboarding.refresh()
 	if player == null or player.health == null:
 		return
 	health_label.text = "VIDA  %d / %d" % [ceili(player.health.current_hp), ceili(player.health.max_hp)]
@@ -2219,6 +2224,11 @@ func _build_ui() -> void:
 	var help_label := _make_label(help_text, 16, Color("d7ddea"))
 	help_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	help_panel.add_child(help_label)
+	if geometer_casting != null:
+		help_panel.hide()
+		geometer_onboarding = GeometerOnboarding.new()
+		ui_root.add_child(geometer_onboarding)
+		geometer_onboarding.configure(geometer_casting)
 	if run_state.build_snapshot != null and run_state.build_snapshot.evolution_id == &"spiritualist":
 		_build_spiritualist_panel()
 	if geometer_casting != null:

@@ -349,6 +349,38 @@ Fixtures habilitam somente esse gate para testar duas builds com compras legais,
 Tooltips explicam edição, prazos e consumo; nomes longos na barra não expandem
 a linha para fora da tela, conservando texto completo no hover/HUD.
 
+### Geômetra G7 — candidato integrado e apresentação
+
+O atlas próprio `geometer.png` usa o contrato de 32 células 64×64 de
+`CharacterAnimation`, incluindo frente/costas, caminhada, ação, hurt e morte,
+com alinhamento por pés e nearest. Fonte gerada e prompt ficam preservados em
+`assets/art/animation_sources`; `prepare_geometer_atlas.gd` reproduz o packing.
+Origem Mago, colisão, dano e relógios de combate independem desse asset.
+
+`GeometerOnboarding` é observador somente-leitura: mostra figura/ordem/vínculo,
+menor prazo restante, fila/suspensão e próximo comando; ajuda recolhível explica
+gates e a distinção Esc/limpeza/Colapso. Informações deixam cliques passarem;
+somente o botão do guia captura mouse. O antigo painel genérico é ocultado
+nessa identidade. Elementos/Desfazer e slots de skill permanecem nos controles
+existentes. Nenhuma preferência/save novo foi criado.
+
+Figuras mantêm área física real: paredes com faixa/direção, triângulos com seis
+motivos interiores pequenos por fundação, regras B e reações C limitadas. Vértices
+distinguem chama/cristal/raio e chão/vínculo; suspensão usa contorno tracejado
+acinzentado sem preenchimento ou manutenção ativa. Um relógio estritamente
+visual avança somente pela simulação não pausada. Nas runs Geômetra, inimigos
+recebem `compact_control_visuals`: slow/root indicados por pequenas marcas junto
+aos pés, preservando todas as regras de CC. Demais identidades mantêm o visual
+anterior. Não há dedução de dano ou aplicação de efeito no desenho.
+
+O candidato G7 habilita `content_ready=true` exclusivamente para `mg_ar`; outras
+identidades incompletas permanecem bloqueadas. Isso habilita o fluxo real de
+evolução/build no código candidato, não atualiza o diretório de playtest nem
+dispensa revisão técnica ou aceite humano. Sem mudança de schema/matemática.
+Probe denso compara 240 intervalos reais de frame por fase em janela 1080p, com
+20 inimigos e APIs de combate, mas delta de simulação explícito 1/60 e comparação
+sequencial observacional. Não substitui qualificação de FPS/gameplay pelo usuário.
+
 ### Procedimento
 
 Import headless detecta scripts/recursos inválidos; testes headless validam fórmulas,

@@ -42,7 +42,7 @@ func _run() -> void:
 	quit(0 if failures == 0 else 1)
 
 func _ready_catalog() -> ProfileCatalog:
-	return ProfileCatalog.pilot({}, {}, {&"mg_ar": {"content_ready": true}})
+	return ProfileCatalog.pilot()
 
 func _check_catalog() -> void:
 	var production := ProfileCatalog.pilot()
@@ -52,7 +52,7 @@ func _check_catalog() -> void:
 	_check(definition != null and definition.origin_class_id == &"mage" and definition.affinity_class_id == &"archer", "Geometer preserves mg_ar Mage origin and directional Archer affinity")
 	if definition == null:
 		return
-	_check(not definition.content_ready and not production.evolution_is_ready(&"mg_ar", &"mage"), "G6 does not publish the unfinished class")
+	_check(definition.content_ready and production.evolution_is_ready(&"mg_ar", &"mage"), "G7 candidate enables exactly the completed Geometer kit")
 	_check(definition.entry_skill_id == &"geometer_trace" and definition.exclusive_skill_ids == IDS, "one free entry and exactly seven ordered exclusive skills")
 	_check(ready.evolution_is_ready(&"mg_ar", &"mage") and ready.evolution_definition(&"mg_ar").exclusive_skill_ids == IDS, "content-ready-only override retains the real library")
 	var library := ready.skill_ids_for_identity(&"mage", &"mg_ar")
@@ -119,7 +119,8 @@ func _check_progression() -> void:
 	_check(not CharacterProgression.learn_skill(novice, catalog, &"geometer_translation")["ok"] and not CharacterProgression.summary(novice, catalog)["effective_skill_ranks"].has(&"geometer_trace"), "base Mage neither buys Geometer skills nor receives its free entry")
 
 func _check_production_gate() -> void:
-	var catalog := ProfileCatalog.pilot()
+	# Preserve G6 gate invariant using an explicitly blocked catalog fixture.
+	var catalog := ProfileCatalog.pilot({}, {}, {&"mg_ar": {"content_ready": false}})
 	var profile := _profile(40)
 	var directory := _directory("production")
 	_check(ProfileStore.new(directory, catalog).commit(profile)["ok"], "production-blocked Geometer fixture can be safely stored")
@@ -170,7 +171,7 @@ func _check_build(label: String, purchases: Dictionary, active: Array[Variant], 
 	var decoded := ProfileCodec.decode(encoded["text"], catalog)
 	_check(decoded["ok"] and not decoded.get("migrated", false), "%s current save round-trips without migration" % label)
 	var production_decoded := ProfileCodec.decode(encoded["text"])
-	_check(production_decoded["ok"] and production_decoded["profile"].character_by_id(character_id).purchased_skill_ranks == purchases, "%s production catalog preserves G6 saves while playability stays blocked" % label)
+	_check(production_decoded["ok"] and production_decoded["profile"].character_by_id(character_id).purchased_skill_ranks == purchases, "%s completed production catalog preserves G6 saves" % label)
 	var corrupt: Dictionary = encoded["data"].duplicate(true)
 	corrupt["characters"][0]["purchased_skill_ranks"]["geometer_trace"] = 5
 	_check(not ProfileCodec.decode(JSON.stringify(corrupt), catalog)["ok"], "%s codec refuses entry ranks over free-plus-four cap" % label)

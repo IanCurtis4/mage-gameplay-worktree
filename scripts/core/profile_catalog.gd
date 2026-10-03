@@ -493,8 +493,8 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 			definition.exclusive_skill_ids = [&"spiritualist_echo_curse", &"spiritualist_echo_recovery", &"spiritualist_soul_drain", &"spiritualist_spectral_veil", &"spiritualist_channel_focus", &"spiritualist_procession", &"spiritualist_dissipation"]
 		if definition.id == &"mg_ar" and (not normalized_overrides.has(definition.id) or (not normalized_overrides[definition.id].has("exclusive_skill_ids") and not normalized_overrides[definition.id].has(&"exclusive_skill_ids"))):
 			definition.entry_skill_id = &"geometer_trace"
-			# System library complete in G6; presentation/integrated gate remains G7.
-			definition.content_ready = false
+			# G7 integrated candidate; publishing playtest still requires technical review.
+			definition.content_ready = true
 			definition.exclusive_skill_ids = [&"geometer_trace", &"geometer_incidence", &"geometer_translation", &"geometer_triangulation", &"geometer_vector_memory", &"geometer_collapse", &"geometer_rewrite"]
 		if normalized_overrides.has(definition.id):
 			_apply_evolution_override(definition, normalized_overrides[definition.id])

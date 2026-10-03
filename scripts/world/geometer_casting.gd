@@ -22,6 +22,7 @@ var _shot_wall_snapshots: Dictionary[int, Dictionary] = {}
 var _shot_triangle_snapshots: Dictionary[int, Dictionary] = {}
 var _wall_reactions: Array[Dictionary] = []
 var _reaction_visual := WallReactionVisual.new()
+var _visual_time := 0.0
 
 func configure(caster: PlayerActor) -> void:
 	player = caster
@@ -158,6 +159,7 @@ func _report_delivery(result: Dictionary) -> void:
 func advance(delta: float) -> void:
 	if not is_finite(delta) or delta <= 0.0 or not is_instance_valid(player) or not player.is_alive() or (is_inside_tree() and get_tree().paused):
 		return
+	_visual_time = fmod(_visual_time + delta, TAU * 10.0)
 	interaction_ledger.sync(construction.construction_id)
 	interaction_ledger.advance(delta)
 	for reaction: Dictionary in _wall_reactions:
@@ -289,6 +291,7 @@ func _draw() -> void:
 		var elements := construction.elements()
 		var tint := Color("ffac68", 0.045) if elements[0] == &"fire" else (Color("a9e9ff", 0.055) if elements[0] == &"ice" else Color("ebe29b", 0.045))
 		draw_colored_polygon(polygon, tint)
+		_draw_foundation(polygon, elements[0])
 		var center := (polygon[0] + polygon[1] + polygon[2]) / 3.0
 		var mark := Color("cde6ed", 0.45)
 		if elements[1] == &"fire":
@@ -297,12 +300,19 @@ func _draw() -> void:
 			draw_polyline(PackedVector2Array([center + Vector2(0, -9), center + Vector2(7, 0), center + Vector2(0, 9), center + Vector2(-7, 0), center + Vector2(0, -9)]), mark, 1.0)
 		else:
 			draw_polyline(PackedVector2Array([center + Vector2(-8, 0), center + Vector2(-2, -6), center + Vector2(2, 6), center + Vector2(8, 0)]), Color("ebe29b", 0.5), 1.0)
-	var tint := Color("b5dce8", 0.6)
+	var tint := Color("b5dce8", 0.75) if not construction.suspended else Color("a4adb2", 0.40)
 	for segment: PackedVector2Array in outline_segments():
 		if construction.suspended or construction.shape == GeometerConstructionState.Shape.PREPARATION:
 			draw_dashed_line(to_local(segment[0]), to_local(segment[1]), tint, 1.5, 8.0)
 		else:
+			if construction.shape == GeometerConstructionState.Shape.WALL:
+				draw_line(to_local(segment[0]), to_local(segment[1]), Color(tint, 0.055), GeometerGeometry.WALL_HALF_WIDTH * 2.0)
 			draw_line(to_local(segment[0]), to_local(segment[1]), tint, 1.5)
+			if construction.shape == GeometerConstructionState.Shape.WALL:
+				var center := to_local(segment[0].lerp(segment[1], 0.5))
+				var axis := (segment[1] - segment[0]).normalized()
+				var side := axis.orthogonal()
+				draw_polyline(PackedVector2Array([center - axis * 6 + side * 4, center + axis * 4, center - axis * 6 - side * 4]), tint, 1.5)
 	for index: int in range(points.size()):
 		if points[index].is_finite():
 			_draw_vertex(to_local(points[index]), construction.vertices[index].element, construction.vertices[index].actor_id > 0)
@@ -328,7 +338,9 @@ func _draw() -> void:
 
 func _draw_vertex(point: Vector2, element: StringName, mobile: bool) -> void:
 	var tint := Color("ffac68") if element == &"fire" else (Color("a9e9ff") if element == &"ice" else Color("ebe29b"))
-	var glyph := PackedVector2Array([point + Vector2(0, -8), point + Vector2(7, 6), point + Vector2(-7, 6), point + Vector2(0, -8)])
+	if construction.suspended:
+		tint = Color("a4adb2", 0.45)
+	var glyph := PackedVector2Array([point + Vector2(0, -10), point + Vector2(7, 2), point + Vector2(4, 7), point + Vector2(-4, 7), point + Vector2(-7, 2), point + Vector2(-3, -3), point + Vector2(-2, 3), point + Vector2(0, -10)])
 	if element == &"ice":
 		glyph = PackedVector2Array([point + Vector2(0, -8), point + Vector2(7, 0), point + Vector2(0, 8), point + Vector2(-7, 0), point + Vector2(0, -8)])
 	elif element == &"lightning":
@@ -336,6 +348,27 @@ func _draw_vertex(point: Vector2, element: StringName, mobile: bool) -> void:
 	draw_polyline(glyph, tint, 2.0)
 	if mobile:
 		draw_arc(point, 12.0, 0.0, TAU, 20, tint, 1.0)
+		draw_line(point + Vector2(0, -12), point + Vector2(0, -19), tint, 1.0)
+		draw_circle(point + Vector2(0, -20), 2, tint)
+	else:
+		var base := PackedVector2Array()
+		for index: int in range(17):
+			base.append(point + Vector2(cos(index * TAU / 16) * 12, sin(index * TAU / 16) * 5 + 6))
+		draw_polyline(base, Color(tint, tint.a * 0.65), 1.0)
+
+func _draw_foundation(polygon: PackedVector2Array, element: StringName) -> void:
+	# Six small interior motifs, never a second region or an opaque carpet.
+	var center := (polygon[0] + polygon[1] + polygon[2]) / 3.0
+	for index: int in range(6):
+		var point := center.lerp(polygon[index % 3].lerp(polygon[(index + 1) % 3], 0.35 if index < 3 else 0.65), 0.50)
+		if element == &"fire":
+			var size := 2.0 + sin(_visual_time * 7 + index) * 0.6
+			draw_line(point + Vector2(-size, 1), point + Vector2(0, -size), Color("ffac68", 0.32), 1.5)
+			draw_line(point + Vector2(0, -size), point + Vector2(size, 1), Color("ffac68", 0.32), 1.0)
+		elif element == &"ice":
+			draw_polyline(PackedVector2Array([point + Vector2(0, -4), point + Vector2(3, 0), point + Vector2(0, 4), point + Vector2(-3, 0), point + Vector2(0, -4)]), Color("a9e9ff", 0.28), 1.0)
+		else:
+			draw_polyline(PackedVector2Array([point + Vector2(-4, 1), point + Vector2(-1, -2), point + Vector2(1, 2), point + Vector2(4, -1)]), Color("ebe29b", 0.28), 1.0)
 
 class WallReactionVisual extends Node2D:
 	## Sparse, short actual-interaction accents above bodies, separate from underlay.

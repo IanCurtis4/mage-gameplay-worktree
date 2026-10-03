@@ -2,19 +2,19 @@
 
 03/10/2026 — autorizada pelo usuário; condutor Sol6.1; base aceita8df3a67.
 Contrato vigente:E05_GEOMETER_PLAN.md, com precedência sobre âncoras estáticas
-obrigatórias do E00. G0–G6 integrados e validados internamente em fixture; classe completa
-ainda indisponível no catálogo de produção.
+obrigatórias do E00. G0–G7 integrados no candidato da branch de implementação.
+Biblioteca completa habilitada nessa branch; revisão técnica e playtest humano pendentes.
 
 | Camada | Estado | Commit/evidência | Próximo passo |
 |---|---|---|---|
 | G0 contratos | DONE (design) | 9527541; ajustes aprovados por Astra em02/10 | Semânticas fechadas; tuning ainda não aceito |
-| G1 input/disparo | DONE (interno) | construção107 + casting61 PASS; renderer4 PASS | Efeitos/progressão/arte final continuam pendentes |
-| G2 geometria estática | DONE (interno) | núcleo109 + integração46 PASS; renderer6 PASS | EfeitosG5 e aceite de produto pendentes |
-| G3 âncoras móveis | DONE (interno) | matriz real de morte/fila/suspensão/expiração; 30/60/144Hz | Manutenção da área móvel validada emG5; composição densa emG7 |
+| G1 input/disparo | DONE (interno) | construção107 + casting61 PASS; renderer4 PASS | Regressão integrada emG7 |
+| G2 geometria estática | DONE (interno) | núcleo109 + integração46 PASS; renderer6 PASS | Regressão integrada emG7; aceite de produto pendente |
+| G3 âncoras móveis | DONE (interno) | matriz real de morte/fila/suspensão/expiração; 30/60/144Hz | Composição densa validada emG7 |
 | G4 paredes6 | DONE (interno) | primitivas74 + receitas106 + projéteis96 PASS; renderer7 PASS | Regressão mantida emG5; tuning ainda não aceito |
-| G5 triângulos27 | DONE (interno) | receitas597 + projéteis192 PASS; renderer9 PASS | Regressão mantida emG6; arte final pendente |
-| G6 edição/progressão | DONE (interno) | edição375 + builds341 PASS; renderer8 PASS | Duas builds legais; fechamentoG7 pendente |
-| G7 visual/integração | PENDING | — | Revisão Astra e playtest |
+| G5 triângulos27 | DONE (interno) | receitas597 + projéteis192 PASS; renderer9 PASS | Regressão integrada emG7 |
+| G6 edição/progressão | DONE (interno) | edição375 + builds341 PASS; renderer8 PASS | Duas builds legais; preservadas emG7 |
+| G7 visual/integração | READY (revisão) | atlas101 + guia276 + integração500 + fluxo26 PASS; renderer15 PASS | Revisão Astra e playtest |
 
 Master permanece na entrega aceita do Espiritualista. Não iniciar outras
 classes, terreno quadrado/Ressonância ou painel de balanceamento. Não mover
@@ -420,3 +420,102 @@ implementador não substituem revisão independente de Astra ou playtest humano.
 Próximo lote, mediante autorização: G7 — apresentação final, onboarding e
 integração densa; então um único checkpoint da classe completa para revisão
 de Astra e candidato de playtest, sem confundir gate técnico com aceite humano.
+
+## G7 — apresentação e candidato integrado — 03/10/2026
+
+Usuário autorizou G7 sobre `317a48d`. Fecha a implementação da Geômetra no
+worktree E05, sem liberar outras classes/híbridas, terreno quadrado, Ressonância
+ou painel de balanceamento. O merge de menu em abas já estava incorporado
+(`cb0f0d3`); G7 não modifica seus contratos/core/save. Revisão é da classe inteira,
+não um gate por skill. Master e diretório habitual de playtest não foram alterados.
+
+Personagem deixa o fallback de Mago: cartógrafa/astrônoma de cabelo prateado,
+chapéu navy com pin triangular dourado, traje ivory/navy e arco instrumental,
+seguindo a referência aprovada por Astra. Um atlas próprio 256×512 com 32 poses,
+frente/costas, passos alternados, preparo/ação, hurt e morte. Fonte imagegen
+integrada e prompt final preservados em `assets/art/animation_sources/geometer_*`;
+normalização nearest/pés reproduzível por `prepare_geometer_atlas.gd`.
+Texturas são compartilhadas, relógio/pose por instância; morte copia o atlas e
+o alinhamento. Não existe acerto, colisão ou custo condicionado a frame visual.
+
+Gramática visual nativa: chama/cristal/raio, base elíptica de chão versus aro/vínculo,
+faixa finita e seta A→B nas paredes; seis motivos pequenos interiores por fundação
+do triângulo, marca B e um acento C. Suspensão tracejada/acinzentada sem piso ativo.
+Não foram geradas 33 sheets nem transformada a área triangular num losango.
+O teste denso mostrou excesso de círculos de slow/root; somente nas runs Geômetra,
+inimigos usam pequenos indicadores nos pés. Slow/root e orçamento do boss são
+os mesmos; outras classes mantêm seus círculos anteriores. Reações limitadas a 12.
+
+Onboarding: Caderno Geométrico compacto no lugar da ajuda genérica, com estado,
+sequência A/B/C, vínculo móvel ↟, menor prazo e próximo passo; guia recolhível para
+1/2/3, gates R1/R3/R5, corpo/chão/Shift, edição e Esc versus Backspace/Colapso.
+É somente-leitura e deixa cliques passarem fora do botão. Ajuda aberta não pausa,
+cancela mira ou altera SP/relógios; menus reais continuam pausando normalmente.
+
+`content_ready=true` agora apenas em `mg_ar` no candidato completo. Evolução
+Mago 10/job 20, Traçado R1 grátis sem autoequip, progressão/ranks/slots e save usam
+o catálogo/fachada vigentes. As builds G6 agora são exercitadas sem override;
+o teste de bloqueio histórico usa fixture explicitamente false, sem remover a
+invariante. Nenhum gate de outros placeholders foi afrouxado e nenhum schema novo.
+
+Regressão histórica: o menu em abas agora espera Geômetra disponível, mantendo
+o bloqueio do placeholder `mg_sw`. Os testes G1/G2/G3 de biblioteca parcial usam
+fixture explicitamente indisponível, em vez de exigir que o candidato completo
+continue bloqueado. O fluxo G7 verifica disponibilidade real sem override.
+
+Evidências novas G7 (903 checks):
+
+- Atlas 101: 32 células/alpha/pés/source regions, passos distintos, morte e Mago intacto.
+- Guia 276: vazio/A/preparação/parede/triângulo/trânsito/suspensão/pausa, requisitos,
+  invariância de estado e layout 1280/1920, expansão/recolhimento e mouse pass-through.
+- Integração 500: builds compradas legalmente em R1/R3/R5, cinco receitas representativas,
+  19 adds + Guardião (total 20), três disparos pagos, auto Mago e cinco flechas hostis
+  reais, contato 30/60/144 Hz, âncora móvel, pausa/suspensão/retomada, cap 12 e limpeza
+  síncrona por morte/resultado/reinício, evolução real com catálogo sem override.
+- Fluxo 26: dois Magos e foco diferente da seleção persistida; confirmação 10/20,
+  +1.000 XP job → 22 bloqueia Incidência; +500 → 23 libera; equipar/save/reload, treino
+  sem escrita/recompensa, run normal com atlas/guia, recompensa no dono correto.
+
+`geometer_g7_renderer_probe.gd`: 15 capturas PASS em Compatibility, incluindo
+silhueta final, parede/direção/interceptação real, FFF/GGG/RRR, tricolor móvel,
+suspensão/retomada, ajuda aberta/fechada, piso escuro, combate denso e limpeza.
+Fixtures elevam HP e congelam atores nas capturas para inspeção; não são teste
+de balanceamento. Obstáculos do cenário permanecem reais. Guardião é o chaser
+de treino vigente; não foi inventado um telegraph de boss que o runtime não possui.
+Capturas e relatório bruto ficam ignorados em `.godot/verification/geometer_g7_*`.
+
+Medição observacional na máquina Windows/i7-8700/GTX 1080, Godot 4.7.2 standard,
+gl_compatibility, janela 1920×1080 e viewport lógico 1280×720: 240 intervalos reais
+por fase após 60 frames de warmup, com 20 inimigos e APIs reais avançadas por
+delta explícito 1/60. Baseline sem figura: média 13,39 ms/p95 13,49 ms/pior 26,74 ms;
+RRR ativo: média 13,59 ms/p95 17,00 ms/pior 26,71 ms, até 3 reações simultâneas.
+Diferença de médias +0,20 ms não é custo isolado do campo: fases sequenciais,
+pacing/vsync/CPU/GPU misturados e estado dos atores evoluindo. Não demonstra
+60 FPS sustentados nem substitui playtest humano; tuning continua inicial.
+
+Fechamento: `tools/verify.ps1` PASS integral em Godot 4.7.2 standard, exit 0,
+incluindo import, regressões de menu/save/classes, todas as camadas Geômetra
+(2.900 checks), smoke da cena e admin de playtest. A primeira execução apontou
+a expectativa antiga de bloqueio no menu; a execução completa final passou
+após alinhar os testes históricos ao catálogo G7. `git diff --check` PASS.
+As 15 capturas finais foram inspecionadas pelo condutor, além da validação do
+probe; alpha, alinhamento, piso claro/escuro, ajuda recolhível e limpeza conferidos.
+
+### Revisão integrada de Astra e roteiro de produto
+
+Revisar Geômetra inteira desde a base aceita 8df3a67, com precedência de
+`E05_GEOMETER_PLAN.md`/`E05_GEOMETER_G0_PROPOSAL.md`; commits de sistemas G1–G6
+e este G7 compõem um candidato. Conferir gates/cards/mira, reservas/cobrança,
+geometria/nav/vínculos, seis paredes, 27 composições, snapshots/dedup/CC, edição,
+Colapso/TTL, duas builds/save e legibilidade do atlas/campo em piso claro/escuro.
+Testes automáticos/capturas do implementador não são reprodução independente.
+
+Após aceite técnico, Astra pode preparar rebase/FF de `codex/playtest`, preservando
+alterações do usuário e os menus aceitos. Roteiro humano: Mago 10/job 20→Geômetra,
+equipar Traçado grátis; testar uma parede por dois elementos distintos e preparação
+por iguais; no job 28 equipar Triangulação para C; experimentar puros R1/mistos R3/
+tricolor R5, chão/inimigo/Shift, vínculo móvel/morte, edição/Colapso/Esc/limpeza,
+duas builds G6 e boss solo/com adds. Avaliar leitura, tempo útil/SP, controle,
+animação/pés e FPS percebido; balanceamento não está automaticamente aprovado.
+Merge em master somente após aceite explícito do candidato testado. Não iniciar
+próxima classe/marco por completar G7.

@@ -218,6 +218,8 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 		animation_kind = &"elementalist"
 	elif _is_spiritualist():
 		animation_kind = &"spiritualist"
+	elif is_geometer():
+		animation_kind = &"geometer"
 	set_animation_kind(animation_kind)
 	max_sp = stat_breakdown.value(&"max_sp")
 	current_sp = max_sp

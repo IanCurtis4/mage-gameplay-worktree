@@ -17,6 +17,7 @@ var stat_breakdown: StatBreakdown
 var health: HealthState
 var collision_radius := 18.0
 var sprite_visual_scale := 1.0
+var compact_control_visuals := false
 var is_hovered := false
 var is_selected := false
 var _flash_time := 0.0
@@ -377,13 +378,23 @@ func _draw() -> void:
 	if not bleed_streams.is_empty():
 		draw_arc(Vector2(0, 4), collision_radius + 7.0, -PI * 0.75, PI * 0.25, 20, Color("d65572"), 2.0, true)
 	if slow_remaining > 0.0:
-		draw_arc(Vector2(0, 6), collision_radius + 9.0, 0.0, TAU, 24, Color("72c9ff"), 2.0, true)
+		if compact_control_visuals:
+			for side: float in [-1.0, 1.0]:
+				var point := Vector2(side * 12, 4)
+				draw_polyline(PackedVector2Array([point + Vector2(-side * 3, -2), point, point + Vector2(-side * 3, 2)]), Color("72c9ff"), 1.5, true)
+		else:
+			draw_arc(Vector2(0, 6), collision_radius + 9.0, 0.0, TAU, 24, Color("72c9ff"), 2.0, true)
 	if is_electrified():
 		for side: float in [-1.0, 1.0]:
 			var x := side * (collision_radius + 8.0)
 			draw_polyline(PackedVector2Array([Vector2(x, -34), Vector2(x - side * 5.0, -24), Vector2(x + side * 2.0, -24), Vector2(x - side * 4.0, -13)]), Color("e9d76a"), 2.5, true)
 	if is_rooted():
-		draw_arc(Vector2(0, 7), collision_radius + 12.0, 0.0, TAU, 24, Color("d9bd72"), 3.0, true)
+		if compact_control_visuals:
+			for side: float in [-1.0, 1.0]:
+				var point := Vector2(side * 8, 7)
+				draw_polyline(PackedVector2Array([point + Vector2(0, -4), point, point + Vector2(-side * 5, 0)]), Color("d9bd72"), 2.0, true)
+		else:
+			draw_arc(Vector2(0, 7), collision_radius + 12.0, 0.0, TAU, 24, Color("d9bd72"), 3.0, true)
 	if is_stunned():
 		draw_arc(Vector2(0, -18), collision_radius + 13.0, -PI * 0.9, -PI * 0.1, 20, Color("f9e585"), 3.0, true)
 	if is_feared():

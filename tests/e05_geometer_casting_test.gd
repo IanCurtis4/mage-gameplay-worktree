@@ -13,7 +13,7 @@ func _initialize() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
-	_check(not ProfileCatalog.pilot().evolution_is_ready(&"mg_ar", &"mage"), "partial library stays unavailable in production")
+	_check(not ProfileCatalog.pilot({}, {}, {&"mg_ar": {"content_ready": false}}).evolution_is_ready(&"mg_ar", &"mage"), "partial-library fixture stays unavailable even with the complete runtime library")
 	for skill: StringName in [&"geometer_trace", &"geometer_triangulation"]:
 		var definition := ClassCatalog.skill_definition(skill)
 		_check(definition.is_rank_catalog_valid() and definition.targeting == SkillDefinition.Targeting.POINT, "execution-only typed catalog for " + String(skill))

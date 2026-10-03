@@ -45,7 +45,7 @@ func _run() -> void:
 	_moving_figure()
 	_death_and_expiration()
 	_frame_rates()
-	_check(not ProfileCatalog.pilot().evolution_is_ready(&"mg_ar", &"mage"), "G2/G3 still do not unlock partial production library")
+	_check(not ProfileCatalog.pilot({}, {}, {&"mg_ar": {"content_ready": false}}).evolution_is_ready(&"mg_ar", &"mage"), "geometry alone does not unlock an explicitly unavailable library")
 	_reset()
 	var flight := _shoot(&"fire", A)
 	arena._show_result(false)

@@ -36,7 +36,7 @@ func _run() -> void:
 	menu.playtest_toggle.button_pressed = true
 	_check(menu._apply_playtest_progression(&"prepare_evolution")["ok"], "admin progression uses facade")
 	menu.playtest_toggle.button_pressed = false
-	_check(menu.evolution_options_list.get_node_or_null("ChooseEvolution_spiritualist") != null and menu.evolution_options_list.get_node_or_null("ChooseEvolution_mg_ar") == null, "gate exposes implemented choices only")
+	_check(menu.evolution_options_list.get_node_or_null("ChooseEvolution_spiritualist") != null and menu.evolution_options_list.get_node_or_null("ChooseEvolution_mg_ar") != null and menu.evolution_options_list.get_node_or_null("ChooseEvolution_mg_sw") == null, "gate exposes implemented choices, including Geometer, but not remaining placeholders")
 	_check(menu._begin_evolution_change(&"spiritualist")["ok"] and menu.menu_tabs.current_tab == 2, "confirmation opens in the class tab")
 	_check(menu._confirm_evolution_change()["ok"], "choose evolution")
 	_check(menu.evolution_options_list.get_child_count() == 0 and not menu.confirm_evolution_button.get_parent().visible, "evolution selection disappears after choice")
