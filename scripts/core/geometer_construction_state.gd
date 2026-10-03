@@ -54,14 +54,20 @@ func _commit_deliveries(deliveries: Array[Dictionary], alive_positions: Dictiona
 			var carrier_id := int(delivery["actor_id"])
 			var point: Vector2 = delivery["point"]
 			# A successful impact waiting for earlier shots may outlive its carrier.
-			# It deposits at that impact's ground point, without binding a corpse.
+			# Queued impacts retain their latest valid ground and elapsed lifetime.
 			if carrier_id > 0:
 				if alive_positions.has(carrier_id):
 					point = alive_positions[carrier_id]
 				else:
 					carrier_id = 0
 			var context: Dictionary = delivery["context"]
-			result = add_vertex(delivery["element"], point, carrier_id, int(context["triangle_rank"]), navigation, float(context["vertex_duration"]), float(context["figure_duration"]))
+			var remaining := float(context["vertex_duration"]) - float(delivery.get("impact_age", 0.0))
+			if remaining <= 0.0:
+				clear()
+				result["reason"] = "Vértice expirado."
+				results.append(result)
+				break
+			result = add_vertex(delivery["element"], point, carrier_id, int(context["triangle_rank"]), navigation, remaining, float(context["figure_duration"]))
 			result["ticket"] = delivery["ticket"]
 		results.append(result)
 	return results
@@ -117,6 +123,7 @@ func edit(point: Vector2, carrier_id: int, rewrite: bool, triangle_rank: int, na
 	return result
 
 func refresh(alive_positions: Dictionary[int, Vector2], navigation: ArenaNavigation) -> void:
+	grammar.refresh_impacts(alive_positions, navigation)
 	for anchor: GeometerAnchor in vertices:
 		anchor.refresh(alive_positions, navigation)
 	suspended = not vertices.is_empty() and not GeometerGeometry.validate(positions(), navigation)["ok"]
@@ -135,7 +142,13 @@ func advance(delta: float, alive_positions: Dictionary[int, Vector2], navigation
 		if figure_remaining <= 0.0:
 			clear()
 			return []
-	return _commit_deliveries(grammar.advance(delta), alive_positions, navigation)
+	var ready := grammar.advance(delta)
+	# Expiry wins even if a shorter-lived impact still waits behind a flight.
+	for delivery: Dictionary in ready + grammar.pending_snapshot():
+		if bool(delivery["resolved"]) and bool(delivery["success"]) and float(delivery["context"]["vertex_duration"]) <= float(delivery["impact_age"]):
+			clear()
+			return [{"ok": false, "reason": "Vértice expirado.", "ticket": delivery["ticket"], "formation": false}]
+	return _commit_deliveries(ready, alive_positions, navigation)
 
 func has_active_figure() -> bool:
 	return shape in [Shape.WALL, Shape.TRIANGLE] and not suspended and figure_remaining > 0.0

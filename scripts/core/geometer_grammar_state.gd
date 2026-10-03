@@ -33,6 +33,8 @@ func resolve(ticket: int, success: bool, position: Vector2) -> Array[Dictionary]
 			delivery["success"] = success and position.is_finite()
 			if bool(delivery["success"]):
 				delivery["point"] = position
+				delivery["last_valid_ground"] = position
+				delivery["impact_age"] = 0.0
 			found = true
 			break
 	if not found:
@@ -44,12 +46,31 @@ func advance(delta: float) -> Array[Dictionary]:
 		return []
 	for delivery: Dictionary in _pending:
 		if bool(delivery["resolved"]):
+			if bool(delivery["success"]):
+				delivery["impact_age"] = float(delivery["impact_age"]) + delta
 			continue
 		delivery["remaining"] = maxf(0.0, float(delivery["remaining"]) - delta)
 		if float(delivery["remaining"]) <= 0.0:
 			delivery["resolved"] = true
 			delivery["success"] = false
 	return _drain_ready()
+
+func refresh_impacts(alive_positions: Dictionary[int, Vector2], navigation: ArenaNavigation) -> void:
+	# A confirmed impact is already an anchor, even while FIFO holds its commit.
+	for delivery: Dictionary in _pending:
+		if not bool(delivery["resolved"]) or not bool(delivery["success"]):
+			continue
+		var carrier_id := int(delivery["actor_id"])
+		if carrier_id == 0:
+			continue
+		if not alive_positions.has(carrier_id):
+			delivery["actor_id"] = 0
+			delivery["point"] = delivery["last_valid_ground"]
+			continue
+		var point: Vector2 = alive_positions[carrier_id]
+		delivery["point"] = point
+		if point.is_finite() and navigation != null and navigation.is_segment_clear(point, point, 0.0):
+			delivery["last_valid_ground"] = point
 
 func _drain_ready() -> Array[Dictionary]:
 	var ready: Array[Dictionary] = []

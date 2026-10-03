@@ -174,6 +174,14 @@ func _construction() -> void:
 	third = state.reserve_shot(C, 0, true, 3, nav)
 	results = state.resolve_shot(third, true, Vector2(250, 100), alive, nav)
 	_check(not results[0]["ok"] and state.shape == GeometerConstructionState.Shape.WALL and state.positions() == PackedVector2Array([A, B]), "invalid third impact preserves prior wall")
+	state.clear()
+	first = state.reserve_shot(A, 0, false, 0, nav)
+	second = state.reserve_shot(B, 0, false, 0, nav, 1.0, 6.0, &"ice")
+	state.resolve_shot(second, true, B, alive, nav)
+	results = state.advance(1.1, alive, nav)
+	_check(state.vertices.is_empty() and state.grammar.pending_count() == 0 and not results[-1]["ok"], "queued impact expiry clears immediately, even before earlier flight returns")
+	results = state.resolve_shot(first, true, A, alive, nav)
+	_check(state.vertices.is_empty() and results.is_empty(), "earlier flight cannot revive construction after queued anchor expiry")
 
 func _mobile() -> void:
 	var nav := _nav([Rect2(500, 200, 50, 50)])

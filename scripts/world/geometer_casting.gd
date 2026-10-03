@@ -71,6 +71,7 @@ func _on_delivered(ticket: int, success: bool, point: Vector2, victim: CombatAct
 		hit.emit(projectile.request, victim)
 	for result: Dictionary in construction.resolve_shot(ticket, success, point, alive_positions(), player.navigation):
 		_report_delivery(result)
+	_retire_invalid_flights()
 	queue_redraw()
 
 func _report_delivery(result: Dictionary) -> void:
@@ -84,7 +85,17 @@ func advance(delta: float) -> void:
 		return
 	for result: Dictionary in construction.advance(delta, alive_positions(), player.navigation):
 		_report_delivery(result)
+	_retire_invalid_flights()
 	queue_redraw()
+
+func _retire_invalid_flights() -> void:
+	var active_tickets: Array[int] = []
+	for pending: Dictionary in construction.grammar.pending_snapshot():
+		if not bool(pending["resolved"]):
+			active_tickets.append(int(pending["ticket"]))
+	for child: Node in get_children():
+		if child is GeometerTraceProjectile and child.ticket not in active_tickets:
+			child.queue_free()
 
 func select(element: StringName) -> bool:
 	if not is_instance_valid(player) or not player.is_geometer() or not player.is_alive() or (is_inside_tree() and get_tree().paused):
@@ -100,17 +111,29 @@ func clear_construction() -> void:
 			child.queue_free()
 	queue_redraw()
 
+func outline_segments() -> Array[PackedVector2Array]:
+	var points := construction.positions()
+	var segments: Array[PackedVector2Array] = []
+	if points.size() < 2:
+		return segments
+	for index: int in range(3 if points.size() == 3 else 1):
+		var next := (index + 1) % points.size()
+		if points[index].is_finite() and points[next].is_finite():
+			segments.append(PackedVector2Array([points[index], points[next]]))
+	return segments
+
 func _draw() -> void:
 	var points := construction.positions()
 	var tint := Color("b5dce8", 0.6)
-	if construction.suspended or construction.shape == GeometerConstructionState.Shape.PREPARATION:
-		for index: int in range(maxi(0, points.size() - 1)):
-			draw_dashed_line(to_local(points[index]), to_local(points[index + 1]), tint, 1.5, 8.0)
-	elif points.size() >= 2:
-		for index: int in range(points.size() if points.size() == 3 else 1):
-			draw_line(to_local(points[index]), to_local(points[(index + 1) % points.size()]), tint, 1.5)
+	for segment: PackedVector2Array in outline_segments():
+		if construction.suspended or construction.shape == GeometerConstructionState.Shape.PREPARATION:
+			draw_dashed_line(to_local(segment[0]), to_local(segment[1]), tint, 1.5, 8.0)
+		else:
+			draw_line(to_local(segment[0]), to_local(segment[1]), tint, 1.5)
 	for index: int in range(points.size()):
-		_draw_vertex(to_local(points[index]), construction.vertices[index].element, construction.vertices[index].actor_id > 0)
+		if points[index].is_finite():
+			_draw_vertex(to_local(points[index]), construction.vertices[index].element, construction.vertices[index].actor_id > 0)
+			draw_string(ThemeDB.fallback_font, to_local(points[index]) + Vector2(14, 4), str(index + 1), HORIZONTAL_ALIGNMENT_LEFT, -1.0, 12, tint)
 	if preview_command != null:
 		var point := preview_command.point
 		for actor: CombatActor in targets:
@@ -119,9 +142,9 @@ func _draw() -> void:
 		if point.is_finite():
 			var preview_tint := Color("87e0cf") if preview_valid else Color("ff8b8b")
 			draw_arc(to_local(point), 15.0, 0.0, TAU, 24, preview_tint, 1.5)
-			if not points.is_empty():
+			if not points.is_empty() and points[-1].is_finite():
 				draw_dashed_line(to_local(points[-1]), to_local(point), preview_tint, 1.0, 7.0)
-			if points.size() == 2:
+			if points.size() == 2 and points[0].is_finite():
 				draw_dashed_line(to_local(point), to_local(points[0]), preview_tint, 1.0, 7.0)
 
 func _draw_vertex(point: Vector2, element: StringName, mobile: bool) -> void:

@@ -1,16 +1,16 @@
 # E05 — checkpoint único da Geômetra
 
-02/10/2026 — autorizada pelo usuário; condutor Sol6.1; base aceita8df3a67.
+03/10/2026 — autorizada pelo usuário; condutor Sol6.1; base aceita8df3a67.
 Contrato vigente:E05_GEOMETER_PLAN.md, com precedência sobre âncoras estáticas
-obrigatórias do E00. G0 e input/disparo G1 integrados em fixture; classe completa
+obrigatórias do E00. G0–G3 integrados e validados internamente em fixture; classe completa
 ainda indisponível no catálogo de produção.
 
 | Camada | Estado | Commit/evidência | Próximo passo |
 |---|---|---|---|
 | G0 contratos | DONE (design) | 9527541; ajustes aprovados por Astra em02/10 | Semânticas fechadas; tuning ainda não aceito |
 | G1 input/disparo | DONE (interno) | construção107 + casting61 PASS; renderer4 PASS | Efeitos/progressão/arte final continuam pendentes |
-| G2 geometria estática | PARTIAL (integração) | núcleo7292583; preview e projétil conectados emG1 | Completar matriz de falhas no encontro real |
-| G3 âncoras móveis | PARTIAL (integração) | vínculo real ao boss em casting61/renderer4 | Completar morte/suspensão/expiração integrada |
+| G2 geometria estática | DONE (interno) | núcleo109 + integração46 PASS; renderer6 PASS | Sem efeitosG4/G5 nem aceite de produto |
+| G3 âncoras móveis | DONE (interno) | matriz real de morte/fila/suspensão/expiração; 30/60/144Hz | Cadências de efeitos móveis ainda serão validadas emG4/G5 |
 | G4 paredes6 | PENDING | semânticas emG0 | Implementar gatilhos reais e dedup |
 | G5 triângulos27 | PENDING | — | Puros → mistos → tricolores |
 | G6 edição/progressão | PENDING | — | Duas builds legais |
@@ -103,3 +103,44 @@ gate/handoff micro a Astra, nenhuma atualização de playtest/master.
 Próxima rodada pequena: fechar matrizG2/G3 no encontro real (duas entregas fora de
 ordem, morte com outros portadores, degeneração/obstáculos, retorno e expiração),
 antes dos cruzamentos/transformações das seis paredesG4.
+
+## G2/G3 — matriz integrada de geometria e portadores — 03/10/2026
+
+Rodada pequena autorizada pelo usuário, retomada sobre01db84a. O teste
+`e05_geometer_geometry_integration_test.gd` usa a cena real, projéteis reais,
+callback canônico de morte e boss vivo, sem escrever perfil. Seus46 checks
+cobrem duas chegadas fora de ordem/timeout, perda de portador na fila,
+obstáculo encerrado na área durante voo, AABB sem interseção, barreira temporária,
+pares iguais, terceiro inválido por movimento, misturas estáticas/móveis,
+inversão de orientação, degeneração, distância, pausa e expiração inteira.
+Em30/60/144Hz, suspensão/retomada preserva relógios/identidade e não repeteC.
+Esses testes não afirmam cadência/dano dos futuros campos, que ainda não existem.
+
+Defeitos encontrados e corrigidos dentro do contrato: impactos já confirmados
+mas retidos pela fila agora consomem seu prazo desde o impacto e acompanham a
+última posição válida do portador. Morte não volta ao ponto inicial nem concede
+mais8s. Expiração de um impacto retido também limpa imediatamente, sem esperar
+o voo anterior. O núcleo passou109 checks, incluindo esse prazo curto válido.
+A figura inicia seu relógio quando efetivamente formada; parede→triângulo
+continua preservando seu prazo. Disparos inválidos por expiração/timeout são
+retirados visualmente no mesmo avanço; callback tardio não causa dano ou âncora.
+Regressão de seleção/cobrança/input: casting61 PASS.
+
+Underlay conserva as três bordas reais inclusive suspenso, ignora coordenadas
+não finitas e mostra ordem1/2/3 discretamente. `geometer_g23_renderer_probe.gd`
+passou seis estados OpenGL1280×720 inspecionados: triângulo ativo, degenerado,
+retomado, depositado no chão, geometria inválida e expiração limpa. Esse probe
+isola apresentação por remoção do portador na lista; morte real é coberta no
+teste de integração. Capturas ignoradas em `.godot/verification/geometer_g23_*.png`.
+Arte continua fallback Mago; onboarding final, cenário denso e FPS pertencemG7.
+
+`tools/verify.ps1` integral PASS (exit0), incluindo importação do editor,
+núcleo109, casting61, integração46 e regressões de persistência, input,
+combate e classes aceitas. `git diff --check` PASS. Playtest91b5f63 e
+master8df3a67 continuam limpos e inalterados. Esta rodada não equivale a
+aprovação independente de Astra, aceitação humana ou classe completa jogável.
+
+Próximo lote pequeno: primitivasG4 de travessia real (ator move, parede não
+varre vítimas), contato contínuo e registros de deduplicação por construção.
+Depois integrar as seis receitas e transformações dentro do contratoG0.
+Sem habilitar catálogo parcial, sem gate por camada ou atualização de playtest/master.
