@@ -11,7 +11,7 @@ antes da abertura. A autorização humana foi conferida no chat de Astra.
 Geômetra revisada está em playtest, sem aceite de produto inferido por iniciar
 Sentinela. Diretório habitual/codex-playtest e saves pessoais permanecem intactos.
 
-Próximo passo: S3, Tiro Perfurante; seguir S3–S7
+Próximo passo: S4, Rede e depois Explosivo; seguir S4–S7
 autonomamente, um bloco/skill por vez, sem gate nem handoff intermediário.
 
 ## Abertura / S0
@@ -43,6 +43,12 @@ limpeza); regressão de perseguição/inércia 41 PASS. Trajetória própria e e
 SEM FOCO acompanham o disparo. Arte original gerada para normalização posterior.
 
 ## Registro compacto a manter pelo condutor
+
+S2 commit 4e20f95. S3 fechado: Perfurante direcional sem alvo, um projétil mágico
+INT+DES com crítico normal, atravessa corpos uma vez e para em paredes/alcance.
+CD DES local aplicado antes do modificador canônico; mira acompanha cursor.
+219 checks PASS: 30/60/144 Hz e delta longo, deduplicação, parede, snapshot,
+marca e isolamento de atributos/CD. Cabeça 126 checks PASS novamente.
 
 Para cada unidade concluída: camada/skill, commit, teste/resultado, decisão
 relevante e próxima unidade. Registrar uso somente quando mensurável. Não

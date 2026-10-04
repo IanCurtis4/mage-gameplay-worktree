@@ -181,7 +181,9 @@ func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast
 	origin = actor.global_position
 	direction = actor.shield_facing if skill_id == &"shield_wall" and actor.has_shield_stance() else actor.aim_direction(point)
 	target_actor = selected_target
-	if skill == &"elementalist_flame_burst":
+	if skill == &"sentinel_piercing_shot":
+		endpoint = origin + direction * actor.skill_range(skill)
+	elif skill == &"elementalist_flame_burst":
 		endpoint = elemental_clamped_point(origin, point, actor.skill_range(skill))
 	elif skill == &"spiritualist_spectral_veil":
 		endpoint = actor.spiritualist_veil_center(point)
@@ -515,7 +517,7 @@ func _draw() -> void:
 		draw_colored_polygon(outline.slice(0, outline.size() - 1), Color(color, 0.16))
 		draw_polyline(outline, color, 2.0, true)
 		draw_arc(origin, active_range * 0.55, direction.angle() - PlayerActor.HAUNT_HALF_ANGLE, direction.angle() + PlayerActor.HAUNT_HALF_ANGLE, 22, Color(color, 0.5), 1.0, true)
-	elif skill in [&"fire_spear", &"ice_spear", &"lightning", &"electric_discharge", &"slowing_arrow"]:
+	elif skill in [&"fire_spear", &"ice_spear", &"lightning", &"electric_discharge", &"slowing_arrow", &"sentinel_headshot", &"sentinel_observe"]:
 		draw_dashed_line(origin, endpoint, color, 2.0, 10.0, true, true)
 		_draw_endpoint(endpoint, color)
 	elif skill == &"double_shot":
@@ -523,7 +525,7 @@ func _draw() -> void:
 		draw_line(origin + direction.orthogonal() * 7.0, endpoint + direction.orthogonal() * 7.0, Color(color, 0.35), 1.0, true)
 		draw_line(origin - direction.orthogonal() * 7.0, endpoint - direction.orthogonal() * 7.0, Color(color, 0.35), 1.0, true)
 		_draw_endpoint(endpoint, color)
-	elif skill == &"piercing_arrow":
+	elif skill in [&"piercing_arrow", &"sentinel_piercing_shot"]:
 		draw_line(origin, endpoint, Color(0.04, 0.09, 0.12, 0.9), 5.0, true)
 		draw_line(origin, endpoint, color, 2.0, true)
 		for ratio: float in [0.25, 0.50, 0.75]:

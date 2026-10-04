@@ -267,15 +267,20 @@ func use_sentinel_observe(enemy: CombatActor) -> bool:
 	return true
 
 func use_sentinel_reset(skill_id: StringName, point: Vector2, enemy: CombatActor = null) -> bool:
-	if skill_id != &"sentinel_headshot" or not point.is_finite() or not sentinel_can_use(skill_id):
+	if skill_id not in [&"sentinel_headshot", &"sentinel_piercing_shot"] or not point.is_finite() or not sentinel_can_use(skill_id):
 		return false
-	if not can_target_skill(skill_id, enemy) or navigation == null or not navigation.is_segment_clear(global_position, enemy.global_position, 0.0):
+	if navigation == null:
 		return false
-	var facing := _resolved_facing(aim_direction(enemy.global_position))
+	var piercing := skill_id == &"sentinel_piercing_shot"
+	if not piercing and (not can_target_skill(skill_id, enemy) or not navigation.is_segment_clear(global_position, enemy.global_position, 0.0)):
+		return false
+	if piercing and (point.distance_squared_to(global_position) < 0.001 or not navigation.is_walkable(global_position)):
+		return false
+	var facing := _resolved_facing(aim_direction(point if piercing else enemy.global_position))
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var tuning := SentinelTuning.values(skill_id, skill_rank(skill_id))
 	var power := SentinelMath.raw_power(skill_id, skill_rank(skill_id), stat_breakdown)
-	var request := _make_physical_request(enemy, skill_id, power, definition.accuracy_mode, definition.can_crit)
+	var request := _make_magic_request(null, skill_id, power, definition.accuracy_mode, definition.can_crit) if piercing else _make_physical_request(enemy, skill_id, power, definition.accuracy_mode, definition.can_crit)
 	# Validation complete: one special launch replaces the next ordinary shot.
 	cancel_active_cast()
 	_spend(skill_id)
@@ -2389,7 +2394,7 @@ func _spend(skill_id: StringName) -> void:
 	var cost := rank_definition.sp_cost if rank_definition != null else definition.sp_cost
 	var base_cooldown := rank_definition.cooldown if rank_definition != null else definition.cooldown
 	current_sp -= cost
-	var cooldown := StatCalculator.effective_cooldown(base_cooldown, stat_breakdown)
+	var cooldown := SentinelMath.cooldown(skill_id, base_cooldown, stat_breakdown) if is_sentinel() else StatCalculator.effective_cooldown(base_cooldown, stat_breakdown)
 	if skill_id == &"slash":
 		slash_cooldown = cooldown
 	elif skill_id == &"dash":

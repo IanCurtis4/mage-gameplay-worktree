@@ -364,7 +364,7 @@ func _on_skill_cast_ready(skill: StringName, point: Vector2, target_id: int) -> 
 	_execute_skill(skill, point, selected_target)
 
 func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatActor = null) -> void:
-	if skill == &"sentinel_headshot":
+	if skill in [&"sentinel_headshot", &"sentinel_piercing_shot"]:
 		if not player.use_sentinel_reset(skill, point, selected_target):
 			_report_skill_failure(skill, selected_target)
 		return
@@ -919,7 +919,11 @@ func _on_precision_projectile_requested(skill_id: StringName, request: DamageReq
 
 func _on_sentinel_projectile_requested(request: DamageRequest, target_actor: CombatActor, direction: Vector2, payload: Dictionary) -> void:
 	var projectile := SentinelProjectile.new()
-	projectile.configure_homing(request.copy(), target_actor, player.global_position + Vector2(0, -18), navigation, float(payload["projectile_speed"]), float(payload["range"]), Color("d7f0de"))
+	var origin := player.global_position + PlayerProjectile.BODY_OFFSET
+	if request.skill_id == &"sentinel_piercing_shot":
+		projectile.configure_directional(request.copy(), origin, direction, enemies, navigation, float(payload["projectile_speed"]), float(payload["range"]), 20, Color("a6e3ee"))
+	else:
+		projectile.configure_homing(request.copy(), target_actor, origin, navigation, float(payload["projectile_speed"]), float(payload["range"]), Color("d7f0de"))
 	projectile.direction = direction
 	projectile.hit.connect(_on_precision_projectile_hit)
 	add_child(projectile)
