@@ -305,6 +305,29 @@ func _start_sentinel_recovery(facing: Vector2) -> void:
 func sentinel_can_use(skill_id: StringName) -> bool:
 	return is_sentinel() and not is_stunned() and not is_feared() and not (is_inside_tree() and get_tree().paused) and _can_spend(skill_id) and sentinel_state.can_pay(float(SentinelTuning.values(skill_id, skill_rank(skill_id)).get("focus_cost", 0.0)))
 
+func sentinel_net_center(point: Vector2) -> Vector2:
+	return global_position + (point - global_position).limit_length(skill_range(&"sentinel_net_shot"))
+
+func can_place_sentinel_net(point: Vector2) -> bool:
+	return point.is_finite() and navigation != null and navigation.is_walkable(sentinel_net_center(point))
+
+func use_sentinel_net(point: Vector2) -> bool:
+	var id := &"sentinel_net_shot"
+	if not sentinel_can_use(id) or not can_place_sentinel_net(point):
+		return false
+	var center := sentinel_net_center(point)
+	var tuning := SentinelTuning.values(id, skill_rank(id))
+	var request := _make_magic_request(null, id, SentinelMath.raw_power(id, skill_rank(id), stat_breakdown), DamageRequest.AccuracyMode.GEOMETRY, true)
+	var facing := _resolved_facing(aim_direction(center))
+	_spend(id)
+	var payload := tuning.duplicate(true)
+	payload["endpoint"] = center
+	payload["range"] = global_position.distance_to(center)
+	sentinel_projectile_requested.emit(request, null, facing, payload)
+	presentation_action.emit(&"cast_release", facing, 0.15)
+	resources_changed.emit()
+	return true
+
 func record_sentinel_damage(result: Dictionary) -> void:
 	if not is_sentinel() or not is_alive() or not bool(result.get("can_trigger_effects", false)) or float(result.get("actual_damage", 0.0)) <= 0.0:
 		return
@@ -1870,6 +1893,8 @@ func begin_skill_cast(skill_id: StringName, point: Vector2, enemy: CombatActor =
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var cast_time := skill_cast_time(skill_id)
 	if definition == null or cast_time <= 0.0 or skill_id not in available_skill_ids() or not _can_spend(skill_id):
+		return false
+	if skill_id == &"sentinel_net_shot" and (not sentinel_can_use(skill_id) or not can_place_sentinel_net(point)):
 		return false
 	if definition.targeting == SkillDefinition.Targeting.SINGLE_TARGET and not can_target_skill(skill_id, enemy):
 		return false

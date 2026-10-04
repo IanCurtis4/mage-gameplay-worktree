@@ -13,5 +13,9 @@ func _draw() -> void:
 		draw_line(Vector2(-17, -3), Vector2(6, -3), Color("69a6af"), 1.0)
 		draw_line(Vector2(-17, 3), Vector2(6, 3), Color("69a6af"), 1.0)
 		draw_colored_polygon(PackedVector2Array([Vector2(16, 0), Vector2(7, -5), Vector2(10, 0), Vector2(7, 5)]), Color.WHITE)
+	elif id == &"sentinel_net_shot":
+		draw_arc(Vector2.ZERO, 8.0, 0.0, TAU, 16, Color("bddfd1"), 1.5)
+		draw_line(Vector2(-6, -6), Vector2(6, 6), Color.WHITE, 1.0)
+		draw_line(Vector2(-6, 6), Vector2(6, -6), Color.WHITE, 1.0)
 	else:
 		super._draw()

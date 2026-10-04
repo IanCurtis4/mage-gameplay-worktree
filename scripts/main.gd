@@ -364,6 +364,10 @@ func _on_skill_cast_ready(skill: StringName, point: Vector2, target_id: int) -> 
 	_execute_skill(skill, point, selected_target)
 
 func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatActor = null) -> void:
+	if skill == &"sentinel_net_shot":
+		if not player.use_sentinel_net(point):
+			_report_skill_failure(skill, selected_target)
+		return
 	if skill in [&"sentinel_headshot", &"sentinel_piercing_shot"]:
 		if not player.use_sentinel_reset(skill, point, selected_target):
 			_report_skill_failure(skill, selected_target)
@@ -918,6 +922,16 @@ func _on_precision_projectile_requested(skill_id: StringName, request: DamageReq
 	_spawn_precision_projectiles(skill_id, request, direction, count, hit_limit, _on_precision_projectile_hit)
 
 func _on_sentinel_projectile_requested(request: DamageRequest, target_actor: CombatActor, direction: Vector2, payload: Dictionary) -> void:
+	if request.skill_id == &"sentinel_net_shot":
+		var area := SentinelAreaProjectile.new()
+		var origin := player.global_position + PlayerProjectile.BODY_OFFSET
+		area.configure_directional(request.copy(), origin, direction, enemies, navigation, float(payload["projectile_speed"]), float(payload["range"]))
+		area.endpoint = Vector2(payload["endpoint"]) + PlayerProjectile.BODY_OFFSET
+		area.payload = payload.duplicate(true)
+		area.burst.connect(_on_sentinel_burst)
+		add_child(area)
+		area.add_to_group("player_projectiles")
+		return
 	var projectile := SentinelProjectile.new()
 	var origin := player.global_position + PlayerProjectile.BODY_OFFSET
 	if request.skill_id == &"sentinel_piercing_shot":
@@ -928,6 +942,27 @@ func _on_sentinel_projectile_requested(request: DamageRequest, target_actor: Com
 	projectile.hit.connect(_on_precision_projectile_hit)
 	add_child(projectile)
 	projectile.add_to_group("player_projectiles")
+
+func _on_sentinel_burst(center: Vector2, request: DamageRequest, payload: Dictionary) -> void:
+	var visual := SentinelBurst.new()
+	visual.position = center
+	visual.radius = float(payload["radius"])
+	visual.skill_id = request.skill_id
+	add_child(visual)
+	visual.add_to_group("player_effects")
+	var seen: Dictionary[int, bool] = {}
+	for enemy: CombatActor in enemies:
+		if not is_instance_valid(enemy) or not enemy.is_alive() or seen.has(enemy.get_instance_id()):
+			continue
+		if center.distance_to(enemy.global_position) > float(payload["radius"]) + enemy.collision_radius or not navigation.is_segment_clear(center + PlayerProjectile.BODY_OFFSET, enemy.global_position + PlayerProjectile.BODY_OFFSET, 0.0):
+			continue
+		seen[enemy.get_instance_id()] = true
+		var hit_request := request.copy()
+		hit_request.target_id = enemy.get_instance_id()
+		# Health emits the direct impact/proc before any new root is applied.
+		var result := enemy.apply_damage(hit_request, rng)
+		if enemy.is_alive() and float(result.get("actual_damage", 0.0)) > 0.0 and request.skill_id == &"sentinel_net_shot":
+			enemy.apply_root(float(payload["root_duration"]), &"magic")
 
 func _on_discharge_requested(request: DamageRequest, direction: Vector2, bonus_magic_damage: float) -> void:
 	var projectile := MageProjectile.new()

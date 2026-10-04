@@ -183,6 +183,8 @@ func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast
 	target_actor = selected_target
 	if skill == &"sentinel_piercing_shot":
 		endpoint = origin + direction * actor.skill_range(skill)
+	elif skill == &"sentinel_net_shot":
+		endpoint = actor.sentinel_net_center(point)
 	elif skill == &"elementalist_flame_burst":
 		endpoint = elemental_clamped_point(origin, point, actor.skill_range(skill))
 	elif skill == &"spiritualist_spectral_veil":
@@ -532,6 +534,13 @@ func _draw() -> void:
 			var marker := origin.lerp(endpoint, ratio)
 			draw_line(marker - direction.orthogonal() * 5.0, marker + direction.orthogonal() * 5.0, Color(color, 0.7), 1.5, true)
 		_draw_endpoint(endpoint, color)
+	elif skill == &"sentinel_net_shot":
+		var radius := float(SentinelTuning.values(skill, 1)["radius"])
+		draw_dashed_line(origin, endpoint, Color(color, 0.55), 1.5, 9.0, true, true)
+		draw_arc(endpoint, radius, 0.0, TAU, 48, color, 2.0, true)
+		for offset: float in [-0.5, 0.0, 0.5]:
+			var half := sqrt(radius * radius * (1.0 - offset * offset))
+			draw_line(endpoint + Vector2(-half, offset * radius), endpoint + Vector2(half, offset * radius), Color(color, 0.4), 1.0)
 	elif skill == &"arrow_rain":
 		draw_dashed_line(origin, endpoint, Color(color, 0.55), 1.5, 9.0, true, true)
 		draw_circle(endpoint, ArrowRain.RADIUS, Color(color, 0.13))
