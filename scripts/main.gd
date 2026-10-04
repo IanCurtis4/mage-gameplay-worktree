@@ -161,6 +161,7 @@ func _ready() -> void:
 	player.mage_projectile_requested.connect(_on_mage_projectile_requested)
 	player.discharge_requested.connect(_on_discharge_requested)
 	player.precision_projectile_requested.connect(_on_precision_projectile_requested)
+	player.sentinel_projectile_requested.connect(_on_sentinel_projectile_requested)
 	player.arrow_rain_requested.connect(_on_arrow_rain_requested)
 	player.snare_trap_requested.connect(_on_snare_trap_requested)
 	player.explosive_trap_requested.connect(_on_explosive_trap_requested)
@@ -363,6 +364,10 @@ func _on_skill_cast_ready(skill: StringName, point: Vector2, target_id: int) -> 
 	_execute_skill(skill, point, selected_target)
 
 func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatActor = null) -> void:
+	if skill == &"sentinel_headshot":
+		if not player.use_sentinel_reset(skill, point, selected_target):
+			_report_skill_failure(skill, selected_target)
+		return
 	if skill == &"sentinel_observe":
 		if not player.use_sentinel_observe(selected_target):
 			_report_skill_failure(skill, selected_target)
@@ -911,6 +916,14 @@ func _on_mage_projectile_requested(skill_id: StringName, request: DamageRequest,
 
 func _on_precision_projectile_requested(skill_id: StringName, request: DamageRequest, _target_actor: CombatActor, direction: Vector2, count: int, hit_limit: int) -> void:
 	_spawn_precision_projectiles(skill_id, request, direction, count, hit_limit, _on_precision_projectile_hit)
+
+func _on_sentinel_projectile_requested(request: DamageRequest, target_actor: CombatActor, direction: Vector2, payload: Dictionary) -> void:
+	var projectile := SentinelProjectile.new()
+	projectile.configure_homing(request.copy(), target_actor, player.global_position + Vector2(0, -18), navigation, float(payload["projectile_speed"]), float(payload["range"]), Color("d7f0de"))
+	projectile.direction = direction
+	projectile.hit.connect(_on_precision_projectile_hit)
+	add_child(projectile)
+	projectile.add_to_group("player_projectiles")
 
 func _on_discharge_requested(request: DamageRequest, direction: Vector2, bonus_magic_damage: float) -> void:
 	var projectile := MageProjectile.new()
@@ -2027,6 +2040,11 @@ func _display_skill_state(skill_id: StringName, sp_cost: float) -> String:
 func _skill_state(cooldown: float, sp_cost: float, skill_id: StringName = &"") -> String:
 	if cooldown > 0.0:
 		return "RECARGA %.1fs" % cooldown
+	if player.is_sentinel():
+		if skill_id in SentinelTuning.SKILL_IDS and not player.sentinel_state.can_pay(float(SentinelTuning.values(skill_id, player.skill_rank(skill_id)).get("focus_cost", 0.0))):
+			return "SEM FOCO"
+		if player.sentinel_free_sp() < sp_cost:
+			return "SEM SP LIVRE"
 	if player.current_sp < sp_cost:
 		return "SEM SP"
 	if skill_id == &"berserker_execution" and not player.can_pay_berserker_execution_hp():

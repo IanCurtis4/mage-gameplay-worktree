@@ -10,6 +10,7 @@ signal berserker_breath_hit_requested(request: DamageRequest, target: CombatActo
 signal mage_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int)
 signal discharge_requested(request: DamageRequest, direction: Vector2, bonus_magic_damage: float)
 signal precision_projectile_requested(skill_id: StringName, request: DamageRequest, target: CombatActor, direction: Vector2, count: int, hit_limit: int)
+signal sentinel_projectile_requested(request: DamageRequest, target: CombatActor, direction: Vector2, payload: Dictionary)
 signal arrow_rain_requested(center: Vector2, request: DamageRequest)
 signal snare_trap_requested(center: Vector2, root_duration: float)
 signal explosive_trap_requested(center: Vector2, request: DamageRequest)
@@ -119,6 +120,7 @@ var sentinel_combat_active := false
 var _sentinel_last_position := Vector2.INF
 var _sentinel_stance_active := false
 var _sentinel_emission_serial := 0
+var _sentinel_last_launch_frame := -1
 var slash_cooldown := 0.0
 var dash_cooldown := 0.0
 var mage_cooldowns: Dictionary[StringName, float] = {}
@@ -263,6 +265,37 @@ func use_sentinel_observe(enemy: CombatActor) -> bool:
 	presentation_action.emit(&"cast_release", _resolved_facing(aim_direction(enemy.global_position)), 0.15)
 	resources_changed.emit()
 	return true
+
+func use_sentinel_reset(skill_id: StringName, point: Vector2, enemy: CombatActor = null) -> bool:
+	if skill_id != &"sentinel_headshot" or not point.is_finite() or not sentinel_can_use(skill_id):
+		return false
+	if not can_target_skill(skill_id, enemy) or navigation == null or not navigation.is_segment_clear(global_position, enemy.global_position, 0.0):
+		return false
+	var facing := _resolved_facing(aim_direction(enemy.global_position))
+	var definition := ClassCatalog.skill_definition(skill_id)
+	var tuning := SentinelTuning.values(skill_id, skill_rank(skill_id))
+	var power := SentinelMath.raw_power(skill_id, skill_rank(skill_id), stat_breakdown)
+	var request := _make_physical_request(enemy, skill_id, power, definition.accuracy_mode, definition.can_crit)
+	# Validation complete: one special launch replaces the next ordinary shot.
+	cancel_active_cast()
+	_spend(skill_id)
+	sentinel_state.spend(float(tuning["focus_cost"]))
+	_start_sentinel_recovery(facing)
+	var payload := tuning.duplicate(true)
+	payload["range"] = skill_range(skill_id)
+	sentinel_projectile_requested.emit(request, enemy, facing, payload)
+	resources_changed.emit()
+	return true
+
+func _start_sentinel_recovery(facing: Vector2) -> void:
+	attack_cooldown = 1.0 / attacks_per_second()
+	_attack_recovery = BASIC_ATTACK_RECOVERY
+	_sentinel_last_launch_frame = Engine.get_process_frames()
+	_path.clear()
+	_has_path_goal = false
+	velocity = Vector2.ZERO
+	reveal_from_offense()
+	presentation_action.emit(&"basic_attack", facing, BASIC_ATTACK_RECOVERY)
 
 func sentinel_can_use(skill_id: StringName) -> bool:
 	return is_sentinel() and not is_stunned() and not is_feared() and not (is_inside_tree() and get_tree().paused) and _can_spend(skill_id) and sentinel_state.can_pay(float(SentinelTuning.values(skill_id, skill_rank(skill_id)).get("focus_cost", 0.0)))
@@ -2270,6 +2303,8 @@ func heal_from_kill() -> float:
 	return healed
 
 func _try_basic_attack() -> void:
+	if is_sentinel() and _sentinel_last_launch_frame == Engine.get_process_frames():
+		return
 	if target == null or attack_cooldown > 0.0 or not can_basic_attack(target, _attack_engaged):
 		return
 	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)

@@ -11,7 +11,7 @@ antes da abertura. A autorização humana foi conferida no chat de Astra.
 Geômetra revisada está em playtest, sem aceite de produto inferido por iniciar
 Sentinela. Diretório habitual/codex-playtest e saves pessoais permanecem intactos.
 
-Próximo passo: S2, transação de reset/Tiro na Cabeça; seguir S2–S7
+Próximo passo: S3, Tiro Perfurante; seguir S3–S7
 autonomamente, um bloco/skill por vez, sem gate nem handoff intermediário.
 
 ## Abertura / S0
@@ -34,6 +34,13 @@ Postura condicional no StatCalculator, retirada antes do auto após deslocamento
 Medidor/retículo/marca mínimos acompanham o sistema, sem save novo. Teste real e
 pure: 338 checks PASS em 30/60/144 Hz, sem multiplicar ganho por AoE; hit letal
 válido é distinguido de alvo previamente morto. S7 fará acabamento de apresentação.
+
+S1 commit a258cec. S2 fechado: Cabeça valida alvo/LoS/SP/Foco/CC antes de cobrar,
+emite um projétil com snapshot e inicia recuperação normal do auto. Um guard por
+frame impede auto comum posterior no mesmo frame, inclusive com delta grande.
+126 checks PASS (ranks, recusas, três modos de input, projétil real, pausa e
+limpeza); regressão de perseguição/inércia 41 PASS. Trajetória própria e estado
+SEM FOCO acompanham o disparo. Arte original gerada para normalização posterior.
 
 ## Registro compacto a manter pelo condutor
 
