@@ -824,6 +824,14 @@ func _skill_progression_tooltip(option: Dictionary) -> String:
 		lines.append("Pré-requisitos: %s" % (", ".join(prerequisites) if not prerequisites.is_empty() else "nenhum"))
 	else:
 		lines.append("Rank máximo atingido.")
+	var skill_id := StringName(option["skill_id"])
+	if skill_id in SentinelTuning.SKILL_IDS:
+		var current_rank := int(option["rank"])
+		if current_rank > 0:
+			lines.append("Atual R%d: %s" % [current_rank, ClassCatalog.sentinel_description(skill_id, current_rank)])
+		if option["next_rank"] != null:
+			var next_rank := int(option["next_rank"])
+			lines.append("Próximo R%d: %s" % [next_rank, ClassCatalog.sentinel_description(skill_id, next_rank)])
 	match StringName(option["skill_id"]):
 		&"spiritualist_echo_curse":
 			lines.append("Maldição marca o alvo e inimigos próximos em raio de 110 com linha de visão.")

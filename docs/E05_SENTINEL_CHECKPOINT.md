@@ -11,7 +11,7 @@ antes da abertura. A autorização humana foi conferida no chat de Astra.
 Geômetra revisada está em playtest, sem aceite de produto inferido por iniciar
 Sentinela. Diretório habitual/codex-playtest e saves pessoais permanecem intactos.
 
-Próximo passo: S6 progressão/builds, depois S7 apresentação/integração.
+Próximo passo: S7 apresentação/integração e verify integral, depois handoff único.
 autonomamente, um bloco/skill por vez, sem gate nem handoff intermediário.
 
 ## Abertura / S0
@@ -74,6 +74,13 @@ ICD 1s, sem qualificar seu próprio novo controle. Absoluto fechado: duração
 4–6s, +20% alcance (não raios/colliders), ganho 15/s imediato apenas parado,
 sem dispensar Postura .75s, sem reset/auto-renovação. 228 checks PASS incluindo
 30/60/144 Hz, expiração parcial, snapshots, pausa, morte/fim e stats sem cura.
+
+S6 fechado: duas builds com compras reais 19 base/20 evolução, 87 atributos,
+5+2 slots, equipamento nulo controlado. 300 checks PASS: evolução/gates,
+rank grátis sem autoequip, menus job22/31/37, carteiras/slots, save/reload/legacy,
+treino sem write/recompensa, locks/respec. Tooltips mostram atual/próximo rank.
+Comparação R5 (crítica/caster): Perfurante 145,4/249,8 bruto, CD 4,556/4,662s;
+Rede 40/130; Explosivo 73,4/262,4. Mesmos custos/rank; não é medida de DPS.
 
 Para cada unidade concluída: camada/skill, commit, teste/resultado, decisão
 relevante e próxima unidade. Registrar uso somente quando mensurável. Não
