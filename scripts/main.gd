@@ -364,6 +364,10 @@ func _on_skill_cast_ready(skill: StringName, point: Vector2, target_id: int) -> 
 	_execute_skill(skill, point, selected_target)
 
 func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatActor = null) -> void:
+	if skill == &"sentinel_absolute_focus":
+		if not player.use_sentinel_absolute_focus():
+			_report_skill_failure(skill, selected_target)
+		return
 	if skill == &"sentinel_explosive_shot":
 		if not player.prepare_sentinel_explosive():
 			_report_skill_failure(skill, selected_target)
@@ -2090,6 +2094,8 @@ func _skill_input_label(skill_id: StringName) -> String:
 	return labels[index] if index >= 0 and index < labels.size() else ClassCatalog.skill_definition(skill_id).input_key
 
 func _display_skill_state(skill_id: StringName, sp_cost: float) -> String:
+	if skill_id == &"sentinel_absolute_focus" and player.sentinel_state.absolute_remaining > 0.0:
+		return "ATIVO %.1fs · %s" % [player.sentinel_state.absolute_remaining, _skill_state(player.skill_cooldown(skill_id), sp_cost, skill_id)]
 	if skill_id == &"sentinel_explosive_shot" and player.sentinel_state.explosive_prepared:
 		return "PREPARADO · CANCELAR"
 	if player.active_cast_skill == skill_id:

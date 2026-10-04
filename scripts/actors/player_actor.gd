@@ -305,6 +305,21 @@ func _start_sentinel_recovery(facing: Vector2) -> void:
 func sentinel_can_use(skill_id: StringName) -> bool:
 	return is_sentinel() and not is_stunned() and not is_feared() and not (is_inside_tree() and get_tree().paused) and _can_spend(skill_id) and sentinel_state.can_pay(float(SentinelTuning.values(skill_id, skill_rank(skill_id)).get("focus_cost", 0.0)))
 
+func use_sentinel_absolute_focus() -> bool:
+	var id := &"sentinel_absolute_focus"
+	if not sentinel_can_use(id):
+		return false
+	_spend(id)
+	sentinel_state.absolute_remaining = float(SentinelTuning.values(id, skill_rank(id))["duration"])
+	presentation_action.emit(&"cast_release", _last_facing, 0.15)
+	resources_changed.emit()
+	return true
+
+func sentinel_range_multiplier() -> float:
+	if not is_sentinel() or sentinel_state.absolute_remaining <= 0.0:
+		return 1.0
+	return 1.0 + float(SentinelTuning.values(&"sentinel_absolute_focus", skill_rank(&"sentinel_absolute_focus")).get("range_bonus", 0.0))
+
 func cancel_sentinel_preparation() -> bool:
 	if not sentinel_state.explosive_prepared:
 		return false
@@ -2060,7 +2075,7 @@ func skill_cost(skill_id: StringName) -> float:
 func skill_range(skill_id: StringName) -> float:
 	var rank_definition := _runtime_rank_definition(skill_id)
 	if rank_definition != null:
-		return rank_definition.range + _extended_aim_bonus(skill_id)
+		return (rank_definition.range + _extended_aim_bonus(skill_id)) * sentinel_range_multiplier()
 	var definition := ClassCatalog.skill_definition(skill_id)
 	if definition != null and not definition.ranks.is_empty():
 		return 0.0
@@ -2567,10 +2582,10 @@ func _on_health_died(actor_id: int) -> void:
 	super._on_health_died(actor_id)
 
 func basic_attack_distance(enemy: CombatActor) -> float:
-	return collision_radius + enemy.collision_radius + class_definition.basic_range + _extended_aim_bonus(&"basic_attack")
+	return collision_radius + enemy.collision_radius + (class_definition.basic_range + _extended_aim_bonus(&"basic_attack")) * sentinel_range_multiplier()
 
 func archer_basic_projectile_range() -> float:
-	return ARCHER_BASIC_MAX_DISTANCE + _extended_aim_bonus(&"basic_attack")
+	return (ARCHER_BASIC_MAX_DISTANCE + _extended_aim_bonus(&"basic_attack")) * sentinel_range_multiplier()
 
 func has_extended_aim() -> bool:
 	return is_archer() and extended_aim_remaining > 0.0

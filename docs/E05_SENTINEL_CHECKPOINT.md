@@ -11,7 +11,7 @@ antes da abertura. A autorização humana foi conferida no chat de Astra.
 Geômetra revisada está em playtest, sem aceite de produto inferido por iniciar
 Sentinela. Diretório habitual/codex-playtest e saves pessoais permanecem intactos.
 
-Próximo passo: S5 Leitura e Absoluto; seguir S5–S7
+Próximo passo: S6 progressão/builds, depois S7 apresentação/integração.
 autonomamente, um bloco/skill por vez, sem gate nem handoff intermediário.
 
 ## Abertura / S0
@@ -67,6 +67,13 @@ fechada: reset ST físico baixo, stun/debuff após dano positivo por canais
 canônicos, snapshot do controle em voo. 313 checks PASS: ranks, crítico não
 alonga CC, boss/resistência/budget, miss/shield/dead, debuff MAX, proc antes de
 controle novo, recursos e reserva intacta. Cabeça 126 PASS novamente.
+
+Concussão commit 1abe305. Leitura já implementada em S1, agora validada com
+Rede/Concussão/Explosivo reais: OR crítico/CC anterior, uma devolução por ação,
+ICD 1s, sem qualificar seu próprio novo controle. Absoluto fechado: duração
+4–6s, +20% alcance (não raios/colliders), ganho 15/s imediato apenas parado,
+sem dispensar Postura .75s, sem reset/auto-renovação. 228 checks PASS incluindo
+30/60/144 Hz, expiração parcial, snapshots, pausa, morte/fim e stats sem cura.
 
 Para cada unidade concluída: camada/skill, commit, teste/resultado, decisão
 relevante e próxima unidade. Registrar uso somente quando mensurável. Não
