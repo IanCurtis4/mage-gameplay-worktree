@@ -15,6 +15,7 @@ func _initialize() -> void:
 
 func _run() -> void:
 	_check(not ProfileCatalog.pilot({}, {}, {&"mg_ar": 3}).is_valid(), "invalid fixture override fails validation without a typed assignment crash")
+	_edit_rank_progression()
 	await _memory()
 	await _edits()
 	await _invalid()
@@ -25,6 +26,14 @@ func _run() -> void:
 	await _input_and_cleanup()
 	print("Geometer G6 editing: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+func _edit_rank_progression() -> void:
+	for skill: StringName in [&"geometer_translation", &"geometer_rewrite"]:
+		var definition := ClassCatalog.skill_definition(skill)
+		for rank: int in range(1, 6):
+			var current := definition.rank_definition(rank)
+			_check(is_equal_approx(current.cooldown, definition.cooldown - 0.25 * (rank - 1)), "every paid edit rank improves cooldown")
+			_check(current.sp_cost == definition.sp_cost and current.range == definition.range, "edit rank preserves cost and geometry")
 
 func _fixture(memory_rank: int = 3, triangle_rank: int = 5, collapse_rank: int = 5) -> void:
 	var build := BuildSnapshot.new()
@@ -107,6 +116,7 @@ func _edits() -> void:
 	var translation := _command(&"geometer_translation", Vector2(200, 480), 0, &"fire")
 	_check(casting.check(translation)["ok"] and casting.construction.vertices[2].actor_id != 0 and arena.player.current_sp == before, "preview leaves binding, resources and state untouched")
 	_check(casting.begin(translation), "valid translation executes instantly")
+	_check(is_equal_approx(arena.player.skill_cooldown(&"geometer_translation"), StatCalculator.effective_cooldown(3.0, arena.player.stat_breakdown)), "rank five translation applies improved central cooldown")
 	_check(arena.player.current_sp == before - 12 and arena.player.skill_cooldown(&"geometer_translation") > 0 and not arena.player.has_active_cast(), "translation charges exactly once with central cooldown")
 	_check(casting.construction.vertices[2].element == &"lightning" and casting.construction.vertices[2].actor_id == 0 and casting.construction.vertices[2].remaining == 12, "translation preserves element but explicit ground detaches and refreshes only changed vertex")
 	_check(casting.construction.vertices[0] == first and casting.construction.vertices[1] == second and casting.construction.figure_remaining == remaining and casting.construction.construction_id == identity, "translation preserves retained anchors, deadline and identity")
@@ -122,6 +132,7 @@ func _edits() -> void:
 	var rewrite := _command(&"geometer_rewrite", Vector2(500, 480), 0, &"fire")
 	casting.select(&"ice")
 	_check(casting.begin(rewrite), "rewrite revalidates full candidate and uses captured element")
+	_check(is_equal_approx(arena.player.skill_cooldown(&"geometer_rewrite"), StatCalculator.effective_cooldown(4.0, arena.player.stat_breakdown)), "rank five rewrite applies improved central cooldown")
 	_check(casting.construction.elements() == [&"ice", &"lightning", &"fire"] and casting.construction.vertices[0] == second and arena.player.current_sp == before - 14, "rewrite removes A and appends D as B/C/D without mutating retained vertices")
 	_check(casting.construction.construction_id == identity and hits.is_empty() and is_equal_approx(casting.construction.figure_remaining, remaining - 0.1), "rewrite does not renew figure, identity or C")
 	arena.training_boss.health.current_hp = 0

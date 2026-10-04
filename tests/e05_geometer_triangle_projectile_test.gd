@@ -21,6 +21,7 @@ func _run() -> void:
 	await _ordering()
 	await _paid_formation()
 	await _solo_auto()
+	await _overlapping_auto()
 	print("Geometer triangle projectiles: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -257,6 +258,26 @@ func _solo_auto() -> void:
 				projectile._process(1.0 / hz)
 			_check(hits.size() == 1 and hits[0].skill_id == &"geometer_foundation_lightning" and arena.training_boss.health.current_hp < arena.training_boss.health.max_hp, "%d Hz solo RRR adds foundation once without duplicate self arc" % hz)
 			_check(casting.construction.vertices.size() == 3 and projectile.travelled < projectile.max_distance, "auto never constructs anchors or renews range")
+		await _finish()
+
+func _overlapping_auto() -> void:
+	for hz: int in [30, 60, 144]:
+		_fixture(1)
+		_triangle()
+		arena.training_boss.global_position = Vector2(300, 320)
+		arena.player.global_position = Vector2(300, 310)
+		arena.player.target = arena.training_boss
+		arena.player._try_basic_attack()
+		var projectile: MageProjectile
+		for child: Node in arena.get_children():
+			if child is MageProjectile:
+				projectile = child
+		_check(projectile != null, "overlapping real auto spawns")
+		if projectile != null:
+			projectile.set_process(false)
+			projectile._process(1.0 / hz)
+			_check(hits.size() == 1 and hits[0].skill_id == &"geometer_foundation_lightning", "inside triangle immediate hit receives foundation exactly once at %d Hz" % hz)
+			_check(projectile.is_queued_for_deletion(), "immediate hit completes without zero-distance loop")
 		await _finish()
 
 func _check(condition: bool, message: String) -> void:

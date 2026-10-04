@@ -1091,7 +1091,7 @@ static func _configure_geometer_edit_ranks() -> void:
 			var rank := SkillRankDefinition.new()
 			rank.rank = index + 1
 			rank.sp_cost = definition.sp_cost
-			rank.cooldown = definition.cooldown
+			rank.cooldown = definition.cooldown - (0.25 * index if skill != &"geometer_collapse" else 0.0)
 			rank.range = definition.range
 			rank.magic_weight = 1.0
 			rank.power = 0.60 + 0.10 * index if skill == &"geometer_collapse" else 0.0

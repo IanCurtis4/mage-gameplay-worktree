@@ -519,3 +519,31 @@ duas builds G6 e boss solo/com adds. Avaliar leitura, tempo útil/SP, controle,
 animação/pés e FPS percebido; balanceamento não está automaticamente aprovado.
 Merge em master somente após aceite explícito do candidato testado. Não iniciar
 próxima classe/marco por completar G7.
+
+### Revisão Astra — retomada e correções de 03/10/2026
+
+Revisão integrada do candidato Sol `b53eb58`, que já contém o menu em abas
+`0c008d4`. Branch de correções `codex/geometer-review`; a branch entregue por
+Sol permanece em seu commit original. Não foi iniciado outro marco.
+
+Dois achados corrigidos dentro do escopo:
+
+- Translação/Reescrita R2–R5 consumiam pontos sem alterar execução. Agora cada
+  rank reduz a recarga em 0,25 s (R5: 3 s/4 s), mantendo custo, alcance e prazos.
+  Tuning registrado no contrato G0; recarga efetiva usa o cálculo central.
+- Auto próprio nascido dentro de RRR e já sobreposto ao boss atingia antes de
+  receber o componente elétrico. Contato inicial do triângulo agora precede esse
+  impacto; prioridade de terreno, paredes e consumo único continuam preservados.
+
+Evidências independentes: revisão de geometria com 9 invariantes adicionais;
+reprodução pelo auto real contra Guardião a 10 e 80 unidades; regressão permanente
+em 30/60/144 Hz; testes de projéteis triangulares 201/0 falhas e edição 397/0.
+Revisão de efeitos completada pelo condutor após interrupção do revisor por limite:
+consumo dos componentes, snapshots, deduplicação, cadência e roteamento do dano.
+O probe gráfico G7 passou com 15 capturas; atlas, alpha e estados representativos
+foram inspecionados. A medição gráfica é observacional, não garantia de 60 FPS.
+
+Validação integral após as correções: em andamento.
+Aceite de produto continua pendente do playtest. Avaliar especialmente leitura
+das receitas, tempo de construção, consumo de SP, boss solo/com adds e contraste
+sobre o chão. Nenhuma alteração no save pessoal, nenhum merge em master.

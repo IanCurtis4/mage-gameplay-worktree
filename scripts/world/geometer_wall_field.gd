@@ -65,7 +65,10 @@ func conduction_active(identity: int) -> bool:
 
 func owned_contact(projectile: PlayerProjectile, from: Vector2, to: Vector2) -> Dictionary:
 	if is_instance_valid(casting) and casting.construction.shape == GeometerConstructionState.Shape.TRIANGLE:
-		return casting.triangle_field.owned_contact(projectile, from, to)
+		var contact := casting.triangle_field.owned_contact(projectile, from, to)
+		if not contact.is_empty():
+			contact["inside_triangle"] = float(contact["fraction"]) == 0.0
+		return contact
 	if not _available() or projectile is GeometerTraceProjectile or projectile.request == null or projectile.request.is_secondary or GeometerCastCommand.is_trace_skill(projectile.request.skill_id) or projectile.request.source_id != casting.player.get_instance_id():
 		return {}
 	var elements := casting.construction.elements()

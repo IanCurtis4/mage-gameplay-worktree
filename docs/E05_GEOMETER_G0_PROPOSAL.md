@@ -198,3 +198,17 @@ Validadores de pontos/linhas/áreas, consulta de obstáculos da navegação,
 seleção/reservas ordenadas e snapshots de âncoras. Não publicar o candidato
 parcial no projeto habitual. Sem novo gate por camada: revisão integrada ao
 fecharG7; escalar apenas novos bloqueios/decisões fora do contrato consolidado.
+
+## Ajuste de revisão integrada — 03/10/2026
+
+Translação e Reescrita mantêm custo/alcance do R1, mas cada rank adicional reduz
+recarga base em 0,25 s: Translação 4/3,75/3,5/3,25/3 s; Reescrita
+5/4,75/4,5/4,25/4 s. O cálculo efetivo continua no StatCalculator.
+Clarificação de tuning por Astra: ranks pagos devem produzir benefício real;
+nenhuma edição renova duração da figura, repete resolução C ou aumenta geometria.
+Colapso conserva sua progressão anterior de dano e recarga.
+
+Projétil próprio já dentro do triângulo recebe A-R/B-R antes de um impacto
+imediato sobreposto ao corpo. Obstáculo continua prioritário sobre o campo e
+empates nas paredes conservam a regra anterior. Registro por instância impede
+repetição e loop de contato com distância zero.

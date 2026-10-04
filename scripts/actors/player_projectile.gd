@@ -118,7 +118,11 @@ func _process(delta: float) -> void:
 		var victim: CombatActor = impact.get("actor") as CombatActor
 		var victim_fraction: float = impact.get("fraction", 2.0)
 		var contact := geometer_field.owned_contact(self, segment_start, segment_end) if geometer_field != null else {}
-		if not contact.is_empty() and float(contact["fraction"]) < minf(wall_fraction, victim_fraction):
+		# A projectile already inside a triangle receives its payload before an
+		# immediate body hit. Terrain and wall-transform tie priorities stay intact.
+		var contact_fraction := float(contact.get("fraction", 2.0))
+		var precedes_victim: bool = contact_fraction < victim_fraction or (contact.get("inside_triangle", false) and contact_fraction == victim_fraction)
+		if not contact.is_empty() and contact_fraction < wall_fraction and precedes_victim:
 			var distance := segment_step * float(contact["fraction"])
 			global_position = segment_start.lerp(segment_end, float(contact["fraction"]))
 			travelled += distance
