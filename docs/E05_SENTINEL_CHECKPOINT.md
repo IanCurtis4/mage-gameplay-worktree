@@ -11,7 +11,7 @@ antes da abertura. A autorização humana foi conferida no chat de Astra.
 Geômetra revisada está em playtest, sem aceite de produto inferido por iniciar
 Sentinela. Diretório habitual/codex-playtest e saves pessoais permanecem intactos.
 
-Próximo passo: fechar S0 (dados/tuning/helper central) e iniciar S1; seguir S1–S7
+Próximo passo: fechar S1 (Foco/Observar/Postura); seguir S1–S7
 autonomamente, um bloco/skill por vez, sem gate nem handoff intermediário.
 
 ## Abertura / S0
@@ -22,6 +22,11 @@ Reset será uma emissão especial imediata que inicia recuperação normal e nã
 consome a munição Explosiva. A classe continuará bloqueada até S7 integrado.
 Catálogo/ranks são pacote delimitado independente; matemática e transações
 permanecem com o condutor. Sem alteração de schema ou atributos globais.
+
+S0 fechado: nove IDs/handlers/ranks, gates/free rank, override parcial e
+`content_ready=false`; `SentinelTuning`/`SentinelMath` com INT isolada, coeficientes
+aditivos e CD DES local. Duas builds de 20 pontos planejadas no contrato.
+Import PASS, catálogo 749 checks, matemática 72 checks, Geômetra builds 341 PASS.
 
 ## Registro compacto a manter pelo condutor
 

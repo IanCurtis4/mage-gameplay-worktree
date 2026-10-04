@@ -72,6 +72,10 @@ static func pilot(
 	var geometer_override: Dictionary = raw_geometer_override if raw_geometer_override is Dictionary else {}
 	if not geometer_override.has("exclusive_skill_ids") and not geometer_override.has(&"exclusive_skill_ids"):
 		catalog._register_geometer_skills()
+	var raw_sentinel_override: Variant = evolution_overrides.get(&"sentinel", evolution_overrides.get("sentinel", {}))
+	var sentinel_override: Dictionary = raw_sentinel_override if raw_sentinel_override is Dictionary else {}
+	if not sentinel_override.has("exclusive_skill_ids") and not sentinel_override.has(&"exclusive_skill_ids"):
+		catalog._register_sentinel_skills()
 	for raw_item_id: Variant in additional_equipment:
 		var metadata: Dictionary = additional_equipment[raw_item_id]
 		var allowed_base_classes: Array[StringName] = []
@@ -422,6 +426,15 @@ func _register_geometer_skills() -> void:
 	add_skill(&"geometer_collapse", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"mg_ar", _evolution_rank_requirements(5, 34))
 	add_skill(&"geometer_rewrite", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"mg_ar", _evolution_rank_requirements(5, 37))
 
+func _register_sentinel_skills() -> void:
+	var origin: Array[StringName] = [&"archer"]
+	var gates: Array[int] = [20, 20, 23, 25, 28, 31, 31, 34, 37]
+	for index: int in SentinelTuning.SKILL_IDS.size():
+		var skill_id := SentinelTuning.SKILL_IDS[index]
+		var maximum := SentinelTuning.max_rank(skill_id)
+		var free_rank := 1 if index == 0 else 0
+		add_skill(skill_id, origin, PASSIVE if maximum == 3 else ACTIVE, EVOLUTION_WALLET, free_rank, maximum - free_rank, &"sentinel", _evolution_rank_requirements(maximum, gates[index]))
+
 func _evolution_rank_requirements(max_rank: int, job_level: int) -> Dictionary:
 	var requirements: Dictionary = {}
 	for rank: int in range(1, max_rank + 1):
@@ -496,6 +509,11 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 			# G7 integrated candidate; publishing playtest still requires technical review.
 			definition.content_ready = true
 			definition.exclusive_skill_ids = [&"geometer_trace", &"geometer_incidence", &"geometer_translation", &"geometer_triangulation", &"geometer_vector_memory", &"geometer_collapse", &"geometer_rewrite"]
+		if definition.id == &"sentinel" and (not normalized_overrides.has(definition.id) or (not normalized_overrides[definition.id].has("exclusive_skill_ids") and not normalized_overrides[definition.id].has(&"exclusive_skill_ids"))):
+			definition.entry_skill_id = &"sentinel_headshot"
+			# S0 data are available to isolated tests, never a partial playtest candidate.
+			definition.content_ready = false
+			definition.exclusive_skill_ids = SentinelTuning.SKILL_IDS.duplicate()
 		if normalized_overrides.has(definition.id):
 			_apply_evolution_override(definition, normalized_overrides[definition.id])
 		add_evolution(definition)

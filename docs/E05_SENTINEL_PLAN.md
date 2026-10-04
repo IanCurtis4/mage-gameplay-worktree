@@ -140,6 +140,32 @@ Cada rank ofensivo melhora dano linearmente; demais benefícios estão na tabela
 
 ## Camadas e execução econômica
 
+### S0 — tuning técnico fechado pelo condutor
+
+`SentinelTuning` centraliza endpoints R1→R5; SP interpola por raiz quadrada,
+coeficientes de dano linearmente. `SentinelMath` calcula poder bruto por
+primários e redução local de CD, sem alterar MATK/resolver global.
+
+| Skill | SP R1→R5 | Dano bruto antes de defesa/crítico |
+|---|---|---|
+| Cabeça | 14→20 | ATQ precisão × (2,0→2,8) |
+| Observar | 8→12 | Sem dano |
+| Perfurante | 16→22 | (10→18) + INT×(2,0→3,2) + DES×(1,4→2,2) |
+| Rede | 18→26 | (20→36) + INT×(1,2→2,0) |
+| Explosivo | 20→28 | (45→65) + INT×(3,0→4,2) |
+| Concussão | 12→18 | ATQ precisão × (0,65→0,85) |
+| Absoluto | 24→32 | Sem dano |
+
+Alcance ST/Rede 340; Perfurante 600 (Flecha Perfurante vigente); projéteis 900/s.
+Rede raio 90, Explosivo raio 80; preparação variável da Rede 0,25 s, resets sem
+cast. Todos os valores restantes seguem a tabela do contrato. A Postura usa
+`primary_flat` do StatCalculator, não `flat` de stats derivados. Fonte condicional
+única, sem alterar compras. Crítica planeja Cabeça5/Observar3/Perfurante5/
+Concussão1/Absoluto1/Postura3/Aberturas3 = 20 pontos pagos (Cabeça tem R1 grátis).
+Caster planeja Observar1/Perfurante5/Rede5/Explosivo5/Absoluto1/Postura1/
+Aberturas2 = 20 pagos; Cabeça grátis não equipada. Mesmos 5+2 slots e orçamento
+de atributos; S6 exercita compras reais e compara, sem prometer DPS equivalente.
+
 | Camada | Entrega | Evidência interna antes de avançar |
 |---|---|---|
 | S0 | Contrato técnico, tuning de dano/SP, responsabilidades, gates, duas builds legais planejadas | IDs existentes reconciliados; fórmulas com unidades; sete ativas/dois passivos sem inflar carteiras; decisões deste plano não reabertas sem motivo |

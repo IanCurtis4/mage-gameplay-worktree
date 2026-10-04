@@ -226,6 +226,7 @@ static func _ensure_built() -> void:
 	_configure_spiritualist_dissipation_ranks()
 	_configure_geometer_trace_ranks()
 	_configure_geometer_edit_ranks()
+	_configure_sentinel_skills()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -294,6 +295,96 @@ static func _add_passive_skill(skill_id: StringName, display_name: String) -> vo
 	definition.display_name = display_name
 	definition.category = SkillDefinition.Category.PASSIVE
 	_skills[skill_id] = definition
+
+static func _configure_sentinel_skills() -> void:
+	var names: Array[String] = ["Tiro na Cabeça", "Observar", "Postura de Precisão", "Tiro Perfurante", "Tiro de Rede", "Tiro Explosivo", "Leitura de Aberturas", "Tiro de Concussão", "Foco Absoluto"]
+	var handlers: Array[SkillDefinition.Handler] = [SkillDefinition.Handler.SENTINEL_HEADSHOT, SkillDefinition.Handler.SENTINEL_OBSERVE, SkillDefinition.Handler.SENTINEL_PRECISION_STANCE, SkillDefinition.Handler.SENTINEL_PIERCING_SHOT, SkillDefinition.Handler.SENTINEL_NET_SHOT, SkillDefinition.Handler.SENTINEL_EXPLOSIVE_SHOT, SkillDefinition.Handler.SENTINEL_OPENING_READ, SkillDefinition.Handler.SENTINEL_CONCUSSION_SHOT, SkillDefinition.Handler.SENTINEL_ABSOLUTE_FOCUS]
+	for index: int in SentinelTuning.SKILL_IDS.size():
+		var skill_id := SentinelTuning.SKILL_IDS[index]
+		var first := SentinelTuning.values(skill_id, 1)
+		var maximum := SentinelTuning.max_rank(skill_id)
+		var contested := skill_id in [&"sentinel_headshot", &"sentinel_concussion_shot"]
+		var offensive := skill_id in [&"sentinel_headshot", &"sentinel_piercing_shot", &"sentinel_net_shot", &"sentinel_explosive_shot", &"sentinel_concussion_shot"]
+		if maximum == 3:
+			_add_passive_skill(skill_id, names[index])
+		else:
+			var targeting := SkillDefinition.Targeting.SINGLE_TARGET
+			if skill_id == &"sentinel_piercing_shot":
+				targeting = SkillDefinition.Targeting.DIRECTION
+			elif skill_id == &"sentinel_net_shot":
+				targeting = SkillDefinition.Targeting.POINT
+			elif skill_id in [&"sentinel_explosive_shot", &"sentinel_absolute_focus"]:
+				targeting = SkillDefinition.Targeting.SELF
+			_add_skill(skill_id, names[index], "D", targeting, first["sp_cost"], first["cooldown"], first["power"], first["range"], first["projectile_speed"], first["variable_cast_time"], DamageRequest.AccuracyMode.CONTESTED if contested else DamageRequest.AccuracyMode.GEOMETRY, offensive, SkillDefinition.ActionKind.OFFENSIVE if offensive else SkillDefinition.ActionKind.DEFENSIVE)
+		var definition: SkillDefinition = _skills[skill_id]
+		definition.handler_id = handlers[index]
+		for current_rank: int in range(1, maximum + 1):
+			var values := SentinelTuning.values(skill_id, current_rank)
+			var rank := SkillRankDefinition.new()
+			rank.rank = current_rank
+			rank.sp_cost = values["sp_cost"]
+			rank.cooldown = values["cooldown"]
+			rank.range = values["range"]
+			rank.projectile_speed = values["projectile_speed"]
+			rank.variable_cast_time = values["variable_cast_time"]
+			rank.power = values["power"]
+			rank.secondary_power = values["secondary_power"]
+			if contested:
+				rank.precision_weight = 1.0
+			elif offensive:
+				# Explicit INT/INT+DES tuning is consumed by the Sentinel math helper;
+				# these skills must not use the global DES-bearing magic_attack stat.
+				rank.magic_weight = 1.0
+			rank.effect_ids = _sentinel_effect_ids(skill_id)
+			definition.ranks.append(rank)
+		assert(definition.is_rank_catalog_valid())
+
+static func _sentinel_effect_ids(skill_id: StringName) -> Array[StringName]:
+	match skill_id:
+		&"sentinel_headshot":
+			return [&"validated_single_special_shot_resets_auto", &"physical_precision_damage_normal_crit", &"focus_cost_30"]
+		&"sentinel_observe":
+			return [&"one_mark_three_positive_direct_actions", &"shared_half_second_focus_return", &"mark_eight_seconds"]
+		&"sentinel_precision_stance":
+			return [&"conditional_effective_dex_luk_after_stability", &"remove_on_actual_movement_no_static_build_bonus"]
+		&"sentinel_piercing_shot":
+			return [&"validated_directional_special_shot_resets_auto", &"explicit_int_dex_magic_damage", &"once_per_victim_stops_at_terrain", &"local_bounded_dex_cooldown", &"focus_cost_20"]
+		&"sentinel_net_shot":
+			return [&"projectile_area_on_first_valid_contact", &"explicit_int_only_magic_damage", &"root_after_positive_direct_damage", &"local_bounded_dex_cooldown"]
+		&"sentinel_explosive_shot":
+			return [&"reserve_sp_focus_for_next_ordinary_auto", &"cancel_refunds_before_launch", &"exclusive_int_magic_area_no_double_primary", &"local_bounded_dex_cooldown", &"focus_cost_25"]
+		&"sentinel_opening_read":
+			return [&"positive_direct_crit_or_preexisting_root_stun_focus_return", &"one_proc_per_action_shared_one_second"]
+		&"sentinel_concussion_shot":
+			return [&"validated_single_special_shot_resets_auto", &"physical_precision_damage_normal_crit", &"stun_after_positive_damage", &"damage_dealt_reduction_ten_percent"]
+		&"sentinel_absolute_focus":
+			return [&"finite_buff_twenty_percent_range", &"stationary_focus_fifteen_per_second_without_resource_warmup", &"precision_passive_warmup_unchanged"]
+	return []
+
+static func sentinel_description(skill_id: StringName, rank: int = 1) -> String:
+	var values := SentinelTuning.values(skill_id, rank)
+	if values.is_empty():
+		return ""
+	match skill_id:
+		&"sentinel_headshot":
+			return "Um tiro físico de precisão (%.2f×), crítico normal por SOR. Consome 30 Foco; reseta o auto sem tiro comum extra." % values["power"]
+		&"sentinel_observe":
+			return "Marca por 8s: próximos 3 acertos diretos próprios devolvem %.0f Foco, uma vez por ação a cada 0,5s. Nova marca substitui a anterior." % values["focus_return"]
+		&"sentinel_precision_stance":
+			return "Equipada: após 0,75s parado, +%.0f DES/+%.0f SOR efetivas. Andar/teleportar remove; não muda atributos comprados." % [values["dex_bonus"], values["luk_bonus"]]
+		&"sentinel_piercing_shot":
+			return "Um tiro linear até 600: dano mágico %.0f + %.2f×INT + %.2f×DES, crítico por SOR. Atravessa inimigos uma vez; terreno bloqueia. Reseta auto; 20 Foco; DES reduz apenas esta recarga até 25%%." % [values["base"], values["int_coefficient"], values["dex_coefficient"]]
+		&"sentinel_net_shot":
+			return "Projétil no chão, raio 90: dano mágico %.0f + %.2f×INT e root %.2fs. DES reduz preparo/recarga, não dano; root não bloqueia ataques. Obstáculos interceptam." % [values["base"], values["int_coefficient"], values["root_duration"]]
+		&"sentinel_explosive_shot":
+			return "Reserva SP/25 Foco para o próximo auto comum: dano mágico %.0f + %.2f×INT em raio 80, sem dano físico extra ou repetição na vítima principal. Não reseta auto; cancelar antes do disparo devolve reserva; CD começa no disparo." % [values["base"], values["int_coefficient"]]
+		&"sentinel_opening_read":
+			return "Equipada: acerto direto crítico OU em alvo já preso/atordoado devolve %.0f Foco, uma vez por ação a cada 1s. Controle aplicado pelo próprio impacto não qualifica." % values["focus_return"]
+		&"sentinel_concussion_shot":
+			return "Um tiro físico de precisão (%.2f×), stun %.2fs e dano causado -10%% por %.1fs após acerto positivo. Reseta auto sem duplicar; boss usa resistência canônica." % [values["power"], values["stun_duration"], values["duration"]]
+		&"sentinel_absolute_focus":
+			return "Por %.1fs: alcance +20%% e Foco parado 15/s sem preparação de 0,5s. Mover preserva reserva, mas não gera; não dispensa preparo da Postura. CD começa ao ativar." % values["duration"]
+	return ""
 
 static func _configure_slash_ranks() -> void:
 	var definition: SkillDefinition = _skills[&"slash"]
