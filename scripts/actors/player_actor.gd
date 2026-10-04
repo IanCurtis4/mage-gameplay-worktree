@@ -114,6 +114,11 @@ var class_definition: ClassDefinition
 var current_sp := 0.0
 var max_sp := 0.0
 var attack_cooldown := 0.0
+var sentinel_state := SentinelFocusState.new()
+var sentinel_combat_active := false
+var _sentinel_last_position := Vector2.INF
+var _sentinel_stance_active := false
+var _sentinel_emission_serial := 0
 var slash_cooldown := 0.0
 var dash_cooldown := 0.0
 var mage_cooldowns: Dictionary[StringName, float] = {}
@@ -206,6 +211,7 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 	clear_berserker_state()
 	clear_elementalist_state()
 	clear_spiritualist_state()
+	clear_sentinel_state()
 	var derived := _build_stat_breakdown()
 	var class_color := Color("8e73de") if class_id == &"mage" else Color("6fa85a") if class_id == &"archer" else Color("55a8d9")
 	setup(class_definition.display_name, class_color, derived, 20.0)
@@ -235,6 +241,49 @@ func is_mage() -> bool:
 
 func is_archer() -> bool:
 	return class_id == &"archer"
+
+func is_sentinel() -> bool:
+	return is_archer() and run_state != null and run_state.uses_persistent_build() and run_state.build_snapshot.evolution_id == &"sentinel"
+
+func sentinel_free_sp() -> float:
+	return maxf(0.0, current_sp - sentinel_state.reserved_sp) if is_sentinel() else current_sp
+
+func clear_sentinel_state() -> void:
+	sentinel_state.clear()
+	_sentinel_stance_active = false
+	_sentinel_last_position = global_position
+	if health != null and run_state != null:
+		_apply_derived_stats(_build_stat_breakdown())
+
+func use_sentinel_observe(enemy: CombatActor) -> bool:
+	if not sentinel_can_use(&"sentinel_observe") or not can_target_skill(&"sentinel_observe", enemy) or not navigation.is_segment_clear(global_position, enemy.global_position, 0.0):
+		return false
+	_spend(&"sentinel_observe")
+	sentinel_state.observe(enemy.get_instance_id(), skill_rank(&"sentinel_observe"))
+	presentation_action.emit(&"cast_release", _resolved_facing(aim_direction(enemy.global_position)), 0.15)
+	resources_changed.emit()
+	return true
+
+func sentinel_can_use(skill_id: StringName) -> bool:
+	return is_sentinel() and not is_stunned() and not is_feared() and not (is_inside_tree() and get_tree().paused) and _can_spend(skill_id) and sentinel_state.can_pay(float(SentinelTuning.values(skill_id, skill_rank(skill_id)).get("focus_cost", 0.0)))
+
+func record_sentinel_damage(result: Dictionary) -> void:
+	if not is_sentinel() or not is_alive() or not bool(result.get("can_trigger_effects", false)) or float(result.get("actual_damage", 0.0)) <= 0.0:
+		return
+	var victim := instance_from_id(int(result.get("target_id", 0))) as CombatActor
+	if not is_instance_valid(victim) or (not victim.is_alive() and not bool(result.get("killed", false))):
+		return
+	var rank := skill_rank(&"sentinel_opening_read") if run_state.build_snapshot.passive_slots.has(&"sentinel_opening_read") else 0
+	var gained := sentinel_state.direct_impact(int(result.get("emission_id", 0)), victim.get_instance_id(), true, bool(result.get("critical", false)), victim.is_rooted() or victim.is_stunned(), rank)
+	if gained > 0.0:
+		resources_changed.emit()
+
+func _set_sentinel_stance(active: bool) -> void:
+	if active == _sentinel_stance_active:
+		return
+	_sentinel_stance_active = active
+	_apply_derived_stats(_build_stat_breakdown())
+	resources_changed.emit()
 
 func available_skill_ids() -> Array[StringName]:
 	if run_state != null and run_state.uses_persistent_build():
@@ -1934,6 +1983,26 @@ func _runtime_rank_definition(skill_id: StringName) -> SkillRankDefinition:
 	return _rank_definitions.get(skill_id)
 
 func _process(delta: float) -> void:
+	if is_sentinel() and is_alive() and not (is_inside_tree() and get_tree().paused):
+		if _sentinel_last_position.is_finite() and _sentinel_last_position.distance_to(global_position) > SentinelFocusState.MOVEMENT_EPSILON:
+			sentinel_state.stable_time = 0.0
+			_set_sentinel_stance(false)
+		var previous := global_position
+		_advance_player(delta)
+		var moved := previous.distance_to(global_position) > SentinelFocusState.MOVEMENT_EPSILON or (_sentinel_last_position.is_finite() and _sentinel_last_position.distance_to(previous) > SentinelFocusState.MOVEMENT_EPSILON)
+		sentinel_state.advance(delta, moved, sentinel_combat_active)
+		_sentinel_last_position = global_position
+		var has_stance := run_state.build_snapshot.passive_slots.has(&"sentinel_precision_stance") and skill_rank(&"sentinel_precision_stance") > 0
+		_set_sentinel_stance(has_stance and sentinel_state.stable_time >= SentinelFocusState.STANCE_DELAY)
+		if sentinel_state.observed_target_id > 0:
+			var observed := instance_from_id(sentinel_state.observed_target_id) as CombatActor
+			if not is_instance_valid(observed) or not observed.is_alive():
+				sentinel_state.clear_observation()
+		queue_redraw()
+	else:
+		_advance_player(delta)
+
+func _advance_player(delta: float) -> void:
 	super._process(delta)
 	if not is_alive():
 		velocity = Vector2.ZERO
@@ -2239,6 +2308,9 @@ func _make_request(enemy: CombatActor, skill_id: StringName, accuracy_mode: Dama
 	request.crit_multiplier = stat_breakdown.value(&"crit_multiplier")
 	request.damage_dealt_multiplier = outgoing_damage_multiplier()
 	request.can_crit = can_crit
+	if is_sentinel():
+		_sentinel_emission_serial += 1
+		request.emission_id = _sentinel_emission_serial
 	return request
 
 func _make_physical_request(enemy: CombatActor, skill_id: StringName, power: float, accuracy_mode: DamageRequest.AccuracyMode, can_crit: bool) -> DamageRequest:
@@ -2274,7 +2346,7 @@ func _magic_power(skill_id: StringName) -> float:
 func _can_spend(skill_id: StringName) -> bool:
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var has_runtime_definition := definition != null and (definition.ranks.is_empty() or _runtime_rank_definition(skill_id) != null)
-	return has_runtime_definition and skill_id in available_skill_ids() and is_alive() and skill_cooldown(skill_id) <= 0.0 and current_sp >= skill_cost(skill_id)
+	return has_runtime_definition and skill_id in available_skill_ids() and is_alive() and skill_cooldown(skill_id) <= 0.0 and sentinel_free_sp() >= skill_cost(skill_id)
 
 func _spend(skill_id: StringName) -> void:
 	var definition := ClassCatalog.skill_definition(skill_id)
@@ -2336,7 +2408,10 @@ func _move_step(delta: float) -> void:
 		if reaches_waypoint:
 			desired_position = _path[_path_index]
 	var safe_position := navigation.move_until_blocked(global_position, desired_position)
+	var previous_position := global_position
 	global_position = safe_position
+	if is_sentinel() and global_position.distance_to(previous_position) > SentinelFocusState.MOVEMENT_EPSILON:
+		_set_sentinel_stance(false)
 	_update_defender_anchor_presence()
 	if safe_position.distance_to(desired_position) > MOVEMENT_EPSILON:
 		velocity = Vector2.ZERO
@@ -2352,6 +2427,7 @@ func _move_step(delta: float) -> void:
 		_last_facing = velocity.normalized()
 
 func _on_health_died(actor_id: int) -> void:
+	clear_sentinel_state()
 	cancel_active_cast()
 	clear_shield_stance()
 	clear_perseverance()
@@ -2394,6 +2470,10 @@ func can_basic_attack(enemy: CombatActor, retain: bool = false) -> bool:
 
 func _build_stat_breakdown() -> StatBreakdown:
 	var sources := run_state.stat_modifier_sources()
+	if is_sentinel() and _sentinel_stance_active:
+		var stance := SentinelMath.stance_source(skill_rank(&"sentinel_precision_stance"))
+		if not stance.is_empty():
+			sources.append(stance)
 	if fury_remaining > 0.0:
 		var source := ClassCatalog.active_modifier_source(&"fury", _runtime_rank_definition(&"fury"))
 		if not source.is_empty():
@@ -2404,6 +2484,18 @@ func _build_stat_breakdown() -> StatBreakdown:
 
 func _draw() -> void:
 	super._draw()
+	if is_sentinel():
+		var aim_size := lerpf(15.0, 8.0, clampf(sentinel_state.stable_time / SentinelFocusState.STANCE_DELAY, 0.0, 1.0))
+		for side: Vector2 in [Vector2.LEFT, Vector2.RIGHT, Vector2.UP, Vector2.DOWN]:
+			var point := Vector2(0, -22) + side * aim_size
+			draw_line(point, point - side * 3.0, Color("b4decb", 0.65), 1.0)
+		if sentinel_state.observed_target_id > 0:
+			var observed := instance_from_id(sentinel_state.observed_target_id) as CombatActor
+			if is_instance_valid(observed) and observed.is_alive():
+				var point := to_local(observed.global_position) + Vector2(0, -40)
+				draw_arc(point, 7.0, 0.0, TAU, 16, Color("b4decb"), 1.5)
+				for index: int in sentinel_state.observation_charges:
+					draw_line(point + Vector2(-5 + index * 5, -12), point + Vector2(-5 + index * 5, -9), Color("b4decb"), 2.0)
 	if has_defender_token():
 		draw_arc(Vector2(0, -18), collision_radius + 25.0, 0.0, TAU, 40, Color("f5cc77", 0.75), 2.0, true)
 	if defender_counter_guard_remaining > 0.0:

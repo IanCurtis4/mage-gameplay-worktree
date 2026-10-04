@@ -104,6 +104,8 @@ var battle_indicators: BattleIndicators
 var spiritualist_ground: SpiritualistHaloUnderlay
 var geometer_casting: GeometerCasting
 var geometer_onboarding: GeometerOnboarding
+var sentinel_focus_label: Label
+var sentinel_focus_bar: ProgressBar
 var geometer_element_buttons: Dictionary[StringName, Button] = {}
 var _geometer_pointer_screen := Vector2.INF
 var trap_registry: PlayerTrapRegistry
@@ -216,6 +218,7 @@ func _ready() -> void:
 		_spawn_encounter(1)
 
 func _process(_delta: float) -> void:
+	player.sentinel_combat_active = encounter_active and not run_finished
 	player.regenerate_hp(_delta, encounter_active, get_tree().paused or run_finished)
 	if not get_tree().paused and not run_finished:
 		_spiritualist_channel_notice_remaining = maxf(0.0, _spiritualist_channel_notice_remaining - _delta)
@@ -360,6 +363,10 @@ func _on_skill_cast_ready(skill: StringName, point: Vector2, target_id: int) -> 
 	_execute_skill(skill, point, selected_target)
 
 func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatActor = null) -> void:
+	if skill == &"sentinel_observe":
+		if not player.use_sentinel_observe(selected_target):
+			_report_skill_failure(skill, selected_target)
+		return
 	var direction := player.aim_direction(point)
 	var definition := ClassCatalog.skill_definition(skill)
 	if definition == null:
@@ -1527,6 +1534,7 @@ func _on_enemy_damage_resolved(result: Dictionary) -> void:
 	if player == null or not is_instance_valid(player) or not player.is_alive() or int(result.get("source_id", 0)) != player.get_instance_id():
 		return
 	player.record_berserker_damage(result)
+	player.record_sentinel_damage(result)
 	var echo_triggered := spiritualist_echo_state.record_hit(result, player.spiritualist_magic_attack())
 	if echo_triggered:
 		if battle_indicators != null:
@@ -1669,6 +1677,7 @@ func _on_player_died(_actor: CombatActor) -> void:
 	_show_result(false)
 
 func _show_result(victory: bool) -> void:
+	player.clear_sentinel_state()
 	_cancel_casting()
 	if geometer_casting != null:
 		geometer_casting.clear_construction()
@@ -1963,6 +1972,10 @@ func _update_hud() -> void:
 		return
 	health_label.text = "VIDA  %d / %d" % [ceili(player.health.current_hp), ceili(player.health.max_hp)]
 	sp_label.text = "SP  %d / %d" % [floori(player.current_sp), floori(player.max_sp)]
+	if sentinel_focus_label != null:
+		var focus := player.sentinel_state
+		sentinel_focus_label.text = "FOCO  %d / 100%s" % [floori(focus.free_focus()), " · %d reservado" % floori(focus.reserved_focus) if focus.reserved_focus > 0.0 else ""]
+		sentinel_focus_bar.value = focus.focus
 	if training_mode and training_boss != null and training_boss.is_alive():
 		training_status_label.text = "TREINO · Guardião %d/%d HP · reforços %d/%d" % [ceili(training_boss.health.current_hp), ceili(training_boss.health.max_hp), enemies.size() - 1, TRAINING_ADD_CAP]
 	var skill_lines: PackedStringArray = []
@@ -2203,6 +2216,15 @@ func _build_ui() -> void:
 	skill_label = _make_label("", 17, Color("e9c67b"))
 	hud_column.add_child(health_label)
 	hud_column.add_child(sp_label)
+	if player.is_sentinel():
+		sentinel_focus_label = _make_label("FOCO 0 / 100", 16, Color("b4decb"))
+		hud_column.add_child(sentinel_focus_label)
+		sentinel_focus_bar = ProgressBar.new()
+		sentinel_focus_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		sentinel_focus_bar.custom_minimum_size = Vector2(0, 5)
+		sentinel_focus_bar.show_percentage = false
+		sentinel_focus_bar.max_value = SentinelFocusState.CAP
+		hud_column.add_child(sentinel_focus_bar)
 	if training_mode:
 		training_status_label = _make_label("Treino isolado", 16, Color("f5cc77"))
 		hud_column.add_child(training_status_label)

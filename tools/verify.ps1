@@ -143,6 +143,7 @@ Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tes
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_playtest_flow_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_catalog_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_math_test.gd')
+Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_focus_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_catalog_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_animation_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_visuals_test.gd')

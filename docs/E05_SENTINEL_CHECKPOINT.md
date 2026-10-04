@@ -11,7 +11,7 @@ antes da abertura. A autorização humana foi conferida no chat de Astra.
 Geômetra revisada está em playtest, sem aceite de produto inferido por iniciar
 Sentinela. Diretório habitual/codex-playtest e saves pessoais permanecem intactos.
 
-Próximo passo: fechar S1 (Foco/Observar/Postura); seguir S1–S7
+Próximo passo: S2, transação de reset/Tiro na Cabeça; seguir S2–S7
 autonomamente, um bloco/skill por vez, sem gate nem handoff intermediário.
 
 ## Abertura / S0
@@ -27,6 +27,13 @@ S0 fechado: nove IDs/handlers/ranks, gates/free rank, override parcial e
 `content_ready=false`; `SentinelTuning`/`SentinelMath` com INT isolada, coeficientes
 aditivos e CD DES local. Duas builds de 20 pontos planejadas no contrato.
 Import PASS, catálogo 749 checks, matemática 72 checks, Geômetra builds 341 PASS.
+
+S0 commit b7ec8b8. S1 fechado: Foco run-only com movimento efetivo, estabilidade,
+decay fora de encontro e pausa; Observar com três acertos e cadência por emissão;
+Postura condicional no StatCalculator, retirada antes do auto após deslocamento.
+Medidor/retículo/marca mínimos acompanham o sistema, sem save novo. Teste real e
+pure: 338 checks PASS em 30/60/144 Hz, sem multiplicar ganho por AoE; hit letal
+válido é distinguido de alvo previamente morto. S7 fará acabamento de apresentação.
 
 ## Registro compacto a manter pelo condutor
 
