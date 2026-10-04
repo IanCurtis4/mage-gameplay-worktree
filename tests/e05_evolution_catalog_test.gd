@@ -63,7 +63,7 @@ func _check_production_roster() -> void:
 			# G7 enables exactly the completed Geometer kit, not other placeholders.
 			expected_state = definition.content_ready and definition.entry_skill_id == &"geometer_trace" and definition.exclusive_skill_ids == [&"geometer_trace", &"geometer_incidence", &"geometer_translation", &"geometer_triangulation", &"geometer_vector_memory", &"geometer_collapse", &"geometer_rewrite"]
 		if definition.id == &"sentinel":
-			expected_state = not definition.content_ready and definition.entry_skill_id == &"sentinel_headshot" and definition.exclusive_skill_ids == SentinelTuning.SKILL_IDS
+			expected_state = definition.content_ready and definition.entry_skill_id == &"sentinel_headshot" and definition.exclusive_skill_ids == SentinelTuning.SKILL_IDS
 		_check(expected_state, "%s readiness matches completed kits and future placeholders" % definition.id)
 	var mage_options := catalog.evolution_definitions_for_origin(&"mage")
 	_check(mage_options.map(func(definition: EvolutionDefinition) -> StringName: return definition.id) == [&"elementalist", &"spiritualist", &"mg_sp", &"mg_ar"], "origin query includes only the four Mage destinations")

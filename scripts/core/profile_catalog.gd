@@ -511,8 +511,8 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 			definition.exclusive_skill_ids = [&"geometer_trace", &"geometer_incidence", &"geometer_translation", &"geometer_triangulation", &"geometer_vector_memory", &"geometer_collapse", &"geometer_rewrite"]
 		if definition.id == &"sentinel" and (not normalized_overrides.has(definition.id) or (not normalized_overrides[definition.id].has("exclusive_skill_ids") and not normalized_overrides[definition.id].has(&"exclusive_skill_ids"))):
 			definition.entry_skill_id = &"sentinel_headshot"
-			# S0 data are available to isolated tests, never a partial playtest candidate.
-			definition.content_ready = false
+			# Complete S7 candidate; publishing playtest still requires technical review.
+			definition.content_ready = true
 			definition.exclusive_skill_ids = SentinelTuning.SKILL_IDS.duplicate()
 		if normalized_overrides.has(definition.id):
 			_apply_evolution_override(definition, normalized_overrides[definition.id])

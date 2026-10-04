@@ -1,5 +1,5 @@
 extends SceneTree
-## S0 catalog isolation. Does not enable Sentinel or touch personal saves.
+## Complete library plus explicit readiness overrides; never touches personal saves.
 
 var checks := 0
 var failures := 0
@@ -17,7 +17,7 @@ func _run() -> void:
 	var catalog := ProfileCatalog.pilot()
 	_check(catalog.is_valid(), "production catalog valid with isolated Sentinel data")
 	var sentinel := catalog.evolution_definition(&"sentinel")
-	_check(sentinel != null and not sentinel.content_ready, "Sentinel remains blocked until integrated S7")
+	_check(sentinel != null and sentinel.content_ready, "Integrated S7 exposes complete Sentinel library")
 	_check(sentinel.origin_class_id == &"archer" and sentinel.entry_skill_id == &"sentinel_headshot", "origin and free entry fixed")
 	_check(sentinel.exclusive_skill_ids == SentinelTuning.SKILL_IDS, "complete ordered nine-skill library")
 	_check(CharacterState.ACTIVE_SLOT_COUNT == 5 and CharacterState.PASSIVE_SLOT_COUNT == 2, "slot contracts unchanged")

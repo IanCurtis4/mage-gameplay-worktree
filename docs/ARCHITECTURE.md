@@ -381,6 +381,27 @@ Probe denso compara 240 intervalos reais de frame por fase em janela 1080p, com
 20 inimigos e APIs de combate, mas delta de simulação explícito 1/60 e comparação
 sequencial observacional. Não substitui qualificação de FPS/gameplay pelo usuário.
 
+### Sentinela
+
+Sentinela (`archer` → `sentinel`) mantém biblioteca 7 ativas/2 passivas e slots
+5+2, sem schema novo. Contrato completo/tuning: E05_SENTINEL_PLAN.md; fechamento:
+E05_SENTINEL_CHECKPOINT.md. `SentinelFocusState` pertence à run e observa o
+`encounter_active` canônico; deslocamento real reinicia estabilidade, não Foco.
+Fora de combate, após 3s, Foco decai até zero; uma reserva de munição que perde
+cobertura é liberada sem gastar SP/iniciar CD, nunca cria piso de Foco. Durante
+combate, a munição não expira por relógio. Pausa congela estado; morte/fim limpa.
+Cabeça/Perfurante/Concussão validam e emitem um reset imediato, com recuperação
+normal e guard contra auto comum no mesmo frame. Explosivo reserva e substitui
+somente o próximo auto comum; recursos são consumidos no lançamento validado.
+`SentinelMath` usa primários efetivos: INT isolada para Rede/Explosivo, INT+DES
+aditiva para Perfurante; CD DES local/limitado nesses três, depois recarga
+canônica uma vez. Snapshots ficam no pedido/payload; controles só após dano
+positivo, procs leem CC anterior e deduplicam por emissão. Postura usa fonte
+`primary_flat` única. VFX têm orçamento cosmético 12, sem suprimir dano/controle.
+S7 habilita apenas esta biblioteca completa no candidato isolado; publicar em
+playtest/revisão e aceite humano continuam separados. Atlas original preserva
+fonte/prompt; provas de renderer não qualificam diversão, balanceamento ou FPS.
+
 ### Procedimento
 
 Import headless detecta scripts/recursos inválidos; testes headless validam fórmulas,

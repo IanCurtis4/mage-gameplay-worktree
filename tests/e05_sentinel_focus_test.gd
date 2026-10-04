@@ -72,10 +72,17 @@ func _resources() -> void:
 	state.explosive_prepared = true
 	_check(state.free_focus() == 75.0 and not state.can_pay(76.0), "prepared ammunition excludes reserved Focus")
 	_check(state.spend(75.0) and state.focus == 25.0 and not state.spend(1.0), "cannot spend another action's reservation")
-	state.advance(10.0, false, false)
-	_check(state.focus == 25.0, "out of combat decay preserves reservation")
 	state.cancel_preparation()
 	_check(state.free_focus() == 25.0 and state.reserved_sp == 0.0 and not state.explosive_prepared, "cancel releases rather than duplicates resource")
+	state.reserved_focus = 25.0
+	state.reserved_sp = 15.0
+	state.explosive_prepared = true
+	state.advance(3.0, false, false)
+	_check(state.focus == 25.0 and state.explosive_prepared, "outside combat grace preserves funded reservation")
+	state.advance(0.1, false, false)
+	_check(absf(state.focus - 24.0) < 0.00001 and not state.explosive_prepared and state.reserved_sp == 0.0 and state.reserved_focus == 0.0, "natural decay releases underfunded reservation without a resource floor")
+	state.advance(10.0, false, false)
+	_check(state.focus == 0.0, "prepared ammunition cannot prevent out-of-combat decay reaching zero")
 	state.observe(10, 5)
 	state.direct_impact(1, 10, true, true, true, 3)
 	state.absolute_remaining = 4.0

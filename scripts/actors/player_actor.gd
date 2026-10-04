@@ -228,6 +228,8 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 		animation_kind = &"spiritualist"
 	elif is_geometer():
 		animation_kind = &"geometer"
+	elif is_sentinel():
+		animation_kind = &"sentinel"
 	set_animation_kind(animation_kind)
 	max_sp = stat_breakdown.value(&"max_sp")
 	current_sp = max_sp
@@ -394,7 +396,7 @@ func use_sentinel_net(point: Vector2) -> bool:
 	return true
 
 func record_sentinel_damage(result: Dictionary) -> void:
-	if not is_sentinel() or not is_alive() or not bool(result.get("can_trigger_effects", false)) or float(result.get("actual_damage", 0.0)) <= 0.0:
+	if not is_sentinel() or not is_alive() or int(result.get("source_id", 0)) != get_instance_id() or not bool(result.get("can_trigger_effects", false)) or float(result.get("actual_damage", 0.0)) <= 0.0:
 		return
 	var victim := instance_from_id(int(result.get("target_id", 0))) as CombatActor
 	if not is_instance_valid(victim) or (not victim.is_alive() and not bool(result.get("killed", false))):
@@ -2619,6 +2621,10 @@ func _draw() -> void:
 	super._draw()
 	if is_sentinel():
 		var aim_size := lerpf(15.0, 8.0, clampf(sentinel_state.stable_time / SentinelFocusState.STANCE_DELAY, 0.0, 1.0))
+		if sentinel_state.absolute_remaining > 0.0:
+			draw_arc(Vector2(0, -18), 25.0, -PI * 0.8, PI * 0.2, 24, Color("a6e3ee", 0.75), 1.5, true)
+		if sentinel_state.explosive_prepared:
+			draw_colored_polygon(PackedVector2Array([Vector2(20, -22), Vector2(24, -18), Vector2(20, -14), Vector2(16, -18)]), Color("ffbf69"))
 		for side: Vector2 in [Vector2.LEFT, Vector2.RIGHT, Vector2.UP, Vector2.DOWN]:
 			var point := Vector2(0, -22) + side * aim_size
 			draw_line(point, point - side * 3.0, Color("b4decb", 0.65), 1.0)

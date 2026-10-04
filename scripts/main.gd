@@ -104,6 +104,7 @@ var battle_indicators: BattleIndicators
 var spiritualist_ground: SpiritualistHaloUnderlay
 var geometer_casting: GeometerCasting
 var geometer_onboarding: GeometerOnboarding
+var sentinel_onboarding: SentinelOnboarding
 var sentinel_focus_label: Label
 var sentinel_focus_bar: ProgressBar
 var geometer_element_buttons: Dictionary[StringName, Button] = {}
@@ -272,7 +273,7 @@ func _input(event: InputEvent) -> void:
 				_close_class_menu()
 			elif battle_controls.settings_overlay.visible:
 				_toggle_settings(false)
-			elif cast_intent.active_skill != &"" or player.has_active_cast():
+			elif cast_intent.active_skill != &"" or player.has_active_cast() or player.sentinel_state.explosive_prepared:
 				_cancel_casting()
 			elif not get_tree().paused and not run_finished:
 				_toggle_settings(true)
@@ -638,6 +639,8 @@ func _update_aim(point: Vector2) -> void:
 		state = "DESTINO BLOQUEADO"
 	elif skill == &"snare_trap" and not player.can_place_snare_trap(point):
 		state = "POSIÇÃO BLOQUEADA"
+	elif skill == &"sentinel_net_shot" and not player.can_place_sentinel_net(point):
+		state = "POSIÇÃO BLOQUEADA"
 	elif skill == &"explosive_trap" and not player.can_place_explosive_trap(point):
 		state = "POSIÇÃO BLOQUEADA"
 	elif skill == &"foliage_shelter" and not player.can_place_foliage_shelter(point):
@@ -684,10 +687,11 @@ func _cancel_aim() -> void:
 	if bottom_controls != null:
 		bottom_controls.visible = player == null or not player.has_active_cast()
 
-func _cancel_casting() -> void:
+func _cancel_casting(cancel_ammunition: bool = true) -> void:
 	if player != null:
 		player.cancel_active_cast()
-		player.cancel_sentinel_preparation()
+		if cancel_ammunition:
+			player.cancel_sentinel_preparation()
 	_cancel_aim()
 
 func _world_mouse_point() -> Vector2:
@@ -736,12 +740,12 @@ func _clear_hover() -> void:
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_WINDOW_FOCUS_OUT:
-		_cancel_casting()
+		_cancel_casting(false)
 
 func _toggle_settings(open: bool) -> void:
 	if open and (get_tree().paused or run_finished):
 		return
-	_cancel_casting()
+	_cancel_casting(false)
 	_clear_hover()
 	battle_controls.settings_overlay.visible = open
 	get_tree().paused = open
@@ -783,7 +787,7 @@ func _spawn_enemy(enemy_type: StringName, spawn_position: Vector2) -> EnemyActor
 	var enemy := EnemyActor.new()
 	enemy.configure(enemy_type, navigation, player)
 	# The Geometer's area already defines occupancy; do not cover it with status rings.
-	enemy.compact_control_visuals = player.is_geometer()
+	enemy.compact_control_visuals = player.is_geometer() or player.is_sentinel()
 	enemy.global_position = spawn_position
 	enemy.attack_requested.connect(_on_enemy_attack_requested)
 	enemy.actor_died.connect(_on_enemy_died)
@@ -964,20 +968,10 @@ func _on_sentinel_direct_hit(request: DamageRequest, enemy: CombatActor, payload
 	if request.skill_id == &"sentinel_concussion_shot" and enemy.is_alive():
 		enemy.apply_stun(float(payload["stun_duration"]))
 		enemy.apply_attribute_debuff(AttributeDebuffState.DAMAGE_DEALT, &"sentinel_concussion_shot", float(payload["damage_dealt_reduction"]), float(payload["duration"]))
-	var visual := SentinelBurst.new()
-	visual.skill_id = request.skill_id
-	visual.radius = 20.0
-	visual.position = enemy.global_position + PlayerProjectile.BODY_OFFSET
-	add_child(visual)
-	visual.add_to_group("player_effects")
+	_show_sentinel_visual(request.skill_id, enemy.global_position + PlayerProjectile.BODY_OFFSET, 20.0)
 
 func _on_sentinel_burst(center: Vector2, request: DamageRequest, payload: Dictionary) -> void:
-	var visual := SentinelBurst.new()
-	visual.position = center
-	visual.radius = float(payload["radius"])
-	visual.skill_id = request.skill_id
-	add_child(visual)
-	visual.add_to_group("player_effects")
+	_show_sentinel_visual(request.skill_id, center, float(payload["radius"]))
 	var seen: Dictionary[int, bool] = {}
 	for enemy: CombatActor in enemies:
 		if not is_instance_valid(enemy) or not enemy.is_alive() or seen.has(enemy.get_instance_id()):
@@ -991,6 +985,21 @@ func _on_sentinel_burst(center: Vector2, request: DamageRequest, payload: Dictio
 		var result := enemy.apply_damage(hit_request, rng)
 		if enemy.is_alive() and float(result.get("actual_damage", 0.0)) > 0.0 and request.skill_id == &"sentinel_net_shot":
 			enemy.apply_root(float(payload["root_duration"]), &"magic")
+
+func _show_sentinel_visual(skill: StringName, center: Vector2, radius: float) -> void:
+	# Cosmetic scene budget independent of hit count, never suppresses damage/CC.
+	var count := 0
+	for child: Node in get_children():
+		if child is SentinelBurst and not child.is_queued_for_deletion():
+			count += 1
+	if count >= 12:
+		return
+	var visual := SentinelBurst.new()
+	visual.skill_id = skill
+	visual.radius = radius
+	visual.position = center
+	add_child(visual)
+	visual.add_to_group("player_effects")
 
 func _on_discharge_requested(request: DamageRequest, direction: Vector2, bonus_magic_damage: float) -> void:
 	var projectile := MageProjectile.new()
@@ -2048,6 +2057,8 @@ func _show_combat_text(actor: CombatActor, text: String, color: Color, font_size
 func _update_hud() -> void:
 	if geometer_onboarding != null:
 		geometer_onboarding.refresh()
+	if sentinel_onboarding != null:
+		sentinel_onboarding.refresh()
 	if player == null or player.health == null:
 		return
 	health_label.text = "VIDA  %d / %d" % [ceili(player.health.current_hp), ceili(player.health.max_hp)]
@@ -2081,6 +2092,10 @@ func _update_hud() -> void:
 			var rank_text := " R%d" % player.skill_rank(skill_id) if not definition.ranks.is_empty() else ""
 			var state := _display_skill_state(skill_id, cost)
 			battle_controls.show_skill_state(skill_id, "%s · %s%s\n%d SP · %s" % [_skill_input_label(skill_id), definition.display_name.to_upper(), rank_text, int(cost), state], cast_intent.active_skill == skill_id or player.active_cast_skill == skill_id)
+			if player.is_sentinel() and skill_id in SentinelTuning.SKILL_IDS:
+				var focus_cost := float(SentinelTuning.values(skill_id, player.skill_rank(skill_id))["focus_cost"])
+				battle_controls.show_skill_state(skill_id, "%s · %s%s\n%d SP · %d Foco\n%s" % [_skill_input_label(skill_id), definition.display_name.to_upper(), rank_text, ceili(cost), ceili(focus_cost), state], cast_intent.active_skill == skill_id or player.active_cast_skill == skill_id)
+				battle_controls.skill_buttons[skill_id].tooltip_text = ClassCatalog.sentinel_description(skill_id, player.skill_rank(skill_id))
 			if skill_id == &"geometer_triangulation" and geometer_casting != null:
 				var elements := geometer_casting.construction.elements()
 				if elements.size() == 2:
@@ -2308,6 +2323,8 @@ func _build_ui() -> void:
 	hud_column.add_child(health_label)
 	hud_column.add_child(sp_label)
 	if player.is_sentinel():
+		hud_panel.offset_bottom = 156.0
+		skill_label.hide()
 		sentinel_focus_label = _make_label("FOCO 0 / 100", 16, Color("b4decb"))
 		hud_column.add_child(sentinel_focus_label)
 		sentinel_focus_bar = ProgressBar.new()
@@ -2342,6 +2359,11 @@ func _build_ui() -> void:
 		geometer_onboarding = GeometerOnboarding.new()
 		ui_root.add_child(geometer_onboarding)
 		geometer_onboarding.configure(geometer_casting)
+	if player.is_sentinel():
+		help_panel.hide()
+		sentinel_onboarding = SentinelOnboarding.new()
+		ui_root.add_child(sentinel_onboarding)
+		sentinel_onboarding.configure(player)
 	if run_state.build_snapshot != null and run_state.build_snapshot.evolution_id == &"spiritualist":
 		_build_spiritualist_panel()
 	if geometer_casting != null:
@@ -2450,6 +2472,11 @@ func _build_ui() -> void:
 	battle_controls.settings_requested.connect(_toggle_settings)
 	battle_controls.preferences_changed.connect(_change_control_preferences)
 	battle_controls.set_class_skills(player.available_skill_ids())
+	if player.is_sentinel():
+		battle_controls.skill_bar.offset_top = -106.0
+		for button: Button in battle_controls.skill_buttons.values():
+			button.custom_minimum_size.y = 88.0
+			button.add_theme_font_size_override("font_size", 14)
 	# The battle controls belong below end-of-run and reward modals.
 	ui_root.move_child(battle_controls, augment_overlay.get_index())
 

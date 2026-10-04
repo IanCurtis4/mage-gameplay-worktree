@@ -52,7 +52,11 @@ func advance(delta: float, moved: bool, combat_active: bool, paused: bool = fals
 		var previous := inactive_time
 		inactive_time += delta
 		var decay_time := maxf(0.0, inactive_time - maxf(previous, OUT_OF_COMBAT_DELAY))
-		focus = maxf(reserved_focus, focus - decay_time * DECAY_PER_SECOND)
+		focus = maxf(0.0, focus - decay_time * DECAY_PER_SECOND)
+		# Out-of-combat decay reaches zero even with ammunition prepared. An
+		# underfunded reservation is released, without spending SP or starting CD.
+		if explosive_prepared and focus + 0.00001 < reserved_focus:
+			cancel_preparation()
 	absolute_remaining = maxf(0.0, absolute_remaining - delta)
 
 func gain(amount: float) -> float:
