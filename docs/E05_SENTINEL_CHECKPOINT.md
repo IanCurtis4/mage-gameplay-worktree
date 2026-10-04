@@ -11,7 +11,7 @@ antes da abertura. A autorização humana foi conferida no chat de Astra.
 Geômetra revisada está em playtest, sem aceite de produto inferido por iniciar
 Sentinela. Diretório habitual/codex-playtest e saves pessoais permanecem intactos.
 
-Próximo passo: S4 Explosivo; seguir S4–S7
+Próximo passo: S5 Concussão, Leitura e Absoluto; seguir S5–S7
 autonomamente, um bloco/skill por vez, sem gate nem handoff intermediário.
 
 ## Abertura / S0
@@ -55,6 +55,12 @@ S3 commit 07a735b. S4 Rede fechada: projétil abre no primeiro corpo/terreno/pon
 167 checks PASS: ranks, boss cap/budget, ataque permitido sob root, preparo
 cancelável grátis, revalidação, parede, delta/frequências, shield/proc/limpeza.
 Revisão interna corrigiu a tag de controle para `magic`; ID da skill não é canal.
+
+Rede commit 204533d. Explosivo fechado: reserva SP/Foco sem custo/CD/reset,
+cancelamento libera, próximo auto revalida e paga uma vez, substituindo dano
+físico por INT e área sem duplicar principal. 162 checks PASS: ranks, recursos
+livres, snapshots no lançamento, alvo trocado/perdido, LoS, proc único, input,
+pausa/morte/fim e nenhum auto gratuito. Resets não consomem a reserva.
 
 Para cada unidade concluída: camada/skill, commit, teste/resultado, decisão
 relevante e próxima unidade. Registrar uso somente quando mensurável. Não

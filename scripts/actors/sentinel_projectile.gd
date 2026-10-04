@@ -17,5 +17,8 @@ func _draw() -> void:
 		draw_arc(Vector2.ZERO, 8.0, 0.0, TAU, 16, Color("bddfd1"), 1.5)
 		draw_line(Vector2(-6, -6), Vector2(6, 6), Color.WHITE, 1.0)
 		draw_line(Vector2(-6, 6), Vector2(6, -6), Color.WHITE, 1.0)
+	elif id == &"sentinel_explosive_shot":
+		draw_line(Vector2(-20, 0), Vector2(11, 0), Color("ffbf69"), 2.0)
+		draw_colored_polygon(PackedVector2Array([Vector2(13, 0), Vector2(6, -6), Vector2(3, 0), Vector2(6, 6)]), Color("ffda96"))
 	else:
 		super._draw()

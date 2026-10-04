@@ -364,6 +364,10 @@ func _on_skill_cast_ready(skill: StringName, point: Vector2, target_id: int) -> 
 	_execute_skill(skill, point, selected_target)
 
 func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatActor = null) -> void:
+	if skill == &"sentinel_explosive_shot":
+		if not player.prepare_sentinel_explosive():
+			_report_skill_failure(skill, selected_target)
+		return
 	if skill == &"sentinel_net_shot":
 		if not player.use_sentinel_net(point):
 			_report_skill_failure(skill, selected_target)
@@ -679,6 +683,7 @@ func _cancel_aim() -> void:
 func _cancel_casting() -> void:
 	if player != null:
 		player.cancel_active_cast()
+		player.cancel_sentinel_preparation()
 	_cancel_aim()
 
 func _world_mouse_point() -> Vector2:
@@ -922,11 +927,14 @@ func _on_precision_projectile_requested(skill_id: StringName, request: DamageReq
 	_spawn_precision_projectiles(skill_id, request, direction, count, hit_limit, _on_precision_projectile_hit)
 
 func _on_sentinel_projectile_requested(request: DamageRequest, target_actor: CombatActor, direction: Vector2, payload: Dictionary) -> void:
-	if request.skill_id == &"sentinel_net_shot":
+	if request.skill_id in [&"sentinel_net_shot", &"sentinel_explosive_shot"]:
 		var area := SentinelAreaProjectile.new()
 		var origin := player.global_position + PlayerProjectile.BODY_OFFSET
-		area.configure_directional(request.copy(), origin, direction, enemies, navigation, float(payload["projectile_speed"]), float(payload["range"]))
-		area.endpoint = Vector2(payload["endpoint"]) + PlayerProjectile.BODY_OFFSET
+		if request.skill_id == &"sentinel_net_shot":
+			area.configure_directional(request.copy(), origin, direction, enemies, navigation, float(payload["projectile_speed"]), float(payload["range"]))
+			area.endpoint = Vector2(payload["endpoint"]) + PlayerProjectile.BODY_OFFSET
+		else:
+			area.configure_homing(request.copy(), target_actor, origin, navigation, float(payload["projectile_speed"]), float(payload["range"]), Color("ffbf69"))
 		area.payload = payload.duplicate(true)
 		area.burst.connect(_on_sentinel_burst)
 		add_child(area)
@@ -2024,6 +2032,8 @@ func _update_hud() -> void:
 		return
 	health_label.text = "VIDA  %d / %d" % [ceili(player.health.current_hp), ceili(player.health.max_hp)]
 	sp_label.text = "SP  %d / %d" % [floori(player.current_sp), floori(player.max_sp)]
+	if player.is_sentinel() and player.sentinel_state.reserved_sp > 0.0:
+		sp_label.text = "SP LIVRE %d / %d · %d reservado" % [floori(player.sentinel_free_sp()), floori(player.max_sp), ceili(player.sentinel_state.reserved_sp)]
 	if sentinel_focus_label != null:
 		var focus := player.sentinel_state
 		sentinel_focus_label.text = "FOCO  %d / 100%s" % [floori(focus.free_focus()), " · %d reservado" % floori(focus.reserved_focus) if focus.reserved_focus > 0.0 else ""]
@@ -2064,6 +2074,8 @@ func _skill_input_label(skill_id: StringName) -> String:
 	return labels[index] if index >= 0 and index < labels.size() else ClassCatalog.skill_definition(skill_id).input_key
 
 func _display_skill_state(skill_id: StringName, sp_cost: float) -> String:
+	if skill_id == &"sentinel_explosive_shot" and player.sentinel_state.explosive_prepared:
+		return "PREPARADO · CANCELAR"
 	if player.active_cast_skill == skill_id:
 		return "CONJURANDO %.1fs" % player.active_cast_remaining
 	if skill_id == &"shield_wall" and player.has_shield_stance():

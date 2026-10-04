@@ -305,6 +305,56 @@ func _start_sentinel_recovery(facing: Vector2) -> void:
 func sentinel_can_use(skill_id: StringName) -> bool:
 	return is_sentinel() and not is_stunned() and not is_feared() and not (is_inside_tree() and get_tree().paused) and _can_spend(skill_id) and sentinel_state.can_pay(float(SentinelTuning.values(skill_id, skill_rank(skill_id)).get("focus_cost", 0.0)))
 
+func cancel_sentinel_preparation() -> bool:
+	if not sentinel_state.explosive_prepared:
+		return false
+	sentinel_state.cancel_preparation()
+	resources_changed.emit()
+	queue_redraw()
+	return true
+
+func prepare_sentinel_explosive() -> bool:
+	if not is_sentinel() or not is_alive() or (is_inside_tree() and get_tree().paused):
+		return false
+	if sentinel_state.explosive_prepared:
+		return cancel_sentinel_preparation()
+	var id := &"sentinel_explosive_shot"
+	if not sentinel_can_use(id):
+		return false
+	var tuning := SentinelTuning.values(id, skill_rank(id))
+	# Reservation is not payment; no cooldown or recovery is touched here.
+	sentinel_state.reserved_sp = skill_cost(id)
+	sentinel_state.reserved_focus = float(tuning["focus_cost"])
+	sentinel_state.explosive_prepared = true
+	resources_changed.emit()
+	queue_redraw()
+	return true
+
+func _launch_sentinel_explosive(enemy: CombatActor) -> bool:
+	var id := &"sentinel_explosive_shot"
+	if not sentinel_state.explosive_prepared or not is_sentinel() or not is_alive() or is_stunned() or is_feared() or (is_inside_tree() and get_tree().paused):
+		return false
+	if id not in available_skill_ids() or skill_cooldown(id) > 0.0 or not can_basic_attack(enemy, _attack_engaged):
+		return false
+	if current_sp < sentinel_state.reserved_sp or sentinel_state.focus < sentinel_state.reserved_focus:
+		return false
+	var tuning := SentinelTuning.values(id, skill_rank(id))
+	if tuning.is_empty():
+		return false
+	var reserved_focus := sentinel_state.reserved_focus
+	var request := _make_magic_request(enemy, id, SentinelMath.raw_power(id, skill_rank(id), stat_breakdown), DamageRequest.AccuracyMode.GEOMETRY, true)
+	var facing := _resolved_facing(aim_direction(enemy.global_position))
+	# All launch checks passed. Release then consume the reservation exactly once.
+	sentinel_state.cancel_preparation()
+	_spend(id)
+	sentinel_state.spend(reserved_focus)
+	_start_sentinel_recovery(facing)
+	var payload := tuning.duplicate(true)
+	payload["range"] = archer_basic_projectile_range()
+	sentinel_projectile_requested.emit(request, enemy, facing, payload)
+	resources_changed.emit()
+	return true
+
 func sentinel_net_center(point: Vector2) -> Vector2:
 	return global_position + (point - global_position).limit_length(skill_range(&"sentinel_net_shot"))
 
@@ -2336,6 +2386,9 @@ func _try_basic_attack() -> void:
 	if is_sentinel() and _sentinel_last_launch_frame == Engine.get_process_frames():
 		return
 	if target == null or attack_cooldown > 0.0 or not can_basic_attack(target, _attack_engaged):
+		return
+	if is_sentinel() and sentinel_state.explosive_prepared:
+		_launch_sentinel_explosive(target)
 		return
 	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
 	_last_facing = global_position.direction_to(target.global_position)
