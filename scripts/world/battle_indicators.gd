@@ -519,7 +519,7 @@ func _draw() -> void:
 		draw_colored_polygon(outline.slice(0, outline.size() - 1), Color(color, 0.16))
 		draw_polyline(outline, color, 2.0, true)
 		draw_arc(origin, active_range * 0.55, direction.angle() - PlayerActor.HAUNT_HALF_ANGLE, direction.angle() + PlayerActor.HAUNT_HALF_ANGLE, 22, Color(color, 0.5), 1.0, true)
-	elif skill in [&"fire_spear", &"ice_spear", &"lightning", &"electric_discharge", &"slowing_arrow", &"sentinel_headshot", &"sentinel_observe"]:
+	elif skill in [&"fire_spear", &"ice_spear", &"lightning", &"electric_discharge", &"slowing_arrow", &"sentinel_headshot", &"sentinel_observe", &"sentinel_concussion_shot"]:
 		draw_dashed_line(origin, endpoint, color, 2.0, 10.0, true, true)
 		_draw_endpoint(endpoint, color)
 	elif skill == &"double_shot":

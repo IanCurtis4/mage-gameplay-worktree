@@ -372,7 +372,7 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 		if not player.use_sentinel_net(point):
 			_report_skill_failure(skill, selected_target)
 		return
-	if skill in [&"sentinel_headshot", &"sentinel_piercing_shot"]:
+	if skill in [&"sentinel_headshot", &"sentinel_piercing_shot", &"sentinel_concussion_shot"]:
 		if not player.use_sentinel_reset(skill, point, selected_target):
 			_report_skill_failure(skill, selected_target)
 		return
@@ -947,9 +947,25 @@ func _on_sentinel_projectile_requested(request: DamageRequest, target_actor: Com
 	else:
 		projectile.configure_homing(request.copy(), target_actor, origin, navigation, float(payload["projectile_speed"]), float(payload["range"]), Color("d7f0de"))
 	projectile.direction = direction
-	projectile.hit.connect(_on_precision_projectile_hit)
+	projectile.hit.connect(_on_sentinel_direct_hit.bind(payload.duplicate(true)))
 	add_child(projectile)
 	projectile.add_to_group("player_projectiles")
+
+func _on_sentinel_direct_hit(request: DamageRequest, enemy: CombatActor, payload: Dictionary) -> void:
+	if not is_instance_valid(enemy) or not enemy.is_alive():
+		return
+	var result := enemy.apply_damage(request, rng)
+	if float(result.get("actual_damage", 0.0)) <= 0.0:
+		return
+	if request.skill_id == &"sentinel_concussion_shot" and enemy.is_alive():
+		enemy.apply_stun(float(payload["stun_duration"]))
+		enemy.apply_attribute_debuff(AttributeDebuffState.DAMAGE_DEALT, &"sentinel_concussion_shot", float(payload["damage_dealt_reduction"]), float(payload["duration"]))
+	var visual := SentinelBurst.new()
+	visual.skill_id = request.skill_id
+	visual.radius = 20.0
+	visual.position = enemy.global_position + PlayerProjectile.BODY_OFFSET
+	add_child(visual)
+	visual.add_to_group("player_effects")
 
 func _on_sentinel_burst(center: Vector2, request: DamageRequest, payload: Dictionary) -> void:
 	var visual := SentinelBurst.new()

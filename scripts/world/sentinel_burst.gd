@@ -19,6 +19,16 @@ func _process(delta: float) -> void:
 
 func _draw() -> void:
 	var progress := 1.0 - remaining / DURATION
+	if skill_id == &"sentinel_headshot":
+		for axis: Vector2 in [Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT, Vector2.UP]:
+			draw_line(axis * 6.0, axis * lerpf(10.0, radius, progress), Color("e4f5e8", 1.0 - progress), 1.5)
+		return
+	if skill_id == &"sentinel_concussion_shot":
+		draw_arc(Vector2.ZERO, lerpf(7.0, radius, progress), -PI * 0.8, PI * 0.8, 20, Color("eedb9f", 1.0 - progress), 2.0)
+		return
+	if skill_id == &"sentinel_piercing_shot":
+		draw_line(Vector2(-7, -5), Vector2(7, 5), Color("a6e3ee", 1.0 - progress), 1.5)
+		return
 	var color := Color("bddfd1") if skill_id == &"sentinel_net_shot" else Color("ffbf69")
 	color.a = 1.0 - progress
 	draw_arc(Vector2.ZERO, radius * lerpf(0.25, 1.0, progress), 0.0, TAU, 48, color, 2.0, true)

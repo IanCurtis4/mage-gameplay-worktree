@@ -267,7 +267,7 @@ func use_sentinel_observe(enemy: CombatActor) -> bool:
 	return true
 
 func use_sentinel_reset(skill_id: StringName, point: Vector2, enemy: CombatActor = null) -> bool:
-	if skill_id not in [&"sentinel_headshot", &"sentinel_piercing_shot"] or not point.is_finite() or not sentinel_can_use(skill_id):
+	if skill_id not in [&"sentinel_headshot", &"sentinel_piercing_shot", &"sentinel_concussion_shot"] or not point.is_finite() or not sentinel_can_use(skill_id):
 		return false
 	if navigation == null:
 		return false

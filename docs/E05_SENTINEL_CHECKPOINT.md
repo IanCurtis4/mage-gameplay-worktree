@@ -11,7 +11,7 @@ antes da abertura. A autorização humana foi conferida no chat de Astra.
 Geômetra revisada está em playtest, sem aceite de produto inferido por iniciar
 Sentinela. Diretório habitual/codex-playtest e saves pessoais permanecem intactos.
 
-Próximo passo: S5 Concussão, Leitura e Absoluto; seguir S5–S7
+Próximo passo: S5 Leitura e Absoluto; seguir S5–S7
 autonomamente, um bloco/skill por vez, sem gate nem handoff intermediário.
 
 ## Abertura / S0
@@ -61,6 +61,12 @@ cancelamento libera, próximo auto revalida e paga uma vez, substituindo dano
 físico por INT e área sem duplicar principal. 162 checks PASS: ranks, recursos
 livres, snapshots no lançamento, alvo trocado/perdido, LoS, proc único, input,
 pausa/morte/fim e nenhum auto gratuito. Resets não consomem a reserva.
+
+Explosivo commit f11b183 (166 checks com dispatcher adicional). Concussão
+fechada: reset ST físico baixo, stun/debuff após dano positivo por canais
+canônicos, snapshot do controle em voo. 313 checks PASS: ranks, crítico não
+alonga CC, boss/resistência/budget, miss/shield/dead, debuff MAX, proc antes de
+controle novo, recursos e reserva intacta. Cabeça 126 PASS novamente.
 
 Para cada unidade concluída: camada/skill, commit, teste/resultado, decisão
 relevante e próxima unidade. Registrar uso somente quando mensurável. Não

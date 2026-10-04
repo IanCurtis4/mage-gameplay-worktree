@@ -327,6 +327,15 @@ func _intents() -> void:
 		_check(not player.sentinel_state.explosive_prepared and player.sentinel_free_sp() == sp and player.sentinel_state.focus == 90.0, "input mode%d cancel returns reserve without launching" % mode)
 		arena.queue_free()
 		await process_frame
+	for id: StringName in [HEAD, PIERCE]:
+		var arena := _scene()
+		var player := arena.player
+		arena._commit_skill(EXPLOSIVE, player.position)
+		arena._commit_skill(id, arena.training_boss.position + PlayerProjectile.BODY_OFFSET)
+		_check(player.sentinel_state.explosive_prepared and player.sentinel_state.reserved_focus == 25.0 and player.skill_cooldown(EXPLOSIVE) == 0.0, "actual dispatcher %s preserves ammunition while launching its own shot" % id)
+		_check(get_nodes_in_group("player_projectiles").size() == 1 and get_nodes_in_group("player_projectiles")[0].request.skill_id == id, "actual dispatcher %s emits no extra Explosive or ordinary auto" % id)
+		arena.queue_free()
+		await process_frame
 
 func _close(actual: float, expected: float, label: String) -> void:
 	_check(absf(actual - expected) < 0.0001, "%s (%.6f vs %.6f)" % [label, actual, expected])
