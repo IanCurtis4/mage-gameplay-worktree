@@ -73,7 +73,7 @@ func _build_ui() -> void:
 	help_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	help_label.add_theme_font_size_override("font_size", 13)
 	help_label.add_theme_color_override("font_color", Color("b9ced8"))
-	help_label.text = "1 Fogo · 2 Gelo · 3 Raio: selecionam, sem disparar.\nTraçado cria A/B; Triangulação cria C (job 28).\nTriangulação R1: puros; R3: mistos; R5: tricolores.\nChão fixa; corpo vincula; Shift força chão.\nTranslação move o último; Reescrita troca o primeiro.\nEditar não renova a figura nem repete a resolução.\nEsc cancela a mira; Backspace desfaz SEM Colapso.\nColapso consome parede/triângulo válido; expirar só desfaz."
+	help_label.text = "F1 Fogo · F2 Gelo · F3 Raio: selecionam, sem disparar.\nTraçado cria A/B; Triangulação cria C (job 28).\nTriangulação R1: puros; R3: mistos; R5: tricolores.\nChão fixa; corpo vincula; Shift força chão.\nTranslação move o último; Reescrita troca o primeiro.\nEditar não renova a figura nem repete a resolução.\nEsc cancela a mira; F6 desfaz SEM Colapso.\nColapso consome parede/triângulo válido; expirar só desfaz."
 	column.add_child(help_label)
 	help_label.hide()
 
@@ -108,7 +108,7 @@ func refresh() -> void:
 		var anchor := state.vertices[index]
 		marks.append("%s:%s%s" % ["ABC"[index], _element_name(anchor.element), "↟" if anchor.actor_id > 0 else ""])
 		remaining = minf(remaining, anchor.remaining) if remaining > 0.0 else anchor.remaining
-	var sequence := " · ".join(marks) if not marks.is_empty() else "1 Fogo · 2 Gelo · 3 Raio"
+	var sequence := " · ".join(marks) if not marks.is_empty() else "F1 Fogo · F2 Gelo · F3 Raio"
 	if remaining > 0.0:
 		sequence += " · %.1f s" % remaining
 	var message := "%s\n%s\n%s" % [heading, sequence, _next_step(state, pending)]
@@ -136,12 +136,12 @@ func _next_step(state: GeometerConstructionState, pending: int) -> String:
 			var player := _casting.player
 			var rank := player.skill_rank(&"geometer_triangulation")
 			if rank <= 0:
-				return "C exige aprender Triangulação no job 28 e equipá-la."
+				return "C exige aprender Triangulação no job 28."
 			if &"geometer_triangulation" not in player.available_skill_ids():
-				return "Equipe Triangulação R%d para criar C." % rank
+				return "Triangulação R%d exige requisitos legais para criar C." % rank
 			return "Triangulação R%d cria C · %s" % [rank, "puros" if rank < 3 else ("puros/mistos" if rank < 5 else "todas as receitas")]
 		GeometerConstructionState.Shape.TRIANGLE:
-			return "Edite ou use Colapso; Backspace desfaz sem dano."
+			return "Edite ou use Colapso; F6 desfaz sem dano."
 	return ""
 
 func _element_name(element: StringName) -> String:

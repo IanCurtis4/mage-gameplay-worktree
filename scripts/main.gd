@@ -13,7 +13,6 @@ const ARENA_OBSTACLES: Array[Rect2] = [
 const TARGET_ASSIST_RADIUS := BattleTargeting.ASSIST_RADIUS
 const TARGET_DIRECT_PADDING := BattleTargeting.DIRECT_PADDING
 const ACTOR_BODY_OFFSET := BattleTargeting.BODY_OFFSET
-const SKILL_KEYS := [KEY_Q, KEY_W, KEY_A, KEY_S, KEY_D]
 const DEFENDER_WATCH_DIRECT_MELEE_IDS := [
 	&"basic_attack", &"cone_slash", &"brutal_strike", &"concentrated_rage",
 	&"defender_counterstroke", &"defender_line_lock", &"defender_wall_advance", &"defender_reprisal_wave",
@@ -100,6 +99,8 @@ var _selected_enemy: CombatActor
 var _feedback_serial := 0
 var cast_intent := CastIntent.new()
 var control_preferences := ControlPreferences.new()
+var action_bar_input := ActionBarInput.new()
+var action_slots: Array[Variant] = []
 var battle_indicators: BattleIndicators
 var spiritualist_ground: SpiritualistHaloUnderlay
 var geometer_casting: GeometerCasting
@@ -261,13 +262,20 @@ func _process(_delta: float) -> void:
 		_collect_reward()
 
 func _input(event: InputEvent) -> void:
-	if geometer_casting != null and event is InputEventMouse:
+	if event is InputEventMouse:
 		_geometer_pointer_screen = event.position
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed and (cast_intent.active_skill != &"" or player.has_active_cast()):
 		_cancel_casting()
 		get_viewport().set_input_as_handled()
 		return
 	if event is InputEventKey and not event.echo:
+		if battle_controls != null and battle_controls.handle_binding_event(event):
+			_cancel_aim()
+			get_viewport().set_input_as_handled()
+			return
+		if _keyboard_text_focused():
+			_cancel_aim()
+			return
 		if event.keycode == KEY_ESCAPE and event.pressed:
 			if class_overlay.visible:
 				_close_class_menu()
@@ -278,9 +286,9 @@ func _input(event: InputEvent) -> void:
 			elif not get_tree().paused and not run_finished:
 				_toggle_settings(true)
 			get_viewport().set_input_as_handled()
-		elif not event.pressed and cast_intent.mode == CastIntent.Mode.RELEASE:
-			var skill := _key_skill(event.keycode)
-			if skill != &"" and skill == cast_intent.active_skill:
+		elif not event.pressed:
+			var skill := action_bar_input.release(event)
+			if cast_intent.mode == CastIntent.Mode.RELEASE and skill != &"" and skill == cast_intent.active_skill:
 				var to_cast := cast_intent.release(skill)
 				if _world_pointer_available():
 					_commit_skill(to_cast, _world_mouse_point())
@@ -289,23 +297,26 @@ func _input(event: InputEvent) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode == KEY_E and _reward_retry_pending:
+		if _keyboard_text_focused():
+			return
+		var auxiliary: bool = not event.alt_pressed and not event.ctrl_pressed and not event.shift_pressed and not event.meta_pressed
+		if auxiliary and event.keycode == KEY_F8 and _reward_retry_pending:
 			_reward_retry_pending = false
 			_collect_reward()
 			get_viewport().set_input_as_handled()
 			return
-		if event.keycode == KEY_R and (not player.is_alive() or run_finished):
+		if auxiliary and event.keycode == KEY_F9 and (not player.is_alive() or run_finished):
 			_restart_run()
 			return
-		if event.keycode == KEY_E and not run_finished and run_state.can_open_choice(encounter_active):
+		if auxiliary and event.keycode == KEY_F8 and not run_finished and run_state.can_open_choice(encounter_active):
 			_open_augment_menu()
 			return
 		if get_tree().paused or not player.is_alive() or run_finished:
 			return
-		if _handle_geometer_key(event.keycode):
+		if auxiliary and _handle_geometer_key(event.keycode):
 			get_viewport().set_input_as_handled()
 			return
-		var skill := _key_skill(event.keycode)
+		var skill := action_bar_input.press(event, control_preferences, action_slots)
 		if skill != &"":
 			player.cancel_active_cast()
 			var definition := ClassCatalog.skill_definition(skill)
@@ -317,7 +328,7 @@ func _unhandled_input(event: InputEvent) -> void:
 				_commit_skill(cast_intent.press(skill), _world_mouse_point())
 				_update_aim(_world_mouse_point())
 			get_viewport().set_input_as_handled()
-		elif event.keycode == KEY_SPACE and next_button.visible:
+		elif auxiliary and event.keycode == KEY_SPACE and next_button.visible:
 			_start_next_encounter()
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 		_cancel_casting()
@@ -334,9 +345,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func _key_skill(key: Key) -> StringName:
-	var index := SKILL_KEYS.find(key)
-	var skill_ids := player.available_skill_ids()
-	return skill_ids[index] if index >= 0 and index < skill_ids.size() else &""
+	var event := InputEventKey.new()
+	event.keycode = key
+	var index := control_preferences.slot_for_event(event)
+	return StringName(action_slots[index]) if index >= 0 and index < action_slots.size() and action_slots[index] != null else &""
+
+func _keyboard_text_focused() -> bool:
+	var focused := get_viewport().gui_get_focus_owner()
+	return focused is LineEdit or focused is TextEdit
 
 func _commit_skill(skill: StringName, point: Vector2) -> void:
 	if skill == &"" or get_tree().paused or run_finished or not player.is_alive():
@@ -582,6 +598,7 @@ func _report_skill_failure(skill: StringName, selected_target: CombatActor = nul
 func _select_skill_from_bar(skill: StringName) -> void:
 	if get_tree().paused or run_finished or not player.is_alive():
 		return
+	action_bar_input.cancel() # A card creates mouse-only confirmation, not held-key release.
 	player.cancel_active_cast()
 	var definition := ClassCatalog.skill_definition(skill)
 	if definition != null and definition.targeting == SkillDefinition.Targeting.SELF:
@@ -677,6 +694,7 @@ func _update_aim(point: Vector2) -> void:
 
 func _cancel_aim() -> void:
 	cast_intent.cancel()
+	action_bar_input.cancel()
 	if geometer_casting != null:
 		geometer_casting.preview_command = null
 		geometer_casting.queue_redraw()
@@ -695,9 +713,9 @@ func _cancel_casting(cancel_ammunition: bool = true) -> void:
 	_cancel_aim()
 
 func _world_mouse_point() -> Vector2:
-	# Geometer keyboard casts use the same viewport event coordinates as clicks.
+	# All keyboard casts use the same viewport event coordinates as clicks.
 	# Keep screen space so camera motion is still resolved at confirmation time.
-	if geometer_casting != null and _geometer_pointer_screen.is_finite():
+	if _geometer_pointer_screen.is_finite():
 		return get_canvas_transform().affine_inverse() * _geometer_pointer_screen
 	return get_global_mouse_position()
 
@@ -707,10 +725,10 @@ func _world_pointer_available() -> bool:
 func _handle_geometer_key(key: Key) -> bool:
 	if geometer_casting == null or not _world_pointer_available():
 		return false
-	if key in [KEY_1, KEY_2, KEY_3]:
-		_select_geometer_element(GeometerGeometry.ELEMENTS[[KEY_1, KEY_2, KEY_3].find(key)])
+	if key in [KEY_F1, KEY_F2, KEY_F3]:
+		_select_geometer_element(GeometerGeometry.ELEMENTS[[KEY_F1, KEY_F2, KEY_F3].find(key)])
 		return true
-	if key == KEY_BACKSPACE:
+	if key == KEY_F6:
 		_clear_geometer_construction()
 		return true
 	return false
@@ -721,6 +739,26 @@ func _select_geometer_element(element: StringName) -> void:
 	if geometer_casting.select(element):
 		for token: StringName in geometer_element_buttons:
 			geometer_element_buttons[token].set_pressed_no_signal(token == element)
+
+func _change_action_slots(slots: Array[Variant]) -> void:
+	_cancel_casting(false)
+	if not ActionBarLayout.valid(slots, player.available_skill_ids()):
+		battle_controls.set_action_bar(player.available_skill_ids(), action_slots, control_preferences)
+		return
+	if persistent_facade != null and not training_mode:
+		var profile := persistent_facade.current_profile()
+		var result := persistent_facade.update_action_slots("bar-%d" % Time.get_ticks_usec(), profile.revision, run_state.character_id, slots)
+		if not result["ok"]:
+			status_label.text = "Não foi possível salvar os atalhos; organização anterior mantida."
+			battle_controls.set_action_bar(player.available_skill_ids(), action_slots, control_preferences)
+			return
+	action_slots = slots.duplicate()
+	# No build, rank, stats, cooldown or resource recalculation for shortcut edits.
+
+func _change_action_bindings() -> void:
+	_cancel_casting(false)
+	if control_preferences.save_settings() != OK:
+		status_label.text = "Atalhos válidos nesta sessão; não foi possível salvar os controles."
 
 func _clear_geometer_construction() -> void:
 	if geometer_casting == null or run_finished or get_tree().paused or not player.is_alive():
@@ -748,10 +786,13 @@ func _toggle_settings(open: bool) -> void:
 	_cancel_casting(false)
 	_clear_hover()
 	battle_controls.settings_overlay.visible = open
+	class_button.visible = not open
+	if not open:
+		battle_controls.cancel_binding_capture()
 	get_tree().paused = open
 
 func _change_control_preferences(mode: int, smart_lock: bool) -> void:
-	_cancel_casting()
+	_cancel_casting(false)
 	_clear_hover()
 	cast_intent.set_mode(mode)
 	control_preferences.cast_mode = mode
@@ -1649,7 +1690,7 @@ func _on_enemy_damage_resolved(result: Dictionary) -> void:
 			var resonance_target := instance_from_id(int(result.get("target_id", 0))) as CombatActor
 			if resonance_target != null and is_instance_valid(resonance_target):
 				battle_indicators.show_elementalist_prism(resonance_target.global_position, &"elementalist_prismatic_resonance")
-	if player.run_state != null and player.run_state.uses_persistent_build() and player.run_state.build_snapshot.evolution_id == &"defender" and &"defender_watch" in player.run_state.build_snapshot.passive_slots and bool(result.get("can_trigger_effects", false)) and float(result.get("actual_damage", 0.0)) > 0.0 and StringName(result.get("skill_id", &"")) in DEFENDER_WATCH_DIRECT_MELEE_IDS:
+	if player.run_state != null and player.run_state.uses_persistent_build() and player.run_state.build_snapshot.evolution_id == &"defender" and player.run_state.build_snapshot.has_passive(&"defender_watch") and bool(result.get("can_trigger_effects", false)) and float(result.get("actual_damage", 0.0)) > 0.0 and StringName(result.get("skill_id", &"")) in DEFENDER_WATCH_DIRECT_MELEE_IDS:
 		var watch_rank := ClassCatalog.skill_definition(&"defender_watch").rank_definition(player.skill_rank(&"defender_watch"))
 		var watch_target := instance_from_id(int(result.get("target_id", 0))) as CombatActor
 		if watch_rank != null and watch_target != null and is_instance_valid(watch_target) and watch_target.is_alive():
@@ -1824,10 +1865,16 @@ func _restart_run() -> void:
 		_return_to_character_menu()
 		return
 	if training_mode:
-		pending_run_state = RunState.from_build("", run_state.build_snapshot)
+		pending_run_state = _training_restart_state()
 		pending_training_mode = true
 	get_tree().paused = false
 	get_tree().reload_current_scene()
+
+func _training_restart_state() -> RunState:
+	# Keep session organization on retry without mutating the current build or save.
+	var snapshot := run_state.build_snapshot.copy_snapshot()
+	snapshot.action_slots = action_slots.duplicate()
+	return RunState.from_build("", snapshot)
 
 func _return_to_character_menu() -> void:
 	var closed := _close_persistent_run(_terminal_outcome)
@@ -1881,6 +1928,8 @@ func _open_class_menu() -> void:
 		return
 	if battle_controls.settings_overlay.visible:
 		battle_controls.settings_overlay.visible = false
+		battle_controls.cancel_binding_capture()
+		class_button.show()
 	_cancel_casting(false)
 	_clear_hover()
 	class_label.text = "Treino isolado da build atual. Saia pelo botão de treino para mudar a build." if training_mode else ("Esta run usa o personagem persistente %s.\nVolte ao menu para trocar personagem ou iniciar outra run." % player.class_definition.display_name if _persistent_run_active() else "Classe atual: %s\nEscolher uma classe inicia uma run nova e limpa todo o estado temporário." % player.class_definition.display_name)
@@ -2084,7 +2133,7 @@ func _update_hud() -> void:
 		defender_status_label.text = player.defender_feedback_text()
 		defender_status_label.visible = not defender_status_label.text.is_empty()
 	_update_spiritualist_panel()
-	augment_button.text = "Escolher augment (E) — %d pendente(s)" % run_state.pending_choices
+	augment_button.text = "Escolher augment (F8) — %d pendente(s)" % run_state.pending_choices
 	augment_button.visible = run_state.pending_choices > 0
 	if battle_controls != null:
 		for skill_id: StringName in player.available_skill_ids():
@@ -2096,8 +2145,9 @@ func _update_hud() -> void:
 			if player.is_sentinel() and skill_id in SentinelTuning.SKILL_IDS:
 				var focus_cost := float(SentinelTuning.values(skill_id, player.skill_rank(skill_id))["focus_cost"])
 				battle_controls.show_skill_state(skill_id, "%s · %s%s\n%d SP · %d Foco\n%s" % [_skill_input_label(skill_id), definition.display_name.to_upper(), rank_text, ceili(cost), ceili(focus_cost), state], cast_intent.active_skill == skill_id or player.active_cast_skill == skill_id)
-				battle_controls.skill_buttons[skill_id].tooltip_text = ClassCatalog.sentinel_description(skill_id, player.skill_rank(skill_id))
-			if skill_id == &"geometer_triangulation" and geometer_casting != null:
+				if battle_controls.skill_buttons.has(skill_id):
+					battle_controls.skill_buttons[skill_id].tooltip_text += "\n" + ClassCatalog.sentinel_description(skill_id, player.skill_rank(skill_id))
+			if skill_id == &"geometer_triangulation" and geometer_casting != null and battle_controls.skill_buttons.has(skill_id):
 				var elements := geometer_casting.construction.elements()
 				if elements.size() == 2:
 					elements.append(geometer_casting.construction.grammar.selected_element)
@@ -2105,9 +2155,8 @@ func _update_hud() -> void:
 				battle_controls.skill_buttons[skill_id].tooltip_text = suspended_text + ClassCatalog.geometer_triangle_description(elements)
 
 func _skill_input_label(skill_id: StringName) -> String:
-	var index := player.available_skill_ids().find(skill_id)
-	var labels := ["Q", "W", "A", "S", "D"]
-	return labels[index] if index >= 0 and index < labels.size() else ClassCatalog.skill_definition(skill_id).input_key
+	var index := action_slots.find(skill_id)
+	return control_preferences.binding_label(index) if index >= 0 else "Sem atalho"
 
 func _display_skill_state(skill_id: StringName, sp_cost: float) -> String:
 	if skill_id == &"sentinel_absolute_focus" and player.sentinel_state.absolute_remaining > 0.0:
@@ -2203,7 +2252,7 @@ func _update_spiritualist_panel() -> void:
 		elif equipped.has(&"spiritualist_echo_curse"):
 			hint = "Maldição em área → skill direta → onda de Eco."
 		else:
-			hint = "Use as ações equipadas; Maldição não está na barra."
+			hint = "Use as ações aprendidas; Maldição ainda não foi aprendida."
 	if player.spiritualist_focus_remaining > 0.0:
 		var consumers: Array[String] = []
 		if equipped.has(&"spiritualist_echo_curse"):
@@ -2227,7 +2276,7 @@ func _spiritualist_route_help(equipped: Array) -> String:
 		if equipped.has(&"spiritualist_dissipation"):
 			lines.append("Rito ativa a onda e preserva bônus contra marcados.")
 	if equipped.has(&"spiritualist_soul_drain"):
-		if player.run_state.build_snapshot.passive_slots.has(&"spiritualist_channel_focus"):
+		if player.run_state.build_snapshot.has_passive(&"spiritualist_channel_focus"):
 			lines.append("Drenagem completa (4 ticks) → Foco por 5s.")
 		lines.append("Movimento, dano e controle interrompem Drenagem.")
 	if lines.is_empty():
@@ -2274,7 +2323,7 @@ func _build_geometer_controls() -> void:
 	panel.position = Vector2(24, 284)
 	panel.add_theme_constant_override("separation", 6)
 	ui_root.add_child(panel)
-	var names := ["1 · Fogo", "2 · Gelo", "3 · Raio"]
+	var names := ["F1 · Fogo", "F2 · Gelo", "F3 · Raio"]
 	for index: int in range(3):
 		var element := GeometerGeometry.ELEMENTS[index]
 		var button := Button.new()
@@ -2309,7 +2358,7 @@ func _build_ui() -> void:
 	hud_panel.offset_left = 24.0
 	hud_panel.offset_top = 20.0
 	hud_panel.offset_right = 544.0
-	hud_panel.offset_bottom = 270.0
+	hud_panel.offset_bottom = 150.0
 	var hud_margin := MarginContainer.new()
 	hud_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	for side: String in ["left", "top", "right", "bottom"]:
@@ -2321,11 +2370,13 @@ func _build_ui() -> void:
 	health_label = _make_label("", 22, Color("ff8b8b"))
 	sp_label = _make_label("", 19, Color("79bfff"))
 	skill_label = _make_label("", 17, Color("e9c67b"))
+	# The action bar owns skill status; the complete learned library no longer
+	# expands a duplicate HUD list over the arena and lower row.
+	skill_label.hide()
 	hud_column.add_child(health_label)
 	hud_column.add_child(sp_label)
 	if player.is_sentinel():
 		hud_panel.offset_bottom = 156.0
-		skill_label.hide()
 		sentinel_focus_label = _make_label("FOCO 0 / 100", 16, Color("b4decb"))
 		hud_column.add_child(sentinel_focus_label)
 		sentinel_focus_bar = ProgressBar.new()
@@ -2349,9 +2400,9 @@ func _build_ui() -> void:
 	help_panel.offset_top = 112.0
 	help_panel.offset_right = -24.0
 	help_panel.offset_bottom = 258.0
-	var help_text := "CLIQUE: mover / autoatacar o alvo\nQ / W / A / S / D: ações da classe\nDIREITO / ESC: cancelar mira\nR: reiniciar ao concluir · sem XP/recompensas" if training_mode else "CLIQUE: mover / autoatacar o alvo\nQ / W / A / S / D: ações da classe\nDIREITO / ESC: cancelar mira\nE: augment  ·  R: reiniciar ao concluir"
+	var help_text := "CLIQUE: mover / autoatacar o alvo\nBarras: atalhos configuráveis em Controles\nDIREITO / ESC: cancelar mira\nF8: augment · F9: reiniciar ao concluir"
 	if player.is_geometer():
-		help_text = "1 / 2 / 3: Fogo / Gelo / Raio\nTraçado: corpo = vínculo; fora = chão\nShift: forçar chão · Backspace: desfazer\nQ / W / A / S / D: skills · Esc: cancelar mira"
+		help_text = "F1 / F2 / F3: Fogo / Gelo / Raio\nTraçado: corpo = vínculo; fora = chão\nShift: forçar chão · F6: desfazer\nBarra: skills · Esc: cancelar mira"
 	var help_label := _make_label(help_text, 16, Color("d7ddea"))
 	help_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	help_panel.add_child(help_label)
@@ -2375,9 +2426,9 @@ func _build_ui() -> void:
 	bottom_controls.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bottom_controls.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	bottom_controls.offset_left = -310.0
-	bottom_controls.offset_top = -186.0
+	bottom_controls.offset_top = -250.0
 	bottom_controls.offset_right = 310.0
-	bottom_controls.offset_bottom = -98.0
+	bottom_controls.offset_bottom = -166.0
 	bottom_controls.alignment = BoxContainer.ALIGNMENT_CENTER
 	status_label = _make_label("", 20, Color.WHITE)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -2448,7 +2499,7 @@ func _build_ui() -> void:
 	result_body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	result_column.add_child(result_body)
 	restart_button = Button.new()
-	restart_button.text = "Reiniciar arena (R)"
+	restart_button.text = "Reiniciar arena (F9)"
 	restart_button.custom_minimum_size = Vector2(260, 54)
 	restart_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	restart_button.pressed.connect(_restart_run)
@@ -2472,12 +2523,16 @@ func _build_ui() -> void:
 	battle_controls.skill_selected.connect(_select_skill_from_bar)
 	battle_controls.settings_requested.connect(_toggle_settings)
 	battle_controls.preferences_changed.connect(_change_control_preferences)
-	battle_controls.set_class_skills(player.available_skill_ids())
-	if player.is_sentinel():
-		battle_controls.skill_bar.offset_top = -106.0
-		for button: Button in battle_controls.skill_buttons.values():
-			button.custom_minimum_size.y = 88.0
-			button.add_theme_font_size_override("font_size", 14)
+	action_slots = run_state.build_snapshot.action_slots.duplicate()
+	if action_slots.is_empty():
+		action_slots = ActionBarLayout.from_legacy(run_state.build_snapshot.active_slots)
+	if not ActionBarLayout.valid(action_slots, player.available_skill_ids()):
+		for index: int in action_slots.size():
+			if action_slots[index] != null and action_slots[index] not in player.available_skill_ids():
+				action_slots[index] = null
+	battle_controls.set_action_bar(player.available_skill_ids(), action_slots, control_preferences)
+	battle_controls.layout_changed.connect(_change_action_slots)
+	battle_controls.bindings_changed.connect(_change_action_bindings)
 	# The battle controls belong below end-of-run and reward modals.
 	ui_root.move_child(battle_controls, augment_overlay.get_index())
 

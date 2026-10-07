@@ -67,6 +67,25 @@ var equipment_empty_label: Label
 var create_panel: VBoxContainer
 var create_toggle: Button
 var menu_panel: VBoxContainer
+var action_editor: ActionBarEditor
+var action_preferences := ControlPreferences.new()
+var automatic_passives_label: Label
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey and action_editor != null and action_editor.handle_binding_event(event):
+		get_viewport().set_input_as_handled()
+
+func _save_action_slots(slots: Array[Variant]) -> void:
+	if _read_only:
+		_refresh()
+		return
+	var context := _selected_progression_context()
+	if context["ok"]:
+		_show_result(facade.update_action_slots(_request_id("bar"), context["revision"], context["character_id"], slots), "Barra salva. Ranks e pontos preservados.")
+
+func _save_action_bindings() -> void:
+	if action_preferences.save_settings() != OK:
+		status_label.text = "Atalhos válidos na sessão; gravação dos controles indisponível."
 
 func set_profile_directory(directory: String) -> void:
 	profile_directory = directory
@@ -157,12 +176,9 @@ func _save_build() -> Dictionary:
 		return _show_result({"ok": false, "error_code": &"invalid_character_id"})
 	var character: Variant = profile.characters[_selected_index]
 	var preset: Dictionary = character.presets[character.selected_preset].duplicate(true)
-	var active_slots: Array[Variant] = []
-	for selector: OptionButton in active_selectors:
-		active_slots.append(_selected_option(selector))
-	var passive_slots: Array[Variant] = []
-	for selector: OptionButton in passive_selectors:
-		passive_slots.append(_selected_option(selector))
+	# Legacy preset arrays are preserved, not selectors or availability limits.
+	var active_slots: Array[Variant] = preset["active_slots"].duplicate()
+	var passive_slots: Array[Variant] = preset["passive_slots"].duplicate()
 	var equipped: Dictionary[StringName, Variant] = preset["equipped"].duplicate(true)
 	equipped[&"weapon"] = _selected_option(weapon_selector)
 	equipped[&"armor"] = _selected_option(armor_selector)
@@ -212,10 +228,13 @@ func _populate_build_editor(character: Variant) -> void:
 	if not options.get("ok", false):
 		return
 	var preset: Dictionary = character.presets[character.selected_preset]
-	for index: int in active_selectors.size():
-		_populate_selector(active_selectors[index], options["active_skills"], preset["active_slots"][index])
-	for index: int in passive_selectors.size():
-		_populate_selector(passive_selectors[index], options["passive_skills"], preset["passive_slots"][index])
+	var learned: Array[StringName] = []
+	learned.assign(options["active_skills"])
+	action_editor.configure(learned, ActionBarLayout.for_character(character), action_preferences)
+	var passives: Array[String] = []
+	for id: StringName in options["passive_skills"]:
+		passives.append(_skill_name(id))
+	automatic_passives_label.text = "Passivas aprendidas: todas automáticas\n%s" % ("Nenhuma aprendida." if passives.is_empty() else ", ".join(passives))
 	_populate_selector(weapon_selector, options["equipment_by_slot"][&"weapon"], preset["equipped"][&"weapon"])
 	_populate_selector(armor_selector, options["equipment_by_slot"][&"armor"], preset["equipped"][&"armor"])
 	_populate_selector(accessory_selector, options["equipment_by_slot"][&"accessory"], preset["equipped"][&"accessory"])
@@ -341,6 +360,7 @@ func _error_text(error_code: StringName, read_only: bool) -> String:
 		&"invalid_origin": return "Essa classe ainda não está disponível."
 		&"invalid_character_id": return "O personagem selecionado não existe mais. Escolha outro personagem."
 		&"invalid_presets": return "O preset contém skills inválidas ou repetidas. Revise os slots escolhidos."
+		&"invalid_action_slots": return "A barra contém atalhos inválidos ou repetidos. Escolha skills aprendidas da biblioteca."
 		&"invalid_equipment": return "O equipamento escolhido não pertence a este personagem ou ao slot informado."
 		&"invalid_loadout": return "A build selecionada não é válida para iniciar a run."
 		&"content_unavailable": return "A evolução escolhida ainda não possui conteúdo pronto para iniciar uma run."
@@ -381,19 +401,18 @@ func _build_summary(character: Variant) -> String:
 	var preview: Dictionary = facade.build_preview(character.character_id)
 	var derived_stats: StatBreakdown = preview.get("stat_breakdown") if preview.get("ok", false) else null
 	var active: Array[String] = []
-	for skill_id: Variant in preset["active_slots"]:
-		if skill_id != null:
-			active.append(_skill_name(skill_id))
+	var options: Dictionary = facade.available_build_options(character.character_id)
+	for skill_id: Variant in options.get("active_skills", []):
+		active.append(_skill_name(skill_id))
 	var passive: Array[String] = []
-	for skill_id: Variant in preset["passive_slots"]:
-		if skill_id != null:
-			passive.append(_skill_name(skill_id))
+	for skill_id: Variant in options.get("passive_skills", []):
+		passive.append(_skill_name(skill_id))
 	var weapon: Variant = preset["equipped"].get(&"weapon")
 	if derived_stats == null:
 		return "Build indisponível (%s)." % preview.get("error_code", &"preview_failed")
 	var active_text := "Nenhuma" if active.is_empty() else ", ".join(active)
 	var passive_text := "Nenhuma" if passive.is_empty() else ", ".join(passive)
-	return "Build salva\nAtivas: %s\nPassiva: %s\nArma: %s\nStats: Vida %d · SP %d · ATQ corpo %d · ATQ precisão %d · ATQ mágico %d" % [active_text, passive_text, _equipment_name(weapon), int(derived_stats.value(&"max_hp")), int(derived_stats.value(&"max_sp")), int(derived_stats.value(&"melee_attack")), int(derived_stats.value(&"precision_attack")), int(derived_stats.value(&"magic_attack"))]
+	return "Build salva\nAtivas aprendidas: %s\nPassivas automáticas: %s\nArma: %s\nStats: Vida %d · SP %d · ATQ corpo %d · ATQ precisão %d · ATQ mágico %d" % [active_text, passive_text, _equipment_name(weapon), int(derived_stats.value(&"max_hp")), int(derived_stats.value(&"max_sp")), int(derived_stats.value(&"melee_attack")), int(derived_stats.value(&"precision_attack")), int(derived_stats.value(&"magic_attack"))]
 
 func _refresh_progression_panel(character: Variant, profile: Variant) -> void:
 	if character == null or facade == null:
@@ -447,7 +466,7 @@ func _refresh_progression_panel(character: Variant, profile: Variant) -> void:
 		var skill_id: StringName = option["skill_id"]
 		skill_label.name = "ProgressionSkill_%s" % skill_id
 		skill_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		skill_label.text = "%s — Rank %d/%d%s" % [_skill_name(skill_id), option["rank"], option["maximum_rank"], " · Passiva" if option["metadata"]["category"] == ProfileCatalog.PASSIVE else " · Ativa"]
+		skill_label.text = "%s — Rank %d/%d%s" % [_skill_name(skill_id), option["rank"], option["maximum_rank"], (" · Passiva automática" if option["rank"] > 0 else " · Passiva") if option["metadata"]["category"] == ProfileCatalog.PASSIVE else " · Ativa"]
 		skill_label.tooltip_text = _skill_progression_tooltip(option)
 		progression_skill_tree.add_child(skill_label)
 		var learn_button := Button.new()
@@ -839,20 +858,20 @@ func _skill_progression_tooltip(option: Dictionary) -> String:
 		&"spiritualist_dissipation":
 			lines.append("Rito mantém o bônus direto contra marcados e também ativa uma onda de Eco.")
 		&"geometer_trace":
-			lines.append("1/2/3 selecionam Fogo/Gelo/Raio sem custo. Traçado coloca A/B; terceiro exige Triangulação selecionada.")
+			lines.append("F1/F2/F3 selecionam Fogo/Gelo/Raio sem custo. Traçado coloca A/B; terceiro exige Triangulação aprendida.")
 		&"geometer_incidence":
-			lines.append("Equipada: recompensa interação efetiva de parede; não aumenta triângulos ou Colapso.")
+			lines.append("Aprendida (automática): recompensa interação efetiva de parede; não aumenta triângulos ou Colapso.")
 		&"geometer_translation":
 			lines.append("Move o último vértice sem mudar seu elemento. Chão solta vínculo; corpo de inimigo prende.")
 		&"geometer_triangulation":
 			lines.append("R1: 3 puros. R3: 21 receitas. R5: 27 receitas. Fecha C uma vez; não herda efeitos de parede.")
 		&"geometer_vector_memory":
-			lines.append("Equipada: novos vértices +1/+2/+4s e figuras +1/+2/+3s, teto 12s. Não renova figura editada.")
+			lines.append("Aprendida (automática): novos vértices +1/+2/+4s e figuras +1/+2/+3s, teto 12s. Não renova figura editada.")
 		&"geometer_collapse":
 			lines.append("Consome parede/triângulo válido uma vez com poder próprio. Parede: pulso na faixa; triângulo: resolução de C.")
 		&"geometer_rewrite":
 			lines.append("Remove o mais antigo e acrescenta o elemento selecionado: B/C/D. Preserva identidade/prazo, sem repetir C.")
-	lines.append("Aprender não equipa automaticamente. Escolha a habilidade nos slots da build.")
+	lines.append("Ativas aprendidas ficam disponíveis na biblioteca; arraste para organizar atalhos. Passivas aprendidas são automáticas.")
 	return "\n".join(lines)
 
 func _skill_purchase_tooltip(option: Dictionary) -> String:
@@ -1065,20 +1084,14 @@ func _build_ui() -> void:
 	respec_skills_button.pressed.connect(_respec_skills)
 	skills_column.add_child(respec_skills_button)
 	skill_empty_label = _section_label(skills_column, "As habilidades aparecem aqui conforme seu job e os pré-requisitos avançam.", 16)
-	_section_label(slots_column, "Skills equipadas", 22)
-	_section_label(slots_column, "Aprender libera a habilidade; escolha abaixo onde equipá-la. Alterações de slots são salvas ao escolher.", 14)
-	for index: int in CharacterState.ACTIVE_SLOT_COUNT:
-		var selector := _build_selector(slots_column, "Ativa %d" % (index + 1))
-		active_selectors.append(selector)
-		if index == 0:
-			active_slot_a = selector
-		elif index == 1:
-			active_slot_b = selector
-	for index: int in CharacterState.PASSIVE_SLOT_COUNT:
-		var selector := _build_selector(slots_column, "Passiva %d" % (index + 1))
-		passive_selectors.append(selector)
-		if index == 0:
-			passive_slot = selector
+	_section_label(slots_column, "Barras de ação · 24 atalhos", 22)
+	action_preferences.load_settings()
+	action_editor = ActionBarEditor.new()
+	slots_column.add_child(action_editor)
+	action_editor.slots_grid.columns = 6 # Two logical rows, wrapped only inside narrow menu.
+	action_editor.layout_changed.connect(_save_action_slots)
+	action_editor.bindings_changed.connect(_save_action_bindings)
+	automatic_passives_label = _section_label(slots_column, "Passivas aprendidas: todas automáticas", 16)
 	evolution_panel = VBoxContainer.new()
 	evolution_panel.name = "EvolutionPanel"
 	evolution_panel.add_theme_constant_override("separation", 4)
@@ -1163,7 +1176,7 @@ func _build_ui() -> void:
 	menu_panel.add_child(footer)
 	save_build_button = Button.new()
 	save_build_button.text = "Salvar build"
-	save_build_button.tooltip_text = "Salva todas as skills e equipamentos da build selecionada."
+	save_build_button.tooltip_text = "Salva o equipamento do preset. Skills aprendidas são automáticas; a barra salva ao editar."
 	save_build_button.pressed.connect(_save_build)
 	footer.add_child(save_build_button)
 	start_run_button = Button.new()

@@ -74,7 +74,7 @@ func _build_ui() -> void:
 	help_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	help_label.add_theme_font_size_override("font_size", 13)
 	help_label.add_theme_color_override("font_color", Color("c1d4cd"))
-	help_label.text = "Em combate: pare 0,5 s → Foco +10/s. Mover preserva Foco.\nObservar: próximos 3 acertos diretos geram Foco.\nCabeça / Perfurante / Concussão: reset, sem auto extra.\nExplosivo: próximo auto comum; não reseta.\nRepita Explosivo ou Esc: libera a reserva antes de disparar.\nFora de combate: Foco decai; reserva insuficiente é liberada.\nRede: dano INT e imobiliza; alvo ainda pode atacar.\nINT: Rede/Explosivo. INT + DES: Perfurante.\nDES reduz só a recarga desses três tiros; SOR permite crítico.\nAbsoluto: alcance +20%; Foco +15/s ao parar, sem 0,5 s.\n5 ativas + 2 passivas: escolha seu kit no menu."
+	help_label.text = "Acerto direto próprio: +4 Foco por ação, a cada 0,5 s.\nEm combate: pare 0,5 s → Foco +10/s. Mover preserva Foco.\nObservar: próximos 3 acertos diretos geram Foco adicional.\nCabeça / Perfurante / Concussão: reset, sem auto extra.\nExplosivo: próximo auto comum; não reseta.\nRepita Explosivo ou Esc: libera a reserva antes de disparar.\nFora de combate: Foco decai; reserva insuficiente é liberada.\nRede: dano INT e imobiliza; alvo ainda pode atacar.\nINT: Rede/Explosivo. INT + DES: Perfurante.\nDES reduz só a recarga desses três tiros; SOR permite crítico.\nAbsoluto: alcance +20%; Foco +15/s ao parar, sem 0,5 s.\nAtivas aprendidas na biblioteca; passivas automáticas."
 	column.add_child(help_label)
 	help_label.hide()
 
