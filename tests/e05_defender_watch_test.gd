@@ -10,6 +10,7 @@ func _run() -> void:
 	var nav := ArenaNavigation.new()
 	nav.configure(Rect2(0, 0, 1000, 700), [], 20.0)
 	var snapshot := BuildSnapshot.new()
+	snapshot.job_level = ProgressionRules.MAX_JOB_LEVEL
 	snapshot.base_class_id = &"swordsman"
 	snapshot.evolution_id = &"defender"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"defender")
@@ -42,6 +43,7 @@ func _run() -> void:
 	enemy.health.current_hp = enemy.health.max_hp
 	var inactive_snapshot := snapshot.copy_snapshot()
 	inactive_snapshot.passive_slots = [null, null]
+	inactive_snapshot.skill_ranks.erase(&"defender_watch")
 	var inactive_player := PlayerActor.new()
 	inactive_player.configure(nav, RunState.from_build("watch-unequipped", inactive_snapshot))
 	inactive_player.global_position = Vector2(300, 350)
@@ -49,7 +51,7 @@ func _run() -> void:
 	inactive_player.set_process(false)
 	controller.player = inactive_player
 	inactive_player.attack_requested.connect(controller._on_attack_requested)
-	_check(inactive_player.use_concentrated_rage(Vector2.RIGHT, [enemy]) and enemy.health.current_hp < enemy.health.max_hp and enemy.attribute_debuffs.fraction(AttributeDebuffState.DAMAGE_DEALT) == 0.0, "learned but unequipped Watch never applies")
+	_check(inactive_player.use_concentrated_rage(Vector2.RIGHT, [enemy]) and enemy.health.current_hp < enemy.health.max_hp and enemy.attribute_debuffs.fraction(AttributeDebuffState.DAMAGE_DEALT) == 0.0, "unlearned Watch never applies")
 	controller.player = player
 	enemy.clear_statuses()
 	enemy.health.current_hp = enemy.health.max_hp

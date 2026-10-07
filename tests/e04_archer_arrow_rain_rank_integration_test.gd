@@ -118,7 +118,7 @@ func _check_preview_hud_dispatch_and_effect() -> void:
 		enemy.set_process(false)
 	controller._update_hud()
 	var card: Button = controller.battle_controls.skill_buttons[&"arrow_rain"]
-	_check(controller.skill_label.text.contains("Chuva de Flechas R5") and card.text.contains("R5") and card.text.contains("30 SP"), "HUD renders snapshot rank and definition cost from the same source")
+	_check(controller.skill_label.text.contains("Chuva de Flechas R5") and card.tooltip_text.contains("R5") and card.tooltip_text.contains("30 SP"), "HUD renders snapshot rank and definition cost from the same source")
 	controller.cast_intent.active_skill = &"arrow_rain"
 	var near_point := controller.player.global_position + Vector2(180, 40)
 	controller._update_aim(near_point)

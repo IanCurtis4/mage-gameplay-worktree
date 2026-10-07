@@ -44,7 +44,10 @@ func _check_ranked_sources_and_stats() -> void:
 	duplicate_slots.passive_slots = [&"mage_mana_regeneration", &"mage_mana_regeneration"]
 	_check(duplicate_slots.intrinsic_modifier_sources().size() == 1 and is_equal_approx(duplicate_slots.stat_breakdown().value(&"sp_regen"), 6.16), "duplicate passive slots cannot apply the same identified source twice")
 	var unequipped := _snapshot(3, false)
-	_check(unequipped.intrinsic_modifier_sources().is_empty() and is_equal_approx(unequipped.stat_breakdown().value(&"sp_regen"), 3.08), "learned but unequipped passive applies no source")
+	_check(unequipped.intrinsic_modifier_sources().size() == 1 and is_equal_approx(unequipped.stat_breakdown().value(&"sp_regen"), 6.16), "learned passive is automatic despite empty legacy slots")
+	var unlearned := _snapshot(3, false)
+	unlearned.skill_ranks.erase(&"mage_mana_regeneration")
+	_check(unlearned.intrinsic_modifier_sources().is_empty() and is_equal_approx(unlearned.stat_breakdown().value(&"sp_regen"), 3.08), "unlearned passive applies no source")
 	var invalid := _snapshot(4, true)
 	_check(invalid.intrinsic_modifier_sources().is_empty() and is_equal_approx(invalid.stat_breakdown().value(&"sp_regen"), 3.08), "invalid passive rank is ineligible instead of falling back to R1")
 
@@ -74,6 +77,7 @@ func _snapshot(rank: int, equipped: bool) -> BuildSnapshot:
 	var snapshot := BuildSnapshot.new()
 	snapshot.character_id = "mage-sp-regeneration-test"
 	snapshot.base_class_id = &"mage"
+	snapshot.job_level = 20
 	snapshot.skill_ranks = {&"mage_mana_regeneration": rank}
 	snapshot.passive_slots = [&"mage_mana_regeneration", null] if equipped else [null, null]
 	return snapshot

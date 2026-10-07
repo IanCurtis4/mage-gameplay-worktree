@@ -183,14 +183,14 @@ func _check_controller_preview_hud_and_area() -> void:
 	for enemy: CombatActor in controller.enemies:
 		enemy.set_process(false)
 		enemy.global_position = Vector2(1200, 850)
-	_check(controller._key_skill(KEY_D) == &"foliage_shelter" and controller.battle_controls.skill_buttons.has(&"foliage_shelter"), "equipped fifth slot binds Foliage Shelter to D and publishes its HUD card")
+	_check(controller._key_skill(KEY_R) == &"foliage_shelter" and controller.battle_controls.skill_buttons.has(&"foliage_shelter"), "equipped fifth slot binds Foliage Shelter to R and publishes its HUD card")
 	var distant_point := controller.player.global_position + Vector2(1000, 0)
 	controller.battle_indicators.show_aim(&"foliage_shelter", controller.player, distant_point, true)
 	var expected_center := controller.player.global_position + Vector2.RIGHT * 360.0
 	_check(controller.battle_indicators.endpoint == expected_center and controller.battle_indicators.active_range == 360.0, "preview clamps placement through the same fixed range as execution")
 	controller._update_hud()
 	var card: Button = controller.battle_controls.skill_buttons[&"foliage_shelter"]
-	_check(controller.skill_label.text.contains("Abrigo de Folhagem R5") and card.text.contains("R5") and card.text.contains("22 SP"), "HUD exposes Foliage Shelter rank and cost in pt-BR")
+	_check(controller.skill_label.text.contains("Abrigo de Folhagem R5") and card.tooltip_text.contains("R5") and card.tooltip_text.contains("22 SP"), "HUD exposes Foliage Shelter rank and cost in pt-BR")
 	var sp_before := controller.player.current_sp
 	controller._commit_skill(&"foliage_shelter", controller.player.global_position)
 	var shelters := get_nodes_in_group("foliage_shelters")

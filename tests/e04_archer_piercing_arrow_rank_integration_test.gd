@@ -129,7 +129,7 @@ func _check_preview_hud_dispatch_and_projectile() -> void:
 		controller.enemies[index].global_position = controller.player.global_position + Vector2(220 + 110 * index, 0)
 	controller._update_hud()
 	var card: Button = controller.battle_controls.skill_buttons[&"piercing_arrow"]
-	_check(controller.skill_label.text.contains("Flecha Perfurante R5") and card.text.contains("R5") and card.text.contains("24 SP"), "HUD renders snapshot rank and definition cost from the same source")
+	_check(controller.skill_label.text.contains("Flecha Perfurante R5") and card.tooltip_text.contains("R5") and card.tooltip_text.contains("24 SP"), "HUD renders snapshot rank and definition cost from the same source")
 	controller.cast_intent.active_skill = &"piercing_arrow"
 	var aim_point := controller.player.global_position + Vector2(1000, 0)
 	controller._update_aim(aim_point)

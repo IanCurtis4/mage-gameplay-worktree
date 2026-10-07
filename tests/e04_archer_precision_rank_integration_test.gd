@@ -65,7 +65,10 @@ func _check_ranked_sources_and_stats() -> void:
 	duplicate_slots.passive_slots = [&"archer_precision", &"archer_precision"]
 	_check(duplicate_slots.intrinsic_modifier_sources().size() == 1 and is_equal_approx(duplicate_slots.stat_breakdown().value(&"hit_rating"), 137.6), "duplicate passive slots cannot apply the same identified source twice")
 	var unequipped := _snapshot(3, false)
-	_check(unequipped.intrinsic_modifier_sources().is_empty() and is_equal_approx(unequipped.stat_breakdown().value(&"hit_rating"), 121.6), "learned but unequipped Precision applies no source")
+	_check(unequipped.intrinsic_modifier_sources().size() == 1 and is_equal_approx(unequipped.stat_breakdown().value(&"hit_rating"), 137.6), "learned Precision is automatic despite empty legacy slots")
+	var unlearned := _snapshot(3, false)
+	unlearned.skill_ranks.erase(&"archer_precision")
+	_check(unlearned.intrinsic_modifier_sources().is_empty() and is_equal_approx(unlearned.stat_breakdown().value(&"hit_rating"), 121.6), "unlearned Precision applies no source")
 	var invalid := _snapshot(4, true)
 	_check(invalid.intrinsic_modifier_sources().is_empty() and is_equal_approx(invalid.stat_breakdown().value(&"hit_rating"), 121.6), "invalid passive rank is ineligible instead of falling back to R1")
 
@@ -126,6 +129,7 @@ func _snapshot(rank: int, equipped: bool) -> BuildSnapshot:
 	var snapshot := BuildSnapshot.new()
 	snapshot.character_id = "archer-precision-test"
 	snapshot.base_class_id = &"archer"
+	snapshot.job_level = 20
 	snapshot.skill_ranks = {&"archer_precision": rank}
 	snapshot.passive_slots = [&"archer_precision", null] if equipped else [null, null]
 	return snapshot

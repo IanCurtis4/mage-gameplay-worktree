@@ -198,14 +198,16 @@ func _check_menu_and_controller() -> void:
 	root.add_child(menu)
 	await process_frame
 	menu._select_roster_index(0)
-	var selector := menu.active_selectors[0]
-	var index := _option_index(selector, &"haunt")
-	_check(index >= 0 and selector.get_item_text(index) == "Assombro", "menu mostra nome e equipagem")
-	selector.select(index)
-	_check(menu._save_build().get("ok", false), "menu salva slot ativo")
+	var learned_button: Button
+	for child: Node in menu.action_editor.library.get_children():
+		if child.get("skill_id") == &"haunt":
+			learned_button = child as Button
+	_check(learned_button != null and learned_button.text == "Assombro", "biblioteca apresenta nome humano da skill aprendida")
+	menu.action_editor.assign_skill(&"haunt", 0)
+	_check(facade.current_profile().character_by_id(character_id).action_slots[0] == &"haunt", "menu salva organização de atalhos pela fachada")
 	var reopened := ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
 	var opened := reopened.open_profile()
-	_check(opened.get("ok", false) and opened["profile"].character_by_id(character_id).presets[0]["active_slots"][0] == &"haunt", "reload preserva preset")
+	_check(opened.get("ok", false) and opened["profile"].character_by_id(character_id).action_slots[0] == &"haunt", "reload preserva preset")
 	menu.queue_free()
 	await process_frame
 	menu = scene.instantiate() as CharacterMenu
@@ -234,7 +236,7 @@ func _check_menu_and_controller() -> void:
 		controller.enemies.append(target)
 	controller._update_hud()
 	var card: Button = controller.battle_controls.skill_buttons[&"haunt"]
-	_check(controller.run_state.skill_levels[&"haunt"] == 5 and card.text.contains("ASSOMBRO") and card.text.contains("R5") and card.text.contains("23 SP"), "HUD mostra rank e custo persistidos")
+	_check(controller.run_state.skill_levels[&"haunt"] == 5 and card.tooltip_text.contains("ASSOMBRO") and card.tooltip_text.contains("R5") and card.tooltip_text.contains("23 SP"), "HUD mostra rank e custo persistidos")
 	controller.cast_intent.active_skill = &"haunt"
 	controller._update_aim(controller.player.global_position + Vector2(1000, 0))
 	_check(controller.battle_controls.aim_label.text.contains("PRONTO") and controller.battle_indicators.active_range == 230.0, "mira mostra cone autorado")

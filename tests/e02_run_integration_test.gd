@@ -46,6 +46,10 @@ func _check_persistent_preset_runtime_flow() -> void:
 	passive[0] = null
 	var equipped: Dictionary[StringName, Variant] = mage.presets[1]["equipped"].duplicate(true)
 	var preset := facade.update_preset("save-reordered", seeded["new_revision"], mage.character_id, 1, active, passive, equipped)
+	var bar := ActionBarLayout.empty()
+	bar[0] = &"fire_wall"
+	bar[1] = &"fireball"
+	var organized := facade.update_action_slots("organize-actions", preset["new_revision"], mage.character_id, bar)
 	var menu_scene := load("res://scenes/character_menu.tscn") as PackedScene
 	var menu: CharacterMenu = menu_scene.instantiate()
 	menu.set_profile_facade(facade)
@@ -56,9 +60,9 @@ func _check_persistent_preset_runtime_flow() -> void:
 	await scene_changed
 	await process_frame
 	var controller := current_scene as RunController
-	_check(created["ok"] and seeded["ok"] and preset["ok"] and started["ok"] and controller != null and controller.player.class_id == &"mage", "menu-selected persistent mage reaches the real arena controller")
-	_check(controller.player.available_skill_ids() == [&"fire_wall", &"fireball"] and controller._key_skill(KEY_Q) == &"fire_wall" and controller._key_skill(KEY_W) == &"fireball" and controller._key_skill(KEY_A) == &"", "equipped active slots determine persistent HUD order and Q/W/A bindings")
-	_check(controller.battle_controls.skill_buttons.keys() == [&"fire_wall", &"fireball"] and is_equal_approx(controller.player.stat_breakdown.value(&"sp_regen"), 3.08), "persistent loadout hides unselected mage skills and excludes an unequipped passive")
+	_check(created["ok"] and seeded["ok"] and preset["ok"] and organized["ok"] and started["ok"] and controller != null and controller.player.class_id == &"mage", "menu-selected persistent mage reaches the real arena controller")
+	_check(controller.player.available_skill_ids() == [&"fireball", &"fire_wall"] and controller._key_skill(KEY_1) == &"fire_wall" and controller._key_skill(KEY_2) == &"fireball" and controller._key_skill(KEY_3) == &"", "learned library is independent of persisted action bar order and empty shortcut slots")
+	_check(controller.battle_controls.slot_buttons.size() == 24 and controller.battle_controls.skill_buttons.keys() == [&"fire_wall", &"fireball"] and is_equal_approx(controller.player.stat_breakdown.value(&"sp_regen"), 4.62), "organized action bar retains learned skills and automatically activates learned passive despite legacy passive slot removal")
 	var closed := controller._close_persistent_run(&"death")
 	_check(closed["ok"] and facade.current_profile().reward_session == null and facade.current_profile().lifetime_stats[&"deaths"] == 1, "closing a persistent run records the terminal outcome once")
 	controller.queue_free()
@@ -69,7 +73,7 @@ func _check_persistent_preset_runtime_flow() -> void:
 	var selected := facade.select_preset("select-default", facade.current_profile().revision, mage.character_id, 0)
 	var restarted := facade.start_run("start-default", selected["new_revision"])
 	controller = await _persistent_controller(facade, restarted["run_state"])
-	_check(selected["ok"] and restarted["ok"] and controller.player.available_skill_ids() == [&"fireball", &"fire_wall"] and is_equal_approx(controller.player.stat_breakdown.value(&"sp_regen"), 4.62), "another preset changes persistent skill order and restores only its equipped passive")
+	_check(selected["ok"] and restarted["ok"] and controller.player.available_skill_ids() == [&"fireball", &"fire_wall"] and controller._key_skill(KEY_1) == &"fire_wall" and controller._key_skill(KEY_2) == &"fireball" and is_equal_approx(controller.player.stat_breakdown.value(&"sp_regen"), 4.62), "equipment preset changes neither per-character shortcuts nor automatic learned passive")
 	controller._close_persistent_run(&"abandoned")
 	controller.queue_free()
 	await process_frame

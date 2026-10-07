@@ -56,7 +56,10 @@ func _run() -> void:
 	var before_return := shield_player.current_sp
 	_check(shield_player.absorb_shield_projectile() and shield_player.has_defender_token() and is_equal_approx(shield_player.current_sp, before_return + 2.0), "one intercepted frontal projectile grants token and equipped Resguardo SP")
 	var unequipped_sp := shield_player.current_sp
-	_check(not shield_player.use_defender_counterstroke(Vector2.RIGHT, []) and shield_player.has_defender_token() and shield_player.current_sp == unequipped_sp, "learned but unequipped entry cannot spend the token")
+	_check(shield_player.available_skill_ids().has(&"defender_counterstroke") and shield_player.has_defender_token() and shield_player.current_sp == unequipped_sp, "learned entry remains available without its legacy shortcut")
+	shield_player.run_state.build_snapshot.skill_ranks.erase(&"defender_counterstroke")
+	shield_player.run_state.skill_levels.erase(&"defender_counterstroke")
+	_check(not shield_player.use_defender_counterstroke(Vector2.RIGHT, []) and shield_player.has_defender_token() and shield_player.current_sp == unequipped_sp, "unlearned entry cannot spend the token")
 	var after_return := shield_player.current_sp
 	_check(shield_player.absorb_shield_projectile() and is_equal_approx(shield_player.current_sp, after_return), "second interception in the 2s internal window renews token without duplicate SP")
 	var hud := RunController.new()
@@ -92,6 +95,7 @@ func _run() -> void:
 
 func _player(navigation: ArenaNavigation, equip_counter: bool) -> PlayerActor:
 	var snapshot := BuildSnapshot.new()
+	snapshot.job_level = ProgressionRules.MAX_JOB_LEVEL
 	snapshot.base_class_id = &"swordsman"
 	snapshot.evolution_id = &"defender"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"defender")

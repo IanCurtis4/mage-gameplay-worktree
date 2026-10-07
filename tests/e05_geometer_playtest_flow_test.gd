@@ -56,14 +56,14 @@ func _run() -> void:
 	var learned := menu._learn_skill(&"geometer_incidence")
 	_check(learned["ok"] and facade.current_profile().character_by_id(geometer_id).purchased_skill_ranks == {&"geometer_incidence": 1}, "Incidence is purchased once its actual gate opens")
 	menu._populate_build_editor(facade.current_profile().character_by_id(geometer_id))
-	_select_option(menu.active_selectors[0], &"geometer_trace")
-	_select_option(menu.passive_selectors[0], &"geometer_incidence")
+	_check(menu.action_editor.slot_buttons.size() == 24 and menu.action_editor.learned_skills == [&"geometer_trace"], "editor has24 slots and only learned legal actives")
+	menu.action_editor.assign_skill(&"geometer_trace", 0)
 	var saved := menu._save_build()
-	_check(saved["ok"] and facade.current_profile().character_by_id(geometer_id).presets[0]["active_slots"] == [&"geometer_trace", null, null, null, null] and facade.current_profile().character_by_id(geometer_id).presets[0]["passive_slots"] == [&"geometer_incidence", null], "menu saves free Trace and paid Incidence into their distinct slot types")
+	_check(saved["ok"] and facade.current_profile().character_by_id(geometer_id).action_slots[0] == &"geometer_trace" and facade.build_preview(geometer_id)["snapshot"].has_passive(&"geometer_incidence") and menu.automatic_passives_label.text.contains("automáticas"), "menu saves free Trace shortcut and exposes paid Incidence as automatic")
 	var reloaded := ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
 	var reopened := reloaded.open_profile()
 	var durable: CharacterState = reopened["profile"].character_by_id(geometer_id)
-	_check(reopened["ok"] and durable.evolution_id == &"mg_ar" and durable.job_xp_total == 6440 and durable.presets[0]["active_slots"][0] == &"geometer_trace" and durable.presets[0]["passive_slots"][0] == &"geometer_incidence", "identity, XP and exact build survive durable reload")
+	_check(reopened["ok"] and durable.evolution_id == &"mg_ar" and durable.job_xp_total == 6440 and durable.action_slots.size() == 24 and durable.action_slots[0] == &"geometer_trace" and durable.presets[0]["active_slots"] == [null, null, null, null, null] and durable.presets[0]["passive_slots"] == [null, null], "identity, XP and action shortcut survive reload while legacy arrays stay unchanged")
 	var before_training := facade.current_profile().revision
 	var training := facade.prepare_playtest_training(geometer_id)
 	_check(training["ok"] and training["run_state"].build_snapshot.evolution_id == &"mg_ar" and facade.current_profile().revision == before_training and facade.current_profile().reward_session == null, "training preparation consumes the focused build without writing XP or opening a reward session")
@@ -73,7 +73,7 @@ func _run() -> void:
 		await process_frame
 	var controller := current_scene as RunController
 	_check(started["ok"] and started["run_state"].class_id == &"mage" and started["run_state"].build_snapshot.evolution_id == &"mg_ar" and facade.current_profile().selected_character_id == geometer_id, "normal start selects the focused Geometer and preserves Mage origin in the run")
-	_check(controller != null and not controller.training_mode and controller.player.available_skill_ids() == [&"geometer_trace"] and controller.battle_controls.skill_buttons.has(&"geometer_trace"), "production dispatch/HUD expose only the equipped active")
+	_check(controller != null and not controller.training_mode and controller.player.available_skill_ids() == [&"geometer_trace"] and controller.battle_controls.skill_buttons.has(&"geometer_trace") and controller.player.run_state.build_snapshot.has_passive(&"geometer_incidence"), "production dispatch/bar expose learned active and automatic passive, not legacy equip arrays")
 	if controller != null:
 		controller.set_process(false)
 		controller.player.set_process(false)
@@ -104,13 +104,6 @@ func _run() -> void:
 	_cleanup()
 	print("E05 Geômetra playtest flow: %s (%d checks)" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(0 if failures == 0 else 1)
-
-func _select_option(selector: OptionButton, skill_id: StringName) -> void:
-	for index: int in selector.item_count:
-		if selector.get_item_metadata(index) == skill_id:
-			selector.select(index)
-			return
-	_check(false, "build selector contains learned skill %s" % skill_id)
 
 func _cleanup() -> void:
 	assert(directory == ProjectSettings.globalize_path("res://.godot/verification/e05_geometer_playtest_flow"))

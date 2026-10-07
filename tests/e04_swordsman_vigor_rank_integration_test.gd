@@ -31,8 +31,9 @@ func _check_runtime() -> void:
 		var snapshot := BuildSnapshot.new()
 		snapshot.character_id = "vigor-%d" % rank
 		snapshot.base_class_id = &"swordsman"
+		snapshot.job_level = 20
 		snapshot.skill_ranks = {&"vigor": rank}
-		snapshot.passive_slots = [&"vigor", null]
+		snapshot.passive_slots = [null, null] # Learned Vigor operates automatically.
 		var player := PlayerActor.new()
 		player.configure(nav, RunState.from_build(snapshot.character_id, snapshot))
 		root.add_child(player)
@@ -46,7 +47,7 @@ func _check_runtime() -> void:
 		_check(not player.regenerate_hp(1.0, false, true) and player.health.current_hp == before_hp, "R%d pausa congela regeneração" % rank)
 		_check(player.regenerate_hp(1.0, false, false) and is_equal_approx(player.health.current_hp, before_hp + expected), "R%d regenera fora de combate por stat derivado" % rank)
 		var copy := snapshot.copy_snapshot()
-		_check(copy.passive_slots == snapshot.passive_slots and copy.skill_ranks == snapshot.skill_ranks, "R%d snapshot preserva equipagem" % rank)
+		_check(copy.passive_slots == snapshot.passive_slots and copy.skill_ranks == snapshot.skill_ranks, "R%d snapshot preserva ranks e arrays legados, não exige equipagem" % rank)
 		player.queue_free()
 		await process_frame
 

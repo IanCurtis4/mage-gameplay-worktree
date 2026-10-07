@@ -47,13 +47,16 @@ func _check_ranked_sources_and_stats() -> void:
 	_check(is_equal_approx(composed.value(&"attacks_per_second"), 1.55925), "Cadência and Battle Rhythm compose additively before one APS multiplication")
 	var dual_passives := _snapshot(3, true)
 	dual_passives.skill_ranks[&"archer_precision"] = 3
-	dual_passives.passive_slots = [&"archer_precision", &"archer_cadence"]
-	_check(dual_passives.intrinsic_modifier_sources().size() == 2 and is_equal_approx(dual_passives.stat_breakdown().value(&"hit_rating"), 137.6) and is_equal_approx(dual_passives.stat_breakdown().value(&"attacks_per_second"), 1.386), "Precision and Cadence coexist independently in the two passive slots")
+	dual_passives.passive_slots = [null, null]
+	_check(dual_passives.intrinsic_modifier_sources().size() == 2 and is_equal_approx(dual_passives.stat_breakdown().value(&"hit_rating"), 137.6) and is_equal_approx(dual_passives.stat_breakdown().value(&"attacks_per_second"), 1.386), "learned Precision and Cadence coexist automatically with empty legacy slots")
 	var duplicate_slots := _snapshot(3, true)
 	duplicate_slots.passive_slots = [&"archer_cadence", &"archer_cadence"]
 	_check(duplicate_slots.intrinsic_modifier_sources().size() == 1 and is_equal_approx(duplicate_slots.stat_breakdown().value(&"attacks_per_second"), 1.386), "duplicate passive slots cannot apply Cadência twice")
 	var unequipped := _snapshot(3, false)
-	_check(unequipped.intrinsic_modifier_sources().is_empty() and is_equal_approx(unequipped.stat_breakdown().value(&"attacks_per_second"), 1.155), "learned but unequipped Cadência applies no source")
+	_check(unequipped.intrinsic_modifier_sources().size() == 1 and is_equal_approx(unequipped.stat_breakdown().value(&"attacks_per_second"), 1.386), "learned Cadência is automatic despite empty legacy slots")
+	var unlearned := _snapshot(3, false)
+	unlearned.skill_ranks.erase(&"archer_cadence")
+	_check(unlearned.intrinsic_modifier_sources().is_empty() and is_equal_approx(unlearned.stat_breakdown().value(&"attacks_per_second"), 1.155), "unlearned Cadência applies no source")
 	var invalid := _snapshot(4, true)
 	_check(invalid.intrinsic_modifier_sources().is_empty() and is_equal_approx(invalid.stat_breakdown().value(&"attacks_per_second"), 1.155), "invalid passive rank is ineligible instead of falling back to R1")
 
@@ -94,6 +97,7 @@ func _snapshot(rank: int, equipped: bool) -> BuildSnapshot:
 	var snapshot := BuildSnapshot.new()
 	snapshot.character_id = "archer-cadence-test"
 	snapshot.base_class_id = &"archer"
+	snapshot.job_level = 20
 	snapshot.skill_ranks = {&"archer_cadence": rank}
 	snapshot.passive_slots = [&"archer_cadence", null] if equipped else [null, null]
 	return snapshot

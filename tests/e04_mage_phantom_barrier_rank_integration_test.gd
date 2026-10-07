@@ -246,14 +246,16 @@ func _check_menu_and_controller() -> void:
 	root.add_child(menu)
 	await process_frame
 	menu._select_roster_index(0)
-	var selector := menu.active_selectors[0]
-	var index := _option_index(selector, &"phantom_barrier")
-	_check(index >= 0 and selector.get_item_text(index) == "Barreira Fantasma", "menu mostra nome e equipagem")
-	selector.select(index)
-	_check(menu._save_build().get("ok", false), "menu salva slot ativo")
+	var learned_button: Button
+	for child: Node in menu.action_editor.library.get_children():
+		if child.get("skill_id") == &"phantom_barrier":
+			learned_button = child as Button
+	_check(learned_button != null and learned_button.text == "Barreira Fantasma", "biblioteca apresenta nome humano da skill aprendida")
+	menu.action_editor.assign_skill(&"phantom_barrier", 0)
+	_check(facade.current_profile().character_by_id(character_id).action_slots[0] == &"phantom_barrier", "menu salva organização de atalhos pela fachada")
 	var reopened := ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
 	var opened := reopened.open_profile()
-	_check(opened.get("ok", false) and opened["profile"].character_by_id(character_id).presets[0]["active_slots"][0] == &"phantom_barrier", "reload preserva preset")
+	_check(opened.get("ok", false) and opened["profile"].character_by_id(character_id).action_slots[0] == &"phantom_barrier", "reload preserva preset")
 	menu.queue_free()
 	await process_frame
 	menu = scene.instantiate() as CharacterMenu
@@ -280,7 +282,7 @@ func _check_menu_and_controller() -> void:
 	controller.enemies.append(target)
 	controller._update_hud()
 	var card: Button = controller.battle_controls.skill_buttons[&"phantom_barrier"]
-	_check(controller.run_state.skill_levels[&"phantom_barrier"] == 5 and card.text.contains("BARREIRA FANTASMA") and card.text.contains("R5") and card.text.contains("26 SP"), "HUD mostra rank e custo persistidos")
+	_check(controller.run_state.skill_levels[&"phantom_barrier"] == 5 and card.tooltip_text.contains("BARREIRA FANTASMA") and card.tooltip_text.contains("R5") and card.tooltip_text.contains("26 SP"), "HUD mostra rank e custo persistidos")
 	controller.cast_intent.active_skill = &"phantom_barrier"
 	controller._update_aim(controller.player.global_position + Vector2(1000, 0))
 	_check(controller.battle_controls.aim_label.text.contains("PRONTO") and controller.battle_indicators.endpoint == controller.player.global_position + Vector2(210, 0), "mira fixa centro da faixa no alcance")

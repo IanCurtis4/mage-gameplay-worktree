@@ -73,7 +73,7 @@ func _test_preview_hud_and_dispatch() -> void:
 		enemy.set_process(false)
 	controller._update_hud()
 	var card: Button = controller.battle_controls.skill_buttons[&"dash"]
-	_check(controller.skill_label.text.contains("Investida R5") and card.text.contains("R5") and card.text.contains("20 SP"), "HUD renders snapshot rank and definition cost from the same source")
+	_check(controller.skill_label.text.contains("Investida R5") and card.tooltip_text.contains("R5") and card.tooltip_text.contains("20 SP"), "HUD renders snapshot rank and definition cost from the same source")
 	controller.player.current_sp = 20.0
 	controller.cast_intent.active_skill = &"dash"
 	var aim_point := controller.player.global_position + Vector2(1000, 0)

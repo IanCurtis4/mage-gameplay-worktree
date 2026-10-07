@@ -83,18 +83,18 @@ func _check_self_input_hud_preview_and_captured_ranges() -> void:
 	controller.player.set_process(false)
 	for enemy: CombatActor in controller.enemies:
 		enemy.set_process(false)
-	_check(controller._key_skill(KEY_S) == &"extended_aim", "fourth equipped Archer active binds to S")
+	_check(controller._key_skill(KEY_4) == &"extended_aim", "fourth equipped Archer active binds to 4")
 	controller.cast_intent.set_mode(CastIntent.Mode.CONFIRM)
 	var sp_before := controller.player.current_sp
 	var self_key := InputEventKey.new()
-	self_key.keycode = KEY_S
+	self_key.keycode = KEY_4
 	self_key.pressed = true
 	controller._unhandled_input(self_key)
 	_check(controller.player.has_extended_aim() and controller.player.extended_aim_remaining == 8.0 and controller.player.current_sp == sp_before - 20.0, "SELF key input activates immediately without consuming mouse position")
 	_check(controller.cast_intent.active_skill.is_empty() and controller.player.skill_cooldown(&"extended_aim") == StatCalculator.effective_cooldown(12.0, controller.player.stat_breakdown), "self activation leaves no pending intent and starts one cooldown")
 	controller._update_hud()
 	var card: Button = controller.battle_controls.skill_buttons[&"extended_aim"]
-	_check(controller.skill_label.text.contains("Mira Estendida R5") and controller.skill_label.text.contains("ATIVA 8.0s") and card.text.contains("20 SP") and card.text.contains("ATIVA 8.0s"), "HUD exposes rank, cost and active duration")
+	_check(controller.skill_label.text.contains("Mira Estendida R5") and controller.skill_label.text.contains("ATIVA 8.0s") and card.tooltip_text.contains("20 SP") and card.tooltip_text.contains("ATIVA 8.0s"), "HUD exposes rank, cost and active duration")
 	controller.battle_indicators.show_aim(&"extended_aim", controller.player, controller.player.global_position + Vector2(900, 300), true)
 	_check(controller.battle_indicators.endpoint == controller.player.global_position and controller.battle_indicators.active_range == 0.0, "SELF preview anchors to the actor and owns no arbitrary ground point")
 	controller.cast_intent.active_skill = &"double_shot"

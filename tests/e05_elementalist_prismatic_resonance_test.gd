@@ -10,6 +10,7 @@ func _run() -> void:
 	var nav := ArenaNavigation.new()
 	nav.configure(Rect2(0, 0, 1000, 700), [], 20.0)
 	var snapshot := BuildSnapshot.new()
+	snapshot.job_level = 40 # Legal fixture: all purchased evolution entry gates are satisfied.
 	snapshot.base_class_id = &"mage"
 	snapshot.evolution_id = &"elementalist"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"mage", &"elementalist")
@@ -71,10 +72,15 @@ func _run() -> void:
 	snapshot.passive_slots = [null, null]
 	var inactive := PlayerActor.new()
 	inactive.configure(nav, RunState.from_build("resonance-inactive", snapshot))
-	_check(_request(inactive, enemy, &"lightning").prismatic_resonance_damage == 0.0, "un-equipped passive cannot capture bonus")
+	_check(is_equal_approx(_request(inactive, enemy, &"lightning").prismatic_resonance_damage, inactive.stat_breakdown.value(&"magic_attack") * 0.45), "learned resonance captures R3 automatically without legacy slots")
+	snapshot.skill_ranks.erase(&"elementalist_prismatic_resonance")
+	var unlearned := PlayerActor.new()
+	unlearned.configure(nav, RunState.from_build("resonance-unlearned", snapshot))
+	_check(_request(unlearned, enemy, &"lightning").prismatic_resonance_damage == 0.0, "unlearned passive cannot capture bonus")
 	player.free()
 	max_player.free()
 	inactive.free()
+	unlearned.free()
 	enemy.free()
 	controller.free()
 	print("E05 Elementalista Ressonância Prismática: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))

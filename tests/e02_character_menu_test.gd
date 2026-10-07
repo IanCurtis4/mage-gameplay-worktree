@@ -27,7 +27,7 @@ func _initialize() -> void:
 	_check(swordsman["ok"] and mage["ok"] and menu.status_label.text == "Personagem criado." and menu.roster_list.item_count == 2 and menu.roster_list.get_item_text(0).contains("Lina") and menu.roster_list.get_item_text(1).contains("Mago"), "creation uses facade, explains success, and refreshes the real roster")
 	menu._select_roster_index(1)
 	_check(not menu.build_summary_label.text.contains("Bola de fogo") and menu.build_summary_label.text.contains("Vida 150") and menu.build_summary_label.text.contains("SP 85"), "roster navigation previews the chosen alt's empty skill bar and central derived stats before committing selection")
-	_check(menu.progression_state_label.text.contains("XP base: 0") and menu.progression_wallets_label.text.contains("Atributos: 0/0 livres") and menu.progression_attributes_label.tooltip_text.contains("INT: base 9 · investido 0 · base + investido: teto 60 · efetivo 9 · limite efetivo 120") and menu.progression_skill_tree.get_node("ProgressionSkill_fire_spear").text.contains("Rank 0/5") and menu.progression_skill_tree.get_node("ProgressionSkill_fire_spear").tooltip_text.contains("não equipa automaticamente"), "progression panel reads XP, wallet, investment and effective caps, rank-zero skills, and equip guidance from the selected character")
+	_check(menu.progression_state_label.text.contains("XP base: 0") and menu.progression_wallets_label.text.contains("Atributos: 0/0 livres") and menu.progression_attributes_label.tooltip_text.contains("INT: base 9 · investido 0 · base + investido: teto 60 · efetivo 9 · limite efetivo 120") and menu.progression_skill_tree.get_node("ProgressionSkill_fire_spear").text.contains("Rank 0/5") and menu.progression_skill_tree.get_node("ProgressionSkill_fire_spear").tooltip_text.contains("arraste para organizar atalhos"), "progression panel reads XP, wallet, caps, rank-zero skills, and action library guidance")
 	var preset_changed: Dictionary = menu._choose_preset(1)
 	_check(preset_changed["ok"] and menu.status_label.text == "Preset selecionado." and menu.facade.current_profile().characters[1].selected_preset == 1, "preset selection persists through the facade without editing build fields directly")
 	var build_saved: Dictionary = menu._save_build()
@@ -45,13 +45,11 @@ func _initialize() -> void:
 	var viewport := get_root().get_viewport().get_visible_rect()
 	var editor_initialized := true
 	var editor_controls: Array[Control] = [menu.preset_selector, menu.weapon_selector, menu.armor_selector, menu.accessory_selector, menu.save_build_button]
-	for selector: OptionButton in menu.active_selectors:
-		editor_controls.append(selector)
-	for selector: OptionButton in menu.passive_selectors:
-		editor_controls.append(selector)
+	for button: Button in menu.action_editor.slot_buttons:
+		editor_controls.append(button)
 	for control: Control in editor_controls:
 		editor_initialized = editor_initialized and control.get_global_rect().size.y > 0.0
-	_check(menu.active_selectors.size() == CharacterState.ACTIVE_SLOT_COUNT and menu.passive_selectors.size() == CharacterState.PASSIVE_SLOT_COUNT and viewport.encloses(menu.get_global_rect()) and menu.roster_list.get_global_rect().size.y >= 96.0 and menu.select_button.get_global_rect().size.y > 0.0 and editor_initialized and menu.menu_scroll != null and viewport.encloses(menu.start_run_button.get_global_rect()), "menu keeps the roster readable, exposes every contracted build slot, scrolls the editor, and keeps the run action visible")
+	_check(menu.active_selectors.is_empty() and menu.passive_selectors.is_empty() and menu.action_editor.slot_buttons.size() == 24 and menu.automatic_passives_label.text.contains("todas automáticas") and viewport.encloses(menu.get_global_rect()) and menu.roster_list.get_global_rect().size.y >= 96.0 and menu.select_button.get_global_rect().size.y > 0.0 and editor_initialized and menu.menu_scroll != null and viewport.encloses(menu.start_run_button.get_global_rect()), "menu exposes 24 action slots and automatic passive state without old equip selectors, preserving scroll and run access")
 	_check(menu._error_text(&"invalid_loadout", false).contains("build") and menu._error_text(&"recovery_required", false).contains("gravação pendente"), "start failures explain how the player can resolve the state")
 	menu.queue_free()
 	var blocked_directory := root_directory.path_join("blocked_profile")
@@ -154,6 +152,11 @@ func _check_skill_controls(scene: PackedScene) -> void:
 	menu._learn_skill(&"slash")
 	var unlocked: Button = menu.progression_skill_tree.get_node_or_null("Learn_heavy_slash")
 	_check(unlocked != null and not unlocked.disabled, "fulfilling the prerequisite reveals the skill without reopening the menu")
+	var unchanged_bar: Array[Variant] = menu.action_editor.action_slots.duplicate()
+	menu.action_editor.assign_skill(&"heavy_slash", 1)
+	_check(menu.action_editor.action_slots == unchanged_bar and menu.facade.current_profile().character_by_id(character_id).purchased_skill_ranks.get(&"heavy_slash", 0) == 0, "visible but unlearned skill cannot enter the shortcut library or gain rank by assignment")
+	var learned_passive: Dictionary = menu._learn_skill(&"vigor")
+	_check(learned_passive["ok"] and menu.progression_skill_tree.get_node("ProgressionSkill_vigor").text.contains("Passiva automática") and menu.automatic_passives_label.text.contains("Vigor") and menu.facade.current_profile().character_by_id(character_id).presets[0]["passive_slots"] == [null, null], "learned passive activates automatically without changing legacy selected-passive arrays")
 	_check(menu._error_text(&"requirements_unmet", false).contains("requisitos") and menu._error_text(&"rank_cap_reached", false).contains("máximo"), "rank failures have pt-BR menu messages without new progression rules")
 	menu.queue_free()
 

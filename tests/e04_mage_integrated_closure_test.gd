@@ -28,8 +28,8 @@ func _run() -> void:
 		&"ice_wall": "Parede de Gelo", &"teleport": "Teleporte",
 		&"mage_mana_regeneration": "Regeneração de SP",
 	}
-	_check(expected_names.size() == 13 and catalog.initial_skill_slots(&"mage")["active_slots"] == [null, null, null, null, null], "biblioteca e cinco slots vazios mantêm R0 fora do loadout")
-	_check(not facade.available_build_options(character_id)["active_skills"].has(&"lightning"), "skill R0 não é equipável")
+	_check(expected_names.size() == 13 and catalog.initial_skill_slots(&"mage")["active_slots"] == [null, null, null, null, null], "biblioteca e arrays legados vazios mantêm R0 fora da biblioteca aprendida")
+	_check(not facade.available_build_options(character_id)["active_skills"].has(&"lightning"), "skill R0 não é atribuível à barra")
 	var seeded := facade.current_profile()
 	seeded.character_by_id(character_id).job_xp_total = ProgressionRules.UNEVOLVED_MAX_JOB_XP
 	_check(store.commit(seeded).get("ok", false), "fixture de 19 pontos usa store transacional isolado")
@@ -53,10 +53,10 @@ func _run() -> void:
 	]
 	for index: int in purchases.size():
 		_check(learning_menu._learn_skill(purchases[index]).get("ok", false), "compra %d de 19: %s" % [index + 1, purchases[index]])
-	for selector: OptionButton in [learning_menu.active_selectors[0], learning_menu.passive_selectors[0]]:
-		for index: int in range(1, selector.item_count):
-			var skill_id: StringName = selector.get_item_metadata(index)
-			_check(selector.get_item_text(index) == expected_names[skill_id], "seletor mostra %s em pt-BR" % skill_id)
+	for child: Node in learning_menu.action_editor.library.get_children():
+		var skill_id: StringName = child.get("skill_id")
+		_check((child as Button).text == expected_names[skill_id], "biblioteca identifica habilidade aprendida %s" % skill_id)
+	_check(learning_menu.action_editor.learned_skills.size() == 12 and learning_menu.action_editor.slot_buttons.size() == 24 and learning_menu.automatic_passives_label.text.contains("todas automáticas"), "biblioteca aprendida e 24 atalhos coexistem com passivas automáticas")
 	learning_menu.queue_free()
 	await process_frame
 	var progression := facade.progression_summary(character_id)
@@ -73,8 +73,8 @@ func _run() -> void:
 	_check(reopened.get("ok", false), "save com builds reabre")
 	if reopened.get("ok", false):
 		var character: CharacterState = reopened["profile"].character_by_id(character_id)
-		_check(character.presets[0]["active_slots"] == elemental and character.presets[1]["active_slots"] == spiritual, "reload preserva as dez escolhas de ativas")
-		_check(character.presets[0]["passive_slots"] == passive and character.presets[1]["passive_slots"] == passive, "reload preserva única passiva existente")
+		_check(character.presets[0]["active_slots"] == elemental and character.presets[1]["active_slots"] == spiritual, "reload preserva os arrays legados de ativas")
+		_check(character.presets[0]["passive_slots"] == passive and character.presets[1]["passive_slots"] == passive, "reload preserva array legado da passiva")
 		await _run_build(reloaded, character_id, 0, elemental, passive)
 		await _run_build(reloaded, character_id, 1, spiritual, passive)
 	_check(catalog.skill_metadata(&"archer_precision").get("category") == ProfileCatalog.PASSIVE and catalog.skill_metadata(&"blood_thirst").get("category") == ProfileCatalog.PASSIVE and ClassCatalog.skill_definition(&"slash") != null, "catálogos Arqueiro/Espadachim permanecem disponíveis")
@@ -88,6 +88,17 @@ func _run_build(facade: ProfileFacade, character_id: String, preset_index: int, 
 	await process_frame
 	menu._select_roster_index(0)
 	var selected := menu._choose_preset(preset_index)
+	var learned: Array[StringName] = []
+	learned.assign(facade.available_build_options(character_id)["active_skills"])
+	var bar := ActionBarLayout.empty()
+	var ordered := _active_names(active)
+	for id: StringName in learned:
+		if id not in ordered:
+			ordered.append(id)
+	for index: int in ordered.size():
+		bar[index] = ordered[index]
+	menu._save_action_slots(bar)
+	_check(facade.current_profile().character_by_id(character_id).action_slots == bar and facade.progression_summary(character_id)["base_skill_points_available"] == 0, "organizar todas aprendidas preserva carteira e persiste barra por personagem")
 	var preview := facade.build_preview(character_id)
 	var started := menu._start_run()
 	_check(selected.get("ok", false) and preview.get("ok", false) and started.get("ok", false), "preset %d inicia run via menu" % preset_index)
@@ -102,7 +113,7 @@ func _run_build(facade: ProfileFacade, character_id: String, preset_index: int, 
 	for enemy: CombatActor in controller.enemies:
 		enemy.set_process(false)
 	var snapshot := controller.run_state.build_snapshot
-	_check(snapshot.active_slots == active and snapshot.passive_slots == passive and controller.player.available_skill_ids() == _active_names(active), "run %d respeita cinco ativas e somente uma passiva" % preset_index)
+	_check(snapshot.active_slots == active and snapshot.passive_slots == passive and snapshot.action_slots == bar and controller.player.available_skill_ids() == learned and snapshot.learned_skill_ids(ProfileCatalog.PASSIVE).size() == 1, "run %d preserva arrays legados e usa todas aprendidas legais sem limite de cinco" % preset_index)
 	_check(controller.run_state.skill_levels[&"lightning"] == 3 and controller.run_state.skill_levels[&"electric_discharge"] == 2 and controller.run_state.skill_levels[&"ice_wall"] == 2 and controller.run_state.skill_levels[&"mage_mana_regeneration"] == 2, "run %d captura ranks comprados")
 	_check(controller.run_state.pending_choices == 0 and controller.run_state.augment_stacks.is_empty(), "run %d começa sem augment obrigatório" % preset_index)
 	_check(is_equal_approx(controller.player.stat_breakdown.value(&"magic_attack"), preview["stat_breakdown"].value(&"magic_attack")) and is_equal_approx(controller.player.stat_breakdown.value(&"sp_regen"), preview["stat_breakdown"].value(&"sp_regen")), "preview/run compartilham MATQ e SP regen canônicos")
@@ -114,7 +125,7 @@ func _run_build(facade: ProfileFacade, character_id: String, preset_index: int, 
 	controller._update_hud()
 	for skill_id: StringName in _active_names(active):
 		var card: Button = controller.battle_controls.skill_buttons[skill_id]
-		_check(card.text.contains(ClassCatalog.skill_definition(skill_id).display_name.to_upper()) and card.text.contains("R%d" % controller.run_state.skill_levels[skill_id]), "HUD apresenta %s equipado" % skill_id)
+		_check(card.tooltip_text.contains(ClassCatalog.skill_definition(skill_id).display_name.to_upper()) and card.tooltip_text.contains("R%d" % controller.run_state.skill_levels[skill_id]), "HUD apresenta %s equipado" % skill_id)
 	var melee := controller.enemies[0] as EnemyActor
 	melee.global_position = controller.player.global_position + Vector2(45, 0)
 	controller.enemies[1].global_position = controller.player.global_position + Vector2(500, 150)

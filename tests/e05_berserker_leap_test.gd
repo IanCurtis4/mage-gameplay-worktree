@@ -12,6 +12,7 @@ func _run() -> void:
 	var navigation := ArenaNavigation.new()
 	navigation.configure(Rect2(0, 0, 1000, 700), [Rect2(510, 300, 40, 100)], 20.0)
 	var snapshot := BuildSnapshot.new()
+	snapshot.job_level = ProgressionRules.MAX_JOB_LEVEL
 	snapshot.base_class_id = &"swordsman"
 	snapshot.evolution_id = &"berserker"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"berserker")

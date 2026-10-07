@@ -32,14 +32,16 @@ func _check_runtime() -> void:
 		var snapshot := BuildSnapshot.new()
 		snapshot.character_id = "blood-%d" % rank
 		snapshot.base_class_id = &"swordsman"
+		snapshot.base_level = 5 # Twelve legal attribute points cover the ten VIT used below.
+		snapshot.job_level = 20
 		snapshot.attribute_allocations = {&"vit": 10}
 		snapshot.skill_ranks = {&"blood_thirst": rank}
-		snapshot.passive_slots = [&"blood_thirst", null]
+		snapshot.passive_slots = [null, null] # Learned Sede de Sangue operates automatically.
 		var player := PlayerActor.new()
 		player.configure(nav, RunState.from_build(snapshot.character_id, snapshot))
 		root.add_child(player)
 		player.set_process(false)
-		var base_stats := StatCalculator.calculate(IdentityIds.initial_attributes(&"swordsman"), {&"vit": 10})
+		var base_stats := StatCalculator.calculate(IdentityIds.initial_attributes(&"swordsman"), {&"vit": 10}, snapshot.base_level)
 		var ratio := 0.60 if rank == 1 else 1.20 if rank == 3 else 0.0
 		_check(is_equal_approx(player.stat_breakdown.value(&"melee_attack"), base_stats.value(&"melee_attack") + 10.0 * ratio) and player.stat_breakdown.primary_value(&"vit") == base_stats.primary_value(&"vit"), "R%d bônus não consome VIT nem depende de adds" % rank)
 		player.health.current_hp = player.health.max_hp - 100.0

@@ -10,6 +10,7 @@ func _run() -> void:
 	var navigation := ArenaNavigation.new()
 	navigation.configure(Rect2(0, 0, 1000, 700), [], 20.0)
 	var snapshot := BuildSnapshot.new()
+	snapshot.job_level = 40 # Legal fixture: all purchased evolution entry gates are satisfied.
 	snapshot.base_class_id = &"mage"
 	snapshot.evolution_id = &"elementalist"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"mage", &"elementalist")
@@ -76,7 +77,14 @@ func _run() -> void:
 	inactive.current_sp = 10.0
 	inactive.record_elementalist_damage(_hit(inactive.get_instance_id(), 101, &"fire_spear"))
 	inactive.record_elementalist_damage(_hit(inactive.get_instance_id(), 101, &"ice_spear"))
-	_check(inactive.current_sp == 10.0, "un-equipped passive has no effect")
+	_check(inactive.current_sp == 12.0, "learned passive refunds automatically without legacy equipped slots")
+	unequipped.skill_ranks.erase(&"elementalist_prismatic_focus")
+	var unlearned := PlayerActor.new()
+	unlearned.configure(navigation, RunState.from_build("focus-unlearned", unequipped))
+	unlearned.current_sp = 10.0
+	unlearned.record_elementalist_damage(_hit(unlearned.get_instance_id(), 101, &"fire_spear"))
+	unlearned.record_elementalist_damage(_hit(unlearned.get_instance_id(), 101, &"ice_spear"))
+	_check(unlearned.current_sp == 10.0, "unlearned passive never refunds")
 	var capped := snapshot.copy_snapshot()
 	capped.skill_ranks[&"elementalist_prismatic_focus"] = 3
 	var ranked := PlayerActor.new()
@@ -98,6 +106,7 @@ func _run() -> void:
 	_check(ranked.current_sp == 14.0, "real damage callback grants R3 refund of four SP")
 	player.free()
 	inactive.free()
+	unlearned.free()
 	ranked.free()
 	enemy.free()
 	controller.free()

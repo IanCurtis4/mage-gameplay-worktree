@@ -127,18 +127,16 @@ func _check_menu_and_controller() -> void:
 	root.add_child(menu)
 	await process_frame
 	menu._select_roster_index(0)
-	var selector := menu.active_selectors[0]
-	var option_index := -1
-	for index: int in selector.item_count:
-		if selector.get_item_metadata(index) == &"lightning":
-			option_index = index
-	_check(option_index >= 0 and (selector.get_item_text(option_index) == "Relâmpago" if option_index >= 0 else false), "menu mostra nome humano, não ID interno")
-	selector.select(option_index)
-	var saved := menu._save_build()
-	_check(saved.get("ok", false), "menu equipa Relâmpago no primeiro slot")
+	var learned_button: Button
+	for child: Node in menu.action_editor.library.get_children():
+		if child.get("skill_id") == &"lightning":
+			learned_button = child as Button
+	_check(learned_button != null and learned_button.text == "Relâmpago", "biblioteca apresenta nome humano da skill aprendida")
+	menu.action_editor.assign_skill(&"lightning", 0)
+	_check(facade.current_profile().character_by_id(character_id).action_slots[0] == &"lightning", "menu salva organização de atalhos pela fachada")
 	var reopened := ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
 	var opened := reopened.open_profile()
-	_check(opened.get("ok", false) and opened["profile"].character_by_id(character_id).presets[0]["active_slots"][0] == &"lightning", "save/reload preserva slot de Relâmpago")
+	_check(opened.get("ok", false) and opened["profile"].character_by_id(character_id).action_slots[0] == &"lightning", "save/reload preserva slot de Relâmpago")
 	menu.queue_free()
 	await process_frame
 	menu = scene.instantiate() as CharacterMenu
@@ -164,7 +162,7 @@ func _check_menu_and_controller() -> void:
 	controller.enemies.append(target)
 	controller._update_hud()
 	var card: Button = controller.battle_controls.skill_buttons[&"lightning"]
-	_check(controller.run_state.skill_levels[&"lightning"] == 5 and controller.player.available_skill_ids() == [&"lightning"] and card.text.contains("RELÂMPAGO") and card.text.contains("R5") and card.text.contains("22 SP"), "HUD consome R5 e nome do snapshot persistente")
+	_check(controller.run_state.skill_levels[&"lightning"] == 5 and controller.player.available_skill_ids() == [&"lightning"] and card.tooltip_text.contains("RELÂMPAGO") and card.tooltip_text.contains("R5") and card.tooltip_text.contains("22 SP"), "HUD consome R5 e nome do snapshot persistente")
 	controller.cast_intent.active_skill = &"lightning"
 	controller._update_aim(target.global_position)
 	_check(controller.battle_controls.aim_label.text.contains("PRONTO") and controller.battle_indicators.endpoint == target.global_position, "mira de alvo único aceita alvo válido")

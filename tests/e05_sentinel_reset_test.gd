@@ -96,7 +96,7 @@ func _fingerprint(player: PlayerActor) -> Array:
 	return [player.current_sp, player.sentinel_state.focus, player.sentinel_state.reserved_focus, player.sentinel_state.reserved_sp, player.skill_cooldown(HEAD), player.attack_cooldown, player._attack_recovery, player._sentinel_last_launch_frame, special.size(), autos.size()]
 
 func _invalid_commands() -> void:
-	for reason: String in ["focus", "reserved_focus", "sp", "reserved_sp", "cooldown", "dead_target", "range", "obstacle", "stun", "fear", "pause", "dead_player", "unequipped", "invalid_point", "null_target"]:
+	for reason: String in ["focus", "reserved_focus", "sp", "reserved_sp", "cooldown", "dead_target", "range", "obstacle", "stun", "fear", "pause", "dead_player", "unlearned", "invalid_point", "null_target"]:
 		var player := _fixture()
 		var enemy := _victim(player)
 		var point := enemy.position
@@ -117,7 +117,7 @@ func _invalid_commands() -> void:
 			"fear": player.apply_fear(1.0)
 			"pause": paused = true
 			"dead_player": player.health.current_hp = 0.0
-			"unequipped": player.run_state.build_snapshot.active_slots = [null, null, null, null, null]
+			"unlearned": player.run_state.build_snapshot.skill_ranks.erase(HEAD)
 			"invalid_point": point = Vector2.INF
 		var before := _fingerprint(player)
 		_check(not player.use_sentinel_reset(HEAD, point, null if reason == "null_target" else enemy), "%s invalid command rejected" % reason)
@@ -150,6 +150,7 @@ func _scene() -> RunController:
 	var arena := load("res://scenes/main.tscn").instantiate() as RunController
 	root.add_child(arena)
 	arena.set_process(false)
+	arena.player.sentinel_combat_active = arena.encounter_active
 	arena.player.set_process(false)
 	arena.training_boss.set_process(false)
 	arena._training_add_elapsed = -1000.0
@@ -186,7 +187,7 @@ func _scene_projectile() -> void:
 		_check(impacts.size() == 1 and projectile.is_queued_for_deletion(), "continuous collision resolves one impact and removes projectile")
 		if not impacts.is_empty():
 			_check(impacts[0].physical_damage == frozen.physical_damage and impacts[0].emission_id == frozen.emission_id, "impact retains launched snapshot")
-		_close(player.sentinel_state.focus, 50.0, "impact never charges additional Focus")
+		_close(player.sentinel_state.focus, 54.0, "impact returns intrinsic4 without charging additional Focus")
 	arena._show_result(false)
 	_check(arena.run_finished and paused and player.sentinel_state.focus == 0.0 and player.sentinel_state.observed_target_id == 0, "actual result clears Sentinel state synchronously while paused")
 	paused = false

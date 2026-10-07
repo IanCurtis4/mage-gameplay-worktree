@@ -54,22 +54,22 @@ func _run() -> void:
 	var learned := menu._learn_skill(&"berserker_obstinacy")
 	_check(learned["ok"] and facade.current_profile().character_by_id(berserker_id).purchased_skill_ranks.get(&"berserker_obstinacy", 0) == 1, "Berserker passive can be bought after reaching its gate")
 	menu._populate_build_editor(facade.current_profile().character_by_id(berserker_id))
-	_select_option(menu.active_selectors[0], &"berserker_rupture")
-	_select_option(menu.passive_selectors[0], &"berserker_obstinacy")
+	_check(menu.action_editor.slot_buttons.size() == 24 and menu.action_editor.learned_skills == [&"berserker_rupture"], "editor has24 slots and only learned legal actives")
+	menu.action_editor.assign_skill(&"berserker_rupture", 0)
 	var saved := menu._save_build()
-	_check(saved["ok"] and facade.current_profile().character_by_id(berserker_id).presets[0]["active_slots"][0] == &"berserker_rupture" and facade.current_profile().character_by_id(berserker_id).presets[0]["passive_slots"][0] == &"berserker_obstinacy", "free active and purchased passive can be equipped")
+	_check(saved["ok"] and facade.current_profile().character_by_id(berserker_id).action_slots[0] == &"berserker_rupture" and facade.build_preview(berserker_id)["snapshot"].has_passive(&"berserker_obstinacy") and menu.automatic_passives_label.text.contains("automáticas"), "free active shortcut is saved; purchased passive operates automatically")
 	var reloaded := ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
 	var reopened := reloaded.open_profile()
 	var durable: CharacterState = reopened["profile"].character_by_id(berserker_id)
-	_check(reopened["ok"] and durable.evolution_id == &"berserker" and durable.job_xp_total == 6440 and durable.presets[0]["active_slots"][0] == &"berserker_rupture", "identity, XP and slots survive durable reload")
+	_check(reopened["ok"] and durable.evolution_id == &"berserker" and durable.job_xp_total == 6440 and durable.action_slots.size() == 24 and durable.action_slots[0] == &"berserker_rupture" and durable.presets[0]["active_slots"] == [null, null, null, null, null] and durable.presets[0]["passive_slots"] == [null, null], "identity, XP and action shortcut survive durable reload while legacy arrays stay unchanged")
 	_check(menu.start_run_button.text.contains("Candidato"), "start button still names the focused character")
 	var started := menu._start_run()
 	if started["ok"]:
 		await scene_changed
 		await process_frame
 	var controller := current_scene as RunController
-	_check(started["ok"] and started["run_state"].class_id == &"swordsman" and started["run_state"].build_snapshot.evolution_id == &"berserker" and started["run_state"].build_snapshot.active_slots[0] == &"berserker_rupture" and facade.current_profile().selected_character_id == berserker_id, "start action launches focused Berserker build")
-	_check(controller != null and controller.player.available_skill_ids().has(&"berserker_rupture") and controller.battle_controls.skill_buttons.has(&"berserker_rupture") and controller.player.character_animation.actor_kind == &"berserker", "runtime dispatch, HUD and exclusive atlas show the equipped skill")
+	_check(started["ok"] and started["run_state"].class_id == &"swordsman" and started["run_state"].build_snapshot.evolution_id == &"berserker" and started["run_state"].build_snapshot.action_slots[0] == &"berserker_rupture" and started["run_state"].build_snapshot.has_passive(&"berserker_obstinacy") and facade.current_profile().selected_character_id == berserker_id, "start action launches focused Berserker learned build and copied shortcuts")
+	_check(controller != null and controller.player.available_skill_ids().has(&"berserker_rupture") and controller.battle_controls.skill_buttons.has(&"berserker_rupture") and controller.player.character_animation.actor_kind == &"berserker", "runtime dispatch, action bar and exclusive atlas show the learned skill")
 	if started["ok"]:
 		var reward := facade.grant_reward("flow-reward", facade.current_profile().revision, started["run_id"], 1, &"encounter_one")
 		_check(reward["ok"] and facade.current_profile().character_by_id(berserker_id).job_xp_total == 6520 and facade.current_profile().character_by_id(first_id).job_xp_total == 0, "run reward advances focused Berserker, not prior roster selection")
@@ -86,12 +86,6 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("E05 Berserker playtest flow: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
 	quit(0 if failures == 0 else 1)
-
-func _select_option(selector: OptionButton, skill_id: StringName) -> void:
-	for index: int in selector.item_count:
-		if selector.get_item_metadata(index) == skill_id:
-			selector.select(index)
-			return
 
 func _check(condition: bool, message: String) -> void:
 	checks += 1

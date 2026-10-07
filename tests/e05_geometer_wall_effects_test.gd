@@ -24,19 +24,20 @@ func _run() -> void:
 	print("Geometer wall effects: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
-func _fixture(trace_rank: int = 1, incidence_rank: int = 0, equipped: bool = true) -> void:
+func _fixture(trace_rank: int = 1, incidence_rank: int = 0, learned: bool = true) -> void:
 	var snapshot := BuildSnapshot.new()
 	snapshot.character_id = "geometer-g4-wall-effects-fixture"
 	snapshot.base_class_id = &"mage"
 	snapshot.evolution_id = &"mg_ar"
+	snapshot.job_level = 28
 	snapshot.skill_ranks = {&"geometer_trace": trace_rank, &"geometer_triangulation": 5}
 	snapshot.library_skill_ids = [&"geometer_trace", &"geometer_triangulation"]
 	snapshot.active_slots = [&"geometer_trace", &"geometer_triangulation", null, null, null]
-	if incidence_rank > 0:
+	if incidence_rank > 0 and learned:
 		snapshot.skill_ranks[&"geometer_incidence"] = incidence_rank
 		snapshot.library_skill_ids.append(&"geometer_incidence")
-		if equipped:
-			snapshot.passive_slots = [&"geometer_incidence", null, null]
+	# Learned passives are automatic; no legacy equip selection is required.
+	snapshot.passive_slots = [null, null]
 	RunController.pending_run_state = RunState.from_build("", snapshot)
 	RunController.pending_training_mode = true
 	arena = load("res://scenes/main.tscn").instantiate() as RunController
@@ -113,13 +114,13 @@ func _recipes() -> void:
 
 func _incidence() -> void:
 	for rank: int in [1, 2, 3]:
-		for equipped: bool in [true, false]:
-			_fixture(1, rank, equipped)
+		for learned: bool in [true, false]:
+			_fixture(1, rank, learned)
 			_wall(&"fire", &"ice")
 			_walk(boss)
-			var expected := arena.player.stat_breakdown.value(&"magic_attack") * 0.35 * (1.0 + (0.05 + rank * 0.05 if equipped else 0.0))
+			var expected := arena.player.stat_breakdown.value(&"magic_attack") * 0.35 * (1.0 + (0.05 + rank * 0.05 if learned else 0.0))
 			var hits := _for_actor(boss)
-			_check(hits.size() == 1 and is_equal_approx(hits[0].magic_damage, expected), "Incidence rank%d bonus requires passive slot (%s)" % [rank, equipped])
+			_check(hits.size() == 1 and is_equal_approx(hits[0].magic_damage, expected), "Incidence rank%d bonus derives automatically only when learned (%s)" % [rank, learned])
 			await _finish_fixture()
 
 func _pulse_and_dedup() -> void:

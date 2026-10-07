@@ -94,7 +94,7 @@ func _test_preview_hud_dispatch_and_projectiles() -> void:
 	target.global_position = controller.player.global_position + Vector2(200, 0)
 	controller._update_hud()
 	var card: Button = controller.battle_controls.skill_buttons[&"fire_spear"]
-	_check(controller.skill_label.text.contains("Lança de Fogo R5") and card.text.contains("R5") and card.text.contains("21 SP"), "HUD renders snapshot rank and definition cost from the same source")
+	_check(controller.skill_label.text.contains("Lança de Fogo R5") and card.tooltip_text.contains("R5") and card.tooltip_text.contains("21 SP"), "HUD renders snapshot rank and definition cost from the same source")
 	controller.cast_intent.active_skill = &"fire_spear"
 	controller._update_aim(target.global_position)
 	_check(controller.battle_controls.aim_label.text.contains("PRONTO") and controller.battle_indicators.endpoint == target.global_position, "ready preview accepts the target inside ranked range")

@@ -78,7 +78,7 @@ func _run() -> void:
 		await process_frame
 	var controller := current_scene as RunController
 	_check(started["ok"] and started["run_state"].build_snapshot.evolution_id == &"spiritualist" and started["run_state"].build_snapshot.skill_ranks[&"spiritualist_echo_curse"] == 5 and started["run_state"].build_snapshot.active_slots == boss_active, "menu→run conserva identidade, Maldição R5 e slots")
-	_check(controller != null and controller.player.character_animation.actor_kind == &"spiritualist" and controller.class_button.text == "Classe: Espiritualista" and controller.battle_controls.skill_buttons.has(&"spiritualist_soul_drain"), "cena real usa atlas, HUD e comando do Espiritualista")
+	_check(controller != null and controller.player.character_animation.actor_kind == &"spiritualist" and controller.class_button.text == "Classe: Espiritualista" and controller.battle_controls.learned_skills.has(&"spiritualist_soul_drain") and controller.action_slots.size() == 24, "cena real usa atlas, identidade e biblioteca aprendida independente dos atalhos")
 	if started["ok"]:
 		_check_boss(started["run_state"])
 		var ended := reloaded.end_run("spiritualist-end", started["new_revision"], started["run_id"], &"completed")
@@ -109,7 +109,7 @@ func _buy_build(facade: ProfileFacade, character_id: String, purchases: Dictiona
 				revision = result["new_revision"]
 	var equipment: Dictionary[StringName, Variant] = {&"weapon": null, &"armor": null, &"accessory": null}
 	var saved := facade.update_preset("build-%s" % character_id, revision, character_id, 0, active, passive, equipment)
-	_check(saved["ok"], "preset legal equipa cinco ativas e duas passivas")
+	_check(saved["ok"], "preset legado preserva suas cinco ativas e duas passivas sem limitar disponibilidade")
 
 func _check_boss(run_state: RunState) -> void:
 	var navigation := ArenaNavigation.new()

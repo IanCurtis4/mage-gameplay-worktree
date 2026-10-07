@@ -153,7 +153,7 @@ func _check_build(label: String, purchases: Dictionary, active: Array[Variant], 
 	_check(not exhausted["ok"] and exhausted["error_code"] == &"insufficient_points", "%s cannot overdraw evolution wallet" % label)
 	var equipped: Dictionary[StringName, Variant] = {&"weapon": null, &"armor": null, &"accessory": null}
 	var preset := facade.update_preset("%s-equip" % label, facade.current_profile().revision, character_id, 0, active, passive, equipped)
-	_check(preset["ok"], "%s equips five actives and two passives" % label)
+	_check(preset["ok"], "%s preserves valid historical five/two preset arrays without limiting learned skills" % label)
 	if not preset["ok"]:
 		return
 	var revision := facade.current_profile().revision
@@ -163,7 +163,18 @@ func _check_build(label: String, purchases: Dictionary, active: Array[Variant], 
 	var illegal_passive: Array[Variant] = passive.duplicate()
 	illegal_passive[0] = &"geometer_trace"
 	_check(not facade.update_preset("%s-wrong-category" % label, revision, character_id, 0, active, illegal_passive, equipped)["ok"] and facade.current_profile().revision == revision, "%s active in passive slot is rejected atomically" % label)
-	_check(not facade.update_preset("%s-six-actives" % label, revision, character_id, 0, active + [&"teleport"], passive, equipped)["ok"], "%s sixth active is forbidden" % label)
+	_check(not facade.update_preset("%s-six-legacy" % label, revision, character_id, 0, active + [&"teleport"], passive, equipped)["ok"], "%s legacy preset format stays five entries; this is not a learned-active limit" % label)
+	var action_slots := ActionBarLayout.from_legacy(active + [&"teleport"])
+	var bar := facade.update_action_slots("%s-six-shortcuts" % label, revision, character_id, action_slots)
+	_check(bar["ok"] and facade.current_profile().character_by_id(character_id).action_slots.size() == 24 and facade.current_profile().character_by_id(character_id).action_slots[5] == &"teleport", "%s sixth learned active is legal in the 24-slot action bar" % label)
+	var illegal_bar: Array[Variant] = action_slots.duplicate()
+	illegal_bar[23] = &"double_shot"
+	revision = facade.current_profile().revision
+	_check(not facade.update_action_slots("%s-foreign-bar" % label, revision, character_id, illegal_bar)["ok"] and facade.current_profile().revision == revision, "%s foreign active shortcut is rejected without changing save" % label)
+	illegal_bar[23] = &"mage_mana_regeneration"
+	_check(not facade.update_action_slots("%s-passive-bar" % label, revision, character_id, illegal_bar)["ok"] and facade.current_profile().revision == revision, "%s passive is automatic, never an active-bar entry" % label)
+	illegal_bar[23] = &"geometer_rewrite" if label == "walls" else &"geometer_translation"
+	_check(not facade.update_action_slots("%s-unlearned-bar" % label, revision, character_id, illegal_bar)["ok"] and facade.current_profile().revision == revision, "%s legal identity alone does not let a shortcut learn a missing active" % label)
 	var encoded := ProfileCodec.encode(facade.current_profile(), catalog)
 	_check(encoded["ok"], "%s profile codec encodes all new IDs" % label)
 	if not encoded["ok"]:
@@ -183,7 +194,7 @@ func _check_build(label: String, purchases: Dictionary, active: Array[Variant], 
 	_check(not ProfileCodec.decode(JSON.stringify(corrupt), catalog)["ok"], "%s codec refuses overspent evolution wallet" % label)
 	if decoded["ok"]:
 		var round_trip: CharacterState = decoded["profile"].character_by_id(character_id)
-		_check(round_trip.purchased_skill_ranks == purchases and round_trip.evolution_id == &"mg_ar" and round_trip.base_class_id == &"mage" and round_trip.presets[0]["active_slots"] == active and round_trip.presets[0]["passive_slots"] == passive, "%s codec retains identity, paid ranks and preset exactly" % label)
+		_check(round_trip.purchased_skill_ranks == purchases and round_trip.evolution_id == &"mg_ar" and round_trip.base_class_id == &"mage" and round_trip.presets[0]["active_slots"] == active and round_trip.presets[0]["passive_slots"] == passive and round_trip.action_slots == action_slots, "%s codec retains identity, paid ranks, legacy preset and independent24-slot layout exactly" % label)
 		_check(encoded["data"]["schema_version"] == ProfileState.SCHEMA_VERSION and encoded["data"]["catalog_version"] == ProfileState.CATALOG_VERSION and not encoded["data"]["characters"][0].has("geometer_construction") and not encoded["data"]["characters"][0].has("cooldowns"), "%s stores current schema metadata, never construction/run state" % label)
 	var reloaded := ProfileFacade.new(ProfileStore.new(directory, catalog))
 	var opened := reloaded.open_profile()
@@ -191,9 +202,9 @@ func _check_build(label: String, purchases: Dictionary, active: Array[Variant], 
 	if not opened["ok"]:
 		return
 	var durable: CharacterState = opened["profile"].character_by_id(character_id)
-	_check(durable.purchased_skill_ranks == purchases and durable.presets[0]["active_slots"] == active and durable.presets[0]["passive_slots"] == passive, "%s durable reload preserves exact build" % label)
+	_check(durable.purchased_skill_ranks == purchases and durable.presets[0]["active_slots"] == active and durable.presets[0]["passive_slots"] == passive and durable.action_slots == action_slots, "%s durable reload preserves exact build and independent action layout" % label)
 	var preview := reloaded.build_preview(character_id)
-	_check(preview["ok"] and preview["snapshot"].active_slots == active and preview["snapshot"].passive_slots == passive and preview["snapshot"].skill_ranks[&"geometer_trace"] == int(purchases[&"geometer_trace"]) + 1, "%s preview uses copied effective ranks including free entry" % label)
+	_check(preview["ok"] and preview["snapshot"].active_slots == active and preview["snapshot"].passive_slots == passive and preview["snapshot"].action_slots == action_slots and preview["snapshot"].skill_ranks[&"geometer_trace"] == int(purchases[&"geometer_trace"]) + 1, "%s preview copies ranks including free entry, action layout and legacy data" % label)
 	var started := reloaded.start_run("%s-run" % label, reloaded.current_profile().revision)
 	_check(started["ok"] and started["run_state"].build_snapshot.evolution_id == &"mg_ar", "%s isolated run starts from reloaded legal build" % label)
 	if not started["ok"]:
@@ -204,17 +215,23 @@ func _check_build(label: String, purchases: Dictionary, active: Array[Variant], 
 	player.configure(navigation, started["run_state"])
 	root.add_child(player)
 	player.set_process(false)
-	_check(player.available_skill_ids() == active and player.skill_rank(&"geometer_trace") == int(purchases[&"geometer_trace"]) + 1, "%s runtime exposes exactly selected actives and correct Trace rank" % label)
+	var learned: Array[StringName] = []
+	for id: StringName in catalog.skill_ids_for_identity(&"mage", &"mg_ar"):
+		if int(summary["effective_skill_ranks"].get(id, 0)) > 0 and catalog.skill_metadata(id)["category"] == ProfileCatalog.ACTIVE:
+			learned.append(id)
+	_check(player.available_skill_ids() == learned and learned.size() == (7 if label == "walls" else 8) and player.skill_rank(&"geometer_trace") == int(purchases[&"geometer_trace"]) + 1, "%s runtime exposes every learned legal active, including skills absent from shortcut bar" % label)
+	_check(player.run_state.build_snapshot.learned_skill_ids(ProfileCatalog.PASSIVE).size() == 3 and player.run_state.build_snapshot.has_passive(&"mage_mana_regeneration") and player.run_state.build_snapshot.has_passive(&"geometer_incidence") and player.run_state.build_snapshot.has_passive(&"geometer_vector_memory"), "%s base plus two evolution passives all operate automatically despite legacy selection of two" % label)
 	var copy: BuildSnapshot = started["run_state"].build_snapshot.copy_snapshot()
 	copy.skill_ranks[&"geometer_trace"] = 99
 	copy.active_slots[0] = null
-	_check(player.skill_rank(&"geometer_trace") == int(purchases[&"geometer_trace"]) + 1 and reloaded.current_profile().character_by_id(character_id).presets[0]["active_slots"] == active, "%s disposable snapshot cannot mutate live actor or durable preset" % label)
+	copy.action_slots[0] = null
+	_check(player.skill_rank(&"geometer_trace") == int(purchases[&"geometer_trace"]) + 1 and player.run_state.build_snapshot.action_slots == action_slots and reloaded.current_profile().character_by_id(character_id).presets[0]["active_slots"] == active and reloaded.current_profile().character_by_id(character_id).action_slots == action_slots, "%s disposable snapshot cannot mutate live actor, durable preset or action layout" % label)
 	player.queue_free()
 	await process_frame
 	var respec_character := durable.copy_state()
 	var refund := CharacterProgression.respec_skills(respec_character, catalog)
 	_check(refund["ok"] and refund["base_refund"] == 19 and refund["evolution_refund"] == 20 and CharacterProgression.summary(respec_character, catalog)["effective_skill_ranks"] == {&"geometer_trace": 1}, "%s respec refunds both wallets and preserves only free Trace" % label)
-	_check(respec_character.presets[0]["active_slots"] == [&"geometer_trace", null, null, null, null] and respec_character.presets[0]["passive_slots"] == [null, null], "%s respec prunes paid actives/passives without erasing free entry" % label)
+	_check(respec_character.presets[0]["active_slots"] == [&"geometer_trace", null, null, null, null] and respec_character.presets[0]["passive_slots"] == [null, null] and respec_character.action_slots == ActionBarLayout.from_legacy([&"geometer_trace"]), "%s respec prunes paid legacy references and action shortcuts without erasing free entry" % label)
 
 func _check_menu(job_level: int) -> void:
 	var directory := _directory("menu%d" % job_level)
@@ -236,7 +253,7 @@ func _check_menu(job_level: int) -> void:
 			_check(label.text.contains("Rank %d/%d" % [1 if index == 0 else 0, CAPS[index]]) and not button.disabled, "job%d offers the legal next rank of %s" % [job_level, skill_id])
 	var character_id: String = menu.facade.current_profile().selected_character_id
 	var foreign_label := menu.progression_skill_tree.get_node_or_null("ProgressionSkill_double_shot")
-	_check(foreign_label == null and menu.active_selectors.size() == 5 and menu.passive_selectors.size() == 2, "job%d menu keeps five/two slots and no Archer branch" % job_level)
+	_check(foreign_label == null and menu.action_editor.slot_buttons.size() == 24 and menu.active_selectors.is_empty() and menu.passive_selectors.is_empty() and menu.automatic_passives_label.text.contains("automáticas"), "job%d menu has24 action slots and automatic passives, with no old selectors or Archer branch" % job_level)
 	if job_level == 23:
 		var learned := menu._learn_skill(&"geometer_incidence")
 		var incidence := menu.progression_skill_tree.get_node_or_null("ProgressionSkill_geometer_incidence") as Label

@@ -23,7 +23,7 @@ func _run() -> void:
 	root.add_child(menu)
 	await process_frame
 	_check(menu.menu_tabs.get_tab_count() == 3, "three preparation tabs")
-	_check(menu.create_panel.visible and not menu.create_toggle.visible and menu.active_slot_a.disabled, "empty profile exposes creation and blocks build controls")
+	_check(menu.create_panel.visible and not menu.create_toggle.visible and menu.action_editor.library.get_child_count() == 0 and menu.action_editor.slot_buttons.size() == 24, "empty profile exposes creation and an empty action library")
 	menu.name_input.text = "Iara"
 	_check(menu.create_character(&"mage")["ok"], "create isolated mage")
 	menu.name_input.text = "Téo"
@@ -54,21 +54,18 @@ func _run() -> void:
 	menu.skill_search.text = ""
 	menu.skill_search.text_changed.emit("")
 	_check(menu._learn_skill(&"fireball")["ok"], "learn base skill through menu")
-	var index := _index_of(menu.active_slot_a, &"fireball")
-	menu.active_slot_a.select(index)
-	menu.active_slot_a.item_selected.emit(index)
+	menu.action_editor.assign_skill(&"fireball", 0)
 	var profile: ProfileState = facade.current_profile()
 	var mage_id: String = profile.characters[0].character_id
-	_check(profile.character_by_id(mage_id).presets[0]["active_slots"][0] == &"fireball", "slot selection persists without leaving an unsaved draft")
+	_check(profile.character_by_id(mage_id).action_slots[0] == &"fireball", "action layout persists independently of legacy presets")
 	store.fail = true
-	menu.active_slot_a.select(0)
-	menu.active_slot_a.item_selected.emit(0)
-	_check(menu._selected_option(menu.active_slot_a) == &"fireball" and menu.status_label.text.contains("Nenhuma alteração"), "save failure restores committed slot and reports error")
+	menu.action_editor.clear_slot(0)
+	_check(menu.action_editor.action_slots[0] == &"fireball" and menu.status_label.text.contains("Nenhuma alteração"), "save failure restores committed shortcut and reports error")
 	store.fail = false
 	menu._choose_preset(1)
-	_check(menu._selected_option(menu.active_slot_a) == null, "changing preset shows its own slots")
+	_check(menu.action_editor.action_slots[0] == &"fireball", "changing equipment preset preserves the character action layout")
 	menu._choose_preset(0)
-	_check(menu._selected_option(menu.active_slot_a) == &"fireball", "returning to saved preset retains skill")
+	_check(menu.action_editor.action_slots[0] == &"fireball", "returning to equipment preset retains learned shortcut")
 	menu._select_roster_index(1)
 	_check(menu.menu_tabs.current_tab == 1 and menu.identity_label.text.contains("Téo") and menu.progression_skill_tree.get_node_or_null("ProgressionSkill_fireball") == null, "alternate updates all tabs without losing current tab")
 	menu._select_roster_index(0)
@@ -96,12 +93,6 @@ func _run() -> void:
 	await process_frame
 	print("Menu tabs: %s (%d checks)" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(0 if failures == 0 else 1)
-
-func _index_of(selector: OptionButton, id: StringName) -> int:
-	for index: int in selector.item_count:
-		if selector.get_item_metadata(index) == id:
-			return index
-	return -1
 
 func _check(condition: bool, label: String) -> void:
 	checks += 1

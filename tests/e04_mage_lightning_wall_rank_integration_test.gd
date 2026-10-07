@@ -141,17 +141,18 @@ func _check_menu_and_controller() -> void:
 	root.add_child(menu)
 	await process_frame
 	menu._select_roster_index(0)
-	var wall_selector := menu.active_selectors[0]
-	var discharge_selector := menu.active_selectors[1]
-	var wall_index := _option_index(wall_selector, &"lightning_wall")
-	var discharge_index := _option_index(discharge_selector, &"electric_discharge")
-	_check(wall_index >= 0 and discharge_index >= 0 and wall_selector.get_item_text(wall_index) == "Parede de Raios", "menu mostra as duas skills e nome visível")
-	wall_selector.select(wall_index)
-	discharge_selector.select(discharge_index)
-	_check(menu._save_build().get("ok", false), "menu salva Parede e Descarga em slots distintos")
+	var learned_button: Button
+	for child: Node in menu.action_editor.library.get_children():
+		if child.get("skill_id") == &"lightning_wall":
+			learned_button = child as Button
+	_check(learned_button != null and learned_button.text == "Parede de Raios", "biblioteca apresenta nome humano da skill aprendida")
+	menu.action_editor.assign_skill(&"lightning_wall", 0)
+	_check(menu.action_editor.learned_skills.has(&"electric_discharge"), "biblioteca também contém Descarga aprendida")
+	menu.action_editor.assign_skill(&"electric_discharge", 1)
+	_check(facade.current_profile().character_by_id(character_id).action_slots[0] == &"lightning_wall", "menu salva organização de atalhos pela fachada")
 	var reopened := ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
 	var opened := reopened.open_profile()
-	_check(opened.get("ok", false) and opened["profile"].character_by_id(character_id).presets[0]["active_slots"].slice(0, 2) == [&"lightning_wall", &"electric_discharge"], "reload preserva build de raio")
+	_check(opened.get("ok", false) and opened["profile"].character_by_id(character_id).action_slots.slice(0, 2) == [&"lightning_wall", &"electric_discharge"], "reload preserva build de raio")
 	menu.queue_free()
 	await process_frame
 	menu = scene.instantiate() as CharacterMenu
@@ -178,7 +179,7 @@ func _check_menu_and_controller() -> void:
 	controller.enemies.append(target)
 	controller._update_hud()
 	var card: Button = controller.battle_controls.skill_buttons[&"lightning_wall"]
-	_check(controller.run_state.skill_levels[&"lightning_wall"] == 5 and card.text.contains("PAREDE DE RAIOS") and card.text.contains("R5") and card.text.contains("28 SP"), "HUD mostra rank e custo persistentes")
+	_check(controller.run_state.skill_levels[&"lightning_wall"] == 5 and card.tooltip_text.contains("PAREDE DE RAIOS") and card.tooltip_text.contains("R5") and card.tooltip_text.contains("28 SP"), "HUD mostra rank e custo persistentes")
 	controller.cast_intent.active_skill = &"lightning_wall"
 	controller._update_aim(controller.player.global_position + Vector2(1000, 0))
 	_check(controller.battle_controls.aim_label.text.contains("PRONTO") and controller.battle_indicators.endpoint == controller.player.global_position + Vector2(220, 0), "mira mostra a linha na distância de colocação")

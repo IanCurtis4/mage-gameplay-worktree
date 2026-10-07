@@ -134,12 +134,12 @@ func _combat(label: String, facade: ProfileFacade, dense: bool) -> void:
 		var before := [player.current_sp, player.sentinel_state.focus, arena.cast_intent.active_skill]
 		guide.toggle_button.pressed.emit()
 		_check(guide.help_label.visible and before == [player.current_sp, player.sentinel_state.focus, arena.cast_intent.active_skill] and not paused, "guide opens without consuming resources, canceling aim, or pausing")
-	_check(player.available_skill_ids() == training["run_state"].build_snapshot.active_slots and player.available_skill_ids().size() == 5, "only the five legally equipped actives enter dispatcher")
+	_check(player.available_skill_ids() == training["run_state"].build_snapshot.learned_skill_ids(ProfileCatalog.ACTIVE) and player.available_skill_ids().size() > 5 and arena.action_slots.size() == 24, "all legally learned actives enter dispatcher independently of24 shortcut layout")
 	arena._update_hud()
 	_check(not arena.skill_label.visible and arena.sentinel_focus_bar.visible, "Sentinel HUD has one Focus meter without duplicate skill list")
-	for skill: StringName in player.available_skill_ids():
+	for skill: StringName in arena.battle_controls.skill_buttons:
 		var card: Button = arena.battle_controls.skill_buttons[skill]
-		_check(card.text.split("\n").size() == 3 and card.text.contains("SP") and card.text.contains("Foco"), "skill card displays named action, SP/Focus cost, readiness in3 lines")
+		_check(card.text.split("\n").size() >= 2 and card.tooltip_text.contains("SP") and card.tooltip_text.contains("Foco"), "compact shortcut names/state retain full SP/Focus cost in tooltip")
 	# No invented resource grant: a measured stationary window generates60 Focus.
 	player._process(0.01) # Observe fixture reposition as effective movement.
 	player._process(6.5)
@@ -269,7 +269,7 @@ func _dense_proc_and_vfx(arena: RunController, label: String) -> void:
 	if player.sentinel_state.focus > 90.0:
 		player.sentinel_state.spend(30.0) # Make proc headroom explicit in saturation fixture.
 	var prior := player.sentinel_state.focus
-	var expected_gain := float(player.skill_rank(&"sentinel_opening_read") + 1)
+	var expected_gain := float(player.skill_rank(&"sentinel_opening_read") + 1) + 4.0
 	var skill := &"sentinel_concussion_shot" if label == "critical" else &"sentinel_net_shot"
 	for index: int in 20:
 		arena._show_sentinel_visual(skill, Vector2(450, 350), 20.0)
@@ -298,7 +298,7 @@ func _dense_proc_and_vfx(arena: RunController, label: String) -> void:
 	for index: int in arena.enemies.size():
 		var actor := arena.enemies[index]
 		_check(actor.health.current_hp < hp[index] and (actor.is_rooted() if label == "caster" else actor.is_stunned()), "cosmetic cap cannot suppress any of20 real direct impacts or controls")
-	_close(player.sentinel_state.focus - prior, minf(expected_gain, 100.0 - prior), "twenty victims of one emission pay exactly one shared OpeningRead proc")
+	_close(player.sentinel_state.focus - prior, minf(expected_gain, 100.0 - prior), "twenty victims pay one intrinsic gain and one shared OpeningRead proc")
 	cosmetics = arena.get_children().filter(func(node: Node) -> bool: return node is SentinelBurst and not node.is_queued_for_deletion())
 	_check(cosmetics.size() == 12, "real gameplay processing does not breach cosmetic cap")
 	var forged := {"source_id": 9999999, "target_id": arena.training_boss.get_instance_id(), "emission_id": 1000, "actual_damage": 1.0, "can_trigger_effects": true, "critical": true}

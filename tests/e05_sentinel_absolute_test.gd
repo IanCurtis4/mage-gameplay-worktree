@@ -95,7 +95,7 @@ func _activation_ranks() -> void:
 		await process_frame
 
 func _invalid_commands() -> void:
-	for reason: String in ["sp", "reserved_sp", "cooldown", "stun", "fear", "pause", "dead", "unequipped", "identity"]:
+	for reason: String in ["sp", "reserved_sp", "cooldown", "stun", "fear", "pause", "dead", "unlearned", "identity"]:
 		var player := _player()
 		match reason:
 			"sp": player.current_sp = player.skill_cost(ABSOLUTE) - 1.0
@@ -107,7 +107,7 @@ func _invalid_commands() -> void:
 			"fear": player.apply_fear(1.0)
 			"pause": paused = true
 			"dead": player.health.current_hp = 0.0
-			"unequipped": player.run_state.build_snapshot.active_slots[0] = null
+			"unlearned": player.run_state.build_snapshot.skill_ranks.erase(ABSOLUTE)
 			"identity": player.run_state.build_snapshot.evolution_id = &"hunter"
 		var before := _fingerprint(player)
 		_check(not player.use_sentinel_absolute_focus() and _fingerprint(player) == before, "%s invalid activation is atomic" % reason)
@@ -195,6 +195,7 @@ func _scene() -> RunController:
 	var arena := load("res://scenes/main.tscn").instantiate() as RunController
 	root.add_child(arena)
 	arena.set_process(false)
+	arena.player.sentinel_combat_active = arena.encounter_active
 	arena.player.set_process(false)
 	arena.training_boss.set_process(false)
 	arena._training_add_elapsed = -1000.0

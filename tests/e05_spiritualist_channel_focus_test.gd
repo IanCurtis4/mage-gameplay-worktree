@@ -20,6 +20,7 @@ func _run() -> void:
 	var snapshot := BuildSnapshot.new()
 	snapshot.base_class_id = &"mage"
 	snapshot.evolution_id = &"spiritualist"
+	snapshot.job_level = 31
 	snapshot.library_skill_ids = catalog.skill_ids_for_identity(&"mage", &"spiritualist")
 	snapshot.skill_ranks = {&"spiritualist_echo_curse": 1, &"spiritualist_soul_drain": 1, &"spiritualist_channel_focus": 1}
 	snapshot.active_slots = [&"spiritualist_echo_curse", &"spiritualist_soul_drain", null, null, null]
@@ -36,7 +37,7 @@ func _run() -> void:
 	player.spiritualist_channel_interrupt_requested.connect(controller._cancel_spiritualist_drain)
 	player.spiritualist_focus_event.connect(controller._on_spiritualist_focus_event)
 	player.spiritualist_echo_curse_requested.connect(_on_curse_request)
-	_check(player.use_spiritualist_soul_drain(enemy), "drain commit starts channel for equipped Focus")
+	_check(player.use_spiritualist_soul_drain(enemy), "drain commit starts channel for learned automatic Focus")
 	for index: int in range(3):
 		controller._advance_spiritualist_drain(0.5)
 	_check(player.spiritualist_focus_remaining == 0.0, "three ticks never grant charge")
@@ -57,14 +58,16 @@ func _run() -> void:
 	_check(player.spiritualist_focus_remaining == 0.0 and player.spiritualist_focus_power == 0.0, "encounter cleanup removes charge")
 	var inactive_snapshot := snapshot.copy_snapshot()
 	inactive_snapshot.passive_slots = [null, null]
+	inactive_snapshot.skill_ranks.erase(&"spiritualist_channel_focus")
 	var inactive := PlayerActor.new()
 	inactive.configure(nav, RunState.from_build("inactive", inactive_snapshot))
-	_check(not inactive.grant_spiritualist_focus() and inactive.spiritualist_focus_remaining == 0.0, "unequipped Focus never charges")
+	_check(not inactive.grant_spiritualist_focus() and inactive.spiritualist_focus_remaining == 0.0, "unlearned Focus never charges")
 	var high_snapshot := snapshot.copy_snapshot()
 	high_snapshot.skill_ranks[&"spiritualist_channel_focus"] = 3
+	high_snapshot.passive_slots = [null, null]
 	var high := PlayerActor.new()
 	high.configure(nav, RunState.from_build("rank3", high_snapshot))
-	_check(high.grant_spiritualist_focus() and is_equal_approx(high.consume_spiritualist_focus(), high.spiritualist_magic_attack() * 0.40), "R3 uses forty percent of current ATQM at commit")
+	_check(high.grant_spiritualist_focus() and is_equal_approx(high.consume_spiritualist_focus(), high.spiritualist_magic_attack() * 0.40), "learned automatic R3 uses forty percent of current ATQM without legacy equip")
 	player.free()
 	inactive.free()
 	high.free()

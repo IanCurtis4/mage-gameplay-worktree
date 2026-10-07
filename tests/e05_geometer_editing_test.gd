@@ -1,5 +1,5 @@
 extends SceneTree
-## G6 real scene transactions: edits, paid collapse, equipped duration snapshot.
+## G6 real scene transactions: edits, paid collapse, learned duration snapshot.
 
 const A := Vector2(200, 200)
 const B := Vector2(500, 200)
@@ -90,16 +90,17 @@ func _memory() -> void:
 	for rank: int in range(4):
 		_fixture(rank)
 		var expected := Vector2(8, 6) + Vector2([0, 1, 2, 4][rank], rank)
-		_check(arena.player.geometer_durations() == expected, "equipped memory rank%d supplies exact durations with ceiling12" % rank)
+		_check(arena.player.geometer_durations() == expected, "learned automatic memory rank%d supplies exact durations with ceiling12" % rank)
 		casting.launch(_command(&"geometer_trace", A))
 		var flight: GeometerTraceProjectile
 		for child: Node in casting.get_children():
 			if child is GeometerTraceProjectile: flight = child
 		flight.set_process(false)
 		arena.player.run_state.build_snapshot.passive_slots = [null, null]
+		arena.player.run_state.build_snapshot.skill_ranks.erase(&"geometer_vector_memory")
 		flight._process(1.0)
-		_check(casting.construction.vertices.size() == 1 and casting.construction.vertices[0].remaining == expected.x, "paid shot captures equipped duration before impact/unequip")
-		_check(arena.player.geometer_durations() == Vector2(8, 6), "learned but unequipped memory cannot extend new vertices")
+		_check(casting.construction.vertices.size() == 1 and casting.construction.vertices[0].remaining == expected.x, "paid shot captures learned duration before impact/unlearning")
+		_check(arena.player.geometer_durations() == Vector2(8, 6), "unlearned memory cannot extend new vertices")
 		await _finish()
 
 func _edits() -> void:
@@ -141,7 +142,7 @@ func _edits() -> void:
 	await _finish()
 
 func _invalid() -> void:
-	for reason: String in ["empty", "pending", "degenerate", "outside", "obstacle", "invalid_actor", "pause", "no_sp", "cooldown", "unequipped", "other_identity", "recipe_rank"]:
+	for reason: String in ["empty", "pending", "degenerate", "outside", "obstacle", "invalid_actor", "pause", "no_sp", "cooldown", "unlearned", "other_identity", "recipe_rank"]:
 		_fixture(3, 1 if reason == "recipe_rank" else 5)
 		_shape([&"fire", &"fire", &"fire"])
 		var command := _command(&"geometer_translation", Vector2(200, 480))
@@ -155,7 +156,7 @@ func _invalid() -> void:
 			"pause": paused = true
 			"no_sp": arena.player.current_sp = 0
 			"cooldown": arena.player.mage_cooldowns[command.skill_id] = 3
-			"unequipped": arena.player.run_state.build_snapshot.active_slots[2] = null
+			"unlearned": arena.player.run_state.build_snapshot.skill_ranks.erase(&"geometer_translation")
 			"other_identity": arena.player.run_state.build_snapshot.evolution_id = &"elementalist"
 			"recipe_rank": command = _command(&"geometer_rewrite", Vector2(200, 480), 0, &"ice")
 		var before := arena.player.current_sp

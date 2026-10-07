@@ -19,6 +19,7 @@ func _run() -> void:
 	var snapshot := BuildSnapshot.new()
 	snapshot.base_class_id = &"mage"
 	snapshot.evolution_id = &"spiritualist"
+	snapshot.job_level = 23
 	snapshot.library_skill_ids = catalog.skill_ids_for_identity(&"mage", &"spiritualist")
 	snapshot.skill_ranks = {&"spiritualist_echo_curse": 1, &"spiritualist_echo_recovery": 1}
 	snapshot.active_slots = [&"spiritualist_echo_curse", null, null, null, null]
@@ -65,18 +66,20 @@ func _run() -> void:
 	_check(player.current_sp == 10.0 and not state.has_mark(107) and state.pending.size() == pending_before_lethal, "lethal trigger cannot create orphan echo or SP refund")
 	player.clear_spiritualist_state()
 	_check(player.spiritualist_recovery_cooldown == 0.0 and player._spiritualist_refunded_emissions.is_empty(), "encounter cleanup resets gate and emission history")
-	var unequipped := snapshot.copy_snapshot()
-	unequipped.passive_slots = [null, null]
+	var unlearned := snapshot.copy_snapshot()
+	unlearned.skill_ranks.erase(&"spiritualist_echo_recovery")
+	unlearned.passive_slots = [null, null]
 	var inactive := PlayerActor.new()
-	inactive.configure(nav, RunState.from_build("inactive", unequipped))
+	inactive.configure(nav, RunState.from_build("inactive", unlearned))
 	inactive.current_sp = 10.0
-	_check(inactive.recover_spiritualist_echo_sp(1) == 0.0 and inactive.current_sp == 10.0, "owned but unequipped passive does nothing")
+	_check(inactive.recover_spiritualist_echo_sp(1) == 0.0 and inactive.current_sp == 10.0, "unlearned passive does nothing")
 	var ranked := snapshot.copy_snapshot()
 	ranked.skill_ranks[&"spiritualist_echo_recovery"] = 3
+	ranked.passive_slots = [null, null]
 	var high := PlayerActor.new()
 	high.configure(nav, RunState.from_build("rank3", ranked))
 	high.current_sp = 10.0
-	_check(high.recover_spiritualist_echo_sp(1) == 4.0 and high.current_sp == 14.0, "R3 grants four SP")
+	_check(high.recover_spiritualist_echo_sp(1) == 4.0 and high.current_sp == 14.0, "learned R3 grants four SP without legacy equip selection")
 	player.free()
 	inactive.free()
 	high.free()

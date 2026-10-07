@@ -267,14 +267,16 @@ func _check_profile_and_controller() -> void:
 	root.add_child(menu)
 	await process_frame
 	menu._select_roster_index(0)
-	var selector := menu.active_selectors[0]
-	var index := _option_index(selector, &"shield_wall")
-	_check(index >= 0 and selector.get_item_text(index) == "Parede de Escudos", "menu mostra nome e opção")
-	selector.select(index)
-	_check(menu._save_build().get("ok", false), "menu salva equipagem manual")
+	var learned_button: Button
+	for child: Node in menu.action_editor.library.get_children():
+		if child.get("skill_id") == &"shield_wall":
+			learned_button = child as Button
+	_check(learned_button != null and learned_button.text == "Parede de Escudos", "biblioteca apresenta nome humano da skill aprendida")
+	menu.action_editor.assign_skill(&"shield_wall", 0)
+	_check(facade.current_profile().character_by_id(character_id).action_slots[0] == &"shield_wall", "menu salva organização de atalhos pela fachada")
 	var reopened := ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
 	var opened := reopened.open_profile()
-	_check(opened.get("ok", false) and opened["profile"].character_by_id(character_id).presets[0]["active_slots"][0] == &"shield_wall", "save/reload preserva slot")
+	_check(opened.get("ok", false) and opened["profile"].character_by_id(character_id).action_slots[0] == &"shield_wall", "save/reload preserva slot")
 	menu.queue_free()
 	await process_frame
 	menu = scene.instantiate() as CharacterMenu
@@ -297,7 +299,7 @@ func _check_profile_and_controller() -> void:
 		enemy.global_position = Vector2(1450, 850)
 	controller._update_hud()
 	var card: Button = controller.battle_controls.skill_buttons[&"shield_wall"]
-	_check(controller.run_state.skill_levels[&"shield_wall"] == 5 and card.text.contains("PAREDE DE ESCUDOS") and card.text.contains("R5") and card.text.contains("24 SP"), "HUD reflete rank e custo")
+	_check(controller.run_state.skill_levels[&"shield_wall"] == 5 and card.tooltip_text.contains("PAREDE DE ESCUDOS") and card.tooltip_text.contains("R5") and card.tooltip_text.contains("24 SP"), "HUD reflete rank e custo")
 	var aim := controller.player.global_position + Vector2(500, 0)
 	controller.cast_intent.active_skill = &"shield_wall"
 	controller._update_aim(aim)
@@ -307,7 +309,7 @@ func _check_profile_and_controller() -> void:
 	_check(controller.player.has_shield_stance() and controller.player.current_sp == before_sp - 24.0, "controller ativa instantaneamente")
 	controller._update_hud()
 	controller._update_aim(aim)
-	_check(card.text.contains("0 SP") and card.text.contains("DESLIGAR") and controller.battle_controls.aim_label.text.contains("DESLIGAR"), "HUD/mira mostram toggle gratuito")
+	_check(card.tooltip_text.contains("0 SP") and card.tooltip_text.contains("DESLIGAR") and controller.battle_controls.aim_label.text.contains("DESLIGAR"), "HUD/mira mostram toggle gratuito")
 	var cooldown := controller.player.skill_cooldown(&"shield_wall")
 	controller.player.current_sp = 0.0
 	controller._commit_skill(&"shield_wall", aim)

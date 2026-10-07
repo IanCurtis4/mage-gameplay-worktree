@@ -55,22 +55,22 @@ func _run() -> void:
 	var learned := menu._learn_skill(&"defender_watch")
 	_check(learned["ok"] and facade.current_profile().character_by_id(defender_id).purchased_skill_ranks.get(&"defender_watch", 0) == 1, "Defender passive can be purchased once job requirement is met")
 	menu._populate_build_editor(facade.current_profile().character_by_id(defender_id))
-	_select_option(menu.active_selectors[0], &"defender_counterstroke")
-	_select_option(menu.passive_selectors[0], &"defender_watch")
+	_check(menu.action_editor.slot_buttons.size() == 24 and menu.action_editor.learned_skills == [&"defender_counterstroke"], "editor has24 slots and only learned legal actives")
+	menu.action_editor.assign_skill(&"defender_counterstroke", 0)
 	var saved := menu._save_build()
-	_check(saved["ok"] and facade.current_profile().character_by_id(defender_id).presets[0]["active_slots"][0] == &"defender_counterstroke" and facade.current_profile().character_by_id(defender_id).presets[0]["passive_slots"][0] == &"defender_watch", "free active and purchased passive can be equipped and saved")
+	_check(saved["ok"] and facade.current_profile().character_by_id(defender_id).action_slots[0] == &"defender_counterstroke" and facade.build_preview(defender_id)["snapshot"].has_passive(&"defender_watch") and menu.automatic_passives_label.text.contains("automáticas"), "free active shortcut is saved; purchased passive operates automatically")
 	var reloaded := ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
 	var reopened := reloaded.open_profile()
 	var durable: CharacterState = reopened["profile"].character_by_id(defender_id)
-	_check(reopened["ok"] and durable.evolution_id == &"defender" and durable.job_xp_total == 6440 and durable.presets[0]["active_slots"][0] == &"defender_counterstroke", "identity, XP and equipped skill survive a full reload")
+	_check(reopened["ok"] and durable.evolution_id == &"defender" and durable.job_xp_total == 6440 and durable.action_slots.size() == 24 and durable.action_slots[0] == &"defender_counterstroke" and durable.presets[0]["active_slots"] == [null, null, null, null, null] and durable.presets[0]["passive_slots"] == [null, null], "identity, XP and action shortcut survive reload while legacy arrays stay unchanged")
 	_check(menu.start_run_button.text.contains("Candidato"), "start action names the focused character instead of an implicit prior selection")
 	var started := menu._start_run()
 	if started["ok"]:
 		await scene_changed
 		await process_frame
 	var controller := current_scene as RunController
-	_check(started["ok"] and started["run_state"].class_id == &"swordsman" and started["run_state"].build_snapshot.evolution_id == &"defender" and started["run_state"].build_snapshot.active_slots[0] == &"defender_counterstroke" and facade.current_profile().selected_character_id == defender_id, "start action launches the focused Defender with base origin and evolved loadout")
-	_check(controller != null and controller.player.available_skill_ids().has(&"defender_counterstroke") and controller.battle_controls.skill_buttons.has(&"defender_counterstroke"), "runtime dispatch and HUD expose the equipped Defender active")
+	_check(started["ok"] and started["run_state"].class_id == &"swordsman" and started["run_state"].build_snapshot.evolution_id == &"defender" and started["run_state"].build_snapshot.action_slots[0] == &"defender_counterstroke" and started["run_state"].build_snapshot.has_passive(&"defender_watch") and facade.current_profile().selected_character_id == defender_id, "start action launches focused Defender with base origin, learned passives and copied shortcuts")
+	_check(controller != null and controller.player.available_skill_ids().has(&"defender_counterstroke") and controller.battle_controls.skill_buttons.has(&"defender_counterstroke"), "runtime dispatch and action bar expose the learned Defender active")
 	if started["ok"]:
 		var reward := facade.grant_reward("flow-reward", facade.current_profile().revision, started["run_id"], 1, &"encounter_one")
 		_check(reward["ok"] and facade.current_profile().character_by_id(defender_id).job_xp_total == 6520 and facade.current_profile().character_by_id(first_id).job_xp_total == 0, "run reward advances the actual Defender above job 20, not the previous selected character")
@@ -87,12 +87,6 @@ func _run() -> void:
 	DirAccess.remove_absolute(directory)
 	print("E05 Defendente playtest flow: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
 	quit(0 if failures == 0 else 1)
-
-func _select_option(selector: OptionButton, skill_id: StringName) -> void:
-	for index: int in selector.item_count:
-		if selector.get_item_metadata(index) == skill_id:
-			selector.select(index)
-			return
 
 func _check(condition: bool, message: String) -> void:
 	checks += 1

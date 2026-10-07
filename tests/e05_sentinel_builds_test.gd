@@ -220,7 +220,7 @@ func _menu(job: int) -> void:
 		_check((label != null and button != null) == (job >= GATES[index]), "job%d hides/reveals correct Sentinel gate: %s" % [job, skill])
 		if label != null:
 			_check(label.text.contains("Rank %d/%d" % [1 if index == 0 else 0, SentinelTuning.max_rank(skill)]), "job%d menu exact free/purchased rank: %s" % [job, skill])
-	_check(menu.active_selectors.size() == 5 and menu.passive_selectors.size() == 2 and menu.progression_skill_tree.get_node_or_null("ProgressionSkill_geometer_trace") == null, "menu keeps five/two slots and excludes unrelated Mage library")
+	_check(menu.action_editor.slot_buttons.size() == 24 and menu.active_selectors.is_empty() and menu.passive_selectors.is_empty() and menu.automatic_passives_label.text.contains("automáticas") and menu.progression_skill_tree.get_node_or_null("ProgressionSkill_geometer_trace") == null, "menu offers24 shortcuts and automatic passives while excluding unrelated Mage library")
 	menu.queue_free()
 	await process_frame
 

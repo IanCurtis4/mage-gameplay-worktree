@@ -37,6 +37,8 @@ func _scene(rank: int = 5, openings: bool = false) -> RunController:
 	build.attribute_allocations = {&"int": 20, &"dex": 20, &"luk": 10}
 	build.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"archer", &"sentinel")
 	build.skill_ranks = {NET: rank, &"sentinel_opening_read": 3}
+	if not openings:
+		build.skill_ranks.erase(&"sentinel_opening_read")
 	build.active_slots = [NET, null, null, null, null]
 	build.passive_slots = [&"sentinel_opening_read" if openings else null, null]
 	RunController.pending_run_state = RunState.from_build("", build)
@@ -44,6 +46,7 @@ func _scene(rank: int = 5, openings: bool = false) -> RunController:
 	var arena := load("res://scenes/main.tscn").instantiate() as RunController
 	root.add_child(arena)
 	arena.set_process(false)
+	arena.player.sentinel_combat_active = arena.encounter_active
 	arena.player.set_process(false)
 	arena.training_boss.set_process(false)
 	arena._training_add_elapsed = -1000.0
@@ -226,10 +229,10 @@ func _procs_and_positive_damage() -> void:
 	arena._on_sentinel_burst(victim.position, request, SentinelTuning.values(NET, 5))
 	_check(hits.size() == 1 and victim.health.current_hp == 9990.0 and other.health.current_hp == 9990.0, "radial dedup damages each victim once, including primary contact")
 	_check(victim.is_rooted() and other.is_rooted() and not shielded.is_rooted() and shielded.health.current_hp == 10000.0, "only positive actual HP damage applies root, not a fully absorbed hit")
-	_check(arena.player.sentinel_state.focus == 0.0, "newly applied root cannot qualify its own noncritical impact")
+	_check(arena.player.sentinel_state.focus == 4.0, "newly applied root does not proc Opening, but intrinsic returns4 once")
 	request.emission_id = 101
 	arena._on_sentinel_burst(victim.position, request, SentinelTuning.values(NET, 5))
-	_check(arena.player.sentinel_state.focus == 4.0, "later AoE sees preexisting root but opening pays once for whole emission")
+	_check(arena.player.sentinel_state.focus == 8.0, "later AoE sees preexisting root: Opening pays once, intrinsic remains in ICD")
 	victim.hard_controls.clear()
 	other.hard_controls.clear()
 	arena.player.sentinel_state.advance(1.0, true, true)
@@ -237,7 +240,7 @@ func _procs_and_positive_damage() -> void:
 	request.can_crit = true
 	request.force_critical = true # Isolated proc fixture; real launch retains normal crit.
 	arena._on_sentinel_burst(victim.position, request, SentinelTuning.values(NET, 5))
-	_check(arena.player.sentinel_state.focus == 8.0, "critical Net can proc without preexisting root, once per AoE")
+	_check(arena.player.sentinel_state.focus == 16.0, "critical Net pays Opening4 plus intrinsic4 once per AoE without preexisting root")
 	var immune := _victim(arena, Vector2(900, 600), true)
 	immune.hard_controls.boss_budget_remaining = 0.0
 	request.emission_id = 103
@@ -245,7 +248,7 @@ func _procs_and_positive_damage() -> void:
 	request.can_crit = false
 	arena.player.sentinel_state.advance(1.0, true, true)
 	arena._on_sentinel_burst(immune.position, request, SentinelTuning.values(NET, 5))
-	_check(not immune.is_rooted() and immune.health.current_hp < 10000.0 and arena.player.sentinel_state.focus == 8.0, "boss control failure grants neither root nor fictitious control proc")
+	_check(not immune.is_rooted() and immune.health.current_hp < 10000.0 and arena.player.sentinel_state.focus == 20.0, "boss control failure grants neither root nor fictitious control proc; actual damage still earns intrinsic4")
 	var edge := _victim(arena, Vector2(1107, 800))
 	var outside := _victim(arena, Vector2(1109, 800))
 	request.emission_id = 104

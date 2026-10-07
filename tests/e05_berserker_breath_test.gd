@@ -107,6 +107,7 @@ func _run() -> void:
 
 func _snapshot(rank: int) -> BuildSnapshot:
 	var snapshot := BuildSnapshot.new()
+	snapshot.job_level = ProgressionRules.MAX_JOB_LEVEL
 	snapshot.base_class_id = &"swordsman"
 	snapshot.evolution_id = &"berserker"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"berserker")

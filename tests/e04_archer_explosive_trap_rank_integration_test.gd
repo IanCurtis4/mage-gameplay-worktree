@@ -141,7 +141,7 @@ func _check_controller_flow() -> void:
 	for enemy: CombatActor in controller.enemies:
 		enemy.set_process(false)
 		enemy.global_position = Vector2(1450, 850)
-	_check(controller._key_skill(KEY_D) == &"explosive_trap" and controller.battle_controls.skill_buttons.has(&"explosive_trap"), "equipped fifth slot binds Explosive Trap to D and publishes its HUD card")
+	_check(controller._key_skill(KEY_R) == &"explosive_trap" and controller.battle_controls.skill_buttons.has(&"explosive_trap"), "equipped fifth slot binds Explosive Trap to R and publishes its HUD card")
 	var placement := controller.player.global_position + Vector2(180, 0)
 	controller.battle_indicators.show_aim(&"explosive_trap", controller.player, placement, true)
 	_check(controller.battle_indicators.endpoint == placement and controller.battle_indicators.active_range == 360.0, "preview uses the same point and fixed placement range as execution")
@@ -154,7 +154,7 @@ func _check_controller_flow() -> void:
 	_check(controller.player.skill_cooldown(&"explosive_trap") == StatCalculator.effective_cooldown(9.0, controller.player.stat_breakdown), "controller starts one ranked cooldown")
 	controller._update_hud()
 	var card: Button = controller.battle_controls.skill_buttons[&"explosive_trap"]
-	_check(card.text.contains("ARMADILHA EXPLOSIVA R5") and card.text.contains("28 SP") and card.text.contains("RECARGA"), "HUD exposes Explosive Trap rank, cost and cooldown in pt-BR")
+	_check(card.tooltip_text.contains("ARMADILHA EXPLOSIVA R5") and card.tooltip_text.contains("28 SP") and card.tooltip_text.contains("RECARGA"), "HUD exposes Explosive Trap rank, cost and cooldown in pt-BR")
 	var first := controller.enemies[0]
 	var second := controller.enemies[1]
 	first.global_position = placement

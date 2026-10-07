@@ -148,17 +148,16 @@ func _check_menu_and_controller() -> void:
 	root.add_child(menu)
 	await process_frame
 	menu._select_roster_index(0)
-	var selector := menu.active_selectors[0]
-	var selected_index := -1
-	for index: int in selector.item_count:
-		if selector.get_item_metadata(index) == &"electric_discharge":
-			selected_index = index
-	_check(selected_index >= 0 and (selector.get_item_text(selected_index) == "Descarga Elétrica" if selected_index >= 0 else false), "menu apresenta nome visível")
-	selector.select(selected_index)
-	_check(menu._save_build().get("ok", false), "menu salva skill no primeiro slot")
+	var learned_button: Button
+	for child: Node in menu.action_editor.library.get_children():
+		if child.get("skill_id") == &"electric_discharge":
+			learned_button = child as Button
+	_check(learned_button != null and learned_button.text == "Descarga Elétrica", "biblioteca apresenta nome humano da skill aprendida")
+	menu.action_editor.assign_skill(&"electric_discharge", 0)
+	_check(facade.current_profile().character_by_id(character_id).action_slots[0] == &"electric_discharge", "menu salva organização de atalhos pela fachada")
 	var reopened := ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
 	var opened := reopened.open_profile()
-	_check(opened.get("ok", false) and opened["profile"].character_by_id(character_id).presets[0]["active_slots"][0] == &"electric_discharge", "reload preserva preset")
+	_check(opened.get("ok", false) and opened["profile"].character_by_id(character_id).action_slots[0] == &"electric_discharge", "reload preserva preset")
 	menu.queue_free()
 	await process_frame
 	menu = scene.instantiate() as CharacterMenu
@@ -185,7 +184,7 @@ func _check_menu_and_controller() -> void:
 	controller.enemies.append(target)
 	controller._update_hud()
 	var card: Button = controller.battle_controls.skill_buttons[&"electric_discharge"]
-	_check(controller.run_state.skill_levels[&"electric_discharge"] == 5 and card.text.contains("DESCARGA ELÉTRICA") and card.text.contains("R5") and card.text.contains("24 SP"), "HUD lê rank, nome e custo do snapshot")
+	_check(controller.run_state.skill_levels[&"electric_discharge"] == 5 and card.tooltip_text.contains("DESCARGA ELÉTRICA") and card.tooltip_text.contains("R5") and card.tooltip_text.contains("24 SP"), "HUD lê rank, nome e custo do snapshot")
 	controller.cast_intent.active_skill = &"electric_discharge"
 	controller._update_aim(target.global_position)
 	_check(controller.battle_controls.aim_label.text.contains("PRONTO") and controller.battle_indicators.endpoint == controller.player.global_position + Vector2(560, 0), "mira mostra corredor direcional de 560")

@@ -61,6 +61,7 @@ func _scene(rank: int = 5) -> RunController:
 	var arena := load("res://scenes/main.tscn").instantiate() as RunController
 	root.add_child(arena)
 	arena.set_process(false)
+	arena.player.sentinel_combat_active = arena.encounter_active
 	arena.player.set_process(false)
 	arena.training_boss.set_process(false)
 	arena._training_add_elapsed = -1000.0
@@ -151,7 +152,7 @@ func _collision_matrix() -> void:
 					var expected_hit := index < (2 if blocked else 3)
 					_check((actors[index].health.current_hp < 10000.0) == expected_hit, "%d Hz body %d obeys obstacle and range" % [hz, index])
 				_check(off_line.health.current_hp == 10000.0, "%d Hz off-axis body outside combined radii untouched" % hz)
-				_close(arena.player.sentinel_state.focus, 70.0, "%d Hz marked direct target returns Focus once despite multiple victims/duplicate list" % hz)
+				_close(arena.player.sentinel_state.focus, 74.0, "%d Hz mark10 plus intrinsic4 return once despite multiple victims/duplicate list" % hz)
 				_check(arena.player.sentinel_state.observation_charges == 2 and arena.player.sentinel_state.observation_cooldown == 0.5, "mark charge and shared cadence consumed once")
 				_check(projectile.travelled <= projectile.max_distance and (not blocked or projectile.position.x < 500.0), "projectile never crosses obstacle or exceeds range budget")
 			arena.queue_free()

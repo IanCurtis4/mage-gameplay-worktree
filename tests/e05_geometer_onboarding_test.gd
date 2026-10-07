@@ -64,10 +64,10 @@ func _run() -> void:
 		_add(&"fire", B)
 		await _expect(["Preparação", "A:Fogo", "B:Fogo", "Triangulação R5 cria C"], viewport_size)
 		player.run_state.skill_levels.erase(&"geometer_triangulation")
-		await _expect(["Preparação", "aprender Triangulação no job 28", "equipá-la"], viewport_size)
+		await _expect(["Preparação", "aprender Triangulação no job 28"], viewport_size)
 		player.run_state.skill_levels[&"geometer_triangulation"] = 3
 		player.run_state.build_snapshot.active_slots[1] = null
-		await _expect(["Preparação", "Equipe Triangulação R3"], viewport_size)
+		await _expect(["Preparação", "Triangulação R3 cria C"], viewport_size)
 		player.run_state.build_snapshot.active_slots[1] = &"geometer_triangulation"
 		await _expect(["Triangulação R3 cria C", "puros/mistos"], viewport_size)
 		player.run_state.skill_levels[&"geometer_triangulation"] = 1
@@ -78,7 +78,7 @@ func _run() -> void:
 		_add(&"ice", B)
 		await _expect(["Parede", "A:Fogo", "B:Gelo", "6.0 s", "Triangulação R5 cria C"], viewport_size)
 		_add(&"lightning", C, 42)
-		await _expect(["Triângulo", "C:Raio↟", "Edite ou use Colapso", "Backspace desfaz sem dano"], viewport_size)
+		await _expect(["Triângulo", "C:Raio↟", "Edite ou use Colapso", "F6 desfaz sem dano"], viewport_size)
 		casting.construction.figure_remaining = 4.25
 		casting.construction.vertices[0].remaining = 2.0
 		await _expect(["Triângulo", "2.0 s"], viewport_size)
@@ -93,7 +93,7 @@ func _run() -> void:
 		guide.toggle_button.pressed.emit()
 		await _settle()
 		_check(guide.help_label.visible and guide.toggle_button.text == "Guia −", "toggle expands help")
-		for text: String in ["1 Fogo", "2 Gelo", "3 Raio", "Traçado cria A/B", "Triangulação cria C", "R1: puros", "R3: mistos", "R5: tricolores", "corpo vincula", "Shift força chão", "Translação", "Reescrita", "Esc cancela", "Backspace desfaz SEM Colapso", "Colapso consome", "expirar só desfaz"]:
+		for text: String in ["F1 Fogo", "F2 Gelo", "F3 Raio", "Traçado cria A/B", "Triangulação cria C", "R1: puros", "R3: mistos", "R5: tricolores", "corpo vincula", "Shift força chão", "Translação", "Reescrita", "Esc cancela", "F6 desfaz SEM Colapso", "Colapso consome", "expirar só desfaz"]:
 			_check(text in guide.help_label.text, "expanded guide documents " + text)
 		_check(_fits(guide.help_label, viewport_size) and _fits(guide.toggle_button, viewport_size), "expanded guide stays inside viewport")
 		_check(guide.help_label.get_global_rect().end.y < float(viewport_size.y) - 160.0, "expanded guide leaves bottom action/aim region clear")

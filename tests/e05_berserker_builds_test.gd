@@ -71,7 +71,7 @@ func _check_build(directory: String, purchases: Dictionary, active: Array[Varian
 	player.global_position = Vector2(400, 350)
 	root.add_child(player)
 	player.set_process(false)
-	_check(player.available_skill_ids() == active and player.skill_rank(&"berserker_rupture") == int(purchases[&"berserker_rupture"]) + 1 and player.character_animation.actor_kind == &"berserker", "run equips only selected actives and the distinct atlas")
+	_check(player.available_skill_ids() == player.run_state.build_snapshot.learned_skill_ids(ProfileCatalog.ACTIVE) and player.skill_rank(&"berserker_rupture") == int(purchases[&"berserker_rupture"]) + 1 and player.character_animation.actor_kind == &"berserker", "run exposes all learned legal actives and the distinct atlas")
 	if &"berserker_execution" in active:
 		_check_boss_without_adds(player)
 	player.queue_free()

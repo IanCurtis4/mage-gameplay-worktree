@@ -18,7 +18,7 @@ func _run() -> void:
 		await process_frame
 		var viewport_rect := Rect2(Vector2.ZERO, Vector2(viewport_size))
 		_check(_inside(viewport_rect, controller.help_panel.get_global_rect()), "help remains visible at %s" % viewport_size)
-		_check(_inside(controller.hud_panel.get_global_rect(), controller.skill_label.get_global_rect()), "two-line skill status fits HUD at %s" % viewport_size)
+		_check(not controller.skill_label.visible and _inside(viewport_rect, controller.hud_panel.get_global_rect()), "compact HUD avoids duplicating the learned library at %s" % viewport_size)
 		var hud_margin := controller.hud_panel.get_child(0) as Control
 		var hud_column := hud_margin.get_child(0) as Control
 		_check(controller.hud_panel.mouse_filter == Control.MOUSE_FILTER_IGNORE and hud_margin.mouse_filter == Control.MOUSE_FILTER_IGNORE and hud_column.mouse_filter == Control.MOUSE_FILTER_IGNORE and controller.help_panel.mouse_filter == Control.MOUSE_FILTER_IGNORE and controller.status_label.mouse_filter == Control.MOUSE_FILTER_IGNORE, "informational UI does not create dead click zones at %s" % viewport_size)
@@ -31,6 +31,7 @@ func _run() -> void:
 		controller._toggle_settings(true)
 		await process_frame
 		_check(_inside(viewport_rect, controller.battle_controls.settings_panel.get_global_rect()), "controls modal fits viewport %s" % viewport_size)
+		_check(not controller.class_button.visible, "class button cannot cover the action editor")
 		controller._toggle_settings(false)
 		for mode: int in [CastIntent.Mode.CONFIRM, CastIntent.Mode.RELEASE, CastIntent.Mode.INSTANT]:
 			controller.battle_controls.set_options(mode, true)

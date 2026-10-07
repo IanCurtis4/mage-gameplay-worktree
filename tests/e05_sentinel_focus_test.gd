@@ -129,7 +129,7 @@ func _openings() -> void:
 			_close(state.direct_impact(4, 4, true, true, true, rank), 1.0 + rank, "new action pays after shared ICD")
 	var state := SentinelFocusState.new()
 	for rank: int in [0, 4]:
-		_close(state.direct_impact(1, 1, true, true, true, rank), 0.0, "unequipped/invalid opening rank cannot proc")
+		_close(state.direct_impact(1, 1, true, true, true, rank), 0.0, "unlearned/invalid opening rank cannot proc")
 	_close(state.direct_impact(2, 1, true, false, false, 3), 0.0, "newly applied control is not a pre-hit opening")
 	state.observe(1, 5)
 	_close(state.direct_impact(3, 1, true, true, true, 3), 14.0, "independent mark and opening each pay once")
@@ -163,7 +163,7 @@ func _absolute_boundaries() -> void:
 	_close(immediate.focus, 1.5, "Absolute skips only Focus preparation, no free initial gain")
 	_check(immediate.stable_time < SentinelFocusState.STANCE_DELAY, "Absolute does not skip passive stance preparation")
 
-func _fixture(stance_rank: int = 3, stance_equipped: bool = true) -> PlayerActor:
+func _fixture(stance_rank: int = 3, stance_learned: bool = true) -> PlayerActor:
 	var build := BuildSnapshot.new()
 	build.character_id = "sentinel-focus-fixture"
 	build.base_class_id = &"archer"
@@ -172,8 +172,10 @@ func _fixture(stance_rank: int = 3, stance_equipped: bool = true) -> PlayerActor
 	build.job_level = 40
 	build.library_skill_ids = [&"sentinel_observe", &"sentinel_precision_stance", &"sentinel_opening_read"]
 	build.skill_ranks = {&"sentinel_observe": 5, &"sentinel_precision_stance": stance_rank, &"sentinel_opening_read": 3}
+	if not stance_learned:
+		build.skill_ranks.erase(&"sentinel_precision_stance")
 	build.active_slots = [&"sentinel_observe", null, null, null, null]
-	build.passive_slots = [&"sentinel_precision_stance" if stance_equipped else null, &"sentinel_opening_read"]
+	build.passive_slots = [null, null] # Learned passives are automatic, even with empty legacy slots.
 	var nav := ArenaNavigation.new()
 	nav.configure(Rect2(0, 0, 900, 600), [], 20.0)
 	var player := PlayerActor.new()
@@ -232,10 +234,10 @@ func _player_stance() -> void:
 		_check(player.sentinel_state.focus == 0.0 and not player._sentinel_stance_active, "player cleanup removes resource and posture")
 		player.queue_free()
 		await process_frame
-	var unequipped := _fixture(3, false)
-	unequipped._process(1.0)
-	_check(not unequipped._sentinel_stance_active, "learned but unequipped posture contributes no source")
-	unequipped.queue_free()
+	var unlearned := _fixture(3, false)
+	unlearned._process(1.0)
+	_check(not unlearned._sentinel_stance_active, "unlearned posture contributes no source; empty legacy slots do not disable learned passives")
+	unlearned.queue_free()
 	await process_frame
 
 func _player_clock_matrix() -> void:
@@ -326,21 +328,21 @@ func _player_observation() -> void:
 	_hit(player, actor, 2, false, false, true)
 	_check(player.sentinel_state.focus == 0.0 and player.sentinel_state.observation_charges == 3, "real resolver secondary and miss cannot recover Focus")
 	_hit(player, actor, 3)
-	_check(player.sentinel_state.focus == 10.0 and player.sentinel_state.observation_charges == 2, "real direct hit grants mark Focus")
+	_check(player.sentinel_state.focus == 14.0 and player.sentinel_state.observation_charges == 2, "real direct hit grants mark10 plus intrinsic4 Focus")
 	player.sentinel_state.advance(1.0, true, true)
 	_hit(player, actor, 4, true)
 	_hit(player, other, 4, true)
-	_check(player.sentinel_state.focus == 24.0 and player.sentinel_state.observation_charges == 1, "one AoE action recovers mark and opening once")
+	_check(player.sentinel_state.focus == 32.0 and player.sentinel_state.observation_charges == 1, "one AoE action recovers mark, opening and intrinsic once")
 	player.sentinel_state.advance(1.0, true, true)
 	_hit(player, other, 5)
 	other.apply_root(1.0, &"magic")
-	_check(player.sentinel_state.focus == 24.0, "noncritical hit followed by new root cannot retroactively qualify")
+	_check(player.sentinel_state.focus == 36.0, "noncritical hit earns intrinsic4; new root cannot retroactively qualify Opening")
 	_hit(player, other, 6)
-	_check(player.sentinel_state.focus == 28.0, "later direct hit sees preexisting root")
+	_check(player.sentinel_state.focus == 40.0, "later direct hit sees preexisting root; same-frame intrinsic ICD pays no extra")
 	player.sentinel_state.advance(1.0, true, true)
 	other.health.current_hp = 0.0
 	_hit(player, other, 7, true)
-	_check(player.sentinel_state.focus == 28.0, "already dead target cannot emit a valid damage event")
+	_check(player.sentinel_state.focus == 40.0, "already dead target cannot emit a valid damage event")
 	actor.health.current_hp = 0.0
 	player._process(0.001)
 	_check(player.sentinel_state.observed_target_id == 0 and player.sentinel_state.observation_charges == 0, "observed target death clears its mark")

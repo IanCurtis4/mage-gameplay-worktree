@@ -144,14 +144,16 @@ func _check_menu_and_controller() -> void:
 	root.add_child(menu)
 	await process_frame
 	menu._select_roster_index(0)
-	var selector := menu.active_selectors[0]
-	var index := _option_index(selector, &"soul_impact")
-	_check(index >= 0 and selector.get_item_text(index) == "Impacto das Almas", "menu apresenta nome e opção de equipagem")
-	selector.select(index)
-	_check(menu._save_build().get("ok", false), "menu salva slot ativo")
+	var learned_button: Button
+	for child: Node in menu.action_editor.library.get_children():
+		if child.get("skill_id") == &"soul_impact":
+			learned_button = child as Button
+	_check(learned_button != null and learned_button.text == "Impacto das Almas", "biblioteca apresenta nome humano da skill aprendida")
+	menu.action_editor.assign_skill(&"soul_impact", 0)
+	_check(facade.current_profile().character_by_id(character_id).action_slots[0] == &"soul_impact", "menu salva organização de atalhos pela fachada")
 	var reopened := ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
 	var opened := reopened.open_profile()
-	_check(opened.get("ok", false) and opened["profile"].character_by_id(character_id).presets[0]["active_slots"][0] == &"soul_impact", "save/reload conserva preset")
+	_check(opened.get("ok", false) and opened["profile"].character_by_id(character_id).action_slots[0] == &"soul_impact", "save/reload conserva preset")
 	menu.queue_free()
 	await process_frame
 	menu = scene.instantiate() as CharacterMenu
@@ -178,7 +180,7 @@ func _check_menu_and_controller() -> void:
 	controller.enemies.append(target)
 	controller._update_hud()
 	var card: Button = controller.battle_controls.skill_buttons[&"soul_impact"]
-	_check(controller.run_state.skill_levels[&"soul_impact"] == 5 and card.text.contains("IMPACTO DAS ALMAS") and card.text.contains("R5") and card.text.contains("25 SP"), "HUD reflete rank e custo persistidos")
+	_check(controller.run_state.skill_levels[&"soul_impact"] == 5 and card.tooltip_text.contains("IMPACTO DAS ALMAS") and card.tooltip_text.contains("R5") and card.tooltip_text.contains("25 SP"), "HUD reflete rank e custo persistidos")
 	controller.cast_intent.active_skill = &"soul_impact"
 	controller._update_aim(target.global_position)
 	_check(controller.battle_controls.aim_label.text.contains("PRONTO") and controller.battle_indicators.endpoint == target.global_position, "mira fixa alvo selecionado")

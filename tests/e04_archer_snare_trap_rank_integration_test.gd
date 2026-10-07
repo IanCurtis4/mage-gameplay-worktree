@@ -181,7 +181,7 @@ func _check_ranked_player_and_controller_flow() -> void:
 	for enemy: CombatActor in controller.enemies:
 		enemy.set_process(false)
 		enemy.global_position = Vector2(1450, 850)
-	_check(controller._key_skill(KEY_D) == &"snare_trap" and controller.battle_controls.skill_buttons.has(&"snare_trap"), "fifth active binds Snare Trap to D and publishes its HUD card")
+	_check(controller._key_skill(KEY_R) == &"snare_trap" and controller.battle_controls.skill_buttons.has(&"snare_trap"), "fifth active binds Snare Trap to R and publishes its HUD card")
 	var placement := controller.player.global_position + Vector2(180, 0)
 	controller.battle_indicators.show_aim(&"snare_trap", controller.player, placement, true)
 	_check(controller.battle_indicators.endpoint == placement and controller.battle_indicators.active_range == 360.0, "preview uses the same point and fixed placement range as execution")
@@ -193,7 +193,7 @@ func _check_ranked_player_and_controller_flow() -> void:
 	_check(controller.player.skill_cooldown(&"snare_trap") == StatCalculator.effective_cooldown(8.0, controller.player.stat_breakdown), "controller starts one ranked cooldown")
 	controller._update_hud()
 	var card: Button = controller.battle_controls.skill_buttons[&"snare_trap"]
-	_check(card.text.contains("ARMADILHA DE LAÇO R5") and card.text.contains("22 SP") and card.text.contains("RECARGA"), "HUD exposes Snare Trap rank, cost and cooldown in pt-BR")
+	_check(card.tooltip_text.contains("ARMADILHA DE LAÇO R5") and card.tooltip_text.contains("22 SP") and card.tooltip_text.contains("RECARGA"), "HUD exposes Snare Trap rank, cost and cooldown in pt-BR")
 	var enemy := controller.enemies[0]
 	var hp_before := enemy.health.current_hp
 	enemy.global_position = placement

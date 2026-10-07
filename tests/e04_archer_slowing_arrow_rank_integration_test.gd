@@ -114,13 +114,13 @@ func _check_controller_projectile_and_hud() -> void:
 		enemy.global_position = Vector2(1450, 850)
 	var target := controller.enemies[0]
 	target.global_position = controller.player.global_position + Vector2(260, 0)
-	_check(controller._key_skill(KEY_D) == &"slowing_arrow" and controller.battle_controls.skill_buttons.has(&"slowing_arrow"), "equipped fifth slot binds Slowing Arrow to D and publishes its HUD card")
+	_check(controller._key_skill(KEY_R) == &"slowing_arrow" and controller.battle_controls.skill_buttons.has(&"slowing_arrow"), "equipped fifth slot binds Slowing Arrow to R and publishes its HUD card")
 	var aim_point := controller.player.global_position + Vector2(1000, 0)
 	controller.battle_indicators.show_aim(&"slowing_arrow", controller.player, aim_point, true)
 	_check(controller.battle_indicators.endpoint == controller.player.global_position + Vector2.RIGHT * 560.0 and controller.battle_indicators.active_range == 560.0, "directional preview consumes the same unbuffed range as execution")
 	controller._update_hud()
 	var card: Button = controller.battle_controls.skill_buttons[&"slowing_arrow"]
-	_check(controller.skill_label.text.contains("Flecha Entorpecente R5") and card.text.contains("R5") and card.text.contains("19 SP"), "HUD exposes Slowing Arrow rank and cost in pt-BR")
+	_check(controller.skill_label.text.contains("Flecha Entorpecente R5") and card.tooltip_text.contains("R5") and card.tooltip_text.contains("19 SP"), "HUD exposes Slowing Arrow rank and cost in pt-BR")
 	controller.player.mage_cooldowns[&"extended_aim"] = 0.0
 	controller.player.current_sp = controller.player.max_sp
 	controller.player.use_extended_aim()

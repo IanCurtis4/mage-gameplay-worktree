@@ -67,8 +67,8 @@ func _run() -> void:
 	_check(reopened.get("ok", false), "save reabre")
 	if reopened.get("ok", false):
 		var character: CharacterState = reopened["profile"].character_by_id(character_id)
-		_check(character.presets[0]["active_slots"] == defender_active and character.presets[1]["active_slots"] == berserker_active, "reload preserva ativas distintas")
-		_check(character.presets[0]["passive_slots"] == defender_passive and character.presets[1]["passive_slots"] == berserker_passive, "reload preserva passivas distintas")
+		_check(character.presets[0]["active_slots"] == defender_active and character.presets[1]["active_slots"] == berserker_active, "reload preserva arrays legados ativos distintos")
+		_check(character.presets[0]["passive_slots"] == defender_passive and character.presets[1]["passive_slots"] == berserker_passive, "reload preserva arrays legados passivos distintos")
 		await _run_build(reloaded, 0, defender_active, defender_passive)
 		await _run_build(reloaded, 1, berserker_active, berserker_passive)
 	_check(ClassCatalog.class_definition(&"mage").skill_ids.size() == 5 and ClassCatalog.class_definition(&"archer").skill_ids.size() == 5 and catalog.skill_metadata(&"haunt").get("category") == ProfileCatalog.ACTIVE and catalog.skill_metadata(&"slowing_arrow").get("category") == ProfileCatalog.ACTIVE, "catálogos Mago/Arqueiro permanecem disponíveis")
@@ -83,6 +83,17 @@ func _run_build(facade: ProfileFacade, preset_index: int, active: Array[Variant]
 	menu._select_roster_index(0)
 	var selected := menu._choose_preset(preset_index)
 	var character_id: String = facade.current_profile().characters[0].character_id
+	var learned: Array[StringName] = []
+	learned.assign(facade.available_build_options(character_id)["active_skills"])
+	var bar := ActionBarLayout.empty()
+	var ordered := _active_names(active)
+	for id: StringName in learned:
+		if id not in ordered:
+			ordered.append(id)
+	for index: int in ordered.size():
+		bar[index] = ordered[index]
+	menu._save_action_slots(bar)
+	_check(facade.current_profile().character_by_id(character_id).action_slots == bar and facade.progression_summary(character_id)["base_skill_points_available"] == 0, "organizar todas aprendidas preserva carteira e persiste barra por personagem")
 	var preview := facade.build_preview(character_id)
 	var started := menu._start_run()
 	_check(selected.get("ok", false) and preview.get("ok", false) and started.get("ok", false), "preset %d inicia run a partir do menu" % preset_index)
@@ -97,13 +108,13 @@ func _run_build(facade: ProfileFacade, preset_index: int, active: Array[Variant]
 	for enemy: CombatActor in controller.enemies:
 		enemy.set_process(false)
 	var snapshot := controller.run_state.build_snapshot
-	_check(snapshot.active_slots == active and snapshot.passive_slots == passive and controller.player.available_skill_ids() == _active_names(active), "run %d usa exatamente cinco ativas e duas passivas" % preset_index)
+	_check(snapshot.active_slots == active and snapshot.passive_slots == passive and snapshot.action_slots == bar and controller.player.available_skill_ids() == learned and snapshot.learned_skill_ids(ProfileCatalog.PASSIVE).size() == 3, "run %d preserva arrays legados e disponibiliza dez ativas/três passivas aprendidas" % preset_index)
 	_check(controller.run_state.skill_levels[&"shield_wall"] == 3 and controller.run_state.skill_levels[&"provoke"] == 2 and controller.run_state.skill_levels[&"brutal_strike"] == 2 and controller.run_state.skill_levels[&"vigor"] == 2 and controller.run_state.skill_levels[&"blood_thirst"] == 2, "run %d captura ranks persistidos")
 	_check(is_equal_approx(controller.player.stat_breakdown.value(&"melee_attack"), preview["stat_breakdown"].value(&"melee_attack")), "run %d e preview compartilham ATQ canônico" % preset_index)
 	controller._update_hud()
 	for skill_id: StringName in _active_names(active):
 		var card: Button = controller.battle_controls.skill_buttons[skill_id]
-		_check(card.text.contains(ClassCatalog.skill_definition(skill_id).display_name.to_upper()) and card.text.contains("R%d" % controller.run_state.skill_levels[skill_id]), "HUD mostra %s equipada no preset %d" % [skill_id, preset_index])
+		_check(card.tooltip_text.contains(ClassCatalog.skill_definition(skill_id).display_name.to_upper()) and card.tooltip_text.contains("R%d" % controller.run_state.skill_levels[skill_id]), "HUD mostra %s equipada no preset %d" % [skill_id, preset_index])
 	var melee := controller.enemies[0] as EnemyActor
 	melee.global_position = controller.player.global_position + Vector2(80, 0)
 	controller.enemies[1].global_position = controller.player.global_position + Vector2(500, 0)

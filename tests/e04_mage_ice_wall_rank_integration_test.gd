@@ -182,14 +182,16 @@ func _check_profile_and_controller() -> void:
 	root.add_child(menu)
 	await process_frame
 	menu._select_roster_index(0)
-	var selector := menu.active_selectors[0]
-	var index := _option_index(selector, &"ice_wall")
-	_check(index >= 0 and selector.get_item_text(index) == "Parede de Gelo", "menu mostra nome no seletor")
-	selector.select(index)
-	_check(menu._save_build().get("ok", false), "menu salva equipagem manual")
+	var learned_button: Button
+	for child: Node in menu.action_editor.library.get_children():
+		if child.get("skill_id") == &"ice_wall":
+			learned_button = child as Button
+	_check(learned_button != null and learned_button.text == "Parede de Gelo", "biblioteca apresenta nome humano da skill aprendida")
+	menu.action_editor.assign_skill(&"ice_wall", 0)
+	_check(facade.current_profile().character_by_id(character_id).action_slots[0] == &"ice_wall", "menu salva organização de atalhos pela fachada")
 	var reopened := ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
 	var opened := reopened.open_profile()
-	_check(opened.get("ok", false) and opened["profile"].character_by_id(character_id).presets[0]["active_slots"][0] == &"ice_wall", "reload conserva preset")
+	_check(opened.get("ok", false) and opened["profile"].character_by_id(character_id).action_slots[0] == &"ice_wall", "reload conserva preset")
 	menu.queue_free()
 	await process_frame
 	menu = scene.instantiate() as CharacterMenu
@@ -212,7 +214,7 @@ func _check_profile_and_controller() -> void:
 		enemy.global_position = Vector2(1450, 850)
 	controller._update_hud()
 	var card: Button = controller.battle_controls.skill_buttons[&"ice_wall"]
-	_check(controller.run_state.skill_levels[&"ice_wall"] == 5 and card.text.contains("PAREDE DE GELO") and card.text.contains("R5") and card.text.contains("28 SP"), "HUD mostra rank e custo persistidos")
+	_check(controller.run_state.skill_levels[&"ice_wall"] == 5 and card.tooltip_text.contains("PAREDE DE GELO") and card.tooltip_text.contains("R5") and card.tooltip_text.contains("28 SP"), "HUD mostra rank e custo persistidos")
 	var aim := controller.player.global_position + Vector2(1000, 0)
 	controller.cast_intent.active_skill = &"ice_wall"
 	controller._update_aim(aim)

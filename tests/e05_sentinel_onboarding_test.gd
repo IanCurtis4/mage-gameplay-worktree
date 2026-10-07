@@ -51,7 +51,7 @@ func _tooltips() -> void:
 			var tooltip := menu._skill_progression_tooltip(option)
 			_check(("Atual R%d: %s" % [rank, ClassCatalog.sentinel_description(id, rank)]) in tooltip if rank > 0 else not "Atual R0" in tooltip, "%s R%d current description matches catalog without invented rank0" % [id, rank])
 			_check(("Próximo R%d: %s" % [next, ClassCatalog.sentinel_description(id, next)]) in tooltip if next != null else "Rank máximo atingido." in tooltip and not "Próximo R" in tooltip, "%s R%d next description matches catalog / bounded cap" % [id, rank])
-			_check("Aprender não equipa automaticamente." in tooltip and "carteira evolução" in tooltip, "%s tooltip preserves progression contract" % id)
+			_check("Ativas aprendidas ficam disponíveis na biblioteca" in tooltip and "Passivas aprendidas são automáticas" in tooltip and "carteira evolução" in tooltip, "%s tooltip preserves purchase wallet and new automatic availability contract" % id)
 	menu.free()
 
 func _guide() -> void:

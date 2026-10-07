@@ -68,7 +68,7 @@ func _check_build(directory: String, purchases: Dictionary, active: Array[Varian
 	player.configure(nav, started["run_state"])
 	root.add_child(player)
 	player.set_process(false)
-	_check(player.available_skill_ids() == active and player.skill_rank(&"defender_counterstroke") == int(purchases[&"defender_counterstroke"]) + 1, "runtime actor receives only selected actives and correct rank")
+	_check(player.available_skill_ids() == player.run_state.build_snapshot.learned_skill_ids(ProfileCatalog.ACTIVE) and player.skill_rank(&"defender_counterstroke") == int(purchases[&"defender_counterstroke"]) + 1, "runtime actor receives all learned legal actives and correct rank")
 	player.queue_free()
 	await process_frame
 

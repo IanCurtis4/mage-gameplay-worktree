@@ -45,7 +45,7 @@ func _check_snapshot_boundaries() -> void:
 	duplicate.passive_slots = [&"trap_technique", &"trap_technique"]
 	_check(duplicate.intrinsic_rule_sources().size() == 1 and duplicate.trap_armed_duration(12.0) == 21.0, "duplicate slots do not double the rule")
 	var unequipped := _snapshot(3, false)
-	_check(unequipped.intrinsic_rule_sources().is_empty() and unequipped.trap_armed_duration(12.0) == 12.0, "learned but unequipped passive has no effect")
+	_check(unequipped.intrinsic_rule_sources().size() == 1 and unequipped.trap_armed_duration(12.0) == 21.0, "learned passive activates once without legacy equipped slots")
 	var invalid := _snapshot(4, true)
 	_check(invalid.intrinsic_rule_sources().is_empty() and invalid.trap_armed_duration(12.0) == 12.0, "invalid rank has no fallback bonus")
 	var zero := _snapshot(0, true)
@@ -53,7 +53,7 @@ func _check_snapshot_boundaries() -> void:
 	var combined := _snapshot(3, true)
 	combined.skill_ranks[&"archer_precision"] = 3
 	combined.passive_slots = [&"archer_precision", &"trap_technique"]
-	_check(combined.intrinsic_rule_sources().size() == 1 and combined.trap_armed_duration(12.0) == 21.0 and is_equal_approx(combined.stat_breakdown().value(&"hit_rating"), 137.6), "Technique and Precision occupy separate slots and affect separate authorities")
+	_check(combined.intrinsic_rule_sources().size() == 1 and combined.trap_armed_duration(12.0) == 21.0 and is_equal_approx(combined.stat_breakdown().value(&"hit_rating"), 137.6), "Technique and Precision activate automatically and affect separate authorities")
 
 func _check_controller_traps() -> void:
 	var source := _snapshot(3, true)

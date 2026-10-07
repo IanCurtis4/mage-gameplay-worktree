@@ -49,7 +49,7 @@ func _run() -> void:
 	var evolved := entry_menu._confirm_evolution_change()
 	var evolved_character: CharacterState = facade.current_profile().character_by_id(character_id)
 	_check(evolved["ok"] and evolved_character.evolution_id == &"elementalist" and evolved_character.job_xp_total == before.job_xp_total, "menu/evolução sintética preserva XP e grava identidade Elementalista")
-	_check(facade.progression_summary(character_id)["effective_skill_ranks"].get(&"elementalist_flame_burst", 0) == 1 and evolved_character.presets[0]["active_slots"].find(&"elementalist_flame_burst") < 0, "entrada R1 é gratuita, mas não autoequipada")
+	_check(facade.progression_summary(character_id)["effective_skill_ranks"].get(&"elementalist_flame_burst", 0) == 1 and evolved_character.action_slots.find(&"elementalist_flame_burst") < 0 and entry_menu.action_editor.learned_skills.has(&"elementalist_flame_burst"), "entrada R1 é gratuita e disponível, mas não ocupa atalho automaticamente")
 	entry_menu.playtest_toggle.button_pressed = true
 	var xp := entry_menu._apply_playtest_progression(&"job_xp", 1000)
 	var gated := entry_menu._learn_skill(&"elementalist_glacial_ring")
@@ -82,15 +82,23 @@ func _run() -> void:
 	var build_b_passive: Array[Variant] = [&"elementalist_prismatic_focus", &"elementalist_prismatic_resonance"]
 	var empty_equipment: Dictionary[StringName, Variant] = {&"weapon": null, &"armor": null, &"accessory": null}
 	var saved_a := facade.update_preset("build-a", revision, character_id, 0, build_a_active, build_a_passive, empty_equipment)
-	_check(saved_a["ok"], "primeira build Elementalista equipa 5 ativas e 2 passivas legais")
+	_check(saved_a["ok"], "primeiro preset mantém arrays legados de ativas/passivas legais")
 	revision = saved_a["new_revision"]
 	var saved_b := facade.update_preset("build-b", revision, character_id, 1, build_b_active, build_b_passive, empty_equipment)
 	_check(saved_b["ok"], "segunda build combina herdadas do Mago e Elementalista em slots legais")
 	revision = saved_b["new_revision"]
+	var learned_active: Array[StringName] = []
+	learned_active.assign(facade.available_build_options(character_id)["active_skills"])
+	var action_slots := ActionBarLayout.empty()
+	for index: int in learned_active.size():
+		action_slots[index] = learned_active[index]
+	var organized := facade.update_action_slots("organize-all-actions", revision, character_id, action_slots)
+	_check(organized["ok"] and learned_active.size() == 7, "sete ativas aprendidas usam biblioteca e barra independente dos presets")
+	revision = organized["new_revision"]
 	var reloaded := ProfileFacade.new(ProfileStore.new(directory, catalog), resolver)
 	var reload_result := reloaded.open_profile()
 	var durable: CharacterState = reload_result["profile"].character_by_id(character_id)
-	_check(reload_result["ok"] and durable.evolution_id == &"elementalist" and durable.presets[0]["active_slots"] == build_a_active and durable.presets[1]["active_slots"] == build_b_active, "reload preserva identidade, ranks e ambas as builds")
+	_check(reload_result["ok"] and durable.evolution_id == &"elementalist" and durable.presets[0]["active_slots"] == build_a_active and durable.presets[1]["active_slots"] == build_b_active and durable.action_slots == action_slots, "reload preserva identidade, ranks, presets legados e 24 atalhos")
 	var menu := load("res://scenes/character_menu.tscn").instantiate() as CharacterMenu
 	menu.set_profile_facade(reloaded)
 	root.add_child(menu)
@@ -103,7 +111,7 @@ func _run() -> void:
 		await process_frame
 	var controller := current_scene as RunController
 	_check(started["ok"] and started["run_state"].build_snapshot.evolution_id == &"elementalist" and started["run_state"].build_snapshot.skill_ranks[&"elementalist_flame_burst"] == 5 and started["run_state"].build_snapshot.active_slots == build_b_active, "run snapshot preserva evolução, R5 e a build selecionada")
-	_check(controller != null and controller.player.character_animation.actor_kind == &"elementalist" and controller.battle_controls.skill_buttons.has(&"elementalist_lightning_arc"), "real scene dispatch and HUD use evolved atlas and equipped Elementalist kit")
+	_check(controller != null and controller.player.character_animation.actor_kind == &"elementalist" and controller.battle_controls.slot_buttons.size() == 24 and controller.battle_controls.skill_buttons.size() == 7 and controller.player.available_skill_ids() == learned_active and controller.run_state.build_snapshot.learned_skill_ids(ProfileCatalog.PASSIVE).size() == 2, "real scene uses evolved atlas, all learned active skills and automatic learned passives")
 	_check(controller != null and controller.class_button.text == "Classe: Elementalista", "run header shows evolved identity without changing the Mage origin contract")
 	if started["ok"]:
 		_check_elementalist_boss(started["run_state"])

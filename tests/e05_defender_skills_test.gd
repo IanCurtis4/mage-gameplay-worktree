@@ -10,6 +10,7 @@ func _run() -> void:
 	var nav := ArenaNavigation.new()
 	nav.configure(Rect2(0, 0, 1000, 700), [], 20.0)
 	var snapshot := BuildSnapshot.new()
+	snapshot.job_level = ProgressionRules.MAX_JOB_LEVEL
 	snapshot.base_class_id = &"swordsman"
 	snapshot.evolution_id = &"defender"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"defender")
@@ -158,6 +159,7 @@ func _run() -> void:
 
 func _test_advance_interruptions(nav: ArenaNavigation) -> void:
 	var snapshot := BuildSnapshot.new()
+	snapshot.job_level = ProgressionRules.MAX_JOB_LEVEL
 	snapshot.base_class_id = &"swordsman"
 	snapshot.evolution_id = &"defender"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"defender")

@@ -35,8 +35,12 @@ func _run() -> void:
 	rank_three.free()
 	var unequipped := _player(navigation, 3, false)
 	unequipped.health.current_hp = unequipped.health.max_hp * 0.40
-	_check(is_equal_approx(_request(unequipped, enemy, &"basic_attack").damage_dealt_multiplier, unequipped.outgoing_damage_multiplier()), "learned but unequipped Obstination is inert")
+	_check(is_equal_approx(_request(unequipped, enemy, &"basic_attack").damage_dealt_multiplier, unequipped.outgoing_damage_multiplier() * 1.14), "learned Obstination is automatic without legacy passive slots")
 	unequipped.free()
+	var unlearned := _player(navigation, 0, false)
+	unlearned.health.current_hp = unlearned.health.max_hp * 0.40
+	_check(is_equal_approx(_request(unlearned, enemy, &"basic_attack").damage_dealt_multiplier, unlearned.outgoing_damage_multiplier()), "unlearned Obstination grants no bonus")
+	unlearned.free()
 	var execution := _player(navigation, 1, true)
 	execution.global_position = Vector2(400, 350)
 	execution.health.current_hp = execution.health.max_hp * 0.51
@@ -49,6 +53,7 @@ func _run() -> void:
 
 func _player(navigation: ArenaNavigation, passive_rank: int, equipped: bool) -> PlayerActor:
 	var snapshot := BuildSnapshot.new()
+	snapshot.job_level = ProgressionRules.MAX_JOB_LEVEL
 	snapshot.base_class_id = &"swordsman"
 	snapshot.evolution_id = &"berserker"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"berserker")

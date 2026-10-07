@@ -41,7 +41,7 @@ func _run() -> void:
 		var label := learning_menu.progression_skill_tree.get_node("ProgressionSkill_%s" % skill_id) as Label
 		var button := learning_menu.progression_skill_tree.get_node("Learn_%s" % skill_id) as Button
 		_check(label.text.begins_with(expected_names[skill_id]) and label.text.contains("Rank 0/") and not button.disabled, "árvore identifica e permite aprender %s em R0" % skill_id)
-		_check(not label.tooltip_text.contains("ainda não estão disponíveis") and label.tooltip_text.contains("não equipa automaticamente"), "tooltip de %s descreve o fluxo vigente" % skill_id)
+		_check(not label.tooltip_text.contains("ainda não estão disponíveis") and label.tooltip_text.contains("Passivas aprendidas são automáticas"), "tooltip de %s descreve o fluxo vigente" % skill_id)
 	var purchases: Array[StringName] = [
 		&"double_shot", &"piercing_arrow", &"arrow_rain", &"extended_aim",
 		&"snare_trap", &"explosive_trap", &"slowing_arrow", &"foliage_shelter",
@@ -53,10 +53,10 @@ func _run() -> void:
 		var skill_id := purchases[index]
 		var result := learning_menu._learn_skill(skill_id)
 		_check(result.get("ok", false), "compra persistente %d: %s" % [index + 1, skill_id])
-	for selector: OptionButton in [learning_menu.active_selectors[0], learning_menu.passive_selectors[0]]:
-		for index: int in range(1, selector.item_count):
-			var skill_id: StringName = selector.get_item_metadata(index)
-			_check(selector.get_item_text(index) == expected_names[skill_id], "slot identifica habilidade aprendida %s" % skill_id)
+	for child: Node in learning_menu.action_editor.library.get_children():
+		var skill_id: StringName = child.get("skill_id")
+		_check((child as Button).text == expected_names[skill_id], "biblioteca identifica habilidade aprendida %s" % skill_id)
+	_check(learning_menu.action_editor.learned_skills.size() == 8 and learning_menu.action_editor.slot_buttons.size() == 24 and learning_menu.automatic_passives_label.text.contains("todas automáticas"), "biblioteca aprendida e 24 atalhos coexistem com passivas automáticas")
 	learning_menu.queue_free()
 	await process_frame
 	var progression := facade.progression_summary(character_id)
@@ -75,8 +75,8 @@ func _run() -> void:
 	_check(reopened.get("ok", false), "perfil com dois presets reabre")
 	if reopened.get("ok", false):
 		var character: CharacterState = reopened["profile"].character_by_id(character_id)
-		_check(character.presets[0]["active_slots"] == bow_active and character.presets[1]["active_slots"] == trap_active, "reload preserva ambos os atalhos ativos")
-		_check(character.presets[0]["passive_slots"] == bow_passive and character.presets[1]["passive_slots"] == trap_passive, "reload preserva combinações passivas diferentes")
+		_check(character.presets[0]["active_slots"] == bow_active and character.presets[1]["active_slots"] == trap_active, "reload preserva arrays legados ativos dos dois presets")
+		_check(character.presets[0]["passive_slots"] == bow_passive and character.presets[1]["passive_slots"] == trap_passive, "reload preserva arrays legados passivos sem usá-los como seleção")
 		await _run_build(reloaded, character_id, 0, bow_active, bow_passive)
 		await _run_build(reloaded, character_id, 1, trap_active, trap_passive)
 	_cleanup(directory)
@@ -90,6 +90,17 @@ func _run_build(facade: ProfileFacade, character_id: String, preset_index: int, 
 	await process_frame
 	menu._select_roster_index(0)
 	var selected := menu._choose_preset(preset_index)
+	var learned: Array[StringName] = []
+	learned.assign(facade.available_build_options(character_id)["active_skills"])
+	var bar := ActionBarLayout.empty()
+	var ordered := _active_names(active)
+	for id: StringName in learned:
+		if id not in ordered:
+			ordered.append(id)
+	for index: int in ordered.size():
+		bar[index] = ordered[index]
+	menu._save_action_slots(bar)
+	_check(facade.current_profile().character_by_id(character_id).action_slots == bar and facade.progression_summary(character_id)["base_skill_points_available"] == 0, "organizar todas aprendidas preserva carteira e persiste barra por personagem")
 	var preview := facade.build_preview(character_id)
 	var started := menu._start_run()
 	_check(selected.get("ok", false) and preview.get("ok", false) and started.get("ok", false), "preset %d passa do menu ao início da run" % preset_index)
@@ -104,7 +115,7 @@ func _run_build(facade: ProfileFacade, character_id: String, preset_index: int, 
 	for enemy: CombatActor in controller.enemies:
 		enemy.set_process(false)
 	var snapshot := controller.run_state.build_snapshot
-	_check(snapshot.active_slots == active and snapshot.passive_slots == passive and controller.player.available_skill_ids() == _active_names(active), "run %d usa slots do preset selecionado" % preset_index)
+	_check(snapshot.active_slots == active and snapshot.passive_slots == passive and snapshot.action_slots == bar and controller.player.available_skill_ids() == learned and snapshot.learned_skill_ids(ProfileCatalog.PASSIVE).size() == 3, "run %d preserva arrays legados, disponibiliza todas aprendidas e automatiza passivas" % preset_index)
 	_check(controller.run_state.skill_levels[&"double_shot"] == 3 and controller.run_state.skill_levels[&"archer_precision"] == 3 and controller.run_state.skill_levels[&"trap_technique"] == 3, "run %d captura ranks comprados sem depender de augments" % preset_index)
 	_check(controller.run_state.pending_choices == 0 and controller.run_state.augment_stacks.is_empty(), "run %d começa sem escolha ou modificador de augment" % preset_index)
 	_check(is_equal_approx(controller.player.stat_breakdown.value(&"hit_rating"), preview["stat_breakdown"].value(&"hit_rating")), "run %d compartilha HIT canônico com preview" % preset_index)

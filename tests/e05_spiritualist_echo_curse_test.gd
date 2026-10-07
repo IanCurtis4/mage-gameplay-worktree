@@ -25,6 +25,7 @@ func _run() -> void:
 	var snapshot := BuildSnapshot.new()
 	snapshot.base_class_id = &"mage"
 	snapshot.evolution_id = &"spiritualist"
+	snapshot.job_level = 20
 	snapshot.library_skill_ids = catalog.skill_ids_for_identity(&"mage", &"spiritualist")
 	snapshot.skill_ranks = {&"spiritualist_echo_curse": 1}
 	snapshot.active_slots = [&"spiritualist_echo_curse", null, null, null, null]

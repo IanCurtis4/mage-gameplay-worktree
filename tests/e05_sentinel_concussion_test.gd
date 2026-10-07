@@ -38,6 +38,8 @@ func _scene(rank: int = 5, openings: bool = false) -> RunController:
 	build.attribute_allocations = {&"dex": 20, &"luk": 10}
 	build.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"archer", &"sentinel")
 	build.skill_ranks = {CONC: rank, &"sentinel_headshot": 1, &"sentinel_piercing_shot": 1, &"sentinel_explosive_shot": 1, &"sentinel_opening_read": 3}
+	if not openings:
+		build.skill_ranks.erase(&"sentinel_opening_read")
 	build.active_slots = [CONC, &"sentinel_headshot", &"sentinel_piercing_shot", &"sentinel_explosive_shot", null]
 	build.passive_slots = [&"sentinel_opening_read" if openings else null, null]
 	RunController.pending_run_state = RunState.from_build("", build)
@@ -45,6 +47,7 @@ func _scene(rank: int = 5, openings: bool = false) -> RunController:
 	var arena := load("res://scenes/main.tscn").instantiate() as RunController
 	root.add_child(arena)
 	arena.set_process(false)
+	arena.player.sentinel_combat_active = arena.encounter_active
 	arena.player.set_process(false)
 	arena.training_boss.set_process(false)
 	arena._training_add_elapsed = -1000.0
@@ -185,10 +188,10 @@ func _control_and_proc() -> void:
 	var request := _request(arena, resistant)
 	arena._on_sentinel_direct_hit(request, resistant, SentinelTuning.values(CONC, 5))
 	_close(resistant.stun_remaining(), 0.4, "canonical magic CC resistance halves stun")
-	_check(arena.player.sentinel_state.focus == 0.0, "new noncritical stun does not qualify OpeningRead")
+	_check(arena.player.sentinel_state.focus == 4.0, "new noncritical stun does not qualify OpeningRead, intrinsic earns4")
 	request.emission_id += 1
 	arena._on_sentinel_direct_hit(request, resistant, SentinelTuning.values(CONC, 5))
-	_check(arena.player.sentinel_state.focus == 4.0, "next action sees preexisting stun and returns one opening")
+	_check(arena.player.sentinel_state.focus == 8.0, "next action sees preexisting stun and returns one opening, intrinsic still in ICD")
 	var boss := _victim(arena, true)
 	request = _request(arena, boss, 200)
 	for _hit: int in range(3):
@@ -205,10 +208,10 @@ func _control_and_proc() -> void:
 	request.force_critical = true
 	resistant.apply_root(1.0, &"magic")
 	arena._on_sentinel_direct_hit(request, resistant, SentinelTuning.values(CONC, 5))
-	_check(arena.player.sentinel_state.focus == 8.0, "critical OR preexisting root pays once rather than twice")
+	_check(arena.player.sentinel_state.focus == 16.0, "critical OR preexisting root pays Opening once plus intrinsic4 after ICD")
 	request.emission_id += 1
 	arena._on_sentinel_direct_hit(request, resistant, SentinelTuning.values(CONC, 5))
-	_check(arena.player.sentinel_state.focus == 8.0, "opening ICD shared across later support shots")
+	_check(arena.player.sentinel_state.focus == 16.0, "both opening and intrinsic ICD are shared across later support shots")
 	await _finish(arena)
 
 func _reservations() -> void:

@@ -10,6 +10,7 @@ func _run() -> void:
 	var navigation := ArenaNavigation.new()
 	navigation.configure(Rect2(0, 0, 1000, 700), [], 20.0)
 	var snapshot := BuildSnapshot.new()
+	snapshot.job_level = 40 # Legal fixture: all purchased evolution entry gates are satisfied.
 	snapshot.base_class_id = &"mage"
 	snapshot.evolution_id = &"elementalist"
 	var actor := PlayerActor.new()

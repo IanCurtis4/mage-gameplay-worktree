@@ -40,7 +40,10 @@ func _check_ranked_sources_and_stats() -> void:
 	}])
 	_check(composed.value(&"physical_defense") == 45.0, "passive rank composes additively inside StatCalculator instead of multiplying in the snapshot")
 	var unequipped := _snapshot(3, false)
-	_check(unequipped.intrinsic_modifier_sources().is_empty() and unequipped.stat_breakdown().value(&"physical_defense") == 20.0, "learned but unequipped passive applies no source")
+	_check(unequipped.intrinsic_modifier_sources().size() == 1 and unequipped.stat_breakdown().value(&"physical_defense") == 40.0, "learned passive is automatic despite empty legacy slots")
+	var unlearned := _snapshot(3, false)
+	unlearned.skill_ranks.erase(&"swordsman_resistance")
+	_check(unlearned.intrinsic_modifier_sources().is_empty() and unlearned.stat_breakdown().value(&"physical_defense") == 20.0, "unlearned passive applies no source")
 	var invalid := _snapshot(4, true)
 	_check(invalid.intrinsic_modifier_sources().is_empty() and invalid.stat_breakdown().value(&"physical_defense") == 20.0, "invalid passive rank is ineligible instead of falling back to R1")
 
@@ -74,6 +77,7 @@ func _snapshot(rank: int, equipped: bool) -> BuildSnapshot:
 	var snapshot := BuildSnapshot.new()
 	snapshot.character_id = "resistance-test"
 	snapshot.base_class_id = &"swordsman"
+	snapshot.job_level = 20
 	snapshot.skill_ranks = {&"swordsman_resistance": rank}
 	snapshot.passive_slots = [&"swordsman_resistance", null] if equipped else [null, null]
 	return snapshot

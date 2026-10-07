@@ -109,7 +109,7 @@ func _reservations() -> void:
 	await process_frame
 
 func _invalid_prepare() -> void:
-	for reason: String in ["sp", "focus", "cooldown", "stun", "fear", "paused", "dead", "unequipped", "wrong_identity"]:
+	for reason: String in ["sp", "focus", "cooldown", "stun", "fear", "paused", "dead", "unlearned", "wrong_identity"]:
 		var player := _player()
 		match reason:
 			"sp": player.current_sp = player.skill_cost(EXPLOSIVE) - 1.0
@@ -119,7 +119,7 @@ func _invalid_prepare() -> void:
 			"fear": player.apply_fear(1.0)
 			"paused": paused = true
 			"dead": player.health.current_hp = 0.0
-			"unequipped": player.run_state.build_snapshot.active_slots[0] = null
+			"unlearned": player.run_state.build_snapshot.skill_ranks.erase(EXPLOSIVE)
 			"wrong_identity": player.run_state.build_snapshot.evolution_id = &"hunter"
 		var before := _fingerprint(player)
 		_check(not player.prepare_sentinel_explosive() and _fingerprint(player) == before, "invalid prepare %s is atomic" % reason)
@@ -128,7 +128,7 @@ func _invalid_prepare() -> void:
 		await process_frame
 
 func _invalid_launch() -> void:
-	for reason: String in ["sp", "focus", "cooldown", "stun", "fear", "paused", "dead", "unequipped", "dead_target", "null_target", "range", "obstacle"]:
+	for reason: String in ["sp", "focus", "cooldown", "stun", "fear", "paused", "dead", "unlearned", "dead_target", "null_target", "range", "obstacle"]:
 		var player := _player()
 		var enemy := _victim(player)
 		player.prepare_sentinel_explosive()
@@ -140,7 +140,7 @@ func _invalid_launch() -> void:
 			"fear": player.apply_fear(1.0)
 			"paused": paused = true
 			"dead": player.health.current_hp = 0.0
-			"unequipped": player.run_state.build_snapshot.active_slots[0] = null
+			"unlearned": player.run_state.build_snapshot.skill_ranks.erase(EXPLOSIVE)
 			"dead_target": enemy.health.current_hp = 0.0
 			"range": enemy.position = player.position + Vector2(player.basic_attack_distance(enemy) + 30.0, 0)
 			"obstacle": player.navigation.configure(Rect2(0, 0, 1000, 700), [Rect2(380, 240, 30, 120)], 20.0)
@@ -201,6 +201,7 @@ func _scene() -> RunController:
 	var arena := load("res://scenes/main.tscn").instantiate() as RunController
 	root.add_child(arena)
 	arena.set_process(false)
+	arena.player.sentinel_combat_active = arena.encounter_active
 	arena.player.set_process(false)
 	arena.training_boss.set_process(false)
 	arena._training_add_elapsed = -1000.0
@@ -264,7 +265,7 @@ func _burst_scene() -> void:
 			if not events[actor.get_instance_id()].is_empty():
 				var result: Dictionary = events[actor.get_instance_id()][0]
 				_check(result["skill_id"] == EXPLOSIVE and result["physical_component"] == 0.0 and result["emission_id"] == frozen.emission_id and result["can_trigger_effects"], "one direct pure-magic damage result per victim")
-		_close(player.sentinel_state.focus, 90.0 - 25.0 + 6.0 + 4.0, "area grants Observar and Aberturas once, not per root victim")
+		_close(player.sentinel_state.focus, 90.0 - 25.0 + 6.0 + 4.0 + 4.0, "area grants Observar, Aberturas and intrinsic4 once, not per root victim")
 		_check(player.sentinel_state.observation_charges == 2 and player.current_sp == impact_sp and player.skill_cooldown(EXPLOSIVE) == paid_cd, "impact consumes only one observation and no additional SP/CD")
 		var amounts := events[primary.get_instance_id()].size()
 		projectile._open()

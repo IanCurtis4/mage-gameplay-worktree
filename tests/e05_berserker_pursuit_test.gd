@@ -39,8 +39,14 @@ func _run() -> void:
 	unequipped.current_sp = 10.0
 	unequipped.record_berserker_damage(_result(unequipped, target_id, &"berserker_rupture", true))
 	unequipped.record_berserker_damage(_result(unequipped, target_id, &"basic_attack", true))
-	_check(unequipped.current_sp == 10.0 and unequipped.berserker_wound_stacks(target_id) == 2, "learned but unequipped Pursuit is inert")
+	_check(unequipped.current_sp == 14.0 and unequipped.berserker_wound_stacks(target_id) == 2, "learned Pursuit automatically returns R3 SP without legacy passive slots")
 	unequipped.free()
+	var unlearned := _player(navigation, 0, false, true)
+	unlearned.current_sp = 10.0
+	unlearned.record_berserker_damage(_result(unlearned, target_id, &"berserker_rupture", true))
+	unlearned.record_berserker_damage(_result(unlearned, target_id, &"basic_attack", true))
+	_check(unlearned.current_sp == 10.0, "unlearned Pursuit grants no SP")
+	unlearned.free()
 	var rank_three := _player(navigation, 3, true, true)
 	rank_three.current_sp = 10.0
 	rank_three.record_berserker_damage(_result(rank_three, target_id, &"berserker_rupture", true))
@@ -58,6 +64,7 @@ func _run() -> void:
 
 func _player(navigation: ArenaNavigation, pursuit_rank: int, equipped: bool, learned_rupture: bool) -> PlayerActor:
 	var snapshot := BuildSnapshot.new()
+	snapshot.job_level = ProgressionRules.MAX_JOB_LEVEL
 	snapshot.base_class_id = &"swordsman"
 	snapshot.evolution_id = &"berserker"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"berserker")

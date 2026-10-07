@@ -10,6 +10,7 @@ func _run() -> void:
 	var navigation := ArenaNavigation.new()
 	navigation.configure(Rect2(0, 0, 1000, 700), [], 20.0)
 	var snapshot := BuildSnapshot.new()
+	snapshot.job_level = 40 # Legal fixture: all purchased evolution entry gates are satisfied.
 	snapshot.base_class_id = &"mage"
 	snapshot.evolution_id = &"elementalist"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"mage", &"elementalist")
@@ -45,7 +46,13 @@ func _run() -> void:
 	_check(feedback.size() == 2, "capped SP displays no nonexistent refund")
 	player.run_state.build_snapshot.passive_slots = [null, null]
 	controller._on_enemy_damage_resolved(_hit(player, target, &"lightning"))
-	_check(feedback.size() == 2, "unequipped passives produce no feedback")
+	_check(feedback.size() == 3 and feedback[2]["skill_id"] == &"elementalist_prismatic_resonance", "learned resonance remains automatic after clearing legacy equipped slots")
+	player.run_state.build_snapshot.skill_ranks.erase(&"elementalist_prismatic_focus")
+	player.run_state.build_snapshot.skill_ranks.erase(&"elementalist_prismatic_resonance")
+	player.clear_elementalist_state()
+	for skill_id: StringName in [&"fire_spear", &"ice_spear", &"lightning"]:
+		controller._on_enemy_damage_resolved(_hit(player, target, skill_id))
+	_check(feedback.size() == 3, "unlearned passives produce no feedback")
 	player.free()
 	target.free()
 	controller.battle_indicators.free()
