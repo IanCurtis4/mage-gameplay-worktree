@@ -130,5 +130,6 @@ em boss. Fora de combate, conferir decaimento e liberação da reserva insuficie
 ## Aceites
 
 - Escopo e execução: autorizados em 03/10/2026.
-- Revisão técnica integrada Astra: pendente; classe completa pronta para handoff.
+- Revisão integrada Astra: código e apresentação aprovados com duas correções; detalhes em REVIEW_E05_SENTINEL.md. Publicação exige PASS integral do commit consolidado.
 - Playtest humano e merge em master: pendentes.
+

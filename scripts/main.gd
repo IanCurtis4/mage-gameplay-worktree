@@ -973,7 +973,8 @@ func _on_sentinel_direct_hit(request: DamageRequest, enemy: CombatActor, payload
 func _on_sentinel_burst(center: Vector2, request: DamageRequest, payload: Dictionary) -> void:
 	_show_sentinel_visual(request.skill_id, center, float(payload["radius"]))
 	var seen: Dictionary[int, bool] = {}
-	for enemy: CombatActor in enemies:
+	# Death callbacks remove actors from enemies synchronously.
+	for enemy: CombatActor in enemies.duplicate():
 		if not is_instance_valid(enemy) or not enemy.is_alive() or seen.has(enemy.get_instance_id()):
 			continue
 		if center.distance_to(enemy.global_position) > float(payload["radius"]) + enemy.collision_radius or not navigation.is_segment_clear(center + PlayerProjectile.BODY_OFFSET, enemy.global_position + PlayerProjectile.BODY_OFFSET, 0.0):
@@ -1715,7 +1716,7 @@ func _open_augment_menu() -> void:
 	var offer := run_state.build_offer(encounter_active, rng)
 	if offer.is_empty():
 		return
-	_cancel_casting()
+	_cancel_casting(false)
 	_clear_hover()
 	for child: Node in choice_buttons.get_children():
 		child.queue_free()
@@ -1880,7 +1881,7 @@ func _open_class_menu() -> void:
 		return
 	if battle_controls.settings_overlay.visible:
 		battle_controls.settings_overlay.visible = false
-	_cancel_casting()
+	_cancel_casting(false)
 	_clear_hover()
 	class_label.text = "Treino isolado da build atual. Saia pelo botão de treino para mudar a build." if training_mode else ("Esta run usa o personagem persistente %s.\nVolte ao menu para trocar personagem ou iniciar outra run." % player.class_definition.display_name if _persistent_run_active() else "Classe atual: %s\nEscolher uma classe inicia uma run nova e limpa todo o estado temporário." % player.class_definition.display_name)
 	class_overlay.visible = true
