@@ -123,7 +123,34 @@ mantendo o cooldown. Ataque emitido ainda passa pela precisão normal de CombatM
 
 ## Mira, input e controles de batalha
 
-`CastIntent` guarda somente modo e skill selecionada. Padrão CONFIRM: Q/W seleciona,
+Atualização autorizada 07/10/2026: `SENTINEL_ACTION_BARS_PLAN.md` substitui
+limites/runtime de loadout citados nas seções históricas abaixo. Biblioteca
+deriva de identidade, rank aprendido e gate legal; todas as passivas aprendidas
+legais são automáticas, com fonte única. Metadata de catálogo sem definição
+concreta não vira ação runtime. Presets 5+2 permanecem apenas como
+dados legados preservados e presets de equipamento, nunca como disponibilidade.
+
+`action_slots` por personagem contém 24 IDs ativos únicos ou null. Campo
+opcional aditivo no schema 2: ausência migra a ordem e vazios do preset escolhido;
+barra explicitamente vazia não é repovoada. Ranks, compras, pontos e equipamentos
+não mudam. Codec/fachada rejeitam tamanho, duplicata, categoria/origem/rank
+inválidos. Respec e troca de evolução prunam referências sem conceder skills.
+
+Barras em duas fileiras de 12, teclas padrão 1/2/3/4/R/F/Q/E/'/V/5/T e Alt+essas.
+`ControlPreferences` salva binds globais por slot, com modificadores exatos,
+captura física (inclusive ABNT) e conflito explícito. `ActionBarInput` associa
+release à skill pressionada mesmo soltando Alt antes; echo, captura e digitação
+não lançam. Remapeamento/organização cancelam intenção, preservando munição
+reservada. F1/F2/F3 escolhem elementos Geômetra, F6 desfaz, F8 abre recompensa,
+F9 reinicia; Esc/Tab e estas teclas são reservadas. Botões permanecem disponíveis.
+
+Editor pausado e menu usam biblioteca aprendida com arrastar, trocar, remover e
+atribuição por clique. Layout organiza, não aprende nem recalcula. Editar durante
+run salva somente o layout do mesmo personagem; snapshot atual de build/stats
+permanece intacto. Treino é não persistente e retry copia a organização da sessão
+para a próxima run. HUD compacto evita lista duplicada sobre as barras.
+
+`CastIntent` guarda somente modo e skill selecionada. Padrão CONFIRM: atalho seleciona,
 clique esquerdo consome intenção uma vez. RELEASE: key-up correspondente consome;
 clique também confirma sem duplicar no key-up posterior. INSTANT: key-down sem echo
 lança. Cartões da barra sempre selecionam para confirmar no mundo.
@@ -146,8 +173,9 @@ verde-água significa disponível, coral indica SP/recarga bloqueada, ouro marca
 alvo selecionado. A mira usa coordenadas de combate da arena 2D atual; anéis elípticos
 nos pés são decorativos. Este bloco não altera a colisão do corte com obstáculos.
 
-`ControlPreferences` persiste somente modo de cast e smart lock em `user://controls.cfg`.
-Valores inválidos retornam ao padrão; falha de gravação mantém a preferência da
+`ControlPreferences` persiste modo de cast, smart lock e os 24 binds em `user://controls.cfg`.
+Modo/smart lock inválidos retornam ao padrão; bind inválido ou em conflito fica
+vazio. Falha de gravação mantém a preferência da
 sessão com aviso. Testes usam arquivos próprios em `.godot/verification`, nunca o
 arquivo do usuário. Este arquivo não persiste run, classe, equips ou cartas.
 
@@ -163,7 +191,7 @@ O vocabulário runtime é canônico: `max_hp`, `max_sp`, `hp_regen`, `sp_regen`,
 `melee_attack`, `precision_attack`, `magic_attack`, `physical_defense`,
 `magic_defense`, `hit_rating`, `flee_rating`, crítico, velocidade e tempos.
 `physical_attack`, defesa única, chance de acerto pronta e mana não existem como
-fontes paralelas. `BuildSnapshot` incorpora passivas equipadas como fontes
+fontes paralelas. `BuildSnapshot` incorpora passivas aprendidas legais como fontes
 identificadas; augments entram como fontes adicionais da run. Preview, snapshot,
 ator e HUD consomem o mesmo cálculo.
 
@@ -383,10 +411,16 @@ sequencial observacional. Não substitui qualificação de FPS/gameplay pelo usu
 
 ### Sentinela
 
-Sentinela (`archer` → `sentinel`) mantém biblioteca 7 ativas/2 passivas e slots
-5+2, sem schema novo. Contrato completo/tuning: E05_SENTINEL_PLAN.md; fechamento:
+Sentinela (`archer` → `sentinel`) mantém biblioteca 7 ativas/2 passivas, agora
+sem limite de loadout runtime conforme contrato de barras acima. Contrato
+original/tuning: E05_SENTINEL_PLAN.md; fechamento:
 E05_SENTINEL_CHECKPOINT.md. `SentinelFocusState` pertence à run e observa o
 `encounter_active` canônico; deslocamento real reinicia estabilidade, não Foco.
+Ganho intrínseco solo: 4 Foco por emissão direta própria positiva em combate,
+ICD compartilhado 0,5s; autos/skills/letal válidos, miss/zero/DoT/secondary/fonte
+alheia excluídos. Ledger de 256 IDs / TTL 10s registra rejeições por ICD e falha
+fechado ao saturar, sem pagar de novo por vítima tardia. Observar/Leitura são
+adicionais, sem alterar ASPD/movimento. Pausa congela ledger/timer; fim limpa.
 Fora de combate, após 3s, Foco decai até zero; uma reserva de munição que perde
 cobertura é liberada sem gastar SP/iniciar CD, nunca cria piso de Foco. Durante
 combate, a munição não expira por relógio. Pausa congela estado; morte/fim limpa.
