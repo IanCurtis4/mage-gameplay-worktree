@@ -23,7 +23,7 @@ const ROOT_FIELDS := [
 const CHARACTER_FIELDS := [
 	"character_id", "display_name", "base_class_id", "evolution_id", "base_xp_total",
 	"job_xp_total", "attribute_allocations", "granted_skill_ranks", "purchased_skill_ranks", "equipped",
-	"presets", "selected_preset",
+	"presets", "selected_preset", "action_slots",
 ]
 const FORBIDDEN_RUNTIME_FIELDS := [
 	"run_state", "build_snapshot", "current_hp", "max_hp", "current_sp", "max_sp",
@@ -176,6 +176,8 @@ static func _decode_character(raw: Variant, profile_id: String, next_character_c
 		return _error(&"invalid_character")
 	var data: Dictionary = raw
 	for field: String in CHARACTER_FIELDS:
+		if field == "action_slots": # Optional schema-2 extension; legacy presets remain intact.
+			continue
 		if not data.has(field):
 			return _error(&"missing_character_field", field)
 	if _contains_forbidden_fields(data):
@@ -256,6 +258,13 @@ static func _decode_character(raw: Variant, profile_id: String, next_character_c
 	character.equipped = equipped_result["equipped"]
 	character.presets = presets
 	character.selected_preset = selected_preset
+	if data.has("action_slots"):
+		var layout := _decode_slots(data["action_slots"], ActionBarLayout.SLOT_COUNT, ProfileCatalog.ACTIVE, base_class_id, evolution_id, effective_ranks, catalog)
+		if not layout["ok"]:
+			return layout
+		character.action_slots = layout["slots"]
+	else:
+		character.action_slots = ActionBarLayout.from_legacy(presets[selected_preset]["active_slots"])
 	character.extension_fields = _unknown_fields(data, CHARACTER_FIELDS)
 	return {"ok": true, "character": character}
 
@@ -575,6 +584,7 @@ static func _character_to_dictionary(character: CharacterState) -> Dictionary:
 		"equipped": _equipped_to_dictionary(character.equipped),
 		"presets": presets,
 		"selected_preset": character.selected_preset,
+		"action_slots": _nullable_names_to_values(ActionBarLayout.for_character(character)),
 	}, true)
 	return data
 

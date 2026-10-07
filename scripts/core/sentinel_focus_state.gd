@@ -19,12 +19,14 @@ var observation_charges := 0
 var observation_gain := 0.0
 var observation_cooldown := 0.0
 var opening_cooldown := 0.0
+var intrinsic_cooldown := 0.0
 var absolute_remaining := 0.0
 var reserved_focus := 0.0
 var reserved_sp := 0.0
 var explosive_prepared := false
 var _observed_emissions: Dictionary[int, bool] = {}
 var _opening_emissions: Dictionary[int, float] = {}
+var _intrinsic_emissions: Dictionary[int, float] = {}
 
 func advance(delta: float, moved: bool, combat_active: bool, paused: bool = false) -> void:
 	if paused or not is_finite(delta) or delta <= 0.0:
@@ -33,6 +35,9 @@ func advance(delta: float, moved: bool, combat_active: bool, paused: bool = fals
 	stable_time = 0.0 if moved else stable_time + delta
 	observation_cooldown = maxf(0.0, observation_cooldown - delta)
 	opening_cooldown = maxf(0.0, opening_cooldown - delta)
+	intrinsic_cooldown = maxf(0.0, intrinsic_cooldown - delta)
+	if intrinsic_cooldown < 0.000001:
+		intrinsic_cooldown = 0.0
 	observation_remaining = maxf(0.0, observation_remaining - delta)
 	if observation_remaining <= 0.0:
 		clear_observation()
@@ -40,6 +45,10 @@ func advance(delta: float, moved: bool, combat_active: bool, paused: bool = fals
 		_opening_emissions[id] -= delta
 		if _opening_emissions[id] <= 0.0:
 			_opening_emissions.erase(id)
+	for id: int in _intrinsic_emissions.keys():
+		_intrinsic_emissions[id] -= delta
+		if _intrinsic_emissions[id] <= 0.0:
+			_intrinsic_emissions.erase(id)
 	if combat_active:
 		inactive_time = 0.0
 		if not moved:
@@ -104,6 +113,23 @@ func direct_impact(emission_id: int, target_id: int, positive_direct_hit: bool, 
 		gain(float(SentinelTuning.values(&"sentinel_opening_read", opening_rank)["focus_return"]))
 	return focus - before
 
+func intrinsic_direct_impact(emission_id: int, eligible: bool) -> float:
+	# Caller supplies alive/in-combat/unpaused, own-source, applied-positive-direct
+	# eligibility. A lethal hit remains eligible; this does not require a passive.
+	if not eligible or emission_id <= 0 or _intrinsic_emissions.has(emission_id):
+		return 0.0
+	# Fail closed if abnormal input saturates the bounded ledger: never evict a
+	# still-live identity and then pay again for a delayed victim of that action.
+	if _intrinsic_emissions.size() >= SentinelTuning.DIRECT_FOCUS_EMISSION_CAP:
+		return 0.0
+	# Record before checking the shared ICD, including a hit rejected by cadence.
+	# A second victim cannot turn that same emission into a later accepted action.
+	_intrinsic_emissions[emission_id] = SentinelTuning.DIRECT_FOCUS_EMISSION_LIFETIME
+	if intrinsic_cooldown > 0.0:
+		return 0.0
+	intrinsic_cooldown = SentinelTuning.DIRECT_FOCUS_INTERNAL_COOLDOWN
+	return gain(SentinelTuning.DIRECT_FOCUS_RETURN)
+
 func clear_observation() -> void:
 	observed_target_id = 0
 	observation_remaining = 0.0
@@ -122,7 +148,9 @@ func clear() -> void:
 	inactive_time = 0.0
 	observation_cooldown = 0.0
 	opening_cooldown = 0.0
+	intrinsic_cooldown = 0.0
 	absolute_remaining = 0.0
 	clear_observation()
 	_opening_emissions.clear()
+	_intrinsic_emissions.clear()
 	cancel_preparation()

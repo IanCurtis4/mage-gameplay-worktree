@@ -45,6 +45,7 @@ func create_character(request_id: String, expected_revision: int, display_name: 
 	var candidate := before.copy_state()
 	var character_id := IdentityIds.character_id(candidate.profile_id, candidate.next_character_counter)
 	var character := CharacterState.new(character_id, display_name, base_class_id)
+	character.action_slots = ActionBarLayout.empty()
 	var initial_slots := _catalog.initial_skill_slots(base_class_id)
 	var starter_equipment := _catalog.starter_equipment(base_class_id)
 	character.equipped = starter_equipment.duplicate(true)
@@ -129,20 +130,10 @@ func available_build_options(character_id: String) -> Dictionary:
 	var character := _profile.character_by_id(character_id) if _profile != null else null
 	if character == null:
 		return {"ok": false, "error_code": &"invalid_character_id"}
-	var effective_ranks := _catalog.effective_skill_ranks(
-		character.base_class_id,
-		character.evolution_id,
-		character.purchased_skill_ranks,
-		character.granted_skill_ranks
-	)
-	var active_skills: Array[StringName] = []
-	var passive_skills: Array[StringName] = []
-	for skill_id: StringName in effective_ranks:
-		var metadata := _catalog.skill_metadata(skill_id)
-		if metadata["category"] == ProfileCatalog.ACTIVE:
-			active_skills.append(skill_id)
-		else:
-			passive_skills.append(skill_id)
+	# Editor and combat share legal learned availability, including job gates.
+	var snapshot := _build_snapshot(character)
+	var active_skills := snapshot.learned_skill_ids(ProfileCatalog.ACTIVE)
+	var passive_skills := snapshot.learned_skill_ids(ProfileCatalog.PASSIVE)
 	var equipment_by_slot: Dictionary[StringName, Array] = {}
 	for slot: StringName in IdentityIds.equipment_slots():
 		equipment_by_slot[slot] = []
@@ -197,6 +188,28 @@ func update_preset(
 		committed["character_id"] = character_id
 		committed["selected_preset"] = preset_index
 	return _finish_operation(request_id, committed)
+
+func update_action_slots(request_id: String, expected_revision: int, character_id: String, slots: Array[Variant]) -> Dictionary:
+	if _operation_in_progress:
+		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
+	var ready := _begin_operation(request_id, expected_revision)
+	if not ready["ok"]:
+		return _finish_operation(request_id, ready)
+	var character := _profile.character_by_id(character_id)
+	if character == null:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_character_id"})
+	if not _catalog.build_is_ready(character):
+		return _finish_operation(request_id, {"ok": false, "error_code": &"content_unavailable"})
+	var snapshot := _build_snapshot(character)
+	if not ActionBarLayout.valid(slots, snapshot.learned_skill_ids(ProfileCatalog.ACTIVE)):
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_action_slots"})
+	# Unlike build edits this is legal during a run: only shortcut organization.
+	if _profile.reward_session != null and _profile.reward_session.character_id != character_id:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"run_active"})
+	var before := _profile.copy_state()
+	var candidate := before.copy_state()
+	candidate.character_by_id(character_id).action_slots = slots.duplicate()
+	return _finish_operation(request_id, _resolve_commit(before, candidate, _store.commit(candidate)))
 
 func progression_summary(character_id: String) -> Dictionary:
 	if _profile == null:
@@ -695,7 +708,8 @@ func _build_snapshot(character: CharacterState) -> BuildSnapshot:
 		ProgressionRules.base_level_for_xp(character.base_xp_total),
 		ProgressionRules.job_level_for_xp(character.job_xp_total, not character.evolution_id.is_empty()),
 		effective_ranks,
-		_catalog.skill_ids_for_identity(character.base_class_id, character.evolution_id)
+		_catalog.skill_ids_for_identity(character.base_class_id, character.evolution_id),
+		_catalog
 	)
 
 func _resolve_commit(before: ProfileState, candidate: ProfileState, commit_result: Dictionary) -> Dictionary:

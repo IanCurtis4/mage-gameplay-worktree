@@ -122,9 +122,11 @@ func reset() -> void:
 func _pilot_snapshot(selected_class: StringName) -> BuildSnapshot:
 	var snapshot := BuildSnapshot.new()
 	snapshot.base_class_id = selected_class
+	snapshot.job_level = ProgressionRules.MAX_JOB_LEVEL
 	for skill_id: StringName in ClassCatalog.skill_ids(selected_class):
 		snapshot.skill_ranks[skill_id] = 1
 	snapshot.active_slots = ClassCatalog.skill_ids(selected_class)
+	snapshot.action_slots = ActionBarLayout.from_legacy(snapshot.active_slots)
 	var definition := ClassCatalog.class_definition(selected_class)
 	if definition != null and definition.passive_id != &"":
 		snapshot.skill_ranks[definition.passive_id] = 1

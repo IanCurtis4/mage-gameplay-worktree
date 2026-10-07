@@ -16,16 +16,21 @@ var active_slots: Array[Variant] = []
 var passive_slots: Array[Variant] = []
 var equipped: Dictionary[StringName, Variant] = {}
 var build_version: int = 1
+var action_slots: Array[Variant] = []
+var _skill_catalog := ProfileCatalog.pilot()
 
 static func from_character(
 	character: CharacterState,
 	derived_base_level: int,
 	derived_job_level: int,
 	effective_skill_ranks: Dictionary[StringName, int],
-	identity_skill_ids: Array[StringName] = []
+	identity_skill_ids: Array[StringName] = [],
+	catalog: ProfileCatalog = null
 ) -> BuildSnapshot:
 	assert(character != null)
 	var snapshot := BuildSnapshot.new()
+	if catalog != null:
+		snapshot._skill_catalog = catalog.copy_catalog()
 	snapshot.character_id = character.character_id
 	snapshot.base_class_id = character.base_class_id
 	snapshot.evolution_id = character.evolution_id
@@ -38,10 +43,12 @@ static func from_character(
 	snapshot.active_slots = preset["active_slots"].duplicate(true)
 	snapshot.passive_slots = preset["passive_slots"].duplicate(true)
 	snapshot.equipped = preset["equipped"].duplicate(true)
+	snapshot.action_slots = ActionBarLayout.for_character(character)
 	return snapshot
 
 func copy_snapshot() -> BuildSnapshot:
 	var copy := BuildSnapshot.new()
+	copy._skill_catalog = _skill_catalog.copy_catalog()
 	copy.ruleset_id = ruleset_id
 	copy.catalog_version = catalog_version
 	copy.character_id = character_id
@@ -56,6 +63,7 @@ func copy_snapshot() -> BuildSnapshot:
 	copy.passive_slots = passive_slots.duplicate(true)
 	copy.equipped = equipped.duplicate(true)
 	copy.build_version = build_version
+	copy.action_slots = action_slots.duplicate()
 	return copy
 
 func stat_breakdown(modifier_sources: Array[Dictionary] = []) -> StatBreakdown:
@@ -75,7 +83,7 @@ func try_stat_breakdown(modifier_sources: Array[Dictionary] = []) -> Dictionary:
 func intrinsic_modifier_sources() -> Array[Dictionary]:
 	var sources: Array[Dictionary] = []
 	var seen: Dictionary[StringName, bool] = {}
-	for raw_passive_id: Variant in passive_slots:
+	for raw_passive_id: Variant in learned_skill_ids(ProfileCatalog.PASSIVE):
 		if raw_passive_id == null:
 			continue
 		var passive_id := StringName(raw_passive_id)
@@ -94,7 +102,7 @@ func intrinsic_modifier_sources() -> Array[Dictionary]:
 func intrinsic_rule_sources() -> Array[Dictionary]:
 	var sources: Array[Dictionary] = []
 	var seen: Dictionary[StringName, bool] = {}
-	for raw_passive_id: Variant in passive_slots:
+	for raw_passive_id: Variant in learned_skill_ids(ProfileCatalog.PASSIVE):
 		if raw_passive_id == null:
 			continue
 		var passive_id := StringName(raw_passive_id)
@@ -115,3 +123,22 @@ func trap_armed_duration(base_duration: float) -> float:
 	for source: Dictionary in intrinsic_rule_sources():
 		bonus += float(source.get("armed_duration_bonus", 0.0))
 	return base_duration + bonus
+
+func learned_skill_ids(category: StringName) -> Array[StringName]:
+	var result: Array[StringName] = []
+	var catalog := _skill_catalog
+	for id: StringName in catalog.skill_ids_for_identity(base_class_id, evolution_id):
+		if not library_skill_ids.is_empty() and id not in library_skill_ids:
+			continue
+		var metadata := catalog.skill_metadata(id)
+		var rank := int(skill_ranks.get(id, 0))
+		if rank <= 0 or metadata["category"] != category:
+			continue
+		if not catalog.check_rank_requirements(id, 1, job_level, skill_ranks)["ok"]:
+			continue
+		result.append(id)
+	return result
+
+func has_passive(id: StringName) -> bool:
+	var metadata := _skill_catalog.skill_metadata(id)
+	return not metadata.is_empty() and metadata["category"] == ProfileCatalog.PASSIVE and int(skill_ranks.get(id, 0)) > 0 and _skill_catalog.skill_is_allowed(id, base_class_id, evolution_id) and (library_skill_ids.is_empty() or id in library_skill_ids) and _skill_catalog.check_rank_requirements(id, 1, job_level, skill_ranks)["ok"]

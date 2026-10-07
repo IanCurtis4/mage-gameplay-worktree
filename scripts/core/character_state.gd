@@ -18,6 +18,7 @@ var purchased_skill_ranks: Dictionary[StringName, int] = {}
 var equipped: Dictionary[StringName, Variant] = {}
 var presets: Array[Dictionary] = []
 var selected_preset: int = 0
+var action_slots: Array[Variant] = [] # Empty only until legacy-layout initialization.
 var extension_fields: Dictionary = {}
 
 func _init(
@@ -45,6 +46,7 @@ func copy_state() -> CharacterState:
 	copy.equipped = equipped.duplicate(true)
 	copy.presets = presets.duplicate(true)
 	copy.selected_preset = selected_preset
+	copy.action_slots = action_slots.duplicate()
 	copy.extension_fields = extension_fields.duplicate(true)
 	return copy
 

@@ -396,13 +396,14 @@ func use_sentinel_net(point: Vector2) -> bool:
 	return true
 
 func record_sentinel_damage(result: Dictionary) -> void:
-	if not is_sentinel() or not is_alive() or int(result.get("source_id", 0)) != get_instance_id() or not bool(result.get("can_trigger_effects", false)) or float(result.get("actual_damage", 0.0)) <= 0.0:
+	if not is_sentinel() or not is_alive() or (is_inside_tree() and get_tree().paused) or int(result.get("source_id", 0)) != get_instance_id() or not bool(result.get("can_trigger_effects", false)) or float(result.get("actual_damage", 0.0)) <= 0.0:
 		return
 	var victim := instance_from_id(int(result.get("target_id", 0))) as CombatActor
 	if not is_instance_valid(victim) or (not victim.is_alive() and not bool(result.get("killed", false))):
 		return
-	var rank := skill_rank(&"sentinel_opening_read") if run_state.build_snapshot.passive_slots.has(&"sentinel_opening_read") else 0
+	var rank := skill_rank(&"sentinel_opening_read") if run_state.build_snapshot.has_passive(&"sentinel_opening_read") else 0
 	var gained := sentinel_state.direct_impact(int(result.get("emission_id", 0)), victim.get_instance_id(), true, bool(result.get("critical", false)), victim.is_rooted() or victim.is_stunned(), rank)
+	gained += sentinel_state.intrinsic_direct_impact(int(result.get("emission_id", 0)), sentinel_combat_active)
 	if gained > 0.0:
 		resources_changed.emit()
 
@@ -415,18 +416,12 @@ func _set_sentinel_stance(active: bool) -> void:
 
 func available_skill_ids() -> Array[StringName]:
 	if run_state != null and run_state.uses_persistent_build():
-		var equipped: Array[StringName] = []
-		for skill_id: Variant in run_state.build_snapshot.active_slots:
-			if skill_id == null:
-				continue
-			var normalized_id := StringName(skill_id)
-			var library: Array[StringName] = run_state.build_snapshot.library_skill_ids
-			if not library.is_empty() and normalized_id not in library:
-				continue
-			if normalized_id in equipped or ClassCatalog.skill_definition(normalized_id) == null or int(run_state.skill_levels.get(normalized_id, 0)) <= 0:
-				continue
-			equipped.append(normalized_id)
-		return equipped
+		var learned: Array[StringName] = []
+		for id: StringName in run_state.build_snapshot.learned_skill_ids(ProfileCatalog.ACTIVE):
+			# Domain catalogs may include fixture/future metadata without runtime skills.
+			if ClassCatalog.skill_definition(id) != null:
+				learned.append(id)
+		return learned
 	return class_definition.skill_ids.duplicate()
 
 func apply_run_modifiers(state: RunState) -> void:
@@ -696,7 +691,7 @@ func record_berserker_damage(result: Dictionary) -> void:
 	berserker_wounds[target_id] = {"stacks": mini(BERSERKER_WOUND_MAX_STACKS, previous + 1), "remaining": BERSERKER_WOUND_DURATION}
 
 func _trigger_berserker_pursuit(target_id: int) -> void:
-	if berserker_wound_stacks(target_id) <= 0 or berserker_pursuit_cooldown > 0.0 or not run_state.build_snapshot.passive_slots.has(&"berserker_pursuit"):
+	if berserker_wound_stacks(target_id) <= 0 or berserker_pursuit_cooldown > 0.0 or not run_state.build_snapshot.has_passive(&"berserker_pursuit"):
 		return
 	var rank_definition := _runtime_rank_definition(&"berserker_pursuit")
 	if rank_definition == null:
@@ -725,7 +720,7 @@ func record_elementalist_damage(result: Dictionary) -> void:
 	var alternating := float(previous.get("remaining", 0.0)) > 0.0 and StringName(previous.get("element", &"")) != element
 	var emission_id := int(result.get("emission_id", 0))
 	var emission_available := emission_id <= 0 or not _elementalist_refunded_emissions.has(emission_id)
-	if alternating and emission_available and elementalist_focus_cooldown <= 0.0 and run_state.build_snapshot.passive_slots.has(&"elementalist_prismatic_focus"):
+	if alternating and emission_available and elementalist_focus_cooldown <= 0.0 and run_state.build_snapshot.has_passive(&"elementalist_prismatic_focus"):
 		var rank_definition := _runtime_rank_definition(&"elementalist_prismatic_focus")
 		if rank_definition != null:
 			var previous_sp := current_sp
@@ -745,7 +740,7 @@ func record_elementalist_damage(result: Dictionary) -> void:
 		elementalist_resonance_history[target_id] = {"elements": elements, "remaining": float(resonance.get("remaining", ELEMENTALIST_RESONANCE_WINDOW))}
 
 func elementalist_resonance_ready(target_id: int, skill_id: StringName) -> bool:
-	if not _is_elementalist() or not is_alive() or not run_state.build_snapshot.passive_slots.has(&"elementalist_prismatic_resonance") or _runtime_rank_definition(&"elementalist_prismatic_resonance") == null:
+	if not _is_elementalist() or not is_alive() or not run_state.build_snapshot.has_passive(&"elementalist_prismatic_resonance") or _runtime_rank_definition(&"elementalist_prismatic_resonance") == null:
 		return false
 	var element := _elementalist_direct_element(skill_id)
 	var history: Dictionary = elementalist_resonance_history.get(target_id, {})
@@ -1114,7 +1109,7 @@ func heal_from_spiritualist_drain(result: Dictionary, already_healed: float) -> 
 	return healed
 
 func recover_spiritualist_echo_sp(emission_id: int) -> float:
-	if not _is_spiritualist() or not is_alive() or spiritualist_recovery_cooldown > 0.0 or not run_state.build_snapshot.passive_slots.has(&"spiritualist_echo_recovery"):
+	if not _is_spiritualist() or not is_alive() or spiritualist_recovery_cooldown > 0.0 or not run_state.build_snapshot.has_passive(&"spiritualist_echo_recovery"):
 		return 0.0
 	var rank_definition := _runtime_rank_definition(&"spiritualist_echo_recovery")
 	if rank_definition == null or (emission_id > 0 and _spiritualist_refunded_emissions.has(emission_id)):
@@ -1136,7 +1131,7 @@ func clear_spiritualist_state() -> void:
 	spiritualist_focus_power = 0.0
 
 func grant_spiritualist_focus() -> bool:
-	if not _is_spiritualist() or not is_alive() or not run_state.build_snapshot.passive_slots.has(&"spiritualist_channel_focus"):
+	if not _is_spiritualist() or not is_alive() or not run_state.build_snapshot.has_passive(&"spiritualist_channel_focus"):
 		return false
 	var rank_definition := _runtime_rank_definition(&"spiritualist_channel_focus")
 	if rank_definition == null:
@@ -1460,7 +1455,7 @@ func _grant_defender_front_event() -> void:
 	defender_token_remaining = DEFENDER_TOKEN_DURATION
 	_set_defender_token_notice("TOKEN RENOVADO" if renewed else "TOKEN PRONTO")
 	var return_rank := _runtime_rank_definition(&"defender_guard_return")
-	if return_rank != null and &"defender_guard_return" in run_state.build_snapshot.passive_slots and defender_guard_return_cooldown <= 0.0:
+	if return_rank != null and run_state.build_snapshot.has_passive(&"defender_guard_return") and defender_guard_return_cooldown <= 0.0:
 		current_sp = minf(max_sp, current_sp + return_rank.power)
 		defender_guard_return_cooldown = return_rank.cooldown
 	resources_changed.emit()
@@ -1859,7 +1854,7 @@ func commit_geometer_shot(command: GeometerCastCommand, construction: GeometerCo
 
 func geometer_durations() -> Vector2:
 	var durations := Vector2(8.0, 6.0)
-	if is_geometer() and run_state.build_snapshot.passive_slots.has(&"geometer_vector_memory"):
+	if is_geometer() and run_state.build_snapshot.has_passive(&"geometer_vector_memory"):
 		var memory := _runtime_rank_definition(&"geometer_vector_memory")
 		if memory != null:
 			durations += Vector2(memory.power, memory.secondary_power)
@@ -1933,7 +1928,7 @@ func geometer_wall_snapshot() -> Dictionary:
 		return {}
 	var bonus := 0.0
 	var refund := 0.0
-	if run_state.build_snapshot.passive_slots.has(&"geometer_incidence"):
+	if run_state.build_snapshot.has_passive(&"geometer_incidence"):
 		var passive := _runtime_rank_definition(&"geometer_incidence")
 		if passive != null:
 			bonus = passive.power
@@ -2122,7 +2117,7 @@ func _process(delta: float) -> void:
 		var moved := previous.distance_to(global_position) > SentinelFocusState.MOVEMENT_EPSILON or (_sentinel_last_position.is_finite() and _sentinel_last_position.distance_to(previous) > SentinelFocusState.MOVEMENT_EPSILON)
 		sentinel_state.advance(delta, moved, sentinel_combat_active)
 		_sentinel_last_position = global_position
-		var has_stance := run_state.build_snapshot.passive_slots.has(&"sentinel_precision_stance") and skill_rank(&"sentinel_precision_stance") > 0
+		var has_stance := run_state.build_snapshot.has_passive(&"sentinel_precision_stance")
 		_set_sentinel_stance(has_stance and sentinel_state.stable_time >= SentinelFocusState.STANCE_DELAY)
 		if sentinel_state.observed_target_id > 0:
 			var observed := instance_from_id(sentinel_state.observed_target_id) as CombatActor
@@ -2385,7 +2380,7 @@ func regenerate_hp(delta: float, encounter_active: bool, simulation_paused: bool
 	return true
 
 func heal_from_kill() -> float:
-	if not is_alive() or run_state == null or not (&"blood_thirst" in run_state.build_snapshot.passive_slots):
+	if not is_alive() or run_state == null or not run_state.build_snapshot.has_passive(&"blood_thirst"):
 		return 0.0
 	var rank := int(run_state.skill_levels.get(&"blood_thirst", 0))
 	var fraction := ClassCatalog.blood_thirst_heal_fraction(rank)
@@ -2451,7 +2446,7 @@ func _make_request(enemy: CombatActor, skill_id: StringName, accuracy_mode: Dama
 func _make_physical_request(enemy: CombatActor, skill_id: StringName, power: float, accuracy_mode: DamageRequest.AccuracyMode, can_crit: bool) -> DamageRequest:
 	var request := _make_request(enemy, skill_id, accuracy_mode, can_crit)
 	request.physical_damage = power
-	if _is_berserker() and skill_id in BERSERKER_DIRECT_MELEE_IDS and run_state.build_snapshot.passive_slots.has(&"berserker_obstinacy") and health.current_hp <= health.max_hp * 0.50:
+	if _is_berserker() and skill_id in BERSERKER_DIRECT_MELEE_IDS and run_state.build_snapshot.has_passive(&"berserker_obstinacy") and health.current_hp <= health.max_hp * 0.50:
 		var rank_definition := _runtime_rank_definition(&"berserker_obstinacy")
 		if rank_definition != null:
 			request.damage_dealt_multiplier *= 1.0 + rank_definition.power
@@ -2466,7 +2461,7 @@ func _make_magic_request(enemy: CombatActor, skill_id: StringName, power: float,
 	elif _is_spiritualist():
 		_spiritualist_emission_serial += 1
 		request.emission_id = _spiritualist_emission_serial
-	if _is_elementalist() and run_state.build_snapshot.passive_slots.has(&"elementalist_prismatic_resonance"):
+	if _is_elementalist() and run_state.build_snapshot.has_passive(&"elementalist_prismatic_resonance"):
 		var resonance_rank := _runtime_rank_definition(&"elementalist_prismatic_resonance")
 		if resonance_rank != null:
 			request.prismatic_resonance_damage = stat_breakdown.value(&"magic_attack") * resonance_rank.power

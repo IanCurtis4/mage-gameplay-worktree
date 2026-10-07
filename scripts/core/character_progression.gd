@@ -129,6 +129,8 @@ static func respec_skills(character: CharacterState, catalog: ProfileCatalog) ->
 	for preset: Dictionary in character.presets:
 		_prune_slots(preset["active_slots"], ProfileCatalog.ACTIVE, effective, catalog)
 		_prune_slots(preset["passive_slots"], ProfileCatalog.PASSIVE, effective, catalog)
+	character.action_slots = ActionBarLayout.for_character(character)
+	_prune_slots(character.action_slots, ProfileCatalog.ACTIVE, effective, catalog)
 	return {"ok": true, "base_refund": base_refund, "evolution_refund": evolution_refund}
 
 static func change_evolution(character: CharacterState, catalog: ProfileCatalog, evolution_id: StringName) -> Dictionary:
@@ -165,6 +167,8 @@ static func change_evolution(character: CharacterState, catalog: ProfileCatalog,
 		character.granted_skill_ranks
 	)
 	var cleared_slots: Array[Dictionary] = []
+	character.action_slots = ActionBarLayout.for_character(character)
+	_prune_slots(character.action_slots, ProfileCatalog.ACTIVE, effective, catalog)
 	for preset_index: int in character.presets.size():
 		var preset: Dictionary = character.presets[preset_index]
 		cleared_slots.append({
