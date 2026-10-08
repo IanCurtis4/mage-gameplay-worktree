@@ -14,6 +14,7 @@ signal sentinel_projectile_requested(request: DamageRequest, target: CombatActor
 signal arrow_rain_requested(center: Vector2, request: DamageRequest)
 signal snare_trap_requested(center: Vector2, root_duration: float)
 signal explosive_trap_requested(center: Vector2, request: DamageRequest)
+signal hunter_trap_requested(center: Vector2, rank: int, request: DamageRequest, opening: DamageRequest)
 signal slowing_arrow_requested(request: DamageRequest, direction: Vector2, slow_fraction: float, slow_duration: float)
 signal foliage_shelter_requested(center: Vector2, duration: float)
 signal fire_wall_requested(direction: Vector2, burn_request: DamageRequest)
@@ -1709,13 +1710,31 @@ func trap_center(skill_id: StringName, point: Vector2) -> Vector2:
 	return global_position + offset
 
 func can_place_trap(skill_id: StringName, point: Vector2) -> bool:
-	if not point.is_finite() or skill_id not in [&"snare_trap", &"explosive_trap"] or skill_range(skill_id) <= 0.0 or navigation == null:
+	if not point.is_finite() or skill_id not in HunterMath.TRAP_IDS or skill_range(skill_id) <= 0.0 or navigation == null:
+		return false
+	if skill_id in HunterMath.NEW_TRAP_IDS and not is_hunter():
 		return false
 	var center := trap_center(skill_id, point)
 	return navigation.is_walkable(center) and (not is_hunter() or navigation.is_segment_clear(global_position, center, 0.0))
 
 func trap_armed_duration(base_duration: float) -> float:
 	return run_state.build_snapshot.trap_armed_duration(base_duration)
+
+func use_hunter_trap(skill_id: StringName, point: Vector2) -> bool:
+	if not is_hunter() or skill_id not in HunterMath.NEW_TRAP_IDS or not _can_spend(skill_id) or not can_place_trap(skill_id, point) or (is_inside_tree() and get_tree().paused):
+		return false
+	var rank := skill_rank(skill_id)
+	var request := HunterMath.trap_request(get_instance_id(), skill_id, rank, stat_breakdown, outgoing_damage_multiplier())
+	var opening := hunter_opening_snapshot(skill_id)
+	if request == null or opening == null:
+		return false
+	var center := trap_center(skill_id, point)
+	_spend(skill_id)
+	reveal_from_offense()
+	hunter_trap_requested.emit(center, rank, request, opening)
+	presentation_action.emit(&"cast_release", aim_direction(center), 0.18)
+	resources_changed.emit()
+	return true
 
 func snare_trap_center(point: Vector2) -> Vector2:
 	return trap_center(&"snare_trap", point)
@@ -2003,6 +2022,8 @@ func begin_skill_cast(skill_id: StringName, point: Vector2, enemy: CombatActor =
 	if definition == null or cast_time <= 0.0 or skill_id not in available_skill_ids() or not _can_spend(skill_id):
 		return false
 	if skill_id == &"sentinel_net_shot" and (not sentinel_can_use(skill_id) or not can_place_sentinel_net(point)):
+		return false
+	if skill_id in HunterMath.NEW_TRAP_IDS and not can_place_trap(skill_id, point):
 		return false
 	if definition.targeting == SkillDefinition.Targeting.SINGLE_TARGET and not can_target_skill(skill_id, enemy):
 		return false

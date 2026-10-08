@@ -11,6 +11,9 @@ const ARMING_TIME := 0.75
 const ARMED_DURATION := 12.0
 
 var damage_request: DamageRequest
+## Optional Hunter-only pre-blast claim. Returns an additive raw multiplier,
+## captured once for the whole explosion; absent leaves base traps unchanged.
+var reaction_callback: Callable
 var _targets: Array[CombatActor] = []
 
 func configure_explosive(trap_owner_id: int, placement: Vector2, request: DamageRequest, targets: Array[CombatActor], armed_lifetime: float = ARMED_DURATION) -> void:
@@ -22,6 +25,8 @@ func configure_explosive(trap_owner_id: int, placement: Vector2, request: Damage
 	configure(trap_owner_id, &"explosive_trap", placement, TRIGGER_RADIUS, ARMING_TIME, armed_lifetime)
 
 func _process(delta: float) -> void:
+	if not is_finite(delta) or delta <= 0.0 or (is_inside_tree() and get_tree().paused):
+		return
 	super._process(delta)
 	if state != State.ARMED:
 		return
@@ -37,11 +42,16 @@ func _on_triggered(_trap: PlayerTrap, _target: CombatActor) -> void:
 		if global_position.distance_to(target.global_position) <= BLAST_RADIUS + target.collision_radius:
 			impacted.append(target)
 	impacted.sort_custom(func(first: CombatActor, second: CombatActor) -> bool: return first.get_instance_id() < second.get_instance_id())
+	var blast_request := damage_request.copy()
+	if reaction_callback.is_valid():
+		var bonus := float(reaction_callback.call(global_position, BLAST_RADIUS))
+		if is_finite(bonus) and bonus > 0.0:
+			blast_request.physical_damage *= 1.0 + minf(0.25, bonus)
 	for target: CombatActor in impacted:
 		# Earlier hit/death callbacks can synchronously free later victims.
 		if target == null or not is_instance_valid(target) or not target.is_alive():
 			continue
-		var impact_request := damage_request.copy()
+		var impact_request := blast_request.copy()
 		impact_request.target_id = target.get_instance_id()
 		hit.emit(impact_request, target)
 

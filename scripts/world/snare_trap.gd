@@ -21,6 +21,8 @@ func configure_snare(trap_owner_id: int, placement: Vector2, duration: float, ta
 	configure(trap_owner_id, &"snare_trap", placement, TRIGGER_RADIUS, ARMING_TIME, armed_lifetime)
 
 func _process(delta: float) -> void:
+	if not is_finite(delta) or delta <= 0.0 or (is_inside_tree() and get_tree().paused):
+		return
 	super._process(delta)
 	if state != State.ARMED:
 		return

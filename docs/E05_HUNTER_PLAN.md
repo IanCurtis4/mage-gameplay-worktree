@@ -90,6 +90,16 @@ funções/range/geometria. Terreno inválido não cobra. Campo de Piche: um por 
 nova ativação substitui anterior; DoT Espinhos renova por fonte, não empilha.
 Limite de campos não se confunde com três mecanismos não disparados.
 
+Concretização H3 do tuning inicial: Congelante escolhe uma presa (mais próxima,
+desempate por ID), como Laço; Espinhos e Piche abrem os ocupantes iniciais de
+suas áreas85/100. Entradas tardias/reentrada no Piche só recebem slow, nunca
+nova abertura. Listas são limitadas a32 e revalidadas após callbacks; novos
+inimigos podem integrar mecanismos/campo Hunter ainda ativos. Expiração normal
+do campo conserva no máximo o residual0,4s; substituição, consumo e limpeza
+retiram a fonte sincronicamente. Não há dano periódico no Piche.
+Fonte de Piche identificada por dono: limpeza terminal também retira o residual
+após o campo visual expirar, preservando slows de outras fontes.
+
 Explosiva mantém ID/carteira/ranks. Somente Hunter usa raw físico exclusivo
 `(22+2,2INT)×(1+0,1×(R−1))`, GEOMETRY, sem crítico. Arqueiro/Sentinela permanecem
 no comportamento original. Piche→Explosiva consome o campo e remove seu slow
@@ -97,6 +107,13 @@ por fonte antes do dano; bônus da explosão +25%×fração de prazo restante (0
 Uma reação por explosão, não por alvo. Vítimas são snapshot de ocupantes da
 explosão, sem detonação de outras traps. Só ativação primária abre janela;
 reação/bônus/bleed não reabrem. Congelante e Espinhos respeitam CC canônico.
+
+Contato da reação H3: círculos de campo/explosão sobrepostos e LoS entre seus
+centros. A lista da explosão é capturada antes do consumo; um callback opcional
+Hunter reivindica o campo antes do loop de impactos e retorna o escalar limitado
+0..25%. Só a cópia do pedido de explosão recebe esse escalar; a recompensa da
+abertura e o pedido original continuam intactos. Não existe sinal de reação que
+detone outro mecanismo. Arqueiro/Sentinela sem esse callback mantêm o raw base.
 
 Cobertura Total é ação própria: raio maior e graça de saída, sem apagar Abrigo
 comprado. Na identidade Hunter ambas compartilham budget3s/ICD de cobertura18s

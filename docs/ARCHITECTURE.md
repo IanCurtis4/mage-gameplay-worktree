@@ -459,6 +459,17 @@ sem atingir cadáver. Passo usa fonte identificada no StatCalculator e preserva
 HP/SP faltantes/CDs. Hooks de LoS Hunter são opcionais; bases preservadas. Nenhum
 estado desse ciclo é catálogo/save. Kit novo e apresentação ainda pendentes.
 
+H3 acrescenta `HunterTrap` para Congelante (presa única), Piche (ocupantes
+iniciais) e Espinhos (área), com snapshots INT-only em HunterMath. Input/preparo,
+commit e BattleIndicators compartilham colocação e geometria; obstáculos novos
+durante preparo rejeitam sem custo. `HunterTarField` é uma instância limitada
+por dono, com fonte de slow própria e residual0,4s, sem dano ou abertura de tick.
+O hook opcional pré-impacto de ExplosiveTrap captura um único escalar, consome
+Piche e retira sua fonte antes de quaisquer impactos. Espinhos usa o bleed
+canônico renovado por dono/skill, secundário e sem crítico. Morte/fim limpa campo,
+slow e streams próprios. Catálogo permanece indisponível; Marca, cobertura,
+passivas e prova visual integrada continuam pendentes.
+
 ### Procedimento de verificação
 
 Import headless detecta scripts/recursos inválidos; testes headless validam fórmulas,

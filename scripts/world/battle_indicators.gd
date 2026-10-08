@@ -212,6 +212,8 @@ func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast
 		endpoint = actor.snare_trap_center(point)
 	elif skill == &"explosive_trap":
 		endpoint = actor.explosive_trap_center(point)
+	elif skill in HunterMath.NEW_TRAP_IDS:
+		endpoint = actor.trap_center(skill, point)
 	elif skill == &"foliage_shelter":
 		endpoint = actor.foliage_shelter_center(point)
 	elif selected_target != null:
@@ -561,6 +563,15 @@ func _draw() -> void:
 	elif skill == &"terrifying_shout":
 		draw_circle(origin, active_range, Color(color, 0.10))
 		draw_arc(origin, active_range, 0.0, TAU, 48, color, 2.0, true)
+	elif skill in HunterMath.NEW_TRAP_IDS:
+		var tuning := HunterTuning.values(skill, 1) # Geometry is rank invariant.
+		var trigger_radius := float(tuning.get("trigger_radius", tuning.get("radius", 52.0)))
+		var effect_radius := float(tuning.get("field_radius", tuning.get("radius", 52.0)))
+		draw_dashed_line(origin, endpoint, Color(color, 0.55), 1.5, 9.0, true, true)
+		draw_circle(endpoint, effect_radius, Color(color, 0.10))
+		draw_arc(endpoint, effect_radius, 0.0, TAU, 48, Color(0.04, 0.09, 0.12, 0.9), 5.0, true)
+		draw_arc(endpoint, effect_radius, 0.0, TAU, 48, color, 2.0, true)
+		draw_arc(endpoint, trigger_radius, 0.0, TAU, 40, Color(color, 0.65), 1.5, true)
 	elif skill == &"snare_trap":
 		draw_dashed_line(origin, endpoint, Color(color, 0.55), 1.5, 9.0, true, true)
 		draw_circle(endpoint, SnareTrap.TRIGGER_RADIUS, Color(color, 0.13))

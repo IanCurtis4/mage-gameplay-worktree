@@ -38,6 +38,7 @@ var navigation := ArenaNavigation.new()
 var arena_view: ArenaView
 var player: PlayerActor
 var enemies: Array[CombatActor] = []
+var hunter_tar_field: HunterTarField
 var _credited_kills: Dictionary[int, bool] = {}
 var _defender_slowed_enemies: Dictionary[int, CombatActor] = {}
 var spiritualist_echo_state := SpiritualistEchoState.new()
@@ -167,6 +168,7 @@ func _ready() -> void:
 	player.arrow_rain_requested.connect(_on_arrow_rain_requested)
 	player.snare_trap_requested.connect(_on_snare_trap_requested)
 	player.explosive_trap_requested.connect(_on_explosive_trap_requested)
+	player.hunter_trap_requested.connect(_on_hunter_trap_requested)
 	player.slowing_arrow_requested.connect(_on_slowing_arrow_requested)
 	player.foliage_shelter_requested.connect(_on_foliage_shelter_requested)
 	player.fire_wall_requested.connect(_on_fire_wall_requested)
@@ -509,6 +511,12 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 				status_label.text = "Armadilha Explosiva cancelada — POSIÇÃO BLOQUEADA"
 			else:
 				_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id in [SkillDefinition.Handler.HUNTER_FREEZING_TRAP, SkillDefinition.Handler.HUNTER_TAR_TRAP, SkillDefinition.Handler.HUNTER_THORN_TRAP]:
+		if not player.use_hunter_trap(skill, point):
+			if not player.can_place_trap(skill, point):
+				status_label.text = definition.display_name + " cancelada — POSIÇÃO BLOQUEADA"
+			else:
+				_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif definition.handler_id == SkillDefinition.Handler.SLOWING_ARROW:
 		if not player.use_slowing_arrow(direction):
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
@@ -662,6 +670,8 @@ func _update_aim(point: Vector2) -> void:
 	elif skill == &"sentinel_net_shot" and not player.can_place_sentinel_net(point):
 		state = "POSIÇÃO BLOQUEADA"
 	elif skill == &"explosive_trap" and not player.can_place_explosive_trap(point):
+		state = "POSIÇÃO BLOQUEADA"
+	elif skill in HunterMath.NEW_TRAP_IDS and not player.can_place_trap(skill, point):
 		state = "POSIÇÃO BLOQUEADA"
 	elif skill == &"foliage_shelter" and not player.can_place_foliage_shelter(point):
 		state = "POSIÇÃO BLOQUEADA"
@@ -841,6 +851,12 @@ func _spawn_enemy(enemy_type: StringName, spawn_position: Vector2) -> EnemyActor
 	enemy.status_damage_requested.connect(_on_attack_requested)
 	add_child(enemy)
 	enemies.append(enemy)
+	if trap_registry != null:
+		for trap: PlayerTrap in trap_registry.active_traps():
+			if trap is HunterTrap:
+				(trap as HunterTrap).track_target(enemy)
+	if is_instance_valid(hunter_tar_field) and hunter_tar_field.active:
+		hunter_tar_field.track_target(enemy)
 	return enemy
 
 func _spawn_training_boss() -> void:
@@ -1115,13 +1131,71 @@ func _on_explosive_trap_requested(center: Vector2, request: DamageRequest) -> vo
 	trap.configure_explosive(player.get_instance_id(), center, request, enemies, player.trap_armed_duration(ExplosiveTrap.ARMED_DURATION))
 	if player.is_hunter():
 		trap.target_filter = _hunter_trap_target_valid.bind(center)
+		trap.reaction_callback = _consume_hunter_tar
 		trap.hit.connect(_on_hunter_explosive_hit.bind(trap.get_instance_id(), center, player.hunter_opening_snapshot(&"explosive_trap")))
 	else:
 		trap.hit.connect(_on_precision_projectile_hit)
 	trap_registry.register_trap(trap)
 
+func _on_hunter_trap_requested(center: Vector2, rank: int, request: DamageRequest, opening: DamageRequest) -> void:
+	var trap := HunterTrap.new()
+	trap.configure_hunter(center, rank, request, opening, enemies, player.trap_armed_duration(HunterTuning.ARMED_TRAP_LIFETIME))
+	trap.target_filter = _hunter_trap_target_valid.bind(center)
+	trap.sprung.connect(_on_hunter_trap_sprung)
+	trap_registry.register_trap(trap)
+
+func _on_hunter_trap_sprung(trap: HunterTrap, victims: Array[CombatActor]) -> void:
+	if not is_instance_valid(player) or not player.is_alive() or get_tree().paused or run_finished:
+		return
+	if trap.source_skill_id == &"hunter_tar_trap":
+		_clear_hunter_tar()
+		hunter_tar_field = HunterTarField.new()
+		hunter_tar_field.configure_tar(player, trap.global_position, trap.tuning, enemies)
+		hunter_tar_field.target_filter = _hunter_trap_target_valid.bind(trap.global_position)
+		add_child(hunter_tar_field)
+		hunter_tar_field.add_to_group("player_effects")
+		hunter_tar_field.refresh_occupants()
+	for victim: CombatActor in victims:
+		if run_finished or victim == null or not is_instance_valid(victim) or not _hunter_trap_target_valid(victim, trap.global_position) or not victim.is_alive():
+			continue
+		player.activate_hunter_opening(trap.get_instance_id(), victim, trap.opening_request)
+		if trap.source_skill_id == &"hunter_tar_trap":
+			continue
+		var request := trap.damage_request.copy()
+		request.target_id = victim.get_instance_id()
+		if trap.source_skill_id == &"hunter_freezing_trap":
+			victim.apply_root(float(trap.tuning["root_duration"]), &"magic")
+		else:
+			victim.apply_slow(float(trap.tuning["slow_fraction"]), float(trap.tuning["slow_duration"]), &"hunter_thorn_trap")
+			var bleed := request.copy()
+			bleed.skill_id = &"hunter_thorn_bleed"
+			bleed.physical_damage *= float(trap.tuning["bleed_fraction"])
+			victim.apply_bleed(bleed, float(trap.tuning["bleed_duration"]))
+		_on_precision_projectile_hit(request, victim)
+
+func _consume_hunter_tar(center: Vector2, blast_radius: float) -> float:
+	if not is_instance_valid(hunter_tar_field) or not is_instance_valid(player) or hunter_tar_field.owner_id != player.get_instance_id() or run_finished:
+		return 0.0
+	return hunter_tar_field.consume_for_explosion(center, blast_radius, navigation)
+
+func _clear_hunter_tar() -> void:
+	if is_instance_valid(hunter_tar_field):
+		hunter_tar_field.expire()
+	hunter_tar_field = null
+
+func _clear_hunter_trap_effects() -> void:
+	_clear_hunter_tar()
+	if not is_instance_valid(player):
+		return
+	var bleed_key := "%d:hunter_thorn_bleed" % player.get_instance_id()
+	for victim: CombatActor in enemies:
+		if victim != null and is_instance_valid(victim):
+			victim.bleed_streams.erase(bleed_key)
+			victim.remove_attribute_debuff(AttributeDebuffState.MOVE_SPEED, HunterTarField.slow_source(player.get_instance_id()))
+			victim.remove_attribute_debuff(AttributeDebuffState.MOVE_SPEED, &"hunter_thorn_trap")
+
 func _on_hunter_explosive_hit(request: DamageRequest, victim: CombatActor, activation_id: int, center: Vector2, snapshot: DamageRequest) -> void:
-	if player == null or not is_instance_valid(player) or victim == null or not is_instance_valid(victim) or not victim.is_alive() or not navigation.is_segment_clear(center, victim.global_position, 0.0):
+	if run_finished or not _hunter_trap_target_valid(victim, center) or not victim.is_alive():
 		return
 	player.activate_hunter_opening(activation_id, victim, snapshot)
 	# Mark before applying damage: lethal callbacks may remove all enemy nodes.
@@ -1660,6 +1734,7 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	player.clear_shield_stance()
 	player.clear_hunter_state()
 	player.clear_perseverance()
+	_clear_hunter_trap_effects()
 	player.clear_fury()
 	_clear_defender_runtime()
 	player.clear_berserker_state()
@@ -1838,6 +1913,7 @@ func _on_player_died(_actor: CombatActor) -> void:
 func _show_result(victory: bool) -> void:
 	player.clear_sentinel_state()
 	player.clear_hunter_state()
+	_clear_hunter_trap_effects()
 	_cancel_casting()
 	if geometer_casting != null:
 		geometer_casting.clear_construction()

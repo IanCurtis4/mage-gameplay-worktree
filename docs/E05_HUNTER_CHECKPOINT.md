@@ -6,7 +6,7 @@ Branch `codex/e05-hunter`, base `3d452fa2e4455f4c8636f4fb319a2d0607d08582`.
 
 ## Estado
 
-H1 e primeiro núcleo H2 implementados, em commits granulares internos.
+H1–H3 implementados, em commits granulares internos.
 Contrato57bb3ef, catálogo650ee87, núcleo4bf832d; candidato efetivo é o commit que contém esta
 atualização (confirmar HEAD e assinatura no CLI antes de reutilizar evidência).
 Caçadora permanece indisponível. Nenhuma revisão/aceite de gameplay desta classe.
@@ -29,7 +29,17 @@ integrados. Master e saves pessoais não foram alterados.
   Passo usa fonte canônica de velocidade, sem HP/SP/cooldown implícitos.
   Hunter revalida LoS na colocação/gatilho/vítimas; callback opcional de PlayerTrap
   deixa as bases inalteradas. Explosiva revalida vítimas após callbacks destrutivos.
-- H3: próximo — Congelante/Piche/Espinhos, campo limitado e Piche→Explosiva.
+- H3 implementado: Congelante/Piche/Espinhos, campo limitado e Piche→Explosiva.
+  HunterMath captura INT efetiva/poder bruto; Congelante usa canal mágico e
+  presa única, Espinhos área física85/bleed secundário renovado por fonte,
+  Piche área100 sem dano. Só ativação inicial abre a presa; reentrada/entradas
+  tardias não renovam janela. Campo único por dono, fonte exclusiva de slow,
+  residual0,4s; consumo/substituição/limpeza removem a fonte antes dos impactos.
+  Explosiva usa callback opcional antes do loop, escalar capturado uma vez
+  para todas as vítimas, sem mutar pedido original/recompensa ou detonar traps.
+  Execução/mira/preparo revalidam terreno/LoS, três modos de cast e cobrança única.
+  Novos atores entram em listas limitadas de mecanismos/campo Hunter ativos.
+  Snare/Explosive recebem guard explícito de pausa/delta, sem mudar tuning base.
 - H4: Marca, Tiro de Cobertura, camuflagem territorial com limite compartilhado.
 - H5: catálogo/passivas/builds/save/admin/menu e testes ponta a ponta.
 - H6: atlas/ícones/VFX e provas nativas solo/grupo/boss.
@@ -64,14 +74,46 @@ sempre `--project` no d066, derivando seleção do verify.ps1 local.
 Engine `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/review-engine/Godot.exe`,
 4.7.2standard. Evidência de implementador e reviewer permanecem separadas.
 
+## Evidência H3
+
+Teste `e05_hunter_traps_integration_test.gd`:181 checks, zero falhas em Godot4.7.2.
+Log `.godot/verification/hunter_h3.log`. Modos CONFIRM/RELEASE/INSTANT exercitam
+input/intenção/dispatch reais com ponteiro determinístico; não são prova manual
+de mouse. IA desligada, como H2. Campo/reação em30/60/144Hz; negativos de terreno
+alterado durante preparo, pausa, LoS por vítima, snapshot após alterar INT,
+boss com CC resistido, FIFO, ausência de abertura por manutenção/bleed,
+reentrada/ocupante tardio, remoção de fontes antes de hits e morte do dono.
+Callback destrutivo revelou referência liberada passada a helper tipado;
+revalidação antecipada corrigida e caso reproduzido sem erros. Primeira execução
+também encontrou fixtures inválidas (atributo fora do cap, método de mira errado,
+tick de IA invocado em teste dirigido); corrigidas, não contam como PASS.
+Conferência de limpeza acrescentou teste de expiração natural seguida de fim:
+fonte de Piche agora é identificada por dono, permitindo retirar o residual
+mesmo depois de o nó visual ser liberado, sem retirar controle de outra fonte.
+`tools/verify.ps1` terminou com exit0, incluindo regressões de bases/classes e
+smoke. Foi iniciado antes dessa última correção (H3 então tinha177 checks);
+por isso não substitui a execução CLI integral posterior no candidato final.
+Os181 checks de H3 foram repetidos após a correção, sem falhas/erros.
+
+Inventário visual conferido pela skill de arte: atlas Arqueiro/CharacterAnimation
+existentes; não há atlas Hunter nesta camada. Novos desenhos procedurais reutilizam
+PlayerTrap/BattleIndicators e a área física, com sinais distintos de mecanismo;
+não houve geração raster nem execução de packers fora do escopo. São provisórios:
+sem prova no renderer/aceite de leitura, ativação/abertura/Passo finais ficam emH6.
+
+Após consolidar este lote, conferir relatório CLI all/implementer no HEAD limpo
+em `.godot/workflow` e exigir `current_inputs=true`. O PASS integral H2 acima é
+histórico e fica incompatível com o delta H3; não é evidência reutilizável do novo
+candidato. Verificação do lote não conclui H4–H7 nem libera revisão/playtest.
+
 ## Limitações e próximo passo
 
-Kit novo, Marca/passivas, camuflagem, input/mira específicos e arte ainda não
-implementados. Congelante R1 de entrada está só declarada, não funcional no mundo;
-portanto nem mesmo o fluxo inicial de evolução está liberado ao usuário. IDs novos
+Marca/passivas, camuflagem, Tiro de Cobertura e arte ainda não implementados.
+Congelante R1 e novas traps funcionam em fixtures isoladas, mas o fluxo inicial
+de evolução continua bloqueado até o kit completo. IDs novos
 ainda não são compráveis numa evolução de produção. H5 deve fechar versionamento
 do catálogo e migração antes de liberar compras persistentes; não gravar estado de
 aberturas/fields. Não declarar classe jogável, leitura visual ou desempenho.
-Próximo passo: H3 e demais camadas autorizadas, atualizar este checkpoint com commits,
+Próximo passo: H4 e demais camadas autorizadas, atualizar este checkpoint com commits,
 resultados e pendências. Nenhum gate por microtarefa nem mensagem a outros chats
 por efeito das skills. Só escalar bloqueio ou divergência relevante do contrato.
