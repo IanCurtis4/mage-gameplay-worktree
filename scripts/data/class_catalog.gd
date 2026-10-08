@@ -227,6 +227,7 @@ static func _ensure_built() -> void:
 	_configure_geometer_trace_ranks()
 	_configure_geometer_edit_ranks()
 	_configure_sentinel_skills()
+	_configure_hunter_skills()
 
 	var swordsman := ClassDefinition.new()
 	swordsman.id = IdentityIds.SWORDSMAN
@@ -338,6 +339,102 @@ static func _configure_sentinel_skills() -> void:
 			rank.effect_ids = _sentinel_effect_ids(skill_id)
 			definition.ranks.append(rank)
 		assert(definition.is_rank_catalog_valid())
+
+static func _configure_hunter_skills() -> void:
+	var names: Array[String] = [
+		"Armadilha Congelante", "Armadilha de Piche", "Armadilha de Espinhos",
+		"Marca do Caçador", "Disciplina de Tiro", "Tiro de Cobertura",
+		"Presa Fácil", "Cobertura Total",
+	]
+	var handlers: Array[SkillDefinition.Handler] = [
+		SkillDefinition.Handler.HUNTER_FREEZING_TRAP,
+		SkillDefinition.Handler.HUNTER_TAR_TRAP,
+		SkillDefinition.Handler.HUNTER_THORN_TRAP,
+		SkillDefinition.Handler.HUNTER_MARK,
+		SkillDefinition.Handler.HUNTER_SHOOTING_DISCIPLINE,
+		SkillDefinition.Handler.HUNTER_COVERING_SHOT,
+		SkillDefinition.Handler.HUNTER_EASY_PREY,
+		SkillDefinition.Handler.HUNTER_TOTAL_COVER,
+	]
+	for index: int in HunterTuning.SKILL_IDS.size():
+		var skill_id := HunterTuning.SKILL_IDS[index]
+		var first := HunterTuning.values(skill_id, 1)
+		var maximum := HunterTuning.max_rank(skill_id)
+		if maximum == 3:
+			_add_passive_skill(skill_id, names[index])
+		else:
+			var targeting := SkillDefinition.Targeting.POINT
+			var offensive := skill_id != &"hunter_total_cover"
+			if skill_id == &"hunter_mark":
+				targeting = SkillDefinition.Targeting.SINGLE_TARGET
+			elif skill_id == &"hunter_covering_shot":
+				targeting = SkillDefinition.Targeting.DIRECTION
+			_add_skill(skill_id, names[index], "D", targeting, first["sp_cost"], first["cooldown"], first["power"], first["range"], first["projectile_speed"], first["variable_cast_time"], DamageRequest.AccuracyMode.GEOMETRY, skill_id == &"hunter_covering_shot", SkillDefinition.ActionKind.OFFENSIVE if offensive else SkillDefinition.ActionKind.DEFENSIVE)
+		var definition: SkillDefinition = _skills[skill_id]
+		definition.handler_id = handlers[index]
+		for current_rank: int in range(1, maximum + 1):
+			var values := HunterTuning.values(skill_id, current_rank)
+			var rank := SkillRankDefinition.new()
+			rank.rank = current_rank
+			rank.sp_cost = values["sp_cost"]
+			rank.cooldown = values["cooldown"]
+			rank.range = values["range"]
+			rank.projectile_speed = values["projectile_speed"]
+			rank.variable_cast_time = values["variable_cast_time"]
+			rank.power = values["power"]
+			rank.secondary_power = values["secondary_power"]
+			if skill_id == &"hunter_freezing_trap":
+				rank.magic_weight = 1.0
+			elif skill_id == &"hunter_thorn_trap":
+				rank.physical_weight = 1.0
+			elif skill_id == &"hunter_covering_shot":
+				rank.precision_weight = 1.0
+			rank.effect_ids = _hunter_effect_ids(skill_id)
+			definition.ranks.append(rank)
+		assert(definition.is_rank_catalog_valid())
+
+static func _hunter_effect_ids(skill_id: StringName) -> Array[StringName]:
+	match skill_id:
+		&"hunter_freezing_trap":
+			return [&"hunter_trap_place_validate_terrain_los", &"armed_stationary_trigger", &"opening_on_primary_activation", &"magic_root_after_damage"]
+		&"hunter_tar_trap":
+			return [&"hunter_trap_place_validate_terrain_los", &"armed_stationary_trigger", &"opening_on_primary_activation", &"replace_owner_tar_field_no_damage"]
+		&"hunter_thorn_trap":
+			return [&"hunter_trap_place_validate_terrain_los", &"armed_stationary_trigger", &"opening_on_primary_activation", &"physical_bleed_snapshot", &"slow_after_positive_damage"]
+		&"hunter_mark":
+			return [&"one_priority_mark_per_victim", &"extends_captured_opening", &"opening_reward_bonus"]
+		&"hunter_shooting_discipline":
+			return [&"precision_secondary_on_exploration_shot_only"]
+		&"hunter_covering_shot":
+			return [&"direct_precision_shot", &"validated_recoil_segment", &"opening_trigger_reuses_consumption_rules", &"does_not_reset_auto"]
+		&"hunter_easy_prey":
+			return [&"bonus_when_marked_or_controlled_before_shot", &"opening_alone_suffices_against_resistant_boss"]
+		&"hunter_total_cover":
+			return [&"shared_cover_budget_and_cooldown", &"one_second_exit_grace", &"does_not_replace_foliage_shelter"]
+	return []
+
+static func hunter_description(skill_id: StringName, rank: int = 1) -> String:
+	var values := HunterTuning.values(skill_id, rank)
+	if values.is_empty():
+		return ""
+	match skill_id:
+		&"hunter_freezing_trap":
+			return "Arma uma armadilha em até 360: raio %.0f, aprisionamento mágico por %.1fs e dano %.0f + %.1f×INT, escalado pelo rank da armadilha." % [values["radius"], values["root_duration"], values["base"], values["int_coefficient"]]
+		&"hunter_tar_trap":
+			return "Arma uma armadilha em até 360: campo de %.0f por %.1fs, lentidão de %.0f%% e resíduo por %.1fs; não causa dano." % [values["field_radius"], values["field_duration"], values["slow_fraction"] * 100.0, values["residual_duration"]]
+		&"hunter_thorn_trap":
+			return "Arma uma armadilha em até 360: área %.0f, dano físico %.0f + %.1f×INT, sangramento por %.0fs e lentidão por %.0fs." % [values["radius"], values["base"], values["int_coefficient"], values["bleed_duration"], values["slow_duration"]]
+		&"hunter_mark":
+			return "Marca um alvo a até 360 por %.0fs: estende em %.0fs a abertura capturada e aumenta sua recompensa em %.0f%%." % [values["duration"], values["opening_extension"], values["reward_bonus"] * 100.0]
+		&"hunter_shooting_discipline":
+			return "Tiros que exploram uma abertura causam um impacto físico secundário de %.0f%% do ATQ de precisão capturado." % (values["power"] * 100.0)
+		&"hunter_covering_shot":
+			return "Dispara na direção escolhida até 520, causando ATQ de precisão × %.2f e recuando 80 unidades se o segmento estiver livre." % values["power"]
+		&"hunter_easy_prey":
+			return "Aumenta em %.0f%% a recompensa da abertura se o alvo estava marcado ou controlado antes do tiro; contra chefes resistentes, a abertura basta." % (values["power"] * 100.0)
+		&"hunter_total_cover":
+			return "Cria cobertura em até 300, raio 125 por %.1fs, com 1s para sair. Compartilha o orçamento de ocultação de 3s e a recarga com Abrigo." % values["duration"]
+	return ""
 
 static func _sentinel_effect_ids(skill_id: StringName) -> Array[StringName]:
 	match skill_id:

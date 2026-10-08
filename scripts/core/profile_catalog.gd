@@ -76,6 +76,10 @@ static func pilot(
 	var sentinel_override: Dictionary = raw_sentinel_override if raw_sentinel_override is Dictionary else {}
 	if not sentinel_override.has("exclusive_skill_ids") and not sentinel_override.has(&"exclusive_skill_ids"):
 		catalog._register_sentinel_skills()
+	var raw_hunter_override: Variant = evolution_overrides.get(&"hunter", evolution_overrides.get("hunter", {}))
+	var hunter_override: Dictionary = raw_hunter_override if raw_hunter_override is Dictionary else {}
+	if not hunter_override.has("exclusive_skill_ids") and not hunter_override.has(&"exclusive_skill_ids"):
+		catalog._register_hunter_skills()
 	for raw_item_id: Variant in additional_equipment:
 		var metadata: Dictionary = additional_equipment[raw_item_id]
 		var allowed_base_classes: Array[StringName] = []
@@ -435,6 +439,15 @@ func _register_sentinel_skills() -> void:
 		var free_rank := 1 if index == 0 else 0
 		add_skill(skill_id, origin, PASSIVE if maximum == 3 else ACTIVE, EVOLUTION_WALLET, free_rank, maximum - free_rank, &"sentinel", _evolution_rank_requirements(maximum, gates[index]))
 
+func _register_hunter_skills() -> void:
+	var origin: Array[StringName] = [&"archer"]
+	var gates: Array[int] = [20, 20, 23, 25, 28, 31, 34, 37]
+	for index: int in HunterTuning.SKILL_IDS.size():
+		var skill_id := HunterTuning.SKILL_IDS[index]
+		var maximum := HunterTuning.max_rank(skill_id)
+		var free_rank := 1 if skill_id == &"hunter_freezing_trap" else 0
+		add_skill(skill_id, origin, PASSIVE if maximum == 3 else ACTIVE, EVOLUTION_WALLET, free_rank, maximum - free_rank, &"hunter", _evolution_rank_requirements(maximum, gates[index]))
+
 func _evolution_rank_requirements(max_rank: int, job_level: int) -> Dictionary:
 	var requirements: Dictionary = {}
 	for rank: int in range(1, max_rank + 1):
@@ -452,7 +465,7 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 		{"id": IdentityIds.MG_SP, "name": "Devastador Astral", "branch": EvolutionDefinition.BRANCH_2_3, "affinity": IdentityIds.SWORDSMAN},
 		{"id": IdentityIds.MG_AR, "name": "Geômetra", "branch": EvolutionDefinition.BRANCH_2_3, "affinity": IdentityIds.ARCHER},
 		{"id": IdentityIds.SENTINEL, "name": "Sentinela", "branch": EvolutionDefinition.BRANCH_2_1, "affinity": &""},
-		{"id": IdentityIds.HUNTER, "name": "Caçador", "branch": EvolutionDefinition.BRANCH_2_2, "affinity": &""},
+		{"id": IdentityIds.HUNTER, "name": "Caçadora", "branch": EvolutionDefinition.BRANCH_2_2, "affinity": &""},
 		{"id": IdentityIds.AR_SP, "name": "Saqueador", "branch": EvolutionDefinition.BRANCH_2_3, "affinity": IdentityIds.SWORDSMAN},
 		{"id": IdentityIds.AR_MG, "name": "Caçador de Espectros", "branch": EvolutionDefinition.BRANCH_2_3, "affinity": IdentityIds.MAGE},
 	]
@@ -514,6 +527,10 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 			# Complete S7 candidate; publishing playtest still requires technical review.
 			definition.content_ready = true
 			definition.exclusive_skill_ids = SentinelTuning.SKILL_IDS.duplicate()
+		if definition.id == &"hunter" and (not normalized_overrides.has(definition.id) or (not normalized_overrides[definition.id].has("exclusive_skill_ids") and not normalized_overrides[definition.id].has(&"exclusive_skill_ids"))):
+			definition.entry_skill_id = &"hunter_freezing_trap"
+			definition.content_ready = false
+			definition.exclusive_skill_ids = HunterTuning.SKILL_IDS.duplicate()
 		if normalized_overrides.has(definition.id):
 			_apply_evolution_override(definition, normalized_overrides[definition.id])
 		add_evolution(definition)

@@ -39,7 +39,7 @@ permanência armada12s; custo somente no commit validado.
 | hunter_thorn_trap | Armadilha de Espinhos / ativa | 23 / 5 / 0 | 18→26 / 9s | gatilho52; área85; dano físico `(16+1,6INT)×(1+0,1×(R−1))`; bleed físico20% do snapshot, 1/s por4s; slow20% por2s |
 | hunter_mark | Marca do Caçador / ativa | 25 / 5 / 0 | 10→14 / 10s | SINGLE_TARGET range360, instantânea; uma prioridade por6→10s; +1→2s à janela capturada da trap; recompensa +15→25% |
 | hunter_shooting_discipline | Disciplina de Tiro / passiva | 28 / 3 / 0 | — | impacto físico secundário adicional de5/10/15% do ATQ de precisão capturado no tiro de exploração |
-| hunter_covering_shot | Tiro de Cobertura / ativa | 31 / 5 / 0 | 16→22 / 8s | direção, range520; tiro físico ATQ precisão×1,1→1,5; recuo80 validado por segmento; sem reset de auto |
+| hunter_covering_shot | Tiro de Cobertura / ativa | 31 / 5 / 0 | 16→22 / 8s | direção, range520, velocidade880; tiro físico GEOMETRY, crítico normal, ATQ precisão×1,1→1,5; recuo80 validado por segmento; sem reset de auto |
 | hunter_easy_prey | Presa Fácil / passiva | 34 / 3 / 0 | — | +8/12/16% na recompensa da abertura quando presa marcada ou controlada antes do tiro; abertura sozinha basta contra boss resistente |
 | hunter_total_cover | Cobertura Total / ativa | 37 / 5 / 0 | 20→28 / 18s | POINT range300; raio125 por4→6s; saída1s; limite comum de camuflagem3s |
 

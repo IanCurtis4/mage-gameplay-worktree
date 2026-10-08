@@ -39,7 +39,7 @@ func _check_production_roster() -> void:
 		&"mg_sp": ["Devastador Astral", &"mage", &"2-3", &"swordsman"],
 		&"mg_ar": ["Geômetra", &"mage", &"2-3", &"archer"],
 		&"sentinel": ["Sentinela", &"archer", &"2-1", &""],
-		&"hunter": ["Caçador", &"archer", &"2-2", &""],
+		&"hunter": ["Caçadora", &"archer", &"2-2", &""],
 		&"ar_sp": ["Saqueador", &"archer", &"2-3", &"swordsman"],
 		&"ar_mg": ["Caçador de Espectros", &"archer", &"2-3", &"mage"],
 	}
@@ -64,6 +64,9 @@ func _check_production_roster() -> void:
 			expected_state = definition.content_ready and definition.entry_skill_id == &"geometer_trace" and definition.exclusive_skill_ids == [&"geometer_trace", &"geometer_incidence", &"geometer_translation", &"geometer_triangulation", &"geometer_vector_memory", &"geometer_collapse", &"geometer_rewrite"]
 		if definition.id == &"sentinel":
 			expected_state = definition.content_ready and definition.entry_skill_id == &"sentinel_headshot" and definition.exclusive_skill_ids == SentinelTuning.SKILL_IDS
+		if definition.id == &"hunter":
+			# Declared Hunter metadata is not permission to launch an incomplete kit.
+			expected_state = not definition.content_ready and definition.entry_skill_id == &"hunter_freezing_trap" and definition.exclusive_skill_ids == HunterTuning.SKILL_IDS
 		_check(expected_state, "%s readiness matches completed kits and future placeholders" % definition.id)
 	var mage_options := catalog.evolution_definitions_for_origin(&"mage")
 	_check(mage_options.map(func(definition: EvolutionDefinition) -> StringName: return definition.id) == [&"elementalist", &"spiritualist", &"mg_sp", &"mg_ar"], "origin query includes only the four Mage destinations")
