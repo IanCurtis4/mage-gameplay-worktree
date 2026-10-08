@@ -34,6 +34,8 @@ var skill: StringName = &""
 var origin := Vector2.ZERO
 var direction := Vector2.RIGHT
 var endpoint := Vector2.ZERO
+var hunter_recoil_endpoint := Vector2.ZERO
+var cover_preview_radius := FoliageShelter.RADIUS
 var body_radius := 20.0
 var active_range := 0.0
 var available := true
@@ -180,6 +182,8 @@ func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast
 	elementalist_ember_preview.clear()
 	origin = actor.global_position
 	direction = actor.shield_facing if skill_id == &"shield_wall" and actor.has_shield_stance() else actor.aim_direction(point)
+	hunter_recoil_endpoint = actor.hunter_recoil_destination(direction) if skill_id == &"hunter_covering_shot" else origin
+	cover_preview_radius = float(HunterTuning.values(skill_id, actor.skill_rank(skill_id)).get("radius", FoliageShelter.RADIUS))
 	target_actor = selected_target
 	if skill == &"sentinel_piercing_shot":
 		endpoint = origin + direction * actor.skill_range(skill)
@@ -216,6 +220,8 @@ func show_aim(skill_id: StringName, actor: PlayerActor, point: Vector2, can_cast
 		endpoint = actor.trap_center(skill, point)
 	elif skill == &"foliage_shelter":
 		endpoint = actor.foliage_shelter_center(point)
+	elif skill == &"hunter_total_cover":
+		endpoint = actor.hunter_total_cover_center(point)
 	elif selected_target != null:
 		endpoint = selected_target.global_position
 	else:
@@ -521,9 +527,12 @@ func _draw() -> void:
 		draw_colored_polygon(outline.slice(0, outline.size() - 1), Color(color, 0.16))
 		draw_polyline(outline, color, 2.0, true)
 		draw_arc(origin, active_range * 0.55, direction.angle() - PlayerActor.HAUNT_HALF_ANGLE, direction.angle() + PlayerActor.HAUNT_HALF_ANGLE, 22, Color(color, 0.5), 1.0, true)
-	elif skill in [&"fire_spear", &"ice_spear", &"lightning", &"electric_discharge", &"slowing_arrow", &"sentinel_headshot", &"sentinel_observe", &"sentinel_concussion_shot"]:
+	elif skill in [&"fire_spear", &"ice_spear", &"lightning", &"electric_discharge", &"slowing_arrow", &"sentinel_headshot", &"sentinel_observe", &"sentinel_concussion_shot", &"hunter_mark", &"hunter_covering_shot"]:
 		draw_dashed_line(origin, endpoint, color, 2.0, 10.0, true, true)
 		_draw_endpoint(endpoint, color)
+		if skill == &"hunter_covering_shot":
+			draw_dashed_line(origin, hunter_recoil_endpoint, color, 1.5, 5.0, true, true)
+			draw_arc(hunter_recoil_endpoint, body_radius, 0.0, TAU, 32, color, 2.0, true)
 	elif skill == &"double_shot":
 		draw_dashed_line(origin, endpoint, color, 2.0, 10.0, true, true)
 		draw_line(origin + direction.orthogonal() * 7.0, endpoint + direction.orthogonal() * 7.0, Color(color, 0.35), 1.0, true)
@@ -583,11 +592,11 @@ func _draw() -> void:
 		draw_arc(endpoint, ExplosiveTrap.BLAST_RADIUS, 0.0, TAU, 56, Color(0.04, 0.09, 0.12, 0.9), 5.0, true)
 		draw_arc(endpoint, ExplosiveTrap.BLAST_RADIUS, 0.0, TAU, 56, color, 2.0, true)
 		draw_arc(endpoint, ExplosiveTrap.TRIGGER_RADIUS, 0.0, TAU, 40, Color(color, 0.65), 1.5, true)
-	elif skill == &"foliage_shelter":
+	elif skill in [&"foliage_shelter", &"hunter_total_cover"]:
 		draw_dashed_line(origin, endpoint, Color(color, 0.55), 1.5, 9.0, true, true)
-		draw_circle(endpoint, FoliageShelter.RADIUS, Color(color, 0.10))
-		draw_arc(endpoint, FoliageShelter.RADIUS, 0.0, TAU, 56, Color(0.04, 0.09, 0.12, 0.9), 5.0, true)
-		draw_arc(endpoint, FoliageShelter.RADIUS, 0.0, TAU, 56, color, 2.0, true)
+		draw_circle(endpoint, cover_preview_radius, Color(color, 0.10))
+		draw_arc(endpoint, cover_preview_radius, 0.0, TAU, 56, Color(0.04, 0.09, 0.12, 0.9), 5.0, true)
+		draw_arc(endpoint, cover_preview_radius, 0.0, TAU, 56, color, 2.0, true)
 	elif skill == &"teleport":
 		draw_dashed_line(origin, endpoint, Color(color, 0.65), 2.0, 10.0, true, true)
 		_draw_endpoint(endpoint, color)

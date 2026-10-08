@@ -125,6 +125,28 @@ novo uso só após CD comum. Fora da identidade Hunter, Abrigo mantém seu contr
 Camuflagem não muda HP, aggro do boss, contagem de encontro ou projectiles/AoEs
 já emitidos. IA observa última posição quando oculto, sem travar/teletransportar.
 
+Concretização H4 do protótipo: Marca é amostrada na ativação válida da trap;
+trocar, expirar ou aplicar uma Marca depois não altera abertura já capturada.
+Seu bônus escala somente o raw INT, preservando multiplicador de colocação e
+resolver atual. A prioridade some ao remover/morrer a presa. Tiro de Cobertura
+exige todo o segmento de recuo80 caminhável e ausência de root; se bloqueado,
+cancela o tiro e o recuo sem cobrança. Projétil nasce na origem anterior ao recuo,
+captura precisão/crit da emissão e não reinicia auto/recovery. Preview compartilha
+destino/segmento e área real, sem ultrapassar paredes pelo endpoint.
+
+Abrigo Hunter conserva raio110/duração comprados, sem graça extra; Cobertura
+Total usa125 e graça1s apenas numa saída efetiva de área ativa. Expirar/remover
+campo encerra a graça, mas não devolve budget nem apaga revelação. Uma colocação
+paga após CD comum renova budget3; registrar, substituir e reentrar não renovam.
+O relógio integra frações de frame de revelação/graça. Budget paga o estado de
+camuflagem do ator; observador dentro do mesmo círculo ainda detecta, como na
+base. Durante graça essa exceção usa a área de origem. Offense válida também
+registra revelação fora de qualquer área e uma nova colocação não a apaga.
+Ambas as recargas usam18s pela autoridade canônica; não existe novo relógio
+paralelo de cooldown. IA Hunter conserva alvo/HP e caminha até a última posição
+visível, sem seguir posição oculta ou emitir ataque enquanto não readquirir.
+Essas concretizações não alteram Abrigo/IA de Arqueiro ou Sentinela.
+
 ## Consumidores e validação
 
 Sol: HunterMath/OpeningState, PlayerActor, main, traps/fields, input dispatch,

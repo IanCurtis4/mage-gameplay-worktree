@@ -16,6 +16,7 @@ var _path_index := 0
 var _repath_time := 0.0
 var _navigation_revision := 0
 var player_target_acquired := false
+var hunter_last_seen_position := Vector2.INF
 var taunt_remaining := 0.0
 var scenario_damage_multiplier := 1.0
 
@@ -34,6 +35,7 @@ func configure(enemy_type: StringName, nav: ArenaNavigation, target_player: Play
 	navigation = nav
 	_navigation_revision = nav.revision
 	player = target_player
+	hunter_last_seen_position = Vector2.INF
 	if archetype == &"archer":
 		var archer_sources: Array[Dictionary] = [{
 			"source_id": &"enemy_archer_tuning",
@@ -87,6 +89,11 @@ func _process(delta: float) -> void:
 		_move_along_path(delta)
 		return
 	if not _refresh_player_acquisition():
+		if player.is_hunter() and hunter_last_seen_position.is_finite():
+			_repath_time -= delta
+			_update_path(hunter_last_seen_position)
+			_move_along_path(delta)
+			return
 		_path.clear()
 		_path_index = 0
 		return
@@ -184,7 +191,15 @@ func _update_fear_path() -> void:
 				_path = candidate_path
 
 func _refresh_player_acquisition() -> bool:
+	var was_acquired := player_target_acquired
 	player_target_acquired = player != null and is_instance_valid(player) and player.is_alive() and (taunt_remaining > 0.0 or player.can_be_acquired_by(global_position))
+	if player != null and is_instance_valid(player) and player.is_hunter():
+		if player_target_acquired:
+			hunter_last_seen_position = player.global_position
+		elif was_acquired:
+			_path.clear()
+			_path_index = 0
+			_repath_time = 0.0
 	return player_target_acquired
 
 func _update_path(destination: Vector2) -> void:

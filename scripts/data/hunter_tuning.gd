@@ -20,6 +20,9 @@ const TRAP_RANGE := 360.0
 const TRAP_PREPARATION := 0.25
 const TRAP_ARMING_TIME := 0.60
 const ARMED_TRAP_LIFETIME := 12.0
+const COVER_BUDGET := 3.0
+const COVER_COOLDOWN := 18.0
+const COVER_REVEAL := 1.25
 
 static func max_rank(skill_id: StringName) -> int:
 	if skill_id not in SKILL_IDS:
@@ -85,10 +88,10 @@ static func values(skill_id: StringName, rank: int) -> Dictionary:
 			result["power"] = [0.08, 0.12, 0.16][rank - 1]
 		&"hunter_total_cover":
 			result.merge({
-				"sp_cost": _linear(20.0, 28.0, fraction), "cooldown": 18.0,
+				"sp_cost": _linear(20.0, 28.0, fraction), "cooldown": COVER_COOLDOWN,
 				"range": 300.0, "radius": 125.0,
 				"duration": _linear(4.0, 6.0, fraction),
-				"exit_grace": 1.0, "shared_cover_budget": 3.0,
+				"exit_grace": 1.0, "shared_cover_budget": COVER_BUDGET,
 			}, true)
 	return result
 

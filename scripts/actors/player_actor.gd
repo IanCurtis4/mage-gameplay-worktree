@@ -17,6 +17,8 @@ signal explosive_trap_requested(center: Vector2, request: DamageRequest)
 signal hunter_trap_requested(center: Vector2, rank: int, request: DamageRequest, opening: DamageRequest)
 signal slowing_arrow_requested(request: DamageRequest, direction: Vector2, slow_fraction: float, slow_duration: float)
 signal foliage_shelter_requested(center: Vector2, duration: float)
+signal hunter_total_cover_requested(center: Vector2, duration: float, radius: float, exit_grace: float)
+signal hunter_covering_shot_requested(request: DamageRequest, origin: Vector2, direction: Vector2)
 signal fire_wall_requested(direction: Vector2, burn_request: DamageRequest)
 signal elementalist_flame_burst_requested(center: Vector2, request: DamageRequest)
 signal elementalist_area_requested(skill_id: StringName, center: Vector2, radius: float, request: DamageRequest, element: StringName)
@@ -118,6 +120,7 @@ var max_sp := 0.0
 var attack_cooldown := 0.0
 var sentinel_state := SentinelFocusState.new()
 var hunter_state := HunterOpeningState.new()
+var hunter_cover := HunterCoverState.new()
 var _hunter_emission_serial := 0
 var sentinel_combat_active := false
 var _sentinel_last_position := Vector2.INF
@@ -286,6 +289,8 @@ func record_hunter_damage(result: Dictionary) -> void:
 func clear_hunter_state() -> void:
 	var had_step := hunter_state.step_remaining > 0.0
 	hunter_state.clear()
+	if is_hunter():
+		clear_foliage_shelters()
 	if had_step and health != null and run_state != null:
 		_apply_derived_stats(_build_stat_breakdown())
 	queue_redraw()
@@ -1792,6 +1797,67 @@ func use_slowing_arrow(direction: Vector2) -> bool:
 	resources_changed.emit()
 	return true
 
+func use_hunter_mark(enemy: CombatActor) -> bool:
+	if not is_hunter() or (is_inside_tree() and get_tree().paused) or not _can_spend(&"hunter_mark") or not can_target_skill(&"hunter_mark", enemy):
+		return false
+	if not hunter_state.mark(enemy.get_instance_id(), skill_rank(&"hunter_mark")):
+		return false
+	_spend(&"hunter_mark")
+	reveal_from_offense()
+	presentation_action.emit(&"cast", aim_direction(enemy.global_position), 0.18)
+	resources_changed.emit()
+	return true
+
+func hunter_recoil_destination(direction: Vector2) -> Vector2:
+	var facing := direction.normalized() if not direction.is_zero_approx() else _last_facing
+	return global_position - facing * float(HunterTuning.values(&"hunter_covering_shot", skill_rank(&"hunter_covering_shot")).get("recoil_distance", 0.0))
+
+func can_use_hunter_covering_shot(direction: Vector2) -> bool:
+	return is_hunter() and direction.is_finite() and not is_rooted() and navigation != null and _runtime_rank_definition(&"hunter_covering_shot") != null and navigation.is_segment_walkable(global_position, hunter_recoil_destination(direction))
+
+func use_hunter_covering_shot(direction: Vector2) -> bool:
+	if (is_inside_tree() and get_tree().paused) or not _can_spend(&"hunter_covering_shot") or not can_use_hunter_covering_shot(direction):
+		return false
+	var facing := _resolved_facing(direction)
+	var origin := global_position + PlayerProjectile.BODY_OFFSET
+	var destination := hunter_recoil_destination(facing)
+	var rank_definition := _runtime_rank_definition(&"hunter_covering_shot")
+	var request := _make_physical_request(null, &"hunter_covering_shot", stat_breakdown.value(&"precision_attack") * rank_definition.power, DamageRequest.AccuracyMode.GEOMETRY, true)
+	_spend(&"hunter_covering_shot")
+	reveal_from_offense()
+	global_position = destination
+	_path.clear()
+	_path_index = 0
+	_has_path_goal = false
+	_repath_time = 0.0
+	velocity = Vector2.ZERO
+	# Movement and the captured shot commit together; basic attack clocks remain.
+	hunter_covering_shot_requested.emit(request, origin, facing)
+	presentation_action.emit(&"basic_attack", facing, 0.18)
+	resources_changed.emit()
+	return true
+
+func hunter_total_cover_center(point: Vector2) -> Vector2:
+	return global_position + (point - global_position).limit_length(skill_range(&"hunter_total_cover"))
+
+func can_place_hunter_total_cover(point: Vector2) -> bool:
+	if not is_hunter() or not point.is_finite() or skill_range(&"hunter_total_cover") <= 0.0 or navigation == null:
+		return false
+	var center := hunter_total_cover_center(point)
+	return navigation.is_walkable(center) and navigation.is_segment_clear(global_position, center, 0.0)
+
+func use_hunter_total_cover(point: Vector2) -> bool:
+	if (is_inside_tree() and get_tree().paused) or not _can_spend(&"hunter_total_cover") or not can_place_hunter_total_cover(point):
+		return false
+	var center := hunter_total_cover_center(point)
+	var tuning := HunterTuning.values(&"hunter_total_cover", skill_rank(&"hunter_total_cover"))
+	_spend(&"hunter_total_cover")
+	hunter_cover.begin_cycle()
+	hunter_total_cover_requested.emit(center, float(tuning["duration"]), float(tuning["radius"]), float(tuning["exit_grace"]))
+	presentation_action.emit(&"cast", aim_direction(center), 0.18)
+	resources_changed.emit()
+	return true
+
 func foliage_shelter_center(point: Vector2) -> Vector2:
 	var offset := point - global_position
 	var maximum_range := skill_range(&"foliage_shelter")
@@ -1800,22 +1866,32 @@ func foliage_shelter_center(point: Vector2) -> Vector2:
 	return global_position + offset
 
 func can_place_foliage_shelter(point: Vector2) -> bool:
+	if is_hunter() and (not point.is_finite() or navigation == null or not navigation.is_segment_clear(global_position, foliage_shelter_center(point), 0.0)):
+		return false
 	return skill_range(&"foliage_shelter") > 0.0 and navigation != null and navigation.is_walkable(foliage_shelter_center(point))
 
 func use_foliage_shelter(point: Vector2) -> bool:
 	var rank_definition := _runtime_rank_definition(&"foliage_shelter")
 	if class_id != &"archer" or rank_definition == null or not _can_spend(&"foliage_shelter") or not can_place_foliage_shelter(point):
 		return false
+	if is_hunter() and is_inside_tree() and get_tree().paused:
+		return false
 	var center := foliage_shelter_center(point)
 	_spend(&"foliage_shelter")
+	if is_hunter():
+		hunter_cover.begin_cycle()
 	foliage_shelter_requested.emit(center, rank_definition.power)
 	presentation_action.emit(&"cast", aim_direction(center), 0.18)
 	resources_changed.emit()
 	return true
 
-func register_foliage_shelter(source_id: int, center: Vector2, radius: float) -> bool:
+func register_foliage_shelter(source_id: int, center: Vector2, radius: float, exit_grace: float = 0.0) -> bool:
 	if source_id <= 0 or not center.is_finite() or not is_finite(radius) or radius <= 0.0:
 		return false
+	if is_hunter():
+		if not hunter_cover.bind_zone(source_id, center, radius, exit_grace):
+			return false
+		_foliage_shelters.clear()
 	_foliage_shelters[source_id] = {"center": center, "radius": radius}
 	queue_redraw()
 	return true
@@ -1823,7 +1899,9 @@ func register_foliage_shelter(source_id: int, center: Vector2, radius: float) ->
 func unregister_foliage_shelter(source_id: int) -> bool:
 	if not _foliage_shelters.erase(source_id):
 		return false
-	if _foliage_shelters.is_empty():
+	if is_hunter():
+		hunter_cover.unbind_zone(source_id)
+	elif _foliage_shelters.is_empty():
 		concealment_reveal_remaining = 0.0
 	queue_redraw()
 	return true
@@ -1831,14 +1909,19 @@ func unregister_foliage_shelter(source_id: int) -> bool:
 func clear_foliage_shelters() -> void:
 	_foliage_shelters.clear()
 	concealment_reveal_remaining = 0.0
+	hunter_cover.clear()
 	queue_redraw()
 
 func is_concealed() -> bool:
+	if is_hunter():
+		return is_alive() and hunter_cover.is_hidden(global_position)
 	return is_alive() and concealment_reveal_remaining <= 0.0 and not _containing_foliage_shelters().is_empty()
 
 func can_be_acquired_by(observer_position: Vector2) -> bool:
 	if not is_alive():
 		return false
+	if is_hunter():
+		return not is_concealed() or observer_position.distance_to(hunter_cover.center) <= hunter_cover.radius
 	var containing := _containing_foliage_shelters()
 	if concealment_reveal_remaining > 0.0 or containing.is_empty():
 		return true
@@ -1848,6 +1931,11 @@ func can_be_acquired_by(observer_position: Vector2) -> bool:
 	return false
 
 func reveal_from_offense(duration: float = CONCEALMENT_REVEAL_DURATION) -> bool:
+	if is_hunter():
+		var revealed := hunter_cover.reveal(duration)
+		concealment_reveal_remaining = hunter_cover.reveal_remaining
+		queue_redraw()
+		return revealed
 	if _foliage_shelters.is_empty() or duration <= 0.0:
 		return false
 	concealment_reveal_remaining = maxf(concealment_reveal_remaining, duration)
@@ -2102,7 +2190,7 @@ func can_target_skill(skill_id: StringName, enemy: CombatActor) -> bool:
 		return false
 	if global_position.distance_to(enemy.global_position) > skill_range(skill_id):
 		return false
-	return skill_id not in [&"brutal_strike", &"berserker_rupture", &"berserker_execution", &"berserker_breath_steal", &"spiritualist_echo_curse", &"spiritualist_soul_drain", &"spiritualist_procession"] or (navigation != null and navigation.is_segment_clear(global_position, enemy.global_position, 0.0))
+	return skill_id not in [&"brutal_strike", &"berserker_rupture", &"berserker_execution", &"berserker_breath_steal", &"spiritualist_echo_curse", &"spiritualist_soul_drain", &"spiritualist_procession", &"hunter_mark"] or (navigation != null and navigation.is_segment_clear(global_position, enemy.global_position, 0.0))
 
 func aim_direction(point: Vector2) -> Vector2:
 	var direction := global_position.direction_to(point)
@@ -2121,6 +2209,8 @@ func dash_destination(direction: Vector2) -> Vector2:
 	return navigation.move_until_blocked(global_position, global_position + direction.normalized() * skill_range(&"dash"))
 
 func skill_cooldown(skill_id: StringName) -> float:
+	if is_hunter() and skill_id in [&"foliage_shelter", &"hunter_total_cover"]:
+		return maxf(mage_cooldowns.get(&"foliage_shelter", 0.0), mage_cooldowns.get(&"hunter_total_cover", 0.0))
 	if skill_id == &"slash":
 		return slash_cooldown
 	if skill_id == &"dash":
@@ -2205,6 +2295,8 @@ func _advance_player(delta: float) -> void:
 	if is_hunter():
 		var had_step := hunter_state.step_remaining > 0.0
 		hunter_state.advance(delta)
+		hunter_cover.advance(delta, global_position)
+		concealment_reveal_remaining = hunter_cover.reveal_remaining
 		if had_step and hunter_state.step_remaining <= 0.0:
 			_apply_derived_stats(_build_stat_breakdown())
 			resources_changed.emit()
@@ -2299,7 +2391,7 @@ func _advance_player(delta: float) -> void:
 		if previous_extended_aim > 0.0 and extended_aim_remaining <= 0.0:
 			resources_changed.emit()
 		queue_redraw()
-	if concealment_reveal_remaining > 0.0:
+	if not is_hunter() and concealment_reveal_remaining > 0.0:
 		concealment_reveal_remaining = maxf(0.0, concealment_reveal_remaining - delta)
 		queue_redraw()
 	if _slash_visual_time > 0.0:
@@ -2567,6 +2659,10 @@ func _spend(skill_id: StringName) -> void:
 		dash_cooldown = cooldown
 	else:
 		mage_cooldowns[skill_id] = cooldown
+	if is_hunter() and skill_id in [&"foliage_shelter", &"hunter_total_cover"]:
+		var shared_cooldown := StatCalculator.effective_cooldown(HunterTuning.COVER_COOLDOWN, stat_breakdown)
+		mage_cooldowns[&"foliage_shelter"] = shared_cooldown
+		mage_cooldowns[&"hunter_total_cover"] = shared_cooldown
 
 func _resolved_facing(direction: Vector2) -> Vector2:
 	var facing := direction.normalized()

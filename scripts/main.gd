@@ -171,6 +171,8 @@ func _ready() -> void:
 	player.hunter_trap_requested.connect(_on_hunter_trap_requested)
 	player.slowing_arrow_requested.connect(_on_slowing_arrow_requested)
 	player.foliage_shelter_requested.connect(_on_foliage_shelter_requested)
+	player.hunter_total_cover_requested.connect(_on_hunter_total_cover_requested)
+	player.hunter_covering_shot_requested.connect(_on_hunter_covering_shot_requested)
 	player.fire_wall_requested.connect(_on_fire_wall_requested)
 	player.elementalist_flame_burst_requested.connect(_on_elementalist_flame_burst_requested)
 	player.elementalist_area_requested.connect(_on_elementalist_area_requested)
@@ -520,6 +522,21 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	elif definition.handler_id == SkillDefinition.Handler.SLOWING_ARROW:
 		if not player.use_slowing_arrow(direction):
 			_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.HUNTER_MARK:
+		if not player.use_hunter_mark(selected_target):
+			status_label.text = definition.display_name + " cancelada — ALVO INVÁLIDO OU SKILL INDISPONÍVEL"
+	elif definition.handler_id == SkillDefinition.Handler.HUNTER_COVERING_SHOT:
+		if not player.use_hunter_covering_shot(direction):
+			if not player.can_use_hunter_covering_shot(direction):
+				status_label.text = definition.display_name + " cancelada — RECUO BLOQUEADO"
+			else:
+				_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
+	elif definition.handler_id == SkillDefinition.Handler.HUNTER_TOTAL_COVER:
+		if not player.use_hunter_total_cover(point):
+			if not player.can_place_hunter_total_cover(point):
+				status_label.text = definition.display_name + " cancelada — POSIÇÃO BLOQUEADA"
+			else:
+				_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill))
 	elif definition.handler_id == SkillDefinition.Handler.FOLIAGE_SHELTER:
 		if not player.use_foliage_shelter(point):
 			if not player.can_place_foliage_shelter(point):
@@ -675,6 +692,10 @@ func _update_aim(point: Vector2) -> void:
 		state = "POSIÇÃO BLOQUEADA"
 	elif skill == &"foliage_shelter" and not player.can_place_foliage_shelter(point):
 		state = "POSIÇÃO BLOQUEADA"
+	elif skill == &"hunter_total_cover" and not player.can_place_hunter_total_cover(point):
+		state = "POSIÇÃO BLOQUEADA"
+	elif skill == &"hunter_covering_shot" and not player.can_use_hunter_covering_shot(player.aim_direction(point)):
+		state = "RECUO BLOQUEADO"
 	elif skill == &"elementalist_ember_path" and player.elementalist_ember_centers(player.aim_direction(point)).is_empty():
 		state = "POSIÇÃO BLOQUEADA"
 	elif skill == &"ice_wall" and not player.can_place_ice_wall(player.aim_direction(point), enemies):
@@ -1085,11 +1106,11 @@ func _on_discharge_hit(request: DamageRequest, target_actor: CombatActor) -> voi
 	if target_actor.is_alive() and stun_roll < 0.25:
 		target_actor.apply_stun(0.6)
 
-func _spawn_precision_projectiles(skill_id: StringName, request: DamageRequest, direction: Vector2, count: int, hit_limit: int, hit_callback: Callable, visual_color: Color = Color("f6dfad")) -> void:
+func _spawn_precision_projectiles(skill_id: StringName, request: DamageRequest, direction: Vector2, count: int, hit_limit: int, hit_callback: Callable, visual_color: Color = Color("f6dfad"), captured_origin: Vector2 = Vector2.INF) -> void:
 	for index: int in range(count):
 		var projectile := PlayerProjectile.new()
 		var side_offset := direction.orthogonal() * (float(index) - float(count - 1) * 0.5) * 14.0
-		var origin := player.global_position + PlayerProjectile.BODY_OFFSET + side_offset
+		var origin := (captured_origin if captured_origin.is_finite() else player.global_position + PlayerProjectile.BODY_OFFSET) + side_offset
 		var speed := PlayerActor.ARCHER_BASIC_SPEED if skill_id == &"basic_attack" else player.skill_projectile_speed(skill_id)
 		var max_distance := player.archer_basic_projectile_range() if skill_id == &"basic_attack" else player.skill_range(skill_id)
 		projectile.configure_directional(request.copy(), origin, direction, enemies, navigation, speed, max_distance, hit_limit, visual_color)
@@ -1215,9 +1236,27 @@ func _on_slowing_arrow_hit(request: DamageRequest, target_actor: CombatActor, sl
 		target_actor.apply_slow(slow_fraction, slow_duration, &"slowing_arrow")
 
 func _on_foliage_shelter_requested(center: Vector2, duration: float) -> void:
+	_spawn_foliage_shelter(center, duration, FoliageShelter.RADIUS, 0.0)
+
+func _on_hunter_total_cover_requested(center: Vector2, duration: float, radius: float, exit_grace: float) -> void:
+	_spawn_foliage_shelter(center, duration, radius, exit_grace)
+
+func _on_hunter_covering_shot_requested(request: DamageRequest, origin: Vector2, direction: Vector2) -> void:
+	_spawn_precision_projectiles(&"hunter_covering_shot", request, direction, 1, 1, _on_precision_projectile_hit, Color("e2d3a0"), origin)
+
+func _spawn_foliage_shelter(center: Vector2, duration: float, radius: float, exit_grace: float) -> void:
+	if not is_instance_valid(player) or not player.is_alive() or run_finished or get_tree().paused:
+		return
+	if player.is_hunter():
+		for node: Node in get_tree().get_nodes_in_group("foliage_shelters"):
+			if is_instance_valid(node) and node is FoliageShelter and node.player_owner == player:
+				node.expire(&"replaced")
+				# Removal signals can finish the encounter or invalidate the owner.
+				if not is_instance_valid(player) or not player.is_alive() or run_finished or get_tree().paused:
+					return
 	var shelter := FoliageShelter.new()
 	add_child(shelter)
-	shelter.configure(player, center, duration)
+	shelter.configure(player, center, duration, radius, exit_grace)
 	shelter.add_to_group("player_effects")
 
 func _on_mage_projectile_hit(request: DamageRequest, target_actor: CombatActor) -> void:

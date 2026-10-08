@@ -10,6 +10,9 @@ const BOW_SKILLS: Array[StringName] = [
 var owner_id := 0
 var step_remaining := 0.0
 var step_cooldown := 0.0
+var marked_target_id := 0
+var mark_rank := 0
+var mark_remaining := 0.0
 var _openings: Dictionary[int, Dictionary] = {}
 var _activations: Dictionary[int, Dictionary] = {}
 var _emissions: Dictionary[int, Dictionary] = {}
@@ -18,6 +21,18 @@ func configure(runtime_owner_id: int) -> void:
 	assert(runtime_owner_id > 0)
 	clear()
 	owner_id = runtime_owner_id
+
+func mark(target_id: int, rank: int) -> bool:
+	var tuning := HunterTuning.values(&"hunter_mark", rank)
+	if owner_id <= 0 or target_id <= 0 or target_id == owner_id or tuning.is_empty():
+		return false
+	marked_target_id = target_id
+	mark_rank = rank
+	mark_remaining = float(tuning["duration"])
+	return true
+
+func is_marked(target_id: int) -> bool:
+	return target_id > 0 and target_id == marked_target_id and mark_remaining > 0.0
 
 func activate(activation_id: int, target_id: int, snapshot: DamageRequest, duration: float = HunterTuning.OPENING_DURATION) -> bool:
 	if owner_id <= 0 or activation_id <= 0 or target_id <= 0 or target_id == owner_id or not _valid_snapshot(snapshot) or not is_finite(duration) or duration <= 0.0 or duration > 6.0:
@@ -30,10 +45,17 @@ func activate(activation_id: int, target_id: int, snapshot: DamageRequest, durat
 	var targets: Dictionary = activation["targets"]
 	if targets.has(target_id) or (not _openings.has(target_id) and _openings.size() >= HunterTuning.OPENING_CAP) or targets.size() >= HunterTuning.OPENING_CAP:
 		return false
+	# Mark is sampled at activation, never retroactively on a live opening.
+	var request := snapshot.copy()
+	if is_marked(target_id):
+		var tuning := HunterTuning.values(&"hunter_mark", mark_rank)
+		duration = minf(6.0, duration + float(tuning["opening_extension"]))
+		request.physical_damage *= 1.0 + float(tuning["reward_bonus"])
+	if not _valid_snapshot(request):
+		return false
 	# Commit both ledgers before any caller applies effects/calls external signals.
 	targets[target_id] = true
 	_activations[activation_id] = activation
-	var request := snapshot.copy()
 	request.target_id = target_id
 	_openings[target_id] = {"remaining": duration, "request": request, "activation_id": activation_id}
 	return true
@@ -80,6 +102,10 @@ func opening(target_id: int) -> Dictionary:
 
 func discard_target(target_id: int) -> void:
 	_openings.erase(target_id)
+	if target_id == marked_target_id:
+		marked_target_id = 0
+		mark_rank = 0
+		mark_remaining = 0.0
 	# Keep claims until TTL: death/removal must not release a live emission.
 
 func advance(delta: float, paused: bool = false) -> void:
@@ -87,6 +113,10 @@ func advance(delta: float, paused: bool = false) -> void:
 		return
 	step_remaining = _remaining(step_remaining, delta)
 	step_cooldown = _remaining(step_cooldown, delta)
+	mark_remaining = _remaining(mark_remaining, delta)
+	if mark_remaining <= 0.0:
+		marked_target_id = 0
+		mark_rank = 0
 	for ledger: Dictionary in [_openings, _activations, _emissions]:
 		for id: int in ledger.keys():
 			var entry: Dictionary = ledger[id]
@@ -100,6 +130,9 @@ func clear() -> void:
 	_emissions.clear()
 	step_remaining = 0.0
 	step_cooldown = 0.0
+	marked_target_id = 0
+	mark_rank = 0
+	mark_remaining = 0.0
 
 func _valid_snapshot(snapshot: DamageRequest) -> bool:
 	return snapshot != null and snapshot.source_id == owner_id and snapshot.is_secondary and not snapshot.can_crit and snapshot.accuracy_mode == DamageRequest.AccuracyMode.GEOMETRY and is_finite(snapshot.physical_damage) and snapshot.physical_damage > 0.0 and snapshot.magic_damage == 0.0 and is_finite(snapshot.damage_dealt_multiplier) and snapshot.damage_dealt_multiplier >= 0.0

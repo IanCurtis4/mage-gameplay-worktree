@@ -6,7 +6,7 @@ Branch `codex/e05-hunter`, base `3d452fa2e4455f4c8636f4fb319a2d0607d08582`.
 
 ## Estado
 
-H1–H3 implementados, em commits granulares internos.
+H1–H4 implementados, em commits granulares internos.
 Contrato57bb3ef, catálogo650ee87, núcleo4bf832d; candidato efetivo é o commit que contém esta
 atualização (confirmar HEAD e assinatura no CLI antes de reutilizar evidência).
 Caçadora permanece indisponível. Nenhuma revisão/aceite de gameplay desta classe.
@@ -40,7 +40,11 @@ integrados. Master e saves pessoais não foram alterados.
   Execução/mira/preparo revalidam terreno/LoS, três modos de cast e cobrança única.
   Novos atores entram em listas limitadas de mecanismos/campo Hunter ativos.
   Snare/Explosive recebem guard explícito de pausa/delta, sem mudar tuning base.
-- H4: Marca, Tiro de Cobertura, camuflagem territorial com limite compartilhado.
+- H4 implementado: Marca, Tiro de Cobertura e camuflagem territorial com limite
+  compartilhado. Snapshot de Marca na ativação; recuo completo revalidado e tiro
+  emitido da origem anterior; budget puro3s, revelação1,25s e recarga comum18s
+  canônica. Cobertura Total125/graça1s, Abrigo110 sem graça adicional. Uma área
+  por dono; IA Hunter caminha à última posição visível, sem ataque oculto.
 - H5: catálogo/passivas/builds/save/admin/menu e testes ponta a ponta.
 - H6: atlas/ícones/VFX e provas nativas solo/grupo/boss.
 - H7: integral no HEAD limpo e pacote único para revisão, sem publicar playtest.
@@ -108,12 +112,53 @@ candidato. Verificação do lote não conclui H4–H7 nem libera revisão/playte
 
 ## Limitações e próximo passo
 
-Marca/passivas, camuflagem, Tiro de Cobertura e arte ainda não implementados.
+Passivas, consumidores persistentes/menu e arte final ainda não implementados.
 Congelante R1 e novas traps funcionam em fixtures isoladas, mas o fluxo inicial
 de evolução continua bloqueado até o kit completo. IDs novos
 ainda não são compráveis numa evolução de produção. H5 deve fechar versionamento
 do catálogo e migração antes de liberar compras persistentes; não gravar estado de
 aberturas/fields. Não declarar classe jogável, leitura visual ou desempenho.
-Próximo passo: H4 e demais camadas autorizadas, atualizar este checkpoint com commits,
+Próximo passo: H5 e demais camadas autorizadas, atualizar este checkpoint com commits,
 resultados e pendências. Nenhum gate por microtarefa nem mensagem a outros chats
 por efeito das skills. Só escalar bloqueio ou divergência relevante do contrato.
+
+## Evidência H4
+
+`e05_hunter_cover_integration_test.gd`:302 checks, zero falhas/erros na execução
+dirigida final, Godot4.7.2standard. Log `.godot/verification/hunter_h4.log`.
+Ranks1–5, prioridade única/expiry/remoção, Marca pré/pós ativação, snapshot sem
+retroatividade/mutação, duplicata, LoS/range/cancelamento sem custo, ranks0/6,
+input CONFIRM/RELEASE/INSTANT e cobrança única. Projétil real GEOMETRY/crítico
+normal (roll forçado só na fixture), exploração secundária/Passo e clocks de auto
+preservados; origem anterior ao recuo, range520/speed880, root, segmento com parede
+mesmo com endpoint livre, preview coerente e pausa.
+
+Camuflagem: três segundos efetivamente oculta, fronteiras parciais de revelação e
+graça em30/60/144Hz, sem ganho por reentrada/substituição/alternância. Colocação paga
+renova somente após ambas recargas; limpeza sem HP/SP/CD refill, offense fora da
+área, remoção sem apagar reveal, base sem graça, observer interno, morte/fim/pausa.
+IA ativa dirigida por delta em30/60/144Hz segue última posição, não a presa oculta;
+boss preserva HP/contagem e projétil hostil já emitido ainda atinge o jogador.
+Demais inimigos/player/fields têm processamento automático desligado na fixture;
+isso não comprova solo, gameplay ou desempenho. Arte de Folhagem/preview existente
+parametrizada, sem novo raster/atlas e sem aceite no renderer (skill ragrpg-art).
+
+Primeira execução dirigida passou289 checks com diagnóstico ambiental de
+certificados sob sandbox; reprodução no ambiente normal removeu esse diagnóstico.
+Ampliação do teste encontrou observador de dano conectado ao ator em vez de
+HealthComponent: script interrompeu a rotina apesar de exit0. Corrigido para a
+fronteira canônica, preservando resultado secondary aninhado; reprodução301
+sem erros completou a rotina. O302º check revalida fim de encontro disparado
+no callback de remoção durante substituição, impedindo nova área após cleanup.
+Nunca usar exit0 isolado como PASS.
+
+`tools/verify.ps1` terminou com exit0, incluindo bases, classes entregues,
+persistência/input/UI, smoke e admin. A execução começou antes do302º check e
+da revalidação terminal de substituição; H4 nela tinha301 checks. Os302 foram
+repetidos sem erros, e a execução CLI integral após commit deve validar o delta
+final e o vínculo ao candidato limpo, não reaproveitar essa execução intermediária.
+
+Após consolidar o lote, conferir CLI all/implementer no HEAD limpo e assinatura
+`current_inputs=true`. Relatórios anteriores vinculados aH3 tornam-se históricos,
+não comprovam H4. Validação H4 não habilita a classe nem conclui H5–H7; nenhuma
+mensagem a Astra/publicação no playtest por efeito da retomada.
