@@ -74,7 +74,7 @@ func _check_round_trip_and_unknown_fields() -> void:
 	_check(ProfileCodec.decode(JSON.stringify(boolean_payload))["error_code"] == &"invalid_integer", "boolean XP is not accepted as an integer")
 	var overspent_payload: Dictionary = encoded["data"].duplicate(true)
 	overspent_payload["characters"][0]["attribute_allocations"]["str"] = 50
-	_check(ProfileCodec.decode(JSON.stringify(overspent_payload))["error_code"] == &"overspent_attributes", "attribute allocations cannot exceed level grants or the investment cap")
+	_check(ProfileCodec.decode(JSON.stringify(overspent_payload))["error_code"] == &"overspent_attributes", "a cap-legal allocation cannot exceed current XP-derived attribute currency")
 	var bad_counter_payload: Dictionary = encoded["data"].duplicate(true)
 	bad_counter_payload["characters"][0]["character_id"] = PROFILE_ID + "_99"
 	bad_counter_payload["selected_character_id"] = PROFILE_ID + "_99"
@@ -236,7 +236,13 @@ func _check_backup_recovery() -> void:
 	var second := store.commit(second_source)
 	_check(second["ok"], "recovery fixture has a primary and previous backup")
 	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), "{broken")
-	_write_text(directory.path_join(ProfileStore.PENDING_FILE), JSON.stringify({"schema_version": 2, "unconfirmed": true}))
+	var pending_text := JSON.stringify({"schema_version": 2, "unconfirmed": true})
+	_write_text(directory.path_join(ProfileStore.PENDING_FILE), pending_text)
+	var blocked := store.load_profile()
+	_check(not blocked["ok"] and blocked["read_only"] and blocked["error_code"] == &"recovery_required", "unconfirmed pending blocks automatic backup recovery")
+	_check(_read_text(directory.path_join(ProfileStore.PENDING_FILE)) == pending_text and _read_text(directory.path_join(ProfileStore.PRIMARY_FILE)) == "{broken", "blocked recovery preserves primary and pending evidence")
+	# Separate recovery-without-pending fixture. This file was created above in the isolated test directory.
+	_check(DirAccess.remove_absolute(directory.path_join(ProfileStore.PENDING_FILE)) == OK, "test resolves only its own temporary pending fixture")
 	var recovered := store.load_profile()
 	_check(recovered["ok"] and recovered["recovered"] and recovered["warning"] == &"recovered_from_backup", "corrupt primary recovers explicitly from the backup")
 	_check(recovered["profile"].revision == 1 and recovered["profile"].characters[0].base_xp_total == 350, "backup recovery reports the older durable revision without claiming no loss")

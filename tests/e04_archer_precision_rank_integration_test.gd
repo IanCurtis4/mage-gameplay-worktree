@@ -48,32 +48,32 @@ func _check_catalog_table_and_persistent_gate() -> void:
 	_check(opened.get("ok", false) and created.get("ok", false) and character != null and character.base_class_id == &"archer" and empty_presets, "persistent Archer creation succeeds at rank zero without learning or auto-equipping Precision")
 
 func _check_ranked_sources_and_stats() -> void:
-	var expected_hit: Array[float] = [129.6, 133.6, 137.6]
+	var expected_hit: Array[float] = [131.6, 135.6, 139.6]
 	var expected_bonuses: Array[float] = [8.0, 12.0, 16.0]
 	for rank: int in range(1, 4):
 		var snapshot := _snapshot(rank, true)
 		var sources := snapshot.intrinsic_modifier_sources()
 		var stats := snapshot.stat_breakdown()
 		_check(sources.size() == 1 and sources[0]["source_id"] == &"passive_archer_precision" and sources[0]["flat"][&"hit_rating"] == expected_bonuses[rank - 1], "R%d emits one identified flat HIT source with its authored magnitude" % rank)
-		_check(is_equal_approx(stats.value(&"hit_rating"), expected_hit[rank - 1]) and is_equal_approx(stats.value(&"precision_attack"), 31.2) and is_equal_approx(stats.value(&"flee_rating"), 112.1) and is_equal_approx(stats.value(&"attacks_per_second"), 1.155), "R%d changes only canonical HIT among adjacent Archer stats" % rank)
+		_check(is_equal_approx(stats.value(&"hit_rating"), expected_hit[rank - 1]) and is_equal_approx(stats.value(&"precision_attack"), 32.2) and is_equal_approx(stats.value(&"flee_rating"), 112.1) and is_equal_approx(stats.value(&"attacks_per_second"), 1.155), "R%d changes only canonical HIT among adjacent Archer stats" % rank)
 	var composed := _snapshot(3, true).stat_breakdown([{
 		"source_id": &"test_hit",
 		"flat": {&"hit_rating": 4.0},
 	}])
-	_check(is_equal_approx(composed.value(&"hit_rating"), 141.6), "passive rank composes additively inside StatCalculator")
+	_check(is_equal_approx(composed.value(&"hit_rating"), 143.6), "passive rank composes additively inside StatCalculator")
 	var duplicate_slots := _snapshot(3, true)
 	duplicate_slots.passive_slots = [&"archer_precision", &"archer_precision"]
-	_check(duplicate_slots.intrinsic_modifier_sources().size() == 1 and is_equal_approx(duplicate_slots.stat_breakdown().value(&"hit_rating"), 137.6), "duplicate passive slots cannot apply the same identified source twice")
+	_check(duplicate_slots.intrinsic_modifier_sources().size() == 1 and is_equal_approx(duplicate_slots.stat_breakdown().value(&"hit_rating"), 139.6), "duplicate passive slots cannot apply the same identified source twice")
 	var unequipped := _snapshot(3, false)
-	_check(unequipped.intrinsic_modifier_sources().size() == 1 and is_equal_approx(unequipped.stat_breakdown().value(&"hit_rating"), 137.6), "learned Precision is automatic despite empty legacy slots")
+	_check(unequipped.intrinsic_modifier_sources().size() == 1 and is_equal_approx(unequipped.stat_breakdown().value(&"hit_rating"), 139.6), "learned Precision is automatic despite empty legacy slots")
 	var unlearned := _snapshot(3, false)
 	unlearned.skill_ranks.erase(&"archer_precision")
-	_check(unlearned.intrinsic_modifier_sources().is_empty() and is_equal_approx(unlearned.stat_breakdown().value(&"hit_rating"), 121.6), "unlearned Precision applies no source")
+	_check(unlearned.intrinsic_modifier_sources().is_empty() and is_equal_approx(unlearned.stat_breakdown().value(&"hit_rating"), 123.6), "unlearned Precision applies no source")
 	var invalid := _snapshot(4, true)
-	_check(invalid.intrinsic_modifier_sources().is_empty() and is_equal_approx(invalid.stat_breakdown().value(&"hit_rating"), 121.6), "invalid passive rank is ineligible instead of falling back to R1")
+	_check(invalid.intrinsic_modifier_sources().is_empty() and is_equal_approx(invalid.stat_breakdown().value(&"hit_rating"), 123.6), "invalid passive rank is ineligible instead of falling back to R1")
 
 func _check_contested_resolution() -> void:
-	var expected_landed: Array[bool] = [false, false, true, true]
+	var expected_landed: Array[bool] = [false, true, true, true]
 	for rank: int in range(0, 4):
 		var stats := _snapshot(rank, rank > 0).stat_breakdown()
 		var request := DamageRequest.new()
@@ -114,15 +114,15 @@ func _check_runtime_request_capture() -> void:
 	player.slowing_arrow_requested.connect(func(request: DamageRequest, _direction: Vector2, _fraction: float, _duration: float) -> void: contested_requests.append(request))
 	player.arrow_rain_requested.connect(func(_center: Vector2, request: DamageRequest) -> void: geometry_requests.append(request))
 	var preview := state.build_snapshot.stat_breakdown()
-	_check(is_equal_approx(preview.value(&"hit_rating"), 137.6) and is_equal_approx(player.stat_breakdown.value(&"hit_rating"), 137.6), "preview, copied run snapshot and runtime actor consume the same R3 HIT")
+	_check(is_equal_approx(preview.value(&"hit_rating"), 139.6) and is_equal_approx(player.stat_breakdown.value(&"hit_rating"), 139.6), "preview, copied run snapshot and runtime actor consume the same R3 HIT")
 	_check(player.use_double_shot(Vector2.RIGHT) and player.use_piercing_arrow(Vector2.RIGHT) and player.use_slowing_arrow(Vector2.RIGHT), "all contested Archer skill families emit from the R3 runtime build")
 	var contested_capture_is_canonical := contested_requests.size() == 3
 	for request: DamageRequest in contested_requests:
-		contested_capture_is_canonical = contested_capture_is_canonical and request.accuracy_mode == DamageRequest.AccuracyMode.CONTESTED and is_equal_approx(request.hit_rating, 137.6)
+		contested_capture_is_canonical = contested_capture_is_canonical and request.accuracy_mode == DamageRequest.AccuracyMode.CONTESTED and is_equal_approx(request.hit_rating, 139.6)
 	_check(contested_capture_is_canonical, "Double Shot, Piercing Arrow and Slowing Arrow capture enhanced HIT in their DamageRequest")
 	player.current_sp = player.max_sp
-	_check(player.use_arrow_rain(player.global_position + Vector2(100, 0)) and geometry_requests.size() == 1 and geometry_requests[0].accuracy_mode == DamageRequest.AccuracyMode.GEOMETRY and is_equal_approx(geometry_requests[0].hit_rating, 137.6), "geometry skill may capture the shared snapshot but retains geometry accuracy semantics")
-	_check(is_equal_approx(player.stat_breakdown.value(&"precision_attack"), 31.2) and is_equal_approx(player.stat_breakdown.value(&"crit_chance"), 0.064) and is_equal_approx(player.stat_breakdown.value(&"attacks_per_second"), 1.155), "runtime Precision changes no damage, critical or cadence stat")
+	_check(player.use_arrow_rain(player.global_position + Vector2(100, 0)) and geometry_requests.size() == 1 and geometry_requests[0].accuracy_mode == DamageRequest.AccuracyMode.GEOMETRY and is_equal_approx(geometry_requests[0].hit_rating, 139.6), "geometry skill may capture the shared snapshot but retains geometry accuracy semantics")
+	_check(is_equal_approx(player.stat_breakdown.value(&"precision_attack"), 32.2) and is_equal_approx(player.stat_breakdown.value(&"crit_chance"), 0.064) and is_equal_approx(player.stat_breakdown.value(&"attacks_per_second"), 1.155), "runtime Precision changes no damage, critical or cadence stat")
 	player.queue_free()
 
 func _snapshot(rank: int, equipped: bool) -> BuildSnapshot:

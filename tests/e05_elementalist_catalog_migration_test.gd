@@ -33,9 +33,10 @@ func _run() -> void:
 	profile.characters.append(defender)
 	profile.selected_character_id = mage_id
 	var encoded := ProfileCodec.encode(profile)
-	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 2 and ProfileState.CATALOG_VERSION == 6, "new catalog keeps schema and ruleset")
+	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 2 and ProfileState.CATALOG_VERSION == 7, "new catalog keeps schema and ruleset")
 	var old_data: Dictionary = encoded["data"].duplicate(true)
 	old_data["catalog_version"] = ProfileCodec.PRE_ELEMENTALIST_CATALOG_VERSION
+	old_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	var old_text := JSON.stringify(old_data, "\t")
 	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), old_text)
 	var decoded := ProfileCodec.decode(old_text)
@@ -46,17 +47,19 @@ func _run() -> void:
 	_check(durable.selected_character_id == mage_id and durable.characters.size() == 2 and durable.character_by_id(mage_id).purchased_skill_ranks == {&"ice_spear": 1} and durable.character_by_id(defender_id).purchased_skill_ranks == {&"defender_anchor": 1}, "characters, selection and builds survive")
 	_check(durable.character_by_id(mage_id).base_xp_total == mage.base_xp_total and durable.character_by_id(mage_id).job_xp_total == mage.job_xp_total and durable.character_by_id(defender_id).job_xp_total == defender.job_xp_total, "XP remains exact")
 	var current_data: Dictionary = JSON.parse_string(_read_text(directory.path_join(ProfileStore.PRIMARY_FILE)))
-	_check(_read_text(directory.path_join(ProfileStore.BACKUP_FILE)) == old_text and current_data["catalog_version"] == 6 and current_data["ruleset_id"] == ProfileState.RULESET_ID, "backup retains exact source bytes")
+	_check(_read_text(directory.path_join(ProfileStore.BACKUP_FILE)) == old_text and current_data["catalog_version"] == ProfileState.CATALOG_VERSION and current_data["ruleset_id"] == ProfileState.RULESET_ID, "backup retains exact source bytes")
 	var reloaded := ProfileStore.new(directory).load_profile()
 	_check(reloaded["ok"] and not reloaded.get("migrated", false) and reloaded["profile"].revision == 10, "current catalog reload is idempotent")
 	var newer := profile.copy_state()
 	newer.revision = 11
 	var newer_data: Dictionary = ProfileCodec.encode(newer)["data"].duplicate(true)
 	newer_data["catalog_version"] = ProfileCodec.PRE_ELEMENTALIST_CATALOG_VERSION
+	newer_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	_assert_protected_backup(old_text, JSON.stringify(newer_data, "\t"), "newer catalog-4 backup")
 	var foreign := ProfileState.new("123e4567-e89b-42d3-a456-426614174079")
 	var foreign_data: Dictionary = ProfileCodec.encode(foreign)["data"].duplicate(true)
 	foreign_data["catalog_version"] = ProfileCodec.PRE_ELEMENTALIST_CATALOG_VERSION
+	foreign_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	_assert_protected_backup(old_text, JSON.stringify(foreign_data, "\t"), "foreign catalog-4 backup")
 	_cleanup_directory()
 	print("E05 Elementalista migração catálogo: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))

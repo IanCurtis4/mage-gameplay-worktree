@@ -46,7 +46,7 @@ func _check_levels_attributes_ranks_and_snapshot() -> void:
 	var opened := facade.open_profile()
 	var summary := facade.progression_summary(character_id)
 	_check(opened["ok"] and summary["base_level"] == 30 and summary["job_level"] == 20, "capped accumulated XP derives base 30 and unevolved job 20 after reload")
-	_check(summary["attribute_points_granted"] == 87 and summary["attribute_points_available"] == 87 and summary["base_skill_points_available"] == 19 and summary["evolution_skill_points_available"] == 0, "three independent wallets derive from XP without persisted balances")
+	_check(summary["attribute_points_granted"] == 458 and summary["attribute_points_available"] == 458 and summary["base_skill_points_available"] == 19 and summary["evolution_skill_points_available"] == 0, "three independent wallets derive from XP without persisted balances")
 	_check(summary["evolution_eligible"] and summary["job_progress_blocked"], "unevolved base 30/job 20 exposes eligibility and the accepted job-XP gate without evolving the character")
 	var skill_options := facade.progression_skill_options(character_id)
 	var heavy_slash: Dictionary = _skill_option(skill_options["skills"], &"heavy_slash")
@@ -57,21 +57,21 @@ func _check_levels_attributes_ranks_and_snapshot() -> void:
 	heavy_slash["metadata"]["rank_requirements"][1]["job_level"] = 99
 	var clean_heavy_slash: Dictionary = _skill_option(facade.progression_skill_options(character_id)["skills"], &"heavy_slash")
 	_check(clean_heavy_slash["metadata"]["rank_requirements"][1]["job_level"] == 5 and not facade.progression_skill_options("missing")["ok"], "skill-option metadata is disposable and an unknown character remains a query error")
-	_check(ProgressionRules.base_level_for_xp(350) == 3 and ProgressionRules.base_level_for_xp(375) == 4 and ProgressionRules.attribute_points_granted(375) == 9, "one accumulated reward can cross multiple base levels and grant each level exactly once")
+	_check(ProgressionRules.base_level_for_xp(350) == 3 and ProgressionRules.base_level_for_xp(375) == 4 and ProgressionRules.attribute_points_granted(375) == 39, "one accumulated reward can cross multiple base levels and grant each level exactly once")
 
 	var invalid := facade.allocate_attributes("bad-attributes", 1, character_id, {&"str": 1, &"banana": 1})
 	_check(not invalid["ok"] and invalid["error_code"] == &"invalid_attribute_allocations" and facade.current_profile().character_by_id(character_id).attribute_allocations[&"str"] == 0, "invalid multi-attribute request is atomic")
 	var strength := facade.allocate_attributes("strength-cap", 1, character_id, {&"str": 52})
 	var vitality := facade.allocate_attributes("spend-rest", 2, character_id, {&"vit": 35})
-	_check(strength["ok"] and strength["progression"]["attribute_points_available"] == 35 and vitality["ok"] and vitality["progression"]["attribute_points_available"] == 0, "allocation spends exactly one point per primary and conserves the 87-point wallet")
+	_check(strength["ok"] and strength["progression"]["attribute_points_available"] == 209 and vitality["ok"] and vitality["progression"]["attribute_points_available"] == 71, "allocation charges 249 for STR and 138 for VIT, preserving 71 of 458 currency points")
 	var cap_fail := facade.allocate_attributes("over-cap", 3, character_id, {&"str": 1})
-	var funds_fail := facade.allocate_attributes("no-points", 3, character_id, {&"agi": 1})
+	var funds_fail := facade.allocate_attributes("no-points", 3, character_id, {&"agi": 30})
 	_check(not cap_fail["ok"] and cap_fail["error_code"] == &"attribute_cap_reached" and not funds_fail["ok"] and funds_fail["error_code"] == &"insufficient_points", "attribute investment enforces initial-plus-allocation cap and available balance")
 
 	var reloaded := ProfileFacade.new(ProfileStore.new(directory, catalog))
 	var reload_open := reloaded.open_profile()
 	var reload_summary := reloaded.progression_summary(character_id)
-	_check(reload_open["ok"] and reload_summary["attribute_points_spent"] == 87 and reload_summary["attribute_points_available"] == 0, "allocation and derived balance survive a full facade/store reload")
+	_check(reload_open["ok"] and reload_summary["attribute_points_spent"] == 387 and reload_summary["attribute_points_available"] == 71, "allocation and derived balance survive a full facade/store reload")
 
 	var prereq_fail := reloaded.learn_skill("heavy-too-early", 3, character_id, &"heavy_slash")
 	_check(not prereq_fail["ok"] and prereq_fail["error_code"] == &"requirements_unmet", "rank purchase rejects an unmet skill prerequisite without a revision")
@@ -101,7 +101,7 @@ func _check_levels_attributes_ranks_and_snapshot() -> void:
 	var attribute_respec := reloaded.respec_attributes("respec-attributes", 11, character_id)
 	var stale_retry := reloaded.respec_attributes("respec-attributes", 11, character_id)
 	var no_op := reloaded.respec_attributes("respec-empty", 12, character_id)
-	_check(attribute_respec["ok"] and attribute_respec["refunded"] == 87 and attribute_respec["progression"]["attribute_points_available"] == 87, "attribute respec restores the whole allocation wallet and preserves XP")
+	_check(attribute_respec["ok"] and attribute_respec["refunded"] == 387 and attribute_respec["progression"]["attribute_points_available"] == 458, "attribute respec restores the whole allocation wallet and preserves XP")
 	_check(not stale_retry["ok"] and stale_retry["error_code"] == &"stale_revision" and no_op["ok"] and no_op["already_applied"] and no_op["new_revision"] == 12, "stale retry cannot duplicate respec and an already-empty respec does not write")
 
 	var preview := reloaded.build_preview(character_id, [{"source_id": &"preview", "primary_flat": {&"str": 2.0}}])
@@ -123,7 +123,7 @@ func _check_levels_attributes_ranks_and_snapshot() -> void:
 	breakdown.primary[&"str"]["effective"] = 777.0 # Consumer violation must remain local to this instance.
 	var isolated := snapshot.stat_breakdown([{"source_id": &"snapshot_test", "primary_flat": {&"str": 2.0}}])
 	_check(snapshot.base_level == 30 and snapshot.job_level == 20 and snapshot.skill_ranks.is_empty() and snapshot.attribute_allocations[&"str"] == 0, "run snapshot carries effective levels, an empty skill build and copied investments")
-	_check(is_equal_approx(isolated.primary_value(&"str"), 10.0) and is_equal_approx(isolated.value(&"melee_attack"), 32.0), "snapshot stats always come from StatCalculator and separate StatBreakdown instances")
+	_check(is_equal_approx(isolated.primary_value(&"str"), 10.0) and is_equal_approx(isolated.value(&"melee_attack"), 33.0), "snapshot stats always come from StatCalculator and separate StatBreakdown instances")
 	_check(not reloaded.allocate_attributes("during-run", 13, character_id, {&"str": 1})["ok"] and not reloaded.learn_skill("learn-during-run", 13, character_id, &"slash")["ok"], "allocation and rank purchases remain menu-only while a run is active")
 
 func _check_evolution_wallet_and_requirements() -> void:
@@ -172,7 +172,7 @@ func _check_failure_retry_reload_and_uncertainty() -> void:
 	var retried := facade.allocate_attributes("retry-allocation", opened["profile"].revision, character_id, {&"str": 1})
 	var restarted := ProfileFacade.new(ProfileStore.new(directory, catalog))
 	var reloaded := restarted.open_profile()
-	_check(retried["ok"] and reloaded["profile"].character_by_id(character_id).attribute_allocations[&"str"] == 1 and restarted.progression_summary(character_id)["attribute_points_available"] == 2, "same revision can retry a definite failure and survives reload exactly once")
+	_check(retried["ok"] and reloaded["profile"].character_by_id(character_id).attribute_allocations[&"str"] == 1 and restarted.progression_summary(character_id)["attribute_points_available"] == 11, "same revision can retry a definite failure and survives reload exactly once")
 
 	var uncertain_directory := root_directory.path_join("uncertain")
 	_prepare_directory(uncertain_directory)

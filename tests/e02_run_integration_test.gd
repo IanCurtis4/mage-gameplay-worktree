@@ -62,7 +62,7 @@ func _check_persistent_preset_runtime_flow() -> void:
 	var controller := current_scene as RunController
 	_check(created["ok"] and seeded["ok"] and preset["ok"] and organized["ok"] and started["ok"] and controller != null and controller.player.class_id == &"mage", "menu-selected persistent mage reaches the real arena controller")
 	_check(controller.player.available_skill_ids() == [&"fireball", &"fire_wall"] and controller._key_skill(KEY_1) == &"fire_wall" and controller._key_skill(KEY_2) == &"fireball" and controller._key_skill(KEY_3) == &"", "learned library is independent of persisted action bar order and empty shortcut slots")
-	_check(controller.battle_controls.slot_buttons.size() == 24 and controller.battle_controls.skill_buttons.keys() == [&"fire_wall", &"fireball"] and is_equal_approx(controller.player.stat_breakdown.value(&"sp_regen"), 4.62), "organized action bar retains learned skills and automatically activates learned passive despite legacy passive slot removal")
+	_check(controller.battle_controls.slot_buttons.size() == 24 and controller.battle_controls.skill_buttons.keys() == [&"fire_wall", &"fireball"] and is_equal_approx(controller.player.stat_breakdown.value(&"sp_regen"), 4.92), "organized action bar retains learned skills and automatically activates learned passive despite legacy passive slot removal")
 	var closed := controller._close_persistent_run(&"death")
 	_check(closed["ok"] and facade.current_profile().reward_session == null and facade.current_profile().lifetime_stats[&"deaths"] == 1, "closing a persistent run records the terminal outcome once")
 	controller.queue_free()
@@ -73,7 +73,7 @@ func _check_persistent_preset_runtime_flow() -> void:
 	var selected := facade.select_preset("select-default", facade.current_profile().revision, mage.character_id, 0)
 	var restarted := facade.start_run("start-default", selected["new_revision"])
 	controller = await _persistent_controller(facade, restarted["run_state"])
-	_check(selected["ok"] and restarted["ok"] and controller.player.available_skill_ids() == [&"fireball", &"fire_wall"] and controller._key_skill(KEY_1) == &"fire_wall" and controller._key_skill(KEY_2) == &"fireball" and is_equal_approx(controller.player.stat_breakdown.value(&"sp_regen"), 4.62), "equipment preset changes neither per-character shortcuts nor automatic learned passive")
+	_check(selected["ok"] and restarted["ok"] and controller.player.available_skill_ids() == [&"fireball", &"fire_wall"] and controller._key_skill(KEY_1) == &"fire_wall" and controller._key_skill(KEY_2) == &"fireball" and is_equal_approx(controller.player.stat_breakdown.value(&"sp_regen"), 4.92), "equipment preset changes neither per-character shortcuts nor automatic learned passive")
 	controller._close_persistent_run(&"abandoned")
 	controller.queue_free()
 	await process_frame

@@ -27,29 +27,29 @@ func _check_catalog_table() -> void:
 	_check(definition.rank_definition(3).power == 1.0, "passive rank lookup returns an isolated catalog copy")
 
 func _check_ranked_sources_and_stats() -> void:
-	var expected_regeneration: Array[float] = [4.62, 5.39, 6.16]
+	var expected_regeneration: Array[float] = [4.92, 5.74, 6.56]
 	var expected_increases: Array[float] = [0.50, 0.75, 1.00]
 	for rank: int in range(1, 4):
 		var snapshot := _snapshot(rank, true)
 		var sources := snapshot.intrinsic_modifier_sources()
 		var stats := snapshot.stat_breakdown()
 		_check(sources.size() == 1 and sources[0]["source_id"] == &"passive_mage_sp_regeneration" and sources[0]["increased"][&"sp_regen"] == expected_increases[rank - 1], "R%d emits one identified modifier source with its authored magnitude" % rank)
-		_check(is_equal_approx(stats.value(&"sp_regen"), expected_regeneration[rank - 1]) and stats.value(&"max_sp") == 85.0 and stats.value(&"magic_attack") == 30.8, "R%d changes only canonical SP regeneration among its adjacent mage stats" % rank)
+		_check(is_equal_approx(stats.value(&"sp_regen"), expected_regeneration[rank - 1]) and stats.value(&"max_sp") == 85.0 and stats.value(&"magic_attack") == 31.3, "R%d changes only canonical SP regeneration among its adjacent mage stats" % rank)
 	var composed := _snapshot(3, true).stat_breakdown([{
 		"source_id": &"test_regeneration",
 		"increased": {&"sp_regen": 0.25},
 	}])
-	_check(is_equal_approx(composed.value(&"sp_regen"), 6.93), "passive rank composes additively inside StatCalculator instead of multiplying in the snapshot")
+	_check(is_equal_approx(composed.value(&"sp_regen"), 7.38), "passive rank composes additively inside StatCalculator instead of multiplying in the snapshot")
 	var duplicate_slots := _snapshot(3, true)
 	duplicate_slots.passive_slots = [&"mage_mana_regeneration", &"mage_mana_regeneration"]
-	_check(duplicate_slots.intrinsic_modifier_sources().size() == 1 and is_equal_approx(duplicate_slots.stat_breakdown().value(&"sp_regen"), 6.16), "duplicate passive slots cannot apply the same identified source twice")
+	_check(duplicate_slots.intrinsic_modifier_sources().size() == 1 and is_equal_approx(duplicate_slots.stat_breakdown().value(&"sp_regen"), 6.56), "duplicate passive slots cannot apply the same identified source twice")
 	var unequipped := _snapshot(3, false)
-	_check(unequipped.intrinsic_modifier_sources().size() == 1 and is_equal_approx(unequipped.stat_breakdown().value(&"sp_regen"), 6.16), "learned passive is automatic despite empty legacy slots")
+	_check(unequipped.intrinsic_modifier_sources().size() == 1 and is_equal_approx(unequipped.stat_breakdown().value(&"sp_regen"), 6.56), "learned passive is automatic despite empty legacy slots")
 	var unlearned := _snapshot(3, false)
 	unlearned.skill_ranks.erase(&"mage_mana_regeneration")
-	_check(unlearned.intrinsic_modifier_sources().is_empty() and is_equal_approx(unlearned.stat_breakdown().value(&"sp_regen"), 3.08), "unlearned passive applies no source")
+	_check(unlearned.intrinsic_modifier_sources().is_empty() and is_equal_approx(unlearned.stat_breakdown().value(&"sp_regen"), 3.28), "unlearned passive applies no source")
 	var invalid := _snapshot(4, true)
-	_check(invalid.intrinsic_modifier_sources().is_empty() and is_equal_approx(invalid.stat_breakdown().value(&"sp_regen"), 3.08), "invalid passive rank is ineligible instead of falling back to R1")
+	_check(invalid.intrinsic_modifier_sources().is_empty() and is_equal_approx(invalid.stat_breakdown().value(&"sp_regen"), 3.28), "invalid passive rank is ineligible instead of falling back to R1")
 
 func _check_preview_runtime_and_regeneration() -> void:
 	var snapshot := _snapshot(3, true)
@@ -61,9 +61,9 @@ func _check_preview_runtime_and_regeneration() -> void:
 	var player := PlayerActor.new()
 	player.configure(navigation, state)
 	root.add_child(player)
-	_check(is_equal_approx(preview.value(&"sp_regen"), 6.16) and is_equal_approx(player.stat_breakdown.value(&"sp_regen"), 6.16), "preview, copied run snapshot and runtime actor consume the same R3 regeneration")
+	_check(is_equal_approx(preview.value(&"sp_regen"), 6.56) and is_equal_approx(player.stat_breakdown.value(&"sp_regen"), 6.56), "preview, copied run snapshot and runtime actor consume the same R3 regeneration")
 	player.current_sp = 10.0
-	_check(player._regenerate_sp(1.0, false) and is_equal_approx(player.current_sp, 16.16), "living unpaused actor regenerates exactly one second from the canonical breakdown")
+	_check(player._regenerate_sp(1.0, false) and is_equal_approx(player.current_sp, 16.56), "living unpaused actor regenerates exactly one second from the canonical breakdown")
 	var before_pause := player.current_sp
 	_check(not player._regenerate_sp(1.0, true) and player.current_sp == before_pause, "paused simulation does not regenerate SP")
 	player.current_sp = player.max_sp - 1.0

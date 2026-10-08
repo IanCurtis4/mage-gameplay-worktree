@@ -101,10 +101,11 @@ func _check_attribute_controls(scene: PackedScene) -> void:
 	_check(not failed["ok"] and failed["error_code"] == &"save_failed" and retried["ok"] and failed["request_id"] == retried["request_id"] and after_retry.revision == seeded["new_revision"] + 1 and after_retry.character_by_id(character_id).attribute_allocations[&"str"] == 1, "a definite attribute-save failure retries the original request ID and revision exactly once")
 	var respec: Dictionary = menu._respec_attributes()
 	_check(respec["ok"] and menu.status_label.text == "Atributos redistribuídos." and menu.facade.current_profile().character_by_id(character_id).attribute_allocations[&"str"] == 0 and menu.progression_attributes_label.tooltip_text.contains("FOR: base 8 · investido 0 · base + investido: teto 60"), "attribute respec uses the facade and refreshes the canonical preview")
-	for _index: int in 3:
+	# FOR8 ->13 costs12 of the 13 points at base2; next increment costs3.
+	for _index: int in 5:
 		menu._allocate_attribute(&"str")
 	var no_points: Dictionary = menu._allocate_attribute(&"str")
-	_check(not no_points["ok"] and no_points["error_code"] == &"insufficient_points" and menu.status_label.text.contains("pontos"), "attribute errors remain pt-BR UI messages and never mutate the character directly")
+	_check(not no_points["ok"] and no_points["error_code"] == &"insufficient_points" and menu.status_label.text.contains("pontos") and menu.facade.current_profile().character_by_id(character_id).attribute_allocations[&"str"] == 5, "attribute errors remain pt-BR UI messages and never mutate the character directly")
 	menu.queue_free()
 
 func _check_skill_controls(scene: PackedScene) -> void:

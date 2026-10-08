@@ -40,7 +40,7 @@ func _check_snapshot_boundaries() -> void:
 		_check(sources.size() == 1 and sources[0]["source_id"] == &"passive_trap_technique" and snapshot.intrinsic_modifier_sources().is_empty(), "R%d remains a rule source outside the stat calculator" % rank)
 		_check(snapshot.trap_armed_duration(SnareTrap.ARMED_DURATION) == expected_armed[rank - 1] and snapshot.trap_armed_duration(ExplosiveTrap.ARMED_DURATION) == expected_armed[rank - 1], "R%d extends both concrete armed lifetimes equally" % rank)
 		var stats := snapshot.stat_breakdown()
-		_check(is_equal_approx(stats.value(&"precision_attack"), 31.2) and is_equal_approx(stats.value(&"attacks_per_second"), 1.155) and is_equal_approx(stats.value(&"hit_rating"), 121.6), "R%d does not change adjacent combat stats" % rank)
+		_check(is_equal_approx(stats.value(&"precision_attack"), 32.2) and is_equal_approx(stats.value(&"attacks_per_second"), 1.155) and is_equal_approx(stats.value(&"hit_rating"), 123.6), "R%d does not change adjacent combat stats" % rank)
 	var duplicate := _snapshot(3, true)
 	duplicate.passive_slots = [&"trap_technique", &"trap_technique"]
 	_check(duplicate.intrinsic_rule_sources().size() == 1 and duplicate.trap_armed_duration(12.0) == 21.0, "duplicate slots do not double the rule")
@@ -53,7 +53,7 @@ func _check_snapshot_boundaries() -> void:
 	var combined := _snapshot(3, true)
 	combined.skill_ranks[&"archer_precision"] = 3
 	combined.passive_slots = [&"archer_precision", &"trap_technique"]
-	_check(combined.intrinsic_rule_sources().size() == 1 and combined.trap_armed_duration(12.0) == 21.0 and is_equal_approx(combined.stat_breakdown().value(&"hit_rating"), 137.6), "Technique and Precision activate automatically and affect separate authorities")
+	_check(combined.intrinsic_rule_sources().size() == 1 and combined.trap_armed_duration(12.0) == 21.0 and is_equal_approx(combined.stat_breakdown().value(&"hit_rating"), 139.6), "Technique and Precision activate automatically and affect separate authorities")
 
 func _check_controller_traps() -> void:
 	var source := _snapshot(3, true)

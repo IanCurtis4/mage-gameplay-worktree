@@ -28,14 +28,14 @@ func _test_reference_classes() -> void:
 	var mage := StatCalculator.calculate(
 		{&"str": 2, &"agi": 5, &"vit": 5, &"int": 9, &"dex": 7, &"luk": 2}
 	)
-	_close(mage.value(&"magic_attack"), 30.8, "mage magic fixture")
+	_close(mage.value(&"magic_attack"), 31.3, "mage magic fixture including INT 5/7 milestones")
 	_close(mage.value(&"magic_defense"), 20.5, "mage magic defense fixture")
 	_close(mage.value(&"variable_cast_multiplier"), 0.97, "mage cast fixture")
 
 	var archer := StatCalculator.calculate(
 		{&"str": 3, &"agi": 7, &"vit": 5, &"int": 2, &"dex": 10, &"luk": 3}
 	)
-	_close(archer.value(&"precision_attack"), 31.2, "archer precision fixture")
+	_close(archer.value(&"precision_attack"), 32.2, "archer precision fixture including DEX 10 milestone")
 	_close(archer.value(&"attacks_per_second"), 1.155, "archer aspd fixture")
 
 func _test_level_scaling() -> void:
@@ -73,8 +73,8 @@ func _test_modifier_order_and_sources() -> void:
 	_close(breakdown.primary_value(&"str"), 10.5, "primary flat may be fractional")
 	# raw HP = 180; (180 + 10) * (1 + .10 + .20) = 247
 	_close(breakdown.value(&"max_hp"), 247.0, "flat precedes additive increased modifiers")
-	# raw melee with effective STR 10.5 and DEX 5 = 33; (33 + 5) * 1.3 = 49.4
-	_close(breakdown.value(&"melee_attack"), 49.4, "derived values consume effective primaries once")
+	# raw melee = 10 + 2*10.5 + .4*5 + floor(10.5/10)^2 = 34; (34 + 5) * 1.3 = 50.7
+	_close(breakdown.value(&"melee_attack"), 50.7, "derived values consume effective primaries once")
 	_check(breakdown.sources().size() == 2, "identified modifier sources are preserved")
 	_close(float(breakdown.derived_detail(&"max_hp")["increased"]), 0.30, "breakdown exposes summed increased")
 
@@ -142,7 +142,7 @@ func _test_hit_crit_and_timing() -> void:
 	_close(StatCalculator.effective_crit_chance(0.20, 0.05), 0.15, "crit resistance subtracts percentage points")
 
 	var caster := StatCalculator.calculate({&"dex": 50, &"int": 20})
-	_close(StatCalculator.effective_cast_time(0.2, 0.8, caster), 0.864, "fixed and variable cast use distinct reductions")
+	_close(StatCalculator.effective_cast_time(0.2, 0.8, caster), 0.824, "fixed and variable cast use distinct reductions including DEX milestones")
 	_close(StatCalculator.effective_after_cast(1.0, caster), 1.0, "zero after-cast reduction preserves duration")
 	_close(StatCalculator.effective_cooldown(5.0, caster), 5.0, "zero cooldown reduction preserves duration")
 

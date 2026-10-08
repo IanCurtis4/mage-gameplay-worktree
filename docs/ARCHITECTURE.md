@@ -1,5 +1,17 @@
 # Contratos de implementação — versão 1
 
+Atualização autorizada 07/10/2026: [STAT_THRESHOLDS_PLAN.md](STAT_THRESHOLDS_PLAN.md)
+substitui somente a carteira de atributos e os bônus raw documentados de E00/E03.
+`ProgressionRules` cobra cada incremento pelo permanente e pela origem; saldo e
+reembolso não são persistidos. `StatCalculator` aplica os marcos aos primários
+efetivos, antes de flat/increased derivados. `ProfileCodec` migra catálogos conhecidos
+1..6 ao par 7/stat_thresholds_v1, validando também o orçamento original antes da
+conversão. `ProfileFacade.attribute_purchase_preview` não grava/abre/repara perfil:
+recalcula uma cópia para incluir passivas dependentes da alocação; o menu exibe
+custo, marco e ganho, desabilitando a compra individualmente. Pending incerto não
+é sobrescrito pela migração ou recuperação de backup. Snapshot, XP, skills, caps
+e fórmulas locais de Sentinela permanecem com seus contratos anteriores.
+
 Este arquivo descreve o piloto executado. O contrato candidato da expansão está
 em [E00_CONTRACT.md](E00_CONTRACT.md), incluindo migração de stats/save. Não
 implementar fórmulas novas parcialmente nem tratar exemplos futuros como runtime atual.

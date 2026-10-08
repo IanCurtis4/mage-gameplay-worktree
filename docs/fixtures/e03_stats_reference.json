@@ -1,6 +1,6 @@
 {
-  "contract_version": "e00_v1",
-  "description": "Matriz determinística de casos para E03-L1; expectativas vêm de E00.2.",
+  "contract_version": "stat_thresholds_v1",
+  "description": "Matriz determinística de casos E03 com derivados conforme stat_thresholds_v1; E00 permanece como referência histórica.",
   "cases": [
     {
       "id": "swordsman_level_1",
@@ -10,7 +10,7 @@
       "expected": {
         "primary": {"str": 8, "agi": 5, "vit": 8, "int": 2, "dex": 5, "luk": 2},
         "derived": {
-          "max_hp": 180, "max_sp": 50, "hp_regen": 0.9, "sp_regen": 2.24,
+          "max_hp": 180, "max_sp": 50, "hp_regen": 1.1, "sp_regen": 2.24,
           "melee_attack": 28, "precision_attack": 23.2, "magic_attack": 16,
           "physical_defense": 20, "magic_defense": 8, "hit_rating": 111.4,
           "flee_rating": 108.9, "crit_chance": 0.0585, "crit_multiplier": 1.5,
@@ -30,8 +30,8 @@
       "expected": {
         "primary": {"str": 2, "agi": 5, "vit": 5, "int": 9, "dex": 7, "luk": 2},
         "derived": {
-          "max_hp": 150, "max_sp": 85, "hp_regen": 0.75, "sp_regen": 3.08,
-          "melee_attack": 16.8, "precision_attack": 24.8, "magic_attack": 30.8,
+          "max_hp": 150, "max_sp": 85, "hp_regen": 0.95, "sp_regen": 3.28,
+          "melee_attack": 16.8, "precision_attack": 24.8, "magic_attack": 31.3,
           "physical_defense": 11, "magic_defense": 20.5, "hit_rating": 115.4,
           "flee_rating": 108.9, "crit_chance": 0.0595, "crit_multiplier": 1.5,
           "crit_resistance": 0, "attacks_per_second": 1.11, "attack_speed_index": 111,
@@ -50,12 +50,12 @@
       "expected": {
         "primary": {"str": 3, "agi": 7, "vit": 5, "int": 2, "dex": 10, "luk": 3},
         "derived": {
-          "max_hp": 150, "max_sp": 50, "hp_regen": 0.75, "sp_regen": 2.24,
-          "melee_attack": 20, "precision_attack": 31.2, "magic_attack": 18,
-          "physical_defense": 11.5, "magic_defense": 6.5, "hit_rating": 121.6,
+          "max_hp": 150, "max_sp": 50, "hp_regen": 0.95, "sp_regen": 2.24,
+          "melee_attack": 20, "precision_attack": 32.2, "magic_attack": 18,
+          "physical_defense": 11.5, "magic_defense": 6.5, "hit_rating": 123.6,
           "flee_rating": 112.1, "crit_chance": 0.064, "crit_multiplier": 1.5,
           "crit_resistance": 0, "attacks_per_second": 1.155, "attack_speed_index": 115.5,
-          "move_speed": 220, "variable_cast_multiplier": 0.968,
+          "move_speed": 220, "variable_cast_multiplier": 0.958,
           "fixed_cast_reduction": 0, "after_cast_reduction": 0,
           "cooldown_reduction": 0, "physical_cc_resistance": 0.01,
           "magic_cc_resistance": 0.004, "damage_dealt_multiplier": 1
@@ -90,12 +90,12 @@
       "expected": {
         "primary": {"str": 60, "agi": 60, "vit": 60, "int": 60, "dex": 60, "luk": 60},
         "derived": {
-          "max_hp": 700, "max_sp": 340, "hp_regen": 3.5, "sp_regen": 9.2,
-          "melee_attack": 154, "precision_attack": 154, "magic_attack": 154,
-          "physical_defense": 150, "magic_defense": 150, "hit_rating": 233,
-          "flee_rating": 203, "crit_chance": 0.26, "crit_multiplier": 1.5,
-          "crit_resistance": 0, "attacks_per_second": 2.2, "attack_speed_index": 220,
-          "move_speed": 220, "variable_cast_multiplier": 0.76,
+          "max_hp": 820, "max_sp": 370, "hp_regen": 5.9, "sp_regen": 11.2,
+          "melee_attack": 190, "precision_attack": 190, "magic_attack": 206,
+          "physical_defense": 162, "magic_defense": 162, "hit_rating": 245,
+          "flee_rating": 215, "crit_chance": 0.284, "crit_multiplier": 1.5,
+          "crit_resistance": 0.024, "attacks_per_second": 2.32, "attack_speed_index": 232,
+          "move_speed": 220, "variable_cast_multiplier": 0.7,
           "fixed_cast_reduction": 0, "after_cast_reduction": 0,
           "cooldown_reduction": 0, "physical_cc_resistance": 0.12,
           "magic_cc_resistance": 0.12, "damage_dealt_multiplier": 1
@@ -136,7 +136,7 @@
       ],
       "expected": {
         "primary": {"str": 10.5},
-        "derived": {"max_hp": 247, "melee_attack": 49.4}
+        "derived": {"max_hp": 247, "melee_attack": 50.7}
       }
     },
     {
@@ -145,7 +145,7 @@
       "allocations": {},
       "base_level": 1,
       "sources": [{"source_id": "buff:primary_cap", "primary_flat": {"str": 100}}],
-      "expected": {"primary": {"str": 120}, "derived": {"melee_attack": 250}}
+      "expected": {"primary": {"str": 120}, "derived": {"melee_attack": 394}}
     },
     {
       "id": "derived_lower_clamps",

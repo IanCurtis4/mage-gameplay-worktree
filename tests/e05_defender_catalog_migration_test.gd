@@ -27,9 +27,10 @@ func _run() -> void:
 	profile.characters.append(character)
 	profile.selected_character_id = character_id
 	var encoded := ProfileCodec.encode(profile)
-	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 2 and ProfileState.CATALOG_VERSION == 6, "current catalog keeps schema 2 and accepts the earlier Defender migration")
+	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 2 and ProfileState.CATALOG_VERSION == 7, "current catalog keeps schema 2 and accepts the earlier Defender migration")
 	var old_data: Dictionary = encoded["data"].duplicate(true)
 	old_data["catalog_version"] = ProfileCodec.PRE_DEFENDER_CATALOG_VERSION
+	old_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	var old_text := JSON.stringify(old_data, "\t")
 	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), old_text)
 	var decoded := ProfileCodec.decode(old_text)
@@ -41,7 +42,7 @@ func _run() -> void:
 	_check(migrated_character.evolution_id == &"defender" and migrated_character.purchased_skill_ranks == {&"slash": 1} and migrated_character.presets[0]["active_slots"][0] == &"slash" and migrated_character.base_xp_total == character.base_xp_total and migrated_character.job_xp_total == character.job_xp_total, "migration preserves identity, XP, purchases and preset")
 	var backup_text := _read_text(directory.path_join(ProfileStore.BACKUP_FILE))
 	var durable_data: Dictionary = JSON.parse_string(_read_text(directory.path_join(ProfileStore.PRIMARY_FILE)))
-	_check(backup_text == old_text and durable_data["catalog_version"] == 6 and durable_data["schema_version"] == 2, "transaction preserves exact old bytes as backup and writes current catalog")
+	_check(backup_text == old_text and durable_data["catalog_version"] == ProfileState.CATALOG_VERSION and durable_data["ruleset_id"] == ProfileState.RULESET_ID and durable_data["schema_version"] == 2, "transaction preserves exact old bytes as backup and writes current catalog")
 	var reloaded := ProfileStore.new(directory).load_profile()
 	_check(reloaded["ok"] and not reloaded.get("migrated", false) and reloaded["profile"].revision == 5, "catalog migration is idempotent on reload")
 	var future_data: Dictionary = durable_data.duplicate(true)
@@ -59,6 +60,7 @@ func _check_catalog_backup_guard(source: ProfileState, primary_text: String) -> 
 	var newer_encoded := ProfileCodec.encode(newer)
 	var newer_data: Dictionary = newer_encoded["data"].duplicate(true)
 	newer_data["catalog_version"] = ProfileCodec.PRE_DEFENDER_CATALOG_VERSION
+	newer_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	var newer_text := JSON.stringify(newer_data, "\t")
 	_assert_protected_backup(primary_text, newer_text, "newer same-profile catalog-2 backup")
 	var foreign := ProfileState.new("123e4567-e89b-42d3-a456-426614174067")
@@ -66,6 +68,7 @@ func _check_catalog_backup_guard(source: ProfileState, primary_text: String) -> 
 	var foreign_encoded := ProfileCodec.encode(foreign)
 	var foreign_data: Dictionary = foreign_encoded["data"].duplicate(true)
 	foreign_data["catalog_version"] = ProfileCodec.PRE_DEFENDER_CATALOG_VERSION
+	foreign_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	var foreign_text := JSON.stringify(foreign_data, "\t")
 	_assert_protected_backup(primary_text, foreign_text, "different-profile catalog-2 backup")
 	_cleanup_directory()
@@ -75,6 +78,7 @@ func _check_catalog_backup_guard(source: ProfileState, primary_text: String) -> 
 	var older_encoded := ProfileCodec.encode(older)
 	var older_data: Dictionary = older_encoded["data"].duplicate(true)
 	older_data["catalog_version"] = ProfileCodec.PRE_DEFENDER_CATALOG_VERSION
+	older_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), primary_text)
 	_write_text(directory.path_join(ProfileStore.BACKUP_FILE), JSON.stringify(older_data, "\t"))
 	var migrated := ProfileStore.new(directory).load_profile()

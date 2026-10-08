@@ -33,12 +33,13 @@ func _run() -> void:
 	profile.characters.append(mage)
 	profile.selected_character_id = evolved_id
 	var encoded := ProfileCodec.encode(profile)
-	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 2 and ProfileState.CATALOG_VERSION == 6, "Spiritualist catalog increments only catalog version")
+	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 2 and ProfileState.CATALOG_VERSION == 7, "Spiritualist catalog increments only catalog version")
 	if not encoded["ok"]:
 		_finish()
 		return
 	var old_data: Dictionary = encoded["data"].duplicate(true)
 	old_data["catalog_version"] = ProfileCodec.PRE_SPIRITUALIST_CATALOG_VERSION
+	old_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	var old_text := JSON.stringify(old_data, "\t")
 	_write(ProfileStore.PRIMARY_FILE, old_text)
 	var decoded := ProfileCodec.decode(old_text)
@@ -76,6 +77,7 @@ func _assert_backup_guard(primary_text: String, original: ProfileState, newer: b
 	var encoded := ProfileCodec.encode(candidate)
 	var data: Dictionary = encoded["data"].duplicate(true)
 	data["catalog_version"] = ProfileCodec.PRE_SPIRITUALIST_CATALOG_VERSION
+	data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	var backup_text := JSON.stringify(data, "\t")
 	_write(ProfileStore.BACKUP_FILE, backup_text)
 	var loaded := ProfileStore.new(directory).load_profile()

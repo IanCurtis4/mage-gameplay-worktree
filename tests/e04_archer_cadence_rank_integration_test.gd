@@ -40,7 +40,7 @@ func _check_ranked_sources_and_stats() -> void:
 		var stats := snapshot.stat_breakdown()
 		_check(sources.size() == 1 and sources[0]["source_id"] == &"passive_archer_cadence" and sources[0]["increased"][&"attacks_per_second"] == expected_increases[rank - 1], "R%d emits one identified increased-APS source with its authored magnitude" % rank)
 		_check(is_equal_approx(stats.value(&"attacks_per_second"), expected_aps[rank - 1]) and is_equal_approx(stats.value(&"attack_speed_index"), expected_aps[rank - 1] * 100.0), "R%d drives APS and its derived display index from the same effective value" % rank)
-		_check(is_equal_approx(stats.value(&"precision_attack"), 31.2) and is_equal_approx(stats.value(&"hit_rating"), 121.6) and is_equal_approx(stats.value(&"flee_rating"), 112.1) and is_equal_approx(stats.value(&"crit_chance"), 0.064), "R%d changes no adjacent Archer offense or evasion stat" % rank)
+		_check(is_equal_approx(stats.value(&"precision_attack"), 32.2) and is_equal_approx(stats.value(&"hit_rating"), 123.6) and is_equal_approx(stats.value(&"flee_rating"), 112.1) and is_equal_approx(stats.value(&"crit_chance"), 0.064), "R%d changes no adjacent Archer offense or evasion stat" % rank)
 	var rhythm_state := RunState.from_build("cadence-battle-rhythm", _snapshot(3, true))
 	rhythm_state.augment_stacks[&"battle_rhythm"] = 1
 	var composed := rhythm_state.build_snapshot.stat_breakdown(rhythm_state.stat_modifier_sources())
@@ -48,7 +48,7 @@ func _check_ranked_sources_and_stats() -> void:
 	var dual_passives := _snapshot(3, true)
 	dual_passives.skill_ranks[&"archer_precision"] = 3
 	dual_passives.passive_slots = [null, null]
-	_check(dual_passives.intrinsic_modifier_sources().size() == 2 and is_equal_approx(dual_passives.stat_breakdown().value(&"hit_rating"), 137.6) and is_equal_approx(dual_passives.stat_breakdown().value(&"attacks_per_second"), 1.386), "learned Precision and Cadence coexist automatically with empty legacy slots")
+	_check(dual_passives.intrinsic_modifier_sources().size() == 2 and is_equal_approx(dual_passives.stat_breakdown().value(&"hit_rating"), 139.6) and is_equal_approx(dual_passives.stat_breakdown().value(&"attacks_per_second"), 1.386), "learned Precision and Cadence coexist automatically with empty legacy slots")
 	var duplicate_slots := _snapshot(3, true)
 	duplicate_slots.passive_slots = [&"archer_cadence", &"archer_cadence"]
 	_check(duplicate_slots.intrinsic_modifier_sources().size() == 1 and is_equal_approx(duplicate_slots.stat_breakdown().value(&"attacks_per_second"), 1.386), "duplicate passive slots cannot apply Cadência twice")
@@ -83,7 +83,7 @@ func _check_preview_runtime_and_auto_interval() -> void:
 	player._process(0.01)
 	var armed_r1 := player.attack_cooldown
 	_check(requests.size() == 1 and is_equal_approx(armed_r1, 1.0 / 1.2705), "R1 auto emission arms exactly the reciprocal canonical APS interval")
-	_check(is_equal_approx(requests[0].physical_damage, 31.2) and is_equal_approx(requests[0].hit_rating, 121.6) and is_equal_approx(requests[0].crit_chance, 0.064), "Cadência changes the auto interval without changing captured damage, HIT or critical chance")
+	_check(is_equal_approx(requests[0].physical_damage, 32.2) and is_equal_approx(requests[0].hit_rating, 123.6) and is_equal_approx(requests[0].crit_chance, 0.064), "Cadência changes the auto interval without changing captured damage, HIT or critical chance")
 	var rank_three_state := RunState.from_build("archer-cadence-r3", _snapshot(3, true))
 	player.apply_run_modifiers(rank_three_state)
 	_check(is_equal_approx(player.stat_breakdown.value(&"attacks_per_second"), 1.386) and player.attack_cooldown == armed_r1, "changing effective APS preserves an auto cooldown already in progress")

@@ -37,6 +37,8 @@ var playtest_buttons: Array[Button] = []
 var progression_attributes_label: Label
 var progression_attribute_actions: VBoxContainer
 var attribute_increment_buttons: Dictionary[StringName, Button] = {}
+var attribute_preview_labels: Dictionary[StringName, Label] = {}
+var attribute_purchase_states: Dictionary[StringName, bool] = {}
 var respec_attributes_button: Button
 var progression_skill_tree: VBoxContainer
 var respec_skills_button: Button
@@ -438,9 +440,26 @@ func _refresh_progression_panel(character: Variant, profile: Variant) -> void:
 	var attribute_details: Array[String] = []
 	for attribute_id: StringName in IdentityIds.attribute_ids():
 		var detail := breakdown.primary_detail(attribute_id)
+		var purchase: Dictionary = facade.attribute_purchase_preview(character.character_id, attribute_id)
 		attribute_details.append("%s: base %d · investido %d · base + investido: teto %d · efetivo %d · limite efetivo %d" % [_attribute_name(attribute_id), int(detail["initial"]), int(detail["allocated"]), StatCalculator.INVESTED_ATTRIBUTE_MAX, int(detail["effective"]), int(detail["maximum"])])
-		attribute_increment_buttons[attribute_id].text = "%s  %d   /   +1" % [_attribute_name(attribute_id), int(detail["effective"])]
+		attribute_purchase_states[attribute_id] = purchase.get("ok", false) and purchase.get("can_purchase", false)
+		var cost_text := "%d pontos" % int(purchase.get("cost", -1)) if int(purchase.get("cost", -1)) >= 0 else "teto permanente"
+		attribute_increment_buttons[attribute_id].text = "%s  %s\n+1 · %s" % [_attribute_name(attribute_id), _attribute_preview_number(float(detail["effective"])), cost_text]
 		attribute_increment_buttons[attribute_id].tooltip_text = attribute_details[-1]
+		var lines: Array[String] = []
+		var milestones: Array = purchase.get("next_milestones", [])
+		lines.append("Permanente %d · efetivo %s" % [int(detail["initial"] + detail["allocated"]), _attribute_preview_number(float(detail["effective"]))])
+		lines.append("Próximo marco: %d efetivo" % int(milestones[0]) if not milestones.is_empty() else "Sem marco adiante")
+		var after: StatBreakdown = purchase.get("after")
+		if after != null:
+			lines.append("%s: %s → %s" % [_attribute_name(attribute_id), _attribute_preview_number(float(detail["effective"])), _attribute_preview_number(after.primary_value(attribute_id))])
+		for change: Dictionary in purchase.get("derived_changes", []):
+			lines.append("%s: %s → %s" % [_attribute_derived_name(change["stat_id"]), _attribute_derived_number(change["stat_id"], float(change["before"])), _attribute_derived_number(change["stat_id"], float(change["after"]))])
+		if purchase.get("blocking_reason", &"") == &"insufficient_points":
+			lines.append("Saldo insuficiente para este aumento.")
+		elif purchase.get("blocking_reason", &"") == &"attribute_cap_reached":
+			lines.append("Teto permanente atingido.")
+		attribute_preview_labels[attribute_id].text = "\n".join(lines)
 		attribute_lines.append("%s   %d   (+%d investidos)" % [_attribute_name(attribute_id), int(detail["effective"]), int(detail["allocated"])])
 	progression_attributes_label.text = "\n".join(attribute_lines)
 	progression_attributes_label.tooltip_text = "\n".join(attribute_details)
@@ -796,14 +815,8 @@ func _set_build_controls_disabled(disabled: bool) -> void:
 		selector.disabled = disabled
 
 func _set_attribute_actions_disabled(disabled: bool) -> void:
-	for button: Button in attribute_increment_buttons.values():
-		button.disabled = disabled
-	if not disabled and _selected_index >= 0:
-		var profile: ProfileState = facade.current_profile()
-		var summary: Dictionary = facade.progression_summary(profile.characters[_selected_index].character_id)
-		if summary.get("ok", false) and int(summary["attribute_points_available"]) <= 0:
-			for button: Button in attribute_increment_buttons.values():
-				button.disabled = true
+	for attribute_id: StringName in attribute_increment_buttons:
+		attribute_increment_buttons[attribute_id].disabled = disabled or not attribute_purchase_states.get(attribute_id, false)
 	if respec_attributes_button != null:
 		respec_attributes_button.disabled = disabled
 
@@ -894,6 +907,36 @@ func _attribute_name(attribute_id: StringName) -> String:
 		&"dex": return "DES"
 		&"luk": return "SOR"
 		_: return "Atributo indisponível"
+
+func _attribute_preview_number(value: float) -> String:
+	return "%.2f" % value if not is_equal_approx(value, roundf(value)) else str(int(value))
+
+func _attribute_derived_number(stat_id: StringName, value: float) -> String:
+	if stat_id == &"variable_cast_multiplier":
+		return "%.3f" % value
+	return "%.2f%%" % (value * 100.0) if stat_id in [&"crit_chance", &"crit_resistance", &"physical_cc_resistance", &"magic_cc_resistance"] else _attribute_preview_number(value)
+
+func _attribute_derived_name(stat_id: StringName) -> String:
+	match stat_id:
+		&"max_hp": return "HP máximo"
+		&"max_sp": return "SP máximo"
+		&"hp_regen": return "HP/s fora de combate"
+		&"sp_regen": return "SP/s"
+		&"melee_attack": return "ATQ corpo"
+		&"precision_attack": return "ATQ precisão"
+		&"magic_attack": return "ATQM"
+		&"physical_defense": return "DEF"
+		&"magic_defense": return "DEFM"
+		&"hit_rating": return "HIT"
+		&"flee_rating": return "FLEE"
+		&"crit_chance": return "Crítico"
+		&"crit_resistance": return "Resistência crítica"
+		&"attacks_per_second": return "Ataques/s"
+		&"attack_speed_index": return "ASPD"
+		&"variable_cast_multiplier": return "Cast variável (×)"
+		&"physical_cc_resistance": return "Resistência CC físico"
+		&"magic_cc_resistance": return "Resistência CC mágico"
+		_: return str(stat_id)
 
 func _skill_name(skill_id: Variant) -> String:
 	var definition := ClassCatalog.skill_definition(StringName(skill_id))
@@ -1040,14 +1083,23 @@ func _build_ui() -> void:
 	attribute_grid.add_theme_constant_override("v_separation", 8)
 	progression_attribute_actions.add_child(attribute_grid)
 	for attribute_id: StringName in IdentityIds.attribute_ids():
+		var attribute_row := VBoxContainer.new()
+		attribute_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		attribute_grid.add_child(attribute_row)
 		var increment_button := Button.new()
 		increment_button.name = "Allocate_%s" % attribute_id
 		increment_button.text = "+1 %s" % _attribute_name(attribute_id)
-		increment_button.tooltip_text = "Investir 1 ponto de atributo via perfil."
+		increment_button.tooltip_text = "Aumentar o atributo permanente em 1; custo depende da faixa."
 		increment_button.pressed.connect(_allocate_attribute.bind(attribute_id))
 		increment_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		attribute_grid.add_child(increment_button)
+		attribute_row.add_child(increment_button)
 		attribute_increment_buttons[attribute_id] = increment_button
+		var preview_label := Label.new()
+		preview_label.name = "AttributePreview_%s" % attribute_id
+		preview_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		preview_label.add_theme_font_size_override("font_size", 14)
+		attribute_row.add_child(preview_label)
+		attribute_preview_labels[attribute_id] = preview_label
 	respec_attributes_button = Button.new()
 	respec_attributes_button.name = "RespecAttributes"
 	respec_attributes_button.text = "Redistribuir atributos"

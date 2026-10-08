@@ -72,9 +72,10 @@ func _legal_character(label: String, evolution: Dictionary, active: Array[Varian
 	for skill: StringName in purchases:
 		for index: int in int(purchases[skill]):
 			_check(CharacterProgression.learn_skill(character, catalog, skill)["ok"], "%s legal purchase %s#%d" % [label, skill, index + 1])
-	_check(CharacterProgression.allocate_attributes(character, allocations)["ok"], "%s actual equal87 attribute budget allocated" % label)
+	_check(CharacterProgression.allocate_attributes(character, allocations)["ok"], "%s legacy 87 increments retained at legal threshold cost" % label)
 	var summary := CharacterProgression.summary(character, catalog)
-	_check(summary["base_skill_points_spent"] == 19 and summary["evolution_skill_points_spent"] == 20 and summary["attribute_points_spent"] == 87 and summary["base_skill_points_available"] == 0 and summary["evolution_skill_points_available"] == 0, "%s exact independent19/20/87 legal wallets" % label)
+	var expected_cost := 340 if label == "critical" else 313
+	_check(summary["base_skill_points_spent"] == 19 and summary["evolution_skill_points_spent"] == 20 and summary["attribute_points_spent"] == expected_cost and summary["attribute_points_available"] == 458 - expected_cost and summary["base_skill_points_available"] == 0 and summary["evolution_skill_points_available"] == 0, "%s independent skill wallets and exact new attribute cost" % label)
 	character.presets[0]["active_slots"] = active
 	character.presets[0]["passive_slots"] = [&"sentinel_precision_stance", &"sentinel_opening_read"]
 	character.presets[0]["equipped"] = {&"weapon": null, &"armor": null, &"accessory": null}

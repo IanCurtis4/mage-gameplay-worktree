@@ -221,7 +221,7 @@ func _test_class_reset_and_ui() -> void:
 	controller = current_scene as RunController
 	_check(controller.player != old_player and controller.run_state.class_id == &"mage" and controller.player.is_mage(), "class selection rebuilds the run with a new player instance")
 	_check(controller.run_state.augment_stacks.is_empty() and controller.player.current_sp == controller.player.max_sp and controller.encounter_index == 1, "class change clears augments, resources, cooldowns and encounter progress")
-	_check(is_equal_approx(controller.player.stat_breakdown.value(&"sp_regen"), 4.62), "mage passive increases SP regeneration through the shared stat pipeline")
+	_check(is_equal_approx(controller.player.stat_breakdown.value(&"sp_regen"), 4.92), "mage passive increases SP regeneration through the shared stat pipeline")
 	_check(controller.battle_controls.slot_buttons.size() == 24 and controller.battle_controls.skill_buttons.size() == 5 and controller.battle_controls.skill_buttons.has(&"teleport") and not controller.battle_controls.skill_buttons.has(&"slash"), "mage pilot fills five shortcuts inside the global 24-slot bar")
 	_check(controller._key_skill(KEY_3) == &"fire_spear" and controller._key_skill(KEY_R) == &"teleport" and controller._key_skill(KEY_E) == &"" and controller._key_skill(KEY_F8) == &"", "pilot shortcut order uses 1/2/3/4/R while F8 remains reserved for rewards and slot E is empty")
 	controller.augment_overlay.visible = true

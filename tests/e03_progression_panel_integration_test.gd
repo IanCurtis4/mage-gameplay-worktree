@@ -45,7 +45,7 @@ func _test_panel_transaction_reload_preview() -> void:
 	var preview_stats: StatBreakdown = preview["stat_breakdown"]
 	var preview_snapshot: BuildSnapshot = preview["snapshot"]
 	var snapshot_stats: StatBreakdown = preview_snapshot.stat_breakdown()
-	_check(reopened["ok"] and summary["attribute_points_available"] == 2 and summary["effective_skill_ranks"][&"slash"] == 1 and reloaded_menu.progression_attributes_label.tooltip_text.contains("FOR: base 8 · investido 1 · base + investido: teto 60 · efetivo 9") and reloaded_menu.progression_skill_tree.get_node("ProgressionSkill_slash").text.contains("Rank 1/5"), "reloaded panel renders the durable progression transaction for the same character")
+	_check(reopened["ok"] and summary["attribute_points_available"] == 11 and summary["effective_skill_ranks"][&"slash"] == 1 and reloaded_menu.progression_attributes_label.tooltip_text.contains("FOR: base 8 · investido 1 · base + investido: teto 60 · efetivo 9") and reloaded_menu.progression_skill_tree.get_node("ProgressionSkill_slash").text.contains("Rank 1/5"), "reloaded panel renders the durable progression transaction for the same character")
 	_check(_same_values(preview_stats, snapshot_stats) and reloaded_menu.progression_attributes_label.tooltip_text.contains("efetivo %d" % int(preview_stats.primary_detail(&"str")["effective"])), "panel attribute preview agrees with the facade BuildSnapshot and StatCalculator output")
 	var started := reloaded.start_run("panel-preview-run", reloaded.current_profile().revision)
 	var run_stats: StatBreakdown = started["run_state"].build_snapshot.stat_breakdown()

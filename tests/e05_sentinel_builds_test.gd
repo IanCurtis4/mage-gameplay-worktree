@@ -123,14 +123,16 @@ func _build(label: String, evolution_purchases: Dictionary, active: Array[Varian
 	var attribute_result := facade.allocate_attributes("%s-attributes" % label, facade.current_profile().revision, id, allocations)
 	_check(attribute_result["ok"], "%s allocates equal legal budget" % label)
 	var summary := facade.progression_summary(id)
-	_check(summary["base_skill_points_spent"] == 19 and summary["evolution_skill_points_spent"] == 20 and summary["base_skill_points_available"] == 0 and summary["evolution_skill_points_available"] == 0 and summary["attribute_points_spent"] == 87 and summary["attribute_points_available"] == 0, "%s exhausts exactly 19/20/87 points independently" % label)
+	var expected_cost := 340 if label == "critical" else 313
+	_check(summary["base_skill_points_spent"] == 19 and summary["evolution_skill_points_spent"] == 20 and summary["base_skill_points_available"] == 0 and summary["evolution_skill_points_available"] == 0 and summary["attribute_points_spent"] == expected_cost and summary["attribute_points_available"] == 458 - expected_cost, "%s exhausts 19/20 skill points and retains its exact legacy investments at new cost" % label)
 	var revision := facade.current_profile().revision
 	var extra := &"sentinel_net_shot" if label == "critical" else &"sentinel_concussion_shot"
 	var overflow := facade.learn_skill("%s-overdraw" % label, revision, id, extra)
 	_check(not overflow["ok"] and overflow["error_code"] == &"insufficient_points" and facade.current_profile().revision == revision, "%s cannot overdraw evolution points" % label)
 	var base_overflow := facade.learn_skill("%s-base-overdraw" % label, revision, id, &"extended_aim")
 	_check(not base_overflow["ok"] and base_overflow["error_code"] == &"insufficient_points" and facade.current_profile().revision == revision, "%s cannot overdraw base wallet instead" % label)
-	_check(not facade.allocate_attributes("%s-attribute-overdraw" % label, revision, id, {&"vit": 1})["ok"] and facade.current_profile().revision == revision, "%s cannot overdraw attributes" % label)
+	# VIT5 ->60 costs255, exceeding both retained balances (118 /145) without exceeding the cap.
+	_check(not facade.allocate_attributes("%s-attribute-overdraw" % label, revision, id, {&"vit": 55})["ok"] and facade.current_profile().revision == revision, "%s cannot overdraw attributes" % label)
 	var passive: Array[Variant] = [&"sentinel_precision_stance", &"sentinel_opening_read"]
 	_check(facade.update_preset("%s-equip" % label, revision, id, 0, active, passive, EQUIPPED)["ok"], "%s equips real five/two slots" % label)
 	revision = facade.current_profile().revision
@@ -191,7 +193,7 @@ func _compare_builds() -> void:
 		return
 	var critical := critical_snapshot.stat_breakdown()
 	var caster := caster_snapshot.stat_breakdown()
-	_check(critical_snapshot.base_level == caster_snapshot.base_level and critical_snapshot.job_level == caster_snapshot.job_level and critical_snapshot.equipped == caster_snapshot.equipped and ProgressionRules.attribute_points_spent(critical_snapshot.attribute_allocations) == ProgressionRules.attribute_points_spent(caster_snapshot.attribute_allocations), "comparisons control levels, attribute budgets and equipment")
+	_check(critical_snapshot.base_level == caster_snapshot.base_level and critical_snapshot.job_level == caster_snapshot.job_level and critical_snapshot.equipped == caster_snapshot.equipped and ProgressionRules.attribute_points_spent(critical_snapshot.attribute_allocations, critical_snapshot.base_class_id) <= ProgressionRules.attribute_points_granted(ProgressionRules.MAX_BASE_XP) and ProgressionRules.attribute_points_spent(caster_snapshot.attribute_allocations, caster_snapshot.base_class_id) <= ProgressionRules.attribute_points_granted(ProgressionRules.MAX_BASE_XP), "legacy builds retain investments and use legal threshold wallets; costs are not assumed equal")
 	_check(critical.value(&"precision_attack") > caster.value(&"precision_attack") and critical.value(&"attacks_per_second") > caster.value(&"attacks_per_second"), "DES/AGI build favors auto precision and cadence")
 	_check(SentinelMath.raw_power(&"sentinel_headshot", 5, critical) > SentinelMath.raw_power(&"sentinel_headshot", 5, caster), "same-rank Headshot favors critical attributes")
 	for skill: StringName in [&"sentinel_piercing_shot", &"sentinel_net_shot", &"sentinel_explosive_shot"]:
@@ -232,6 +234,7 @@ func _legacy() -> void:
 	var encoded := ProfileCodec.encode(before)
 	var prior: Dictionary = encoded["data"].duplicate(true)
 	prior["catalog_version"] = ProfileCodec.PRE_SPIRITUALIST_CATALOG_VERSION
+	prior["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	var prior_text := JSON.stringify(prior)
 	var file := FileAccess.open(path.path_join(ProfileStore.PRIMARY_FILE), FileAccess.WRITE)
 	file.store_string(prior_text)

@@ -43,14 +43,14 @@ func _check_menu_reward_investment_new_run_reload() -> void:
 	var first_reward := controller._collect_reward()
 	var after_first := facade.progression_summary(created["character_id"])
 	_check(first_reward["ok"] and first_reward["applied_reward"]["base_xp"] == 100 and first_reward["applied_reward"]["job_xp"] == 80, "first pilot encounter commits its declared XP before consuming the pickup")
-	_check(after_first["base_level"] == 2 and after_first["job_level"] == 2 and after_first["attribute_points_available"] == 3 and after_first["base_skill_points_available"] == 1, "first reward derives both levels and separate point wallets")
+	_check(after_first["base_level"] == 2 and after_first["job_level"] == 2 and after_first["attribute_points_available"] == 13 and after_first["base_skill_points_available"] == 1, "first reward derives both levels and separate point wallets")
 	_check(_same_values(initial_stats, controller.player.stat_breakdown), "XP gained during the run does not mutate its value snapshot")
 
 	_prepare_reward(controller, 2)
 	var second_reward := controller._collect_reward()
 	var after_second := facade.progression_summary(created["character_id"])
 	_check(second_reward["ok"] and after_second["base_level"] == 3 and after_second["job_level"] == 3, "second reward crosses multiple cumulative level thresholds in the real run")
-	_check(after_second["attribute_points_available"] == 6 and after_second["base_skill_points_available"] == 2 and controller.status_label.text.contains("+150 base") and controller.status_label.text.contains("+100 job"), "second reward exposes the derived wallets and saved XP feedback")
+	_check(after_second["attribute_points_available"] == 26 and after_second["base_skill_points_available"] == 2 and controller.status_label.text.contains("+150 base") and controller.status_label.text.contains("+100 job"), "second reward exposes the derived wallets and saved XP feedback")
 	_check(_same_values(initial_stats, controller.player.stat_breakdown), "both persistent rewards leave current combat stats unchanged")
 
 	var closed := controller._close_persistent_run(&"completed")
@@ -65,7 +65,7 @@ func _check_menu_reward_investment_new_run_reload() -> void:
 	var learned := investment_menu._learn_skill(&"slash")
 	var invested_preview := facade.build_preview(created["character_id"])
 	var invested_summary := facade.progression_summary(created["character_id"])
-	_check(allocated["ok"] and learned["ok"] and invested_summary["attribute_points_available"] == 5 and invested_summary["base_skill_points_available"] == 1 and invested_summary["effective_skill_ranks"][&"slash"] == 1, "menu spends one attribute point and learns slash rank one through persistent transactions")
+	_check(allocated["ok"] and learned["ok"] and invested_summary["attribute_points_available"] == 24 and invested_summary["base_skill_points_available"] == 1 and invested_summary["effective_skill_ranks"][&"slash"] == 1, "menu charges two currency points for one attribute increment and learns slash rank one through persistent transactions")
 
 	var next_started := investment_menu._start_run()
 	await scene_changed
