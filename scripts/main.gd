@@ -327,6 +327,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			elif _world_pointer_available():
 				_commit_skill(cast_intent.press(skill), _world_mouse_point())
 				_update_aim(_world_mouse_point())
+			else:
+				# A rejected retarget must not leave an older aim without its release latch.
+				_cancel_aim()
 			get_viewport().set_input_as_handled()
 		elif auxiliary and event.keycode == KEY_SPACE and next_button.visible:
 			_start_next_encounter()

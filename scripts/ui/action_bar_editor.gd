@@ -26,6 +26,7 @@ var message_label: Label
 var slot_buttons: Array[Button] = []
 
 func _ready() -> void:
+	visibility_changed.connect(_on_visibility_changed)
 	if not managed_externally:
 		assignment_requested.connect(assign_skill)
 		movement_requested.connect(move_skill)
@@ -145,7 +146,14 @@ func begin_binding_capture(index: int) -> void:
 func cancel_binding_capture() -> void:
 	capture_binding = -1
 
+func _on_visibility_changed() -> void:
+	if not is_visible_in_tree():
+		cancel_binding_capture()
+
 func handle_binding_event(event: InputEventKey) -> bool:
+	if not is_visible_in_tree():
+		cancel_binding_capture()
+		return false
 	if capture_binding < 0:
 		return false
 	if not event.pressed or event.echo:

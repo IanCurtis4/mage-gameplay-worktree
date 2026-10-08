@@ -115,3 +115,27 @@ Astra para revisão independente deste escopo completo. Aprovação técnica lib
 preparação por Astra; aceite de gameplay continua com o usuário, merge depois.
 Não alterar checkout habitual, master, saves pessoais, assets ou novas classes
 durante esta entrega.
+
+## Revisão independente Astra — 07/10/2026
+
+Candidato de Sol 9039da8: reprodução integral reviewer PASS, 154 etapas,
+.godot/workflow/20261007-180723-18b5dc6a/report.json. Provas nativas
+reproduzidas: 230 checks e 13 capturas, zero falhas. Inspeção visual de barra,
+menu e controles da Sentinela; layout legível, nomes completos em tooltip.
+Revisão estática de persistência/biblioteca não encontrou defeitos adicionais.
+
+Dois achados de input reproduzidos e corrigidos pelo revisor:
+- Captura continuava ativa ao sair da aba Skills e consumia a primeira letra
+  digitada no nome do personagem. Ocultar o editor agora cancela a captura;
+  editor oculto não consome eventos de teclado.
+- No modo RELEASE, pressionar outra skill sobre UI substituía o vínculo de
+  key-up, mas deixava a mira anterior presa. Retarget recusado agora cancela
+  mira e vínculo juntos, sem gastar recursos ou emitir skill.
+
+Regressão permanente action_bar_review_test.gd: 11 checks, três falhas antes,
+zero depois, usando menu real, perfis isolados e eventos enviados ao Viewport.
+Revisão de código aprovada com essas correções. Publicação depende de nova
+suíte integral reviewer no commit consolidado; aprovação técnica e publicação
+serão vinculadas a ele por relatórios locais do workflow. Aceite humano segue
+pendente e master permanece separado. Ganho de Foco validado mecanicamente;
+conforto solo e balanceamento ainda dependem da partida do usuário.
