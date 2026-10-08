@@ -5,12 +5,24 @@ substitui somente a carteira de atributos e os bônus raw documentados de E00/E0
 `ProgressionRules` cobra cada incremento pelo permanente e pela origem; saldo e
 reembolso não são persistidos. `StatCalculator` aplica os marcos aos primários
 efetivos, antes de flat/increased derivados. `ProfileCodec` migra catálogos conhecidos
-1..6 ao par 7/stat_thresholds_v1, validando também o orçamento original antes da
+1..6 ao ruleset stat_thresholds_v1, validando também o orçamento original antes da
 conversão. `ProfileFacade.attribute_purchase_preview` não grava/abre/repara perfil:
 recalcula uma cópia para incluir passivas dependentes da alocação; o menu exibe
 custo, marco e ganho, desabilitando a compra individualmente. Pending incerto não
 é sobrescrito pela migração ou recuperação de backup. Snapshot, XP, skills, caps
 e fórmulas locais de Sentinela permanecem com seus contratos anteriores.
+
+Caçadora H5 ([E05_HUNTER_PLAN.md](E05_HUNTER_PLAN.md)): catálogo atual8/schema2;
+o envelope7/stat_thresholds_v1 migra explicitamente apenas o catálogo, usando
+o custo/orçamento de atributos já vigente em7, sem reaplicar o limite antigo de
+incrementos. Codec conserva o perfil; store preserva backup e avança uma revisão.
+Passivas Hunter capturam escalares no DamageRequest do arco; o resultado canônico
+transporta esses valores sem modificar o dano primário. OpeningState combina
+somente a parcela INT com Presa Fácil e adiciona Disciplina depois, num único
+pedido físico secundário, sem crítico e sem estado novo persistido.
+Entrada de menu headless sem diretório/fachada explícitos usa perfil descartável
+em `.godot/verification/headless_menu_profile`; não abre/migra o save do jogador.
+Fixtures explícitas e entrada gráfica mantêm seus diretórios normais.
 
 Este arquivo descreve o piloto executado. O contrato candidato da expansão está
 em [E00_CONTRACT.md](E00_CONTRACT.md), incluindo migração de stats/save. Não

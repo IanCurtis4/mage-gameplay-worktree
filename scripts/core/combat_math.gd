@@ -34,6 +34,8 @@ static func resolve(
 		"target_id": request.target_id,
 		"skill_id": request.skill_id,
 		"emission_id": request.emission_id,
+		"hunter_precision_damage": request.hunter_precision_damage,
+		"hunter_easy_prey_bonus": request.hunter_easy_prey_bonus,
 		"hit_chance": hit_chance,
 		"effective_crit_chance": effective_crit,
 		"physical_component": physical_component,

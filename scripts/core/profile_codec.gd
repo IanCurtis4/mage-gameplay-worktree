@@ -11,6 +11,7 @@ const PRE_BERSERKER_CATALOG_VERSION := 3
 const PRE_ELEMENTALIST_CATALOG_VERSION := 4
 const PRE_SPIRITUALIST_CATALOG_VERSION := 5
 const PRE_THRESHOLDS_CATALOG_VERSION := 6
+const PRE_HUNTER_CATALOG_VERSION := 7
 const PRE_THRESHOLDS_RULESET_ID := "e04_learn_from_zero_v1"
 const LEGACY_BASE_GRANTS := {
 	"swordsman": {"slash": 1, "dash": 1, "swordsman_resistance": 1},
@@ -103,6 +104,12 @@ static func decode(text: String, catalog: ProfileCatalog = null) -> Dictionary:
 		and data.get("ruleset_id") == PRE_THRESHOLDS_RULESET_ID
 	):
 		return _migrate_catalog_v6(data, effective_catalog)
+	if (
+		_is_exact_integer(data.get("catalog_version"))
+		and int(data["catalog_version"]) == PRE_HUNTER_CATALOG_VERSION
+		and data.get("ruleset_id") == ProfileState.RULESET_ID
+	):
+		return _migrate_catalog_v7(data, effective_catalog)
 	return _decode_v2(data, effective_catalog)
 
 static func validate_profile(profile: ProfileState, catalog: ProfileCatalog = null) -> Dictionary:
@@ -564,6 +571,18 @@ static func _migrate_catalog_v6(data: Dictionary, catalog: ProfileCatalog) -> Di
 		return decoded
 	decoded["migrated"] = true
 	decoded["migration_kind"] = &"catalog_v6"
+	return decoded
+
+static func _migrate_catalog_v7(data: Dictionary, catalog: ProfileCatalog) -> Dictionary:
+	# Catalog 7 already uses threshold costs/budget. Hunter only adds identities:
+	# never revalidate legitimate investments against the pre-threshold wallet.
+	var migrated := data.duplicate(true)
+	migrated["catalog_version"] = ProfileState.CATALOG_VERSION
+	var decoded := _decode_v2(migrated, catalog)
+	if not decoded["ok"]:
+		return decoded
+	decoded["migrated"] = true
+	decoded["migration_kind"] = &"catalog_v7"
 	return decoded
 
 static func _profile_to_dictionary(profile: ProfileState) -> Dictionary:

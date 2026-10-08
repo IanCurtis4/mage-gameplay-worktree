@@ -4,7 +4,7 @@ extends RefCounted
 
 const FORMAT_ID := "ragrpg_character_profile"
 const SCHEMA_VERSION := 2
-const CATALOG_VERSION := 7
+const CATALOG_VERSION := 8
 const RULESET_ID := "stat_thresholds_v1"
 const MAX_CHARACTERS := 8
 

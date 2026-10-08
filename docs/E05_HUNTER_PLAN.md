@@ -147,6 +147,23 @@ paralelo de cooldown. IA Hunter conserva alvo/HP e caminha até a última posiç
 visível, sem seguir posição oculta ou emitir ataque enquanto não readquirir.
 Essas concretizações não alteram Abrigo/IA de Arqueiro ou Sentinela.
 
+Concretização H5: Disciplina captura ATQ de precisão efetivo e rank legal na
+emissão do arco; Presa Fácil captura seu rank/escalar na mesma emissão. Cópias
+e projéteis conservam ambos. Na exploração, Marca atual/root/stun/fear/slow de
+movimento pré-existentes qualificam Presa Fácil; weaken não é controle. Essa
+amostragem ocorre no callback de dano, antes do controle do próprio tiro.
+Boss com abertura qualifica sem exigir CC aceito. Presa Fácil multiplica só o
+raw INT já capturado (incluindo Marca da ativação); Disciplina é somada depois.
+O pedido secundário único conserva o multiplicador capturado na colocação,
+sem repetir mitigação ou crítico. Alterar stats/ranks durante voo não recalcula
+os escalares emitidos; erro/zero/absorção/secondary não reivindicam abertura.
+
+Persistência H5: catálogo8/schema2/stat_thresholds_v1; migração explícita do par
+7/stat_thresholds_v1 sem mudar regras/carteiras, investimentos, XP ou grants.
+Versões1..6 continuam validando seus orçamentos antigos. A versão7 já usa custos
+por patamar e não recebe essa validação antiga. Aberturas/camuflagem/payloads de
+passivas continuam exclusivos da run. Produção ainda `content_ready=false`.
+
 ## Consumidores e validação
 
 Sol: HunterMath/OpeningState, PlayerActor, main, traps/fields, input dispatch,

@@ -425,16 +425,19 @@ static func hunter_description(skill_id: StringName, rank: int = 1) -> String:
 		&"hunter_thorn_trap":
 			return "Arma uma armadilha em até 360: área %.0f, dano físico %.0f + %.1f×INT, sangramento por %.0fs e lentidão por %.0fs." % [values["radius"], values["base"], values["int_coefficient"], values["bleed_duration"], values["slow_duration"]]
 		&"hunter_mark":
-			return "Marca um alvo a até 360 por %.0fs: estende em %.0fs a abertura capturada e aumenta sua recompensa em %.0f%%." % [values["duration"], values["opening_extension"], values["reward_bonus"] * 100.0]
+			return "Marca um alvo a até 360 por %.0fs: estende em %.2fs a abertura capturada e aumenta sua parcela de INT em %.1f%%." % [values["duration"], values["opening_extension"], values["reward_bonus"] * 100.0]
 		&"hunter_shooting_discipline":
 			return "Tiros que exploram uma abertura causam um impacto físico secundário de %.0f%% do ATQ de precisão capturado." % (values["power"] * 100.0)
 		&"hunter_covering_shot":
-			return "Dispara na direção escolhida até 520, causando ATQ de precisão × %.2f e recuando 80 unidades se o segmento estiver livre." % values["power"]
+			return "Dispara na direção escolhida até 520, causando ATQ de precisão × %.2f e recuando 80 unidades. Recuo bloqueado cancela toda a ação sem custo." % values["power"]
 		&"hunter_easy_prey":
-			return "Aumenta em %.0f%% a recompensa da abertura se o alvo estava marcado ou controlado antes do tiro; contra chefes resistentes, a abertura basta." % (values["power"] * 100.0)
+			return "Aprendida (automática): aumenta em %.0f%% somente a parcela de INT da abertura se a presa estava marcada ou controlada antes do controle do próprio tiro; contra chefes resistentes, a abertura basta." % (values["power"] * 100.0)
 		&"hunter_total_cover":
-			return "Cria cobertura em até 300, raio 125 por %.1fs, com 1s para sair. Compartilha o orçamento de ocultação de 3s e a recarga com Abrigo." % values["duration"]
+			return "Cria cobertura em até 300, raio 125 por %.1fs, com 1s para sair. " % values["duration"] + hunter_cover_description()
 	return ""
+
+static func hunter_cover_description() -> String:
+	return "Na Caçadora, Abrigo e Cobertura Total compartilham %.0fs de ocultação e recarga base de %.0fs (reduzida pelos atributos). Ofensiva válida revela por %.2fs; reentrar não renova o orçamento." % [HunterTuning.COVER_BUDGET, HunterTuning.COVER_COOLDOWN, HunterTuning.COVER_REVEAL]
 
 static func _sentinel_effect_ids(skill_id: StringName) -> Array[StringName]:
 	match skill_id:

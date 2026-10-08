@@ -3,6 +3,7 @@ extends Control
 ## E02.1 roster screen. It only asks ProfileFacade to mutate the normal profile.
 
 const DEFAULT_PROFILE_DIRECTORY := "user://"
+const HEADLESS_PROFILE_DIRECTORY := "res://.godot/verification/headless_menu_profile"
 const MAX_CHARACTERS := 8
 const ProfileFacadeScript := preload("res://scripts/core/profile_facade.gd")
 const ProfileStoreScript := preload("res://scripts/core/profile_store.gd")
@@ -138,6 +139,11 @@ func select_character_at(index: int) -> Dictionary:
 
 func _open_profile() -> void:
 	if facade == null:
+		# Script runners can instantiate the project entry scene too. A default
+		# headless menu must never migrate/repair the player's real profile.
+		# Explicit fixture directories/facades and graphical playtest are unchanged.
+		if DisplayServer.get_name() == "headless" and profile_directory == DEFAULT_PROFILE_DIRECTORY:
+			profile_directory = HEADLESS_PROFILE_DIRECTORY
 		facade = ProfileFacadeScript.new(
 			ProfileStoreScript.new(profile_directory, ProfileCatalogScript.pilot()),
 			ProfileRewardResolverScript.pilot_progression()
@@ -857,13 +863,20 @@ func _skill_progression_tooltip(option: Dictionary) -> String:
 	else:
 		lines.append("Rank máximo atingido.")
 	var skill_id := StringName(option["skill_id"])
-	if skill_id in SentinelTuning.SKILL_IDS:
+	if skill_id in SentinelTuning.SKILL_IDS or skill_id in HunterTuning.SKILL_IDS:
 		var current_rank := int(option["rank"])
 		if current_rank > 0:
-			lines.append("Atual R%d: %s" % [current_rank, ClassCatalog.sentinel_description(skill_id, current_rank)])
+			var description := ClassCatalog.hunter_description(skill_id, current_rank) if skill_id in HunterTuning.SKILL_IDS else ClassCatalog.sentinel_description(skill_id, current_rank)
+			lines.append("Atual R%d: %s" % [current_rank, description])
 		if option["next_rank"] != null:
 			var next_rank := int(option["next_rank"])
-			lines.append("Próximo R%d: %s" % [next_rank, ClassCatalog.sentinel_description(skill_id, next_rank)])
+			var description := ClassCatalog.hunter_description(skill_id, next_rank) if skill_id in HunterTuning.SKILL_IDS else ClassCatalog.sentinel_description(skill_id, next_rank)
+			lines.append("Próximo R%d: %s" % [next_rank, description])
+	if skill_id == &"foliage_shelter" and facade != null:
+		var profile: ProfileState = facade.current_profile()
+		var character := profile.character_by_id(_focused_character_id) if profile != null else null
+		if character != null and character.evolution_id == &"hunter":
+			lines.append(ClassCatalog.hunter_cover_description())
 	match StringName(option["skill_id"]):
 		&"spiritualist_echo_curse":
 			lines.append("Maldição marca o alvo e inimigos próximos em raio de 110 com linha de visão.")

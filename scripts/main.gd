@@ -2291,6 +2291,11 @@ func _update_hud() -> void:
 				battle_controls.show_skill_state(skill_id, "%s · %s%s\n%d SP · %d Foco\n%s" % [_skill_input_label(skill_id), definition.display_name.to_upper(), rank_text, ceili(cost), ceili(focus_cost), state], cast_intent.active_skill == skill_id or player.active_cast_skill == skill_id)
 				if battle_controls.skill_buttons.has(skill_id):
 					battle_controls.skill_buttons[skill_id].tooltip_text += "\n" + ClassCatalog.sentinel_description(skill_id, player.skill_rank(skill_id))
+			if player.is_hunter() and battle_controls.skill_buttons.has(skill_id):
+				if skill_id in HunterTuning.SKILL_IDS:
+					battle_controls.skill_buttons[skill_id].tooltip_text += "\n" + ClassCatalog.hunter_description(skill_id, player.skill_rank(skill_id))
+				elif skill_id == &"foliage_shelter":
+					battle_controls.skill_buttons[skill_id].tooltip_text += "\n" + ClassCatalog.hunter_cover_description()
 			if skill_id == &"geometer_triangulation" and geometer_casting != null and battle_controls.skill_buttons.has(skill_id):
 				var elements := geometer_casting.construction.elements()
 				if elements.size() == 2:

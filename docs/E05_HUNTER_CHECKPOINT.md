@@ -6,14 +6,15 @@ Branch `codex/e05-hunter`, base `3d452fa2e4455f4c8636f4fb319a2d0607d08582`.
 
 ## Estado
 
-H1–H4 implementados, em commits granulares internos.
+H1–H5 implementados, em commits granulares internos.
 Contrato57bb3ef, catálogo650ee87, núcleo4bf832d; candidato efetivo é o commit que contém esta
 atualização (confirmar HEAD e assinatura no CLI antes de reutilizar evidência).
 Caçadora permanece indisponível. Nenhuma revisão/aceite de gameplay desta classe.
 Playtest habitual limpo na base3d452fa, sem alteração nesta entrega.
 Atributos já revisados/publicados por Astra; cabeçalho antigo do checkpoint de
 atributos antecede essa decisão. Ícones aee3e18/revisão35901f6 separados e não
-integrados. Master e saves pessoais não foram alterados.
+integrados. Master não foi alterado. Incidente de isolamento do save habitual
+detectado emH5 e descrito abaixo; não afirmar ausência de escrita pessoal.
 
 ## Camadas / evidência
 
@@ -45,7 +46,10 @@ integrados. Master e saves pessoais não foram alterados.
   emitido da origem anterior; budget puro3s, revelação1,25s e recarga comum18s
   canônica. Cobertura Total125/graça1s, Abrigo110 sem graça adicional. Uma área
   por dono; IA Hunter caminha à última posição visível, sem ataque oculto.
-- H5: catálogo/passivas/builds/save/admin/menu e testes ponta a ponta.
+- H5 implementado: Disciplina/Presa Fácil automáticas com snapshot no arco,
+  pedido secundário único sem crit; catálogo8/schema2/ruleset inalterado,
+  migração7 explícita, menu/HUD e duas builds legais com reload/recompensa/retorno.
+  Admin e produção continuam respeitando `content_ready=false`.
 - H6: atlas/ícones/VFX e provas nativas solo/grupo/boss.
 - H7: integral no HEAD limpo e pacote único para revisão, sem publicar playtest.
 
@@ -112,13 +116,13 @@ candidato. Verificação do lote não conclui H4–H7 nem libera revisão/playte
 
 ## Limitações e próximo passo
 
-Passivas, consumidores persistentes/menu e arte final ainda não implementados.
+Passivas e consumidores persistentes/menu concluídos emH5; arte final pendente.
 Congelante R1 e novas traps funcionam em fixtures isoladas, mas o fluxo inicial
 de evolução continua bloqueado até o kit completo. IDs novos
-ainda não são compráveis numa evolução de produção. H5 deve fechar versionamento
-do catálogo e migração antes de liberar compras persistentes; não gravar estado de
+não são selecionáveis numa evolução de produção. Versionamento do catálogo e
+migração fechados emH5; produção continua bloqueada atéH6/H7. Não gravar estado de
 aberturas/fields. Não declarar classe jogável, leitura visual ou desempenho.
-Próximo passo: H5 e demais camadas autorizadas, atualizar este checkpoint com commits,
+Próximo passo: H6 (atlas/ícones/VFX e provas nativas), atualizar este checkpoint com commits,
 resultados e pendências. Nenhum gate por microtarefa nem mensagem a outros chats
 por efeito das skills. Só escalar bloqueio ou divergência relevante do contrato.
 
@@ -162,3 +166,74 @@ Após consolidar o lote, conferir CLI all/implementer no HEAD limpo e assinatura
 `current_inputs=true`. Relatórios anteriores vinculados aH3 tornam-se históricos,
 não comprovam H4. Validação H4 não habilita a classe nem conclui H5–H7; nenhuma
 mensagem a Astra/publicação no playtest por efeito da retomada.
+
+## Evidência H5
+
+`e05_hunter_passives_test.gd`:613 checks, zero falhas/erros, Godot4.7.2standard.
+Todos os ranks legais e inválidos, seis emissões reais de arco, passivas sem slot,
+gates28/34, outras identidades sem bônus, cópias durante voo, Marca e Presa Fácil
+somente na parcela INT, Disciplina somada depois, uma mitigação/rounding sem crit,
+duplicatas/reabertura, payload inválido sem claim, miss/zero/escudo/secondary/letal.
+Controller real confirma root/stun/fear/slow anteriores e Marca, exclui weaken e
+o slow do próprio primeiro tiro; boss com CC resistido mantém Presa Fácil.
+Fixtures alteradas após emissão comprovam ausência de leitura tardia de stats/rank.
+
+`e05_hunter_catalog_migration_test.gd`:112 checks, zero falhas/erros. Migração
+7→8 explícita sem mudar schema2/stat_thresholds_v1 ou persistir estado da run;
+investimentos legítimos acima de87 incrementos não usam orçamento antigo.
+Identidades/XP/counters/ranks/grants/slots24/presets/equipamentos/extensões/seleção
+e sessão de recompensa conservados; backup fonte byte-exato, revisão única,
+primeira alocação posterior/respec/reload, todos os estágios de falha de escrita,
+pending/futuro/incompatível preservados e recuperação conservadora de backup.
+Testes históricos de catálogos anteriores só atualizam expectativa atual8;
+oráculo independente de atributos continua identificado como catálogo7 e ligado
+ao ruleset inalterado, sem reescrever seus números.
+
+`e05_hunter_builds_test.gd`:422 checks, zero falhas/erros na reprodução de Sol.
+Luna escreveu apenas teste/UID; implementação e evidência final são de Sol.
+Preparadora e Emboscadora compram ranks pela fachada e respeitam carteiras19/20
+e custo canônico de atributos. Evolução/menu real, ranks/gates, compras, tooltips
+atuais/próximos, Abrigo18s apenas Hunter, passivas aprendidas automáticas além dos
+dois slots antigos, biblioteca além de cinco ativas, edição slot24, save/reload,
+snapshot de run, recompensa/fim e retorno ao menu. Override de readiness apenas
+nas fixtures; produção/start/admin/training continuam bloqueados para Hunter.
+São transações dirigidas, não uma prova de combate solo ou de IA ativa.
+
+Logs em `.godot/verification/e05_hunter_passives_test.log`,
+`e05_hunter_catalog_migration_test.log`; builds reproduzidas pelo verify integral.
+Primeiras execuções dirigidas detectaram propriedades/fixtures inválidas dos
+novos testes (nome do slot passivo e mapa de atributos incompleto); corrigidas e
+rotinas completas repetidas sem SCRIPT ERROR. Exit0 dessas tentativas não é PASS.
+
+Após commit, executar CLI `all/implementer` no HEAD limpo e consultar o relatório
+emitido pelo status com `current_inputs=true`; relatórios H4 tornam-se históricos.
+Este lote não habilita a classe nem conclui H6/H7. Nenhuma publicação, merge
+ou mensagem a Astra nesta camada.
+
+### Isolamento da verificação / incidente H5
+
+A entrada CharacterMenu pode ser instanciada pelo runner headless mesmo com
+`--script`. Foi detectada abertura do perfil habitual: primário migrou7→8 e
+revisão+1 em08/10/2026 15:06:59, backup7 preservado. Comparação estrutural de todos
+os campos contra backup: só catálogo/revisão diferentes; personagens, progressão
+e demais dados iguais. Usuário foi informado e autorizou explicitamente restaurar
+o backup anterior. Primário restaurado byte-exato ao backup7; backup original
+preservado. Cópia recuperável do primário8 anterior em
+`.godot/verification/h5_profile8_before_restore_20261008.json` (ignorada pelo Git).
+Hashes revalidados antes de copiar; nenhuma escrita se arquivos tivessem mudado.
+Conferências posteriores devem conservar ambas as assinaturas restauradas.
+Não tratar esse
+incidente como publicação/aceite nem afirmar que o save permaneceu intocado.
+
+Primeiro verify H5 foi interrompido preventivamente antes de concluir; não é
+PASS integral. CharacterMenu agora resolve o perfil padrão headless em
+`res://.godot/verification/headless_menu_profile`, antes de abrir o store.
+Diretórios/fachadas explícitos de fixtures e execução gráfica continuam intactos.
+`verification_profile_isolation_test.gd`:5 checks, zero falhas/erros. Toda nova
+verificação integral deve repetir com essa proteção, incluindo smoke de entrada.
+
+Segunda execução completa de `tools/verify.ps1`:exit0, sem erros/falhas, incluindo
+as quatro suítes novas, bases/classes, persistência/UI/input, smoke e admin.
+Ao final, hashes do primário e backup habitual permanecem exatamente os da
+restauração autorizada. A execução CLI integral após commit deve vincular o
+resultado ao HEAD limpo; conferir assinatura pelo status, sem editar relatório.

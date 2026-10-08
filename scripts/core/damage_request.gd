@@ -16,6 +16,10 @@ var magic_damage: float = 0.0
 ## Optional Elementalist passive power captured at commit; applied at impact
 ## only when that target's direct elemental sequence is ready.
 var prismatic_resonance_damage: float = 0.0
+## Hunter passive powers captured on bow emission, not from later actor stats.
+## These are eligibility payloads, never added to the primary arrow damage.
+var hunter_precision_damage: float = 0.0
+var hunter_easy_prey_bonus: float = 0.0
 var damage_dealt_multiplier: float = 1.0
 var accuracy_mode: AccuracyMode = AccuracyMode.CONTESTED
 var hit_rating: float = 0.0
@@ -36,6 +40,8 @@ func copy() -> DamageRequest:
 	result.physical_damage = physical_damage
 	result.magic_damage = magic_damage
 	result.prismatic_resonance_damage = prismatic_resonance_damage
+	result.hunter_precision_damage = hunter_precision_damage
+	result.hunter_easy_prey_bonus = hunter_easy_prey_bonus
 	result.damage_dealt_multiplier = damage_dealt_multiplier
 	result.accuracy_mode = accuracy_mode
 	result.hit_rating = hit_rating

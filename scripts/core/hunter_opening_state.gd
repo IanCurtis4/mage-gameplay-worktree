@@ -60,11 +60,15 @@ func activate(activation_id: int, target_id: int, snapshot: DamageRequest, durat
 	_openings[target_id] = {"remaining": duration, "request": request, "activation_id": activation_id}
 	return true
 
-func consume(result: Dictionary) -> Dictionary:
+func consume(result: Dictionary, controlled_or_boss: bool = false) -> Dictionary:
 	var target_id := int(result.get("target_id", 0))
 	var emission_id := int(result.get("emission_id", 0))
 	var actual_damage := float(result.get("actual_damage", 0.0))
 	if owner_id <= 0 or int(result.get("source_id", 0)) != owner_id or target_id <= 0 or emission_id <= 0 or not bool(result.get("can_trigger_effects", false)) or not is_finite(actual_damage) or actual_damage <= 0.0 or StringName(result.get("skill_id", &"")) not in BOW_SKILLS or not _openings.has(target_id):
+		return {}
+	var precision := float(result.get("hunter_precision_damage", 0.0))
+	var easy_bonus := float(result.get("hunter_easy_prey_bonus", 0.0))
+	if not is_finite(precision) or precision < 0.0 or not is_finite(easy_bonus) or easy_bonus < 0.0 or easy_bonus > 0.16:
 		return {}
 	var emission: Dictionary = _emissions.get(emission_id, {})
 	if emission.is_empty():
@@ -78,6 +82,14 @@ func consume(result: Dictionary) -> Dictionary:
 	var request: DamageRequest = opening["request"]
 	request = request.copy()
 	request.emission_id = emission_id
+	# Mark was already captured on activation. Easy Prey scales only that INT
+	# portion; Discipline is added afterwards. One canonical secondary request
+	# retains the placement multiplier, current defenses and no critical roll.
+	if is_marked(target_id) or controlled_or_boss:
+		request.physical_damage *= 1.0 + easy_bonus
+	request.physical_damage += precision
+	if not _valid_snapshot(request):
+		return {}
 	# Claim/erase before returning a payload. Nested secondary/death callbacks
 	# cannot find the same opening, or exploit a replacement with the same action.
 	_openings.erase(target_id)

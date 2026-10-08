@@ -44,5 +44,16 @@ static func explosive_raw(rank: int, stats: StatBreakdown) -> float:
 		return 0.0
 	return (22.0 + 2.2 * stats.primary_value(&"int")) * (1.0 + 0.1 * (rank - 1))
 
+static func discipline_raw(rank: int, stats: StatBreakdown) -> float:
+	var tuning := HunterTuning.values(&"hunter_shooting_discipline", rank)
+	if tuning.is_empty() or stats == null:
+		return 0.0
+	var precision := stats.value(&"precision_attack")
+	return precision * float(tuning["power"]) if is_finite(precision) and precision >= 0.0 else 0.0
+
+static func easy_prey_bonus(rank: int) -> float:
+	var tuning := HunterTuning.values(&"hunter_easy_prey", rank)
+	return float(tuning["power"]) if not tuning.is_empty() else 0.0
+
 static func step_source() -> Dictionary:
 	return {"source_id": &"hunter_step", "label": "Passo de Caça", "increased": {&"move_speed": HunterTuning.STEP_SPEED_BONUS}}

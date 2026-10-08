@@ -275,7 +275,10 @@ func record_hunter_damage(result: Dictionary) -> void:
 	var victim := instance_from_id(int(result.get("target_id", 0))) as CombatActor
 	if not is_instance_valid(victim) or (not victim.is_alive() and not bool(result.get("killed", false))):
 		return
-	var payload := hunter_state.consume(result)
+	# Called from damage_applied before an arrow applies its own control. Boss
+	# openings qualify even when the shared hard-control budget resists the trap.
+	var controlled_or_boss := victim.hard_controls.boss or victim.is_rooted() or victim.is_stunned() or victim.is_feared() or victim.attribute_debuffs.fraction(AttributeDebuffState.MOVE_SPEED) > 0.0
+	var payload := hunter_state.consume(result, controlled_or_boss)
 	if payload.is_empty():
 		return
 	if bool(payload["granted_step"]):
@@ -2609,6 +2612,12 @@ func _make_request(enemy: CombatActor, skill_id: StringName, accuracy_mode: Dama
 	elif is_hunter():
 		_hunter_emission_serial += 1
 		request.emission_id = _hunter_emission_serial
+		if skill_id in HunterOpeningState.BOW_SKILLS:
+			var build := run_state.build_snapshot
+			if build.has_passive(&"hunter_shooting_discipline"):
+				request.hunter_precision_damage = HunterMath.discipline_raw(skill_rank(&"hunter_shooting_discipline"), stat_breakdown)
+			if build.has_passive(&"hunter_easy_prey"):
+				request.hunter_easy_prey_bonus = HunterMath.easy_prey_bonus(skill_rank(&"hunter_easy_prey"))
 	return request
 
 func _make_physical_request(enemy: CombatActor, skill_id: StringName, power: float, accuracy_mode: DamageRequest.AccuracyMode, can_crit: bool) -> DamageRequest:
