@@ -460,16 +460,18 @@ S7 habilita apenas esta biblioteca completa no candidato isolado; publicar em
 playtest/revisão e aceite humano continuam separados. Atlas original preserva
 fonte/prompt; provas de renderer não qualificam diversão, balanceamento ou FPS.
 
-### Caçadora — núcleo parcial H2
+### Caçadora — candidato integrado H7
 
 Contrato: E05_HUNTER_PLAN.md; retomada: E05_HUNTER_CHECKPOINT.md. Hunter mantém
-`content_ready=false`. HunterOpeningState é efêmero e deduplica trap/vítima e
+`content_ready=true` apenas no candidato completo; revisão/playtest/aceite seguem
+separados. HunterOpeningState é efêmero e deduplica trap/vítima e
 emissão/vítima antes de callbacks. Laço/Explosiva reutilizados abrem a presa,
 inclusive com CC resistido; tiro próprio positivo consome um snapshot físico
 INT-only secundário pelo resolver existente. Letal ainda reivindica mobilidade,
 sem atingir cadáver. Passo usa fonte identificada no StatCalculator e preserva
 HP/SP faltantes/CDs. Hooks de LoS Hunter são opcionais; bases preservadas. Nenhum
-estado desse ciclo é catálogo/save. Kit novo e apresentação ainda pendentes.
+estado desse ciclo é catálogo/save. Kit próprio, passivas, menu e apresentação
+estão integrados; o catálogo8/schema2/stat_thresholds_v1 não muda nesta camada.
 
 H3 acrescenta `HunterTrap` para Congelante (presa única), Piche (ocupantes
 iniciais) e Espinhos (área), com snapshots INT-only em HunterMath. Input/preparo,
@@ -479,8 +481,17 @@ por dono, com fonte de slow própria e residual0,4s, sem dano ou abertura de tic
 O hook opcional pré-impacto de ExplosiveTrap captura um único escalar, consome
 Piche e retira sua fonte antes de quaisquer impactos. Espinhos usa o bleed
 canônico renovado por dono/skill, secundário e sem crítico. Morte/fim limpa campo,
-slow e streams próprios. Catálogo permanece indisponível; Marca, cobertura,
-passivas e prova visual integrada continuam pendentes.
+slow e streams próprios. H4 integra Marca/snapshot da ativação, recuo80 revalidado
+por segmento completo e cobertura compartilhada3s/18s com Abrigo. A IA observa
+a última posição visível e não ataca o jogador oculto. H5 captura Disciplina e
+Presa Fácil na emissão e resolve uma recompensa secundária canônica sem crit.
+
+H7 revalida remoção de presas antes de atribuições tipadas no Piche e nas traps
+de área; índices/Variants são conferidos antes de converter atores vivos.
+Rotação paga com IA, navegação, colisão de flechas e reforços reais é exercitada
+por deltas explícitos30/60/144Hz, com duas builds legais e variantes sem passivas
+tardias. Probe nativo usa processamento automático, HUD/obstáculos existentes e
+caps solicitados30/60/144; isso não é qualificação de FPS, DPS ou diversão.
 
 ### Procedimento de verificação
 

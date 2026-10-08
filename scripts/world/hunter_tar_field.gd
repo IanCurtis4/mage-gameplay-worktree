@@ -50,8 +50,16 @@ func _on_owner_died(_owner: CombatActor) -> void:
 func refresh_occupants() -> void:
 	if not active or not is_instance_valid(owner_actor) or not owner_actor.is_alive() or (is_inside_tree() and get_tree().paused):
 		return
-	for victim: CombatActor in _targets.duplicate():
-		if victim == null or not is_instance_valid(victim) or not victim.is_alive():
+	# A typed loop attempts to cast a freed Object before its validity guard.
+	# Prune through untyped/index access first, then use the live typed actor.
+	for index: int in range(_targets.size() - 1, -1, -1):
+		if not is_instance_valid(_targets[index]):
+			_targets.remove_at(index)
+	for candidate: Variant in _targets.duplicate():
+		if not is_instance_valid(candidate):
+			continue
+		var victim := candidate as CombatActor
+		if victim == null or not victim.is_alive() or victim.is_queued_for_deletion():
 			continue
 		if global_position.distance_to(victim.global_position) <= RADIUS + victim.collision_radius and (not target_filter.is_valid() or bool(target_filter.call(victim))):
 			victim.apply_slow(slow_fraction, residual_duration, source_id)
@@ -77,9 +85,9 @@ func expire(remove_slow: bool = true) -> void:
 	queue_free()
 
 func _remove_own_slow() -> void:
-	for victim: CombatActor in _targets:
-		if victim != null and is_instance_valid(victim):
-			victim.remove_attribute_debuff(AttributeDebuffState.MOVE_SPEED, source_id)
+	for candidate: Variant in _targets:
+		if is_instance_valid(candidate):
+			(candidate as CombatActor).remove_attribute_debuff(AttributeDebuffState.MOVE_SPEED, source_id)
 
 func _exit_tree() -> void:
 	# External cleanup/retry must not leave the field's source behind.

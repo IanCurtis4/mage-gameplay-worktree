@@ -37,6 +37,9 @@ func _process(delta: float) -> void:
 		return
 	super._process(delta)
 	if state == State.ARMED:
+		for index: int in range(_targets.size() - 1, -1, -1):
+			if not is_instance_valid(_targets[index]):
+				_targets.remove_at(index)
 		var victim := first_trigger_target(_targets)
 		if victim != null:
 			try_trigger(victim)
@@ -48,8 +51,11 @@ func _on_triggered(_trap: PlayerTrap, primary: CombatActor) -> void:
 	if source_skill_id == &"hunter_freezing_trap":
 		victims.append(primary)
 	else:
-		for victim: CombatActor in _targets:
-			if victim == null or not is_instance_valid(victim) or not victim.is_alive() or victim.get_instance_id() == owner_id:
+		for candidate: Variant in _targets:
+			if not is_instance_valid(candidate):
+				continue
+			var victim := candidate as CombatActor
+			if victim == null or not victim.is_alive() or victim.is_queued_for_deletion() or victim.get_instance_id() == owner_id:
 				continue
 			if global_position.distance_to(victim.global_position) <= effect_radius + victim.collision_radius and (not target_filter.is_valid() or bool(target_filter.call(victim))):
 				victims.append(victim)

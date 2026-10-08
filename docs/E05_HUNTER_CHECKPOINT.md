@@ -6,10 +6,11 @@ Branch `codex/e05-hunter`, base `3d452fa2e4455f4c8636f4fb319a2d0607d08582`.
 
 ## Estado
 
-H1–H6 implementados, em commits granulares internos.
+H1–H7 implementados, em commits granulares internos; fechamento técnico de Astra pendente.
 Contrato57bb3ef, catálogo650ee87, núcleo4bf832d; candidato efetivo é o commit que contém esta
 atualização (confirmar HEAD e assinatura no CLI antes de reutilizar evidência).
-Caçadora permanece indisponível. Nenhuma revisão/aceite de gameplay desta classe.
+Caçadora habilitada somente no candidato integrado (`content_ready=true`).
+Nenhuma aprovação de Astra, publicação ou aceite de gameplay desta classe.
 Playtest habitual limpo na base3d452fa, sem alteração nesta entrega.
 Atributos já revisados/publicados por Astra; cabeçalho antigo do checkpoint de
 atributos antecede essa decisão. Ícones aee3e18/revisão35901f6 separados e não
@@ -54,7 +55,10 @@ detectado emH5 e descrito abaixo; não afirmar ausência de escrita pessoal.
   mecanismos/campo de chão e observador cosmético de Marca/abertura/consumo/Passo.
   Prova nativa controlada solo/grupo/boss claro/escuro; sem publicação ou ícones
   globais integrados. Revisão visual independente e combate ativo ainda H7.
-- H7: integral no HEAD limpo e pacote único para revisão, sem publicar playtest.
+- H7: IA/navegação/flight ativos30/60/144, builds legais e variantes sem passivas
+  tardias, fluxo real menu→arena→retorno, correção de referências removidas,
+  prova nativa com HUD/obstáculos e readiness no candidato. Integral/pacote único
+  devem estar vinculados ao HEAD limpo final; sem publicar playtest.
 
 Evidência dirigida reproduzida por Sol em Godot4.7.2: catálogo619 checks,
 abertura674 e integração41, zero falhas. Roster66 e catálogo Sentinela749 também
@@ -119,18 +123,17 @@ candidato. Verificação do lote não conclui H4–H7 nem libera revisão/playte
 
 ## Limitações e próximo passo
 
-Passivas e consumidores persistentes/menu concluídos emH5; arte/VFX H6 integrados
-com evidência dirigida e renderer controlado. Revisão visual final ainda pendente.
-Congelante R1 e novas traps funcionam em fixtures isoladas, mas o fluxo inicial
-de evolução continua bloqueado até o kit completo. IDs novos
-não são selecionáveis numa evolução de produção. Versionamento do catálogo e
-migração fechados emH5; produção continua bloqueada até fecharH7. Não gravar estado de
-aberturas/fields. Não declarar classe publicada, desempenho ou aceite de leitura.
-Próximo passo: H7 (IA ativa30/60/144Hz solo/defesa, integração final e readiness
-somente com consumidores/evidência completos), atualizar este checkpoint e
-preparar um único candidato para revisão integrada de Astra. Não iniciar H7
-automaticamente no encerramento desta rodada granular. Nenhum gate por microtarefa nem mensagem a outros chats
-por efeito das skills. Só escalar bloqueio ou divergência relevante do contrato.
+H1–H7 integrados no candidato, incluindo evolução normal, compras e reload,
+menu/arena/HUD/retorno reais. Catálogo8/schema2/ruleset preservados no fechamento.
+As seções H1–H6 abaixo/acima são evidências históricas, não o estado vigente de
+readiness. Não gravar estado de aberturas/fields. Ícones globais continuam fora
+do escopo; os oito exclusivos Hunter estão preparados, sem integração global.
+Revisão técnica/visual final de Astra e aceite humano continuam pendentes.
+Não declarar publicada a classe, nem DPS/FPS/diversão por provas dirigidas.
+Próximo passo: revisão integrada do candidato limpo e relatório all compatível;
+envio a outro chat exige autorização humana específica, não decorre desta skill.
+Depois da aprovação técnica, Astra prepara/revalida a composição no playtest;
+merge somente após aceite do usuário. Nenhuma outra classe/épico iniciado.
 
 ## Evidência H4
 
@@ -302,3 +305,90 @@ checkout. Conferir status --contract docs/E05_HUNTER_PLAN.md
 e relatório all/implementer current_inputs=true no commit que contém H6.
 Essa prova integral não fecha H7. Próxima rodada: combate ativo/integração final,
 readiness com evidência completa e um único pacote para revisão de Astra.
+
+## Evidência H7 — fechamento integrado
+
+Retomada de bf615b1 limpo; H6 all/implementer170 estava `current_inputs=true`.
+Escopo humano Hunter prevalece sobre cabeçalhos históricos Defendente. Readiness
+agora true para somente Hunter completo; placeholders futuros permanecem false.
+Testes de catálogo/roster/Sentinela/atlas atualizam expectativas históricas,
+conservando negativos com override false e metadata completa. Não muda tuning,
+schema2, catálogo8 ou stat_thresholds_v1; não publica em codex/playtest.
+
+H7 active combat: PASS12768 checks/16 cenários, zero falhas/erros, Godot4.7.2.
+Subagente escreveu exclusivamente teste/UID; Sol inspecionou e reproduziu na suíte
+integral. Duas builds19/20 em solo/defesa ×30/60/144 deltas, mais quatro variantes
+legais sem Disciplina/Presa Fácil a60 (16/14evol, saldo não gasto). IA real,
+pathfinding, preparo variável/commit, mecanismos, flight e colisão real de
+flechas. Boss de treino canônico50.000HP/dano0,18, sem HP artificial ou refill:
+andou385–386px, atacou6solo/18defesa; defesa recebeu7 hits de flechas e a onda8s.
+Um consumo de abertura/recompensa/Passo por emissão; SP auditado frame a frame
+contra regen e pagamentos canônicos. Pausa conserva IA/SP/CD/Marca/projéteis;
+fim solo e morte real por DamageRequest letal em defesa limpam claims/fields/
+mecanismos/cobertura/VFX. Delta dirigido não é benchmark de FPS, balanço ou vitória.
+Primeiras fixtures tiveram contagem indevida de flight por delta automático após
+emissão; congelamento imediato corrigido. Não confundir tentativa com PASS final.
+
+H3 ampliado: PASS186, zero falhas/erros. A primeira prova nativa ativa revelou
+`Trying to assign invalid previously freed instance` em refresh de Piche, após
+morte/remoção de uma presa. Guard dentro de loop tipado era tardio: a atribuição
+falhava antes da validade. Runtime agora revalida/pruna índices/Variants antes
+de converter atores vivos, também em cleanup do campo e ativação de traps de
+área. Regressão libera nós reais, conserva slow da presa sobrevivente e aciona
+Espinhos após remoção, sem impacto extra ou mudança na fórmula.
+
+Build/menu/save/arena/retorno: PASS426. Catálogo de produção sem readiness
+override nos dois caminhos legais. Menu._start_run muda para main.tscn real;
+HUD recebe slots24/biblioteca/atlas Hunter. RunController terminal retorna à
+CharacterMenu real, fecha sessão uma vez e reabre fachada/save explícitos de
+fixture antes de _ready. Perfil pessoal e controles de user:// não são gravados.
+Gates/caps/carteiras/passivas automáticas permanecem; fixture false ainda rejeita
+evolução/admin/start/training sem mutação.
+
+Renderer nativo automático: PASS708 checks/36 capturas (236/12 em cada cap30,
+60,144), zero erros após correção. IA/processamento automáticos, solo/defesa,
+Preparadora/Emboscadora, HUD real, piso e três obstáculos preservados, origem do
+atlas própria, mecanismo/opening/consumo/Passo/cobertura. Não há congelamento de
+AI, refill de SP ou HP inflado; caps solicitados não são taxas medidas. Primeira
+rodada60 também tinha contador de skill errado na fixture; corrigido para
+hunter_exploit e todas as capturas regeneradas. Limites e procedimento seguro:
+[docs/art/hunter_h7/README.md](art/hunter_h7/README.md). Inspeção representativa;
+H6 mantém prova de atlas32/pisos claros-escuros/cenas densas. Não é review Astra.
+
+tools/verify.ps1 completo terminou exit0, incluindo H7 PASS12768, builds426,
+H3regressão186, bases/classes anteriores, persistência/UI/input, import, smoke
+e admin; nenhuma falha ou SCRIPT ERROR. CLI all/implementer vincula o resultado
+ao candidato final e continua obrigatório no fechamento. Validar
+novamente após o commit que contém esta atualização e exigir `current_inputs=true`
+no status, candidato limpo e seleção incluindo e05_hunter_active_combat_test.gd.
+Não reutilizar relatório H6, não editar report e não executar approve em nome
+de Astra. CLI externo/origem/SHA256 permanecem os explicitamente registrados
+emH6; não foi copiado. Pacote de inspeção CLI contra base3d452fa deve ser emitido
+em `.godot/workflow/hunter_h7_review.md` após consolidação; não é aprovação.
+Usuário autorizou explicitamente o envio deste candidato completo ao Astra
+nesta rodada, após a validação integral (resposta “Sim, enviar ao Astra”).
+
+Conferência durante H7: perfil habitual primário e backup continuam byte-exatos
+à restauração autorizada H5 (SHA256 FC96503BEE4A2BFE896CE2800A3FA198B9F66C48025E3249613360A9D846FB56).
+Playtest permanece codex/playtest/3d452fa, limpo; master sem alteração. Guard
+headless e entradas gráficas posicionais explícitas preservam o isolamento.
+
+### Roteiro de playtest após aprovação técnica de Astra
+
+1. Evoluir Arqueiro job20 em Caçadora: Congelante R1 grátis, origem preservada;
+   comprar ranks pelos gates20/23/25/28/31/34/37, sem ultrapassar carteiras.
+2. Preparadora e Emboscadora do contrato: salvar/reabrir, organizar mais de cinco
+   ativas/slot24, conferir passivas automáticas; não exigir Espinhos/kit inteiro
+   nem passivas tardias para abrir→atirar→Passo.
+3. Testar confirmar/soltar/instantâneo, cancelar e alvo/parede novos durante
+   preparo; comparar SP/CD antes/depois, tiro com recuo bloqueado sem cobrança.
+4. Preparar mecanismos antes da chegada; distinguir preparando/armado/campo,
+   controlar grupo/boss, marcar e consumir abertura uma vez, testar Piche→Explosiva.
+5. Alternar Abrigo/Cobertura Total: budget3s/CD18 compartilhados, revelação1,25s,
+   última posição da IA, saída/reentrada sem renovar budget; flechas já emitidas
+   continuam válidas. Pausar durante preparo/flight/cobertura e retomar.
+6. Conferir silhueta/pés/costas/arma, marcador combinado e rastro curto em pisos
+   claros/escuros e perto dos obstáculos/HUD, especialmente combate denso.
+7. Morrer/terminar/reiniciar/voltar ao menu sem órfãos ou estado Hunter salvo;
+   comparar Arqueiro/Sentinela. Registrar leitura, recursos e prazer do ciclo;
+   este roteiro não registra aceite humano automaticamente.

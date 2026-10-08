@@ -65,8 +65,8 @@ func _check_production_roster() -> void:
 		if definition.id == &"sentinel":
 			expected_state = definition.content_ready and definition.entry_skill_id == &"sentinel_headshot" and definition.exclusive_skill_ids == SentinelTuning.SKILL_IDS
 		if definition.id == &"hunter":
-			# Declared Hunter metadata is not permission to launch an incomplete kit.
-			expected_state = not definition.content_ready and definition.entry_skill_id == &"hunter_freezing_trap" and definition.exclusive_skill_ids == HunterTuning.SKILL_IDS
+			# H7 enables only the complete Hunter candidate, not future placeholders.
+			expected_state = definition.content_ready and definition.entry_skill_id == &"hunter_freezing_trap" and definition.exclusive_skill_ids == HunterTuning.SKILL_IDS
 		_check(expected_state, "%s readiness matches completed kits and future placeholders" % definition.id)
 	var mage_options := catalog.evolution_definitions_for_origin(&"mage")
 	_check(mage_options.map(func(definition: EvolutionDefinition) -> StringName: return definition.id) == [&"elementalist", &"spiritualist", &"mg_sp", &"mg_ar"], "origin query includes only the four Mage destinations")

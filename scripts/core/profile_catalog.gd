@@ -529,7 +529,8 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 			definition.exclusive_skill_ids = SentinelTuning.SKILL_IDS.duplicate()
 		if definition.id == &"hunter" and (not normalized_overrides.has(definition.id) or (not normalized_overrides[definition.id].has("exclusive_skill_ids") and not normalized_overrides[definition.id].has(&"exclusive_skill_ids"))):
 			definition.entry_skill_id = &"hunter_freezing_trap"
-			definition.content_ready = false
+			# Complete H7 candidate; technical review/product playtest remain separate.
+			definition.content_ready = true
 			definition.exclusive_skill_ids = HunterTuning.SKILL_IDS.duplicate()
 		if normalized_overrides.has(definition.id):
 			_apply_evolution_override(definition, normalized_overrides[definition.id])

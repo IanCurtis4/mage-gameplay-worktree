@@ -73,7 +73,7 @@ func _run() -> void:
 	_sp_endpoints()
 	_overrides()
 	var hunter := catalog.evolution_definition(&"hunter")
-	_check(not hunter.content_ready and hunter.entry_skill_id == &"hunter_freezing_trap" and hunter.exclusive_skill_ids == HunterTuning.SKILL_IDS, "partial Hunter metadata remains unavailable alongside Sentinel")
+	_check(hunter.content_ready and hunter.entry_skill_id == &"hunter_freezing_trap" and hunter.exclusive_skill_ids == HunterTuning.SKILL_IDS, "complete Hunter metadata coexists with unchanged Sentinel")
 	for evolution_id: StringName in [&"sp_mg", &"sp_ar", &"mg_sp", &"ar_sp", &"ar_mg"]:
 		_check(not catalog.evolution_definition(evolution_id).content_ready and catalog.evolution_definition(evolution_id).exclusive_skill_ids.is_empty(), "other placeholders unchanged: %s" % evolution_id)
 	print("Sentinel catalog: %d checks, %d failures" % [checks, failures])

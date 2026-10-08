@@ -56,7 +56,7 @@ func _run() -> void:
 	quit(0 if failures == 0 else 1)
 
 func _catalog() -> ProfileCatalog:
-	return ProfileCatalog.pilot({}, {}, {&"hunter": {"content_ready": true}})
+	return ProfileCatalog.pilot()
 
 func _profile(job_level: int, evolved: bool = true) -> ProfileState:
 	var profile := ProfileState.new(PROFILE_ID)
@@ -84,15 +84,16 @@ func _facade(label: String, job_level: int = 40, evolved: bool = true, catalog: 
 	return facade
 
 func _check_catalog_and_admin_gate() -> void:
-	var production := ProfileCatalog.pilot()
+	# Retain negative readiness coverage without blocking the complete candidate.
+	var production := ProfileCatalog.pilot({}, {}, {&"hunter": {"content_ready": false}})
 	var ready := _catalog()
 	var production_hunter := production.evolution_definition(&"hunter")
 	var ready_hunter := ready.evolution_definition(&"hunter")
 	_check(production.is_valid() and ready.is_valid() and production_hunter != null and ready_hunter != null, "production and test catalogs contain the Hunter identity")
 	if production_hunter == null or ready_hunter == null:
 		return
-	_check(not production_hunter.content_ready and not production.evolution_is_ready(&"hunter", &"archer"), "production Hunter remains unavailable until class closure")
-	_check(ready_hunter.content_ready and ready.evolution_is_ready(&"hunter", &"archer") and ready_hunter.exclusive_skill_ids == HunterTuning.SKILL_IDS, "only the explicit fixture override marks the complete Hunter library ready")
+	_check(not production_hunter.content_ready and not production.evolution_is_ready(&"hunter", &"archer"), "explicit incomplete fixture remains blocked at every consumer")
+	_check(ready_hunter.content_ready and ready.evolution_is_ready(&"hunter", &"archer") and ready_hunter.exclusive_skill_ids == HunterTuning.SKILL_IDS, "production H7 metadata marks only the complete Hunter library ready")
 	var facade := _facade("blocked", 40, true, production)
 	var id: String = facade.current_profile().selected_character_id
 	var ordinary := facade.evolution_options(id)
@@ -263,7 +264,22 @@ func _check_build(label: String, evolution_purchases: Dictionary, allocations: D
 	_check(menu.automatic_passives_label.text.contains("Disciplina de Tiro") and menu.automatic_passives_label.text.contains("Presa Fácil"), "%s menu lists both learned Hunter passives as automatic" % label)
 	_check_passive_tooltip(menu, &"hunter_shooting_discipline", int(purchases[&"hunter_shooting_discipline"]))
 	_check_passive_tooltip(menu, &"hunter_easy_prey", int(purchases[&"hunter_easy_prey"]))
-	var run := reload_facade.start_run("%s-start" % label, reload_facade.current_profile().revision)
+	# Actual menu scene transition; isolate controls before the arena's _ready.
+	var isolate_controls := func(node: Node) -> void:
+		if node is RunController:
+			(node as RunController).control_preferences.path = ROOT_DIRECTORY.path_join(label + "_controls.cfg")
+	root.child_entered_tree.connect(isolate_controls)
+	var run := menu._start_run()
+	await scene_changed
+	root.child_entered_tree.disconnect(isolate_controls)
+	var controller := current_scene as RunController
+	_check(controller != null and controller.player.is_hunter() and controller.player.character_animation.actor_kind == &"hunter", "%s real menu transition selects Hunter runtime and own atlas" % label)
+	if controller != null:
+		controller.set_process(false)
+		controller.player.set_process(false)
+		for enemy: CombatActor in controller.enemies:
+			enemy.set_process(false)
+		_check(controller.action_slots == menu_bar and controller.battle_controls.slot_buttons.size() == 24 and controller.player.available_skill_ids().size() > 5, "%s real HUD consumes saved slots24 and full learned library" % label)
 	_check(run["ok"] and run["run_state"].class_id == &"archer" and run["run_state"].build_snapshot.evolution_id == &"hunter", "%s starts a normal run from the saved build" % label)
 	if not run["ok"]:
 		menu.queue_free()
@@ -277,16 +293,21 @@ func _check_build(label: String, evolution_purchases: Dictionary, allocations: D
 	_check(not reload_facade.learn_skill("%s-run-purchase" % label, run_revision, id, &"hunter_mark")["ok"] and not reload_facade.update_preset("%s-run-preset" % label, run_revision, id, 0, legacy_active, passive_slots, EQUIPPED)["ok"] and reload_facade.current_profile().revision == run_revision, "%s build mutations stay locked during the live run" % label)
 	var reward := reload_facade.grant_reward("%s-reward" % label, run_revision, run["run_id"], 1, &"encounter_one")
 	_check(reward["ok"] and reward["profile"].reward_session["last_committed_seq"] == 1, "%s reward persists through the run facade before returning to menu" % label)
-	if reward["ok"]:
-		var ended := reload_facade.end_run("%s-end" % label, reload_facade.current_profile().revision, run["run_id"], &"completed")
-		_check(ended["ok"] and ended["profile"].reward_session == null and ended["profile"].lifetime_stats[&"runs_completed"] == 1, "%s closes the completed run and records return state" % label)
+	# Real terminal return opens a new facade on the explicit fixture before _ready.
+	var returned := ProfileFacade.new(ProfileStore.new(path, catalog), _reward_resolver())
+	var isolate_return := func(node: Node) -> void:
+		if node is CharacterMenu:
+			(node as CharacterMenu).set_profile_facade(returned)
+	root.child_entered_tree.connect(isolate_return)
+	controller._show_result(true)
+	controller._return_to_character_menu()
+	await scene_changed
+	root.child_entered_tree.disconnect(isolate_return)
+	_check(reload_facade.current_profile().reward_session == null and reload_facade.current_profile().lifetime_stats[&"runs_completed"] == 1, "%s real terminal return closes completed run exactly once" % label)
 	menu.queue_free()
 	await process_frame
-	var returned := ProfileFacade.new(ProfileStore.new(path, catalog), _reward_resolver())
-	var returned_open := returned.open_profile()
-	var returned_menu := (load("res://scenes/character_menu.tscn") as PackedScene).instantiate() as CharacterMenu
-	returned_menu.set_profile_facade(returned)
-	root.add_child(returned_menu)
+	var returned_open := {"ok": returned.current_profile() != null}
+	var returned_menu := current_scene as CharacterMenu
 	await process_frame
 	var returned_character: CharacterState = returned.current_profile().character_by_id(id)
 	_check(returned_open["ok"] and returned.current_profile().reward_session == null and returned_menu.evolution_state_label.text.contains("Caçadora"), "%s returns to the real menu with no active session" % label)

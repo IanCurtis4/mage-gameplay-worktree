@@ -86,7 +86,7 @@ func _actor_integration() -> void:
 		_check(player.character_animation.actor_kind == expected and player.class_id == &"archer", "identity selects presentation without rewriting origin")
 		_check(player.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST, "runtime sprite uses nearest")
 		player.free()
-	_check(not ProfileCatalog.pilot().evolution_is_ready(&"hunter", &"archer"), "atlas integration does not publish incomplete class")
+	_check(ProfileCatalog.pilot().evolution_is_ready(&"hunter", &"archer"), "H7 completed candidate has its own integrated atlas; publication is separate")
 
 func _finish() -> void:
 	print("Hunter H6 atlas: %s (%d checks, %d failures)" % ["PASS" if failures == 0 else "FAIL", checks, failures])

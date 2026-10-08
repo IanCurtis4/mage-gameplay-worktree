@@ -23,6 +23,7 @@ func _run() -> void:
 	await _lifecycle_and_fifo()
 	await _destructive_callback()
 	await _field_clocks()
+	await _freed_tar_occupants()
 	print("Hunter H3 traps integration: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -351,6 +352,40 @@ func _field_clocks() -> void:
 	controller._show_result(false)
 	_check(victim.slow_fraction == 0.0, "terminal cleanup removes residue even without a field node")
 	paused = false
+	controller.queue_free()
+	await process_frame
+
+func _freed_tar_occupants() -> void:
+	var controller := _controller()
+	var point := Vector2(410, 300)
+	var first := controller.enemies[0]
+	var second := controller.enemies[1]
+	first.global_position = point
+	second.global_position = point
+	var trap := _place(controller, &"hunter_tar_trap", point)
+	trap._process(0.61)
+	var field := controller.hunter_tar_field
+	field.set_process(false)
+	controller.enemies.erase(first)
+	first.free()
+	field._process(0.1)
+	_check(field.active and field._targets.size() == 1 and second.slow_fraction == 0.3, "freed Tar occupant is pruned before typed iteration while surviving prey remains slowed")
+	controller.enemies.erase(second)
+	second.free()
+	field.expire()
+	_check(not field.active, "Tar cleanup skips freed occupants without assigning stale typed references")
+	# An armed area mechanism also keeps snapshots after prey removal.
+	var removed := CombatActor.new()
+	removed.setup("Removida", Color.WHITE, StatCalculator.calculate({}))
+	removed.position = point
+	root.add_child(removed)
+	var survivor := controller._spawn_enemy(&"chaser", point)
+	survivor.set_process(false)
+	trap = _place(controller, &"hunter_thorn_trap", point)
+	trap.track_target(removed)
+	removed.free()
+	trap._process(0.61)
+	_check(survivor.health.current_hp < survivor.health.max_hp, "area activation skips stale references and hits a live prey")
 	controller.queue_free()
 	await process_frame
 

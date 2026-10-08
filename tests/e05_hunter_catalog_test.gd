@@ -18,7 +18,7 @@ func _run() -> void:
 	var hunter := catalog.evolution_definition(&"hunter")
 	_check(catalog.is_valid(), "production profile catalog remains valid")
 	_check(hunter != null and hunter.display_name == "Caçadora" and hunter.origin_class_id == &"archer", "Hunter evolution is the approved Caçadora identity from Arqueiro")
-	_check(hunter != null and hunter.entry_skill_id == &"hunter_freezing_trap" and hunter.exclusive_skill_ids == HunterTuning.SKILL_IDS and not hunter.content_ready, "full ordered library is declared but content remains unavailable")
+	_check(hunter != null and hunter.entry_skill_id == &"hunter_freezing_trap" and hunter.exclusive_skill_ids == HunterTuning.SKILL_IDS and hunter.content_ready, "H7 candidate exposes exactly the complete ordered Hunter library")
 	_check(ProfileState.SCHEMA_VERSION == 2 and ProfileState.CATALOG_VERSION == 8, "Hunter bumps only catalog version, preserving save schema")
 	_check(ClassCatalog.skill_ids(&"archer") == [&"double_shot", &"piercing_arrow", &"arrow_rain", &"extended_aim", &"snare_trap"], "Hunter skills do not leak into Archer's default actions")
 	var gates: Array[int] = [20, 20, 23, 25, 28, 31, 34, 37]
