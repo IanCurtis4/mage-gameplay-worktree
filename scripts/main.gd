@@ -1168,6 +1168,8 @@ func _on_hunter_trap_requested(center: Vector2, rank: int, request: DamageReques
 func _on_hunter_trap_sprung(trap: HunterTrap, victims: Array[CombatActor]) -> void:
 	if not is_instance_valid(player) or not player.is_alive() or get_tree().paused or run_finished:
 		return
+	if is_instance_valid(player.hunter_presentation):
+		player.hunter_presentation.notify_trap(trap.global_position, trap.source_skill_id, trap.effect_radius)
 	if trap.source_skill_id == &"hunter_tar_trap":
 		_clear_hunter_tar()
 		hunter_tar_field = HunterTarField.new()

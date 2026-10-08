@@ -103,8 +103,4 @@ func _process(delta: float) -> void:
 func _draw() -> void:
 	if not active:
 		return
-	draw_circle(Vector2.ZERO, RADIUS, Color(0.13, 0.16, 0.09, 0.26))
-	draw_arc(Vector2.ZERO, RADIUS, 0.0, TAU, 48, Color("b7aa73"), 1.5, true)
-	for index: int in range(7):
-		var point := Vector2.from_angle(TAU * index / 7.0) * 58.0
-		draw_arc(point, 9.0, 0.0, PI, 12, Color(0.54, 0.52, 0.31, 0.5), 2.0, true)
+	HunterGroundArt.draw_recipe(self, HunterGroundArt.tar_recipe(RADIUS, duration - remaining))

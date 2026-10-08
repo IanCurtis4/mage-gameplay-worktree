@@ -6,7 +6,7 @@ Branch `codex/e05-hunter`, base `3d452fa2e4455f4c8636f4fb319a2d0607d08582`.
 
 ## Estado
 
-H1–H5 implementados, em commits granulares internos.
+H1–H6 implementados, em commits granulares internos.
 Contrato57bb3ef, catálogo650ee87, núcleo4bf832d; candidato efetivo é o commit que contém esta
 atualização (confirmar HEAD e assinatura no CLI antes de reutilizar evidência).
 Caçadora permanece indisponível. Nenhuma revisão/aceite de gameplay desta classe.
@@ -50,7 +50,10 @@ detectado emH5 e descrito abaixo; não afirmar ausência de escrita pessoal.
   pedido secundário único sem crit; catálogo8/schema2/ruleset inalterado,
   migração7 explícita, menu/HUD e duas builds legais com reload/recompensa/retorno.
   Admin e produção continuam respeitando `content_ready=false`.
-- H6: atlas/ícones/VFX e provas nativas solo/grupo/boss.
+- H6 implementado: atlas próprio32 células, oito ícones exclusivos preparados,
+  mecanismos/campo de chão e observador cosmético de Marca/abertura/consumo/Passo.
+  Prova nativa controlada solo/grupo/boss claro/escuro; sem publicação ou ícones
+  globais integrados. Revisão visual independente e combate ativo ainda H7.
 - H7: integral no HEAD limpo e pacote único para revisão, sem publicar playtest.
 
 Evidência dirigida reproduzida por Sol em Godot4.7.2: catálogo619 checks,
@@ -116,14 +119,17 @@ candidato. Verificação do lote não conclui H4–H7 nem libera revisão/playte
 
 ## Limitações e próximo passo
 
-Passivas e consumidores persistentes/menu concluídos emH5; arte final pendente.
+Passivas e consumidores persistentes/menu concluídos emH5; arte/VFX H6 integrados
+com evidência dirigida e renderer controlado. Revisão visual final ainda pendente.
 Congelante R1 e novas traps funcionam em fixtures isoladas, mas o fluxo inicial
 de evolução continua bloqueado até o kit completo. IDs novos
 não são selecionáveis numa evolução de produção. Versionamento do catálogo e
-migração fechados emH5; produção continua bloqueada atéH6/H7. Não gravar estado de
-aberturas/fields. Não declarar classe jogável, leitura visual ou desempenho.
-Próximo passo: H6 (atlas/ícones/VFX e provas nativas), atualizar este checkpoint com commits,
-resultados e pendências. Nenhum gate por microtarefa nem mensagem a outros chats
+migração fechados emH5; produção continua bloqueada até fecharH7. Não gravar estado de
+aberturas/fields. Não declarar classe publicada, desempenho ou aceite de leitura.
+Próximo passo: H7 (IA ativa30/60/144Hz solo/defesa, integração final e readiness
+somente com consumidores/evidência completos), atualizar este checkpoint e
+preparar um único candidato para revisão integrada de Astra. Não iniciar H7
+automaticamente no encerramento desta rodada granular. Nenhum gate por microtarefa nem mensagem a outros chats
 por efeito das skills. Só escalar bloqueio ou divergência relevante do contrato.
 
 ## Evidência H4
@@ -237,3 +243,62 @@ as quatro suítes novas, bases/classes, persistência/UI/input, smoke e admin.
 Ao final, hashes do primário e backup habitual permanecem exatamente os da
 restauração autorizada. A execução CLI integral após commit deve vincular o
 resultado ao HEAD limpo; conferir assinatura pelo status, sem editar relatório.
+
+## Evidência H6 — apresentação
+
+Retomada de53a884d, árvore inicialmente limpa; H5 all167 estava current_inputs=true.
+Escopo Hunter autorizado prevalece sobre cabeçalho antigo Defendente, conforme
+autorização humana referenciada no contrato. Nenhum novo marco/épico iniciado.
+
+Atlas próprio original integrado pelo CharacterAnimation/PlayerActor:32 células
+64×64, pivô32,58, frente/costas, espelhamento, idle/walk/ação/hurt/morte.
+Fonte imagegen preservada e prompt integral em hunter_prompts.md; preparador
+Godot derivado do Geômetra só normaliza alpha/escala/pés, sem reescrever bases.
+Oito SVGs exclusivos com IDs estáveis preparados/importados; UI global continua
+fora do escopo. Inventário/provas/limites: docs/art/hunter_h6/README.md.
+
+HunterGroundArt é helper puro: Congelante mandíbulas/cristal, Piche pote/resina,
+Espinhos estacas/mola. Preparo segmentado/progressivo e armado fechado/discreto;
+campo ativado tem borda dupla no raio real100, sem mecanismo aguardando.
+HunterPresentation observa estado de run e IDs sem reter alvos/payloads; Marca
+diamante e abertura entalhada se combinam num marcador por presa. Claim aceito
+gera impacto breve; Passo real gera rastro curto dos pés. Cosmético até16 bursts
+e6 amostras de rastro, pausa/TTL próprios, clear/death/end sem órfãos. Nenhuma
+fórmula, custo, timer de gameplay, colisão ou semântica das skills foi alterada.
+
+Pacotes internos separados: subagentes entregaram receitas de chão+teste e
+atlas-test/probe; Sol inspecionou/reproduziu, criou fonte/atlas/ícones/observador,
+integrou e corrigiu o palco/limpeza do probe. Não é reprodução independente Astra.
+Testes dirigidos: ground575, atlas158, presentation25, todos zero falhas/erros.
+Presentation cobre ausência de dano/custo/claim/timer causado por VFX, limites,
+pausa, subpassos de rastro, alvo removido, limpeza, callback único e morte.
+H3regressão181 passou; verify integral também cobre H1–H5, Arqueiro/Sentinela,
+outras classes, save/UI/input, editor import, smoke e admin. tools/verify.ps1
+completo terminou exit0/sem erros; apresentação então tinha22checks e os três
+casos adicionais foram repetidos dirigidamente PASS25. CLI all após commit
+deve reproduzir o arquivo final e vincular evidência ao HEAD limpo.
+
+Renderer nativo Compatibility: PASS282 checks/33 capturas, inspecionadas em
+docs/art/hunter_h6. Preparadora/Emboscadora legais19/20, solo/grupo/boss, piso
+claro/escuro, preparo/armado/acionado/campo/Marca/abertura/consumo/Passo/Cobertura
+e limpeza terminal real. Primeira rodada técnica PASS278 tinha oclusão do palco
+e clear parcial; não é a prova final. Palco foi desobstruído, com câmera fixa,
+HUD oculto apenas no probe, navegação/arte sem obstáculos. IA/input congelados,
+SP/CD e deslocamento preparados para snapshots. Não certifica HUD, navegação
+sob obstáculos, combate ativo30/60/144Hz, FPS/DPS/diversão ou aceite humano.
+
+Sandbox de shell/patch estava com falha ambiental; comandos autorizados usaram
+execução escalada e patches pelo executor nativo. Não houve gravação direta de
+código nem desvio de aprovação. Probe usa cena posicional explícita, sem
+CharacterMenu/ProfileStore/fachada e controles isolados. Hashes do primário e
+backup habitual permaneceram byte-exatos à restauração H5 durante esta rodada.
+Playtest codex/playtest/3d452fa limpo; sem publicação, merge ou mensagem Astra.
+
+CLI externo autorizado: menu-tabs/tools/workflow/workflow.py, SHA256
+e642dbe882cd7ea3cd687da51ed978bdecc93675fbb31d08d26626a0b40a1bae;
+origem checkout0c008d4843d13f772aa2b69be22d24d2300b80a1, arquivo ainda não
+versionado naquela árvore (assinatura explícita acima). Não copiado para este
+checkout. Conferir status --contract docs/E05_HUNTER_PLAN.md
+e relatório all/implementer current_inputs=true no commit que contém H6.
+Essa prova integral não fecha H7. Próxima rodada: combate ativo/integração final,
+readiness com evidência completa e um único pacote para revisão de Astra.

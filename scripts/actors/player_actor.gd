@@ -120,6 +120,7 @@ var max_sp := 0.0
 var attack_cooldown := 0.0
 var sentinel_state := SentinelFocusState.new()
 var hunter_state := HunterOpeningState.new()
+var hunter_presentation: HunterPresentation
 var hunter_cover := HunterCoverState.new()
 var _hunter_emission_serial := 0
 var sentinel_combat_active := false
@@ -237,7 +238,18 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 		animation_kind = &"geometer"
 	elif is_sentinel():
 		animation_kind = &"sentinel"
+	elif is_hunter():
+		animation_kind = &"hunter"
 	set_animation_kind(animation_kind)
+	if is_instance_valid(hunter_presentation):
+		hunter_presentation.clear()
+		hunter_presentation.free()
+		hunter_presentation = null
+	if is_hunter():
+		hunter_presentation = HunterPresentation.new()
+		hunter_presentation.name = "HunterPresentation"
+		hunter_presentation.configure(self)
+		add_child(hunter_presentation)
 	max_sp = stat_breakdown.value(&"max_sp")
 	current_sp = max_sp
 	shield_remaining = 0.0
@@ -284,6 +296,8 @@ func record_hunter_damage(result: Dictionary) -> void:
 	if bool(payload["granted_step"]):
 		_apply_derived_stats(_build_stat_breakdown())
 		resources_changed.emit()
+	if is_instance_valid(hunter_presentation) and is_instance_valid(victim):
+		hunter_presentation.notify_consumed(victim.global_position)
 	# Lethal direct arrows still claim the opening/step, but never damage a corpse.
 	if is_instance_valid(victim) and victim.is_alive():
 		status_damage_requested.emit(payload["request"], victim)
@@ -292,6 +306,8 @@ func record_hunter_damage(result: Dictionary) -> void:
 func clear_hunter_state() -> void:
 	var had_step := hunter_state.step_remaining > 0.0
 	hunter_state.clear()
+	if is_instance_valid(hunter_presentation):
+		hunter_presentation.clear()
 	if is_hunter():
 		clear_foliage_shelters()
 	if had_step and health != null and run_state != null:

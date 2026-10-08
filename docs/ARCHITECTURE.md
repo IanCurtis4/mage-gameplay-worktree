@@ -484,6 +484,16 @@ passivas e prova visual integrada continuam pendentes.
 
 ### Procedimento de verificação
 
+H6 Caçadora integra atlas próprio no CharacterAnimation, preservando origem
+Arqueiro. HunterGroundArt é receita pura de desenho dos mecanismos/campo;
+HunterPresentation é filho pausável do jogador, observa IDs/estado de abertura
+e Marca e recebe feedback cosmético depois do claim. Nenhum desses consumidores
+resolve dano, avança relógios de gameplay ou altera camuflagem. Bursts até16 e
+rastro de pés até6 têm TTL visual; limpar o ciclo limpa também a apresentação.
+Ícones exclusivos SVG64 estão preparados, não integrados ao HUD/tooltip global.
+Prova nativa H6 usa uma cena principal explícita, sem CharacterMenu/ProfileStore;
+não lançar esse probe com SceneTree --script sobre a entrada padrão gráfica.
+
 Import headless detecta scripts/recursos inválidos; testes headless validam fórmulas,
 limites, dano, elegibilidade, fluxo da arena, layout e invariantes de movimento.
 Smoke da cena detecta falhas de inicialização. Movimento automatizado é exercitado

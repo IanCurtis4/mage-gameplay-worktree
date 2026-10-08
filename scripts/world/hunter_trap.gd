@@ -57,18 +57,8 @@ func _on_triggered(_trap: PlayerTrap, primary: CombatActor) -> void:
 	sprung.emit(self, victims)
 
 func _draw() -> void:
-	super._draw()
 	if not is_active():
 		return
-	var color := Color("b6d9d7") if source_skill_id == &"hunter_freezing_trap" else Color("cab58a")
-	if source_skill_id == &"hunter_tar_trap":
-		draw_circle(Vector2.ZERO, 13.0, Color("343b2b"))
-		draw_arc(Vector2.ZERO, 13.0, 0.0, TAU, 20, color, 2.0, true)
-	elif source_skill_id == &"hunter_freezing_trap":
-		for index: int in range(3):
-			var x := float(index - 1) * 12.0
-			draw_colored_polygon(PackedVector2Array([Vector2(x - 5, 5), Vector2(x, -15), Vector2(x + 5, 5)]), Color(color, 0.75))
-	else:
-		for index: int in range(6):
-			var axis := Vector2.from_angle(TAU * index / 6.0)
-			draw_line(axis * 7.0, axis * 25.0, color, 3.0, true)
+	var progress := 1.0 - arming_remaining / arming_duration if arming_duration > 0.0 else 1.0
+	var elapsed := armed_duration - lifetime_remaining
+	HunterGroundArt.draw_recipe(self, HunterGroundArt.trap_recipe(source_skill_id, state == State.ARMED, progress, elapsed, radius))
