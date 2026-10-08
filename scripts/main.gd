@@ -1084,7 +1084,7 @@ func _spawn_precision_projectiles(skill_id: StringName, request: DamageRequest, 
 		projectile.add_to_group("player_projectiles")
 
 func _on_precision_projectile_hit(request: DamageRequest, target_actor: CombatActor) -> void:
-	if target_actor != null and target_actor.is_alive():
+	if target_actor != null and is_instance_valid(target_actor) and target_actor.is_alive():
 		target_actor.apply_damage(request, rng)
 
 func _on_arrow_rain_requested(center: Vector2, request: DamageRequest) -> void:
@@ -1097,13 +1097,35 @@ func _on_arrow_rain_requested(center: Vector2, request: DamageRequest) -> void:
 func _on_snare_trap_requested(center: Vector2, root_duration: float) -> void:
 	var trap := SnareTrap.new()
 	trap.configure_snare(player.get_instance_id(), center, root_duration, enemies, player.trap_armed_duration(SnareTrap.ARMED_DURATION))
+	if player.is_hunter():
+		trap.target_filter = _hunter_trap_target_valid.bind(center)
+		trap.root_applied.connect(_on_hunter_snare_triggered.bind(player.hunter_opening_snapshot(&"snare_trap")))
 	trap_registry.register_trap(trap)
+
+func _on_hunter_snare_triggered(trap: SnareTrap, victim: CombatActor, _applied_duration: float, snapshot: DamageRequest) -> void:
+	if player == null or not is_instance_valid(player) or victim == null or not is_instance_valid(victim) or not navigation.is_segment_clear(trap.global_position, victim.global_position, 0.0):
+		return
+	player.activate_hunter_opening(trap.get_instance_id(), victim, snapshot)
+
+func _hunter_trap_target_valid(victim: CombatActor, center: Vector2) -> bool:
+	return player != null and is_instance_valid(player) and player.is_alive() and victim != null and is_instance_valid(victim) and navigation.is_segment_clear(center, victim.global_position, 0.0)
 
 func _on_explosive_trap_requested(center: Vector2, request: DamageRequest) -> void:
 	var trap := ExplosiveTrap.new()
 	trap.configure_explosive(player.get_instance_id(), center, request, enemies, player.trap_armed_duration(ExplosiveTrap.ARMED_DURATION))
-	trap.hit.connect(_on_precision_projectile_hit)
+	if player.is_hunter():
+		trap.target_filter = _hunter_trap_target_valid.bind(center)
+		trap.hit.connect(_on_hunter_explosive_hit.bind(trap.get_instance_id(), center, player.hunter_opening_snapshot(&"explosive_trap")))
+	else:
+		trap.hit.connect(_on_precision_projectile_hit)
 	trap_registry.register_trap(trap)
+
+func _on_hunter_explosive_hit(request: DamageRequest, victim: CombatActor, activation_id: int, center: Vector2, snapshot: DamageRequest) -> void:
+	if player == null or not is_instance_valid(player) or victim == null or not is_instance_valid(victim) or not victim.is_alive() or not navigation.is_segment_clear(center, victim.global_position, 0.0):
+		return
+	player.activate_hunter_opening(activation_id, victim, snapshot)
+	# Mark before applying damage: lethal callbacks may remove all enemy nodes.
+	_on_precision_projectile_hit(request, victim)
 
 func _on_slowing_arrow_requested(request: DamageRequest, direction: Vector2, slow_fraction: float, slow_duration: float) -> void:
 	var hit_callback := _on_slowing_arrow_hit.bind(slow_fraction, slow_duration)
@@ -1610,6 +1632,7 @@ func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActo
 
 func _on_enemy_died(actor: CombatActor) -> void:
 	_defender_slowed_enemies.erase(actor.get_instance_id())
+	player.hunter_state.discard_target(actor.get_instance_id())
 	player.remove_berserker_wound(actor.get_instance_id())
 	player.remove_elementalist_target(actor.get_instance_id())
 	spiritualist_echo_state.remove_target(actor.get_instance_id())
@@ -1635,6 +1658,7 @@ func _on_enemy_died(actor: CombatActor) -> void:
 		return
 	encounter_active = false
 	player.clear_shield_stance()
+	player.clear_hunter_state()
 	player.clear_perseverance()
 	player.clear_fury()
 	_clear_defender_runtime()
@@ -1669,6 +1693,7 @@ func _on_enemy_damage_resolved(result: Dictionary) -> void:
 		return
 	player.record_berserker_damage(result)
 	player.record_sentinel_damage(result)
+	player.record_hunter_damage(result)
 	var echo_triggered := spiritualist_echo_state.record_hit(result, player.spiritualist_magic_attack())
 	if echo_triggered:
 		if battle_indicators != null:
@@ -1812,6 +1837,7 @@ func _on_player_died(_actor: CombatActor) -> void:
 
 func _show_result(victory: bool) -> void:
 	player.clear_sentinel_state()
+	player.clear_hunter_state()
 	_cancel_casting()
 	if geometer_casting != null:
 		geometer_casting.clear_construction()

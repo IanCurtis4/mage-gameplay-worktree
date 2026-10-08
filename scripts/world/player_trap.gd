@@ -25,6 +25,9 @@ var lifetime_remaining := 0.0
 var state: State = State.EXPIRED
 var removal_reason: StringName = &""
 var registration_order := 0
+## Optional placement-specific validation, captured by the controller. Existing
+## base traps retain their contract when this hook is absent.
+var target_filter: Callable
 var _configured := false
 
 func configure(
@@ -67,6 +70,7 @@ func can_trigger(target: CombatActor) -> bool:
 		and is_instance_valid(target)
 		and target.is_alive()
 		and global_position.distance_to(target.global_position) <= radius + target.collision_radius
+		and (not target_filter.is_valid() or bool(target_filter.call(target)))
 	)
 
 func first_trigger_target(targets: Array[CombatActor]) -> CombatActor:

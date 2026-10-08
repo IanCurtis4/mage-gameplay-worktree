@@ -72,7 +72,9 @@ func _run() -> void:
 	_check(not SentinelTuning.values(&"sentinel_net_shot", 5).has("dex_coefficient") and not SentinelTuning.values(&"sentinel_explosive_shot", 5).has("dex_coefficient"), "exclusive INT recipes have no hidden DES coefficient")
 	_sp_endpoints()
 	_overrides()
-	for evolution_id: StringName in [&"hunter", &"sp_mg", &"sp_ar", &"mg_sp", &"ar_sp", &"ar_mg"]:
+	var hunter := catalog.evolution_definition(&"hunter")
+	_check(not hunter.content_ready and hunter.entry_skill_id == &"hunter_freezing_trap" and hunter.exclusive_skill_ids == HunterTuning.SKILL_IDS, "partial Hunter metadata remains unavailable alongside Sentinel")
+	for evolution_id: StringName in [&"sp_mg", &"sp_ar", &"mg_sp", &"ar_sp", &"ar_mg"]:
 		_check(not catalog.evolution_definition(evolution_id).content_ready and catalog.evolution_definition(evolution_id).exclusive_skill_ids.is_empty(), "other placeholders unchanged: %s" % evolution_id)
 	print("Sentinel catalog: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

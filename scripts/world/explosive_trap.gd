@@ -38,6 +38,9 @@ func _on_triggered(_trap: PlayerTrap, _target: CombatActor) -> void:
 			impacted.append(target)
 	impacted.sort_custom(func(first: CombatActor, second: CombatActor) -> bool: return first.get_instance_id() < second.get_instance_id())
 	for target: CombatActor in impacted:
+		# Earlier hit/death callbacks can synchronously free later victims.
+		if target == null or not is_instance_valid(target) or not target.is_alive():
+			continue
 		var impact_request := damage_request.copy()
 		impact_request.target_id = target.get_instance_id()
 		hit.emit(impact_request, target)

@@ -116,6 +116,8 @@ var current_sp := 0.0
 var max_sp := 0.0
 var attack_cooldown := 0.0
 var sentinel_state := SentinelFocusState.new()
+var hunter_state := HunterOpeningState.new()
+var _hunter_emission_serial := 0
 var sentinel_combat_active := false
 var _sentinel_last_position := Vector2.INF
 var _sentinel_stance_active := false
@@ -214,6 +216,7 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 	clear_elementalist_state()
 	clear_spiritualist_state()
 	clear_sentinel_state()
+	hunter_state.configure(get_instance_id())
 	var derived := _build_stat_breakdown()
 	var class_color := Color("8e73de") if class_id == &"mage" else Color("6fa85a") if class_id == &"archer" else Color("55a8d9")
 	setup(class_definition.display_name, class_color, derived, 20.0)
@@ -248,6 +251,43 @@ func is_archer() -> bool:
 
 func is_sentinel() -> bool:
 	return is_archer() and run_state != null and run_state.uses_persistent_build() and run_state.build_snapshot.evolution_id == &"sentinel"
+
+func is_hunter() -> bool:
+	return is_archer() and run_state != null and run_state.uses_persistent_build() and run_state.build_snapshot.evolution_id == &"hunter"
+
+func hunter_opening_snapshot(trap_id: StringName) -> DamageRequest:
+	if not is_hunter():
+		return null
+	return HunterMath.opening_request(get_instance_id(), trap_id, skill_rank(trap_id), stat_breakdown, outgoing_damage_multiplier())
+
+func activate_hunter_opening(activation_id: int, victim: CombatActor, snapshot: DamageRequest) -> bool:
+	if not is_hunter() or not is_alive() or victim == null or not is_instance_valid(victim) or not victim.is_alive() or (is_inside_tree() and get_tree().paused):
+		return false
+	return hunter_state.activate(activation_id, victim.get_instance_id(), snapshot)
+
+func record_hunter_damage(result: Dictionary) -> void:
+	if not is_hunter() or not is_alive() or (is_inside_tree() and get_tree().paused):
+		return
+	var victim := instance_from_id(int(result.get("target_id", 0))) as CombatActor
+	if not is_instance_valid(victim) or (not victim.is_alive() and not bool(result.get("killed", false))):
+		return
+	var payload := hunter_state.consume(result)
+	if payload.is_empty():
+		return
+	if bool(payload["granted_step"]):
+		_apply_derived_stats(_build_stat_breakdown())
+		resources_changed.emit()
+	# Lethal direct arrows still claim the opening/step, but never damage a corpse.
+	if is_instance_valid(victim) and victim.is_alive():
+		status_damage_requested.emit(payload["request"], victim)
+	queue_redraw()
+
+func clear_hunter_state() -> void:
+	var had_step := hunter_state.step_remaining > 0.0
+	hunter_state.clear()
+	if had_step and health != null and run_state != null:
+		_apply_derived_stats(_build_stat_breakdown())
+	queue_redraw()
 
 func sentinel_free_sp() -> float:
 	return maxf(0.0, current_sp - sentinel_state.reserved_sp) if is_sentinel() else current_sp
@@ -1669,7 +1709,10 @@ func trap_center(skill_id: StringName, point: Vector2) -> Vector2:
 	return global_position + offset
 
 func can_place_trap(skill_id: StringName, point: Vector2) -> bool:
-	return skill_id in [&"snare_trap", &"explosive_trap"] and skill_range(skill_id) > 0.0 and navigation != null and navigation.is_walkable(trap_center(skill_id, point))
+	if not point.is_finite() or skill_id not in [&"snare_trap", &"explosive_trap"] or skill_range(skill_id) <= 0.0 or navigation == null:
+		return false
+	var center := trap_center(skill_id, point)
+	return navigation.is_walkable(center) and (not is_hunter() or navigation.is_segment_clear(global_position, center, 0.0))
 
 func trap_armed_duration(base_duration: float) -> float:
 	return run_state.build_snapshot.trap_armed_duration(base_duration)
@@ -1708,6 +1751,9 @@ func use_explosive_trap(point: Vector2) -> bool:
 	var definition := ClassCatalog.skill_definition(&"explosive_trap")
 	var power := stat_breakdown.value(&"precision_attack") * rank_definition.power
 	var request := _make_physical_request(null, &"explosive_trap", power, definition.accuracy_mode, definition.can_crit)
+	if is_hunter():
+		request.physical_damage = HunterMath.explosive_raw(skill_rank(&"explosive_trap"), stat_breakdown)
+		request.can_crit = false
 	explosive_trap_requested.emit(center, request)
 	presentation_action.emit(&"cast", aim_direction(center), 0.18)
 	resources_changed.emit()
@@ -2135,6 +2181,12 @@ func _advance_player(delta: float) -> void:
 	var simulation_paused := is_inside_tree() and get_tree().paused
 	if simulation_paused:
 		return
+	if is_hunter():
+		var had_step := hunter_state.step_remaining > 0.0
+		hunter_state.advance(delta)
+		if had_step and hunter_state.step_remaining <= 0.0:
+			_apply_derived_stats(_build_stat_breakdown())
+			resources_changed.emit()
 	berserker_pursuit_cooldown = maxf(0.0, berserker_pursuit_cooldown - delta)
 	elementalist_focus_cooldown = maxf(0.0, elementalist_focus_cooldown - delta)
 	spiritualist_recovery_cooldown = maxf(0.0, spiritualist_recovery_cooldown - delta)
@@ -2441,6 +2493,9 @@ func _make_request(enemy: CombatActor, skill_id: StringName, accuracy_mode: Dama
 	if is_sentinel():
 		_sentinel_emission_serial += 1
 		request.emission_id = _sentinel_emission_serial
+	elif is_hunter():
+		_hunter_emission_serial += 1
+		request.emission_id = _hunter_emission_serial
 	return request
 
 func _make_physical_request(enemy: CombatActor, skill_id: StringName, power: float, accuracy_mode: DamageRequest.AccuracyMode, can_crit: bool) -> DamageRequest:
@@ -2558,6 +2613,7 @@ func _move_step(delta: float) -> void:
 
 func _on_health_died(actor_id: int) -> void:
 	clear_sentinel_state()
+	clear_hunter_state()
 	cancel_active_cast()
 	clear_shield_stance()
 	clear_perseverance()
@@ -2600,6 +2656,8 @@ func can_basic_attack(enemy: CombatActor, retain: bool = false) -> bool:
 
 func _build_stat_breakdown() -> StatBreakdown:
 	var sources := run_state.stat_modifier_sources()
+	if is_hunter() and hunter_state.step_remaining > 0.0:
+		sources.append(HunterMath.step_source())
 	if is_sentinel() and _sentinel_stance_active:
 		var stance := SentinelMath.stance_source(skill_rank(&"sentinel_precision_stance"))
 		if not stance.is_empty():

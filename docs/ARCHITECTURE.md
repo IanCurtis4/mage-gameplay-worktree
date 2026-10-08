@@ -450,6 +450,19 @@ fonte/prompt; provas de renderer não qualificam diversão, balanceamento ou FPS
 
 ### Procedimento
 
+### Caçadora — núcleo parcial H2
+
+Contrato: E05_HUNTER_PLAN.md; retomada: E05_HUNTER_CHECKPOINT.md. Hunter mantém
+`content_ready=false`. HunterOpeningState é efêmero e deduplica trap/vítima e
+emissão/vítima antes de callbacks. Laço/Explosiva reutilizados abrem a presa,
+inclusive com CC resistido; tiro próprio positivo consome um snapshot físico
+INT-only secundário pelo resolver existente. Letal ainda reivindica mobilidade,
+sem atingir cadáver. Passo usa fonte identificada no StatCalculator e preserva
+HP/SP faltantes/CDs. Hooks de LoS Hunter são opcionais; bases preservadas. Nenhum
+estado desse ciclo é catálogo/save. Kit novo e apresentação ainda pendentes.
+
+### Procedimento de verificação
+
 Import headless detecta scripts/recursos inválidos; testes headless validam fórmulas,
 limites, dano, elegibilidade, fluxo da arena, layout e invariantes de movimento.
 Smoke da cena detecta falhas de inicialização. Movimento automatizado é exercitado
