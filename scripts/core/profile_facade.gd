@@ -359,6 +359,58 @@ func build_preview(character_id: String, modifier_sources: Array[Dictionary] = [
 		"stat_breakdown": stats_result["breakdown"],
 	}
 
+func attribute_purchase_preview(character_id: String, attribute_id: StringName, amount: int = 1, modifier_sources: Array[Dictionary] = []) -> Dictionary:
+	# Strictly read-only: no open/repair/migration or revision/selection change.
+	if _profile == null:
+		return {"ok": false, "error_code": &"profile_unavailable"}
+	var character := _profile.character_by_id(character_id)
+	if character == null:
+		return {"ok": false, "error_code": &"invalid_character_id"}
+	if attribute_id not in IdentityIds.attribute_ids() or amount <= 0:
+		return {"ok": false, "error_code": &"invalid_attribute_allocations"}
+	var snapshot := _build_snapshot(character)
+	var before_result := snapshot.try_stat_breakdown(modifier_sources)
+	if not before_result["ok"]:
+		return before_result
+	var before: StatBreakdown = before_result["breakdown"]
+	var initial := IdentityIds.initial_attributes(character.base_class_id)
+	var permanent := int(initial[attribute_id]) + character.attribute_allocations[attribute_id]
+	var cost := ProgressionRules.attribute_increment_cost(permanent, amount)
+	var available := ProgressionRules.attribute_points_available(character.base_xp_total, character.attribute_allocations, character.base_class_id)
+	var result := {
+		"ok": true, "attribute_id": attribute_id, "amount": amount,
+		"permanent": permanent, "effective": before.primary_value(attribute_id),
+		"cost": cost, "available": available, "can_purchase": false,
+		"blocking_reason": &"", "before": before, "after": null,
+		"next_milestones": StatCalculator.next_attribute_milestones(attribute_id, before.primary_value(attribute_id)),
+		"derived_changes": [],
+	}
+	if cost < 0:
+		result["blocking_reason"] = &"attribute_cap_reached"
+		return result
+	# Use a copied build to recalculate allocation-dependent passives as well.
+	var candidate := character.copy_state()
+	candidate.attribute_allocations[attribute_id] += amount
+	var after_result := _build_snapshot(candidate).try_stat_breakdown(modifier_sources)
+	if not after_result["ok"]:
+		return after_result
+	var after: StatBreakdown = after_result["breakdown"]
+	result["after"] = after
+	var changes: Array[Dictionary] = []
+	for stat_id: StringName in StatCalculator.DERIVED_IDS:
+		if not is_equal_approx(before.value(stat_id), after.value(stat_id)):
+			changes.append({"stat_id": stat_id, "before": before.value(stat_id), "after": after.value(stat_id)})
+	result["derived_changes"] = changes
+	if _read_only:
+		result["blocking_reason"] = &"profile_read_only"
+	elif _profile.reward_session != null:
+		result["blocking_reason"] = &"run_active"
+	elif available < cost:
+		result["blocking_reason"] = &"insufficient_points"
+	else:
+		result["can_purchase"] = true
+	return result
+
 func allocate_attributes(request_id: String, expected_revision: int, character_id: String, increments: Dictionary) -> Dictionary:
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}

@@ -20,8 +20,8 @@ static func summary(character: CharacterState, catalog: ProfileCatalog) -> Dicti
 		"evolution_eligible": not evolved and base_level >= 10 and job_level >= ProgressionRules.UNEVOLVED_MAX_JOB_LEVEL,
 		"job_progress_blocked": not evolved and character.job_xp_total >= ProgressionRules.UNEVOLVED_MAX_JOB_XP,
 		"attribute_points_granted": ProgressionRules.attribute_points_granted(character.base_xp_total),
-		"attribute_points_spent": ProgressionRules.attribute_points_spent(character.attribute_allocations),
-		"attribute_points_available": ProgressionRules.attribute_points_available(character.base_xp_total, character.attribute_allocations),
+		"attribute_points_spent": ProgressionRules.attribute_points_spent(character.attribute_allocations, character.base_class_id),
+		"attribute_points_available": ProgressionRules.attribute_points_available(character.base_xp_total, character.attribute_allocations, character.base_class_id),
 		"base_skill_points_granted": base_granted,
 		"base_skill_points_spent": base_spent,
 		"base_skill_points_available": base_granted - base_spent,
@@ -44,21 +44,29 @@ static func allocate_attributes(character: CharacterState, increments: Dictionar
 	var normalized: Dictionary[StringName, int] = {}
 	var total_cost := 0
 	var initial := IdentityIds.initial_attributes(character.base_class_id)
+	if initial.is_empty():
+		return _failure(&"invalid_origin")
+	var available := ProgressionRules.attribute_points_available(character.base_xp_total, character.attribute_allocations, character.base_class_id)
+	if available < 0:
+		return _failure(&"invalid_attribute_allocations")
 	for raw_id: Variant in increments:
 		if not (raw_id is String or raw_id is StringName):
 			return _failure(&"invalid_attribute_allocations")
 		var attribute_id := StringName(raw_id)
 		if attribute_id not in IdentityIds.attribute_ids():
 			return _failure(&"invalid_attribute_allocations")
+		if normalized.has(attribute_id):
+			return _failure(&"invalid_attribute_allocations")
 		var raw_amount: Variant = increments[raw_id]
 		if not raw_amount is int or int(raw_amount) <= 0:
 			return _failure(&"invalid_attribute_allocations")
 		var amount := int(raw_amount)
-		if int(initial[attribute_id]) + character.attribute_allocations[attribute_id] + amount > StatCalculator.INVESTED_ATTRIBUTE_MAX:
+		var permanent := int(initial[attribute_id]) + character.attribute_allocations[attribute_id]
+		if amount > StatCalculator.INVESTED_ATTRIBUTE_MAX - permanent:
 			return _failure(&"attribute_cap_reached")
-		normalized[attribute_id] = normalized.get(attribute_id, 0) + amount
-		total_cost += amount
-	if total_cost > ProgressionRules.attribute_points_available(character.base_xp_total, character.attribute_allocations):
+		normalized[attribute_id] = amount
+		total_cost += ProgressionRules.attribute_increment_cost(permanent, amount)
+	if total_cost > available:
 		return _failure(&"insufficient_points")
 	for attribute_id: StringName in normalized:
 		character.attribute_allocations[attribute_id] += normalized[attribute_id]
@@ -105,7 +113,9 @@ static func learn_skill(character: CharacterState, catalog: ProfileCatalog, skil
 static func respec_attributes(character: CharacterState) -> Dictionary:
 	if character == null:
 		return _failure(&"invalid_character_id")
-	var refunded := ProgressionRules.attribute_points_spent(character.attribute_allocations)
+	var refunded := ProgressionRules.attribute_points_spent(character.attribute_allocations, character.base_class_id)
+	if refunded < 0:
+		return _failure(&"invalid_attribute_allocations")
 	if refunded == 0:
 		return {"ok": true, "already_applied": true, "refunded": 0}
 	for attribute_id: StringName in IdentityIds.attribute_ids():

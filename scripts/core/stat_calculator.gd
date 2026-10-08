@@ -240,23 +240,23 @@ static func _raw_derived(primary: Dictionary[StringName, float], base_level: int
 	var level_delta := float(base_level - 1)
 
 	return {
-		&"max_hp": 100.0 + 10.0 * vitality + 8.0 * level_delta,
-		&"max_sp": 40.0 + 5.0 * intelligence + 3.0 * level_delta,
-		&"hp_regen": 0.5 + 0.05 * vitality,
-		&"sp_regen": 2.0 + 0.12 * intelligence,
-		&"melee_attack": 10.0 + 2.0 * strength + 0.4 * dexterity,
-		&"precision_attack": 10.0 + 2.0 * dexterity + 0.4 * strength,
-		&"magic_attack": 10.0 + 2.0 * intelligence + 0.4 * dexterity,
-		&"physical_defense": 2.0 * vitality + 0.5 * strength,
-		&"magic_defense": 2.0 * intelligence + 0.5 * vitality,
-		&"hit_rating": 100.0 + float(base_level) + 2.0 * dexterity + 0.2 * luck,
-		&"flee_rating": 100.0 + float(base_level) + 1.5 * agility + 0.2 * luck,
-		&"crit_chance": 0.05 + 0.003 * luck + 0.0005 * dexterity,
+		&"max_hp": 100.0 + 10.0 * vitality + 8.0 * level_delta + 20.0 * floor(vitality / 10.0),
+		&"max_sp": 40.0 + 5.0 * intelligence + 3.0 * level_delta + 5.0 * floor(intelligence / 10.0),
+		&"hp_regen": 0.5 + 0.05 * vitality + 0.2 * floor(vitality / 5.0),
+		&"sp_regen": 2.0 + 0.12 * intelligence + 0.2 * floor(intelligence / 6.0),
+		&"melee_attack": 10.0 + 2.0 * strength + 0.4 * dexterity + pow(floor(strength / 10.0), 2.0),
+		&"precision_attack": 10.0 + 2.0 * dexterity + 0.4 * strength + pow(floor(dexterity / 10.0), 2.0),
+		&"magic_attack": 10.0 + 2.0 * intelligence + 0.4 * dexterity + 0.25 * (pow(floor(intelligence / 5.0), 2.0) + pow(floor(intelligence / 7.0), 2.0)),
+		&"physical_defense": 2.0 * vitality + 0.5 * strength + 2.0 * floor(vitality / 10.0),
+		&"magic_defense": 2.0 * intelligence + 0.5 * vitality + 2.0 * floor(intelligence / 10.0),
+		&"hit_rating": 100.0 + float(base_level) + 2.0 * dexterity + 0.2 * luck + 2.0 * floor(dexterity / 10.0),
+		&"flee_rating": 100.0 + float(base_level) + 1.5 * agility + 0.2 * luck + 2.0 * floor(agility / 10.0),
+		&"crit_chance": 0.05 + 0.003 * luck + 0.0005 * dexterity + 0.002 * floor(luck / 5.0),
 		&"crit_multiplier": 1.5,
-		&"crit_resistance": 0.0,
-		&"attacks_per_second": 1.0 + 0.015 * agility + 0.005 * dexterity,
+		&"crit_resistance": 0.002 * floor(luck / 5.0),
+		&"attacks_per_second": 1.0 + 0.015 * agility + 0.005 * dexterity + 0.02 * floor(agility / 10.0),
 		&"move_speed": 220.0,
-		&"variable_cast_multiplier": 1.0 - 0.003 * dexterity - 0.001 * intelligence,
+		&"variable_cast_multiplier": 1.0 - 0.003 * dexterity - 0.001 * intelligence - 0.01 * floor(dexterity / 10.0),
 		&"fixed_cast_reduction": 0.0,
 		&"after_cast_reduction": 0.0,
 		&"cooldown_reduction": 0.0,
@@ -264,6 +264,21 @@ static func _raw_derived(primary: Dictionary[StringName, float], base_level: int
 		&"magic_cc_resistance": 0.002 * intelligence,
 		&"damage_dealt_multiplier": 1.0,
 	}
+
+static func next_attribute_milestones(stat_id: StringName, effective_value: float) -> Array[int]:
+	var periods: Array[int] = []
+	match stat_id:
+		&"str", &"agi", &"dex": periods = [10]
+		&"vit": periods = [5, 10]
+		&"int": periods = [5, 6, 7, 10]
+		&"luk": periods = [5]
+	var result: Array[int] = []
+	for period: int in periods:
+		var next_value := (floori(maxf(0.0, effective_value) / period) + 1) * period
+		if next_value <= int(PRIMARY_MAX) and next_value not in result:
+			result.append(next_value)
+	result.sort()
+	return result
 
 static func _validated_attributes(values: Dictionary, kind: StringName) -> Dictionary:
 	var normalized: Dictionary[StringName, int] = {}

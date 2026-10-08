@@ -26,6 +26,8 @@ func load_profile() -> Dictionary:
 		var primary_result := _read_and_decode(PRIMARY_FILE)
 		if primary_result["ok"]:
 			if primary_result.get("migrated", false):
+				if pending_exists:
+					return {"ok": false, "error_code": &"recovery_required", "read_only": true}
 				return _commit_migration(primary_result["profile"], primary_result.get("migration_kind", &""))
 			return primary_result
 		if _must_preserve_incompatible(primary_result):
@@ -142,6 +144,9 @@ func _recover_from_backup(preserve_corrupt_primary: bool) -> Dictionary:
 	var backup_result := _read_and_decode(BACKUP_FILE)
 	if not backup_result["ok"]:
 		return backup_result
+	# An unconfirmed transaction is evidence, not a disposable recovery scratch file.
+	if has_pending_transaction():
+		return {"ok": false, "error_code": &"recovery_required", "read_only": true}
 	if preserve_corrupt_primary:
 		var corrupt_name := "profile.corrupt.%d.%d.json" % [Time.get_unix_time_from_system(), Time.get_ticks_usec()]
 		if DirAccess.copy_absolute(_absolute_path(PRIMARY_FILE), _absolute_path(corrupt_name)) != OK:
@@ -192,9 +197,11 @@ func _preflight_commit(source: ProfileState, allow_migration: bool) -> Dictionar
 	if disk.get("migrated", false):
 		if not allow_migration:
 			return {"ok": false, "error_code": &"unsupported_schema", "read_only": true}
+		if has_pending_transaction():
+			return {"ok": false, "error_code": &"recovery_required", "read_only": true}
 		var migration_kind: StringName = disk.get("migration_kind", &"")
 		var migrated_disk_profile: ProfileState = disk["profile"]
-		if migration_kind in [&"catalog_v1", &"catalog_v2", &"catalog_v3", &"catalog_v4", &"catalog_v5"] and _same_profile(migrated_disk_profile, source):
+		if migration_kind in [&"catalog_v1", &"catalog_v2", &"catalog_v3", &"catalog_v4", &"catalog_v5", &"catalog_v6"] and _same_profile(migrated_disk_profile, source):
 			return {"ok": true}
 		if migration_kind == &"schema_v1" and source.revision == 0 and source.characters.is_empty():
 			return {"ok": true, "archive_legacy": true}

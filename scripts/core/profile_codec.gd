@@ -10,6 +10,8 @@ const PRE_DEFENDER_CATALOG_VERSION := 2
 const PRE_BERSERKER_CATALOG_VERSION := 3
 const PRE_ELEMENTALIST_CATALOG_VERSION := 4
 const PRE_SPIRITUALIST_CATALOG_VERSION := 5
+const PRE_THRESHOLDS_CATALOG_VERSION := 6
+const PRE_THRESHOLDS_RULESET_ID := "e04_learn_from_zero_v1"
 const LEGACY_BASE_GRANTS := {
 	"swordsman": {"slash": 1, "dash": 1, "swordsman_resistance": 1},
 	"mage": {"fireball": 1, "fire_wall": 1, "mage_mana_regeneration": 1},
@@ -74,27 +76,33 @@ static func decode(text: String, catalog: ProfileCatalog = null) -> Dictionary:
 	if (
 		_is_exact_integer(data.get("catalog_version"))
 		and int(data["catalog_version"]) == PRE_DEFENDER_CATALOG_VERSION
-		and data.get("ruleset_id") == ProfileState.RULESET_ID
+		and data.get("ruleset_id") == PRE_THRESHOLDS_RULESET_ID
 	):
 		return _migrate_catalog_v2(data, effective_catalog)
 	if (
 		_is_exact_integer(data.get("catalog_version"))
 		and int(data["catalog_version"]) == PRE_BERSERKER_CATALOG_VERSION
-		and data.get("ruleset_id") == ProfileState.RULESET_ID
+		and data.get("ruleset_id") == PRE_THRESHOLDS_RULESET_ID
 	):
 		return _migrate_catalog_v3(data, effective_catalog)
 	if (
 		_is_exact_integer(data.get("catalog_version"))
 		and int(data["catalog_version"]) == PRE_ELEMENTALIST_CATALOG_VERSION
-		and data.get("ruleset_id") == ProfileState.RULESET_ID
+		and data.get("ruleset_id") == PRE_THRESHOLDS_RULESET_ID
 	):
 		return _migrate_catalog_v4(data, effective_catalog)
 	if (
 		_is_exact_integer(data.get("catalog_version"))
 		and int(data["catalog_version"]) == PRE_SPIRITUALIST_CATALOG_VERSION
-		and data.get("ruleset_id") == ProfileState.RULESET_ID
+		and data.get("ruleset_id") == PRE_THRESHOLDS_RULESET_ID
 	):
 		return _migrate_catalog_v5(data, effective_catalog)
+	if (
+		_is_exact_integer(data.get("catalog_version"))
+		and int(data["catalog_version"]) == PRE_THRESHOLDS_CATALOG_VERSION
+		and data.get("ruleset_id") == PRE_THRESHOLDS_RULESET_ID
+	):
+		return _migrate_catalog_v6(data, effective_catalog)
 	return _decode_v2(data, effective_catalog)
 
 static func validate_profile(profile: ProfileState, catalog: ProfileCatalog = null) -> Dictionary:
@@ -103,7 +111,7 @@ static func validate_profile(profile: ProfileState, catalog: ProfileCatalog = nu
 		return _catalog_error(&"invalid_catalog")
 	return _decode_v2(_profile_to_dictionary(profile), effective_catalog)
 
-static func _decode_v2(data: Dictionary, catalog: ProfileCatalog) -> Dictionary:
+static func _decode_v2(data: Dictionary, catalog: ProfileCatalog, legacy_attribute_budget: bool = false) -> Dictionary:
 	if data.get("format_id") != ProfileState.FORMAT_ID:
 		return _error(&"unsupported_schema")
 	if not _is_exact_integer(data.get("catalog_version")) or int(data["catalog_version"]) != ProfileState.CATALOG_VERSION:
@@ -133,7 +141,7 @@ static func _decode_v2(data: Dictionary, catalog: ProfileCatalog) -> Dictionary:
 	profile.next_run_counter = int(data["next_run_counter"])
 	var character_ids: Dictionary[String, bool] = {}
 	for raw_character: Variant in data["characters"]:
-		var decoded_character := _decode_character(raw_character, profile.profile_id, profile.next_character_counter, catalog)
+		var decoded_character := _decode_character(raw_character, profile.profile_id, profile.next_character_counter, catalog, legacy_attribute_budget)
 		if not decoded_character["ok"]:
 			return decoded_character
 		var character: CharacterState = decoded_character["character"]
@@ -171,7 +179,7 @@ static func _decode_v2(data: Dictionary, catalog: ProfileCatalog) -> Dictionary:
 	profile.extension_fields = _unknown_fields(data, ROOT_FIELDS)
 	return {"ok": true, "profile": profile, "migrated": false}
 
-static func _decode_character(raw: Variant, profile_id: String, next_character_counter: int, catalog: ProfileCatalog) -> Dictionary:
+static func _decode_character(raw: Variant, profile_id: String, next_character_counter: int, catalog: ProfileCatalog, legacy_attribute_budget: bool = false) -> Dictionary:
 	if not raw is Dictionary:
 		return _error(&"invalid_character")
 	var data: Dictionary = raw
@@ -210,7 +218,7 @@ static func _decode_character(raw: Variant, profile_id: String, next_character_c
 		return _error(&"xp_out_of_range")
 	if not evolution_id.is_empty() and (base_xp < ProgressionRules.EVOLUTION_MIN_BASE_XP or job_xp < ProgressionRules.EVOLUTION_MIN_JOB_XP):
 		return _error(&"requirements_unmet")
-	var allocations_result := _decode_allocations(data["attribute_allocations"], base_class_id, base_xp)
+	var allocations_result := _decode_allocations(data["attribute_allocations"], base_class_id, base_xp, legacy_attribute_budget)
 	if not allocations_result["ok"]:
 		return allocations_result
 	var grants_result := _decode_granted_rank_map(data["granted_skill_ranks"], base_class_id, evolution_id, catalog)
@@ -268,7 +276,7 @@ static func _decode_character(raw: Variant, profile_id: String, next_character_c
 	character.extension_fields = _unknown_fields(data, CHARACTER_FIELDS)
 	return {"ok": true, "character": character}
 
-static func _decode_allocations(raw: Variant, base_class_id: StringName, base_xp: int) -> Dictionary:
+static func _decode_allocations(raw: Variant, base_class_id: StringName, base_xp: int, legacy_attribute_budget: bool = false) -> Dictionary:
 	if not raw is Dictionary or raw.size() != IdentityIds.attribute_ids().size():
 		return _error(&"invalid_attribute_allocations")
 	var allocations: Dictionary[StringName, int] = {}
@@ -283,7 +291,10 @@ static func _decode_allocations(raw: Variant, base_class_id: StringName, base_xp
 			return _error(&"overspent_attributes")
 		allocations[attribute_id] = allocation
 		invested += allocation
-	if invested > ProgressionRules.attribute_points_granted(base_xp):
+	if legacy_attribute_budget and invested > ProgressionRules.legacy_attribute_points_granted(base_xp):
+		return _error(&"overspent_attributes")
+	var spent := ProgressionRules.attribute_points_spent(allocations, base_class_id)
+	if spent < 0 or spent > ProgressionRules.attribute_points_granted(base_xp):
 		return _error(&"overspent_attributes")
 	return {"ok": true, "allocations": allocations}
 
@@ -487,7 +498,7 @@ static func _migrate_catalog_v1(data: Dictionary, catalog: ProfileCatalog) -> Di
 		var grants: Dictionary = LEGACY_BASE_GRANTS.get(raw_character["base_class_id"], {}).duplicate(true)
 		raw_character["granted_skill_ranks"] = grants
 		migrated["characters"][index] = raw_character
-	var decoded := _decode_v2(migrated, catalog)
+	var decoded := _decode_v2(migrated, catalog, true)
 	if not decoded["ok"]:
 		return decoded
 	decoded["migrated"] = true
@@ -498,7 +509,8 @@ static func _migrate_catalog_v2(data: Dictionary, catalog: ProfileCatalog) -> Di
 	# The Defender catalog adds IDs but does not reinterpret any catalog-2 field.
 	var migrated := data.duplicate(true)
 	migrated["catalog_version"] = ProfileState.CATALOG_VERSION
-	var decoded := _decode_v2(migrated, catalog)
+	migrated["ruleset_id"] = ProfileState.RULESET_ID
+	var decoded := _decode_v2(migrated, catalog, true)
 	if not decoded["ok"]:
 		return decoded
 	decoded["migrated"] = true
@@ -509,7 +521,8 @@ static func _migrate_catalog_v3(data: Dictionary, catalog: ProfileCatalog) -> Di
 	# Berserker adds exclusive IDs without reinterpreting catalog-3 fields.
 	var migrated := data.duplicate(true)
 	migrated["catalog_version"] = ProfileState.CATALOG_VERSION
-	var decoded := _decode_v2(migrated, catalog)
+	migrated["ruleset_id"] = ProfileState.RULESET_ID
+	var decoded := _decode_v2(migrated, catalog, true)
 	if not decoded["ok"]:
 		return decoded
 	decoded["migrated"] = true
@@ -520,7 +533,8 @@ static func _migrate_catalog_v4(data: Dictionary, catalog: ProfileCatalog) -> Di
 	# Elementalist adds exclusive IDs without reinterpreting catalog-4 fields.
 	var migrated := data.duplicate(true)
 	migrated["catalog_version"] = ProfileState.CATALOG_VERSION
-	var decoded := _decode_v2(migrated, catalog)
+	migrated["ruleset_id"] = ProfileState.RULESET_ID
+	var decoded := _decode_v2(migrated, catalog, true)
 	if not decoded["ok"]:
 		return decoded
 	decoded["migrated"] = true
@@ -531,11 +545,25 @@ static func _migrate_catalog_v5(data: Dictionary, catalog: ProfileCatalog) -> Di
 	# Spiritualist only adds IDs; catalog-5 character fields and ranks are unchanged.
 	var migrated := data.duplicate(true)
 	migrated["catalog_version"] = ProfileState.CATALOG_VERSION
-	var decoded := _decode_v2(migrated, catalog)
+	migrated["ruleset_id"] = ProfileState.RULESET_ID
+	var decoded := _decode_v2(migrated, catalog, true)
 	if not decoded["ok"]:
 		return decoded
 	decoded["migrated"] = true
 	decoded["migration_kind"] = &"catalog_v5"
+	return decoded
+
+static func _migrate_catalog_v6(data: Dictionary, catalog: ProfileCatalog) -> Dictionary:
+	var migrated := data.duplicate(true)
+	migrated["catalog_version"] = ProfileState.CATALOG_VERSION
+	migrated["ruleset_id"] = ProfileState.RULESET_ID
+	# Validate all old allocations against the old wallet before accepting the
+	# larger new budget. The new cost is then checked too; no debt or reset.
+	var decoded := _decode_v2(migrated, catalog, true)
+	if not decoded["ok"]:
+		return decoded
+	decoded["migrated"] = true
+	decoded["migration_kind"] = &"catalog_v6"
 	return decoded
 
 static func _profile_to_dictionary(profile: ProfileState) -> Dictionary:
