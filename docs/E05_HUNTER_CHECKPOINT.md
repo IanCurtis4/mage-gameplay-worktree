@@ -7,7 +7,7 @@ Branch `codex/e05-hunter`, base `3d452fa2e4455f4c8636f4fb319a2d0607d08582`.
 ## Estado
 
 H1 e primeiro núcleo H2 implementados, em commits granulares internos.
-Contrato57bb3ef, catálogo650ee87; candidato efetivo é o commit que contém esta
+Contrato57bb3ef, catálogo650ee87, núcleo4bf832d; candidato efetivo é o commit que contém esta
 atualização (confirmar HEAD e assinatura no CLI antes de reutilizar evidência).
 Caçadora permanece indisponível. Nenhuma revisão/aceite de gameplay desta classe.
 Playtest habitual limpo na base3d452fa, sem alteração nesta entrega.
@@ -49,6 +49,9 @@ destrutivos foram exercitados. Death/end removem estado, sem refill.
 `tools/verify.ps1` foi executado: primeiras tentativas interrompidas exclusivamente
 em expectativas antigas do roster e do teste de catálogo Sentinela, corrigidas e
 reproduzidas acima. Não registrar essas execuções interrompidas como PASS integral.
+A primeira execução CLI integral foi interrompida ao detectar um UID de teste
+gerado pela importação depois do commit; registro `20261008-094324-84d94f65`
+permanece incompleto e não é evidência reutilizável. UID acrescentado ao Git.
 Após o commit deste lote, executar CLI `all/implementer` no HEAD limpo e consultar
 o relatório emitido em `.godot/workflow` pelo status: exigir `current_inputs=true`
 para reutilizar. Resultado posterior de verificação do lote não conclui H3–H7,

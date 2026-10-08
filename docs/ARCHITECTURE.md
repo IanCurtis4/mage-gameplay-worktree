@@ -448,8 +448,6 @@ S7 habilita apenas esta biblioteca completa no candidato isolado; publicar em
 playtest/revisão e aceite humano continuam separados. Atlas original preserva
 fonte/prompt; provas de renderer não qualificam diversão, balanceamento ou FPS.
 
-### Procedimento
-
 ### Caçadora — núcleo parcial H2
 
 Contrato: E05_HUNTER_PLAN.md; retomada: E05_HUNTER_CHECKPOINT.md. Hunter mantém
