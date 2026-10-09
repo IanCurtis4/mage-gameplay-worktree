@@ -1,3 +1,28 @@
+# Chats vigentes e histórico — 09/10/2026
+
+Norma: [WORKFLOW.md](WORKFLOW.md). A partir de E06, um Astra permanente novo por
+épico cuida exclusivamente de arquitetura/contratos/guias; execução, revisão e
+integração ficam em chats temporários com registro Git e arquivamento após
+validação/integração. Essa regra substitui qualquer obrigação histórica abaixo
+de reutilizar a reserva Sol do épico ou retomar Astra como gerente.
+
+| Papel atual E06 | Título exato no app | ID |
+|---|---|---|
+| Arquitetura permanente | RagRPG \| E06 — Arquitetura Astra | 01a11e1e-be3d-7243-affc-295c0dc00f9f |
+| Chat solicitante, dispatch das tarefas | Iniciar E06 com chats por tarefa | 01a11e1a-5eac-7992-9fd5-76e4cdcced19 |
+| T1/T2/T3/T4/T5/R | Não criados nesta entrega | Registrar ao criar no checkpoint E06 |
+
+[Contrato](epics/e06_contract.md), [DAG/donos](epics/e06_tasks.md) e
+[checkpoint](epics/e06_checkpoint.md) são o índice persistente.
+A coordenação fará a delegação depois desta entrega; nenhum executor foi criado
+por este chat. A reserva histórica E06 de13/09 não é o executor vigente.
+Nenhum contato ou retomada de chats históricos por efeito dessa mudança.
+E07+ sem autorização. IDs não conferem por si só permissão para enviar mensagens.
+
+---
+
+## Reservas e decisões históricas — não são o roteamento atual
+
 > Estado vigente em 23/09/2026: E04 encerrado e aceito; E05 liberado, somente E05-S0 em execução (docs/E05_START.md). E06–E11 reservados. As atualizações abaixo são históricas.
 
 # Conversas reservadas dos épicos

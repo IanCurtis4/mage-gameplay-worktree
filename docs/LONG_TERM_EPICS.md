@@ -1,3 +1,30 @@
+# Estado e precedência em 09/10/2026
+
+Norma única de operação: [WORKFLOW.md](WORKFLOW.md), autorizada em 08/10.
+A partir de E06: novo chat Astra permanente por épico para arquitetura/contratos/
+guias; tarefas temporárias para execução, revisão independente e integração.
+Substitui abaixo “uma conversa reservada por épico” como executor obrigatório,
+“Astra revisa cada passo” e “Astra integra/rebaseia”. Sem gate por microtarefa.
+
+E06 iniciado, entrega atual somente documental:
+[contrato](epics/e06_contract.md), [tarefas](epics/e06_tasks.md),
+[checkpoint](epics/e06_checkpoint.md). As três decisões de produto estão
+respondidas: dez identidades com opções próprias; equipamentos/cartas também
+transformadores; cartas únicas por tipo na run. T1 é a primeira execução futura.
+
+Base auditada: playtest51b5fabc, master8df3a67. E03/E04 presentes.
+E05 não declarado integralmente aceito: dez identidades jogáveis e cinco híbridas
+ainda bloqueadas; Caçadora aprovada tecnicamente/publicada, com aceite humano e
+merge pendentes. E06 depende de E03/E04, portanto seu planejamento prossegue.
+E07–E11 continuam reservados; nenhuma decisão deste pacote os inicia.
+
+---
+
+## Roadmap histórico e escopo dos épicos
+
+Datas/estados de reserva abaixo são históricos. Escopos futuros continuam úteis;
+roteamento/autoridade atuais estão no bloco acima e em WORKFLOW.
+
 > Estado vigente em 23/09/2026: E04 encerrado e aceito; E05 liberado, somente E05-S0 em execução (docs/E05_START.md). E06–E11 reservados. As atualizações abaixo são históricas.
 
 # Épicos do MVP expandido
@@ -51,7 +78,7 @@ Uma conversa reservada por épico principal; subépicos reutilizam a conversa, c
 | E03 — Stats, job e níveis de habilidade | sol | E00, E01 | RESERVADO |
 | E04 — Três classes base completas | sol | E03 | RESERVADO |
 | E05 — Evoluções e seis híbridas clássicas | sol | E04 | RESERVADO |
-| E06 — Augments, equipamentos e cartas | sol | E03, E04 | RESERVADO |
+| E06 — Augments, equipamentos e cartas | arquitetura Astra; execução por tarefa | E03, E04 | AUTORIZADO — documentos; ver e06.md |
 | E07 — Campanha de três fases e boss | sol | E04, E06 | RESERVADO |
 | E08 — Arte, animações e feedback do demo | astra | E04 | RESERVADO |
 | E09 — Integração e primeiro demo bom | astra | E02, E03, E04, E05, E06, E07, E08 | RESERVADO |
@@ -147,17 +174,21 @@ Limite: Não começar as seis puras/seis híbridas simultaneamente. As outras 50
 
 ## E06 — Augments, equipamentos e cartas
 
-Dono inicial: gpt-5.6-sol, esforço high. Dependências: E03, E04.
+**Autorizado em 08/10/2026.** Dependências E03/E04. Arquitetura permanente Astra;
+execução temporária Sol/Terra, revisão independente temporária e integração
+operacional conforme [e06.md](epics/e06.md), que substitui o roteiro antigo.
 
-Ampliar variedade de builds, pool de augments por identidade, equipamentos e cartas, mantendo coleta e escolha fora do combate.
+Pipeline único de modificadores/transformações/procs; equipamentos compartilhados,
+cartas/augments da run, troca sem cura e save conservador. Dez identidades já
+jogáveis com opções próprias. Equipamentos e cartas também transformam habilidades;
+cartas únicas por tipo e sorteadas sem repetição. Manter coleta manual, ofertas
+estáveis/pendências fora do encontro e UI atual/próximo.
 
-1. Sol: pipeline de modificadores/efeitos, limites de proc e proteção contra cascatas.
-2. Terra após contrato: preencher pools/ícones/textos e apresentar efeito atual/próximo; proposta inicial 12 gerais + 8 por base, sujeita a E00.
-3. Sol: inventário/equipar/cartas/save conforme ADR; testes de elegibilidade, troca sem cura e reset apenas de estado temporário.
-
-Aceite: Ao menos duas builds distinguíveis por classe no demo; coleta pode acumular escolhas, menu só fora do encontro, nenhuma oferta inválida ou cadeia infinita.
-
-Limite: Sem crafting, loja online, monetização ou números de catálogo tratados como compromisso sem balanceamento.
+Aceite: duas builds legais distinguíveis por identidade coberta, sem oferta
+inútil/ilegal, cascata, perda/duplicação de progresso ou cura por troca.
+Sem habilitar as cinco híbridas pendentes, crafting, lojas ou monetização.
+“12 gerais +8 por base” continua hipótese histórica, não quota aprovada.
+Tarefas e propriedade em e06_tasks; estado/hash/evidência em e06_checkpoint.
 
 ## E07 — Campanha de três fases e boss
 

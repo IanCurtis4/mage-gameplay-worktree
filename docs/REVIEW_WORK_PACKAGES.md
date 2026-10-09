@@ -1,3 +1,38 @@
+# Pacotes e revisão proporcional ao risco — norma a partir de E06
+
+09/10/2026. Fonte única: [WORKFLOW.md](WORKFLOW.md), fluxo autorizado em
+08/10/2026. Este bloco prevalece sobre toda a análise histórica abaixo.
+Astra permanente de cada épico limita-se a arquitetura/contratos/guias.
+Execução, integração e revisão independente usam chats temporários separados.
+Sem gate Astra por microtarefa; E06 segue [seu mapa](epics/e06_tasks.md).
+
+| Risco/entrega | Executor proposto | Validação necessária |
+|---|---|---|
+| Lote fechado de textos/receitas | Luna | Validador e conferência do lote por Terra |
+| UI/conteúdo sobre APIs estáveis | Terra | Testes e inspeção contextual/visual; primeiro padrão tem revisão independente adequada |
+| Matemática, save, identidade, causalidade ou runtime compartilhado | Sol | Invariantes e revisão independente da fronteira completa por tarefa temporária, antes dos consumidores |
+| Composição/candidato | Executor de integração temporário | Suíte integrada, revisão independente e roteiro de playtest; aceite humano antes do merge |
+
+Um comportamento verificável por tarefa, com resultado/exclusões, base/checkout,
+dono exclusivo, APIs, testes, SHA entregue/integrado, evidências e limitações.
+Não criar cadeia obrigatória pelos quatro modelos. Paralelo somente com APIs
+concretas e arquivos disjuntos. Correções reutilizam o chat da tarefa.
+Arquivamento exige entrega registrada, validada e integrada; falha/decisão mantém
+pendente. O checkpoint no repositório sobrevive aos chats.
+
+Em E06, T1/T2 formam uma fundação revisada em R1; conteúdo/UI podem então rodar
+em paralelo; R2 revisa a composição. R1/R2 pertencem ao mesmo chat temporário R.
+Escolha de esforço é explícita por rodada, sem promessa de adaptação automática.
+E07+ continuam sem liberação.
+
+---
+
+## Análise histórica de 14–26/09/2026 — não usar como roteamento atual
+
+Mantida para rastrear decisões/evidências antigas. Referências abaixo a escopo
+“atual”, conversa reservada única, Astra integrador/gerente ou revisão a cada
+passo estão substituídas por WORKFLOW a partir de E06; não são novos aceites.
+
 > Atualização normativa de 26/09/2026: usuário determinou entregas granulares
 > com revisão Astra somente por escopo completo (agora: uma classe).
 > Sem handoff/gate por microtarefa; manter um checkpoint consolidado por classe.

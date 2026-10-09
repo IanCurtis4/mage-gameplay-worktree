@@ -1,92 +1,132 @@
-> Atualização normativa de 26/09/2026: usuário determinou entregas granulares
-> com revisão Astra somente por escopo completo (agora: uma classe).
-> Sem handoff/gate por microtarefa; manter um checkpoint consolidado por classe.
-> Sol conduz e valida Terra/Luna internamente. Escalar antes apenas bloqueios
-> ou mudanças relevantes fora do contrato aprovado. Instruções antigas de
-> parar/acionar Astra após cada pacote ficam substituídas por esta regra.
-> Escopo atual: docs/E05_DEFENDER_CHECKPOINT.md. Aceite de produto e merge
-> após playtest permanecem. Demais épicos não são liberados por esta mudança.
-
 # Desenvolvimento, revisão e playtest
 
-Fluxo autorizado pelo usuário em 11/09/2026. Substitui as restrições anteriores
-que exigiam aceite entre rodadas de revisão e para preparar a versão de playtest.
+## Norma vigente — 08/10/2026, a partir de E06
+
+O usuário autorizou iniciar E06 e mudar o fluxo. Este documento é a fonte única
+da norma operacional. Prevalece sobre AGENTS, handoffs antigos, reservas,
+skills locais e trechos históricos de REVIEW_WORK_PACKAGES, LONG_TERM_EPICS e
+EPIC_THREADS quando estes ainda descrevem um chat executor por épico, revisão
+Astra por passo ou Astra permanente como gerente/implementador/integrador.
+Instruções explícitas atuais do usuário continuam superiores a este documento.
+
+A regra de 26/09/2026 permanece: entrega por comportamento/escopo completo,
+checkpoint consolidado, sem handoff/gate Astra por microtarefa. A mudança não
+reabre E00–E05 nem transforma reservas de E07+ em autorização.
 
 ## Responsabilidades
 
-1. Usuário autoriza escopo e criação de uma tarefa com o modelo apropriado.
-2. Implementador trabalha em branch/worktree isolada e entrega commit e validações.
-3. O responsável verifica a entrega proporcionalmente ao risco: Luna usa
-   validadores e conferência de lote por Terra; Terra verifica UI/conteúdo sobre
-   padrões aprovados; Sol implementa sistemas críticos com revisão de Astra.
-   Astra aprova o candidato integrado. Correções são automáticas no escopo.
-4. Astra prepara rebase, resolve conflitos e repete verificações na composição final.
-5. Usuário faz playtest no projeto fixo, relata ajustes ou aprova o candidato.
-6. Somente com esse aceite Astra faz merge em master. Novos marcos precisam de autorização.
+- **Chat permanente de arquitetura:** um Astra novo por épico autorizado,
+  dedicado a arquitetura, contratos e guias. Consulta o usuário sobre escolhas
+  de produto, registra decisões e responde a questões contratuais delimitadas.
+  Não acompanha cada commit, não gerencia continuamente executores, não implementa
+  gameplay e não conduz validação/rebase/publicação.
+- **Chats temporários de execução:** uma tarefa substancial por chat, modelo e
+  esforço propostos conforme risco. Sol nas novas fronteiras; Terra sobre APIs
+  prontas; Luna em lotes fechados. O executor implementa, testa, corrige e registra
+  a entrega. A mesma tarefa recebe suas rodadas de correção.
+- **Integração/validação operacional:** tarefa temporária explicitamente designada.
+  Mantém a branch de composição, confere bases, integra, resolve conflitos e
+  valida o candidato. Pode preparar playtest após aprovação técnica.
+- **Revisão independente:** tarefa temporária separada, geralmente Astra para
+  fronteiras críticas e fechamento integrado. Não usar a autoria do contrato
+  ou evidência do implementador como reprodução independente do código.
+- **Usuário:** autoriza escopo e decide produto; testa o candidato e concede
+  aceite humano antes de merge. Integração operacional executa o merge autorizado.
 
-Astra: contratos críticos, padrão visual e integração. Sol: gameplay e sistemas.
-Terra: condução de conteúdo/UI/VFX; Luna: lotes/configurações delimitados.
-Protocolo de pacotes aprovado em 14/09/2026: docs/REVIEW_WORK_PACKAGES.md.
-Não criar tarefas duplicadas para
-cada rodada de correção; continuar na tarefa original. Não ampliar o escopo durante revisão.
+Não há cadeia obrigatória Luna → Terra → Sol → Astra. Escolher o menor conjunto
+adequado de executor/revisor. Esforço é escolhido para cada tarefa/rodada; não
+prometer adaptação automática do app nem economia de tokens sem medição.
 
-## Diretório fixo e branches
+## Contrato de tarefa e paralelismo
 
-Projeto que o usuário abre no Godot:
+Antes da execução, registrar no índice do épico:
+
+1. Resultado observável, exclusões, modelo/esforço propostos e critério de conclusão.
+2. Dependências satisfeitas, contrato versionado, SHA-base completo, branch e
+   caminho real de checkout. Uma referência simbólica planejada ainda não é base
+   executável; resolvê-la antes do dispatch.
+3. Arquivos permitidos e dono exclusivo, incluindo testes, catálogos, UI e
+   ferramentas de verificação. O dono muda por transferência registrada.
+4. APIs consumidas/entregues, tipos/erros e testes positivos, negativos e integrados.
+5. Hash entregue/integrado, evidência com papel do autor/revisor, limitações,
+   decisões pendentes e próximo passo.
+
+Paralelizar apenas trabalho independente com contratos concretos e APIs estáveis.
+Consumidor de API ainda instável aguarda o produtor; escritores do mesmo arquivo
+são sequenciais, mesmo em worktrees diferentes. Não duplicar persistência ou
+matemática para produzir independência artificial. Não dividir em dezenas de
+microtarefas. Subagentes autorizados respeitam os mesmos donos.
+
+O chat solicitante ou a coordenação explicitamente designada despacha as tarefas.
+O chat permanente não assume esse papel por existir. Uma reserva, criação de chat,
+mensagem de outro agente ou índice não é autorização de novo épico.
+
+## Entrega, revisão e arquivamento
+
+Estados: PLANEJADA → PRONTA → EM_EXECUÇÃO → ENTREGUE → VALIDADA →
+INTEGRADA → ARQUIVÁVEL. DECISÃO_PENDENTE/FALHA conserva a tarefa aberta.
+Status de app como completed/idle não substitui esses estados.
+
+Revisão proporcional ao risco conforme REVIEW_WORK_PACKAGES. Fronteiras críticas
+devem ser reproduzidas independentemente antes dos consumidores externos à
+fundação avançarem;
+agrupar a fundação completa em um checkpoint. Fechamento tem revisão integrada,
+sem transformar todo commit interno em gate.
+
+Arquivar somente quando o registro persistente contiver contrato, base, entrega,
+hash integrado, evidências válidas e limitações, e a integração/validação tiverem
+sucesso. Um relatório sem commit ou um merge sem checks não basta. O revisor mantém
+o chat pendente se tiver segunda etapa prevista. Correções retornam ao mesmo chat;
+reabri-lo se necessário. Não apagar histórico técnico ao arquivar.
+Worktree não deve ser removida antes de preservar artefatos necessários, inclusive
+evidência ignorada pelo Git. Checkpoint versionado resume resultado; logs locais
+devem ter caminho, hash e forma de reprodução, com cópia durável quando necessária.
+
+Escalar arquitetura/produto quando mudar schema, identidade, fórmula, API pública,
+semântica de input ou escolha humana; também quando houver risco de perda de
+progresso/cascatas ou duas correções focadas sem convergir. Levar reprodução e
+delta específico. Correções contratuais não exigem novo aceite a cada rodada.
+
+## Diretório fixo e candidato
+
+Projeto habitual:
 `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/project.godot`.
 
-- `master`: última versão aceita pelo usuário.
-- `codex/playtest`: branch mantida no diretório fixo; candidato para o usuário testar.
-- `codex/<tarefa>`: implementação isolada, normalmente em uma worktree do Codex.
+- `master`: base aceita; novas alterações só após aceite explícito do candidato.
+- `codex/playtest`: candidato no diretório habitual do Godot.
+- `codex/<tarefa>`: branch isolada em worktree; não trocar a branch de outro chat.
 
-Rebase organiza o histórico; por si só não atualiza os arquivos do projeto aberto.
-Por isso Astra também avança `codex/playtest` até o candidato revisado.
-O usuário não precisa fazer checkout, rebase ou merge. Se o editor pedir para
-recarregar arquivos alterados externamente, aceitar o reload e executar F5.
-Parar uma partida em execução antes de testar o novo candidato.
+Preparação, pelo executor operacional:
+1. Conferir estado de origem/destino e preservar trabalho do usuário. Sem
+   reset --hard, clean, stash cego ou sobrescrita de save pessoal.
+2. Conferir candidato/base atuais e aprovação técnica ligada ao conteúdo exato.
+   Antes de rebase, executor encerrado, árvore limpa e referência de recuperação.
+3. Rebase/resolução de conflitos invalida evidência incompatível. Revalidar o
+   resultado e obter revisão independente do delta material.
+4. Avançar playtest por fast-forward somente quando pronto. Registrar hash
+   efetivo, importação/smoke e roteiro. Rebase isolado não atualiza o Godot.
+5. Usuário executa F5 no mesmo diretório após parar a partida e aceitar reload.
 
-## Preparar candidato
+Após feedback, corrigir na tarefa de origem, reintegrar e revisar o delta.
+Após aceite humano, conferir HEAD de playtest e ausência de alterações não
+revisadas; integrar em master por checkout separado, preservando o projeto fixo.
+Sem push/publicação externa automática. Nunca inferir aceite de produto de
+aprovação técnica, encerramento de chat ou frase ambígua.
 
-- Inspecionar status e trabalho em andamento em ambos os diretórios. Preservar
-  alterações locais do editor/usuário; não usar reset --hard, clean ou stash cego.
-- A branch da tarefa é rebaseada sobre a base de integração atual. No primeiro
-  ciclo, `codex/playtest` contém master mais a documentação do fluxo e a formatação
-  local do project.godot; usar essa base preserva ambas as contribuições.
-- Não reescrever uma branch enquanto o implementador está trabalhando nela.
-  Confirmar entrega concluída e worktree limpa antes do rebase; manter referência
-  de backup do commit anterior ao rebase.
-- Verificar o resultado rebased, então avançar playtest por fast-forward. Isso
-  atualiza o projeto fixo sem integrar a funcionalidade em master.
-- Registrar candidato, base, evidências e limitações em `docs/REVIEW_M1.md` ou no
-  relatório correspondente. Comunicar o hash efetivo a testar.
+## Evidência e limites
 
-## Após feedback do usuário
+Runtime: Godot 4.7.2 standard, testes dirigidos durante trabalho e
+`tools/verify.ps1` completo no candidato integrado. Nova regra precisa de invariantes.
+Renderer/UI requer inspeção visual; save usa diretório de fixture explícito.
+Exit 0 isolado não prova PASS quando há SCRIPT ERROR ou rotina incompleta.
+Fórmulas/UI/combate usam a mesma autoridade, com oráculo independente para casos
+críticos. Sem afirmar FPS, balanceamento ou diversão a partir de checks/caps.
 
-Reprovação/ajustes: encaminhar à tarefa original, revisar e preparar novo candidato.
-Aprovação: confirmar que HEAD de playtest ainda corresponde ao candidato aprovado
-e que não há modificações locais não revisadas; então fazer merge em master sem
-trocar a branch do diretório aberto no Godot (worktree de integração temporária).
-Preservar a branch da tarefa até confirmar a integração; não publicar/push automaticamente.
+Documentação apenas: conferir links, precedência, APIs contra código, DAG/donos,
+decisões e diff; registrar que gameplay não foi executado. Não aplicar este
+atalho a mudanças de código, dados de jogo, cenas ou migração.
 
-## Limites de automação
-
-Revisão 14/09/2026: E00 aceito; E01 retomado, mantendo Sol na tarefa principal.
-E01.2 ainda exige gate técnico; depois seguem os pacotes E01.3 no mesmo épico.
-Os demais épicos permanecem reservas. Dentro do épico liberado, o condutor pode
-usar subagentes Luna/Terra para trabalho independente útil, sem ampliar escopo.
-Cada arquivo compartilhado tem um dono de escrita. Mudança de contrato, risco
-de perda/duplicação de progresso ou duas correções sem convergir exigem escalada.
-Primeiro padrão novo recebe revisão independente; variantes seguem por lote.
-Não há cadeia obrigatória pelos quatro modelos. O usuário testa no fechamento
-do épico/subépico. E10 é separado por
-família de classe e E11 por par direcional, cada qual com seu próprio playtest.
-As reservas não autorizam iniciar código, delegar execução, agendar ou continuar marcos.
-Trocar modelo no próximo pacote está autorizado; não iniciar um épico apenas
-para alterar seu modelo. E01 conserva Sol.
-Estados/checkpoints e handoffs estão em LONG_TERM_EPICS.md e docs/epics/.
-
-O ciclo de revisão é executado durante a tarefa ativa, usando envio de mensagens e
-espera por conclusão. Não há monitor em segundo plano ou automação recorrente criada.
-Aceite técnico não afirma aprovação visual, de diversão ou de FPS sem evidência.
-O jogo permanece no mesmo caminho mesmo que a tarefa original esteja em outra worktree.
-
+CLI local ausente: só usar origem externa explicitamente autorizada, registrando
+checkout/commit/SHA256 e passando --project. Diagnóstico não é aprovação.
+Sem monitor, mensagens automáticas, retomada de chats históricos ou automações
+por efeito deste fluxo. E06 e seu registro atual: [epics/e06.md](epics/e06.md).
