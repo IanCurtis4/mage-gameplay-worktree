@@ -14,6 +14,7 @@ func _run() -> void:
 	_echo_and_kill_exceptions()
 	_berserker_last_slot()
 	_sentinel_multiple_victims()
+	_nova_component_families()
 	await _arena_budget()
 	print("E06 effects runtime: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
@@ -401,3 +402,41 @@ func _sentinel_multiple_victims() -> void:
 	for actor: CombatActor in actors:
 		actor.free()
 	player.free()
+
+func _nova_component_families() -> void:
+	var build := BuildSnapshot.new()
+	build.character_id = "nova-budget"
+	build.base_class_id = &"mage"
+	build.evolution_id = &"elementalist"
+	build.job_level = 40
+	build.skill_ranks = {&"elementalist_tri_nova": 1}
+	var state := RunState.from_build("nova", build)
+	var nav := ArenaNavigation.new()
+	nav.configure(Rect2(0, 0, 1000, 1000), [], 0.0)
+	var player := PlayerActor.new()
+	player.configure(nav, state)
+	root.add_child(player)
+	player.set_process(false)
+	var victim := CombatActor.new()
+	victim.setup("Fixture", Color.WHITE, StatCalculator.calculate({}))
+	victim.health.max_hp = 10000.0
+	victim.health.current_hp = 10000.0
+	root.add_child(victim)
+	victim.set_process(false)
+	var requests: Array[DamageRequest] = []
+	player.elementalist_tri_nova_requested.connect(func(_center: Vector2, captured: Array[DamageRequest], _bonus: float) -> void: requests.assign(captured))
+	player.use_elementalist_tri_nova()
+	var fillers: Array[Dictionary] = []
+	for index: int in 14:
+		fillers.append({"family_id": StringName("fill_%d" % index), "source_id": &"fixture", "target_id": victim.get_instance_id()})
+	state.effect_ledger.claim_batch(requests[0].context, fillers)
+	var children: Array[DamageRequest] = []
+	for index: int in [1, 2]:
+		var child := requests[index].copy()
+		child.target_id = victim.get_instance_id()
+		children.append(child)
+		var result := victim.health.apply(child, 0.0, 1.0)
+		_check(not result.is_empty() and not result["can_trigger_effects"] and child.context.root_event_id == requests[0].context.root_event_id, "distinct Nova element component applies without fresh root or cascades")
+	_check(state.effect_ledger.applications(requests[0].context) == 16 and victim.health.apply(children[0].copy(), 0.0, 1.0).is_empty() and victim.health.apply(children[1].copy(), 0.0, 1.0).is_empty(), "both Nova components share cap16 and reject replay")
+	player.free()
+	victim.free()

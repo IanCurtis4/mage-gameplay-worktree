@@ -77,6 +77,9 @@ DamageRequest.context é CombatEventContext; effect_snapshot copia procs e vers�
 na emissão. DamageRequest.copy conserva root/event/flags, cancelled, metadata e
 poder. secondary permanece verdadeiro no envelope mesmo após tentar limpar o
 bool. HealthState.apply carimba a entrega e chama apply_once antes de HP/listeners.
+Componente intrínseco usa context.family_id explícito, ou skill_id se vazio.
+Nova Tríplice reserva elementalist_tri_nova_ice e elementalist_tri_nova_lightning
+na mesma raiz; ambas são vedadas a receitas genéricas e compartilham cap16.
 Cópia de entrega já carimbada conserva event_id e não aplica novamente. Cada
 projétil copia o protótipo; perfuração carimba nova colisão preservando a raiz.
 

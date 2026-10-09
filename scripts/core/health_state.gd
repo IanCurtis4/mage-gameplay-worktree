@@ -39,7 +39,8 @@ func apply(request: DamageRequest, hit_roll: float, crit_roll: float, debuffs: A
 		if not request.context.is_active():
 			return {}
 		if request.is_secondary and request.context.event_id == 0:
-			var claims := request.context.ledger().claim_intrinsic(request.context, [{"family_id": request.skill_id, "source_id": StringName(str(request.source_id)), "target_id": actor_id}])
+			var family := request.context.family_id if not request.context.family_id.is_empty() else request.skill_id
+			var claims := request.context.ledger().claim_intrinsic(request.context, [{"family_id": family, "source_id": StringName(str(request.source_id)), "target_id": actor_id}])
 			if claims.is_empty():
 				return {}
 			request.context = claims[0]["context"]

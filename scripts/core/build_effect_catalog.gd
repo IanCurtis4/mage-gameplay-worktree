@@ -5,7 +5,7 @@ extends RefCounted
 const ORIGINS: Array[StringName] = [&"augment", &"equipment", &"card"]
 const SLOTS: Array[StringName] = [&"weapon", &"armor", &"accessory"]
 const SCALAR_AXES: Array[StringName] = [&"range"]
-const INTRINSIC_FAMILIES: Array[StringName] = [&"hunter_exploit", &"sentinel_focus", &"berserker_wound", &"berserker_pursuit", &"berserker_breath_heal", &"elementalist_focus", &"spiritualist_echo", &"spiritualist_echo_recovery", &"spiritualist_channel_focus", &"spiritualist_drain_heal", &"blood_thirst", &"defender_watch", &"defender_token", &"defender_guard_return"]
+const INTRINSIC_FAMILIES: Array[StringName] = [&"elementalist_tri_nova_ice", &"elementalist_tri_nova_lightning", &"hunter_exploit", &"sentinel_focus", &"berserker_wound", &"berserker_pursuit", &"berserker_breath_heal", &"elementalist_focus", &"spiritualist_echo", &"spiritualist_echo_recovery", &"spiritualist_channel_focus", &"spiritualist_drain_heal", &"blood_thirst", &"defender_watch", &"defender_token", &"defender_guard_return"]
 const PROJECTILE_SKILLS: Array[StringName] = [&"fire_spear", &"ice_spear", &"double_shot"]
 var _definitions: Dictionary = {}
 

@@ -1079,6 +1079,8 @@ func use_elementalist_tri_nova() -> bool:
 	for index: int in range(3):
 		var request := _make_magic_request(null, &"elementalist_tri_nova", magic_attack * powers[index], definition.accuracy_mode, definition.can_crit)
 		request.is_secondary = index > 0
+		if index > 0 and request.context != null:
+			request.context.family_id = &"elementalist_tri_nova_ice" if index == 1 else &"elementalist_tri_nova_lightning"
 		requests.append(request)
 	elementalist_tri_nova_requested.emit(global_position, requests, magic_attack * 0.40)
 	resources_changed.emit()
