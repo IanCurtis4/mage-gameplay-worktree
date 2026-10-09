@@ -48,6 +48,7 @@ func _run() -> void:
 	c.player.apply_run_modifiers(state)
 	state.queue_choice()
 	_check(F.change(c, &"unequip", {"slot": &"armor"})["ok"], "pending unopened choice permits equipment change")
+	var base_projectiles := state.projectile_count(&"fire_spear")
 	var cards := state.card_inventory
 	for id: StringName in [&"echo_card", &"ember_card", &"bulwark_card"]:
 		_check(cards.grant(id, state.effect_catalog())["ok"], "fixture card acquired once")
@@ -55,11 +56,11 @@ func _run() -> void:
 	_check(F.change(c, &"equip", {"slot": &"armor", "item_id": &"traveler_vest"})["ok"], "armor restored")
 	disk = F.disk(fixture)
 	_check(F.change(c, &"socket", {"item_id": &"starter_staff", "card_id": &"echo_card"})["ok"], "free card sockets on equipped item")
-	_check(state.projectile_count(&"fire_spear") == 2 and F.disk(fixture) == disk, "card transforms skill through T1 and never saves")
+	_check(state.projectile_count(&"fire_spear") == base_projectiles + 1 and F.disk(fixture) == disk, "card transforms skill through T1 and never saves")
 	var unchanged := state.card_inventory.describe()
 	_check(F.change(c, &"socket", {"item_id": &"traveler_vest", "card_id": &"ember_card"})["error_code"] == &"effect_conflict" and state.card_inventory.describe() == unchanged, "cross-card conflict rejects whole change")
 	_check(F.change(c, &"equip", {"slot": &"weapon", "item_id": &"ember_staff"})["ok"], "unequipping card host returns card before composition")
-	_check(state.card_inventory.describe()["free"].has(&"echo_card") and state.projectile_count(&"fire_spear") == 2, "new item transformation remains and removed card is free")
+	_check(state.card_inventory.describe()["free"].has(&"echo_card") and state.projectile_count(&"fire_spear") == base_projectiles + 1, "new item transformation remains and removed card is free")
 	_check(F.change(c, &"socket", {"item_id": &"traveler_vest", "card_id": &"echo_card"})["error_code"] == &"effect_conflict", "equipment/card exclusive conflict rejects")
 	_check(F.change(c, &"equip", {"slot": &"weapon", "item_id": &"starter_staff"})["ok"], "conflicting equipment removable")
 	_check(F.change(c, &"socket", {"item_id": &"starter_staff", "card_id": &"echo_card"})["ok"], "card can be reused without another draw")

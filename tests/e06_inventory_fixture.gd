@@ -97,6 +97,7 @@ static func make(tree: SceneTree, label: String, origin: StringName = &"mage", o
 	RunController.pending_run_facade = facade
 	var controller := RunController.new()
 	tree.root.add_child(controller)
+	controller.rng.seed = 260609
 	controller.set_process(false)
 	controller.player.set_process(false)
 	for enemy: CombatActor in controller.enemies:
