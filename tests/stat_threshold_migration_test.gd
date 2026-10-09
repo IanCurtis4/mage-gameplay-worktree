@@ -90,7 +90,10 @@ func _test_store_migration_and_respec() -> void:
 	var current: ProfileState = migrated["profile"]
 	_check(current.revision == profile.revision+1 and current.next_run_counter == 9 and current.next_character_counter == 3 and current.selected_character_id == profile.selected_character_id, "migration conserves IDs/counters/selection and increments revision once")
 	var kept := current.characters[0]
-	_check(kept.attribute_allocations == character.attribute_allocations and kept.purchased_skill_ranks == character.purchased_skill_ranks and kept.action_slots == character.action_slots and kept.presets == character.presets and kept.equipped == character.equipped and kept.extension_fields == character.extension_fields and current.extension_fields == profile.extension_fields, "migration preserves skills bars presets equips and extensions")
+	_check(kept.attribute_allocations == character.attribute_allocations and kept.purchased_skill_ranks == character.purchased_skill_ranks and kept.action_slots == character.action_slots and kept.extension_fields == character.extension_fields and current.extension_fields == profile.extension_fields, "migration preserves skills bars investments and extensions")
+	var expected_equipped := {&"weapon": &"starter_blade", &"armor": &"traveler_vest", &"accessory": &"traveler_charm"}
+	_check(kept.equipped == expected_equipped and kept.presets[0]["equipped"] == expected_equipped and kept.presets[1]["equipped"] == expected_equipped, "E06 additive migration fills previously null equipment slots")
+	_check(kept.presets[0]["active_slots"] == character.presets[0]["active_slots"] and kept.presets[1]["active_slots"] == character.presets[1]["active_slots"] and kept.presets[0]["passive_slots"] == character.presets[0]["passive_slots"] and kept.presets[1]["passive_slots"] == character.presets[1]["passive_slots"], "additive starters preserve both legacy skill presets")
 	var facade := ProfileFacade.new(store)
 	_check(facade.open_profile()["ok"], "migrated store opens facade normally")
 	var revision := facade.current_profile().revision

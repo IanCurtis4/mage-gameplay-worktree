@@ -70,8 +70,10 @@ func _run() -> void:
 	controller.player.slash_cooldown = 2.0
 	controller.player.dash_cooldown = 3.0
 	controller._confirm_augment(second_offer[0].id)
-	_check(paused and controller.run_finished and controller.result_overlay.visible, "second choice completes and pauses the victorious run")
-	_check(controller.result_title.text == "Arena concluída!" and controller.run_state.augment_stacks.size() > 0, "victory preserves run summary state until restart")
+	_check(not paused and not controller.run_finished and controller.next_button.visible, "second choice leaves a usable interval before explicit end")
+	controller._start_next_encounter()
+	_check(paused and controller.run_finished and controller.result_overlay.visible, "explicit completion pauses the victorious run")
+	_check(controller.result_title.text == "Arena concluída!" and controller.run_state.augment_stacks.is_empty(), "terminal completion discards transient effects")
 
 	var completed_controller := controller
 	controller._restart_run()

@@ -59,6 +59,10 @@ var reward: RewardPickup
 var encounter_index := 0
 var encounter_active := false
 var run_finished := false
+var build_service: RunBuildService
+var reward_service: RunRewardService
+var inventory_frozen := false
+var _inventory_previous_pause := false
 var _terminal_outcome: StringName = &"abandoned"
 var persistent_facade: ProfileFacade = null
 var _close_request_serial := 0
@@ -155,7 +159,14 @@ func _ready() -> void:
 	trap_registry.y_sort_enabled = true
 	add_child(trap_registry)
 	player = PlayerActor.new()
+	if run_state.build_snapshot.equipped.is_empty():
+		run_state.build_snapshot.equipped = ProfileCatalog.pilot().starter_equipment(run_state.class_id)
+	for item: Variant in run_state.build_snapshot.equipped.values():
+		if item != null and item not in run_state.local_equipment:
+			run_state.local_equipment.append(item)
 	player.configure(navigation, run_state)
+	build_service = RunBuildService.new(self)
+	reward_service = RunRewardService.new(self)
 	player.global_position = Vector2(300, 520)
 	player.attack_requested.connect(_on_attack_requested)
 	player.defender_hit_requested.connect(_on_defender_hit_requested)
@@ -1810,6 +1821,7 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	reward.global_position = Vector2(880, 500)
 	reward.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(reward)
+	_ensure_reward_ticket()
 	status_label.text = "Encontro concluído — toque no cristal dourado"
 
 func _on_enemy_damage_resolved(result: Dictionary) -> void:
@@ -1872,36 +1884,51 @@ func _collect_reward() -> Dictionary:
 	var progression_result := _grant_persistent_encounter_reward()
 	if not progression_result.get("ok", false):
 		_reward_retry_pending = true
-		status_label.text = "%s Pressione E para tentar novamente ou use Personagem para sair; a coleta ainda não foi consumida." % _reward_error_text(StringName(progression_result.get("error_code", &"unknown")))
+		status_label.text = "%s Pressione F8 para tentar novamente ou use Personagem para sair; a coleta ainda não foi consumida." % _reward_error_text(StringName(progression_result.get("error_code", &"unknown")))
 		return progression_result
 	reward.queue_free()
 	reward = null
-	run_state.queue_choice()
+	_reward_retry_pending = false
 	augment_button.disabled = false
 	if progression_result.get("persistent", false):
 		var applied: Dictionary = progression_result.get("applied_reward", {})
 		if applied.is_empty():
-			status_label.text = "XP persistente já salvo — abra a escolha com E"
+			status_label.text = "XP persistente já salvo — abra a escolha com F8"
 		else:
-			status_label.text = "XP salvo: +%d base · +%d job — abra a escolha com E" % [applied["base_xp"], applied["job_xp"]]
+			status_label.text = "XP salvo: +%d base · +%d job — abra a escolha com F8" % [applied["base_xp"], applied["job_xp"]]
 	else:
-		status_label.text = "Recompensa coletada — abra a escolha com E"
+		status_label.text = "Recompensa coletada — abra a escolha com F8"
 	return progression_result
 
+func _ensure_reward_ticket() -> Dictionary:
+	if reward == null or reward_service == null:
+		return BuildEffectCatalog.failure(&"reward_unavailable")
+	if not reward.ticket_id.is_empty():
+		return reward_service.ticket(reward.ticket_id)
+	var issued := reward_service.issue("encounter_%d" % encounter_index, ProfileRewardResolver.pilot_encounter_reward_id(encounter_index), encounter_index == 2)
+	if issued["ok"]:
+		reward.ticket_id = issued["ticket_id"]
+	return issued
+
 func _grant_persistent_encounter_reward() -> Dictionary:
-	if not _persistent_run_active():
-		return {"ok": true, "persistent": false}
-	var profile := persistent_facade.current_profile()
-	if profile == null:
-		return {"ok": false, "error_code": &"profile_unavailable"}
-	var reward_id := ProfileRewardResolver.pilot_encounter_reward_id(encounter_index)
-	if reward_id.is_empty():
-		return {"ok": false, "error_code": &"invalid_reward"}
-	var request_id := "reward-%s-%d" % [run_state.run_id.md5_text(), encounter_index]
-	var result := persistent_facade.grant_reward(request_id, profile.revision, run_state.run_id, encounter_index, reward_id)
-	if result.get("ok", false):
-		result["persistent"] = true
-	return result
+	var issued := _ensure_reward_ticket()
+	if not issued["ok"]:
+		return issued
+	return reward_service.collect(issued["ticket_id"])
+
+func set_inventory_freeze(frozen: bool) -> void:
+	if inventory_frozen == frozen:
+		return
+	inventory_frozen = frozen
+	run_state.transaction_locked = frozen
+	if not is_inside_tree():
+		return
+	if frozen:
+		_inventory_previous_pause = get_tree().paused
+		_cancel_casting(false)
+		get_tree().paused = true
+	else:
+		get_tree().paused = _inventory_previous_pause
 
 func _reward_error_text(error_code: StringName) -> String:
 	match error_code:
@@ -1915,7 +1942,7 @@ func _reward_error_text(error_code: StringName) -> String:
 		_: return "A recompensa persistente falhou (%s)." % error_code
 
 func _open_augment_menu() -> void:
-	if run_finished or get_tree().paused:
+	if run_finished or inventory_frozen or get_tree().paused:
 		return
 	var offer_result := run_state.open_offer(encounter_active, rng)
 	if not offer_result["ok"]:
@@ -1928,10 +1955,8 @@ func _open_augment_menu() -> void:
 			status_label.text = consumed["message"]
 			augment_button.disabled = run_state.pending_choices <= 0
 			if run_state.pending_choices <= 0:
-				if encounter_index >= 2:
-					_show_result(true)
-				else:
-					next_button.visible = true
+				next_button.visible = true
+				next_button.text = "Encerrar demonstração" if encounter_index >= 2 else "Próximo encontro"
 		return
 	_cancel_casting(false)
 	_clear_hover()
@@ -1957,16 +1982,17 @@ func _confirm_augment(augment_id: StringName) -> void:
 	if run_state.pending_choices > 0:
 		status_label.text = "Aprimoramento aplicado — há escolhas pendentes"
 		return
+	next_button.visible = true
+	next_button.text = "Encerrar demonstração" if encounter_index >= 2 else "Próximo encontro"
+	status_label.text = "Recompensas disponíveis — prepare a build ou encerre a demonstração" if encounter_index >= 2 else "Augment aplicado — inicie o próximo encontro"
+
+func _start_next_encounter() -> void:
+	if encounter_active or reward != null or run_state.pending_choices > 0 or run_state.has_open_offer() or inventory_frozen or run_finished or reward_service.has_uncollected():
+		return
 	if encounter_index >= 2:
 		_show_result(true)
 	else:
-		next_button.visible = true
-		status_label.text = "Augment aplicado — inicie o próximo encontro"
-
-func _start_next_encounter() -> void:
-	if encounter_active or reward != null or run_state.pending_choices > 0 or encounter_index >= 2:
-		return
-	_spawn_encounter(encounter_index + 1)
+		_spawn_encounter(encounter_index + 1)
 
 func _spawn_death_visual(actor: CombatActor, after_run: bool = false) -> void:
 	if actor.character_animation == null:
@@ -1987,6 +2013,11 @@ func _on_player_died(_actor: CombatActor) -> void:
 	_show_result(false)
 
 func _show_result(victory: bool) -> void:
+	if run_finished:
+		return
+	if victory and not training_mode and (reward != null or run_state.pending_choices > 0 or run_state.has_open_offer() or inventory_frozen or reward_service.has_uncollected()):
+		return
+	run_finished = true # Claim terminal before clearing buffs can recalculate lethal maxima.
 	run_state.effect_ledger.cancel()
 	player.clear_sentinel_state()
 	player.clear_hunter_state()
@@ -2020,6 +2051,8 @@ func _show_result(victory: bool) -> void:
 		elif effect is LightningWall or effect is SoulImpactSequence or effect is HauntConeVisual or effect is PhantomBarrier or effect is ElementalistSequenceScript:
 			effect.queue_free()
 	run_finished = true
+	run_state.reset()
+	run_state.effect_ledger.cancel()
 	_training_add_elapsed = 0.0
 	_terminal_outcome = &"completed" if victory else &"death"
 	result_title.text = ("Treino concluído!" if training_mode else "Arena concluída!") if victory else "Você caiu em combate"
@@ -2393,7 +2426,7 @@ func _restore_context_status(serial: int) -> void:
 	elif reward != null:
 		status_label.text = "Encontro concluído — toque no cristal dourado"
 	elif run_state.pending_choices > 0:
-		status_label.text = "Recompensa coletada — abra a escolha com E"
+		status_label.text = "Recompensa coletada — abra a escolha com F8"
 	elif encounter_index < 2:
 		status_label.text = "Augment aplicado — inicie o próximo encontro"
 

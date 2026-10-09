@@ -80,6 +80,13 @@ static func pilot(
 	var hunter_override: Dictionary = raw_hunter_override if raw_hunter_override is Dictionary else {}
 	if not hunter_override.has("exclusive_skill_ids") and not hunter_override.has(&"exclusive_skill_ids"):
 		catalog._register_hunter_skills()
+	if additional_equipment.is_empty():
+		for resource: Resource in BuildContentLoader.definitions(&"equipment"):
+			if not resource is EquipmentDefinition:
+				catalog._build_error = true
+				continue
+			var item := resource as EquipmentDefinition
+			catalog.add_equipment(item.id, item.slot, item.allowed_origins, item.starter)
 	for raw_item_id: Variant in additional_equipment:
 		var metadata: Dictionary = additional_equipment[raw_item_id]
 		var allowed_base_classes: Array[StringName] = []

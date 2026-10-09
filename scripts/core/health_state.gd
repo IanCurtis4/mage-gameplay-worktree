@@ -7,7 +7,14 @@ signal actor_died(actor_id: int)
 
 var actor_id: int
 var max_hp: float
-var current_hp: float
+var _hp_deficit := 0.0
+var current_hp: float:
+	get:
+		return 0.0 if _death_emitted else maxf(0.0, max_hp - _hp_deficit)
+	set(value):
+		if is_finite(value):
+			_hp_deficit = maxf(0.0, max_hp - clampf(value, 0.0, max_hp))
+
 var physical_defense: float
 var magic_defense: float
 var flee_rating: float
@@ -27,7 +34,7 @@ func is_alive() -> bool:
 func spend_hp_nonlethal(cost: float) -> bool:
 	if not is_finite(cost) or cost < 0.0 or current_hp <= cost:
 		return false
-	current_hp -= cost
+	_hp_deficit += cost
 	return true
 
 func apply(request: DamageRequest, hit_roll: float, crit_roll: float, debuffs: AttributeDebuffState = null) -> Dictionary:
@@ -70,7 +77,7 @@ func apply(request: DamageRequest, hit_roll: float, crit_roll: float, debuffs: A
 	var absorbed_damage := minf(shield_hp, float(result["damage"]))
 	shield_hp = maxf(0.0, shield_hp - absorbed_damage)
 	var actual_damage := minf(previous_hp, float(result["damage"]) - absorbed_damage)
-	current_hp = maxf(0.0, current_hp - actual_damage)
+	_hp_deficit += actual_damage
 	var killed := previous_hp > 0.0 and current_hp <= 0.0
 	result["actual_damage"] = actual_damage
 	result["absorbed_damage"] = absorbed_damage
@@ -84,10 +91,12 @@ func apply(request: DamageRequest, hit_roll: float, crit_roll: float, debuffs: A
 
 func set_stats_preserving_missing(new_stats: StatBreakdown) -> void:
 	assert(new_stats != null)
-	var missing_hp := maxf(0.0, max_hp - current_hp)
+	var was_alive := is_alive()
 	max_hp = maxf(1.0, new_stats.value(&"max_hp"))
-	current_hp = clampf(max_hp - missing_hp, 0.0, max_hp)
 	_set_defensive_stats(new_stats)
+	if was_alive and current_hp <= 0.0 and not _death_emitted:
+		_death_emitted = true
+		actor_died.emit(actor_id)
 
 func reset(new_stats: StatBreakdown) -> void:
 	assert(new_stats != null)
@@ -96,6 +105,16 @@ func reset(new_stats: StatBreakdown) -> void:
 	shield_hp = 0.0
 	_set_defensive_stats(new_stats)
 	_death_emitted = false
+
+func hp_deficit() -> float:
+	return _hp_deficit
+
+func heal(amount: float) -> float:
+	if not is_alive() or not is_finite(amount) or amount <= 0.0:
+		return 0.0
+	var restored := minf(amount, _hp_deficit)
+	_hp_deficit -= restored
+	return restored
 
 func grant_shield(capacity: float) -> bool:
 	if not is_alive() or not is_finite(capacity) or capacity <= 0.0:

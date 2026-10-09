@@ -56,6 +56,10 @@ if ($SkipEditorImport) {
 } else {
     Invoke-GodotCheck @('--headless', '--path', $projectPath, '--editor', '--import', '--quit')
 }
+Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_inventory_resources_test.gd')
+Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_inventory_test.gd')
+Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_rewards_test.gd')
+Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_migration_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_effects_composition_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_proc_ledger_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_effects_runtime_test.gd')

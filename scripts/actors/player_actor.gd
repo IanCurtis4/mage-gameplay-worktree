@@ -115,7 +115,13 @@ var navigation: ArenaNavigation
 var run_state: RunState
 var class_id: StringName = &"swordsman"
 var class_definition: ClassDefinition
-var current_sp := 0.0
+var _sp_deficit := 0.0
+var current_sp: float:
+	get:
+		return maxf(0.0, max_sp - _sp_deficit)
+	set(value):
+		if is_finite(value):
+			_sp_deficit = maxf(0.0, max_sp - clampf(value, 0.0, max_sp))
 var max_sp := 0.0
 var attack_cooldown := 0.0
 var sentinel_state := SentinelFocusState.new()
@@ -512,11 +518,9 @@ func apply_run_modifiers(state: RunState) -> void:
 
 func _apply_derived_stats(derived: StatBreakdown) -> void:
 	assert(derived != null)
-	var missing_sp := maxf(0.0, max_sp - current_sp)
 	stat_breakdown = derived
 	health.set_stats_preserving_missing(stat_breakdown)
 	max_sp = maxf(0.0, stat_breakdown.value(&"max_sp"))
-	current_sp = clampf(max_sp - missing_sp, 0.0, max_sp)
 
 func move_to(point: Vector2) -> void:
 	cancel_active_cast()
@@ -665,7 +669,7 @@ func heal_from_berserker_breath_steal(result: Dictionary, heal_fraction: float) 
 	var amount := minf(float(result.get("actual_damage", 0.0)) * heal_fraction, health.max_hp * BERSERKER_BREATH_HEAL_CAP_FRACTION)
 	var healed := minf(maxf(0.0, amount), health.max_hp - health.current_hp)
 	if healed > 0.0:
-		health.current_hp += healed
+		health.heal(healed)
 		resources_changed.emit()
 		queue_redraw()
 	return healed
@@ -782,7 +786,7 @@ func _trigger_berserker_pursuit(target_id: int, result: Dictionary) -> void:
 		return
 	if not claim_effect_result(result, &"berserker_pursuit", get_instance_id()):
 		return
-	current_sp = minf(max_sp, current_sp + rank_definition.power)
+	recover_sp(rank_definition.power)
 	berserker_pursuit_cooldown = 1.0
 	resources_changed.emit()
 
@@ -810,7 +814,7 @@ func record_elementalist_damage(result: Dictionary) -> void:
 		var rank_definition := _runtime_rank_definition(&"elementalist_prismatic_focus")
 		if rank_definition != null and claim_effect_result(result, &"elementalist_focus", get_instance_id()):
 			var previous_sp := current_sp
-			current_sp = minf(max_sp, current_sp + rank_definition.power)
+			recover_sp(rank_definition.power)
 			elementalist_focus_cooldown = 1.0
 			if emission_id > 0:
 				_elementalist_refunded_emissions[emission_id] = true
@@ -1200,7 +1204,7 @@ func heal_from_spiritualist_drain(result: Dictionary, already_healed: float) -> 
 	var remaining_channel_cap := maxf(0.0, health.max_hp * 0.05 - already_healed)
 	var healed := minf(minf(actual_damage * 0.15, remaining_channel_cap), health.max_hp - health.current_hp)
 	if healed > 0.0:
-		health.current_hp += healed
+		health.heal(healed)
 		resources_changed.emit()
 		queue_redraw()
 	return healed
@@ -1211,10 +1215,10 @@ func recover_spiritualist_echo_sp(emission_id: int, result: Dictionary = {}) -> 
 	var rank_definition := _runtime_rank_definition(&"spiritualist_echo_recovery")
 	if rank_definition == null or (emission_id > 0 and _spiritualist_refunded_emissions.has(emission_id)):
 		return 0.0
-	var recovered := minf(rank_definition.power, maxf(0.0, max_sp - current_sp))
+	var recovered := minf(rank_definition.power, sp_deficit())
 	if recovered <= 0.0 or not claim_effect_result(result, &"spiritualist_echo_recovery", get_instance_id()):
 		return 0.0
-	current_sp += recovered
+	recover_sp(recovered)
 	spiritualist_recovery_cooldown = 1.0
 	if emission_id > 0:
 		_spiritualist_refunded_emissions[emission_id] = true
@@ -1563,7 +1567,7 @@ func _grant_defender_front_event(result: Dictionary = {}) -> void:
 	_set_defender_token_notice("TOKEN RENOVADO" if renewed else "TOKEN PRONTO")
 	var return_rank := _runtime_rank_definition(&"defender_guard_return")
 	if return_rank != null and run_state.build_snapshot.has_passive(&"defender_guard_return") and defender_guard_return_cooldown <= 0.0 and claim_effect_result(result, &"defender_guard_return", get_instance_id()):
-		current_sp = minf(max_sp, current_sp + return_rank.power)
+		recover_sp(return_rank.power)
 		defender_guard_return_cooldown = return_rank.cooldown
 	resources_changed.emit()
 	queue_redraw()
@@ -2600,10 +2604,10 @@ func _try_berserker_leap_hit(from: Vector2, to: Vector2) -> void:
 	attack_requested.emit(request, chosen)
 
 func _regenerate_sp(delta: float, simulation_paused: bool) -> bool:
-	if simulation_paused or not is_alive() or current_sp >= max_sp:
+	if simulation_paused or delta <= 0.0 or not is_alive() or sp_deficit() <= 0.0:
 		return false
 	var previous_sp := current_sp
-	current_sp = minf(max_sp, current_sp + stat_breakdown.value(&"sp_regen") * delta)
+	recover_sp(stat_breakdown.value(&"sp_regen") * delta)
 	if is_equal_approx(previous_sp, current_sp):
 		return false
 	resources_changed.emit()
@@ -2613,7 +2617,7 @@ func regenerate_hp(delta: float, encounter_active: bool, simulation_paused: bool
 	if encounter_active or simulation_paused or delta <= 0.0 or not is_alive() or health.current_hp >= health.max_hp:
 		return false
 	var previous_hp := health.current_hp
-	health.current_hp = minf(health.max_hp, health.current_hp + stat_breakdown.value(&"hp_regen") * delta)
+	health.heal(stat_breakdown.value(&"hp_regen") * delta)
 	if is_equal_approx(previous_hp, health.current_hp):
 		return false
 	resources_changed.emit()
@@ -2628,7 +2632,7 @@ func heal_from_kill() -> float:
 	if fraction <= 0.0:
 		return 0.0
 	var previous_hp := health.current_hp
-	health.current_hp = minf(health.max_hp, health.current_hp + health.max_hp * fraction)
+	health.heal(health.max_hp * fraction)
 	var healed := health.current_hp - previous_hp
 	if healed > 0.0:
 		resources_changed.emit()
@@ -2729,7 +2733,7 @@ func _spend(skill_id: StringName) -> void:
 	var rank_definition := _runtime_rank_definition(skill_id)
 	var cost := rank_definition.sp_cost if rank_definition != null else definition.sp_cost
 	var base_cooldown := rank_definition.cooldown if rank_definition != null else definition.cooldown
-	current_sp -= cost
+	_sp_deficit += cost
 	var cooldown := SentinelMath.cooldown(skill_id, base_cooldown, stat_breakdown) if is_sentinel() else StatCalculator.effective_cooldown(base_cooldown, stat_breakdown)
 	if skill_id == &"slash":
 		slash_cooldown = cooldown
@@ -2849,8 +2853,8 @@ func can_basic_attack(enemy: CombatActor, retain: bool = false) -> bool:
 	var allowed_distance := basic_attack_distance(enemy) + (ATTACK_RETENTION if retain else 0.0)
 	return global_position.distance_to(enemy.global_position) <= allowed_distance and navigation.is_segment_clear(global_position, enemy.global_position, 0.0)
 
-func _build_stat_breakdown() -> StatBreakdown:
-	var sources := run_state.stat_modifier_sources()
+func temporary_stat_sources() -> Array[Dictionary]:
+	var sources: Array[Dictionary] = []
 	if is_hunter() and hunter_state.step_remaining > 0.0:
 		sources.append(HunterMath.step_source())
 	if is_sentinel() and _sentinel_stance_active:
@@ -2863,7 +2867,25 @@ func _build_stat_breakdown() -> StatBreakdown:
 			sources.append(source)
 	if _defender_inside_anchor and has_defender_anchor():
 		sources.append({"source_id": &"defender_anchor", "label": "Marco de Guarda", "increased": {&"physical_defense": DEFENDER_ANCHOR_DEFENSE_BONUS, &"magic_defense": DEFENDER_ANCHOR_DEFENSE_BONUS}})
+	return sources
+
+func _build_stat_breakdown() -> StatBreakdown:
+	var sources := run_state.stat_modifier_sources()
+	sources.append_array(temporary_stat_sources())
 	return run_state.build_snapshot.stat_breakdown(sources)
+
+func sp_deficit() -> float:
+	return _sp_deficit
+
+func recover_sp(amount: float) -> float:
+	if not is_alive() or not is_finite(amount) or amount <= 0.0:
+		return 0.0
+	var recovered := minf(amount, _sp_deficit)
+	_sp_deficit -= recovered
+	return recovered
+
+func resource_state() -> Dictionary:
+	return {"hp_deficit": health.hp_deficit(), "sp_deficit": sp_deficit(), "temporary_sources": temporary_stat_sources()}
 
 func _draw() -> void:
 	super._draw()

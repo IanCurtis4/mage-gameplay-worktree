@@ -15,7 +15,10 @@ var current_offer: Array[AugmentDefinition] = []
 var _effect_catalog: BuildEffectCatalog
 var effect_ledger := EffectProcLedger.new()
 var runtime_revision: int = 1
+var transaction_locked := false
 var card_sockets: Dictionary = {}
+var card_inventory := RunCardInventory.new()
+var local_equipment: Array[StringName] = []
 var _effect_cache_key: int = 0
 var _effect_cache: Dictionary = {}
 var _effect_cache_serial := 0
@@ -29,7 +32,7 @@ var _offer_ids: Array[StringName] = []
 var _uses_persistent_build: bool = false
 
 func _init(selected_class: StringName = DEFAULT_CLASS_ID) -> void:
-	_effect_catalog = BuildEffectCatalog.pilot()
+	_effect_catalog = BuildContentLoader.pilot()
 	select_class(selected_class)
 
 static func from_build(new_run_id: String, source: BuildSnapshot) -> RunState:
@@ -63,12 +66,14 @@ func queue_choice() -> void:
 	_choice_ids.append(_choice_serial)
 
 func can_open_choice(encounter_active: bool) -> bool:
-	return pending_choices > 0 and not encounter_active
+	return pending_choices > 0 and not encounter_active and not transaction_locked
 
 func effect_catalog() -> BuildEffectCatalog:
 	return _effect_catalog.copy_catalog()
 
 func set_effect_catalog(catalog: BuildEffectCatalog) -> Dictionary:
+	if transaction_locked:
+		return BuildEffectCatalog.failure(&"save_in_progress")
 	if catalog == null or _offer_open:
 		return BuildEffectCatalog.failure(&"offer_open" if _offer_open else &"missing_catalog")
 	var candidate := BuildEffectComposer.compose(build_snapshot, effect_state(), [], catalog)
@@ -196,6 +201,8 @@ func _offer_dto() -> Dictionary:
 	return result
 
 func _validate_offer_token(token: Dictionary, encounter_active: bool) -> Dictionary:
+	if transaction_locked:
+		return BuildEffectCatalog.failure(&"save_in_progress")
 	if encounter_active:
 		return BuildEffectCatalog.failure(&"encounter_active")
 	if not _offer_open or _choice_ids.is_empty() or pending_choices <= 0:
@@ -253,6 +260,7 @@ func reset() -> void:
 	pending_choices = 0
 	current_offer.clear()
 	card_sockets.clear()
+	card_inventory.clear()
 	_offer_ids.clear()
 	_choice_ids.clear()
 	_offer_open = false

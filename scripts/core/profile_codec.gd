@@ -12,6 +12,7 @@ const PRE_ELEMENTALIST_CATALOG_VERSION := 4
 const PRE_SPIRITUALIST_CATALOG_VERSION := 5
 const PRE_THRESHOLDS_CATALOG_VERSION := 6
 const PRE_HUNTER_CATALOG_VERSION := 7
+const PRE_INVENTORY_CATALOG_VERSION := 8
 const PRE_THRESHOLDS_RULESET_ID := "e04_learn_from_zero_v1"
 const LEGACY_BASE_GRANTS := {
 	"swordsman": {"slash": 1, "dash": 1, "swordsman_resistance": 1},
@@ -110,6 +111,8 @@ static func decode(text: String, catalog: ProfileCatalog = null) -> Dictionary:
 		and data.get("ruleset_id") == ProfileState.RULESET_ID
 	):
 		return _migrate_catalog_v7(data, effective_catalog)
+	if _is_exact_integer(data.get("catalog_version")) and int(data["catalog_version"]) == PRE_INVENTORY_CATALOG_VERSION and data.get("ruleset_id") == ProfileState.RULESET_ID:
+		return _migrate_catalog_v8(data, effective_catalog)
 	return _decode_v2(data, effective_catalog)
 
 static func validate_profile(profile: ProfileState, catalog: ProfileCatalog = null) -> Dictionary:
@@ -508,6 +511,7 @@ static func _migrate_catalog_v1(data: Dictionary, catalog: ProfileCatalog) -> Di
 	var decoded := _decode_v2(migrated, catalog, true)
 	if not decoded["ok"]:
 		return decoded
+	_add_inventory_starters(decoded["profile"], catalog)
 	decoded["migrated"] = true
 	decoded["migration_kind"] = &"catalog_v1"
 	return decoded
@@ -520,6 +524,7 @@ static func _migrate_catalog_v2(data: Dictionary, catalog: ProfileCatalog) -> Di
 	var decoded := _decode_v2(migrated, catalog, true)
 	if not decoded["ok"]:
 		return decoded
+	_add_inventory_starters(decoded["profile"], catalog)
 	decoded["migrated"] = true
 	decoded["migration_kind"] = &"catalog_v2"
 	return decoded
@@ -532,6 +537,7 @@ static func _migrate_catalog_v3(data: Dictionary, catalog: ProfileCatalog) -> Di
 	var decoded := _decode_v2(migrated, catalog, true)
 	if not decoded["ok"]:
 		return decoded
+	_add_inventory_starters(decoded["profile"], catalog)
 	decoded["migrated"] = true
 	decoded["migration_kind"] = &"catalog_v3"
 	return decoded
@@ -544,6 +550,7 @@ static func _migrate_catalog_v4(data: Dictionary, catalog: ProfileCatalog) -> Di
 	var decoded := _decode_v2(migrated, catalog, true)
 	if not decoded["ok"]:
 		return decoded
+	_add_inventory_starters(decoded["profile"], catalog)
 	decoded["migrated"] = true
 	decoded["migration_kind"] = &"catalog_v4"
 	return decoded
@@ -556,6 +563,7 @@ static func _migrate_catalog_v5(data: Dictionary, catalog: ProfileCatalog) -> Di
 	var decoded := _decode_v2(migrated, catalog, true)
 	if not decoded["ok"]:
 		return decoded
+	_add_inventory_starters(decoded["profile"], catalog)
 	decoded["migrated"] = true
 	decoded["migration_kind"] = &"catalog_v5"
 	return decoded
@@ -569,6 +577,7 @@ static func _migrate_catalog_v6(data: Dictionary, catalog: ProfileCatalog) -> Di
 	var decoded := _decode_v2(migrated, catalog, true)
 	if not decoded["ok"]:
 		return decoded
+	_add_inventory_starters(decoded["profile"], catalog)
 	decoded["migrated"] = true
 	decoded["migration_kind"] = &"catalog_v6"
 	return decoded
@@ -581,9 +590,36 @@ static func _migrate_catalog_v7(data: Dictionary, catalog: ProfileCatalog) -> Di
 	var decoded := _decode_v2(migrated, catalog)
 	if not decoded["ok"]:
 		return decoded
+	_add_inventory_starters(decoded["profile"], catalog)
 	decoded["migrated"] = true
 	decoded["migration_kind"] = &"catalog_v7"
 	return decoded
+
+static func _migrate_catalog_v8(data: Dictionary, catalog: ProfileCatalog) -> Dictionary:
+	var migrated := data.duplicate(true)
+	migrated["catalog_version"] = ProfileState.CATALOG_VERSION
+	var decoded := _decode_v2(migrated, catalog)
+	if not decoded["ok"]:
+		return decoded
+	_add_inventory_starters(decoded["profile"], catalog)
+	decoded["migrated"] = true
+	decoded["migration_kind"] = &"catalog_v8"
+	return decoded
+
+static func _add_inventory_starters(profile: ProfileState, catalog: ProfileCatalog) -> void:
+	for character: CharacterState in profile.characters:
+		var starters := catalog.starter_equipment(character.base_class_id)
+		for slot: StringName in IdentityIds.equipment_slots():
+			var item: Variant = starters.get(slot)
+			if item == null:
+				continue
+			if item not in profile.equipment_collection:
+				profile.equipment_collection.append(item)
+			if character.equipped[slot] == null:
+				character.equipped[slot] = item
+			for preset: Dictionary in character.presets:
+				if preset["equipped"][slot] == null:
+					preset["equipped"][slot] = item
 
 static func _profile_to_dictionary(profile: ProfileState) -> Dictionary:
 	var data := profile.extension_fields.duplicate(true)

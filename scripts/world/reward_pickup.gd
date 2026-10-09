@@ -1,6 +1,7 @@
 class_name RewardPickup
 extends Node2D
 
+var ticket_id := ""
 var _time := 0.0
 
 func _process(delta: float) -> void:

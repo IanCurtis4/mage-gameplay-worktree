@@ -201,7 +201,7 @@ func _preflight_commit(source: ProfileState, allow_migration: bool) -> Dictionar
 			return {"ok": false, "error_code": &"recovery_required", "read_only": true}
 		var migration_kind: StringName = disk.get("migration_kind", &"")
 		var migrated_disk_profile: ProfileState = disk["profile"]
-		if migration_kind in [&"catalog_v1", &"catalog_v2", &"catalog_v3", &"catalog_v4", &"catalog_v5", &"catalog_v6", &"catalog_v7"] and _same_profile(migrated_disk_profile, source):
+		if migration_kind in [&"catalog_v1", &"catalog_v2", &"catalog_v3", &"catalog_v4", &"catalog_v5", &"catalog_v6", &"catalog_v7", &"catalog_v8"] and _same_profile(migrated_disk_profile, source):
 			return {"ok": true}
 		if migration_kind == &"schema_v1" and source.revision == 0 and source.characters.is_empty():
 			return {"ok": true, "archive_legacy": true}

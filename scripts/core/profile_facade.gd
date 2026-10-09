@@ -9,6 +9,8 @@ var _catalog: ProfileCatalog
 var _reward_resolver: ProfileRewardResolver
 var _profile: ProfileState = null
 var _operation_in_progress := false
+var _active_request_id := ""
+var _uncertain_transaction: Dictionary = {}
 var _read_only := false
 var _read_only_error_code: StringName = &""
 
@@ -18,6 +20,8 @@ func _init(store: ProfileStore = null, reward_resolver: ProfileRewardResolver = 
 	_reward_resolver = reward_resolver.copy_resolver() if reward_resolver != null else ProfileRewardResolver.new()
 
 func open_profile() -> Dictionary:
+	if not _uncertain_transaction.is_empty():
+		return {"ok": false, "error_code": &"result_uncertain", "read_only": true}
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress"}
 	_operation_in_progress = true
@@ -188,6 +192,36 @@ func update_preset(
 		committed["character_id"] = character_id
 		committed["selected_preset"] = preset_index
 	return _finish_operation(request_id, committed)
+
+func run_mutation_status(run_id: String, character_id: String) -> Dictionary:
+	if _operation_in_progress:
+		return {"ok": false, "error_code": &"save_in_progress"}
+	if _read_only or not _uncertain_transaction.is_empty() or _store.has_pending_transaction():
+		return {"ok": false, "error_code": &"result_uncertain" if _read_only else &"recovery_required"}
+	if _profile == null or _profile.reward_session == null:
+		return {"ok": false, "error_code": &"invalid_session"}
+	if _profile.reward_session["run_id"] != run_id or _profile.reward_session["character_id"] != character_id or _profile.selected_character_id != character_id:
+		return {"ok": false, "error_code": &"invalid_session"}
+	return {"ok": true}
+
+func equip_between_encounters(request_id: String, expected_revision: int, controller: RunController, intent: Dictionary) -> Dictionary:
+	if controller == null or controller.persistent_facade != self or controller.build_service == null or request_id != intent.get("request_id") or not intent.has("resource_state") or not controller.build_service._busy or controller.build_service._committing_intent != intent:
+		return {"ok": false, "error_code": &"invalid_session", "request_id": request_id}
+	var prepared := controller.build_service._prepare(intent)
+	if not prepared["ok"]:
+		return prepared
+	if not prepared["equipment_changed"]:
+		return {"ok": false, "error_code": &"invalid_intent", "request_id": request_id}
+	var ready := _begin_operation(request_id, expected_revision)
+	if not ready["ok"]:
+		return _finish_operation(request_id, ready)
+	var before := _profile.copy_state()
+	var candidate := before.copy_state()
+	var character := candidate.character_by_id(controller.run_state.character_id)
+	var equipped: Dictionary = prepared["snapshot"].equipped
+	character.equipped.assign(equipped)
+	character.presets[character.selected_preset]["equipped"] = equipped.duplicate(true)
+	return _finish_operation(request_id, _resolve_commit(before, candidate, _store.commit(candidate)))
 
 func update_action_slots(request_id: String, expected_revision: int, character_id: String, slots: Array[Variant]) -> Dictionary:
 	if _operation_in_progress:
@@ -581,6 +615,23 @@ func start_run(request_id: String, expected_revision: int) -> Dictionary:
 	return _finish_operation(request_id, committed)
 
 func grant_reward(request_id: String, expected_revision: int, run_id: String, sequence: int, reward_id: StringName) -> Dictionary:
+	return _grant_reward_payload(request_id, expected_revision, run_id, sequence, reward_id)
+
+func grant_run_ticket(controller: RunController, ticket_id: String) -> Dictionary:
+	if controller == null or controller.persistent_facade != self or controller.reward_service == null or controller.encounter_active or controller.run_finished or not controller.player.is_alive():
+		return {"ok": false, "error_code": &"invalid_session", "request_id": ticket_id}
+	var ticket := controller.reward_service._durable_ticket(ticket_id)
+	if ticket.is_empty():
+		return {"ok": false, "error_code": &"invalid_reward", "request_id": ticket_id}
+	var boundary := run_mutation_status(controller.run_state.run_id, controller.run_state.character_id)
+	if not boundary["ok"]:
+		return boundary
+	return _grant_reward_payload(ticket["request_id"], _profile.revision, controller.run_state.run_id, ticket["sequence"], ticket["reward_id"], ticket["payload"])
+
+func reward_definition(reward_id: StringName) -> Dictionary:
+	return _reward_resolver.resolve(reward_id)
+
+func _grant_reward_payload(request_id: String, expected_revision: int, run_id: String, sequence: int, reward_id: StringName, frozen_payload: Dictionary = {}) -> Dictionary:
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
 	var ready := _begin_context(request_id)
@@ -608,7 +659,7 @@ func grant_reward(request_id: String, expected_revision: int, run_id: String, se
 		return _finish_operation(request_id, revision_result)
 	if sequence != cursor + 1:
 		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_reward_sequence"})
-	var resolved := _reward_resolver.resolve(reward_id)
+	var resolved := _reward_resolver.resolve(reward_id) if frozen_payload.is_empty() else {"ok": true, "reward": frozen_payload.duplicate(true)}
 	if not resolved["ok"]:
 		return _finish_operation(request_id, resolved)
 	var reward: Dictionary = resolved["reward"]
@@ -708,6 +759,7 @@ func _finish_progression_mutation(
 	return _finish_operation(request_id, committed)
 
 func _begin_context(request_id: String) -> Dictionary:
+	_active_request_id = request_id
 	_operation_in_progress = true
 	if not _valid_request_id(request_id):
 		return {"ok": false, "error_code": &"invalid_request_id"}
@@ -765,6 +817,27 @@ func _build_snapshot(character: CharacterState) -> BuildSnapshot:
 	)
 
 func _resolve_commit(before: ProfileState, candidate: ProfileState, commit_result: Dictionary) -> Dictionary:
+	var result := _reconcile_commit(before, candidate, commit_result)
+	if not result["ok"] and result.get("read_only", false):
+		_uncertain_transaction = {"request_id": _active_request_id, "before": before.copy_state(), "candidate": candidate.copy_state()}
+	else:
+		_uncertain_transaction = {}
+	return result
+
+func reconcile_transaction(request_id: String) -> Dictionary:
+	if _operation_in_progress:
+		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
+	if _uncertain_transaction.is_empty() or _uncertain_transaction["request_id"] != request_id:
+		return {"ok": false, "error_code": &"invalid_transaction", "request_id": request_id}
+	_operation_in_progress = true
+	var pending := _uncertain_transaction.duplicate()
+	var result := _reconcile_commit(pending["before"], pending["candidate"], {"ok": false, "error_code": &"save_failed"})
+	if result["ok"] or not result.get("read_only", false):
+		_uncertain_transaction = {}
+		_clear_read_only()
+	return _finish_operation(request_id, result)
+
+func _reconcile_commit(before: ProfileState, candidate: ProfileState, commit_result: Dictionary) -> Dictionary:
 	if commit_result["ok"]:
 		_profile = commit_result["profile"].copy_state()
 		_clear_read_only()

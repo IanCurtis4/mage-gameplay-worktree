@@ -180,7 +180,7 @@ func intercept_hostile(point: Vector2, context: CombatEventContext = null) -> vo
 		return
 	var refund: float = _snapshot["incidence_sp"]
 	var player := casting.player
-	if refund > 0.0 and casting.interaction_ledger.claim_interception_refund(player.current_sp < player.max_sp) and (context == null or (context.ledger() != null and not context.ledger().claim_batch(context, [{"family_id": &"geometer_incidence_refund", "source_id": &"geometer_incidence", "target_id": player.get_instance_id()}]).is_empty())):
-		player.current_sp = minf(player.max_sp, player.current_sp + refund)
+	if refund > 0.0 and casting.interaction_ledger.claim_interception_refund(player.sp_deficit() > 0.0) and (context == null or (context.ledger() != null and not context.ledger().claim_batch(context, [{"family_id": &"geometer_incidence_refund", "source_id": &"geometer_incidence", "target_id": player.get_instance_id()}]).is_empty())):
+		player.recover_sp(refund)
 		player.resources_changed.emit()
 	casting.show_wall_reaction(point, &"ice")
