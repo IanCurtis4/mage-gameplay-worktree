@@ -44,6 +44,9 @@ func on_crossed(contact: Dictionary, actor: CombatActor) -> void:
 				candidates.append(victim)
 	var identity := _identity
 	var affected := false
+	var prototype: DamageRequest = _snapshot["entry_request"] if first == &"fire" else (_snapshot["exit_request"] if second == &"fire" else null)
+	var crossing := prototype.scheduled_tick() if prototype != null else null
+	candidates.sort_custom(func(a: CombatActor, b: CombatActor) -> bool: return a.get_instance_id() < b.get_instance_id())
 	for victim: CombatActor in candidates:
 		if casting.construction.construction_id != identity or not casting.player.is_alive():
 			break
@@ -52,9 +55,8 @@ func on_crossed(contact: Dictionary, actor: CombatActor) -> void:
 		affected = true
 		if victim == actor and first == &"ice":
 			victim.apply_slow(_snapshot["slow_fraction"], 2.0, &"geometer_wall")
-		var prototype: DamageRequest = _snapshot["entry_request"] if first == &"fire" else (_snapshot["exit_request"] if second == &"fire" else null)
-		if prototype != null:
-			var request := prototype.copy()
+		if crossing != null:
+			var request := crossing.copy()
 			request.target_id = victim.get_instance_id()
 			casting.hit.emit(request, victim)
 	if affected:
@@ -108,6 +110,7 @@ func apply_owned_contact(projectile: PlayerProjectile) -> void:
 			transformed = true
 	if elements[1] == &"fire" and casting.interaction_ledger.claim_owned_projectile(projectile.get_instance_id(), GeometerInteractionLedger.Component.FIRE_EXIT, projectile.request, owner):
 		projectile.geometer_fire_request = (_snapshot["exit_request"] as DamageRequest).copy()
+		projectile.geometer_fire_request.inherit_root(projectile.request.context)
 		projectile.geometer_payload_identity = _identity
 		transformed = true
 	if transformed:
@@ -172,12 +175,12 @@ func hostile_contact(projectile: ArrowProjectile, from: Vector2, to: Vector2) ->
 	var points := casting.construction.positions()
 	return GeometerGeometry.wall_contact(from - ArrowProjectile.BODY_OFFSET, to - ArrowProjectile.BODY_OFFSET, points[0], points[1], projectile.projectile_radius)
 
-func intercept_hostile(point: Vector2) -> void:
+func intercept_hostile(point: Vector2, context: CombatEventContext = null) -> void:
 	if not _available():
 		return
 	var refund: float = _snapshot["incidence_sp"]
 	var player := casting.player
-	if refund > 0.0 and casting.interaction_ledger.claim_interception_refund(player.current_sp < player.max_sp):
+	if refund > 0.0 and casting.interaction_ledger.claim_interception_refund(player.current_sp < player.max_sp) and (context == null or (context.ledger() != null and not context.ledger().claim_batch(context, [{"family_id": &"geometer_incidence_refund", "source_id": &"geometer_incidence", "target_id": player.get_instance_id()}]).is_empty())):
 		player.current_sp = minf(player.max_sp, player.current_sp + refund)
 		player.resources_changed.emit()
 	casting.show_wall_reaction(point, &"ice")

@@ -1443,6 +1443,7 @@ func _apply_spiritualist_echo(echo: Dictionary) -> void:
 			continue
 		if center.distance_to(candidate.global_position) <= SkillGeometry.SPIRITUALIST_ECHO_SPREAD_RADIUS + candidate.collision_radius and navigation.is_segment_clear(center, candidate.global_position, 0.0):
 			affected.append(candidate)
+	affected.sort_custom(func(a: CombatActor, b: CombatActor) -> bool: return a.get_instance_id() < b.get_instance_id())
 	for target_actor: CombatActor in affected:
 		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
 			continue
@@ -1452,6 +1453,13 @@ func _apply_spiritualist_echo(echo: Dictionary) -> void:
 		if not spiritualist_echo_state.claim_pair(int(echo["wave_id"]), int(echo["target_id"]), target_actor.get_instance_id()):
 			continue
 		var request := player.make_spiritualist_echo_request(target_actor, float(echo["magic_damage"]))
+		request.damage_dealt_multiplier = float(echo.get("damage_multiplier", 1.0))
+		var parent: CombatEventContext = echo.get("context")
+		if parent != null:
+			var claimed := parent.ledger().claim_echo_pair(parent, int(echo["target_id"]), target_actor.get_instance_id()) if parent.ledger() != null else null
+			if claimed == null:
+				continue
+			request.context = claimed
 		_spiritualist_echo_number_target_id = target_actor.get_instance_id()
 		var result := target_actor.apply_damage(request, rng)
 		_spiritualist_echo_number_target_id = 0
@@ -1521,7 +1529,7 @@ func _advance_spiritualist_drain(delta: float) -> void:
 		var healed_before := spiritualist_drain_state.healed_total
 		var channel_completed := spiritualist_drain_state.resolve_tick()
 		if channel_completed:
-			player.grant_spiritualist_focus()
+			player.grant_spiritualist_focus(request.context)
 		var result := target_actor.apply_damage(request, rng)
 		var healed := player.heal_from_spiritualist_drain(result, healed_before)
 		spiritualist_drain_state.healed_total = healed_before + healed
@@ -1807,6 +1815,15 @@ func _on_enemy_died(actor: CombatActor) -> void:
 func _on_enemy_damage_resolved(result: Dictionary) -> void:
 	if player == null or not is_instance_valid(player) or not player.is_alive() or int(result.get("source_id", 0)) != player.get_instance_id():
 		return
+	var candidates: Array[Dictionary] = []
+	var build := player.run_state.build_snapshot
+	var victim_id_for_claim := int(result.get("target_id", 0))
+	if build.evolution_id == &"defender" and build.has_passive(&"defender_watch") and StringName(result.get("skill_id", &"")) in DEFENDER_WATCH_DIRECT_MELEE_IDS:
+		candidates.append({"family_id": &"defender_watch", "source_id": &"defender_watch", "target_id": victim_id_for_claim})
+	if spiritualist_echo_state.can_record_hit(result) and build.has_passive(&"spiritualist_echo_recovery") and player.spiritualist_recovery_cooldown <= 0.0 and player.current_sp < player.max_sp and not player._spiritualist_refunded_emissions.has(int(result.get("emission_id", 0))):
+		candidates.append({"family_id": &"spiritualist_echo_recovery", "source_id": &"spiritualist_echo_recovery", "target_id": player.get_instance_id()})
+	player.prepare_effect_claims(result, candidates)
+	player.resolve_build_effect_procs(result)
 	player.record_berserker_damage(result)
 	player.record_sentinel_damage(result)
 	player.record_hunter_damage(result)
@@ -1817,7 +1834,7 @@ func _on_enemy_damage_resolved(result: Dictionary) -> void:
 			if mark_target != null and is_instance_valid(mark_target):
 				battle_indicators.show_spiritualist_event(&"echo_ready", mark_target.global_position + Vector2(0, -37), mark_target)
 				_show_spiritualist_feedback(mark_target, "ECO PREPARADO", Color("d9eafa"))
-		var recovered := player.recover_spiritualist_echo_sp(int(result.get("emission_id", 0)))
+		var recovered := player.recover_spiritualist_echo_sp(int(result.get("emission_id", 0)), result)
 		if recovered > 0.0:
 			_show_spiritualist_feedback(player, "+%d SP" % ceili(recovered), Color("9fcdf2"))
 		if recovered > 0.0 and battle_indicators != null:
@@ -1838,14 +1855,16 @@ func _on_enemy_damage_resolved(result: Dictionary) -> void:
 		var watch_rank := ClassCatalog.skill_definition(&"defender_watch").rank_definition(player.skill_rank(&"defender_watch"))
 		var watch_target := instance_from_id(int(result.get("target_id", 0))) as CombatActor
 		if watch_rank != null and watch_target != null and is_instance_valid(watch_target) and watch_target.is_alive():
-			watch_target.apply_weaken(watch_rank.power, PlayerActor.DEFENDER_WATCH_DURATION, &"defender_watch")
+			if player.claim_effect_result(result, &"defender_watch", watch_target.get_instance_id()):
+				watch_target.apply_weaken(watch_rank.power, PlayerActor.DEFENDER_WATCH_DURATION, &"defender_watch")
 	if not bool(result.get("killed", false)):
 		return
 	var victim_id := int(result.get("target_id", 0))
 	if victim_id <= 0 or _credited_kills.has(victim_id):
 		return
 	_credited_kills[victim_id] = true
-	player.heal_from_kill()
+	if build.has_passive(&"blood_thirst") and player.claim_effect_result(result, &"blood_thirst", victim_id, true):
+		player.heal_from_kill()
 
 func _collect_reward() -> Dictionary:
 	if reward == null:
@@ -1898,8 +1917,21 @@ func _reward_error_text(error_code: StringName) -> String:
 func _open_augment_menu() -> void:
 	if run_finished or get_tree().paused:
 		return
-	var offer := run_state.build_offer(encounter_active, rng)
+	var offer_result := run_state.open_offer(encounter_active, rng)
+	if not offer_result["ok"]:
+		return
+	var offer: Array[AugmentDefinition] = []
+	offer.assign(offer_result["definitions"])
 	if offer.is_empty():
+		var consumed := run_state.consume_empty_offer(offer_result, encounter_active)
+		if consumed["ok"]:
+			status_label.text = consumed["message"]
+			augment_button.disabled = run_state.pending_choices <= 0
+			if run_state.pending_choices <= 0:
+				if encounter_index >= 2:
+					_show_result(true)
+				else:
+					next_button.visible = true
 		return
 	_cancel_casting(false)
 	_clear_hover()
@@ -1921,7 +1953,10 @@ func _confirm_augment(augment_id: StringName) -> void:
 	player.apply_run_modifiers(run_state)
 	augment_overlay.visible = false
 	get_tree().paused = false
-	augment_button.disabled = true
+	augment_button.disabled = run_state.pending_choices <= 0
+	if run_state.pending_choices > 0:
+		status_label.text = "Aprimoramento aplicado — há escolhas pendentes"
+		return
 	if encounter_index >= 2:
 		_show_result(true)
 	else:
@@ -1952,6 +1987,7 @@ func _on_player_died(_actor: CombatActor) -> void:
 	_show_result(false)
 
 func _show_result(victory: bool) -> void:
+	run_state.effect_ledger.cancel()
 	player.clear_sentinel_state()
 	player.clear_hunter_state()
 	_clear_hunter_trap_effects()

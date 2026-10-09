@@ -59,7 +59,7 @@ func _process(delta: float) -> void:
 		var previous: Vector2 = _previous_positions.get(actor_id, current)
 		var inside_now := _within_band(current, actor.collision_radius)
 		if not _inside.get(actor_id, inside_now) and current.distance_squared_to(previous) > 0.0001 and _swept_contact(previous, current, actor.collision_radius) and _cooldowns.get(actor_id, 0.0) <= 0.0:
-			var impact := request.copy()
+			var impact := request.scheduled_tick()
 			impact.target_id = actor_id
 			crossed.emit(impact, actor)
 			_cooldowns[actor_id] = TARGET_INTERVAL

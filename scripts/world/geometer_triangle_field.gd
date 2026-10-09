@@ -101,6 +101,8 @@ func advance(delta: float) -> void:
 			request.magic_damage += (_snapshot[&"rule_fire"] as DamageRequest).magic_damage
 	if request != null:
 		request.skill_id = &"geometer_triangle_maintenance"
+		if tick:
+			request = request.scheduled_tick()
 	for actor: CombatActor in _occupants():
 		if not _active():
 			break
@@ -119,6 +121,7 @@ func _occupants_for(points: PackedVector2Array) -> Array[CombatActor]:
 	for actor: CombatActor in casting.targets.duplicate():
 		if is_instance_valid(actor) and actor.is_alive() and actor != casting.player and _inside_visible_points(actor, points):
 			occupants.append(actor)
+	occupants.sort_custom(func(a: CombatActor, b: CombatActor) -> bool: return a.get_instance_id() < b.get_instance_id())
 	return occupants
 
 func _inside_visible(actor: CombatActor) -> bool:
@@ -167,9 +170,11 @@ func apply_owned_contact(projectile: PlayerProjectile) -> void:
 	var transformed := false
 	if elements[0] == &"lightning" and ledger.claim_owned_projectile(projectile.get_instance_id(), GeometerInteractionLedger.Component.LIGHTNING_FOUNDATION, projectile.request, owner):
 		projectile.geometer_triangle_foundation_request = (_snapshot[&"foundation_lightning"] as DamageRequest).copy()
+		projectile.geometer_triangle_foundation_request.inherit_root(projectile.request.context)
 		transformed = true
 	if elements[1] == &"lightning" and ledger.claim_owned_projectile(projectile.get_instance_id(), GeometerInteractionLedger.Component.LIGHTNING_RULE, projectile.request, owner):
 		projectile.geometer_triangle_arc_request = (_snapshot[&"rule_lightning"] as DamageRequest).copy()
+		projectile.geometer_triangle_arc_request.inherit_root(projectile.request.context)
 		transformed = true
 	if transformed:
 		projectile.geometer_triangle_identity = _identity

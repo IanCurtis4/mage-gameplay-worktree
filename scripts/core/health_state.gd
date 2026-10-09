@@ -31,7 +31,23 @@ func spend_hp_nonlethal(cost: float) -> bool:
 	return true
 
 func apply(request: DamageRequest, hit_roll: float, crit_roll: float, debuffs: AttributeDebuffState = null) -> Dictionary:
-	if not is_alive() or request.target_id != actor_id:
+	if request == null or request.cancelled or request.target_id != actor_id:
+		return {}
+	if request.context != null:
+		if request.source_id != request.context._budget.owner_id or (request.context.event_id > 0 and request.context.target_id != actor_id):
+			return {}
+		if not request.context.is_active():
+			return {}
+		if request.is_secondary and request.context.event_id == 0:
+			var claims := request.context.ledger().claim_intrinsic(request.context, [{"family_id": request.skill_id, "source_id": StringName(str(request.source_id)), "target_id": actor_id}])
+			if claims.is_empty():
+				return {}
+			request.context = claims[0]["context"]
+		else:
+			request.context = request.context.impact(actor_id)
+		if not request.context.ledger().apply_once(request.context):
+			return {}
+	if not is_alive():
 		return {}
 	var effective_physical_defense := physical_defense
 	var effective_magic_defense := magic_defense

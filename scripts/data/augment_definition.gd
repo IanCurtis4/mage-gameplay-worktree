@@ -14,3 +14,8 @@ extends Resource
 
 func is_eligible(selected_class: StringName, current_stacks: int) -> bool:
 	return not id.is_empty() and not effect_id.is_empty() and (class_id.is_empty() or class_id == selected_class) and current_stacks >= 0 and current_stacks < max_stacks
+
+@export var icon: Texture2D
+@export var allowed_origins: Array[StringName] = []
+@export var allowed_evolutions: Array[StringName] = []
+@export var effects: Array[EffectDefinition] = []

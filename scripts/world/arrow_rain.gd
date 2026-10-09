@@ -35,12 +35,13 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 func _emit_volley() -> void:
+	var volley := damage_request.scheduled_tick()
 	for actor: CombatActor in targets:
 		if actor == null or not is_instance_valid(actor) or not actor.is_alive():
 			continue
 		if global_position.distance_to(actor.global_position) > RADIUS + actor.collision_radius:
 			continue
-		var impact_request := damage_request.copy()
+		var impact_request := volley.copy()
 		impact_request.target_id = actor.get_instance_id()
 		hit.emit(impact_request, actor)
 

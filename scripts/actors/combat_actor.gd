@@ -26,6 +26,7 @@ var sprite_rect := Rect2()
 var _sprite_visible_height := 0.0
 var burn_remaining := 0.0
 var burn_tick_remaining := 0.0
+var burn_streams: Dictionary[String, Dictionary] = {}
 var burn_request: DamageRequest
 var bleed_streams: Dictionary[String, Dictionary] = {}
 var berserker_wound_visual_stacks := 0
@@ -84,7 +85,7 @@ func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Diction
 	if received_increase > 0.0:
 		effective_request = request.copy()
 		effective_request.damage_dealt_multiplier *= 1.0 + received_increase
-	return health.apply(effective_request, rng.randf(), rng.randf(), attribute_debuffs)
+	return health.apply(effective_request, rng.randf() if effective_request.requires_hit_roll() else 0.0, 1.0 if effective_request.is_secondary else rng.randf(), attribute_debuffs)
 
 func is_alive() -> bool:
 	return health != null and health.is_alive()
@@ -111,23 +112,28 @@ func apply_electrified(duration: float) -> void:
 func apply_burn(request: DamageRequest, duration: float = 3.0) -> void:
 	if not is_alive() or request == null or duration <= 0.0 or request.physical_damage + request.magic_damage <= 0.0:
 		return
-	var was_burning := is_burning()
-	burn_request = request.copy()
-	burn_request.target_id = get_instance_id()
-	burn_request.skill_id = &"burn_tick"
-	burn_request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
-	burn_request.can_crit = false
-	burn_request.force_critical = false
-	burn_request.is_secondary = true
-	burn_remaining = duration
-	if not was_burning:
-		burn_tick_remaining = minf(1.0, duration)
+	var key := "%d:burn_tick" % request.source_id
+	if not burn_streams.has(key) and burn_streams.size() + bleed_streams.size() >= 4:
+		return
+	var previous: Dictionary = burn_streams.get(key, {})
+	var captured := request.copy()
+	captured.target_id = get_instance_id()
+	captured.skill_id = &"burn_tick"
+	captured.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
+	captured.can_crit = false
+	captured.force_critical = false
+	captured.is_secondary = true
+	burn_streams[key] = {"request": captured, "remaining": maxf(duration, float(previous.get("remaining", 0.0))), "tick_remaining": float(previous.get("tick_remaining", minf(1.0, duration)))}
+	burn_request = captured # Legacy presentation/preview of the latest applied burn.
+	_sync_burn_display()
 	queue_redraw()
 
 func apply_bleed(request: DamageRequest, duration: float = 4.0) -> void:
 	if not is_alive() or request == null or duration <= 0.0 or request.physical_damage <= 0.0 or request.source_id <= 0 or request.skill_id.is_empty():
 		return
 	var key := "%d:%s" % [request.source_id, request.skill_id]
+	if not bleed_streams.has(key) and bleed_streams.size() + burn_streams.size() >= 4:
+		return
 	var tick_remaining := float(bleed_streams[key].get("tick_remaining", 1.0)) if bleed_streams.has(key) else 1.0
 	var captured := request.copy()
 	captured.target_id = get_instance_id()
@@ -135,7 +141,7 @@ func apply_bleed(request: DamageRequest, duration: float = 4.0) -> void:
 	captured.can_crit = false
 	captured.force_critical = false
 	captured.is_secondary = true
-	bleed_streams[key] = {"request": captured, "remaining": duration, "tick_remaining": tick_remaining}
+	bleed_streams[key] = {"request": captured, "remaining": maxf(duration, float(bleed_streams.get(key, {}).get("remaining", 0.0))), "tick_remaining": tick_remaining}
 	queue_redraw()
 
 func set_berserker_wound_visual(stacks: int, remaining: float) -> void:
@@ -244,6 +250,7 @@ func clear_statuses() -> void:
 	burn_remaining = 0.0
 	burn_tick_remaining = 0.0
 	burn_request = null
+	burn_streams.clear()
 	bleed_streams.clear()
 	berserker_wound_visual_stacks = 0
 	berserker_wound_visual_remaining = 0.0
@@ -272,21 +279,28 @@ func advance_statuses(delta: float, simulation_paused: bool = false) -> void:
 	if electrified_remaining > 0.0:
 		electrified_remaining = maxf(0.0, electrified_remaining - delta)
 		queue_redraw()
-	var remaining_delta := delta
-	while burn_remaining > 0.0 and remaining_delta > 0.0:
-		var step := minf(remaining_delta, minf(burn_remaining, burn_tick_remaining))
-		burn_remaining = maxf(0.0, burn_remaining - step)
-		burn_tick_remaining = maxf(0.0, burn_tick_remaining - step)
-		remaining_delta = maxf(0.0, remaining_delta - step)
-		if burn_tick_remaining <= 0.0001:
-			var request := burn_request.copy()
-			status_damage_requested.emit(request, self)
-			if not is_alive():
-				break
-			burn_tick_remaining = 1.0
-	if burn_remaining <= 0.0:
-		burn_request = null
-		queue_redraw()
+	var burn_keys: Array = burn_streams.keys()
+	burn_keys.sort()
+	for key: String in burn_keys:
+		if not burn_streams.has(key) or not is_alive():
+			break
+		var stream: Dictionary = burn_streams[key]
+		var remaining_delta := delta
+		while float(stream["remaining"]) > 0.0 and remaining_delta > 0.0:
+			var step := minf(remaining_delta, minf(float(stream["remaining"]), float(stream["tick_remaining"])))
+			stream["remaining"] = maxf(0.0, float(stream["remaining"]) - step)
+			stream["tick_remaining"] = maxf(0.0, float(stream["tick_remaining"]) - step)
+			remaining_delta = maxf(0.0, remaining_delta - step)
+			if float(stream["tick_remaining"]) <= 0.0001:
+				# Commit the clock before callbacks; a listener may renew/remove the stream.
+				stream["tick_remaining"] = 1.0
+				var tick: DamageRequest = (stream["request"] as DamageRequest).scheduled_tick()
+				status_damage_requested.emit(tick, self)
+				if not is_alive() or not burn_streams.has(key) or burn_streams[key] != stream:
+					break
+		if burn_streams.has(key) and burn_streams[key] == stream and float(stream["remaining"]) <= 0.0:
+			burn_streams.erase(key)
+	_sync_burn_display()
 	for key: String in bleed_streams.keys():
 		if not bleed_streams.has(key) or not is_alive():
 			break
@@ -298,14 +312,14 @@ func advance_statuses(delta: float, simulation_paused: bool = false) -> void:
 			stream["tick_remaining"] = maxf(0.0, float(stream["tick_remaining"]) - step)
 			bleed_delta = maxf(0.0, bleed_delta - step)
 			if float(stream["tick_remaining"]) <= 0.0001:
-				var tick: DamageRequest = (stream["request"] as DamageRequest).copy()
-				status_damage_requested.emit(tick, self)
-				if not is_alive():
-					break
+				var tick: DamageRequest = (stream["request"] as DamageRequest).scheduled_tick()
 				stream["tick_remaining"] = 1.0
+				status_damage_requested.emit(tick, self)
+				if not is_alive() or not bleed_streams.has(key) or bleed_streams[key] != stream:
+					break
 		if not is_alive():
 			break
-		if float(stream["remaining"]) <= 0.0:
+		if bleed_streams.has(key) and bleed_streams[key] == stream and float(stream["remaining"]) <= 0.0:
 			bleed_streams.erase(key)
 			queue_redraw()
 
@@ -430,4 +444,14 @@ func _on_health_died(_actor_id: int) -> void:
 		character_animation.play(&"death")
 	clear_statuses()
 	actor_died.emit(self)
+	queue_redraw()
+
+func _sync_burn_display() -> void:
+	burn_remaining = 0.0
+	burn_tick_remaining = 0.0
+	for stream: Dictionary in burn_streams.values():
+		burn_remaining = maxf(burn_remaining, float(stream["remaining"]))
+		burn_tick_remaining = float(stream["tick_remaining"])
+	if burn_streams.is_empty():
+		burn_request = null
 	queue_redraw()

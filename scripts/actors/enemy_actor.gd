@@ -1,6 +1,8 @@
 class_name EnemyActor
 extends CombatActor
 
+var effect_ledger := EffectProcLedger.new("enemy")
+
 signal attack_requested(request: DamageRequest, target: CombatActor, ranged: bool)
 ## Actual navigation-applied walking only. Direct placement/push is not walking.
 signal ground_walked(from: Vector2, to: Vector2)
@@ -126,8 +128,11 @@ func _process(delta: float) -> void:
 func _try_attack(ranged: bool) -> void:
 	if is_stunned() or is_feared() or attack_cooldown > 0.0 or not player_target_acquired or (taunt_remaining <= 0.0 and not player.can_be_acquired_by(global_position)):
 		return
+	if not effect_ledger.can_create_root() or (ranged and is_inside_tree() and not EffectProcLedger.projectile_slots_available(get_tree(), 1)):
+		return
 	attack_cooldown = (1.70 if ranged else 1.30) * stat_breakdown.value(&"attacks_per_second") / attacks_per_second()
 	var request := DamageRequest.new()
+	request.context = effect_ledger.new_root(get_instance_id())
 	request.source_id = get_instance_id()
 	request.target_id = player.get_instance_id()
 	request.skill_id = &"enemy_arrow" if ranged else &"enemy_claw"

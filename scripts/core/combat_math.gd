@@ -13,11 +13,11 @@ static func resolve(
 	crit_roll: float
 ) -> Dictionary:
 	var hit_chance := 1.0
-	if request.accuracy_mode == DamageRequest.AccuracyMode.CONTESTED:
+	if request.requires_hit_roll():
 		hit_chance = StatCalculator.contested_hit_chance(request.hit_rating, flee_rating)
-	var landed := hit_roll < hit_chance
+	var landed := (request.is_secondary and not request.requires_hit_roll()) or hit_roll < hit_chance
 	var effective_crit := StatCalculator.effective_crit_chance(request.crit_chance, crit_resistance)
-	var critical := landed and request.can_crit and (request.force_critical or crit_roll < effective_crit)
+	var critical := landed and request.can_crit and not request.is_secondary and (request.force_critical or crit_roll < effective_crit)
 	var damage := 0
 	var physical_component := 0.0
 	var magic_component := 0.0
@@ -31,9 +31,15 @@ static func resolve(
 			damage = maxi(1, floori(final_damage + 0.5))
 	return {
 		"source_id": request.source_id,
+		"context": request.context.copy_context() if request.context != null else null,
+		"root_event_id": request.context.root_event_id if request.context != null else "",
+		"event_id": request.context.event_id if request.context != null else 0,
+		"secondary": request.is_secondary,
+		"effect_snapshot": request.effect_snapshot.duplicate(true),
 		"target_id": request.target_id,
 		"skill_id": request.skill_id,
 		"emission_id": request.emission_id,
+		"damage_dealt_multiplier": request.damage_dealt_multiplier,
 		"hunter_precision_damage": request.hunter_precision_damage,
 		"hunter_easy_prey_bonus": request.hunter_easy_prey_bonus,
 		"hit_chance": hit_chance,

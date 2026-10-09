@@ -90,6 +90,16 @@ func consume(result: Dictionary, controlled_or_boss: bool = false) -> Dictionary
 	request.physical_damage += precision
 	if not _valid_snapshot(request):
 		return {}
+	var parent: CombatEventContext = result.get("context")
+	if parent != null:
+		if result.has("_effect_claims"):
+			request.context = EffectProcLedger.take_result_claim(result, &"hunter_exploit", target_id)
+			if request.context == null:
+				return {}
+		else:
+			request = request.child_request(parent, &"hunter_exploit", &"hunter_opening", target_id)
+			if request == null:
+				return {}
 	# Claim/erase before returning a payload. Nested secondary/death callbacks
 	# cannot find the same opening, or exploit a replacement with the same action.
 	_openings.erase(target_id)
@@ -152,3 +162,11 @@ func _valid_snapshot(snapshot: DamageRequest) -> bool:
 static func _remaining(value: float, delta: float) -> float:
 	var remaining := maxf(0.0, value - delta)
 	return 0.0 if remaining < 0.000001 else remaining
+
+func can_consume(result: Dictionary) -> bool:
+	var target := int(result.get("target_id", 0))
+	var emission := int(result.get("emission_id", 0))
+	if int(result.get("source_id", 0)) != owner_id or target <= 0 or emission <= 0 or not bool(result.get("can_trigger_effects", false)) or float(result.get("actual_damage", 0.0)) <= 0.0 or StringName(result.get("skill_id", &"")) not in BOW_SKILLS or not _openings.has(target):
+		return false
+	var entry: Dictionary = _emissions.get(emission, {})
+	return (not entry.is_empty() or _emissions.size() < HunterTuning.EMISSION_CAP) and not entry.get("targets", {}).has(target) and entry.get("targets", {}).size() < HunterTuning.OPENING_CAP

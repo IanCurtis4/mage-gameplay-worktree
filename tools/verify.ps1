@@ -1,15 +1,25 @@
 param(
     [Parameter(Mandatory = $true)][string]$GodotPath,
-    [switch]$SkipEditorImport
+    [switch]$SkipEditorImport,
+    [string]$VerificationDirectory = "",
+    [ValidateRange(60, 300)][int]$CheckTimeoutSeconds = 120
 )
 $ErrorActionPreference = 'Stop'
 $enginePath = (Resolve-Path -LiteralPath $GodotPath).Path
 $projectPath = Split-Path -Parent $PSScriptRoot
-$verificationPath = Join-Path $projectPath '.godot/verification'
+$verificationPath = if ($VerificationDirectory) { [System.IO.Path]::GetFullPath($VerificationDirectory) } else { Join-Path $projectPath '.godot/verification' }
 [void](New-Item -ItemType Directory -Force -Path $verificationPath)
-$logPath = Join-Path $verificationPath 'godot.log'
+$script:verifyCheckIndex = 0
+$manifestPath = Join-Path $verificationPath 'checks.jsonl'
+Set-Content -LiteralPath $manifestPath -Value '' -Encoding utf8
 
 function Invoke-GodotCheck([string[]]$EngineArguments) {
+    $script:verifyCheckIndex += 1
+    $checkName = '{0:D3}' -f $script:verifyCheckIndex
+    $scriptArgument = [Array]::IndexOf($EngineArguments, '--script')
+    if ($scriptArgument -ge 0) { $checkName += '-' + [IO.Path]::GetFileNameWithoutExtension($EngineArguments[$scriptArgument + 1]) }
+    $logPath = Join-Path $verificationPath ($checkName + '.engine.log')
+    $outputPath = Join-Path $verificationPath ($checkName + '.output.log')
     $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
     $startInfo.FileName = $enginePath
     $startInfo.UseShellExecute = $false
@@ -22,17 +32,23 @@ function Invoke-GodotCheck([string[]]$EngineArguments) {
     [void]$process.Start()
     $stdoutTask = $process.StandardOutput.ReadToEndAsync()
     $stderrTask = $process.StandardError.ReadToEndAsync()
-    if (-not $process.WaitForExit(60000)) {
+    $timedOut = -not $process.WaitForExit($CheckTimeoutSeconds * 1000)
+    if ($timedOut) {
         $process.Kill($true)
-        throw 'Godot verification timed out after 60 seconds.'
+        $process.WaitForExit()
     }
     $checkOutput = $stdoutTask.GetAwaiter().GetResult() + $stderrTask.GetAwaiter().GetResult()
     $checkExitCode = $process.ExitCode
     $process.Dispose()
+    Set-Content -LiteralPath $outputPath -Value $checkOutput -Encoding utf8
+    $checkFailed = $timedOut -or $checkExitCode -ne 0 -or ($checkOutput -match 'SCRIPT ERROR:|Parse Error:|ERROR:')
+    @{ index = $script:verifyCheckIndex; arguments = $EngineArguments; exit_code = $checkExitCode; timed_out = [bool]$timedOut; timeout_seconds = $CheckTimeoutSeconds; failed = [bool]$checkFailed; output_path = $outputPath; output_sha256 = (Get-FileHash -LiteralPath $outputPath -Algorithm SHA256).Hash; engine_log = $logPath } | ConvertTo-Json -Compress | Add-Content -LiteralPath $manifestPath -Encoding utf8
     Write-Host $checkOutput
-    if ($checkExitCode -ne 0 -or ($checkOutput -match 'SCRIPT ERROR:|Parse Error:|ERROR:')) {
+    if ($checkFailed) {
+        if ($timedOut) { throw "Godot verification timed out after $CheckTimeoutSeconds seconds." }
         throw "Godot verification failed (exit $checkExitCode)."
     }
+
 }
 
 if ($SkipEditorImport) {
@@ -40,6 +56,9 @@ if ($SkipEditorImport) {
 } else {
     Invoke-GodotCheck @('--headless', '--path', $projectPath, '--editor', '--import', '--quit')
 }
+Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_effects_composition_test.gd')
+Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_proc_ledger_test.gd')
+Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_effects_runtime_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/foundation_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/combat_animation_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/milestone_one_test.gd')
@@ -209,5 +228,5 @@ Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tes
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_defender_playtest_flow_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/action_bar_review_test.gd')
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--quit-after', '5')
-Write-Host 'All foundation and milestone-one checks passed.'
 Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/playtest_admin_progression_test.gd')
+Write-Host 'All foundation and milestone-one checks passed.'

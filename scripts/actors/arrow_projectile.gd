@@ -61,7 +61,7 @@ func _process(delta: float) -> void:
 			if navigation.is_segment_clear(global_position, point, projectile_radius):
 				travelled += step * fraction
 				global_position = point
-				geometer_field.intercept_hostile(point - BODY_OFFSET)
+				geometer_field.intercept_hostile(point - BODY_OFFSET, request.context)
 				queue_free()
 				return
 	if shield_fraction >= 0.0 and (target_fraction < 0.0 or shield_fraction <= target_fraction) and shield_fraction <= first_barrier_fraction:

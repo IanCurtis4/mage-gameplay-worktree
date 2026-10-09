@@ -49,7 +49,7 @@ func _process(delta: float) -> void:
 		return
 	time_to_next -= delta
 	while time_to_next <= 0.0 and emitted < IMPACT_COUNT:
-		var pulse := impact_request.copy()
+		var pulse := impact_request.scheduled_tick()
 		pulse.is_secondary = emitted > 0
 		emitted += 1
 		impact.emit(pulse, target)

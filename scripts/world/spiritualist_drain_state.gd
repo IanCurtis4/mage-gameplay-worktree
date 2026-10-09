@@ -29,7 +29,7 @@ func advance(delta: float) -> Array[DamageRequest]:
 		return due
 	elapsed = minf(float(TICK_COUNT) * TICK_INTERVAL, elapsed + delta)
 	while ticks_issued < TICK_COUNT and elapsed + 0.0001 >= float(ticks_issued + 1) * TICK_INTERVAL:
-		var request := captured_request.copy()
+		var request := captured_request.scheduled_tick()
 		request.is_secondary = ticks_issued > 0
 		due.append(request)
 		ticks_issued += 1

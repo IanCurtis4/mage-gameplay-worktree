@@ -176,6 +176,10 @@ func _nearest_impact(from: Vector2, to: Vector2) -> Dictionary:
 	return {"actor": victim, "fraction": victim_fraction}
 
 func _prepare_impact(victim: CombatActor) -> void:
+	# One delivery event per physical collision; a piercing projectile keeps its root.
+	if request.context != null and not request.is_secondary:
+		request.context = request.context.copy_context()
+		request.context.event_id = 0
 	request.target_id = victim.get_instance_id()
 
 func _wall_fraction(from: Vector2, to: Vector2) -> float:

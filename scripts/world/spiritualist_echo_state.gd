@@ -52,7 +52,7 @@ func record_hit(result: Dictionary, magic_attack_at_trigger: float) -> bool:
 		var eligible: Dictionary[int, float] = {}
 		for marked_id: int in marks:
 			eligible[marked_id] = float(marks[marked_id]["echo_power"])
-		waves[wave_id] = {"eligible": eligible, "scheduled": {}, "pairs": {}, "shown_targets": {}, "magic_attack": maxf(0.0, magic_attack_at_trigger)}
+		waves[wave_id] = {"eligible": eligible, "scheduled": {}, "pairs": {}, "shown_targets": {}, "magic_attack": maxf(0.0, magic_attack_at_trigger), "context": result.get("context"), "damage_multiplier": result.get("damage_dealt_multiplier", 1.0)}
 		if emission_id > 0:
 			wave_by_emission[emission_id] = wave_id
 	return _schedule_carrier(wave_id, target_id)
@@ -93,7 +93,7 @@ func _schedule_carrier(wave_id: int, target_id: int) -> bool:
 	wave["scheduled"][target_id] = true
 	marks.erase(target_id)
 	var power := float(wave["eligible"][target_id])
-	pending.append({"target_id": target_id, "wave_id": wave_id, "remaining": ECHO_DELAY, "magic_damage": float(wave["magic_attack"]) * power, "echo_power": power})
+	pending.append({"target_id": target_id, "wave_id": wave_id, "remaining": ECHO_DELAY, "magic_damage": float(wave["magic_attack"]) * power, "echo_power": power, "context": wave.get("context"), "damage_multiplier": wave.get("damage_multiplier", 1.0)})
 	return true
 
 func finish_resolution() -> void:
@@ -126,6 +126,7 @@ func advance(delta: float) -> Array[Dictionary]:
 			pending.remove_at(index)
 		else:
 			pending[index] = echo
+	due.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a["target_id"]) < int(b["target_id"]))
 	return due
 
 func remove_target(target_id: int) -> void:
@@ -140,3 +141,7 @@ func clear() -> void:
 	waves.clear()
 	wave_by_emission.clear()
 	next_wave_id = 1
+
+func can_record_hit(result: Dictionary) -> bool:
+	var target := int(result.get("target_id", 0))
+	return int(result.get("source_id", 0)) == source_id and marks.has(target) and bool(result.get("can_trigger_effects", false)) and float(result.get("actual_damage", 0.0)) > 0.0 and not bool(result.get("killed", false)) and StringName(result.get("skill_id", &"")) not in [&"", &"basic_attack", &"burn_tick", &"bleed_tick"] and pending.size() < MAX_PENDING and waves.size() < MAX_WAVES

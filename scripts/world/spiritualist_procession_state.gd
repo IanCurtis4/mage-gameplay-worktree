@@ -38,7 +38,7 @@ func advance(delta: float) -> Array[Dictionary]:
 			due.append({"kind": &"departure", "index": departures_issued})
 			departures_issued += 1
 		else:
-			var request := captured_request.copy()
+			var request := captured_request.scheduled_tick()
 			request.is_secondary = impacts_issued > 0
 			due.append({"kind": &"impact", "index": impacts_issued, "request": request})
 			impacts_issued += 1

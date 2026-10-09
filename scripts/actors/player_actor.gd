@@ -167,7 +167,10 @@ var _active_cast_point := Vector2.ZERO
 var _active_cast_target_id: int = 0
 var _active_geometer_command: GeometerCastCommand
 var _active_cast_direction := Vector2.RIGHT
+var _emission_context: CombatEventContext
 var _rank_definitions: Dictionary[StringName, SkillRankDefinition] = {}
+var _effect_rank_cache: Dictionary[StringName, SkillRankDefinition] = {}
+var _effect_rank_revision := -1
 var _foliage_shelters: Dictionary[int, Dictionary] = {}
 var shield_remaining := 0.0
 var shield_resistance := 0
@@ -274,7 +277,10 @@ func is_hunter() -> bool:
 func hunter_opening_snapshot(trap_id: StringName) -> DamageRequest:
 	if not is_hunter():
 		return null
-	return HunterMath.opening_request(get_instance_id(), trap_id, skill_rank(trap_id), stat_breakdown, outgoing_damage_multiplier())
+	var request := HunterMath.opening_request(get_instance_id(), trap_id, skill_rank(trap_id), stat_breakdown, outgoing_damage_multiplier())
+	if request != null and _emission_context != null:
+		request.inherit_root(_emission_context)
+	return request
 
 func activate_hunter_opening(activation_id: int, victim: CombatActor, snapshot: DamageRequest) -> bool:
 	if not is_hunter() or not is_alive() or victim == null or not is_instance_valid(victim) or not victim.is_alive() or (is_inside_tree() and get_tree().paused):
@@ -351,6 +357,8 @@ func use_sentinel_reset(skill_id: StringName, point: Vector2, enemy: CombatActor
 	# Validation complete: one special launch replaces the next ordinary shot.
 	cancel_active_cast()
 	_spend(skill_id)
+	request.context = _emission_context.copy_context()
+	request.emission_id = int(_emission_context.root_event_id.get_slice(":", _emission_context.root_event_id.get_slice_count(":") - 1))
 	sentinel_state.spend(float(tuning["focus_cost"]))
 	_start_sentinel_recovery(facing)
 	var payload := tuning.duplicate(true)
@@ -429,6 +437,8 @@ func _launch_sentinel_explosive(enemy: CombatActor) -> bool:
 	# All launch checks passed. Release then consume the reservation exactly once.
 	sentinel_state.cancel_preparation()
 	_spend(id)
+	request.context = _emission_context.copy_context()
+	request.emission_id = int(_emission_context.root_event_id.get_slice(":", _emission_context.root_event_id.get_slice_count(":") - 1))
 	sentinel_state.spend(reserved_focus)
 	_start_sentinel_recovery(facing)
 	var payload := tuning.duplicate(true)
@@ -452,6 +462,8 @@ func use_sentinel_net(point: Vector2) -> bool:
 	var request := _make_magic_request(null, id, SentinelMath.raw_power(id, skill_rank(id), stat_breakdown), DamageRequest.AccuracyMode.GEOMETRY, true)
 	var facing := _resolved_facing(aim_direction(center))
 	_spend(id)
+	request.context = _emission_context.copy_context()
+	request.emission_id = int(_emission_context.root_event_id.get_slice(":", _emission_context.root_event_id.get_slice_count(":") - 1))
 	var payload := tuning.duplicate(true)
 	payload["endpoint"] = center
 	payload["range"] = global_position.distance_to(center)
@@ -465,6 +477,8 @@ func record_sentinel_damage(result: Dictionary) -> void:
 		return
 	var victim := instance_from_id(int(result.get("target_id", 0))) as CombatActor
 	if not is_instance_valid(victim) or (not victim.is_alive() and not bool(result.get("killed", false))):
+		return
+	if not claim_effect_result(result, &"sentinel_focus", get_instance_id()):
 		return
 	var rank := skill_rank(&"sentinel_opening_read") if run_state.build_snapshot.has_passive(&"sentinel_opening_read") else 0
 	var gained := sentinel_state.direct_impact(int(result.get("emission_id", 0)), victim.get_instance_id(), true, bool(result.get("critical", false)), victim.is_rooted() or victim.is_stunned(), rank)
@@ -590,6 +604,7 @@ func use_berserker_rupture(enemy: CombatActor) -> bool:
 	reveal_from_offense()
 	var request := _make_physical_request(enemy, &"berserker_rupture_detonation" if detonate else &"berserker_rupture", power, definition.accuracy_mode, definition.can_crit and not detonate)
 	request.is_secondary = detonate
+	request.intrinsic_contested = detonate
 	attack_requested.emit(request, enemy)
 	presentation_action.emit(&"slash", facing, 0.20)
 	resources_changed.emit()
@@ -644,6 +659,8 @@ func use_berserker_breath_steal(enemy: CombatActor) -> bool:
 
 func heal_from_berserker_breath_steal(result: Dictionary, heal_fraction: float) -> float:
 	if not _is_berserker() or not is_alive() or int(result.get("source_id", 0)) != get_instance_id() or StringName(result.get("skill_id", &"")) != &"berserker_breath_steal" or not bool(result.get("can_trigger_effects", false)) or bool(result.get("killed", false)) or heal_fraction <= 0.0:
+		return 0.0
+	if not claim_effect_result(result, &"berserker_breath_heal", int(result.get("target_id", 0))):
 		return 0.0
 	var amount := minf(float(result.get("actual_damage", 0.0)) * heal_fraction, health.max_hp * BERSERKER_BREATH_HEAL_CAP_FRACTION)
 	var healed := minf(maxf(0.0, amount), health.max_hp - health.current_hp)
@@ -743,7 +760,7 @@ func record_berserker_damage(result: Dictionary) -> void:
 		return
 	if skill_id == &"berserker_execution":
 		if bool(result.get("can_trigger_effects", false)) and float(result.get("actual_damage", 0.0)) > 0.0:
-			_trigger_berserker_pursuit(target_id)
+			_trigger_berserker_pursuit(target_id, result)
 			berserker_wounds.erase(target_id)
 		return
 	if not bool(result.get("can_trigger_effects", false)) or float(result.get("actual_damage", 0.0)) <= 0.0 or skill_id not in BERSERKER_DIRECT_MELEE_IDS or skill_rank(&"berserker_rupture") <= 0:
@@ -751,15 +768,19 @@ func record_berserker_damage(result: Dictionary) -> void:
 	var previous := berserker_wound_stacks(target_id)
 	if previous == 0 and skill_id != &"berserker_rupture":
 		return
+	if not claim_effect_result(result, &"berserker_wound", target_id):
+		return
 	if previous > 0:
-		_trigger_berserker_pursuit(target_id)
+		_trigger_berserker_pursuit(target_id, result)
 	berserker_wounds[target_id] = {"stacks": mini(BERSERKER_WOUND_MAX_STACKS, previous + 1), "remaining": BERSERKER_WOUND_DURATION}
 
-func _trigger_berserker_pursuit(target_id: int) -> void:
+func _trigger_berserker_pursuit(target_id: int, result: Dictionary) -> void:
 	if berserker_wound_stacks(target_id) <= 0 or berserker_pursuit_cooldown > 0.0 or not run_state.build_snapshot.has_passive(&"berserker_pursuit"):
 		return
 	var rank_definition := _runtime_rank_definition(&"berserker_pursuit")
 	if rank_definition == null:
+		return
+	if not claim_effect_result(result, &"berserker_pursuit", get_instance_id()):
 		return
 	current_sp = minf(max_sp, current_sp + rank_definition.power)
 	berserker_pursuit_cooldown = 1.0
@@ -787,7 +808,7 @@ func record_elementalist_damage(result: Dictionary) -> void:
 	var emission_available := emission_id <= 0 or not _elementalist_refunded_emissions.has(emission_id)
 	if alternating and emission_available and elementalist_focus_cooldown <= 0.0 and run_state.build_snapshot.has_passive(&"elementalist_prismatic_focus"):
 		var rank_definition := _runtime_rank_definition(&"elementalist_prismatic_focus")
-		if rank_definition != null:
+		if rank_definition != null and claim_effect_result(result, &"elementalist_focus", get_instance_id()):
 			var previous_sp := current_sp
 			current_sp = minf(max_sp, current_sp + rank_definition.power)
 			elementalist_focus_cooldown = 1.0
@@ -1080,7 +1101,14 @@ func spiritualist_magic_attack() -> float:
 	return stat_breakdown.value(&"magic_attack")
 
 func make_spiritualist_echo_request(enemy: CombatActor, magic_damage: float) -> DamageRequest:
-	var request := _make_magic_request(enemy, &"spiritualist_echo_curse", magic_damage, DamageRequest.AccuracyMode.GEOMETRY, false)
+	var request := DamageRequest.new()
+	request.source_id = get_instance_id()
+	request.target_id = enemy.get_instance_id()
+	request.skill_id = &"spiritualist_echo_curse"
+	request.magic_damage = magic_damage
+	request.damage_dealt_multiplier = outgoing_damage_multiplier()
+	request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
+	request.can_crit = false
 	request.is_secondary = true
 	return request
 
@@ -1164,6 +1192,8 @@ func use_spiritualist_dissipation(point: Vector2) -> bool:
 func heal_from_spiritualist_drain(result: Dictionary, already_healed: float) -> float:
 	if not _is_spiritualist() or not is_alive() or int(result.get("source_id", 0)) != get_instance_id() or StringName(result.get("skill_id", &"")) != &"spiritualist_soul_drain":
 		return 0.0
+	if float(result.get("actual_damage", 0.0)) <= 0.0 or not claim_effect_result(result, &"spiritualist_drain_heal", int(result.get("target_id", 0)), true):
+		return 0.0
 	var actual_damage := maxf(0.0, float(result.get("actual_damage", 0.0)))
 	var remaining_channel_cap := maxf(0.0, health.max_hp * 0.05 - already_healed)
 	var healed := minf(minf(actual_damage * 0.15, remaining_channel_cap), health.max_hp - health.current_hp)
@@ -1173,14 +1203,14 @@ func heal_from_spiritualist_drain(result: Dictionary, already_healed: float) -> 
 		queue_redraw()
 	return healed
 
-func recover_spiritualist_echo_sp(emission_id: int) -> float:
+func recover_spiritualist_echo_sp(emission_id: int, result: Dictionary = {}) -> float:
 	if not _is_spiritualist() or not is_alive() or spiritualist_recovery_cooldown > 0.0 or not run_state.build_snapshot.has_passive(&"spiritualist_echo_recovery"):
 		return 0.0
 	var rank_definition := _runtime_rank_definition(&"spiritualist_echo_recovery")
 	if rank_definition == null or (emission_id > 0 and _spiritualist_refunded_emissions.has(emission_id)):
 		return 0.0
 	var recovered := minf(rank_definition.power, maxf(0.0, max_sp - current_sp))
-	if recovered <= 0.0:
+	if recovered <= 0.0 or not claim_effect_result(result, &"spiritualist_echo_recovery", get_instance_id()):
 		return 0.0
 	current_sp += recovered
 	spiritualist_recovery_cooldown = 1.0
@@ -1195,11 +1225,13 @@ func clear_spiritualist_state() -> void:
 	spiritualist_focus_remaining = 0.0
 	spiritualist_focus_power = 0.0
 
-func grant_spiritualist_focus() -> bool:
+func grant_spiritualist_focus(context: CombatEventContext = null) -> bool:
 	if not _is_spiritualist() or not is_alive() or not run_state.build_snapshot.has_passive(&"spiritualist_channel_focus"):
 		return false
 	var rank_definition := _runtime_rank_definition(&"spiritualist_channel_focus")
 	if rank_definition == null:
+		return false
+	if context != null and (context.ledger() == null or context.ledger().claim_intrinsic(context, [{"family_id": &"spiritualist_channel_focus", "source_id": &"spiritualist_channel_focus", "target_id": get_instance_id()}]).is_empty()):
 		return false
 	spiritualist_focus_power = rank_definition.power
 	spiritualist_focus_remaining = 5.0
@@ -1471,7 +1503,7 @@ func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Diction
 	var result := _apply_damage_with_shield(effective_request, rng)
 	var frontal_shield_absorption := _faces_position(_defender_event_facing(), source.global_position) and float(result.get("absorbed_damage", 0.0)) > 0.0
 	if bool(result.get("landed", false)) and float(result.get("damage", 0.0)) > 0.0 and (front_reduction > 0.0 or frontal_shield_absorption):
-		_grant_defender_front_event()
+		_grant_defender_front_event(result)
 	return result
 
 func _apply_damage_with_shield(request: DamageRequest, rng: RandomNumberGenerator) -> Dictionary:
@@ -1513,14 +1545,22 @@ func _is_spiritualist() -> bool:
 func _defender_active_equipped(skill_id: StringName) -> bool:
 	return _is_defender() and skill_id in available_skill_ids()
 
-func _grant_defender_front_event() -> void:
+func _grant_defender_front_event(result: Dictionary = {}) -> void:
 	if not _is_defender() or skill_rank(&"defender_counterstroke") <= 0 or not is_alive():
 		return
+	var context: CombatEventContext = result.get("context")
+	if context != null:
+		var candidates: Array[Dictionary] = [{"family_id": &"defender_token", "source_id": &"defender_token", "target_id": get_instance_id()}]
+		if run_state.build_snapshot.has_passive(&"defender_guard_return") and defender_guard_return_cooldown <= 0.0:
+			candidates.append({"family_id": &"defender_guard_return", "source_id": &"defender_guard_return", "target_id": get_instance_id()})
+		result["_effect_claims"] = context.ledger().claim_batch(context, candidates) if context.ledger() != null else []
+		if not claim_effect_result(result, &"defender_token", get_instance_id()):
+			return
 	var renewed := has_defender_token()
 	defender_token_remaining = DEFENDER_TOKEN_DURATION
 	_set_defender_token_notice("TOKEN RENOVADO" if renewed else "TOKEN PRONTO")
 	var return_rank := _runtime_rank_definition(&"defender_guard_return")
-	if return_rank != null and run_state.build_snapshot.has_passive(&"defender_guard_return") and defender_guard_return_cooldown <= 0.0:
+	if return_rank != null and run_state.build_snapshot.has_passive(&"defender_guard_return") and defender_guard_return_cooldown <= 0.0 and claim_effect_result(result, &"defender_guard_return", get_instance_id()):
 		current_sp = minf(max_sp, current_sp + return_rank.power)
 		defender_guard_return_cooldown = return_rank.cooldown
 	resources_changed.emit()
@@ -1683,7 +1723,7 @@ func use_double_shot(direction: Vector2) -> bool:
 	var definition := ClassCatalog.skill_definition(&"double_shot")
 	var power := stat_breakdown.value(&"precision_attack") * rank_definition.power
 	var request := _make_physical_request(null, &"double_shot", power, definition.accuracy_mode, definition.can_crit)
-	precision_projectile_requested.emit(&"double_shot", request, null, facing, 2, 1)
+	precision_projectile_requested.emit(&"double_shot", request, null, facing, run_state.projectile_count(&"double_shot"), 1)
 	resources_changed.emit()
 	return true
 
@@ -1754,6 +1794,8 @@ func use_hunter_trap(skill_id: StringName, point: Vector2) -> bool:
 		return false
 	var center := trap_center(skill_id, point)
 	_spend(skill_id)
+	request.context = _emission_context.copy_context()
+	opening.inherit_root(_emission_context)
 	reveal_from_offense()
 	hunter_trap_requested.emit(center, rank, request, opening)
 	presentation_action.emit(&"cast_release", aim_direction(center), 0.18)
@@ -1843,6 +1885,8 @@ func use_hunter_covering_shot(direction: Vector2) -> bool:
 	var rank_definition := _runtime_rank_definition(&"hunter_covering_shot")
 	var request := _make_physical_request(null, &"hunter_covering_shot", stat_breakdown.value(&"precision_attack") * rank_definition.power, DamageRequest.AccuracyMode.GEOMETRY, true)
 	_spend(&"hunter_covering_shot")
+	request.context = _emission_context.copy_context()
+	request.emission_id = int(_emission_context.root_event_id.get_slice(":", _emission_context.root_event_id.get_slice_count(":") - 1))
 	reveal_from_offense()
 	global_position = destination
 	_path.clear()
@@ -2272,6 +2316,8 @@ func skill_rank_definition(skill_id: StringName) -> SkillRankDefinition:
 
 func _capture_rank_definitions() -> void:
 	_rank_definitions.clear()
+	_effect_rank_cache.clear()
+	_effect_rank_revision = -1
 	for skill_id: StringName in run_state.skill_levels:
 		var catalog_definition := ClassCatalog.skill_definition(skill_id)
 		if catalog_definition == null or catalog_definition.ranks.is_empty():
@@ -2281,6 +2327,15 @@ func _capture_rank_definitions() -> void:
 			_rank_definitions[skill_id] = rank_definition
 
 func _runtime_rank_definition(skill_id: StringName) -> SkillRankDefinition:
+	if run_state != null and _rank_definitions.has(skill_id):
+		var revision := run_state.composition_revision()
+		if revision != _effect_rank_revision:
+			_effect_rank_cache.clear()
+			_effect_rank_revision = revision
+		if not _effect_rank_cache.has(skill_id):
+			var captured := run_state.skill_effect_capture(skill_id)
+			_effect_rank_cache[skill_id] = captured["rank_definition"] if captured["ok"] else null
+		return _effect_rank_cache[skill_id]
 	return _rank_definitions.get(skill_id)
 
 func _process(delta: float) -> void:
@@ -2579,6 +2634,8 @@ func heal_from_kill() -> float:
 	return healed
 
 func _try_basic_attack() -> void:
+	if not run_state.effect_ledger.can_create_root() or not has_projectile_capacity(&"basic_attack"):
+		return
 	if is_sentinel() and _sentinel_last_launch_frame == Engine.get_process_frames():
 		return
 	if target == null or attack_cooldown > 0.0 or not can_basic_attack(target, _attack_engaged):
@@ -2586,6 +2643,7 @@ func _try_basic_attack() -> void:
 	if is_sentinel() and sentinel_state.explosive_prepared:
 		_launch_sentinel_explosive(target)
 		return
+	_begin_effect_emission()
 	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
 	_last_facing = global_position.direction_to(target.global_position)
 	attack_cooldown = 1.0 / attacks_per_second()
@@ -2613,6 +2671,9 @@ func _try_basic_attack() -> void:
 
 func _make_request(enemy: CombatActor, skill_id: StringName, accuracy_mode: DamageRequest.AccuracyMode, can_crit: bool) -> DamageRequest:
 	var request := DamageRequest.new()
+	request.context = _emission_context.copy_context() if _emission_context != null else null
+	var composed := run_state.composed_build()
+	request.effect_snapshot = {"procs": composed.get("procs", []).duplicate(true), "build_version": run_state.build_snapshot.build_version}
 	request.source_id = get_instance_id()
 	request.target_id = enemy.get_instance_id() if enemy != null else 0
 	request.skill_id = skill_id
@@ -2622,18 +2683,13 @@ func _make_request(enemy: CombatActor, skill_id: StringName, accuracy_mode: Dama
 	request.crit_multiplier = stat_breakdown.value(&"crit_multiplier")
 	request.damage_dealt_multiplier = outgoing_damage_multiplier()
 	request.can_crit = can_crit
-	if is_sentinel():
-		_sentinel_emission_serial += 1
-		request.emission_id = _sentinel_emission_serial
-	elif is_hunter():
-		_hunter_emission_serial += 1
-		request.emission_id = _hunter_emission_serial
-		if skill_id in HunterOpeningState.BOW_SKILLS:
-			var build := run_state.build_snapshot
-			if build.has_passive(&"hunter_shooting_discipline"):
-				request.hunter_precision_damage = HunterMath.discipline_raw(skill_rank(&"hunter_shooting_discipline"), stat_breakdown)
-			if build.has_passive(&"hunter_easy_prey"):
-				request.hunter_easy_prey_bonus = HunterMath.easy_prey_bonus(skill_rank(&"hunter_easy_prey"))
+	request.emission_id = int(_emission_context.root_event_id.get_slice(":", _emission_context.root_event_id.get_slice_count(":") - 1)) if _emission_context != null else _next_fixture_emission_id()
+	if is_hunter() and skill_id in HunterOpeningState.BOW_SKILLS:
+		var build := run_state.build_snapshot
+		if build.has_passive(&"hunter_shooting_discipline"):
+			request.hunter_precision_damage = HunterMath.discipline_raw(skill_rank(&"hunter_shooting_discipline"), stat_breakdown)
+		if build.has_passive(&"hunter_easy_prey"):
+			request.hunter_easy_prey_bonus = HunterMath.easy_prey_bonus(skill_rank(&"hunter_easy_prey"))
 	return request
 
 func _make_physical_request(enemy: CombatActor, skill_id: StringName, power: float, accuracy_mode: DamageRequest.AccuracyMode, can_crit: bool) -> DamageRequest:
@@ -2648,12 +2704,6 @@ func _make_physical_request(enemy: CombatActor, skill_id: StringName, power: flo
 func _make_magic_request(enemy: CombatActor, skill_id: StringName, power: float, accuracy_mode: DamageRequest.AccuracyMode, can_crit: bool) -> DamageRequest:
 	var request := _make_request(enemy, skill_id, accuracy_mode, can_crit)
 	request.magic_damage = power
-	if _is_elementalist():
-		_elementalist_emission_serial += 1
-		request.emission_id = _elementalist_emission_serial
-	elif _is_spiritualist():
-		_spiritualist_emission_serial += 1
-		request.emission_id = _spiritualist_emission_serial
 	if _is_elementalist() and run_state.build_snapshot.has_passive(&"elementalist_prismatic_resonance"):
 		var resonance_rank := _runtime_rank_definition(&"elementalist_prismatic_resonance")
 		if resonance_rank != null:
@@ -2669,9 +2719,10 @@ func _magic_power(skill_id: StringName) -> float:
 func _can_spend(skill_id: StringName) -> bool:
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var has_runtime_definition := definition != null and (definition.ranks.is_empty() or _runtime_rank_definition(skill_id) != null)
-	return has_runtime_definition and skill_id in available_skill_ids() and is_alive() and skill_cooldown(skill_id) <= 0.0 and sentinel_free_sp() >= skill_cost(skill_id)
+	return run_state.effect_ledger.can_create_root() and run_state.effects_valid() and has_projectile_capacity(skill_id) and has_runtime_definition and skill_id in available_skill_ids() and is_alive() and skill_cooldown(skill_id) <= 0.0 and sentinel_free_sp() >= skill_cost(skill_id)
 
 func _spend(skill_id: StringName) -> void:
+	_begin_effect_emission()
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var rank_definition := _runtime_rank_definition(skill_id)
 	var cost := rank_definition.sp_cost if rank_definition != null else definition.sp_cost
@@ -2878,3 +2929,120 @@ func _draw() -> void:
 	if _slash_visual_time > 0.0:
 		var angle := _slash_facing.angle()
 		draw_arc(_slash_origin - global_position, _slash_visual_range, angle - SLASH_HALF_ANGLE, angle + SLASH_HALF_ANGLE, 28, Color(0.91, 0.78, 0.48, _slash_visual_time * 3.5), 7.0)
+
+func _next_fixture_emission_id() -> int:
+	# Private request factories also serve isolated legacy fixtures without a paid action.
+	_hunter_emission_serial += 1
+	return _hunter_emission_serial
+
+func _begin_effect_emission() -> void:
+	_emission_context = run_state.effect_ledger.new_root(get_instance_id()) if run_state != null else null
+
+func claim_effect_result(result: Dictionary, family: StringName, target_id: int, kit_recovery: bool = false) -> bool:
+	var context: CombatEventContext = result.get("context")
+	if context == null:
+		return true # Legacy pure fixtures; live producers always supply a context.
+	var ledger := context.ledger()
+	if ledger == null:
+		return false
+	if result.has("_effect_claims"):
+		var reserved := EffectProcLedger.take_result_claim(result, family, target_id)
+		if reserved != null:
+			return true
+		if not (kit_recovery and context.secondary):
+			return false
+	if kit_recovery:
+		return ledger.claim_kit_recovery(context, family, family, target_id)
+	return not ledger.claim_batch(context, [{"family_id": family, "source_id": family, "target_id": target_id}]).is_empty()
+
+func resolve_build_effect_procs(result: Dictionary) -> void:
+	if not bool(result.get("can_trigger_effects", false)) or int(result.get("source_id", 0)) != get_instance_id() or not is_alive():
+		return
+	var context: CombatEventContext = result.get("context")
+	if context == null or not context.is_active():
+		return
+	var target_id := int(result.get("target_id", 0))
+	if not result.has("_effect_claims"):
+		prepare_effect_claims(result)
+	var claims: Array[Dictionary] = []
+	for reserved: Dictionary in result.get("_effect_claims", []):
+		if not reserved.get("build_proc", false):
+			continue
+		if EffectProcLedger.take_result_claim(result, reserved["family_id"], target_id) != null:
+			claims.append(reserved)
+	for claim: Dictionary in claims:
+		var victim := instance_from_id(target_id) as CombatActor
+		if not is_instance_valid(victim) or not victim.is_alive() or not is_alive():
+			continue
+		var request := DamageRequest.new()
+		request.context = claim["context"]
+		request.source_id = get_instance_id()
+		request.target_id = target_id
+		request.skill_id = claim["family_id"]
+		request.emission_id = int(result.get("emission_id", 0))
+		request.is_secondary = true
+		request.can_crit = false
+		request.accuracy_mode = DamageRequest.AccuracyMode.GEOMETRY
+		var magnitude := clampf(float(claim["flat"]) + float(result.get("actual_damage", 0.0)) * float(claim["increased"]), 0.0, float(claim["limit"]))
+		if claim["axis"] == &"physical_damage":
+			request.physical_damage = magnitude
+		else:
+			request.magic_damage = magnitude
+		request.damage_dealt_multiplier = 1.0
+		status_damage_requested.emit(request, victim)
+
+func has_projectile_capacity(skill_id: StringName) -> bool:
+	if not is_inside_tree():
+		return true
+	var projectile_skills: Array[StringName] = [&"basic_attack", &"fireball", &"fire_spear", &"ice_spear", &"lightning", &"electric_discharge", &"double_shot", &"piercing_arrow", &"slowing_arrow", &"hunter_covering_shot", &"sentinel_headshot", &"sentinel_piercing_shot", &"sentinel_concussion_shot", &"sentinel_net_shot", &"sentinel_explosive_shot", &"geometer_trace", &"geometer_triangulation"]
+	if skill_id not in projectile_skills or (skill_id == &"basic_attack" and class_id == &"swordsman"):
+		return true
+	var needed := run_state.projectile_count(skill_id) if skill_id in BuildEffectCatalog.PROJECTILE_SKILLS else 1
+	return EffectProcLedger.projectile_slots_available(get_tree(), needed)
+
+func prepare_effect_claims(result: Dictionary, additional: Array[Dictionary] = []) -> void:
+	if result.has("_effect_claims"):
+		return
+	var context: CombatEventContext = result.get("context")
+	if context == null:
+		return
+	result["_effect_claims"] = []
+	if not context.is_active() or context.secondary or not is_alive() or not bool(result.get("can_trigger_effects", false)) or int(result.get("source_id", 0)) != get_instance_id() or float(result.get("actual_damage", 0.0)) <= 0.0:
+		return
+	var candidates: Array[Dictionary] = additional.duplicate(true)
+	var target_id := int(result.get("target_id", 0))
+	var skill := StringName(result.get("skill_id", &""))
+	var emission := int(result.get("emission_id", 0))
+	for proc: Dictionary in result.get("effect_snapshot", {}).get("procs", []):
+		if proc["trigger"] != EffectDefinition.Trigger.ON_HIT or (not proc["targets"].is_empty() and skill not in proc["targets"]):
+			continue
+		var candidate := proc.duplicate(true)
+		candidate["target_id"] = target_id
+		candidate["build_proc"] = true
+		candidates.append(candidate)
+	if is_sentinel() and not (is_inside_tree() and get_tree().paused):
+		_append_kit_candidate(candidates, &"sentinel_focus", get_instance_id())
+	if is_hunter() and hunter_state.can_consume(result) and not (is_inside_tree() and get_tree().paused):
+		_append_kit_candidate(candidates, &"hunter_exploit", target_id, &"hunter_opening")
+	if _is_berserker():
+		var previous := berserker_wound_stacks(target_id)
+		var direct := skill in BERSERKER_DIRECT_MELEE_IDS and skill_rank(&"berserker_rupture") > 0 and (previous > 0 or skill == &"berserker_rupture")
+		if direct:
+			_append_kit_candidate(candidates, &"berserker_wound", target_id)
+		if previous > 0 and (direct or skill == &"berserker_execution") and berserker_pursuit_cooldown <= 0.0 and run_state.build_snapshot.has_passive(&"berserker_pursuit"):
+			_append_kit_candidate(candidates, &"berserker_pursuit", get_instance_id())
+		if skill == &"berserker_breath_steal" and not bool(result.get("killed", false)):
+			_append_kit_candidate(candidates, &"berserker_breath_heal", target_id)
+	if _is_elementalist():
+		var element := _elementalist_direct_element(skill)
+		var previous: Dictionary = elementalist_focus_history.get(target_id, {})
+		if element != &"" and float(previous.get("remaining", 0.0)) > 0.0 and StringName(previous.get("element", &"")) != element and (emission <= 0 or not _elementalist_refunded_emissions.has(emission)) and elementalist_focus_cooldown <= 0.0 and run_state.build_snapshot.has_passive(&"elementalist_prismatic_focus"):
+			_append_kit_candidate(candidates, &"elementalist_focus", get_instance_id())
+	if _is_spiritualist() and skill == &"spiritualist_soul_drain":
+		_append_kit_candidate(candidates, &"spiritualist_drain_heal", target_id)
+	if bool(result.get("killed", false)) and run_state.build_snapshot.has_passive(&"blood_thirst"):
+		_append_kit_candidate(candidates, &"blood_thirst", target_id)
+	result["_effect_claims"] = context.ledger().claim_batch(context, candidates)
+
+func _append_kit_candidate(candidates: Array[Dictionary], family: StringName, target_id: int, source: StringName = &"") -> void:
+	candidates.append({"family_id": family, "source_id": family if source.is_empty() else source, "target_id": target_id})
