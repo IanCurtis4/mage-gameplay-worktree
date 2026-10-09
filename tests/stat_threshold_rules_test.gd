@@ -13,7 +13,7 @@ func _initialize() -> void:
 
 func _test_oracle() -> void:
 	var fixture: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/fixtures/stat_threshold_reference.json"))
-	_check(fixture["ruleset_id"] == ProfileState.RULESET_ID and int(fixture["catalog_version"]) == ProfileCodec.PRE_HUNTER_CATALOG_VERSION and ProfileState.CATALOG_VERSION == 8, "historical catalog-7 oracle still binds unchanged threshold rules under catalog 8")
+	_check(fixture["ruleset_id"] == ProfileState.RULESET_ID and int(fixture["catalog_version"]) == ProfileCodec.PRE_HUNTER_CATALOG_VERSION and ProfileState.CATALOG_VERSION == 9, "historical catalog-7 oracle still binds unchanged threshold rules under catalog 9")
 	for row: Dictionary in fixture["builds"]:
 		var origin := StringName(row["origin"])
 		var allocated: Dictionary[StringName, int] = {}

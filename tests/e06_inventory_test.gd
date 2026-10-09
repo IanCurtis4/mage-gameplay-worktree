@@ -99,6 +99,7 @@ func _failures() -> void:
 			result = c.build_service.commit_change(preview["intent"])
 		else:
 			_check(c.inventory_frozen and paused and not c.run_state.can_open_choice(false), "uncertain save freezes run and offers")
+			_check(facade.open_profile()["error_code"] == &"result_uncertain", "live transaction cannot be discarded by generic reload")
 			var other: Dictionary = preview["intent"].duplicate(true)
 			other["item_id"] = &"trailcoat"
 			_check(c.build_service.commit_change(other)["error_code"] == &"result_uncertain", "uncertain payload cannot be replaced")

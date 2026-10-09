@@ -221,7 +221,7 @@ func equip_between_encounters(request_id: String, expected_revision: int, contro
 	var equipped: Dictionary = prepared["snapshot"].equipped
 	character.equipped.assign(equipped)
 	character.presets[character.selected_preset]["equipped"] = equipped.duplicate(true)
-	return _finish_operation(request_id, _resolve_commit(before, candidate, _store.commit(candidate)))
+	return _finish_operation(request_id, _resolve_commit(before, candidate, _store.commit(candidate), true))
 
 func update_action_slots(request_id: String, expected_revision: int, character_id: String, slots: Array[Variant]) -> Dictionary:
 	if _operation_in_progress:
@@ -683,7 +683,7 @@ func _grant_reward_payload(request_id: String, expected_revision: int, run_id: S
 		candidate.lifetime_stats[stat_id] = candidate.lifetime_stats.get(stat_id, 0) + reward["stat_increments"][stat_id]
 	candidate_session["last_committed_seq"] = sequence
 	candidate.reward_session = candidate_session
-	var committed := _resolve_commit(before, candidate, _store.commit(candidate))
+	var committed := _resolve_commit(before, candidate, _store.commit(candidate), not frozen_payload.is_empty())
 	if committed["ok"]:
 		committed["run_id"] = run_id
 		committed["sequence"] = sequence
@@ -816,9 +816,9 @@ func _build_snapshot(character: CharacterState) -> BuildSnapshot:
 		_catalog
 	)
 
-func _resolve_commit(before: ProfileState, candidate: ProfileState, commit_result: Dictionary) -> Dictionary:
+func _resolve_commit(before: ProfileState, candidate: ProfileState, commit_result: Dictionary, retain_runtime_transaction: bool = false) -> Dictionary:
 	var result := _reconcile_commit(before, candidate, commit_result)
-	if not result["ok"] and result.get("read_only", false):
+	if retain_runtime_transaction and not result["ok"] and result.get("read_only", false):
 		_uncertain_transaction = {"request_id": _active_request_id, "before": before.copy_state(), "candidate": candidate.copy_state()}
 	else:
 		_uncertain_transaction = {}
