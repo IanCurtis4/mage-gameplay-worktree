@@ -13,6 +13,7 @@ func _run() -> void:
 	_mixed_kit_quota()
 	_echo_and_kill_exceptions()
 	_berserker_last_slot()
+	_sentinel_multiple_victims()
 	await _arena_budget()
 	print("E06 effects runtime: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
@@ -347,3 +348,56 @@ func _berserker_last_slot() -> void:
 	_check(player.current_sp > sp and player.berserker_wound_stacks(victim.get_instance_id()) == 1 and state.effect_ledger.applications(request.context) == 16, "accepted Pursuit applies even when later Wound candidate is discarded")
 	player.free()
 	victim.free()
+
+func _sentinel_multiple_victims() -> void:
+	var build := BuildSnapshot.new()
+	build.character_id = "focus-budget"
+	build.base_class_id = &"archer"
+	build.evolution_id = &"sentinel"
+	build.job_level = 40
+	build.skill_ranks = {&"sentinel_observe": 5, &"sentinel_piercing_shot": 1}
+	var state := RunState.from_build("focus", build)
+	var nav := ArenaNavigation.new()
+	nav.configure(Rect2(0, 0, 1000, 1000), [], 0.0)
+	var player := PlayerActor.new()
+	player.configure(nav, state)
+	root.add_child(player)
+	player.set_process(false)
+	player.sentinel_combat_active = true
+	player.sentinel_state.focus = 60.0
+	var actors: Array[CombatActor] = []
+	for index: int in 3:
+		var actor := CombatActor.new()
+		actor.setup("Fixture", Color.WHITE, StatCalculator.calculate({}))
+		root.add_child(actor)
+		actor.set_process(false)
+		actors.append(actor)
+	player.sentinel_state.observe(actors[1].get_instance_id(), 5)
+	player._begin_effect_emission()
+	var prototype := player._make_magic_request(actors[0], &"sentinel_piercing_shot", 1.0, DamageRequest.AccuracyMode.GEOMETRY, false)
+	var second_result: Dictionary = {}
+	for index: int in 2:
+		var request := prototype.copy()
+		request.target_id = actors[index].get_instance_id()
+		var result := actors[index].health.apply(request, 0.0, 1.0)
+		player.prepare_effect_claims(result)
+		player.record_sentinel_damage(result)
+		second_result = result
+	_check(is_equal_approx(player.sentinel_state.focus, 74.0) and player.sentinel_state.observation_charges == 2 and state.effect_ledger.applications(prototype.context) == 2, "first unmarked victim does not suppress later marked victim; intrinsic return remains once per emission")
+	player.record_sentinel_damage(second_result)
+	_check(is_equal_approx(player.sentinel_state.focus, 74.0) and state.effect_ledger.applications(prototype.context) == 2, "replayed marked result cannot recover Focus twice")
+	var fillers: Array[Dictionary] = []
+	for index: int in 14:
+		fillers.append({"family_id": StringName("fill_%d" % index), "source_id": &"fixture", "target_id": actors[0].get_instance_id()})
+	state.effect_ledger.claim_batch(prototype.context, fillers)
+	player.sentinel_state.observe(actors[2].get_instance_id(), 5)
+	player.sentinel_state.observation_cooldown = 0.0
+	var request := prototype.copy()
+	request.target_id = actors[2].get_instance_id()
+	var result := actors[2].health.apply(request, 0.0, 1.0)
+	player.prepare_effect_claims(result)
+	player.record_sentinel_damage(result)
+	_check(is_equal_approx(player.sentinel_state.focus, 74.0) and player.sentinel_state.observation_charges == 3 and state.effect_ledger.applications(prototype.context) == 16, "later marked victim cannot recover beyond shared root cap")
+	for actor: CombatActor in actors:
+		actor.free()
+	player.free()

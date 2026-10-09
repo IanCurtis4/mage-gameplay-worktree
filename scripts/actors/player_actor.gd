@@ -478,7 +478,7 @@ func record_sentinel_damage(result: Dictionary) -> void:
 	var victim := instance_from_id(int(result.get("target_id", 0))) as CombatActor
 	if not is_instance_valid(victim) or (not victim.is_alive() and not bool(result.get("killed", false))):
 		return
-	if not claim_effect_result(result, &"sentinel_focus", get_instance_id()):
+	if not claim_effect_result(result, &"sentinel_focus", victim.get_instance_id()):
 		return
 	var rank := skill_rank(&"sentinel_opening_read") if run_state.build_snapshot.has_passive(&"sentinel_opening_read") else 0
 	var gained := sentinel_state.direct_impact(int(result.get("emission_id", 0)), victim.get_instance_id(), true, bool(result.get("critical", false)), victim.is_rooted() or victim.is_stunned(), rank)
@@ -3021,7 +3021,7 @@ func prepare_effect_claims(result: Dictionary, additional: Array[Dictionary] = [
 		candidate["build_proc"] = true
 		candidates.append(candidate)
 	if is_sentinel() and not (is_inside_tree() and get_tree().paused):
-		_append_kit_candidate(candidates, &"sentinel_focus", get_instance_id())
+		_append_kit_candidate(candidates, &"sentinel_focus", target_id)
 	if is_hunter() and hunter_state.can_consume(result) and not (is_inside_tree() and get_tree().paused):
 		_append_kit_candidate(candidates, &"hunter_exploit", target_id, &"hunter_opening")
 	if _is_berserker():

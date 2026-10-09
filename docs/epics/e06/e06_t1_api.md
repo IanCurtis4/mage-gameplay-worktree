@@ -13,7 +13,7 @@
 | BuildEffectComposer.compose(snapshot: BuildSnapshot, run_effects: Dictionary, temporary_sources: Array[Dictionary]=[], catalog: BuildEffectCatalog=null) -> Dictionary | run_effects={augment_stacks, card_sockets}; equipamento de snapshot.equipped | Valida identidade pronta, slots/restrições/ranks, fontes únicas e conflito antes de publicar |
 | SkillEffectResolver.preview/capture(skill_id: StringName, rank: int, composed_build: Dictionary) -> Dictionary | rank_definition copiado; values={range,sp_cost,cooldown,projectile_count}, procs, build_version | Mesmo caminho puro; rank/biblioteca são autoridade, barra não é requisito |
 
-Resultado de composição: ok/error_code/request_id/build_version, stat_sources,
+Resultado de composição: ok/error_code/request_id/build_version, skill_ranks, stat_sources,
 breakdown (StatBreakdown novo), skill_rules, procs, provenance, inactive e conflicts.
 Inactive registra source_id/effect_id/reason (skill_not_learned ou identity_restricted).
 Falha retorna ok=false/error_code/request_id/detail; não aplicar um resultado parcial.
@@ -57,7 +57,7 @@ novas receitas que alterem esse kit exigem adaptador específico.
 | effect_catalog() -> BuildEffectCatalog; effect_state() -> Dictionary | cópias do catálogo e {augment_stacks,card_sockets} |
 | set_effect_catalog(catalog) -> Dictionary | valida candidato antes de substituir; oferta aberta bloqueia; runtime_revision incrementa uma vez |
 | composed_build(temporary_sources=[]) -> Dictionary; skill_effect_capture(id) -> Dictionary | getters por valor; cache privado detecta identidade/ranks/atributos/fontes/versões |
-| composition_revision() -> int; effects_valid() -> bool | consulta interna leve; não expõe cache; PlayerActor reaproveita ranks privados por revisão |
+| composition_revision() -> int; effects_valid() -> bool | consulta interna leve; não expõe cache; PlayerActor reaproveita ranks privados por revisão; snapshot ausente falha e restauração recompõe |
 | queue_choice(); can_open_choice(encounter_active) | tickets monotônicos de pendência; não abre durante encontro |
 | open_offer(encounter_active, rng) -> Dictionary; offer_token() -> Dictionary | token choice_id/offer_id/runtime_revision; IDs/definitions copiados, empty e request_id; máximo três sem reposição |
 | confirm_offer(token, augment_id, encounter_active) -> Dictionary | ID deve estar na oferta; revisão válida; um stack e uma pendência; replay falha |
@@ -99,7 +99,8 @@ antes de executar procs/passivas; ordem temporal de colisões permanece física.
 Componentes intrínsecos de projétil/campo são entregas próprias na ordem da
 geometria E05; cópias conservam raiz e concorrem no mesmo saldo. Miss/zero/escudo
 integral não armam ON_HIT. Filhos genéricos não consomem RNG HIT/crítico, não
-criam dano/cura/controle/timer derivados. HP da execução é custo, não hit.
+criam dano/cura/controle/timer derivados. Ataques primários preservam sua sequência
+legada de RNG, incluindo impactos geométricos. HP da execução é custo, não hit.
 
 ## Matriz origem -> adaptador -> consumidor
 
@@ -127,7 +128,9 @@ Controles/escudos ativos e auras de terreno E05 são componentes explícitos do 
 com suas quotas/CC já contratadas; não são novos handlers de proc secundário.
 Não expor chamadas apply_root/heal/current_sp como handler genérico de receita.
 Resonância Prismática/Obstinação são modificadores capturados do dano primário;
-não criam eventos secundários extras. Ranks, números, quota de Foco/mecanismos/
+não criam eventos secundários extras. Foco reserva sentinel_focus/vítima/raiz; SentinelFocusState mantém cotas e
+cadência por emissão, permitindo a marca de uma vítima posterior de perfuração.
+Ranks, números, quota de Foco/mecanismos/
 construções e fórmulas de CC continuam em seus módulos canônicos.
 
 Exceções preservadas: Ruptura paga mantém contested (flag restrita ao ID intrínseco,
@@ -160,7 +163,8 @@ offer_not_empty, no_effective_gain e erros propagados de composição.
 
 Fixtures e06_effects_fixture.gd são Resources/valores locais aos testes, nunca
 save/grant/catalog de produção. e06_effects_composition_test cobre três origens,
-ordem/duplicata/caps/conflitos, dez prontas/cinco bloqueadas, curvas e ofertas.
+ordem/duplicata/caps/conflitos, dez prontas/cinco bloqueadas, curvas, ofertas
+e invalidação/restauração após remoção do snapshot.
 e06_proc_ledger_test cobre 16/17, famílias, reentrada/replay, escudo/letal/zero,
 ref tardia, 512, cancelamento, timer proibido e Eco. e06_effects_runtime_test usa
 ator real e callback real: quantidade/alcance nas três origens, snapshot após
