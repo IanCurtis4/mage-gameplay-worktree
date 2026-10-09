@@ -38,8 +38,8 @@ func _run() -> void:
 		player.run_state = RunState.from_build("", build)
 		player.class_id = &"mage"
 		player.class_definition = ClassCatalog.class_definition(&"mage")
-		player.current_sp = 100.0
 		player.max_sp = 100.0
+		player.current_sp = 100.0
 		player.set_process(false)
 		casting = GeometerCasting.new()
 		fixture.add_child(casting)

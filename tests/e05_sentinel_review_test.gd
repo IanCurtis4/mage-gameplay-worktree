@@ -15,8 +15,9 @@ func _lethal_area(skill: StringName) -> void:
 	for index: int in range(4):
 		var victim := arena._spawn_enemy(&"chaser", Vector2(470 + index * 8, 300))
 		victim.set_process(false)
-		victim.health.current_hp = 1.0 if index < 3 else 1000.0
 		victim.health.max_hp = 1000.0
+		victim.health.current_hp = 1.0 if index < 3 else 1000.0
+		_check(victim.health.current_hp == (1.0 if index < 3 else 1000.0), "lethal fixture starts at the explicit HP after maximum initialization")
 		victims.append(victim)
 	var request := DamageRequest.new()
 	request.source_id = arena.player.get_instance_id()
