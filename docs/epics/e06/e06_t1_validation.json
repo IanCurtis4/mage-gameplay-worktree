@@ -1,0 +1,4010 @@
+{
+  "schema_version": 1,
+  "task": "E06-T1",
+  "created_at_utc": "2026-10-09T11:31:24.672687+00:00",
+  "state": "delivered_and_author_validated",
+  "chat_id": "01a11f3e-33db-7ac0-88be-c2916ea3fe1f",
+  "dispatch_source_chat_id": "01a11e1e-be3d-7243-affc-295c0dc00f9f",
+  "base_commit": "0b2e4a02bb445c98aa4ea2d9b5c5ce83bedf6c0b",
+  "contract": "docs/epics/e06_contract.md",
+  "tested_code_commit": "60c0d9c8aaaf41b6ec9091f4c6020463c5d3762d",
+  "delivery_checkpoint_ref": "refs/tags/codex/e06-t1-f1",
+  "delivery_ref_kind": "annotated_tag_to_documented_delivery_commit",
+  "runtime_trees": {
+    "scripts": "717fdfe3bd29df34e2b70e47100eb487d873cac5",
+    "tests": "6b39cb213e5a083d20af814aeb88c4bdb4db5eea",
+    "tools": "512a658f26201ab000b93009bd06e8b5c5df5a8c",
+    "scenes": "ad978361b89fbfd98a900ca95ab914235833c51e",
+    "assets": "b57728bf1d2a6516f8cb2a3e61c1d7f3c5c34c8b",
+    "project.godot": "487c5077cf60138b7ee53206d504cf71b5c9540e"
+  },
+  "branch": "codex/e06-effects",
+  "worktree": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+  "author": "Sol",
+  "independent_review": {
+    "state": "pending_R1_after_T1_T2",
+    "reproduced_by_reviewer": false
+  },
+  "product_acceptance": "pending",
+  "integrated_commit": null,
+  "engine": {
+    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\review-engine\\Godot.exe",
+    "version": "4.7.2.stable.official.ed1daf0bf",
+    "sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424"
+  },
+  "verification": {
+    "command_arguments": [
+      "C:\\Users\\João Pedro\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+      "-NoProfile",
+      "-File",
+      "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\tools\\verify.ps1",
+      "-GodotPath",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\review-engine\\Godot.exe",
+      "-VerificationDirectory",
+      "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete"
+    ],
+    "skip_editor_import": false,
+    "timeout_seconds_per_stage": 120,
+    "directory": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete",
+    "elapsed_seconds": 559.532,
+    "exit_code": 0,
+    "total_stages": 174,
+    "unique_test_scripts": 172,
+    "editor_import_stages": 1,
+    "main_smoke_stages": 1,
+    "own_checks": {
+      "composition": 69,
+      "ledger": 29,
+      "runtime": 53,
+      "total": 151
+    },
+    "warning_count_in_stage_outputs": 0,
+    "error_or_script_error_count_in_stage_outputs": 0,
+    "manifest_sha256": "77e6adb20fd2b9e369c30b99459cd35f3ce612b0f4950420d5158b524c89252b",
+    "full_stdout_sha256": "51141c803c9ce8710c3094166636fc24e99d4fb7b34ffa18293cfd6588a8af62",
+    "checks": [
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "4E7367257F72026879F7BE5F18BA268BE89B26893FA63C5C7081DB84D4E77766",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\001.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\001.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--editor",
+          "--import",
+          "--quit"
+        ],
+        "index": 1,
+        "engine_log_sha256": "f819fe359354b7e0a5d094586b312ae2560a708f0db000a9a62bea65a406cb52",
+        "summary_lines": []
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "71958720E37183BE2C8C2E6B8B5144EA7893B4DA8289D7272DDB9497153C21C4",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\002-e06_effects_composition_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\002-e06_effects_composition_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e06_effects_composition_test.gd"
+        ],
+        "index": 2,
+        "engine_log_sha256": "e2afc0d4272373ddaa30f49073aa7da571b7162eddb0b9af28c388795d7e42b5",
+        "summary_lines": [
+          "E06 effects composition: 69 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "443A713628B4D82EF2343B7AA6A92B6F0AC6D51526B470D75E01D124C1D74945",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\003-e06_proc_ledger_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\003-e06_proc_ledger_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e06_proc_ledger_test.gd"
+        ],
+        "index": 3,
+        "engine_log_sha256": "68e90785f3a622d9f219b744a884cca25e68e5bd858a49881a64456c22210fd9",
+        "summary_lines": [
+          "E06 proc ledger: 29 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "4D2C6C3D1221AA352C92570D7EB188AD87A213352D772DD848A8639C20376906",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\004-e06_effects_runtime_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\004-e06_effects_runtime_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e06_effects_runtime_test.gd"
+        ],
+        "index": 4,
+        "engine_log_sha256": "868a20a8a3b9474b1278e7b81906fd33fee223d8e34be48f9c1f59c5cd3f819b",
+        "summary_lines": [
+          "E06 effects runtime: 53 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "10C00F261A4572819C6B3293933D567298A2335AB50E19A710DBE5FA5445374B",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\005-foundation_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\005-foundation_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/foundation_test.gd"
+        ],
+        "index": 5,
+        "engine_log_sha256": "3401356fd2604bec0fef9407b7aa25a2cc613ee6feb204826ed07503cfac6ac4",
+        "summary_lines": [
+          "Foundation: PASS (20 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "DF1D52002E18C5524FA60801186A018CDBC71C91E0248051E38F6565C154FB1E",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\006-combat_animation_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\006-combat_animation_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/combat_animation_test.gd"
+        ],
+        "index": 6,
+        "engine_log_sha256": "93de56f18131527bef7e074074477b21e409365bd02c190b9d05a2293ae9d42d",
+        "summary_lines": [
+          "Animações: PASS (39 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "064BEAF0DAA82FE14CD8323E948F820032897B5E6CE9EDEC03BAD229090F4185",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\007-milestone_one_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\007-milestone_one_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/milestone_one_test.gd"
+        ],
+        "index": 7,
+        "engine_log_sha256": "1a2d07833e85687903dbb6a543312a3748164345f6415cf112efce836dd95bc5",
+        "summary_lines": [
+          "Marco 1: PASS (64 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "8C47282C62BA53C641542CA9C40C5B9C16A565C335457E09053271195BEBD25C",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\008-pursuit_momentum_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\008-pursuit_momentum_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/pursuit_momentum_test.gd"
+        ],
+        "index": 8,
+        "engine_log_sha256": "9187b1289ababedca99763131b5daa8f0b366a33613c8ca2fc4a6f038af59850",
+        "summary_lines": [
+          "Perseguição e inércia: PASS (41 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "F8318896CA4F69C73DFEE75D000BE93183454816283638EE4C14279A62749D21",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\009-battle_ui_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\009-battle_ui_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/battle_ui_test.gd"
+        ],
+        "index": 9,
+        "engine_log_sha256": "19ca805b5dac2a4ef977b786eccb964fa10557dcb15dffe014cd427381a81696",
+        "summary_lines": [
+          "UI de batalha: PASS (47 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "90A0E308400998CF57BA08152B8651454A772395B211EAD1ACBB0372D50D5FE3",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\010-arena_flow_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\010-arena_flow_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/arena_flow_test.gd"
+        ],
+        "index": 10,
+        "engine_log_sha256": "9e140963bead29d2126ed242b5216ba641e91f56e69f789a489b096d5ba3dfbe",
+        "summary_lines": [
+          "Fluxo da arena: PASS (32 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "2221C3B8FF5B8BC13995CE03DF5ADDB87D48671AD7CA4B1B51601E3D859D9690",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\011-ui_layout_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\011-ui_layout_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/ui_layout_test.gd"
+        ],
+        "index": 11,
+        "engine_log_sha256": "786e497b3cda17d9d4270fa2899ce2432714eb98d4cf80ea908e593e1eb79a9b",
+        "summary_lines": [
+          "Layout da UI: PASS (30 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "02D14E4B0067A2FC483B56F165EC8534C00262007966F3D45930D287E2919C5C",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\012-mage_gameplay_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\012-mage_gameplay_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/mage_gameplay_test.gd"
+        ],
+        "index": 12,
+        "engine_log_sha256": "4a68e875d0e3b0bc62828858cbae53605549e31e7a71fcadc6e1c3aeda8a6b48",
+        "summary_lines": [
+          "Gameplay do Mago: PASS (52 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "401E2A51A56E2EC92B1581A5EEFBC5D343131D81DBAA49613C8CC7CDE6193C05",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\013-persistent_state_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\013-persistent_state_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/persistent_state_test.gd"
+        ],
+        "index": 13,
+        "engine_log_sha256": "67dcd363a29512768bb78f50ec35aabcf6578602427710387b00bfb4236d8646",
+        "summary_lines": [
+          "Estado persistente E01.1: PASS (33 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "5367FDB65B879E166E5BF0B32391D37A3E04E4E98AF00E9427155194EBF8E2E5",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\014-profile_store_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\014-profile_store_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/profile_store_test.gd"
+        ],
+        "index": 14,
+        "engine_log_sha256": "9e20150dc310db093e87cd0d7bc62aedc98f319d31642a59d235d7ededd9495c",
+        "summary_lines": [
+          "Persistência E01.2: PASS (116 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "0E7C0200C1FAEDEE71AA0FEC27B6F9415F0F622606FFE2917B2718E1295292D5",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\015-profile_facade_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\015-profile_facade_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/profile_facade_test.gd"
+        ],
+        "index": 15,
+        "engine_log_sha256": "da59bc0a6b3db2bb051694c1d09b478505133dce5f332dcbb19e31504a99c66c",
+        "summary_lines": [
+          "Fachada de perfil E01.3-A: PASS (52 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "63AFAED0F8287EE17CEF6777E5F7E217A036B1CB41A7CD9C52DCF2355AA0484E",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\016-profile_run_facade_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\016-profile_run_facade_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/profile_run_facade_test.gd"
+        ],
+        "index": 16,
+        "engine_log_sha256": "b0c7cdf8b26380ed5b643ea575f2993c5c16ffa8bf72d430d4552eb3aeb8843a",
+        "summary_lines": [
+          "Sessão e recompensas E01.3-B: PASS (54 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "DA8272E7B90579E0E6D63C1EF70478FA7C20E658D411836D31012677F9AFA6CB",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\017-e01_profile_diagnostic_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\017-e01_profile_diagnostic_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e01_profile_diagnostic_test.gd"
+        ],
+        "index": 17,
+        "engine_log_sha256": "d761a69374227b0183366212bc65a13bfdc0f80eb6ab4fbbeee947f1cd4d3817",
+        "summary_lines": [
+          "Diagnóstico E01.3-C: PASS (7 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "92E8322739E3F81D8741FB767086745D0012C5B6A7B991C3B90A90688B3FA116",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\018-e02_character_menu_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\018-e02_character_menu_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e02_character_menu_test.gd"
+        ],
+        "index": 18,
+        "engine_log_sha256": "990b05c907abfcc4ffb6d1ca0ddce8bd0e40d26462605bf3d45d07d08c6e709f",
+        "summary_lines": [
+          "Menu E02.1: PASS (26 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "CDCC8B782B3C42E73F1A4C6131129F9C21A415FEEF3A675A1F740DF549BF3647",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\019-verification_profile_isolation_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\019-verification_profile_isolation_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/verification_profile_isolation_test.gd"
+        ],
+        "index": 19,
+        "engine_log_sha256": "bff798b9335f53b5837410a93ad7ba2c5d13bde7ccfbf27ba28d4082a72d713d",
+        "summary_lines": [
+          "Verification profile isolation: 5 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "738F19A005D082B95E21F29A34953CE1B92EA516DDC9BBE5E3F93E024CAF01A0",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\020-menu_tabs_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\020-menu_tabs_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/menu_tabs_test.gd"
+        ],
+        "index": 20,
+        "engine_log_sha256": "447942191ec6742f6d7c7d41db6cbc2e1b5a6c2c9937f0be66aca6806172f152",
+        "summary_lines": [
+          "Menu tabs: PASS (38 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "56EA73C9374CB767D708AB43D2545B6E5A13357EC44B25D4EFBFFCDEDCF54D10",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\021-e02_run_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\021-e02_run_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e02_run_integration_test.gd"
+        ],
+        "index": 21,
+        "engine_log_sha256": "1e7d5afc6323f61ce5313406cef5d8a1058fb0a5bbd75d3f465b70835f493bd0",
+        "summary_lines": [
+          "Integração E02 menu/run: PASS (9 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "403C2A716927AD4067404B9AD8DE0AA024C7A9ECC9033DDBCF9B2149CFB3B90A",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\022-e03_stat_calculator_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\022-e03_stat_calculator_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e03_stat_calculator_test.gd"
+        ],
+        "index": 22,
+        "engine_log_sha256": "1c338f8b5a65852c28631aa59e49cb6c609858fcfdf53c0be08b83228cb34103",
+        "summary_lines": [
+          "E03 StatCalculator: PASS (39 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "9A221F78CE662697790D6145917A3F3282907676446C44E791919DAA69F9D5E9",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\023-stat_threshold_rules_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\023-stat_threshold_rules_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/stat_threshold_rules_test.gd"
+        ],
+        "index": 23,
+        "engine_log_sha256": "5cb0c5ee11bcdf976639983c23d0f679c0c09d7d798ffc2977d997dbda5aec3a",
+        "summary_lines": [
+          "Stat threshold rules: PASS (28090 checks, 0 failures)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "A62A1C5719FC33DD1FE4A0818CC8A83C98A99082B67A0CF6175103351AED0C04",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\024-stat_threshold_migration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\024-stat_threshold_migration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/stat_threshold_migration_test.gd"
+        ],
+        "index": 24,
+        "engine_log_sha256": "e125395ebbdafd814e2ae525296f55542f802296db695e6afd838a8deaef2277",
+        "summary_lines": [
+          "Stat threshold migration: PASS (520 checks, 0 failures)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "88BD44E17EBF03801D46D96DB0AC8419ECCC06967E16ABFC11C76A11C905F0D4",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\025-stat_threshold_preview_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\025-stat_threshold_preview_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/stat_threshold_preview_integration_test.gd"
+        ],
+        "index": 25,
+        "engine_log_sha256": "b7832e3aef98a17844a715f5d805dfb11c1147ad5d49193926e8ddce80bd232b",
+        "summary_lines": [
+          "Stat threshold preview integration: PASS (26 checks, 0 failures)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "CEB5426A74C5956C4CE6769207DC77A8660289AF7F81DE75EAD97980B0F99535",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\026-e03_stat_matrix_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\026-e03_stat_matrix_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e03_stat_matrix_test.gd"
+        ],
+        "index": 26,
+        "engine_log_sha256": "8a2ae9a719c84d12c26887753513869da16a7d6c62642d83732a3c5a6ddbbb48",
+        "summary_lines": [
+          "E03 Stat matrix: PASS (296 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "3A00F5DA9D88D204D0A5BFABF4E711B0B07C69DC0A0986996B98211B971596DD",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\027-e03_progression_transactions_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\027-e03_progression_transactions_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e03_progression_transactions_test.gd"
+        ],
+        "index": 27,
+        "engine_log_sha256": "60afecd7f36d35ec582a3ed051b4b271edbe90f679f1842be7711583f1f9b772",
+        "summary_lines": [
+          "E03 progressão/transações: PASS (47 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "4498C889E864F8D5125B6016F9E9C4B2929D303162CD8632C9BB73C26A470CCD",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\028-e03_progression_panel_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\028-e03_progression_panel_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e03_progression_panel_integration_test.gd"
+        ],
+        "index": 28,
+        "engine_log_sha256": "89b6cd18dfd3825a7eb5f04cd2cef38b3b4bc8b90c710febb045d1040d5c64d1",
+        "summary_lines": [
+          "E03 painel de progressão: PASS (5 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "E3C286942B7C07FD76A5B55BE2615203DD98F20C2B5D121E669A65EE2C3C7FB8",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\029-e03_consumer_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\029-e03_consumer_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e03_consumer_integration_test.gd"
+        ],
+        "index": 29,
+        "engine_log_sha256": "c2ccf8a9678013aef20fe7509b4451e2d486ca0b2e7f3f086f055b1f4eb6bcaf",
+        "summary_lines": [
+          "E03 consumidores: PASS (28 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "BAF3A8DF3239BBEEAEC2DAE2437BF9E67DFFFA9346B49166C0D00A2055C7523B",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\030-e03_integrated_progression_flow_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\030-e03_integrated_progression_flow_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e03_integrated_progression_flow_test.gd"
+        ],
+        "index": 30,
+        "engine_log_sha256": "61fae8971f72775ac22d3325695a6720a8e3bef0e1d479afcc86b19390b04201",
+        "summary_lines": [
+          "E03 fluxo integrado: PASS (17 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "66D5D2B896D23D1B823F94383E955D3AA2951E410E5FABA5623645E397B80B52",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\031-e04_skill_rank_definition_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\031-e04_skill_rank_definition_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_skill_rank_definition_test.gd"
+        ],
+        "index": 31,
+        "engine_log_sha256": "e03fc1df5615be94e439a49e00f827c0128a3141dd8a594365d637ea5d34c52a",
+        "summary_lines": [
+          "E04 skill ranks: PASS (16 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "DE4EA69A121B77BEDEC6F5A460731CE977D93F8DE83AB3E0BF13E550DD900DF6",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\032-e04_slash_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\032-e04_slash_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_slash_rank_integration_test.gd"
+        ],
+        "index": 32,
+        "engine_log_sha256": "c645a2e8b183ee000a60aa373b82ec4067f1906965fd97773ea78d653d0a173d",
+        "summary_lines": [
+          "E04 Corte por rank: PASS (27 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "261FEAAAD8B9496F94868EE479D1E8F7E7C62DC9BA0C569985E0F0C46115D49B",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\033-e04_dash_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\033-e04_dash_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_dash_rank_integration_test.gd"
+        ],
+        "index": 33,
+        "engine_log_sha256": "c44a331446447531d8f4d4d6536d8d1b41d63268c908ab71a3acce2301300a22",
+        "summary_lines": [
+          "E04 Investida por rank: PASS (28 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "12F5A46F5760D99DFA67EEDD61F2CC5514EC9D59A2AF51C56C651EABD83A47DC",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\034-e04_swordsman_resistance_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\034-e04_swordsman_resistance_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_swordsman_resistance_rank_integration_test.gd"
+        ],
+        "index": 34,
+        "engine_log_sha256": "d2b056b1e3facaff20f56051434c6c28b04551ee43cd9f62a4303e8d9486664e",
+        "summary_lines": [
+          "E04 Resistência por rank: PASS (24 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "9326670E30CF39122AA845B633136815F158E458ABE3CF9F00FFE58A1F7BEAF5",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\035-e04_fireball_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\035-e04_fireball_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_fireball_rank_integration_test.gd"
+        ],
+        "index": 35,
+        "engine_log_sha256": "7c7d63141274646d55a591ed7b0a43023cfb705d6a6612b8483644e08a2f80f5",
+        "summary_lines": [
+          "E04 Bola de Fogo por rank: PASS (35 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "110FB010FC445816DA58D5C6852396FDCD4E6D654EF35644E3BC0012BD3554BA",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\036-e04_fire_wall_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\036-e04_fire_wall_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_fire_wall_rank_integration_test.gd"
+        ],
+        "index": 36,
+        "engine_log_sha256": "3f1b5772ccaa76e211e0896d6419bfe01261464c86e06a49fcd4d6f7d2d9f3c2",
+        "summary_lines": [
+          "E04 Parede de Fogo por rank: PASS (36 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "3EEF726FC0EBD1D7189F6CCF9D1E31237D929A40D78C457FB6EDC7D7AA5E04A6",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\037-e04_fire_spear_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\037-e04_fire_spear_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_fire_spear_rank_integration_test.gd"
+        ],
+        "index": 37,
+        "engine_log_sha256": "a6bc6fd8b27b64aab7d58959a7a0a88e57d960f039eefa87a606c636e7b2f3f6",
+        "summary_lines": [
+          "E04 Lança de Fogo por rank: PASS (39 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "FFCA099282678509933D23DE73AB769C725A96023C96A48A24919D71ECC0C520",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\038-e04_ice_spear_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\038-e04_ice_spear_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_ice_spear_rank_integration_test.gd"
+        ],
+        "index": 38,
+        "engine_log_sha256": "ccd338d24247cf67fc01af4cb9da921114c615c58dabd1ddfe85b349fb884219",
+        "summary_lines": [
+          "E04 Lança de Gelo por rank: PASS (39 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "09A9DF630C4CE22000062EA5B4CCCB31C63FBDEF89B12A539F9E77D6FF97D9AC",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\039-e04_teleport_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\039-e04_teleport_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_teleport_rank_integration_test.gd"
+        ],
+        "index": 39,
+        "engine_log_sha256": "06aff5c76cbe10b1b2779c688389ddad1a05143def7b718d3840a1853a4530f8",
+        "summary_lines": [
+          "E04 Teleporte por rank: PASS (29 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "659126513A0D526F45380C06DDD459B6F3F22650012FD21D9A80B52F7C4B5BCF",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\040-e04_mage_sp_regeneration_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\040-e04_mage_sp_regeneration_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_mage_sp_regeneration_rank_integration_test.gd"
+        ],
+        "index": 40,
+        "engine_log_sha256": "58a898acf363f586210dd3b09adfe549fd7ae85902ee4e4dadf2a2196cae0bc5",
+        "summary_lines": [
+          "E04 Regeneração de SP por rank: PASS (27 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "2F2227B80CB60B753D6855EA4C5C7ED115EC2A24304860F118AA630E23F2AA17",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\041-e04_archer_precision_projectile_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\041-e04_archer_precision_projectile_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_archer_precision_projectile_test.gd"
+        ],
+        "index": 41,
+        "engine_log_sha256": "6dcb5d59b83fffd2e7401fa08eba91abfeb9857f7a95cac7538517b452808726",
+        "summary_lines": [
+          "E04 Arqueiro projétil de precisão: PASS (17 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "6D126AF874721903014549B254E3AABC9C3EF918D7662EC04AE2CDAC4ED4BFA1",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\042-e04_archer_double_shot_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\042-e04_archer_double_shot_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_archer_double_shot_rank_integration_test.gd"
+        ],
+        "index": 42,
+        "engine_log_sha256": "678c10c5fc5708bf774619edecf03a25ab3ee74ba697095d64af9f78c98b76e4",
+        "summary_lines": [
+          "E04 Disparo Duplo por rank: PASS (37 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "B06C2FFE477139A1ED292A63164343F5209618F47D86727D765D6FA1AA9D0A77",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\043-e04_archer_piercing_arrow_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\043-e04_archer_piercing_arrow_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_archer_piercing_arrow_rank_integration_test.gd"
+        ],
+        "index": 43,
+        "engine_log_sha256": "050f59a576e49de2b094a70eb05cc83006715a39a29f4b0e88d2b47a8b08a294",
+        "summary_lines": [
+          "E04 Flecha Perfurante por rank: PASS (44 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "CD14C1EB506DBAE48A1036E88C60FDE3484E6FEB50B98F0A8A9A9EAD80EC5E16",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\044-e04_archer_arrow_rain_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\044-e04_archer_arrow_rain_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_archer_arrow_rain_rank_integration_test.gd"
+        ],
+        "index": 44,
+        "engine_log_sha256": "e554d834965d9354efa32daf0bac759e43380da503d89e039198d2ed8d18e85e",
+        "summary_lines": [
+          "E04 Chuva de Flechas por rank: PASS (48 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "B523C7DF447E67640A1024B571E52DCB9F29047E58117E507A2FB4104DA18D93",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\045-e04_archer_extended_aim_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\045-e04_archer_extended_aim_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_archer_extended_aim_rank_integration_test.gd"
+        ],
+        "index": 45,
+        "engine_log_sha256": "276781a6e82ea94d48e5506740ac8500f2458ed212a0af44d1294735434fbb60",
+        "summary_lines": [
+          "E04 Mira Estendida por rank: PASS (49 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "DAD6D7D95E9EFBEB2BF297E05A26B50736D1B226ADA612797AB99AE76308C189",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\046-e04_archer_trap_runtime_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\046-e04_archer_trap_runtime_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_archer_trap_runtime_test.gd"
+        ],
+        "index": 46,
+        "engine_log_sha256": "ab564f76e341f295f27266c8cf283066145a45c8afc950b195922e5949941514",
+        "summary_lines": [
+          "E04 runtime de armadilhas: PASS (40 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "735127B8BDCDBA912668577E1F00DAA2505F0792627ED65034ACDC7C6F6D344A",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\047-e05_hunter_catalog_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\047-e05_hunter_catalog_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_hunter_catalog_test.gd"
+        ],
+        "index": 47,
+        "engine_log_sha256": "e77ae832a463f0c067dfd6dbea78f5587a38a7bd784cfe410291c7a3372771f7",
+        "summary_lines": [
+          "E05 Caçadora catalog: 619 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "A54768E0C9AB8EE7B2824E23D8F5A0E489D81E3F54C344E026510A9787AB002E",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\048-e05_hunter_opening_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\048-e05_hunter_opening_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_hunter_opening_test.gd"
+        ],
+        "index": 48,
+        "engine_log_sha256": "74e9a7fde287529627f80de795eda17e7621f11fbe9a65cbf9831dae300732c0",
+        "summary_lines": [
+          "Hunter opening: 674 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "C9F14931487B29134BF588BDE93B922EA28F949004B92237780D2FED3DCEDBBB",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\049-e05_hunter_core_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\049-e05_hunter_core_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_hunter_core_integration_test.gd"
+        ],
+        "index": 49,
+        "engine_log_sha256": "67134378e59720da74ed7b9e7a4d8eb0f626cf2a247b3861427bfcd9ead3700d",
+        "summary_lines": [
+          "Hunter core integration: 41 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "74B4AE80D7DEE422D3541CCA69338C7C79001E5E00310B4CB844CE423EE0A8F9",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\050-e05_hunter_traps_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\050-e05_hunter_traps_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_hunter_traps_integration_test.gd"
+        ],
+        "index": 50,
+        "engine_log_sha256": "1cd1311c5f2e63d08f0d4f9eefe30044b9590e4b26c81b36eea5bcf93de56d3b",
+        "summary_lines": [
+          "Hunter H3 traps integration: 186 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "ABA9521633BBE3723901FC6030B981CA31F23A95E284426EBD3CA1BC895D168C",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\051-e05_hunter_cover_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\051-e05_hunter_cover_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_hunter_cover_integration_test.gd"
+        ],
+        "index": 51,
+        "engine_log_sha256": "deb6cd2fdc882c3356c56f6ec43d444f7235aeaea531827ff26733ae1b8b074a",
+        "summary_lines": [
+          "Hunter H4 cover integration: 302 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "648D5C37DDA019D2549226C772E68A8500D4CE50EBC081C3E0C2FB867CE8829D",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\052-e05_hunter_passives_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\052-e05_hunter_passives_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_hunter_passives_test.gd"
+        ],
+        "index": 52,
+        "engine_log_sha256": "4165292245ef7a296696c31b61fe0344228bb359f4957050a226c0395e08b680",
+        "summary_lines": [
+          "Hunter passives: 613 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "30F03339DFE5B6B1BB2D72DE131BB7BA0AC28AF39DD7CE226EF21A1648477E2F",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\053-e05_hunter_catalog_migration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\053-e05_hunter_catalog_migration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_hunter_catalog_migration_test.gd"
+        ],
+        "index": 53,
+        "engine_log_sha256": "dcf2147e559ada9d361d4ea2c6805e67ee61d6641590bd02fcf6944dfa162f6a",
+        "summary_lines": [
+          "Hunter catalog migration: 112 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "DDFF639E4B72FC2486DC38C2A9BAACC5402903506C94101AA11D6A3327AF7D3F",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\054-e05_hunter_builds_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\054-e05_hunter_builds_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_hunter_builds_test.gd"
+        ],
+        "index": 54,
+        "engine_log_sha256": "bebbf9231f1c07fd015512548932add829137dd4f36e1148673c5ea8837b601d",
+        "summary_lines": [
+          "E05 Caçadora H5 builds/menu/save/run: PASS (426 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "E397197EDD547C7851FFBDFB98D9BC3EC04567B61A0DCFB9BE18F82B578B5F50",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\055-e05_hunter_ground_visual_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\055-e05_hunter_ground_visual_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_hunter_ground_visual_test.gd"
+        ],
+        "index": 55,
+        "engine_log_sha256": "50f02d739abe97c28c92815c1f7fba11dff1f62c9cd9f13c7dd32046b09a4dad",
+        "summary_lines": [
+          "Hunter ground visuals: 575 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "DD9FC5B154BD229D67433EB6A18143321446991403F75FB160D9EAFC324E8F9A",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\056-e05_hunter_atlas_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\056-e05_hunter_atlas_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_hunter_atlas_test.gd"
+        ],
+        "index": 56,
+        "engine_log_sha256": "0285fd21e097f116202f5677754edd800f1610a01671dd42cd72b21aa8cc1283",
+        "summary_lines": [
+          "Hunter H6 atlas: PASS (158 checks, 0 failures)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "ABCB0A1EA7C5B0BB69946BF76259579F2FB6EF96F904B9E42B0C5D714012A3B3",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\057-e05_hunter_presentation_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\057-e05_hunter_presentation_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_hunter_presentation_test.gd"
+        ],
+        "index": 57,
+        "engine_log_sha256": "c4deeed034d1d07e8900a10673c3db1cdd87cfbf85c26719b657169da46291d5",
+        "summary_lines": [
+          "E05 Hunter H6 presentation: PASS (25 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "CDAFEC2BE14D17967E1F193072CA7A9BEA113693E51CCED81376D2BA47F89081",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\058-e05_hunter_active_combat_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\058-e05_hunter_active_combat_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_hunter_active_combat_test.gd"
+        ],
+        "index": 58,
+        "engine_log_sha256": "6bec06a84cdb5bd1f326b3454ef03c136c46e2585ad0ac3acfca7ccdd215733b",
+        "summary_lines": [
+          "Hunter H7 active combat: PASS (12768 checks, 0 failures; actual AI/flight, deterministic deltas, no balance/FPS claim)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "C6AB8CCD839E9D88C3DF7F73DBFC43EF964059749C3684838D162A0A6FE92FD5",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\059-e04_archer_snare_trap_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\059-e04_archer_snare_trap_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_archer_snare_trap_rank_integration_test.gd"
+        ],
+        "index": 59,
+        "engine_log_sha256": "59c825a0adb3529cc3cfda43d07d8dae974aa5c4d7450b198ac784bca6b3ab66",
+        "summary_lines": [
+          "E04 Armadilha de Laço por rank: PASS (69 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "B883BC0A35859064A574D64214429034F1661CB66BDBFC3A3E143FC6F2D7B661",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\060-e04_archer_explosive_trap_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\060-e04_archer_explosive_trap_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_archer_explosive_trap_rank_integration_test.gd"
+        ],
+        "index": 60,
+        "engine_log_sha256": "c26f992638d5a3e6848630840caccbd058709695da607986b18a774b89992f55",
+        "summary_lines": [
+          "E04 Armadilha Explosiva por rank: PASS (56 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "9E6D73B0BB78B12485DD630B56FFF98C109B074F7E7EAFBBD497CE14E091BBF9",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\061-e04_archer_slowing_arrow_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\061-e04_archer_slowing_arrow_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_archer_slowing_arrow_rank_integration_test.gd"
+        ],
+        "index": 61,
+        "engine_log_sha256": "d380c78065a621ef8a6c1c1202f1757ff7c5b937d2293de39c6e35c4fa2639cd",
+        "summary_lines": [
+          "E04 Flecha Entorpecente por rank: PASS (54 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "01B94707CAB7793363263F359B256755219911338E2EB4F44B7473B88CF22085",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\062-e04_archer_foliage_shelter_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\062-e04_archer_foliage_shelter_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_archer_foliage_shelter_rank_integration_test.gd"
+        ],
+        "index": 62,
+        "engine_log_sha256": "02db988ccfe017c6df6daffcce42cddfdd820ebcead64c7f2779a80a5ef5523c",
+        "summary_lines": [
+          "E04 Abrigo de Folhagem por rank: PASS (62 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "63C682BB6F4FA062BD62F2ED75005FA2DBF697B065E5D3BE0BC217628F3081B0",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\063-e04_archer_precision_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\063-e04_archer_precision_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_archer_precision_rank_integration_test.gd"
+        ],
+        "index": 63,
+        "engine_log_sha256": "8fb1328186c5e811ed78ac1f4da5c3f902fd6ac31a053ac54a526a2e2767df4a",
+        "summary_lines": [
+          "E04 Precisão por rank: PASS (34 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "B1DE7D781A3E80CF66C00006605A34DF81293521A15ECF450FEB1F647A358CC9",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\064-e04_archer_cadence_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\064-e04_archer_cadence_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_archer_cadence_rank_integration_test.gd"
+        ],
+        "index": 64,
+        "engine_log_sha256": "66c9d4fb38a20b00afd0ed6a8d7aaf4336079af8d274d344b20064ba1128148e",
+        "summary_lines": [
+          "E04 Cadência por rank: PASS (33 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "68F9AFC91086863EF695CD4FDEA94BB28B10C997DFE5F91D70412D4EB900494E",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\065-e04_archer_trap_technique_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\065-e04_archer_trap_technique_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_archer_trap_technique_rank_integration_test.gd"
+        ],
+        "index": 65,
+        "engine_log_sha256": "73b20b17ea08fcfb07fe2140496abe1980156350b9bea98b98ea2fdef8a73a64",
+        "summary_lines": [
+          "E04 Técnica de Armadilhas por rank: PASS (37 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "3F71C04F200578ADE5D20175D6DA79A3D0393C4ED99F35A32A6D1787F0DBACA1",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\066-e04_archer_integrated_closure_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\066-e04_archer_integrated_closure_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_archer_integrated_closure_test.gd"
+        ],
+        "index": 66,
+        "engine_log_sha256": "49827d1685c79807a3c4eeaeae22406de3bdcc218eb7b20a1f31b39ff22b24ae",
+        "summary_lines": [
+          "E04 Arqueiro integrado: PASS (82 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "E2157F7DA8B77E51583AB01A8A6D7B05DE070F730FBC35FDB3B53353E28F87A8",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\067-e04_mage_lightning_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\067-e04_mage_lightning_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_mage_lightning_rank_integration_test.gd"
+        ],
+        "index": 67,
+        "engine_log_sha256": "74275e8ca60cb1ccc3e5b14bc035d1080968a229af5b656b35961a3cfb8a6634",
+        "summary_lines": [
+          "E04 MG1 Relâmpago: PASS (66 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "02DE1B38336AC431A7049D96A990AA7BF8209B07780CB4CDDDDDA960D53D82D0",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\068-e04_mage_electric_discharge_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\068-e04_mage_electric_discharge_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_mage_electric_discharge_rank_integration_test.gd"
+        ],
+        "index": 68,
+        "engine_log_sha256": "989f3873bf5736a202af50710a6a7b260f4072f59c54dd8e3d18c89954cce465",
+        "summary_lines": [
+          "E04 MG2 Descarga Elétrica: PASS (69 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "A170101A31C7B4E7C137556CEF3F7AAF53CBE1718C019A332AF91230EB1E5316",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\069-e04_mage_lightning_wall_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\069-e04_mage_lightning_wall_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_mage_lightning_wall_rank_integration_test.gd"
+        ],
+        "index": 69,
+        "engine_log_sha256": "da62082deb06fef8e852a80866ebce50a5c46679d3ce4740b128b2b8b4606398",
+        "summary_lines": [
+          "E04 MG3 Parede de Raios: PASS (70 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "C751CFDD91EA6267BE27022FDF58C16334919B5E407D2121B0B46168E234A091",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\070-e04_mage_soul_impact_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\070-e04_mage_soul_impact_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_mage_soul_impact_rank_integration_test.gd"
+        ],
+        "index": 70,
+        "engine_log_sha256": "1e975fd1cde288aa7ad93ce8c26768205799238cfba293293bcf12e19f96cdb8",
+        "summary_lines": [
+          "E04 MG4 Impacto das Almas: PASS (64 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "1F32E69F20B6768C60FE7E87F730C0B5ED458AD085BC53ADAABCAE89D0108495",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\071-e04_mage_haunt_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\071-e04_mage_haunt_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_mage_haunt_rank_integration_test.gd"
+        ],
+        "index": 71,
+        "engine_log_sha256": "672caed3d75f7ca2df5d27fe351d7e16b6ff41da44fca81d2bb8f6cf01a880e6",
+        "summary_lines": [
+          "E04 MG5 Assombro: PASS (82 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "293E6038C7E5B6EEA030B2CA77C20E50327159AB187E3C9C367279AC4D073BEB",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\072-e04_mage_phantom_barrier_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\072-e04_mage_phantom_barrier_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_mage_phantom_barrier_rank_integration_test.gd"
+        ],
+        "index": 72,
+        "engine_log_sha256": "bfe9b6462f337ebe37736b9994837ca7bd3f0d84832d65db8169bd1c2bdf67f4",
+        "summary_lines": [
+          "E04 MG6 Barreira Fantasma: PASS (77 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "310B5C6E6BF38656C8E9DA9F11D9F332F09D8BF30787B7EF089031CD0E27BCE1",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\073-e04_mage_ice_wall_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\073-e04_mage_ice_wall_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_mage_ice_wall_rank_integration_test.gd"
+        ],
+        "index": 73,
+        "engine_log_sha256": "475d0f09c4977016b624ded3522c176389876ed33c33340af0f03f7fad6caf9a",
+        "summary_lines": [
+          "E04 MG7 Parede de Gelo: PASS (76 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "9EB88A33B70EBE4ED91866E3E80AC4E454A713630A8705D73384D45410A141D5",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\074-e04_mage_integrated_closure_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\074-e04_mage_integrated_closure_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_mage_integrated_closure_test.gd"
+        ],
+        "index": 74,
+        "engine_log_sha256": "ce0bd259e3bd3fee4added73d7152efbd17b07c5361ed092b86a1e87df089bcb",
+        "summary_lines": [
+          "E04 Mago integrado: PASS (103 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "A177365260FF37996E22544E992784664A4F68B00B2763E1EF3D71800E87DABD",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\075-e04_swordsman_shield_wall_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\075-e04_swordsman_shield_wall_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_swordsman_shield_wall_rank_integration_test.gd"
+        ],
+        "index": 75,
+        "engine_log_sha256": "fa920f1112838320f848588930b79b4c803184c76fe7a653c53c7678dc2d80e5",
+        "summary_lines": [
+          "E04 SW1 Parede de Escudos: PASS (88 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "0A4606F1571D6BA169F5F5B69A37E2603FBDC259E38F9690F7339935FB3CB9A1",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\076-e04_swordsman_provoke_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\076-e04_swordsman_provoke_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_swordsman_provoke_rank_integration_test.gd"
+        ],
+        "index": 76,
+        "engine_log_sha256": "5591a2f36a5f81cf168bb31dfd47c773fbe5870f26247bafcc9e4da9313297c8",
+        "summary_lines": [
+          "E04 SW2 Provocar: PASS (34 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "2E7A612D23586A95F94128BC9F443CA075D292102C4F71CB6094486A032D4241",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\077-e04_swordsman_perseverance_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\077-e04_swordsman_perseverance_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_swordsman_perseverance_rank_integration_test.gd"
+        ],
+        "index": 77,
+        "engine_log_sha256": "8715668b2270f32be16ac77bedec3329a5ed35c2a5a900d4b673316d9f0f52b1",
+        "summary_lines": [
+          "E04 SW3 Perseverança: PASS (26 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "D554CB854D16193408301503E9FB35DB3563833A71951C1B55D0DD178F2C0BD3",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\078-e04_swordsman_piercing_shout_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\078-e04_swordsman_piercing_shout_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_swordsman_piercing_shout_rank_integration_test.gd"
+        ],
+        "index": 78,
+        "engine_log_sha256": "fac2ff644922ed77cc281bcd99ecc65a966020d2c9d5380ac053ea553e48d53d",
+        "summary_lines": [
+          "E04 SW4 Grito Perfurante: PASS (22 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "C84F643793E20631B90F2D3AF14BFEAF671364D056B547F8C101833E856479D8",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\079-e04_swordsman_fury_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\079-e04_swordsman_fury_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_swordsman_fury_rank_integration_test.gd"
+        ],
+        "index": 79,
+        "engine_log_sha256": "cb57895bcc1c3f3f827af67131623d388f6b96b2053800d2506997258cd04834",
+        "summary_lines": [
+          "E04 SW5 Fúria: PASS (29 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "AAE410A0B738EFEC0ACA9D2E375C8903A66D32A57740D46A3E50E0DBFCDDF059",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\080-e04_swordsman_brutal_strike_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\080-e04_swordsman_brutal_strike_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_swordsman_brutal_strike_rank_integration_test.gd"
+        ],
+        "index": 80,
+        "engine_log_sha256": "39d9ab17e7cc668e708037cf86ed0e410b971f402e8086cae0b659026057cb7f",
+        "summary_lines": [
+          "E04 SW6 Golpe Brutal: PASS (24 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "2891BC338EBD56275FC3F2C3B4A149E54E477EE32795957ED37C1082AAE9264C",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\081-e04_swordsman_concentrated_rage_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\081-e04_swordsman_concentrated_rage_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_swordsman_concentrated_rage_rank_integration_test.gd"
+        ],
+        "index": 81,
+        "engine_log_sha256": "8f4baf65f2b3b9ae626dfab27ff17c7ac2f6c629c83d546e72859cc27245cc88",
+        "summary_lines": [
+          "E04 SW7 Raiva Concentrada: PASS (23 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "D71B47E04797C62AEC238B959E1C50A5F31EAC8B0115B57B207A1032C3E86A8B",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\082-e04_swordsman_terrifying_shout_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\082-e04_swordsman_terrifying_shout_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_swordsman_terrifying_shout_rank_integration_test.gd"
+        ],
+        "index": 82,
+        "engine_log_sha256": "324cfa804687acc737f65b063f44261e3c0b95639f50dc120da0569e8709bc30",
+        "summary_lines": [
+          "E04 SW8 Grito Aterrorizante: PASS (22 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "86191870026895AECEEB4571FC4F87C240A67BFC8C8585CE345CBFF147D980AD",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\083-e04_swordsman_vigor_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\083-e04_swordsman_vigor_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_swordsman_vigor_rank_integration_test.gd"
+        ],
+        "index": 83,
+        "engine_log_sha256": "694c1ae8ba5c5538c7bdf87eb4fbbbd02d9b105d7e55b022fce75f12dbe97ae6",
+        "summary_lines": [
+          "E04 SW9 Vigor: PASS (26 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "8233C2FBD64FF6E400C8F59729561B65900F105EAC906CD40345BDFD07AABF7F",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\084-e04_swordsman_blood_thirst_rank_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\084-e04_swordsman_blood_thirst_rank_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_swordsman_blood_thirst_rank_integration_test.gd"
+        ],
+        "index": 84,
+        "engine_log_sha256": "834e086567676a58b242360c921a194c1ff3924f8427709fa3e8f6ceda60bf13",
+        "summary_lines": [
+          "E04 SW10 Sede de Sangue: PASS (25 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "ADAEBAD7AB5A77863CE8E9C4D7DE9C7E82240E5B684984B803F6A19AF263109A",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\085-e04_swordsman_integrated_closure_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\085-e04_swordsman_integrated_closure_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_swordsman_integrated_closure_test.gd"
+        ],
+        "index": 85,
+        "engine_log_sha256": "89d8fc55c542e1e0ea811f0dfcc355b0906637b7e47296261fce666e5b894afa",
+        "summary_lines": [
+          "E04 Espadachim integrado: PASS (80 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "B421E7102CA45046FF7D9789E1CC5B52E47092A0D9D64DC6DAE6B954C4CD0DD9",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\086-e04_learn_from_zero_migration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\086-e04_learn_from_zero_migration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e04_learn_from_zero_migration_test.gd"
+        ],
+        "index": 86,
+        "engine_log_sha256": "693f120cde5d7e451657848ad8cb489bd213eeca4be0a53eec86f167cd1ba2b3",
+        "summary_lines": [
+          "E04 aprendizado do zero/migração: PASS (18 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "D132B6E1693655E7D5807E6D4901AB12928FF0ABAF4AD4AFFC61C70BAA30DC99",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\087-e05_evolution_catalog_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\087-e05_evolution_catalog_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_evolution_catalog_test.gd"
+        ],
+        "index": 87,
+        "engine_log_sha256": "34b9c5041d202247e38dd2006007cd36eea02838cc64d977ea874645d981368d",
+        "summary_lines": [
+          "E05 S1A catálogo de evolução: PASS (66 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "7E4549E180A962046BD69F9FDA7B19F31B1CA00B8E153B12DC9A751E50C819A0",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\088-e05_evolution_transaction_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\088-e05_evolution_transaction_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_evolution_transaction_test.gd"
+        ],
+        "index": 88,
+        "engine_log_sha256": "55e063ad6e6aa021cb0a4da72bdff6b9dadbc78e18f76613189e33b1a8465cd6",
+        "summary_lines": [
+          "E05-S1B transação de evolução: PASS (51 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "4971C5F9BD615E8CFB872B89BA8A5ECF2F0704506752BF6D788A5A8C3A7D341C",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\089-e05_evolution_menu_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\089-e05_evolution_menu_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_evolution_menu_integration_test.gd"
+        ],
+        "index": 89,
+        "engine_log_sha256": "dbded7fae3a0fb44d0b628653d6450382d12dad8e9abcf55a1afc24499e8bf32",
+        "summary_lines": [
+          "E05-S1C seletor de evolução: PASS (25 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "F0B3638ABCA8C2DBE72C81102FCA65D461FF5A19CB18463DE4D44045FB387D89",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\090-e05_training_boss_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\090-e05_training_boss_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_training_boss_test.gd"
+        ],
+        "index": 90,
+        "engine_log_sha256": "0e2e8fda1ceb3608131fba85b571ee6fc904dbb75d79d3f05a319d0c53c2035e",
+        "summary_lines": [
+          "E05 treino de boss: PASS (17 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "BB7A24E201BB8F3FE049E9AE7AF9CEC15C5387C3B627DA8098AE6E50A7AA0953",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\091-e05_identity_boundary_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\091-e05_identity_boundary_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_identity_boundary_test.gd"
+        ],
+        "index": 91,
+        "engine_log_sha256": "aedc9b2350b6daa2c5f6dae3a27441fbf5b04fe6970abfae0d2f783c3fcae970",
+        "summary_lines": [
+          "E05-SP1 fronteira de identidade: PASS (18 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "5BEFC88C03890578CC6BDF470D5ACC7A42ACCF80FCAF120FF358759005DE9DFE",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\092-e05_defender_catalog_migration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\092-e05_defender_catalog_migration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_defender_catalog_migration_test.gd"
+        ],
+        "index": 92,
+        "engine_log_sha256": "1c2d1af4c132059a50a66aff304e422e4319c39a25f68c7d47df4cc99e60004a",
+        "summary_lines": [
+          "E05 Defendente migração catálogo: PASS (13 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "97836519571914AB7D5928F3B12F7ACB4E8F90D0402143D59F15E5D5A8CC6674",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\093-e05_berserker_catalog_migration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\093-e05_berserker_catalog_migration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_berserker_catalog_migration_test.gd"
+        ],
+        "index": 93,
+        "engine_log_sha256": "4da2f7dbee43929585864b5be872d0a38b3c5eabbb77b5f61d9f2fc3c8b80a01",
+        "summary_lines": [
+          "E05 Berserker migração catálogo: PASS (10 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "A6D1A2D19B9B09B462855E797127F70E12B4C84B85C397C0E4B510B55E3E5DD5",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\094-e05_elementalist_catalog_migration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\094-e05_elementalist_catalog_migration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_elementalist_catalog_migration_test.gd"
+        ],
+        "index": 94,
+        "engine_log_sha256": "09490e19639fd05cc72f831a912c5ee2a08f0fa6ecf6d8ccee28c31378dc3702",
+        "summary_lines": [
+          "E05 Elementalista migração catálogo: PASS (11 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "62C5EC94ED52BB88E31459183C836DB21FA0A794789CB1C4D371BBFDE69FBF18",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\095-e05_spiritualist_catalog_migration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\095-e05_spiritualist_catalog_migration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_spiritualist_catalog_migration_test.gd"
+        ],
+        "index": 95,
+        "engine_log_sha256": "166938d694e2725284c3436ded7a78b0c657c5be4ad446e6e682708c088d7516",
+        "summary_lines": [
+          "E05 Espiritualista migração catálogo: PASS (14 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "4634440CA405823AB6DD41BD81BCC43C0CC67A0DBCE3FC41C54AD343EC610E82",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\096-e05_spiritualist_echo_curse_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\096-e05_spiritualist_echo_curse_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_spiritualist_echo_curse_test.gd"
+        ],
+        "index": 96,
+        "engine_log_sha256": "a7841ca435a34cb970d6115e1b69b45d15294709718f8797a140313f5b24bd92",
+        "summary_lines": [
+          "E05 Espiritualista Maldição do Eco: PASS (30 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "A302768C0D147759EE0E98EB834D7665B8D3EEADEDAF61D3417BE6ADD5708808",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\097-e05_spiritualist_echo_spread_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\097-e05_spiritualist_echo_spread_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_spiritualist_echo_spread_test.gd"
+        ],
+        "index": 97,
+        "engine_log_sha256": "275ec14592bb4f39165c926b5cdc440f74f893436307614df62554b234dd053a",
+        "summary_lines": [
+          "E05 Espiritualista propagação: PASS (37 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "307C6559127F6C662D7145E08AC15E8BBD65902DB8E707EBB1170414624B7355",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\098-e05_spiritualist_echo_recovery_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\098-e05_spiritualist_echo_recovery_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_spiritualist_echo_recovery_test.gd"
+        ],
+        "index": 98,
+        "engine_log_sha256": "b92912ee5741ba646d22e47628066beac77bc4d12db71e404a13ec8aae9f9f0a",
+        "summary_lines": [
+          "E05 Espiritualista Recolhimento: PASS (16 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "E45F5D6CF60CC23D561B2E4830661715AC1ACAF5DE28B8CCB930B6C7F95668EC",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\099-e05_spiritualist_soul_drain_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\099-e05_spiritualist_soul_drain_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_spiritualist_soul_drain_test.gd"
+        ],
+        "index": 99,
+        "engine_log_sha256": "be50436dcf460039387e4634622f28445d0c5f39a390d15c3b6fa9e7fccc251e",
+        "summary_lines": [
+          "E05 Espiritualista Drenagem: PASS (28 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "89E91C632DA75F48CC8FEB8A75836C813B5A4739C174109AF58E03278D4D5855",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\100-e05_spiritualist_spectral_veil_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\100-e05_spiritualist_spectral_veil_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_spiritualist_spectral_veil_test.gd"
+        ],
+        "index": 100,
+        "engine_log_sha256": "e05bd15278abad4cc7eb9873a38baf070435bb7a7557e32d0b508fc6cb9003d2",
+        "summary_lines": [
+          "E05 Espiritualista Véu Espectral: PASS (19 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "2B399C795E96E7C895D91E4FF6FF2F1095432592803F75FDDC0DFA03D3865955",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\101-e05_spiritualist_channel_focus_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\101-e05_spiritualist_channel_focus_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_spiritualist_channel_focus_test.gd"
+        ],
+        "index": 101,
+        "engine_log_sha256": "180b30de8655d18973550cf8feb597ca31e1f91f7a1da3683ea9c00e71b63dc5",
+        "summary_lines": [
+          "E05 Espiritualista Foco do Além: PASS (17 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "A26C9AB021CA6EC69921495FC21696CE6A572DC69E4735919F47926A9E790AAC",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\102-e05_spiritualist_procession_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\102-e05_spiritualist_procession_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_spiritualist_procession_test.gd"
+        ],
+        "index": 102,
+        "engine_log_sha256": "a12f936a5e4dfd5dc7a85b5ba4f8b58b49ea922f06b422d7be01010726961c9f",
+        "summary_lines": [
+          "E05 Espiritualista Procissão: PASS (18 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "1BFFAC95EBBA47735DF47E86FDAFC27971B198AFF1E1EB2E6498E5CE4CFEA910",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\103-e05_spiritualist_dissipation_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\103-e05_spiritualist_dissipation_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_spiritualist_dissipation_test.gd"
+        ],
+        "index": 103,
+        "engine_log_sha256": "c38d2243ac156e3cda68027af645322c81db4b7614c566e4e01aae11dce37b00",
+        "summary_lines": [
+          "E05 Espiritualista Dissipação: PASS (18 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "513E8509315A7BA9BD54A0AB9F038A1AAE8CF24B0502132EBDC9607C4B8FA24D",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\104-e05_spiritualist_visuals_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\104-e05_spiritualist_visuals_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_spiritualist_visuals_test.gd"
+        ],
+        "index": 104,
+        "engine_log_sha256": "c0b8df743fdf8b51ca5abc54e9539f4bec1f6ecf1b69e41792ea29fbca1fcd22",
+        "summary_lines": [
+          "E05 Espiritualista visual: PASS (23 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "8211A855B90C0782A83DB75E13409C404C7E62FDACA21C30A11805B28B79D5DD",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\105-e05_spiritualist_integrated_closure_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\105-e05_spiritualist_integrated_closure_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_spiritualist_integrated_closure_test.gd"
+        ],
+        "index": 105,
+        "engine_log_sha256": "5b7dc04beb5012721b319fe8ce2b767e626762ef8eb91c3e751f97f542d94dc6",
+        "summary_lines": [
+          "E05 Espiritualista fechamento integrado: PASS (86 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "E9024A5E93D766EF0BC0155A3E3AFB3C16787588CCFCDA9E54664C29CB783F48",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\106-e05_spiritualist_readability_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\106-e05_spiritualist_readability_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_spiritualist_readability_test.gd"
+        ],
+        "index": 106,
+        "engine_log_sha256": "008c2d5d423a729f1991f2b22829c560cc8fb98944ca388458b95bb6bcc79259",
+        "summary_lines": [
+          "E05 legibilidade Espiritualista: PASS (39 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "E9E3043C3CB414B2FF3F9EE238716A42B628F0D295E6CB17AEA378F417098A35",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\107-e05_spiritualist_soul_presentation_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\107-e05_spiritualist_soul_presentation_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_spiritualist_soul_presentation_test.gd"
+        ],
+        "index": 107,
+        "engine_log_sha256": "d51377df683092fae30efeedfaf15dc47f0a0982f15f21ea63a16ca5d799686a",
+        "summary_lines": [
+          "E05 almas Espiritualista: PASS (30 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "3452D968DC6510EF7C455789625A9D5397220489E69A7365E3C7A7C6240B177E",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\108-e05_geometer_construction_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\108-e05_geometer_construction_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_geometer_construction_test.gd"
+        ],
+        "index": 108,
+        "engine_log_sha256": "6cd956755cf97e39817df060fc0b160e3ccf68f7136c95e36ee728f120acc575",
+        "summary_lines": [
+          "Geometer construction: 109 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "D4DC0C17E211528164119F4C23F3197AB3766F3E5162E8683C6EC4D996DFA1B4",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\109-e05_geometer_casting_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\109-e05_geometer_casting_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_geometer_casting_test.gd"
+        ],
+        "index": 109,
+        "engine_log_sha256": "1e2f7ffc343509d3bc19c6da09c45d72ed1bcf50b874d1785e14e10c866f1dd5",
+        "summary_lines": [
+          "Geometer casting: 63 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "63CA46AED7FC1BE13F12981E8CF5144DDECA66612E3714F3D7081454F06053F4",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\110-e05_geometer_geometry_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\110-e05_geometer_geometry_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_geometer_geometry_integration_test.gd"
+        ],
+        "index": 110,
+        "engine_log_sha256": "38ef52f4306d45ac8a99019b03a389ad86301a85fef524308db7503240e0d69d",
+        "summary_lines": [
+          "Geometer geometry integration: 46 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "28767A0A76A28B1B69735C0422D2018F4E3E93A243BCF794F4AE35437CFB3C52",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\111-e05_geometer_wall_primitives_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\111-e05_geometer_wall_primitives_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_geometer_wall_primitives_test.gd"
+        ],
+        "index": 111,
+        "engine_log_sha256": "9623bac20548eb2aca7e50dc812c61c5ddedb407058b56f74d07dd95abc536d8",
+        "summary_lines": [
+          "Geometer wall primitives: 74 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "F2784B4AD5BF29C5FE0F79CDD55F1552D4F16FD6E26E42875AE4F94038FDB506",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\112-e05_geometer_wall_effects_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\112-e05_geometer_wall_effects_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_geometer_wall_effects_test.gd"
+        ],
+        "index": 112,
+        "engine_log_sha256": "2d5bca382eb68e9b580d9cd0e597f6721cd67c5d821d24cd5905c75b6f18c20d",
+        "summary_lines": [
+          "Geometer wall effects: 106 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "E7637D3A7301D2AFEBA51FC6B7B09C58EB9F5A70F5C2C416655A23934080DB25",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\113-e05_geometer_wall_projectile_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\113-e05_geometer_wall_projectile_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_geometer_wall_projectile_test.gd"
+        ],
+        "index": 113,
+        "engine_log_sha256": "e6645bfd65fac17bf196b364b041d7a7cf2a4a9ca5f4d7c8c70cef447beafe54",
+        "summary_lines": [
+          "Geometer wall projectiles: 96 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "7FA03FBFD87CE57538D169B8E7BAA33EBD24571A1F4379054495639E17058919",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\114-e05_geometer_triangle_recipes_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\114-e05_geometer_triangle_recipes_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_geometer_triangle_recipes_test.gd"
+        ],
+        "index": 114,
+        "engine_log_sha256": "9cfe278e0111bf48f01526d51bee618eed8f260ff153c0d9d989dd51d72b90fa",
+        "summary_lines": [
+          "Geometer triangle recipes: 597 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "6B38B08AB9B83227B1670D4B0A0050BAC05BD08715C7E58B79AECE9EA52A2797",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\115-e05_geometer_triangle_projectile_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\115-e05_geometer_triangle_projectile_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_geometer_triangle_projectile_test.gd"
+        ],
+        "index": 115,
+        "engine_log_sha256": "f529aa9647e0bc8a50a5665466794a4a8d9f2889f8c3561dd7e2d85ee665383f",
+        "summary_lines": [
+          "Geometer triangle projectiles: 201 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "60C2B12794358FFA9BE39E265B2795AF614A0FF337E02EEE030929BF1F06090F",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\116-e05_geometer_editing_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\116-e05_geometer_editing_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_geometer_editing_test.gd"
+        ],
+        "index": 116,
+        "engine_log_sha256": "3a5d53675c235391b843b8505a2bcd3e0a95f8eeb151166b219ab810bbb63df4",
+        "summary_lines": [
+          "Geometer G6 editing: 397 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "FC347AF12C8EADE6D0FD01DFFE78711EF6914B7BFE6D21F3B685CF35E3288D63",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\117-e05_geometer_builds_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\117-e05_geometer_builds_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_geometer_builds_test.gd"
+        ],
+        "index": 117,
+        "engine_log_sha256": "3793db4d64e77b5273e59ec6421b0b2362a1e26f6613a8b9ef4ea3358d76eb4a",
+        "summary_lines": [
+          "E05 Geômetra G6 builds/progressão: PASS (351 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "617A113C564C517EBAD51BE63FDC6C5AE8F935E32D8E2203F90D110803D18D66",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\118-e05_geometer_animation_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\118-e05_geometer_animation_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_geometer_animation_test.gd"
+        ],
+        "index": 118,
+        "engine_log_sha256": "0cd50b1325b9045de51351e966742741c7e29501ebaec265472deb936c50a368",
+        "summary_lines": [
+          "Geometer G7 animation: 101 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "705F60C1B14DFE0445C621E03560A6FEC1C2476A572144D249467ACCE37E1F91",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\119-e05_geometer_onboarding_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\119-e05_geometer_onboarding_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_geometer_onboarding_test.gd"
+        ],
+        "index": 119,
+        "engine_log_sha256": "98d6ea43eb2439b8dada5f904b06be7d7ea6c5d759f3b151b0962c6e8d68ce20",
+        "summary_lines": [
+          "Geometer G7 onboarding: 274 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "A33BC52F8AF213D6F6C6A6F5C08E7376B3B4CB51228210D2374FAF12373F48B0",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\120-e05_geometer_g7_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\120-e05_geometer_g7_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_geometer_g7_test.gd"
+        ],
+        "index": 120,
+        "engine_log_sha256": "8e0cd2bb779e42e6a817d3076fb779c5b70042e78fd9958c6758e55f6a4bacfa",
+        "summary_lines": [
+          "Geometer G7 integrated: 500 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "93114C265C3A06E4F78B16F18D9E722D7964C9D548C6E777EC3D535FB897946B",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\121-e05_geometer_playtest_flow_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\121-e05_geometer_playtest_flow_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_geometer_playtest_flow_test.gd"
+        ],
+        "index": 121,
+        "engine_log_sha256": "20f5f99ad1d0e80012fbddd56653aa431d98702b950a4993e8c24cca8840bb11",
+        "summary_lines": [
+          "E05 Geômetra playtest flow: PASS (27 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "A4D56D7E2174C1510153D3F71824DCE87C94217C7BA3EC8E95E3E7E52A8E81A4",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\122-e05_sentinel_catalog_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\122-e05_sentinel_catalog_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_sentinel_catalog_test.gd"
+        ],
+        "index": 122,
+        "engine_log_sha256": "8a87a8dafee7a649678a55ecf62cc75b3b3251d6cad627e91c363795decd36b6",
+        "summary_lines": [
+          "Sentinel catalog: 749 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "F3AA6F8674A2AD4C0C8F2E7E55D1D893BF44DC44AE842CA22A30DEE41C1662D4",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\123-e05_sentinel_math_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\123-e05_sentinel_math_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_sentinel_math_test.gd"
+        ],
+        "index": 123,
+        "engine_log_sha256": "df373e807030cdb5de49607d50a457e5f4ead56d08d9c317abc189f5fbdd6c67",
+        "summary_lines": [
+          "Sentinel S0 math: 72 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "D854EB3523596E87BE99A3F0D67A938A390051A13ABC8C9B34E996D5CE4E6CDC",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\124-e05_sentinel_focus_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\124-e05_sentinel_focus_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_sentinel_focus_test.gd"
+        ],
+        "index": 124,
+        "engine_log_sha256": "f42c2233fbc8b142faca643cba0c22b01b9c6b29634fcc1d510d06dd46234955",
+        "summary_lines": [
+          "Sentinel S1 Focus: 340 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "26AA2DB8F7F2CBF88494FDC7DF82D415A923CD6BE71CB34482AE0379081ED669",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\125-e05_sentinel_reset_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\125-e05_sentinel_reset_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_sentinel_reset_test.gd"
+        ],
+        "index": 125,
+        "engine_log_sha256": "421bc0b99fb86fb9141913d0cfb6bdeb50caa3190dfb4374234db3ceb59b95db",
+        "summary_lines": [
+          "Sentinel S2 reset: 126 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "0322525C1F4140A0954E624B14D7C065965AFBEA097B31ED94A0C6B0B41EBD4C",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\126-e05_sentinel_piercing_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\126-e05_sentinel_piercing_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_sentinel_piercing_test.gd"
+        ],
+        "index": 126,
+        "engine_log_sha256": "00a4f0c9a3a24f4dba5625a894d384ceb8390d5e50b1a1cea620c650e0b0e129",
+        "summary_lines": [
+          "Sentinel S3 piercing: 219 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "6B1BBC6993A2D9AFF458E767B424D8ABA4C3008D437FC958CB9A62EA30BFF4F5",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\127-e05_sentinel_net_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\127-e05_sentinel_net_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_sentinel_net_test.gd"
+        ],
+        "index": 127,
+        "engine_log_sha256": "2cd4dec99ac092d8684a16904ae8a5def6b082aa8d369ac6eebae81c6edb809b",
+        "summary_lines": [
+          "Sentinel S4 Net: 167 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "C0E5B95A49FC450151C604B2D3C27DCD33B03316B479A94ED942FF872C4A0E74",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\128-e05_sentinel_explosive_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\128-e05_sentinel_explosive_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_sentinel_explosive_test.gd"
+        ],
+        "index": 128,
+        "engine_log_sha256": "144d46d0f809adbdad4571b2ae499f4e757af835513d218fb2d682b783ea4911",
+        "summary_lines": [
+          "Sentinel S4 Explosive: 166 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "2125FD91D134D27D00FDE4F54D3AE4CDD05CCB57229E2F760B7798CED368B43A",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\129-e05_sentinel_concussion_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\129-e05_sentinel_concussion_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_sentinel_concussion_test.gd"
+        ],
+        "index": 129,
+        "engine_log_sha256": "e6a1ecceedf01993ca44866e663a872aa8347c5f80d74bd780fc0eba3d0e5e3c",
+        "summary_lines": [
+          "Sentinel S5 Concussion: 313 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "893C2E2DBB67588BAC17132C037852A6A11EAECB37BE6A10C2EE58843251757A",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\130-e05_sentinel_absolute_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\130-e05_sentinel_absolute_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_sentinel_absolute_test.gd"
+        ],
+        "index": 130,
+        "engine_log_sha256": "b57cfd7f09c4a29102eeab85eb9d6d14746c7d3135b94b421ecf7a851a5d199c",
+        "summary_lines": [
+          "Sentinel S5 Absolute: 228 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "7E59229BF17C23FCCC44C08F2EE2D3DF80A086914618F96DFF88472EBF51E1C9",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\131-e05_sentinel_builds_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\131-e05_sentinel_builds_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_sentinel_builds_test.gd"
+        ],
+        "index": 131,
+        "engine_log_sha256": "83468aa72b67e54da8e688afef34b15884df8fc1bea49da4eaa485156e5395be",
+        "summary_lines": [
+          "E05 Sentinel S6 builds/progression: PASS (300 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "A0FE98089E7DA1AC4B77E0672D4E01256B58177AD5B174BD9CCA8A5A11392458",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\132-e05_sentinel_atlas_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\132-e05_sentinel_atlas_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_sentinel_atlas_test.gd"
+        ],
+        "index": 132,
+        "engine_log_sha256": "26cdd731560ae3978b5d0318bb0b947618d2d9a753b876447e87aecb8dfe7895",
+        "summary_lines": [
+          "Sentinel G7 animation: 137 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "CA12F5F00517AB29F1689C800F835677BBB66605F182B5EF9A418BA4FEC2DF08",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\133-e05_sentinel_onboarding_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\133-e05_sentinel_onboarding_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_sentinel_onboarding_test.gd"
+        ],
+        "index": 133,
+        "engine_log_sha256": "a112094d992b27af48c21523d00d2d382e7916af800fa1c79f36083abf9cbc03",
+        "summary_lines": [
+          "Sentinel S7 onboarding: 140 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "FB1D6691A50F27B6B7A7C710760B1C90AE5820B1E46F485C0575F8B6418AA7B2",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\134-e05_sentinel_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\134-e05_sentinel_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_sentinel_integration_test.gd"
+        ],
+        "index": 134,
+        "engine_log_sha256": "0d48969505ce5562720e7e253991306b03d34ac3026dc1ba70f1d25df7f33ac3",
+        "summary_lines": [
+          "Sentinel S7 integrated: 341 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "8A9D8197667630AB5D47B99FD6F9E63A0A037E0529E0269C7EBA4AB8341B0A18",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\135-e05_sentinel_review_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\135-e05_sentinel_review_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_sentinel_review_test.gd"
+        ],
+        "index": 135,
+        "engine_log_sha256": "e478213f2e765c2c4e81a982fe5365fd4cbcd093c3a30fda65d0a395890c8138",
+        "summary_lines": [
+          "Sentinel integrated review: 16 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "26598E554D8037B8260FA6728D12D9D149854A7135F061EF30D31DA1450E7A94",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\136-e05_sentinel_solo_focus_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\136-e05_sentinel_solo_focus_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_sentinel_solo_focus_test.gd"
+        ],
+        "index": 136,
+        "engine_log_sha256": "b285463c7a51fb8ac388f9bd64a2f4e52fcacba042d96cce9a2f904952cb845d",
+        "summary_lines": [
+          "Sentinel solo Focus: 85 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "B754EF51A362584252D4B2FEE251945C28E54529F0F60B7CB124A16BBA984C23",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\137-e05_sentinel_solo_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\137-e05_sentinel_solo_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_sentinel_solo_integration_test.gd"
+        ],
+        "index": 137,
+        "engine_log_sha256": "df69a5765e049ba475a8248b5ecee247224964d348f253f1e91d1e4b800be9e0",
+        "summary_lines": [
+          "Sentinel solo integration: 73 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "6AB5589AB3E259944655BF94CFFFA36F08ABFFDCD050BB1563E24101ADC96098",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\138-action_bar_input_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\138-action_bar_input_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/action_bar_input_test.gd"
+        ],
+        "index": 138,
+        "engine_log_sha256": "e33c2e2c345f05d431fbacbfab8c1e512dd2671ac7428d86b4c61ddbb71878d5",
+        "summary_lines": [
+          "Action bar input: 105 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "10A14E55AAF59FC48FD1C186DC7DD8FBE0E661FED49998E329E55BD0AD998215",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\139-action_bar_ui_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\139-action_bar_ui_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/action_bar_ui_test.gd"
+        ],
+        "index": 139,
+        "engine_log_sha256": "f7835a4518b09315f82fa5e46ac2056585b60de51acf292e0b55ea87c2ab0685",
+        "summary_lines": [
+          "Action bar UI: 74 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "2964131520409A32303873B54AFB25C4E33CA46253B4761FE02176F933E8244B",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\140-action_bar_persistence_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\140-action_bar_persistence_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/action_bar_persistence_test.gd"
+        ],
+        "index": 140,
+        "engine_log_sha256": "9afa38fbd847b3ba9da8d39fe046adacea60554c2cb5ff084b9a117b4602fccd",
+        "summary_lines": [
+          "Action bars persistence: PASS (228 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "33E1EB7F2D437941F81D3B5F38252EDFA1855ACAA84B593DEA616614122CF320",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\141-action_bar_game_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\141-action_bar_game_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/action_bar_game_integration_test.gd"
+        ],
+        "index": 141,
+        "engine_log_sha256": "8eec3bdf47d94b9a8584fd46e4f8fcfcf0124c33c64d23953b3dfd257a85a8fc",
+        "summary_lines": [
+          "Action bars game integration: PASS (59 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "C450AA9D5A3BB66D916777011949B003A117C5088BF49FB8A1999137FBEF0905",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\142-e05_elementalist_catalog_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\142-e05_elementalist_catalog_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_elementalist_catalog_test.gd"
+        ],
+        "index": 142,
+        "engine_log_sha256": "57ac2f8ba722901198c7454c75ae6c93305fd1386009740ff0288567057588a0",
+        "summary_lines": [
+          "E05 Elementalista catalog: PASS (99 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "7052D244DF3253350A7211DE5AE2DF14FC43A08C03E0B717635F92BED82E0816",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\143-e05_elementalist_animation_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\143-e05_elementalist_animation_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_elementalist_animation_test.gd"
+        ],
+        "index": 143,
+        "engine_log_sha256": "261ecb083baeeefda9e44ea65a6135e47c79a366a5f26739c983937cdade770a",
+        "summary_lines": [
+          "Elementalista visual: PASS (7 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "7802A119488B1BF36E643F06572003268F16FEAB28B2A361180DFDC43B9D0A9B",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\144-e05_elementalist_visuals_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\144-e05_elementalist_visuals_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_elementalist_visuals_test.gd"
+        ],
+        "index": 144,
+        "engine_log_sha256": "742a1ebb25de00b41de9b3eba4075945647471646273f100d706a4147ab72d55",
+        "summary_lines": [
+          "Visuais Elementalista: PASS (8 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "6FC87453528A49625999DC8B3650B0F1C139CFA647C371D4E26D321D899C526A",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\145-e05_elementalist_visual_integration_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\145-e05_elementalist_visual_integration_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_elementalist_visual_integration_test.gd"
+        ],
+        "index": 145,
+        "engine_log_sha256": "072bacfbe856dab1e0ca8934fe0feba2f88a97b1ff944fafb08507de699b9cf0",
+        "summary_lines": [
+          "Elementalista integração visual: PASS (7 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "2D3A9F87A208444E2A1C59427D8C20D9D1A462AA77FAE12BACFFC17D6F852C35",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\146-e05_elementalist_indicators_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\146-e05_elementalist_indicators_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_elementalist_indicators_test.gd"
+        ],
+        "index": 146,
+        "engine_log_sha256": "23d51c58703ab85b83df27c1897f8a0af78f8d03724bc380f5555140d0f44183",
+        "summary_lines": [
+          "Indicadores Elementalista: PASS (13 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "C11B92638571489CF7CD29739B105F36D0A70D13767689ECD218885CB4438203",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\147-e05_elementalist_flame_burst_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\147-e05_elementalist_flame_burst_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_elementalist_flame_burst_test.gd"
+        ],
+        "index": 147,
+        "engine_log_sha256": "f5d4475d10b987e7e497fab125ed6909fef2622fe234c18477a7b33bb6a5d6c4",
+        "summary_lines": [
+          "E05 Elementalista Explosão de Chamas: PASS (10 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "8BA67248556398B9CEF4D33067FD172DB9839F7BFCFCFE57300A3CA4AC988FD2",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\148-e05_elementalist_prismatic_focus_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\148-e05_elementalist_prismatic_focus_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_elementalist_prismatic_focus_test.gd"
+        ],
+        "index": 148,
+        "engine_log_sha256": "0fd04ee2d27f0a64d60d2bf151cd21ff7f06908b6eea5d903320212dd034942d",
+        "summary_lines": [
+          "E05 Elementalista Foco Prismático: PASS (16 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "0B86D58F19545FE0BF07CFB42088E4E4E81F635B0D7F4EC44E9CFA45C555F6B9",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\149-e05_elementalist_glacial_ring_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\149-e05_elementalist_glacial_ring_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_elementalist_glacial_ring_test.gd"
+        ],
+        "index": 149,
+        "engine_log_sha256": "4a6b755b55517545d7cc8ef00dc454514c6b321d0c21d5af088942fdd0c8b387",
+        "summary_lines": [
+          "E05 Elementalista Anel Glacial: PASS (11 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "7718F760D59EC6DC725F1B17DBE2F4C983EB0CB1B1D8C81B33AC39EC902FE197",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\150-e05_elementalist_lightning_arc_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\150-e05_elementalist_lightning_arc_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_elementalist_lightning_arc_test.gd"
+        ],
+        "index": 150,
+        "engine_log_sha256": "55b8638dfa0e2fa35e7c7f7dd953038f8dfa4953b88d1d4019368a7339ef7849",
+        "summary_lines": [
+          "E05 Elementalista Arco Voltaico: PASS (16 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "2AC6818F17F54BDCD997B4BDB5D8BA0A4E86F6A40D72A7A0EDDA98F32A232873",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\151-e05_elementalist_prismatic_resonance_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\151-e05_elementalist_prismatic_resonance_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_elementalist_prismatic_resonance_test.gd"
+        ],
+        "index": 151,
+        "engine_log_sha256": "38afbd2f72d7907deb8423d7ac0f8af41f6c5bd7509430da6dd560cb91215a72",
+        "summary_lines": [
+          "E05 Elementalista Ressonância Prismática: PASS (15 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "31E72DF3091738F1937ACA6F82297265C78A36E3219C286273EBDBB5F70DF20B",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\152-e05_elementalist_ember_path_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\152-e05_elementalist_ember_path_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_elementalist_ember_path_test.gd"
+        ],
+        "index": 152,
+        "engine_log_sha256": "f057e86ef32894b5d71c50ef6645cfb746f3562c73881cd22384081f36ab7a14",
+        "summary_lines": [
+          "E05 Elementalista Trilha de Brasas: PASS (11 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "3B37EC5DFE5B738EC03C122ACC0BC2E8F66BFAE1884BB24EA39B2A019EB37AC6",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\153-e05_elementalist_tri_nova_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\153-e05_elementalist_tri_nova_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_elementalist_tri_nova_test.gd"
+        ],
+        "index": 153,
+        "engine_log_sha256": "5cebf5c76e3cf820cb4b6452bd8d622c0f55ffdd468d094aa6a3a5afdab1c367",
+        "summary_lines": [
+          "E05 Elementalista Nova Tríplice: PASS (12 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "2BCA9BEC2B64BE40221C17136B9D44DA2CE779550A35DB27292BBECD3E0759DD",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\154-e05_elementalist_integrated_closure_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\154-e05_elementalist_integrated_closure_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_elementalist_integrated_closure_test.gd"
+        ],
+        "index": 154,
+        "engine_log_sha256": "ff94a9a7faa021d26837ebf4fb4e46db0907effb5b64e9c110fe4a41eb13619a",
+        "summary_lines": [
+          "E05 Elementalista fechamento integrado: PASS (35 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "2B2A966E88FA12FDFC067DB8FCA54B2218F1B1236D01977B827D01F8D4FE7718",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\155-e05_berserker_catalog_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\155-e05_berserker_catalog_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_berserker_catalog_test.gd"
+        ],
+        "index": 155,
+        "engine_log_sha256": "3c4a870e5542e5e78f22b889b43091b9f3874f17dba182858f8a89b404cc16e5",
+        "summary_lines": [
+          "E05 Berserker catalog: PASS (57 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "B612F9091182532CB07C1FFE7277B858CA009A8CA5B846E169EDB31EE1E30F2A",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\156-e05_berserker_rupture_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\156-e05_berserker_rupture_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_berserker_rupture_test.gd"
+        ],
+        "index": 156,
+        "engine_log_sha256": "e8f411f78e7be735e3977c9ab4c5f71c0a9335f491398db1bbdcc9b0d09bbba2",
+        "summary_lines": [
+          "E05 Berserker Ruptura: PASS (16 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "AB6F97527D8C0FBAFE9E00E298A491907AAAC84E4D87CB0BB54D74557AC618A8",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\157-e05_berserker_execution_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\157-e05_berserker_execution_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_berserker_execution_test.gd"
+        ],
+        "index": 157,
+        "engine_log_sha256": "88b49adbb48bd0275ff4abf71baa6613ad8251dfb0bd9b1487f9263939cdc3e7",
+        "summary_lines": [
+          "E05 Berserker Execução: PASS (16 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "2C110AF4BA10D28A9905B0E00E53DA9F989EB7AE664C8595F4286CEFE18DD6B3",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\158-e05_berserker_obstinacy_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\158-e05_berserker_obstinacy_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_berserker_obstinacy_test.gd"
+        ],
+        "index": 158,
+        "engine_log_sha256": "c61a398dcaee2803ad61ccd7587609dff459e3b73103fc6c0000c353fda439e3",
+        "summary_lines": [
+          "E05 Berserker Obstinação: PASS (18 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "8106F126346FC8FE79D8002AEC2E5537E614D587231DA57011E86FB2D041D8E2",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\159-e05_berserker_leap_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\159-e05_berserker_leap_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_berserker_leap_test.gd"
+        ],
+        "index": 159,
+        "engine_log_sha256": "c5e244f389a23ae0c8ce46033d1dfbfdd2b22f65a5b486a4051643ade30ffe04",
+        "summary_lines": [
+          "E05 Berserker Salto: PASS (15 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "3E205CBDB8D7EAC83CFC74810C05B053D4D3B4F917AE1B1828E8336B83CE1ED5",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\160-e05_berserker_pursuit_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\160-e05_berserker_pursuit_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_berserker_pursuit_test.gd"
+        ],
+        "index": 160,
+        "engine_log_sha256": "583c35bc37fd110cd50b98b50ce17838528f61c04cc8a34834d5224590a9883b",
+        "summary_lines": [
+          "E05 Berserker Caça: PASS (12 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "42558BA09F7645A315B5E9D02634F9759B61320E551BACE02F4B118FD42BDD65",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\161-e05_berserker_rift_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\161-e05_berserker_rift_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_berserker_rift_test.gd"
+        ],
+        "index": 161,
+        "engine_log_sha256": "0d3ae3e8f32aa0a77e949fb8ddecde32b4f8ef596294034222ae35c7e73e86cc",
+        "summary_lines": [
+          "E05 Berserker Fenda: PASS (18 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "1D7BC0CB033F25F082481CD2B073A5CFCB09DD728ED71A21FDAA4BDA46A42A6A",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\162-e05_berserker_breath_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\162-e05_berserker_breath_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_berserker_breath_test.gd"
+        ],
+        "index": 162,
+        "engine_log_sha256": "e26e6fcb35ff7c6bf2766d9b190a88150e27671751fd60eaa789a13c2610a5c7",
+        "summary_lines": [
+          "E05 Berserker Arrancar Fôlego: PASS (16 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "1E7D5B26D2D4D540A9CA9188765C6AA07985833CA9545528ECF0E60560C0B602",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\163-e05_berserker_builds_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\163-e05_berserker_builds_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_berserker_builds_test.gd"
+        ],
+        "index": 163,
+        "engine_log_sha256": "febda12ef911b1ddc963cb3c4f4adf4f0935d003c18f891644803f47c15fe64b",
+        "summary_lines": [
+          "E05 Berserker builds: PASS (76 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "6DD399185B49C2BC71EB15D0AD582C1D484318FA138E359E8FA17E4EAD5AF8A9",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\164-e05_berserker_playtest_flow_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\164-e05_berserker_playtest_flow_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_berserker_playtest_flow_test.gd"
+        ],
+        "index": 164,
+        "engine_log_sha256": "f33f455f643f57cd57eedd8aeaac346bc20e0e42e51f55a67a9198bcaa644275",
+        "summary_lines": [
+          "E05 Berserker playtest flow: PASS (17 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "0CC3FF660876BBC226671D7B9B96E6392C86B11C37A25700F08475EC9B7F052C",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\165-e05_defender_catalog_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\165-e05_defender_catalog_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_defender_catalog_test.gd"
+        ],
+        "index": 165,
+        "engine_log_sha256": "cd1ecbbdeca3604682b38a12103a7e05fe6c531ebad7ea3637459ad902dfe23b",
+        "summary_lines": [
+          "E05 Defendente catalog: PASS (92 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "FB1A35874F77B05561734CBCB6BC8373CF1FB420A29EFD52E37A6AEA9E57E52C",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\166-e05_defender_indicators_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\166-e05_defender_indicators_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_defender_indicators_test.gd"
+        ],
+        "index": 166,
+        "engine_log_sha256": "8e696d5eca28c7d1d27167b423d0e875666895ae0ba41fa41d7dda98ed8c345e",
+        "summary_lines": [
+          "Indicadores Defendente: PASS (11 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "3593F6915E417D89309B6242D7A57394EA1CCB3CF49B601A7F3ABA9BF565F015",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\167-e05_defender_guard_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\167-e05_defender_guard_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_defender_guard_test.gd"
+        ],
+        "index": 167,
+        "engine_log_sha256": "f15015e1506a1a1d7f206dd1b5008d6119fd66b9891299049ea00afa5be8b27e",
+        "summary_lines": [
+          "E05 Defendente guarda: PASS (18 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "E7D81B2C6E5ADFD0B7929A7B1E28B3EE5A195BFEB56B980F7E58BD06531E9AB9",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\168-e05_defender_skills_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\168-e05_defender_skills_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_defender_skills_test.gd"
+        ],
+        "index": 168,
+        "engine_log_sha256": "98442514d4518c1bdce2d8364f26b94aabb58a92c7c7e188c7088c35d0c32289",
+        "summary_lines": [
+          "E05 Defendente skills: PASS (32 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "253B0803066347F098D295740A049C98106D338FBE2AC1BA91B495F8BED69535",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\169-e05_defender_watch_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\169-e05_defender_watch_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_defender_watch_test.gd"
+        ],
+        "index": 169,
+        "engine_log_sha256": "c012b22e7b5e3ddc58f1fa2bcc496282b018ee0fae02d4f817c34c2c9d363a1e",
+        "summary_lines": [
+          "E05 Defendente Vigília: PASS (7 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "9A3AE53C622C97FDC1DD99695101E5521E4DB02FDBFBFC46322665EE0389AE05",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\170-e05_defender_builds_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\170-e05_defender_builds_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_defender_builds_test.gd"
+        ],
+        "index": 170,
+        "engine_log_sha256": "740062962531caaf0038afd8b0e380702b5ac05f7ba89bb388e82b8a7681d35d",
+        "summary_lines": [
+          "E05 Defendente builds: PASS (73 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "8853528292FE9119FF47FA8046D3F1B49ACD4A8FDA1E2F3ED705A4A8FB2B1C03",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\171-e05_defender_playtest_flow_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\171-e05_defender_playtest_flow_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/e05_defender_playtest_flow_test.gd"
+        ],
+        "index": 171,
+        "engine_log_sha256": "3597f3ae8365031389afafabec84c9c8badd83b17856407b64c55f593f87c808",
+        "summary_lines": [
+          "E05 Defendente playtest flow: PASS (18 checks)"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "DA5DB65C8E4D083B8661C30F534EE3B2B9852AACE0B6DC70F9C7608D03179279",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\172-action_bar_review_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\172-action_bar_review_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/action_bar_review_test.gd"
+        ],
+        "index": 172,
+        "engine_log_sha256": "74f000a67256c01d65214bce567584023ec27820e27e786ff32810f83e36b7ca",
+        "summary_lines": [
+          "Action bar review: 11 checks, 0 failures"
+        ]
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "99A1F5C05F8B42A98C1353A644C0527B7FBDEBFB7A944ACD272CCF7D46CC34A6",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\173.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\173.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--quit-after",
+          "5"
+        ],
+        "index": 173,
+        "engine_log_sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+        "summary_lines": []
+      },
+      {
+        "exit_code": 0,
+        "timeout_seconds": 120,
+        "output_sha256": "55BD1B237C9FE2E44FD85FC68543E3C2C96700DCFD42DDC87FB8950684651943",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\174-playtest_admin_progression_test.engine.log",
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\complete\\174-playtest_admin_progression_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+          "--script",
+          "res://tests/playtest_admin_progression_test.gd"
+        ],
+        "index": 174,
+        "engine_log_sha256": "a520c14434051be3ce510d81ec1d9effb9fd5bd041346b8062e3c981bf7a73df",
+        "summary_lines": [
+          "Playtest admin progression: PASS (12 checks)"
+        ]
+      }
+    ]
+  },
+  "file_manifest_at_tested_code_commit": [
+    {
+      "path": "docs/epics/e06/e06_t1.md",
+      "git_blob": "a0b8fddf3fbf06f314fb2b4672a711cfd0f9cedc"
+    },
+    {
+      "path": "docs/epics/e06/e06_t1_api.md",
+      "git_blob": "dac78413694f481c07a644deb4eeb031b52a4a1f"
+    },
+    {
+      "path": "scripts/actors/arrow_projectile.gd",
+      "git_blob": "0d6e2e35d202c1b787020d076f867d20c5202aaa"
+    },
+    {
+      "path": "scripts/actors/combat_actor.gd",
+      "git_blob": "b3473dc375526a90b2d47f0123365a6de82cf34c"
+    },
+    {
+      "path": "scripts/actors/enemy_actor.gd",
+      "git_blob": "92f615dae04fab2931f2a73c0dccc2cb0bfcd670"
+    },
+    {
+      "path": "scripts/actors/player_actor.gd",
+      "git_blob": "5a299f6a73592cc4fe2876cb84e66fa0d193616a"
+    },
+    {
+      "path": "scripts/actors/player_projectile.gd",
+      "git_blob": "1b7532a8b1b8595ffcbaffb7e44b366457e476d4"
+    },
+    {
+      "path": "scripts/core/build_effect_catalog.gd",
+      "git_blob": "0eb39e9332387cf11aa75307f559232014d43bef"
+    },
+    {
+      "path": "scripts/core/build_effect_catalog.gd.uid",
+      "git_blob": "ba4433b438acb07ed3fe8cab26f7383db0f4c981"
+    },
+    {
+      "path": "scripts/core/build_effect_composer.gd",
+      "git_blob": "cef8aae8f1902238b7f05ce1060d558e98869456"
+    },
+    {
+      "path": "scripts/core/build_effect_composer.gd.uid",
+      "git_blob": "82eb9601888622eb57196dc98057a56e565f75ac"
+    },
+    {
+      "path": "scripts/core/combat_event_context.gd",
+      "git_blob": "5f33afc64b73a5a28f2c68b62738507e5d37bec7"
+    },
+    {
+      "path": "scripts/core/combat_event_context.gd.uid",
+      "git_blob": "14a0e7c24e2d0f80e370004eede973a8272b4503"
+    },
+    {
+      "path": "scripts/core/combat_math.gd",
+      "git_blob": "d8339f4d0298ff4ce2eb6689205b69e8efbe8c68"
+    },
+    {
+      "path": "scripts/core/damage_request.gd",
+      "git_blob": "7cfa3b06a46e3128e55757f9cb486f6acf3a7403"
+    },
+    {
+      "path": "scripts/core/effect_proc_ledger.gd",
+      "git_blob": "2bcc0fcdc7492602d60872d3929faa60d2c3bd46"
+    },
+    {
+      "path": "scripts/core/effect_proc_ledger.gd.uid",
+      "git_blob": "0aac1552fc6933f89d773282112f023c081d6187"
+    },
+    {
+      "path": "scripts/core/health_state.gd",
+      "git_blob": "78f8707d0149b445623a118dc783412a650fa9ed"
+    },
+    {
+      "path": "scripts/core/hunter_opening_state.gd",
+      "git_blob": "302fc2f4eb8e34faad7daf7c22839ec641f57e80"
+    },
+    {
+      "path": "scripts/core/run_state.gd",
+      "git_blob": "85e7f37f8662c98140cdb495a1bbf6f28e1a05c8"
+    },
+    {
+      "path": "scripts/core/skill_effect_resolver.gd",
+      "git_blob": "d1fd100da05500372c13503589fe5ea633a3b398"
+    },
+    {
+      "path": "scripts/core/skill_effect_resolver.gd.uid",
+      "git_blob": "d292a38f096e9a75b27b1a55572882b1997124d4"
+    },
+    {
+      "path": "scripts/data/augment_definition.gd",
+      "git_blob": "8abf74cf4aa067a61141995e9e4dbcdf54f3d0e0"
+    },
+    {
+      "path": "scripts/data/card_definition.gd",
+      "git_blob": "caee98f22abd7c5a692ab6229291dd64ee5c2ad0"
+    },
+    {
+      "path": "scripts/data/card_definition.gd.uid",
+      "git_blob": "fa9c46f554cb34b054a0008737e831158f6a55d9"
+    },
+    {
+      "path": "scripts/data/effect_definition.gd",
+      "git_blob": "19fd1b25e7321b8d235e2630753a214ec90d0291"
+    },
+    {
+      "path": "scripts/data/effect_definition.gd.uid",
+      "git_blob": "7d29458b3d4df764fd2ff0e8a6ba931cf07382d1"
+    },
+    {
+      "path": "scripts/data/equipment_definition.gd",
+      "git_blob": "493970acb3011160d9794cccc9412d68e6e4ffee"
+    },
+    {
+      "path": "scripts/data/equipment_definition.gd.uid",
+      "git_blob": "c218254d3e0cc2df7e6018d98662413fb8b63780"
+    },
+    {
+      "path": "scripts/main.gd",
+      "git_blob": "167622c0fa214d7dde1d03efd24f08abec02c256"
+    },
+    {
+      "path": "scripts/world/arrow_rain.gd",
+      "git_blob": "aca395afe2c8fd86c6061c33bb5a101e01ea94d1"
+    },
+    {
+      "path": "scripts/world/geometer_triangle_field.gd",
+      "git_blob": "a84dd8745f9a2c84c0635ca73d5c63c2d7f105d2"
+    },
+    {
+      "path": "scripts/world/geometer_wall_field.gd",
+      "git_blob": "3b6e82fc85bd15f7c8310ae6afcc99cdcb766238"
+    },
+    {
+      "path": "scripts/world/lightning_wall.gd",
+      "git_blob": "2786ab7ad30f99db180a74b38b212c2dee0e49fd"
+    },
+    {
+      "path": "scripts/world/soul_impact_sequence.gd",
+      "git_blob": "19c6d8795de033d57c04798f7c30a9944a32f8c5"
+    },
+    {
+      "path": "scripts/world/spiritualist_drain_state.gd",
+      "git_blob": "ba63a768bcf99507746420d40ecae65d1dc38a7f"
+    },
+    {
+      "path": "scripts/world/spiritualist_echo_state.gd",
+      "git_blob": "600579f842c462258497e55d46140f8d4bba47d4"
+    },
+    {
+      "path": "scripts/world/spiritualist_procession_state.gd",
+      "git_blob": "5ed6442f60bb058e27bdb5476c35fa82ce105d52"
+    },
+    {
+      "path": "tests/e06_effects_composition_test.gd",
+      "git_blob": "aa485640d636e920522a78cbb7dbfb721a89c5da"
+    },
+    {
+      "path": "tests/e06_effects_composition_test.gd.uid",
+      "git_blob": "a4044a91efd8568e17b756f602b624cf1ddd221e"
+    },
+    {
+      "path": "tests/e06_effects_fixture.gd",
+      "git_blob": "247c3f5ef96ad9c577ee901bf4c9043a49dade1d"
+    },
+    {
+      "path": "tests/e06_effects_fixture.gd.uid",
+      "git_blob": "d5bc8cb0895df2574630587a4e92c8d11a2bd603"
+    },
+    {
+      "path": "tests/e06_effects_runtime_test.gd",
+      "git_blob": "9cdfb7f6651d121f925ff45e6e7f5f710d29eddd"
+    },
+    {
+      "path": "tests/e06_effects_runtime_test.gd.uid",
+      "git_blob": "d3fe1821607b845a763f0008aaf2a176d58e4761"
+    },
+    {
+      "path": "tests/e06_proc_ledger_test.gd",
+      "git_blob": "45a90ef6a64a790b13392caf37b129a0f0c07bc4"
+    },
+    {
+      "path": "tests/e06_proc_ledger_test.gd.uid",
+      "git_blob": "2f60ed016b8204efef32d863fd5d18424f18d099"
+    },
+    {
+      "path": "tools/verify.ps1",
+      "git_blob": "180256a5ae211a5e1b31eb3712214c191153a7b3"
+    }
+  ],
+  "additional_exclusive_documents": [
+    "docs/epics/e06/e06_t1.md",
+    "docs/epics/e06/e06_t1_api.md",
+    "docs/epics/e06/e06_t1_validation.json"
+  ],
+  "human_contract_delta": {
+    "decision": "Preservar Eco com exceção finita e teto 16 comum",
+    "date": "2026-10-09",
+    "rule": "Onda finita E05; deduplicação portador/alvo na raiz original; saldo compartilhado de 16; sem procs secundários derivados"
+  },
+  "preserved_previous_attempts": [
+    {
+      "directory": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\full",
+      "manifest_sha256": "01f7ec5b548a4ba3a2a7ba803690305acbcd7ce9c0636704041f0bc4a335f853",
+      "completed_records": 49,
+      "failed_indices": [
+        49
+      ],
+      "recorded_code_commit": null,
+      "contributes_to_final_full_acceptance": false,
+      "note": "Tentativa integral incompleta"
+    },
+    {
+      "directory": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\full_v2",
+      "manifest_sha256": "06585813eff1cd6979b9d9d9accd3d937fc0447963bd0526cbac72c6938582b5",
+      "completed_records": 57,
+      "failed_indices": [],
+      "recorded_code_commit": null,
+      "contributes_to_final_full_acceptance": false,
+      "note": "Tentativa integral incompleta"
+    },
+    {
+      "directory": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\final",
+      "manifest_sha256": "066663f393992592f371c18c5e259b01aedec53b43301bf56a7ba217f1894af0",
+      "completed_records": 68,
+      "failed_indices": [
+        68
+      ],
+      "recorded_code_commit": null,
+      "contributes_to_final_full_acceptance": false,
+      "note": "Tentativa integral incompleta"
+    },
+    {
+      "directory": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\verified",
+      "manifest_sha256": "fee76ae0a4b8261e7543765f5d86223962050850f56c6b7c833d51e04fe421de",
+      "completed_records": 106,
+      "failed_indices": [
+        106
+      ],
+      "recorded_code_commit": "0ccaba6fed3690c0ed232334389b8ce08babb900",
+      "contributes_to_final_full_acceptance": false,
+      "note": "Tentativa integral incompleta"
+    },
+    {
+      "directory": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\verified_v2",
+      "manifest_sha256": "0475a8ee703d6a97f55f329b25d1fba5f1efb3794452b9c2afaa5104d215d3c9",
+      "completed_records": 126,
+      "failed_indices": [
+        126
+      ],
+      "recorded_code_commit": "2943a550b276120c37c686c8d890d713808ab079",
+      "contributes_to_final_full_acceptance": false,
+      "note": "Tentativa integral incompleta"
+    },
+    {
+      "directory": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\remaining",
+      "manifest_sha256": "0d44dc2d1a60b3e23101c7596941bcd1c279a18c0f35653bb59fbb89c69082e1",
+      "completed_records": 27,
+      "failed_indices": [
+        27
+      ],
+      "recorded_code_commit": "8961f8440b2c4cc6a6fe17b682dbe0d1451429db",
+      "contributes_to_final_full_acceptance": false,
+      "note": "Trecho dirigido, não suíte integral"
+    },
+    {
+      "directory": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG\\.godot\\verification\\e06_t1\\remaining_v2",
+      "manifest_sha256": "33763aef9105b0d49b1f134bf37c69d8127ddba0c8f30e26003dc58783bae4f6",
+      "completed_records": 21,
+      "failed_indices": [],
+      "recorded_code_commit": "60c0d9c8aaaf41b6ec9091f4c6020463c5d3762d",
+      "contributes_to_final_full_acceptance": false,
+      "note": "Trecho dirigido, não suíte integral"
+    }
+  ],
+  "fixed_playtest_checkout": {
+    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+    "branch": "codex/playtest",
+    "commit": "51b5fabc8fcc7bb74f1b45479cdfe1aa090be4bc",
+    "changed_by_this_task": false
+  },
+  "limits": [
+    "T2–T5 não executados",
+    "Sem reprodução independente R1, aceite de produto, push, playtest ou merge",
+    "Evidência headless do autor; sem alegação de renderer, FPS ou balanceamento",
+    "DamageRequest sem contexto permanece entrada de fixtures legadas, sem garantia de cota/replay nessa entrada",
+    "Handlers além dos eixos/skills/triggers publicados exigem extensão T1 antes do catálogo T3"
+  ],
+  "next_step": "Coordenação resolve F1 em SHA completo; T2 reproduz/consome; R1 revisa T1+T2",
+  "archivable": false,
+  "preservation": "Worktree e logs ignorados permanecem; preservar logs necessários antes de qualquer arquivamento futuro"
+}
