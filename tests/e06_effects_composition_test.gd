@@ -8,6 +8,7 @@ func _initialize() -> void:
 	_validation_and_conflicts()
 	_offers()
 	_combined_and_scalar()
+	_snapshot_removal()
 	print("E06 effects composition: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -166,3 +167,17 @@ func _combined_and_scalar() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 66
 	_check(run.open_offer(false, rng)["empty"], "fully capped proc filtered despite new source provenance")
+
+func _snapshot_removal() -> void:
+	var state := RunState.new(&"mage")
+	var before := state.composed_build()
+	var previous_revision := state.composition_revision()
+	var saved := state.build_snapshot
+	state.build_snapshot = null
+	_check(state.composed_build()["error_code"] == &"missing_snapshot" and not state.effects_valid(), "removed snapshot cannot apply stale cached effects")
+	var absent_revision := state.composition_revision()
+	_check(absent_revision > previous_revision and state.composition_revision() == absent_revision, "missing snapshot invalidates once, repeated HUD queries stay stable")
+	_check(state.skill_effect_capture(&"fire_spear")["error_code"] == &"invalid_composed_build", "removed snapshot does not publish cached skill capture")
+	state.build_snapshot = saved
+	var restored := state.composed_build()
+	_check(restored["ok"] and state.composition_revision() > absent_revision and restored["breakdown"].values() == before["breakdown"].values(), "restoring same snapshot recomposes without stale failure")

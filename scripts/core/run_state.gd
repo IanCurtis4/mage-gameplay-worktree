@@ -82,8 +82,13 @@ func effect_state() -> Dictionary:
 	return {"augment_stacks": augment_stacks.duplicate(true), "card_sockets": card_sockets.duplicate(true)}
 
 func _ensure_effect_cache(temporary_sources: Array[Dictionary] = []) -> void:
+	if build_snapshot == null:
+		if _effect_cache.get("error_code", &"") != &"missing_snapshot":
+			_effect_cache = BuildEffectCatalog.failure(&"missing_snapshot")
+			_effect_cache_serial += 1
+		return
 	var key := hash([build_snapshot.base_class_id, build_snapshot.evolution_id, build_snapshot.base_level, build_snapshot.job_level, build_snapshot.attribute_allocations, skill_levels, build_snapshot.library_skill_ids, build_snapshot.equipped, build_snapshot.build_version, augment_stacks, card_sockets, temporary_sources, runtime_revision])
-	if not _effect_cache.is_empty() and key == _effect_cache_key:
+	if not _effect_cache.is_empty() and _effect_cache.get("error_code", &"") != &"missing_snapshot" and key == _effect_cache_key:
 		return
 	var snapshot := build_snapshot.copy_snapshot()
 	snapshot.skill_ranks = skill_levels.duplicate(true)
