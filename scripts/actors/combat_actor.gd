@@ -85,7 +85,7 @@ func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Diction
 	if received_increase > 0.0:
 		effective_request = request.copy()
 		effective_request.damage_dealt_multiplier *= 1.0 + received_increase
-	return health.apply(effective_request, rng.randf() if effective_request.requires_hit_roll() else 0.0, 1.0 if effective_request.is_secondary else rng.randf(), attribute_debuffs)
+	return health.apply(effective_request, 0.0 if effective_request.is_secondary and not effective_request.requires_hit_roll() else rng.randf(), 1.0 if effective_request.is_secondary else rng.randf(), attribute_debuffs)
 
 func is_alive() -> bool:
 	return health != null and health.is_alive()
