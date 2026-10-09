@@ -768,10 +768,10 @@ func record_berserker_damage(result: Dictionary) -> void:
 	var previous := berserker_wound_stacks(target_id)
 	if previous == 0 and skill_id != &"berserker_rupture":
 		return
-	if not claim_effect_result(result, &"berserker_wound", target_id):
-		return
 	if previous > 0:
 		_trigger_berserker_pursuit(target_id, result)
+	if not claim_effect_result(result, &"berserker_wound", target_id):
+		return
 	berserker_wounds[target_id] = {"stacks": mini(BERSERKER_WOUND_MAX_STACKS, previous + 1), "remaining": BERSERKER_WOUND_DURATION}
 
 func _trigger_berserker_pursuit(target_id: int, result: Dictionary) -> void:
@@ -3031,7 +3031,7 @@ func prepare_effect_claims(result: Dictionary, additional: Array[Dictionary] = [
 			_append_kit_candidate(candidates, &"berserker_wound", target_id)
 		if previous > 0 and (direct or skill == &"berserker_execution") and berserker_pursuit_cooldown <= 0.0 and run_state.build_snapshot.has_passive(&"berserker_pursuit"):
 			_append_kit_candidate(candidates, &"berserker_pursuit", get_instance_id())
-		if skill == &"berserker_breath_steal" and not bool(result.get("killed", false)):
+		if skill == &"berserker_breath_steal" and previous > 0 and not bool(result.get("killed", false)):
 			_append_kit_candidate(candidates, &"berserker_breath_heal", target_id)
 	if _is_elementalist():
 		var element := _elementalist_direct_element(skill)

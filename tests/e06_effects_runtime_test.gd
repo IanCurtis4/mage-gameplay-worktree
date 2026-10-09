@@ -12,6 +12,7 @@ func _run() -> void:
 	_dot_pause_and_limits()
 	_mixed_kit_quota()
 	_echo_and_kill_exceptions()
+	_berserker_last_slot()
 	await _arena_budget()
 	print("E06 effects runtime: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
@@ -312,3 +313,37 @@ func _echo_and_kill_exceptions() -> void:
 	victim.free()
 	player.free()
 	controller.free()
+
+func _berserker_last_slot() -> void:
+	var build := BuildSnapshot.new()
+	build.character_id = "pursuit-budget"
+	build.base_class_id = &"swordsman"
+	build.evolution_id = &"berserker"
+	build.job_level = 40
+	build.skill_ranks = {&"berserker_rupture": 1, &"berserker_pursuit": 1}
+	var state := RunState.from_build("pursuit", build)
+	var nav := ArenaNavigation.new()
+	nav.configure(Rect2(0, 0, 1000, 1000), [], 0.0)
+	var player := PlayerActor.new()
+	player.configure(nav, state)
+	root.add_child(player)
+	player.set_process(false)
+	var victim := CombatActor.new()
+	victim.setup("Fixture", Color.WHITE, StatCalculator.calculate({}))
+	root.add_child(victim)
+	victim.set_process(false)
+	player.berserker_wounds[victim.get_instance_id()] = {"stacks": 1, "remaining": 4.0}
+	player.current_sp -= 5.0
+	var sp := player.current_sp
+	player._begin_effect_emission()
+	var request := player._make_physical_request(victim, &"basic_attack", 5.0, DamageRequest.AccuracyMode.GEOMETRY, false)
+	var fillers: Array[Dictionary] = []
+	for index: int in 15:
+		fillers.append({"family_id": StringName("a_%d" % index), "source_id": &"fixture", "target_id": victim.get_instance_id()})
+	state.effect_ledger.claim_batch(request.context, fillers)
+	var result := victim.health.apply(request, 0.0, 1.0)
+	player.prepare_effect_claims(result)
+	player.record_berserker_damage(result)
+	_check(player.current_sp > sp and player.berserker_wound_stacks(victim.get_instance_id()) == 1 and state.effect_ledger.applications(request.context) == 16, "accepted Pursuit applies even when later Wound candidate is discarded")
+	player.free()
+	victim.free()
