@@ -1,8 +1,35 @@
 # E06 — checkpoint consolidado de arquitetura
 
-09/10/2026. Entrega documental; gameplay E06 não iniciado.
+09/10/2026. Arquitetura D0 entregue; T1 iniciada em chat executor separado.
 Índice: [e06.md](e06.md). [Contrato](e06_contract.md).
 [Tarefas/DAG/donos](e06_tasks.md). Norma: [WORKFLOW](../WORKFLOW.md).
+
+## Delegação T1 — 09/10/2026
+
+Após a entrega D0, o usuário autorizou diretamente neste chat: “Pode delegar ao
+Sol e pedir para ele usar as skills necessárias para a tarefa.” Este dispatch
+pontual foi executado pelo chat de arquitetura; não estabelece gerência contínua.
+
+- Chat: **RagRPG | E06-T1 — Composição e causalidade**.
+- ID: `01a11f3e-33db-7ac0-88be-c2916ea3fe1f`; host local.
+- Modelo/esforço: `gpt-6.1-sol` / `xhigh`.
+- Base exata D0: `0b2e4a02bb445c98aa4ea2d9b5c5ce83bedf6c0b`.
+- Worktree criada por Sol: `C:/Users/João Pedro/.codex/worktrees/e06-effects/RagRPG`.
+  Na primeira conferência Git: HEAD em D0, ainda detached. Branch proposta
+  `codex/e06-effects`; Sol registra a branch efetiva em seu próprio arquivo T1.
+- Execução iniciada: wait_threads/read_thread confirmaram estado ativo e uso de
+  ragrpg-resume, preparando checkout e inventário antes de alterar runtime.
+- Orientação explícita: usar ragrpg-resume e outras skills realmente pertinentes;
+  respeitar escopo T1, donos, testes, registro e limites das skills antigas.
+- Registro exclusivo do executor: `docs/epics/e06/e06_t1.md`, a ser criado por Sol.
+- Entrega F1, validação, integração e revisão: **pendentes**. Não arquivável.
+- T2–T5/R não disparadas. Nenhuma automação/monitor contínuo criado.
+
+O prompt determina workdir isolado, preservação do playtest/save, verificação
+integral do runtime e ausência de publicação/merge. Não precisa receber o commit
+deste registro administrativo para executar: o contrato permanece D0, sem alteração.
+O chat solicitante anterior continua referência histórica de coordenação; o
+usuário pode dirigir as próximas delegações a partir dos registros atuais.
 
 ## Estado e autorização
 
@@ -11,7 +38,8 @@ produz arquitetura/documentação e divisão de tarefas, sem dispatch de executo
 Chat permanente: `01a11e1e-be3d-7243-affc-295c0dc00f9f`
 (RagRPG | E06 — Arquitetura Astra).
 Coordenação solicitante: `01a11e1a-5eac-7992-9fd5-76e4cdcced19`
-(Iniciar E06 com chats por tarefa); fará dispatch e registro dos IDs.
+(Iniciar E06 com chats por tarefa); roteamento inicial. A delegação T1 foi
+posteriormente autorizada diretamente aqui e registrada acima.
 
 Decisões humanas diretas, em 08/10:
 D1 dez identidades com opções próprias; D2 equipamentos/cartas também transformam
@@ -61,13 +89,13 @@ Não interpretar interrupção como aceite, PASS ou motivo para reiniciar runtim
 
 ## Índice de execução persistente
 
-Todos os hashes de execução, chat_ids, checkouts e evidências abaixo são
-**não existentes nesta rodada**; preenchimento pela coordenação/autor responsável
-antes de dispatch e ao entregar, usando o template de e06_tasks.
+T1 tem chat/base/checkout registrados acima. Hashes de entrega e evidências de
+execução continuam pendentes. As demais tarefas não possuem chat/checkout.
+Preencher por etapa usando o template de e06_tasks.
 
 | Tarefa | Estado | Dependência / próximo passo | Entrega / integração / evidência |
 |---|---|---|---|
-| T1 | PRONTA após D0 | Coordenação resolve SHA D0 e cria chat/check-out próprios | Não iniciada |
+| T1 | EM_EXECUÇÃO — preparação | Sol na worktree e06-effects, base D0 | F1/testes/integração pendentes |
 | T2 | AGUARDA T1 | F1 limpo/validado, transferência dos arquivos | Não iniciada |
 | R1 | AGUARDA T2 | Fundação T1+T2 completa, revisão independente | Não iniciada |
 | T3 | AGUARDA R1 | F2 aprovado e API congelada; pode paralelizar T4 | Não iniciada |
@@ -121,8 +149,7 @@ não evidência produzida por esta arquitetura. Nenhuma promessa de FPS/balancea
 
 ## Próxima ação permitida
 
-Coordenação cria **T1 — composição e causalidade**, Sol/xhigh proposto, de D0
-em worktree própria; prompt deve referenciar contrato, tarefa T1 e este checkpoint,
-com SHA/caminho reais. Não usar o checkout fixo ou a reserva histórica E06.
-Não iniciar T2/T3/T4 por antecipação; T2 precisa F1 e T3/T4 precisam F2/R1.
-Chat Astra permanente só recebe questões contratuais/decisões delimitadas.
+T1 executa composição e causalidade no chat/checkout acima e entrega F1 com
+registro/validações. Seu início foi conferido, sem assumir acompanhamento contínuo.
+T2 aguarda F1; T3/T4 aguardam F2/R1. Nenhuma nova tarefa se inicia por efeito deste
+registro. Chat permanente recebe apenas questões contratuais/decisões delimitadas.

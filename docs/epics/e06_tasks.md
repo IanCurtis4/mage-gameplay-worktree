@@ -2,9 +2,10 @@
 
 09/10/2026. Contrato: [e06_contract.md](e06_contract.md).
 Retomada: [e06_checkpoint.md](e06_checkpoint.md).
-**Nenhum executor criado nesta rodada.** D1/D2/D3 respondidas.
-T1 pronta para dispatch pela coordenação após o commit documental; outras
-tarefas aguardam entregas técnicas, não novo aceite humano rotineiro.
+**T1 despachada em09/10 por autorização direta do usuário.** D1/D2/D3 respondidas.
+Chat01a11f3e-33db-7ac0-88be-c2916ea3fe1f, Sol/xhigh; baseD0 completa
+0b2e4a02bb445c98aa4ea2d9b5c5ce83bedf6c0b. Outras tarefas aguardam
+entregas técnicas, não novo aceite humano rotineiro.
 
 ## Bases e registros
 
@@ -23,8 +24,9 @@ Não executar a partir de referência planejada nem usar B0 sem os novos contrat
 Checkout documental existente:
 `C:/Users/João Pedro/.codex/worktrees/e06-architecture/RagRPG`,
 branch `codex/e06-architecture`, exclusivo do chat permanente.
-Executores usam worktrees gerenciadas próprias, ainda não criadas; nomes de
-branches abaixo são propostas. Preservar diretório fixo, save e branches alheias.
+T1 criou a worktree C:/Users/João Pedro/.codex/worktrees/e06-effects/RagRPG.
+Demais worktrees não criadas; branches abaixo são propostas. Sol registra sua
+branch efetiva no arquivo T1. Preservar diretório fixo, save e branches alheias.
 
 Cada tarefa cria seu registro exclusivo em `docs/epics/e06/e06_t1.md`,
 `e06_t2.md`, `e06_t3.md`, `e06_t4.md`, `e06_t5.md` ou `e06_r.md`.
@@ -56,7 +58,7 @@ T5 mantém a responsabilidade operacional durante playtest/correções/aceite.
 
 | ID | Resultado | Modelo / esforço propostos | Base / branch / checkout |
 |---|---|---|---|
-| T1 | Composição única e causalidade limitada, adaptadas ao runtime | gpt-6.1-sol / xhigh | D0; codex/e06-effects; worktree própria a criar |
+| T1 | Composição única e causalidade limitada, adaptadas ao runtime | gpt-6.1-sol / xhigh | D0; branch codex/e06-effects proposta; worktree e06-effects criada |
 | T2 | Coleção, troca, cartas e recompensas atômicas | gpt-6.1-sol / xhigh | F1; codex/e06-inventory; worktree própria a criar |
 | R | Parecer independente R1/R2 | gpt-6-astra / high; xhigh se necessário pela complexidade real | T1+T2 em R1; I0 em R2; codex/e06-review; checkout próprio |
 | T3 | Catálogo concreto e duas builds legais por identidade | gpt-5.6-terra / high | F2 aprovado; codex/e06-content; checkout próprio |

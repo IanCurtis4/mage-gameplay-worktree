@@ -10,12 +10,14 @@ de reutilizar a reserva Sol do épico ou retomar Astra como gerente.
 |---|---|---|
 | Arquitetura permanente | RagRPG \| E06 — Arquitetura Astra | 01a11e1e-be3d-7243-affc-295c0dc00f9f |
 | Chat solicitante, dispatch das tarefas | Iniciar E06 com chats por tarefa | 01a11e1a-5eac-7992-9fd5-76e4cdcced19 |
-| T1/T2/T3/T4/T5/R | Não criados nesta entrega | Registrar ao criar no checkpoint E06 |
+| T1 — Sol / xhigh | RagRPG \| E06-T1 — Composição e causalidade | 01a11f3e-33db-7ac0-88be-c2916ea3fe1f |
+| T2/T3/T4/T5/R | Não criados | Aguardam dependências de e06_tasks |
 
 [Contrato](epics/e06_contract.md), [DAG/donos](epics/e06_tasks.md) e
 [checkpoint](epics/e06_checkpoint.md) são o índice persistente.
-A coordenação fará a delegação depois desta entrega; nenhum executor foi criado
-por este chat. A reserva histórica E06 de13/09 não é o executor vigente.
+Após D0, o usuário autorizou diretamente neste chat de arquitetura o dispatch
+pontual de T1. Sol já iniciou ragrpg-resume na base0b2e4a0, com checkout próprio;
+ver registro completo no checkpoint. A reserva E06 de13/09 não é o executor atual.
 Nenhum contato ou retomada de chats históricos por efeito dessa mudança.
 E07+ sem autorização. IDs não conferem por si só permissão para enviar mensagens.
 
