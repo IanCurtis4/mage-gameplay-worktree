@@ -115,8 +115,15 @@ aprovação técnica, encerramento de chat ou frase ambígua.
 
 ## Evidência e limites
 
-Runtime: Godot 4.7.2 standard, testes dirigidos durante trabalho e
-`tools/verify.ps1` completo no candidato integrado. Nova regra precisa de invariantes.
+Runtime: Godot 4.7.2 standard. Norma incremental autorizada em 10/10/2026:
+selecionar em `tools/verify.ps1` os testes diretamente afetados pela mudança;
+novas falhas exigem a regressão necessária à fronteira atingida. Suíte completa
+somente com risco amplo ou fechamento que a justifique, mantendo a cobertura
+e os gates contratados (incluindo R1/R2 de E06). Nova regra precisa de invariantes.
+Não repetir integralmente por edição documental ou fixture pontual quando já
+há evidência compatível: validar o delta e registrar o reaproveitamento com SHA,
+inputs/engine e escopo. Retomar uma cauda certifica somente as etapas executadas;
+não aprova sozinha as etapas omitidas. Opções e critérios em [TESTING.md](TESTING.md).
 Renderer/UI requer inspeção visual; save usa diretório de fixture explícito.
 Exit 0 isolado não prova PASS quando há SCRIPT ERROR ou rotina incompleta.
 Fórmulas/UI/combate usam a mesma autoridade, com oráculo independente para casos

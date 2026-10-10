@@ -1,21 +1,29 @@
 param(
-    [Parameter(Mandatory = $true)][string]$GodotPath,
+    [string]$GodotPath = '',
     [switch]$SkipEditorImport,
     [string]$VerificationDirectory = "",
-    [ValidateRange(60, 300)][int]$CheckTimeoutSeconds = 120
+    [ValidateRange(60, 300)][int]$CheckTimeoutSeconds = 120,
+    [string[]]$Test = @(),
+    [ValidateRange(1, 2147483647)][int]$FromStep = 1,
+    [ValidateRange(1, 2147483647)][int]$ToStep = 2147483647,
+    [switch]$List
 )
 $ErrorActionPreference = 'Stop'
-$enginePath = (Resolve-Path -LiteralPath $GodotPath).Path
 $projectPath = Split-Path -Parent $PSScriptRoot
-$verificationPath = if ($VerificationDirectory) { [System.IO.Path]::GetFullPath($VerificationDirectory) } else { Join-Path $projectPath '.godot/verification' }
-[void](New-Item -ItemType Directory -Force -Path $verificationPath)
-$script:verifyCheckIndex = 0
-$manifestPath = Join-Path $verificationPath 'checks.jsonl'
-Set-Content -LiteralPath $manifestPath -Value '' -Encoding utf8
+$checkPlan = [System.Collections.Generic.List[object]]::new()
 
-function Invoke-GodotCheck([string[]]$EngineArguments) {
+function Add-GodotCheck([string[]]$EngineArguments) {
+    $scriptArgument = [Array]::IndexOf($EngineArguments, '--script')
+    $name = if ($scriptArgument -ge 0) {
+        [IO.Path]::GetFileNameWithoutExtension($EngineArguments[$scriptArgument + 1])
+    } elseif ($EngineArguments -contains '--import') { 'editor_import' } else { 'smoke' }
+    $checkPlan.Add([pscustomobject]@{ index = $checkPlan.Count + 1; name = $name; arguments = $EngineArguments })
+}
+
+function Invoke-GodotCheck($Check) {
+    $EngineArguments = $Check.arguments
     $script:verifyCheckIndex += 1
-    $checkName = '{0:D3}' -f $script:verifyCheckIndex
+    $checkName = '{0:D3}' -f $Check.index
     $scriptArgument = [Array]::IndexOf($EngineArguments, '--script')
     if ($scriptArgument -ge 0) { $checkName += '-' + [IO.Path]::GetFileNameWithoutExtension($EngineArguments[$scriptArgument + 1]) }
     $logPath = Join-Path $verificationPath ($checkName + '.engine.log')
@@ -42,7 +50,7 @@ function Invoke-GodotCheck([string[]]$EngineArguments) {
     $process.Dispose()
     Set-Content -LiteralPath $outputPath -Value $checkOutput -Encoding utf8
     $checkFailed = $timedOut -or $checkExitCode -ne 0 -or ($checkOutput -match 'SCRIPT ERROR:|Parse Error:|ERROR:')
-    @{ index = $script:verifyCheckIndex; arguments = $EngineArguments; exit_code = $checkExitCode; timed_out = [bool]$timedOut; timeout_seconds = $CheckTimeoutSeconds; failed = [bool]$checkFailed; output_path = $outputPath; output_sha256 = (Get-FileHash -LiteralPath $outputPath -Algorithm SHA256).Hash; engine_log = $logPath } | ConvertTo-Json -Compress | Add-Content -LiteralPath $manifestPath -Encoding utf8
+    @{ index = $Check.index; execution_index = $script:verifyCheckIndex; name = $Check.name; arguments = $EngineArguments; exit_code = $checkExitCode; timed_out = [bool]$timedOut; timeout_seconds = $CheckTimeoutSeconds; failed = [bool]$checkFailed; output_path = $outputPath; output_sha256 = (Get-FileHash -LiteralPath $outputPath -Algorithm SHA256).Hash; engine_log = $logPath } | ConvertTo-Json -Compress | Add-Content -LiteralPath $manifestPath -Encoding utf8
     Write-Host $checkOutput
     if ($checkFailed) {
         if ($timedOut) { throw "Godot verification timed out after $CheckTimeoutSeconds seconds." }
@@ -51,186 +59,238 @@ function Invoke-GodotCheck([string[]]$EngineArguments) {
 
 }
 
+Add-GodotCheck @('--headless', '--path', $projectPath, '--editor', '--import', '--quit')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_inventory_resources_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_inventory_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_rewards_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_migration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_effects_composition_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_proc_ledger_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_effects_runtime_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/foundation_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/combat_animation_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/milestone_one_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/pursuit_momentum_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/battle_ui_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/arena_flow_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/ui_layout_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/mage_gameplay_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/persistent_state_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/profile_store_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/profile_facade_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/profile_run_facade_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e01_profile_diagnostic_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e02_character_menu_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/verification_profile_isolation_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/menu_tabs_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e02_run_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e03_stat_calculator_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/stat_threshold_rules_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/stat_threshold_migration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/stat_threshold_preview_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e03_stat_matrix_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e03_progression_transactions_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e03_progression_panel_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e03_consumer_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e03_integrated_progression_flow_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_skill_rank_definition_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_slash_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_dash_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_resistance_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_fireball_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_fire_wall_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_fire_spear_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_ice_spear_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_teleport_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_mage_sp_regeneration_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_precision_projectile_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_double_shot_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_piercing_arrow_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_arrow_rain_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_extended_aim_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_trap_runtime_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_catalog_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_opening_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_core_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_traps_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_cover_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_passives_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_catalog_migration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_builds_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_ground_visual_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_atlas_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_presentation_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_active_combat_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_snare_trap_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_explosive_trap_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_slowing_arrow_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_foliage_shelter_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_precision_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_cadence_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_trap_technique_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_integrated_closure_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_mage_lightning_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_mage_electric_discharge_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_mage_lightning_wall_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_mage_soul_impact_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_mage_haunt_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_mage_phantom_barrier_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_mage_ice_wall_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_mage_integrated_closure_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_shield_wall_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_provoke_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_perseverance_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_piercing_shout_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_fury_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_brutal_strike_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_concentrated_rage_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_terrifying_shout_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_vigor_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_blood_thirst_rank_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_integrated_closure_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_learn_from_zero_migration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_evolution_catalog_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_evolution_transaction_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_evolution_menu_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_training_boss_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_identity_boundary_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_defender_catalog_migration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_catalog_migration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_catalog_migration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_catalog_migration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_echo_curse_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_echo_spread_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_echo_recovery_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_soul_drain_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_spectral_veil_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_channel_focus_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_procession_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_dissipation_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_visuals_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_integrated_closure_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_readability_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_soul_presentation_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_construction_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_casting_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_geometry_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_wall_primitives_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_wall_effects_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_wall_projectile_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_triangle_recipes_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_triangle_projectile_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_editing_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_builds_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_animation_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_onboarding_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_g7_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_playtest_flow_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_catalog_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_math_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_focus_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_reset_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_piercing_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_net_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_explosive_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_concussion_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_absolute_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_builds_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_atlas_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_onboarding_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_review_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_solo_focus_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_solo_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/action_bar_input_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/action_bar_ui_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/action_bar_persistence_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/action_bar_game_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_catalog_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_animation_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_visuals_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_visual_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_indicators_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_flame_burst_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_prismatic_focus_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_glacial_ring_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_lightning_arc_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_prismatic_resonance_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_ember_path_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_tri_nova_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_integrated_closure_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_catalog_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_rupture_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_execution_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_obstinacy_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_leap_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_pursuit_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_rift_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_breath_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_builds_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_playtest_flow_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_defender_catalog_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_defender_indicators_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_defender_guard_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_defender_skills_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_defender_watch_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_defender_builds_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_defender_playtest_flow_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/action_bar_review_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--quit-after', '5')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/playtest_admin_progression_test.gd')
+# Indices always refer to the complete plan, including editor import.
+if (-not $PSBoundParameters.ContainsKey('ToStep')) { $ToStep = $checkPlan.Count }
+if ($FromStep -gt $ToStep -or $ToStep -gt $checkPlan.Count) {
+    throw "Invalid step range $FromStep..$ToStep; use 1..$($checkPlan.Count)."
+}
+$matchedNames = @{}
+if ($PSBoundParameters.ContainsKey('Test')) {
+    if ($Test.Count -eq 0) { throw 'Test selection cannot be empty.' }
+    foreach ($pattern in $Test) {
+        if ([string]::IsNullOrWhiteSpace($pattern)) { throw 'Test selection cannot contain an empty name/pattern.' }
+        $matches = @($checkPlan | Where-Object { $_.name -like $pattern })
+        if ($matches.Count -eq 0) { throw "No check matches '$pattern'. Use -List to inspect names." }
+        foreach ($check in $matches) { $matchedNames[$check.name] = $true }
+    }
+}
+$selectedChecks = @($checkPlan | Where-Object {
+    $_.index -ge $FromStep -and $_.index -le $ToStep -and
+    (-not $PSBoundParameters.ContainsKey('Test') -or $matchedNames.ContainsKey($_.name)) -and
+    (-not $SkipEditorImport -or $_.name -ne 'editor_import')
+})
+if ($selectedChecks.Count -eq 0) { throw 'No checks remain after applying the selection, step range and import option.' }
+if ($List) {
+    Write-Host "Plan only: $($selectedChecks.Count)/$($checkPlan.Count) steps selected; no checks executed."
+    $selectedChecks
+    return
+}
+if ([string]::IsNullOrWhiteSpace($GodotPath)) { throw 'GodotPath is required to execute checks; use -List to inspect the plan.' }
+$enginePath = (Resolve-Path -LiteralPath $GodotPath).Path
+$verificationPath = if ($VerificationDirectory) { [System.IO.Path]::GetFullPath($VerificationDirectory) } else { Join-Path $projectPath '.godot/verification' }
+[void](New-Item -ItemType Directory -Force -Path $verificationPath)
+$selection = [ordered]@{
+    test = @($Test); test_filter_specified = $PSBoundParameters.ContainsKey('Test')
+    from_step = $FromStep; to_step = $ToStep; skip_editor_import = [bool]$SkipEditorImport
+}
+[ordered]@{
+    created_utc = [DateTime]::UtcNow.ToString('o')
+    source_commit = (git -C $projectPath rev-parse HEAD)
+    working_tree_status = @(git -C $projectPath status --porcelain)
+    runner_sha256 = (Get-FileHash -LiteralPath $PSCommandPath -Algorithm SHA256).Hash
+    engine_path = $enginePath; engine_sha256 = (Get-FileHash -LiteralPath $enginePath -Algorithm SHA256).Hash
+    timeout_seconds = $CheckTimeoutSeconds; selection = $selection
+    total_steps = $checkPlan.Count; selected_steps = $selectedChecks.Count; checks = $selectedChecks
+} | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $verificationPath 'plan.json') -Encoding utf8
+$manifestPath = Join-Path $verificationPath 'checks.jsonl'
+Set-Content -LiteralPath $manifestPath -Value '' -Encoding utf8
+$script:verifyCheckIndex = 0
 if ($SkipEditorImport) {
     Write-Host 'Editor import explicitly skipped; verify import in a clean worktree before using this option.'
-} else {
-    Invoke-GodotCheck @('--headless', '--path', $projectPath, '--editor', '--import', '--quit')
+} elseif ('editor_import' -notin $selectedChecks.name) {
+    Write-Host 'Editor import is outside the selected plan; compatible imported resources are required.'
 }
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_inventory_resources_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_inventory_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_rewards_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_migration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_effects_composition_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_proc_ledger_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_effects_runtime_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/foundation_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/combat_animation_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/milestone_one_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/pursuit_momentum_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/battle_ui_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/arena_flow_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/ui_layout_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/mage_gameplay_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/persistent_state_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/profile_store_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/profile_facade_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/profile_run_facade_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e01_profile_diagnostic_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e02_character_menu_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/verification_profile_isolation_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/menu_tabs_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e02_run_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e03_stat_calculator_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/stat_threshold_rules_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/stat_threshold_migration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/stat_threshold_preview_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e03_stat_matrix_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e03_progression_transactions_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e03_progression_panel_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e03_consumer_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e03_integrated_progression_flow_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_skill_rank_definition_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_slash_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_dash_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_resistance_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_fireball_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_fire_wall_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_fire_spear_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_ice_spear_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_teleport_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_mage_sp_regeneration_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_precision_projectile_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_double_shot_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_piercing_arrow_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_arrow_rain_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_extended_aim_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_trap_runtime_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_catalog_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_opening_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_core_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_traps_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_cover_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_passives_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_catalog_migration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_builds_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_ground_visual_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_atlas_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_presentation_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_hunter_active_combat_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_snare_trap_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_explosive_trap_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_slowing_arrow_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_foliage_shelter_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_precision_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_cadence_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_trap_technique_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_archer_integrated_closure_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_mage_lightning_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_mage_electric_discharge_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_mage_lightning_wall_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_mage_soul_impact_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_mage_haunt_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_mage_phantom_barrier_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_mage_ice_wall_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_mage_integrated_closure_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_shield_wall_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_provoke_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_perseverance_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_piercing_shout_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_fury_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_brutal_strike_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_concentrated_rage_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_terrifying_shout_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_vigor_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_blood_thirst_rank_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_swordsman_integrated_closure_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e04_learn_from_zero_migration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_evolution_catalog_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_evolution_transaction_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_evolution_menu_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_training_boss_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_identity_boundary_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_defender_catalog_migration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_catalog_migration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_catalog_migration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_catalog_migration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_echo_curse_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_echo_spread_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_echo_recovery_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_soul_drain_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_spectral_veil_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_channel_focus_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_procession_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_dissipation_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_visuals_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_integrated_closure_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_readability_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_spiritualist_soul_presentation_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_construction_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_casting_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_geometry_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_wall_primitives_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_wall_effects_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_wall_projectile_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_triangle_recipes_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_triangle_projectile_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_editing_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_builds_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_animation_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_onboarding_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_g7_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_geometer_playtest_flow_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_catalog_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_math_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_focus_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_reset_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_piercing_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_net_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_explosive_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_concussion_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_absolute_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_builds_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_atlas_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_onboarding_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_review_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_solo_focus_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_sentinel_solo_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/action_bar_input_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/action_bar_ui_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/action_bar_persistence_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/action_bar_game_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_catalog_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_animation_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_visuals_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_visual_integration_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_indicators_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_flame_burst_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_prismatic_focus_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_glacial_ring_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_lightning_arc_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_prismatic_resonance_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_ember_path_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_tri_nova_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_elementalist_integrated_closure_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_catalog_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_rupture_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_execution_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_obstinacy_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_leap_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_pursuit_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_rift_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_breath_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_builds_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_berserker_playtest_flow_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_defender_catalog_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_defender_indicators_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_defender_guard_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_defender_skills_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_defender_watch_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_defender_builds_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e05_defender_playtest_flow_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/action_bar_review_test.gd')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--quit-after', '5')
-Invoke-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/playtest_admin_progression_test.gd')
-Write-Host 'All foundation and milestone-one checks passed.'
+foreach ($check in $selectedChecks) { Invoke-GodotCheck $check }
+if ($selectedChecks.Count -eq $checkPlan.Count) {
+    Write-Host 'All foundation and milestone-one checks passed.'
+} else {
+    Write-Host "Selected checks passed ($($selectedChecks.Count)/$($checkPlan.Count) steps); unselected steps were not run."
+}
