@@ -12,7 +12,7 @@
   "tested_code_commit": "27dc6845598cefc95ca1ebd1bd9c83ada0dd5810",
   "tested_commit_tree": "a9feb9058d68c8e8b84e8ca7285b631afb1e9a4a",
   "delivery_checkpoint_ref": "refs/heads/codex/e06-inventory",
-  "delivery_note": "The later delivery commit changes only this receipt and the T2 record; its executable trees must equal runtime_trees. Resolve the branch and inspect its ancestry.",
+  "delivery_note": "Full gameplay evidence belongs to tested_code_commit; aa7233b is its documentation-only delivery. The later granular verification runner at 549408c has separate focused evidence in post_validation_tooling. Gameplay trees remain identical; the tools tree deliberately differs. No full gameplay suite was repeated for this follow-up.",
   "runtime_trees": {
     "scripts": "db596da2d1fa0e44f32a3d4af9e07e94a0c9ca7d",
     "tests": "59ab55df0d504a7f8cbe85d20e7b9e2a3b90ddcc",
@@ -11337,5 +11337,301 @@
     "branch": "codex/playtest",
     "head": "51b5fabc8fcc7bb74f1b45479cdfe1aa090be4bc",
     "state": "unchanged, clean at final verification"
+  },
+  "delivery_documentation_commit": "aa7233b32f12c5677ea24cd7022b28adc3467895",
+  "post_validation_tooling": {
+    "reviewed_date": "2026-10-11",
+    "implementation_commit": "549408c0c5a46498646865325f76d2cb36dc2214",
+    "scope": [
+      "tools/verify.ps1",
+      "docs/TESTING.md",
+      "docs/WORKFLOW.md"
+    ],
+    "selection_assertions": [
+      {
+        "name": "PowerShell parse",
+        "passed": true
+      },
+      {
+        "name": "178 original commands in the same order",
+        "passed": true
+      },
+      {
+        "name": "full list contains indices 1..178",
+        "passed": true
+      },
+      {
+        "name": "full list import and smoke retain original positions",
+        "passed": true
+      },
+      {
+        "name": "skip import retains original indices",
+        "passed": true
+      },
+      {
+        "name": "wildcard selects seven E06 scripts",
+        "passed": true
+      },
+      {
+        "name": "union deduplicates and keeps original order",
+        "passed": true
+      },
+      {
+        "name": "one selected script remains an array-compatible plan",
+        "passed": true
+      },
+      {
+        "name": "tail listing includes original steps 174..178",
+        "passed": true
+      },
+      {
+        "name": "end-only range includes 1..3",
+        "passed": true
+      },
+      {
+        "name": "range intersects names",
+        "passed": true
+      },
+      {
+        "name": "import is selectable explicitly",
+        "passed": true
+      },
+      {
+        "name": "list does not resolve engine or create evidence directory",
+        "passed": true
+      },
+      {
+        "name": "list preserves existing evidence",
+        "passed": true
+      },
+      {
+        "name": "empty array",
+        "passed": true,
+        "error": "Test selection cannot be empty."
+      },
+      {
+        "name": "empty name",
+        "passed": true,
+        "error": "Test selection cannot contain an empty name/pattern."
+      },
+      {
+        "name": "whitespace name",
+        "passed": true,
+        "error": "Test selection cannot contain an empty name/pattern."
+      },
+      {
+        "name": "unknown name",
+        "passed": true,
+        "error": "No check matches 'not_a_real_test'. Use -List to inspect names."
+      },
+      {
+        "name": "unknown pattern among valid names",
+        "passed": true,
+        "error": "No check matches 'missing_*'. Use -List to inspect names."
+      },
+      {
+        "name": "malformed wildcard",
+        "passed": true,
+        "error": "The specified wildcard character pattern is not valid: ["
+      },
+      {
+        "name": "inverted interval",
+        "passed": true,
+        "error": "Invalid step range 5..3; use 1..178."
+      },
+      {
+        "name": "end outside plan",
+        "passed": true,
+        "error": "Invalid step range 1..179; use 1..178."
+      },
+      {
+        "name": "start outside plan",
+        "passed": true,
+        "error": "Invalid step range 179..178; use 1..178."
+      },
+      {
+        "name": "zero index",
+        "passed": true,
+        "error": "Cannot validate argument on parameter 'FromStep'. The 0 argument is less than the minimum allowed range of 1. Supply an argument that is greater than or equal to 1 and then try the command again."
+      },
+      {
+        "name": "negative index",
+        "passed": true,
+        "error": "Cannot validate argument on parameter 'ToStep'. The -1 argument is less than the minimum allowed range of 1. Supply an argument that is greater than or equal to 1 and then try the command again."
+      },
+      {
+        "name": "empty name-range intersection",
+        "passed": true,
+        "error": "No checks remain after applying the selection, step range and import option."
+      },
+      {
+        "name": "import removed from import-only selection",
+        "passed": true,
+        "error": "No checks remain after applying the selection, step range and import option."
+      },
+      {
+        "name": "engine missing for execution",
+        "passed": true,
+        "error": "GodotPath is required to execute checks; use -List to inspect the plan."
+      },
+      {
+        "name": "invalid execution cannot overwrite evidence",
+        "passed": true,
+        "error": "No check matches 'missing_*'. Use -List to inspect names."
+      },
+      {
+        "name": "invalid execution preserves existing evidence",
+        "passed": true
+      },
+      {
+        "name": "timeout below existing bound",
+        "passed": true,
+        "error": "Cannot validate argument on parameter 'CheckTimeoutSeconds'. The 59 argument is less than the minimum allowed range of 60. Supply an argument that is greater than or equal to 60 and then try the command again."
+      },
+      {
+        "name": "timeout above existing bound",
+        "passed": true,
+        "error": "Cannot validate argument on parameter 'CheckTimeoutSeconds'. The 301 argument is greater than the maximum allowed range of 300. Supply an argument that is less than or equal to 300 and then try the command again."
+      }
+    ],
+    "focused_execution": {
+      "passed": true,
+      "original_indices": [
+        9,
+        177
+      ],
+      "execution_indices": [
+        1,
+        2
+      ],
+      "selected_steps": 2,
+      "plan_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\test_granularity\\focused_pass\\plan.json",
+      "checks_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\test_granularity\\focused_pass\\checks.jsonl"
+    },
+    "plan": {
+      "created_utc": "2026-10-10T04:12:32.0205188Z",
+      "source_commit": "aa7233b32f12c5677ea24cd7022b28adc3467895",
+      "working_tree_status": [
+        " M docs/WORKFLOW.md",
+        " M tools/verify.ps1",
+        "?? docs/TESTING.md"
+      ],
+      "runner_sha256": "1C0E4255A849714C56DE87E9E5ECF298D11B62B4B7C56D3B4A3EED2DF8516711",
+      "engine_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\review-engine\\Godot.exe",
+      "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+      "timeout_seconds": 60,
+      "selection": {
+        "test": [
+          "foundation_test",
+          "smoke"
+        ],
+        "test_filter_specified": true,
+        "from_step": 9,
+        "to_step": 177,
+        "skip_editor_import": true
+      },
+      "total_steps": 178,
+      "selected_steps": 2,
+      "checks": [
+        {
+          "index": 9,
+          "name": "foundation_test",
+          "arguments": [
+            "--headless",
+            "--path",
+            "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+            "--script",
+            "res://tests/foundation_test.gd"
+          ]
+        },
+        {
+          "index": 177,
+          "name": "smoke",
+          "arguments": [
+            "--headless",
+            "--path",
+            "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+            "--quit-after",
+            "5"
+          ]
+        }
+      ]
+    },
+    "checks": [
+      {
+        "name": "foundation_test",
+        "index": 9,
+        "exit_code": 0,
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\test_granularity\\focused_pass\\009-foundation_test.engine.log",
+        "execution_index": 1,
+        "timed_out": false,
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+          "--script",
+          "res://tests/foundation_test.gd"
+        ],
+        "output_sha256": "10C00F261A4572819C6B3293933D567298A2335AB50E19A710DBE5FA5445374B",
+        "timeout_seconds": 60,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\test_granularity\\focused_pass\\009-foundation_test.output.log",
+        "failed": false
+      },
+      {
+        "name": "smoke",
+        "index": 177,
+        "exit_code": 0,
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\test_granularity\\focused_pass\\177.engine.log",
+        "execution_index": 2,
+        "timed_out": false,
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+          "--quit-after",
+          "5"
+        ],
+        "output_sha256": "99A1F5C05F8B42A98C1353A644C0527B7FBDEBFB7A944ACD272CCF7D46CC34A6",
+        "timeout_seconds": 60,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\test_granularity\\focused_pass\\177.output.log",
+        "failed": false
+      }
+    ],
+    "evidence_files": [
+      {
+        "path": ".godot/verification/test_granularity/selection_probe.ps1",
+        "sha256": "fa875dd977edf61698ee11ff8fca7d030b1bdcefa44b181b34ae23d30153968b"
+      },
+      {
+        "path": ".godot/verification/test_granularity/selection_checks.json",
+        "sha256": "56ade23569a37e12c488d0fbe2445b700cd25a26f1f0595022002c81e24dc007"
+      },
+      {
+        "path": ".godot/verification/test_granularity/execution_probe.ps1",
+        "sha256": "082780c205bd7d68901d52b590f10d87842f0f963385aabfb52fb8c854967ba6"
+      },
+      {
+        "path": ".godot/verification/test_granularity/execution_probe.log",
+        "sha256": "6f049920beab9f066d1fa88a3d1af81b0c682234b156ec7e93e70c6d54e3b990"
+      },
+      {
+        "path": ".godot/verification/test_granularity/execution_checks.json",
+        "sha256": "6188eb95d160e2376a0434770656aab9136d676dd4b7b28ffeb144baa861bdad"
+      },
+      {
+        "path": ".godot/verification/test_granularity/focused_pass/plan.json",
+        "sha256": "54afa84cd6c4c0bae68c76d64688040be7894db47d195a6d5034cfbb5eb02102"
+      },
+      {
+        "path": ".godot/verification/test_granularity/focused_pass/checks.jsonl",
+        "sha256": "4a7c708860dc42eef13c24c63c7cd4a82baeedee63a9f2fe66bc7907cc980460"
+      }
+    ],
+    "runner": {
+      "path": "tools/verify.ps1",
+      "sha256": "1c0e4255a849714c56de87e9e5ecf298d11b62b4b7c56d3b4a3eed2df8516711"
+    },
+    "author_review": "32 selection assertions PASS; runner hash matches focused execution; two executed steps (foundation_test and smoke) PASS with verified output hashes. All 178 original commands retain their order. Gameplay trees scripts/tests/resources/scenes/assets/addons/project.godot/docs/fixtures equal tested_code_commit. Final five full-suite logs verified without rerunning them. No additional engine execution on 2026-10-11.",
+    "independent_review": "R1 pending; this is author/tooling evidence only."
   }
 }

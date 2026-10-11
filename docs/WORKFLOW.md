@@ -37,6 +37,11 @@ Não há cadeia obrigatória Luna → Terra → Sol → Astra. Escolher o menor 
 adequado de executor/revisor. Esforço é escolhido para cada tarefa/rodada; não
 prometer adaptação automática do app nem economia de tokens sem medição.
 
+Preferência humana reiterada em 11/10/2026: respeitar o esforço reduzido escolhido
+no chat; Extra Alto não é padrão para delegações. Reservar esforço maior a uma
+necessidade concreta de risco, evitando reanálise e validação duplicadas. Usar
+pacotes concluíveis e delegar somente quando houver ganho concreto.
+
 ## Contrato de tarefa e paralelismo
 
 Antes da execução, registrar no índice do épico:
