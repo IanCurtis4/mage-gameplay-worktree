@@ -42,6 +42,9 @@ static func from_build(new_run_id: String, source: BuildSnapshot) -> RunState:
 	state.effect_ledger = EffectProcLedger.new(new_run_id)
 	state.character_id = source.character_id
 	state.build_snapshot = source.copy_snapshot()
+	var loaded := BuildContentLoader.load_catalog_for_profile(state.build_snapshot._skill_catalog)
+	if loaded["ok"]:
+		state._effect_catalog = loaded["catalog"]
 	state.class_id = state.build_snapshot.base_class_id
 	state._uses_persistent_build = true
 	state.reset()
@@ -237,14 +240,20 @@ func _augment_candidate(id: StringName, before: Dictionary) -> Dictionary:
 	var after := BuildEffectComposer.compose(snapshot, state, [], _effect_catalog)
 	if not after["ok"]:
 		return after
+	return after if has_effective_gain(before, after) else BuildEffectCatalog.failure(&"no_effective_gain")
+
+func has_effective_gain(before: Dictionary, after: Dictionary) -> bool:
+	# Offers and card rewards compare resolved values, after caps and aggregation.
+	if not before.get("ok", false) or not after.get("ok", false):
+		return false
 	if before["breakdown"].values() != after["breakdown"].values() or _effective_proc_signature(before["procs"]) != _effective_proc_signature(after["procs"]):
-		return after
+		return true
 	for skill: StringName in after["skill_rules"]:
 		var previous := SkillEffectResolver.capture(skill, int(skill_levels.get(skill, 0)), before)
 		var following := SkillEffectResolver.capture(skill, int(skill_levels.get(skill, 0)), after)
 		if previous["ok"] and following["ok"] and previous["values"] != following["values"]:
-			return after
-	return BuildEffectCatalog.failure(&"no_effective_gain")
+			return true
+	return false
 
 func describe_progress(definition: AugmentDefinition) -> String:
 	var current: int = augment_stacks.get(definition.id, 0)

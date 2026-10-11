@@ -704,12 +704,12 @@ static func _copy_json_candidate(value: Variant) -> Variant:
 static func _character_equipment_is_valid(character: CharacterState, collection: Array[StringName], catalog: ProfileCatalog) -> bool:
 	for slot: StringName in IdentityIds.equipment_slots():
 		var value: Variant = character.equipped[slot]
-		if value != null and (value not in collection or not catalog.equipment_is_allowed(value, slot, character.base_class_id)):
+		if value != null and (value not in collection or not catalog.equipment_is_allowed(value, slot, character.base_class_id, character.evolution_id)):
 			return false
 	for preset: Dictionary in character.presets:
 		for slot: StringName in IdentityIds.equipment_slots():
 			var value: Variant = preset["equipped"][slot]
-			if value != null and (value not in collection or not catalog.equipment_is_allowed(value, slot, character.base_class_id)):
+			if value != null and (value not in collection or not catalog.equipment_is_allowed(value, slot, character.base_class_id, character.evolution_id)):
 				return false
 	return true
 

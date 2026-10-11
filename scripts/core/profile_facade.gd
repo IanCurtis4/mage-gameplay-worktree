@@ -65,7 +65,7 @@ func create_character(request_id: String, expected_revision: int, display_name: 
 	candidate.selected_character_id = character_id
 	candidate.next_character_counter += 1
 
-	var committed := _resolve_commit(before, candidate, _store.commit(candidate))
+	var committed := _resolve_commit(before, candidate, _commit_candidate(candidate, character_id))
 	if committed["ok"]:
 		committed["character_id"] = character_id
 	return _finish_operation(request_id, committed)
@@ -92,7 +92,7 @@ func select_character(request_id: String, expected_revision: int, character_id: 
 	var before := _profile.copy_state()
 	var candidate := before.copy_state()
 	candidate.selected_character_id = character_id
-	var committed := _resolve_commit(before, candidate, _store.commit(candidate))
+	var committed := _resolve_commit(before, candidate, _commit_candidate(candidate, character_id))
 	if committed["ok"]:
 		committed["selected_character_id"] = character_id
 	return _finish_operation(request_id, committed)
@@ -124,7 +124,7 @@ func select_preset(request_id: String, expected_revision: int, character_id: Str
 	var candidate_character := candidate.character_by_id(character_id)
 	candidate_character.selected_preset = preset_index
 	candidate_character.equipped = candidate_character.presets[preset_index]["equipped"].duplicate(true)
-	var committed := _resolve_commit(before, candidate, _store.commit(candidate))
+	var committed := _resolve_commit(before, candidate, _commit_candidate(candidate, character_id))
 	if committed["ok"]:
 		committed["character_id"] = character_id
 		committed["selected_preset"] = preset_index
@@ -143,7 +143,7 @@ func available_build_options(character_id: String) -> Dictionary:
 		equipment_by_slot[slot] = []
 	for item_id: StringName in _profile.equipment_collection:
 		for slot: StringName in IdentityIds.equipment_slots():
-			if _catalog.equipment_is_allowed(item_id, slot, character.base_class_id):
+			if _catalog.equipment_is_allowed(item_id, slot, character.base_class_id, character.evolution_id):
 				equipment_by_slot[slot].append(item_id)
 	return {
 		"ok": true,
@@ -187,7 +187,7 @@ func update_preset(
 	candidate_preset["equipped"] = equipped.duplicate(true)
 	candidate_character.selected_preset = preset_index
 	candidate_character.equipped = equipped.duplicate(true)
-	var committed := _resolve_commit(before, candidate, _store.commit(candidate))
+	var committed := _resolve_commit(before, candidate, _commit_candidate(candidate, character_id))
 	if committed["ok"]:
 		committed["character_id"] = character_id
 		committed["selected_preset"] = preset_index
@@ -221,7 +221,7 @@ func equip_between_encounters(request_id: String, expected_revision: int, contro
 	var equipped: Dictionary = prepared["snapshot"].equipped
 	character.equipped.assign(equipped)
 	character.presets[character.selected_preset]["equipped"] = equipped.duplicate(true)
-	return _finish_operation(request_id, _resolve_commit(before, candidate, _store.commit(candidate), true))
+	return _finish_operation(request_id, _resolve_commit(before, candidate, _commit_candidate(candidate, character.character_id), true))
 
 func update_action_slots(request_id: String, expected_revision: int, character_id: String, slots: Array[Variant]) -> Dictionary:
 	if _operation_in_progress:
@@ -606,7 +606,7 @@ func start_run(request_id: String, expected_revision: int) -> Dictionary:
 		"last_committed_seq": 0,
 	}
 	candidate.lifetime_stats[&"runs_started"] += 1
-	var committed := _resolve_commit(before, candidate, _store.commit(candidate))
+	var committed := _resolve_commit(before, candidate, _commit_candidate(candidate, character.character_id))
 	if committed["ok"]:
 		var committed_character := _profile.character_by_id(character.character_id)
 		var snapshot := _build_snapshot(committed_character)
@@ -749,7 +749,7 @@ func _finish_progression_mutation(
 		no_op["character_id"] = character_id
 		no_op["progression"] = CharacterProgression.summary(_profile.character_by_id(character_id), _catalog)
 		return _finish_operation(request_id, no_op)
-	var committed := _resolve_commit(before, candidate, _store.commit(candidate))
+	var committed := _resolve_commit(before, candidate, _commit_candidate(candidate, character_id))
 	if committed["ok"]:
 		committed["character_id"] = character_id
 		committed["progression"] = CharacterProgression.summary(_profile.character_by_id(character_id), _catalog)
@@ -815,6 +815,30 @@ func _build_snapshot(character: CharacterState) -> BuildSnapshot:
 		_catalog.skill_ids_for_identity(character.base_class_id, character.evolution_id),
 		_catalog
 	)
+
+func _commit_candidate(candidate: ProfileState, character_id: String) -> Dictionary:
+	# Validate persistent preferences with the same compositor used by the run,
+	# before any disk write. No cards, augments or temporary buffs enter the save.
+	var encoded := ProfileCodec.encode(candidate, _catalog)
+	if not encoded["ok"]:
+		return encoded
+	var loaded := BuildContentLoader.load_catalog_for_profile(_catalog)
+	if not loaded["ok"]:
+		return loaded
+	var character := candidate.character_by_id(character_id)
+	if character == null:
+		return BuildEffectCatalog.failure(&"invalid_character_id")
+	# Check only the edited character; unrelated alts cannot prevent a repair.
+	# Dormant identities may remain stored; start_run separately rejects them.
+	if character.evolution_id.is_empty() or _catalog.evolution_is_ready(character.evolution_id, character.base_class_id):
+		for preset_index: int in character.presets.size():
+			var selected := character.copy_state()
+			selected.selected_preset = preset_index
+			selected.equipped = selected.presets[preset_index]["equipped"].duplicate(true)
+			var composed := BuildEffectComposer.compose(_build_snapshot(selected), {}, [], loaded["catalog"])
+			if not composed["ok"]:
+				return composed
+	return _store.commit(candidate)
 
 func _resolve_commit(before: ProfileState, candidate: ProfileState, commit_result: Dictionary, retain_runtime_transaction: bool = false) -> Dictionary:
 	var result := _reconcile_commit(before, candidate, commit_result)

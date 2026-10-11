@@ -156,3 +156,23 @@ Saves ficam explicitamente em `.godot/verification/e06_t2`, sem perfis pessoais.
 Receitas reais de testes cobrem HP/SP, transformação de Fire Spear e exclusividade
 cruzada; estrutura de catálogo é copiada antes de qualquer alteração da fixture.
 R1 independente e integração F2 pendentes; dados/UI finais dependem desse gate.
+
+
+## Correções da fundação após achados R1 — 11/10/2026
+
+`RunState.has_effective_gain(before, after)` compara stats, payload efetivo de
+procs e valores capturados de skill depois de caps; compartilhado por ofertas e
+sorteio de cartas. `claim_kit_recovery` exclui filhos de proc genérico.
+`ProfileCatalog.add_equipment` aceita `allowed_evolutions` opcional ao final;
+`equipment_is_allowed` recebe `evolution_id` opcional ao final. Metadata preserva
+as restrições; codec verifica equipamento de ambos os presets e menu filtra
+opções pela evolução. `equipment_ids()` devolve os IDs do catálogo por valor.
+
+`BuildContentLoader.load_catalog_for_profile(catalog)` preserva Resources de
+produção e acrescenta definições neutras só para IDs exclusivamente de metadata
+injetada. Fachada e RunState usam a mesma interpretação. Antes de persistir uma
+mudança de build, ranks/preset ou iniciar sessão, a fachada compõe os dois presets
+do personagem envolvido e rejeita conflito inteiro. Não usa cartas, augments ou
+buffs temporários nessa validação; aquisição e encerramento mantêm seus contratos.
+Esta API ainda corresponde à fundação v1. A expansão contratual de11/10 exige
+novas APIs/migração antes de conteúdo e interface; não está implementada aqui.

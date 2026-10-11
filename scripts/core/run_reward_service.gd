@@ -79,7 +79,7 @@ func eligible_cards() -> Array[StringName]:
 			var after_effects := before_effects.duplicate(true)
 			after_effects["card_sockets"][item] = id
 			var after := BuildEffectComposer.compose(_run.build_snapshot, after_effects, [], catalog)
-			if before["ok"] and after["ok"] and (before["breakdown"].values() != after["breakdown"].values() or before["skill_rules"] != after["skill_rules"] or _run._effective_proc_signature(before["procs"]) != _run._effective_proc_signature(after["procs"])):
+			if _run.has_effective_gain(before, after):
 				result.append(id)
 				break
 	return result

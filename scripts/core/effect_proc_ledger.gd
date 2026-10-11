@@ -119,7 +119,7 @@ func cancel() -> void:
 
 func claim_kit_recovery(context: CombatEventContext, family: StringName, source: StringName, target: int) -> bool:
 	# Explicit E05 exceptions: intrinsic drain healing and kill healing from DoT.
-	if family not in [&"blood_thirst", &"spiritualist_drain_heal"] or context == null:
+	if family not in [&"blood_thirst", &"spiritualist_drain_heal"] or context == null or context.proc_child:
 		return false
 	return not _claim(context, [{"family_id": family, "source_id": source, "target_id": target}], true, 0, true).is_empty()
 
