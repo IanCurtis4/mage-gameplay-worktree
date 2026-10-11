@@ -1,5 +1,133 @@
 # E06 — contrato de composição, efeitos e inventário
 
+## Adendo prevalente — 11/10/2026: equipamentos, cartas e loot
+
+**Decisão humana:** atualizar o contrato E06 antes de iniciar conteúdo e interface.
+Este adendo prevalece sobre as seções v1 abaixo somente nos deltas explicitados.
+A v1 permanece preservada como base histórica da revisão R1 de três slots; seus
+SHAs, IDs e critérios não foram reescritos para aparentar cobertura da expansão.
+A revisão R1 em andamento não aprova este novo escopo nem libera T3/T4.
+
+Esta rodada autoriza atualização documental e discussão. A fundação ampliada
+aguarda as decisões estruturais abaixo, contrato executável/APIs e definição
+formal do pacote antes de implementação. Não há dispatch por efeito deste texto.
+
+Autoria: subagente `equipment_loot_planning`, com propriedade documental adicional
+repassada pela coordenação por autorização humana em 11/10/2026, neste checkout
+`C:/Users/João Pedro/.codex/worktrees/e06-inventory/RagRPG`.
+Registro completo de decisões, propostas e pendências:
+[equipment_loot_requirements.md](e06/equipment_loot_requirements.md).
+Mapa dependente deste adendo: [e06_tasks.md](e06_tasks.md).
+Checkpoint, runtime, testes e artefatos de revisão permanecem com seus donos.
+
+### A1. Produto confirmado para a extensão de E06
+
+- Equipamentos e cartas transformam características, habilidades, gameplay e
+  passivos; podem adicionar habilidades. Acessórios podem conceder ativas.
+  A antiga exclusão de habilidades concedidas por item não define mais o alvo
+  de E06. Semântica de concessão/rank/remoção permanece a contratar.
+- Cartas se vinculam ao mob-base que as dropa; equipamentos ao lugar do drop.
+  Usar ícone genérico de carta e ícones de armadura por pano, couro, malha,
+  escamas e placas. Subtipos não recebem restrições ou números presumidos.
+- Inventário alvo: cabeça, pescoço, ombros, braços (punho + luvas), tronco,
+  capa, calças, pés, main hand, off hand e quatro posições livres de acessórios
+  como berloques, trinkets e anéis: 14 posições no total. Compatibilidades,
+  duas mãos e migração dos slots/IDs antigos exigem regra explícita.
+- Armadura não aparece no personagem, salvo chapéu, com modelos 2D por
+  orientação/pose. Slots próprios de cosméticos ficam fora desta entrega.
+- Armas/armaduras usam raridades iguais às de WoW; somente raro+ tem efeitos
+  secundários interessantes; incomuns apenas mais stats. Drop rate depende
+  do inimigo. Lista exata de raridades, extensão a acessórios, taxas e regra
+  de garantir ou permitir efeitos em raro+ ainda não foram fixadas.
+- Mobs também têm raridade; algumas bases só aparecem a partir de certa
+  raridade, outras são exclusivas de uma raridade, na referência humana de
+  artefato de mapa estilo WoW. A taxonomia e essa referência precisam ser
+  operacionalizadas antes de regras de spawn/loot.
+- Drops/cartas seguem raridade do mob, mas variar a raridade da ocorrência do
+  mesmo mob-base não muda a qualidade da carta. Mobs de base mais alta têm
+  cartas melhores. Chance/quantidade/elegibilidade e eixo de base mais alta
+  precisam de definição; não fundir raridade do mob, item e carta.
+- Reutilizar habilidades das classes para mobs, equipamentos e cartas; novos
+  efeitos devem considerar augments. Preservar autoridade única de fórmulas,
+  recursos imutáveis e adaptação explícita dos contratos particulares dos kits.
+- Hierarquias: stackabilidade augments > cartas > equipamentos; poder augments
+  > equipamentos > cartas; dificuldade de acesso cartas > equipamentos >
+  augments. Não atribuem valores, taxas ou prioridade oculta entre fontes.
+
+### A2. Resposta humana sobre acúmulo e acesso
+
+> Tanto cópias repetidas como soma de bônus. A quantidade de efeitos simultâneos
+> é ilimitada. Equips não podem stackar efeitos com o mesmo nome (então nada de
+> acessórios iguais, pese em "unique-equipped"). Dificuldade envolve tanto chance
+> de drop como frequência de oportunidades.
+
+Consequências confirmadas:
+
+- Stackabilidade cobre repetição de cópias e soma de bônus. A exclusividade
+  absoluta de cartas de D3/v1 é substituída: vários encaixes por peça e cartas
+  iguais podem ocupar a mesma peça. Quantidade de encaixes e limites de cópias
+  por efeito ainda não foram definidos; não reutilizar implicitamente um encaixe.
+- Não impor limite global de quantidade de efeitos simultâneos no design da
+  build. Isso não fixa número de stacks de cada efeito nem número de encaixes.
+- Equipamentos não acumulam efeitos de mesmo nome; acessórios idênticos não
+  podem ser equipados simultaneamente. Não reduzir a regra a item_id: peças
+  diferentes podem compartilhar um efeito. Decisão humana complementar:
+  impedir equipar os dois juntos quando compartilham efeito de mesmo nome.
+  A transação inteira deve ser rejeitada, sem suprimir silenciosamente um efeito.
+  A chave estável equivalente ao nome ainda deverá ser formalizada no contrato
+  técnico; nomes visíveis/traduções não devem criar equivalências acidentais.
+- Dificuldade de acesso considera conjuntamente chance de drop e frequência
+  de oportunidades. Nenhuma tabela numérica decorre dessa hierarquia.
+
+A quantidade de efeitos simultâneos e o orçamento causal são dimensões distintas.
+O teto v1 de 16 aplicações secundárias por raiz e a vedação de cascatas permanecem
+como critérios da R1 histórica. Para a expansão, o usuário escolheu **manter a
+proteção, mas revisar o teto de 16**. O limite causal será reprojetado e validado
+sem presumir novo valor, remoção completa do orçamento ou teto de buffs/fontes
+simultâneos. Não inferir procs infinitos de efeitos simultâneos ilimitados, nem
+usar cap16 para esconder/truncar a lista de efeitos ativos.
+
+### A3. Fronteira pendente e evidência
+
+Antes da fundação ampliada: decidir quantidade/distribuição dos encaixes e limites
+de cópias de cartas, chave de equivalência dos efeitos, compatibilidade
+main/off hand, semântica de habilidades concedidas e orçamento causal. A regra
+cross-origin de famílias carta/augment/equipamento deverá ser explícita; a
+proibição humana de equipamentos não resolve sozinha as outras combinações.
+Persistência efêmera de cartas/augments, coleção compartilhada e troca fora de
+encontro não receberam mudança humana nesta rodada; preservam-se os contratos
+anteriores nesses aspectos. Não inferir permanência de skills concedidas.
+
+Antes do conteúdo final: fechar taxonomias de item/mob, unidade da hierarquia de
+poder, base mais alta, origem espacial, loot por mob versus prêmio por etapa,
+lotação inicial do catálogo e matriz de chapéus. As reservas de 12 itens/6 cartas
+são base histórica de migração, não cobertura aprovada das 14 posições novas.
+E07/campanha final e identidades indisponíveis continuam fora da autorização.
+
+T3/T4 aguardam decisões pertinentes e fundação ampliada estável, validada e
+revisada como fronteira completa. R1 antiga, eventual PASS do autor e atualização
+documental não atendem essa dependência. Aproveitar evidência antiga só com
+compatibilidade demonstrada; revisar o delta material com reprodução independente.
+Save, snapshots, déficits, idempotência e autoridades únicas continuam invariantes.
+Arte/UI exigem inspeção visual; playtest e merge mantêm gates humanos vigentes.
+
+### A4. Referências fornecidas e limite de consulta
+
+O usuário identificou WoW Forever por [Blizzard](https://worldofwarcraft.blizzard.com/pt-br/forever),
+[Wowhead](https://www.wowhead.com/forever/pt) e
+[Warcraft Wiki](https://warcraft.wiki.gg/wiki/World_of_Warcraft:_Forever).
+Consulta em 11/10/2026: Blizzard e Wiki retornaram HTTP403; Wowhead retornou
+apenas página dependente de JavaScript, sem regras úteis de equipamentos/raridade.
+Logo, nenhuma mecânica, taxonomia ou número foi validado nessas páginas. WoW
+Classic e Ragnarok permanecem referências humanas de poder/estilo; não importam
+regras automaticamente. Fonte externa não substitui decisão de produto.
+
+## Base histórica v1 — escopo exclusivo da R1 atual
+
+As seções 1–9 abaixo preservam a redação de 08/10/2026, inclusive afirmações de
+estado daquela data. Onde conflitam, o adendo acima define o novo alvo documental;
+a v1 ainda identifica exatamente a fundação que R1 está revisando.
+
 08/10/2026. Arquitetura documental v1 sobre
 `51b5fabc8fcc7bb74f1b45479cdfe1aa090be4bc`; implementação não iniciada.
 Índice: [e06.md](e06.md). Execução: [tarefas](e06_tasks.md).

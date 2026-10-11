@@ -1286,5 +1286,6 @@
     "Two failed author fixture rounds are preserved: weak Resource lifetime and unsupported STAT skill-target recipe; final fixture uses retained supported SKILL_RULE Resources.",
     "External CLI validate expects old Invoke-GodotCheck registration, incompatible with current Add-GodotCheck plan. No automatic approve emitted.",
     "Updated E06 product requirements are documentation only; runtime still implements v1 foundation."
-  ]
+  ],
+  "corrected_code_commit": "7dbe237f85f8308fdfcf5bbee7e8dd6b975080c4"
 }

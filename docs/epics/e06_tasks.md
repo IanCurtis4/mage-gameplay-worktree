@@ -1,30 +1,64 @@
 # E06 — tarefas temporárias e mapa de integração
 
-09/10/2026. Contrato: [e06_contract.md](e06_contract.md).
-Retomada: [e06_checkpoint.md](e06_checkpoint.md).
-**Nenhum executor criado nesta rodada.** D1/D2/D3 respondidas.
-T1 pronta para dispatch pela coordenação após o commit documental; outras
-tarefas aguardam entregas técnicas, não novo aceite humano rotineiro.
+11/10/2026. **Contrato E06 atualizado antes de conteúdo e interface por decisão
+humana. T3/T4 suspensas até a fundação ampliada.**
+Contrato: [adendo prevalente](e06_contract.md).
+Decisões/propostas: [equipamentos e loot](e06/equipment_loot_requirements.md).
+Retomada operacional continua em [e06_checkpoint.md](e06_checkpoint.md), com seu dono.
+
+A revisão R1 atual avalia apenas T1/T2 de três slots conforme a base v1 histórica.
+Permanece pendente: a interrupção do revisor por limite de uso e as correções/
+provas do autor não constituem aprovação independente. Esta atualização documental
+não encerra R1, não altera sua evidência e não inicia implementação da expansão.
+
+A decisão atual exige uma fundação ampliada antes das receitas/interface finais:
+14 posições; cartas repetidas em múltiplos encaixes na mesma peça; exclusão mútua
+de equipamentos com efeito de mesmo nome; raridades e origem de loot; habilidades
+concedidas; chapéus visíveis; revisão do orçamento causal preservando anti-cascata.
+Quantidades/taxonomias/unidade de poder e demais pendências do adendo não estão
+implicitamente delegadas ao conteúdo. Não despachar consumidores sobre F2 antiga.
+
+### Extensão planejada, sem executor despachado
+
+| Etapa | Resultado e dependência | Situação |
+|---|---|---|
+| DX | Completar decisões estruturais e contrato executável da extensão, sem alterar o parecer da v1 | Documentação em atualização; questões restantes registradas no adendo |
+| TX | Fundação ampliada de composição/inventário/skills/loot, migração e APIs estáveis, preservando autoridades existentes | Planejada; depende de DX, base SHA real, autorização de execução e donos exclusivos; Sol/Alto proposto |
+| RX | Revisão independente da fundação ampliada completa e delta perante v1, com orçamento causal reprojetado | Planejada; sem gate por microtarefa, sem aprovar expansão por herança de R1 |
+| T3/T4 | Conteúdo/UI/arte sobre fundação ampliada aprovada, com contratos de apresentação | Suspensas até FX e decisões pertinentes; modelos Terra/Alto propostos |
+| T5/R2 | Integração e revisão do candidato ampliado; posterior playtest e aceite humano | Dependem dos consumidores completos; sem nova liberação automática de campanha |
+
+DX/TX/RX/FX são marcadores de dependência, não commits, chats criados ou execução
+autorizada. O dispatch resolve pacotes substanciais e pode reutilizar tarefas com
+transferência de dono registrada. Esta atualização não cria número obrigatório
+de chats nem altera arquivos de implementação de T1/T2/R.
+Propriedade documental desta rodada: subagente `equipment_loot_planning` somente
+em `e06_contract.md`, `e06_tasks.md` e `e06/equipment_loot_requirements.md`, por
+autorização humana repassada pela coordenação. Nenhum commit nesta rodada.
 
 ## Bases e registros
 
 - B0: `51b5fabc8fcc7bb74f1b45479cdfe1aa090be4bc`, candidato auditado.
 - D0: entrega documental marcada por `codex/e06-architecture-docs-v1`.
 - F1: commit T1 entregue/validado, usado como base de T2.
-- F2: composição T1+T2, aprovada em R1; base comum congelada de T3/T4.
-- I0: F2+T3+T4 integrados e validados por T5.
+- F2: composição histórica T1+T2 de três slots, dependente de R1; não libera T3/T4.
+- FX: fundação ampliada TX aprovada em RX; nova base comum congelada de T3/T4.
+- I0: FX+T3+T4 integrados e validados por T5 para o alvo ampliado.
 - P0: candidato exato aprovado em R2 e aplicado ao playtest por T5.
 - M0: merge após aceite explícito do usuário sobre P0.
 
-F1/F2/I0/P0/M0 ainda não existem. Antes de dispatch, resolver D0 ou dependência
+B0/D0 e as referências T1/T2 preservam seu significado histórico; o estado real
+fica nos registros das tarefas. FX/I0/P0/M0 ampliados não são SHAs resolvidos.
+Antes de dispatch, resolver a dependência
 em SHA completo e registrar branch, checkout absoluto, chat_id e dono dos arquivos.
 Não executar a partir de referência planejada nem usar B0 sem os novos contratos.
 
-Checkout documental existente:
+Checkout documental registrado na rodada original de 09/10:
 `C:/Users/João Pedro/.codex/worktrees/e06-architecture/RagRPG`,
 branch `codex/e06-architecture`, exclusivo do chat permanente.
-Executores usam worktrees gerenciadas próprias, ainda não criadas; nomes de
-branches abaixo são propostas. Preservar diretório fixo, save e branches alheias.
+Na rodada original, as worktrees dos executores ainda não tinham sido criadas;
+consultar os registros para estado atual. Nomes de
+branches abaixo preservam aquele planejamento. Preservar diretório fixo, save e branches alheias.
 
 Cada tarefa cria seu registro exclusivo em `docs/epics/e06/e06_t1.md`,
 `e06_t2.md`, `e06_t3.md`, `e06_t4.md`, `e06_t5.md` ou `e06_r.md`.
@@ -32,15 +66,19 @@ Checkpoint central: coordenação é dona até transferi-lo a T5.
 Hash/evidência/limitação não podem existir somente na conversa que será arquivada.
 Mensagens entre chats continuam dependentes da autorização humana correspondente.
 
-## DAG: seis chats, duas etapas da mesma revisão
+## DAG atualizado — dependências, sem criação de chats
 
 ```mermaid
 flowchart TD
   D0[Documentação e decisões] --> T1[T1 Composição e causalidade]
   T1 --> T2[T2 Inventário e persistência]
-  T2 --> R1[R1 Revisão da fundação completa]
-  R1 --> T3[T3 Catálogo e builds]
-  R1 --> T4[T4 Interface]
+  T2 --> R1[R1 Fundação histórica de três slots]
+  D0 --> DX[DX Decisões e extensão contratual]
+  R1 --> TX[TX Fundação ampliada]
+  DX --> TX
+  TX --> RX[RX Revisão da fundação ampliada]
+  RX --> T3[T3 Catálogo e builds]
+  RX --> T4[T4 Interface e apresentação]
   T3 --> T5[T5 Integração e validação]
   T4 --> T5
   T5 --> R2[R2 Revisão integrada]
@@ -49,7 +87,8 @@ flowchart TD
   H --> M[T5 Merge autorizado]
 ```
 
-R1/R2 pertencem ao mesmo chat temporário R, mantido pendente entre etapas.
+R1/R2 preservam o registro da tarefa R, pendente entre etapas; a atribuição de RX
+será explícita, sem inferir disponibilidade ou aprovação da tarefa histórica.
 São revisão de uma fundação crítica completa e do candidato integrado, sem gate
 por microtarefa. O chat permanente não executa R, integração ou gerência contínua.
 T5 mantém a responsabilidade operacional durante playtest/correções/aceite.
@@ -59,9 +98,9 @@ T5 mantém a responsabilidade operacional durante playtest/correções/aceite.
 | T1 | Composição única e causalidade limitada, adaptadas ao runtime | gpt-6.1-sol / xhigh | D0; codex/e06-effects; worktree própria a criar |
 | T2 | Coleção, troca, cartas e recompensas atômicas | gpt-6.1-sol / xhigh | F1; codex/e06-inventory; worktree própria a criar |
 | R | Parecer independente R1/R2 | gpt-6-astra / high; xhigh se necessário pela complexidade real | T1+T2 em R1; I0 em R2; codex/e06-review; checkout próprio |
-| T3 | Catálogo concreto e duas builds legais por identidade | gpt-5.6-terra / high | F2 aprovado; codex/e06-content; checkout próprio |
-| T4 | Ofertas/inventário/previews utilizáveis | gpt-5.6-terra / high | F2 aprovado; codex/e06-build-ui; checkout próprio |
-| T5 | Candidato, evidências, playtest e eventual merge autorizado | gpt-6.1-sol / high | F2 + T3/T4; codex/e06-integration; checkout próprio |
+| T3 | Catálogo concreto e duas builds legais por identidade | gpt-5.6-terra / high | FX aprovado e decisões fechadas; codex/e06-content; checkout próprio |
+| T4 | Ofertas/inventário/previews utilizáveis | gpt-5.6-terra / high | FX aprovado e decisões fechadas; codex/e06-build-ui; checkout próprio |
+| T5 | Candidato, evidências, playtest e eventual merge autorizado | gpt-6.1-sol / high | FX + T3/T4; codex/e06-integration; checkout próprio |
 
 Modelo/esforço são escolhas explícitas na criação/rodada, não adaptação automática.
 Luna pode preencher variantes estritamente fechadas dentro de T3 após receita/
@@ -82,7 +121,7 @@ contratual antes dos consumidores. Toda transferência de dono é registrada.
 | scripts/data/augment_definition.gd; novos equipment_definition.gd, card_definition.gd, effect_definition.gd; scripts/core/build_effect_catalog.gd, build_effect_composer.gd, skill_effect_resolver.gd | T1; T2/T3/T4 consomem, não editam sem transferência |
 | scripts/core/profile_catalog.gd, profile_facade.gd, profile_codec.gd, profile_store.gd, profile_state.gd, profile_reward_resolver.gd | T2 |
 | novos scripts/core/run_build_service.gd, run_card_inventory.gd, run_reward_service.gd, build_presentation.gd; scripts/world/reward_pickup.gd | T2 |
-| resources/build_effects/** | T2 cria metadata/IDs fixados em §8 → T3 preenche conteúdo depois de R1 |
+| resources/build_effects/** | T2 cria metadata/IDs fixados em §8 → T3 preenche conteúdo depois de FX e migração contratada |
 | assets/art/icons/build_effects/**, docs/epics/e06/content_manifest.md | T3 |
 | scripts/ui/character_menu.gd; novos scripts/ui/build_inventory_panel.gd, augment_choice_panel.gd; scenes/ui/e06/** | T4 |
 | tests/e06_effects_*, tests/e06_proc_* | T1 |
@@ -102,9 +141,11 @@ Nenhuma tarefa paralela começa com arquivo compartilhado ainda sob alteração.
 T4 constrói painéis desacoplados e testa com hospedeiro/fixtures próprios;
 a conexão em Main fica com T5. T3 usa carregador pronto, sem editar ProfileCatalog
 para registrar seus dados. Handler adicional solicitado por T3 retorna a T1,
-suspendendo receitas dependentes e revalidando F2/consumidores afetados.
+suspendendo receitas dependentes e revalidando FX/consumidores afetados.
 
 ## T1 — composição e causalidade
+
+Recorte histórico de R1; a ampliação TX não é declarada entregue por este pacote.
 
 **Resultado observável:** a mesma fonte em augment/equipamento/carta compõe de
 modo previsível e preview coincide com execução; efeitos concorrentes respeitam
@@ -131,6 +172,9 @@ vem em R1; arquivável após F2 validado/aprovado, mantendo correções no chat 
 
 ## T2 — inventário, cartas e durabilidade
 
+Recorte histórico de R1; carta única/encaixe único descrevem a v1, substituída
+no alvo ampliado pelo adendo. Não reusar essa unicidade como regra futura.
+
 **Resultado observável:** coleta salva item; trocar/encaixar altera somente a
 build permitida; falha ou déficit extremo conserva perfil e ator; morte/reabrir
 conserva itens/XP e descarta cartas/augments.
@@ -156,7 +200,8 @@ snapshot/ranks/barras24; carta livre/encaixada/transferida e reset transitório.
 Verify completo, saves em fixtures explícitas.
 
 **Conclusão:** candidato completo T1+T2, manifesto de DTOs/APIs estável e commit
-limpo. R1 reproduz/aprova F2 antes de T3/T4. Arquivável após F2 integrado/validado.
+limpo. R1 reproduz/aprova F2 histórica; T3/T4 agora aguardam FX. O registro de T2
+preserva sua conclusão histórica, sem representar entrega da ampliação.
 
 ## R — revisão independente
 
@@ -168,8 +213,8 @@ adaptadores E05, identidade, troca/dívida, migração e falhas de save, APIs do
 consumidores. Casos adversariais independentes e verify completo. Aprovar F2 ou
 devolver achados às tarefas autoras, sem exigir gate para cada commit interno.
 
-**R2:** I0: delta catálogo/UI/integração, dez identidades/20 builds, combinações
-das três origens, renderer, terminal/reload e validade dos contratos de R1.
+**R2:** I0 ampliado: delta catálogo/UI/integração, dez identidades/20 builds, combinações
+das três origens, renderer, terminal/reload e validade da base histórica R1 e da extensão aprovada em RX.
 Reproduzir suíte integral e inspecionar capturas próprias/renderer. Reuso de
 evidência só com inputs compatíveis e identificado; nunca converter evidência
 do implementador em reprodução própria.
@@ -183,11 +228,14 @@ Autoria do contrato pelo chat permanente não conta como review de executável.
 
 ## T3 — catálogo e builds
 
+**Suspensa:** depende de FX e decisões de conteúdo do adendo. O recorte v1 abaixo
+é referência a revisar; 12 equipamentos/6 cartas não cobrem automaticamente o novo alvo.
+
 **Resultado observável:** pools gerais/origem/exclusivos úteis para dez identidades;
 equipamentos/cartas transformadores; duas builds legais/identidade mudam uma
 decisão de combate, além de diferenças numéricas.
 
-**APIs/entrega:** Resources sobre F2, manifesto de IDs/ranks mínimos/curvas/unidades/
+**APIs/entrega:** Resources sobre FX, manifesto de IDs/ranks mínimos/curvas/unidades/
 caps/conflitos/alvos/eligibilidade, ícones sobre padrão existente, duas builds/
 identidade e tabela de recompensa demonstrativa. Sem alterar carregador/serviços.
 
@@ -206,15 +254,20 @@ origens,20 builds por APIs e transformações observáveis. Testes dirigidos,
 comandos/lista para T5 registrar em verify.
 
 **Conclusão:** commit limpo com receitas e evidências; arquivável após integração
-T5/R2 validada. Paralelo com T4 sobre F2; sem mudanças de API durante esse paralelo.
+T5/R2 validada. Paralelo com T4 sobre FX; sem mudanças de API durante esse paralelo.
 
 ## T4 — interface de coleção, inventário e ofertas
+
+**Suspensa:** depende de FX, slots/encaixes e contrato visual ampliado. O recorte
+v1 abaixo deverá ser adequado a 14 posições, cartas repetidas e habilidades
+concedidas antes do dispatch. Chapéus exigem proprietário de arte explicitamente
+designado; não transferir arquivos de atores implicitamente para T4.
 
 **Resultado observável:** usuário distingue persistente/temporário, compara
 atual→próximo/antes→depois, escolhe/equipa/transfere e entende bloqueios; nenhum
 clique duplicado, lançamento de skill ou reroll por reabrir UI.
 
-**APIs/entrega:** apenas DTOs/operações F2; catálogo injetado. Fixtures próprias
+**APIs/entrega:** apenas DTOs/operações FX; catálogo injetado. Fixtures próprias
 com três origens transformadoras, caps e nomes longos, independentes do T3.
 Painéis e integração CharacterMenu; sinais para ligação Main por T5.
 
@@ -235,7 +288,7 @@ após T5/R2 validar integração. Não editar runner ou arquivos de conteúdo em
 inventário/ofertas/transformações e evidências ligadas ao commit; playtest e
 merge somente nos gates correspondentes.
 
-**APIs/arquivos:** integra F2+T3+T4 serialmente, conecta painéis/dados em Main/Player,
+**APIs/arquivos:** integra FX+T3+T4 serialmente, conecta painéis/dados em Main/Player,
 registra testes em verify e assume checkpoint mediante transferência.
 Wiring local pode ser corrigido aqui; defeito de domínio retorna ao autor,
 reabrindo seu chat se necessário. Não criar API concorrente.
