@@ -1,3 +1,5 @@
+> Atualização prevalente de 11/10/2026, após as respostas finais: [itemização e execução após T2](e06/itemization_execution.md). Consolida encaixes 0–4, loot por categoria, incomuns apenas stats, cartas sempre passivas e efeitos interessantes conforme mob base elite+. Autoriza encaminhamento em etapas ao Sol; R1 permanece pendente e antecede TX. O texto abaixo conserva o registro anterior nos pontos não substituídos.
+
 # E06 — contrato de composição, efeitos e inventário
 
 ## Adendo prevalente — 11/10/2026: equipamentos, cartas e loot
