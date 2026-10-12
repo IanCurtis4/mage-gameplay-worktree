@@ -98,5 +98,24 @@ func _run() -> void:
 		c.enemies.erase(victim)
 		victim.free()
 		c.free()
+	_snapshot_null_guard()
 	print("E06 TX2 active: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
+
+func _snapshot_null_guard() -> void:
+	var fixture := F.make(self, "tx_active_null_guard", &"mage")
+	var controller: RunController = fixture["controller"]
+	var state := controller.run_state
+	assert(state.set_effect_catalog(_catalog())["ok"])
+	assert(F.change(controller, &"equip", {"slot": &"accessory_1", "item_id": &"prismatic_charm"})["ok"])
+	var original_ids := state.available_active_ids()
+	var saved_snapshot := state.build_snapshot
+	state.build_snapshot = null
+	_check(state.available_active_ids().is_empty() and not state.has_item_active(&"fire_spear") and state.effective_skill_rank(&"fire_spear") == 0, "temporarily absent snapshot clears learned/item access instead of leaking cached grants")
+	_check(controller.player.available_skill_ids().is_empty(), "persistent player library is safe while snapshot is absent")
+	state.build_snapshot = saved_snapshot
+	_check(state.available_active_ids() == original_ids and state.has_item_active(&"fire_spear") and state.effective_skill_rank(&"fire_spear") == 3, "restoring snapshot rebuilds item and learned access without losing original order")
+	var pilot := RunState.new(&"mage")
+	pilot.build_snapshot = null
+	_check(not pilot.uses_persistent_build() and pilot.available_active_ids().is_empty(), "pilot item lookup tolerates absent snapshot; actor retains its existing class fallback")
+	controller.free()

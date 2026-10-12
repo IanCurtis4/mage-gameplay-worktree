@@ -372,7 +372,9 @@ func effective_skill_rank(skill: StringName) -> int:
 	return int(_effect_cache.get("skill_ranks", {}).get(skill, 0))
 
 func available_active_ids() -> Array[StringName]:
-	var result := build_snapshot.learned_skill_ids(ProfileCatalog.ACTIVE)
+	var result: Array[StringName] = []
+	if build_snapshot != null:
+		result = build_snapshot.learned_skill_ids(ProfileCatalog.ACTIVE)
 	_ensure_effect_cache()
 	for skill: StringName in _effect_cache.get("item_grants", {}):
 		if skill not in result:
