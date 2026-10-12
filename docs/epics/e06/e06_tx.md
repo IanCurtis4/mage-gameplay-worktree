@@ -189,3 +189,14 @@ Renderer nativo Compatibility/OpenGL3.3/NVIDIA GTX1080, janela oculta e save de 
 Falhas preservadas/correções: hook de falha do teste inicialmente tinha nome inexistente, corrigido para write_pending sem retirar assert. Hunter integração detectou canal hunter_thorn_bleed ausente no plano TX2: plano agora inclui skill IDs aprendidos e lista explícita de componentes/ticks reservados; genéricos não podem usar esses IDs como família. Regressões Hunter186/302, Geômetra46, Espiritualista86, Berserker76 e demais consumidores dirigidos PASS; suas expectativas/fórmulas não mudaram. Imports32 incidentais restaurados por conteúdo.
 
 Limites: taxas/receitas/cobertura14 e interface de pickups individuais/T3/T4/chapéus/FX permanecem posteriores, boss AI/mapas/campanha E07 não liberados. RX da fundação ampliada inteira precede consumidores; nenhum push/playtest/merge/aceite humano.
+
+
+## Dispatch RX da fundação ampliada, 12/10/2026
+
+TX1 a8706f8861175ef133ad2247326473f663ca5940; TX2 5d53e486de4656f3c74f51f36c042a24ca69538f; TX3 94ae228fee41fc1b71a568d75c86255c25aa5e49. Base de código da ampliação54e6fad47763310afb307d990759c874c33fd1d3. Runtime/tree serão congelados durante RX. Este registro documental não altera o candidato executável.
+
+Retomar o mesmo único subagente r1_resume, Astra/high, para RX independente TX1–TX3 conjunta (autorização de continuação/subagentes/revisão crítica do contrato/AGENTS; sem novo chat nem gate por microtarefa). Dono temporário exclusivo: novo docs/epics/e06/e06_rx.md, e06_rx_reviewer_validation.json e tests/e06_rx_* +UIDs para probes próprios. Nenhum outro escritor nesses paths. Revisor lê/testa; não corrige runtime/runner/dados nem altera testes autorais. Logs exclusivos .godot/verification/e06_rx/. R1 relatório/recibo fechados intactos. Sol conserva somente este checkpoint/manifesto durante revisão; achados retornam ao autor e suspendem freeze para correção registrada.
+
+Critério RX: inspeção das fronteiras ampliadas e consumidores, probes próprios adversariais, uma integral tools/verify.ps1 de fechamento (190 etapas antes de probes novos) se não houver bloqueio conhecido. Não reexecutar a integral por documentação/ajuste de fixture isolado; decidir reuso por hash/impacto. Separar provas recebidas TX1/2/3 da execução do revisor. Skill ragrpg-review lida; CLI externo autorizado menu-tabs/0c008d4/e642dbe... para pacote diagnóstico. validate/approve antigos não entendem Add-GodotCheck, limitação já conferida em R1: não modificar CLI nem fabricar approve. Decisão manual responsável deve vincular manifesto/HEAD/tree/engine/runner/logs do runner atual.
+
+RX não é aprovação T3/T4/FX/playtest/produto/merge. Sem push, nova conversa, aplicar no checkout fixo ou iniciar E07.
