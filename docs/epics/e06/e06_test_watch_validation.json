@@ -1,0 +1,150 @@
+{
+  "title": "E06 automated test supervision receipt",
+  "role": "Luna automated test supervision; not semantic independent review or product acceptance",
+  "branch": "codex/e06-inventory",
+  "checkout": "C:/Users/João Pedro/.codex/worktrees/e06-inventory/RagRPG",
+  "final_head": "2803f1165ee8883e462bfa8909e6707bb30e004d",
+  "final_tree": "b5582130407daea85c37a248ee75bf74efe60271",
+  "working_tree_clean_at_receipt": true,
+  "engine": {
+    "path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/review-engine/Godot.exe",
+    "version": "4.7.2.stable.official.ed1daf0bf",
+    "sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424"
+  },
+  "runner": {
+    "path": "tools/verify.ps1",
+    "sha256": "0A8143EF881AD75502E6D3DA778ADAE8CA14426B92A477018657402AF23BDAFD"
+  },
+  "timeout_seconds_per_step": 120,
+  "coverage": {
+    "planned_unique_step_names": 193,
+    "unique_step_names_covered": 193,
+    "completed_output_records_hash_checked": 202,
+    "steps_1_through_89": "PASS reused from the clean original run at e7257563e70f0cb00c931d0067b7c7a89d76354c; every recorded output hash was checked against its output file",
+    "step_90": "PASS on corrected catalog-v1 fixture at d2b64e0f3a445be109576238668f39beed335764",
+    "steps_91_through_109": "PASS in the first resumed tail at d2b64e0f3a445be109576238668f39beed335764",
+    "step_110": "PASS after snapshot guard correction at 2803f1165ee8883e462bfa8909e6707bb30e004d",
+    "steps_111_through_193": "PASS in the resumed tail at 2803f1165ee8883e462bfa8909e6707bb30e004d",
+    "distinct_steps_covered": 193,
+    "full_integral_rerun": false
+  },
+  "runs": [
+    {
+      "kind": "original_integrated_prefix_and_failure",
+      "source_commit": "e7257563e70f0cb00c931d0067b7c7a89d76354c",
+      "directory": ".godot/verification/e06_rx/round2/integrated",
+      "selected_indices": "1..193",
+      "completed_indices": "1..90",
+      "pass_count": 89,
+      "failure_count": 1,
+      "failed_step": 90,
+      "exit_code_file": ".godot/verification/e06_rx/round2/integrated.exitcode.txt",
+      "persisted_exit_code": 1,
+      "exit_code_file_sha256": "F1B2F662800122BED0FF255693DF89C4487FBDCF453D3524A42D4EC20C3D9C04",
+      "console_log": ".godot/verification/e06_rx/round2/integrated.console.log",
+      "console_log_sha256": "0663DB11A8666E06A3960ACD1C4435E1EEBC6DA07D3EADD8391D705F1342E3DE",
+      "plan_sha256": "2A241A7EFEBCE37D3C1988CC0ED9277D3B941E5A407912E86541AFDD7EA28B9B",
+      "checks_sha256": "A3819315A46C11FD79E56FF25758CB949535AC053E1558809E093E7F3FCC039A",
+      "checks_file_has_90_records": true,
+      "all_output_and_engine_logs_present": true,
+      "all_recorded_output_hashes_match_files": true,
+      "outputs_and_engine_sha256_fingerprint": "4B93A587236C36ED540D5416B182B63C4A6FF1AC0913D9474FDBE78C074954F8",
+      "failure": {
+        "name": "e04_learn_from_zero_migration_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "output_sha256": "C13C9446A77D57DFA9FB34D0B35BC475AA90202AB310D01FD77D94EE67E4159A",
+        "engine_log_sha256": "27AC400604EC925976E1E3CD701D57B7364A395452F6C31FA62A5037A515C41E",
+        "diagnostic": "SCRIPT ERROR: invalid access to property or key 'profile' on Dictionary at tests/e04_learn_from_zero_migration_test.gd:156; the runner correctly rejected the error despite exit code 0 and a misleading PASS line"
+      }
+    },
+    {
+      "kind": "focused_migration_regression",
+      "source_commit": "d2b64e0f3a445be109576238668f39beed335764",
+      "directory": ".godot/verification/e06_test_watch/focused",
+      "selected_indices": [90, 184],
+      "pass_count": 2,
+      "failure_count": 0,
+      "plan_sha256": "79FE97DDEC8C6D37DC673281C2AC8FAEC9E345E662BB4217131AF4DFF68C42B8",
+      "checks_sha256": "F1020DAD4C4984C0557ACB441627CF26B70A1B664DA7A98953F49BD25F10E11A",
+      "all_output_and_engine_logs_present": true,
+      "all_recorded_output_hashes_match_files": true,
+      "outputs_and_engine_sha256_fingerprint": "EC983B3E8869FAD8AB5012B4B7D277F60BF00D657210A8BB6FC7B9E50D153C67",
+      "step_90_output_sha256": "059B016D80CA1832C9C14E4B08684E7D69FC6D34D5C093D162F42729173CFA6A",
+      "step_184_output_sha256": "E9895F305173E29547757B2EE8651DA0491376CE355D5C6BF70B2C687489EB8E",
+      "observed": "e04_learn_from_zero_migration_test PASS (20 checks); e06_tx_migration_test PASS (25 checks)"
+    },
+    {
+      "kind": "first_resumed_tail",
+      "source_commit": "d2b64e0f3a445be109576238668f39beed335764",
+      "directory": ".godot/verification/e06_test_watch/tail",
+      "selected_indices": "91..193",
+      "completed_indices": "91..110",
+      "pass_count": 19,
+      "failure_count": 1,
+      "plan_sha256": "61BDAFB8EBEB096AAF7C111C66A6FA8A56B2CED01937AA0ACD04B7FF307C674C",
+      "checks_sha256": "0B3D272DF481AA8C8F5D8CDAE24255978926E4DC372B983DEFC94107D96089DA",
+      "all_output_and_engine_logs_present": true,
+      "all_recorded_output_hashes_match_files": true,
+      "outputs_and_engine_sha256_fingerprint": "0348393AED0F9C308B143CED9D9BA0D2F8E7BECFAACFF83170ED47783C444D17",
+      "step_110_failure": {
+        "name": "e05_spiritualist_readability_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "output_sha256": "F8D8222D9401944187AFC9797663DB3E17EE9E0D00AB9CCF15A51CA19E5C9A07",
+        "engine_log_sha256": "1ADA501D5AA52F9DFB455C6DBD9B738BDE314DEBF91AF57001E348F7008FA33D",
+        "diagnostic": "SCRIPT ERROR: learned_skill_ids called on Nil through RunState.available_active_ids; runner rejected the error despite exit code 0 and a PASS line"
+      }
+    },
+    {
+      "kind": "snapshot_guard_regression",
+      "source_commit": "2803f1165ee8883e462bfa8909e6707bb30e004d",
+      "directory": ".godot/verification/e06_test_watch/snapshot_guard",
+      "selected_indices": [8, 13, 14, 25, 78, 110, 187],
+      "pass_count": 7,
+      "failure_count": 0,
+      "plan_sha256": "9EB264E4B00BCC5BC6ADE02EF17F3C9C4D99A9983BA6C71D95A77F9D6CD2A7A4",
+      "checks_sha256": "BAC4A908AC0713A3C3B39D610161B148C44999822150038F846D31F2A083EDE4",
+      "all_output_and_engine_logs_present": true,
+      "all_recorded_output_hashes_match_files": true,
+      "outputs_and_engine_sha256_fingerprint": "9F5E2C963D67BE3C98135C9B971CD3168D55BE0AA15686B3463C42CB35718950",
+      "observed": "readability 39 checks; TX2 active 58 checks; effects runtime 53; mage integrated closure 103; E02 run integration 9; battle UI 47; arena flow 33"
+    },
+    {
+      "kind": "resumed_tail_after_step_110",
+      "source_commit": "2803f1165ee8883e462bfa8909e6707bb30e004d",
+      "directory": ".godot/verification/e06_test_watch/tail_after_110",
+      "selected_indices": "111..193",
+      "pass_count": 83,
+      "failure_count": 0,
+      "plan_sha256": "B502F4E59E51B647976748C6A8BCFD89DF88B8BD84753EA6BF264486447DBB14",
+      "checks_sha256": "6BC0632E3148C2AB7564BA1E8C767770119E2915810C4A4B82F2B0076AEBB451",
+      "all_output_and_engine_logs_present": true,
+      "all_recorded_output_hashes_match_files": true,
+      "outputs_and_engine_sha256_fingerprint": "5D06B2D4EBE9D1A4AC060AF759BC436EA9D7A7F84535927E9A15F522D4A7DD9F"
+    }
+  ],
+  "hash_fingerprint_method": "For each completed check in JSONL order, concatenate original index|name|actual output file SHA-256|actual engine log SHA-256, join rows with LF, then SHA-256 the UTF-8 bytes. Each recorded output SHA-256 was also compared directly with its output file; all referenced output and engine logs exist.",
+  "reused_evidence": {
+    "steps_1_through_89": {
+      "source_commit": "e7257563e70f0cb00c931d0067b7c7a89d76354c",
+      "executable_compatibility": "Sol confirmed runtime, runner, resources, and scenes are unchanged from the original source for this reuse; the original complete output-hash audit passed. The later changes are the focused migration fixture repair and the null-snapshot guard, both covered by targeted checks."
+    },
+    "steps_91_through_109": "Passed in the first resumed tail at d2b64e0f3a445be109576238668f39beed335764; retained after the step-110 failure and not rerun."
+  },
+  "change_context": [
+    {
+      "commit": "d2b64e0f3a445be109576238668f39beed335764",
+      "summary": "Corrects the legacy migration fixture to represent the historical schema/catalog combination; retains the existing grant, wallet, identity, counters, XP, backup, and respec assertions."
+    },
+    {
+      "commit": "2803f1165ee8883e462bfa8909e6707bb30e004d",
+      "summary": "The only runtime delta after e725756 is the nullable guard in RunState.available_active_ids: return an empty typed collection while build_snapshot is absent, preserving normal snapshot behavior and restoration; adds active-state invariants."
+    }
+  ],
+  "limitations": [
+    "This receipt covers automated checks and hash/runner supervision, not a semantic independent audit of all E06 behavior.",
+    "No visual inspection, Godot playtest, product acceptance, playtest deployment, push, or merge is claimed.",
+    "The original integrated run stopped at step 90, and the first resumed tail stopped at step 110. Their failed records remain preserved and are not counted as PASS; corrected focused executions supply the PASS for steps 90 and 110."
+  ]
+}

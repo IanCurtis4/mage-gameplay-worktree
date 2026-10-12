@@ -187,3 +187,8 @@ Current demo default é preservado: sem tabela de produção, modo mob loot desl
 ## Correção prevalente RX-F01/F02
 
 O domínio de vítimas do plano TX2/TX3 congelado no lançamento era insuficiente para reforços que os produtores E05 já rastreiam. Famílias/valores continuam capturados; orçamento deriva do domínio admitido por impactos primários ou componentes intrínsecos validados, durante emissores de vida finita. Apenas caminhos nativos podem admitir, antes de claim/callback; claim_batch genérico, proc_child/contextos derivados/famílias desconhecidas não ampliam. Ticks herdam atualizações. Carriers Echo são vinculados uma vez ao snapshot real do primeiro impacto, sem rearmar onda; vítimas legítimas posteriores podem receber a aplicação reservada. Nenhum cap global de buffs ou cap substituto arbitrário. Documentação anterior de IDs de vítimas irrevogáveis no plantio é histórica e substituída por esta correção. Caster AI usa o alcance real da skill; arco básico mantém os valores anteriores.
+
+
+## Estado após fechamento técnico, 12/10/2026
+
+TX1–TX3 e correções RX-F01/F02 validadas no candidato2803f1165ee8883e462bfa8909e6707bb30e004d, cobertura consolidada193 etapas por supervisão Luna e fechamento Sol conforme nova norma humana. Hashes/retomadas/reuso/limites no [checkpoint](e06_tx.md) e [recibo](e06_test_watch_validation.json). APIs acima não mudam por esta anotação. Aprovação Astra completa não foi emitida nem exigida pela norma atual; conteúdo/UI finais e playtest continuam posteriores. Consulta de ativas com snapshot temporariamente ausente é segura, sem conceder habilidades de cache antigo; restauração recompõe biblioteca/ranks.
