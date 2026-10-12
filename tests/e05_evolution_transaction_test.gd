@@ -1,4 +1,5 @@
 extends SceneTree
+const TX = preload("res://tests/e06_tx_fixture.gd")
 
 class ToggleFailStore:
 	extends ProfileStore
@@ -182,8 +183,8 @@ func _check_unavailable_identity_blocks_run() -> void:
 
 func _catalog() -> ProfileCatalog:
 	return ProfileCatalog.pilot({
-		&"practice_sword": {"slot": &"weapon", "allowed_base_classes": [&"swordsman"]},
-		&"practice_armor": {"slot": &"armor", "allowed_base_classes": [&"swordsman"]},
+		&"practice_sword": {"slot": &"main_hand", "allowed_base_classes": [&"swordsman"]},
+		&"practice_armor": {"slot": &"torso", "allowed_base_classes": [&"swordsman"]},
 	}, {
 		&"defender_entry": _skill(ProfileCatalog.ACTIVE, 1, 4, &"defender", {1: {"job_level": 20, "skill_ranks": {}}}),
 		&"defender_guard": _skill(ProfileCatalog.ACTIVE, 0, 5, &"defender"),
@@ -224,7 +225,7 @@ func _seed_character(directory: String, catalog: ProfileCatalog, evolution_id: S
 	character.attribute_allocations[&"str"] = 1
 	character.purchased_skill_ranks[&"slash"] = 2
 	character.granted_skill_ranks = {&"slash": 1, &"dash": 1, &"swordsman_resistance": 1}
-	character.equipped[&"weapon"] = &"practice_sword" if catalog.knows_equipment(&"practice_sword") else null
+	character.equipped[&"main_hand"] = &"practice_sword" if catalog.knows_equipment(&"practice_sword") else null
 	for preset: Dictionary in character.presets:
 		preset["equipped"] = character.equipped.duplicate(true)
 	character.presets[0]["active_slots"][0] = &"slash"
@@ -243,7 +244,8 @@ func _seed_character(directory: String, catalog: ProfileCatalog, evolution_id: S
 	profile.selected_character_id = character_id
 	profile.next_character_counter = 2
 	if catalog.knows_equipment(&"practice_sword"):
-		profile.equipment_collection.append(&"practice_sword")
+		character.equipped[&"main_hand"] = TX.own(profile, &"practice_sword", catalog)
+		for preset: Dictionary in character.presets: preset["equipped"] = character.equipped.duplicate(true)
 	var committed := ProfileStore.new(directory, catalog).commit(profile)
 	_check(committed["ok"], "isolated evolution transaction fixture is durably seeded: %s" % [committed])
 	return {"character_id": character_id, "profile": committed.get("profile")}

@@ -1,4 +1,5 @@
 extends SceneTree
+const TX = preload("res://tests/e06_tx_fixture.gd")
 
 const PROFILE_ID := "123e4567-e89b-42d3-a456-426614174180"
 
@@ -33,11 +34,11 @@ func _run() -> void:
 	profile.characters.append(mage)
 	profile.selected_character_id = evolved_id
 	var encoded := ProfileCodec.encode(profile)
-	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 2 and ProfileState.CATALOG_VERSION == 9, "current catalog preserves Spiritualist migration and schema")
+	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 3 and ProfileState.CATALOG_VERSION == 10, "current catalog preserves Spiritualist migration and schema")
 	if not encoded["ok"]:
 		_finish()
 		return
-	var old_data: Dictionary = encoded["data"].duplicate(true)
+	var old_data: Dictionary = TX.legacy_data(encoded["data"])
 	old_data["catalog_version"] = ProfileCodec.PRE_SPIRITUALIST_CATALOG_VERSION
 	old_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	var old_text := JSON.stringify(old_data, "\t")
@@ -75,7 +76,7 @@ func _assert_backup_guard(primary_text: String, original: ProfileState, newer: b
 	if newer:
 		candidate.revision += 2
 	var encoded := ProfileCodec.encode(candidate)
-	var data: Dictionary = encoded["data"].duplicate(true)
+	var data: Dictionary = TX.legacy_data(encoded["data"]).duplicate(true)
 	data["catalog_version"] = ProfileCodec.PRE_SPIRITUALIST_CATALOG_VERSION
 	data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	var backup_text := JSON.stringify(data, "\t")

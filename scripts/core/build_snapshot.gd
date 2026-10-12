@@ -14,7 +14,8 @@ var skill_ranks: Dictionary[StringName, int] = {}
 var library_skill_ids: Array[StringName] = []
 var active_slots: Array[Variant] = []
 var passive_slots: Array[Variant] = []
-var equipped: Dictionary[StringName, Variant] = {}
+var equipped: Dictionary[StringName, Variant] = EquipmentRules.empty_layout()
+var equipment_instances: Dictionary[StringName, EquipmentInstance] = {}
 var build_version: int = 1
 var action_slots: Array[Variant] = []
 var _skill_catalog := ProfileCatalog.pilot()
@@ -25,7 +26,8 @@ static func from_character(
 	derived_job_level: int,
 	effective_skill_ranks: Dictionary[StringName, int],
 	identity_skill_ids: Array[StringName] = [],
-	catalog: ProfileCatalog = null
+	catalog: ProfileCatalog = null,
+	instances: Dictionary = {}
 ) -> BuildSnapshot:
 	assert(character != null)
 	var snapshot := BuildSnapshot.new()
@@ -43,6 +45,8 @@ static func from_character(
 	snapshot.active_slots = preset["active_slots"].duplicate(true)
 	snapshot.passive_slots = preset["passive_slots"].duplicate(true)
 	snapshot.equipped = preset["equipped"].duplicate(true)
+	for id: StringName in instances:
+		snapshot.equipment_instances[id] = instances[id].copy_instance()
 	snapshot.action_slots = ActionBarLayout.for_character(character)
 	return snapshot
 
@@ -62,6 +66,8 @@ func copy_snapshot() -> BuildSnapshot:
 	copy.active_slots = active_slots.duplicate(true)
 	copy.passive_slots = passive_slots.duplicate(true)
 	copy.equipped = equipped.duplicate(true)
+	for id: StringName in equipment_instances:
+		copy.equipment_instances[id] = equipment_instances[id].copy_instance()
 	copy.build_version = build_version
 	copy.action_slots = action_slots.duplicate()
 	return copy
@@ -142,3 +148,11 @@ func learned_skill_ids(category: StringName) -> Array[StringName]:
 func has_passive(id: StringName) -> bool:
 	var metadata := _skill_catalog.skill_metadata(id)
 	return not metadata.is_empty() and metadata["category"] == ProfileCatalog.PASSIVE and int(skill_ranks.get(id, 0)) > 0 and _skill_catalog.skill_is_allowed(id, base_class_id, evolution_id) and (library_skill_ids.is_empty() or id in library_skill_ids) and _skill_catalog.check_rank_requirements(id, 1, job_level, skill_ranks)["ok"]
+
+func equipment_records() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	var ids: Array = equipment_instances.keys()
+	ids.sort()
+	for id: StringName in ids:
+		result.append(equipment_instances[id].to_record())
+	return result

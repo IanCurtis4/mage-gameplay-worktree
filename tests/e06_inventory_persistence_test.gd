@@ -1,4 +1,5 @@
 extends SceneTree
+const TX = preload("res://tests/e06_tx_fixture.gd")
 var checks := 0
 var failures := 0
 func _initialize() -> void:
@@ -14,7 +15,7 @@ func _identity() -> void:
 	restricted.take_over_path(path)
 	var catalog := ProfileCatalog.pilot()
 	_check(catalog.is_valid() and catalog.equipment_metadata(restricted.id)["allowed_evolutions"] == [&"defender"], "resource evolution restriction preserved")
-	_check(catalog.equipment_is_allowed(restricted.id, &"armor", &"swordsman", &"defender") and not catalog.equipment_is_allowed(restricted.id, &"armor", &"swordsman", &"berserker"), "correct evolution accepted and sibling rejected")
+	_check(catalog.equipment_is_allowed(restricted.id, &"torso", &"swordsman", &"defender") and not catalog.equipment_is_allowed(restricted.id, &"torso", &"swordsman", &"berserker"), "correct evolution accepted and sibling rejected")
 	var store := ProfileStore.new(_directory("identity"), catalog)
 	var facade := ProfileFacade.new(store)
 	_check(facade.create_character("create", 0, "Defensor", &"swordsman")["ok"], "create isolated character")
@@ -23,20 +24,20 @@ func _identity() -> void:
 	character.evolution_id = &"defender"
 	character.base_xp_total = ProgressionRules.EVOLUTION_MIN_BASE_XP
 	character.job_xp_total = ProgressionRules.EVOLUTION_MIN_JOB_XP
-	profile.equipment_collection.append(restricted.id)
+	TX.own(profile, restricted.id, catalog)
 	_check(store.commit(profile)["ok"] and facade.open_profile()["ok"], "legal evolved profile")
 	profile = facade.current_profile()
 	character = profile.characters[0]
 	var equipped := character.equipped.duplicate(true)
-	equipped[&"armor"] = restricted.id
+	equipped[&"torso"] = profile.first_instance_for_definition(restricted.id)
 	var preset: Dictionary = character.presets[0]
 	_check(facade.update_preset("equip", profile.revision, character.character_id, 0, preset["active_slots"], preset["passive_slots"], equipped)["ok"], "legal restricted equipment persists")
-	_check(restricted.id in facade.available_build_options(character.character_id)["equipment_by_slot"][&"armor"], "legal equipment remains in menu options")
+	_check(profile.first_instance_for_definition(restricted.id) in facade.available_build_options(character.character_id)["equipment_by_slot"][&"torso"], "legal equipment remains in menu options")
 	var started := facade.start_run("start", facade.current_profile().revision)
 	_check(started["ok"] and started["run_state"].effects_valid(), "legal persistent equipment composes at start")
 	var invalid := profile.copy_state()
 	invalid.characters[0].evolution_id = &"berserker"
-	invalid.characters[0].presets[1]["equipped"][&"armor"] = restricted.id
+	invalid.characters[0].presets[1]["equipped"][&"torso"] = profile.first_instance_for_definition(restricted.id)
 	_check(not ProfileCodec.encode(invalid, catalog)["ok"], "inactive preset cannot bypass evolution restriction")
 	original.take_over_path(path)
 func _conflicts() -> void:
@@ -70,9 +71,9 @@ func _conflicts() -> void:
 	var profile := facade.current_profile()
 	var character := profile.characters[0]
 	character.job_xp_total = ProgressionRules.UNEVOLVED_MAX_JOB_XP
-	profile.equipment_collection.append_array([&"warden_mail", &"prismatic_charm"])
-	character.presets[1]["equipped"][&"armor"] = &"warden_mail"
-	character.presets[1]["equipped"][&"accessory"] = &"prismatic_charm"
+	for definition_id: StringName in [&"warden_mail", &"prismatic_charm"]: TX.own(profile, definition_id, catalog)
+	character.presets[1]["equipped"][&"torso"] = profile.first_instance_for_definition(&"warden_mail")
+	character.presets[1]["equipped"][&"accessory_1"] = profile.first_instance_for_definition(&"prismatic_charm")
 	_check(store.commit(profile)["ok"] and facade.open_profile()["ok"], "unlearned skill keeps equipment effects inactive")
 	var disk := FileAccess.get_file_as_string(directory.path_join(ProfileStore.PRIMARY_FILE))
 	var learned := facade.learn_skill("learn", facade.current_profile().revision, character.character_id, &"fire_spear")

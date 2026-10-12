@@ -45,9 +45,9 @@ func _check_profile_and_alt_isolation() -> void:
 	profile.selected_character_id = first.character_id
 	first.attribute_allocations[&"str"] = 4
 	first.presets[0]["active_slots"][0] = &"slash"
-	first.presets[0]["equipped"][&"weapon"] = &"training_sword"
+	first.presets[0]["equipped"][&"main_hand"] = &"training_sword"
 	_check(second.attribute_allocations[&"str"] == 0, "attribute allocation does not leak between alts")
-	_check(second.presets[0]["active_slots"][0] == null and second.presets[0]["equipped"][&"weapon"] == null, "preset and equipment containers do not leak between alts")
+	_check(second.presets[0]["active_slots"][0] == null and second.presets[0]["equipped"][&"main_hand"] == null, "preset and equipment containers do not leak between alts")
 	var copied := profile.copy_state()
 	first.attribute_allocations[&"str"] = 9
 	first.presets[0]["active_slots"][0] = &"dash"
@@ -61,7 +61,7 @@ func _check_run_snapshot_isolation() -> void:
 	character.job_xp_total = 80
 	character.attribute_allocations[&"str"] = 4
 	character.presets[0]["active_slots"][0] = &"slash"
-	character.presets[0]["equipped"][&"weapon"] = &"training_sword"
+	character.presets[0]["equipped"][&"main_hand"] = &"training_sword"
 	var snapshot := BuildSnapshot.from_character(character, 3, 2, {&"slash": 2, &"dash": 1})
 	var run := RunState.from_build("profile_7", snapshot)
 	character.attribute_allocations[&"str"] = 12

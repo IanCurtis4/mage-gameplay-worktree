@@ -80,8 +80,7 @@ func _normalize_definition(raw: Variant) -> Dictionary:
 		var item_id := StringName(raw_item_id)
 		if not IdentityIds.is_technical_id(String(item_id)):
 			return {"ok": false}
-		if item_id not in equipment_ids:
-			equipment_ids.append(item_id)
+		equipment_ids.append(item_id)
 	var raw_stats: Variant = data.get("stat_increments", {})
 	if not raw_stats is Dictionary:
 		return {"ok": false}

@@ -188,9 +188,9 @@ func _save_build() -> Dictionary:
 	var active_slots: Array[Variant] = preset["active_slots"].duplicate()
 	var passive_slots: Array[Variant] = preset["passive_slots"].duplicate()
 	var equipped: Dictionary[StringName, Variant] = preset["equipped"].duplicate(true)
-	equipped[&"weapon"] = _selected_option(weapon_selector)
-	equipped[&"armor"] = _selected_option(armor_selector)
-	equipped[&"accessory"] = _selected_option(accessory_selector)
+	equipped[&"main_hand"] = _selected_option(weapon_selector)
+	equipped[&"torso"] = _selected_option(armor_selector)
+	equipped[&"accessory_1"] = _selected_option(accessory_selector)
 	return _show_result(facade.update_preset(_request_id("build"), profile.revision, character.character_id, character.selected_preset, active_slots, passive_slots, equipped), "Preset salvo.")
 
 func _start_run() -> Dictionary:
@@ -243,9 +243,9 @@ func _populate_build_editor(character: Variant) -> void:
 	for id: StringName in options["passive_skills"]:
 		passives.append(_skill_name(id))
 	automatic_passives_label.text = "Passivas aprendidas: todas automáticas\n%s" % ("Nenhuma aprendida." if passives.is_empty() else ", ".join(passives))
-	_populate_selector(weapon_selector, options["equipment_by_slot"][&"weapon"], preset["equipped"][&"weapon"])
-	_populate_selector(armor_selector, options["equipment_by_slot"][&"armor"], preset["equipped"][&"armor"])
-	_populate_selector(accessory_selector, options["equipment_by_slot"][&"accessory"], preset["equipped"][&"accessory"])
+	_populate_selector(weapon_selector, options["equipment_by_slot"][&"main_hand"], preset["equipped"][&"main_hand"])
+	_populate_selector(armor_selector, options["equipment_by_slot"][&"torso"], preset["equipped"][&"torso"])
+	_populate_selector(accessory_selector, options["equipment_by_slot"][&"accessory_1"], preset["equipped"][&"accessory_1"])
 	equipment_empty_label.visible = not weapon_selector.get_parent().visible and not armor_selector.get_parent().visible and not accessory_selector.get_parent().visible
 
 func _populate_selector(selector: OptionButton, values: Array, current: Variant) -> void:
@@ -415,7 +415,7 @@ func _build_summary(character: Variant) -> String:
 	var passive: Array[String] = []
 	for skill_id: Variant in options.get("passive_skills", []):
 		passive.append(_skill_name(skill_id))
-	var weapon: Variant = preset["equipped"].get(&"weapon")
+	var weapon: Variant = preset["equipped"].get(&"main_hand")
 	if derived_stats == null:
 		return "Build indisponível (%s)." % preview.get("error_code", &"preview_failed")
 	var active_text := "Nenhuma" if active.is_empty() else ", ".join(active)
@@ -956,11 +956,14 @@ func _skill_name(skill_id: Variant) -> String:
 	return definition.display_name if definition != null else "Habilidade não implementada"
 
 func _equipment_name(item_id: Variant) -> String:
-	var normalized_id: StringName = StringName(item_id) if item_id != null else &""
-	match normalized_id:
-		&"training_sword": return "Espada de treino"
-		&"apprentice_staff": return "Cajado de aprendiz"
-		_: return "Nenhuma"
+	if item_id == null:
+		return "Nenhum"
+	var profile: ProfileState = facade.current_profile() if facade != null else null
+	var instance: EquipmentInstance = profile.equipment_instances.get(StringName(item_id)) if profile != null else null
+	if instance == null:
+		return "Equipamento indisponível"
+	var loaded := BuildContentLoader.pilot().get_definition(&"equipment", instance.definition_id) as EquipmentDefinition
+	return loaded.display_name if loaded != null else "Equipamento indisponível"
 
 func _request_id(action: String) -> String:
 	_request_serial += 1

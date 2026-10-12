@@ -13,9 +13,7 @@ const BASE_PURCHASES := {
 	&"double_shot": 5, &"piercing_arrow": 5, &"arrow_rain": 5,
 	&"archer_precision": 3, &"archer_cadence": 1,
 }
-const EQUIPPED: Dictionary[StringName, Variant] = {
-	&"weapon": null, &"armor": null, &"accessory": null,
-}
+const EQUIPPED: Dictionary[StringName, Variant] = {&"head": null, &"neck": null, &"shoulders": null, &"arms": null, &"torso": null, &"cloak": null, &"legs": null, &"feet": null, &"main_hand": null, &"off_hand": null, &"accessory_1": null, &"accessory_2": null, &"accessory_3": null, &"accessory_4": null}
 
 var directory := ""
 var checks := 0

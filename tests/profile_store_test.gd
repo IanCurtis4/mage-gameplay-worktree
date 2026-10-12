@@ -1,4 +1,5 @@
 extends SceneTree
+const TX = preload("res://tests/e06_tx_fixture.gd")
 
 class FailingStore:
 	extends ProfileStore
@@ -80,7 +81,7 @@ func _check_round_trip_and_unknown_fields() -> void:
 	bad_counter_payload["selected_character_id"] = PROFILE_ID + "_99"
 	_check(ProfileCodec.decode(JSON.stringify(bad_counter_payload))["error_code"] == &"invalid_character_id", "character IDs must use a reserved counter below the next counter")
 	var unowned_payload: Dictionary = encoded["data"].duplicate(true)
-	unowned_payload["characters"][0]["equipped"]["weapon"] = "not_owned"
+	unowned_payload["characters"][0]["equipped"]["main_hand"] = "not_owned"
 	_check(ProfileCodec.decode(JSON.stringify(unowned_payload))["error_code"] == &"invalid_equipment", "equipped items must belong to the profile collection")
 	var invalid_id_payload: Dictionary = encoded["data"].duplicate(true)
 	invalid_id_payload["characters"][0]["purchased_skill_ranks"]["../not_an_id"] = 1
@@ -101,8 +102,9 @@ func _check_round_trip_and_unknown_fields() -> void:
 	overspent_skill_payload["characters"][0]["purchased_skill_ranks"]["slash"] = 2
 	_check(ProfileCodec.decode(JSON.stringify(overspent_skill_payload))["error_code"] == &"overspent_skill_points", "purchased ranks cannot exceed granted base skill points")
 	var unknown_owned_item_payload: Dictionary = encoded["data"].duplicate(true)
-	unknown_owned_item_payload["equipment_collection"] = ["nonexistent_item"]
-	unknown_owned_item_payload["characters"][0]["equipped"]["weapon"] = "nonexistent_item"
+	unknown_owned_item_payload["equipment_instances"] = [{"instance_id": "equipment_1", "definition_id": "nonexistent_item", "origin_id": "fixture_origin", "item_level": 1, "quality_id": "common", "socket_capacity": 1}]
+	unknown_owned_item_payload["next_equipment_counter"] = 2
+	unknown_owned_item_payload["characters"][0]["equipped"]["main_hand"] = "nonexistent_item"
 	_check(ProfileCodec.decode(JSON.stringify(unknown_owned_item_payload))["error_code"] == &"invalid_catalog", "syntactically valid but unknown equipment blocks the profile")
 	var early_evolution_payload: Dictionary = encoded["data"].duplicate(true)
 	early_evolution_payload["characters"][0]["evolution_id"] = "sp_mg"
@@ -137,13 +139,13 @@ func _check_atomic_write_failures() -> void:
 func _check_catalog_references() -> void:
 	var catalog := _catalog_with_training_sword()
 	var profile := _profile_with_character()
-	profile.equipment_collection.append(&"training_sword")
-	profile.characters[0].equipped[&"weapon"] = &"training_sword"
+	TX.own(profile, &"training_sword", catalog)
+	profile.characters[0].equipped[&"main_hand"] = profile.first_instance_for_definition(&"training_sword")
 	var encoded := ProfileCodec.encode(profile, catalog)
 	_check(encoded["ok"], "explicit catalog accepts known equipment in its legal slot and origin")
 	var wrong_slot: Dictionary = encoded["data"].duplicate(true)
-	wrong_slot["characters"][0]["equipped"]["weapon"] = null
-	wrong_slot["characters"][0]["equipped"]["armor"] = "training_sword"
+	wrong_slot["characters"][0]["equipped"]["main_hand"] = null
+	wrong_slot["characters"][0]["equipped"]["torso"] = String(profile.first_instance_for_definition(&"training_sword"))
 	var wrong_slot_result := ProfileCodec.decode(JSON.stringify(wrong_slot), catalog)
 	_check(not wrong_slot_result["ok"] and wrong_slot_result["error_code"] == &"invalid_equipment" and wrong_slot_result["catalog_incompatible"], "equipment metadata enforces slot and marks incompatibility as protected")
 
@@ -341,7 +343,7 @@ func _check_v1_migration() -> void:
 	var migrated := store.load_profile()
 	_check(migrated["ok"] and migrated["migrated"] and migrated["warning"] == &"profile_migrated", "recognized schema 1 migrates once to schema 2")
 	var profile: ProfileState = migrated["profile"]
-	_check(profile.characters.is_empty() and profile.equipment_collection == [&"training_sword"], "migration never invents characters or duplicate known equipment")
+	_check(profile.characters.is_empty() and TX.definition_ids(profile) == [&"training_sword"], "migration never invents characters or duplicate known equipment")
 	_check(profile.unresolved_legacy["equipment_ids"] == ["lost_relic"] and profile.legacy_loadouts.has("swordsman"), "unknown equipment and legacy loadouts remain recoverable")
 	_check(_read_text(directory.path_join(ProfileStore.BACKUP_FILE)) == legacy_text, "migration preserves the original schema-1 file as backup")
 	var reloaded := store.load_profile()
@@ -414,7 +416,7 @@ func _assert_v1_followup(directory: String, catalog: ProfileCatalog, legacy_text
 
 func _catalog_with_training_sword() -> ProfileCatalog:
 	return ProfileCatalog.pilot({
-		&"training_sword": {"slot": &"weapon", "allowed_base_classes": [&"swordsman"]},
+		&"training_sword": {"slot": &"main_hand", "allowed_base_classes": [&"swordsman"]},
 	})
 
 func _profile_with_character() -> ProfileState:

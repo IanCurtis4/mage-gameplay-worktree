@@ -1,4 +1,5 @@
 extends SceneTree
+const TX = preload("res://tests/e06_tx_fixture.gd")
 var checks := 0
 var failures := 0
 func _initialize() -> void:
@@ -17,13 +18,13 @@ func _identity_edges() -> void:
 	var facade := ProfileFacade.new(store)
 	_check(facade.create_character("create", 0, "Revisao", &"swordsman")["ok"], "create identity fixture")
 	var profile := facade.current_profile()
-	profile.equipment_collection.append(fixture.id)
+	TX.own(profile, fixture.id, catalog)
 	_check(store.commit(profile)["ok"] and facade.open_profile()["ok"], "own restricted item without equipping")
 	profile = facade.current_profile()
 	var character := profile.characters[0]
-	_check(fixture.id not in facade.available_build_options(character.character_id)["equipment_by_slot"][&"armor"], "unevolved same origin does not see restricted item")
+	_check(profile.first_instance_for_definition(fixture.id) not in facade.available_build_options(character.character_id)["equipment_by_slot"][&"torso"], "unevolved same origin does not see restricted item")
 	var data: Dictionary = ProfileCodec.encode(profile, catalog)["data"]
-	data["characters"][0]["presets"][1]["equipped"]["armor"] = "warden_mail"
+	data["characters"][0]["presets"][1]["equipped"]["torso"] = String(profile.first_instance_for_definition(fixture.id))
 	_check(not ProfileCodec.decode(JSON.stringify(data), catalog)["ok"], "decode rejects illegal restricted item in inactive preset")
 	character.evolution_id = &"defender"
 	character.base_xp_total = ProgressionRules.EVOLUTION_MIN_BASE_XP
@@ -31,9 +32,9 @@ func _identity_edges() -> void:
 	_check(store.commit(profile)["ok"] and facade.open_profile()["ok"], "legal evolution fixture")
 	profile = facade.current_profile()
 	character = profile.characters[0]
-	_check(fixture.id in facade.available_build_options(character.character_id)["equipment_by_slot"][&"armor"], "matching evolution exposes item")
+	_check(profile.first_instance_for_definition(fixture.id) in facade.available_build_options(character.character_id)["equipment_by_slot"][&"torso"], "matching evolution exposes item")
 	var equipped := character.equipped.duplicate(true)
-	equipped[&"armor"] = fixture.id
+	equipped[&"torso"] = profile.first_instance_for_definition(fixture.id)
 	var preset: Dictionary = character.presets[0]
 	_check(facade.update_preset("legal", profile.revision, character.character_id, 0, preset["active_slots"], preset["passive_slots"], equipped)["ok"], "legal restricted item commits")
 	var started := facade.start_run("start", facade.current_profile().revision)
@@ -64,10 +65,10 @@ func _conflict_edges() -> void:
 	var facade := ProfileFacade.new(store)
 	_check(facade.create_character("create", 0, "Revisao", &"mage")["ok"], "create conflict fixture")
 	var profile := facade.current_profile()
-	profile.equipment_collection.append_array([&"warden_mail", &"prismatic_charm"])
+	for definition_id: StringName in [&"warden_mail", &"prismatic_charm"]: TX.own(profile, definition_id, catalog)
 	var character := profile.characters[0]
-	character.equipped[&"armor"] = &"warden_mail"
-	character.equipped[&"accessory"] = &"prismatic_charm"
+	character.equipped[&"torso"] = profile.first_instance_for_definition(&"warden_mail")
+	character.equipped[&"accessory_1"] = profile.first_instance_for_definition(&"prismatic_charm")
 	character.presets[0]["equipped"] = character.equipped.duplicate(true)
 	_check(store.commit(profile)["ok"] and facade.open_profile()["ok"], "load old conflicting preferences through codec")
 	profile = facade.current_profile()
@@ -79,7 +80,7 @@ func _conflict_edges() -> void:
 	_check(disk == FileAccess.get_file_as_string(directory.path_join(ProfileStore.PRIMARY_FILE)), "rejected start preserves durable bytes")
 	character = after.characters[0]
 	var repaired := character.equipped.duplicate(true)
-	repaired[&"accessory"] = &"traveler_charm"
+	repaired[&"accessory_1"] = profile.first_instance_for_definition(&"traveler_charm")
 	var preset: Dictionary = character.presets[0]
 	_check(facade.update_preset("repair", after.revision, character.character_id, 0, preset["active_slots"], preset["passive_slots"], repaired)["ok"], "legal repair remains possible after rejected start")
 	var started := facade.start_run("good-start", facade.current_profile().revision)

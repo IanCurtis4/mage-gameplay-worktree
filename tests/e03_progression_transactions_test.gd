@@ -190,7 +190,7 @@ func _check_catalog_invariants() -> void:
 	var sealed := ProfileCatalog.pilot()
 	var sealed_slash := sealed.skill_metadata(&"slash")
 	var rejected_sealed_skill := sealed.add_skill(&"sealed_skill", [&"swordsman"], ProfileCatalog.ACTIVE, ProfileCatalog.BASE_WALLET, 0, 1)
-	var rejected_sealed_equipment := sealed.add_equipment(&"sealed_sword", &"weapon", [&"swordsman"])
+	var rejected_sealed_equipment := sealed.add_equipment(&"sealed_sword", &"main_hand", [&"swordsman"])
 	_check(not rejected_sealed_skill and not rejected_sealed_equipment and sealed.is_valid(), "rejected writes cannot invalidate a sealed catalog")
 	_check(sealed.skill_metadata(&"slash") == sealed_slash and sealed.skill_metadata(&"sealed_skill").is_empty() and sealed.equipment_metadata(&"sealed_sword").is_empty(), "sealed catalog content remains unchanged after rejected writes")
 

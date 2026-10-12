@@ -1,4 +1,5 @@
 extends SceneTree
+const Fixture = preload("res://tests/e06_effects_fixture.gd")
 var checks := 0
 var failures := 0
 func _initialize() -> void:
@@ -24,22 +25,22 @@ func _card_cap() -> void:
 	var registry := BuildEffectCatalog.new()
 	var item := EquipmentDefinition.new()
 	item.id = &"review_staff"
-	item.slot = &"weapon"
+	item.slot = &"main_hand"
 	item.effects = [_count_effect(&"staff_count", 15.0)]
 	_check(registry.register_definition(&"equipment", item)["ok"], "setup staff accepted")
 	var card := CardDefinition.new()
 	card.id = &"review_count_card"
-	card.allowed_slots = [&"weapon"]
+	card.allowed_slots = [&"main_hand"]
 	card.effects = [_count_effect(&"card_count", 1.0)]
 	_check(registry.register_definition(&"card", card)["ok"], "setup card accepted")
 	var state := RunState.new(&"mage")
-	state.build_snapshot.equipped = {&"weapon": item.id}
+	Fixture.equip(state.build_snapshot, item.id)
 	_check(state.set_effect_catalog(registry)["ok"], "setup composition accepted")
 	var controller := RunController.new()
 	controller.run_state = state
 	var rewards := RunRewardService.new(controller)
 	var before := state.composed_build()
-	var after := BuildEffectComposer.compose(state.build_snapshot, {"card_sockets": {item.id: card.id}}, [], registry)
+	var after := BuildEffectComposer.compose(state.build_snapshot, {"card_sockets": {item.id: [card.id]}, "card_instances": {card.id: card.id}}, [], registry)
 	var first := SkillEffectResolver.capture(&"fire_spear", 1, before)
 	var second := SkillEffectResolver.capture(&"fire_spear", 1, after)
 	_check(first["values"]["projectile_count"] == 16 and first["values"] == second["values"], "both captures are already at 16 projectiles")

@@ -1,4 +1,5 @@
 extends RefCounted
+const TX = preload("res://tests/e06_tx_fixture.gd")
 
 class FaultStore:
 	extends ProfileStore
@@ -81,8 +82,8 @@ static func make(tree: SceneTree, label: String, origin: StringName = &"mage", o
 		character.purchased_skill_ranks = {&"fire_spear": 1, &"ice_spear": 1}
 		character.action_slots[0] = &"fire_spear"
 	for id: StringName in BuildContentLoader.pilot().ids(&"equipment"):
-		if own_all and id not in profile.equipment_collection:
-			profile.equipment_collection.append(id)
+		if own_all and profile.first_instance_for_definition(id).is_empty():
+			TX.own(profile, id)
 	var alt := CharacterState.new(IdentityIds.character_id(profile.profile_id, 2), "Outro", &"archer")
 	profile.characters.append(alt)
 	profile.next_character_counter = 3
@@ -107,7 +108,27 @@ static func make(tree: SceneTree, label: String, origin: StringName = &"mage", o
 
 static func intent(controller: RunController, kind: StringName, values: Dictionary = {}) -> Dictionary:
 	var result := controller.build_service.context()
-	result.merge(values, true)
+	var mapped := values.duplicate(true)
+	var profile := controller.persistent_facade.current_profile() if controller.persistent_facade != null else ProfileState.new()
+	if controller.persistent_facade == null:
+		for id: StringName in controller.run_state.local_equipment_instances:
+			profile.equipment_instances[id] = controller.run_state.local_equipment_instances[id].copy_instance()
+	for pair: Array in [["item_id", "equipment_instance_id"], ["from_item_id", "from_equipment_instance_id"]]:
+		if mapped.has(pair[0]):
+			mapped[pair[1]] = profile.first_instance_for_definition(StringName(mapped[pair[0]])) if typeof(mapped[pair[0]]) in [TYPE_STRING, TYPE_STRING_NAME] else mapped[pair[0]]
+			mapped.erase(pair[0])
+	if mapped.has("card_id") and typeof(mapped["card_id"]) in [TYPE_STRING, TYPE_STRING_NAME]:
+		for id: StringName in controller.run_state.card_inventory.describe()["owned"]:
+			if controller.run_state.card_inventory.definition_id(id) == StringName(mapped["card_id"]):
+				mapped["card_instance_id"] = id
+				break
+		mapped.erase("card_id")
+	if kind in [&"socket", &"unsocket", &"transfer"]:
+		mapped["socket_index"] = 0
+	if kind == &"transfer": mapped["from_socket_index"] = 0
+	if mapped.has("slot") and typeof(mapped["slot"]) in [TYPE_STRING, TYPE_STRING_NAME]:
+		mapped["slot"] = EquipmentRules.legacy_position(StringName(mapped["slot"]))
+	result.merge(mapped, true)
 	result["kind"] = kind
 	result["request_id"] = "fixture-%d" % Time.get_ticks_usec()
 	return result
@@ -118,3 +139,15 @@ static func change(controller: RunController, kind: StringName, values: Dictiona
 
 static func disk(fixture: Dictionary) -> String:
 	return FileAccess.get_file_as_string(String(fixture["directory"]).path_join(ProfileStore.PRIMARY_FILE))
+
+static func selected(controller: RunController, slot: StringName) -> Variant:
+	var id: Variant = controller.run_state.build_snapshot.equipped[slot]
+	return null if id == null else controller.run_state.build_snapshot.equipment_instances[id].definition_id
+
+static func equipment(controller: RunController, definition: StringName) -> StringName:
+	return controller.persistent_facade.current_profile().first_instance_for_definition(definition)
+
+static func card(controller: RunController, definition: StringName) -> StringName:
+	for id: StringName in controller.run_state.card_inventory.describe()["owned"]:
+		if controller.run_state.card_inventory.definition_id(id) == definition: return id
+	return &""

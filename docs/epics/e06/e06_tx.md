@@ -1,6 +1,6 @@
 # E06-TX — checkpoint consolidado da fundação ampliada
 
-12/10/2026. DX ENTREGUE; R1 v1 APROVADA; TX1 PRONTA para execução sequencial. TX2/TX3 seguem o mesmo contrato e suas dependências.
+12/10/2026. DX ENTREGUE; R1 v1 APROVADA; TX1 ENTREGUE PELO AUTOR com validação dirigida; RX da ampliação pendente. TX2/TX3 seguem o mesmo contrato e suas dependências.
 
 ## Retomada, autorização e base real
 
@@ -109,3 +109,21 @@ Transferência adicional estrita: scripts/ui/character_menu.gd somente compatibi
 - tests/stat_threshold_rules_test.gd
 
 Validação TX1 por impacto: novos testes de exemplares/slots/capacidade/cartas/migração e os consumidores de codec/fachada/store/inventário/compositor/recompensas/preview/snapshot afetados. Plano de seleção conferido antes da execução; nenhuma repetição integral por mudança documental. Fechamento integrado TX1–TX3/RX conforme contrato. Base pós-commit DX/R1 será registrada no início da edição.
+
+TX1 iniciada em12/10/2026. Base real pós-DX/R1:54e6fad47763310afb307d990759c874c33fd1d3, branch codex/e06-inventory, mesmo checkout. R1v1 aprovada, decisões TX1 satisfeitas. EquipmentRules será a autoridade única de compatibilidade/capacidade; EquipmentInstance conterá somente dados de aquisição. Campos auxiliares legados de leitura são DTOs derivados, não segunda coleção gravável. Nenhum limite global de cópias de carta além dos encaixes físicos é introduzido por TX1.
+
+## TX1 — entrega do autor, 12/10/2026
+
+Resultado implementado:14 posições, EquipmentInstance persistente por aquisição; capacidade0–4 independente da qualidade, cartas por exemplar/índice e repetição da mesma definição; alts/presets compartilham referências; arma de duas mãos rejeita off_hand ocupado, uma mão admite escudo/foco, acessórios idênticos em exemplares diferentes rejeitados. Fonte de carta inclui host/índice/exemplar. Preview/commit/reconcile preservam dívida HP/SP, snapshots emitidos, barras/ranks/XP e durabilidade. Ordem de instâncias usa contador crescente, preservando a escolha do exemplar mais antigo.
+
+Schema3/catalog10, ruleset stat_thresholds_v1: legado validado primeiro em seus3 slots; mapa determinístico depois; um exemplar por ID realmente registrado, sem criar cópias perdidas.12 itens seguem tabela humana de qualidade/ilvl/origem. Slots nulos do catálogo9 preservados; versões1..8 conservam a união histórica de starters. Os11 novos slots iniciam nulos. Catálogo conhecido, futuro/pending/backup, extensões e campos de personagem conservados. ProfileStore aceita novo migration_kind somente quando perfil candidato e legado hidratado são iguais; demais migrations mantêm seus nomes históricos. Campo equipment_collection é DTO legado de leitura de IDs de instância, jamais segunda autoridade salva. Não modificar esse array como mutador de posse.
+
+APIs finais TX1: e06_tx_api.md seção de entrega. UI mudou somente a compatibilidade dos3 seletores antigos e rótulos;11 posições restantes são preservadas ao salvar. Interface14, arte/chapéus e conteúdo final continuam T3/T4/FX.
+
+Validação do autor por tools/verify.ps1:42 etapas distintas com PASS entre planos dirigidos (incluindo import/smoke), sem suíte integral185/185 e sem somar reexecuções. Novas provas: inventário24 checks; migração25. Regressões dirigidas de codec/store/fachada/sessão/barras, migrações históricas/carteira, inventário/recompensas/composição/runtime, probes F01–F04, inicialização/menu/progressão e builds dos consumidores alterados PASS. Logs e planos com papéis/hashes e tentativas falhas: e06_tx_validation.json; .godot/verification/e06_tx/. Reexecução dos probes R1 por Sol é evidência DO AUTOR, não nova reprodução independente. R1v1 permanece histórica e intacta.
+
+Falhas preservadas: primeira seleção omitiu import dos2 tipos novos e timeout; import apontou variável de menu sem tipo, corrigida; tentativa de timeout30 foi rejeitada pelo runner antes de engine. Prova nova de migração apontou migration_kind ainda não aceito pelo writer, corrigido com guarda de igualdade. Fixture comparava tipos int/float antes do wire JSON, corrigida para os valores serializados exatos. Fixtures legadas precisaram de referências de exemplar/14 slots, replay por aquisição em vez de unicidade de definição e envelopes schema2 históricos; nenhum oráculo de stats/dano alterado. Metadata inválida de aquisição agora é rejeitada ANTES de RNG/ticket/save, inclusive treino, com prova negativa; conversões de metadata malformada são guardadas.
+
+Reaproveitamento por impacto identificado no recibo: cada plano mantém seu commit/base/sujeira/inputs/engine e outputs; posteriores mudanças restritas a fixtures, ordenação de instâncias ou rejeição de dados inválidos tiveram seleção própria. Nenhum PASS parcial é reapresentado como execução integral do HEAD. Fechamento amplo da fundação TX1–TX3 e RX ainda obrigatórios antes dos consumidores.
+
+Próxima dependência: TX2 sobre esta entrega local; decisões humanas de rank/cooldown/remoção/cross-class/biblioteca/atalho já registradas. Publicar contrato concreto de capacidades/tags/chave de exclusividade/conjuntos/arma por uso e orçamento causal derivado antes de editar suas autoridades. TX3 aguarda essa composição e seus tipos compartilhados. Sem push, playtest, merge ou aceite de produto. Candidato da ampliação não arquivável antes de TX2/TX3/RX e integração pertinentes.

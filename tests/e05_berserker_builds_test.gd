@@ -49,7 +49,7 @@ func _check_build(directory: String, purchases: Dictionary, active: Array[Varian
 				return
 	var summary := facade.progression_summary(character_id)
 	_check(summary["base_skill_points_available"] == 6 and summary["evolution_skill_points_available"] == 20 - evolution_spent, "base and evolution wallets retain exact independent balances")
-	var equipped: Dictionary[StringName, Variant] = {&"weapon": null, &"armor": null, &"accessory": null}
+	var equipped: Dictionary[StringName, Variant] = {&"head": null, &"neck": null, &"shoulders": null, &"arms": null, &"torso": null, &"cloak": null, &"legs": null, &"feet": null, &"main_hand": null, &"off_hand": null, &"accessory_1": null, &"accessory_2": null, &"accessory_3": null, &"accessory_4": null}
 	var preset := facade.update_preset("equip", facade.current_profile().revision, character_id, 0, active, passive, equipped)
 	_check(preset["ok"], "equip five actives and two passives")
 	if not preset["ok"]:

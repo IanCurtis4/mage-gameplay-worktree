@@ -1,4 +1,5 @@
 extends SceneTree
+const TX = preload("res://tests/e06_tx_fixture.gd")
 
 class ToggleFailStore:
 	extends ProfileStore
@@ -51,7 +52,7 @@ func _check_run_reward_and_end_flow() -> void:
 	_check(started["ok"] and started["new_revision"] == 4 and run_id == IdentityIds.run_id(started["profile"].profile_id, 1), "start_run reserves and commits the first monotonic run ID")
 	_check(started["profile"].next_run_counter == 2 and started["profile"].reward_session["last_committed_seq"] == 0 and started["profile"].lifetime_stats[&"runs_started"] == 1, "run counter, reward cursor and runs_started share the start commit")
 	_check(run_state.character_id == first["character_id"] and run_state.build_snapshot.base_level == 1 and run_state.build_snapshot.job_level == 1, "runtime receives the selected character and derived levels")
-	_check(run_state.skill_levels.is_empty() and run_state.build_snapshot.active_slots == [null, null, null, null, null] and run_state.build_snapshot.equipped[&"weapon"] == &"training_sword", "snapshot accepts an empty skill bar and selected preset equipment")
+	_check(run_state.skill_levels.is_empty() and run_state.build_snapshot.active_slots == [null, null, null, null, null] and run_state.build_snapshot.equipment_instances[run_state.build_snapshot.equipped[&"main_hand"]].definition_id == &"training_sword", "snapshot accepts an empty skill bar and selected preset equipment")
 	run_state.build_snapshot.attribute_allocations[&"str"] = 50
 	run_state.skill_levels[&"slash"] = 5
 	run_state.augment_stacks[&"vitality"] = 3
@@ -71,7 +72,7 @@ func _check_run_reward_and_end_flow() -> void:
 	var rewarded_character: CharacterState = reward_one["profile"].character_by_id(first["character_id"])
 	_check(reward_one["ok"] and reward_one["new_revision"] == 5 and rewarded_character.base_xp_total == 100 and rewarded_character.job_xp_total == 80, "next reward applies base/job XP in one commit")
 	_check(reward_one["profile"].reward_session["last_committed_seq"] == 1 and reward_one["profile"].lifetime_stats[&"kills"] == 2, "reward stats and cursor advance atomically")
-	_check(&"reward_blade" in reward_one["profile"].equipment_collection and reward_one["profile"].lifetime_stats[&"equipment_unlocked"] == 3, "new reward equipment joins the shared collection and increments its stat once")
+	_check(&"reward_blade" in TX.definition_ids(reward_one["profile"]) and reward_one["profile"].lifetime_stats[&"equipment_unlocked"] == 3, "new reward equipment joins the shared collection and increments its stat once")
 	_check(reward_one["profile"].character_by_id(second["character_id"]).base_xp_total == 0, "reward origin is fixed to the session character, not the other alt")
 	var literal_reward_retry := facade.grant_reward("reward-1", 4, run_id, 1, &"encounter_one")
 	var stale_new_reward := facade.grant_reward("reward-2-stale", 4, run_id, 2, &"encounter_two")
@@ -82,7 +83,7 @@ func _check_run_reward_and_end_flow() -> void:
 	var reward_two := facade.grant_reward("reward-2", 5, run_id, 2, &"encounter_two")
 	var twice_rewarded: CharacterState = reward_two["profile"].character_by_id(first["character_id"])
 	_check(reward_two["ok"] and reward_two["new_revision"] == 6 and twice_rewarded.base_xp_total == 250 and twice_rewarded.job_xp_total == 180, "strict next sequence applies the second resolved XP payload")
-	_check(reward_two["profile"].lifetime_stats[&"kills"] == 3 and reward_two["profile"].lifetime_stats[&"equipment_unlocked"] == 3, "duplicate equipment never duplicates collection or unlock stats")
+	_check(reward_two["profile"].lifetime_stats[&"kills"] == 3 and reward_two["profile"].lifetime_stats[&"equipment_unlocked"] == 3 and reward_two["profile"].equipment_instances.size() == reward_one["profile"].equipment_instances.size() + 1, "new acquisition preserves a copy without duplicating distinct unlock stats")
 
 	var wrong_end := facade.end_run("end-wrong", 6, IdentityIds.run_id(reward_two["profile"].profile_id, 99), &"completed")
 	var invalid_end := facade.end_run("end-invalid", 6, run_id, &"victoryish")
@@ -249,9 +250,9 @@ func _check_abandoned_session_reopen() -> void:
 
 func _catalog() -> ProfileCatalog:
 	return ProfileCatalog.pilot({
-		&"training_sword": {"slot": &"weapon", "allowed_base_classes": [&"swordsman"], "starter": true},
-		&"apprentice_staff": {"slot": &"weapon", "allowed_base_classes": [&"mage"], "starter": true},
-		&"reward_blade": {"slot": &"weapon", "allowed_base_classes": [&"swordsman"]},
+		&"training_sword": {"slot": &"main_hand", "allowed_base_classes": [&"swordsman"], "starter": true},
+		&"apprentice_staff": {"slot": &"main_hand", "allowed_base_classes": [&"mage"], "starter": true},
+		&"reward_blade": {"slot": &"main_hand", "allowed_base_classes": [&"swordsman"]},
 	})
 
 func _rewards() -> ProfileRewardResolver:

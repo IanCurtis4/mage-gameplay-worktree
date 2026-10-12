@@ -1,4 +1,5 @@
 extends SceneTree
+const TX = preload("res://tests/e06_tx_fixture.gd")
 var checks := 0
 var failures := 0
 func _initialize() -> void:
@@ -18,13 +19,13 @@ func _initialize() -> void:
 	var facade := ProfileFacade.new(store, ProfileRewardResolver.pilot_progression())
 	_check(facade.create_character("review-create", 0, "Revisao", &"mage")["ok"], "isolated character")
 	var profile := facade.current_profile()
-	profile.equipment_collection.append_array([armor.id, charm.id])
+	for definition_id: StringName in [armor.id, charm.id]: TX.own(profile, definition_id, catalog)
 	_check(store.commit(profile)["ok"] and facade.open_profile()["ok"], "collection accepts conflicting items independently")
 	profile = facade.current_profile()
 	var character := profile.characters[0]
 	var equipped := character.equipped.duplicate(true)
-	equipped[&"armor"] = armor.id
-	equipped[&"accessory"] = charm.id
+	equipped[&"torso"] = profile.first_instance_for_definition(armor.id)
+	equipped[&"accessory_1"] = profile.first_instance_for_definition(charm.id)
 	var disk_before := FileAccess.get_file_as_string(directory.path_join(ProfileStore.PRIMARY_FILE))
 	var preset: Dictionary = character.presets[0]
 	var update := facade.update_preset("review-conflicting-equip", profile.revision, character.character_id, 0, preset["active_slots"], preset["passive_slots"], equipped)

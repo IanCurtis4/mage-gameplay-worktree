@@ -7,21 +7,27 @@ static func describe(controller: RunController) -> Dictionary:
 		return BuildEffectCatalog.failure(&"invalid_session")
 	var state := controller.run_state
 	var catalog := state.effect_catalog()
-	var owned := state.local_equipment.duplicate()
+	var owned: Dictionary = state.local_equipment_instances
 	if controller.persistent_facade != null:
 		var profile := controller.persistent_facade.current_profile()
 		if profile != null:
-			owned = profile.equipment_collection
+			owned = profile.equipment_instances
 	var equipment: Array[Dictionary] = []
-	for id: StringName in owned:
-		var item := catalog.get_definition(&"equipment", id) as EquipmentDefinition
+	var ids: Array = owned.keys()
+	ids.sort()
+	for id: StringName in ids:
+		var instance: EquipmentInstance = owned[id]
+		var item := catalog.get_definition(&"equipment", instance.definition_id) as EquipmentDefinition
 		if item != null:
-			equipment.append({"id": id, "name": item.display_name, "description": item.description, "slot": item.slot, "selected": id in state.build_snapshot.equipped.values(), "allowed": BuildEffectCatalog.definition_allowed(item, state.build_snapshot)})
+			var row := instance.to_record()
+			row.merge({"id": id, "name": item.display_name, "description": item.description, "slot": item.slot, "selected": id in state.build_snapshot.equipped.values(), "allowed": BuildEffectCatalog.definition_allowed(item, state.build_snapshot)})
+			equipment.append(row)
 	var inventory := state.card_inventory.describe()
 	var cards: Array[Dictionary] = []
 	for id: StringName in inventory["owned"]:
-		var card := catalog.get_definition(&"card", id) as CardDefinition
-		cards.append({"id": id, "name": card.display_name, "description": card.description, "free": id in inventory["free"]})
+		var definition_id: StringName = inventory["instances"][id]
+		var card := catalog.get_definition(&"card", definition_id) as CardDefinition
+		cards.append({"id": id, "definition_id": definition_id, "name": card.display_name, "description": card.description, "free": id in inventory["free"]})
 	var composed := state.composed_build(controller.player.temporary_stat_sources())
 	if not composed["ok"]:
 		return composed

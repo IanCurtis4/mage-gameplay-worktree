@@ -17,8 +17,16 @@ var effect_ledger := EffectProcLedger.new()
 var runtime_revision: int = 1
 var transaction_locked := false
 var card_sockets: Dictionary = {}
+var card_instances: Dictionary = {}
 var card_inventory := RunCardInventory.new()
-var local_equipment: Array[StringName] = []
+var local_equipment_instances: Dictionary[StringName, EquipmentInstance] = {}
+var next_local_equipment_counter := 1
+var local_equipment: Array[StringName]:
+	get:
+		var ids: Array[StringName] = []
+		ids.assign(local_equipment_instances.keys())
+		ids.sort()
+		return ids
 var _effect_cache_key: int = 0
 var _effect_cache: Dictionary = {}
 var _effect_cache_serial := 0
@@ -87,7 +95,7 @@ func set_effect_catalog(catalog: BuildEffectCatalog) -> Dictionary:
 	return {"ok": true, "error_code": &"", "request_id": "", "runtime_revision": runtime_revision}
 
 func effect_state() -> Dictionary:
-	return {"augment_stacks": augment_stacks.duplicate(true), "card_sockets": card_sockets.duplicate(true)}
+	return {"augment_stacks": augment_stacks.duplicate(true), "card_sockets": card_sockets.duplicate(true), "card_instances": card_instances.duplicate(true)}
 
 func _ensure_effect_cache(temporary_sources: Array[Dictionary] = []) -> void:
 	if build_snapshot == null:
@@ -95,7 +103,7 @@ func _ensure_effect_cache(temporary_sources: Array[Dictionary] = []) -> void:
 			_effect_cache = BuildEffectCatalog.failure(&"missing_snapshot")
 			_effect_cache_serial += 1
 		return
-	var key := hash([build_snapshot.base_class_id, build_snapshot.evolution_id, build_snapshot.base_level, build_snapshot.job_level, build_snapshot.attribute_allocations, skill_levels, build_snapshot.library_skill_ids, build_snapshot.equipped, build_snapshot.build_version, augment_stacks, card_sockets, temporary_sources, runtime_revision])
+	var key := hash([build_snapshot.base_class_id, build_snapshot.evolution_id, build_snapshot.base_level, build_snapshot.job_level, build_snapshot.attribute_allocations, skill_levels, build_snapshot.library_skill_ids, build_snapshot.equipped, build_snapshot.equipment_records(), build_snapshot.build_version, augment_stacks, card_sockets, card_instances, temporary_sources, runtime_revision])
 	if not _effect_cache.is_empty() and _effect_cache.get("error_code", &"") != &"missing_snapshot" and key == _effect_cache_key:
 		return
 	var snapshot := build_snapshot.copy_snapshot()
@@ -269,6 +277,7 @@ func reset() -> void:
 	pending_choices = 0
 	current_offer.clear()
 	card_sockets.clear()
+	card_instances.clear()
 	card_inventory.clear()
 	_offer_ids.clear()
 	_choice_ids.clear()
@@ -313,3 +322,17 @@ func _effective_proc_signature(procs: Array) -> Array[Dictionary]:
 			increased = 0.0
 		result.append({"family_id": proc["family_id"], "trigger": proc["trigger"], "axis": proc["axis"], "targets": proc["targets"], "flat": flat, "increased": increased, "limit": cap})
 	return result
+
+func add_local_equipment(definition_id: StringName, metadata: Dictionary) -> Dictionary:
+	var id := StringName("equipment_%d" % next_local_equipment_counter)
+	if local_equipment_instances.has(id):
+		return BuildEffectCatalog.failure(&"duplicate_equipment_instance")
+	var created := EquipmentInstance.from_metadata(id, definition_id, metadata)
+	if not created["ok"]:
+		return created
+	var checked := EquipmentRules.validate_instance(created["instance"], metadata)
+	if not checked["ok"]:
+		return checked
+	local_equipment_instances[id] = created["instance"]
+	next_local_equipment_counter += 1
+	return {"ok": true, "instance_id": id}

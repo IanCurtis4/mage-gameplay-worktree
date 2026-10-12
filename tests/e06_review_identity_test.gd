@@ -1,4 +1,5 @@
 extends SceneTree
+const TX = preload("res://tests/e06_tx_fixture.gd")
 var checks := 0
 var failures := 0
 func _initialize() -> void:
@@ -14,13 +15,13 @@ func _initialize() -> void:
 	var facade := ProfileFacade.new(store, ProfileRewardResolver.pilot_progression())
 	_check(facade.create_character("review-create", 0, "Revisao", &"mage")["ok"], "create mage with isolated store")
 	var profile := facade.current_profile()
-	profile.equipment_collection.append(&"warden_mail")
+	TX.own(profile, &"warden_mail", catalog)
 	_check(store.commit(profile)["ok"], "collection may own equipment of any identity")
 	_check(facade.open_profile()["ok"], "refresh isolated profile")
 	profile = facade.current_profile()
 	var character := profile.characters[0]
 	var equipped := character.equipped.duplicate(true)
-	equipped[&"armor"] = &"warden_mail"
+	equipped[&"torso"] = profile.first_instance_for_definition(&"warden_mail")
 	var disk_before := FileAccess.get_file_as_string(directory.path_join(ProfileStore.PRIMARY_FILE))
 	var preset: Dictionary = character.presets[0]
 	var update := facade.update_preset("review-restricted-equip", profile.revision, character.character_id, 0, preset["active_slots"], preset["passive_slots"], equipped)

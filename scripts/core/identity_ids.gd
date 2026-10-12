@@ -33,7 +33,7 @@ static func attribute_ids() -> Array[StringName]:
 	return [&"str", &"agi", &"vit", &"int", &"dex", &"luk"]
 
 static func equipment_slots() -> Array[StringName]:
-	return [&"weapon", &"armor", &"accessory"]
+	return [&"head", &"neck", &"shoulders", &"arms", &"torso", &"cloak", &"legs", &"feet", &"main_hand", &"off_hand", &"accessory_1", &"accessory_2", &"accessory_3", &"accessory_4"]
 
 static func is_technical_id(value: String) -> bool:
 	if value.is_empty() or value.length() > 64:

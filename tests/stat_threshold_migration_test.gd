@@ -1,4 +1,5 @@
 extends SceneTree
+const TX = preload("res://tests/e06_tx_fixture.gd")
 
 class FailingStore:
 	extends ProfileStore
@@ -91,7 +92,7 @@ func _test_store_migration_and_respec() -> void:
 	_check(current.revision == profile.revision+1 and current.next_run_counter == 9 and current.next_character_counter == 3 and current.selected_character_id == profile.selected_character_id, "migration conserves IDs/counters/selection and increments revision once")
 	var kept := current.characters[0]
 	_check(kept.attribute_allocations == character.attribute_allocations and kept.purchased_skill_ranks == character.purchased_skill_ranks and kept.action_slots == character.action_slots and kept.extension_fields == character.extension_fields and current.extension_fields == profile.extension_fields, "migration preserves skills bars investments and extensions")
-	var expected_equipped := {&"weapon": &"starter_blade", &"armor": &"traveler_vest", &"accessory": &"traveler_charm"}
+	var expected_equipped := TX.legacy_expected(current, {&"main_hand": &"starter_blade", &"torso": &"traveler_vest", &"accessory_1": &"traveler_charm"})
 	_check(kept.equipped == expected_equipped and kept.presets[0]["equipped"] == expected_equipped and kept.presets[1]["equipped"] == expected_equipped, "E06 additive migration fills previously null equipment slots")
 	_check(kept.presets[0]["active_slots"] == character.presets[0]["active_slots"] and kept.presets[1]["active_slots"] == character.presets[1]["active_slots"] and kept.presets[0]["passive_slots"] == character.presets[0]["passive_slots"] and kept.presets[1]["passive_slots"] == character.presets[1]["passive_slots"], "additive starters preserve both legacy skill presets")
 	var facade := ProfileFacade.new(store)
@@ -173,7 +174,7 @@ func _old_text(profile: ProfileState, version: int = 6) -> String:
 	var encoded := ProfileCodec.encode(profile,ProfileCatalog.pilot())
 	_check(encoded["ok"], "fixture new profile valid before changing envelope")
 	if not encoded["ok"]: return "invalid fixture"
-	var data: Dictionary = encoded["data"]
+	var data: Dictionary = TX.legacy_data(encoded["data"])
 	data["catalog_version"] = version
 	data["ruleset_id"] = "e00_v1" if version == 1 else ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	if version == 1:

@@ -78,7 +78,7 @@ func _legal_character(label: String, evolution: Dictionary, active: Array[Varian
 	_check(summary["base_skill_points_spent"] == 19 and summary["evolution_skill_points_spent"] == 20 and summary["attribute_points_spent"] == expected_cost and summary["attribute_points_available"] == 458 - expected_cost and summary["base_skill_points_available"] == 0 and summary["evolution_skill_points_available"] == 0, "%s independent skill wallets and exact new attribute cost" % label)
 	character.presets[0]["active_slots"] = active
 	character.presets[0]["passive_slots"] = [&"sentinel_precision_stance", &"sentinel_opening_read"]
-	character.presets[0]["equipped"] = {&"weapon": null, &"armor": null, &"accessory": null}
+	character.presets[0]["equipped"] = {&"head": null, &"neck": null, &"shoulders": null, &"arms": null, &"torso": null, &"cloak": null, &"legs": null, &"feet": null, &"main_hand": null, &"off_hand": null, &"accessory_1": null, &"accessory_2": null, &"accessory_3": null, &"accessory_4": null}
 	_check(active.size() == 5 and character.presets[0]["passive_slots"].size() == 2 and catalog.effective_skill_ranks(&"archer", &"sentinel", character.purchased_skill_ranks, {}).has(&"sentinel_headshot"), "%s kit uses5+2 slots with free Head retained in library" % label)
 	return character
 

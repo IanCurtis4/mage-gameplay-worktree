@@ -69,9 +69,9 @@ func _validation_and_conflicts() -> void:
 		exclusive.conflict_group = &"one_transformation"
 		_check(registry.register_definition(origin, Fixture.definition(origin, origin, [exclusive]))["ok"], "exclusive recipe valid")
 	var snapshot := Fixture.snapshot()
-	snapshot.equipped = {&"weapon": &"equipment"}
+	Fixture.equip(snapshot, &"equipment")
 	_check(BuildEffectComposer.compose(snapshot, {"augment_stacks": {&"augment": 1}}, [], registry)["error_code"] == &"effect_conflict", "augment/equipment reject entire conflict")
-	_check(BuildEffectComposer.compose(snapshot, {"card_sockets": {&"equipment": &"card"}}, [], registry)["error_code"] == &"effect_conflict", "equipment/card reject entire conflict")
+	_check(BuildEffectComposer.compose(snapshot, {"card_sockets": {&"equipment": [&"card"]}, "card_instances": {&"card": &"card"}}, [], registry)["error_code"] == &"effect_conflict", "equipment/card reject entire conflict")
 	var capped: EffectDefinition = Fixture.count_effect(&"cap", 20.0)
 	registry = Fixture.catalog_for(&"augment", [capped])
 	snapshot = Fixture.snapshot()
@@ -141,8 +141,8 @@ func _combined_and_scalar() -> void:
 	scalar.target_skill_ids = [&"fire_spear"]
 	for origin: StringName in BuildEffectCatalog.ORIGINS:
 		_check(registry.register_definition(origin, Fixture.definition(origin, origin, [scalar, Fixture.proc_effect()]))["ok"], "compatible scalar/proc registry")
-	snapshot.equipped = {&"weapon": &"equipment"}
-	var state := {"augment_stacks": {&"augment": 1}, "card_sockets": {&"equipment": &"card"}}
+	Fixture.equip(snapshot, &"equipment")
+	var state := {"augment_stacks": {&"augment": 1}, "card_sockets": {&"equipment": [&"card"]}, "card_instances": {&"card": &"card"}}
 	var composed := BuildEffectComposer.compose(snapshot, state, [], registry)
 	var captured := SkillEffectResolver.capture(&"fire_spear", 1, composed)
 	var base := ClassCatalog.skill_definition(&"fire_spear").rank_definition(1).range
@@ -161,7 +161,7 @@ func _combined_and_scalar() -> void:
 	registry.register_definition(&"equipment", Fixture.definition(&"equipment", &"saturated", [capped]))
 	registry.register_definition(&"augment", Fixture.definition(&"augment", &"no_gain", [Fixture.proc_effect(&"extra", &"same_family")]))
 	var run := RunState.new(&"mage")
-	run.build_snapshot.equipped = {&"weapon": &"saturated"}
+	Fixture.equip(run.build_snapshot, &"saturated")
 	run.set_effect_catalog(registry)
 	run.queue_choice()
 	var rng := RandomNumberGenerator.new()

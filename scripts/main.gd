@@ -159,11 +159,19 @@ func _ready() -> void:
 	trap_registry.y_sort_enabled = true
 	add_child(trap_registry)
 	player = PlayerActor.new()
-	if run_state.build_snapshot.equipped.is_empty():
-		run_state.build_snapshot.equipped = ProfileCatalog.pilot().starter_equipment(run_state.class_id)
-	for item: Variant in run_state.build_snapshot.equipped.values():
-		if item != null and item not in run_state.local_equipment:
-			run_state.local_equipment.append(item)
+	if not run_state.uses_persistent_build():
+		var catalog := ProfileCatalog.pilot()
+		for slot: StringName in IdentityIds.equipment_slots():
+			var definition_id: Variant = catalog.starter_equipment(run_state.class_id)[slot]
+			if definition_id == null:
+				continue
+			var created := run_state.add_local_equipment(definition_id, catalog.equipment_metadata(definition_id))
+			if created["ok"]:
+				run_state.build_snapshot.equipped[slot] = created["instance_id"]
+				run_state.build_snapshot.equipment_instances[created["instance_id"]] = run_state.local_equipment_instances[created["instance_id"]].copy_instance()
+	else:
+		for id: StringName in run_state.build_snapshot.equipment_instances:
+			run_state.local_equipment_instances[id] = run_state.build_snapshot.equipment_instances[id].copy_instance()
 	player.configure(navigation, run_state)
 	build_service = RunBuildService.new(self)
 	reward_service = RunRewardService.new(self)

@@ -51,16 +51,24 @@ func create_character(request_id: String, expected_revision: int, display_name: 
 	var character := CharacterState.new(character_id, display_name, base_class_id)
 	character.action_slots = ActionBarLayout.empty()
 	var initial_slots := _catalog.initial_skill_slots(base_class_id)
-	var starter_equipment := _catalog.starter_equipment(base_class_id)
+	var starter_equipment := EquipmentRules.empty_layout()
+	for slot: StringName in IdentityIds.equipment_slots():
+		var definition_id: Variant = _catalog.starter_equipment(base_class_id)[slot]
+		if definition_id == null:
+			continue
+		var instance_id := candidate.first_instance_for_definition(definition_id)
+		if instance_id.is_empty():
+			var created_instance := candidate.add_equipment_instance(definition_id, _catalog.equipment_metadata(definition_id))
+			if not created_instance["ok"]:
+				return _finish_operation(request_id, created_instance)
+			instance_id = created_instance["instance_id"]
+			candidate.lifetime_stats[&"equipment_unlocked"] += 1
+		starter_equipment[slot] = instance_id
 	character.equipped = starter_equipment.duplicate(true)
 	for preset: Dictionary in character.presets:
 		preset["active_slots"] = initial_slots["active_slots"].duplicate(true)
 		preset["passive_slots"] = initial_slots["passive_slots"].duplicate(true)
 		preset["equipped"] = starter_equipment.duplicate(true)
-	for item_id: StringName in _catalog.starter_item_ids(base_class_id):
-		if item_id not in candidate.equipment_collection:
-			candidate.equipment_collection.append(item_id)
-			candidate.lifetime_stats[&"equipment_unlocked"] += 1
 	candidate.characters.append(character)
 	candidate.selected_character_id = character_id
 	candidate.next_character_counter += 1
@@ -141,10 +149,11 @@ func available_build_options(character_id: String) -> Dictionary:
 	var equipment_by_slot: Dictionary[StringName, Array] = {}
 	for slot: StringName in IdentityIds.equipment_slots():
 		equipment_by_slot[slot] = []
-	for item_id: StringName in _profile.equipment_collection:
+	for instance_id: StringName in _profile.equipment_instance_ids():
+		var item_id := _profile.equipment_instances[instance_id].definition_id
 		for slot: StringName in IdentityIds.equipment_slots():
 			if _catalog.equipment_is_allowed(item_id, slot, character.base_class_id, character.evolution_id):
-				equipment_by_slot[slot].append(item_id)
+				equipment_by_slot[slot].append(instance_id)
 	return {
 		"ok": true,
 		"character_id": character_id,
@@ -675,9 +684,26 @@ func _grant_reward_payload(request_id: String, expected_revision: int, run_id: S
 		return _finish_operation(request_id, _block_with({"ok": false, "error_code": &"invalid_reward_session", "read_only": true}))
 	character.base_xp_total = ProgressionRules.add_base_xp(character.base_xp_total, reward["base_xp"])
 	character.job_xp_total = ProgressionRules.add_job_xp(character.job_xp_total, reward["job_xp"], not character.evolution_id.is_empty())
-	for item_id: StringName in reward["equipment_ids"]:
-		if item_id not in candidate.equipment_collection:
-			candidate.equipment_collection.append(item_id)
+	var acquired: Array[StringName] = []
+	var drops: Array = reward.get("equipment_drops", [])
+	if not reward.has("equipment_drops"):
+		for definition_id: StringName in reward["equipment_ids"]:
+			var metadata := _catalog.equipment_metadata(definition_id)
+			metadata["definition_id"] = definition_id
+			drops.append(metadata)
+	for drop: Dictionary in drops:
+		var definition_id := StringName(drop.get("definition_id", &""))
+		if not _catalog.knows_equipment(definition_id):
+			return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_catalog"})
+		var metadata := _catalog.equipment_metadata(definition_id)
+		for field: String in ["origin_id", "item_level", "quality_id", "socket_capacity"]:
+			metadata[field] = drop.get(field)
+		var was_known := not candidate.first_instance_for_definition(definition_id).is_empty()
+		var added := candidate.add_equipment_instance(definition_id, metadata)
+		if not added["ok"]:
+			return _finish_operation(request_id, added)
+		acquired.append(added["instance_id"])
+		if not was_known:
 			candidate.lifetime_stats[&"equipment_unlocked"] += 1
 	for stat_id: StringName in reward["stat_increments"]:
 		candidate.lifetime_stats[stat_id] = candidate.lifetime_stats.get(stat_id, 0) + reward["stat_increments"][stat_id]
@@ -689,6 +715,7 @@ func _grant_reward_payload(request_id: String, expected_revision: int, run_id: S
 		committed["sequence"] = sequence
 		committed["reward_id"] = reward_id
 		committed["applied_reward"] = reward.duplicate(true)
+		committed["equipment_instance_ids"] = acquired.duplicate()
 	return _finish_operation(request_id, committed)
 
 func end_run(request_id: String, expected_revision: int, run_id: String, outcome: StringName) -> Dictionary:
@@ -800,7 +827,7 @@ func _open_profile_transaction() -> Dictionary:
 			closed[metadata_key] = loaded[metadata_key]
 	return closed
 
-func _build_snapshot(character: CharacterState) -> BuildSnapshot:
+func _build_snapshot(character: CharacterState, owner_profile: ProfileState = null) -> BuildSnapshot:
 	var effective_ranks := _catalog.effective_skill_ranks(
 		character.base_class_id,
 		character.evolution_id,
@@ -813,7 +840,8 @@ func _build_snapshot(character: CharacterState) -> BuildSnapshot:
 		ProgressionRules.job_level_for_xp(character.job_xp_total, not character.evolution_id.is_empty()),
 		effective_ranks,
 		_catalog.skill_ids_for_identity(character.base_class_id, character.evolution_id),
-		_catalog
+		_catalog,
+		(owner_profile if owner_profile != null else _profile).equipment_instances
 	)
 
 func _commit_candidate(candidate: ProfileState, character_id: String) -> Dictionary:
@@ -835,7 +863,7 @@ func _commit_candidate(candidate: ProfileState, character_id: String) -> Diction
 			var selected := character.copy_state()
 			selected.selected_preset = preset_index
 			selected.equipped = selected.presets[preset_index]["equipped"].duplicate(true)
-			var composed := BuildEffectComposer.compose(_build_snapshot(selected), {}, [], loaded["catalog"])
+			var composed := BuildEffectComposer.compose(_build_snapshot(selected, candidate), {}, [], loaded["catalog"])
 			if not composed["ok"]:
 				return composed
 	return _store.commit(candidate)

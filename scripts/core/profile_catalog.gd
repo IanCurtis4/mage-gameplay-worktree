@@ -86,14 +86,14 @@ static func pilot(
 				catalog._build_error = true
 				continue
 			var item := resource as EquipmentDefinition
-			catalog.add_equipment(item.id, item.slot, IdentityIds.base_class_ids() if item.allowed_origins.is_empty() else item.allowed_origins, item.starter, item.allowed_evolutions)
+			catalog.add_equipment(item.id, item.slot, IdentityIds.base_class_ids() if item.allowed_origins.is_empty() else item.allowed_origins, item.starter, item.allowed_evolutions, item.metadata())
 	for raw_item_id: Variant in additional_equipment:
 		var metadata: Dictionary = additional_equipment[raw_item_id]
 		var allowed_base_classes: Array[StringName] = []
 		allowed_base_classes.assign(metadata.get("allowed_base_classes", []))
 		var allowed_evolutions: Array[StringName] = []
 		allowed_evolutions.assign(metadata.get("allowed_evolutions", []))
-		catalog.add_equipment(StringName(raw_item_id), metadata.get("slot", &""), allowed_base_classes, metadata.get("starter", false), allowed_evolutions)
+		catalog.add_equipment(StringName(raw_item_id), metadata.get("slot", &""), allowed_base_classes, metadata.get("starter", false), allowed_evolutions, metadata)
 	for raw_skill_id: Variant in additional_skills:
 		var metadata: Dictionary = additional_skills[raw_skill_id]
 		var allowed_base_classes: Array[StringName] = []
@@ -152,14 +152,20 @@ func add_evolution(definition: EvolutionDefinition) -> bool:
 	_evolution_order.append(definition.id)
 	return true
 
-func add_equipment(item_id: StringName, slot: StringName, allowed_base_classes: Array[StringName], starter: bool = false, allowed_evolutions: Array[StringName] = []) -> bool:
+func add_equipment(item_id: StringName, slot: StringName, allowed_base_classes: Array[StringName], starter: bool = false, allowed_evolutions: Array[StringName] = [], acquisition_metadata: Dictionary = {}) -> bool:
 	if _sealed:
 		return false
 	if _equipment.has(item_id):
 		_build_error = true
 		return false
 	_equipment[item_id] = {
-		"slot": slot,
+		"slot": EquipmentRules.definition_slot(slot),
+		"item_kind": acquisition_metadata.get("item_kind", EquipmentRules.default_kind(slot)),
+		"hand_usage": acquisition_metadata.get("hand_usage", &"one_hand" if EquipmentRules.definition_slot(slot) == &"main_hand" else &"none"),
+		"origin_id": acquisition_metadata.get("origin_id", &"fixture_origin"),
+		"item_level": acquisition_metadata.get("item_level", 1),
+		"quality_id": acquisition_metadata.get("quality_id", &"common"),
+		"socket_capacity": acquisition_metadata.get("socket_capacity", 1 if EquipmentRules.default_kind(slot) in [&"armor", &"weapon", &"shield"] else 0),
 		"allowed_base_classes": allowed_base_classes.duplicate(),
 		"starter": starter,
 		"allowed_evolutions": allowed_evolutions.duplicate(),
@@ -211,7 +217,7 @@ func is_valid() -> bool:
 		return false
 	var starter_slots: Dictionary[StringName, bool] = {}
 	for metadata: Dictionary in _equipment.values():
-		if metadata.get("slot") not in IdentityIds.equipment_slots() or not _valid_origins(metadata.get("allowed_base_classes")):
+		if not EquipmentRules.validate_definition(metadata)["ok"] or not EquipmentInstance.from_metadata(&"validation_instance", &"validation_definition", metadata)["ok"] or not _valid_origins(metadata.get("allowed_base_classes")):
 			return false
 		if not metadata.get("starter") is bool:
 			return false
@@ -281,7 +287,7 @@ func starter_equipment(base_class_id: StringName) -> Dictionary[StringName, Vari
 	for item_id: StringName in _equipment:
 		var metadata: Dictionary = _equipment[item_id]
 		if metadata["starter"] and base_class_id in metadata["allowed_base_classes"]:
-			equipped[metadata["slot"]] = item_id
+			equipped[EquipmentRules.legacy_position(metadata["slot"])] = item_id
 	return equipped
 
 func starter_item_ids(base_class_id: StringName) -> Array[StringName]:
@@ -399,7 +405,7 @@ func skill_is_allowed(skill_id: StringName, base_class_id: StringName, evolution
 
 func equipment_is_allowed(item_id: StringName, slot: StringName, base_class_id: StringName, evolution_id: StringName = &"") -> bool:
 	var metadata: Dictionary = _equipment.get(item_id, {})
-	return not metadata.is_empty() and metadata["slot"] == slot and base_class_id in metadata["allowed_base_classes"] and (metadata["allowed_evolutions"].is_empty() or evolution_id in metadata["allowed_evolutions"])
+	return not metadata.is_empty() and slot in IdentityIds.equipment_slots() and EquipmentRules.slot_matches(metadata["slot"], slot) and base_class_id in metadata["allowed_base_classes"] and (metadata["allowed_evolutions"].is_empty() or evolution_id in metadata["allowed_evolutions"])
 
 func _register_defender_skills() -> void:
 	var origin: Array[StringName] = [&"swordsman"]
@@ -805,3 +811,6 @@ func _requirement_cycle_from(skill_id: StringName, visiting: Dictionary[StringNa
 	visiting.erase(skill_id)
 	visited[skill_id] = true
 	return false
+
+func all_equipment_metadata() -> Dictionary:
+	return _equipment.duplicate(true)

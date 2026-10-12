@@ -1,4 +1,5 @@
 extends SceneTree
+const TX = preload("res://tests/e06_tx_fixture.gd")
 ## Catalog 7→9 migration with additive inventory starters. All file writes are isolated test fixtures.
 
 class FailingStore:
@@ -39,12 +40,12 @@ func _old_text(profile: ProfileState) -> String:
 	var encoded := ProfileCodec.encode(profile, ProfileCatalog.pilot())
 	_check(encoded["ok"], "legal source before changing only envelope")
 	if not encoded["ok"]: return "invalid fixture"
-	var data: Dictionary = encoded["data"]
+	var data: Dictionary = TX.legacy_data(encoded["data"])
 	data["catalog_version"] = 7
 	return JSON.stringify(data, "\t")
 
 func _pairs_and_validation() -> void:
-	_check(ProfileState.CATALOG_VERSION == 9 and ProfileState.SCHEMA_VERSION == 2 and ProfileState.RULESET_ID == "stat_thresholds_v1", "only catalog version changes")
+	_check(ProfileState.CATALOG_VERSION == 10 and ProfileState.SCHEMA_VERSION == 3 and ProfileState.RULESET_ID == "stat_thresholds_v1", "only catalog version changes")
 	for pair: Array in [[&"swordsman", &""], [&"mage", &""], [&"archer", &""], [&"swordsman", &"defender"], [&"swordsman", &"berserker"], [&"mage", &"elementalist"], [&"mage", &"spiritualist"], [&"mage", &"mg_ar"], [&"archer", &"sentinel"], [&"archer", &"hunter"]]:
 		var source := _profile(pair[0], pair[1])
 		var decoded := ProfileCodec.decode(_old_text(source))
@@ -61,7 +62,7 @@ func _pairs_and_validation() -> void:
 	_check(ProfileCodec.decode(text)["ok"], "legitimate threshold-era investment above 87 increments migrates")
 	for change: Dictionary in [
 		{"ruleset_id": ProfileCodec.PRE_THRESHOLDS_RULESET_ID}, {"ruleset_id": "unknown"},
-		{"catalog_version": 10}, {"schema_version": 3},
+		{"catalog_version": 10}, {"schema_version": 4},
 	]:
 		var data: Dictionary = JSON.parse_string(text)
 		data.merge(change, true)
@@ -97,7 +98,7 @@ func _store_and_first_mutation() -> void:
 	var kept := migrated.characters[0]
 	_check(migrated.revision == profile.revision + 1 and migrated.profile_id == PROFILE_ID and migrated.next_character_counter == 3 and migrated.next_run_counter == 9 and migrated.selected_character_id == profile.selected_character_id, "single revision increment preserves IDs/counters/selection")
 	_check(kept.attribute_allocations == character.attribute_allocations and kept.purchased_skill_ranks == character.purchased_skill_ranks and kept.granted_skill_ranks == character.granted_skill_ranks and kept.action_slots == character.action_slots, "all investments/skills/24 slots/presets/equipment preserved")
-	var expected_equipment := {&"weapon": &"starter_blade", &"armor": &"traveler_vest", &"accessory": &"traveler_charm"}
+	var expected_equipment := TX.legacy_expected(migrated, {&"main_hand": &"starter_blade", &"torso": &"traveler_vest", &"accessory_1": &"traveler_charm"})
 	_check(kept.equipped == expected_equipment, "inventory migration fills only previously null equipment")
 	for index: int in CharacterState.PRESET_COUNT:
 		_check(kept.presets[index]["equipped"] == expected_equipment and kept.presets[index]["active_slots"] == character.presets[index]["active_slots"] and kept.presets[index]["passive_slots"] == character.presets[index]["passive_slots"], "both presets retain skill slots and gain only additive starters")

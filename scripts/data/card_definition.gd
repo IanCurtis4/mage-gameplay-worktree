@@ -8,5 +8,5 @@ extends Resource
 @export var icon: Texture2D
 @export var allowed_origins: Array[StringName] = []
 @export var allowed_evolutions: Array[StringName] = []
-@export var allowed_slots: Array[StringName] = [&"weapon", &"armor", &"accessory"]
+@export var allowed_slots: Array[StringName] = [&"head", &"shoulders", &"arms", &"torso", &"cloak", &"legs", &"feet", &"main_hand", &"off_hand"]
 @export var effects: Array[EffectDefinition] = []

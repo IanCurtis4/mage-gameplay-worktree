@@ -1,4 +1,5 @@
 extends SceneTree
+const TX = preload("res://tests/e06_tx_fixture.gd")
 const F = preload("res://tests/e06_inventory_fixture.gd")
 const ID := "123e4567-e89b-42d3-a456-426614174000"
 var checks := 0
@@ -8,12 +9,12 @@ func _initialize() -> void:
 	directory = ProjectSettings.globalize_path("res://.godot/verification/e06_t2/migration_%d" % Time.get_ticks_usec())
 	DirAccess.make_dir_recursive_absolute(directory)
 	var catalog := ProfileCatalog.pilot()
-	_check(ProfileState.CATALOG_VERSION == 9 and ProfileState.SCHEMA_VERSION == 2 and ProfileState.RULESET_ID == "stat_thresholds_v1", "audited8 -> catalog9, schema/ruleset unchanged")
+	_check(ProfileState.CATALOG_VERSION == 10 and ProfileState.SCHEMA_VERSION == 3 and ProfileState.RULESET_ID == "stat_thresholds_v1", "historical catalogs -> catalog10/schema3, stat ruleset unchanged")
 	var effects := BuildContentLoader.pilot()
 	_check(effects.ids(&"equipment").size() == 12 and effects.ids(&"card").size() == 6, "reserved metadata counts")
 	for origin: StringName in [&"swordsman", &"mage", &"archer"]:
 		var starters := catalog.starter_equipment(origin)
-		_check(starters[&"armor"] == &"traveler_vest" and starters[&"accessory"] == &"traveler_charm" and catalog.starter_item_ids(origin).size() == 3, "origin starter trio from unique catalog")
+		_check(starters[&"torso"] == &"traveler_vest" and starters[&"accessory_1"] == &"traveler_charm" and catalog.starter_item_ids(origin).size() == 3, "origin starter trio from unique catalog")
 	for id: StringName in effects.ids(&"equipment"):
 		var item := effects.get_definition(&"equipment", id) as EquipmentDefinition
 		var metadata := catalog.equipment_metadata(id)
@@ -26,7 +27,7 @@ func _initialize() -> void:
 		if not result["ok"]: continue
 		var profile: ProfileState = result["profile"]
 		var character := profile.characters[0]
-		_check(character.equipped[&"armor"] == &"warden_mail" and character.equipped[&"weapon"] == &"starter_staff" and character.presets[1]["equipped"][&"armor"] == &"channeler_robe", "preserve valid selections, fill only null slots")
+		_check(character.equipped[&"torso"] == profile.first_instance_for_definition(&"warden_mail") and character.equipped[&"main_hand"] == profile.first_instance_for_definition(&"starter_staff") and character.presets[1]["equipped"][&"torso"] == profile.first_instance_for_definition(&"channeler_robe"), "preserve valid selections, fill only null slots")
 		_check(character.action_slots.size() == 24 and character.action_slots[0] == &"fire_spear" and character.attribute_allocations[&"int"] == (7 if version >= 7 else 1) and character.base_xp_total == 225, "XP ranks/actions and threshold investment preserved")
 		_check(profile.extension_fields["extension"] == {"keep": [1.0, 2.0]} and character.extension_fields["note"] == "keep" and profile.legacy_loadouts == {"custom": "keep"} and profile.unresolved_legacy == {"unknown": "keep"}, "extensions and unresolved legacy preserved")
 		var serialized := ProfileCodec.encode(profile)
@@ -71,7 +72,7 @@ func _payload(version: int) -> Dictionary:
 	profile.revision = 5
 	profile.next_character_counter = 2
 	profile.selected_character_id = IdentityIds.character_id(ID, 1)
-	profile.equipment_collection = [&"warden_mail", &"channeler_robe"]
+	for id: StringName in [&"warden_mail", &"channeler_robe"]: TX.own(profile, id)
 	profile.extension_fields["extension"] = {"keep": [1, 2]}
 	profile.legacy_loadouts = {"custom": "keep"}
 	profile.unresolved_legacy = {"unknown": "keep"}
@@ -82,14 +83,14 @@ func _payload(version: int) -> Dictionary:
 	character.action_slots = ActionBarLayout.empty()
 	character.action_slots[0] = &"fire_spear"
 	character.attribute_allocations[&"int"] = 7 if version >= 7 else 1
-	character.equipped[&"armor"] = &"warden_mail"
-	character.presets[0]["equipped"][&"armor"] = &"warden_mail"
-	character.presets[1]["equipped"][&"armor"] = &"channeler_robe"
+	character.equipped[&"torso"] = profile.first_instance_for_definition(&"warden_mail")
+	character.presets[0]["equipped"][&"torso"] = profile.first_instance_for_definition(&"warden_mail")
+	character.presets[1]["equipped"][&"torso"] = profile.first_instance_for_definition(&"channeler_robe")
 	character.extension_fields["note"] = "keep"
 	profile.characters.append(character)
 	var encoded := ProfileCodec.encode(profile)
 	assert(encoded["ok"])
-	var payload: Dictionary = encoded["data"]
+	var payload: Dictionary = TX.legacy_data(encoded["data"])
 	payload["catalog_version"] = version
 	payload["ruleset_id"] = "e00_v1" if version == 1 else (ProfileCodec.PRE_THRESHOLDS_RULESET_ID if version <= 6 else ProfileState.RULESET_ID)
 	if version == 1: payload["characters"][0].erase("granted_skill_ranks")

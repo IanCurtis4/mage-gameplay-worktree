@@ -1,4 +1,5 @@
 extends SceneTree
+const TX = preload("res://tests/e06_tx_fixture.gd")
 const F = preload("res://tests/e06_inventory_fixture.gd")
 var checks := 0
 var failures := 0
@@ -19,7 +20,7 @@ func _run() -> void:
 	_check(c.reward_service.ticket(first["ticket_id"])["payload"]["base_xp"] == 100, "ticket DTO cannot alter durable payload")
 	var second := c.reward_service.issue("stage2", &"encounter_two", true)
 	var third := c.reward_service.issue("stage3", &"encounter_two", true)
-	_check(first["card_id"] != second["card_id"] and second["card_id"] != third["card_id"] and first["card_id"] != third["card_id"], "queued stage draws reserve unique cards before collection")
+	_check(first["card_id"] != &"" and second["card_id"] != &"" and third["card_id"] != &"" and first["ticket_id"] != second["ticket_id"] and second["ticket_id"] != third["ticket_id"], "queued acquisitions have distinct tickets and may repeat card definitions")
 	_check(c.reward_service.collect(second["ticket_id"])["error_code"] == &"invalid_reward_sequence", "reward queue serializes out-of-order requests")
 	_check(not c.reward_service.collect("invented")["ok"], "UI cannot invent ticket or reward values")
 	var disk := F.disk(f)
@@ -30,8 +31,8 @@ func _run() -> void:
 	_check(c.rng.state == rng_state and c.reward_service.ticket(first["ticket_id"])["card_id"] == first["card_id"], "retry does not change RNG or chosen card")
 	store.failure_stage = &""
 	var collected := c.reward_service.collect(first["ticket_id"])
-	_check(collected["ok"] and facade.current_profile().characters[0].base_xp_total == 100 and StringName(first["item_id"]) in facade.current_profile().equipment_collection, "item and XP confirmed in same commit")
-	_check(c.run_state.pending_choices == 1 and c.run_state.card_inventory.owns(first["card_id"]), "confirmation publishes one card and one choice")
+	_check(collected["ok"] and facade.current_profile().characters[0].base_xp_total == 100 and StringName(first["item_id"]) in TX.definition_ids(facade.current_profile()), "item and XP confirmed in same commit")
+	_check(c.run_state.pending_choices == 1 and c.run_state.card_inventory.owns(collected["card_instance_id"]), "confirmation publishes one card and one choice")
 	var revision := facade.current_profile().revision
 	_check(c.reward_service.collect(first["ticket_id"])["already_applied"] and facade.current_profile().revision == revision and c.run_state.pending_choices == 1, "replay creates no item XP card or choice")
 	store.uncertain = true
@@ -54,7 +55,7 @@ func _run() -> void:
 	paused = false
 	var reopened := ProfileFacade.new(ProfileStore.new(directory), ProfileRewardResolver.pilot_progression())
 	var loaded := reopened.open_profile()
-	_check(loaded["ok"] and loaded["abandoned_run_closed"] and reopened.current_profile().characters[0].base_xp_total == 400 and item in reopened.current_profile().equipment_collection, "reopen keeps durable XP/items and closes interrupted run")
+	_check(loaded["ok"] and loaded["abandoned_run_closed"] and reopened.current_profile().characters[0].base_xp_total == 400 and item in TX.definition_ids(reopened.current_profile()), "reopen keeps durable XP/items and closes interrupted run")
 	var fresh := reopened.start_run("new-run", reopened.current_profile().revision)
 	_check(fresh["ok"] and fresh["run_state"].card_inventory.describe()["owned"].is_empty() and fresh["run_state"].augment_stacks.is_empty(), "restart never reconstructs cards or augments")
 	await _terminal()
@@ -111,7 +112,9 @@ func _reward_boundaries() -> void:
 	var c: RunController = f["controller"]
 	for id: StringName in c.run_state.effect_catalog().ids(&"card"):
 		c.run_state.card_inventory.grant(id, c.run_state.effect_catalog())
-	_check(c.reward_service.eligible_cards().is_empty(), "owned free and socketed types exhaust card pool")
+	_check(not c.reward_service.eligible_cards().is_empty(), "owning a definition does not forbid another acquisition")
+	assert(c.run_state.set_effect_catalog(BuildContentLoader.pilot())["ok"])
+	_check(c.reward_service.eligible_cards().is_empty(), "catalog with no useful card recipe exhausts card pool")
 	var issued := c.reward_service.issue("empty-stage", &"encounter_two", true)
 	_check(issued["card_id"] == &"" and not issued["message"].is_empty() and c.reward_service.collect(issued["ticket_id"])["ok"] and c.run_state.pending_choices == 1, "exhausted card pool warns and still delivers item XP and pending choice")
 	var empty_augments := BuildEffectCatalog.new()

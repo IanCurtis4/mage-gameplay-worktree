@@ -51,11 +51,7 @@ func copy_state() -> CharacterState:
 	return copy
 
 static func _empty_equipment() -> Dictionary[StringName, Variant]:
-	return {
-		&"weapon": null,
-		&"armor": null,
-		&"accessory": null,
-	}
+	return EquipmentRules.empty_layout()
 
 static func _empty_preset() -> Dictionary:
 	var active_slots: Array[Variant] = []

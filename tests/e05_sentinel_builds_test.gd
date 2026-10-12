@@ -1,11 +1,12 @@
 extends SceneTree
+const TX = preload("res://tests/e06_tx_fixture.gd")
 ## S6 legal purchases, persistence and comparable allocations. No personal saves.
 
 const PROFILE_ID := "123e4567-e89b-42d3-a456-426614174216"
 const DIRECTORIES: Array[String] = ["blocked", "gates", "critical", "caster", "menu22", "menu31", "menu37", "legacy"]
 const GATES: Array[int] = [20, 20, 23, 25, 28, 31, 31, 34, 37]
 const BASE_PURCHASES := {&"double_shot": 5, &"piercing_arrow": 5, &"arrow_rain": 5, &"archer_precision": 3, &"archer_cadence": 1}
-const EQUIPPED: Dictionary[StringName, Variant] = {&"weapon": null, &"armor": null, &"accessory": null}
+const EQUIPPED: Dictionary[StringName, Variant] = {&"head": null, &"neck": null, &"shoulders": null, &"arms": null, &"torso": null, &"cloak": null, &"legs": null, &"feet": null, &"main_hand": null, &"off_hand": null, &"accessory_1": null, &"accessory_2": null, &"accessory_3": null, &"accessory_4": null}
 var directory: String
 var checks := 0
 var failures := 0
@@ -232,7 +233,7 @@ func _legacy() -> void:
 	before.characters[0].purchased_skill_ranks[&"double_shot"] = 1
 	before.characters[0].presets[0]["active_slots"][0] = &"double_shot"
 	var encoded := ProfileCodec.encode(before)
-	var prior: Dictionary = encoded["data"].duplicate(true)
+	var prior: Dictionary = TX.legacy_data(encoded["data"])
 	prior["catalog_version"] = ProfileCodec.PRE_SPIRITUALIST_CATALOG_VERSION
 	prior["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	var prior_text := JSON.stringify(prior)

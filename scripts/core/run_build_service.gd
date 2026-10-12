@@ -83,7 +83,7 @@ func has_pending_transaction() -> bool:
 func _prepare(intent: Dictionary) -> Dictionary:
 	if typeof(intent.get("request_id")) != TYPE_STRING:
 		return BuildEffectCatalog.failure(&"invalid_request_id")
-	for field: String in ["kind", "slot", "item_id", "card_id", "from_item_id"]:
+	for field: String in ["kind", "slot", "equipment_instance_id", "card_instance_id", "from_equipment_instance_id"]:
 		if intent.has(field) and typeof(intent[field]) not in [TYPE_STRING, TYPE_STRING_NAME]:
 			return _failure(&"invalid_intent", intent)
 	if _run.build_snapshot == null:
@@ -116,16 +116,19 @@ func _prepare(intent: Dictionary) -> Dictionary:
 		return _failure(&"stale_resources", intent)
 	if intent.has("inventory_revision") and intent["inventory_revision"] != _run.card_inventory.revision:
 		return _failure(&"stale_revision", intent)
-	var owned := _run.local_equipment.duplicate()
+	var instances: Dictionary = _run.local_equipment_instances.duplicate(true)
 	if controller.persistent_facade != null:
 		var boundary := controller.persistent_facade.run_mutation_status(_run.run_id, _run.character_id)
 		if not boundary["ok"]:
 			return _failure(boundary["error_code"], intent)
-		owned = controller.persistent_facade.current_profile().equipment_collection
+		instances = controller.persistent_facade.current_profile().equipment_instances
 	elif not _run.run_id.is_empty():
 		return _failure(&"invalid_session", intent)
 	var candidate := _run.build_snapshot.copy_snapshot()
 	candidate.skill_ranks = _run.skill_levels.duplicate(true)
+	candidate.equipment_instances.clear()
+	for id: StringName in instances:
+		candidate.equipment_instances[id] = instances[id].copy_instance()
 	for slot: StringName in IdentityIds.equipment_slots():
 		if not candidate.equipped.has(slot):
 			candidate.equipped[slot] = null
@@ -134,21 +137,29 @@ func _prepare(intent: Dictionary) -> Dictionary:
 		var slot := StringName(intent.get("slot", &""))
 		if slot not in IdentityIds.equipment_slots():
 			return _failure(&"invalid_slot", intent)
-		var item := StringName(intent.get("item_id", &""))
-		if kind == &"equip" and item not in owned:
+		var item := StringName(intent.get("equipment_instance_id", &""))
+		if kind == &"equip" and not instances.has(item):
 			return _failure(&"item_not_owned", intent)
 		candidate.equipped[slot] = item if kind == &"equip" else null
 	elif kind not in [&"socket", &"unsocket", &"transfer"]:
 		return _failure(&"invalid_intent", intent)
 	for item: Variant in candidate.equipped.values():
-		if item != null and item not in owned:
+		if item != null and not instances.has(item):
 			return _failure(&"item_not_owned", intent)
-	var inventory_result := _run.card_inventory.preview(intent, candidate.equipped)
+	var metadata: Dictionary = {}
+	var catalog := _run.effect_catalog()
+	for id: StringName in catalog.ids(&"equipment"):
+		metadata[id] = (catalog.get_definition(&"equipment", id) as EquipmentDefinition).metadata()
+	var layout_check := EquipmentRules.validate_layout(candidate.equipped, candidate.equipment_instances, metadata, candidate.base_class_id, candidate.evolution_id)
+	if not layout_check["ok"]:
+		return _failure(layout_check["error_code"], intent)
+	var inventory_result := _run.card_inventory.preview(intent, candidate.equipped, candidate.equipment_instances, metadata)
 	if not inventory_result["ok"]:
 		return _failure(inventory_result["error_code"], intent)
 	var inventory: RunCardInventory = inventory_result["inventory"]
 	var effects := _run.effect_state()
 	effects["card_sockets"] = inventory.sockets()
+	effects["card_instances"] = inventory.describe()["instances"]
 	candidate.build_version += 1
 	var composition := BuildEffectComposer.compose(candidate, effects, actor.temporary_stat_sources(), _run.effect_catalog())
 	if not composition["ok"]:
@@ -172,6 +183,7 @@ func _publish(prepared: Dictionary) -> void:
 	_run.build_snapshot = prepared["snapshot"].copy_snapshot()
 	_run.card_inventory = prepared["inventory"].copy_inventory()
 	_run.card_sockets = _run.card_inventory.sockets()
+	_run.card_instances = _run.card_inventory.describe()["instances"]
 	_run.runtime_revision += 1
 	_applied[prepared["intent"]["request_id"]] = true
 	actor.apply_run_modifiers(_run)

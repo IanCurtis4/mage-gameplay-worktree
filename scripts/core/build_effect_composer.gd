@@ -15,25 +15,45 @@ static func compose(snapshot: BuildSnapshot, run_effects: Dictionary, temporary_
 		if typeof(stacks[id]) != TYPE_INT or int(stacks[id]) < 1:
 			return BuildEffectCatalog.failure(&"invalid_stacks")
 		entries.append({"source_id": StringName("augment:%s" % id), "origin": &"augment", "id": StringName(id), "stacks": int(stacks[id])})
-	for slot: Variant in snapshot.equipped:
+	var equipment_definitions: Dictionary = {}
+	for id: StringName in registry.ids(&"equipment"):
+		var definition := registry.get_definition(&"equipment", id) as EquipmentDefinition
+		equipment_definitions[id] = definition.metadata()
+	var layout_check := EquipmentRules.validate_layout(snapshot.equipped, snapshot.equipment_instances, equipment_definitions, snapshot.base_class_id, snapshot.evolution_id)
+	if not layout_check["ok"]:
+		return layout_check
+	for slot: StringName in IdentityIds.equipment_slots():
 		var item: Variant = snapshot.equipped[slot]
 		if item == null:
 			continue
-		entries.append({"source_id": StringName("equipment:%s:%s" % [slot, item]), "origin": &"equipment", "id": StringName(item), "slot": StringName(slot), "stacks": 1})
+		var instance: EquipmentInstance = snapshot.equipment_instances[item]
+		entries.append({"source_id": StringName("equipment:%s:%s" % [slot, item]), "origin": &"equipment", "id": instance.definition_id, "slot": slot, "instance_id": item, "stacks": 1})
 	var sockets: Dictionary = run_effects.get("card_sockets", {})
+	var cards: Dictionary = run_effects.get("card_instances", {})
 	var seen_cards: Dictionary = {}
 	for item: Variant in sockets:
-		var card: StringName = StringName(sockets[item])
-		if seen_cards.has(card):
-			return BuildEffectCatalog.failure(&"duplicate_card")
-		seen_cards[card] = true
-		var slot: StringName = &""
-		for equipped_slot: Variant in snapshot.equipped:
-			if snapshot.equipped[equipped_slot] != null and StringName(snapshot.equipped[equipped_slot]) == StringName(item):
-				slot = StringName(equipped_slot)
-		if slot.is_empty():
+		if typeof(item) not in [TYPE_STRING, TYPE_STRING_NAME] or item not in snapshot.equipped.values():
 			return BuildEffectCatalog.failure(&"socket_item_not_equipped")
-		entries.append({"source_id": StringName("card:%s:%s" % [card, item]), "origin": &"card", "id": card, "slot": slot, "stacks": 1})
+		var instance: EquipmentInstance = snapshot.equipment_instances[item]
+		if not sockets[item] is Array or sockets[item].size() != instance.socket_capacity:
+			return BuildEffectCatalog.failure(&"invalid_socket_capacity")
+		if not EquipmentRules.allows_sockets(equipment_definitions[instance.definition_id]):
+			return BuildEffectCatalog.failure(&"socket_not_allowed")
+		var slot: StringName = &""
+		for equipped_slot: StringName in IdentityIds.equipment_slots():
+			if snapshot.equipped[equipped_slot] == item:
+				slot = equipped_slot
+		for index: int in sockets[item].size():
+			var raw_card: Variant = sockets[item][index]
+			if raw_card == null:
+				continue
+			if typeof(raw_card) not in [TYPE_STRING, TYPE_STRING_NAME] or not cards.has(raw_card) or typeof(cards[raw_card]) not in [TYPE_STRING, TYPE_STRING_NAME]:
+				return BuildEffectCatalog.failure(&"card_instance_not_owned")
+			var card_instance := StringName(raw_card)
+			if seen_cards.has(card_instance):
+				return BuildEffectCatalog.failure(&"duplicate_card")
+			seen_cards[card_instance] = true
+			entries.append({"source_id": StringName("card:%s:%d:%s" % [item, index, card_instance]), "origin": &"card", "id": StringName(cards[card_instance]), "slot": slot, "stacks": 1})
 	entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return String(a["source_id"]) < String(b["source_id"]))
 	var sources: Array[Dictionary] = []
 	var rules: Dictionary = {}
@@ -56,7 +76,7 @@ static func compose(snapshot: BuildSnapshot, run_effects: Dictionary, temporary_
 			return BuildEffectCatalog.failure(&"identity_restricted", String(entry["id"]))
 		if definition is AugmentDefinition and entry["stacks"] > definition.max_stacks:
 			return BuildEffectCatalog.failure(&"stack_cap")
-		if (definition is EquipmentDefinition and definition.slot != entry["slot"]) or (definition is CardDefinition and entry["slot"] not in definition.allowed_slots):
+		if (definition is EquipmentDefinition and not EquipmentRules.slot_matches(definition.slot, entry["slot"])) or (definition is CardDefinition and entry["slot"] not in definition.allowed_slots):
 			return BuildEffectCatalog.failure(&"slot_restricted")
 		var source := {"source_id": source_id, "label": definition.display_name, "primary_flat": {}, "flat": {}, "increased": {}}
 		var effects: Array[EffectDefinition] = definition.effects.duplicate()

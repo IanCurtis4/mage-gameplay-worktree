@@ -1,6 +1,6 @@
 class_name ProfileCodec
 extends RefCounted
-## Pure schema-2 encoding, validation and conservative schema/catalog migration.
+## Pure schema-3 encoding; validate historical envelopes before instance migration.
 
 const MAX_FILE_BYTES := 4 * 1024 * 1024
 const MAX_EXACT_JSON_INTEGER := 9007199254740991
@@ -18,10 +18,16 @@ const LEGACY_BASE_GRANTS := {
 	"swordsman": {"slash": 1, "dash": 1, "swordsman_resistance": 1},
 	"mage": {"fireball": 1, "fire_wall": 1, "mage_mana_regeneration": 1},
 }
-const ROOT_FIELDS := [
+const LEGACY_ROOT_FIELDS := [
 	"format_id", "schema_version", "catalog_version", "ruleset_id", "profile_id",
 	"revision", "next_character_counter", "next_run_counter", "selected_character_id",
 	"equipment_collection", "characters", "settings", "lifetime_stats",
+	"reward_session", "legacy_loadouts", "unresolved_legacy",
+]
+const ROOT_FIELDS := [
+	"format_id", "schema_version", "catalog_version", "ruleset_id", "profile_id",
+	"revision", "next_character_counter", "next_run_counter", "next_equipment_counter", "selected_character_id",
+	"equipment_instances", "characters", "settings", "lifetime_stats",
 	"reward_session", "legacy_loadouts", "unresolved_legacy",
 ]
 const CHARACTER_FIELDS := [
@@ -66,69 +72,82 @@ static func decode(text: String, catalog: ProfileCatalog = null) -> Dictionary:
 	if schema_version > ProfileState.SCHEMA_VERSION:
 		return {"ok": false, "error_code": &"unsupported_schema", "future_schema": true}
 	if schema_version == 1:
-		return _migrate_v1(data, effective_catalog)
-	if schema_version != ProfileState.SCHEMA_VERSION:
+		return _upgrade_legacy(_migrate_v1(data, effective_catalog), effective_catalog)
+	if schema_version not in [2, ProfileState.SCHEMA_VERSION]:
 		return _error(&"unsupported_schema")
+	if schema_version == ProfileState.SCHEMA_VERSION:
+		if data.has("equipment_collection"):
+			return _catalog_error(&"invalid_catalog")
+		return _decode_v2(data, effective_catalog)
+	if not _is_exact_integer(data.get("catalog_version")) or int(data["catalog_version"]) < 1 or int(data["catalog_version"]) > 9:
+		return _catalog_error(&"invalid_catalog")
+	for reserved: String in ["equipment_instances", "next_equipment_counter"]:
+		if data.has(reserved):
+			return _catalog_error(&"invalid_catalog")
 	if (
 		_is_exact_integer(data.get("catalog_version"))
 		and int(data["catalog_version"]) == LEGACY_CATALOG_VERSION
 		and data.get("ruleset_id") == LEGACY_RULESET_ID
 	):
-		return _migrate_catalog_v1(data, effective_catalog)
+		return _upgrade_legacy(_migrate_catalog_v1(data, effective_catalog), effective_catalog)
 	if (
 		_is_exact_integer(data.get("catalog_version"))
 		and int(data["catalog_version"]) == PRE_DEFENDER_CATALOG_VERSION
 		and data.get("ruleset_id") == PRE_THRESHOLDS_RULESET_ID
 	):
-		return _migrate_catalog_v2(data, effective_catalog)
+		return _upgrade_legacy(_migrate_catalog_v2(data, effective_catalog), effective_catalog)
 	if (
 		_is_exact_integer(data.get("catalog_version"))
 		and int(data["catalog_version"]) == PRE_BERSERKER_CATALOG_VERSION
 		and data.get("ruleset_id") == PRE_THRESHOLDS_RULESET_ID
 	):
-		return _migrate_catalog_v3(data, effective_catalog)
+		return _upgrade_legacy(_migrate_catalog_v3(data, effective_catalog), effective_catalog)
 	if (
 		_is_exact_integer(data.get("catalog_version"))
 		and int(data["catalog_version"]) == PRE_ELEMENTALIST_CATALOG_VERSION
 		and data.get("ruleset_id") == PRE_THRESHOLDS_RULESET_ID
 	):
-		return _migrate_catalog_v4(data, effective_catalog)
+		return _upgrade_legacy(_migrate_catalog_v4(data, effective_catalog), effective_catalog)
 	if (
 		_is_exact_integer(data.get("catalog_version"))
 		and int(data["catalog_version"]) == PRE_SPIRITUALIST_CATALOG_VERSION
 		and data.get("ruleset_id") == PRE_THRESHOLDS_RULESET_ID
 	):
-		return _migrate_catalog_v5(data, effective_catalog)
+		return _upgrade_legacy(_migrate_catalog_v5(data, effective_catalog), effective_catalog)
 	if (
 		_is_exact_integer(data.get("catalog_version"))
 		and int(data["catalog_version"]) == PRE_THRESHOLDS_CATALOG_VERSION
 		and data.get("ruleset_id") == PRE_THRESHOLDS_RULESET_ID
 	):
-		return _migrate_catalog_v6(data, effective_catalog)
+		return _upgrade_legacy(_migrate_catalog_v6(data, effective_catalog), effective_catalog)
 	if (
 		_is_exact_integer(data.get("catalog_version"))
 		and int(data["catalog_version"]) == PRE_HUNTER_CATALOG_VERSION
 		and data.get("ruleset_id") == ProfileState.RULESET_ID
 	):
-		return _migrate_catalog_v7(data, effective_catalog)
+		return _upgrade_legacy(_migrate_catalog_v7(data, effective_catalog), effective_catalog)
 	if _is_exact_integer(data.get("catalog_version")) and int(data["catalog_version"]) == PRE_INVENTORY_CATALOG_VERSION and data.get("ruleset_id") == ProfileState.RULESET_ID:
-		return _migrate_catalog_v8(data, effective_catalog)
-	return _decode_v2(data, effective_catalog)
+		return _upgrade_legacy(_migrate_catalog_v8(data, effective_catalog), effective_catalog)
+	var normalized := data.duplicate(true)
+	normalized["catalog_version"] = ProfileState.CATALOG_VERSION
+	return _upgrade_legacy(_decode_v2(normalized, effective_catalog, false, true), effective_catalog)
 
 static func validate_profile(profile: ProfileState, catalog: ProfileCatalog = null) -> Dictionary:
 	var effective_catalog := catalog if catalog != null else ProfileCatalog.pilot()
 	if not effective_catalog.is_valid():
 		return _catalog_error(&"invalid_catalog")
+	if not profile._migration_equipment_ids.is_empty():
+		return _error(&"invalid_equipment_instance")
 	return _decode_v2(_profile_to_dictionary(profile), effective_catalog)
 
-static func _decode_v2(data: Dictionary, catalog: ProfileCatalog, legacy_attribute_budget: bool = false) -> Dictionary:
+static func _decode_v2(data: Dictionary, catalog: ProfileCatalog, legacy_attribute_budget: bool = false, legacy_inventory: bool = false) -> Dictionary:
 	if data.get("format_id") != ProfileState.FORMAT_ID:
 		return _error(&"unsupported_schema")
 	if not _is_exact_integer(data.get("catalog_version")) or int(data["catalog_version"]) != ProfileState.CATALOG_VERSION:
 		return _error(&"invalid_catalog")
 	if data.get("ruleset_id") != ProfileState.RULESET_ID:
 		return _error(&"invalid_catalog")
-	for field: String in ROOT_FIELDS:
+	for field: String in LEGACY_ROOT_FIELDS if legacy_inventory else ROOT_FIELDS:
 		if not data.has(field):
 			return _error(&"missing_field", field)
 	if _contains_forbidden_fields(data):
@@ -151,7 +170,7 @@ static func _decode_v2(data: Dictionary, catalog: ProfileCatalog, legacy_attribu
 	profile.next_run_counter = int(data["next_run_counter"])
 	var character_ids: Dictionary[String, bool] = {}
 	for raw_character: Variant in data["characters"]:
-		var decoded_character := _decode_character(raw_character, profile.profile_id, profile.next_character_counter, catalog, legacy_attribute_budget)
+		var decoded_character := _decode_character(raw_character, profile.profile_id, profile.next_character_counter, catalog, legacy_attribute_budget, legacy_inventory)
 		if not decoded_character["ok"]:
 			return decoded_character
 		var character: CharacterState = decoded_character["character"]
@@ -163,15 +182,35 @@ static func _decode_v2(data: Dictionary, catalog: ProfileCatalog, legacy_attribu
 	if selected != null and (not selected is String or not character_ids.has(selected)):
 		return _error(&"invalid_selected_character")
 	profile.selected_character_id = "" if selected == null else selected
-	var collection_result := _decode_unique_ids(data["equipment_collection"])
-	if not collection_result["ok"]:
-		return collection_result
-	profile.equipment_collection = collection_result["ids"]
-	for item_id: StringName in profile.equipment_collection:
-		if not catalog.knows_equipment(item_id):
-			return _catalog_error(&"invalid_catalog")
+	if legacy_inventory:
+		var collection_result := _decode_unique_ids(data["equipment_collection"])
+		if not collection_result["ok"]:
+			return collection_result
+		profile._migration_equipment_ids = collection_result["ids"]
+		for item_id: StringName in profile._migration_equipment_ids:
+			if not catalog.knows_equipment(item_id):
+				return _catalog_error(&"invalid_catalog")
+	else:
+		if not _is_exact_integer(data["next_equipment_counter"]) or int(data["next_equipment_counter"]) < 1 or int(data["next_equipment_counter"]) > MAX_EXACT_JSON_INTEGER or not data["equipment_instances"] is Array:
+			return _error(&"invalid_equipment_instance")
+		profile.next_equipment_counter = int(data["next_equipment_counter"])
+		for raw_instance: Variant in data["equipment_instances"]:
+			var instance_result := EquipmentInstance.from_record(raw_instance)
+			if not instance_result["ok"]:
+				return _catalog_error(instance_result["error_code"])
+			var instance: EquipmentInstance = instance_result["instance"]
+			var id := instance.instance_id
+			var counter := _derived_counter(String(id), "equipment")
+			if counter < 1 or counter >= profile.next_equipment_counter or profile.equipment_instances.has(id):
+				return _catalog_error(&"invalid_equipment_instance")
+			if not catalog.knows_equipment(instance.definition_id):
+				return _catalog_error(&"invalid_catalog")
+			var instance_check := EquipmentRules.validate_instance(instance, catalog.equipment_metadata(instance.definition_id))
+			if not instance_check["ok"]:
+				return _catalog_error(instance_check["error_code"])
+			profile.equipment_instances[id] = instance
 	for character: CharacterState in profile.characters:
-		if not _character_equipment_is_valid(character, profile.equipment_collection, catalog):
+		if not _character_equipment_is_valid(character, profile, catalog, legacy_inventory):
 			return _catalog_error(&"invalid_equipment")
 	if not data["settings"] is Dictionary or not data["legacy_loadouts"] is Dictionary or not data["unresolved_legacy"] is Dictionary:
 		return _error(&"invalid_profile_maps")
@@ -186,10 +225,10 @@ static func _decode_v2(data: Dictionary, catalog: ProfileCatalog, legacy_attribu
 	if not reward_result["ok"]:
 		return reward_result
 	profile.reward_session = reward_result["session"]
-	profile.extension_fields = _unknown_fields(data, ROOT_FIELDS)
+	profile.extension_fields = _unknown_fields(data, LEGACY_ROOT_FIELDS if legacy_inventory else ROOT_FIELDS)
 	return {"ok": true, "profile": profile, "migrated": false}
 
-static func _decode_character(raw: Variant, profile_id: String, next_character_counter: int, catalog: ProfileCatalog, legacy_attribute_budget: bool = false) -> Dictionary:
+static func _decode_character(raw: Variant, profile_id: String, next_character_counter: int, catalog: ProfileCatalog, legacy_attribute_budget: bool = false, legacy_inventory: bool = false) -> Dictionary:
 	if not raw is Dictionary:
 		return _error(&"invalid_character")
 	var data: Dictionary = raw
@@ -244,7 +283,7 @@ static func _decode_character(raw: Variant, profile_id: String, next_character_c
 	)
 	if not ranks_result["ok"]:
 		return ranks_result
-	var equipped_result := _decode_equipped(data["equipped"])
+	var equipped_result := _decode_equipped(data["equipped"], legacy_inventory)
 	if not equipped_result["ok"]:
 		return equipped_result
 	if not data["presets"] is Array or data["presets"].size() != CharacterState.PRESET_COUNT:
@@ -257,7 +296,7 @@ static func _decode_character(raw: Variant, profile_id: String, next_character_c
 		grants_result["ranks"]
 	)
 	for raw_preset: Variant in data["presets"]:
-		var preset_result := _decode_preset(raw_preset, base_class_id, evolution_id, effective_ranks, catalog)
+		var preset_result := _decode_preset(raw_preset, base_class_id, evolution_id, effective_ranks, catalog, legacy_inventory)
 		if not preset_result["ok"]:
 			return preset_result
 		presets.append(preset_result["preset"])
@@ -370,23 +409,24 @@ static func _decode_rank_map(
 		return requirements
 	return {"ok": true, "ranks": ranks}
 
-static func _decode_equipped(raw: Variant) -> Dictionary:
-	if not raw is Dictionary or raw.size() != IdentityIds.equipment_slots().size():
+static func _decode_equipped(raw: Variant, legacy_inventory: bool = false) -> Dictionary:
+	var slots: Array[StringName] = EquipmentRules.LEGACY_SLOTS if legacy_inventory else IdentityIds.equipment_slots()
+	if not raw is Dictionary or raw.size() != slots.size():
 		return _error(&"invalid_equipment")
 	var equipped: Dictionary[StringName, Variant] = {}
-	for slot: StringName in IdentityIds.equipment_slots():
+	for slot: StringName in slots:
 		var key := String(slot)
 		if not raw.has(key) or (raw[key] != null and (not raw[key] is String or not IdentityIds.is_technical_id(raw[key]))):
 			return _error(&"invalid_equipment")
 		equipped[slot] = null if raw[key] == null else StringName(raw[key])
 	return {"ok": true, "equipped": equipped}
 
-static func _decode_preset(raw: Variant, base_class_id: StringName, evolution_id: StringName, effective_ranks: Dictionary[StringName, int], catalog: ProfileCatalog) -> Dictionary:
+static func _decode_preset(raw: Variant, base_class_id: StringName, evolution_id: StringName, effective_ranks: Dictionary[StringName, int], catalog: ProfileCatalog, legacy_inventory: bool = false) -> Dictionary:
 	if not raw is Dictionary or raw.size() != 3 or not raw.has("active_slots") or not raw.has("passive_slots") or not raw.has("equipped"):
 		return _error(&"invalid_presets")
 	var active_result := _decode_slots(raw["active_slots"], CharacterState.ACTIVE_SLOT_COUNT, ProfileCatalog.ACTIVE, base_class_id, evolution_id, effective_ranks, catalog)
 	var passive_result := _decode_slots(raw["passive_slots"], CharacterState.PASSIVE_SLOT_COUNT, ProfileCatalog.PASSIVE, base_class_id, evolution_id, effective_ranks, catalog)
-	var equipped_result := _decode_equipped(raw["equipped"])
+	var equipped_result := _decode_equipped(raw["equipped"], legacy_inventory)
 	if not active_result["ok"]:
 		return active_result
 	if not passive_result["ok"]:
@@ -477,7 +517,7 @@ static func _migrate_v1(data: Dictionary, catalog: ProfileCatalog) -> Dictionary
 				continue
 			seen[item_id] = true
 			if catalog.knows_equipment(item_id):
-				profile.equipment_collection.append(item_id)
+				profile._migration_equipment_ids.append(item_id)
 			else:
 				unresolved.append(raw_item_id)
 	profile.legacy_loadouts = data["equipped"].duplicate(true)
@@ -508,7 +548,7 @@ static func _migrate_catalog_v1(data: Dictionary, catalog: ProfileCatalog) -> Di
 		var grants: Dictionary = LEGACY_BASE_GRANTS.get(raw_character["base_class_id"], {}).duplicate(true)
 		raw_character["granted_skill_ranks"] = grants
 		migrated["characters"][index] = raw_character
-	var decoded := _decode_v2(migrated, catalog, true)
+	var decoded := _decode_v2(migrated, catalog, true, true)
 	if not decoded["ok"]:
 		return decoded
 	_add_inventory_starters(decoded["profile"], catalog)
@@ -521,7 +561,7 @@ static func _migrate_catalog_v2(data: Dictionary, catalog: ProfileCatalog) -> Di
 	var migrated := data.duplicate(true)
 	migrated["catalog_version"] = ProfileState.CATALOG_VERSION
 	migrated["ruleset_id"] = ProfileState.RULESET_ID
-	var decoded := _decode_v2(migrated, catalog, true)
+	var decoded := _decode_v2(migrated, catalog, true, true)
 	if not decoded["ok"]:
 		return decoded
 	_add_inventory_starters(decoded["profile"], catalog)
@@ -534,7 +574,7 @@ static func _migrate_catalog_v3(data: Dictionary, catalog: ProfileCatalog) -> Di
 	var migrated := data.duplicate(true)
 	migrated["catalog_version"] = ProfileState.CATALOG_VERSION
 	migrated["ruleset_id"] = ProfileState.RULESET_ID
-	var decoded := _decode_v2(migrated, catalog, true)
+	var decoded := _decode_v2(migrated, catalog, true, true)
 	if not decoded["ok"]:
 		return decoded
 	_add_inventory_starters(decoded["profile"], catalog)
@@ -547,7 +587,7 @@ static func _migrate_catalog_v4(data: Dictionary, catalog: ProfileCatalog) -> Di
 	var migrated := data.duplicate(true)
 	migrated["catalog_version"] = ProfileState.CATALOG_VERSION
 	migrated["ruleset_id"] = ProfileState.RULESET_ID
-	var decoded := _decode_v2(migrated, catalog, true)
+	var decoded := _decode_v2(migrated, catalog, true, true)
 	if not decoded["ok"]:
 		return decoded
 	_add_inventory_starters(decoded["profile"], catalog)
@@ -560,7 +600,7 @@ static func _migrate_catalog_v5(data: Dictionary, catalog: ProfileCatalog) -> Di
 	var migrated := data.duplicate(true)
 	migrated["catalog_version"] = ProfileState.CATALOG_VERSION
 	migrated["ruleset_id"] = ProfileState.RULESET_ID
-	var decoded := _decode_v2(migrated, catalog, true)
+	var decoded := _decode_v2(migrated, catalog, true, true)
 	if not decoded["ok"]:
 		return decoded
 	_add_inventory_starters(decoded["profile"], catalog)
@@ -574,7 +614,7 @@ static func _migrate_catalog_v6(data: Dictionary, catalog: ProfileCatalog) -> Di
 	migrated["ruleset_id"] = ProfileState.RULESET_ID
 	# Validate all old allocations against the old wallet before accepting the
 	# larger new budget. The new cost is then checked too; no debt or reset.
-	var decoded := _decode_v2(migrated, catalog, true)
+	var decoded := _decode_v2(migrated, catalog, true, true)
 	if not decoded["ok"]:
 		return decoded
 	_add_inventory_starters(decoded["profile"], catalog)
@@ -587,7 +627,7 @@ static func _migrate_catalog_v7(data: Dictionary, catalog: ProfileCatalog) -> Di
 	# never revalidate legitimate investments against the pre-threshold wallet.
 	var migrated := data.duplicate(true)
 	migrated["catalog_version"] = ProfileState.CATALOG_VERSION
-	var decoded := _decode_v2(migrated, catalog)
+	var decoded := _decode_v2(migrated, catalog, false, true)
 	if not decoded["ok"]:
 		return decoded
 	_add_inventory_starters(decoded["profile"], catalog)
@@ -598,7 +638,7 @@ static func _migrate_catalog_v7(data: Dictionary, catalog: ProfileCatalog) -> Di
 static func _migrate_catalog_v8(data: Dictionary, catalog: ProfileCatalog) -> Dictionary:
 	var migrated := data.duplicate(true)
 	migrated["catalog_version"] = ProfileState.CATALOG_VERSION
-	var decoded := _decode_v2(migrated, catalog)
+	var decoded := _decode_v2(migrated, catalog, false, true)
 	if not decoded["ok"]:
 		return decoded
 	_add_inventory_starters(decoded["profile"], catalog)
@@ -609,12 +649,12 @@ static func _migrate_catalog_v8(data: Dictionary, catalog: ProfileCatalog) -> Di
 static func _add_inventory_starters(profile: ProfileState, catalog: ProfileCatalog) -> void:
 	for character: CharacterState in profile.characters:
 		var starters := catalog.starter_equipment(character.base_class_id)
-		for slot: StringName in IdentityIds.equipment_slots():
-			var item: Variant = starters.get(slot)
+		for slot: StringName in EquipmentRules.LEGACY_SLOTS:
+			var item: Variant = starters.get(EquipmentRules.legacy_position(slot))
 			if item == null:
 				continue
-			if item not in profile.equipment_collection:
-				profile.equipment_collection.append(item)
+			if item not in profile._migration_equipment_ids:
+				profile._migration_equipment_ids.append(item)
 			if character.equipped[slot] == null:
 				character.equipped[slot] = item
 			for preset: Dictionary in character.presets:
@@ -633,7 +673,8 @@ static func _profile_to_dictionary(profile: ProfileState) -> Dictionary:
 		"next_character_counter": profile.next_character_counter,
 		"next_run_counter": profile.next_run_counter,
 		"selected_character_id": null if profile.selected_character_id.is_empty() else profile.selected_character_id,
-		"equipment_collection": _names_to_strings(profile.equipment_collection),
+		"equipment_instances": _instance_records(profile),
+		"next_equipment_counter": profile.next_equipment_counter,
 		"characters": [],
 		"settings": profile.settings.duplicate(true),
 		"lifetime_stats": _integer_map_to_dictionary(profile.lifetime_stats),
@@ -701,17 +742,58 @@ static func _copy_json_candidate(value: Variant) -> Variant:
 		return value.duplicate(true)
 	return value
 
-static func _character_equipment_is_valid(character: CharacterState, collection: Array[StringName], catalog: ProfileCatalog) -> bool:
-	for slot: StringName in IdentityIds.equipment_slots():
-		var value: Variant = character.equipped[slot]
-		if value != null and (value not in collection or not catalog.equipment_is_allowed(value, slot, character.base_class_id, character.evolution_id)):
-			return false
+static func _character_equipment_is_valid(character: CharacterState, profile: ProfileState, catalog: ProfileCatalog, legacy_inventory: bool = false) -> bool:
+	var layouts: Array[Dictionary] = [character.equipped]
 	for preset: Dictionary in character.presets:
-		for slot: StringName in IdentityIds.equipment_slots():
-			var value: Variant = preset["equipped"][slot]
-			if value != null and (value not in collection or not catalog.equipment_is_allowed(value, slot, character.base_class_id, character.evolution_id)):
-				return false
+		layouts.append(preset["equipped"])
+	for layout: Dictionary in layouts:
+		if legacy_inventory:
+			for slot: StringName in EquipmentRules.LEGACY_SLOTS:
+				var value: Variant = layout[slot]
+				if value != null and (value not in profile._migration_equipment_ids or not catalog.equipment_is_allowed(value, EquipmentRules.legacy_position(slot), character.base_class_id, character.evolution_id)):
+					return false
+		elif not EquipmentRules.validate_layout(layout, profile.equipment_instances, catalog.all_equipment_metadata(), character.base_class_id, character.evolution_id)["ok"]:
+			return false
 	return true
+
+static func _instance_records(profile: ProfileState) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for id: StringName in profile.equipment_instance_ids():
+		result.append(profile.equipment_instances[id].to_record())
+	return result
+
+static func _upgrade_legacy(decoded: Dictionary, catalog: ProfileCatalog) -> Dictionary:
+	if not decoded["ok"]:
+		return decoded
+	var profile: ProfileState = decoded["profile"]
+	for reserved: String in ["equipment_instances", "next_equipment_counter"]:
+		if profile.extension_fields.has(reserved):
+			return _catalog_error(&"invalid_catalog")
+	var mapping: Dictionary = {}
+	for id: StringName in profile._migration_equipment_ids:
+		var created := profile.add_equipment_instance(id, catalog.equipment_metadata(id))
+		if not created["ok"]:
+			return _catalog_error(created["error_code"])
+		mapping[id] = created["instance_id"]
+	for character: CharacterState in profile.characters:
+		character.equipped = _upgrade_layout(character.equipped, mapping)
+		for preset: Dictionary in character.presets:
+			preset["equipped"] = _upgrade_layout(preset["equipped"], mapping)
+	profile._migration_equipment_ids.clear()
+	for character: CharacterState in profile.characters:
+		if not _character_equipment_is_valid(character, profile, catalog):
+			return _catalog_error(&"invalid_equipment")
+	decoded["migrated"] = true
+	if StringName(decoded.get("migration_kind", &"")).is_empty():
+		decoded["migration_kind"] = &"equipment_instances_v1"
+	return decoded
+
+static func _upgrade_layout(legacy: Dictionary, mapping: Dictionary) -> Dictionary[StringName, Variant]:
+	var result := EquipmentRules.empty_layout()
+	for slot: StringName in EquipmentRules.LEGACY_SLOTS:
+		var id: Variant = legacy[slot]
+		result[EquipmentRules.legacy_position(slot)] = null if id == null else mapping[id]
+	return result
 
 static func _unknown_fields(data: Dictionary, known_fields: Array) -> Dictionary:
 	var unknown := {}

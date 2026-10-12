@@ -107,7 +107,7 @@ func _buy_build(facade: ProfileFacade, character_id: String, purchases: Dictiona
 			_check(result["ok"], "compra legal de %s rank %d" % [skill_id, rank_index + 1])
 			if result["ok"]:
 				revision = result["new_revision"]
-	var equipment: Dictionary[StringName, Variant] = {&"weapon": null, &"armor": null, &"accessory": null}
+	var equipment: Dictionary[StringName, Variant] = {&"head": null, &"neck": null, &"shoulders": null, &"arms": null, &"torso": null, &"cloak": null, &"legs": null, &"feet": null, &"main_hand": null, &"off_hand": null, &"accessory_1": null, &"accessory_2": null, &"accessory_3": null, &"accessory_4": null}
 	var saved := facade.update_preset("build-%s" % character_id, revision, character_id, 0, active, passive, equipment)
 	_check(saved["ok"], "preset legado preserva suas cinco ativas e duas passivas sem limitar disponibilidade")
 

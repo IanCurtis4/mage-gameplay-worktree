@@ -31,14 +31,20 @@ static func definition(origin: StringName, id: StringName, effects: Array[Effect
 static func snapshot() -> BuildSnapshot:
 	return RunState.new(&"mage").build_snapshot.copy_snapshot()
 
+static func equip(snapshot: BuildSnapshot, id: StringName, slot: StringName = &"main_hand") -> void:
+	snapshot.equipped = EquipmentRules.empty_layout()
+	snapshot.equipped[slot] = id
+	var created := EquipmentInstance.from_metadata(id, id, {"origin_id": &"fixture_origin", "item_level": 1, "quality_id": &"rare", "socket_capacity": 1})
+	assert(created["ok"])
+	snapshot.equipment_instances[id] = created["instance"]
+
 static func state_for(origin: StringName, snapshot: BuildSnapshot, id: StringName = &"fixture") -> Dictionary:
-	if origin == &"augment":
-		return {"augment_stacks": {id: 1}}
+	if origin == &"augment": return {"augment_stacks": {id: 1}}
 	if origin == &"equipment":
-		snapshot.equipped = {&"weapon": id}
+		equip(snapshot, id)
 		return {}
-	snapshot.equipped = {&"weapon": &"fixture_empty_item"}
-	return {"card_sockets": {&"fixture_empty_item": id}}
+	equip(snapshot, &"fixture_empty_item")
+	return {"card_sockets": {&"fixture_empty_item": [id]}, "card_instances": {id: id}}
 
 static func catalog_for(origin: StringName, effects: Array[EffectDefinition]) -> BuildEffectCatalog:
 	var registry := BuildEffectCatalog.new()

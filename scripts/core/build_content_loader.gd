@@ -49,6 +49,12 @@ static func load_catalog_for_profile(profile_catalog: ProfileCatalog) -> Diction
 		var item := EquipmentDefinition.new()
 		item.id = id
 		item.slot = metadata["slot"]
+		item.item_kind = metadata["item_kind"]
+		item.hand_usage = metadata["hand_usage"]
+		item.origin_id = metadata["origin_id"]
+		item.item_level = metadata["item_level"]
+		item.quality_id = metadata["quality_id"]
+		item.socket_capacity = metadata["socket_capacity"]
 		item.allowed_origins.assign(metadata["allowed_base_classes"])
 		item.allowed_evolutions.assign(metadata["allowed_evolutions"])
 		item.starter = metadata["starter"]

@@ -1,4 +1,5 @@
 extends SceneTree
+const TX = preload("res://tests/e06_tx_fixture.gd")
 
 class UncertainStore:
 	extends ProfileStore
@@ -80,7 +81,7 @@ func _check_create_select_and_restart() -> void:
 	var first_character: CharacterState = first["profile"].character_by_id(first_id)
 	_check(first_character != null and first_character.base_xp_total == 0 and first_character.job_xp_total == 0 and first_character.evolution_id.is_empty(), "new character starts with zero progression and no evolution")
 	_check(first_character.purchased_skill_ranks.is_empty() and first_character.granted_skill_ranks.is_empty() and first_character.presets[0]["active_slots"] == [null, null, null, null, null] and first_character.presets[0]["passive_slots"] == [null, null], "new characters begin without learned or equipped skills")
-	_check(first_character.equipped[&"weapon"] == &"training_sword" and first["profile"].equipment_collection == [&"training_sword"], "creation unlocks and equips the catalog starter atomically")
+	_check(first_character.equipped[&"main_hand"] == first["profile"].first_instance_for_definition(&"training_sword") and TX.definition_ids(first["profile"]) == [&"training_sword"], "creation unlocks and equips the catalog starter atomically")
 	_check(first["profile"].selected_character_id == first_id and first["profile"].next_character_counter == 2, "creation selects the alt and reserves its monotonic ID")
 
 	var restarted := ProfileFacade.new(ProfileStore.new(directory, catalog))
@@ -91,8 +92,8 @@ func _check_create_select_and_restart() -> void:
 	_check(second["ok"] and second["new_revision"] == 2 and second["character_id"] == second_id, "second alt consumes the next ID after restart")
 	var second_character: CharacterState = second["profile"].character_by_id(second_id)
 	_check(second_character.presets[0]["active_slots"] == [null, null, null, null, null] and second_character.presets[0]["passive_slots"] == [null, null], "each new origin accepts an empty skill bar")
-	_check(second_character.equipped[&"weapon"] == &"apprentice_staff" and second["profile"].equipment_collection == [&"training_sword", &"apprentice_staff"], "starters are shared in the collection without replacing another alt loadout")
-	_check(second["profile"].character_by_id(first_id).equipped[&"weapon"] == &"training_sword" and second["profile"].lifetime_stats[&"equipment_unlocked"] == 2, "creating another alt does not leak its build and counts only new starter unlocks")
+	_check(second_character.equipped[&"main_hand"] == second["profile"].first_instance_for_definition(&"apprentice_staff") and TX.definition_ids(second["profile"]) == [&"training_sword", &"apprentice_staff"], "starters are shared in the collection without replacing another alt loadout")
+	_check(second["profile"].character_by_id(first_id).equipped[&"main_hand"] == second["profile"].first_instance_for_definition(&"training_sword") and second["profile"].lifetime_stats[&"equipment_unlocked"] == 2, "creating another alt does not leak its build and counts only new starter unlocks")
 
 	var selected := restarted.select_character("select-ana", 2, first_id)
 	_check(selected["ok"] and selected["new_revision"] == 3 and selected["selected_character_id"] == first_id, "selection is a durable revisioned transaction")
@@ -109,7 +110,7 @@ func _check_create_select_and_restart() -> void:
 	var updated_build := restarted.update_preset("update-build", 4, second_id, 1, active_build, passive_build, equipment_build)
 	_check(updated_build["ok"] and updated_build["new_revision"] == 5 and updated_build["profile"].character_by_id(second_id).presets[1]["active_slots"] == [null, null, null, null, null], "an empty skill bar and legal equipment update one preset atomically")
 	var build_options := restarted.available_build_options(second_id)
-	_check(build_options["ok"] and build_options["active_skills"].is_empty() and build_options["passive_skills"].is_empty() and &"apprentice_staff" in build_options["equipment_by_slot"][&"weapon"], "build options expose no skill before learning while retaining owned legal equipment")
+	_check(build_options["ok"] and build_options["active_skills"].is_empty() and build_options["passive_skills"].is_empty() and restarted.current_profile().first_instance_for_definition(&"apprentice_staff") in build_options["equipment_by_slot"][&"main_hand"], "build options expose no skill before learning while retaining owned legal equipment")
 	var duplicate_build := restarted.update_preset("duplicate-build", 5, second_id, 1, [&"fire_wall", &"fire_wall", null, null, null], passive_build, equipment_build)
 	_check(not duplicate_build["ok"] and duplicate_build["error_code"] == &"requirements_unmet" and restarted.current_profile().revision == 5, "unlearned skills are rejected without publishing a partial build")
 	var missing := restarted.select_character("select-missing", 5, profile_id + "_99")
@@ -135,8 +136,8 @@ func _check_create_select_and_restart() -> void:
 	var invalid_request := restarted.select_character("", revision, selected_id)
 	_check(not invalid_request["ok"] and invalid_request["error_code"] == &"invalid_request_id", "menu operations require a bounded request ID")
 	var ambiguous_starters := ProfileCatalog.pilot({
-		&"first_sword": {"slot": &"weapon", "allowed_base_classes": [&"swordsman"], "starter": true},
-		&"second_sword": {"slot": &"weapon", "allowed_base_classes": [&"swordsman"], "starter": true},
+		&"first_sword": {"slot": &"main_hand", "allowed_base_classes": [&"swordsman"], "starter": true},
+		&"second_sword": {"slot": &"main_hand", "allowed_base_classes": [&"swordsman"], "starter": true},
 	})
 	_check(not ambiguous_starters.is_valid(), "catalog rejects more than one starter for the same origin and slot")
 
@@ -227,8 +228,8 @@ func _check_run_active_boundary() -> void:
 
 func _catalog_with_starters() -> ProfileCatalog:
 	return ProfileCatalog.pilot({
-		&"training_sword": {"slot": &"weapon", "allowed_base_classes": [&"swordsman"], "starter": true},
-		&"apprentice_staff": {"slot": &"weapon", "allowed_base_classes": [&"mage"], "starter": true},
+		&"training_sword": {"slot": &"main_hand", "allowed_base_classes": [&"swordsman"], "starter": true},
+		&"apprentice_staff": {"slot": &"main_hand", "allowed_base_classes": [&"mage"], "starter": true},
 	})
 
 func _read_text(path: String) -> String:

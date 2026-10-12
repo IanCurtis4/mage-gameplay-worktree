@@ -151,7 +151,7 @@ func _check_build(label: String, purchases: Dictionary, active: Array[Variant], 
 	_check(summary["base_skill_points_spent"] == 19 and summary["evolution_skill_points_spent"] == 20 and summary["base_skill_points_available"] == 0 and summary["evolution_skill_points_available"] == 0, "%s independently exhausts 19 base and 20 evolution points" % label)
 	var exhausted := facade.learn_skill("%s-empty-wallet" % label, facade.current_profile().revision, character_id, &"geometer_rewrite" if label == "walls" else &"geometer_translation")
 	_check(not exhausted["ok"] and exhausted["error_code"] == &"insufficient_points", "%s cannot overdraw evolution wallet" % label)
-	var equipped: Dictionary[StringName, Variant] = {&"weapon": null, &"armor": null, &"accessory": null}
+	var equipped: Dictionary[StringName, Variant] = {&"head": null, &"neck": null, &"shoulders": null, &"arms": null, &"torso": null, &"cloak": null, &"legs": null, &"feet": null, &"main_hand": null, &"off_hand": null, &"accessory_1": null, &"accessory_2": null, &"accessory_3": null, &"accessory_4": null}
 	var preset := facade.update_preset("%s-equip" % label, facade.current_profile().revision, character_id, 0, active, passive, equipped)
 	_check(preset["ok"], "%s preserves valid historical five/two preset arrays without limiting learned skills" % label)
 	if not preset["ok"]:

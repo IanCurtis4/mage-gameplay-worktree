@@ -3,7 +3,7 @@ extends RefCounted
 ## One copied registry for all three content origins. No production items in T1.
 
 const ORIGINS: Array[StringName] = [&"augment", &"equipment", &"card"]
-const SLOTS: Array[StringName] = [&"weapon", &"armor", &"accessory"]
+const SLOTS: Array[StringName] = [&"head", &"neck", &"shoulders", &"arms", &"torso", &"cloak", &"legs", &"feet", &"main_hand", &"off_hand", &"accessory_1", &"accessory_2", &"accessory_3", &"accessory_4"]
 const SCALAR_AXES: Array[StringName] = [&"range"]
 const INTRINSIC_FAMILIES: Array[StringName] = [&"elementalist_tri_nova_ice", &"elementalist_tri_nova_lightning", &"hunter_exploit", &"sentinel_focus", &"berserker_wound", &"berserker_pursuit", &"berserker_breath_heal", &"elementalist_focus", &"spiritualist_echo", &"spiritualist_echo_recovery", &"spiritualist_channel_focus", &"spiritualist_drain_heal", &"blood_thirst", &"defender_watch", &"defender_token", &"defender_guard_return"]
 const PROJECTILE_SKILLS: Array[StringName] = [&"fire_spear", &"ice_spear", &"double_shot"]
@@ -69,8 +69,10 @@ func register_definition(origin: StringName, definition: Resource) -> Dictionary
 		return failure(&"duplicate_or_empty_id")
 	if not _restrictions_valid(definition.allowed_origins, definition.allowed_evolutions):
 		return failure(&"invalid_restrictions")
-	if definition is EquipmentDefinition and definition.slot not in SLOTS:
-		return failure(&"invalid_slot")
+	if definition is EquipmentDefinition:
+		var equipment_check := EquipmentRules.validate_definition(definition.metadata())
+		if not equipment_check["ok"]:
+			return equipment_check
 	if definition is CardDefinition:
 		if definition.allowed_slots.is_empty():
 			return failure(&"invalid_slot")

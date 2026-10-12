@@ -48,37 +48,37 @@ func _run() -> void:
 	p.current_sp = p.max_sp
 	p.health.current_hp = p.health.max_hp - 30.0
 	p.attack_cooldown = 3.0
-	var result := F.change(c, &"equip", {"slot": &"armor", "item_id": &"warden_mail"})
+	var result := F.change(c, &"equip", {"slot": &"torso", "item_id": &"warden_mail"})
 	_check(result["ok"] and p.health.hp_deficit() == 30.0 and p.attack_cooldown == 3.0, "equipment preserves debt and cooldown")
 	p.health.current_hp = 1.0
 	var disk := F.disk(fixture)
 	var version := c.run_state.runtime_revision
-	result = F.change(c, &"equip", {"slot": &"armor", "item_id": &"traveler_vest"})
+	result = F.change(c, &"equip", {"slot": &"torso", "item_id": &"traveler_vest"})
 	_check(not result["ok"] and result["error_code"] == &"hp_deficit" and F.disk(fixture) == disk and c.run_state.runtime_revision == version, "extreme voluntary HP reduction rejects before disk/runtime")
 	p.health.current_hp = p.health.max_hp
-	_check(F.change(c, &"equip", {"slot": &"armor", "item_id": &"channeler_robe"})["ok"], "SP fixture equips")
+	_check(F.change(c, &"equip", {"slot": &"torso", "item_id": &"channeler_robe"})["ok"], "SP fixture equips")
 	p.current_sp = 1.0
 	disk = F.disk(fixture)
-	result = F.change(c, &"unequip", {"slot": &"armor"})
+	result = F.change(c, &"unequip", {"slot": &"torso"})
 	_check(not result["ok"] and result["error_code"] == &"sp_deficit" and F.disk(fixture) == disk, "extreme SP deficit rejects")
 	p.recover_sp(100.0)
-	result = F.change(c, &"unequip", {"slot": &"armor"})
+	result = F.change(c, &"unequip", {"slot": &"torso"})
 	_check(result["ok"] and is_equal_approx(p.current_sp, 1.0), "explicit SP recovery makes removal legal without healing")
 	# The boundary is strict for HP and inclusive for SP, including card removal.
 	p.health.current_hp = p.health.max_hp
-	_check(F.change(c, &"equip", {"slot": &"armor", "item_id": &"warden_mail"})["ok"], "HP boundary setup")
+	_check(F.change(c, &"equip", {"slot": &"torso", "item_id": &"warden_mail"})["ok"], "HP boundary setup")
 	var small_hp := p.health.max_hp - 100.0
 	p.health.current_hp = 100.0 # Deficit equals the candidate maximum exactly.
 	disk = F.disk(fixture)
-	result = F.change(c, &"unequip", {"slot": &"armor"})
+	result = F.change(c, &"unequip", {"slot": &"torso"})
 	_check(result["error_code"] == &"hp_deficit" and p.health.hp_deficit() == small_hp and F.disk(fixture) == disk, "new HP maximum equal to debt rejects atomically")
 	p.health.heal(1.0)
-	_check(F.change(c, &"unequip", {"slot": &"armor"})["ok"] and is_equal_approx(p.health.current_hp, 1.0), "one explicit HP recovery makes exact boundary legal")
+	_check(F.change(c, &"unequip", {"slot": &"torso"})["ok"] and is_equal_approx(p.health.current_hp, 1.0), "one explicit HP recovery makes exact boundary legal")
 	p.health.heal(10000.0)
-	_check(F.change(c, &"equip", {"slot": &"armor", "item_id": &"channeler_robe"})["ok"], "SP boundary setup")
+	_check(F.change(c, &"equip", {"slot": &"torso", "item_id": &"channeler_robe"})["ok"], "SP boundary setup")
 	var small_sp := p.max_sp - 100.0
 	p.current_sp = 100.0
-	_check(F.change(c, &"unequip", {"slot": &"armor"})["ok"] and is_zero_approx(p.current_sp) and is_equal_approx(p.sp_deficit(), small_sp), "new SP maximum equal to debt allows zero SP")
+	_check(F.change(c, &"unequip", {"slot": &"torso"})["ok"] and is_zero_approx(p.current_sp) and is_equal_approx(p.sp_deficit(), small_sp), "new SP maximum equal to debt allows zero SP")
 	p.recover_sp(10000.0)
 	var cost := p.skill_cost(&"fire_spear")
 	p._spend(&"fire_spear")

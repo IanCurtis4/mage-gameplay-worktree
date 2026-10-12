@@ -1,4 +1,5 @@
 extends SceneTree
+const TX = preload("res://tests/e06_tx_fixture.gd")
 
 const PROFILE_ID := "123e4567-e89b-42d3-a456-426614174078"
 
@@ -33,8 +34,8 @@ func _run() -> void:
 	profile.characters.append(defender)
 	profile.selected_character_id = mage_id
 	var encoded := ProfileCodec.encode(profile)
-	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 2 and ProfileState.CATALOG_VERSION == 9, "new catalog keeps schema and ruleset")
-	var old_data: Dictionary = encoded["data"].duplicate(true)
+	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 3 and ProfileState.CATALOG_VERSION == 10, "new catalog keeps schema and ruleset")
+	var old_data: Dictionary = TX.legacy_data(encoded["data"])
 	old_data["catalog_version"] = ProfileCodec.PRE_ELEMENTALIST_CATALOG_VERSION
 	old_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	var old_text := JSON.stringify(old_data, "\t")
@@ -52,12 +53,12 @@ func _run() -> void:
 	_check(reloaded["ok"] and not reloaded.get("migrated", false) and reloaded["profile"].revision == 10, "current catalog reload is idempotent")
 	var newer := profile.copy_state()
 	newer.revision = 11
-	var newer_data: Dictionary = ProfileCodec.encode(newer)["data"].duplicate(true)
+	var newer_data: Dictionary = TX.legacy_data(ProfileCodec.encode(newer)["data"])
 	newer_data["catalog_version"] = ProfileCodec.PRE_ELEMENTALIST_CATALOG_VERSION
 	newer_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	_assert_protected_backup(old_text, JSON.stringify(newer_data, "\t"), "newer catalog-4 backup")
 	var foreign := ProfileState.new("123e4567-e89b-42d3-a456-426614174079")
-	var foreign_data: Dictionary = ProfileCodec.encode(foreign)["data"].duplicate(true)
+	var foreign_data: Dictionary = TX.legacy_data(ProfileCodec.encode(foreign)["data"])
 	foreign_data["catalog_version"] = ProfileCodec.PRE_ELEMENTALIST_CATALOG_VERSION
 	foreign_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	_assert_protected_backup(old_text, JSON.stringify(foreign_data, "\t"), "foreign catalog-4 backup")

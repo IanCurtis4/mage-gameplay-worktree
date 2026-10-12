@@ -1,4 +1,5 @@
 extends SceneTree
+const TX = preload("res://tests/e06_tx_fixture.gd")
 ## Authorized bars/passive migration, using isolated profiles and real purchases.
 
 const PROFILE_ID := "123e4567-e89b-42d3-a456-426614174333"
@@ -24,7 +25,7 @@ func _run() -> void:
 	quit(0 if failures == 0 else 1)
 
 func _catalog() -> ProfileCatalog:
-	return ProfileCatalog.pilot({&"training_sword": {"slot": &"weapon", "allowed_base_classes": [&"swordsman"], "starter": true}})
+	return ProfileCatalog.pilot({&"training_sword": {"slot": &"main_hand", "allowed_base_classes": [&"swordsman"], "starter": true}})
 
 func _character(base: StringName, evolution: StringName = &"") -> CharacterState:
 	var character := CharacterState.new(IdentityIds.character_id(PROFILE_ID, 1), "Barras", base)
@@ -43,9 +44,9 @@ func _migration_and_codec() -> void:
 	character.granted_skill_ranks = {&"slash": 1, &"dash": 1, &"swordsman_resistance": 1}
 	for id: StringName in SWORD_ACTIVES + SWORD_PASSIVES:
 		_check(CharacterProgression.learn_skill(character, catalog, id)["ok"], "legacy fixture purchases %s legally" % id)
-	character.equipped[&"weapon"] = &"training_sword"
+	character.equipped[&"main_hand"] = &"training_sword"
 	for preset: Dictionary in character.presets:
-		preset["equipped"][&"weapon"] = &"training_sword"
+		preset["equipped"][&"main_hand"] = &"training_sword"
 	character.presets[0]["active_slots"] = [&"slash", null, &"dash", null, &"shield_wall"]
 	character.presets[1]["active_slots"] = [null, &"provoke", null, &"perseverance", null]
 	character.presets[0]["passive_slots"] = [&"swordsman_resistance", &"vigor"]
@@ -55,7 +56,9 @@ func _migration_and_codec() -> void:
 	profile.characters.append(character)
 	profile.selected_character_id = character.character_id
 	profile.next_character_counter = 2
-	profile.equipment_collection.append(&"training_sword")
+	var instance := TX.own(profile, &"training_sword", catalog)
+	character.equipped[&"main_hand"] = instance
+	for preset: Dictionary in character.presets: preset["equipped"][&"main_hand"] = instance
 	var encoded := ProfileCodec.encode(profile, catalog)
 	_check(encoded["ok"], "legacy valid profile encodes")
 	if not encoded["ok"]:

@@ -27,6 +27,7 @@ func _runtime_origin(origin: StringName) -> void:
 	if contents.has("augment_stacks"):
 		state.augment_stacks.assign(contents["augment_stacks"])
 	state.card_sockets = contents.get("card_sockets", {})
+	state.card_instances = contents.get("card_instances", {})
 	_check(state.set_effect_catalog(catalog)["ok"], "runtime fixture catalog injected")
 	var nav := ArenaNavigation.new()
 	nav.configure(Rect2(0, 0, 1000, 1000), [], 0.0)
@@ -164,8 +165,9 @@ func _mixed_kit_quota() -> void:
 	for origin: StringName in BuildEffectCatalog.ORIGINS:
 		registry.register_definition(origin, Fixture.definition(origin, origin, [Fixture.proc_effect(StringName("recipe_" + String(origin)), StringName("z_" + String(origin)))]))
 	state.augment_stacks = {&"augment": 1}
-	state.build_snapshot.equipped = {&"weapon": &"equipment"}
-	state.card_sockets = {&"equipment": &"card"}
+	Fixture.equip(state.build_snapshot, &"equipment")
+	state.card_sockets = {&"equipment": [&"card"]}
+	state.card_instances = {&"card": &"card"}
 	_check(state.set_effect_catalog(registry)["ok"], "mixed kit and three origins compose")
 	var nav := ArenaNavigation.new()
 	nav.configure(Rect2(0, 0, 1000, 1000), [], 0.0)
@@ -225,8 +227,9 @@ func _echo_and_kill_exceptions() -> void:
 	for origin: StringName in BuildEffectCatalog.ORIGINS:
 		registry.register_definition(origin, Fixture.definition(origin, origin, [Fixture.proc_effect(StringName("recipe_" + String(origin)), StringName("generic_" + String(origin)))]))
 	state.augment_stacks = {&"augment": 1}
-	state.build_snapshot.equipped = {&"weapon": &"equipment"}
-	state.card_sockets = {&"equipment": &"card"}
+	Fixture.equip(state.build_snapshot, &"equipment")
+	state.card_sockets = {&"equipment": [&"card"]}
+	state.card_instances = {&"card": &"card"}
 	state.set_effect_catalog(registry)
 	var nav := ArenaNavigation.new()
 	nav.configure(Rect2(0, 0, 1000, 1000), [], 0.0)

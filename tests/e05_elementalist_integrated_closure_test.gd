@@ -80,7 +80,7 @@ func _run() -> void:
 	var build_a_passive: Array[Variant] = [&"elementalist_prismatic_focus", &"elementalist_prismatic_resonance"]
 	var build_b_active: Array[Variant] = [&"elementalist_flame_burst", &"ice_spear", &"fire_spear", &"elementalist_lightning_arc", &"elementalist_glacial_ring"]
 	var build_b_passive: Array[Variant] = [&"elementalist_prismatic_focus", &"elementalist_prismatic_resonance"]
-	var empty_equipment: Dictionary[StringName, Variant] = {&"weapon": null, &"armor": null, &"accessory": null}
+	var empty_equipment: Dictionary[StringName, Variant] = {&"head": null, &"neck": null, &"shoulders": null, &"arms": null, &"torso": null, &"cloak": null, &"legs": null, &"feet": null, &"main_hand": null, &"off_hand": null, &"accessory_1": null, &"accessory_2": null, &"accessory_3": null, &"accessory_4": null}
 	var saved_a := facade.update_preset("build-a", revision, character_id, 0, build_a_active, build_a_passive, empty_equipment)
 	_check(saved_a["ok"], "primeiro preset mantém arrays legados de ativas/passivas legais")
 	revision = saved_a["new_revision"]
