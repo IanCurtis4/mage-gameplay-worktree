@@ -1,6 +1,6 @@
 # E06-TX — checkpoint consolidado da fundação ampliada
 
-12/10/2026. DX ENTREGUE; R1 v1 APROVADA; TX1/TX2/TX3 ENTREGUES PELO AUTOR com validação dirigida; RX rejeitada na primeira rodada; correções RX-F01/F02 em execução.
+12/10/2026. DX ENTREGUE; R1 v1 APROVADA; TX1/TX2/TX3 ENTREGUES PELO AUTOR com validação dirigida; RX rejeitada na primeira rodada; correções RX-F01/F02 entregues em e725756; novo fechamento Luna/Sol em andamento conforme norma humana de 12/10.
 
 ## Retomada, autorização e base real
 
@@ -47,7 +47,7 @@ Respostas adicionais DX, 11/10: usuário rejeitou origem/ilvl/qualidade desconhe
 
 Árvore Git real do commit de entrada:7c41736da52d9564c930683067109e24925d39cc (SHA1 por git rev-parse HEAD^{tree}). Campo tree de64 caracteres do CLI status é fingerprint da ferramenta, não esse objeto Git. SHA256/origem do CLI conferidos. R1 prossegue independente; nenhum commit ou edição runtime durante a execução integral.
 
-## Retomada de12/10/2026 e última decisão humana DX
+## Retomada de 12/10/2026 e última decisão humana DX
 
 Usuário autorizou continuar de onde a interrupção por quota parou, inclusive o mesmo revisor R1. A execução original chegou ao fim após a interrupção: logs/plan/checks.jsonl e marcador final existem até182. Sol somente conferiu disponibilidade; a decisão/recibo são do revisor. Nenhuma etapa foi reexecutada pelo executor nesta retomada.
 
@@ -110,7 +110,7 @@ Transferência adicional estrita: scripts/ui/character_menu.gd somente compatibi
 
 Validação TX1 por impacto: novos testes de exemplares/slots/capacidade/cartas/migração e os consumidores de codec/fachada/store/inventário/compositor/recompensas/preview/snapshot afetados. Plano de seleção conferido antes da execução; nenhuma repetição integral por mudança documental. Fechamento integrado TX1–TX3/RX conforme contrato. Base pós-commit DX/R1 será registrada no início da edição.
 
-TX1 iniciada em12/10/2026. Base real pós-DX/R1:54e6fad47763310afb307d990759c874c33fd1d3, branch codex/e06-inventory, mesmo checkout. R1v1 aprovada, decisões TX1 satisfeitas. EquipmentRules será a autoridade única de compatibilidade/capacidade; EquipmentInstance conterá somente dados de aquisição. Campos auxiliares legados de leitura são DTOs derivados, não segunda coleção gravável. Nenhum limite global de cópias de carta além dos encaixes físicos é introduzido por TX1.
+TX1 iniciada em 12/10/2026. Base real pós-DX/R1:54e6fad47763310afb307d990759c874c33fd1d3, branch codex/e06-inventory, mesmo checkout. R1v1 aprovada, decisões TX1 satisfeitas. EquipmentRules será a autoridade única de compatibilidade/capacidade; EquipmentInstance conterá somente dados de aquisição. Campos auxiliares legados de leitura são DTOs derivados, não segunda coleção gravável. Nenhum limite global de cópias de carta além dos encaixes físicos é introduzido por TX1.
 
 ## TX1 — entrega do autor, 12/10/2026
 
@@ -224,3 +224,16 @@ Impacto primário validado admite vítima real antes do callback. Canal intríns
 18 etapas distintas PASS em três seleções autorais, 23 outputs conferidos; não integral193/193 nem decisão independente. Probes originais5/4 sem edição passam; thorn existente/reforço9/9, caster375→aproxima/emite. Causal21 e novo late-fields22: LightningWall real com alvo após placement, tick intrínseco sem primary anterior, EchoState real com marks posteriores à emissão, reentrada/proc_child/cancelamento/duplicatas. Consumidores dirigidos Hunter186/12768, Geômetra46/106, Espiritualista30/37/16/86, Berserker18/76, ledger29/runtime53/mobs27 PASS. Recibo e06_rx_author_validation.json separa seleções e reaproveitamento por impacto.32 imports restaurados após igualdade normalizada; UIDs gerados automaticamente, sem editar probes independentes.
 
 Retomar mesmo Astra/high para revisar delta corretivo e executar uma integral de fechamento somente sem bloqueio conhecido. Freeze de runtime/runner/resources/tests após commit; Sol conserva apenas checkpoint/manifesto, revisor conserva RX/probes/recibo. Decisão R1 histórica e RX rejeitada da primeira rodada preservadas no histórico; sem consumidores T3/T4, playtest/push/merge.
+
+
+## Norma humana de 12/10 e transferência antes da edição
+
+Usuário substituiu revisão Astra completa por capítulo: Luna acompanha bateria automatizada e encaminha falhas a Sol; Astra fica exclusivamente em arquitetura/planejamento de longo prazo e exceções de análise visual ou complexidade justificada por Sol. Não há nova aprovação Astra automática no fechamento. Sol consolida resultado técnico com testes/contrato/pendências, sem apresentar supervisão automatizada como auditoria semântica. Aceite de produto e merge continuam humanos.
+
+Sol assume documentalmente AGENTS.md, docs/WORKFLOW.md, docs/REVIEW_WORK_PACKAGES.md, docs/LONG_TERM_EPICS.md, docs/EPIC_THREADS.md, docs/epics/e06.md, e06_contract.md, e06_tasks.md, e06/itemization_execution.md e este checkpoint/API para refletir essa autorização. Nenhuma mudança de runtime por norma. Histórico R1/RX e decisões anteriores permanecem rastreáveis.
+
+Astra r1_resume interrompido por nova norma e já indisponível por limite de uso; antes disso reproduziu4 testes dirigidos PASS no candidato e725756. Integral foi iniciada, terminou na etapa90 e04_learn_from_zero_migration_test com falha detectada pelo runner apesar exit0;1..89 ainda requerem conferência de recibos para reaproveitamento. Não concluir RX por mensagem de progresso nem executar outra integral sem avaliar impacto. Logs .godot/verification/e06_rx/round2/ preservados; nenhum parecer final dessa rodada.
+
+Dispatch autorizado ao único novo subagente test_watch, gpt-6-luna/low, contexto mínimo: verificar saída/hashes, reportar falha90 a Sol, aguardar correção e acompanhar cauda/regressão proporcional. Dono exclusivo novo docs/epics/e06/e06_test_watch.md, e06_test_watch_validation.json e logs .godot/verification/e06_test_watch/. Não escrever runtime/runner/fixtures/expectativas/relatórios RX. Sol mantém correções e transferência registrada; não chamar Astra apenas por falha automatizada. Testes ficam congelados até diagnóstico, consumidores/playtest/merge continuam fora desta retomada.
+
+Transferência corretiva Luna90 antes da edição: Sol assume tests/e04_learn_from_zero_migration_test.gd, somente envelope legado schema2/catalog1/3 slots reais e guardas de resultado para não truncar a rotina. Perfil atual schema3/catalog10 não deve fingir catálogo1; runtime/codec permanecem intactos. Todas as expectativas de grants/wallet/XP/identidade/counters/backup/respec mantidas.

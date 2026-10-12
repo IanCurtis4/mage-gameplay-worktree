@@ -1,8 +1,14 @@
 # Desenvolvimento, revisão e playtest
 
-## Norma vigente — 08/10/2026, a partir de E06
+## Norma vigente — atualização humana de 12/10/2026
 
-O usuário autorizou iniciar E06 e mudar o fluxo. Este documento é a fonte única
+O usuário autorizou iniciar E06 em08/10 e atualizou o fluxo em 12/10/2026: Luna
+acompanha testes automatizados, Sol corrige e consolida a validação, Astra fica
+para arquitetura/planejamento de longo prazo. Não há revisão Astra completa
+automática por capítulo. Análise puramente visual excepcional ou problema
+justificado por Sol como muito complexo pode voltar a Astra. Essa decisão
+substitui gates anteriores de revisão independente rotineira e fechamento Astra,
+inclusive os de E06; preserva escopos e evidências históricas. Este documento é a fonte única
 da norma operacional. Prevalece sobre AGENTS, handoffs antigos, reservas,
 skills locais e trechos históricos de REVIEW_WORK_PACKAGES, LONG_TERM_EPICS e
 EPIC_THREADS quando estes ainda descrevem um chat executor por épico, revisão
@@ -27,9 +33,20 @@ reabre E00–E05 nem transforma reservas de E07+ em autorização.
 - **Integração/validação operacional:** tarefa temporária explicitamente designada.
   Mantém a branch de composição, confere bases, integra, resolve conflitos e
   valida o candidato. Pode preparar playtest após aprovação técnica.
-- **Revisão independente:** tarefa temporária separada, geralmente Astra para
-  fronteiras críticas e fechamento integrado. Não usar a autoria do contrato
-  ou evidência do implementador como reprodução independente do código.
+- **Supervisão automatizada:** Luna acompanha a seleção aprovada de testes,
+  confirma conclusão e verifica saída, erros, timeouts e hashes. Se falhar,
+  envia etapa/log/reprodução a Sol e aguarda correção; não altera runtime nem
+  expectativas. Depois acompanha regressão e retomada por impacto. Não precisa
+  reler todo o capítulo ou produzir auditoria semântica do código.
+- **Validação técnica:** Sol confere comportamento/contrato, invariantes e
+  pendências, corrige falhas e consolida evidências com papéis explícitos. Pode
+  concluir candidato tecnicamente validado quando os checks necessários passam
+  e não resta bloqueio conhecido; não requer carimbo Astra.
+- **Consulta excepcional a Astra:** arquitetura e planejamento; fora disso,
+  análise visual que exija julgamento ou problema que Sol defina como muito
+  complexo, com motivo e reprodução/delta delimitados. Não disparar por cada
+  falha ou por terminar um capítulo. Se houver auditoria excepcional, manter
+  sua reprodução separada da evidência autoral e da supervisão de Luna.
 - **Usuário:** autoriza escopo e decide produto; testa o candidato e concede
   aceite humano antes de merge. Integração operacional executa o merge autorizado.
 
@@ -72,11 +89,13 @@ Estados: PLANEJADA → PRONTA → EM_EXECUÇÃO → ENTREGUE → VALIDADA →
 INTEGRADA → ARQUIVÁVEL. DECISÃO_PENDENTE/FALHA conserva a tarefa aberta.
 Status de app como completed/idle não substitui esses estados.
 
-Revisão proporcional ao risco conforme REVIEW_WORK_PACKAGES. Fronteiras críticas
-devem ser reproduzidas independentemente antes dos consumidores externos à
-fundação avançarem;
-agrupar a fundação completa em um checkpoint. Fechamento tem revisão integrada,
-sem transformar todo commit interno em gate.
+Validação proporcional ao impacto conforme REVIEW_WORK_PACKAGES. Fronteiras
+críticas exigem invariantes e integração pertinentes antes dos consumidores;
+agrupar a fundação completa em um checkpoint. Luna supervisiona a execução
+automatizada e Sol fecha o resultado técnico. Uma nova regra ou fronteira
+amplia os testes necessários, sem criar revisão Astra de código obrigatória.
+Testes aprovados não demonstram que toda a especificação ou avaliação visual
+foi coberta; registrar limites concretos e preservar o playtest humano.
 
 Arquivar somente quando o registro persistente contiver contrato, base, entrega,
 hash integrado, evidências válidas e limitações, e a integração/validação tiverem
@@ -87,10 +106,13 @@ Worktree não deve ser removida antes de preservar artefatos necessários, inclu
 evidência ignorada pelo Git. Checkpoint versionado resume resultado; logs locais
 devem ter caminho, hash e forma de reprodução, com cópia durável quando necessária.
 
-Escalar arquitetura/produto quando mudar schema, identidade, fórmula, API pública,
-semântica de input ou escolha humana; também quando houver risco de perda de
-progresso/cascatas ou duas correções focadas sem convergir. Levar reprodução e
-delta específico. Correções contratuais não exigem novo aceite a cada rodada.
+Escalar arquitetura/produto quando for necessária decisão fora do contrato ou
+mudar escolha humana, com delta específico. Correção de schema, identidade,
+fórmula, API ou input dentro do contrato permanece com Sol, com invariantes.
+Falha automatizada, risco ou duas tentativas sem convergir motivam diagnóstico
+de Sol; chamar Astra somente se Sol justificar complexidade excepcional ou
+necessidade de decisão arquitetural. Correções contratuais não exigem novo
+aceite a cada rodada.
 
 ## Diretório fixo e candidato
 
@@ -107,7 +129,8 @@ Preparação, pelo executor operacional:
 2. Conferir candidato/base atuais e aprovação técnica ligada ao conteúdo exato.
    Antes de rebase, executor encerrado, árvore limpa e referência de recuperação.
 3. Rebase/resolução de conflitos invalida evidência incompatível. Revalidar o
-   resultado e obter revisão independente do delta material.
+   resultado por impacto, com supervisão Luna e fechamento Sol; consultar Astra
+   apenas nas exceções definidas acima.
 4. Avançar playtest por fast-forward somente quando pronto. Registrar hash
    efetivo, importação/smoke e roteiro. Rebase isolado não atualiza o Godot.
 5. Usuário executa F5 no mesmo diretório após parar a partida e aceitar reload.
@@ -124,7 +147,9 @@ Runtime: Godot 4.7.2 standard. Norma incremental autorizada em 10/10/2026:
 selecionar em `tools/verify.ps1` os testes diretamente afetados pela mudança;
 novas falhas exigem a regressão necessária à fronteira atingida. Suíte completa
 somente com risco amplo ou fechamento que a justifique, mantendo a cobertura
-e os gates contratados (incluindo R1/R2 de E06). Nova regra precisa de invariantes.
+contratada. Em E06, RX/R2 passam a identificar checkpoints de validação
+consolidada Luna/Sol, sem revisão Astra automática; R1 histórica permanece
+intacta. Nova regra precisa de invariantes.
 Não repetir integralmente por edição documental ou fixture pontual quando já
 há evidência compatível: validar o delta e registrar o reaproveitamento com SHA,
 inputs/engine e escopo. Retomar uma cauda certifica somente as etapas executadas;

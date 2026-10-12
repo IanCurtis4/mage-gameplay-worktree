@@ -1,29 +1,41 @@
-# Pacotes e revisão proporcional ao risco — norma a partir de E06
+# Pacotes e validação proporcional ao impacto — norma atualizada em 12/10/2026
 
-09/10/2026. Fonte única: [WORKFLOW.md](WORKFLOW.md), fluxo autorizado em
-08/10/2026. Este bloco prevalece sobre toda a análise histórica abaixo.
-Astra permanente de cada épico limita-se a arquitetura/contratos/guias.
-Execução, integração e revisão independente usam chats temporários separados.
-Sem gate Astra por microtarefa; E06 segue [seu mapa](epics/e06_tasks.md).
+Fonte única: [WORKFLOW.md](WORKFLOW.md). Decisão humana: Luna acompanha a bateria
+automatizada, falhas voltam a Sol. Astra fica exclusivamente em arquitetura e
+planejamento de longo prazo; pode ser consultado excepcionalmente para análise
+visual ou problema que Sol justifique como muito complexo. Não exigir revisão
+Astra completa por capítulo, por fronteira crítica ou no fechamento automático.
+O bloco abaixo substitui o roteamento anterior; análise histórica permanece
+para rastrear decisões, não para reintroduzir gates Astra.
 
-| Risco/entrega | Executor proposto | Validação necessária |
+| Entrega | Execução | Validação necessária |
 |---|---|---|
-| Lote fechado de textos/receitas | Luna | Validador e conferência do lote por Terra |
-| UI/conteúdo sobre APIs estáveis | Terra | Testes e inspeção contextual/visual; primeiro padrão tem revisão independente adequada |
-| Matemática, save, identidade, causalidade ou runtime compartilhado | Sol | Invariantes e revisão independente da fronteira completa por tarefa temporária, antes dos consumidores |
-| Composição/candidato | Executor de integração temporário | Suíte integrada, revisão independente e roteiro de playtest; aceite humano antes do merge |
+| Lote fechado de textos/receitas | Luna | Validador e conferência contextual proporcional |
+| UI/conteúdo sobre APIs estáveis | Terra | Testes e inspeção visual/contextual; Astra só em exceção visual justificada |
+| Matemática, save, identidade, causalidade ou runtime compartilhado | Sol | Invariantes e integração pertinentes, execução supervisionada por Luna, fechamento técnico Sol |
+| Composição/candidato | Executor de integração designado | Bateria consolidada Luna/Sol e roteiro de playtest; aceite humano antes do merge |
+| Arquitetura/planejamento ou exceção muito complexa | Astra | Decisão delimitada com motivo, contrato/delta e limites registrados |
 
 Um comportamento verificável por tarefa, com resultado/exclusões, base/checkout,
 dono exclusivo, APIs, testes, SHA entregue/integrado, evidências e limitações.
 Não criar cadeia obrigatória pelos quatro modelos. Paralelo somente com APIs
-concretas e arquivos disjuntos. Correções reutilizam o chat da tarefa.
+concretas e arquivos disjuntos. Correções reutilizam a tarefa; Luna informa
+falha com etapa, saída, timeout/erro e hash, sem consertar código ou mudar assert.
+Sol corrige e define a seleção de regressão. PASS precisa de rotina concluída e
+logs conferidos, não apenas exit0. Não repetir integral por edição documental
+ou fixture pontual; retomar etapas omitidas e registrar reuso por impacto.
+
+Em E06, R1 histórica foi concluída sob o fluxo anterior. RX/T5/R2 continuam
+marcos de dependência e evidência; deixam de exigir auditoria Astra de código.
+Luna supervisiona testes e Sol consolida o resultado técnico. Um relatório
+parcial Astra anterior é preservado, sem fabricar parecer completo. Supervisão
+automatizada não é auditoria semântica independente nem aceite de produto.
+T3/T4 e E07+ não são liberados pela mudança de processo.
+
+Escolha de esforço é explícita por pacote; usar contexto mínimo para Luna
+acompanhar execução/triagem. Não prometer economia de tokens sem medição.
 Arquivamento exige entrega registrada, validada e integrada; falha/decisão mantém
 pendente. O checkpoint no repositório sobrevive aos chats.
-
-Em E06, T1/T2 formam uma fundação revisada em R1; conteúdo/UI podem então rodar
-em paralelo; R2 revisa a composição. R1/R2 pertencem ao mesmo chat temporário R.
-Escolha de esforço é explícita por rodada, sem promessa de adaptação automática.
-E07+ continuam sem liberação.
 
 ---
 

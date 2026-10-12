@@ -1,10 +1,14 @@
 # RagRPG — instruções para colaboradores
 
-> Norma vigente desde 08/10/2026, a partir de E06:
+> Norma vigente atualizada por decisão humana em 12/10/2026:
 > [docs/WORKFLOW.md](docs/WORKFLOW.md) é a fonte única do fluxo.
 > Cada épico autorizado terá um novo chat permanente Astra para arquitetura,
-> contratos e guias. Execução, integração e revisão operacional usam tarefas
-> temporárias separadas, com modelo proporcional ao risco.
+> contratos, guias e planejamento de longo prazo. Luna acompanha testes
+> automatizados; Sol corrige falhas e consolida validação técnica. Execução
+> e integração usam tarefas delimitadas, com modelo proporcional ao risco.
+> Sem revisão Astra completa obrigatória por capítulo. Astra só retorna
+> fora de arquitetura para análise visual excepcional ou problema que Sol
+> justifique como muito complexo. Norma substitui gates Astra de fechamento.
 > Esta norma substitui a reutilização obrigatória de um chat executor por épico
 > e o papel de Astra permanente como gerente, implementador ou integrador.
 > Preserva a regra de 26/09: nenhum gate Astra por microtarefa.
@@ -19,8 +23,11 @@
 - Astra permanente cuida de arquitetura/guias; Sol implementa sistemas novos e
   fronteiras críticas; Terra conduz UI/conteúdo sobre APIs estáveis; Luna executa
   lotes fechados. Leia `docs/REVIEW_WORK_PACKAGES.md`.
-- Revisão técnica independente de persistência, matemática, causalidade e fechamento
-  usa tarefa temporária separada quando necessária. Não passar tudo pelos quatro modelos.
+- Luna verifica execução, conclusão, erros e hashes dos testes; falha vai a Sol,
+  sem editar expectativas para ocultá-la. Sol valida contrato e invariantes e
+  registra limitações. Essa supervisão não é auditoria semântica independente.
+  Astra não é gate rotineiro, inclusive em persistência/matemática/causalidade;
+  escalar arquitetura ou exceção concreta, conforme WORKFLOW. Não passar tudo pelos quatro modelos.
 - Paralelismo somente com dependências estáveis e dono exclusivo por arquivo.
   Subagentes delimitados no épico autorizado continuam possíveis; não dispensam
   o registro de propriedade. Não criar chats ou iniciar marcos por efeito de reserva.
@@ -33,7 +40,7 @@
   testado. Aprovação técnica não é aprovação de produto. Sem push automático.
 - Use Godot 4.7.2 standard e GDScript tipado; sem plugins externos nesta fundação.
 - Não duplique fórmulas de atributos/dano em atores ou UI. Mudanças de contrato
-  devem ser documentadas e justificadas para revisão independente.
+  devem ser documentadas e justificadas; escolhas de arquitetura/produto seguem WORKFLOW.
 - Recursos de catálogo são imutáveis; estado da run pertence a instâncias separadas.
 - Textos visíveis em pt-BR. Código e IDs em inglês, caminhos em snake_case.
 - Preserve arquivos do usuário. Não adicione `.tools`, `.godot` ou builds ao Git.

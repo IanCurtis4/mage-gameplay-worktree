@@ -1,3 +1,5 @@
+> Atualização prevalente autorizada em 12/10/2026: [../WORKFLOW.md](../WORKFLOW.md) substitui a revisão Astra completa por capítulo. Luna acompanha bateria automatizada e informa falhas; Sol corrige e fecha validação técnica. Astra permanece em arquitetura/planejamento e exceções justificadas visual/complexidade. RX/R2 continuam checkpoints consolidados, sem auditoria Astra automática. R1 histórica aprovada e registros RX preservados; TX1–TX3 entregues no candidato e725756, validação integrada em andamento. Estado/donos: [e06/e06_tx.md](e06/e06_tx.md). Não libera T3/T4, E07, playtest ou merge. Cabeçalhos datados anteriores são históricos nos pontos substituídos.
+
 > Retomada autorizada em 11/10/2026: executor Sol/high para DX/TX, base9d05361f65549189f87f4f5440529aec44e3a904. Checkpoint/donos: [e06_tx.md](e06/e06_tx.md); decisões humanas adicionais e contrato técnico proposto: [e06_tx_api.md](e06/e06_tx_api.md). Exemplares por aquisição e migração dos três slots confirmados; encaixes só armaduras/armas/escudos; focos/joias sem cartas; duas mãos bloqueiam secundária. R1 histórica continua dependência real. RX da ampliação precede T3/T4. Cabeçalhos anteriores que dizem sem dispatch preservam a rodada histórica.
 > Atualização prevalente de 11/10/2026, após as respostas finais: [itemização e execução após T2](e06/itemization_execution.md). Consolida encaixes 0–4, loot por categoria, incomuns apenas stats, cartas sempre passivas e efeitos interessantes conforme mob base elite+. Autoriza encaminhamento em etapas ao Sol; R1 permanece pendente e antecede TX. O texto abaixo conserva o registro anterior nos pontos não substituídos.
 
@@ -27,7 +29,7 @@ implicitamente delegadas ao conteúdo. Não despachar consumidores sobre F2 anti
 |---|---|---|
 | DX | Completar decisões estruturais e contrato executável da extensão, sem alterar o parecer da v1 | Documentação em atualização; questões restantes registradas no adendo |
 | TX | Fundação ampliada de composição/inventário/skills/loot, migração e APIs estáveis, preservando autoridades existentes | Planejada; depende de DX, base SHA real, autorização de execução e donos exclusivos; Sol/Alto proposto |
-| RX | Revisão independente da fundação ampliada completa e delta perante v1, com orçamento causal reprojetado | Planejada; sem gate por microtarefa, sem aprovar expansão por herança de R1 |
+| RX | Validação consolidada da fundação ampliada, bateria supervisionada Luna e fechamento técnico Sol | Em andamento no checkpoint; sem auditoria Astra automática, sem herdar cobertura da R1 |
 | T3/T4 | Conteúdo/UI/arte sobre fundação ampliada aprovada, com contratos de apresentação | Suspensas até FX e decisões pertinentes; modelos Terra/Alto propostos |
 | T5/R2 | Integração e revisão do candidato ampliado; posterior playtest e aceite humano | Dependem dos consumidores completos; sem nova liberação automática de campanha |
 
@@ -79,12 +81,12 @@ flowchart TD
   D0 --> DX[DX Decisões e extensão contratual]
   R1 --> TX[TX Fundação ampliada]
   DX --> TX
-  TX --> RX[RX Revisão da fundação ampliada]
+  TX --> RX[RX Validação consolidada Luna/Sol]
   RX --> T3[T3 Catálogo e builds]
   RX --> T4[T4 Interface e apresentação]
   T3 --> T5[T5 Integração e validação]
   T4 --> T5
-  T5 --> R2[R2 Revisão integrada]
+  T5 --> R2[R2 Validação integrada Luna/Sol]
   R2 --> P[T5 Prepara playtest]
   P --> H[Aceite humano]
   H --> M[T5 Merge autorizado]

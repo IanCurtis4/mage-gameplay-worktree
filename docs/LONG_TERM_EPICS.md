@@ -1,3 +1,5 @@
+> Norma prevalente de 12/10/2026: [WORKFLOW.md](WORKFLOW.md). Luna acompanha testes automatizados; falhas voltam a Sol, que consolida validação técnica. Astra exclusivo para arquitetura/planejamento de longo prazo e exceções justificadas de análise visual ou complexidade. Sem revisão Astra completa obrigatória por capítulo/candidato. Registros datados abaixo preservam histórico; esta mudança não libera épicos reservados nem cria/envia mensagens a chats.
+
 # Estado e precedência em 09/10/2026
 
 Norma única de operação: [WORKFLOW.md](WORKFLOW.md), autorizada em 08/10.
