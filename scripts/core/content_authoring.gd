@@ -168,7 +168,10 @@ static func _effect_text(effect: EffectDefinition) -> String:
 			for skill: StringName in effect.target_skill_ids: skills.append(_skill_name(skill))
 			text = "%s: %s %s; limite final %s." % [", ".join(skills), _curve_text(effect), "projétil(is)" if effect.handler_id == EffectDefinition.Handler.PROJECTILE_COUNT else "unidades de alcance", _number(effect.limit)]
 		EffectDefinition.Kind.PROC:
+			var targets: Array[String] = []
+			for skill: StringName in effect.target_skill_ids: targets.append(_skill_name(skill))
 			text = "Ao acertar: bônus de %s de dano %s e %s%% proporcional; limite do bônus %s." % [_curve_text(effect), "físico" if effect.axis == &"physical_damage" else "mágico", _number(effect.increased * 100.0), _number(effect.limit)]
+			if not targets.is_empty(): text += " Apenas em acertos de %s." % ", ".join(targets)
 		EffectDefinition.Kind.ACTIVE_GRANT:
 			text = "Concede %s no rank %d; vale o maior rank disponível, com recarga compartilhada." % [_skill_name(effect.granted_skill_id), effect.granted_rank]
 	if not effect.target_skill_ids.is_empty(): text += " Requer rank %d na habilidade afetada." % effect.minimum_rank

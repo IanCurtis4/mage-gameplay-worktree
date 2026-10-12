@@ -1,3 +1,5 @@
+> Continuação autorizada de 12/10/2026: [T3-B](e06/e06_content_pilot.md), catálogo piloto no ilvl 1 com valores explícitos; progressão e taxas depois. Recursos offline, composição de vinte comparações e limitações táticas declaradas. Sol mecânicas, Luna nomes/flavor e supervisão automatizada. Sem liberação de UI/E07/publicação.
+
 > Autorização prevalente de 12/10/2026: base racional T3-A por Sol e população de nomes/flavor por Luna. [T3-A](e06/e06_content_base.md) entregue e validada,24 exemplos fora de produção e12 testes dirigidos. O catálogo final T3/20 builds, UI T4 e decisões de tuning/rates continuam posteriores. Este recorte substitui a suspensão anterior apenas para a base de autoria.
 
 > Atualização prevalente autorizada em 12/10/2026: [../WORKFLOW.md](../WORKFLOW.md) substitui a revisão Astra completa por capítulo. Luna acompanha bateria automatizada e informa falhas; Sol corrige e fecha validação técnica. Astra permanece em arquitetura/planejamento e exceções justificadas visual/complexidade. RX/R2 continuam checkpoints consolidados, sem auditoria Astra automática. R1 histórica aprovada e registros RX preservados; TX1–TX3 validadas tecnicamente por Sol com supervisão Luna no candidato2803f11, cobertura consolidada193 etapas; recibos e limites no checkpoint. Estado/donos: [e06/e06_tx.md](e06/e06_tx.md). Não libera T3/T4, E07, playtest ou merge. Cabeçalhos datados anteriores são históricos nos pontos substituídos.
@@ -33,6 +35,7 @@ implicitamente delegadas ao conteúdo. Não despachar consumidores sobre F2 anti
 | TX | Fundação ampliada de composição/inventário/skills/loot, migração e APIs estáveis | TX1–TX3 entregues por Sol; candidato executável2803f11; contratos/recibos no checkpoint |
 | RX | Validação consolidada da fundação ampliada, bateria supervisionada Luna e fechamento técnico Sol | VALIDADA:193 etapas distintas por reuso/retomadas compatíveis,202 outputs conferidos; sem auditoria Astra automática ou cobertura herdada da R1 |
 | T3-A | Base racional de autoria, modelos/validação e fichas para população Luna | ENTREGUE/VALIDADA;24 exemplos de contrato fora do loader de produção |
+| T3-B | Catálogo piloto no ilvl1, textos Luna e20 comparações de composição | ENTREGUE/VALIDADA;63 receitas offline,10 testes dirigidos; avaliação tática/progressão/rates posteriores |
 | T3/T4 | Catálogo final/UI/arte sobre fundação e base de autoria validadas | Posteriores; parâmetros finais, cobertura e donos pertinentes antes da execução |
 | T5/R2 | Integração e revisão do candidato ampliado; posterior playtest e aceite humano | Dependem dos consumidores completos; sem nova liberação automática de campanha |
 

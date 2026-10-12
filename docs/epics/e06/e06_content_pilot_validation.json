@@ -1,0 +1,752 @@
+{
+  "title": "E06 T3-B offline pilot Luna automated validation",
+  "role": "Automated test supervision and generated preview integrity; not semantic audit or product acceptance",
+  "branch": "codex/e06-inventory",
+  "checkout": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+  "source_commit": "075eb8fdec54bb8cab2c4b80456b565ef21c2ce3",
+  "source_tree": "5a4bba7a3e249c4cc1a6a0cfa75fe685c7fa8982",
+  "runner": {
+    "path": "tools/verify.ps1",
+    "sha256": "EC5A61CE4ECD1C9482ADA90E829035532E3C017EEBCF48A9FACEF7D256BDF454"
+  },
+  "engine": {
+    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\review-engine\\Godot.exe",
+    "version": "4.7.2.stable.official.ed1daf0bf",
+    "sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424"
+  },
+  "timeout_seconds": 60,
+  "coverage": {
+    "requested_distinct_ids": 10,
+    "requested_ids": [
+      "editor_import",
+      "e06_inventory_resources_test",
+      "e06_effects_composition_test",
+      "e06_effects_runtime_test",
+      "e06_tx_composition_test",
+      "e06_tx_active_test",
+      "e06_content_authoring_test",
+      "e06_content_editorial_test",
+      "e06_content_pilot_test",
+      "e06_content_pilot_runtime_test"
+    ],
+    "selected_steps": 10,
+    "runner_total_steps": 197,
+    "unique_ids_executed": 10,
+    "all_requested_ids_passed": true,
+    "full_suite_run": false,
+    "pass_count": 10,
+    "failure_count": 0
+  },
+  "plan": {
+    "path": ".godot\\verification\\e06_content_pilot\\luna_final\\plan.json",
+    "sha256": "199B36E0A5EFF100AADED4B6B53C6DA4B8DBB4EE7EBB338D3C84712128FF57FF",
+    "check_manifest_path": ".godot\\verification\\e06_content_pilot\\luna_final\\checks.jsonl",
+    "check_manifest_sha256": "077C4A92774A081DE10C25EEB86E0C173FDDD9CFA7042391BC0C955FBE9F17D0"
+  },
+  "tests": [
+    {
+      "index": 1,
+      "name": "editor_import",
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_seconds": 60,
+      "output_path": ".godot/verification/e06_content_pilot/luna_final/001.output.log",
+      "recorded_output_sha256": "A4331D45FB6495770014FD54E45EAC414A9F9FA97071104218E8C728EF6FD7F3",
+      "actual_output_sha256": "A4331D45FB6495770014FD54E45EAC414A9F9FA97071104218E8C728EF6FD7F3",
+      "engine_log_path": ".godot/verification/e06_content_pilot/luna_final/001.engine.log",
+      "engine_log_sha256": "C10EE8317E8A192B576EF5DD46F2DBD56CE033954053695D400211FC5F4F6B04",
+      "output_hash_matches": true
+    },
+    {
+      "index": 2,
+      "name": "e06_inventory_resources_test",
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_seconds": 60,
+      "output_path": ".godot/verification/e06_content_pilot/luna_final/002-e06_inventory_resources_test.output.log",
+      "recorded_output_sha256": "535C051E5EADF61A08F78A2130CF90C8A2C500C310A069569768582BA24D206C",
+      "actual_output_sha256": "535C051E5EADF61A08F78A2130CF90C8A2C500C310A069569768582BA24D206C",
+      "engine_log_path": ".godot/verification/e06_content_pilot/luna_final/002-e06_inventory_resources_test.engine.log",
+      "engine_log_sha256": "612610C7DE5D52605625FD8E333F24DE0F4844D01EC30F401F93A7EB97352A67",
+      "output_hash_matches": true
+    },
+    {
+      "index": 6,
+      "name": "e06_effects_composition_test",
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_seconds": 60,
+      "output_path": ".godot/verification/e06_content_pilot/luna_final/006-e06_effects_composition_test.output.log",
+      "recorded_output_sha256": "71958720E37183BE2C8C2E6B8B5144EA7893B4DA8289D7272DDB9497153C21C4",
+      "actual_output_sha256": "71958720E37183BE2C8C2E6B8B5144EA7893B4DA8289D7272DDB9497153C21C4",
+      "engine_log_path": ".godot/verification/e06_content_pilot/luna_final/006-e06_effects_composition_test.engine.log",
+      "engine_log_sha256": "E2AFC0D4272373DDAA30F49073AA7DA571B7162EDDB0B9AF28C388795D7E42B5",
+      "output_hash_matches": true
+    },
+    {
+      "index": 8,
+      "name": "e06_effects_runtime_test",
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_seconds": 60,
+      "output_path": ".godot/verification/e06_content_pilot/luna_final/008-e06_effects_runtime_test.output.log",
+      "recorded_output_sha256": "4D2C6C3D1221AA352C92570D7EB188AD87A213352D772DD848A8639C20376906",
+      "actual_output_sha256": "4D2C6C3D1221AA352C92570D7EB188AD87A213352D772DD848A8639C20376906",
+      "engine_log_path": ".godot/verification/e06_content_pilot/luna_final/008-e06_effects_runtime_test.engine.log",
+      "engine_log_sha256": "868A20A8A3B9474B1278E7B81906FD33FEE223D8E34BE48F9C1F59C5CD3F819B",
+      "output_hash_matches": true
+    },
+    {
+      "index": 186,
+      "name": "e06_tx_composition_test",
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_seconds": 60,
+      "output_path": ".godot/verification/e06_content_pilot/luna_final/186-e06_tx_composition_test.output.log",
+      "recorded_output_sha256": "707FF42F2E379D184E5C2FF37EDB33CD2C67857FF402F143A430D1779BFC000C",
+      "actual_output_sha256": "707FF42F2E379D184E5C2FF37EDB33CD2C67857FF402F143A430D1779BFC000C",
+      "engine_log_path": ".godot/verification/e06_content_pilot/luna_final/186-e06_tx_composition_test.engine.log",
+      "engine_log_sha256": "B3E8D7DC65F7C64C0E5F6123127BDE45DAA3C414289F95131C9B042AC35FB54E",
+      "output_hash_matches": true
+    },
+    {
+      "index": 187,
+      "name": "e06_tx_active_test",
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_seconds": 60,
+      "output_path": ".godot/verification/e06_content_pilot/luna_final/187-e06_tx_active_test.output.log",
+      "recorded_output_sha256": "639C3CD9F61B1C2233E3B8A4D05B7F3F189282421100D7248362526DEBEE3E18",
+      "actual_output_sha256": "639C3CD9F61B1C2233E3B8A4D05B7F3F189282421100D7248362526DEBEE3E18",
+      "engine_log_path": ".godot/verification/e06_content_pilot/luna_final/187-e06_tx_active_test.engine.log",
+      "engine_log_sha256": "6E415F9DDF7F1E7709E7901D353C93D14B35B9FAE0B79AC60714070D992EC9E9",
+      "output_hash_matches": true
+    },
+    {
+      "index": 194,
+      "name": "e06_content_authoring_test",
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_seconds": 60,
+      "output_path": ".godot/verification/e06_content_pilot/luna_final/194-e06_content_authoring_test.output.log",
+      "recorded_output_sha256": "41AB313DA854B7B0223B6E128E3079B93C556C65A3509E8752BC15134FB8AF62",
+      "actual_output_sha256": "41AB313DA854B7B0223B6E128E3079B93C556C65A3509E8752BC15134FB8AF62",
+      "engine_log_path": ".godot/verification/e06_content_pilot/luna_final/194-e06_content_authoring_test.engine.log",
+      "engine_log_sha256": "007765C98B800EF964DC34AF28A634211BEE46C86C833874121BC9CC6D1B1F64",
+      "output_hash_matches": true
+    },
+    {
+      "index": 195,
+      "name": "e06_content_editorial_test",
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_seconds": 60,
+      "output_path": ".godot/verification/e06_content_pilot/luna_final/195-e06_content_editorial_test.output.log",
+      "recorded_output_sha256": "4F19B03DD3389029AEB3FCDB8F6D511DB2C5E80715348CD9AB52F1819844A2DF",
+      "actual_output_sha256": "4F19B03DD3389029AEB3FCDB8F6D511DB2C5E80715348CD9AB52F1819844A2DF",
+      "engine_log_path": ".godot/verification/e06_content_pilot/luna_final/195-e06_content_editorial_test.engine.log",
+      "engine_log_sha256": "E542031BD9026AC6B00281952F27F3087C3FB8661F48438A85FB348F60D5CC89",
+      "output_hash_matches": true
+    },
+    {
+      "index": 196,
+      "name": "e06_content_pilot_test",
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_seconds": 60,
+      "output_path": ".godot/verification/e06_content_pilot/luna_final/196-e06_content_pilot_test.output.log",
+      "recorded_output_sha256": "5D3C2EE5D30E4CF7361706F02EBE5951627B654ECDFD0691712283784148FA88",
+      "actual_output_sha256": "5D3C2EE5D30E4CF7361706F02EBE5951627B654ECDFD0691712283784148FA88",
+      "engine_log_path": ".godot/verification/e06_content_pilot/luna_final/196-e06_content_pilot_test.engine.log",
+      "engine_log_sha256": "450F329264D3744F8ADB0B8D7789EB7C2E07FE1D79D6BAA868DDA7BA624A9422",
+      "output_hash_matches": true
+    },
+    {
+      "index": 197,
+      "name": "e06_content_pilot_runtime_test",
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "timeout_seconds": 60,
+      "output_path": ".godot/verification/e06_content_pilot/luna_final/197-e06_content_pilot_runtime_test.output.log",
+      "recorded_output_sha256": "6CBDFEC9054577CF5D7A5B218CBB2CD36D650467370A971ACF67C54B20810A17",
+      "actual_output_sha256": "6CBDFEC9054577CF5D7A5B218CBB2CD36D650467370A971ACF67C54B20810A17",
+      "engine_log_path": ".godot/verification/e06_content_pilot/luna_final/197-e06_content_pilot_runtime_test.engine.log",
+      "engine_log_sha256": "8FFDFA6017A73D3766E705576B8B85B25A8A401FAE806EC091C9203A1ABA20BC",
+      "output_hash_matches": true
+    }
+  ],
+  "preview_commands": [
+    {
+      "name": "pilot_prepare",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_path": "pare.stdout.log",
+      "stdout_sha256": "1E166C35C5F8200FEF704E382B798BF7C0C29D6C1BA22AA3B6099866FD7FCDC4",
+      "engine_log_path": "pare.engine.log",
+      "engine_log_sha256": "89492CBD522EDED48BC91810936FCCE254DE7D0550CD180DE653B523705E5EF2",
+      "observed": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nPilot prepared: 63 recipes; existing editorial preserved."
+    },
+    {
+      "name": "pilot_preview",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_path": "view.stdout.log",
+      "stdout_sha256": "54A707855B8EDB198FD7CB0D26617ED646F870D235A9AC9703D5C0FCC40D56BB",
+      "engine_log_path": "view.engine.log",
+      "engine_log_sha256": "C3843485D4A3BCDB761D5DB530CD69E4A7722AB0B23216D2635B1DD9184E86CB",
+      "observed": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nPilot validated: 63 recipes, 20 composed comparisons; tactical validation pending. res://.godot/content_authoring/pilot_1859391"
+    }
+  ],
+  "preview_manifest": {
+    "path": ".godot/content_authoring/pilot_1859391/manifest.json",
+    "sha256": "504C16BE37F24128E4BA35B646BF73C13C75800701F1BB7E06E2C1A20E1038E7",
+    "resource_count": 63,
+    "all_resource_paths_unique": true,
+    "all_resources_exist": true,
+    "production_published": false,
+    "mechanical_digest": "f90a083a54b6d42ed0d4d400f20834f4ba0b5cddc8c4f2835bc94db624706100",
+    "expected_mechanical_digest": "f90a083a54b6d42ed0d4d400f20834f4ba0b5cddc8c4f2835bc94db624706100",
+    "editorial_sha256": "80b8c21eb7032f773989941df9b05779075c1e17389019d485bf0dc8670b950a",
+    "expected_editorial_sha256": "80b8c21eb7032f773989941df9b05779075c1e17389019d485bf0dc8670b950a",
+    "resources": [
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_battle_rhythm.tres",
+        "exists": true,
+        "sha256": "5E66CE5B3539B3625EB96C520603036BDD7484C5FC801FBC4DF9AF1B89A6263D"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_extra_fire_spear.tres",
+        "exists": true,
+        "sha256": "B77A5CF78D73AEB95E5236A3406118E6C6DAEC6FFD4278F47BDBF55B380DAAF6"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_extra_ice_spear.tres",
+        "exists": true,
+        "sha256": "69F580CFAAEC6081C14D5040AAAE014101FE1A94210136FB5DBB6D2276528847"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_keen_edge.tres",
+        "exists": true,
+        "sha256": "7387C49DC6F6086D21F8289D993EC4DA2AD88B0185A26DB8B1970A45D927E966"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_vitality.tres",
+        "exists": true,
+        "sha256": "E29260F7FC78686A2B1B9393CB1DF70EFB0D48973C65CF073B76CDF32C3669B2"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_channeler_robe.tres",
+        "exists": true,
+        "sha256": "6C0EAB009FA149FAD72CE5B7A05C970DE1AE1DD2E72E8CF9DD7FD6B4F4FFC82C"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_ember_staff.tres",
+        "exists": true,
+        "sha256": "9876336564933946307E5B8D71130299D2D3941FC0ECB7D38C030462974AC52B"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_hunters_bow.tres",
+        "exists": true,
+        "sha256": "3D8BB2416653F1956A698CDB64B0D673CD470A178D21842D193521DC5457C1FD"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_prismatic_charm.tres",
+        "exists": true,
+        "sha256": "E4600408DB9E378A8B0096D34779885CB9D5FF0A54CEB1B80115CA77E873BED2"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_riposte_blade.tres",
+        "exists": true,
+        "sha256": "7E952E1B56F2CA7B8D6B86F7483E5A1308A4281C2DBAD3B2A7FD02BDE71A5B95"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_starter_blade.tres",
+        "exists": true,
+        "sha256": "885CF1AFFD7FDF92729F46F9EE01E397248DECE6A4C2C693FAE57401945084F8"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_starter_bow.tres",
+        "exists": true,
+        "sha256": "29F7F0492B9960F858B0FDB7FE2D5EDBBFFE98119123DAB50991FFD475127585"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_starter_staff.tres",
+        "exists": true,
+        "sha256": "F52850E05C2CF24AF156BE9688AB960E4CB4FBA128DF720FB26AD02C09E8D25F"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_trailcoat.tres",
+        "exists": true,
+        "sha256": "7E1144AAF07161BC59A2457C8CB7D47E5C505A93A2D7F1CA8E31382F59327656"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_traveler_charm.tres",
+        "exists": true,
+        "sha256": "927AE89D13DEC1C18D5E8A4B790A6D82C51169B4A3DB6445821A07FB574A313A"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_traveler_vest.tres",
+        "exists": true,
+        "sha256": "6B592D64933DBDAC0B5555DA528BEA40EFA22456070ACF3297865F2DC4B1655C"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_warden_mail.tres",
+        "exists": true,
+        "sha256": "BF87BE38C96A75E9C47ED7D2852EE4D3CACCDEEBB1CA772941DD1A241F4C51DF"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_pilot_head.tres",
+        "exists": true,
+        "sha256": "6ADFD53A420991F2E17D413F11010AD1ECBC3CEA266B21F4A1A4A3EC3A3B3FA3"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_pilot_shoulders.tres",
+        "exists": true,
+        "sha256": "90AAF8DC3434CE4A77E21D6549C7F8E179E151076FD220501218D98985EC429B"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_pilot_arms.tres",
+        "exists": true,
+        "sha256": "1BA8587E921E586DCFCAC8F954B279D15F8A157018436FE58EB1E92279A2C305"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_pilot_cloak.tres",
+        "exists": true,
+        "sha256": "4E8F1BA63993EC0D202959DB8D17B51FA6B22F242423FA1FBF8F35F2B7090287"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_pilot_legs.tres",
+        "exists": true,
+        "sha256": "E68EE05CF2CC2893E76A06DD732555A0CCFBCF53F78935DF1342B971BC7EFD06"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_pilot_feet.tres",
+        "exists": true,
+        "sha256": "83191DBD946D2FD7D17573185B7B3D0E40135C0188D91639B75E2D0B3FD3F602"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_pilot_shield.tres",
+        "exists": true,
+        "sha256": "531DC7B4F8C389B4A9BAA9896B79DB89B347FBEA819D913257FAA765D9DE5EDF"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_pilot_focus.tres",
+        "exists": true,
+        "sha256": "B68FE3B7E335089CF177DDA062F0ED4385DB3B8C315AC9F7234941700A63622A"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_pilot_sp_jewel.tres",
+        "exists": true,
+        "sha256": "C9A4243906DC30D43C46C5DB04EE57FB32E773BAA558E8DECADBC78520E50810"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_pilot_stride_jewel.tres",
+        "exists": true,
+        "sha256": "46373A4FDCC7CF1EC8784B72B8B6B0B13709B1E66614E72B8FAEFDE53C87B440"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_pilot_ward_jewel.tres",
+        "exists": true,
+        "sha256": "7C33250CDF0A5B446FD1521B9E723210F92D9EFF716E1102699F637FECEEBF48"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_pilot_step_neck.tres",
+        "exists": true,
+        "sha256": "45C99ABDD1E9E5D1C72145743AA5DFFEFB9E69A34E9C42CCF1EBEF75C07A1752"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/equipment_pilot_wand.tres",
+        "exists": true,
+        "sha256": "43178772121F33A6172EED6D380BB7A457B2C3B47EE3AA01FA28DF95F8BEA32B"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/set_pilot_guard_set.tres",
+        "exists": true,
+        "sha256": "A91B22D64F1FEC2F6AC5C3D2D923C6BEA9E54BCC947B432A91AFA538E9C60F02"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/mob_pilot_echo_species.tres",
+        "exists": true,
+        "sha256": "88B0CDA459A7853A573F17B2A8E8144F8B89A3CA8DD0603554BCCA335B6B1A71"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/card_echo_card.tres",
+        "exists": true,
+        "sha256": "5087A82A5EA761D4124CB3683599E077E5F39BE19575CB20B928BA7FECFED0DB"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/mob_pilot_ember_species.tres",
+        "exists": true,
+        "sha256": "103C3AF7260015BE440EF72B9689DF02B6482B624B553E935ACFEC010E846BC9"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/card_ember_card.tres",
+        "exists": true,
+        "sha256": "E09C6E1D2CA4BAFE4B2D3CA17290F5932D3C24C92C03734ABE3294B41DF1E17D"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/mob_pilot_frost_species.tres",
+        "exists": true,
+        "sha256": "E6982D39DC7F72FFCB0D5B606E423D1CD2C06DCFE6F65C66E33B1E3FEB8D4B93"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/card_frost_card.tres",
+        "exists": true,
+        "sha256": "0B8418CB3B209E6B39727478749F0EB327E4ED6D3DAE9448F2E103FE53F53761"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/mob_pilot_precision_species.tres",
+        "exists": true,
+        "sha256": "128849D00E19D86A6F92D13D447E9291E6AC7F03834F536A9C83BB340842275B"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/card_precision_card.tres",
+        "exists": true,
+        "sha256": "53B4C902DBBD5C3DDFDA217CB34D5FF4482E2AA98D65C1C4250040FF727726C6"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/mob_pilot_bulwark_species.tres",
+        "exists": true,
+        "sha256": "5F391A3E3B8A120230CAE0F57B4E4497F9CE17C0277B4FDF997CD4E8961CA17F"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/card_bulwark_card.tres",
+        "exists": true,
+        "sha256": "3C9E4C1C9507CBFE720ACB46A8A38DDFFA6826CEB613F2820AEF7D2F9D50C892"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/mob_pilot_trail_species.tres",
+        "exists": true,
+        "sha256": "27E8CB3F366B8069DF4938F500F82B880ED31218C484A1057041DD4EF4B7C040"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/card_trail_card.tres",
+        "exists": true,
+        "sha256": "3EAB88EAC25D2490BAEEE06B3C967436D082D10FDC3B026317265467E0D69A3A"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_swordsman_pressure.tres",
+        "exists": true,
+        "sha256": "764A4AB5AF7CC90FF21FE0C832977EF75D3501687E23FC0D09687110633F0A75"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_swordsman_reserve.tres",
+        "exists": true,
+        "sha256": "506261F6EA24062B520BE837B45EC1EC0C442C316F65E7C3A63B5BD87CE9F708"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_mage_pressure.tres",
+        "exists": true,
+        "sha256": "2BEB14E60D18EB1DD309B7D02393F74C08BF702377EAC44650353C6533F607F0"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_mage_reserve.tres",
+        "exists": true,
+        "sha256": "037193053DDE26BF500D80EDFA052F97FC6116B2A26E87684B53D719D9B13F1E"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_archer_pressure.tres",
+        "exists": true,
+        "sha256": "9D1322931BCB94AA5CC07CE84542CC81A43CC9D40EC43F5A2FE77BDDBB1E9709"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_archer_reserve.tres",
+        "exists": true,
+        "sha256": "092D51E650F6B78EDAF9AA8196E52F2C92DB85E388996B025238817AA1FB819E"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_defender_a.tres",
+        "exists": true,
+        "sha256": "1FD4B38BF586253B0C91608DB8BF2767A1E3982B09B94471990D3CB8C1D2DD2E"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_defender_b.tres",
+        "exists": true,
+        "sha256": "7E31903DE362C4B1D154E7F91711EA404620A0ED2F951E2978572924123A3EFE"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_berserker_a.tres",
+        "exists": true,
+        "sha256": "0399C77B120FAB446CCA3CBF971CA705294093BAF14A5F198BC526CC17705A38"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_berserker_b.tres",
+        "exists": true,
+        "sha256": "1ADCD3B479D9691CE312C2D5C323062F935C6786F55DDAD0610BC39882FED06C"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_elementalist_a.tres",
+        "exists": true,
+        "sha256": "34CDCBBC6DD9A8B087D381C6CEA0851C81445CA6AA2FA5714858259E85B7077F"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_elementalist_b.tres",
+        "exists": true,
+        "sha256": "08901AC5BAAE3D77A7BB7354A78552A7610BA13BAD52B6A29FC31AB22380C57F"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_spiritualist_a.tres",
+        "exists": true,
+        "sha256": "4508D9E5D1F83082CAD44231A6DA6600D625749EECA2AB4390FE3C913DBE52AA"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_spiritualist_b.tres",
+        "exists": true,
+        "sha256": "0AD195AFC6CC128ADAD3DB447267015FDD3DE6C4FA051827379B4AB34B7597CC"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_sentinel_a.tres",
+        "exists": true,
+        "sha256": "3210054C64D77FFCC64DF23A20278091375B80140952EEF2A86625AE02059C06"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_sentinel_b.tres",
+        "exists": true,
+        "sha256": "0CED9FF60127912A5CC781501C26F066DEB9AACE161412D64585244B0CFF10D1"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_hunter_a.tres",
+        "exists": true,
+        "sha256": "92476F8EFC357D1500C5054415FBE4C5B60464FD2B5B1ED5AB5F5D5AFB817BB9"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_hunter_b.tres",
+        "exists": true,
+        "sha256": "F9D9D2CCFE45D11B1ECBA58ACE5319BF51B843E8CCDBDAF15FAAE8D8B6752AB9"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_mg_ar_a.tres",
+        "exists": true,
+        "sha256": "B000774C4DDF17E8BB3EDF2B1B9A1107F4887D28874936C04952C21D44C35702"
+      },
+      {
+        "path": "res://.godot/content_authoring/pilot_1859391/augment_pilot_mg_ar_b.tres",
+        "exists": true,
+        "sha256": "FB79CD63E7A4F70880A2DADCC23B09593F62F20FEDEBE5B9DD1B02B0348DA246"
+      }
+    ]
+  },
+  "pilot_builds": {
+    "path": "content/authoring/pilot_builds.json",
+    "sha256": "08C9C9685BAE58FA2D5EA0980BE03287E59A649004DF8FD41C4DAAF41B97B094",
+    "comparison_count": 20,
+    "all_composition_valid": true,
+    "all_tactical_validated_false": true,
+    "all_native_composition_checks_true": true,
+    "comparison_details": [
+      {
+        "identity": "swordsman",
+        "branch": "A",
+        "composition_valid": true,
+        "tactical_validated": false
+      },
+      {
+        "identity": "swordsman",
+        "branch": "B",
+        "composition_valid": true,
+        "tactical_validated": false
+      },
+      {
+        "identity": "mage",
+        "branch": "A",
+        "composition_valid": true,
+        "tactical_validated": false
+      },
+      {
+        "identity": "mage",
+        "branch": "B",
+        "composition_valid": true,
+        "tactical_validated": false
+      },
+      {
+        "identity": "archer",
+        "branch": "A",
+        "composition_valid": true,
+        "tactical_validated": false
+      },
+      {
+        "identity": "archer",
+        "branch": "B",
+        "composition_valid": true,
+        "tactical_validated": false
+      },
+      {
+        "identity": "defender",
+        "branch": "A",
+        "composition_valid": true,
+        "tactical_validated": false
+      },
+      {
+        "identity": "defender",
+        "branch": "B",
+        "composition_valid": true,
+        "tactical_validated": false
+      },
+      {
+        "identity": "berserker",
+        "branch": "A",
+        "composition_valid": true,
+        "tactical_validated": false
+      },
+      {
+        "identity": "berserker",
+        "branch": "B",
+        "composition_valid": true,
+        "tactical_validated": false
+      },
+      {
+        "identity": "elementalist",
+        "branch": "A",
+        "composition_valid": true,
+        "tactical_validated": false
+      },
+      {
+        "identity": "elementalist",
+        "branch": "B",
+        "composition_valid": true,
+        "tactical_validated": false
+      },
+      {
+        "identity": "spiritualist",
+        "branch": "A",
+        "composition_valid": true,
+        "tactical_validated": false
+      },
+      {
+        "identity": "spiritualist",
+        "branch": "B",
+        "composition_valid": true,
+        "tactical_validated": false
+      },
+      {
+        "identity": "sentinel",
+        "branch": "A",
+        "composition_valid": true,
+        "tactical_validated": false
+      },
+      {
+        "identity": "sentinel",
+        "branch": "B",
+        "composition_valid": true,
+        "tactical_validated": false
+      },
+      {
+        "identity": "hunter",
+        "branch": "A",
+        "composition_valid": true,
+        "tactical_validated": false
+      },
+      {
+        "identity": "hunter",
+        "branch": "B",
+        "composition_valid": true,
+        "tactical_validated": false
+      },
+      {
+        "identity": "mg_ar",
+        "branch": "A",
+        "composition_valid": true,
+        "tactical_validated": false
+      },
+      {
+        "identity": "mg_ar",
+        "branch": "B",
+        "composition_valid": true,
+        "tactical_validated": false
+      }
+    ]
+  },
+  "sources": {
+    "before_manifest_path": ".godot\\verification\\e06_content_pilot\\luna_final\\manifest_before.json",
+    "before_manifest_sha256": "DA1915F319FBBDBD2839F38F8A4BDD3A259D11983388D3C1B75021AEF8B66E55",
+    "after_manifest_path": ".godot\\verification\\e06_content_pilot\\luna_final\\manifest_after.json",
+    "after_manifest_sha256": "4742883E9C433617068B7DAE2CC90C4F2EF6B04C85F9703A2EBFAD12AC381E03",
+    "files_before": 720,
+    "files_after": 722,
+    "changed_paths": [
+      "content/authoring/pilot_builds.json",
+      "tests/e06_content_pilot_runtime_test.gd.uid"
+    ],
+    "auto_generated_uid_paths": [
+      "tests/e06_content_pilot_runtime_test.gd.uid"
+    ],
+    "auto_generated_uid_note": "The editor import created the UID sidecar for the new runtime test. This is generated metadata, not an edit to tests/e06_content_pilot_runtime_test.gd; file-count changes are recorded explicitly rather than claimed identical.",
+    "removed_paths": [],
+    "pilot_texts_sha256_before": "80B8C21EB7032F773989941DF9B05779075C1E17389019D485BF0DC8670B950A",
+    "pilot_texts_sha256_after": "80B8C21EB7032F773989941DF9B05779075C1E17389019D485BF0DC8670B950A",
+    "pilot_briefs_sha256_before": "88FE21EA6EAE72383534EA73A8ECDD6D059DE886264E8E7378BBE6235FAA5A7E",
+    "pilot_briefs_sha256_after": "88FE21EA6EAE72383534EA73A8ECDD6D059DE886264E8E7378BBE6235FAA5A7E",
+    "content_authoring_sha256": "80B8C21EB7032F773989941DF9B05779075C1E17389019D485BF0DC8670B950A",
+    "production_resource_tres_count": 20,
+    "production_catalog_unchanged": true,
+    "production_catalog_tres_fingerprint": "343E6C353675DBE2C5705F69A00A46DCF60D0FFC9D1736E6E811D2B88C1716EC",
+    "loader_sha256_before": "365DA424CBB23E25C71BC262C911560CEAF463A96D03502969DF1F50255C4F81",
+    "loader_sha256_after": "365DA424CBB23E25C71BC262C911560CEAF463A96D03502969DF1F50255C4F81",
+    "project_sha256_before": "ADF17C0941269918DEE0A0005329D874DA199778DDEFCE294CA00E655367857E",
+    "project_sha256_after": "ADF17C0941269918DEE0A0005329D874DA199778DDEFCE294CA00E655367857E",
+    "runner_sha256_before": "EC5A61CE4ECD1C9482ADA90E829035532E3C017EEBCF48A9FACEF7D256BDF454",
+    "runner_sha256_after": "EC5A61CE4ECD1C9482ADA90E829035532E3C017EEBCF48A9FACEF7D256BDF454"
+  },
+  "historical_artifacts": [
+    ".godot/verification/e06_content_pilot/author_* (prior Sol attempts; preserved and not counted or rehashed in this Luna run)"
+  ],
+  "limitations": [
+    "This receipt is automated test supervision and file-integrity evidence, not a semantic independent audit.",
+    "Only the 10 named tests were selected from the 197-step runner; no full suite was run.",
+    "The 20 comparisons certify canonical composition only; each pilot_builds record explicitly leaves tactical_validated false.",
+    "No production publication, gameplay playtest, push, or merge was performed.",
+    "The editor import updated generated .import files; they were left intact for the integration owner to restore if needed."
+  ],
+  "reported_test_results": [
+    {
+      "name": "editor_import",
+      "result": "editor import completed"
+    },
+    {
+      "name": "e06_inventory_resources_test",
+      "result": "24 checks; 0 failures"
+    },
+    {
+      "name": "e06_effects_composition_test",
+      "result": "69 checks; 0 failures"
+    },
+    {
+      "name": "e06_effects_runtime_test",
+      "result": "53 checks; 0 failures"
+    },
+    {
+      "name": "e06_tx_composition_test",
+      "result": "60 checks; 0 failures"
+    },
+    {
+      "name": "e06_tx_active_test",
+      "result": "58 checks; 0 failures"
+    },
+    {
+      "name": "e06_content_authoring_test",
+      "result": "60 checks; 0 failures"
+    },
+    {
+      "name": "e06_content_editorial_test",
+      "result": "100 checks; 0 failures"
+    },
+    {
+      "name": "e06_content_pilot_test",
+      "result": "468 checks; 0 failures"
+    },
+    {
+      "name": "e06_content_pilot_runtime_test",
+      "result": "244 checks; 0 failures"
+    }
+  ]
+}

@@ -52,3 +52,13 @@ A prévia exige as24 entradas completas e grava Resources nativos/manifesto apen
 6. Sol valida exemplos/builds relevantes, revisa coerência e integra o lote autorizado. Habilitar produção é uma etapa explícita, posterior a esta base.
 
 Para T3 final ainda faltam orçamento/poder/tuning, taxas, contagens e cobertura de conteúdo, taxonomias adicionais e20 builds/10 identidades. Esta base não resolve essas decisões por placeholders. UI14, arte/chapéus, campanha/boss AI, playtest e merge permanecem fora do pacote.
+
+## Piloto no ilvl 1 (T3-B)
+
+`tools/content/pilot_bundle.gd` fixa as63 receitas do piloto, mantendo os12 IDs/metadata de equipamento e cinco augments históricos. Valores de receita são tuning manual explícito, sem multiplicador por ilvl/qualidade. Recursos de exemplo da T3-A continuam separados; o piloto não substitui o catálogo ativo.
+
+`tools/content/pilot.gd -- --prepare` gera pilot_briefs.json e cria pilot_texts.json somente se ausente. Nunca sobrescreve população existente. Se a mecânica mudar, o digest muda; o autor deve transferir nova ficha e reconciliar o envelope/textos conscientemente. O comando sem argumentos compila o documento completo, gera pilot_builds.json e63 Resources nativos em `.godot/content_authoring/pilot_*`, com manifesto e production_published=false. O diretório não é consumido pelo loader do jogo.
+
+[Prévia legível do piloto](pilot_preview.md) reúne descrição factual gerada e flavor Luna. [Comparações](pilot_builds.json) guardam20 seleções legais, metadados de aprendizado/equipamento/encaixe e capturas/stats calculados pelos serviços existentes. composition_valid não significa tactical_validated: o relatório declara explicitamente que a validação tática de T3 continua pendente. Não usar contagem de linhas ou mudanças numéricas como prova de novas decisões de combate.
+
+Os novos efeitos de proc direcionado incluem as habilidades alvo na descrição factual. Curvas completas, caps e ranks permanecem na ficha; nome/flavor jamais definem execução. Específicos de Foco, ecos, armadilhas e geometria não são gerados a partir de tags. Qualquer transformação futura exige contrato/handler executável antes da população.

@@ -1,0 +1,258 @@
+{
+	"entries": {
+		"augment:battle_rhythm": {
+			"name": "Ritmo de Batalha",
+			"flavor": "Golpes em cadência firme mantêm o combatente no compasso do confronto."
+		},
+		"augment:extra_fire_spear": {
+			"name": "Lanças de Fogo",
+			"flavor": "A chama se divide em rastros rubros que cortam o ar diante do conjurador."
+		},
+		"augment:extra_ice_spear": {
+			"name": "Lanças de Gelo",
+			"flavor": "Estilhaços claros acompanham a lança congelante em sua travessia."
+		},
+		"augment:keen_edge": {
+			"name": "Fio Perspicaz",
+			"flavor": "Um corte bem calculado encontra a abertura que passaria despercebida."
+		},
+		"augment:pilot_archer_pressure": {
+			"name": "Pressão do Arqueiro",
+			"flavor": "Cada acerto certeiro sustenta a ofensiva enquanto a distância é mantida."
+		},
+		"augment:pilot_archer_reserve": {
+			"name": "Reserva do Arqueiro",
+			"flavor": "O arqueiro guarda fôlego para seguir atento durante toda a disputa."
+		},
+		"augment:pilot_berserker_a": {
+			"name": "Ruptura Implacável",
+			"flavor": "Ruptura abre uma brecha; o golpe certeiro aproveita o instante."
+		},
+		"augment:pilot_berserker_b": {
+			"name": "Execução Decisiva",
+			"flavor": "Na execução, o berserker concentra o impacto em um acerto preciso."
+		},
+		"augment:pilot_defender_a": {
+			"name": "Contraforte Firme",
+			"flavor": "O contraforte converte uma defesa bem colocada em resposta contundente."
+		},
+		"augment:pilot_defender_b": {
+			"name": "Trava de Linha",
+			"flavor": "A linha se fecha, e o impacto certeiro pune quem insiste em avançar."
+		},
+		"augment:pilot_elementalist_a": {
+			"name": "Chamas em Explosão",
+			"flavor": "A explosão de chamas deixa um clarão vivo no centro do confronto."
+		},
+		"augment:pilot_elementalist_b": {
+			"name": "Anel Glacial",
+			"flavor": "O anel glacial desenha um contorno pálido ao redor do embate."
+		},
+		"augment:pilot_hunter_a": {
+			"name": "Leitura da Caçada",
+			"flavor": "A caçadora observa os sinais ao redor e escolhe o próximo passo com cuidado."
+		},
+		"augment:pilot_hunter_b": {
+			"name": "Mira da Caçada",
+			"flavor": "Respiração serena e olhar atento acompanham a preparação de cada disparo."
+		},
+		"augment:pilot_mage_pressure": {
+			"name": "Pressão Arcana",
+			"flavor": "O mago conserva a iniciativa e transforma cada acerto em presença no duelo."
+		},
+		"augment:pilot_mage_reserve": {
+			"name": "Reserva Arcana",
+			"flavor": "Uma reserva bem guardada permite sustentar a jornada entre os confrontos."
+		},
+		"augment:pilot_mg_ar_a": {
+			"name": "Reserva do Geômetra",
+			"flavor": "O geômetra calcula o próprio ritmo e guarda recursos para o que vier."
+		},
+		"augment:pilot_mg_ar_b": {
+			"name": "Passo do Geômetra",
+			"flavor": "Traços medidos no chão orientam a passada entre um ponto e outro."
+		},
+		"augment:pilot_sentinel_a": {
+			"name": "Tiro na Cabeça",
+			"flavor": "O sentinela espera a linha se abrir antes de soltar um disparo preciso."
+		},
+		"augment:pilot_sentinel_b": {
+			"name": "Tiro de Rede",
+			"flavor": "Um disparo bem colocado marca o instante em que a guarda adversária cede."
+		},
+		"augment:pilot_spiritualist_a": {
+			"name": "Reserva Espiritual",
+			"flavor": "A espiritualista respira fundo e preserva forças para os próximos desafios."
+		},
+		"augment:pilot_spiritualist_b": {
+			"name": "Véu Interior",
+			"flavor": "Uma calma concentrada acompanha a espiritualista em meio ao tumulto."
+		},
+		"augment:pilot_swordsman_pressure": {
+			"name": "Pressão do Espadachim",
+			"flavor": "O espadachim mantém a linha de ataque com golpes decididos e contínuos."
+		},
+		"augment:pilot_swordsman_reserve": {
+			"name": "Reserva do Espadachim",
+			"flavor": "Entre dois avanços, o espadachim recompõe o fôlego e observa o terreno."
+		},
+		"augment:vitality": {
+			"name": "Vigor Duradouro",
+			"flavor": "A determinação do aventureiro permanece firme mesmo após longas provações."
+		},
+		"card:bulwark_card": {
+			"name": "Carta do Guardião do Baluarte",
+			"flavor": "O guardião robusto avança sem hesitar, coberto por placas marcadas pelo uso."
+		},
+		"card:echo_card": {
+			"name": "Carta do Eco da Arena",
+			"flavor": "A figura silenciosa reaparece na memória como um vulto de contornos conhecidos."
+		},
+		"card:ember_card": {
+			"name": "Carta do Batedor da Brasa",
+			"flavor": "O batedor de marcas rubras cruza a arena em passos curtos e atentos."
+		},
+		"card:frost_card": {
+			"name": "Carta do Vigia Invernal",
+			"flavor": "O vigia de tons pálidos permanece firme, mesmo sob o vento frio da arena."
+		},
+		"card:precision_card": {
+			"name": "Carta do Atirador Preciso",
+			"flavor": "O atirador mede a distância com cuidado antes de assumir posição."
+		},
+		"card:trail_card": {
+			"name": "Carta do Mateiro da Trilha",
+			"flavor": "O mateiro conhece cada curva do percurso e segue adiante sem alarde."
+		},
+		"equipment:channeler_robe": {
+			"name": "Veste do Condutor",
+			"flavor": "O corte sóbrio e os bordados discretos distinguem esta veste entre os trajes da Arena."
+		},
+		"equipment:ember_staff": {
+			"name": "Cajado da Brasa",
+			"flavor": "Marcas avermelhadas percorrem a madeira e lembram brasas sob cinza fria."
+		},
+		"equipment:hunters_bow": {
+			"name": "Arco do Caçador",
+			"flavor": "A corda esticada vibra baixo enquanto o caçador procura uma abertura."
+		},
+		"equipment:pilot_arms": {
+			"name": "Braçadeiras da Arena",
+			"flavor": "Costuras reforçadas acompanham o movimento dos braços nos treinos."
+		},
+		"equipment:pilot_cloak": {
+			"name": "Manto do Vigia",
+			"flavor": "O tecido escuro leva a poeira das rondas ao redor da Arena."
+		},
+		"equipment:pilot_feet": {
+			"name": "Botas de Passo Leve",
+			"flavor": "A sola gasta guarda marcas de voltas incontáveis pelo campo de treino."
+		},
+		"equipment:pilot_focus": {
+			"name": "Foco de Vidro Fosco",
+			"flavor": "Uma superfície opaca capta a luz sem revelar o que há além dela."
+		},
+		"equipment:pilot_head": {
+			"name": "Elmo da Guarda",
+			"flavor": "A viseira marcada emoldura o olhar atento dos combatentes da Arena."
+		},
+		"equipment:pilot_legs": {
+			"name": "Grevas do Guardião",
+			"flavor": "Fivelas simples prendem as placas usadas nas rondas e exercícios."
+		},
+		"equipment:pilot_shield": {
+			"name": "Broquel da Arena",
+			"flavor": "O escudo compacto conserva riscos de encontros e treinos antigos."
+		},
+		"equipment:pilot_shoulders": {
+			"name": "Ombreiras do Baluarte",
+			"flavor": "O par de placas repete o emblema gravado no restante da armadura."
+		},
+		"equipment:pilot_sp_jewel": {
+			"name": "Joia da Reserva",
+			"flavor": "Uma pedra clara, presa em metal discreto, repousa junto ao peito."
+		},
+		"equipment:pilot_step_neck": {
+			"name": "Colar do Passo Distante",
+			"flavor": "O cristal captura um reflexo fugaz, como uma porta vista por um instante."
+		},
+		"equipment:pilot_stride_jewel": {
+			"name": "Joia da Passada",
+			"flavor": "A pequena peça oscila suavemente a cada mudança de direção."
+		},
+		"equipment:pilot_wand": {
+			"name": "Varinha de Condução",
+			"flavor": "A haste simples repousa na mão, pronta para conduzir a energia arcana."
+		},
+		"equipment:pilot_ward_jewel": {
+			"name": "Joia da Guarda",
+			"flavor": "A pedra escura traz um brilho quieto sob as luzes do campo."
+		},
+		"equipment:prismatic_charm": {
+			"name": "Amuleto Prismático",
+			"flavor": "Facetas coloridas refletem a luz em pequenos arcos sobre a palma."
+		},
+		"equipment:riposte_blade": {
+			"name": "Lâmina da Resposta",
+			"flavor": "O fio sóbrio acompanha contra-ataques rápidos nos duelos da Arena."
+		},
+		"equipment:starter_blade": {
+			"name": "Espada de Treino",
+			"flavor": "Uma espada equilibrada, marcada por muitas sessões de prática."
+		},
+		"equipment:starter_bow": {
+			"name": "Arco de Treino",
+			"flavor": "O arco simples aguarda em silêncio a próxima disputa."
+		},
+		"equipment:starter_staff": {
+			"name": "Cajado de Treino",
+			"flavor": "A madeira lisa conserva marcas deixadas pelas mãos de aprendizes."
+		},
+		"equipment:trailcoat": {
+			"name": "Casaco da Trilha",
+			"flavor": "O casaco leve traz bolsos gastos de tantas caminhadas entre exercícios."
+		},
+		"equipment:traveler_charm": {
+			"name": "Pingente do Viajante",
+			"flavor": "Uma lembrança lisa e discreta acompanha quem percorre longas distâncias."
+		},
+		"equipment:traveler_vest": {
+			"name": "Colete do Viajante",
+			"flavor": "O colete de corte simples protege o viajante durante os treinos."
+		},
+		"equipment:warden_mail": {
+			"name": "Cota do Guardião",
+			"flavor": "Anéis escurecidos formam uma malha robusta, pronta para a rotina da Arena."
+		},
+		"mob:pilot_bulwark_species": {
+			"name": "Guardião do Baluarte",
+			"flavor": "O combatente de porte firme avança com o escudo erguido e golpeia de perto."
+		},
+		"mob:pilot_echo_species": {
+			"name": "Eco da Arena",
+			"flavor": "Um vulto conhecido cruza o campo e investe contra quem se aproxima."
+		},
+		"mob:pilot_ember_species": {
+			"name": "Batedor da Brasa",
+			"flavor": "Marcas rubras destacam o batedor, que encurta a distância e ataca."
+		},
+		"mob:pilot_frost_species": {
+			"name": "Vigia Invernal",
+			"flavor": "O vigia de tons pálidos mantém a guarda e parte para um ataque próximo."
+		},
+		"mob:pilot_precision_species": {
+			"name": "Atirador Preciso",
+			"flavor": "O atirador mede a distância e desfere um golpe básico quando o alvo chega."
+		},
+		"mob:pilot_trail_species": {
+			"name": "Mateiro da Trilha",
+			"flavor": "O mateiro segue as pegadas pela arena e ataca ao alcançar seu oponente."
+		},
+		"set:pilot_guard_set": {
+			"name": "Guarda do Baluarte",
+			"flavor": "Peitoral, ombreiras e grevas compartilham o emblema da guarda que treinava na Arena."
+		}
+	},
+	"mechanical_digest": "f90a083a54b6d42ed0d4d400f20834f4ba0b5cddc8c4f2835bc94db624706100",
+	"schema_version": 1
+}

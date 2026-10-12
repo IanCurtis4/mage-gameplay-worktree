@@ -272,3 +272,9 @@ Usuário autorizou Sol na estrutura racional e Luna nos nomes/flavor. [Pacote](e
 Base de conteúdo pronta; não é catálogo final T3 nem UI T4. Próximo lote Sol fixa orçamento/rates/receitas/cobertura/compatibilidades e exemplos concretos, Luna recebe só sua população aprovada. Parâmetros não decididos continuam pendentes, não substituídos por números de fixture. Sem aplicar no checkout fixo, publicar conteúdo ativo, push/merge ou inferir aceite humano. Preservar esta worktree e os logs até integração.
 
 Entrega concreta T3-A:917ad44e5a016632b2ecf19cb863376464a5db76 (árvore680c8f88c94063e7556e9605e9585b7c04301f89). Código congelado conforme inputs do recibo de Luna; anotações posteriores são documentais. Sem preparar/aplicar playtest ou iniciar catálogo final por efeito deste fechamento.
+
+## T3-B — catálogo piloto no ilvl 1, entregue em12/10/2026
+
+Continuação autorizada pelo usuário com receitas manuais no ilvl1; progressão/rates depois. [Contrato/checkpoint](e06_content_pilot.md):63 receitas offline (25 equipamentos/25 augments/6 cartas/6 espécies/1 conjunto), Luna63 nomes/flavors, descrição factual Sol.20 comparações de composição em10 identidades,14 posições legais e5 híbridas bloqueadas rejeitadas. Contratos/metadata dos12 antigos preservados em cópias; publicação futura precisa reconciliar preservação de stats.
+
+Seleção final Luna10/197 PASS, novos testes468/244 checks, regressões pertinentes aprovadas. [Recibo](e06_content_pilot_validation.json) SHA2561B359EBEB3903E49754D58F7C8C7D72BFF7B8CD1DBBE9AB28A4EEE38234DF30D; fonte local congelada por manifest, base075eb8f não confundida com candidato limpo. Sol conferiu hashes/outputs e63 Resources da prévia. Sem delta de catálogo ativo/atores/fórmulas/codec/playtest. Piloto validado tecnicamente; vinte direções táticas, progressão/rates, novos handlers específicos e integração continuam posteriores. Não disparar Astra rotineiro.
