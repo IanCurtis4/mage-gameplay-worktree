@@ -52,6 +52,12 @@ func record_hit(result: Dictionary, magic_attack_at_trigger: float) -> bool:
 		var eligible: Dictionary[int, float] = {}
 		for marked_id: int in marks:
 			eligible[marked_id] = float(marks[marked_id]["echo_power"])
+		var context: CombatEventContext = result.get("context")
+		if context != null:
+			var carriers: Array[int] = []
+			carriers.assign(eligible.keys())
+			if context.ledger() == null or not context.ledger().bind_echo_carriers(context, carriers):
+				return false
 		waves[wave_id] = {"eligible": eligible, "scheduled": {}, "pairs": {}, "shown_targets": {}, "magic_attack": maxf(0.0, magic_attack_at_trigger), "context": result.get("context"), "damage_multiplier": result.get("damage_dealt_multiplier", 1.0)}
 		if emission_id > 0:
 			wave_by_emission[emission_id] = wave_id

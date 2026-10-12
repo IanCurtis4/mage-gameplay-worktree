@@ -1,6 +1,6 @@
 # E06-TX — checkpoint consolidado da fundação ampliada
 
-12/10/2026. DX ENTREGUE; R1 v1 APROVADA; TX1/TX2/TX3 ENTREGUES PELO AUTOR com validação dirigida; RX da ampliação seguinte.
+12/10/2026. DX ENTREGUE; R1 v1 APROVADA; TX1/TX2/TX3 ENTREGUES PELO AUTOR com validação dirigida; RX rejeitada na primeira rodada; correções RX-F01/F02 em execução.
 
 ## Retomada, autorização e base real
 
@@ -200,3 +200,27 @@ Retomar o mesmo único subagente r1_resume, Astra/high, para RX independente TX1
 Critério RX: inspeção das fronteiras ampliadas e consumidores, probes próprios adversariais, uma integral tools/verify.ps1 de fechamento (190 etapas antes de probes novos) se não houver bloqueio conhecido. Não reexecutar a integral por documentação/ajuste de fixture isolado; decidir reuso por hash/impacto. Separar provas recebidas TX1/2/3 da execução do revisor. Skill ragrpg-review lida; CLI externo autorizado menu-tabs/0c008d4/e642dbe... para pacote diagnóstico. validate/approve antigos não entendem Add-GodotCheck, limitação já conferida em R1: não modificar CLI nem fabricar approve. Decisão manual responsável deve vincular manifesto/HEAD/tree/engine/runner/logs do runner atual.
 
 RX não é aprovação T3/T4/FX/playtest/produto/merge. Sem push, nova conversa, aplicar no checkout fixo ou iniciar E07.
+
+
+## Correção consolidada RX-F01/F02 antes da edição
+
+Revisor fechou primeira rodada REJECTED, sem integral e sem nova importação; recibo SHA2564ad858e72c0d177292b249208239064d6aade251954be4fab9bd4f3e6b796281. RX-F01/P1: reforço rastreado validamente recebe trap primary/stream mas perde tick pelo domínio de alvos congelado. RX-F02/P2: caster legal para fora do alcance real da skill. Expectativas dos probes tests/e06_rx_causal_late_test.gd e e06_rx_mob_ai_test.gd preservadas; execução autoral autorizada, código/relatório/recibo seguem propriedade do revisor.
+
+Freeze liberado pelo revisor para Sol neste pacote corretivo completo. Caminhos transferidos antes de edição: scripts/core/effect_proc_ledger.gd, combat_event_context.gd; scripts/actors/enemy_actor.gd; scripts/world/spiritualist_echo_state.gd (consumidor adjacente); tests/e06_tx_causality_test.gd; novo tests/e06_tx_late_fields_test.gd/UID; tools/verify.ps1 e este checkpoint/manifesto. Nenhuma mudança de fórmulas/custo/CD/expectativas E05. Registro dos2 probes independentes no runner autorizado; fechará192 etapas antes do novo teste autoral. Não editar relatório RX/R1 nem probes do revisor.
+
+Contrato revisado causal: congelar famílias/fontes e valores, não suprimir vítimas que o produtor legítimo admite durante a vida finita da emissão. Impacto primário validado em HealthState pode admitir vítima no budget antes de callback; componente/tick intrínseco válido pode admitir antes do claim. claim_batch genérico sozinho, proc_child, contexto secundário derivado ou família desconhecida não podem ampliar domínio. Orçamento continua produto de famílias finitas e IDs de vítimas admitidas uma vez por produtores finitos, mais pares de carriers; claims/apply_once/depth/cancelamento e limites de duração/projétil/campos/roots dos kits preservados. Não criar número substituto/ICD/teto de fontes. Ticks herdam plano atualizado do produtor.
+
+Echo deve vincular uma única vez carriers ao snapshot finito real de elegíveis que EchoState cria no primeiro impacto (não adivinhar esse conjunto no plantio). Carriers posteriores não entram na mesma onda; vítimas posteriores legitimamente atingidas pela onda podem ser admitidas no claim nativo sem permitir cascata genérica. Budget derivado recalcula produto por admissão, não reabre pares nem expande famílias. Arqueiro sem skills conserva faixa150..390/posição280; caster usa alcance do rank declarado para parar/aproximar/atacar.
+
+Provas: probes independentes5/4 sem editar; novos campos/ticks/echo com reforços e reentrada/proc_child/cancelamento; regressões de canais e AI afetados; uma integral RX somente após nenhum bloqueio conhecido.
+
+Recibo autoral novo transferido antes da escrita: docs/epics/e06/e06_rx_author_validation.json; logs exclusivos .godot/verification/e06_rx_author/.
+
+
+## Correção RX-F01/F02 — entrega do autor, 12/10/2026
+
+Impacto primário validado admite vítima real antes do callback. Canal intrínseco conhecido admite vítimas posteriores por tick finito; desconhecidos/proc_child/secondary genérico não ampliam domínio. Claims continuam anteriores ao callback e apply_once; cancelamento/ancestralidade preservados. Eco vincula carriers uma vez ao snapshot real no primeiro hit, exige vínculo antes de pares planejados e rejeita lista duplicada sem mutação. Vítimas posteriores recebem Eco, sem virar carrier da mesma onda. Caster aproxima usando range real; archer básico mantém banda/standoff anteriores.
+
+18 etapas distintas PASS em três seleções autorais, 23 outputs conferidos; não integral193/193 nem decisão independente. Probes originais5/4 sem edição passam; thorn existente/reforço9/9, caster375→aproxima/emite. Causal21 e novo late-fields22: LightningWall real com alvo após placement, tick intrínseco sem primary anterior, EchoState real com marks posteriores à emissão, reentrada/proc_child/cancelamento/duplicatas. Consumidores dirigidos Hunter186/12768, Geômetra46/106, Espiritualista30/37/16/86, Berserker18/76, ledger29/runtime53/mobs27 PASS. Recibo e06_rx_author_validation.json separa seleções e reaproveitamento por impacto.32 imports restaurados após igualdade normalizada; UIDs gerados automaticamente, sem editar probes independentes.
+
+Retomar mesmo Astra/high para revisar delta corretivo e executar uma integral de fechamento somente sem bloqueio conhecido. Freeze de runtime/runner/resources/tests após commit; Sol conserva apenas checkpoint/manifesto, revisor conserva RX/probes/recibo. Decisão R1 histórica e RX rejeitada da primeira rodada preservadas no histórico; sem consumidores T3/T4, playtest/push/merge.

@@ -51,6 +51,8 @@ func impact(victim_id: int) -> CombatEventContext:
 		return null
 	if event_id > 0:
 		return copy_context()
+	if not ledger()._admit_target(self, victim_id):
+		return null
 	var result := copy_context()
 	result.event_id = _budget.next_event_id
 	_budget.next_event_id += 1

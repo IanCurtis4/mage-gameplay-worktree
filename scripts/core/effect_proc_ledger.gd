@@ -17,6 +17,7 @@ class RootBudget extends RefCounted:
 	var families: Dictionary = {}
 	var targets: Dictionary = {}
 	var carriers: Dictionary = {}
+	var echo_bound := false
 	var claims: Dictionary = {}
 	var applied: Dictionary = {}
 	var cancelled := false
@@ -92,6 +93,8 @@ func _claim(context: CombatEventContext, candidates: Array[Dictionary], allow_in
 		var target := int(candidate.get("target_id", 0))
 		if family.is_empty() or source.is_empty() or target <= 0:
 			continue
+		if allow_intrinsic and context.event_id == 0 and not context.proc_child and budget.families.has(family):
+			_admit_target(context, target, true)
 		if not budget.plan.is_empty() and (not budget.targets.has(target) or (not budget.families.has(family) if echo_carrier <= 0 else not budget.carriers.has(echo_carrier))):
 			continue
 		var key := "%s:%d" % [family, target]
@@ -146,8 +149,11 @@ func claim_kit_recovery(context: CombatEventContext, family: StringName, source:
 func claim_echo_pair(context: CombatEventContext, carrier_id: int, target_id: int) -> CombatEventContext:
 	# Human E06-T1 exception (09/10): finite E05 carriers share their frozen root plan.
 	# This API neither schedules carriers nor re-arms marks. EchoState owns that set.
-	if carrier_id <= 0 or context == null or context.secondary:
+	if carrier_id <= 0 or context == null or context.secondary or context.proc_child or not context.is_active() or context.ledger() != self:
 		return null
+	if not context._budget.plan.is_empty() and (not context._budget.echo_bound or not context._budget.carriers.has(carrier_id)):
+		return null
+	_admit_target(context, target_id, false, true)
 	var claims := _claim(context, [{"family_id": &"spiritualist_echo", "source_id": &"spiritualist_echo_curse", "target_id": target_id}], false, carrier_id)
 	return claims[0]["context"] if not claims.is_empty() else null
 
@@ -193,3 +199,39 @@ static func validate_plan(plan: Dictionary) -> Dictionary:
 
 func application_limit(context: CombatEventContext) -> int:
 	return context._budget.application_limit if context != null and context._budget != null else 0
+
+func _admit_target(context: CombatEventContext, target: int, intrinsic_emitter: bool = false, echo_emitter: bool = false) -> bool:
+	# Called only after a producer has validated its actual collision/occurrence.
+	# Generic callbacks cannot extend the domain with arbitrary candidates.
+	if context == null or not context.is_active() or context.ledger() != self or target <= 0 or context.proc_child or (context.secondary and not intrinsic_emitter) or (context.event_id > 0 and not echo_emitter):
+		return false
+	var budget: RootBudget = context._budget
+	if budget.plan.is_empty(): return true # Historical cap16 remains unchanged.
+	if not budget.targets.has(target):
+		budget.targets[target] = true
+		budget.plan["targets"].append(target)
+		_recompute_limit(budget)
+	return true
+
+func bind_echo_carriers(context: CombatEventContext, carriers: Array[int]) -> bool:
+	if context == null or not context.is_active() or context.ledger() != self or context.secondary or context.proc_child:
+		return false
+	var admitted: Dictionary = {}
+	for carrier: int in carriers:
+		if carrier <= 0 or admitted.has(carrier): return false
+		admitted[carrier] = true
+	var budget: RootBudget = context._budget
+	if budget.echo_bound: return budget.carriers == admitted
+	budget.echo_bound = true
+	if budget.plan.is_empty(): return true
+	budget.carriers = admitted
+	budget.plan["carriers"] = carriers.duplicate()
+	for carrier: int in carriers:
+		if not budget.targets.has(carrier):
+			budget.targets[carrier] = true
+			budget.plan["targets"].append(carrier)
+	_recompute_limit(budget)
+	return true
+
+func _recompute_limit(budget: RootBudget) -> void:
+	budget.application_limit = (budget.families.size() + budget.carriers.size()) * budget.targets.size()

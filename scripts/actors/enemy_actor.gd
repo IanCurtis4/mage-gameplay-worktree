@@ -127,7 +127,7 @@ func _process(delta: float) -> void:
 	_repath_time -= delta
 	var distance := global_position.distance_to(player.global_position)
 	if taunt_remaining > 0.0:
-		var attack_range := 390.0 if archetype == &"archer" else 55.0
+		var attack_range := _declared_attack_range() if archetype == &"archer" else 55.0
 		if distance <= attack_range:
 			_path.clear()
 			_try_attack(archetype == &"archer")
@@ -136,11 +136,14 @@ func _process(delta: float) -> void:
 		_move_along_path(delta)
 		return
 	if archetype == &"archer":
-		if distance <= 390.0 and distance >= 150.0:
+		if distance <= _declared_attack_range() and distance >= minf(150.0, _declared_attack_range() * 0.5):
 			_path.clear()
 			_try_attack(true)
 		else:
-			var desired := player.global_position + player.global_position.direction_to(global_position) * 280.0
+			var standoff := 280.0
+			if _mob_definition != null and not _mob_definition.skill_ids.is_empty():
+				standoff = minf(standoff, _declared_attack_range() * 0.75)
+			var desired := player.global_position + player.global_position.direction_to(global_position) * standoff
 			_update_path(desired)
 	else:
 		if distance <= 55.0:
@@ -323,3 +326,11 @@ func _advance_mob_cast(delta: float) -> void:
 	_mob_cooldowns[request.skill_id] = captured["cooldown"]
 	presentation_action.emit(&"cast_release", global_position.direction_to(player.global_position), 0.18)
 	mob_skill_requested.emit(request, player, rank.projectile_speed, rank.range)
+
+func _declared_attack_range() -> float:
+	if _mob_definition == null or _mob_definition.skill_ids.is_empty(): return 390.0
+	var result := 0.0
+	for skill: StringName in _mob_definition.skill_ids:
+		var rank := ClassCatalog.skill_definition(skill).rank_definition(int(_mob_definition.skill_ranks[skill]))
+		result = maxf(result, rank.range)
+	return result

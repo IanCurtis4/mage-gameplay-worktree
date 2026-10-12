@@ -30,6 +30,8 @@ func _run() -> void:
 	_check(ledger.apply_once(accepted[0]["context"]) and not ledger.apply_once(accepted[0]["context"]), "one claimed application is consumed once")
 	_check(ledger.claim_batch(context, [{"family_id": &"late_family", "source_id": &"late", "target_id": 10}]).is_empty(), "late build cannot add a family to emitted plan")
 	_check(ledger.claim_batch(context, [{"family_id": &"family_0", "source_id": &"source", "target_id": 12}]).is_empty(), "undeclared late target cannot expand budget")
+	_check(ledger.claim_echo_pair(context, 10, 11) == null, "planned echo cannot claim before actual carrier snapshot")
+	_check(ledger.bind_echo_carriers(context, [10]), "finite real carrier snapshot is bound before wave claims")
 	var echo := ledger.claim_echo_pair(context, 10, 11)
 	_check(echo != null and ledger.claim_echo_pair(context, 10, 11) == null and ledger.claim_echo_pair(context, 11, 10) == null, "echo finite authorized carrier pairs share root claims")
 	var tick := context.scheduled_tick()
