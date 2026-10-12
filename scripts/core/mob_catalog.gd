@@ -19,8 +19,20 @@ func register_definition(definition: MobDefinition) -> Dictionary:
 	if definition.primary_attributes.size() != StatCalculator.PRIMARY_IDS.size():
 		return BuildEffectCatalog.failure(&"invalid_mob_stats")
 	for axis: StringName in StatCalculator.PRIMARY_IDS:
-		if not EquipmentRules.exact_integer(definition.primary_attributes.get(axis), 0, 1000000):
+		if not EquipmentRules.exact_integer(definition.primary_attributes.get(axis), 0):
 			return BuildEffectCatalog.failure(&"invalid_mob_stats")
+	if definition.archetype not in [&"chaser", &"archer"] or definition.animation_kind not in [&"warrior", &"archer"] or not is_finite(definition.collision_radius) or definition.collision_radius <= 0.0:
+		return BuildEffectCatalog.failure(&"invalid_mob_definition")
+	if definition.skill_ranks.size() != definition.skill_ids.size():
+		return BuildEffectCatalog.failure(&"invalid_mob_skill")
+	seen.clear()
+	for skill: StringName in definition.skill_ids:
+		if seen.has(skill) or not EquipmentRules.exact_integer(definition.skill_ranks.get(skill), 1, 5) or not MobSkillAdapters.supports(skill, int(definition.skill_ranks[skill])):
+			return BuildEffectCatalog.failure(&"invalid_mob_skill")
+		seen[skill] = true
+	var stats := StatCalculator.try_calculate(definition.primary_attributes, {}, definition.fixed_level, definition.modifier_sources)
+	if not stats["ok"] or stats["breakdown"].value(&"max_hp") <= 0.0:
+		return BuildEffectCatalog.failure(&"invalid_mob_stats")
 	_definitions[definition.id] = definition.duplicate(true)
 	return {"ok": true}
 func get_definition(id: StringName) -> MobDefinition:
@@ -31,3 +43,9 @@ func ids() -> Array[StringName]:
 	result.assign(_definitions.keys())
 	result.sort()
 	return result
+
+func stats(id: StringName) -> Dictionary:
+	var definition := get_definition(id)
+	if definition == null:
+		return BuildEffectCatalog.failure(&"invalid_mob_definition")
+	return StatCalculator.try_calculate(definition.primary_attributes, {}, definition.fixed_level, definition.modifier_sources)

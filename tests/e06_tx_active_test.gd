@@ -53,6 +53,7 @@ func _run() -> void:
 		for index: int in slots.size():
 			if slots[index] == &"fire_spear": slots[index] = null
 		slots[8] = &"fire_spear"
+		slots[9] = &"teleport"
 		c._change_action_slots(slots)
 		_check(c.action_slots[8] == &"fire_spear", "manual shortcut persists through durable facade")
 		var victim := CombatActor.new()
@@ -83,6 +84,14 @@ func _run() -> void:
 		_check(player.begin_skill_cast(&"fire_spear", victim.global_position, victim), "prepare before removing source")
 		F.change(c, &"unequip", {"slot": &"accessory_1"})
 		_check(player.has_active_cast() == (origin == &"mage"), "preparation cancelled only when last source is lost")
+		if origin == &"mage":
+			c.control_preferences.restore_bindings()
+			c.get_viewport().gui_release_focus()
+			var disabled_key := InputEventKey.new()
+			disabled_key.keycode = KEY_V
+			disabled_key.pressed = true
+			c._unhandled_input(disabled_key)
+			_check(player.has_active_cast() and player.active_cast_skill == &"fire_spear", "disabled shortcut cannot cancel another valid preparation")
 		var decoded := ProfileCodec.decode(F.disk(fixture))
 		_check(decoded["ok"] and decoded["profile"].characters[0].action_slots[8] == &"fire_spear" and int(decoded["profile"].characters[0].purchased_skill_ranks.get(&"fire_spear", 0)) == learned, "inactive known adapter reference reopens without granting learning")
 		_check(player.weapon_ids_for_skill(&"basic_attack").size() == 1 and player.weapon_ids_for_skill(&"sentinel_piercing_shot").size() == 1 and player.weapon_ids_for_skill(&"sentinel_net_shot").is_empty(), "autos and explicit paid shot adapters capture weapon; INT net does not")

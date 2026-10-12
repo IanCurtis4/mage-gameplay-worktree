@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MobDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/mob_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"demo_chaser"
+display_name = "Guerreiro"
+base_category = &"normal"
+allowed_occurrence_categories = Array[StringName]([&"normal"])
+fixed_level = 1
+primary_attributes = {&"str": 5, &"agi": 3, &"vit": 3, &"int": 1, &"dex": 4, &"luk": 1}
+modifier_sources = Array[Dictionary]([{"source_id": &"enemy_warrior_tuning", "flat": {&"max_hp": -62.0, &"move_speed": -25.0}}])
+archetype = &"chaser"
+animation_kind = &"warrior"
+tint = Color(0.7764705882352941, 0.35294117647058826, 0.40784313725490196, 1)
+collision_radius = 19.0

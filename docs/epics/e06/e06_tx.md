@@ -1,6 +1,6 @@
 # E06-TX — checkpoint consolidado da fundação ampliada
 
-12/10/2026. DX ENTREGUE; R1 v1 APROVADA; TX1/TX2 ENTREGUES PELO AUTOR com validação dirigida; TX3 seguinte; RX da ampliação pendente.
+12/10/2026. DX ENTREGUE; R1 v1 APROVADA; TX1/TX2/TX3 ENTREGUES PELO AUTOR com validação dirigida; RX da ampliação seguinte.
 
 ## Retomada, autorização e base real
 
@@ -157,3 +157,35 @@ Validação dirigida pelo autor: 28 nomes distintos PASS em 11 seleções, inclu
 Tentativas falhas preservadas: parâmetro de decoder inserido inicialmente na função errada (compile), chamada de codec inexistente no teste, fixtures genéricas de proc ainda usavam arma para spell e fixture adversarial sem qualidade. Fixtures de mistura/saturação agora explicitamente usam armadura para conservar seu propósito; teste novo cobre arma verdadeira separadamente, sem retirar assert. A regressão encontrou ordenação lexical nova na biblioteca, corrigida no runtime. Novo delta de assinatura condicional teve provas próprias; não rerodou todos os kits por essa correção local. Nenhuma fórmula de stats/dano ou oráculo E05 mudou.
 
 TX2 aguardará RX junto a TX1/TX3. Próximo: TX3, definição fixa de mob/ocorrência, adaptadores e loot parametrizado, sem taxas de produção inventadas.
+
+
+## Plano fechado TX3 antes da edição, 12/10/2026
+
+Base real TX2:5d53e486de4656f3c74f51f36c042a24ca69538f; mesmo Sol/high/checkout/branch. MobCatalog já é autoridade compartilhada. Resultado: espécies fixas, ocorrências/categorias separadas, adaptadores concretos, loot por morte congelado antes de coletar, garantias mínimas sem item extra, retry/durabilidade e substituição dos itens/cartas de etapa preservando XP/augment.
+
+Propriedade Sol sequencial: scripts/data/mob_definition.gd; scripts/core/mob_catalog.gd, build_content_loader.gd, run_reward_service.gd, profile_facade.gd; scripts/actors/enemy_actor.gd; scripts/main.gd; tools/verify.ps1; este checkpoint/manifesto. Novos: scripts/core/mob_occurrence.gd, mob_skill_adapters.gd, mob_loot_resolver.gd; scripts/data/mob_loot_table.gd e UIDs; resources/build_effects/mob/demo_chaser.tres e demo_archer.tres; tests/e06_tx_mob_test.gd e e06_tx_loot_test.gd/UIDs; docs/epics/e06/e06_tx3_validation.json. Fixtures anteriores são lidas/reutilizadas; não mudar suas expectativas para ocultar falhas.
+
+Demo chaser/archer transcreverão exatamente atributos/nível1/modificadores/nomes/raios/animações atuais de EnemyActor, sem aumentar dificuldade ou conceder cartas. Apenas ocorrências normais na demo; outras categorias/skills/loot serão fixtures identificadas. Sem taxas finais ou novos itens/cartas/arte/mapas/E07. Boss categoria é suportada pelo contrato; IA de boss/campanha não entra nesta fundação.
+
+TX3 transferência adicional antes da edição: novo scripts/core/skill_impact_rules.gd/UID para o mesmo impacto de Ice Spear em player e mob, sem duplicar o efeito; Main reutiliza essa autoridade.
+
+TX3 transferência adicional antes da edição: tests/e06_tx_active_test.gd para acrescentar a prova de que tecla de atalho desabilitado não cancela outra preparação válida; expectativas TX2 preservadas.
+
+TX3 transferência adicional: scripts/core/run_state.gd para selar a substituição do catálogo de efeitos após configurar loot por mob. O resolver congelado não pode emitir carta cuja definição foi removida por outro catálogo antes da coleta. Setter continua disponível antes dessa fronteira para fixtures.
+
+TX3 transferência corretiva: scripts/core/build_effect_catalog.gd para a lista explícita de componentes secundários/ticks E05 reservados. Regressão Hunter revelou que o plano TX2 só listava famílias de proc e não o canal hunter_thorn_bleed. RunState passa a capturar também skill IDs aprendidos e componentes concretos; EnemyActor usa a mesma lista reservada. Não mudar a expectativa de sangramento/abertura nem criar limite substituto.
+
+
+## TX3 — entrega do autor, 12/10/2026
+
+Espécie/ocorrência separadas, dados fixos pelo catálogo único e StatCalculator. Os dois inimigos da demo transcritos exatamente, nível1/stats/modificadores/raios/nomes/animações preservados. Variantes permitidas declaradas; cartas da mesma base permanecem a mesma receita. MobSkillAdapters fire_spear/ice_spear executam preparação/custo/CD/projétil/poder/impacto concretos, sem restante do kit. Impacto Ice Spear compartilhado com player em SkillImpactRules.
+
+Loot parametrizado com cinco uniforms e referências/saídas validadas antes de RNG. Rare garante uncommon, rare_elite rare, boss epic; superior substitui em um exemplar; legendary só boss; sockets independentes/inelegíveis0. Nível fixo/origem espacial reais congelados. Serviço registra ator/ocorrência no spawn, só morte própria emite ticket, replay não rerrola e coleta dura precede cartas. Configurar mob loot sela o catálogo para não remover definição de carta antes da entrega. Mobs não inventam XP nem escolhas: etapa mantém XP/augment, substituindo apenas equipamento/carta quando o modo foi explicitamente configurado. Coleta atual de final de encontro drena tickets de mob anteriores em ordem. Taxas de produção não configuradas; dados reais da demo não contêm loot inventado.
+
+Nova prova:27 checks mob e49 loot. TX2 ativa54 (inclui tecla desabilitada não cancelando outra preparação), causal19/composição60 preservadas. Validação autoral dirigida: 22 nomes distintos PASS em 6 seleções, sem integral190/190. Recibo e06_tx3_validation.json; logs .godot/verification/e06_tx3/. Reuso das etapas TX1/TX2 por impacto, não soma contagens/reexecuções como cobertura nova.
+
+Renderer nativo Compatibility/OpenGL3.3/NVIDIA GTX1080, janela oculta e save de fixture: visual/disabled_bar.png e enabled_same_slot.png inspecionadas. Atribuição pela biblioteca real, retirada e reequip preservam posição; slots desabilitados legíveis e recuperados sem repovoar a barra. Sem clipping observado nesse1280x720; não prova UI14/arte final/acessibilidade completa/FPS/diversão. Script/logs/hashes no recibo; nenhum usuário/save pessoal foi alterado. Primeira fixture visual tentava atribuir por controller sem atualizar widget, corrigida para usar a biblioteca real; falha mantida e processo próprio encerrado.
+
+Falhas preservadas/correções: hook de falha do teste inicialmente tinha nome inexistente, corrigido para write_pending sem retirar assert. Hunter integração detectou canal hunter_thorn_bleed ausente no plano TX2: plano agora inclui skill IDs aprendidos e lista explícita de componentes/ticks reservados; genéricos não podem usar esses IDs como família. Regressões Hunter186/302, Geômetra46, Espiritualista86, Berserker76 e demais consumidores dirigidos PASS; suas expectativas/fórmulas não mudaram. Imports32 incidentais restaurados por conteúdo.
+
+Limites: taxas/receitas/cobertura14 e interface de pickups individuais/T3/T4/chapéus/FX permanecem posteriores, boss AI/mapas/campanha E07 não liberados. RX da fundação ampliada inteira precede consumidores; nenhum push/playtest/merge/aceite humano.

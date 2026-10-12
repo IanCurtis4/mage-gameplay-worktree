@@ -340,7 +340,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 		var skill := action_bar_input.press(event, control_preferences, action_slots)
-		if skill != &"":
+		if skill != &"" and skill in player.available_skill_ids():
 			player.cancel_active_cast()
 			var definition := ClassCatalog.skill_definition(skill)
 			if definition != null and definition.targeting == SkillDefinition.Targeting.SELF:
@@ -884,6 +884,7 @@ func _spawn_enemy(enemy_type: StringName, spawn_position: Vector2) -> EnemyActor
 	enemy.compact_control_visuals = player.is_geometer() or player.is_sentinel()
 	enemy.global_position = spawn_position
 	enemy.attack_requested.connect(_on_enemy_attack_requested)
+	enemy.mob_skill_requested.connect(_on_mob_skill_requested)
 	enemy.actor_died.connect(_on_enemy_died)
 	enemy.health.damage_applied.connect(_on_enemy_damage_resolved)
 	enemy.damage_number.connect(_show_damage_number)
@@ -891,6 +892,9 @@ func _spawn_enemy(enemy_type: StringName, spawn_position: Vector2) -> EnemyActor
 	enemy.status_damage_requested.connect(_on_attack_requested)
 	add_child(enemy)
 	enemies.append(enemy)
+	if reward_service != null and reward_service.mob_loot_enabled():
+		var registered := reward_service.register_mob_actor(enemy)
+		assert(registered["ok"], str(registered))
 	if trap_registry != null:
 		for trap: PlayerTrap in trap_registry.active_traps():
 			if trap is HunterTrap:
@@ -1286,9 +1290,8 @@ func _on_mage_projectile_hit(request: DamageRequest, target_actor: CombatActor) 
 	var result := target_actor.apply_damage(_elementalist_resonance_request(request, target_actor), rng)
 	if result.is_empty() or not bool(result["landed"]) or float(result["actual_damage"]) <= 0.0:
 		return
-	if request.skill_id == &"ice_spear" and target_actor.is_alive():
-		target_actor.apply_slow(0.30, 2.0, &"ice_spear")
-	elif request.skill_id == &"lightning" and target_actor.is_alive():
+	SkillImpactRules.spear(request.skill_id, result, target_actor)
+	if request.skill_id == &"lightning" and target_actor.is_alive():
 		target_actor.apply_electrified(4.0)
 
 func _on_fire_wall_requested(direction: Vector2, burn_request: DamageRequest) -> void:
@@ -1773,6 +1776,10 @@ func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActo
 	projectile.add_to_group("enemy_projectiles")
 
 func _on_enemy_died(actor: CombatActor) -> void:
+	if not training_mode and actor is EnemyActor and reward_service != null and reward_service.mob_loot_enabled():
+		var issued := reward_service.issue_mob_drop(actor)
+		if not issued["ok"]:
+			status_label.text = "Não foi possível preparar o loot: %s" % issued["error_code"]
 	_defender_slowed_enemies.erase(actor.get_instance_id())
 	player.hunter_state.discard_target(actor.get_instance_id())
 	player.remove_berserker_wound(actor.get_instance_id())
@@ -1919,6 +1926,8 @@ func _ensure_reward_ticket() -> Dictionary:
 	return issued
 
 func _grant_persistent_encounter_reward() -> Dictionary:
+	var mobs := reward_service.collect_pending_mob_tickets()
+	if not mobs["ok"]: return mobs
 	var issued := _ensure_reward_ticket()
 	if not issued["ok"]:
 		return issued
@@ -2863,3 +2872,19 @@ func _make_label(text_value: String, size: int, color: Color) -> Label:
 	label.add_theme_font_size_override("font_size", size)
 	label.add_theme_color_override("font_color", color)
 	return label
+
+func _on_mob_skill_requested(request: DamageRequest, target_actor: CombatActor, speed: float, maximum_range: float) -> void:
+	var source := instance_from_id(request.source_id) as Node2D
+	if source == null or target_actor == null: return
+	var projectile := MageProjectile.new()
+	var color := Color("74c9ff") if request.skill_id == &"ice_spear" else Color("ff793d")
+	projectile.configure_homing(request.copy(), target_actor, source.global_position + Vector2(0, -18), navigation, speed, maximum_range, color)
+	projectile.hit.connect(_on_mob_skill_hit)
+	if geometer_casting != null: projectile.geometer_field = geometer_casting.wall_field
+	add_child(projectile)
+	projectile.add_to_group("enemy_projectiles")
+
+func _on_mob_skill_hit(request: DamageRequest, target_actor: CombatActor) -> void:
+	if target_actor == null or not target_actor.is_alive(): return
+	var result := target_actor.apply_damage(request, rng)
+	SkillImpactRules.spear(request.skill_id, result, target_actor)

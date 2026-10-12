@@ -6,6 +6,12 @@ var effect_ledger := EffectProcLedger.new("enemy")
 signal attack_requested(request: DamageRequest, target: CombatActor, ranged: bool)
 ## Actual navigation-applied walking only. Direct placement/push is not walking.
 signal ground_walked(from: Vector2, to: Vector2)
+signal mob_skill_requested(request: DamageRequest, target: CombatActor, projectile_speed: float, maximum_range: float)
+var occurrence: MobOccurrence
+var _mob_definition: MobDefinition
+var _mob_cast: Dictionary = {}
+var _mob_cooldowns: Dictionary = {}
+var _mob_sp := 0.0
 
 const MOVEMENT_EPSILON := 0.01
 
@@ -33,29 +39,41 @@ func apply_defender_push(direction: Vector2, distance: float) -> float:
 	return before.distance_to(global_position)
 
 func configure(enemy_type: StringName, nav: ArenaNavigation, target_player: PlayerActor) -> void:
-	archetype = enemy_type
+	var catalog := BuildContentLoader.pilot().mob_catalog()
+	var spawn := MobOccurrence.new()
+	spawn.occurrence_id = "demo_%d" % get_instance_id()
+	spawn.mob_base_id = &"demo_archer" if enemy_type == &"archer" else &"demo_chaser"
+	spawn.category_id = &"normal"
+	spawn.origin_id = &"demo_arena"
+	var result := configure_occurrence(spawn, catalog, nav, target_player)
+	assert(result["ok"], str(result))
+
+func configure_occurrence(spawn: MobOccurrence, catalog: MobCatalog, nav: ArenaNavigation, target_player: PlayerActor) -> Dictionary:
+	if spawn == null or nav == null or target_player == null:
+		return BuildEffectCatalog.failure(&"invalid_occurrence")
+	var checked := spawn.validate(catalog)
+	if not checked["ok"]:
+		return checked
+	var derived := catalog.stats(spawn.mob_base_id)
+	if not derived["ok"]:
+		return derived
+	var definition: MobDefinition = checked["definition"]
+	occurrence = spawn.copy_occurrence()
+	_mob_definition = definition.duplicate(true) as MobDefinition
+	archetype = definition.archetype
 	navigation = nav
 	_navigation_revision = nav.revision
 	player = target_player
 	hunter_last_seen_position = Vector2.INF
-	if archetype == &"archer":
-		var archer_sources: Array[Dictionary] = [{
-			"source_id": &"enemy_archer_tuning",
-			"flat": {&"max_hp": -68.0, &"move_speed": -45.0},
-		}]
-		var archer_stats := StatCalculator.calculate({"str": 4, "agi": 5, "vit": 2, "int": 1, "dex": 7, "luk": 1}, {}, 1, archer_sources)
-		setup("Arqueiro", Color("d29a4a"), archer_stats, 17.0)
-		set_animation_kind(&"archer")
-	else:
-		var chaser_sources: Array[Dictionary] = [{
-			"source_id": &"enemy_warrior_tuning",
-			"flat": {&"max_hp": -62.0, &"move_speed": -25.0},
-		}]
-		var chaser_stats := StatCalculator.calculate({"str": 5, "agi": 3, "vit": 3, "int": 1, "dex": 4, "luk": 1}, {}, 1, chaser_sources)
-		setup("Guerreiro", Color("c65a68"), chaser_stats, 19.0)
-		set_animation_kind(&"warrior")
+	_mob_cast.clear()
+	_mob_cooldowns.clear()
+	_mob_sp = derived["breakdown"].value(&"max_sp")
+	setup(definition.display_name, definition.tint, derived["breakdown"], definition.collision_radius)
+	set_animation_kind(definition.animation_kind)
+	hard_controls.boss = occurrence.category_id == &"boss"
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 	_refresh_player_acquisition()
+	return {"ok": true}
 
 func _process(delta: float) -> void:
 	if is_inside_tree() and get_tree().paused:
@@ -70,6 +88,8 @@ func _process(delta: float) -> void:
 		_path_index = 0
 		_repath_time = 0.0
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
+	for skill: StringName in _mob_cooldowns:
+		_mob_cooldowns[skill] = maxf(0.0, float(_mob_cooldowns[skill]) - delta)
 	if taunt_remaining > 0.0:
 		taunt_remaining = maxf(0.0, taunt_remaining - delta)
 		queue_redraw()
@@ -78,10 +98,12 @@ func _process(delta: float) -> void:
 		_path_index = 0
 		_repath_time = 0.0
 	if is_stunned():
+		_mob_cast.clear()
 		_path.clear()
 		_path_index = 0
 		return
 	if is_feared():
+		_mob_cast.clear()
 		if is_rooted():
 			_path.clear()
 			_path_index = 0
@@ -89,6 +111,9 @@ func _process(delta: float) -> void:
 		_repath_time -= delta
 		_update_fear_path()
 		_move_along_path(delta)
+		return
+	if not _mob_cast.is_empty():
+		_advance_mob_cast(delta)
 		return
 	if not _refresh_player_acquisition():
 		if player.is_hunter() and hunter_last_seen_position.is_finite():
@@ -128,11 +153,14 @@ func _process(delta: float) -> void:
 func _try_attack(ranged: bool) -> void:
 	if is_stunned() or is_feared() or attack_cooldown > 0.0 or not player_target_acquired or (taunt_remaining <= 0.0 and not player.can_be_acquired_by(global_position)):
 		return
+	if _mob_definition != null and not _mob_definition.skill_ids.is_empty():
+		_try_declared_skill()
+		return
 	if not effect_ledger.can_create_root() or (ranged and is_inside_tree() and not EffectProcLedger.projectile_slots_available(get_tree(), 1)):
 		return
 	attack_cooldown = (1.70 if ranged else 1.30) * stat_breakdown.value(&"attacks_per_second") / attacks_per_second()
 	var request := DamageRequest.new()
-	request.context = effect_ledger.new_root(get_instance_id())
+	request.context = effect_ledger.new_root(get_instance_id(), false, "", false, _causal_plan())
 	request.source_id = get_instance_id()
 	request.target_id = player.get_instance_id()
 	request.skill_id = &"enemy_arrow" if ranged else &"enemy_claw"
@@ -165,6 +193,7 @@ func apply_taunt(duration: float) -> bool:
 	return true
 
 func clear_statuses() -> void:
+	_mob_cast.clear()
 	taunt_remaining = 0.0
 	super.clear_statuses()
 
@@ -244,3 +273,53 @@ func _move_along_path(delta: float) -> void:
 		remaining_distance = maxf(0.0, remaining_distance - travel)
 		if travel >= distance - MOVEMENT_EPSILON:
 			_path_index += 1
+
+func _causal_plan() -> Dictionary:
+	var controller := get_parent() as RunController
+	if controller == null:
+		return {} # Legacy isolated fixtures only.
+	var targets: Array[int] = [get_instance_id(), player.get_instance_id()]
+	for actor: CombatActor in controller.enemies:
+		if is_instance_valid(actor) and actor.is_alive() and actor.get_instance_id() not in targets:
+			targets.append(actor.get_instance_id())
+	var families := BuildEffectCatalog.INTRINSIC_FAMILIES.duplicate()
+	families.append_array(BuildEffectCatalog.INTRINSIC_COMPONENTS)
+	for skill: StringName in _mob_definition.skill_ids:
+		if skill not in families: families.append(skill)
+	return {"families": families, "targets": targets, "carriers": []}
+
+func _try_declared_skill() -> bool:
+	if _mob_definition == null or not _mob_cast.is_empty() or not effect_ledger.can_create_root():
+		return false
+	for skill: StringName in _mob_definition.skill_ids:
+		if float(_mob_cooldowns.get(skill, 0.0)) > 0.0:
+			continue
+		var captured := MobSkillAdapters.capture(skill, int(_mob_definition.skill_ranks[skill]), stat_breakdown, get_instance_id(), player.get_instance_id())
+		var rank: SkillRankDefinition = captured["rank_definition"]
+		if _mob_sp < rank.sp_cost or global_position.distance_to(player.global_position) > rank.range or not navigation.is_segment_clear(global_position, player.global_position, 0.0):
+			continue
+		captured["remaining"] = captured["cast_time"]
+		_mob_cast = captured
+		_path.clear()
+		if float(captured["remaining"]) <= 0.0:
+			_advance_mob_cast(0.0)
+		return true
+	return false
+
+func _advance_mob_cast(delta: float) -> void:
+	if _mob_cast.is_empty(): return
+	_mob_cast["remaining"] = maxf(0.0, float(_mob_cast["remaining"]) - delta)
+	if float(_mob_cast["remaining"]) > 0.0: return
+	var captured := _mob_cast
+	_mob_cast = {}
+	var rank: SkillRankDefinition = captured["rank_definition"]
+	if not is_alive() or player == null or not player.is_alive() or is_stunned() or is_feared() or global_position.distance_to(player.global_position) > rank.range or not navigation.is_segment_clear(global_position, player.global_position, 0.0) or _mob_sp < rank.sp_cost or not effect_ledger.can_create_root():
+		return
+	if is_inside_tree() and not EffectProcLedger.projectile_slots_available(get_tree(), 1): return
+	var request: DamageRequest = captured["request"]
+	request.context = effect_ledger.new_root(get_instance_id(), false, "", false, _causal_plan())
+	request.damage_dealt_multiplier = outgoing_damage_multiplier() * scenario_damage_multiplier
+	_mob_sp -= rank.sp_cost
+	_mob_cooldowns[request.skill_id] = captured["cooldown"]
+	presentation_action.emit(&"cast_release", global_position.direction_to(player.global_position), 0.18)
+	mob_skill_requested.emit(request, player, rank.projectile_speed, rank.range)

@@ -16,6 +16,7 @@ var _effect_catalog: BuildEffectCatalog
 var effect_ledger := EffectProcLedger.new()
 var runtime_revision: int = 1
 var transaction_locked := false
+var _catalog_frozen := false
 var card_sockets: Dictionary = {}
 var card_instances: Dictionary = {}
 var card_inventory := RunCardInventory.new()
@@ -83,6 +84,8 @@ func effect_catalog() -> BuildEffectCatalog:
 	return _effect_catalog.copy_catalog()
 
 func set_effect_catalog(catalog: BuildEffectCatalog) -> Dictionary:
+	if _catalog_frozen:
+		return BuildEffectCatalog.failure(&"catalog_frozen")
 	if transaction_locked:
 		return BuildEffectCatalog.failure(&"save_in_progress")
 	if catalog == null or _offer_open:
@@ -354,6 +357,10 @@ func add_local_equipment(definition_id: StringName, metadata: Dictionary) -> Dic
 
 func causal_plan(targets: Array[int], carriers: Array[int] = []) -> Dictionary:
 	var families: Array[StringName] = BuildEffectCatalog.INTRINSIC_FAMILIES.duplicate()
+	families.append_array(BuildEffectCatalog.INTRINSIC_COMPONENTS)
+	for skill: StringName in composed_build().get("skill_ranks", {}):
+		if effective_skill_rank(skill) > 0 and skill not in families:
+			families.append(skill)
 	for proc: Dictionary in composed_build().get("procs", []):
 		if proc["family_id"] not in families:
 			families.append(proc["family_id"])
@@ -375,3 +382,6 @@ func available_active_ids() -> Array[StringName]:
 func has_item_active(skill: StringName) -> bool:
 	_ensure_effect_cache()
 	return _effect_cache.get("item_grants", {}).has(skill)
+
+func freeze_effect_catalog() -> void:
+	_catalog_frozen = true

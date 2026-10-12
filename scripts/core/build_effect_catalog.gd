@@ -6,6 +6,7 @@ const ORIGINS: Array[StringName] = [&"augment", &"equipment", &"card"]
 const SLOTS: Array[StringName] = [&"head", &"neck", &"shoulders", &"arms", &"torso", &"cloak", &"legs", &"feet", &"main_hand", &"off_hand", &"accessory_1", &"accessory_2", &"accessory_3", &"accessory_4"]
 const SCALAR_AXES: Array[StringName] = [&"range"]
 const INTRINSIC_FAMILIES: Array[StringName] = [&"elementalist_tri_nova_ice", &"elementalist_tri_nova_lightning", &"hunter_exploit", &"sentinel_focus", &"berserker_wound", &"berserker_pursuit", &"berserker_breath_heal", &"elementalist_focus", &"spiritualist_echo", &"spiritualist_echo_recovery", &"spiritualist_channel_focus", &"spiritualist_drain_heal", &"blood_thirst", &"defender_watch", &"defender_token", &"defender_guard_return"]
+const INTRINSIC_COMPONENTS: Array[StringName] = [&"basic_attack", &"burn_tick", &"bleed_tick", &"hunter_thorn_bleed", &"berserker_blood_rift_tick", &"berserker_rupture_detonation", &"geometer_wall_entry", &"geometer_wall_exit", &"geometer_foundation_fire", &"geometer_foundation_lightning", &"geometer_rule_fire", &"geometer_rule_lightning", &"geometer_resolution_fire", &"geometer_resolution_ice", &"geometer_resolution_lightning", &"geometer_triangle_maintenance", &"geometer_incidence"]
 const PROJECTILE_SKILLS: Array[StringName] = [&"fire_spear", &"ice_spear", &"double_shot"]
 var _definitions: Dictionary = {}
 var _mob_catalog := MobCatalog.new()
@@ -154,7 +155,7 @@ static func validate_effect(effect: EffectDefinition) -> Dictionary:
 		elif effect.handler_id != EffectDefinition.Handler.SKILL_SCALAR or effect.axis not in SCALAR_AXES or effect.unit != &"units" or not _all_projectile_skills(effect.target_skill_ids):
 			return failure(&"unsupported_skill_axis")
 	elif effect.kind == EffectDefinition.Kind.PROC:
-		if effect.family_id in INTRINSIC_FAMILIES or effect.family_id == &"geometer_incidence_refund" or ClassCatalog.skill_definition(effect.family_id) != null:
+		if effect.family_id in INTRINSIC_FAMILIES or effect.family_id in INTRINSIC_COMPONENTS or effect.family_id == &"geometer_incidence_refund" or ClassCatalog.skill_definition(effect.family_id) != null:
 			return failure(&"intrinsic_family_requires_adapter")
 		if effect.handler_id != EffectDefinition.Handler.HIT_DAMAGE or effect.trigger != EffectDefinition.Trigger.ON_HIT or effect.axis not in [&"physical_damage", &"magic_damage"] or effect.magnitude < 0.0 or effect.increased < 0.0 or effect.limit <= 0.0 or effect.unit != &"damage":
 			return failure(&"unsupported_proc")

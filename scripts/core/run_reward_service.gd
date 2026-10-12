@@ -10,6 +10,9 @@ var _queue: Array[String] = []
 var _next_sequence := 1
 var _busy := false
 var _uncertain_ticket := ""
+var _loot_resolver: MobLootResolver
+var _mob_actors: Dictionary = {}
+var _occurrence_actors: Dictionary = {}
 
 func _init(controller: RunController) -> void:
 	_owner = weakref(controller)
@@ -31,6 +34,8 @@ func issue(event_id: String, reward_id: StringName, stage_reward: bool = false) 
 	if not resolved["ok"]:
 		return resolved
 	var payload: Dictionary = resolved["reward"].duplicate(true)
+	if stage_reward and mob_loot_enabled():
+		payload["equipment_ids"] = []
 	payload["equipment_drops"] = []
 	var catalog := _run.effect_catalog()
 	var profile_catalog := _run.build_snapshot._skill_catalog
@@ -49,7 +54,7 @@ func issue(event_id: String, reward_id: StringName, stage_reward: bool = false) 
 		payload["equipment_drops"].append(metadata)
 	var item_pool: Array[StringName] = []
 	var card_pool: Array[StringName] = []
-	if stage_reward:
+	if stage_reward and not mob_loot_enabled():
 		for id: StringName in catalog.ids(&"equipment"):
 			var item := catalog.get_definition(&"equipment", id) as EquipmentDefinition
 			if not item.starter and BuildEffectCatalog.definition_allowed(item, _run.build_snapshot):
@@ -168,7 +173,8 @@ func collect(ticket_id: String) -> Dictionary:
 			var granted := _run.card_inventory.grant(entry["card_id"], _run.effect_catalog(), ticket_id)
 			entry["card_instance_id"] = granted.get("card_instance_id", &"")
 			_run.card_instances = _run.card_inventory.describe()["instances"]
-		_run.queue_choice()
+		if not entry.get("mob_ticket", false):
+			_run.queue_choice()
 		_uncertain_ticket = ""
 		controller.set_inventory_freeze(false)
 		result["persistent"] = persistent
@@ -191,3 +197,75 @@ func has_pending_transaction() -> bool:
 
 func has_uncollected() -> bool:
 	return not _queue.is_empty()
+
+func mob_loot_enabled() -> bool:
+	return _loot_resolver != null
+
+func configure_mob_loot(table: MobLootTable) -> Dictionary:
+	var controller := _owner.get_ref() as RunController
+	if controller == null or not _events.is_empty() or has_pending_transaction() or controller.training_mode:
+		return BuildEffectCatalog.failure(&"invalid_mob_event")
+	var created := MobLootResolver.create(_run.effect_catalog(), table)
+	if not created["ok"]: return created
+	var resolver: MobLootResolver = created["resolver"]
+	var actors: Dictionary = {}
+	var occurrences: Dictionary = {}
+	for actor: CombatActor in controller.enemies:
+		if not actor is EnemyActor or actor.get_parent() != controller or actor.occurrence == null:
+			return BuildEffectCatalog.failure(&"invalid_mob_event")
+		var checked := resolver.validate_occurrence(actor.occurrence)
+		if not checked["ok"]: return checked
+		if occurrences.has(actor.occurrence.occurrence_id): return BuildEffectCatalog.failure(&"invalid_occurrence")
+		actors[actor.get_instance_id()] = {"actor": weakref(actor), "occurrence": actor.occurrence.copy_occurrence()}
+		occurrences[actor.occurrence.occurrence_id] = actor.get_instance_id()
+	_loot_resolver = resolver
+	_mob_actors = actors
+	_occurrence_actors = occurrences
+	_run.freeze_effect_catalog()
+	return {"ok": true}
+
+func register_mob_actor(actor: EnemyActor) -> Dictionary:
+	var controller := _owner.get_ref() as RunController
+	if not mob_loot_enabled() or controller == null or not is_instance_valid(actor) or not actor.is_alive() or actor.get_parent() != controller or actor not in controller.enemies or actor.occurrence == null:
+		return BuildEffectCatalog.failure(&"invalid_mob_event")
+	var checked := _loot_resolver.validate_occurrence(actor.occurrence)
+	if not checked["ok"]: return checked
+	var id := actor.get_instance_id()
+	if _mob_actors.has(id): return {"ok": true, "already_applied": true}
+	if _occurrence_actors.has(actor.occurrence.occurrence_id): return BuildEffectCatalog.failure(&"invalid_occurrence")
+	_mob_actors[id] = {"actor": weakref(actor), "occurrence": actor.occurrence.copy_occurrence()}
+	_occurrence_actors[actor.occurrence.occurrence_id] = id
+	return {"ok": true}
+
+func issue_mob_drop(actor: EnemyActor) -> Dictionary:
+	var controller := _owner.get_ref() as RunController
+	if not mob_loot_enabled() or controller == null or controller.run_state != _run or controller.run_finished or not controller.player.is_alive() or not is_instance_valid(actor):
+		return BuildEffectCatalog.failure(&"invalid_mob_event")
+	var registered: Dictionary = _mob_actors.get(actor.get_instance_id(), {})
+	if registered.is_empty() or registered["actor"].get_ref() != actor or actor.get_parent() != controller or actor.is_alive():
+		return BuildEffectCatalog.failure(&"unknown_mob_actor")
+	var occurrence: MobOccurrence = registered["occurrence"]
+	var event := "mob:" + occurrence.occurrence_id
+	if _events.has(event): return ticket(_events[event])
+	if has_pending_transaction() or controller.inventory_frozen: return BuildEffectCatalog.failure(&"save_in_progress")
+	var checked := _loot_resolver.validate_occurrence(occurrence)
+	if not checked["ok"]: return checked
+	var values: Array[float] = []
+	for index: int in 5: values.append(controller.rng.randf())
+	var rolled := _loot_resolver.roll(occurrence, values)
+	assert(rolled["ok"], "Validated immutable loot must resolve without failure")
+	var payload := {"base_xp": 0, "job_xp": 0, "equipment_ids": [], "equipment_drops": rolled["equipment_drops"].duplicate(true), "stat_increments": {}}
+	for drop: Dictionary in payload["equipment_drops"]: payload["equipment_ids"].append(drop["definition_id"])
+	var ticket_id := "reward-%s-%d" % [_run.run_id.md5_text(), _next_sequence]
+	var entry := {"ok": true, "error_code": &"", "request_id": ticket_id, "ticket_id": ticket_id, "event_id": event, "reward_id": &"mob_drop", "sequence": _next_sequence, "payload": payload, "item_id": payload["equipment_ids"][0] if not payload["equipment_ids"].is_empty() else &"", "card_id": rolled["card_id"], "stage_reward": false, "mob_ticket": true, "delivered": false, "message": "Loot do inimigo coletado.", "mob_base_id": occurrence.mob_base_id, "category_id": occurrence.category_id, "occurrence_id": occurrence.occurrence_id}
+	_tickets[ticket_id] = entry
+	_events[event] = ticket_id
+	_queue.append(ticket_id)
+	_next_sequence += 1
+	return ticket(ticket_id)
+
+func collect_pending_mob_tickets() -> Dictionary:
+	while not _queue.is_empty() and _tickets[_queue[0]].get("mob_ticket", false):
+		var result := collect(_queue[0])
+		if not result["ok"]: return result
+	return {"ok": true}

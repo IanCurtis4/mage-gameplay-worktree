@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MobDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/mob_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"demo_archer"
+display_name = "Arqueiro"
+base_category = &"normal"
+allowed_occurrence_categories = Array[StringName]([&"normal"])
+fixed_level = 1
+primary_attributes = {&"str": 4, &"agi": 5, &"vit": 2, &"int": 1, &"dex": 7, &"luk": 1}
+modifier_sources = Array[Dictionary]([{"source_id": &"enemy_archer_tuning", "flat": {&"max_hp": -68.0, &"move_speed": -45.0}}])
+archetype = &"archer"
+animation_kind = &"archer"
+tint = Color(0.8235294117647058, 0.6039215686274509, 0.2901960784313726, 1)
+collision_radius = 17.0
