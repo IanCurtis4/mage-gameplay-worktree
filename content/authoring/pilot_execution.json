@@ -1,0 +1,208 @@
+{
+	"mechanical_digest": "f90a083a54b6d42ed0d4d400f20834f4ba0b5cddc8c4f2835bc94db624706100",
+	"observations": [
+		{
+			"baseline": {
+				"cooldown": 6.0,
+				"damage": 41.0,
+				"launched": true,
+				"removed_before_impact": false,
+				"selected_emissions": 0,
+				"sp_paid": 16.0,
+				"weapon_emissions": 1
+			},
+			"branch": "A",
+			"identity": "defender",
+			"real_launch": true,
+			"selected": {
+				"cooldown": 6.0,
+				"damage": 47.0,
+				"launched": true,
+				"removed_before_impact": false,
+				"selected_emissions": 1,
+				"sp_paid": 16.0,
+				"weapon_emissions": 1
+			},
+			"skill_id": "defender_counterstroke",
+			"tactical_validated": false
+		},
+		{
+			"baseline": {
+				"cooldown": 9.0,
+				"damage": 21.0,
+				"launched": true,
+				"removed_before_impact": false,
+				"selected_emissions": 0,
+				"sp_paid": 18.0,
+				"weapon_emissions": 0
+			},
+			"branch": "B",
+			"identity": "defender",
+			"real_launch": true,
+			"selected": {
+				"cooldown": 9.0,
+				"damage": 27.0,
+				"launched": true,
+				"removed_before_impact": false,
+				"selected_emissions": 1,
+				"sp_paid": 18.0,
+				"weapon_emissions": 0
+			},
+			"skill_id": "defender_line_lock",
+			"tactical_validated": false
+		},
+		{
+			"baseline": {
+				"cooldown": 5.0,
+				"damage": 40.0,
+				"launched": true,
+				"removed_before_impact": false,
+				"selected_emissions": 0,
+				"sp_paid": 17.0,
+				"weapon_emissions": 1
+			},
+			"branch": "A",
+			"identity": "berserker",
+			"real_launch": true,
+			"selected": {
+				"cooldown": 5.0,
+				"damage": 46.0,
+				"launched": true,
+				"removed_before_impact": false,
+				"selected_emissions": 1,
+				"sp_paid": 17.0,
+				"weapon_emissions": 1
+			},
+			"skill_id": "berserker_rupture",
+			"tactical_validated": false
+		},
+		{
+			"baseline": {
+				"cooldown": 9.0,
+				"damage": 36.0,
+				"launched": true,
+				"removed_before_impact": false,
+				"selected_emissions": 0,
+				"sp_paid": 22.0,
+				"weapon_emissions": 0
+			},
+			"branch": "B",
+			"identity": "berserker",
+			"real_launch": true,
+			"selected": {
+				"cooldown": 9.0,
+				"damage": 42.0,
+				"launched": true,
+				"removed_before_impact": false,
+				"selected_emissions": 1,
+				"sp_paid": 22.0,
+				"weapon_emissions": 0
+			},
+			"skill_id": "berserker_execution",
+			"tactical_validated": false
+		},
+		{
+			"baseline": {
+				"cooldown": 6.0,
+				"damage": 56.0,
+				"launched": true,
+				"removed_before_impact": false,
+				"selected_emissions": 0,
+				"sp_paid": 20.0,
+				"weapon_emissions": 0
+			},
+			"branch": "A",
+			"identity": "elementalist",
+			"real_launch": true,
+			"selected": {
+				"cooldown": 6.0,
+				"damage": 62.0,
+				"launched": true,
+				"removed_before_impact": false,
+				"selected_emissions": 1,
+				"sp_paid": 20.0,
+				"weapon_emissions": 0
+			},
+			"skill_id": "elementalist_flame_burst",
+			"tactical_validated": false
+		},
+		{
+			"baseline": {
+				"cooldown": 8.0,
+				"damage": 33.0,
+				"launched": true,
+				"removed_before_impact": false,
+				"selected_emissions": 0,
+				"sp_paid": 19.0,
+				"weapon_emissions": 0
+			},
+			"branch": "B",
+			"identity": "elementalist",
+			"real_launch": true,
+			"selected": {
+				"cooldown": 8.0,
+				"damage": 39.0,
+				"launched": true,
+				"removed_before_impact": false,
+				"selected_emissions": 1,
+				"sp_paid": 19.0,
+				"weapon_emissions": 0
+			},
+			"skill_id": "elementalist_glacial_ring",
+			"tactical_validated": false
+		},
+		{
+			"baseline": {
+				"cooldown": 6.0,
+				"damage": 76.0,
+				"launched": true,
+				"removed_before_impact": false,
+				"selected_emissions": 0,
+				"sp_paid": 14.0,
+				"weapon_emissions": 0
+			},
+			"branch": "A",
+			"identity": "sentinel",
+			"real_launch": true,
+			"selected": {
+				"cooldown": 6.0,
+				"damage": 82.0,
+				"launched": true,
+				"removed_before_impact": false,
+				"selected_emissions": 1,
+				"sp_paid": 14.0,
+				"weapon_emissions": 0
+			},
+			"skill_id": "sentinel_headshot",
+			"tactical_validated": false
+		},
+		{
+			"baseline": {
+				"cooldown": 9.77272727272727,
+				"damage": 22.0,
+				"launched": true,
+				"removed_before_impact": false,
+				"selected_emissions": 0,
+				"sp_paid": 18.0,
+				"weapon_emissions": 0
+			},
+			"branch": "B",
+			"identity": "sentinel",
+			"real_launch": true,
+			"selected": {
+				"cooldown": 9.77272727272727,
+				"damage": 28.0,
+				"launched": true,
+				"removed_before_impact": false,
+				"selected_emissions": 1,
+				"sp_paid": 18.0,
+				"weapon_emissions": 0
+			},
+			"skill_id": "sentinel_net_shot",
+			"tactical_validated": false
+		}
+	],
+	"production_published": false,
+	"scope": "real_launch_proof_only",
+	"tactical_validated": false
+}

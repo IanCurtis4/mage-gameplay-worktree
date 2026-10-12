@@ -1,3 +1,5 @@
+> Retomada12/10: [provas reais](e06/e06_pilot_execution.md) entregues/validadas; usuário escolheu [eco e vértices fixos](e06/e06_spatial_policies.md), demais quatro transformações propostas pendentes.
+
 > Continuação autorizada de 12/10/2026: [T3-B](e06/e06_content_pilot.md), catálogo piloto no ilvl 1 com valores explícitos; progressão e taxas depois. Recursos offline, composição de vinte comparações e limitações táticas declaradas. Sol mecânicas, Luna nomes/flavor e supervisão automatizada. Sem liberação de UI/E07/publicação.
 
 > Autorização prevalente de 12/10/2026: base racional T3-A por Sol e população de nomes/flavor por Luna. [T3-A](e06/e06_content_base.md) entregue e validada,24 exemplos fora de produção e12 testes dirigidos. O catálogo final T3/20 builds, UI T4 e decisões de tuning/rates continuam posteriores. Este recorte substitui a suspensão anterior apenas para a base de autoria.

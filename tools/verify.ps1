@@ -256,6 +256,7 @@ Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_content_editorial_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_content_pilot_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_content_pilot_runtime_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_pilot_execution_test.gd')
 
 
 

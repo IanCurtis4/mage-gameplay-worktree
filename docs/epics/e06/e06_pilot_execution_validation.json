@@ -1,0 +1,362 @@
+{
+  "schema": "e06_pilot_execution_validation_v1",
+  "role": "automated_test_supervision",
+  "semantic_audit": false,
+  "source_commit": "985f6bcad206b87aeabdf7b5f9938536f7aa25d3",
+  "source_tree": "ef98a70618228d12b737bf469160e2588bccc0eb",
+  "candidate_tree": "dirty working tree; see manifest deltas",
+  "branch": "codex/e06-inventory",
+  "engine_path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/review-engine/Godot.exe",
+  "engine_version": "Godot 4.7.2.stable.official.ed1daf0bf",
+  "powershell_path": "C:/Users/João Pedro/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/powershell/pwsh.exe",
+  "runner": "tools/verify.ps1",
+  "selection": [
+    "editor_import",
+    "e05_defender_skills_test",
+    "e05_defender_guard_test",
+    "e06_effects_runtime_test",
+    "e06_tx_active_test",
+    "e06_content_pilot_runtime_test",
+    "e06_pilot_execution_test"
+  ],
+  "selected_count": 7,
+  "runner_step_count": 198,
+  "result": "PASS",
+  "steps_passed": 7,
+  "steps_failed": 0,
+  "unselected_steps_run": 0,
+  "exit_code": 0,
+  "timeout_seconds": 60,
+  "run_start_utc": "2026-10-12T20:42:31.2872978Z",
+  "run_end_utc": "2026-10-12T20:43:05.5599636Z",
+  "test_evidence": {
+    "effects_runtime_checks": 53,
+    "effects_runtime_failures": 0,
+    "tx_active_failures": 0,
+    "pilot_execution_failures": 0,
+    "defender_skills_checks": 32,
+    "defender_guard_checks": 18,
+    "tx_active_checks": 58,
+    "pilot_execution_checks": 128,
+    "pilot_runtime_checks": 244,
+    "pilot_runtime_failures": 0
+  },
+  "report_output": {
+    "path": "content/authoring/pilot_execution.json",
+    "sha256": "C1B282428F4F4A5E9A2F4D59D002EBBEE0136F4E1C2CE00C00C8D892E029BAB2",
+    "expected_mechanical_digest": "f90a083a54b6d42ed0d4d400f20834f4ba0b5cddc8c4f2835bc94db624706100",
+    "all_selected_emissions_one": true,
+    "all_real_launches": true,
+    "all_damage_delta_six": true,
+    "observation_count": 8,
+    "production_published": false,
+    "mechanical_digest": "f90a083a54b6d42ed0d4d400f20834f4ba0b5cddc8c4f2835bc94db624706100",
+    "tactical_validated": false
+  },
+  "inputs": {
+    "active_effect_resource_changes": 0,
+    "pilot_texts_path": "content/authoring/pilot_texts.json",
+    "pilot_texts_unchanged": true,
+    "pilot_texts_expected_sha256": "80b8c21eb7032f773989941df9b05779075c1e17389019d485bf0dc8670b950a",
+    "active_effect_resources_unchanged": true,
+    "active_effect_resource_count": 20,
+    "pilot_texts_sha256": "80B8C21EB7032F773989941DF9B05779075C1E17389019D485BF0DC8670B950A"
+  },
+  "historical_sol_evidence": {
+    "luna_reran_historical_failure": false,
+    "initial_run": "109 checks, 1 failure: defender weapon whitelist used obsolete defender_counter_cut",
+    "corrected_run": "128 checks PASS, including 8 real launches and 2 in-flight Sentinel projectile removal observations"
+  },
+  "generated_artifacts": {
+    "pilot_execution_uid": "tests/e06_pilot_execution_test.gd.uid present after editor import; classified as generated editor metadata, alongside frozen candidate test source.",
+    "editor_import_may_generate_import_metadata": true,
+    "pilot_execution_json": "expected generated output, validated and hashed"
+  },
+  "manifest": {
+    "before_count": 725,
+    "after_count": 725,
+    "changed_or_added": [
+      {
+        "sha256": "F450CC09E8CDCAB559FF038050902F83EB835AC9393690F04D2B24011EB0DF9E",
+        "classification": "pre-existing frozen candidate test source",
+        "path": "tests/e06_pilot_execution_test.gd"
+      },
+      {
+        "sha256": "C8694A356A601FBDEAF6A8FBD08DAB4244927510BB6EC1BC006D5F219FFDAD97",
+        "classification": "generated editor UID sidecar during import",
+        "path": "tests/e06_pilot_execution_test.gd.uid"
+      },
+      {
+        "sha256": "C1B282428F4F4A5E9A2F4D59D002EBBEE0136F4E1C2CE00C00C8D892E029BAB2",
+        "classification": "expected test-generated output",
+        "path": "content/authoring/pilot_execution.json"
+      }
+    ],
+    "after_path": ".godot/verification/e06_pilot_execution/luna_final/manifest_after.json",
+    "before_path": ".godot/verification/e06_pilot_execution/luna_final/manifest_before.json",
+    "note": "The broad before/after manifest hashes remained identical across captured input categories. The three listed candidate/generated paths are explicitly captured after import/output creation; no pre-run baseline hash is available for them.",
+    "source_commit": "985f6bcad206b87aeabdf7b5f9938536f7aa25d3",
+    "input_manifest_sha256": "19CD271481924B72C3126800C253FEF7625BF8DDA0B4C12C1E6F3428CEC1F11A",
+    "input_manifest_captured_file_count": 725,
+    "candidate_untracked_note": "Pilot execution test, UID sidecar, and generated output were not part of the broad pre-run manifest baseline; individually documented with hashes/classification under manifest.changed_or_added. The baseline working-tree inventory is preserved in runner plan."
+  },
+  "logs": [
+    {
+      "path": ".godot/verification/e06_pilot_execution/luna_final/verify.stdout_stderr.log",
+      "sha256": "D05F08799DCB9D969591F2BA0786FD91F1F581075CA092283BF34075A36CF33D"
+    },
+    {
+      "path": ".godot/verification/e06_pilot_execution/luna_final/verify.exit.json",
+      "sha256": "675D4458854FFB0FD823EA17DC8BD94A1F720EBDC527D6767FAF177344F1409A"
+    }
+  ],
+  "limitations": [
+    "Somente os 7 nomes selecionados foram executados; o runner contém 198 etapas.",
+    "Supervisão automatizada de testes, sem auditoria semântica independente.",
+    "HEAD é a base source_commit; o candidato inclui alterações locais congeladas, com diferenças registradas nos manifests.",
+    "Nenhum playtest, publicação, preview ou execução integral foi realizado."
+  ],
+  "evidence_file_hashes": [
+    {
+      "name": "manifest_before",
+      "path": ".godot\\verification\\e06_pilot_execution\\luna_final\\manifest_before.json",
+      "sha256": "19CD271481924B72C3126800C253FEF7625BF8DDA0B4C12C1E6F3428CEC1F11A",
+      "length": 113901
+    },
+    {
+      "name": "manifest_after",
+      "path": ".godot\\verification\\e06_pilot_execution\\luna_final\\manifest_after.json",
+      "sha256": "C7A40B438CAD6BC91B1770D7B827B621574937B06E2FCBFF9D0674DA3703D44F",
+      "length": 113789
+    },
+    {
+      "name": "verify_runner",
+      "path": "tools/verify.ps1",
+      "sha256": "BCA5B9599C996EE8C912B6B278E05DDB102A7931A73DEF2BBA0078471CD8AEDA",
+      "length": 29636
+    },
+    {
+      "name": "godot_engine",
+      "path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/review-engine/Godot.exe",
+      "sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+      "length": 180858888
+    },
+    {
+      "name": "execution_log",
+      "path": ".godot\\verification\\e06_pilot_execution\\luna_final\\verify.stdout_stderr.log",
+      "sha256": "D05F08799DCB9D969591F2BA0786FD91F1F581075CA092283BF34075A36CF33D",
+      "length": 2001
+    },
+    {
+      "name": "exit_metadata",
+      "path": ".godot\\verification\\e06_pilot_execution\\luna_final\\verify.exit.json",
+      "sha256": "675D4458854FFB0FD823EA17DC8BD94A1F720EBDC527D6767FAF177344F1409A",
+      "length": 568
+    }
+  ],
+  "completion_records": [
+    {
+      "test": "editor_import",
+      "result": "PASS",
+      "exit_code": 0
+    },
+    {
+      "test": "e05_defender_skills_test",
+      "result": "PASS",
+      "failures": 0,
+      "checks": 32
+    },
+    {
+      "test": "e05_defender_guard_test",
+      "result": "PASS",
+      "failures": 0,
+      "checks": 18
+    },
+    {
+      "test": "e06_effects_runtime_test",
+      "result": "PASS",
+      "failures": 0,
+      "checks": 53
+    },
+    {
+      "test": "e06_tx_active_test",
+      "result": "PASS",
+      "failures": 0,
+      "checks": 58
+    },
+    {
+      "test": "e06_content_pilot_runtime_test",
+      "result": "PASS",
+      "failures": 0,
+      "checks": 244
+    },
+    {
+      "test": "e06_pilot_execution_test",
+      "result": "PASS",
+      "failures": 0,
+      "checks": 128
+    }
+  ],
+  "runner_evidence": {
+    "plan_original_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\plan.json",
+    "plan_archived_path": ".godot\\verification\\e06_pilot_execution\\luna_final\\checks\\plan.json",
+    "plan_sha256": "2C3CE254AF0232224F895D3A46B7D03F77C9238665BB9C302ECFC47DEF7514F8",
+    "checks_original_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\checks.jsonl",
+    "checks_archived_path": ".godot\\verification\\e06_pilot_execution\\luna_final\\checks\\checks.jsonl",
+    "checks_sha256": "0B88C5125FDBEB0E4CCBCA53257ACD5FC57D817F3AB7191BCCDDC9E6D5B44046",
+    "runner_sha256": "BCA5B9599C996EE8C912B6B278E05DDB102A7931A73DEF2BBA0078471CD8AEDA",
+    "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+    "plan_total_steps": 198,
+    "plan_selected_steps": 7,
+    "selection": [
+      "editor_import",
+      "e05_defender_skills_test",
+      "e05_defender_guard_test",
+      "e06_effects_runtime_test",
+      "e06_tx_active_test",
+      "e06_content_pilot_runtime_test",
+      "e06_pilot_execution_test"
+    ],
+    "selection_matches_records": true,
+    "fallback_note": "tools/verify.ps1 wrote evidence to the default .godot/verification root, not luna_final. Recovery was by byte-preserving copies only; original files were preserved and not moved/deleted. No tests rerun.",
+    "records": [
+      {
+        "name": "editor_import",
+        "runner_index": 1,
+        "execution_index": 1,
+        "original_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\001.output.log",
+        "archived_path": ".godot\\verification\\e06_pilot_execution\\luna_final\\checks\\001.output.log",
+        "output_sha256": "5D5D20621941F273A3F1E397B111DB79A6102E1A7A90519420A222EDD7496CAC",
+        "recorded_output_sha256": "5D5D20621941F273A3F1E397B111DB79A6102E1A7A90519420A222EDD7496CAC",
+        "output_hash_matches": true,
+        "engine_original_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\001.engine.log",
+        "engine_archived_path": ".godot\\verification\\e06_pilot_execution\\luna_final\\checks\\001.engine.log",
+        "engine_sha256": "0D9CBC547592524EC996812C0EDDF765E6D4C97B76D9AAE8C753597B68523D76",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60,
+        "output_copy_matches_source": true,
+        "engine_copy_matches_source": true
+      },
+      {
+        "name": "e06_effects_runtime_test",
+        "runner_index": 8,
+        "execution_index": 2,
+        "original_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\008-e06_effects_runtime_test.output.log",
+        "archived_path": ".godot\\verification\\e06_pilot_execution\\luna_final\\checks\\008-e06_effects_runtime_test.output.log",
+        "output_sha256": "4D2C6C3D1221AA352C92570D7EB188AD87A213352D772DD848A8639C20376906",
+        "recorded_output_sha256": "4D2C6C3D1221AA352C92570D7EB188AD87A213352D772DD848A8639C20376906",
+        "output_hash_matches": true,
+        "engine_original_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\008-e06_effects_runtime_test.engine.log",
+        "engine_archived_path": ".godot\\verification\\e06_pilot_execution\\luna_final\\checks\\008-e06_effects_runtime_test.engine.log",
+        "engine_sha256": "868A20A8A3B9474B1278E7B81906FD33FEE223D8E34BE48F9C1F59C5CD3F819B",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60,
+        "output_copy_matches_source": true,
+        "engine_copy_matches_source": true
+      },
+      {
+        "name": "e05_defender_guard_test",
+        "runner_index": 171,
+        "execution_index": 3,
+        "original_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\171-e05_defender_guard_test.output.log",
+        "archived_path": ".godot\\verification\\e06_pilot_execution\\luna_final\\checks\\171-e05_defender_guard_test.output.log",
+        "output_sha256": "3593F6915E417D89309B6242D7A57394EA1CCB3CF49B601A7F3ABA9BF565F015",
+        "recorded_output_sha256": "3593F6915E417D89309B6242D7A57394EA1CCB3CF49B601A7F3ABA9BF565F015",
+        "output_hash_matches": true,
+        "engine_original_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\171-e05_defender_guard_test.engine.log",
+        "engine_archived_path": ".godot\\verification\\e06_pilot_execution\\luna_final\\checks\\171-e05_defender_guard_test.engine.log",
+        "engine_sha256": "F15015E1506A1A1D7F206DD1B5008D6119FD66B9891299049EA00AFA5BE8B27E",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60,
+        "output_copy_matches_source": true,
+        "engine_copy_matches_source": true
+      },
+      {
+        "name": "e05_defender_skills_test",
+        "runner_index": 172,
+        "execution_index": 4,
+        "original_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\172-e05_defender_skills_test.output.log",
+        "archived_path": ".godot\\verification\\e06_pilot_execution\\luna_final\\checks\\172-e05_defender_skills_test.output.log",
+        "output_sha256": "E7D81B2C6E5ADFD0B7929A7B1E28B3EE5A195BFEB56B980F7E58BD06531E9AB9",
+        "recorded_output_sha256": "E7D81B2C6E5ADFD0B7929A7B1E28B3EE5A195BFEB56B980F7E58BD06531E9AB9",
+        "output_hash_matches": true,
+        "engine_original_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\172-e05_defender_skills_test.engine.log",
+        "engine_archived_path": ".godot\\verification\\e06_pilot_execution\\luna_final\\checks\\172-e05_defender_skills_test.engine.log",
+        "engine_sha256": "98442514D4518C1BDCE2D8364F26B94AABB58A92C7C7E188C7088C35D0C32289",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60,
+        "output_copy_matches_source": true,
+        "engine_copy_matches_source": true
+      },
+      {
+        "name": "e06_tx_active_test",
+        "runner_index": 187,
+        "execution_index": 5,
+        "original_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\187-e06_tx_active_test.output.log",
+        "archived_path": ".godot\\verification\\e06_pilot_execution\\luna_final\\checks\\187-e06_tx_active_test.output.log",
+        "output_sha256": "639C3CD9F61B1C2233E3B8A4D05B7F3F189282421100D7248362526DEBEE3E18",
+        "recorded_output_sha256": "639C3CD9F61B1C2233E3B8A4D05B7F3F189282421100D7248362526DEBEE3E18",
+        "output_hash_matches": true,
+        "engine_original_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\187-e06_tx_active_test.engine.log",
+        "engine_archived_path": ".godot\\verification\\e06_pilot_execution\\luna_final\\checks\\187-e06_tx_active_test.engine.log",
+        "engine_sha256": "6E415F9DDF7F1E7709E7901D353C93D14B35B9FAE0B79AC60714070D992EC9E9",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60,
+        "output_copy_matches_source": true,
+        "engine_copy_matches_source": true
+      },
+      {
+        "name": "e06_content_pilot_runtime_test",
+        "runner_index": 197,
+        "execution_index": 6,
+        "original_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\197-e06_content_pilot_runtime_test.output.log",
+        "archived_path": ".godot\\verification\\e06_pilot_execution\\luna_final\\checks\\197-e06_content_pilot_runtime_test.output.log",
+        "output_sha256": "6CBDFEC9054577CF5D7A5B218CBB2CD36D650467370A971ACF67C54B20810A17",
+        "recorded_output_sha256": "6CBDFEC9054577CF5D7A5B218CBB2CD36D650467370A971ACF67C54B20810A17",
+        "output_hash_matches": true,
+        "engine_original_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\197-e06_content_pilot_runtime_test.engine.log",
+        "engine_archived_path": ".godot\\verification\\e06_pilot_execution\\luna_final\\checks\\197-e06_content_pilot_runtime_test.engine.log",
+        "engine_sha256": "8FFDFA6017A73D3766E705576B8B85B25A8A401FAE806EC091C9203A1ABA20BC",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60,
+        "output_copy_matches_source": true,
+        "engine_copy_matches_source": true
+      },
+      {
+        "name": "e06_pilot_execution_test",
+        "runner_index": 198,
+        "execution_index": 7,
+        "original_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\198-e06_pilot_execution_test.output.log",
+        "archived_path": ".godot\\verification\\e06_pilot_execution\\luna_final\\checks\\198-e06_pilot_execution_test.output.log",
+        "output_sha256": "C9F1E258339201BA669CFE3DCF725561F4617272EA16F7FD78894D34A31C89D0",
+        "recorded_output_sha256": "C9F1E258339201BA669CFE3DCF725561F4617272EA16F7FD78894D34A31C89D0",
+        "output_hash_matches": true,
+        "engine_original_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\198-e06_pilot_execution_test.engine.log",
+        "engine_archived_path": ".godot\\verification\\e06_pilot_execution\\luna_final\\checks\\198-e06_pilot_execution_test.engine.log",
+        "engine_sha256": "5E8D68E197D0432C470622D65D5FE7B01EC9FF6A5AFDA471F626BA57EB866F39",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60,
+        "output_copy_matches_source": true,
+        "engine_copy_matches_source": true
+      }
+    ],
+    "source_plan_sha256": "2C3CE254AF0232224F895D3A46B7D03F77C9238665BB9C302ECFC47DEF7514F8",
+    "source_checks_sha256": "0B88C5125FDBEB0E4CCBCA53257ACD5FC57D817F3AB7191BCCDDC9E6D5B44046",
+    "plan_copy_matches_source": true,
+    "checks_copy_matches_source": true
+  }
+}

@@ -3108,7 +3108,7 @@ func _append_kit_candidate(candidates: Array[Dictionary], family: StringName, ta
 
 func weapon_ids_for_skill(skill_id: StringName) -> Array[StringName]:
 	var result: Array[StringName] = []
-	var direct: Array[StringName] = [&"basic_attack", &"slash", &"cone_slash", &"brutal_strike", &"concentrated_rage", &"defender_counter_cut", &"defender_wall_advance", &"berserker_wound_leap", &"double_shot", &"piercing_arrow", &"slowing_arrow", &"arrow_rain", &"hunter_covering_shot", &"sentinel_headshot", &"sentinel_piercing_shot", &"sentinel_concussion_shot", &"sentinel_explosive_shot"]
+	var direct: Array[StringName] = [&"basic_attack", &"slash", &"cone_slash", &"brutal_strike", &"concentrated_rage", &"defender_counterstroke", &"defender_wall_advance", &"berserker_wound_leap", &"double_shot", &"piercing_arrow", &"slowing_arrow", &"arrow_rain", &"hunter_covering_shot", &"sentinel_headshot", &"sentinel_piercing_shot", &"sentinel_concussion_shot", &"sentinel_explosive_shot"]
 	if skill_id not in direct and skill_id not in BERSERKER_DIRECT_MELEE_IDS:
 		return result
 	var id: Variant = run_state.build_snapshot.equipped[&"main_hand"]

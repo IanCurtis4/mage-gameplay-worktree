@@ -280,3 +280,7 @@ Continuação autorizada pelo usuário com receitas manuais no ilvl1; progressã
 Seleção final Luna10/197 PASS, novos testes468/244 checks, regressões pertinentes aprovadas. [Recibo](e06_content_pilot_validation.json) SHA2561B359EBEB3903E49754D58F7C8C7D72BFF7B8CD1DBBE9AB28A4EEE38234DF30D; fonte local congelada por manifest, base075eb8f não confundida com candidato limpo. Sol conferiu hashes/outputs e63 Resources da prévia. Sem delta de catálogo ativo/atores/fórmulas/codec/playtest. Piloto validado tecnicamente; vinte direções táticas, progressão/rates, novos handlers específicos e integração continuam posteriores. Não disparar Astra rotineiro.
 
 Entrega preservada:68b5ab8cfba1914d03908cd32301f5dcc35233ac, árvore4b72d9719218872d67e4d6404a9b68c58dbb4f23, branch codex/e06-inventory, worktree limpa após entrega. Vínculo posterior estritamente documental; fontes/editorial/receitas/recibo validados não mudaram após a supervisão.
+
+## Provas reais e próximo lote espacial,12/10/2026
+
+[Provas](e06_pilot_execution.md):08 procs exclusivos por habilidades reais com/comsem receita, captura em voo preservada. Whitelist obsoleta de Contraforte corrigida somente no ID da arma. Luna7/198 PASS, real128 checks e regressões; recibo DF08C9795B2CF32D9BC8FCB78E201A45C6961C963659BEDAC60E680E66C7EB31, logs recuperados/conferidos. Catálogo/digest/flavor não mudaram,20 direções táticas continuam pendentes. Usuário escolheu [eco e vértices fixos](e06_spatial_policies.md); demais quatro propostas não autorizadas.
