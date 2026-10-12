@@ -143,16 +143,29 @@ func _check_catalog_v1_migration_and_respec() -> void:
 	legacy_profile.characters.append(legacy_mage)
 	legacy_profile.selected_character_id = character_id
 	var encoded := ProfileCodec.encode(legacy_profile)
+	_check(encoded["ok"], "source profile encodes before conversion to historical envelope")
+	if not encoded["ok"]:
+		return
 	var legacy_data: Dictionary = encoded["data"].duplicate(true)
+	legacy_data["schema_version"] = 2
+	legacy_data.erase("equipment_instances")
+	legacy_data.erase("next_equipment_counter")
+	legacy_data["equipment_collection"] = []
 	legacy_data["catalog_version"] = ProfileCodec.LEGACY_CATALOG_VERSION
 	legacy_data["ruleset_id"] = ProfileCodec.LEGACY_RULESET_ID
 	for raw_character: Dictionary in legacy_data["characters"]:
 		raw_character.erase("granted_skill_ranks")
+		raw_character["equipped"] = {"weapon": null, "armor": null, "accessory": null}
+		for preset: Dictionary in raw_character["presets"]:
+			preset["equipped"] = {"weapon": null, "armor": null, "accessory": null}
 	var legacy_text := JSON.stringify(legacy_data, "\t")
 	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), legacy_text)
 
 	var store := ProfileStore.new(directory)
 	var migrated := store.load_profile()
+	_check(migrated["ok"], "actual historical envelope migrates without truncating test flow")
+	if not migrated["ok"]:
+		return
 	var migrated_profile: ProfileState = migrated["profile"]
 	var migrated_character: CharacterState = migrated_profile.character_by_id(character_id)
 	var summary := CharacterProgression.summary(migrated_character, ProfileCatalog.pilot())
