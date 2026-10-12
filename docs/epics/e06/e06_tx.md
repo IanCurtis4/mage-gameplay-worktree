@@ -256,3 +256,17 @@ Achados RX-F01/F02 resolvidos com provas5/4 originais: reforço Espinhos9/9 e ca
 Sol confere entrega dentro do contrato aprovado, invariantes, correções e nenhuma falha automatizada pendente; declara fundação TX1–TX3 pronta tecnicamente sob norma atual. Não equivale a auditoria semântica independente completa nem aceite de produto. Visual autoral limitado à barra em1280x720 continua no recibo TX3, sem nova inspeção nesta supervisão.
 
 Limites/próximo passo: conteúdo/receitas/taxonomias/poder/rates finais e UI14/pickups/chapéus/FX ainda não entregues; T3/T4 dependem dessa base e de autorização/donos/decisões pertinentes, sem iniciar aqui. E07/campanha/boss AI permanecem fora do escopo. Checkout fixo codex/playtest não editado/aplicado, nenhum push/merge ou aceite humano inferido. Manter esta worktree e logs até integração/preservação da evidência; não arquivar como entrega integrada. Próxima retomada consulta este checkpoint e WORKFLOW atualizado, usa Luna em bateria e Sol em falhas; Astra somente arquitetura/planejamento ou exceção concreta justificada.
+
+
+## Autorização T3-A — base de conteúdo, 12/10/2026
+
+Usuário abriu base racional para conteúdo, deixando nomes/flavor para Luna. Recorte/donos/base/critério em [e06_content_base.md](e06_content_base.md). Suspensão anterior de T3 prevalece para catálogo final, UI e decisões pendentes; T3-A é o novo pacote autorizado. Mesmo checkout isolado, sem editar playtest. Sol implementa infraestrutura de autoria/copiar/validar, Luna faz população editorial delimitada sobre fichas estáveis.
+
+
+## Entrega T3-A — base de autoria e população demonstrativa, 12/10/2026
+
+Usuário autorizou Sol na estrutura racional e Luna nos nomes/flavor. [Pacote](e06_content_base.md) ENTREGUE/VALIDADO: ContentAuthoring, modelos/fichas/texto vinculado à assinatura, descrição factual gerada, prévia nativa e24 entradas preenchidas por Luna. Dados editoriais são separados/copied; nenhuma fórmula, save ou identidade é alterada por texto. Compatibilidade/capacidade/qualidade/mob/conjuntos usam autoridades existentes.
+
+[Guia](../../../content/authoring/README.md) e [prévia legível](../../../content/authoring/demo_preview.md).12 nomes dirigidos PASS,160 checks novos autoria/editorial,13 outputs verificados,24 Resources recarregados e catálogo de produção estável. [Recibo](e06_content_validation.json), SHA256CC7E6D8403347C599DC0C2831714C901D1F1CA7DC351062D4319339DA931A8D9; logs/papéis/tentativas/reuso no pacote. Runner195 agora; não afirmar integral195 executada nem reutilizar193 como novos testes.
+
+Base de conteúdo pronta; não é catálogo final T3 nem UI T4. Próximo lote Sol fixa orçamento/rates/receitas/cobertura/compatibilidades e exemplos concretos, Luna recebe só sua população aprovada. Parâmetros não decididos continuam pendentes, não substituídos por números de fixture. Sem aplicar no checkout fixo, publicar conteúdo ativo, push/merge ou inferir aceite humano. Preservar esta worktree e os logs até integração.

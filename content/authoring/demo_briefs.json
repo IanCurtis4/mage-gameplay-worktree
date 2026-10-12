@@ -1,0 +1,1336 @@
+{
+	"briefs": [
+		{
+			"description": "Lança de Fogo: +1 projétil(is); limite final 16. Requer rank 1 na habilidade afetada. Não combina com outra transformação do mesmo grupo.\nAcumula até 1 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:demo_fire_shape",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"mage"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "projectile_count",
+						"channel": "flat",
+						"conflict_group": "demo_fire_shape",
+						"family_id": "demo_fire_shape",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 2,
+						"id": "demo_augment_fire_shape",
+						"increased": 0.0,
+						"kind": 1,
+						"limit": 16.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 1,
+						"tags": [
+							"flaming"
+						],
+						"target_skill_ids": [
+							"fire_spear"
+						],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "count"
+					}
+				],
+				"id": "demo_fire_shape",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 1,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Transformação exclusiva de Lança de Fogo na run; alternativa à carta transformadora, sem novo botão."
+		},
+		{
+			"description": "SP máximo: +2 / +4 / +6.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:demo_sp_growth",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "max_sp",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "demo_sp_growth_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "demo_sp_growth_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 2.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							2.0,
+							4.0,
+							6.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"id": "demo_sp_growth",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Reserva de SP da run, três patamares cumulativos; não promete cura ou recarga."
+		},
+		{
+			"description": "Lança de Fogo, Lança de Gelo: +20 / +40 unidades de alcance; limite final 1200. Requer rank 1 na habilidade afetada.\nAcumula até 2 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:demo_spear_range",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"mage"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "range",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "demo_spear_range_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 1,
+						"id": "demo_spear_range_effect",
+						"increased": 0.0,
+						"kind": 1,
+						"limit": 1200.0,
+						"magnitude": 20.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							20.0,
+							40.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [
+							"fire_spear",
+							"ice_spear"
+						],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "units"
+					}
+				],
+				"id": "demo_spear_range",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 2,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Alcance de Lanças de Fogo/Gelo em duas etapas; não aumenta dano, velocidade ou quantidade."
+		},
+		{
+			"description": "Lança de Fogo: +1 projétil(is); limite final 16. Requer rank 1 na habilidade afetada. Não combina com outra transformação do mesmo grupo.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "card:demo_elite_card",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"mage"
+				],
+				"allowed_slots": [
+					"head",
+					"shoulders",
+					"arms",
+					"torso",
+					"cloak",
+					"legs",
+					"feet",
+					"main_hand",
+					"off_hand"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "projectile_count",
+						"channel": "flat",
+						"conflict_group": "demo_fire_shape",
+						"family_id": "demo_fire_shape",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 2,
+						"id": "demo_card_fire_shape",
+						"increased": 0.0,
+						"kind": 1,
+						"limit": 16.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 1,
+						"tags": [
+							"flaming"
+						],
+						"target_skill_ids": [
+							"fire_spear"
+						],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "count"
+					}
+				],
+				"id": "demo_elite_card",
+				"mob_base_id": "demo_elite_species",
+				"type": "CardDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Carta passiva da espécie elite: transforma Lança de Fogo, sem conceder ação nova."
+		},
+		{
+			"description": "VIT: +1.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "card:demo_normal_card",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [],
+				"allowed_slots": [
+					"head",
+					"shoulders",
+					"arms",
+					"torso",
+					"cloak",
+					"legs",
+					"feet",
+					"main_hand",
+					"off_hand"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "vit",
+						"channel": "primary_flat",
+						"conflict_group": "",
+						"family_id": "demo_card_vit",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "demo_card_vit",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"id": "demo_normal_card",
+				"mob_base_id": "demo_normal_species",
+				"type": "CardDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Carta passiva da espécie comum: resistência numérica; não atribuir transformação."
+		},
+		{
+			"description": "Defesa física: +1.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:demo_accessory_1",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "demo_stat_accessory_1",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "demo_stat_accessory_1",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "demo_accessory_1",
+				"item_kind": "jewelry",
+				"item_level": 1,
+				"origin_id": "authoring_demo",
+				"quality_id": "common",
+				"set_id": "",
+				"slot": "accessory",
+				"socket_capacity": 0,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Proteção simples; peça de demonstração da posição accessory_1, sem origem narrativa definitiva."
+		},
+		{
+			"description": "Defesa física: +1.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:demo_accessory_2",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "demo_stat_accessory_2",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "demo_stat_accessory_2",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "demo_accessory_2",
+				"item_kind": "jewelry",
+				"item_level": 1,
+				"origin_id": "authoring_demo",
+				"quality_id": "common",
+				"set_id": "",
+				"slot": "accessory",
+				"socket_capacity": 0,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Proteção simples; peça de demonstração da posição accessory_2, sem origem narrativa definitiva."
+		},
+		{
+			"description": "Defesa física: +1.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:demo_accessory_3",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "demo_stat_accessory_3",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "demo_stat_accessory_3",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "demo_accessory_3",
+				"item_kind": "jewelry",
+				"item_level": 1,
+				"origin_id": "authoring_demo",
+				"quality_id": "common",
+				"set_id": "",
+				"slot": "accessory",
+				"socket_capacity": 0,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Proteção simples; peça de demonstração da posição accessory_3, sem origem narrativa definitiva."
+		},
+		{
+			"description": "Defesa física: +1.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:demo_accessory_4",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "demo_stat_accessory_4",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "demo_stat_accessory_4",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "demo_accessory_4",
+				"item_kind": "jewelry",
+				"item_level": 1,
+				"origin_id": "authoring_demo",
+				"quality_id": "common",
+				"set_id": "",
+				"slot": "accessory",
+				"socket_capacity": 0,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Proteção simples; peça de demonstração da posição accessory_4, sem origem narrativa definitiva."
+		},
+		{
+			"description": "Defesa física: +1.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:demo_arms",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "demo_stat_arms",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "demo_stat_arms",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "demo_arms",
+				"item_kind": "armor",
+				"item_level": 1,
+				"origin_id": "authoring_demo",
+				"quality_id": "common",
+				"set_id": "",
+				"slot": "arms",
+				"socket_capacity": 2,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Proteção simples; peça de demonstração da posição arms, sem origem narrativa definitiva."
+		},
+		{
+			"description": "Defesa física: +1.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:demo_cloak",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "demo_stat_cloak",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "demo_stat_cloak",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "demo_cloak",
+				"item_kind": "armor",
+				"item_level": 1,
+				"origin_id": "authoring_demo",
+				"quality_id": "common",
+				"set_id": "",
+				"slot": "cloak",
+				"socket_capacity": 4,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Proteção simples; peça de demonstração da posição cloak, sem origem narrativa definitiva."
+		},
+		{
+			"description": "Defesa física: +1.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:demo_feet",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "demo_stat_feet",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "demo_stat_feet",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "demo_feet",
+				"item_kind": "armor",
+				"item_level": 1,
+				"origin_id": "authoring_demo",
+				"quality_id": "common",
+				"set_id": "",
+				"slot": "feet",
+				"socket_capacity": 1,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Proteção simples; peça de demonstração da posição feet, sem origem narrativa definitiva."
+		},
+		{
+			"description": "INT: +1.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:demo_focus",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"mage"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "int",
+						"channel": "primary_flat",
+						"conflict_group": "",
+						"family_id": "demo_focus_int",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "demo_focus_int",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "demo_focus",
+				"item_kind": "focus",
+				"item_level": 1,
+				"origin_id": "authoring_demo",
+				"quality_id": "common",
+				"set_id": "",
+				"slot": "off_hand",
+				"socket_capacity": 0,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Foco de condução arcana na mão secundária, sem encaixes; não é escudo nem arma adicional."
+		},
+		{
+			"description": "Defesa física: +1.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:demo_head",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "demo_stat_head",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "demo_stat_head",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "demo_head",
+				"item_kind": "armor",
+				"item_level": 1,
+				"origin_id": "authoring_demo",
+				"quality_id": "common",
+				"set_id": "",
+				"slot": "head",
+				"socket_capacity": 0,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Proteção simples; peça de demonstração da posição head, sem origem narrativa definitiva."
+		},
+		{
+			"description": "Defesa física: +1.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:demo_legs",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "demo_stat_legs",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "demo_stat_legs",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "demo_legs",
+				"item_kind": "armor",
+				"item_level": 1,
+				"origin_id": "authoring_demo",
+				"quality_id": "common",
+				"set_id": "",
+				"slot": "legs",
+				"socket_capacity": 0,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Proteção simples; peça de demonstração da posição legs, sem origem narrativa definitiva."
+		},
+		{
+			"description": "Ao acertar: bônus de +3 de dano físico e 0% proporcional; limite do bônus 20.\nO efeito de acerto exige uso desta arma.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:demo_main_hand",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_damage",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "demo_weapon_hit",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 3,
+						"id": "demo_weapon_proc",
+						"increased": 0.0,
+						"kind": 2,
+						"limit": 20.0,
+						"magnitude": 3.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 1,
+						"type": "EffectDefinition",
+						"unique_effect_id": "demo_weapon_proc",
+						"unit": "damage"
+					}
+				],
+				"hand_usage": "one_hand",
+				"id": "demo_main_hand",
+				"item_kind": "weapon",
+				"item_level": 1,
+				"origin_id": "authoring_demo",
+				"quality_id": "rare",
+				"set_id": "",
+				"slot": "main_hand",
+				"socket_capacity": 2,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Arma de uma mão para pressão em acertos reais; não atribuir magia, sangramento ou área ao texto."
+		},
+		{
+			"description": "Concede Teleporte no rank 1; vale o maior rank disponível, com recarga compartilhada.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:demo_neck",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [
+							"swordsman",
+							"mage",
+							"archer"
+						],
+						"axis": "",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "demo_teleport_access",
+						"granted_rank": 1,
+						"granted_skill_id": "teleport",
+						"handler_id": 4,
+						"id": "demo_teleport_access",
+						"increased": 0.0,
+						"kind": 3,
+						"limit": 0.0,
+						"magnitude": 0.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [
+							"ethereal"
+						],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "demo_neck",
+				"item_kind": "jewelry",
+				"item_level": 1,
+				"origin_id": "authoring_demo",
+				"quality_id": "rare",
+				"set_id": "",
+				"slot": "neck",
+				"socket_capacity": 0,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Joia de mobilidade: concede acesso a Teleporte enquanto equipada; não concede o restante do kit de Mago."
+		},
+		{
+			"description": "Defesa física: +1.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:demo_off_hand",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "demo_stat_off_hand",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "demo_stat_off_hand",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "demo_off_hand",
+				"item_kind": "shield",
+				"item_level": 1,
+				"origin_id": "authoring_demo",
+				"quality_id": "common",
+				"set_id": "",
+				"slot": "off_hand",
+				"socket_capacity": 2,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Proteção simples; peça de demonstração da posição off_hand, sem origem narrativa definitiva."
+		},
+		{
+			"description": "Defesa física: +1.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:demo_shoulders",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "demo_stat_shoulders",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "demo_stat_shoulders",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "demo_shoulders",
+				"item_kind": "armor",
+				"item_level": 1,
+				"origin_id": "authoring_demo",
+				"quality_id": "rare",
+				"set_id": "demo_armor_set",
+				"slot": "shoulders",
+				"socket_capacity": 1,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Proteção coordenada: esta armadura pertence ao mesmo conjunto demonstrativo que a outra peça."
+		},
+		{
+			"description": "Defesa física: +1.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:demo_torso",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "demo_stat_torso",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "demo_stat_torso",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "demo_torso",
+				"item_kind": "armor",
+				"item_level": 1,
+				"origin_id": "authoring_demo",
+				"quality_id": "rare",
+				"set_id": "demo_armor_set",
+				"slot": "torso",
+				"socket_capacity": 3,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Proteção coordenada: esta armadura pertence ao mesmo conjunto demonstrativo que a outra peça."
+		},
+		{
+			"description": "Lança de Fogo, Lança de Gelo: +10 unidades de alcance; limite final 1200. Requer rank 1 na habilidade afetada.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:demo_two_hands",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"mage"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "range",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "demo_two_hands_reach",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 1,
+						"id": "demo_two_hands_reach",
+						"increased": 0.0,
+						"kind": 1,
+						"limit": 1200.0,
+						"magnitude": 10.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [
+							"fire_spear",
+							"ice_spear"
+						],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "units"
+					}
+				],
+				"hand_usage": "two_hands",
+				"id": "demo_two_hands",
+				"item_kind": "weapon",
+				"item_level": 1,
+				"origin_id": "authoring_demo",
+				"quality_id": "rare",
+				"set_id": "",
+				"slot": "main_hand",
+				"socket_capacity": 4,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Arma arcana de duas mãos para alcance; exige secundária vazia, não pode combinar com foco ou escudo."
+		},
+		{
+			"description": "Nível fixo 1. Categoria base: elite.\nUsa Lança de Fogo no rank 1.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "mob:demo_elite_species",
+			"mechanics": {
+				"allowed_occurrence_categories": [
+					"elite",
+					"rare_elite"
+				],
+				"animation_kind": "archer",
+				"archetype": "archer",
+				"base_category": "elite",
+				"card_id": "demo_elite_card",
+				"collision_radius": 19.0,
+				"fixed_level": 1,
+				"id": "demo_elite_species",
+				"modifier_sources": [],
+				"primary_attributes": {
+					"agi": 2,
+					"dex": 2,
+					"int": 2,
+					"luk": 2,
+					"str": 2,
+					"vit": 2
+				},
+				"skill_ids": [
+					"fire_spear"
+				],
+				"skill_ranks": {
+					"fire_spear": 1
+				},
+				"tint": [
+					0.776470601558685,
+					0.352941185235977,
+					0.407843142747879,
+					1.0
+				],
+				"type": "MobDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Espécie demonstrativa ligada a lanças de fogo, base elite."
+		},
+		{
+			"description": "Nível fixo 1. Categoria base: normal.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "mob:demo_normal_species",
+			"mechanics": {
+				"allowed_occurrence_categories": [
+					"normal",
+					"rare",
+					"elite"
+				],
+				"animation_kind": "warrior",
+				"archetype": "chaser",
+				"base_category": "normal",
+				"card_id": "demo_normal_card",
+				"collision_radius": 19.0,
+				"fixed_level": 1,
+				"id": "demo_normal_species",
+				"modifier_sources": [],
+				"primary_attributes": {
+					"agi": 2,
+					"dex": 2,
+					"int": 2,
+					"luk": 2,
+					"str": 2,
+					"vit": 2
+				},
+				"skill_ids": [],
+				"skill_ranks": {},
+				"tint": [
+					0.776470601558685,
+					0.352941185235977,
+					0.407843142747879,
+					1.0
+				],
+				"type": "MobDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Espécie demonstrativa resistente e comum, sem magia ou poderes novos."
+		},
+		{
+			"description": "2 peças: Vida máxima: +4.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "set:demo_armor_set",
+			"mechanics": {
+				"id": "demo_armor_set",
+				"thresholds": {
+					"2": [
+						{
+							"allowed_evolutions": [],
+							"allowed_origins": [],
+							"axis": "max_hp",
+							"channel": "flat",
+							"conflict_group": "",
+							"family_id": "demo_set_hp",
+							"granted_rank": 1,
+							"granted_skill_id": "",
+							"handler_id": 0,
+							"id": "demo_set_hp",
+							"increased": 0.0,
+							"kind": 0,
+							"limit": 0.0,
+							"magnitude": 4.0,
+							"minimum_rank": 1,
+							"stack_values": [],
+							"stacking_mode": 0,
+							"tags": [],
+							"target_skill_ids": [],
+							"trigger": 0,
+							"type": "EffectDefinition",
+							"unique_effect_id": "",
+							"unit": "points"
+						}
+					]
+				},
+				"type": "EquipmentSetDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Conjunto de duas armaduras para proteção; tema deve unir tronco e ombros, sem prometer efeitos elementais."
+		}
+	],
+	"mechanical_digest": "d5c3774c237e012b6a4cb0190e9c421f2a180551fae99be13af0604c355f350d",
+	"scope": "authoring_demo_only"
+}

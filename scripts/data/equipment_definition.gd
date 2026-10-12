@@ -4,6 +4,7 @@ extends Resource
 
 @export var id: StringName
 @export var display_name: String
+@export_multiline var flavor_text: String
 @export_multiline var description: String
 @export var icon: Texture2D
 @export var allowed_origins: Array[StringName] = []

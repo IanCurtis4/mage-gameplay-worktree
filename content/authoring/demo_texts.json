@@ -1,0 +1,102 @@
+{
+	"entries": {
+		"augment:demo_fire_shape": {
+			"name": "Geometria da Brasa",
+			"flavor": "A chama se abre em um leque de pontos rubros, como estrelas que deixam o braseiro."
+		},
+		"augment:demo_sp_growth": {
+			"name": "Fôlego Guardado",
+			"flavor": "Uma reserva tranquila acompanha a jornada, pronta para os momentos de maior esforço."
+		},
+		"augment:demo_spear_range": {
+			"name": "Horizonte das Lanças",
+			"flavor": "O traço de fogo e o brilho do gelo percorrem o campo como riscos no crepúsculo."
+		},
+		"card:demo_elite_card": {
+			"name": "Carta do Arqueiro Rubro",
+			"flavor": "O arqueiro de manto escarlate mantinha o olhar firme mesmo quando o calor tremulava no ar."
+		},
+		"card:demo_normal_card": {
+			"name": "Carta do Vigia de Pedra",
+			"flavor": "O vigia avançava sem pressa, com a postura serena de quem conhece cada trilha da serra."
+		},
+		"equipment:demo_accessory_1": {
+			"name": "Broche da Vigília",
+			"flavor": "Um pequeno emblema de estrada, polido por muitas mãos que partiram antes do amanhecer."
+		},
+		"equipment:demo_accessory_2": {
+			"name": "Fivela do Peregrino",
+			"flavor": "O metal gasto guarda o brilho discreto das fogueiras acesas ao longo do caminho."
+		},
+		"equipment:demo_accessory_3": {
+			"name": "Amuleto da Colina",
+			"flavor": "Uma pedra lisa, recolhida onde o vento sopra livre sobre os campos altos."
+		},
+		"equipment:demo_accessory_4": {
+			"name": "Selo do Caminhante",
+			"flavor": "Linhas simples gravadas no selo lembram mapas desenhados à luz de lamparina."
+		},
+		"equipment:demo_arms": {
+			"name": "Braçais do Batedor",
+			"flavor": "Couro firme e costuras cuidadosas acompanham quem abre caminho entre ruínas."
+		},
+		"equipment:demo_cloak": {
+			"name": "Manto da Estrada",
+			"flavor": "O tecido escuro traz poeira de muitas passagens e pequenos remendos bem-feitos."
+		},
+		"equipment:demo_feet": {
+			"name": "Grevas do Viajante",
+			"flavor": "As marcas na sola contam uma longa jornada por pedra, terra e folhas secas."
+		},
+		"equipment:demo_focus": {
+			"name": "Orbe de Vidro Azul",
+			"flavor": "Dentro do vidro, um reflexo azul dança quando a luz da tarde toca sua superfície."
+		},
+		"equipment:demo_head": {
+			"name": "Elmo do Patrulheiro",
+			"flavor": "A borda marcada pelo uso emoldura uma viseira feita para longas rondas."
+		},
+		"equipment:demo_legs": {
+			"name": "Perneiras do Mateiro",
+			"flavor": "Fivelas simples prendem o couro que já cruzou bosques e trilhas pedregosas."
+		},
+		"equipment:demo_main_hand": {
+			"name": "Lâmina do Marco",
+			"flavor": "Uma espada sóbria, equilibrada para acompanhar golpes firmes nas escaramuças."
+		},
+		"equipment:demo_neck": {
+			"name": "Pingente do Passo Distante",
+			"flavor": "A pedra clara parece guardar a imagem de um caminho que some entre montanhas."
+		},
+		"equipment:demo_off_hand": {
+			"name": "Escudo da Ronda",
+			"flavor": "A madeira marcada conserva sinais de antigas patrulhas e brasões quase apagados."
+		},
+		"equipment:demo_shoulders": {
+			"name": "Ombreiras da Vigília",
+			"flavor": "As placas trazem o mesmo entalhe de muralha que aparece no peitoral da guarda."
+		},
+		"equipment:demo_torso": {
+			"name": "Peitoral da Vigília",
+			"flavor": "O brasão gasto da muralha une esta peça às ombreiras do antigo destacamento."
+		},
+		"equipment:demo_two_hands": {
+			"name": "Bastão dos Dois Ventos",
+			"flavor": "Veios pálidos e avermelhados percorrem o bastão, lembrando inverno e brasa."
+		},
+		"mob:demo_elite_species": {
+			"name": "Arqueiro da Brasa",
+			"flavor": "O arqueiro rubro mede a distância em silêncio antes de traçar uma lança de fogo."
+		},
+		"mob:demo_normal_species": {
+			"name": "Vigia de Pedra",
+			"flavor": "O vigia robusto deixa o abrigo e segue adiante sem recorrer a artifícios arcanos."
+		},
+		"set:demo_armor_set": {
+			"name": "Guarda da Muralha Antiga",
+			"flavor": "O peitoral e as ombreiras repetem o brasão de uma fortaleza esquecida nas colinas."
+		}
+	},
+	"mechanical_digest": "d5c3774c237e012b6a4cb0190e9c421f2a180551fae99be13af0604c355f350d",
+	"schema_version": 1
+}

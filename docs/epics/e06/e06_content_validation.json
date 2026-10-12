@@ -1,0 +1,183 @@
+{
+  "title": "E06 T3-A Luna automated content validation receipt",
+  "role": "Automated test supervision and preview verification only",
+  "branch": "codex/e06-inventory",
+  "checkout": "C:/Users/João Pedro/.codex/worktrees/e06-inventory/RagRPG",
+  "source_commit": "3d0bed78b239de34e8432420410bbccb09b0aafd",
+  "working_tree_was_authored_and_frozen_by_sol_and_luna_content_copy": true,
+  "engine": {
+    "path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/review-engine/Godot.exe",
+    "version": "4.7.2.stable.official.ed1daf0bf",
+    "sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424"
+  },
+  "runner": {
+    "path": "tools/verify.ps1",
+    "sha256": "19C73B494E41727A2C769FA51EA2865DF9BA3C1F3CCA307B34A90802E70EF093"
+  },
+  "timeout_seconds_per_test": 60,
+  "coverage": {
+    "requested_distinct_test_ids": 12,
+    "requested_test_ids": [
+      "editor_import",
+      "e06_content_authoring_test",
+      "e06_content_editorial_test",
+      "e06_inventory_resources_test",
+      "e06_inventory_test",
+      "e06_effects_composition_test",
+      "e06_tx_composition_test",
+      "e06_tx_active_test",
+      "e06_tx_mob_test",
+      "e06_tx_loot_test",
+      "profile_store_test",
+      "profile_run_facade_test"
+    ],
+    "requested_test_ids_all_passed": true,
+    "unique_test_ids_passed": 12,
+    "completed_execution_records": 13,
+    "note": "The first selection stopped at the authoring failure before editorial ran; the later focused rerun passed both authoring and editorial. Repeated checks are not counted as additional test IDs. This was a 12-ID selection from a 195-step runner, not a full suite."
+  },
+  "test_runs": [
+    {
+      "kind": "initial_directed_selection_with_failure",
+      "directory": ".godot/verification/e06_content_base/luna_final",
+      "source_commit": "3d0bed78b239de34e8432420410bbccb09b0aafd",
+      "selected_steps": 12,
+      "completed_steps": 11,
+      "pass_count": 10,
+      "failure_count": 1,
+      "plan_sha256": "384DFDDDDB50DCDCBE4F4B1709FABF335F22FDFECF26FBD387D5E3016B66D052",
+      "checks_sha256": "74364D310E35960F5563DFE79A5912BF5B2674E57ACF5983ED40B2BEFA9CC14A",
+      "failure": {
+        "step": 194,
+        "name": "e06_content_authoring_test",
+        "checks": "59 checks, 1 failure",
+        "exit_code": 1,
+        "timed_out": false,
+        "diagnostic": "generated mechanical text includes full skill curve (tests/e06_content_authoring_test.gd:93)",
+        "output_path": ".godot/verification/e06_content_base/luna_final/194-e06_content_authoring_test.output.log",
+        "output_sha256": "8121867672E668E61CC6ED06F6E68F98FB2C5FAF56F3F3911C86CBA808074889",
+        "engine_log_path": ".godot/verification/e06_content_base/luna_final/194-e06_content_authoring_test.engine.log",
+        "engine_log_sha256": "F72F4B2245D1E9144F4DFCE7911A9140C49C3125F21C32468FEDDCFBB4441D44"
+      },
+      "passing_steps": [
+        {"step": 1, "name": "editor_import", "output_sha256": "046587317D9799144C9E570E98F9C7445AA26BF9F9F6E6EC07E20CAB25771347", "engine_log_sha256": "1A35397CA65FA1DB4A61A3824207380EC515D5079BCFFAD7393D7B73D9AF5393"},
+        {"step": 2, "name": "e06_inventory_resources_test", "output_sha256": "535C051E5EADF61A08F78A2130CF90C8A2C500C310A069569768582BA24D206C", "engine_log_sha256": "612610C7DE5D52605625FD8E333F24DE0F4844D01EC30F401F93A7EB97352A67"},
+        {"step": 3, "name": "e06_inventory_test", "output_sha256": "1BD9A4B87F549316D171DDEF1A2CACF156EA80EC76A1AF3DE9D7D091192722A5", "engine_log_sha256": "4267A1D9B78DD981F096442A85E76F3D9A97593E8F0DC1D66A0DB7441CBCD22D"},
+        {"step": 6, "name": "e06_effects_composition_test", "output_sha256": "71958720E37183BE2C8C2E6B8B5144EA7893B4DA8289D7272DDB9497153C21C4", "engine_log_sha256": "E2AFC0D4272373DDAA30F49073AA7DA571B7162EDDB0B9AF28C388795D7E42B5"},
+        {"step": 18, "name": "profile_store_test", "output_sha256": "5367FDB65B879E166E5BF0B32391D37A3E04E4E98AF00E9427155194EBF8E2E5", "engine_log_sha256": "9E20150DC310DB093E87CD0D7BC62AEDC98F319D31642A59D235D7EDEDD9495C"},
+        {"step": 20, "name": "profile_run_facade_test", "output_sha256": "63AFAED0F8287EE17CEF6777E5F7E217A036B1CB41A7CD9C52DCF2355AA0484E", "engine_log_sha256": "B0C7CDF8B26380ED5B643EA575F2993C5C16FFA8BF72D430D4552EB3AEB8843A"},
+        {"step": 186, "name": "e06_tx_composition_test", "output_sha256": "707FF42F2E379D184E5C2FF37EDB33CD2C67857FF402F143A430D1779BFC000C", "engine_log_sha256": "B3E8D7DC65F7C64C0E5F6123127BDE45DAA3C414289F95131C9B042AC35FB54E"},
+        {"step": 187, "name": "e06_tx_active_test", "output_sha256": "639C3CD9F61B1C2233E3B8A4D05B7F3F189282421100D7248362526DEBEE3E18", "engine_log_sha256": "6E415F9DDF7F1E7709E7901D353C93D14B35B9FAE0B79AC60714070D992EC9E9"},
+        {"step": 189, "name": "e06_tx_mob_test", "output_sha256": "5D56F0CD5FF057474655131DDF94EC101977F7AAB24FCB67EF806B1E4F99969A", "engine_log_sha256": "F12E0A69986FA9FE77192B7E646804A4916DA71CCD67ECE37383EB9D591310FE"},
+        {"step": 190, "name": "e06_tx_loot_test", "output_sha256": "480430AC5C34FB01364DA07461E7F07835D2984CBA43F6A2052BD9D1F8CC0706", "engine_log_sha256": "28EF116D8FDD1CECCB295F0F01B362D9A2A5F41E68CD199A12B00FDB4F958B51"}
+      ]
+    },
+    {
+      "kind": "focused_authoring_and_editorial_rerun",
+      "directory": ".godot/verification/e06_content_base/luna_after_format",
+      "source_commit": "3d0bed78b239de34e8432420410bbccb09b0aafd",
+      "selected_steps": 2,
+      "pass_count": 2,
+      "failure_count": 0,
+      "plan_sha256": "A0C1CFFC15CD6E45CC09EC2EBE45AE0579AEE1E050848C789101AD25AC87F101",
+      "checks_sha256": "DBBCC1ABECF0AABE02058055F691046B53F582759095FBEAD0D31A60BC195DF4",
+      "passing_steps": [
+        {"step": 194, "name": "e06_content_authoring_test", "checks": "60 checks, 0 failures", "output_sha256": "41AB313DA854B7B0223B6E128E3079B93C556C65A3509E8752BC15134FB8AF62", "engine_log_sha256": "007765C98B800EF964DC34AF28A634211BEE46C86C833874121BC9CC6D1B1F64"},
+        {"step": 195, "name": "e06_content_editorial_test", "checks": "100 checks, 0 failures", "output_sha256": "4F19B03DD3389029AEB3FCDB8F6D511DB2C5E80715348CD9AB52F1819844A2DF", "engine_log_sha256": "E542031BD9026AC6B00281952F27F3087C3FB8661F48438A85FB348F60D5CC89"}
+      ]
+    }
+  ],
+  "preview_commands": [
+    {
+      "name": "prepare",
+      "arguments": ["--headless", "--path", "<checkout>", "--script", "res://tools/content/preview.gd", "--", "--prepare"],
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_path": ".godot/content_authoring/luna_prepare.stdout.log",
+      "stdout_sha256": "914AAC4FBA2C5C0AAD870302E9133D3C97C8F3CB766952D91091A175E8440327",
+      "engine_log_path": ".godot/content_authoring/luna_prepare.engine.log",
+      "engine_log_sha256": "9CFC7D84044BF265CB3C3095B77F8ECD73A6A2785971C1DE2911713052ED88FC",
+      "exitcode_path": ".godot/content_authoring/luna_prepare.exitcode.txt",
+      "observed": "Fichas preparadas: 24; texto existente preservado."
+    },
+    {
+      "name": "preview",
+      "arguments": ["--headless", "--path", "<checkout>", "--script", "res://tools/content/preview.gd"],
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_path": ".godot/content_authoring/luna_preview.stdout.log",
+      "stdout_sha256": "102236DC6814DDB9AD104006DF9EF02DF43BF808F3AB5325A9B68CF514FD8442",
+      "engine_log_path": ".godot/content_authoring/luna_preview.engine.log",
+      "engine_log_sha256": "D11BD11B829EC341E03259F4D8A1E115D6D8A70AB28BD742157DD19387E30D28",
+      "exitcode_path": ".godot/content_authoring/luna_preview.exitcode.txt",
+      "observed": "Prévia validada: 24 recursos. Nenhum recurso de produção alterado."
+    }
+  ],
+  "preserved_preexisting_preview_log": {
+    "path": ".godot/verification/e06_content_base/prepare.engine.log",
+    "sha256": "9CFC7D84044BF265CB3C3095B77F8ECD73A6A2785971C1DE2911713052ED88FC",
+    "preserved_without_overwrite": true
+  },
+  "preview_manifest": {
+    "path": ".godot/content_authoring/preview_845673/manifest.json",
+    "sha256": "F3B8FD7E0D1F716429E83A7E8F272AF10BE0F3EA0E31636B99866EEA2DD198CB",
+    "resource_count": 24,
+    "all_resources_exist": true,
+    "production_published": false,
+    "mechanical_digest": "d5c3774c237e012b6a4cb0190e9c421f2a180551fae99be13af0604c355f350d",
+    "expected_mechanical_digest": "d5c3774c237e012b6a4cb0190e9c421f2a180551fae99be13af0604c355f350d",
+    "editorial_sha256": "c9456ce73d53ee735f2a8e0818895af4d8efb734a24cc5ac21a11be2da07eada",
+    "demo_texts_sha256": "C9456CE73D53EE735F2A8E0818895AF4D8EFB734A24CC5AC21A11BE2DA07EADA",
+    "resources": [
+      {"path": "res://.godot/content_authoring/preview_845673/equipment_demo_head.tres", "sha256": "4D5D796EAE4D9418CC0CD0D559C27AE9AF5E3A8E7443C183ACF936D606436936"},
+      {"path": "res://.godot/content_authoring/preview_845673/equipment_demo_neck.tres", "sha256": "5C80B56A6D685A5F1D1F882447FFB2A703D0FA598E040E0CC7F5C0E4BB49EF4D"},
+      {"path": "res://.godot/content_authoring/preview_845673/equipment_demo_shoulders.tres", "sha256": "6F0670611811E1B6812EDE95F6639456CBD2F52BFF23E2AA790F3C988500121F"},
+      {"path": "res://.godot/content_authoring/preview_845673/equipment_demo_arms.tres", "sha256": "3E2046114AFB628DC79F7E99F193CA6E29EA4B69E02BC62B5D693C6393F8CE35"},
+      {"path": "res://.godot/content_authoring/preview_845673/equipment_demo_torso.tres", "sha256": "F56302188E4553CA82C0E8ED702788C887636541A1DFDE220F3D1B7FD2012739"},
+      {"path": "res://.godot/content_authoring/preview_845673/equipment_demo_cloak.tres", "sha256": "1E7F2AE612EBFD49E80D1B02D943BF1DF5DD6D46B098C6E3142A7A83320B8242"},
+      {"path": "res://.godot/content_authoring/preview_845673/equipment_demo_legs.tres", "sha256": "6F8C00D86194DB33BC4119B91CC04B26F823EDAC3913C292774EAFE59524C39C"},
+      {"path": "res://.godot/content_authoring/preview_845673/equipment_demo_feet.tres", "sha256": "93CBF1A4BBD1C1E9F828E3B4B3654C7C9F88331FE421B630CC564B5175FFEDDF"},
+      {"path": "res://.godot/content_authoring/preview_845673/equipment_demo_main_hand.tres", "sha256": "5C1AC8A74E5855E9ACF6EF5B1C6E08B4A236C7385D6C38D1DEC56B064C83DCDC"},
+      {"path": "res://.godot/content_authoring/preview_845673/equipment_demo_off_hand.tres", "sha256": "BFA9FDF264E2582EE2FEEB439A18D8E89A33FB8519250B0FB2D45D6945F0CAE2"},
+      {"path": "res://.godot/content_authoring/preview_845673/equipment_demo_accessory_1.tres", "sha256": "C67DA60B88308F7AE41712E4667233340F9E96ABE102CC30AF71FAB20FF1F3E7"},
+      {"path": "res://.godot/content_authoring/preview_845673/equipment_demo_accessory_2.tres", "sha256": "C9434440C4BAC51EE8C9F7B4715CBE5B2B9DCFEB51A560E283ED05ADC096FCBA"},
+      {"path": "res://.godot/content_authoring/preview_845673/equipment_demo_accessory_3.tres", "sha256": "3038ECF2E3F4C6CA1F8A31014B9A01232190D70C836CC349FBBD4EB577A0A819"},
+      {"path": "res://.godot/content_authoring/preview_845673/equipment_demo_accessory_4.tres", "sha256": "B2AB5F8849CF35CB1AD735BA9A207147D1277B2D6E03F3609C0E7EFDF4CB58B9"},
+      {"path": "res://.godot/content_authoring/preview_845673/set_demo_armor_set.tres", "sha256": "1BA304C8B92D7DBF457BAD6F48B739EE44090801E6EF4E126C8CB38F635FD37C"},
+      {"path": "res://.godot/content_authoring/preview_845673/mob_demo_normal_species.tres", "sha256": "11A2EAF95DA8342E820DADC7CB62A1EAF7507400D5ACE924C33E30BD99268C10"},
+      {"path": "res://.godot/content_authoring/preview_845673/card_demo_normal_card.tres", "sha256": "C5E525ED27FCD9996F3F03684DC2743E89756B178D55D7E310B87A57073A43A3"},
+      {"path": "res://.godot/content_authoring/preview_845673/mob_demo_elite_species.tres", "sha256": "CE2720EFB62BB853C1DC251ABF7A89BDDEB36A29A94A0823D015B006F5DB28F6"},
+      {"path": "res://.godot/content_authoring/preview_845673/card_demo_elite_card.tres", "sha256": "96CBA67E984C319C82835AA9F027B013395108E1314A21CEFB53D55545A72E89"},
+      {"path": "res://.godot/content_authoring/preview_845673/augment_demo_sp_growth.tres", "sha256": "70AC1E8B8B66D556DAC1DBD4ED4ED82F17C9F835AC870BD699D705FEC2C3B06F"},
+      {"path": "res://.godot/content_authoring/preview_845673/augment_demo_fire_shape.tres", "sha256": "77A34F70098F479EC20847637984F067C08A50E9E2E6C1F6CABCB9A07CE09CAD"},
+      {"path": "res://.godot/content_authoring/preview_845673/augment_demo_spear_range.tres", "sha256": "835D211ACC4466D806D848BF3A8181A44E2CAEBECC13C1F81FAEF5761E4624C9"},
+      {"path": "res://.godot/content_authoring/preview_845673/equipment_demo_focus.tres", "sha256": "E1F1A8574AD5F8FA4B617D56DB87AB1F6A094AB02FBD772F2D0181041AA610E7"},
+      {"path": "res://.godot/content_authoring/preview_845673/equipment_demo_two_hands.tres", "sha256": "F4DEC4F822F17510C17A3D8696C1FFCB197456EB330C65CEECCAC954AFF3B8E4"}
+    ]
+  },
+  "source_and_content_integrity": {
+    "before_manifest_path": ".godot/content_authoring/luna_before_manifest.json",
+    "before_manifest_sha256": "0F6A90254441F0904B23E22100255963C3D891B3C74AB507183E41E1A56F38F4",
+    "after_manifest_path": ".godot/content_authoring/luna_after_manifest.json",
+    "after_manifest_sha256": "901A6DEA4F427BDA67B92A8E9FECEA3996590165CC6F6E797812AC4B7C899290",
+    "manifested_files_before": 717,
+    "manifested_files_after": 717,
+    "changed_paths": ["content/authoring/demo_briefs.json"],
+    "removed_paths": [],
+    "demo_briefs_sha256_before": "4C1F735FF390FD1D7025DE5CA5ABBE552F237F07B45BDFE4616394818463CA37",
+    "demo_briefs_sha256_after": "34B7B8E339E5CCBF67F6DDCA940F43EE71E01948A9935ADA0324A20AD80CD9C3",
+    "demo_texts_sha256_before_and_after": "C9456CE73D53EE735F2A8E0818895AF4D8EFB734A24CC5AC21A11BE2DA07EADA",
+    "demo_texts_mechanical_digest": "c9456ce73d53ee735f2a8e0818895af4d8efb734a24cc5ac21a11be2da07eada",
+    "production_catalog_resource_count": 20,
+    "production_catalog_tres_fingerprint": "343E6C353675DBE2C5705F69A00A46DCF60D0FFC9D1736E6E811D2B88C1716EC",
+    "loader_sha256_before_and_after": "365DA424CBB23E25C71BC262C911560CEAF463A96D03502969DF1F50255C4F81",
+    "project_sha256_before_and_after": "ADF17C0941269918DEE0A0005329D874DA199778DDEFCE294CA00E655367857E",
+    "runner_sha256_before_and_after": "19C73B494E41727A2C769FA51EA2865DF9BA3C1F3CCA307B34A90802E70EF093",
+    "production_catalog_unchanged": true
+  },
+  "limitations": [
+    "This is automated supervision and artifact integrity evidence, not a semantic independent audit or product acceptance.",
+    "No full 195-step run, visual review, gameplay playtest, production publication, push, or merge was performed.",
+    "The first authoring attempt failed at step 194 and remains preserved in luna_final; corrected authoring and editorial checks passed in luna_after_format."
+  ]
+}

@@ -1,3 +1,5 @@
+> Autorização prevalente de 12/10/2026: base racional T3-A por Sol e população de nomes/flavor por Luna. [T3-A](e06/e06_content_base.md) entregue e validada,24 exemplos fora de produção e12 testes dirigidos. O catálogo final T3/20 builds, UI T4 e decisões de tuning/rates continuam posteriores. Este recorte substitui a suspensão anterior apenas para a base de autoria.
+
 > Atualização prevalente autorizada em 12/10/2026: [../WORKFLOW.md](../WORKFLOW.md) substitui a revisão Astra completa por capítulo. Luna acompanha bateria automatizada e informa falhas; Sol corrige e fecha validação técnica. Astra permanece em arquitetura/planejamento e exceções justificadas visual/complexidade. RX/R2 continuam checkpoints consolidados, sem auditoria Astra automática. R1 histórica aprovada e registros RX preservados; TX1–TX3 validadas tecnicamente por Sol com supervisão Luna no candidato2803f11, cobertura consolidada193 etapas; recibos e limites no checkpoint. Estado/donos: [e06/e06_tx.md](e06/e06_tx.md). Não libera T3/T4, E07, playtest ou merge. Cabeçalhos datados anteriores são históricos nos pontos substituídos.
 
 > Retomada autorizada em 11/10/2026: executor Sol/high para DX/TX, base9d05361f65549189f87f4f5440529aec44e3a904. Checkpoint/donos: [e06_tx.md](e06/e06_tx.md); decisões humanas adicionais e contrato técnico proposto: [e06_tx_api.md](e06/e06_tx_api.md). Exemplares por aquisição e migração dos três slots confirmados; encaixes só armaduras/armas/escudos; focos/joias sem cartas; duas mãos bloqueiam secundária. R1 histórica continua dependência real. RX da ampliação precede T3/T4. Cabeçalhos anteriores que dizem sem dispatch preservam a rodada histórica.
@@ -30,7 +32,8 @@ implicitamente delegadas ao conteúdo. Não despachar consumidores sobre F2 anti
 | DX | Decisões estruturais e contrato executável da fundação, preservando registro v1 | Entregue; decisões pertinentes ao conteúdo final continuam posteriores |
 | TX | Fundação ampliada de composição/inventário/skills/loot, migração e APIs estáveis | TX1–TX3 entregues por Sol; candidato executável2803f11; contratos/recibos no checkpoint |
 | RX | Validação consolidada da fundação ampliada, bateria supervisionada Luna e fechamento técnico Sol | VALIDADA:193 etapas distintas por reuso/retomadas compatíveis,202 outputs conferidos; sem auditoria Astra automática ou cobertura herdada da R1 |
-| T3/T4 | Conteúdo/UI/arte sobre fundação tecnicamente validada, com contratos de apresentação | Não iniciadas; dependem de autorização, donos e decisões pertinentes; fundação pronta não libera consumidores por inferência |
+| T3-A | Base racional de autoria, modelos/validação e fichas para população Luna | ENTREGUE/VALIDADA;24 exemplos de contrato fora do loader de produção |
+| T3/T4 | Catálogo final/UI/arte sobre fundação e base de autoria validadas | Posteriores; parâmetros finais, cobertura e donos pertinentes antes da execução |
 | T5/R2 | Integração e revisão do candidato ampliado; posterior playtest e aceite humano | Dependem dos consumidores completos; sem nova liberação automática de campanha |
 
 DX/TX/RX/FX são marcadores de dependência, não commits, chats criados ou execução

@@ -4,6 +4,7 @@ extends Resource
 
 @export var id: StringName
 @export var display_name: String
+@export_multiline var flavor_text: String
 @export_multiline var description: String
 ## Empty means available to either class.
 @export var class_id: StringName
