@@ -126,7 +126,7 @@ func effects_valid() -> bool:
 
 func skill_effect_capture(skill_id: StringName) -> Dictionary:
 	_ensure_effect_cache()
-	return SkillEffectResolver.capture(skill_id, int(skill_levels.get(skill_id, 0)), _effect_cache)
+	return SkillEffectResolver.capture(skill_id, int(_effect_cache.get("skill_ranks", {}).get(skill_id, 0)), _effect_cache)
 
 func stat_modifier_sources() -> Array[Dictionary]:
 	var result := composed_build()
@@ -254,11 +254,11 @@ func has_effective_gain(before: Dictionary, after: Dictionary) -> bool:
 	# Offers and card rewards compare resolved values, after caps and aggregation.
 	if not before.get("ok", false) or not after.get("ok", false):
 		return false
-	if before["breakdown"].values() != after["breakdown"].values() or _effective_proc_signature(before["procs"]) != _effective_proc_signature(after["procs"]):
+	if before.get("item_grants", {}) != after.get("item_grants", {}) or before["breakdown"].values() != after["breakdown"].values() or _effective_proc_signature(before["procs"]) != _effective_proc_signature(after["procs"]):
 		return true
 	for skill: StringName in after["skill_rules"]:
-		var previous := SkillEffectResolver.capture(skill, int(skill_levels.get(skill, 0)), before)
-		var following := SkillEffectResolver.capture(skill, int(skill_levels.get(skill, 0)), after)
+		var previous := SkillEffectResolver.capture(skill, int(before.get("skill_ranks", {}).get(skill, 0)), before)
+		var following := SkillEffectResolver.capture(skill, int(after.get("skill_ranks", {}).get(skill, 0)), after)
 		if previous["ok"] and following["ok"] and previous["values"] != following["values"]:
 			return true
 	return false
@@ -310,17 +310,32 @@ func _format_effect(effect_id: StringName, value: float) -> String:
 func _effective_proc_signature(procs: Array) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for proc: Dictionary in procs:
-		var flat := float(proc["flat"])
-		var increased := float(proc["increased"])
-		var cap := float(proc["limit"])
-		if flat <= 0.0 and increased <= 0.0:
-			continue
-		# Every legal hit has at least one HP damage. At that point a saturated
-		# family cannot gain from any extra flat/increased magnitude or provenance.
-		if flat + increased >= cap:
-			flat = cap
-			increased = 0.0
-		result.append({"family_id": proc["family_id"], "trigger": proc["trigger"], "axis": proc["axis"], "targets": proc["targets"], "flat": flat, "increased": increased, "limit": cap})
+		var cases: Dictionary = {&"": {"flat": 0.0, "increased": 0.0}}
+		var parts: Array = proc.get("parts", [{"weapon_instance_id": &"", "flat": proc["flat"], "increased": proc["increased"]}])
+		for part: Dictionary in parts:
+			var weapon := StringName(part["weapon_instance_id"])
+			if not weapon.is_empty():
+				cases[weapon] = {"flat": 0.0, "increased": 0.0}
+		var weapons: Array = cases.keys()
+		weapons.sort()
+		var generic: Dictionary = {}
+		for weapon: StringName in weapons:
+			var flat := 0.0
+			var increased := 0.0
+			for part: Dictionary in parts:
+				if not StringName(part["weapon_instance_id"]).is_empty() and part["weapon_instance_id"] != weapon:
+					continue
+				flat += float(part["flat"])
+				increased += float(part["increased"])
+			var cap := float(proc["limit"])
+			if flat + increased >= cap:
+				flat = cap
+				increased = 0.0
+			var magnitude := {"flat": flat, "increased": increased}
+			if weapon.is_empty(): generic = magnitude
+			if (flat <= 0.0 and increased <= 0.0) or (not weapon.is_empty() and magnitude == generic):
+				continue
+			result.append({"family_id": proc["family_id"], "trigger": proc["trigger"], "axis": proc["axis"], "targets": proc["targets"], "weapon_instance_id": weapon, "flat": flat, "increased": increased, "limit": cap})
 	return result
 
 func add_local_equipment(definition_id: StringName, metadata: Dictionary) -> Dictionary:
@@ -336,3 +351,27 @@ func add_local_equipment(definition_id: StringName, metadata: Dictionary) -> Dic
 	local_equipment_instances[id] = created["instance"]
 	next_local_equipment_counter += 1
 	return {"ok": true, "instance_id": id}
+
+func causal_plan(targets: Array[int], carriers: Array[int] = []) -> Dictionary:
+	var families: Array[StringName] = BuildEffectCatalog.INTRINSIC_FAMILIES.duplicate()
+	for proc: Dictionary in composed_build().get("procs", []):
+		if proc["family_id"] not in families:
+			families.append(proc["family_id"])
+	families.sort()
+	return {"families": families, "targets": targets.duplicate(), "carriers": carriers.duplicate()}
+
+func effective_skill_rank(skill: StringName) -> int:
+	_ensure_effect_cache()
+	return int(_effect_cache.get("skill_ranks", {}).get(skill, 0))
+
+func available_active_ids() -> Array[StringName]:
+	var result := build_snapshot.learned_skill_ids(ProfileCatalog.ACTIVE)
+	_ensure_effect_cache()
+	for skill: StringName in _effect_cache.get("item_grants", {}):
+		if skill not in result:
+			result.append(skill)
+	return result
+
+func has_item_active(skill: StringName) -> bool:
+	_ensure_effect_cache()
+	return _effect_cache.get("item_grants", {}).has(skill)

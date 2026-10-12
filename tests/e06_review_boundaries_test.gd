@@ -1,4 +1,5 @@
 extends SceneTree
+const TXEffects = preload("res://tests/e06_effects_fixture.gd")
 const Fixture = preload("res://tests/e06_effects_fixture.gd")
 var checks := 0
 var failures := 0
@@ -22,13 +23,15 @@ func _count_effect(id: StringName, amount: float) -> EffectDefinition:
 	effect.limit = 16.0
 	return effect
 func _card_cap() -> void:
-	var registry := BuildEffectCatalog.new()
+	var registry := TXEffects.registry()
 	var item := EquipmentDefinition.new()
 	item.id = &"review_staff"
+	item.quality_id = &"rare"
 	item.slot = &"main_hand"
 	item.effects = [_count_effect(&"staff_count", 15.0)]
 	_check(registry.register_definition(&"equipment", item)["ok"], "setup staff accepted")
 	var card := CardDefinition.new()
+	card.mob_base_id = &"fixture_elite"
 	card.id = &"review_count_card"
 	card.allowed_slots = [&"main_hand"]
 	card.effects = [_count_effect(&"card_count", 1.0)]

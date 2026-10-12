@@ -316,7 +316,7 @@ static func _decode_character(raw: Variant, profile_id: String, next_character_c
 	character.presets = presets
 	character.selected_preset = selected_preset
 	if data.has("action_slots"):
-		var layout := _decode_slots(data["action_slots"], ActionBarLayout.SLOT_COUNT, ProfileCatalog.ACTIVE, base_class_id, evolution_id, effective_ranks, catalog)
+		var layout := _decode_slots(data["action_slots"], ActionBarLayout.SLOT_COUNT, ProfileCatalog.ACTIVE, base_class_id, evolution_id, effective_ranks, catalog, not legacy_inventory)
 		if not layout["ok"]:
 			return layout
 		character.action_slots = layout["slots"]
@@ -435,7 +435,7 @@ static func _decode_preset(raw: Variant, base_class_id: StringName, evolution_id
 		return equipped_result
 	return {"ok": true, "preset": {"active_slots": active_result["slots"], "passive_slots": passive_result["slots"], "equipped": equipped_result["equipped"]}}
 
-static func _decode_slots(raw: Variant, expected_size: int, category: StringName, base_class_id: StringName, evolution_id: StringName, effective_ranks: Dictionary[StringName, int], catalog: ProfileCatalog) -> Dictionary:
+static func _decode_slots(raw: Variant, expected_size: int, category: StringName, base_class_id: StringName, evolution_id: StringName, effective_ranks: Dictionary[StringName, int], catalog: ProfileCatalog, allow_item_refs: bool = false) -> Dictionary:
 	if not raw is Array or raw.size() != expected_size:
 		return _error(&"invalid_presets")
 	var slots: Array[Variant] = []
@@ -448,11 +448,12 @@ static func _decode_slots(raw: Variant, expected_size: int, category: StringName
 			continue
 		var skill_id := StringName(value)
 		var metadata := catalog.skill_metadata(skill_id)
-		if metadata.is_empty() or not catalog.skill_is_allowed(skill_id, base_class_id, evolution_id):
+		var item_reference := allow_item_refs and category == ProfileCatalog.ACTIVE and ItemSkillAdapters.supports(skill_id, base_class_id)
+		if metadata.is_empty() or (not catalog.skill_is_allowed(skill_id, base_class_id, evolution_id) and not item_reference):
 			return _catalog_error(&"invalid_catalog")
 		if metadata["category"] != category or seen.has(skill_id):
 			return _catalog_error(&"invalid_presets") if metadata["category"] != category else _error(&"invalid_presets")
-		if effective_ranks.get(skill_id, 0) <= 0:
+		if effective_ranks.get(skill_id, 0) <= 0 and not item_reference:
 			return _error(&"requirements_unmet")
 		seen[skill_id] = true
 		slots.append(skill_id)

@@ -21,7 +21,7 @@ static func from_legacy(slots: Array) -> Array[Variant]:
 			seen[id] = true
 	return result
 
-static func valid(slots: Array, learned: Array[StringName]) -> bool:
+static func valid(slots: Array, learned: Array[StringName], retained_item_refs: Array[StringName] = []) -> bool:
 	if slots.size() != SLOT_COUNT:
 		return false
 	var seen: Dictionary[StringName, bool] = {}
@@ -31,7 +31,7 @@ static func valid(slots: Array, learned: Array[StringName]) -> bool:
 		if not (value is String or value is StringName):
 			return false
 		var id := StringName(value)
-		if id not in learned or seen.has(id):
+		if (id not in learned and id not in retained_item_refs) or seen.has(id):
 			return false
 		seen[id] = true
 	return true

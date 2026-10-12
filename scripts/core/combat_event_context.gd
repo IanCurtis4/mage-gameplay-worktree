@@ -59,4 +59,4 @@ func impact(victim_id: int) -> CombatEventContext:
 
 func scheduled_tick() -> CombatEventContext:
 	var owner := ledger()
-	return owner.new_root(_budget.owner_id, secondary, root_event_id, true) if is_active() and owner != null and not proc_child else null
+	return owner.new_root(_budget.owner_id, secondary, root_event_id, true, _budget.plan) if is_active() and owner != null and not proc_child else null

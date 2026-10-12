@@ -1,4 +1,5 @@
 extends SceneTree
+const TXEffects = preload("res://tests/e06_effects_fixture.gd")
 const Fixture = preload("res://tests/e06_effects_fixture.gd")
 var checks := 0
 var failures := 0
@@ -62,7 +63,7 @@ func _validation_and_conflicts() -> void:
 	primary.channel = &"increased"
 	primary.axis = &"int"
 	_check(not BuildEffectCatalog.validate_effect(primary)["ok"], "primary percentages forbidden")
-	var registry := BuildEffectCatalog.new()
+	var registry := TXEffects.registry()
 	for origin: StringName in BuildEffectCatalog.ORIGINS:
 		var exclusive: EffectDefinition = Fixture.count_effect()
 		exclusive.stacking_mode = EffectDefinition.Stacking.EXCLUSIVE
@@ -126,7 +127,7 @@ func _check(value: bool, message: String) -> void:
 		push_error(message)
 
 func _combined_and_scalar() -> void:
-	var registry := BuildEffectCatalog.new()
+	var registry := TXEffects.registry()
 	var snapshot := Fixture.snapshot()
 	var scalar := EffectDefinition.new()
 	scalar.id = &"fixture_range"
@@ -157,11 +158,15 @@ func _combined_and_scalar() -> void:
 		legal.job_level = 40
 		_check(BuildEffectComposer.compose(legal, {"augment_stacks": {&"vitality": 1}})["ok"], "available identity admits general effect")
 	var capped := Fixture.proc_effect(&"capped", &"same_family", 100.0)
-	registry = BuildEffectCatalog.new()
-	registry.register_definition(&"equipment", Fixture.definition(&"equipment", &"saturated", [capped]))
+	registry = TXEffects.registry()
+	var saturated := Fixture.definition(&"equipment", &"saturated", [capped]) as EquipmentDefinition
+	saturated.slot = &"torso"
+	saturated.item_kind = &"armor"
+	saturated.hand_usage = &"none"
+	registry.register_definition(&"equipment", saturated)
 	registry.register_definition(&"augment", Fixture.definition(&"augment", &"no_gain", [Fixture.proc_effect(&"extra", &"same_family")]))
 	var run := RunState.new(&"mage")
-	Fixture.equip(run.build_snapshot, &"saturated")
+	Fixture.equip(run.build_snapshot, &"saturated", &"torso")
 	run.set_effect_catalog(registry)
 	run.queue_choice()
 	var rng := RandomNumberGenerator.new()

@@ -36,6 +36,7 @@ static func resolve(
 		"event_id": request.context.event_id if request.context != null else 0,
 		"secondary": request.is_secondary,
 		"effect_snapshot": request.effect_snapshot.duplicate(true),
+		"weapon_instance_ids": request.weapon_instance_ids.duplicate(),
 		"target_id": request.target_id,
 		"skill_id": request.skill_id,
 		"emission_id": request.emission_id,

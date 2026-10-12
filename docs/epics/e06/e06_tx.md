@@ -1,6 +1,6 @@
 # E06-TX — checkpoint consolidado da fundação ampliada
 
-12/10/2026. DX ENTREGUE; R1 v1 APROVADA; TX1 ENTREGUE PELO AUTOR com validação dirigida; RX da ampliação pendente. TX2/TX3 seguem o mesmo contrato e suas dependências.
+12/10/2026. DX ENTREGUE; R1 v1 APROVADA; TX1/TX2 ENTREGUES PELO AUTOR com validação dirigida; TX3 seguinte; RX da ampliação pendente.
 
 ## Retomada, autorização e base real
 
@@ -127,3 +127,33 @@ Falhas preservadas: primeira seleção omitiu import dos2 tipos novos e timeout;
 Reaproveitamento por impacto identificado no recibo: cada plano mantém seu commit/base/sujeira/inputs/engine e outputs; posteriores mudanças restritas a fixtures, ordenação de instâncias ou rejeição de dados inválidos tiveram seleção própria. Nenhum PASS parcial é reapresentado como execução integral do HEAD. Fechamento amplo da fundação TX1–TX3 e RX ainda obrigatórios antes dos consumidores.
 
 Próxima dependência: TX2 sobre esta entrega local; decisões humanas de rank/cooldown/remoção/cross-class/biblioteca/atalho já registradas. Publicar contrato concreto de capacidades/tags/chave de exclusividade/conjuntos/arma por uso e orçamento causal derivado antes de editar suas autoridades. TX3 aguarda essa composição e seus tipos compartilhados. Sem push, playtest, merge ou aceite de produto. Candidato da ampliação não arquivável antes de TX2/TX3/RX e integração pertinentes.
+
+
+## TX1 preservada e plano concreto TX2, 12/10/2026
+
+Entrega TX1 local: a8706f8861175ef133ad2247326473f663ca5940; base54e6fad. Recibo autoral com42 etapas distintas/27 seleções,61 outputs com hashes conferidos e manifesto executável idêntico antes do commit.32 imports incidentais restaurados; nenhuma alteração em arte/projeto/addons. R1 histórica fechada permanece intacta.
+
+TX2 inicia nesta base, Sol/high, mesmo checkout/branch. Resultado: regras concretas de capacidades e origem, tags descritivas, efeitos nomeados exclusivos, conjuntos por limiar, cartas repetidas, uso real da arma, ativas de item com organização/cooldown preservados e orçamento causal derivado. Propriedade sequencial transferida antes de edição: scripts/data/effect_definition.gd, skill_definition.gd, equipment_definition.gd, card_definition.gd; scripts/core/build_effect_catalog.gd, build_effect_composer.gd, build_content_loader.gd, skill_effect_resolver.gd, run_state.gd, equipment_rules.gd, effect_proc_ledger.gd, combat_event_context.gd, damage_request.gd, combat_math.gd, profile_codec.gd, profile_facade.gd, action_bar_layout.gd, build_presentation.gd, run_reward_service.gd; scripts/actors/player_actor.gd; scripts/main.gd; scripts/ui/action_bar_editor.gd e tools/verify.ps1. UIDs existentes preservados. Novos: scripts/core/effect_tags.gd, item_skill_adapters.gd, mob_catalog.gd, scripts/data/mob_definition.gd, equipment_set_definition.gd; tests/e06_tx_composition_test.gd, e06_tx_active_test.gd, e06_tx_causality_test.gd e UIDs. MobCatalog é autoridade compartilhada inicial de base/categoria, consumida por TX3; nenhum catálogo paralelo.
+
+Fixtures permitidas: tests/e06_effects_fixture.gd, e06_inventory_fixture.gd, e06_tx_fixture.gd, e06_effects_composition_test.gd, e06_effects_runtime_test.gd, e06_inventory_resources_test.gd, e06_inventory_persistence_test.gd, e06_review_boundaries_test.gd, e06_review_preset_test.gd, e06_review_persistence_edges_test.gd, e06_tx_inventory_test.gd, action_bar_persistence_test.gd. Adaptações apenas metadata/contrato alterado; preservar casos negativos, durabilidade e fórmulas. Seleções adicionais de regressão usam testes existentes sem editar.
+
+Contrato concreto abaixo e no manifesto; sem aprovação por microtarefa. TX2/TX3 terão RX conjunta independente. Sem conteúdo/UI finais/T3/T4/E07/playtest/push/merge.
+
+Transferência TX2 adicional antes da edição: scripts/ui/battle_controls.gd, estritamente preservação/desabilitação do atalho e atualização da biblioteca existente, sem UI14 final.
+
+
+## TX2 — entrega do autor, 12/10/2026
+
+Resultado: capacidades inferidas por handler e validadas por origem/qualidade/base; mob base autoritativo copiado; tags de efeito/skill apenas metadata; chave de exclusividade semântica; conjuntos legais com uma fonte por limiar; soma de cartas por exemplar e transformação EXCLUSIVE repetida idempotente apenas quando mesma receita. Conflitos diferentes/cross-origin rejeitam toda mudança. Qualidade real do exemplar controla receita, inclusive antes do RNG de aquisição.
+
+Ativas: adaptadores concretos fire_spear/ice_spear/teleport executados nas três bases; maior rank, aprendizado intacto, biblioteca enquanto equipado, seleção manual, atalho persistido desabilitado, CD compartilhado correndo/removal/reequip sem reset. Perda da última fonte cancela preparação; emissão retida. Outros handlers não são liberados por metadata. Ordem anterior da biblioteca aprendida preservada.
+
+Arma: DamageRequest captura exemplares usados por mapeamento explícito; auto, golpes diretos/arco/tiros pagos Sentinela são elegíveis, Rede INT/spells/traps não. Proc agregado conserva parcelas condicionais, não dá bônus da arma a spell genérica. Comparação de ganho considera parcelas genéricas e condicionais, evitando ocultar novo buff pelo cap de uma parcela de arma.
+
+Causalidade: plano congelado de famílias/alvos/carriers por emissão no RunController, orçamento pelo produto finito de pares; dedupe antes de callback, apply_once, proc_child/depth, cancelamento, roots fracas e limites mundiais/kit preservados. Ticks herdam plano/ancestralidade. Não trunca fontes nem usa cap global de buffs. Compatibilidade cap16 exclusivamente fixtures sem plano; novos produtores vivos adotam plano. Novas provas:60 composição,53 ativas,19 causalidade, incluindo26 famílias úteis em emissão real e exclusão da parcela de arma de uma spell.
+
+Validação dirigida pelo autor: 28 nomes distintos PASS em 11 seleções, incluindo import/smoke, fronteiras persistência/barra/inventário e regressões dos sete kits E05. Sem integral188/188 nem decisão RX. Recibo novo permitido/assumido por Sol: e06_tx2_validation.json; logs .godot/verification/e06_tx2/. Probes de revisão executados como evidência autoral, sem alterar relatório R1 fechado. Imports incidentais restaurados após igualdade por conteúdo normalizado.
+
+Tentativas falhas preservadas: parâmetro de decoder inserido inicialmente na função errada (compile), chamada de codec inexistente no teste, fixtures genéricas de proc ainda usavam arma para spell e fixture adversarial sem qualidade. Fixtures de mistura/saturação agora explicitamente usam armadura para conservar seu propósito; teste novo cobre arma verdadeira separadamente, sem retirar assert. A regressão encontrou ordenação lexical nova na biblioteca, corrigida no runtime. Novo delta de assinatura condicional teve provas próprias; não rerodou todos os kits por essa correção local. Nenhuma fórmula de stats/dano ou oráculo E05 mudou.
+
+TX2 aguardará RX junto a TX1/TX3. Próximo: TX3, definição fixa de mob/ocorrência, adaptadores e loot parametrizado, sem taxas de produção inventadas.

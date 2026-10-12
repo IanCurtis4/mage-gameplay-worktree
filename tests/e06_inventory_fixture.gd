@@ -1,4 +1,5 @@
 extends RefCounted
+const TXEffects = preload("res://tests/e06_effects_fixture.gd")
 const TX = preload("res://tests/e06_tx_fixture.gd")
 
 class FaultStore:
@@ -42,7 +43,7 @@ static func stat(id: StringName, axis: StringName, amount: float) -> EffectDefin
 
 static func catalog() -> BuildEffectCatalog:
 	var source := BuildContentLoader.pilot()
-	var result := BuildEffectCatalog.new()
+	var result := TXEffects.registry()
 	for origin: StringName in BuildEffectCatalog.ORIGINS:
 		for id: StringName in source.ids(origin):
 			var definition := source.get_definition(origin, id)
@@ -66,6 +67,8 @@ static func catalog() -> BuildEffectCatalog:
 				effect.stacking_mode = EffectDefinition.Stacking.EXCLUSIVE
 				effect.conflict_group = &"fixture_exclusive"
 				definition.effects.assign([effect])
+			if definition is CardDefinition:
+				definition.mob_base_id = &"fixture_elite"
 			assert(result.register_definition(origin, definition)["ok"])
 	return result
 

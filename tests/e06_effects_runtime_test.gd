@@ -1,4 +1,5 @@
 extends SceneTree
+const TXEffects = preload("res://tests/e06_effects_fixture.gd")
 const Fixture = preload("res://tests/e06_effects_fixture.gd")
 var checks := 0
 var failures := 0
@@ -23,7 +24,17 @@ func _runtime_origin(origin: StringName) -> void:
 	var state := RunState.new(&"mage")
 	var effects: Array[EffectDefinition] = [Fixture.count_effect(), Fixture.proc_effect(), Fixture.range_effect()]
 	var catalog: BuildEffectCatalog = Fixture.catalog_for(origin, effects)
+	if origin == &"equipment":
+		var armor := Fixture.definition(origin, &"fixture", effects) as EquipmentDefinition
+		armor.slot = &"torso"
+		armor.item_kind = &"armor"
+		armor.hand_usage = &"none"
+		catalog = TXEffects.registry()
+		catalog.register_definition(origin, armor)
 	var contents: Dictionary = Fixture.state_for(origin, state.build_snapshot)
+	if origin == &"equipment":
+		state.build_snapshot.equipped[&"main_hand"] = null
+		state.build_snapshot.equipped[&"torso"] = &"fixture"
 	if contents.has("augment_stacks"):
 		state.augment_stacks.assign(contents["augment_stacks"])
 	state.card_sockets = contents.get("card_sockets", {})
@@ -161,7 +172,7 @@ func _mixed_kit_quota() -> void:
 	snapshot.job_level = 40
 	snapshot.skill_ranks = {&"snare_trap": 1}
 	var state := RunState.from_build("mixed", snapshot)
-	var registry := BuildEffectCatalog.new()
+	var registry := TXEffects.registry()
 	for origin: StringName in BuildEffectCatalog.ORIGINS:
 		registry.register_definition(origin, Fixture.definition(origin, origin, [Fixture.proc_effect(StringName("recipe_" + String(origin)), StringName("z_" + String(origin)))]))
 	state.augment_stacks = {&"augment": 1}
@@ -223,11 +234,16 @@ func _echo_and_kill_exceptions() -> void:
 	build.evolution_id = &"spiritualist"
 	build.job_level = 40
 	var state := RunState.from_build("echo-mixed", build)
-	var registry := BuildEffectCatalog.new()
+	var registry := TXEffects.registry()
 	for origin: StringName in BuildEffectCatalog.ORIGINS:
-		registry.register_definition(origin, Fixture.definition(origin, origin, [Fixture.proc_effect(StringName("recipe_" + String(origin)), StringName("generic_" + String(origin)))]))
+		var definition := Fixture.definition(origin, origin, [Fixture.proc_effect(StringName("recipe_" + String(origin)), StringName("generic_" + String(origin)))])
+		if origin == &"equipment":
+			definition.slot = &"torso"
+			definition.item_kind = &"armor"
+			definition.hand_usage = &"none"
+		registry.register_definition(origin, definition)
 	state.augment_stacks = {&"augment": 1}
-	Fixture.equip(state.build_snapshot, &"equipment")
+	Fixture.equip(state.build_snapshot, &"equipment", &"torso")
 	state.card_sockets = {&"equipment": [&"card"]}
 	state.card_instances = {&"card": &"card"}
 	state.set_effect_catalog(registry)

@@ -17,6 +17,16 @@ static func definitions(origin: StringName) -> Array[Resource]:
 
 static func load_catalog() -> Dictionary:
 	var catalog := BuildEffectCatalog.new()
+	var mobs := MobCatalog.new()
+	for definition: Resource in definitions(&"mob"):
+		var registered := mobs.register_definition(definition as MobDefinition)
+		if not registered["ok"]:
+			return registered
+	catalog.set_mob_catalog(mobs)
+	for definition: Resource in definitions(&"set"):
+		var registered := catalog.register_set(definition as EquipmentSetDefinition)
+		if not registered["ok"]:
+			return registered
 	for origin: StringName in BuildEffectCatalog.ORIGINS:
 		for definition: Resource in definitions(origin):
 			var registered := catalog.register_definition(origin, definition)

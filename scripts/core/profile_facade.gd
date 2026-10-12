@@ -244,7 +244,7 @@ func update_action_slots(request_id: String, expected_revision: int, character_i
 	if not _catalog.build_is_ready(character):
 		return _finish_operation(request_id, {"ok": false, "error_code": &"content_unavailable"})
 	var snapshot := _build_snapshot(character)
-	if not ActionBarLayout.valid(slots, snapshot.learned_skill_ids(ProfileCatalog.ACTIVE)):
+	if not ActionBarLayout.valid(slots, snapshot.learned_skill_ids(ProfileCatalog.ACTIVE), ItemSkillAdapters.reference_ids(character.base_class_id)):
 		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_action_slots"})
 	# Unlike build edits this is legal during a run: only shortcut organization.
 	if _profile.reward_session != null and _profile.reward_session.character_id != character_id:

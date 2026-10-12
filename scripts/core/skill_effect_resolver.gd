@@ -14,6 +14,15 @@ static func capture(skill_id: StringName, rank: int, composed_build: Dictionary)
 	var rank_definition := definition.rank_definition(rank) if definition != null else null
 	if rank_definition == null:
 		return BuildEffectCatalog.failure(&"skill_not_learned")
+	if not EffectTags.valid(definition.tags):
+		return BuildEffectCatalog.failure(&"unknown_effect_tag")
+	var tags := definition.tags.duplicate()
+	for source: Dictionary in composed_build.get("provenance", []):
+		if skill_id in source.get("targets", []) or (source.get("capability") == &"active_grant" and source.get("granted_skill_id") == skill_id):
+			for tag: StringName in source.get("tags", []):
+				if tag not in tags:
+					tags.append(tag)
+	tags.sort()
 	var axes: Dictionary = composed_build.get("skill_rules", {}).get(skill_id, {})
 	var values := {"range": rank_definition.range, "sp_cost": rank_definition.sp_cost, "cooldown": rank_definition.cooldown, "projectile_count": 2.0 if skill_id == &"double_shot" else 1.0}
 	for axis: StringName in axes:
@@ -26,4 +35,4 @@ static func capture(skill_id: StringName, rank: int, composed_build: Dictionary)
 	rank_definition.range = values["range"]
 	rank_definition.sp_cost = values["sp_cost"]
 	rank_definition.cooldown = values["cooldown"]
-	return {"ok": true, "error_code": &"", "request_id": "", "skill_id": skill_id, "rank": rank, "build_version": composed_build.get("build_version", 0), "rank_definition": rank_definition, "values": values.duplicate(true), "procs": composed_build.get("procs", []).duplicate(true)}
+	return {"ok": true, "error_code": &"", "request_id": "", "skill_id": skill_id, "rank": rank, "build_version": composed_build.get("build_version", 0), "rank_definition": rank_definition, "values": values.duplicate(true), "procs": composed_build.get("procs", []).duplicate(true), "tags": tags.duplicate()}

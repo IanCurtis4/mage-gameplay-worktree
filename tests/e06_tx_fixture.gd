@@ -1,4 +1,5 @@
 extends RefCounted
+const TXEffects = preload("res://tests/e06_effects_fixture.gd")
 class FaultStore:
 	extends ProfileStore
 	var failure_stage: StringName = &""
@@ -57,7 +58,7 @@ static func make(tree: SceneTree, label: String) -> Dictionary:
 	var state: RunState = started["run_state"]
 	var loaded := BuildContentLoader.load_catalog_for_profile(catalog)
 	var effects: BuildEffectCatalog = loaded["catalog"]
-	var registry := BuildEffectCatalog.new()
+	var registry := TXEffects.registry()
 	for origin: StringName in BuildEffectCatalog.ORIGINS:
 		for id: StringName in effects.ids(origin):
 			var definition := effects.get_definition(origin, id)
@@ -69,6 +70,8 @@ static func make(tree: SceneTree, label: String) -> Dictionary:
 				effect.magnitude = 30.0
 				effect.unit = &"points"
 				definition.effects.assign([effect])
+			if definition is CardDefinition:
+				definition.mob_base_id = &"fixture_elite"
 			assert(registry.register_definition(origin, definition)["ok"])
 	assert(state.set_effect_catalog(registry)["ok"])
 	RunController.pending_run_state = state

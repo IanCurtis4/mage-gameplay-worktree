@@ -31,7 +31,7 @@ static func describe(controller: RunController) -> Dictionary:
 	var composed := state.composed_build(controller.player.temporary_stat_sources())
 	if not composed["ok"]:
 		return composed
-	return {"ok": true, "error_code": &"", "request_id": "", "title": "Equipamentos e cartas", "collection_label": "Coleção permanente", "inventory_label": "Cartas desta run", "context": controller.build_service.context(), "equipped": state.build_snapshot.equipped.duplicate(true), "equipment": equipment, "cards": cards, "inventory": inventory, "stats": composed["breakdown"].values(), "sources": composed["provenance"].duplicate(true), "inactive": composed["inactive"].duplicate(true), "skill_rules": composed["skill_rules"].duplicate(true)}
+	return {"ok": true, "error_code": &"", "request_id": "", "title": "Equipamentos e cartas", "collection_label": "Coleção permanente", "inventory_label": "Cartas desta run", "context": controller.build_service.context(), "equipped": state.build_snapshot.equipped.duplicate(true), "equipment": equipment, "cards": cards, "inventory": inventory, "stats": composed["breakdown"].values(), "sources": composed["provenance"].duplicate(true), "inactive": composed["inactive"].duplicate(true), "skill_rules": composed["skill_rules"].duplicate(true), "item_grants": composed["item_grants"].duplicate(true), "unique_effects": composed["unique_effects"].duplicate(true)}
 
 static func compare(service: RunBuildService, intent: Dictionary) -> Dictionary:
 	var preview := service.preview_change(intent)

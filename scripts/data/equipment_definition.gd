@@ -15,6 +15,7 @@ extends Resource
 @export var item_level: int = 0
 @export var quality_id: StringName
 @export var socket_capacity: int = 0
+@export var set_id: StringName
 @export var starter: bool = false
 @export var effects: Array[EffectDefinition] = []
 

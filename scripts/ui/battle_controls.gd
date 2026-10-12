@@ -127,7 +127,7 @@ func _build_settings() -> void:
 func set_action_bar(skill_ids: Array[StringName], slots: Array[Variant], preferences: ControlPreferences) -> void:
 	learned_skills = skill_ids.duplicate()
 	control_preferences = preferences
-	action_slots = slots.duplicate() if ActionBarLayout.valid(slots, learned_skills) else ActionBarLayout.empty()
+	action_slots = slots.duplicate() if ActionBarLayout.valid(slots, learned_skills, ItemSkillAdapters.IDS) else ActionBarLayout.empty()
 	_rebuild_bar()
 
 func set_class_skills(skill_ids: Array[StringName]) -> void:
@@ -157,6 +157,7 @@ func _rebuild_bar() -> void:
 		button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		button.focus_mode = Control.FOCUS_NONE
 		button.toggle_mode = true
+		button.disabled = not id.is_empty() and id not in learned_skills
 		button.add_theme_font_size_override("font_size", 12)
 		# The arena's large modal-button padding must not expand the two-row bar.
 		for state: StringName in [&"normal", &"hover", &"pressed", &"hover_pressed", &"disabled"]:
@@ -167,7 +168,7 @@ func _rebuild_bar() -> void:
 			style.content_margin_right = 4.0
 			button.add_theme_stylebox_override(state, style)
 		button.text = "%s\n%s" % [labels[index], _short_name(id)]
-		button.tooltip_text = "Slot %d · %s\n%s" % [index + 1, labels[index], _name(id)]
+		button.tooltip_text = "Slot %d · %s\n%s%s" % [index + 1, labels[index], _name(id), " · indisponível" if button.disabled else ""]
 		if id != &"":
 			button.pressed.connect(_choose_skill.bind(id))
 			skill_buttons[id] = button

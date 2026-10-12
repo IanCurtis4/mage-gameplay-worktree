@@ -92,7 +92,7 @@ func _action(row: HBoxContainer, title: String, callback: Callable) -> void:
 
 func configure(learned: Array[StringName], slots: Array[Variant], preferences: ControlPreferences) -> void:
 	learned_skills = learned.duplicate()
-	action_slots = slots.duplicate() if ActionBarLayout.valid(slots, learned) else ActionBarLayout.empty()
+	action_slots = slots.duplicate() if ActionBarLayout.valid(slots, learned, ItemSkillAdapters.IDS) else ActionBarLayout.empty()
 	control_preferences = preferences
 	if slots_grid == null:
 		return

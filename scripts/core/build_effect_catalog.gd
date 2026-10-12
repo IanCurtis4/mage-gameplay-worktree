@@ -8,6 +8,8 @@ const SCALAR_AXES: Array[StringName] = [&"range"]
 const INTRINSIC_FAMILIES: Array[StringName] = [&"elementalist_tri_nova_ice", &"elementalist_tri_nova_lightning", &"hunter_exploit", &"sentinel_focus", &"berserker_wound", &"berserker_pursuit", &"berserker_breath_heal", &"elementalist_focus", &"spiritualist_echo", &"spiritualist_echo_recovery", &"spiritualist_channel_focus", &"spiritualist_drain_heal", &"blood_thirst", &"defender_watch", &"defender_token", &"defender_guard_return"]
 const PROJECTILE_SKILLS: Array[StringName] = [&"fire_spear", &"ice_spear", &"double_shot"]
 var _definitions: Dictionary = {}
+var _mob_catalog := MobCatalog.new()
+var _sets: Dictionary = {}
 
 static func pilot() -> BuildEffectCatalog:
 	var catalog := BuildEffectCatalog.new()
@@ -46,6 +48,9 @@ static func pilot() -> BuildEffectCatalog:
 
 func copy_catalog() -> BuildEffectCatalog:
 	var result := BuildEffectCatalog.new()
+	result._mob_catalog = _mob_catalog.copy_catalog()
+	for id: StringName in _sets:
+		result._sets[id] = _sets[id].duplicate(true)
 	for key: String in _definitions:
 		result._definitions[key] = (_definitions[key] as Resource).duplicate(true)
 	return result
@@ -73,7 +78,13 @@ func register_definition(origin: StringName, definition: Resource) -> Dictionary
 		var equipment_check := EquipmentRules.validate_definition(definition.metadata())
 		if not equipment_check["ok"]:
 			return equipment_check
+	if definition is EquipmentDefinition and not definition.set_id.is_empty():
+		var set_check := validate_equipment_quality(definition, definition.quality_id)
+		if not set_check["ok"]:
+			return set_check
 	if definition is CardDefinition:
+		if not definition.effects.is_empty() and _mob_catalog.get_definition(definition.mob_base_id) == null:
+			return failure(&"missing_mob_base")
 		if definition.allowed_slots.is_empty():
 			return failure(&"invalid_slot")
 		for slot: StringName in definition.allowed_slots:
@@ -86,6 +97,9 @@ func register_definition(origin: StringName, definition: Resource) -> Dictionary
 		var validation := validate_effect(effect)
 		if not validation["ok"]:
 			return validation
+		var capability_check := validate_recipe(origin, definition, effect)
+		if not capability_check["ok"]:
+			return capability_check
 		if seen.has(effect.id):
 			return failure(&"duplicate_effect")
 		seen[effect.id] = true
@@ -99,6 +113,12 @@ func register_definition(origin: StringName, definition: Resource) -> Dictionary
 static func validate_effect(effect: EffectDefinition) -> Dictionary:
 	if effect == null or effect.id.is_empty() or effect.family_id.is_empty() or effect.unit not in [&"ratio", &"points", &"count", &"units", &"seconds", &"sp", &"damage"] or effect.minimum_rank < 1 or effect.minimum_rank > 5:
 		return failure(&"invalid_effect")
+	if not EffectTags.valid(effect.tags):
+		return failure(&"unknown_effect_tag")
+	if not effect.unique_effect_id.is_empty() and not IdentityIds.is_technical_id(String(effect.unique_effect_id)):
+		return failure(&"invalid_unique_effect")
+	if effect.kind != EffectDefinition.Kind.ACTIVE_GRANT and not effect.granted_skill_id.is_empty():
+		return failure(&"invalid_item_active")
 	for value: float in [effect.magnitude, effect.increased, effect.limit]:
 		if not is_finite(value):
 			return failure(&"non_finite_parameter")
@@ -138,6 +158,16 @@ static func validate_effect(effect: EffectDefinition) -> Dictionary:
 			return failure(&"intrinsic_family_requires_adapter")
 		if effect.handler_id != EffectDefinition.Handler.HIT_DAMAGE or effect.trigger != EffectDefinition.Trigger.ON_HIT or effect.axis not in [&"physical_damage", &"magic_damage"] or effect.magnitude < 0.0 or effect.increased < 0.0 or effect.limit <= 0.0 or effect.unit != &"damage":
 			return failure(&"unsupported_proc")
+	elif effect.kind == EffectDefinition.Kind.ACTIVE_GRANT:
+		if effect.handler_id != EffectDefinition.Handler.ACTIVE_SKILL or effect.trigger != EffectDefinition.Trigger.NONE or not effect.target_skill_ids.is_empty() or effect.magnitude != 0.0 or effect.increased != 0.0 or effect.limit != 0.0 or not effect.stack_values.is_empty():
+			return failure(&"invalid_item_active")
+		if effect.granted_rank < 1 or effect.granted_rank > 5:
+			return failure(&"invalid_item_rank")
+		if effect.allowed_origins.is_empty():
+			return failure(&"invalid_item_compatibility")
+		for origin: StringName in effect.allowed_origins:
+			if not ItemSkillAdapters.supports(effect.granted_skill_id, origin):
+				return failure(&"unsupported_item_active")
 	else:
 		return failure(&"unsupported_handler")
 	return {"ok": true, "error_code": &"", "request_id": ""}
@@ -170,3 +200,59 @@ static func _all_projectile_skills(skills: Array[StringName]) -> bool:
 		if skill not in PROJECTILE_SKILLS:
 			return false
 	return true
+
+func set_mob_catalog(catalog: MobCatalog) -> Dictionary:
+	if catalog == null or not ids(&"card").is_empty():
+		return failure(&"catalog_frozen")
+	_mob_catalog = catalog.copy_catalog()
+	return {"ok": true}
+
+func mob_catalog() -> MobCatalog:
+	return _mob_catalog.copy_catalog()
+
+func register_set(definition: EquipmentSetDefinition) -> Dictionary:
+	if definition == null or not IdentityIds.is_technical_id(String(definition.id)) or _sets.has(definition.id) or definition.thresholds.is_empty():
+		return failure(&"invalid_set")
+	for threshold: Variant in definition.thresholds:
+		if typeof(threshold) != TYPE_INT or threshold < 1 or threshold > EquipmentRules.ARMOR_SLOTS.size() or not definition.thresholds[threshold] is Array or definition.thresholds[threshold].is_empty():
+			return failure(&"invalid_set")
+		var seen: Dictionary = {}
+		for raw: Variant in definition.thresholds[threshold]:
+			if not raw is EffectDefinition:
+				return failure(&"invalid_set")
+			var effect: EffectDefinition = raw
+			var checked := validate_effect(effect)
+			if not checked["ok"]:
+				return checked
+			if effect.kind == EffectDefinition.Kind.ACTIVE_GRANT or seen.has(effect.id) or not effect.stack_values.is_empty():
+				return failure(&"invalid_set")
+			seen[effect.id] = true
+	_sets[definition.id] = definition.duplicate(true)
+	return {"ok": true}
+
+func get_set(id: StringName) -> EquipmentSetDefinition:
+	var definition: EquipmentSetDefinition = _sets.get(id)
+	return definition.duplicate(true) as EquipmentSetDefinition if definition != null else null
+
+func validate_recipe(origin: StringName, definition: Resource, effect: EffectDefinition) -> Dictionary:
+	if origin == &"card":
+		var mob := _mob_catalog.get_definition(definition.mob_base_id)
+		if effect.capability() == &"active_grant" or (mob != null and mob.base_category not in MobCatalog.COMPLEX_BASES and effect.capability() not in [&"stat", &"skill_buff"]):
+			return failure(&"capability_not_allowed")
+	if origin == &"equipment":
+		if effect.capability() != &"stat" and definition.quality_id not in [&"rare", &"epic", &"legendary"]:
+			return failure(&"capability_not_allowed")
+		if effect.capability() == &"active_grant" and definition.item_kind != &"jewelry":
+			return failure(&"capability_not_allowed")
+	return {"ok": true}
+
+func validate_equipment_quality(definition: EquipmentDefinition, quality: StringName) -> Dictionary:
+	if quality not in EquipmentRules.QUALITY_IDS:
+		return failure(&"invalid_equipment_instance")
+	if not definition.set_id.is_empty():
+		if definition.item_kind != &"armor" or get_set(definition.set_id) == null or quality not in [&"rare", &"epic", &"legendary"]:
+			return failure(&"invalid_set")
+	for effect: EffectDefinition in definition.effects:
+		if effect.capability() != &"stat" and quality not in [&"rare", &"epic", &"legendary"]:
+			return failure(&"capability_not_allowed")
+	return {"ok": true}

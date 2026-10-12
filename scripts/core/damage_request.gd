@@ -34,6 +34,7 @@ var intrinsic_contested: bool = false
 var cancelled: bool = false
 var context: CombatEventContext
 var effect_snapshot: Dictionary = {}
+var weapon_instance_ids: Array[StringName] = []
 var _is_secondary: bool = false
 var is_secondary: bool:
 	get: return _is_secondary or (context != null and context.secondary)
@@ -64,6 +65,7 @@ func copy() -> DamageRequest:
 	result.force_critical = force_critical
 	result.context = context.copy_context() if context != null else null
 	result.effect_snapshot = effect_snapshot.duplicate(true)
+	result.weapon_instance_ids = weapon_instance_ids.duplicate()
 	result.is_secondary = is_secondary
 	return result
 

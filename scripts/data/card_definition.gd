@@ -9,4 +9,5 @@ extends Resource
 @export var allowed_origins: Array[StringName] = []
 @export var allowed_evolutions: Array[StringName] = []
 @export var allowed_slots: Array[StringName] = [&"head", &"shoulders", &"arms", &"torso", &"cloak", &"legs", &"feet", &"main_hand", &"off_hand"]
+@export var mob_base_id: StringName
 @export var effects: Array[EffectDefinition] = []

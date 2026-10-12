@@ -502,15 +502,24 @@ func _set_sentinel_stance(active: bool) -> void:
 func available_skill_ids() -> Array[StringName]:
 	if run_state != null and run_state.uses_persistent_build():
 		var learned: Array[StringName] = []
-		for id: StringName in run_state.build_snapshot.learned_skill_ids(ProfileCatalog.ACTIVE):
+		for id: StringName in run_state.available_active_ids():
 			# Domain catalogs may include fixture/future metadata without runtime skills.
 			if ClassCatalog.skill_definition(id) != null:
 				learned.append(id)
 		return learned
-	return class_definition.skill_ids.duplicate()
+	var result := class_definition.skill_ids.duplicate()
+	if run_state != null:
+		for skill: StringName in run_state.available_active_ids():
+			if skill not in result:
+				result.append(skill)
+	return result
 
 func apply_run_modifiers(state: RunState) -> void:
 	run_state = state
+	if not active_cast_skill.is_empty() and active_cast_skill not in available_skill_ids():
+		cancel_active_cast()
+	if sentinel_state.explosive_prepared and &"sentinel_explosive_shot" not in available_skill_ids():
+		cancel_sentinel_preparation()
 	var derived := _build_stat_breakdown()
 	_apply_derived_stats(derived)
 	resources_changed.emit()
@@ -1254,7 +1263,7 @@ func consume_spiritualist_focus() -> float:
 	return bonus
 
 func use_spear(skill_id: StringName, enemy: CombatActor) -> bool:
-	if class_id != &"mage" or skill_id not in [&"fire_spear", &"ice_spear"] or not can_target_skill(skill_id, enemy) or not _can_spend(skill_id):
+	if (class_id != &"mage" and not run_state.has_item_active(skill_id)) or skill_id not in [&"fire_spear", &"ice_spear"] or not can_target_skill(skill_id, enemy) or not _can_spend(skill_id):
 		return false
 	var facing := _resolved_facing(global_position.direction_to(enemy.global_position))
 	_spend(skill_id)
@@ -2237,7 +2246,7 @@ func can_teleport(point: Vector2) -> bool:
 	return not is_rooted() and skill_range(&"teleport") > 0.0 and navigation != null and navigation.is_walkable(teleport_destination(point))
 
 func use_teleport(point: Vector2) -> bool:
-	if class_id != &"mage" or not _can_spend(&"teleport") or not can_teleport(point):
+	if (class_id != &"mage" and not run_state.has_item_active(&"teleport")) or not _can_spend(&"teleport") or not can_teleport(point):
 		return false
 	var destination := teleport_destination(point)
 	var facing := _resolved_facing(global_position.direction_to(destination))
@@ -2314,7 +2323,7 @@ func skill_projectile_speed(skill_id: StringName) -> float:
 	return definition.projectile_speed if definition != null else 0.0
 
 func skill_rank(skill_id: StringName) -> int:
-	return int(run_state.skill_levels.get(skill_id, 0)) if run_state != null else 0
+	return run_state.effective_skill_rank(skill_id) if run_state != null else 0
 
 func skill_rank_definition(skill_id: StringName) -> SkillRankDefinition:
 	var definition := _runtime_rank_definition(skill_id)
@@ -2333,7 +2342,7 @@ func _capture_rank_definitions() -> void:
 			_rank_definitions[skill_id] = rank_definition
 
 func _runtime_rank_definition(skill_id: StringName) -> SkillRankDefinition:
-	if run_state != null and _rank_definitions.has(skill_id):
+	if run_state != null and ClassCatalog.skill_definition(skill_id) != null:
 		var revision := run_state.composition_revision()
 		if revision != _effect_rank_revision:
 			_effect_rank_cache.clear()
@@ -2680,6 +2689,7 @@ func _make_request(enemy: CombatActor, skill_id: StringName, accuracy_mode: Dama
 	request.context = _emission_context.copy_context() if _emission_context != null else null
 	var composed := run_state.composed_build()
 	request.effect_snapshot = {"procs": composed.get("procs", []).duplicate(true), "build_version": run_state.build_snapshot.build_version}
+	request.weapon_instance_ids = weapon_ids_for_skill(skill_id)
 	request.source_id = get_instance_id()
 	request.target_id = enemy.get_instance_id() if enemy != null else 0
 	request.skill_id = skill_id
@@ -2960,7 +2970,22 @@ func _next_fixture_emission_id() -> int:
 	return _hunter_emission_serial
 
 func _begin_effect_emission() -> void:
-	_emission_context = run_state.effect_ledger.new_root(get_instance_id()) if run_state != null else null
+	if run_state == null:
+		_emission_context = null
+		return
+	var controller := get_parent() as RunController
+	var plan: Dictionary = {}
+	if controller != null:
+		var targets: Array[int] = [get_instance_id()]
+		for enemy: CombatActor in controller.enemies:
+			if is_instance_valid(enemy) and enemy.is_alive() and enemy.get_instance_id() not in targets:
+				targets.append(enemy.get_instance_id())
+		var carriers: Array[int] = []
+		for id: int in controller.spiritualist_echo_state.marks:
+			if id in targets:
+				carriers.append(id)
+		plan = run_state.causal_plan(targets, carriers)
+	_emission_context = run_state.effect_ledger.new_root(get_instance_id(), false, "", false, plan)
 
 func claim_effect_result(result: Dictionary, family: StringName, target_id: int, kit_recovery: bool = false) -> bool:
 	var context: CombatEventContext = result.get("context")
@@ -3018,7 +3043,7 @@ func resolve_build_effect_procs(result: Dictionary) -> void:
 func has_projectile_capacity(skill_id: StringName) -> bool:
 	if not is_inside_tree():
 		return true
-	var projectile_skills: Array[StringName] = [&"basic_attack", &"fireball", &"fire_spear", &"ice_spear", &"lightning", &"electric_discharge", &"double_shot", &"piercing_arrow", &"slowing_arrow", &"hunter_covering_shot", &"sentinel_headshot", &"sentinel_piercing_shot", &"sentinel_concussion_shot", &"sentinel_net_shot", &"sentinel_explosive_shot", &"geometer_trace", &"geometer_triangulation"]
+	var projectile_skills: Array[StringName] = [&"basic_attack", &"fireball", &"fire_spear", &"ice_spear", &"lightning", &"electric_discharge", &"double_shot", &"piercing_arrow", &"slowing_arrow", &"arrow_rain", &"hunter_covering_shot", &"sentinel_headshot", &"sentinel_piercing_shot", &"sentinel_concussion_shot", &"sentinel_net_shot", &"sentinel_explosive_shot", &"geometer_trace", &"geometer_triangulation"]
 	if skill_id not in projectile_skills or (skill_id == &"basic_attack" and class_id == &"swordsman"):
 		return true
 	var needed := run_state.projectile_count(skill_id) if skill_id in BuildEffectCatalog.PROJECTILE_SKILLS else 1
@@ -3041,6 +3066,16 @@ func prepare_effect_claims(result: Dictionary, additional: Array[Dictionary] = [
 		if proc["trigger"] != EffectDefinition.Trigger.ON_HIT or (not proc["targets"].is_empty() and skill not in proc["targets"]):
 			continue
 		var candidate := proc.duplicate(true)
+		if proc.has("parts"):
+			candidate["flat"] = 0.0
+			candidate["increased"] = 0.0
+			for part: Dictionary in proc["parts"]:
+				if not StringName(part["weapon_instance_id"]).is_empty() and part["weapon_instance_id"] not in result.get("weapon_instance_ids", []):
+					continue
+				candidate["flat"] += float(part["flat"])
+				candidate["increased"] += float(part["increased"])
+			if candidate["flat"] <= 0.0 and candidate["increased"] <= 0.0:
+				continue
 		candidate["target_id"] = target_id
 		candidate["build_proc"] = true
 		candidates.append(candidate)
@@ -3070,3 +3105,13 @@ func prepare_effect_claims(result: Dictionary, additional: Array[Dictionary] = [
 
 func _append_kit_candidate(candidates: Array[Dictionary], family: StringName, target_id: int, source: StringName = &"") -> void:
 	candidates.append({"family_id": family, "source_id": family if source.is_empty() else source, "target_id": target_id})
+
+func weapon_ids_for_skill(skill_id: StringName) -> Array[StringName]:
+	var result: Array[StringName] = []
+	var direct: Array[StringName] = [&"basic_attack", &"slash", &"cone_slash", &"brutal_strike", &"concentrated_rage", &"defender_counter_cut", &"defender_wall_advance", &"berserker_wound_leap", &"double_shot", &"piercing_arrow", &"slowing_arrow", &"arrow_rain", &"hunter_covering_shot", &"sentinel_headshot", &"sentinel_piercing_shot", &"sentinel_concussion_shot", &"sentinel_explosive_shot"]
+	if skill_id not in direct and skill_id not in BERSERKER_DIRECT_MELEE_IDS:
+		return result
+	var id: Variant = run_state.build_snapshot.equipped[&"main_hand"]
+	if id != null:
+		result.append(StringName(id))
+	return result

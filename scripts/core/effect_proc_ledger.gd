@@ -3,7 +3,8 @@ extends RefCounted
 ## Run-owned weak registry. Root claims live exactly as long as their envelopes.
 ## No TTL can reopen a claim while any projectile/timer/result still holds it.
 
-const APPLICATION_CAP := 16
+const LEGACY_APPLICATION_CAP := 16
+const APPLICATION_CAP := LEGACY_APPLICATION_CAP # Historical fixture compatibility only.
 const LIVE_ROOT_CAP := 512
 class RootBudget extends RefCounted:
 	var root_event_id := ""
@@ -11,6 +12,11 @@ class RootBudget extends RefCounted:
 	var owner_id := 0
 	var next_event_id := 1
 	var used := 0
+	var application_limit := LEGACY_APPLICATION_CAP
+	var plan: Dictionary = {}
+	var families: Dictionary = {}
+	var targets: Dictionary = {}
+	var carriers: Dictionary = {}
 	var claims: Dictionary = {}
 	var applied: Dictionary = {}
 	var cancelled := false
@@ -32,14 +38,26 @@ func live_roots() -> int:
 func can_create_root() -> bool:
 	return not _cancelled and live_roots() < LIVE_ROOT_CAP
 
-func new_root(owner_id: int, secondary: bool = false, ancestor: String = "", intrinsic: bool = false) -> CombatEventContext:
+func new_root(owner_id: int, secondary: bool = false, ancestor: String = "", intrinsic: bool = false, plan: Dictionary = {}) -> CombatEventContext:
 	if owner_id <= 0 or not can_create_root():
+		return null
+	var checked := validate_plan(plan)
+	if not checked["ok"]:
 		return null
 	_serial += 1
 	var budget := RootBudget.new()
 	budget.root_event_id = "%s:%d:%d" % [_run_id, owner_id, _serial]
 	budget.ancestor_root_id = ancestor
 	budget.owner_id = owner_id
+	budget.plan = plan.duplicate(true)
+	if not plan.is_empty():
+		for family: StringName in plan["families"]:
+			budget.families[family] = true
+		for target: int in plan["targets"]:
+			budget.targets[target] = true
+		for carrier: int in plan["carriers"]:
+			budget.carriers[carrier] = true
+		budget.application_limit = (budget.families.size() + budget.carriers.size()) * budget.targets.size()
 	_roots[budget.root_event_id] = weakref(budget)
 	var context := CombatEventContext.new()
 	context._ledger = weakref(self)
@@ -74,10 +92,12 @@ func _claim(context: CombatEventContext, candidates: Array[Dictionary], allow_in
 		var target := int(candidate.get("target_id", 0))
 		if family.is_empty() or source.is_empty() or target <= 0:
 			continue
+		if not budget.plan.is_empty() and (not budget.targets.has(target) or (not budget.families.has(family) if echo_carrier <= 0 else not budget.carriers.has(echo_carrier))):
+			continue
 		var key := "%s:%d" % [family, target]
 		if echo_carrier > 0:
 			key = "spiritualist_echo:%d:%d" % [echo_carrier, target]
-		if budget.claims.has(key) or budget.used >= APPLICATION_CAP:
+		if budget.claims.has(key) or budget.used >= budget.application_limit:
 			continue
 		budget.claims[key] = true
 		budget.used += 1
@@ -124,7 +144,7 @@ func claim_kit_recovery(context: CombatEventContext, family: StringName, source:
 	return not _claim(context, [{"family_id": family, "source_id": source, "target_id": target}], true, 0, true).is_empty()
 
 func claim_echo_pair(context: CombatEventContext, carrier_id: int, target_id: int) -> CombatEventContext:
-	# Human E06-T1 exception (09/10): finite E05 carriers share the original cap16.
+	# Human E06-T1 exception (09/10): finite E05 carriers share their frozen root plan.
 	# This API neither schedules carriers nor re-arms marks. EchoState owns that set.
 	if carrier_id <= 0 or context == null or context.secondary:
 		return null
@@ -147,3 +167,29 @@ static func projectile_slots_available(tree: SceneTree, needed: int) -> bool:
 			if not node.is_queued_for_deletion():
 				active += 1
 	return active + needed <= 128
+
+static func validate_plan(plan: Dictionary) -> Dictionary:
+	if plan.is_empty():
+		return {"ok": true}
+	if plan.size() != 3:
+		return BuildEffectCatalog.failure(&"invalid_causal_plan")
+	for key: String in ["families", "targets", "carriers"]:
+		if not plan.get(key) is Array:
+			return BuildEffectCatalog.failure(&"invalid_causal_plan")
+		var seen: Dictionary = {}
+		for value: Variant in plan[key]:
+			if seen.has(value):
+				return BuildEffectCatalog.failure(&"invalid_causal_plan")
+			if key == "families":
+				if typeof(value) not in [TYPE_STRING, TYPE_STRING_NAME] or not IdentityIds.is_technical_id(String(value)):
+					return BuildEffectCatalog.failure(&"invalid_causal_plan")
+			elif typeof(value) != TYPE_INT or value <= 0:
+				return BuildEffectCatalog.failure(&"invalid_causal_plan")
+			seen[value] = true
+	for carrier: int in plan["carriers"]:
+		if carrier not in plan["targets"]:
+			return BuildEffectCatalog.failure(&"invalid_causal_plan")
+	return {"ok": true}
+
+func application_limit(context: CombatEventContext) -> int:
+	return context._budget.application_limit if context != null and context._budget != null else 0

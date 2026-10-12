@@ -381,7 +381,7 @@ func _keyboard_text_focused() -> bool:
 	return focused is LineEdit or focused is TextEdit
 
 func _commit_skill(skill: StringName, point: Vector2) -> void:
-	if skill == &"" or get_tree().paused or run_finished or not player.is_alive():
+	if skill == &"" or get_tree().paused or run_finished or not player.is_alive() or skill not in player.available_skill_ids():
 		return
 	if spiritualist_drain_state.active:
 		_cancel_spiritualist_drain()
@@ -795,7 +795,7 @@ func _select_geometer_element(element: StringName) -> void:
 
 func _change_action_slots(slots: Array[Variant]) -> void:
 	_cancel_casting(false)
-	if not ActionBarLayout.valid(slots, player.available_skill_ids()):
+	if not ActionBarLayout.valid(slots, player.available_skill_ids(), ItemSkillAdapters.reference_ids(player.class_id)):
 		battle_controls.set_action_bar(player.available_skill_ids(), action_slots, control_preferences)
 		return
 	if persistent_facade != null and not training_mode:
@@ -2359,6 +2359,11 @@ func _update_hud() -> void:
 	augment_button.text = "Escolher augment (F8) — %d pendente(s)" % run_state.pending_choices
 	augment_button.visible = run_state.pending_choices > 0
 	if battle_controls != null:
+		var available := player.available_skill_ids()
+		if battle_controls.learned_skills != available:
+			battle_controls.set_action_bar(available, action_slots, control_preferences)
+			if not cast_intent.active_skill.is_empty() and cast_intent.active_skill not in available:
+				_cancel_aim()
 		for skill_id: StringName in player.available_skill_ids():
 			var definition := ClassCatalog.skill_definition(skill_id)
 			var cost := 0.0 if skill_id == &"shield_wall" and player.has_shield_stance() else player.skill_cost(skill_id)
@@ -2754,9 +2759,9 @@ func _build_ui() -> void:
 	action_slots = run_state.build_snapshot.action_slots.duplicate()
 	if action_slots.is_empty():
 		action_slots = ActionBarLayout.from_legacy(run_state.build_snapshot.active_slots)
-	if not ActionBarLayout.valid(action_slots, player.available_skill_ids()):
+	if not ActionBarLayout.valid(action_slots, player.available_skill_ids(), ItemSkillAdapters.reference_ids(player.class_id)):
 		for index: int in action_slots.size():
-			if action_slots[index] != null and action_slots[index] not in player.available_skill_ids():
+			if action_slots[index] != null and action_slots[index] not in player.available_skill_ids() and action_slots[index] not in ItemSkillAdapters.reference_ids(player.class_id):
 				action_slots[index] = null
 	battle_controls.set_action_bar(player.available_skill_ids(), action_slots, control_preferences)
 	battle_controls.layout_changed.connect(_change_action_slots)

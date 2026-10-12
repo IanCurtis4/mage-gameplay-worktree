@@ -100,6 +100,7 @@ enum Handler {
 const MAX_ACTIVE_RANK := 5
 const MAX_PASSIVE_RANK := 3
 
+@export var tags: Array[StringName] = []
 @export var id: StringName
 @export var display_name: String
 @export var input_key: String

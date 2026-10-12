@@ -32,6 +32,7 @@ func issue(event_id: String, reward_id: StringName, stage_reward: bool = false) 
 		return resolved
 	var payload: Dictionary = resolved["reward"].duplicate(true)
 	payload["equipment_drops"] = []
+	var catalog := _run.effect_catalog()
 	var profile_catalog := _run.build_snapshot._skill_catalog
 	for definition_id: StringName in payload["equipment_ids"]:
 		var metadata := profile_catalog.equipment_metadata(definition_id)
@@ -42,8 +43,10 @@ func issue(event_id: String, reward_id: StringName, stage_reward: bool = false) 
 		checked = EquipmentRules.validate_instance(checked["instance"], metadata)
 		if not checked["ok"]:
 			return checked
+		checked = catalog.validate_equipment_quality(catalog.get_definition(&"equipment", definition_id) as EquipmentDefinition, StringName(metadata["quality_id"]))
+		if not checked["ok"]:
+			return checked
 		payload["equipment_drops"].append(metadata)
-	var catalog := _run.effect_catalog()
 	var item_pool: Array[StringName] = []
 	var card_pool: Array[StringName] = []
 	if stage_reward:
@@ -54,6 +57,9 @@ func issue(event_id: String, reward_id: StringName, stage_reward: bool = false) 
 				if not checked["ok"]:
 					return checked
 				checked = EquipmentRules.validate_instance(checked["instance"], item.metadata())
+				if not checked["ok"]:
+					return checked
+				checked = catalog.validate_equipment_quality(item, item.quality_id)
 				if not checked["ok"]:
 					return checked
 				item_pool.append(id)

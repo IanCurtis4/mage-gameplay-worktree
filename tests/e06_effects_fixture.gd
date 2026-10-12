@@ -21,8 +21,13 @@ static func definition(origin: StringName, id: StringName, effects: Array[Effect
 		result.max_stacks = 1
 	elif origin == &"equipment":
 		result = EquipmentDefinition.new()
+		result.quality_id = &"rare"
+		result.origin_id = &"fixture_origin"
+		result.item_level = 1
+		result.socket_capacity = 1
 	else:
 		result = CardDefinition.new()
+		result.mob_base_id = &"fixture_elite"
 	result.id = id
 	result.display_name = "Fixture"
 	result.effects = effects
@@ -47,7 +52,7 @@ static func state_for(origin: StringName, snapshot: BuildSnapshot, id: StringNam
 	return {"card_sockets": {&"fixture_empty_item": [id]}, "card_instances": {id: id}}
 
 static func catalog_for(origin: StringName, effects: Array[EffectDefinition]) -> BuildEffectCatalog:
-	var registry := BuildEffectCatalog.new()
+	var registry := registry()
 	assert(registry.register_definition(origin, definition(origin, &"fixture", effects))["ok"])
 	if origin == &"card":
 		var empty: Array[EffectDefinition] = []
@@ -79,3 +84,16 @@ static func range_effect() -> EffectDefinition:
 	effect.magnitude = 100.0
 	effect.limit = 900.0
 	return effect
+
+static func registry() -> BuildEffectCatalog:
+	var mobs := MobCatalog.new()
+	var mob := MobDefinition.new()
+	mob.id = &"fixture_elite"
+	mob.base_category = &"elite"
+	mob.allowed_occurrence_categories = [&"elite", &"rare_elite"]
+	for axis: StringName in StatCalculator.PRIMARY_IDS:
+		mob.primary_attributes[axis] = 3
+	assert(mobs.register_definition(mob)["ok"])
+	var result := BuildEffectCatalog.new()
+	assert(result.set_mob_catalog(mobs)["ok"])
+	return result
