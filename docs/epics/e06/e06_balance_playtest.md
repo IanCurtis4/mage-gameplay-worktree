@@ -1,6 +1,6 @@
 # E06 — playtest da primeira calibração
 
-Candidato validado tecnicamente:209etapas distintas em execuções complementares e3rechecks finais. Hash/aplicação registrados no checkpoint quando concluídos. Após atualizar o mesmo projeto habitual, parar partida antiga, aceitar reload eF5. Preservação do save foi testada em diretórios isolados; abrir perfil verdadeiro migra schema3→4/catalog10→11 combackup, sem alterar poder dos exemplares antigos. Não inferir aceite de produto ou merge deste roteiro.
+Candidato validado tecnicamente:209etapas distintas em execuções complementares e3rechecks finais. Gameplay be9bd8d7f643851317064ca9e6821e96748a386c aplicado no projeto habitual; importação/abertura PASS e save pessoal intacto. [Recibo de aplicação](e06_balance_playtest_delivery.json). Após atualizar o mesmo projeto habitual, parar partida antiga, aceitar reload eF5. Preservação do save foi testada em diretórios isolados; abrir perfil verdadeiro migra schema3→4/catalog10→11 combackup, sem alterar poder dos exemplares antigos. Não inferir aceite de produto ou merge deste roteiro.
 
 1. Conferir coleção/presets/atalhos existentes. Nomes e ilvl/qualidade/encaixes anteriores devem permanecer. Todo exemplar prévio está no ruleset legado, inclusive dos25IDsnovos.
 2. Iniciar run normal persistente. Loot por mob substitui equipamento/carta da etapa; XP100/80 e150/100 e uma escolha de augment por encontro permanecem. A emissão é congelada na morte; equipamentos só entram após coleta durável fora de encontro.
