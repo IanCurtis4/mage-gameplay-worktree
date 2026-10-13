@@ -1,0 +1,63 @@
+{
+  "candidate": "ae8af6f82860cbeeec80b84f226cae6aabe5df38",
+  "source_tree": "dcb6d7a7dc3b3f225da2db404ef84e35ef301ca9",
+  "previous": "51b5fabc8fcc7bb74f1b45479cdfe1aa090be4bc",
+  "source": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+  "target": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+  "same_repository": true,
+  "both_clean_before": true,
+  "target_branch": "codex/playtest",
+  "target_ancestor": true,
+  "ignored_collisions": [],
+  "personal_files_before": {
+    "C:\\Users\\João Pedro\\AppData\\Roaming\\Godot\\app_userdata\\RagRPG\\controls.cfg": "a11cac61ce45a85dca9ee3189359639ef7ff14723822a958b1674d25c9f3e22f",
+    "C:\\Users\\João Pedro\\AppData\\Roaming\\Godot\\app_userdata\\RagRPG\\profile.backup.json": "1b6c2c2a8c33a89bd1aa2920a5d511c65e3ff0429a578cb9e155cd0e699660f1",
+    "C:\\Users\\João Pedro\\AppData\\Roaming\\Godot\\app_userdata\\RagRPG\\profile.json": "a3e441730f2145be12aa548145b3ec7b5a866b5fe220f520c3134b5be1cb5db1"
+  },
+  "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "technical_approval_sha256": "e8c87e501c813ea6db214205572697f5d27894e21aaa74890e00389c1ae99dad",
+  "legacy_cli_preparation_exit": 1,
+  "legacy_cli_limitation": "Requires old reviewer role and workflow runner signature; current evidence honestly technical_validator with tools/verify runner. No false independent audit. Equivalent preserving fast-forward authorized by current WORKFLOW.",
+  "product_acceptance": "not_recorded",
+  "master_merge": false,
+  "push": false,
+  "checks": [
+    {
+      "name": "editor_import",
+      "exit_code": 0,
+      "errors_detected": false,
+      "output": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_ui_playtest\\editor_import.output.log",
+      "output_sha256": "7ac34bc1739be8a198b609d07671da4f1dffd9a22054bd1a55a479d5dd52538e"
+    },
+    {
+      "name": "scene_smoke",
+      "exit_code": 0,
+      "errors_detected": false,
+      "output": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_ui_playtest\\scene_smoke.output.log",
+      "output_sha256": "83cf0b082206af2aa236c83064fbcfa76be1e00a4aa3558574b2f65965d9481c"
+    }
+  ],
+  "applied": true,
+  "ready": true,
+  "effective_head": "ae8af6f82860cbeeec80b84f226cae6aabe5df38",
+  "both_clean_after": true,
+  "personal_files_unchanged": true,
+  "new_imports_restored_after_normalized_byte_equality": [
+    "assets/art/icons/equipment/card.svg.import",
+    "assets/art/icons/equipment/cloth.svg.import",
+    "assets/art/icons/equipment/focus.svg.import",
+    "assets/art/icons/equipment/head.svg.import",
+    "assets/art/icons/equipment/jewelry.svg.import",
+    "assets/art/icons/equipment/leather.svg.import",
+    "assets/art/icons/equipment/mail.svg.import",
+    "assets/art/icons/equipment/plate.svg.import",
+    "assets/art/icons/equipment/scales.svg.import",
+    "assets/art/icons/equipment/shield.svg.import",
+    "assets/art/icons/equipment/weapon.svg.import"
+  ],
+  "limitations": [
+    "Human playtest/style/balance acceptance pending",
+    "Production rates/progression formula deferred",
+    "No master merge/push"
+  ]
+}

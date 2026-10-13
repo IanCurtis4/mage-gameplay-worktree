@@ -1,4 +1,4 @@
-> Estado prevalente13/10: interface14posições/cartas/ícones/elmo e fechamento técnico integrado entregues/validados por Sol com supervisão Luna, cobertura206etapas distintas em rodadas complementares. [Checkpoint vigente](e06/e06_pending_checkpoint.md) e [roteiro](e06/e06_playtest.md). Preparação do playtest em curso; aceite humano/merge pendentes. Taxas/progressão/E07 adiados. Cabeçalhos antigos conservam o histórico.
+> Estado prevalente13/10: interface14posições/cartas/ícones/elmo e fechamento técnico integrado entregues/validados por Sol com supervisão Luna, cobertura206etapas distintas em rodadas complementares. [Checkpoint vigente](e06/e06_pending_checkpoint.md) e [roteiro](e06/e06_playtest.md). Playtest aplicado no diretório habitual, importação/abertura e preservação do save verificadas; aceite humano/merge pendentes. Taxas/progressão/E07 adiados. Cabeçalhos antigos conservam o histórico.
 
 > Continuação humana13/10: [interface e integração restantes](e06/e06_ui_integration.md) em implementação sobre7cc6294. Suspensão antigaT4 foi resolvida pelas dependências e este pedido; rates/progressão/E07 continuam adiados.
 

@@ -1,4 +1,4 @@
-> Estado prevalente13/10: interface14posições/cartas/ícones/elmo e fechamento técnico integrado entregues/validados por Sol com supervisão Luna, cobertura206etapas distintas em rodadas complementares. [Checkpoint vigente](e06/e06_pending_checkpoint.md) e [roteiro](e06/e06_playtest.md). Preparação do playtest em curso; aceite humano/merge pendentes. Taxas/progressão/E07 adiados. Cabeçalhos antigos conservam o histórico.
+> Estado prevalente13/10: interface14posições/cartas/ícones/elmo e fechamento técnico integrado entregues/validados por Sol com supervisão Luna, cobertura206etapas distintas em rodadas complementares. [Checkpoint vigente](e06/e06_pending_checkpoint.md) e [roteiro](e06/e06_playtest.md). Playtest aplicado no diretório habitual, importação/abertura e preservação do save verificadas; aceite humano/merge pendentes. Taxas/progressão/E07 adiados. Cabeçalhos antigos conservam o histórico.
 
 # E06 — checkpoint consolidado de arquitetura
 

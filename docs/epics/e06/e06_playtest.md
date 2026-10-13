@@ -1,6 +1,6 @@
 # E06 — roteiro do candidato de inventário
 
-Preparação pendente da validação integrada e do hash final. Não é aceite humano nem autorização de merge. Diretório habitual C:/Users/João Pedro/Documents/ChatGPT/RagRPG permanece codex/playtest; save pessoal não faz parte dos testes.
+Candidato integrado aprovado tecnicamente e aplicado no projeto habitual em 13/10/2026, com importação e abertura verificadas. [Recibo](e06_playtest_delivery.json). Aceite humano e merge continuam pendentes. Diretório habitual C:/Users/João Pedro/Documents/ChatGPT/RagRPG permanece codex/playtest; save pessoal não faz parte dos testes.
 
 Depois da atualização, pare a partida antiga, aceite recarregar os arquivos no Godot e execute F5. Não abrir uma worktree diferente no editor habitual.
 

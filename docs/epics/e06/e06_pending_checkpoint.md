@@ -73,3 +73,12 @@ Base7cc62946ad802a1cec08975c4c2f6394c268454d; commit de entrega e preparação d
 Recibo automatizado SHA256 c2a306372a827f9f5d58021ca76b8df703e67fabc4bb99a80521465d254f4af4; inspeção visual SHA256 221f8f731dd65c2c0b4d043f13f010dfee98d11b130fbff1bf505adedf897e94.
 
 Vínculo Git da entrega técnica: **13339635c825ddbe3295582e5d8ebd12b609bd98**, árvore **6574e31d75f3aaff05db0848d99629e7f34a2c09**. Aprovação Sol cobre estes49arquivos entregues, receitas/resources intactos, recibos automatizado e nativo versionados no mesmo commit. Esta atualização é documental, sem novo teste de gameplay. Próximo passo: diagnóstico e fast-forward preservador do candidato exato no playtest, mantendo aceite humano pendente.
+
+
+### Playtest aplicado e pronto — 13/10/2026
+
+Candidato técnico aplicado **ae8af6f82860cbeeec80b84f226cae6aabe5df38**, entrega de gameplay13339635c825ddbe3295582e5d8ebd12b609bd98. Fast-forward preservador sobre51b5fabc8fcc7bb74f1b45479cdfe1aa090be4bc no diretório habitual, sem rebase/conflitos. Ambos limpos, mesmo repositório, targetcodex/playtest/ancestral, nenhum ignorado colidindo. Aprovação exata/fingerprint e motor conferidos antes da escrita. CLI antigo recusou o papel técnico atual (exige reviewer/runnerpróprios): logs preservados; não falsificados papéis/assinaturas. Equivalente autorizado pela normaWORKFLOW executou todos os pré-checks e git merge --ff-only --no-overwrite-ignore.
+
+Importação e scene_smoke headless no target: ambos exit0/semERROR e60s. Menu headless usa .godot/verification/headless_menu_profile, sem migrar/reparar save pessoal. Três arquivos pessoais existentes (perfil/backup/controles) tiveram hashes BEFORE/AFTER iguais. Onze novos imports receberam apenas normalizaçãoLF/CRLF do engine; restaurados só após igualdade contra conteúdo comitado. Origem/destino limpos; nenhum mastermerge/push. [Recibo de aplicação](e06_playtest_delivery.json) e logs .godot/verification/e06_ui/playtest/ e target.godot/verification/e06_ui_playtest/. Não arquivar worktree com evidência ignorada antes de integração aceita.
+
+Próximo passo: usuário parar a partida antiga, aceitar reload no Godot eF5 no mesmo projeto; [roteiro](e06_playtest.md). Aceite de produto/visual/equilíbrio pendente, progressão/taxas adiadas, E07 não autorizado. Atualizações documentais posteriores ligam este estado sem modificar conteúdo de gameplay nem repetir bateria.
