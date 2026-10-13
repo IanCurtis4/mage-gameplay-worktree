@@ -13,6 +13,7 @@ var ticks_issued := 0
 var ticks_resolved := 0
 var healed_total := 0.0
 var captured_request: DamageRequest
+var _inscription_claimed := false
 
 func start(target: CombatActor, caster_origin: Vector2, request: DamageRequest) -> void:
 	cancel()
@@ -44,6 +45,14 @@ func resolve_tick() -> bool:
 		return true
 	return false
 
+func claim_completion_inscription(request: DamageRequest) -> float:
+	if _inscription_claimed or ticks_resolved != TICK_COUNT or request == null or captured_request == null or request.emission_id != captured_request.emission_id:
+		return 0.0
+	_inscription_claimed = true # Before damage callbacks can cancel/restart/reenter.
+	if not bool(request.effect_snapshot.get("kit_policies", {}).get(&"drain_inscription", false)): return 0.0
+	var power := float(request.effect_snapshot.get("drain_echo_power", 0.0))
+	return power if is_finite(power) and power > 0.0 else 0.0
+
 func cancel() -> void:
 	active = false
 	target_id = 0
@@ -52,3 +61,4 @@ func cancel() -> void:
 	ticks_resolved = 0
 	healed_total = 0.0
 	captured_request = null
+	_inscription_claimed = false

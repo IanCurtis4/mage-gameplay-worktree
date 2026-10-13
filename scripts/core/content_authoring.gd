@@ -173,7 +173,13 @@ static func _effect_text(effect: EffectDefinition) -> String:
 			text = "Ao acertar: bônus de %s de dano %s e %s%% proporcional; limite do bônus %s." % [_curve_text(effect), "físico" if effect.axis == &"physical_damage" else "mágico", _number(effect.increased * 100.0), _number(effect.limit)]
 			if not targets.is_empty(): text += " Apenas em acertos de %s." % ", ".join(targets)
 		EffectDefinition.Kind.KIT_RULE:
-			text = "Eco resolve no ponto onde o portador foi agendado, com espera, dano e alcance da habilidade." if effect.axis == &"echo_origin_fixed" else "Traçado e Triangulação fixam vértices no ponto do impacto, sem acompanhar o alvo."
+			match effect.axis:
+				&"echo_origin_fixed": text = "Eco resolve no ponto onde o portador foi agendado, com espera, dano e alcance da habilidade."
+				&"geometer_ground_anchor": text = "Traçado e Triangulação fixam vértices no ponto do impacto, sem acompanhar o alvo."
+				&"drain_inscription": text = "Drenagem completa de quatro impactos marca por 5 s o alvo que sobrevive ao último dano positivo. Potência de Maldição capturada no início. Requer Drenagem e Maldição aprendidas; não dispara eco nesse impacto."
+				&"hunter_marked_mechanism": text = "Congelante, Piche e Espinhos só são disparadas pelo alvo da Marca capturada na colocação. Sem Marca viva, não há custo nem colocação. Área e vítimas seguem as regras da armadilha. Requer Marca e uma dessas armadilhas aprendidas."
+				&"hunter_covering_fan": text = "Tiro de Cobertura divide a exploração bruta da abertura: 50% no alvo, 50% no segundo inimigo mais próximo até 80 unidades com visão. Empate por ID; sem segundo, 100% no alvo. Defesas resolvem cada parcela separadamente."
+				&"geometer_collapse_first_element": text = "Colapso de triângulo usa o elemento de A em vez de C; corrente elétrica começa em A. Paredes não mudam. Requer Triangulação e Colapso aprendidos, preservando os gates do kit."
 		EffectDefinition.Kind.ACTIVE_GRANT:
 			text = "Concede %s no rank %d; vale o maior rank disponível, com recarga compartilhada." % [_skill_name(effect.granted_skill_id), effect.granted_rank]
 	if not effect.target_skill_ids.is_empty(): text += " Requer rank %d na habilidade afetada." % effect.minimum_rank

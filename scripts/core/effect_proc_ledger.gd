@@ -200,10 +200,10 @@ static func validate_plan(plan: Dictionary) -> Dictionary:
 func application_limit(context: CombatEventContext) -> int:
 	return context._budget.application_limit if context != null and context._budget != null else 0
 
-func _admit_target(context: CombatEventContext, target: int, intrinsic_emitter: bool = false, echo_emitter: bool = false) -> bool:
+func _admit_target(context: CombatEventContext, target: int, intrinsic_emitter: bool = false, echo_emitter: bool = false, hunter_fan_emitter: bool = false) -> bool:
 	# Called only after a producer has validated its actual collision/occurrence.
 	# Generic callbacks cannot extend the domain with arbitrary candidates.
-	if context == null or not context.is_active() or context.ledger() != self or target <= 0 or context.proc_child or (context.secondary and not intrinsic_emitter) or (context.event_id > 0 and not echo_emitter):
+	if context == null or not context.is_active() or context.ledger() != self or target <= 0 or context.proc_child or (context.secondary and not intrinsic_emitter) or (context.event_id > 0 and not echo_emitter and not hunter_fan_emitter):
 		return false
 	var budget: RootBudget = context._budget
 	if budget.plan.is_empty(): return true # Historical cap16 remains unchanged.
@@ -212,6 +212,12 @@ func _admit_target(context: CombatEventContext, target: int, intrinsic_emitter: 
 		budget.plan["targets"].append(target)
 		_recompute_limit(budget)
 	return true
+
+func admit_hunter_fan(result: Dictionary, target: int) -> bool:
+	# Closed producer: main validates nearest living enemy and line of sight first.
+	var context: CombatEventContext = result.get("context")
+	if context == null or not context.is_active() or context.secondary or context.proc_child or context.ledger() != self or context.event_id <= 0 or context.target_id != int(result.get("target_id", 0)) or int(result.get("source_id", 0)) != context._budget.owner_id or not bool(result.get("can_trigger_effects", false)) or float(result.get("actual_damage", 0.0)) <= 0.0 or StringName(result.get("skill_id", &"")) != &"hunter_covering_shot" or not bool(result.get("effect_snapshot", {}).get("kit_policies", {}).get(&"hunter_covering_fan", false)): return false
+	return _admit_target(context, target, false, false, true)
 
 func bind_echo_carriers(context: CombatEventContext, carriers: Array[int]) -> bool:
 	if context == null or not context.is_active() or context.ledger() != self or context.secondary or context.proc_child:

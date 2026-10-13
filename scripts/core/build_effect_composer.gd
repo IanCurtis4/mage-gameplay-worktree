@@ -129,6 +129,11 @@ static func compose(snapshot: BuildSnapshot, run_effects: Dictionary, temporary_
 				if skill == &"basic_attack" or (int(effective_ranks.get(skill, 0)) >= effect.minimum_rank and ClassCatalog.skill_definition(skill) != null):
 					targets.append(skill)
 			targets.sort_custom(func(a: StringName, b: StringName) -> bool: return String(a) < String(b))
+			if effect.kind == EffectDefinition.Kind.KIT_RULE:
+				var prerequisites_met := true
+				for required: StringName in BuildEffectCatalog.KIT_POLICIES[effect.axis].get("required", []):
+					if int(effective_ranks.get(required, 0)) < 1 or ClassCatalog.skill_definition(required) == null: prerequisites_met = false
+				if not prerequisites_met: targets.clear()
 			if effect.kind == EffectDefinition.Kind.SKILL_RULE and targets.is_empty() or (not effect.target_skill_ids.is_empty() and targets.is_empty()):
 				inactive.append({"source_id": source_id, "effect_id": effect.id, "reason": &"skill_not_learned"})
 				continue

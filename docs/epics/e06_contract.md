@@ -1,3 +1,5 @@
+> Continuação humana de 12/10: as [quatro transformações restantes](e06/e06_transform_remaining.md) foram entregues e validadas, 25/202 testes dirigidos PASS; primeiro lote espacial preservado. Catálogo ativo, UI e playtest continuam fora deste pacote.
+
 > Lote espacial autorizado em 12/10/2026: [eco no ponto agendado e vértices fixos no chão](e06/e06_spatial_policies.md), entregues e validados. Capacidade fechada somente para dois augments, sem alteração de fórmulas ou publicação no catálogo ativo. Outras quatro transformações permanecem propostas. Evidência e limitações no checkpoint.
 
 > Continuação autorizada de 12/10/2026: [T3-B](e06/e06_content_pilot.md), catálogo piloto no ilvl 1 com valores explícitos; progressão e taxas depois. Recursos offline, composição de vinte comparações e limitações táticas declaradas. Sol mecânicas, Luna nomes/flavor e supervisão automatizada. Sem liberação de UI/E07/publicação.

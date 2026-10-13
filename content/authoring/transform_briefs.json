@@ -1,0 +1,3846 @@
+{
+	"briefs": [
+		{
+			"description": "Ataques por segundo: +15% / +30% / +45% (bônus aumentado).\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:battle_rhythm",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [],
+				"class_id": "",
+				"effect_id": "attack_speed_increased",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "attacks_per_second",
+						"channel": "increased",
+						"conflict_group": "",
+						"family_id": "attack_speed_increased",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "attack_speed_increased",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 0.15,
+						"minimum_rank": 1,
+						"stack_values": [
+							0.15,
+							0.3,
+							0.45
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "ratio"
+					}
+				],
+				"id": "battle_rhythm",
+				"magnitude_per_stack": 0.15,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Augment histórico: preservar ID, curva, limite e comportamento; texto pode ser renovado sem adicionar efeitos."
+		},
+		{
+			"description": "Lança de Fogo: +1 / +2 / +3 projétil(is); limite final 16. Requer rank 1 na habilidade afetada.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:extra_fire_spear",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [],
+				"class_id": "mage",
+				"effect_id": "fire_spear_count_flat",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "projectile_count",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "fire_spear_count_flat",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 2,
+						"id": "fire_spear_count_flat",
+						"increased": 0.0,
+						"kind": 1,
+						"limit": 16.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							1.0,
+							2.0,
+							3.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [
+							"fire_spear"
+						],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "count"
+					}
+				],
+				"id": "extra_fire_spear",
+				"magnitude_per_stack": 1.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Augment histórico: preservar ID, curva, limite e comportamento; texto pode ser renovado sem adicionar efeitos."
+		},
+		{
+			"description": "Lança de Gelo: +1 / +2 / +3 projétil(is); limite final 16. Requer rank 1 na habilidade afetada.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:extra_ice_spear",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [],
+				"class_id": "mage",
+				"effect_id": "ice_spear_count_flat",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "projectile_count",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "ice_spear_count_flat",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 2,
+						"id": "ice_spear_count_flat",
+						"increased": 0.0,
+						"kind": 1,
+						"limit": 16.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							1.0,
+							2.0,
+							3.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [
+							"ice_spear"
+						],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "count"
+					}
+				],
+				"id": "extra_ice_spear",
+				"magnitude_per_stack": 1.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Augment histórico: preservar ID, curva, limite e comportamento; texto pode ser renovado sem adicionar efeitos."
+		},
+		{
+			"description": "Colapso de triângulo usa o elemento de A em vez de C; corrente elétrica começa em A. Paredes não mudam. Requer Triangulação e Colapso aprendidos, preservando os gates do kit. Requer rank 1 na habilidade afetada. Não combina com outra transformação do mesmo grupo.\nAcumula até 1 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:geometer_collapse_first_element",
+			"mechanics": {
+				"allowed_evolutions": [
+					"mg_ar"
+				],
+				"allowed_origins": [
+					"mage"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [
+							"mg_ar"
+						],
+						"allowed_origins": [
+							"mage"
+						],
+						"axis": "geometer_collapse_first_element",
+						"channel": "flat",
+						"conflict_group": "geometer_collapse_first_element",
+						"family_id": "geometer_collapse_first_element_policy",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 5,
+						"id": "geometer_collapse_first_element_policy",
+						"increased": 0.0,
+						"kind": 4,
+						"limit": 0.0,
+						"magnitude": 0.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 1,
+						"tags": [],
+						"target_skill_ids": [
+							"geometer_collapse"
+						],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "policy"
+					}
+				],
+				"id": "geometer_collapse_first_element",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 1,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Transformação aprovada geometer_collapse_first_element. Nome/flavor deve retratar a regra factual abaixo, sem prometer dano extra, outra skill ou efeito fora do contrato."
+		},
+		{
+			"description": "Traçado e Triangulação fixam vértices no ponto do impacto, sem acompanhar o alvo. Requer rank 1 na habilidade afetada. Não combina com outra transformação do mesmo grupo.\nAcumula até 1 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:geometer_ground_anchor",
+			"mechanics": {
+				"allowed_evolutions": [
+					"mg_ar"
+				],
+				"allowed_origins": [
+					"mage"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [
+							"mg_ar"
+						],
+						"allowed_origins": [
+							"mage"
+						],
+						"axis": "geometer_ground_anchor",
+						"channel": "flat",
+						"conflict_group": "geometer_ground_anchor",
+						"family_id": "geometer_ground_anchor_policy",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 5,
+						"id": "geometer_ground_anchor_policy",
+						"increased": 0.0,
+						"kind": 4,
+						"limit": 0.0,
+						"magnitude": 0.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 1,
+						"tags": [],
+						"target_skill_ids": [
+							"geometer_trace",
+							"geometer_triangulation"
+						],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "policy"
+					}
+				],
+				"id": "geometer_ground_anchor",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 1,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Transformação exclusiva de mg_ar: posição fixa capturada, sem aumentar dano, duração ou quantidade. Nomes/flavor devem sugerir posição/fixação, sem prometer raiz/controle ou novos botões."
+		},
+		{
+			"description": "Tiro de Cobertura divide a exploração bruta da abertura: 50% no alvo, 50% no segundo inimigo mais próximo até 80 unidades com visão. Empate por ID; sem segundo, 100% no alvo. Defesas resolvem cada parcela separadamente. Requer rank 1 na habilidade afetada. Não combina com outra transformação do mesmo grupo.\nAcumula até 1 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:hunter_covering_fan",
+			"mechanics": {
+				"allowed_evolutions": [
+					"hunter"
+				],
+				"allowed_origins": [
+					"archer"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [
+							"hunter"
+						],
+						"allowed_origins": [
+							"archer"
+						],
+						"axis": "hunter_covering_fan",
+						"channel": "flat",
+						"conflict_group": "hunter_covering_fan",
+						"family_id": "hunter_covering_fan_policy",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 5,
+						"id": "hunter_covering_fan_policy",
+						"increased": 0.0,
+						"kind": 4,
+						"limit": 0.0,
+						"magnitude": 0.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 1,
+						"tags": [],
+						"target_skill_ids": [
+							"hunter_covering_shot"
+						],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "policy"
+					}
+				],
+				"id": "hunter_covering_fan",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 1,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Transformação aprovada hunter_covering_fan. Nome/flavor deve retratar a regra factual abaixo, sem prometer dano extra, outra skill ou efeito fora do contrato."
+		},
+		{
+			"description": "Congelante, Piche e Espinhos só são disparadas pelo alvo da Marca capturada na colocação. Sem Marca viva, não há custo nem colocação. Área e vítimas seguem as regras da armadilha. Requer Marca e uma dessas armadilhas aprendidas. Requer rank 1 na habilidade afetada. Não combina com outra transformação do mesmo grupo.\nAcumula até 1 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:hunter_marked_mechanism",
+			"mechanics": {
+				"allowed_evolutions": [
+					"hunter"
+				],
+				"allowed_origins": [
+					"archer"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [
+							"hunter"
+						],
+						"allowed_origins": [
+							"archer"
+						],
+						"axis": "hunter_marked_mechanism",
+						"channel": "flat",
+						"conflict_group": "hunter_marked_mechanism",
+						"family_id": "hunter_marked_mechanism_policy",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 5,
+						"id": "hunter_marked_mechanism_policy",
+						"increased": 0.0,
+						"kind": 4,
+						"limit": 0.0,
+						"magnitude": 0.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 1,
+						"tags": [],
+						"target_skill_ids": [
+							"hunter_freezing_trap",
+							"hunter_tar_trap",
+							"hunter_thorn_trap"
+						],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "policy"
+					}
+				],
+				"id": "hunter_marked_mechanism",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 1,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Transformação aprovada hunter_marked_mechanism. Nome/flavor deve retratar a regra factual abaixo, sem prometer dano extra, outra skill ou efeito fora do contrato."
+		},
+		{
+			"description": "Chance de crítico: +5 p.p. / +10 p.p. / +15 p.p..\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:keen_edge",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [],
+				"class_id": "",
+				"effect_id": "crit_chance_flat",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "crit_chance",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "crit_chance_flat",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "crit_chance_flat",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 0.05,
+						"minimum_rank": 1,
+						"stack_values": [
+							0.05,
+							0.1,
+							0.15
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"id": "keen_edge",
+				"magnitude_per_stack": 0.05,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Augment histórico: preservar ID, curva, limite e comportamento; texto pode ser renovado sem adicionar efeitos."
+		},
+		{
+			"description": "Ao acertar: bônus de +6 / +12 / +18 de dano físico e 0% proporcional; limite do bônus 60.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_archer_pressure",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"archer"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_damage",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_archer_pressure_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 3,
+						"id": "pilot_archer_pressure_effect",
+						"increased": 0.0,
+						"kind": 2,
+						"limit": 60.0,
+						"magnitude": 6.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							6.0,
+							12.0,
+							18.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 1,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "damage"
+					}
+				],
+				"id": "pilot_archer_pressure",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Escolha da origem archer: dano secundário em acertos primários. Três patamares, sem mecânicas exclusivas da evolução."
+		},
+		{
+			"description": "SP máximo: +6 / +12 / +18.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_archer_reserve",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"archer"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "max_sp",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_archer_reserve_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_archer_reserve_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 6.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							6.0,
+							12.0,
+							18.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"id": "pilot_archer_reserve",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Escolha da origem archer: reserva de SP. Três patamares, sem mecânicas exclusivas da evolução."
+		},
+		{
+			"description": "Ao acertar: bônus de +6 / +12 / +18 de dano físico e 0% proporcional; limite do bônus 60. Apenas em acertos de Ruptura. Requer rank 1 na habilidade afetada.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_berserker_a",
+			"mechanics": {
+				"allowed_evolutions": [
+					"berserker"
+				],
+				"allowed_origins": [
+					"swordsman"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_damage",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_berserker_a_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 3,
+						"id": "pilot_berserker_a_effect",
+						"increased": 0.0,
+						"kind": 2,
+						"limit": 60.0,
+						"magnitude": 6.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							6.0,
+							12.0,
+							18.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [
+							"berserker_rupture"
+						],
+						"trigger": 1,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "damage"
+					}
+				],
+				"id": "pilot_berserker_a",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Opção exclusiva de berserker, comparação A. Dano adicional apenas nos acertos primários da habilidade indicada. Não prometer transformação de Foco, armadilhas, ecos ou construções."
+		},
+		{
+			"description": "Ao acertar: bônus de +6 / +12 / +18 de dano físico e 0% proporcional; limite do bônus 60. Apenas em acertos de Execução. Requer rank 1 na habilidade afetada.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_berserker_b",
+			"mechanics": {
+				"allowed_evolutions": [
+					"berserker"
+				],
+				"allowed_origins": [
+					"swordsman"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_damage",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_berserker_b_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 3,
+						"id": "pilot_berserker_b_effect",
+						"increased": 0.0,
+						"kind": 2,
+						"limit": 60.0,
+						"magnitude": 6.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							6.0,
+							12.0,
+							18.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [
+							"berserker_execution"
+						],
+						"trigger": 1,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "damage"
+					}
+				],
+				"id": "pilot_berserker_b",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Opção exclusiva de berserker, comparação B. Dano adicional apenas nos acertos primários da habilidade indicada. Não prometer transformação de Foco, armadilhas, ecos ou construções."
+		},
+		{
+			"description": "Ao acertar: bônus de +6 / +12 / +18 de dano físico e 0% proporcional; limite do bônus 60. Apenas em acertos de Contraforte. Requer rank 1 na habilidade afetada.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_defender_a",
+			"mechanics": {
+				"allowed_evolutions": [
+					"defender"
+				],
+				"allowed_origins": [
+					"swordsman"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_damage",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_defender_a_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 3,
+						"id": "pilot_defender_a_effect",
+						"increased": 0.0,
+						"kind": 2,
+						"limit": 60.0,
+						"magnitude": 6.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							6.0,
+							12.0,
+							18.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [
+							"defender_counterstroke"
+						],
+						"trigger": 1,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "damage"
+					}
+				],
+				"id": "pilot_defender_a",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Opção exclusiva de defender, comparação A. Dano adicional apenas nos acertos primários da habilidade indicada. Não prometer transformação de Foco, armadilhas, ecos ou construções."
+		},
+		{
+			"description": "Ao acertar: bônus de +6 / +12 / +18 de dano físico e 0% proporcional; limite do bônus 60. Apenas em acertos de Trava de Linha. Requer rank 1 na habilidade afetada.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_defender_b",
+			"mechanics": {
+				"allowed_evolutions": [
+					"defender"
+				],
+				"allowed_origins": [
+					"swordsman"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_damage",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_defender_b_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 3,
+						"id": "pilot_defender_b_effect",
+						"increased": 0.0,
+						"kind": 2,
+						"limit": 60.0,
+						"magnitude": 6.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							6.0,
+							12.0,
+							18.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [
+							"defender_line_lock"
+						],
+						"trigger": 1,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "damage"
+					}
+				],
+				"id": "pilot_defender_b",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Opção exclusiva de defender, comparação B. Dano adicional apenas nos acertos primários da habilidade indicada. Não prometer transformação de Foco, armadilhas, ecos ou construções."
+		},
+		{
+			"description": "Ao acertar: bônus de +6 / +12 / +18 de dano mágico e 0% proporcional; limite do bônus 60. Apenas em acertos de Explosão de Chamas. Requer rank 1 na habilidade afetada.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_elementalist_a",
+			"mechanics": {
+				"allowed_evolutions": [
+					"elementalist"
+				],
+				"allowed_origins": [
+					"mage"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "magic_damage",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_elementalist_a_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 3,
+						"id": "pilot_elementalist_a_effect",
+						"increased": 0.0,
+						"kind": 2,
+						"limit": 60.0,
+						"magnitude": 6.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							6.0,
+							12.0,
+							18.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [
+							"elementalist_flame_burst"
+						],
+						"trigger": 1,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "damage"
+					}
+				],
+				"id": "pilot_elementalist_a",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Opção exclusiva de elementalist, comparação A. Dano adicional apenas nos acertos primários da habilidade indicada. Não prometer transformação de Foco, armadilhas, ecos ou construções."
+		},
+		{
+			"description": "Ao acertar: bônus de +6 / +12 / +18 de dano mágico e 0% proporcional; limite do bônus 60. Apenas em acertos de Anel Glacial. Requer rank 1 na habilidade afetada.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_elementalist_b",
+			"mechanics": {
+				"allowed_evolutions": [
+					"elementalist"
+				],
+				"allowed_origins": [
+					"mage"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "magic_damage",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_elementalist_b_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 3,
+						"id": "pilot_elementalist_b_effect",
+						"increased": 0.0,
+						"kind": 2,
+						"limit": 60.0,
+						"magnitude": 6.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							6.0,
+							12.0,
+							18.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [
+							"elementalist_glacial_ring"
+						],
+						"trigger": 1,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "damage"
+					}
+				],
+				"id": "pilot_elementalist_b",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Opção exclusiva de elementalist, comparação B. Dano adicional apenas nos acertos primários da habilidade indicada. Não prometer transformação de Foco, armadilhas, ecos ou construções."
+		},
+		{
+			"description": "INT: +2 / +4 / +6.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_hunter_a",
+			"mechanics": {
+				"allowed_evolutions": [
+					"hunter"
+				],
+				"allowed_origins": [
+					"archer"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "int",
+						"channel": "primary_flat",
+						"conflict_group": "",
+						"family_id": "pilot_hunter_a_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_hunter_a_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 2.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							2.0,
+							4.0,
+							6.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"id": "pilot_hunter_a",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Opção exclusiva de hunter, comparação A. Bônus numérico de apoio à rota; fantasia específica ainda pendente. Não prometer transformação de Foco, armadilhas, ecos ou construções."
+		},
+		{
+			"description": "DES: +2 / +4 / +6.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_hunter_b",
+			"mechanics": {
+				"allowed_evolutions": [
+					"hunter"
+				],
+				"allowed_origins": [
+					"archer"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "dex",
+						"channel": "primary_flat",
+						"conflict_group": "",
+						"family_id": "pilot_hunter_b_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_hunter_b_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 2.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							2.0,
+							4.0,
+							6.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"id": "pilot_hunter_b",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Opção exclusiva de hunter, comparação B. Bônus numérico de apoio à rota; fantasia específica ainda pendente. Não prometer transformação de Foco, armadilhas, ecos ou construções."
+		},
+		{
+			"description": "Ao acertar: bônus de +6 / +12 / +18 de dano mágico e 0% proporcional; limite do bônus 60.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_mage_pressure",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"mage"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "magic_damage",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_mage_pressure_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 3,
+						"id": "pilot_mage_pressure_effect",
+						"increased": 0.0,
+						"kind": 2,
+						"limit": 60.0,
+						"magnitude": 6.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							6.0,
+							12.0,
+							18.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 1,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "damage"
+					}
+				],
+				"id": "pilot_mage_pressure",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Escolha da origem mage: dano secundário em acertos primários. Três patamares, sem mecânicas exclusivas da evolução."
+		},
+		{
+			"description": "SP máximo: +6 / +12 / +18.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_mage_reserve",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"mage"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "max_sp",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_mage_reserve_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_mage_reserve_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 6.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							6.0,
+							12.0,
+							18.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"id": "pilot_mage_reserve",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Escolha da origem mage: reserva de SP. Três patamares, sem mecânicas exclusivas da evolução."
+		},
+		{
+			"description": "SP máximo: +6 / +12 / +18.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_mg_ar_a",
+			"mechanics": {
+				"allowed_evolutions": [
+					"mg_ar"
+				],
+				"allowed_origins": [
+					"mage"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "max_sp",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_mg_ar_a_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_mg_ar_a_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 6.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							6.0,
+							12.0,
+							18.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"id": "pilot_mg_ar_a",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Opção exclusiva de mg_ar, comparação A. Bônus numérico de apoio à rota; fantasia específica ainda pendente. Não prometer transformação de Foco, armadilhas, ecos ou construções."
+		},
+		{
+			"description": "Velocidade de movimento: +4 / +8 / +12.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_mg_ar_b",
+			"mechanics": {
+				"allowed_evolutions": [
+					"mg_ar"
+				],
+				"allowed_origins": [
+					"mage"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "move_speed",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_mg_ar_b_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_mg_ar_b_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 4.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							4.0,
+							8.0,
+							12.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"id": "pilot_mg_ar_b",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Opção exclusiva de mg_ar, comparação B. Bônus numérico de apoio à rota; fantasia específica ainda pendente. Não prometer transformação de Foco, armadilhas, ecos ou construções."
+		},
+		{
+			"description": "Ao acertar: bônus de +6 / +12 / +18 de dano físico e 0% proporcional; limite do bônus 60. Apenas em acertos de Tiro na Cabeça. Requer rank 1 na habilidade afetada.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_sentinel_a",
+			"mechanics": {
+				"allowed_evolutions": [
+					"sentinel"
+				],
+				"allowed_origins": [
+					"archer"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_damage",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_sentinel_a_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 3,
+						"id": "pilot_sentinel_a_effect",
+						"increased": 0.0,
+						"kind": 2,
+						"limit": 60.0,
+						"magnitude": 6.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							6.0,
+							12.0,
+							18.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [
+							"sentinel_headshot"
+						],
+						"trigger": 1,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "damage"
+					}
+				],
+				"id": "pilot_sentinel_a",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Opção exclusiva de sentinel, comparação A. Dano adicional apenas nos acertos primários da habilidade indicada. Não prometer transformação de Foco, armadilhas, ecos ou construções."
+		},
+		{
+			"description": "Ao acertar: bônus de +6 / +12 / +18 de dano físico e 0% proporcional; limite do bônus 60. Apenas em acertos de Tiro de Rede. Requer rank 1 na habilidade afetada.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_sentinel_b",
+			"mechanics": {
+				"allowed_evolutions": [
+					"sentinel"
+				],
+				"allowed_origins": [
+					"archer"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_damage",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_sentinel_b_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 3,
+						"id": "pilot_sentinel_b_effect",
+						"increased": 0.0,
+						"kind": 2,
+						"limit": 60.0,
+						"magnitude": 6.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							6.0,
+							12.0,
+							18.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [
+							"sentinel_net_shot"
+						],
+						"trigger": 1,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "damage"
+					}
+				],
+				"id": "pilot_sentinel_b",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Opção exclusiva de sentinel, comparação B. Dano adicional apenas nos acertos primários da habilidade indicada. Não prometer transformação de Foco, armadilhas, ecos ou construções."
+		},
+		{
+			"description": "SP máximo: +6 / +12 / +18.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_spiritualist_a",
+			"mechanics": {
+				"allowed_evolutions": [
+					"spiritualist"
+				],
+				"allowed_origins": [
+					"mage"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "max_sp",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_spiritualist_a_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_spiritualist_a_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 6.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							6.0,
+							12.0,
+							18.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"id": "pilot_spiritualist_a",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Opção exclusiva de spiritualist, comparação A. Bônus numérico de apoio à rota; fantasia específica ainda pendente. Não prometer transformação de Foco, armadilhas, ecos ou construções."
+		},
+		{
+			"description": "Defesa mágica: +2 / +4 / +6.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_spiritualist_b",
+			"mechanics": {
+				"allowed_evolutions": [
+					"spiritualist"
+				],
+				"allowed_origins": [
+					"mage"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "magic_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_spiritualist_b_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_spiritualist_b_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 2.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							2.0,
+							4.0,
+							6.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"id": "pilot_spiritualist_b",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Opção exclusiva de spiritualist, comparação B. Bônus numérico de apoio à rota; fantasia específica ainda pendente. Não prometer transformação de Foco, armadilhas, ecos ou construções."
+		},
+		{
+			"description": "Ao acertar: bônus de +6 / +12 / +18 de dano físico e 0% proporcional; limite do bônus 60.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_swordsman_pressure",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_damage",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_swordsman_pressure_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 3,
+						"id": "pilot_swordsman_pressure_effect",
+						"increased": 0.0,
+						"kind": 2,
+						"limit": 60.0,
+						"magnitude": 6.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							6.0,
+							12.0,
+							18.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 1,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "damage"
+					}
+				],
+				"id": "pilot_swordsman_pressure",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Escolha da origem swordsman: dano secundário em acertos primários. Três patamares, sem mecânicas exclusivas da evolução."
+		},
+		{
+			"description": "SP máximo: +6 / +12 / +18.\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:pilot_swordsman_reserve",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "max_sp",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_swordsman_reserve_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_swordsman_reserve_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 6.0,
+						"minimum_rank": 1,
+						"stack_values": [
+							6.0,
+							12.0,
+							18.0
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"id": "pilot_swordsman_reserve",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Escolha da origem swordsman: reserva de SP. Três patamares, sem mecânicas exclusivas da evolução."
+		},
+		{
+			"description": "Drenagem completa de quatro impactos marca por 5 s o alvo que sobrevive ao último dano positivo. Potência de Maldição capturada no início. Requer Drenagem e Maldição aprendidas; não dispara eco nesse impacto. Requer rank 1 na habilidade afetada. Não combina com outra transformação do mesmo grupo.\nAcumula até 1 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:spiritualist_drain_inscription",
+			"mechanics": {
+				"allowed_evolutions": [
+					"spiritualist"
+				],
+				"allowed_origins": [
+					"mage"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [
+							"spiritualist"
+						],
+						"allowed_origins": [
+							"mage"
+						],
+						"axis": "drain_inscription",
+						"channel": "flat",
+						"conflict_group": "drain_inscription",
+						"family_id": "spiritualist_drain_inscription_policy",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 5,
+						"id": "spiritualist_drain_inscription_policy",
+						"increased": 0.0,
+						"kind": 4,
+						"limit": 0.0,
+						"magnitude": 0.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 1,
+						"tags": [],
+						"target_skill_ids": [
+							"spiritualist_soul_drain",
+							"spiritualist_echo_curse"
+						],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "policy"
+					}
+				],
+				"id": "spiritualist_drain_inscription",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 1,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Transformação aprovada drain_inscription. Nome/flavor deve retratar a regra factual abaixo, sem prometer dano extra, outra skill ou efeito fora do contrato."
+		},
+		{
+			"description": "Eco resolve no ponto onde o portador foi agendado, com espera, dano e alcance da habilidade. Requer rank 1 na habilidade afetada. Não combina com outra transformação do mesmo grupo.\nAcumula até 1 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:spiritualist_echo_fixed_origin",
+			"mechanics": {
+				"allowed_evolutions": [
+					"spiritualist"
+				],
+				"allowed_origins": [
+					"mage"
+				],
+				"class_id": "",
+				"effect_id": "",
+				"effects": [
+					{
+						"allowed_evolutions": [
+							"spiritualist"
+						],
+						"allowed_origins": [
+							"mage"
+						],
+						"axis": "echo_origin_fixed",
+						"channel": "flat",
+						"conflict_group": "echo_origin_fixed",
+						"family_id": "spiritualist_echo_fixed_origin_policy",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 5,
+						"id": "spiritualist_echo_fixed_origin_policy",
+						"increased": 0.0,
+						"kind": 4,
+						"limit": 0.0,
+						"magnitude": 0.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 1,
+						"tags": [],
+						"target_skill_ids": [
+							"spiritualist_echo_curse"
+						],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "policy"
+					}
+				],
+				"id": "spiritualist_echo_fixed_origin",
+				"magnitude_per_stack": 0.0,
+				"max_stacks": 1,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Transformação exclusiva de spiritualist: posição fixa capturada, sem aumentar dano, duração ou quantidade. Nomes/flavor devem sugerir posição/fixação, sem prometer raiz/controle ou novos botões."
+		},
+		{
+			"description": "Vida máxima: +20% / +40% / +60% (bônus aumentado).\nAcumula até 3 vez(es).",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "augment:vitality",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [],
+				"class_id": "",
+				"effect_id": "max_hp_increased",
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "max_hp",
+						"channel": "increased",
+						"conflict_group": "",
+						"family_id": "max_hp_increased",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "max_hp_increased",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 0.2,
+						"minimum_rank": 1,
+						"stack_values": [
+							0.2,
+							0.4,
+							0.6
+						],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "ratio"
+					}
+				],
+				"id": "vitality",
+				"magnitude_per_stack": 0.2,
+				"max_stacks": 3,
+				"type": "AugmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Augment histórico: preservar ID, curva, limite e comportamento; texto pode ser renovado sem adicionar efeitos."
+		},
+		{
+			"description": "Defesa física: +2.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "card:bulwark_card",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [],
+				"allowed_slots": [
+					"head",
+					"shoulders",
+					"arms",
+					"torso",
+					"cloak",
+					"legs",
+					"feet",
+					"main_hand",
+					"off_hand"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_card_defense",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_card_defense",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 2.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"id": "bulwark_card",
+				"mob_base_id": "pilot_bulwark_species",
+				"type": "CardDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Carta passiva da espécie pilot_bulwark_species, categoria base normal. Nome deve reconhecer o nome da espécie; só a receita é efeito, nenhum botão novo."
+		},
+		{
+			"description": "Ao acertar: bônus de +2 de dano mágico e 0% proporcional; limite do bônus 60.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "card:echo_card",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [],
+				"allowed_slots": [
+					"head",
+					"shoulders",
+					"arms",
+					"torso",
+					"cloak",
+					"legs",
+					"feet",
+					"main_hand",
+					"off_hand"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "magic_damage",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_card_hit",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 3,
+						"id": "pilot_card_hit",
+						"increased": 0.0,
+						"kind": 2,
+						"limit": 60.0,
+						"magnitude": 2.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 1,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "damage"
+					}
+				],
+				"id": "echo_card",
+				"mob_base_id": "pilot_echo_species",
+				"type": "CardDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Carta passiva da espécie pilot_echo_species, categoria base elite. Nome deve reconhecer o nome da espécie; só a receita é efeito, nenhum botão novo."
+		},
+		{
+			"description": "Lança de Fogo: +1 projétil(is); limite final 16. Requer rank 1 na habilidade afetada.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "card:ember_card",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"mage"
+				],
+				"allowed_slots": [
+					"head",
+					"shoulders",
+					"arms",
+					"torso",
+					"cloak",
+					"legs",
+					"feet",
+					"main_hand",
+					"off_hand"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "projectile_count",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_card_shape",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 2,
+						"id": "pilot_card_shape",
+						"increased": 0.0,
+						"kind": 1,
+						"limit": 16.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [
+							"flaming"
+						],
+						"target_skill_ids": [
+							"fire_spear"
+						],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "count"
+					}
+				],
+				"id": "ember_card",
+				"mob_base_id": "pilot_ember_species",
+				"type": "CardDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Carta passiva da espécie pilot_ember_species, categoria base elite. Nome deve reconhecer o nome da espécie; só a receita é efeito, nenhum botão novo."
+		},
+		{
+			"description": "Lança de Gelo: +20 unidades de alcance; limite final 1200. Requer rank 1 na habilidade afetada.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "card:frost_card",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"mage"
+				],
+				"allowed_slots": [
+					"head",
+					"shoulders",
+					"arms",
+					"torso",
+					"cloak",
+					"legs",
+					"feet",
+					"main_hand",
+					"off_hand"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "range",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_card_reach",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 1,
+						"id": "pilot_card_reach",
+						"increased": 0.0,
+						"kind": 1,
+						"limit": 1200.0,
+						"magnitude": 20.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [
+							"freezing"
+						],
+						"target_skill_ids": [
+							"ice_spear"
+						],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "units"
+					}
+				],
+				"id": "frost_card",
+				"mob_base_id": "pilot_frost_species",
+				"type": "CardDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Carta passiva da espécie pilot_frost_species, categoria base normal. Nome deve reconhecer o nome da espécie; só a receita é efeito, nenhum botão novo."
+		},
+		{
+			"description": "DES: +1.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "card:precision_card",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [],
+				"allowed_slots": [
+					"head",
+					"shoulders",
+					"arms",
+					"torso",
+					"cloak",
+					"legs",
+					"feet",
+					"main_hand",
+					"off_hand"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "dex",
+						"channel": "primary_flat",
+						"conflict_group": "",
+						"family_id": "pilot_card_dex",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_card_dex",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"id": "precision_card",
+				"mob_base_id": "pilot_precision_species",
+				"type": "CardDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Carta passiva da espécie pilot_precision_species, categoria base normal. Nome deve reconhecer o nome da espécie; só a receita é efeito, nenhum botão novo."
+		},
+		{
+			"description": "Velocidade de movimento: +3.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "card:trail_card",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [],
+				"allowed_slots": [
+					"head",
+					"shoulders",
+					"arms",
+					"torso",
+					"cloak",
+					"legs",
+					"feet",
+					"main_hand",
+					"off_hand"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "move_speed",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_card_speed",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_card_speed",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 3.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"id": "trail_card",
+				"mob_base_id": "pilot_trail_species",
+				"type": "CardDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Carta passiva da espécie pilot_trail_species, categoria base normal. Nome deve reconhecer o nome da espécie; só a receita é efeito, nenhum botão novo."
+		},
+		{
+			"description": "INT: +3.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:channeler_robe",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "int",
+						"channel": "primary_flat",
+						"conflict_group": "",
+						"family_id": "pilot_robe_int",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_robe_int",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 3.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "channeler_robe",
+				"item_kind": "armor",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "rare",
+				"set_id": "",
+				"slot": "torso",
+				"socket_capacity": 1,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Equipamento da Arena demonstrativa, ilvl 1. ID e metadata históricos preservados. Receita piloto explícita; não inventar região, tipo de armadura ou poder além da ficha."
+		},
+		{
+			"description": "Lança de Fogo: +1 projétil(is); limite final 16. Requer rank 1 na habilidade afetada.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:ember_staff",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"mage"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "projectile_count",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_staff_shape",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 2,
+						"id": "pilot_staff_shape",
+						"increased": 0.0,
+						"kind": 1,
+						"limit": 16.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [
+							"flaming"
+						],
+						"target_skill_ids": [
+							"fire_spear"
+						],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "count"
+					}
+				],
+				"hand_usage": "two_hands",
+				"id": "ember_staff",
+				"item_kind": "weapon",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "rare",
+				"set_id": "",
+				"slot": "main_hand",
+				"socket_capacity": 1,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Equipamento da Arena demonstrativa, ilvl 1. ID e metadata históricos preservados. Receita piloto explícita; não inventar região, tipo de armadura ou poder além da ficha."
+		},
+		{
+			"description": "Ao acertar: bônus de +4 de dano físico e 0% proporcional; limite do bônus 60.\nO efeito de acerto exige uso desta arma.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:hunters_bow",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_damage",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_bow_hit",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 3,
+						"id": "pilot_bow_hit",
+						"increased": 0.0,
+						"kind": 2,
+						"limit": 60.0,
+						"magnitude": 4.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 1,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "damage"
+					}
+				],
+				"hand_usage": "two_hands",
+				"id": "hunters_bow",
+				"item_kind": "weapon",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "rare",
+				"set_id": "",
+				"slot": "main_hand",
+				"socket_capacity": 1,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Equipamento da Arena demonstrativa, ilvl 1. ID e metadata históricos preservados. Receita piloto explícita; não inventar região, tipo de armadura ou poder além da ficha."
+		},
+		{
+			"description": "Acerto: +3.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:pilot_arms",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "hit_rating",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_arms_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_arms_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 3.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "pilot_arms",
+				"item_kind": "armor",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "uncommon",
+				"set_id": "",
+				"slot": "arms",
+				"socket_capacity": 3,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Peça da Arena demonstrativa na posição arms, ilvl 1. Nome e flavor descrevem sua função; não prometer habilidade, cura ou transformação."
+		},
+		{
+			"description": "Defesa mágica: +2.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:pilot_cloak",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "magic_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_cloak_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_cloak_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 2.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "pilot_cloak",
+				"item_kind": "armor",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "uncommon",
+				"set_id": "",
+				"slot": "cloak",
+				"socket_capacity": 0,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Peça da Arena demonstrativa na posição cloak, ilvl 1. Nome e flavor descrevem sua função; não prometer habilidade, cura ou transformação."
+		},
+		{
+			"description": "Velocidade de movimento: +3.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:pilot_feet",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "move_speed",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_feet_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_feet_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 3.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "pilot_feet",
+				"item_kind": "armor",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "uncommon",
+				"set_id": "",
+				"slot": "feet",
+				"socket_capacity": 1,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Peça da Arena demonstrativa na posição feet, ilvl 1. Nome e flavor descrevem sua função; não prometer habilidade, cura ou transformação."
+		},
+		{
+			"description": "INT: +2.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:pilot_focus",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"mage"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "int",
+						"channel": "primary_flat",
+						"conflict_group": "",
+						"family_id": "pilot_focus_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_focus_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 2.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "pilot_focus",
+				"item_kind": "focus",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "uncommon",
+				"set_id": "",
+				"slot": "off_hand",
+				"socket_capacity": 0,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Peça da Arena demonstrativa na posição off_hand, ilvl 1. Nome e flavor descrevem sua função; não prometer habilidade, cura ou transformação."
+		},
+		{
+			"description": "Defesa física: +2.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:pilot_head",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_head_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_head_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 2.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "pilot_head",
+				"item_kind": "armor",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "uncommon",
+				"set_id": "",
+				"slot": "head",
+				"socket_capacity": 0,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Peça da Arena demonstrativa na posição head, ilvl 1. Nome e flavor descrevem sua função; não prometer habilidade, cura ou transformação."
+		},
+		{
+			"description": "Defesa física: +2.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:pilot_legs",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_legs_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_legs_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 2.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "pilot_legs",
+				"item_kind": "armor",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "rare",
+				"set_id": "pilot_guard_set",
+				"slot": "legs",
+				"socket_capacity": 4,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Peça da Arena demonstrativa na posição legs, ilvl 1. Nome e flavor descrevem sua função; não prometer habilidade, cura ou transformação."
+		},
+		{
+			"description": "Defesa física: +3.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:pilot_shield",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_shield_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_shield_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 3.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "pilot_shield",
+				"item_kind": "shield",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "uncommon",
+				"set_id": "",
+				"slot": "off_hand",
+				"socket_capacity": 2,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Peça da Arena demonstrativa na posição off_hand, ilvl 1. Nome e flavor descrevem sua função; não prometer habilidade, cura ou transformação."
+		},
+		{
+			"description": "Defesa física: +2.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:pilot_shoulders",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_shoulders_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_shoulders_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 2.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "pilot_shoulders",
+				"item_kind": "armor",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "rare",
+				"set_id": "pilot_guard_set",
+				"slot": "shoulders",
+				"socket_capacity": 2,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Peça da Arena demonstrativa na posição shoulders, ilvl 1. Nome e flavor descrevem sua função; não prometer habilidade, cura ou transformação."
+		},
+		{
+			"description": "SP máximo: +6.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:pilot_sp_jewel",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "max_sp",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_sp_jewel_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_sp_jewel_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 6.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "pilot_sp_jewel",
+				"item_kind": "jewelry",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "uncommon",
+				"set_id": "",
+				"slot": "accessory",
+				"socket_capacity": 0,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Peça da Arena demonstrativa na posição accessory, ilvl 1. Nome e flavor descrevem sua função; não prometer habilidade, cura ou transformação."
+		},
+		{
+			"description": "Concede Teleporte no rank 1; vale o maior rank disponível, com recarga compartilhada.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:pilot_step_neck",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [
+							"swordsman",
+							"mage",
+							"archer"
+						],
+						"axis": "",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_step_access",
+						"granted_rank": 1,
+						"granted_skill_id": "teleport",
+						"handler_id": 4,
+						"id": "pilot_step_access",
+						"increased": 0.0,
+						"kind": 3,
+						"limit": 0.0,
+						"magnitude": 0.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "pilot_step_neck",
+				"item_kind": "jewelry",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "rare",
+				"set_id": "",
+				"slot": "neck",
+				"socket_capacity": 0,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Colar da Arena demonstrativa: acesso a Teleporte enquanto equipado, sem conceder biblioteca ou mecânicas de Mago."
+		},
+		{
+			"description": "Velocidade de movimento: +3.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:pilot_stride_jewel",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "move_speed",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_stride_jewel_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_stride_jewel_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 3.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "pilot_stride_jewel",
+				"item_kind": "jewelry",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "uncommon",
+				"set_id": "",
+				"slot": "accessory",
+				"socket_capacity": 0,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Peça da Arena demonstrativa na posição accessory, ilvl 1. Nome e flavor descrevem sua função; não prometer habilidade, cura ou transformação."
+		},
+		{
+			"description": "Ataque mágico: +1.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:pilot_wand",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"mage"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "magic_attack",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_wand_magic",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_wand_magic",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 1.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "one_hand",
+				"id": "pilot_wand",
+				"item_kind": "weapon",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "common",
+				"set_id": "",
+				"slot": "main_hand",
+				"socket_capacity": 2,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Arma arcana da Arena demonstrativa, de uma mão, ilvl 1; permite foco na secundária. Só ataque mágico numérico, sem magia nova."
+		},
+		{
+			"description": "Defesa mágica: +2.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:pilot_ward_jewel",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "magic_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_ward_jewel_effect",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_ward_jewel_effect",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 2.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "pilot_ward_jewel",
+				"item_kind": "jewelry",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "uncommon",
+				"set_id": "",
+				"slot": "accessory",
+				"socket_capacity": 0,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Peça da Arena demonstrativa na posição accessory, ilvl 1. Nome e flavor descrevem sua função; não prometer habilidade, cura ou transformação."
+		},
+		{
+			"description": "Concede Lança de Fogo no rank 1; vale o maior rank disponível, com recarga compartilhada.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:prismatic_charm",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [
+							"swordsman",
+							"mage",
+							"archer"
+						],
+						"axis": "",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_prismatic_access",
+						"granted_rank": 1,
+						"granted_skill_id": "fire_spear",
+						"handler_id": 4,
+						"id": "pilot_prismatic_access",
+						"increased": 0.0,
+						"kind": 3,
+						"limit": 0.0,
+						"magnitude": 0.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "prismatic_charm",
+				"item_kind": "jewelry",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "rare",
+				"set_id": "",
+				"slot": "accessory",
+				"socket_capacity": 0,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Equipamento da Arena demonstrativa, ilvl 1. ID e metadata históricos preservados. Receita piloto explícita; não inventar região, tipo de armadura ou poder além da ficha."
+		},
+		{
+			"description": "Ao acertar: bônus de +4 de dano físico e 0% proporcional; limite do bônus 60.\nO efeito de acerto exige uso desta arma.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:riposte_blade",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_damage",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_blade_hit",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 3,
+						"id": "pilot_blade_hit",
+						"increased": 0.0,
+						"kind": 2,
+						"limit": 60.0,
+						"magnitude": 4.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 1,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "damage"
+					}
+				],
+				"hand_usage": "one_hand",
+				"id": "riposte_blade",
+				"item_kind": "weapon",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "rare",
+				"set_id": "",
+				"slot": "main_hand",
+				"socket_capacity": 1,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Equipamento da Arena demonstrativa, ilvl 1. ID e metadata históricos preservados. Receita piloto explícita; não inventar região, tipo de armadura ou poder além da ficha."
+		},
+		{
+			"description": "Ataque corpo a corpo: +2.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:starter_blade",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "melee_attack",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_blade_attack",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_blade_attack",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 2.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "one_hand",
+				"id": "starter_blade",
+				"item_kind": "weapon",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "common",
+				"set_id": "",
+				"slot": "main_hand",
+				"socket_capacity": 1,
+				"starter": true,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Equipamento da Arena demonstrativa, ilvl 1. ID e metadata históricos preservados. Receita piloto explícita; não inventar região, tipo de armadura ou poder além da ficha."
+		},
+		{
+			"description": "Ataque de precisão: +2.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:starter_bow",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "precision_attack",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_bow_attack",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_bow_attack",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 2.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "two_hands",
+				"id": "starter_bow",
+				"item_kind": "weapon",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "common",
+				"set_id": "",
+				"slot": "main_hand",
+				"socket_capacity": 1,
+				"starter": true,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Equipamento da Arena demonstrativa, ilvl 1. ID e metadata históricos preservados. Receita piloto explícita; não inventar região, tipo de armadura ou poder além da ficha."
+		},
+		{
+			"description": "Ataque mágico: +2.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:starter_staff",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"mage"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "magic_attack",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_staff_attack",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_staff_attack",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 2.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "two_hands",
+				"id": "starter_staff",
+				"item_kind": "weapon",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "common",
+				"set_id": "",
+				"slot": "main_hand",
+				"socket_capacity": 1,
+				"starter": true,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Equipamento da Arena demonstrativa, ilvl 1. ID e metadata históricos preservados. Receita piloto explícita; não inventar região, tipo de armadura ou poder além da ficha."
+		},
+		{
+			"description": "DES: +3.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:trailcoat",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "dex",
+						"channel": "primary_flat",
+						"conflict_group": "",
+						"family_id": "pilot_coat_dex",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_coat_dex",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 3.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "trailcoat",
+				"item_kind": "armor",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "rare",
+				"set_id": "",
+				"slot": "torso",
+				"socket_capacity": 1,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Equipamento da Arena demonstrativa, ilvl 1. ID e metadata históricos preservados. Receita piloto explícita; não inventar região, tipo de armadura ou poder além da ficha."
+		},
+		{
+			"description": "Vida máxima: +6.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:traveler_charm",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "max_hp",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_charm_hp",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_charm_hp",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 6.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "traveler_charm",
+				"item_kind": "jewelry",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "common",
+				"set_id": "",
+				"slot": "accessory",
+				"socket_capacity": 0,
+				"starter": true,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Equipamento da Arena demonstrativa, ilvl 1. ID e metadata históricos preservados. Receita piloto explícita; não inventar região, tipo de armadura ou poder além da ficha."
+		},
+		{
+			"description": "Defesa física: +2.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:traveler_vest",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_vest_defense",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_vest_defense",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 2.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "traveler_vest",
+				"item_kind": "armor",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "common",
+				"set_id": "",
+				"slot": "torso",
+				"socket_capacity": 1,
+				"starter": true,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Equipamento da Arena demonstrativa, ilvl 1. ID e metadata históricos preservados. Receita piloto explícita; não inventar região, tipo de armadura ou poder além da ficha."
+		},
+		{
+			"description": "Defesa física: +4.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "equipment:warden_mail",
+			"mechanics": {
+				"allowed_evolutions": [],
+				"allowed_origins": [
+					"swordsman",
+					"mage",
+					"archer"
+				],
+				"effects": [
+					{
+						"allowed_evolutions": [],
+						"allowed_origins": [],
+						"axis": "physical_defense",
+						"channel": "flat",
+						"conflict_group": "",
+						"family_id": "pilot_mail_defense",
+						"granted_rank": 1,
+						"granted_skill_id": "",
+						"handler_id": 0,
+						"id": "pilot_mail_defense",
+						"increased": 0.0,
+						"kind": 0,
+						"limit": 0.0,
+						"magnitude": 4.0,
+						"minimum_rank": 1,
+						"stack_values": [],
+						"stacking_mode": 0,
+						"tags": [],
+						"target_skill_ids": [],
+						"trigger": 0,
+						"type": "EffectDefinition",
+						"unique_effect_id": "",
+						"unit": "points"
+					}
+				],
+				"hand_usage": "none",
+				"id": "warden_mail",
+				"item_kind": "armor",
+				"item_level": 1,
+				"origin_id": "demo_arena",
+				"quality_id": "rare",
+				"set_id": "pilot_guard_set",
+				"slot": "torso",
+				"socket_capacity": 1,
+				"starter": false,
+				"type": "EquipmentDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Equipamento da Arena demonstrativa, ilvl 1. ID e metadata históricos preservados. Receita piloto explícita; não inventar região, tipo de armadura ou poder além da ficha."
+		},
+		{
+			"description": "Nível fixo 1. Categoria base: normal.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "mob:pilot_bulwark_species",
+			"mechanics": {
+				"allowed_occurrence_categories": [
+					"normal",
+					"rare",
+					"elite",
+					"rare_elite"
+				],
+				"animation_kind": "warrior",
+				"archetype": "chaser",
+				"base_category": "normal",
+				"card_id": "bulwark_card",
+				"collision_radius": 19.0,
+				"fixed_level": 1,
+				"id": "pilot_bulwark_species",
+				"modifier_sources": [],
+				"primary_attributes": {
+					"agi": 2,
+					"dex": 2,
+					"int": 2,
+					"luk": 2,
+					"str": 2,
+					"vit": 2
+				},
+				"skill_ids": [],
+				"skill_ranks": {},
+				"tint": [
+					0.776470601558685,
+					0.352941185235977,
+					0.407843142747879,
+					1.0
+				],
+				"type": "MobDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Espécie de referência do piloto, ligada à carta bulwark_card. Nível fixo 1, seis stats 2 e ataque básico; não inventar magia, eco ou habilidades no flavor. Não é spawn de campanha."
+		},
+		{
+			"description": "Nível fixo 1. Categoria base: elite.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "mob:pilot_echo_species",
+			"mechanics": {
+				"allowed_occurrence_categories": [
+					"elite",
+					"rare_elite"
+				],
+				"animation_kind": "warrior",
+				"archetype": "chaser",
+				"base_category": "elite",
+				"card_id": "echo_card",
+				"collision_radius": 19.0,
+				"fixed_level": 1,
+				"id": "pilot_echo_species",
+				"modifier_sources": [],
+				"primary_attributes": {
+					"agi": 2,
+					"dex": 2,
+					"int": 2,
+					"luk": 2,
+					"str": 2,
+					"vit": 2
+				},
+				"skill_ids": [],
+				"skill_ranks": {},
+				"tint": [
+					0.776470601558685,
+					0.352941185235977,
+					0.407843142747879,
+					1.0
+				],
+				"type": "MobDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Espécie de referência do piloto, ligada à carta echo_card. Nível fixo 1, seis stats 2 e ataque básico; não inventar magia, eco ou habilidades no flavor. Não é spawn de campanha."
+		},
+		{
+			"description": "Nível fixo 1. Categoria base: elite.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "mob:pilot_ember_species",
+			"mechanics": {
+				"allowed_occurrence_categories": [
+					"elite",
+					"rare_elite"
+				],
+				"animation_kind": "warrior",
+				"archetype": "chaser",
+				"base_category": "elite",
+				"card_id": "ember_card",
+				"collision_radius": 19.0,
+				"fixed_level": 1,
+				"id": "pilot_ember_species",
+				"modifier_sources": [],
+				"primary_attributes": {
+					"agi": 2,
+					"dex": 2,
+					"int": 2,
+					"luk": 2,
+					"str": 2,
+					"vit": 2
+				},
+				"skill_ids": [],
+				"skill_ranks": {},
+				"tint": [
+					0.776470601558685,
+					0.352941185235977,
+					0.407843142747879,
+					1.0
+				],
+				"type": "MobDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Espécie de referência do piloto, ligada à carta ember_card. Nível fixo 1, seis stats 2 e ataque básico; não inventar magia, eco ou habilidades no flavor. Não é spawn de campanha."
+		},
+		{
+			"description": "Nível fixo 1. Categoria base: normal.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "mob:pilot_frost_species",
+			"mechanics": {
+				"allowed_occurrence_categories": [
+					"normal",
+					"rare",
+					"elite",
+					"rare_elite"
+				],
+				"animation_kind": "warrior",
+				"archetype": "chaser",
+				"base_category": "normal",
+				"card_id": "frost_card",
+				"collision_radius": 19.0,
+				"fixed_level": 1,
+				"id": "pilot_frost_species",
+				"modifier_sources": [],
+				"primary_attributes": {
+					"agi": 2,
+					"dex": 2,
+					"int": 2,
+					"luk": 2,
+					"str": 2,
+					"vit": 2
+				},
+				"skill_ids": [],
+				"skill_ranks": {},
+				"tint": [
+					0.776470601558685,
+					0.352941185235977,
+					0.407843142747879,
+					1.0
+				],
+				"type": "MobDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Espécie de referência do piloto, ligada à carta frost_card. Nível fixo 1, seis stats 2 e ataque básico; não inventar magia, eco ou habilidades no flavor. Não é spawn de campanha."
+		},
+		{
+			"description": "Nível fixo 1. Categoria base: normal.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "mob:pilot_precision_species",
+			"mechanics": {
+				"allowed_occurrence_categories": [
+					"normal",
+					"rare",
+					"elite",
+					"rare_elite"
+				],
+				"animation_kind": "warrior",
+				"archetype": "chaser",
+				"base_category": "normal",
+				"card_id": "precision_card",
+				"collision_radius": 19.0,
+				"fixed_level": 1,
+				"id": "pilot_precision_species",
+				"modifier_sources": [],
+				"primary_attributes": {
+					"agi": 2,
+					"dex": 2,
+					"int": 2,
+					"luk": 2,
+					"str": 2,
+					"vit": 2
+				},
+				"skill_ids": [],
+				"skill_ranks": {},
+				"tint": [
+					0.776470601558685,
+					0.352941185235977,
+					0.407843142747879,
+					1.0
+				],
+				"type": "MobDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Espécie de referência do piloto, ligada à carta precision_card. Nível fixo 1, seis stats 2 e ataque básico; não inventar magia, eco ou habilidades no flavor. Não é spawn de campanha."
+		},
+		{
+			"description": "Nível fixo 1. Categoria base: normal.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "mob:pilot_trail_species",
+			"mechanics": {
+				"allowed_occurrence_categories": [
+					"normal",
+					"rare",
+					"elite",
+					"rare_elite"
+				],
+				"animation_kind": "warrior",
+				"archetype": "chaser",
+				"base_category": "normal",
+				"card_id": "trail_card",
+				"collision_radius": 19.0,
+				"fixed_level": 1,
+				"id": "pilot_trail_species",
+				"modifier_sources": [],
+				"primary_attributes": {
+					"agi": 2,
+					"dex": 2,
+					"int": 2,
+					"luk": 2,
+					"str": 2,
+					"vit": 2
+				},
+				"skill_ids": [],
+				"skill_ranks": {},
+				"tint": [
+					0.776470601558685,
+					0.352941185235977,
+					0.407843142747879,
+					1.0
+				],
+				"type": "MobDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Espécie de referência do piloto, ligada à carta trail_card. Nível fixo 1, seis stats 2 e ataque básico; não inventar magia, eco ou habilidades no flavor. Não é spawn de campanha."
+		},
+		{
+			"description": "2 peças: Vida máxima: +8.\n3 peças: Defesa física: +2.",
+			"editable_fields": [
+				"name",
+				"flavor"
+			],
+			"flavor_max_length": 220,
+			"key": "set:pilot_guard_set",
+			"mechanics": {
+				"id": "pilot_guard_set",
+				"thresholds": {
+					"2": [
+						{
+							"allowed_evolutions": [],
+							"allowed_origins": [],
+							"axis": "max_hp",
+							"channel": "flat",
+							"conflict_group": "",
+							"family_id": "pilot_guard_hp",
+							"granted_rank": 1,
+							"granted_skill_id": "",
+							"handler_id": 0,
+							"id": "pilot_guard_hp",
+							"increased": 0.0,
+							"kind": 0,
+							"limit": 0.0,
+							"magnitude": 8.0,
+							"minimum_rank": 1,
+							"stack_values": [],
+							"stacking_mode": 0,
+							"tags": [],
+							"target_skill_ids": [],
+							"trigger": 0,
+							"type": "EffectDefinition",
+							"unique_effect_id": "",
+							"unit": "points"
+						}
+					],
+					"3": [
+						{
+							"allowed_evolutions": [],
+							"allowed_origins": [],
+							"axis": "physical_defense",
+							"channel": "flat",
+							"conflict_group": "",
+							"family_id": "pilot_guard_resist",
+							"granted_rank": 1,
+							"granted_skill_id": "",
+							"handler_id": 0,
+							"id": "pilot_guard_resist",
+							"increased": 0.0,
+							"kind": 0,
+							"limit": 0.0,
+							"magnitude": 2.0,
+							"minimum_rank": 1,
+							"stack_values": [],
+							"stacking_mode": 0,
+							"tags": [],
+							"target_skill_ids": [],
+							"trigger": 0,
+							"type": "EffectDefinition",
+							"unique_effect_id": "",
+							"unit": "points"
+						}
+					]
+				},
+				"type": "EquipmentSetDefinition"
+			},
+			"name_max_length": 80,
+			"purpose": "Conjunto de proteção da Arena demonstrativa. Tronco, ombros e pernas; limiares numéricos de duas e três peças, sem reação automática."
+		}
+	],
+	"mechanical_digest": "b2480230ac8691fe155976ce4e311cfef233e6b32618a3ebd8a7c87fbd0658fd",
+	"scope": "transform_pilot_offline"
+}

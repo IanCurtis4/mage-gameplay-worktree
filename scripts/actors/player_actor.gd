@@ -313,6 +313,10 @@ func record_hunter_damage(result: Dictionary) -> void:
 	# Lethal direct arrows still claim the opening/step, but never damage a corpse.
 	if is_instance_valid(victim) and victim.is_alive():
 		status_damage_requested.emit(payload["request"], victim)
+	var fan: DamageRequest = payload.get("fan_request")
+	if fan != null and is_alive() and not (is_inside_tree() and get_tree().paused):
+		var second := instance_from_id(fan.target_id) as CombatActor
+		if is_instance_valid(second) and second.is_alive() and not second.is_queued_for_deletion(): status_damage_requested.emit(fan, second)
 	queue_redraw()
 
 func clear_hunter_state() -> void:
@@ -1141,6 +1145,9 @@ func use_spiritualist_soul_drain(enemy: CombatActor) -> bool:
 	velocity = Vector2.ZERO
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var request := _make_magic_request(enemy, skill_id, _magic_power(skill_id), definition.accuracy_mode, definition.can_crit)
+	if bool(request.effect_snapshot["kit_policies"].get(&"drain_inscription", false)):
+		var curse := _runtime_rank_definition(&"spiritualist_echo_curse")
+		if curse != null: request.effect_snapshot["drain_echo_power"] = curse.secondary_power
 	spiritualist_drain_requested.emit(request, enemy)
 	presentation_action.emit(&"cast", global_position.direction_to(enemy.global_position), 2.0)
 	resources_changed.emit()
@@ -1802,6 +1809,12 @@ func trap_armed_duration(base_duration: float) -> float:
 func use_hunter_trap(skill_id: StringName, point: Vector2) -> bool:
 	if not is_hunter() or skill_id not in HunterMath.NEW_TRAP_IDS or not _can_spend(skill_id) or not can_place_trap(skill_id, point) or (is_inside_tree() and get_tree().paused):
 		return false
+	var selective := bool(run_state.composed_build().get("kit_policies", {}).get(&"hunter_marked_mechanism", false))
+	var captured_target_id := hunter_state.marked_target_id if selective else 0
+	if selective:
+		var marked := instance_from_id(captured_target_id) as CombatActor if captured_target_id > 0 else null
+		var controller := get_parent() as RunController
+		if not hunter_state.is_marked(captured_target_id) or not is_instance_valid(marked) or not marked.is_alive() or marked.is_queued_for_deletion() or controller == null or marked not in controller.enemies: return false
 	var rank := skill_rank(skill_id)
 	var request := HunterMath.trap_request(get_instance_id(), skill_id, rank, stat_breakdown, outgoing_damage_multiplier())
 	var opening := hunter_opening_snapshot(skill_id)
@@ -1810,6 +1823,7 @@ func use_hunter_trap(skill_id: StringName, point: Vector2) -> bool:
 	var center := trap_center(skill_id, point)
 	_spend(skill_id)
 	request.context = _emission_context.copy_context()
+	request.effect_snapshot = {"marked_trigger_target_id": captured_target_id}
 	opening.inherit_root(_emission_context)
 	reveal_from_offense()
 	hunter_trap_requested.emit(center, rank, request, opening)
@@ -2138,13 +2152,17 @@ func commit_geometer_collapse(command: GeometerCastCommand, construction: Geomet
 	var check := geometer_action_check(command, construction, actors)
 	if not check["ok"] or command.skill_id != &"geometer_collapse":
 		return check if not check["ok"] else {"ok": false, "reason": "Skill não é Colapso."}
+	var first := bool(run_state.composed_build().get("kit_policies", {}).get(&"geometer_collapse_first_element", false))
 	var captured := construction.consume_collapse()
 	if captured.is_empty():
 		return {"ok": false, "reason": "Sem figura ativa."}
 	# Consume before any signal/damage; callbacks cannot finalize the same instance twice.
 	cancel_active_cast()
 	_spend(command.skill_id)
-	var element: StringName = captured["elements"][2] if captured["shape"] == GeometerConstructionState.Shape.TRIANGLE else &"wall"
+	var resolution_vertex := 0 if first else 2
+	var element: StringName = captured["elements"][resolution_vertex] if captured["shape"] == GeometerConstructionState.Shape.TRIANGLE else &"wall"
+	captured["resolution_element"] = element
+	captured["resolution_vertex"] = resolution_vertex
 	var tuning := ClassCatalog.geometer_collapse_tuning(skill_rank(command.skill_id))
 	var request := _make_magic_request(null, command.skill_id, stat_breakdown.value(&"magic_attack") * float(tuning[element]), DamageRequest.AccuracyMode.GEOMETRY, false)
 	request.is_secondary = true
@@ -3083,6 +3101,8 @@ func prepare_effect_claims(result: Dictionary, additional: Array[Dictionary] = [
 		_append_kit_candidate(candidates, &"sentinel_focus", target_id)
 	if is_hunter() and hunter_state.can_consume(result) and not (is_inside_tree() and get_tree().paused):
 		_append_kit_candidate(candidates, &"hunter_exploit", target_id, &"hunter_opening")
+		var fan_target := int(result.get("_hunter_fan_target_id", 0))
+		if fan_target > 0: _append_kit_candidate(candidates, &"hunter_exploit", fan_target, &"hunter_opening")
 	if _is_berserker():
 		var previous := berserker_wound_stacks(target_id)
 		var direct := skill in BERSERKER_DIRECT_MELEE_IDS and skill_rank(&"berserker_rupture") > 0 and (previous > 0 or skill == &"berserker_rupture")

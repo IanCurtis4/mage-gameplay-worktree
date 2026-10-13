@@ -1,0 +1,1135 @@
+{
+  "schema_version": 1,
+  "role": "automated_test_supervision",
+  "semantic_audit": false,
+  "astra_approval": false,
+  "candidate": {
+    "branch": "codex/e06-inventory",
+    "worktree": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+    "source_commit": "0753b80c7c990b631583978046e38936e013c0ac",
+    "source_tree": "55b0ce455ea087b42abbaf0759ebe2c2835d7435",
+    "expected_base_commit": "0753b80c7c990b631583978046e38936e013c0ac",
+    "expected_base_tree": "55b0ce455ea087b42abbaf0759ebe2c2835d7435",
+    "before_dirty_manifest": [
+      " M assets/art/animations/archer.png.import",
+      " M assets/art/animations/berserker.png.import",
+      " M assets/art/animations/defender.png.import",
+      " M assets/art/animations/elementalist.png.import",
+      " M assets/art/animations/geometer.png.import",
+      " M assets/art/animations/hunter.png.import",
+      " M assets/art/animations/mage.png.import",
+      " M assets/art/animations/sentinel.png.import",
+      " M assets/art/animations/spiritualist.png.import",
+      " M assets/art/animations/swordsman.png.import",
+      " M assets/art/animations/warrior.png.import",
+      " M assets/art/icons/hunter/hunter_covering_shot.svg.import",
+      " M assets/art/icons/hunter/hunter_easy_prey.svg.import",
+      " M assets/art/icons/hunter/hunter_freezing_trap.svg.import",
+      " M assets/art/icons/hunter/hunter_mark.svg.import",
+      " M assets/art/icons/hunter/hunter_shooting_discipline.svg.import",
+      " M assets/art/icons/hunter/hunter_tar_trap.svg.import",
+      " M assets/art/icons/hunter/hunter_thorn_trap.svg.import",
+      " M assets/art/icons/hunter/hunter_total_cover.svg.import",
+      " M assets/art/pilot/archer.png.import",
+      " M assets/art/pilot/dirt.png.import",
+      " M assets/art/pilot/grass.png.import",
+      " M assets/art/pilot/hero.png.import",
+      " M assets/art/pilot/stone.png.import",
+      " M assets/art/pilot/warrior.png.import",
+      " M assets/art/vfx/soul_impact_orb.png.import",
+      " M assets/art/vfx/soul_impact_orb_source.png.import",
+      " M assets/art/vfx/spiritualist_curse_sigil.png.import",
+      " M assets/art/vfx/spiritualist_effects.png.import",
+      " M assets/art/vfx/spiritualist_ritual_halo.png.import",
+      " M assets/art/vfx/spiritualist_soul_wisp.png.import",
+      " M assets/art/vfx/spiritualist_spectral_burst.png.import",
+      " M content/authoring/README.md",
+      " M docs/epics/e06_contract.md",
+      " M docs/epics/e06_tasks.md",
+      " M scripts/actors/player_actor.gd",
+      " M scripts/core/build_effect_catalog.gd",
+      " M scripts/core/build_effect_composer.gd",
+      " M scripts/core/content_authoring.gd",
+      " M scripts/core/effect_proc_ledger.gd",
+      " M scripts/core/hunter_opening_state.gd",
+      " M scripts/main.gd",
+      " M scripts/world/geometer_casting.gd",
+      " M scripts/world/geometer_triangle_field.gd",
+      " M scripts/world/hunter_trap.gd",
+      " M scripts/world/spiritualist_drain_state.gd",
+      " M tools/verify.ps1",
+      "?? content/authoring/transform_briefs.json",
+      "?? content/authoring/transform_preview.md",
+      "?? content/authoring/transform_texts.json",
+      "?? docs/epics/e06/e06_transform_remaining.md",
+      "?? tests/e06_transform_execution_test.gd",
+      "?? tests/e06_transform_execution_test.gd.uid",
+      "?? tests/e06_transform_policies_test.gd",
+      "?? tests/e06_transform_policies_test.gd.uid",
+      "?? tools/content/transform.gd",
+      "?? tools/content/transform.gd.uid",
+      "?? tools/content/transform_bundle.gd",
+      "?? tools/content/transform_bundle.gd.uid"
+    ],
+    "after_dirty_manifest": [
+      " M assets/art/animations/archer.png.import",
+      " M assets/art/animations/berserker.png.import",
+      " M assets/art/animations/defender.png.import",
+      " M assets/art/animations/elementalist.png.import",
+      " M assets/art/animations/geometer.png.import",
+      " M assets/art/animations/hunter.png.import",
+      " M assets/art/animations/mage.png.import",
+      " M assets/art/animations/sentinel.png.import",
+      " M assets/art/animations/spiritualist.png.import",
+      " M assets/art/animations/swordsman.png.import",
+      " M assets/art/animations/warrior.png.import",
+      " M assets/art/icons/hunter/hunter_covering_shot.svg.import",
+      " M assets/art/icons/hunter/hunter_easy_prey.svg.import",
+      " M assets/art/icons/hunter/hunter_freezing_trap.svg.import",
+      " M assets/art/icons/hunter/hunter_mark.svg.import",
+      " M assets/art/icons/hunter/hunter_shooting_discipline.svg.import",
+      " M assets/art/icons/hunter/hunter_tar_trap.svg.import",
+      " M assets/art/icons/hunter/hunter_thorn_trap.svg.import",
+      " M assets/art/icons/hunter/hunter_total_cover.svg.import",
+      " M assets/art/pilot/archer.png.import",
+      " M assets/art/pilot/dirt.png.import",
+      " M assets/art/pilot/grass.png.import",
+      " M assets/art/pilot/hero.png.import",
+      " M assets/art/pilot/stone.png.import",
+      " M assets/art/pilot/warrior.png.import",
+      " M assets/art/vfx/soul_impact_orb.png.import",
+      " M assets/art/vfx/soul_impact_orb_source.png.import",
+      " M assets/art/vfx/spiritualist_curse_sigil.png.import",
+      " M assets/art/vfx/spiritualist_effects.png.import",
+      " M assets/art/vfx/spiritualist_ritual_halo.png.import",
+      " M assets/art/vfx/spiritualist_soul_wisp.png.import",
+      " M assets/art/vfx/spiritualist_spectral_burst.png.import",
+      " M content/authoring/README.md",
+      " M docs/epics/e06/e06_transform_proposal.md",
+      " M docs/epics/e06_contract.md",
+      " M docs/epics/e06_tasks.md",
+      " M scripts/actors/player_actor.gd",
+      " M scripts/core/build_effect_catalog.gd",
+      " M scripts/core/build_effect_composer.gd",
+      " M scripts/core/content_authoring.gd",
+      " M scripts/core/effect_proc_ledger.gd",
+      " M scripts/core/hunter_opening_state.gd",
+      " M scripts/main.gd",
+      " M scripts/world/geometer_casting.gd",
+      " M scripts/world/geometer_triangle_field.gd",
+      " M scripts/world/hunter_trap.gd",
+      " M scripts/world/spiritualist_drain_state.gd",
+      " M tools/verify.ps1",
+      "?? content/authoring/transform_briefs.json",
+      "?? content/authoring/transform_builds.json",
+      "?? content/authoring/transform_preview.md",
+      "?? content/authoring/transform_texts.json",
+      "?? docs/epics/e06/e06_transform_remaining.md",
+      "?? docs/epics/e06/e06_transform_validation.json",
+      "?? tests/e06_transform_execution_test.gd",
+      "?? tests/e06_transform_execution_test.gd.uid",
+      "?? tests/e06_transform_policies_test.gd",
+      "?? tests/e06_transform_policies_test.gd.uid",
+      "?? tools/content/transform.gd",
+      "?? tools/content/transform.gd.uid",
+      "?? tools/content/transform_bundle.gd",
+      "?? tools/content/transform_bundle.gd.uid"
+    ],
+    "dirty_manifest_semantics": "before_dirty_manifest and after_dirty_manifest are git status path lists only; they contain no pre-execution or post-execution source hashes."
+  },
+  "verification": {
+    "runner": "tools/verify.ps1",
+    "runner_sha256": "4A2A80064057A65B23B7659B37EB8ACDB292651E3A6BCEB8EA07093EE7E936D7",
+    "engine_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\review-engine\\Godot.exe",
+    "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+    "engine_version": "Godot 4.7.2 standard ed1daf0bf",
+    "timeout_seconds": 60,
+    "total_runner_steps": 202,
+    "selected_steps": 25,
+    "passed_steps": 25,
+    "failed_steps": 0,
+    "check_results_sha256": "72f59e983ff0098eec5cc74da8022ba1052c4a79611b87c7b24e84d3602195ab",
+    "plan_sha256": "272b9d227fbb58e9da1549bd674e2f051a642af1c595fa0a94f2a1eb887e9d64",
+    "steps": [
+      {
+        "index": 1,
+        "name": "editor_import",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "ACFD60DEF9DCA8A13BB9FEF2E028D40DA14564DE52520DBDCC583C3AA755A58B"
+      },
+      {
+        "index": 6,
+        "name": "e06_effects_composition_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "71958720E37183BE2C8C2E6B8B5144EA7893B4DA8289D7272DDB9497153C21C4"
+      },
+      {
+        "index": 8,
+        "name": "e06_effects_runtime_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "4D2C6C3D1221AA352C92570D7EB188AD87A213352D772DD848A8639C20376906"
+      },
+      {
+        "index": 52,
+        "name": "e05_hunter_opening_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "A54768E0C9AB8EE7B2824E23D8F5A0E489D81E3F54C344E026510A9787AB002E"
+      },
+      {
+        "index": 53,
+        "name": "e05_hunter_core_integration_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "C9F14931487B29134BF588BDE93B922EA28F949004B92237780D2FED3DCEDBBB"
+      },
+      {
+        "index": 54,
+        "name": "e05_hunter_traps_integration_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "74B4AE80D7DEE422D3541CCA69338C7C79001E5E00310B4CB844CE423EE0A8F9"
+      },
+      {
+        "index": 56,
+        "name": "e05_hunter_passives_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "648D5C37DDA019D2549226C772E68A8500D4CE50EBC081C3E0C2FB867CE8829D"
+      },
+      {
+        "index": 62,
+        "name": "e05_hunter_active_combat_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "CDAFEC2BE14D17967E1F193072CA7A9BEA113693E51CCED81376D2BA47F89081"
+      },
+      {
+        "index": 100,
+        "name": "e05_spiritualist_echo_curse_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "4634440CA405823AB6DD41BD81BCC43C0CC67A0DBCE3FC41C54AD343EC610E82"
+      },
+      {
+        "index": 103,
+        "name": "e05_spiritualist_soul_drain_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "E45F5D6CF60CC23D561B2E4830661715AC1ACAF5DE28B8CCB930B6C7F95668EC"
+      },
+      {
+        "index": 105,
+        "name": "e05_spiritualist_channel_focus_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "2B399C795E96E7C895D91E4FF6FF2F1095432592803F75FDDC0DFA03D3865955"
+      },
+      {
+        "index": 113,
+        "name": "e05_geometer_casting_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "D4DC0C17E211528164119F4C23F3197AB3766F3E5162E8683C6EC4D996DFA1B4"
+      },
+      {
+        "index": 118,
+        "name": "e05_geometer_triangle_recipes_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "7FA03FBFD87CE57538D169B8E7BAA33EBD24571A1F4379054495639E17058919"
+      },
+      {
+        "index": 120,
+        "name": "e05_geometer_editing_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "60C2B12794358FFA9BE39E265B2795AF614A0FF337E02EEE030929BF1F06090F"
+      },
+      {
+        "index": 124,
+        "name": "e05_geometer_g7_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "A33BC52F8AF213D6F6C6A6F5C08E7376B3B4CB51228210D2374FAF12373F48B0"
+      },
+      {
+        "index": 186,
+        "name": "e06_tx_composition_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "707FF42F2E379D184E5C2FF37EDB33CD2C67857FF402F143A430D1779BFC000C"
+      },
+      {
+        "index": 188,
+        "name": "e06_tx_causality_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "494CA0551D7AA0AA3545AE39F5A41608342A42DC41A04316CAAE9EA58DAAA069"
+      },
+      {
+        "index": 191,
+        "name": "e06_rx_causal_late_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "65F849D3AC85223F120556DF1F6D3C8A68E253D3A764407A451FEA504B7D2D02"
+      },
+      {
+        "index": 193,
+        "name": "e06_tx_late_fields_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "8BA8EB33E5AFB2FE7C7AA9F617F729A000C7C3195432B46F19022E48297613AC"
+      },
+      {
+        "index": 194,
+        "name": "e06_content_authoring_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "41AB313DA854B7B0223B6E128E3079B93C556C65A3509E8752BC15134FB8AF62"
+      },
+      {
+        "index": 195,
+        "name": "e06_content_editorial_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "4F19B03DD3389029AEB3FCDB8F6D511DB2C5E80715348CD9AB52F1819844A2DF"
+      },
+      {
+        "index": 199,
+        "name": "e06_spatial_policies_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "A91E9DE2E098A74ABBECC490B235B93EF48AF904B9921FA742E43C3C8B1585D6"
+      },
+      {
+        "index": 200,
+        "name": "e06_spatial_execution_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "4A129A7CAD9CF6F3723160B290CE09E52D4EA1FCA8E3327B0919EE28E6BEEE20"
+      },
+      {
+        "index": 201,
+        "name": "e06_transform_policies_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "4DEAFAC9FA3396D356B5044D68873B2E3A256F5127ACF247177F57886B10AB34"
+      },
+      {
+        "index": 202,
+        "name": "e06_transform_execution_test",
+        "exit_code": 0,
+        "timed_out": false,
+        "failed": false,
+        "output_sha256": "17570A4579CF8A2AB43B85175101DF2D8F40571090678887CBAFE0054D9440B1"
+      }
+    ]
+  },
+  "preserved_author_evidence": {
+    "policy_checks": 130,
+    "real_execution_checks": 675,
+    "total_checks": 805,
+    "real_scenarios": 64,
+    "scenario_groups": {
+      "drain": 11,
+      "marked_mechanism": 30,
+      "covering_fan": 15,
+      "geometer_collapse": 8
+    },
+    "interpretation": "Evidência autoral registrada antes desta supervisão; não é auditoria semântica independente."
+  },
+  "transform_tool": {
+    "prepare": {
+      "exit_code": 0,
+      "timeout_seconds": 60,
+      "log": ".godot/verification/e06_transform/luna_final/prepare.output.log",
+      "sha256": "42a97e4d3c985e540d9efb8da93e2906ad3a5b5b0cd5c39991e3f25a84eec2af"
+    },
+    "compile_preview": {
+      "exit_code": 0,
+      "timeout_seconds": 60,
+      "log": ".godot/verification/e06_transform/luna_final/compile_preview.output.log",
+      "sha256": "36b84a1aa6af7e482d57c6fa9e19b4ec32c7c88f3c8d31073de23b32bfc94464"
+    },
+    "mechanical_digest": "b2480230ac8691fe155976ce4e311cfef233e6b32618a3ebd8a7c87fbd0658fd",
+    "expected_mechanical_digest": "b2480230ac8691fe155976ce4e311cfef233e6b32618a3ebd8a7c87fbd0658fd",
+    "editorial_sha256": "dd648491c5cc5c25200e601aa3ba010f1ea1ec4c5d6495546de2d7c28da63e8e",
+    "expected_editorial_sha256": "dd648491c5cc5c25200e601aa3ba010f1ea1ec4c5d6495546de2d7c28da63e8e",
+    "comparison_count": 20,
+    "composition_valid_count": 20,
+    "inactive_count": 0,
+    "production_published": false,
+    "tactical_validation_pending": true,
+    "progression_formula": null,
+    "production_loot_rates": null,
+    "policy_rows": [
+      {
+        "identity": "swordsman",
+        "branch": "A",
+        "kit_policy_count": 0,
+        "kit_policies": {},
+        "inactive_count": 0
+      },
+      {
+        "identity": "swordsman",
+        "branch": "B",
+        "kit_policy_count": 0,
+        "kit_policies": {},
+        "inactive_count": 0
+      },
+      {
+        "identity": "mage",
+        "branch": "A",
+        "kit_policy_count": 0,
+        "kit_policies": {},
+        "inactive_count": 0
+      },
+      {
+        "identity": "mage",
+        "branch": "B",
+        "kit_policy_count": 0,
+        "kit_policies": {},
+        "inactive_count": 0
+      },
+      {
+        "identity": "archer",
+        "branch": "A",
+        "kit_policy_count": 0,
+        "kit_policies": {},
+        "inactive_count": 0
+      },
+      {
+        "identity": "archer",
+        "branch": "B",
+        "kit_policy_count": 0,
+        "kit_policies": {},
+        "inactive_count": 0
+      },
+      {
+        "identity": "defender",
+        "branch": "A",
+        "kit_policy_count": 0,
+        "kit_policies": {},
+        "inactive_count": 0
+      },
+      {
+        "identity": "defender",
+        "branch": "B",
+        "kit_policy_count": 0,
+        "kit_policies": {},
+        "inactive_count": 0
+      },
+      {
+        "identity": "berserker",
+        "branch": "A",
+        "kit_policy_count": 0,
+        "kit_policies": {},
+        "inactive_count": 0
+      },
+      {
+        "identity": "berserker",
+        "branch": "B",
+        "kit_policy_count": 0,
+        "kit_policies": {},
+        "inactive_count": 0
+      },
+      {
+        "identity": "elementalist",
+        "branch": "A",
+        "kit_policy_count": 0,
+        "kit_policies": {},
+        "inactive_count": 0
+      },
+      {
+        "identity": "elementalist",
+        "branch": "B",
+        "kit_policy_count": 0,
+        "kit_policies": {},
+        "inactive_count": 0
+      },
+      {
+        "identity": "spiritualist",
+        "branch": "A",
+        "kit_policy_count": 1,
+        "kit_policies": {
+          "echo_origin_fixed": true
+        },
+        "inactive_count": 0
+      },
+      {
+        "identity": "spiritualist",
+        "branch": "B",
+        "kit_policy_count": 1,
+        "kit_policies": {
+          "drain_inscription": true
+        },
+        "inactive_count": 0
+      },
+      {
+        "identity": "sentinel",
+        "branch": "A",
+        "kit_policy_count": 0,
+        "kit_policies": {},
+        "inactive_count": 0
+      },
+      {
+        "identity": "sentinel",
+        "branch": "B",
+        "kit_policy_count": 0,
+        "kit_policies": {},
+        "inactive_count": 0
+      },
+      {
+        "identity": "hunter",
+        "branch": "A",
+        "kit_policy_count": 1,
+        "kit_policies": {
+          "hunter_marked_mechanism": true
+        },
+        "inactive_count": 0
+      },
+      {
+        "identity": "hunter",
+        "branch": "B",
+        "kit_policy_count": 1,
+        "kit_policies": {
+          "hunter_covering_fan": true
+        },
+        "inactive_count": 0
+      },
+      {
+        "identity": "mg_ar",
+        "branch": "A",
+        "kit_policy_count": 1,
+        "kit_policies": {
+          "geometer_ground_anchor": true
+        },
+        "inactive_count": 0
+      },
+      {
+        "identity": "mg_ar",
+        "branch": "B",
+        "kit_policy_count": 1,
+        "kit_policies": {
+          "geometer_collapse_first_element": true
+        },
+        "inactive_count": 0
+      }
+    ],
+    "expected_policy_rows": [
+      {
+        "identity": "spiritualist",
+        "branch": "A",
+        "policy": "echo_origin_fixed"
+      },
+      {
+        "identity": "spiritualist",
+        "branch": "B",
+        "policy": "drain_inscription"
+      },
+      {
+        "identity": "hunter",
+        "branch": "A",
+        "policy": "hunter_marked_mechanism"
+      },
+      {
+        "identity": "hunter",
+        "branch": "B",
+        "policy": "hunter_covering_fan"
+      },
+      {
+        "identity": "mg_ar",
+        "branch": "A",
+        "policy": "geometer_ground_anchor"
+      },
+      {
+        "identity": "mg_ar",
+        "branch": "B",
+        "policy": "geometer_collapse_first_element"
+      }
+    ],
+    "native_resource_count": 69,
+    "native_resource_unique_paths": 69,
+    "native_resources": [
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_battle_rhythm.tres",
+        "sha256": "0b529cd5d5a7de36118fad41888be9263352ed5423e0ccda4e2327171752c08b"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_extra_fire_spear.tres",
+        "sha256": "c25d4233de1d4e2a879f5bd47e65878aecd33d17ca745e899c763437d427f381"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_extra_ice_spear.tres",
+        "sha256": "a6277fffb5b93d36b267e10b05b55211567a1583544f8d63f54afcb9bc5007a0"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_keen_edge.tres",
+        "sha256": "3b7ad20992e583d82b8e18bb245ad5189b2226c1e9763baff0f41fd0a29d1133"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_vitality.tres",
+        "sha256": "92c239ce45df20e53c2eef6af729c6a2c54894af442fab8a1471d706942b168d"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_channeler_robe.tres",
+        "sha256": "6f57641bfc4b0745ee6d746a0721a9e60eed0f0e405731028bd5fc5fd1eb7926"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_ember_staff.tres",
+        "sha256": "14084927525bc8aa9a69e8955414442704e5308f8e0b949c6b375b40b62649f5"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_hunters_bow.tres",
+        "sha256": "3b28c1eee5ae7ac3a4ec1b4021ac1dd6db7e7de7a57a466fbc50b7583e8b8fca"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_prismatic_charm.tres",
+        "sha256": "f50e51a447b5cd5b17d00eb047dabb521a6ba83971769f24ae99b9b7fe63ff1f"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_riposte_blade.tres",
+        "sha256": "0b21f54e3287c04b20b291f5b0b03a5b4d883a946a92e39bc857e91252be5d2d"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_starter_blade.tres",
+        "sha256": "003b9347ac08cd93e499e6a75555152ad5d8dcd4ea2c19e0aaac886defef7e33"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_starter_bow.tres",
+        "sha256": "032c93ce8fe1839b33d2fa1b011035ef01d6dd2081c89f2812ced0ad18c497bc"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_starter_staff.tres",
+        "sha256": "418a64803e4544569050dffe0c892ed07a18f62b5dde6f4697e442bd791f2ab7"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_trailcoat.tres",
+        "sha256": "7da6312914648fb88a447265314ebd02cdcdb8ec1561a61250ffcc4e971563da"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_traveler_charm.tres",
+        "sha256": "1bc83e29775a8fff143b275451815f251b0a08d577d4ac1f8dc4e59c45104af4"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_traveler_vest.tres",
+        "sha256": "6b511eaaeff7312a273661615d46a1603f9b23e2cc83b59213ef236baa340758"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_warden_mail.tres",
+        "sha256": "ef4a9b9264e6a38464adb55186189061823d8a78e3693806cdb01672891bd1c9"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_pilot_head.tres",
+        "sha256": "7be5258c26d59b937f825ef5e92b168690091ded62271c42e9fc67e273a7887e"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_pilot_shoulders.tres",
+        "sha256": "65044d2376a59d72e1878b00443ee0295204ae9f4a3d14b538af788e7286d10b"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_pilot_arms.tres",
+        "sha256": "3bc0f821318dcecfbf76ac2cb4b53db8057b9cf8d75f426ceb396285cd213d2f"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_pilot_cloak.tres",
+        "sha256": "64cec0e8ddd3861cae374227884857eeba03b40a0a068383b5e7be88ea9b45eb"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_pilot_legs.tres",
+        "sha256": "68a6fc6e343c9fa3d3a6eab674dc5ddda002b67384763fa59663cb4fcfe5b20d"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_pilot_feet.tres",
+        "sha256": "24ec5c8481746d413a84733fd3309696083fd1b303f91321b4226fc0cdcae3d3"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_pilot_shield.tres",
+        "sha256": "3dcef8c1355d99d9eb204954cf2ea7ad7678418bd52a4ec40a193ad17eef7c2a"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_pilot_focus.tres",
+        "sha256": "ab3132249da7b4afda3e13ef5ef05ce880f92cf5b92ee0b117d39391d4c085af"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_pilot_sp_jewel.tres",
+        "sha256": "33d8db6b7bb37772efb4a2f2c1410fe0184d71a6063013cb024fbe6b27cefbfe"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_pilot_stride_jewel.tres",
+        "sha256": "9f59123203c888576343348ab26e0414d024dbd67c18f61054fd270c81913fba"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_pilot_ward_jewel.tres",
+        "sha256": "1e159688fd830f2f65bf3ef2949fb1612b502d2d2ccb4b9e3bf1640220e1d6c5"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_pilot_step_neck.tres",
+        "sha256": "39c40eb8fd9008a4ea008d8f754564f9be38838abc1d1aa5db4efd944a547ff1"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/equipment_pilot_wand.tres",
+        "sha256": "9fbafad52d3e51594e213d50b779c853ff611fb42b22097cdf188aaf9da99419"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/set_pilot_guard_set.tres",
+        "sha256": "4b2272afd55856252d7fabec7eb1ea75b76c68de74a447493c6c3ca00ef7c1a1"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/mob_pilot_echo_species.tres",
+        "sha256": "dc72ab1549bd144a8e9a5caa87b2f4b94ca4896e0d20344bfa70e5a5540a80b3"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/card_echo_card.tres",
+        "sha256": "971052454afd0e96a073a3da9eb2d4570ecc041e794aaae9789ca855f0b204fe"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/mob_pilot_ember_species.tres",
+        "sha256": "5a3438d7e804af5e9c6de0ac30ed3053951c56e3532391cbc213022b8a110cad"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/card_ember_card.tres",
+        "sha256": "2f4f8f2417b1e4f8eff31fae49758a19f6de8a6823724a5a93b63300877cccb9"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/mob_pilot_frost_species.tres",
+        "sha256": "3d7de602b34ac2e9428b4a92693432649a6d108574d04f68630bd9020f688423"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/card_frost_card.tres",
+        "sha256": "4ccc81de4aa822775eea3658badc1ac73c1a435e6075c17f17f45209c3da625b"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/mob_pilot_precision_species.tres",
+        "sha256": "4df8f93b3fec29334bd81263561a4874280b45b57bdb1b720d79d197f5c17823"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/card_precision_card.tres",
+        "sha256": "d9feb0b058866b0aff2cd601861563a86e96b1b5cd646ad3403e56075252a4fb"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/mob_pilot_bulwark_species.tres",
+        "sha256": "d01fe873ad88ad8345fb68ae5add4b617143bf11e7a0c12b4e937a503177ec8d"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/card_bulwark_card.tres",
+        "sha256": "b6441e8ac83f3a3c3d3755d6f01e4243b744abb91f2309a7c1e6ab5466ce7417"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/mob_pilot_trail_species.tres",
+        "sha256": "1232d2a910016856e92bf605401402da64080db855df05a6156963bd1c1e823d"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/card_trail_card.tres",
+        "sha256": "02400941c100c20f19aab8f8c488f061eea63927d078c6de335c7e889419e6b9"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_swordsman_pressure.tres",
+        "sha256": "4c4dd594982a09f6aeb9dc5f927a762ab9bb356328f67f6338b6981eeb493b1b"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_swordsman_reserve.tres",
+        "sha256": "d8e6fa3faa74568be592d3c541a3505a4174b2a14a1959ddceddc75886a4de4c"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_mage_pressure.tres",
+        "sha256": "b7620159a260ad86ed4587dfb5a4db343745ee2f9d458cc7ee571bc2bf7590bc"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_mage_reserve.tres",
+        "sha256": "ac582e03042eb352ac6239e28c625036e647012ab575dfeae45e4f6d9cd0047c"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_archer_pressure.tres",
+        "sha256": "c1b8b4257152d2871026ef0c903dcc8a70d8d18570ff0f74dbfb11c6e26e6259"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_archer_reserve.tres",
+        "sha256": "14e4c60025921f4c4795d44d080ecd0c14ccbef7107729f09f6012b39820bbc9"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_defender_a.tres",
+        "sha256": "7e98a2a39fea3a3fcb899f89d918825632cff8326bbdb3eeaae10d5248b7e8c9"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_defender_b.tres",
+        "sha256": "21bbde566177961cfa52ab1babe1aab2f91e8b440edb8da92b2c358b372593dc"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_berserker_a.tres",
+        "sha256": "48ccf7f1412ff93dfdae3d54aa4d911ff424c389afb803d505d17778e054ca91"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_berserker_b.tres",
+        "sha256": "4c97932a3f423bd0d3409c9c882ef09974753ca1295d8ae763dd6610a8259a82"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_elementalist_a.tres",
+        "sha256": "3cbbd6d540ba92098a279ef0abcb10e9b9bcc3e947ffc402286ba2342c7c0d24"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_elementalist_b.tres",
+        "sha256": "20297f6a69e9ac0eaf025b47e3efc94afd3bb7e6671be7d6f037056f0eefd101"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_spiritualist_a.tres",
+        "sha256": "a61e4e5adc378af6d4f2e48cf2251d985c4fe4c06aeb0a4934d442ded0113e35"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_spiritualist_b.tres",
+        "sha256": "dc6165817247bc0e4342325528b34518acb4c528f4b3952fde7389c01345b677"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_sentinel_a.tres",
+        "sha256": "bf20903556c403f9494078db589303935a5cf56665dd8447163d99ec472a91b0"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_sentinel_b.tres",
+        "sha256": "d829df38a19b4a306726b67134e17564ff77959ef5b4ac7f33b0a1820ac9c3c6"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_hunter_a.tres",
+        "sha256": "969de0ba5f698f105bc973dfa13faf8610d06f7424dbf979d9b68b66608e1b81"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_hunter_b.tres",
+        "sha256": "08d4686650c45dfb23fb24d342ea09d18c8150e2dc46aff4777754111ce26bdd"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_mg_ar_a.tres",
+        "sha256": "7afb2dae1a9a8bff91403e607aa89c265ce65d38215599527fc6507f34270e73"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_pilot_mg_ar_b.tres",
+        "sha256": "c9726333456535b792adfb246d9e5747afd1814bc03c8815048677d6883746ca"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_spiritualist_echo_fixed_origin.tres",
+        "sha256": "f709249f960d005ca02997ad19d15874b5323d6d343e6f4510e39add84dae00c"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_geometer_ground_anchor.tres",
+        "sha256": "37467fad9b3aff41659a29d5dbefd5a27aad554e368468855edd2f2139bf0f20"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_spiritualist_drain_inscription.tres",
+        "sha256": "62367a4c897887908c817c467a1b044e6e0bccf1ebb46fb5c1d49e339288d0a5"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_hunter_marked_mechanism.tres",
+        "sha256": "403bf855a6dd2a8a24697d5f542f7bf60ff3559def9a2e2a0bb51803907a8560"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_hunter_covering_fan.tres",
+        "sha256": "59c457786a44187735a04b0e1dcaa4727e5a39ad1ff24a71ff96d8a5e8d2cb54"
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/augment_geometer_collapse_first_element.tres",
+        "sha256": "f26ddad804c642b0168c417268db2c4c0ac90042023db7fe475ad563eb7801cc"
+      }
+    ]
+  },
+  "preservation": {
+    "transform_texts_sha256": "dd648491c5cc5c25200e601aa3ba010f1ea1ec4c5d6495546de2d7c28da63e8e",
+    "transform_text_entry_count": 69,
+    "spatial_text_entry_count": 65,
+    "all_65_spatial_editorial_cells_equal": true,
+    "four_new_editorial_cells": [
+      "augment:geometer_collapse_first_element",
+      "augment:hunter_covering_fan",
+      "augment:hunter_marked_mechanism",
+      "augment:spiritualist_drain_inscription"
+    ],
+    "spatial_bundle_resource_count": 65,
+    "spatial_bundle_mechanical_digest": "6b143650ef433d96eb204aa5036725c065c14ccc79adbaf08fea039be686c3f9",
+    "spatial_bundle_files_preserved_at": ".godot/content_authoring/spatial_2015979",
+    "note": "The four new editorial cells are added; all 65 prior spatial_texts cells match. The existing ignored spatial bundle output directory and its 65 resources remain present; the newly compiled 69-resource bundle is isolated under a new transform_* directory."
+  },
+  "observed_generated_changes": {
+    "new_nonignored_artifact_from_prepare_compile": "content/authoring/transform_builds.json",
+    "new_script_uid_files_from_prepare_compile": [],
+    "ignored_native_resource_directory": ".godot/content_authoring/transform_2349721 (69 resources)",
+    "editorial_frozen_sha256": "dd648491c5cc5c25200e601aa3ba010f1ea1ec4c5d6495546de2d7c28da63e8e",
+    "logs_and_hashes": [
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/001.engine.log",
+        "sha256": "06f6c9b3c3c5650a06a0f989bbb37bd4a9217b471b381d18da2c0604534d4fd8"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/001.output.log",
+        "sha256": "acfd60def9dca8a13bb9fef2e028d40da14564de52520dbdcc583c3aa755a58b"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/006-e06_effects_composition_test.engine.log",
+        "sha256": "e2afc0d4272373ddaa30f49073aa7da571b7162eddb0b9af28c388795d7e42b5"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/006-e06_effects_composition_test.output.log",
+        "sha256": "71958720e37183be2c8c2e6b8b5144ea7893b4da8289d7272ddb9497153c21c4"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/008-e06_effects_runtime_test.engine.log",
+        "sha256": "868a20a8a3b9474b1278e7b81906fd33fee223d8e34be48f9c1f59c5cd3f819b"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/008-e06_effects_runtime_test.output.log",
+        "sha256": "4d2c6c3d1221aa352c92570d7eb188ad87a213352d772dd848a8639c20376906"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/052-e05_hunter_opening_test.engine.log",
+        "sha256": "74e9a7fde287529627f80de795eda17e7621f11fbe9a65cbf9831dae300732c0"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/052-e05_hunter_opening_test.output.log",
+        "sha256": "a54768e0c9ab8ee7b2824e23d8f5a0e489d81e3f54c344e026510a9787ab002e"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/053-e05_hunter_core_integration_test.engine.log",
+        "sha256": "67134378e59720da74ed7b9e7a4d8eb0f626cf2a247b3861427bfcd9ead3700d"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/053-e05_hunter_core_integration_test.output.log",
+        "sha256": "c9f14931487b29134bf588bde93b922ea28f949004b92237780d2fed3dcedbbb"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/054-e05_hunter_traps_integration_test.engine.log",
+        "sha256": "1cd1311c5f2e63d08f0d4f9eefe30044b9590e4b26c81b36eea5bcf93de56d3b"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/054-e05_hunter_traps_integration_test.output.log",
+        "sha256": "74b4ae80d7dee422d3541cca69338c7c79001e5e00310b4cb844ce423ee0a8f9"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/056-e05_hunter_passives_test.engine.log",
+        "sha256": "4165292245ef7a296696c31b61fe0344228bb359f4957050a226c0395e08b680"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/056-e05_hunter_passives_test.output.log",
+        "sha256": "648d5c37dda019d2549226c772e68a8500d4ce50ebc081c3e0c2fb867ce8829d"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/062-e05_hunter_active_combat_test.engine.log",
+        "sha256": "6bec06a84cdb5bd1f326b3454ef03c136c46e2585ad0ac3acfca7ccdd215733b"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/062-e05_hunter_active_combat_test.output.log",
+        "sha256": "cdafec2be14d17967e1f193072ca7a9bea113693e51cced81376d2ba47f89081"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/100-e05_spiritualist_echo_curse_test.engine.log",
+        "sha256": "a7841ca435a34cb970d6115e1b69b45d15294709718f8797a140313f5b24bd92"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/100-e05_spiritualist_echo_curse_test.output.log",
+        "sha256": "4634440ca405823ab6dd41bd81bcc43c0cc67a0dbce3fc41c54ad343ec610e82"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/103-e05_spiritualist_soul_drain_test.engine.log",
+        "sha256": "be50436dcf460039387e4634622f28445d0c5f39a390d15c3b6fa9e7fccc251e"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/103-e05_spiritualist_soul_drain_test.output.log",
+        "sha256": "e45f5d6cf60cc23d561b2e4830661715ac1acaf5de28b8ccb930b6c7f95668ec"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/105-e05_spiritualist_channel_focus_test.engine.log",
+        "sha256": "180b30de8655d18973550cf8feb597ca31e1f91f7a1da3683ea9c00e71b63dc5"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/105-e05_spiritualist_channel_focus_test.output.log",
+        "sha256": "2b399c795e96e7c895d91e4ff6ff2f1095432592803f75fddc0dfa03d3865955"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/113-e05_geometer_casting_test.engine.log",
+        "sha256": "1e2f7ffc343509d3bc19c6da09c45d72ed1bcf50b874d1785e14e10c866f1dd5"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/113-e05_geometer_casting_test.output.log",
+        "sha256": "d4dc0c17e211528164119f4c23f3197ab3766f3e5162e8683c6ec4d996dfa1b4"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/118-e05_geometer_triangle_recipes_test.engine.log",
+        "sha256": "9cfe278e0111bf48f01526d51bee618eed8f260ff153c0d9d989dd51d72b90fa"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/118-e05_geometer_triangle_recipes_test.output.log",
+        "sha256": "7fa03fbfd87ce57538d169b8e7baa33ebd24571a1f4379054495639e17058919"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/120-e05_geometer_editing_test.engine.log",
+        "sha256": "3a5d53675c235391b843b8505a2bcd3e0a95f8eeb151166b219ab810bbb63df4"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/120-e05_geometer_editing_test.output.log",
+        "sha256": "60c2b12794358ffa9be39e265b2795af614a0ff337e02eee030929bf1f06090f"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/124-e05_geometer_g7_test.engine.log",
+        "sha256": "8e0cd2bb779e42e6a817d3076fb779c5b70042e78fd9958c6758e55f6a4bacfa"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/124-e05_geometer_g7_test.output.log",
+        "sha256": "a33bc52f8af213d6f6c6a6f5c08e7376b3b4cb51228210d2374faf12373f48b0"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/186-e06_tx_composition_test.engine.log",
+        "sha256": "b3e8d7dc65f7c64c0e5f6123127bde45daa3c414289f95131c9b042ac35fb54e"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/186-e06_tx_composition_test.output.log",
+        "sha256": "707ff42f2e379d184e5c2ff37edb33cd2c67857ff402f143a430d1779bfc000c"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/188-e06_tx_causality_test.engine.log",
+        "sha256": "890c0cbdb1d81976b5620a745e68ec057512b175710d12551df2aa3e1f67912a"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/188-e06_tx_causality_test.output.log",
+        "sha256": "494ca0551d7aa0aa3545ae39f5a41608342a42dc41a04316caae9ea58daaa069"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/191-e06_rx_causal_late_test.engine.log",
+        "sha256": "880b2813295947f02ce2075729c182718d6cab67f685be8e793d97a563cbcfb0"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/191-e06_rx_causal_late_test.output.log",
+        "sha256": "65f849d3ac85223f120556df1f6d3c8a68e253d3a764407a451fea504b7d2d02"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/193-e06_tx_late_fields_test.engine.log",
+        "sha256": "60a58fd7c0e2b48445532ad4c6f4acf81a8a71e8aec3fc8477a2f611c062da84"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/193-e06_tx_late_fields_test.output.log",
+        "sha256": "8ba8eb33e5afb2fe7c7aa9f617f729a000c7c3195432b46f19022e48297613ac"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/194-e06_content_authoring_test.engine.log",
+        "sha256": "007765c98b800ef964dc34af28a634211bee46c86c833874121bc9cc6d1b1f64"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/194-e06_content_authoring_test.output.log",
+        "sha256": "41ab313da854b7b0223b6e128e3079b93c556c65a3509e8752bc15134fb8af62"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/195-e06_content_editorial_test.engine.log",
+        "sha256": "e542031bd9026ac6b00281952f27f3087c3fb8661f48438a85fb348f60d5cc89"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/195-e06_content_editorial_test.output.log",
+        "sha256": "4f19b03dd3389029aeb3fcdb8f6d511db2c5e80715348cd9ab52f1819844a2df"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/199-e06_spatial_policies_test.engine.log",
+        "sha256": "ca016407e1c985e4b4798efa4222d5802c8c4dabfe74ca8a0e9f9c958f1e7473"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/199-e06_spatial_policies_test.output.log",
+        "sha256": "a91e9de2e098a74abbecc490b235b93ef48af904b9921fa742e43c3c8b1585d6"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/200-e06_spatial_execution_test.engine.log",
+        "sha256": "60dd89c0511fb4299a0506f4633ab059d180c71cfd2a22af6e7e555c38d82800"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/200-e06_spatial_execution_test.output.log",
+        "sha256": "4a129a7cad9cf6f3723160b290ce09e52d4ea1fca8e3327b0919ee28e6beee20"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/201-e06_transform_policies_test.engine.log",
+        "sha256": "fa8a989bd8abb003abba25a2905989e946ae29c2f3307d84e558bf9dbf2f4139"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/201-e06_transform_policies_test.output.log",
+        "sha256": "4deafac9fa3396d356b5044d68873b2e3a256f5127acf247177f57886b10ab34"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/202-e06_transform_execution_test.engine.log",
+        "sha256": "00799f9554dc0533de22631263e09a1c7a7b21fd57bc1562c9a95d649c9ed85e"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/checks/202-e06_transform_execution_test.output.log",
+        "sha256": "17570a4579cf8a2ab43b85175101df2d8f40571090678887cbafe0054d9440b1"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/compile_preview.output.log",
+        "sha256": "36b84a1aa6af7e482d57c6fa9e19b4ec32c7c88f3c8d31073de23b32bfc94464"
+      },
+      {
+        "path": ".godot/verification/e06_transform/luna_final/prepare.output.log",
+        "sha256": "42a97e4d3c985e540d9efb8da93e2906ad3a5b5b0cd5c39991e3f25a84eec2af"
+      }
+    ],
+    "log_file_count": 52,
+    "concurrent_manifest_delta": "docs/epics/e06/e06_transform_proposal.md received a 12/10 authorization note after plan.json captured the pre-run dirty manifest; it is a concurrent root-owned edit, outside Luna ownership."
+  },
+  "limitations": [
+    "Supervision confirms execution and artifact integrity for the selected checks only; 177 runner steps were not run.",
+    "This receipt is not a semantic audit, technical closure, product acceptance, Astra approval, playtest, or merge authorization.",
+    "Candidate source tree is intentionally dirty; manifest records before/after state."
+  ],
+  "post_execution_source_manifest": {
+    "capture_kind": "POST_EXECUTION",
+    "path": ".godot/verification/e06_transform/luna_final/manifest_post_execution.json",
+    "sha256": "504d8df65acf2c15608901a3c325f4a41082c810a0ee320b190faecae66e0b93",
+    "scope_file_total": 707,
+    "scope_counts": {
+      "project": 1,
+      "scripts": 246,
+      "tests": 406,
+      "resources": 20,
+      "scenes": 5,
+      "verify_runner": 1,
+      "tools_content": 16,
+      "content_authoring_json": 12
+    },
+    "additional_artifacts": [
+      {
+        "path": "content/authoring/transform_briefs.json",
+        "sha256": "01eef676462632f982562f6e2d417723f815b49359d53a550299a17c22f7a69c",
+        "size_bytes": 100190
+      },
+      {
+        "path": "content/authoring/transform_builds.json",
+        "sha256": "1d5183384f9188290d185414574ab384c6507d871ed13621b90b9b9ce47574a8",
+        "size_bytes": 68264
+      },
+      {
+        "path": ".godot/content_authoring/transform_2349721/manifest.json",
+        "sha256": "e3d3635dc230b3a0e87658d49ea0b418340cbf5156e0d6bfb8e258d76bd58126",
+        "size_bytes": 6108
+      }
+    ],
+    "baseline_sha256_manifest_captured": false,
+    "before_after_hash_equality_claimed": false,
+    "source_ownership_during_execution": "Sources remained frozen by exclusive ownership during the test run; no before-hash exists. The initial and final git status snapshots remain separate diagnostics."
+  }
+}

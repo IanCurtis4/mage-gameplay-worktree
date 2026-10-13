@@ -5,6 +5,10 @@ extends RefCounted
 const ORIGINS: Array[StringName] = [&"augment", &"equipment", &"card"]
 const SLOTS: Array[StringName] = [&"head", &"neck", &"shoulders", &"arms", &"torso", &"cloak", &"legs", &"feet", &"main_hand", &"off_hand", &"accessory_1", &"accessory_2", &"accessory_3", &"accessory_4"]
 const KIT_POLICIES := {
+	&"drain_inscription": {"origin": &"mage", "evolution": &"spiritualist", "skills": [&"spiritualist_soul_drain", &"spiritualist_echo_curse"], "required": [&"spiritualist_soul_drain", &"spiritualist_echo_curse"]},
+	&"hunter_marked_mechanism": {"origin": &"archer", "evolution": &"hunter", "skills": [&"hunter_freezing_trap", &"hunter_tar_trap", &"hunter_thorn_trap"], "required": [&"hunter_mark"]},
+	&"hunter_covering_fan": {"origin": &"archer", "evolution": &"hunter", "skills": [&"hunter_covering_shot"]},
+	&"geometer_collapse_first_element": {"origin": &"mage", "evolution": &"mg_ar", "skills": [&"geometer_collapse"], "required": [&"geometer_triangulation"]},
 	&"echo_origin_fixed": {"evolution": &"spiritualist", "skills": [&"spiritualist_echo_curse"]},
 	&"geometer_ground_anchor": {"evolution": &"mg_ar", "skills": [&"geometer_trace", &"geometer_triangulation"]},
 }
@@ -168,7 +172,7 @@ static func validate_effect(effect: EffectDefinition) -> Dictionary:
 		var policy: Dictionary = KIT_POLICIES.get(effect.axis, {})
 		if policy.is_empty() or effect.handler_id != EffectDefinition.Handler.KIT_POLICY or effect.trigger != EffectDefinition.Trigger.NONE or effect.unit != &"policy" or effect.magnitude != 0 or effect.increased != 0 or effect.limit != 0 or not effect.stack_values.is_empty() or effect.channel != &"flat" or effect.minimum_rank != 1:
 			return failure(&"invalid_kit_policy")
-		if effect.target_skill_ids != policy["skills"] or effect.allowed_origins != [&"mage"] or effect.allowed_evolutions != [policy["evolution"]] or effect.stacking_mode != EffectDefinition.Stacking.EXCLUSIVE or effect.conflict_group != effect.axis:
+		if effect.target_skill_ids != policy["skills"] or effect.allowed_origins != [policy.get("origin", &"mage")] or effect.allowed_evolutions != [policy["evolution"]] or effect.stacking_mode != EffectDefinition.Stacking.EXCLUSIVE or effect.conflict_group != effect.axis:
 			return failure(&"invalid_kit_policy_restrictions")
 	elif effect.kind == EffectDefinition.Kind.ACTIVE_GRANT:
 		if effect.handler_id != EffectDefinition.Handler.ACTIVE_SKILL or effect.trigger != EffectDefinition.Trigger.NONE or not effect.target_skill_ids.is_empty() or effect.magnitude != 0.0 or effect.increased != 0.0 or effect.limit != 0.0 or not effect.stack_values.is_empty():

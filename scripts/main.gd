@@ -1558,9 +1558,12 @@ func _advance_spiritualist_drain(delta: float) -> void:
 			return
 		var healed_before := spiritualist_drain_state.healed_total
 		var channel_completed := spiritualist_drain_state.resolve_tick()
+		var inscription_power := spiritualist_drain_state.claim_completion_inscription(request) if channel_completed else 0.0
 		if channel_completed:
 			player.grant_spiritualist_focus(request.context)
 		var result := target_actor.apply_damage(request, rng)
+		if inscription_power > 0.0 and not run_finished and player.is_alive() and is_instance_valid(target_actor) and target_actor.is_alive() and float(result.get("actual_damage", 0.0)) > 0.0:
+			spiritualist_echo_state.mark(target_actor.get_instance_id(), inscription_power)
 		var healed := player.heal_from_spiritualist_drain(result, healed_before)
 		spiritualist_drain_state.healed_total = healed_before + healed
 		if healed > 0.0:
@@ -1847,6 +1850,22 @@ func _on_enemy_died(actor: CombatActor) -> void:
 	_ensure_reward_ticket()
 	status_label.text = "Encontro concluído — toque no cristal dourado"
 
+func _prepare_hunter_fan(result: Dictionary) -> void:
+	if not player.is_hunter() or not player.hunter_state.can_consume(result) or StringName(result.get("skill_id", &"")) != &"hunter_covering_shot" or not bool(result.get("effect_snapshot", {}).get("kit_policies", {}).get(&"hunter_covering_fan", false)) or get_tree().paused: return
+	var victim := instance_from_id(int(result.get("target_id", 0))) as CombatActor
+	if not is_instance_valid(victim) or not victim.is_alive(): return
+	var selected: CombatActor
+	var distance := INF
+	for candidate: CombatActor in enemies.duplicate():
+		if not is_instance_valid(candidate) or not candidate.is_alive() or candidate.is_queued_for_deletion() or candidate == victim: continue
+		var squared := victim.global_position.distance_squared_to(candidate.global_position)
+		if squared > 80.0 * 80.0 or not navigation.is_segment_clear(victim.global_position, candidate.global_position, 0.0): continue
+		if selected == null or squared < distance or (is_equal_approx(squared, distance) and candidate.get_instance_id() < selected.get_instance_id()):
+			selected = candidate
+			distance = squared
+	var context: CombatEventContext = result.get("context")
+	if selected != null and context != null and context.ledger() != null and context.ledger().admit_hunter_fan(result, selected.get_instance_id()): result["_hunter_fan_target_id"] = selected.get_instance_id()
+
 func _on_enemy_damage_resolved(result: Dictionary) -> void:
 	if player == null or not is_instance_valid(player) or not player.is_alive() or int(result.get("source_id", 0)) != player.get_instance_id():
 		return
@@ -1857,6 +1876,7 @@ func _on_enemy_damage_resolved(result: Dictionary) -> void:
 		candidates.append({"family_id": &"defender_watch", "source_id": &"defender_watch", "target_id": victim_id_for_claim})
 	if spiritualist_echo_state.can_record_hit(result) and build.has_passive(&"spiritualist_echo_recovery") and player.spiritualist_recovery_cooldown <= 0.0 and player.current_sp < player.max_sp and not player._spiritualist_refunded_emissions.has(int(result.get("emission_id", 0))):
 		candidates.append({"family_id": &"spiritualist_echo_recovery", "source_id": &"spiritualist_echo_recovery", "target_id": player.get_instance_id()})
+	_prepare_hunter_fan(result)
 	player.prepare_effect_claims(result, candidates)
 	player.resolve_build_effect_procs(result)
 	player.record_berserker_damage(result)

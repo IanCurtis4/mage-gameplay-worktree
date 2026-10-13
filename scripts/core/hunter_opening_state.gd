@@ -100,6 +100,15 @@ func consume(result: Dictionary, controlled_or_boss: bool = false) -> Dictionary
 			request = request.child_request(parent, &"hunter_exploit", &"hunter_opening", target_id)
 			if request == null:
 				return {}
+	var fan_request: DamageRequest
+	var fan_target := int(result.get("_hunter_fan_target_id", 0))
+	if fan_target > 0 and fan_target != target_id and StringName(result.get("skill_id", &"")) == &"hunter_covering_shot" and bool(result.get("effect_snapshot", {}).get("kit_policies", {}).get(&"hunter_covering_fan", false)):
+		var fan_context := EffectProcLedger.take_result_claim(result, &"hunter_exploit", fan_target)
+		if fan_context != null:
+			request.physical_damage *= 0.5
+			fan_request = request.copy()
+			fan_request.target_id = fan_target
+			fan_request.context = fan_context
 	# Claim/erase before returning a payload. Nested secondary/death callbacks
 	# cannot find the same opening, or exploit a replacement with the same action.
 	_openings.erase(target_id)
@@ -112,7 +121,7 @@ func consume(result: Dictionary, controlled_or_boss: bool = false) -> Dictionary
 			step_remaining = HunterTuning.STEP_DURATION
 			granted_step = true
 	_emissions[emission_id] = emission
-	return {"request": request, "granted_step": granted_step, "activation_id": opening["activation_id"]}
+	return {"request": request, "fan_request": fan_request, "granted_step": granted_step, "activation_id": opening["activation_id"]}
 
 func opening(target_id: int) -> Dictionary:
 	if not _openings.has(target_id):

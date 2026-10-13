@@ -1,3 +1,5 @@
+> Atualização humana de 12/10/2026: após a entrega do primeiro lote, usuário autorizou continuar as quatro transformações restantes. As quatro foram entregues e validadas, completando as seis receitas propostas. Escopo/donos/evidência em [e06_transform_remaining.md](e06_transform_remaining.md). O registro abaixo conserva a proposta original e a decisão inicial; suas afirmações anteriores de não autorização ficam substituídas para essas quatro receitas.
+
 # E06 — proposta de transformações do piloto
 
 PROPOSTA DE PRODUTO/ARQUITETURA: usuário aprovou começar SOMENTE por spiritualist_echo_fixed_origin e geometer_ground_anchor em12/10/2026; outros quatro não autorizados. Consulta Astra/low, somente leitura, em12/10/2026; Sol conferiu os pontos de integração nos estados de eco/drenagem, armadilhas/abertura e construção/triângulo existentes. Não é auditoria do capítulo. A base continua985f6bc e os deltas de execução real do piloto; nenhuma receita abaixo foi adicionada ao catálogo.

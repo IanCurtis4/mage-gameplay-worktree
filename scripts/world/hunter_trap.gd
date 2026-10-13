@@ -10,12 +10,14 @@ var damage_request: DamageRequest
 var opening_request: DamageRequest
 var effect_radius := 0.0
 var _targets: Array[CombatActor] = []
+var marked_trigger_target_id := 0
 
 func configure_hunter(placement: Vector2, rank: int, request: DamageRequest, opening: DamageRequest, targets: Array[CombatActor], lifetime: float) -> void:
 	assert(request != null and request.skill_id in HunterMath.NEW_TRAP_IDS and opening != null)
 	tuning = HunterTuning.values(request.skill_id, rank)
 	assert(not tuning.is_empty())
 	damage_request = request.copy()
+	marked_trigger_target_id = int(request.effect_snapshot.get("marked_trigger_target_id", 0))
 	opening_request = opening.copy()
 	_targets.clear()
 	for victim: CombatActor in targets:
@@ -43,6 +45,9 @@ func _process(delta: float) -> void:
 		var victim := first_trigger_target(_targets)
 		if victim != null:
 			try_trigger(victim)
+
+func can_trigger(target: CombatActor) -> bool:
+	return super.can_trigger(target) and (marked_trigger_target_id == 0 or target.get_instance_id() == marked_trigger_target_id)
 
 func _on_triggered(_trap: PlayerTrap, primary: CombatActor) -> void:
 	var victims: Array[CombatActor] = []

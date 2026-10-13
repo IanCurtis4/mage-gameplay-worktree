@@ -70,3 +70,9 @@ Os novos efeitos de proc direcionado incluem as habilidades alvo na descrição 
 `tools/content/spatial.gd -- --prepare` gera spatial_briefs.json e, somente se ausente, cria spatial_texts.json copiando os63 name/flavor anteriores. Luna só preenche os2 novos. O comando sem argumentos valida/completa, gera spatial_builds.json e65 Resources em `.godot/content_authoring/spatial_*`, sem publicar no loader ativo. `pilot_*` continua preservado; as comparações A de Espiritualista/Geômetra passam a incluir o modo espacial no novo relatório.
 
 [Prévia legível](spatial_preview.md) explica os resultados observáveis. O compositor/capturas guardam kit_policies por valor; ondas e reservas seguem suas capturas depois da retirada do augment. Não tratar políticas como modificador numérico, proc de arma ou autorização de outros4 efeitos da proposta. Os valores de dano/cadência/progressão/rates continuam com suas autoridades anteriores.
+
+## Quatro transformações restantes
+
+`tools/content/transform_bundle.gd` conserva as 65 receitas espaciais e acrescenta quatro políticas de kit aprovadas. `tools/content/transform.gd -- --prepare` gera fichas e cria o envelope editorial somente se ausente, copiando as 65 células antigas; execução sem argumentos valida editorial, gera `transform_builds.json` e 69 Resources em `.godot/content_authoring/transform_*`. Os bundles anteriores e o loader ativo não são reescritos.
+
+Luna edita somente os quatro nomes/flavors. Pré-requisitos dos adapters fechados ficam em BuildEffectCatalog, sem propriedades exportadas novas. Inscrição requer Drenagem+Maldição; mecanismo requer Marca+uma armadilha afetada; Colapso requer sua ativa+Triangulação. O compositor ativa somente a política útil de rank legal. [Prévia legível](transform_preview.md) e [checkpoint](../../docs/epics/e06/e06_transform_remaining.md) registram os comportamentos e limites.

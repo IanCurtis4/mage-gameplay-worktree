@@ -94,7 +94,7 @@ func collapse(command: GeometerCastCommand) -> bool:
 	var points: PackedVector2Array = captured["points"]
 	var request: DamageRequest = captured["request"]
 	if captured["shape"] == GeometerConstructionState.Shape.TRIANGLE:
-		triangle_field.resolve_captured(points, captured["elements"][2], request)
+		triangle_field.resolve_captured(points, captured["resolution_element"], request, 0, int(captured["resolution_vertex"]))
 	else:
 		for actor: CombatActor in targets.duplicate():
 			if not player.is_alive() or (is_inside_tree() and get_tree().paused):

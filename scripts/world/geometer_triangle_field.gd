@@ -46,12 +46,12 @@ func form(snapshot: Dictionary = {}) -> void:
 	var element := casting.construction.elements()[2]
 	resolve_captured(casting.construction.positions(), element, _snapshot[StringName("resolution_" + String(element))], _identity)
 
-func resolve_captured(points: PackedVector2Array, element: StringName, prototype: DamageRequest, formation_identity: int = 0) -> void:
+func resolve_captured(points: PackedVector2Array, element: StringName, prototype: DamageRequest, formation_identity: int = 0, resolution_vertex: int = 2) -> void:
 	# Also used by explicit collapse AFTER consumption. No maintenance or snapshot replay.
 	var occupants := _occupants_for(points)
 	var links := PackedVector2Array()
 	if element == &"lightning":
-		var origin := points[2]
+		var origin := points[clampi(resolution_vertex, 0, 2)]
 		for index: int in range(3):
 			var victim := _nearest(occupants, origin, INF if index == 0 else LINK_RANGE)
 			if victim == null or not _can_resolve(formation_identity):
