@@ -1,0 +1,10 @@
+{
+  "phase": "technical_closure_before_application",
+  "base_commit": "d4d67fbb44fb17e34e619b4e64b70651d9ae1624",
+  "source": "C:/Users/Jo\u00e3o Pedro/.codex/worktrees/e06-inventory/RagRPG",
+  "target": "C:/Users/Jo\u00e3o Pedro/Documents/ChatGPT/RagRPG",
+  "applied": false,
+  "product_acceptance": "not_recorded",
+  "master_merge": false,
+  "push": false
+}

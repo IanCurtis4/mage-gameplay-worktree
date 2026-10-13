@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="MobDefinition" format=3]
+[ext_resource type="Script" path="res://scripts/data/mob_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = &"test_beast_master"
+display_name = "Mestre das Feras"
+description = "Nível fixo da área de teste."
+base_category = &"rare"
+allowed_occurrence_categories = Array[StringName]([&"rare", &"elite", &"rare_elite", &"boss"])
+fixed_level = 2
+origin_levels = {&"trial_stage_1": 2, &"trial_stage_2": 4, &"trial_stage_3": 6, &"trial_stage_4": 9, &"trial_stage_5": 12, &"trial_stage_6": 15}
+primary_attributes = {&"str": 2, &"agi": 2, &"vit": 2, &"int": 2, &"dex": 2, &"luk": 2}
+modifier_sources = Array[Dictionary]([{"source_id": &"test_species_tuning", "flat": {&"move_speed": -77.0, &"max_hp": 0.0}}])
+encounter_tiers = true
+aggro_radius = 420.0
+leash_radius = 850.0
+sight_timeout = 4.0
+visual_kind = &"humanoid"
+summons_companion = true

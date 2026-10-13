@@ -68,7 +68,7 @@ func validate_occurrence(occurrence: MobOccurrence) -> Dictionary:
 	if not _profiles.has(occurrence.category_id):
 		return BuildEffectCatalog.failure(&"invalid_loot_table")
 	var definition: MobDefinition = checked["definition"]
-	if _power_ruleset_id == &"equipment_growth_v1" and definition.fixed_level > 30:
+	if _power_ruleset_id == &"equipment_growth_v1" and int(checked["level"]) > 30:
 		return BuildEffectCatalog.failure(&"invalid_equipment_power")
 	if float(_profiles[occurrence.category_id]["card_chance"]) > 0.0 and definition.id not in _cardless_base_ids:
 		var card := _catalog.get_definition(&"card", definition.card_id) as CardDefinition
@@ -92,7 +92,7 @@ func roll(occurrence: MobOccurrence, uniforms: Array) -> Dictionary:
 		var id := StringName(_weighted(_item_pool(occurrence.category_id, quality), float(uniforms[2])))
 		var item := _catalog.get_definition(&"equipment", id) as EquipmentDefinition
 		var sockets := int(_weighted(row["socket_weights"], float(uniforms[3]))) if EquipmentRules.allows_sockets(item.metadata()) else 0
-		drops.append({"definition_id": id, "origin_id": occurrence.origin_id, "item_level": mob.fixed_level, "quality_id": quality, "socket_capacity": sockets, "recipe_revision_id": _recipe_revision_id, "power_ruleset_id": _power_ruleset_id})
+		drops.append({"definition_id": id, "origin_id": occurrence.origin_id, "item_level": int(checked["level"]), "quality_id": quality, "socket_capacity": sockets, "recipe_revision_id": _recipe_revision_id, "power_ruleset_id": _power_ruleset_id})
 	var card: StringName = mob.card_id if mob.id not in _cardless_base_ids and _passes(float(uniforms[4]), float(row["card_chance"])) else &""
 	return {"ok": true, "equipment_drops": drops, "card_id": card, "mob_base_id": mob.id, "category_id": occurrence.category_id, "occurrence_id": occurrence.occurrence_id}
 func _item_pool(category: StringName, quality: StringName) -> Dictionary:

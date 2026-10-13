@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-13",
+  "role": "automated_supervisor",
+  "base_commit": "d4d67fbb44fb17e34e619b4e64b70651d9ae1624",
+  "branch": "codex/e06-inventory",
+  "runner": {
+    "tool": "tools/verify.ps1",
+    "total_plan_steps": 212,
+    "selected_names": 27,
+    "checks_executed": 18,
+    "checks_passed_before_stop": 17,
+    "verification_directory": ".godot/verification/e06_gameplay_extension/final/checks",
+    "frozen_inputs_before_sha256": "e904ce01b04d2ee33d5beccd7b0abb6cbeaa97f65be427555dbfdcc84ec8df9a"
+  },
+  "result": "stopped_on_first_failure",
+  "failure": {
+    "selection_index": 18,
+    "plan_index": 203,
+    "name": "e06_directions_test",
+    "exit_code": 1,
+    "timed_out": false,
+    "output": "{ \"ok\": false, \"error_code\": \"stale_editorial_document\", \"request_id\": \"\", \"detail\": \"\" }\nERROR: unchanged 69 recipe bundle has complete real editorial\n   at: push_error (core/variant/variant_utility.cpp:1023)\n   GDScript backtrace: tests/e06_directions_test.gd:16, tests/e06_directions_test.gd:20",
+    "output_log": ".godot/verification/e06_gameplay_extension/final/checks/203-e06_directions_test.output.log",
+    "engine_log": ".godot/verification/e06_gameplay_extension/final/checks/203-e06_directions_test.engine.log",
+    "output_sha256": "2f0132cae9a9e47f53afd05942bbd8f75b382d921471450059ba898786901cf"
+  },
+  "publication_check": "not_run_after_failure",
+  "source_or_expectation_changes_by_supervisor": false,
+  "limitations": [
+    "The remaining 9 selected checks were not run.",
+    "Publication --check was not run.",
+    "The 970-input and 85-resource snapshots were not rechecked after execution.",
+    "Four native captures are separate evidence and were not inspected in this supervision."
+  ]
+}

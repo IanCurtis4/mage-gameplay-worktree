@@ -18,4 +18,4 @@ func validate(catalog: MobCatalog) -> Dictionary:
 	var definition := catalog.get_definition(mob_base_id)
 	if definition == null or category_id not in definition.allowed_occurrence_categories:
 		return BuildEffectCatalog.failure(&"invalid_mob_category")
-	return {"ok": true, "definition": definition}
+	return catalog.level_for_occurrence(self)

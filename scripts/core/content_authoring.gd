@@ -4,6 +4,9 @@ extends RefCounted
 const ORIGINS: Array[StringName] = [&"mob", &"set", &"equipment", &"card", &"augment"]
 const EDITORIAL_FIELDS: Array[StringName] = [&"display_name", &"description", &"flavor_text", &"icon"]
 const STAT_LABELS := {&"str": "FOR", &"agi": "AGI", &"vit": "VIT", &"int": "INT", &"dex": "DES", &"luk": "SOR", &"max_hp": "Vida máxima", &"max_sp": "SP máximo", &"hp_regen": "Regeneração de Vida", &"sp_regen": "Regeneração de SP", &"melee_attack": "Ataque corpo a corpo", &"precision_attack": "Ataque de precisão", &"magic_attack": "Ataque mágico", &"physical_defense": "Defesa física", &"magic_defense": "Defesa mágica", &"hit_rating": "Acerto", &"flee_rating": "Esquiva", &"crit_chance": "Chance de crítico", &"crit_multiplier": "Multiplicador de crítico", &"crit_resistance": "Resistência a crítico", &"attacks_per_second": "Ataques por segundo", &"move_speed": "Velocidade de movimento", &"variable_cast_multiplier": "Multiplicador de conjuração variável", &"fixed_cast_reduction": "Redução de conjuração fixa", &"after_cast_reduction": "Redução de pós-conjuração", &"cooldown_reduction": "Redução de recarga", &"physical_cc_resistance": "Resistência a controle físico", &"magic_cc_resistance": "Resistência a controle mágico", &"damage_dealt_multiplier": "Multiplicador de dano causado"}
+# Omit additive neutral defaults so historical recipes retain their canonical digest.
+# Every effective gameplay value still participates in the mechanical signature.
+const NEUTRAL_MOB_FIELDS := {&"origin_levels": {}, &"encounter_tiers": false, &"aggro_radius": 0.0, &"leash_radius": 0.0, &"sight_timeout": 4.0, &"visual_kind": &"humanoid", &"summons_companion": false}
 const FRACTION_AXES: Array[StringName] = [&"crit_chance", &"crit_resistance", &"fixed_cast_reduction", &"after_cast_reduction", &"cooldown_reduction", &"physical_cc_resistance", &"magic_cc_resistance"]
 
 static func prepare(entries: Array[Dictionary]) -> Dictionary:
@@ -113,6 +116,8 @@ static func _resource_data(resource: Resource) -> Dictionary:
 	for property: Dictionary in resource.get_property_list():
 		var field := StringName(property["name"])
 		if int(property["usage"]) & PROPERTY_USAGE_SCRIPT_VARIABLE and int(property["usage"]) & PROPERTY_USAGE_STORAGE and field not in EDITORIAL_FIELDS:
+			if resource is MobDefinition and NEUTRAL_MOB_FIELDS.has(field) and resource.get(field) == NEUTRAL_MOB_FIELDS[field]:
+				continue
 			result[String(field)] = _value_data(resource.get(field))
 	return result
 

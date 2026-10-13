@@ -271,6 +271,10 @@ Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/
 
 
 
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_gameplay_content_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_gameplay_ai_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_gameplay_route_test.gd')
+
 # Indices always refer to the complete plan, including editor import.
 if (-not $PSBoundParameters.ContainsKey('ToStep')) { $ToStep = $checkPlan.Count }
 if ($FromStep -gt $ToStep -or $ToStep -gt $checkPlan.Count) {

@@ -1,0 +1,112 @@
+{
+  "schema_version": 3,
+  "date": "2026-10-13",
+  "role": "automated_supervisor",
+  "status": "completed_selected_validation",
+  "base_commit": "d4d67fbb44fb17e34e619b4e64b70651d9ae1624",
+  "branch": "codex/e06-inventory",
+  "scope": "closed gameplay validation selection; no source, test, expectation, or resource edits by supervisor",
+  "runner": {
+    "tool": "tools/verify.ps1",
+    "global_plan_steps": 212,
+    "selections": [
+      { "selected": 27, "executed": 18, "passed_before_first_failure": 17, "verification_directory": ".godot/verification/e06_gameplay_extension/final/checks" },
+      { "selected": 11, "executed": 9, "passed_before_first_failure": 8, "verification_directory": ".godot/verification/e06_gameplay_extension/final/resumed_checks" },
+      { "selected": 3, "executed": 3, "passed": 3, "verification_directory": ".godot/verification/e06_gameplay_extension/final/resumed_v3_checks" }
+    ],
+    "distinct_plan_indices_passed": 28,
+    "baseline_v3": {
+      "path": ".godot/verification/e06_gameplay_extension/final/inputs_before_v3.json",
+      "items": 970,
+      "sha256": "4ec165ab3057f70b61ec86d6c5cd28b08df9f9269a225d532ce06e785a131d5a",
+      "post_run_mismatches": 0
+    },
+    "original_resources": {
+      "path": ".godot/verification/e06_gameplay_extension/final/original85_before.json",
+      "items": 85,
+      "post_run_mismatches": 0
+    },
+    "comparison_exclusions": ["docs/", "*.import"],
+    "new_non_docs_import_path_outside_baseline": "content/authoring/directions_execution.json"
+  },
+  "interrupted_runs_preserved": [
+    {
+      "record": "docs/epics/e06/e06_gameplay_interrupted_validation.json",
+      "plan_index": 203,
+      "name": "e06_directions_test",
+      "exit_code": 1,
+      "timed_out": false,
+      "output_sha256": "2f0132cae9a9e47f53afd05942bbd8f75b382d921471450059ba898786901cf",
+      "later_status": "passed in resumed selection"
+    },
+    {
+      "record": "docs/epics/e06/e06_gameplay_interrupted_validation_v2.json",
+      "plan_index": 210,
+      "name": "e06_gameplay_content_test",
+      "exit_code": 1,
+      "timed_out": false,
+      "output_sha256": "fc24193a83d157e1f9e016fe707fac2df0fffbf6ae8e4e6c1b577a9e94a032e0",
+      "diagnosis": "The signature fixture had aggro_radius 420 without a greater leash value; Sol identified this as a fixture defect. The fixture was corrected and the test passed in the v3 resumption."
+    }
+  ],
+  "supervised_passes_by_selection": {
+    "initial_plan_indices": [1, 2, 3, 4, 9, 13, 14, 15, 18, 20, 22, 25, 94, 113, 189, 190, 192],
+    "resumed_v2_plan_indices": [194, 203, 204, 205, 206, 207, 208, 209],
+    "resumed_v3_plan_indices": [210, 211, 212]
+  },
+  "resumed_v3_checks": {
+    "manifest": ".godot/verification/e06_gameplay_extension/final/resumed_v3_checks/checks.jsonl",
+    "manifest_sha256": "5b3f635d7742a35ddda5a7f7f84a22c687dcfc40109da3f209205e3318597f52",
+    "all_exit_codes_zero": true,
+    "timed_out": 0,
+    "checks": [
+      { "index": 210, "name": "e06_gameplay_content_test", "output_sha256": "4472c31b61f5328274fc4887c0c09452a645347814c223befff609b0b47cfff", "engine_sha256": "3dc5a09c4d402772a8b53575ef9c76d615a0d7d2d44dc225b4fde648badf7491" },
+      { "index": 211, "name": "e06_gameplay_ai_test", "output_sha256": "48656f0d5420262fafdb3944e8c1a74ff08d312c1baef3bfa0b60b4cc0b42b28", "engine_sha256": "841f0a6af7797d754c501fbcbb031fce6bae7aca5e5bd76de02a31ac06466d17" },
+      { "index": 212, "name": "e06_gameplay_route_test", "output_sha256": "5d947ec41dc30ea37fe808b99fdbd34c1589b3fc607ed246b645177d05d27fc6", "engine_sha256": "1ba203279d2d91f473607412539b2cec467848bf42cd3701716b62a865275bf8" }
+    ],
+    "engine_log_scan": "No ERROR, SCRIPT ERROR, or Parse Error in the three engine logs."
+  },
+  "publication_check": {
+    "path": "tools/content/publish.gd -- --check",
+    "read_only": true,
+    "exit_code": 0,
+    "timed_out": false,
+    "duration_seconds": 3.47,
+    "output": "E06_PUBLICATION_CHECK_OK entries=83 builds=20 digest=6631984d3bf5a12efd1344a2cf542c9c07e411c9f38bd465f95c417d8fc4bf9f",
+    "output_log": ".godot/verification/e06_gameplay_extension/final/resumed_v3_checks/publish_check.output.log",
+    "output_sha256": "6bbbf54a47d0cb1faffd612851fc899d89db4aa94c18fd6844c6968d57c390da"
+  },
+  "original_manifests": {
+    "content/authoring/publication_manifest.json": "96ec2c1a35d8d96ea084cc11850e5ee3316284a8e9061dbb08ad876d44fe9582",
+    "content/authoring/directions_builds.json": "43b95e84291290d62b1c2e005551a6219ca6950b220deb2df615bb3f42b5ed4a",
+    "content/authoring/pilot_execution.json": "c1b282428f4f4a5e9a2f4d59d002ebbee0136f4e1c2ce00c00c8d892e029bab2"
+  },
+  "directions_execution_report": {
+    "path": "content/authoring/directions_execution.json",
+    "tracked_and_identical_to_head": true,
+    "sha256": "25eb5b966e912ab25346402f70766c502230413df7e0c5cc988ca00d2f84c77b",
+    "observation_count": 20,
+    "mechanical_digest": "b2480230ac8691fe155976ce4e311cfef233e6b32618a3ebd8a7c87fbd0658fd",
+    "matches_publication_source_digest": true,
+    "balance_validated": false,
+    "human_playtest": false,
+    "performance_validated": false,
+    "production_published": false
+  },
+  "root_canonical_checks_separate_from_28_indices": {
+    "manifest": ".godot/verification/e06_gameplay_extension/canonical_fix/checks.jsonl",
+    "manifest_sha256": "7cfbe78558fd47ec034b5014d1b5a824ddf806ce365d7e8a4da1e7bab2959e73",
+    "passed_names": ["editor_import", "e06_content_authoring_test", "e06_directions_test"],
+    "timeouts": 0
+  },
+  "separate_evidence": {
+    "sol_record": ".godot/verification/e06_gameplay_extension/final/sol_evidence.json",
+    "description": "Root reports four native captures, probe/log hashes, and three personal files intact; these are separate Sol evidence, not part of the automated supervisor's 28 checks."
+  },
+  "coverage_limitations": [
+    "The 212-step global runner was not executed in full; only the three explicitly selected complementary ranges were supervised.",
+    "The root's three canonical checks are recorded separately and are not added to the 28 distinct supervised plan indices.",
+    "No human product acceptance, performance result, or balance approval is claimed.",
+    "Documentation and .import sidecars were excluded from the baseline comparison."
+  ]
+}

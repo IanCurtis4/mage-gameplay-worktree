@@ -1,0 +1,46 @@
+{
+  "role": "implementer_native_visual_inspection",
+  "validator": "Sol",
+  "renderer": "Godot4.7.2/OpenGL3.3/NVIDIA GTX1080",
+  "probe": "tools/e06_gameplay_probe.gd",
+  "probe_sha256": "89701d71a5c635e3919cd1fedb769a2750ca3ee6ceef6368b8c3639324bc3c01",
+  "log": ".godot/verification/e06_gameplay_extension/author/native_approved.output.log",
+  "log_sha256": "7997087d085d28d1bc8eae0f2f534732d869b32199eb6270108d57adf811e182",
+  "exit_code": 0,
+  "errors_detected": false,
+  "images": [
+    {
+      "path": ".godot/verification/e06_gameplay_extension/native/bosque_1280.png",
+      "sha256": "b3a39a22998100fbe1e2ed7e6490e3988966b1bb56870e254afea716af15b30b"
+    },
+    {
+      "path": ".godot/verification/e06_gameplay_extension/native/campina_1280.png",
+      "sha256": "5524559abc615700882ddec58428d3075070326ce5dbb2fed4dadc9fa235fdee"
+    },
+    {
+      "path": ".godot/verification/e06_gameplay_extension/native/ruinas_tiers_1280.png",
+      "sha256": "360b736f42c5295c5c9c0f80cc2a51a50d14986f56dd6d4493624fa06d36c142"
+    },
+    {
+      "path": ".godot/verification/e06_gameplay_extension/native/ruinas_tiers_1920.png",
+      "sha256": "6575f477b9df1a1e37967422f4ecbaee5da888c5d2101d988ae68e8ea89bb722"
+    }
+  ],
+  "observations": [
+    "three larger area layouts",
+    "five original Gel shapes: normal/rare/elite/rare_elite/boss differentiated by size,outline,name,color",
+    "actual boss Master with rare_elite animal, finite summon",
+    "humanoid category and all mob levels visible",
+    "readable 1280/1920 viewport, full boss body clear of foreground"
+  ],
+  "personal_profile_used": false,
+  "independent_semantic_audit": false,
+  "human_product_acceptance": false,
+  "limits": [
+    "isolated programmatic persistent fixture, not human gameplay",
+    "no FPS/balance/fun qualification",
+    "prototype art and existing terrain textures",
+    "first probe accessed a not-yet-loaded profile and timed out; visual pass then exposed weak presenter lifetime, fixed with retention and regression"
+  ],
+  "preserved_logs": ".godot/verification/e06_gameplay_extension/author/"
+}

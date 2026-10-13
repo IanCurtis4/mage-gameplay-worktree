@@ -31,6 +31,7 @@ static var selected_class_id: StringName = &"swordsman"
 static var pending_run_state: RunState = null
 static var pending_run_facade: ProfileFacade = null
 static var pending_training_mode := false
+static var pending_gameplay_extension := false
 
 var rng := RandomNumberGenerator.new()
 var run_state: RunState
@@ -71,6 +72,10 @@ var persistent_facade: ProfileFacade = null
 var _close_request_serial := 0
 var _reward_retry_pending := false
 var training_mode := false
+var gameplay_extension := false
+var active_bounds := ARENA_BOUNDS
+var _world_obstacle_views: Array[Node2D] = []
+var route_camera: Camera2D
 var training_boss: EnemyActor = null
 var _training_add_elapsed := 0.0
 var _training_wave_index := 0
@@ -132,22 +137,22 @@ func _ready() -> void:
 		run_state = pending_run_state
 		persistent_facade = pending_run_facade
 		training_mode = pending_training_mode
+		gameplay_extension = pending_gameplay_extension and not training_mode and persistent_facade != null
 		pending_run_state = null
 		pending_run_facade = null
 		pending_training_mode = false
+		pending_gameplay_extension = false
 	else:
 		run_state = RunState.new(selected_class_id)
-	navigation.configure(ARENA_BOUNDS, ARENA_OBSTACLES, 22.0)
+	if gameplay_extension:
+		var loaded := BuildContentLoader.load_catalog_for_profile(run_state.build_snapshot._skill_catalog, true)
+		assert(loaded["ok"] and run_state.set_effect_catalog(loaded["catalog"])["ok"], "Roteiro de teste inválido")
 	control_preferences.load_settings()
 	cast_intent.set_mode(control_preferences.cast_mode)
 	arena_view = ArenaView.new()
 	arena_view.z_index = -2
-	arena_view.configure(ARENA_BOUNDS, ARENA_OBSTACLES)
 	add_child(arena_view)
-	for obstacle: Rect2 in ARENA_OBSTACLES:
-		var obstacle_view := ArenaObstacleView.new()
-		obstacle_view.configure(obstacle)
-		add_child(obstacle_view)
+	_configure_world(1)
 	battle_indicators = BattleIndicators.new()
 	battle_indicators.z_index = 2 if run_state.build_snapshot != null and run_state.build_snapshot.evolution_id == &"spiritualist" else -1
 	battle_indicators.process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -182,7 +187,7 @@ func _ready() -> void:
 		var production := EquipmentLootProfiles.production(run_state.effect_catalog())
 		var configured := reward_service.configure_mob_loot(production)
 		assert(configured["ok"], str(configured))
-	player.global_position = Vector2(300, 520)
+	player.global_position = PlaytestGameplay.ENTRANCE if gameplay_extension else Vector2(300, 520)
 	player.attack_requested.connect(_on_attack_requested)
 	player.defender_hit_requested.connect(_on_defender_hit_requested)
 	player.berserker_rift_hit_requested.connect(_on_berserker_rift_hit_requested)
@@ -237,12 +242,13 @@ func _ready() -> void:
 		geometer_casting.feedback.connect(_on_geometer_feedback)
 	spiritualist_echo_state.source_id = player.get_instance_id()
 	var camera := Camera2D.new()
+	route_camera = camera
 	camera.position_smoothing_enabled = true
 	camera.position_smoothing_speed = 7.0
-	camera.limit_left = int(ARENA_BOUNDS.position.x - 40.0)
-	camera.limit_top = int(ARENA_BOUNDS.position.y - 40.0)
-	camera.limit_right = int(ARENA_BOUNDS.end.x + 40.0)
-	camera.limit_bottom = int(ARENA_BOUNDS.end.y + 40.0)
+	camera.limit_left = int(active_bounds.position.x - 40.0)
+	camera.limit_top = int(active_bounds.position.y - 40.0)
+	camera.limit_right = int(active_bounds.end.x + 40.0)
+	camera.limit_bottom = int(active_bounds.end.y + 40.0)
 	player.add_child(camera)
 	_build_ui()
 	if training_mode:
@@ -869,6 +875,15 @@ func _spawn_encounter(index: int) -> void:
 	_reward_retry_pending = false
 	next_button.visible = false
 	augment_button.disabled = true
+	if gameplay_extension:
+		_configure_world(index)
+		player.global_position = PlaytestGameplay.ENTRANCE
+		player.move_to(player.global_position)
+		if route_camera != null: route_camera.reset_smoothing()
+		for entry: Dictionary in PlaytestGameplay.spawns(index, rng):
+			_spawn_route_enemy(entry, index)
+		status_label.text = "%s · encontro %d/6 — puxe grupos e encontre o cristal após vencer" % [PlaytestGameplay.AREA_NAMES[int((index - 1) / 2.0)], index]
+		return
 	var entries: Array[Dictionary]
 	if index == 1:
 		entries = [
@@ -1796,10 +1811,11 @@ func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActo
 	projectile.add_to_group("enemy_projectiles")
 
 func _on_enemy_died(actor: CombatActor) -> void:
-	if not training_mode and actor is EnemyActor and reward_service != null and reward_service.mob_loot_enabled():
+	if not training_mode and actor is EnemyActor and not actor.is_summoned and reward_service != null and reward_service.mob_loot_enabled():
 		var issued := reward_service.issue_mob_drop(actor)
 		if not issued["ok"]:
 			status_label.text = "Não foi possível preparar o loot: %s" % issued["error_code"]
+	_remove_master_companion(actor.get_instance_id())
 	_defender_slowed_enemies.erase(actor.get_instance_id())
 	player.hunter_state.discard_target(actor.get_instance_id())
 	player.remove_berserker_wound(actor.get_instance_id())
@@ -1823,8 +1839,9 @@ func _on_enemy_died(actor: CombatActor) -> void:
 			encounter_active = false
 			_show_result(true)
 		return
-	if not enemies.is_empty():
+	if not _required_enemies().is_empty():
 		return
+	_remove_remaining_companions()
 	encounter_active = false
 	player.clear_shield_stance()
 	player.clear_hunter_state()
@@ -1853,7 +1870,7 @@ func _on_enemy_died(actor: CombatActor) -> void:
 			else:
 				runtime_node.queue_free()
 	reward = RewardPickup.new()
-	reward.global_position = Vector2(880, 500)
+	reward.global_position = navigation.get_path(player.global_position, player.global_position)[-1] if gameplay_extension else Vector2(880, 500)
 	reward.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(reward)
 	_ensure_reward_ticket()
@@ -1924,6 +1941,8 @@ func _on_enemy_damage_resolved(result: Dictionary) -> void:
 	if not bool(result.get("killed", false)):
 		return
 	var victim_id := int(result.get("target_id", 0))
+	var defeated := instance_from_id(victim_id) as EnemyActor
+	if defeated != null and defeated.is_summoned: return
 	if victim_id <= 0 or _credited_kills.has(victim_id):
 		return
 	_credited_kills[victim_id] = true
@@ -1957,7 +1976,7 @@ func _ensure_reward_ticket() -> Dictionary:
 		return BuildEffectCatalog.failure(&"reward_unavailable")
 	if not reward.ticket_id.is_empty():
 		return reward_service.ticket(reward.ticket_id)
-	var issued := reward_service.issue("encounter_%d" % encounter_index, ProfileRewardResolver.pilot_encounter_reward_id(encounter_index), encounter_index == 2)
+	var issued := reward_service.issue("encounter_%d" % encounter_index, PlaytestGameplay.reward_id(encounter_index) if gameplay_extension else ProfileRewardResolver.pilot_encounter_reward_id(encounter_index), gameplay_extension or encounter_index == 2)
 	if issued["ok"]:
 		reward.ticket_id = issued["ticket_id"]
 	return issued
@@ -2010,7 +2029,7 @@ func _open_augment_menu() -> void:
 			augment_button.disabled = run_state.pending_choices <= 0
 			if run_state.pending_choices <= 0:
 				next_button.visible = true
-				next_button.text = "Encerrar demonstração" if encounter_index >= 2 else "Próximo encontro"
+				next_button.text = "Encerrar demonstração" if encounter_index >= _encounter_count() else "Próximo encontro"
 		return
 	_cancel_casting(false)
 	_clear_hover()
@@ -2038,13 +2057,13 @@ func _confirm_augment(augment_id: StringName) -> void:
 		status_label.text = "Aprimoramento aplicado — há escolhas pendentes"
 		return
 	next_button.visible = true
-	next_button.text = "Encerrar demonstração" if encounter_index >= 2 else "Próximo encontro"
-	status_label.text = "Recompensas disponíveis — prepare a build ou encerre a demonstração" if encounter_index >= 2 else "Augment aplicado — inicie o próximo encontro"
+	next_button.text = "Encerrar demonstração" if encounter_index >= _encounter_count() else "Próximo encontro"
+	status_label.text = "Recompensas disponíveis — prepare a build ou encerre a demonstração" if encounter_index >= _encounter_count() else "Augment aplicado — inicie o próximo encontro"
 
 func _start_next_encounter() -> void:
 	if encounter_active or reward != null or run_state.pending_choices > 0 or run_state.has_open_offer() or inventory_frozen or run_finished or reward_service.has_uncollected():
 		return
-	if encounter_index >= 2:
+	if encounter_index >= _encounter_count():
 		_show_result(true)
 	else:
 		_spawn_encounter(encounter_index + 1)
@@ -2116,7 +2135,7 @@ func _show_result(victory: bool) -> void:
 	if training_mode:
 		result_body.text = ("O Guardião caiu.\n" if victory else "Treino encerrado.\n") + "Nenhum XP ou recompensa foi salvo.\n" + next_step
 	else:
-		result_body.text = ("Os dois encontros do Marco 1 foram vencidos.\n" if victory else "A run terminou e todo o estado temporário será descartado.\n") + next_step
+		result_body.text = (("As três áreas e seus seis encontros foram vencidos.\n" if gameplay_extension else "Os dois encontros do Marco 1 foram vencidos.\n") if victory else "A run terminou e todo o estado temporário será descartado.\n") + next_step
 	result_overlay.visible = true
 	get_tree().paused = true
 
@@ -2954,3 +2973,132 @@ func _close_inventory() -> void:
 	inventory_panel.hide()
 	_cancel_casting(false)
 	get_tree().paused = run_finished or inventory_frozen or augment_overlay.visible or class_overlay.visible or battle_controls.settings_overlay.visible
+
+func _encounter_count() -> int:
+	return PlaytestGameplay.STAGE_COUNT if gameplay_extension else 2
+
+func _configure_world(stage: int) -> void:
+	active_bounds = PlaytestGameplay.BOUNDS if gameplay_extension else ARENA_BOUNDS
+	var obstacles: Array[Rect2] = PlaytestGameplay.obstacles(stage) if gameplay_extension else ARENA_OBSTACLES.duplicate()
+	navigation.configure(active_bounds, obstacles, 22.0)
+	arena_view.configure(active_bounds, obstacles)
+	for view: Node2D in _world_obstacle_views:
+		if is_instance_valid(view): view.free()
+	_world_obstacle_views.clear()
+	for obstacle: Rect2 in obstacles:
+		var view := ArenaObstacleView.new()
+		view.configure(obstacle)
+		add_child(view)
+		_world_obstacle_views.append(view)
+	if route_camera != null:
+		route_camera.limit_left = int(active_bounds.position.x - 40)
+		route_camera.limit_top = int(active_bounds.position.y - 40)
+		route_camera.limit_right = int(active_bounds.end.x + 40)
+		route_camera.limit_bottom = int(active_bounds.end.y + 40)
+	if gameplay_extension:
+		arena_view.modulate = [Color("f2ffe7"), Color("d6ead8"), Color("d8e1ef")][int((stage - 1) / 2.0)]
+
+func _spawn_route_enemy(entry: Dictionary, stage: int, summoned: bool = false, owner_id: int = 0) -> EnemyActor:
+	var from := player.global_position
+	if summoned:
+		var master := instance_from_id(owner_id) as EnemyActor
+		assert(is_instance_valid(master) and master.is_alive(), "Invocador inválido")
+		from = master.global_position
+	var path := navigation.get_path(from, entry["position"])
+	assert(not path.is_empty(), "Spawn sem caminho válido")
+	var enemy := EnemyActor.new()
+	enemy.global_position = path[-1]
+	enemy.is_summoned = summoned
+	enemy.summoner_id = owner_id
+	enemy.companion_requested.connect(_on_companion_requested, CONNECT_DEFERRED)
+	var occurrence := MobOccurrence.new()
+	occurrence.occurrence_id = "trial_%d_%d" % [stage, enemy.get_instance_id()]
+	occurrence.mob_base_id = entry["species"]
+	occurrence.category_id = entry["category"]
+	occurrence.origin_id = PlaytestGameplay.origin(stage)
+	var checked := enemy.configure_occurrence(occurrence, run_state.effect_catalog().mob_catalog(), navigation, player)
+	assert(checked["ok"], str(checked))
+	enemy.compact_control_visuals = player.is_geometer() or player.is_sentinel()
+	enemy.actor_name += " · %s · Nv.%d" % [MobPrototypeVisual.category_name(occurrence.category_id), checked.get("level", run_state.effect_catalog().mob_catalog().level_for_occurrence(occurrence)["level"])]
+	if enemy._mob_definition.visual_kind != &"humanoid":
+		var visual := MobPrototypeVisual.new()
+		visual.kind = enemy._mob_definition.visual_kind
+		visual.category = occurrence.category_id
+		enemy.body_visual_owner = visual
+		enemy.body_drawer = visual.draw_on
+		enemy.sprite_visual_scale = 1.0 + MobCatalog.CATEGORIES.find(occurrence.category_id) * 0.13
+	var caption := Label.new()
+	caption.text = "%s · Nv.%d" % [enemy._mob_definition.display_name, enemy.stat_breakdown.base_level]
+	if enemy._mob_definition.visual_kind == &"humanoid": caption.text += "\n" + MobPrototypeVisual.category_name(occurrence.category_id)
+	caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	caption.position = Vector2(-110, -54.0 * enemy.sprite_visual_scale - (42 if enemy._mob_definition.visual_kind == &"humanoid" else 28))
+	caption.size = Vector2(220, 36)
+	caption.add_theme_font_size_override("font_size", 12)
+	caption.add_theme_color_override("font_color", Color("f2f5ef"))
+	caption.add_theme_color_override("font_outline_color", Color("172723"))
+	caption.add_theme_constant_override("outline_size", 4)
+	caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	enemy.add_child(caption)
+	enemy.attack_requested.connect(_on_enemy_attack_requested)
+	enemy.mob_skill_requested.connect(_on_mob_skill_requested)
+	enemy.actor_died.connect(_on_enemy_died)
+	enemy.health.damage_applied.connect(_on_enemy_damage_resolved)
+	enemy.damage_number.connect(_show_damage_number)
+	enemy.attack_missed.connect(_show_miss)
+	enemy.status_damage_requested.connect(_on_attack_requested)
+	add_child(enemy)
+	enemies.append(enemy)
+	if not summoned and reward_service.mob_loot_enabled():
+		assert(reward_service.register_mob_actor(enemy)["ok"], "Loot não registrado")
+	if trap_registry != null:
+		for trap: PlayerTrap in trap_registry.active_traps():
+			if trap is HunterTrap: (trap as HunterTrap).track_target(enemy)
+	if is_instance_valid(hunter_tar_field) and hunter_tar_field.active: hunter_tar_field.track_target(enemy)
+	return enemy
+
+func _on_companion_requested(master: EnemyActor) -> void:
+	if not is_instance_valid(master) or not master.is_alive() or master.is_summoned or master.get_parent() != self or master not in enemies or run_finished or not encounter_active: return
+	var category := MobTierRules.lower_category(master.occurrence.category_id)
+	if category.is_empty(): return
+	for offset: Vector2 in [Vector2(-185,45), Vector2(185,45), Vector2(0,170), Vector2(0,-170)]:
+		var position := master.global_position + offset
+		if not navigation.is_walkable(position) or position.distance_to(player.global_position) < 45.0: continue
+		var occupied := false
+		for actor: CombatActor in enemies:
+			if actor.is_alive() and actor.global_position.distance_to(position) < 45.0: occupied = true
+		if occupied: continue
+		_spawn_route_enemy({"species": &"test_animal_companion", "category": category, "position": position}, encounter_index, true, master.get_instance_id())
+		return
+
+func _remove_master_companion(owner_id: int) -> void:
+	for actor: CombatActor in enemies.duplicate():
+		if actor is EnemyActor and actor.is_summoned and actor.summoner_id == owner_id:
+			_discard_companion(actor)
+
+func _remove_remaining_companions() -> void:
+	for actor: CombatActor in enemies.duplicate():
+		if actor is EnemyActor and actor.is_summoned:
+			_discard_companion(actor)
+
+func _required_enemies() -> Array[CombatActor]:
+	var result: Array[CombatActor] = []
+	for actor: CombatActor in enemies:
+		if is_instance_valid(actor) and actor.is_alive() and not (actor is EnemyActor and actor.is_summoned): result.append(actor)
+	return result
+
+func _discard_companion(actor: EnemyActor) -> void:
+	actor.health.current_hp = 0.0
+	actor.clear_statuses()
+	_defender_slowed_enemies.erase(actor.get_instance_id())
+	player.hunter_state.discard_target(actor.get_instance_id())
+	player.remove_berserker_wound(actor.get_instance_id())
+	player.remove_elementalist_target(actor.get_instance_id())
+	spiritualist_echo_state.remove_target(actor.get_instance_id())
+	if spiritualist_drain_state.target_id == actor.get_instance_id(): _cancel_spiritualist_drain()
+	if spiritualist_procession_state.target_id == actor.get_instance_id(): _cancel_spiritualist_procession()
+	_spiritualist_veil_members.erase(actor.get_instance_id())
+	if player.target == actor: player.target = null
+	if _hovered_enemy == actor: _hovered_enemy = null
+	if _selected_enemy == actor: _selected_enemy = null
+	enemies.erase(actor)
+	actor.queue_free()

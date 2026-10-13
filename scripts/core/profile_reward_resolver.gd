@@ -12,10 +12,12 @@ var _valid := true
 static func pilot_progression() -> ProfileRewardResolver:
 	# E03 integration values for the two current pilot encounters. E07 owns the
 	# final encounter/reward table and can replace this resolver at composition.
-	return ProfileRewardResolver.new({
+	var rows := {
 		PILOT_ENCOUNTER_REWARD_IDS[0]: {"base_xp": 100, "job_xp": 80},
 		PILOT_ENCOUNTER_REWARD_IDS[1]: {"base_xp": 150, "job_xp": 100},
-	})
+	}
+	rows.merge(PlaytestGameplay.reward_definitions())
+	return ProfileRewardResolver.new(rows)
 
 static func pilot_encounter_reward_id(encounter_number: int) -> StringName:
 	if encounter_number < 1 or encounter_number > PILOT_ENCOUNTER_REWARD_IDS.size():

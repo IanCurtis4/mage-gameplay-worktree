@@ -17,3 +17,12 @@ extends Resource
 @export var skill_ranks: Dictionary = {}
 @export var skill_ids: Array[StringName] = []
 @export var card_id: StringName
+
+# Defaults preserve historical species. Origin levels are immutable content data.
+@export var origin_levels: Dictionary = {}
+@export var encounter_tiers := false
+@export var aggro_radius := 0.0
+@export var leash_radius := 0.0
+@export var sight_timeout := 4.0
+@export var visual_kind: StringName = &"humanoid"
+@export var summons_companion := false

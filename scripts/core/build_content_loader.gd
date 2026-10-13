@@ -13,8 +13,8 @@ static func definitions(origin: StringName, include_progression: bool = false) -
 		if file.ends_with(".tres"):
 			var definition := load(directory.path_join(file)) as Resource
 			result.append(definition.duplicate(true) if definition != null else null)
-	if include_progression and origin == &"equipment":
-		var extra := "res://resources/loot_progression/equipment"
+	if include_progression and origin in [&"equipment", &"mob"]:
+		var extra := "res://resources/loot_progression/equipment" if origin == &"equipment" else "res://resources/playtest_gameplay/mob"
 		if DirAccess.dir_exists_absolute(extra):
 			var extra_files := DirAccess.get_files_at(extra)
 			extra_files.sort()
@@ -24,11 +24,16 @@ static func definitions(origin: StringName, include_progression: bool = false) -
 				result.append(definition.duplicate(true) if definition != null else null)
 	return result
 
-static func load_catalog(include_progression: bool = false) -> Dictionary:
+static func load_catalog(include_progression: bool = false, gameplay_behaviors: bool = false) -> Dictionary:
 	var catalog := BuildEffectCatalog.new()
 	var mobs := MobCatalog.new()
-	for definition: Resource in definitions(&"mob"):
-		var registered := mobs.register_definition(definition as MobDefinition)
+	for definition: Resource in definitions(&"mob", include_progression):
+		var mob := definition as MobDefinition
+		if gameplay_behaviors and mob != null and String(mob.id).begins_with("pilot_"):
+			mob.aggro_radius = 420.0
+			mob.leash_radius = 850.0
+			mob.modifier_sources.append({"source_id": &"trial_pilot_movement", "flat": {&"move_speed": -66.0}})
+		var registered := mobs.register_definition(mob)
 		if not registered["ok"]:
 			return registered
 	catalog.set_mob_catalog(mobs)
@@ -54,8 +59,8 @@ static func pilot() -> BuildEffectCatalog:
 	assert(loaded["ok"], "Catálogo de efeitos inválido")
 	return loaded.get("catalog", BuildEffectCatalog.new())
 
-static func load_catalog_for_profile(profile_catalog: ProfileCatalog) -> Dictionary:
-	var loaded := load_catalog(true)
+static func load_catalog_for_profile(profile_catalog: ProfileCatalog, gameplay_behaviors: bool = false) -> Dictionary:
+	var loaded := load_catalog(true, gameplay_behaviors)
 	if not loaded["ok"]:
 		return loaded
 	var catalog: BuildEffectCatalog = loaded["catalog"]

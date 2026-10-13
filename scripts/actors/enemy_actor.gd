@@ -7,6 +7,14 @@ signal attack_requested(request: DamageRequest, target: CombatActor, ranged: boo
 ## Actual navigation-applied walking only. Direct placement/push is not walking.
 signal ground_walked(from: Vector2, to: Vector2)
 signal mob_skill_requested(request: DamageRequest, target: CombatActor, projectile_speed: float, maximum_range: float)
+signal companion_requested(master: EnemyActor)
+var is_summoned := false
+var summoner_id := 0
+var summon_used := false
+var spawn_home := Vector2.ZERO
+var engagement_mode: StringName = &"idle"
+var _last_seen_position := Vector2.INF
+var _sight_lost_time := 0.0
 var occurrence: MobOccurrence
 var _mob_definition: MobDefinition
 var _mob_cast: Dictionary = {}
@@ -54,7 +62,7 @@ func configure_occurrence(spawn: MobOccurrence, catalog: MobCatalog, nav: ArenaN
 	var checked := spawn.validate(catalog)
 	if not checked["ok"]:
 		return checked
-	var derived := catalog.stats(spawn.mob_base_id)
+	var derived := catalog.stats_for_occurrence(spawn)
 	if not derived["ok"]:
 		return derived
 	var definition: MobDefinition = checked["definition"]
@@ -65,6 +73,11 @@ func configure_occurrence(spawn: MobOccurrence, catalog: MobCatalog, nav: ArenaN
 	_navigation_revision = nav.revision
 	player = target_player
 	hunter_last_seen_position = Vector2.INF
+	spawn_home = global_position
+	engagement_mode = &"idle"
+	_last_seen_position = Vector2.INF
+	_sight_lost_time = 0.0
+	player_target_acquired = false
 	_mob_cast.clear()
 	_mob_cooldowns.clear()
 	_mob_sp = derived["breakdown"].value(&"max_sp")
@@ -97,6 +110,8 @@ func _process(delta: float) -> void:
 		_path.clear()
 		_path_index = 0
 		_repath_time = 0.0
+	if _uses_engagement():
+		_refresh_engagement(delta)
 	if is_stunned():
 		_mob_cast.clear()
 		_path.clear()
@@ -112,11 +127,21 @@ func _process(delta: float) -> void:
 		_update_fear_path()
 		_move_along_path(delta)
 		return
+	if _uses_engagement():
+		if engagement_mode == &"returning":
+			_process_return(delta)
+			return
+		_request_companion_once()
 	if not _mob_cast.is_empty():
 		_advance_mob_cast(delta)
 		return
 	if not _refresh_player_acquisition():
-		if player.is_hunter() and hunter_last_seen_position.is_finite():
+		if _uses_engagement() and engagement_mode == &"engaged" and _last_seen_position.is_finite():
+			_repath_time -= delta
+			_update_path(_last_seen_position)
+			_move_along_path(delta)
+			return
+		if not _uses_engagement() and player.is_hunter() and hunter_last_seen_position.is_finite():
 			_repath_time -= delta
 			_update_path(hunter_last_seen_position)
 			_move_along_path(delta)
@@ -154,6 +179,8 @@ func _process(delta: float) -> void:
 	_move_along_path(delta)
 
 func _try_attack(ranged: bool) -> void:
+	if _uses_engagement() and (not _refresh_engagement(0.0) or engagement_mode != &"engaged"):
+		return
 	if is_stunned() or is_feared() or attack_cooldown > 0.0 or not player_target_acquired or (taunt_remaining <= 0.0 and not player.can_be_acquired_by(global_position)):
 		return
 	if _mob_definition != null and not _mob_definition.skill_ids.is_empty():
@@ -161,6 +188,8 @@ func _try_attack(ranged: bool) -> void:
 		return
 	if not effect_ledger.can_create_root() or (ranged and is_inside_tree() and not EffectProcLedger.projectile_slots_available(get_tree(), 1)):
 		return
+	_request_companion_once()
+	if not is_alive(): return
 	attack_cooldown = (1.70 if ranged else 1.30) * stat_breakdown.value(&"attacks_per_second") / attacks_per_second()
 	var request := DamageRequest.new()
 	request.context = effect_ledger.new_root(get_instance_id(), false, "", false, _causal_plan())
@@ -228,6 +257,8 @@ func _update_fear_path() -> void:
 				_path = candidate_path
 
 func _refresh_player_acquisition() -> bool:
+	if _uses_engagement():
+		return _refresh_engagement(0.0)
 	var was_acquired := player_target_acquired
 	player_target_acquired = player != null and is_instance_valid(player) and player.is_alive() and (taunt_remaining > 0.0 or player.can_be_acquired_by(global_position))
 	if player != null and is_instance_valid(player) and player.is_hunter():
@@ -263,6 +294,8 @@ func _move_along_path(delta: float) -> void:
 		var moved_to := navigation.move_until_blocked(before, desired)
 		var actual_travel := before.distance_to(moved_to)
 		global_position = moved_to
+		if _uses_engagement() and engagement_mode == &"engaged" and not _inside_leash():
+			_begin_return()
 		if actual_travel <= 0.0:
 			break
 		ground_walked.emit(before, moved_to)
@@ -313,6 +346,9 @@ func _advance_mob_cast(delta: float) -> void:
 	if _mob_cast.is_empty(): return
 	_mob_cast["remaining"] = maxf(0.0, float(_mob_cast["remaining"]) - delta)
 	if float(_mob_cast["remaining"]) > 0.0: return
+	if _uses_engagement() and (not _refresh_engagement(0.0) or engagement_mode != &"engaged"):
+		_mob_cast.clear()
+		return
 	var captured := _mob_cast
 	_mob_cast = {}
 	var rank: SkillRankDefinition = captured["rank_definition"]
@@ -334,3 +370,92 @@ func _declared_attack_range() -> float:
 		var rank := ClassCatalog.skill_definition(skill).rank_definition(int(_mob_definition.skill_ranks[skill]))
 		result = maxf(result, rank.range)
 	return result
+
+func _uses_engagement() -> bool:
+	return _mob_definition != null and _mob_definition.aggro_radius > 0.0
+
+func _inside_leash() -> bool:
+	return global_position.distance_to(spawn_home) <= _mob_definition.leash_radius and player != null and is_instance_valid(player) and player.global_position.distance_to(spawn_home) <= _mob_definition.leash_radius
+
+func _can_see_player() -> bool:
+	return player != null and is_instance_valid(player) and player.is_alive() and (taunt_remaining > 0.0 or player.can_be_acquired_by(global_position)) and navigation.is_segment_clear(global_position, player.global_position, 0.0)
+
+func _refresh_engagement(delta: float) -> bool:
+	if not is_alive() or player == null or not is_instance_valid(player) or not player.is_alive():
+		player_target_acquired = false
+		return false
+	if engagement_mode == &"returning":
+		player_target_acquired = false
+		return false
+	if not _inside_leash():
+		if engagement_mode == &"engaged" or global_position.distance_to(spawn_home) > _mob_definition.leash_radius:
+			_begin_return()
+		player_target_acquired = false
+		return false
+	var visible := _can_see_player()
+	if engagement_mode == &"idle":
+		if not visible or (taunt_remaining <= 0.0 and global_position.distance_to(player.global_position) > _mob_definition.aggro_radius):
+			player_target_acquired = false
+			return false
+		engagement_mode = &"engaged"
+		_clear_engagement_path()
+	player_target_acquired = visible
+	if visible:
+		_last_seen_position = player.global_position
+		hunter_last_seen_position = _last_seen_position
+		_sight_lost_time = 0.0
+		_request_companion_once()
+	else:
+		if _sight_lost_time == 0.0:
+			_clear_engagement_path()
+		_sight_lost_time += maxf(0.0, delta)
+		if _sight_lost_time >= _mob_definition.sight_timeout:
+			_begin_return()
+	return player_target_acquired
+
+func _begin_return() -> void:
+	if engagement_mode == &"returning": return
+	engagement_mode = &"returning"
+	player_target_acquired = false
+	_mob_cast.clear()
+	_clear_engagement_path()
+
+func _clear_engagement_path() -> void:
+	_path.clear()
+	_path_index = 0
+	_repath_time = 0.0
+
+func _process_return(delta: float) -> void:
+	_repath_time -= delta
+	_update_path(spawn_home)
+	_move_along_path(delta)
+	if global_position.distance_to(spawn_home) <= MOVEMENT_EPSILON:
+		engagement_mode = &"idle"
+		_last_seen_position = Vector2.INF
+		hunter_last_seen_position = Vector2.INF
+		_sight_lost_time = 0.0
+		_clear_engagement_path()
+
+func _request_companion_once() -> void:
+	if _mob_definition == null or not _mob_definition.summons_companion or is_summoned or summon_used or not is_alive() or is_stunned() or is_feared() or (is_inside_tree() and get_tree().paused) or (_uses_engagement() and engagement_mode != &"engaged"):
+		return
+	# Claim before callbacks: creation cannot recursively request another child.
+	summon_used = true
+	companion_requested.emit(self)
+
+func _on_damage_applied(result: Dictionary) -> void:
+	super._on_damage_applied(result)
+	if not _uses_engagement() or not is_alive() or engagement_mode == &"returning" or float(result.get("actual_damage", 0.0)) <= 0.0 or player == null or not is_instance_valid(player) or not player.is_alive() or int(result.get("source_id", 0)) != player.get_instance_id():
+		return
+	if engagement_mode == &"engaged":
+		# Further hits do not reveal a hidden target or renew its sight clock.
+		_refresh_engagement(0.0)
+		return
+	if not _inside_leash(): return
+	engagement_mode = &"engaged"
+	_last_seen_position = player.global_position
+	hunter_last_seen_position = _last_seen_position
+	_sight_lost_time = 0.0
+	_clear_engagement_path()
+	player_target_acquired = _can_see_player()
+	_request_companion_once()

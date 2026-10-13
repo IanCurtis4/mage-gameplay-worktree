@@ -17,6 +17,8 @@ var stat_breakdown: StatBreakdown
 var health: HealthState
 var collision_radius := 18.0
 var sprite_visual_scale := 1.0
+var body_drawer: Callable
+var body_visual_owner: RefCounted
 var compact_control_visuals := false
 var is_hovered := false
 var is_selected := false
@@ -360,7 +362,9 @@ func _draw() -> void:
 		_draw_target_ring(collision_radius + 14.0, Color("f5cc77"), 3.0)
 	elif is_hovered:
 		_draw_target_ring(collision_radius + 11.0, Color("81dfd0"), 2.0)
-	if character_animation != null:
+	if body_drawer.is_valid():
+		body_drawer.call(self)
+	elif character_animation != null:
 		character_animation.draw_on(self, Color(2.0, 2.0, 2.0) if _flash_time > 0.0 else Color.WHITE, sprite_visual_scale)
 	elif sprite_texture != null:
 		var tint := Color(2.0, 2.0, 2.0) if _flash_time > 0.0 else Color.WHITE

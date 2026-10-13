@@ -208,6 +208,7 @@ func _start_run() -> Dictionary:
 	if result.get("ok", false):
 		RunController.pending_run_state = result["run_state"]
 		RunController.pending_run_facade = facade
+		RunController.pending_gameplay_extension = true
 		get_tree().change_scene_to_file("res://scenes/main.tscn")
 	return _show_result(result, "Run iniciada.")
 
@@ -223,6 +224,7 @@ func _start_playtest_training() -> Dictionary:
 		RunController.pending_run_state = result["run_state"]
 		RunController.pending_run_facade = null
 		RunController.pending_training_mode = true
+		RunController.pending_gameplay_extension = false
 		get_tree().change_scene_to_file("res://scenes/main.tscn")
 	return _show_result(result, "Treino iniciado sem alterar o perfil.")
 

@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-13",
+  "role": "automated_supervisor",
+  "base_commit": "d4d67fbb44fb17e34e619b4e64b70651d9ae1624",
+  "branch": "codex/e06-inventory",
+  "runner": {
+    "tool": "tools/verify.ps1",
+    "total_plan_steps": 212,
+    "initial_selection_names": 27,
+    "resumed_selection_names": 11,
+    "initial_snapshot_sha256": "e904ce01b04d2ee33d5beccd7b0abb6cbeaa97f65be427555dbfdcc84ec8df9a",
+    "correction_snapshot_v2_sha256": "3c25a28ee45cedfadadf487fd660a28d3c2d658c5c9acc419ceb0c02b085c576",
+    "supervisor_writes_to_sources_or_expectations": false
+  },
+  "status": "stopped_on_first_failure_waiting_for_fixture_correction",
+  "previous_supervision": {
+    "result": "17_pass_then_failure",
+    "checks_passed": [1, 2, 3, 4, 9, 13, 14, 15, 18, 20, 22, 25, 94, 113, 189, 190, 192],
+    "failure": {
+      "plan_index": 203,
+      "name": "e06_directions_test",
+      "exit_code": 1,
+      "timed_out": false,
+      "output_sha256": "2f0132cae9a9e47f53afd05942bbd8f75b382d921471450059ba898786901cf",
+      "record": "docs/epics/e06/e06_gameplay_interrupted_validation.json"
+    },
+    "resolution_evidence": "The root's canonical_fix checks and the resumed selection both passed e06_directions_test after the content_authoring fingerprint fix."
+  },
+  "resumed_supervision": {
+    "verification_directory": ".godot/verification/e06_gameplay_extension/final/resumed_checks",
+    "manifest": ".godot/verification/e06_gameplay_extension/final/resumed_checks/checks.jsonl",
+    "manifest_sha256": "f78a09ea20eb6f738a4274d00393d2a62cc3af76ac32416fcd139493e417cb84",
+    "checks_run": 9,
+    "checks_passed": [194, 203, 204, 205, 206, 207, 208, 209],
+    "failure": {
+      "selection_index": 9,
+      "plan_index": 210,
+      "name": "e06_gameplay_content_test",
+      "exit_code": 1,
+      "timed_out": false,
+      "output": "E06 gameplay content: 231 checks, 1 failures\nERROR: effective mob value participates in digest: aggro_radius\nGDScript backtrace: tests/e06_gameplay_content_test.gd:8, tests/e06_gameplay_content_test.gd:84",
+      "output_log": ".godot/verification/e06_gameplay_extension/final/resumed_checks/210-e06_gameplay_content_test.output.log",
+      "engine_log": ".godot/verification/e06_gameplay_extension/final/resumed_checks/210-e06_gameplay_content_test.engine.log",
+      "output_sha256": "fc24193a83d157e1f9e016fe707fac2df0fffbf6ae8e4e6c1b577a9e94a032e0",
+      "engine_sha256": "f3e07e44cc5bf8bc4bf334bd8b106049a73701b2f6172429c31fae5a2bb9babe",
+      "diagnosis_from_sol": "The signature fixture used aggro_radius 420 without a greater leash value, violating MobCatalog's valid mob constraint. This is a fixture defect, not a runtime failure. Root plans leash 850 for the reference and variant fixtures and an invalid-pair negative case."
+    },
+    "successful_check_logs": [
+      { "index": 194, "name": "e06_content_authoring_test", "output_sha256": "41ab313da854b7b0223b6e128e3079b93c556c65a3509e8752bc15134fb8af62", "engine_sha256": "007765c98b800ef964dc34af28a634211bee46c86c833874121bc9cc6d1b1f64" },
+      { "index": 203, "name": "e06_directions_test", "output_sha256": "619b359cb0c0335f24208b1dc8e5715401a5666331ec9233804b71d55b7ce525", "engine_sha256": "c7f9992bc6c5c6bca02fd53b0b4475aeb930d2cf4542225d15bbb9b2d68f065b" },
+      { "index": 204, "name": "e06_publication_test", "output_sha256": "96a9d78f053626b275c3698c2984379b1b52a8ab41ff1c842262467462b17982", "engine_sha256": "45e8f12e47d34fa945a5e84f7e29acc6f744ef8f034eb0bb5ef36f61785202d6" },
+      { "index": 205, "name": "e06_ui_inventory_test", "output_sha256": "d8f2de1bc1717c8010b8aad2a410e1014142cedf00c47c689a250d4bac021c83", "engine_sha256": "dc74f6980a82b5eab4030064409a237b425e68233d08c364d5f702a731b312f6" },
+      { "index": 206, "name": "e06_ui_menu_test", "output_sha256": "f88d8dad81a261f3d86620221e7a0fc9340fd1eaa70378f62c42b047310a734f", "engine_sha256": "9e8aaf3cd70f4e7c67d1aaf47070210d218d8c2915a8fe900e33de8c26c34236" },
+      { "index": 207, "name": "e06_power_progression_test", "output_sha256": "8cece1d896a01d6a8d438b7b5c06f0d021fd8f3553d916f2db421d0cdc5e71f8", "engine_sha256": "5d1e839547f49739cff747987772056db83d073e3f8bbdfb609470b70e636bef" },
+      { "index": 208, "name": "e06_power_migration_test", "output_sha256": "c3fbd56446ddc9aacc72697a6f46af9707a7449feca99e2c031997727dfaea42", "engine_sha256": "fe86b21da50df61d8d9dc90e3ba9baaf4e9566dd9f86c48531bfa42cc77df44e" },
+      { "index": 209, "name": "e06_production_loot_test", "output_sha256": "5615e139dd4554656734a8d7995d2cf226902074b581cf5747c1abc1df129e7c", "engine_sha256": "4d6ae7dc3e4c22329f621ee3e92dacb7168aa297a00e56ca70aeb394f2f0dca5" }
+    ],
+    "engine_log_scan": "Only the failing e06_gameplay_content_test engine log contains ERROR/SCRIPT ERROR/Parse Error; no check timed out.",
+    "remaining_selected_checks": [211, 212],
+    "publication_check": "not_run_after_failure"
+  },
+  "distinct_supervised_plan_indices_passed": 25,
+  "coverage_limitations": [
+    "The 212-step global runner was not executed in full.",
+    "Only 25 distinct plan indices have passed across the two supervised selections; the latest attempt stopped at index 210.",
+    "Plan indices 211 and 212 and publish.gd --check remain pending until the fixture correction is frozen.",
+    "The 970-input and 85-resource snapshots were not rechecked after the resumed run because it stopped at a failure.",
+    "Four native captures are separate Sol evidence and were not inspected in this supervision."
+  ]
+}
