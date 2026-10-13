@@ -1,10 +1,92 @@
 {
-  "phase": "technical_closure_before_application",
-  "base_commit": "d4d67fbb44fb17e34e619b4e64b70651d9ae1624",
-  "source": "C:/Users/Jo\u00e3o Pedro/.codex/worktrees/e06-inventory/RagRPG",
-  "target": "C:/Users/Jo\u00e3o Pedro/Documents/ChatGPT/RagRPG",
-  "applied": false,
+  "candidate": "85be67654829ea3155d615ded6e685e420fa8fbf",
+  "gameplay_candidate": "85be67654829ea3155d615ded6e685e420fa8fbf",
+  "source_tree": "5e1ebe004f3c8a9416d37e9141677cd7f9007f82",
+  "previous": "d4d67fbb44fb17e34e619b4e64b70651d9ae1624",
+  "source": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+  "target": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+  "same_repository": true,
+  "both_clean_before": true,
+  "target_branch": "codex/playtest",
+  "target_ancestor": true,
+  "ignored_collisions": [],
+  "personal_files_before": {
+    "C:\\Users\\João Pedro\\AppData\\Roaming\\Godot\\app_userdata\\RagRPG\\profile.json": "a3e441730f2145be12aa548145b3ec7b5a866b5fe220f520c3134b5be1cb5db1",
+    "C:\\Users\\João Pedro\\AppData\\Roaming\\Godot\\app_userdata\\RagRPG\\profile.backup.json": "1b6c2c2a8c33a89bd1aa2920a5d511c65e3ff0429a578cb9e155cd0e699660f1",
+    "C:\\Users\\João Pedro\\AppData\\Roaming\\Godot\\app_userdata\\RagRPG\\controls.cfg": "a11cac61ce45a85dca9ee3189359639ef7ff14723822a958b1674d25c9f3e22f"
+  },
+  "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "technical_approval_sha256": "f0c24fb651b77d0fcffb09d17c47215190711ebd741361ec9f70c97407076ed7",
+  "validation_sha256": "4500a2ad7af8e2ffb45e61e73b0cfaf90a6aee1b8b922975f92af02a50b91d46",
+  "legacy_cli_preparation_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_gameplay_extension\\final\\legacy_cli_preparation.output.log",
+  "legacy_cli_preparation_sha256": "6707109a2b6fd3eb29248f26ed97e50f98f2c3c58ad9881831b782ef14044886",
+  "method": "Equivalent current WORKFLOW12/10 prechecks + fast-forward; legacy CLI reviewer-only format rejects honest technical_validator role. No reviewer impersonation.",
   "product_acceptance": "not_recorded",
   "master_merge": false,
-  "push": false
+  "push": false,
+  "checks": [
+    {
+      "id": "editor_import",
+      "status": "passed",
+      "exit_code": 0,
+      "timeout": false,
+      "seconds": 9.699,
+      "log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_gameplay_extension_playtest\\editor_import.log",
+      "errors": [],
+      "log_sha256": "132e4d963801dba1ea5beeeb9bbbf6bad0779c1e092e05131b67877220e9a17a",
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_gameplay_extension_playtest\\editor_import.engine.log",
+      "engine_log_sha256": "281561ee392d1dbf17cda68629165efdf0252235a133ff8a5ff57a7425ce4323"
+    },
+    {
+      "id": "scene_smoke",
+      "status": "passed",
+      "exit_code": 0,
+      "timeout": false,
+      "seconds": 2.333,
+      "log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_gameplay_extension_playtest\\scene_smoke.log",
+      "errors": [],
+      "log_sha256": "83cf0b082206af2aa236c83064fbcfa76be1e00a4aa3558574b2f65965d9481c",
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_gameplay_extension_playtest\\scene_smoke.engine.log",
+      "engine_log_sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    }
+  ],
+  "applied": true,
+  "ready": true,
+  "effective_head": "85be67654829ea3155d615ded6e685e420fa8fbf",
+  "both_clean_after": true,
+  "personal_files_after": {
+    "C:\\Users\\João Pedro\\AppData\\Roaming\\Godot\\app_userdata\\RagRPG\\profile.json": "a3e441730f2145be12aa548145b3ec7b5a866b5fe220f520c3134b5be1cb5db1",
+    "C:\\Users\\João Pedro\\AppData\\Roaming\\Godot\\app_userdata\\RagRPG\\profile.backup.json": "1b6c2c2a8c33a89bd1aa2920a5d511c65e3ff0429a578cb9e155cd0e699660f1",
+    "C:\\Users\\João Pedro\\AppData\\Roaming\\Godot\\app_userdata\\RagRPG\\controls.cfg": "a11cac61ce45a85dca9ee3189359639ef7ff14723822a958b1674d25c9f3e22f"
+  },
+  "personal_files_unchanged": true,
+  "normalized_imports_restored": [
+    "assets/art/icons/equipment/card.svg.import",
+    "assets/art/icons/equipment/cloth.svg.import",
+    "assets/art/icons/equipment/focus.svg.import",
+    "assets/art/icons/equipment/head.svg.import",
+    "assets/art/icons/equipment/jewelry.svg.import",
+    "assets/art/icons/equipment/leather.svg.import",
+    "assets/art/icons/equipment/mail.svg.import",
+    "assets/art/icons/equipment/plate.svg.import",
+    "assets/art/icons/equipment/scales.svg.import",
+    "assets/art/icons/equipment/shield.svg.import",
+    "assets/art/icons/equipment/weapon.svg.import"
+  ],
+  "source_input_count": 970,
+  "target_inputs_match_source_after_newline_normalization": true,
+  "limitations": [
+    "Human balance/style/product acceptance pending",
+    "Finite six-stage pilot, provisional art, new Gel/Master/animal have no cards",
+    "28 selected regression steps in complementary rounds, not full212 suite"
+  ],
+  "documentary_successor": "A documentation-only commit records this application; Sol renews exact fingerprint and advances playtest without rerunning unchanged engine checks.",
+  "newline_only_target_difference_count": 305,
+  "local_application_evidence": {
+    "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_gameplay_extension\\final\\playtest_application.json",
+    "sha256": "87d53c86187df5aab49534e039fbde7b47a04751c4de9ab3d511b9ebb9529f65"
+  },
+  "technical_validator": "Sol",
+  "automated_supervisor": "Luna",
+  "architectural_planner": "Astra (short contract only)"
 }

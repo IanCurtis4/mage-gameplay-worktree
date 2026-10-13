@@ -1,6 +1,6 @@
 # E06 — playtest de mobs, mapas e loot
 
-Pacote adicional autorizado em 13/10/2026. O roteiro abaixo avalia a primeira versão das áreas e do comportamento dos mobs. A validação técnica e a aplicação ficam registradas no [checkpoint](e06_pending_checkpoint.md) e no [recibo de entrega](e06_gameplay_playtest_delivery.json). O aceite humano continua pendente.
+Pacote adicional autorizado em 13/10/2026. Gameplay `85be67654829ea3155d615ded6e685e420fa8fbf` aplicado no projeto habitual, com importação/abertura verificadas e perfil pessoal intacto; um commit posterior apenas registra a entrega. O roteiro abaixo avalia a primeira versão das áreas e do comportamento dos mobs. A validação técnica e a aplicação ficam registradas no [checkpoint](e06_pending_checkpoint.md) e no [recibo de entrega](e06_gameplay_playtest_delivery.json). O aceite humano continua pendente.
 
 Abra o projeto habitual `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/project.godot`. Pare a partida antiga, aceite recarregar os arquivos e execute F5. No menu, escolha personagem/build e inicie a run normal. O treino continua separado.
 

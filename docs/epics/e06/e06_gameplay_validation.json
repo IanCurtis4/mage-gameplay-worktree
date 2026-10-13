@@ -10,9 +10,24 @@
     "tool": "tools/verify.ps1",
     "global_plan_steps": 212,
     "selections": [
-      { "selected": 27, "executed": 18, "passed_before_first_failure": 17, "verification_directory": ".godot/verification/e06_gameplay_extension/final/checks" },
-      { "selected": 11, "executed": 9, "passed_before_first_failure": 8, "verification_directory": ".godot/verification/e06_gameplay_extension/final/resumed_checks" },
-      { "selected": 3, "executed": 3, "passed": 3, "verification_directory": ".godot/verification/e06_gameplay_extension/final/resumed_v3_checks" }
+      {
+        "selected": 27,
+        "executed": 18,
+        "passed_before_first_failure": 17,
+        "verification_directory": ".godot/verification/e06_gameplay_extension/final/checks"
+      },
+      {
+        "selected": 11,
+        "executed": 9,
+        "passed_before_first_failure": 8,
+        "verification_directory": ".godot/verification/e06_gameplay_extension/final/resumed_checks"
+      },
+      {
+        "selected": 3,
+        "executed": 3,
+        "passed": 3,
+        "verification_directory": ".godot/verification/e06_gameplay_extension/final/resumed_v3_checks"
+      }
     ],
     "distinct_plan_indices_passed": 28,
     "baseline_v3": {
@@ -26,8 +41,15 @@
       "items": 85,
       "post_run_mismatches": 0
     },
-    "comparison_exclusions": ["docs/", "*.import"],
-    "new_non_docs_import_path_outside_baseline": "content/authoring/directions_execution.json"
+    "comparison_exclusions": [
+      "docs/",
+      "*.import",
+      "content/authoring/directions_execution.json"
+    ],
+    "generated_report_exclusion": {
+      "path": "content/authoring/directions_execution.json",
+      "reason": "Known generated report explicitly excluded from970 input snapshot; Sol verified JSON identity against previous HEAD. Not a newly added source path."
+    }
   },
   "interrupted_runs_preserved": [
     {
@@ -50,9 +72,40 @@
     }
   ],
   "supervised_passes_by_selection": {
-    "initial_plan_indices": [1, 2, 3, 4, 9, 13, 14, 15, 18, 20, 22, 25, 94, 113, 189, 190, 192],
-    "resumed_v2_plan_indices": [194, 203, 204, 205, 206, 207, 208, 209],
-    "resumed_v3_plan_indices": [210, 211, 212]
+    "initial_plan_indices": [
+      1,
+      2,
+      3,
+      4,
+      9,
+      13,
+      14,
+      15,
+      18,
+      20,
+      22,
+      25,
+      94,
+      113,
+      189,
+      190,
+      192
+    ],
+    "resumed_v2_plan_indices": [
+      194,
+      203,
+      204,
+      205,
+      206,
+      207,
+      208,
+      209
+    ],
+    "resumed_v3_plan_indices": [
+      210,
+      211,
+      212
+    ]
   },
   "resumed_v3_checks": {
     "manifest": ".godot/verification/e06_gameplay_extension/final/resumed_v3_checks/checks.jsonl",
@@ -60,9 +113,24 @@
     "all_exit_codes_zero": true,
     "timed_out": 0,
     "checks": [
-      { "index": 210, "name": "e06_gameplay_content_test", "output_sha256": "4472c31b61f5328274fc4887c0c09452a645347814c223befff609b0b47cfff", "engine_sha256": "3dc5a09c4d402772a8b53575ef9c76d615a0d7d2d44dc225b4fde648badf7491" },
-      { "index": 211, "name": "e06_gameplay_ai_test", "output_sha256": "48656f0d5420262fafdb3944e8c1a74ff08d312c1baef3bfa0b60b4cc0b42b28", "engine_sha256": "841f0a6af7797d754c501fbcbb031fce6bae7aca5e5bd76de02a31ac06466d17" },
-      { "index": 212, "name": "e06_gameplay_route_test", "output_sha256": "5d947ec41dc30ea37fe808b99fdbd34c1589b3fc607ed246b645177d05d27fc6", "engine_sha256": "1ba203279d2d91f473607412539b2cec467848bf42cd3701716b62a865275bf8" }
+      {
+        "index": 210,
+        "name": "e06_gameplay_content_test",
+        "output_sha256": "4472c31b61f5328274fc4887c0c09452a645347814c223befff609b0b47cfff",
+        "engine_sha256": "3dc5a09c4d402772a8b53575ef9c76d615a0d7d2d44dc225b4fde648badf7491"
+      },
+      {
+        "index": 211,
+        "name": "e06_gameplay_ai_test",
+        "output_sha256": "48656f0d5420262fafdb3944e8c1a74ff08d312c1baef3bfa0b60b4cc0b42b28",
+        "engine_sha256": "841f0a6af7797d754c501fbcbb031fce6bae7aca5e5bd76de02a31ac06466d17"
+      },
+      {
+        "index": 212,
+        "name": "e06_gameplay_route_test",
+        "output_sha256": "5d947ec41dc30ea37fe808b99fdbd34c1589b3fc607ed246b645177d05d27fc6",
+        "engine_sha256": "1ba203279d2d91f473607412539b2cec467848bf42cd3701716b62a865275bf8"
+      }
     ],
     "engine_log_scan": "No ERROR, SCRIPT ERROR, or Parse Error in the three engine logs."
   },
@@ -96,7 +164,11 @@
   "root_canonical_checks_separate_from_28_indices": {
     "manifest": ".godot/verification/e06_gameplay_extension/canonical_fix/checks.jsonl",
     "manifest_sha256": "7cfbe78558fd47ec034b5014d1b5a824ddf806ce365d7e8a4da1e7bab2959e73",
-    "passed_names": ["editor_import", "e06_content_authoring_test", "e06_directions_test"],
+    "passed_names": [
+      "editor_import",
+      "e06_content_authoring_test",
+      "e06_directions_test"
+    ],
     "timeouts": 0
   },
   "separate_evidence": {
@@ -108,5 +180,12 @@
     "The root's three canonical checks are recorded separately and are not added to the 28 distinct supervised plan indices.",
     "No human product acceptance, performance result, or balance approval is claimed.",
     "Documentation and .import sidecars were excluded from the baseline comparison."
-  ]
+  ],
+  "technical_validator_annotation": {
+    "validator": "Sol",
+    "kind": "documentary_metadata_correction_after_supervisor_return",
+    "original_supervisor_document_sha256": "7c46d44fd49b0344941299413ea7fedf2a28d26928f33ca60a9997ac1973fe7c",
+    "original_preserved_in_gameplay_commit": "85be67654829ea3155d615ded6e685e420fa8fbf",
+    "checks_or_expectations_changed": false
+  }
 }
