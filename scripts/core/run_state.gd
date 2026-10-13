@@ -257,7 +257,7 @@ func has_effective_gain(before: Dictionary, after: Dictionary) -> bool:
 	# Offers and card rewards compare resolved values, after caps and aggregation.
 	if not before.get("ok", false) or not after.get("ok", false):
 		return false
-	if before.get("item_grants", {}) != after.get("item_grants", {}) or before["breakdown"].values() != after["breakdown"].values() or _effective_proc_signature(before["procs"]) != _effective_proc_signature(after["procs"]):
+	if before.get("kit_policies", {}) != after.get("kit_policies", {}) or before.get("item_grants", {}) != after.get("item_grants", {}) or before["breakdown"].values() != after["breakdown"].values() or _effective_proc_signature(before["procs"]) != _effective_proc_signature(after["procs"]):
 		return true
 	for skill: StringName in after["skill_rules"]:
 		var previous := SkillEffectResolver.capture(skill, int(before.get("skill_ranks", {}).get(skill, 0)), before)

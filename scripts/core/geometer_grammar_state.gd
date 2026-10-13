@@ -60,6 +60,7 @@ func refresh_impacts(alive_positions: Dictionary[int, Vector2], navigation: Aren
 	for delivery: Dictionary in _pending:
 		if not bool(delivery["resolved"]) or not bool(delivery["success"]):
 			continue
+		if bool(delivery["context"].get("fixed_ground", false)): continue
 		var carrier_id := int(delivery["actor_id"])
 		if carrier_id == 0:
 			continue

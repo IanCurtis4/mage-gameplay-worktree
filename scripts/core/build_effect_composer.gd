@@ -95,6 +95,7 @@ static func compose(snapshot: BuildSnapshot, run_effects: Dictionary, temporary_
 				effective_ranks[skill] = maxi(int(effective_ranks.get(skill, 0)), effect.granted_rank)
 	var sources: Array[Dictionary] = []
 	var rules: Dictionary = {}
+	var kit_policies: Dictionary = {}
 	var procs: Dictionary = {}
 	var provenance: Array[Dictionary] = []
 	var inactive: Array[Dictionary] = []
@@ -146,6 +147,8 @@ static func compose(snapshot: BuildSnapshot, run_effects: Dictionary, temporary_
 				continue
 			if effect.kind == EffectDefinition.Kind.STAT:
 				source[effect.channel][effect.axis] = float(source[effect.channel].get(effect.axis, 0.0)) + magnitude
+			elif effect.kind == EffectDefinition.Kind.KIT_RULE:
+				kit_policies[effect.axis] = true
 			elif effect.kind == EffectDefinition.Kind.SKILL_RULE:
 				for skill: StringName in targets:
 					if not rules.has(skill):
@@ -183,7 +186,7 @@ static func compose(snapshot: BuildSnapshot, run_effects: Dictionary, temporary_
 	proc_keys.sort()
 	for key: String in proc_keys:
 		proc_list.append(procs[key].duplicate(true))
-	return {"ok": true, "error_code": &"", "request_id": "", "build_version": snapshot.build_version, "skill_ranks": effective_ranks.duplicate(true), "item_grants": item_grants.duplicate(true), "unique_effects": unique_effects.duplicate(true), "stat_sources": sources.duplicate(true), "breakdown": stat_result["breakdown"], "skill_rules": rules.duplicate(true), "procs": proc_list, "provenance": provenance, "inactive": inactive, "conflicts": conflicts.duplicate(true)}
+	return {"ok": true, "error_code": &"", "request_id": "", "build_version": snapshot.build_version, "skill_ranks": effective_ranks.duplicate(true), "item_grants": item_grants.duplicate(true), "unique_effects": unique_effects.duplicate(true), "stat_sources": sources.duplicate(true), "breakdown": stat_result["breakdown"], "skill_rules": rules.duplicate(true), "kit_policies": kit_policies.duplicate(true), "procs": proc_list, "provenance": provenance, "inactive": inactive, "conflicts": conflicts.duplicate(true)}
 
 static func copy_result(result: Dictionary) -> Dictionary:
 	var copy := result.duplicate(true)

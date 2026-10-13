@@ -35,4 +35,4 @@ static func capture(skill_id: StringName, rank: int, composed_build: Dictionary)
 	rank_definition.range = values["range"]
 	rank_definition.sp_cost = values["sp_cost"]
 	rank_definition.cooldown = values["cooldown"]
-	return {"ok": true, "error_code": &"", "request_id": "", "skill_id": skill_id, "rank": rank, "build_version": composed_build.get("build_version", 0), "rank_definition": rank_definition, "values": values.duplicate(true), "procs": composed_build.get("procs", []).duplicate(true), "tags": tags.duplicate()}
+	return {"ok": true, "error_code": &"", "request_id": "", "skill_id": skill_id, "rank": rank, "build_version": composed_build.get("build_version", 0), "rank_definition": rank_definition, "values": values.duplicate(true), "procs": composed_build.get("procs", []).duplicate(true), "kit_policies": composed_build.get("kit_policies", {}).duplicate(true), "tags": tags.duplicate()}

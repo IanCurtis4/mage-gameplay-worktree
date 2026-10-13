@@ -1454,14 +1454,22 @@ func _on_spiritualist_echo_curse_requested(request: DamageRequest, target_actor:
 					battle_indicators.show_spiritualist_spread(origin, candidate.global_position)
 			_show_spiritualist_feedback(candidate, "AMALDIÇOADO", Color("e6d9f2"))
 
+func _echo_positions() -> Dictionary[int, Vector2]:
+	var positions: Dictionary[int, Vector2] = {}
+	for actor: CombatActor in enemies:
+		if is_instance_valid(actor) and actor.is_alive(): positions[actor.get_instance_id()] = actor.global_position
+	return positions
+
 func _apply_spiritualist_echo(echo: Dictionary) -> void:
 	var carrier := instance_from_id(int(echo["target_id"])) as CombatActor
 	if carrier == null or not is_instance_valid(carrier) or not carrier.is_alive():
 		return
-	var center := carrier.global_position
-	var affected: Array[CombatActor] = [carrier]
+	var fixed := bool(echo.get("fixed_origin", false))
+	var center: Vector2 = echo["center"] if fixed else carrier.global_position
+	var affected: Array[CombatActor] = []
+	if not fixed: affected.append(carrier)
 	for candidate: CombatActor in enemies.duplicate():
-		if candidate == null or candidate == carrier or not is_instance_valid(candidate) or not candidate.is_alive():
+		if candidate == null or (candidate == carrier and not fixed) or not is_instance_valid(candidate) or not candidate.is_alive():
 			continue
 		if center.distance_to(candidate.global_position) <= SkillGeometry.SPIRITUALIST_ECHO_SPREAD_RADIUS + candidate.collision_radius and navigation.is_segment_clear(center, candidate.global_position, 0.0):
 			affected.append(candidate)
@@ -1470,7 +1478,7 @@ func _apply_spiritualist_echo(echo: Dictionary) -> void:
 		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
 			continue
 		# Recheck geometry at resolution, not only when the wave was scheduled.
-		if target_actor != carrier and (center.distance_to(target_actor.global_position) > SkillGeometry.SPIRITUALIST_ECHO_SPREAD_RADIUS + target_actor.collision_radius or not navigation.is_segment_clear(center, target_actor.global_position, 0.0)):
+		if (fixed or target_actor != carrier) and (center.distance_to(target_actor.global_position) > SkillGeometry.SPIRITUALIST_ECHO_SPREAD_RADIUS + target_actor.collision_radius or not navigation.is_segment_clear(center, target_actor.global_position, 0.0)):
 			continue
 		if not spiritualist_echo_state.claim_pair(int(echo["wave_id"]), int(echo["target_id"]), target_actor.get_instance_id()):
 			continue
@@ -1487,7 +1495,7 @@ func _apply_spiritualist_echo(echo: Dictionary) -> void:
 		_spiritualist_echo_number_target_id = 0
 		var actual := float(result.get("actual_damage", 0.0))
 		if actual > 0.0:
-			var first_spread := spiritualist_echo_state.record_echo_impact(int(echo["wave_id"]), result, float(echo["echo_power"]))
+			var first_spread := spiritualist_echo_state.record_echo_impact(int(echo["wave_id"]), result, float(echo["echo_power"]), _echo_positions())
 			if battle_indicators != null:
 				if target_actor == carrier:
 					battle_indicators.show_spiritualist_event(&"echo_hit", target_actor.global_position + Vector2(0, -18), target_actor)
@@ -1854,7 +1862,7 @@ func _on_enemy_damage_resolved(result: Dictionary) -> void:
 	player.record_berserker_damage(result)
 	player.record_sentinel_damage(result)
 	player.record_hunter_damage(result)
-	var echo_triggered := spiritualist_echo_state.record_hit(result, player.spiritualist_magic_attack())
+	var echo_triggered := spiritualist_echo_state.record_hit(result, player.spiritualist_magic_attack(), _echo_positions())
 	if echo_triggered:
 		if battle_indicators != null:
 			var mark_target := instance_from_id(int(result.get("target_id", 0))) as CombatActor

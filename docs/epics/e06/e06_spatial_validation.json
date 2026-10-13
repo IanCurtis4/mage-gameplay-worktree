@@ -1,0 +1,829 @@
+{
+  "schema": "e06_spatial_validation_v1",
+  "role": "automated_test_supervision",
+  "semantic_audit": false,
+  "source_commit": "ecfe13dbd9a80bf8ed36c55c275fba02de996bb8",
+  "source_tree": "064942d34492d48a86ee60c6c7ecd34fb118c001",
+  "expected_base_commit": "ecfe13dbd9a80bf8ed36c55c275fba02de996bb8",
+  "expected_base_tree": "064942d34492d48a86ee60c6c7ecd34fb118c001",
+  "branch": "codex/e06-inventory",
+  "candidate_is_dirty": true,
+  "engine": {
+    "plan_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+    "version": "Godot 4.7.2.stable.official.ed1daf0bf",
+    "path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/review-engine/Godot.exe",
+    "hash_matches_plan": true,
+    "sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424"
+  },
+  "runner": {
+    "plan_sha256": "773A182ED68C708BD3921749F2FD30DD57C5D5E1C84256C2AD00963C53F98C76",
+    "path": "tools/verify.ps1",
+    "hash_matches_plan": true,
+    "sha256": "773A182ED68C708BD3921749F2FD30DD57C5D5E1C84256C2AD00963C53F98C76"
+  },
+  "execution": {
+    "selected_steps": 18,
+    "plan_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\plan.json",
+    "checks_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\checks.jsonl",
+    "checks_sha256": "44BAECEDCE2B5188E623768A56E890EC43DFB4E2A99E8F980BA8645B73AEFB6A",
+    "records": [
+      {
+        "name": "editor_import",
+        "runner_index": 1,
+        "execution_index": 1,
+        "original_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\001.output.log",
+        "archived_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\001.output.log",
+        "output_sha256": "A4331D45FB6495770014FD54E45EAC414A9F9FA97071104218E8C728EF6FD7F3",
+        "recorded_output_sha256": "A4331D45FB6495770014FD54E45EAC414A9F9FA97071104218E8C728EF6FD7F3",
+        "output_hash_matches": true,
+        "original_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\001.engine.log",
+        "archived_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\001.engine.log",
+        "engine_sha256": "C10EE8317E8A192B576EF5DD46F2DBD56CE033954053695D400211FC5F4F6B04",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60
+      },
+      {
+        "name": "e06_effects_composition_test",
+        "runner_index": 6,
+        "execution_index": 2,
+        "original_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\006-e06_effects_composition_test.output.log",
+        "archived_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\006-e06_effects_composition_test.output.log",
+        "output_sha256": "71958720E37183BE2C8C2E6B8B5144EA7893B4DA8289D7272DDB9497153C21C4",
+        "recorded_output_sha256": "71958720E37183BE2C8C2E6B8B5144EA7893B4DA8289D7272DDB9497153C21C4",
+        "output_hash_matches": true,
+        "original_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\006-e06_effects_composition_test.engine.log",
+        "archived_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\006-e06_effects_composition_test.engine.log",
+        "engine_sha256": "E2AFC0D4272373DDAA30F49073AA7DA571B7162EDDB0B9AF28C388795D7E42B5",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60
+      },
+      {
+        "name": "e06_effects_runtime_test",
+        "runner_index": 8,
+        "execution_index": 3,
+        "original_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\008-e06_effects_runtime_test.output.log",
+        "archived_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\008-e06_effects_runtime_test.output.log",
+        "output_sha256": "4D2C6C3D1221AA352C92570D7EB188AD87A213352D772DD848A8639C20376906",
+        "recorded_output_sha256": "4D2C6C3D1221AA352C92570D7EB188AD87A213352D772DD848A8639C20376906",
+        "output_hash_matches": true,
+        "original_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\008-e06_effects_runtime_test.engine.log",
+        "archived_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\008-e06_effects_runtime_test.engine.log",
+        "engine_sha256": "868A20A8A3B9474B1278E7B81906FD33FEE223D8E34BE48F9C1F59C5CD3F819B",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60
+      },
+      {
+        "name": "e05_spiritualist_echo_curse_test",
+        "runner_index": 100,
+        "execution_index": 4,
+        "original_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\100-e05_spiritualist_echo_curse_test.output.log",
+        "archived_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\100-e05_spiritualist_echo_curse_test.output.log",
+        "output_sha256": "4634440CA405823AB6DD41BD81BCC43C0CC67A0DBCE3FC41C54AD343EC610E82",
+        "recorded_output_sha256": "4634440CA405823AB6DD41BD81BCC43C0CC67A0DBCE3FC41C54AD343EC610E82",
+        "output_hash_matches": true,
+        "original_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\100-e05_spiritualist_echo_curse_test.engine.log",
+        "archived_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\100-e05_spiritualist_echo_curse_test.engine.log",
+        "engine_sha256": "A7841CA435A34CB970D6115E1B69B45D15294709718F8797A140313F5B24BD92",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60
+      },
+      {
+        "name": "e05_spiritualist_echo_spread_test",
+        "runner_index": 101,
+        "execution_index": 5,
+        "original_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\101-e05_spiritualist_echo_spread_test.output.log",
+        "archived_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\101-e05_spiritualist_echo_spread_test.output.log",
+        "output_sha256": "A302768C0D147759EE0E98EB834D7665B8D3EEADEDAF61D3417BE6ADD5708808",
+        "recorded_output_sha256": "A302768C0D147759EE0E98EB834D7665B8D3EEADEDAF61D3417BE6ADD5708808",
+        "output_hash_matches": true,
+        "original_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\101-e05_spiritualist_echo_spread_test.engine.log",
+        "archived_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\101-e05_spiritualist_echo_spread_test.engine.log",
+        "engine_sha256": "275EC14592BB4F39165C926B5CDC440F74F893436307614DF62554B234DD053A",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60
+      },
+      {
+        "name": "e05_spiritualist_echo_recovery_test",
+        "runner_index": 102,
+        "execution_index": 6,
+        "original_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\102-e05_spiritualist_echo_recovery_test.output.log",
+        "archived_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\102-e05_spiritualist_echo_recovery_test.output.log",
+        "output_sha256": "307C6559127F6C662D7145E08AC15E8BBD65902DB8E707EBB1170414624B7355",
+        "recorded_output_sha256": "307C6559127F6C662D7145E08AC15E8BBD65902DB8E707EBB1170414624B7355",
+        "output_hash_matches": true,
+        "original_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\102-e05_spiritualist_echo_recovery_test.engine.log",
+        "archived_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\102-e05_spiritualist_echo_recovery_test.engine.log",
+        "engine_sha256": "B92912EE5741BA646D22E47628066BEAC77BC4D12DB71E404A13EC8AAE9F9F0A",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60
+      },
+      {
+        "name": "e05_geometer_construction_test",
+        "runner_index": 112,
+        "execution_index": 7,
+        "original_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\112-e05_geometer_construction_test.output.log",
+        "archived_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\112-e05_geometer_construction_test.output.log",
+        "output_sha256": "3452D968DC6510EF7C455789625A9D5397220489E69A7365E3C7A7C6240B177E",
+        "recorded_output_sha256": "3452D968DC6510EF7C455789625A9D5397220489E69A7365E3C7A7C6240B177E",
+        "output_hash_matches": true,
+        "original_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\112-e05_geometer_construction_test.engine.log",
+        "archived_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\112-e05_geometer_construction_test.engine.log",
+        "engine_sha256": "6CD956755CF97E39817DF060FC0B160E3CCF68F7136C95E36EE728F120ACC575",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60
+      },
+      {
+        "name": "e05_geometer_casting_test",
+        "runner_index": 113,
+        "execution_index": 8,
+        "original_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\113-e05_geometer_casting_test.output.log",
+        "archived_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\113-e05_geometer_casting_test.output.log",
+        "output_sha256": "D4DC0C17E211528164119F4C23F3197AB3766F3E5162E8683C6EC4D996DFA1B4",
+        "recorded_output_sha256": "D4DC0C17E211528164119F4C23F3197AB3766F3E5162E8683C6EC4D996DFA1B4",
+        "output_hash_matches": true,
+        "original_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\113-e05_geometer_casting_test.engine.log",
+        "archived_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\113-e05_geometer_casting_test.engine.log",
+        "engine_sha256": "1E2F7FFC343509D3BC19C6DA09C45D72ED1BCF50B874D1785E14E10C866F1DD5",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60
+      },
+      {
+        "name": "e06_tx_composition_test",
+        "runner_index": 186,
+        "execution_index": 9,
+        "original_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\186-e06_tx_composition_test.output.log",
+        "archived_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\186-e06_tx_composition_test.output.log",
+        "output_sha256": "707FF42F2E379D184E5C2FF37EDB33CD2C67857FF402F143A430D1779BFC000C",
+        "recorded_output_sha256": "707FF42F2E379D184E5C2FF37EDB33CD2C67857FF402F143A430D1779BFC000C",
+        "output_hash_matches": true,
+        "original_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\186-e06_tx_composition_test.engine.log",
+        "archived_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\186-e06_tx_composition_test.engine.log",
+        "engine_sha256": "B3E8D7DC65F7C64C0E5F6123127BDE45DAA3C414289F95131C9B042AC35FB54E",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60
+      },
+      {
+        "name": "e06_tx_active_test",
+        "runner_index": 187,
+        "execution_index": 10,
+        "original_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\187-e06_tx_active_test.output.log",
+        "archived_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\187-e06_tx_active_test.output.log",
+        "output_sha256": "639C3CD9F61B1C2233E3B8A4D05B7F3F189282421100D7248362526DEBEE3E18",
+        "recorded_output_sha256": "639C3CD9F61B1C2233E3B8A4D05B7F3F189282421100D7248362526DEBEE3E18",
+        "output_hash_matches": true,
+        "original_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\187-e06_tx_active_test.engine.log",
+        "archived_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\187-e06_tx_active_test.engine.log",
+        "engine_sha256": "6E415F9DDF7F1E7709E7901D353C93D14B35B9FAE0B79AC60714070D992EC9E9",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60
+      },
+      {
+        "name": "e06_tx_late_fields_test",
+        "runner_index": 193,
+        "execution_index": 11,
+        "original_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\193-e06_tx_late_fields_test.output.log",
+        "archived_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\193-e06_tx_late_fields_test.output.log",
+        "output_sha256": "8BA8EB33E5AFB2FE7C7AA9F617F729A000C7C3195432B46F19022E48297613AC",
+        "recorded_output_sha256": "8BA8EB33E5AFB2FE7C7AA9F617F729A000C7C3195432B46F19022E48297613AC",
+        "output_hash_matches": true,
+        "original_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\193-e06_tx_late_fields_test.engine.log",
+        "archived_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\193-e06_tx_late_fields_test.engine.log",
+        "engine_sha256": "60A58FD7C0E2B48445532AD4C6F4ACF81A8A71E8AEC3FC8477A2F611C062DA84",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60
+      },
+      {
+        "name": "e06_content_authoring_test",
+        "runner_index": 194,
+        "execution_index": 12,
+        "original_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\194-e06_content_authoring_test.output.log",
+        "archived_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\194-e06_content_authoring_test.output.log",
+        "output_sha256": "41AB313DA854B7B0223B6E128E3079B93C556C65A3509E8752BC15134FB8AF62",
+        "recorded_output_sha256": "41AB313DA854B7B0223B6E128E3079B93C556C65A3509E8752BC15134FB8AF62",
+        "output_hash_matches": true,
+        "original_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\194-e06_content_authoring_test.engine.log",
+        "archived_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\194-e06_content_authoring_test.engine.log",
+        "engine_sha256": "007765C98B800EF964DC34AF28A634211BEE46C86C833874121BC9CC6D1B1F64",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60
+      },
+      {
+        "name": "e06_content_editorial_test",
+        "runner_index": 195,
+        "execution_index": 13,
+        "original_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\195-e06_content_editorial_test.output.log",
+        "archived_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\195-e06_content_editorial_test.output.log",
+        "output_sha256": "4F19B03DD3389029AEB3FCDB8F6D511DB2C5E80715348CD9AB52F1819844A2DF",
+        "recorded_output_sha256": "4F19B03DD3389029AEB3FCDB8F6D511DB2C5E80715348CD9AB52F1819844A2DF",
+        "output_hash_matches": true,
+        "original_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\195-e06_content_editorial_test.engine.log",
+        "archived_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\195-e06_content_editorial_test.engine.log",
+        "engine_sha256": "E542031BD9026AC6B00281952F27F3087C3FB8661F48438A85FB348F60D5CC89",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60
+      },
+      {
+        "name": "e06_content_pilot_test",
+        "runner_index": 196,
+        "execution_index": 14,
+        "original_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\196-e06_content_pilot_test.output.log",
+        "archived_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\196-e06_content_pilot_test.output.log",
+        "output_sha256": "5D3C2EE5D30E4CF7361706F02EBE5951627B654ECDFD0691712283784148FA88",
+        "recorded_output_sha256": "5D3C2EE5D30E4CF7361706F02EBE5951627B654ECDFD0691712283784148FA88",
+        "output_hash_matches": true,
+        "original_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\196-e06_content_pilot_test.engine.log",
+        "archived_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\196-e06_content_pilot_test.engine.log",
+        "engine_sha256": "450F329264D3744F8ADB0B8D7789EB7C2E07FE1D79D6BAA868DDA7BA624A9422",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60
+      },
+      {
+        "name": "e06_content_pilot_runtime_test",
+        "runner_index": 197,
+        "execution_index": 15,
+        "original_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\197-e06_content_pilot_runtime_test.output.log",
+        "archived_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\197-e06_content_pilot_runtime_test.output.log",
+        "output_sha256": "6CBDFEC9054577CF5D7A5B218CBB2CD36D650467370A971ACF67C54B20810A17",
+        "recorded_output_sha256": "6CBDFEC9054577CF5D7A5B218CBB2CD36D650467370A971ACF67C54B20810A17",
+        "output_hash_matches": true,
+        "original_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\197-e06_content_pilot_runtime_test.engine.log",
+        "archived_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\197-e06_content_pilot_runtime_test.engine.log",
+        "engine_sha256": "8FFDFA6017A73D3766E705576B8B85B25A8A401FAE806EC091C9203A1ABA20BC",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60
+      },
+      {
+        "name": "e06_pilot_execution_test",
+        "runner_index": 198,
+        "execution_index": 16,
+        "original_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\198-e06_pilot_execution_test.output.log",
+        "archived_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\198-e06_pilot_execution_test.output.log",
+        "output_sha256": "C9F1E258339201BA669CFE3DCF725561F4617272EA16F7FD78894D34A31C89D0",
+        "recorded_output_sha256": "C9F1E258339201BA669CFE3DCF725561F4617272EA16F7FD78894D34A31C89D0",
+        "output_hash_matches": true,
+        "original_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\198-e06_pilot_execution_test.engine.log",
+        "archived_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\198-e06_pilot_execution_test.engine.log",
+        "engine_sha256": "5E8D68E197D0432C470622D65D5FE7B01EC9FF6A5AFDA471F626BA57EB866F39",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60
+      },
+      {
+        "name": "e06_spatial_policies_test",
+        "runner_index": 199,
+        "execution_index": 17,
+        "original_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\199-e06_spatial_policies_test.output.log",
+        "archived_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\199-e06_spatial_policies_test.output.log",
+        "output_sha256": "A91E9DE2E098A74ABBECC490B235B93EF48AF904B9921FA742E43C3C8B1585D6",
+        "recorded_output_sha256": "A91E9DE2E098A74ABBECC490B235B93EF48AF904B9921FA742E43C3C8B1585D6",
+        "output_hash_matches": true,
+        "original_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\199-e06_spatial_policies_test.engine.log",
+        "archived_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\199-e06_spatial_policies_test.engine.log",
+        "engine_sha256": "CA016407E1C985E4B4798EFA4222D5802C8C4DABFE74CA8A0E9F9C958F1E7473",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60
+      },
+      {
+        "name": "e06_spatial_execution_test",
+        "runner_index": 200,
+        "execution_index": 18,
+        "original_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\200-e06_spatial_execution_test.output.log",
+        "archived_output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\200-e06_spatial_execution_test.output.log",
+        "output_sha256": "4A129A7CAD9CF6F3723160B290CE09E52D4EA1FCA8E3327B0919EE28E6BEEE20",
+        "recorded_output_sha256": "4A129A7CAD9CF6F3723160B290CE09E52D4EA1FCA8E3327B0919EE28E6BEEE20",
+        "output_hash_matches": true,
+        "original_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\200-e06_spatial_execution_test.engine.log",
+        "archived_engine_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks\\200-e06_spatial_execution_test.engine.log",
+        "engine_sha256": "60DD89C0511FB4299A0506F4633AB059D180C71CFD2A22AF6E7E555C38D82800",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "timeout_seconds": 60
+      }
+    ],
+    "timeout_seconds": 60,
+    "end_utc": "2026-10-12T21:11:10.8547086Z",
+    "start_utc": "2026-10-12T21:09:51.1597168Z",
+    "selection": [
+      "editor_import",
+      "e06_effects_composition_test",
+      "e06_effects_runtime_test",
+      "e06_tx_composition_test",
+      "e06_tx_active_test",
+      "e06_content_authoring_test",
+      "e06_content_editorial_test",
+      "e06_content_pilot_test",
+      "e06_content_pilot_runtime_test",
+      "e06_pilot_execution_test",
+      "e05_spiritualist_echo_curse_test",
+      "e05_spiritualist_echo_spread_test",
+      "e05_spiritualist_echo_recovery_test",
+      "e05_geometer_construction_test",
+      "e05_geometer_casting_test",
+      "e06_tx_late_fields_test",
+      "e06_spatial_policies_test",
+      "e06_spatial_execution_test"
+    ],
+    "verification_directory": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\checks",
+    "plan_sha256": "0F0A3842030159CE26D6E1D2DD155A53C88A6F0E6D93A57FE6F255F7D40380D3",
+    "selected_count": 18,
+    "exit_code": 0,
+    "runner_total_steps": 200,
+    "all_pass": true
+  },
+  "manifests": {
+    "removed": [],
+    "changed": [],
+    "production_effect_resources_changed": 0,
+    "before_file_count": 732,
+    "production_effect_resource_count": 20,
+    "before_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\manifest_before.json",
+    "working_tree_status_before": [
+      " M assets/art/animations/archer.png.import",
+      " M assets/art/animations/berserker.png.import",
+      " M assets/art/animations/defender.png.import",
+      " M assets/art/animations/elementalist.png.import",
+      " M assets/art/animations/geometer.png.import",
+      " M assets/art/animations/hunter.png.import",
+      " M assets/art/animations/mage.png.import",
+      " M assets/art/animations/sentinel.png.import",
+      " M assets/art/animations/spiritualist.png.import",
+      " M assets/art/animations/swordsman.png.import",
+      " M assets/art/animations/warrior.png.import",
+      " M assets/art/icons/hunter/hunter_covering_shot.svg.import",
+      " M assets/art/icons/hunter/hunter_easy_prey.svg.import",
+      " M assets/art/icons/hunter/hunter_freezing_trap.svg.import",
+      " M assets/art/icons/hunter/hunter_mark.svg.import",
+      " M assets/art/icons/hunter/hunter_shooting_discipline.svg.import",
+      " M assets/art/icons/hunter/hunter_tar_trap.svg.import",
+      " M assets/art/icons/hunter/hunter_thorn_trap.svg.import",
+      " M assets/art/icons/hunter/hunter_total_cover.svg.import",
+      " M assets/art/pilot/archer.png.import",
+      " M assets/art/pilot/dirt.png.import",
+      " M assets/art/pilot/grass.png.import",
+      " M assets/art/pilot/hero.png.import",
+      " M assets/art/pilot/stone.png.import",
+      " M assets/art/pilot/warrior.png.import",
+      " M assets/art/vfx/soul_impact_orb.png.import",
+      " M assets/art/vfx/soul_impact_orb_source.png.import",
+      " M assets/art/vfx/spiritualist_curse_sigil.png.import",
+      " M assets/art/vfx/spiritualist_effects.png.import",
+      " M assets/art/vfx/spiritualist_ritual_halo.png.import",
+      " M assets/art/vfx/spiritualist_soul_wisp.png.import",
+      " M assets/art/vfx/spiritualist_spectral_burst.png.import",
+      " M docs/epics/e06/e06_spatial_policies.md",
+      " M scripts/actors/player_actor.gd",
+      " M scripts/core/build_effect_catalog.gd",
+      " M scripts/core/build_effect_composer.gd",
+      " M scripts/core/content_authoring.gd",
+      " M scripts/core/geometer_construction_state.gd",
+      " M scripts/core/geometer_grammar_state.gd",
+      " M scripts/core/run_state.gd",
+      " M scripts/core/skill_effect_resolver.gd",
+      " M scripts/data/effect_definition.gd",
+      " M scripts/main.gd",
+      " M scripts/world/spiritualist_echo_state.gd",
+      " M tools/verify.ps1",
+      "?? content/authoring/spatial_briefs.json",
+      "?? content/authoring/spatial_texts.json",
+      "?? tests/e06_spatial_execution_test.gd",
+      "?? tests/e06_spatial_policies_test.gd",
+      "?? tools/content/spatial.gd",
+      "?? tools/content/spatial_bundle.gd",
+      "?? tools/content/spatial_bundle.gd.uid"
+    ],
+    "before_sha256": "3C3B39F7DDD2F3751144D26482CF68B633638D11833AC75F71B9E9B0E8EA9A38",
+    "after_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\manifest_after.json",
+    "production_effect_resources_unchanged": true,
+    "added": [
+      {
+        "path": "content/authoring/spatial_builds.json",
+        "classification": "expected_generated_bundle_report",
+        "sha256": "D8409125254E32B85A2EDCDB576FF1535B3015981B5819BF426BB02F21259FD3"
+      },
+      {
+        "path": "tools/content/spatial.gd.uid",
+        "classification": "generated_editor_uid",
+        "sha256": "F4D4A9DFB407286E3138419F9A0AF0302305DA2CDB890A1CBF8128E5BD11EA8D"
+      },
+      {
+        "path": "tests/e06_spatial_policies_test.gd.uid",
+        "classification": "generated_editor_uid",
+        "sha256": "DA651D0A784E281F708FF015857D705ED6451C03FAC14BB7CF4C9532E38ADFDA"
+      },
+      {
+        "path": "tests/e06_spatial_execution_test.gd.uid",
+        "classification": "generated_editor_uid",
+        "sha256": "D40973E2933398A39B5BFAF3DAE843045B4F8E239DC4855C790C7011A1563B24"
+      }
+    ],
+    "after_file_count": 736,
+    "after_sha256": "21AFFACBABD7635C29CB128B8D4DC8769CD397E8F04090642A19DBF6B9E097F2"
+  },
+  "content": {
+    "spatial_briefs_sha256": "CDB9B2EF14142205DDD4289F32D0CEF20853327C599A715E6187A4238C9C6814",
+    "spatial_builds_path": "content/authoring/spatial_builds.json",
+    "editorial_sha256": "9e8be1b1d5c1b313488c6ea38cf7aaddba07d3233e7850a199b5c53150f78792",
+    "pilot_texts_sha256": "80B8C21EB7032F773989941DF9B05779075C1E17389019D485BF0DC8670B950A",
+    "old_editorial_unchanged": true,
+    "old_editorial_changed_entry_count": 0,
+    "expected_mechanical_digest": "6b143650ef433d96eb204aa5036725c065c14ccc79adbaf08fea039be686c3f9",
+    "spatial_texts_path": "content/authoring/spatial_texts.json",
+    "spatial_texts_expected_sha256": "9e8be1b1d5c1b313488c6ea38cf7aaddba07d3233e7850a199b5c53150f78792",
+    "mechanical_digest": "6b143650ef433d96eb204aa5036725c065c14ccc79adbaf08fea039be686c3f9",
+    "pilot_texts_unchanged": true,
+    "spatial_texts_sha256": "9E8BE1B1D5C1B313488C6EA38CF7AADDBA07D3233E7850A199B5C53150F78792",
+    "expected_editorial_sha256": "9e8be1b1d5c1b313488c6ea38cf7aaddba07d3233e7850a199b5c53150f78792",
+    "old_editorial_entry_count": 63,
+    "spatial_builds_sha256": "D8409125254E32B85A2EDCDB576FF1535B3015981B5819BF426BB02F21259FD3",
+    "spatial_texts_hash_matches": true,
+    "pilot_texts_expected_sha256": "80b8c21eb7032f773989941df9b05779075c1e17389019d485bf0dc8670b950a"
+  },
+  "generated_preview": {
+    "native_resource_hashes": [
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_battle_rhythm.tres",
+        "sha256": "4AB0E886019C761F5A8EF6E91984F3FBE3B910B8A9A72CF9A95F86C3684D5A90"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_extra_fire_spear.tres",
+        "sha256": "3DA3EAF1605DDE75A927A3C4DBD5EFC330F11D746C5AD701D96931E5E7F4A218"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_extra_ice_spear.tres",
+        "sha256": "8E924171E28BB42E9A4FAE731E5F7A47A73E7B92B95E76196348056D3A43799F"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_keen_edge.tres",
+        "sha256": "1362D57A73A1B6A8EFB34049134836AE4658C7E6BE9ACA3433DEA35F7B151816"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_vitality.tres",
+        "sha256": "CBC308F28C188F7AB7EB31649F52D6BF44EA983607D660AB09A63DCDDFA36636"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_channeler_robe.tres",
+        "sha256": "39AA09291898BFF9462129B65095D74C4A968F13A6CA157DD441BFC04F2E14B7"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_ember_staff.tres",
+        "sha256": "6B1B0B910038A94DAFCF05A3D5FE6B4F47212BC9EDEA2C39E2F21040D687A4D3"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_hunters_bow.tres",
+        "sha256": "D0A1139455691FB08F425B767B506DF383761BAED9A912C4E0A983E3102CDD6F"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_prismatic_charm.tres",
+        "sha256": "1DDF8E85A5F28D12F49214BE09A7F91A44743D256252FBEDD106428D2814ACA5"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_riposte_blade.tres",
+        "sha256": "B414F358D2579D7AF3703B752E7A39926A8C31FE31F13D61154DF9DED13A6E3C"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_starter_blade.tres",
+        "sha256": "1DFE00AA6A1A3775DB9259FDC765DFADF430F0E314C3F63A94BDDEF98282AF03"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_starter_bow.tres",
+        "sha256": "7FD9A485A3C331A49ACF8B4D2CDDC8B89A310CEE064CBAC834739930BC524D55"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_starter_staff.tres",
+        "sha256": "AE96D79B438844FBEC4B868B18F98B7B1F1363B4DEDD0AADFCD6C4E6E5334852"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_trailcoat.tres",
+        "sha256": "1396CBE4A6E0029144AAD123437CE361DBED7418423BC374CF4D89B2B6171F41"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_traveler_charm.tres",
+        "sha256": "8D3AB3CC0A8529B17D515BAD5A511D515FBF76D6F62928EAAC1556F5367B9ADD"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_traveler_vest.tres",
+        "sha256": "E843AA9A8A439CF9D39BC958552539574F0995338E193050E681E684870149F0"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_warden_mail.tres",
+        "sha256": "60D91CAC4B2760916E562A2BDB785F18F42238DD791170002B638B7C9F5F41C4"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_pilot_head.tres",
+        "sha256": "6B213E4CCD7BA1EFEBEE88AD8BF7E885912E8C4C1D5D0FA51374020CD7DC041E"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_pilot_shoulders.tres",
+        "sha256": "85EAB63C1059D18923FBD4DA80F0A1208A6A012D618E0FE2110CCFC8B69BD673"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_pilot_arms.tres",
+        "sha256": "CCA562AE26FEE1724DC5D76EBC283166320188C961A3A9377F01BBF30721A375"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_pilot_cloak.tres",
+        "sha256": "88779B66C8E5EED44736A975639B7773EDAB74CCACAF10CE9A06ED3BCB020663"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_pilot_legs.tres",
+        "sha256": "B7744DF5CD77ED99098F6FCCC9730447A7F9E15396FF36075A1043A5FF68DAC6"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_pilot_feet.tres",
+        "sha256": "02B6D6B83519FD9B3FD25DEA9038D4430508F7DADC1278FCA74AC8110E723F7D"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_pilot_shield.tres",
+        "sha256": "1052AED61B6181CFADEB4FE258287C4F0A949E9E86A8E2F10C61DE5E2F6FFF52"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_pilot_focus.tres",
+        "sha256": "22A6ACC374F8D51A8B53753A5C68A19624229666C1A9C7D32137442230817C02"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_pilot_sp_jewel.tres",
+        "sha256": "2B96E3EE28503FF700C096B83584CD4904B514AB5C303F9C8E5DF8B1986C2732"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_pilot_stride_jewel.tres",
+        "sha256": "A410AD3AA8D0F9B8ED634C386600992372C43D0DD37D8ED05F05E3C7E7CCD426"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_pilot_ward_jewel.tres",
+        "sha256": "B3F9B4CBC4752E3FAC071A5BADB7888E5BC8AEEDBC48FA15FAAA4E4E3C7FDB38"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_pilot_step_neck.tres",
+        "sha256": "3662080EB549908DA8849CB9DBA0B997AA90AFDF6514E8459A002BCF978AB109"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/equipment_pilot_wand.tres",
+        "sha256": "5E39CC434A5386D2A69C96CE94D3F96AD356F94AAA32375FDA57C92CD77CA5AB"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/set_pilot_guard_set.tres",
+        "sha256": "290D7E7E15C0754B4FBE65E0DF574EE55A6EA75275AEA1FF10E64882ACFD3A63"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/mob_pilot_echo_species.tres",
+        "sha256": "E9736F0677C7FF5EC0B8CF6651A447533D324701942DBC3C4F4F8488190F6842"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/card_echo_card.tres",
+        "sha256": "162875D3805F4B19D6512B8AD9950B240D3DB34BE89DFD5EC7514BA70CC60D0D"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/mob_pilot_ember_species.tres",
+        "sha256": "F027B4B602BA5DA44DBBC823E790FB05B4C0006C6FA79AC7DCDF943F388EAB09"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/card_ember_card.tres",
+        "sha256": "E8169924D647ADAE33EFC48897D9E484A7EE35DF22FE84B3DEEC0ED88D7848AF"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/mob_pilot_frost_species.tres",
+        "sha256": "9521593D005D5BB456890B849919215F70AD0B8D1C469658707BB6017FE324CB"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/card_frost_card.tres",
+        "sha256": "1FF5A3654BD3A6FA78122B2E2C9E53AC5133528DADAB0CA4BF3E5468430563A3"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/mob_pilot_precision_species.tres",
+        "sha256": "2F9813D5DF263C3E02A159FDEDFFF928D36CAAFDA4DE71B6A26BBAB0D4B90C50"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/card_precision_card.tres",
+        "sha256": "3AD90D248C50A9384650E356D03AEDF6A254F17FF02252F746143266ED0E4382"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/mob_pilot_bulwark_species.tres",
+        "sha256": "6119719EDCA356A69A4750A6E1E0A8B246681ACB6A01EA7264A473501C18ECFE"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/card_bulwark_card.tres",
+        "sha256": "D396DB50FBBAC849100F75D831D4E95391B194A69F6F6D0449D8549E5CCDD754"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/mob_pilot_trail_species.tres",
+        "sha256": "69C580066F95AA28B53FA102517FFBE4CE649C2BC02237E624C04489C1D900C8"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/card_trail_card.tres",
+        "sha256": "E2B9992311C7D963511A2016796BFE1A5D0E8A8F0496DAC1EA0544AD37B71922"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_swordsman_pressure.tres",
+        "sha256": "3362A22DEC3A07222FD94603670871325898DEFD13AD710FA27FD7E049854E1D"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_swordsman_reserve.tres",
+        "sha256": "4F7C77978BBFE2AC10698AA8813D8B9C6CE30CEABB3224C6178497E8852C7AFA"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_mage_pressure.tres",
+        "sha256": "C5887AD998696F3EBDB3060654DF9309EE4868AB02863566001B7A6C19D26058"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_mage_reserve.tres",
+        "sha256": "837653A809AA5601A8D690C45EB1CD987AA46074F10FA8D7CF37D2FE273F2170"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_archer_pressure.tres",
+        "sha256": "7D5C979E84580BFE2FF356DA16E1ABB6D02F01EC3EBCCED0235232C351740072"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_archer_reserve.tres",
+        "sha256": "C1C1FCE3EDFE9672C25C35D8773AF81FDA917B4CCCC25240E9088C9BA620FDAC"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_defender_a.tres",
+        "sha256": "3863FC16332E8EE9BFA6EFDC3DF535A9295F30ADD3FA958D92C5A54365F6EC75"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_defender_b.tres",
+        "sha256": "5BB8C1B913D2EB0B825742253E4BC34472B6FA9652BAA58A91374078FC5679A4"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_berserker_a.tres",
+        "sha256": "00B3C79601C614401E4133B7220E2E000C13CC09968E262D4ED6283B562709C0"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_berserker_b.tres",
+        "sha256": "4186B15D37A6E147D9B5E5DAF3FA802020316E854F9F436C83A25A98C0B4C889"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_elementalist_a.tres",
+        "sha256": "AB256A3FE35921EEBBB9CEF4E8387F19FC654502E66A06CCCD2629C98B8F496D"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_elementalist_b.tres",
+        "sha256": "7050304C0241F79E449D4530909AA85B9044AB9BDB5EFB9F5FCBCEE909AEBB3D"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_spiritualist_a.tres",
+        "sha256": "22934E39506652399ADD32FAFCF853BC9EFC853CF29F96085256D297C0F47807"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_spiritualist_b.tres",
+        "sha256": "CF869E77A9F6F5ABC933B4E96E3967BFE49AF8E30ABDA9B9455CDABC98BF4295"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_sentinel_a.tres",
+        "sha256": "DFC86DA78964BEC887240BC8E1E5AB0880DAD62ED5479CC2B4A5E82557A132F7"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_sentinel_b.tres",
+        "sha256": "BF688294D39DAF53C71F9F2291271C759D75D890A928A5B5D5559526F7D0C48C"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_hunter_a.tres",
+        "sha256": "C1CC5AAC821271F06D1E9A5DF98E2FFD628435C44ABC69E0BF738C3ECA245BAF"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_hunter_b.tres",
+        "sha256": "C87B37D7F9E440829970C143C535864066C6E201C41D6B16A1E683BF0FDAE2FF"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_mg_ar_a.tres",
+        "sha256": "37AC45B69546C260E1F041A761099D4E1ADD9807F49BB5E47F78417B3711221D"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_pilot_mg_ar_b.tres",
+        "sha256": "E4EB386C0C82E30CC2A6329CEF3064EE13EC18DE09157304337468614E7F4A72"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_spiritualist_echo_fixed_origin.tres",
+        "sha256": "91755CB7B4D881B82FE9DDA698468ADB19D3DA619A426CDC50354768D3551F5D"
+      },
+      {
+        "resource_path": "res://.godot/content_authoring/spatial_2015979/augment_geometer_ground_anchor.tres",
+        "sha256": "7A19C40ADE8222EB677767D8EB8CF8503EFD1889D500F7EF8402BCF87187AC59"
+      }
+    ],
+    "editorial_sha256": "9e8be1b1d5c1b313488c6ea38cf7aaddba07d3233e7850a199b5c53150f78792",
+    "spatial_preview_markdown_sha256": "11E889F1C9B606F072F25DE2958E45A343A33127AC3DE244976E009DBBB90103",
+    "preview_exit_code": 0,
+    "mechanical_digest": "6b143650ef433d96eb204aa5036725c065c14ccc79adbaf08fea039be686c3f9",
+    "preview_timed_out": false,
+    "prepare_timed_out": false,
+    "comparison_count": 20,
+    "logs": [
+      {
+        "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\spatial_prepare.console.log",
+        "sha256": "C0A1FD1159072C3CE6A17B2337F58EB057580867DE0720C40CA65477145515E9"
+      },
+      {
+        "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\spatial_prepare.engine.log",
+        "sha256": "E2A9767550AB2017AF991443709C5DCE0EF5EB8A75BBFDFCB12ED62F05258E3F"
+      },
+      {
+        "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\spatial_preview.console.log",
+        "sha256": "4647FD0EA040A0FCE9EE69EB3F95680A0CC615840B5963A9831A1991B9ABC165"
+      },
+      {
+        "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_spatial\\luna_final\\spatial_preview.engine.log",
+        "sha256": "E2636781FB1B8583276B57A5EB7EF36EAAD3604D7D702E7CC2C9E5CCDD32CB0A"
+      }
+    ],
+    "manifest_path": ".godot/content_authoring/spatial_2015979/manifest.json",
+    "prepare_exit_code": 0,
+    "manifest_sha256": "EDE5EBF58DB660069902915F694EAF71C34DBDD603CBF853A9A1109DC5BA66CA",
+    "resource_count": 65,
+    "unique_resource_paths": 65,
+    "tactical_validated": false,
+    "production_published": false,
+    "scope": "spatial_pilot_offline"
+  },
+  "comparisons": {
+    "composition_valid_count": 20,
+    "two_a_policies_only": true,
+    "inactive_count": 0,
+    "tactical_validated_count": 0,
+    "all_policy_mappings_match": true,
+    "all_b_comparisons_have_zero_policy": true,
+    "count": 20,
+    "policy_failures": [],
+    "expected_policy_by_branch": [
+      {
+        "branch": "A",
+        "identity": "spiritualist",
+        "policies": {
+          "echo_origin_fixed": true
+        },
+        "expected_policy": "echo_origin_fixed"
+      },
+      {
+        "branch": "B",
+        "identity": "spiritualist",
+        "policies": {},
+        "expected_policy": null
+      },
+      {
+        "branch": "A",
+        "identity": "mg_ar",
+        "policies": {
+          "geometer_ground_anchor": true
+        },
+        "expected_policy": "geometer_ground_anchor"
+      },
+      {
+        "branch": "B",
+        "identity": "mg_ar",
+        "policies": {},
+        "expected_policy": null
+      }
+    ],
+    "policy_count_method": "Direct count from content/authoring/spatial_builds.json: count kit_policies properties for each row; A rows with policies = 2, B rows with policies = 0, total B rows = 10. This avoids PowerShell .Count behavior on an empty PSCustomObject."
+  },
+  "artifacts": {
+    "generated_uid_sidecars_classified_as_editor_metadata": true,
+    "generated_files_not_source_changes": [
+      "content/authoring/spatial_builds.json",
+      "tests/e06_spatial_execution_test.gd.uid",
+      "tests/e06_spatial_policies_test.gd.uid",
+      "tools/content/spatial.gd.uid"
+    ],
+    "pilot_preview": "Generated preview at .godot/content_authoring/spatial_2015979; no preview beyond this offline generator was run."
+  },
+  "historical_sol_runs": "Sol authoring evidence in checkpoint is historical context only; Luna did not rerun those initial failures.",
+  "limitations": [
+    "18 of 200 runner steps only; no full suite.",
+    "Automated test supervision, not independent semantic audit.",
+    "No playtest, publication, push, merge or active catalog integration."
+  ]
+}

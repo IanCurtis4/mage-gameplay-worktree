@@ -284,3 +284,10 @@ Entrega preservada:68b5ab8cfba1914d03908cd32301f5dcc35233ac, árvore4b72d9719218
 ## Provas reais e próximo lote espacial,12/10/2026
 
 [Provas](e06_pilot_execution.md):08 procs exclusivos por habilidades reais com/comsem receita, captura em voo preservada. Whitelist obsoleta de Contraforte corrigida somente no ID da arma. Luna7/198 PASS, real128 checks e regressões; recibo DF08C9795B2CF32D9BC8FCB78E201A45C6961C963659BEDAC60E680E66C7EB31, logs recuperados/conferidos. Catálogo/digest/flavor não mudaram,20 direções táticas continuam pendentes. Usuário escolheu [eco e vértices fixos](e06_spatial_policies.md); demais quatro propostas não autorizadas.
+
+
+## Primeiro lote espacial entregue, 12/10/2026
+
+[Eco e vértices fixos](e06_spatial_policies.md) ENTREGUES / VALIDADOS TECNICAMENTE. Usuário autorizou somente essas duas transformações da proposta. Sol implementou a capacidade fechada, captura de onda/reserva e consumidores reais; Luna completou dois nomes/flavors e supervisionou a regressão. Seleção final 18/200 PASS; novos testes 123 + 153 checks. Sol conferiu os hashes de todos os logs e 65 Resources, além do manifesto de fontes. [Recibo](e06_spatial_validation.json), SHA256 A577ED233E6AB659A1A26722C37EFA54D0E63BD0BE0F639349C9B3F0CBA7D3D9. Não houve nova integral ou revisão Astra rotineira.
+
+[Prévia](../../../content/authoring/spatial_preview.md) e bundle separado de 65 receitas, com os 63 textos anteriores preservados. Duas comparações A recebem as políticas; as dez B permanecem sem elas. Vinte composições válidas não equivalem a vinte direções táticas concluídas. As quatro outras transformações, integração no catálogo ativo, progressão/rates, UI e playtest continuam posteriores. Não iniciar por efeito deste fechamento. Mesmo checkout isolado; preservar os logs até integração.

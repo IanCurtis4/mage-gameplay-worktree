@@ -172,6 +172,8 @@ static func _effect_text(effect: EffectDefinition) -> String:
 			for skill: StringName in effect.target_skill_ids: targets.append(_skill_name(skill))
 			text = "Ao acertar: bônus de %s de dano %s e %s%% proporcional; limite do bônus %s." % [_curve_text(effect), "físico" if effect.axis == &"physical_damage" else "mágico", _number(effect.increased * 100.0), _number(effect.limit)]
 			if not targets.is_empty(): text += " Apenas em acertos de %s." % ", ".join(targets)
+		EffectDefinition.Kind.KIT_RULE:
+			text = "Eco resolve no ponto onde o portador foi agendado, com espera, dano e alcance da habilidade." if effect.axis == &"echo_origin_fixed" else "Traçado e Triangulação fixam vértices no ponto do impacto, sem acompanhar o alvo."
 		EffectDefinition.Kind.ACTIVE_GRANT:
 			text = "Concede %s no rank %d; vale o maior rank disponível, com recarga compartilhada." % [_skill_name(effect.granted_skill_id), effect.granted_rank]
 	if not effect.target_skill_ids.is_empty(): text += " Requer rank %d na habilidade afetada." % effect.minimum_rank

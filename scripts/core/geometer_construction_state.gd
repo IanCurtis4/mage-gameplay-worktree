@@ -37,10 +37,10 @@ func preview_shot(point: Vector2, third: bool, triangle_rank: int, navigation: A
 	tokens.append(grammar.selected_element if element == &"" else element)
 	return _validate_candidate(points, tokens, triangle_rank, navigation)
 
-func reserve_shot(point: Vector2, actor_id: int, third: bool, triangle_rank: int, navigation: ArenaNavigation, vertex_duration: float = 8.0, figure_duration: float = 6.0, element: StringName = &"") -> int:
+func reserve_shot(point: Vector2, actor_id: int, third: bool, triangle_rank: int, navigation: ArenaNavigation, vertex_duration: float = 8.0, figure_duration: float = 6.0, element: StringName = &"", fixed_ground: bool = false) -> int:
 	if not _valid_durations(vertex_duration, figure_duration) or not preview_shot(point, third, triangle_rank, navigation, element)["ok"] or actor_id < 0:
 		return 0
-	return grammar.reserve(point, actor_id, vertices.size(), {"triangle_rank": triangle_rank, "vertex_duration": vertex_duration, "figure_duration": figure_duration}, 3.0, element)
+	return grammar.reserve(point, actor_id, vertices.size(), {"triangle_rank": triangle_rank, "vertex_duration": vertex_duration, "figure_duration": figure_duration, "fixed_ground": fixed_ground}, 3.0, element)
 
 func resolve_shot(ticket: int, success: bool, point: Vector2, alive_positions: Dictionary[int, Vector2], navigation: ArenaNavigation) -> Array[Dictionary]:
 	refresh(alive_positions, navigation)
@@ -51,7 +51,7 @@ func _commit_deliveries(deliveries: Array[Dictionary], alive_positions: Dictiona
 	for delivery: Dictionary in deliveries:
 		var result := {"ok": false, "reason": "Disparo perdido.", "ticket": delivery["ticket"], "formation": false}
 		if bool(delivery["success"]):
-			var carrier_id := int(delivery["actor_id"])
+			var carrier_id := 0 if bool(delivery["context"].get("fixed_ground", false)) else int(delivery["actor_id"])
 			var point: Vector2 = delivery["point"]
 			# A successful impact waiting for earlier shots may outlive its carrier.
 			# Queued impacts retain their latest valid ground and elapsed lifetime.

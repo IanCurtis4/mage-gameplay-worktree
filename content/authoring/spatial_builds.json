@@ -1,0 +1,3184 @@
+{
+	"comparisons": [
+		{
+			"action_slots": [
+				"slash",
+				"brutal_strike",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "swordsman",
+			"base_level": 30,
+			"branch": "A",
+			"composition_valid": true,
+			"effective_ranks": {
+				"brutal_strike": 1,
+				"slash": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "riposte_blade",
+				"neck": "pilot_step_neck",
+				"off_hand": "pilot_shield",
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "",
+			"identity": "swordsman",
+			"inactive": [],
+			"job_level": 20,
+			"kit_policies": {},
+			"procs": [
+				{
+					"axis": "physical_damage",
+					"family_id": "pilot_blade_hit",
+					"flat": 4.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 4.0,
+							"increased": 0.0,
+							"source_id": "equipment:main_hand:pilot_instance_main_hand",
+							"weapon_instance_id": "pilot_instance_main_hand"
+						}
+					],
+					"source_id": "equipment:main_hand:pilot_instance_main_hand",
+					"targets": [],
+					"trigger": 1
+				},
+				{
+					"axis": "magic_damage",
+					"family_id": "pilot_card_hit",
+					"flat": 2.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 2.0,
+							"increased": 0.0,
+							"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+					"targets": [],
+					"trigger": 1
+				},
+				{
+					"axis": "physical_damage",
+					"family_id": "pilot_swordsman_pressure_effect",
+					"flat": 6.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 6.0,
+							"increased": 0.0,
+							"source_id": "augment:pilot_swordsman_pressure",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "augment:pilot_swordsman_pressure",
+					"targets": [],
+					"trigger": 1
+				}
+			],
+			"purchased_ranks": {
+				"brutal_strike": 1,
+				"slash": 1
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"pilot_swordsman_pressure": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"brutal_strike": {
+					"cooldown": 8.0,
+					"projectile_count": 1,
+					"range": 110.0,
+					"sp_cost": 20.0
+				},
+				"slash": {
+					"cooldown": 4.0,
+					"projectile_count": 1,
+					"range": 155.0,
+					"sp_cost": 15.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 5.0,
+				"attack_speed_index": 110.0,
+				"attacks_per_second": 1.1,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.0585,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 5.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 137.9,
+				"hit_rating": 143.4,
+				"hp_regen": 1.1,
+				"int": 2.0,
+				"luk": 2.0,
+				"magic_attack": 16.0,
+				"magic_cc_resistance": 0.004,
+				"magic_defense": 12.0,
+				"max_hp": 511.2,
+				"max_sp": 143.0,
+				"melee_attack": 28.0,
+				"move_speed": 226.0,
+				"physical_cc_resistance": 0.016,
+				"physical_defense": 35.0,
+				"precision_attack": 23.2,
+				"sp_regen": 2.24,
+				"str": 8.0,
+				"variable_cast_multiplier": 0.983,
+				"vit": 8.0
+			},
+			"tactical_validated": false
+		},
+		{
+			"action_slots": [
+				"shield_wall",
+				"provoke",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "swordsman",
+			"base_level": 30,
+			"branch": "B",
+			"composition_valid": true,
+			"effective_ranks": {
+				"provoke": 1,
+				"shield_wall": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "starter_blade",
+				"neck": "pilot_step_neck",
+				"off_hand": "pilot_shield",
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "",
+			"identity": "swordsman",
+			"inactive": [],
+			"job_level": 20,
+			"kit_policies": {},
+			"procs": [],
+			"purchased_ranks": {
+				"provoke": 1,
+				"shield_wall": 1
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"pilot_swordsman_reserve": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"provoke": {
+					"cooldown": 10.0,
+					"projectile_count": 1,
+					"range": 300.0,
+					"sp_cost": 14.0
+				},
+				"shield_wall": {
+					"cooldown": 12.0,
+					"projectile_count": 1,
+					"range": 34.0,
+					"sp_cost": 18.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 5.0,
+				"attack_speed_index": 110.0,
+				"attacks_per_second": 1.1,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.0585,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 5.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 137.9,
+				"hit_rating": 143.4,
+				"hp_regen": 1.1,
+				"int": 2.0,
+				"luk": 2.0,
+				"magic_attack": 16.0,
+				"magic_cc_resistance": 0.004,
+				"magic_defense": 12.0,
+				"max_hp": 511.2,
+				"max_sp": 149.0,
+				"melee_attack": 30.0,
+				"move_speed": 226.0,
+				"physical_cc_resistance": 0.016,
+				"physical_defense": 37.0,
+				"precision_attack": 23.2,
+				"sp_regen": 2.24,
+				"str": 8.0,
+				"variable_cast_multiplier": 0.983,
+				"vit": 8.0
+			},
+			"tactical_validated": false
+		},
+		{
+			"action_slots": [
+				"fire_spear",
+				"ice_spear",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "mage",
+			"base_level": 30,
+			"branch": "A",
+			"composition_valid": true,
+			"effective_ranks": {
+				"fire_spear": 1,
+				"ice_spear": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "ember_staff",
+				"neck": "pilot_step_neck",
+				"off_hand": null,
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "",
+			"identity": "mage",
+			"inactive": [],
+			"job_level": 20,
+			"kit_policies": {},
+			"procs": [
+				{
+					"axis": "magic_damage",
+					"family_id": "pilot_card_hit",
+					"flat": 2.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 2.0,
+							"increased": 0.0,
+							"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+					"targets": [],
+					"trigger": 1
+				},
+				{
+					"axis": "magic_damage",
+					"family_id": "pilot_mage_pressure_effect",
+					"flat": 6.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 6.0,
+							"increased": 0.0,
+							"source_id": "augment:pilot_mage_pressure",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "augment:pilot_mage_pressure",
+					"targets": [],
+					"trigger": 1
+				}
+			],
+			"purchased_ranks": {
+				"fire_spear": 1,
+				"ice_spear": 1
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"pilot_mage_pressure": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"fire_spear": {
+					"cooldown": 3.0,
+					"projectile_count": 2,
+					"range": 360.0,
+					"sp_cost": 16.0
+				},
+				"ice_spear": {
+					"cooldown": 3.0,
+					"projectile_count": 1,
+					"range": 360.0,
+					"sp_cost": 14.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 5.0,
+				"attack_speed_index": 111.0,
+				"attacks_per_second": 1.11,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.0595,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 7.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 137.9,
+				"hit_rating": 147.4,
+				"hp_regen": 0.95,
+				"int": 9.0,
+				"luk": 2.0,
+				"magic_attack": 31.3,
+				"magic_cc_resistance": 0.018,
+				"magic_defense": 24.5,
+				"max_hp": 475.2,
+				"max_sp": 178.0,
+				"melee_attack": 16.8,
+				"move_speed": 226.0,
+				"physical_cc_resistance": 0.01,
+				"physical_defense": 23.0,
+				"precision_attack": 24.8,
+				"sp_regen": 3.28,
+				"str": 2.0,
+				"variable_cast_multiplier": 0.97,
+				"vit": 5.0
+			},
+			"tactical_validated": false
+		},
+		{
+			"action_slots": [
+				"fire_wall",
+				"ice_wall",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "mage",
+			"base_level": 30,
+			"branch": "B",
+			"composition_valid": true,
+			"effective_ranks": {
+				"fire_wall": 1,
+				"ice_wall": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "pilot_wand",
+				"neck": "pilot_step_neck",
+				"off_hand": "pilot_focus",
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "",
+			"identity": "mage",
+			"inactive": [],
+			"job_level": 20,
+			"kit_policies": {},
+			"procs": [],
+			"purchased_ranks": {
+				"fire_wall": 1,
+				"ice_wall": 1
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"pilot_mage_reserve": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"fire_wall": {
+					"cooldown": 7.0,
+					"projectile_count": 1,
+					"range": 180.0,
+					"sp_cost": 24.0
+				},
+				"ice_wall": {
+					"cooldown": 9.0,
+					"projectile_count": 1,
+					"range": 200.0,
+					"sp_cost": 22.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 5.0,
+				"attack_speed_index": 111.0,
+				"attacks_per_second": 1.11,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.0595,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 7.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 137.9,
+				"hit_rating": 147.4,
+				"hp_regen": 0.95,
+				"int": 11.0,
+				"luk": 2.0,
+				"magic_attack": 37.05,
+				"magic_cc_resistance": 0.022,
+				"magic_defense": 30.5,
+				"max_hp": 475.2,
+				"max_sp": 199.0,
+				"melee_attack": 16.8,
+				"move_speed": 226.0,
+				"physical_cc_resistance": 0.01,
+				"physical_defense": 25.0,
+				"precision_attack": 24.8,
+				"sp_regen": 3.52,
+				"str": 2.0,
+				"variable_cast_multiplier": 0.968,
+				"vit": 5.0
+			},
+			"tactical_validated": false
+		},
+		{
+			"action_slots": [
+				"double_shot",
+				"piercing_arrow",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "archer",
+			"base_level": 30,
+			"branch": "A",
+			"composition_valid": true,
+			"effective_ranks": {
+				"double_shot": 1,
+				"piercing_arrow": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "hunters_bow",
+				"neck": "pilot_step_neck",
+				"off_hand": null,
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "",
+			"identity": "archer",
+			"inactive": [],
+			"job_level": 20,
+			"kit_policies": {},
+			"procs": [
+				{
+					"axis": "physical_damage",
+					"family_id": "pilot_archer_pressure_effect",
+					"flat": 6.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 6.0,
+							"increased": 0.0,
+							"source_id": "augment:pilot_archer_pressure",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "augment:pilot_archer_pressure",
+					"targets": [],
+					"trigger": 1
+				},
+				{
+					"axis": "physical_damage",
+					"family_id": "pilot_bow_hit",
+					"flat": 4.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 4.0,
+							"increased": 0.0,
+							"source_id": "equipment:main_hand:pilot_instance_main_hand",
+							"weapon_instance_id": "pilot_instance_main_hand"
+						}
+					],
+					"source_id": "equipment:main_hand:pilot_instance_main_hand",
+					"targets": [],
+					"trigger": 1
+				},
+				{
+					"axis": "magic_damage",
+					"family_id": "pilot_card_hit",
+					"flat": 2.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 2.0,
+							"increased": 0.0,
+							"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+					"targets": [],
+					"trigger": 1
+				}
+			],
+			"purchased_ranks": {
+				"double_shot": 1,
+				"piercing_arrow": 1
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"pilot_archer_pressure": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"double_shot": {
+					"cooldown": 4.0,
+					"projectile_count": 2,
+					"range": 520.0,
+					"sp_cost": 14.0
+				},
+				"piercing_arrow": {
+					"cooldown": 5.0,
+					"projectile_count": 1,
+					"range": 600.0,
+					"sp_cost": 18.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 7.0,
+				"attack_speed_index": 115.5,
+				"attacks_per_second": 1.155,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.064,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 10.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 141.1,
+				"hit_rating": 155.6,
+				"hp_regen": 0.95,
+				"int": 2.0,
+				"luk": 3.0,
+				"magic_attack": 18.0,
+				"magic_cc_resistance": 0.004,
+				"magic_defense": 10.5,
+				"max_hp": 475.2,
+				"max_sp": 143.0,
+				"melee_attack": 20.0,
+				"move_speed": 226.0,
+				"physical_cc_resistance": 0.01,
+				"physical_defense": 23.5,
+				"precision_attack": 32.2,
+				"sp_regen": 2.24,
+				"str": 3.0,
+				"variable_cast_multiplier": 0.958,
+				"vit": 5.0
+			},
+			"tactical_validated": false
+		},
+		{
+			"action_slots": [
+				"snare_trap",
+				"explosive_trap",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "archer",
+			"base_level": 30,
+			"branch": "B",
+			"composition_valid": true,
+			"effective_ranks": {
+				"explosive_trap": 1,
+				"snare_trap": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "starter_bow",
+				"neck": "pilot_step_neck",
+				"off_hand": null,
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "",
+			"identity": "archer",
+			"inactive": [],
+			"job_level": 20,
+			"kit_policies": {},
+			"procs": [],
+			"purchased_ranks": {
+				"explosive_trap": 1,
+				"snare_trap": 1
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"pilot_archer_reserve": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"explosive_trap": {
+					"cooldown": 9.0,
+					"projectile_count": 1,
+					"range": 360.0,
+					"sp_cost": 20.0
+				},
+				"snare_trap": {
+					"cooldown": 8.0,
+					"projectile_count": 1,
+					"range": 360.0,
+					"sp_cost": 18.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 7.0,
+				"attack_speed_index": 115.5,
+				"attacks_per_second": 1.155,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.064,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 10.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 141.1,
+				"hit_rating": 155.6,
+				"hp_regen": 0.95,
+				"int": 2.0,
+				"luk": 3.0,
+				"magic_attack": 18.0,
+				"magic_cc_resistance": 0.004,
+				"magic_defense": 10.5,
+				"max_hp": 475.2,
+				"max_sp": 149.0,
+				"melee_attack": 20.0,
+				"move_speed": 226.0,
+				"physical_cc_resistance": 0.01,
+				"physical_defense": 25.5,
+				"precision_attack": 34.2,
+				"sp_regen": 2.24,
+				"str": 3.0,
+				"variable_cast_multiplier": 0.958,
+				"vit": 5.0
+			},
+			"tactical_validated": false
+		},
+		{
+			"action_slots": [
+				"defender_counterstroke",
+				"defender_reprisal_wave",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "swordsman",
+			"base_level": 30,
+			"branch": "A",
+			"composition_valid": true,
+			"effective_ranks": {
+				"defender_counterstroke": 1,
+				"defender_reprisal_wave": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "riposte_blade",
+				"neck": "pilot_step_neck",
+				"off_hand": "pilot_shield",
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "defender",
+			"identity": "defender",
+			"inactive": [],
+			"job_level": 40,
+			"kit_policies": {},
+			"procs": [
+				{
+					"axis": "physical_damage",
+					"family_id": "pilot_blade_hit",
+					"flat": 4.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 4.0,
+							"increased": 0.0,
+							"source_id": "equipment:main_hand:pilot_instance_main_hand",
+							"weapon_instance_id": "pilot_instance_main_hand"
+						}
+					],
+					"source_id": "equipment:main_hand:pilot_instance_main_hand",
+					"targets": [],
+					"trigger": 1
+				},
+				{
+					"axis": "magic_damage",
+					"family_id": "pilot_card_hit",
+					"flat": 2.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 2.0,
+							"increased": 0.0,
+							"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+					"targets": [],
+					"trigger": 1
+				},
+				{
+					"axis": "physical_damage",
+					"family_id": "pilot_defender_a_effect",
+					"flat": 6.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 6.0,
+							"increased": 0.0,
+							"source_id": "augment:pilot_defender_a",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "augment:pilot_defender_a",
+					"targets": [
+						"defender_counterstroke"
+					],
+					"trigger": 1
+				},
+				{
+					"axis": "physical_damage",
+					"family_id": "pilot_swordsman_pressure_effect",
+					"flat": 6.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 6.0,
+							"increased": 0.0,
+							"source_id": "augment:pilot_swordsman_pressure",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "augment:pilot_swordsman_pressure",
+					"targets": [],
+					"trigger": 1
+				}
+			],
+			"purchased_ranks": {
+				"defender_counterstroke": 0,
+				"defender_reprisal_wave": 1
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"pilot_defender_a": 1,
+					"pilot_swordsman_pressure": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"defender_counterstroke": {
+					"cooldown": 6.0,
+					"projectile_count": 1,
+					"range": 120.0,
+					"sp_cost": 16.0
+				},
+				"defender_reprisal_wave": {
+					"cooldown": 12.0,
+					"projectile_count": 1,
+					"range": 130.0,
+					"sp_cost": 24.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 5.0,
+				"attack_speed_index": 110.0,
+				"attacks_per_second": 1.1,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.0585,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 5.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 137.9,
+				"hit_rating": 143.4,
+				"hp_regen": 1.1,
+				"int": 2.0,
+				"luk": 2.0,
+				"magic_attack": 16.0,
+				"magic_cc_resistance": 0.004,
+				"magic_defense": 12.0,
+				"max_hp": 511.2,
+				"max_sp": 143.0,
+				"melee_attack": 28.0,
+				"move_speed": 226.0,
+				"physical_cc_resistance": 0.016,
+				"physical_defense": 35.0,
+				"precision_attack": 23.2,
+				"sp_regen": 2.24,
+				"str": 8.0,
+				"variable_cast_multiplier": 0.983,
+				"vit": 8.0
+			},
+			"tactical_validated": false
+		},
+		{
+			"action_slots": [
+				"defender_line_lock",
+				"defender_anchor",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "swordsman",
+			"base_level": 30,
+			"branch": "B",
+			"composition_valid": true,
+			"effective_ranks": {
+				"defender_anchor": 1,
+				"defender_counterstroke": 1,
+				"defender_line_lock": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "starter_blade",
+				"neck": "pilot_step_neck",
+				"off_hand": "pilot_shield",
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "defender",
+			"identity": "defender",
+			"inactive": [],
+			"job_level": 40,
+			"kit_policies": {},
+			"procs": [
+				{
+					"axis": "physical_damage",
+					"family_id": "pilot_defender_b_effect",
+					"flat": 6.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 6.0,
+							"increased": 0.0,
+							"source_id": "augment:pilot_defender_b",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "augment:pilot_defender_b",
+					"targets": [
+						"defender_line_lock"
+					],
+					"trigger": 1
+				}
+			],
+			"purchased_ranks": {
+				"defender_anchor": 1,
+				"defender_line_lock": 1
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"pilot_defender_b": 1,
+					"pilot_swordsman_reserve": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"defender_anchor": {
+					"cooldown": 12.0,
+					"projectile_count": 1,
+					"range": 150.0,
+					"sp_cost": 20.0
+				},
+				"defender_counterstroke": {
+					"cooldown": 6.0,
+					"projectile_count": 1,
+					"range": 120.0,
+					"sp_cost": 16.0
+				},
+				"defender_line_lock": {
+					"cooldown": 9.0,
+					"projectile_count": 1,
+					"range": 170.0,
+					"sp_cost": 18.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 5.0,
+				"attack_speed_index": 110.0,
+				"attacks_per_second": 1.1,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.0585,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 5.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 137.9,
+				"hit_rating": 143.4,
+				"hp_regen": 1.1,
+				"int": 2.0,
+				"luk": 2.0,
+				"magic_attack": 16.0,
+				"magic_cc_resistance": 0.004,
+				"magic_defense": 12.0,
+				"max_hp": 511.2,
+				"max_sp": 149.0,
+				"melee_attack": 30.0,
+				"move_speed": 226.0,
+				"physical_cc_resistance": 0.016,
+				"physical_defense": 37.0,
+				"precision_attack": 23.2,
+				"sp_regen": 2.24,
+				"str": 8.0,
+				"variable_cast_multiplier": 0.983,
+				"vit": 8.0
+			},
+			"tactical_validated": false
+		},
+		{
+			"action_slots": [
+				"berserker_rupture",
+				"berserker_blood_rift",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "swordsman",
+			"base_level": 30,
+			"branch": "A",
+			"composition_valid": true,
+			"effective_ranks": {
+				"berserker_blood_rift": 1,
+				"berserker_rupture": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "riposte_blade",
+				"neck": "pilot_step_neck",
+				"off_hand": "pilot_shield",
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "berserker",
+			"identity": "berserker",
+			"inactive": [],
+			"job_level": 40,
+			"kit_policies": {},
+			"procs": [
+				{
+					"axis": "physical_damage",
+					"family_id": "pilot_berserker_a_effect",
+					"flat": 6.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 6.0,
+							"increased": 0.0,
+							"source_id": "augment:pilot_berserker_a",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "augment:pilot_berserker_a",
+					"targets": [
+						"berserker_rupture"
+					],
+					"trigger": 1
+				},
+				{
+					"axis": "physical_damage",
+					"family_id": "pilot_blade_hit",
+					"flat": 4.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 4.0,
+							"increased": 0.0,
+							"source_id": "equipment:main_hand:pilot_instance_main_hand",
+							"weapon_instance_id": "pilot_instance_main_hand"
+						}
+					],
+					"source_id": "equipment:main_hand:pilot_instance_main_hand",
+					"targets": [],
+					"trigger": 1
+				},
+				{
+					"axis": "magic_damage",
+					"family_id": "pilot_card_hit",
+					"flat": 2.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 2.0,
+							"increased": 0.0,
+							"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+					"targets": [],
+					"trigger": 1
+				},
+				{
+					"axis": "physical_damage",
+					"family_id": "pilot_swordsman_pressure_effect",
+					"flat": 6.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 6.0,
+							"increased": 0.0,
+							"source_id": "augment:pilot_swordsman_pressure",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "augment:pilot_swordsman_pressure",
+					"targets": [],
+					"trigger": 1
+				}
+			],
+			"purchased_ranks": {
+				"berserker_blood_rift": 1,
+				"berserker_rupture": 0
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"pilot_berserker_a": 1,
+					"pilot_swordsman_pressure": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"berserker_blood_rift": {
+					"cooldown": 9.0,
+					"projectile_count": 1,
+					"range": 220.0,
+					"sp_cost": 21.0
+				},
+				"berserker_rupture": {
+					"cooldown": 5.0,
+					"projectile_count": 1,
+					"range": 110.0,
+					"sp_cost": 17.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 5.0,
+				"attack_speed_index": 110.0,
+				"attacks_per_second": 1.1,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.0585,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 5.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 137.9,
+				"hit_rating": 143.4,
+				"hp_regen": 1.1,
+				"int": 2.0,
+				"luk": 2.0,
+				"magic_attack": 16.0,
+				"magic_cc_resistance": 0.004,
+				"magic_defense": 12.0,
+				"max_hp": 511.2,
+				"max_sp": 143.0,
+				"melee_attack": 28.0,
+				"move_speed": 226.0,
+				"physical_cc_resistance": 0.016,
+				"physical_defense": 35.0,
+				"precision_attack": 23.2,
+				"sp_regen": 2.24,
+				"str": 8.0,
+				"variable_cast_multiplier": 0.983,
+				"vit": 8.0
+			},
+			"tactical_validated": false
+		},
+		{
+			"action_slots": [
+				"berserker_execution",
+				"berserker_wound_leap",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "swordsman",
+			"base_level": 30,
+			"branch": "B",
+			"composition_valid": true,
+			"effective_ranks": {
+				"berserker_execution": 1,
+				"berserker_rupture": 1,
+				"berserker_wound_leap": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "starter_blade",
+				"neck": "pilot_step_neck",
+				"off_hand": "pilot_shield",
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "berserker",
+			"identity": "berserker",
+			"inactive": [],
+			"job_level": 40,
+			"kit_policies": {},
+			"procs": [
+				{
+					"axis": "physical_damage",
+					"family_id": "pilot_berserker_b_effect",
+					"flat": 6.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 6.0,
+							"increased": 0.0,
+							"source_id": "augment:pilot_berserker_b",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "augment:pilot_berserker_b",
+					"targets": [
+						"berserker_execution"
+					],
+					"trigger": 1
+				}
+			],
+			"purchased_ranks": {
+				"berserker_execution": 1,
+				"berserker_wound_leap": 1
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"pilot_berserker_b": 1,
+					"pilot_swordsman_reserve": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"berserker_execution": {
+					"cooldown": 9.0,
+					"projectile_count": 1,
+					"range": 110.0,
+					"sp_cost": 22.0
+				},
+				"berserker_rupture": {
+					"cooldown": 5.0,
+					"projectile_count": 1,
+					"range": 110.0,
+					"sp_cost": 17.0
+				},
+				"berserker_wound_leap": {
+					"cooldown": 8.0,
+					"projectile_count": 1,
+					"range": 140.0,
+					"sp_cost": 18.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 5.0,
+				"attack_speed_index": 110.0,
+				"attacks_per_second": 1.1,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.0585,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 5.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 137.9,
+				"hit_rating": 143.4,
+				"hp_regen": 1.1,
+				"int": 2.0,
+				"luk": 2.0,
+				"magic_attack": 16.0,
+				"magic_cc_resistance": 0.004,
+				"magic_defense": 12.0,
+				"max_hp": 511.2,
+				"max_sp": 149.0,
+				"melee_attack": 30.0,
+				"move_speed": 226.0,
+				"physical_cc_resistance": 0.016,
+				"physical_defense": 37.0,
+				"precision_attack": 23.2,
+				"sp_regen": 2.24,
+				"str": 8.0,
+				"variable_cast_multiplier": 0.983,
+				"vit": 8.0
+			},
+			"tactical_validated": false
+		},
+		{
+			"action_slots": [
+				"elementalist_flame_burst",
+				"elementalist_lightning_arc",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "mage",
+			"base_level": 30,
+			"branch": "A",
+			"composition_valid": true,
+			"effective_ranks": {
+				"elementalist_flame_burst": 1,
+				"elementalist_lightning_arc": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "pilot_wand",
+				"neck": "pilot_step_neck",
+				"off_hand": "pilot_focus",
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "elementalist",
+			"identity": "elementalist",
+			"inactive": [],
+			"job_level": 40,
+			"kit_policies": {},
+			"procs": [
+				{
+					"axis": "magic_damage",
+					"family_id": "pilot_card_hit",
+					"flat": 2.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 2.0,
+							"increased": 0.0,
+							"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+					"targets": [],
+					"trigger": 1
+				},
+				{
+					"axis": "magic_damage",
+					"family_id": "pilot_elementalist_a_effect",
+					"flat": 6.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 6.0,
+							"increased": 0.0,
+							"source_id": "augment:pilot_elementalist_a",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "augment:pilot_elementalist_a",
+					"targets": [
+						"elementalist_flame_burst"
+					],
+					"trigger": 1
+				},
+				{
+					"axis": "magic_damage",
+					"family_id": "pilot_mage_pressure_effect",
+					"flat": 6.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 6.0,
+							"increased": 0.0,
+							"source_id": "augment:pilot_mage_pressure",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "augment:pilot_mage_pressure",
+					"targets": [],
+					"trigger": 1
+				}
+			],
+			"purchased_ranks": {
+				"elementalist_flame_burst": 0,
+				"elementalist_lightning_arc": 1
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"pilot_elementalist_a": 1,
+					"pilot_mage_pressure": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"elementalist_flame_burst": {
+					"cooldown": 6.0,
+					"projectile_count": 1,
+					"range": 380.0,
+					"sp_cost": 20.0
+				},
+				"elementalist_lightning_arc": {
+					"cooldown": 8.0,
+					"projectile_count": 1,
+					"range": 380.0,
+					"sp_cost": 22.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 5.0,
+				"attack_speed_index": 111.0,
+				"attacks_per_second": 1.11,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.0595,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 7.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 137.9,
+				"hit_rating": 147.4,
+				"hp_regen": 0.95,
+				"int": 11.0,
+				"luk": 2.0,
+				"magic_attack": 37.05,
+				"magic_cc_resistance": 0.022,
+				"magic_defense": 30.5,
+				"max_hp": 475.2,
+				"max_sp": 193.0,
+				"melee_attack": 16.8,
+				"move_speed": 226.0,
+				"physical_cc_resistance": 0.01,
+				"physical_defense": 23.0,
+				"precision_attack": 24.8,
+				"sp_regen": 3.52,
+				"str": 2.0,
+				"variable_cast_multiplier": 0.968,
+				"vit": 5.0
+			},
+			"tactical_validated": false
+		},
+		{
+			"action_slots": [
+				"elementalist_glacial_ring",
+				"elementalist_ember_path",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "mage",
+			"base_level": 30,
+			"branch": "B",
+			"composition_valid": true,
+			"effective_ranks": {
+				"elementalist_ember_path": 1,
+				"elementalist_flame_burst": 1,
+				"elementalist_glacial_ring": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "pilot_wand",
+				"neck": "pilot_step_neck",
+				"off_hand": "pilot_focus",
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "elementalist",
+			"identity": "elementalist",
+			"inactive": [],
+			"job_level": 40,
+			"kit_policies": {},
+			"procs": [
+				{
+					"axis": "magic_damage",
+					"family_id": "pilot_elementalist_b_effect",
+					"flat": 6.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 6.0,
+							"increased": 0.0,
+							"source_id": "augment:pilot_elementalist_b",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "augment:pilot_elementalist_b",
+					"targets": [
+						"elementalist_glacial_ring"
+					],
+					"trigger": 1
+				}
+			],
+			"purchased_ranks": {
+				"elementalist_ember_path": 1,
+				"elementalist_glacial_ring": 1
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"pilot_elementalist_b": 1,
+					"pilot_mage_reserve": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"elementalist_ember_path": {
+					"cooldown": 10.0,
+					"projectile_count": 1,
+					"range": 240.0,
+					"sp_cost": 24.0
+				},
+				"elementalist_flame_burst": {
+					"cooldown": 6.0,
+					"projectile_count": 1,
+					"range": 380.0,
+					"sp_cost": 20.0
+				},
+				"elementalist_glacial_ring": {
+					"cooldown": 8.0,
+					"projectile_count": 1,
+					"range": 145.0,
+					"sp_cost": 19.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 5.0,
+				"attack_speed_index": 111.0,
+				"attacks_per_second": 1.11,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.0595,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 7.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 137.9,
+				"hit_rating": 147.4,
+				"hp_regen": 0.95,
+				"int": 11.0,
+				"luk": 2.0,
+				"magic_attack": 37.05,
+				"magic_cc_resistance": 0.022,
+				"magic_defense": 30.5,
+				"max_hp": 475.2,
+				"max_sp": 199.0,
+				"melee_attack": 16.8,
+				"move_speed": 226.0,
+				"physical_cc_resistance": 0.01,
+				"physical_defense": 25.0,
+				"precision_attack": 24.8,
+				"sp_regen": 3.52,
+				"str": 2.0,
+				"variable_cast_multiplier": 0.968,
+				"vit": 5.0
+			},
+			"tactical_validated": false
+		},
+		{
+			"action_slots": [
+				"spiritualist_echo_curse",
+				"spiritualist_procession",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "mage",
+			"base_level": 30,
+			"branch": "A",
+			"composition_valid": true,
+			"effective_ranks": {
+				"spiritualist_echo_curse": 1,
+				"spiritualist_procession": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "pilot_wand",
+				"neck": "pilot_step_neck",
+				"off_hand": "pilot_focus",
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "spiritualist",
+			"identity": "spiritualist",
+			"inactive": [],
+			"job_level": 40,
+			"kit_policies": {
+				"echo_origin_fixed": true
+			},
+			"procs": [
+				{
+					"axis": "magic_damage",
+					"family_id": "pilot_card_hit",
+					"flat": 2.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 2.0,
+							"increased": 0.0,
+							"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+					"targets": [],
+					"trigger": 1
+				},
+				{
+					"axis": "magic_damage",
+					"family_id": "pilot_mage_pressure_effect",
+					"flat": 6.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 6.0,
+							"increased": 0.0,
+							"source_id": "augment:pilot_mage_pressure",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "augment:pilot_mage_pressure",
+					"targets": [],
+					"trigger": 1
+				}
+			],
+			"purchased_ranks": {
+				"spiritualist_echo_curse": 0,
+				"spiritualist_procession": 1
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"pilot_mage_pressure": 1,
+					"pilot_spiritualist_a": 1,
+					"spiritualist_echo_fixed_origin": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"spiritualist_echo_curse": {
+					"cooldown": 6.0,
+					"projectile_count": 1,
+					"range": 380.0,
+					"sp_cost": 18.0
+				},
+				"spiritualist_procession": {
+					"cooldown": 10.0,
+					"projectile_count": 1,
+					"range": 380.0,
+					"sp_cost": 24.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 5.0,
+				"attack_speed_index": 111.0,
+				"attacks_per_second": 1.11,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.0595,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 7.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 137.9,
+				"hit_rating": 147.4,
+				"hp_regen": 0.95,
+				"int": 11.0,
+				"luk": 2.0,
+				"magic_attack": 37.05,
+				"magic_cc_resistance": 0.022,
+				"magic_defense": 30.5,
+				"max_hp": 475.2,
+				"max_sp": 199.0,
+				"melee_attack": 16.8,
+				"move_speed": 226.0,
+				"physical_cc_resistance": 0.01,
+				"physical_defense": 23.0,
+				"precision_attack": 24.8,
+				"sp_regen": 3.52,
+				"str": 2.0,
+				"variable_cast_multiplier": 0.968,
+				"vit": 5.0
+			},
+			"tactical_validated": false
+		},
+		{
+			"action_slots": [
+				"spiritualist_soul_drain",
+				"spiritualist_spectral_veil",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "mage",
+			"base_level": 30,
+			"branch": "B",
+			"composition_valid": true,
+			"effective_ranks": {
+				"spiritualist_echo_curse": 1,
+				"spiritualist_soul_drain": 1,
+				"spiritualist_spectral_veil": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "pilot_wand",
+				"neck": "pilot_step_neck",
+				"off_hand": "pilot_focus",
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "spiritualist",
+			"identity": "spiritualist",
+			"inactive": [],
+			"job_level": 40,
+			"kit_policies": {},
+			"procs": [],
+			"purchased_ranks": {
+				"spiritualist_soul_drain": 1,
+				"spiritualist_spectral_veil": 1
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"pilot_mage_reserve": 1,
+					"pilot_spiritualist_b": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"spiritualist_echo_curse": {
+					"cooldown": 6.0,
+					"projectile_count": 1,
+					"range": 380.0,
+					"sp_cost": 18.0
+				},
+				"spiritualist_soul_drain": {
+					"cooldown": 10.0,
+					"projectile_count": 1,
+					"range": 350.0,
+					"sp_cost": 22.0
+				},
+				"spiritualist_spectral_veil": {
+					"cooldown": 12.0,
+					"projectile_count": 1,
+					"range": 250.0,
+					"sp_cost": 20.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 5.0,
+				"attack_speed_index": 111.0,
+				"attacks_per_second": 1.11,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.0595,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 7.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 137.9,
+				"hit_rating": 147.4,
+				"hp_regen": 0.95,
+				"int": 11.0,
+				"luk": 2.0,
+				"magic_attack": 37.05,
+				"magic_cc_resistance": 0.022,
+				"magic_defense": 32.5,
+				"max_hp": 475.2,
+				"max_sp": 199.0,
+				"melee_attack": 16.8,
+				"move_speed": 226.0,
+				"physical_cc_resistance": 0.01,
+				"physical_defense": 25.0,
+				"precision_attack": 24.8,
+				"sp_regen": 3.52,
+				"str": 2.0,
+				"variable_cast_multiplier": 0.968,
+				"vit": 5.0
+			},
+			"tactical_validated": false
+		},
+		{
+			"action_slots": [
+				"sentinel_headshot",
+				"sentinel_piercing_shot",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "archer",
+			"base_level": 30,
+			"branch": "A",
+			"composition_valid": true,
+			"effective_ranks": {
+				"sentinel_headshot": 1,
+				"sentinel_piercing_shot": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "hunters_bow",
+				"neck": "pilot_step_neck",
+				"off_hand": null,
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "sentinel",
+			"identity": "sentinel",
+			"inactive": [],
+			"job_level": 40,
+			"kit_policies": {},
+			"procs": [
+				{
+					"axis": "physical_damage",
+					"family_id": "pilot_archer_pressure_effect",
+					"flat": 6.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 6.0,
+							"increased": 0.0,
+							"source_id": "augment:pilot_archer_pressure",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "augment:pilot_archer_pressure",
+					"targets": [],
+					"trigger": 1
+				},
+				{
+					"axis": "physical_damage",
+					"family_id": "pilot_bow_hit",
+					"flat": 4.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 4.0,
+							"increased": 0.0,
+							"source_id": "equipment:main_hand:pilot_instance_main_hand",
+							"weapon_instance_id": "pilot_instance_main_hand"
+						}
+					],
+					"source_id": "equipment:main_hand:pilot_instance_main_hand",
+					"targets": [],
+					"trigger": 1
+				},
+				{
+					"axis": "magic_damage",
+					"family_id": "pilot_card_hit",
+					"flat": 2.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 2.0,
+							"increased": 0.0,
+							"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+					"targets": [],
+					"trigger": 1
+				},
+				{
+					"axis": "physical_damage",
+					"family_id": "pilot_sentinel_a_effect",
+					"flat": 6.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 6.0,
+							"increased": 0.0,
+							"source_id": "augment:pilot_sentinel_a",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "augment:pilot_sentinel_a",
+					"targets": [
+						"sentinel_headshot"
+					],
+					"trigger": 1
+				}
+			],
+			"purchased_ranks": {
+				"sentinel_headshot": 0,
+				"sentinel_piercing_shot": 1
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"pilot_archer_pressure": 1,
+					"pilot_sentinel_a": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"sentinel_headshot": {
+					"cooldown": 6.0,
+					"projectile_count": 1,
+					"range": 340.0,
+					"sp_cost": 14.0
+				},
+				"sentinel_piercing_shot": {
+					"cooldown": 5.0,
+					"projectile_count": 1,
+					"range": 600.0,
+					"sp_cost": 16.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 7.0,
+				"attack_speed_index": 115.5,
+				"attacks_per_second": 1.155,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.064,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 10.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 141.1,
+				"hit_rating": 155.6,
+				"hp_regen": 0.95,
+				"int": 2.0,
+				"luk": 3.0,
+				"magic_attack": 18.0,
+				"magic_cc_resistance": 0.004,
+				"magic_defense": 10.5,
+				"max_hp": 475.2,
+				"max_sp": 143.0,
+				"melee_attack": 20.0,
+				"move_speed": 226.0,
+				"physical_cc_resistance": 0.01,
+				"physical_defense": 23.5,
+				"precision_attack": 32.2,
+				"sp_regen": 2.24,
+				"str": 3.0,
+				"variable_cast_multiplier": 0.958,
+				"vit": 5.0
+			},
+			"tactical_validated": false
+		},
+		{
+			"action_slots": [
+				"sentinel_net_shot",
+				"sentinel_concussion_shot",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "archer",
+			"base_level": 30,
+			"branch": "B",
+			"composition_valid": true,
+			"effective_ranks": {
+				"sentinel_concussion_shot": 1,
+				"sentinel_headshot": 1,
+				"sentinel_net_shot": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "starter_bow",
+				"neck": "pilot_step_neck",
+				"off_hand": null,
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "sentinel",
+			"identity": "sentinel",
+			"inactive": [],
+			"job_level": 40,
+			"kit_policies": {},
+			"procs": [
+				{
+					"axis": "physical_damage",
+					"family_id": "pilot_sentinel_b_effect",
+					"flat": 6.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 6.0,
+							"increased": 0.0,
+							"source_id": "augment:pilot_sentinel_b",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "augment:pilot_sentinel_b",
+					"targets": [
+						"sentinel_net_shot"
+					],
+					"trigger": 1
+				}
+			],
+			"purchased_ranks": {
+				"sentinel_concussion_shot": 1,
+				"sentinel_net_shot": 1
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"pilot_archer_reserve": 1,
+					"pilot_sentinel_b": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"sentinel_concussion_shot": {
+					"cooldown": 12.0,
+					"projectile_count": 1,
+					"range": 340.0,
+					"sp_cost": 12.0
+				},
+				"sentinel_headshot": {
+					"cooldown": 6.0,
+					"projectile_count": 1,
+					"range": 340.0,
+					"sp_cost": 14.0
+				},
+				"sentinel_net_shot": {
+					"cooldown": 10.0,
+					"projectile_count": 1,
+					"range": 340.0,
+					"sp_cost": 18.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 7.0,
+				"attack_speed_index": 115.5,
+				"attacks_per_second": 1.155,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.064,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 10.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 141.1,
+				"hit_rating": 155.6,
+				"hp_regen": 0.95,
+				"int": 2.0,
+				"luk": 3.0,
+				"magic_attack": 18.0,
+				"magic_cc_resistance": 0.004,
+				"magic_defense": 10.5,
+				"max_hp": 475.2,
+				"max_sp": 149.0,
+				"melee_attack": 20.0,
+				"move_speed": 226.0,
+				"physical_cc_resistance": 0.01,
+				"physical_defense": 25.5,
+				"precision_attack": 34.2,
+				"sp_regen": 2.24,
+				"str": 3.0,
+				"variable_cast_multiplier": 0.958,
+				"vit": 5.0
+			},
+			"tactical_validated": false
+		},
+		{
+			"action_slots": [
+				"hunter_freezing_trap",
+				"hunter_tar_trap",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "archer",
+			"base_level": 30,
+			"branch": "A",
+			"composition_valid": true,
+			"effective_ranks": {
+				"hunter_freezing_trap": 1,
+				"hunter_tar_trap": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "hunters_bow",
+				"neck": "pilot_step_neck",
+				"off_hand": null,
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "hunter",
+			"identity": "hunter",
+			"inactive": [],
+			"job_level": 40,
+			"kit_policies": {},
+			"procs": [
+				{
+					"axis": "physical_damage",
+					"family_id": "pilot_archer_pressure_effect",
+					"flat": 6.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 6.0,
+							"increased": 0.0,
+							"source_id": "augment:pilot_archer_pressure",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "augment:pilot_archer_pressure",
+					"targets": [],
+					"trigger": 1
+				},
+				{
+					"axis": "physical_damage",
+					"family_id": "pilot_bow_hit",
+					"flat": 4.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 4.0,
+							"increased": 0.0,
+							"source_id": "equipment:main_hand:pilot_instance_main_hand",
+							"weapon_instance_id": "pilot_instance_main_hand"
+						}
+					],
+					"source_id": "equipment:main_hand:pilot_instance_main_hand",
+					"targets": [],
+					"trigger": 1
+				},
+				{
+					"axis": "magic_damage",
+					"family_id": "pilot_card_hit",
+					"flat": 2.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 2.0,
+							"increased": 0.0,
+							"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+					"targets": [],
+					"trigger": 1
+				}
+			],
+			"purchased_ranks": {
+				"hunter_freezing_trap": 0,
+				"hunter_tar_trap": 1
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"pilot_archer_pressure": 1,
+					"pilot_hunter_a": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"hunter_freezing_trap": {
+					"cooldown": 7.0,
+					"projectile_count": 1,
+					"range": 360.0,
+					"sp_cost": 16.0
+				},
+				"hunter_tar_trap": {
+					"cooldown": 9.0,
+					"projectile_count": 1,
+					"range": 360.0,
+					"sp_cost": 16.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 7.0,
+				"attack_speed_index": 115.5,
+				"attacks_per_second": 1.155,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.064,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 10.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 141.1,
+				"hit_rating": 155.6,
+				"hp_regen": 0.95,
+				"int": 4.0,
+				"luk": 3.0,
+				"magic_attack": 22.0,
+				"magic_cc_resistance": 0.008,
+				"magic_defense": 14.5,
+				"max_hp": 475.2,
+				"max_sp": 153.0,
+				"melee_attack": 20.0,
+				"move_speed": 226.0,
+				"physical_cc_resistance": 0.01,
+				"physical_defense": 23.5,
+				"precision_attack": 32.2,
+				"sp_regen": 2.48,
+				"str": 3.0,
+				"variable_cast_multiplier": 0.956,
+				"vit": 5.0
+			},
+			"tactical_validated": false
+		},
+		{
+			"action_slots": [
+				"hunter_covering_shot",
+				"hunter_mark",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "archer",
+			"base_level": 30,
+			"branch": "B",
+			"composition_valid": true,
+			"effective_ranks": {
+				"hunter_covering_shot": 1,
+				"hunter_freezing_trap": 1,
+				"hunter_mark": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "starter_bow",
+				"neck": "pilot_step_neck",
+				"off_hand": null,
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "hunter",
+			"identity": "hunter",
+			"inactive": [],
+			"job_level": 40,
+			"kit_policies": {},
+			"procs": [],
+			"purchased_ranks": {
+				"hunter_covering_shot": 1,
+				"hunter_mark": 1
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"pilot_archer_reserve": 1,
+					"pilot_hunter_b": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"hunter_covering_shot": {
+					"cooldown": 8.0,
+					"projectile_count": 1,
+					"range": 520.0,
+					"sp_cost": 16.0
+				},
+				"hunter_freezing_trap": {
+					"cooldown": 7.0,
+					"projectile_count": 1,
+					"range": 360.0,
+					"sp_cost": 16.0
+				},
+				"hunter_mark": {
+					"cooldown": 10.0,
+					"projectile_count": 1,
+					"range": 360.0,
+					"sp_cost": 10.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 7.0,
+				"attack_speed_index": 116.5,
+				"attacks_per_second": 1.165,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.065,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 12.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 141.1,
+				"hit_rating": 159.6,
+				"hp_regen": 0.95,
+				"int": 2.0,
+				"luk": 3.0,
+				"magic_attack": 18.8,
+				"magic_cc_resistance": 0.004,
+				"magic_defense": 10.5,
+				"max_hp": 475.2,
+				"max_sp": 149.0,
+				"melee_attack": 20.8,
+				"move_speed": 226.0,
+				"physical_cc_resistance": 0.01,
+				"physical_defense": 25.5,
+				"precision_attack": 38.2,
+				"sp_regen": 2.24,
+				"str": 3.0,
+				"variable_cast_multiplier": 0.952,
+				"vit": 5.0
+			},
+			"tactical_validated": false
+		},
+		{
+			"action_slots": [
+				"geometer_trace",
+				"geometer_rewrite",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "mage",
+			"base_level": 30,
+			"branch": "A",
+			"composition_valid": true,
+			"effective_ranks": {
+				"geometer_rewrite": 1,
+				"geometer_trace": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "pilot_wand",
+				"neck": "pilot_step_neck",
+				"off_hand": "pilot_focus",
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "mg_ar",
+			"identity": "mg_ar",
+			"inactive": [],
+			"job_level": 40,
+			"kit_policies": {
+				"geometer_ground_anchor": true
+			},
+			"procs": [
+				{
+					"axis": "magic_damage",
+					"family_id": "pilot_card_hit",
+					"flat": 2.0,
+					"increased": 0.0,
+					"limit": 60.0,
+					"parts": [
+						{
+							"flat": 2.0,
+							"increased": 0.0,
+							"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+							"weapon_instance_id": ""
+						}
+					],
+					"source_id": "card:pilot_instance_shoulders:0:pilot_card_one",
+					"targets": [],
+					"trigger": 1
+				}
+			],
+			"purchased_ranks": {
+				"geometer_rewrite": 1,
+				"geometer_trace": 0
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"geometer_ground_anchor": 1,
+					"pilot_mage_reserve": 1,
+					"pilot_mg_ar_a": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"geometer_rewrite": {
+					"cooldown": 5.0,
+					"projectile_count": 1,
+					"range": 600.0,
+					"sp_cost": 14.0
+				},
+				"geometer_trace": {
+					"cooldown": 0.4,
+					"projectile_count": 1,
+					"range": 600.0,
+					"sp_cost": 8.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 5.0,
+				"attack_speed_index": 111.0,
+				"attacks_per_second": 1.11,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.0595,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 7.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 137.9,
+				"hit_rating": 147.4,
+				"hp_regen": 0.95,
+				"int": 11.0,
+				"luk": 2.0,
+				"magic_attack": 37.05,
+				"magic_cc_resistance": 0.022,
+				"magic_defense": 30.5,
+				"max_hp": 475.2,
+				"max_sp": 205.0,
+				"melee_attack": 16.8,
+				"move_speed": 226.0,
+				"physical_cc_resistance": 0.01,
+				"physical_defense": 23.0,
+				"precision_attack": 24.8,
+				"sp_regen": 3.52,
+				"str": 2.0,
+				"variable_cast_multiplier": 0.968,
+				"vit": 5.0
+			},
+			"tactical_validated": false
+		},
+		{
+			"action_slots": [
+				"geometer_triangulation",
+				"geometer_collapse",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"base_class_id": "mage",
+			"base_level": 30,
+			"branch": "B",
+			"composition_valid": true,
+			"effective_ranks": {
+				"geometer_collapse": 1,
+				"geometer_trace": 1,
+				"geometer_triangulation": 1
+			},
+			"equipment": {
+				"accessory_1": "traveler_charm",
+				"accessory_2": "pilot_sp_jewel",
+				"accessory_3": "pilot_stride_jewel",
+				"accessory_4": "pilot_ward_jewel",
+				"arms": "pilot_arms",
+				"cloak": "pilot_cloak",
+				"feet": "pilot_feet",
+				"head": "pilot_head",
+				"legs": "pilot_legs",
+				"main_hand": "pilot_wand",
+				"neck": "pilot_step_neck",
+				"off_hand": "pilot_focus",
+				"shoulders": "pilot_shoulders",
+				"torso": "warden_mail"
+			},
+			"evolution_id": "mg_ar",
+			"identity": "mg_ar",
+			"inactive": [],
+			"job_level": 40,
+			"kit_policies": {},
+			"procs": [],
+			"purchased_ranks": {
+				"geometer_collapse": 1,
+				"geometer_triangulation": 1
+			},
+			"run_effects": {
+				"augment_stacks": {
+					"pilot_mage_reserve": 1,
+					"pilot_mg_ar_b": 1,
+					"vitality": 1
+				},
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				}
+			},
+			"skill_capture": {
+				"geometer_collapse": {
+					"cooldown": 8.0,
+					"projectile_count": 1,
+					"range": 0.0,
+					"sp_cost": 18.0
+				},
+				"geometer_trace": {
+					"cooldown": 0.4,
+					"projectile_count": 1,
+					"range": 600.0,
+					"sp_cost": 8.0
+				},
+				"geometer_triangulation": {
+					"cooldown": 3.0,
+					"projectile_count": 1,
+					"range": 600.0,
+					"sp_cost": 16.0
+				}
+			},
+			"stats": {
+				"after_cast_reduction": 0.0,
+				"agi": 5.0,
+				"attack_speed_index": 111.0,
+				"attacks_per_second": 1.11,
+				"cooldown_reduction": 0.0,
+				"crit_chance": 0.0595,
+				"crit_multiplier": 1.5,
+				"crit_resistance": 0.0,
+				"damage_dealt_multiplier": 1.0,
+				"dex": 7.0,
+				"fixed_cast_reduction": 0.0,
+				"flee_rating": 137.9,
+				"hit_rating": 147.4,
+				"hp_regen": 0.95,
+				"int": 11.0,
+				"luk": 2.0,
+				"magic_attack": 37.05,
+				"magic_cc_resistance": 0.022,
+				"magic_defense": 30.5,
+				"max_hp": 475.2,
+				"max_sp": 199.0,
+				"melee_attack": 16.8,
+				"move_speed": 230.0,
+				"physical_cc_resistance": 0.01,
+				"physical_defense": 25.0,
+				"precision_attack": 24.8,
+				"sp_regen": 3.52,
+				"str": 2.0,
+				"variable_cast_multiplier": 0.968,
+				"vit": 5.0
+			},
+			"tactical_validated": false
+		}
+	],
+	"editorial_sha256": "9e8be1b1d5c1b313488c6ea38cf7aaddba07d3233e7850a199b5c53150f78792",
+	"mechanical_digest": "6b143650ef433d96eb204aa5036725c065c14ccc79adbaf08fea039be686c3f9",
+	"production_loot_rates": null,
+	"production_published": false,
+	"progression_formula": null,
+	"scope": "spatial_pilot_offline",
+	"tactical_validation_pending": true
+}

@@ -2,8 +2,8 @@ class_name EffectDefinition
 extends Resource
 ## Declarative recipe: no code, Node, Callable or mutable run state.
 
-enum Kind { STAT, SKILL_RULE, PROC, ACTIVE_GRANT }
-enum Handler { STAT_MODIFIER, SKILL_SCALAR, PROJECTILE_COUNT, HIT_DAMAGE, ACTIVE_SKILL }
+enum Kind { STAT, SKILL_RULE, PROC, ACTIVE_GRANT, KIT_RULE }
+enum Handler { STAT_MODIFIER, SKILL_SCALAR, PROJECTILE_COUNT, HIT_DAMAGE, ACTIVE_SKILL, KIT_POLICY }
 enum Stacking { ADDITIVE, EXCLUSIVE }
 enum Trigger { NONE, ON_HIT, ON_KILL, ON_CAST, ENCOUNTER_END }
 
@@ -34,4 +34,4 @@ func value_at(stacks: int) -> float:
 	return stack_values[stacks - 1] if not stack_values.is_empty() and stacks > 0 and stacks <= stack_values.size() else magnitude * stacks
 
 func capability() -> StringName:
-	return {Handler.STAT_MODIFIER: &"stat", Handler.SKILL_SCALAR: &"skill_buff", Handler.PROJECTILE_COUNT: &"transformation", Handler.HIT_DAMAGE: &"proc", Handler.ACTIVE_SKILL: &"active_grant"}.get(handler_id, &"unsupported")
+	return {Handler.STAT_MODIFIER: &"stat", Handler.SKILL_SCALAR: &"skill_buff", Handler.PROJECTILE_COUNT: &"transformation", Handler.HIT_DAMAGE: &"proc", Handler.ACTIVE_SKILL: &"active_grant", Handler.KIT_POLICY: &"transformation"}.get(handler_id, &"unsupported")

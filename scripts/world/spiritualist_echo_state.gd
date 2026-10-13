@@ -31,7 +31,7 @@ func consume_mark(target_id: int) -> bool:
 	marks.erase(target_id)
 	return true
 
-func record_hit(result: Dictionary, magic_attack_at_trigger: float) -> bool:
+func record_hit(result: Dictionary, magic_attack_at_trigger: float, positions: Dictionary[int, Vector2] = {}) -> bool:
 	var target_id := int(result.get("target_id", 0))
 	if int(result.get("source_id", 0)) != source_id or not marks.has(target_id):
 		return false
@@ -58,12 +58,12 @@ func record_hit(result: Dictionary, magic_attack_at_trigger: float) -> bool:
 			carriers.assign(eligible.keys())
 			if context.ledger() == null or not context.ledger().bind_echo_carriers(context, carriers):
 				return false
-		waves[wave_id] = {"eligible": eligible, "scheduled": {}, "pairs": {}, "shown_targets": {}, "magic_attack": maxf(0.0, magic_attack_at_trigger), "context": result.get("context"), "damage_multiplier": result.get("damage_dealt_multiplier", 1.0)}
+		waves[wave_id] = {"eligible": eligible, "fixed_origin": bool(result.get("effect_snapshot", {}).get("kit_policies", {}).get(&"echo_origin_fixed", false)), "scheduled": {}, "pairs": {}, "shown_targets": {}, "magic_attack": maxf(0.0, magic_attack_at_trigger), "context": result.get("context"), "damage_multiplier": result.get("damage_dealt_multiplier", 1.0)}
 		if emission_id > 0:
 			wave_by_emission[emission_id] = wave_id
-	return _schedule_carrier(wave_id, target_id)
+	return _schedule_carrier(wave_id, target_id, positions)
 
-func record_echo_impact(wave_id: int, result: Dictionary, echo_power: float) -> bool:
+func record_echo_impact(wave_id: int, result: Dictionary, echo_power: float, positions: Dictionary[int, Vector2] = {}) -> bool:
 	if not waves.has(wave_id) or int(result.get("source_id", 0)) != source_id or float(result.get("actual_damage", 0.0)) <= 0.0:
 		return false
 	var target_id := int(result.get("target_id", 0))
@@ -73,7 +73,7 @@ func record_echo_impact(wave_id: int, result: Dictionary, echo_power: float) -> 
 	if bool(result.get("killed", false)):
 		return first_visual
 	if wave["eligible"].has(target_id):
-		_schedule_carrier(wave_id, target_id)
+		_schedule_carrier(wave_id, target_id, positions)
 	# Reapplication is for the next player action, never reentry into this wave.
 	mark(target_id, echo_power)
 	return first_visual
@@ -90,16 +90,17 @@ func claim_pair(wave_id: int, carrier_id: int, target_id: int) -> bool:
 	wave["pairs"][pair_key] = true
 	return true
 
-func _schedule_carrier(wave_id: int, target_id: int) -> bool:
+func _schedule_carrier(wave_id: int, target_id: int, positions: Dictionary[int, Vector2]) -> bool:
 	if not waves.has(wave_id) or pending.size() >= MAX_PENDING:
 		return false
 	var wave: Dictionary = waves[wave_id]
 	if not wave["eligible"].has(target_id) or wave["scheduled"].has(target_id):
 		return false
+	if bool(wave.get("fixed_origin", false)) and (not positions.has(target_id) or not positions[target_id].is_finite()): return false
 	wave["scheduled"][target_id] = true
 	marks.erase(target_id)
 	var power := float(wave["eligible"][target_id])
-	pending.append({"target_id": target_id, "wave_id": wave_id, "remaining": ECHO_DELAY, "magic_damage": float(wave["magic_attack"]) * power, "echo_power": power, "context": wave.get("context"), "damage_multiplier": wave.get("damage_multiplier", 1.0)})
+	pending.append({"target_id": target_id, "wave_id": wave_id, "fixed_origin": bool(wave.get("fixed_origin", false)), "center": positions.get(target_id, Vector2.ZERO), "remaining": ECHO_DELAY, "magic_damage": float(wave["magic_attack"]) * power, "echo_power": power, "context": wave.get("context"), "damage_multiplier": wave.get("damage_multiplier", 1.0)})
 	return true
 
 func finish_resolution() -> void:

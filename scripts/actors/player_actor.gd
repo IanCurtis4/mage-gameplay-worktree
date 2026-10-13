@@ -2066,7 +2066,7 @@ func commit_geometer_shot(command: GeometerCastCommand, construction: GeometerCo
 	if not check["ok"]:
 		return check
 	var durations := geometer_durations()
-	var ticket := construction.reserve_shot(check["point"], command.actor_id, command.skill_id == &"geometer_triangulation", skill_rank(&"geometer_triangulation"), navigation, durations.x, durations.y, command.element)
+	var ticket := construction.reserve_shot(check["point"], command.actor_id, command.skill_id == &"geometer_triangulation", skill_rank(&"geometer_triangulation"), navigation, durations.x, durations.y, command.element, bool(run_state.composed_build().get("kit_policies", {}).get(&"geometer_ground_anchor", false)))
 	if ticket == 0:
 		return {"ok": false, "reason": "Construção indisponível."}
 	_spend(command.skill_id)
@@ -2688,7 +2688,7 @@ func _make_request(enemy: CombatActor, skill_id: StringName, accuracy_mode: Dama
 	var request := DamageRequest.new()
 	request.context = _emission_context.copy_context() if _emission_context != null else null
 	var composed := run_state.composed_build()
-	request.effect_snapshot = {"procs": composed.get("procs", []).duplicate(true), "build_version": run_state.build_snapshot.build_version}
+	request.effect_snapshot = {"procs": composed.get("procs", []).duplicate(true), "kit_policies": composed.get("kit_policies", {}).duplicate(true), "build_version": run_state.build_snapshot.build_version}
 	request.weapon_instance_ids = weapon_ids_for_skill(skill_id)
 	request.source_id = get_instance_id()
 	request.target_id = enemy.get_instance_id() if enemy != null else 0

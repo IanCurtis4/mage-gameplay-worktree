@@ -62,3 +62,11 @@ Para T3 final ainda faltam orçamento/poder/tuning, taxas, contagens e cobertura
 [Prévia legível do piloto](pilot_preview.md) reúne descrição factual gerada e flavor Luna. [Comparações](pilot_builds.json) guardam20 seleções legais, metadados de aprendizado/equipamento/encaixe e capturas/stats calculados pelos serviços existentes. composition_valid não significa tactical_validated: o relatório declara explicitamente que a validação tática de T3 continua pendente. Não usar contagem de linhas ou mudanças numéricas como prova de novas decisões de combate.
 
 Os novos efeitos de proc direcionado incluem as habilidades alvo na descrição factual. Curvas completas, caps e ranks permanecem na ficha; nome/flavor jamais definem execução. Específicos de Foco, ecos, armadilhas e geometria não são gerados a partir de tags. Qualquer transformação futura exige contrato/handler executável antes da população.
+
+## Duas políticas espaciais aprovadas
+
+`tools/content/spatial_bundle.gd` acrescenta somente spiritualist_echo_fixed_origin e geometer_ground_anchor ao bundle anterior, sem editar suas63 entradas. Os handlers de política são fechados e restritos a augment/uma aquisição/evolução correta; não reutilizar a nova capacidade em cartas/equipamentos/conjuntos por suposição.
+
+`tools/content/spatial.gd -- --prepare` gera spatial_briefs.json e, somente se ausente, cria spatial_texts.json copiando os63 name/flavor anteriores. Luna só preenche os2 novos. O comando sem argumentos valida/completa, gera spatial_builds.json e65 Resources em `.godot/content_authoring/spatial_*`, sem publicar no loader ativo. `pilot_*` continua preservado; as comparações A de Espiritualista/Geômetra passam a incluir o modo espacial no novo relatório.
+
+[Prévia legível](spatial_preview.md) explica os resultados observáveis. O compositor/capturas guardam kit_policies por valor; ondas e reservas seguem suas capturas depois da retirada do augment. Não tratar políticas como modificador numérico, proc de arma ou autorização de outros4 efeitos da proposta. Os valores de dano/cadência/progressão/rates continuam com suas autoridades anteriores.

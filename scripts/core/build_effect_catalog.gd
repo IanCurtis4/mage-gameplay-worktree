@@ -4,6 +4,10 @@ extends RefCounted
 
 const ORIGINS: Array[StringName] = [&"augment", &"equipment", &"card"]
 const SLOTS: Array[StringName] = [&"head", &"neck", &"shoulders", &"arms", &"torso", &"cloak", &"legs", &"feet", &"main_hand", &"off_hand", &"accessory_1", &"accessory_2", &"accessory_3", &"accessory_4"]
+const KIT_POLICIES := {
+	&"echo_origin_fixed": {"evolution": &"spiritualist", "skills": [&"spiritualist_echo_curse"]},
+	&"geometer_ground_anchor": {"evolution": &"mg_ar", "skills": [&"geometer_trace", &"geometer_triangulation"]},
+}
 const SCALAR_AXES: Array[StringName] = [&"range"]
 const INTRINSIC_FAMILIES: Array[StringName] = [&"elementalist_tri_nova_ice", &"elementalist_tri_nova_lightning", &"hunter_exploit", &"sentinel_focus", &"berserker_wound", &"berserker_pursuit", &"berserker_breath_heal", &"elementalist_focus", &"spiritualist_echo", &"spiritualist_echo_recovery", &"spiritualist_channel_focus", &"spiritualist_drain_heal", &"blood_thirst", &"defender_watch", &"defender_token", &"defender_guard_return"]
 const INTRINSIC_COMPONENTS: Array[StringName] = [&"basic_attack", &"burn_tick", &"bleed_tick", &"hunter_thorn_bleed", &"berserker_blood_rift_tick", &"berserker_rupture_detonation", &"geometer_wall_entry", &"geometer_wall_exit", &"geometer_foundation_fire", &"geometer_foundation_lightning", &"geometer_rule_fire", &"geometer_rule_lightning", &"geometer_resolution_fire", &"geometer_resolution_ice", &"geometer_resolution_lightning", &"geometer_triangle_maintenance", &"geometer_incidence"]
@@ -112,8 +116,9 @@ func register_definition(origin: StringName, definition: Resource) -> Dictionary
 	return {"ok": true, "error_code": &"", "request_id": ""}
 
 static func validate_effect(effect: EffectDefinition) -> Dictionary:
-	if effect == null or effect.id.is_empty() or effect.family_id.is_empty() or effect.unit not in [&"ratio", &"points", &"count", &"units", &"seconds", &"sp", &"damage"] or effect.minimum_rank < 1 or effect.minimum_rank > 5:
+	if effect == null or effect.id.is_empty() or effect.family_id.is_empty() or effect.unit not in [&"ratio", &"points", &"count", &"units", &"seconds", &"sp", &"damage", &"policy"] or effect.minimum_rank < 1 or effect.minimum_rank > 5:
 		return failure(&"invalid_effect")
+	if (effect.unit == &"policy") != (effect.kind == EffectDefinition.Kind.KIT_RULE): return failure(&"invalid_policy_unit")
 	if not EffectTags.valid(effect.tags):
 		return failure(&"unknown_effect_tag")
 	if not effect.unique_effect_id.is_empty() and not IdentityIds.is_technical_id(String(effect.unique_effect_id)):
@@ -159,6 +164,12 @@ static func validate_effect(effect: EffectDefinition) -> Dictionary:
 			return failure(&"intrinsic_family_requires_adapter")
 		if effect.handler_id != EffectDefinition.Handler.HIT_DAMAGE or effect.trigger != EffectDefinition.Trigger.ON_HIT or effect.axis not in [&"physical_damage", &"magic_damage"] or effect.magnitude < 0.0 or effect.increased < 0.0 or effect.limit <= 0.0 or effect.unit != &"damage":
 			return failure(&"unsupported_proc")
+	elif effect.kind == EffectDefinition.Kind.KIT_RULE:
+		var policy: Dictionary = KIT_POLICIES.get(effect.axis, {})
+		if policy.is_empty() or effect.handler_id != EffectDefinition.Handler.KIT_POLICY or effect.trigger != EffectDefinition.Trigger.NONE or effect.unit != &"policy" or effect.magnitude != 0 or effect.increased != 0 or effect.limit != 0 or not effect.stack_values.is_empty() or effect.channel != &"flat" or effect.minimum_rank != 1:
+			return failure(&"invalid_kit_policy")
+		if effect.target_skill_ids != policy["skills"] or effect.allowed_origins != [&"mage"] or effect.allowed_evolutions != [policy["evolution"]] or effect.stacking_mode != EffectDefinition.Stacking.EXCLUSIVE or effect.conflict_group != effect.axis:
+			return failure(&"invalid_kit_policy_restrictions")
 	elif effect.kind == EffectDefinition.Kind.ACTIVE_GRANT:
 		if effect.handler_id != EffectDefinition.Handler.ACTIVE_SKILL or effect.trigger != EffectDefinition.Trigger.NONE or not effect.target_skill_ids.is_empty() or effect.magnitude != 0.0 or effect.increased != 0.0 or effect.limit != 0.0 or not effect.stack_values.is_empty():
 			return failure(&"invalid_item_active")
@@ -225,7 +236,7 @@ func register_set(definition: EquipmentSetDefinition) -> Dictionary:
 			var checked := validate_effect(effect)
 			if not checked["ok"]:
 				return checked
-			if effect.kind == EffectDefinition.Kind.ACTIVE_GRANT or seen.has(effect.id) or not effect.stack_values.is_empty():
+			if effect.kind in [EffectDefinition.Kind.ACTIVE_GRANT, EffectDefinition.Kind.KIT_RULE] or seen.has(effect.id) or not effect.stack_values.is_empty():
 				return failure(&"invalid_set")
 			seen[effect.id] = true
 	_sets[definition.id] = definition.duplicate(true)
@@ -236,6 +247,9 @@ func get_set(id: StringName) -> EquipmentSetDefinition:
 	return definition.duplicate(true) as EquipmentSetDefinition if definition != null else null
 
 func validate_recipe(origin: StringName, definition: Resource, effect: EffectDefinition) -> Dictionary:
+	if effect.kind == EffectDefinition.Kind.KIT_RULE:
+		if origin != &"augment" or not definition is AugmentDefinition or definition.max_stacks != 1 or definition.allowed_origins != effect.allowed_origins or definition.allowed_evolutions != effect.allowed_evolutions:
+			return failure(&"capability_not_allowed")
 	if origin == &"card":
 		var mob := _mob_catalog.get_definition(definition.mob_base_id)
 		if effect.capability() == &"active_grant" or (mob != null and mob.base_category not in MobCatalog.COMPLEX_BASES and effect.capability() not in [&"stat", &"skill_buff"]):
