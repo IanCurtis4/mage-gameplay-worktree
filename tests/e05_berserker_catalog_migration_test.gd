@@ -27,7 +27,7 @@ func _run() -> void:
 	profile.characters.append(character)
 	profile.selected_character_id = character_id
 	var encoded := ProfileCodec.encode(profile)
-	_check(encoded["ok"] and ProfileState.CATALOG_VERSION == 10, "current catalog remains schema 2 and accepts earlier Berserker migration")
+	_check(encoded["ok"] and ProfileState.CATALOG_VERSION == 11, "current catalog remains schema 2 and accepts earlier Berserker migration")
 	var old_data: Dictionary = TX.legacy_data(encoded["data"])
 	old_data["catalog_version"] = ProfileCodec.PRE_BERSERKER_CATALOG_VERSION
 	old_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
@@ -40,7 +40,7 @@ func _run() -> void:
 	var durable: CharacterState = loaded["profile"].character_by_id(character_id)
 	_check(durable.evolution_id == &"defender" and durable.purchased_skill_ranks == {&"defender_anchor": 1} and durable.presets[0]["active_slots"][0] == &"defender_anchor" and durable.base_xp_total == character.base_xp_total and durable.job_xp_total == character.job_xp_total, "migration preserves existing Defender build and XP")
 	var current_data: Dictionary = JSON.parse_string(_read_text(directory.path_join(ProfileStore.PRIMARY_FILE)))
-	_check(_read_text(directory.path_join(ProfileStore.BACKUP_FILE)) == old_text and current_data["catalog_version"] == ProfileState.CATALOG_VERSION and current_data["ruleset_id"] == ProfileState.RULESET_ID and current_data["schema_version"] == 3, "backup preserves exact catalog-3 source bytes")
+	_check(_read_text(directory.path_join(ProfileStore.BACKUP_FILE)) == old_text and current_data["catalog_version"] == ProfileState.CATALOG_VERSION and current_data["ruleset_id"] == ProfileState.RULESET_ID and current_data["schema_version"] == ProfileState.SCHEMA_VERSION, "backup preserves exact catalog-3 source bytes")
 	var reloaded := ProfileStore.new(directory).load_profile()
 	_check(reloaded["ok"] and not reloaded.get("migrated", false) and reloaded["profile"].revision == 8, "current catalog reload is idempotent")
 	var newer := profile.copy_state()

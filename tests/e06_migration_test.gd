@@ -9,9 +9,9 @@ func _initialize() -> void:
 	directory = ProjectSettings.globalize_path("res://.godot/verification/e06_t2/migration_%d" % Time.get_ticks_usec())
 	DirAccess.make_dir_recursive_absolute(directory)
 	var catalog := ProfileCatalog.pilot()
-	_check(ProfileState.CATALOG_VERSION == 10 and ProfileState.SCHEMA_VERSION == 3 and ProfileState.RULESET_ID == "stat_thresholds_v1", "historical catalogs -> catalog10/schema3, stat ruleset unchanged")
+	_check(ProfileState.CATALOG_VERSION == 11 and ProfileState.SCHEMA_VERSION == 4 and ProfileState.RULESET_ID == "stat_thresholds_v1", "historical catalogs -> catalog11/schema4, stat ruleset unchanged")
 	var effects := BuildContentLoader.pilot()
-	_check(effects.ids(&"equipment").size() == 37 and effects.ids(&"card").size() == 6, "published metadata includes 12 preserved and 25 new pieces")
+	_check(effects.ids(&"equipment").size() == 39 and effects.ids(&"card").size() == 6, "published metadata includes 12 preserved and 25 published plus 2 progression tiers")
 	for origin: StringName in [&"swordsman", &"mage", &"archer"]:
 		var starters := catalog.starter_equipment(origin)
 		_check(starters[&"torso"] == &"traveler_vest" and starters[&"accessory_1"] == &"traveler_charm" and catalog.starter_item_ids(origin).size() == 3, "origin starter trio from unique catalog")

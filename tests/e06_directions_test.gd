@@ -325,6 +325,12 @@ func _case(identity: String, branch: int) -> void:
 				_check(triangle and metrics["figure_consumed"] and resolution.size() > 0 and metrics["collapse_does_not_repeat_ice_root"], "triangle route changes finite preparation and geometry consumption")
 	var snapshot: BuildSnapshot = comparison["snapshot"]
 	var instances: Dictionary = {}
-	for id: StringName in snapshot.equipment_instances: instances[id] = snapshot.equipment_instances[id].to_record()
+	for id: StringName in snapshot.equipment_instances:
+		var instance: EquipmentInstance = snapshot.equipment_instances[id]
+		var record := instance.to_record()
+		if instance.power_ruleset_id == &"legacy_unscaled" and instance.recipe_revision_id == &"catalog_v1":
+			record.erase("power_ruleset_id")
+			record.erase("recipe_revision_id")
+		instances[id] = record
 	observations.append({"identity": identity, "branch": "A" if branch == 0 else "B", "decision": decision, "metrics": metrics, "decision_validated": failures == before_failures, "skills_executed": skills, "effect_attribution": {"kit": skills, "recipe_policies": comparison["composed"].get("kit_policies", {}), "recipe_provenance": comparison["composed"].get("provenance", [])}, "build": {"base_class_id": snapshot.base_class_id, "evolution_id": snapshot.evolution_id, "base_level": snapshot.base_level, "job_level": snapshot.job_level, "purchased_ranks": comparison["purchased_ranks"], "support_purchases": comparison.get("support_purchases", {}), "equipment_instances": instances, "effective_ranks": snapshot.skill_ranks, "action_slots": snapshot.action_slots, "equipped": snapshot.equipped, "augment_stacks": arena.run_state.augment_stacks, "card_instances": arena.run_state.card_instances, "card_sockets": arena.run_state.card_sockets}, "observed_secondary_emissions": emissions.duplicate(), "production_published": false, "balance_validated": false, "performance_validated": false})
 	await _finish(arena)

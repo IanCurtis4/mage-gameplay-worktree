@@ -28,7 +28,7 @@ func _run() -> void:
 	profile.characters.append(character)
 	profile.selected_character_id = character_id
 	var encoded := ProfileCodec.encode(profile)
-	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 3 and ProfileState.CATALOG_VERSION == 10, "current catalog keeps schema 2 and accepts the earlier Defender migration")
+	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 4 and ProfileState.CATALOG_VERSION == 11, "current catalog keeps schema 2 and accepts the earlier Defender migration")
 	var old_data: Dictionary = TX.legacy_data(encoded["data"])
 	old_data["catalog_version"] = ProfileCodec.PRE_DEFENDER_CATALOG_VERSION
 	old_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
@@ -43,7 +43,7 @@ func _run() -> void:
 	_check(migrated_character.evolution_id == &"defender" and migrated_character.purchased_skill_ranks == {&"slash": 1} and migrated_character.presets[0]["active_slots"][0] == &"slash" and migrated_character.base_xp_total == character.base_xp_total and migrated_character.job_xp_total == character.job_xp_total, "migration preserves identity, XP, purchases and preset")
 	var backup_text := _read_text(directory.path_join(ProfileStore.BACKUP_FILE))
 	var durable_data: Dictionary = JSON.parse_string(_read_text(directory.path_join(ProfileStore.PRIMARY_FILE)))
-	_check(backup_text == old_text and durable_data["catalog_version"] == ProfileState.CATALOG_VERSION and durable_data["ruleset_id"] == ProfileState.RULESET_ID and durable_data["schema_version"] == 3, "transaction preserves exact old bytes as backup and writes current catalog")
+	_check(backup_text == old_text and durable_data["catalog_version"] == ProfileState.CATALOG_VERSION and durable_data["ruleset_id"] == ProfileState.RULESET_ID and durable_data["schema_version"] == ProfileState.SCHEMA_VERSION, "transaction preserves exact old bytes as backup and writes current catalog")
 	var reloaded := ProfileStore.new(directory).load_profile()
 	_check(reloaded["ok"] and not reloaded.get("migrated", false) and reloaded["profile"].revision == 5, "catalog migration is idempotent on reload")
 	var future_data: Dictionary = durable_data.duplicate(true)

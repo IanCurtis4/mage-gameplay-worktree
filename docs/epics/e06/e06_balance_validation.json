@@ -1,0 +1,223 @@
+{
+  "role": "automated_supervisor",
+  "base_commit": "3a6075f0d0596aaf2dee92b7bac11509c63b6ed6",
+  "branch": "codex/e06-inventory",
+  "checkout": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+  "engine": {
+    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\review-engine\\Godot.exe",
+    "sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424"
+  },
+  "runner_sha256": "4f1482cbfbb07c240729bd0f2425907a650874c44bf1466bdb8406f47fdcfe62",
+  "consolidated": {
+    "status": "PASS across 3 execution ranges",
+    "distinct_runner_steps": 209,
+    "step_coverage": "1..209",
+    "compatible_reused_prefix_steps": 183,
+    "tail_steps": 26,
+    "first_run_failure_preserved": "107a8e6ef32ccacec6ca1e364276462ef0e2971e05395d01396511f32a851eee",
+    "second_run_failure_preserved": "238f34d727f01a258e6c2f38ecbc5345b05141881057d7cf905563789821fc44",
+    "terminology": "209 runner test steps; per-test assertion counts are separately reported",
+    "limits": [
+      "supervision of automated checks only",
+      "no Astra audit",
+      "no FPS conclusion",
+      "no human playtest or product acceptance",
+      "no balance fun verdict"
+    ]
+  },
+  "runs": [
+    {
+      "range": "1..209",
+      "selected": 209,
+      "status": "stopped on first failure",
+      "passed_before_failure": 17,
+      "failure_step": 18,
+      "failure_name": "profile_store_test",
+      "exit_code": 1,
+      "timed_out": false,
+      "failure_output_sha256": "B62D6CADECBB03EB7518B4894F12510E912D6A8414D741C6C41C2A736F848CEB",
+      "failure_receipt": ".godot/verification/e06_balance/final/failure_receipt.json"
+    },
+    {
+      "range": "18..209",
+      "selected": 192,
+      "status": "stopped on first failure",
+      "passed_in_range_before_failure": 166,
+      "failure_step": 184,
+      "failure_name": "e06_tx_migration_test",
+      "exit_code": 1,
+      "timed_out": false,
+      "failure_output_sha256": "8F059F6E77E085E800594D782474A4867F07032F4D46004D9ED9FFE0D8CAAC77",
+      "failure_receipt": ".godot/verification/e06_balance/final/resume/failure_receipt.json"
+    },
+    {
+      "range": "184..209",
+      "selected": 26,
+      "editor_import_skipped": true,
+      "executed": 26,
+      "passed": 26,
+      "failed": 0,
+      "timed_out": 0,
+      "exit_errors": 0,
+      "checks_jsonl": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_balance\\final\\tail\\checks\\checks.jsonl",
+      "checks_sha256": "6d03b3ed6703e8f6818b6f51a28fc6a5d8c1799a5c651f8f22c5b0fbc0046eb9",
+      "plan_sha256": "3a1c5ab3e9f03e2f312ad5d1f9b733bc51b8a89d1d3f1e6c774f0975cacc82c2",
+      "outputs_and_engine_logs_error_scan": "no SCRIPT ERROR, Parse Error, or ERROR markers"
+    }
+  ],
+  "publication": {
+    "status": "PASS",
+    "entries": 83,
+    "builds": 20,
+    "digest": "6631984d3bf5a12efd1344a2cf542c9c07e411c9f38bd465f95c417d8fc4bf9",
+    "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_balance\\final\\tail\\publication.engine.log",
+    "log_sha256": "e192ca5c3581f129673c5472a614d9d55872db42c0e41225962345c0b044b849"
+  },
+  "offline_model": {
+    "status": "PASS",
+    "invariant_checks": 80,
+    "catalog_equipment": 37,
+    "projection_match": true,
+    "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_balance\\final\\tail\\model.log",
+    "log_sha256": "c79e9740b26d02eb8e9bfb390e5038bce46818e7ad5d5ab1a76c643dc268c27b",
+    "projection_sha256": "b26d27cd3b61a8b08bc7de96fa76b62be3fabf8eeb28f8728ec3316e26ea03df"
+  },
+  "baseline": {
+    "manifest": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_balance\\final\\tail\\inputs_before.json",
+    "manifest_entries": 953,
+    "manifest_sha256": "89fa528cb4433ac6a587fe697f99c9f88db1e3c128d54aab7627f57b09d827a2",
+    "changed_after": [],
+    "native83_count": 83,
+    "native83_changed_after": [],
+    "new_tier_sha256": {
+      "resources/loot_progression/equipment/arena_epic_ward.tres": "7cbdd9383b510dc3d730f8ab5baf532a11d2c884c55edfc1ba18d40aeff042c5",
+      "resources/loot_progression/equipment/arena_legendary_ward.tres": "cae0e01076c63c353ad5a21b914c5fe076cf37f6289284d98dbfa6e783dc71d9"
+    }
+  },
+  "publication_check": "read-only --check",
+  "model_execution": "read-only report(); projection not regenerated",
+  "playtest": "not performed by automated supervisor; Sol prepares separately after technical approval under WORKFLOW",
+  "consolidated_summary": {
+    "original_runner_steps": 209,
+    "coverage": "1..209 in 3 execution ranges",
+    "final_status": "PASS",
+    "directed_rechecks": 3,
+    "rechecks_do_not_change_original_209_step_count": true,
+    "earlier_failures_preserved": [
+      ".godot/verification/e06_balance/final/failure_receipt.json",
+      ".godot/verification/e06_balance/final/resume/failure_receipt.json"
+    ],
+    "sealed_tail_receipt_sha256": "583adcdef4568e231651433a87c5a2475ce8093632d4241e342c2e477fd1384e"
+  },
+  "directed_message_delta": {
+    "status": "PASS",
+    "source_delta": "scripts/core/run_reward_service.gd",
+    "source_sha256": "1b5380d809803b434d69ac7692d657fc3865639ce2585ba4e293d9a67fb14353",
+    "selected_runner_steps": 3,
+    "indices": [
+      4,
+      14,
+      209
+    ],
+    "tests": [
+      {
+        "index": 4,
+        "name": "e06_rewards_test",
+        "status": "PASS",
+        "exit_code": 0,
+        "timed_out": false,
+        "output_sha256": "1D0D94EFD583A1833C93AE6EC2F2EEE6F921D9083C5248CA2BC50E19DAE1410F",
+        "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_balance\\final\\message_delta\\checks\\004-e06_rewards_test.output.log",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_balance\\final\\message_delta\\checks\\004-e06_rewards_test.engine.log"
+      },
+      {
+        "index": 14,
+        "name": "arena_flow_test",
+        "status": "PASS",
+        "exit_code": 0,
+        "timed_out": false,
+        "output_sha256": "110201CA81B8DA2A6AD21A6FC5331AF48E7092149D8EB4C677130EB4ABA64F6A",
+        "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_balance\\final\\message_delta\\checks\\014-arena_flow_test.output.log",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_balance\\final\\message_delta\\checks\\014-arena_flow_test.engine.log"
+      },
+      {
+        "index": 209,
+        "name": "e06_production_loot_test",
+        "status": "PASS",
+        "exit_code": 0,
+        "timed_out": false,
+        "output_sha256": "5615E139DD4554656734A8D7995D2CF226902074B581CF5747C1ABC1DF129E7C",
+        "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_balance\\final\\message_delta\\checks\\209-e06_production_loot_test.output.log",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_balance\\final\\message_delta\\checks\\209-e06_production_loot_test.engine.log"
+      }
+    ],
+    "checks_jsonl_sha256": "b57c7f228fe3b69cea5f94911515dca52b0f71ae45433702e2f75172912cc844",
+    "plan_sha256": "2867f5fb69d83eb3dc53e69a7b16bbcd36365a547b36b58f84a502957d80c832",
+    "error_scan": "no SCRIPT ERROR, Parse Error, or ERROR markers in selected outputs or engine logs"
+  },
+  "message_delta_baseline": {
+    "manifest": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_balance\\final\\message_delta\\inputs_before.json",
+    "manifest_entries": 953,
+    "manifest_sha256": "7757f09f8b31d95d3a2ebda8470ffaa8dd4a4eda0fdd92e2c550b18dd40b9041",
+    "changed_after": [],
+    "native83_count": 83,
+    "native83_changed_after": [],
+    "new_tier_sha256": {
+      "resources/loot_progression/equipment/arena_epic_ward.tres": "7cbdd9383b510dc3d730f8ab5baf532a11d2c884c55edfc1ba18d40aeff042c5",
+      "resources/loot_progression/equipment/arena_legendary_ward.tres": "cae0e01076c63c353ad5a21b914c5fe076cf37f6289284d98dbfa6e783dc71d9"
+    }
+  },
+  "limits": [
+    "no Astra audit",
+    "no FPS conclusion",
+    "no human playtest or product acceptance",
+    "no balance fun verdict"
+  ],
+  "sol_closure": {
+    "role": "technical_validator",
+    "validator": "Sol",
+    "supervisor_completion": "Luna wrote 3 PASS outputs and receipt before usage-limit interruption; Sol verified artifacts and closed without a further supervisor message",
+    "distinct_runner_steps_verified": 209,
+    "directed_message_rechecks_verified": 3,
+    "source_entries_current_unchanged": 953,
+    "native83_unchanged": true,
+    "independent_semantic_audit": false,
+    "human_product_acceptance": false,
+    "preserved_message_receipt": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_balance\\final\\message_delta\\receipt.json",
+    "preserved_message_receipt_sha256": "87359fa3a89ddd26f71fbe1430c560f72989e391450d08c778c2ec2c8962aca7",
+    "normalized_imports_restored": [
+      "assets/art/animations/archer.png.import",
+      "assets/art/animations/berserker.png.import",
+      "assets/art/animations/defender.png.import",
+      "assets/art/animations/elementalist.png.import",
+      "assets/art/animations/geometer.png.import",
+      "assets/art/animations/hunter.png.import",
+      "assets/art/animations/mage.png.import",
+      "assets/art/animations/sentinel.png.import",
+      "assets/art/animations/spiritualist.png.import",
+      "assets/art/animations/swordsman.png.import",
+      "assets/art/animations/warrior.png.import",
+      "assets/art/icons/hunter/hunter_covering_shot.svg.import",
+      "assets/art/icons/hunter/hunter_easy_prey.svg.import",
+      "assets/art/icons/hunter/hunter_freezing_trap.svg.import",
+      "assets/art/icons/hunter/hunter_mark.svg.import",
+      "assets/art/icons/hunter/hunter_shooting_discipline.svg.import",
+      "assets/art/icons/hunter/hunter_tar_trap.svg.import",
+      "assets/art/icons/hunter/hunter_thorn_trap.svg.import",
+      "assets/art/icons/hunter/hunter_total_cover.svg.import",
+      "assets/art/pilot/archer.png.import",
+      "assets/art/pilot/dirt.png.import",
+      "assets/art/pilot/grass.png.import",
+      "assets/art/pilot/hero.png.import",
+      "assets/art/pilot/stone.png.import",
+      "assets/art/pilot/warrior.png.import",
+      "assets/art/vfx/soul_impact_orb.png.import",
+      "assets/art/vfx/soul_impact_orb_source.png.import",
+      "assets/art/vfx/spiritualist_curse_sigil.png.import",
+      "assets/art/vfx/spiritualist_effects.png.import",
+      "assets/art/vfx/spiritualist_ritual_halo.png.import",
+      "assets/art/vfx/spiritualist_soul_wisp.png.import",
+      "assets/art/vfx/spiritualist_spectral_burst.png.import"
+    ]
+  }
+}

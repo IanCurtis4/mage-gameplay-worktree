@@ -264,7 +264,7 @@ func _populate_selector(selector: OptionButton, values: Array, current: Variant)
 		selector.add_item(_skill_name(item_id) if is_skill_selector else _equipment_name(item_id))
 		var index := selector.item_count - 1
 		selector.set_item_metadata(index, item_id)
-		selector.set_item_tooltip(index, _skill_name(item_id) if is_skill_selector else _equipment_name(item_id))
+		selector.set_item_tooltip(index, _skill_name(item_id) if is_skill_selector else _equipment_tooltip(item_id))
 		if value == current:
 			current_index = index
 	selector.select(current_index)
@@ -975,6 +975,14 @@ func _equipment_name(item_id: Variant) -> String:
 	var loaded := _equipment_display_cache.get(instance.definition_id) as EquipmentDefinition
 	if loaded == null: return "Equipamento indisponível"
 	return "%s · %s · ilvl %d · %d encaixe(s) · exemplar %d" % [EquipmentPresentation.item_name(loaded), EquipmentPresentation.quality_name(instance.quality_id), instance.item_level, instance.socket_capacity, profile.equipment_instance_ids().find(instance.instance_id) + 1]
+
+func _equipment_tooltip(item_id: Variant) -> String:
+	var profile: ProfileState = facade.current_profile()
+	var instance: EquipmentInstance = profile.equipment_instances.get(StringName(item_id)) if profile != null else null
+	if instance == null: return "Equipamento indisponível"
+	var name := _equipment_name(item_id)
+	var definition := _equipment_display_cache.get(instance.definition_id) as EquipmentDefinition
+	return name + "\n" + EquipmentPresentation.instance_description(definition, instance) if definition != null else name
 
 func _request_id(action: String) -> String:
 	_request_serial += 1

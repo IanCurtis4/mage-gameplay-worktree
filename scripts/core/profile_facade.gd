@@ -698,6 +698,8 @@ func _grant_reward_payload(request_id: String, expected_revision: int, run_id: S
 		var metadata := _catalog.equipment_metadata(definition_id)
 		for field: String in ["origin_id", "item_level", "quality_id", "socket_capacity"]:
 			metadata[field] = drop.get(field)
+		metadata["recipe_revision_id"] = drop.get("recipe_revision_id", &"catalog_v1")
+		metadata["power_ruleset_id"] = drop.get("power_ruleset_id", &"legacy_unscaled")
 		var was_known := not candidate.first_instance_for_definition(definition_id).is_empty()
 		var added := candidate.add_equipment_instance(definition_id, metadata)
 		if not added["ok"]:

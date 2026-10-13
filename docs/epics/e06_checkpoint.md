@@ -1,3 +1,5 @@
+> Estado prevalente13/10: primeira calibração de equipamentos/loot ENTREGUE e VALIDADA por Sol, com supervisão automatizada Luna:209etapas distintas em três execuções complementares, mais3rechecks do delta final. XP e poder de todos os exemplares anteriores preservados. [Contrato atual](e06/e06_balance_scope.md), [recibo](e06/e06_balance_validation.json), [roteiro](e06/e06_balance_playtest.md). Preparação de playtest em andamento; aceite humano/merge pendentes, E07 não autorizado. Cabeçalhos abaixo são históricos.
+
 > Estado prevalente13/10: interface14posições/cartas/ícones/elmo e fechamento técnico integrado entregues/validados por Sol com supervisão Luna, cobertura206etapas distintas em rodadas complementares. [Checkpoint vigente](e06/e06_pending_checkpoint.md) e [roteiro](e06/e06_playtest.md). Playtest aplicado no diretório habitual, importação/abertura e preservação do save verificadas; aceite humano/merge pendentes. Taxas/progressão/E07 adiados. Cabeçalhos antigos conservam o histórico.
 
 # E06 — checkpoint consolidado de arquitetura

@@ -69,7 +69,7 @@ func _normalize(value: Variant, reverse_mapping: bool = false) -> Variant:
 	return value
 func _legacy_definitions() -> void:
 	var profile_catalog := ProfileCatalog.pilot()
-	_check(profile_catalog.is_valid() and ProfileState.SCHEMA_VERSION == 3 and ProfileState.CATALOG_VERSION == 10, "additive publication keeps valid catalog10/schema3")
+	_check(profile_catalog.is_valid() and ProfileState.SCHEMA_VERSION == 4 and ProfileState.CATALOG_VERSION == 11, "additive publication keeps valid catalog11/schema4")
 	var starters: Array[StringName] = []
 	for id: StringName in active.ids(&"equipment"):
 		var item := active.get_definition(&"equipment", id) as EquipmentDefinition

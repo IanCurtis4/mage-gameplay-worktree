@@ -2,7 +2,7 @@ class_name BuildContentLoader
 extends RefCounted
 ## Resource files are the single metadata source. T3 can add recipes without code edits.
 
-static func definitions(origin: StringName) -> Array[Resource]:
+static func definitions(origin: StringName, include_progression: bool = false) -> Array[Resource]:
 	var result: Array[Resource] = []
 	var directory := "res://resources/build_effects/%s" % origin
 	if not DirAccess.dir_exists_absolute(directory):
@@ -13,9 +13,18 @@ static func definitions(origin: StringName) -> Array[Resource]:
 		if file.ends_with(".tres"):
 			var definition := load(directory.path_join(file)) as Resource
 			result.append(definition.duplicate(true) if definition != null else null)
+	if include_progression and origin == &"equipment":
+		var extra := "res://resources/loot_progression/equipment"
+		if DirAccess.dir_exists_absolute(extra):
+			var extra_files := DirAccess.get_files_at(extra)
+			extra_files.sort()
+			for file: String in extra_files:
+				if not file.ends_with(".tres"): continue
+				var definition := load(extra.path_join(file)) as Resource
+				result.append(definition.duplicate(true) if definition != null else null)
 	return result
 
-static func load_catalog() -> Dictionary:
+static func load_catalog(include_progression: bool = false) -> Dictionary:
 	var catalog := BuildEffectCatalog.new()
 	var mobs := MobCatalog.new()
 	for definition: Resource in definitions(&"mob"):
@@ -28,7 +37,7 @@ static func load_catalog() -> Dictionary:
 		if not registered["ok"]:
 			return registered
 	for origin: StringName in BuildEffectCatalog.ORIGINS:
-		for definition: Resource in definitions(origin):
+		for definition: Resource in definitions(origin, include_progression):
 			var registered := catalog.register_definition(origin, definition)
 			if not registered["ok"]:
 				return registered
@@ -41,12 +50,12 @@ static func load_catalog() -> Dictionary:
 	return {"ok": true, "error_code": &"", "request_id": "", "catalog": catalog}
 
 static func pilot() -> BuildEffectCatalog:
-	var loaded := load_catalog()
+	var loaded := load_catalog(true)
 	assert(loaded["ok"], "Catálogo de efeitos inválido")
 	return loaded.get("catalog", BuildEffectCatalog.new())
 
 static func load_catalog_for_profile(profile_catalog: ProfileCatalog) -> Dictionary:
-	var loaded := load_catalog()
+	var loaded := load_catalog(true)
 	if not loaded["ok"]:
 		return loaded
 	var catalog: BuildEffectCatalog = loaded["catalog"]

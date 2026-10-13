@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2"]
+
+[sub_resource type="Resource" id="defense"]
+script = ExtResource("1")
+id = &"arena_legendary_ward_defense"
+family_id = &"arena_legendary_ward_defense"
+axis = &"physical_defense"
+unit = &"points"
+magnitude = 6.0
+
+[resource]
+script = ExtResource("2")
+id = &"arena_legendary_ward"
+display_name = "Armadura da Guarda da Arena"
+flavor_text = "Marcas de uso percorrem esta armadura, lembrança das disputas da Arena demonstrativa."
+description = "Defesa física: +6."
+allowed_origins = Array[StringName]([&"swordsman", &"mage", &"archer"])
+slot = &"torso"
+item_kind = &"armor"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"legendary"
+effects = Array[ExtResource("1")]([SubResource("defense")])

@@ -4,11 +4,25 @@ extends RefCounted
 const FLOORS := {&"rare": &"uncommon", &"rare_elite": &"rare", &"boss": &"epic"}
 var _catalog: BuildEffectCatalog
 var _profiles: Dictionary = {}
+var _strict_quality_pools := false
+var _recipe_revision_id: StringName = &"catalog_v1"
+var _power_ruleset_id: StringName = &"legacy_unscaled"
+var _cardless_base_ids: Array[StringName] = []
 static func create(catalog: BuildEffectCatalog, table: MobLootTable) -> Dictionary:
 	if catalog == null or table == null or table.profiles.is_empty():
 		return BuildEffectCatalog.failure(&"invalid_loot_table")
 	var resolver := MobLootResolver.new()
 	resolver._catalog = catalog.copy_catalog()
+	if table.recipe_revision_id != &"catalog_v1" or table.power_ruleset_id not in [&"legacy_unscaled", &"equipment_growth_v1"]:
+		return BuildEffectCatalog.failure(&"invalid_equipment_power")
+	resolver._strict_quality_pools = table.strict_quality_pools
+	resolver._recipe_revision_id = table.recipe_revision_id
+	resolver._power_ruleset_id = table.power_ruleset_id
+	resolver._cardless_base_ids = table.cardless_base_ids.duplicate()
+	for id: StringName in resolver._cardless_base_ids:
+		var definition := catalog.mob_catalog().get_definition(id)
+		if definition == null or not definition.card_id.is_empty():
+			return BuildEffectCatalog.failure(&"invalid_loot_table")
 	for raw_category: Variant in table.profiles:
 		if typeof(raw_category) not in [TYPE_STRING, TYPE_STRING_NAME] or StringName(raw_category) not in MobCatalog.CATEGORIES:
 			return BuildEffectCatalog.failure(&"invalid_loot_table")
@@ -54,7 +68,9 @@ func validate_occurrence(occurrence: MobOccurrence) -> Dictionary:
 	if not _profiles.has(occurrence.category_id):
 		return BuildEffectCatalog.failure(&"invalid_loot_table")
 	var definition: MobDefinition = checked["definition"]
-	if float(_profiles[occurrence.category_id]["card_chance"]) > 0.0:
+	if _power_ruleset_id == &"equipment_growth_v1" and definition.fixed_level > 30:
+		return BuildEffectCatalog.failure(&"invalid_equipment_power")
+	if float(_profiles[occurrence.category_id]["card_chance"]) > 0.0 and definition.id not in _cardless_base_ids:
 		var card := _catalog.get_definition(&"card", definition.card_id) as CardDefinition
 		if card == null or card.mob_base_id != definition.id:
 			return BuildEffectCatalog.failure(&"missing_mob_base")
@@ -76,15 +92,15 @@ func roll(occurrence: MobOccurrence, uniforms: Array) -> Dictionary:
 		var id := StringName(_weighted(_item_pool(occurrence.category_id, quality), float(uniforms[2])))
 		var item := _catalog.get_definition(&"equipment", id) as EquipmentDefinition
 		var sockets := int(_weighted(row["socket_weights"], float(uniforms[3]))) if EquipmentRules.allows_sockets(item.metadata()) else 0
-		drops.append({"definition_id": id, "origin_id": occurrence.origin_id, "item_level": mob.fixed_level, "quality_id": quality, "socket_capacity": sockets})
-	var card: StringName = mob.card_id if _passes(float(uniforms[4]), float(row["card_chance"])) else &""
+		drops.append({"definition_id": id, "origin_id": occurrence.origin_id, "item_level": mob.fixed_level, "quality_id": quality, "socket_capacity": sockets, "recipe_revision_id": _recipe_revision_id, "power_ruleset_id": _power_ruleset_id})
+	var card: StringName = mob.card_id if mob.id not in _cardless_base_ids and _passes(float(uniforms[4]), float(row["card_chance"])) else &""
 	return {"ok": true, "equipment_drops": drops, "card_id": card, "mob_base_id": mob.id, "category_id": occurrence.category_id, "occurrence_id": occurrence.occurrence_id}
 func _item_pool(category: StringName, quality: StringName) -> Dictionary:
 	var result: Dictionary = {}
 	for raw_id: Variant in _profiles[category]["equipment_weights"]:
 		var id := StringName(raw_id)
 		var item := _catalog.get_definition(&"equipment", id) as EquipmentDefinition
-		if _catalog.validate_equipment_quality(item, quality)["ok"]:
+		if (not _strict_quality_pools or item.quality_id == quality) and _catalog.validate_equipment_quality(item, quality)["ok"]:
 			result[id] = _profiles[category]["equipment_weights"][raw_id]
 	return result
 static func minimum_quality(category: StringName, quality: StringName) -> StringName:

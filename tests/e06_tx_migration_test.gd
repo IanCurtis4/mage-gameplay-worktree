@@ -40,7 +40,7 @@ func _run() -> void:
 		var rare: EquipmentInstance = migrated.equipment_instances[migrated.first_instance_for_definition(&"warden_mail")]
 		_check(starter.quality_id == &"common" and rare.quality_id == &"rare" and starter.item_level == 1 and rare.origin_id == &"demo_arena" and rare.socket_capacity == 1, "approved migration metadata")
 		var current := ProfileCodec.encode(migrated)
-		_check(current["ok"] and current["data"]["schema_version"] == 3 and current["data"]["catalog_version"] == 10 and not current["data"].has("equipment_collection") and not current["data"].has("card_sockets"), "only exemplar records persist")
+		_check(current["ok"] and current["data"]["schema_version"] == 4 and current["data"]["catalog_version"] == 11 and not current["data"].has("equipment_collection") and not current["data"].has("card_sockets"), "only exemplar records persist")
 		var again := ProfileCodec.decode(current["text"])
 		_check(again["ok"] and not again.get("migrated", false) and ProfileCodec.encode(again["profile"])["text"] == current["text"], "current envelope reopens without remigration")
 		var duplicate := migrated.copy_state()
@@ -76,7 +76,7 @@ func _run() -> void:
 	var reopened := store.load_profile()
 	_check(reopened["ok"] and reopened["profile"].revision == loaded["profile"].revision and FileAccess.get_file_as_string(primary) == durable, "reopen is idempotent")
 	var future := JSON.parse_string(durable) as Dictionary
-	future["schema_version"] = 4
+	future["schema_version"] = ProfileState.SCHEMA_VERSION + 1
 	var future_text := JSON.stringify(future)
 	_write(primary, future_text)
 	var protected := store.load_profile()

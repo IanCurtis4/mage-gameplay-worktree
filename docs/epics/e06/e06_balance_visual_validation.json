@@ -1,0 +1,30 @@
+{
+  "role": "implementer_native_visual_inspection",
+  "validator": "Sol",
+  "renderer": "Godot4.7.2 OpenGL3.3/NVIDIA GTX1080",
+  "viewport": [
+    1280,
+    720
+  ],
+  "probe": "tools/e06_balance_probe.gd",
+  "probe_sha256": "e37b6662362d10f408e0f4088c98fd420cf540c8dfcc7fef6dbcb97be836a39a",
+  "image": ".godot/verification/e06_balance/native/growth_inventory.png",
+  "image_sha256": "060bc6583be68c9ba36bb54a374aab092b54b786c72079ad19b93fe003fb3d5d",
+  "log": ".godot/verification/e06_balance/native_probe_final.log",
+  "log_sha256": "bc60011694c58cfd5725b8ce5980eaea385ce407b23edf9cffae74bcf909f26d",
+  "exit_code": 0,
+  "errors_detected": false,
+  "observations": [
+    "two separate exemplars ilvl1/30",
+    "canonical final physical defense35 to39.64",
+    "resolved item tooltip8.64 asserted independently from composed defense",
+    "Esc closes inventory and resumes tree"
+  ],
+  "personal_profile_used": false,
+  "human_product_acceptance": false,
+  "limitations": [
+    "isolated training with explicit full blueprint",
+    "programmatic native UI, not human input/style/balance acceptance",
+    "no performance or loot cadence qualification"
+  ]
+}

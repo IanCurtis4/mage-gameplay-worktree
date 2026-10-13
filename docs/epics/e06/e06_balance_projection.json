@@ -1,0 +1,929 @@
+{
+  "scope": "offline_unapproved_tuning_proposal",
+  "runtime_activated": false,
+  "model_sha256": "f29bcc6042c26908d0130868b4e2ebe839cdee80d15df740ea217332599114d8",
+  "catalog_equipment": [
+    {
+      "id": "arena_channeler_robe",
+      "quality": "rare",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "a5d34fff4f7deb3191a1bf765ea0ae3b1b048a0ba9d377bd4e8af891b05c335b"
+    },
+    {
+      "id": "arena_ember_staff",
+      "quality": "rare",
+      "ilvl": 1,
+      "has_non_stat_kind": true,
+      "set_id": "",
+      "sha256": "9455513f93bd28ad308260b0559d26a48cea9a665be2a7f715ff523bf3835f9d"
+    },
+    {
+      "id": "arena_hunters_bow",
+      "quality": "rare",
+      "ilvl": 1,
+      "has_non_stat_kind": true,
+      "set_id": "",
+      "sha256": "de145b37741b8235b740291172aa979aac5117070a14c86fca8aef883452383d"
+    },
+    {
+      "id": "arena_prismatic_charm",
+      "quality": "rare",
+      "ilvl": 1,
+      "has_non_stat_kind": true,
+      "set_id": "",
+      "sha256": "461d89cce6e4c10e952585ad85d4af5be1158240d052f51bd2b6320b5c33cf1f"
+    },
+    {
+      "id": "arena_riposte_blade",
+      "quality": "rare",
+      "ilvl": 1,
+      "has_non_stat_kind": true,
+      "set_id": "",
+      "sha256": "4c0d43c631c7dae77de6614235870dad1a7d3ad55f0cc17e118079f3ac487c0e"
+    },
+    {
+      "id": "arena_starter_blade",
+      "quality": "common",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "64e37eee3b26c65b071f67b03db474eb4d07232a128d28949114fd546bdc5f0a"
+    },
+    {
+      "id": "arena_starter_bow",
+      "quality": "common",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "8aa8729158ebfbdfea10b5d969acc39d3cd7e7e24de2f724d41a1d28c89a1422"
+    },
+    {
+      "id": "arena_starter_staff",
+      "quality": "common",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "dd29ee5e2dbe81680ba0dc0e7568ea827b0ce9ee5533f6f91236161adf45818a"
+    },
+    {
+      "id": "arena_trailcoat",
+      "quality": "rare",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "40cf5e020f331e7dcd852b3093cb43ebe7d97930bf37aac79ccb5bec26ec746a"
+    },
+    {
+      "id": "arena_traveler_charm",
+      "quality": "common",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "e28256ca6e97b9ced7da0d1e8565b03db4fc94f29ff1efda170b953f6daf0b41"
+    },
+    {
+      "id": "arena_traveler_vest",
+      "quality": "common",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "f766b430a8a9feed47fd4494c6024f2e3e62c1d2bcba5057c5584373a04ee102"
+    },
+    {
+      "id": "arena_warden_mail",
+      "quality": "rare",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "pilot_guard_set",
+      "sha256": "dca6746c57ce53a5321ae3905b134bc5b1183bccd99bb91d04b3df3bbffd15b3"
+    },
+    {
+      "id": "channeler_robe",
+      "quality": "rare",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "fcc200ca4498aacba29762e1d5ca3e636d965569e57cf77aa418f97d642e752b"
+    },
+    {
+      "id": "ember_staff",
+      "quality": "rare",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "8468e44bc46700fd3af285f55ad4e25f2a47284a6faf6e60e351449e12dea8f3"
+    },
+    {
+      "id": "hunters_bow",
+      "quality": "rare",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "cfd99496cf6b5da7de11bf4fec8cd3e57034dab2769bc2331c31a10ac538dffc"
+    },
+    {
+      "id": "pilot_arms",
+      "quality": "uncommon",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "f33257f3c4a3491cdb108180c92b9dc8fded363490a9ff7577df2185bb4cb362"
+    },
+    {
+      "id": "pilot_cloak",
+      "quality": "uncommon",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "b9610e2c63ac4600b1e0af5981112b669b553330da6b1b518c5ea9218a5fe4d8"
+    },
+    {
+      "id": "pilot_feet",
+      "quality": "uncommon",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "26a37b93596b841a23eed976dab40d0a54212cb80ccab85ebd6943eba8eaadbd"
+    },
+    {
+      "id": "pilot_focus",
+      "quality": "uncommon",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "fb1f12edb72068152d8783888e03fa1dc2df18102366761a61969fda2401975c"
+    },
+    {
+      "id": "pilot_head",
+      "quality": "uncommon",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "14f8f6f8fa1b1af210809f7243c986d9c782e327c19d50616ffde511c001545d"
+    },
+    {
+      "id": "pilot_legs",
+      "quality": "rare",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "pilot_guard_set",
+      "sha256": "0451bbe50639765a443e49f7df47a0b90c7ad2384c947fc4345af9c44a15955b"
+    },
+    {
+      "id": "pilot_shield",
+      "quality": "uncommon",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "95963df6320ce8d8b6a9cdcb9b88ac1f24c43b55e2b8fbc8b888aa5c9a79b38a"
+    },
+    {
+      "id": "pilot_shoulders",
+      "quality": "rare",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "pilot_guard_set",
+      "sha256": "04c981b444416a98732ceedda128b457cbd4309d8724c7227bd424c73260310e"
+    },
+    {
+      "id": "pilot_sp_jewel",
+      "quality": "uncommon",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "2c716c8f254f7840f25b39a4fe7e4c01c883cc67129d7ba541aa2339aa678cfc"
+    },
+    {
+      "id": "pilot_step_neck",
+      "quality": "rare",
+      "ilvl": 1,
+      "has_non_stat_kind": true,
+      "set_id": "",
+      "sha256": "1afb86c89ce15033ddf2e5348d8e9db223d1c5f76135b643cf1d9c10cb8cc376"
+    },
+    {
+      "id": "pilot_stride_jewel",
+      "quality": "uncommon",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "5af92ee68baa00ba73b05515f95563f0d452807e95b4237ab28fb85dd1ddbe55"
+    },
+    {
+      "id": "pilot_wand",
+      "quality": "common",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "df6961540c7ad8fb6adf81c966b5e4ea64dcd5d6e75c16d373982ddbef1072c1"
+    },
+    {
+      "id": "pilot_ward_jewel",
+      "quality": "uncommon",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "c3152368a2c92521187b60aef7940af864406d209a0cc0cd62eecc20e1fdfacf"
+    },
+    {
+      "id": "prismatic_charm",
+      "quality": "rare",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "f87d63ab33b62db88b1cc598cad96ed1b0f543763f06ca0f6e90b52912943a15"
+    },
+    {
+      "id": "riposte_blade",
+      "quality": "rare",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "469b743bb57fd801c8714e53ec78101a72dd8c3ae67d6889d26f4a31d2cc03ae"
+    },
+    {
+      "id": "starter_blade",
+      "quality": "common",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "217fbecdc34b7cc16d06750077de10d04dc46b7132743e3764b97cfbeaf149b1"
+    },
+    {
+      "id": "starter_bow",
+      "quality": "common",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "3684fe34c3ab9c6b7a6388afe4c883632cdaad264a4a08c18c54adff98fea051"
+    },
+    {
+      "id": "starter_staff",
+      "quality": "common",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "b05526c48bed4f8e2f8efac7760ead0e584afbb3a3db58d33fa5a28bf9794ffa"
+    },
+    {
+      "id": "trailcoat",
+      "quality": "rare",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "dc4f0496d966a51c93f523a6e30fa222b20fa0e55697c7b347616ab7ee247510"
+    },
+    {
+      "id": "traveler_charm",
+      "quality": "common",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "b971c5a9cd918fab9015fa15f096441c302d319fe0acaf7bdfec62393c66df89"
+    },
+    {
+      "id": "traveler_vest",
+      "quality": "common",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "68d17311342cfbbf979d0c0841f3891db9946b1ae6d214013ca2d81854a3ea16"
+    },
+    {
+      "id": "warden_mail",
+      "quality": "rare",
+      "ilvl": 1,
+      "has_non_stat_kind": false,
+      "set_id": "",
+      "sha256": "fb522a2a738283b96cf4f04040c40ddd7a01afaa97ea049048752e92c9399ab7"
+    }
+  ],
+  "nominal_quality_counts": {
+    "rare": 17,
+    "common": 11,
+    "uncommon": 9
+  },
+  "profiles": {
+    "normal": {
+      "equipment_probability": {
+        "fraction": "1/25",
+        "decimal": 0.04
+      },
+      "card_probability": {
+        "fraction": "1/100",
+        "decimal": 0.01
+      },
+      "no_equipment_probability": {
+        "fraction": "24/25",
+        "decimal": 0.96
+      },
+      "quality_weights_conditional": {
+        "common": 790,
+        "uncommon": 200,
+        "rare": 9,
+        "epic": 1,
+        "legendary": 0
+      },
+      "absolute_equipment_probability": {
+        "common": {
+          "fraction": "79/2500",
+          "decimal": 0.0316
+        },
+        "uncommon": {
+          "fraction": "1/125",
+          "decimal": 0.008
+        },
+        "rare": {
+          "fraction": "9/25000",
+          "decimal": 0.00036
+        },
+        "epic": {
+          "fraction": "1/25000",
+          "decimal": 4e-05
+        },
+        "legendary": {
+          "fraction": "0",
+          "decimal": 0.0
+        }
+      }
+    },
+    "rare": {
+      "equipment_probability": {
+        "fraction": "1",
+        "decimal": 1.0
+      },
+      "card_probability": {
+        "fraction": "3/100",
+        "decimal": 0.03
+      },
+      "no_equipment_probability": {
+        "fraction": "0",
+        "decimal": 0.0
+      },
+      "quality_weights_conditional": {
+        "common": 0,
+        "uncommon": 900,
+        "rare": 90,
+        "epic": 10,
+        "legendary": 0
+      },
+      "absolute_equipment_probability": {
+        "common": {
+          "fraction": "0",
+          "decimal": 0.0
+        },
+        "uncommon": {
+          "fraction": "9/10",
+          "decimal": 0.9
+        },
+        "rare": {
+          "fraction": "9/100",
+          "decimal": 0.09
+        },
+        "epic": {
+          "fraction": "1/100",
+          "decimal": 0.01
+        },
+        "legendary": {
+          "fraction": "0",
+          "decimal": 0.0
+        }
+      }
+    },
+    "elite": {
+      "equipment_probability": {
+        "fraction": "3/25",
+        "decimal": 0.12
+      },
+      "card_probability": {
+        "fraction": "3/100",
+        "decimal": 0.03
+      },
+      "no_equipment_probability": {
+        "fraction": "22/25",
+        "decimal": 0.88
+      },
+      "quality_weights_conditional": {
+        "common": 790,
+        "uncommon": 200,
+        "rare": 9,
+        "epic": 1,
+        "legendary": 0
+      },
+      "absolute_equipment_probability": {
+        "common": {
+          "fraction": "237/2500",
+          "decimal": 0.0948
+        },
+        "uncommon": {
+          "fraction": "3/125",
+          "decimal": 0.024
+        },
+        "rare": {
+          "fraction": "27/25000",
+          "decimal": 0.00108
+        },
+        "epic": {
+          "fraction": "3/25000",
+          "decimal": 0.00012
+        },
+        "legendary": {
+          "fraction": "0",
+          "decimal": 0.0
+        }
+      }
+    },
+    "rare_elite": {
+      "equipment_probability": {
+        "fraction": "1",
+        "decimal": 1.0
+      },
+      "card_probability": {
+        "fraction": "2/25",
+        "decimal": 0.08
+      },
+      "no_equipment_probability": {
+        "fraction": "0",
+        "decimal": 0.0
+      },
+      "quality_weights_conditional": {
+        "common": 0,
+        "uncommon": 0,
+        "rare": 900,
+        "epic": 100,
+        "legendary": 0
+      },
+      "absolute_equipment_probability": {
+        "common": {
+          "fraction": "0",
+          "decimal": 0.0
+        },
+        "uncommon": {
+          "fraction": "0",
+          "decimal": 0.0
+        },
+        "rare": {
+          "fraction": "9/10",
+          "decimal": 0.9
+        },
+        "epic": {
+          "fraction": "1/10",
+          "decimal": 0.1
+        },
+        "legendary": {
+          "fraction": "0",
+          "decimal": 0.0
+        }
+      }
+    },
+    "boss": {
+      "equipment_probability": {
+        "fraction": "1",
+        "decimal": 1.0
+      },
+      "card_probability": {
+        "fraction": "1/5",
+        "decimal": 0.2
+      },
+      "no_equipment_probability": {
+        "fraction": "0",
+        "decimal": 0.0
+      },
+      "quality_weights_conditional": {
+        "common": 0,
+        "uncommon": 0,
+        "rare": 0,
+        "epic": 980,
+        "legendary": 20
+      },
+      "absolute_equipment_probability": {
+        "common": {
+          "fraction": "0",
+          "decimal": 0.0
+        },
+        "uncommon": {
+          "fraction": "0",
+          "decimal": 0.0
+        },
+        "rare": {
+          "fraction": "0",
+          "decimal": 0.0
+        },
+        "epic": {
+          "fraction": "49/50",
+          "decimal": 0.98
+        },
+        "legendary": {
+          "fraction": "1/50",
+          "decimal": 0.02
+        }
+      }
+    }
+  },
+  "recommended_card_cadence_probabilities": {
+    "normal": {
+      "fraction": "1/50",
+      "decimal": 0.02
+    },
+    "rare": {
+      "fraction": "3/50",
+      "decimal": 0.06
+    },
+    "elite": {
+      "fraction": "2/25",
+      "decimal": 0.08
+    },
+    "rare_elite": {
+      "fraction": "4/25",
+      "decimal": 0.16
+    },
+    "boss": {
+      "fraction": "2/5",
+      "decimal": 0.4
+    }
+  },
+  "socket_weights_conditional_on_eligible_equipment": [
+    60,
+    25,
+    10,
+    4,
+    1
+  ],
+  "expected_sockets_per_eligible_drop": {
+    "fraction": "61/100",
+    "decimal": 0.61
+  },
+  "scenarios": [
+    {
+      "label": "hypothetical_20_kills",
+      "counts": {
+        "normal": 15,
+        "rare": 1,
+        "elite": 2,
+        "rare_elite": 1,
+        "boss": 1
+      },
+      "equipment_expected": {
+        "fraction": "96/25",
+        "decimal": 3.84
+      },
+      "cards_expected": {
+        "fraction": "13/25",
+        "decimal": 0.52
+      },
+      "at_least_one_card_probability": {
+        "fraction": "13196103109772839396747588400141722979/31250000000000000000000000000000000000",
+        "decimal": 0.42227529951273085
+      },
+      "recommended_build_card_cadence": {
+        "cards_expected": {
+          "fraction": "27/25",
+          "decimal": 1.08
+        },
+        "at_least_one_card_probability": {
+          "fraction": "83904365638989908391171730527119/119209289550781250000000000000000",
+          "decimal": 0.7038408328341559
+        }
+      },
+      "expected_equipment_by_quality": {
+        "common": {
+          "fraction": "1659/2500",
+          "decimal": 0.6636
+        },
+        "uncommon": {
+          "fraction": "267/250",
+          "decimal": 1.068
+        },
+        "rare": {
+          "fraction": "24939/25000",
+          "decimal": 0.99756
+        },
+        "epic": {
+          "fraction": "27271/25000",
+          "decimal": 1.09084
+        },
+        "legendary": {
+          "fraction": "1/50",
+          "decimal": 0.02
+        }
+      },
+      "augment_opportunities_assumed": 6,
+      "assumptions": [
+        "Not current two-encounter/six-mob arena or authorized campaign",
+        "Every species has a valid card recipe; current demo species do not",
+        "All loot collected; no death/abandonment; independent rolls; no pity or reroll"
+      ]
+    },
+    {
+      "label": "hypothetical_60_kills",
+      "counts": {
+        "normal": 55,
+        "rare": 1,
+        "elite": 2,
+        "rare_elite": 1,
+        "boss": 1
+      },
+      "equipment_expected": {
+        "fraction": "136/25",
+        "decimal": 5.44
+      },
+      "cards_expected": {
+        "fraction": "23/25",
+        "decimal": 0.92
+      },
+      "at_least_one_card_probability": {
+        "fraction": "1917245284830905009287951184438654138452614908315440178682577591503087697979903507279328871160235206941537000966006979/3125000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "decimal": 0.6135184911458896
+      },
+      "recommended_build_card_cadence": {
+        "cards_expected": {
+          "fraction": "47/25",
+          "decimal": 1.88
+        },
+        "at_least_one_card_probability": {
+          "fraction": "9410893717525892340021238441571171434308740502888020207525351434681549087294520884237966607905839119/10842021724855044340074528008699417114257812500000000000000000000000000000000000000000000000000000000",
+          "decimal": 0.868001739560406
+        }
+      },
+      "expected_equipment_by_quality": {
+        "common": {
+          "fraction": "4819/2500",
+          "decimal": 1.9276
+        },
+        "uncommon": {
+          "fraction": "347/250",
+          "decimal": 1.388
+        },
+        "rare": {
+          "fraction": "25299/25000",
+          "decimal": 1.01196
+        },
+        "epic": {
+          "fraction": "27311/25000",
+          "decimal": 1.09244
+        },
+        "legendary": {
+          "fraction": "1/50",
+          "decimal": 0.02
+        }
+      },
+      "augment_opportunities_assumed": 6,
+      "assumptions": [
+        "Not current two-encounter/six-mob arena or authorized campaign",
+        "Every species has a valid card recipe; current demo species do not",
+        "All loot collected; no death/abandonment; independent rolls; no pity or reroll"
+      ]
+    },
+    {
+      "label": "hypothetical_120_kills",
+      "counts": {
+        "normal": 115,
+        "rare": 1,
+        "elite": 2,
+        "rare_elite": 1,
+        "boss": 1
+      },
+      "equipment_expected": {
+        "fraction": "196/25",
+        "decimal": 7.84
+      },
+      "cards_expected": {
+        "fraction": "38/25",
+        "decimal": 1.52
+      },
+      "at_least_one_card_probability": {
+        "fraction": "2464168985216467507322339224112019408954979317503490550916802353723681200950408766880828460985350648064008002973221698740806906942113417743190996940165499195500563640164119846551941238936361377941520553928956586136378987143208693572432979/3125000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "decimal": 0.7885340752692696
+      },
+      "recommended_build_card_cadence": {
+        "cards_expected": {
+          "fraction": "77/25",
+          "decimal": 3.08
+        },
+        "at_least_one_card_probability": {
+          "fraction": "9034600401725981543559223239868546382031716607029487817183084565378267495457319204076874264670217812954947459242279030167752941091166727692609352240835010127944336641683646306337810553839440004248807119/9403954806578300063749892297777965422549324454176700172070013650227338075637817382812500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "decimal": 0.9607235027763058
+        }
+      },
+      "expected_equipment_by_quality": {
+        "common": {
+          "fraction": "9559/2500",
+          "decimal": 3.8236
+        },
+        "uncommon": {
+          "fraction": "467/250",
+          "decimal": 1.868
+        },
+        "rare": {
+          "fraction": "25839/25000",
+          "decimal": 1.03356
+        },
+        "epic": {
+          "fraction": "27371/25000",
+          "decimal": 1.09484
+        },
+        "legendary": {
+          "fraction": "1/50",
+          "decimal": 0.02
+        }
+      },
+      "augment_opportunities_assumed": 6,
+      "assumptions": [
+        "Not current two-encounter/six-mob arena or authorized campaign",
+        "Every species has a valid card recipe; current demo species do not",
+        "All loot collected; no death/abandonment; independent rolls; no pity or reroll"
+      ]
+    }
+  ],
+  "progression_points_only_example": [
+    {
+      "ilvl": 1,
+      "level_factor": {
+        "fraction": "1",
+        "decimal": 1.0
+      },
+      "reference_rare_defense_4_by_quality": {
+        "common": {
+          "fraction": "80/27",
+          "decimal": 2.962962962962963
+        },
+        "uncommon": {
+          "fraction": "92/27",
+          "decimal": 3.4074074074074074
+        },
+        "rare": {
+          "fraction": "4",
+          "decimal": 4.0
+        },
+        "epic": {
+          "fraction": "44/9",
+          "decimal": 4.888888888888889
+        },
+        "legendary": {
+          "fraction": "160/27",
+          "decimal": 5.925925925925926
+        }
+      }
+    },
+    {
+      "ilvl": 5,
+      "level_factor": {
+        "fraction": "29/25",
+        "decimal": 1.16
+      },
+      "reference_rare_defense_4_by_quality": {
+        "common": {
+          "fraction": "464/135",
+          "decimal": 3.437037037037037
+        },
+        "uncommon": {
+          "fraction": "2668/675",
+          "decimal": 3.9525925925925924
+        },
+        "rare": {
+          "fraction": "116/25",
+          "decimal": 4.64
+        },
+        "epic": {
+          "fraction": "1276/225",
+          "decimal": 5.671111111111111
+        },
+        "legendary": {
+          "fraction": "928/135",
+          "decimal": 6.874074074074074
+        }
+      }
+    },
+    {
+      "ilvl": 10,
+      "level_factor": {
+        "fraction": "34/25",
+        "decimal": 1.36
+      },
+      "reference_rare_defense_4_by_quality": {
+        "common": {
+          "fraction": "544/135",
+          "decimal": 4.029629629629629
+        },
+        "uncommon": {
+          "fraction": "3128/675",
+          "decimal": 4.634074074074074
+        },
+        "rare": {
+          "fraction": "136/25",
+          "decimal": 5.44
+        },
+        "epic": {
+          "fraction": "1496/225",
+          "decimal": 6.648888888888889
+        },
+        "legendary": {
+          "fraction": "1088/135",
+          "decimal": 8.059259259259258
+        }
+      }
+    },
+    {
+      "ilvl": 20,
+      "level_factor": {
+        "fraction": "44/25",
+        "decimal": 1.76
+      },
+      "reference_rare_defense_4_by_quality": {
+        "common": {
+          "fraction": "704/135",
+          "decimal": 5.214814814814815
+        },
+        "uncommon": {
+          "fraction": "4048/675",
+          "decimal": 5.997037037037037
+        },
+        "rare": {
+          "fraction": "176/25",
+          "decimal": 7.04
+        },
+        "epic": {
+          "fraction": "1936/225",
+          "decimal": 8.604444444444445
+        },
+        "legendary": {
+          "fraction": "1408/135",
+          "decimal": 10.42962962962963
+        }
+      }
+    },
+    {
+      "ilvl": 30,
+      "level_factor": {
+        "fraction": "54/25",
+        "decimal": 2.16
+      },
+      "reference_rare_defense_4_by_quality": {
+        "common": {
+          "fraction": "32/5",
+          "decimal": 6.4
+        },
+        "uncommon": {
+          "fraction": "184/25",
+          "decimal": 7.36
+        },
+        "rare": {
+          "fraction": "216/25",
+          "decimal": 8.64
+        },
+        "epic": {
+          "fraction": "264/25",
+          "decimal": 10.56
+        },
+        "legendary": {
+          "fraction": "64/5",
+          "decimal": 12.8
+        }
+      }
+    }
+  ],
+  "quality_factors_proposed": {
+    "common": {
+      "fraction": "1",
+      "decimal": 1.0
+    },
+    "uncommon": {
+      "fraction": "23/20",
+      "decimal": 1.15
+    },
+    "rare": {
+      "fraction": "27/20",
+      "decimal": 1.35
+    },
+    "epic": {
+      "fraction": "33/20",
+      "decimal": 1.65
+    },
+    "legendary": {
+      "fraction": "2",
+      "decimal": 2.0
+    }
+  },
+  "scaling_exclusions": [
+    "ratio/reduction multipliers",
+    "ASPD/index",
+    "proc",
+    "skill rule",
+    "active rank",
+    "kit policy",
+    "set bonus",
+    "family limits",
+    "cards",
+    "augments"
+  ],
+  "invariant_checks": 80,
+  "limitations": [
+    "Not a global power budget or canonical final stat/damage calculator",
+    "No actual mob exposure, kill speed, player build, inventory lifetime or combat balancing",
+    "No epic/legendary authored recipe inferred from weights",
+    "Fraction example must resolve before StatCalculator; does not bypass stat thresholds/caps",
+    "No production enablement or mutation of the 83 catalog resources"
+  ]
+}

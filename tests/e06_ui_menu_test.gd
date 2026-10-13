@@ -22,7 +22,7 @@ func _run() -> void:
 			published += 1
 		if profile.first_instance_for_definition(id).is_empty():
 			_check(profile.add_equipment_instance(id, catalog.equipment_metadata(id))["ok"], "own published exemplar %s" % id)
-	_check(published == 25 and profile.equipment_instance_ids().size() == 37, "all twenty-five new pieces coexist with historical collection")
+	_check(published == 27 and profile.equipment_instance_ids().size() == 39, "all twenty-seven new pieces coexist with historical collection")
 	_check(store.commit(profile)["ok"], "isolated published collection persisted")
 	var scene := load("res://scenes/character_menu.tscn") as PackedScene
 	var menu: CharacterMenu = scene.instantiate()

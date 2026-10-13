@@ -81,7 +81,7 @@ static func pilot(
 	if not hunter_override.has("exclusive_skill_ids") and not hunter_override.has(&"exclusive_skill_ids"):
 		catalog._register_hunter_skills()
 	if additional_equipment.is_empty():
-		for resource: Resource in BuildContentLoader.definitions(&"equipment"):
+		for resource: Resource in BuildContentLoader.definitions(&"equipment", true):
 			if not resource is EquipmentDefinition:
 				catalog._build_error = true
 				continue

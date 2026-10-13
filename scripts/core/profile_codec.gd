@@ -1,6 +1,6 @@
 class_name ProfileCodec
 extends RefCounted
-## Pure schema-3 encoding; validate historical envelopes before instance migration.
+## Pure schema-4 encoding; validate historical envelopes before instance migration.
 
 const MAX_FILE_BYTES := 4 * 1024 * 1024
 const MAX_EXACT_JSON_INTEGER := 9007199254740991
@@ -73,6 +73,8 @@ static func decode(text: String, catalog: ProfileCatalog = null) -> Dictionary:
 		return {"ok": false, "error_code": &"unsupported_schema", "future_schema": true}
 	if schema_version == 1:
 		return _upgrade_legacy(_migrate_v1(data, effective_catalog), effective_catalog)
+	if schema_version == 3:
+		return _migrate_power_v3(data, effective_catalog)
 	if schema_version not in [2, ProfileState.SCHEMA_VERSION]:
 		return _error(&"unsupported_schema")
 	if schema_version == ProfileState.SCHEMA_VERSION:
@@ -131,6 +133,25 @@ static func decode(text: String, catalog: ProfileCatalog = null) -> Dictionary:
 	var normalized := data.duplicate(true)
 	normalized["catalog_version"] = ProfileState.CATALOG_VERSION
 	return _upgrade_legacy(_decode_v2(normalized, effective_catalog, false, true), effective_catalog)
+
+static func _migrate_power_v3(data: Dictionary, catalog: ProfileCatalog) -> Dictionary:
+	if not _is_exact_integer(data.get("catalog_version")) or int(data["catalog_version"]) != 10 or not data.get("equipment_instances") is Array:
+		return _catalog_error(&"invalid_catalog")
+	var upgraded := data.duplicate(true)
+	for record: Variant in upgraded["equipment_instances"]:
+		if not record is Dictionary or record.size() != 6:
+			return _catalog_error(&"invalid_equipment_power")
+		var checked := EquipmentInstance.from_record(record)
+		if not checked["ok"]: return _catalog_error(checked["error_code"])
+		record["recipe_revision_id"] = "catalog_v1"
+		record["power_ruleset_id"] = "legacy_unscaled"
+	upgraded["schema_version"] = ProfileState.SCHEMA_VERSION
+	upgraded["catalog_version"] = ProfileState.CATALOG_VERSION
+	var decoded := _decode_v2(upgraded, catalog)
+	if decoded["ok"]:
+		decoded["migrated"] = true
+		decoded["migration_kind"] = &"equipment_power_v1"
+	return decoded
 
 static func validate_profile(profile: ProfileState, catalog: ProfileCatalog = null) -> Dictionary:
 	var effective_catalog := catalog if catalog != null else ProfileCatalog.pilot()
@@ -195,6 +216,8 @@ static func _decode_v2(data: Dictionary, catalog: ProfileCatalog, legacy_attribu
 			return _error(&"invalid_equipment_instance")
 		profile.next_equipment_counter = int(data["next_equipment_counter"])
 		for raw_instance: Variant in data["equipment_instances"]:
+			if not raw_instance is Dictionary or raw_instance.size() != 8:
+				return _catalog_error(&"invalid_equipment_power")
 			var instance_result := EquipmentInstance.from_record(raw_instance)
 			if not instance_result["ok"]:
 				return _catalog_error(instance_result["error_code"])

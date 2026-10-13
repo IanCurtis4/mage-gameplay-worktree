@@ -34,7 +34,7 @@ func _run() -> void:
 	profile.characters.append(defender)
 	profile.selected_character_id = mage_id
 	var encoded := ProfileCodec.encode(profile)
-	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 3 and ProfileState.CATALOG_VERSION == 10, "new catalog keeps schema and ruleset")
+	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 4 and ProfileState.CATALOG_VERSION == 11, "new catalog keeps schema and ruleset")
 	var old_data: Dictionary = TX.legacy_data(encoded["data"])
 	old_data["catalog_version"] = ProfileCodec.PRE_ELEMENTALIST_CATALOG_VERSION
 	old_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID

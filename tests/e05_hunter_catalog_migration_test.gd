@@ -45,7 +45,7 @@ func _old_text(profile: ProfileState) -> String:
 	return JSON.stringify(data, "\t")
 
 func _pairs_and_validation() -> void:
-	_check(ProfileState.CATALOG_VERSION == 10 and ProfileState.SCHEMA_VERSION == 3 and ProfileState.RULESET_ID == "stat_thresholds_v1", "only catalog version changes")
+	_check(ProfileState.CATALOG_VERSION == 11 and ProfileState.SCHEMA_VERSION == 4 and ProfileState.RULESET_ID == "stat_thresholds_v1", "only catalog version changes")
 	for pair: Array in [[&"swordsman", &""], [&"mage", &""], [&"archer", &""], [&"swordsman", &"defender"], [&"swordsman", &"berserker"], [&"mage", &"elementalist"], [&"mage", &"spiritualist"], [&"mage", &"mg_ar"], [&"archer", &"sentinel"], [&"archer", &"hunter"]]:
 		var source := _profile(pair[0], pair[1])
 		var decoded := ProfileCodec.decode(_old_text(source))
@@ -62,7 +62,7 @@ func _pairs_and_validation() -> void:
 	_check(ProfileCodec.decode(text)["ok"], "legitimate threshold-era investment above 87 increments migrates")
 	for change: Dictionary in [
 		{"ruleset_id": ProfileCodec.PRE_THRESHOLDS_RULESET_ID}, {"ruleset_id": "unknown"},
-		{"catalog_version": 10}, {"schema_version": 4},
+		{"catalog_version": 10}, {"schema_version": ProfileState.SCHEMA_VERSION + 1},
 	]:
 		var data: Dictionary = JSON.parse_string(text)
 		data.merge(change, true)

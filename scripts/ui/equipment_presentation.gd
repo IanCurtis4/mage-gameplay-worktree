@@ -18,3 +18,12 @@ static func icon(item: EquipmentDefinition) -> Texture2D:
 	return load("res://assets/art/icons/equipment/%s.svg" % key) as Texture2D
 static func card_icon() -> Texture2D:
 	return load("res://assets/art/icons/equipment/card.svg") as Texture2D
+
+static func instance_description(item: EquipmentDefinition, instance: EquipmentInstance) -> String:
+	if instance.power_ruleset_id == &"legacy_unscaled": return item.description
+	var lines: Array[String] = []
+	for effect: EffectDefinition in item.effects:
+		if not EquipmentPowerRules.scales(effect): continue
+		var value := EquipmentPowerRules.modifier_magnitude(effect, instance, item)
+		lines.append("%s: %s%s" % [ContentAuthoring.STAT_LABELS.get(effect.axis, String(effect.axis)), "+" if value >= 0 else "", BuildPresentation.value_text(effect.axis, value)])
+	return item.description if lines.is_empty() else "Bônus deste exemplar:\n" + "\n".join(lines) + "\nReceita: " + item.description

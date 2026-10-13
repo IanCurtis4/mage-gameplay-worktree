@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2"]
+
+[sub_resource type="Resource" id="defense"]
+script = ExtResource("1")
+id = &"arena_epic_ward_defense"
+family_id = &"arena_epic_ward_defense"
+axis = &"physical_defense"
+unit = &"points"
+magnitude = 5.0
+
+[resource]
+script = ExtResource("2")
+id = &"arena_epic_ward"
+display_name = "Couraça de Treino da Arena"
+flavor_text = "Riscos de treino cruzam as placas, lembrando as disputas da Arena demonstrativa."
+description = "Defesa física: +5."
+allowed_origins = Array[StringName]([&"swordsman", &"mage", &"archer"])
+slot = &"torso"
+item_kind = &"armor"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"epic"
+effects = Array[ExtResource("1")]([SubResource("defense")])

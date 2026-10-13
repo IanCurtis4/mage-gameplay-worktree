@@ -102,7 +102,7 @@ func _check_round_trip_and_unknown_fields() -> void:
 	overspent_skill_payload["characters"][0]["purchased_skill_ranks"]["slash"] = 2
 	_check(ProfileCodec.decode(JSON.stringify(overspent_skill_payload))["error_code"] == &"overspent_skill_points", "purchased ranks cannot exceed granted base skill points")
 	var unknown_owned_item_payload: Dictionary = encoded["data"].duplicate(true)
-	unknown_owned_item_payload["equipment_instances"] = [{"instance_id": "equipment_1", "definition_id": "nonexistent_item", "origin_id": "fixture_origin", "item_level": 1, "quality_id": "common", "socket_capacity": 1}]
+	unknown_owned_item_payload["equipment_instances"] = [{"instance_id": "equipment_1", "definition_id": "nonexistent_item", "origin_id": "fixture_origin", "item_level": 1, "quality_id": "common", "socket_capacity": 1, "recipe_revision_id": "catalog_v1", "power_ruleset_id": "legacy_unscaled"}]
 	unknown_owned_item_payload["next_equipment_counter"] = 2
 	unknown_owned_item_payload["characters"][0]["equipped"]["main_hand"] = "nonexistent_item"
 	_check(ProfileCodec.decode(JSON.stringify(unknown_owned_item_payload))["error_code"] == &"invalid_catalog", "syntactically valid but unknown equipment blocks the profile")

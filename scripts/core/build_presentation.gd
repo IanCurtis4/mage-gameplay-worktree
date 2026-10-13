@@ -20,7 +20,7 @@ static func describe(controller: RunController) -> Dictionary:
 		var item := catalog.get_definition(&"equipment", instance.definition_id) as EquipmentDefinition
 		if item != null:
 			var row := instance.to_record()
-			row.merge({"id": id, "name": EquipmentPresentation.item_name(item), "description": item.description, "flavor": item.flavor_text, "icon": EquipmentPresentation.icon(item), "hand_usage": item.hand_usage, "origin_label": "Arena demonstrativa" if instance.origin_id == &"demo_arena" else String(instance.origin_id), "slot": item.slot, "selected": id in state.build_snapshot.equipped.values(), "allowed": BuildEffectCatalog.definition_allowed(item, state.build_snapshot)})
+			row.merge({"id": id, "name": EquipmentPresentation.item_name(item), "description": EquipmentPresentation.instance_description(item, instance), "flavor": item.flavor_text, "icon": EquipmentPresentation.icon(item), "hand_usage": item.hand_usage, "origin_label": "Arena demonstrativa" if instance.origin_id == &"demo_arena" else String(instance.origin_id), "slot": item.slot, "selected": id in state.build_snapshot.equipped.values(), "allowed": BuildEffectCatalog.definition_allowed(item, state.build_snapshot)})
 			equipment.append(row)
 	var inventory := state.card_inventory.describe()
 	var cards: Array[Dictionary] = []

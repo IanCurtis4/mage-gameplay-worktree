@@ -1,3 +1,5 @@
+> Contrato atual E06,13/10: [primeira calibração](epics/e06/e06_balance_scope.md), [checkpoint](epics/e06/e06_pending_checkpoint.md). Persistência schema4/catalog11; stat_thresholds_v1 e XP mantidos. EquipmentInstance guarda revisão imutável catalog_v1 e ruleset de poder, além dos seis campos anteriores. Migração3→4 atribui legacy_unscaled a todos os exemplares existentes, sem alterar seus valores; aquisições por tabela aprovada guardam equipment_growth_v1 no ticket. EquipmentPowerRules resolve somente pontos autorizados, sem mutar Resources; Composer, tooltip e comparação consomem a mesma autoridade. Pools de produção por tier nominal,83recursos-base preservados +2receitas explícitas novas (runtime85). O texto abaixo conserva os contratos históricos nos pontos substituídos.
+
 # Contratos de implementação — versão 1
 
 Atualização autorizada 07/10/2026: [STAT_THRESHOLDS_PLAN.md](STAT_THRESHOLDS_PLAN.md)

@@ -57,7 +57,7 @@ func issue(event_id: String, reward_id: StringName, stage_reward: bool = false) 
 	if stage_reward and not mob_loot_enabled():
 		for id: StringName in catalog.ids(&"equipment"):
 			var item := catalog.get_definition(&"equipment", id) as EquipmentDefinition
-			if not item.starter and BuildEffectCatalog.definition_allowed(item, _run.build_snapshot):
+			if not item.starter and item.quality_id != &"legendary" and BuildEffectCatalog.definition_allowed(item, _run.build_snapshot):
 				var checked := EquipmentInstance.from_metadata(&"reward_candidate", id, item.metadata())
 				if not checked["ok"]:
 					return checked
@@ -80,7 +80,8 @@ func issue(event_id: String, reward_id: StringName, stage_reward: bool = false) 
 	if not card_pool.is_empty():
 		card_id = card_pool[controller.rng.randi_range(0, card_pool.size() - 1)]
 	var ticket_id := "reward-%s-%d" % [_run.run_id.md5_text(), _next_sequence]
-	var entry := {"ok": true, "error_code": &"", "request_id": ticket_id, "ticket_id": ticket_id, "event_id": event_id, "reward_id": reward_id, "sequence": _next_sequence, "payload": payload, "item_id": item_id, "card_id": card_id, "stage_reward": stage_reward, "delivered": false, "message": "Nenhuma carta Ãºtil disponÃ­vel." if stage_reward and card_id.is_empty() else ""}
+	var message := "XP e escolha de augment disponíveis." if stage_reward and mob_loot_enabled() else ("Nenhuma carta útil disponível." if stage_reward and card_id.is_empty() else "")
+	var entry := {"ok": true, "error_code": &"", "request_id": ticket_id, "ticket_id": ticket_id, "event_id": event_id, "reward_id": reward_id, "sequence": _next_sequence, "payload": payload, "item_id": item_id, "card_id": card_id, "stage_reward": stage_reward, "delivered": false, "message": message}
 	_tickets[ticket_id] = entry
 	_events[event_id] = ticket_id
 	_queue.append(ticket_id)

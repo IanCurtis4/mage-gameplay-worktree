@@ -28,6 +28,9 @@ static func compose(snapshot: BuildSnapshot, run_effects: Dictionary, temporary_
 		if item == null:
 			continue
 		var instance: EquipmentInstance = snapshot.equipment_instances[item]
+		var power_check := EquipmentPowerRules.validate_instance(instance)
+		if not power_check["ok"]:
+			return power_check
 		var item_definition := registry.get_definition(&"equipment", instance.definition_id) as EquipmentDefinition
 		var quality_check := registry.validate_equipment_quality(item_definition, instance.quality_id)
 		if not quality_check["ok"]:
@@ -147,6 +150,10 @@ static func compose(snapshot: BuildSnapshot, run_effects: Dictionary, temporary_
 				else:
 					conflicts[effect.conflict_group] = {"source_id": source_id, "equivalence": equivalence}
 			var magnitude := effect.value_at(entry["stacks"])
+			if entry["origin"] == &"equipment":
+				magnitude = EquipmentPowerRules.modifier_magnitude(effect, snapshot.equipment_instances[entry["instance_id"]], definition as EquipmentDefinition)
+				if not is_finite(magnitude):
+					return BuildEffectCatalog.failure(&"invalid_equipment_power")
 			provenance.append({"source_id": source_id, "origin": entry["origin"], "definition_id": entry["id"], "effect_id": effect.id, "family_id": effect.family_id, "magnitude": magnitude, "targets": targets.duplicate(), "tags": effect.tags.duplicate(), "capability": effect.capability(), "granted_skill_id": effect.granted_skill_id, "unique_effect_id": effect.unique_effect_id, "repeated_card": repeated_card})
 			if repeated_card or effect.kind == EffectDefinition.Kind.ACTIVE_GRANT:
 				continue

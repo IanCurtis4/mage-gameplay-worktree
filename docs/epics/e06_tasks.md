@@ -1,3 +1,5 @@
+> Estado prevalente13/10: primeira calibração de equipamentos/loot ENTREGUE e VALIDADA por Sol, com supervisão automatizada Luna:209etapas distintas em três execuções complementares, mais3rechecks do delta final. XP e poder de todos os exemplares anteriores preservados. [Contrato atual](e06/e06_balance_scope.md), [recibo](e06/e06_balance_validation.json), [roteiro](e06/e06_balance_playtest.md). Preparação de playtest em andamento; aceite humano/merge pendentes, E07 não autorizado. Cabeçalhos abaixo são históricos.
+
 > Estado prevalente13/10: interface14posições/cartas/ícones/elmo e fechamento técnico integrado entregues/validados por Sol com supervisão Luna, cobertura206etapas distintas em rodadas complementares. [Checkpoint vigente](e06/e06_pending_checkpoint.md) e [roteiro](e06/e06_playtest.md). Playtest aplicado no diretório habitual, importação/abertura e preservação do save verificadas; aceite humano/merge pendentes. Taxas/progressão/E07 adiados. Cabeçalhos antigos conservam o histórico.
 
 > Continuação humana13/10: [interface e integração restantes](e06/e06_ui_integration.md) em implementação sobre7cc6294. Suspensão antigaT4 foi resolvida pelas dependências e este pedido; rates/progressão/E07 continuam adiados.
@@ -359,3 +361,5 @@ Arquivável? motivo / preservação da worktree:
 Não inventar SHA, número de checks, PASS ou aceite. Arquivar só após entrega
 registrada, validada e integrada. Falha/decisão mantém aberto; correções na mesma
 tarefa. Preservar logs ignorados necessários antes de remover uma worktree.
+
+13/10: novo lote taxas/progressões autorizado; suspensão anterior substituída apenas para esse escopo. [Contrato/donos](e06/e06_balance_scope.md), análise e proposta primeiro, sem taxas de produção nem E07 por inferência.

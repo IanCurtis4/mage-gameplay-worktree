@@ -31,5 +31,12 @@ static func comparison(identity: String, branch: int, catalog: BuildEffectCatalo
 static func describe(result: Dictionary) -> Dictionary:
 	var snapshot: BuildSnapshot = result["snapshot"]
 	var instances: Dictionary = {}
-	for id: StringName in snapshot.equipment_instances: instances[id] = snapshot.equipment_instances[id].to_record()
+	for id: StringName in snapshot.equipment_instances:
+		var instance: EquipmentInstance = snapshot.equipment_instances[id]
+		var record := instance.to_record()
+		# Historical offline blueprint schema stays six fields only for frozen legacy.
+		if instance.power_ruleset_id == &"legacy_unscaled" and instance.recipe_revision_id == &"catalog_v1":
+			record.erase("power_ruleset_id")
+			record.erase("recipe_revision_id")
+		instances[id] = record
 	return {"base_class_id": snapshot.base_class_id, "evolution_id": snapshot.evolution_id, "base_level": snapshot.base_level, "job_level": snapshot.job_level, "purchased_ranks": result["purchased_ranks"].duplicate(true), "effective_ranks": snapshot.skill_ranks.duplicate(true), "action_slots": snapshot.action_slots.duplicate(), "equipment_instances": instances, "equipped": snapshot.equipped.duplicate(true), "augment_stacks": result["run_effects"]["augment_stacks"].duplicate(true), "card_instances": result["run_effects"]["card_instances"].duplicate(true), "card_sockets": result["run_effects"]["card_sockets"].duplicate(true), "support_purchases": result["support_purchases"].duplicate(true)}

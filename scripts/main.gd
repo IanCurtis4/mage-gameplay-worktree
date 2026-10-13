@@ -178,6 +178,10 @@ func _ready() -> void:
 	player.configure(navigation, run_state)
 	build_service = RunBuildService.new(self)
 	reward_service = RunRewardService.new(self)
+	if persistent_facade != null and not training_mode and run_state.effect_catalog().get_definition(&"equipment", &"arena_legendary_ward") != null:
+		var production := EquipmentLootProfiles.production(run_state.effect_catalog())
+		var configured := reward_service.configure_mob_loot(production)
+		assert(configured["ok"], str(configured))
 	player.global_position = Vector2(300, 520)
 	player.attack_requested.connect(_on_attack_requested)
 	player.defender_hit_requested.connect(_on_defender_hit_requested)
