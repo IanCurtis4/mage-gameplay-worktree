@@ -1,0 +1,14 @@
+# E06 — roteiro do candidato de inventário
+
+Preparação pendente da validação integrada e do hash final. Não é aceite humano nem autorização de merge. Diretório habitual C:/Users/João Pedro/Documents/ChatGPT/RagRPG permanece codex/playtest; save pessoal não faz parte dos testes.
+
+Depois da atualização, pare a partida antiga, aceite recarregar os arquivos no Godot e execute F5. Não abrir uma worktree diferente no editor habitual.
+
+1. Abra Classe e equipamento no menu. Confira as 14 posições e a distinção dos exemplares/qualidade/ilvl/encaixes. Iniciais e itens antigos continuam no inventário com a indicação antigo; suas receitas não recebem o poder novo. Salve um preset, troque de personagem e retorne: alts/presets ainda podem apontar ao mesmo exemplar compartilhado.
+2. Inicie a demonstração com a build escolhida. O botão Equipamentos/cartas bloqueia trocas no encontro. Depois de concluí-lo e coletar a recompensa, abra o inventário: mundo/recargas ficam pausados, a mira e o preparo são cancelados, sem lançamento residual ao fechar com Esc.
+3. Escolha uma peça adquirida e confira a comparação atual→depois. Só Confirmar aplica. Reabrir o painel não troca nem sorteia outra oferta. Se o item exige outra identidade ou bloqueia a mão secundária, o motivo deve aparecer; duas cópias de acessório iguais continuam proibidas, antigo+novo correspondente pode coexistir quando são exemplares diferentes.
+4. Cartas da run aparecem separadas da coleção. Escolha a peça equipada, um encaixe existente e uma carta livre. Transferir uma carta ocupada captura a origem automaticamente e só muda os dois encaixes na confirmação; um destino ocupado exige retirada antes. Desequipar libera cartas na mochila. Acesso a skill de item aparece na biblioteca, com escolha manual de atalho; retirar a última fonte mantém o atalho desabilitado e a recarga.
+5. Resolva as escolhas de augment. Nome, receita e comparação canônica de efeitos devem ser legíveis; descrições grandes rolam. Cada confirmação consome uma única escolha. Cartas/augments desaparecem ao terminar ou abandonar a run; equipamentos obtidos permanecem salvos.
+6. Caso obtenha/equipe Elmo da Guarda, observe frente, costas, espelhamento, caminhada e ação. Só a peça de cabeça acrescenta representação no personagem; outras peças não substituem o atlas do corpo. Testar elmo depende da aquisição disponível; não há concessão automática ao save nem tabela de mobloot inventada para facilitar o roteiro.
+
+Relatar a ação anterior ao problema, personagem/peça e o que deveria acontecer. A avaliação humana cobre sensação, leitura, estilo do elmo/ícones e equilíbrio; capturas nativas/checks não os aprovam por você. Campanha/E07, taxas e fórmula de progressão permanecem adiadas. Não há push ou merge automático.

@@ -1,3 +1,7 @@
+> Estado prevalente13/10: interface14posições/cartas/ícones/elmo e fechamento técnico integrado entregues/validados por Sol com supervisão Luna, cobertura206etapas distintas em rodadas complementares. [Checkpoint vigente](e06/e06_pending_checkpoint.md) e [roteiro](e06/e06_playtest.md). Preparação do playtest em curso; aceite humano/merge pendentes. Taxas/progressão/E07 adiados. Cabeçalhos antigos conservam o histórico.
+
+> Continuação humana13/10: [interface e integração restantes](e06/e06_ui_integration.md) em implementação sobre7cc6294. Suspensão antigaT4 foi resolvida pelas dependências e este pedido; rates/progressão/E07 continuam adiados.
+
 > 13/10/2026: [publicação preservadora](e06/e06_catalog_integration.md) ENTREGUE/VALIDADA:69receitas,83definições ativas,12itens antigos intactos e20builds equivalentes. Luna40/204 nomes distintos PASS em duas rodadas; UI/chapéus/playtest e progressão/taxas ainda pendentes.
 
 > 13/10/2026: escolha humana recebida — novos IDs, iniciais atuais, antigo+novo permitido. [Publicação preservadora](e06/e06_catalog_integration.md) em implementação sobre d242a60bf905ea971c72e90fa65ca6a58580ba87, árvore2c0578265b50e1b8d495ff374244b4162e69ec44. Declarações anteriores de DECISÃO_PENDENTE são históricas.

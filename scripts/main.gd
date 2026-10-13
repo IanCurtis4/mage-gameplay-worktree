@@ -61,6 +61,9 @@ var encounter_active := false
 var run_finished := false
 var build_service: RunBuildService
 var reward_service: RunRewardService
+var inventory_panel: RunInventoryPanel
+var inventory_button: Button
+var equipment_head: EquipmentHeadVisual
 var inventory_frozen := false
 var _inventory_previous_pause := false
 var _terminal_outcome: StringName = &"abandoned"
@@ -300,7 +303,9 @@ func _input(event: InputEvent) -> void:
 			_cancel_aim()
 			return
 		if event.keycode == KEY_ESCAPE and event.pressed:
-			if class_overlay.visible:
+			if inventory_panel != null and inventory_panel.visible:
+				inventory_panel.dismiss()
+			elif class_overlay.visible:
 				_close_class_menu()
 			elif battle_controls.settings_overlay.visible:
 				_toggle_settings(false)
@@ -2009,8 +2014,9 @@ func _open_augment_menu() -> void:
 		child.queue_free()
 	for definition: AugmentDefinition in offer:
 		var button := Button.new()
-		button.custom_minimum_size = Vector2(520, 88)
-		button.text = "%s\n%s\n%s" % [definition.display_name, definition.description, run_state.describe_progress(definition)]
+		button.custom_minimum_size = Vector2(520, 120)
+		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		button.text = "%s\n%s\n%s" % [definition.display_name, definition.description, BuildPresentation.augment_progress(self, definition)]
 		button.add_theme_font_size_override("font_size", 17)
 		button.pressed.connect(_confirm_augment.bind(definition.id))
 		choice_buttons.add_child(button)
@@ -2184,7 +2190,7 @@ func _run_close_error_text(error_code: StringName) -> String:
 		_: return "O encerramento da run falhou (%s)." % error_code
 
 func _open_class_menu() -> void:
-	if augment_overlay.visible or class_overlay.visible:
+	if augment_overlay.visible or class_overlay.visible or (inventory_panel != null and inventory_panel.visible):
 		return
 	if battle_controls.settings_overlay.visible:
 		battle_controls.settings_overlay.visible = false
@@ -2365,6 +2371,8 @@ func _show_combat_text(actor: CombatActor, text: String, color: Color, font_size
 	return label
 
 func _update_hud() -> void:
+	if inventory_button != null:
+		inventory_button.disabled = encounter_active or run_finished or inventory_frozen or not player.is_alive()
 	if geometer_onboarding != null:
 		geometer_onboarding.refresh()
 	if sentinel_onboarding != null:
@@ -2695,22 +2703,32 @@ func _build_ui() -> void:
 	ui_root.add_child(bottom_controls)
 	bottom_controls.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bottom_controls.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
-	bottom_controls.offset_left = -310.0
-	bottom_controls.offset_top = -250.0
-	bottom_controls.offset_right = 310.0
+	bottom_controls.offset_left = -600.0
+	bottom_controls.offset_top = -310.0
+	bottom_controls.offset_right = 600.0
 	bottom_controls.offset_bottom = -166.0
 	bottom_controls.alignment = BoxContainer.ALIGNMENT_CENTER
 	status_label = _make_label("", 20, Color.WHITE)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	bottom_controls.add_child(status_label)
-	var buttons := HBoxContainer.new()
-	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
+	var buttons := HFlowContainer.new()
+	buttons.alignment = FlowContainer.ALIGNMENT_CENTER
 	buttons.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bottom_controls.add_child(buttons)
 	augment_button = Button.new()
 	augment_button.custom_minimum_size = Vector2(280, 44)
 	augment_button.pressed.connect(_open_augment_menu)
 	buttons.add_child(augment_button)
+	inventory_button = Button.new()
+	inventory_button.text = "Equipamentos / cartas"
+	inventory_button.pressed.connect(_open_inventory)
+	buttons.add_child(inventory_button)
+	inventory_panel = RunInventoryPanel.new()
+	ui_root.add_child(inventory_panel)
+	inventory_panel.closed.connect(_close_inventory)
+	equipment_head = EquipmentHeadVisual.new()
+	player.add_child(equipment_head)
+	equipment_head.configure(player)
 	next_button = Button.new()
 	next_button.text = "Iniciar encontro 2 (Espaço)"
 	next_button.custom_minimum_size = Vector2(250, 44)
@@ -2745,9 +2763,14 @@ func _build_ui() -> void:
 	choice_title = _make_label("Escolha um augment", 30, Color("e9c67b"))
 	choice_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	choice_column.add_child(choice_title)
+	var choices_scroll := ScrollContainer.new()
+	choices_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	choices_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	choice_column.add_child(choices_scroll)
 	choice_buttons = VBoxContainer.new()
+	choice_buttons.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	choice_buttons.add_theme_constant_override("separation", 14)
-	choice_column.add_child(choice_buttons)
+	choices_scroll.add_child(choice_buttons)
 	augment_overlay.visible = false
 
 	result_overlay = _make_overlay(ui_root)
@@ -2916,3 +2939,14 @@ func _on_mob_skill_hit(request: DamageRequest, target_actor: CombatActor) -> voi
 	if target_actor == null or not target_actor.is_alive(): return
 	var result := target_actor.apply_damage(request, rng)
 	SkillImpactRules.spear(request.skill_id, result, target_actor)
+
+func _open_inventory() -> void:
+	if encounter_active or run_finished or not player.is_alive() or get_tree().paused or inventory_frozen: return
+	_cancel_casting(false)
+	_clear_hover()
+	inventory_panel.configure(self)
+	get_tree().paused = true
+func _close_inventory() -> void:
+	inventory_panel.hide()
+	_cancel_casting(false)
+	get_tree().paused = run_finished or inventory_frozen or augment_overlay.visible or class_overlay.visible or battle_controls.settings_overlay.visible

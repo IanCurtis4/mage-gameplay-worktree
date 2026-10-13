@@ -44,6 +44,8 @@ func _test_augment_flow() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 7
 	var state := RunState.new()
+	# Original three-choice milestone fixture, independent of the live catalog.
+	state.set_effect_catalog(BuildEffectCatalog.pilot())
 	state.queue_choice()
 	_check(not state.can_open_choice(true), "choice cannot open during encounter")
 	_check(state.build_offer(true, rng).is_empty(), "offer is blocked during encounter")
@@ -79,6 +81,7 @@ func _test_augment_flow() -> void:
 	state.reset()
 	_check(state.augment_stacks.is_empty() and state.current_offer.is_empty() and state.pending_choices == 0, "explicit reset clears all run state")
 	var hp_state := RunState.new()
+	hp_state.set_effect_catalog(BuildEffectCatalog.pilot())
 	hp_state.queue_choice()
 	var hp_offer := hp_state.build_offer(false, rng)
 	var hp_available := false

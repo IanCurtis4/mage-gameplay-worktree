@@ -1,0 +1,92 @@
+{
+  "scope": "E06 final directed UI and integration validation supervision",
+  "outcome": "directed_pass",
+  "base_commit": "7cc62946ad802a1cec08975c4c2f6394c268454d",
+  "base_tree": "908fac6c99452b05eb621156558a802c57d042dc",
+  "delta_manifest": ".godot/verification/e06_ui/final/delta/inputs_before.json",
+  "delta_manifest_sha256": "3154f0d3f68e7f38b069fbdceb39e81297c6a3aab18d5160b509c681431778a8",
+  "delta_manifest_entries": 859,
+  "delta_manifest_changes_vs_previous_resume": [
+    "scripts/core/build_presentation.gd",
+    "tests/e06_ui_inventory_test.gd",
+    "tools/e06_ui_probe.gd"
+  ],
+  "delta_manifest_expected_changes": [
+    "scripts/core/build_presentation.gd",
+    "tests/e06_ui_inventory_test.gd",
+    "tools/e06_ui_probe.gd"
+  ],
+  "post_manifest": ".godot/verification/e06_ui/final/delta/inputs_after.json",
+  "post_manifest_sha256": "5a81ef88f1f4f856412cc48f301bfc64437c478ba0e1665198cce2c64490c47c",
+  "integrity": ".godot/verification/e06_ui/final/delta/integrity.json",
+  "integrity_sha256": "2c36466089a54dca2663511c6301349e91267f60c5545975cfb25ecbc05f325a",
+  "source_unchanged": true,
+  "source_comparison_count": 859,
+  "legacy_unchanged": true,
+  "legacy_comparison_count": 14,
+  "native_unchanged": true,
+  "native_comparison_count": 83,
+  "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "runner_sha256": "3d2be8db42a83164e8dd0741fb015c713cb0930915a7c8733c265946ef1491f1",
+  "timeout_seconds": 60,
+  "directed_selection": [
+    "e06_ui_inventory_test",
+    "e06_ui_menu_test",
+    "battle_ui_test",
+    "arena_flow_test",
+    "e06_spatial_policies_test",
+    "e06_transform_policies_test"
+  ],
+  "directed_checks": {
+    "checks_sha256": "9ffebcd5e4a560cee145f2f466fc21b1f3b93d5d3184b097e3a16a03b0a3361b",
+    "records": ".godot/verification/e06_ui/final/delta/checks/checks.jsonl",
+    "passed": 6,
+    "attempted": 6,
+    "failed": 0
+  },
+  "publication_check": {
+    "arguments": "Godot --headless --path <worktree> --script res://tools/content/publish.gd -- --check",
+    "exit_code": 0,
+    "timed_out": false,
+    "errors_detected": false,
+    "entries": 83,
+    "builds": 20,
+    "digest": "6631984d3bf5a12efd1344a2cf542c9c07e411c9f38bd465f95c417d8fc4bf9f",
+    "output": ".godot/verification/e06_ui/final/delta/publication.log",
+    "output_sha256": "d8f212996190d3d0e0fd6361f6037af1a5617a044b942c2e904dcdfc75cea7bf"
+  },
+  "prior_failure_receipt": ".godot/verification/e06_ui/final/delta/failure_receipt.json",
+  "prior_failure_receipt_sha256": "4755035313a57e6c3b8080373b47a952060a4b34464a818288f9b05cf205705b",
+  "prior_broad_runs": {
+    "initial_passed": 10,
+    "initial_failed": 1,
+    "resume_passed": 194,
+    "resume_failed": 1,
+    "known_compatible_distinct_passes": 204
+  },
+  "composite_coverage": {
+    "prior_compatible_passes": 204,
+    "directed_passes": 6,
+    "overlap_step_ids": [
+      13,
+      14,
+      199,
+      201
+    ],
+    "new_passed_step_ids": [
+      205,
+      206
+    ],
+    "distinct_step_ids_with_pass": 206,
+    "single_full_suite_run_claim": false
+  },
+  "prior_known_failure": "Original full suite failed on old milestone_one_test oracle; preserved receipt and superseded by authorized delta, no current source/oracle change by supervisor.",
+  "native_visual_probe_status": "separately supervised by root; not claimed approved in this receipt.",
+  "sol_evidence_verification": {
+    "distinct_passed_step_ids": 206,
+    "every_output_hash_verified": true,
+    "every_pass_exit_and_error_scan_verified": true,
+    "role": "technical_validator",
+    "independent_semantic_audit": false
+  }
+}

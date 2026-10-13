@@ -1,0 +1,45 @@
+{
+  "role": "implementer_native_visual_inspection",
+  "supervisor": "Sol",
+  "renderer": "Godot 4.7.2 standard OpenGL 3.3 NVIDIA GTX 1080",
+  "probe": "tools/e06_ui_probe.gd",
+  "probe_sha256": "f142fd38555a6f9da860d2abeca1524e76a6a5e7078c3924cce2e8c374f6f3b4",
+  "exit_code": 0,
+  "errors_detected": false,
+  "log": ".godot/verification/e06_ui/final/delta/native_probe_final.log",
+  "log_sha256": "b101f93d9c9e99d7b36def2b7e1881fa92058e9ce27a58f7123c720c967b932e",
+  "source_manifest_before": ".godot/verification/e06_ui/final/delta/native_inputs_before.json",
+  "source_manifest_after": ".godot/verification/e06_ui/final/delta/native_inputs_after.json",
+  "859_hashes_unchanged": true,
+  "images": {
+    ".godot/verification/e06_ui/visual/helm_poses.png": "acde8822827c316fea6025284dd0b022b59889d98ede8f7bddf52ff647dc32a2",
+    ".godot/verification/e06_ui/visual/inventory_1280.png": "8f6e316075c8064f14448b978a69820635b7d92aa90e2f4f3a8f8c8130bd91a8",
+    ".godot/verification/e06_ui/visual/inventory_1920.png": "35e8ae821a207d7bf2db0118823c902f973e108a39b75ff614058e8d5d0af941",
+    ".godot/verification/e06_ui/visual/menu_1280.png": "a3465d17e1a5be169006ed46b9df8420f1f63cf9055ac8b7445c96d8d905bcd3",
+    ".godot/verification/e06_ui/visual/menu_1920.png": "7bb8bd9d0f808ed0112f5abb387c57eb6b0fd80578c8d0016d9c731b36cda516",
+    ".godot/verification/e06_ui/visual/offers_0.png": "b22e766daf40030e322fa89d775ad3f8b607068afea71a0ac603c48df7bac070",
+    ".godot/verification/e06_ui/visual/offers_1.png": "7df5f1766956439176f1aac0189ae4a9c31b43079ddb7fc4e53038c3919c3039",
+    ".godot/verification/e06_ui/visual/offers_2.png": "899b1b333fcd635e70c0d76bb3acf82cac0eb5104b99f62dfdc756d2ec6aee3b",
+    ".godot/verification/e06_ui/visual/offers_3.png": "9b481b6458edf75eaf6ed33f742e61ade56ae2774ae35710fd381eb43ca1e9de",
+    ".godot/verification/e06_ui/visual/policy_geometer_collapse_first_element.png": "c401dae45037c274517165b8d8954e27a53583311fdd8a053bcbf9f3fc8058fc",
+    ".godot/verification/e06_ui/visual/policy_geometer_ground_anchor.png": "3c022d913b81f04e83b0e0d39d898bf20b23f56d3728c2e7a3e0c02094ca0078",
+    ".godot/verification/e06_ui/visual/policy_hunter_covering_fan.png": "69d0dd55895b91936cb56a2ce6cb5e5d6e343c099582edcd347aa9dd9eb2e965",
+    ".godot/verification/e06_ui/visual/policy_hunter_marked_mechanism.png": "3c2d7a8a063cc0d09e25f39c2a50f0c1e33bf7309713693533392b33714fb1f2",
+    ".godot/verification/e06_ui/visual/policy_spiritualist_drain_inscription.png": "0518cffe32149f56377170a14e5f71c25b7b3e689db6f88ebd001d429c8e5eab",
+    ".godot/verification/e06_ui/visual/policy_spiritualist_echo_fixed_origin.png": "b78de1d84db3f820542478fe6f1f62fb344e4681e12848cbf242019c7453ad58"
+  },
+  "scenarios": [
+    "inventory and menu 1280x720/1920x1080",
+    "0/1/2/3 offers with closed fixture pool",
+    "six policy offers with learned approved preparations",
+    "helmet:10 identities,six poses,alternating flip,dark/light background"
+  ],
+  "probe_only_delta_after_automated_suite": "geometer display name replaced by mg_ar technical identity in two fixture entries",
+  "limitations": [
+    "Isolated profiles; no personal save writes",
+    "Programmatic native fixture inspection, no human product/style acceptance",
+    "No FPS/balance/fun certification",
+    "Inventory comparison in fixture explicitly proposes removing head while main-hand collection remains selected"
+  ],
+  "technical_decision": "approved_by_Sol_with_Luna_automated_supervision"
+}

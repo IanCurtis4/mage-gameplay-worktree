@@ -55,6 +55,8 @@ var active_slot_b: OptionButton
 var passive_slot: OptionButton
 var active_selectors: Array[OptionButton] = []
 var passive_selectors: Array[OptionButton] = []
+var _equipment_display_cache: Dictionary = {}
+var equipment_selectors: Dictionary[StringName, OptionButton] = {}
 var weapon_selector: OptionButton
 var armor_selector: OptionButton
 var accessory_selector: OptionButton
@@ -188,9 +190,8 @@ func _save_build() -> Dictionary:
 	var active_slots: Array[Variant] = preset["active_slots"].duplicate()
 	var passive_slots: Array[Variant] = preset["passive_slots"].duplicate()
 	var equipped: Dictionary[StringName, Variant] = preset["equipped"].duplicate(true)
-	equipped[&"main_hand"] = _selected_option(weapon_selector)
-	equipped[&"torso"] = _selected_option(armor_selector)
-	equipped[&"accessory_1"] = _selected_option(accessory_selector)
+	for slot: StringName in IdentityIds.equipment_slots():
+		equipped[slot] = _selected_option(equipment_selectors[slot])
 	return _show_result(facade.update_preset(_request_id("build"), profile.revision, character.character_id, character.selected_preset, active_slots, passive_slots, equipped), "Preset salvo.")
 
 func _start_run() -> Dictionary:
@@ -231,6 +232,7 @@ func _selected_option(selector: OptionButton) -> Variant:
 	return selector.get_item_metadata(selector.selected)
 
 func _populate_build_editor(character: Variant) -> void:
+	_equipment_display_cache.clear()
 	identity_label.text = "%s  /  %s" % [character.display_name, _roster_identity_name(character)]
 	var options: Dictionary = facade.available_build_options(character.character_id)
 	if not options.get("ok", false):
@@ -243,10 +245,13 @@ func _populate_build_editor(character: Variant) -> void:
 	for id: StringName in options["passive_skills"]:
 		passives.append(_skill_name(id))
 	automatic_passives_label.text = "Passivas aprendidas: todas automáticas\n%s" % ("Nenhuma aprendida." if passives.is_empty() else ", ".join(passives))
-	_populate_selector(weapon_selector, options["equipment_by_slot"][&"main_hand"], preset["equipped"][&"main_hand"])
-	_populate_selector(armor_selector, options["equipment_by_slot"][&"torso"], preset["equipped"][&"torso"])
-	_populate_selector(accessory_selector, options["equipment_by_slot"][&"accessory_1"], preset["equipped"][&"accessory_1"])
-	equipment_empty_label.visible = not weapon_selector.get_parent().visible and not armor_selector.get_parent().visible and not accessory_selector.get_parent().visible
+	var any_equipment := false
+	for slot: StringName in IdentityIds.equipment_slots():
+		_populate_selector(equipment_selectors[slot], options["equipment_by_slot"][slot], preset["equipped"][slot])
+		# All14 positions remain visible even before acquisition.
+		equipment_selectors[slot].get_parent().show()
+		any_equipment = any_equipment or not options["equipment_by_slot"][slot].is_empty()
+	equipment_empty_label.visible = not any_equipment
 
 func _populate_selector(selector: OptionButton, values: Array, current: Variant) -> void:
 	selector.clear()
@@ -259,6 +264,7 @@ func _populate_selector(selector: OptionButton, values: Array, current: Variant)
 		selector.add_item(_skill_name(item_id) if is_skill_selector else _equipment_name(item_id))
 		var index := selector.item_count - 1
 		selector.set_item_metadata(index, item_id)
+		selector.set_item_tooltip(index, _skill_name(item_id) if is_skill_selector else _equipment_name(item_id))
 		if value == current:
 			current_index = index
 	selector.select(current_index)
@@ -817,7 +823,7 @@ func _refresh_playtest_controls(profile: Variant) -> void:
 func _set_build_controls_disabled(disabled: bool) -> void:
 	preset_selector.disabled = disabled
 	save_build_button.disabled = disabled
-	for selector: OptionButton in active_selectors + passive_selectors + [weapon_selector, armor_selector, accessory_selector]:
+	for selector: OptionButton in active_selectors + passive_selectors + equipment_selectors.values():
 		selector.disabled = disabled
 
 func _set_attribute_actions_disabled(disabled: bool) -> void:
@@ -962,8 +968,13 @@ func _equipment_name(item_id: Variant) -> String:
 	var instance: EquipmentInstance = profile.equipment_instances.get(StringName(item_id)) if profile != null else null
 	if instance == null:
 		return "Equipamento indisponível"
-	var loaded := BuildContentLoader.pilot().get_definition(&"equipment", instance.definition_id) as EquipmentDefinition
-	return loaded.display_name if loaded != null else "Equipamento indisponível"
+	if _equipment_display_cache.is_empty():
+		var catalog := BuildContentLoader.pilot()
+		for id: StringName in catalog.ids(&"equipment"):
+			_equipment_display_cache[id] = catalog.get_definition(&"equipment", id)
+	var loaded := _equipment_display_cache.get(instance.definition_id) as EquipmentDefinition
+	if loaded == null: return "Equipamento indisponível"
+	return "%s · %s · ilvl %d · %d encaixe(s) · exemplar %d" % [EquipmentPresentation.item_name(loaded), EquipmentPresentation.quality_name(instance.quality_id), instance.item_level, instance.socket_capacity, profile.equipment_instance_ids().find(instance.instance_id) + 1]
 
 func _request_id(action: String) -> String:
 	_request_serial += 1
@@ -1194,9 +1205,11 @@ func _build_ui() -> void:
 	cancel_evolution_button.pressed.connect(_cancel_evolution_change)
 	evolution_actions.add_child(cancel_evolution_button)
 	_section_label(gear_column, "Equipamento da build", 22)
-	weapon_selector = _build_selector(gear_column, "Arma")
-	armor_selector = _build_selector(gear_column, "Armadura")
-	accessory_selector = _build_selector(gear_column, "Acessório")
+	for slot: StringName in IdentityIds.equipment_slots():
+		equipment_selectors[slot] = _build_selector(gear_column, EquipmentPresentation.SLOT_LABELS[slot])
+	weapon_selector = equipment_selectors[&"main_hand"]
+	armor_selector = equipment_selectors[&"torso"]
+	accessory_selector = equipment_selectors[&"accessory_1"]
 	equipment_empty_label = _section_label(gear_column, "Ainda não há equipamentos disponíveis para esta classe. Os slots aparecem quando você obtiver itens compatíveis.", 16)
 	_section_label(gear_column, "Ferramentas de teste", 18)
 	playtest_toggle = CheckButton.new()
