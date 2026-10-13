@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="AugmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_1ypma"]
+[ext_resource type="Script" path="res://scripts/data/augment_definition.gd" id="2_teacp"]
+
+[sub_resource type="Resource" id="Resource_l2833"]
+script = ExtResource("1_1ypma")
+id = &"pilot_elementalist_a_effect"
+family_id = &"pilot_elementalist_a_effect"
+kind = 2
+handler_id = 3
+trigger = 1
+target_skill_ids = Array[StringName]([&"elementalist_flame_burst"])
+axis = &"magic_damage"
+unit = &"damage"
+magnitude = 6.0
+limit = 60.0
+stack_values = Array[float]([6.0, 12.0, 18.0])
+
+[resource]
+script = ExtResource("2_teacp")
+id = &"pilot_elementalist_a"
+display_name = "Chamas em Explosão"
+flavor_text = "A explosão de chamas deixa um clarão vivo no centro do confronto."
+description = "Ao acertar: bônus de +6 / +12 / +18 de dano mágico e 0% proporcional; limite do bônus 60. Apenas em acertos de Explosão de Chamas. Requer rank 1 na habilidade afetada.
+Acumula até 3 vez(es)."
+max_stacks = 3
+allowed_origins = Array[StringName]([&"mage"])
+allowed_evolutions = Array[StringName]([&"elementalist"])
+effects = Array[ExtResource("1_1ypma")]([SubResource("Resource_l2833")])

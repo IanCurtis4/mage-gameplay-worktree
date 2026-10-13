@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="AugmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_xn1kc"]
+[ext_resource type="Script" path="res://scripts/data/augment_definition.gd" id="2_jga6h"]
+
+[sub_resource type="Resource" id="Resource_32d7d"]
+script = ExtResource("1_xn1kc")
+id = &"hunter_covering_fan_policy"
+family_id = &"hunter_covering_fan_policy"
+kind = 4
+handler_id = 5
+stacking_mode = 1
+conflict_group = &"hunter_covering_fan"
+target_skill_ids = Array[StringName]([&"hunter_covering_shot"])
+allowed_origins = Array[StringName]([&"archer"])
+allowed_evolutions = Array[StringName]([&"hunter"])
+axis = &"hunter_covering_fan"
+unit = &"policy"
+
+[resource]
+script = ExtResource("2_jga6h")
+id = &"hunter_covering_fan"
+display_name = "Leque de Cobertura"
+flavor_text = "O Tiro de Cobertura reparte a abertura em partes iguais entre o alvo e o inimigo mais próximo a até 80 unidades com visão; sem outro elegível, tudo fica no alvo."
+description = "Tiro de Cobertura divide a exploração bruta da abertura: 50% no alvo, 50% no segundo inimigo mais próximo até 80 unidades com visão. Empate por ID; sem segundo, 100% no alvo. Defesas resolvem cada parcela separadamente. Requer rank 1 na habilidade afetada. Não combina com outra transformação do mesmo grupo.
+Acumula até 1 vez(es)."
+allowed_origins = Array[StringName]([&"archer"])
+allowed_evolutions = Array[StringName]([&"hunter"])
+effects = Array[ExtResource("1_xn1kc")]([SubResource("Resource_32d7d")])

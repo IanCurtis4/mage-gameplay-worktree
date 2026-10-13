@@ -11,7 +11,7 @@ func _initialize() -> void:
 	var catalog := ProfileCatalog.pilot()
 	_check(ProfileState.CATALOG_VERSION == 10 and ProfileState.SCHEMA_VERSION == 3 and ProfileState.RULESET_ID == "stat_thresholds_v1", "historical catalogs -> catalog10/schema3, stat ruleset unchanged")
 	var effects := BuildContentLoader.pilot()
-	_check(effects.ids(&"equipment").size() == 12 and effects.ids(&"card").size() == 6, "reserved metadata counts")
+	_check(effects.ids(&"equipment").size() == 37 and effects.ids(&"card").size() == 6, "published metadata includes 12 preserved and 25 new pieces")
 	for origin: StringName in [&"swordsman", &"mage", &"archer"]:
 		var starters := catalog.starter_equipment(origin)
 		_check(starters[&"torso"] == &"traveler_vest" and starters[&"accessory_1"] == &"traveler_charm" and catalog.starter_item_ids(origin).size() == 3, "origin starter trio from unique catalog")

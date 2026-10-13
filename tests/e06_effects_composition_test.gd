@@ -108,6 +108,8 @@ func _offers() -> void:
 	offer = state.open_offer(false, rng)
 	_check(offer["ids"].size() == 3 and &"extra_fire_spear" not in offer["ids"] and &"extra_ice_spear" not in offer["ids"], "empty bar still offers useful general stats, no unlearned skills")
 	state = RunState.new()
+	# Exhaustion uses a closed historical pool, independent of live publication.
+	_check(state.set_effect_catalog(preload("res://tests/e06_tx_fixture.gd").neutral_effect_catalog())["ok"], "closed exhaustion fixture catalog valid")
 	state.queue_choice()
 	state.queue_choice()
 	state.augment_stacks = {&"vitality": 3, &"keen_edge": 3, &"battle_rhythm": 3}

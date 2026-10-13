@@ -42,7 +42,7 @@ static func stat(id: StringName, axis: StringName, amount: float) -> EffectDefin
 	return effect
 
 static func catalog() -> BuildEffectCatalog:
-	var source := BuildContentLoader.pilot()
+	var source := TX.neutral_effect_catalog()
 	var result := TXEffects.registry()
 	for origin: StringName in BuildEffectCatalog.ORIGINS:
 		for id: StringName in source.ids(origin):
@@ -84,7 +84,7 @@ static func make(tree: SceneTree, label: String, origin: StringName = &"mage", o
 	if origin == &"mage":
 		character.purchased_skill_ranks = {&"fire_spear": 1, &"ice_spear": 1}
 		character.action_slots[0] = &"fire_spear"
-	for id: StringName in BuildContentLoader.pilot().ids(&"equipment"):
+	for id: StringName in TX.HISTORICAL_EQUIPMENT_IDS:
 		if own_all and profile.first_instance_for_definition(id).is_empty():
 			TX.own(profile, id)
 	var alt := CharacterState.new(IdentityIds.character_id(profile.profile_id, 2), "Outro", &"archer")

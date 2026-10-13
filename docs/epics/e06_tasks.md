@@ -1,3 +1,7 @@
+> 13/10/2026: [publicação preservadora](e06/e06_catalog_integration.md) ENTREGUE/VALIDADA:69receitas,83definições ativas,12itens antigos intactos e20builds equivalentes. Luna40/204 nomes distintos PASS em duas rodadas; UI/chapéus/playtest e progressão/taxas ainda pendentes.
+
+> 13/10/2026: escolha humana recebida — novos IDs, iniciais atuais, antigo+novo permitido. [Publicação preservadora](e06/e06_catalog_integration.md) em implementação sobre d242a60bf905ea971c72e90fa65ca6a58580ba87, árvore2c0578265b50e1b8d495ff374244b4162e69ec44. Declarações anteriores de DECISÃO_PENDENTE são históricas.
+
 > Retomada humana de 13/10: [pendências](e06/e06_pending_checkpoint.md), com vinte direções entregues/validadas e proposta concreta de integração preservadora aguardando escolha humana. Receitas/editorial69 congelados; progressão/rates seguem adiadas.
 
 > Continuação humana de 12/10: as [quatro transformações restantes](e06/e06_transform_remaining.md) foram entregues e validadas, 25/202 testes dirigidos PASS; primeiro lote espacial preservado. Catálogo ativo, UI e playtest continuam fora deste pacote.

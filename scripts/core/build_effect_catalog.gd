@@ -192,7 +192,8 @@ static func definition_allowed(definition: Resource, snapshot: BuildSnapshot) ->
 	return (definition.allowed_origins.is_empty() or snapshot.base_class_id in definition.allowed_origins) and (definition.allowed_evolutions.is_empty() or snapshot.evolution_id in definition.allowed_evolutions) and (not definition is AugmentDefinition or definition.class_id.is_empty() or definition.class_id == snapshot.base_class_id)
 
 static func _restrictions_valid(origins: Array[StringName], evolutions: Array[StringName]) -> bool:
-	var catalog := ProfileCatalog.pilot() if not evolutions.is_empty() else null
+	# IdentityIds owns the closed evolution IDs; avoid loading equipment recipes
+	# for every restriction check. Availability remains a separate composer gate.
 	var seen: Dictionary = {}
 	for origin: StringName in origins:
 		if origin not in [&"swordsman", &"mage", &"archer"] or seen.has(origin):
@@ -200,7 +201,7 @@ static func _restrictions_valid(origins: Array[StringName], evolutions: Array[St
 		seen[origin] = true
 	seen.clear()
 	for evolution: StringName in evolutions:
-		if catalog.evolution_definition(evolution) == null or seen.has(evolution):
+		if not IdentityIds.is_evolution(evolution) or seen.has(evolution):
 			return false
 		seen[evolution] = true
 	return true

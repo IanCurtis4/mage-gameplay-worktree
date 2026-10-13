@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="AugmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_n22qh"]
+[ext_resource type="Script" path="res://scripts/data/augment_definition.gd" id="2_37jma"]
+
+[sub_resource type="Resource" id="Resource_hdn4j"]
+script = ExtResource("1_n22qh")
+id = &"pilot_mg_ar_a_effect"
+family_id = &"pilot_mg_ar_a_effect"
+axis = &"max_sp"
+unit = &"points"
+magnitude = 6.0
+stack_values = Array[float]([6.0, 12.0, 18.0])
+
+[resource]
+script = ExtResource("2_37jma")
+id = &"pilot_mg_ar_a"
+display_name = "Reserva do Geômetra"
+flavor_text = "O geômetra calcula o próprio ritmo e guarda recursos para o que vier."
+description = "SP máximo: +6 / +12 / +18.
+Acumula até 3 vez(es)."
+max_stacks = 3
+allowed_origins = Array[StringName]([&"mage"])
+allowed_evolutions = Array[StringName]([&"mg_ar"])
+effects = Array[ExtResource("1_n22qh")]([SubResource("Resource_hdn4j")])

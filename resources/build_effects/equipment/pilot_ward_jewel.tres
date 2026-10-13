@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_vbwa1"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_go2y8"]
+
+[sub_resource type="Resource" id="Resource_vbwa1"]
+script = ExtResource("1_vbwa1")
+id = &"pilot_ward_jewel_effect"
+family_id = &"pilot_ward_jewel_effect"
+axis = &"magic_defense"
+unit = &"points"
+magnitude = 2.0
+
+[resource]
+script = ExtResource("2_go2y8")
+id = &"pilot_ward_jewel"
+display_name = "Joia da Guarda"
+flavor_text = "A pedra escura traz um brilho quieto sob as luzes do campo."
+description = "Defesa mágica: +2."
+allowed_origins = Array[StringName]([&"swordsman", &"mage", &"archer"])
+slot = &"accessory"
+item_kind = &"jewelry"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"uncommon"
+effects = Array[ExtResource("1_vbwa1")]([SubResource("Resource_vbwa1")])

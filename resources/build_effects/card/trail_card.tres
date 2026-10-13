@@ -1,9 +1,21 @@
-[gd_resource type="Resource" script_class="CardDefinition" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="CardDefinition" format=3]
 
-[ext_resource type="Script" path="res://scripts/data/card_definition.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_xi1v2"]
+[ext_resource type="Script" path="res://scripts/data/card_definition.gd" id="2_4w5we"]
+
+[sub_resource type="Resource" id="Resource_noera"]
+script = ExtResource("1_xi1v2")
+id = &"pilot_card_speed"
+family_id = &"pilot_card_speed"
+axis = &"move_speed"
+unit = &"points"
+magnitude = 3.0
 
 [resource]
-script = ExtResource("1")
+script = ExtResource("2_4w5we")
 id = &"trail_card"
-display_name = "Carta em preparação"
-description = "Receita reservada para o catálogo E06."
+display_name = "Carta do Mateiro da Trilha"
+flavor_text = "O mateiro conhece cada curva do percurso e segue adiante sem alarde."
+description = "Velocidade de movimento: +3."
+mob_base_id = &"pilot_trail_species"
+effects = Array[ExtResource("1_xi1v2")]([SubResource("Resource_noera")])

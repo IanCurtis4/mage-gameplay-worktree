@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_w6j74"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_bn2im"]
+
+[sub_resource type="Resource" id="Resource_w6j74"]
+script = ExtResource("1_w6j74")
+id = &"pilot_mail_defense"
+family_id = &"pilot_mail_defense"
+axis = &"physical_defense"
+unit = &"points"
+magnitude = 4.0
+
+[resource]
+script = ExtResource("2_bn2im")
+id = &"arena_warden_mail"
+display_name = "Cota do Guardião"
+flavor_text = "Anéis escurecidos formam uma malha robusta, pronta para a rotina da Arena."
+description = "Defesa física: +4."
+allowed_origins = Array[StringName]([&"swordsman", &"mage", &"archer"])
+slot = &"torso"
+item_kind = &"armor"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"rare"
+socket_capacity = 1
+set_id = &"pilot_guard_set"
+effects = Array[ExtResource("1_w6j74")]([SubResource("Resource_w6j74")])

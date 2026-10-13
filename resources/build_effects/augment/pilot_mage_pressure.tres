@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="AugmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_lykyc"]
+[ext_resource type="Script" path="res://scripts/data/augment_definition.gd" id="2_wrseu"]
+
+[sub_resource type="Resource" id="Resource_c13ry"]
+script = ExtResource("1_lykyc")
+id = &"pilot_mage_pressure_effect"
+family_id = &"pilot_mage_pressure_effect"
+kind = 2
+handler_id = 3
+trigger = 1
+axis = &"magic_damage"
+unit = &"damage"
+magnitude = 6.0
+limit = 60.0
+stack_values = Array[float]([6.0, 12.0, 18.0])
+
+[resource]
+script = ExtResource("2_wrseu")
+id = &"pilot_mage_pressure"
+display_name = "Pressão Arcana"
+flavor_text = "O mago conserva a iniciativa e transforma cada acerto em presença no duelo."
+description = "Ao acertar: bônus de +6 / +12 / +18 de dano mágico e 0% proporcional; limite do bônus 60.
+Acumula até 3 vez(es)."
+max_stacks = 3
+allowed_origins = Array[StringName]([&"mage"])
+effects = Array[ExtResource("1_lykyc")]([SubResource("Resource_c13ry")])

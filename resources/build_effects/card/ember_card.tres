@@ -1,9 +1,27 @@
-[gd_resource type="Resource" script_class="CardDefinition" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="CardDefinition" format=3]
 
-[ext_resource type="Script" path="res://scripts/data/card_definition.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_k3k02"]
+[ext_resource type="Script" path="res://scripts/data/card_definition.gd" id="2_vy8x2"]
+
+[sub_resource type="Resource" id="Resource_bqwq3"]
+script = ExtResource("1_k3k02")
+id = &"pilot_card_shape"
+tags = Array[StringName]([&"flaming"])
+family_id = &"pilot_card_shape"
+kind = 1
+handler_id = 2
+target_skill_ids = Array[StringName]([&"fire_spear"])
+axis = &"projectile_count"
+unit = &"count"
+magnitude = 1.0
+limit = 16.0
 
 [resource]
-script = ExtResource("1")
+script = ExtResource("2_vy8x2")
 id = &"ember_card"
-display_name = "Carta em preparação"
-description = "Receita reservada para o catálogo E06."
+display_name = "Carta do Batedor da Brasa"
+flavor_text = "O batedor de marcas rubras cruza a arena em passos curtos e atentos."
+description = "Lança de Fogo: +1 projétil(is); limite final 16. Requer rank 1 na habilidade afetada."
+allowed_origins = Array[StringName]([&"mage"])
+mob_base_id = &"pilot_ember_species"
+effects = Array[ExtResource("1_k3k02")]([SubResource("Resource_bqwq3")])

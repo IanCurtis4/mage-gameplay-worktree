@@ -1,3 +1,7 @@
+> Variante mínima aplicada e validada em13/10/2026. [Entrega e evidências](e06_catalog_integration.md). Proposta e estados abaixo são históricos.
+
+> 13/10/2026: variante mínima aprovada pelo usuário: novos IDs, iniciais atuais e antigo+novo permitido. Execução em [e06_catalog_integration.md](e06_catalog_integration.md). Os estados pendentes abaixo são históricos.
+
 # E06 — proposta concreta de integração preservadora
 
 13/10/2026. Consulta arquitetural Astra/low somente leitura, sem testes/auditoria. Sol conferiu a constatação: EquipmentInstance serializa seis campos totais; a composição resolve receita pelo definition_id. Atualizar os12 IDs ativos com as receitas do piloto aumentaria retroativamente o poder de todos os exemplares históricos. Metadata igual não preserva poder. O bundle offline69 e seus digests continuam congelados; publicação terá manifesto próprio.

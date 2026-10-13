@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_gphh1"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_26e2i"]
+
+[sub_resource type="Resource" id="Resource_gphh1"]
+script = ExtResource("1_gphh1")
+id = &"pilot_bow_attack"
+family_id = &"pilot_bow_attack"
+axis = &"precision_attack"
+unit = &"points"
+magnitude = 2.0
+
+[resource]
+script = ExtResource("2_26e2i")
+id = &"arena_starter_bow"
+display_name = "Arco de Treino"
+flavor_text = "O arco simples aguarda em silêncio a próxima disputa."
+description = "Ataque de precisão: +2."
+allowed_origins = Array[StringName]([&"archer"])
+hand_usage = &"two_hands"
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"common"
+socket_capacity = 1
+effects = Array[ExtResource("1_gphh1")]([SubResource("Resource_gphh1")])

@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_kn7fg"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_4lni5"]
+
+[sub_resource type="Resource" id="Resource_kn7fg"]
+script = ExtResource("1_kn7fg")
+id = &"pilot_head_effect"
+family_id = &"pilot_head_effect"
+axis = &"physical_defense"
+unit = &"points"
+magnitude = 2.0
+
+[resource]
+script = ExtResource("2_4lni5")
+id = &"pilot_head"
+display_name = "Elmo da Guarda"
+flavor_text = "A viseira marcada emoldura o olhar atento dos combatentes da Arena."
+description = "Defesa física: +2."
+allowed_origins = Array[StringName]([&"swordsman", &"mage", &"archer"])
+slot = &"head"
+item_kind = &"armor"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"uncommon"
+effects = Array[ExtResource("1_kn7fg")]([SubResource("Resource_kn7fg")])

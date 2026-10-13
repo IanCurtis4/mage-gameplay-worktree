@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_8oaci"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_x3wde"]
+
+[sub_resource type="Resource" id="Resource_8oaci"]
+script = ExtResource("1_8oaci")
+id = &"pilot_blade_hit"
+family_id = &"pilot_blade_hit"
+kind = 2
+handler_id = 3
+trigger = 1
+axis = &"physical_damage"
+unit = &"damage"
+magnitude = 4.0
+limit = 60.0
+
+[resource]
+script = ExtResource("2_x3wde")
+id = &"arena_riposte_blade"
+display_name = "Lâmina da Resposta"
+flavor_text = "O fio sóbrio acompanha contra-ataques rápidos nos duelos da Arena."
+description = "Ao acertar: bônus de +4 de dano físico e 0% proporcional; limite do bônus 60.
+O efeito de acerto exige uso desta arma."
+allowed_origins = Array[StringName]([&"swordsman"])
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"rare"
+socket_capacity = 1
+effects = Array[ExtResource("1_8oaci")]([SubResource("Resource_8oaci")])

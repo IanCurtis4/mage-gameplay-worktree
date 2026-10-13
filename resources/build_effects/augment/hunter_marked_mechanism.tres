@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="AugmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_6wgah"]
+[ext_resource type="Script" path="res://scripts/data/augment_definition.gd" id="2_ccuch"]
+
+[sub_resource type="Resource" id="Resource_ev5ig"]
+script = ExtResource("1_6wgah")
+id = &"hunter_marked_mechanism_policy"
+family_id = &"hunter_marked_mechanism_policy"
+kind = 4
+handler_id = 5
+stacking_mode = 1
+conflict_group = &"hunter_marked_mechanism"
+target_skill_ids = Array[StringName]([&"hunter_freezing_trap", &"hunter_tar_trap", &"hunter_thorn_trap"])
+allowed_origins = Array[StringName]([&"archer"])
+allowed_evolutions = Array[StringName]([&"hunter"])
+axis = &"hunter_marked_mechanism"
+unit = &"policy"
+
+[resource]
+script = ExtResource("2_ccuch")
+id = &"hunter_marked_mechanism"
+display_name = "Armadilhas da Marca"
+flavor_text = "A Marca capturada define quem pode acionar Congelante, Piche ou Espinhos; depois do disparo, a área segue suas regras próprias."
+description = "Congelante, Piche e Espinhos só são disparadas pelo alvo da Marca capturada na colocação. Sem Marca viva, não há custo nem colocação. Área e vítimas seguem as regras da armadilha. Requer Marca e uma dessas armadilhas aprendidas. Requer rank 1 na habilidade afetada. Não combina com outra transformação do mesmo grupo.
+Acumula até 1 vez(es)."
+allowed_origins = Array[StringName]([&"archer"])
+allowed_evolutions = Array[StringName]([&"hunter"])
+effects = Array[ExtResource("1_6wgah")]([SubResource("Resource_ev5ig")])

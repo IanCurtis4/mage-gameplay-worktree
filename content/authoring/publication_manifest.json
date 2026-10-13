@@ -1,0 +1,3896 @@
+{
+	"comparisons": [
+		{
+			"branch": "A",
+			"build": {
+				"action_slots": [
+					"slash",
+					"brutal_strike",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"pilot_swordsman_pressure": 1,
+					"vitality": 1
+				},
+				"base_class_id": "swordsman",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"brutal_strike": 1,
+					"slash": 1
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "arena_riposte_blade",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_off_hand": {
+						"definition_id": "pilot_shield",
+						"instance_id": "pilot_instance_off_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 2
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": "pilot_instance_off_hand",
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "",
+				"job_level": 20,
+				"purchased_ranks": {
+					"brutal_strike": 1,
+					"slash": 1
+				},
+				"support_purchases": {}
+			},
+			"composition_valid": true,
+			"identity": "swordsman"
+		},
+		{
+			"branch": "B",
+			"build": {
+				"action_slots": [
+					"shield_wall",
+					"provoke",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"pilot_swordsman_reserve": 1,
+					"vitality": 1
+				},
+				"base_class_id": "swordsman",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"provoke": 1,
+					"shield_wall": 1
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "arena_starter_blade",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 1
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_off_hand": {
+						"definition_id": "pilot_shield",
+						"instance_id": "pilot_instance_off_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 2
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": "pilot_instance_off_hand",
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "",
+				"job_level": 20,
+				"purchased_ranks": {
+					"provoke": 1,
+					"shield_wall": 1
+				},
+				"support_purchases": {}
+			},
+			"composition_valid": true,
+			"identity": "swordsman"
+		},
+		{
+			"branch": "A",
+			"build": {
+				"action_slots": [
+					"fire_spear",
+					"ice_spear",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"pilot_mage_pressure": 1,
+					"vitality": 1
+				},
+				"base_class_id": "mage",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"fire_spear": 1,
+					"ice_spear": 1
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "arena_ember_staff",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": null,
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "",
+				"job_level": 20,
+				"purchased_ranks": {
+					"fire_spear": 1,
+					"ice_spear": 1
+				},
+				"support_purchases": {}
+			},
+			"composition_valid": true,
+			"identity": "mage"
+		},
+		{
+			"branch": "B",
+			"build": {
+				"action_slots": [
+					"fire_wall",
+					"ice_wall",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"pilot_mage_reserve": 1,
+					"vitality": 1
+				},
+				"base_class_id": "mage",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"fire_wall": 1,
+					"ice_wall": 1
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "pilot_wand",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 2
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_off_hand": {
+						"definition_id": "pilot_focus",
+						"instance_id": "pilot_instance_off_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": "pilot_instance_off_hand",
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "",
+				"job_level": 20,
+				"purchased_ranks": {
+					"fire_wall": 1,
+					"ice_wall": 1
+				},
+				"support_purchases": {}
+			},
+			"composition_valid": true,
+			"identity": "mage"
+		},
+		{
+			"branch": "A",
+			"build": {
+				"action_slots": [
+					"double_shot",
+					"piercing_arrow",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"pilot_archer_pressure": 1,
+					"vitality": 1
+				},
+				"base_class_id": "archer",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"double_shot": 1,
+					"piercing_arrow": 1
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "arena_hunters_bow",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": null,
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "",
+				"job_level": 20,
+				"purchased_ranks": {
+					"double_shot": 1,
+					"piercing_arrow": 1
+				},
+				"support_purchases": {}
+			},
+			"composition_valid": true,
+			"identity": "archer"
+		},
+		{
+			"branch": "B",
+			"build": {
+				"action_slots": [
+					"snare_trap",
+					"explosive_trap",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"pilot_archer_reserve": 1,
+					"vitality": 1
+				},
+				"base_class_id": "archer",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"explosive_trap": 1,
+					"snare_trap": 1
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "arena_starter_bow",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 1
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": null,
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "",
+				"job_level": 20,
+				"purchased_ranks": {
+					"explosive_trap": 1,
+					"snare_trap": 1
+				},
+				"support_purchases": {}
+			},
+			"composition_valid": true,
+			"identity": "archer"
+		},
+		{
+			"branch": "A",
+			"build": {
+				"action_slots": [
+					"defender_counterstroke",
+					"defender_reprisal_wave",
+					"shield_wall",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"pilot_defender_a": 1,
+					"pilot_swordsman_pressure": 1,
+					"vitality": 1
+				},
+				"base_class_id": "swordsman",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"defender_counterstroke": 1,
+					"defender_reprisal_wave": 1,
+					"shield_wall": 1
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "arena_riposte_blade",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_off_hand": {
+						"definition_id": "pilot_shield",
+						"instance_id": "pilot_instance_off_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 2
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": "pilot_instance_off_hand",
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "defender",
+				"job_level": 40,
+				"purchased_ranks": {
+					"defender_counterstroke": 0,
+					"defender_reprisal_wave": 1,
+					"shield_wall": 1
+				},
+				"support_purchases": {
+					"shield_wall": 1
+				}
+			},
+			"composition_valid": true,
+			"identity": "defender"
+		},
+		{
+			"branch": "B",
+			"build": {
+				"action_slots": [
+					"defender_line_lock",
+					"defender_anchor",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"pilot_defender_b": 1,
+					"pilot_swordsman_reserve": 1,
+					"vitality": 1
+				},
+				"base_class_id": "swordsman",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"defender_anchor": 1,
+					"defender_counterstroke": 1,
+					"defender_line_lock": 1
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "arena_starter_blade",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 1
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_off_hand": {
+						"definition_id": "pilot_shield",
+						"instance_id": "pilot_instance_off_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 2
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": "pilot_instance_off_hand",
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "defender",
+				"job_level": 40,
+				"purchased_ranks": {
+					"defender_anchor": 1,
+					"defender_line_lock": 1
+				},
+				"support_purchases": {}
+			},
+			"composition_valid": true,
+			"identity": "defender"
+		},
+		{
+			"branch": "A",
+			"build": {
+				"action_slots": [
+					"berserker_rupture",
+					"berserker_blood_rift",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"pilot_berserker_a": 1,
+					"pilot_swordsman_pressure": 1,
+					"vitality": 1
+				},
+				"base_class_id": "swordsman",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"berserker_blood_rift": 1,
+					"berserker_rupture": 1
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "arena_riposte_blade",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_off_hand": {
+						"definition_id": "pilot_shield",
+						"instance_id": "pilot_instance_off_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 2
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": "pilot_instance_off_hand",
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "berserker",
+				"job_level": 40,
+				"purchased_ranks": {
+					"berserker_blood_rift": 1,
+					"berserker_rupture": 0
+				},
+				"support_purchases": {}
+			},
+			"composition_valid": true,
+			"identity": "berserker"
+		},
+		{
+			"branch": "B",
+			"build": {
+				"action_slots": [
+					"berserker_execution",
+					"berserker_wound_leap",
+					"berserker_rupture",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"pilot_berserker_b": 1,
+					"pilot_swordsman_reserve": 1,
+					"vitality": 1
+				},
+				"base_class_id": "swordsman",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"berserker_execution": 1,
+					"berserker_rupture": 1,
+					"berserker_wound_leap": 1
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "arena_starter_blade",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 1
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_off_hand": {
+						"definition_id": "pilot_shield",
+						"instance_id": "pilot_instance_off_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 2
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": "pilot_instance_off_hand",
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "berserker",
+				"job_level": 40,
+				"purchased_ranks": {
+					"berserker_execution": 1,
+					"berserker_rupture": 0,
+					"berserker_wound_leap": 1
+				},
+				"support_purchases": {
+					"berserker_rupture": 0
+				}
+			},
+			"composition_valid": true,
+			"identity": "berserker"
+		},
+		{
+			"branch": "A",
+			"build": {
+				"action_slots": [
+					"elementalist_flame_burst",
+					"elementalist_lightning_arc",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"pilot_elementalist_a": 1,
+					"pilot_mage_pressure": 1,
+					"vitality": 1
+				},
+				"base_class_id": "mage",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"elementalist_flame_burst": 1,
+					"elementalist_lightning_arc": 1,
+					"elementalist_prismatic_focus": 1
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "pilot_wand",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 2
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_off_hand": {
+						"definition_id": "pilot_focus",
+						"instance_id": "pilot_instance_off_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": "pilot_instance_off_hand",
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "elementalist",
+				"job_level": 40,
+				"purchased_ranks": {
+					"elementalist_flame_burst": 0,
+					"elementalist_lightning_arc": 1,
+					"elementalist_prismatic_focus": 1
+				},
+				"support_purchases": {
+					"elementalist_prismatic_focus": 1
+				}
+			},
+			"composition_valid": true,
+			"identity": "elementalist"
+		},
+		{
+			"branch": "B",
+			"build": {
+				"action_slots": [
+					"elementalist_glacial_ring",
+					"elementalist_ember_path",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"pilot_elementalist_b": 1,
+					"pilot_mage_reserve": 1,
+					"vitality": 1
+				},
+				"base_class_id": "mage",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"elementalist_ember_path": 1,
+					"elementalist_flame_burst": 1,
+					"elementalist_glacial_ring": 1
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "pilot_wand",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 2
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_off_hand": {
+						"definition_id": "pilot_focus",
+						"instance_id": "pilot_instance_off_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": "pilot_instance_off_hand",
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "elementalist",
+				"job_level": 40,
+				"purchased_ranks": {
+					"elementalist_ember_path": 1,
+					"elementalist_glacial_ring": 1
+				},
+				"support_purchases": {}
+			},
+			"composition_valid": true,
+			"identity": "elementalist"
+		},
+		{
+			"branch": "A",
+			"build": {
+				"action_slots": [
+					"spiritualist_echo_curse",
+					"spiritualist_procession",
+					"fire_spear",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"pilot_mage_pressure": 1,
+					"pilot_spiritualist_a": 1,
+					"spiritualist_echo_fixed_origin": 1,
+					"vitality": 1
+				},
+				"base_class_id": "mage",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"fire_spear": 1,
+					"spiritualist_echo_curse": 1,
+					"spiritualist_echo_recovery": 1,
+					"spiritualist_procession": 1
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "pilot_wand",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 2
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_off_hand": {
+						"definition_id": "pilot_focus",
+						"instance_id": "pilot_instance_off_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": "pilot_instance_off_hand",
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "spiritualist",
+				"job_level": 40,
+				"purchased_ranks": {
+					"fire_spear": 1,
+					"spiritualist_echo_curse": 0,
+					"spiritualist_echo_recovery": 1,
+					"spiritualist_procession": 1
+				},
+				"support_purchases": {
+					"fire_spear": 1,
+					"spiritualist_echo_recovery": 1
+				}
+			},
+			"composition_valid": true,
+			"identity": "spiritualist"
+		},
+		{
+			"branch": "B",
+			"build": {
+				"action_slots": [
+					"spiritualist_soul_drain",
+					"spiritualist_spectral_veil",
+					"fire_spear",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"pilot_mage_reserve": 1,
+					"pilot_spiritualist_b": 1,
+					"spiritualist_drain_inscription": 1,
+					"vitality": 1
+				},
+				"base_class_id": "mage",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"fire_spear": 1,
+					"spiritualist_echo_curse": 1,
+					"spiritualist_soul_drain": 1,
+					"spiritualist_spectral_veil": 1
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "pilot_wand",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 2
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_off_hand": {
+						"definition_id": "pilot_focus",
+						"instance_id": "pilot_instance_off_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": "pilot_instance_off_hand",
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "spiritualist",
+				"job_level": 40,
+				"purchased_ranks": {
+					"fire_spear": 1,
+					"spiritualist_soul_drain": 1,
+					"spiritualist_spectral_veil": 1
+				},
+				"support_purchases": {
+					"fire_spear": 1
+				}
+			},
+			"composition_valid": true,
+			"identity": "spiritualist"
+		},
+		{
+			"branch": "A",
+			"build": {
+				"action_slots": [
+					"sentinel_headshot",
+					"sentinel_piercing_shot",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"pilot_archer_pressure": 1,
+					"pilot_sentinel_a": 1,
+					"vitality": 1
+				},
+				"base_class_id": "archer",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"sentinel_headshot": 1,
+					"sentinel_piercing_shot": 1
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "arena_hunters_bow",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": null,
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "sentinel",
+				"job_level": 40,
+				"purchased_ranks": {
+					"sentinel_headshot": 0,
+					"sentinel_piercing_shot": 1
+				},
+				"support_purchases": {}
+			},
+			"composition_valid": true,
+			"identity": "sentinel"
+		},
+		{
+			"branch": "B",
+			"build": {
+				"action_slots": [
+					"sentinel_net_shot",
+					"sentinel_concussion_shot",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"pilot_archer_reserve": 1,
+					"pilot_sentinel_b": 1,
+					"vitality": 1
+				},
+				"base_class_id": "archer",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"sentinel_concussion_shot": 1,
+					"sentinel_headshot": 1,
+					"sentinel_net_shot": 1
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "arena_starter_bow",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 1
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": null,
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "sentinel",
+				"job_level": 40,
+				"purchased_ranks": {
+					"sentinel_concussion_shot": 1,
+					"sentinel_net_shot": 1
+				},
+				"support_purchases": {}
+			},
+			"composition_valid": true,
+			"identity": "sentinel"
+		},
+		{
+			"branch": "A",
+			"build": {
+				"action_slots": [
+					"hunter_freezing_trap",
+					"hunter_tar_trap",
+					"hunter_mark",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"hunter_marked_mechanism": 1,
+					"pilot_archer_pressure": 1,
+					"pilot_hunter_a": 1,
+					"vitality": 1
+				},
+				"base_class_id": "archer",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"hunter_freezing_trap": 1,
+					"hunter_mark": 1,
+					"hunter_tar_trap": 1
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "arena_hunters_bow",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": null,
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "hunter",
+				"job_level": 40,
+				"purchased_ranks": {
+					"hunter_freezing_trap": 0,
+					"hunter_mark": 1,
+					"hunter_tar_trap": 1
+				},
+				"support_purchases": {}
+			},
+			"composition_valid": true,
+			"identity": "hunter"
+		},
+		{
+			"branch": "B",
+			"build": {
+				"action_slots": [
+					"hunter_covering_shot",
+					"hunter_mark",
+					"hunter_freezing_trap",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"hunter_covering_fan": 1,
+					"pilot_archer_reserve": 1,
+					"pilot_hunter_b": 1,
+					"vitality": 1
+				},
+				"base_class_id": "archer",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"hunter_covering_shot": 1,
+					"hunter_freezing_trap": 1,
+					"hunter_mark": 1
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "arena_starter_bow",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 1
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": null,
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "hunter",
+				"job_level": 40,
+				"purchased_ranks": {
+					"hunter_covering_shot": 1,
+					"hunter_freezing_trap": 0,
+					"hunter_mark": 1
+				},
+				"support_purchases": {
+					"hunter_freezing_trap": 0
+				}
+			},
+			"composition_valid": true,
+			"identity": "hunter"
+		},
+		{
+			"branch": "A",
+			"build": {
+				"action_slots": [
+					"geometer_trace",
+					"geometer_rewrite",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"geometer_ground_anchor": 1,
+					"pilot_mage_reserve": 1,
+					"pilot_mg_ar_a": 1,
+					"vitality": 1
+				},
+				"base_class_id": "mage",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "echo_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"geometer_rewrite": 1,
+					"geometer_trace": 1
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "pilot_wand",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 2
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_off_hand": {
+						"definition_id": "pilot_focus",
+						"instance_id": "pilot_instance_off_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": "pilot_instance_off_hand",
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "mg_ar",
+				"job_level": 40,
+				"purchased_ranks": {
+					"geometer_rewrite": 1,
+					"geometer_trace": 0
+				},
+				"support_purchases": {}
+			},
+			"composition_valid": true,
+			"identity": "mg_ar"
+		},
+		{
+			"branch": "B",
+			"build": {
+				"action_slots": [
+					"geometer_triangulation",
+					"geometer_collapse",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null
+				],
+				"augment_stacks": {
+					"geometer_collapse_first_element": 1,
+					"pilot_mage_reserve": 1,
+					"pilot_mg_ar_b": 1,
+					"vitality": 1
+				},
+				"base_class_id": "mage",
+				"base_level": 30,
+				"card_instances": {
+					"pilot_card_one": "bulwark_card"
+				},
+				"card_sockets": {
+					"pilot_instance_shoulders": [
+						"pilot_card_one",
+						null
+					]
+				},
+				"effective_ranks": {
+					"geometer_collapse": 1,
+					"geometer_trace": 1,
+					"geometer_triangulation": 3
+				},
+				"equipment_instances": {
+					"pilot_instance_accessory_1": {
+						"definition_id": "arena_traveler_charm",
+						"instance_id": "pilot_instance_accessory_1",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_2": {
+						"definition_id": "pilot_sp_jewel",
+						"instance_id": "pilot_instance_accessory_2",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_3": {
+						"definition_id": "pilot_stride_jewel",
+						"instance_id": "pilot_instance_accessory_3",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_accessory_4": {
+						"definition_id": "pilot_ward_jewel",
+						"instance_id": "pilot_instance_accessory_4",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_arms": {
+						"definition_id": "pilot_arms",
+						"instance_id": "pilot_instance_arms",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 3
+					},
+					"pilot_instance_cloak": {
+						"definition_id": "pilot_cloak",
+						"instance_id": "pilot_instance_cloak",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_feet": {
+						"definition_id": "pilot_feet",
+						"instance_id": "pilot_instance_feet",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 1
+					},
+					"pilot_instance_head": {
+						"definition_id": "pilot_head",
+						"instance_id": "pilot_instance_head",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_legs": {
+						"definition_id": "pilot_legs",
+						"instance_id": "pilot_instance_legs",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 4
+					},
+					"pilot_instance_main_hand": {
+						"definition_id": "pilot_wand",
+						"instance_id": "pilot_instance_main_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "common",
+						"socket_capacity": 2
+					},
+					"pilot_instance_neck": {
+						"definition_id": "pilot_step_neck",
+						"instance_id": "pilot_instance_neck",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 0
+					},
+					"pilot_instance_off_hand": {
+						"definition_id": "pilot_focus",
+						"instance_id": "pilot_instance_off_hand",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "uncommon",
+						"socket_capacity": 0
+					},
+					"pilot_instance_shoulders": {
+						"definition_id": "pilot_shoulders",
+						"instance_id": "pilot_instance_shoulders",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 2
+					},
+					"pilot_instance_torso": {
+						"definition_id": "arena_warden_mail",
+						"instance_id": "pilot_instance_torso",
+						"item_level": 1,
+						"origin_id": "demo_arena",
+						"quality_id": "rare",
+						"socket_capacity": 1
+					}
+				},
+				"equipped": {
+					"accessory_1": "pilot_instance_accessory_1",
+					"accessory_2": "pilot_instance_accessory_2",
+					"accessory_3": "pilot_instance_accessory_3",
+					"accessory_4": "pilot_instance_accessory_4",
+					"arms": "pilot_instance_arms",
+					"cloak": "pilot_instance_cloak",
+					"feet": "pilot_instance_feet",
+					"head": "pilot_instance_head",
+					"legs": "pilot_instance_legs",
+					"main_hand": "pilot_instance_main_hand",
+					"neck": "pilot_instance_neck",
+					"off_hand": "pilot_instance_off_hand",
+					"shoulders": "pilot_instance_shoulders",
+					"torso": "pilot_instance_torso"
+				},
+				"evolution_id": "mg_ar",
+				"job_level": 40,
+				"purchased_ranks": {
+					"geometer_collapse": 1,
+					"geometer_triangulation": 3
+				},
+				"support_purchases": {
+					"geometer_triangulation": 3
+				}
+			},
+			"composition_valid": true,
+			"identity": "mg_ar"
+		}
+	],
+	"entry_count": 83,
+	"human_playtest_accepted": false,
+	"id_mapping": {
+		"channeler_robe": "arena_channeler_robe",
+		"ember_staff": "arena_ember_staff",
+		"hunters_bow": "arena_hunters_bow",
+		"prismatic_charm": "arena_prismatic_charm",
+		"riposte_blade": "arena_riposte_blade",
+		"starter_blade": "arena_starter_blade",
+		"starter_bow": "arena_starter_bow",
+		"starter_staff": "arena_starter_staff",
+		"trailcoat": "arena_trailcoat",
+		"traveler_charm": "arena_traveler_charm",
+		"traveler_vest": "arena_traveler_vest",
+		"warden_mail": "arena_warden_mail"
+	},
+	"mechanical_digest": "6631984d3bf5a12efd1344a2cf542c9c07e411c9f38bd465f95c417d8fc4bf9f",
+	"preserved_equipment_ids": [
+		"starter_blade",
+		"starter_staff",
+		"starter_bow",
+		"traveler_vest",
+		"traveler_charm",
+		"riposte_blade",
+		"ember_staff",
+		"hunters_bow",
+		"warden_mail",
+		"channeler_robe",
+		"trailcoat",
+		"prismatic_charm"
+	],
+	"preserved_mob_ids": [
+		"demo_chaser",
+		"demo_archer"
+	],
+	"production_loot_rates": null,
+	"progression_formula": null,
+	"published_resource_count": 69,
+	"published_resource_paths": [
+		"res://resources/build_effects/augment/battle_rhythm.tres",
+		"res://resources/build_effects/augment/extra_fire_spear.tres",
+		"res://resources/build_effects/augment/extra_ice_spear.tres",
+		"res://resources/build_effects/augment/keen_edge.tres",
+		"res://resources/build_effects/augment/vitality.tres",
+		"res://resources/build_effects/equipment/arena_channeler_robe.tres",
+		"res://resources/build_effects/equipment/arena_ember_staff.tres",
+		"res://resources/build_effects/equipment/arena_hunters_bow.tres",
+		"res://resources/build_effects/equipment/arena_prismatic_charm.tres",
+		"res://resources/build_effects/equipment/arena_riposte_blade.tres",
+		"res://resources/build_effects/equipment/arena_starter_blade.tres",
+		"res://resources/build_effects/equipment/arena_starter_bow.tres",
+		"res://resources/build_effects/equipment/arena_starter_staff.tres",
+		"res://resources/build_effects/equipment/arena_trailcoat.tres",
+		"res://resources/build_effects/equipment/arena_traveler_charm.tres",
+		"res://resources/build_effects/equipment/arena_traveler_vest.tres",
+		"res://resources/build_effects/equipment/arena_warden_mail.tres",
+		"res://resources/build_effects/equipment/pilot_head.tres",
+		"res://resources/build_effects/equipment/pilot_shoulders.tres",
+		"res://resources/build_effects/equipment/pilot_arms.tres",
+		"res://resources/build_effects/equipment/pilot_cloak.tres",
+		"res://resources/build_effects/equipment/pilot_legs.tres",
+		"res://resources/build_effects/equipment/pilot_feet.tres",
+		"res://resources/build_effects/equipment/pilot_shield.tres",
+		"res://resources/build_effects/equipment/pilot_focus.tres",
+		"res://resources/build_effects/equipment/pilot_sp_jewel.tres",
+		"res://resources/build_effects/equipment/pilot_stride_jewel.tres",
+		"res://resources/build_effects/equipment/pilot_ward_jewel.tres",
+		"res://resources/build_effects/equipment/pilot_step_neck.tres",
+		"res://resources/build_effects/equipment/pilot_wand.tres",
+		"res://resources/build_effects/set/pilot_guard_set.tres",
+		"res://resources/build_effects/mob/pilot_echo_species.tres",
+		"res://resources/build_effects/card/echo_card.tres",
+		"res://resources/build_effects/mob/pilot_ember_species.tres",
+		"res://resources/build_effects/card/ember_card.tres",
+		"res://resources/build_effects/mob/pilot_frost_species.tres",
+		"res://resources/build_effects/card/frost_card.tres",
+		"res://resources/build_effects/mob/pilot_precision_species.tres",
+		"res://resources/build_effects/card/precision_card.tres",
+		"res://resources/build_effects/mob/pilot_bulwark_species.tres",
+		"res://resources/build_effects/card/bulwark_card.tres",
+		"res://resources/build_effects/mob/pilot_trail_species.tres",
+		"res://resources/build_effects/card/trail_card.tres",
+		"res://resources/build_effects/augment/pilot_swordsman_pressure.tres",
+		"res://resources/build_effects/augment/pilot_swordsman_reserve.tres",
+		"res://resources/build_effects/augment/pilot_mage_pressure.tres",
+		"res://resources/build_effects/augment/pilot_mage_reserve.tres",
+		"res://resources/build_effects/augment/pilot_archer_pressure.tres",
+		"res://resources/build_effects/augment/pilot_archer_reserve.tres",
+		"res://resources/build_effects/augment/pilot_defender_a.tres",
+		"res://resources/build_effects/augment/pilot_defender_b.tres",
+		"res://resources/build_effects/augment/pilot_berserker_a.tres",
+		"res://resources/build_effects/augment/pilot_berserker_b.tres",
+		"res://resources/build_effects/augment/pilot_elementalist_a.tres",
+		"res://resources/build_effects/augment/pilot_elementalist_b.tres",
+		"res://resources/build_effects/augment/pilot_spiritualist_a.tres",
+		"res://resources/build_effects/augment/pilot_spiritualist_b.tres",
+		"res://resources/build_effects/augment/pilot_sentinel_a.tres",
+		"res://resources/build_effects/augment/pilot_sentinel_b.tres",
+		"res://resources/build_effects/augment/pilot_hunter_a.tres",
+		"res://resources/build_effects/augment/pilot_hunter_b.tres",
+		"res://resources/build_effects/augment/pilot_mg_ar_a.tres",
+		"res://resources/build_effects/augment/pilot_mg_ar_b.tres",
+		"res://resources/build_effects/augment/spiritualist_echo_fixed_origin.tres",
+		"res://resources/build_effects/augment/geometer_ground_anchor.tres",
+		"res://resources/build_effects/augment/spiritualist_drain_inscription.tres",
+		"res://resources/build_effects/augment/hunter_marked_mechanism.tres",
+		"res://resources/build_effects/augment/hunter_covering_fan.tres",
+		"res://resources/build_effects/augment/geometer_collapse_first_element.tres"
+	],
+	"schema_version": 1,
+	"scope": "e06_published_catalog",
+	"source_mechanical_digest": "b2480230ac8691fe155976ce4e311cfef233e6b32618a3ebd8a7c87fbd0658fd"
+}

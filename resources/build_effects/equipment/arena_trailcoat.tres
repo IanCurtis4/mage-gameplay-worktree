@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_3m4yb"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_qw58d"]
+
+[sub_resource type="Resource" id="Resource_3m4yb"]
+script = ExtResource("1_3m4yb")
+id = &"pilot_coat_dex"
+family_id = &"pilot_coat_dex"
+channel = &"primary_flat"
+axis = &"dex"
+unit = &"points"
+magnitude = 3.0
+
+[resource]
+script = ExtResource("2_qw58d")
+id = &"arena_trailcoat"
+display_name = "Casaco da Trilha"
+flavor_text = "O casaco leve traz bolsos gastos de tantas caminhadas entre exercícios."
+description = "DES: +3."
+allowed_origins = Array[StringName]([&"swordsman", &"mage", &"archer"])
+slot = &"torso"
+item_kind = &"armor"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"rare"
+socket_capacity = 1
+effects = Array[ExtResource("1_3m4yb")]([SubResource("Resource_3m4yb")])

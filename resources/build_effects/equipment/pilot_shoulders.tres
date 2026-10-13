@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_lo2oa"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_ll6pj"]
+
+[sub_resource type="Resource" id="Resource_lo2oa"]
+script = ExtResource("1_lo2oa")
+id = &"pilot_shoulders_effect"
+family_id = &"pilot_shoulders_effect"
+axis = &"physical_defense"
+unit = &"points"
+magnitude = 2.0
+
+[resource]
+script = ExtResource("2_ll6pj")
+id = &"pilot_shoulders"
+display_name = "Ombreiras do Baluarte"
+flavor_text = "O par de placas repete o emblema gravado no restante da armadura."
+description = "Defesa física: +2."
+allowed_origins = Array[StringName]([&"swordsman", &"mage", &"archer"])
+slot = &"shoulders"
+item_kind = &"armor"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"rare"
+socket_capacity = 2
+set_id = &"pilot_guard_set"
+effects = Array[ExtResource("1_lo2oa")]([SubResource("Resource_lo2oa")])

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="AugmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_3b5pm"]
+[ext_resource type="Script" path="res://scripts/data/augment_definition.gd" id="2_htgmw"]
+
+[sub_resource type="Resource" id="Resource_r3e2e"]
+script = ExtResource("1_3b5pm")
+id = &"pilot_hunter_b_effect"
+family_id = &"pilot_hunter_b_effect"
+channel = &"primary_flat"
+axis = &"dex"
+unit = &"points"
+magnitude = 2.0
+stack_values = Array[float]([2.0, 4.0, 6.0])
+
+[resource]
+script = ExtResource("2_htgmw")
+id = &"pilot_hunter_b"
+display_name = "Mira da Caçada"
+flavor_text = "Respiração serena e olhar atento acompanham a preparação de cada disparo."
+description = "DES: +2 / +4 / +6.
+Acumula até 3 vez(es)."
+max_stacks = 3
+allowed_origins = Array[StringName]([&"archer"])
+allowed_evolutions = Array[StringName]([&"hunter"])
+effects = Array[ExtResource("1_3b5pm")]([SubResource("Resource_r3e2e")])

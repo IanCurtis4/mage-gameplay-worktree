@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="AugmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_y7sih"]
+[ext_resource type="Script" path="res://scripts/data/augment_definition.gd" id="2_1db85"]
+
+[sub_resource type="Resource" id="Resource_vntcp"]
+script = ExtResource("1_y7sih")
+id = &"crit_chance_flat"
+family_id = &"crit_chance_flat"
+axis = &"crit_chance"
+unit = &"points"
+magnitude = 0.05
+stack_values = Array[float]([0.05, 0.1, 0.15000000000000002])
+
+[resource]
+script = ExtResource("2_1db85")
+id = &"keen_edge"
+display_name = "Fio Perspicaz"
+flavor_text = "Um corte bem calculado encontra a abertura que passaria despercebida."
+description = "Chance de crítico: +5 p.p. / +10 p.p. / +15 p.p..
+Acumula até 3 vez(es)."
+max_stacks = 3
+effect_id = &"crit_chance_flat"
+magnitude_per_stack = 0.05
+effects = Array[ExtResource("1_y7sih")]([SubResource("Resource_vntcp")])

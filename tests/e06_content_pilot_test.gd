@@ -26,6 +26,7 @@ func _run() -> void:
 		capacities[item.socket_capacity] = true
 	_check(slots.size() == 14 and capacities.size() == 5, "all 14 positions and 0-4 capacities")
 	for item: Resource in BuildContentLoader.definitions(&"equipment"):
+		if item.id not in Pilot.LEGACY_EQUIPMENT_IDS: continue
 		var pilot := catalog.get_definition(&"equipment", item.id) as EquipmentDefinition
 		_check(pilot.metadata() == item.metadata(), "12 legacy metadata stable %s" % item.id)
 	var historical := BuildEffectCatalog.pilot()
@@ -84,7 +85,7 @@ func _run() -> void:
 	for entry: Dictionary in changed:
 		if entry["origin"] == &"augment" and entry["definition"].id == &"pilot_defender_a": entry["definition"].effects[0].target_skill_ids.assign([&"defender_line_lock"])
 	_check(ContentAuthoring.prepare(changed)["mechanical_digest"] != mechanical_digest, "target edit invalidates Luna text")
-	_check(BuildContentLoader.pilot().get_definition(&"equipment", &"pilot_head") == null and BuildContentLoader.pilot().get_definition(&"augment", &"pilot_defender_a") == null, "pilot remains outside production")
+	_check(BuildContentLoader.pilot().get_definition(&"equipment", &"starter_blade").effects.is_empty() and not BuildContentLoader.pilot().get_definition(&"equipment", &"arena_starter_blade").effects.is_empty(), "publication preserves historical definition and maps recipe to new ID")
 	print("E06 content pilot: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 

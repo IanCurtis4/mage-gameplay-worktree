@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_kytwg"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_cop5p"]
+
+[sub_resource type="Resource" id="Resource_kytwg"]
+script = ExtResource("1_kytwg")
+id = &"pilot_staff_shape"
+tags = Array[StringName]([&"flaming"])
+family_id = &"pilot_staff_shape"
+kind = 1
+handler_id = 2
+target_skill_ids = Array[StringName]([&"fire_spear"])
+axis = &"projectile_count"
+unit = &"count"
+magnitude = 1.0
+limit = 16.0
+
+[resource]
+script = ExtResource("2_cop5p")
+id = &"arena_ember_staff"
+display_name = "Cajado da Brasa"
+flavor_text = "Marcas avermelhadas percorrem a madeira e lembram brasas sob cinza fria."
+description = "Lança de Fogo: +1 projétil(is); limite final 16. Requer rank 1 na habilidade afetada."
+allowed_origins = Array[StringName]([&"mage"])
+hand_usage = &"two_hands"
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"rare"
+socket_capacity = 1
+effects = Array[ExtResource("1_kytwg")]([SubResource("Resource_kytwg")])

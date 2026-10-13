@@ -1,6 +1,7 @@
 extends RefCounted
 ## Offline ilvl-1 comparison catalog. Not a progression model or live catalog.
 const D = preload("res://tools/content/demo_bundle.gd")
+const LEGACY_EQUIPMENT_IDS: Array[StringName] = [&"starter_blade", &"starter_staff", &"starter_bow", &"traveler_vest", &"traveler_charm", &"riposte_blade", &"ember_staff", &"hunters_bow", &"warden_mail", &"channeler_robe", &"trailcoat", &"prismatic_charm"]
 const ROUTES := {
 	"swordsman": [["slash", "brutal_strike"], ["shield_wall", "provoke"]],
 	"mage": [["fire_spear", "ice_spear"], ["fire_wall", "ice_wall"]],
@@ -30,6 +31,7 @@ static func entries() -> Array[Dictionary]:
 	for id: StringName in legacy.ids(&"augment"):
 		result.append(D._entry(&"augment", legacy.get_definition(&"augment", id), "Augment histórico: preservar ID, curva, limite e comportamento; texto pode ser renovado sem adicionar efeitos."))
 	for item: Resource in BuildContentLoader.definitions(&"equipment"):
+		if item.id not in LEGACY_EQUIPMENT_IDS: continue
 		var effect: EffectDefinition
 		match item.id:
 			&"starter_blade": effect = D._stat(&"pilot_blade_attack", &"melee_attack", 2)

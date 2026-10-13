@@ -1,5 +1,24 @@
 extends RefCounted
 const TXEffects = preload("res://tests/e06_effects_fixture.gd")
+const HISTORICAL_EQUIPMENT_IDS: Array[StringName] = [&"starter_blade", &"starter_staff", &"starter_bow", &"traveler_vest", &"traveler_charm", &"riposte_blade", &"ember_staff", &"hunters_bow", &"warden_mail", &"channeler_robe", &"trailcoat", &"prismatic_charm"]
+
+# Closed historical fixture; publication must not change its recipes or pools.
+static func neutral_effect_catalog(profile_catalog: ProfileCatalog = null) -> BuildEffectCatalog:
+	var source: BuildEffectCatalog = BuildContentLoader.pilot() if profile_catalog == null else BuildContentLoader.load_catalog_for_profile(profile_catalog)["catalog"] as BuildEffectCatalog
+	var result := TXEffects.registry()
+	var legacy := BuildEffectCatalog.pilot()
+	for origin: StringName in BuildEffectCatalog.ORIGINS:
+		for id: StringName in source.ids(origin):
+			if origin == &"equipment" and id not in HISTORICAL_EQUIPMENT_IDS and id not in [&"fixture_wand", &"fixture_shield", &"fixture_focus"]: continue
+			if origin == &"augment" and id not in legacy.ids(&"augment"): continue
+			var definition := source.get_definition(origin, id)
+			if definition is CardDefinition:
+				definition.effects.clear()
+				definition.allowed_origins.clear()
+				definition.mob_base_id = &"fixture_elite"
+			assert(result.register_definition(origin, definition)["ok"])
+	return result
+
 class FaultStore:
 	extends ProfileStore
 	var failure_stage: StringName = &""
@@ -32,6 +51,7 @@ static func profile_catalog() -> ProfileCatalog:
 	var metadata: Dictionary = {}
 	for resource: Resource in BuildContentLoader.definitions(&"equipment"):
 		var item := resource as EquipmentDefinition
+		if item.id not in HISTORICAL_EQUIPMENT_IDS: continue
 		metadata[item.id] = item.metadata()
 	metadata[&"warden_mail"]["socket_capacity"] = 4
 	for row: Array in [[&"fixture_wand", &"main_hand", &"weapon", &"one_hand", 1], [&"fixture_shield", &"off_hand", &"shield", &"none", 4], [&"fixture_focus", &"off_hand", &"focus", &"none", 0]]:
@@ -56,8 +76,7 @@ static func make(tree: SceneTree, label: String) -> Dictionary:
 	var started := facade.start_run("start", facade.current_profile().revision)
 	assert(started["ok"], str(started))
 	var state: RunState = started["run_state"]
-	var loaded := BuildContentLoader.load_catalog_for_profile(catalog)
-	var effects: BuildEffectCatalog = loaded["catalog"]
+	var effects := neutral_effect_catalog(catalog)
 	var registry := TXEffects.registry()
 	for origin: StringName in BuildEffectCatalog.ORIGINS:
 		for id: StringName in effects.ids(origin):

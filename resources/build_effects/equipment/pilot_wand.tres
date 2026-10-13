@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_p1mp7"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_8cvxm"]
+
+[sub_resource type="Resource" id="Resource_p1mp7"]
+script = ExtResource("1_p1mp7")
+id = &"pilot_wand_magic"
+family_id = &"pilot_wand_magic"
+axis = &"magic_attack"
+unit = &"points"
+magnitude = 1.0
+
+[resource]
+script = ExtResource("2_8cvxm")
+id = &"pilot_wand"
+display_name = "Varinha de Condução"
+flavor_text = "A haste simples repousa na mão, pronta para conduzir a energia arcana."
+description = "Ataque mágico: +1."
+allowed_origins = Array[StringName]([&"mage"])
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"common"
+socket_capacity = 2
+effects = Array[ExtResource("1_p1mp7")]([SubResource("Resource_p1mp7")])

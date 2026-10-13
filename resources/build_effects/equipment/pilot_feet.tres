@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_tc2sh"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_xsh1d"]
+
+[sub_resource type="Resource" id="Resource_tc2sh"]
+script = ExtResource("1_tc2sh")
+id = &"pilot_feet_effect"
+family_id = &"pilot_feet_effect"
+axis = &"move_speed"
+unit = &"points"
+magnitude = 3.0
+
+[resource]
+script = ExtResource("2_xsh1d")
+id = &"pilot_feet"
+display_name = "Botas de Passo Leve"
+flavor_text = "A sola gasta guarda marcas de voltas incontáveis pelo campo de treino."
+description = "Velocidade de movimento: +3."
+allowed_origins = Array[StringName]([&"swordsman", &"mage", &"archer"])
+slot = &"feet"
+item_kind = &"armor"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"uncommon"
+socket_capacity = 1
+effects = Array[ExtResource("1_tc2sh")]([SubResource("Resource_tc2sh")])

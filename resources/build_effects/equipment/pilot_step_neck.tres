@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_ntse2"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_a58r2"]
+
+[sub_resource type="Resource" id="Resource_ntse2"]
+script = ExtResource("1_ntse2")
+id = &"pilot_step_access"
+granted_skill_id = &"teleport"
+family_id = &"pilot_step_access"
+kind = 3
+handler_id = 4
+allowed_origins = Array[StringName]([&"swordsman", &"mage", &"archer"])
+unit = &"points"
+
+[resource]
+script = ExtResource("2_a58r2")
+id = &"pilot_step_neck"
+display_name = "Colar do Passo Distante"
+flavor_text = "O cristal captura um reflexo fugaz, como uma porta vista por um instante."
+description = "Concede Teleporte no rank 1; vale o maior rank disponível, com recarga compartilhada."
+allowed_origins = Array[StringName]([&"swordsman", &"mage", &"archer"])
+slot = &"neck"
+item_kind = &"jewelry"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"rare"
+effects = Array[ExtResource("1_ntse2")]([SubResource("Resource_ntse2")])

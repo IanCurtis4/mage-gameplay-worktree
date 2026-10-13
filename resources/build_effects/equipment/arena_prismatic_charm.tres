@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_yburx"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_i3wpp"]
+
+[sub_resource type="Resource" id="Resource_yburx"]
+script = ExtResource("1_yburx")
+id = &"pilot_prismatic_access"
+granted_skill_id = &"fire_spear"
+family_id = &"pilot_prismatic_access"
+kind = 3
+handler_id = 4
+allowed_origins = Array[StringName]([&"swordsman", &"mage", &"archer"])
+unit = &"points"
+
+[resource]
+script = ExtResource("2_i3wpp")
+id = &"arena_prismatic_charm"
+display_name = "Amuleto Prismático"
+flavor_text = "Facetas coloridas refletem a luz em pequenos arcos sobre a palma."
+description = "Concede Lança de Fogo no rank 1; vale o maior rank disponível, com recarga compartilhada."
+allowed_origins = Array[StringName]([&"swordsman", &"mage", &"archer"])
+slot = &"accessory"
+item_kind = &"jewelry"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"rare"
+effects = Array[ExtResource("1_yburx")]([SubResource("Resource_yburx")])

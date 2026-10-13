@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_48l0n"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_7fthn"]
+
+[sub_resource type="Resource" id="Resource_48l0n"]
+script = ExtResource("1_48l0n")
+id = &"pilot_staff_attack"
+family_id = &"pilot_staff_attack"
+axis = &"magic_attack"
+unit = &"points"
+magnitude = 2.0
+
+[resource]
+script = ExtResource("2_7fthn")
+id = &"arena_starter_staff"
+display_name = "Cajado de Treino"
+flavor_text = "A madeira lisa conserva marcas deixadas pelas mãos de aprendizes."
+description = "Ataque mágico: +2."
+allowed_origins = Array[StringName]([&"mage"])
+hand_usage = &"two_hands"
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"common"
+socket_capacity = 1
+effects = Array[ExtResource("1_48l0n")]([SubResource("Resource_48l0n")])

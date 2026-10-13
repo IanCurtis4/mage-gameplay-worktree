@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="MobDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/mob_definition.gd" id="1_cfxlk"]
+
+[resource]
+script = ExtResource("1_cfxlk")
+id = &"pilot_precision_species"
+display_name = "Atirador Preciso"
+flavor_text = "O atirador mede a distância e desfere um golpe básico quando o alvo chega."
+description = "Nível fixo 1. Categoria base: normal."
+allowed_occurrence_categories = Array[StringName]([&"normal", &"rare", &"elite", &"rare_elite"])
+primary_attributes = {
+&"agi": 2,
+&"dex": 2,
+&"int": 2,
+&"luk": 2,
+&"str": 2,
+&"vit": 2
+}
+card_id = &"precision_card"

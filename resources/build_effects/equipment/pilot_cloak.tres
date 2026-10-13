@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_gj61e"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_2scap"]
+
+[sub_resource type="Resource" id="Resource_gj61e"]
+script = ExtResource("1_gj61e")
+id = &"pilot_cloak_effect"
+family_id = &"pilot_cloak_effect"
+axis = &"magic_defense"
+unit = &"points"
+magnitude = 2.0
+
+[resource]
+script = ExtResource("2_2scap")
+id = &"pilot_cloak"
+display_name = "Manto do Vigia"
+flavor_text = "O tecido escuro leva a poeira das rondas ao redor da Arena."
+description = "Defesa mágica: +2."
+allowed_origins = Array[StringName]([&"swordsman", &"mage", &"archer"])
+slot = &"cloak"
+item_kind = &"armor"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"uncommon"
+effects = Array[ExtResource("1_gj61e")]([SubResource("Resource_gj61e")])

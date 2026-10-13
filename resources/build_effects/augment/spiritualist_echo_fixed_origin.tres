@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="AugmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_xnsnn"]
+[ext_resource type="Script" path="res://scripts/data/augment_definition.gd" id="2_vosih"]
+
+[sub_resource type="Resource" id="Resource_bq3ii"]
+script = ExtResource("1_xnsnn")
+id = &"spiritualist_echo_fixed_origin_policy"
+family_id = &"spiritualist_echo_fixed_origin_policy"
+kind = 4
+handler_id = 5
+stacking_mode = 1
+conflict_group = &"echo_origin_fixed"
+target_skill_ids = Array[StringName]([&"spiritualist_echo_curse"])
+allowed_origins = Array[StringName]([&"mage"])
+allowed_evolutions = Array[StringName]([&"spiritualist"])
+axis = &"echo_origin_fixed"
+unit = &"policy"
+
+[resource]
+script = ExtResource("2_vosih")
+id = &"spiritualist_echo_fixed_origin"
+display_name = "Eco no Ponto Marcado"
+flavor_text = "Quando agendado, o eco guarda aquele ponto no espaço; o portador precisa permanecer vivo para que a onda se resolva ali, sem seguir o alvo."
+description = "Eco resolve no ponto onde o portador foi agendado, com espera, dano e alcance da habilidade. Requer rank 1 na habilidade afetada. Não combina com outra transformação do mesmo grupo.
+Acumula até 1 vez(es)."
+allowed_origins = Array[StringName]([&"mage"])
+allowed_evolutions = Array[StringName]([&"spiritualist"])
+effects = Array[ExtResource("1_xnsnn")]([SubResource("Resource_bq3ii")])

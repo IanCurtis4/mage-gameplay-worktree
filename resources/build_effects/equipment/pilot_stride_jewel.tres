@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_ahtsv"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_w37dr"]
+
+[sub_resource type="Resource" id="Resource_ahtsv"]
+script = ExtResource("1_ahtsv")
+id = &"pilot_stride_jewel_effect"
+family_id = &"pilot_stride_jewel_effect"
+axis = &"move_speed"
+unit = &"points"
+magnitude = 3.0
+
+[resource]
+script = ExtResource("2_w37dr")
+id = &"pilot_stride_jewel"
+display_name = "Joia da Passada"
+flavor_text = "A pequena peça oscila suavemente a cada mudança de direção."
+description = "Velocidade de movimento: +3."
+allowed_origins = Array[StringName]([&"swordsman", &"mage", &"archer"])
+slot = &"accessory"
+item_kind = &"jewelry"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"uncommon"
+effects = Array[ExtResource("1_ahtsv")]([SubResource("Resource_ahtsv")])

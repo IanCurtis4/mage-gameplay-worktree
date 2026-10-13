@@ -1,0 +1,433 @@
+{
+  "role": "automated_test_supervision",
+  "semantic_audit": false,
+  "status": "PASS",
+  "source_commit": "d242a60bf905ea971c72e90fa65ca6a58580ba87",
+  "source_tree": "2c0578265b50e1b8d495ff374244b4162e69ec44",
+  "branch": "codex/e06-inventory",
+  "worktree": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+  "started_utc": "2026-10-13T06:19:58.9173846Z",
+  "resumed_utc": "2026-10-13T06:23:50.7469221Z",
+  "completed_utc": "2026-10-13T06:31:57.404572Z",
+  "baseline_provenance": {
+    "resume_baseline_path": ".godot/verification/e06_publication/luna_final/resume/inputs_before.json",
+    "resume_baseline_sha256": "115044350ba7c323bc1d6db3b5649b45eb214f931dfa007a7c21bf352d11b402",
+    "input_count_before_and_after": 783,
+    "pre_resume_diff_path": ".godot/verification/e06_publication/luna_final/resume/inputs_precheck.json",
+    "pre_resume_clean": true,
+    "post_resume_manifest": ".godot/verification/e06_publication/luna_final/resume/inputs_after.json",
+    "post_resume_clean": true,
+    "changed_paths": [],
+    "missing_paths": [],
+    "prior_failure_baseline_sha256": "81e5d9d0ade095cbf2a6462f735b6ed39beec01713c2c115cf131f595fc402f3",
+    "prior_failure_count": 783,
+    "delta_between_baselines": "Exactly tests/e06_effects_composition_test.gd; other 782 entries matched. The corrected file baseline is the root-supplied 783-input resume snapshot, not a backfilled prior hash."
+  },
+  "test_execution": {
+    "runner": "tools/verify.ps1",
+    "runner_sha256": "19033BBDE612DCFBCBC2A0A44044A98D425DA74EEF52F322724CC05EC03039A6",
+    "engine_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\review-engine\\Godot.exe",
+    "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+    "timeout_seconds": 60,
+    "plan_total_steps": 204,
+    "selected_checks_total": 40,
+    "attempt_1": {
+      "selection_count": 40,
+      "completed_before_failure": 6,
+      "passed_reused_checks": 5,
+      "failed_check": "e06_effects_composition_test",
+      "failure_receipt": ".godot/verification/e06_publication/luna_final/e06_publication_validation_failed.json",
+      "failure_receipt_sha256": "E90289222721E8635FCAA05352430863084CBA18D92C8CEF2327CC871CF59B16",
+      "reused_passes": [
+        {
+          "name": "editor_import",
+          "exit_code": 0,
+          "timed_out": false,
+          "output_sha256": "1114CD3AA7489C8324A4C9466F4EC6BFBF9EA6E1EB813EE4A2847CFFBD9F61C4",
+          "log_path": ".godot/verification/e06_publication/luna_final/checks/001.output.log"
+        },
+        {
+          "name": "e06_inventory_resources_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "output_sha256": "535C051E5EADF61A08F78A2130CF90C8A2C500C310A069569768582BA24D206C",
+          "log_path": ".godot/verification/e06_publication/luna_final/checks/002-e06_inventory_resources_test.output.log"
+        },
+        {
+          "name": "e06_inventory_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "output_sha256": "1BD9A4B87F549316D171DDEF1A2CACF156EA80EC76A1AF3DE9D7D091192722A5",
+          "log_path": ".godot/verification/e06_publication/luna_final/checks/003-e06_inventory_test.output.log"
+        },
+        {
+          "name": "e06_rewards_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "output_sha256": "1D0D94EFD583A1833C93AE6EC2F2EEE6F921D9083C5248CA2BC50E19DAE1410F",
+          "log_path": ".godot/verification/e06_publication/luna_final/checks/004-e06_rewards_test.output.log"
+        },
+        {
+          "name": "e06_migration_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "output_sha256": "9F5DD3900F179B2583C848957F59455C400BECC3EE08CE8DBA4E815F112E58EE",
+          "log_path": ".godot/verification/e06_publication/luna_final/checks/005-e06_migration_test.output.log"
+        }
+      ]
+    },
+    "attempt_2": {
+      "selection_count": 35,
+      "skip_editor_import": true,
+      "completed": 35,
+      "all_passed": true,
+      "plan_path": ".godot/verification/e06_publication/luna_final/resume/checks/plan.json",
+      "plan_sha256": "AED94349B9575B3CF4B7C41F59E9403332591BC6CAEAE2DB2D706E570E01B0E8",
+      "checks_manifest_path": ".godot/verification/e06_publication/luna_final/resume/checks/checks.jsonl",
+      "checks_manifest_sha256": "33868AFD2EF68B2784DCCAA5ED936493ED8DE62348EF5D891C28D4B2A4629751",
+      "results": [
+        {
+          "index": 6,
+          "name": "e06_effects_composition_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "B2B7FC39DC73A5D0073D8ADC039D62D03A7B900EBA194841001F01017136E501"
+        },
+        {
+          "index": 7,
+          "name": "e06_proc_ledger_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "443A713628B4D82EF2343B7AA6A92B6F0AC6D51526B470D75E01D124C1D74945"
+        },
+        {
+          "index": 8,
+          "name": "e06_effects_runtime_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "4D2C6C3D1221AA352C92570D7EB188AD87A213352D772DD848A8639C20376906"
+        },
+        {
+          "index": 13,
+          "name": "battle_ui_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "F8318896CA4F69C73DFEE75D000BE93183454816283638EE4C14279A62749D21"
+        },
+        {
+          "index": 14,
+          "name": "arena_flow_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "110201CA81B8DA2A6AD21A6FC5331AF48E7092149D8EB4C677130EB4ABA64F6A"
+        },
+        {
+          "index": 17,
+          "name": "persistent_state_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "401E2A51A56E2EC92B1581A5EEFBC5D343131D81DBAA49613C8CC7CDE6193C05"
+        },
+        {
+          "index": 18,
+          "name": "profile_store_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "5367FDB65B879E166E5BF0B32391D37A3E04E4E98AF00E9427155194EBF8E2E5"
+        },
+        {
+          "index": 19,
+          "name": "profile_facade_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "0E7C0200C1FAEDEE71AA0FEC27B6F9415F0F622606FFE2917B2718E1295292D5"
+        },
+        {
+          "index": 20,
+          "name": "profile_run_facade_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "63AFAED0F8287EE17CEF6777E5F7E217A036B1CB41A7CD9C52DCF2355AA0484E"
+        },
+        {
+          "index": 179,
+          "name": "e06_review_boundaries_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "879C59F0EB2A24F1189EF32060653B3813AB8F3405318A8E63042BE8EE94CA2D"
+        },
+        {
+          "index": 180,
+          "name": "e06_review_identity_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "78730AEE37D14BF44F6A01A9F6DA7F25FF4D4E128F86E9BF6884ADF5EA8734C3"
+        },
+        {
+          "index": 181,
+          "name": "e06_review_preset_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "5C0A47797ACE989282C83EF1C664EF0CB97DEBB214770F1C1985D285AB38FEDB"
+        },
+        {
+          "index": 182,
+          "name": "e06_inventory_persistence_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "8D43F4B38A9BD50B709CC4913A4F404B1529CBBD3EDFC7D3EE99191CF6FF0594"
+        },
+        {
+          "index": 183,
+          "name": "e06_tx_inventory_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "7D5A0186D76FF5E1B9D83BBCD5F58406877A58629E2022A7E4FF642695C3D29A"
+        },
+        {
+          "index": 184,
+          "name": "e06_tx_migration_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "E9895F305173E29547757B2EE8651DA0491376CE355D5C6BF70B2C687489EB8E"
+        },
+        {
+          "index": 185,
+          "name": "e06_review_persistence_edges_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "123FB66F3591E9B0FAEB734BBBCCE59EBB2D84AF3B349EE4851B63199EFD657F"
+        },
+        {
+          "index": 186,
+          "name": "e06_tx_composition_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "707FF42F2E379D184E5C2FF37EDB33CD2C67857FF402F143A430D1779BFC000C"
+        },
+        {
+          "index": 187,
+          "name": "e06_tx_active_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "639C3CD9F61B1C2233E3B8A4D05B7F3F189282421100D7248362526DEBEE3E18"
+        },
+        {
+          "index": 188,
+          "name": "e06_tx_causality_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "494CA0551D7AA0AA3545AE39F5A41608342A42DC41A04316CAAE9EA58DAAA069"
+        },
+        {
+          "index": 189,
+          "name": "e06_tx_mob_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "5D56F0CD5FF057474655131DDF94EC101977F7AAB24FCB67EF806B1E4F99969A"
+        },
+        {
+          "index": 190,
+          "name": "e06_tx_loot_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "480430AC5C34FB01364DA07461E7F07835D2984CBA43F6A2052BD9D1F8CC0706"
+        },
+        {
+          "index": 191,
+          "name": "e06_rx_causal_late_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "58BB9913B5EFAEB48C4EE2AB21441D6C4DCFC7E9CA4DBA97245040514E8182E7"
+        },
+        {
+          "index": 192,
+          "name": "e06_rx_mob_ai_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "B9569774452019C5A7A2F3C085320FE2CF4B747A45ADF3BBBAC256FFC674109A"
+        },
+        {
+          "index": 193,
+          "name": "e06_tx_late_fields_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "8BA8EB33E5AFB2FE7C7AA9F617F729A000C7C3195432B46F19022E48297613AC"
+        },
+        {
+          "index": 194,
+          "name": "e06_content_authoring_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "41AB313DA854B7B0223B6E128E3079B93C556C65A3509E8752BC15134FB8AF62"
+        },
+        {
+          "index": 195,
+          "name": "e06_content_editorial_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "4F19B03DD3389029AEB3FCDB8F6D511DB2C5E80715348CD9AB52F1819844A2DF"
+        },
+        {
+          "index": 196,
+          "name": "e06_content_pilot_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "5D3C2EE5D30E4CF7361706F02EBE5951627B654ECDFD0691712283784148FA88"
+        },
+        {
+          "index": 197,
+          "name": "e06_content_pilot_runtime_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "6CBDFEC9054577CF5D7A5B218CBB2CD36D650467370A971ACF67C54B20810A17"
+        },
+        {
+          "index": 198,
+          "name": "e06_pilot_execution_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "C9F1E258339201BA669CFE3DCF725561F4617272EA16F7FD78894D34A31C89D0"
+        },
+        {
+          "index": 199,
+          "name": "e06_spatial_policies_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "A91E9DE2E098A74ABBECC490B235B93EF48AF904B9921FA742E43C3C8B1585D6"
+        },
+        {
+          "index": 200,
+          "name": "e06_spatial_execution_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "4A129A7CAD9CF6F3723160B290CE09E52D4EA1FCA8E3327B0919EE28E6BEEE20"
+        },
+        {
+          "index": 201,
+          "name": "e06_transform_policies_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "4DEAFAC9FA3396D356B5044D68873B2E3A256F5127ACF247177F57886B10AB34"
+        },
+        {
+          "index": 202,
+          "name": "e06_transform_execution_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "17570A4579CF8A2AB43B85175101DF2D8F40571090678887CBAFE0054D9440B1"
+        },
+        {
+          "index": 203,
+          "name": "e06_directions_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "619B359CB0C0335F24208B1DC8E5715401A5666331EC9233804B71D55B7CE525"
+        },
+        {
+          "index": 204,
+          "name": "e06_publication_test",
+          "exit_code": 0,
+          "timed_out": false,
+          "failed": false,
+          "output_sha256": "96A9D78F053626B275C3698C2984379B1B52A8AB41FF1C842262467462B17982"
+        }
+      ]
+    },
+    "total_distinct_checks_passed_across_attempts": 40,
+    "assertion_counts": {
+      "e06_effects_composition_test": 70,
+      "e06_proc_ledger_test": 29,
+      "e06_effects_runtime_test": 53,
+      "e06_content_pilot_test": 468,
+      "e06_content_pilot_runtime_test": 244,
+      "e06_pilot_execution_test": 128,
+      "e06_spatial_policies_test": 123,
+      "e06_spatial_execution_test": 153,
+      "e06_transform_policies_test": 130,
+      "e06_transform_execution_test": 675,
+      "e06_directions_test": 129,
+      "e06_publication_test": 1143
+    }
+  },
+  "publication_check": {
+    "command": "Godot --headless --path <worktree> --script res://tools/content/publish.gd -- --check",
+    "runner": "Python subprocess.run(timeout=60)",
+    "exit_code": 0,
+    "log_path": ".godot/verification/e06_publication/luna_final/resume/publish_check.output.log",
+    "log_sha256": "6BBBF54A47D0CB1FAFFD612851FC899D89DB4AA94C18FD6844C6968D57C390DA",
+    "stdout_summary": "E06_PUBLICATION_CHECK_OK entries=83 builds=20 digest=6631984d3bf5a12efd1344a2cf542c9c07e411c9f38bd465f95c417d8fc4bf9f",
+    "expected_published_digest": "6631984d3bf5a12efd1344a2cf542c9c07e411c9f38bd465f95c417d8fc4bf9f",
+    "expected_source_digest": "b2480230ac8691fe155976ce4e311cfef233e6b32618a3ebd8a7c87fbd0658fd",
+    "read_only_check": true
+  },
+  "publication_evidence": {
+    "manifest_path": "content/authoring/publication_manifest.json",
+    "manifest_sha256": "96EC2C1A35D8D96EA084CC11850E5EE3316284A8E9061DBB08AD876D44FE9582",
+    "native_hash_manifest": ".godot/verification/e06_publication/luna_final/resume/published_native_hashes.json",
+    "native_hash_manifest_sha256": "4746A005D23E05ADBAFA0C4F629BD98AF94F0CD05C41260844D5D5422FA6D033",
+    "native_resource_count": 83,
+    "entry_count": 83,
+    "published_resource_count": 69,
+    "source_mechanical_digest": "b2480230ac8691fe155976ce4e311cfef233e6b32618a3ebd8a7c87fbd0658fd",
+    "publication_mechanical_digest": "6631984d3bf5a12efd1344a2cf542c9c07e411c9f38bd465f95c417d8fc4bf9f",
+    "comparison_builds": 20,
+    "unique_build_pairs": 20,
+    "preserved_equipment_ids": 12,
+    "preserved_mob_ids": 2,
+    "directions_execution_sha256": "25EB5B966E912AB25346402F70766C502230413DF7E0C5CC988CA00D2F84C77B",
+    "published_resource_paths_unique": true,
+    "published_paths_match_manifest": true,
+    "preserved_resource_path_count": 14,
+    "all_83_native_paths_accounted_for": true,
+    "native_paths_note": "Manifest lists 69 newly published resources; the other 14 of 83 are preserved legacy equipment/mob resources listed by IDs. Their union equals all 83 hashed native TRES.",
+    "native_resource_paths_match_manifest_removed_reason": "The manifest contains 69 newly published paths; the 83 native TRES also include 14 preserved legacy paths. Exact coverage is represented by published_paths_match_manifest and all_83_native_paths_accounted_for."
+  },
+  "legacy_preservation": {
+    "baseline_path": ".godot/verification/e06_publication/legacy_before.json",
+    "legacy_count": 14,
+    "all_14_unchanged": true,
+    "after_manifest": ".godot/verification/e06_publication/luna_final/resume/legacy_after.json",
+    "native_resources_unchanged_since_failure_capture": true
+  },
+  "log_errors": [],
+  "timeout_lines": [],
+  "artifacts_owned_by_luna": [
+    "docs/epics/e06/e06_publication_validation.json",
+    ".godot/verification/e06_publication/luna_final/"
+  ]
+}

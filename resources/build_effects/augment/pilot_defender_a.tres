@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="AugmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_bcrsa"]
+[ext_resource type="Script" path="res://scripts/data/augment_definition.gd" id="2_nuopp"]
+
+[sub_resource type="Resource" id="Resource_ertbu"]
+script = ExtResource("1_bcrsa")
+id = &"pilot_defender_a_effect"
+family_id = &"pilot_defender_a_effect"
+kind = 2
+handler_id = 3
+trigger = 1
+target_skill_ids = Array[StringName]([&"defender_counterstroke"])
+axis = &"physical_damage"
+unit = &"damage"
+magnitude = 6.0
+limit = 60.0
+stack_values = Array[float]([6.0, 12.0, 18.0])
+
+[resource]
+script = ExtResource("2_nuopp")
+id = &"pilot_defender_a"
+display_name = "Contraforte Firme"
+flavor_text = "O contraforte converte uma defesa bem colocada em resposta contundente."
+description = "Ao acertar: bônus de +6 / +12 / +18 de dano físico e 0% proporcional; limite do bônus 60. Apenas em acertos de Contraforte. Requer rank 1 na habilidade afetada.
+Acumula até 3 vez(es)."
+max_stacks = 3
+allowed_origins = Array[StringName]([&"swordsman"])
+allowed_evolutions = Array[StringName]([&"defender"])
+effects = Array[ExtResource("1_bcrsa")]([SubResource("Resource_ertbu")])

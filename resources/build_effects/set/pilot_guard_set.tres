@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="EquipmentSetDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_set_definition.gd" id="1_wv6sn"]
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="2_j6yq8"]
+
+[sub_resource type="Resource" id="Resource_kqnjy"]
+script = ExtResource("2_j6yq8")
+id = &"pilot_guard_hp"
+family_id = &"pilot_guard_hp"
+axis = &"max_hp"
+unit = &"points"
+magnitude = 8.0
+
+[sub_resource type="Resource" id="Resource_2q5uu"]
+script = ExtResource("2_j6yq8")
+id = &"pilot_guard_resist"
+family_id = &"pilot_guard_resist"
+axis = &"physical_defense"
+unit = &"points"
+magnitude = 2.0
+
+[resource]
+script = ExtResource("1_wv6sn")
+id = &"pilot_guard_set"
+display_name = "Guarda do Baluarte"
+flavor_text = "Peitoral, ombreiras e grevas compartilham o emblema da guarda que treinava na Arena."
+description = "2 peças: Vida máxima: +8.
+3 peças: Defesa física: +2."
+thresholds = {
+2: [SubResource("Resource_kqnjy")],
+3: [SubResource("Resource_2q5uu")]
+}

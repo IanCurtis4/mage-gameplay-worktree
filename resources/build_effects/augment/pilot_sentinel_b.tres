@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="AugmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_07w1h"]
+[ext_resource type="Script" path="res://scripts/data/augment_definition.gd" id="2_q6hxw"]
+
+[sub_resource type="Resource" id="Resource_g8ao2"]
+script = ExtResource("1_07w1h")
+id = &"pilot_sentinel_b_effect"
+family_id = &"pilot_sentinel_b_effect"
+kind = 2
+handler_id = 3
+trigger = 1
+target_skill_ids = Array[StringName]([&"sentinel_net_shot"])
+axis = &"physical_damage"
+unit = &"damage"
+magnitude = 6.0
+limit = 60.0
+stack_values = Array[float]([6.0, 12.0, 18.0])
+
+[resource]
+script = ExtResource("2_q6hxw")
+id = &"pilot_sentinel_b"
+display_name = "Tiro de Rede"
+flavor_text = "Um disparo bem colocado marca o instante em que a guarda adversária cede."
+description = "Ao acertar: bônus de +6 / +12 / +18 de dano físico e 0% proporcional; limite do bônus 60. Apenas em acertos de Tiro de Rede. Requer rank 1 na habilidade afetada.
+Acumula até 3 vez(es)."
+max_stacks = 3
+allowed_origins = Array[StringName]([&"archer"])
+allowed_evolutions = Array[StringName]([&"sentinel"])
+effects = Array[ExtResource("1_07w1h")]([SubResource("Resource_g8ao2")])

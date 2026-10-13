@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_t26qp"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_sd7sh"]
+
+[sub_resource type="Resource" id="Resource_t26qp"]
+script = ExtResource("1_t26qp")
+id = &"pilot_robe_int"
+family_id = &"pilot_robe_int"
+channel = &"primary_flat"
+axis = &"int"
+unit = &"points"
+magnitude = 3.0
+
+[resource]
+script = ExtResource("2_sd7sh")
+id = &"arena_channeler_robe"
+display_name = "Veste do Condutor"
+flavor_text = "O corte sóbrio e os bordados discretos distinguem esta veste entre os trajes da Arena."
+description = "INT: +3."
+allowed_origins = Array[StringName]([&"swordsman", &"mage", &"archer"])
+slot = &"torso"
+item_kind = &"armor"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"rare"
+socket_capacity = 1
+effects = Array[ExtResource("1_t26qp")]([SubResource("Resource_t26qp")])

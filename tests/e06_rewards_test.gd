@@ -113,7 +113,7 @@ func _reward_boundaries() -> void:
 	for id: StringName in c.run_state.effect_catalog().ids(&"card"):
 		c.run_state.card_inventory.grant(id, c.run_state.effect_catalog())
 	_check(not c.reward_service.eligible_cards().is_empty(), "owning a definition does not forbid another acquisition")
-	assert(c.run_state.set_effect_catalog(BuildContentLoader.pilot())["ok"])
+	assert(c.run_state.set_effect_catalog(TX.neutral_effect_catalog())["ok"])
 	_check(c.reward_service.eligible_cards().is_empty(), "catalog with no useful card recipe exhausts card pool")
 	var issued := c.reward_service.issue("empty-stage", &"encounter_two", true)
 	_check(issued["card_id"] == &"" and not issued["message"].is_empty() and c.reward_service.collect(issued["ticket_id"])["ok"] and c.run_state.pending_choices == 1, "exhausted card pool warns and still delivers item XP and pending choice")

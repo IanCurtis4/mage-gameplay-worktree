@@ -82,3 +82,9 @@ Luna edita somente os quatro nomes/flavors. Pré-requisitos dos adapters fechado
 `tools/content/directions_bundle.gd` usa as mesmas 69 receitas e cria vinte blueprints com compras/slots de preparação legais. `tests/e06_directions_test.gd` gera `directions_execution.json` somente após confirmar todos os casos reais. `tools/content/directions.gd` verifica digest e igualdade dos blueprints observados antes de gerar `directions_builds.json` e Resources nativos separados. Não passa a integrar o loader ativo.
 
 [Prévia das decisões](directions_preview.md). `direction_decisions_validated` indica prova dirigida dos caminhos; `tactical_validation_pending`, equilíbrio, desempenho e playtest humano continuam separados. Os resultados antigos de `pilot_*`, `spatial_*` e `transform_*` permanecem preservados.
+
+## Publicação preservadora — E06
+
+Variante mínima aprovada em13/10/2026: os12 equipamentos históricos ficam intactos;69receitas são publicadas com os12 equivalentes renomeados para arena_*. Os cinco iniciais antigos continuam os padrões. O catálogo ativo reúne83definições; nenhuma instância/salvamento é remapeada. [Manifesto da publicação](publication_manifest.json) registra mapping, digest próprio e20blueprints. Os63/65/69bundles e provas offline anteriores permanecem congelados.
+
+`tools/content/publish.gd` materializa os69Resources autorizados; `-- --check` confere Resources, digest e manifesto sem escrever. Usar Godot4.7.2 da worktree e preservar14definições antigas. O caminho demonstrativo de escolha existente passa a considerar novas peças elegíveis; não há tabela nova de mobloot, rates/progressão ou spawns. Interface ampliada e playtest humano permanecem pendentes.

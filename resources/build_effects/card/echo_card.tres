@@ -1,9 +1,25 @@
-[gd_resource type="Resource" script_class="CardDefinition" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="CardDefinition" format=3]
 
-[ext_resource type="Script" path="res://scripts/data/card_definition.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_vyml7"]
+[ext_resource type="Script" path="res://scripts/data/card_definition.gd" id="2_4bw45"]
+
+[sub_resource type="Resource" id="Resource_d313b"]
+script = ExtResource("1_vyml7")
+id = &"pilot_card_hit"
+family_id = &"pilot_card_hit"
+kind = 2
+handler_id = 3
+trigger = 1
+axis = &"magic_damage"
+unit = &"damage"
+magnitude = 2.0
+limit = 60.0
 
 [resource]
-script = ExtResource("1")
+script = ExtResource("2_4bw45")
 id = &"echo_card"
-display_name = "Carta em preparação"
-description = "Receita reservada para o catálogo E06."
+display_name = "Carta do Eco da Arena"
+flavor_text = "A figura silenciosa reaparece na memória como um vulto de contornos conhecidos."
+description = "Ao acertar: bônus de +2 de dano mágico e 0% proporcional; limite do bônus 60."
+mob_base_id = &"pilot_echo_species"
+effects = Array[ExtResource("1_vyml7")]([SubResource("Resource_d313b")])

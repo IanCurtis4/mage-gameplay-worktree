@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_g0tqx"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_wx3wj"]
+
+[sub_resource type="Resource" id="Resource_g0tqx"]
+script = ExtResource("1_g0tqx")
+id = &"pilot_arms_effect"
+family_id = &"pilot_arms_effect"
+axis = &"hit_rating"
+unit = &"points"
+magnitude = 3.0
+
+[resource]
+script = ExtResource("2_wx3wj")
+id = &"pilot_arms"
+display_name = "Braçadeiras da Arena"
+flavor_text = "Costuras reforçadas acompanham o movimento dos braços nos treinos."
+description = "Acerto: +3."
+allowed_origins = Array[StringName]([&"swordsman", &"mage", &"archer"])
+slot = &"arms"
+item_kind = &"armor"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"uncommon"
+socket_capacity = 3
+effects = Array[ExtResource("1_g0tqx")]([SubResource("Resource_g0tqx")])

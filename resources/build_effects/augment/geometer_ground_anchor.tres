@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="AugmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_kdduh"]
+[ext_resource type="Script" path="res://scripts/data/augment_definition.gd" id="2_41f7f"]
+
+[sub_resource type="Resource" id="Resource_mddew"]
+script = ExtResource("1_kdduh")
+id = &"geometer_ground_anchor_policy"
+family_id = &"geometer_ground_anchor_policy"
+kind = 4
+handler_id = 5
+stacking_mode = 1
+conflict_group = &"geometer_ground_anchor"
+target_skill_ids = Array[StringName]([&"geometer_trace", &"geometer_triangulation"])
+allowed_origins = Array[StringName]([&"mage"])
+allowed_evolutions = Array[StringName]([&"mg_ar"])
+axis = &"geometer_ground_anchor"
+unit = &"policy"
+
+[resource]
+script = ExtResource("2_41f7f")
+id = &"geometer_ground_anchor"
+display_name = "Vértice de Chão Firme"
+flavor_text = "No impacto confirmado, o ponto fica marcado no chão; Traçado e Triangulação mantêm seus vértices onde o disparo realmente alcançou."
+description = "Traçado e Triangulação fixam vértices no ponto do impacto, sem acompanhar o alvo. Requer rank 1 na habilidade afetada. Não combina com outra transformação do mesmo grupo.
+Acumula até 1 vez(es)."
+allowed_origins = Array[StringName]([&"mage"])
+allowed_evolutions = Array[StringName]([&"mg_ar"])
+effects = Array[ExtResource("1_kdduh")]([SubResource("Resource_mddew")])

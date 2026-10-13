@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_qi1ax"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_xcay8"]
+
+[sub_resource type="Resource" id="Resource_qi1ax"]
+script = ExtResource("1_qi1ax")
+id = &"pilot_vest_defense"
+family_id = &"pilot_vest_defense"
+axis = &"physical_defense"
+unit = &"points"
+magnitude = 2.0
+
+[resource]
+script = ExtResource("2_xcay8")
+id = &"arena_traveler_vest"
+display_name = "Colete do Viajante"
+flavor_text = "O colete de corte simples protege o viajante durante os treinos."
+description = "Defesa física: +2."
+allowed_origins = Array[StringName]([&"swordsman", &"mage", &"archer"])
+slot = &"torso"
+item_kind = &"armor"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"common"
+socket_capacity = 1
+effects = Array[ExtResource("1_qi1ax")]([SubResource("Resource_qi1ax")])
