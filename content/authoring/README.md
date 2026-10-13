@@ -76,3 +76,9 @@ Os novos efeitos de proc direcionado incluem as habilidades alvo na descrição 
 `tools/content/transform_bundle.gd` conserva as 65 receitas espaciais e acrescenta quatro políticas de kit aprovadas. `tools/content/transform.gd -- --prepare` gera fichas e cria o envelope editorial somente se ausente, copiando as 65 células antigas; execução sem argumentos valida editorial, gera `transform_builds.json` e 69 Resources em `.godot/content_authoring/transform_*`. Os bundles anteriores e o loader ativo não são reescritos.
 
 Luna edita somente os quatro nomes/flavors. Pré-requisitos dos adapters fechados ficam em BuildEffectCatalog, sem propriedades exportadas novas. Inscrição requer Drenagem+Maldição; mecanismo requer Marca+uma armadilha afetada; Colapso requer sua ativa+Triangulação. O compositor ativa somente a política útil de rank legal. [Prévia legível](transform_preview.md) e [checkpoint](../../docs/epics/e06/e06_transform_remaining.md) registram os comportamentos e limites.
+
+## Vinte direções de combate
+
+`tools/content/directions_bundle.gd` usa as mesmas 69 receitas e cria vinte blueprints com compras/slots de preparação legais. `tests/e06_directions_test.gd` gera `directions_execution.json` somente após confirmar todos os casos reais. `tools/content/directions.gd` verifica digest e igualdade dos blueprints observados antes de gerar `directions_builds.json` e Resources nativos separados. Não passa a integrar o loader ativo.
+
+[Prévia das decisões](directions_preview.md). `direction_decisions_validated` indica prova dirigida dos caminhos; `tactical_validation_pending`, equilíbrio, desempenho e playtest humano continuam separados. Os resultados antigos de `pilot_*`, `spatial_*` e `transform_*` permanecem preservados.

@@ -1,0 +1,176 @@
+{
+  "role": "automated_test_supervision",
+  "semantic_audit": false,
+  "status": "PASS",
+  "source_commit": "dcae71a23324be3f1a9d65afb82a5a857b443756",
+  "source_tree": "277c3031349448592948b323f0785c3a0cbcae70",
+  "branch": "codex/e06-inventory",
+  "worktree": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+  "started_utc": "2026-10-13T05:29:13.6247678Z",
+  "completed_utc": "2026-10-13T05:36:57.078215Z",
+  "elapsed_seconds_approx": 163.5,
+  "base_dirty_manifest": [
+    " M assets/art/animations/archer.png.import",
+    " M assets/art/animations/berserker.png.import",
+    " M assets/art/animations/defender.png.import",
+    " M assets/art/animations/elementalist.png.import",
+    " M assets/art/animations/geometer.png.import",
+    " M assets/art/animations/hunter.png.import",
+    " M assets/art/animations/mage.png.import",
+    " M assets/art/animations/sentinel.png.import",
+    " M assets/art/animations/spiritualist.png.import",
+    " M assets/art/animations/swordsman.png.import",
+    " M assets/art/animations/warrior.png.import",
+    " M assets/art/icons/hunter/hunter_covering_shot.svg.import",
+    " M assets/art/icons/hunter/hunter_easy_prey.svg.import",
+    " M assets/art/icons/hunter/hunter_freezing_trap.svg.import",
+    " M assets/art/icons/hunter/hunter_mark.svg.import",
+    " M assets/art/icons/hunter/hunter_shooting_discipline.svg.import",
+    " M assets/art/icons/hunter/hunter_tar_trap.svg.import",
+    " M assets/art/icons/hunter/hunter_thorn_trap.svg.import",
+    " M assets/art/icons/hunter/hunter_total_cover.svg.import",
+    " M assets/art/pilot/archer.png.import",
+    " M assets/art/pilot/dirt.png.import",
+    " M assets/art/pilot/grass.png.import",
+    " M assets/art/pilot/hero.png.import",
+    " M assets/art/pilot/stone.png.import",
+    " M assets/art/pilot/warrior.png.import",
+    " M assets/art/vfx/soul_impact_orb.png.import",
+    " M assets/art/vfx/soul_impact_orb_source.png.import",
+    " M assets/art/vfx/spiritualist_curse_sigil.png.import",
+    " M assets/art/vfx/spiritualist_effects.png.import",
+    " M assets/art/vfx/spiritualist_ritual_halo.png.import",
+    " M assets/art/vfx/spiritualist_soul_wisp.png.import",
+    " M assets/art/vfx/spiritualist_spectral_burst.png.import",
+    " M content/authoring/README.md",
+    " M docs/epics/e06_contract.md",
+    " M docs/epics/e06_tasks.md",
+    " M tools/verify.ps1",
+    "?? content/authoring/directions_builds.json",
+    "?? content/authoring/directions_execution.json",
+    "?? content/authoring/directions_preview.md",
+    "?? docs/epics/e06/e06_catalog_integration_proposal.md",
+    "?? docs/epics/e06/e06_pending_checkpoint.md",
+    "?? tests/e06_directions_test.gd",
+    "?? tests/e06_directions_test.gd.uid",
+    "?? tools/content/directions.gd",
+    "?? tools/content/directions.gd.uid",
+    "?? tools/content/directions_bundle.gd",
+    "?? tools/content/directions_bundle.gd.uid"
+  ],
+  "input_hash_count_before": 693,
+  "input_hash_manifest_before": ".godot/verification/e06_directions/luna_final/input_hashes_before.json",
+  "input_hash_manifest_after": ".godot/verification/e06_directions/luna_final/input_hashes_after.json",
+  "unexpected_input_mutations": [],
+  "checks": {
+    "runner": "tools/verify.ps1",
+    "runner_sha256": "5828D689CF8200A3B3A8BF0AE2AF8A04641C65376C25470E0E74CE9E444C23D0",
+    "engine_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\review-engine\\Godot.exe",
+    "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+    "timeout_seconds": 60,
+    "plan_total": 203,
+    "selected_count": 4,
+    "selected": [
+      {
+        "name": "editor_import",
+        "index": 1,
+        "exit_code": 0,
+        "timed_out": false,
+        "output_sha256": "1BD06C8A9464523F317C43D09248C24E8E848769588640F0B3A361DB9053D1B9"
+      },
+      {
+        "name": "e06_content_pilot_test",
+        "index": 196,
+        "exit_code": 0,
+        "timed_out": false,
+        "output_sha256": "5D3C2EE5D30E4CF7361706F02EBE5951627B654ECDFD0691712283784148FA88"
+      },
+      {
+        "name": "e06_transform_policies_test",
+        "index": 201,
+        "exit_code": 0,
+        "timed_out": false,
+        "output_sha256": "4DEAFAC9FA3396D356B5044D68873B2E3A256F5127ACF247177F57886B10AB34"
+      },
+      {
+        "name": "e06_directions_test",
+        "index": 203,
+        "exit_code": 0,
+        "timed_out": false,
+        "output_sha256": "619B359CB0C0335F24208B1DC8E5715401A5666331EC9233804B71D55B7CE525"
+      }
+    ],
+    "check_totals": {
+      "editor_import": 1,
+      "e06_content_pilot_test": 468,
+      "e06_transform_policies_test": 130,
+      "e06_directions_test": 129
+    },
+    "logs_clean": true,
+    "log_error_matches": [],
+    "plan_sha256": "EF2FFDDEBC6E2CB40DDDFB7FD3B609F8391E2B107CC2E54ECA8BA21CB847DF11",
+    "checks_manifest_sha256": "81820C30BB8DCE1375D64315A42AC1DAE05D75461C7C09EF59EFED2D96030C4D"
+  },
+  "generator": {
+    "command": "Godot --headless --path <worktree> --script res://tools/content/directions.gd",
+    "runner": "Python subprocess.run(timeout=60)",
+    "exit_code": 0,
+    "output": "Directions pilot validated: 69 recipes, 20 composed comparisons; tactical validation pending.",
+    "log_path": ".godot/verification/e06_directions/luna_final/generator.output.log",
+    "generated_resource_count": 69,
+    "native_manifest_path": ".godot/content_authoring/directions_3067322/manifest.json",
+    "native_manifest_sha256": "5F33B9B3633FE2A99AABFBF060B07B802A5CF46D47F9F01D425EF21C0FA71CE6",
+    "resource_hash_manifest": ".godot/verification/e06_directions/luna_final/generated_resource_hashes.json",
+    "all_69_paths_unique_and_hashed": true
+  },
+  "direction_evidence": {
+    "mechanical_digest": "b2480230ac8691fe155976ce4e311cfef233e6b32618a3ebd8a7c87fbd0658fd",
+    "editorial_sha256": "dd648491c5cc5c25200e601aa3ba010f1ea1ec4c5d6495546de2d7c28da63e8e",
+    "execution_proof_sha256": "25eb5b966e912ab25346402f70766c502230413df7e0c5cc988ca00d2f84c77b",
+    "execution_proof_sha256_in_report": "25eb5b966e912ab25346402f70766c502230413df7e0c5cc988ca00d2f84c77b",
+    "builds_sha256": "43b95e84291290d62b1c2e005551a6219ca6950b220deb2df615bb3f42b5ed4a",
+    "outputs_pre_generation_sha256": {
+      "directions_execution.json": {
+        "sha256": "25eb5b966e912ab25346402f70766c502230413df7e0c5cc988ca00d2f84c77b",
+        "provenance": "SHA observed by Sol before Luna execution, communicated by root; not independently captured by Luna"
+      },
+      "directions_builds.json": {
+        "sha256": null,
+        "provenance": "No pre-generation SHA was captured; disclose as evidence limitation"
+      }
+    },
+    "outputs_pre_generation_limitation": "Luna did not capture initial output hashes. Sol supplied the observed pre-run hash for directions_execution.json, matching the post-run SHA. directions_builds.json has no pre-run SHA. The 693 frozen source inputs were independently captured before checks and all remained unchanged.",
+    "proof_observations": 20,
+    "report_comparisons": 20,
+    "unique_identity_branch_pairs": true,
+    "decision_validated_all_20": true,
+    "composition_valid_all_20": true,
+    "inactive_count_zero_all_20": true,
+    "build_purchases_layout_ranks_slots_match_proof": true,
+    "historical_build_effect_resources": {
+      "count": 20,
+      "unchanged_by_hash": true
+    },
+    "direction_decisions_validated": true,
+    "tactical_validation_pending": true,
+    "balance_validated": false,
+    "performance_validated": false,
+    "human_playtest": false,
+    "production_published": false,
+    "outputs_post_generation_sha256": {
+      "directions_execution.json": "25eb5b966e912ab25346402f70766c502230413df7e0c5cc988ca00d2f84c77b",
+      "directions_builds.json": "43b95e84291290d62b1c2e005551a6219ca6950b220deb2df615bb3f42b5ed4a"
+    }
+  },
+  "artifacts_owned_by_luna": [
+    "docs/epics/e06/e06_directions_validation.json",
+    ".godot/verification/e06_directions/luna_final/"
+  ],
+  "tool_content_post_execution_manifest": {
+    "path": ".godot/verification/e06_directions/luna_final/manifest_tools_content_post.json",
+    "capture_phase": "POST_EXECUTION",
+    "file_count": 20,
+    "sha256": "BD982A49A532AE173AAAA786D5D7196409604CEBFB2ADBEE602509FA2EFBE3A9",
+    "limitation": "tools/content was omitted from the 693-file before/after input snapshot. These 20 files have post-execution hashes only; no earlier hashes are claimed. The evidence count remains 693 before/after plus 20 post-execution, not 713 before/after."
+  }
+}

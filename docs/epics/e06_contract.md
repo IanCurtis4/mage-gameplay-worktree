@@ -1,3 +1,5 @@
+> Retomada humana de 13/10: [pendências](e06/e06_pending_checkpoint.md), com vinte direções entregues/validadas e proposta concreta de integração preservadora aguardando escolha humana. Receitas/editorial69 congelados; progressão/rates seguem adiadas.
+
 > Continuação humana de 12/10: as [quatro transformações restantes](e06/e06_transform_remaining.md) foram entregues e validadas, 25/202 testes dirigidos PASS; primeiro lote espacial preservado. Catálogo ativo, UI e playtest continuam fora deste pacote.
 
 > Lote espacial autorizado em 12/10/2026: [eco no ponto agendado e vértices fixos no chão](e06/e06_spatial_policies.md), entregues e validados. Capacidade fechada somente para dois augments, sem alteração de fórmulas ou publicação no catálogo ativo. Outras quatro transformações permanecem propostas. Evidência e limitações no checkpoint.

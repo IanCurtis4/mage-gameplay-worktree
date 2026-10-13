@@ -1,3 +1,5 @@
+> Retomada humana de 13/10: [pendências](e06/e06_pending_checkpoint.md), com vinte direções entregues/validadas e proposta concreta de integração preservadora aguardando escolha humana. Receitas/editorial69 congelados; progressão/rates seguem adiadas.
+
 > Continuação humana de 12/10: as [quatro transformações restantes](e06/e06_transform_remaining.md) foram entregues e validadas, 25/202 testes dirigidos PASS; primeiro lote espacial preservado. Catálogo ativo, UI e playtest continuam fora deste pacote.
 
 > Retomada12/10: [provas reais](e06/e06_pilot_execution.md) entregues/validadas; [eco e vértices fixos](e06/e06_spatial_policies.md) entregues/validados, 18/200 testes dirigidos PASS; demais quatro transformações propostas pendentes.
