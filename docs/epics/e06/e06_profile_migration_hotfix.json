@@ -1,0 +1,164 @@
+{
+  "status": "passed",
+  "role": "technical_validator",
+  "validator": "Sol",
+  "base_commit": "567575027969e614989b816d51e38e3e9d4b3408",
+  "problem": "Schema4/catalog11 successfully decoded but persistent_cards_v1 was missing from ProfileStore migration preflight allowlist, causing stale_revision/read_only and hiding the roster.",
+  "fix": "Authorize only the named migration while retaining _same_profile, backup ordering and pending guards.",
+  "coverage": "Durable old-store migration, seven visible characters, normal creation of eighth, exact original backup, idempotence, preservation on four injected failures and pending guard.",
+  "selected_checks": [
+    {
+      "output_sha256": "8CFB6C6ED66B315B4B617D4E4A4991E661679EEA3A5011AE66771E4CC824A609",
+      "failed": false,
+      "index": 1,
+      "name": "editor_import",
+      "timeout_seconds": 60,
+      "timed_out": false,
+      "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_profile_hotfix\\checks\\001.output.log",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "exit_code": 0,
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_profile_hotfix\\checks\\001.engine.log",
+      "execution_index": 1,
+      "output_sha256_verified": true
+    },
+    {
+      "output_sha256": "5367FDB65B879E166E5BF0B32391D37A3E04E4E98AF00E9427155194EBF8E2E5",
+      "failed": false,
+      "index": 18,
+      "name": "profile_store_test",
+      "timeout_seconds": 60,
+      "timed_out": false,
+      "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_profile_hotfix\\checks\\018-profile_store_test.output.log",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+        "--script",
+        "res://tests/profile_store_test.gd"
+      ],
+      "exit_code": 0,
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_profile_hotfix\\checks\\018-profile_store_test.engine.log",
+      "execution_index": 2,
+      "output_sha256_verified": true
+    },
+    {
+      "output_sha256": "0E7C0200C1FAEDEE71AA0FEC27B6F9415F0F622606FFE2917B2718E1295292D5",
+      "failed": false,
+      "index": 19,
+      "name": "profile_facade_test",
+      "timeout_seconds": 60,
+      "timed_out": false,
+      "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_profile_hotfix\\checks\\019-profile_facade_test.output.log",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+        "--script",
+        "res://tests/profile_facade_test.gd"
+      ],
+      "exit_code": 0,
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_profile_hotfix\\checks\\019-profile_facade_test.engine.log",
+      "execution_index": 3,
+      "output_sha256_verified": true
+    },
+    {
+      "output_sha256": "63AFAED0F8287EE17CEF6777E5F7E217A036B1CB41A7CD9C52DCF2355AA0484E",
+      "failed": false,
+      "index": 20,
+      "name": "profile_run_facade_test",
+      "timeout_seconds": 60,
+      "timed_out": false,
+      "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_profile_hotfix\\checks\\020-profile_run_facade_test.output.log",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+        "--script",
+        "res://tests/profile_run_facade_test.gd"
+      ],
+      "exit_code": 0,
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_profile_hotfix\\checks\\020-profile_run_facade_test.engine.log",
+      "execution_index": 4,
+      "output_sha256_verified": true
+    },
+    {
+      "output_sha256": "C3FBD56446DDC9AACC72697A6F46AF9707A7449FECA99E2C031997727DFAEA42",
+      "failed": false,
+      "index": 208,
+      "name": "e06_power_migration_test",
+      "timeout_seconds": 60,
+      "timed_out": false,
+      "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_profile_hotfix\\checks\\208-e06_power_migration_test.output.log",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+        "--script",
+        "res://tests/e06_power_migration_test.gd"
+      ],
+      "exit_code": 0,
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_profile_hotfix\\checks\\208-e06_power_migration_test.engine.log",
+      "execution_index": 5,
+      "output_sha256_verified": true
+    },
+    {
+      "output_sha256": "0B561B308A6990E7F46C4DCC507D9E706CB9B131BAF4CC9D627CE98B1A59701A",
+      "failed": false,
+      "index": 213,
+      "name": "e06_permanent_cards_test",
+      "timeout_seconds": 60,
+      "timed_out": false,
+      "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_profile_hotfix\\checks\\213-e06_permanent_cards_test.output.log",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+        "--script",
+        "res://tests/e06_permanent_cards_test.gd"
+      ],
+      "exit_code": 0,
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_profile_hotfix\\checks\\213-e06_permanent_cards_test.engine.log",
+      "execution_index": 6,
+      "output_sha256_verified": true
+    },
+    {
+      "output_sha256": "4823AF9D4A8914BDE3A7DA843328E04168711BAAC76127145D4D45DA4E1CCC21",
+      "failed": false,
+      "index": 219,
+      "name": "e06_card_migration_store_test",
+      "timeout_seconds": 60,
+      "timed_out": false,
+      "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_profile_hotfix\\checks\\219-e06_card_migration_store_test.output.log",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+        "--script",
+        "res://tests/e06_card_migration_store_test.gd"
+      ],
+      "exit_code": 0,
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_profile_hotfix\\checks\\219-e06_card_migration_store_test.engine.log",
+      "execution_index": 7,
+      "output_sha256_verified": true
+    }
+  ],
+  "plan_steps": 219,
+  "private_save_probe": {
+    "source": "preserved private copy, never written to original user directory",
+    "original_characters": 7,
+    "isolated_after_creation_characters": 8,
+    "original_character_data_unchanged": true,
+    "original_equipment_records_unchanged": true,
+    "log_sha256": "6536a44878193673ae92455d880a566f62c5c9c44cdcbcabd0612a0c0ef0828c"
+  },
+  "limits": "No actual private profile contents are versioned. Sol executed and validated this bounded hotfix; no semantic independent review is claimed.",
+  "playtest_application": "pending",
+  "product_acceptance": "pending"
+}

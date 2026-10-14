@@ -286,6 +286,8 @@ Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/
 
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_appearance_integration_test.gd')
 
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_card_migration_store_test.gd')
+
 if (-not $PSBoundParameters.ContainsKey('ToStep')) { $ToStep = $checkPlan.Count }
 if ($FromStep -gt $ToStep -or $ToStep -gt $checkPlan.Count) {
     throw "Invalid step range $FromStep..$ToStep; use 1..$($checkPlan.Count)."
