@@ -1,0 +1,670 @@
+{
+  "status": "passed",
+  "complete": true,
+  "role": "technical_validator",
+  "validator": "Sol",
+  "base_commit": "fe35332a6e84e628ada24ca72e91fdf54971f466",
+  "runtime_commit": "a0d877df8a0a85b5ece24409a91d1349f21a60b2",
+  "contract": "docs/epics/e06/e06_skill_ux_scope.md",
+  "architecture": "Short Astra API contract incorporated in scope; no routine Astra audit",
+  "automation_supervision": {
+    "report": "docs/epics/e06/e06_skill_ux_luna.json",
+    "sha256": "d983314e44dadffaf1ca7a6b9941975ce166a79413bdf9c5bd0dc760e4a35e05",
+    "distinct_checks": 20,
+    "total_plan": 223,
+    "selected_names": [
+      "action_bar_input_test",
+      "action_bar_ui_test",
+      "battle_ui_test",
+      "e02_character_menu_test",
+      "e03_consumer_integration_test",
+      "e03_integrated_progression_flow_test",
+      "e03_progression_panel_integration_test",
+      "e03_progression_transactions_test",
+      "e04_archer_integrated_closure_test",
+      "e04_mage_integrated_closure_test",
+      "e04_swordsman_integrated_closure_test",
+      "e05_evolution_menu_integration_test",
+      "e06_tx_active_test",
+      "editor_import",
+      "menu_tabs_test",
+      "reward_feedback_test",
+      "skill_allocation_test",
+      "skill_window_test",
+      "smoke",
+      "ui_layout_test"
+    ],
+    "full_suite": false,
+    "allocation_checks": 44,
+    "window_checks": 41
+  },
+  "supervised_inputs": {
+    "consumer": {
+      "scripts/main.gd": {
+        "sha256_normalized_utf8": "08aa8eb57ca6bcfb9e0e681dc56f731eaf8b8152579f698d5b9a1d1429d6caf7",
+        "sha256_raw": "4391143cf105ed1cacc19119a30be13b3d03ad232b2ada5e93d151c14a2f15d1"
+      },
+      "scripts/core/profile_facade.gd": {
+        "sha256_normalized_utf8": "d41d952f56683089ef72a81c91b9236c927a0d3fb459cd4f65ba348e187ef7cb",
+        "sha256_raw": "bb97a9ee352645288594a423c0c527127ea9409739b604ef0123b1d68dba974e"
+      },
+      "scripts/core/skill_allocation_draft.gd": {
+        "sha256_normalized_utf8": "8048eba53c5a3f786ed746780aa61d0607a52337165d941f0457af38b685fb9c",
+        "sha256_raw": "3486cee0107b00acdc2e8a498c2f62bb2b3530eab68d837f988ab0ac19697503"
+      },
+      "scripts/ui/skill_presentation.gd": {
+        "sha256_normalized_utf8": "69d88f4bf9d371d4032c6b416e9f76d8222200a01d85ed5c5c980a6f2f2921f4",
+        "sha256_raw": "7c1c266ebe72b9312ef2ce27382edbd7e4c6fcd7eb40597bac44ae212aae062f"
+      },
+      "scripts/ui/skill_window.gd": {
+        "sha256_normalized_utf8": "26c8ec376bfd379d1237c35a509ab4f65ec9af57e268d7f14e90057b9ea3850a",
+        "sha256_raw": "f7d5686ffc25b9adb58588364f6d9bbd1f001d5d0d82999ec6438e32a8cabed7"
+      },
+      "scripts/ui/skill_tooltip.gd": {
+        "sha256_normalized_utf8": "87a5d3d1f5a0428e23873361d25dbe8aff2dbd092dd219a3b0c2a6de27e775a0",
+        "sha256_raw": "69b931d310a1bf9b0494e79b5eeafbf7f74b6646f8d1e658d5b36ab67e74239a"
+      },
+      "scripts/ui/skill_locked_icon.gdshader": {
+        "sha256_normalized_utf8": "dfa784a7e6240f021bafadeeafc0b18341f0220f4b2eed57769d4a5a1952ce9f",
+        "sha256_raw": "a0a0dc6e34377fb2e03d0fc90df6e62d9932416dfdb3b3e93a1be847aa1a00a3"
+      },
+      "scripts/ui/action_bar_editor.gd": {
+        "sha256_normalized_utf8": "7afa3b1865b36448d297cabeb72c3921fdb8cf74bfeadbf4ad66476d38481012",
+        "sha256_raw": "c7aef36ca7380f3530319aa1b86c0358625e89a59a4766fb1c082774f251a343"
+      },
+      "scripts/ui/action_bar_slot.gd": {
+        "sha256_normalized_utf8": "375a37f7afa97dd960ad8a52f82458d7891082eef5f30f90b5f92c7b4edf4d3b",
+        "sha256_raw": "e0a94d5d2095cbb8a7bc50923da105facf932844e89894b332097ba2e16e2af6"
+      },
+      "scripts/ui/battle_controls.gd": {
+        "sha256_normalized_utf8": "a586376e3206b3cb4fd27dc3c61781944880b1723a782a8a5887777651432c70",
+        "sha256_raw": "3082c5a66b4eab143bebfe1c2d38bc7cc5410b7c3837ede0f6fd5a3a09cbfa01"
+      },
+      "scripts/ui/character_menu.gd": {
+        "sha256_normalized_utf8": "b595d5992df31a2d6c7e8b0c50286a86cbf66c97c792c5a18738612b388a0a76",
+        "sha256_raw": "85338f36fb91c0698aaae797b7c23e84f15c628c2bdde827cc112172cbaead95"
+      }
+    },
+    "tests": {
+      "tests/skill_allocation_test.gd": {
+        "sha256_normalized_utf8": "a7685fef9491b0536a7f38394b52b6c438ec7dcdc75ed8ec2575c5f5c3d55ecf",
+        "sha256_raw": "a7685fef9491b0536a7f38394b52b6c438ec7dcdc75ed8ec2575c5f5c3d55ecf"
+      },
+      "tests/skill_window_test.gd": {
+        "sha256_normalized_utf8": "1f8d987228288e4a7e85a7345e72691f186632b14ffa3649fbb337d72a67ebd4",
+        "sha256_raw": "1f8d987228288e4a7e85a7345e72691f186632b14ffa3649fbb337d72a67ebd4"
+      },
+      "tests/e02_character_menu_test.gd": {
+        "sha256_normalized_utf8": "ee91ee4336cf59a37e4473f7f37ee166f4d6e1aab15da3bf208bbf4a4656efe9",
+        "sha256_raw": "8c7f48588339b24d088d8e5360f703f5cadf2112a4281dd53da637452484c27d"
+      },
+      "tests/e03_progression_panel_integration_test.gd": {
+        "sha256_normalized_utf8": "24b19ecf79d2f8317fa24a5cbaf0731b45682ff16e8734b8922e6b01e9195d74",
+        "sha256_raw": "580270f3092bb5cb33fc839da2918537c98f0b5def6b4f8a45af10510743275f"
+      },
+      "tests/menu_tabs_test.gd": {
+        "sha256_normalized_utf8": "72a977512f9eb581b27f8654944d17e8bc3639e453ed020ae81500f736550c2d",
+        "sha256_raw": "21851975b8cbb9da9a260f274146e4d1cbcf179c00f770ef6610d44acd99516b"
+      },
+      "tests/e03_progression_transactions_test.gd": {
+        "sha256_normalized_utf8": "52614706b0749c73dedaaf850db9cff2c35d9063ea5b7e7a1931e735f5cde8c2",
+        "sha256_raw": "52614706b0749c73dedaaf850db9cff2c35d9063ea5b7e7a1931e735f5cde8c2"
+      },
+      "tests/e03_consumer_integration_test.gd": {
+        "sha256_normalized_utf8": "cec4588128b432c655ce8b933b218db2c89e5267925887832cd95362cbac439c",
+        "sha256_raw": "c77a5badd4e272746a880662de2dcc7339db486ce4d2b7b4f1d3b205c073a942"
+      },
+      "tests/e03_integrated_progression_flow_test.gd": {
+        "sha256_normalized_utf8": "595b057431e3af2ace2f46318df05ce2df3575c1b93e1a595392285f3c146d79",
+        "sha256_raw": "96ec6f43ca7847a8bdd93a1be3e66e57433d49c64c2b4fd1c8f028273013b691"
+      },
+      "tests/e05_evolution_menu_integration_test.gd": {
+        "sha256_normalized_utf8": "611cafe416fe44a144a05b0dec0028eb7f40eacbc356b86620a81a8f07afb919",
+        "sha256_raw": "ddfbd7fdac64555eaade6db80e16fbe5e5f85f8460395e1f1dbfd28fdff9697b"
+      },
+      "tests/e04_archer_integrated_closure_test.gd": {
+        "sha256_normalized_utf8": "50ca2dc9c653e055140980c621884a89b9d5565116572cc666e1be852314760c",
+        "sha256_raw": "f18ca3a0f47a9e2af602268134474629a785d45b77d30fbd11aeb9ffdeebc011"
+      },
+      "tests/e04_mage_integrated_closure_test.gd": {
+        "sha256_normalized_utf8": "f87b886bb5e950907e489987c32b0a9a1d8a08527212a0792f89a8975e3cac36",
+        "sha256_raw": "2e6dba88a12150ece26c75bac0193be82a082750f233d6973749bf822231dfbf"
+      },
+      "tests/e04_swordsman_integrated_closure_test.gd": {
+        "sha256_normalized_utf8": "2ffa634f73c81624e9f4741667fc604a57f68ac241bbab61be42a285bd0f1fab",
+        "sha256_raw": "9d4fd87f3b5d6e7e8e86a4854c77ab18d27f9a3db2c8dceb117f832681b57e5f"
+      },
+      "tests/e06_tx_active_test.gd": {
+        "sha256_normalized_utf8": "2971ad549bba67aa0e0931340fa877945cc53e160ad0c3b53f4a975aef69b512",
+        "sha256_raw": "2971ad549bba67aa0e0931340fa877945cc53e160ad0c3b53f4a975aef69b512"
+      },
+      "tests/action_bar_ui_test.gd": {
+        "sha256_normalized_utf8": "93d11a5f7cc5764ce5224eafe3e9769b38dcbaad297bb4c65608d39894928d35",
+        "sha256_raw": "603c5e8526e2c77efa57e2ea735fcceea7b27ecb6caef13bdbab0297d34e3773"
+      },
+      "tests/action_bar_input_test.gd": {
+        "sha256_normalized_utf8": "8615531ca37a536701ca833642944885642a7e697b3b42a46edf703238e216d7",
+        "sha256_raw": "f4e3198c36135451676c058b5377b47f478fbb4fdc31262da0d331734ce7d164"
+      },
+      "tests/ui_layout_test.gd": {
+        "sha256_normalized_utf8": "80f09a4702131e6b5bfebfb1802619a779cd0f84962667fa182eda16c109a4f1",
+        "sha256_raw": "c04cf3a49adf2311e5c56614def6cac40b271b3fbbb70ed838c4d5b5704b516f"
+      },
+      "tests/battle_ui_test.gd": {
+        "sha256_normalized_utf8": "ee604b850e9aee96fe49c8cd3bb36270a09130adaa9c1534ffc12025ea97da87",
+        "sha256_raw": "c4ddf8e6b2956a7cbf9f306f88f3f998ffb7b44ada421ef8d0078c1960377779"
+      },
+      "tests/reward_feedback_test.gd": {
+        "sha256_normalized_utf8": "ef9b79c86f1ad5c125a29f3b3f8085ccba0aab096adb7421e7bc3bae84d45cf5",
+        "sha256_raw": "8b8fb9cf3a2392809fe157bb7e854dfb2285c6574ecb6f072c8ce2931ccd3b1b"
+      }
+    },
+    "icons": {
+      "assets/art/skills/archer_cadence.svg": {
+        "sha256_normalized_utf8": "f68aa5a81e5760994f62c65b4dc2334e7ef4ebd2ae65a1941e041053caa65099",
+        "sha256_raw": "f68aa5a81e5760994f62c65b4dc2334e7ef4ebd2ae65a1941e041053caa65099"
+      },
+      "assets/art/skills/archer_precision.svg": {
+        "sha256_normalized_utf8": "aa93c4199576da69d589ac028cf2dac8de54627aa811527e1a5b9d3b2ac8e1ac",
+        "sha256_raw": "aa93c4199576da69d589ac028cf2dac8de54627aa811527e1a5b9d3b2ac8e1ac"
+      },
+      "assets/art/skills/arrow_rain.svg": {
+        "sha256_normalized_utf8": "67eb33abc9ea375a16c5da7e8acb97fb51fb46739e7db5cb5e947f1acdf3b76e",
+        "sha256_raw": "67eb33abc9ea375a16c5da7e8acb97fb51fb46739e7db5cb5e947f1acdf3b76e"
+      },
+      "assets/art/skills/berserker_blood_rift.svg": {
+        "sha256_normalized_utf8": "59e687220a8a2c8fe65ca1212e39dc30de74edb7f825db44b29c1aecc08c6c83",
+        "sha256_raw": "59e687220a8a2c8fe65ca1212e39dc30de74edb7f825db44b29c1aecc08c6c83"
+      },
+      "assets/art/skills/berserker_breath_steal.svg": {
+        "sha256_normalized_utf8": "ae8b1358d5c981d53453f8f8329167b5f2f4d15e2795877fb7512a02e7069a66",
+        "sha256_raw": "ae8b1358d5c981d53453f8f8329167b5f2f4d15e2795877fb7512a02e7069a66"
+      },
+      "assets/art/skills/berserker_execution.svg": {
+        "sha256_normalized_utf8": "c0dd1eaf47fa6175400e9e97b45b009580d88247b8111cd5f0444b89c7b3278b",
+        "sha256_raw": "c0dd1eaf47fa6175400e9e97b45b009580d88247b8111cd5f0444b89c7b3278b"
+      },
+      "assets/art/skills/berserker_obstinacy.svg": {
+        "sha256_normalized_utf8": "bb09d71cc13a0ba0f2c06e955e7f90e337acd933f091827fc0fb8f3d0eb90042",
+        "sha256_raw": "bb09d71cc13a0ba0f2c06e955e7f90e337acd933f091827fc0fb8f3d0eb90042"
+      },
+      "assets/art/skills/berserker_pursuit.svg": {
+        "sha256_normalized_utf8": "43969b4ad7ba9b711c470e4293571d495863a384e672b2ce9fdf6da32c6d59b6",
+        "sha256_raw": "43969b4ad7ba9b711c470e4293571d495863a384e672b2ce9fdf6da32c6d59b6"
+      },
+      "assets/art/skills/berserker_rupture.svg": {
+        "sha256_normalized_utf8": "d6e69f5db5863512d085f6014d1ab4bb16cfa9ece558120f249ffae5239e7e47",
+        "sha256_raw": "d6e69f5db5863512d085f6014d1ab4bb16cfa9ece558120f249ffae5239e7e47"
+      },
+      "assets/art/skills/berserker_wound_leap.svg": {
+        "sha256_normalized_utf8": "709ba929cc89b81418a618a6301422764413ce0dc6740d17023e75e65793544d",
+        "sha256_raw": "709ba929cc89b81418a618a6301422764413ce0dc6740d17023e75e65793544d"
+      },
+      "assets/art/skills/blood_thirst.svg": {
+        "sha256_normalized_utf8": "f18b34ee5d7bd4611816269c02481cb91640c0ba367fe89b15db67b5f1e6f254",
+        "sha256_raw": "f18b34ee5d7bd4611816269c02481cb91640c0ba367fe89b15db67b5f1e6f254"
+      },
+      "assets/art/skills/brutal_strike.svg": {
+        "sha256_normalized_utf8": "28586f350151fda9bba8d81f5fb30a6ec1623e49b60578cc590de02e5f31028c",
+        "sha256_raw": "28586f350151fda9bba8d81f5fb30a6ec1623e49b60578cc590de02e5f31028c"
+      },
+      "assets/art/skills/concentrated_rage.svg": {
+        "sha256_normalized_utf8": "e385036c1bd027ed249e3db1cc7dfc5e8c38b8d2b10f71684f12d1c879b66159",
+        "sha256_raw": "e385036c1bd027ed249e3db1cc7dfc5e8c38b8d2b10f71684f12d1c879b66159"
+      },
+      "assets/art/skills/dash.svg": {
+        "sha256_normalized_utf8": "65a1f558435814de2fcf30d89bc766114ce44591ed3088af576748bfb5d0817c",
+        "sha256_raw": "65a1f558435814de2fcf30d89bc766114ce44591ed3088af576748bfb5d0817c"
+      },
+      "assets/art/skills/defender_anchor.svg": {
+        "sha256_normalized_utf8": "9f4d7ceaf6cff31730c410d1f4d2c01184b14e96d422c75db864cd8639eb1b06",
+        "sha256_raw": "9f4d7ceaf6cff31730c410d1f4d2c01184b14e96d422c75db864cd8639eb1b06"
+      },
+      "assets/art/skills/defender_counterstroke.svg": {
+        "sha256_normalized_utf8": "2760663fdae6f6e5b45ecf25e366772467f87d8c322f467c10948da7c50a456e",
+        "sha256_raw": "2760663fdae6f6e5b45ecf25e366772467f87d8c322f467c10948da7c50a456e"
+      },
+      "assets/art/skills/defender_guard_return.svg": {
+        "sha256_normalized_utf8": "fc9b8bd74c6f5896967319e356a58eacc30ef848dc06c9ebdffe4cddac025550",
+        "sha256_raw": "fc9b8bd74c6f5896967319e356a58eacc30ef848dc06c9ebdffe4cddac025550"
+      },
+      "assets/art/skills/defender_line_lock.svg": {
+        "sha256_normalized_utf8": "c0fd54d10d34a16d0ef18911ea56d026c14b6fbe5bd55f73b93540942a5f5a5a",
+        "sha256_raw": "c0fd54d10d34a16d0ef18911ea56d026c14b6fbe5bd55f73b93540942a5f5a5a"
+      },
+      "assets/art/skills/defender_reprisal_wave.svg": {
+        "sha256_normalized_utf8": "7feca4c64c6bd5d6327a285bf1e3e27454a1c3c336142383360aae467c622a9c",
+        "sha256_raw": "7feca4c64c6bd5d6327a285bf1e3e27454a1c3c336142383360aae467c622a9c"
+      },
+      "assets/art/skills/defender_wall_advance.svg": {
+        "sha256_normalized_utf8": "1767797c464c2e47d8009dc011574f075c462341b80fa6ddcca944ef5db40ce6",
+        "sha256_raw": "1767797c464c2e47d8009dc011574f075c462341b80fa6ddcca944ef5db40ce6"
+      },
+      "assets/art/skills/defender_watch.svg": {
+        "sha256_normalized_utf8": "a56184c1716b2ea3ebe7bcd95fb492d45509688220f85e31d1d41a2795d7ec72",
+        "sha256_raw": "a56184c1716b2ea3ebe7bcd95fb492d45509688220f85e31d1d41a2795d7ec72"
+      },
+      "assets/art/skills/double_shot.svg": {
+        "sha256_normalized_utf8": "94f23149207bde3370e9dcbaf90bfd65057ec96ed3763e90a1d3c5c1ab6dc6d0",
+        "sha256_raw": "94f23149207bde3370e9dcbaf90bfd65057ec96ed3763e90a1d3c5c1ab6dc6d0"
+      },
+      "assets/art/skills/electric_discharge.svg": {
+        "sha256_normalized_utf8": "d106607958c5274023243e6ddfaa88e224cc9e2bd61beb3eb669f8db787b5d2e",
+        "sha256_raw": "d106607958c5274023243e6ddfaa88e224cc9e2bd61beb3eb669f8db787b5d2e"
+      },
+      "assets/art/skills/elementalist_ember_path.svg": {
+        "sha256_normalized_utf8": "d9ff65765434364242a4255037ff98cf5098a3de7bf466e6d408e15495034086",
+        "sha256_raw": "d9ff65765434364242a4255037ff98cf5098a3de7bf466e6d408e15495034086"
+      },
+      "assets/art/skills/elementalist_flame_burst.svg": {
+        "sha256_normalized_utf8": "ac199d4ea8d69db5911f35c190e637be260fdd29c7ab42cc3c6bdf6b157796aa",
+        "sha256_raw": "ac199d4ea8d69db5911f35c190e637be260fdd29c7ab42cc3c6bdf6b157796aa"
+      },
+      "assets/art/skills/elementalist_glacial_ring.svg": {
+        "sha256_normalized_utf8": "9601dde36469405c11a8b06066ecad84471cdf762af33283ca21a74b76a0199c",
+        "sha256_raw": "9601dde36469405c11a8b06066ecad84471cdf762af33283ca21a74b76a0199c"
+      },
+      "assets/art/skills/elementalist_lightning_arc.svg": {
+        "sha256_normalized_utf8": "cb8cf49578c9525a7090d6651a1f8e1841f69fb662a319054846cc997be573e4",
+        "sha256_raw": "cb8cf49578c9525a7090d6651a1f8e1841f69fb662a319054846cc997be573e4"
+      },
+      "assets/art/skills/elementalist_prismatic_focus.svg": {
+        "sha256_normalized_utf8": "d4de4ff748bcbf7e09f13c7f62c070994c4f94c847e2fb73c9dc876c74b11df9",
+        "sha256_raw": "d4de4ff748bcbf7e09f13c7f62c070994c4f94c847e2fb73c9dc876c74b11df9"
+      },
+      "assets/art/skills/elementalist_prismatic_resonance.svg": {
+        "sha256_normalized_utf8": "e0221b72cc196bfd9b3618aeedb07904dc080493657fe69f74b1746b12eff863",
+        "sha256_raw": "e0221b72cc196bfd9b3618aeedb07904dc080493657fe69f74b1746b12eff863"
+      },
+      "assets/art/skills/elementalist_tri_nova.svg": {
+        "sha256_normalized_utf8": "adab98e968684fd888716152384c597c73533c098d32f24c85a0af27edbf2430",
+        "sha256_raw": "adab98e968684fd888716152384c597c73533c098d32f24c85a0af27edbf2430"
+      },
+      "assets/art/skills/explosive_trap.svg": {
+        "sha256_normalized_utf8": "d25c578162543543543ee4383a00dde67ccf03d7155b6f8364c5d82ab0004a58",
+        "sha256_raw": "d25c578162543543543ee4383a00dde67ccf03d7155b6f8364c5d82ab0004a58"
+      },
+      "assets/art/skills/extended_aim.svg": {
+        "sha256_normalized_utf8": "af9275e1da6fef3128ec055ce0ee2dc10c2d543e494db2f7145528eee44e0a8f",
+        "sha256_raw": "af9275e1da6fef3128ec055ce0ee2dc10c2d543e494db2f7145528eee44e0a8f"
+      },
+      "assets/art/skills/fire_spear.svg": {
+        "sha256_normalized_utf8": "bfa68b5154e1b28d5b867c94cd0dfa0dc7ebc6a298973e66b91e57e2eaa58716",
+        "sha256_raw": "bfa68b5154e1b28d5b867c94cd0dfa0dc7ebc6a298973e66b91e57e2eaa58716"
+      },
+      "assets/art/skills/fire_wall.svg": {
+        "sha256_normalized_utf8": "760688372844067ae1b0470a67365715ff01d4902874619f16a8f29a721d6ab4",
+        "sha256_raw": "760688372844067ae1b0470a67365715ff01d4902874619f16a8f29a721d6ab4"
+      },
+      "assets/art/skills/fireball.svg": {
+        "sha256_normalized_utf8": "e2c9c1a72bf578dec33734928c2e6d4a644c11eb99b89bf4ae47a7c437b7bd7c",
+        "sha256_raw": "e2c9c1a72bf578dec33734928c2e6d4a644c11eb99b89bf4ae47a7c437b7bd7c"
+      },
+      "assets/art/skills/foliage_shelter.svg": {
+        "sha256_normalized_utf8": "b267eec36290f7ca9e8d3958df800eb6acf6fd91f482d07ec5714a6c3730612a",
+        "sha256_raw": "b267eec36290f7ca9e8d3958df800eb6acf6fd91f482d07ec5714a6c3730612a"
+      },
+      "assets/art/skills/fury.svg": {
+        "sha256_normalized_utf8": "68ed9c574e78c4923c019e9517353ac09a60c3b84a9dfaf9d08054a516d43cc6",
+        "sha256_raw": "68ed9c574e78c4923c019e9517353ac09a60c3b84a9dfaf9d08054a516d43cc6"
+      },
+      "assets/art/skills/geometer_collapse.svg": {
+        "sha256_normalized_utf8": "86ba6cd39be7013bf0359557819836af8b13c27e5d784f5330151693704d9b23",
+        "sha256_raw": "86ba6cd39be7013bf0359557819836af8b13c27e5d784f5330151693704d9b23"
+      },
+      "assets/art/skills/geometer_incidence.svg": {
+        "sha256_normalized_utf8": "815db94b4a8af0753a5a5e1b5484df11e99846a16157188b50ae3f6482303fb4",
+        "sha256_raw": "815db94b4a8af0753a5a5e1b5484df11e99846a16157188b50ae3f6482303fb4"
+      },
+      "assets/art/skills/geometer_rewrite.svg": {
+        "sha256_normalized_utf8": "a8d54e66f85a7550620921e34259046f7f544fe423e7e2094aaf3ffd94d344a9",
+        "sha256_raw": "a8d54e66f85a7550620921e34259046f7f544fe423e7e2094aaf3ffd94d344a9"
+      },
+      "assets/art/skills/geometer_trace.svg": {
+        "sha256_normalized_utf8": "c47913e55f05058a908db2acba917736b96609c711a0180db0958475751cc820",
+        "sha256_raw": "c47913e55f05058a908db2acba917736b96609c711a0180db0958475751cc820"
+      },
+      "assets/art/skills/geometer_translation.svg": {
+        "sha256_normalized_utf8": "83ee29232d9d6724c3de56edf1e5c4ad4aeb2906d22029417b6f0c3f75cf91e0",
+        "sha256_raw": "83ee29232d9d6724c3de56edf1e5c4ad4aeb2906d22029417b6f0c3f75cf91e0"
+      },
+      "assets/art/skills/geometer_triangulation.svg": {
+        "sha256_normalized_utf8": "0c68430b68b0d53e9891f8c821b4230377391b228808655d9a95fb4b59d068a3",
+        "sha256_raw": "0c68430b68b0d53e9891f8c821b4230377391b228808655d9a95fb4b59d068a3"
+      },
+      "assets/art/skills/geometer_vector_memory.svg": {
+        "sha256_normalized_utf8": "30b8cd9389db2d11364b678ef3256cc5258b98cd590d35626fa284bb97d66e76",
+        "sha256_raw": "30b8cd9389db2d11364b678ef3256cc5258b98cd590d35626fa284bb97d66e76"
+      },
+      "assets/art/skills/haunt.svg": {
+        "sha256_normalized_utf8": "8dbf039b05a39f7d7caf9792736a84f46d79363b61a5ab77d5b26045f1648112",
+        "sha256_raw": "8dbf039b05a39f7d7caf9792736a84f46d79363b61a5ab77d5b26045f1648112"
+      },
+      "assets/art/skills/hunter_covering_shot.svg": {
+        "sha256_normalized_utf8": "1f32d5643deb23b9116406af7f14bbe09436a65877a4edf8112e8a694ffdc0e9",
+        "sha256_raw": "1f32d5643deb23b9116406af7f14bbe09436a65877a4edf8112e8a694ffdc0e9"
+      },
+      "assets/art/skills/hunter_easy_prey.svg": {
+        "sha256_normalized_utf8": "c061cd8b9c12367a5a8ac4c2570d34b113dbc1cb920aa5f58ac6a69312a52eef",
+        "sha256_raw": "c061cd8b9c12367a5a8ac4c2570d34b113dbc1cb920aa5f58ac6a69312a52eef"
+      },
+      "assets/art/skills/hunter_freezing_trap.svg": {
+        "sha256_normalized_utf8": "7188291fc1cd3dd1f048535d0feeadf4b16e70e42491d7c93fac975e8bbbb3f2",
+        "sha256_raw": "7188291fc1cd3dd1f048535d0feeadf4b16e70e42491d7c93fac975e8bbbb3f2"
+      },
+      "assets/art/skills/hunter_mark.svg": {
+        "sha256_normalized_utf8": "2ef786fc02f205e26b3861448a64a82a35ad04b8438fba8b42d5c170d90c0bda",
+        "sha256_raw": "2ef786fc02f205e26b3861448a64a82a35ad04b8438fba8b42d5c170d90c0bda"
+      },
+      "assets/art/skills/hunter_shooting_discipline.svg": {
+        "sha256_normalized_utf8": "062371269bcd851a4d255c493e3936e7ce75ae721aca31c681c835c77360c5d7",
+        "sha256_raw": "062371269bcd851a4d255c493e3936e7ce75ae721aca31c681c835c77360c5d7"
+      },
+      "assets/art/skills/hunter_tar_trap.svg": {
+        "sha256_normalized_utf8": "e2b283e910868b6ca4c4bb1caa1be06937a3fe252f09c575a0c810d9041e580c",
+        "sha256_raw": "e2b283e910868b6ca4c4bb1caa1be06937a3fe252f09c575a0c810d9041e580c"
+      },
+      "assets/art/skills/hunter_thorn_trap.svg": {
+        "sha256_normalized_utf8": "642623967a70d238e269d9f05f34d6499d7406d35123daa3048156ff66558aef",
+        "sha256_raw": "642623967a70d238e269d9f05f34d6499d7406d35123daa3048156ff66558aef"
+      },
+      "assets/art/skills/hunter_total_cover.svg": {
+        "sha256_normalized_utf8": "c3b7877404a5b93eaa4479f4341e5bafd007243f71356cf1a04a54e7210930a4",
+        "sha256_raw": "c3b7877404a5b93eaa4479f4341e5bafd007243f71356cf1a04a54e7210930a4"
+      },
+      "assets/art/skills/ice_spear.svg": {
+        "sha256_normalized_utf8": "6024b7bc3e0be951993624b705bfbbb81691c3953e40bc9947ddf75cd900cee5",
+        "sha256_raw": "6024b7bc3e0be951993624b705bfbbb81691c3953e40bc9947ddf75cd900cee5"
+      },
+      "assets/art/skills/ice_wall.svg": {
+        "sha256_normalized_utf8": "5af2281387ac4e6e9e539f20078622f12afeaa58c95639086b137b8d1025d5d9",
+        "sha256_raw": "5af2281387ac4e6e9e539f20078622f12afeaa58c95639086b137b8d1025d5d9"
+      },
+      "assets/art/skills/lightning.svg": {
+        "sha256_normalized_utf8": "0ace3602552af6e50047aa19426effbf6c2cc4a29aa0648981513cf6cd9e17bf",
+        "sha256_raw": "0ace3602552af6e50047aa19426effbf6c2cc4a29aa0648981513cf6cd9e17bf"
+      },
+      "assets/art/skills/lightning_wall.svg": {
+        "sha256_normalized_utf8": "3b17e45c5145dedb4c3b28b35e75e0d0ad5b202bd0dfa01813f9bc0c2dd63e05",
+        "sha256_raw": "3b17e45c5145dedb4c3b28b35e75e0d0ad5b202bd0dfa01813f9bc0c2dd63e05"
+      },
+      "assets/art/skills/mage_mana_regeneration.svg": {
+        "sha256_normalized_utf8": "e5a3d856e874a49837fde01c4587295a04c5765cbed84aecd8f3d35ff4ba8e0c",
+        "sha256_raw": "e5a3d856e874a49837fde01c4587295a04c5765cbed84aecd8f3d35ff4ba8e0c"
+      },
+      "assets/art/skills/perseverance.svg": {
+        "sha256_normalized_utf8": "ddd4c4ce1a458d6447f4c984443782f2b1cdee81fc1ddd0758fea066d703b8d0",
+        "sha256_raw": "ddd4c4ce1a458d6447f4c984443782f2b1cdee81fc1ddd0758fea066d703b8d0"
+      },
+      "assets/art/skills/phantom_barrier.svg": {
+        "sha256_normalized_utf8": "e98ef270d1c9b0cd4f87e92f6fab2bc427ebe3ec35837fe61706eaf0bcc10622",
+        "sha256_raw": "e98ef270d1c9b0cd4f87e92f6fab2bc427ebe3ec35837fe61706eaf0bcc10622"
+      },
+      "assets/art/skills/piercing_arrow.svg": {
+        "sha256_normalized_utf8": "11c9cd4af1ce8197da6016f33e84d2e64f74bcfd4a4b8d128f446ee98df5845f",
+        "sha256_raw": "11c9cd4af1ce8197da6016f33e84d2e64f74bcfd4a4b8d128f446ee98df5845f"
+      },
+      "assets/art/skills/piercing_shout.svg": {
+        "sha256_normalized_utf8": "0f8a47d35ed09855109a73240332723c32b8688bfdf9f2679de07b2b9f8abd43",
+        "sha256_raw": "0f8a47d35ed09855109a73240332723c32b8688bfdf9f2679de07b2b9f8abd43"
+      },
+      "assets/art/skills/provoke.svg": {
+        "sha256_normalized_utf8": "303a5b764cdab414ba147822bac1106a36c8d5915d3d807abfd32f577e484c33",
+        "sha256_raw": "303a5b764cdab414ba147822bac1106a36c8d5915d3d807abfd32f577e484c33"
+      },
+      "assets/art/skills/sentinel_absolute_focus.svg": {
+        "sha256_normalized_utf8": "abcf5dd45c5f72274ec367dff912e42ced7532d90e9e7a28b8dc1e5049dc94e6",
+        "sha256_raw": "abcf5dd45c5f72274ec367dff912e42ced7532d90e9e7a28b8dc1e5049dc94e6"
+      },
+      "assets/art/skills/sentinel_concussion_shot.svg": {
+        "sha256_normalized_utf8": "26859ac40309ee2d618a698db815755bf10ec935e08814e9958a84b53a25f786",
+        "sha256_raw": "26859ac40309ee2d618a698db815755bf10ec935e08814e9958a84b53a25f786"
+      },
+      "assets/art/skills/sentinel_explosive_shot.svg": {
+        "sha256_normalized_utf8": "c1ce2de8827388b8dd0d449099da0e54db67146b1595d5dc7ded22d8225053e0",
+        "sha256_raw": "c1ce2de8827388b8dd0d449099da0e54db67146b1595d5dc7ded22d8225053e0"
+      },
+      "assets/art/skills/sentinel_headshot.svg": {
+        "sha256_normalized_utf8": "bde3df0d2df7819d9b7aac0740de180c8f166e36cdd87995f031e2d6e02c020e",
+        "sha256_raw": "bde3df0d2df7819d9b7aac0740de180c8f166e36cdd87995f031e2d6e02c020e"
+      },
+      "assets/art/skills/sentinel_net_shot.svg": {
+        "sha256_normalized_utf8": "437740ebc3de2abfd8879aea6b34cf93ac1c6e1f9c53191adebaf81ee1f545e7",
+        "sha256_raw": "437740ebc3de2abfd8879aea6b34cf93ac1c6e1f9c53191adebaf81ee1f545e7"
+      },
+      "assets/art/skills/sentinel_observe.svg": {
+        "sha256_normalized_utf8": "2f30f7f08a08011dc2259f8c1dc46a6eecfff2136f3655ecc75cd4e645d281f4",
+        "sha256_raw": "2f30f7f08a08011dc2259f8c1dc46a6eecfff2136f3655ecc75cd4e645d281f4"
+      },
+      "assets/art/skills/sentinel_opening_read.svg": {
+        "sha256_normalized_utf8": "59dd89b8302c428bcc63a6c4e9c6b829b1f0a2b9ddfc8ac91ea8fe045cfc06bc",
+        "sha256_raw": "59dd89b8302c428bcc63a6c4e9c6b829b1f0a2b9ddfc8ac91ea8fe045cfc06bc"
+      },
+      "assets/art/skills/sentinel_piercing_shot.svg": {
+        "sha256_normalized_utf8": "fad9d3d493c57c897ed4cd78bfdbe82dbc662cc615250ac6ce0fd51d6309667f",
+        "sha256_raw": "fad9d3d493c57c897ed4cd78bfdbe82dbc662cc615250ac6ce0fd51d6309667f"
+      },
+      "assets/art/skills/sentinel_precision_stance.svg": {
+        "sha256_normalized_utf8": "eccda5f5e6aa07ec64d40231e172ea85beba25e3c6f6fea7d478030da35bbb8a",
+        "sha256_raw": "eccda5f5e6aa07ec64d40231e172ea85beba25e3c6f6fea7d478030da35bbb8a"
+      },
+      "assets/art/skills/shield_wall.svg": {
+        "sha256_normalized_utf8": "414fc3d31c58dc7d25b1684eb76b717b06bd572718fbe26229c7fe79cc28cd23",
+        "sha256_raw": "414fc3d31c58dc7d25b1684eb76b717b06bd572718fbe26229c7fe79cc28cd23"
+      },
+      "assets/art/skills/slash.svg": {
+        "sha256_normalized_utf8": "fc950221f5619725f6f0e1231091a24367bbb7cb516d626908bc03d4d4a07a21",
+        "sha256_raw": "fc950221f5619725f6f0e1231091a24367bbb7cb516d626908bc03d4d4a07a21"
+      },
+      "assets/art/skills/slowing_arrow.svg": {
+        "sha256_normalized_utf8": "3fe027b883d15a1f8f5e98ebf8cf9c871014384c6b9ac3dcbc98ee3d28448cb8",
+        "sha256_raw": "3fe027b883d15a1f8f5e98ebf8cf9c871014384c6b9ac3dcbc98ee3d28448cb8"
+      },
+      "assets/art/skills/snare_trap.svg": {
+        "sha256_normalized_utf8": "c028a2477673a532cc708ee761ed8aec6de0f2b466591f1debd2a6ae94b431b1",
+        "sha256_raw": "c028a2477673a532cc708ee761ed8aec6de0f2b466591f1debd2a6ae94b431b1"
+      },
+      "assets/art/skills/soul_impact.svg": {
+        "sha256_normalized_utf8": "dd408e126e318591a763abbbf3b4bece1657189d88427ea8a9ef1287771d2d6c",
+        "sha256_raw": "dd408e126e318591a763abbbf3b4bece1657189d88427ea8a9ef1287771d2d6c"
+      },
+      "assets/art/skills/spiritualist_channel_focus.svg": {
+        "sha256_normalized_utf8": "5a71222bbfbd234433c14e2a6df344b2d17e20092e241bb55227a6247256cbc6",
+        "sha256_raw": "5a71222bbfbd234433c14e2a6df344b2d17e20092e241bb55227a6247256cbc6"
+      },
+      "assets/art/skills/spiritualist_dissipation.svg": {
+        "sha256_normalized_utf8": "4fc4960f07572ecd4f1c7e8219475bb881c9059fcdd5ef19deb95dad1385dc12",
+        "sha256_raw": "4fc4960f07572ecd4f1c7e8219475bb881c9059fcdd5ef19deb95dad1385dc12"
+      },
+      "assets/art/skills/spiritualist_echo_curse.svg": {
+        "sha256_normalized_utf8": "e8a970e73652ed3c30d10508dc96df5f2a6711f176358f110da6dc811ab4a557",
+        "sha256_raw": "e8a970e73652ed3c30d10508dc96df5f2a6711f176358f110da6dc811ab4a557"
+      },
+      "assets/art/skills/spiritualist_echo_recovery.svg": {
+        "sha256_normalized_utf8": "9b003a4411d9152ed183df7aef9a1a8f69b224468b7df8bf127c732fcb2a7bc9",
+        "sha256_raw": "9b003a4411d9152ed183df7aef9a1a8f69b224468b7df8bf127c732fcb2a7bc9"
+      },
+      "assets/art/skills/spiritualist_procession.svg": {
+        "sha256_normalized_utf8": "b53b6968cef076236e2380eec6d472e166325d1c6847c93de52426fe913e2161",
+        "sha256_raw": "b53b6968cef076236e2380eec6d472e166325d1c6847c93de52426fe913e2161"
+      },
+      "assets/art/skills/spiritualist_soul_drain.svg": {
+        "sha256_normalized_utf8": "ea4d37a858df6e56a30916d7b559dc18f67c8822583715859756bd28f9c13281",
+        "sha256_raw": "ea4d37a858df6e56a30916d7b559dc18f67c8822583715859756bd28f9c13281"
+      },
+      "assets/art/skills/spiritualist_spectral_veil.svg": {
+        "sha256_normalized_utf8": "dc1ae9c63452c5e7b588f1a1b49cf09b9da4b6d3ebae3115bf9ea0348bef71d9",
+        "sha256_raw": "dc1ae9c63452c5e7b588f1a1b49cf09b9da4b6d3ebae3115bf9ea0348bef71d9"
+      },
+      "assets/art/skills/swordsman_resistance.svg": {
+        "sha256_normalized_utf8": "0e43aee1ddb002c6e6d9f248e4aa8f0ffa5643bc53ce92a5593b0aa9b51eacdc",
+        "sha256_raw": "0e43aee1ddb002c6e6d9f248e4aa8f0ffa5643bc53ce92a5593b0aa9b51eacdc"
+      },
+      "assets/art/skills/teleport.svg": {
+        "sha256_normalized_utf8": "daea3aafa89eabe4842b96308182b79f494ba10cf2e40b5ec7a5291f7d5d7bec",
+        "sha256_raw": "daea3aafa89eabe4842b96308182b79f494ba10cf2e40b5ec7a5291f7d5d7bec"
+      },
+      "assets/art/skills/terrifying_shout.svg": {
+        "sha256_normalized_utf8": "827233909db038e89f49b4f32d61c2787f88f487cfc5a6911bb64559b8379cd2",
+        "sha256_raw": "827233909db038e89f49b4f32d61c2787f88f487cfc5a6911bb64559b8379cd2"
+      },
+      "assets/art/skills/trap_technique.svg": {
+        "sha256_normalized_utf8": "f2cb4ebe8252263f253838a51fe266a2de07fbb249bdd47c7195c59b9400cacc",
+        "sha256_raw": "f2cb4ebe8252263f253838a51fe266a2de07fbb249bdd47c7195c59b9400cacc"
+      },
+      "assets/art/skills/vigor.svg": {
+        "sha256_normalized_utf8": "822ca5ee3376c2e18f6a5f88e563d3db37e306b9c1c41668cc06b1031c89e6b4",
+        "sha256_raw": "822ca5ee3376c2e18f6a5f88e563d3db37e306b9c1c41668cc06b1031c89e6b4"
+      }
+    }
+  },
+  "post_supervision_format_delta": {
+    "path": "tests\\e02_character_menu_test.gd",
+    "before_sha256": "8c7f48588339b24d088d8e5360f703f5cadf2112a4281dd53da637452484c27d",
+    "after_sha256": "fa3c9c89899904d7ee5d04ae5fed66c9b98d9418120f04a5c3f1c96bca05eccf",
+    "change": "Remove one trailing empty line; all code bytes equal after EOF whitespace trimming",
+    "semantic_change": false
+  },
+  "native": {
+    "probe": "tools/skill_ux_native_probe.gd",
+    "probe_sha256": "9d94a3a96c75089e227f64e30ab3281b52871fd15640a63530818198948acf49",
+    "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+    "output": ".godot/verification/e06_skill_ux/native/output.log",
+    "output_sha256": "a4bace5ba4ced7e0072ae5eccfa68c16fddf13aca08392d1ddffb15b2b9e495d",
+    "complete": "SKILL_UX_NATIVE_OK",
+    "viewports": [
+      [
+        1280,
+        720
+      ],
+      [
+        1920,
+        1080
+      ]
+    ],
+    "icon_contact": [
+      {
+        "icons": 89,
+        "pixels": 32,
+        "backgrounds": 2
+      },
+      {
+        "icons": 89,
+        "pixels": 64,
+        "backgrounds": 2
+      }
+    ],
+    "images": {
+      "game_list_1280.png": "85c02a261f3a25c25f6eab5b417bc6de0ee9b42523a933c96ea74c9dca24afe1",
+      "game_list_1920.png": "ec31cbb4bae5a8ed27398a1fcc095b277d82c5d8f3753000ae037d1dde1a8760",
+      "game_shared_icons_1280.png": "c29e0128bc4cf3d9982befb46510ca505d1b2dc90eb0472d8689f2bfb600ae92",
+      "game_shared_icons_1920.png": "4f7c2a3c111f164eb5e89ba22dfefa50f0fc3643b316cb9c3ed3903e40063c66",
+      "game_tree_1280.png": "8f758855d335b839f4969aa806d7f5d6817c8f599bc7894d06f6d00cf1b45734",
+      "game_tree_1920.png": "7472236dadb386443980b530889db77acae230bcf0704b5dbd32d26deeeb0465",
+      "hover_dialog_layout_1280.png": "cffe6e78df3feaa920fa5eef8daf8c836eac992a2aa5ce0ea158308a1e9502e7",
+      "hover_dialog_layout_1920.png": "354ea95bfe84dc49c104ff3094cfb4d1c0527d7689bd9069f45b866845ff6bb9",
+      "icon_contact_32.png": "14f66699c100e44fb6fe380ce51ce0d80e3b342eed19399abd57eb9d9fd0abf4",
+      "icon_contact_64.png": "e12841ddeb6297e5800b3822bb0d5337d68afe5afdad6ba54037376e065fde20",
+      "lobby_future_paths_1280.png": "30d1388673f47829b6a01d7422254325a5dafa3a97a3414930395caccccada58",
+      "lobby_future_paths_1920.png": "68eb66aef7a41fb028ef14a9469ed6e064cf41601d373f6bc35bbb24d66190fd",
+      "lobby_list_pending_1280.png": "c8cdfc102ac0bf9e0e731a8024ae8a393464c80c9e982a23babfdb22f0dd0f63",
+      "lobby_list_pending_1920.png": "32f886c5dbffea35c4bf457ca0e2ddeab74c8234d1e3b69f6901812c9f9feffc",
+      "lobby_tree_1280.png": "735341a85188ec543a4abf3d857471c667547608ad4e874fd04ce8bdcd9b2658",
+      "lobby_tree_1920.png": "b5b8ef7ffb3c5da3b3a20e17fa7dee4d776e8456104506c065621bb16c28e701"
+    },
+    "inspection": "Sol inspected lobby tree/list, gray future job, tooltip layout, game window and actual assigned shared icons on the map. Light/cream windows and dark hover foreground are readable; both bounded.",
+    "hover_limit": "Tooltip layout capture uses the exact factory manually; custom hover factory/input integration is tested, actual pointer hover remains part of human playtest."
+  },
+  "invariants": [
+    "Read-only preview uses CharacterProgression on a copy; no save or grant",
+    "One atomic batch or no purchased-rank/point change; retain same uncertain request until reconciled",
+    "Pending ranks cannot enter action library or combat; reset discards only pending increments",
+    "Character/revision changes invalidate drafts",
+    "Current catalog requirements, wallets, grants, XP, damage and24 slots preserved",
+    "Published class skill definitions only; unknown fixture metadata not fabricated",
+    "Run/training/local window is read-only; opening pauses and closing restores editor order and pause",
+    "Original art files retained;89 new two-color SVGs shared by all consumers"
+  ],
+  "failure_resolution": [
+    {
+      "check": "ui_layout_test",
+      "initial_result": "Falha em controls modal fits viewport (1280, 720).",
+      "resolution": "Sol limitou o conteúdo de settings com ScrollContainer no painel; recheck de editor_import + ui_layout passou, 30 checks."
+    },
+    {
+      "check": "e05_evolution_menu_integration_test",
+      "initial_result": "Dois acessos ao membro removido progression_skill_tree em fixtures de evolução com IDs sem SkillDefinition publicada.",
+      "resolution": "Teste agora verifica grant pelo progression_summary.effective_skill_ranks e metadados do DTO; exige que IDs não publicados não ganhem widgets fictícios; 25 checks passam."
+    },
+    {
+      "check": "e04_archer_integrated_closure_test",
+      "initial_result": "Dois fails de fixture enemies.size em runs E04, agora ligadas à extensão de gameplay E06.",
+      "resolution": "Cada fixture E04 seta pending_gameplay_extension=false antes da troca de cena e verifica gameplay_extension=false; preservados os oráculos de mobs e gameplay; 84 checks passam."
+    },
+    {
+      "check": "e04_mage_integrated_closure_test",
+      "initial_result": "Dois fails de barreira espiritual por coordenadas/estado do mapa E06 ampliado.",
+      "resolution": "Fixture E04 usa explicitamente a arena legada sem extensão E06; barreira e projétil continuam com os oráculos originais; 105 checks passam."
+    },
+    {
+      "check": "e04_swordsman_integrated_closure_test",
+      "initial_result": "Dois fails de inimigos melee/ranged devido à extensão E06 no fixture legado.",
+      "resolution": "Fixture E04 usa explicitamente a arena legada sem extensão E06; 82 checks passam."
+    },
+    {
+      "check": "skill_window_test",
+      "initial_result": "A asserção de contraste usou método Color.luminance() inexistente.",
+      "resolution": "Teste calcula luminância relativa em canais sRGB e exige >=0.8 para a cor explícita do tooltip sob tema claro; 41 checks passam."
+    },
+    {
+      "check": "e02_character_menu_test",
+      "initial_result": "A dica de atalhos foi movida do botão para a área de detalhes.",
+      "resolution": "Asserção acompanha o texto visível na área de detalhes; asserção de XP, carteiras, caps e ranks segue igual; 26 checks passam."
+    }
+  ],
+  "legacy_test_scope": [
+    {
+      "test": "e02_character_menu_test",
+      "migration": "progression_skill_tree -> SkillWindow.skill_entries e texto da área de detalhes.",
+      "preserved": "XP, carteiras, caps, compra e retry, presets, save e foco do personagem."
+    },
+    {
+      "test": "e03_progression_panel_integration_test",
+      "migration": "rank consultado no DTO de skill_window.",
+      "preserved": "progression, atributos, build snapshot, persistência e run snapshot."
+    },
+    {
+      "test": "menu_tabs_test",
+      "migration": "tabs/lista de skills publicadas substituem busca/árvore antiga.",
+      "preserved": "navegação por teclado, rank/locks, preset/action bar e evolução."
+    },
+    {
+      "test": "e05_evolution_menu_integration_test",
+      "migration": "grants gratuitos consultados pelo resumo canônico e DTO; sem widgets para IDs fixture não publicados.",
+      "preserved": "confirmação, retry/stale, reembolso, presets e cleanup exato."
+    },
+    {
+      "test": "e04_archer_integrated_closure_test",
+      "migration": "janela publicada substitui label/button progression_skill_tree; execução E04 explicitamente sem extensão E06.",
+      "preserved": "ranks, compras, carteiras, presets, action slots, ataques e recompensa."
+    },
+    {
+      "test": "e04_mage_integrated_closure_test",
+      "migration": "janela publicada substitui label/button progression_skill_tree; execução E04 explicitamente sem extensão E06.",
+      "preserved": "ranks, compras, carteiras, presets, action slots, barreira e recompensa."
+    },
+    {
+      "test": "e04_swordsman_integrated_closure_test",
+      "migration": "janela publicada substitui label/button progression_skill_tree; execução E04 explicitamente sem extensão E06.",
+      "preserved": "ranks, compras, carteiras, presets, action slots e encontros."
+    }
+  ],
+  "technical_decision": "Approved for fixed playtest with no known blocker",
+  "limits": [
+    "Human product acceptance pending",
+    "Current published requirements are rendered; no new quest unlocks or future kits invented",
+    "Catalog values in descriptions are base; battle bar uses effective execution state",
+    "No FPS/balance claim; full223-step suite not repeated",
+    "No master merge, push or E07 authorization"
+  ]
+}

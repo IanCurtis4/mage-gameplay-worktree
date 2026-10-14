@@ -1,0 +1,1631 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-14T18:50:04Z",
+  "role": "automation_supervisor",
+  "scope": "Supervisão Luna de execução, conclusão, logs e hashes para os consumidores E06 Skill UX; não é revisão semântica independente nem auditoria do contrato.",
+  "candidate": {
+    "base_commit": "fe35332a6e84e628ada24ca72e91fdf54971f466",
+    "state_at_selection_start": "dirty",
+    "dirty_path_count_at_selection_start": 63,
+    "dirty_status_sha256": "0d972d102b8234f40f7695ebc6ad1184e886b74d0d8a410e6925bb4d78793eee",
+    "dirty_status_serialization": "SHA-256 de UTF-8 dos itens working_tree_status unidos por LF, sem LF final.",
+    "working_tree_status_at_selection_start": [
+      " M README.md",
+      " M assets/art/animations/archer.png.import",
+      " M assets/art/animations/berserker.png.import",
+      " M assets/art/animations/defender.png.import",
+      " M assets/art/animations/elementalist.png.import",
+      " M assets/art/animations/geometer.png.import",
+      " M assets/art/animations/hunter.png.import",
+      " M assets/art/animations/mage.png.import",
+      " M assets/art/animations/sentinel.png.import",
+      " M assets/art/animations/spiritualist.png.import",
+      " M assets/art/animations/swordsman.png.import",
+      " M assets/art/animations/warrior.png.import",
+      " M assets/art/icons/hunter/hunter_covering_shot.svg.import",
+      " M assets/art/icons/hunter/hunter_easy_prey.svg.import",
+      " M assets/art/icons/hunter/hunter_freezing_trap.svg.import",
+      " M assets/art/icons/hunter/hunter_mark.svg.import",
+      " M assets/art/icons/hunter/hunter_shooting_discipline.svg.import",
+      " M assets/art/icons/hunter/hunter_tar_trap.svg.import",
+      " M assets/art/icons/hunter/hunter_thorn_trap.svg.import",
+      " M assets/art/icons/hunter/hunter_total_cover.svg.import",
+      " M assets/art/pilot/archer.png.import",
+      " M assets/art/pilot/dirt.png.import",
+      " M assets/art/pilot/grass.png.import",
+      " M assets/art/pilot/hero.png.import",
+      " M assets/art/pilot/stone.png.import",
+      " M assets/art/pilot/warrior.png.import",
+      " M assets/art/vfx/soul_impact_orb.png.import",
+      " M assets/art/vfx/soul_impact_orb_source.png.import",
+      " M assets/art/vfx/spiritualist_curse_sigil.png.import",
+      " M assets/art/vfx/spiritualist_effects.png.import",
+      " M assets/art/vfx/spiritualist_ritual_halo.png.import",
+      " M assets/art/vfx/spiritualist_soul_wisp.png.import",
+      " M assets/art/vfx/spiritualist_spectral_burst.png.import",
+      " M docs/epics/e06.md",
+      " M scripts/core/profile_facade.gd",
+      " M scripts/main.gd",
+      " M scripts/ui/action_bar_editor.gd",
+      " M scripts/ui/action_bar_slot.gd",
+      " M scripts/ui/battle_controls.gd",
+      " M scripts/ui/character_menu.gd",
+      " M tests/e02_character_menu_test.gd",
+      " M tests/e03_progression_panel_integration_test.gd",
+      " M tests/menu_tabs_test.gd",
+      " M tools/verify.ps1",
+      "?? assets/art/skills/",
+      "?? docs/epics/e06/e06_skill_ux_scope.md",
+      "?? scripts/core/skill_allocation_draft.gd",
+      "?? scripts/core/skill_allocation_draft.gd.uid",
+      "?? scripts/ui/skill_locked_icon.gdshader",
+      "?? scripts/ui/skill_locked_icon.gdshader.uid",
+      "?? scripts/ui/skill_presentation.gd",
+      "?? scripts/ui/skill_presentation.gd.uid",
+      "?? scripts/ui/skill_tooltip.gd",
+      "?? scripts/ui/skill_tooltip.gd.uid",
+      "?? scripts/ui/skill_window.gd",
+      "?? scripts/ui/skill_window.gd.uid",
+      "?? tests/skill_allocation_test.gd",
+      "?? tests/skill_allocation_test.gd.uid",
+      "?? tests/skill_window_test.gd",
+      "?? tests/skill_window_test.gd.uid",
+      "?? tools/prepare_skill_icons.py",
+      "?? tools/skill_ux_native_probe.gd",
+      "?? tools/skill_ux_native_probe.gd.uid"
+    ],
+    "state_after_final_run": "dirty",
+    "dirty_path_count_after_final_run": 68,
+    "dirty_status_sha256_after_final_run": "83bb8f310e5f00eeb5b47d5a15ca6e0778aa9bce188327ce5ad73ecb73744f35",
+    "status_paths_changed_since_selection_start": [
+      "docs/epics/e06/e06_skill_ux_playtest.md",
+      "tests/e04_archer_integrated_closure_test.gd",
+      "tests/e04_mage_integrated_closure_test.gd",
+      "tests/e04_swordsman_integrated_closure_test.gd",
+      "tests/e05_evolution_menu_integration_test.gd"
+    ]
+  },
+  "input_hash_policy": "Arquivos de texto: remove BOM UTF-8 inicial, converte CRLF e CR para LF e calcula SHA-256 da representação UTF-8 normalizada; SHA-256 raw também registrado. SVGs incluem as 89 fontes de ícone importadas pelo SkillPresentation.",
+  "consumer_inputs": {
+    "scripts/main.gd": {
+      "sha256_normalized_utf8": "08aa8eb57ca6bcfb9e0e681dc56f731eaf8b8152579f698d5b9a1d1429d6caf7",
+      "sha256_raw": "4391143cf105ed1cacc19119a30be13b3d03ad232b2ada5e93d151c14a2f15d1"
+    },
+    "scripts/core/profile_facade.gd": {
+      "sha256_normalized_utf8": "d41d952f56683089ef72a81c91b9236c927a0d3fb459cd4f65ba348e187ef7cb",
+      "sha256_raw": "bb97a9ee352645288594a423c0c527127ea9409739b604ef0123b1d68dba974e"
+    },
+    "scripts/core/skill_allocation_draft.gd": {
+      "sha256_normalized_utf8": "8048eba53c5a3f786ed746780aa61d0607a52337165d941f0457af38b685fb9c",
+      "sha256_raw": "3486cee0107b00acdc2e8a498c2f62bb2b3530eab68d837f988ab0ac19697503"
+    },
+    "scripts/ui/skill_presentation.gd": {
+      "sha256_normalized_utf8": "69d88f4bf9d371d4032c6b416e9f76d8222200a01d85ed5c5c980a6f2f2921f4",
+      "sha256_raw": "7c1c266ebe72b9312ef2ce27382edbd7e4c6fcd7eb40597bac44ae212aae062f"
+    },
+    "scripts/ui/skill_window.gd": {
+      "sha256_normalized_utf8": "26c8ec376bfd379d1237c35a509ab4f65ec9af57e268d7f14e90057b9ea3850a",
+      "sha256_raw": "f7d5686ffc25b9adb58588364f6d9bbd1f001d5d0d82999ec6438e32a8cabed7"
+    },
+    "scripts/ui/skill_tooltip.gd": {
+      "sha256_normalized_utf8": "87a5d3d1f5a0428e23873361d25dbe8aff2dbd092dd219a3b0c2a6de27e775a0",
+      "sha256_raw": "69b931d310a1bf9b0494e79b5eeafbf7f74b6646f8d1e658d5b36ab67e74239a"
+    },
+    "scripts/ui/skill_locked_icon.gdshader": {
+      "sha256_normalized_utf8": "dfa784a7e6240f021bafadeeafc0b18341f0220f4b2eed57769d4a5a1952ce9f",
+      "sha256_raw": "a0a0dc6e34377fb2e03d0fc90df6e62d9932416dfdb3b3e93a1be847aa1a00a3"
+    },
+    "scripts/ui/action_bar_editor.gd": {
+      "sha256_normalized_utf8": "7afa3b1865b36448d297cabeb72c3921fdb8cf74bfeadbf4ad66476d38481012",
+      "sha256_raw": "c7aef36ca7380f3530319aa1b86c0358625e89a59a4766fb1c082774f251a343"
+    },
+    "scripts/ui/action_bar_slot.gd": {
+      "sha256_normalized_utf8": "375a37f7afa97dd960ad8a52f82458d7891082eef5f30f90b5f92c7b4edf4d3b",
+      "sha256_raw": "e0a94d5d2095cbb8a7bc50923da105facf932844e89894b332097ba2e16e2af6"
+    },
+    "scripts/ui/battle_controls.gd": {
+      "sha256_normalized_utf8": "a586376e3206b3cb4fd27dc3c61781944880b1723a782a8a5887777651432c70",
+      "sha256_raw": "3082c5a66b4eab143bebfe1c2d38bc7cc5410b7c3837ede0f6fd5a3a09cbfa01"
+    },
+    "scripts/ui/character_menu.gd": {
+      "sha256_normalized_utf8": "b595d5992df31a2d6c7e8b0c50286a86cbf66c97c792c5a18738612b388a0a76",
+      "sha256_raw": "85338f36fb91c0698aaae797b7c23e84f15c628c2bdde827cc112172cbaead95"
+    }
+  },
+  "test_inputs": {
+    "tests/skill_allocation_test.gd": {
+      "sha256_normalized_utf8": "a7685fef9491b0536a7f38394b52b6c438ec7dcdc75ed8ec2575c5f5c3d55ecf",
+      "sha256_raw": "a7685fef9491b0536a7f38394b52b6c438ec7dcdc75ed8ec2575c5f5c3d55ecf"
+    },
+    "tests/skill_window_test.gd": {
+      "sha256_normalized_utf8": "1f8d987228288e4a7e85a7345e72691f186632b14ffa3649fbb337d72a67ebd4",
+      "sha256_raw": "1f8d987228288e4a7e85a7345e72691f186632b14ffa3649fbb337d72a67ebd4"
+    },
+    "tests/e02_character_menu_test.gd": {
+      "sha256_normalized_utf8": "ee91ee4336cf59a37e4473f7f37ee166f4d6e1aab15da3bf208bbf4a4656efe9",
+      "sha256_raw": "8c7f48588339b24d088d8e5360f703f5cadf2112a4281dd53da637452484c27d"
+    },
+    "tests/e03_progression_panel_integration_test.gd": {
+      "sha256_normalized_utf8": "24b19ecf79d2f8317fa24a5cbaf0731b45682ff16e8734b8922e6b01e9195d74",
+      "sha256_raw": "580270f3092bb5cb33fc839da2918537c98f0b5def6b4f8a45af10510743275f"
+    },
+    "tests/menu_tabs_test.gd": {
+      "sha256_normalized_utf8": "72a977512f9eb581b27f8654944d17e8bc3639e453ed020ae81500f736550c2d",
+      "sha256_raw": "21851975b8cbb9da9a260f274146e4d1cbcf179c00f770ef6610d44acd99516b"
+    },
+    "tests/e03_progression_transactions_test.gd": {
+      "sha256_normalized_utf8": "52614706b0749c73dedaaf850db9cff2c35d9063ea5b7e7a1931e735f5cde8c2",
+      "sha256_raw": "52614706b0749c73dedaaf850db9cff2c35d9063ea5b7e7a1931e735f5cde8c2"
+    },
+    "tests/e03_consumer_integration_test.gd": {
+      "sha256_normalized_utf8": "cec4588128b432c655ce8b933b218db2c89e5267925887832cd95362cbac439c",
+      "sha256_raw": "c77a5badd4e272746a880662de2dcc7339db486ce4d2b7b4f1d3b205c073a942"
+    },
+    "tests/e03_integrated_progression_flow_test.gd": {
+      "sha256_normalized_utf8": "595b057431e3af2ace2f46318df05ce2df3575c1b93e1a595392285f3c146d79",
+      "sha256_raw": "96ec6f43ca7847a8bdd93a1be3e66e57433d49c64c2b4fd1c8f028273013b691"
+    },
+    "tests/e05_evolution_menu_integration_test.gd": {
+      "sha256_normalized_utf8": "611cafe416fe44a144a05b0dec0028eb7f40eacbc356b86620a81a8f07afb919",
+      "sha256_raw": "ddfbd7fdac64555eaade6db80e16fbe5e5f85f8460395e1f1dbfd28fdff9697b"
+    },
+    "tests/e04_archer_integrated_closure_test.gd": {
+      "sha256_normalized_utf8": "50ca2dc9c653e055140980c621884a89b9d5565116572cc666e1be852314760c",
+      "sha256_raw": "f18ca3a0f47a9e2af602268134474629a785d45b77d30fbd11aeb9ffdeebc011"
+    },
+    "tests/e04_mage_integrated_closure_test.gd": {
+      "sha256_normalized_utf8": "f87b886bb5e950907e489987c32b0a9a1d8a08527212a0792f89a8975e3cac36",
+      "sha256_raw": "2e6dba88a12150ece26c75bac0193be82a082750f233d6973749bf822231dfbf"
+    },
+    "tests/e04_swordsman_integrated_closure_test.gd": {
+      "sha256_normalized_utf8": "2ffa634f73c81624e9f4741667fc604a57f68ac241bbab61be42a285bd0f1fab",
+      "sha256_raw": "9d4fd87f3b5d6e7e8e86a4854c77ab18d27f9a3db2c8dceb117f832681b57e5f"
+    },
+    "tests/e06_tx_active_test.gd": {
+      "sha256_normalized_utf8": "2971ad549bba67aa0e0931340fa877945cc53e160ad0c3b53f4a975aef69b512",
+      "sha256_raw": "2971ad549bba67aa0e0931340fa877945cc53e160ad0c3b53f4a975aef69b512"
+    },
+    "tests/action_bar_ui_test.gd": {
+      "sha256_normalized_utf8": "93d11a5f7cc5764ce5224eafe3e9769b38dcbaad297bb4c65608d39894928d35",
+      "sha256_raw": "603c5e8526e2c77efa57e2ea735fcceea7b27ecb6caef13bdbab0297d34e3773"
+    },
+    "tests/action_bar_input_test.gd": {
+      "sha256_normalized_utf8": "8615531ca37a536701ca833642944885642a7e697b3b42a46edf703238e216d7",
+      "sha256_raw": "f4e3198c36135451676c058b5377b47f478fbb4fdc31262da0d331734ce7d164"
+    },
+    "tests/ui_layout_test.gd": {
+      "sha256_normalized_utf8": "80f09a4702131e6b5bfebfb1802619a779cd0f84962667fa182eda16c109a4f1",
+      "sha256_raw": "c04cf3a49adf2311e5c56614def6cac40b271b3fbbb70ed838c4d5b5704b516f"
+    },
+    "tests/battle_ui_test.gd": {
+      "sha256_normalized_utf8": "ee604b850e9aee96fe49c8cd3bb36270a09130adaa9c1534ffc12025ea97da87",
+      "sha256_raw": "c4ddf8e6b2956a7cbf9f306f88f3f998ffb7b44ada421ef8d0078c1960377779"
+    },
+    "tests/reward_feedback_test.gd": {
+      "sha256_normalized_utf8": "ef9b79c86f1ad5c125a29f3b3f8085ccba0aab096adb7421e7bc3bae84d45cf5",
+      "sha256_raw": "8b8fb9cf3a2392809fe157bb7e854dfb2285c6574ecb6f072c8ce2931ccd3b1b"
+    }
+  },
+  "skill_icon_inputs": {
+    "assets/art/skills/archer_cadence.svg": {
+      "sha256_normalized_utf8": "f68aa5a81e5760994f62c65b4dc2334e7ef4ebd2ae65a1941e041053caa65099",
+      "sha256_raw": "f68aa5a81e5760994f62c65b4dc2334e7ef4ebd2ae65a1941e041053caa65099"
+    },
+    "assets/art/skills/archer_precision.svg": {
+      "sha256_normalized_utf8": "aa93c4199576da69d589ac028cf2dac8de54627aa811527e1a5b9d3b2ac8e1ac",
+      "sha256_raw": "aa93c4199576da69d589ac028cf2dac8de54627aa811527e1a5b9d3b2ac8e1ac"
+    },
+    "assets/art/skills/arrow_rain.svg": {
+      "sha256_normalized_utf8": "67eb33abc9ea375a16c5da7e8acb97fb51fb46739e7db5cb5e947f1acdf3b76e",
+      "sha256_raw": "67eb33abc9ea375a16c5da7e8acb97fb51fb46739e7db5cb5e947f1acdf3b76e"
+    },
+    "assets/art/skills/berserker_blood_rift.svg": {
+      "sha256_normalized_utf8": "59e687220a8a2c8fe65ca1212e39dc30de74edb7f825db44b29c1aecc08c6c83",
+      "sha256_raw": "59e687220a8a2c8fe65ca1212e39dc30de74edb7f825db44b29c1aecc08c6c83"
+    },
+    "assets/art/skills/berserker_breath_steal.svg": {
+      "sha256_normalized_utf8": "ae8b1358d5c981d53453f8f8329167b5f2f4d15e2795877fb7512a02e7069a66",
+      "sha256_raw": "ae8b1358d5c981d53453f8f8329167b5f2f4d15e2795877fb7512a02e7069a66"
+    },
+    "assets/art/skills/berserker_execution.svg": {
+      "sha256_normalized_utf8": "c0dd1eaf47fa6175400e9e97b45b009580d88247b8111cd5f0444b89c7b3278b",
+      "sha256_raw": "c0dd1eaf47fa6175400e9e97b45b009580d88247b8111cd5f0444b89c7b3278b"
+    },
+    "assets/art/skills/berserker_obstinacy.svg": {
+      "sha256_normalized_utf8": "bb09d71cc13a0ba0f2c06e955e7f90e337acd933f091827fc0fb8f3d0eb90042",
+      "sha256_raw": "bb09d71cc13a0ba0f2c06e955e7f90e337acd933f091827fc0fb8f3d0eb90042"
+    },
+    "assets/art/skills/berserker_pursuit.svg": {
+      "sha256_normalized_utf8": "43969b4ad7ba9b711c470e4293571d495863a384e672b2ce9fdf6da32c6d59b6",
+      "sha256_raw": "43969b4ad7ba9b711c470e4293571d495863a384e672b2ce9fdf6da32c6d59b6"
+    },
+    "assets/art/skills/berserker_rupture.svg": {
+      "sha256_normalized_utf8": "d6e69f5db5863512d085f6014d1ab4bb16cfa9ece558120f249ffae5239e7e47",
+      "sha256_raw": "d6e69f5db5863512d085f6014d1ab4bb16cfa9ece558120f249ffae5239e7e47"
+    },
+    "assets/art/skills/berserker_wound_leap.svg": {
+      "sha256_normalized_utf8": "709ba929cc89b81418a618a6301422764413ce0dc6740d17023e75e65793544d",
+      "sha256_raw": "709ba929cc89b81418a618a6301422764413ce0dc6740d17023e75e65793544d"
+    },
+    "assets/art/skills/blood_thirst.svg": {
+      "sha256_normalized_utf8": "f18b34ee5d7bd4611816269c02481cb91640c0ba367fe89b15db67b5f1e6f254",
+      "sha256_raw": "f18b34ee5d7bd4611816269c02481cb91640c0ba367fe89b15db67b5f1e6f254"
+    },
+    "assets/art/skills/brutal_strike.svg": {
+      "sha256_normalized_utf8": "28586f350151fda9bba8d81f5fb30a6ec1623e49b60578cc590de02e5f31028c",
+      "sha256_raw": "28586f350151fda9bba8d81f5fb30a6ec1623e49b60578cc590de02e5f31028c"
+    },
+    "assets/art/skills/concentrated_rage.svg": {
+      "sha256_normalized_utf8": "e385036c1bd027ed249e3db1cc7dfc5e8c38b8d2b10f71684f12d1c879b66159",
+      "sha256_raw": "e385036c1bd027ed249e3db1cc7dfc5e8c38b8d2b10f71684f12d1c879b66159"
+    },
+    "assets/art/skills/dash.svg": {
+      "sha256_normalized_utf8": "65a1f558435814de2fcf30d89bc766114ce44591ed3088af576748bfb5d0817c",
+      "sha256_raw": "65a1f558435814de2fcf30d89bc766114ce44591ed3088af576748bfb5d0817c"
+    },
+    "assets/art/skills/defender_anchor.svg": {
+      "sha256_normalized_utf8": "9f4d7ceaf6cff31730c410d1f4d2c01184b14e96d422c75db864cd8639eb1b06",
+      "sha256_raw": "9f4d7ceaf6cff31730c410d1f4d2c01184b14e96d422c75db864cd8639eb1b06"
+    },
+    "assets/art/skills/defender_counterstroke.svg": {
+      "sha256_normalized_utf8": "2760663fdae6f6e5b45ecf25e366772467f87d8c322f467c10948da7c50a456e",
+      "sha256_raw": "2760663fdae6f6e5b45ecf25e366772467f87d8c322f467c10948da7c50a456e"
+    },
+    "assets/art/skills/defender_guard_return.svg": {
+      "sha256_normalized_utf8": "fc9b8bd74c6f5896967319e356a58eacc30ef848dc06c9ebdffe4cddac025550",
+      "sha256_raw": "fc9b8bd74c6f5896967319e356a58eacc30ef848dc06c9ebdffe4cddac025550"
+    },
+    "assets/art/skills/defender_line_lock.svg": {
+      "sha256_normalized_utf8": "c0fd54d10d34a16d0ef18911ea56d026c14b6fbe5bd55f73b93540942a5f5a5a",
+      "sha256_raw": "c0fd54d10d34a16d0ef18911ea56d026c14b6fbe5bd55f73b93540942a5f5a5a"
+    },
+    "assets/art/skills/defender_reprisal_wave.svg": {
+      "sha256_normalized_utf8": "7feca4c64c6bd5d6327a285bf1e3e27454a1c3c336142383360aae467c622a9c",
+      "sha256_raw": "7feca4c64c6bd5d6327a285bf1e3e27454a1c3c336142383360aae467c622a9c"
+    },
+    "assets/art/skills/defender_wall_advance.svg": {
+      "sha256_normalized_utf8": "1767797c464c2e47d8009dc011574f075c462341b80fa6ddcca944ef5db40ce6",
+      "sha256_raw": "1767797c464c2e47d8009dc011574f075c462341b80fa6ddcca944ef5db40ce6"
+    },
+    "assets/art/skills/defender_watch.svg": {
+      "sha256_normalized_utf8": "a56184c1716b2ea3ebe7bcd95fb492d45509688220f85e31d1d41a2795d7ec72",
+      "sha256_raw": "a56184c1716b2ea3ebe7bcd95fb492d45509688220f85e31d1d41a2795d7ec72"
+    },
+    "assets/art/skills/double_shot.svg": {
+      "sha256_normalized_utf8": "94f23149207bde3370e9dcbaf90bfd65057ec96ed3763e90a1d3c5c1ab6dc6d0",
+      "sha256_raw": "94f23149207bde3370e9dcbaf90bfd65057ec96ed3763e90a1d3c5c1ab6dc6d0"
+    },
+    "assets/art/skills/electric_discharge.svg": {
+      "sha256_normalized_utf8": "d106607958c5274023243e6ddfaa88e224cc9e2bd61beb3eb669f8db787b5d2e",
+      "sha256_raw": "d106607958c5274023243e6ddfaa88e224cc9e2bd61beb3eb669f8db787b5d2e"
+    },
+    "assets/art/skills/elementalist_ember_path.svg": {
+      "sha256_normalized_utf8": "d9ff65765434364242a4255037ff98cf5098a3de7bf466e6d408e15495034086",
+      "sha256_raw": "d9ff65765434364242a4255037ff98cf5098a3de7bf466e6d408e15495034086"
+    },
+    "assets/art/skills/elementalist_flame_burst.svg": {
+      "sha256_normalized_utf8": "ac199d4ea8d69db5911f35c190e637be260fdd29c7ab42cc3c6bdf6b157796aa",
+      "sha256_raw": "ac199d4ea8d69db5911f35c190e637be260fdd29c7ab42cc3c6bdf6b157796aa"
+    },
+    "assets/art/skills/elementalist_glacial_ring.svg": {
+      "sha256_normalized_utf8": "9601dde36469405c11a8b06066ecad84471cdf762af33283ca21a74b76a0199c",
+      "sha256_raw": "9601dde36469405c11a8b06066ecad84471cdf762af33283ca21a74b76a0199c"
+    },
+    "assets/art/skills/elementalist_lightning_arc.svg": {
+      "sha256_normalized_utf8": "cb8cf49578c9525a7090d6651a1f8e1841f69fb662a319054846cc997be573e4",
+      "sha256_raw": "cb8cf49578c9525a7090d6651a1f8e1841f69fb662a319054846cc997be573e4"
+    },
+    "assets/art/skills/elementalist_prismatic_focus.svg": {
+      "sha256_normalized_utf8": "d4de4ff748bcbf7e09f13c7f62c070994c4f94c847e2fb73c9dc876c74b11df9",
+      "sha256_raw": "d4de4ff748bcbf7e09f13c7f62c070994c4f94c847e2fb73c9dc876c74b11df9"
+    },
+    "assets/art/skills/elementalist_prismatic_resonance.svg": {
+      "sha256_normalized_utf8": "e0221b72cc196bfd9b3618aeedb07904dc080493657fe69f74b1746b12eff863",
+      "sha256_raw": "e0221b72cc196bfd9b3618aeedb07904dc080493657fe69f74b1746b12eff863"
+    },
+    "assets/art/skills/elementalist_tri_nova.svg": {
+      "sha256_normalized_utf8": "adab98e968684fd888716152384c597c73533c098d32f24c85a0af27edbf2430",
+      "sha256_raw": "adab98e968684fd888716152384c597c73533c098d32f24c85a0af27edbf2430"
+    },
+    "assets/art/skills/explosive_trap.svg": {
+      "sha256_normalized_utf8": "d25c578162543543543ee4383a00dde67ccf03d7155b6f8364c5d82ab0004a58",
+      "sha256_raw": "d25c578162543543543ee4383a00dde67ccf03d7155b6f8364c5d82ab0004a58"
+    },
+    "assets/art/skills/extended_aim.svg": {
+      "sha256_normalized_utf8": "af9275e1da6fef3128ec055ce0ee2dc10c2d543e494db2f7145528eee44e0a8f",
+      "sha256_raw": "af9275e1da6fef3128ec055ce0ee2dc10c2d543e494db2f7145528eee44e0a8f"
+    },
+    "assets/art/skills/fire_spear.svg": {
+      "sha256_normalized_utf8": "bfa68b5154e1b28d5b867c94cd0dfa0dc7ebc6a298973e66b91e57e2eaa58716",
+      "sha256_raw": "bfa68b5154e1b28d5b867c94cd0dfa0dc7ebc6a298973e66b91e57e2eaa58716"
+    },
+    "assets/art/skills/fire_wall.svg": {
+      "sha256_normalized_utf8": "760688372844067ae1b0470a67365715ff01d4902874619f16a8f29a721d6ab4",
+      "sha256_raw": "760688372844067ae1b0470a67365715ff01d4902874619f16a8f29a721d6ab4"
+    },
+    "assets/art/skills/fireball.svg": {
+      "sha256_normalized_utf8": "e2c9c1a72bf578dec33734928c2e6d4a644c11eb99b89bf4ae47a7c437b7bd7c",
+      "sha256_raw": "e2c9c1a72bf578dec33734928c2e6d4a644c11eb99b89bf4ae47a7c437b7bd7c"
+    },
+    "assets/art/skills/foliage_shelter.svg": {
+      "sha256_normalized_utf8": "b267eec36290f7ca9e8d3958df800eb6acf6fd91f482d07ec5714a6c3730612a",
+      "sha256_raw": "b267eec36290f7ca9e8d3958df800eb6acf6fd91f482d07ec5714a6c3730612a"
+    },
+    "assets/art/skills/fury.svg": {
+      "sha256_normalized_utf8": "68ed9c574e78c4923c019e9517353ac09a60c3b84a9dfaf9d08054a516d43cc6",
+      "sha256_raw": "68ed9c574e78c4923c019e9517353ac09a60c3b84a9dfaf9d08054a516d43cc6"
+    },
+    "assets/art/skills/geometer_collapse.svg": {
+      "sha256_normalized_utf8": "86ba6cd39be7013bf0359557819836af8b13c27e5d784f5330151693704d9b23",
+      "sha256_raw": "86ba6cd39be7013bf0359557819836af8b13c27e5d784f5330151693704d9b23"
+    },
+    "assets/art/skills/geometer_incidence.svg": {
+      "sha256_normalized_utf8": "815db94b4a8af0753a5a5e1b5484df11e99846a16157188b50ae3f6482303fb4",
+      "sha256_raw": "815db94b4a8af0753a5a5e1b5484df11e99846a16157188b50ae3f6482303fb4"
+    },
+    "assets/art/skills/geometer_rewrite.svg": {
+      "sha256_normalized_utf8": "a8d54e66f85a7550620921e34259046f7f544fe423e7e2094aaf3ffd94d344a9",
+      "sha256_raw": "a8d54e66f85a7550620921e34259046f7f544fe423e7e2094aaf3ffd94d344a9"
+    },
+    "assets/art/skills/geometer_trace.svg": {
+      "sha256_normalized_utf8": "c47913e55f05058a908db2acba917736b96609c711a0180db0958475751cc820",
+      "sha256_raw": "c47913e55f05058a908db2acba917736b96609c711a0180db0958475751cc820"
+    },
+    "assets/art/skills/geometer_translation.svg": {
+      "sha256_normalized_utf8": "83ee29232d9d6724c3de56edf1e5c4ad4aeb2906d22029417b6f0c3f75cf91e0",
+      "sha256_raw": "83ee29232d9d6724c3de56edf1e5c4ad4aeb2906d22029417b6f0c3f75cf91e0"
+    },
+    "assets/art/skills/geometer_triangulation.svg": {
+      "sha256_normalized_utf8": "0c68430b68b0d53e9891f8c821b4230377391b228808655d9a95fb4b59d068a3",
+      "sha256_raw": "0c68430b68b0d53e9891f8c821b4230377391b228808655d9a95fb4b59d068a3"
+    },
+    "assets/art/skills/geometer_vector_memory.svg": {
+      "sha256_normalized_utf8": "30b8cd9389db2d11364b678ef3256cc5258b98cd590d35626fa284bb97d66e76",
+      "sha256_raw": "30b8cd9389db2d11364b678ef3256cc5258b98cd590d35626fa284bb97d66e76"
+    },
+    "assets/art/skills/haunt.svg": {
+      "sha256_normalized_utf8": "8dbf039b05a39f7d7caf9792736a84f46d79363b61a5ab77d5b26045f1648112",
+      "sha256_raw": "8dbf039b05a39f7d7caf9792736a84f46d79363b61a5ab77d5b26045f1648112"
+    },
+    "assets/art/skills/hunter_covering_shot.svg": {
+      "sha256_normalized_utf8": "1f32d5643deb23b9116406af7f14bbe09436a65877a4edf8112e8a694ffdc0e9",
+      "sha256_raw": "1f32d5643deb23b9116406af7f14bbe09436a65877a4edf8112e8a694ffdc0e9"
+    },
+    "assets/art/skills/hunter_easy_prey.svg": {
+      "sha256_normalized_utf8": "c061cd8b9c12367a5a8ac4c2570d34b113dbc1cb920aa5f58ac6a69312a52eef",
+      "sha256_raw": "c061cd8b9c12367a5a8ac4c2570d34b113dbc1cb920aa5f58ac6a69312a52eef"
+    },
+    "assets/art/skills/hunter_freezing_trap.svg": {
+      "sha256_normalized_utf8": "7188291fc1cd3dd1f048535d0feeadf4b16e70e42491d7c93fac975e8bbbb3f2",
+      "sha256_raw": "7188291fc1cd3dd1f048535d0feeadf4b16e70e42491d7c93fac975e8bbbb3f2"
+    },
+    "assets/art/skills/hunter_mark.svg": {
+      "sha256_normalized_utf8": "2ef786fc02f205e26b3861448a64a82a35ad04b8438fba8b42d5c170d90c0bda",
+      "sha256_raw": "2ef786fc02f205e26b3861448a64a82a35ad04b8438fba8b42d5c170d90c0bda"
+    },
+    "assets/art/skills/hunter_shooting_discipline.svg": {
+      "sha256_normalized_utf8": "062371269bcd851a4d255c493e3936e7ce75ae721aca31c681c835c77360c5d7",
+      "sha256_raw": "062371269bcd851a4d255c493e3936e7ce75ae721aca31c681c835c77360c5d7"
+    },
+    "assets/art/skills/hunter_tar_trap.svg": {
+      "sha256_normalized_utf8": "e2b283e910868b6ca4c4bb1caa1be06937a3fe252f09c575a0c810d9041e580c",
+      "sha256_raw": "e2b283e910868b6ca4c4bb1caa1be06937a3fe252f09c575a0c810d9041e580c"
+    },
+    "assets/art/skills/hunter_thorn_trap.svg": {
+      "sha256_normalized_utf8": "642623967a70d238e269d9f05f34d6499d7406d35123daa3048156ff66558aef",
+      "sha256_raw": "642623967a70d238e269d9f05f34d6499d7406d35123daa3048156ff66558aef"
+    },
+    "assets/art/skills/hunter_total_cover.svg": {
+      "sha256_normalized_utf8": "c3b7877404a5b93eaa4479f4341e5bafd007243f71356cf1a04a54e7210930a4",
+      "sha256_raw": "c3b7877404a5b93eaa4479f4341e5bafd007243f71356cf1a04a54e7210930a4"
+    },
+    "assets/art/skills/ice_spear.svg": {
+      "sha256_normalized_utf8": "6024b7bc3e0be951993624b705bfbbb81691c3953e40bc9947ddf75cd900cee5",
+      "sha256_raw": "6024b7bc3e0be951993624b705bfbbb81691c3953e40bc9947ddf75cd900cee5"
+    },
+    "assets/art/skills/ice_wall.svg": {
+      "sha256_normalized_utf8": "5af2281387ac4e6e9e539f20078622f12afeaa58c95639086b137b8d1025d5d9",
+      "sha256_raw": "5af2281387ac4e6e9e539f20078622f12afeaa58c95639086b137b8d1025d5d9"
+    },
+    "assets/art/skills/lightning.svg": {
+      "sha256_normalized_utf8": "0ace3602552af6e50047aa19426effbf6c2cc4a29aa0648981513cf6cd9e17bf",
+      "sha256_raw": "0ace3602552af6e50047aa19426effbf6c2cc4a29aa0648981513cf6cd9e17bf"
+    },
+    "assets/art/skills/lightning_wall.svg": {
+      "sha256_normalized_utf8": "3b17e45c5145dedb4c3b28b35e75e0d0ad5b202bd0dfa01813f9bc0c2dd63e05",
+      "sha256_raw": "3b17e45c5145dedb4c3b28b35e75e0d0ad5b202bd0dfa01813f9bc0c2dd63e05"
+    },
+    "assets/art/skills/mage_mana_regeneration.svg": {
+      "sha256_normalized_utf8": "e5a3d856e874a49837fde01c4587295a04c5765cbed84aecd8f3d35ff4ba8e0c",
+      "sha256_raw": "e5a3d856e874a49837fde01c4587295a04c5765cbed84aecd8f3d35ff4ba8e0c"
+    },
+    "assets/art/skills/perseverance.svg": {
+      "sha256_normalized_utf8": "ddd4c4ce1a458d6447f4c984443782f2b1cdee81fc1ddd0758fea066d703b8d0",
+      "sha256_raw": "ddd4c4ce1a458d6447f4c984443782f2b1cdee81fc1ddd0758fea066d703b8d0"
+    },
+    "assets/art/skills/phantom_barrier.svg": {
+      "sha256_normalized_utf8": "e98ef270d1c9b0cd4f87e92f6fab2bc427ebe3ec35837fe61706eaf0bcc10622",
+      "sha256_raw": "e98ef270d1c9b0cd4f87e92f6fab2bc427ebe3ec35837fe61706eaf0bcc10622"
+    },
+    "assets/art/skills/piercing_arrow.svg": {
+      "sha256_normalized_utf8": "11c9cd4af1ce8197da6016f33e84d2e64f74bcfd4a4b8d128f446ee98df5845f",
+      "sha256_raw": "11c9cd4af1ce8197da6016f33e84d2e64f74bcfd4a4b8d128f446ee98df5845f"
+    },
+    "assets/art/skills/piercing_shout.svg": {
+      "sha256_normalized_utf8": "0f8a47d35ed09855109a73240332723c32b8688bfdf9f2679de07b2b9f8abd43",
+      "sha256_raw": "0f8a47d35ed09855109a73240332723c32b8688bfdf9f2679de07b2b9f8abd43"
+    },
+    "assets/art/skills/provoke.svg": {
+      "sha256_normalized_utf8": "303a5b764cdab414ba147822bac1106a36c8d5915d3d807abfd32f577e484c33",
+      "sha256_raw": "303a5b764cdab414ba147822bac1106a36c8d5915d3d807abfd32f577e484c33"
+    },
+    "assets/art/skills/sentinel_absolute_focus.svg": {
+      "sha256_normalized_utf8": "abcf5dd45c5f72274ec367dff912e42ced7532d90e9e7a28b8dc1e5049dc94e6",
+      "sha256_raw": "abcf5dd45c5f72274ec367dff912e42ced7532d90e9e7a28b8dc1e5049dc94e6"
+    },
+    "assets/art/skills/sentinel_concussion_shot.svg": {
+      "sha256_normalized_utf8": "26859ac40309ee2d618a698db815755bf10ec935e08814e9958a84b53a25f786",
+      "sha256_raw": "26859ac40309ee2d618a698db815755bf10ec935e08814e9958a84b53a25f786"
+    },
+    "assets/art/skills/sentinel_explosive_shot.svg": {
+      "sha256_normalized_utf8": "c1ce2de8827388b8dd0d449099da0e54db67146b1595d5dc7ded22d8225053e0",
+      "sha256_raw": "c1ce2de8827388b8dd0d449099da0e54db67146b1595d5dc7ded22d8225053e0"
+    },
+    "assets/art/skills/sentinel_headshot.svg": {
+      "sha256_normalized_utf8": "bde3df0d2df7819d9b7aac0740de180c8f166e36cdd87995f031e2d6e02c020e",
+      "sha256_raw": "bde3df0d2df7819d9b7aac0740de180c8f166e36cdd87995f031e2d6e02c020e"
+    },
+    "assets/art/skills/sentinel_net_shot.svg": {
+      "sha256_normalized_utf8": "437740ebc3de2abfd8879aea6b34cf93ac1c6e1f9c53191adebaf81ee1f545e7",
+      "sha256_raw": "437740ebc3de2abfd8879aea6b34cf93ac1c6e1f9c53191adebaf81ee1f545e7"
+    },
+    "assets/art/skills/sentinel_observe.svg": {
+      "sha256_normalized_utf8": "2f30f7f08a08011dc2259f8c1dc46a6eecfff2136f3655ecc75cd4e645d281f4",
+      "sha256_raw": "2f30f7f08a08011dc2259f8c1dc46a6eecfff2136f3655ecc75cd4e645d281f4"
+    },
+    "assets/art/skills/sentinel_opening_read.svg": {
+      "sha256_normalized_utf8": "59dd89b8302c428bcc63a6c4e9c6b829b1f0a2b9ddfc8ac91ea8fe045cfc06bc",
+      "sha256_raw": "59dd89b8302c428bcc63a6c4e9c6b829b1f0a2b9ddfc8ac91ea8fe045cfc06bc"
+    },
+    "assets/art/skills/sentinel_piercing_shot.svg": {
+      "sha256_normalized_utf8": "fad9d3d493c57c897ed4cd78bfdbe82dbc662cc615250ac6ce0fd51d6309667f",
+      "sha256_raw": "fad9d3d493c57c897ed4cd78bfdbe82dbc662cc615250ac6ce0fd51d6309667f"
+    },
+    "assets/art/skills/sentinel_precision_stance.svg": {
+      "sha256_normalized_utf8": "eccda5f5e6aa07ec64d40231e172ea85beba25e3c6f6fea7d478030da35bbb8a",
+      "sha256_raw": "eccda5f5e6aa07ec64d40231e172ea85beba25e3c6f6fea7d478030da35bbb8a"
+    },
+    "assets/art/skills/shield_wall.svg": {
+      "sha256_normalized_utf8": "414fc3d31c58dc7d25b1684eb76b717b06bd572718fbe26229c7fe79cc28cd23",
+      "sha256_raw": "414fc3d31c58dc7d25b1684eb76b717b06bd572718fbe26229c7fe79cc28cd23"
+    },
+    "assets/art/skills/slash.svg": {
+      "sha256_normalized_utf8": "fc950221f5619725f6f0e1231091a24367bbb7cb516d626908bc03d4d4a07a21",
+      "sha256_raw": "fc950221f5619725f6f0e1231091a24367bbb7cb516d626908bc03d4d4a07a21"
+    },
+    "assets/art/skills/slowing_arrow.svg": {
+      "sha256_normalized_utf8": "3fe027b883d15a1f8f5e98ebf8cf9c871014384c6b9ac3dcbc98ee3d28448cb8",
+      "sha256_raw": "3fe027b883d15a1f8f5e98ebf8cf9c871014384c6b9ac3dcbc98ee3d28448cb8"
+    },
+    "assets/art/skills/snare_trap.svg": {
+      "sha256_normalized_utf8": "c028a2477673a532cc708ee761ed8aec6de0f2b466591f1debd2a6ae94b431b1",
+      "sha256_raw": "c028a2477673a532cc708ee761ed8aec6de0f2b466591f1debd2a6ae94b431b1"
+    },
+    "assets/art/skills/soul_impact.svg": {
+      "sha256_normalized_utf8": "dd408e126e318591a763abbbf3b4bece1657189d88427ea8a9ef1287771d2d6c",
+      "sha256_raw": "dd408e126e318591a763abbbf3b4bece1657189d88427ea8a9ef1287771d2d6c"
+    },
+    "assets/art/skills/spiritualist_channel_focus.svg": {
+      "sha256_normalized_utf8": "5a71222bbfbd234433c14e2a6df344b2d17e20092e241bb55227a6247256cbc6",
+      "sha256_raw": "5a71222bbfbd234433c14e2a6df344b2d17e20092e241bb55227a6247256cbc6"
+    },
+    "assets/art/skills/spiritualist_dissipation.svg": {
+      "sha256_normalized_utf8": "4fc4960f07572ecd4f1c7e8219475bb881c9059fcdd5ef19deb95dad1385dc12",
+      "sha256_raw": "4fc4960f07572ecd4f1c7e8219475bb881c9059fcdd5ef19deb95dad1385dc12"
+    },
+    "assets/art/skills/spiritualist_echo_curse.svg": {
+      "sha256_normalized_utf8": "e8a970e73652ed3c30d10508dc96df5f2a6711f176358f110da6dc811ab4a557",
+      "sha256_raw": "e8a970e73652ed3c30d10508dc96df5f2a6711f176358f110da6dc811ab4a557"
+    },
+    "assets/art/skills/spiritualist_echo_recovery.svg": {
+      "sha256_normalized_utf8": "9b003a4411d9152ed183df7aef9a1a8f69b224468b7df8bf127c732fcb2a7bc9",
+      "sha256_raw": "9b003a4411d9152ed183df7aef9a1a8f69b224468b7df8bf127c732fcb2a7bc9"
+    },
+    "assets/art/skills/spiritualist_procession.svg": {
+      "sha256_normalized_utf8": "b53b6968cef076236e2380eec6d472e166325d1c6847c93de52426fe913e2161",
+      "sha256_raw": "b53b6968cef076236e2380eec6d472e166325d1c6847c93de52426fe913e2161"
+    },
+    "assets/art/skills/spiritualist_soul_drain.svg": {
+      "sha256_normalized_utf8": "ea4d37a858df6e56a30916d7b559dc18f67c8822583715859756bd28f9c13281",
+      "sha256_raw": "ea4d37a858df6e56a30916d7b559dc18f67c8822583715859756bd28f9c13281"
+    },
+    "assets/art/skills/spiritualist_spectral_veil.svg": {
+      "sha256_normalized_utf8": "dc1ae9c63452c5e7b588f1a1b49cf09b9da4b6d3ebae3115bf9ea0348bef71d9",
+      "sha256_raw": "dc1ae9c63452c5e7b588f1a1b49cf09b9da4b6d3ebae3115bf9ea0348bef71d9"
+    },
+    "assets/art/skills/swordsman_resistance.svg": {
+      "sha256_normalized_utf8": "0e43aee1ddb002c6e6d9f248e4aa8f0ffa5643bc53ce92a5593b0aa9b51eacdc",
+      "sha256_raw": "0e43aee1ddb002c6e6d9f248e4aa8f0ffa5643bc53ce92a5593b0aa9b51eacdc"
+    },
+    "assets/art/skills/teleport.svg": {
+      "sha256_normalized_utf8": "daea3aafa89eabe4842b96308182b79f494ba10cf2e40b5ec7a5291f7d5d7bec",
+      "sha256_raw": "daea3aafa89eabe4842b96308182b79f494ba10cf2e40b5ec7a5291f7d5d7bec"
+    },
+    "assets/art/skills/terrifying_shout.svg": {
+      "sha256_normalized_utf8": "827233909db038e89f49b4f32d61c2787f88f487cfc5a6911bb64559b8379cd2",
+      "sha256_raw": "827233909db038e89f49b4f32d61c2787f88f487cfc5a6911bb64559b8379cd2"
+    },
+    "assets/art/skills/trap_technique.svg": {
+      "sha256_normalized_utf8": "f2cb4ebe8252263f253838a51fe266a2de07fbb249bdd47c7195c59b9400cacc",
+      "sha256_raw": "f2cb4ebe8252263f253838a51fe266a2de07fbb249bdd47c7195c59b9400cacc"
+    },
+    "assets/art/skills/vigor.svg": {
+      "sha256_normalized_utf8": "822ca5ee3376c2e18f6a5f88e563d3db37e306b9c1c41668cc06b1031c89e6b4",
+      "sha256_raw": "822ca5ee3376c2e18f6a5f88e563d3db37e306b9c1c41668cc06b1031c89e6b4"
+    }
+  },
+  "skill_icon_count": 89,
+  "verification": {
+    "passed": true,
+    "godot_version": "Godot Engine v4.7.2.stable.official.ed1daf0bf",
+    "godot_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\review-engine\\Godot.exe",
+    "godot_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+    "runner_path": "tools/verify.ps1",
+    "runner_sha256": "22CC7DF5DC1014E211B174523D07CA4DB8F222DDCAD145D76ADACCD450DE95DE",
+    "total_plan_steps": 223,
+    "distinct_selected_checks": 20,
+    "execution_count": 33,
+    "passed_distinct_checks": [
+      "action_bar_input_test",
+      "action_bar_ui_test",
+      "battle_ui_test",
+      "e02_character_menu_test",
+      "e03_consumer_integration_test",
+      "e03_integrated_progression_flow_test",
+      "e03_progression_panel_integration_test",
+      "e03_progression_transactions_test",
+      "e04_archer_integrated_closure_test",
+      "e04_mage_integrated_closure_test",
+      "e04_swordsman_integrated_closure_test",
+      "e05_evolution_menu_integration_test",
+      "e06_tx_active_test",
+      "editor_import",
+      "menu_tabs_test",
+      "reward_feedback_test",
+      "skill_allocation_test",
+      "skill_window_test",
+      "smoke",
+      "ui_layout_test"
+    ],
+    "failed_latest_checks": [],
+    "per_check_timeout_seconds": 120,
+    "full_suite_rerun": false,
+    "semantic_independent_audit": false,
+    "supervision_note": "Os manifests representam execuções limitadas. Rechecks posteriores substituem apenas o status final daquela mesma verificação e todos os logs de tentativas anteriores permanecem referenciados. A suíte inteira de 223 etapas não foi executada.",
+    "native_probe": "O parent reportou import sem erros e SKILL_UX_NATIVE_OK para 1280/1920, 89 ícones em 32/64px, fundos claro/escuro; evidência independente do verify.ps1.",
+    "selected_check_union": [
+      "action_bar_input_test",
+      "action_bar_ui_test",
+      "battle_ui_test",
+      "e02_character_menu_test",
+      "e03_consumer_integration_test",
+      "e03_integrated_progression_flow_test",
+      "e03_progression_panel_integration_test",
+      "e03_progression_transactions_test",
+      "e04_archer_integrated_closure_test",
+      "e04_mage_integrated_closure_test",
+      "e04_swordsman_integrated_closure_test",
+      "e05_evolution_menu_integration_test",
+      "e06_tx_active_test",
+      "editor_import",
+      "menu_tabs_test",
+      "reward_feedback_test",
+      "skill_allocation_test",
+      "skill_window_test",
+      "smoke",
+      "ui_layout_test"
+    ],
+    "execution_runs": [
+      {
+        "directory": ".godot/verification/e06_skill_ux_luna",
+        "created_utc": "2026-10-14T18:34:16.7898757Z",
+        "runner_sha256": "22CC7DF5DC1014E211B174523D07CA4DB8F222DDCAD145D76ADACCD450DE95DE",
+        "plan_sha256": "9b50cdc9748ece4de7128b9d2709a13d1aca10fa0497a70397a957bd00414bb4",
+        "manifest_sha256": "342e7267eeb1c26b8ba03f2b554ee5250a4f61710a4d5c74035ca9fd6334cbda",
+        "selection": [
+          "editor_import",
+          "skill_allocation_test",
+          "skill_window_test",
+          "e02_character_menu_test",
+          "e03_progression_panel_integration_test",
+          "menu_tabs_test",
+          "e03_progression_transactions_test",
+          "e03_consumer_integration_test",
+          "e03_integrated_progression_flow_test",
+          "e05_evolution_menu_integration_test",
+          "action_bar_ui_test",
+          "action_bar_input_test",
+          "ui_layout_test",
+          "battle_ui_test",
+          "reward_feedback_test",
+          "smoke"
+        ],
+        "planned_steps": 16,
+        "checks": [
+          {
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna\\001.output.log",
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--editor",
+              "--import",
+              "--quit"
+            ],
+            "execution_index": 1,
+            "failed": false,
+            "name": "editor_import",
+            "exit_code": 0,
+            "timeout_seconds": 120,
+            "index": 1,
+            "timed_out": false,
+            "output_sha256": "176C4FC91E14AB42BC977EAD3351A2778500B21CA1C9F0C0A666A09B069C7FA6",
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna\\001.engine.log",
+            "output_relative": ".godot/verification/e06_skill_ux_luna/001.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna/001.engine.log",
+            "engine_log_sha256": "8be3557cc72b432c87442117e423ca3dec7406681873b672d968facff1b1a80a"
+          },
+          {
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna\\013-battle_ui_test.output.log",
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/battle_ui_test.gd"
+            ],
+            "execution_index": 2,
+            "failed": false,
+            "name": "battle_ui_test",
+            "exit_code": 0,
+            "timeout_seconds": 120,
+            "index": 13,
+            "timed_out": false,
+            "output_sha256": "F8318896CA4F69C73DFEE75D000BE93183454816283638EE4C14279A62749D21",
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna\\013-battle_ui_test.engine.log",
+            "output_relative": ".godot/verification/e06_skill_ux_luna/013-battle_ui_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna/013-battle_ui_test.engine.log",
+            "engine_log_sha256": "19ca805b5dac2a4ef977b786eccb964fa10557dcb15dffe014cd427381a81696"
+          },
+          {
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna\\015-ui_layout_test.output.log",
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/ui_layout_test.gd"
+            ],
+            "execution_index": 3,
+            "failed": true,
+            "name": "ui_layout_test",
+            "exit_code": 1,
+            "timeout_seconds": 120,
+            "index": 15,
+            "timed_out": false,
+            "output_sha256": "C6E2A162D40F3ED08DCD5BCF33D82B8FAA241856CDD041F453085485C330C370",
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna\\015-ui_layout_test.engine.log",
+            "output_relative": ".godot/verification/e06_skill_ux_luna/015-ui_layout_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna/015-ui_layout_test.engine.log",
+            "engine_log_sha256": "d942376e3038925e093ddca48012b95cd3026e8ab52414606b5e9f088f6bd73f"
+          }
+        ]
+      },
+      {
+        "directory": ".godot/verification/e06_skill_ux_luna_rerun_ui",
+        "created_utc": "2026-10-14T18:36:52.3530310Z",
+        "runner_sha256": "22CC7DF5DC1014E211B174523D07CA4DB8F222DDCAD145D76ADACCD450DE95DE",
+        "plan_sha256": "1b3aeed6e591c9a143b8257702179f4f762492796c1eee674053e75982682448",
+        "manifest_sha256": "b18ca7f4113abc7680d8be709ec718cfc198c50b3e7e82948d6f89daa0463bdd",
+        "selection": [
+          "editor_import",
+          "ui_layout_test"
+        ],
+        "planned_steps": 2,
+        "checks": [
+          {
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--editor",
+              "--import",
+              "--quit"
+            ],
+            "index": 1,
+            "exit_code": 0,
+            "failed": false,
+            "timeout_seconds": 120,
+            "execution_index": 1,
+            "output_sha256": "5DAB2EBAAA4F6C567ADD7DD0D4565A4E1149CD77B25B2A7B81C8A830FE93CC93",
+            "timed_out": false,
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_rerun_ui\\001.output.log",
+            "name": "editor_import",
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_rerun_ui\\001.engine.log",
+            "output_relative": ".godot/verification/e06_skill_ux_luna_rerun_ui/001.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_rerun_ui/001.engine.log",
+            "engine_log_sha256": "4f7575053f94be9ac60d2abcc11a06374ca74094f57fd15faacb8f8df7f9c4a5"
+          },
+          {
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/ui_layout_test.gd"
+            ],
+            "index": 15,
+            "exit_code": 0,
+            "failed": false,
+            "timeout_seconds": 120,
+            "execution_index": 2,
+            "output_sha256": "2221C3B8FF5B8BC13995CE03DF5ADDB87D48671AD7CA4B1B51601E3D859D9690",
+            "timed_out": false,
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_rerun_ui\\015-ui_layout_test.output.log",
+            "name": "ui_layout_test",
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_rerun_ui\\015-ui_layout_test.engine.log",
+            "output_relative": ".godot/verification/e06_skill_ux_luna_rerun_ui/015-ui_layout_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_rerun_ui/015-ui_layout_test.engine.log",
+            "engine_log_sha256": "786e497b3cda17d9d4270fa2899ce2432714eb98d4cf80ea908e593e1eb79a9b"
+          }
+        ]
+      },
+      {
+        "directory": ".godot/verification/e06_skill_ux_luna_rest",
+        "created_utc": "2026-10-14T18:37:21.2203126Z",
+        "runner_sha256": "22CC7DF5DC1014E211B174523D07CA4DB8F222DDCAD145D76ADACCD450DE95DE",
+        "plan_sha256": "1dad38d61ea0ab24536b547546ef4ae72e0565407927d61281bc0918a0218892",
+        "manifest_sha256": "34d8e699a92bdd015f3cedb45663dfa0e1d3569dc8384e081c44e5aaee13a1ec",
+        "selection": [
+          "skill_allocation_test",
+          "skill_window_test",
+          "e02_character_menu_test",
+          "e03_progression_panel_integration_test",
+          "menu_tabs_test",
+          "e03_progression_transactions_test",
+          "e03_consumer_integration_test",
+          "e03_integrated_progression_flow_test",
+          "e05_evolution_menu_integration_test",
+          "action_bar_ui_test",
+          "action_bar_input_test",
+          "reward_feedback_test",
+          "smoke"
+        ],
+        "planned_steps": 13,
+        "checks": [
+          {
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_rest\\022-e02_character_menu_test.engine.log",
+            "exit_code": 0,
+            "execution_index": 1,
+            "output_sha256": "92E8322739E3F81D8741FB767086745D0012C5B6A7B991C3B90A90688B3FA116",
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_rest\\022-e02_character_menu_test.output.log",
+            "timeout_seconds": 120,
+            "timed_out": false,
+            "index": 22,
+            "failed": false,
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/e02_character_menu_test.gd"
+            ],
+            "name": "e02_character_menu_test",
+            "output_relative": ".godot/verification/e06_skill_ux_luna_rest/022-e02_character_menu_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_rest/022-e02_character_menu_test.engine.log",
+            "engine_log_sha256": "990b05c907abfcc4ffb6d1ca0ddce8bd0e40d26462605bf3d45d07d08c6e709f"
+          },
+          {
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_rest\\024-menu_tabs_test.engine.log",
+            "exit_code": 0,
+            "execution_index": 2,
+            "output_sha256": "C8527D79178E7D2A7585CDCFE9F0A5A606375083487944B559B41A912F8CC41C",
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_rest\\024-menu_tabs_test.output.log",
+            "timeout_seconds": 120,
+            "timed_out": false,
+            "index": 24,
+            "failed": false,
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/menu_tabs_test.gd"
+            ],
+            "name": "menu_tabs_test",
+            "output_relative": ".godot/verification/e06_skill_ux_luna_rest/024-menu_tabs_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_rest/024-menu_tabs_test.engine.log",
+            "engine_log_sha256": "7a1add619207bef9c712fe46fb2b96e193b535bfa97ba2144be41c40156f0223"
+          },
+          {
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_rest\\031-e03_progression_transactions_test.engine.log",
+            "exit_code": 0,
+            "execution_index": 3,
+            "output_sha256": "3A00F5DA9D88D204D0A5BFABF4E711B0B07C69DC0A0986996B98211B971596DD",
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_rest\\031-e03_progression_transactions_test.output.log",
+            "timeout_seconds": 120,
+            "timed_out": false,
+            "index": 31,
+            "failed": false,
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/e03_progression_transactions_test.gd"
+            ],
+            "name": "e03_progression_transactions_test",
+            "output_relative": ".godot/verification/e06_skill_ux_luna_rest/031-e03_progression_transactions_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_rest/031-e03_progression_transactions_test.engine.log",
+            "engine_log_sha256": "60afecd7f36d35ec582a3ed051b4b271edbe90f679f1842be7711583f1f9b772"
+          },
+          {
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_rest\\032-e03_progression_panel_integration_test.engine.log",
+            "exit_code": 0,
+            "execution_index": 4,
+            "output_sha256": "4498C889E864F8D5125B6016F9E9C4B2929D303162CD8632C9BB73C26A470CCD",
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_rest\\032-e03_progression_panel_integration_test.output.log",
+            "timeout_seconds": 120,
+            "timed_out": false,
+            "index": 32,
+            "failed": false,
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/e03_progression_panel_integration_test.gd"
+            ],
+            "name": "e03_progression_panel_integration_test",
+            "output_relative": ".godot/verification/e06_skill_ux_luna_rest/032-e03_progression_panel_integration_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_rest/032-e03_progression_panel_integration_test.engine.log",
+            "engine_log_sha256": "89b6cd18dfd3825a7eb5f04cd2cef38b3b4bc8b90c710febb045d1040d5c64d1"
+          },
+          {
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_rest\\033-e03_consumer_integration_test.engine.log",
+            "exit_code": 0,
+            "execution_index": 5,
+            "output_sha256": "E3C286942B7C07FD76A5B55BE2615203DD98F20C2B5D121E669A65EE2C3C7FB8",
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_rest\\033-e03_consumer_integration_test.output.log",
+            "timeout_seconds": 120,
+            "timed_out": false,
+            "index": 33,
+            "failed": false,
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/e03_consumer_integration_test.gd"
+            ],
+            "name": "e03_consumer_integration_test",
+            "output_relative": ".godot/verification/e06_skill_ux_luna_rest/033-e03_consumer_integration_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_rest/033-e03_consumer_integration_test.engine.log",
+            "engine_log_sha256": "c2ccf8a9678013aef20fe7509b4451e2d486ca0b2e7f3f086f055b1f4eb6bcaf"
+          },
+          {
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_rest\\034-e03_integrated_progression_flow_test.engine.log",
+            "exit_code": 0,
+            "execution_index": 6,
+            "output_sha256": "BAF3A8DF3239BBEEAEC2DAE2437BF9E67DFFFA9346B49166C0D00A2055C7523B",
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_rest\\034-e03_integrated_progression_flow_test.output.log",
+            "timeout_seconds": 120,
+            "timed_out": false,
+            "index": 34,
+            "failed": false,
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/e03_integrated_progression_flow_test.gd"
+            ],
+            "name": "e03_integrated_progression_flow_test",
+            "output_relative": ".godot/verification/e06_skill_ux_luna_rest/034-e03_integrated_progression_flow_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_rest/034-e03_integrated_progression_flow_test.engine.log",
+            "engine_log_sha256": "61fae8971f72775ac22d3325695a6720a8e3bef0e1d479afcc86b19390b04201"
+          },
+          {
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_rest\\093-e05_evolution_menu_integration_test.engine.log",
+            "exit_code": 0,
+            "execution_index": 7,
+            "output_sha256": "F7FAD22D8C8C3DF884488FEF1B4B72573D26BB7624F5543FCE8BF32D78D0E83B",
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_rest\\093-e05_evolution_menu_integration_test.output.log",
+            "timeout_seconds": 120,
+            "timed_out": false,
+            "index": 93,
+            "failed": true,
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/e05_evolution_menu_integration_test.gd"
+            ],
+            "name": "e05_evolution_menu_integration_test",
+            "output_relative": ".godot/verification/e06_skill_ux_luna_rest/093-e05_evolution_menu_integration_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_rest/093-e05_evolution_menu_integration_test.engine.log",
+            "engine_log_sha256": "e23203e2b0a1994e4339277e6a04b23282d3183cd9d0685b40cdafcd4ae912e2"
+          }
+        ]
+      },
+      {
+        "directory": ".godot/verification/e06_skill_ux_luna_tail",
+        "created_utc": "2026-10-14T18:39:13.5327215Z",
+        "runner_sha256": "22CC7DF5DC1014E211B174523D07CA4DB8F222DDCAD145D76ADACCD450DE95DE",
+        "plan_sha256": "543dc805cb3ae4255ce6455818fdf631f957bf7021d870bd14ac8199a00d44d6",
+        "manifest_sha256": "745da8222a278c6afc83611e98508662cc10e9e516ef3afb8ee49bfc1cfa73b3",
+        "selection": [
+          "action_bar_ui_test",
+          "action_bar_input_test",
+          "reward_feedback_test",
+          "skill_allocation_test",
+          "skill_window_test",
+          "smoke"
+        ],
+        "planned_steps": 6,
+        "checks": [
+          {
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_tail\\142-action_bar_input_test.output.log",
+            "execution_index": 1,
+            "output_sha256": "6AB5589AB3E259944655BF94CFFFA36F08ABFFDCD050BB1563E24101ADC96098",
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/action_bar_input_test.gd"
+            ],
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_tail\\142-action_bar_input_test.engine.log",
+            "exit_code": 0,
+            "name": "action_bar_input_test",
+            "failed": false,
+            "timeout_seconds": 120,
+            "index": 142,
+            "timed_out": false,
+            "output_relative": ".godot/verification/e06_skill_ux_luna_tail/142-action_bar_input_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_tail/142-action_bar_input_test.engine.log",
+            "engine_log_sha256": "e33c2e2c345f05d431fbacbfab8c1e512dd2671ac7428d86b4c61ddbb71878d5"
+          },
+          {
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_tail\\143-action_bar_ui_test.output.log",
+            "execution_index": 2,
+            "output_sha256": "10A14E55AAF59FC48FD1C186DC7DD8FBE0E661FED49998E329E55BD0AD998215",
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/action_bar_ui_test.gd"
+            ],
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_tail\\143-action_bar_ui_test.engine.log",
+            "exit_code": 0,
+            "name": "action_bar_ui_test",
+            "failed": false,
+            "timeout_seconds": 120,
+            "index": 143,
+            "timed_out": false,
+            "output_relative": ".godot/verification/e06_skill_ux_luna_tail/143-action_bar_ui_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_tail/143-action_bar_ui_test.engine.log",
+            "engine_log_sha256": "f7835a4518b09315f82fa5e46ac2056585b60de51acf292e0b55ea87c2ab0685"
+          },
+          {
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_tail\\177.output.log",
+            "execution_index": 3,
+            "output_sha256": "99A1F5C05F8B42A98C1353A644C0527B7FBDEBFB7A944ACD272CCF7D46CC34A6",
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--quit-after",
+              "5"
+            ],
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_tail\\177.engine.log",
+            "exit_code": 0,
+            "name": "smoke",
+            "failed": false,
+            "timeout_seconds": 120,
+            "index": 177,
+            "timed_out": false,
+            "output_relative": ".godot/verification/e06_skill_ux_luna_tail/177.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_tail/177.engine.log",
+            "engine_log_sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+          },
+          {
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_tail\\221-reward_feedback_test.output.log",
+            "execution_index": 4,
+            "output_sha256": "76E1CC29885E18047F395402C03FF9357B67F8D2EE4F4D614BEC91B396DA8589",
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/reward_feedback_test.gd"
+            ],
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_tail\\221-reward_feedback_test.engine.log",
+            "exit_code": 0,
+            "name": "reward_feedback_test",
+            "failed": false,
+            "timeout_seconds": 120,
+            "index": 221,
+            "timed_out": false,
+            "output_relative": ".godot/verification/e06_skill_ux_luna_tail/221-reward_feedback_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_tail/221-reward_feedback_test.engine.log",
+            "engine_log_sha256": "8416ef0f3a36bf19a44fb70c7c148cbd5269e89f6525cfea33303e072bbd0d55"
+          },
+          {
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_tail\\222-skill_allocation_test.output.log",
+            "execution_index": 5,
+            "output_sha256": "4BBF4DE594BE8F142DB94129FC154393A17EBD463F30E86A1BDBB35A500317A8",
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/skill_allocation_test.gd"
+            ],
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_tail\\222-skill_allocation_test.engine.log",
+            "exit_code": 0,
+            "name": "skill_allocation_test",
+            "failed": false,
+            "timeout_seconds": 120,
+            "index": 222,
+            "timed_out": false,
+            "output_relative": ".godot/verification/e06_skill_ux_luna_tail/222-skill_allocation_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_tail/222-skill_allocation_test.engine.log",
+            "engine_log_sha256": "e66626469f528f0d6681689a5fd6346a8aae1410a376897daf45ce0c96dc5cda"
+          },
+          {
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_tail\\223-skill_window_test.output.log",
+            "execution_index": 6,
+            "output_sha256": "5ED1BFF70183F837025F50586D947F7AE9468699FEB047D81215ACE71ED51DE7",
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/skill_window_test.gd"
+            ],
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_tail\\223-skill_window_test.engine.log",
+            "exit_code": 0,
+            "name": "skill_window_test",
+            "failed": false,
+            "timeout_seconds": 120,
+            "index": 223,
+            "timed_out": false,
+            "output_relative": ".godot/verification/e06_skill_ux_luna_tail/223-skill_window_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_tail/223-skill_window_test.engine.log",
+            "engine_log_sha256": "e8dafba35273471f24a799eabcbc6f55f6e669dec3b003988d05d1de5701f8ab"
+          }
+        ]
+      },
+      {
+        "directory": ".godot/verification/e06_skill_ux_luna_final_7",
+        "created_utc": "2026-10-14T18:43:34.5430597Z",
+        "runner_sha256": "22CC7DF5DC1014E211B174523D07CA4DB8F222DDCAD145D76ADACCD450DE95DE",
+        "plan_sha256": "7f3fb0cf8a675dc468835c8fe778b3df21016807d770d23194c1781301587492",
+        "manifest_sha256": "1d5611a7378ae4fd57e73b445278b1cdf73b1518009f6ac8a971c5eb61d3eed8",
+        "selection": [
+          "e04_archer_integrated_closure_test",
+          "e04_mage_integrated_closure_test",
+          "e04_swordsman_integrated_closure_test",
+          "e05_evolution_menu_integration_test",
+          "e06_tx_active_test",
+          "skill_window_test",
+          "ui_layout_test"
+        ],
+        "planned_steps": 7,
+        "checks": [
+          {
+            "timed_out": false,
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_7\\015-ui_layout_test.engine.log",
+            "timeout_seconds": 120,
+            "execution_index": 1,
+            "index": 15,
+            "failed": false,
+            "name": "ui_layout_test",
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/ui_layout_test.gd"
+            ],
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_7\\015-ui_layout_test.output.log",
+            "output_sha256": "2221C3B8FF5B8BC13995CE03DF5ADDB87D48671AD7CA4B1B51601E3D859D9690",
+            "exit_code": 0,
+            "output_relative": ".godot/verification/e06_skill_ux_luna_final_7/015-ui_layout_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_final_7/015-ui_layout_test.engine.log",
+            "engine_log_sha256": "786e497b3cda17d9d4270fa2899ce2432714eb98d4cf80ea908e593e1eb79a9b"
+          },
+          {
+            "timed_out": false,
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_7\\070-e04_archer_integrated_closure_test.engine.log",
+            "timeout_seconds": 120,
+            "execution_index": 2,
+            "index": 70,
+            "failed": true,
+            "name": "e04_archer_integrated_closure_test",
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/e04_archer_integrated_closure_test.gd"
+            ],
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_7\\070-e04_archer_integrated_closure_test.output.log",
+            "output_sha256": "2D03B12CB1C8C23FB946498ADAAD607FE33D51894E1492E1AF471B8889B1C186",
+            "exit_code": 1,
+            "output_relative": ".godot/verification/e06_skill_ux_luna_final_7/070-e04_archer_integrated_closure_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_final_7/070-e04_archer_integrated_closure_test.engine.log",
+            "engine_log_sha256": "6091e8c3fc83ced1cce8d84c1b963619164605cf3a5354b8204b6742ab03c5c7"
+          }
+        ]
+      },
+      {
+        "directory": ".godot/verification/e06_skill_ux_luna_other",
+        "created_utc": "2026-10-14T18:45:27.5780649Z",
+        "runner_sha256": "22CC7DF5DC1014E211B174523D07CA4DB8F222DDCAD145D76ADACCD450DE95DE",
+        "plan_sha256": "8d8fed1302c9f27be655c29e3bfb6d3cf2e3d92fc8e5bb085a313f4443a2fc6a",
+        "manifest_sha256": "e7c4ac104a381c5fae8a7db06d293fedb9c6e10b930337716b3fd6284ce3cb09",
+        "selection": [
+          "e04_mage_integrated_closure_test",
+          "e04_swordsman_integrated_closure_test",
+          "e05_evolution_menu_integration_test",
+          "e06_tx_active_test",
+          "skill_window_test"
+        ],
+        "planned_steps": 5,
+        "checks": [
+          {
+            "output_sha256": "AC21763D574CC82D910402DF377B017AF416A1CA853BA372F9E400EDCA6D3C7E",
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/e04_mage_integrated_closure_test.gd"
+            ],
+            "execution_index": 1,
+            "name": "e04_mage_integrated_closure_test",
+            "index": 78,
+            "failed": true,
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_other\\078-e04_mage_integrated_closure_test.engine.log",
+            "exit_code": 1,
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_other\\078-e04_mage_integrated_closure_test.output.log",
+            "timeout_seconds": 120,
+            "timed_out": false,
+            "output_relative": ".godot/verification/e06_skill_ux_luna_other/078-e04_mage_integrated_closure_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_other/078-e04_mage_integrated_closure_test.engine.log",
+            "engine_log_sha256": "f60c5aa4236bfe75742f06eb8ff0fda583b58a73a532938e57e55d8d86f9f13a"
+          }
+        ]
+      },
+      {
+        "directory": ".godot/verification/e06_skill_ux_luna_other2",
+        "created_utc": "2026-10-14T18:45:57.3420999Z",
+        "runner_sha256": "22CC7DF5DC1014E211B174523D07CA4DB8F222DDCAD145D76ADACCD450DE95DE",
+        "plan_sha256": "fbe60bae131e3eadadf8ab9eb414e0e29e72f5ed959765f3f15c53554d074386",
+        "manifest_sha256": "ca7064f403e26472ae759b0617a81e23a39120b856dee5c1cb73d7fefa4cd82a",
+        "selection": [
+          "e04_swordsman_integrated_closure_test",
+          "e05_evolution_menu_integration_test",
+          "e06_tx_active_test",
+          "skill_window_test"
+        ],
+        "planned_steps": 4,
+        "checks": [
+          {
+            "index": 89,
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_other2\\089-e04_swordsman_integrated_closure_test.engine.log",
+            "exit_code": 1,
+            "execution_index": 1,
+            "timed_out": false,
+            "timeout_seconds": 120,
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_other2\\089-e04_swordsman_integrated_closure_test.output.log",
+            "output_sha256": "5315D59F06AECC0B422795FCECB9392F1C9A2D89BDB62E125D240AB93B2D293C",
+            "failed": true,
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/e04_swordsman_integrated_closure_test.gd"
+            ],
+            "name": "e04_swordsman_integrated_closure_test",
+            "output_relative": ".godot/verification/e06_skill_ux_luna_other2/089-e04_swordsman_integrated_closure_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_other2/089-e04_swordsman_integrated_closure_test.engine.log",
+            "engine_log_sha256": "75fedeb6e38532b936e7f8b938f627852ea2f95aa9b465198b1a4d3023bc343c"
+          }
+        ]
+      },
+      {
+        "directory": ".godot/verification/e06_skill_ux_luna_final_rest",
+        "created_utc": "2026-10-14T18:46:23.2093817Z",
+        "runner_sha256": "22CC7DF5DC1014E211B174523D07CA4DB8F222DDCAD145D76ADACCD450DE95DE",
+        "plan_sha256": "09518ba942d92534b98cd20e424b2d62f01abdff2bed7b248217b3803a279f95",
+        "manifest_sha256": "361288e767cff7975c8f8d2680f671c25c5eb962ba156f492366f221facd8679",
+        "selection": [
+          "e05_evolution_menu_integration_test",
+          "e06_tx_active_test",
+          "skill_window_test"
+        ],
+        "planned_steps": 3,
+        "checks": [
+          {
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_rest\\093-e05_evolution_menu_integration_test.engine.log",
+            "timed_out": false,
+            "failed": false,
+            "execution_index": 1,
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_rest\\093-e05_evolution_menu_integration_test.output.log",
+            "output_sha256": "4971C5F9BD615E8CFB872B89BA8A5ECF2F0704506752BF6D788A5A8C3A7D341C",
+            "timeout_seconds": 120,
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/e05_evolution_menu_integration_test.gd"
+            ],
+            "exit_code": 0,
+            "name": "e05_evolution_menu_integration_test",
+            "index": 93,
+            "output_relative": ".godot/verification/e06_skill_ux_luna_final_rest/093-e05_evolution_menu_integration_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_final_rest/093-e05_evolution_menu_integration_test.engine.log",
+            "engine_log_sha256": "dbded7fae3a0fb44d0b628653d6450382d12dad8e9abcf55a1afc24499e8bf32"
+          },
+          {
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_rest\\187-e06_tx_active_test.engine.log",
+            "timed_out": false,
+            "failed": false,
+            "execution_index": 2,
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_rest\\187-e06_tx_active_test.output.log",
+            "output_sha256": "639C3CD9F61B1C2233E3B8A4D05B7F3F189282421100D7248362526DEBEE3E18",
+            "timeout_seconds": 120,
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/e06_tx_active_test.gd"
+            ],
+            "exit_code": 0,
+            "name": "e06_tx_active_test",
+            "index": 187,
+            "output_relative": ".godot/verification/e06_skill_ux_luna_final_rest/187-e06_tx_active_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_final_rest/187-e06_tx_active_test.engine.log",
+            "engine_log_sha256": "6e415f9ddf7f1e7709e7901d353c93d14b35b9fae0b79ac60714070d992ec9e9"
+          },
+          {
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_rest\\223-skill_window_test.engine.log",
+            "timed_out": false,
+            "failed": true,
+            "execution_index": 3,
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_rest\\223-skill_window_test.output.log",
+            "output_sha256": "651FAF66CAD20B36DB42706F2C7E52C9FDA95C38CA7478C627949398935C1288",
+            "timeout_seconds": 120,
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/skill_window_test.gd"
+            ],
+            "exit_code": 1,
+            "name": "skill_window_test",
+            "index": 223,
+            "output_relative": ".godot/verification/e06_skill_ux_luna_final_rest/223-skill_window_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_final_rest/223-skill_window_test.engine.log",
+            "engine_log_sha256": "268d8ecabb38c372d21f6ab09fad5ea363ef857e6f7dc2fb8dd5651a752e1cbe"
+          }
+        ]
+      },
+      {
+        "directory": ".godot/verification/e06_skill_ux_luna_final_7b",
+        "created_utc": "2026-10-14T18:47:23.3418118Z",
+        "runner_sha256": "22CC7DF5DC1014E211B174523D07CA4DB8F222DDCAD145D76ADACCD450DE95DE",
+        "plan_sha256": "e8b2851f1aa6991fbbce7e3288c31021c1b8d8ea6ed0ba120121af45fea64e3a",
+        "manifest_sha256": "34547652632412aa689fe89ef9b90994c0460bf1247b1df2059aefe12515a49b",
+        "selection": [
+          "e04_archer_integrated_closure_test",
+          "e04_mage_integrated_closure_test",
+          "e04_swordsman_integrated_closure_test",
+          "e05_evolution_menu_integration_test",
+          "e06_tx_active_test",
+          "skill_window_test",
+          "ui_layout_test"
+        ],
+        "planned_steps": 7,
+        "checks": [
+          {
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/ui_layout_test.gd"
+            ],
+            "timed_out": false,
+            "execution_index": 1,
+            "failed": false,
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_7b\\015-ui_layout_test.output.log",
+            "output_sha256": "2221C3B8FF5B8BC13995CE03DF5ADDB87D48671AD7CA4B1B51601E3D859D9690",
+            "timeout_seconds": 120,
+            "index": 15,
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_7b\\015-ui_layout_test.engine.log",
+            "name": "ui_layout_test",
+            "exit_code": 0,
+            "output_relative": ".godot/verification/e06_skill_ux_luna_final_7b/015-ui_layout_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_final_7b/015-ui_layout_test.engine.log",
+            "engine_log_sha256": "786e497b3cda17d9d4270fa2899ce2432714eb98d4cf80ea908e593e1eb79a9b"
+          },
+          {
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/e04_archer_integrated_closure_test.gd"
+            ],
+            "timed_out": false,
+            "execution_index": 2,
+            "failed": false,
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_7b\\070-e04_archer_integrated_closure_test.output.log",
+            "output_sha256": "B19B5DAE9FD607E22793D8C30F54776AE203EA131C916CB73608B95A06653EB9",
+            "timeout_seconds": 120,
+            "index": 70,
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_7b\\070-e04_archer_integrated_closure_test.engine.log",
+            "name": "e04_archer_integrated_closure_test",
+            "exit_code": 0,
+            "output_relative": ".godot/verification/e06_skill_ux_luna_final_7b/070-e04_archer_integrated_closure_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_final_7b/070-e04_archer_integrated_closure_test.engine.log",
+            "engine_log_sha256": "cd24305d0230af8d7f76e420656505742b356d38645ab31a346ab97c12c055a2"
+          },
+          {
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/e04_mage_integrated_closure_test.gd"
+            ],
+            "timed_out": false,
+            "execution_index": 3,
+            "failed": false,
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_7b\\078-e04_mage_integrated_closure_test.output.log",
+            "output_sha256": "0294A23EDDA31E643FE0F8EAD223304197BA646832849DAEAA1EBF9BF2BC90AB",
+            "timeout_seconds": 120,
+            "index": 78,
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_7b\\078-e04_mage_integrated_closure_test.engine.log",
+            "name": "e04_mage_integrated_closure_test",
+            "exit_code": 0,
+            "output_relative": ".godot/verification/e06_skill_ux_luna_final_7b/078-e04_mage_integrated_closure_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_final_7b/078-e04_mage_integrated_closure_test.engine.log",
+            "engine_log_sha256": "01debee531a89ff813b9a862fdb42ccb7ea5cff63d4a146ed7c57ae320f02fe3"
+          },
+          {
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/e04_swordsman_integrated_closure_test.gd"
+            ],
+            "timed_out": false,
+            "execution_index": 4,
+            "failed": false,
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_7b\\089-e04_swordsman_integrated_closure_test.output.log",
+            "output_sha256": "97BB20D222D309177714ADA2F785FCD684A8A2C97156C6F0B0CAC80A5B228CFE",
+            "timeout_seconds": 120,
+            "index": 89,
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_7b\\089-e04_swordsman_integrated_closure_test.engine.log",
+            "name": "e04_swordsman_integrated_closure_test",
+            "exit_code": 0,
+            "output_relative": ".godot/verification/e06_skill_ux_luna_final_7b/089-e04_swordsman_integrated_closure_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_final_7b/089-e04_swordsman_integrated_closure_test.engine.log",
+            "engine_log_sha256": "4c3261ff1b0d77e5ebcf900c72c7946b5294a98ef2c4857dfe5d12478d27721b"
+          },
+          {
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/e05_evolution_menu_integration_test.gd"
+            ],
+            "timed_out": false,
+            "execution_index": 5,
+            "failed": false,
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_7b\\093-e05_evolution_menu_integration_test.output.log",
+            "output_sha256": "4971C5F9BD615E8CFB872B89BA8A5ECF2F0704506752BF6D788A5A8C3A7D341C",
+            "timeout_seconds": 120,
+            "index": 93,
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_7b\\093-e05_evolution_menu_integration_test.engine.log",
+            "name": "e05_evolution_menu_integration_test",
+            "exit_code": 0,
+            "output_relative": ".godot/verification/e06_skill_ux_luna_final_7b/093-e05_evolution_menu_integration_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_final_7b/093-e05_evolution_menu_integration_test.engine.log",
+            "engine_log_sha256": "dbded7fae3a0fb44d0b628653d6450382d12dad8e9abcf55a1afc24499e8bf32"
+          },
+          {
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/e06_tx_active_test.gd"
+            ],
+            "timed_out": false,
+            "execution_index": 6,
+            "failed": false,
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_7b\\187-e06_tx_active_test.output.log",
+            "output_sha256": "639C3CD9F61B1C2233E3B8A4D05B7F3F189282421100D7248362526DEBEE3E18",
+            "timeout_seconds": 120,
+            "index": 187,
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_7b\\187-e06_tx_active_test.engine.log",
+            "name": "e06_tx_active_test",
+            "exit_code": 0,
+            "output_relative": ".godot/verification/e06_skill_ux_luna_final_7b/187-e06_tx_active_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_final_7b/187-e06_tx_active_test.engine.log",
+            "engine_log_sha256": "6e415f9ddf7f1e7709e7901d353c93d14b35b9fae0b79ac60714070d992ec9e9"
+          },
+          {
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--script",
+              "res://tests/skill_window_test.gd"
+            ],
+            "timed_out": false,
+            "execution_index": 7,
+            "failed": false,
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_7b\\223-skill_window_test.output.log",
+            "output_sha256": "246F69F3FBBD2F8B2BAA6D8AC737CF28F6A01420EE864D3BD705876CC64C690D",
+            "timeout_seconds": 120,
+            "index": 223,
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_7b\\223-skill_window_test.engine.log",
+            "name": "skill_window_test",
+            "exit_code": 0,
+            "output_relative": ".godot/verification/e06_skill_ux_luna_final_7b/223-skill_window_test.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_final_7b/223-skill_window_test.engine.log",
+            "engine_log_sha256": "908e86ab9014fef690378a0bdc65e90357de692728991e7f77f9d6e315fc48de"
+          }
+        ]
+      },
+      {
+        "directory": ".godot/verification/e06_skill_ux_luna_final_import",
+        "created_utc": "2026-10-14T18:49:32.3409800Z",
+        "runner_sha256": "22CC7DF5DC1014E211B174523D07CA4DB8F222DDCAD145D76ADACCD450DE95DE",
+        "plan_sha256": "52e3228dffe393c3fc670f2e954a405c162c17bb22dc1467dde9b662caa6f02d",
+        "manifest_sha256": "87e3fff65b876033bb6a77c13d09945cd73391cc8f3fc7e0e8938ca3edfadf31",
+        "selection": [
+          "editor_import"
+        ],
+        "planned_steps": 1,
+        "checks": [
+          {
+            "exit_code": 0,
+            "arguments": [
+              "--headless",
+              "--path",
+              "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+              "--editor",
+              "--import",
+              "--quit"
+            ],
+            "output_sha256": "54B6A989D7D3ADB6D6588C57FC3FB63F617C423B7E7DEAA72B1746BEC8554C9D",
+            "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_import\\001.output.log",
+            "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_luna_final_import\\001.engine.log",
+            "timeout_seconds": 120,
+            "index": 1,
+            "timed_out": false,
+            "failed": false,
+            "execution_index": 1,
+            "name": "editor_import",
+            "output_relative": ".godot/verification/e06_skill_ux_luna_final_import/001.output.log",
+            "engine_log_relative": ".godot/verification/e06_skill_ux_luna_final_import/001.engine.log",
+            "engine_log_sha256": "1bb1e155aaea3c394f3d9e894c2b11c857658101a616c4043192327e8ee97bb4"
+          }
+        ]
+      }
+    ],
+    "initial_failures_and_resolutions": [
+      {
+        "check": "ui_layout_test",
+        "initial_result": "Falha em controls modal fits viewport (1280, 720).",
+        "resolution": "Sol limitou o conteúdo de settings com ScrollContainer no painel; recheck de editor_import + ui_layout passou, 30 checks."
+      },
+      {
+        "check": "e05_evolution_menu_integration_test",
+        "initial_result": "Dois acessos ao membro removido progression_skill_tree em fixtures de evolução com IDs sem SkillDefinition publicada.",
+        "resolution": "Teste agora verifica grant pelo progression_summary.effective_skill_ranks e metadados do DTO; exige que IDs não publicados não ganhem widgets fictícios; 25 checks passam."
+      },
+      {
+        "check": "e04_archer_integrated_closure_test",
+        "initial_result": "Dois fails de fixture enemies.size em runs E04, agora ligadas à extensão de gameplay E06.",
+        "resolution": "Cada fixture E04 seta pending_gameplay_extension=false antes da troca de cena e verifica gameplay_extension=false; preservados os oráculos de mobs e gameplay; 84 checks passam."
+      },
+      {
+        "check": "e04_mage_integrated_closure_test",
+        "initial_result": "Dois fails de barreira espiritual por coordenadas/estado do mapa E06 ampliado.",
+        "resolution": "Fixture E04 usa explicitamente a arena legada sem extensão E06; barreira e projétil continuam com os oráculos originais; 105 checks passam."
+      },
+      {
+        "check": "e04_swordsman_integrated_closure_test",
+        "initial_result": "Dois fails de inimigos melee/ranged devido à extensão E06 no fixture legado.",
+        "resolution": "Fixture E04 usa explicitamente a arena legada sem extensão E06; 82 checks passam."
+      },
+      {
+        "check": "skill_window_test",
+        "initial_result": "A asserção de contraste usou método Color.luminance() inexistente.",
+        "resolution": "Teste calcula luminância relativa em canais sRGB e exige >=0.8 para a cor explícita do tooltip sob tema claro; 41 checks passam."
+      },
+      {
+        "check": "e02_character_menu_test",
+        "initial_result": "A dica de atalhos foi movida do botão para a área de detalhes.",
+        "resolution": "Asserção acompanha o texto visível na área de detalhes; asserção de XP, carteiras, caps e ranks segue igual; 26 checks passam."
+      }
+    ],
+    "adapted_legacy_consumers": [
+      {
+        "test": "e02_character_menu_test",
+        "migration": "progression_skill_tree -> SkillWindow.skill_entries e texto da área de detalhes.",
+        "preserved": "XP, carteiras, caps, compra e retry, presets, save e foco do personagem."
+      },
+      {
+        "test": "e03_progression_panel_integration_test",
+        "migration": "rank consultado no DTO de skill_window.",
+        "preserved": "progression, atributos, build snapshot, persistência e run snapshot."
+      },
+      {
+        "test": "menu_tabs_test",
+        "migration": "tabs/lista de skills publicadas substituem busca/árvore antiga.",
+        "preserved": "navegação por teclado, rank/locks, preset/action bar e evolução."
+      },
+      {
+        "test": "e05_evolution_menu_integration_test",
+        "migration": "grants gratuitos consultados pelo resumo canônico e DTO; sem widgets para IDs fixture não publicados.",
+        "preserved": "confirmação, retry/stale, reembolso, presets e cleanup exato."
+      },
+      {
+        "test": "e04_archer_integrated_closure_test",
+        "migration": "janela publicada substitui label/button progression_skill_tree; execução E04 explicitamente sem extensão E06.",
+        "preserved": "ranks, compras, carteiras, presets, action slots, ataques e recompensa."
+      },
+      {
+        "test": "e04_mage_integrated_closure_test",
+        "migration": "janela publicada substitui label/button progression_skill_tree; execução E04 explicitamente sem extensão E06.",
+        "preserved": "ranks, compras, carteiras, presets, action slots, barreira e recompensa."
+      },
+      {
+        "test": "e04_swordsman_integrated_closure_test",
+        "migration": "janela publicada substitui label/button progression_skill_tree; execução E04 explicitamente sem extensão E06.",
+        "preserved": "ranks, compras, carteiras, presets, action slots e encontros."
+      }
+    ],
+    "oracle_changes": "Nenhum resultado esperado de regra/transação foi relaxado. Os três consumidores E04 explicitam o modo de arena legado que seus oráculos pressupõem; o conteúdo E06 segue coberto pelos testes E06/native probe."
+  },
+  "evidence_directories": [
+    ".godot/verification/e06_skill_ux_luna",
+    ".godot/verification/e06_skill_ux_luna_rerun_ui",
+    ".godot/verification/e06_skill_ux_luna_rest",
+    ".godot/verification/e06_skill_ux_luna_tail",
+    ".godot/verification/e06_skill_ux_luna_final_7",
+    ".godot/verification/e06_skill_ux_luna_other",
+    ".godot/verification/e06_skill_ux_luna_other2",
+    ".godot/verification/e06_skill_ux_luna_final_rest",
+    ".godot/verification/e06_skill_ux_luna_final_7b",
+    ".godot/verification/e06_skill_ux_luna_final_import"
+  ]
+}
