@@ -1,0 +1,190 @@
+{
+  "status": "applied_verified",
+  "role": "technical_validator",
+  "validator": "Sol",
+  "runtime_commit": "a0d877df8a0a85b5ece24409a91d1349f21a60b2",
+  "candidate_commit": "2b5e66c07278a8402727d3be5b58b8b8980e0034",
+  "previous_target": "fe35332a6e84e628ada24ca72e91fdf54971f466",
+  "target": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+  "target_branch": "codex/playtest",
+  "operation": "fast-forward --no-overwrite-ignore",
+  "preflight": {
+    "candidate": "2b5e66c07278a8402727d3be5b58b8b8980e0034",
+    "runtime_commit": "a0d877df8a0a85b5ece24409a91d1349f21a60b2",
+    "previous_target": "fe35332a6e84e628ada24ca72e91fdf54971f466",
+    "approval": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux\\approval.json",
+    "cli_diagnostic": {
+      "supported": false,
+      "reason": "Evidência inválida/alterada",
+      "explanation": "Legacy CLI requires role=reviewer; current WORKFLOW permits technical_validator. Role is not fabricated."
+    },
+    "clean_source_and_target": true,
+    "same_repository": true,
+    "fast_forward": true,
+    "ignored_collisions": [],
+    "personal_before": {
+      "profile.json": "9d46ee59c48e4cdaba0c17b6d91dc7f42e16e757131fd58225fb88986ae0c0fe",
+      "profile.backup.json": "9371a027f3e8c755138914ff7e9a0a125be0ba46e23cd5a77b3f018e42c11c73",
+      "controls.cfg": "a11cac61ce45a85dca9ee3189359639ef7ff14723822a958b1674d25c9f3e22f"
+    },
+    "external_cli": {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\menu-tabs\\RagRPG\\tools\\workflow\\workflow.py",
+      "sha256": "e642dbe882cd7ea3cd687da51ed978bdecc93675fbb31d08d26626a0b40a1bae",
+      "origin": "0c008d4843d13f772aa2b69be22d24d2300b80a1"
+    }
+  },
+  "target_checks": [
+    {
+      "failed": false,
+      "timed_out": false,
+      "exit_code": 0,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "execution_index": 1,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux\\apply_checks\\001.engine.log",
+      "name": "editor_import",
+      "output_sha256": "9F014C0234E2957B6FAFDF3FA6BBEDD4A5390B3A064D21484D4D355349774EC0",
+      "index": 1,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux\\apply_checks\\001.output.log",
+      "timeout_seconds": 120
+    },
+    {
+      "failed": false,
+      "timed_out": false,
+      "exit_code": 0,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--quit-after",
+        "5"
+      ],
+      "execution_index": 2,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux\\apply_checks\\177.engine.log",
+      "name": "smoke",
+      "output_sha256": "99A1F5C05F8B42A98C1353A644C0527B7FBDEBFB7A944ACD272CCF7D46CC34A6",
+      "index": 177,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux\\apply_checks\\177.output.log",
+      "timeout_seconds": 120
+    },
+    {
+      "failed": false,
+      "timed_out": false,
+      "exit_code": 0,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/skill_allocation_test.gd"
+      ],
+      "execution_index": 3,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux\\apply_checks\\222-skill_allocation_test.engine.log",
+      "name": "skill_allocation_test",
+      "output_sha256": "4BBF4DE594BE8F142DB94129FC154393A17EBD463F30E86A1BDBB35A500317A8",
+      "index": 222,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux\\apply_checks\\222-skill_allocation_test.output.log",
+      "timeout_seconds": 120
+    },
+    {
+      "failed": false,
+      "timed_out": false,
+      "exit_code": 0,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/skill_window_test.gd"
+      ],
+      "execution_index": 4,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux\\apply_checks\\223-skill_window_test.engine.log",
+      "name": "skill_window_test",
+      "output_sha256": "246F69F3FBBD2F8B2BAA6D8AC737CF28F6A01420EE864D3BD705876CC64C690D",
+      "index": 223,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux\\apply_checks\\223-skill_window_test.output.log",
+      "timeout_seconds": 120
+    }
+  ],
+  "native_output": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux\\native\\output.log",
+  "native_output_sha256": "a4bace5ba4ced7e0072ae5eccfa68c16fddf13aca08392d1ddffb15b2b9e495d",
+  "native_completion": "SKILL_UX_NATIVE_OK",
+  "native_images": {
+    "game_list_1280.png": "2e0ab4639164358cda34415468bfe943d12fda26b1cf0490d51f49864f74edae",
+    "game_list_1920.png": "986479db50279cbdc47a889fc935c766873acf519956f481da63d03c0f375174",
+    "game_shared_icons_1280.png": "5f890e49cc09444adbbe98026af0387d933f296670e28a36d9e3b495812e8d3b",
+    "game_shared_icons_1920.png": "6a3151d99200d6b072ead078f37701ca1de14aca1436ef7e9d14f8610d617f4e",
+    "game_tree_1280.png": "c18f0741271fe2ed93dde023a7fc75c93ad0f67c0f537ee57f68519fb6da6305",
+    "game_tree_1920.png": "82414191c4dbcb52ccfbc2fd0eba9bd91be53b79be87c0cdcf22d817af46458d",
+    "hover_dialog_layout_1280.png": "cffe6e78df3feaa920fa5eef8daf8c836eac992a2aa5ce0ea158308a1e9502e7",
+    "hover_dialog_layout_1920.png": "354ea95bfe84dc49c104ff3094cfb4d1c0527d7689bd9069f45b866845ff6bb9",
+    "icon_contact_32.png": "14f66699c100e44fb6fe380ce51ce0d80e3b342eed19399abd57eb9d9fd0abf4",
+    "icon_contact_64.png": "e12841ddeb6297e5800b3822bb0d5337d68afe5afdad6ba54037376e065fde20",
+    "lobby_future_paths_1280.png": "30d1388673f47829b6a01d7422254325a5dafa3a97a3414930395caccccada58",
+    "lobby_future_paths_1920.png": "68eb66aef7a41fb028ef14a9469ed6e064cf41601d373f6bc35bbb24d66190fd",
+    "lobby_list_pending_1280.png": "c8cdfc102ac0bf9e0e731a8024ae8a393464c80c9e982a23babfdb22f0dd0f63",
+    "lobby_list_pending_1920.png": "32f886c5dbffea35c4bf457ca0e2ddeab74c8234d1e3b69f6901812c9f9feffc",
+    "lobby_tree_1280.png": "735341a85188ec543a4abf3d857471c667547608ad4e874fd04ce8bdcd9b2658",
+    "lobby_tree_1920.png": "b5b8ef7ffb3c5da3b3a20e17fa7dee4d776e8456104506c065621bb16c28e701"
+  },
+  "visual_inspection": "Sol confirmed real target lobby tree screenshot; source native captures cover list, future gates, hover factory layout, game and icon contacts32/64 on both backgrounds.",
+  "source_target_equivalence": {
+    "count": 1765,
+    "equal": true,
+    "text_extensions": [
+      ".cfg",
+      ".csv",
+      ".gd",
+      ".gdextension",
+      ".gdshader",
+      ".godot",
+      ".import",
+      ".json",
+      ".md",
+      ".ps1",
+      ".py",
+      ".svg",
+      ".toml",
+      ".tres",
+      ".tscn",
+      ".txt",
+      ".uid",
+      ".yaml",
+      ".yml"
+    ],
+    "text_names": [
+      ".gdignore",
+      ".gitattributes",
+      ".gitignore",
+      "LICENSE"
+    ],
+    "normalization": "UTF-8 BOM removed and CRLF to LF for listed text files; others raw"
+  },
+  "restored_target_metadata": {
+    "count": 120,
+    "verified_newline_only": true
+  },
+  "personal_files": {
+    "before": {
+      "profile.json": "9d46ee59c48e4cdaba0c17b6d91dc7f42e16e757131fd58225fb88986ae0c0fe",
+      "profile.backup.json": "9371a027f3e8c755138914ff7e9a0a125be0ba46e23cd5a77b3f018e42c11c73",
+      "controls.cfg": "a11cac61ce45a85dca9ee3189359639ef7ff14723822a958b1674d25c9f3e22f"
+    },
+    "after": {
+      "profile.json": "9d46ee59c48e4cdaba0c17b6d91dc7f42e16e757131fd58225fb88986ae0c0fe",
+      "profile.backup.json": "9371a027f3e8c755138914ff7e9a0a125be0ba46e23cd5a77b3f018e42c11c73",
+      "controls.cfg": "a11cac61ce45a85dca9ee3189359639ef7ff14723822a958b1674d25c9f3e22f"
+    },
+    "unchanged": true
+  },
+  "product_acceptance": "pending",
+  "master_merge": false,
+  "push": false,
+  "e07_authorized": false
+}
