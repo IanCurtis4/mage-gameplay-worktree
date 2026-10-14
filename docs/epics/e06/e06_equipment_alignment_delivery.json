@@ -1,0 +1,109 @@
+{
+  "status": "applied_verified",
+  "role": "technical_validator",
+  "validator": "Sol",
+  "runtime_commit": "eb3987e60d6251c0a625aa6284101da8236288da",
+  "previous_target": "8a84c632b89ff037d17e358d9ee3da4ee1a27f84",
+  "target": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+  "target_branch": "codex/playtest",
+  "operation": "fast-forward --no-overwrite-ignore",
+  "preflight": {
+    "approval": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_equipment_alignment\\approval.json",
+    "candidate": "eb3987e60d6251c0a625aa6284101da8236288da",
+    "previous_target": "8a84c632b89ff037d17e358d9ee3da4ee1a27f84",
+    "cli_diagnostic": {
+      "supported": false,
+      "reason": "Evidência inválida/alterada",
+      "explanation": "Legacy CLI requires role=reviewer. Current human workflow permits technical_validator; do not forge reviewer. Equivalent clean/ancestor/ignored-collision checks are performed before authorized fast-forward."
+    },
+    "clean_source_and_target": true,
+    "same_repository": true,
+    "fast_forward": true,
+    "ignored_collisions": [],
+    "personal_hashes_before": {
+      "profile.json": "4a6db9b3a355833a9f491627da003e35d61006a64304c3bea1a99fdbfe5be917",
+      "profile.backup.json": "a37a6eff7cbe30d5469266f8ce6b9b66243e5eeb85c1481e7e9cb00ed67079e0",
+      "controls.cfg": "a11cac61ce45a85dca9ee3189359639ef7ff14723822a958b1674d25c9f3e22f"
+    }
+  },
+  "target_checks": [
+    {
+      "exit_code": 0,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "timeout_seconds": 60,
+      "index": 1,
+      "failed": false,
+      "output_sha256": "F069DBE4E7CD760BCF53D56200EE4EC38AE913626E20E313784CCD883F7C5488",
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_equipment_alignment\\apply_checks\\001.output.log",
+      "timed_out": false,
+      "execution_index": 1,
+      "name": "editor_import",
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_equipment_alignment\\apply_checks\\001.engine.log"
+    },
+    {
+      "exit_code": 0,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--quit-after",
+        "5"
+      ],
+      "timeout_seconds": 60,
+      "index": 177,
+      "failed": false,
+      "output_sha256": "99A1F5C05F8B42A98C1353A644C0527B7FBDEBFB7A944ACD272CCF7D46CC34A6",
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_equipment_alignment\\apply_checks\\177.output.log",
+      "timed_out": false,
+      "execution_index": 2,
+      "name": "smoke",
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_equipment_alignment\\apply_checks\\177.engine.log"
+    },
+    {
+      "exit_code": 0,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/equipment_hand_alignment_test.gd"
+      ],
+      "timeout_seconds": 60,
+      "index": 220,
+      "failed": false,
+      "output_sha256": "38A87BF0439BDB473ABA8B25A1455D60554E8F41F99E1E0DC53853009A3C9145",
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_equipment_alignment\\apply_checks\\220-equipment_hand_alignment_test.output.log",
+      "timed_out": false,
+      "execution_index": 3,
+      "name": "equipment_hand_alignment_test",
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_equipment_alignment\\apply_checks\\220-equipment_hand_alignment_test.engine.log"
+    }
+  ],
+  "target_native_inventory": {
+    "exit_code": 0,
+    "errors": [],
+    "log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_equipment_alignment\\applied_inventory.output.log",
+    "log_sha256": "c9b5260778da84115e8395ad6da77975451d18b58d5cdf85781f35c5ae2b88e9",
+    "portrait_sha256": "c41cf2a734574a530d878193808019f0a3cb5c6f0d160bfd8c087ed7f44cde9e",
+    "portrait_identical_to_source": true
+  },
+  "normalized_source_target_files_equal": 1149,
+  "source_target_normalization": "All UTF8 text: BOM and CRLF normalized; binary bytes unchanged. The supervisor snapshot source is checked separately using its extension whitelist.",
+  "normalized_only_imports_restored_count": 31,
+  "personal_hashes_after": {
+    "profile.json": "4a6db9b3a355833a9f491627da003e35d61006a64304c3bea1a99fdbfe5be917",
+    "profile.backup.json": "a37a6eff7cbe30d5469266f8ce6b9b66243e5eeb85c1481e7e9cb00ed67079e0",
+    "controls.cfg": "a11cac61ce45a85dca9ee3189359639ef7ff14723822a958b1674d25c9f3e22f"
+  },
+  "personal_files_unchanged": true,
+  "product_acceptance": "pending",
+  "master_merge": "not_authorized",
+  "push": "not_requested"
+}
