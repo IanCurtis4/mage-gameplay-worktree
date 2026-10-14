@@ -159,6 +159,92 @@
     "log_sha256": "6536a44878193673ae92455d880a566f62c5c9c44cdcbcabd0612a0c0ef0828c"
   },
   "limits": "No actual private profile contents are versioned. Sol executed and validated this bounded hotfix; no semantic independent review is claimed.",
-  "playtest_application": "pending",
-  "product_acceptance": "pending"
+  "playtest_application": {
+    "runtime_candidate": "14cdb478417c8dc8f44bffbf5bda7e287c899583",
+    "previous": "567575027969e614989b816d51e38e3e9d4b3408",
+    "target": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+    "ready": true,
+    "checks": [
+      {
+        "id": "editor_import",
+        "status": "passed",
+        "exit_code": 0,
+        "timeout": false,
+        "seconds": 8.867,
+        "log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_profile_hotfix\\application\\editor_import.log",
+        "errors": []
+      },
+      {
+        "id": "scene_smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "timeout": false,
+        "seconds": 2.607,
+        "log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_profile_hotfix\\application\\scene_smoke.log",
+        "errors": []
+      },
+      {
+        "id": "private_profile_menu",
+        "status": "passed",
+        "exit_code": 0,
+        "timeout": false,
+        "seconds": 3.722,
+        "log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_profile_hotfix\\application\\private_profile_menu.log",
+        "errors": []
+      }
+    ],
+    "private_backup_directory": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_profile_hotfix\\preserved_20261013_230324",
+    "personal_hashes_before": {
+      "profile.json": "bf953acac623a16675c3cbbb4dc04096fd801fc257e292ff1c24aaa9fd33fc20",
+      "profile.backup.json": "8b594601d42e5dc1f536363ef1d0b0f1ec363c948531915c825fa97e333f3dbd",
+      "controls.cfg": "a11cac61ce45a85dca9ee3189359639ef7ff14723822a958b1674d25c9f3e22f"
+    },
+    "personal_hashes_after": {
+      "profile.json": "bf953acac623a16675c3cbbb4dc04096fd801fc257e292ff1c24aaa9fd33fc20",
+      "profile.backup.json": "8b594601d42e5dc1f536363ef1d0b0f1ec363c948531915c825fa97e333f3dbd",
+      "controls.cfg": "a11cac61ce45a85dca9ee3189359639ef7ff14723822a958b1674d25c9f3e22f"
+    },
+    "personal_files_unchanged": true,
+    "original_characters": 7,
+    "new_creation_verified_on_isolated_copy": true,
+    "source_and_target_clean": true,
+    "normalized_imports": [
+      "assets/art/animations/animal_companion.png.import",
+      "assets/art/animations/archer_weaponless.png.import",
+      "assets/art/animations/beast_master.png.import",
+      "assets/art/animations/berserker_weaponless.png.import",
+      "assets/art/animations/defender_weaponless.png.import",
+      "assets/art/animations/elementalist_weaponless.png.import",
+      "assets/art/animations/gel.png.import",
+      "assets/art/animations/geometer_weaponless.png.import",
+      "assets/art/animations/hunter_weaponless.png.import",
+      "assets/art/animations/mage_weaponless.png.import",
+      "assets/art/animations/sentinel_weaponless.png.import",
+      "assets/art/animations/spiritualist_weaponless.png.import",
+      "assets/art/animations/swordsman_weaponless.png.import",
+      "assets/art/equipment/axe.svg.import",
+      "assets/art/equipment/bow.svg.import",
+      "assets/art/equipment/prismatic_focus.svg.import",
+      "assets/art/equipment/shield.svg.import",
+      "assets/art/equipment/staff.svg.import",
+      "assets/art/equipment/sword.svg.import",
+      "assets/art/equipment/wooden_beads.svg.import",
+      "assets/art/icons/equipment/card.svg.import",
+      "assets/art/icons/equipment/cloth.svg.import",
+      "assets/art/icons/equipment/focus.svg.import",
+      "assets/art/icons/equipment/head.svg.import",
+      "assets/art/icons/equipment/jewelry.svg.import",
+      "assets/art/icons/equipment/leather.svg.import",
+      "assets/art/icons/equipment/mail.svg.import",
+      "assets/art/icons/equipment/plate.svg.import",
+      "assets/art/icons/equipment/scales.svg.import",
+      "assets/art/icons/equipment/shield.svg.import",
+      "assets/art/icons/equipment/weapon.svg.import"
+    ],
+    "product_acceptance": "pending",
+    "master_merge": false,
+    "push": false
+  },
+  "product_acceptance": "pending",
+  "automation_supervisor": "Luna independently confirmed completion, stdout hashes and absence of errors for the seven checks; no private save content read."
 }

@@ -1,3 +1,5 @@
+> Hotfix atual: runtime `14cdb478417c8dc8f44bffbf5bda7e287c899583`. Corrigido o bloqueio de abertura de saves schema4; sete personagens do save real verificados numa cópia, com criação funcionando. [Recibo](e06_profile_migration_hotfix.json). Pare a partida antiga antes de F5.
+
 # Playtest — correções após feedback
 
 Candidato validado e aplicado: runtime `9f05ce5c39d98135dfafc74d96bb5340f13369b1`, com sucessor apenas documental. [Recibo da aplicação](e06_playtest_fixes_delivery.json). Projeto habitual: `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/project.godot`. Pare a partida anterior e aceite o reload do Godot antes de F5 para testar este candidato.
