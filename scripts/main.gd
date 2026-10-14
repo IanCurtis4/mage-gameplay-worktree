@@ -61,6 +61,9 @@ var encounter_index := 0
 var encounter_active := false
 var run_finished := false
 var build_service: RunBuildService
+var acquisition_journal := AcquisitionJournal.new()
+var reward_feedback: RewardFeedbackPanel
+var _acquisition_augment_serial := 0
 var reward_service: RunRewardService
 var inventory_panel: RunInventoryPanel
 var inventory_button: Button
@@ -183,6 +186,7 @@ func _ready() -> void:
 	player.configure(navigation, run_state)
 	build_service = RunBuildService.new(self)
 	reward_service = RunRewardService.new(self)
+	reward_service.reward_confirmed.connect(_on_reward_confirmed)
 	if persistent_facade != null and not training_mode and run_state.effect_catalog().get_definition(&"equipment", &"arena_legendary_ward") != null:
 		var production := EquipmentLootProfiles.production(run_state.effect_catalog())
 		var configured := reward_service.configure_mob_loot(production)
@@ -869,6 +873,8 @@ func _change_control_preferences(mode: int, smart_lock: bool) -> void:
 		status_label.text = "Controles aplicados; não foi possível salvar a preferência."
 
 func _spawn_encounter(index: int) -> void:
+	if reward_feedback != null:
+		reward_feedback.hide_history()
 	encounter_index = index
 	encounter_active = true
 	_credited_kills.clear()
@@ -1961,8 +1967,10 @@ func _collect_reward() -> Dictionary:
 	reward = null
 	_reward_retry_pending = false
 	augment_button.disabled = false
+	if not training_mode:
+		reward_feedback.open_history(encounter_index)
 	if progression_result.get("persistent", false):
-		var applied: Dictionary = progression_result.get("applied_reward", {})
+		var applied: Dictionary = progression_result.get("acquisition", {})
 		if applied.is_empty():
 			status_label.text = "XP persistente já salvo — abra a escolha com F8"
 		else:
@@ -2043,6 +2051,7 @@ func _open_augment_menu() -> void:
 		button.add_theme_font_size_override("font_size", 17)
 		button.pressed.connect(_confirm_augment.bind(definition.id))
 		choice_buttons.add_child(button)
+	reward_feedback.hide_history()
 	augment_overlay.visible = true
 	get_tree().paused = true
 
@@ -2050,6 +2059,9 @@ func _confirm_augment(augment_id: StringName) -> void:
 	if not run_state.confirm(augment_id, encounter_active):
 		return
 	player.apply_run_modifiers(run_state)
+	if not training_mode:
+		_acquisition_augment_serial += 1
+		acquisition_journal.record_augment(str(_acquisition_augment_serial), encounter_index, run_state.effect_catalog().get_definition(&"augment", augment_id) as AugmentDefinition, int(run_state.augment_stacks.get(augment_id, 1)))
 	augment_overlay.visible = false
 	get_tree().paused = false
 	augment_button.disabled = run_state.pending_choices <= 0
@@ -2091,6 +2103,8 @@ func _show_result(victory: bool) -> void:
 		return
 	if victory and not training_mode and (reward != null or run_state.pending_choices > 0 or run_state.has_open_offer() or inventory_frozen or reward_service.has_uncollected()):
 		return
+	reward_feedback.hide_history()
+	reward_feedback.hide_recent()
 	run_finished = true # Claim terminal before clearing buffs can recalculate lethal maxima.
 	run_state.effect_ledger.cancel()
 	player.clear_sentinel_state()
@@ -2136,6 +2150,9 @@ func _show_result(victory: bool) -> void:
 		result_body.text = ("O Guardião caiu.\n" if victory else "Treino encerrado.\n") + "Nenhum XP ou recompensa foi salvo.\n" + next_step
 	else:
 		result_body.text = (("As três áreas e seus seis encontros foram vencidos.\n" if gameplay_extension else "Os dois encontros do Marco 1 foram vencidos.\n") if victory else "A run terminou e todo o estado temporário será descartado.\n") + next_step
+	if not training_mode:
+		var gained := acquisition_journal.totals()
+		result_body.text += "\nXP obtida nesta run: Base +%d · Job +%d" % [gained["base_xp"], gained["job_xp"]]
 	result_overlay.visible = true
 	get_tree().paused = true
 
@@ -2746,6 +2763,11 @@ func _build_ui() -> void:
 	inventory_button.text = "Equipamentos / cartas"
 	inventory_button.pressed.connect(_open_inventory)
 	buttons.add_child(inventory_button)
+	var acquisitions_button := Button.new()
+	acquisitions_button.text = "Recompensas"
+	acquisitions_button.visible = not training_mode
+	acquisitions_button.pressed.connect(func() -> void: reward_feedback.open_history(0))
+	buttons.add_child(acquisitions_button)
 	inventory_panel = RunInventoryPanel.new()
 	ui_root.add_child(inventory_panel)
 	inventory_panel.closed.connect(_close_inventory)
@@ -2800,20 +2822,28 @@ func _build_ui() -> void:
 	result_panel = PanelContainer.new()
 	result_overlay.add_child(result_panel)
 	result_panel.set_anchors_preset(Control.PRESET_CENTER)
-	result_panel.offset_left = -280.0
-	result_panel.offset_top = -190.0
-	result_panel.offset_right = 280.0
-	result_panel.offset_bottom = 190.0
+	result_panel.offset_left = -340.0
+	result_panel.offset_top = -270.0
+	result_panel.offset_right = 340.0
+	result_panel.offset_bottom = 270.0
 	var result_column := VBoxContainer.new()
 	result_column.alignment = BoxContainer.ALIGNMENT_CENTER
-	result_column.add_theme_constant_override("separation", 24)
+	result_column.add_theme_constant_override("separation", 12)
 	result_panel.add_child(result_column)
 	result_title = _make_label("", 34, Color("e9c67b"))
 	result_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	result_column.add_child(result_title)
 	result_body = _make_label("", 20, Color("d7ddea"))
 	result_body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	result_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	result_column.add_child(result_body)
+	var result_rewards := Button.new()
+	result_rewards.text = "Ver recompensas desta run"
+	result_rewards.custom_minimum_size = Vector2(320,44)
+	result_rewards.visible = not training_mode
+	result_rewards.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	result_rewards.pressed.connect(func() -> void: reward_feedback.open_history(0))
+	result_column.add_child(result_rewards)
 	restart_button = Button.new()
 	restart_button.text = "Reiniciar arena (F9)"
 	restart_button.custom_minimum_size = Vector2(260, 54)
@@ -2905,6 +2935,10 @@ func _build_ui() -> void:
 	class_column.add_child(cancel_class)
 	class_overlay.visible = false
 
+	reward_feedback = RewardFeedbackPanel.new()
+	ui_root.add_child(reward_feedback)
+	reward_feedback.configure(acquisition_journal, run_state.effect_catalog(), persistent_facade != null)
+
 func _battle_theme() -> Theme:
 	var theme_value := Theme.new()
 	theme_value.default_font_size = 16
@@ -2964,6 +2998,8 @@ func _on_mob_skill_hit(request: DamageRequest, target_actor: CombatActor) -> voi
 	SkillImpactRules.spear(request.skill_id, result, target_actor)
 
 func _open_inventory() -> void:
+	reward_feedback.hide_history()
+	reward_feedback.hide_recent()
 	if encounter_active or run_finished or not player.is_alive() or get_tree().paused or inventory_frozen: return
 	_cancel_casting(false)
 	_clear_hover()
@@ -3097,3 +3133,7 @@ func _discard_companion(actor: EnemyActor) -> void:
 	if _selected_enemy == actor: _selected_enemy = null
 	enemies.erase(actor)
 	actor.queue_free()
+
+func _on_reward_confirmed(receipt: Dictionary) -> void:
+	if not training_mode:
+		acquisition_journal.record_reward(receipt, run_state.effect_catalog())

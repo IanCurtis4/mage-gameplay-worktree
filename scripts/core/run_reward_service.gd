@@ -2,6 +2,10 @@ class_name RunRewardService
 extends RefCounted
 ## Tickets are minted by world events. collect accepts only an issued ticket ID.
 
+signal reward_confirmed(receipt: Dictionary)
+# Baselines are presentation-only and retained across an uncertain retry.
+var _presentation_xp_before: Dictionary = {}
+
 var _owner: WeakRef
 var _run: RunState
 var _tickets: Dictionary = {}
@@ -82,7 +86,7 @@ func issue(event_id: String, reward_id: StringName, stage_reward: bool = false) 
 	var ticket_id := "reward-%s-%d" % [_run.run_id.md5_text(), _next_sequence]
 	var message := "XP e escolha de augment disponíveis." if stage_reward and mob_loot_enabled() else ("Nenhuma carta útil disponível." if stage_reward and card_id.is_empty() else "")
 	payload["card_id"] = card_id
-	var entry := {"ok": true, "error_code": &"", "request_id": ticket_id, "ticket_id": ticket_id, "event_id": event_id, "reward_id": reward_id, "sequence": _next_sequence, "payload": payload, "item_id": item_id, "card_id": card_id, "stage_reward": stage_reward, "delivered": false, "message": message}
+	var entry := {"ok": true, "error_code": &"", "request_id": ticket_id, "ticket_id": ticket_id, "event_id": event_id, "reward_id": reward_id, "encounter_index": controller.encounter_index, "sequence": _next_sequence, "payload": payload, "item_id": item_id, "card_id": card_id, "stage_reward": stage_reward, "delivered": false, "message": message}
 	_tickets[ticket_id] = entry
 	_events[event_id] = ticket_id
 	_queue.append(ticket_id)
@@ -157,6 +161,8 @@ func collect(ticket_id: String) -> Dictionary:
 		return BuildEffectCatalog.failure(&"result_uncertain")
 	_busy = true
 	var persistent := controller.persistent_facade != null
+	if persistent and not _presentation_xp_before.has(ticket_id):
+		_presentation_xp_before[ticket_id] = _observe_xp(controller)
 	var result := {"ok": true, "error_code": &"", "request_id": ticket_id}
 	if persistent:
 		result = controller.persistent_facade.reconcile_transaction(ticket_id) if _uncertain_ticket == ticket_id else controller.persistent_facade.grant_run_ticket(controller, ticket_id)
@@ -198,6 +204,10 @@ func collect(ticket_id: String) -> Dictionary:
 		controller.set_inventory_freeze(false)
 	_busy = false
 	result["request_id"] = ticket_id
+	if result["ok"]:
+		var receipt := _confirmed_receipt(controller, entry, persistent)
+		result["acquisition"] = receipt.duplicate(true)
+		reward_confirmed.emit(receipt)
 	return result
 
 func has_pending_transaction() -> bool:
@@ -269,7 +279,7 @@ func issue_mob_drop(actor: EnemyActor) -> Dictionary:
 	for drop: Dictionary in payload["equipment_drops"]: payload["equipment_ids"].append(drop["definition_id"])
 	payload["card_id"] = rolled["card_id"]
 	var ticket_id := "reward-%s-%d" % [_run.run_id.md5_text(), _next_sequence]
-	var entry := {"ok": true, "error_code": &"", "request_id": ticket_id, "ticket_id": ticket_id, "event_id": event, "reward_id": &"mob_drop", "sequence": _next_sequence, "payload": payload, "item_id": payload["equipment_ids"][0] if not payload["equipment_ids"].is_empty() else &"", "card_id": rolled["card_id"], "stage_reward": false, "mob_ticket": true, "delivered": false, "message": "Loot do inimigo coletado.", "mob_base_id": occurrence.mob_base_id, "category_id": occurrence.category_id, "occurrence_id": occurrence.occurrence_id}
+	var entry := {"ok": true, "error_code": &"", "request_id": ticket_id, "ticket_id": ticket_id, "event_id": event, "reward_id": &"mob_drop", "encounter_index": controller.encounter_index, "sequence": _next_sequence, "payload": payload, "item_id": payload["equipment_ids"][0] if not payload["equipment_ids"].is_empty() else &"", "card_id": rolled["card_id"], "stage_reward": false, "mob_ticket": true, "delivered": false, "message": "Loot do inimigo coletado.", "mob_base_id": occurrence.mob_base_id, "category_id": occurrence.category_id, "occurrence_id": occurrence.occurrence_id}
 	_tickets[ticket_id] = entry
 	_events[event] = ticket_id
 	_queue.append(ticket_id)
@@ -281,3 +291,14 @@ func collect_pending_mob_tickets() -> Dictionary:
 		var result := collect(_queue[0])
 		if not result["ok"]: return result
 	return {"ok": true}
+
+func _observe_xp(controller: RunController) -> Dictionary:
+	var profile := controller.persistent_facade.current_profile()
+	var character := profile.character_by_id(_run.character_id) if profile != null else null
+	return {"base_xp": character.base_xp_total, "job_xp": character.job_xp_total} if character != null else {"base_xp": 0, "job_xp": 0}
+
+func _confirmed_receipt(controller: RunController, entry: Dictionary, persistent: bool) -> Dictionary:
+	var before: Dictionary = _presentation_xp_before.get(entry["ticket_id"], {"base_xp": 0, "job_xp": 0})
+	var after := _observe_xp(controller) if persistent else before
+	var payload: Dictionary = entry["payload"]
+	return {"ticket_id": entry["ticket_id"], "encounter_index": entry["encounter_index"], "persistent": persistent, "base_xp": maxi(0, int(after["base_xp"]) - int(before["base_xp"])), "job_xp": maxi(0, int(after["job_xp"]) - int(before["job_xp"])), "offered_base_xp": int(payload["base_xp"]) if persistent else 0, "offered_job_xp": int(payload["job_xp"]) if persistent else 0, "equipment_drops": payload["equipment_drops"].duplicate(true), "card_id": entry["card_id"]}
