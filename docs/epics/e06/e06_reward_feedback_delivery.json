@@ -1,0 +1,173 @@
+{
+  "status": "applied_verified",
+  "role": "technical_validator",
+  "validator": "Sol",
+  "runtime_commit": "cadd2e0489461146300506e1a87b32ffbede4431",
+  "candidate_commit": "ff1e00098b477dd0bc04dc3be3278ed86c949905",
+  "previous_target": "bf4de5c72554a78b3aa46fe1e49e786d049af18d",
+  "target": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+  "target_branch": "codex/playtest",
+  "operation": "fast-forward --no-overwrite-ignore",
+  "preflight": {
+    "candidate": "ff1e00098b477dd0bc04dc3be3278ed86c949905",
+    "runtime_commit": "cadd2e0489461146300506e1a87b32ffbede4431",
+    "previous_target": "bf4de5c72554a78b3aa46fe1e49e786d049af18d",
+    "approval": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_reward_feedback\\approval.json",
+    "cli_diagnostic": {
+      "supported": false,
+      "reason": "Evidência inválida/alterada",
+      "explanation": "Legacy CLI requires role=reviewer; current WORKFLOW permits technical_validator. No reviewer role fabricated."
+    },
+    "clean_source_and_target": true,
+    "same_repository": true,
+    "fast_forward": true,
+    "ignored_collisions": [],
+    "personal_hashes_before": {
+      "profile.json": "4a6db9b3a355833a9f491627da003e35d61006a64304c3bea1a99fdbfe5be917",
+      "profile.backup.json": "a37a6eff7cbe30d5469266f8ce6b9b66243e5eeb85c1481e7e9cb00ed67079e0",
+      "controls.cfg": "a11cac61ce45a85dca9ee3189359639ef7ff14723822a958b1674d25c9f3e22f"
+    },
+    "external_cli": {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\menu-tabs\\RagRPG\\tools\\workflow\\workflow.py",
+      "sha256": "e642dbe882cd7ea3cd687da51ed978bdecc93675fbb31d08d26626a0b40a1bae",
+      "origin_commit": "0c008d4843d13f772aa2b69be22d24d2300b80a1"
+    }
+  },
+  "target_checks": [
+    {
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_reward_feedback\\apply_checks\\001.engine.log",
+      "index": 1,
+      "exit_code": 0,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "failed": false,
+      "execution_index": 1,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_reward_feedback\\apply_checks\\001.output.log",
+      "output_sha256": "516054BCE061D4948DF4FAA99E6F0267ED23B58736CF87E8B5DBE32D69709B0C",
+      "name": "editor_import"
+    },
+    {
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_reward_feedback\\apply_checks\\177.engine.log",
+      "index": 177,
+      "exit_code": 0,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--quit-after",
+        "5"
+      ],
+      "failed": false,
+      "execution_index": 2,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_reward_feedback\\apply_checks\\177.output.log",
+      "output_sha256": "99A1F5C05F8B42A98C1353A644C0527B7FBDEBFB7A944ACD272CCF7D46CC34A6",
+      "name": "smoke"
+    },
+    {
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_reward_feedback\\apply_checks\\221-reward_feedback_test.engine.log",
+      "index": 221,
+      "exit_code": 0,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/reward_feedback_test.gd"
+      ],
+      "failed": false,
+      "execution_index": 3,
+      "timeout_seconds": 120,
+      "timed_out": false,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_reward_feedback\\apply_checks\\221-reward_feedback_test.output.log",
+      "output_sha256": "76E1CC29885E18047F395402C03FF9357B67F8D2EE4F4D614BEC91B396DA8589",
+      "name": "reward_feedback_test"
+    }
+  ],
+  "native_output": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_reward_feedback\\native\\output.log",
+  "native_output_sha256": "5ceba29a09654fbfe625a591846be365f59aa4e2508e7582eea33aa058d1225c",
+  "native_completion": "REWARD_FEEDBACK_NATIVE_OK",
+  "native_viewports": [
+    [
+      1280,
+      720
+    ],
+    [
+      1920,
+      1080
+    ]
+  ],
+  "native_images": {
+    "encounter_1280.png": "ccd1850c2e2092a47e65bd7a57b8cb97fd24187898deead2a89101917485a2d0",
+    "encounter_1920.png": "aea91800c058fa939439a353a4c1436fa7764d7f8b7e89953756591b5bb09568",
+    "recent_1280.png": "f19a81647060b43773c0b7fc0851fca6bf4b5fcc6d5eca554ca4fd49e4b570f8",
+    "recent_1920.png": "b72d39189f57281311cbad32c4187b87943bb8c017f33fe21dfadc2cef3e683a",
+    "result_1280.png": "fc8f157299f4f8eebd4c8036da2d3d7b863637dcb942b46e7b5af2c5b0f36b52",
+    "result_1920.png": "12713ce143f0b305a27158f7eccae316c7fef26a9519743fb1128e523cf234ec",
+    "run_1280.png": "2b9bc71d3e77a99f48719df7e49534d0d30f2508025155e1b1973105b3b75006",
+    "run_1920.png": "cb0ef4b15f8fa8b670c08896a0d2bdb6940c57797a7b5c5381a960617e435b44"
+  },
+  "visual_inspection": "Sol inspected target history screenshot: opaque readable bounded 700x490 window; production receipt and close target correct.",
+  "source_target_equivalence": {
+    "count": 1563,
+    "equal": true,
+    "text_extensions": [
+      ".cfg",
+      ".csv",
+      ".gd",
+      ".gdextension",
+      ".gdshader",
+      ".godot",
+      ".import",
+      ".json",
+      ".md",
+      ".ps1",
+      ".py",
+      ".svg",
+      ".toml",
+      ".tres",
+      ".tscn",
+      ".txt",
+      ".uid",
+      ".yaml",
+      ".yml"
+    ],
+    "text_names": [
+      ".gdignore",
+      ".gitattributes",
+      ".gitignore",
+      "LICENSE"
+    ],
+    "normalization": "Remove UTF-8 BOM and CRLF to LF for listed text extensions/names; others raw"
+  },
+  "restored_target_import_metadata": {
+    "verified_newline_only": true,
+    "meaningful_content_preserved": true
+  },
+  "personal_files": {
+    "before": {
+      "profile.json": "4a6db9b3a355833a9f491627da003e35d61006a64304c3bea1a99fdbfe5be917",
+      "profile.backup.json": "a37a6eff7cbe30d5469266f8ce6b9b66243e5eeb85c1481e7e9cb00ed67079e0",
+      "controls.cfg": "a11cac61ce45a85dca9ee3189359639ef7ff14723822a958b1674d25c9f3e22f"
+    },
+    "after": {
+      "profile.json": "4a6db9b3a355833a9f491627da003e35d61006a64304c3bea1a99fdbfe5be917",
+      "profile.backup.json": "a37a6eff7cbe30d5469266f8ce6b9b66243e5eeb85c1481e7e9cb00ed67079e0",
+      "controls.cfg": "a11cac61ce45a85dca9ee3189359639ef7ff14723822a958b1674d25c9f3e22f"
+    },
+    "unchanged": true
+  },
+  "product_acceptance": "pending",
+  "master_merge": false,
+  "push": false,
+  "e07_authorized": false
+}
