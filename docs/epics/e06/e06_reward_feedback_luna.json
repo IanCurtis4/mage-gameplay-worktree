@@ -1,0 +1,513 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-14T16:38:25.9478727Z",
+  "role": "automation_supervisor",
+  "scope": "Supervisão Luna de execução, conclusão e integridade dos logs; não é revisão semântica independente nem auditoria do contrato.",
+  "candidate": {
+    "base_commit": "bf4de5c72554a78b3aa46fe1e49e786d049af18d",
+    "state_at_selection_start": "dirty",
+    "dirty_path_count_at_selection_start": 44,
+    "dirty_status_sha256": "c0e35e1ecdc098db4086ee1d2dfe5920feae1519c325a7342f73b322941df790",
+    "dirty_status_serialization": "SHA-256 de UTF-8 dos itens working_tree_status de plan.json unidos por LF, sem LF final.",
+    "working_tree_status_at_selection_start": [
+      " M assets/art/animations/archer.png.import",
+      " M assets/art/animations/berserker.png.import",
+      " M assets/art/animations/defender.png.import",
+      " M assets/art/animations/elementalist.png.import",
+      " M assets/art/animations/geometer.png.import",
+      " M assets/art/animations/hunter.png.import",
+      " M assets/art/animations/mage.png.import",
+      " M assets/art/animations/sentinel.png.import",
+      " M assets/art/animations/spiritualist.png.import",
+      " M assets/art/animations/swordsman.png.import",
+      " M assets/art/animations/warrior.png.import",
+      " M assets/art/icons/hunter/hunter_covering_shot.svg.import",
+      " M assets/art/icons/hunter/hunter_easy_prey.svg.import",
+      " M assets/art/icons/hunter/hunter_freezing_trap.svg.import",
+      " M assets/art/icons/hunter/hunter_mark.svg.import",
+      " M assets/art/icons/hunter/hunter_shooting_discipline.svg.import",
+      " M assets/art/icons/hunter/hunter_tar_trap.svg.import",
+      " M assets/art/icons/hunter/hunter_thorn_trap.svg.import",
+      " M assets/art/icons/hunter/hunter_total_cover.svg.import",
+      " M assets/art/pilot/archer.png.import",
+      " M assets/art/pilot/dirt.png.import",
+      " M assets/art/pilot/grass.png.import",
+      " M assets/art/pilot/hero.png.import",
+      " M assets/art/pilot/stone.png.import",
+      " M assets/art/pilot/warrior.png.import",
+      " M assets/art/vfx/soul_impact_orb.png.import",
+      " M assets/art/vfx/soul_impact_orb_source.png.import",
+      " M assets/art/vfx/spiritualist_curse_sigil.png.import",
+      " M assets/art/vfx/spiritualist_effects.png.import",
+      " M assets/art/vfx/spiritualist_ritual_halo.png.import",
+      " M assets/art/vfx/spiritualist_soul_wisp.png.import",
+      " M assets/art/vfx/spiritualist_spectral_burst.png.import",
+      " M docs/epics/e06/e06_pending_checkpoint.md",
+      " M scripts/core/run_reward_service.gd",
+      " M scripts/main.gd",
+      " M tools/verify.ps1",
+      "?? docs/epics/e06/e06_reward_feedback_scope.md",
+      "?? scripts/core/acquisition_journal.gd",
+      "?? scripts/core/acquisition_journal.gd.uid",
+      "?? scripts/ui/reward_feedback_panel.gd",
+      "?? scripts/ui/reward_feedback_panel.gd.uid",
+      "?? tests/reward_feedback_test.gd",
+      "?? tests/reward_feedback_test.gd.uid",
+      "?? tools/reward_feedback_native_probe.gd"
+    ],
+    "state_after_run": "dirty",
+    "dirty_path_count_after_run": 39,
+    "dirty_status_sha256_after_run": "2663aea02b245e7c38a453f08ed0b1a1feeab492a7cec72e9fa1c53249e20752",
+    "paths_added_after_selection_start": [
+      "docs/epics/e06.md",
+      "docs/epics/e06/e06_reward_feedback_playtest.md",
+      "docs/epics/e06/e06_tx.md",
+      "docs/epics/e06_contract.md",
+      "docs/epics/e06_tasks.md"
+    ],
+    "status_lines_changed_after_selection_start": [],
+    "paths_cleared_after_selection_start": [
+      "scripts/core/acquisition_journal.gd",
+      "scripts/core/acquisition_journal.gd.uid",
+      "scripts/core/run_reward_service.gd",
+      "scripts/main.gd",
+      "scripts/ui/reward_feedback_panel.gd",
+      "scripts/ui/reward_feedback_panel.gd.uid",
+      "tests/reward_feedback_test.gd",
+      "tests/reward_feedback_test.gd.uid",
+      "tools/reward_feedback_native_probe.gd",
+      "tools/verify.ps1"
+    ]
+  },
+  "runtime_inputs": {
+    "main": {
+      "path": "scripts/main.gd",
+      "sha256": "7ae4d58737450707f9bfa1a890cd06546afed0e177b0910e0c3de00c74d7ac49"
+    },
+    "run_reward_service": {
+      "path": "scripts/core/run_reward_service.gd",
+      "sha256": "da975c248c6d329787789b33d81fb6e052fbad49dbeb759aaf3226dfba79cf42"
+    },
+    "acquisition_journal": {
+      "path": "scripts/core/acquisition_journal.gd",
+      "sha256": "d2d003e1a399a279bcefacbfdadf785cbae37ab02754f59303f7df6af134e8fa"
+    },
+    "reward_feedback_panel": {
+      "path": "scripts/ui/reward_feedback_panel.gd",
+      "sha256": "77c21d18d1bdd864b66aa92e7a4ab53461883489fd41fbecc092e173926cf011"
+    },
+    "reward_feedback_test": {
+      "path": "tests/reward_feedback_test.gd",
+      "sha256": "9c57239dc7d15fe06d758b1248fe5e4ba47da390032d3463c345b8a95a209b38"
+    },
+    "verification_runner": {
+      "path": "tools/verify.ps1",
+      "sha256": "64f7445e221c71045244c4039f792d26750b72ccedf4823331b55059ee193032"
+    }
+  },
+  "verification": {
+    "passed": true,
+    "godot_version": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org",
+    "godot_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\review-engine\\Godot.exe",
+    "godot_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "runner_path": "tools/verify.ps1",
+    "runner_sha256": "64f7445e221c71045244c4039f792d26750b72ccedf4823331b55059ee193032",
+    "runner_plan_sha256": "cb3e2411ba6e9eda3d428c70c99dcab807991c741192527e04ac5995f43f6ec5",
+    "runner_manifest_sha256": "919e37bc30993f77f997fc1b7cfd5ae0a25f6b671046715806ae2737a5a094fe",
+    "total_plan_steps": 221,
+    "selected_steps": 10,
+    "selected_indices": [
+      1,
+      4,
+      13,
+      15,
+      20,
+      177,
+      190,
+      209,
+      215,
+      221
+    ],
+    "per_check_timeout_seconds": 120,
+    "selection": [
+      "editor_import",
+      "e06_rewards_test",
+      "e06_tx_loot_test",
+      "e06_production_loot_test",
+      "profile_run_facade_test",
+      "battle_ui_test",
+      "ui_layout_test",
+      "e06_inventory_window_input_test",
+      "reward_feedback_test",
+      "smoke"
+    ],
+    "execution_order": [
+      "editor_import",
+      "e06_rewards_test",
+      "battle_ui_test",
+      "ui_layout_test",
+      "profile_run_facade_test",
+      "smoke",
+      "e06_tx_loot_test",
+      "e06_production_loot_test",
+      "e06_inventory_window_input_test",
+      "reward_feedback_test"
+    ],
+    "checks": [
+      {
+        "plan_index": 1,
+        "execution_index": 1,
+        "name": "editor_import",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+          "--editor",
+          "--import",
+          "--quit"
+        ],
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": 120,
+        "failed": false,
+        "summary": "Godot editor import completed; process exited 0.",
+        "error_marker_count": 0,
+        "output_log": ".godot/verification/e06_reward_feedback_luna/final_checks/001.output.log",
+        "output_sha256": "f0719a9cbed24cc9d731f0b42e4f7de0f10b2491236cc2f872a750563e69902c",
+        "engine_log": ".godot/verification/e06_reward_feedback_luna/final_checks/001.engine.log",
+        "engine_log_sha256": "a2f6aefc57926c4f56704f5497b31addb55e80833fd8c8b642477d835da0b01c"
+      },
+      {
+        "plan_index": 4,
+        "execution_index": 2,
+        "name": "e06_rewards_test",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+          "--script",
+          "res://tests/e06_rewards_test.gd"
+        ],
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": 120,
+        "failed": false,
+        "summary": "E06 rewards: 51 checks, 0 failures",
+        "error_marker_count": 0,
+        "output_log": ".godot/verification/e06_reward_feedback_luna/final_checks/004-e06_rewards_test.output.log",
+        "output_sha256": "1d0d94efd583a1833c93ae6ec2f2eee6f921d9083c5248ca2bc50e19dae1410f",
+        "engine_log": ".godot/verification/e06_reward_feedback_luna/final_checks/004-e06_rewards_test.engine.log",
+        "engine_log_sha256": "a7e0e37903056f5b74e0212122f8a78a4e68a99b16a73a24b1c71b71c40dab59"
+      },
+      {
+        "plan_index": 13,
+        "execution_index": 3,
+        "name": "battle_ui_test",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+          "--script",
+          "res://tests/battle_ui_test.gd"
+        ],
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": 120,
+        "failed": false,
+        "summary": "UI de batalha: PASS (47 checks)",
+        "error_marker_count": 0,
+        "output_log": ".godot/verification/e06_reward_feedback_luna/final_checks/013-battle_ui_test.output.log",
+        "output_sha256": "f8318896ca4f69c73dfee75d000be93183454816283638ee4c14279a62749d21",
+        "engine_log": ".godot/verification/e06_reward_feedback_luna/final_checks/013-battle_ui_test.engine.log",
+        "engine_log_sha256": "19ca805b5dac2a4ef977b786eccb964fa10557dcb15dffe014cd427381a81696"
+      },
+      {
+        "plan_index": 15,
+        "execution_index": 4,
+        "name": "ui_layout_test",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+          "--script",
+          "res://tests/ui_layout_test.gd"
+        ],
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": 120,
+        "failed": false,
+        "summary": "Layout da UI: PASS (30 checks)",
+        "error_marker_count": 0,
+        "output_log": ".godot/verification/e06_reward_feedback_luna/final_checks/015-ui_layout_test.output.log",
+        "output_sha256": "2221c3b8ff5b8bc13995ce03df5addb87d48671ad7ca4b1b51601e3d859d9690",
+        "engine_log": ".godot/verification/e06_reward_feedback_luna/final_checks/015-ui_layout_test.engine.log",
+        "engine_log_sha256": "786e497b3cda17d9d4270fa2899ce2432714eb98d4cf80ea908e593e1eb79a9b"
+      },
+      {
+        "plan_index": 20,
+        "execution_index": 5,
+        "name": "profile_run_facade_test",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+          "--script",
+          "res://tests/profile_run_facade_test.gd"
+        ],
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": 120,
+        "failed": false,
+        "summary": "Sessão e recompensas E01.3-B: PASS (54 checks)",
+        "error_marker_count": 0,
+        "output_log": ".godot/verification/e06_reward_feedback_luna/final_checks/020-profile_run_facade_test.output.log",
+        "output_sha256": "63afaed0f8287ee17cef6777e5f7e217a036b1cb41a7cd9c52dcf2355aa0484e",
+        "engine_log": ".godot/verification/e06_reward_feedback_luna/final_checks/020-profile_run_facade_test.engine.log",
+        "engine_log_sha256": "b0c7cdf8b26380ed5b643ea575f2993c5c16ffa8bf72d430d4552eb3aeb8843a"
+      },
+      {
+        "plan_index": 177,
+        "execution_index": 6,
+        "name": "smoke",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+          "--quit-after",
+          "5"
+        ],
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": 120,
+        "failed": false,
+        "summary": "Headless smoke completed; process exited 0.",
+        "error_marker_count": 0,
+        "output_log": ".godot/verification/e06_reward_feedback_luna/final_checks/177.output.log",
+        "output_sha256": "99a1f5c05f8b42a98c1353a644c0527b7fbdebfb7a944acd272ccf7d46cc34a6",
+        "engine_log": ".godot/verification/e06_reward_feedback_luna/final_checks/177.engine.log",
+        "engine_log_sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+      },
+      {
+        "plan_index": 190,
+        "execution_index": 7,
+        "name": "e06_tx_loot_test",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+          "--script",
+          "res://tests/e06_tx_loot_test.gd"
+        ],
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": 120,
+        "failed": false,
+        "summary": "E06 TX3 loot: 49 checks, 0 failures",
+        "error_marker_count": 0,
+        "output_log": ".godot/verification/e06_reward_feedback_luna/final_checks/190-e06_tx_loot_test.output.log",
+        "output_sha256": "480430ac5c34fb01364da07461e7f07835d2984cba43f6a2052bd9d1f8cc0706",
+        "engine_log": ".godot/verification/e06_reward_feedback_luna/final_checks/190-e06_tx_loot_test.engine.log",
+        "engine_log_sha256": "28ef116d8fdd1ceccb295f0f01b362d9a2a5f41e68cd199a12b00fdb4f958b51"
+      },
+      {
+        "plan_index": 209,
+        "execution_index": 8,
+        "name": "e06_production_loot_test",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+          "--script",
+          "res://tests/e06_production_loot_test.gd"
+        ],
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": 120,
+        "failed": false,
+        "summary": "E06 production loot: 53 checks, 0 failures",
+        "error_marker_count": 0,
+        "output_log": ".godot/verification/e06_reward_feedback_luna/final_checks/209-e06_production_loot_test.output.log",
+        "output_sha256": "5615e139dd4554656734a8d7995d2cf226902074b581cf5747c1abc1df129e7c",
+        "engine_log": ".godot/verification/e06_reward_feedback_luna/final_checks/209-e06_production_loot_test.engine.log",
+        "engine_log_sha256": "4d6ae7dc3e4c22329f621ee3e92dacb7168aa297a00e56ca70aeb394f2f0dca5"
+      },
+      {
+        "plan_index": 215,
+        "execution_index": 9,
+        "name": "e06_inventory_window_input_test",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+          "--script",
+          "res://tests/e06_inventory_window_input_test.gd"
+        ],
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": 120,
+        "failed": false,
+        "summary": "E06 inventory window input: 34 checks, 0 failures",
+        "error_marker_count": 0,
+        "output_log": ".godot/verification/e06_reward_feedback_luna/final_checks/215-e06_inventory_window_input_test.output.log",
+        "output_sha256": "bb0d3fb514c34a7faf7314b8ef9bed4417b8ae24e6b8cab026cebdeb079901d1",
+        "engine_log": ".godot/verification/e06_reward_feedback_luna/final_checks/215-e06_inventory_window_input_test.engine.log",
+        "engine_log_sha256": "5c713ed925081eb9cc6bcab30cf4560d31d7b5ab7aab7eb3946579f7442182f5"
+      },
+      {
+        "plan_index": 221,
+        "execution_index": 10,
+        "name": "reward_feedback_test",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+          "--script",
+          "res://tests/reward_feedback_test.gd"
+        ],
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": 120,
+        "failed": false,
+        "summary": "E06 reward feedback: 48 checks, 0 failures",
+        "error_marker_count": 0,
+        "output_log": ".godot/verification/e06_reward_feedback_luna/final_checks/221-reward_feedback_test.output.log",
+        "output_sha256": "9b0051d0a03ca75a1bbe7a71f4e08a805634ddcb98d8d5e5b077859080b8b6ed",
+        "engine_log": ".godot/verification/e06_reward_feedback_luna/final_checks/221-reward_feedback_test.engine.log",
+        "engine_log_sha256": "c301ae27a4229c884ec40bc6cfef75db04fa58febd2889ff329bda371250c30d"
+      }
+    ],
+    "full_suite_rerun": false,
+    "semantic_independent_audit": false,
+    "supervision_note": "A execução observou exit codes, timeouts, marcadores de erro e hashes de saída/engine log. A seleção não prova completude semântica do contrato."
+  },
+  "evidence_directory": ".godot/verification/e06_reward_feedback_luna/final_checks",
+  "final_rechecks": {
+    "purpose": "Regression for Escape routing with reward history open during a run and after death; verifies settings remain closed and pause state is preserved.",
+    "passed": true,
+    "godot_version": "Godot Engine v4.7.2.stable.official.ed1daf0bf",
+    "godot_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\review-engine\\Godot.exe",
+    "godot_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "runner_path": "tools/verify.ps1",
+    "runner_sha256": "64f7445e221c71045244c4039f792d26750b72ccedf4823331b55059ee193032",
+    "runner_plan_sha256": "1fa08657b8c0db584777437e819c158b1f4cb051f76bc7ae887b1101d03a7ff7",
+    "runner_manifest_sha256": "bf5fd37ffd13d2e4bcae20e4ee92c4e3d7335283bae227006bc148f7bde14352",
+    "source_commit": "ce80674b001f1ef7643d76b78d601b1cb61f33f2",
+    "total_plan_steps": 221,
+    "selected_steps": 3,
+    "selected_indices": [
+      13,
+      15,
+      221
+    ],
+    "selection": [
+      "battle_ui_test",
+      "ui_layout_test",
+      "reward_feedback_test"
+    ],
+    "execution_order": [
+      "battle_ui_test",
+      "ui_layout_test",
+      "reward_feedback_test"
+    ],
+    "per_check_timeout_seconds": 120,
+    "checks": [
+      {
+        "plan_index": 13,
+        "execution_index": 1,
+        "name": "battle_ui_test",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+          "--script",
+          "res://tests/battle_ui_test.gd"
+        ],
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": 120,
+        "failed": false,
+        "summary": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nUI de batalha: PASS (47 checks)",
+        "output_log": ".godot/verification/e06_reward_feedback_luna/escape_rechecks/013-battle_ui_test.output.log",
+        "output_sha256": "f8318896ca4f69c73dfee75d000be93183454816283638ee4c14279a62749d21",
+        "engine_log": ".godot/verification/e06_reward_feedback_luna/escape_rechecks/013-battle_ui_test.engine.log",
+        "engine_log_sha256": "19ca805b5dac2a4ef977b786eccb964fa10557dcb15dffe014cd427381a81696"
+      },
+      {
+        "plan_index": 15,
+        "execution_index": 2,
+        "name": "ui_layout_test",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+          "--script",
+          "res://tests/ui_layout_test.gd"
+        ],
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": 120,
+        "failed": false,
+        "summary": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nLayout da UI: PASS (30 checks)",
+        "output_log": ".godot/verification/e06_reward_feedback_luna/escape_rechecks/015-ui_layout_test.output.log",
+        "output_sha256": "2221c3b8ff5b8bc13995ce03df5addb87d48671ad7ca4b1b51601e3d859d9690",
+        "engine_log": ".godot/verification/e06_reward_feedback_luna/escape_rechecks/015-ui_layout_test.engine.log",
+        "engine_log_sha256": "786e497b3cda17d9d4270fa2899ce2432714eb98d4cf80ea908e593e1eb79a9b"
+      },
+      {
+        "plan_index": 221,
+        "execution_index": 3,
+        "name": "reward_feedback_test",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+          "--script",
+          "res://tests/reward_feedback_test.gd"
+        ],
+        "exit_code": 0,
+        "timed_out": false,
+        "timeout_seconds": 120,
+        "failed": false,
+        "summary": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nE06 reward feedback: 55 checks, 0 failures",
+        "output_log": ".godot/verification/e06_reward_feedback_luna/escape_rechecks/221-reward_feedback_test.output.log",
+        "output_sha256": "76e1cc29885e18047f395402c03ff9357b67f8d2ee4f4d614bec91b396da8589",
+        "engine_log": ".godot/verification/e06_reward_feedback_luna/escape_rechecks/221-reward_feedback_test.engine.log",
+        "engine_log_sha256": "8416ef0f3a36bf19a44fb70c7c148cbd5269e89f6525cfea33303e072bbd0d55"
+      }
+    ],
+    "runtime_inputs": {
+      "main": {
+        "path": "scripts/main.gd",
+        "sha256": "5b9dfd7e2258d58449e63240beb812a6457c9e8119bd7e23a40a711b537c1c36"
+      },
+      "run_reward_service": {
+        "path": "scripts/core/run_reward_service.gd",
+        "sha256": "da975c248c6d329787789b33d81fb6e052fbad49dbeb759aaf3226dfba79cf42"
+      },
+      "acquisition_journal": {
+        "path": "scripts/core/acquisition_journal.gd",
+        "sha256": "d2d003e1a399a279bcefacbfdadf785cbae37ab02754f59303f7df6af134e8fa"
+      },
+      "reward_feedback_panel": {
+        "path": "scripts/ui/reward_feedback_panel.gd",
+        "sha256": "77c21d18d1bdd864b66aa92e7a4ab53461883489fd41fbecc092e173926cf011"
+      },
+      "reward_feedback_test": {
+        "path": "tests/reward_feedback_test.gd",
+        "sha256": "8b8fb9cf3a2392809fe157bb7e854dfb2285c6574ecb6f072c8ce2931ccd3b1b"
+      },
+      "verification_runner": {
+        "path": "tools/verify.ps1",
+        "sha256": "64f7445e221c71045244c4039f792d26750b72ccedf4823331b55059ee193032"
+      }
+    },
+    "full_suite_rerun": false,
+    "semantic_independent_audit": false,
+    "evidence_directory": ".godot/verification/e06_reward_feedback_luna/escape_rechecks",
+    "supervision_note": "Recheck supervision records process exit, timeout, error markers and output/engine log hashes. Three selected checks passed; this is not a semantic independent audit."
+  },
+  "final_recheck_working_tree": {
+    "status": "dirty",
+    "note": "Includes this test addition, the report update, and existing project-local changes; see plan.json for exact state at selection start."
+  }
+}
