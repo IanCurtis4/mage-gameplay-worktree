@@ -189,7 +189,7 @@ static func validate_effect(effect: EffectDefinition) -> Dictionary:
 	return {"ok": true, "error_code": &"", "request_id": ""}
 
 static func definition_allowed(definition: Resource, snapshot: BuildSnapshot) -> bool:
-	return (definition.allowed_origins.is_empty() or snapshot.base_class_id in definition.allowed_origins) and (definition.allowed_evolutions.is_empty() or snapshot.evolution_id in definition.allowed_evolutions) and (not definition is AugmentDefinition or definition.class_id.is_empty() or definition.class_id == snapshot.base_class_id)
+	return (not definition is EquipmentDefinition or EquipmentEligibilityRules.identity_allowed(definition.metadata(),snapshot.base_class_id,snapshot.evolution_id)) and (definition.allowed_origins.is_empty() or snapshot.base_class_id in definition.allowed_origins) and (definition.allowed_evolutions.is_empty() or snapshot.evolution_id in definition.allowed_evolutions) and (not definition is AugmentDefinition or definition.class_id.is_empty() or definition.class_id == snapshot.base_class_id)
 
 static func _restrictions_valid(origins: Array[StringName], evolutions: Array[StringName]) -> bool:
 	# IdentityIds owns the closed evolution IDs; avoid loading equipment recipes
@@ -228,6 +228,7 @@ func mob_catalog() -> MobCatalog:
 	return _mob_catalog.copy_catalog()
 
 func register_set(definition: EquipmentSetDefinition) -> Dictionary:
+	if definition != null and not EquipmentEligibilityRules.validate(EquipmentEligibilityRules.for_resource(definition))["ok"]: return failure(&"invalid_set")
 	if definition == null or not IdentityIds.is_technical_id(String(definition.id)) or _sets.has(definition.id) or definition.thresholds.is_empty():
 		return failure(&"invalid_set")
 	for threshold: Variant in definition.thresholds:

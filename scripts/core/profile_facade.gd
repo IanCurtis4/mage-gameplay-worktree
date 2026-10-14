@@ -219,14 +219,13 @@ func equip_between_encounters(request_id: String, expected_revision: int, contro
 	var prepared := controller.build_service._prepare(intent)
 	if not prepared["ok"]:
 		return prepared
-	if not prepared["equipment_changed"]:
-		return {"ok": false, "error_code": &"invalid_intent", "request_id": request_id}
 	var ready := _begin_operation(request_id, expected_revision)
 	if not ready["ok"]:
 		return _finish_operation(request_id, ready)
 	var before := _profile.copy_state()
 	var candidate := before.copy_state()
 	var character := candidate.character_by_id(controller.run_state.character_id)
+	candidate.card_inventory = prepared["inventory"].copy_inventory()
 	var equipped: Dictionary = prepared["snapshot"].equipped
 	character.equipped.assign(equipped)
 	character.presets[character.selected_preset]["equipped"] = equipped.duplicate(true)
@@ -392,7 +391,9 @@ func build_preview(character_id: String, modifier_sources: Array[Dictionary] = [
 	if character == null:
 		return {"ok": false, "error_code": &"invalid_character_id"}
 	var snapshot := _build_snapshot(character)
-	var stats_result := snapshot.try_stat_breakdown(modifier_sources)
+	var loaded := BuildContentLoader.load_catalog_for_profile(_catalog)
+	if not loaded["ok"]: return loaded
+	var stats_result := BuildEffectComposer.compose(snapshot,{},modifier_sources,loaded["catalog"])
 	if not stats_result["ok"]:
 		return stats_result
 	return {
@@ -412,7 +413,9 @@ func attribute_purchase_preview(character_id: String, attribute_id: StringName, 
 	if attribute_id not in IdentityIds.attribute_ids() or amount <= 0:
 		return {"ok": false, "error_code": &"invalid_attribute_allocations"}
 	var snapshot := _build_snapshot(character)
-	var before_result := snapshot.try_stat_breakdown(modifier_sources)
+	var loaded := BuildContentLoader.load_catalog_for_profile(_catalog)
+	if not loaded["ok"]: return loaded
+	var before_result := BuildEffectComposer.compose(snapshot,{},modifier_sources,loaded["catalog"])
 	if not before_result["ok"]:
 		return before_result
 	var before: StatBreakdown = before_result["breakdown"]
@@ -434,7 +437,7 @@ func attribute_purchase_preview(character_id: String, attribute_id: StringName, 
 	# Use a copied build to recalculate allocation-dependent passives as well.
 	var candidate := character.copy_state()
 	candidate.attribute_allocations[attribute_id] += amount
-	var after_result := _build_snapshot(candidate).try_stat_breakdown(modifier_sources)
+	var after_result := BuildEffectComposer.compose(_build_snapshot(candidate),{},modifier_sources,loaded["catalog"])
 	if not after_result["ok"]:
 		return after_result
 	var after: StatBreakdown = after_result["breakdown"]
@@ -707,6 +710,14 @@ func _grant_reward_payload(request_id: String, expected_revision: int, run_id: S
 		acquired.append(added["instance_id"])
 		if not was_known:
 			candidate.lifetime_stats[&"equipment_unlocked"] += 1
+	var card_id := StringName(reward.get("card_id", &""))
+	var acquired_card: StringName = &""
+	if not card_id.is_empty():
+		var content := BuildContentLoader.load_catalog_for_profile(_catalog)
+		if not content["ok"]: return _finish_operation(request_id,content)
+		var grant := candidate.card_inventory.grant(card_id,content["catalog"],run_id+":"+request_id)
+		if not grant["ok"]: return _finish_operation(request_id,grant)
+		acquired_card = grant["card_instance_id"]
 	for stat_id: StringName in reward["stat_increments"]:
 		candidate.lifetime_stats[stat_id] = candidate.lifetime_stats.get(stat_id, 0) + reward["stat_increments"][stat_id]
 	candidate_session["last_committed_seq"] = sequence
@@ -718,6 +729,7 @@ func _grant_reward_payload(request_id: String, expected_revision: int, run_id: S
 		committed["reward_id"] = reward_id
 		committed["applied_reward"] = reward.duplicate(true)
 		committed["equipment_instance_ids"] = acquired.duplicate()
+		committed["card_instance_id"] = acquired_card
 	return _finish_operation(request_id, committed)
 
 func end_run(request_id: String, expected_revision: int, run_id: String, outcome: StringName) -> Dictionary:
@@ -836,7 +848,7 @@ func _build_snapshot(character: CharacterState, owner_profile: ProfileState = nu
 		character.purchased_skill_ranks,
 		character.granted_skill_ranks
 	)
-	return BuildSnapshot.from_character(
+	var snapshot := BuildSnapshot.from_character(
 		character,
 		ProgressionRules.base_level_for_xp(character.base_xp_total),
 		ProgressionRules.job_level_for_xp(character.job_xp_total, not character.evolution_id.is_empty()),
@@ -845,6 +857,8 @@ func _build_snapshot(character: CharacterState, owner_profile: ProfileState = nu
 		_catalog,
 		(owner_profile if owner_profile != null else _profile).equipment_instances
 	)
+	snapshot.card_inventory = (owner_profile if owner_profile != null else _profile).card_inventory.copy_inventory()
+	return snapshot
 
 func _commit_candidate(candidate: ProfileState, character_id: String) -> Dictionary:
 	# Validate persistent preferences with the same compositor used by the run,
@@ -860,9 +874,13 @@ func _commit_candidate(candidate: ProfileState, character_id: String) -> Diction
 		return BuildEffectCatalog.failure(&"invalid_character_id")
 	# Check only the edited character; unrelated alts cannot prevent a repair.
 	# Dormant identities may remain stored; start_run separately rejects them.
-	if character.evolution_id.is_empty() or _catalog.evolution_is_ready(character.evolution_id, character.base_class_id):
-		for preset_index: int in character.presets.size():
-			var selected := character.copy_state()
+	var owners: Array[CharacterState] = []
+	if candidate.card_inventory.to_record() != _profile.card_inventory.to_record(): owners.assign(candidate.characters)
+	else: owners.append(character)
+	for owner: CharacterState in owners:
+		if not owner.evolution_id.is_empty() and not _catalog.evolution_is_ready(owner.evolution_id,owner.base_class_id): continue
+		for preset_index: int in owner.presets.size():
+			var selected := owner.copy_state()
 			selected.selected_preset = preset_index
 			selected.equipped = selected.presets[preset_index]["equipped"].duplicate(true)
 			var composed := BuildEffectComposer.compose(_build_snapshot(selected, candidate), {}, [], loaded["catalog"])
@@ -991,3 +1009,59 @@ func _valid_request_id(request_id: String) -> bool:
 		if codepoint < 32 or codepoint == 127:
 			return false
 	return true
+
+var _inventory_pending: Dictionary = {}
+
+func preview_inventory_change(character_id: String, intent: Dictionary) -> Dictionary:
+	if not _inventory_pending.is_empty() or _operation_in_progress: return BuildEffectCatalog.failure(&"save_in_progress")
+	var prepared := _prepare_inventory_change(character_id,intent)
+	prepared.erase("candidate")
+	return prepared
+
+func commit_inventory_change(character_id: String, intent: Dictionary) -> Dictionary:
+	if not _inventory_pending.is_empty():
+		if _inventory_pending["character_id"] != character_id or _inventory_pending["intent"] != intent: return BuildEffectCatalog.failure(&"result_uncertain")
+		var reconciled := reconcile_transaction(String(intent.get("request_id","")))
+		if reconciled["ok"] or not reconciled.get("read_only",false): _inventory_pending.clear()
+		return reconciled
+	var prepared := _prepare_inventory_change(character_id,intent)
+	if not prepared["ok"]: return prepared
+	var request_id := String(intent["request_id"])
+	var ready := _begin_operation(request_id,int(intent["profile_revision"]))
+	if not ready["ok"]: return _finish_operation(request_id,ready)
+	var candidate: ProfileState = prepared["candidate"]
+	var result := _resolve_commit(_profile.copy_state(),candidate,_commit_candidate(candidate,character_id),true)
+	if not result["ok"] and result.get("read_only",false): _inventory_pending = {"character_id":character_id,"intent":intent.duplicate(true)}
+	return _finish_operation(request_id,result)
+
+func _prepare_inventory_change(character_id: String, intent: Dictionary) -> Dictionary:
+	if _profile == null: return BuildEffectCatalog.failure(&"profile_unavailable")
+	if _read_only: return BuildEffectCatalog.failure(&"recovery_required")
+	if _profile.reward_session != null: return BuildEffectCatalog.failure(&"run_active")
+	if not intent.get("request_id") is String or intent["request_id"].is_empty() or intent["request_id"].length()>MAX_REQUEST_ID_LENGTH: return BuildEffectCatalog.failure(&"invalid_request_id")
+	if typeof(intent.get("profile_revision")) != TYPE_INT or intent["profile_revision"] != _profile.revision: return BuildEffectCatalog.failure(&"stale_revision")
+	for key: Variant in intent:
+		if key not in ["request_id","profile_revision","kind","slot","equipment_instance_id","card_instance_id","socket_index","from_equipment_instance_id","from_socket_index"]: return BuildEffectCatalog.failure(&"invalid_intent")
+	for key: String in ["kind","slot","equipment_instance_id","card_instance_id","from_equipment_instance_id"]:
+		if intent.has(key) and typeof(intent[key]) not in [TYPE_STRING,TYPE_STRING_NAME]: return BuildEffectCatalog.failure(&"invalid_intent")
+	var candidate := _profile.copy_state()
+	var character := candidate.character_by_id(character_id)
+	if character == null: return BuildEffectCatalog.failure(&"invalid_character_id")
+	var kind := StringName(intent.get("kind",&""))
+	if kind in [&"equip",&"unequip"]:
+		var slot := StringName(intent.get("slot",&"")); var item := StringName(intent.get("equipment_instance_id",&""))
+		if slot not in IdentityIds.equipment_slots(): return BuildEffectCatalog.failure(&"invalid_slot")
+		if kind == &"equip" and not candidate.equipment_instances.has(item): return BuildEffectCatalog.failure(&"item_not_owned")
+		character.equipped[slot] = item if kind == &"equip" else null
+		character.presets[character.selected_preset]["equipped"] = character.equipped.duplicate(true)
+	var checked := candidate.card_inventory.preview(intent,character.equipped,candidate.equipment_instances,_catalog.all_equipment_metadata())
+	if not checked["ok"]: return checked
+	candidate.card_inventory = checked["inventory"]
+	var loaded := BuildContentLoader.load_catalog_for_profile(_catalog)
+	if not loaded["ok"]: return loaded
+	var previous := BuildEffectComposer.compose(_build_snapshot(_profile.character_by_id(character_id)),{},[],loaded["catalog"])
+	var after := BuildEffectComposer.compose(_build_snapshot(character,candidate),{},[],loaded["catalog"])
+	if not previous["ok"]: return previous
+	if not after["ok"]: return after
+	if character.equipped == _profile.character_by_id(character_id).equipped and candidate.card_inventory.sockets() == _profile.card_inventory.sockets(): return BuildEffectCatalog.failure(&"no_change")
+	return {"ok":true,"intent":intent.duplicate(true),"candidate":candidate,"request_id":intent["request_id"],"equipped":character.equipped.duplicate(true),"inventory":candidate.card_inventory.describe(),"before":previous["breakdown"].values(),"after":after["breakdown"].values(),"sources":after["provenance"],"inactive":after["inactive"],"skill_rules":after["skill_rules"],"skill_ranks":after["skill_ranks"],"item_grants":after["item_grants"],"kit_policies":after["kit_policies"],"procs":after["procs"]}

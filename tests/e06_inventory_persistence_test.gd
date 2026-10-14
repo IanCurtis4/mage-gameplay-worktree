@@ -13,6 +13,7 @@ func _identity() -> void:
 	var restricted := original.duplicate(true) as EquipmentDefinition
 	restricted.allowed_evolutions = [&"defender"]
 	restricted.take_over_path(path)
+	_reset_fixture_catalogs()
 	var catalog := ProfileCatalog.pilot()
 	_check(catalog.is_valid() and catalog.equipment_metadata(restricted.id)["allowed_evolutions"] == [&"defender"], "resource evolution restriction preserved")
 	_check(catalog.equipment_is_allowed(restricted.id, &"torso", &"swordsman", &"defender") and not catalog.equipment_is_allowed(restricted.id, &"torso", &"swordsman", &"berserker"), "correct evolution accepted and sibling rejected")
@@ -63,6 +64,7 @@ func _conflicts() -> void:
 		item.effects = [effect]
 		item.take_over_path(paths[index])
 		fixtures.append(item) # Keep process-local overrides alive throughout the scenario.
+	_reset_fixture_catalogs()
 	var catalog := ProfileCatalog.pilot()
 	var directory := _directory("conflict")
 	var store := ProfileStore.new(directory, catalog)
@@ -97,3 +99,8 @@ func _check(value: bool, label: String) -> void:
 	if not value:
 		failures += 1
 		push_error(label)
+
+func _reset_fixture_catalogs() -> void:
+	# Adversarial Resource replacements are separate from the immutable production cache.
+	ProfileCatalog._default_pilot = null
+	BuildContentLoader._catalog_cache.clear()

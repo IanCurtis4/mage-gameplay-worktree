@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_fw72x"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_eyr8p"]
+
+[sub_resource type="Resource" id="Resource_86dqa"]
+script = ExtResource("1_fw72x")
+id = &"class_set_mg_ar_head_effect"
+unique_effect_id = &"class_set_mg_ar_head_effect"
+family_id = &"class_set_mg_ar_head_effect"
+allowed_origins = Array[StringName]([&"mage"])
+allowed_evolutions = Array[StringName]([&"mg_ar"])
+axis = &"max_sp"
+unit = &"points"
+magnitude = 3.0
+
+[resource]
+script = ExtResource("2_eyr8p")
+id = &"class_set_mg_ar_head"
+display_name = "Diadema do Traçado"
+flavor_text = "Linhas geométricas bordadas lembram construções precisas traçadas no chão."
+description = "Cabeça: SP máximo +3."
+allowed_origins = Array[StringName]([&"mage"])
+allowed_evolutions = Array[StringName]([&"mg_ar"])
+slot = &"head"
+item_kind = &"armor"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 11
+quality_id = &"rare"
+socket_capacity = 1
+set_id = &"class_set_mg_ar"
+effects = Array[ExtResource("1_fw72x")]([SubResource("Resource_86dqa")])
+min_item_level = 11
+max_item_level = 15
+allowed_identities = Array[StringName]([&"mg_ar"])

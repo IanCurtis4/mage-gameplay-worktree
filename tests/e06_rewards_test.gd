@@ -50,14 +50,14 @@ func _run() -> void:
 	_check(c.run_state.build_snapshot.action_slots == slots_before and facade.current_profile().characters[1].base_xp_total == before.characters[1].base_xp_total, "rewards and equip preserve action layout and alt XP")
 	var directory: String = f["directory"]
 	c._show_result(false)
-	_check(c.run_state.card_inventory.describe()["owned"].is_empty() and c.run_state.augment_stacks.is_empty() and c.run_state.pending_choices == 0, "death discards all cards and choices")
+	_check(c.run_state.card_inventory.describe()["owned"].size() == 3 and c.run_state.card_inventory.to_record() == facade.current_profile().card_inventory.to_record() and c.run_state.augment_stacks.is_empty() and c.run_state.pending_choices == 0, "death preserves permanent cards and discards augments and choices")
 	c.free()
 	paused = false
 	var reopened := ProfileFacade.new(ProfileStore.new(directory), ProfileRewardResolver.pilot_progression())
 	var loaded := reopened.open_profile()
 	_check(loaded["ok"] and loaded["abandoned_run_closed"] and reopened.current_profile().characters[0].base_xp_total == 400 and item in TX.definition_ids(reopened.current_profile()), "reopen keeps durable XP/items and closes interrupted run")
 	var fresh := reopened.start_run("new-run", reopened.current_profile().revision)
-	_check(fresh["ok"] and fresh["run_state"].card_inventory.describe()["owned"].is_empty() and fresh["run_state"].augment_stacks.is_empty(), "restart never reconstructs cards or augments")
+	_check(fresh["ok"] and fresh["run_state"].card_inventory.describe()["owned"].size() == 3 and fresh["run_state"].card_inventory.to_record() == reopened.current_profile().card_inventory.to_record() and fresh["run_state"].augment_stacks.is_empty(), "restart loads permanent cards and no augments")
 	await _terminal()
 	await _reward_boundaries()
 	await _training()
@@ -85,7 +85,7 @@ func _terminal() -> void:
 	_check(c.run_state.card_inventory.describe()["owned"].size() == 1, "only second encounter grants stage card")
 	_check(c.next_button.visible and c.next_button.text == "Encerrar demonstração", "explicit terminal available after demonstration reward")
 	c._start_next_encounter()
-	_check(c.run_finished and paused and c.run_state.card_inventory.describe()["owned"].is_empty(), "explicit end closes and discards transient inventory")
+	_check(c.run_finished and paused and c.run_state.card_inventory.describe()["owned"].size() == 1 and c.run_state.augment_stacks.is_empty(), "explicit end preserves card and discards augments")
 	c.free()
 	paused = false
 	await process_frame

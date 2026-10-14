@@ -9,10 +9,14 @@ const EVOLUTION_WALLET: StringName = &"evolution"
 const MAX_ACTIVE_RANK := 5
 const MAX_PASSIVE_RANK := 3
 
+# Only the no-override production shape is shared internally; every caller gets a copy.
+static var _default_pilot: ProfileCatalog
+
 var _skills: Dictionary[StringName, Dictionary] = {}
 var _equipment: Dictionary[StringName, Dictionary] = {}
 var _evolutions: Dictionary[StringName, EvolutionDefinition] = {}
 var _evolution_order: Array[StringName] = []
+var _card_ids: Array[StringName] = []
 var _sealed := false
 var _build_error := false
 
@@ -21,7 +25,12 @@ static func pilot(
 	additional_skills: Dictionary = {},
 	evolution_overrides: Dictionary = {}
 ) -> ProfileCatalog:
+	var default_shape := additional_equipment.is_empty() and additional_skills.is_empty() and evolution_overrides.is_empty()
+	if default_shape and _default_pilot != null:
+		return _default_pilot.copy_catalog()
 	var catalog := ProfileCatalog.new()
+	for resource: Resource in BuildContentLoader.definitions(&"card"):
+		if resource is CardDefinition: catalog._card_ids.append(resource.id)
 	catalog.add_skill(&"slash", [&"swordsman"], ACTIVE, BASE_WALLET, 0, 5)
 	catalog.add_skill(&"dash", [&"swordsman"], ACTIVE, BASE_WALLET, 0, 5)
 	catalog.add_skill(&"shield_wall", [&"swordsman"], ACTIVE, BASE_WALLET, 0, 5)
@@ -109,7 +118,11 @@ static func pilot(
 			metadata.get("rank_requirements", {})
 		)
 	catalog._register_e00_evolutions(evolution_overrides)
-	return catalog.seal()
+	catalog.seal()
+	if default_shape:
+		_default_pilot = catalog
+		return catalog.copy_catalog()
+	return catalog
 
 func add_skill(
 	skill_id: StringName,
@@ -170,6 +183,8 @@ func add_equipment(item_id: StringName, slot: StringName, allowed_base_classes: 
 		"starter": starter,
 		"allowed_evolutions": allowed_evolutions.duplicate(),
 	}
+	for field: String in ["min_item_level","max_item_level","allowed_identities"]:
+		if acquisition_metadata.has(field): _equipment[item_id][field] = acquisition_metadata[field].duplicate() if acquisition_metadata[field] is Array else acquisition_metadata[field]
 	return true
 
 func seal() -> ProfileCatalog:
@@ -180,6 +195,7 @@ func copy_catalog() -> ProfileCatalog:
 	var copy := ProfileCatalog.new()
 	copy._skills = _skills.duplicate(true)
 	copy._equipment = _equipment.duplicate(true)
+	copy._card_ids = _card_ids.duplicate()
 	for evolution_id: StringName in _evolution_order:
 		copy._evolutions[evolution_id] = _evolutions[evolution_id].copy_definition()
 	copy._evolution_order = _evolution_order.duplicate()
@@ -405,7 +421,7 @@ func skill_is_allowed(skill_id: StringName, base_class_id: StringName, evolution
 
 func equipment_is_allowed(item_id: StringName, slot: StringName, base_class_id: StringName, evolution_id: StringName = &"") -> bool:
 	var metadata: Dictionary = _equipment.get(item_id, {})
-	return not metadata.is_empty() and slot in IdentityIds.equipment_slots() and EquipmentRules.slot_matches(metadata["slot"], slot) and base_class_id in metadata["allowed_base_classes"] and (metadata["allowed_evolutions"].is_empty() or evolution_id in metadata["allowed_evolutions"])
+	return not metadata.is_empty() and EquipmentEligibilityRules.identity_allowed(metadata,base_class_id,evolution_id) and slot in IdentityIds.equipment_slots() and EquipmentRules.slot_matches(metadata["slot"], slot) and base_class_id in metadata["allowed_base_classes"] and (metadata["allowed_evolutions"].is_empty() or evolution_id in metadata["allowed_evolutions"])
 
 func _register_defender_skills() -> void:
 	var origin: Array[StringName] = [&"swordsman"]
@@ -814,3 +830,6 @@ func _requirement_cycle_from(skill_id: StringName, visiting: Dictionary[StringNa
 
 func all_equipment_metadata() -> Dictionary:
 	return _equipment.duplicate(true)
+
+func card_ids() -> Array[StringName]:
+	return _card_ids.duplicate()

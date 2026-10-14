@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_6opl0"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_c5pgs"]
+
+[sub_resource type="Resource" id="Resource_gm6k7"]
+script = ExtResource("1_6opl0")
+id = &"spiritualist_prayer_beads_effect"
+unique_effect_id = &"spiritualist_prayer_beads_effect"
+family_id = &"spiritualist_prayer_beads_effect"
+allowed_origins = Array[StringName]([&"mage"])
+allowed_evolutions = Array[StringName]([&"spiritualist"])
+axis = &"max_sp"
+unit = &"points"
+magnitude = 5.0
+
+[resource]
+script = ExtResource("2_c5pgs")
+id = &"spiritualist_prayer_beads"
+display_name = "Japamala do Eco Calmo"
+flavor_text = "Contas de madeira de um japamala, polidas pelo manuseio cuidadoso."
+description = "Armadura nos braços: SP máximo +5."
+allowed_origins = Array[StringName]([&"mage"])
+allowed_evolutions = Array[StringName]([&"spiritualist"])
+slot = &"arms"
+item_kind = &"armor"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 6
+quality_id = &"rare"
+socket_capacity = 1
+effects = Array[ExtResource("1_6opl0")]([SubResource("Resource_gm6k7")])
+min_item_level = 6
+max_item_level = 10
+allowed_identities = Array[StringName]([&"spiritualist"])
+visual_key = &"wooden_beads"

@@ -2,6 +2,9 @@ class_name BuildContentLoader
 extends RefCounted
 ## Resource files are the single metadata source. T3 can add recipes without code edits.
 
+# Never return a cached registry: BuildEffectCatalog copies Resources on both ingress and egress.
+static var _catalog_cache: Dictionary = {}
+
 static func definitions(origin: StringName, include_progression: bool = false) -> Array[Resource]:
 	var result: Array[Resource] = []
 	var directory := "res://resources/build_effects/%s" % origin
@@ -22,9 +25,20 @@ static func definitions(origin: StringName, include_progression: bool = false) -
 				if not file.ends_with(".tres"): continue
 				var definition := load(extra.path_join(file)) as Resource
 				result.append(definition.duplicate(true) if definition != null else null)
+	if include_progression and origin in [&"equipment",&"set"]:
+		var content_dir := "res://resources/e06_inventory_content/%s" % origin
+		if DirAccess.dir_exists_absolute(content_dir):
+			var names := DirAccess.get_files_at(content_dir); names.sort()
+			for file: String in names:
+				if file.ends_with(".tres"):
+					var authored := load(content_dir.path_join(file)) as Resource
+					result.append(authored.duplicate(true) if authored != null else null)
 	return result
 
 static func load_catalog(include_progression: bool = false, gameplay_behaviors: bool = false) -> Dictionary:
+	var cache_key := int(include_progression) * 2 + int(gameplay_behaviors)
+	if _catalog_cache.has(cache_key):
+		return {"ok": true, "error_code": &"", "request_id": "", "catalog": (_catalog_cache[cache_key] as BuildEffectCatalog).copy_catalog()}
 	var catalog := BuildEffectCatalog.new()
 	var mobs := MobCatalog.new()
 	for definition: Resource in definitions(&"mob", include_progression):
@@ -37,7 +51,7 @@ static func load_catalog(include_progression: bool = false, gameplay_behaviors: 
 		if not registered["ok"]:
 			return registered
 	catalog.set_mob_catalog(mobs)
-	for definition: Resource in definitions(&"set"):
+	for definition: Resource in definitions(&"set", include_progression):
 		var registered := catalog.register_set(definition as EquipmentSetDefinition)
 		if not registered["ok"]:
 			return registered
@@ -52,7 +66,8 @@ static func load_catalog(include_progression: bool = false, gameplay_behaviors: 
 			var registered := catalog.register_definition(&"augment", legacy.get_definition(&"augment", id))
 			if not registered["ok"]:
 				return registered
-	return {"ok": true, "error_code": &"", "request_id": "", "catalog": catalog}
+	_catalog_cache[cache_key] = catalog
+	return {"ok": true, "error_code": &"", "request_id": "", "catalog": catalog.copy_catalog()}
 
 static func pilot() -> BuildEffectCatalog:
 	var loaded := load_catalog(true)
@@ -66,8 +81,11 @@ static func load_catalog_for_profile(profile_catalog: ProfileCatalog, gameplay_b
 	var catalog: BuildEffectCatalog = loaded["catalog"]
 	# Metadata-only injected catalogs remain valid neutral equipment. Production
 	# IDs always keep their Resource effects and never synthesize a second recipe.
+	var production_ids: Dictionary = {}
+	for id: StringName in catalog.ids(&"equipment"):
+		production_ids[id] = true
 	for id: StringName in profile_catalog.equipment_ids():
-		if catalog.get_definition(&"equipment", id) != null:
+		if production_ids.has(id):
 			continue
 		var metadata := profile_catalog.equipment_metadata(id)
 		var item := EquipmentDefinition.new()

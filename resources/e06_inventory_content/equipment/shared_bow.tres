@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_qrat3"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_eppbk"]
+
+[sub_resource type="Resource" id="Resource_6wm6v"]
+script = ExtResource("1_qrat3")
+id = &"shared_bow_effect"
+unique_effect_id = &"shared_bow_effect"
+family_id = &"shared_bow_effect"
+allowed_origins = Array[StringName]([&"archer"])
+axis = &"precision_attack"
+unit = &"points"
+magnitude = 2.0
+
+[resource]
+script = ExtResource("2_eppbk")
+id = &"shared_bow"
+display_name = "Arco do Vento Claro"
+flavor_text = "Um arco de madeira leve, pronto para a prática de tiro."
+description = "Arma de duas mãos: ataque de precisão +2."
+allowed_origins = Array[StringName]([&"archer"])
+hand_usage = &"two_hands"
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"common"
+socket_capacity = 1
+effects = Array[ExtResource("1_qrat3")]([SubResource("Resource_6wm6v")])
+allowed_identities = Array[StringName]([&"archer", &"sentinel", &"hunter"])
+visual_key = &"bow"

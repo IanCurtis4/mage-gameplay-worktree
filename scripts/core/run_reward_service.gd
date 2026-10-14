@@ -81,6 +81,7 @@ func issue(event_id: String, reward_id: StringName, stage_reward: bool = false) 
 		card_id = card_pool[controller.rng.randi_range(0, card_pool.size() - 1)]
 	var ticket_id := "reward-%s-%d" % [_run.run_id.md5_text(), _next_sequence]
 	var message := "XP e escolha de augment disponíveis." if stage_reward and mob_loot_enabled() else ("Nenhuma carta útil disponível." if stage_reward and card_id.is_empty() else "")
+	payload["card_id"] = card_id
 	var entry := {"ok": true, "error_code": &"", "request_id": ticket_id, "ticket_id": ticket_id, "event_id": event_id, "reward_id": reward_id, "sequence": _next_sequence, "payload": payload, "item_id": item_id, "card_id": card_id, "stage_reward": stage_reward, "delivered": false, "message": message}
 	_tickets[ticket_id] = entry
 	_events[event_id] = ticket_id
@@ -170,7 +171,13 @@ func collect(ticket_id: String) -> Dictionary:
 		else:
 			for drop: Dictionary in entry["payload"]["equipment_drops"]:
 				_run.add_local_equipment(StringName(drop["definition_id"]), drop)
-		if not StringName(entry["card_id"]).is_empty():
+		if persistent:
+			_run.card_inventory = controller.persistent_facade.current_profile().card_inventory.copy_inventory()
+			_run.build_snapshot.card_inventory = _run.card_inventory.copy_inventory()
+			entry["card_instance_id"] = result.get("card_instance_id", &"")
+			_run.card_instances = _run.card_inventory.describe()["instances"]
+			_run.card_sockets = _run.card_inventory.sockets()
+		if not persistent and not StringName(entry["card_id"]).is_empty():
 			var granted := _run.card_inventory.grant(entry["card_id"], _run.effect_catalog(), ticket_id)
 			entry["card_instance_id"] = granted.get("card_instance_id", &"")
 			_run.card_instances = _run.card_inventory.describe()["instances"]
@@ -260,6 +267,7 @@ func issue_mob_drop(actor: EnemyActor) -> Dictionary:
 	assert(rolled["ok"], "Validated immutable loot must resolve without failure")
 	var payload := {"base_xp": 0, "job_xp": 0, "equipment_ids": [], "equipment_drops": rolled["equipment_drops"].duplicate(true), "stat_increments": {}}
 	for drop: Dictionary in payload["equipment_drops"]: payload["equipment_ids"].append(drop["definition_id"])
+	payload["card_id"] = rolled["card_id"]
 	var ticket_id := "reward-%s-%d" % [_run.run_id.md5_text(), _next_sequence]
 	var entry := {"ok": true, "error_code": &"", "request_id": ticket_id, "ticket_id": ticket_id, "event_id": event, "reward_id": &"mob_drop", "sequence": _next_sequence, "payload": payload, "item_id": payload["equipment_ids"][0] if not payload["equipment_ids"].is_empty() else &"", "card_id": rolled["card_id"], "stage_reward": false, "mob_ticket": true, "delivered": false, "message": "Loot do inimigo coletado.", "mob_base_id": occurrence.mob_base_id, "category_id": occurrence.category_id, "occurrence_id": occurrence.occurrence_id}
 	_tickets[ticket_id] = entry

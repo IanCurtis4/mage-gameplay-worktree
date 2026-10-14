@@ -1,6 +1,6 @@
 class_name RunCardInventory
 extends RefCounted
-## Each acquisition is a run-only exemplar. All DTOs and candidates are copies.
+## Profile-owned collection; the run observes a projection. Candidates are copies.
 
 var _instances: Dictionary[StringName, StringName] = {}
 var _sockets: Dictionary = {}
@@ -41,6 +41,7 @@ func grant(card_id: StringName, catalog: BuildEffectCatalog, acquisition_id: Str
 		if _grants[acquisition_id]["definition_id"] != card_id:
 			return BuildEffectCatalog.failure(&"replayed_request")
 		return {"ok": true, "already_applied": true, "card_instance_id": _grants[acquisition_id]["instance_id"]}
+	if _next_counter < 1 or _next_counter >= EquipmentRules.MAX_EXACT_INTEGER: return BuildEffectCatalog.failure(&"invalid_card_counter")
 	var id := StringName("card_%d" % _next_counter)
 	_instances[id] = card_id
 	_next_counter += 1
@@ -54,13 +55,12 @@ func sockets() -> Dictionary:
 
 func preview(intent: Dictionary, equipped: Dictionary, equipment_instances: Dictionary, equipment_definitions: Dictionary) -> Dictionary:
 	var copy := copy_inventory()
-	for item: Variant in copy._sockets.keys():
-		if item not in equipped.values():
-			copy._sockets.erase(item)
 	var kind := StringName(intent.get("kind", &""))
+	if kind not in [&"equip", &"unequip", &"socket", &"unsocket", &"transfer"]:
+		return BuildEffectCatalog.failure(&"invalid_intent")
 	if kind in [&"socket", &"unsocket", &"transfer"]:
 		var item := StringName(intent.get("equipment_instance_id", &""))
-		if item not in equipped.values() or not equipment_instances.has(item):
+		if not equipment_instances.has(item):
 			return BuildEffectCatalog.failure(&"socket_item_not_equipped")
 		var instance: EquipmentInstance = equipment_instances[item]
 		if not EquipmentRules.allows_sockets(equipment_definitions.get(instance.definition_id, {})) or instance.socket_capacity == 0:
@@ -108,3 +108,57 @@ func clear() -> void:
 	_sockets.clear()
 	_grants.clear()
 	revision += 1
+
+func active_sockets(equipped: Dictionary) -> Dictionary:
+	var result := {}
+	for host: Variant in _sockets:
+		if host in equipped.values(): result[host] = _sockets[host].duplicate()
+	return result
+
+func effect_state(equipped: Dictionary) -> Dictionary:
+	return {"card_instances": _instances.duplicate(), "card_sockets": active_sockets(equipped)}
+
+func to_record() -> Dictionary:
+	var instances := {}; var sockets := {}; var grants := {}
+	for id: StringName in _instances: instances[String(id)] = String(_instances[id])
+	for host: Variant in _sockets:
+		var values: Array = []
+		for card: Variant in _sockets[host]: values.append(null if card == null else String(card))
+		sockets[String(host)] = values
+	for acquisition: String in _grants: grants[acquisition] = {"instance_id":String(_grants[acquisition]["instance_id"]),"definition_id":String(_grants[acquisition]["definition_id"])}
+	return {"instances":instances,"sockets":sockets,"next_counter":_next_counter,"grants":grants,"revision":revision}
+
+static func from_record(raw: Variant, equipment: Dictionary, definitions: Dictionary, known_cards: Array[StringName]) -> Dictionary:
+	if not raw is Dictionary or raw.size() != 5 or not raw.get("instances") is Dictionary or not raw.get("sockets") is Dictionary or not raw.get("grants") is Dictionary or not EquipmentRules.exact_integer(raw.get("next_counter"),1) or not EquipmentRules.exact_integer(raw.get("revision"),0):
+		return BuildEffectCatalog.failure(&"invalid_card_inventory")
+	var inventory := RunCardInventory.new()
+	inventory._next_counter = int(raw["next_counter"])
+	inventory.revision = int(raw["revision"])
+	for id: Variant in raw["instances"]:
+		if typeof(id) not in [TYPE_STRING,TYPE_STRING_NAME] or typeof(raw["instances"][id]) not in [TYPE_STRING,TYPE_STRING_NAME]: return BuildEffectCatalog.failure(&"invalid_card_inventory")
+		var name := String(id)
+		var number := name.trim_prefix("card_").to_int()
+		if name != "card_%d" % number or number < 1 or number >= inventory._next_counter or StringName(raw["instances"][id]) not in known_cards: return BuildEffectCatalog.failure(&"invalid_card_inventory")
+		inventory._instances[StringName(id)] = StringName(raw["instances"][id])
+	var seen := {}
+	for host: Variant in raw["sockets"]:
+		if typeof(host) not in [TYPE_STRING,TYPE_STRING_NAME] or not equipment.has(StringName(host)) or not raw["sockets"][host] is Array: return BuildEffectCatalog.failure(&"invalid_card_inventory")
+		var item: EquipmentInstance = equipment[StringName(host)]
+		var sockets: Array = raw["sockets"][host]
+		if not EquipmentRules.allows_sockets(definitions.get(item.definition_id,{})) or sockets.size() != item.socket_capacity or item.socket_capacity == 0: return BuildEffectCatalog.failure(&"invalid_card_inventory")
+		var copied: Array = []
+		for card: Variant in sockets:
+			if card == null: copied.append(null); continue
+			if typeof(card) not in [TYPE_STRING,TYPE_STRING_NAME] or not inventory._instances.has(StringName(card)) or seen.has(StringName(card)): return BuildEffectCatalog.failure(&"invalid_card_inventory")
+			seen[StringName(card)] = true; copied.append(StringName(card))
+		inventory._sockets[StringName(host)] = copied
+	var receipted_instances := {}
+	for acquisition: Variant in raw["grants"]:
+		var grant: Variant = raw["grants"][acquisition]
+		if not acquisition is String or acquisition.is_empty() or acquisition.length()>160 or not grant is Dictionary or grant.size()!=2 or typeof(grant.get("instance_id")) not in [TYPE_STRING,TYPE_STRING_NAME] or typeof(grant.get("definition_id")) not in [TYPE_STRING,TYPE_STRING_NAME]: return BuildEffectCatalog.failure(&"invalid_card_inventory")
+		var instance := StringName(grant["instance_id"])
+		if inventory.definition_id(instance) != StringName(grant["definition_id"]) or not inventory.owns(instance): return BuildEffectCatalog.failure(&"invalid_card_inventory")
+		if receipted_instances.has(instance): return BuildEffectCatalog.failure(&"invalid_card_inventory")
+		receipted_instances[instance] = true
+		inventory._grants[acquisition] = {"instance_id":instance,"definition_id":StringName(grant["definition_id"])}
+	return {"ok":true,"inventory":inventory}

@@ -20,7 +20,7 @@ func _run() -> void:
 	var catalog: BuildEffectCatalog = loaded["catalog"]
 	var mobs := catalog.mob_catalog()
 	check(base["catalog"].mob_catalog().ids().size() == 8 and mobs.ids().size() == 11, "eight frozen species plus3new")
-	check(catalog.ids(&"equipment").size() == 39 and catalog.ids(&"card").size() == 6, "same39 equipment and6 cards")
+	check(catalog.ids(&"equipment").size() == 85 and catalog.ids(&"card").size() == 6, "expanded85 equipment and preserved6 cards")
 	for stage: int in range(1,7):
 		for index: int in MobCatalog.CATEGORIES.size():
 			var o := occurrence(&"test_gel", MobCatalog.CATEGORIES[index], PlaytestGameplay.origin(stage))

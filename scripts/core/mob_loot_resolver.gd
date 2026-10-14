@@ -74,6 +74,8 @@ func validate_occurrence(occurrence: MobOccurrence) -> Dictionary:
 		var card := _catalog.get_definition(&"card", definition.card_id) as CardDefinition
 		if card == null or card.mob_base_id != definition.id:
 			return BuildEffectCatalog.failure(&"missing_mob_base")
+	for quality: Variant in _profiles[occurrence.category_id]["quality_weights"]:
+		if _item_pool(occurrence.category_id,minimum_quality(occurrence.category_id,StringName(quality)),int(checked["level"])).is_empty(): return BuildEffectCatalog.failure(&"empty_eligible_pool")
 	return checked
 func roll(occurrence: MobOccurrence, uniforms: Array) -> Dictionary:
 	var checked := validate_occurrence(occurrence)
@@ -89,17 +91,18 @@ func roll(occurrence: MobOccurrence, uniforms: Array) -> Dictionary:
 	var drops: Array[Dictionary] = []
 	if FLOORS.has(occurrence.category_id) or _passes(float(uniforms[0]), float(row["equipment_chance"])):
 		var quality := minimum_quality(occurrence.category_id, StringName(_weighted(row["quality_weights"], float(uniforms[1]), EquipmentRules.QUALITY_IDS)))
-		var id := StringName(_weighted(_item_pool(occurrence.category_id, quality), float(uniforms[2])))
+		var id := StringName(_weighted(_item_pool(occurrence.category_id, quality, int(checked["level"])), float(uniforms[2])))
 		var item := _catalog.get_definition(&"equipment", id) as EquipmentDefinition
 		var sockets := int(_weighted(row["socket_weights"], float(uniforms[3]))) if EquipmentRules.allows_sockets(item.metadata()) else 0
 		drops.append({"definition_id": id, "origin_id": occurrence.origin_id, "item_level": int(checked["level"]), "quality_id": quality, "socket_capacity": sockets, "recipe_revision_id": _recipe_revision_id, "power_ruleset_id": _power_ruleset_id})
 	var card: StringName = mob.card_id if mob.id not in _cardless_base_ids and _passes(float(uniforms[4]), float(row["card_chance"])) else &""
 	return {"ok": true, "equipment_drops": drops, "card_id": card, "mob_base_id": mob.id, "category_id": occurrence.category_id, "occurrence_id": occurrence.occurrence_id}
-func _item_pool(category: StringName, quality: StringName) -> Dictionary:
+func _item_pool(category: StringName, quality: StringName, level: int = 0) -> Dictionary:
 	var result: Dictionary = {}
 	for raw_id: Variant in _profiles[category]["equipment_weights"]:
 		var id := StringName(raw_id)
 		var item := _catalog.get_definition(&"equipment", id) as EquipmentDefinition
+		if level > 0 and not EquipmentEligibilityRules.level_allowed(EquipmentEligibilityRules.for_resource(item),level): continue
 		if (not _strict_quality_pools or item.quality_id == quality) and _catalog.validate_equipment_quality(item, quality)["ok"]:
 			result[id] = _profiles[category]["equipment_weights"][raw_id]
 	return result

@@ -1,6 +1,6 @@
 class_name RunState
 extends RefCounted
-## Mutable run-only state. Persistent character data enters only as a value snapshot.
+## Mutable encounter/augment state and copied profile collection; catalogs stay immutable.
 
 const DEFAULT_CLASS_ID: StringName = &"swordsman"
 
@@ -98,7 +98,10 @@ func set_effect_catalog(catalog: BuildEffectCatalog) -> Dictionary:
 	return {"ok": true, "error_code": &"", "request_id": "", "runtime_revision": runtime_revision}
 
 func effect_state() -> Dictionary:
-	return {"augment_stacks": augment_stacks.duplicate(true), "card_sockets": card_sockets.duplicate(true), "card_instances": card_instances.duplicate(true)}
+	var active := {}
+	for host: Variant in card_sockets:
+		if host in build_snapshot.equipped.values(): active[host] = card_sockets[host].duplicate()
+	return {"augment_stacks": augment_stacks.duplicate(true), "card_sockets": active, "card_instances": card_instances.duplicate(true)}
 
 func _ensure_effect_cache(temporary_sources: Array[Dictionary] = []) -> void:
 	if build_snapshot == null:
@@ -279,9 +282,9 @@ func reset() -> void:
 	augment_stacks.clear()
 	pending_choices = 0
 	current_offer.clear()
-	card_sockets.clear()
-	card_instances.clear()
-	card_inventory.clear()
+	card_inventory = build_snapshot.card_inventory.copy_inventory() if _uses_persistent_build else RunCardInventory.new()
+	card_sockets = card_inventory.sockets()
+	card_instances = card_inventory.describe()["instances"]
 	_offer_ids.clear()
 	_choice_ids.clear()
 	_offer_open = false

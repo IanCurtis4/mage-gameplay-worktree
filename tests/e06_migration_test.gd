@@ -9,16 +9,16 @@ func _initialize() -> void:
 	directory = ProjectSettings.globalize_path("res://.godot/verification/e06_t2/migration_%d" % Time.get_ticks_usec())
 	DirAccess.make_dir_recursive_absolute(directory)
 	var catalog := ProfileCatalog.pilot()
-	_check(ProfileState.CATALOG_VERSION == 11 and ProfileState.SCHEMA_VERSION == 4 and ProfileState.RULESET_ID == "stat_thresholds_v1", "historical catalogs -> catalog11/schema4, stat ruleset unchanged")
+	_check(ProfileState.CATALOG_VERSION == 12 and ProfileState.SCHEMA_VERSION == 5 and ProfileState.RULESET_ID == "stat_thresholds_v1", "historical catalogs -> catalog12/schema5, stat ruleset unchanged")
 	var effects := BuildContentLoader.pilot()
-	_check(effects.ids(&"equipment").size() == 39 and effects.ids(&"card").size() == 6, "published metadata includes 12 preserved and 25 published plus 2 progression tiers")
+	_check(effects.ids(&"equipment").size() == 85 and effects.ids(&"card").size() == 6, "runtime metadata preserves 39 previous and adds 46 recipes")
 	for origin: StringName in [&"swordsman", &"mage", &"archer"]:
 		var starters := catalog.starter_equipment(origin)
 		_check(starters[&"torso"] == &"traveler_vest" and starters[&"accessory_1"] == &"traveler_charm" and catalog.starter_item_ids(origin).size() == 3, "origin starter trio from unique catalog")
 	for id: StringName in effects.ids(&"equipment"):
 		var item := effects.get_definition(&"equipment", id) as EquipmentDefinition
 		var metadata := catalog.equipment_metadata(id)
-		_check(metadata["slot"] == item.slot and metadata["allowed_base_classes"] == item.allowed_origins and metadata["starter"] == item.starter, "profile metadata matches Resource")
+		_check(metadata["slot"] == item.slot and metadata["allowed_base_classes"] == (IdentityIds.base_class_ids() if item.allowed_origins.is_empty() else item.allowed_origins) and metadata["starter"] == item.starter, "profile metadata matches Resource")
 	for version: int in range(1, 9):
 		var payload := _payload(version)
 		var encoded := JSON.stringify(payload)

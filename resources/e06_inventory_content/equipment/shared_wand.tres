@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_ua2mg"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_qlxkh"]
+
+[sub_resource type="Resource" id="Resource_obx8m"]
+script = ExtResource("1_ua2mg")
+id = &"shared_wand_effect"
+unique_effect_id = &"shared_wand_effect"
+family_id = &"shared_wand_effect"
+allowed_origins = Array[StringName]([&"mage"])
+axis = &"magic_attack"
+unit = &"points"
+magnitude = 2.0
+
+[resource]
+script = ExtResource("2_qlxkh")
+id = &"shared_wand"
+display_name = "Varinha de Estrela"
+flavor_text = "Uma varinha de madeira com uma pequena estrela entalhada."
+description = "Arma de uma mão: ataque mágico +2."
+allowed_origins = Array[StringName]([&"mage"])
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"common"
+socket_capacity = 1
+effects = Array[ExtResource("1_ua2mg")]([SubResource("Resource_obx8m")])
+allowed_identities = Array[StringName]([&"mage", &"elementalist", &"spiritualist", &"mg_ar"])
+visual_key = &"staff"

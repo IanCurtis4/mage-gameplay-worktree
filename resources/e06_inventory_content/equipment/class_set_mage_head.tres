@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_8f88u"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_ugppj"]
+
+[sub_resource type="Resource" id="Resource_e48pj"]
+script = ExtResource("1_8f88u")
+id = &"class_set_mage_head_effect"
+unique_effect_id = &"class_set_mage_head_effect"
+family_id = &"class_set_mage_head_effect"
+allowed_origins = Array[StringName]([&"mage"])
+axis = &"max_sp"
+unit = &"points"
+magnitude = 3.0
+
+[resource]
+script = ExtResource("2_ugppj")
+id = &"class_set_mage_head"
+display_name = "Capuz de Fagulha"
+flavor_text = "Tecido azul com pequenos bordados de estrelas guia a concentração."
+description = "Cabeça: SP máximo +3."
+allowed_origins = Array[StringName]([&"mage"])
+slot = &"head"
+item_kind = &"armor"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 2
+quality_id = &"rare"
+socket_capacity = 1
+set_id = &"class_set_mage"
+effects = Array[ExtResource("1_8f88u")]([SubResource("Resource_e48pj")])
+min_item_level = 2
+max_item_level = 5
+allowed_identities = Array[StringName]([&"mage", &"elementalist", &"spiritualist", &"mg_ar"])

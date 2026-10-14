@@ -43,7 +43,7 @@ func _run() -> void:
 	var visible_equipment := 0
 	for row: Dictionary in description["equipment"]:
 		if EquipmentRules.slot_matches(row["slot"], current_slot): visible_equipment += 1
-	_check(panel.equipment_list.item_count == visible_equipment and panel.cards_list.item_count == description["cards"].size(), "lists derive from canonical description")
+	_check(panel.equipment_list.item_count == visible_equipment and panel.cards_list.item_count == maxi(1, description["cards"].size()) and (not description["cards"].is_empty() or panel.cards_list.is_item_disabled(0)), "lists derive from canonical description with an explicit empty placeholder")
 	var armor := F.item(fixture, &"warden_mail")
 	var before_disk := F.disk(fixture)
 	var before_build := controller.run_state.build_snapshot.equipped.duplicate(true)
@@ -98,7 +98,7 @@ func _run() -> void:
 	var unsocket: Dictionary = panel.propose({"kind": &"unsocket", "equipment_instance_id": shield, "socket_index": 3})
 	_check(unsocket["ok"] and panel.confirm_change()["ok"] and grants[2] in controller.run_state.card_inventory.describe()["free"], "unsocket returns the same run card")
 	var unequip: Dictionary = panel.propose({"kind": &"unequip", "slot": &"torso"})
-	_check(unequip["ok"] and panel.confirm_change()["ok"] and controller.run_state.card_inventory.describe()["free"].size() == 4, "unequip releases all cards")
+	_check(unequip["ok"] and panel.confirm_change()["ok"] and controller.run_state.card_inventory.describe()["free"].size() == 1 and controller.run_state.card_inventory.sockets().has(armor) and not controller.run_state.effect_state()["card_sockets"].has(armor), "unequip preserves remaining sockets outside active effects")
 	controller.encounter_active = true
 	var blocked: Dictionary = panel.propose({"kind": &"equip", "slot": &"torso", "equipment_instance_id": armor})
 	_check(not blocked["ok"] and blocked["error_code"] == &"encounter_active" and panel.status_label.text.contains("encontro"), "encounter blocks proposal with pt-BR reason")

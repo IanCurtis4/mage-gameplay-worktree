@@ -21,8 +21,10 @@ func _run() -> void:
 		if id not in Historical.HISTORICAL_EQUIPMENT_IDS:
 			published += 1
 		if profile.first_instance_for_definition(id).is_empty():
-			_check(profile.add_equipment_instance(id, catalog.equipment_metadata(id))["ok"], "own published exemplar %s" % id)
-	_check(published == 27 and profile.equipment_instance_ids().size() == 39, "all twenty-seven new pieces coexist with historical collection")
+			var metadata := catalog.equipment_metadata(id)
+			metadata["item_level"] = metadata.get("min_item_level", metadata["item_level"])
+			_check(profile.add_equipment_instance(id, metadata)["ok"], "own published exemplar %s" % id)
+	_check(published == 73 and profile.equipment_instance_ids().size() == 85, "all seventy-three added pieces coexist with historical collection")
 	_check(store.commit(profile)["ok"], "isolated published collection persisted")
 	var scene := load("res://scenes/character_menu.tscn") as PackedScene
 	var menu: CharacterMenu = scene.instantiate()

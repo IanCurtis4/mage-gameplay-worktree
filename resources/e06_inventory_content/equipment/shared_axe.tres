@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_qsd38"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_8xf44"]
+
+[sub_resource type="Resource" id="Resource_5jet8"]
+script = ExtResource("1_qsd38")
+id = &"shared_axe_effect"
+unique_effect_id = &"shared_axe_effect"
+family_id = &"shared_axe_effect"
+allowed_origins = Array[StringName]([&"swordsman"])
+axis = &"melee_attack"
+unit = &"points"
+magnitude = 3.0
+
+[resource]
+script = ExtResource("2_8xf44")
+id = &"shared_axe"
+display_name = "Machado da Forja Alegre"
+flavor_text = "Um machado compacto com cabo de madeira clara."
+description = "Arma de uma mão: ataque corpo a corpo +3."
+allowed_origins = Array[StringName]([&"swordsman"])
+origin_id = &"demo_arena"
+item_level = 1
+quality_id = &"common"
+socket_capacity = 1
+effects = Array[ExtResource("1_qsd38")]([SubResource("Resource_5jet8")])
+allowed_identities = Array[StringName]([&"swordsman", &"defender", &"berserker"])
+visual_key = &"axe"

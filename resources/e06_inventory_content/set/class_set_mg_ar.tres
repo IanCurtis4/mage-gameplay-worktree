@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="EquipmentSetDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_set_definition.gd" id="1_86int"]
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="2_tysgd"]
+
+[sub_resource type="Resource" id="Resource_ooyuw"]
+script = ExtResource("2_tysgd")
+id = &"class_set_mg_ar_threshold_2_magic_attack"
+unique_effect_id = &"class_set_mg_ar_threshold_2_magic_attack"
+family_id = &"class_set_mg_ar_threshold_2_magic_attack"
+allowed_origins = Array[StringName]([&"mage"])
+allowed_evolutions = Array[StringName]([&"mg_ar"])
+axis = &"magic_attack"
+unit = &"points"
+magnitude = 2.0
+
+[sub_resource type="Resource" id="Resource_51q7h"]
+script = ExtResource("2_tysgd")
+id = &"class_set_mg_ar_threshold_2_precision_attack"
+unique_effect_id = &"class_set_mg_ar_threshold_2_precision_attack"
+family_id = &"class_set_mg_ar_threshold_2_precision_attack"
+allowed_origins = Array[StringName]([&"mage"])
+allowed_evolutions = Array[StringName]([&"mg_ar"])
+axis = &"precision_attack"
+unit = &"points"
+magnitude = 2.0
+
+[sub_resource type="Resource" id="Resource_stjik"]
+script = ExtResource("2_tysgd")
+id = &"class_set_mg_ar_threshold_3_max_sp"
+unique_effect_id = &"class_set_mg_ar_threshold_3_max_sp"
+family_id = &"class_set_mg_ar_threshold_3_max_sp"
+allowed_origins = Array[StringName]([&"mage"])
+allowed_evolutions = Array[StringName]([&"mg_ar"])
+axis = &"max_sp"
+unit = &"points"
+magnitude = 8.0
+
+[resource]
+script = ExtResource("1_86int")
+id = &"class_set_mg_ar"
+display_name = "Conjunto Geômetra"
+flavor_text = "Linhas geométricas bordadas lembram construções precisas traçadas no chão."
+description = "2 peças: Ataque mágico +2; Precisão +2.
+3 peças: SP máximo +8."
+thresholds = {
+2: Array[ExtResource("2_tysgd")]([SubResource("Resource_ooyuw"), SubResource("Resource_51q7h")]),
+3: [SubResource("Resource_stjik")]
+}
+min_item_level = 11
+max_item_level = 15
+allowed_identities = Array[StringName]([&"mg_ar"])

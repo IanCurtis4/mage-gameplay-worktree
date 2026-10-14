@@ -2,6 +2,51 @@ class_name BuildPresentation
 extends RefCounted
 ## Value DTOs for T4. All numbers come from the canonical compositor/services.
 
+static var _profile_catalog_owner := 0
+static var _profile_catalog: BuildEffectCatalog
+
+static func describe_profile(facade: ProfileFacade, character_id: String) -> Dictionary:
+	if facade == null:
+		return BuildEffectCatalog.failure(&"profile_unavailable")
+	var profile := facade.current_profile()
+	if profile == null:
+		return BuildEffectCatalog.failure(&"profile_unavailable")
+	var character := profile.character_by_id(character_id)
+	if character == null:
+		return BuildEffectCatalog.failure(&"invalid_character_id")
+	var preview := facade.build_preview(character_id)
+	if not preview.get("ok", false):
+		return preview
+	if _profile_catalog_owner != facade.get_instance_id() or _profile_catalog == null:
+		var loaded := BuildContentLoader.load_catalog_for_profile(facade._catalog)
+		if not loaded.get("ok", false):
+			return loaded
+		_profile_catalog = loaded["catalog"]
+		_profile_catalog_owner = facade.get_instance_id()
+	var catalog := _profile_catalog
+	var snapshot: BuildSnapshot = preview["snapshot"]
+	var equipment: Array[Dictionary] = []
+	for id: StringName in profile.equipment_instance_ids():
+		var instance: EquipmentInstance = profile.equipment_instances[id]
+		var item := catalog.get_definition(&"equipment", instance.definition_id) as EquipmentDefinition
+		if item == null: continue
+		var row := instance.to_record()
+		row.merge({"id": id, "name": EquipmentPresentation.item_name(item), "description": _equipment_description(item, instance, catalog), "flavor": item.flavor_text, "icon": EquipmentPresentation.icon(item), "hand_usage": item.hand_usage, "origin_label": PlaytestGameplay.origin_name(instance.origin_id), "slot": item.slot, "selected": id in snapshot.equipped.values(), "allowed": BuildEffectCatalog.definition_allowed(item, snapshot)})
+		equipment.append(row)
+	var inventory: Dictionary = profile.card_inventory.describe()
+	var cards: Array[Dictionary] = []
+	for id: StringName in inventory["owned"]:
+		var definition_id: StringName = inventory["instances"][id]
+		var card := catalog.get_definition(&"card", definition_id) as CardDefinition
+		if card == null: continue
+		var species := catalog.mob_catalog().get_definition(card.mob_base_id)
+		cards.append({"flavor": card.flavor_text, "origin_label": "Espécie: " + (species.display_name if species != null else "Espécie desconhecida"), "id": id, "definition_id": definition_id, "name": card.display_name, "description": card.description, "free": id in inventory["free"]})
+	var visual: Dictionary = {}
+	if ResourceLoader.exists("res://scripts/actors/equipment_attachment_visual.gd"):
+		var visual_script := load("res://scripts/actors/equipment_attachment_visual.gd") as GDScript
+		visual = visual_script.call("describe", snapshot, catalog)
+	return {"ok": true, "error_code": &"", "request_id": "", "title": "Equipamentos e cartas", "collection_label": "Coleção permanente", "inventory_label": "Cartas permanentes", "context": {"profile_revision": profile.revision}, "equipped": snapshot.equipped.duplicate(true), "equipment": equipment, "cards": cards, "inventory": inventory, "stats": preview["stat_breakdown"].values(), "sources": {}, "inactive": [], "skill_rules": {}, "skill_ranks": snapshot.skill_ranks.duplicate(true), "kit_policies": {}, "procs": [], "item_grants": [], "unique_effects": [], "identity_id": portrait_identity(snapshot), "equipment_visual": visual}
+
 static func describe(controller: RunController) -> Dictionary:
 	if controller == null or controller.build_service == null or controller.run_state == null:
 		return BuildEffectCatalog.failure(&"invalid_session")
@@ -20,7 +65,7 @@ static func describe(controller: RunController) -> Dictionary:
 		var item := catalog.get_definition(&"equipment", instance.definition_id) as EquipmentDefinition
 		if item != null:
 			var row := instance.to_record()
-			row.merge({"id": id, "name": EquipmentPresentation.item_name(item), "description": EquipmentPresentation.instance_description(item, instance), "flavor": item.flavor_text, "icon": EquipmentPresentation.icon(item), "hand_usage": item.hand_usage, "origin_label": PlaytestGameplay.origin_name(instance.origin_id), "slot": item.slot, "selected": id in state.build_snapshot.equipped.values(), "allowed": BuildEffectCatalog.definition_allowed(item, state.build_snapshot)})
+			row.merge({"id": id, "name": EquipmentPresentation.item_name(item), "description": _equipment_description(item, instance, catalog), "flavor": item.flavor_text, "icon": EquipmentPresentation.icon(item), "hand_usage": item.hand_usage, "origin_label": PlaytestGameplay.origin_name(instance.origin_id), "slot": item.slot, "selected": id in state.build_snapshot.equipped.values(), "allowed": BuildEffectCatalog.definition_allowed(item, state.build_snapshot)})
 			equipment.append(row)
 	var inventory := state.card_inventory.describe()
 	var cards: Array[Dictionary] = []
@@ -32,7 +77,17 @@ static func describe(controller: RunController) -> Dictionary:
 	var composed := state.composed_build(controller.player.temporary_stat_sources())
 	if not composed["ok"]:
 		return composed
-	return {"ok": true, "error_code": &"", "request_id": "", "title": "Equipamentos e cartas", "collection_label": "Coleção permanente", "inventory_label": "Cartas desta run", "context": controller.build_service.context(), "equipped": state.build_snapshot.equipped.duplicate(true), "equipment": equipment, "cards": cards, "inventory": inventory, "stats": composed["breakdown"].values(), "sources": composed["provenance"].duplicate(true), "inactive": composed["inactive"].duplicate(true), "skill_rules": composed["skill_rules"].duplicate(true), "skill_ranks": composed["skill_ranks"].duplicate(true), "kit_policies": composed["kit_policies"].duplicate(true), "procs": composed["procs"].duplicate(true), "item_grants": composed["item_grants"].duplicate(true), "unique_effects": composed["unique_effects"].duplicate(true)}
+	var visual: Dictionary = {}
+	if ResourceLoader.exists("res://scripts/actors/equipment_attachment_visual.gd"):
+		var visual_script := load("res://scripts/actors/equipment_attachment_visual.gd") as GDScript
+		visual = visual_script.call("describe", state.build_snapshot, catalog)
+	var identity_id := portrait_identity(state.build_snapshot)
+	return {"ok": true, "error_code": &"", "request_id": "", "title": "Equipamentos e cartas", "collection_label": "Coleção permanente", "inventory_label": "Cartas permanentes", "context": controller.build_service.context(), "equipped": state.build_snapshot.equipped.duplicate(true), "equipment": equipment, "cards": cards, "inventory": inventory, "stats": composed["breakdown"].values(), "sources": composed["provenance"].duplicate(true), "inactive": composed["inactive"].duplicate(true), "skill_rules": composed["skill_rules"].duplicate(true), "skill_ranks": composed["skill_ranks"].duplicate(true), "kit_policies": composed["kit_policies"].duplicate(true), "procs": composed["procs"].duplicate(true), "item_grants": composed["item_grants"].duplicate(true), "unique_effects": composed["unique_effects"].duplicate(true), "identity_id": identity_id, "equipment_visual": visual}
+
+static func portrait_identity(snapshot: BuildSnapshot) -> StringName:
+	if snapshot.evolution_id in [&"defender", &"berserker", &"elementalist", &"spiritualist", &"geometer", &"sentinel", &"hunter"]:
+		return snapshot.evolution_id
+	return snapshot.base_class_id
 
 static func compare(service: RunBuildService, intent: Dictionary) -> Dictionary:
 	var preview := service.preview_change(intent)
@@ -46,7 +101,9 @@ static func error_text(code: StringName) -> String:
 		&"hp_deficit": return "A troca deixaria o personagem sem vida."
 		&"sp_deficit": return "O novo máximo de SP não cobre o SP já gasto."
 		&"item_not_owned", &"card_not_owned": return "Este item ainda não foi obtido."
-		&"identity_restricted", &"slot_restricted", &"invalid_slot": return "O item não é compatível com este personagem ou espaço."
+		&"identity_restricted": return "Esta peça não serve à identidade deste personagem."
+		&"slot_restricted", &"invalid_slot": return "Esta peça não cabe no espaço escolhido."
+		&"item_level_restricted": return "O nível desta peça está fora da faixa permitida."
 		&"effect_conflict", &"duplicate_unique_effect": return "A troca conflita com um efeito já ativo."
 		&"duplicate_equipment_instance": return "Este exemplar já ocupa outra posição."
 		&"identical_accessory": return "Duas peças iguais não podem ocupar os acessórios."
@@ -133,3 +190,11 @@ static func value_text(axis: StringName, value: float) -> String:
 		if percentage.contains("."): percentage = percentage.rstrip("0").rstrip(".")
 		return percentage + "%"
 	return String.num(value, 2)
+
+static func _equipment_description(item: EquipmentDefinition, instance: EquipmentInstance, catalog: BuildEffectCatalog) -> String:
+	var text := EquipmentPresentation.instance_description(item,instance)
+	if not item.set_id.is_empty():
+		var set_definition := catalog.get_set(item.set_id)
+		if set_definition != null:
+			text += "\nConjunto: %s · ilvl %d–%d\n%s" % [set_definition.display_name,set_definition.min_item_level,set_definition.max_item_level,ContentAuthoring.describe(&"set",set_definition)]
+	return text

@@ -144,6 +144,7 @@ static func legacy_data(current: Dictionary) -> Dictionary:
 	if not current.has("equipment_instances"):
 		return current.duplicate(true)
 	var result := current.duplicate(true)
+	result.erase("card_inventory")
 	var lookup: Dictionary = {}
 	for record: Dictionary in current["equipment_instances"]:
 		lookup[record["instance_id"]] = record["definition_id"]

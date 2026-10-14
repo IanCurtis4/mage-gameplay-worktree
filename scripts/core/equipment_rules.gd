@@ -39,6 +39,8 @@ static func allows_sockets(metadata: Dictionary) -> bool:
 	return metadata.get("item_kind") in [&"armor", &"weapon", &"shield"]
 
 static func validate_definition(metadata: Dictionary) -> Dictionary:
+	var eligibility := EquipmentEligibilityRules.validate(metadata)
+	if not eligibility["ok"]: return eligibility
 	for field: String in ["slot", "item_kind", "hand_usage"]:
 		if typeof(metadata.get(field)) not in [TYPE_STRING, TYPE_STRING_NAME]:
 			return BuildEffectCatalog.failure(&"invalid_equipment_definition")
@@ -69,6 +71,7 @@ static func validate_instance(instance: EquipmentInstance, metadata: Dictionary)
 		return checked
 	if instance.socket_capacity > 0 and not allows_sockets(metadata):
 		return BuildEffectCatalog.failure(&"socket_not_allowed")
+	if not EquipmentEligibilityRules.level_allowed(metadata,instance.item_level): return BuildEffectCatalog.failure(&"item_level_restricted")
 	return validate_definition(metadata)
 
 static func validate_layout(equipped: Dictionary, instances: Dictionary, definitions: Dictionary, origin: StringName, evolution: StringName) -> Dictionary:
@@ -92,6 +95,7 @@ static func validate_layout(equipped: Dictionary, instances: Dictionary, definit
 			return BuildEffectCatalog.failure(&"duplicate_equipment_instance")
 		seen[id] = true
 		var metadata: Dictionary = definitions.get(instance.definition_id, {})
+		if not EquipmentEligibilityRules.identity_allowed(metadata,origin,evolution): return BuildEffectCatalog.failure(&"identity_restricted")
 		var checked := validate_instance(instance, metadata)
 		if not checked["ok"]:
 			return checked

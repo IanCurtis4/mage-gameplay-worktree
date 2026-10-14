@@ -21,4 +21,16 @@ extends Resource
 @export var effects: Array[EffectDefinition] = []
 
 func metadata() -> Dictionary:
-	return {"slot": slot, "item_kind": item_kind, "hand_usage": hand_usage, "origin_id": origin_id, "item_level": item_level, "quality_id": quality_id, "socket_capacity": socket_capacity, "allowed_base_classes": IdentityIds.base_class_ids() if allowed_origins.is_empty() else allowed_origins.duplicate(), "allowed_evolutions": allowed_evolutions.duplicate(), "starter": starter}
+	var result := {"slot": slot, "item_kind": item_kind, "hand_usage": hand_usage, "origin_id": origin_id, "item_level": item_level, "quality_id": quality_id, "socket_capacity": socket_capacity, "allowed_base_classes": IdentityIds.base_class_ids() if allowed_origins.is_empty() else allowed_origins.duplicate(), "allowed_evolutions": allowed_evolutions.duplicate(), "starter": starter}
+
+	if min_item_level != 1 or max_item_level != 30 or not allowed_identities.is_empty():
+		result["min_item_level"] = min_item_level
+		result["max_item_level"] = max_item_level
+		result["allowed_identities"] = allowed_identities.duplicate()
+	return result
+
+# Optional policy for newly authored IDs; neutral defaults preserve legacy recipes.
+@export var min_item_level: int = 1
+@export var max_item_level: int = 30
+@export var allowed_identities: Array[StringName] = []
+@export var visual_key: StringName = &""

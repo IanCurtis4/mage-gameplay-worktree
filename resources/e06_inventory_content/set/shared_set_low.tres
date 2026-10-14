@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="EquipmentSetDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_set_definition.gd" id="1_3r8da"]
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="2_mwaa3"]
+
+[sub_resource type="Resource" id="Resource_iti7e"]
+script = ExtResource("2_mwaa3")
+id = &"shared_set_low_threshold_2_hp"
+unique_effect_id = &"shared_set_low_threshold_2_hp"
+family_id = &"shared_set_low_threshold_2_hp"
+axis = &"max_hp"
+unit = &"points"
+magnitude = 12.0
+
+[sub_resource type="Resource" id="Resource_utjg0"]
+script = ExtResource("2_mwaa3")
+id = &"shared_set_low_threshold_3_defense"
+unique_effect_id = &"shared_set_low_threshold_3_defense"
+family_id = &"shared_set_low_threshold_3_defense"
+axis = &"physical_defense"
+unit = &"points"
+magnitude = 3.0
+
+[resource]
+script = ExtResource("1_3r8da")
+id = &"shared_set_low"
+display_name = "Trilha do Primeiro Passo"
+flavor_text = "Peças leves para quem começa a explorar a Arena, costuradas em tons de bosque."
+description = "2 peças: Vida máxima +12.
+3 peças: Defesa física +3."
+thresholds = {
+2: [SubResource("Resource_iti7e")],
+3: [SubResource("Resource_utjg0")]
+}
+min_item_level = 2
+max_item_level = 5

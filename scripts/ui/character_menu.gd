@@ -56,6 +56,8 @@ var passive_slot: OptionButton
 var active_selectors: Array[OptionButton] = []
 var passive_selectors: Array[OptionButton] = []
 var _equipment_display_cache: Dictionary = {}
+var _equipment_profile_cache: ProfileState
+var _equipment_instance_ordinals: Dictionary[StringName, int] = {}
 var equipment_selectors: Dictionary[StringName, OptionButton] = {}
 var weapon_selector: OptionButton
 var armor_selector: OptionButton
@@ -69,6 +71,8 @@ var skill_points_label: Label
 var skill_empty_label: Label
 var skill_search: LineEdit
 var equipment_empty_label: Label
+var inventory_open_button: Button
+var inventory_panel: RunInventoryPanel
 var create_panel: VBoxContainer
 var create_toggle: Button
 var menu_panel: VBoxContainer
@@ -97,6 +101,9 @@ func set_profile_directory(directory: String) -> void:
 
 func set_profile_facade(value: RefCounted) -> void:
 	facade = value
+	_equipment_display_cache.clear()
+	_equipment_profile_cache = null
+	_equipment_instance_ordinals.clear()
 
 func _ready() -> void:
 	_focused_character_id = pending_focus_character_id
@@ -165,6 +172,8 @@ func _select_roster_index(index: int) -> void:
 		if _focused_character_id != profile.characters[index].character_id:
 			_discard_evolution_intent()
 		_focused_character_id = profile.characters[index].character_id
+		if inventory_panel != null and inventory_panel.visible:
+			inventory_panel.configure_profile(facade as ProfileFacade, _focused_character_id)
 		preset_selector.select(profile.characters[index].selected_preset)
 		_populate_build_editor(profile.characters[index])
 		build_summary_label.text = _build_summary(profile.characters[index])
@@ -234,7 +243,11 @@ func _selected_option(selector: OptionButton) -> Variant:
 	return selector.get_item_metadata(selector.selected)
 
 func _populate_build_editor(character: Variant) -> void:
-	_equipment_display_cache.clear()
+	_equipment_profile_cache = facade.current_profile()
+	_equipment_instance_ordinals.clear()
+	var equipment_ids := _equipment_profile_cache.equipment_instance_ids()
+	for index: int in equipment_ids.size():
+		_equipment_instance_ordinals[equipment_ids[index]] = index + 1
 	identity_label.text = "%s  /  %s" % [character.display_name, _roster_identity_name(character)]
 	var options: Dictionary = facade.available_build_options(character.character_id)
 	if not options.get("ok", false):
@@ -251,9 +264,27 @@ func _populate_build_editor(character: Variant) -> void:
 	for slot: StringName in IdentityIds.equipment_slots():
 		_populate_selector(equipment_selectors[slot], options["equipment_by_slot"][slot], preset["equipped"][slot])
 		# All14 positions remain visible even before acquisition.
-		equipment_selectors[slot].get_parent().show()
+		equipment_selectors[slot].get_parent().hide()
 		any_equipment = any_equipment or not options["equipment_by_slot"][slot].is_empty()
 	equipment_empty_label.visible = not any_equipment
+	if inventory_open_button != null:
+		inventory_open_button.disabled = _read_only
+		inventory_open_button.text = "Abrir equipamentos e mochila"
+
+func _open_inventory_panel() -> void:
+	if _read_only or facade == null or _selected_index < 0:
+		return
+	var profile: ProfileState = facade.current_profile()
+	if profile == null or _selected_index >= profile.characters.size():
+		return
+	if inventory_panel == null:
+		inventory_panel = RunInventoryPanel.new()
+		add_child(inventory_panel)
+		inventory_panel.closed.connect(_inventory_panel_closed)
+	inventory_panel.configure_profile(facade as ProfileFacade, profile.characters[_selected_index].character_id)
+
+func _inventory_panel_closed() -> void:
+	_refresh()
 
 func _populate_selector(selector: OptionButton, values: Array, current: Variant) -> void:
 	selector.clear()
@@ -307,6 +338,8 @@ func _refresh() -> void:
 		save_build_button.disabled = true
 		start_run_button.disabled = true
 		start_run_button.text = "Iniciar run"
+		if inventory_open_button != null:
+			inventory_open_button.disabled = true
 		_set_build_controls_disabled(true)
 		_set_attribute_actions_disabled(true)
 		_set_skill_actions_disabled(true)
@@ -351,6 +384,8 @@ func _refresh() -> void:
 	_refresh_playtest_controls(profile)
 	if profile.characters.size() >= MAX_CHARACTERS:
 		status_label.text = "Limite de %d personagens atingido." % MAX_CHARACTERS
+	if inventory_panel != null and inventory_panel.visible and _selected_index >= 0:
+		inventory_panel.configure_profile(facade as ProfileFacade, profile.characters[_selected_index].character_id)
 
 func _refresh_start_run_action(profile: ProfileState) -> void:
 	if start_run_button == null:
@@ -966,7 +1001,7 @@ func _skill_name(skill_id: Variant) -> String:
 func _equipment_name(item_id: Variant) -> String:
 	if item_id == null:
 		return "Nenhum"
-	var profile: ProfileState = facade.current_profile() if facade != null else null
+	var profile: ProfileState = _equipment_profile_cache
 	var instance: EquipmentInstance = profile.equipment_instances.get(StringName(item_id)) if profile != null else null
 	if instance == null:
 		return "Equipamento indisponível"
@@ -976,10 +1011,10 @@ func _equipment_name(item_id: Variant) -> String:
 			_equipment_display_cache[id] = catalog.get_definition(&"equipment", id)
 	var loaded := _equipment_display_cache.get(instance.definition_id) as EquipmentDefinition
 	if loaded == null: return "Equipamento indisponível"
-	return "%s · %s · ilvl %d · %d encaixe(s) · exemplar %d" % [EquipmentPresentation.item_name(loaded), EquipmentPresentation.quality_name(instance.quality_id), instance.item_level, instance.socket_capacity, profile.equipment_instance_ids().find(instance.instance_id) + 1]
+	return "%s · %s · ilvl %d · %d encaixe(s) · exemplar %d" % [EquipmentPresentation.item_name(loaded), EquipmentPresentation.quality_name(instance.quality_id), instance.item_level, instance.socket_capacity, _equipment_instance_ordinals.get(instance.instance_id, 0)]
 
 func _equipment_tooltip(item_id: Variant) -> String:
-	var profile: ProfileState = facade.current_profile()
+	var profile: ProfileState = _equipment_profile_cache
 	var instance: EquipmentInstance = profile.equipment_instances.get(StringName(item_id)) if profile != null else null
 	if instance == null: return "Equipamento indisponível"
 	var name := _equipment_name(item_id)
@@ -1215,12 +1250,18 @@ func _build_ui() -> void:
 	cancel_evolution_button.pressed.connect(_cancel_evolution_change)
 	evolution_actions.add_child(cancel_evolution_button)
 	_section_label(gear_column, "Equipamento da build", 22)
+	inventory_open_button = Button.new()
+	inventory_open_button.name = "OpenInventory"
+	inventory_open_button.text = "Abrir equipamentos e mochila"
+	inventory_open_button.custom_minimum_size.y = 48
+	inventory_open_button.pressed.connect(_open_inventory_panel)
+	gear_column.add_child(inventory_open_button)
 	for slot: StringName in IdentityIds.equipment_slots():
 		equipment_selectors[slot] = _build_selector(gear_column, EquipmentPresentation.SLOT_LABELS[slot])
 	weapon_selector = equipment_selectors[&"main_hand"]
 	armor_selector = equipment_selectors[&"torso"]
 	accessory_selector = equipment_selectors[&"accessory_1"]
-	equipment_empty_label = _section_label(gear_column, "Ainda não há equipamentos disponíveis para esta classe. Os slots aparecem quando você obtiver itens compatíveis.", 16)
+	equipment_empty_label = _section_label(gear_column, "Ainda não há equipamentos disponíveis para esta classe.", 16)
 	_section_label(gear_column, "Ferramentas de teste", 18)
 	playtest_toggle = CheckButton.new()
 	playtest_toggle.name = "PlaytestAdminToggle"
@@ -1270,6 +1311,7 @@ func _build_ui() -> void:
 	save_build_button.tooltip_text = "Salva o equipamento do preset. Skills aprendidas são automáticas; a barra salva ao editar."
 	save_build_button.pressed.connect(_save_build)
 	footer.add_child(save_build_button)
+	save_build_button.hide()
 	start_run_button = Button.new()
 	start_run_button.name = "StartRun"
 	start_run_button.text = "Iniciar run com este personagem"

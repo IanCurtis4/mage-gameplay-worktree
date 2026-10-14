@@ -3020,16 +3020,11 @@ func _spawn_route_enemy(entry: Dictionary, stage: int, summoned: bool = false, o
 	assert(checked["ok"], str(checked))
 	enemy.compact_control_visuals = player.is_geometer() or player.is_sentinel()
 	enemy.actor_name += " · %s · Nv.%d" % [MobPrototypeVisual.category_name(occurrence.category_id), checked.get("level", run_state.effect_catalog().mob_catalog().level_for_occurrence(occurrence)["level"])]
-	if enemy._mob_definition.visual_kind != &"humanoid":
-		var visual := MobPrototypeVisual.new()
-		visual.kind = enemy._mob_definition.visual_kind
-		visual.category = occurrence.category_id
-		enemy.body_visual_owner = visual
-		enemy.body_drawer = visual.draw_on
+	if enemy._mob_definition.animation_kind in [&"gel", &"beast_master", &"animal_companion"]:
 		enemy.sprite_visual_scale = 1.0 + MobCatalog.CATEGORIES.find(occurrence.category_id) * 0.13
 	var caption := Label.new()
 	caption.text = "%s · Nv.%d" % [enemy._mob_definition.display_name, enemy.stat_breakdown.base_level]
-	if enemy._mob_definition.visual_kind == &"humanoid": caption.text += "\n" + MobPrototypeVisual.category_name(occurrence.category_id)
+	caption.text += "\n" + MobPrototypeVisual.category_name(occurrence.category_id)
 	caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	caption.position = Vector2(-110, -54.0 * enemy.sprite_visual_scale - (42 if enemy._mob_definition.visual_kind == &"humanoid" else 28))
 	caption.size = Vector2(220, 36)

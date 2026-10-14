@@ -40,7 +40,7 @@ func _run() -> void:
 		var rare: EquipmentInstance = migrated.equipment_instances[migrated.first_instance_for_definition(&"warden_mail")]
 		_check(starter.quality_id == &"common" and rare.quality_id == &"rare" and starter.item_level == 1 and rare.origin_id == &"demo_arena" and rare.socket_capacity == 1, "approved migration metadata")
 		var current := ProfileCodec.encode(migrated)
-		_check(current["ok"] and current["data"]["schema_version"] == 4 and current["data"]["catalog_version"] == 11 and not current["data"].has("equipment_collection") and not current["data"].has("card_sockets"), "only exemplar records persist")
+		_check(current["ok"] and current["data"]["schema_version"] == 5 and current["data"]["catalog_version"] == 12 and not current["data"].has("equipment_collection") and not current["data"].has("card_sockets"), "only exemplar records persist")
 		var again := ProfileCodec.decode(current["text"])
 		_check(again["ok"] and not again.get("migrated", false) and ProfileCodec.encode(again["profile"])["text"] == current["text"], "current envelope reopens without remigration")
 		var duplicate := migrated.copy_state()
@@ -86,6 +86,7 @@ func _run() -> void:
 func _legacy_data(current: Dictionary, profile: ProfileState) -> Dictionary:
 	var result := current.duplicate(true)
 	result["schema_version"] = 2
+	result.erase("card_inventory")
 	result["catalog_version"] = 9
 	result.erase("equipment_instances")
 	result.erase("next_equipment_counter")

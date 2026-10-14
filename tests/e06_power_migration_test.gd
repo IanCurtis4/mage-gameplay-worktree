@@ -13,11 +13,14 @@ func _run() -> void:
 	_check(facade.create_character("create", 0, "Preservado", &"mage")["ok"], "source character")
 	var profile := facade.current_profile()
 	for id: StringName in catalog.equipment_ids():
+		# Historical catalog-10 contained only the preceding 39 recipes.
+		if catalog.equipment_metadata(id).has("allowed_identities"): continue
 		if profile.first_instance_for_definition(id).is_empty(): profile.add_equipment_instance(id, catalog.equipment_metadata(id))
 	var original := ProfileCodec.encode(profile)
 	_check(original["ok"], "source current codec")
 	var legacy: Dictionary = original["data"].duplicate(true)
 	legacy["schema_version"] = 3; legacy["catalog_version"] = 10
+	legacy.erase("card_inventory")
 	for record: Dictionary in legacy["equipment_instances"]:
 		record.erase("recipe_revision_id"); record.erase("power_ruleset_id")
 		record["item_level"] = 30
@@ -35,7 +38,7 @@ func _run() -> void:
 		for effect: EffectDefinition in item.effects:
 			_check(EquipmentPowerRules.modifier_magnitude(effect, instance, item) == effect.value_at(1), "legacy exact original values")
 	var encoded := ProfileCodec.encode(migrated, catalog)
-	_check(encoded["ok"] and encoded["data"]["schema_version"] == 4 and encoded["data"]["catalog_version"] == 11, "new envelope schema4catalog11")
+	_check(encoded["ok"] and encoded["data"]["schema_version"] == 5 and encoded["data"]["catalog_version"] == 12, "new envelope schema5catalog12")
 	var again := ProfileCodec.decode(encoded["text"], catalog)
 	_check(again["ok"] and not again.get("migrated", true), "migration is not reapplied")
 	var invalid: Dictionary = encoded["data"].duplicate(true)

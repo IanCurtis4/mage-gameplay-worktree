@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="EquipmentSetDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_set_definition.gd" id="1_52h2v"]
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="2_dtpya"]
+
+[sub_resource type="Resource" id="Resource_rtlwi"]
+script = ExtResource("2_dtpya")
+id = &"class_set_berserker_threshold_2_melee_attack"
+unique_effect_id = &"class_set_berserker_threshold_2_melee_attack"
+family_id = &"class_set_berserker_threshold_2_melee_attack"
+allowed_origins = Array[StringName]([&"swordsman"])
+allowed_evolutions = Array[StringName]([&"berserker"])
+axis = &"melee_attack"
+unit = &"points"
+magnitude = 4.0
+
+[sub_resource type="Resource" id="Resource_jxgam"]
+script = ExtResource("2_dtpya")
+id = &"class_set_berserker_threshold_3_max_hp"
+unique_effect_id = &"class_set_berserker_threshold_3_max_hp"
+family_id = &"class_set_berserker_threshold_3_max_hp"
+allowed_origins = Array[StringName]([&"swordsman"])
+allowed_evolutions = Array[StringName]([&"berserker"])
+axis = &"max_hp"
+unit = &"points"
+magnitude = 15.0
+
+[resource]
+script = ExtResource("1_52h2v")
+id = &"class_set_berserker"
+display_name = "Conjunto Furioso"
+flavor_text = "Tiras escarlates e rebites largos lembram uma investida sem hesitação."
+description = "2 peças: Ataque corpo a corpo +4.
+3 peças: Vida máxima +15."
+thresholds = {
+2: Array[ExtResource("2_dtpya")]([SubResource("Resource_rtlwi")]),
+3: [SubResource("Resource_jxgam")]
+}
+min_item_level = 6
+max_item_level = 10
+allowed_identities = Array[StringName]([&"berserker"])

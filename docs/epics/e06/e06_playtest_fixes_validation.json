@@ -1,0 +1,705 @@
+{
+  "kind": "technical-validation",
+  "status": "passed",
+  "complete": true,
+  "role": "technical_validator",
+  "validator": "Sol",
+  "automation_supervisor": "Luna",
+  "automation_note": "Luna supervised complementary regression rounds and dispatched the final 12 checks; its turn hit a usage limit before final consolidation. Sol verified every output/hash/engine log and the frozen inputs. This is not an independent semantic review.",
+  "base_commit": "8e2badfad1bc7bdd21f3c1556a6ed47c426bbf0b",
+  "contract": "docs/epics/e06/e06_playtest_fixes_contract.md",
+  "normalized_gameplay_inputs_sha256": "3bae8af55e371b66bf7f7778dc3d24e3dce5c6a77af75879bd379096161bc083",
+  "generated_uid_only_delta": [],
+  "total_plan_steps": 218,
+  "unique_passed_steps": 59,
+  "final_round_steps": 12,
+  "checks": [
+    {
+      "index": 1,
+      "name": "editor_import",
+      "round": "final_watch",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\001.output.log",
+      "output_sha256": "5f8ca15679c9d7700d4334e9825e9f56f13359b1a00ab50af8e6c033bd0015a9",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\001.engine.log",
+      "engine_log_sha256": "73e6733ca9ebc03123e016d5f17af3822ad8e2f4836d17163768fc21ad24fdb5"
+    },
+    {
+      "index": 2,
+      "name": "e06_inventory_resources_test",
+      "round": "regression_watch",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch\\002-e06_inventory_resources_test.output.log",
+      "output_sha256": "535c051e5eadf61a08f78a2130cf90c8a2c500c310a069569768582ba24d206c",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch\\002-e06_inventory_resources_test.engine.log",
+      "engine_log_sha256": "612610c7de5d52605625fd8e333f24de0f4844d01ec30f401f93a7eb97352a67"
+    },
+    {
+      "index": 3,
+      "name": "e06_inventory_test",
+      "round": "regression_watch_retry1",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry1\\003-e06_inventory_test.output.log",
+      "output_sha256": "1bd9a4b87f549316d171ddef1a2cacf156ea80ec76a1af3de9d7d091192722a5",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry1\\003-e06_inventory_test.engine.log",
+      "engine_log_sha256": "4267a1d9b78dd981f096442a85e76f3d9a97593e8f0dc1d66a0db7441cbcd22d"
+    },
+    {
+      "index": 4,
+      "name": "e06_rewards_test",
+      "round": "regression_watch_retry2",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry2\\004-e06_rewards_test.output.log",
+      "output_sha256": "1d0d94efd583a1833c93ae6ec2f2eee6f921d9083c5248ca2bc50e19dae1410f",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry2\\004-e06_rewards_test.engine.log",
+      "engine_log_sha256": "a7e0e37903056f5b74e0212122f8a78a4e68a99b16a73a24b1c71b71c40dab59"
+    },
+    {
+      "index": 5,
+      "name": "e06_migration_test",
+      "round": "regression_watch_retry3",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\005-e06_migration_test.output.log",
+      "output_sha256": "ab206d302db4e297be657d97e355bffd5ae5e095d3b55edb9f6e1130c08f4a4d",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\005-e06_migration_test.engine.log",
+      "engine_log_sha256": "3d5142b133f6650e1326304827c463a9198a34636dbe9ef59e0ca2c56edeffd6"
+    },
+    {
+      "index": 6,
+      "name": "e06_effects_composition_test",
+      "round": "regression_watch_retry3",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\006-e06_effects_composition_test.output.log",
+      "output_sha256": "b2b7fc39dc73a5d0073d8adc039d62d03a7b900eba194841001f01017136e501",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\006-e06_effects_composition_test.engine.log",
+      "engine_log_sha256": "899033009407f8c6b6ff6ebe03abad057a82d5145eb80587ac39cf546325ee50"
+    },
+    {
+      "index": 8,
+      "name": "e06_effects_runtime_test",
+      "round": "regression_watch_retry3",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\008-e06_effects_runtime_test.output.log",
+      "output_sha256": "4d2c6c3d1221aa352c92570d7eb188ad87a213352d772dd848a8639c20376906",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\008-e06_effects_runtime_test.engine.log",
+      "engine_log_sha256": "868a20a8a3b9474b1278e7b81906fd33fee223d8e34be48f9c1f59c5cd3f819b"
+    },
+    {
+      "index": 9,
+      "name": "foundation_test",
+      "round": "final_watch",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\009-foundation_test.output.log",
+      "output_sha256": "10c00f261a4572819c6b3293933d567298a2335ab50e19a710dbe5fa5445374b",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\009-foundation_test.engine.log",
+      "engine_log_sha256": "3401356fd2604bec0fef9407b7aa25a2cc613ee6feb204826ed07503cfac6ac4"
+    },
+    {
+      "index": 10,
+      "name": "combat_animation_test",
+      "round": "final_watch",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\010-combat_animation_test.output.log",
+      "output_sha256": "df1d52002e18c5524fa60801186a018cdbc71c91e0248051e38f6565c154fb1e",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\010-combat_animation_test.engine.log",
+      "engine_log_sha256": "93de56f18131527bef7e074074477b21e409365bd02c190b9d05a2293ae9d42d"
+    },
+    {
+      "index": 13,
+      "name": "battle_ui_test",
+      "round": "final_watch",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\013-battle_ui_test.output.log",
+      "output_sha256": "f8318896ca4f69c73dfee75d000be93183454816283638ee4c14279a62749d21",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\013-battle_ui_test.engine.log",
+      "engine_log_sha256": "19ca805b5dac2a4ef977b786eccb964fa10557dcb15dffe014cd427381a81696"
+    },
+    {
+      "index": 14,
+      "name": "arena_flow_test",
+      "round": "final_watch",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\014-arena_flow_test.output.log",
+      "output_sha256": "110201ca81b8da2a6ad21a6fc5331af48e7092149d8eb4c677130eb4aba64f6a",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\014-arena_flow_test.engine.log",
+      "engine_log_sha256": "95562f51516eb0b6ded4e86401617950fcc21c4ea82227186ecf61af0b4798db"
+    },
+    {
+      "index": 15,
+      "name": "ui_layout_test",
+      "round": "final_watch",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\015-ui_layout_test.output.log",
+      "output_sha256": "2221c3b8ff5b8bc13995ce03df5addb87d48671ad7ca4b1b51601e3d859d9690",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\015-ui_layout_test.engine.log",
+      "engine_log_sha256": "786e497b3cda17d9d4270fa2899ce2432714eb98d4cf80ea908e593e1eb79a9b"
+    },
+    {
+      "index": 17,
+      "name": "persistent_state_test",
+      "round": "regression_watch_retry3",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\017-persistent_state_test.output.log",
+      "output_sha256": "401e2a51a56e2ec92b1581a5eefbc5d343131d81dbaa49613c8cc7cde6193c05",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\017-persistent_state_test.engine.log",
+      "engine_log_sha256": "67dcd363a29512768bb78f50ec35aabcf6578602427710387b00bfb4236d8646"
+    },
+    {
+      "index": 18,
+      "name": "profile_store_test",
+      "round": "regression_watch_retry3",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\018-profile_store_test.output.log",
+      "output_sha256": "5367fdb65b879e166e5bf0b32391d37a3e04e4e98af00e9427155194ebf8e2e5",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\018-profile_store_test.engine.log",
+      "engine_log_sha256": "9e20150dc310db093e87cd0d7bc62aedc98f319d31642a59d235d7ededd9495c"
+    },
+    {
+      "index": 19,
+      "name": "profile_facade_test",
+      "round": "regression_watch_retry3",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\019-profile_facade_test.output.log",
+      "output_sha256": "0e7c0200c1faedee71aa0fec27b6f9415f0f622606ffe2917b2718e1295292d5",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\019-profile_facade_test.engine.log",
+      "engine_log_sha256": "da59bc0a6b3db2bb051694c1d09b478505133dce5f332dcbb19e31504a99c66c"
+    },
+    {
+      "index": 20,
+      "name": "profile_run_facade_test",
+      "round": "regression_watch_retry3",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\020-profile_run_facade_test.output.log",
+      "output_sha256": "63afaed0f8287ee17cef6777e5f7e217a036b1cb41a7cd9c52dcf2355aa0484e",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\020-profile_run_facade_test.engine.log",
+      "engine_log_sha256": "b0c7cdf8b26380ed5b643ea575f2993c5c16ffa8bf72d430d4552eb3aeb8843a"
+    },
+    {
+      "index": 22,
+      "name": "e02_character_menu_test",
+      "round": "regression_watch_retry3",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\022-e02_character_menu_test.output.log",
+      "output_sha256": "92e8322739e3f81d8741fb767086745d0012c5b6a7b991c3b90a90688b3fa116",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\022-e02_character_menu_test.engine.log",
+      "engine_log_sha256": "990b05c907abfcc4ffb6d1ca0ddce8bd0e40d26462605bf3d45d07d08c6e709f"
+    },
+    {
+      "index": 24,
+      "name": "menu_tabs_test",
+      "round": "regression_watch_retry3",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\024-menu_tabs_test.output.log",
+      "output_sha256": "738f19a005d082b95e21f29a34953ce1b92ea516ddc9bbe5e3f93e024caf01a0",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\024-menu_tabs_test.engine.log",
+      "engine_log_sha256": "447942191ec6742f6d7c7d41db6cbc2e1b5a6c2c9937f0be66aca6806172f152"
+    },
+    {
+      "index": 25,
+      "name": "e02_run_integration_test",
+      "round": "regression_watch_retry3",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\025-e02_run_integration_test.output.log",
+      "output_sha256": "56ea73c9374cb767d708ab43d2545b6e5a13357ec44b25d4efbffcdedcf54d10",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\025-e02_run_integration_test.engine.log",
+      "engine_log_sha256": "1e7d5afc6323f61ce5313406cef5d8a1058fb0a5bbd75d3f465b70835f493bd0"
+    },
+    {
+      "index": 27,
+      "name": "stat_threshold_rules_test",
+      "round": "regression_watch_retry3",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\027-stat_threshold_rules_test.output.log",
+      "output_sha256": "9a221f78ce662697790d6145917a3f3282907676446c44e791919daa69f9d5e9",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\027-stat_threshold_rules_test.engine.log",
+      "engine_log_sha256": "5cb0c5ee11bcdf976639983c23d0f679c0c09d7d798ffc2977d997dbda5aec3a"
+    },
+    {
+      "index": 28,
+      "name": "stat_threshold_migration_test",
+      "round": "regression_watch_retry3",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\028-stat_threshold_migration_test.output.log",
+      "output_sha256": "bbceca0381e5bdfabc98ff49a62d6909fe0a68af08cf0cdd30c3e9088a3d144b",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\028-stat_threshold_migration_test.engine.log",
+      "engine_log_sha256": "f9ec9386f2bbb7380ab6bb4e29ecb19b9b8cd567d4a03a910b6ff95373a50813"
+    },
+    {
+      "index": 29,
+      "name": "stat_threshold_preview_integration_test",
+      "round": "regression_watch_retry3",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\029-stat_threshold_preview_integration_test.output.log",
+      "output_sha256": "88bd44e17ebf03801d46d96db0ac8419eccc06967e16abfc11c76a11c905f0d4",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\029-stat_threshold_preview_integration_test.engine.log",
+      "engine_log_sha256": "b7832e3aef98a17844a715f5d805dfb11c1147ad5d49193926e8ddce80bd232b"
+    },
+    {
+      "index": 31,
+      "name": "e03_progression_transactions_test",
+      "round": "regression_watch_retry3",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\031-e03_progression_transactions_test.output.log",
+      "output_sha256": "3a00f5da9d88d204d0a5bfabf4e711b0b07c69dc0a0986996b98211b971596dd",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\031-e03_progression_transactions_test.engine.log",
+      "engine_log_sha256": "60afecd7f36d35ec582a3ed051b4b271edbe90f679f1842be7711583f1f9b772"
+    },
+    {
+      "index": 51,
+      "name": "e05_hunter_catalog_test",
+      "round": "regression_watch_retry3",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\051-e05_hunter_catalog_test.output.log",
+      "output_sha256": "735127b8bdcdba912668577e1f00daa2505f0792627ed65034acdc7c6f6d344a",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\051-e05_hunter_catalog_test.engine.log",
+      "engine_log_sha256": "e77ae832a463f0c067dfd6dbea78f5587a38a7bd784cfe410291c7a3372771f7"
+    },
+    {
+      "index": 57,
+      "name": "e05_hunter_catalog_migration_test",
+      "round": "regression_watch_retry3",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\057-e05_hunter_catalog_migration_test.output.log",
+      "output_sha256": "6c06946f095f46ffe3df0910476f2ce9730f9ba9b8eb2f906dad839c38ea5703",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry3\\057-e05_hunter_catalog_migration_test.engine.log",
+      "engine_log_sha256": "7e2fd2216bf92a0a45a9f7782fdf060e0943bde7aa9271b7537750fcfdfb1714"
+    },
+    {
+      "index": 90,
+      "name": "e04_learn_from_zero_migration_test",
+      "round": "regression_watch_retry4",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry4\\090-e04_learn_from_zero_migration_test.output.log",
+      "output_sha256": "059b016d80ca1832c9c14e4b08684e7d69fc6d34d5c093d162f42729173cfa6a",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry4\\090-e04_learn_from_zero_migration_test.engine.log",
+      "engine_log_sha256": "7427fd3f39122849f4822628663b92a0d241082f05ade9adfc161ddaed8e9fe0"
+    },
+    {
+      "index": 96,
+      "name": "e05_defender_catalog_migration_test",
+      "round": "regression_watch_retry4",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry4\\096-e05_defender_catalog_migration_test.output.log",
+      "output_sha256": "5befc88c03890578cc6bdf470d5acc7a42accf80fcaf120ff358759005de9dfe",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry4\\096-e05_defender_catalog_migration_test.engine.log",
+      "engine_log_sha256": "1c2d1af4c132059a50a66aff304e422e4319c39a25f68c7d47df4cc99e60004a"
+    },
+    {
+      "index": 97,
+      "name": "e05_berserker_catalog_migration_test",
+      "round": "regression_watch_retry4",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry4\\097-e05_berserker_catalog_migration_test.output.log",
+      "output_sha256": "97836519571914ab7d5928f3b12f7acb4e8f90d0402143d59f15e5d5a8cc6674",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry4\\097-e05_berserker_catalog_migration_test.engine.log",
+      "engine_log_sha256": "4da2f7dbee43929585864b5be872d0a38b3c5eabbb77b5f61d9f2fc3c8b80a01"
+    },
+    {
+      "index": 98,
+      "name": "e05_elementalist_catalog_migration_test",
+      "round": "regression_watch_retry4",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry4\\098-e05_elementalist_catalog_migration_test.output.log",
+      "output_sha256": "a6d1a2d19b9b09b462855e797127f70e12b4c84b85c397c0e4b510b55e3e5dd5",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry4\\098-e05_elementalist_catalog_migration_test.engine.log",
+      "engine_log_sha256": "09490e19639fd05cc72f831a912c5ee2a08f0fa6ecf6d8ccee28c31378dc3702"
+    },
+    {
+      "index": 99,
+      "name": "e05_spiritualist_catalog_migration_test",
+      "round": "regression_watch_retry4",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry4\\099-e05_spiritualist_catalog_migration_test.output.log",
+      "output_sha256": "62c5ec94ed52bb88e31459183c836db21fa0a794789cb1c4d371bbfde69fbf18",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry4\\099-e05_spiritualist_catalog_migration_test.engine.log",
+      "engine_log_sha256": "166938d694e2725284c3436ded7a78b0c657c5be4ad446e6e682708c088d7516"
+    },
+    {
+      "index": 177,
+      "name": "smoke",
+      "round": "final_watch",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\177.output.log",
+      "output_sha256": "99a1f5c05f8b42a98c1353a644c0527b7fbdebfb7a944acd272ccf7d46cc34a6",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\177.engine.log",
+      "engine_log_sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+    },
+    {
+      "index": 180,
+      "name": "e06_review_identity_test",
+      "round": "regression_watch_retry10_extras",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10_extras\\180-e06_review_identity_test.output.log",
+      "output_sha256": "78730aee37d14bf44f6a01a9f6da7f25ff4d4e128f86e9bf6884adf5ea8734c3",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10_extras\\180-e06_review_identity_test.engine.log",
+      "engine_log_sha256": "49a8e4acec0ba772f13396931dd9710250fed361e1d803c8e56c93485e8eb2cb"
+    },
+    {
+      "index": 181,
+      "name": "e06_review_preset_test",
+      "round": "regression_watch_retry10_extras",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10_extras\\181-e06_review_preset_test.output.log",
+      "output_sha256": "5c0a47797ace989282c83ef1c664ef0cb97debb214770f1c1985d285ab38fedb",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10_extras\\181-e06_review_preset_test.engine.log",
+      "engine_log_sha256": "ed74cb16b4fc95db5b22b5a4b21c986c0142a3927c2818acda16f74c7d997e48"
+    },
+    {
+      "index": 182,
+      "name": "e06_inventory_persistence_test",
+      "round": "regression_watch_retry10_extras",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10_extras\\182-e06_inventory_persistence_test.output.log",
+      "output_sha256": "8d43f4b38a9bd50b709cc4913a4f404b1529cbbd3edfc7d3ee99191cf6ff0594",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10_extras\\182-e06_inventory_persistence_test.engine.log",
+      "engine_log_sha256": "67f1a9288b8b50591f8ac7a81deb10d80095a29324e146174ea68e23447ec782"
+    },
+    {
+      "index": 183,
+      "name": "e06_tx_inventory_test",
+      "round": "regression_watch_retry5",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry5\\183-e06_tx_inventory_test.output.log",
+      "output_sha256": "7d5a0186d76ff5e1b9d83bbcd5f58406877a58629e2022a7e4ff642695c3d29a",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry5\\183-e06_tx_inventory_test.engine.log",
+      "engine_log_sha256": "5efe74b5d5859cd1193aba4f7a0e83b7497af7c84ea5b3c1a1959bbb062d3fe1"
+    },
+    {
+      "index": 184,
+      "name": "e06_tx_migration_test",
+      "round": "regression_watch_retry5",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry5\\184-e06_tx_migration_test.output.log",
+      "output_sha256": "e9895f305173e29547757b2ee8651da0491376ce355d5c6bf70b2c687489eb8e",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry5\\184-e06_tx_migration_test.engine.log",
+      "engine_log_sha256": "e37c7da3ee5611437b90a8ce4bab8b16bb2ff1d601e16910c53087a3c2c63b0f"
+    },
+    {
+      "index": 185,
+      "name": "e06_review_persistence_edges_test",
+      "round": "regression_watch_retry6",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry6\\185-e06_review_persistence_edges_test.output.log",
+      "output_sha256": "123fb66f3591e9b0faeb734bbbcce59ebb2d84af3b349ee4851b63199efd657f",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry6\\185-e06_review_persistence_edges_test.engine.log",
+      "engine_log_sha256": "c0d6ab6b56ac7df01a2a90c6e578c310d7b3f249b7e55778e475c304c2dc62d3"
+    },
+    {
+      "index": 186,
+      "name": "e06_tx_composition_test",
+      "round": "regression_watch_retry6",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry6\\186-e06_tx_composition_test.output.log",
+      "output_sha256": "707ff42f2e379d184e5c2ff37edb33cd2c67857ff402f143a430d1779bfc000c",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry6\\186-e06_tx_composition_test.engine.log",
+      "engine_log_sha256": "b3e8d7dc65f7c64c0e5f6123127bde45daa3c414289f95131c9b042ac35fb54e"
+    },
+    {
+      "index": 187,
+      "name": "e06_tx_active_test",
+      "round": "regression_watch_retry6",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry6\\187-e06_tx_active_test.output.log",
+      "output_sha256": "639c3cd9f61b1c2233e3b8a4d05b7f3f189282421100d7248362526debee3e18",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry6\\187-e06_tx_active_test.engine.log",
+      "engine_log_sha256": "6e415f9ddf7f1e7709e7901d353c93d14b35b9fae0b79ac60714070d992ec9e9"
+    },
+    {
+      "index": 188,
+      "name": "e06_tx_causality_test",
+      "round": "regression_watch_retry6",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry6\\188-e06_tx_causality_test.output.log",
+      "output_sha256": "494ca0551d7aa0aa3545ae39f5a41608342a42dc41a04316caae9ea58daaa069",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry6\\188-e06_tx_causality_test.engine.log",
+      "engine_log_sha256": "890c0cbdb1d81976b5620a745e68ec057512b175710d12551df2aa3e1f67912a"
+    },
+    {
+      "index": 189,
+      "name": "e06_tx_mob_test",
+      "round": "regression_watch_retry6",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry6\\189-e06_tx_mob_test.output.log",
+      "output_sha256": "5d56f0cd5ff057474655131ddf94ec101977f7aab24fcb67ef806b1e4f99969a",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry6\\189-e06_tx_mob_test.engine.log",
+      "engine_log_sha256": "f12e0a69986fa9fe77192b7e646804a4916da71ccd67ece37383eb9d591310fe"
+    },
+    {
+      "index": 190,
+      "name": "e06_tx_loot_test",
+      "round": "regression_watch_retry8",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry8\\190-e06_tx_loot_test.output.log",
+      "output_sha256": "480430ac5c34fb01364da07461e7f07835d2984cba43f6a2052bd9d1f8cc0706",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry8\\190-e06_tx_loot_test.engine.log",
+      "engine_log_sha256": "28ef116d8fdd1ceccb295f0f01b362d9a2a5f41e68cd199a12b00fdb4f958b51"
+    },
+    {
+      "index": 197,
+      "name": "e06_content_pilot_runtime_test",
+      "round": "regression_watch_retry8",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry8\\197-e06_content_pilot_runtime_test.output.log",
+      "output_sha256": "6cbdfec9054577cf5d7a5b218cbb2cd36d650467370a971acf67c54b20810a17",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry8\\197-e06_content_pilot_runtime_test.engine.log",
+      "engine_log_sha256": "8ffdfa6017a73d3766e705576b8b85b25a8a401fae806ec091c9203a1aba20bc"
+    },
+    {
+      "index": 203,
+      "name": "e06_directions_test",
+      "round": "regression_watch_retry8",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry8\\203-e06_directions_test.output.log",
+      "output_sha256": "619b359cb0c0335f24208b1dc8e5715401a5666331ec9233804b71d55b7ce525",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry8\\203-e06_directions_test.engine.log",
+      "engine_log_sha256": "c7f9992bc6c5c6bca02fd53b0b4475aeb930d2cf4542225d15bbb9b2d68f065b"
+    },
+    {
+      "index": 204,
+      "name": "e06_publication_test",
+      "round": "regression_watch_retry8",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry8\\204-e06_publication_test.output.log",
+      "output_sha256": "96a9d78f053626b275c3698c2984379b1b52a8ab41ff1c842262467462b17982",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry8\\204-e06_publication_test.engine.log",
+      "engine_log_sha256": "45e8f12e47d34fa945a5e84f7e29acc6f744ef8f034eb0bb5ef36f61785202d6"
+    },
+    {
+      "index": 205,
+      "name": "e06_ui_inventory_test",
+      "round": "regression_watch_retry9",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry9\\205-e06_ui_inventory_test.output.log",
+      "output_sha256": "d8f2de1bc1717c8010b8aad2a410e1014142cedf00c47c689a250d4bac021c83",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry9\\205-e06_ui_inventory_test.engine.log",
+      "engine_log_sha256": "dc74f6980a82b5eab4030064409a237b425e68233d08c364d5f702a731b312f6"
+    },
+    {
+      "index": 206,
+      "name": "e06_ui_menu_test",
+      "round": "regression_watch_retry10",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10\\206-e06_ui_menu_test.output.log",
+      "output_sha256": "115f851f6fe74866a9f6857851112bb5e888fcf79a99aa4e19e63ce42450b688",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10\\206-e06_ui_menu_test.engine.log",
+      "engine_log_sha256": "1407615305564ea489954b4f6b7ca469a644e7ecc6435055a4ac9358b5b44da4"
+    },
+    {
+      "index": 207,
+      "name": "e06_power_progression_test",
+      "round": "regression_watch_retry10",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10\\207-e06_power_progression_test.output.log",
+      "output_sha256": "8cece1d896a01d6a8d438b7b5c06f0d021fd8f3553d916f2db421d0cdc5e71f8",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10\\207-e06_power_progression_test.engine.log",
+      "engine_log_sha256": "5d1e839547f49739cff747987772056db83d073e3f8bbdfb609470b70e636bef"
+    },
+    {
+      "index": 208,
+      "name": "e06_power_migration_test",
+      "round": "regression_watch_retry10",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10\\208-e06_power_migration_test.output.log",
+      "output_sha256": "c3fbd56446ddc9aacc72697a6f46af9707a7449feca99e2c031997727dfaea42",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10\\208-e06_power_migration_test.engine.log",
+      "engine_log_sha256": "fe86b21da50df61d8d9dc90e3baa9baf4e9566dd9f86c48531bfa42cc77df44e"
+    },
+    {
+      "index": 209,
+      "name": "e06_production_loot_test",
+      "round": "regression_watch_retry10",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10\\209-e06_production_loot_test.output.log",
+      "output_sha256": "5615e139dd4554656734a8d7995d2cf226902074b581cf5747c1abc1df129e7c",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10\\209-e06_production_loot_test.engine.log",
+      "engine_log_sha256": "4d6ae7dc3e4c22329f621ee3e92dacb7168aa297a00e56ca70aeb394f2f0dca5"
+    },
+    {
+      "index": 210,
+      "name": "e06_gameplay_content_test",
+      "round": "final_watch",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\210-e06_gameplay_content_test.output.log",
+      "output_sha256": "4472c31b61f5328274fc4887c0c09452a645347814c223beffff609b0b47cfff",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\210-e06_gameplay_content_test.engine.log",
+      "engine_log_sha256": "3dc5a09c4d402772a8b53575ef9c76d615a0d7d2d44dc225b4fde648badf7491"
+    },
+    {
+      "index": 211,
+      "name": "e06_gameplay_ai_test",
+      "round": "regression_watch_retry10",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10\\211-e06_gameplay_ai_test.output.log",
+      "output_sha256": "48656f0d5420262fafdb3944e8c1a74ff08d312c1baef3bfa0b60b4cc0b42b28",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10\\211-e06_gameplay_ai_test.engine.log",
+      "engine_log_sha256": "841f0a6af7797d754c501fbcbb031fce6bae7aca5e5bd76de02a31ac06466d17"
+    },
+    {
+      "index": 212,
+      "name": "e06_gameplay_route_test",
+      "round": "final_watch",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\212-e06_gameplay_route_test.output.log",
+      "output_sha256": "5d947ec41dc30ea37fe808b99fdbd34c1589b3fc607ed246b645177d05d27fc6",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\212-e06_gameplay_route_test.engine.log",
+      "engine_log_sha256": "1ba203279d2d91f473607412539b2cec467848bf42cd3701716b62a865275bf8"
+    },
+    {
+      "index": 213,
+      "name": "e06_permanent_cards_test",
+      "round": "regression_watch_retry10",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10\\213-e06_permanent_cards_test.output.log",
+      "output_sha256": "0b561b308a6990e7f46c4dcc507d9e706cb9b131baf4cc9d627ce98b1a59701a",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10\\213-e06_permanent_cards_test.engine.log",
+      "engine_log_sha256": "9c2ce8433e8d23c6fc20fee9cc6f29a5c1a2d27c967211cbe91a2797666fc24c"
+    },
+    {
+      "index": 214,
+      "name": "e06_inventory_profile_panel_test",
+      "round": "final_watch",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\214-e06_inventory_profile_panel_test.output.log",
+      "output_sha256": "ca6acee4c959f25b351ff83e8f6ae0d001aa559e7624f06c98f0850b0f9e04ac",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\214-e06_inventory_profile_panel_test.engine.log",
+      "engine_log_sha256": "9fbaef575db82d194d4f929c4b302571b37631c59ba69a59f021fbf55b908829"
+    },
+    {
+      "index": 215,
+      "name": "e06_inventory_window_input_test",
+      "round": "final_watch",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\215-e06_inventory_window_input_test.output.log",
+      "output_sha256": "bb0d3fb514c34a7faf7314b8ef9bed4417b8ae24e6b8cab026cebdeb079901d1",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\215-e06_inventory_window_input_test.engine.log",
+      "engine_log_sha256": "5c713ed925081eb9cc6bcab30cf4560d31d7b5ab7aab7eb3946579f7442182f5"
+    },
+    {
+      "index": 216,
+      "name": "e06_fixes_performance_cache_test",
+      "round": "regression_watch_retry10",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10\\216-e06_fixes_performance_cache_test.output.log",
+      "output_sha256": "b1056f0bc876b94725035622419cf6f8e3e55ccd41149f380c510f60bf038419",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10\\216-e06_fixes_performance_cache_test.engine.log",
+      "engine_log_sha256": "bdb33e05b7e9cf8c254eebb566b27670033058cab68db58e5100ff2f5b20c58a"
+    },
+    {
+      "index": 217,
+      "name": "e06_expanded_equipment_content_test",
+      "round": "regression_watch_retry10",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10\\217-e06_expanded_equipment_content_test.output.log",
+      "output_sha256": "2fbbbda2ec0e34042963b4ad9b2dc54e53e2902f7392cb1ff60125a494dfed66",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\regression_watch_retry10\\217-e06_expanded_equipment_content_test.engine.log",
+      "engine_log_sha256": "675b63b18a8ae9043afa9c321f00fa66cd3a0ae2f76a1ef1815f471b98d06ca0"
+    },
+    {
+      "index": 218,
+      "name": "e06_appearance_integration_test",
+      "round": "final_watch",
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\218-e06_appearance_integration_test.output.log",
+      "output_sha256": "68ed38f6fc8fd3ccd08b2fbe151189abf23d5266a6b35329cdc52c6f5f1d912f",
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_playtest_fixes\\final_watch\\218-e06_appearance_integration_test.engine.log",
+      "engine_log_sha256": "1be81a6335faa720ca71e570e1a73a2c70706703fe773b2743b1498e877be2f1"
+    }
+  ],
+  "failed_rounds_preserved": [
+    {
+      "name": "e06_inventory_test",
+      "round": "regression_watch",
+      "output_sha256": "47CF2B3E290682C855043D3FE062749B53104A64E66852207CD497B348F62769"
+    },
+    {
+      "name": "e06_rewards_test",
+      "round": "regression_watch_retry1",
+      "output_sha256": "C437DEDD2E931F477B11B535CBB0716077717CC210F91C6F9F6B093FBB374CEF"
+    },
+    {
+      "name": "e06_migration_test",
+      "round": "regression_watch_retry2",
+      "output_sha256": "E65E0D64FAD08BB663E39BE636D95303BE723CE7A7E6349CB5BE4820B7B073FC"
+    },
+    {
+      "name": "e04_learn_from_zero_migration_test",
+      "round": "regression_watch_retry3",
+      "output_sha256": "227AD6D5EFF66E0BA265573E94BC3728E905FA064A67A88D07CA4FFDC5F859A2"
+    },
+    {
+      "name": "e06_tx_inventory_test",
+      "round": "regression_watch_retry4",
+      "output_sha256": "81E80699490067E0101426AC7E9ED6159C64E157F64C0EC9E0D1B899BB50267E"
+    },
+    {
+      "name": "e06_review_persistence_edges_test",
+      "round": "regression_watch_retry5",
+      "output_sha256": "196B7F3FA8D7500A7739AF7E50B7BECE866D57FF2F81C7E26D262E917144C3BA"
+    },
+    {
+      "name": "e06_tx_loot_test",
+      "round": "regression_watch_retry6",
+      "output_sha256": "D5974BB1A260B335DABD30EB1F6CFD0CEEF816BB43764A61DC5DAF443790BE2C"
+    },
+    {
+      "name": "e06_tx_loot_test",
+      "round": "regression_watch_retry7",
+      "output_sha256": "15828BDBB7C86BB2FD92E9F9085CA57A93E77B0BAE43ECE7D1399B453B57D4CA"
+    },
+    {
+      "name": "e06_ui_inventory_test",
+      "round": "regression_watch_retry8",
+      "output_sha256": "7DD9D9D993D570A66EB916427D21FDEBE8EF71A10618CAC575B25012F54B32D0"
+    },
+    {
+      "name": "e06_ui_menu_test",
+      "round": "regression_watch_retry9",
+      "output_sha256": "F3AC0C7D1F0118982AAD6D011092B3BD7FE35C00AFE027D88287E1CA87944C43"
+    }
+  ],
+  "engine": {
+    "path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/review-engine/Godot.exe",
+    "sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "version": "4.7.2.stable.official.ed1daf0bf"
+  },
+  "runner": {
+    "path": "tools/verify.ps1",
+    "sha256": "ecfbdab741375d31e4489c09c7fb6954d4ccc42fde2698fe288fa6db3f9d7574"
+  },
+  "preservation": {
+    "resources": 85,
+    "historical_atlases": 11,
+    "report": ".godot/verification/e06_playtest_fixes/preservation_author.json",
+    "sha256": "9f214dca2dd797b3ccf0b3893a8ff8fdf10dd3def07dc877140ca5434a1de300"
+  },
+  "visual_evidence": [
+    {
+      "path": ".godot\\verification\\e06_playtest_fixes\\native_classes_author.output.log",
+      "sha256": "65fa29c98ab98a0341e9650d30ffb3fda254b23dce310c0a4871756c5cfa941c"
+    },
+    {
+      "path": ".godot\\verification\\e06_playtest_fixes\\classes_final.output.log",
+      "sha256": "fca8271081313a3b0c62924a42aab34d5c6dedab692f87c159bd2cd134d9d127"
+    },
+    {
+      "path": ".godot\\verification\\e06_playtest_fixes\\inventory_final_1280.output.log",
+      "sha256": "c9b5260778da84115e8395ad6da77975451d18b58d5cdf85781f35c5ae2b88e9"
+    },
+    {
+      "path": ".godot\\verification\\e06_playtest_fixes\\inventory_final_1920.output.log",
+      "sha256": "cbb6500b33ae4e6db14838893ab2e1fd7614d3eae99da6cd3b31742ccf264ee4"
+    },
+    {
+      "path": ".godot\\verification\\e06_playtest_fixes\\gameplay_final.output.log",
+      "sha256": "63bd212f6d5438ee70d925bfa21ad012fdc1c7f0bfaa07715f9fcc1203d79da2"
+    },
+    {
+      "path": ".godot\\verification\\e06_playtest_fixes\\native_classes\\classes_0.png",
+      "sha256": "0b12bb018af2765d7e5ffff9d9d2dba0a93eacabfa93c6c2b5234adec406e83c"
+    },
+    {
+      "path": ".godot\\verification\\e06_playtest_fixes\\native_classes\\classes_1.png",
+      "sha256": "831e279ec56eb3ef7f3f6cd5d7357380ffd20a75de0b704d710f931c7266a52f"
+    },
+    {
+      "path": ".godot\\verification\\e06_playtest_fixes\\native_classes\\classes_2.png",
+      "sha256": "997d43b931fa83c225045d044425d7ca683e0d34840dabfc4ae01c6cea05e246"
+    },
+    {
+      "path": ".godot\\verification\\e06_playtest_fixes\\native_gameplay\\bosque_1280.png",
+      "sha256": "89790ac9271e5d262df7dfd91c0df09f7857648a05a6c8bb6ec11e07be7cf5a0"
+    },
+    {
+      "path": ".godot\\verification\\e06_playtest_fixes\\native_gameplay\\campina_1280.png",
+      "sha256": "ecc4f88fd789b8f096b3a012d68e17c10706fdfa4e05d6543175a7b029afab40"
+    },
+    {
+      "path": ".godot\\verification\\e06_playtest_fixes\\native_gameplay\\ruinas_tiers_1280.png",
+      "sha256": "c83e6e622f17a1fac0a774226f6e782ba6f2f5aa12087641b6de9a6331910f4e"
+    },
+    {
+      "path": ".godot\\verification\\e06_playtest_fixes\\native_gameplay\\ruinas_tiers_1920.png",
+      "sha256": "b8565c9b06b406799cc16c98085d2871e4c27f772ad84a36c93ff5cc9a98ee1b"
+    },
+    {
+      "path": ".godot\\verification\\e06_playtest_fixes\\inventory_cards_1280.png",
+      "sha256": "4e1619782337cf0137e4dfeb3a75171a59941924a257198594513065d628c2b0"
+    },
+    {
+      "path": ".godot\\verification\\e06_playtest_fixes\\inventory_cards_1920.png",
+      "sha256": "5dd6dbcdf2eddc2708662fa7046998e9ea4a728b4141ec0d7e8d049aa50e0f67"
+    },
+    {
+      "path": ".godot\\verification\\e06_playtest_fixes\\inventory_equipment_1280.png",
+      "sha256": "145d7a0954cc7af86e99255ecce3120e4203b9a087bab9958715f34901a1e617"
+    },
+    {
+      "path": ".godot\\verification\\e06_playtest_fixes\\inventory_equipment_1920.png",
+      "sha256": "e376ed01a8311450209ba02da2dbe909626dd18f431f9d5c983a866fccb1049d"
+    }
+  ],
+  "performance": {
+    "uncached_catalog_median_ms": 261.514,
+    "warm_cached_catalog_median_ms": 7.64,
+    "cold_cached_catalog_median_ms": 282.094,
+    "limits": "Microbenchmark only. No end-to-end baseline, FPS claim, or demonstrated debug limitation."
+  },
+  "content": {
+    "runtime_equipment": 85,
+    "runtime_sets": 14,
+    "added_equipment": 46,
+    "added_sets": 13,
+    "new_mob_atlases": 3,
+    "weaponless_player_atlases": 10
+  },
+  "product_acceptance": "pending",
+  "master_merge": "not_authorized",
+  "playtest_application": "pending",
+  "limitations": [
+    "Migration cannot recover cards discarded by the old save.",
+    "Empty Consumibles/Misc tabs add no usable consumable mechanics.",
+    "Equipment art is a first visual integration; aesthetics, frame timing and perceived lag require human playtest.",
+    "Selected coverage is 59 distinct checks out of plan 218, not a complete-suite run."
+  ]
+}

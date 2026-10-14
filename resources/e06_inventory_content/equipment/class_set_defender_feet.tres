@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_m1dgw"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_pnnwo"]
+
+[sub_resource type="Resource" id="Resource_etato"]
+script = ExtResource("1_m1dgw")
+id = &"class_set_defender_feet_effect"
+unique_effect_id = &"class_set_defender_feet_effect"
+family_id = &"class_set_defender_feet_effect"
+allowed_origins = Array[StringName]([&"swordsman"])
+allowed_evolutions = Array[StringName]([&"defender"])
+axis = &"move_speed"
+unit = &"points"
+magnitude = 2.0
+
+[resource]
+script = ExtResource("2_pnnwo")
+id = &"class_set_defender_feet"
+display_name = "Grevas do Baluarte"
+flavor_text = "Placas polidas trazem o emblema de uma muralha e a disciplina de uma guarda."
+description = "Pés: Velocidade de movimento +2."
+allowed_origins = Array[StringName]([&"swordsman"])
+allowed_evolutions = Array[StringName]([&"defender"])
+slot = &"feet"
+item_kind = &"armor"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 6
+quality_id = &"rare"
+socket_capacity = 1
+set_id = &"class_set_defender"
+effects = Array[ExtResource("1_m1dgw")]([SubResource("Resource_etato")])
+min_item_level = 6
+max_item_level = 10
+allowed_identities = Array[StringName]([&"defender"])

@@ -46,7 +46,7 @@ func _run() -> void:
 		for actor: CombatActor in controller.enemies:
 			actor.set_process(false)
 			if actor is EnemyActor and actor._mob_definition.visual_kind != &"humanoid":
-				check(actor.body_drawer.is_valid(), "prototype visual survives local presenter scope")
+				check(actor.character_animation != null and actor.character_animation.atlas != null and actor.character_animation.actor_kind == actor._mob_definition.animation_kind and not actor.body_drawer.is_valid(), "species atlas survives and death uses same visual kind")
 			check(not actor.player_target_acquired,"safe entry does not acquire distant groups")
 			if actor is EnemyActor and actor.occurrence.mob_base_id == &"test_beast_master": master = actor
 		controller._start_next_encounter()

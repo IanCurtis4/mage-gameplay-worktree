@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="EquipmentSetDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_set_definition.gd" id="1_stfo5"]
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="2_dj2l0"]
+
+[sub_resource type="Resource" id="Resource_4r78d"]
+script = ExtResource("2_dj2l0")
+id = &"class_set_archer_threshold_2_precision_attack"
+unique_effect_id = &"class_set_archer_threshold_2_precision_attack"
+family_id = &"class_set_archer_threshold_2_precision_attack"
+allowed_origins = Array[StringName]([&"archer"])
+axis = &"precision_attack"
+unit = &"points"
+magnitude = 4.0
+
+[sub_resource type="Resource" id="Resource_0kg0l"]
+script = ExtResource("2_dj2l0")
+id = &"class_set_archer_threshold_3_max_hp"
+unique_effect_id = &"class_set_archer_threshold_3_max_hp"
+family_id = &"class_set_archer_threshold_3_max_hp"
+allowed_origins = Array[StringName]([&"archer"])
+axis = &"max_hp"
+unit = &"points"
+magnitude = 15.0
+
+[resource]
+script = ExtResource("1_stfo5")
+id = &"class_set_archer"
+display_name = "Conjunto Arqueiro"
+flavor_text = "Couro verde e fivelas leves deixam braços e pernas livres para mirar."
+description = "2 peças: Ataque de precisão +4.
+3 peças: Vida máxima +15."
+thresholds = {
+2: Array[ExtResource("2_dj2l0")]([SubResource("Resource_4r78d")]),
+3: [SubResource("Resource_0kg0l")]
+}
+min_item_level = 2
+max_item_level = 5
+allowed_identities = Array[StringName]([&"archer", &"sentinel", &"hunter"])

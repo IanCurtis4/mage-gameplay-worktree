@@ -35,13 +35,14 @@ static func compose(snapshot: BuildSnapshot, run_effects: Dictionary, temporary_
 		var quality_check := registry.validate_equipment_quality(item_definition, instance.quality_id)
 		if not quality_check["ok"]:
 			return quality_check
-		if not item_definition.set_id.is_empty():
+		var set_definition := registry.get_set(item_definition.set_id) if not item_definition.set_id.is_empty() else null
+		if set_definition != null and EquipmentEligibilityRules.level_allowed(EquipmentEligibilityRules.for_resource(set_definition),instance.item_level) and EquipmentEligibilityRules.identity_allowed(EquipmentEligibilityRules.for_resource(set_definition),snapshot.base_class_id,snapshot.evolution_id):
 			var members: Dictionary = set_members.get(item_definition.set_id, {})
 			members[instance.definition_id] = true
 			set_members[item_definition.set_id] = members
 		entries.append({"source_id": StringName("equipment:%s:%s" % [slot, item]), "origin": &"equipment", "id": instance.definition_id, "slot": slot, "instance_id": item, "stacks": 1})
-	var sockets: Dictionary = run_effects.get("card_sockets", {})
-	var cards: Dictionary = run_effects.get("card_instances", {})
+	var sockets: Dictionary = run_effects.get("card_sockets", snapshot.card_inventory.active_sockets(snapshot.equipped))
+	var cards: Dictionary = run_effects.get("card_instances", snapshot.card_inventory.describe()["instances"])
 	var seen_cards: Dictionary = {}
 	for item: Variant in sockets:
 		if typeof(item) not in [TYPE_STRING, TYPE_STRING_NAME] or item not in snapshot.equipped.values():

@@ -37,9 +37,9 @@ func _run() -> void:
 	before_disk = F.disk(f)
 	var equipped := c.run_state.build_snapshot.equipped.duplicate(true)
 	_check(F.change(f, &"equip", {"slot": &"main_hand", "equipment_instance_id": F.item(f, &"starter_staff")})["error_code"] == &"invalid_hand_configuration" and F.disk(f) == before_disk and c.run_state.build_snapshot.equipped == equipped, "two hands rejects shield without partial write")
-	_check(F.change(f, &"equip", {"slot": &"off_hand", "equipment_instance_id": focus})["ok"] and c.run_state.card_inventory.describe()["free"].has(cards[0]), "desequipped shield releases cards")
+	_check(F.change(f, &"equip", {"slot": &"off_hand", "equipment_instance_id": focus})["ok"] and c.run_state.card_inventory.sockets()[shield][3] == cards[0] and not c.run_state.effect_state()["card_sockets"].has(shield), "desequipped shield keeps physical card and removes active effect")
 	_check(F.change(f, &"socket", {"equipment_instance_id": focus, "socket_index": 0, "card_instance_id": cards[0]})["error_code"] == &"socket_not_allowed", "focus cannot socket")
-	_check(F.change(f, &"unequip", {"slot": &"torso"})["ok"] and c.run_state.card_inventory.describe()["free"].size() == 4 and is_equal_approx(c.player.health.hp_deficit(), debt), "unequip frees all remaining cards without healing")
+	_check(F.change(f, &"unequip", {"slot": &"torso"})["ok"] and c.run_state.card_inventory.describe()["free"].is_empty() and c.run_state.effect_state()["card_sockets"].is_empty() and is_equal_approx(c.player.health.hp_deficit(), debt), "unequip retains all sockets without active effects or healing")
 	_check(F.change(f, &"equip", {"slot": &"accessory_2", "equipment_instance_id": charm})["error_code"] == &"duplicate_equipment_instance", "same exemplar cannot occupy two positions")
 	var another_charm: StringName = &""
 	for id: StringName in facade.current_profile().equipment_instance_ids():

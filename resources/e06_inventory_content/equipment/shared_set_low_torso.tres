@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_hseha"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_7menv"]
+
+[sub_resource type="Resource" id="Resource_d42ht"]
+script = ExtResource("1_hseha")
+id = &"shared_set_low_torso_effect"
+unique_effect_id = &"shared_set_low_torso_effect"
+family_id = &"shared_set_low_torso_effect"
+axis = &"max_hp"
+unit = &"points"
+magnitude = 12.0
+
+[resource]
+script = ExtResource("2_7menv")
+id = &"shared_set_low_torso"
+display_name = "Colete de Caminhante"
+flavor_text = "Peças leves para quem começa a explorar a Arena, costuradas em tons de bosque."
+description = "Tronco: Vida máxima +12."
+slot = &"torso"
+item_kind = &"armor"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 2
+quality_id = &"rare"
+socket_capacity = 1
+set_id = &"shared_set_low"
+effects = Array[ExtResource("1_hseha")]([SubResource("Resource_d42ht")])
+min_item_level = 2
+max_item_level = 5

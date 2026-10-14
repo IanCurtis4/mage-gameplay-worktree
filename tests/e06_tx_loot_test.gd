@@ -16,16 +16,18 @@ func _catalog() -> BuildEffectCatalog:
 	mob.id = &"loot_fixture"
 	mob.fixed_level = 7
 	mob.allowed_occurrence_categories = MobCatalog.CATEGORIES.duplicate()
-	mob.card_id = &"loot_card"
+	mob.card_id = &"bulwark_card"
 	for axis: StringName in StatCalculator.PRIMARY_IDS: mob.primary_attributes[axis] = 3
 	assert(mobs.register_definition(mob)["ok"])
 	var result := BuildEffectCatalog.new()
 	result.set_mob_catalog(mobs)
 	for origin: StringName in BuildEffectCatalog.ORIGINS:
 		for id: StringName in source.ids(origin):
+			# Use a published persistent card ID with explicit fixture species/effect binding.
+			if origin == &"card" and id == &"bulwark_card": continue
 			assert(result.register_definition(origin, source.get_definition(origin, id))["ok"])
 	var card := CardDefinition.new()
-	card.id = &"loot_card"
+	card.id = &"bulwark_card"
 	card.mob_base_id = mob.id
 	card.effects.assign([F.stat(&"loot_hp", &"max_hp", 5)])
 	assert(result.register_definition(&"card", card)["ok"])
@@ -55,7 +57,7 @@ func _run() -> void:
 		var high := resolver.roll(_occurrence(category), [1.0, 1.0, 1.0, 1.0, 1.0])
 		var guaranteed := MobLootResolver.FLOORS.has(category)
 		_check(low["equipment_drops"].size() == (1 if guaranteed else 0) and high["equipment_drops"].size() == (1 if guaranteed else 0), "guarantee yields one item independent of chance " + String(category))
-		_check(low["card_id"] == &"loot_card" and high["card_id"] == &"loot_card", "occurrence variant retains base card even at extreme RNG " + String(category))
+		_check(low["card_id"] == &"bulwark_card" and high["card_id"] == &"bulwark_card", "occurrence variant retains base card even at extreme RNG " + String(category))
 		if guaranteed:
 			_check(low["equipment_drops"][0]["quality_id"] == MobLootResolver.FLOORS[category], "minimum quality applied once")
 			_check(high["equipment_drops"][0]["quality_id"] == (&"legendary" if category == &"boss" else &"epic") and high["equipment_drops"].size() == 1, "superior replaces guaranteed minimum without extra item")
@@ -129,13 +131,13 @@ func _durable_event(catalog: BuildEffectCatalog) -> void:
 	var profile := c.persistent_facade.current_profile()
 	var acquired: EquipmentInstance = profile.equipment_instances[profile.equipment_instance_ids().back()]
 	_check(profile.equipment_instances.size() == before_profile.equipment_instances.size() + 1 and acquired.quality_id == &"rare" and acquired.item_level == 7 and acquired.socket_capacity == 4, "actual metadata and repeated definition create own persistent exemplar")
-	_check(c.run_state.card_inventory.describe()["owned"].size() == 1 and c.run_state.pending_choices == 0 and profile.characters[0].base_xp_total == before_profile.characters[0].base_xp_total, "mob gives one ephemeral card without encounter XP or augment")
+	_check(c.run_state.card_inventory.describe()["owned"].size() == 1 and c.run_state.pending_choices == 0 and profile.characters[0].base_xp_total == before_profile.characters[0].base_xp_total, "mob gives one permanent card without encounter XP or augment")
 	var collected_disk := F.disk(fixture)
 	_check(c.reward_service.collect(token)["already_applied"] and F.disk(fixture) == collected_disk and c.run_state.card_inventory.describe()["owned"].size() == 1, "collection replay cannot duplicate gear/card/save")
 	var stage := c.reward_service.issue("fixture_stage", &"encounter_two", true)
 	_check(stage["ok"] and stage["item_id"] == &"" and stage["card_id"] == &"" and stage["payload"]["base_xp"] == 150 and stage["payload"]["job_xp"] == 100, "per-mob mode replaces only stage equipment/card")
 	_check(c.reward_service.collect(stage["ticket_id"])["ok"] and c.run_state.pending_choices == 1 and c.persistent_facade.current_profile().characters[0].base_xp_total == before_profile.characters[0].base_xp_total + 150 and profile.equipment_instances.size() == before_profile.equipment_instances.size() + 1, "encounter still gives XP and one augment choice")
-	_check(not F.disk(fixture).contains("loot_card") and not F.disk(fixture).contains("card_sockets"), "cards remain absent from persistent save")
+	_check(F.disk(fixture).contains("bulwark_card") and not F.disk(fixture).contains("card_sockets") and profile.card_inventory.describe()["owned"].size() == 1, "card collection persists in its own validated schema field")
 	c.run_state.reset()
-	_check(c.run_state.card_inventory.describe()["owned"].is_empty() and c.persistent_facade.current_profile().equipment_instances.size() == before_profile.equipment_instances.size() + 1, "run end discards cards and preserves acquired equipment")
+	_check(c.run_state.card_inventory.describe()["owned"].size() == 1 and c.run_state.card_inventory.to_record() == c.persistent_facade.current_profile().card_inventory.to_record() and c.persistent_facade.current_profile().equipment_instances.size() == before_profile.equipment_instances.size() + 1, "run end preserves acquired cards and equipment")
 	c.free()

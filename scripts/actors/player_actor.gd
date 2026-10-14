@@ -250,6 +250,8 @@ func configure(nav: ArenaNavigation, state: RunState) -> void:
 	elif is_hunter():
 		animation_kind = &"hunter"
 	set_animation_kind(animation_kind)
+	_equipment_visual_key = 0
+	_refresh_equipment_visual()
 	if is_instance_valid(hunter_presentation):
 		hunter_presentation.clear()
 		hunter_presentation.free()
@@ -520,6 +522,7 @@ func available_skill_ids() -> Array[StringName]:
 
 func apply_run_modifiers(state: RunState) -> void:
 	run_state = state
+	_refresh_equipment_visual()
 	if not active_cast_skill.is_empty() and active_cast_skill not in available_skill_ids():
 		cancel_active_cast()
 	if sentinel_state.explosive_prepared and &"sentinel_explosive_shot" not in available_skill_ids():
@@ -3135,3 +3138,12 @@ func weapon_ids_for_skill(skill_id: StringName) -> Array[StringName]:
 	if id != null:
 		result.append(StringName(id))
 	return result
+
+var _equipment_visual_key := 0
+func _refresh_equipment_visual() -> void:
+	if run_state == null or run_state.build_snapshot == null or character_animation == null: return
+	var snapshot := run_state.build_snapshot
+	var key := hash([snapshot.base_class_id,snapshot.evolution_id,snapshot.equipped])
+	if key == _equipment_visual_key: return
+	_equipment_visual_key = key
+	character_animation.equipment_visual = EquipmentAttachmentVisual.describe(snapshot,run_state.effect_catalog())

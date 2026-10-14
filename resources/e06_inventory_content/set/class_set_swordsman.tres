@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="EquipmentSetDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_set_definition.gd" id="1_hnqgr"]
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="2_kxenv"]
+
+[sub_resource type="Resource" id="Resource_4cl3w"]
+script = ExtResource("2_kxenv")
+id = &"class_set_swordsman_threshold_2_melee_attack"
+unique_effect_id = &"class_set_swordsman_threshold_2_melee_attack"
+family_id = &"class_set_swordsman_threshold_2_melee_attack"
+allowed_origins = Array[StringName]([&"swordsman"])
+axis = &"melee_attack"
+unit = &"points"
+magnitude = 4.0
+
+[sub_resource type="Resource" id="Resource_ikx6w"]
+script = ExtResource("2_kxenv")
+id = &"class_set_swordsman_threshold_3_max_hp"
+unique_effect_id = &"class_set_swordsman_threshold_3_max_hp"
+family_id = &"class_set_swordsman_threshold_3_max_hp"
+allowed_origins = Array[StringName]([&"swordsman"])
+axis = &"max_hp"
+unit = &"points"
+magnitude = 15.0
+
+[resource]
+script = ExtResource("1_hnqgr")
+id = &"class_set_swordsman"
+display_name = "Conjunto Espadachim"
+flavor_text = "Couro vermelho e costuras resistentes acompanham quem luta de perto."
+description = "2 peças: Ataque corpo a corpo +4.
+3 peças: Vida máxima +15."
+thresholds = {
+2: Array[ExtResource("2_kxenv")]([SubResource("Resource_4cl3w")]),
+3: [SubResource("Resource_ikx6w")]
+}
+min_item_level = 2
+max_item_level = 5
+allowed_identities = Array[StringName]([&"swordsman", &"defender", &"berserker"])

@@ -44,7 +44,7 @@ func commit_change(intent: Dictionary) -> Dictionary:
 	_busy = true
 	_committing_intent = intent.duplicate(true)
 	var result := {"ok": true, "error_code": &"", "request_id": intent["request_id"]}
-	if prepared["equipment_changed"] and controller.persistent_facade != null:
+	if controller.persistent_facade != null:
 		result = controller.persistent_facade.equip_between_encounters(String(intent["request_id"]), int(intent["profile_revision"]), controller, intent)
 	if result["ok"]:
 		_publish(prepared)
@@ -158,7 +158,7 @@ func _prepare(intent: Dictionary) -> Dictionary:
 		return _failure(inventory_result["error_code"], intent)
 	var inventory: RunCardInventory = inventory_result["inventory"]
 	var effects := _run.effect_state()
-	effects["card_sockets"] = inventory.sockets()
+	effects["card_sockets"] = inventory.active_sockets(candidate.equipped)
 	effects["card_instances"] = inventory.describe()["instances"]
 	candidate.build_version += 1
 	var composition := BuildEffectComposer.compose(candidate, effects, actor.temporary_stat_sources(), _run.effect_catalog())
@@ -181,6 +181,7 @@ func _prepare(intent: Dictionary) -> Dictionary:
 func _publish(prepared: Dictionary) -> void:
 	var actor := _actor.get_ref() as PlayerActor
 	_run.build_snapshot = prepared["snapshot"].copy_snapshot()
+	_run.build_snapshot.card_inventory = prepared["inventory"].copy_inventory()
 	_run.card_inventory = prepared["inventory"].copy_inventory()
 	_run.card_sockets = _run.card_inventory.sockets()
 	_run.card_instances = _run.card_inventory.describe()["instances"]

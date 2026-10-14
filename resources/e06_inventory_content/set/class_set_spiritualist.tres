@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="EquipmentSetDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_set_definition.gd" id="1_lbrkb"]
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="2_quwql"]
+
+[sub_resource type="Resource" id="Resource_jum1i"]
+script = ExtResource("2_quwql")
+id = &"class_set_spiritualist_threshold_2_magic_attack"
+unique_effect_id = &"class_set_spiritualist_threshold_2_magic_attack"
+family_id = &"class_set_spiritualist_threshold_2_magic_attack"
+allowed_origins = Array[StringName]([&"mage"])
+allowed_evolutions = Array[StringName]([&"spiritualist"])
+axis = &"magic_attack"
+unit = &"points"
+magnitude = 4.0
+
+[sub_resource type="Resource" id="Resource_nyqt1"]
+script = ExtResource("2_quwql")
+id = &"class_set_spiritualist_threshold_3_max_sp"
+unique_effect_id = &"class_set_spiritualist_threshold_3_max_sp"
+family_id = &"class_set_spiritualist_threshold_3_max_sp"
+allowed_origins = Array[StringName]([&"mage"])
+allowed_evolutions = Array[StringName]([&"spiritualist"])
+axis = &"max_sp"
+unit = &"points"
+magnitude = 8.0
+
+[resource]
+script = ExtResource("1_lbrkb")
+id = &"class_set_spiritualist"
+display_name = "Conjunto Espiritualista"
+flavor_text = "Sinos pequenos e contas de madeira acompanham uma jornada de escuta."
+description = "2 peças: Ataque mágico +4.
+3 peças: SP máximo +8."
+thresholds = {
+2: Array[ExtResource("2_quwql")]([SubResource("Resource_jum1i")]),
+3: [SubResource("Resource_nyqt1")]
+}
+min_item_level = 6
+max_item_level = 10
+allowed_identities = Array[StringName]([&"spiritualist"])

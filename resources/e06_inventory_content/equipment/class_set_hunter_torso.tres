@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_chydr"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_euoud"]
+
+[sub_resource type="Resource" id="Resource_7123m"]
+script = ExtResource("1_chydr")
+id = &"class_set_hunter_torso_effect"
+unique_effect_id = &"class_set_hunter_torso_effect"
+family_id = &"class_set_hunter_torso_effect"
+allowed_origins = Array[StringName]([&"archer"])
+allowed_evolutions = Array[StringName]([&"hunter"])
+axis = &"max_hp"
+unit = &"points"
+magnitude = 12.0
+
+[resource]
+script = ExtResource("2_euoud")
+id = &"class_set_hunter_torso"
+display_name = "Casaco de Batedora"
+flavor_text = "Tecido de viagem reforçado para seguir rastros sem perder o passo."
+description = "Tronco: Vida máxima +12."
+allowed_origins = Array[StringName]([&"archer"])
+allowed_evolutions = Array[StringName]([&"hunter"])
+slot = &"torso"
+item_kind = &"armor"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 6
+quality_id = &"rare"
+socket_capacity = 1
+set_id = &"class_set_hunter"
+effects = Array[ExtResource("1_chydr")]([SubResource("Resource_7123m")])
+min_item_level = 6
+max_item_level = 10
+allowed_identities = Array[StringName]([&"hunter"])

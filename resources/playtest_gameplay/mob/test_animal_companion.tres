@@ -3,6 +3,7 @@
 [resource]
 script = ExtResource("1")
 id = &"test_animal_companion"
+animation_kind = &"animal_companion"
 display_name = "Companheiro animal"
 description = "Nível fixo da área de teste."
 base_category = &"normal"

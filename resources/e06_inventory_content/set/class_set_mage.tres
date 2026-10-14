@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="EquipmentSetDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_set_definition.gd" id="1_8bqcm"]
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="2_q18qp"]
+
+[sub_resource type="Resource" id="Resource_uowcg"]
+script = ExtResource("2_q18qp")
+id = &"class_set_mage_threshold_2_magic_attack"
+unique_effect_id = &"class_set_mage_threshold_2_magic_attack"
+family_id = &"class_set_mage_threshold_2_magic_attack"
+allowed_origins = Array[StringName]([&"mage"])
+axis = &"magic_attack"
+unit = &"points"
+magnitude = 4.0
+
+[sub_resource type="Resource" id="Resource_j3aos"]
+script = ExtResource("2_q18qp")
+id = &"class_set_mage_threshold_3_max_sp"
+unique_effect_id = &"class_set_mage_threshold_3_max_sp"
+family_id = &"class_set_mage_threshold_3_max_sp"
+allowed_origins = Array[StringName]([&"mage"])
+axis = &"max_sp"
+unit = &"points"
+magnitude = 8.0
+
+[resource]
+script = ExtResource("1_8bqcm")
+id = &"class_set_mage"
+display_name = "Conjunto Mago"
+flavor_text = "Tecido azul com pequenos bordados de estrelas guia a concentração."
+description = "2 peças: Ataque mágico +4.
+3 peças: SP máximo +8."
+thresholds = {
+2: Array[ExtResource("2_q18qp")]([SubResource("Resource_uowcg")]),
+3: [SubResource("Resource_j3aos")]
+}
+min_item_level = 2
+max_item_level = 5
+allowed_identities = Array[StringName]([&"mage", &"elementalist", &"spiritualist", &"mg_ar"])

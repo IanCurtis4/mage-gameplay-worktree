@@ -28,7 +28,7 @@ func register_definition(definition: MobDefinition) -> Dictionary:
 	for axis: StringName in StatCalculator.PRIMARY_IDS:
 		if not EquipmentRules.exact_integer(definition.primary_attributes.get(axis), 0):
 			return BuildEffectCatalog.failure(&"invalid_mob_stats")
-	if definition.archetype not in [&"chaser", &"archer"] or definition.animation_kind not in [&"warrior", &"archer"] or not is_finite(definition.collision_radius) or definition.collision_radius <= 0.0:
+	if definition.archetype not in [&"chaser", &"archer"] or definition.animation_kind not in [&"warrior", &"archer", &"gel", &"beast_master", &"animal_companion"] or not is_finite(definition.collision_radius) or definition.collision_radius <= 0.0:
 		return BuildEffectCatalog.failure(&"invalid_mob_definition")
 	if definition.skill_ranks.size() != definition.skill_ids.size():
 		return BuildEffectCatalog.failure(&"invalid_mob_skill")

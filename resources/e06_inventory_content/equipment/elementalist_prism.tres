@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_x8r6h"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_fcsrg"]
+
+[sub_resource type="Resource" id="Resource_p1jlx"]
+script = ExtResource("1_x8r6h")
+id = &"elementalist_prism_effect"
+unique_effect_id = &"elementalist_prism_effect"
+family_id = &"elementalist_prism_effect"
+allowed_origins = Array[StringName]([&"mage"])
+allowed_evolutions = Array[StringName]([&"elementalist"])
+axis = &"magic_attack"
+unit = &"points"
+magnitude = 2.0
+
+[resource]
+script = ExtResource("2_fcsrg")
+id = &"elementalist_prism"
+display_name = "Prisma Elemental"
+flavor_text = "Um foco prismático que separa a luz em cores nítidas."
+description = "Foco secundário: ataque mágico +2."
+allowed_origins = Array[StringName]([&"mage"])
+allowed_evolutions = Array[StringName]([&"elementalist"])
+slot = &"off_hand"
+item_kind = &"focus"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 6
+quality_id = &"rare"
+effects = Array[ExtResource("1_x8r6h")]([SubResource("Resource_p1jlx")])
+min_item_level = 6
+max_item_level = 10
+allowed_identities = Array[StringName]([&"elementalist"])
+visual_key = &"prismatic_focus"

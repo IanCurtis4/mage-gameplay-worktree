@@ -3,6 +3,7 @@
 [resource]
 script = ExtResource("1")
 id = &"test_gel"
+animation_kind = &"gel"
 display_name = "Gel"
 description = "Nível fixo da área de teste."
 base_category = &"normal"

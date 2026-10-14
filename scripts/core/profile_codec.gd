@@ -1,6 +1,6 @@
 class_name ProfileCodec
 extends RefCounted
-## Pure schema-4 encoding; validate historical envelopes before instance migration.
+## Pure schema-5 encoding; validate historical envelopes before card/instance migration.
 
 const MAX_FILE_BYTES := 4 * 1024 * 1024
 const MAX_EXACT_JSON_INTEGER := 9007199254740991
@@ -27,7 +27,7 @@ const LEGACY_ROOT_FIELDS := [
 const ROOT_FIELDS := [
 	"format_id", "schema_version", "catalog_version", "ruleset_id", "profile_id",
 	"revision", "next_character_counter", "next_run_counter", "next_equipment_counter", "selected_character_id",
-	"equipment_instances", "characters", "settings", "lifetime_stats",
+	"equipment_instances", "card_inventory", "characters", "settings", "lifetime_stats",
 	"reward_session", "legacy_loadouts", "unresolved_legacy",
 ]
 const CHARACTER_FIELDS := [
@@ -71,6 +71,19 @@ static func decode(text: String, catalog: ProfileCatalog = null) -> Dictionary:
 	var schema_version := int(data["schema_version"])
 	if schema_version > ProfileState.SCHEMA_VERSION:
 		return {"ok": false, "error_code": &"unsupported_schema", "future_schema": true}
+	if schema_version < 5 and data.has("card_inventory"):
+		return _catalog_error(&"invalid_card_inventory")
+	if schema_version == 4:
+		if not _is_exact_integer(data.get("catalog_version")) or int(data["catalog_version"]) != 11:
+			return _catalog_error(&"invalid_catalog")
+		var upgraded := data.duplicate(true)
+		upgraded["schema_version"] = ProfileState.SCHEMA_VERSION
+		upgraded["catalog_version"] = ProfileState.CATALOG_VERSION
+		var migrated := _decode_v2(upgraded,effective_catalog,false,false,true)
+		if migrated["ok"]:
+			migrated["migrated"] = true
+			migrated["migration_kind"] = &"persistent_cards_v1"
+		return migrated
 	if schema_version == 1:
 		return _upgrade_legacy(_migrate_v1(data, effective_catalog), effective_catalog)
 	if schema_version == 3:
@@ -147,7 +160,7 @@ static func _migrate_power_v3(data: Dictionary, catalog: ProfileCatalog) -> Dict
 		record["power_ruleset_id"] = "legacy_unscaled"
 	upgraded["schema_version"] = ProfileState.SCHEMA_VERSION
 	upgraded["catalog_version"] = ProfileState.CATALOG_VERSION
-	var decoded := _decode_v2(upgraded, catalog)
+	var decoded := _decode_v2(upgraded, catalog, false, false, true)
 	if decoded["ok"]:
 		decoded["migrated"] = true
 		decoded["migration_kind"] = &"equipment_power_v1"
@@ -161,7 +174,7 @@ static func validate_profile(profile: ProfileState, catalog: ProfileCatalog = nu
 		return _error(&"invalid_equipment_instance")
 	return _decode_v2(_profile_to_dictionary(profile), effective_catalog)
 
-static func _decode_v2(data: Dictionary, catalog: ProfileCatalog, legacy_attribute_budget: bool = false, legacy_inventory: bool = false) -> Dictionary:
+static func _decode_v2(data: Dictionary, catalog: ProfileCatalog, legacy_attribute_budget: bool = false, legacy_inventory: bool = false, legacy_cards: bool = false) -> Dictionary:
 	if data.get("format_id") != ProfileState.FORMAT_ID:
 		return _error(&"unsupported_schema")
 	if not _is_exact_integer(data.get("catalog_version")) or int(data["catalog_version"]) != ProfileState.CATALOG_VERSION:
@@ -169,6 +182,7 @@ static func _decode_v2(data: Dictionary, catalog: ProfileCatalog, legacy_attribu
 	if data.get("ruleset_id") != ProfileState.RULESET_ID:
 		return _error(&"invalid_catalog")
 	for field: String in LEGACY_ROOT_FIELDS if legacy_inventory else ROOT_FIELDS:
+		if field == "card_inventory" and legacy_cards: continue
 		if not data.has(field):
 			return _error(&"missing_field", field)
 	if _contains_forbidden_fields(data):
@@ -248,6 +262,10 @@ static func _decode_v2(data: Dictionary, catalog: ProfileCatalog, legacy_attribu
 	if not reward_result["ok"]:
 		return reward_result
 	profile.reward_session = reward_result["session"]
+	if not legacy_inventory and not legacy_cards:
+		var inventory_result := RunCardInventory.from_record(data.get("card_inventory"),profile.equipment_instances,catalog.all_equipment_metadata(),catalog.card_ids())
+		if not inventory_result["ok"]: return _catalog_error(inventory_result["error_code"])
+		profile.card_inventory = inventory_result["inventory"]
 	profile.extension_fields = _unknown_fields(data, LEGACY_ROOT_FIELDS if legacy_inventory else ROOT_FIELDS)
 	return {"ok": true, "profile": profile, "migrated": false}
 
@@ -699,6 +717,7 @@ static func _profile_to_dictionary(profile: ProfileState) -> Dictionary:
 		"selected_character_id": null if profile.selected_character_id.is_empty() else profile.selected_character_id,
 		"equipment_instances": _instance_records(profile),
 		"next_equipment_counter": profile.next_equipment_counter,
+		"card_inventory": profile.card_inventory.to_record(),
 		"characters": [],
 		"settings": profile.settings.duplicate(true),
 		"lifetime_stats": _integer_map_to_dictionary(profile.lifetime_stats),

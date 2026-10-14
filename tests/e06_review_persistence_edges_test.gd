@@ -13,6 +13,7 @@ func _identity_edges() -> void:
 	var fixture := original.duplicate(true) as EquipmentDefinition
 	fixture.allowed_evolutions = [&"defender"]
 	fixture.take_over_path(path)
+	_reset_fixture_catalogs()
 	var catalog := ProfileCatalog.pilot()
 	var store := ProfileStore.new(_directory("identity"), catalog)
 	var facade := ProfileFacade.new(store)
@@ -59,6 +60,7 @@ func _conflict_edges() -> void:
 		fixture.effects = [effect]
 		fixture.take_over_path(paths[index])
 		fixtures.append(fixture)
+	_reset_fixture_catalogs()
 	var catalog := ProfileCatalog.pilot()
 	var directory := _directory("conflict")
 	var store := ProfileStore.new(directory, catalog)
@@ -94,3 +96,9 @@ func _check(value: bool, label: String) -> void:
 	if not value:
 		failures += 1
 		push_error(label)
+
+func _reset_fixture_catalogs() -> void:
+	# These adversarial fixtures replace registered Resource paths inside one process.
+	# Production catalogs are immutable; each fixture needs a fresh cache boundary.
+	ProfileCatalog._default_pilot = null
+	BuildContentLoader._catalog_cache.clear()

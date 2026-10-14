@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="EquipmentDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/effect_definition.gd" id="1_cmfk5"]
+[ext_resource type="Script" path="res://scripts/data/equipment_definition.gd" id="2_r76b4"]
+
+[sub_resource type="Resource" id="Resource_vgswg"]
+script = ExtResource("1_cmfk5")
+id = &"shared_set_mid_head_effect"
+unique_effect_id = &"shared_set_mid_head_effect"
+family_id = &"shared_set_mid_head_effect"
+axis = &"max_sp"
+unit = &"points"
+magnitude = 3.0
+
+[resource]
+script = ExtResource("2_r76b4")
+id = &"shared_set_mid_head"
+display_name = "Faixa da Lua Serena"
+flavor_text = "Um conjunto de viagem com detalhes prateados, feito para jornadas já conhecidas."
+description = "Cabeça: SP máximo +3."
+slot = &"head"
+item_kind = &"armor"
+hand_usage = &"none"
+origin_id = &"demo_arena"
+item_level = 6
+quality_id = &"rare"
+socket_capacity = 1
+set_id = &"shared_set_mid"
+effects = Array[ExtResource("1_cmfk5")]([SubResource("Resource_vgswg")])
+min_item_level = 6
+max_item_level = 10

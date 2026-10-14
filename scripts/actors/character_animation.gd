@@ -4,26 +4,77 @@ extends RefCounted
 
 const CELL := Vector2(64, 64)
 const PIVOT := Vector2(32, 58)
+const WEAPONLESS_KINDS: Array[StringName] = [&"swordsman", &"archer", &"berserker", &"defender", &"elementalist", &"hunter", &"mage", &"sentinel", &"spiritualist", &"geometer"]
+static var _atlas_cache: Dictionary = {}
+static var _weaponless_atlas_cache: Dictionary = {}
+const ATTACHMENT_VISUAL_SCRIPT = preload("res://scripts/actors/equipment_attachment_visual.gd")
 var state := CombatAnimationState.new()
 var atlas: Texture2D
 var actor_kind: StringName = &"swordsman"
+var _equipment_visual: Dictionary = {}
+var equipment_visual: Dictionary:
+	get:
+		return _equipment_visual
+	set(value):
+		set_equipment_visual(value)
 var _last_position := Vector2.ZERO
 var _observed_position := false
 var _ground_offsets := PackedFloat32Array()
+var _base_atlas: Texture2D
+var _base_ground_offsets := PackedFloat32Array()
 
 func configure(kind: StringName) -> void:
 	actor_kind = kind
-	if actor_kind not in [&"swordsman", &"mage", &"warrior", &"archer", &"defender", &"berserker", &"elementalist", &"spiritualist", &"geometer", &"sentinel", &"hunter"]:
+	if actor_kind not in [&"swordsman", &"mage", &"warrior", &"archer", &"defender", &"berserker", &"elementalist", &"spiritualist", &"geometer", &"sentinel", &"hunter", &"gel", &"beast_master", &"animal_companion"]:
 		actor_kind = &"swordsman"
-	atlas = load("res://assets/art/animations/%s.png" % actor_kind) as Texture2D
-	_ground_offsets.clear()
-	var bitmap := atlas.get_image()
+	var cached: Dictionary = _atlas_cache.get(actor_kind, {})
+	if cached.is_empty():
+		atlas = load("res://assets/art/animations/%s.png" % actor_kind) as Texture2D
+		var offsets := _measure_ground_offsets(atlas)
+		_atlas_cache[actor_kind] = {"atlas": atlas, "ground_offsets": offsets}
+		_base_atlas = atlas
+		_base_ground_offsets = offsets
+	else:
+		atlas = cached["atlas"]
+		_base_atlas = atlas
+		_base_ground_offsets = cached["ground_offsets"]
+	_select_atlas_for_visual()
+	state = CombatAnimationState.new()
+	_observed_position = false
+
+func set_equipment_visual(value: Dictionary) -> void:
+	_equipment_visual = value.duplicate(true)
+	_select_atlas_for_visual()
+
+func _select_atlas_for_visual() -> void:
+	var has_player_contract := equipment_visual.has("main_hand") or equipment_visual.has("off_hand") or equipment_visual.has("arms")
+	if not has_player_contract or actor_kind not in WEAPONLESS_KINDS:
+		atlas = _base_atlas if _base_atlas != null else atlas
+		_ground_offsets = _base_ground_offsets
+		return
+	var cached: Dictionary = _weaponless_atlas_cache.get(actor_kind, {})
+	if cached.is_empty():
+		var path := "res://assets/art/animations/%s_weaponless.png" % actor_kind
+		var texture := load(path) as Texture2D if ResourceLoader.exists(path) else null
+		cached = {"atlas": texture, "ground_offsets": _measure_ground_offsets(texture)}
+		_weaponless_atlas_cache[actor_kind] = cached
+	if cached["atlas"] != null:
+		atlas = cached["atlas"]
+		_ground_offsets = cached["ground_offsets"]
+	else:
+		atlas = _base_atlas
+		_ground_offsets = _base_ground_offsets
+
+static func _measure_ground_offsets(texture: Texture2D) -> PackedFloat32Array:
+	var offsets := PackedFloat32Array()
+	if texture == null:
+		return offsets
+	var bitmap := texture.get_image()
 	for index: int in range(32):
 		var bounds := bitmap.get_region(Rect2i(Vector2i(index % 4 * 64, index / 4 * 64), Vector2i(64, 64))).get_used_rect()
 		# Last opaque pixel rests on the ground rather than above the contact shadow.
-		_ground_offsets.append(PIVOT.y - float(bounds.end.y - 1))
-	state = CombatAnimationState.new()
-	_observed_position = false
+		offsets.append(PIVOT.y - float(bounds.end.y - 1))
+	return offsets
 
 func observe(position: Vector2, delta: float) -> void:
 	var displacement := position - _last_position if _observed_position else Vector2.ZERO
@@ -44,6 +95,7 @@ func draw_on(canvas: CanvasItem, tint: Color = Color.WHITE, visual_scale: float 
 	canvas.draw_set_transform(Vector2.ZERO, 0.0, Vector2(-visual_scale if state.flip_h else visual_scale, visual_scale))
 	canvas.draw_texture_rect_region(atlas, destination_rect(frame), region, tint)
 	canvas.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+	ATTACHMENT_VISUAL_SCRIPT.draw_on(canvas, state, equipment_visual, tint, visual_scale)
 
 func source_region(frame: int) -> Rect2:
 	# Integer cell coordinates are explicit; no fractional atlas-row sampling.
@@ -57,8 +109,9 @@ func destination_rect(frame: int) -> Rect2:
 func death_copy() -> CharacterAnimation:
 	var result := CharacterAnimation.new()
 	result.actor_kind = actor_kind
-	result.atlas = atlas
-	result._ground_offsets = _ground_offsets
+	result._base_atlas = _base_atlas
+	result._base_ground_offsets = _base_ground_offsets
+	result.equipment_visual = equipment_visual.duplicate(true)
 	result.state.face(state.facing)
 	result.state.trigger(&"death")
 	return result

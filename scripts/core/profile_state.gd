@@ -3,8 +3,8 @@ extends RefCounted
 ## Persistent profile-owned state. Persistence mechanics are introduced in E01.2.
 
 const FORMAT_ID := "ragrpg_character_profile"
-const SCHEMA_VERSION := 4
-const CATALOG_VERSION := 11
+const SCHEMA_VERSION := 5
+const CATALOG_VERSION := 12
 const RULESET_ID := "stat_thresholds_v1"
 const MAX_CHARACTERS := 8
 
@@ -15,6 +15,7 @@ var next_run_counter: int = 1
 var selected_character_id: String = ""
 var equipment_instances: Dictionary[StringName, EquipmentInstance] = {}
 var next_equipment_counter: int = 1
+var card_inventory := RunCardInventory.new()
 # Read-only compatibility DTO. Mutating the returned array never mutates ownership.
 var equipment_collection: Array[StringName]:
 	get: return equipment_instance_ids()
@@ -50,6 +51,7 @@ func copy_state() -> ProfileState:
 	copy.next_run_counter = next_run_counter
 	copy.selected_character_id = selected_character_id
 	copy.next_equipment_counter = next_equipment_counter
+	copy.card_inventory = card_inventory.copy_inventory()
 	for id: StringName in equipment_instances:
 		copy.equipment_instances[id] = equipment_instances[id].copy_instance()
 	copy._migration_equipment_ids = _migration_equipment_ids.duplicate()

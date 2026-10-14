@@ -276,6 +276,16 @@ Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_gameplay_route_test.gd')
 
 # Indices always refer to the complete plan, including editor import.
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_permanent_cards_test.gd')
+
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_inventory_profile_panel_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_inventory_window_input_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_fixes_performance_cache_test.gd')
+
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_expanded_equipment_content_test.gd')
+
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_appearance_integration_test.gd')
+
 if (-not $PSBoundParameters.ContainsKey('ToStep')) { $ToStep = $checkPlan.Count }
 if ($FromStep -gt $ToStep -or $ToStep -gt $checkPlan.Count) {
     throw "Invalid step range $FromStep..$ToStep; use 1..$($checkPlan.Count)."

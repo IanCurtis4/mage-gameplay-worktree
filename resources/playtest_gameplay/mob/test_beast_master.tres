@@ -3,6 +3,7 @@
 [resource]
 script = ExtResource("1")
 id = &"test_beast_master"
+animation_kind = &"beast_master"
 display_name = "Mestre das Feras"
 description = "Nível fixo da área de teste."
 base_category = &"rare"

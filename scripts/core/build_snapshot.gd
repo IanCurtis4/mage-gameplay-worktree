@@ -16,9 +16,16 @@ var active_slots: Array[Variant] = []
 var passive_slots: Array[Variant] = []
 var equipped: Dictionary[StringName, Variant] = EquipmentRules.empty_layout()
 var equipment_instances: Dictionary[StringName, EquipmentInstance] = {}
+var card_inventory := RunCardInventory.new()
 var build_version: int = 1
 var action_slots: Array[Variant] = []
-var _skill_catalog := ProfileCatalog.pilot()
+var _skill_catalog: ProfileCatalog:
+	get:
+		if _skill_catalog == null:
+			_skill_catalog = ProfileCatalog.pilot()
+		return _skill_catalog
+	set(value):
+		_skill_catalog = value
 
 static func from_character(
 	character: CharacterState,
@@ -31,8 +38,7 @@ static func from_character(
 ) -> BuildSnapshot:
 	assert(character != null)
 	var snapshot := BuildSnapshot.new()
-	if catalog != null:
-		snapshot._skill_catalog = catalog.copy_catalog()
+	snapshot._skill_catalog = catalog.copy_catalog() if catalog != null else ProfileCatalog.pilot()
 	snapshot.character_id = character.character_id
 	snapshot.base_class_id = character.base_class_id
 	snapshot.evolution_id = character.evolution_id
@@ -68,6 +74,7 @@ func copy_snapshot() -> BuildSnapshot:
 	copy.equipped = equipped.duplicate(true)
 	for id: StringName in equipment_instances:
 		copy.equipment_instances[id] = equipment_instances[id].copy_instance()
+	copy.card_inventory = card_inventory.copy_inventory()
 	copy.build_version = build_version
 	copy.action_slots = action_slots.duplicate()
 	return copy
