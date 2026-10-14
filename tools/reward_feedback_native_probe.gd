@@ -56,7 +56,11 @@ func _run() -> void:
 			quit(1)
 			return
 		await _capture(viewport,directory,"encounter_%d" % size.x)
-		c.reward_feedback.hide_history()
+		var escape := InputEventKey.new()
+		escape.keycode=KEY_ESCAPE
+		escape.pressed=true
+		viewport.push_input(escape)
+		assert(not c.reward_feedback.history_panel.visible and not c.battle_controls.settings_overlay.visible)
 		await _capture(viewport,directory,"recent_%d" % size.x)
 		c._open_augment_menu()
 		var offer := c.run_state.current_offer.duplicate()

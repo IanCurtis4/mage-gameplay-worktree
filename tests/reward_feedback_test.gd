@@ -11,6 +11,7 @@ func _run() -> void:
 	await _confirmed_mob_drop()
 	await _local_session_and_journal_lifetime()
 	await _panel_layout_and_history()
+	await _escape_closes_history()
 	print("E06 reward feedback: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 
@@ -225,6 +226,36 @@ func _panel_layout_and_history() -> void:
 		_check(not panel.history_panel.visible, "close button hides history")
 		test_viewport.queue_free()
 		await process_frame
+
+func _escape_closes_history() -> void:
+	var fixture := F.make(self, "reward_feedback_escape", &"mage", false)
+	var controller: RunController = fixture["controller"]
+	controller.reward_feedback.open_history(0)
+	var was_paused := paused
+	var escape := InputEventKey.new()
+	escape.keycode = KEY_ESCAPE
+	escape.pressed = true
+	controller._input(escape)
+	_check(not controller.reward_feedback.history_panel.visible, "Escape closes reward history during the run")
+	_check(not controller.battle_controls.settings_overlay.visible and paused == was_paused, "closing run history does not open settings or change pause state")
+
+	controller._show_result(false)
+	_check(controller.run_finished and paused, "death result screen is active before checking its history control")
+	var result_history_button: Button
+	for candidate: Node in controller.result_panel.find_children("*", "Button", true, false):
+		if candidate is Button and (candidate as Button).text == "Ver recompensas desta run":
+			result_history_button = candidate as Button
+			break
+	_check(result_history_button != null, "death result exposes the acquired reward history control")
+	if result_history_button != null:
+		result_history_button.pressed.emit()
+		_check(controller.reward_feedback.history_panel.visible, "result control opens the reward history after death")
+		controller._input(escape)
+		_check(not controller.reward_feedback.history_panel.visible, "Escape closes reward history after death")
+		_check(not controller.battle_controls.settings_overlay.visible and paused, "closing post-death history keeps settings closed and result paused")
+	controller.free()
+	paused = false
+	await process_frame
 
 func _mob_feedback_catalog() -> BuildEffectCatalog:
 	var source := F.catalog()

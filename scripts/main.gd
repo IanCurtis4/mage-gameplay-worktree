@@ -317,7 +317,9 @@ func _input(event: InputEvent) -> void:
 			_cancel_aim()
 			return
 		if event.keycode == KEY_ESCAPE and event.pressed:
-			if inventory_panel != null and inventory_panel.visible:
+			if reward_feedback != null and reward_feedback.history_panel.visible:
+				reward_feedback.hide_history()
+			elif inventory_panel != null and inventory_panel.visible:
 				inventory_panel.dismiss()
 			elif class_overlay.visible:
 				_close_class_menu()
