@@ -90,12 +90,15 @@ func draw_on(canvas: CanvasItem, tint: Color = Color.WHITE, visual_scale: float 
 		return
 	var frame := state.frame_index()
 	var region := source_region(frame)
+	var body_origin := destination_rect(frame).position
+	ATTACHMENT_VISUAL_SCRIPT.draw_on(canvas,state,equipment_visual,tint,visual_scale,actor_kind,body_origin,0)
 	# draw_set_transform replaces the prior transform, so compose flip and scale here.
 	# The zero translation keeps the sprite pivot anchored at the actor's feet.
 	canvas.draw_set_transform(Vector2.ZERO, 0.0, Vector2(-visual_scale if state.flip_h else visual_scale, visual_scale))
 	canvas.draw_texture_rect_region(atlas, destination_rect(frame), region, tint)
 	canvas.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
-	ATTACHMENT_VISUAL_SCRIPT.draw_on(canvas, state, equipment_visual, tint, visual_scale)
+	ATTACHMENT_VISUAL_SCRIPT.draw_on(canvas,state,equipment_visual,tint,visual_scale,actor_kind,body_origin,1)
+	ATTACHMENT_VISUAL_SCRIPT.draw_fingers(canvas,state,equipment_visual,tint,visual_scale,actor_kind,atlas,body_origin)
 
 func source_region(frame: int) -> Rect2:
 	# Integer cell coordinates are explicit; no fractional atlas-row sampling.

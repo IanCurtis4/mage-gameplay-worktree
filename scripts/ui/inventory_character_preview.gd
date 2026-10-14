@@ -8,6 +8,7 @@ var _sprite: Node2D
 
 func _ready() -> void:
 	_sprite = Node2D.new()
+	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_sprite.draw.connect(_draw_actor)
 	add_child(_sprite)
 	resized.connect(_place_sprite)

@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-14T03:17:19.6662097Z",
+  "role": "automation_supervisor",
+  "scope": "Supervisão Luna de execução e integridade dos logs; não é reviewer nem auditoria semântica independente.",
+  "candidate": {
+    "base_commit": "8a84c632b89ff037d17e358d9ee3da4ee1a27f84",
+    "state": "dirty",
+    "dirty_path_count": 53,
+    "dirty_status_sha256": "db22b59b7b8ba06bcd92d48e13fd9bc76989d852584440c97bf2099768648b84"
+  },
+  "input_manifest": {
+    "path": ".godot/verification/e06_equipment_alignment/final_checks/sources-before.tsv",
+    "sha256": "33ac65e7d58534c5cfc417762372ec1f7027cf2d76535e2fd194ce55b4076a55",
+    "source_file_count": 1149,
+    "normalized_source_tree_sha256": "9c15f0d8ec59ae1a843db6d9e4a26b7af54947626b6078652e6ddbff628e63a3",
+    "normalization": "Arquivos de texto com CRLF foram normalizados para LF; binários mantiveram bytes originais.",
+    "excluded_paths": [
+      "docs/",
+      ".godot/",
+      ".tools/"
+    ],
+    "source_tree_unchanged_during_run": true,
+    "source_tree_sha256_after": "9c15f0d8ec59ae1a843db6d9e4a26b7af54947626b6078652e6ddbff628e63a3",
+    "changed_source_rows": 0
+  },
+  "verification": {
+    "passed": true,
+    "godot_version": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org",
+    "godot_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\review-engine\\Godot.exe",
+    "godot_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "runner_path": "tools/verify.ps1",
+    "runner_sha256": "76d79632a91e6999d3c6afc538cfcaf7d55769f68c984a3fea83110717eeba20",
+    "total_plan_steps": 220,
+    "selected_steps": 7,
+    "selected_indices": [
+      1,
+      10,
+      177,
+      215,
+      218,
+      219,
+      220
+    ],
+    "per_check_timeout_seconds": 60,
+    "selection": [
+      "editor_import",
+      "combat_animation_test",
+      "smoke",
+      "e06_inventory_window_input_test",
+      "e06_appearance_integration_test",
+      "e06_card_migration_store_test",
+      "equipment_hand_alignment_test"
+    ],
+    "checks": [
+      {
+        "index": 1,
+        "name": "editor_import",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "error_marker_count": 0,
+        "output_log": ".godot\\verification\\e06_equipment_alignment\\final_checks\\001.output.log",
+        "output_sha256": "1580ce482705e612b997001cce03a7590b49c009e77eaeeda8c9641d3ffe3276",
+        "engine_log": ".godot\\verification\\e06_equipment_alignment\\final_checks\\001.engine.log",
+        "engine_log_sha256": "5f96b0f4a9e17c920ef869b2a069792a4f279d671523c0101354a40d183e057f"
+      },
+      {
+        "index": 10,
+        "name": "combat_animation_test",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "error_marker_count": 0,
+        "output_log": ".godot\\verification\\e06_equipment_alignment\\final_checks\\010-combat_animation_test.output.log",
+        "output_sha256": "df1d52002e18c5524fa60801186a018cdbc71c91e0248051e38f6565c154fb1e",
+        "engine_log": ".godot\\verification\\e06_equipment_alignment\\final_checks\\010-combat_animation_test.engine.log",
+        "engine_log_sha256": "93de56f18131527bef7e074074477b21e409365bd02c190b9d05a2293ae9d42d"
+      },
+      {
+        "index": 177,
+        "name": "smoke",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "error_marker_count": 0,
+        "output_log": ".godot\\verification\\e06_equipment_alignment\\final_checks\\177.output.log",
+        "output_sha256": "99a1f5c05f8b42a98c1353a644c0527b7fbdebfb7a944acd272ccf7d46cc34a6",
+        "engine_log": ".godot\\verification\\e06_equipment_alignment\\final_checks\\177.engine.log",
+        "engine_log_sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+      },
+      {
+        "index": 215,
+        "name": "e06_inventory_window_input_test",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "error_marker_count": 0,
+        "output_log": ".godot\\verification\\e06_equipment_alignment\\final_checks\\215-e06_inventory_window_input_test.output.log",
+        "output_sha256": "bb0d3fb514c34a7faf7314b8ef9bed4417b8ae24e6b8cab026cebdeb079901d1",
+        "engine_log": ".godot\\verification\\e06_equipment_alignment\\final_checks\\215-e06_inventory_window_input_test.engine.log",
+        "engine_log_sha256": "5c713ed925081eb9cc6bcab30cf4560d31d7b5ab7aab7eb3946579f7442182f5"
+      },
+      {
+        "index": 218,
+        "name": "e06_appearance_integration_test",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "error_marker_count": 0,
+        "output_log": ".godot\\verification\\e06_equipment_alignment\\final_checks\\218-e06_appearance_integration_test.output.log",
+        "output_sha256": "68ed38f6fc8fd3ccd08b2fbe151189abf23d5266a6b35329cdc52c6f5f1d912f",
+        "engine_log": ".godot\\verification\\e06_equipment_alignment\\final_checks\\218-e06_appearance_integration_test.engine.log",
+        "engine_log_sha256": "1be81a6335faa720ca71e570e1a73a2c70706703fe773b2743b1498e877be2f1"
+      },
+      {
+        "index": 219,
+        "name": "e06_card_migration_store_test",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "error_marker_count": 0,
+        "output_log": ".godot\\verification\\e06_equipment_alignment\\final_checks\\219-e06_card_migration_store_test.output.log",
+        "output_sha256": "4823af9d4a8914bde3a7da843328e04168711baac76127145d4d45da4e1ccc21",
+        "engine_log": ".godot\\verification\\e06_equipment_alignment\\final_checks\\219-e06_card_migration_store_test.engine.log",
+        "engine_log_sha256": "935243f606e99d5d50aa3d57611cd1ff599450ad52023ace36b6e12966bae5e2"
+      },
+      {
+        "index": 220,
+        "name": "equipment_hand_alignment_test",
+        "exit_code": 0,
+        "failed": false,
+        "timed_out": false,
+        "error_marker_count": 0,
+        "output_log": ".godot\\verification\\e06_equipment_alignment\\final_checks\\220-equipment_hand_alignment_test.output.log",
+        "output_sha256": "38a87bf0439bdb473aba8b25a1455d60554e8f41f99e1e0dc53853009a3c9145",
+        "engine_log": ".godot\\verification\\e06_equipment_alignment\\final_checks\\220-equipment_hand_alignment_test.engine.log",
+        "engine_log_sha256": "02d1a5a3a2ec2f363015ef22dcfb7138aa52ab1673ee04342730b84acbc54e6d"
+      }
+    ],
+    "full_suite_rerun": false,
+    "additional_native_reruns": false,
+    "requested_selection": [
+      "editor_import",
+      "combat_animation_test",
+      "e06_appearance_integration_test",
+      "e06_inventory_window_input_test",
+      "equipment_hand_alignment_test",
+      "e06_card_migration_store_test",
+      "smoke"
+    ],
+    "execution_order": [
+      "editor_import",
+      "combat_animation_test",
+      "smoke",
+      "e06_inventory_window_input_test",
+      "e06_appearance_integration_test",
+      "e06_card_migration_store_test",
+      "equipment_hand_alignment_test"
+    ]
+  },
+  "evidence_directory": ".godot/verification/e06_equipment_alignment/final_checks"
+}

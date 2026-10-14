@@ -1,0 +1,129 @@
+{
+  "status": "passed",
+  "complete": true,
+  "role": "technical_validator",
+  "validator": "Sol",
+  "base_commit": "8a84c632b89ff037d17e358d9ee3da4ee1a27f84",
+  "contract": "docs/epics/e06/e06_equipment_visual_alignment_scope.md",
+  "automation_supervision": {
+    "report": "docs/epics/e06/e06_equipment_alignment_luna.json",
+    "sha256": "830002506b7edeea6d120eca6f80493e5c7891d231b8a99362cc7a567f58da24",
+    "selected_steps": 7,
+    "total_plan_steps": 220,
+    "alignment_checks": 4593,
+    "not_full_suite": true
+  },
+  "post_supervision_delta": {
+    "paths": [
+      "tools/equipment_grip_probe.gd",
+      "tools/equipment_inventory_alignment_probe.gd"
+    ],
+    "reason": "Only native-evidence probes: fix UTF-8 text and paginate seven equipment samples within the 720px viewport. Both probes rerun below.",
+    "other_1147_inputs_unchanged": true
+  },
+  "current_inputs": {
+    "manifest": ".godot/verification/e06_equipment_alignment/confirmed_native/current_sources.json",
+    "sha256": "2103e60dbfa6c12b8cbf66b6bc12d39712f76de2b4e3944e7025d78356c0cfba",
+    "normalized_source_count": 1149,
+    "normalization": "UTF-8 text in the supervisor extension whitelist: remove BOM and CRLF to LF. Other extensions raw.",
+    "text_extensions": [
+      ".cfg",
+      ".csv",
+      ".gd",
+      ".gdextension",
+      ".gdshader",
+      ".godot",
+      ".import",
+      ".json",
+      ".md",
+      ".ps1",
+      ".svg",
+      ".tres",
+      ".tscn",
+      ".txt",
+      ".uid",
+      ".xml",
+      ".yaml",
+      ".yml"
+    ]
+  },
+  "native_checks": [
+    {
+      "id": "poses",
+      "status": "passed",
+      "exit_code": 0,
+      "timeout": false,
+      "log": ".godot/verification/e06_equipment_alignment/confirmed_native/poses.output.log",
+      "log_sha256": "5faf3d3aa8f10795fef68830910f2feb4154590538922b99ff1cd433d784d30e",
+      "script_sha256": "cc01e76b58f1dbf7ed82c3f057dbbc69ce3b196c7b89d06b42129ff41d512456"
+    },
+    {
+      "id": "poses_flip",
+      "status": "passed",
+      "exit_code": 0,
+      "timeout": false,
+      "log": ".godot/verification/e06_equipment_alignment/confirmed_native/poses_flip.output.log",
+      "log_sha256": "4470101e400b6be1bfae2f92fed8082ec2eed933a3ae4cc1e4fda56317ca2810",
+      "script_sha256": "cc01e76b58f1dbf7ed82c3f057dbbc69ce3b196c7b89d06b42129ff41d512456"
+    },
+    {
+      "id": "inventory",
+      "status": "passed",
+      "exit_code": 0,
+      "timeout": false,
+      "log": ".godot/verification/e06_equipment_alignment/confirmed_native/inventory.output.log",
+      "log_sha256": "c9b5260778da84115e8395ad6da77975451d18b58d5cdf85781f35c5ae2b88e9",
+      "script_sha256": "95672c32ec79f4aab550d3d35ee4643ed27c420e4fefa553d6c36df154434a4e"
+    }
+  ],
+  "native_images": {
+    ".godot/verification/e06_equipment_alignment/archer.png": "85e3288d8aea1b581d3c3e2acdadf32908c949f3596257d17dcaa9f4e5c6886a",
+    ".godot/verification/e06_equipment_alignment/archer_flip.png": "cfd3e5c94564bab167c4fff4c9946b0a2e4fe01abc3dcda58c7fe78fd891ec65",
+    ".godot/verification/e06_equipment_alignment/berserker.png": "37fd69104271481c14d09688e994141501d8238d36de268282f7fa9dcfe7a10e",
+    ".godot/verification/e06_equipment_alignment/berserker_flip.png": "ca3008cd149fd5518cb90d62cba94eb4b21b65a56dc57bc34eed45c314bcc42d",
+    ".godot/verification/e06_equipment_alignment/defender.png": "82319446f0422b47530c8cd70d0d4268ddbdc717365f27c2308a08cb9e627f3e",
+    ".godot/verification/e06_equipment_alignment/defender_flip.png": "6c5e74bc0209c97cf1543084390b0c59d70b36f907843b95bf42d21264452b9c",
+    ".godot/verification/e06_equipment_alignment/elementalist.png": "d0117787c82c9dca371d5b059518f02993d0538c4269620145f252879d1a80c1",
+    ".godot/verification/e06_equipment_alignment/elementalist_flip.png": "5bca14a72101e3197adb6c227d5fc89315ef7070a3927ce610c22e21d4f442c5",
+    ".godot/verification/e06_equipment_alignment/geometer.png": "7400e21a1fed69911d141eec4312b298943792bdbfb5c13f0b3091fdadbc967e",
+    ".godot/verification/e06_equipment_alignment/geometer_flip.png": "df3749904fd819fd219d4cc4937be5c3cda7527eda9b9cadd3d6f1510850aeed",
+    ".godot/verification/e06_equipment_alignment/hunter.png": "703159e957d930028a772b4358d1556b996e7253830be428cbe35d53264b1190",
+    ".godot/verification/e06_equipment_alignment/hunter_flip.png": "afbb2735f85f7d0b73f7676b9e16ea0eb4dd225a79477ae7af6e7d193a4d079f",
+    ".godot/verification/e06_equipment_alignment/inventory_cards_1280.png": "1ca9fe7a41599fb2088b71c6357f66c6ccab35208c5347a59b4dacc9df1e29a5",
+    ".godot/verification/e06_equipment_alignment/inventory_equipment_1280.png": "9d4a1907014b4ec38fb3eaf1084eeac7eccc2d1ef9873300bf513e3a8d099339",
+    ".godot/verification/e06_equipment_alignment/mage.png": "6049097d0fe0f1fa2b9e55f78485fd6b12cb28549c0806d49e0b2065534f1e13",
+    ".godot/verification/e06_equipment_alignment/mage_flip.png": "1522efe49c445aae845e9c119fcc9b6f76d1e94bf47aeed8c7a09eb0aadc3d50",
+    ".godot/verification/e06_equipment_alignment/sentinel.png": "d5d2196ba906107469e3952c9d9dd1a7225df331f6b53fb6e7ca40424d01bec4",
+    ".godot/verification/e06_equipment_alignment/sentinel_flip.png": "d6187b5f61c7d2eccda1fafa9b65c4bbb8f4f4221ea7c9c0063330ad422418fb",
+    ".godot/verification/e06_equipment_alignment/sentinel_portrait.png": "c41cf2a734574a530d878193808019f0a3cb5c6f0d160bfd8c087ed7f44cde9e",
+    ".godot/verification/e06_equipment_alignment/seven_pieces_0.png": "b8d340966c189c15ba61be5bb25afbe16c2956c3af0302e7c39ec330a025ac7f",
+    ".godot/verification/e06_equipment_alignment/seven_pieces_1.png": "ab423337269cccd5369e76e0b0f04f4f352e3f697f3cce9628bd233b02eb2f5f",
+    ".godot/verification/e06_equipment_alignment/spiritualist.png": "53bae6de22efe7b7638d3f668f4c7b52dfaba434381c7eaad392f46611be54dc",
+    ".godot/verification/e06_equipment_alignment/spiritualist_flip.png": "8666d0a882fa3689d4c17ebcf4791eaf715371ce78fa7aa4c9333cc1b36a582b",
+    ".godot/verification/e06_equipment_alignment/swordsman.png": "d6fa1c426ca40e17629bef601dd6fad5131b79a2bb59c6121609847168d2679f",
+    ".godot/verification/e06_equipment_alignment/swordsman_flip.png": "61ba2e8a69f3bfdba10abe8692a008e6d580976c4f81675589008d3c0d7c66df"
+  },
+  "recoil_opaque_face_pixel_comparisons": 5286,
+  "native_pose_count": 640,
+  "native_filter": "nearest, world1x and UI2.4x",
+  "preservation": {
+    "body_and_catalog_file_count": 321,
+    "against_commit": "8a84c632b89ff037d17e358d9ee3da4ee1a27f84",
+    "all_equal": true,
+    "manifest": ".godot/verification/e06_equipment_alignment/final_native/proof.json",
+    "manifest_sha256": "816862961fc385731e8d5b09da65aad0287ab690ba3a2c8715175d498e55ccdf"
+  },
+  "visual_consultation": {
+    "model": "Astra",
+    "role": "visual_consultant",
+    "limited_to": "short initial analysis and four-image static check",
+    "finding": "hunter24/sentinel24 recoil cord overlapped face",
+    "resolution": "Sol changed bow recoil depth behind body, inspected final sheets and compared opaque face pixels against unequipped rendering for all three archers in both flips.",
+    "not_chapter_audit": true
+  },
+  "limitations": [
+    "Original body poses preserved; full bowstring pull remains limited by existing atlas.",
+    "Static pose inspection and invariants do not certify perceived motion, taste or gameplay FPS.",
+    "Product acceptance and master merge pending."
+  ]
+}
