@@ -1,6 +1,6 @@
 # Playtest — correções após feedback
 
-Candidato ainda em validação. O recibo final identificará o hash aplicado no projeto habitual: `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/project.godot`. Pare a partida anterior e aceite o reload do Godot antes de F5 quando a aplicação for confirmada.
+Candidato validado e aplicado: runtime `9f05ce5c39d98135dfafc74d96bb5340f13369b1`, com sucessor apenas documental. [Recibo da aplicação](e06_playtest_fixes_delivery.json). Projeto habitual: `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/project.godot`. Pare a partida anterior e aceite o reload do Godot antes de F5 para testar este candidato.
 
 1. Abra Equipamentos no menu de preparação. Confira as 14 posições, personagem central e mochila com quatro abas. Arraste as janelas e teste os cantos dos dois botões Fechar. Troque a resolução se disponível; o cenário deve continuar visível ao redor.
 2. Durante a run, obtenha uma carta e encaixe numa peça permitida entre encontros. Desequipe essa peça: a carta fica nela, e o efeito deixa de estar ativo. Reequipar restaura o efeito. Retirar/transferir não consome moeda nem destrói a carta.

@@ -695,11 +695,12 @@
   },
   "product_acceptance": "pending",
   "master_merge": "not_authorized",
-  "playtest_application": "pending",
+  "playtest_application": "applied and ready; runtime candidate 9f05ce5c39d98135dfafc74d96bb5340f13369b1",
   "limitations": [
     "Migration cannot recover cards discarded by the old save.",
     "Empty Consumibles/Misc tabs add no usable consumable mechanics.",
     "Equipment art is a first visual integration; aesthetics, frame timing and perceived lag require human playtest.",
     "Selected coverage is 59 distinct checks out of plan 218, not a complete-suite run."
-  ]
+  ],
+  "delivery_receipt": "docs/epics/e06/e06_playtest_fixes_delivery.json"
 }
