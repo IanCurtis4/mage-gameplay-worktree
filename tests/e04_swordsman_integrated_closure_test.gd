@@ -39,9 +39,9 @@ func _run() -> void:
 	}
 	_check(expected_names.size() == 13 and catalog.initial_skill_slots(&"swordsman")["active_slots"] == [null, null, null, null, null], "biblioteca tem dez ativas/três passivas e não equipa R0")
 	for skill_id: StringName in expected_names:
-		var label := learning_menu.progression_skill_tree.get_node("ProgressionSkill_%s" % skill_id) as Label
-		var button := learning_menu.progression_skill_tree.get_node("Learn_%s" % skill_id) as Button
-		_check(label.text.begins_with(expected_names[skill_id]) and label.text.contains("Rank 0/") and not button.disabled, "menu mostra %s comprável" % skill_id)
+		var entry: Dictionary = learning_menu.skill_window.skill_entries[skill_id]
+		var tooltip: String = entry["button"].tooltip_text
+		_check(tooltip.begins_with(expected_names[skill_id]) and tooltip.contains("Rank 0/") and int(entry["option"]["rank"]) == 0 and not entry["plus"].disabled, "biblioteca mostra %s comprável" % skill_id)
 	var purchases: Array[StringName] = [
 		&"slash", &"dash", &"shield_wall", &"provoke", &"perseverance", &"piercing_shout",
 		&"fury", &"brutal_strike", &"concentrated_rage", &"terrifying_shout",
@@ -100,9 +100,11 @@ func _run_build(facade: ProfileFacade, preset_index: int, active: Array[Variant]
 	if not started.get("ok", false):
 		menu.queue_free()
 		return
+	RunController.pending_gameplay_extension = false
 	await scene_changed
 	await process_frame
 	var controller := current_scene as RunController
+	_check(not controller.gameplay_extension, "legacy E04 fixture explicitly keeps the E06 route extension off")
 	controller.set_process(false)
 	controller.player.set_process(false)
 	for enemy: CombatActor in controller.enemies:

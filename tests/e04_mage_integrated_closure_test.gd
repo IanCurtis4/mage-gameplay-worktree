@@ -41,9 +41,9 @@ func _run() -> void:
 	await process_frame
 	learning_menu._select_roster_index(0)
 	for skill_id: StringName in expected_names:
-		var label := learning_menu.progression_skill_tree.get_node("ProgressionSkill_%s" % skill_id) as Label
-		var button := learning_menu.progression_skill_tree.get_node("Learn_%s" % skill_id) as Button
-		_check(label.text.begins_with(expected_names[skill_id]) and label.text.contains("Rank 0/") and not button.disabled, "menu publica %s comprável" % skill_id)
+		var entry: Dictionary = learning_menu.skill_window.skill_entries[skill_id]
+		var tooltip: String = entry["button"].tooltip_text
+		_check(tooltip.begins_with(expected_names[skill_id]) and tooltip.contains("Rank 0/") and int(entry["option"]["rank"]) == 0 and not entry["plus"].disabled, "biblioteca publica %s comprável" % skill_id)
 	var purchases: Array[StringName] = [
 		&"fireball", &"fire_wall", &"fire_spear", &"ice_spear", &"lightning",
 		&"electric_discharge", &"lightning_wall", &"soul_impact", &"haunt",
@@ -105,9 +105,11 @@ func _run_build(facade: ProfileFacade, character_id: String, preset_index: int, 
 	if not started.get("ok", false):
 		menu.queue_free()
 		return
+	RunController.pending_gameplay_extension = false
 	await scene_changed
 	await process_frame
 	var controller := current_scene as RunController
+	_check(not controller.gameplay_extension, "legacy E04 fixture explicitly keeps the E06 route extension off")
 	controller.set_process(false)
 	controller.player.set_process(false)
 	for enemy: CombatActor in controller.enemies:

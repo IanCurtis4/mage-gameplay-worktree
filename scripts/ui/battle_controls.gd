@@ -79,7 +79,12 @@ func _build_settings() -> void:
 	settings_panel.add_child(margin)
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", 6)
-	margin.add_child(column)
+	var settings_scroll := ScrollContainer.new()
+	settings_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	settings_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	margin.add_child(settings_scroll)
+	settings_scroll.add_child(column)
+	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var title := Label.new()
 	title.text = "Controles e biblioteca de ações"
 	title.add_theme_font_size_override("font_size", 24)
@@ -151,6 +156,9 @@ func _rebuild_bar() -> void:
 		var button := SlotScript.new()
 		button.slot_index = index
 		button.skill_id = id
+		button.icon = SkillPresentation.icon(id)
+		button.add_theme_constant_override("icon_max_width", 32)
+		button.expand_icon = true
 		button.custom_minimum_size = Vector2(88, 68)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.clip_text = true
@@ -255,7 +263,7 @@ func show_skill_state(skill: StringName, state_text: String, active: bool) -> vo
 	var lines := state_text.split("\n")
 	var status := String(lines[-1]).split(" · ")[-1]
 	button.text = "%s\n%s\n%s" % [control_preferences.binding_label(button.slot_index), _short_name(skill), status]
-	button.tooltip_text = state_text
+	button.tooltip_text = state_text + "\n" + SkillPresentation.MECHANICS.get(skill, "Ativa desta classe. Os valores acima refletem o estado atual.")
 	button.set_pressed_no_signal(active)
 
 func set_aim_text(text: String) -> void:

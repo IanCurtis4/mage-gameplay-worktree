@@ -291,6 +291,9 @@ Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/
 
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/reward_feedback_test.gd')
 
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/skill_allocation_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/skill_window_test.gd')
+
 if (-not $PSBoundParameters.ContainsKey('ToStep')) { $ToStep = $checkPlan.Count }
 if ($FromStep -gt $ToStep -or $ToStep -gt $checkPlan.Count) {
     throw "Invalid step range $FromStep..$ToStep; use 1..$($checkPlan.Count)."

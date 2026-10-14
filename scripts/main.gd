@@ -63,6 +63,9 @@ var run_finished := false
 var build_service: RunBuildService
 var acquisition_journal := AcquisitionJournal.new()
 var reward_feedback: RewardFeedbackPanel
+var skill_window: SkillWindow
+var _skill_action_editor_home: Node
+var _skill_action_editor_index := 0
 var _acquisition_augment_serial := 0
 var reward_service: RunRewardService
 var inventory_panel: RunInventoryPanel
@@ -317,7 +320,9 @@ func _input(event: InputEvent) -> void:
 			_cancel_aim()
 			return
 		if event.keycode == KEY_ESCAPE and event.pressed:
-			if reward_feedback != null and reward_feedback.history_panel.visible:
+			if skill_window != null and skill_window.visible:
+				skill_window.dismiss()
+			elif reward_feedback != null and reward_feedback.history_panel.visible:
 				reward_feedback.hide_history()
 			elif inventory_panel != null and inventory_panel.visible:
 				inventory_panel.dismiss()
@@ -2940,6 +2945,18 @@ func _build_ui() -> void:
 	reward_feedback = RewardFeedbackPanel.new()
 	ui_root.add_child(reward_feedback)
 	reward_feedback.configure(acquisition_journal, run_state.effect_catalog(), persistent_facade != null)
+	skill_window = SkillWindow.new()
+	ui_root.add_child(skill_window)
+	skill_window.set_embedded(false)
+	skill_window.closed.connect(_close_skill_window)
+	_skill_action_editor_home = battle_controls.action_editor.get_parent()
+	_skill_action_editor_index = battle_controls.action_editor.get_index()
+	var skill_open := Button.new()
+	skill_open.text = "Habilidades"
+	skill_open.focus_mode = Control.FOCUS_NONE
+	buttons.add_child(skill_open)
+	skill_open.pressed.connect(_open_skill_window)
+
 
 func _battle_theme() -> Theme:
 	var theme_value := Theme.new()
@@ -3139,3 +3156,25 @@ func _discard_companion(actor: EnemyActor) -> void:
 func _on_reward_confirmed(receipt: Dictionary) -> void:
 	if not training_mode:
 		acquisition_journal.record_reward(receipt, run_state.effect_catalog())
+
+func _open_skill_window() -> void:
+	if skill_window == null or run_finished or get_tree().paused:
+		return
+	_cancel_casting(false)
+	_clear_hover()
+	reward_feedback.hide_history()
+	reward_feedback.hide_recent()
+	var skill_preview := SkillPresentation.run_preview(run_state, persistent_facade)
+	skill_window.configure_catalog(skill_preview["skills"], skill_preview["summary"], skill_preview["base_class_id"])
+	battle_controls.action_editor.reparent(skill_window.action_host)
+	battle_controls.action_editor.slots_grid.columns = 6
+	skill_window.open()
+	get_tree().paused = true
+
+func _close_skill_window() -> void:
+	battle_controls.cancel_binding_capture()
+	if is_instance_valid(_skill_action_editor_home):
+		battle_controls.action_editor.reparent(_skill_action_editor_home)
+		_skill_action_editor_home.move_child(battle_controls.action_editor, _skill_action_editor_index)
+		battle_controls.action_editor.slots_grid.columns = 12
+	get_tree().paused = run_finished or augment_overlay.visible or inventory_panel.visible or class_overlay.visible or battle_controls.settings_overlay.visible

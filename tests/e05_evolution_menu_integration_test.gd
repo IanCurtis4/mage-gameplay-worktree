@@ -63,7 +63,9 @@ func _check_confirmation_cancel_and_first_choice(scene: PackedScene) -> void:
 	var confirmed := menu._confirm_evolution_change()
 	var after: CharacterState = menu.facade.current_profile().character_by_id(character_id)
 	_check(confirmed["ok"] and after.evolution_id == &"defender" and menu.status_label.text.contains("Reembolso de evolução: 0") and menu.evolution_state_label.text.contains("Evolução atual: Defendente"), "confirmation calls the facade once and refreshes the current-evolution summary")
-	_check(after.presets[0]["active_slots"] == [null, null, null, null, null] and menu.progression_skill_tree.get_node_or_null("ProgressionSkill_defender_entry") != null, "first choice refreshes progression and preserves empty presets instead of auto-equipping the free entry")
+	var defender_option := _preview_option(menu.skill_window.draft.preview.get("skills", []), &"defender_entry")
+	var defender_ranks: Dictionary = menu.facade.progression_summary(character_id)["effective_skill_ranks"]
+	_check(after.presets[0]["active_slots"] == [null, null, null, null, null] and defender_ranks.get(&"defender_entry", 0) == 1 and defender_option.get("metadata", {}).get("free_rank", 0) == 1 and not menu.skill_window.skill_entries.has(&"defender_entry"), "first choice grants the catalog free rank without equipping it or inventing an unpublished skill widget")
 	_check(menu.get_global_rect().size.y > 0.0 and menu.evolution_panel.get_global_rect().size.y > 0.0 and menu.menu_scroll != null, "selector is built inside the scrollable menu with a visible layout footprint")
 	menu.queue_free()
 
@@ -94,9 +96,9 @@ func _check_switch_retry_and_focused_alt(scene: PackedScene) -> void:
 	var focused: CharacterState = current.character_by_id(second_id)
 	_check(retried["ok"] and failed["request_id"] == retried["request_id"] and current.revision == before_revision + 1 and current.selected_character_id == first_id and menu._focused_character_id == second_id, "retry reuses the original request/revision and keeps the browsed alt separate from persisted selection")
 	_check(focused.evolution_id == &"berserker" and focused.purchased_skill_ranks.is_empty() and focused.presets[0]["active_slots"] == [null, null, null, null, null] and focused.presets[1]["active_slots"] == [null, null, null, null, null], "successful branch switch refreshes both presets after removing only obsolete evolution ranks")
-	var berserker_entry: Label = menu.progression_skill_tree.get_node_or_null("ProgressionSkill_berserker_entry")
-	var defender_entry: Label = menu.progression_skill_tree.get_node_or_null("ProgressionSkill_defender_entry")
-	_check(menu.evolution_state_label.text.contains("Evolução atual: Berserker") and berserker_entry != null and berserker_entry.text.contains("Rank 1/5") and defender_entry == null and menu.status_label.text.contains("Slots esvaziados: 4"), "selector refreshes summary, progression tree and exact cleanup feedback from the transaction response")
+	var berserker_option := _preview_option(menu.skill_window.draft.preview.get("skills", []), &"berserker_entry")
+	var berserker_ranks: Dictionary = menu.facade.progression_summary(second_id)["effective_skill_ranks"]
+	_check(menu.evolution_state_label.text.contains("Evolução atual: Berserker") and berserker_ranks.get(&"berserker_entry", 0) == 1 and berserker_option.get("metadata", {}).get("free_rank", 0) == 1 and not menu.skill_window.skill_entries.has(&"berserker_entry") and not menu.skill_window.skill_entries.has(&"defender_entry") and menu.status_label.text.contains("Slots esvaziados: 4"), "selector refreshes canonical free rank and exact cleanup feedback without fabricating unpublished UI rows")
 	menu.queue_free()
 
 func _check_cancelled_retry_is_discarded(scene: PackedScene) -> void:
@@ -173,6 +175,12 @@ func _open_menu(scene: PackedScene, facade: ProfileFacade) -> CharacterMenu:
 	root.add_child(menu)
 	await process_frame
 	return menu
+
+func _preview_option(options: Array, skill_id: StringName) -> Dictionary:
+	for option: Dictionary in options:
+		if StringName(option.get("skill_id", &"")) == skill_id:
+			return option
+	return {}
 
 func _ready_catalog() -> ProfileCatalog:
 	return ProfileCatalog.pilot({}, {

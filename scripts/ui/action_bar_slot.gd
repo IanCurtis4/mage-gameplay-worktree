@@ -29,3 +29,6 @@ func _gui_input(event: InputEvent) -> void:
 	if drag_enabled and slot_index >= 0 and event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 		removal_requested.emit(slot_index)
 		accept_event()
+
+func _make_custom_tooltip(for_text: String) -> Object:
+	return SkillTooltip.create(for_text)

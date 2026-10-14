@@ -1,0 +1,900 @@
+{
+  "schema": 1,
+  "source": "ClassCatalog + SentinelTuning.SKILL_IDS + HunterTuning.SKILL_IDS + ItemSkillAdapters.IDS",
+  "canvas": [
+    64,
+    64
+  ],
+  "entries": [
+    {
+      "id": "archer_cadence",
+      "category": "passive",
+      "class": "archer",
+      "palette": {
+        "background": "#25483d",
+        "silhouette": "#f1d17b"
+      },
+      "sha256": "f68aa5a81e5760994f62c65b4dc2334e7ef4ebd2ae65a1941e041053caa65099"
+    },
+    {
+      "id": "archer_precision",
+      "category": "passive",
+      "class": "archer",
+      "palette": {
+        "background": "#25483d",
+        "silhouette": "#f1d17b"
+      },
+      "sha256": "aa93c4199576da69d589ac028cf2dac8de54627aa811527e1a5b9d3b2ac8e1ac"
+    },
+    {
+      "id": "arrow_rain",
+      "category": "active",
+      "class": "archer",
+      "palette": {
+        "background": "#25483d",
+        "silhouette": "#f1d17b"
+      },
+      "sha256": "67eb33abc9ea375a16c5da7e8acb97fb51fb46739e7db5cb5e947f1acdf3b76e"
+    },
+    {
+      "id": "berserker_blood_rift",
+      "category": "active",
+      "class": "berserker",
+      "palette": {
+        "background": "#552e3b",
+        "silhouette": "#f0a66e"
+      },
+      "sha256": "59e687220a8a2c8fe65ca1212e39dc30de74edb7f825db44b29c1aecc08c6c83"
+    },
+    {
+      "id": "berserker_breath_steal",
+      "category": "active",
+      "class": "berserker",
+      "palette": {
+        "background": "#552e3b",
+        "silhouette": "#f0a66e"
+      },
+      "sha256": "ae8b1358d5c981d53453f8f8329167b5f2f4d15e2795877fb7512a02e7069a66"
+    },
+    {
+      "id": "berserker_execution",
+      "category": "active",
+      "class": "berserker",
+      "palette": {
+        "background": "#552e3b",
+        "silhouette": "#f0a66e"
+      },
+      "sha256": "c0dd1eaf47fa6175400e9e97b45b009580d88247b8111cd5f0444b89c7b3278b"
+    },
+    {
+      "id": "berserker_obstinacy",
+      "category": "passive",
+      "class": "berserker",
+      "palette": {
+        "background": "#552e3b",
+        "silhouette": "#f0a66e"
+      },
+      "sha256": "bb09d71cc13a0ba0f2c06e955e7f90e337acd933f091827fc0fb8f3d0eb90042"
+    },
+    {
+      "id": "berserker_pursuit",
+      "category": "passive",
+      "class": "berserker",
+      "palette": {
+        "background": "#552e3b",
+        "silhouette": "#f0a66e"
+      },
+      "sha256": "43969b4ad7ba9b711c470e4293571d495863a384e672b2ce9fdf6da32c6d59b6"
+    },
+    {
+      "id": "berserker_rupture",
+      "category": "active",
+      "class": "berserker",
+      "palette": {
+        "background": "#552e3b",
+        "silhouette": "#f0a66e"
+      },
+      "sha256": "d6e69f5db5863512d085f6014d1ab4bb16cfa9ece558120f249ffae5239e7e47"
+    },
+    {
+      "id": "berserker_wound_leap",
+      "category": "active",
+      "class": "berserker",
+      "palette": {
+        "background": "#552e3b",
+        "silhouette": "#f0a66e"
+      },
+      "sha256": "709ba929cc89b81418a618a6301422764413ce0dc6740d17023e75e65793544d"
+    },
+    {
+      "id": "blood_thirst",
+      "category": "passive",
+      "class": "swordsman",
+      "palette": {
+        "background": "#263a47",
+        "silhouette": "#f1c879"
+      },
+      "sha256": "f18b34ee5d7bd4611816269c02481cb91640c0ba367fe89b15db67b5f1e6f254"
+    },
+    {
+      "id": "brutal_strike",
+      "category": "active",
+      "class": "swordsman",
+      "palette": {
+        "background": "#263a47",
+        "silhouette": "#f1c879"
+      },
+      "sha256": "28586f350151fda9bba8d81f5fb30a6ec1623e49b60578cc590de02e5f31028c"
+    },
+    {
+      "id": "concentrated_rage",
+      "category": "active",
+      "class": "swordsman",
+      "palette": {
+        "background": "#263a47",
+        "silhouette": "#f1c879"
+      },
+      "sha256": "e385036c1bd027ed249e3db1cc7dfc5e8c38b8d2b10f71684f12d1c879b66159"
+    },
+    {
+      "id": "dash",
+      "category": "active",
+      "class": "swordsman",
+      "palette": {
+        "background": "#263a47",
+        "silhouette": "#f1c879"
+      },
+      "sha256": "65a1f558435814de2fcf30d89bc766114ce44591ed3088af576748bfb5d0817c"
+    },
+    {
+      "id": "defender_anchor",
+      "category": "active",
+      "class": "defender",
+      "palette": {
+        "background": "#344958",
+        "silhouette": "#e8c27a"
+      },
+      "sha256": "9f4d7ceaf6cff31730c410d1f4d2c01184b14e96d422c75db864cd8639eb1b06"
+    },
+    {
+      "id": "defender_counterstroke",
+      "category": "active",
+      "class": "defender",
+      "palette": {
+        "background": "#344958",
+        "silhouette": "#e8c27a"
+      },
+      "sha256": "2760663fdae6f6e5b45ecf25e366772467f87d8c322f467c10948da7c50a456e"
+    },
+    {
+      "id": "defender_guard_return",
+      "category": "passive",
+      "class": "defender",
+      "palette": {
+        "background": "#344958",
+        "silhouette": "#e8c27a"
+      },
+      "sha256": "fc9b8bd74c6f5896967319e356a58eacc30ef848dc06c9ebdffe4cddac025550"
+    },
+    {
+      "id": "defender_line_lock",
+      "category": "active",
+      "class": "defender",
+      "palette": {
+        "background": "#344958",
+        "silhouette": "#e8c27a"
+      },
+      "sha256": "c0fd54d10d34a16d0ef18911ea56d026c14b6fbe5bd55f73b93540942a5f5a5a"
+    },
+    {
+      "id": "defender_reprisal_wave",
+      "category": "active",
+      "class": "defender",
+      "palette": {
+        "background": "#344958",
+        "silhouette": "#e8c27a"
+      },
+      "sha256": "7feca4c64c6bd5d6327a285bf1e3e27454a1c3c336142383360aae467c622a9c"
+    },
+    {
+      "id": "defender_wall_advance",
+      "category": "active",
+      "class": "defender",
+      "palette": {
+        "background": "#344958",
+        "silhouette": "#e8c27a"
+      },
+      "sha256": "1767797c464c2e47d8009dc011574f075c462341b80fa6ddcca944ef5db40ce6"
+    },
+    {
+      "id": "defender_watch",
+      "category": "passive",
+      "class": "defender",
+      "palette": {
+        "background": "#344958",
+        "silhouette": "#e8c27a"
+      },
+      "sha256": "a56184c1716b2ea3ebe7bcd95fb492d45509688220f85e31d1d41a2795d7ec72"
+    },
+    {
+      "id": "double_shot",
+      "category": "active",
+      "class": "archer",
+      "palette": {
+        "background": "#25483d",
+        "silhouette": "#f1d17b"
+      },
+      "sha256": "94f23149207bde3370e9dcbaf90bfd65057ec96ed3763e90a1d3c5c1ab6dc6d0"
+    },
+    {
+      "id": "electric_discharge",
+      "category": "active",
+      "class": "mage",
+      "palette": {
+        "background": "#302b58",
+        "silhouette": "#87d8ed"
+      },
+      "sha256": "d106607958c5274023243e6ddfaa88e224cc9e2bd61beb3eb669f8db787b5d2e"
+    },
+    {
+      "id": "elementalist_ember_path",
+      "category": "active",
+      "class": "elementalist",
+      "palette": {
+        "background": "#303d67",
+        "silhouette": "#a7e1e4"
+      },
+      "sha256": "d9ff65765434364242a4255037ff98cf5098a3de7bf466e6d408e15495034086"
+    },
+    {
+      "id": "elementalist_flame_burst",
+      "category": "active",
+      "class": "elementalist",
+      "palette": {
+        "background": "#303d67",
+        "silhouette": "#a7e1e4"
+      },
+      "sha256": "ac199d4ea8d69db5911f35c190e637be260fdd29c7ab42cc3c6bdf6b157796aa"
+    },
+    {
+      "id": "elementalist_glacial_ring",
+      "category": "active",
+      "class": "elementalist",
+      "palette": {
+        "background": "#303d67",
+        "silhouette": "#a7e1e4"
+      },
+      "sha256": "9601dde36469405c11a8b06066ecad84471cdf762af33283ca21a74b76a0199c"
+    },
+    {
+      "id": "elementalist_lightning_arc",
+      "category": "active",
+      "class": "elementalist",
+      "palette": {
+        "background": "#303d67",
+        "silhouette": "#a7e1e4"
+      },
+      "sha256": "cb8cf49578c9525a7090d6651a1f8e1841f69fb662a319054846cc997be573e4"
+    },
+    {
+      "id": "elementalist_prismatic_focus",
+      "category": "passive",
+      "class": "elementalist",
+      "palette": {
+        "background": "#303d67",
+        "silhouette": "#a7e1e4"
+      },
+      "sha256": "d4de4ff748bcbf7e09f13c7f62c070994c4f94c847e2fb73c9dc876c74b11df9"
+    },
+    {
+      "id": "elementalist_prismatic_resonance",
+      "category": "passive",
+      "class": "elementalist",
+      "palette": {
+        "background": "#303d67",
+        "silhouette": "#a7e1e4"
+      },
+      "sha256": "e0221b72cc196bfd9b3618aeedb07904dc080493657fe69f74b1746b12eff863"
+    },
+    {
+      "id": "elementalist_tri_nova",
+      "category": "active",
+      "class": "elementalist",
+      "palette": {
+        "background": "#303d67",
+        "silhouette": "#a7e1e4"
+      },
+      "sha256": "adab98e968684fd888716152384c597c73533c098d32f24c85a0af27edbf2430"
+    },
+    {
+      "id": "explosive_trap",
+      "category": "active",
+      "class": "archer",
+      "palette": {
+        "background": "#25483d",
+        "silhouette": "#f1d17b"
+      },
+      "sha256": "d25c578162543543543ee4383a00dde67ccf03d7155b6f8364c5d82ab0004a58"
+    },
+    {
+      "id": "extended_aim",
+      "category": "active",
+      "class": "archer",
+      "palette": {
+        "background": "#25483d",
+        "silhouette": "#f1d17b"
+      },
+      "sha256": "af9275e1da6fef3128ec055ce0ee2dc10c2d543e494db2f7145528eee44e0a8f"
+    },
+    {
+      "id": "fire_spear",
+      "category": "active",
+      "class": "mage",
+      "palette": {
+        "background": "#302b58",
+        "silhouette": "#87d8ed"
+      },
+      "sha256": "bfa68b5154e1b28d5b867c94cd0dfa0dc7ebc6a298973e66b91e57e2eaa58716"
+    },
+    {
+      "id": "fire_wall",
+      "category": "active",
+      "class": "mage",
+      "palette": {
+        "background": "#302b58",
+        "silhouette": "#87d8ed"
+      },
+      "sha256": "760688372844067ae1b0470a67365715ff01d4902874619f16a8f29a721d6ab4"
+    },
+    {
+      "id": "fireball",
+      "category": "active",
+      "class": "mage",
+      "palette": {
+        "background": "#302b58",
+        "silhouette": "#87d8ed"
+      },
+      "sha256": "e2c9c1a72bf578dec33734928c2e6d4a644c11eb99b89bf4ae47a7c437b7bd7c"
+    },
+    {
+      "id": "foliage_shelter",
+      "category": "active",
+      "class": "archer",
+      "palette": {
+        "background": "#25483d",
+        "silhouette": "#f1d17b"
+      },
+      "sha256": "b267eec36290f7ca9e8d3958df800eb6acf6fd91f482d07ec5714a6c3730612a"
+    },
+    {
+      "id": "fury",
+      "category": "active",
+      "class": "swordsman",
+      "palette": {
+        "background": "#263a47",
+        "silhouette": "#f1c879"
+      },
+      "sha256": "68ed9c574e78c4923c019e9517353ac09a60c3b84a9dfaf9d08054a516d43cc6"
+    },
+    {
+      "id": "geometer_collapse",
+      "category": "active",
+      "class": "geometer",
+      "palette": {
+        "background": "#35434d",
+        "silhouette": "#8fe0c5"
+      },
+      "sha256": "86ba6cd39be7013bf0359557819836af8b13c27e5d784f5330151693704d9b23"
+    },
+    {
+      "id": "geometer_incidence",
+      "category": "passive",
+      "class": "geometer",
+      "palette": {
+        "background": "#35434d",
+        "silhouette": "#8fe0c5"
+      },
+      "sha256": "815db94b4a8af0753a5a5e1b5484df11e99846a16157188b50ae3f6482303fb4"
+    },
+    {
+      "id": "geometer_rewrite",
+      "category": "active",
+      "class": "geometer",
+      "palette": {
+        "background": "#35434d",
+        "silhouette": "#8fe0c5"
+      },
+      "sha256": "a8d54e66f85a7550620921e34259046f7f544fe423e7e2094aaf3ffd94d344a9"
+    },
+    {
+      "id": "geometer_trace",
+      "category": "active",
+      "class": "geometer",
+      "palette": {
+        "background": "#35434d",
+        "silhouette": "#8fe0c5"
+      },
+      "sha256": "c47913e55f05058a908db2acba917736b96609c711a0180db0958475751cc820"
+    },
+    {
+      "id": "geometer_translation",
+      "category": "active",
+      "class": "geometer",
+      "palette": {
+        "background": "#35434d",
+        "silhouette": "#8fe0c5"
+      },
+      "sha256": "83ee29232d9d6724c3de56edf1e5c4ad4aeb2906d22029417b6f0c3f75cf91e0"
+    },
+    {
+      "id": "geometer_triangulation",
+      "category": "active",
+      "class": "geometer",
+      "palette": {
+        "background": "#35434d",
+        "silhouette": "#8fe0c5"
+      },
+      "sha256": "0c68430b68b0d53e9891f8c821b4230377391b228808655d9a95fb4b59d068a3"
+    },
+    {
+      "id": "geometer_vector_memory",
+      "category": "passive",
+      "class": "geometer",
+      "palette": {
+        "background": "#35434d",
+        "silhouette": "#8fe0c5"
+      },
+      "sha256": "30b8cd9389db2d11364b678ef3256cc5258b98cd590d35626fa284bb97d66e76"
+    },
+    {
+      "id": "haunt",
+      "category": "active",
+      "class": "mage",
+      "palette": {
+        "background": "#302b58",
+        "silhouette": "#87d8ed"
+      },
+      "sha256": "8dbf039b05a39f7d7caf9792736a84f46d79363b61a5ab77d5b26045f1648112"
+    },
+    {
+      "id": "hunter_covering_shot",
+      "category": "active",
+      "class": "hunter",
+      "palette": {
+        "background": "#34513a",
+        "silhouette": "#f3d17a"
+      },
+      "sha256": "1f32d5643deb23b9116406af7f14bbe09436a65877a4edf8112e8a694ffdc0e9"
+    },
+    {
+      "id": "hunter_easy_prey",
+      "category": "passive",
+      "class": "hunter",
+      "palette": {
+        "background": "#34513a",
+        "silhouette": "#f3d17a"
+      },
+      "sha256": "c061cd8b9c12367a5a8ac4c2570d34b113dbc1cb920aa5f58ac6a69312a52eef"
+    },
+    {
+      "id": "hunter_freezing_trap",
+      "category": "active",
+      "class": "hunter",
+      "palette": {
+        "background": "#34513a",
+        "silhouette": "#f3d17a"
+      },
+      "sha256": "7188291fc1cd3dd1f048535d0feeadf4b16e70e42491d7c93fac975e8bbbb3f2"
+    },
+    {
+      "id": "hunter_mark",
+      "category": "active",
+      "class": "hunter",
+      "palette": {
+        "background": "#34513a",
+        "silhouette": "#f3d17a"
+      },
+      "sha256": "2ef786fc02f205e26b3861448a64a82a35ad04b8438fba8b42d5c170d90c0bda"
+    },
+    {
+      "id": "hunter_shooting_discipline",
+      "category": "passive",
+      "class": "hunter",
+      "palette": {
+        "background": "#34513a",
+        "silhouette": "#f3d17a"
+      },
+      "sha256": "062371269bcd851a4d255c493e3936e7ce75ae721aca31c681c835c77360c5d7"
+    },
+    {
+      "id": "hunter_tar_trap",
+      "category": "active",
+      "class": "hunter",
+      "palette": {
+        "background": "#34513a",
+        "silhouette": "#f3d17a"
+      },
+      "sha256": "e2b283e910868b6ca4c4bb1caa1be06937a3fe252f09c575a0c810d9041e580c"
+    },
+    {
+      "id": "hunter_thorn_trap",
+      "category": "active",
+      "class": "hunter",
+      "palette": {
+        "background": "#34513a",
+        "silhouette": "#f3d17a"
+      },
+      "sha256": "642623967a70d238e269d9f05f34d6499d7406d35123daa3048156ff66558aef"
+    },
+    {
+      "id": "hunter_total_cover",
+      "category": "active",
+      "class": "hunter",
+      "palette": {
+        "background": "#34513a",
+        "silhouette": "#f3d17a"
+      },
+      "sha256": "c3b7877404a5b93eaa4479f4341e5bafd007243f71356cf1a04a54e7210930a4"
+    },
+    {
+      "id": "ice_spear",
+      "category": "active",
+      "class": "mage",
+      "palette": {
+        "background": "#302b58",
+        "silhouette": "#87d8ed"
+      },
+      "sha256": "6024b7bc3e0be951993624b705bfbbb81691c3953e40bc9947ddf75cd900cee5"
+    },
+    {
+      "id": "ice_wall",
+      "category": "active",
+      "class": "mage",
+      "palette": {
+        "background": "#302b58",
+        "silhouette": "#87d8ed"
+      },
+      "sha256": "5af2281387ac4e6e9e539f20078622f12afeaa58c95639086b137b8d1025d5d9"
+    },
+    {
+      "id": "lightning",
+      "category": "active",
+      "class": "mage",
+      "palette": {
+        "background": "#302b58",
+        "silhouette": "#87d8ed"
+      },
+      "sha256": "0ace3602552af6e50047aa19426effbf6c2cc4a29aa0648981513cf6cd9e17bf"
+    },
+    {
+      "id": "lightning_wall",
+      "category": "active",
+      "class": "mage",
+      "palette": {
+        "background": "#302b58",
+        "silhouette": "#87d8ed"
+      },
+      "sha256": "3b17e45c5145dedb4c3b28b35e75e0d0ad5b202bd0dfa01813f9bc0c2dd63e05"
+    },
+    {
+      "id": "mage_mana_regeneration",
+      "category": "passive",
+      "class": "mage",
+      "palette": {
+        "background": "#302b58",
+        "silhouette": "#87d8ed"
+      },
+      "sha256": "e5a3d856e874a49837fde01c4587295a04c5765cbed84aecd8f3d35ff4ba8e0c"
+    },
+    {
+      "id": "perseverance",
+      "category": "active",
+      "class": "swordsman",
+      "palette": {
+        "background": "#263a47",
+        "silhouette": "#f1c879"
+      },
+      "sha256": "ddd4c4ce1a458d6447f4c984443782f2b1cdee81fc1ddd0758fea066d703b8d0"
+    },
+    {
+      "id": "phantom_barrier",
+      "category": "active",
+      "class": "mage",
+      "palette": {
+        "background": "#302b58",
+        "silhouette": "#87d8ed"
+      },
+      "sha256": "e98ef270d1c9b0cd4f87e92f6fab2bc427ebe3ec35837fe61706eaf0bcc10622"
+    },
+    {
+      "id": "piercing_arrow",
+      "category": "active",
+      "class": "archer",
+      "palette": {
+        "background": "#25483d",
+        "silhouette": "#f1d17b"
+      },
+      "sha256": "11c9cd4af1ce8197da6016f33e84d2e64f74bcfd4a4b8d128f446ee98df5845f"
+    },
+    {
+      "id": "piercing_shout",
+      "category": "active",
+      "class": "swordsman",
+      "palette": {
+        "background": "#263a47",
+        "silhouette": "#f1c879"
+      },
+      "sha256": "0f8a47d35ed09855109a73240332723c32b8688bfdf9f2679de07b2b9f8abd43"
+    },
+    {
+      "id": "provoke",
+      "category": "active",
+      "class": "swordsman",
+      "palette": {
+        "background": "#263a47",
+        "silhouette": "#f1c879"
+      },
+      "sha256": "303a5b764cdab414ba147822bac1106a36c8d5915d3d807abfd32f577e484c33"
+    },
+    {
+      "id": "sentinel_absolute_focus",
+      "category": "active",
+      "class": "sentinel",
+      "palette": {
+        "background": "#234b59",
+        "silhouette": "#f0cf7f"
+      },
+      "sha256": "abcf5dd45c5f72274ec367dff912e42ced7532d90e9e7a28b8dc1e5049dc94e6"
+    },
+    {
+      "id": "sentinel_concussion_shot",
+      "category": "active",
+      "class": "sentinel",
+      "palette": {
+        "background": "#234b59",
+        "silhouette": "#f0cf7f"
+      },
+      "sha256": "26859ac40309ee2d618a698db815755bf10ec935e08814e9958a84b53a25f786"
+    },
+    {
+      "id": "sentinel_explosive_shot",
+      "category": "active",
+      "class": "sentinel",
+      "palette": {
+        "background": "#234b59",
+        "silhouette": "#f0cf7f"
+      },
+      "sha256": "c1ce2de8827388b8dd0d449099da0e54db67146b1595d5dc7ded22d8225053e0"
+    },
+    {
+      "id": "sentinel_headshot",
+      "category": "active",
+      "class": "sentinel",
+      "palette": {
+        "background": "#234b59",
+        "silhouette": "#f0cf7f"
+      },
+      "sha256": "bde3df0d2df7819d9b7aac0740de180c8f166e36cdd87995f031e2d6e02c020e"
+    },
+    {
+      "id": "sentinel_net_shot",
+      "category": "active",
+      "class": "sentinel",
+      "palette": {
+        "background": "#234b59",
+        "silhouette": "#f0cf7f"
+      },
+      "sha256": "437740ebc3de2abfd8879aea6b34cf93ac1c6e1f9c53191adebaf81ee1f545e7"
+    },
+    {
+      "id": "sentinel_observe",
+      "category": "active",
+      "class": "sentinel",
+      "palette": {
+        "background": "#234b59",
+        "silhouette": "#f0cf7f"
+      },
+      "sha256": "2f30f7f08a08011dc2259f8c1dc46a6eecfff2136f3655ecc75cd4e645d281f4"
+    },
+    {
+      "id": "sentinel_opening_read",
+      "category": "passive",
+      "class": "sentinel",
+      "palette": {
+        "background": "#234b59",
+        "silhouette": "#f0cf7f"
+      },
+      "sha256": "59dd89b8302c428bcc63a6c4e9c6b829b1f0a2b9ddfc8ac91ea8fe045cfc06bc"
+    },
+    {
+      "id": "sentinel_piercing_shot",
+      "category": "active",
+      "class": "sentinel",
+      "palette": {
+        "background": "#234b59",
+        "silhouette": "#f0cf7f"
+      },
+      "sha256": "fad9d3d493c57c897ed4cd78bfdbe82dbc662cc615250ac6ce0fd51d6309667f"
+    },
+    {
+      "id": "sentinel_precision_stance",
+      "category": "passive",
+      "class": "sentinel",
+      "palette": {
+        "background": "#234b59",
+        "silhouette": "#f0cf7f"
+      },
+      "sha256": "eccda5f5e6aa07ec64d40231e172ea85beba25e3c6f6fea7d478030da35bbb8a"
+    },
+    {
+      "id": "shield_wall",
+      "category": "active",
+      "class": "swordsman",
+      "palette": {
+        "background": "#263a47",
+        "silhouette": "#f1c879"
+      },
+      "sha256": "414fc3d31c58dc7d25b1684eb76b717b06bd572718fbe26229c7fe79cc28cd23"
+    },
+    {
+      "id": "slash",
+      "category": "active",
+      "class": "swordsman",
+      "palette": {
+        "background": "#263a47",
+        "silhouette": "#f1c879"
+      },
+      "sha256": "fc950221f5619725f6f0e1231091a24367bbb7cb516d626908bc03d4d4a07a21"
+    },
+    {
+      "id": "slowing_arrow",
+      "category": "active",
+      "class": "archer",
+      "palette": {
+        "background": "#25483d",
+        "silhouette": "#f1d17b"
+      },
+      "sha256": "3fe027b883d15a1f8f5e98ebf8cf9c871014384c6b9ac3dcbc98ee3d28448cb8"
+    },
+    {
+      "id": "snare_trap",
+      "category": "active",
+      "class": "archer",
+      "palette": {
+        "background": "#25483d",
+        "silhouette": "#f1d17b"
+      },
+      "sha256": "c028a2477673a532cc708ee761ed8aec6de0f2b466591f1debd2a6ae94b431b1"
+    },
+    {
+      "id": "soul_impact",
+      "category": "active",
+      "class": "mage",
+      "palette": {
+        "background": "#302b58",
+        "silhouette": "#87d8ed"
+      },
+      "sha256": "dd408e126e318591a763abbbf3b4bece1657189d88427ea8a9ef1287771d2d6c"
+    },
+    {
+      "id": "spiritualist_channel_focus",
+      "category": "passive",
+      "class": "spiritualist",
+      "palette": {
+        "background": "#382e57",
+        "silhouette": "#d8b6ef"
+      },
+      "sha256": "5a71222bbfbd234433c14e2a6df344b2d17e20092e241bb55227a6247256cbc6"
+    },
+    {
+      "id": "spiritualist_dissipation",
+      "category": "active",
+      "class": "spiritualist",
+      "palette": {
+        "background": "#382e57",
+        "silhouette": "#d8b6ef"
+      },
+      "sha256": "4fc4960f07572ecd4f1c7e8219475bb881c9059fcdd5ef19deb95dad1385dc12"
+    },
+    {
+      "id": "spiritualist_echo_curse",
+      "category": "active",
+      "class": "spiritualist",
+      "palette": {
+        "background": "#382e57",
+        "silhouette": "#d8b6ef"
+      },
+      "sha256": "e8a970e73652ed3c30d10508dc96df5f2a6711f176358f110da6dc811ab4a557"
+    },
+    {
+      "id": "spiritualist_echo_recovery",
+      "category": "passive",
+      "class": "spiritualist",
+      "palette": {
+        "background": "#382e57",
+        "silhouette": "#d8b6ef"
+      },
+      "sha256": "9b003a4411d9152ed183df7aef9a1a8f69b224468b7df8bf127c732fcb2a7bc9"
+    },
+    {
+      "id": "spiritualist_procession",
+      "category": "active",
+      "class": "spiritualist",
+      "palette": {
+        "background": "#382e57",
+        "silhouette": "#d8b6ef"
+      },
+      "sha256": "b53b6968cef076236e2380eec6d472e166325d1c6847c93de52426fe913e2161"
+    },
+    {
+      "id": "spiritualist_soul_drain",
+      "category": "active",
+      "class": "spiritualist",
+      "palette": {
+        "background": "#382e57",
+        "silhouette": "#d8b6ef"
+      },
+      "sha256": "ea4d37a858df6e56a30916d7b559dc18f67c8822583715859756bd28f9c13281"
+    },
+    {
+      "id": "spiritualist_spectral_veil",
+      "category": "active",
+      "class": "spiritualist",
+      "palette": {
+        "background": "#382e57",
+        "silhouette": "#d8b6ef"
+      },
+      "sha256": "dc1ae9c63452c5e7b588f1a1b49cf09b9da4b6d3ebae3115bf9ea0348bef71d9"
+    },
+    {
+      "id": "swordsman_resistance",
+      "category": "passive",
+      "class": "swordsman",
+      "palette": {
+        "background": "#263a47",
+        "silhouette": "#f1c879"
+      },
+      "sha256": "0e43aee1ddb002c6e6d9f248e4aa8f0ffa5643bc53ce92a5593b0aa9b51eacdc"
+    },
+    {
+      "id": "teleport",
+      "category": "active",
+      "class": "mage",
+      "palette": {
+        "background": "#302b58",
+        "silhouette": "#87d8ed"
+      },
+      "sha256": "daea3aafa89eabe4842b96308182b79f494ba10cf2e40b5ec7a5291f7d5d7bec"
+    },
+    {
+      "id": "terrifying_shout",
+      "category": "active",
+      "class": "swordsman",
+      "palette": {
+        "background": "#263a47",
+        "silhouette": "#f1c879"
+      },
+      "sha256": "827233909db038e89f49b4f32d61c2787f88f487cfc5a6911bb64559b8379cd2"
+    },
+    {
+      "id": "trap_technique",
+      "category": "passive",
+      "class": "archer",
+      "palette": {
+        "background": "#25483d",
+        "silhouette": "#f1d17b"
+      },
+      "sha256": "f2cb4ebe8252263f253838a51fe266a2de07fbb249bdd47c7195c59b9400cacc"
+    },
+    {
+      "id": "vigor",
+      "category": "passive",
+      "class": "swordsman",
+      "palette": {
+        "background": "#263a47",
+        "silhouette": "#f1c879"
+      },
+      "sha256": "822ca5ee3376c2e18f6a5f88e563d3db37e306b9c1c41668cc06b1031c89e6b4"
+    }
+  ]
+}

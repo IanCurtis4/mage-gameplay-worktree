@@ -38,10 +38,10 @@ func _run() -> void:
 		&"trap_technique": "Técnica de Armadilhas",
 	}
 	for skill_id: StringName in expected_names:
-		var label := learning_menu.progression_skill_tree.get_node("ProgressionSkill_%s" % skill_id) as Label
-		var button := learning_menu.progression_skill_tree.get_node("Learn_%s" % skill_id) as Button
-		_check(label.text.begins_with(expected_names[skill_id]) and label.text.contains("Rank 0/") and not button.disabled, "árvore identifica e permite aprender %s em R0" % skill_id)
-		_check(not label.tooltip_text.contains("ainda não estão disponíveis") and label.tooltip_text.contains("Passivas aprendidas são automáticas"), "tooltip de %s descreve o fluxo vigente" % skill_id)
+		var entry: Dictionary = learning_menu.skill_window.skill_entries[skill_id]
+		var tooltip: String = entry["button"].tooltip_text
+		_check(tooltip.begins_with(expected_names[skill_id]) and tooltip.contains("Rank 0/") and int(entry["option"]["rank"]) == 0 and not entry["plus"].disabled, "biblioteca identifica e permite aprender %s em R0" % skill_id)
+		_check(not tooltip.contains("ainda não estão disponíveis") and tooltip.contains("Passivas aprendidas são automáticas"), "tooltip de %s descreve o fluxo vigente" % skill_id)
 	var purchases: Array[StringName] = [
 		&"double_shot", &"piercing_arrow", &"arrow_rain", &"extended_aim",
 		&"snare_trap", &"explosive_trap", &"slowing_arrow", &"foliage_shelter",
@@ -107,9 +107,11 @@ func _run_build(facade: ProfileFacade, character_id: String, preset_index: int, 
 	if not started.get("ok", false):
 		menu.queue_free()
 		return
+	RunController.pending_gameplay_extension = false
 	await scene_changed
 	await process_frame
 	var controller := current_scene as RunController
+	_check(not controller.gameplay_extension, "legacy E04 fixture explicitly keeps the E06 route extension off")
 	controller.set_process(false)
 	controller.player.set_process(false)
 	for enemy: CombatActor in controller.enemies:

@@ -37,6 +37,7 @@ func _ready() -> void:
 	add_theme_constant_override("separation", 6)
 	var instruction := Label.new()
 	instruction.text = "Arraste uma skill ou selecione um slot e clique na biblioteca. Direito remove."
+	instruction.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	instruction.add_theme_font_size_override("font_size", 14)
 	add_child(instruction)
 	slots_grid = GridContainer.new()
@@ -58,17 +59,19 @@ func _ready() -> void:
 		button.removal_requested.connect(func(i: int) -> void: removal_requested.emit(i))
 		slots_grid.add_child(button)
 		slot_buttons.append(button)
-	var actions := HBoxContainer.new()
-	add_child(actions)
+	var actions := GridContainer.new()
+	actions.columns = 2
 	selection_label = Label.new()
 	selection_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	actions.add_child(selection_label)
+	add_child(selection_label)
+	add_child(actions)
 	_action(actions, "Remover skill", func() -> void: removal_requested.emit(selected_slot))
 	_action(actions, "Alterar tecla", func() -> void: capture_requested.emit(selected_slot))
 	_action(actions, "Limpar tecla", func() -> void: clear_binding_requested.emit(selected_slot))
 	_action(actions, "Teclas padrão", func() -> void: restore_bindings_requested.emit())
 	message_label = Label.new()
 	message_label.text = "Barra organiza atalhos; apenas skills aprendidas estão disponíveis."
+	message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	message_label.add_theme_font_size_override("font_size", 14)
 	add_child(message_label)
 	var scroll := ScrollContainer.new()
@@ -82,7 +85,7 @@ func _ready() -> void:
 	if action_slots.size() == 24:
 		configure(learned_skills, action_slots, control_preferences)
 
-func _action(row: HBoxContainer, title: String, callback: Callable) -> void:
+func _action(row: Container, title: String, callback: Callable) -> void:
 	var button := Button.new()
 	button.text = title
 	button.focus_mode = Control.FOCUS_NONE
@@ -100,6 +103,9 @@ func configure(learned: Array[StringName], slots: Array[Variant], preferences: C
 		var id := StringName(action_slots[index]) if action_slots[index] != null else &""
 		var button := slot_buttons[index] as ActionBarSlot
 		button.skill_id = id
+		button.icon = SkillPresentation.icon(id)
+		button.add_theme_constant_override("icon_max_width", 24)
+		button.expand_icon = true
 		button.text = "%s\n%s" % [preferences.binding_label(index), _name(id)]
 		button.tooltip_text = "Slot %d · %s\n%s" % [index + 1, preferences.binding_label(index), _name(id)]
 	for child: Node in library.get_children():
@@ -108,9 +114,12 @@ func configure(learned: Array[StringName], slots: Array[Variant], preferences: C
 	for id: StringName in learned:
 		var button := SlotScript.new()
 		button.skill_id = id
+		button.icon = SkillPresentation.icon(id)
+		button.add_theme_constant_override("icon_max_width", 32)
+		button.expand_icon = true
 		button.drag_enabled = true
 		button.text = _name(id)
-		button.tooltip_text = "Aprendida · %s\nClique para atribuir ao slot selecionado, ou arraste." % _name(id)
+		button.tooltip_text = "Aprendida · %s\nClique para atribuir ao slot selecionado, ou arraste.\n%s" % [_name(id), SkillPresentation.MECHANICS.get(id, "Ativa desta classe; os valores de execução aparecem na barra.")]
 		button.focus_mode = Control.FOCUS_NONE
 		button.custom_minimum_size.y = 32
 		button.pressed.connect(func() -> void: assignment_requested.emit(id, selected_slot))

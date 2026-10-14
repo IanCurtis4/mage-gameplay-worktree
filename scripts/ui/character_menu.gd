@@ -41,8 +41,6 @@ var attribute_increment_buttons: Dictionary[StringName, Button] = {}
 var attribute_preview_labels: Dictionary[StringName, Label] = {}
 var attribute_purchase_states: Dictionary[StringName, bool] = {}
 var respec_attributes_button: Button
-var progression_skill_tree: VBoxContainer
-var respec_skills_button: Button
 var evolution_panel: VBoxContainer
 var evolution_state_label: Label
 var evolution_options_list: VBoxContainer
@@ -67,9 +65,7 @@ var start_run_button: Button
 var menu_scroll: ScrollContainer
 var menu_tabs: TabContainer
 var identity_label: Label
-var skill_points_label: Label
-var skill_empty_label: Label
-var skill_search: LineEdit
+var skill_window: SkillWindow
 var equipment_empty_label: Label
 var inventory_open_button: Button
 var inventory_panel: RunInventoryPanel
@@ -512,59 +508,10 @@ func _refresh_progression_panel(character: Variant, profile: Variant) -> void:
 		attribute_lines.append("%s   %d   (+%d investidos)" % [_attribute_name(attribute_id), int(detail["effective"]), int(detail["allocated"])])
 	progression_attributes_label.text = "\n".join(attribute_lines)
 	progression_attributes_label.tooltip_text = "\n".join(attribute_details)
-	skill_points_label.text = "Pontos de skills · Base: %d · Evolução: %d" % [summary["base_skill_points_available"], summary["evolution_skill_points_available"]]
-	_clear_progression_skill_tree()
-	var skill_options: Array = options["skills"].duplicate()
-	skill_options.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		if a["metadata"]["wallet"] != b["metadata"]["wallet"]:
-			return a["metadata"]["wallet"] == ProfileCatalog.BASE_WALLET
-		return _skill_name(a["skill_id"]).naturalnocasecmp_to(_skill_name(b["skill_id"])) < 0
-	)
-	var previous_wallet: StringName = &""
-	for option: Dictionary in skill_options:
-		if not _skill_is_revealed(option, summary):
-			continue
-		if not skill_search.text.strip_edges().is_empty() and not _skill_name(option["skill_id"]).to_lower().contains(skill_search.text.strip_edges().to_lower()):
-			continue
-		var wallet: StringName = option["metadata"]["wallet"]
-		if previous_wallet != wallet:
-			_section_label(progression_skill_tree, "Classe base" if wallet == ProfileCatalog.BASE_WALLET else "Evolução", 19)
-			previous_wallet = wallet
-		var skill_label := Label.new()
-		var skill_id: StringName = option["skill_id"]
-		skill_label.name = "ProgressionSkill_%s" % skill_id
-		skill_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		skill_label.text = "%s — Rank %d/%d%s" % [_skill_name(skill_id), option["rank"], option["maximum_rank"], (" · Passiva automática" if option["rank"] > 0 else " · Passiva") if option["metadata"]["category"] == ProfileCatalog.PASSIVE else " · Ativa"]
-		skill_label.tooltip_text = _skill_progression_tooltip(option)
-		progression_skill_tree.add_child(skill_label)
-		var learn_button := Button.new()
-		learn_button.name = "Learn_%s" % skill_id
-		learn_button.text = ("Aprender · 1 ponto" if option["rank"] == 0 else "Aprimorar para rank %d · 1 ponto" % option["next_rank"]) if option["next_rank"] != null else "Rank máximo"
-		if option["next_rank"] != null and not option["next_rank_available"]:
-			learn_button.text += " · %s" % ("sem pontos" if option["next_rank_error_code"] == &"insufficient_points" else "requisitos pendentes")
-		learn_button.tooltip_text = _skill_purchase_tooltip(option)
-		learn_button.disabled = _read_only or profile.reward_session != null or not option["next_rank_available"]
-		learn_button.pressed.connect(_learn_skill.bind(skill_id))
-		progression_skill_tree.add_child(learn_button)
-	skill_empty_label.visible = progression_skill_tree.get_child_count() == 0
-	skill_empty_label.text = "Nenhuma habilidade liberada corresponde à busca." if not skill_search.text.is_empty() else "As habilidades aparecem conforme seu job e os pré-requisitos avançam."
+	skill_window.configure(facade, character.character_id, not _read_only and profile.reward_session == null)
 	_set_attribute_actions_disabled(_read_only or profile.reward_session != null)
 	_set_skill_actions_disabled(_read_only or profile.reward_session != null)
 	_refresh_evolution_panel(character, profile)
-
-func _skill_is_revealed(option: Dictionary, summary: Dictionary) -> bool:
-	if not option["available"]:
-		return false
-	if int(option["rank"]) > 0:
-		return true
-	var requirement: Dictionary = option["next_rank_requirement"]
-	if int(summary["job_level"]) < int(requirement.get("job_level", 1)):
-		return false
-	var ranks: Dictionary = summary["effective_skill_ranks"]
-	for skill_id: Variant in requirement.get("skill_ranks", {}):
-		if int(ranks.get(skill_id, 0)) < int(requirement["skill_ranks"][skill_id]):
-			return false
-	return true
 
 func _refresh_evolution_panel(character: Variant, profile: Variant) -> void:
 	if evolution_panel == null:
@@ -869,9 +816,10 @@ func _set_attribute_actions_disabled(disabled: bool) -> void:
 	if respec_attributes_button != null:
 		respec_attributes_button.disabled = disabled
 
+
 func _set_skill_actions_disabled(disabled: bool) -> void:
-	if respec_skills_button != null:
-		respec_skills_button.disabled = disabled
+	if skill_window != null:
+		skill_window.configure(facade, _focused_character_id, not disabled)
 
 func _show_progression_message(message: String) -> void:
 	if progression_state_label == null:
@@ -879,80 +827,7 @@ func _show_progression_message(message: String) -> void:
 	progression_state_label.text = message
 	progression_wallets_label.text = ""
 	progression_attributes_label.text = ""
-	skill_points_label.text = "Selecione um personagem."
-	skill_empty_label.visible = true
-	_clear_progression_skill_tree()
 	_set_skill_actions_disabled(true)
-
-func _clear_progression_skill_tree() -> void:
-	if progression_skill_tree == null:
-		return
-	for child: Node in progression_skill_tree.get_children():
-		progression_skill_tree.remove_child(child)
-		child.queue_free()
-
-func _skill_progression_tooltip(option: Dictionary) -> String:
-	var metadata: Dictionary = option["metadata"]
-	var category := "Ativa" if metadata["category"] == ProfileCatalog.ACTIVE else "Passiva"
-	var wallet := "base" if metadata["wallet"] == ProfileCatalog.BASE_WALLET else "evolução"
-	var lines: Array[String] = ["%s · carteira %s" % [category, wallet], "Rank atual: %d/%d" % [option["rank"], option["maximum_rank"]]]
-	if option["next_rank"] != null:
-		var requirement: Dictionary = option["next_rank_requirement"]
-		lines.append("Próximo rank: %d · Job %d" % [option["next_rank"], requirement["job_level"]])
-		var prerequisites: Array[String] = []
-		for prerequisite_id: StringName in requirement["skill_ranks"]:
-			prerequisites.append("%s R%d" % [_skill_name(prerequisite_id), requirement["skill_ranks"][prerequisite_id]])
-		lines.append("Pré-requisitos: %s" % (", ".join(prerequisites) if not prerequisites.is_empty() else "nenhum"))
-	else:
-		lines.append("Rank máximo atingido.")
-	var skill_id := StringName(option["skill_id"])
-	if skill_id in SentinelTuning.SKILL_IDS or skill_id in HunterTuning.SKILL_IDS:
-		var current_rank := int(option["rank"])
-		if current_rank > 0:
-			var description := ClassCatalog.hunter_description(skill_id, current_rank) if skill_id in HunterTuning.SKILL_IDS else ClassCatalog.sentinel_description(skill_id, current_rank)
-			lines.append("Atual R%d: %s" % [current_rank, description])
-		if option["next_rank"] != null:
-			var next_rank := int(option["next_rank"])
-			var description := ClassCatalog.hunter_description(skill_id, next_rank) if skill_id in HunterTuning.SKILL_IDS else ClassCatalog.sentinel_description(skill_id, next_rank)
-			lines.append("Próximo R%d: %s" % [next_rank, description])
-	if skill_id == &"foliage_shelter" and facade != null:
-		var profile: ProfileState = facade.current_profile()
-		var character := profile.character_by_id(_focused_character_id) if profile != null else null
-		if character != null and character.evolution_id == &"hunter":
-			lines.append(ClassCatalog.hunter_cover_description())
-	match StringName(option["skill_id"]):
-		&"spiritualist_echo_curse":
-			lines.append("Maldição marca o alvo e inimigos próximos em raio de 110 com linha de visão.")
-			lines.append("Skill direta em marcado ativa uma onda de Eco após 0,35 s; autoataque não ativa.")
-		&"spiritualist_dissipation":
-			lines.append("Rito mantém o bônus direto contra marcados e também ativa uma onda de Eco.")
-		&"geometer_trace":
-			lines.append("F1/F2/F3 selecionam Fogo/Gelo/Raio sem custo. Traçado coloca A/B; terceiro exige Triangulação aprendida.")
-		&"geometer_incidence":
-			lines.append("Aprendida (automática): recompensa interação efetiva de parede; não aumenta triângulos ou Colapso.")
-		&"geometer_translation":
-			lines.append("Move o último vértice sem mudar seu elemento. Chão solta vínculo; corpo de inimigo prende.")
-		&"geometer_triangulation":
-			lines.append("R1: 3 puros. R3: 21 receitas. R5: 27 receitas. Fecha C uma vez; não herda efeitos de parede.")
-		&"geometer_vector_memory":
-			lines.append("Aprendida (automática): novos vértices +1/+2/+4s e figuras +1/+2/+3s, teto 12s. Não renova figura editada.")
-		&"geometer_collapse":
-			lines.append("Consome parede/triângulo válido uma vez com poder próprio. Parede: pulso na faixa; triângulo: resolução de C.")
-		&"geometer_rewrite":
-			lines.append("Remove o mais antigo e acrescenta o elemento selecionado: B/C/D. Preserva identidade/prazo, sem repetir C.")
-	lines.append("Ativas aprendidas ficam disponíveis na biblioteca; arraste para organizar atalhos. Passivas aprendidas são automáticas.")
-	return "\n".join(lines)
-
-func _skill_purchase_tooltip(option: Dictionary) -> String:
-	if option["next_rank"] == null:
-		return "Esta skill já atingiu o rank máximo."
-	if option["next_rank_available"]:
-		return "Comprar o rank %d pela carteira indicada." % option["next_rank"]
-	match StringName(option["next_rank_error_code"]):
-		&"insufficient_points": return "Pontos insuficientes na carteira desta skill."
-		&"requirements_unmet": return "Os requisitos do próximo rank ainda não foram atendidos."
-		&"rank_cap_reached": return "Esta skill já atingiu o rank máximo."
-		_: return "Este rank não está disponível agora."
 
 func _attribute_name(attribute_id: StringName) -> String:
 	match attribute_id:
@@ -1069,8 +944,6 @@ func _build_ui() -> void:
 	var class_page := _new_page("Classe e equipamento")
 	var roster_column := _scroll_column(character_page, 0.85)
 	var stats_column := _scroll_column(character_page, 1.15)
-	var skills_column := _scroll_column(skills_page, 1.2)
-	var slots_column := _scroll_column(skills_page, 1.0)
 	var class_column := _scroll_column(class_page, 1.0)
 	menu_scroll = class_column.get_parent().get_parent() as ScrollContainer
 	var gear_column := _scroll_column(class_page, 1.0)
@@ -1182,40 +1055,24 @@ func _build_ui() -> void:
 	build_summary_label.name = "BuildSummary"
 	build_summary_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	stats_column.add_child(build_summary_label)
-	skill_points_label = _section_label(skills_column, "Pontos de skills", 18)
-	_section_label(skills_column, "Só habilidades liberadas para este personagem. Passe o mouse para ver requisitos e detalhes.", 14)
-	skill_search = LineEdit.new()
-	skill_search.placeholder_text = "Buscar habilidade..."
-	skill_search.clear_button_enabled = true
-	skills_column.add_child(skill_search)
-	skill_search.text_changed.connect(func(_text: String) -> void:
-		var profile: ProfileState = facade.current_profile() if facade != null else null
-		if profile != null and _selected_index >= 0:
-			_refresh_progression_panel(profile.characters[_selected_index], profile)
+	skill_window = SkillWindow.new()
+	skill_window.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	skill_window.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	skills_page.add_child(skill_window)
+	skill_window.set_embedded(true)
+	skill_window.transaction_result.connect(func(result: Dictionary) -> void: _show_result(result, "Pontos de habilidades confirmados."))
+	skill_window.respec_requested.connect(_respec_skills)
+	skill_window.closed.connect(func() -> void: menu_tabs.current_tab = 0)
+	menu_tabs.tab_changed.connect(func(tab: int) -> void:
+		if tab == 1: skill_window.open()
 	)
-	var skill_tree_title := Label.new()
-	skill_tree_title.text = "Árvore de skills"
-	skill_tree_title.add_theme_font_size_override("font_size", 16)
-	skills_column.add_child(skill_tree_title)
-	progression_skill_tree = VBoxContainer.new()
-	progression_skill_tree.name = "ProgressionSkillTree"
-	progression_skill_tree.add_theme_constant_override("separation", 2)
-	skills_column.add_child(progression_skill_tree)
-	respec_skills_button = Button.new()
-	respec_skills_button.name = "RespecSkills"
-	respec_skills_button.text = "Redistribuir skills"
-	respec_skills_button.tooltip_text = "Devolve as compras das carteiras base e de evolução."
-	respec_skills_button.pressed.connect(_respec_skills)
-	skills_column.add_child(respec_skills_button)
-	skill_empty_label = _section_label(skills_column, "As habilidades aparecem aqui conforme seu job e os pré-requisitos avançam.", 16)
-	_section_label(slots_column, "Barras de ação · 24 atalhos", 22)
 	action_preferences.load_settings()
 	action_editor = ActionBarEditor.new()
-	slots_column.add_child(action_editor)
-	action_editor.slots_grid.columns = 6 # Two logical rows, wrapped only inside narrow menu.
+	skill_window.action_host.add_child(action_editor)
+	action_editor.slots_grid.columns = 6
 	action_editor.layout_changed.connect(_save_action_slots)
 	action_editor.bindings_changed.connect(_save_action_bindings)
-	automatic_passives_label = _section_label(slots_column, "Passivas aprendidas: todas automáticas", 16)
+	automatic_passives_label = _section_label(skill_window.action_host, "Passivas aprendidas: todas automáticas", 14)
 	evolution_panel = VBoxContainer.new()
 	evolution_panel.name = "EvolutionPanel"
 	evolution_panel.add_theme_constant_override("separation", 4)

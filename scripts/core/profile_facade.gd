@@ -336,6 +336,9 @@ func progression_skill_options(character_id: String) -> Dictionary:
 	var character := _profile.character_by_id(character_id)
 	if character == null:
 		return {"ok": false, "error_code": &"invalid_character_id"}
+	return _progression_skill_options_for(character)
+
+func _progression_skill_options_for(character: CharacterState) -> Dictionary:
 	var progression := CharacterProgression.summary(character, _catalog)
 	var effective_ranks: Dictionary[StringName, int] = progression["effective_skill_ranks"]
 	var skill_ids: Array[StringName] = []
@@ -378,9 +381,65 @@ func progression_skill_options(character_id: String) -> Dictionary:
 		})
 	return {
 		"ok": true,
-		"character_id": character_id,
+		"character_id": character.character_id,
 		"skills": skills,
 	}
+
+## Read-only draft, without opening or repairing the profile.
+func skill_allocation_preview(character_id: String, expected_revision: int, ordered_skill_ids: Array) -> Dictionary:
+	if _profile == null:
+		return {"ok": false, "error_code": &"profile_unavailable"}
+	if expected_revision != _profile.revision:
+		return {"ok": false, "error_code": &"stale_revision", "current_revision": _profile.revision}
+	var character := _profile.character_by_id(character_id)
+	if character == null:
+		return {"ok": false, "error_code": &"invalid_character_id"}
+	var candidate := character.copy_state()
+	var simulation := _apply_skill_sequence(candidate, ordered_skill_ids)
+	if not simulation["ok"]:
+		return simulation
+	var options := _progression_skill_options_for(candidate)
+	options["summary"] = CharacterProgression.summary(candidate, _catalog)
+	options["original_ranks"] = CharacterProgression.summary(character, _catalog)["effective_skill_ranks"].duplicate(true)
+	options["profile_revision"] = _profile.revision
+	options["pending_count"] = ordered_skill_ids.size()
+	options["can_apply"] = not _read_only and _profile.reward_session == null
+	options["run_active"] = _profile.reward_session != null
+	options["pending_counts"] = simulation["pending_counts"].duplicate(true)
+	return options.duplicate(true)
+
+func _apply_skill_sequence(character: CharacterState, ordered_skill_ids: Array) -> Dictionary:
+	if ordered_skill_ids.size() > 512:
+		return {"ok": false, "error_code": &"invalid_skill_allocations"}
+	var counts: Dictionary = {}
+	for index: int in ordered_skill_ids.size():
+		var raw: Variant = ordered_skill_ids[index]
+		if not (raw is StringName or raw is String):
+			return {"ok": false, "error_code": &"invalid_skill_id", "failed_index": index}
+		var id := StringName(raw)
+		var result := CharacterProgression.learn_skill(character, _catalog, id)
+		if not result["ok"]:
+			result["failed_index"] = index
+			result["skill_id"] = id
+			return result
+		counts[id] = int(counts.get(id, 0)) + 1
+	return {"ok": true, "pending_counts": counts, "spent": ordered_skill_ids.size()}
+
+func apply_skill_allocations(request_id: String, expected_revision: int, character_id: String, ordered_skill_ids: Array) -> Dictionary:
+	if _operation_in_progress:
+		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
+	var ready := _begin_operation(request_id, expected_revision)
+	if not ready["ok"]:
+		return _finish_operation(request_id, ready)
+	var boundary := _progression_boundary(character_id)
+	if not boundary["ok"]:
+		return _finish_operation(request_id, boundary)
+	if ordered_skill_ids.is_empty():
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_skill_allocations"})
+	var before := _profile.copy_state()
+	var candidate := before.copy_state()
+	var mutation := _apply_skill_sequence(candidate.character_by_id(character_id), ordered_skill_ids)
+	return _finish_progression_mutation(request_id, before, candidate, character_id, mutation, true)
 
 func build_preview(character_id: String, modifier_sources: Array[Dictionary] = []) -> Dictionary:
 	if _profile == null:
@@ -779,7 +838,8 @@ func _finish_progression_mutation(
 	before: ProfileState,
 	candidate: ProfileState,
 	character_id: String,
-	mutation: Dictionary
+	mutation: Dictionary,
+	retain_runtime_transaction: bool = false
 ) -> Dictionary:
 	if not mutation["ok"]:
 		return _finish_operation(request_id, mutation)
@@ -790,7 +850,7 @@ func _finish_progression_mutation(
 		no_op["character_id"] = character_id
 		no_op["progression"] = CharacterProgression.summary(_profile.character_by_id(character_id), _catalog)
 		return _finish_operation(request_id, no_op)
-	var committed := _resolve_commit(before, candidate, _commit_candidate(candidate, character_id))
+	var committed := _resolve_commit(before, candidate, _commit_candidate(candidate, character_id), retain_runtime_transaction)
 	if committed["ok"]:
 		committed["character_id"] = character_id
 		committed["progression"] = CharacterProgression.summary(_profile.character_by_id(character_id), _catalog)

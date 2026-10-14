@@ -31,8 +31,14 @@ func _run() -> void:
 	menu._select_roster_index(0)
 	_check(not menu.create_panel.visible and menu.create_toggle.visible, "creation collapses once a character exists")
 	_check(menu.evolution_options_list.get_child_count() == 0, "evolution choices hidden before gate")
-	_check(menu.progression_skill_tree.get_node_or_null("ProgressionSkill_spiritualist_echo_curse") == null, "other branch skill hidden")
-	_check(menu.progression_skill_tree.get_node_or_null("ProgressionSkill_fireball") != null and (menu.progression_skill_tree.get_node("Learn_fireball") as Button).disabled, "unlocked skills remain visible without points")
+	var spiritualist_metadata := _skill_option(menu.skill_window, &"spiritualist_echo_curse")
+	_check(not spiritualist_metadata.is_empty() and not menu.skill_window.skill_entries.has(&"spiritualist_echo_curse"), "all published branches are in the dataset while the base-job view remains focused")
+	menu.skill_window._choose_job(&"spiritualist")
+	var locked_branch: Dictionary = menu.skill_window.skill_entries[&"spiritualist_echo_curse"]
+	_check(not locked_branch.is_empty() and locked_branch["plus"].disabled, "an unselected evolution branch stays visible on its job tab with purchase blocked")
+	menu.skill_window._choose_job(&"")
+	var fireball_entry: Dictionary = menu.skill_window.skill_entries[&"fireball"]
+	_check(not fireball_entry.is_empty() and fireball_entry["plus"].disabled, "base-job skills remain visible while their rank purchase is blocked for lack of points")
 	menu.playtest_toggle.button_pressed = true
 	_check(menu._apply_playtest_progression(&"prepare_evolution")["ok"], "admin progression uses facade")
 	menu.playtest_toggle.button_pressed = false
@@ -40,19 +46,21 @@ func _run() -> void:
 	_check(menu._begin_evolution_change(&"spiritualist")["ok"] and menu.menu_tabs.current_tab == 2, "confirmation opens in the class tab")
 	_check(menu._confirm_evolution_change()["ok"], "choose evolution")
 	_check(menu.evolution_options_list.get_child_count() == 0 and not menu.confirm_evolution_button.get_parent().visible, "evolution selection disappears after choice")
-	_check(menu.progression_skill_tree.get_node_or_null("ProgressionSkill_spiritualist_echo_curse") != null and menu.progression_skill_tree.get_node_or_null("ProgressionSkill_spiritualist_dissipation") == null, "only entry skill exposed at evolution job gate")
+	menu.skill_window._choose_job(&"spiritualist")
+	var entry_skill: Dictionary = menu.skill_window.skill_entries[&"spiritualist_echo_curse"]
+	var late_skill: Dictionary = menu.skill_window.skill_entries[&"spiritualist_dissipation"]
+	_check(entry_skill["option"]["rank"] == 1 and late_skill["option"]["rank"] == 0 and late_skill["plus"].disabled, "entry rank and future job-gated skills are all visible with their canonical states")
 	menu.menu_tabs.current_tab = 1
-	menu.skill_search.grab_focus()
+	menu.skill_window.skill_entries[&"spiritualist_echo_curse"]["button"].grab_focus()
 	var navigation := InputEventAction.new()
 	navigation.action = &"ui_down"
 	navigation.pressed = true
 	menu._unhandled_key_input(navigation)
-	_check(menu._selected_index == 0, "arrow input in skill search cannot change the selected character")
-	menu.skill_search.text = "zzzz"
-	menu.skill_search.text_changed.emit("zzzz")
-	_check(menu.skill_empty_label.visible and menu.progression_skill_tree.get_child_count() == 0, "search shows explicit empty state without revealing locked skills")
-	menu.skill_search.text = ""
-	menu.skill_search.text_changed.emit("")
+	_check(menu._selected_index == 0, "keyboard navigation focused on a skill cannot change the selected character")
+	var view_switch := menu.skill_window.skill_panel.get_node("ViewSwitch") as Button
+	view_switch.pressed.emit()
+	_check(not menu.skill_window._tree and menu.skill_window.skill_entries.has(&"spiritualist_dissipation"), "list view preserves visible future skills on the selected job tab")
+	view_switch.pressed.emit()
 	_check(menu._learn_skill(&"fireball")["ok"], "learn base skill through menu")
 	menu.action_editor.assign_skill(&"fireball", 0)
 	var profile: ProfileState = facade.current_profile()
@@ -67,14 +75,15 @@ func _run() -> void:
 	menu._choose_preset(0)
 	_check(menu.action_editor.action_slots[0] == &"fireball", "returning to equipment preset retains learned shortcut")
 	menu._select_roster_index(1)
-	_check(menu.menu_tabs.current_tab == 1 and menu.identity_label.text.contains("Téo") and menu.progression_skill_tree.get_node_or_null("ProgressionSkill_fireball") == null, "alternate updates all tabs without losing current tab")
+	_check(menu.menu_tabs.current_tab == 1 and menu.identity_label.text.contains("Téo") and menu.skill_window.skill_entries.has(&"slash") and not menu.skill_window.skill_entries.has(&"fireball"), "alternate updates the current job library without losing the selected menu tab")
 	menu._select_roster_index(0)
 	menu.playtest_toggle.button_pressed = true
 	_check(menu.evolution_options_list.get_node_or_null("ChooseEvolution_elementalist") != null, "admin exposes alternative evolution")
 	menu._apply_playtest_progression(&"max_levels")
 	menu.playtest_toggle.button_pressed = false
 	_check(menu.evolution_options_list.get_child_count() == 0 and not menu.playtest_panel.visible, "leaving admin restores normal disclosure")
-	_check(menu.progression_skill_tree.get_node_or_null("ProgressionSkill_spiritualist_dissipation") != null, "later job gate reveals exclusive skill")
+	menu.skill_window._choose_job(&"spiritualist")
+	_check(menu.skill_window.skill_entries.has(&"spiritualist_dissipation") and not menu.skill_window.skill_entries[&"spiritualist_dissipation"]["plus"].disabled, "later job gate enables the already visible exclusive skill")
 	for extent: Vector2i in [Vector2i(1280, 720), Vector2i(960, 540)]:
 		root.size = extent
 		for tab: int in 3:
@@ -99,3 +108,9 @@ func _check(condition: bool, label: String) -> void:
 	if not condition:
 		failures += 1
 		push_error(label)
+
+func _skill_option(window: SkillWindow, skill_id: StringName) -> Dictionary:
+	for option: Dictionary in window._options:
+		if StringName(option["skill_id"]) == skill_id:
+			return option
+	return {}
