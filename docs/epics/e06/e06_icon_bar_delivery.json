@@ -1,0 +1,211 @@
+{
+  "status": "applied_verified",
+  "role": "technical_validator",
+  "validator": "Sol",
+  "runtime_commit": "14ea885821ff24c857bd9e7b3a1f8c1fd53259c4",
+  "primary_runtime_commit": "9e8219807e3117eb72c075e566710d63834f89d8",
+  "target": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+  "target_branch": "codex/playtest",
+  "operation": "fast-forward --no-overwrite-ignore",
+  "preflight": {
+    "candidate": "9e8219807e3117eb72c075e566710d63834f89d8",
+    "previous": "021cc9fd8df7135362c03f3a40f7d91a7469d6d2",
+    "source_clean": true,
+    "same_repository": true,
+    "fast_forward": true,
+    "preserved_nonoverlapping_local_files": 128,
+    "ignored_collisions": [],
+    "legacy_cli_exit": 1,
+    "legacy_cli_error": "{\"error\": \"Worktree alterada: preservar arquivos e resolver antes de publicar\"}",
+    "operational_policy": "Current WORKFLOW permits preserving nonoverlapping local files and Sol technical validation; manual ff-only/no-overwrite-ignore; reviewer role not fabricated."
+  },
+  "followup": {
+    "candidate": "14ea885821ff24c857bd9e7b3a1f8c1fd53259c4",
+    "delta": "Long key hint clipping; source22+80 invariants PASS; no shader/timer changes",
+    "source_clean": true,
+    "local_path_overlap": [],
+    "operation": "ff-only --no-overwrite-ignore"
+  },
+  "target_checks": [
+    {
+      "failed": false,
+      "output_sha256": "FC990B2766488B9E44ABE5C189882FA79A394BEE9F9C0DCD17D29ACFF0042CB3",
+      "timed_out": false,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\icon_bar_apply\\checks\\001.engine.log",
+      "name": "editor_import",
+      "index": 1,
+      "exit_code": 0,
+      "timeout_seconds": 120,
+      "execution_index": 1,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\icon_bar_apply\\checks\\001.output.log"
+    },
+    {
+      "failed": false,
+      "output_sha256": "2221C3B8FF5B8BC13995CE03DF5ADDB87D48671AD7CA4B1B51601E3D859D9690",
+      "timed_out": false,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/ui_layout_test.gd"
+      ],
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\icon_bar_apply\\checks\\015-ui_layout_test.engine.log",
+      "name": "ui_layout_test",
+      "index": 15,
+      "exit_code": 0,
+      "timeout_seconds": 120,
+      "execution_index": 2,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\icon_bar_apply\\checks\\015-ui_layout_test.output.log"
+    },
+    {
+      "failed": false,
+      "output_sha256": "C2EF385893D199BA0A5C15FD51608B258E9494E90A5DB43E51E49EB7DE13CA44",
+      "timed_out": false,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/action_bar_ui_test.gd"
+      ],
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\icon_bar_apply\\checks\\143-action_bar_ui_test.engine.log",
+      "name": "action_bar_ui_test",
+      "index": 143,
+      "exit_code": 0,
+      "timeout_seconds": 120,
+      "execution_index": 3,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\icon_bar_apply\\checks\\143-action_bar_ui_test.output.log"
+    },
+    {
+      "failed": false,
+      "output_sha256": "99A1F5C05F8B42A98C1353A644C0527B7FBDEBFB7A944ACD272CCF7D46CC34A6",
+      "timed_out": false,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--quit-after",
+        "5"
+      ],
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\icon_bar_apply\\checks\\177.engine.log",
+      "name": "smoke",
+      "index": 177,
+      "exit_code": 0,
+      "timeout_seconds": 120,
+      "execution_index": 4,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\icon_bar_apply\\checks\\177.output.log"
+    },
+    {
+      "failed": false,
+      "output_sha256": "445A89252EAD5536D33B3CA03A4FB13A82ADFBC2437DD2B9E03FA9426793C3C7",
+      "timed_out": false,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/e06_tx_active_test.gd"
+      ],
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\icon_bar_apply\\checks\\187-e06_tx_active_test.engine.log",
+      "name": "e06_tx_active_test",
+      "index": 187,
+      "exit_code": 0,
+      "timeout_seconds": 120,
+      "execution_index": 5,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\icon_bar_apply\\checks\\187-e06_tx_active_test.output.log"
+    },
+    {
+      "failed": false,
+      "output_sha256": "F5D8F0E8B6C15CEE9DD2F9A9A235AF649193EAAC6D47309CF68EE1211B6FC2C2",
+      "timed_out": false,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/e06_icon_bar_test.gd"
+      ],
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\icon_bar_apply\\checks\\227-e06_icon_bar_test.engine.log",
+      "name": "e06_icon_bar_test",
+      "index": 227,
+      "exit_code": 0,
+      "timeout_seconds": 120,
+      "execution_index": 6,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\icon_bar_apply\\checks\\227-e06_icon_bar_test.output.log"
+    }
+  ],
+  "followup_checks": [
+    {
+      "timed_out": false,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\icon_bar_apply\\followup_checks_final\\143-action_bar_ui_test.output.log",
+      "name": "action_bar_ui_test",
+      "output_sha256": "C2EF385893D199BA0A5C15FD51608B258E9494E90A5DB43E51E49EB7DE13CA44",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/action_bar_ui_test.gd"
+      ],
+      "index": 143,
+      "timeout_seconds": 120,
+      "failed": false,
+      "execution_index": 1,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\icon_bar_apply\\followup_checks_final\\143-action_bar_ui_test.engine.log",
+      "exit_code": 0
+    },
+    {
+      "timed_out": false,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\icon_bar_apply\\followup_checks_final\\227-e06_icon_bar_test.output.log",
+      "name": "e06_icon_bar_test",
+      "output_sha256": "A45A532405E15BE9DCDC9E24877C37D54592E1CDF955FB5B018BCFBA3879C207",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/e06_icon_bar_test.gd"
+      ],
+      "index": 227,
+      "timeout_seconds": 120,
+      "failed": false,
+      "execution_index": 2,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\icon_bar_apply\\followup_checks_final\\227-e06_icon_bar_test.engine.log",
+      "exit_code": 0
+    }
+  ],
+  "native": {
+    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\icon_bar_apply\\native.output.log",
+    "sha256": "6415778ec820d0738c673f9e1295531e97a704f42fb90ff2f1df59adf59f6775",
+    "clockwise_pixel_checks": 20,
+    "real_slot_click": true,
+    "reuse": "Native proof on primary runtime; final change only clips long key labels, covered by22 slot invariants+80 UI checks at final target. Shader, icon geometry and cooldown logic unchanged."
+  },
+  "equivalence": {
+    "normalized_crlf_only": true,
+    "equal_files": 1819,
+    "preserved_local_difference": [
+      "export_presets.cfg"
+    ]
+  },
+  "preservation": {
+    "local_files_unchanged_bytewise": 128,
+    "personal_files_unchanged_bytewise": 3,
+    "before_manifest": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\icon_bar_preservation\\before.json"
+  },
+  "evidence_archive": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\icon_bar_archive",
+  "disk_space_recovery": "Git index write ran out of space during follow-up application. Removed only duplicated docs/assets and engine cache inside the owned disposable skill_iteration_runner. Canonical source/target files, saves, test scripts and logs were retained; later commit and ff succeeded.",
+  "product_acceptance": "not_recorded",
+  "master_merge": false,
+  "push": false,
+  "next_action": "Stop old run, accept reload and F5."
+}
