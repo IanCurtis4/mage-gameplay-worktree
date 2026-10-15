@@ -13,9 +13,9 @@
   ],
   "automation_supervision": {
     "report": "docs/epics/e06/e06_icon_bar_luna.json",
-    "sha256": "a345994c8b9260ed98346a91550f4d9226a0413aff5026149e0eda7d3e5bb27a",
+    "sha256": "ebc0916b99046f4912187929b8b2e8d5316621d7bd6eed0565513f95024965ad",
     "distinct_checks": 13,
-    "executions": 14,
+    "executions": 16,
     "total_plan": 227,
     "full_suite": false
   },
@@ -54,5 +54,15 @@
   ],
   "product_acceptance": "not_recorded",
   "master_merge": false,
-  "push": false
+  "push": false,
+  "icon_bar_invariants": 22,
+  "key_hint_followup": "Long chords are clipped with ellipsis inside square slot; full chord remains in tooltip.22 layout/state invariants and80 action-bar UI checks passed after delta; shader unchanged.",
+  "tested_inputs_normalized_sha256": {
+    "scripts/ui/action_bar_slot.gd": "3d159cd292b575d2db701393856c350c3ee47e585ceb0621731c7941ee67dddb",
+    "scripts/ui/action_cooldown.gdshader": "f0fa96dbf80df99c96352e3c8dda9efef1ae2c6b1496459617819ade85689f10",
+    "scripts/ui/battle_controls.gd": "e4c269a4fda5e047b7e3079a990c60ce3ecfcfea895ea60e89b36afaa6f63715",
+    "scripts/main.gd": "9f7cbd433ce6280a15f3c5e73b92342f32a585476a1fa759d79e0c92da3469dc",
+    "tests/e06_icon_bar_test.gd": "1f804aaa9f6fa0ce1bec15036c68881e323c704015a21e12a30ecb104c6513d3",
+    "tests/e06_tx_active_test.gd": "bc17c142bddffccedf54154cce99bb0b366b57511f0e185fc52468a9f196c2cb"
+  }
 }

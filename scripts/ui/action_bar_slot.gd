@@ -63,6 +63,8 @@ func configure_combat(texture: Texture2D, binding: String) -> void:
 	combat_icon.material = _cooldown_material
 	add_child(combat_icon)
 	key_hint = _combat_label(10, HORIZONTAL_ALIGNMENT_RIGHT, VERTICAL_ALIGNMENT_TOP)
+	key_hint.clip_text = true
+	key_hint.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	key_hint.text = "" if binding == "Sem atalho" else binding
 	rank_hint = _combat_label(10, HORIZONTAL_ALIGNMENT_LEFT, VERTICAL_ALIGNMENT_BOTTOM)
 	rank_hint.text = "R%d" % cast_rank if cast_rank > 0 else ""

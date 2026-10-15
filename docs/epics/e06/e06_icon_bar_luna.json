@@ -9,7 +9,7 @@
   "runner": {
     "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
     "verify_ps1_sha256": "74FE60D7AD3F07767645210074632C2EA07140EB48EE9B9FA041013B23EB4159",
-    "project_inputs_manifest_sha256": "FE21FA249D3EFF9B820E0316B0043FE9E4F20B728D6898827EE8CA1F66A59127",
+    "project_inputs_manifest_sha256": "BF7D3D7DD7E6B62D1D4C6F2B207029CA2E6E3B6AF1D004EF8234AB2800448828",
     "project_input_file_count": 1809,
     "plan_checks": 227
   },
@@ -240,7 +240,14 @@
     "final_unique_pass": 13,
     "final_unique_fail": 0,
     "final_status": "PASS_AFTER_CORRECTED_TEST_FIXTURE",
-    "reruns": 1
+    "reruns": 1,
+    "icon_bar_keyhint_rerun": {
+      "executed": 2,
+      "pass": 2,
+      "fail": 0,
+      "timeout": 0
+    },
+    "total_executions": 16
   },
   "corrected_fixture_history": {
     "test": "e06_icon_bar_test",
@@ -327,5 +334,44 @@
     ],
     "quadrant_pixel_samples": 20,
     "observed": "Twenty quadrant pixel ratios across clockwise phases from 0% through 100%; real slot click; same-ID rank cooldown sharing; GPU output also records tooltip edges and inventory actual close after 80x30 physical drag."
+  },
+  "long_key_hint_followup": {
+    "cause": "Long Ctrl+Alt+Shift key hint text could exceed the square slot label.",
+    "fix": "Clip key_hint with ellipsis in the slot; full key chord remains in the tooltip.",
+    "runtime_file": "scripts/ui/action_bar_slot.gd",
+    "runtime_file_sha256": "CA7E5826DD831DBC507AF09B2F82566AD85E87FCDB2E528623C6DD61392E9C40",
+    "checks": [
+      {
+        "name": "e06_icon_bar_test",
+        "status": "PASS",
+        "exit_code": 0,
+        "timeout": false,
+        "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_icon_bar_test.gd",
+        "test_file_sha256": "B240DB38C51BA7DD260DB0E6CA2A551EDC8E25A6B7825138B6AD207AEC8832B0",
+        "completion_checks": 22,
+        "completion_summary": "E06 icon bar: 22 checks, 0 failures",
+        "error_markers": [],
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_keyhint_rerun\\227-e06_icon_bar_test.engine.log",
+        "engine_log_sha256": "75BD9EC6B71AEF7B567D928CD7CEECB0378BC59C474BF7479143DB2A359814D9",
+        "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_keyhint_rerun\\227-e06_icon_bar_test.output.log",
+        "output_log_sha256": "A45A532405E15BE9DCDC9E24877C37D54592E1CDF955FB5B018BCFBA3879C207"
+      },
+      {
+        "name": "action_bar_ui_test",
+        "status": "PASS",
+        "exit_code": 0,
+        "timeout": false,
+        "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\action_bar_ui_test.gd",
+        "test_file_sha256": "FD6F3CDE5509D443203CECC0EC64352E4931B695F2D4E8126EE72494FE8C5C1F",
+        "completion_checks": 80,
+        "completion_summary": "Action bar UI: 80 checks, 0 failures",
+        "error_markers": [],
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_keyhint_rerun\\143-action_bar_ui_test.engine.log",
+        "engine_log_sha256": "BB18C46A2FE69346A71B9BD330A014AEF72CBAB651C99E34541DC722914B5837",
+        "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_keyhint_rerun\\143-action_bar_ui_test.output.log",
+        "output_log_sha256": "C2EF385893D199BA0A5C15FD51608B258E9494E90A5DB43E51E49EB7DE13CA44"
+      }
+    ],
+    "gpu_scope": "Native key glyphs and cooldown shader are unchanged; no GPU rerun was requested."
   }
 }

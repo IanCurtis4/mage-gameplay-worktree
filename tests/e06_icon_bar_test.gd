@@ -17,6 +17,10 @@ func _run() -> void:
 	_check(controls.slot_buttons.size() == 24 and controls.skill_bar.columns == 12, "all24bindings remain")
 	_check(first.text.is_empty() and first.icon == null and first.combat_icon.texture == SkillPresentation.icon(&"fireball"), "full face replaces side-by-side native text/icon")
 	_check(first.key_hint.text == "1" and first.rank_hint.text == "R1" and third.rank_hint.text == "R3", "key and selected rank remain readable overlays")
+	first.key_hint.text = "Ctrl+Alt+Shift+Espaço"
+	await process_frame
+	_check(first.key_hint.size.x <= first.size.x and first.size.is_equal_approx(Vector2(60,60)), "long binding hint cannot widen or overflow the icon slot")
+	first.key_hint.text = "1"
 	_check(first.size.is_equal_approx(Vector2(60,60)) and first.combat_icon.size.is_equal_approx(Vector2(54,54)), "square slot contains almost-full icon")
 	_check(first.combat_icon.mouse_filter == Control.MOUSE_FILTER_IGNORE and first.cooldown_hint.mouse_filter == Control.MOUSE_FILTER_IGNORE, "visual overlays cannot intercept clicks")
 	controls.show_skill_state(&"fireball","BOLA DE FOGO R1\n18 SP · RECARGA 999s",true,1)
