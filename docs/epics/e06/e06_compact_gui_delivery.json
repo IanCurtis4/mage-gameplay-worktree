@@ -1,0 +1,156 @@
+{
+  "status": "applied_verified",
+  "role": "technical_validator",
+  "validator": "Sol",
+  "runtime_commit": "5c6f38009f090daac3f9b49100cfb0dd89c79bf7",
+  "target": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+  "target_branch": "codex/playtest",
+  "operation": "fast-forward --no-overwrite-ignore",
+  "preflight": {
+    "candidate": "5c6f38009f090daac3f9b49100cfb0dd89c79bf7",
+    "previous": "0a39890b324cd2c63c52b9584447fe762db89583",
+    "source_clean": true,
+    "same_repository": true,
+    "target_branch": "codex/playtest",
+    "fast_forward": true,
+    "ignored_collisions": [],
+    "nonoverlapping_preserved_local_files": 128,
+    "legacy_cli_exit": 1,
+    "legacy_cli_error": "{\"error\": \"Worktree alterada: preservar arquivos e resolver antes de publicar\"}",
+    "operational_policy": "Current WORKFLOW permits preserving nonoverlapping local files and Sol technical validation; manual ff-only with no-overwrite-ignore. No reviewer role fabricated."
+  },
+  "target_checks": [
+    {
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\compact_gui_apply\\checks\\001.engine.log",
+      "timed_out": false,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\compact_gui_apply\\checks\\001.output.log",
+      "exit_code": 0,
+      "timeout_seconds": 120,
+      "failed": false,
+      "index": 1,
+      "output_sha256": "9824974B6C75EB260F4CE85DEFFB046E39E04CC06D2EF387717070D7311F41C1",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "execution_index": 1,
+      "name": "editor_import"
+    },
+    {
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\compact_gui_apply\\checks\\015-ui_layout_test.engine.log",
+      "timed_out": false,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\compact_gui_apply\\checks\\015-ui_layout_test.output.log",
+      "exit_code": 0,
+      "timeout_seconds": 120,
+      "failed": false,
+      "index": 15,
+      "output_sha256": "2221C3B8FF5B8BC13995CE03DF5ADDB87D48671AD7CA4B1B51601E3D859D9690",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/ui_layout_test.gd"
+      ],
+      "execution_index": 2,
+      "name": "ui_layout_test"
+    },
+    {
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\compact_gui_apply\\checks\\177.engine.log",
+      "timed_out": false,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\compact_gui_apply\\checks\\177.output.log",
+      "exit_code": 0,
+      "timeout_seconds": 120,
+      "failed": false,
+      "index": 177,
+      "output_sha256": "99A1F5C05F8B42A98C1353A644C0527B7FBDEBFB7A944ACD272CCF7D46CC34A6",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--quit-after",
+        "5"
+      ],
+      "execution_index": 3,
+      "name": "smoke"
+    },
+    {
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\compact_gui_apply\\checks\\215-e06_inventory_window_input_test.engine.log",
+      "timed_out": false,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\compact_gui_apply\\checks\\215-e06_inventory_window_input_test.output.log",
+      "exit_code": 0,
+      "timeout_seconds": 120,
+      "failed": false,
+      "index": 215,
+      "output_sha256": "BB0D3FB514C34A7FAF7314B8EF9BED4417B8AE24E6B8CAB026CEBDEB079901D1",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/e06_inventory_window_input_test.gd"
+      ],
+      "execution_index": 4,
+      "name": "e06_inventory_window_input_test"
+    },
+    {
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\compact_gui_apply\\checks\\223-skill_window_test.engine.log",
+      "timed_out": false,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\compact_gui_apply\\checks\\223-skill_window_test.output.log",
+      "exit_code": 0,
+      "timeout_seconds": 120,
+      "failed": false,
+      "index": 223,
+      "output_sha256": "0E9A1AF5E645884008D630A948B7DAFA031EC2162B48D93D9C6E8640FE21EFEF",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/skill_window_test.gd"
+      ],
+      "execution_index": 5,
+      "name": "skill_window_test"
+    }
+  ],
+  "target_native": {
+    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\compact_gui_apply\\native.output.log",
+    "sha256": "0dc992f0f8e892df36984b6cd9048eb19f877a390171f9698d51c9321d559991",
+    "actual_mouse_and_popup_input": true,
+    "resolutions": [
+      [
+        960,
+        540
+      ],
+      [
+        1280,
+        720
+      ],
+      [
+        1920,
+        1080
+      ]
+    ],
+    "resize": true,
+    "complete": true
+  },
+  "preservation": {
+    "equivalent_files": 1808,
+    "normalized_crlf_only": true,
+    "preserved_local_difference": [
+      "export_presets.cfg"
+    ],
+    "local_files_unchanged": 128,
+    "personal_files_unchanged": 3
+  },
+  "before_manifest": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\compact_gui_preservation\\before.json",
+  "evidence_archive": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\compact_gui_archive",
+  "product_acceptance": "not_recorded",
+  "master_merge": false,
+  "push": false,
+  "next_action": "Stop old run, accept reload and F5; use docs/epics/e06/e06_compact_gui_playtest.md."
+}
