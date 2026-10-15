@@ -1,0 +1,195 @@
+{
+  "status": "applied_verified",
+  "role": "technical_validator",
+  "validator": "Sol",
+  "runtime_commit": "b0ad3d4415f8c51f5cbd5ac5ee962f3bf69ed186",
+  "tested_candidate_commit": "d94aeb67ce7eb3ecdc63bf79dc18eec1daf90603",
+  "target": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+  "target_branch": "codex/playtest",
+  "operation": "fast-forward --no-overwrite-ignore; preserving121 nonoverlapping local files",
+  "source_technical_validation": "docs/epics/e06/e06_skill_ux_iteration_validation.json",
+  "preflight": {
+    "previous_target": "3b2899940207d556c6d34babbb1560f1bd03e94e",
+    "candidate": "d94aeb67ce7eb3ecdc63bf79dc18eec1daf90603",
+    "same_repository": true,
+    "fast_forward": true,
+    "source_clean": true,
+    "preserved_target_local_files": 121,
+    "local_path_overlap": [],
+    "ignored_collisions": [],
+    "legacy_cli": "Does not support nonoverlapping preserved local files nor current technical_validator role; current WORKFLOW governs manual preserving fast-forward",
+    "operation": "git merge --ff-only --no-overwrite-ignore"
+  },
+  "target_checks": [
+    {
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration_apply_native\\001.output.log",
+      "name": "editor_import",
+      "timed_out": false,
+      "timeout_seconds": 120,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration_apply_native\\001.engine.log",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "exit_code": 0,
+      "index": 1,
+      "output_sha256": "CB2AB5DCDD0CBDD15D033D9AA1424B48E316D45C3B67CFC1302B44C9923DE210",
+      "failed": false,
+      "execution_index": 1
+    },
+    {
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration_apply_native\\144-action_bar_persistence_test.output.log",
+      "name": "action_bar_persistence_test",
+      "timed_out": false,
+      "timeout_seconds": 120,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration_apply_native\\144-action_bar_persistence_test.engine.log",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/action_bar_persistence_test.gd"
+      ],
+      "exit_code": 0,
+      "index": 144,
+      "output_sha256": "94818F93F9C3CAC2CF8945941AFCB28EC1B90D73F40008786537736DF143E9B2",
+      "failed": false,
+      "execution_index": 2
+    },
+    {
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration_apply_native\\177.output.log",
+      "name": "smoke",
+      "timed_out": false,
+      "timeout_seconds": 120,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration_apply_native\\177.engine.log",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--quit-after",
+        "5"
+      ],
+      "exit_code": 0,
+      "index": 177,
+      "output_sha256": "99A1F5C05F8B42A98C1353A644C0527B7FBDEBFB7A944ACD272CCF7D46CC34A6",
+      "failed": false,
+      "execution_index": 3
+    },
+    {
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration_apply_native\\223-skill_window_test.output.log",
+      "name": "skill_window_test",
+      "timed_out": false,
+      "timeout_seconds": 120,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration_apply_native\\223-skill_window_test.engine.log",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/skill_window_test.gd"
+      ],
+      "exit_code": 0,
+      "index": 223,
+      "output_sha256": "0E9A1AF5E645884008D630A948B7DAFA031EC2162B48D93D9C6E8640FE21EFEF",
+      "failed": false,
+      "execution_index": 4
+    },
+    {
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration_apply_native\\224-e06_skill_downrank_test.output.log",
+      "name": "e06_skill_downrank_test",
+      "timed_out": false,
+      "timeout_seconds": 120,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration_apply_native\\224-e06_skill_downrank_test.engine.log",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/e06_skill_downrank_test.gd"
+      ],
+      "exit_code": 0,
+      "index": 224,
+      "output_sha256": "0729074E33D2D605417FF8307F6618DD1CAD70F964E2E9442F20EDD96AD356AF",
+      "failed": false,
+      "execution_index": 5
+    },
+    {
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration_apply_native\\225-e06_swordsman_cluster_test.output.log",
+      "name": "e06_swordsman_cluster_test",
+      "timed_out": false,
+      "timeout_seconds": 120,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration_apply_native\\225-e06_swordsman_cluster_test.engine.log",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/e06_swordsman_cluster_test.gd"
+      ],
+      "exit_code": 0,
+      "index": 225,
+      "output_sha256": "18979C7C4E12CA58D4AA9906E7E380497A3EA59FD4AB4C9E445107024AB2D67C",
+      "failed": false,
+      "execution_index": 6
+    },
+    {
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration_apply_native\\226-e06_skill_ux_iteration_test.output.log",
+      "name": "e06_skill_ux_iteration_test",
+      "timed_out": false,
+      "timeout_seconds": 120,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration_apply_native\\226-e06_skill_ux_iteration_test.engine.log",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/e06_skill_ux_iteration_test.gd"
+      ],
+      "exit_code": 0,
+      "index": 226,
+      "output_sha256": "18A66B1934CAE325566299FC0F3C1B40CC7150A2AD4F679D352F6CBAD144FAD7",
+      "failed": false,
+      "execution_index": 7
+    }
+  ],
+  "native": {
+    "log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration_apply_native\\native.output.log",
+    "sha256": "05f2cfa7170700632a43bf3f16ad4ad4f1fe202fe8827a2980a666e522e0ca25",
+    "completed": true,
+    "viewports": [
+      [
+        1280,
+        720
+      ],
+      [
+        1920,
+        1080
+      ]
+    ],
+    "icons": 93,
+    "actual_drag_and_escape": true
+  },
+  "preservation": {
+    "before_manifest": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration_preservation\\before.json",
+    "local_files_unchanged_bytewise": 121,
+    "personal_files_unchanged_bytewise": 3,
+    "intentional_export_path": "build/RagRPG v0.5.exe",
+    "equivalence": {
+      "equivalent_files": 1799,
+      "normalized_crlf_only": true,
+      "intentional_preserved_local_differences": [
+        "export_presets.cfg"
+      ]
+    }
+  },
+  "evidence_archive": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration_archive",
+  "editor_environment_retry": "Initial sandbox-only editor import reported GitPlugin repository ownership/certificate errors; same unmodified project imported successfully in normal user context. Both outputs retained. No plugin or global Git configuration changed.",
+  "human_product_acceptance": "not_recorded",
+  "master_merge": false,
+  "push": false,
+  "next_action": "Stop old game, accept project reload, use F5 and playtest route."
+}

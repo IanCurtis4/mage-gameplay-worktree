@@ -75,5 +75,12 @@
   "runner_isolation": "Exact source runtime copied, ignored addons excluded and runner VCS autoload disabled; source plugin config unchanged",
   "reuse": "61 selected checks with impacted reruns. Final13 persistence regressions after migration allowlist delta; native UI evidence reused because only historical-migration authorization changed. No new UI/gameplay delta afterward.",
   "automation_supervision_sha256": "b1f3bd0a189ffc24647eaad0bd453956b742aea59593283940cd1b0644108595",
-  "runtime_commit": "b0ad3d4415f8c51f5cbd5ac5ee962f3bf69ed186"
+  "runtime_commit": "b0ad3d4415f8c51f5cbd5ac5ee962f3bf69ed186",
+  "final_runtime_runner_equivalence": {
+    "file_count": 1261,
+    "manifest": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration_apply_native\\final_runtime_inputs.json",
+    "sha256": "0279ba82a8a5a8e08253a27a7b4aecdcbe9d14a7c8ae17d0baeaf93d0078b915",
+    "normalized_crlf_only": true,
+    "docs_only_successors": "Runtime/art/test equality confirmed; final documentation changes do not invalidate gameplay evidence."
+  }
 }
