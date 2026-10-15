@@ -8,6 +8,7 @@ raw = subprocess.check_output(["git", "-c", "safe.directory="+str(source), "ls-f
 records = []
 for name in raw.decode("utf-8").split("\0"):
     if not name or name.startswith((".godot/", ".tools/", ".git/", "addons/")): continue
+    if name.startswith("docs/") and not name.startswith("docs/fixtures/"): continue
     path = source/name
     if not path.is_file(): continue
     target = runner/name

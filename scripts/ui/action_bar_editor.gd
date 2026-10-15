@@ -50,7 +50,7 @@ func _ready() -> void:
 		var button := SlotScript.new()
 		button.slot_index = index
 		button.drag_enabled = true
-		button.custom_minimum_size = Vector2(62, 48)
+		button.custom_minimum_size = Vector2(52, 52)
 		button.clip_text = true
 		button.focus_mode = Control.FOCUS_NONE
 		button.add_theme_font_size_override("font_size", 12)
@@ -102,10 +102,7 @@ func configure(learned: Array[StringName], slots: Array[Variant], preferences: C
 		var button := slot_buttons[index] as ActionBarSlot
 		button.skill_id = id
 		button.cast_rank = rank
-		button.icon = SkillPresentation.icon(id)
-		button.add_theme_constant_override("icon_max_width", 32)
-		button.expand_icon = true
-		button.text = "%s\n%s" % [preferences.binding_label(index), "R%d" % rank if rank > 0 else ("Máx." if not id.is_empty() else "—")]
+		button.configure_combat(SkillPresentation.icon(id), preferences.binding_label(index))
 		button.tooltip_text = "Slot %d · %s\n%s" % [index + 1, preferences.binding_label(index), _name(id) + (" R%d" % rank if rank > 0 else "")]
 	for child: Node in library.get_children():
 		library.remove_child(child)

@@ -65,6 +65,19 @@ func _check_main_window(controller: RunController, extent: Vector2i) -> void:
 	_check(controller.battle_controls.action_editor.slots_grid.get_child_count() == 24, "action editor retains all 24 shortcut slots")
 	_check(window.skill_entries.has(&"fire_spear") and window.skill_entries[&"fire_spear"]["option"]["rank"] == 1, "active run displays its actual learned rank")
 	_check(window._jobs == [&""] and window._tabs.get_child_count() == 1, "job tabs show only the possessed base job when no evolution is owned")
+	for listed: bool in [false, true]:
+		window._tree = not listed
+		window._render_skills()
+		await process_frame
+		var contained := true
+		for entry: Dictionary in window.skill_entries.values():
+			for key: String in ["plus", "minus"]:
+				var control: Button = entry[key]
+				contained = contained and Rect2(Vector2.ZERO, entry["card"].size).encloses(control.get_rect()) and control.size.y <= 16.0
+		_check(contained, "rank controls fit actual card bounds with compact height in list=%s" % listed)
+	window._tree = true
+	window._render_skills()
+	await process_frame
 	var fire: Dictionary = window.skill_entries[&"fire_spear"]
 	fire["button"].pressed.emit()
 	_check(window._details.text.contains("Investimento total") and fire["button"].tooltip_text.contains("R1/"), "selecting a skill shows canonical effect, investment, and its displayed rank")

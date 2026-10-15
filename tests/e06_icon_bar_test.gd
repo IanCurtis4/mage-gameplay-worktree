@@ -52,7 +52,13 @@ func _run() -> void:
 	var empty := controls.slot_buttons[23] as ActionBarSlot
 	_check(empty.combat_icon.texture == null and empty.text.is_empty() and empty.cooldown_hint.text.is_empty(), "empty slot keeps key only")
 	var editor := controls.action_editor.slot_buttons[0] as ActionBarSlot
-	_check(editor.combat_icon == null and editor.icon != null and not editor.text.is_empty(), "paused editor keeps its authored presentation")
+	_check(editor.combat_icon != null and editor.icon == null and editor.text.is_empty() and editor.key_hint.text == "1", "editor uses a full icon and overlaid key without lateral text")
+	var child_count := editor.get_child_count()
+	controls.action_editor.configure([&"fireball",&"dash"], slots, controls.control_preferences)
+	controls.action_editor.configure([&"fireball",&"dash"], slots, controls.control_preferences)
+	await process_frame
+	_check(editor.get_child_count() == child_count and editor.size.is_equal_approx(Vector2(52,52)), "editor refresh reuses overlays and retains square slots")
+	_check(editor.key_hint.get_theme_color("font_color").get_luminance() > .8 and (editor.key_hint.get_theme_stylebox("normal") as StyleBoxFlat).bg_color.get_luminance() < .1, "key contrast is independent of icon brightness")
 	var retained := ActionBarLayout.assign(ActionBarLayout.empty(),&"fire_spear",0,1)
 	controls.set_action_bar([&"dash"],retained,controls.control_preferences)
 	first = controls.slot_buttons[0] as ActionBarSlot

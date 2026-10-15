@@ -1,0 +1,40 @@
+{
+  "status": "technically_validated",
+  "role": "technical_validator",
+  "validator": "Sol",
+  "base": "769c368e467f779f1522bd40e9374bfe9b0bf37a",
+  "inputs_sha256": {
+    "scripts/ui/action_bar_slot.gd": "81b2ea3b8bc299152b19cbdaf249e162a42ca54415ee5d8b790634eeeb55d1e9",
+    "scripts/ui/action_bar_editor.gd": "fac1ac54aa2e4429dbce25902fc1dbc6a9414f69f912692712a8124ac9c25e2b",
+    "scripts/ui/skill_window.gd": "8ea7e9c273aeac3bee50ddf515f1749cdfc8cf6c6711a3a8e2bae545d27ff153",
+    "tests/e06_icon_bar_test.gd": "ea049da8e01e03a6bb3d57bc7ff4fce2992aaa085fc342cc26025ce607710a56",
+    "tests/skill_window_test.gd": "7dbab9bbb75cc5cfe2cd3c7d28c5a34f62c2bf14690c25494ae8eccdf640811a",
+    "tools/compact_gui_native_probe.gd": "cdbe18166aa77b6713e1fb98622ad37b814038db288774f8568caa54566a6ed8",
+    "tools/prepare_skill_iteration_runner.py": "bb6f142d0c2b13c5b6fca546ee11a4216fb5c18c2c6e7d8e9905c2536b53eacb"
+  },
+  "native": {
+    "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\editor_alignment_native.log",
+    "sha256": "0dc992f0f8e892df36984b6cd9048eb19f877a390171f9698d51c9321d559991",
+    "exit_code": 0,
+    "markers": [
+      "SKILL_UX_NATIVE_OK",
+      "COMPACT_GUI_NATIVE_OK",
+      "COMPACT_GUI_RESIZE_OK",
+      "COMPACT_INVENTORY_INPUT_OK"
+    ],
+    "inspection": "lobby_tree_1280.png: full editor icons, contrast keys, compact enclosed rank controls; actual clicks and DnD PASS;1280/1920 and list/tree probes completed without errors"
+  },
+  "limits": [
+    "No gameplay/save changes; full gameplay suite not repeated",
+    "Technical approval is not human product acceptance"
+  ],
+  "runner": "Disposable exact runtime copy; bulky docs excluded except fixtures; editor VCS autoload disabled only in runner",
+  "automated": {
+    "report": "e06_editor_alignment_luna.json",
+    "checks": 8,
+    "failures": 0,
+    "assertions": 318,
+    "supervisor": "Luna",
+    "semantic_validation": "Sol"
+  }
+}

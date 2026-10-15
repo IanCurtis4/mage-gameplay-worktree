@@ -34,7 +34,7 @@ func _gui_input(event: InputEvent) -> void:
 func _make_custom_tooltip(for_text: String) -> Object:
 	return SkillTooltip.create(for_text, self)
 
-# Combat-only face. The paused editor keeps the normal Button icon/text layout.
+# Shared icon face for combat and the shortcut editor.
 var combat_icon: TextureRect
 var key_hint: Label
 var rank_hint: Label
@@ -48,6 +48,10 @@ var _cooldown_material: ShaderMaterial
 func configure_combat(texture: Texture2D, binding: String) -> void:
 	text = ""
 	icon = null
+	if combat_icon != null:
+		combat_icon.texture = texture
+		_update_face(binding)
+		return
 	combat_icon = TextureRect.new()
 	combat_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	combat_icon.texture = texture
@@ -65,12 +69,23 @@ func configure_combat(texture: Texture2D, binding: String) -> void:
 	key_hint = _combat_label(10, HORIZONTAL_ALIGNMENT_RIGHT, VERTICAL_ALIGNMENT_TOP)
 	key_hint.clip_text = true
 	key_hint.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	key_hint.text = "" if binding == "Sem atalho" else binding
+	key_hint.anchor_bottom = 0.0
+	key_hint.offset_bottom = 17
+	var key_background := StyleBoxFlat.new()
+	key_background.bg_color = Color(0.035, 0.05, 0.075, 0.88)
+	key_background.content_margin_right = 2
+	key_hint.add_theme_stylebox_override("normal", key_background)
 	rank_hint = _combat_label(10, HORIZONTAL_ALIGNMENT_LEFT, VERTICAL_ALIGNMENT_BOTTOM)
-	rank_hint.text = "R%d" % cast_rank if cast_rank > 0 else ""
+
 	cooldown_hint = _combat_label(16, HORIZONTAL_ALIGNMENT_CENTER, VERTICAL_ALIGNMENT_CENTER)
 	blocked_hint = _combat_label(12, HORIZONTAL_ALIGNMENT_RIGHT, VERTICAL_ALIGNMENT_BOTTOM)
 	blocked_hint.add_theme_color_override("font_color", Color("ffd296"))
+	_update_face(binding)
+
+func _update_face(binding: String) -> void:
+	key_hint.text = "" if binding == "Sem atalho" else binding
+	key_hint.visible = not key_hint.text.is_empty()
+	rank_hint.text = "R%d" % cast_rank if cast_rank > 0 else ""
 	set_combat_blocked(disabled)
 	show_cooldown(0.0, 0.0)
 

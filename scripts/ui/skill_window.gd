@@ -456,9 +456,16 @@ func _make_entry(option: Dictionary, point: Vector2) -> void:
 	rank_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if _tree else HORIZONTAL_ALIGNMENT_LEFT
 	var plus := _button(card, "+", _change.bind(id, true))
 	var minus := _button(card, "−", _change.bind(id, false))
-	plus.position = Vector2(68, 80) if _tree else Vector2(454, 14)
-	minus.position = Vector2(4, 80) if _tree else Vector2(422, 14)
-	plus.size = Vector2(20, 20) if _tree else Vector2(24, 22)
+	for control: Button in [plus, minus]:
+		control.add_theme_font_size_override("font_size", 10)
+		for state_name: String in ["normal", "hover", "pressed", "disabled"]:
+			var compact := control.get_theme_stylebox(state_name).duplicate() as StyleBoxFlat
+			compact.content_margin_top = 0
+			compact.content_margin_bottom = 0
+			control.add_theme_stylebox_override(state_name, compact)
+	plus.position = Vector2(68, 82) if _tree else Vector2(454, 17)
+	minus.position = Vector2(4, 82) if _tree else Vector2(422, 17)
+	plus.size = Vector2(20, 16) if _tree else Vector2(24, 16)
 	minus.size = plus.size
 	plus.disabled = not can_add or not draft.editable or draft.is_uncertain() or not draft.preview.get("can_apply", false)
 	minus.disabled = pending <= 0 or not draft.editable or draft.is_uncertain()

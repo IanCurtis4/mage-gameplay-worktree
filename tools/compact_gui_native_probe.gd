@@ -13,6 +13,9 @@ func _capture(viewport: SubViewport, directory: String, file_name: String) -> vo
 	var entry: Dictionary = skill_window.skill_entries[&"fireball"]
 	var plus: Button = entry["plus"]
 	var minus: Button = entry["minus"]
+	assert(plus.size.y <= 16.0 and minus.size.y <= 16.0)
+	assert(Rect2(Vector2.ZERO,entry["card"].size).encloses(plus.get_rect()))
+	assert(Rect2(Vector2.ZERO,entry["card"].size).encloses(minus.get_rect()))
 	assert(GuiMetrics.visual_rect(plus).size.x < 24.0 and not GuiMetrics.visual_rect(plus).intersects(GuiMetrics.visual_rect(minus)))
 	await _click(viewport, GuiMetrics.visual_rect(plus).get_center())
 	assert(skill_window.draft.sequence.size() == 1)
