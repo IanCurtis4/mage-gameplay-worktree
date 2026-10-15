@@ -32,10 +32,10 @@ func _run() -> void:
 	_check(not menu.create_panel.visible and menu.create_toggle.visible, "creation collapses once a character exists")
 	_check(menu.evolution_options_list.get_child_count() == 0, "evolution choices hidden before gate")
 	var spiritualist_metadata := _skill_option(menu.skill_window, &"spiritualist_echo_curse")
-	_check(not spiritualist_metadata.is_empty() and not menu.skill_window.skill_entries.has(&"spiritualist_echo_curse"), "all published branches are in the dataset while the base-job view remains focused")
+	_check(spiritualist_metadata.is_empty() and menu.skill_window._jobs == [&""] and not menu.skill_window.skill_entries.has(&"spiritualist_echo_curse"), "unowned jobs are omitted from the visible skill dataset and tabs")
 	menu.skill_window._choose_job(&"spiritualist")
-	var locked_branch: Dictionary = menu.skill_window.skill_entries[&"spiritualist_echo_curse"]
-	_check(not locked_branch.is_empty() and locked_branch["plus"].disabled, "an unselected evolution branch stays visible on its job tab with purchase blocked")
+	var locked_branch: Dictionary = menu.skill_window.skill_entries.get(&"spiritualist_echo_curse", {})
+	_check(locked_branch.is_empty() and menu.skill_window._job == &"", "an unowned job cannot be opened by a stale selection")
 	menu.skill_window._choose_job(&"")
 	var fireball_entry: Dictionary = menu.skill_window.skill_entries[&"fireball"]
 	_check(not fireball_entry.is_empty() and fireball_entry["plus"].disabled, "base-job skills remain visible while their rank purchase is blocked for lack of points")

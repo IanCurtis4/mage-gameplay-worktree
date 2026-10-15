@@ -64,17 +64,36 @@ func _check_main_window(controller: RunController, extent: Vector2i) -> void:
 	_check(controller.battle_controls.action_editor.get_parent() == window.action_host and controller.battle_controls.action_editor.slots_grid.columns == 6, "real action editor moves into the consultation and uses six columns")
 	_check(controller.battle_controls.action_editor.slots_grid.get_child_count() == 24, "action editor retains all 24 shortcut slots")
 	_check(window.skill_entries.has(&"fire_spear") and window.skill_entries[&"fire_spear"]["option"]["rank"] == 1, "active run displays its actual learned rank")
-	_check(window._jobs.size() > 1 and window._tabs.get_child_count() == window._jobs.size(), "job tabs expose catalog skills beyond the active class")
+	_check(window._jobs == [&""] and window._tabs.get_child_count() == 1, "job tabs show only the possessed base job when no evolution is owned")
 	var fire: Dictionary = window.skill_entries[&"fire_spear"]
 	fire["button"].pressed.emit()
-	_check(window._details.text.contains("Investimento total") and fire["button"].tooltip_text.contains("Rank 1"), "selecting a skill shows canonical effect and investment details with tooltip")
+	_check(window._details.text.contains("Investimento total") and fire["button"].tooltip_text.contains("R1/"), "selecting a skill shows canonical effect, investment, and its displayed rank")
+	_check(fire["button"].get_child(0).size == Vector2(32, 32), "skill card icon uses the compact 32-pixel size")
+	_check(window._rank_picker.visible and window._rank_picker.item_count == 2, "rank picker offers highest and confirmed R1 choices only")
+	window._rank_picker.select(1)
+	window._rank_picker.item_selected.emit(1)
+	fire = window.skill_entries[&"fire_spear"]
+	_check(fire["button"].drag_payload() == {"kind": "action_skill", "skill_id": &"fire_spear", "rank": 1, "source_index": -1}, "confirmed active drag payload carries its explicit rank and library source")
+	var passive_drag := false
+	for candidate: Variant in window.skill_entries.keys():
+		var candidate_id := StringName(candidate)
+		var candidate_def := ClassCatalog.skill_definition(candidate_id)
+		if candidate_def != null and candidate_def.category == SkillDefinition.Category.PASSIVE:
+			passive_drag = window.skill_entries[candidate]["button"].drag_payload() == null
+			break
+	_check(passive_drag, "passive skill cards never produce an action-bar drag payload")
 	var light_theme := Theme.new()
 	light_theme.set_color("font_color", "Label", Color("263b54"))
 	var tooltip := (fire["button"] as Button)._make_custom_tooltip(fire["button"].tooltip_text) as Control
 	tooltip.theme = light_theme
-	var tooltip_foreground := (tooltip.get_child(0) as Label).get_theme_color("font_color")
+	var tooltip_scroll := tooltip.get_child(0) as ScrollContainer
+	var tooltip_content := tooltip_scroll.get_child(0) as RichTextLabel
+	var tooltip_foreground := tooltip_content.get_theme_color("default_color")
 	var tooltip_luminance := 0.2126 * _linear_channel(tooltip_foreground.r) + 0.7152 * _linear_channel(tooltip_foreground.g) + 0.0722 * _linear_channel(tooltip_foreground.b)
+	_check(tooltip_content.bbcode_enabled and tooltip_content.text.contains("[b]"), "skill tooltip renders emphasized details through RichTextLabel")
 	_check(tooltip_luminance >= 0.8, "skill tooltip keeps readable light text under a light lobby theme")
+	await process_frame
+	_check(tooltip_scroll.custom_minimum_size.y <= 580.0 and tooltip_scroll.get_v_scroll_bar().max_value >= 0.0, "skill tooltip content stays inside a bounded scroll viewport")
 	tooltip.free()
 	var icon_categories_match := true
 	for skill_id: Variant in window.skill_entries:
@@ -128,6 +147,7 @@ func _check_pending_discard() -> void:
 	_check(not plus.disabled, "funded persistent consultation exposes an enabled pending-rank control")
 	plus.pressed.emit()
 	_check(window.draft.sequence == [&"fire_spear"] and int(window.skill_entries[&"fire_spear"]["option"]["rank"]) == 1 and window.draft.preview["original_ranks"].get(&"fire_spear", 0) == 0 and facade.current_profile().character_by_id(character_id).purchased_skill_ranks.get(&"fire_spear", 0) == 0, "plus stages a preview while durable ranks remain unchanged")
+	_check(window.skill_entries[&"fire_spear"]["button"].drag_payload() == null, "a pending, unconfirmed rank cannot be dragged into the action bar")
 	(window.skill_panel.get_node("ViewSwitch") as Button).pressed.emit()
 	window._undo.pressed.emit()
 	var after := ProfileCodec.encode(facade.current_profile(), catalog)

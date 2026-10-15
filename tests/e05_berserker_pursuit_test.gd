@@ -70,7 +70,7 @@ func _player(navigation: ArenaNavigation, pursuit_rank: int, equipped: bool, lea
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"berserker")
 	snapshot.skill_ranks = {&"berserker_pursuit": pursuit_rank}
 	if learned_rupture:
-		snapshot.skill_ranks[&"berserker_rupture"] = 1
+		snapshot.skill_ranks[&"berserker_rupture"] = 2
 	snapshot.passive_slots = [&"berserker_pursuit" if equipped else null, null]
 	var player := PlayerActor.new()
 	player.configure(navigation, RunState.from_build("pursuit-test", snapshot))

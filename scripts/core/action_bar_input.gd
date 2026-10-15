@@ -3,6 +3,8 @@ extends RefCounted
 ## A release belongs to its key-down, not the modifiers present at key-up.
 
 var pending_slot := -1
+var pending_rank := 0
+var released_rank := 0
 var pending_skill: StringName = &""
 var _pending_key := 0
 var _pending_physical := false
@@ -14,9 +16,7 @@ func press(event: InputEventKey, preferences: ControlPreferences, slots: Array[V
 	var slot := preferences.slot_for_event(event)
 	if slot < 0 or slot >= slots.size():
 		return &""
-	if not (slots[slot] is String or slots[slot] is StringName):
-		return &""
-	var skill := StringName(str(slots[slot]))
+	var skill := ActionBarLayout.skill_id(slots[slot])
 	if skill == &"":
 		return &""
 	var binding: Dictionary = preferences.bindings[slot]
@@ -28,6 +28,7 @@ func press(event: InputEventKey, preferences: ControlPreferences, slots: Array[V
 	_held_keys[token] = true
 	pending_slot = slot
 	pending_skill = skill
+	pending_rank = ActionBarLayout.selected_rank(slots[slot])
 	_pending_key = key
 	_pending_physical = physical
 	return skill
@@ -41,8 +42,10 @@ func release(event: InputEventKey) -> StringName:
 	if pending_slot < 0 or key != _pending_key:
 		return &""
 	var result := pending_skill
+	released_rank = pending_rank
 	pending_slot = -1
 	pending_skill = &""
+	pending_rank = 0
 	_pending_key = 0
 	_pending_physical = false
 	return result
@@ -50,6 +53,7 @@ func release(event: InputEventKey) -> StringName:
 func cancel() -> void:
 	pending_slot = -1
 	pending_skill = &""
+	pending_rank = 0
 	_pending_key = 0
 	_pending_physical = false
 	_held_keys.clear()

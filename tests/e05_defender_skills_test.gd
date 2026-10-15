@@ -14,7 +14,7 @@ func _run() -> void:
 	snapshot.base_class_id = &"swordsman"
 	snapshot.evolution_id = &"defender"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"defender")
-	snapshot.skill_ranks = {&"defender_counterstroke": 1, &"defender_anchor": 1, &"defender_line_lock": 1, &"defender_wall_advance": 1, &"defender_reprisal_wave": 1, &"defender_watch": 1}
+	snapshot.skill_ranks = {&"shield_wall": 2, &"dash": 2, &"defender_counterstroke": 3, &"defender_anchor": 2, &"defender_line_lock": 1, &"defender_wall_advance": 1, &"defender_reprisal_wave": 1, &"defender_watch": 1}
 	snapshot.active_slots = [&"defender_counterstroke", &"defender_anchor", &"defender_line_lock", &"defender_wall_advance", &"defender_reprisal_wave"]
 	snapshot.passive_slots = [&"defender_watch", null]
 	var player := PlayerActor.new()
@@ -163,7 +163,7 @@ func _test_advance_interruptions(nav: ArenaNavigation) -> void:
 	snapshot.base_class_id = &"swordsman"
 	snapshot.evolution_id = &"defender"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"defender")
-	snapshot.skill_ranks = {&"defender_counterstroke": 1, &"defender_wall_advance": 1, &"concentrated_rage": 1, &"dash": 1}
+	snapshot.skill_ranks = {&"defender_counterstroke": 1, &"defender_wall_advance": 1, &"concentrated_rage": 1, &"dash": 2}
 	snapshot.active_slots = [&"defender_wall_advance", &"concentrated_rage", &"dash", null, null]
 	var player := PlayerActor.new()
 	player.configure(nav, RunState.from_build("defender-interrupt", snapshot))

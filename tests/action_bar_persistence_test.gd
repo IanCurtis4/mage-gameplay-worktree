@@ -199,6 +199,13 @@ func _passive_identities_and_pruning() -> void:
 		var expected: Array[StringName] = []
 		for skill: StringName in catalog.skill_ids_for_identity(identity[0], identity[1]):
 			if catalog.skill_metadata(skill)["category"] == ProfileCatalog.PASSIVE:
+				# Automatic still means legally learned: buy newly approved antecedents.
+				for prerequisite: StringName in catalog.skill_metadata(skill)["rank_requirements"][1]["skill_ranks"]:
+					var required: int = catalog.skill_metadata(skill)["rank_requirements"][1]["skill_ranks"][prerequisite]
+					while int(catalog.effective_skill_ranks(character.base_class_id,character.evolution_id,character.purchased_skill_ranks,character.granted_skill_ranks).get(prerequisite,0)) < required:
+						var purchase := CharacterProgression.learn_skill(character,catalog,prerequisite)
+						_check(purchase["ok"], "passive fixture buys minimal approved antecedent")
+						if not purchase["ok"]: break
 				_check(CharacterProgression.learn_skill(character, catalog, skill)["ok"], "legal passive purchase for %s/%s" % identity)
 				expected.append(skill)
 		var snapshot := _snapshot(character, catalog)
@@ -217,6 +224,8 @@ func _passive_identities_and_pruning() -> void:
 					_check(not gated.has_passive(skill), "below-job evolution passive remains locked despite fixture rank")
 	# Branch switch strips old evolution while keeping learned base passives.
 	var defender := _character(&"swordsman", &"defender")
+	for prerequisite: StringName in [&"shield_wall", &"shield_wall", &"defender_counterstroke"]:
+		_check(CharacterProgression.learn_skill(defender, catalog, prerequisite)["ok"], "switch fixture buys approved antecedent")
 	for skill: StringName in [&"swordsman_resistance", &"vigor", &"blood_thirst", &"defender_watch", &"defender_guard_return", &"defender_anchor"]:
 		_check(CharacterProgression.learn_skill(defender, catalog, skill)["ok"], "switch fixture legal purchase")
 	defender.action_slots = ActionBarLayout.empty()

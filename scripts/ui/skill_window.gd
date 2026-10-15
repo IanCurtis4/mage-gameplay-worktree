@@ -6,6 +6,25 @@ signal closed
 signal respec_requested
 
 class SkillButton extends Button:
+	var skill_id: StringName = &""
+	var cast_rank := 0
+	var drag_allowed := false
+	func drag_payload() -> Variant:
+		return {"kind": "action_skill", "skill_id": skill_id, "rank": cast_rank, "source_index": -1} if drag_allowed else null
+	func _get_drag_data(_position: Vector2) -> Variant:
+		var payload: Variant = drag_payload()
+		if payload == null: return null
+		var preview := HBoxContainer.new()
+		var icon := TextureRect.new()
+		icon.texture = SkillPresentation.icon(skill_id)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.custom_minimum_size = Vector2(32, 32)
+		preview.add_child(icon)
+		var label := Label.new()
+		label.text = "%s · %s" % [SkillPresentation.name_of(skill_id), "maior rank" if cast_rank == 0 else "R%d" % cast_rank]
+		preview.add_child(label)
+		set_drag_preview(preview)
+		return payload
 	func _make_custom_tooltip(for_text: String) -> Object:
 		return SkillTooltip.create(for_text)
 
@@ -18,7 +37,9 @@ var _body: Control
 var _tabs: HFlowContainer
 var _scroll: ScrollContainer
 var _canvas: Control
-var _details: Label
+var _details: RichTextLabel
+var _rank_picker: OptionButton
+var _rank_choices: Dictionary = {}
 var _wallet: Label
 var _status: Label
 var _apply: Button
@@ -46,6 +67,7 @@ func _init() -> void:
 	resized.connect(_layout)
 
 func configure(facade: RefCounted, character_id: String, editable: bool) -> void:
+	if character_id != draft.character_id: _rank_choices.clear()
 	draft.configure(facade, character_id, editable)
 	if draft.facade != null:
 		var profile: ProfileState = draft.facade.current_profile()
@@ -171,14 +193,21 @@ func _build() -> void:
 	detail_scroll.name = "DetailScroll"
 	detail_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	detail_panel.add_child(detail_scroll)
-	_details = Label.new()
+	_details = RichTextLabel.new()
+	_details.bbcode_enabled = true
+	_details.fit_content = true
+	_details.scroll_active = false
 	_details.text = "Selecione uma habilidade para ver seus efeitos e requisitos."
 	_details.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_details.add_theme_color_override("font_color", INK)
-	_details.add_theme_font_size_override("font_size", 14)
+	_details.add_theme_color_override("default_color", INK)
+	_details.add_theme_font_size_override("normal_font_size", 14)
 	detail_scroll.add_child(_details)
-	_label(detail_panel, "Atalhos · apenas habilidades já aprendidas", Rect2(14, 256, 500, 26), INK, 14)
+	_rank_picker = OptionButton.new()
+	_rank_picker.tooltip_text = "Escolha a versão antes de arrastar. Cada versão usa o próprio custo e poder; a recarga é compartilhada."
+	_rank_picker.item_selected.connect(_pick_rank)
+	detail_panel.add_child(_rank_picker)
+	_label(detail_panel, "Arraste da árvore/lista para um atalho", Rect2(14, 256, 500, 26), INK, 14)
 	var action_scroll := ScrollContainer.new()
 	action_scroll.name = "ActionScroll"
 	action_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -233,7 +262,9 @@ func _layout() -> void:
 	_status.size = Vector2(width - 225, 47)
 	var detail_scroll := detail_panel.get_node("DetailScroll") as ScrollContainer
 	detail_scroll.position = Vector2(14, 58)
-	detail_scroll.size = Vector2(width - 28, 190)
+	detail_scroll.size = Vector2(width - 28, 151)
+	_rank_picker.position = Vector2(14, 214)
+	_rank_picker.size = Vector2(width - 28, 32)
 	var action_scroll := detail_panel.get_node("ActionScroll") as ScrollContainer
 	action_scroll.position = Vector2(12, 287)
 	action_scroll.size = Vector2(width - 24, maxf(70, height - 299))
@@ -249,10 +280,16 @@ func _refresh() -> void:
 	_jobs.clear()
 	_jobs.append(&"")
 	for option: Dictionary in draft.preview.get("skills", []):
-		if ClassCatalog.skill_definition(StringName(option["skill_id"])) == null: continue
+		if ClassCatalog.skill_definition(StringName(option["skill_id"])) == null or not option.get("available", false): continue
 		_options.append(option)
 		var job := StringName(option["metadata"].get("required_evolution_id", &""))
 		if not _jobs.has(job): _jobs.append(job)
+	var confirmed_ranks: Dictionary = {}
+	for option: Dictionary in _options:
+		var id := StringName(option["skill_id"])
+		confirmed_ranks[id] = maxi(int(option.get("item_rank", 0)), int(option["rank"]) - int(draft.preview.get("pending_counts", {}).get(id, 0)))
+	for child: Node in action_host.get_children():
+		if child is ActionBarEditor: child.available_ranks = confirmed_ranks.duplicate()
 	if not _jobs.has(_job): _job = &""
 	for child: Node in _tabs.get_children():
 		_tabs.remove_child(child)
@@ -297,23 +334,16 @@ func _render_skills() -> void:
 	var positions: Dictionary = {}
 	var y := 10.0
 	if _tree:
-		var max_level := 0
-		for value: Variant in levels.values(): max_level = maxi(max_level, int(value))
-		for level: int in range(max_level + 1):
-			var index := 0
-			for option: Dictionary in shown:
-				var id := StringName(option["skill_id"])
-				if int(levels[id]) != level: continue
-				positions[id] = Vector2(10 + (index % 4) * 126, y + (index / 4) * 158)
-				index += 1
-			if index > 0: y += ceilf(float(index) / 4.0) * 158
+		var placed := _branch_positions(shown, levels)
+		positions = placed["positions"]
+		y = placed["height"]
 		for option: Dictionary in shown:
 			var id := StringName(option["skill_id"])
 			var requirements := SkillPresentation.prerequisites(option)
 			for prerequisite: Variant in requirements:
 				if not positions.has(prerequisite): continue
-				var start: Vector2 = positions[prerequisite] + Vector2(55, 132)
-				var finish: Vector2 = positions[id] + Vector2(55, 0)
+				var start: Vector2 = positions[prerequisite] + Vector2(46, 122)
+				var finish: Vector2 = positions[id] + Vector2(46, 0)
 				var line := Line2D.new()
 				line.width = 1.5
 				line.default_color = Color("a1afbe")
@@ -323,10 +353,56 @@ func _render_skills() -> void:
 	else:
 		for option: Dictionary in shown:
 			positions[StringName(option["skill_id"])] = Vector2(10, y)
-			y += 82
+			y += 66
 	_canvas.custom_minimum_size = Vector2(514, maxf(100, y))
 	for option: Dictionary in shown:
 		_make_entry(option, positions[StringName(option["skill_id"])])
+
+func _branch_positions(shown: Array[Dictionary], levels: Dictionary) -> Dictionary:
+	# Pack each actual prerequisite root as an independent vertical cluster.
+	# No decorative dependency is invented for skills without a prerequisite.
+	var roots: Array[StringName] = []
+	var branch: Dictionary = {}
+	var ordered := shown.duplicate()
+	ordered.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(levels[a["skill_id"]]) < int(levels[b["skill_id"]]))
+	for option: Dictionary in ordered:
+		var id := StringName(option["skill_id"])
+		if int(levels[id]) == 0:
+			roots.append(id)
+			branch[id] = id
+		else:
+			for prerequisite: Variant in SkillPresentation.prerequisites(option):
+				if branch.has(prerequisite):
+					branch[id] = branch[prerequisite]
+					break
+			if not branch.has(id):
+				roots.append(id)
+				branch[id] = id
+	var result: Dictionary = {}
+	var x := 10.0
+	var base_y := 10.0
+	var band_height := 0.0
+	for root_id: StringName in roots:
+		var by_depth: Dictionary = {}
+		var width := 1
+		for option: Dictionary in ordered:
+			var id := StringName(option["skill_id"])
+			if branch[id] != root_id: continue
+			var depth := int(levels[id])
+			if not by_depth.has(depth): by_depth[depth] = []
+			by_depth[depth].append(id)
+			width = maxi(width, by_depth[depth].size())
+		if x + width * 100 > 514 and x > 10:
+			x = 10.0
+			base_y += band_height + 30.0
+			band_height = 0.0
+		for depth: int in by_depth:
+			var nodes: Array = by_depth[depth]
+			for index: int in nodes.size():
+				result[nodes[index]] = Vector2(x + (width - nodes.size()) * 50 + index * 100, base_y + depth * 158)
+			band_height = maxf(band_height, (depth + 1) * 158)
+		x += width * 100
+	return {"positions": result, "height": base_y + band_height + 10}
 
 func _make_entry(option: Dictionary, point: Vector2) -> void:
 	var id := StringName(option["skill_id"])
@@ -337,13 +413,20 @@ func _make_entry(option: Dictionary, point: Vector2) -> void:
 	var color := RED if rank > 0 or item_rank > 0 else (BLUE if can_add else GRAY)
 	var card := Panel.new()
 	card.position = point
-	card.size = Vector2(110, 132) if _tree else Vector2(484, 72)
+	card.size = Vector2(92, 122) if _tree else Vector2(484, 58)
 	card.add_theme_stylebox_override("panel", _style(Color.WHITE, BLUE if pending > 0 else color, 2 if pending > 0 or id == _selected else 1))
 	_canvas.add_child(card)
 	var button := SkillButton.new()
 	button.flat = true
-	button.size = Vector2(110, 98) if _tree else Vector2(398, 72)
+	button.skill_id = id
+	var confirmed := maxi(0, rank - pending)
+	confirmed = maxi(confirmed, item_rank)
+	button.drag_allowed = confirmed > 0 and ClassCatalog.skill_definition(id).category == SkillDefinition.Category.ACTIVE and option.get("available", false)
+	button.cast_rank = int(_rank_choices.get(id, 0))
+	if button.cast_rank > confirmed: button.cast_rank = 0
+	button.size = Vector2(92, 94) if _tree else Vector2(398, 58)
 	button.tooltip_text = SkillPresentation.describe(option, draft.preview.get("summary", {}))
+	if button.drag_allowed: button.tooltip_text += "\n[b]Versão para arrastar: %s[/b]" % ("maior rank disponível" if button.cast_rank == 0 else "R%d" % button.cast_rank)
 	button.pressed.connect(_select.bind(id))
 	card.add_child(button)
 	var icon := TextureRect.new()
@@ -354,30 +437,41 @@ func _make_entry(option: Dictionary, point: Vector2) -> void:
 			_gray_material = ShaderMaterial.new()
 			_gray_material.shader = load("res://scripts/ui/skill_locked_icon.gdshader") as Shader
 		icon.material = _gray_material
-	icon.position = Vector2(31, 4) if _tree else Vector2(8, 11)
+	icon.position = Vector2(30, 3) if _tree else Vector2(8, 13)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon.size = Vector2(48, 48)
+	icon.size = Vector2(32, 32)
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	button.add_child(icon)
-	var name_label := _label(button, SkillPresentation.name_of(id), Rect2(4, 54, 102, 30) if _tree else Rect2(66, 5, 324, 32), color, 12, true)
+	var name_label := _label(button, SkillPresentation.name_of(id), Rect2(3, 39, 86, 32) if _tree else Rect2(50, 4, 344, 28), color, 12, true)
 	name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	name_label.size = Vector2(102, 30) if _tree else Vector2(324, 32)
+	name_label.clip_text = true
+	name_label.max_lines_visible = 2
+	name_label.size = Vector2(86, 38) if _tree else Vector2(344, 28)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if _tree else HORIZONTAL_ALIGNMENT_LEFT
 	var state := "Item R%d" % item_rank if item_rank > 0 else ("Disponível" if can_add else ("Aprendida" if rank > 0 else "Bloqueada"))
-	var text := "%d/%d · %s" % [rank, int(option["maximum_rank"]), state]
-	if pending > 0: _label(button, "+%d" % pending, Rect2(82, 4, 28, 20) if _tree else Rect2(357, 5, 36, 20), BLUE, 13)
-	var rank_label := _label(button, text, Rect2(3, 85, 104, 18) if _tree else Rect2(66, 40, 324, 22), color, 10 if _tree else 12)
+	var text := "%d/%d" % [rank, int(option["maximum_rank"])] if _tree else "%d/%d · %s" % [rank, int(option["maximum_rank"]), state]
+	if pending > 0: _label(button, "+%d" % pending, Rect2(69, 3, 23, 20) if _tree else Rect2(357, 5, 36, 20), BLUE, 13)
+	var rank_label := _label(button, text, Rect2(2, 76, 88, 16) if _tree else Rect2(50, 32, 344, 22), color, 10 if _tree else 12)
 	rank_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if _tree else HORIZONTAL_ALIGNMENT_LEFT
 	var plus := _button(card, "+", _change.bind(id, true))
 	var minus := _button(card, "−", _change.bind(id, false))
-	plus.position = Vector2(60, 104) if _tree else Vector2(438, 19)
-	minus.position = Vector2(8, 104) if _tree else Vector2(402, 19)
-	plus.size = Vector2(42, 28) if _tree else Vector2(32, 32)
+	plus.position = Vector2(49, 97) if _tree else Vector2(438, 13)
+	minus.position = Vector2(5, 97) if _tree else Vector2(402, 13)
+	plus.size = Vector2(38, 20) if _tree else Vector2(32, 32)
 	minus.size = plus.size
 	plus.disabled = not can_add or not draft.editable or draft.is_uncertain() or not draft.preview.get("can_apply", false)
 	minus.disabled = pending <= 0 or not draft.editable or draft.is_uncertain()
 	minus.tooltip_text = "Remover apenas um aumento pendente; dependências precisam continuar válidas."
+	var external: Array[String] = []
+	for prerequisite: Variant in SkillPresentation.prerequisites(option):
+		var same_job := false
+		for other: Dictionary in _options:
+			if other["skill_id"] == prerequisite and StringName(other["metadata"].get("required_evolution_id", &"")) == _job: same_job = true
+		if not same_job: external.append("%s R%d" % [SkillPresentation.name_of(StringName(prerequisite)), int(SkillPresentation.prerequisites(option)[prerequisite])])
+	if _tree and not external.is_empty():
+		var requirement_label := _label(_canvas, " + ".join(external), Rect2(point.x - 4, point.y + 123, 100, 27), INK, 10, true)
+		requirement_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	skill_entries[id] = {"button": button, "plus": plus, "minus": minus, "card": card, "option": option}
 
 func _select(id: StringName) -> void:
@@ -385,9 +479,22 @@ func _select(id: StringName) -> void:
 	_show_details()
 
 func _show_details() -> void:
+	_rank_picker.clear()
+	_rank_picker.visible = false
 	for option: Dictionary in _options:
 		if StringName(option["skill_id"]) != _selected: continue
 		var text := SkillPresentation.describe(option, draft.preview.get("summary", {}))
+		var confirmed := maxi(int(option.get("item_rank", 0)), int(option["rank"]) - int(draft.preview.get("pending_counts", {}).get(_selected, 0)))
+		var definition := ClassCatalog.skill_definition(_selected)
+		if confirmed > 0 and definition.category == SkillDefinition.Category.ACTIVE:
+			_rank_picker.visible = true
+			_rank_picker.add_item("Versão: maior rank disponível (R%d)" % confirmed, 0)
+			if SkillCastRank.supports(_selected):
+				for rank: int in range(1, confirmed + 1):
+					var values := definition.rank_definition(rank)
+					_rank_picker.add_item("Versão R%d · %.0f SP base" % [rank, values.sp_cost], rank)
+			for index: int in _rank_picker.item_count:
+				if _rank_picker.get_item_id(index) == int(_rank_choices.get(_selected, 0)): _rank_picker.select(index)
 		var dependents: Array[String] = []
 		for other: Dictionary in _options:
 			var requirements := SkillPresentation.prerequisites(other)
@@ -397,7 +504,12 @@ func _show_details() -> void:
 		text += "\nInvestimento total: Base %d · Evolução %d\nPendências deste lote: %d ponto(s)." % [int(summary.get("base_skill_points_spent", 0)), int(summary.get("evolution_skill_points_spent", 0)), draft.sequence.size()]
 		_details.text = text
 		return
-	_details.text = "Selecione uma habilidade para ver seus efeitos e requisitos.\nCada aumento custa 1 ponto da carteira indicada.\nAtalhos recebem somente habilidades já aprendidas."
+	_details.text = "Selecione uma habilidade para ver seus efeitos e requisitos.\nCada aumento custa 1 ponto da carteira indicada.\nSelecione uma ativa confirmada, escolha a versão e arraste até um atalho."
+
+func _pick_rank(index: int) -> void:
+	_rank_choices[_selected] = _rank_picker.get_item_id(index)
+	_render_skills()
+	_show_details()
 
 func _change(id: StringName, increase: bool) -> void:
 	var result: Dictionary = draft.add(id) if increase else draft.remove(id)
@@ -409,9 +521,3 @@ func _confirm() -> void:
 	_status.text = "Habilidades aplicadas." if result.get("ok", false) else ("Verifique a aplicação pendente." if draft.is_uncertain() else "Aplicação não concluída; confira os requisitos e tente novamente.")
 	_refresh()
 	transaction_result.emit(result)
-
-
-
-
-
-

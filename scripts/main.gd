@@ -15,7 +15,7 @@ const TARGET_DIRECT_PADDING := BattleTargeting.DIRECT_PADDING
 const ACTOR_BODY_OFFSET := BattleTargeting.BODY_OFFSET
 const DEFENDER_WATCH_DIRECT_MELEE_IDS := [
 	&"basic_attack", &"cone_slash", &"brutal_strike", &"concentrated_rage",
-	&"defender_counterstroke", &"defender_line_lock", &"defender_wall_advance", &"defender_reprisal_wave",
+	&"defender_counterstroke", &"defender_line_lock", &"defender_wall_advance", &"defender_reprisal_wave", &"defender_riposte",
 ]
 const TRAINING_BOSS_HP := 50000.0
 const TRAINING_ADD_HP := 1500.0
@@ -118,6 +118,7 @@ var _selected_enemy: CombatActor
 var _feedback_serial := 0
 var cast_intent := CastIntent.new()
 var control_preferences := ControlPreferences.new()
+var _intent_rank := 0
 var action_bar_input := ActionBarInput.new()
 var action_slots: Array[Variant] = []
 var battle_indicators: BattleIndicators
@@ -366,8 +367,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 		var skill := action_bar_input.press(event, control_preferences, action_slots)
-		if skill != &"" and skill in player.available_skill_ids():
+		if skill != &"" and skill in player.available_skill_ids() and SkillCastRank.resolve(skill, action_bar_input.pending_rank, run_state.effective_skill_rank(skill)) > 0:
 			player.cancel_active_cast()
+			_intent_rank = action_bar_input.pending_rank
 			var definition := ClassCatalog.skill_definition(skill)
 			if definition != null and definition.targeting == SkillDefinition.Targeting.SELF:
 				cast_intent.cancel()
@@ -400,13 +402,23 @@ func _key_skill(key: Key) -> StringName:
 	var event := InputEventKey.new()
 	event.keycode = key
 	var index := control_preferences.slot_for_event(event)
-	return StringName(action_slots[index]) if index >= 0 and index < action_slots.size() and action_slots[index] != null else &""
+	return ActionBarLayout.skill_id(action_slots[index]) if index >= 0 and index < action_slots.size() else &""
 
 func _keyboard_text_focused() -> bool:
 	var focused := get_viewport().gui_get_focus_owner()
 	return focused is LineEdit or focused is TextEdit
 
 func _commit_skill(skill: StringName, point: Vector2) -> void:
+	if skill.is_empty():
+		return
+	var previous := player.push_cast_rank(skill, _intent_rank)
+	if player.selected_cast_rank_valid(skill):
+		_commit_skill_with_rank(skill, point)
+	else:
+		status_label.text = "Rank do atalho indisponível."
+	player.restore_cast_rank(previous)
+
+func _commit_skill_with_rank(skill: StringName, point: Vector2) -> void:
 	if skill == &"" or get_tree().paused or run_finished or not player.is_alive() or skill not in player.available_skill_ids():
 		return
 	if spiritualist_drain_state.active:
@@ -457,7 +469,16 @@ func _execute_skill(skill: StringName, point: Vector2, selected_target: CombatAc
 	var definition := ClassCatalog.skill_definition(skill)
 	if definition == null:
 		return
-	if definition.handler_id == SkillDefinition.Handler.SLASH:
+	if definition.handler_id == SkillDefinition.Handler.DEFENDER_RIPOSTE:
+		if not player.use_defender_riposte(direction, enemies):
+			status_label.text = "Rebater exige token e um alvo frontal ao alcance."
+	elif definition.handler_id == SkillDefinition.Handler.DEFENDER_RETREAT_GUARD:
+		if not player.use_defender_retreat_guard(direction):
+			_report_skill_failure(skill, selected_target)
+	elif definition.handler_id == SkillDefinition.Handler.BERSERKER_PURSUIT_CUT:
+		if not player.use_berserker_pursuit_cut(selected_target):
+			_report_skill_failure(skill, selected_target)
+	elif definition.handler_id == SkillDefinition.Handler.SLASH:
 		if not player.use_slash(direction, enemies):
 			_show_skill_blocked(definition.display_name, player.slash_cooldown, player.skill_cost(skill))
 	elif definition.handler_id == SkillDefinition.Handler.DASH:
@@ -668,7 +689,8 @@ func _report_skill_failure(skill: StringName, selected_target: CombatActor = nul
 	else:
 		_show_skill_blocked(definition.display_name, player.skill_cooldown(skill), player.skill_cost(skill), skill)
 
-func _select_skill_from_bar(skill: StringName) -> void:
+func _select_skill_from_bar(skill: StringName, rank: int = 0) -> void:
+	_intent_rank = rank
 	if get_tree().paused or run_finished or not player.is_alive():
 		return
 	action_bar_input.cancel() # A card creates mouse-only confirmation, not held-key release.
@@ -683,6 +705,17 @@ func _select_skill_from_bar(skill: StringName) -> void:
 	_update_aim(_world_mouse_point())
 
 func _update_aim(point: Vector2) -> void:
+	if cast_intent.active_skill.is_empty():
+		_update_aim_with_rank(point)
+		return
+	var previous := player.push_cast_rank(cast_intent.active_skill, _intent_rank)
+	if player.selected_cast_rank_valid(cast_intent.active_skill):
+		_update_aim_with_rank(point)
+	else:
+		battle_controls.set_aim_text("Rank do atalho indisponível.")
+	player.restore_cast_rank(previous)
+
+func _update_aim_with_rank(point: Vector2) -> void:
 	var skill := cast_intent.active_skill
 	if geometer_casting != null:
 		geometer_casting.preview_command = null
@@ -772,6 +805,7 @@ func _update_aim(point: Vector2) -> void:
 	bottom_controls.visible = false
 
 func _cancel_aim() -> void:
+	_intent_rank = 0
 	cast_intent.cancel()
 	action_bar_input.cancel()
 	if geometer_casting != null:
@@ -831,7 +865,7 @@ func _change_action_slots(slots: Array[Variant]) -> void:
 			status_label.text = "Não foi possível salvar os atalhos; organização anterior mantida."
 			battle_controls.set_action_bar(player.available_skill_ids(), action_slots, control_preferences)
 			return
-	action_slots = slots.duplicate()
+	action_slots = slots.duplicate(true)
 	# No build, rank, stats, cooldown or resource recalculation for shortcut edits.
 
 func _change_action_bindings() -> void:
@@ -1013,7 +1047,7 @@ func _on_berserker_rift_hit_requested(request: DamageRequest, target_actor: Comb
 		return
 	var result := target_actor.apply_damage(request, rng)
 	if bool(result.get("can_trigger_effects", false)) and float(result.get("actual_damage", 0.0)) > 0.0 and target_actor.is_alive():
-		target_actor.apply_bleed(bleed_request, PlayerActor.BERSERKER_RIFT_BLEED_DURATION)
+		target_actor.apply_bleed(bleed_request, float(bleed_request.effect_snapshot.get("bleed_duration", PlayerActor.BERSERKER_RIFT_BLEED_DURATION)))
 
 func _on_berserker_breath_hit_requested(request: DamageRequest, target_actor: CombatActor, heal_fraction: float, marked_before_hit: bool) -> void:
 	if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
@@ -2452,6 +2486,7 @@ func _update_hud() -> void:
 	augment_button.visible = run_state.pending_choices > 0
 	if battle_controls != null:
 		var available := player.available_skill_ids()
+		battle_controls.set_skill_ranks(run_state.composed_build().get("skill_ranks", {}))
 		if battle_controls.learned_skills != available:
 			battle_controls.set_action_bar(available, action_slots, control_preferences)
 			if not cast_intent.active_skill.is_empty() and cast_intent.active_skill not in available:
@@ -2479,8 +2514,35 @@ func _update_hud() -> void:
 				var suspended_text := "Construção suspensa — sem efeitos.\n" if geometer_casting.construction.suspended else ""
 				battle_controls.skill_buttons[skill_id].tooltip_text = suspended_text + ClassCatalog.geometer_triangle_description(elements)
 
+		_update_slot_skill_states()
+
+func _update_slot_skill_states() -> void:
+	for index: int in action_slots.size():
+		var skill := ActionBarLayout.skill_id(action_slots[index])
+		if skill.is_empty():
+			continue
+		var requested := ActionBarLayout.selected_rank(action_slots[index])
+		var previous := player.push_cast_rank(skill, requested)
+		var accessible := skill in player.available_skill_ids() and player.selected_cast_rank_valid(skill)
+		var definition := ClassCatalog.skill_definition(skill)
+		var resolved := player.skill_rank(skill)
+		var cost := player.skill_cost(skill)
+		if not accessible and requested > 0:
+			var preview := SkillEffectResolver.preview_retained(skill, requested, run_state.composed_build())
+			var authored := definition.rank_definition(requested)
+			cost = float(preview["values"]["sp_cost"]) if preview.get("ok", false) else (authored.sp_cost if authored != null else 0.0)
+		var state := _display_skill_state(skill, cost) if accessible else "RANK INDISPONÍVEL"
+		var active := (cast_intent.active_skill == skill and _intent_rank == requested) or (player.active_cast_skill == skill and player.active_cast_rank == resolved)
+		var rank_text := " R%d" % (resolved if resolved > 0 else requested) if not definition.ranks.is_empty() else ""
+		battle_controls.show_skill_state(skill, "%s · %s%s\n%d SP · %s" % [control_preferences.binding_label(index), definition.display_name.to_upper(), rank_text, ceili(cost), state], active, requested)
+		player.restore_cast_rank(previous)
+
 func _skill_input_label(skill_id: StringName) -> String:
-	var index := action_slots.find(skill_id)
+	var index := -1
+	for slot: int in action_slots.size():
+		if ActionBarLayout.skill_id(action_slots[slot]) == skill_id:
+			index = slot
+			break
 	return control_preferences.binding_label(index) if index >= 0 else "Sem atalho"
 
 func _display_skill_state(skill_id: StringName, sp_cost: float) -> String:
@@ -2876,13 +2938,14 @@ func _build_ui() -> void:
 	battle_controls.skill_selected.connect(_select_skill_from_bar)
 	battle_controls.settings_requested.connect(_toggle_settings)
 	battle_controls.preferences_changed.connect(_change_control_preferences)
-	action_slots = run_state.build_snapshot.action_slots.duplicate()
+	action_slots = run_state.build_snapshot.action_slots.duplicate(true)
 	if action_slots.is_empty():
 		action_slots = ActionBarLayout.from_legacy(run_state.build_snapshot.active_slots)
 	if not ActionBarLayout.valid(action_slots, player.available_skill_ids(), ItemSkillAdapters.reference_ids(player.class_id)):
 		for index: int in action_slots.size():
-			if action_slots[index] != null and action_slots[index] not in player.available_skill_ids() and action_slots[index] not in ItemSkillAdapters.reference_ids(player.class_id):
+			if action_slots[index] != null and ActionBarLayout.skill_id(action_slots[index]) not in player.available_skill_ids() and ActionBarLayout.skill_id(action_slots[index]) not in ItemSkillAdapters.reference_ids(player.class_id):
 				action_slots[index] = null
+	battle_controls.set_skill_ranks(run_state.composed_build().get("skill_ranks", {}))
 	battle_controls.set_action_bar(player.available_skill_ids(), action_slots, control_preferences)
 	battle_controls.layout_changed.connect(_change_action_slots)
 	battle_controls.bindings_changed.connect(_change_action_bindings)
@@ -3164,11 +3227,17 @@ func _open_skill_window() -> void:
 	_clear_hover()
 	reward_feedback.hide_history()
 	reward_feedback.hide_recent()
+	var composed := run_state.composed_build()
+	if not composed.get("ok", false):
+		status_label.text = "Habilidades indisponíveis — build inválida."
+		return
+	battle_controls.set_skill_ranks(composed["skill_ranks"])
 	var skill_preview := SkillPresentation.run_preview(run_state, persistent_facade)
 	skill_window.configure_catalog(skill_preview["skills"], skill_preview["summary"], skill_preview["base_class_id"])
 	battle_controls.action_editor.reparent(skill_window.action_host)
 	battle_controls.action_editor.slots_grid.columns = 6
 	skill_window.open()
+	battle_controls.set_skill_ranks(composed["skill_ranks"])
 	get_tree().paused = true
 
 func _close_skill_window() -> void:

@@ -108,7 +108,7 @@ const ELEMENTALIST_RESONANCE_WINDOW := 6.0
 const BERSERKER_DIRECT_MELEE_IDS := [
 	&"basic_attack", &"cone_slash", &"brutal_strike", &"concentrated_rage",
 	&"berserker_rupture", &"berserker_execution", &"berserker_wound_leap",
-	&"berserker_blood_rift", &"berserker_breath_steal",
+	&"berserker_blood_rift", &"berserker_breath_steal", &"berserker_pursuit_cut",
 ]
 
 var navigation: ArenaNavigation
@@ -162,8 +162,31 @@ var _dash_speed := 0.0
 var _defender_advance_targets: Array[CombatActor] = []
 var _defender_advance_hit := false
 var _berserker_leap_targets: Array[CombatActor] = []
+var _berserker_leap_request: DamageRequest
+var _defender_advance_request: DamageRequest
 var _berserker_leap_active := false
 var _berserker_leap_hit := false
+var _cast_rank_context: Dictionary = {}
+var _prepared_rank_context: Dictionary = {}
+var active_cast_rank := 0
+
+## Scoped context never mutates learning, grants, passives or wallets.
+func push_cast_rank(skill_id: StringName, requested_rank: int = 0) -> Dictionary:
+	var previous := _cast_rank_context
+	var rank := SkillCastRank.resolve(skill_id, requested_rank, run_state.effective_skill_rank(skill_id))
+	var captured := run_state.skill_effect_capture(skill_id, requested_rank)
+	_cast_rank_context = {"skill_id": skill_id, "rank": rank, "requested_rank": requested_rank, "capture": captured}
+	return previous
+
+func restore_cast_rank(previous: Dictionary) -> void:
+	_cast_rank_context = previous
+
+func selected_cast_rank_valid(skill_id: StringName) -> bool:
+	if _cast_rank_context.get("skill_id", &"") != skill_id:
+		return true
+	var selected := int(_cast_rank_context.get("rank", 0))
+	return selected > 0 and selected <= run_state.effective_skill_rank(skill_id) and bool(_cast_rank_context.get("capture", {}).get("ok", false))
+
 var active_cast_skill: StringName = &""
 var active_cast_remaining := 0.0
 var active_cast_total := 0.0
@@ -194,6 +217,9 @@ var terrifying_shout_visual_time := 0.0
 var defender_token_remaining := 0.0
 var defender_token_notice := ""
 var defender_token_notice_remaining := 0.0
+var defender_retreat_guard_remaining := 0.0
+var defender_retreat_guard_facing := Vector2.RIGHT
+var defender_retreat_guard_reduction := 0.0
 var defender_counter_guard_remaining := 0.0
 var defender_counter_guard_facing := Vector2.RIGHT
 var defender_advance_guard_active := false
@@ -523,7 +549,7 @@ func available_skill_ids() -> Array[StringName]:
 func apply_run_modifiers(state: RunState) -> void:
 	run_state = state
 	_refresh_equipment_visual()
-	if not active_cast_skill.is_empty() and active_cast_skill not in available_skill_ids():
+	if not active_cast_skill.is_empty() and (active_cast_skill not in available_skill_ids() or active_cast_rank > run_state.effective_skill_rank(active_cast_skill)):
 		cancel_active_cast()
 	if sentinel_state.explosive_prepared and &"sentinel_explosive_shot" not in available_skill_ids():
 		cancel_sentinel_preparation()
@@ -715,6 +741,8 @@ func use_berserker_wound_leap(direction: Vector2, enemies: Array[CombatActor]) -
 	_dash_speed = distance / DASH_DURATION
 	_dash_active = true
 	_berserker_leap_active = true
+	var definition := ClassCatalog.skill_definition(&"berserker_wound_leap")
+	_berserker_leap_request = _make_physical_request(null, &"berserker_wound_leap", stat_breakdown.value(&"melee_attack") * rank_definition.power, definition.accuracy_mode, definition.can_crit)
 	_berserker_leap_targets = enemies.duplicate()
 	_berserker_leap_hit = false
 	_path.clear()
@@ -750,6 +778,8 @@ func use_berserker_blood_rift(direction: Vector2, enemies: Array[CombatActor]) -
 		var direct := _make_physical_request(enemy, &"berserker_blood_rift", melee_attack * rank_definition.power, definition.accuracy_mode, definition.can_crit)
 		var bleed := _make_physical_request(enemy, &"berserker_blood_rift_tick", melee_attack * rank_definition.secondary_power, DamageRequest.AccuracyMode.GEOMETRY, false)
 		bleed.is_secondary = true
+		var bleeding := _runtime_rank_definition(&"berserker_deep_bleeding") if run_state.build_snapshot.has_passive(&"berserker_deep_bleeding") else null
+		bleed.effect_snapshot["bleed_duration"] = BERSERKER_RIFT_BLEED_DURATION + (bleeding.power if bleeding != null else 0.0)
 		berserker_rift_hit_requested.emit(direct, enemy, bleed)
 	presentation_action.emit(&"slash", facing, 0.25)
 	resources_changed.emit()
@@ -933,6 +963,8 @@ func use_defender_wall_advance(direction: Vector2, enemies: Array[CombatActor]) 
 	_dash_speed = distance / DASH_DURATION
 	_dash_active = true
 	defender_advance_guard_active = true
+	var definition := ClassCatalog.skill_definition(&"defender_wall_advance")
+	_defender_advance_request = _make_physical_request(null, &"defender_wall_advance", stat_breakdown.value(&"melee_attack") * rank_definition.power, definition.accuracy_mode, definition.can_crit)
 	defender_advance_guard_facing = facing
 	_defender_advance_targets = enemies.duplicate()
 	_defender_advance_hit = false
@@ -1522,6 +1554,8 @@ func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Diction
 		front_reduction = maxf(front_reduction, DEFENDER_COUNTER_GUARD_REDUCTION)
 	if _is_defender() and defender_advance_guard_active and _faces_position(defender_advance_guard_facing, source.global_position):
 		front_reduction = maxf(front_reduction, DEFENDER_ADVANCE_GUARD_REDUCTION)
+	if _is_defender() and defender_retreat_guard_remaining > 0.0 and _faces_position(defender_retreat_guard_facing, source.global_position):
+		front_reduction = maxf(front_reduction, defender_retreat_guard_reduction)
 	var effective_request := request.copy() if front_reduction > 0.0 else request
 	if front_reduction > 0.0:
 		effective_request.damage_dealt_multiplier *= 1.0 - front_reduction
@@ -1549,6 +1583,8 @@ func _faces_position(facing: Vector2, position: Vector2) -> bool:
 	return not offset.is_zero_approx() and offset.normalized().dot(facing) >= cos(SkillGeometry.DEFENDER_GUARD_HALF_ANGLE)
 
 func _defender_event_facing() -> Vector2:
+	if defender_retreat_guard_remaining > 0.0:
+		return defender_retreat_guard_facing
 	if defender_advance_guard_active:
 		return defender_advance_guard_facing
 	if defender_counter_guard_remaining > 0.0:
@@ -1610,7 +1646,9 @@ func defender_feedback_text() -> String:
 		lines.append(defender_token_notice)
 	else:
 		lines.append("CONTRA-ATAQUE SEM TOKEN")
-	if defender_counter_guard_remaining > 0.0:
+	if defender_retreat_guard_remaining > 0.0:
+		lines.append("GUARDA DE RETIRADA · %.1fs" % defender_retreat_guard_remaining)
+	elif defender_counter_guard_remaining > 0.0:
 		lines.append("GUARDA FRONTAL · %.1fs" % defender_counter_guard_remaining)
 	elif defender_advance_guard_active:
 		lines.append("GUARDA FRONTAL · AVANÇO")
@@ -1621,6 +1659,8 @@ func clear_defender_state() -> void:
 	defender_token_notice = ""
 	defender_token_notice_remaining = 0.0
 	defender_counter_guard_remaining = 0.0
+	defender_retreat_guard_remaining = 0.0
+	defender_retreat_guard_reduction = 0.0
 	_stop_dash()
 	defender_guard_return_cooldown = 0.0
 	defender_anchor_remaining = 0.0
@@ -2215,6 +2255,8 @@ func begin_skill_cast(skill_id: StringName, point: Vector2, enemy: CombatActor =
 	if definition.targeting == SkillDefinition.Targeting.SINGLE_TARGET and not can_target_skill(skill_id, enemy):
 		return false
 	cancel_active_cast()
+	_prepared_rank_context = _cast_rank_context.duplicate(true) if _cast_rank_context.get("skill_id", &"") == skill_id else {"skill_id": skill_id, "rank": skill_rank(skill_id), "requested_rank": 0, "capture": run_state.skill_effect_capture(skill_id)}
+	active_cast_rank = skill_rank(skill_id)
 	active_cast_skill = skill_id
 	active_cast_total = cast_time
 	active_cast_remaining = active_cast_total
@@ -2236,6 +2278,8 @@ func cancel_active_cast() -> bool:
 	if active_cast_skill == &"":
 		return false
 	active_cast_skill = &""
+	active_cast_rank = 0
+	_prepared_rank_context.clear()
 	active_cast_remaining = 0.0
 	active_cast_total = 0.0
 	_active_cast_target_id = 0
@@ -2344,6 +2388,8 @@ func skill_projectile_speed(skill_id: StringName) -> float:
 	return definition.projectile_speed if definition != null else 0.0
 
 func skill_rank(skill_id: StringName) -> int:
+	if _cast_rank_context.get("skill_id", &"") == skill_id:
+		return int(_cast_rank_context.get("rank", 0))
 	return run_state.effective_skill_rank(skill_id) if run_state != null else 0
 
 func skill_rank_definition(skill_id: StringName) -> SkillRankDefinition:
@@ -2363,15 +2409,19 @@ func _capture_rank_definitions() -> void:
 			_rank_definitions[skill_id] = rank_definition
 
 func _runtime_rank_definition(skill_id: StringName) -> SkillRankDefinition:
+	if _cast_rank_context.get("skill_id", &"") == skill_id:
+		var captured: Dictionary = _cast_rank_context.get("capture", {})
+		return captured.get("rank_definition") if selected_cast_rank_valid(skill_id) else null
 	if run_state != null and ClassCatalog.skill_definition(skill_id) != null:
 		var revision := run_state.composition_revision()
 		if revision != _effect_rank_revision:
 			_effect_rank_cache.clear()
 			_effect_rank_revision = revision
-		if not _effect_rank_cache.has(skill_id):
+		var key := StringName("%s:%d" % [skill_id, skill_rank(skill_id)])
+		if not _effect_rank_cache.has(key):
 			var captured := run_state.skill_effect_capture(skill_id)
-			_effect_rank_cache[skill_id] = captured["rank_definition"] if captured["ok"] else null
-		return _effect_rank_cache[skill_id]
+			_effect_rank_cache[key] = captured["rank_definition"] if captured["ok"] else null
+		return _effect_rank_cache[key]
 	return _rank_definitions.get(skill_id)
 
 func _process(delta: float) -> void:
@@ -2443,6 +2493,7 @@ func _advance_player(delta: float) -> void:
 	if token_was_active and defender_token_remaining <= 0.0:
 		_set_defender_token_notice("TOKEN EXPIROU")
 	defender_counter_guard_remaining = maxf(0.0, defender_counter_guard_remaining - delta)
+	defender_retreat_guard_remaining = maxf(0.0, defender_retreat_guard_remaining - delta)
 	if defender_token_remaining > 0.0 or defender_counter_guard_remaining > 0.0 or defender_advance_guard_active:
 		queue_redraw()
 	defender_guard_return_cooldown = maxf(0.0, defender_guard_return_cooldown - delta)
@@ -2551,6 +2602,9 @@ func _advance_active_cast(delta: float) -> void:
 	active_cast_remaining = maxf(0.0, active_cast_remaining - delta)
 	if active_cast_remaining > 0.0:
 		return
+	var completed_context := _prepared_rank_context
+	_prepared_rank_context = {}
+	active_cast_rank = 0
 	var completed_skill := active_cast_skill
 	var completed_point := _active_cast_point
 	var completed_target_id := _active_cast_target_id
@@ -2563,7 +2617,11 @@ func _advance_active_cast(delta: float) -> void:
 	if completed_geometer_command != null:
 		geometer_cast_ready.emit(completed_geometer_command)
 	else:
-		skill_cast_ready.emit(completed_skill, completed_point, completed_target_id)
+		var previous := _cast_rank_context
+		_cast_rank_context = completed_context
+		if selected_cast_rank_valid(completed_skill):
+			skill_cast_ready.emit(completed_skill, completed_point, completed_target_id)
+		_cast_rank_context = previous
 
 func _advance_dash(delta: float) -> void:
 	var previous_position := global_position
@@ -2590,6 +2648,8 @@ func _stop_dash() -> void:
 	_defender_advance_targets.clear()
 	_defender_advance_hit = false
 	_berserker_leap_active = false
+	_berserker_leap_request = null
+	_defender_advance_request = null
 	_berserker_leap_targets.clear()
 	_berserker_leap_hit = false
 	velocity = Vector2.ZERO
@@ -2606,7 +2666,8 @@ func _try_defender_advance_hit(from: Vector2, to: Vector2) -> void:
 		if closest.distance_to(enemy.global_position) > collision_radius + enemy.collision_radius:
 			continue
 		_defender_advance_hit = true
-		var request := _make_physical_request(enemy, &"defender_wall_advance", stat_breakdown.value(&"melee_attack") * rank_definition.power, definition.accuracy_mode, definition.can_crit)
+		var request := _defender_advance_request.copy()
+		request.target_id = enemy.get_instance_id()
 		defender_hit_requested.emit(request, enemy, 0.0, defender_advance_guard_facing)
 		return
 
@@ -2630,7 +2691,8 @@ func _try_berserker_leap_hit(from: Vector2, to: Vector2) -> void:
 	_berserker_leap_hit = true
 	var definition := ClassCatalog.skill_definition(&"berserker_wound_leap")
 	var rank_definition := _runtime_rank_definition(&"berserker_wound_leap")
-	var request := _make_physical_request(chosen, &"berserker_wound_leap", stat_breakdown.value(&"melee_attack") * rank_definition.power, definition.accuracy_mode, definition.can_crit)
+	var request := _berserker_leap_request.copy()
+	request.target_id = chosen.get_instance_id()
 	attack_requested.emit(request, chosen)
 
 func _regenerate_sp(delta: float, simulation_paused: bool) -> bool:
@@ -2708,8 +2770,8 @@ func _try_basic_attack() -> void:
 func _make_request(enemy: CombatActor, skill_id: StringName, accuracy_mode: DamageRequest.AccuracyMode, can_crit: bool) -> DamageRequest:
 	var request := DamageRequest.new()
 	request.context = _emission_context.copy_context() if _emission_context != null else null
-	var composed := run_state.composed_build()
-	request.effect_snapshot = {"procs": composed.get("procs", []).duplicate(true), "kit_policies": composed.get("kit_policies", {}).duplicate(true), "build_version": run_state.build_snapshot.build_version}
+	var composed: Dictionary = _cast_rank_context.get("capture", {}) if not _cast_rank_context.is_empty() else run_state.composed_build()
+	request.effect_snapshot = {"procs": composed.get("procs", []).duplicate(true), "kit_policies": composed.get("kit_policies", {}).duplicate(true), "build_version": composed.get("build_version", run_state.build_snapshot.build_version), "cast_rank": int(_cast_rank_context.get("rank", skill_rank(skill_id))), "cast_skill_id": _cast_rank_context.get("skill_id", skill_id)}
 	request.weapon_instance_ids = weapon_ids_for_skill(skill_id)
 	request.source_id = get_instance_id()
 	request.target_id = enemy.get_instance_id() if enemy != null else 0
@@ -2756,7 +2818,7 @@ func _magic_power(skill_id: StringName) -> float:
 func _can_spend(skill_id: StringName) -> bool:
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var has_runtime_definition := definition != null and (definition.ranks.is_empty() or _runtime_rank_definition(skill_id) != null)
-	return run_state.effect_ledger.can_create_root() and run_state.effects_valid() and has_projectile_capacity(skill_id) and has_runtime_definition and skill_id in available_skill_ids() and is_alive() and skill_cooldown(skill_id) <= 0.0 and sentinel_free_sp() >= skill_cost(skill_id)
+	return selected_cast_rank_valid(skill_id) and run_state.effect_ledger.can_create_root() and run_state.effects_valid() and has_projectile_capacity(skill_id) and has_runtime_definition and skill_id in available_skill_ids() and is_alive() and skill_cooldown(skill_id) <= 0.0 and sentinel_free_sp() >= skill_cost(skill_id)
 
 func _spend(skill_id: StringName) -> void:
 	_begin_effect_emission()
@@ -3131,7 +3193,7 @@ func _append_kit_candidate(candidates: Array[Dictionary], family: StringName, ta
 
 func weapon_ids_for_skill(skill_id: StringName) -> Array[StringName]:
 	var result: Array[StringName] = []
-	var direct: Array[StringName] = [&"basic_attack", &"slash", &"cone_slash", &"brutal_strike", &"concentrated_rage", &"defender_counterstroke", &"defender_wall_advance", &"berserker_wound_leap", &"double_shot", &"piercing_arrow", &"slowing_arrow", &"arrow_rain", &"hunter_covering_shot", &"sentinel_headshot", &"sentinel_piercing_shot", &"sentinel_concussion_shot", &"sentinel_explosive_shot"]
+	var direct: Array[StringName] = [&"basic_attack", &"slash", &"cone_slash", &"brutal_strike", &"concentrated_rage", &"defender_counterstroke", &"defender_riposte", &"defender_wall_advance", &"berserker_wound_leap", &"double_shot", &"piercing_arrow", &"slowing_arrow", &"arrow_rain", &"hunter_covering_shot", &"sentinel_headshot", &"sentinel_piercing_shot", &"sentinel_concussion_shot", &"sentinel_explosive_shot"]
 	if skill_id not in direct and skill_id not in BERSERKER_DIRECT_MELEE_IDS:
 		return result
 	var id: Variant = run_state.build_snapshot.equipped[&"main_hand"]
@@ -3147,3 +3209,68 @@ func _refresh_equipment_visual() -> void:
 	if key == _equipment_visual_key: return
 	_equipment_visual_key = key
 	character_animation.equipment_visual = EquipmentAttachmentVisual.describe(snapshot,run_state.effect_catalog())
+
+func use_defender_riposte(direction: Vector2, enemies: Array[CombatActor]) -> bool:
+	var id := &"defender_riposte"
+	var rank := _runtime_rank_definition(id)
+	if not _is_defender() or rank == null or not has_defender_token() or not _can_spend(id) or navigation == null:
+		return false
+	var facing := direction.normalized() if not direction.is_zero_approx() else _last_facing
+	var chosen: CombatActor
+	var distance := INF
+	for enemy: CombatActor in enemies:
+		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive(): continue
+		var offset := enemy.global_position - global_position
+		if offset.length() < distance and SkillGeometry.cone_contains(offset, facing, rank.range, deg_to_rad(35.0)) and navigation.is_segment_clear(global_position, enemy.global_position, 0.0):
+			chosen = enemy
+			distance = offset.length()
+	if chosen == null: return false
+	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
+	_spend(id)
+	_consume_defender_token()
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(id)
+	attack_requested.emit(_make_physical_request(chosen, id, stat_breakdown.value(&"melee_attack") * rank.power, definition.accuracy_mode, definition.can_crit), chosen)
+	presentation_action.emit(&"slash", _resolved_facing(facing), 0.2)
+	resources_changed.emit()
+	return true
+
+func use_defender_retreat_guard(direction: Vector2) -> bool:
+	var id := &"defender_retreat_guard"
+	var rank := _runtime_rank_definition(id)
+	if not _is_defender() or rank == null or not _can_spend(id) or navigation == null or is_rooted() or not direction.is_finite():
+		return false
+	var facing := direction.normalized() if not direction.is_zero_approx() else _last_facing
+	var endpoint := navigation.move_until_blocked(global_position, global_position - facing * rank.range)
+	if endpoint.distance_to(global_position) <= MOVEMENT_EPSILON: return false
+	_spend(id)
+	global_position = endpoint
+	_path.clear()
+	_has_path_goal = false
+	velocity = Vector2.ZERO
+	target = null
+	_attack_engaged = false
+	_stop_dash()
+	defender_retreat_guard_facing = facing
+	defender_retreat_guard_reduction = rank.power
+	defender_retreat_guard_remaining = rank.secondary_power
+	_update_defender_anchor_presence()
+	presentation_action.emit(&"dash", _resolved_facing(facing), 0.18)
+	resources_changed.emit()
+	return true
+
+func use_berserker_pursuit_cut(enemy: CombatActor) -> bool:
+	var id := &"berserker_pursuit_cut"
+	var rank := _runtime_rank_definition(id)
+	if not _is_berserker() or rank == null or not _can_spend(id) or not can_target_skill(id, enemy) or navigation == null or not navigation.is_segment_clear(global_position, enemy.global_position, 0.0):
+		return false
+	var wounded := berserker_wound_stacks(enemy.get_instance_id()) > 0
+	var power := rank.power + (rank.secondary_power if wounded else 0.0)
+	var definition := ClassCatalog.skill_definition(id)
+	_commit_action(definition.action_kind)
+	_spend(id)
+	reveal_from_offense()
+	attack_requested.emit(_make_physical_request(enemy, id, stat_breakdown.value(&"melee_attack") * power, definition.accuracy_mode, definition.can_crit), enemy)
+	presentation_action.emit(&"slash", _resolved_facing(aim_direction(enemy.global_position)), 0.2)
+	resources_changed.emit()
+	return true

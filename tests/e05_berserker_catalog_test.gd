@@ -8,19 +8,19 @@ func _initialize() -> void:
 	var ids: Array[StringName] = [
 		&"berserker_rupture", &"berserker_obstinacy", &"berserker_wound_leap",
 		&"berserker_execution", &"berserker_pursuit", &"berserker_blood_rift",
-		&"berserker_breath_steal",
+		&"berserker_breath_steal", &"berserker_pursuit_cut", &"berserker_deep_bleeding",
 	]
-	var gates: Array[int] = [20, 23, 25, 28, 31, 34, 37]
+	var gates: Array[int] = [20, 23, 25, 28, 31, 34, 37, 31, 37]
 	var evolution := catalog.evolution_definition(&"berserker")
 	_check(catalog.is_valid() and evolution != null and evolution.content_ready and evolution.entry_skill_id == &"berserker_rupture" and evolution.exclusive_skill_ids == ids, "Berserker enables its complete exclusive library")
 	var library := catalog.skill_ids_for_identity(&"swordsman", &"berserker")
-	_check(&"slash" in library and library.slice(library.size() - 7) == ids and &"defender_counterstroke" not in library and &"berserker_rupture" not in catalog.skill_ids_for_identity(&"swordsman", &"defender"), "Berserker resolves only its own branch and inherited Swordsman skills")
+	_check(&"slash" in library and library.slice(library.size() - ids.size()) == ids and &"defender_counterstroke" not in library and &"berserker_rupture" not in catalog.skill_ids_for_identity(&"swordsman", &"defender"), "Berserker resolves only its own branch and inherited Swordsman skills")
 	for index: int in ids.size():
 		var id := ids[index]
 		var metadata := catalog.skill_metadata(id)
 		var definition := ClassCatalog.skill_definition(id)
 		_check(not metadata.is_empty() and metadata["wallet"] == ProfileCatalog.EVOLUTION_WALLET and metadata["required_evolution_id"] == &"berserker" and metadata["rank_requirements"][1]["job_level"] == gates[index], "%s uses approved evolution wallet and job gate" % id)
-		_check(definition != null and definition.is_rank_catalog_valid() and definition.ranks.size() == (3 if id in [&"berserker_obstinacy", &"berserker_pursuit"] else 5), "%s has a complete valid rank table" % id)
+		_check(definition != null and definition.is_rank_catalog_valid() and definition.ranks.size() == (3 if id in [&"berserker_obstinacy", &"berserker_pursuit", &"berserker_deep_bleeding"] else 5), "%s has a complete valid rank table" % id)
 		_check(not catalog.skill_is_allowed(id, &"mage", &"berserker") and not catalog.skill_is_allowed(id, &"swordsman", &"defender"), "%s cannot leak into another origin or branch" % id)
 	_check(catalog.evolution_is_ready(&"berserker", &"swordsman"), "completed Berserker can be selected in production")
 	_check(ClassCatalog.skill_definition(&"berserker_wound_leap").action_kind == SkillDefinition.ActionKind.OFFENSIVE and ClassCatalog.skill_definition(&"berserker_blood_rift").rank_definition(1).variable_cast_time == 0.3, "Leap is offensive and Rift has approved variable preparation")

@@ -427,21 +427,27 @@ func _register_defender_skills() -> void:
 	var origin: Array[StringName] = [&"swordsman"]
 	add_skill(&"defender_counterstroke", origin, ACTIVE, EVOLUTION_WALLET, 1, 4, &"defender", _evolution_rank_requirements(5, 20))
 	add_skill(&"defender_watch", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"defender", _evolution_rank_requirements(3, 23))
-	add_skill(&"defender_anchor", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _evolution_rank_requirements(5, 25))
-	add_skill(&"defender_line_lock", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _evolution_rank_requirements(5, 28))
-	add_skill(&"defender_guard_return", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"defender", _evolution_rank_requirements(3, 31))
-	add_skill(&"defender_wall_advance", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _evolution_rank_requirements(5, 34))
-	add_skill(&"defender_reprisal_wave", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _evolution_rank_requirements(5, 37))
+	add_skill(&"defender_anchor", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _evolution_rank_requirements(5, 25, {&"shield_wall": 2}))
+	add_skill(&"defender_line_lock", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _evolution_rank_requirements(5, 28, {&"defender_anchor": 2}))
+	add_skill(&"defender_guard_return", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"defender", _evolution_rank_requirements(3, 31, {&"defender_counterstroke": 2}))
+	add_skill(&"defender_wall_advance", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _evolution_rank_requirements(5, 34, {&"dash": 2}))
+	add_skill(&"defender_reprisal_wave", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _evolution_rank_requirements(5, 37, {&"defender_counterstroke": 3}))
+
+	add_skill(&"defender_riposte", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _evolution_rank_requirements(5, 31, {&"defender_guard_return": 2}))
+	add_skill(&"defender_retreat_guard", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"defender", _evolution_rank_requirements(5, 25))
 
 func _register_berserker_skills() -> void:
 	var origin: Array[StringName] = [&"swordsman"]
 	add_skill(&"berserker_rupture", origin, ACTIVE, EVOLUTION_WALLET, 1, 4, &"berserker", _evolution_rank_requirements(5, 20))
-	add_skill(&"berserker_obstinacy", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"berserker", _evolution_rank_requirements(3, 23))
-	add_skill(&"berserker_wound_leap", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"berserker", _evolution_rank_requirements(5, 25))
-	add_skill(&"berserker_execution", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"berserker", _evolution_rank_requirements(5, 28))
-	add_skill(&"berserker_pursuit", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"berserker", _evolution_rank_requirements(3, 31))
+	add_skill(&"berserker_obstinacy", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"berserker", _evolution_rank_requirements(3, 23, {&"fury": 3}))
+	add_skill(&"berserker_wound_leap", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"berserker", _evolution_rank_requirements(5, 25, {&"dash": 2}))
+	add_skill(&"berserker_execution", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"berserker", _evolution_rank_requirements(5, 28, {&"berserker_rupture": 3}))
+	add_skill(&"berserker_pursuit", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"berserker", _evolution_rank_requirements(3, 31, {&"berserker_rupture": 2}))
 	add_skill(&"berserker_blood_rift", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"berserker", _evolution_rank_requirements(5, 34))
-	add_skill(&"berserker_breath_steal", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"berserker", _evolution_rank_requirements(5, 37))
+	add_skill(&"berserker_breath_steal", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"berserker", _evolution_rank_requirements(5, 37, {&"berserker_pursuit": 2}))
+
+	add_skill(&"berserker_pursuit_cut", origin, ACTIVE, EVOLUTION_WALLET, 0, 5, &"berserker", _evolution_rank_requirements(5, 31, {&"berserker_wound_leap": 2}))
+	add_skill(&"berserker_deep_bleeding", origin, PASSIVE, EVOLUTION_WALLET, 0, 3, &"berserker", _evolution_rank_requirements(3, 37, {&"berserker_blood_rift": 3}))
 
 func _register_elementalist_skills() -> void:
 	var origin: Array[StringName] = [&"mage"]
@@ -491,10 +497,10 @@ func _register_hunter_skills() -> void:
 		var free_rank := 1 if skill_id == &"hunter_freezing_trap" else 0
 		add_skill(skill_id, origin, PASSIVE if maximum == 3 else ACTIVE, EVOLUTION_WALLET, free_rank, maximum - free_rank, &"hunter", _evolution_rank_requirements(maximum, gates[index]))
 
-func _evolution_rank_requirements(max_rank: int, job_level: int) -> Dictionary:
+func _evolution_rank_requirements(max_rank: int, job_level: int, prerequisites: Dictionary = {}) -> Dictionary:
 	var requirements: Dictionary = {}
 	for rank: int in range(1, max_rank + 1):
-		requirements[rank] = {"job_level": job_level}
+		requirements[rank] = {"job_level": job_level, "skill_ranks": prerequisites.duplicate(true)}
 	return requirements
 
 func _register_e00_evolutions(overrides: Dictionary) -> void:
@@ -537,7 +543,7 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 			definition.exclusive_skill_ids = [
 				&"defender_counterstroke", &"defender_watch", &"defender_anchor",
 				&"defender_line_lock", &"defender_guard_return",
-				&"defender_wall_advance", &"defender_reprisal_wave",
+				&"defender_wall_advance", &"defender_reprisal_wave", &"defender_riposte", &"defender_retreat_guard",
 			]
 		if definition.id == &"berserker" and not normalized_overrides.has(definition.id):
 			definition.entry_skill_id = &"berserker_rupture"
@@ -545,7 +551,7 @@ func _register_e00_evolutions(overrides: Dictionary) -> void:
 			definition.exclusive_skill_ids = [
 				&"berserker_rupture", &"berserker_obstinacy", &"berserker_wound_leap",
 				&"berserker_execution", &"berserker_pursuit",
-				&"berserker_blood_rift", &"berserker_breath_steal",
+				&"berserker_blood_rift", &"berserker_breath_steal", &"berserker_pursuit_cut", &"berserker_deep_bleeding",
 			]
 		if definition.id == &"elementalist" and not normalized_overrides.has(definition.id):
 			definition.entry_skill_id = &"elementalist_flame_burst"
@@ -833,3 +839,16 @@ func all_equipment_metadata() -> Dictionary:
 
 func card_ids() -> Array[StringName]:
 	return _card_ids.duplicate()
+
+func pre_swordsman_cluster_catalog() -> ProfileCatalog:
+	## Historical validation only. Never expose this as runtime learning authority.
+	var copy := copy_catalog()
+	for id: StringName in [&"defender_riposte", &"defender_retreat_guard", &"berserker_pursuit_cut", &"berserker_deep_bleeding"]:
+		copy._skills.erase(id)
+		for definition: EvolutionDefinition in copy._evolutions.values():
+			definition.exclusive_skill_ids.erase(id)
+	for id: StringName in [&"defender_anchor", &"defender_line_lock", &"defender_guard_return", &"defender_wall_advance", &"defender_reprisal_wave", &"berserker_obstinacy", &"berserker_wound_leap", &"berserker_execution", &"berserker_pursuit", &"berserker_breath_steal"]:
+		if copy._skills.has(id):
+			for rank: Variant in copy._skills[id]["rank_requirements"]:
+				copy._skills[id]["rank_requirements"][rank]["skill_ranks"] = {}
+	return copy

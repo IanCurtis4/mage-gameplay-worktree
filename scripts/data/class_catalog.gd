@@ -216,6 +216,7 @@ static func _ensure_built() -> void:
 	_configure_defender_wall_advance_ranks()
 	_configure_defender_reprisal_wave_ranks()
 	_configure_berserker_ranks()
+	_configure_swordsman_cluster_skills()
 	_configure_elementalist_ranks()
 	_configure_spiritualist_curse_ranks()
 	_configure_spiritualist_recovery_ranks()
@@ -1488,3 +1489,39 @@ static func _berserker_passive_ranks(skill_id: StringName, powers: Array[float],
 		rank.effect_ids = effects.duplicate()
 		definition.ranks.append(rank)
 	assert(definition.is_rank_catalog_valid())
+
+static func _configure_swordsman_cluster_skills() -> void:
+	_add_skill(&"defender_riposte", "Rebater", "D", SkillDefinition.Targeting.DIRECTION, 18.0, 8.0, 1.3, 120.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, true)
+	_add_skill(&"defender_retreat_guard", "Guarda de Retirada", "D", SkillDefinition.Targeting.DIRECTION, 16.0, 10.0, 0.15, 60.0, 0.0, 0.0, DamageRequest.AccuracyMode.GEOMETRY, false, SkillDefinition.ActionKind.DEFENSIVE)
+	_add_skill(&"berserker_pursuit_cut", "Talho de Perseguição", "D", SkillDefinition.Targeting.SINGLE_TARGET, 18.0, 7.0, 0.9, 110.0, 0.0, 0.0, DamageRequest.AccuracyMode.CONTESTED, true)
+	_add_passive_skill(&"berserker_deep_bleeding", "Hemorragia Profunda")
+	var specs := {
+		&"defender_riposte": {"handler": SkillDefinition.Handler.DEFENDER_RIPOSTE, "costs": [18.0,20.0,22.0,24.0,26.0], "powers": [1.3,1.45,1.6,1.75,1.9], "secondary": [0.0,0.0,0.0,0.0,0.0], "ranges": [120.0,120.0,120.0,120.0,120.0], "effects": [&"requires_and_consumes_guard_token", &"focused_front_cone_70deg"]},
+		&"defender_retreat_guard": {"handler": SkillDefinition.Handler.DEFENDER_RETREAT_GUARD, "costs": [16.0,18.0,20.0,22.0,24.0], "powers": [0.15,0.15,0.15,0.15,0.15], "secondary": [0.8,0.8,0.8,0.8,0.8], "ranges": [60.0,70.0,80.0,90.0,100.0], "effects": [&"backward_step_captured_front", &"front_guard_no_damage_no_heal"]},
+		&"berserker_pursuit_cut": {"handler": SkillDefinition.Handler.BERSERKER_PURSUIT_CUT, "costs": [18.0,20.0,22.0,24.0,26.0], "powers": [0.9,1.0,1.1,1.2,1.3], "secondary": [0.3,0.3,0.3,0.3,0.3], "ranges": [110.0,110.0,110.0,110.0,110.0], "effects": [&"direct_melee", &"bonus_if_previously_wounded", &"does_not_open_wound"]},
+	}
+	for id: StringName in specs:
+		var definition: SkillDefinition = _skills[id]
+		var spec: Dictionary = specs[id]
+		definition.handler_id = spec["handler"]
+		for index: int in 5:
+			var rank := SkillRankDefinition.new()
+			rank.rank = index + 1
+			rank.sp_cost = spec["costs"][index]
+			rank.cooldown = definition.cooldown
+			rank.range = spec["ranges"][index]
+			rank.power = spec["powers"][index]
+			rank.secondary_power = spec["secondary"][index]
+			rank.physical_weight = 0.0 if id == &"defender_retreat_guard" else 1.0
+			rank.effect_ids.assign(spec["effects"])
+			definition.ranks.append(rank)
+		assert(definition.is_rank_catalog_valid())
+	var passive: SkillDefinition = _skills[&"berserker_deep_bleeding"]
+	passive.handler_id = SkillDefinition.Handler.BERSERKER_DEEP_BLEEDING
+	for index: int in 3:
+		var rank := SkillRankDefinition.new()
+		rank.rank = index + 1
+		rank.power = [0.5,1.0,1.5][index]
+		rank.effect_ids = [&"rift_bleed_duration_only"]
+		passive.ranks.append(rank)
+	assert(passive.is_rank_catalog_valid())

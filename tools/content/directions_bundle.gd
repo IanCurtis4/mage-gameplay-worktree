@@ -2,7 +2,7 @@ extends RefCounted
 const Transform = preload("res://tools/content/transform_bundle.gd")
 const SUPPORT := {
 	"defender": {0: {&"shield_wall": 1}},
-	"berserker": {1: {&"berserker_rupture": 0}},
+	"berserker": {1: {&"berserker_rupture": 2}},
 	"elementalist": {0: {&"elementalist_prismatic_focus": 1}},
 	"spiritualist": {0: {&"fire_spear": 1, &"spiritualist_echo_recovery": 1}, 1: {&"fire_spear": 1}},
 	"hunter": {1: {&"hunter_freezing_trap": 0}},

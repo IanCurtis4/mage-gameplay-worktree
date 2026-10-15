@@ -34,7 +34,8 @@ const MECHANICS := {
 static func icon(id: StringName) -> Texture2D:
 	if id.is_empty(): return null
 	if not _icons.has(id):
-		var path := "res://assets/art/skills/%s.svg" % id
+		var painted := "res://assets/art/skills/painted/%s.png" % id
+		var path := painted if ResourceLoader.exists(painted) else "res://assets/art/skills/%s.svg" % id
 		_icons[id] = load(path) as Texture2D if ResourceLoader.exists(path) else null
 	return _icons[id]
 
@@ -57,6 +58,22 @@ static func prerequisites(option: Dictionary) -> Dictionary:
 			result[id] = maxi(int(result.get(id, 0)), int(requirement["skill_ranks"][raw]))
 	return result
 
+static func emphasize(text: String) -> String:
+	# Presentation only: values arrive from immutable catalog authorities.
+	for term: String in ["dano físico", "dano mágico", "cargas", "feridas", "queimadura", "eletrificação", "SP", "Foco", "INT", "DES", "VIT", "ATQ", "ATQ mágico", "aprisionamento", "sangramento", "carga de guarda"]:
+		text = text.replace(term, "[b]" + term + "[/b]")
+	return text
+
+static func _series(definition: SkillDefinition, field: StringName, suffix: String = "", multiplier: float = 1.0) -> String:
+	var values: Array[String] = []
+	for rank: SkillRankDefinition in definition.ranks:
+		var value := float(rank.get(field)) * multiplier
+		values.append(String.num(value, 2))
+	var unique: Array[String] = []
+	for value: String in values:
+		if value not in unique: unique.append(value)
+	return "[b]" + (values[0] + " (todos os ranks)" if unique.size() == 1 else " / ".join(values)) + "[/b] " + suffix
+
 static func describe(option: Dictionary, summary: Dictionary = {}) -> String:
 	var id := StringName(option["skill_id"])
 	var definition := ClassCatalog.skill_definition(id)
@@ -64,39 +81,93 @@ static func describe(option: Dictionary, summary: Dictionary = {}) -> String:
 	var rank := int(option["rank"])
 	var maximum := int(option["maximum_rank"])
 	var active := definition.category == SkillDefinition.Category.ACTIVE
-	var lines: Array[String] = [name_of(id), "%s · Rank %d/%d" % ["Ativa" if active else "Passiva automática", rank, maximum]]
+	var copy := SkillCopy.text_for(id)
+	var lines: Array[String] = ["[b]%s[/b]  ·  %s  ·  R%d/%d" % [name_of(id), "Ativa" if active else "Passiva automática", rank, maximum]]
+	if not String(copy.get("flavor", "")).is_empty(): lines.append("[i]" + String(copy["flavor"]) + "[/i]")
+	lines.append(emphasize(String(copy.get("effect", MECHANICS.get(id, "Habilidade desta classe.")))))
+	if not String(copy.get("combo", "")).is_empty(): lines.append("[b]Interação[/b] · " + emphasize(String(copy["combo"])))
+	var shown_rank := clampi(maxi(rank, int(option.get("item_rank", 0))), 1, maximum)
+	var values := definition.rank_definition(shown_rank)
+	if values != null:
+		lines.append("")
+		lines.append("[b]Escalas por rank (R1 → R%d)[/b]" % maximum)
+		if id in HunterTuning.SKILL_IDS:
+			lines.append(emphasize(ClassCatalog.hunter_description(id, shown_rank)))
+		elif id in SentinelTuning.SKILL_IDS:
+			lines.append(emphasize(ClassCatalog.sentinel_description(id, shown_rank).replace("Equipada:", "Aprendida (automática):")))
+		elif id == &"piercing_shout": lines.append("Controle: " + _series(definition, &"power", "s") + ". O pulso de dano não usa essa duração como multiplicador.")
+		elif id in [&"provoke", &"terrifying_shout", &"ice_wall", &"defender_anchor", &"foliage_shelter", &"slowing_arrow", &"spiritualist_spectral_veil"]: lines.append("Duração: " + _series(definition, &"power", "s"))
+		elif id in [&"shield_wall", &"phantom_barrier"]: lines.append("Interceptações: " + _series(definition, &"power"))
+		elif id == &"fury": lines.append("ATQ corpo a corpo: +" + _series(definition, &"power", "%", 100.0))
+		elif id == &"extended_aim": lines.append("Bônus de alcance: " + _series(definition, &"power"))
+		elif id == &"defender_retreat_guard": lines.append("Recuo: " + _series(definition, &"range") + "; [b]15% de redução frontal[/b] por [b]0,8s[/b].")
+		elif id == &"berserker_deep_bleeding": lines.append("Duração extra de sangramento da Fenda: " + _series(definition, &"power", "s") + ". Cadência e dano por pulso permanecem iguais.")
+		elif id == &"perseverance": lines.append("Escudo base: " + _series(definition, &"power") + "; [b]+%s × VIT + %s × INT efetivas[/b]." % [String.num(StatCalculator.PERSONAL_SHIELD_VIT_COEFFICIENT, 2), String.num(StatCalculator.PERSONAL_SHIELD_INT_COEFFICIENT, 2)])
+		elif id not in [&"explosive_trap", &"geometer_trace", &"geometer_triangulation", &"geometer_collapse", &"geometer_translation", &"geometer_rewrite"]:
+			if values.physical_weight > 0.0: lines.append("[b]Dano físico[/b]: " + _series(definition, &"power", "% do ATQ corpo a corpo", 100.0))
+			elif values.precision_weight > 0.0: lines.append("[b]Dano físico[/b]: " + _series(definition, &"power", "% do ATQ de precisão", 100.0))
+			elif values.magic_weight > 0.0: lines.append("[b]Dano mágico[/b]: " + _series(definition, &"power", "% do ATQ mágico", 100.0))
+		var passive_axes := {
+			&"swordsman_resistance": ["DEF física", "%", 100.0], &"vigor": ["Regeneração de HP fora de encontros", "%", 100.0],
+			&"mage_mana_regeneration": ["Regeneração de SP", "%", 100.0], &"archer_precision": ["Precisão adicional", "pontos", 1.0],
+			&"archer_cadence": ["Velocidade de ataque", "%", 100.0], &"trap_technique": ["Prazo armado extra", "s", 1.0],
+			&"berserker_obstinacy": ["Dano melee direto com HP até50%", "%", 100.0], &"berserker_pursuit": ["SP recuperado por acerto elegível", "SP", 1.0],
+			&"defender_watch": ["Redução de dano causado pelo alvo", "%", 100.0], &"defender_guard_return": ["SP por resposta elegível", "SP", 1.0],
+			&"elementalist_prismatic_focus": ["SP por alternância elegível", "SP", 1.0], &"elementalist_prismatic_resonance": ["Terceiro elemento distinto", "%", 100.0],
+			&"spiritualist_echo_recovery": ["SP por Eco elegível", "SP", 1.0], &"geometer_incidence": ["Bônus de interação efetiva", "%", 100.0],
+			&"geometer_vector_memory": ["Prazo extra de novo vértice", "s", 1.0]
+		}
+		if passive_axes.has(id):
+			var axis: Array = passive_axes[id]
+			lines.append(String(axis[0]) + ": " + _series(definition, &"power", String(axis[1]), float(axis[2])))
+		if id == &"blood_thirst":
+			lines.append("ATQ corpo adicional por VIT investida: " + _series(definition, &"power"))
+			var heals: Array[String] = []
+			for r: int in range(1, maximum + 1): heals.append(String.num(ClassCatalog.blood_thirst_heal_fraction(r) * 100.0, 2))
+			lines.append("Cura por abate: [b]" + " / ".join(heals) + "% do HP máximo[/b].")
+		if id == &"spiritualist_echo_curse": lines.append("Onda de Eco: " + _series(definition, &"secondary_power", "% do ATQ mágico", 100.0))
+		if id == &"geometer_vector_memory": lines.append("Prazo extra da figura: " + _series(definition, &"secondary_power", "s"))
+		if id == &"slowing_arrow": lines.append("Dano físico fixo: [b]%s%% do ATQ de precisão[/b]." % String.num(definition.power * 100.0, 2))
+		if id == &"double_shot": lines.append("Dano indicado por flecha; dois projéteis na execução base.")
+		if id in [&"fire_wall", &"lightning_wall", &"berserker_blood_rift", &"elementalist_ember_path", &"elementalist_tri_nova"]: lines.append("Coeficiente indicado por impacto/pulso; duração e número de emissões seguem o efeito.")
+		if id == &"berserker_pursuit_cut": lines.append("Contra alvo já ferido: [b]+30% do ATQ corpo a corpo[/b].")
+		if id == &"berserker_rupture": lines.append("Detonação por carga: " + _series(definition, &"secondary_power", "% do ATQ corpo a corpo", 100.0))
+		if id == &"berserker_execution": lines.append("Custo adicional: [b]3% do HP máximo[/b], não letal; [b]+20%[/b] contra alvo com até [b]35% HP[/b].")
+		if id == &"defender_line_lock": lines.append("Aprisionamento: " + _series(definition, &"secondary_power", "s"))
+		if id == &"berserker_breath_steal": lines.append("Cura em ferido sobrevivente: " + _series(definition, &"secondary_power", "% do dano aplicado", 100.0) + "; teto de [b]5% HP máximo[/b].")
+		if active:
+			lines.append("SP base: " + _series(definition, &"sp_cost"))
+			lines.append("Recarga base: " + _series(definition, &"cooldown", "s"))
+			if values.range > 0.0: lines.append("Alcance base: " + _series(definition, &"range"))
+			if values.fixed_cast_time > 0.0 or values.variable_cast_time > 0.0:
+				lines.append("Preparo: " + _series(definition, &"fixed_cast_time", "s fixos") + " + " + _series(definition, &"variable_cast_time", "s variáveis"))
+			lines.append("Valores de catálogo: atributos, equipamento e augments podem modificar a execução. O dano aplicado considera a defesa do alvo.")
+			lines.append("[b]Versões[/b] · escolha o rank nos detalhes antes de arrastar. As versões compartilham a recarga." if SkillCastRank.supports(id) else "Esta habilidade usa o maior rank disponível no atalho.")
+	lines.append("")
 	var wallet := "Base" if option["metadata"]["wallet"] == ProfileCatalog.BASE_WALLET else "Evolução"
 	if option.get("item_only", false):
-		lines.append("Concedida pelo equipamento: acesso enquanto a peça estiver equipada; sem investimento de pontos.")
+		lines.append("[b]Fonte: equipamento[/b]. Acesso enquanto equipado; sem investimento.")
 	else:
-		lines.append("Carteira %s · 1 ponto por aumento · %d pontos próprios até o máximo" % [wallet, maxi(0, maximum - rank)])
-	if int(option.get("item_rank", 0)) > 0:
-		lines.append("Equipamento equipado concede R%d. Aprendizado e concessão usam o maior rank." % int(option["item_rank"]))
-	if int(option["metadata"].get("free_rank", 0)) > 0: lines.append("Rank inicial gratuito: %d" % int(option["metadata"]["free_rank"]))
-	var shown_rank := clampi(rank, 1, maximum)
-	if id in HunterTuning.SKILL_IDS: lines.append(ClassCatalog.hunter_description(id, shown_rank))
-	elif id in SentinelTuning.SKILL_IDS: lines.append(ClassCatalog.sentinel_description(id, shown_rank))
-	else: lines.append(MECHANICS.get(id, "Habilidade desta classe."))
-	if active:
-		var preview_ranks: Array[int] = [shown_rank]
-		if rank > 0 and rank < maximum: preview_ranks.append(rank + 1)
-		for r: int in preview_ranks:
-			var values := definition.rank_definition(r)
-			if values != null:
-				lines.append("R%d: SP %.0f · recarga %.1fs · preparo fixo %.2fs + variável %.2fs · alcance %.0f" % [r, values.sp_cost, values.cooldown, values.fixed_cast_time, values.variable_cast_time, values.range])
-	var required_job := StringName(option["metadata"].get("required_evolution_id", &""))
-	if not required_job.is_empty() and not option.get("available", false): lines.append("Exige job: %s" % job_name(required_job))
-	for target: Variant in option["metadata"]["rank_requirements"]:
-		if int(target) <= rank: continue
-		var requirement: Dictionary = option["metadata"]["rank_requirements"][target]
-		var requirements: Array[String] = []
-		for prerequisite: Variant in requirement["skill_ranks"]:
-			requirements.append("%s R%d" % [name_of(StringName(prerequisite)), int(requirement["skill_ranks"][prerequisite])])
-		lines.append("R%d exige Job %d%s" % [int(target), int(requirement["job_level"]), " · " + ", ".join(requirements) if not requirements.is_empty() else ""])
+		lines.append("Investimento: [b]1 ponto de %s por rank[/b] · %d pontos próprios restantes até o máximo." % [wallet, maxi(0, maximum - rank)])
+	if int(option.get("item_rank", 0)) > 0: lines.append("Equipamento concede R%d; vale o maior rank entre aprendido e concedido." % int(option["item_rank"]))
+	var requirement: Dictionary = option.get("next_rank_requirement", {})
+	if not requirement.is_empty():
+		var required: Array[String] = ["Job %d" % int(requirement.get("job_level", 1))]
+		for prerequisite: Variant in requirement.get("skill_ranks", {}):
+			required.append("%s R%d" % [name_of(StringName(prerequisite)), int(requirement["skill_ranks"][prerequisite])])
+		lines.append("Próximo rank exige: [b]" + ", ".join(required) + "[/b].")
 	if not option.get("next_rank_available", false) and option.get("next_rank") != null:
 		lines.append("Sem pontos livres nesta carteira." if option.get("next_rank_error_code") == &"insufficient_points" else "Requisitos ainda não cumpridos.")
-	lines.append("Ativas confirmadas ficam na biblioteca; arraste para organizar atalhos. Passivas aprendidas são automáticas.")
 	return "\n".join(lines)
+
+static func migration_notice(report: Dictionary, character_id: String) -> String:
+	for entry: Dictionary in report.get("characters", []):
+		if String(entry.get("character_id", "")) != character_id: continue
+		var removed: Array[String] = []
+		for skill: Dictionary in entry.get("removed", []):
+			removed.append("%s (%d pontos)" % [name_of(StringName(skill["skill_id"])), int(skill["purchased_ranks"])])
+		return "Na atualização da árvore, %d pontos de Evolução foram devolvidos. Skills retiradas: %s. Redistribua os pontos respeitando os novos requisitos." % [int(entry.get("evolution_refund", 0)), ", ".join(removed)]
+	return ""
 
 static func run_preview(state: RunState, facade: RefCounted = null) -> Dictionary:
 	var base := state.build_snapshot.base_class_id if state.build_snapshot != null else state.class_id

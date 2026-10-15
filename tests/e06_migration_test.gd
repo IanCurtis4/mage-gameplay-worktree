@@ -9,7 +9,7 @@ func _initialize() -> void:
 	directory = ProjectSettings.globalize_path("res://.godot/verification/e06_t2/migration_%d" % Time.get_ticks_usec())
 	DirAccess.make_dir_recursive_absolute(directory)
 	var catalog := ProfileCatalog.pilot()
-	_check(ProfileState.CATALOG_VERSION == 12 and ProfileState.SCHEMA_VERSION == 5 and ProfileState.RULESET_ID == "stat_thresholds_v1", "historical catalogs -> catalog12/schema5, stat ruleset unchanged")
+	_check(ProfileState.CATALOG_VERSION == 13 and ProfileState.SCHEMA_VERSION == 6 and ProfileState.RULESET_ID == "stat_thresholds_v1", "historical catalogs -> catalog13/schema6, stat ruleset unchanged")
 	var effects := BuildContentLoader.pilot()
 	_check(effects.ids(&"equipment").size() == 85 and effects.ids(&"card").size() == 6, "runtime metadata preserves 39 previous and adds 46 recipes")
 	for origin: StringName in [&"swordsman", &"mage", &"archer"]:

@@ -15,18 +15,18 @@ func _run() -> void:
 	await _check_build(directory.path_join("boss"), {
 		&"fury": 5, &"brutal_strike": 5, &"blood_thirst": 3,
 		&"berserker_rupture": 4, &"berserker_execution": 5,
-		&"berserker_breath_steal": 4, &"berserker_pursuit": 3,
+		&"berserker_pursuit": 3, &"berserker_breath_steal": 4,
 	}, [&"fury", &"brutal_strike", &"berserker_rupture", &"berserker_execution", &"berserker_breath_steal"], [&"blood_thirst", &"berserker_pursuit"], 16)
 	await _check_build(directory.path_join("mobile"), {
-		&"dash": 5, &"concentrated_rage": 5, &"vigor": 3,
+		&"dash": 5, &"concentrated_rage": 5, &"vigor": 3, &"fury": 3,
 		&"berserker_rupture": 2, &"berserker_wound_leap": 5,
 		&"berserker_blood_rift": 5, &"berserker_obstinacy": 3,
-	}, [&"dash", &"concentrated_rage", &"berserker_rupture", &"berserker_wound_leap", &"berserker_blood_rift"], [&"vigor", &"berserker_obstinacy"], 15)
+	}, [&"dash", &"concentrated_rage", &"berserker_rupture", &"berserker_wound_leap", &"berserker_blood_rift"], [&"vigor", &"berserker_obstinacy"], 15, 16)
 	_cleanup(directory)
 	print("E05 Berserker builds: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
 	quit(0 if failures == 0 else 1)
 
-func _check_build(directory: String, purchases: Dictionary, active: Array[Variant], passive: Array[Variant], evolution_spent: int) -> void:
+func _check_build(directory: String, purchases: Dictionary, active: Array[Variant], passive: Array[Variant], evolution_spent: int, base_spent: int = 13) -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var catalog := ProfileCatalog.pilot()
 	var profile := ProfileState.new(PROFILE_ID)
@@ -48,7 +48,7 @@ func _check_build(directory: String, purchases: Dictionary, active: Array[Varian
 			if not result["ok"]:
 				return
 	var summary := facade.progression_summary(character_id)
-	_check(summary["base_skill_points_available"] == 6 and summary["evolution_skill_points_available"] == 20 - evolution_spent, "base and evolution wallets retain exact independent balances")
+	_check(summary["base_skill_points_available"] == 19 - base_spent and summary["evolution_skill_points_available"] == 20 - evolution_spent, "base and evolution wallets retain exact independent balances")
 	var equipped: Dictionary[StringName, Variant] = {&"head": null, &"neck": null, &"shoulders": null, &"arms": null, &"torso": null, &"cloak": null, &"legs": null, &"feet": null, &"main_hand": null, &"off_hand": null, &"accessory_1": null, &"accessory_2": null, &"accessory_3": null, &"accessory_4": null}
 	var preset := facade.update_preset("equip", facade.current_profile().revision, character_id, 0, active, passive, equipped)
 	_check(preset["ok"], "equip five actives and two passives")

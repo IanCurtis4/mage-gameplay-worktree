@@ -1,0 +1,1646 @@
+{
+  "report": "Luna execution supervision; no semantic independent audit",
+  "source": {
+    "branch": "codex/e06-inventory",
+    "base_commit": "3b2899940207d556c6d34babbb1560f1bd03e94e",
+    "checkout": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG"
+  },
+  "runner": {
+    "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+    "frozen_at_final_rerun": true,
+    "verify_ps1_sha256": "919AD53FAC37CEECBDCDFBE93B7FFFBFDB452B03C03034DBAB301354C696E38B",
+    "current_project_inputs_manifest_sha256": "1AB95E267933C7B311C376A326BD12FABC4DE65A0CEEE21D95D89E5F2F9045CB",
+    "note": "The per-check input hash was not captured during the first 53-check pass before later fixture synchronization; per-check test hashes below describe current final runner contents. Original and rerun log/output hashes and exact failure evidence are preserved.",
+    "current_project_input_file_count": 1791,
+    "current_input_snapshot_utc": "2026-10-15T07:28:42.5782088Z"
+  },
+  "engine": {
+    "version": "Godot 4.7.2 standard",
+    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\review-engine\\Godot.exe",
+    "sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424"
+  },
+  "selection": {
+    "total_plan_checks": 226,
+    "unique_checks_covered": 61,
+    "first_batch": {
+      "executed": 53,
+      "pass": 47,
+      "fail": 6
+    },
+    "corrected_batch": {
+      "executed": 17,
+      "pass": 15,
+      "fail": 2
+    },
+    "final_batch": {
+      "executed": 5,
+      "pass": 5,
+      "fail": 0
+    },
+    "final_unique_pass": 61,
+    "final_unique_fail": 0,
+    "timeout_count": 0,
+    "followup_store_persistence": {
+      "executed": 13,
+      "pass": 13,
+      "fail": 0,
+      "timeout": 0
+    },
+    "total_executions": 88
+  },
+  "checks": [
+    {
+      "name": "action_bar_game_integration_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\action_bar_game_integration_test.gd",
+      "test_file_sha256_current_final_runner": "20EFE96CF8A1274E060AD435DACD88C60F12864FD4E70D14DA340FED2823B04C",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\145-action_bar_game_integration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\145-action_bar_game_integration_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "8EEC3BDF47D94B9A8584FD46E4F8FCFCF0124C33C64D23953B3DFD257A85A8FC",
+          "output_log_sha256": "8EEC3BDF47D94B9A8584FD46E4F8FCFCF0124C33C64D23953B3DFD257A85A8FC",
+          "exit_code": 0,
+          "completion_summary": "Action bars game integration: PASS (59 checks)"
+        }
+      ]
+    },
+    {
+      "name": "action_bar_input_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\action_bar_input_test.gd",
+      "test_file_sha256_current_final_runner": "F4E3198C36135451676C058B5377B47F478FBB4FDC31262DA0D331734CE7D164",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\142-action_bar_input_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\142-action_bar_input_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 105,
+          "failure_evidence": [],
+          "engine_log_sha256": "E33C2E2C345F05D431FBACBFAB8C1E512DD2671AC7428D86B4C61DDBB71878D5",
+          "output_log_sha256": "E33C2E2C345F05D431FBACBFAB8C1E512DD2671AC7428D86B4C61DDBB71878D5",
+          "exit_code": 0,
+          "completion_summary": "Action bar input: 105 checks, 0 failures"
+        }
+      ]
+    },
+    {
+      "name": "action_bar_persistence_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\action_bar_persistence_test.gd",
+      "test_file_sha256_current_final_runner": "32A2195D2E1FBD1F60647C6776884CEEDA88EDDC72EE7658371CD2726773628A",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\144-action_bar_persistence_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\144-action_bar_persistence_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "F05ADD1B7840CE69B268F413C72545E44918D00D0CF2C88D19ACB3C8C000A1FB",
+          "output_log_sha256": "F05ADD1B7840CE69B268F413C72545E44918D00D0CF2C88D19ACB3C8C000A1FB",
+          "exit_code": 0,
+          "completion_summary": "Action bars persistence: PASS (242 checks)"
+        }
+      ]
+    },
+    {
+      "name": "action_bar_review_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\action_bar_review_test.gd",
+      "test_file_sha256_current_final_runner": "9C51E1DA70591F5E7049EE88171C36B06F9E9755FDBF0224554DCA711F079BF6",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\176-action_bar_review_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\176-action_bar_review_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 11,
+          "failure_evidence": [],
+          "engine_log_sha256": "74F000A67256C01D65214BCE567584023EC27820E27E786FF32810F83E36B7CA",
+          "output_log_sha256": "74F000A67256C01D65214BCE567584023EC27820E27E786FF32810F83E36B7CA",
+          "exit_code": 0,
+          "completion_summary": "Action bar review: 11 checks, 0 failures"
+        }
+      ]
+    },
+    {
+      "name": "action_bar_ui_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\action_bar_ui_test.gd",
+      "test_file_sha256_current_final_runner": "1E0F926BCDBD0AE6BAEFFFBBFD065F57716C280250A021BE37F81948911A64B4",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\143-action_bar_ui_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\143-action_bar_ui_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 80,
+          "failure_evidence": [],
+          "engine_log_sha256": "BB18C46A2FE69346A71B9BD330A014AEF72CBAB651C99E34541DC722914B5837",
+          "output_log_sha256": "BB18C46A2FE69346A71B9BD330A014AEF72CBAB651C99E34541DC722914B5837",
+          "exit_code": 0,
+          "completion_summary": "Action bar UI: 80 checks, 0 failures"
+        },
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\143-action_bar_ui_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\143-action_bar_ui_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 80,
+          "failure_evidence": [],
+          "engine_log_sha256": "BB18C46A2FE69346A71B9BD330A014AEF72CBAB651C99E34541DC722914B5837",
+          "output_log_sha256": "BB18C46A2FE69346A71B9BD330A014AEF72CBAB651C99E34541DC722914B5837",
+          "exit_code": 0,
+          "completion_summary": "Action bar UI: 80 checks, 0 failures"
+        },
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_final\\143-action_bar_ui_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_final\\143-action_bar_ui_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 80,
+          "failure_evidence": [],
+          "engine_log_sha256": "BB18C46A2FE69346A71B9BD330A014AEF72CBAB651C99E34541DC722914B5837",
+          "output_log_sha256": "BB18C46A2FE69346A71B9BD330A014AEF72CBAB651C99E34541DC722914B5837",
+          "exit_code": 0,
+          "completion_summary": "Action bar UI: 80 checks, 0 failures"
+        }
+      ]
+    },
+    {
+      "name": "e02_character_menu_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e02_character_menu_test.gd",
+      "test_file_sha256_current_final_runner": "FB0E2338C4C67A3B7E2785C5698E89B5AFDF22AB6E09C562C75A1DD7F02E4B71",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\022-e02_character_menu_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\022-e02_character_menu_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "990B05C907ABFCC4FFB6D1CA0DDCE8BD0E40D26462605BF3D45D07D08C6E709F",
+          "output_log_sha256": "990B05C907ABFCC4FFB6D1CA0DDCE8BD0E40D26462605BF3D45D07D08C6E709F",
+          "exit_code": 0,
+          "completion_summary": "Menu E02.1: PASS (26 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e03_progression_panel_integration_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e03_progression_panel_integration_test.gd",
+      "test_file_sha256_current_final_runner": "580270F3092BB5CB33FC839DA2918537C98F0B5DEF6B4F8A45AF10510743275F",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\032-e03_progression_panel_integration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\032-e03_progression_panel_integration_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "89B6CD18DFD3825A7EB5F04CD2CEF38B3B4BC8B90C710FEBB045D1040D5C64D1",
+          "output_log_sha256": "89B6CD18DFD3825A7EB5F04CD2CEF38B3B4BC8B90C710FEBB045D1040D5C64D1",
+          "exit_code": 0,
+          "completion_summary": "E03 painel de progressão: PASS (5 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e03_stat_calculator_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e03_stat_calculator_test.gd",
+      "test_file_sha256_current_final_runner": "8F82AA032CB3CB4A53CAC1B8E866043D56C6B251A221C9A4E002A7894C5D76D4",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\026-e03_stat_calculator_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\026-e03_stat_calculator_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "1C338F8B5A65852C28631AA59E49CB6C609858FCFDF53C0BE08B83228CB34103",
+          "output_log_sha256": "1C338F8B5A65852C28631AA59E49CB6C609858FCFDF53C0BE08B83228CB34103",
+          "exit_code": 0,
+          "completion_summary": "E03 StatCalculator: PASS (39 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e04_swordsman_perseverance_rank_integration_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e04_swordsman_perseverance_rank_integration_test.gd",
+      "test_file_sha256_current_final_runner": "B72F2E966FFD7E7D11089971767AF75B3EDED6C152133EBE16AB3CD726EA6515",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\081-e04_swordsman_perseverance_rank_integration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\081-e04_swordsman_perseverance_rank_integration_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "8715668B2270F32BE16AC77BEDEC3329A5ED35C2A5A900D4B673316D9F0F52B1",
+          "output_log_sha256": "8715668B2270F32BE16AC77BEDEC3329A5ED35C2A5A900D4B673316D9F0F52B1",
+          "exit_code": 0,
+          "completion_summary": "E04 SW3 Perseverança: PASS (26 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_berserker_breath_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_berserker_breath_test.gd",
+      "test_file_sha256_current_final_runner": "89E5454AE9565426A6360DAA5A2812A4C8D7A16F562FC35A874AFEE696BD81D7",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\166-e05_berserker_breath_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\166-e05_berserker_breath_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "E26E6FCB35FF7C6BF2766D9B190A88150E27671751FD60EAA789A13C2610A5C7",
+          "output_log_sha256": "E26E6FCB35FF7C6BF2766D9B190A88150E27671751FD60EAA789A13C2610A5C7",
+          "exit_code": 0,
+          "completion_summary": "E05 Berserker Arrancar Fôlego: PASS (16 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_berserker_builds_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_berserker_builds_test.gd",
+      "test_file_sha256_current_final_runner": "438DA80BE45CD861AFA84F7A74A34674501B05A98EBFA3F276E5684E18D15BD7",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\167-e05_berserker_builds_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\167-e05_berserker_builds_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "94684844129D3FDF57A06BE485A1806B178E48DA7820874C2EC079CC55CAEBC7",
+          "output_log_sha256": "94684844129D3FDF57A06BE485A1806B178E48DA7820874C2EC079CC55CAEBC7",
+          "exit_code": 0,
+          "completion_summary": "E05 Berserker builds: PASS (79 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_berserker_catalog_migration_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_berserker_catalog_migration_test.gd",
+      "test_file_sha256_current_final_runner": "89AD176F145E4F88D0DBFDF092F841F774D40F21EA95660F833C1038406DE870",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\097-e05_berserker_catalog_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\097-e05_berserker_catalog_migration_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "4DA2F7DBEE43929585864B5BE872D0A38B3C5EABBB77B5F61D9F2FC3C8B80A01",
+          "output_log_sha256": "4DA2F7DBEE43929585864B5BE872D0A38B3C5EABBB77B5F61D9F2FC3C8B80A01",
+          "exit_code": 0,
+          "completion_summary": "E05 Berserker migração catálogo: PASS (10 checks)"
+        },
+        {
+          "batch": "store_persistence_followup",
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\097-e05_berserker_catalog_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\097-e05_berserker_catalog_migration_test.output.log",
+          "status": "PASS",
+          "timeout": false,
+          "exit_code": 0,
+          "completion_checks": 10,
+          "completion_summary": "E05 Berserker migração catálogo: PASS (10 checks)",
+          "failure_evidence": [],
+          "engine_log_sha256": "4DA2F7DBEE43929585864B5BE872D0A38B3C5EABBB77B5F61D9F2FC3C8B80A01",
+          "output_log_sha256": "97836519571914AB7D5928F3B12F7ACB4E8F90D0402143D59F15E5D5A8CC6674"
+        }
+      ]
+    },
+    {
+      "name": "e05_berserker_catalog_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_berserker_catalog_test.gd",
+      "test_file_sha256_current_final_runner": "4C3DB5B8E48AB595BFD65614585DD5F84A3466E076B1B03F2CBB21F50C71B8EF",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\159-e05_berserker_catalog_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\159-e05_berserker_catalog_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "B1463447729BE25435E81829291188EC880FC80464CBF1143B5759AA4A8F533E",
+          "output_log_sha256": "B1463447729BE25435E81829291188EC880FC80464CBF1143B5759AA4A8F533E",
+          "exit_code": 0,
+          "completion_summary": "E05 Berserker catalog: PASS (63 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_berserker_execution_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_berserker_execution_test.gd",
+      "test_file_sha256_current_final_runner": "409E82A00207AF8724DD41068185F98404EAFC7C5426AA945A97DFF32E42B925",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\161-e05_berserker_execution_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\161-e05_berserker_execution_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "88B49ADBB48BD0275FF4ABF71BAA6613AD8251DFB0BD9B1487F9263939CDC3E7",
+          "output_log_sha256": "88B49ADBB48BD0275FF4ABF71BAA6613AD8251DFB0BD9B1487F9263939CDC3E7",
+          "exit_code": 0,
+          "completion_summary": "E05 Berserker Execução: PASS (16 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_berserker_leap_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_berserker_leap_test.gd",
+      "test_file_sha256_current_final_runner": "A7F9593050CBBE30BC31DEFC6D882AFEFF3B229EEB21BD2DD84694AE7C8BC810",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\163-e05_berserker_leap_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\163-e05_berserker_leap_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "C5E244F389A23AE0C8CE46033D1DFBFDD2B22F65A5B486A4051643ADE30FFE04",
+          "output_log_sha256": "C5E244F389A23AE0C8CE46033D1DFBFDD2B22F65A5B486A4051643ADE30FFE04",
+          "exit_code": 0,
+          "completion_summary": "E05 Berserker Salto: PASS (15 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_berserker_obstinacy_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_berserker_obstinacy_test.gd",
+      "test_file_sha256_current_final_runner": "55943178E435CD7A878B9DA97BC69B4A212B8B9E9C5AB7635CCA0593AED26007",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\162-e05_berserker_obstinacy_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\162-e05_berserker_obstinacy_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "C61A398DCAEE2803AD61CCD7587609DFF459E3B73103FC6C0000C353FDA439E3",
+          "output_log_sha256": "C61A398DCAEE2803AD61CCD7587609DFF459E3B73103FC6C0000C353FDA439E3",
+          "exit_code": 0,
+          "completion_summary": "E05 Berserker Obstinação: PASS (18 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_berserker_playtest_flow_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_berserker_playtest_flow_test.gd",
+      "test_file_sha256_current_final_runner": "FC287C087AB9C5A8A6097C461E3FF3BD26958DEF162F6302D14F670FD88AF1FC",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\168-e05_berserker_playtest_flow_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\168-e05_berserker_playtest_flow_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "AAE9DC32150BAC1063DF335FBF9FE51B2C02A37F699D444BBF96C3B067703215",
+          "output_log_sha256": "AAE9DC32150BAC1063DF335FBF9FE51B2C02A37F699D444BBF96C3B067703215",
+          "exit_code": 0,
+          "completion_summary": "E05 Berserker playtest flow: PASS (21 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_berserker_pursuit_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_berserker_pursuit_test.gd",
+      "test_file_sha256_current_final_runner": "0C80A7FC7457761C32D8FA30703CDC7D6035B8E44BF02834E1E2872A2CF0F2D6",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\164-e05_berserker_pursuit_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\164-e05_berserker_pursuit_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "583C35BC37FD110CD50B98B50CE17838528F61C04CC8A34834D5224590A9883B",
+          "output_log_sha256": "583C35BC37FD110CD50B98B50CE17838528F61C04CC8A34834D5224590A9883B",
+          "exit_code": 0,
+          "completion_summary": "E05 Berserker Caça: PASS (12 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_berserker_rift_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_berserker_rift_test.gd",
+      "test_file_sha256_current_final_runner": "86757C9B33A513888D5C1E26BB3F7BD449F98D4B16ACCC4A8FD7FBF9192139B9",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\165-e05_berserker_rift_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\165-e05_berserker_rift_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "0D3AE3E8F32AA0A77E949FB8DDECDE32B4F8EF596294034222AE35C7E73E86CC",
+          "output_log_sha256": "0D3AE3E8F32AA0A77E949FB8DDECDE32B4F8EF596294034222AE35C7E73E86CC",
+          "exit_code": 0,
+          "completion_summary": "E05 Berserker Fenda: PASS (18 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_berserker_rupture_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_berserker_rupture_test.gd",
+      "test_file_sha256_current_final_runner": "AEFC7E239A3DA5D6FB618FEBFF05BE8C6557396C3AD66734844B448676FE84FD",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\160-e05_berserker_rupture_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\160-e05_berserker_rupture_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "E8F411F78E7BE735E3977C9AB4C5F71C0A9335F491398DB1BBDCC9B0D09BBBA2",
+          "output_log_sha256": "E8F411F78E7BE735E3977C9AB4C5F71C0A9335F491398DB1BBDCC9B0D09BBBA2",
+          "exit_code": 0,
+          "completion_summary": "E05 Berserker Ruptura: PASS (16 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_defender_builds_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_defender_builds_test.gd",
+      "test_file_sha256_current_final_runner": "88B0383624A4D30104EFD57B5C3A4A27FD4606DE3670F2E5BCB5FC679F1DA5E8",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\174-e05_defender_builds_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\174-e05_defender_builds_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "740062962531CAAF0038AFD8B0E380702B5AC05F7BA89BB388E82B8A7681D35D",
+          "output_log_sha256": "740062962531CAAF0038AFD8B0E380702B5AC05F7BA89BB388E82B8A7681D35D",
+          "exit_code": 0,
+          "completion_summary": "E05 Defendente builds: PASS (73 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_defender_catalog_migration_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_defender_catalog_migration_test.gd",
+      "test_file_sha256_current_final_runner": "256B673BCC98998C52198775408320D90E633DE9FA05E7D8644262431BA3D6B6",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\096-e05_defender_catalog_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\096-e05_defender_catalog_migration_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "1C2D1AF4C132059A50A66AFF304E422E4319C39A25F68C7D47DF4CC99E60004A",
+          "output_log_sha256": "1C2D1AF4C132059A50A66AFF304E422E4319C39A25F68C7D47DF4CC99E60004A",
+          "exit_code": 0,
+          "completion_summary": "E05 Defendente migração catálogo: PASS (13 checks)"
+        },
+        {
+          "batch": "store_persistence_followup",
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\096-e05_defender_catalog_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\096-e05_defender_catalog_migration_test.output.log",
+          "status": "PASS",
+          "timeout": false,
+          "exit_code": 0,
+          "completion_checks": 13,
+          "completion_summary": "E05 Defendente migração catálogo: PASS (13 checks)",
+          "failure_evidence": [],
+          "engine_log_sha256": "1C2D1AF4C132059A50A66AFF304E422E4319C39A25F68C7D47DF4CC99E60004A",
+          "output_log_sha256": "5BEFC88C03890578CC6BDF470D5ACC7A42ACCF80FCAF120FF358759005DE9DFE"
+        }
+      ]
+    },
+    {
+      "name": "e05_defender_catalog_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_defender_catalog_test.gd",
+      "test_file_sha256_current_final_runner": "CD55D33024347FC26AE1A2C058844A8646D0A2F34D0A226CBB30A0ADF7A3F121",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\169-e05_defender_catalog_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\169-e05_defender_catalog_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "CD1ECBBDECA3604682B38A12103A7E05FE6C531EBAD7EA3637459AD902DFE23B",
+          "output_log_sha256": "CD1ECBBDECA3604682B38A12103A7E05FE6C531EBAD7EA3637459AD902DFE23B",
+          "exit_code": 0,
+          "completion_summary": "E05 Defendente catalog: PASS (92 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_defender_guard_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_defender_guard_test.gd",
+      "test_file_sha256_current_final_runner": "2567361B85EF7560F7412E417F8BDFE6BDFABFA2AD5CC5CE7F06650402AB71EC",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\171-e05_defender_guard_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\171-e05_defender_guard_test.engine.log",
+          "status": "FAIL",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [
+            "ERROR: unempowered entry R1 uses only its base weight",
+            "ERROR: next valid counterstroke consumes token once at commit for R1 bonus"
+          ],
+          "engine_log_sha256": "89DFAD16A3347415F32E0EB014380648C1E5AA49EAA432E6EDE4BBF81B06166D",
+          "output_log_sha256": "89DFAD16A3347415F32E0EB014380648C1E5AA49EAA432E6EDE4BBF81B06166D",
+          "exit_code": 1,
+          "completion_summary": "E05 Defendente guarda: FAIL (2 de 18)"
+        },
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\171-e05_defender_guard_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\171-e05_defender_guard_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "F15015E1506A1A1D7F206DD1B5008D6119FD66B9891299049EA00AFA5BE8B27E",
+          "output_log_sha256": "F15015E1506A1A1D7F206DD1B5008D6119FD66B9891299049EA00AFA5BE8B27E",
+          "exit_code": 0,
+          "completion_summary": "E05 Defendente guarda: PASS (18 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_defender_indicators_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_defender_indicators_test.gd",
+      "test_file_sha256_current_final_runner": "E7AC08C78F6AB96E7ACDD3703D875E2B0FE46555928EC3321FDE4AEE1DBBBF34",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\170-e05_defender_indicators_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\170-e05_defender_indicators_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "8E696D5ECA28C7D1D27167B423D0E875666895AE0BA41FA41D7DDA98ED8C345E",
+          "output_log_sha256": "8E696D5ECA28C7D1D27167B423D0E875666895AE0BA41FA41D7DDA98ED8C345E",
+          "exit_code": 0,
+          "completion_summary": "Indicadores Defendente: PASS (11 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_defender_playtest_flow_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_defender_playtest_flow_test.gd",
+      "test_file_sha256_current_final_runner": "3207D32E7205A233BD5A74DB01A48793FFA0FF4091DC4567177507D31E23FA62",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\175-e05_defender_playtest_flow_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\175-e05_defender_playtest_flow_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "3597F3AE8365031389AFAFABEC84C9C8BADD83B17856407B64C55F593F87C808",
+          "output_log_sha256": "3597F3AE8365031389AFAFABEC84C9C8BADD83B17856407B64C55F593F87C808",
+          "exit_code": 0,
+          "completion_summary": "E05 Defendente playtest flow: PASS (18 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_defender_skills_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_defender_skills_test.gd",
+      "test_file_sha256_current_final_runner": "F6A46EC26F267788FED704AB81CBBBC6E24A1D767A4F796BC8151F9D9498329E",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\172-e05_defender_skills_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\172-e05_defender_skills_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "98442514D4518C1BDCE2D8364F26B94AABB58A92C7C7E188C7088C35D0C32289",
+          "output_log_sha256": "98442514D4518C1BDCE2D8364F26B94AABB58A92C7C7E188C7088C35D0C32289",
+          "exit_code": 0,
+          "completion_summary": "E05 Defendente skills: PASS (32 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_defender_watch_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_defender_watch_test.gd",
+      "test_file_sha256_current_final_runner": "5723E706470002448BFD5A049355D513B64BABC4C0ED6F55F1F53A28251E4433",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\173-e05_defender_watch_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\173-e05_defender_watch_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "C012B22E7B5E3DDC58F1FA2BCC496282B018EE0FAE02D4F817C34C2C9D363A1E",
+          "output_log_sha256": "C012B22E7B5E3DDC58F1FA2BCC496282B018EE0FAE02D4F817C34C2C9D363A1E",
+          "exit_code": 0,
+          "completion_summary": "E05 Defendente Vigília: PASS (7 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_elementalist_catalog_migration_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_elementalist_catalog_migration_test.gd",
+      "test_file_sha256_current_final_runner": "96D09CBF7C145068F759E4619A99523916C7455225AE049A5D16EACC3AEAC4DF",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\098-e05_elementalist_catalog_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\098-e05_elementalist_catalog_migration_test.engine.log",
+          "status": "FAIL",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [
+            "ERROR: new catalog keeps schema and ruleset",
+            "SCRIPT ERROR: Invalid access to property or key 'data' on a base object of type 'Dictionary'."
+          ],
+          "engine_log_sha256": "56A07B5133A88DCF4E94887AEE83FD50B97156AEAF01D34DCD4441FD136D8F9F",
+          "output_log_sha256": "56A07B5133A88DCF4E94887AEE83FD50B97156AEAF01D34DCD4441FD136D8F9F",
+          "exit_code": 1,
+          "completion_summary": "[1] _initialize (res://tests/e05_elementalist_catalog_migration_test.gd:14)"
+        },
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\098-e05_elementalist_catalog_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\098-e05_elementalist_catalog_migration_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "09490E19639FD05CC72F831A912C5EE2A08F0FA6ECF6D8CCEE28C31378DC3702",
+          "output_log_sha256": "09490E19639FD05CC72F831A912C5EE2A08F0FA6ECF6D8CCEE28C31378DC3702",
+          "exit_code": 0,
+          "completion_summary": "E05 Elementalista migração catálogo: PASS (11 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_evolution_menu_integration_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_evolution_menu_integration_test.gd",
+      "test_file_sha256_current_final_runner": "DDFBD7FDAC64555EAADE6DB80E16FBE5E5F85F8460395E1F1DBFD28FDFF9697B",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\093-e05_evolution_menu_integration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\093-e05_evolution_menu_integration_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "DBDED7FAE3A0FB44D0B628653D6450382D12DAD8E9ABCF55A1AFC24499E8BF32",
+          "output_log_sha256": "DBDED7FAE3A0FB44D0B628653D6450382D12DAD8E9ABCF55A1AFC24499E8BF32",
+          "exit_code": 0,
+          "completion_summary": "E05-S1C seletor de evolução: PASS (25 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_evolution_transaction_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_evolution_transaction_test.gd",
+      "test_file_sha256_current_final_runner": "397D4A17B7E17D0B3F060B64C76A5EA9748B29518F41AB207B34FF1770EF857E",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\092-e05_evolution_transaction_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\092-e05_evolution_transaction_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "55E063AD6E6AA021CB0A4DA72BDFF6B9DADBC78E18F76613189E33B1A8465CD6",
+          "output_log_sha256": "55E063AD6E6AA021CB0A4DA72BDFF6B9DADBC78E18F76613189E33B1A8465CD6",
+          "exit_code": 0,
+          "completion_summary": "E05-S1B transação de evolução: PASS (51 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_hunter_catalog_migration_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_hunter_catalog_migration_test.gd",
+      "test_file_sha256_current_final_runner": "694DE908F748E6C5AB3AFA9B91CC7D61F947726D79DA4849FC9136DABF1FA96D",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\057-e05_hunter_catalog_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\057-e05_hunter_catalog_migration_test.engine.log",
+          "status": "FAIL",
+          "timeout": false,
+          "completion_checks": 101,
+          "failure_evidence": [
+            "ERROR: only catalog version changes",
+            "ERROR: legal source before changing only envelope",
+            "ERROR: store durably migrates with explicit warning"
+          ],
+          "engine_log_sha256": "48B355DA33F5B695B0B221D18D25149665F3C221E4B1E8519AE4B19090F693E0",
+          "output_log_sha256": "48B355DA33F5B695B0B221D18D25149665F3C221E4B1E8519AE4B19090F693E0",
+          "exit_code": 1,
+          "completion_summary": "Hunter catalog migration: 101 checks, 3 failures"
+        },
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\057-e05_hunter_catalog_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\057-e05_hunter_catalog_migration_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 115,
+          "failure_evidence": [],
+          "engine_log_sha256": "7E2FD2216BF92A0A45A9F7782FDF060E0943BDE7AA9271B7537750FCFDFB1714",
+          "output_log_sha256": "7E2FD2216BF92A0A45A9F7782FDF060E0943BDE7AA9271B7537750FCFDFB1714",
+          "exit_code": 0,
+          "completion_summary": "Hunter catalog migration: 115 checks, 0 failures"
+        },
+        {
+          "batch": "store_persistence_followup",
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\057-e05_hunter_catalog_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\057-e05_hunter_catalog_migration_test.output.log",
+          "status": "PASS",
+          "timeout": false,
+          "exit_code": 0,
+          "completion_checks": 115,
+          "completion_summary": "Hunter catalog migration: 115 checks, 0 failures",
+          "failure_evidence": [],
+          "engine_log_sha256": "7E2FD2216BF92A0A45A9F7782FDF060E0943BDE7AA9271B7537750FCFDFB1714",
+          "output_log_sha256": "6C06946F095F46FFE3DF0910476F2CE9730F9BA9B8EB2F906DAD839C38EA5703"
+        }
+      ]
+    },
+    {
+      "name": "e05_identity_boundary_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_identity_boundary_test.gd",
+      "test_file_sha256_current_final_runner": "2183ED4B945F2EE9A118F21A467BEC877620E686620B69A8608AE0F7892C5B1A",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\095-e05_identity_boundary_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\095-e05_identity_boundary_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "AEDC9B2350B6DAA2C5F6DAE3A27441FBF5B04FE6970ABFAE0D2F783C3FCAE970",
+          "output_log_sha256": "AEDC9B2350B6DAA2C5F6DAE3A27441FBF5B04FE6970ABFAE0D2F783C3FCAE970",
+          "exit_code": 0,
+          "completion_summary": "E05-SP1 fronteira de identidade: PASS (18 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e05_spiritualist_catalog_migration_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_spiritualist_catalog_migration_test.gd",
+      "test_file_sha256_current_final_runner": "60EFE50F3552C6F48A858A08097B39981506C36814E2CE0D5C3F24D62B0B44EF",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\099-e05_spiritualist_catalog_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\099-e05_spiritualist_catalog_migration_test.engine.log",
+          "status": "FAIL",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [
+            "ERROR: current catalog preserves Spiritualist migration and schema"
+          ],
+          "engine_log_sha256": "A8E0B64EC641999A2359F633187C9DCCBCBE5975CD4C0B05688DFC6ABA5E0C86",
+          "output_log_sha256": "A8E0B64EC641999A2359F633187C9DCCBCBE5975CD4C0B05688DFC6ABA5E0C86",
+          "exit_code": 1,
+          "completion_summary": "E05 Espiritualista migração catálogo: FAIL (14 checks)"
+        },
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\099-e05_spiritualist_catalog_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\099-e05_spiritualist_catalog_migration_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "166938D694E2725284C3436DED7A78B0C657C5BE4AD446E6E682708C088D7516",
+          "output_log_sha256": "166938D694E2725284C3436DED7A78B0C657C5BE4AD446E6E682708C088D7516",
+          "exit_code": 0,
+          "completion_summary": "E05 Espiritualista migração catálogo: PASS (14 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e06_card_migration_store_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_card_migration_store_test.gd",
+      "test_file_sha256_current_final_runner": "5955C0E35653C74E19EF14D2395473F855A60B08D51562699A6B5A336AE4A8B2",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\219-e06_card_migration_store_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\219-e06_card_migration_store_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 39,
+          "failure_evidence": [],
+          "engine_log_sha256": "935243F606E99D5D50AA3D57611CD1FF599450AD52023ACE36B6E12966BAE5E2",
+          "output_log_sha256": "935243F606E99D5D50AA3D57611CD1FF599450AD52023ACE36B6E12966BAE5E2",
+          "exit_code": 0,
+          "completion_summary": "E06 durable card migration: 39 checks, 0 failures"
+        },
+        {
+          "batch": "store_persistence_followup",
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\219-e06_card_migration_store_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\219-e06_card_migration_store_test.output.log",
+          "status": "PASS",
+          "timeout": false,
+          "exit_code": 0,
+          "completion_checks": 39,
+          "completion_summary": "E06 durable card migration: 39 checks, 0 failures",
+          "failure_evidence": [],
+          "engine_log_sha256": "935243F606E99D5D50AA3D57611CD1FF599450AD52023ACE36B6E12966BAE5E2",
+          "output_log_sha256": "4823AF9D4A8914BDE3A7DA843328E04168711BAAC76127145D4D45DA4E1CCC21"
+        }
+      ]
+    },
+    {
+      "name": "e06_content_pilot_runtime_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_content_pilot_runtime_test.gd",
+      "test_file_sha256_current_final_runner": "37610824C8682CE6250F7761818B5179FE30CD812F239EAE6DA68A4F9E480AED",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\197-e06_content_pilot_runtime_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\197-e06_content_pilot_runtime_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 244,
+          "failure_evidence": [],
+          "engine_log_sha256": "8FFDFA6017A73D3766E705576B8B85B25A8A401FAE806EC091C9203A1ABA20BC",
+          "output_log_sha256": "8FFDFA6017A73D3766E705576B8B85B25A8A401FAE806EC091C9203A1ABA20BC",
+          "exit_code": 0,
+          "completion_summary": "E06 content pilot runtime: 244 checks, 0 failures"
+        }
+      ]
+    },
+    {
+      "name": "e06_content_pilot_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_content_pilot_test.gd",
+      "test_file_sha256_current_final_runner": "362BD83FB8DBBC8E8BFDBC8DDCA820465F8FE8D7A99043D03D8729C32F0BA256",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\196-e06_content_pilot_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\196-e06_content_pilot_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 470,
+          "failure_evidence": [],
+          "engine_log_sha256": "CC329FDF9D76D6501F1E18B4CEC0BBDF5501A0B0EBD22F8787B74741DCA4BBFA",
+          "output_log_sha256": "CC329FDF9D76D6501F1E18B4CEC0BBDF5501A0B0EBD22F8787B74741DCA4BBFA",
+          "exit_code": 0,
+          "completion_summary": "E06 content pilot: 470 checks, 0 failures"
+        }
+      ]
+    },
+    {
+      "name": "e06_directions_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_directions_test.gd",
+      "test_file_sha256_current_final_runner": "1ECF401A3B9D90DFE367FC8F110AFC0615B7CE55CF09946A98EE24FA3F4DF1E3",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\203-e06_directions_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\203-e06_directions_test.engine.log",
+          "status": "FAIL",
+          "timeout": false,
+          "completion_checks": 122,
+          "failure_evidence": [
+            "ERROR: canonical purchased ranks and composed build berserker/1",
+            "ERROR: twenty full builds observed"
+          ],
+          "engine_log_sha256": "CFDFE883940C9A1828F38877BF2E2329FF19AF239C85207BB1A9905FABF288E4",
+          "output_log_sha256": "CFDFE883940C9A1828F38877BF2E2329FF19AF239C85207BB1A9905FABF288E4",
+          "exit_code": 1,
+          "completion_summary": "E06 directions: 122 checks, 2 failures"
+        },
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_final\\203-e06_directions_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_final\\203-e06_directions_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 129,
+          "failure_evidence": [],
+          "engine_log_sha256": "C7F9992BC6C5C6BCA02FD53B0B4475AEB930D2CF4542225D15BBB9B2D68F065B",
+          "output_log_sha256": "C7F9992BC6C5C6BCA02FD53B0B4475AEB930D2CF4542225D15BBB9B2D68F065B",
+          "exit_code": 0,
+          "completion_summary": "E06 directions: 129 checks, 0 failures"
+        }
+      ]
+    },
+    {
+      "name": "e06_effects_runtime_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_effects_runtime_test.gd",
+      "test_file_sha256_current_final_runner": "F0704A8529388DC03436CF80B327D97F9F931DE22DFCA780C0B3ADC6C6ED584C",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\008-e06_effects_runtime_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\008-e06_effects_runtime_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 53,
+          "failure_evidence": [],
+          "engine_log_sha256": "868A20A8A3B9474B1278E7B81906FD33FEE223D8E34BE48F9C1F59C5CD3F819B",
+          "output_log_sha256": "868A20A8A3B9474B1278E7B81906FD33FEE223D8E34BE48F9C1F59C5CD3F819B",
+          "exit_code": 0,
+          "completion_summary": "E06 effects runtime: 53 checks, 0 failures"
+        }
+      ]
+    },
+    {
+      "name": "e06_migration_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_migration_test.gd",
+      "test_file_sha256_current_final_runner": "165EC240C0F3A50E3757E6FCE924D83D3DECC2A9A86A5AC4308D10D9BAB0482B",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\005-e06_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\005-e06_migration_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 143,
+          "failure_evidence": [],
+          "engine_log_sha256": "3D5142B133F6650E1326304827C463A9198A34636DBE9EF59E0CA2C56EDEFFD6",
+          "output_log_sha256": "3D5142B133F6650E1326304827C463A9198A34636DBE9EF59E0CA2C56EDEFFD6",
+          "exit_code": 0,
+          "completion_summary": "E06 migration: 143 checks, 0 failures"
+        },
+        {
+          "batch": "store_persistence_followup",
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\005-e06_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\005-e06_migration_test.output.log",
+          "status": "PASS",
+          "timeout": false,
+          "exit_code": 0,
+          "completion_checks": 143,
+          "completion_summary": "E06 migration: 143 checks, 0 failures",
+          "failure_evidence": [],
+          "engine_log_sha256": "3D5142B133F6650E1326304827C463A9198A34636DBE9EF59E0CA2C56EDEFFD6",
+          "output_log_sha256": "AB206D302DB4E297BE657D97E355BFFD5AE5E095D3B55EDB9F6E1130C08F4A4D"
+        }
+      ]
+    },
+    {
+      "name": "e06_permanent_cards_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_permanent_cards_test.gd",
+      "test_file_sha256_current_final_runner": "FDD2C8E390C95486E7D8F4562377662DF6B3E9143D3EC399BB2B6712D6B18BC7",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\213-e06_permanent_cards_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\213-e06_permanent_cards_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 46,
+          "failure_evidence": [],
+          "engine_log_sha256": "9C2CE8433E8D23C6FC20FEE9CC6F29A5C1A2D27C967211CBE91A2797666FC24C",
+          "output_log_sha256": "9C2CE8433E8D23C6FC20FEE9CC6F29A5C1A2D27C967211CBE91A2797666FC24C",
+          "exit_code": 0,
+          "completion_summary": "E06 permanent cards: 46 checks, 0 failures"
+        },
+        {
+          "batch": "store_persistence_followup",
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\213-e06_permanent_cards_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\213-e06_permanent_cards_test.output.log",
+          "status": "PASS",
+          "timeout": false,
+          "exit_code": 0,
+          "completion_checks": 46,
+          "completion_summary": "E06 permanent cards: 46 checks, 0 failures",
+          "failure_evidence": [],
+          "engine_log_sha256": "9C2CE8433E8D23C6FC20FEE9CC6F29A5C1A2D27C967211CBE91A2797666FC24C",
+          "output_log_sha256": "0B561B308A6990E7F46C4DCC507D9E706CB9B131BAF4CC9D627CE98B1A59701A"
+        }
+      ]
+    },
+    {
+      "name": "e06_pilot_execution_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_pilot_execution_test.gd",
+      "test_file_sha256_current_final_runner": "F450CC09E8CDCAB559FF038050902F83EB835AC9393690F04D2B24011EB0DF9E",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\198-e06_pilot_execution_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\198-e06_pilot_execution_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 128,
+          "failure_evidence": [],
+          "engine_log_sha256": "5E8D68E197D0432C470622D65D5FE7B01EC9FF6A5AFDA471F626BA57EB866F39",
+          "output_log_sha256": "5E8D68E197D0432C470622D65D5FE7B01EC9FF6A5AFDA471F626BA57EB866F39",
+          "exit_code": 0,
+          "completion_summary": "E06 pilot real execution: 128 checks, 0 failures"
+        }
+      ]
+    },
+    {
+      "name": "e06_power_migration_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_power_migration_test.gd",
+      "test_file_sha256_current_final_runner": "60FA0C0F55632E2A0B188CE316DBBD1234CBCC0D74C065E790011385F4079A6F",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\208-e06_power_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\208-e06_power_migration_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 87,
+          "failure_evidence": [],
+          "engine_log_sha256": "FE86B21DA50DF61D8D9DC90E3BAA9BAF4E9566DD9F86C48531BFA42CC77DF44E",
+          "output_log_sha256": "FE86B21DA50DF61D8D9DC90E3BAA9BAF4E9566DD9F86C48531BFA42CC77DF44E",
+          "exit_code": 0,
+          "completion_summary": "E06 power migration: 87 checks, 0 failures"
+        },
+        {
+          "batch": "store_persistence_followup",
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\208-e06_power_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\208-e06_power_migration_test.output.log",
+          "status": "PASS",
+          "timeout": false,
+          "exit_code": 0,
+          "completion_checks": 87,
+          "completion_summary": "E06 power migration: 87 checks, 0 failures",
+          "failure_evidence": [],
+          "engine_log_sha256": "FE86B21DA50DF61D8D9DC90E3BAA9BAF4E9566DD9F86C48531BFA42CC77DF44E",
+          "output_log_sha256": "C3FBD56446DDC9AACC72697A6F46AF9707A7449FECA99E2C031997727DFAEA42"
+        }
+      ]
+    },
+    {
+      "name": "e06_publication_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_publication_test.gd",
+      "test_file_sha256_current_final_runner": "50C75EB12B270B17C74DD862D6878A1A4F9C4D0F7210AF114B210C735E4846F1",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\204-e06_publication_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\204-e06_publication_test.engine.log",
+          "status": "FAIL",
+          "timeout": false,
+          "completion_checks": 1050,
+          "failure_evidence": [
+            "ERROR: old and published blueprints compose defender/0",
+            "ERROR: old and published blueprints compose defender/1",
+            "ERROR: old and published blueprints compose berserker/1"
+          ],
+          "engine_log_sha256": "95EF85465550B3C2B43CECECDB32D4D4E40FB45C1123664FF563B34E686F7CA3",
+          "output_log_sha256": "95EF85465550B3C2B43CECECDB32D4D4E40FB45C1123664FF563B34E686F7CA3",
+          "exit_code": 1,
+          "completion_summary": "E06 publication: 1050 checks, 3 failures"
+        },
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\204-e06_publication_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\204-e06_publication_test.engine.log",
+          "status": "FAIL",
+          "timeout": false,
+          "completion_checks": 1113,
+          "failure_evidence": [
+            "ERROR: old and published blueprints compose berserker/1"
+          ],
+          "engine_log_sha256": "B7B9E82874A2803D6FFF3D76DD5C171D84ABFD49299EA140EA9390E4CB6C0AFA",
+          "output_log_sha256": "B7B9E82874A2803D6FFF3D76DD5C171D84ABFD49299EA140EA9390E4CB6C0AFA",
+          "exit_code": 1,
+          "completion_summary": "E06 publication: 1113 checks, 1 failures"
+        },
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_final\\204-e06_publication_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_final\\204-e06_publication_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 1145,
+          "failure_evidence": [],
+          "engine_log_sha256": "2186705F69E894A792DFDF4F4EA20CBF399A6AE4E2B4B0CAAD43F81E9BE0F182",
+          "output_log_sha256": "2186705F69E894A792DFDF4F4EA20CBF399A6AE4E2B4B0CAAD43F81E9BE0F182",
+          "exit_code": 0,
+          "completion_summary": "E06 publication: 1145 checks, 0 failures"
+        }
+      ]
+    },
+    {
+      "name": "e06_skill_downrank_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_skill_downrank_test.gd",
+      "test_file_sha256_current_final_runner": "D875E3BBB0EE6068D4AC750CC36548793C8476D24EF497DE87EDA264B2EED74F",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\224-e06_skill_downrank_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\224-e06_skill_downrank_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "55F5C5A7616B5DD62B3DE9D060B446B07BF362879CD5281D42E2CB3A7E88F141",
+          "output_log_sha256": "55F5C5A7616B5DD62B3DE9D060B446B07BF362879CD5281D42E2CB3A7E88F141",
+          "exit_code": 0,
+          "completion_summary": "E06 downranking: PASS (113 checks)"
+        }
+      ]
+    },
+    {
+      "name": "e06_skill_ux_iteration_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_skill_ux_iteration_test.gd",
+      "test_file_sha256_current_final_runner": "342338F4F7F13FA636B53E0041078407C0385A7897F4570974EAEDD59A22F154",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\226-e06_skill_ux_iteration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\226-e06_skill_ux_iteration_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 14,
+          "failure_evidence": [],
+          "engine_log_sha256": "C831C5AB09EBBF341E082E5C1E4A7A95A280D1A3CEB88905430FD9F0E34A8B9C",
+          "output_log_sha256": "C831C5AB09EBBF341E082E5C1E4A7A95A280D1A3CEB88905430FD9F0E34A8B9C",
+          "exit_code": 0,
+          "completion_summary": "E06 skill UX iteration: 14 checks, 0 failures"
+        },
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\226-e06_skill_ux_iteration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\226-e06_skill_ux_iteration_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 14,
+          "failure_evidence": [],
+          "engine_log_sha256": "C831C5AB09EBBF341E082E5C1E4A7A95A280D1A3CEB88905430FD9F0E34A8B9C",
+          "output_log_sha256": "C831C5AB09EBBF341E082E5C1E4A7A95A280D1A3CEB88905430FD9F0E34A8B9C",
+          "exit_code": 0,
+          "completion_summary": "E06 skill UX iteration: 14 checks, 0 failures"
+        },
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_final\\226-e06_skill_ux_iteration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_final\\226-e06_skill_ux_iteration_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 14,
+          "failure_evidence": [],
+          "engine_log_sha256": "C831C5AB09EBBF341E082E5C1E4A7A95A280D1A3CEB88905430FD9F0E34A8B9C",
+          "output_log_sha256": "C831C5AB09EBBF341E082E5C1E4A7A95A280D1A3CEB88905430FD9F0E34A8B9C",
+          "exit_code": 0,
+          "completion_summary": "E06 skill UX iteration: 14 checks, 0 failures"
+        }
+      ]
+    },
+    {
+      "name": "e06_spatial_execution_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_spatial_execution_test.gd",
+      "test_file_sha256_current_final_runner": "85196B3310BE08785D4D52FB924C9EDBE67A81C55376DA7BC282797FAA8A5AE5",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\200-e06_spatial_execution_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\200-e06_spatial_execution_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 153,
+          "failure_evidence": [],
+          "engine_log_sha256": "60DD89C0511FB4299A0506F4633AB059D180C71CFD2A22AF6E7E555C38D82800",
+          "output_log_sha256": "60DD89C0511FB4299A0506F4633AB059D180C71CFD2A22AF6E7E555C38D82800",
+          "exit_code": 0,
+          "completion_summary": "E06 spatial execution: 153 checks, 0 failures"
+        }
+      ]
+    },
+    {
+      "name": "e06_spatial_policies_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_spatial_policies_test.gd",
+      "test_file_sha256_current_final_runner": "0E7A32A2197B25231D17CEF292F20F718028A4F9275CBD1920CDB6CD12B945CC",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\199-e06_spatial_policies_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\199-e06_spatial_policies_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 123,
+          "failure_evidence": [],
+          "engine_log_sha256": "CA016407E1C985E4B4798EFA4222D5802C8C4DABFE74CA8A0E9F9C958F1E7473",
+          "output_log_sha256": "CA016407E1C985E4B4798EFA4222D5802C8C4DABFE74CA8A0E9F9C958F1E7473",
+          "exit_code": 0,
+          "completion_summary": "E06 spatial policies: 123 checks, 0 failures"
+        }
+      ]
+    },
+    {
+      "name": "e06_swordsman_cluster_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_swordsman_cluster_test.gd",
+      "test_file_sha256_current_final_runner": "670B5B53F2AE2F4902903841C1C3B2CBDEDB482B9D62679B44544DF91B4BBD67",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\225-e06_swordsman_cluster_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\225-e06_swordsman_cluster_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "9372FFD92E0E5D3A23EA3071C7947EB7A08045BBE4473C3E1DE66B9B94D9E351",
+          "output_log_sha256": "9372FFD92E0E5D3A23EA3071C7947EB7A08045BBE4473C3E1DE66B9B94D9E351",
+          "exit_code": 0,
+          "completion_summary": "E06 swordsman clusters: PASS (188 checks)"
+        },
+        {
+          "batch": "store_persistence_followup",
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\225-e06_swordsman_cluster_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\225-e06_swordsman_cluster_test.output.log",
+          "status": "PASS",
+          "timeout": false,
+          "exit_code": 0,
+          "completion_checks": 218,
+          "completion_summary": "E06 swordsman clusters: PASS (218 checks)",
+          "failure_evidence": [],
+          "engine_log_sha256": "BD39608D928E9363CEC2255D9532CF0A35F9999A1B26A33AAEAE6F39C7663A30",
+          "output_log_sha256": "18979C7C4E12CA58D4AA9906E7E380497A3EA59FD4AB4C9E445107024AB2D67C"
+        }
+      ]
+    },
+    {
+      "name": "e06_transform_execution_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_transform_execution_test.gd",
+      "test_file_sha256_current_final_runner": "691FA6F3081524922FA31834B73103D9C2994DC479EEFE85562FDBB5B88BAF77",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\202-e06_transform_execution_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\202-e06_transform_execution_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 675,
+          "failure_evidence": [],
+          "engine_log_sha256": "00799F9554DC0533DE22631263E09A1C7A7B21FD57BC1562C9A95D649C9ED85E",
+          "output_log_sha256": "00799F9554DC0533DE22631263E09A1C7A7B21FD57BC1562C9A95D649C9ED85E",
+          "exit_code": 0,
+          "completion_summary": "E06 transform execution: 675 checks, 0 failures"
+        }
+      ]
+    },
+    {
+      "name": "e06_transform_policies_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_transform_policies_test.gd",
+      "test_file_sha256_current_final_runner": "195BC358F8A45EDFD40B575664664B37A3574B0C5D6124F656AAF25335868D08",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\201-e06_transform_policies_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\201-e06_transform_policies_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 130,
+          "failure_evidence": [],
+          "engine_log_sha256": "FA8A989BD8ABB003ABBA25A2905989E946AE29C2F3307D84E558BF9DBF2F4139",
+          "output_log_sha256": "FA8A989BD8ABB003ABBA25A2905989E946AE29C2F3307D84E558BF9DBF2F4139",
+          "exit_code": 0,
+          "completion_summary": "E06 transform policies: 130 checks, 0 failures"
+        }
+      ]
+    },
+    {
+      "name": "e06_tx_migration_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_tx_migration_test.gd",
+      "test_file_sha256_current_final_runner": "A421D666FFCCB72B4C1436BE6B2C89211729A9B90DA270FD3D17031C37772597",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\184-e06_tx_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\184-e06_tx_migration_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 25,
+          "failure_evidence": [],
+          "engine_log_sha256": "E37C7DA3EE5611437B90A8CE4BAB8B16BB2FF1D601E16910C53087A3C2C63B0F",
+          "output_log_sha256": "E37C7DA3EE5611437B90A8CE4BAB8B16BB2FF1D601E16910C53087A3C2C63B0F",
+          "exit_code": 0,
+          "completion_summary": "E06 TX1 migration: 25 checks, 0 failures"
+        },
+        {
+          "batch": "store_persistence_followup",
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\184-e06_tx_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\184-e06_tx_migration_test.output.log",
+          "status": "PASS",
+          "timeout": false,
+          "exit_code": 0,
+          "completion_checks": 25,
+          "completion_summary": "E06 TX1 migration: 25 checks, 0 failures",
+          "failure_evidence": [],
+          "engine_log_sha256": "E37C7DA3EE5611437B90A8CE4BAB8B16BB2FF1D601E16910C53087A3C2C63B0F",
+          "output_log_sha256": "E9895F305173E29547757B2EE8651DA0491376CE355D5C6BF70B2C687489EB8E"
+        }
+      ]
+    },
+    {
+      "name": "editor_import",
+      "final_status": "PASS",
+      "test_file": null,
+      "test_file_sha256_current_final_runner": null,
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\001.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\001.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "63404C5C8F1A365777DC88358307D7C4F40A8BE410005D228E771C4CE6F327CA",
+          "output_log_sha256": "63404C5C8F1A365777DC88358307D7C4F40A8BE410005D228E771C4CE6F327CA",
+          "exit_code": 0,
+          "completion_summary": "[ DONE ] loading_editor_layout"
+        }
+      ]
+    },
+    {
+      "name": "menu_tabs_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\menu_tabs_test.gd",
+      "test_file_sha256_current_final_runner": "B06B1FCF5B9D8F31F0BECFE49500053ADBCE2558BF8F2485A8C69FCF69DBB043",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\024-menu_tabs_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\024-menu_tabs_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "7A1ADD619207BEF9C712FE46FB2B96E193B535BFA97BA2144BE41C40156F0223",
+          "output_log_sha256": "7A1ADD619207BEF9C712FE46FB2B96E193B535BFA97BA2144BE41C40156F0223",
+          "exit_code": 0,
+          "completion_summary": "Menu tabs: PASS (39 checks)"
+        }
+      ]
+    },
+    {
+      "name": "profile_facade_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\profile_facade_test.gd",
+      "test_file_sha256_current_final_runner": "7B67E89207876D350EE55F8AE218FCB181C0AB4D251E0C963831AC2703937857",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\019-profile_facade_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\019-profile_facade_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "DA59BC0A6B3DB2BB051694C1D09B478505133DCE5F332DCBB19E31504A99C66C",
+          "output_log_sha256": "DA59BC0A6B3DB2BB051694C1D09B478505133DCE5F332DCBB19E31504A99C66C",
+          "exit_code": 0,
+          "completion_summary": "Fachada de perfil E01.3-A: PASS (52 checks)"
+        },
+        {
+          "batch": "store_persistence_followup",
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\019-profile_facade_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\019-profile_facade_test.output.log",
+          "status": "PASS",
+          "timeout": false,
+          "exit_code": 0,
+          "completion_checks": 52,
+          "completion_summary": "Fachada de perfil E01.3-A: PASS (52 checks)",
+          "failure_evidence": [],
+          "engine_log_sha256": "DA59BC0A6B3DB2BB051694C1D09B478505133DCE5F332DCBB19E31504A99C66C",
+          "output_log_sha256": "0E7C0200C1FAEDEE71AA0FEC27B6F9415F0F622606FFE2917B2718E1295292D5"
+        }
+      ]
+    },
+    {
+      "name": "profile_run_facade_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\profile_run_facade_test.gd",
+      "test_file_sha256_current_final_runner": "1DE76A5C49B346C9DC6FCD320464805DFA4D49A8D5042A10FFC7504AEBD73226",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\020-profile_run_facade_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\020-profile_run_facade_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "B0C7CDF8B26380ED5B643EA575F2993C5C16FFA8BF72D430D4552EB3AEB8843A",
+          "output_log_sha256": "B0C7CDF8B26380ED5B643EA575F2993C5C16FFA8BF72D430D4552EB3AEB8843A",
+          "exit_code": 0,
+          "completion_summary": "Sessão e recompensas E01.3-B: PASS (54 checks)"
+        },
+        {
+          "batch": "store_persistence_followup",
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\020-profile_run_facade_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\020-profile_run_facade_test.output.log",
+          "status": "PASS",
+          "timeout": false,
+          "exit_code": 0,
+          "completion_checks": 54,
+          "completion_summary": "Sessão e recompensas E01.3-B: PASS (54 checks)",
+          "failure_evidence": [],
+          "engine_log_sha256": "B0C7CDF8B26380ED5B643EA575F2993C5C16FFA8BF72D430D4552EB3AEB8843A",
+          "output_log_sha256": "63AFAED0F8287EE17CEF6777E5F7E217A036B1CB41A7CD9C52DCF2355AA0484E"
+        }
+      ]
+    },
+    {
+      "name": "profile_store_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\profile_store_test.gd",
+      "test_file_sha256_current_final_runner": "5E293A82643334DFF1FC02255E2A33D0262BEA0D72D1B5BACF9FE4624F68E104",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\018-profile_store_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\018-profile_store_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "9E20150DC310DB093E87CD0D7BC62AEDC98F319D31642A59D235D7EDEDD9495C",
+          "output_log_sha256": "9E20150DC310DB093E87CD0D7BC62AEDC98F319D31642A59D235D7EDEDD9495C",
+          "exit_code": 0,
+          "completion_summary": "Persistência E01.2: PASS (116 checks)"
+        },
+        {
+          "batch": "store_persistence_followup",
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\018-profile_store_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\018-profile_store_test.output.log",
+          "status": "PASS",
+          "timeout": false,
+          "exit_code": 0,
+          "completion_checks": 116,
+          "completion_summary": "Persistência E01.2: PASS (116 checks)",
+          "failure_evidence": [],
+          "engine_log_sha256": "9E20150DC310DB093E87CD0D7BC62AEDC98F319D31642A59D235D7EDEDD9495C",
+          "output_log_sha256": "5367FDB65B879E166E5BF0B32391D37A3E04E4E98AF00E9427155194EBF8E2E5"
+        }
+      ]
+    },
+    {
+      "name": "skill_allocation_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\skill_allocation_test.gd",
+      "test_file_sha256_current_final_runner": "A7685FEF9491B0536A7F38394B52B6C438EC7DCDC75ED8EC2575C5F5C3D55ECF",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\222-skill_allocation_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\222-skill_allocation_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 44,
+          "failure_evidence": [],
+          "engine_log_sha256": "E66626469F528F0D6681689A5FD6346A8AAE1410A376897DAF45CE0C96DC5CDA",
+          "output_log_sha256": "E66626469F528F0D6681689A5FD6346A8AAE1410A376897DAF45CE0C96DC5CDA",
+          "exit_code": 0,
+          "completion_summary": "E06 skill allocation: 44 checks, 0 failures"
+        }
+      ]
+    },
+    {
+      "name": "skill_window_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\skill_window_test.gd",
+      "test_file_sha256_current_final_runner": "C06D72902F83D4E664147DE9446AB93190F00F3575B3D93DF06FC414403FF6BC",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\223-skill_window_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\223-skill_window_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 54,
+          "failure_evidence": [],
+          "engine_log_sha256": "6AB25CC9E5D5128E900722C682466CCAF161C73E544DF6B6EA6E0B8AEA078A20",
+          "output_log_sha256": "6AB25CC9E5D5128E900722C682466CCAF161C73E544DF6B6EA6E0B8AEA078A20",
+          "exit_code": 0,
+          "completion_summary": "E06 skill window: 54 checks, 0 failures"
+        },
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\223-skill_window_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\223-skill_window_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 54,
+          "failure_evidence": [],
+          "engine_log_sha256": "6AB25CC9E5D5128E900722C682466CCAF161C73E544DF6B6EA6E0B8AEA078A20",
+          "output_log_sha256": "6AB25CC9E5D5128E900722C682466CCAF161C73E544DF6B6EA6E0B8AEA078A20",
+          "exit_code": 0,
+          "completion_summary": "E06 skill window: 54 checks, 0 failures"
+        },
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_final\\223-skill_window_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_final\\223-skill_window_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 54,
+          "failure_evidence": [],
+          "engine_log_sha256": "6AB25CC9E5D5128E900722C682466CCAF161C73E544DF6B6EA6E0B8AEA078A20",
+          "output_log_sha256": "6AB25CC9E5D5128E900722C682466CCAF161C73E544DF6B6EA6E0B8AEA078A20",
+          "exit_code": 0,
+          "completion_summary": "E06 skill window: 54 checks, 0 failures"
+        }
+      ]
+    },
+    {
+      "name": "smoke",
+      "final_status": "PASS",
+      "test_file": null,
+      "test_file_sha256_current_final_runner": null,
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\177.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\177.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": null,
+          "failure_evidence": [],
+          "engine_log_sha256": "6D1C065383A27C36804949B6FFA4B09714470B112E5DACC0BD5AEB7B9C147C4E",
+          "output_log_sha256": "6D1C065383A27C36804949B6FFA4B09714470B112E5DACC0BD5AEB7B9C147C4E",
+          "exit_code": 0,
+          "completion_summary": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org"
+        }
+      ]
+    },
+    {
+      "name": "stat_threshold_migration_test",
+      "final_status": "PASS",
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\stat_threshold_migration_test.gd",
+      "test_file_sha256_current_final_runner": "D5CDDF44148F52D6457495D9057673F66F11E4CA6ADC5789ECDF79769A9BFEA8",
+      "attempts": [
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\028-stat_threshold_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15\\028-stat_threshold_migration_test.engine.log",
+          "status": "FAIL",
+          "timeout": false,
+          "completion_checks": 509,
+          "failure_evidence": [
+            "ERROR: fixture new profile valid before changing envelope",
+            "ERROR: durable migration reports explicit warning"
+          ],
+          "engine_log_sha256": "522FADAD371AD05F6FDE689A81DB82B43F70261063D6EDF9CB1E43EF6AA7317F",
+          "output_log_sha256": "522FADAD371AD05F6FDE689A81DB82B43F70261063D6EDF9CB1E43EF6AA7317F",
+          "exit_code": 1,
+          "completion_summary": "Stat threshold migration: FAIL (509 checks, 2 failures)"
+        },
+        {
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\028-stat_threshold_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_corrected\\028-stat_threshold_migration_test.engine.log",
+          "status": "PASS",
+          "timeout": false,
+          "completion_checks": 522,
+          "failure_evidence": [],
+          "engine_log_sha256": "F9EC9386F2BBB7380AB6BB4E29ECB19B9B8CD567D4A03A910B6FF95373A50813",
+          "output_log_sha256": "F9EC9386F2BBB7380AB6BB4E29ECB19B9B8CD567D4A03A910B6FF95373A50813",
+          "exit_code": 0,
+          "completion_summary": "Stat threshold migration: PASS (522 checks, 0 failures)"
+        },
+        {
+          "batch": "store_persistence_followup",
+          "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\028-stat_threshold_migration_test.engine.log",
+          "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\e06_skill_ux_iteration\\resume_15_persistence_regression\\028-stat_threshold_migration_test.output.log",
+          "status": "PASS",
+          "timeout": false,
+          "exit_code": 0,
+          "completion_checks": 522,
+          "completion_summary": "Stat threshold migration: PASS (522 checks, 0 failures)",
+          "failure_evidence": [],
+          "engine_log_sha256": "F9EC9386F2BBB7380AB6BB4E29ECB19B9B8CD567D4A03A910B6FF95373A50813",
+          "output_log_sha256": "BBCECA0381E5BDFABC98FF49A62D6909FE0A68AF08CF0CDD30C3E9088A3D144B"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Runner supervision confirms process completion, exit behavior as recorded by the verify wrapper, engine logs, and hashes; it is not a semantic independent audit.",
+    "The initial first-pass test-file/input hashes were not captured before runner synchronization. The report records current final-runner test-file hashes and preserves exact log/output hashes for every attempt."
+  ],
+  "followup_finding": {
+    "cause": "An isolated durable personal-save-copy schema 5 to 6 migration exposed ProfileStore._preflight_commit rejecting explicit_cast_ranks_v1 and swordsman_clusters_v1 as stale_revision.",
+    "correction": "Allowlist updated while retaining _same_profile identity guards.",
+    "regression": "e06_swordsman_cluster_test now covers durable schema 5/catalog 12 and transitional schema 6/catalog 12 migration, backup/revision/refund/idempotency, facade first create, same-revision forged source rejection, and failure-stage/pending preservation.",
+    "automated_regressions": "All 13 targeted persistence and migration checks passed.",
+    "independent_copy_confirmation": "Root confirmed isolated personal-copy migration passed: original seven characters opened, eighth character creation succeeded, and three original personal hashes were unchanged.",
+    "independent_copy_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration\\personal_copy_15_corrected.output.log"
+  }
+}

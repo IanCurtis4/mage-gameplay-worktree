@@ -5,10 +5,20 @@ extends RefCounted
 static func preview(skill_id: StringName, rank: int, composed_build: Dictionary) -> Dictionary:
 	return capture(skill_id, rank, composed_build)
 
+static func preview_retained(skill_id: StringName, rank: int, composed_build: Dictionary) -> Dictionary:
+	## Disabled shortcut preview only. The copied rank view cannot grant runtime access.
+	if not SkillCastRank.supports(skill_id) or rank <= 0 or ClassCatalog.skill_definition(skill_id).rank_definition(rank) == null:
+		return BuildEffectCatalog.failure(&"rank_mismatch")
+	var view := BuildEffectComposer.copy_result(composed_build)
+	if not view.get("ok", false): return view
+	view["skill_ranks"][skill_id] = rank
+	return capture(skill_id, rank, view)
+
 static func capture(skill_id: StringName, rank: int, composed_build: Dictionary) -> Dictionary:
 	if not composed_build.get("ok", false):
 		return BuildEffectCatalog.failure(&"invalid_composed_build")
-	if rank <= 0 or int(composed_build.get("skill_ranks", {}).get(skill_id, 0)) != rank:
+	var effective := int(composed_build.get("skill_ranks", {}).get(skill_id, 0))
+	if rank <= 0 or (effective != rank and SkillCastRank.resolve(skill_id, rank, effective) != rank):
 		return BuildEffectCatalog.failure(&"rank_mismatch")
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var rank_definition := definition.rank_definition(rank) if definition != null else null

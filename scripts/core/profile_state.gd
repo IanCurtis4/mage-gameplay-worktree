@@ -3,8 +3,8 @@ extends RefCounted
 ## Persistent profile-owned state. Persistence mechanics are introduced in E01.2.
 
 const FORMAT_ID := "ragrpg_character_profile"
-const SCHEMA_VERSION := 5
-const CATALOG_VERSION := 12
+const SCHEMA_VERSION := 6
+const CATALOG_VERSION := 13
 const RULESET_ID := "stat_thresholds_v1"
 const MAX_CHARACTERS := 8
 

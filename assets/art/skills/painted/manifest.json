@@ -1,0 +1,59 @@
+{
+  "tool": "built-in imagegen",
+  "date": "2026-10-14",
+  "source_preserved": true,
+  "runtime_import_max_size": 128,
+  "display_pixels": 32,
+  "common_prompt": "Original SINGLE square hand-painted Korean fantasy RPG ability icon, one coherent central silhouette75%,10%margin, strict bicolor deep navy/burgundy/indigo and warm ivory/golden tonal shades, unmistakable at32x32, no frame/text/grid/watermark/vector collage or malformed overlaps, opaque background.",
+  "assets": [
+    {
+      "id": "fury",
+      "file": "fury.png",
+      "subject_prompt": "a clenched armored fist surging upward surrounded by one coherent wild flame aura",
+      "sha256": "c894d7ca8c9e9b6c4a9c99ada2ad94debea1b3c10d2df3500b0d23d0edf0bccb",
+      "prompt": "Use case: stylized-concept. Asset type: a SINGLE square RPG ability icon, original painted pixel illustration for RagRPG. Subject: a clenched armored fist surging upward surrounded by one coherent wild flame aura, conveys fierce physical rage and pressure. Style: hand-painted 2D Korean fantasy RPG inventory icon, bold clean anatomical silhouette and confident curved painted edges, subtly textured low-resolution painted treatment. Composition: a single unmistakable large subject centered filling 75% of a square, 10% breathing margin, no border frame. Color palette: STRICT BICOLOR deep burgundy background and luminous warm ivory silhouette; use only tonal shades of these two hue families and controlled edge shading. The icon MUST remain recognizable when shown 32x32 pixels. No text, no numbers, no grid, no multiple icons, no watermark. Avoid mechanical vector primitives, overlaid geometrical shapes, tiny scattered marks, extraneous fingers, intersecting broken outlines, rainbow lighting. Opaque flat background."
+    },
+    {
+      "id": "shield_wall",
+      "file": "shield_wall.png",
+      "subject_prompt": "one sturdy medieval kite shield with a protective arc",
+      "sha256": "5292b24b8c0983e716cdcb7dbd923aa1f8910c6d9834772fbe3268aa8cc83db9",
+      "prompt": "Use case: stylized-concept. Asset type: a SINGLE square RPG ability icon, original painted pixel illustration for RagRPG. Subject: one large sturdy medieval kite shield seen three-quarter front, a single solid protective arc around its left rim, conveys frontal guarding. Style: hand-painted 2D Korean fantasy RPG inventory icon, bold clean anatomical silhouette and confident curved painted edges, subtly textured low-resolution painted treatment. Composition: a single unmistakable large subject centered filling 75% of a square, 10% breathing margin, no border frame. Color palette: STRICT BICOLOR deep navy background and luminous warm ivory silhouette; use only tonal shades of these two hue families and controlled edge shading. The icon MUST remain recognizable when shown 32x32 pixels. No text, no numbers, no grid, no multiple icons, no watermark. Avoid mechanical vector primitives, overlaid geometrical shapes, tiny scattered marks, extraneous fingers, intersecting broken outlines, rainbow lighting. Opaque flat background."
+    },
+    {
+      "id": "fireball",
+      "file": "fireball.png",
+      "subject_prompt": "one burning spherical comet with a sweeping flame tail",
+      "sha256": "0538213b7a8b0b683026cc6e05bde8e98a0383c0ec91a3c89f63aff5e0820c16",
+      "prompt": "Use case: stylized-concept. Asset type: a SINGLE square RPG ability icon, original painted pixel illustration for RagRPG. Subject: one burning spherical comet travelling diagonally with a curved sweeping flame tail, the flame and ball form one unified mass. Style: hand-painted 2D Korean fantasy RPG inventory icon, bold clean anatomical silhouette and confident curved painted edges, subtly textured low-resolution painted treatment. Composition: a single unmistakable large subject centered filling 75% of a square, 10% breathing margin, no border frame. Color palette: STRICT BICOLOR deep indigo background and luminous golden ivory silhouette; use only tonal shades of these two hue families and controlled edge shading. The icon MUST remain recognizable when shown 32x32 pixels. No text, no numbers, no grid, no multiple icons, no watermark. Avoid mechanical vector primitives, overlaid geometrical shapes, tiny scattered marks, extraneous fingers, intersecting broken outlines, rainbow lighting. Opaque flat background."
+    },
+    {
+      "id": "defender_riposte",
+      "file": "defender_riposte.png",
+      "subject_prompt": "steel sword retaliating from a protective shield stance",
+      "sha256": "201b9b720968701c44868c7256bd4149fec97b5e226ee8566e9f6195f4579c2b",
+      "prompt": "Use case: stylized-concept. Asset type: SINGLE square original painted RPG skill icon for RagRPG, shared between tree and combat at32px. Subject: a single steel sword striking firmly forward out of a protective shield stance; sword blade dominant, short shield rim secondary; conveys precise retaliatory strike. Hand-painted Korean fantasy RPG style, expressive confident painted curved silhouette, delicate controlled brush shading. STRICT BICOLOR deep navy and warm ivory: tonal shades of only these two hue families. One large central unified image occupying75% of canvas, flat opaque background,10% breathing margin. Not a vector collage; no repeated overlapping primitives, malformed outlines, tiny decorations or scattered particles. Remain instantly recognizable at32x32 pixels. No frame, no text, no letters, no numbers, no watermark, no grid."
+    },
+    {
+      "id": "defender_retreat_guard",
+      "file": "defender_retreat_guard.png",
+      "subject_prompt": "armored boot stepping backward",
+      "sha256": "9144102f92460348bc4e64479d639ccb2a90d081ac69b5c447900f417e54e3d6",
+      "prompt": "Use case: stylized-concept. Asset type: SINGLE square original painted RPG skill icon for RagRPG, shared between tree and combat at32px. Subject: one armored boot taking a backward step with a confident sweeping motion stroke, strong readable silhouette, conveys a guarded retreat. Hand-painted Korean fantasy RPG style, expressive confident painted curved silhouette, delicate controlled brush shading. STRICT BICOLOR deep navy and warm ivory: tonal shades of only these two hue families. One large central unified image occupying75% of canvas, flat opaque background,10% breathing margin. Not a vector collage; no repeated overlapping primitives, malformed outlines, tiny decorations or scattered particles. Remain instantly recognizable at32x32 pixels. No frame, no text, no letters, no numbers, no watermark, no grid."
+    },
+    {
+      "id": "berserker_pursuit_cut",
+      "file": "berserker_pursuit_cut.png",
+      "subject_prompt": "rugged curved greatsword tracing a sweeping cut",
+      "sha256": "3641cd64e321b852d0d8dd76affc512fc24eb4ec3a3e27cc141aba4b0055a0da",
+      "prompt": "Use case: stylized-concept. Asset type: SINGLE square original painted RPG skill icon for RagRPG, shared between tree and combat at32px. Subject: a single rugged curved greatsword tracing one long forceful sweeping cut; blade plus unified painted slash trail. Hand-painted Korean fantasy RPG style, expressive confident painted curved silhouette, delicate controlled brush shading. STRICT BICOLOR deep burgundy and warm ivory: tonal shades of only these two hue families. One large central unified image occupying75% of canvas, flat opaque background,10% breathing margin. Not a vector collage; no repeated overlapping primitives, malformed outlines, tiny decorations or scattered particles. Remain instantly recognizable at32x32 pixels. No frame, no text, no letters, no numbers, no watermark, no grid."
+    },
+    {
+      "id": "berserker_deep_bleeding",
+      "file": "berserker_deep_bleeding.png",
+      "subject_prompt": "outlined hollow blood drop with an incision line",
+      "sha256": "49c4445cf036ac3457ee057747f3f16e7037d154235c3cf5d7125bd74aa38835",
+      "prompt": "Use case: stylized-concept. Asset type: SINGLE square original painted RPG skill icon for RagRPG, shared between tree and combat at32px. Subject: one bold OUTLINED teardrop of blood enclosing a single small incision line, simple hollow contour, a PASSIVE icon with restrained hand-painted brush edges. Hand-painted Korean fantasy RPG style, expressive confident painted curved silhouette, delicate controlled brush shading. STRICT BICOLOR deep burgundy and warm ivory: tonal shades of only these two hue families. One large central unified image occupying75% of canvas, flat opaque background,10% breathing margin. Not a vector collage; no repeated overlapping primitives, malformed outlines, tiny decorations or scattered particles. Remain instantly recognizable at32x32 pixels. No frame, no text, no letters, no numbers, no watermark, no grid."
+    }
+  ]
+}

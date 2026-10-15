@@ -26,26 +26,26 @@ func _run() -> void:
 	character.presets[0]["active_slots"][0] = &"defender_anchor"
 	profile.characters.append(character)
 	profile.selected_character_id = character_id
-	var encoded := ProfileCodec.encode(profile)
-	_check(encoded["ok"] and ProfileState.CATALOG_VERSION == 12, "current catalog remains schema 2 and accepts earlier Berserker migration")
+	var encoded := ProfileCodec.encode(profile, ProfileCatalog.pilot().pre_swordsman_cluster_catalog())
+	_check(encoded["ok"] and ProfileState.CATALOG_VERSION == 13, "historical fixture encodes under its previous rules before schema6/catalog13 migration")
 	var old_data: Dictionary = TX.legacy_data(encoded["data"])
 	old_data["catalog_version"] = ProfileCodec.PRE_BERSERKER_CATALOG_VERSION
 	old_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	var old_text := JSON.stringify(old_data, "\t")
 	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), old_text)
 	var decoded := ProfileCodec.decode(old_text)
-	_check(decoded["ok"] and decoded["migration_kind"] == &"catalog_v3" and decoded["profile"].revision == 7, "catalog-3 save migrates additively without changing revision")
+	_check(decoded["ok"] and decoded["migration_kind"] == &"catalog_v3" and &"swordsman_clusters_v1" in decoded["migration_kinds"] and decoded["profile"].revision == 7, "catalog3 fixture migrates with explicit cluster refund without changing decode revision")
 	var loaded := ProfileStore.new(directory).load_profile()
 	_check(loaded["ok"] and loaded["migrated"] and loaded["profile"].revision == 8, "store commits one transactional migration revision")
 	var durable: CharacterState = loaded["profile"].character_by_id(character_id)
-	_check(durable.evolution_id == &"defender" and durable.purchased_skill_ranks == {&"defender_anchor": 1} and durable.presets[0]["active_slots"][0] == &"defender_anchor" and durable.base_xp_total == character.base_xp_total and durable.job_xp_total == character.job_xp_total, "migration preserves existing Defender build and XP")
+	_check(durable.evolution_id == &"defender" and durable.purchased_skill_ranks.is_empty() and durable.presets[0]["active_slots"][0] == null and decoded["migration_removals"][0]["evolution_refund"] == 1 and durable.base_xp_total == character.base_xp_total and durable.job_xp_total == character.job_xp_total, "migration refunds illegal Anchor without buying Shield and preserves Defender identity/XP")
 	var current_data: Dictionary = JSON.parse_string(_read_text(directory.path_join(ProfileStore.PRIMARY_FILE)))
 	_check(_read_text(directory.path_join(ProfileStore.BACKUP_FILE)) == old_text and current_data["catalog_version"] == ProfileState.CATALOG_VERSION and current_data["ruleset_id"] == ProfileState.RULESET_ID and current_data["schema_version"] == ProfileState.SCHEMA_VERSION, "backup preserves exact catalog-3 source bytes")
 	var reloaded := ProfileStore.new(directory).load_profile()
 	_check(reloaded["ok"] and not reloaded.get("migrated", false) and reloaded["profile"].revision == 8, "current catalog reload is idempotent")
 	var newer := profile.copy_state()
 	newer.revision = 9
-	var newer_data: Dictionary = TX.legacy_data(ProfileCodec.encode(newer)["data"])
+	var newer_data: Dictionary = TX.legacy_data(ProfileCodec.encode(newer, ProfileCatalog.pilot().pre_swordsman_cluster_catalog())["data"])
 	newer_data["catalog_version"] = ProfileCodec.PRE_BERSERKER_CATALOG_VERSION
 	newer_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	_assert_protected_backup(old_text, JSON.stringify(newer_data, "\t"), "newer same-profile catalog-3 backup")

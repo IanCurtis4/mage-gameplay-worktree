@@ -341,7 +341,7 @@ func _berserker_last_slot() -> void:
 	build.base_class_id = &"swordsman"
 	build.evolution_id = &"berserker"
 	build.job_level = 40
-	build.skill_ranks = {&"berserker_rupture": 1, &"berserker_pursuit": 1}
+	build.skill_ranks = {&"berserker_rupture": 2, &"berserker_pursuit": 1} # Approved permanent prerequisite; ledger oracle unchanged.
 	var state := RunState.from_build("pursuit", build)
 	var nav := ArenaNavigation.new()
 	nav.configure(Rect2(0, 0, 1000, 1000), [], 0.0)

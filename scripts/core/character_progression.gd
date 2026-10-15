@@ -140,7 +140,7 @@ static func respec_skills(character: CharacterState, catalog: ProfileCatalog) ->
 		_prune_slots(preset["active_slots"], ProfileCatalog.ACTIVE, effective, catalog)
 		_prune_slots(preset["passive_slots"], ProfileCatalog.PASSIVE, effective, catalog)
 	character.action_slots = ActionBarLayout.for_character(character)
-	_prune_slots(character.action_slots, ProfileCatalog.ACTIVE, effective, catalog)
+	_prune_slots(character.action_slots, ProfileCatalog.ACTIVE, effective, catalog, ItemSkillAdapters.reference_ids(character.base_class_id))
 	return {"ok": true, "base_refund": base_refund, "evolution_refund": evolution_refund}
 
 static func change_evolution(character: CharacterState, catalog: ProfileCatalog, evolution_id: StringName) -> Dictionary:
@@ -178,7 +178,7 @@ static func change_evolution(character: CharacterState, catalog: ProfileCatalog,
 	)
 	var cleared_slots: Array[Dictionary] = []
 	character.action_slots = ActionBarLayout.for_character(character)
-	_prune_slots(character.action_slots, ProfileCatalog.ACTIVE, effective, catalog)
+	_prune_slots(character.action_slots, ProfileCatalog.ACTIVE, effective, catalog, ItemSkillAdapters.reference_ids(character.base_class_id))
 	for preset_index: int in character.presets.size():
 		var preset: Dictionary = character.presets[preset_index]
 		cleared_slots.append({
@@ -212,18 +212,52 @@ static func _empty_cleared_slots() -> Array[Dictionary]:
 		})
 	return cleared_slots
 
-static func _prune_slots(slots: Array, category: StringName, effective: Dictionary[StringName, int], catalog: ProfileCatalog) -> Array[int]:
+static func _prune_slots(slots: Array, category: StringName, effective: Dictionary[StringName, int], catalog: ProfileCatalog, retained_item_refs: Array[StringName] = []) -> Array[int]:
 	var cleared_indices: Array[int] = []
 	for index: int in slots.size():
 		var value: Variant = slots[index]
 		if value == null:
 			continue
-		var skill_id := StringName(value)
+		var skill_id := ActionBarLayout.skill_id(value)
 		var metadata := catalog.skill_metadata(skill_id)
-		if metadata.is_empty() or metadata["category"] != category or effective.get(skill_id, 0) <= 0:
+		if metadata.is_empty() or metadata["category"] != category or (effective.get(skill_id, 0) <= 0 and skill_id not in retained_item_refs):
 			slots[index] = null
 			cleared_indices.append(index)
 	return cleared_indices
 
 static func _failure(error_code: StringName) -> Dictionary:
 	return {"ok": false, "error_code": error_code}
+
+static func refund_illegal_swordsman_ranks(character: CharacterState, catalog: ProfileCatalog) -> Dictionary:
+	## Fixed point: refund dependencies after their antecedents disappear, never buy them.
+	var removed: Array[Dictionary] = []
+	if character.base_class_id != &"swordsman" or character.evolution_id not in [&"defender", &"berserker"]:
+		return {"removed": removed, "evolution_refund": 0, "cleared_action_slots": []}
+	var refund := 0
+	var changed := true
+	while changed:
+		changed = false
+		var effective := catalog.effective_skill_ranks(character.base_class_id, character.evolution_id, character.purchased_skill_ranks, character.granted_skill_ranks)
+		for id: StringName in character.purchased_skill_ranks.keys():
+			var metadata := catalog.skill_metadata(id)
+			if metadata.get("wallet") != ProfileCatalog.EVOLUTION_WALLET or character.purchased_skill_ranks[id] <= 0:
+				continue
+			var rank := int(effective.get(id, 0))
+			var legal := true
+			for current_rank: int in range(1, rank + 1):
+				if not catalog.check_rank_requirements(id, current_rank, ProgressionRules.job_level_for_xp(character.job_xp_total, true), effective)["ok"]:
+					legal = false
+					break
+			if legal: continue
+			var purchased: int = character.purchased_skill_ranks[id]
+			removed.append({"skill_id": String(id), "purchased_ranks": purchased, "wallet": String(ProfileCatalog.EVOLUTION_WALLET)})
+			refund += purchased
+			character.purchased_skill_ranks.erase(id)
+			changed = true
+	var effective := catalog.effective_skill_ranks(character.base_class_id, character.evolution_id, character.purchased_skill_ranks, character.granted_skill_ranks)
+	character.action_slots = ActionBarLayout.for_character(character)
+	var cleared := _prune_slots(character.action_slots, ProfileCatalog.ACTIVE, effective, catalog, ItemSkillAdapters.reference_ids(character.base_class_id))
+	for preset: Dictionary in character.presets:
+		_prune_slots(preset["active_slots"], ProfileCatalog.ACTIVE, effective, catalog)
+		_prune_slots(preset["passive_slots"], ProfileCatalog.PASSIVE, effective, catalog)
+	return {"removed": removed, "evolution_refund": refund, "cleared_action_slots": cleared}

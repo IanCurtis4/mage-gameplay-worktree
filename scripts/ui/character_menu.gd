@@ -251,6 +251,7 @@ func _populate_build_editor(character: Variant) -> void:
 	var preset: Dictionary = character.presets[character.selected_preset]
 	var learned: Array[StringName] = []
 	learned.assign(options["active_skills"])
+	action_editor.available_ranks = options.get("effective_cast_ranks", {}).duplicate()
 	action_editor.configure(learned, ActionBarLayout.for_character(character), action_preferences)
 	var passives: Array[String] = []
 	for id: StringName in options["passive_skills"]:
@@ -479,6 +480,8 @@ func _refresh_progression_panel(character: Variant, profile: Variant) -> void:
 	if profile.reward_session != null:
 		evolution_state = "Run ativa: a progressão é somente leitura até o encerramento."
 	progression_state_label.text = "XP base: %d · Nível base: %d\nXP job: %d · Nível de job: %d\n%s" % [character.base_xp_total, summary["base_level"], character.job_xp_total, summary["job_level"], evolution_state]
+	var migration_notice := SkillPresentation.migration_notice(summary.get("migration_report", {}), character.character_id)
+	if not migration_notice.is_empty(): progression_state_label.text += "\n" + migration_notice
 	progression_wallets_label.text = "Atributos: %d/%d livres" % [summary["attribute_points_available"], summary["attribute_points_granted"]]
 	var breakdown: StatBreakdown = preview["stat_breakdown"]
 	var attribute_lines: Array[String] = []

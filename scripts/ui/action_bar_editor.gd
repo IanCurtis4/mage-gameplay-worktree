@@ -4,7 +4,7 @@ extends VBoxContainer
 
 const SlotScript := preload("res://scripts/ui/action_bar_slot.gd")
 
-signal assignment_requested(skill: StringName, destination: int)
+signal assignment_requested(skill: StringName, destination: int, rank: int)
 signal movement_requested(source: int, destination: int)
 signal removal_requested(index: int)
 signal capture_requested(index: int)
@@ -20,7 +20,8 @@ var learned_skills: Array[StringName] = []
 var action_slots: Array[Variant] = []
 var control_preferences := ControlPreferences.new()
 var slots_grid: GridContainer
-var library: VBoxContainer
+var library: VBoxContainer # Retained empty compatibility handle; no duplicate library rendered.
+var available_ranks: Dictionary = {}
 var selection_label: Label
 var message_label: Label
 var slot_buttons: Array[Button] = []
@@ -36,7 +37,7 @@ func _ready() -> void:
 		restore_bindings_requested.connect(restore_bindings)
 	add_theme_constant_override("separation", 6)
 	var instruction := Label.new()
-	instruction.text = "Arraste uma skill ou selecione um slot e clique na biblioteca. Direito remove."
+	instruction.text = "Arraste uma ativa da árvore/lista. Escolha a versão nos detalhes. Direito remove."
 	instruction.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	instruction.add_theme_font_size_override("font_size", 14)
 	add_child(instruction)
@@ -49,7 +50,7 @@ func _ready() -> void:
 		var button := SlotScript.new()
 		button.slot_index = index
 		button.drag_enabled = true
-		button.custom_minimum_size = Vector2(74, 48)
+		button.custom_minimum_size = Vector2(62, 48)
 		button.clip_text = true
 		button.focus_mode = Control.FOCUS_NONE
 		button.add_theme_font_size_override("font_size", 12)
@@ -74,13 +75,9 @@ func _ready() -> void:
 	message_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	message_label.add_theme_font_size_override("font_size", 14)
 	add_child(message_label)
-	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size.y = 164
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	add_child(scroll)
 	library = VBoxContainer.new()
-	library.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.add_child(library)
+	library.visible = false
+	add_child(library)
 	select_slot(0)
 	if action_slots.size() == 24:
 		configure(learned_skills, action_slots, control_preferences)
@@ -100,36 +97,25 @@ func configure(learned: Array[StringName], slots: Array[Variant], preferences: C
 	if slots_grid == null:
 		return
 	for index: int in range(24):
-		var id := StringName(action_slots[index]) if action_slots[index] != null else &""
+		var id := ActionBarLayout.skill_id(action_slots[index])
+		var rank := ActionBarLayout.selected_rank(action_slots[index])
 		var button := slot_buttons[index] as ActionBarSlot
 		button.skill_id = id
-		button.icon = SkillPresentation.icon(id)
-		button.add_theme_constant_override("icon_max_width", 24)
-		button.expand_icon = true
-		button.text = "%s\n%s" % [preferences.binding_label(index), _name(id)]
-		button.tooltip_text = "Slot %d · %s\n%s" % [index + 1, preferences.binding_label(index), _name(id)]
-	for child: Node in library.get_children():
-		library.remove_child(child)
-		child.queue_free()
-	for id: StringName in learned:
-		var button := SlotScript.new()
-		button.skill_id = id
+		button.cast_rank = rank
 		button.icon = SkillPresentation.icon(id)
 		button.add_theme_constant_override("icon_max_width", 32)
 		button.expand_icon = true
-		button.drag_enabled = true
-		button.text = _name(id)
-		button.tooltip_text = "Aprendida · %s\nClique para atribuir ao slot selecionado, ou arraste.\n%s" % [_name(id), SkillPresentation.MECHANICS.get(id, "Ativa desta classe; os valores de execução aparecem na barra.")]
-		button.focus_mode = Control.FOCUS_NONE
-		button.custom_minimum_size.y = 32
-		button.pressed.connect(func() -> void: assignment_requested.emit(id, selected_slot))
-		library.add_child(button)
+		button.text = "%s\n%s" % [preferences.binding_label(index), "R%d" % rank if rank > 0 else ("Máx." if not id.is_empty() else "—")]
+		button.tooltip_text = "Slot %d · %s\n%s" % [index + 1, preferences.binding_label(index), _name(id) + (" R%d" % rank if rank > 0 else "")]
+	for child: Node in library.get_children():
+		library.remove_child(child)
+		child.queue_free()
 	select_slot(selected_slot)
 
-func assign_skill(skill: StringName, destination: int) -> void:
-	if not learned_skills.has(skill) or destination < 0 or destination >= 24:
+func assign_skill(skill: StringName, destination: int, rank: int = 0) -> void:
+	if not learned_skills.has(skill) or destination < 0 or destination >= 24 or rank < 0 or (rank > 0 and (not SkillCastRank.supports(skill) or rank > int(available_ranks.get(skill, 0)))):
 		return
-	configure(learned_skills, ActionBarLayout.assign(action_slots, skill, destination), control_preferences)
+	configure(learned_skills, ActionBarLayout.assign(action_slots, skill, destination, rank), control_preferences)
 	layout_changed.emit(action_slots.duplicate())
 
 func move_skill(source: int, destination: int) -> void:
@@ -203,13 +189,14 @@ func select_slot(index: int) -> void:
 		slot_buttons[i].set_pressed_no_signal(i == selected_slot)
 
 func _drop(data: Dictionary, destination: int) -> void:
+	if data.get("kind") != "action_skill" or not data.get("skill_id") is StringName or not data.get("source_index", -1) is int or not data.get("rank", 0) is int or int(data.get("rank", 0)) < 0 or destination < 0 or destination >= ActionBarLayout.SLOT_COUNT: return
 	var source := int(data.get("source_index", -1))
 	if source >= 0:
-		if source >= action_slots.size() or action_slots[source] == null or StringName(action_slots[source]) != StringName(data.get("skill_id", &"")):
+		if source >= action_slots.size() or action_slots[source] == null or ActionBarLayout.skill_id(action_slots[source]) != StringName(data.get("skill_id", &"")) or ActionBarLayout.selected_rank(action_slots[source]) != int(data.get("rank", 0)):
 			return
 		movement_requested.emit(source, destination)
 	else:
-		assignment_requested.emit(StringName(data.get("skill_id", &"")), destination)
+		assignment_requested.emit(StringName(data.get("skill_id", &"")), destination, int(data.get("rank", 0)))
 
 func _name(id: StringName) -> String:
 	if id == &"":

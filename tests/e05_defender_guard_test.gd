@@ -99,9 +99,10 @@ func _player(navigation: ArenaNavigation, equip_counter: bool) -> PlayerActor:
 	snapshot.base_class_id = &"swordsman"
 	snapshot.evolution_id = &"defender"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"defender")
-	snapshot.skill_ranks = {&"defender_counterstroke": 1, &"defender_guard_return": 1, &"shield_wall": 1}
+	snapshot.skill_ranks = {&"defender_counterstroke": 1 if equip_counter else 2, &"shield_wall": 1}
+	if not equip_counter: snapshot.skill_ranks[&"defender_guard_return"] = 1
 	snapshot.active_slots = [&"defender_counterstroke" if equip_counter else &"shield_wall", null, null, null, null]
-	snapshot.passive_slots = [&"defender_guard_return", null]
+	snapshot.passive_slots = [null if equip_counter else &"defender_guard_return", null]
 	var player := PlayerActor.new()
 	player.configure(navigation, RunState.from_build("defender-guard", snapshot))
 	return player

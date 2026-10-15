@@ -111,7 +111,7 @@ func _snapshot(rank: int) -> BuildSnapshot:
 	snapshot.base_class_id = &"swordsman"
 	snapshot.evolution_id = &"berserker"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"berserker")
-	snapshot.skill_ranks = {&"berserker_rupture": 1, &"berserker_breath_steal": rank, &"blood_thirst": 1}
+	snapshot.skill_ranks = {&"berserker_rupture": 2, &"berserker_pursuit": 2, &"berserker_breath_steal": rank, &"blood_thirst": 1}
 	snapshot.active_slots = [&"berserker_rupture", &"berserker_breath_steal", null, null, null]
 	snapshot.passive_slots = [&"blood_thirst", null]
 	return snapshot

@@ -4,7 +4,7 @@ extends Control
 const SlotScript := preload("res://scripts/ui/action_bar_slot.gd")
 const ActionEditorScript := preload("res://scripts/ui/action_bar_editor.gd")
 
-signal skill_selected(skill: StringName)
+signal skill_selected(skill: StringName, rank: int)
 signal settings_requested(open: bool)
 signal preferences_changed(mode: int, smart_lock: bool)
 signal layout_changed(slots: Array[Variant])
@@ -26,6 +26,7 @@ var learned_skills: Array[StringName] = []
 var action_slots: Array[Variant] = []
 var control_preferences := ControlPreferences.new()
 var slot_buttons: Array[Button] = []
+var available_ranks: Dictionary = {}
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -86,7 +87,7 @@ func _build_settings() -> void:
 	settings_scroll.add_child(column)
 	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var title := Label.new()
-	title.text = "Controles e biblioteca de ações"
+	title.text = "Controles e atalhos"
 	title.add_theme_font_size_override("font_size", 24)
 	column.add_child(title)
 	mode_option = OptionButton.new()
@@ -152,10 +153,12 @@ func _rebuild_bar() -> void:
 	var labels: Array[String] = []
 	for index: int in range(24):
 		labels.append(control_preferences.binding_label(index))
-		var id := StringName(action_slots[index]) if action_slots[index] != null else &""
+		var id := ActionBarLayout.skill_id(action_slots[index])
+		var rank := ActionBarLayout.selected_rank(action_slots[index])
 		var button := SlotScript.new()
 		button.slot_index = index
 		button.skill_id = id
+		button.cast_rank = rank
 		button.icon = SkillPresentation.icon(id)
 		button.add_theme_constant_override("icon_max_width", 32)
 		button.expand_icon = true
@@ -178,18 +181,19 @@ func _rebuild_bar() -> void:
 		button.text = "%s\n%s" % [labels[index], _short_name(id)]
 		button.tooltip_text = "Slot %d · %s\n%s%s" % [index + 1, labels[index], _name(id), " · indisponível" if button.disabled else ""]
 		if id != &"":
-			button.pressed.connect(_choose_skill.bind(id))
+			button.pressed.connect(_choose_skill.bind(id, rank))
 			skill_buttons[id] = button
 		else:
 			button.pressed.connect(func() -> void: settings_requested.emit(true))
 		skill_bar.add_child(button)
 		slot_buttons.append(button)
+	action_editor.available_ranks = available_ranks.duplicate()
 	action_editor.configure(learned_skills, action_slots, control_preferences)
 
-func assign_skill(skill: StringName, destination: int) -> void:
-	if not learned_skills.has(skill) or destination < 0 or destination >= 24:
+func assign_skill(skill: StringName, destination: int, rank: int = 0) -> void:
+	if not learned_skills.has(skill) or destination < 0 or destination >= 24 or rank < 0 or (rank > 0 and (not SkillCastRank.supports(skill) or rank > int(available_ranks.get(skill, 0)))):
 		return
-	action_slots = ActionBarLayout.assign(action_slots, skill, destination)
+	action_slots = ActionBarLayout.assign(action_slots, skill, destination, rank)
 	_rebuild_bar()
 	layout_changed.emit(action_slots.duplicate())
 
@@ -256,22 +260,27 @@ func set_options(mode: int, smart_lock: bool) -> void:
 	lock_option.set_pressed_no_signal(smart_lock)
 	_update_description(mode)
 
-func show_skill_state(skill: StringName, state_text: String, active: bool) -> void:
-	if not skill_buttons.has(skill):
-		return
-	var button := skill_buttons[skill] as ActionBarSlot
-	var lines := state_text.split("\n")
-	var status := String(lines[-1]).split(" · ")[-1]
-	button.text = "%s\n%s\n%s" % [control_preferences.binding_label(button.slot_index), _short_name(skill), status]
-	button.tooltip_text = state_text + "\n" + SkillPresentation.MECHANICS.get(skill, "Ativa desta classe. Os valores acima refletem o estado atual.")
-	button.set_pressed_no_signal(active)
+func set_skill_ranks(ranks: Dictionary) -> void:
+	available_ranks = ranks.duplicate()
+	if action_editor != null: action_editor.available_ranks = available_ranks.duplicate()
+
+func show_skill_state(skill: StringName, state_text: String, active: bool, requested_rank: int = -1) -> void:
+	for raw: Button in slot_buttons:
+		var button := raw as ActionBarSlot
+		if button.skill_id != skill or (requested_rank >= 0 and button.cast_rank != requested_rank): continue
+		var lines := state_text.split("\n")
+		var status := String(lines[-1]).split(" · ")[-1]
+		button.text = "%s\n%s%s\n%s" % [control_preferences.binding_label(button.slot_index), _short_name(skill), " R%d" % button.cast_rank if button.cast_rank > 0 else "", status]
+		var copy := SkillCopy.text_for(skill)
+		button.tooltip_text = state_text + "\n" + SkillPresentation.emphasize(String(copy.get("effect", ""))) + "\n" + SkillPresentation.emphasize(String(copy.get("combo", "")))
+		button.set_pressed_no_signal(active)
 
 func set_aim_text(text: String) -> void:
 	aim_panel.visible = not text.is_empty()
 	aim_label.text = text
 
-func _choose_skill(skill: StringName) -> void:
-	skill_selected.emit(skill)
+func _choose_skill(skill: StringName, rank: int = 0) -> void:
+	skill_selected.emit(skill, rank)
 
 func _mode_changed(mode: int) -> void:
 	_update_description(mode)

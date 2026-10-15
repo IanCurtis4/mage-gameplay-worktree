@@ -18,7 +18,7 @@ func _run() -> void:
 	snapshot.base_class_id = &"swordsman"
 	snapshot.evolution_id = &"berserker"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"berserker")
-	snapshot.skill_ranks = {&"berserker_rupture": 1, &"berserker_execution": 1}
+	snapshot.skill_ranks = {&"berserker_rupture": 3, &"berserker_execution": 1}
 	snapshot.active_slots = [&"berserker_rupture", &"berserker_execution", null, null, null]
 	var player := PlayerActor.new()
 	player.configure(navigation, RunState.from_build("execution-test", snapshot))

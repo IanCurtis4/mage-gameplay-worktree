@@ -1,0 +1,5 @@
+# Ícones pintados — E06
+
+Sete PNGs originais gerados com a ferramenta imagegen integrada em14/10/2026: Fúria, Parede de Escudos, Bola de Fogo, Rebater, Guarda de Retirada, Talho de Perseguição e Hemorragia Profunda. Fontes geradas preservadas, sem recortar/recolorir por script. Importação limita textura runtime a128px; todas as views usam a mesma Texture2D com32px de exibição. SVGs anteriores permanecem e servem como fallback dos demais86 IDs. Este lote não substitui todo o catálogo de arte.
+
+Prompt comum: “SINGLE square original hand-painted Korean fantasy RPG ability icon; a confident coherent painted silhouette, strict bicolor deep navy/burgundy/indigo background and warm ivory/golden light, tonal shades of two hue families; unmistakable at32px;75% central subject,10% margin; no text/frame/grid/watermark/vector collage or malformed overlaps.” Assuntos por ID: punho armado com aura de Fúria; escudo frontal; cometa de fogo; espada de contra-ataque e borda de escudo; bota recuando; espada curva com corte; gota delineada com incisão (passiva). Prompts completos e hashes em manifest.json.

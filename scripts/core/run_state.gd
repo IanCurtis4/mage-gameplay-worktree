@@ -130,9 +130,9 @@ func effects_valid() -> bool:
 	_ensure_effect_cache()
 	return _effect_cache.get("ok", false)
 
-func skill_effect_capture(skill_id: StringName) -> Dictionary:
+func skill_effect_capture(skill_id: StringName, requested_rank: int = 0) -> Dictionary:
 	_ensure_effect_cache()
-	return SkillEffectResolver.capture(skill_id, int(_effect_cache.get("skill_ranks", {}).get(skill_id, 0)), _effect_cache)
+	return SkillEffectResolver.capture(skill_id, SkillCastRank.resolve(skill_id, requested_rank, int(_effect_cache.get("skill_ranks", {}).get(skill_id, 0))), _effect_cache)
 
 func stat_modifier_sources() -> Array[Dictionary]:
 	var result := composed_build()

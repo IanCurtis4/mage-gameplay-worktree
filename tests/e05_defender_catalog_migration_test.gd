@@ -28,14 +28,14 @@ func _run() -> void:
 	profile.characters.append(character)
 	profile.selected_character_id = character_id
 	var encoded := ProfileCodec.encode(profile)
-	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 5 and ProfileState.CATALOG_VERSION == 12, "current catalog keeps schema 2 and accepts the earlier Defender migration")
+	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 6 and ProfileState.CATALOG_VERSION == 13, "current catalog keeps schema 2 and accepts the earlier Defender migration")
 	var old_data: Dictionary = TX.legacy_data(encoded["data"])
 	old_data["catalog_version"] = ProfileCodec.PRE_DEFENDER_CATALOG_VERSION
 	old_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	var old_text := JSON.stringify(old_data, "\t")
 	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), old_text)
 	var decoded := ProfileCodec.decode(old_text)
-	_check(decoded["ok"] and decoded["migrated"] and decoded["migration_kind"] == &"catalog_v2" and decoded["profile"].revision == 4, "catalog-2 payload is accepted without changing in-memory progression")
+	_check(decoded["ok"] and decoded["migrated"] and decoded["migration_kind"] == &"catalog_v2" and &"swordsman_clusters_v1" in decoded["migration_kinds"] and decoded["profile"].revision == 4, "catalog-2 payload is accepted without changing in-memory progression")
 	var store := ProfileStore.new(directory)
 	var loaded := store.load_profile()
 	_check(loaded["ok"] and loaded["migrated"] and loaded["profile"].revision == 5, "store commits one atomic catalog migration revision")

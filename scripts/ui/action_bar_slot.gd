@@ -8,6 +8,7 @@ signal removal_requested(index: int)
 var slot_index := -1
 var skill_id: StringName = &""
 var drag_enabled := false
+var cast_rank := 0
 
 func _get_drag_data(_position: Vector2) -> Variant:
 	if not drag_enabled or skill_id == &"":
@@ -16,10 +17,10 @@ func _get_drag_data(_position: Vector2) -> Variant:
 	preview.text = tooltip_text if not tooltip_text.is_empty() else text
 	preview.add_theme_font_size_override("font_size", 16)
 	set_drag_preview(preview)
-	return {"kind": "action_skill", "skill_id": skill_id, "source_index": slot_index}
+	return {"kind": "action_skill", "skill_id": skill_id, "source_index": slot_index, "rank": cast_rank}
 
 func _can_drop_data(_position: Vector2, data: Variant) -> bool:
-	return drag_enabled and slot_index >= 0 and data is Dictionary and data.get("kind") == "action_skill" and data.get("skill_id") is StringName
+	return drag_enabled and slot_index >= 0 and data is Dictionary and data.get("kind") == "action_skill" and data.get("skill_id") is StringName and (not data.has("rank") or (data["rank"] is int and data["rank"] >= 0))
 
 func _drop_data(_position: Vector2, data: Variant) -> void:
 	if _can_drop_data(_position, data):

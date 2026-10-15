@@ -213,6 +213,14 @@ static func comparison(identity: String, branch: int, catalog: BuildEffectCatalo
 	var purchased: Dictionary[StringName, int] = {}
 	for raw_skill: String in ROUTES[identity][branch]:
 		purchased[StringName(raw_skill)] = 0 if not snapshot.evolution_id.is_empty() and snapshot._skill_catalog.evolution_definition(snapshot.evolution_id).entry_skill_id == StringName(raw_skill) else 1
+	# Explicit comparison-fixture purchases for the approved Job + skill gates.
+	# These are offline authored builds, never an automatic player purchase.
+	var prerequisites: Dictionary = {
+		"defender": {0: {&"defender_counterstroke": 2}, 1: {&"shield_wall": 2, &"defender_anchor": 2}},
+		"berserker": {1: {&"berserker_rupture": 2, &"dash": 2}},
+	}.get(identity, {}).get(branch, {})
+	for prerequisite: StringName in prerequisites:
+		purchased[prerequisite] = prerequisites[prerequisite]
 	snapshot.skill_ranks = snapshot._skill_catalog.effective_skill_ranks(base, snapshot.evolution_id, purchased)
 	var learned_check: Dictionary = snapshot._skill_catalog.validate_purchased_ranks(base, snapshot.evolution_id, snapshot.job_level, purchased)
 	if not learned_check["ok"]: return learned_check

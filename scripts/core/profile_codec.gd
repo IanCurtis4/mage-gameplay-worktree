@@ -1,6 +1,6 @@
 class_name ProfileCodec
 extends RefCounted
-## Pure schema-5 encoding; validate historical envelopes before card/instance migration.
+## Pure schema-6 encoding; validate historical envelopes before card/instance migration.
 
 const MAX_FILE_BYTES := 4 * 1024 * 1024
 const MAX_EXACT_JSON_INTEGER := 9007199254740991
@@ -57,6 +57,38 @@ static func encode(profile: ProfileState, catalog: ProfileCatalog = null) -> Dic
 	return {"ok": true, "text": text, "data": payload}
 
 static func decode(text: String, catalog: ProfileCatalog = null) -> Dictionary:
+	var effective := catalog if catalog != null else ProfileCatalog.pilot()
+	var json := JSON.new()
+	if text.to_utf8_buffer().size() > MAX_FILE_BYTES or json.parse(text) != OK or not json.data is Dictionary:
+		return _decode_envelope(text, effective)
+	var data: Dictionary = json.data
+	var historical := _is_exact_integer(data.get("schema_version")) and (int(data["schema_version"]) <= 5 or (int(data["schema_version"]) == 6 and _is_exact_integer(data.get("catalog_version")) and int(data["catalog_version"]) == 12))
+	if not historical:
+		return _decode_envelope(text, effective)
+	var old_catalog := effective.pre_swordsman_cluster_catalog()
+	var input := data.duplicate(true)
+	if int(input["schema_version"]) == 6:
+		input["catalog_version"] = ProfileState.CATALOG_VERSION
+	var decoded := _decode_envelope(JSON.stringify(input), old_catalog)
+	if not decoded.get("ok", false): return decoded
+	var profile: ProfileState = decoded["profile"]
+	var reports: Array[Dictionary] = []
+	for character: CharacterState in profile.characters:
+		var report := CharacterProgression.refund_illegal_swordsman_ranks(character, effective)
+		if not report["removed"].is_empty():
+			report["character_id"] = character.character_id
+			reports.append(report)
+	if not reports.is_empty():
+		profile.extension_fields["swordsman_skill_tree_migration"] = {"catalog_version": ProfileState.CATALOG_VERSION, "characters": reports.duplicate(true)}
+	var valid := validate_profile(profile, effective)
+	if not valid.get("ok", false): return valid
+	decoded["migrated"] = true
+	decoded["migration_kind"] = decoded.get("migration_kind", &"swordsman_clusters_v1")
+	decoded["migration_kinds"] = [decoded["migration_kind"], &"swordsman_clusters_v1"]
+	decoded["migration_removals"] = reports.duplicate(true)
+	return decoded
+
+static func _decode_envelope(text: String, catalog: ProfileCatalog = null) -> Dictionary:
 	var effective_catalog := catalog if catalog != null else ProfileCatalog.pilot()
 	if not effective_catalog.is_valid():
 		return _catalog_error(&"invalid_catalog")
@@ -71,8 +103,25 @@ static func decode(text: String, catalog: ProfileCatalog = null) -> Dictionary:
 	var schema_version := int(data["schema_version"])
 	if schema_version > ProfileState.SCHEMA_VERSION:
 		return {"ok": false, "error_code": &"unsupported_schema", "future_schema": true}
+	if schema_version < 6 and data.get("characters") is Array:
+		for character: Variant in data["characters"]:
+			if character is Dictionary and character.get("action_slots") is Array:
+				for value: Variant in character["action_slots"]:
+					if value is Dictionary:
+						return _error(&"invalid_presets")
 	if schema_version < 5 and data.has("card_inventory"):
 		return _catalog_error(&"invalid_card_inventory")
+	if schema_version == 5:
+		if not _is_exact_integer(data.get("catalog_version")) or int(data["catalog_version"]) != 12:
+			return _catalog_error(&"invalid_catalog")
+		var upgraded := data.duplicate(true)
+		upgraded["schema_version"] = ProfileState.SCHEMA_VERSION
+		upgraded["catalog_version"] = ProfileState.CATALOG_VERSION
+		var migrated := _decode_v2(upgraded, effective_catalog)
+		if migrated["ok"]:
+			migrated["migrated"] = true
+			migrated["migration_kind"] = &"explicit_cast_ranks_v1"
+		return migrated
 	if schema_version == 4:
 		if not _is_exact_integer(data.get("catalog_version")) or int(data["catalog_version"]) != 11:
 			return _catalog_error(&"invalid_catalog")
@@ -480,24 +529,33 @@ static func _decode_slots(raw: Variant, expected_size: int, category: StringName
 	if not raw is Array or raw.size() != expected_size:
 		return _error(&"invalid_presets")
 	var slots: Array[Variant] = []
-	var seen: Dictionary[StringName, bool] = {}
+	var seen: Dictionary[String, bool] = {}
 	for value: Variant in raw:
-		if value != null and (not value is String or not IdentityIds.is_technical_id(value)):
+		var id := ActionBarLayout.skill_id(value)
+		var selected := ActionBarLayout.selected_rank(value)
+		var explicit := value is Dictionary
+		if explicit and (expected_size != ActionBarLayout.SLOT_COUNT or value.size() != 2 or not value.has("rank") or not _is_exact_integer(value["rank"]) or selected <= 0 or not SkillCastRank.supports(id)):
+			return _error(&"invalid_presets")
+		if value != null and (id.is_empty() or not IdentityIds.is_technical_id(String(id))):
 			return _error(&"invalid_presets")
 		if value == null:
 			slots.append(null)
 			continue
-		var skill_id := StringName(value)
+		var skill_id := id
+		var key := "%s:%d" % [id, selected]
 		var metadata := catalog.skill_metadata(skill_id)
 		var item_reference := allow_item_refs and category == ProfileCatalog.ACTIVE and ItemSkillAdapters.supports(skill_id, base_class_id)
 		if metadata.is_empty() or (not catalog.skill_is_allowed(skill_id, base_class_id, evolution_id) and not item_reference):
 			return _catalog_error(&"invalid_catalog")
-		if metadata["category"] != category or seen.has(skill_id):
+		if metadata["category"] != category or seen.has(key):
 			return _catalog_error(&"invalid_presets") if metadata["category"] != category else _error(&"invalid_presets")
 		if effective_ranks.get(skill_id, 0) <= 0 and not item_reference:
 			return _error(&"requirements_unmet")
-		seen[skill_id] = true
-		slots.append(skill_id)
+		if explicit and ClassCatalog.skill_definition(skill_id).rank_definition(selected) == null:
+			return _error(&"invalid_presets")
+		# Retain a formerly granted or higher rank disabled; execution revalidates access.
+		seen[key] = true
+		slots.append(ActionBarLayout.entry(skill_id, selected))
 	return {"ok": true, "slots": slots}
 
 static func _decode_unique_ids(raw: Variant) -> Dictionary:
@@ -777,7 +835,7 @@ static func _names_to_strings(values: Array[StringName]) -> Array[String]:
 static func _nullable_names_to_values(values: Array) -> Array[Variant]:
 	var result: Array[Variant] = []
 	for value: Variant in values:
-		result.append(null if value == null else String(value))
+		result.append({"skill_id": String(ActionBarLayout.skill_id(value)), "rank": ActionBarLayout.selected_rank(value)} if value is Dictionary else (null if value == null else String(value)))
 	return result
 
 static func _copy_json_candidate(value: Variant) -> Variant:

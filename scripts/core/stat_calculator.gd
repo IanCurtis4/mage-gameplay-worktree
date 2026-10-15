@@ -1,5 +1,8 @@
 class_name StatCalculator
 extends RefCounted
+
+const PERSONAL_SHIELD_VIT_COEFFICIENT := 2.0
+const PERSONAL_SHIELD_INT_COEFFICIENT := 1.5
 ## Canonical E00/E03 stat authority.
 ##
 ## Persistent state owns initial attributes, allocations and base level.
@@ -207,7 +210,7 @@ static func runtime_reduced_value(stat_id: StringName, base_value: float, fracti
 static func personal_shield_capacity(rank_base: float, stats: StatBreakdown) -> float:
 	if stats == null or not is_finite(rank_base) or rank_base < 0.0:
 		return NAN
-	return rank_base + 2.0 * stats.primary_value(&"vit") + 1.5 * stats.primary_value(&"int")
+	return rank_base + PERSONAL_SHIELD_VIT_COEFFICIENT * stats.primary_value(&"vit") + PERSONAL_SHIELD_INT_COEFFICIENT * stats.primary_value(&"int")
 
 static func effective_crit_chance(attacker_crit_chance: float, target_crit_resistance: float) -> float:
 	return clampf(attacker_crit_chance - target_crit_resistance, 0.0, 0.75)

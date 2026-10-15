@@ -76,7 +76,7 @@ func copy_snapshot() -> BuildSnapshot:
 		copy.equipment_instances[id] = equipment_instances[id].copy_instance()
 	copy.card_inventory = card_inventory.copy_inventory()
 	copy.build_version = build_version
-	copy.action_slots = action_slots.duplicate()
+	copy.action_slots = action_slots.duplicate(true)
 	return copy
 
 func stat_breakdown(modifier_sources: Array[Dictionary] = []) -> StatBreakdown:

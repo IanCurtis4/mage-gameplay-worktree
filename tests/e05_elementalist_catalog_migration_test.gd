@@ -29,12 +29,13 @@ func _run() -> void:
 	defender.base_xp_total = ProgressionRules.EVOLUTION_MIN_BASE_XP
 	defender.job_xp_total = ProgressionRules.MAX_JOB_XP
 	defender.evolution_id = &"defender"
+	defender.purchased_skill_ranks[&"shield_wall"] = 2
 	defender.purchased_skill_ranks[&"defender_anchor"] = 1
 	defender.presets[0]["active_slots"][0] = &"defender_anchor"
 	profile.characters.append(defender)
 	profile.selected_character_id = mage_id
 	var encoded := ProfileCodec.encode(profile)
-	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 5 and ProfileState.CATALOG_VERSION == 12, "new catalog keeps schema and ruleset")
+	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 6 and ProfileState.CATALOG_VERSION == 13, "new catalog keeps schema and ruleset")
 	var old_data: Dictionary = TX.legacy_data(encoded["data"])
 	old_data["catalog_version"] = ProfileCodec.PRE_ELEMENTALIST_CATALOG_VERSION
 	old_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
@@ -45,7 +46,7 @@ func _run() -> void:
 	var loaded := ProfileStore.new(directory).load_profile()
 	_check(loaded["ok"] and loaded["migrated"] and loaded["profile"].revision == 10, "store commits migration transaction once")
 	var durable: ProfileState = loaded["profile"]
-	_check(durable.selected_character_id == mage_id and durable.characters.size() == 2 and durable.character_by_id(mage_id).purchased_skill_ranks == {&"ice_spear": 1} and durable.character_by_id(defender_id).purchased_skill_ranks == {&"defender_anchor": 1}, "characters, selection and builds survive")
+	_check(durable.selected_character_id == mage_id and durable.characters.size() == 2 and durable.character_by_id(mage_id).purchased_skill_ranks == {&"ice_spear": 1} and durable.character_by_id(defender_id).purchased_skill_ranks == {&"shield_wall": 2, &"defender_anchor": 1}, "characters, selection and builds survive")
 	_check(durable.character_by_id(mage_id).base_xp_total == mage.base_xp_total and durable.character_by_id(mage_id).job_xp_total == mage.job_xp_total and durable.character_by_id(defender_id).job_xp_total == defender.job_xp_total, "XP remains exact")
 	var current_data: Dictionary = JSON.parse_string(_read_text(directory.path_join(ProfileStore.PRIMARY_FILE)))
 	_check(_read_text(directory.path_join(ProfileStore.BACKUP_FILE)) == old_text and current_data["catalog_version"] == ProfileState.CATALOG_VERSION and current_data["ruleset_id"] == ProfileState.RULESET_ID, "backup retains exact source bytes")

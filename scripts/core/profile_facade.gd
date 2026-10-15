@@ -145,6 +145,10 @@ func available_build_options(character_id: String) -> Dictionary:
 	# Editor and combat share legal learned availability, including job gates.
 	var snapshot := _build_snapshot(character)
 	var active_skills := snapshot.learned_skill_ids(ProfileCatalog.ACTIVE)
+	var composed := _permanent_effect_preview(character)
+	if not composed.get("ok", false): return composed
+	for id: StringName in composed.get("item_grants", {}):
+		if id not in active_skills: active_skills.append(id)
 	var passive_skills := snapshot.learned_skill_ids(ProfileCatalog.PASSIVE)
 	var equipment_by_slot: Dictionary[StringName, Array] = {}
 	for slot: StringName in IdentityIds.equipment_slots():
@@ -158,6 +162,7 @@ func available_build_options(character_id: String) -> Dictionary:
 		"ok": true,
 		"character_id": character_id,
 		"active_skills": active_skills,
+		"effective_cast_ranks": composed["skill_ranks"].duplicate(true),
 		"passive_skills": passive_skills,
 		"equipment_by_slot": equipment_by_slot,
 	}
@@ -250,7 +255,7 @@ func update_action_slots(request_id: String, expected_revision: int, character_i
 		return _finish_operation(request_id, {"ok": false, "error_code": &"run_active"})
 	var before := _profile.copy_state()
 	var candidate := before.copy_state()
-	candidate.character_by_id(character_id).action_slots = slots.duplicate()
+	candidate.character_by_id(character_id).action_slots = slots.duplicate(true)
 	return _finish_operation(request_id, _resolve_commit(before, candidate, _store.commit(candidate)))
 
 func progression_summary(character_id: String) -> Dictionary:
@@ -263,6 +268,7 @@ func progression_summary(character_id: String) -> Dictionary:
 		return {"ok": false, "error_code": &"invalid_character_id"}
 	var result := CharacterProgression.summary(character, _catalog)
 	result["character_id"] = character_id
+	result["migration_report"] = _profile.extension_fields.get("swordsman_skill_tree_migration", {}).duplicate(true)
 	return result.duplicate(true)
 
 func evolution_options(character_id: String) -> Dictionary:
@@ -399,6 +405,22 @@ func skill_allocation_preview(character_id: String, expected_revision: int, orde
 	if not simulation["ok"]:
 		return simulation
 	var options := _progression_skill_options_for(candidate)
+	var composed := _permanent_effect_preview(candidate)
+	if not composed.get("ok", false): return composed
+	var represented: Array[StringName] = []
+	for option: Dictionary in options["skills"]:
+		var id: StringName = option["skill_id"]
+		represented.append(id)
+		option["item_rank"] = int(composed.get("item_grants", {}).get(id, 0))
+		option["effective_cast_rank"] = int(composed["skill_ranks"].get(id, 0))
+	for id: StringName in composed.get("item_grants", {}):
+		if id in represented: continue
+		var item_rank := int(composed["item_grants"][id])
+		var metadata := _catalog.skill_metadata(id)
+		metadata["required_evolution_id"] = &"items"
+		metadata["wallet"] = &"items"
+		options["skills"].append({"skill_id": id, "item_only": true, "metadata": metadata, "rank": 0, "item_rank": item_rank, "effective_cast_rank": int(composed["skill_ranks"].get(id, 0)), "purchased_rank": 0, "maximum_rank": item_rank, "available": true, "next_rank": null, "next_rank_available": false, "next_rank_requirement": {}, "next_rank_error_code": &"item_only"})
+	options["effective_cast_ranks"] = composed["skill_ranks"].duplicate(true)
 	options["summary"] = CharacterProgression.summary(candidate, _catalog)
 	options["original_ranks"] = CharacterProgression.summary(character, _catalog)["effective_skill_ranks"].duplicate(true)
 	options["profile_revision"] = _profile.revision
@@ -1125,3 +1147,9 @@ func _prepare_inventory_change(character_id: String, intent: Dictionary) -> Dict
 	if not after["ok"]: return after
 	if character.equipped == _profile.character_by_id(character_id).equipped and candidate.card_inventory.sockets() == _profile.card_inventory.sockets(): return BuildEffectCatalog.failure(&"no_change")
 	return {"ok":true,"intent":intent.duplicate(true),"candidate":candidate,"request_id":intent["request_id"],"equipped":character.equipped.duplicate(true),"inventory":candidate.card_inventory.describe(),"before":previous["breakdown"].values(),"after":after["breakdown"].values(),"sources":after["provenance"],"inactive":after["inactive"],"skill_rules":after["skill_rules"],"skill_ranks":after["skill_ranks"],"item_grants":after["item_grants"],"kit_policies":after["kit_policies"],"procs":after["procs"]}
+
+func _permanent_effect_preview(character: CharacterState) -> Dictionary:
+	## Pure snapshot/composition; never creates a run, opens a save, or grants a purchase.
+	var loaded := BuildContentLoader.load_catalog_for_profile(_catalog)
+	if not loaded.get("ok", false): return loaded
+	return BuildEffectComposer.compose(_build_snapshot(character), {}, [], loaded["catalog"])

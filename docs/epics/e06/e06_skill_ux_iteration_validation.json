@@ -1,0 +1,78 @@
+{
+  "status": "passed",
+  "complete": true,
+  "role": "technical_validator",
+  "validator": "Sol",
+  "base_commit": "3b2899940207d556c6d34babbb1560f1bd03e94e",
+  "contract": "docs/epics/e06/e06_skill_ux_iteration_scope.md",
+  "automation_supervision": "docs/epics/e06/e06_skill_ux_iteration_luna.json",
+  "full_suite": false,
+  "engine": {
+    "version": "Godot 4.7.2 standard",
+    "sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424"
+  },
+  "features": [
+    "32px icons and direct tree/list to24slot drag and drop",
+    "47 validated explicit active ranks; shared skill cooldown and frozen emissions",
+    "Owned-job tabs, prerequisite clusters, canonical effect/combo/scaling tooltips",
+    "Four approved Defender/Berserker skills; Job+permanent-rank gates",
+    "Schema6/catalog13 durable migration with transitive refund and notice"
+  ],
+  "native": {
+    "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration\\native_final_15b.output.log",
+    "sha256": "05f2cfa7170700632a43bf3f16ad4ad4f1fe202fe8827a2980a666e522e0ca25",
+    "completed_marker": "SKILL_UX_NATIVE_OK",
+    "viewports": [
+      [
+        1280,
+        720
+      ],
+      [
+        1920,
+        1080
+      ]
+    ],
+    "real_mouse_drag": true,
+    "actual_escape": true,
+    "skill_icons": 93,
+    "icon_sizes": [
+      32,
+      64
+    ],
+    "cluster_skills_each": 9,
+    "inspection": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration\\inspection.json"
+  },
+  "personal_save_copy": {
+    "isolated": true,
+    "original_untouched": true,
+    "original_characters": 7,
+    "after_test_creation": 8,
+    "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration\\personal_copy_15_corrected.output.log",
+    "sha256": "a23f4aeee6f60e5d4ae08f617d047f94a972d2f2d51b2396550274fd31910b8d"
+  },
+  "corrections": [
+    "Historical tests/build fixtures updated to approved prerequisites; combat oracles retained",
+    "Real personal-copy failure stale_revision fixed by explicit migration type authorization, retaining canonical source equality and backup/pending guards",
+    "Long names and rank counters no longer overflow tree cards"
+  ],
+  "limits": [
+    "Selected verification, not all226checks",
+    "Seven new raster icons;86 skills retain existing bicolor fallback",
+    "Unsupported multi-stage handlers remain highest-rank only",
+    "No FPS, balance, fun or product-acceptance assertion",
+    "Luna supervision is not a separate semantic audit; no routine Astra review"
+  ],
+  "product_acceptance": "not_recorded",
+  "master_merge": false,
+  "push": false,
+  "distinct_checks": 61,
+  "total_plan": 226,
+  "execution_attempts": 88,
+  "new_cluster_invariants": 218,
+  "downrank_invariants": 113,
+  "ux_invariants": 14,
+  "source_runner": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+  "runner_isolation": "Exact source runtime copied, ignored addons excluded and runner VCS autoload disabled; source plugin config unchanged",
+  "reuse": "61 selected checks with impacted reruns. Final13 persistence regressions after migration allowlist delta; native UI evidence reused because only historical-migration authorization changed. No new UI/gameplay delta afterward.",
+  "automation_supervision_sha256": "b1f3bd0a189ffc24647eaad0bd453956b742aea59593283940cd1b0644108595"
+}

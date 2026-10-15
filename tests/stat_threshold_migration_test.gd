@@ -72,7 +72,7 @@ func _test_store_migration_and_respec() -> void:
 	character.job_xp_total = ProgressionRules.MAX_JOB_XP
 	character.attribute_allocations[&"str"] = 52
 	character.attribute_allocations[&"vit"] = 35
-	character.purchased_skill_ranks = {&"slash":3,&"blood_thirst":1,&"berserker_execution":1}
+	character.purchased_skill_ranks = {&"slash":3,&"blood_thirst":1,&"berserker_rupture":2,&"berserker_execution":1}
 	character.action_slots[0] = &"slash"
 	character.action_slots[7] = &"berserker_execution"
 	character.extension_fields["note"] = ["preservar"]
@@ -171,7 +171,7 @@ func _profile(origin: StringName, level: int) -> ProfileState:
 	return profile
 
 func _old_text(profile: ProfileState, version: int = 6) -> String:
-	var encoded := ProfileCodec.encode(profile,ProfileCatalog.pilot())
+	var encoded := ProfileCodec.encode(profile,ProfileCatalog.pilot().pre_swordsman_cluster_catalog())
 	_check(encoded["ok"], "fixture new profile valid before changing envelope")
 	if not encoded["ok"]: return "invalid fixture"
 	var data: Dictionary = TX.legacy_data(encoded["data"])

@@ -1,4 +1,4 @@
-﻿param(
+param(
     [string]$GodotPath = '',
     [switch]$SkipEditorImport,
     [string]$VerificationDirectory = "",
@@ -293,6 +293,9 @@ Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/
 
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/skill_allocation_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/skill_window_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_skill_downrank_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_swordsman_cluster_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_skill_ux_iteration_test.gd')
 
 if (-not $PSBoundParameters.ContainsKey('ToStep')) { $ToStep = $checkPlan.Count }
 if ($FromStep -gt $ToStep -or $ToStep -gt $checkPlan.Count) {

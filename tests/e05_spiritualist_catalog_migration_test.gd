@@ -34,7 +34,7 @@ func _run() -> void:
 	profile.characters.append(mage)
 	profile.selected_character_id = evolved_id
 	var encoded := ProfileCodec.encode(profile)
-	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 5 and ProfileState.CATALOG_VERSION == 12, "current catalog preserves Spiritualist migration and schema")
+	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 6 and ProfileState.CATALOG_VERSION == 13, "current catalog preserves Spiritualist migration and schema")
 	if not encoded["ok"]:
 		_finish()
 		return
