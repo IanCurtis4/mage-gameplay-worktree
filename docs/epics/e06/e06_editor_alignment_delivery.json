@@ -1,0 +1,71 @@
+{
+  "status": "applied_verified",
+  "runtime_commit": "6f19e50952f991fd6283503170b3c93b504a3f51",
+  "role": "technical_validator",
+  "validator": "Sol",
+  "target": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+  "target_branch": "codex/playtest",
+  "preflight": {
+    "candidate": "6f19e50952f991fd6283503170b3c93b504a3f51",
+    "previous": "769c368e467f779f1522bd40e9374bfe9b0bf37a",
+    "cli_preflight_exit": 1,
+    "cli_preflight_error": "Gate técnico não aprovado",
+    "same_repository": true,
+    "source_clean": true,
+    "fast_forward": true,
+    "local_overlap": [],
+    "ignored_collisions": [],
+    "preserved_local_paths": 128,
+    "policy": "Current WORKFLOW permits nonoverlapping local edits and Sol technical validation; legacy CLI requires historical approval format. Technical validation/evidence recorded with real Sol/Luna roles; no fabricated reviewer. Manual preservation checks and ff-only/no-overwrite-ignore."
+  },
+  "target_checks": [
+    {
+      "output": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\editor_alignment_apply\\001.output.log",
+      "sha256": "98f857d03191e15c2f6e55767f4d3a15db1581e113655fcdba8114efc55ccefc",
+      "last_line": "\u001b[0m"
+    },
+    {
+      "output": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\editor_alignment_apply\\143-action_bar_ui_test.output.log",
+      "sha256": "c2ef385893d199ba0a5c15fd51608b258e9494e90a5db43e51e49eb7de13ca44",
+      "last_line": "Action bar UI: 80 checks, 0 failures"
+    },
+    {
+      "output": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\editor_alignment_apply\\177.output.log",
+      "sha256": "99a1f5c05f8b42a98c1353a644c0527b7fbdebfb7a944acd272ccf7d46cc34a6",
+      "last_line": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org"
+    },
+    {
+      "output": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\editor_alignment_apply\\223-skill_window_test.output.log",
+      "sha256": "eddc5f71b114c1765b12012a3eb2f519b2d248ad17c2f85ac3ae24f80fb1f576",
+      "last_line": "E06 skill window: 58 checks, 0 failures"
+    },
+    {
+      "output": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\editor_alignment_apply\\227-e06_icon_bar_test.output.log",
+      "sha256": "eb3f9abdaf6f6b129e2fe140e29916fcddecd3e077141bf2fe525a5703a692aa",
+      "last_line": "E06 icon bar: 24 checks, 0 failures"
+    }
+  ],
+  "native": {
+    "output": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\editor_alignment_apply\\native.output.log",
+    "sha256": "0dc992f0f8e892df36984b6cd9048eb19f877a390171f9698d51c9321d559991",
+    "exit_code": 0,
+    "completed": true,
+    "errors": false,
+    "viewports": [
+      1280,
+      1920
+    ],
+    "real_plus_minus": true,
+    "real_drag": true
+  },
+  "preservation": {
+    "local_files_bytewise_unchanged": 128,
+    "personal_files_bytewise_unchanged": 3,
+    "manifest": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\editor_alignment_preservation\\before.json"
+  },
+  "archive": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\editor_alignment_archive",
+  "product_acceptance": "pending",
+  "master_merge": false,
+  "push": false,
+  "next_action": "Stop old run, accept reload and F5."
+}
