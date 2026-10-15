@@ -1,0 +1,58 @@
+{
+  "status": "passed",
+  "complete": true,
+  "role": "technical_validator",
+  "validator": "Sol",
+  "base_commit": "021cc9fd8df7135362c03f3a40f7d91a7469d6d2",
+  "contract": "docs/epics/e06/e06_icon_bar_scope.md",
+  "features": [
+    "combat-only60px square full icon face",
+    "key and explicit rank overlays; names/effect/state remain in tooltip",
+    "clockwise clearing shadow with gradient edge and subtle seconds",
+    "numeric canonical remaining only; shared observation per skill ID; no independent UI clock"
+  ],
+  "automation_supervision": {
+    "report": "docs/epics/e06/e06_icon_bar_luna.json",
+    "sha256": "a345994c8b9260ed98346a91550f4d9226a0413aff5026149e0eda7d3e5bb27a",
+    "distinct_checks": 13,
+    "executions": 14,
+    "total_plan": 227,
+    "full_suite": false
+  },
+  "native": {
+    "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\icon_bar_native.output.log",
+    "sha256": "6415778ec820d0738c673f9e1295531e97a704f42fb90ff2f1df59adf59f6775",
+    "marker": "ICON_BAR_NATIVE_OK",
+    "clockwise_quadrant_samples": 20,
+    "phases": [
+      0,
+      0.25,
+      0.5,
+      0.75,
+      1
+    ],
+    "real_slot_click": true,
+    "shared_rank_cooldown": true,
+    "synthetic_cooldown_fixture": "Remaining8→6→4→2→0 supplied through real Player state/Main HUD; pixel oracle uses a uniform test texture. This is a rendering proof, not a new gameplay cooldown formula.",
+    "viewports": [
+      [
+        1280,
+        720
+      ],
+      [
+        1920,
+        1080
+      ]
+    ],
+    "existing_compact_proof": "Also retained tooltip corners, DnD, Escape, inventory overlap and small viewport resize."
+  },
+  "fixture_correction": "Preexisting R3 item preparation access guard in PlayerActor is unchanged from base. TX-active now separately verifies losing R3 and preserving learned R1 preparation; emission/cooldown/input safeguards retained.",
+  "limits": [
+    "Gauge normalizes to first/max remaining observed for a cooldown cycle",
+    "No FPS or balance measurement",
+    "Luna supervision is not independent semantic audit"
+  ],
+  "product_acceptance": "not_recorded",
+  "master_merge": false,
+  "push": false
+}

@@ -1,0 +1,331 @@
+{
+  "report": "Luna selected icon-bar verification; execution supervision, not semantic independent audit",
+  "source": {
+    "branch": "codex/e06-inventory",
+    "base_commit": "021cc9fd8df7135362c03f3a40f7d91a7469d6d2",
+    "checkout": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG"
+  },
+  "scope_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\docs\\epics\\e06\\e06_icon_bar_scope.md",
+  "runner": {
+    "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+    "verify_ps1_sha256": "74FE60D7AD3F07767645210074632C2EA07140EB48EE9B9FA041013B23EB4159",
+    "project_inputs_manifest_sha256": "FE21FA249D3EFF9B820E0316B0043FE9E4F20B728D6898827EE8CA1F66A59127",
+    "project_input_file_count": 1809,
+    "plan_checks": 227
+  },
+  "engine": {
+    "version": "Godot 4.7.2 standard",
+    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\review-engine\\Godot.exe",
+    "sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424"
+  },
+  "selection": {
+    "selected": 13,
+    "pass": 12,
+    "fail": 1,
+    "timeouts": 0,
+    "status": "NEEDS_ROOT_TRIAGE",
+    "checks": [
+      {
+        "name": "editor_import",
+        "status": "PASS",
+        "exit_code": 0,
+        "timeout": false,
+        "test_file": null,
+        "test_file_sha256": null,
+        "completion_checks": null,
+        "failure_count": 0,
+        "completion_summary": "[ DONE ] loading_editor_layout",
+        "error_markers": [],
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\001.engine.log",
+        "engine_log_sha256": "7F47B1AD66697470B1DDF39A664845F9BA759BA5D8AA8B16940D1593A2713AA1",
+        "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\001.output.log",
+        "output_log_sha256": "DAC772E898B017371B32933445884A1C9C743D5ECBF710AF2771D673803E5D09"
+      },
+      {
+        "name": "smoke",
+        "status": "PASS",
+        "exit_code": 0,
+        "timeout": false,
+        "test_file": null,
+        "test_file_sha256": null,
+        "completion_checks": null,
+        "failure_count": 0,
+        "completion_summary": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org",
+        "error_markers": [],
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\177.engine.log",
+        "engine_log_sha256": "6D1C065383A27C36804949B6FFA4B09714470B112E5DACC0BD5AEB7B9C147C4E",
+        "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\177.output.log",
+        "output_log_sha256": "99A1F5C05F8B42A98C1353A644C0527B7FBDEBFB7A944ACD272CCF7D46CC34A6"
+      },
+      {
+        "name": "e06_icon_bar_test",
+        "status": "PASS",
+        "exit_code": 0,
+        "timeout": false,
+        "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_icon_bar_test.gd",
+        "test_file_sha256": "950DF6559BD52A94135E693EEA86FB22A6C14BD3F61363D401F71BADF459BE9C",
+        "completion_checks": 21,
+        "failure_count": 0,
+        "completion_summary": "E06 icon bar: 21 checks, 0 failures",
+        "error_markers": [],
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\227-e06_icon_bar_test.engine.log",
+        "engine_log_sha256": "594E11072180FF9DDCCF9676EC8E04628E29865A174FB88C55EB4F814C51DA9E",
+        "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\227-e06_icon_bar_test.output.log",
+        "output_log_sha256": "F5D8F0E8B6C15CEE9DD2F9A9A235AF649193EAAC6D47309CF68EE1211B6FC2C2"
+      },
+      {
+        "name": "action_bar_ui_test",
+        "status": "PASS",
+        "exit_code": 0,
+        "timeout": false,
+        "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\action_bar_ui_test.gd",
+        "test_file_sha256": "FD6F3CDE5509D443203CECC0EC64352E4931B695F2D4E8126EE72494FE8C5C1F",
+        "completion_checks": 80,
+        "failure_count": 0,
+        "completion_summary": "Action bar UI: 80 checks, 0 failures",
+        "error_markers": [],
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\143-action_bar_ui_test.engine.log",
+        "engine_log_sha256": "BB18C46A2FE69346A71B9BD330A014AEF72CBAB651C99E34541DC722914B5837",
+        "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\143-action_bar_ui_test.output.log",
+        "output_log_sha256": "C2EF385893D199BA0A5C15FD51608B258E9494E90A5DB43E51E49EB7DE13CA44"
+      },
+      {
+        "name": "battle_ui_test",
+        "status": "PASS",
+        "exit_code": 0,
+        "timeout": false,
+        "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\battle_ui_test.gd",
+        "test_file_sha256": "C4DDF8E6B2956A7CBF9F306F88F3F998FFB7B44ADA421EF8D0078C1960377779",
+        "completion_checks": 47,
+        "failure_count": 0,
+        "completion_summary": "UI de batalha: PASS (47 checks)",
+        "error_markers": [],
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\013-battle_ui_test.engine.log",
+        "engine_log_sha256": "19CA805B5DAC2A4EF977B786ECCB964FA10557DCB15DFFE014CD427381A81696",
+        "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\013-battle_ui_test.output.log",
+        "output_log_sha256": "F8318896CA4F69C73DFEE75D000BE93183454816283638EE4C14279A62749D21"
+      },
+      {
+        "name": "ui_layout_test",
+        "status": "PASS",
+        "exit_code": 0,
+        "timeout": false,
+        "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\ui_layout_test.gd",
+        "test_file_sha256": "C04CF3A49ADF2311E5C56614DEF6CAC40B271B3FBBB70ED838C4D5B5704B516F",
+        "completion_checks": 30,
+        "failure_count": 0,
+        "completion_summary": "Layout da UI: PASS (30 checks)",
+        "error_markers": [],
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\015-ui_layout_test.engine.log",
+        "engine_log_sha256": "786E497B3CDA17D9D4270FA2899CE2432714EB98D4CF80EA908E593E1EB79A9B",
+        "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\015-ui_layout_test.output.log",
+        "output_log_sha256": "2221C3B8FF5B8BC13995CE03DF5ADDB87D48671AD7CA4B1B51601E3D859D9690"
+      },
+      {
+        "name": "skill_window_test",
+        "status": "PASS",
+        "exit_code": 0,
+        "timeout": false,
+        "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\skill_window_test.gd",
+        "test_file_sha256": "C06D72902F83D4E664147DE9446AB93190F00F3575B3D93DF06FC414403FF6BC",
+        "completion_checks": 54,
+        "failure_count": 0,
+        "completion_summary": "E06 skill window: 54 checks, 0 failures",
+        "error_markers": [],
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\223-skill_window_test.engine.log",
+        "engine_log_sha256": "6AB25CC9E5D5128E900722C682466CCAF161C73E544DF6B6EA6E0B8AEA078A20",
+        "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\223-skill_window_test.output.log",
+        "output_log_sha256": "0E9A1AF5E645884008D630A948B7DAFA031EC2162B48D93D9C6E8640FE21EFEF"
+      },
+      {
+        "name": "e06_skill_ux_iteration_test",
+        "status": "PASS",
+        "exit_code": 0,
+        "timeout": false,
+        "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_skill_ux_iteration_test.gd",
+        "test_file_sha256": "342338F4F7F13FA636B53E0041078407C0385A7897F4570974EAEDD59A22F154",
+        "completion_checks": 14,
+        "failure_count": 0,
+        "completion_summary": "E06 skill UX iteration: 14 checks, 0 failures",
+        "error_markers": [],
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\226-e06_skill_ux_iteration_test.engine.log",
+        "engine_log_sha256": "C831C5AB09EBBF341E082E5C1E4A7A95A280D1A3CEB88905430FD9F0E34A8B9C",
+        "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\226-e06_skill_ux_iteration_test.output.log",
+        "output_log_sha256": "18A66B1934CAE325566299FC0F3C1B40CC7150A2AD4F679D352F6CBAD144FAD7"
+      },
+      {
+        "name": "e06_skill_downrank_test",
+        "status": "PASS",
+        "exit_code": 0,
+        "timeout": false,
+        "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_skill_downrank_test.gd",
+        "test_file_sha256": "D875E3BBB0EE6068D4AC750CC36548793C8476D24EF497DE87EDA264B2EED74F",
+        "completion_checks": 113,
+        "failure_count": 0,
+        "completion_summary": "E06 downranking: PASS (113 checks)",
+        "error_markers": [],
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\224-e06_skill_downrank_test.engine.log",
+        "engine_log_sha256": "55F5C5A7616B5DD62B3DE9D060B446B07BF362879CD5281D42E2CB3A7E88F141",
+        "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\224-e06_skill_downrank_test.output.log",
+        "output_log_sha256": "0729074E33D2D605417FF8307F6618DD1CAD70F964E2E9442F20EDD96AD356AF"
+      },
+      {
+        "name": "e05_berserker_execution_test",
+        "status": "PASS",
+        "exit_code": 0,
+        "timeout": false,
+        "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e05_berserker_execution_test.gd",
+        "test_file_sha256": "4DD0B0372441C8B9827310D21BEB90F8DE8684A4A59B7C5A86792F028BFF91E4",
+        "completion_checks": 16,
+        "failure_count": 0,
+        "completion_summary": "E05 Berserker Execução: PASS (16 checks)",
+        "error_markers": [],
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\161-e05_berserker_execution_test.engine.log",
+        "engine_log_sha256": "88B49ADBB48BD0275FF4ABF71BAA6613AD8251DFB0BD9B1487F9263939CDC3E7",
+        "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\161-e05_berserker_execution_test.output.log",
+        "output_log_sha256": "AB6F97527D8C0FBAFE9E00E298A491907AAAC84E4D87CB0BB54D74557AC618A8"
+      },
+      {
+        "name": "e06_tx_active_test",
+        "status": "FAIL",
+        "exit_code": 1,
+        "timeout": false,
+        "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_tx_active_test.gd",
+        "test_file_sha256": "2971AD549BBA67AA0E0931340FA877945CC53E160AD0C3B53F4A975AEF69B512",
+        "completion_checks": 58,
+        "failure_count": 2,
+        "completion_summary": "E06 TX2 active: 58 checks, 2 failures",
+        "error_markers": [
+          "ERROR: preparation cancelled only when last source is lost",
+          "ERROR: disabled shortcut cannot cancel another valid preparation"
+        ],
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\187-e06_tx_active_test.engine.log",
+        "engine_log_sha256": "2E26CADA37F5CFF6DB49BF56E662C9CE514E1BFBF2CDB196FD8E6E180AA5AF6D",
+        "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\187-e06_tx_active_test.output.log",
+        "output_log_sha256": "773B52C6B53E8DEC94FEA728111973C971D366D72A44F9EAD06D31CC6E9936F0"
+      },
+      {
+        "name": "action_bar_input_test",
+        "status": "PASS",
+        "exit_code": 0,
+        "timeout": false,
+        "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\action_bar_input_test.gd",
+        "test_file_sha256": "F4E3198C36135451676C058B5377B47F478FBB4FDC31262DA0D331734CE7D164",
+        "completion_checks": 105,
+        "failure_count": 0,
+        "completion_summary": "Action bar input: 105 checks, 0 failures",
+        "error_markers": [],
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\142-action_bar_input_test.engine.log",
+        "engine_log_sha256": "E33C2E2C345F05D431FBACBFAB8C1E512DD2671AC7428D86B4C61DDBB71878D5",
+        "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\142-action_bar_input_test.output.log",
+        "output_log_sha256": "6AB5589AB3E259944655BF94CFFFA36F08ABFFDCD050BB1563E24101ADC96098"
+      },
+      {
+        "name": "reward_feedback_test",
+        "status": "PASS",
+        "exit_code": 0,
+        "timeout": false,
+        "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\reward_feedback_test.gd",
+        "test_file_sha256": "8B8FB9CF3A2392809FE157BB7E854DFB2285C6574ECB6F072C8CE2931CCD3B1B",
+        "completion_checks": 55,
+        "failure_count": 0,
+        "completion_summary": "E06 reward feedback: 55 checks, 0 failures",
+        "error_markers": [],
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\221-reward_feedback_test.engine.log",
+        "engine_log_sha256": "8416EF0F3A36BF19A44FB70C7C148CBD5269E89F6525CFEA33303E072BBD0D55",
+        "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\221-reward_feedback_test.output.log",
+        "output_log_sha256": "76E1CC29885E18047F395402C03FF9357B67F8D2EE4F4D614BEC91B396DA8589"
+      }
+    ],
+    "final_unique_pass": 13,
+    "final_unique_fail": 0,
+    "final_status": "PASS_AFTER_CORRECTED_TEST_FIXTURE",
+    "reruns": 1
+  },
+  "corrected_fixture_history": {
+    "test": "e06_icon_bar_test",
+    "prior_runner_failure": {
+      "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\icon_bar_import\\227-e06_icon_bar_test.engine.log",
+      "log_sha256": "F202C707F1D330D1204F0B8B4D48AD7F984035C7D5032486C5BB7FFBC1819F8F",
+      "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\icon_bar_import\\227-e06_icon_bar_test.output.log",
+      "output_log_sha256": "66E07F600A195F0FDC3E05F65CA8383BEF257B73F1768BC0BF1E4B603DEAAD0C",
+      "exit_code": 1,
+      "timeout": false,
+      "completion": "E06 icon bar: 21 checks, 1 failures",
+      "error_markers": [
+        "ERROR: lost access retains disabled slot and tooltip"
+      ]
+    },
+    "diagnosis": "The test used Fireball for a retained-item-source case; root corrected the fixture to fire_spear without runtime changes.",
+    "current_run": {
+      "name": "e06_icon_bar_test",
+      "status": "PASS",
+      "exit_code": 0,
+      "timeout": false,
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_icon_bar_test.gd",
+      "test_file_sha256": "950DF6559BD52A94135E693EEA86FB22A6C14BD3F61363D401F71BADF459BE9C",
+      "completion_checks": 21,
+      "failure_count": 0,
+      "completion_summary": "E06 icon bar: 21 checks, 0 failures",
+      "error_markers": [],
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\227-e06_icon_bar_test.engine.log",
+      "engine_log_sha256": "594E11072180FF9DDCCF9676EC8E04628E29865A174FB88C55EB4F814C51DA9E",
+      "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_luna_15\\227-e06_icon_bar_test.output.log",
+      "output_log_sha256": "F5D8F0E8B6C15CEE9DD2F9A9A235AF649193EAAC6D47309CF68EE1211B6FC2C2"
+    }
+  },
+  "native_proof": {
+    "status": "Pending",
+    "owner": "root GPU proof",
+    "note": "Awaiting root render evidence."
+  },
+  "limitations": [
+    "e06_tx_active_test failed in the selected batch and remains for root triage; no test/runtime changes were made by Luna.",
+    "This selection does not alter or validate runtime combat rules beyond the listed automated checks."
+  ],
+  "corrected_tx_active_rerun": {
+    "prior_failure_preserved": true,
+    "prior_error_markers": [
+      "preparation cancelled only when last source is lost",
+      "disabled shortcut cannot cancel another valid preparation"
+    ],
+    "corrected_fixture": "Assert loss of captured rank 3 cancels across all source origins; Mage starts with learned rank 1 and retains the original disabled Teleport shortcut while it cannot cancel a valid preparation.",
+    "runtime_changes_by_Luna": 0,
+    "result": {
+      "name": "e06_tx_active_test",
+      "status": "PASS",
+      "exit_code": 0,
+      "timeout": false,
+      "test_file": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\tests\\e06_tx_active_test.gd",
+      "test_file_sha256": "A26A594D8315594F60266352CB408F7799823E57D8CF85E0281E33ED7F419374",
+      "completion_checks": 60,
+      "failure_count": 0,
+      "completion_summary": "E06 TX2 active: 60 checks, 0 failures",
+      "error_markers": [],
+      "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_tx_active_rerun\\187-e06_tx_active_test.engine.log",
+      "engine_log_sha256": "0E35A751C573B854126C325728A7DE5C80AFD26E49CA2E38B31590753AE53066",
+      "output_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\icon_bar_tx_active_rerun\\187-e06_tx_active_test.output.log",
+      "output_log_sha256": "445A89252EAD5536D33B3CA03A4FB13A82ADFBC2437DD2B9E03FA9426793C3C7"
+    }
+  },
+  "native_gpu_proof": {
+    "status": "PASS",
+    "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\icon_bar_native.output.log",
+    "log_sha256": "6415778EC820D0738C673F9E1295531E97A704F42FB90FF2F1DF59ADF59F6775",
+    "error_markers": [],
+    "success_markers": [
+      "COMPACT_GUI_NATIVE_OK actual_plus_minus=true hover_edges=4 scale=0.85",
+      "ICON_BAR_NATIVE_OK full_icons=true clockwise_pixels=20 shared_rank_cooldown=true actual_slot_click=true",
+      "SKILL_UX_NATIVE_OK"
+    ],
+    "icon_sweep_phases": [
+      0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "quadrant_pixel_samples": 20,
+    "observed": "Twenty quadrant pixel ratios across clockwise phases from 0% through 100%; real slot click; same-ID rank cooldown sharing; GPU output also records tooltip edges and inventory actual close after 80x30 physical drag."
+  }
+}

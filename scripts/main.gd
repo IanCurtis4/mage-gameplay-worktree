@@ -2492,6 +2492,7 @@ func _update_hud() -> void:
 			if not cast_intent.active_skill.is_empty() and cast_intent.active_skill not in available:
 				_cancel_aim()
 		for skill_id: StringName in player.available_skill_ids():
+			battle_controls.show_skill_cooldown(skill_id, player.skill_cooldown(skill_id))
 			var definition := ClassCatalog.skill_definition(skill_id)
 			var cost := 0.0 if skill_id == &"shield_wall" and player.has_shield_stance() else player.skill_cost(skill_id)
 			var rank_text := " R%d" % player.skill_rank(skill_id) if not definition.ranks.is_empty() else ""
@@ -2535,6 +2536,7 @@ func _update_slot_skill_states() -> void:
 		var active := (cast_intent.active_skill == skill and _intent_rank == requested) or (player.active_cast_skill == skill and player.active_cast_rank == resolved)
 		var rank_text := " R%d" % (resolved if resolved > 0 else requested) if not definition.ranks.is_empty() else ""
 		battle_controls.show_skill_state(skill, "%s · %s%s\n%d SP · %s" % [control_preferences.binding_label(index), definition.display_name.to_upper(), rank_text, ceili(cost), state], active, requested)
+		battle_controls.show_skill_cooldown(skill, player.skill_cooldown(skill))
 		player.restore_cast_rank(previous)
 
 func _skill_input_label(skill_id: StringName) -> String:
@@ -2813,9 +2815,9 @@ func _build_ui() -> void:
 	bottom_controls.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bottom_controls.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	bottom_controls.offset_left = -600.0
-	bottom_controls.offset_top = -310.0
+	bottom_controls.offset_top = -286.0
 	bottom_controls.offset_right = 600.0
-	bottom_controls.offset_bottom = -166.0
+	bottom_controls.offset_bottom = -142.0
 	bottom_controls.alignment = BoxContainer.ALIGNMENT_CENTER
 	status_label = _make_label("", 20, Color.WHITE)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

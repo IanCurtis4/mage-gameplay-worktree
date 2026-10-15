@@ -98,7 +98,7 @@ func _test_execution_ui(snapshot: BuildSnapshot) -> void:
 	ui.player.health.current_hp = hp_cost
 	ui.player.current_sp = ui.player.max_sp
 	ui._update_hud()
-	_check(ui.skill_label.text.contains("HP INSUFICIENTE") and ui.battle_controls.skill_buttons[&"berserker_execution"].text.contains("HP INSUFICIENTE"), "HUD and skill card expose the same insufficient-HP gate as the commit")
+	_check(ui.skill_label.text.contains("HP INSUFICIENTE") and ui.battle_controls.skill_buttons[&"berserker_execution"].tooltip_text.contains("HP INSUFICIENTE") and ui.battle_controls.skill_buttons[&"berserker_execution"].combat_blocked, "HUD and skill card expose the same insufficient-HP gate as the commit")
 	ui.cast_intent.active_skill = &"berserker_execution"
 	var motion := InputEventMouseMotion.new()
 	motion.position = ui.get_global_transform_with_canvas() * target_actor.global_position

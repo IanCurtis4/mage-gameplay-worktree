@@ -27,6 +27,8 @@ var action_slots: Array[Variant] = []
 var control_preferences := ControlPreferences.new()
 var slot_buttons: Array[Button] = []
 var available_ranks: Dictionary = {}
+var _cooldown_spans: Dictionary = {}
+var _cooldown_last: Dictionary = {}
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -38,11 +40,11 @@ func _ready() -> void:
 	skill_bar.add_theme_constant_override("h_separation", 4)
 	skill_bar.add_theme_constant_override("v_separation", 4)
 	add_child(skill_bar)
-	_center_bottom(skill_bar, 1100, -158, -18)
+	_center_bottom(skill_bar, 764, -142, -18)
 	aim_panel = PanelContainer.new()
 	aim_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(aim_panel)
-	_center_bottom(aim_panel, 740, -204, -166)
+	_center_bottom(aim_panel, 740, -188, -150)
 	aim_label = Label.new()
 	aim_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	aim_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -159,10 +161,7 @@ func _rebuild_bar() -> void:
 		button.slot_index = index
 		button.skill_id = id
 		button.cast_rank = rank
-		button.icon = SkillPresentation.icon(id)
-		button.add_theme_constant_override("icon_max_width", 32)
-		button.expand_icon = true
-		button.custom_minimum_size = Vector2(88, 68)
+		button.custom_minimum_size = Vector2(60, 60)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.clip_text = true
 		button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -178,7 +177,8 @@ func _rebuild_bar() -> void:
 			style.content_margin_left = 4.0
 			style.content_margin_right = 4.0
 			button.add_theme_stylebox_override(state, style)
-		button.text = "%s\n%s" % [labels[index], _short_name(id)]
+		button.configure_combat(SkillPresentation.icon(id), labels[index])
+		button.show_cooldown(float(_cooldown_last.get(id, 0.0)), float(_cooldown_spans.get(id, 0.0)))
 		button.tooltip_text = "Slot %d · %s\n%s%s" % [index + 1, labels[index], _name(id), " · indisponível" if button.disabled else ""]
 		if id != &"":
 			button.pressed.connect(_choose_skill.bind(id, rank))
@@ -270,7 +270,7 @@ func show_skill_state(skill: StringName, state_text: String, active: bool, reque
 		if button.skill_id != skill or (requested_rank >= 0 and button.cast_rank != requested_rank): continue
 		var lines := state_text.split("\n")
 		var status := String(lines[-1]).split(" · ")[-1]
-		button.text = "%s\n%s%s\n%s" % [control_preferences.binding_label(button.slot_index), _short_name(skill), " R%d" % button.cast_rank if button.cast_rank > 0 else "", status]
+		button.set_combat_blocked(button.disabled or status.begins_with("SEM ") or status.contains("INSUFICIENTE") or status.contains("INDISPONÍVEL"))
 		var copy := SkillCopy.text_for(skill)
 		button.tooltip_text = state_text + "\n" + SkillPresentation.emphasize(String(copy.get("effect", ""))) + "\n" + SkillPresentation.emphasize(String(copy.get("combo", "")))
 		button.set_pressed_no_signal(active)
@@ -299,23 +299,22 @@ func _name(id: StringName) -> String:
 	var definition := ClassCatalog.skill_definition(id)
 	return definition.display_name if definition != null else String(id)
 
-func _short_name(id: StringName) -> String:
-	var name := _name(id)
-	if name.length() <= 11:
-		return name
-	var words := name.split(" ")
-	var first := ""
-	var second := ""
-	for word: String in words:
-		if (first.is_empty() or first.length() + 1 + word.length() <= 11) and second.is_empty():
-			first += (" " if not first.is_empty() else "") + word
-		else:
-			second += (" " if not second.is_empty() else "") + word
-	return first + "\n" + second
-
 func _center_bottom(control: Control, width: float, top: float, bottom: float) -> void:
 	control.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	control.offset_left = -width * 0.5
 	control.offset_right = width * 0.5
 	control.offset_top = top
 	control.offset_bottom = bottom
+
+func show_skill_cooldown(skill: StringName, remaining: float) -> void:
+	var current := maxf(0.0, remaining)
+	var previous := float(_cooldown_last.get(skill, 0.0))
+	if current <= 0.0:
+		_cooldown_spans.erase(skill)
+	elif not _cooldown_spans.has(skill) or current > previous + 0.001:
+		_cooldown_spans[skill] = current
+	_cooldown_last[skill] = current
+	for raw: Button in slot_buttons:
+		var slot := raw as ActionBarSlot
+		if slot.skill_id == skill:
+			slot.show_cooldown(current, float(_cooldown_spans.get(skill, 0.0)))

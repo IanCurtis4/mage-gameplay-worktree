@@ -83,8 +83,12 @@ func _run() -> void:
 		player.mage_cooldowns[&"fire_spear"] = 0.0
 		_check(player.begin_skill_cast(&"fire_spear", victim.global_position, victim), "prepare before removing source")
 		F.change(c, &"unequip", {"slot": &"accessory_1"})
-		_check(player.has_active_cast() == (origin == &"mage"), "preparation cancelled only when last source is lost")
+		_check(not player.has_active_cast(), "removing item cancels captured R3 preparation when that rank loses access")
 		if origin == &"mage":
+			var previous := player.push_cast_rank(&"fire_spear",1)
+			_check(player.begin_skill_cast(&"fire_spear",victim.global_position,victim), "learned R1 can prepare after boosted rank is lost")
+			player.restore_cast_rank(previous)
+			_check(player.active_cast_rank == 1, "surviving preparation uses learned R1 without retaining item R3")
 			c.control_preferences.restore_bindings()
 			c.get_viewport().gui_release_focus()
 			var disabled_key := InputEventKey.new()

@@ -1,0 +1,13 @@
+# E06 — barra de combate por ícones e recarga radial
+
+Autorização humana15/10: somente ícone preenchendo o slot durante combate, descrição em tooltip, varredura horária com degradê na recarga e segundos discretos. Base021cc9fd8df7135362c03f3a40f7d91a7469d6d2; codex/e06-inventory em C:/Users/João Pedro/.codex/worktrees/e06-inventory/RagRPG. Destino habitual codex/playtest; preservar alterações locais/save. Sem master/push/E07.
+
+Sol root dono exclusivo scripts/ui/action_bar_slot.gd, battle_controls.gd, novo action_cooldown.gdshader(+uid), scripts/main.gd apenas apresentação; testes action_bar_ui_test/e05_berserker_execution_test para oráculos visuais substituídos, novo e06_icon_bar_test(+uid), tools/icon_bar_native_probe(+uid), tools/verify.ps1, docs deste lote. Demais regras/catálogos/player/persistência/ícones e editor de atalhos não mudam. Registrar este contrato no índice antes de implementar.
+
+Barra24slots/12colunas em quadrados60px lógicos (escala85% vigente). Ícone integral com tecla e rank explícito pequenos; sem nome/status em texto no corpo. Tooltip preserva nome, rank, custo, estado e efeito/interação. Indisponibilidade mantém slot e indicação discreta. Clique/mira/binds/recarga por ID preservados.
+
+Gauge consome somente player.skill_cooldown numérico, sem relógio próprio, parsing de texto ou nova fórmula de cooldown. A duração gráfica é o maior restante observado no início/renovação da recarga; versões do mesmo ID compartilham a observação. Pausa deixa o gauge imóvel porque o restante canônico não anda. Rebuild não reinicia o cache. Shader limpa em sentido horário a partir de12h, com sombra e faixa em degradê; segundos sobrepostos desaparecem no zero. Esta normalização visual não muda execução nem duração real.
+
+Luna supervisiona seleção fechada de tools/verify.ps1, dono apenas e06_icon_bar_luna.json. Sol valida entrada real, tooltips e leitura1280/1920, além de amostras renderizadas para direção horária/fases; documentação distingue fixtures visuais de lançamentos reais. Aplicação após PASS técnico; aceite de produto permanece humano.
+
+Compatibilidade de teste adicional sob dono root: e06_tx_active_test ainda esperava que uma preparação R3 do item sobrevivesse à perda desse rank quando o Mago só aprendeu R1. PlayerActor já cancela rank capturado acima do acesso efetivo no candidato base021cc9fd (arquivo idêntico ao atual), conforme contrato de versões explícitas da rodada anterior. O teste agora distingue cancelar R3 indisponível de poder preparar R1 aprendido; mantém oráculos de emissão já lançada, recarga, atalho persistente e input de atalho sem fonte. Nenhuma regra/runtime de preparação é alterada neste lote.
