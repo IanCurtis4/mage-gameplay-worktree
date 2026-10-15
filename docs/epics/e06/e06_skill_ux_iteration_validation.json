@@ -74,5 +74,6 @@
   "source_runner": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
   "runner_isolation": "Exact source runtime copied, ignored addons excluded and runner VCS autoload disabled; source plugin config unchanged",
   "reuse": "61 selected checks with impacted reruns. Final13 persistence regressions after migration allowlist delta; native UI evidence reused because only historical-migration authorization changed. No new UI/gameplay delta afterward.",
-  "automation_supervision_sha256": "b1f3bd0a189ffc24647eaad0bd453956b742aea59593283940cd1b0644108595"
+  "automation_supervision_sha256": "b1f3bd0a189ffc24647eaad0bd453956b742aea59593283940cd1b0644108595",
+  "runtime_commit": "b0ad3d4415f8c51f5cbd5ac5ee962f3bf69ed186"
 }
