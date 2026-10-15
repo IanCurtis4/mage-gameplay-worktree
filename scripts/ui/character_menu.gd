@@ -105,6 +105,7 @@ func _ready() -> void:
 	_focused_character_id = pending_focus_character_id
 	pending_focus_character_id = ""
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	GuiMetrics.configure_root(self)
 	_build_ui()
 	_layout_panel()
 	get_viewport().size_changed.connect(_layout_panel)
@@ -906,7 +907,7 @@ func _request_id(action: String) -> String:
 func _layout_panel() -> void:
 	if menu_panel == null:
 		return
-	var extent := get_viewport_rect().size
+	var extent := GuiMetrics.local_extent(self)
 	var width := minf(extent.x - 48.0, 1200.0)
 	menu_panel.position = Vector2((extent.x - width) * 0.5, 20)
 	menu_panel.size = Vector2(width, maxf(300, extent.y - 40))

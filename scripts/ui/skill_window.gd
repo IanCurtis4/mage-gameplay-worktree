@@ -26,7 +26,7 @@ class SkillButton extends Button:
 		set_drag_preview(preview)
 		return payload
 	func _make_custom_tooltip(for_text: String) -> Object:
-		return SkillTooltip.create(for_text)
+		return SkillTooltip.create(for_text, self)
 
 var draft := SkillAllocationDraft.new()
 var action_host: VBoxContainer
@@ -342,7 +342,7 @@ func _render_skills() -> void:
 			var requirements := SkillPresentation.prerequisites(option)
 			for prerequisite: Variant in requirements:
 				if not positions.has(prerequisite): continue
-				var start: Vector2 = positions[prerequisite] + Vector2(46, 122)
+				var start: Vector2 = positions[prerequisite] + Vector2(46, 104)
 				var finish: Vector2 = positions[id] + Vector2(46, 0)
 				var line := Line2D.new()
 				line.width = 1.5
@@ -353,7 +353,7 @@ func _render_skills() -> void:
 	else:
 		for option: Dictionary in shown:
 			positions[StringName(option["skill_id"])] = Vector2(10, y)
-			y += 66
+			y += 58
 	_canvas.custom_minimum_size = Vector2(514, maxf(100, y))
 	for option: Dictionary in shown:
 		_make_entry(option, positions[StringName(option["skill_id"])])
@@ -399,8 +399,8 @@ func _branch_positions(shown: Array[Dictionary], levels: Dictionary) -> Dictiona
 		for depth: int in by_depth:
 			var nodes: Array = by_depth[depth]
 			for index: int in nodes.size():
-				result[nodes[index]] = Vector2(x + (width - nodes.size()) * 50 + index * 100, base_y + depth * 158)
-			band_height = maxf(band_height, (depth + 1) * 158)
+				result[nodes[index]] = Vector2(x + (width - nodes.size()) * 50 + index * 100, base_y + depth * 140)
+			band_height = maxf(band_height, (depth + 1) * 140)
 		x += width * 100
 	return {"positions": result, "height": base_y + band_height + 10}
 
@@ -413,7 +413,7 @@ func _make_entry(option: Dictionary, point: Vector2) -> void:
 	var color := RED if rank > 0 or item_rank > 0 else (BLUE if can_add else GRAY)
 	var card := Panel.new()
 	card.position = point
-	card.size = Vector2(92, 122) if _tree else Vector2(484, 58)
+	card.size = Vector2(92, 104) if _tree else Vector2(484, 50)
 	card.add_theme_stylebox_override("panel", _style(Color.WHITE, BLUE if pending > 0 else color, 2 if pending > 0 or id == _selected else 1))
 	_canvas.add_child(card)
 	var button := SkillButton.new()
@@ -424,7 +424,7 @@ func _make_entry(option: Dictionary, point: Vector2) -> void:
 	button.drag_allowed = confirmed > 0 and ClassCatalog.skill_definition(id).category == SkillDefinition.Category.ACTIVE and option.get("available", false)
 	button.cast_rank = int(_rank_choices.get(id, 0))
 	if button.cast_rank > confirmed: button.cast_rank = 0
-	button.size = Vector2(92, 94) if _tree else Vector2(398, 58)
+	button.size = Vector2(92, 78) if _tree else Vector2(398, 50)
 	button.tooltip_text = SkillPresentation.describe(option, draft.preview.get("summary", {}))
 	if button.drag_allowed: button.tooltip_text += "\n[b]Versão para arrastar: %s[/b]" % ("maior rank disponível" if button.cast_rank == 0 else "R%d" % button.cast_rank)
 	button.pressed.connect(_select.bind(id))
@@ -437,28 +437,28 @@ func _make_entry(option: Dictionary, point: Vector2) -> void:
 			_gray_material = ShaderMaterial.new()
 			_gray_material.shader = load("res://scripts/ui/skill_locked_icon.gdshader") as Shader
 		icon.material = _gray_material
-	icon.position = Vector2(30, 3) if _tree else Vector2(8, 13)
+	icon.position = Vector2(30, 3) if _tree else Vector2(8, 9)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.size = Vector2(32, 32)
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	button.add_child(icon)
-	var name_label := _label(button, SkillPresentation.name_of(id), Rect2(3, 39, 86, 32) if _tree else Rect2(50, 4, 344, 28), color, 12, true)
+	var name_label := _label(button, SkillPresentation.name_of(id), Rect2(3, 39, 86, 32) if _tree else Rect2(50, 2, 344, 24), color, 12, true)
 	name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	name_label.clip_text = true
 	name_label.max_lines_visible = 2
-	name_label.size = Vector2(86, 38) if _tree else Vector2(344, 28)
+	name_label.size = Vector2(86, 38) if _tree else Vector2(344, 24)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if _tree else HORIZONTAL_ALIGNMENT_LEFT
 	var state := "Item R%d" % item_rank if item_rank > 0 else ("Disponível" if can_add else ("Aprendida" if rank > 0 else "Bloqueada"))
 	var text := "%d/%d" % [rank, int(option["maximum_rank"])] if _tree else "%d/%d · %s" % [rank, int(option["maximum_rank"]), state]
 	if pending > 0: _label(button, "+%d" % pending, Rect2(69, 3, 23, 20) if _tree else Rect2(357, 5, 36, 20), BLUE, 13)
-	var rank_label := _label(button, text, Rect2(2, 76, 88, 16) if _tree else Rect2(50, 32, 344, 22), color, 10 if _tree else 12)
+	var rank_label := _label(button, text, Rect2(26, 81, 40, 18) if _tree else Rect2(50, 26, 344, 20), color, 10 if _tree else 12)
 	rank_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if _tree else HORIZONTAL_ALIGNMENT_LEFT
 	var plus := _button(card, "+", _change.bind(id, true))
 	var minus := _button(card, "−", _change.bind(id, false))
-	plus.position = Vector2(49, 97) if _tree else Vector2(438, 13)
-	minus.position = Vector2(5, 97) if _tree else Vector2(402, 13)
-	plus.size = Vector2(38, 20) if _tree else Vector2(32, 32)
+	plus.position = Vector2(68, 80) if _tree else Vector2(454, 14)
+	minus.position = Vector2(4, 80) if _tree else Vector2(422, 14)
+	plus.size = Vector2(20, 20) if _tree else Vector2(24, 22)
 	minus.size = plus.size
 	plus.disabled = not can_add or not draft.editable or draft.is_uncertain() or not draft.preview.get("can_apply", false)
 	minus.disabled = pending <= 0 or not draft.editable or draft.is_uncertain()
@@ -470,7 +470,7 @@ func _make_entry(option: Dictionary, point: Vector2) -> void:
 			if other["skill_id"] == prerequisite and StringName(other["metadata"].get("required_evolution_id", &"")) == _job: same_job = true
 		if not same_job: external.append("%s R%d" % [SkillPresentation.name_of(StringName(prerequisite)), int(SkillPresentation.prerequisites(option)[prerequisite])])
 	if _tree and not external.is_empty():
-		var requirement_label := _label(_canvas, " + ".join(external), Rect2(point.x - 4, point.y + 123, 100, 27), INK, 10, true)
+		var requirement_label := _label(_canvas, " + ".join(external), Rect2(point.x - 4, point.y + 105, 100, 27), INK, 10, true)
 		requirement_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	skill_entries[id] = {"button": button, "plus": plus, "minus": minus, "card": card, "option": option}
 

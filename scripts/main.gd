@@ -2734,7 +2734,7 @@ func _build_ui() -> void:
 	add_child(canvas)
 	ui_root = Control.new()
 	canvas.add_child(ui_root)
-	ui_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	GuiMetrics.configure_root(ui_root)
 	ui_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ui_root.theme = _battle_theme()
 

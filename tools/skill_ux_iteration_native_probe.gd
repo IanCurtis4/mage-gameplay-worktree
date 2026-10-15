@@ -32,7 +32,7 @@ func _run() -> void:
 		menu.action_editor.assign_skill(&"fire_spear", 1)
 		menu.skill_window._select(&"fireball")
 		var drag_button: Button = menu.skill_window.skill_entries[&"fireball"]["button"]
-		await _native_drag(viewport, drag_button.get_global_rect().get_center(), menu.action_editor.slot_buttons[8].get_global_rect().get_center())
+		await _native_drag(viewport, GuiMetrics.visual_rect(drag_button).get_center(), GuiMetrics.visual_rect(menu.action_editor.slot_buttons[8]).get_center())
 		assert(ActionBarLayout.skill_id(menu.action_editor.action_slots[8]) == &"fireball" and ActionBarLayout.selected_rank(menu.action_editor.action_slots[8]) == 0)
 		await _capture(viewport, directory, "lobby_tree_%d" % extent.x)
 		assert(menu.skill_window.draft.add(&"ice_spear")["ok"])

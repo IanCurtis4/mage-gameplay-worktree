@@ -1,0 +1,76 @@
+{
+  "status": "passed",
+  "complete": true,
+  "role": "technical_validator",
+  "validator": "Sol",
+  "base_commit": "0a39890b324cd2c63c52b9584447fe762db89583",
+  "contract": "docs/epics/e06/e06_compact_gui_scope.md",
+  "scale": 0.85,
+  "automation_supervision": {
+    "report": "docs/epics/e06/e06_compact_gui_luna.json",
+    "sha256": "39d927c26899598a57c7ab7304f2725f4d170cab1d1eb3c94b9d31b30ce51603",
+    "distinct_script_checks": 17,
+    "check_executions": 21,
+    "editor_import_separate": true,
+    "full_suite": false,
+    "total_plan": 226
+  },
+  "native": {
+    "log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\compact_gui_native_final_v6.output.log",
+    "sha256": "0dc992f0f8e892df36984b6cd9048eb19f877a390171f9698d51c9321d559991",
+    "viewports": [
+      [
+        960,
+        540
+      ],
+      [
+        1280,
+        720
+      ],
+      [
+        1920,
+        1080
+      ]
+    ],
+    "actual_input": [
+      "plus/minus",
+      "tree-to-slot drag",
+      "Escape",
+      "inventory drag80x30",
+      "close after overlapping windows"
+    ],
+    "tooltip_popup_corners": 4,
+    "resize": "960x540→1280x720",
+    "visual_inspection": [
+      "lobby_tree_1280",
+      "compact_hover_1230_670",
+      "compact_960",
+      "game_shared_icons_1280",
+      "compact_inventory_1280"
+    ]
+  },
+  "tested_inputs_normalized_sha256": {
+    "scripts/ui/action_bar_slot.gd": "d8df10fbbd91f69d31f253761fc5a235edf3db80e6db524f7bc7085f4e10cdbf",
+    "scripts/main.gd": "27939df3f4a2ce756a9bc5dd9c3ea12b5f9a9aaf0b9b6475b99148b3cb6ca943",
+    "scripts/ui/skill_tooltip.gd": "aa49e9b1ce93be795a93d4b0a8bb7e9016a8f3a562a432faa7d792bd80f41076",
+    "scripts/ui/gui_metrics.gd.uid": "b61a1d8d40b26105f19e86b3510c7e20d668c42cdf8f195800390649d1545eaf",
+    "scripts/ui/run_inventory_panel.gd": "c309b3e0e24d74ac631d81f14b04ccddcca1141e27b107f306fe98c5f1e0f932",
+    "scripts/ui/gui_metrics.gd": "54f7a9db4ea663585b43877f3d9f7dd41e4fefb1d9120b5550ed99212ac70696",
+    "tools/skill_ux_iteration_native_probe.gd": "1f2e5de886bbfbaf37cb8d8054c9877c9c4819aa42e1a9358a948b657dc82bd3",
+    "tools/compact_gui_native_probe.gd": "91e9393b6af85091a6c2407c4fd2cbde5a64344f5b010ab62b8a05f4c772ee4b",
+    "scripts/ui/skill_window.gd": "4e3b7266d53f98b492723441ff60cdd17456ace677cdefefcb91cf0306a88c56",
+    "scripts/ui/character_menu.gd": "abfac18627966b0367ee8a9649b5d6bc7fe080875bc1866f9e14f2c7820918a2",
+    "tools/compact_gui_native_probe.gd.uid": "5edc0dbee59bcd9ec3bb893f8103a0a2987ef5e06fbb76b6026b9e53663e0b79"
+  },
+  "reused_checks": "Final inventory move_child delta covered by4 Luna reruns and final native proof; other17 selection evidence reused by unchanged behavior. No gameplay/save changes.",
+  "probe_corrections": "Earlier native failures retained: transformed hit coordinates; stale Button after refresh; notifying mouse entry to standalone SubViewport; configure inventory before testing visibility. Actual window-overlap failure fixed by bringing dragged window to front.",
+  "limitations": [
+    "Fixed85% scale in this iteration",
+    "Small windows use scrolling",
+    "No FPS/balance/fun assertion",
+    "Luna supervision is not an independent semantic audit"
+  ],
+  "product_acceptance": "not_recorded",
+  "master_merge": false,
+  "push": false
+}

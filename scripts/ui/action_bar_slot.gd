@@ -32,4 +32,4 @@ func _gui_input(event: InputEvent) -> void:
 		accept_event()
 
 func _make_custom_tooltip(for_text: String) -> Object:
-	return SkillTooltip.create(for_text)
+	return SkillTooltip.create(for_text, self)

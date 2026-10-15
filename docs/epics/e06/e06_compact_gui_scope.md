@@ -1,0 +1,9 @@
+# E06 — escala compacta de GUI
+
+Autorização humana15/10: diminuir GUI global, compactar/posicionar controles de rank e impedir overflow das tooltips. Base0a39890b324cd2c63c52b9584447fe762db89583, codex/e06-inventory, checkout C:/Users/João Pedro/.codex/worktrees/e06-inventory/RagRPG; destino habitual codex/playtest. Não altera mundo/câmera, gameplay, compras, fórmulas, save, binds ou arte. Sem master/push/E07.
+
+Sol root dono exclusivo scripts/ui/gui_metrics.gd(+uid), character_menu.gd, run_inventory_panel.gd, skill_window.gd, skill_tooltip.gd, action_bar_slot.gd, scripts/main.gd; testes/probe UI afetados e docs deste lote. Métrica compartilhada aplica85% apenas às raízes de GUI e preserva área lógica/âncoras. Layouts de janelas e drag usam espaço local correto. Controles de rank menores junto do contador, sem invadir nome/ícone. Tooltip usa viewport do solicitante, largura/altura limitadas e reposiciona popup após medida; conteúdo completo continua acessível nos detalhes.
+
+Luna supervisionará seleção fechada de tools/verify.ps1 em recibo próprio e06_compact_gui_luna.json, sem escrever runtime/testes. Sol confere visual1280×720/1920×1080, viewport menor e redimensionamento, hover real nas bordas, cliques +/- e DnD de atalhos na GUI reduzida. Critério: HUD e janelas dentro da área, hitboxes correspondentes à imagem, tooltips dentro da viewport. Testes não certificam FPS/diversão/balanceamento. Aplicação preservadora após PASS técnico; aceite humano de produto pendente.
+
+Correção visual de janela dentro do mesmo escopo: a prova nativa mostrou que arrastar Equipamentos sobre Mochila deixava seu fechar coberto. Ao iniciar drag pelo cabeçalho, a janela passa à frente. Prova exige deslocamento físico80×30px, limites e clique real no fechar após sobreposição. Regressão de inventário reexecutada por Luna após esse delta.

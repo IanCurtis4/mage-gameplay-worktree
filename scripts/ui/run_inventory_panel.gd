@@ -204,8 +204,9 @@ func _window_header(parent: VBoxContainer, window: PanelContainer, title: String
 func _header_input(event: InputEvent, window: PanelContainer) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
+			move_child(window, get_child_count() - 1)
 			_dragging = window
-			_drag_start = get_global_mouse_position()
+			_drag_start = get_local_mouse_position()
 			_window_start = window.position
 		else:
 			_dragging = null
@@ -216,16 +217,16 @@ func _input(event: InputEvent) -> void:
 		dismiss()
 		get_viewport().set_input_as_handled()
 	elif _dragging != null and event is InputEventMouseMotion:
-		_dragging.position = _clamp_window(_window_start + get_global_mouse_position() - _drag_start, _dragging.size)
+		_dragging.position = _clamp_window(_window_start + get_local_mouse_position() - _drag_start, _dragging.size)
 		get_viewport().set_input_as_handled()
 	elif _dragging != null and event is InputEventMouseButton and not event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		_dragging = null
 func _clamp_window(at: Vector2, extent: Vector2) -> Vector2:
-	var viewport := get_viewport_rect().size
+	var viewport := GuiMetrics.local_extent(self)
 	return Vector2(clampf(at.x, 0.0, maxf(0.0, viewport.x - extent.x)), clampf(at.y, 0.0, maxf(0.0, viewport.y - extent.y)))
 func _layout_windows() -> void:
 	if equipment_window == null or bag_window == null: return
-	var viewport := get_viewport_rect().size
+	var viewport := GuiMetrics.local_extent(self)
 	var gap := 12.0
 	var width := minf(742.0, maxf(560.0, viewport.x * 0.62))
 	var bag_width := minf(400.0, maxf(290.0, viewport.x - width - gap - 24.0))
