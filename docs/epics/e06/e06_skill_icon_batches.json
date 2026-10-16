@@ -2,7 +2,7 @@
   "scope": "Remaining86 painted icons for approved93 skills; one closed class batch at a time",
   "baseline": "0af2ec5ab4ba0d181f1430da24e6866e1541ade0",
   "existing_painted": 7,
-  "pending": 61,
+  "pending": 49,
   "owner": "Sol/root: art briefs, generation, files, manifests, import settings, class probes and checkpoints. Luna: bounded execution supervision only after stable batch.",
   "classes": [
     {
@@ -170,7 +170,7 @@
     },
     {
       "class": "berserker",
-      "status": "validated_source",
+      "status": "applied_verified",
       "entries": [
         {
           "id": "berserker_blood_rift",
@@ -235,26 +235,33 @@
       "generation_notes": [
         "First full-figure leap attempt returned output moderation_blocked with no asset delivered. Final benign jump motif uses one airborne armored boot over an arch; source and final prompt preserved."
       ],
-      "validation": "docs/epics/e06/e06_skill_icons_berserker_validation.json"
+      "validation": "docs/epics/e06/e06_skill_icons_berserker_validation.json",
+      "commit": "9efb300cdb3e2bc81b4155aadcd0d23ab1d7e819"
     },
     {
       "class": "mage",
-      "status": "pending",
+      "status": "validated_source",
       "entries": [
         {
           "id": "electric_discharge",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/electric_discharge.png",
+          "sha256": "2e1e23bad218989b93e63a7f46357d2249dcd4da3ac12a6384be8c11da5f66a2"
         },
         {
           "id": "fire_spear",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/fire_spear.png",
+          "sha256": "006e63772494d99dd8f140815c7366fb3b0a616145a868651680d35d329c2880"
         },
         {
           "id": "fire_wall",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/fire_wall.png",
+          "sha256": "a858464ac1b896a7cdb058174430e4f86ffcc056fb61b5071c6f0dfb63972662"
         },
         {
           "id": "fireball",
@@ -264,49 +271,68 @@
         {
           "id": "haunt",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/haunt.png",
+          "sha256": "f6bdc9971982b737b13f7d3285cc0099134a93c268b0bd12e6ab88161156163c"
         },
         {
           "id": "ice_spear",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/ice_spear.png",
+          "sha256": "64c958800375c6503cb7b7242a1c442a5f51bd6dd291ddf86bf042e45b2a60ef"
         },
         {
           "id": "ice_wall",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/ice_wall.png",
+          "sha256": "b77bbaea5f6d9b8074c1e422ee8221a53d6253c869ac4b7a5dd93c000c726b54"
         },
         {
           "id": "lightning",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/lightning.png",
+          "sha256": "45aa49d9e2aa4e7a47139ce9d48592eced8a983848d2aa4888e67504b2b2cf43"
         },
         {
           "id": "lightning_wall",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/lightning_wall.png",
+          "sha256": "3de5b23185af2045af8b39de40bcb8e4d5cc98f5f4849c2f597efb505d8f18c2"
         },
         {
           "id": "mage_mana_regeneration",
           "category": "passive",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/mage_mana_regeneration.png",
+          "sha256": "fd5442b18f6890a87daa26ab3a535b65466f192e5275c6c2643aff196e6e1e54"
         },
         {
           "id": "phantom_barrier",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/phantom_barrier.png",
+          "sha256": "1b06bbe352478f2477cbde13db69bec55074d38f8a10729460d371f24a019353"
         },
         {
           "id": "soul_impact",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/soul_impact.png",
+          "sha256": "91e19afbd41270b05e86f66d4e2dbb8feb3d4fdf5c34d148db984f4ca0bdbf7e"
         },
         {
           "id": "teleport",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/teleport.png",
+          "sha256": "c9d9b1f367899306ce0a60fb47d2ff1e069f9414467178d219aabb5acef07a3b"
         }
-      ]
+      ],
+      "validation": "docs/epics/e06/e06_skill_icons_mage_validation.json"
     },
     {
       "class": "elementalist",
@@ -590,6 +616,6 @@
       ]
     }
   ],
-  "generated_new": 25,
-  "next_class": "mage"
+  "generated_new": 37,
+  "next_class": "elementalist"
 }

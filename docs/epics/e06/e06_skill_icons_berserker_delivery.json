@@ -1,0 +1,16 @@
+{
+  "status": "APPLIED_VERIFIED",
+  "class": "berserker",
+  "candidate": "9efb300cdb3e2bc81b4155aadcd0d23ab1d7e819",
+  "base": "15b27c03c8ca2af5fc6ff0acfe53c90785bd83e5",
+  "target_checks": 2,
+  "native_sha256": "bb80fb7acde79071d5a3c332317f330e5b5d2e49500a65b3e919f6ff4947ab21",
+  "local_files_preserved": 146,
+  "personal_files_preserved": 3,
+  "cli_preflight": "Legacy CLI dirty target refusal; manual preserving FF according current WORKFLOW.",
+  "product_acceptance": "pending",
+  "luna_target_watch": {
+    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\art_batch_berserker\\target_watch.json",
+    "sha256": "721274d8e698428b133ce7549abcc49fac042a76b490e4fa5f1366d15b3738be"
+  }
+}

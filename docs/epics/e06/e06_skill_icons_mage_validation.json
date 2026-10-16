@@ -1,0 +1,163 @@
+{
+  "status": "TECHNICALLY_VALIDATED_SOURCE",
+  "class": "mage",
+  "date": "2026-10-16",
+  "new_icons": 12,
+  "preserved_icons": 1,
+  "assets": [
+    {
+      "id": "electric_discharge",
+      "file": "assets/art/skills/painted/electric_discharge.png",
+      "sha256": "2e1e23bad218989b93e63a7f46357d2249dcd4da3ac12a6384be8c11da5f66a2",
+      "preserved_existing": false
+    },
+    {
+      "id": "fire_spear",
+      "file": "assets/art/skills/painted/fire_spear.png",
+      "sha256": "006e63772494d99dd8f140815c7366fb3b0a616145a868651680d35d329c2880",
+      "preserved_existing": false
+    },
+    {
+      "id": "fire_wall",
+      "file": "assets/art/skills/painted/fire_wall.png",
+      "sha256": "a858464ac1b896a7cdb058174430e4f86ffcc056fb61b5071c6f0dfb63972662",
+      "preserved_existing": false
+    },
+    {
+      "id": "fireball",
+      "file": "assets/art/skills/painted/fireball.png",
+      "sha256": "0538213b7a8b0b683026cc6e05bde8e98a0383c0ec91a3c89f63aff5e0820c16",
+      "preserved_existing": true
+    },
+    {
+      "id": "haunt",
+      "file": "assets/art/skills/painted/haunt.png",
+      "sha256": "f6bdc9971982b737b13f7d3285cc0099134a93c268b0bd12e6ab88161156163c",
+      "preserved_existing": false
+    },
+    {
+      "id": "ice_spear",
+      "file": "assets/art/skills/painted/ice_spear.png",
+      "sha256": "64c958800375c6503cb7b7242a1c442a5f51bd6dd291ddf86bf042e45b2a60ef",
+      "preserved_existing": false
+    },
+    {
+      "id": "ice_wall",
+      "file": "assets/art/skills/painted/ice_wall.png",
+      "sha256": "b77bbaea5f6d9b8074c1e422ee8221a53d6253c869ac4b7a5dd93c000c726b54",
+      "preserved_existing": false
+    },
+    {
+      "id": "lightning",
+      "file": "assets/art/skills/painted/lightning.png",
+      "sha256": "45aa49d9e2aa4e7a47139ce9d48592eced8a983848d2aa4888e67504b2b2cf43",
+      "preserved_existing": false
+    },
+    {
+      "id": "lightning_wall",
+      "file": "assets/art/skills/painted/lightning_wall.png",
+      "sha256": "3de5b23185af2045af8b39de40bcb8e4d5cc98f5f4849c2f597efb505d8f18c2",
+      "preserved_existing": false
+    },
+    {
+      "id": "mage_mana_regeneration",
+      "file": "assets/art/skills/painted/mage_mana_regeneration.png",
+      "sha256": "fd5442b18f6890a87daa26ab3a535b65466f192e5275c6c2643aff196e6e1e54",
+      "preserved_existing": false
+    },
+    {
+      "id": "phantom_barrier",
+      "file": "assets/art/skills/painted/phantom_barrier.png",
+      "sha256": "1b06bbe352478f2477cbde13db69bec55074d38f8a10729460d371f24a019353",
+      "preserved_existing": false
+    },
+    {
+      "id": "soul_impact",
+      "file": "assets/art/skills/painted/soul_impact.png",
+      "sha256": "91e19afbd41270b05e86f66d4e2dbb8feb3d4fdf5c34d148db984f4ca0bdbf7e",
+      "preserved_existing": false
+    },
+    {
+      "id": "teleport",
+      "file": "assets/art/skills/painted/teleport.png",
+      "sha256": "c9d9b1f367899306ce0a60fb47d2ff1e069f9414467178d219aabb5acef07a3b",
+      "preserved_existing": false
+    }
+  ],
+  "generation": "Built-in imagegen; original PNGs copied unchanged, full prompts/source/hash in painted/manifest.json.128px import;32/64px display.",
+  "execution": {
+    "class": "mage",
+    "status": "CHECKS_AND_NATIVE_PASS_PENDING_VISUAL_REVIEW",
+    "checks": [
+      {
+        "index": 1,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\mage\\checks\\001.output.log",
+        "exit_code": 0,
+        "name": "editor_import",
+        "output_sha256": "3EB92D57A59124217B6535CDADC3B0843759A543B9C68D79B4300CAAF0FFAEDC",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\mage\\checks\\001.engine.log",
+        "timeout_seconds": 300,
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+          "--editor",
+          "--import",
+          "--quit"
+        ],
+        "failed": false,
+        "timed_out": false,
+        "execution_index": 1
+      },
+      {
+        "index": 227,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\mage\\checks\\227-e06_icon_bar_test.output.log",
+        "exit_code": 0,
+        "name": "e06_icon_bar_test",
+        "output_sha256": "EB3F9ABDAF6F6B129E2FE140E29916FCDDECD3E077141BF2FE525A5703A692AA",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\mage\\checks\\227-e06_icon_bar_test.engine.log",
+        "timeout_seconds": 300,
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+          "--script",
+          "res://tests/e06_icon_bar_test.gd"
+        ],
+        "failed": false,
+        "timed_out": false,
+        "execution_index": 2
+      }
+    ],
+    "native_sha256": "c823534bf3ae7a1a7182e3f89983d8dc7079077299965e7e1644bf62437a5ad0",
+    "native_elapsed_seconds": 7.92,
+    "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "source_input_manifest": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner_inputs.json",
+    "source_input_manifest_sha256": "986c5dacebe32e4d9cdad39f8abdf0a534f667e8510f1923fb13927ef7cdab26"
+  },
+  "luna_supervision": {
+    "report": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\mage\\watch.json",
+    "sha256": "22c602a7988a375ed140e252a96c57ae8582a560a4e771230ab2065c4b82f47b",
+    "role": "Execution supervision; no independent semantic audit"
+  },
+  "captures": [
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\mage\\contact.png",
+      "sha256": "f8002cbbadcb01f49c1e49793294255267e49c3c1708e9eab22f3edf30c85946"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\mage\\tree.png",
+      "sha256": "387b3d3701c5a536f55e3363e830c9fa19f7dce7bc9c5c034df8b801e8fae8af"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\mage\\list.png",
+      "sha256": "4cb074ed5bff579b058e5fea4edb47bb2d5adbe69c7e897f133058cf2dcb86fb"
+    }
+  ],
+  "visual_review": "Sol viewed contact and real tree at32/64px on light/dark backgrounds and existing blocked shader; distinct skill motifs, restrained passive contours, coherent subjects; source originals preserved. Tree/list probe completed with isolated profile.",
+  "changes_to_rules_or_save": false,
+  "limitations": [
+    "Human artistic preference/playtest pending; no FPS/balance claims.",
+    "49 icons still queued; next class elementalist"
+  ]
+}

@@ -429,6 +429,186 @@
       ],
       "sha256": "926dd60a2e8a3b5fe73d645ed45ba68e00edd69c27e1cd0a77fdf02fe436ec45",
       "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep burgundy #552e3b background and pale warm ivory-peach #f0a66e subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE Caça Persistente: one bold hollow OUTLINE of a single forward-pointing boot print enclosing one small drop at its heel, with a curved returning energy stroke forming part of the outer heel. Restrained brush contour, empty interior, no aura or character. Pursuing a wounded target, distinct from a jumping boot."
+    },
+    {
+      "id": "fire_wall",
+      "file": "fire_wall.png",
+      "class": "mage",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-65a9f51a-4151-4e0d-957d-4e9e892920dd.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "a858464ac1b896a7cdb058174430e4f86ffcc056fb61b5071c6f0dfb63972662",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep arcane indigo #302b58 background and warm golden ivory #f1c879 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Parede de Fogo: one broad curtain of three large connected curling flames rising from a single continuous ground line, forms one horizontal wall silhouette. Arcane spell flavor: flame edges flow like an unfurling magical parchment curl. No sphere, no staff, no separate floating particles."
+    },
+    {
+      "id": "fire_spear",
+      "file": "fire_spear.png",
+      "class": "mage",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-c8b3e3f2-3cc1-4b98-a71f-8981b4364163.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "006e63772494d99dd8f140815c7366fb3b0a616145a868651680d35d329c2880",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep arcane indigo #302b58 background and warm golden ivory #f1c879 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Lanças de Fogo: one long burning magical lance descending diagonally, narrow straight luminous core and a large pointed flame tip, curling flame tail unified with the shaft. No physical handle or crossguard, no meteor ball; clearly a fire spear spell."
+    },
+    {
+      "id": "ice_spear",
+      "file": "ice_spear.png",
+      "class": "mage",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-6fef91f8-9bd6-4f11-9542-11c9b62e6beb.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "64c958800375c6503cb7b7242a1c442a5f51bd6dd291ddf86bf042e45b2a60ef",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep arcane indigo #302b58 background and luminous icy cyan #87d8ed subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Lanças de Gelo: one long sharp crystalline icicle spear descending diagonally, broad faceted icy point and a single sweeping frost curl at its tail. One coherent tapering crystal silhouette, no handle, no snowflake clutter, sharply distinct from a flame."
+    },
+    {
+      "id": "ice_wall",
+      "file": "ice_wall.png",
+      "class": "mage",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-f5812c88-65fd-4d89-ab0b-24b57c8ae2ec.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "b77bbaea5f6d9b8074c1e422ee8221a53d6253c869ac4b7a5dd93c000c726b54",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep arcane indigo #302b58 background and luminous icy cyan #87d8ed subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Muralha de Gelo: one sturdy upright barricade formed by three large fused translucent ice blocks with a jagged frozen top edge. Frontal three-quarter view, broad rectangular obstructing wall silhouette; minimal internal facets, no castle bricks or tiny icicles."
+    },
+    {
+      "id": "lightning",
+      "file": "lightning.png",
+      "class": "mage",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-31bc007f-9d33-4004-9d9a-a7268924ee2d.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "45aa49d9e2aa4e7a47139ce9d48592eced8a983848d2aa4888e67504b2b2cf43",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep arcane indigo #302b58 background and luminous icy cyan #87d8ed subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Relâmpago: one huge vivid forked lightning bolt descending vertically from a small curled cloud-like brush stroke. Angular powerful zigzag dominant, two short branches, no circular pulse or fence. Hand-painted energy with broad clean negative space, not a flat vector glyph."
+    },
+    {
+      "id": "electric_discharge",
+      "file": "electric_discharge.png",
+      "class": "mage",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-5dac8ec0-ac2a-4209-9c81-72f24c00c85d.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "2e1e23bad218989b93e63a7f46357d2249dcd4da3ac12a6384be8c11da5f66a2",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep arcane indigo #302b58 background and luminous icy cyan #87d8ed subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Descarga Elétrica: one compact central spark releasing a thick circular pulse with four broad outward electric branches. Strong radial burst silhouette, clear dark center and large sparks, no many tiny particles; distinct from a single descending bolt."
+    },
+    {
+      "id": "lightning_wall",
+      "file": "lightning_wall.png",
+      "class": "mage",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-554a5151-8630-49db-bc24-7c21a42c04d2.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "3de5b23185af2045af8b39de40bcb8e4d5cc98f5f4849c2f597efb505d8f18c2",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep arcane indigo #302b58 background and luminous icy cyan #87d8ed subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Parede Elétrica: one horizontal curtain of three thick upright lightning columns joined by a broad continuous arcing base. Broad electric barricade silhouette, large connected zigzags, no posts, no physical masonry or radial explosion."
+    },
+    {
+      "id": "mage_mana_regeneration",
+      "file": "mage_mana_regeneration.png",
+      "class": "mage",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-86eff90a-3374-4ac2-988a-b6e4a4f72bfd.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "fd5442b18f6890a87daa26ab3a535b65466f192e5275c6c2643aff196e6e1e54",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep arcane indigo #302b58 background and luminous icy cyan #87d8ed subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE Regeneração de SP: one bold hollow OUTLINE of an open spellbook containing a single luminous energy drop, one simple curved returning stroke at its lower spine. Restrained hand-painted contour, large dark empty page spaces, no writing, runes, detailed text or aura."
+    },
+    {
+      "id": "soul_impact",
+      "file": "soul_impact.png",
+      "class": "mage",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-3f69421d-781b-47e7-b9fd-d345638b8b74.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "91e19afbd41270b05e86f66d4e2dbb8feb3d4fdf5c34d148db984f4ca0bdbf7e",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep arcane indigo #302b58 background and luminous pale lavender #d8b6ef subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Impacto da Alma: one dense luminous orb releasing four broad concussive lobes, with a short straight forward wake. Filled bright center and bold compressed impact silhouette, arcane spectral force rather than fire or electricity. No face, no weapon, no tiny particles."
+    },
+    {
+      "id": "haunt",
+      "file": "haunt.png",
+      "class": "mage",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-993a94cb-10e2-4d9a-b88e-0f27b0ec1d9a.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "f6bdc9971982b737b13f7d3285cc0099134a93c268b0bd12e6ab88161156163c",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep arcane indigo #302b58 background and luminous pale lavender #d8b6ef subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Assombrar: a single floating spectral hood-like wisp with two large dark eye hollows and a long curled tail wrapping inward. Expressive clean ghost silhouette, softly magical and stylized, no skull or horror scene, no tiny details. A haunting spell on a target."
+    },
+    {
+      "id": "phantom_barrier",
+      "file": "phantom_barrier.png",
+      "class": "mage",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-d2670930-6930-4efb-9a99-95a5f8327da3.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "1b06bbe352478f2477cbde13db69bec55074d38f8a10729460d371f24a019353",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep arcane indigo #302b58 background and luminous pale lavender #d8b6ef subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Barreira Fantasma: one translucent rounded protective bubble enclosing a single small curled spectral wisp. Broad smooth dome rim and one internal wisp form a unified ward silhouette, open airy negative space, magical vapor instead of metal shield or armor."
+    },
+    {
+      "id": "teleport",
+      "file": "teleport.png",
+      "class": "mage",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-d9c905c4-2efd-48d7-88e4-4f18b43d506a.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "c9d9b1f367899306ce0a60fb47d2ff1e069f9414467178d219aabb5acef07a3b",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep arcane indigo #302b58 background and luminous pale lavender #d8b6ef subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Teleporte: one tall open oval portal with a broad curling ribbon of arcane light flowing inward from one side and out the other, like the curled edges of an unfurled spell scroll. Large clear dark opening, no person or extra portals. Distinct from a round protective bubble."
     }
   ]
 }
