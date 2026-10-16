@@ -8,6 +8,7 @@ func _initialize() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
+	await _check_portrait_identities()
 	var base_directory := OS.get_environment("RAGRPG_TEST_DIRECTORY")
 	if base_directory.is_empty():
 		base_directory = ProjectSettings.globalize_path("res://.godot/verification")
@@ -62,3 +63,25 @@ func _check(condition: bool, label: String) -> void:
 	if not condition:
 		failures += 1
 		push_error(label)
+
+func _check_portrait_identities() -> void:
+	# Persisted IDs cross the DTO/portrait boundary into the actual animation.
+	var rows := [
+		[&"swordsman", &"", &"swordsman"], [&"mage", &"", &"mage"], [&"archer", &"", &"archer"],
+		[&"swordsman", &"defender", &"defender"], [&"swordsman", &"berserker", &"berserker"],
+		[&"mage", &"elementalist", &"elementalist"], [&"mage", &"spiritualist", &"spiritualist"],
+		[&"archer", &"sentinel", &"sentinel"], [&"archer", &"hunter", &"hunter"],
+		[&"mage", &"mg_ar", &"geometer"],
+	]
+	var portrait := InventoryCharacterPreview.new()
+	root.add_child(portrait)
+	await process_frame
+	for row: Array in rows:
+		var snapshot := BuildSnapshot.new()
+		snapshot.base_class_id = row[0]
+		snapshot.evolution_id = row[1]
+		var identity := BuildPresentation.portrait_identity(snapshot)
+		portrait.configure(identity, {})
+		_check(portrait._identity == row[2] and portrait._animation.actor_kind == row[2], "equipment portrait identity: %s/%s" % [row[0], row[1]])
+	portrait.queue_free()
+	await process_frame

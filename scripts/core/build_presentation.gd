@@ -85,6 +85,9 @@ static func describe(controller: RunController) -> Dictionary:
 	return {"ok": true, "error_code": &"", "request_id": "", "title": "Equipamentos e cartas", "collection_label": "Coleção permanente", "inventory_label": "Cartas permanentes", "context": controller.build_service.context(), "equipped": state.build_snapshot.equipped.duplicate(true), "equipment": equipment, "cards": cards, "inventory": inventory, "stats": composed["breakdown"].values(), "sources": composed["provenance"].duplicate(true), "inactive": composed["inactive"].duplicate(true), "skill_rules": composed["skill_rules"].duplicate(true), "skill_ranks": composed["skill_ranks"].duplicate(true), "kit_policies": composed["kit_policies"].duplicate(true), "procs": composed["procs"].duplicate(true), "item_grants": composed["item_grants"].duplicate(true), "unique_effects": composed["unique_effects"].duplicate(true), "identity_id": identity_id, "equipment_visual": visual}
 
 static func portrait_identity(snapshot: BuildSnapshot) -> StringName:
+	# Persistent hybrid identity differs from its animation asset ID.
+	if snapshot.evolution_id == IdentityIds.MG_AR:
+		return &"geometer"
 	if snapshot.evolution_id in [&"defender", &"berserker", &"elementalist", &"spiritualist", &"geometer", &"sentinel", &"hunter"]:
 		return snapshot.evolution_id
 	return snapshot.base_class_id
