@@ -2,7 +2,7 @@
   "scope": "Remaining86 painted icons for approved93 skills; one closed class batch at a time",
   "baseline": "0af2ec5ab4ba0d181f1430da24e6866e1541ade0",
   "existing_painted": 7,
-  "pending": 24,
+  "pending": 15,
   "owner": "Sol/root: art briefs, generation, files, manifests, import settings, class probes and checkpoints. Luna: bounded execution supervision only after stable batch.",
   "classes": [
     {
@@ -451,7 +451,7 @@
     },
     {
       "class": "archer",
-      "status": "validated_source",
+      "status": "applied_verified",
       "entries": [
         {
           "id": "archer_cadence",
@@ -531,58 +531,78 @@
           "sha256": "9563f9391e413e09f013ac9fa74a9b2b331cd6b5f345b3a5622666d3de8f82c8"
         }
       ],
-      "validation": "docs/epics/e06/e06_skill_icons_archer_validation.json"
+      "validation": "docs/epics/e06/e06_skill_icons_archer_validation.json",
+      "commit": "cf0fe46431d87a8a77d5f35e0f84f5c30c362ac1"
     },
     {
       "class": "sentinel",
-      "status": "pending",
+      "status": "validated_source",
       "entries": [
         {
           "id": "sentinel_absolute_focus",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/sentinel_absolute_focus.png",
+          "sha256": "05193dbaae27810d36987f0adc9f8a61659856d0a0c514b1edf071474b80db54"
         },
         {
           "id": "sentinel_concussion_shot",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/sentinel_concussion_shot.png",
+          "sha256": "e3674b4c190c086f15495fb87418f2a02bcdf669e8c756eae2fc637d7574904c"
         },
         {
           "id": "sentinel_explosive_shot",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/sentinel_explosive_shot.png",
+          "sha256": "dfd9782d08ba3e869dbd71bb9b2a16b68c4943b67a61bc066f6495e42139400f"
         },
         {
           "id": "sentinel_headshot",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/sentinel_headshot.png",
+          "sha256": "49cbc4a6630bdcc5425156a36d353488653e17276c7fcaa0d3f6a06cec81b148"
         },
         {
           "id": "sentinel_net_shot",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/sentinel_net_shot.png",
+          "sha256": "6f51d12f836bf9f4b6273ee57395498617acc60dff3f049974000356561acc0a"
         },
         {
           "id": "sentinel_observe",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/sentinel_observe.png",
+          "sha256": "ff5ce4103dba7a428299b28bdba38c9f82c75765caa9314b77f693918ae199dd"
         },
         {
           "id": "sentinel_opening_read",
           "category": "passive",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/sentinel_opening_read.png",
+          "sha256": "d2658ae3e27baf1ad0c690f245899da2724e75f45f9fda2390d57fedb9dec279"
         },
         {
           "id": "sentinel_piercing_shot",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/sentinel_piercing_shot.png",
+          "sha256": "18c9b56068cc6ae6626539110c88e05c7de90b003fde55b19dbd6298db44c0c0"
         },
         {
           "id": "sentinel_precision_stance",
           "category": "passive",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/sentinel_precision_stance.png",
+          "sha256": "a706eda1102ae979e70481b8a7acebca9980645f75e1239395e3162ec51efc6d"
         }
-      ]
+      ],
+      "validation": "docs/epics/e06/e06_skill_icons_sentinel_validation.json"
     },
     {
       "class": "hunter",
@@ -672,6 +692,6 @@
       ]
     }
   ],
-  "generated_new": 62,
-  "next_class": "sentinel"
+  "generated_new": 71,
+  "next_class": "hunter"
 }

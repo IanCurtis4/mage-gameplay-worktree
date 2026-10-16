@@ -984,6 +984,141 @@
       ],
       "sha256": "9563f9391e413e09f013ac9fa74a9b2b331cd6b5f345b3a5622666d3de8f82c8",
       "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep forest-green #25483d background and warm pale gold #f1d17b subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE Técnica de Armadilhas: one bold hollow OUTLINE of a simple six-tooth mechanical gear enclosing one large curved snare-trigger hook. Gear and hook form one coherent craft symbol, wide dark negative spaces, restrained painted edges, no fine mechanism or extra overlapping tools."
+    },
+    {
+      "id": "sentinel_headshot",
+      "file": "sentinel_headshot.png",
+      "class": "sentinel",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-26b30cae-fb72-4804-a69e-40d98dd19f92.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "49cbc4a6630bdcc5425156a36d353488653e17276c7fcaa0d3f6a06cec81b148",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep teal-navy #234b59 background and warm pale gold #f0cf7f subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE precision shot: one formidable arrowhead entering the exact center of a single tilted bullseye ring. Bold pointed silhouette, no victim or person; distinct from ordinary double arrows."
+    },
+    {
+      "id": "sentinel_observe",
+      "file": "sentinel_observe.png",
+      "class": "sentinel",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-ebf1eb1c-2b80-433d-854c-f2584d9ddf00.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "ff5ce4103dba7a428299b28bdba38c9f82c75765caa9314b77f693918ae199dd",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep teal-navy #234b59 background and warm pale gold #f0cf7f subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE observation mark: a watchful hawk eye above one small target diamond, united by a flowing painted eyebrow. One iconic eye motif, no scattered symbols."
+    },
+    {
+      "id": "sentinel_precision_stance",
+      "file": "sentinel_precision_stance.png",
+      "class": "sentinel",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-c8f6c227-0408-4e8e-bdd7-ce4cf0f9fd61.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "a706eda1102ae979e70481b8a7acebca9980645f75e1239395e3162ec51efc6d",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep teal-navy #234b59 background and warm pale gold #f0cf7f subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE precision stance: sparse hollow outline of a steady planted boot with an upright arrow beside its heel, integrated as one quiet emblem. Large empty interiors, no aura, simple contour."
+    },
+    {
+      "id": "sentinel_piercing_shot",
+      "file": "sentinel_piercing_shot.png",
+      "class": "sentinel",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-846f9589-4c0f-41f8-9d2c-8ffdeb3ea1a2.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "18c9b56068cc6ae6626539110c88e05c7de90b003fde55b19dbd6298db44c0c0",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep teal-navy #234b59 background and warm pale gold #f0cf7f subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE magical penetrating shot: one long brilliant spear-shaped arrow passing through two tilted narrow energy hoops, dominant straight diagonal lance, coherent painted motion."
+    },
+    {
+      "id": "sentinel_net_shot",
+      "file": "sentinel_net_shot.png",
+      "class": "sentinel",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-0bf5398f-5863-4dba-a4e6-3a38f3c61f12.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "6f51d12f836bf9f4b6273ee57395498617acc60dff3f049974000356561acc0a",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep teal-navy #234b59 background and warm pale gold #f0cf7f subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE net shot: a broad weighted fishing net unfolding from a single arrow tip, three thick crossing cords and four rounded weights, clear broad fan silhouette."
+    },
+    {
+      "id": "sentinel_explosive_shot",
+      "file": "sentinel_explosive_shot.png",
+      "class": "sentinel",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-a0bbf3e1-443a-4f66-a217-1fa334620b68.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "dfd9782d08ba3e869dbd71bb9b2a16b68c4943b67a61bc066f6495e42139400f",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep teal-navy #234b59 background and warm pale gold #f0cf7f subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE explosive shot: one heavy arrowhead at the center of a chunky rounded magical blast blossom, bold radial burst behind the intact point; no gore or victims."
+    },
+    {
+      "id": "sentinel_opening_read",
+      "file": "sentinel_opening_read.png",
+      "class": "sentinel",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-224435ff-bb3b-47a8-8009-f0dbf740305a.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "d2658ae3e27baf1ad0c690f245899da2724e75f45f9fda2390d57fedb9dec279",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep teal-navy #234b59 background and warm pale gold #f0cf7f subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE reading an opening: sparse hollow contour of a cracked target ring, its wide open wedge aligned with a small arrowhead. Quiet restrained outline, large negative space, no aura or explosion."
+    },
+    {
+      "id": "sentinel_concussion_shot",
+      "file": "sentinel_concussion_shot.png",
+      "class": "sentinel",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-3fce60cb-046a-4cfc-b608-0dea1106ea18.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "e3674b4c190c086f15495fb87418f2a02bcdf669e8c756eae2fc637d7574904c",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep teal-navy #234b59 background and warm pale gold #f0cf7f subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE concussive shot: a blunt rounded arrow striking a thick curling shockwave, two broad vibration arcs above its head. Distinct heavy rounded silhouette, no victims."
+    },
+    {
+      "id": "sentinel_absolute_focus",
+      "file": "sentinel_absolute_focus.png",
+      "class": "sentinel",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-db92b039-c198-4794-bd04-80f38c71026d.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "05193dbaae27810d36987f0adc9f8a61659856d0a0c514b1edf071474b80db54",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep teal-navy #234b59 background and warm pale gold #f0cf7f subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE absolute focus: regal hawk head in strict side profile with a brilliant focused eye and two sweeping feather crests forming a protective arc; one elegant coherent bird silhouette, confident and calm."
     }
   ]
 }

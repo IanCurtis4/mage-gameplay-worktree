@@ -1,0 +1,139 @@
+{
+  "status": "TECHNICALLY_VALIDATED_SOURCE",
+  "class": "sentinel",
+  "date": "2026-10-16",
+  "new_icons": 9,
+  "preserved_icons": 0,
+  "assets": [
+    {
+      "id": "sentinel_absolute_focus",
+      "file": "assets/art/skills/painted/sentinel_absolute_focus.png",
+      "sha256": "05193dbaae27810d36987f0adc9f8a61659856d0a0c514b1edf071474b80db54",
+      "preserved_existing": false
+    },
+    {
+      "id": "sentinel_concussion_shot",
+      "file": "assets/art/skills/painted/sentinel_concussion_shot.png",
+      "sha256": "e3674b4c190c086f15495fb87418f2a02bcdf669e8c756eae2fc637d7574904c",
+      "preserved_existing": false
+    },
+    {
+      "id": "sentinel_explosive_shot",
+      "file": "assets/art/skills/painted/sentinel_explosive_shot.png",
+      "sha256": "dfd9782d08ba3e869dbd71bb9b2a16b68c4943b67a61bc066f6495e42139400f",
+      "preserved_existing": false
+    },
+    {
+      "id": "sentinel_headshot",
+      "file": "assets/art/skills/painted/sentinel_headshot.png",
+      "sha256": "49cbc4a6630bdcc5425156a36d353488653e17276c7fcaa0d3f6a06cec81b148",
+      "preserved_existing": false
+    },
+    {
+      "id": "sentinel_net_shot",
+      "file": "assets/art/skills/painted/sentinel_net_shot.png",
+      "sha256": "6f51d12f836bf9f4b6273ee57395498617acc60dff3f049974000356561acc0a",
+      "preserved_existing": false
+    },
+    {
+      "id": "sentinel_observe",
+      "file": "assets/art/skills/painted/sentinel_observe.png",
+      "sha256": "ff5ce4103dba7a428299b28bdba38c9f82c75765caa9314b77f693918ae199dd",
+      "preserved_existing": false
+    },
+    {
+      "id": "sentinel_opening_read",
+      "file": "assets/art/skills/painted/sentinel_opening_read.png",
+      "sha256": "d2658ae3e27baf1ad0c690f245899da2724e75f45f9fda2390d57fedb9dec279",
+      "preserved_existing": false
+    },
+    {
+      "id": "sentinel_piercing_shot",
+      "file": "assets/art/skills/painted/sentinel_piercing_shot.png",
+      "sha256": "18c9b56068cc6ae6626539110c88e05c7de90b003fde55b19dbd6298db44c0c0",
+      "preserved_existing": false
+    },
+    {
+      "id": "sentinel_precision_stance",
+      "file": "assets/art/skills/painted/sentinel_precision_stance.png",
+      "sha256": "a706eda1102ae979e70481b8a7acebca9980645f75e1239395e3162ec51efc6d",
+      "preserved_existing": false
+    }
+  ],
+  "generation": "Built-in imagegen; original PNGs copied unchanged, full prompts/source/hash in painted/manifest.json.128px import;32/64px display.",
+  "execution": {
+    "class": "sentinel",
+    "status": "CHECKS_AND_NATIVE_PASS_PENDING_VISUAL_REVIEW",
+    "checks": [
+      {
+        "failed": false,
+        "timed_out": false,
+        "index": 1,
+        "output_sha256": "067AF3E88FC3966027D2E42C12BB48F7A31FAC1C99EF08366D137F118D3CB6BB",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\sentinel\\checks\\001.engine.log",
+        "exit_code": 0,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\sentinel\\checks\\001.output.log",
+        "timeout_seconds": 300,
+        "execution_index": 1,
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+          "--editor",
+          "--import",
+          "--quit"
+        ],
+        "name": "editor_import"
+      },
+      {
+        "failed": false,
+        "timed_out": false,
+        "index": 227,
+        "output_sha256": "EB3F9ABDAF6F6B129E2FE140E29916FCDDECD3E077141BF2FE525A5703A692AA",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\sentinel\\checks\\227-e06_icon_bar_test.engine.log",
+        "exit_code": 0,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\sentinel\\checks\\227-e06_icon_bar_test.output.log",
+        "timeout_seconds": 300,
+        "execution_index": 2,
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+          "--script",
+          "res://tests/e06_icon_bar_test.gd"
+        ],
+        "name": "e06_icon_bar_test"
+      }
+    ],
+    "native_sha256": "f869b2eb613143a3f7ed1ed9f904093fc98ca298ad8fee847a6a8c5393c8edcb",
+    "native_elapsed_seconds": 6.08,
+    "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "source_input_manifest": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner_inputs.json",
+    "source_input_manifest_sha256": "9600a26383562c0fef3c012da64a3277747570b6ba11fc56de6f0ab40e8492aa"
+  },
+  "luna_supervision": {
+    "report": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\sentinel\\watch.json",
+    "sha256": "a12981f609bc436d5ab2c5ab52776ecb993fafadedcfb4af31fd35d2da4e6e3c",
+    "role": "Execution supervision; no independent semantic audit"
+  },
+  "captures": [
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\sentinel\\contact.png",
+      "sha256": "bb8d837e4871844d1b40a1f39cd7bf1996eae52ffd736e9beec2a0a2c6dbc2d2"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\sentinel\\tree.png",
+      "sha256": "8f554abb13672312ac828c8e3345ac9c0dedee8610a6c44203bd7387dea20982"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\sentinel\\list.png",
+      "sha256": "44727082418c09ff7bff169f00cc389657772f72d8246c9b0b941b8ab1acb022"
+    }
+  ],
+  "visual_review": "Sol viewed contact and real tree at32/64px on light/dark backgrounds and existing blocked shader; distinct skill motifs, restrained passive contours, coherent subjects; source originals preserved. Tree/list probe completed with isolated profile.",
+  "changes_to_rules_or_save": false,
+  "limitations": [
+    "Human artistic preference/playtest pending; no FPS/balance claims.",
+    "15 icons still queued; next class hunter"
+  ]
+}
