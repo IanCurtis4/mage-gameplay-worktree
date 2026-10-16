@@ -1119,6 +1119,126 @@
       ],
       "sha256": "05193dbaae27810d36987f0adc9f8a61659856d0a0c514b1edf071474b80db54",
       "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep teal-navy #234b59 background and warm pale gold #f0cf7f subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE absolute focus: regal hawk head in strict side profile with a brilliant focused eye and two sweeping feather crests forming a protective arc; one elegant coherent bird silhouette, confident and calm."
+    },
+    {
+      "id": "hunter_freezing_trap",
+      "file": "hunter_freezing_trap.png",
+      "class": "hunter",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-afa31403-859a-49ad-964e-1effe46f3306.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "d1dd8d76e01747e95c38a61857c737dc878ac986cf9472905debf0a47f50e32f",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep woodland green #34513a background and warm pale gold #f3d17a subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE freezing trap: a single large crystalline snowflake rising from an open circular wooden snare; chunky cold angular silhouette, clean six-armed ice motif."
+    },
+    {
+      "id": "hunter_tar_trap",
+      "file": "hunter_tar_trap.png",
+      "class": "hunter",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-2a5825ac-f00d-472d-a3d9-3a5d1511c377.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "aa9b1e88522e8005cadb8730f8dc51fdbbb43a8c8a620b9e60b16f10f343be15",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep woodland green #34513a background and warm pale gold #f3d17a subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE sticky tar trap: a tipped small earthen jar pouring one thick viscous puddle that curls into a trapped boot footprint; thick drips, readable low spreading silhouette."
+    },
+    {
+      "id": "hunter_thorn_trap",
+      "file": "hunter_thorn_trap.png",
+      "class": "hunter",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-ecbe6951-cf18-4943-a314-52d51cf4a037.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "2f8c78f91c25c0d265ae945da028f562c17a92349a48f3873275ccf05935c41a",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep woodland green #34513a background and warm pale gold #f3d17a subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE thorn trap: a coiling briar vine forming a circular snare with three large inward thorns, one thick rising central thorn; coherent living bramble, no victims or blood."
+    },
+    {
+      "id": "hunter_mark",
+      "file": "hunter_mark.png",
+      "class": "hunter",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-0f72923a-50b0-407a-ac05-9125b5ba49c7.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "721443f6d61989e9d92cd2ae9eb909ba5acc6a1424a1e3b9033a998346bbc974",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep woodland green #34513a background and warm pale gold #f3d17a subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE hunter mark: a stylized deer antler crown surrounding one bold centered hunting diamond, sweeping symmetrical antlers as a single memorable emblem. Not an eye or bullseye."
+    },
+    {
+      "id": "hunter_shooting_discipline",
+      "file": "hunter_shooting_discipline.png",
+      "class": "hunter",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-aef2d3f4-99a2-4977-87d4-0d1a8001a3f7.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "65d0e410be3bcba77b069832639b69915acc1f17fc26ba58aa413c6fd54d8d1e",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep woodland green #34513a background and warm pale gold #f3d17a subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE shooting discipline: sparse hollow contour of one upright longbow with a single nocked arrow, a second thin echo line at the point suggesting a follow-up shot. Quiet outline, no aura or burst."
+    },
+    {
+      "id": "hunter_covering_shot",
+      "file": "hunter_covering_shot.png",
+      "class": "hunter",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-d9037150-34e2-4b6d-b0ff-bf1b82959e77.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "80467ed12b7a85235e9fa36e75948e3cd65592f16c61690c03578c8d198d8cf3",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep woodland green #34513a background and warm pale gold #f3d17a subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE covering retreat shot: one sweeping ranger boot moving backward below a broad curved arrow flight trail pointing forward, unified crescent of motion; clear retreat-and-shot motif, no person."
+    },
+    {
+      "id": "hunter_easy_prey",
+      "file": "hunter_easy_prey.png",
+      "class": "hunter",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-fe280a64-202f-4181-8fbe-3c006aa4e7b4.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "391d3f5d159ba33bc787ef9085e3d1a170aab1052aaf9623a58f10b468c880de",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep woodland green #34513a background and warm pale gold #f3d17a subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE easy prey: simple hollow contour of a small rabbit silhouette inside a partially open hunting ring; two long ears and one round body, large empty interior, restrained outline, no aura or violence."
+    },
+    {
+      "id": "hunter_total_cover",
+      "file": "hunter_total_cover.png",
+      "class": "hunter",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-392fa683-7f47-4dbe-9367-5bcc480bdb5a.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "fe139e104bf660a40a82a6568dde2e645b2fb0a320333fa90039da821ea61915",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep woodland green #34513a background and warm pale gold #f3d17a subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE total concealment: a hooded ranger face almost entirely hidden beneath a broad layered leafy canopy, two calm eyes in the shadow; one compact draped silhouette, clear cover identity, no background scenery."
     }
   ]
 }

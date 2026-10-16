@@ -1,0 +1,133 @@
+{
+  "status": "TECHNICALLY_VALIDATED_SOURCE",
+  "class": "hunter",
+  "date": "2026-10-16",
+  "new_icons": 8,
+  "preserved_icons": 0,
+  "assets": [
+    {
+      "id": "hunter_covering_shot",
+      "file": "assets/art/skills/painted/hunter_covering_shot.png",
+      "sha256": "80467ed12b7a85235e9fa36e75948e3cd65592f16c61690c03578c8d198d8cf3",
+      "preserved_existing": false
+    },
+    {
+      "id": "hunter_easy_prey",
+      "file": "assets/art/skills/painted/hunter_easy_prey.png",
+      "sha256": "391d3f5d159ba33bc787ef9085e3d1a170aab1052aaf9623a58f10b468c880de",
+      "preserved_existing": false
+    },
+    {
+      "id": "hunter_freezing_trap",
+      "file": "assets/art/skills/painted/hunter_freezing_trap.png",
+      "sha256": "d1dd8d76e01747e95c38a61857c737dc878ac986cf9472905debf0a47f50e32f",
+      "preserved_existing": false
+    },
+    {
+      "id": "hunter_mark",
+      "file": "assets/art/skills/painted/hunter_mark.png",
+      "sha256": "721443f6d61989e9d92cd2ae9eb909ba5acc6a1424a1e3b9033a998346bbc974",
+      "preserved_existing": false
+    },
+    {
+      "id": "hunter_shooting_discipline",
+      "file": "assets/art/skills/painted/hunter_shooting_discipline.png",
+      "sha256": "65d0e410be3bcba77b069832639b69915acc1f17fc26ba58aa413c6fd54d8d1e",
+      "preserved_existing": false
+    },
+    {
+      "id": "hunter_tar_trap",
+      "file": "assets/art/skills/painted/hunter_tar_trap.png",
+      "sha256": "aa9b1e88522e8005cadb8730f8dc51fdbbb43a8c8a620b9e60b16f10f343be15",
+      "preserved_existing": false
+    },
+    {
+      "id": "hunter_thorn_trap",
+      "file": "assets/art/skills/painted/hunter_thorn_trap.png",
+      "sha256": "2f8c78f91c25c0d265ae945da028f562c17a92349a48f3873275ccf05935c41a",
+      "preserved_existing": false
+    },
+    {
+      "id": "hunter_total_cover",
+      "file": "assets/art/skills/painted/hunter_total_cover.png",
+      "sha256": "fe139e104bf660a40a82a6568dde2e645b2fb0a320333fa90039da821ea61915",
+      "preserved_existing": false
+    }
+  ],
+  "generation": "Built-in imagegen; original PNGs copied unchanged, full prompts/source/hash in painted/manifest.json.128px import;32/64px display.",
+  "execution": {
+    "class": "hunter",
+    "status": "CHECKS_AND_NATIVE_PASS_PENDING_VISUAL_REVIEW",
+    "checks": [
+      {
+        "index": 1,
+        "timeout_seconds": 300,
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\hunter\\checks\\001.engine.log",
+        "execution_index": 1,
+        "exit_code": 0,
+        "failed": false,
+        "name": "editor_import",
+        "output_sha256": "268267ABC293271F647621A70BC2BAF590DA002310C5A78559FB834FDFF8346B",
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\hunter\\checks\\001.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+          "--editor",
+          "--import",
+          "--quit"
+        ],
+        "timed_out": false
+      },
+      {
+        "index": 227,
+        "timeout_seconds": 300,
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\hunter\\checks\\227-e06_icon_bar_test.engine.log",
+        "execution_index": 2,
+        "exit_code": 0,
+        "failed": false,
+        "name": "e06_icon_bar_test",
+        "output_sha256": "EB3F9ABDAF6F6B129E2FE140E29916FCDDECD3E077141BF2FE525A5703A692AA",
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\hunter\\checks\\227-e06_icon_bar_test.output.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+          "--script",
+          "res://tests/e06_icon_bar_test.gd"
+        ],
+        "timed_out": false
+      }
+    ],
+    "native_sha256": "18be8e7ca81a1a119557dfb5b6b56bffca3c908dfd1d68746454982f2ab26d8c",
+    "native_elapsed_seconds": 7.29,
+    "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "source_input_manifest": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner_inputs.json",
+    "source_input_manifest_sha256": "32c062d0978c0a13f1bc873e4d792012687bc1f0850441fb5f0c46b3b82fddb8"
+  },
+  "luna_supervision": {
+    "report": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\hunter\\watch.json",
+    "sha256": "77403676bb8f94f08a380724fdbcd912e6b0b095f1f8288d0985ee1cca0dc272",
+    "role": "Execution supervision; no independent semantic audit"
+  },
+  "captures": [
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\hunter\\contact.png",
+      "sha256": "3d81885e0b269ebf95f45206804f796ddd9e66817d03311a33e624a2685e8845"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\hunter\\tree.png",
+      "sha256": "e301070ce15eaab567f3732f13e7ddb69e6668a53a5b3ce9e6386d710966cfa1"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\hunter\\list.png",
+      "sha256": "45faecc9983d7a749bc6682821d2c6ed1fc1c6a88f5cf32aacb82c1559bb1542"
+    }
+  ],
+  "visual_review": "Sol viewed contact and real tree at32/64px on light/dark backgrounds and existing blocked shader; distinct skill motifs, restrained passive contours, coherent subjects; source originals preserved. Tree/list probe completed with isolated profile.",
+  "changes_to_rules_or_save": false,
+  "limitations": [
+    "Human artistic preference/playtest pending; no FPS/balance claims.",
+    "7 icons still queued; next class geometer"
+  ]
+}

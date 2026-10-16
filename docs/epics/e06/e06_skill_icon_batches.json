@@ -2,7 +2,7 @@
   "scope": "Remaining86 painted icons for approved93 skills; one closed class batch at a time",
   "baseline": "0af2ec5ab4ba0d181f1430da24e6866e1541ade0",
   "existing_painted": 7,
-  "pending": 15,
+  "pending": 7,
   "owner": "Sol/root: art briefs, generation, files, manifests, import settings, class probes and checkpoints. Luna: bounded execution supervision only after stable batch.",
   "classes": [
     {
@@ -536,7 +536,7 @@
     },
     {
       "class": "sentinel",
-      "status": "validated_source",
+      "status": "applied_verified",
       "entries": [
         {
           "id": "sentinel_absolute_focus",
@@ -602,53 +602,71 @@
           "sha256": "a706eda1102ae979e70481b8a7acebca9980645f75e1239395e3162ec51efc6d"
         }
       ],
-      "validation": "docs/epics/e06/e06_skill_icons_sentinel_validation.json"
+      "validation": "docs/epics/e06/e06_skill_icons_sentinel_validation.json",
+      "commit": "17dabe5fa04b55df531001abbfc59d6c065cf2ff"
     },
     {
       "class": "hunter",
-      "status": "pending",
+      "status": "validated_source",
       "entries": [
         {
           "id": "hunter_covering_shot",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/hunter_covering_shot.png",
+          "sha256": "80467ed12b7a85235e9fa36e75948e3cd65592f16c61690c03578c8d198d8cf3"
         },
         {
           "id": "hunter_easy_prey",
           "category": "passive",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/hunter_easy_prey.png",
+          "sha256": "391d3f5d159ba33bc787ef9085e3d1a170aab1052aaf9623a58f10b468c880de"
         },
         {
           "id": "hunter_freezing_trap",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/hunter_freezing_trap.png",
+          "sha256": "d1dd8d76e01747e95c38a61857c737dc878ac986cf9472905debf0a47f50e32f"
         },
         {
           "id": "hunter_mark",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/hunter_mark.png",
+          "sha256": "721443f6d61989e9d92cd2ae9eb909ba5acc6a1424a1e3b9033a998346bbc974"
         },
         {
           "id": "hunter_shooting_discipline",
           "category": "passive",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/hunter_shooting_discipline.png",
+          "sha256": "65d0e410be3bcba77b069832639b69915acc1f17fc26ba58aa413c6fd54d8d1e"
         },
         {
           "id": "hunter_tar_trap",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/hunter_tar_trap.png",
+          "sha256": "aa9b1e88522e8005cadb8730f8dc51fdbbb43a8c8a620b9e60b16f10f343be15"
         },
         {
           "id": "hunter_thorn_trap",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/hunter_thorn_trap.png",
+          "sha256": "2f8c78f91c25c0d265ae945da028f562c17a92349a48f3873275ccf05935c41a"
         },
         {
           "id": "hunter_total_cover",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/hunter_total_cover.png",
+          "sha256": "fe139e104bf660a40a82a6568dde2e645b2fb0a320333fa90039da821ea61915"
         }
-      ]
+      ],
+      "validation": "docs/epics/e06/e06_skill_icons_hunter_validation.json"
     },
     {
       "class": "geometer",
@@ -692,6 +710,6 @@
       ]
     }
   ],
-  "generated_new": 71,
-  "next_class": "hunter"
+  "generated_new": 79,
+  "next_class": "geometer"
 }
