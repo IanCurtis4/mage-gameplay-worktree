@@ -324,6 +324,111 @@
       ],
       "sha256": "2f2cdd516da0a58a7f48eb414208f05deaaef87acd90a99069a6133739cebb09",
       "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep navy-slate #344958 background and warm golden ivory #e8c27a subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Onda de Represália: a single armored fist striking downward into the ground, releasing one broad circular shockwave spreading outward. Low viewpoint, fist above central impact, large ring dominant, minimal ground cracks and no tiny debris; strong unified radial pulse motif."
+    },
+    {
+      "id": "berserker_rupture",
+      "file": "berserker_rupture.png",
+      "class": "berserker",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-ddf1d539-3f72-47b7-9444-010fb43194e3.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "0343545f1ca571676dfb1481977c3290b3054763eeccd5f1bcf6eecb92355757",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep burgundy #552e3b background and pale warm ivory-peach #f0a66e subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Ruptura: one rugged hooked sword blade tearing across a single bold three-notched wound sigil. The blade and jagged incision form one compact forceful silhouette, implies wounds building toward a second strike. Non-graphic fantasy symbol, no person or detached body parts."
+    },
+    {
+      "id": "berserker_execution",
+      "file": "berserker_execution.png",
+      "class": "berserker",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-8d1fcb93-0770-4e7c-8827-879ada7db2a5.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "7f41bab12d245c0fb4b6562e6961fe4a222e119ccc7cc283439d5b4b3bee9294",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep burgundy #552e3b background and pale warm ivory-peach #f0a66e subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Execução: one massive executioner's axe descending toward a single simple cracked skull emblem. Large axehead dominant, decisive vertical finishing blow, skull is a clean symbolic sigil with two eye hollows, no gore or body. Different silhouette from a curved sword slash."
+    },
+    {
+      "id": "berserker_blood_rift",
+      "file": "berserker_blood_rift.png",
+      "class": "berserker",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-6c25473e-4def-4774-a3d3-b275d662eb9a.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "ca8d36b72466c8875dc601632ff2c45f8b3b90f67eb00cadeaef677af6b1f824",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep burgundy #552e3b background and pale warm ivory-peach #f0a66e subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Fenda Sangrenta: one long jagged blade-cut fissure opening diagonally through the dark field, bordered by a single broad flowing bloodlike energy ribbon and one large drop. Narrow directional ripping line, strong elongated cut silhouette, not a circular explosion. Non-graphic stylized fantasy art."
+    },
+    {
+      "id": "berserker_wound_leap",
+      "file": "berserker_wound_leap.png",
+      "class": "berserker",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-182a3b16-8db9-4ca5-863b-0902093a66a0.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "83ebb05c41dca920dedd3c7aea83ceef511ecf4ee0b813e16b7b3b9c504c35be",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep burgundy #552e3b background and pale warm ivory-peach #f0a66e subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE forward leap ability: one single armored boot lifted high above a bold rising curved motion arc. The boot is clearly airborne with heel raised and toe pointing forward, foot and arched trajectory form one compact readable icon. No character, no combat scene, no weapons. Dark negative space beneath the arch distinguishes a leap from a straight rushing boot."
+    },
+    {
+      "id": "berserker_breath_steal",
+      "file": "berserker_breath_steal.png",
+      "class": "berserker",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-19e18ae6-6475-48fd-8856-9bdf3293f170.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "b2c6b17df29ee78e935dd96824d1cc2766f090b7f45228bf0b2b7fcebe469177",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep burgundy #552e3b background and pale warm ivory-peach #f0a66e subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Arrancar Fôlego: one powerful armored gauntlet grasping a single broad curling wisp of breath energy and drawing it inward. Gauntlet dominant, rounded healing energy wisp unifies with the grasp, confident physical grip. Only hand plus one wisp, no face, no injured person."
+    },
+    {
+      "id": "berserker_obstinacy",
+      "file": "berserker_obstinacy.png",
+      "class": "berserker",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-b7dc8f0e-17f4-44c7-ba30-004ed87433b2.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "c74f3ec3a83b67421af7e520162350bd5caf17759ee5dff9c0f416f4f8d6cb6b",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep burgundy #552e3b background and pale warm ivory-peach #f0a66e subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE Obstinação: one bold hollow OUTLINE of a battle-worn heart with one broad diagonal crack, still holding firm around a tiny central upward flame. Simple sturdy contour, large empty interior, no filled aura or scene. Represents fighting on at low health."
+    },
+    {
+      "id": "berserker_pursuit",
+      "file": "berserker_pursuit.png",
+      "class": "berserker",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-1b36b6a6-6646-4ecd-8ac3-cda0e5f82a47.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "926dd60a2e8a3b5fe73d645ed45ba68e00edd69c27e1cd0a77fdf02fe436ec45",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep burgundy #552e3b background and pale warm ivory-peach #f0a66e subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE Caça Persistente: one bold hollow OUTLINE of a single forward-pointing boot print enclosing one small drop at its heel, with a curved returning energy stroke forming part of the outer heel. Restrained brush contour, empty interior, no aura or character. Pursuing a wounded target, distinct from a jumping boot."
     }
   ]
 }

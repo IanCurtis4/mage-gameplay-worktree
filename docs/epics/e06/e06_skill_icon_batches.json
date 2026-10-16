@@ -2,7 +2,7 @@
   "scope": "Remaining86 painted icons for approved93 skills; one closed class batch at a time",
   "baseline": "0af2ec5ab4ba0d181f1430da24e6866e1541ade0",
   "existing_painted": 7,
-  "pending": 68,
+  "pending": 61,
   "owner": "Sol/root: art briefs, generation, files, manifests, import settings, class probes and checkpoints. Luna: bounded execution supervision only after stable batch.",
   "classes": [
     {
@@ -103,7 +103,7 @@
     },
     {
       "class": "defender",
-      "status": "validated_source",
+      "status": "applied_verified",
       "entries": [
         {
           "id": "defender_anchor",
@@ -165,46 +165,61 @@
           "status": "existing_painted"
         }
       ],
-      "validation": "docs/epics/e06/e06_skill_icons_defender_validation.json"
+      "validation": "docs/epics/e06/e06_skill_icons_defender_validation.json",
+      "commit": "15b27c03c8ca2af5fc6ff0acfe53c90785bd83e5"
     },
     {
       "class": "berserker",
-      "status": "pending",
+      "status": "validated_source",
       "entries": [
         {
           "id": "berserker_blood_rift",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/berserker_blood_rift.png",
+          "sha256": "ca8d36b72466c8875dc601632ff2c45f8b3b90f67eb00cadeaef677af6b1f824"
         },
         {
           "id": "berserker_breath_steal",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/berserker_breath_steal.png",
+          "sha256": "b2c6b17df29ee78e935dd96824d1cc2766f090b7f45228bf0b2b7fcebe469177"
         },
         {
           "id": "berserker_execution",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/berserker_execution.png",
+          "sha256": "7f41bab12d245c0fb4b6562e6961fe4a222e119ccc7cc283439d5b4b3bee9294"
         },
         {
           "id": "berserker_obstinacy",
           "category": "passive",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/berserker_obstinacy.png",
+          "sha256": "c74f3ec3a83b67421af7e520162350bd5caf17759ee5dff9c0f416f4f8d6cb6b"
         },
         {
           "id": "berserker_pursuit",
           "category": "passive",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/berserker_pursuit.png",
+          "sha256": "926dd60a2e8a3b5fe73d645ed45ba68e00edd69c27e1cd0a77fdf02fe436ec45"
         },
         {
           "id": "berserker_rupture",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/berserker_rupture.png",
+          "sha256": "0343545f1ca571676dfb1481977c3290b3054763eeccd5f1bcf6eecb92355757"
         },
         {
           "id": "berserker_wound_leap",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/berserker_wound_leap.png",
+          "sha256": "83ebb05c41dca920dedd3c7aea83ceef511ecf4ee0b813e16b7b3b9c504c35be"
         },
         {
           "id": "berserker_pursuit_cut",
@@ -216,7 +231,11 @@
           "category": "passive",
           "status": "existing_painted"
         }
-      ]
+      ],
+      "generation_notes": [
+        "First full-figure leap attempt returned output moderation_blocked with no asset delivered. Final benign jump motif uses one airborne armored boot over an arch; source and final prompt preserved."
+      ],
+      "validation": "docs/epics/e06/e06_skill_icons_berserker_validation.json"
     },
     {
       "class": "mage",
@@ -571,6 +590,6 @@
       ]
     }
   ],
-  "generated_new": 18,
-  "next_class": "berserker"
+  "generated_new": 25,
+  "next_class": "mage"
 }

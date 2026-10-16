@@ -1,3 +1,5 @@
+> Ícones16/10: berserker VALIDADO na fonte, 9ícones pintados; importação/barra/renderer PASS com supervisão Luna e inspeção Sol. [Evidência](e06_skill_icons_berserker_validation.json). Restam61; próximo mage. [Fila retomável](e06_skill_icon_batches.json). Classes anteriores aplicadas têm recibos por classe.
+
 > Ícones16/10: defender VALIDADO na fonte, 9ícones pintados; importação/barra/renderer PASS com supervisão Luna e inspeção Sol. [Evidência](e06_skill_icons_defender_validation.json). Restam68; próximo berserker. [Fila retomável](e06_skill_icon_batches.json). Classes anteriores aplicadas têm recibos por classe.
 
 > Ícones16/10: Espadachim VALIDADO na fonte —11novos PNGs +2anteriores preservados. Importação/4checks UI PASS com Luna; prova renderer32/64px/fundos/estado bloqueado/árvore/lista PASS e inspeção Sol. [Evidência](e06_skill_icons_swordsman_validation.json), [fila](e06_skill_icon_batches.json). Restam75ícones; próximo lote Defendente. Sem regras/save alterados.

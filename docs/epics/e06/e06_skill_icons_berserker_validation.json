@@ -1,0 +1,139 @@
+{
+  "status": "TECHNICALLY_VALIDATED_SOURCE",
+  "class": "berserker",
+  "date": "2026-10-16",
+  "new_icons": 7,
+  "preserved_icons": 2,
+  "assets": [
+    {
+      "id": "berserker_blood_rift",
+      "file": "assets/art/skills/painted/berserker_blood_rift.png",
+      "sha256": "ca8d36b72466c8875dc601632ff2c45f8b3b90f67eb00cadeaef677af6b1f824",
+      "preserved_existing": false
+    },
+    {
+      "id": "berserker_breath_steal",
+      "file": "assets/art/skills/painted/berserker_breath_steal.png",
+      "sha256": "b2c6b17df29ee78e935dd96824d1cc2766f090b7f45228bf0b2b7fcebe469177",
+      "preserved_existing": false
+    },
+    {
+      "id": "berserker_execution",
+      "file": "assets/art/skills/painted/berserker_execution.png",
+      "sha256": "7f41bab12d245c0fb4b6562e6961fe4a222e119ccc7cc283439d5b4b3bee9294",
+      "preserved_existing": false
+    },
+    {
+      "id": "berserker_obstinacy",
+      "file": "assets/art/skills/painted/berserker_obstinacy.png",
+      "sha256": "c74f3ec3a83b67421af7e520162350bd5caf17759ee5dff9c0f416f4f8d6cb6b",
+      "preserved_existing": false
+    },
+    {
+      "id": "berserker_pursuit",
+      "file": "assets/art/skills/painted/berserker_pursuit.png",
+      "sha256": "926dd60a2e8a3b5fe73d645ed45ba68e00edd69c27e1cd0a77fdf02fe436ec45",
+      "preserved_existing": false
+    },
+    {
+      "id": "berserker_rupture",
+      "file": "assets/art/skills/painted/berserker_rupture.png",
+      "sha256": "0343545f1ca571676dfb1481977c3290b3054763eeccd5f1bcf6eecb92355757",
+      "preserved_existing": false
+    },
+    {
+      "id": "berserker_wound_leap",
+      "file": "assets/art/skills/painted/berserker_wound_leap.png",
+      "sha256": "83ebb05c41dca920dedd3c7aea83ceef511ecf4ee0b813e16b7b3b9c504c35be",
+      "preserved_existing": false
+    },
+    {
+      "id": "berserker_pursuit_cut",
+      "file": "assets/art/skills/painted/berserker_pursuit_cut.png",
+      "sha256": "3641cd64e321b852d0d8dd76affc512fc24eb4ec3a3e27cc141aba4b0055a0da",
+      "preserved_existing": true
+    },
+    {
+      "id": "berserker_deep_bleeding",
+      "file": "assets/art/skills/painted/berserker_deep_bleeding.png",
+      "sha256": "49c4445cf036ac3457ee057747f3f16e7037d154235c3cf5d7125bd74aa38835",
+      "preserved_existing": true
+    }
+  ],
+  "generation": "Built-in imagegen; original PNGs copied unchanged, full prompts/source/hash in painted/manifest.json.128px import;32/64px display.",
+  "execution": {
+    "class": "berserker",
+    "status": "CHECKS_AND_NATIVE_PASS_PENDING_VISUAL_REVIEW",
+    "checks": [
+      {
+        "execution_index": 1,
+        "name": "editor_import",
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\berserker\\checks\\001.output.log",
+        "index": 1,
+        "timeout_seconds": 300,
+        "output_sha256": "843EE9E738B6310921844F6EEDC5B4E6F38FD1ED297FF6CE87A63ED29CECFE42",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\berserker\\checks\\001.engine.log",
+        "exit_code": 0,
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+          "--editor",
+          "--import",
+          "--quit"
+        ],
+        "timed_out": false,
+        "failed": false
+      },
+      {
+        "execution_index": 2,
+        "name": "e06_icon_bar_test",
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\berserker\\checks\\227-e06_icon_bar_test.output.log",
+        "index": 227,
+        "timeout_seconds": 300,
+        "output_sha256": "EB3F9ABDAF6F6B129E2FE140E29916FCDDECD3E077141BF2FE525A5703A692AA",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\berserker\\checks\\227-e06_icon_bar_test.engine.log",
+        "exit_code": 0,
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+          "--script",
+          "res://tests/e06_icon_bar_test.gd"
+        ],
+        "timed_out": false,
+        "failed": false
+      }
+    ],
+    "native_sha256": "bb80fb7acde79071d5a3c332317f330e5b5d2e49500a65b3e919f6ff4947ab21",
+    "native_elapsed_seconds": 5.09,
+    "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "source_input_manifest": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner_inputs.json",
+    "source_input_manifest_sha256": "55f5c17934e9253927e98b4c71e5aa71fbe9234c515f2e2de6da178b6f195a8b"
+  },
+  "luna_supervision": {
+    "report": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\berserker\\watch.json",
+    "sha256": "10afcd3bec0b74aef9a92e6e8d42920a173e8faaf8ec75a0200d5c8e2e02fd86",
+    "role": "Execution supervision; no independent semantic audit"
+  },
+  "captures": [
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\berserker\\contact.png",
+      "sha256": "84eb9f526da049383de8cf4f3b752359cc8121fb7a3a292811a5bd52edb2a0ed"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\berserker\\tree.png",
+      "sha256": "48e4a37bcb9ca20e37c23c7d022b1d90ca71f2a35cfbee6ea7a69348e6819711"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\berserker\\list.png",
+      "sha256": "238a055829069568c9a57ad34e0e209e826ea19f028beae3db755b4966d5da48"
+    }
+  ],
+  "visual_review": "Sol viewed contact and real tree at32/64px on light/dark backgrounds and existing blocked shader; distinct skill motifs, restrained passive contours, coherent subjects; source originals preserved. Tree/list probe completed with isolated profile.",
+  "changes_to_rules_or_save": false,
+  "limitations": [
+    "Human artistic preference/playtest pending; no FPS/balance claims.",
+    "61 icons still queued; next class mage"
+  ]
+}
