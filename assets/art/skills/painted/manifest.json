@@ -819,6 +819,171 @@
       ],
       "sha256": "f097223a10280ecea72321ee6932b9a4b32afbb0797bf7bcc066e4bb24cba7f7",
       "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep plum-violet #382e57 background and luminous pale lavender #d8b6ef subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE Recolhimento: one bold hollow OUTLINE of a three-petaled lotus cupping a single small returning soul-wisp. One inward curling stroke unites the wisp and flower, broad open negative spaces and sparse confident brush contours. No filled aura, no detailed leaves, no writing."
+    },
+    {
+      "id": "double_shot",
+      "file": "double_shot.png",
+      "class": "archer",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-98cc932f-0a09-4f72-aa34-bc033a95147c.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "53c75bd8cddb9aa3d6a2c81ceb68c2a4396fc2d7843b0f491755f18e727a944d",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep forest-green #25483d background and warm pale gold #f1d17b subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Disparo Duplo: exactly TWO large feather-fletched arrows flying side-by-side horizontally toward the upper right. Parallel distinct shafts and broad matching points, one coherent swift twin-shot silhouette. No bow or target, no extra arrows."
+    },
+    {
+      "id": "piercing_arrow",
+      "file": "piercing_arrow.png",
+      "class": "archer",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-a1ee2307-d824-45f6-8042-4bf06808246e.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "1a4f466c03cb83251839d4e818017e2025ed63e3d28ec68a3a207bae0e5b1e23",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep forest-green #25483d background and warm pale gold #f1d17b subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Flecha Perfurante: one single very broad steel arrowhead punching straight through one large hollow target ring, clear long horizontal shaft and one decisive forward pressure trail. Arrow dominant, ring secondary and simple, no extra arrows or writing."
+    },
+    {
+      "id": "arrow_rain",
+      "file": "arrow_rain.png",
+      "class": "archer",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-3bc477db-c142-4021-bcd4-07344ce52e6e.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "f7ac05f50f8ca57b207fed754c8451b00ffcefd0c9d5463d16f9106867746b21",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep forest-green #25483d background and warm pale gold #f1d17b subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Chuva de Flechas: exactly THREE large arrows descending steeply downward in a broad fan, staggered heads pointing toward a single flat ground ellipse. Strong vertical falling-volley silhouette, broad visible fletching, no bow, no cloud and no tiny arrows."
+    },
+    {
+      "id": "extended_aim",
+      "file": "extended_aim.png",
+      "class": "archer",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-470595bc-2aba-42de-be9f-1f8e78514d70.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "7538e6357d9444b3e83486432ff2929a90a57440cf61181bc8351f25e9d7e1ab",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep forest-green #25483d background and warm pale gold #f1d17b subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Mira Estendida: one elegant recurved longbow fully drawn with a single nocked arrow aimed rightward, large taut string triangle and calm long aiming line. Bow and arrow form one coherent centered silhouette. No archer, no extra strings or scopes."
+    },
+    {
+      "id": "snare_trap",
+      "file": "snare_trap.png",
+      "class": "archer",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-8e177859-f611-4ae5-882c-a77ed39c4317.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "22e84b867a9b405f79b0bd4bf745b831d51b68ea80b8dfa875f8dfd845863332",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep forest-green #25483d background and warm pale gold #f1d17b subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Armadilha de Laço: one open spring snare viewed three-quarter from above, thick circular wire loop and two stout anchoring pegs with a single tension trigger. Bold trap silhouette, clear dark open center, minimal mechanism, no victim or animal, no tiny teeth network."
+    },
+    {
+      "id": "explosive_trap",
+      "file": "explosive_trap.png",
+      "class": "archer",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-dd627688-b758-4267-ae4b-40f4904782ab.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "ec229d08ccff2662c828e575c88a156cd843c50af7edfbc5a073bf9a868f2689",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep forest-green #25483d background and warm pale gold #f1d17b subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Armadilha Explosiva: one squat round explosive charge mounted on a broad simple pressure-trigger base, one short thick fuse ending in a single large bright spark. Charge and trigger form one unified compact trap silhouette, no text, no injury, no fragments or tiny gears."
+    },
+    {
+      "id": "slowing_arrow",
+      "file": "slowing_arrow.png",
+      "class": "archer",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-3d6da99d-cb88-455e-9ffa-8af31e3debe3.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "a38d3a2d0b429741c1df46f459b7ced7fe46e197860ef68d667b5c0655ff737b",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep forest-green #25483d background and warm pale gold #f1d17b subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Flecha Lenta: one heavy broad barbed arrow pulling a single taut coiled cord loop at its tail. Arrow points forward while the heavy loop visibly drags backward, simple clear slowing-shot silhouette. No ice, magical snowflakes or extra arrows."
+    },
+    {
+      "id": "foliage_shelter",
+      "file": "foliage_shelter.png",
+      "class": "archer",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-445fb7a5-7c8b-41ea-8bf8-fe951bccad15.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "f1c133c9c7fff9e80cbdbade8eb2ce5057e4fad27bdaa50d61c1b2f93c01cceb",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep forest-green #25483d background and warm pale gold #f1d17b subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Abrigo de Folhagem: one broad arched leafy branch forming a protective canopy roof over a clear dark opening. Exactly five large simple leaves, two short branch ends, compact umbrella-like natural cover silhouette, no full forest scene or person."
+    },
+    {
+      "id": "archer_precision",
+      "file": "archer_precision.png",
+      "class": "archer",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-6ea2cd89-4208-433f-8c34-f68a93c71868.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "0365ae97b82b25ce1cae6f638bdd7aa6302200882e975871642edca12cdbe097",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep forest-green #25483d background and warm pale gold #f1d17b subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE Precisão: one bold hollow OUTLINE of a focused eye with a single broad arrowhead aligned precisely at its pupil. Simple open eye contour and arrowpoint joined into one clean symbol, large dark negative spaces, no filled aura, no tiny iris texture."
+    },
+    {
+      "id": "archer_cadence",
+      "file": "archer_cadence.png",
+      "class": "archer",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-f9585ea4-1d75-4f2d-8788-a23bf0b762dd.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "cf730f6eee8ec968fde1c91a6cb0e2a12aa83e33ca54dc36f50d68ce87070a7d",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep forest-green #25483d background and warm pale gold #f1d17b subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE Cadência: one broad hollow OUTLINE of a single feather fletching with two short repeating rhythm strokes following its rear edge. Sparse confident curved contours, large empty interior, no filled glow or tiny feather filaments. Suggests steady repeated shots."
+    },
+    {
+      "id": "trap_technique",
+      "file": "trap_technique.png",
+      "class": "archer",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-5b521db8-6b2c-4eb8-a6f4-7986c072734f.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "9563f9391e413e09f013ac9fa74a9b2b331cd6b5f345b3a5622666d3de8f82c8",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep forest-green #25483d background and warm pale gold #f1d17b subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE Técnica de Armadilhas: one bold hollow OUTLINE of a simple six-tooth mechanical gear enclosing one large curved snare-trigger hook. Gear and hook form one coherent craft symbol, wide dark negative spaces, restrained painted edges, no fine mechanism or extra overlapping tools."
     }
   ]
 }

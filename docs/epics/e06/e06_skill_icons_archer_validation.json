@@ -1,0 +1,151 @@
+{
+  "status": "TECHNICALLY_VALIDATED_SOURCE",
+  "class": "archer",
+  "date": "2026-10-16",
+  "new_icons": 11,
+  "preserved_icons": 0,
+  "assets": [
+    {
+      "id": "archer_cadence",
+      "file": "assets/art/skills/painted/archer_cadence.png",
+      "sha256": "cf730f6eee8ec968fde1c91a6cb0e2a12aa83e33ca54dc36f50d68ce87070a7d",
+      "preserved_existing": false
+    },
+    {
+      "id": "archer_precision",
+      "file": "assets/art/skills/painted/archer_precision.png",
+      "sha256": "0365ae97b82b25ce1cae6f638bdd7aa6302200882e975871642edca12cdbe097",
+      "preserved_existing": false
+    },
+    {
+      "id": "arrow_rain",
+      "file": "assets/art/skills/painted/arrow_rain.png",
+      "sha256": "f7ac05f50f8ca57b207fed754c8451b00ffcefd0c9d5463d16f9106867746b21",
+      "preserved_existing": false
+    },
+    {
+      "id": "double_shot",
+      "file": "assets/art/skills/painted/double_shot.png",
+      "sha256": "53c75bd8cddb9aa3d6a2c81ceb68c2a4396fc2d7843b0f491755f18e727a944d",
+      "preserved_existing": false
+    },
+    {
+      "id": "explosive_trap",
+      "file": "assets/art/skills/painted/explosive_trap.png",
+      "sha256": "ec229d08ccff2662c828e575c88a156cd843c50af7edfbc5a073bf9a868f2689",
+      "preserved_existing": false
+    },
+    {
+      "id": "extended_aim",
+      "file": "assets/art/skills/painted/extended_aim.png",
+      "sha256": "7538e6357d9444b3e83486432ff2929a90a57440cf61181bc8351f25e9d7e1ab",
+      "preserved_existing": false
+    },
+    {
+      "id": "foliage_shelter",
+      "file": "assets/art/skills/painted/foliage_shelter.png",
+      "sha256": "f1c133c9c7fff9e80cbdbade8eb2ce5057e4fad27bdaa50d61c1b2f93c01cceb",
+      "preserved_existing": false
+    },
+    {
+      "id": "piercing_arrow",
+      "file": "assets/art/skills/painted/piercing_arrow.png",
+      "sha256": "1a4f466c03cb83251839d4e818017e2025ed63e3d28ec68a3a207bae0e5b1e23",
+      "preserved_existing": false
+    },
+    {
+      "id": "slowing_arrow",
+      "file": "assets/art/skills/painted/slowing_arrow.png",
+      "sha256": "a38d3a2d0b429741c1df46f459b7ced7fe46e197860ef68d667b5c0655ff737b",
+      "preserved_existing": false
+    },
+    {
+      "id": "snare_trap",
+      "file": "assets/art/skills/painted/snare_trap.png",
+      "sha256": "22e84b867a9b405f79b0bd4bf745b831d51b68ea80b8dfa875f8dfd845863332",
+      "preserved_existing": false
+    },
+    {
+      "id": "trap_technique",
+      "file": "assets/art/skills/painted/trap_technique.png",
+      "sha256": "9563f9391e413e09f013ac9fa74a9b2b331cd6b5f345b3a5622666d3de8f82c8",
+      "preserved_existing": false
+    }
+  ],
+  "generation": "Built-in imagegen; original PNGs copied unchanged, full prompts/source/hash in painted/manifest.json.128px import;32/64px display.",
+  "execution": {
+    "class": "archer",
+    "status": "CHECKS_AND_NATIVE_PASS_PENDING_VISUAL_REVIEW",
+    "checks": [
+      {
+        "index": 1,
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\archer\\checks\\001.engine.log",
+        "name": "editor_import",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+          "--editor",
+          "--import",
+          "--quit"
+        ],
+        "timeout_seconds": 300,
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\archer\\checks\\001.output.log",
+        "exit_code": 0,
+        "output_sha256": "7769C319F1075FE917728FFCBAF1DC8BFFEBA7FEA57FF23054CD89DB3CF909D1",
+        "execution_index": 1
+      },
+      {
+        "index": 227,
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\archer\\checks\\227-e06_icon_bar_test.engine.log",
+        "name": "e06_icon_bar_test",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+          "--script",
+          "res://tests/e06_icon_bar_test.gd"
+        ],
+        "timeout_seconds": 300,
+        "timed_out": false,
+        "failed": false,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\archer\\checks\\227-e06_icon_bar_test.output.log",
+        "exit_code": 0,
+        "output_sha256": "EB3F9ABDAF6F6B129E2FE140E29916FCDDECD3E077141BF2FE525A5703A692AA",
+        "execution_index": 2
+      }
+    ],
+    "native_sha256": "675a23f639464c78f746f927f23761d5d01d5c123bc4e3aa7bb219be82c45fd8",
+    "native_elapsed_seconds": 6.78,
+    "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "source_input_manifest": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner_inputs.json",
+    "source_input_manifest_sha256": "66b5b580901d07943de79ed4fa65fb130670ab238a106e9c44abc995928259c7"
+  },
+  "luna_supervision": {
+    "report": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\archer\\watch.json",
+    "sha256": "58c70311c118cc1254a1f9f5cadf764e6f74498245b67f32682bf296befbdd43",
+    "role": "Execution supervision; no independent semantic audit"
+  },
+  "captures": [
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\archer\\contact.png",
+      "sha256": "5bb946f5dc25cda11bec2f22618447b19811a32ef7aa38a3a6c128abd6f1a685"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\archer\\tree.png",
+      "sha256": "71adc3ea1ead35e052ee4215f4e030f2f9f13b93bbc9e671132862f73b9c3877"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\archer\\list.png",
+      "sha256": "96cb261170ec8a568c6432ccad964449a8635a6d4f5d8715ae0037dd4558c46e"
+    }
+  ],
+  "visual_review": "Sol viewed contact and real tree at32/64px on light/dark backgrounds and existing blocked shader; distinct skill motifs, restrained passive contours, coherent subjects; source originals preserved. Tree/list probe completed with isolated profile.",
+  "changes_to_rules_or_save": false,
+  "limitations": [
+    "Human artistic preference/playtest pending; no FPS/balance claims.",
+    "24 icons still queued; next class sentinel"
+  ]
+}

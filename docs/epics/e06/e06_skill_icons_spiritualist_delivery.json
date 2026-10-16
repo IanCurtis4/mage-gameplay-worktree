@@ -1,0 +1,16 @@
+{
+  "status": "APPLIED_VERIFIED",
+  "class": "spiritualist",
+  "candidate": "d0af561e07d049f649d59613b6ed46619f51b407",
+  "base": "254f4cac26b49db3fc4bac96d9c1e762d691e442",
+  "target_checks": 2,
+  "native_sha256": "dd543d034c5be17c3e59f51266b65cb8e1b041145c8c4c7dedb68eead622e1fd",
+  "local_files_preserved": 172,
+  "personal_files_preserved": 3,
+  "cli_preflight": "Legacy CLI dirty target refusal; manual preserving FF according current WORKFLOW.",
+  "product_acceptance": "pending",
+  "luna_target_watch": {
+    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\art_batch_spiritualist\\target_watch.json",
+    "sha256": "f4282d5a4ae2dfe312a44f8848a536bbc5d78e84b3abf07aa854e1fb7f08e53d"
+  }
+}
