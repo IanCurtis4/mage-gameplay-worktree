@@ -54,6 +54,171 @@
       "subject_prompt": "outlined hollow blood drop with an incision line",
       "sha256": "49c4445cf036ac3457ee057747f3f16e7037d154235c3cf5d7125bd74aa38835",
       "prompt": "Use case: stylized-concept. Asset type: SINGLE square original painted RPG skill icon for RagRPG, shared between tree and combat at32px. Subject: one bold OUTLINED teardrop of blood enclosing a single small incision line, simple hollow contour, a PASSIVE icon with restrained hand-painted brush edges. Hand-painted Korean fantasy RPG style, expressive confident painted curved silhouette, delicate controlled brush shading. STRICT BICOLOR deep burgundy and warm ivory: tonal shades of only these two hue families. One large central unified image occupying75% of canvas, flat opaque background,10% breathing margin. Not a vector collage; no repeated overlapping primitives, malformed outlines, tiny decorations or scattered particles. Remain instantly recognizable at32x32 pixels. No frame, no text, no letters, no numbers, no watermark, no grid."
+    },
+    {
+      "id": "slash",
+      "file": "slash.png",
+      "class": "swordsman",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-238d2d49-c36a-436a-b8fa-099863d3b764.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "3fb316edfe2710b2130bb4d29b5a28c7ce1b12014c4ddca5c80816f23fd4c9a5",
+      "prompt": "Use case: stylized-concept. Create ONE SINGLE square original hand-painted fantasy RPG skill icon for RagRPG. Ability: Corte em cone (slash), a broad physical sword swing striking a frontal cone. Subject: one unmistakable medieval steel sword sweeping in a wide curved crescent; the blade and confident painted slash trail form one unified central silhouette. Hand-painted Korean fantasy RPG ability art, expressive brush edges, controlled chunky shading, simple and clear when reduced to32x32. STRICT BICOLOR: deep blue-slate background #263a47 and luminous warm golden ivory silhouette #f1c879, tonal shades only of these two color families. Large central subject fills75% of square with10% safe margins. Opaque flat background. Active martial skill: decisive motion, no ornamental UI frame. No text, letters, numerals, grid, watermark, multi-icon sheet, vector collage, overlapping unrelated geometric shapes, tiny particles, malformed sword or extra blades. This is finished game icon art, not a UI mockup."
+    },
+    {
+      "id": "blood_thirst",
+      "file": "blood_thirst.png",
+      "class": "swordsman",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-c52a99cd-3674-40ae-877e-793d492adb9d.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "ed65c8995c0cb6d336df3e9b2713ae57efafdb165c059c30e1e5eb9377e0a64e",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep blue-slate #263a47 background and warm golden ivory #f1c879 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE Sede de Sangue: a single bold hollow outline of a sharp predatory fang curving around one blood drop; restrained open contour and large empty interior, symbolizing life recovered after a kill, no filled aura."
+    },
+    {
+      "id": "brutal_strike",
+      "file": "brutal_strike.png",
+      "class": "swordsman",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-2f84bdaa-c824-4b34-be9a-d53bcd1b0b48.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "063c11de27adcd93864c7e9bfd0db1414af2ba3bb12195fa520e91c46bb5d808",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep blue-slate #263a47 background and warm golden ivory #f1c879 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Golpe Brutal: one heavy medieval mace head descending forcefully into a single large cracked armor plate. Unified impact silhouette, massive head dominant, one bold fracture; conveys a crushing armor-weakening close blow. No surrounding tiny debris."
+    },
+    {
+      "id": "concentrated_rage",
+      "file": "concentrated_rage.png",
+      "class": "swordsman",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-230b81f4-0ef0-4995-8b84-cb830d944f7f.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "a55507e41febc41902d38e4b924a5b171fe8c5da1fd7271f7785ee916192f3c4",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep blue-slate #263a47 background and warm golden ivory #f1c879 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Raiva Concentrada: a single long sword thrust straight forward along one narrow forceful trail. The tapering blade and straight thrust trail form one strong elongated silhouette, conveys focused physical attack in a narrow line, distinct from a curved sweeping slash."
+    },
+    {
+      "id": "dash",
+      "file": "dash.png",
+      "class": "swordsman",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-48fc3468-3b09-4d70-9eb9-0ced84fe3cfb.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "962ceff827c5546e22c55031c0ef634bfeeec1b8e659c1c33cfc0a662c99fc47",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep blue-slate #263a47 background and warm golden ivory #f1c879 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Investida: a single armored boot lunging forward with a strong diagonal thrust trail; one bold dynamic silhouette, implies rapid forward reposition. Only the boot and its coherent trail, no full character. All boot and toe inside safe margin."
+    },
+    {
+      "id": "perseverance",
+      "file": "perseverance.png",
+      "class": "swordsman",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-db0b6737-8ddc-45e9-9a45-f5cae4147dfe.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "5604aa833cf4b33483b95e0b8f2a0f5ab457f65d97e3b754aca558b1795adbc3",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep blue-slate #263a47 background and warm golden ivory #f1c879 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Perseverança: a single sturdy clenched armored gauntlet protected inside a thick curved bubble of force. Gauntlet dominant, one enveloping protective contour forms a coherent shield motif. Temporary personal shield, no sword, no full person."
+    },
+    {
+      "id": "piercing_shout",
+      "file": "piercing_shout.png",
+      "class": "swordsman",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-99b25887-7577-477b-94fd-d71d3bde9071.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "a809ee1adf56f5c2fba53a7f075226e01f86fe64130b248cb73f0515d043884b",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep blue-slate #263a47 background and warm golden ivory #f1c879 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Grito Perfurante: a single side-profile open shouting mouth with two broad outward sweeping sound waves, a forceful slowing warcry. Head profile and sound emerge as one coherent silhouette, restrained broad shapes and no tiny facial details."
+    },
+    {
+      "id": "provoke",
+      "file": "provoke.png",
+      "class": "swordsman",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-d9b36190-2006-42a2-9f7c-529fed30793c.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "0b8df37234e48d6e706f42dc8ab0c680575043917727e2f616c554d6fb7647fb",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep blue-slate #263a47 background and warm golden ivory #f1c879 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Provocar: one armored hand making a clear challenging beckoning gesture, index finger curled toward itself, correct anatomy, four fingers plus thumb, clean simple silhouette with a single bold outward attention ray. Only gauntlet and gesture, no full person. Invites an enemy to attack and lowers its defense. Distinct from a clenched fist."
+    },
+    {
+      "id": "swordsman_resistance",
+      "file": "swordsman_resistance.png",
+      "class": "swordsman",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-2ba1b338-aa1f-4b67-9df2-e4da558ac2c8.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "e284720b73768fca202530c7321952a4855c7910e575633cec0bae39a2b9fb07",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep blue-slate #263a47 background and warm golden ivory #f1c879 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE Resistência: one bold hollow OUTLINE of a sturdy medieval breastplate with broad shoulders and an empty dark interior. Restrained single painted contour, sparse shape, no glow or surrounding aura. Suggests permanent physical defense, distinct from a shield."
+    },
+    {
+      "id": "terrifying_shout",
+      "file": "terrifying_shout.png",
+      "class": "swordsman",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-f239b5b2-4777-4f89-a78e-f3f13d47bafd.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "e0fa1d68018b5b988c34b313c566e2e0e9b5e443747f0bd77d97d198227644da",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep blue-slate #263a47 background and warm golden ivory #f1c879 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Grito Aterrador: a single fierce roaring lion face viewed frontally, intimidating wide-open mouth and large fangs, expressive bold mane forming two strong curved sound crests. Simple coherent mask silhouette, no person, no armor. Distinct from the side-profile human slowing shout."
+    },
+    {
+      "id": "vigor",
+      "file": "vigor.png",
+      "class": "swordsman",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-ea56a387-6dad-4a54-85a0-14034bf1c8d0.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "37faf1c2b6488846e8cf63ba36c0943b762699bc118601ffc4333062fadd6dec",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep blue-slate #263a47 background and warm golden ivory #f1c879 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE Vigor: one bold hollow OUTLINE of a full heart containing one very simple upward sprouting leaf. Large empty negative space, restrained brushed contour, no aura, no filled scene. Conveys life regenerating during rest."
     }
   ]
 }

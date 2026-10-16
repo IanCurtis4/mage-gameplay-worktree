@@ -1,0 +1,125 @@
+{
+  "status": "TECHNICALLY_VALIDATED_SOURCE",
+  "class": "swordsman",
+  "date": "2026-10-16",
+  "baseline": "0af2ec5ab4ba0d181f1430da24e6866e1541ade0",
+  "new_icons": 11,
+  "preserved_icons": 2,
+  "assets": [
+    {
+      "id": "blood_thirst",
+      "file": "assets/art/skills/painted/blood_thirst.png",
+      "sha256": "ed65c8995c0cb6d336df3e9b2713ae57efafdb165c059c30e1e5eb9377e0a64e",
+      "preserved_existing": false
+    },
+    {
+      "id": "brutal_strike",
+      "file": "assets/art/skills/painted/brutal_strike.png",
+      "sha256": "063c11de27adcd93864c7e9bfd0db1414af2ba3bb12195fa520e91c46bb5d808",
+      "preserved_existing": false
+    },
+    {
+      "id": "concentrated_rage",
+      "file": "assets/art/skills/painted/concentrated_rage.png",
+      "sha256": "a55507e41febc41902d38e4b924a5b171fe8c5da1fd7271f7785ee916192f3c4",
+      "preserved_existing": false
+    },
+    {
+      "id": "dash",
+      "file": "assets/art/skills/painted/dash.png",
+      "sha256": "962ceff827c5546e22c55031c0ef634bfeeec1b8e659c1c33cfc0a662c99fc47",
+      "preserved_existing": false
+    },
+    {
+      "id": "fury",
+      "file": "assets/art/skills/painted/fury.png",
+      "sha256": "c894d7ca8c9e9b6c4a9c99ada2ad94debea1b3c10d2df3500b0d23d0edf0bccb",
+      "preserved_existing": true
+    },
+    {
+      "id": "perseverance",
+      "file": "assets/art/skills/painted/perseverance.png",
+      "sha256": "5604aa833cf4b33483b95e0b8f2a0f5ab457f65d97e3b754aca558b1795adbc3",
+      "preserved_existing": false
+    },
+    {
+      "id": "piercing_shout",
+      "file": "assets/art/skills/painted/piercing_shout.png",
+      "sha256": "a809ee1adf56f5c2fba53a7f075226e01f86fe64130b248cb73f0515d043884b",
+      "preserved_existing": false
+    },
+    {
+      "id": "provoke",
+      "file": "assets/art/skills/painted/provoke.png",
+      "sha256": "0b8df37234e48d6e706f42dc8ab0c680575043917727e2f616c554d6fb7647fb",
+      "preserved_existing": false
+    },
+    {
+      "id": "shield_wall",
+      "file": "assets/art/skills/painted/shield_wall.png",
+      "sha256": "5292b24b8c0983e716cdcb7dbd923aa1f8910c6d9834772fbe3268aa8cc83db9",
+      "preserved_existing": true
+    },
+    {
+      "id": "slash",
+      "file": "assets/art/skills/painted/slash.png",
+      "sha256": "3fb316edfe2710b2130bb4d29b5a28c7ce1b12014c4ddca5c80816f23fd4c9a5",
+      "preserved_existing": false
+    },
+    {
+      "id": "swordsman_resistance",
+      "file": "assets/art/skills/painted/swordsman_resistance.png",
+      "sha256": "e284720b73768fca202530c7321952a4855c7910e575633cec0bae39a2b9fb07",
+      "preserved_existing": false
+    },
+    {
+      "id": "terrifying_shout",
+      "file": "assets/art/skills/painted/terrifying_shout.png",
+      "sha256": "e0fa1d68018b5b988c34b313c566e2e0e9b5e443747f0bd77d97d198227644da",
+      "preserved_existing": false
+    },
+    {
+      "id": "vigor",
+      "file": "assets/art/skills/painted/vigor.png",
+      "sha256": "37faf1c2b6488846e8cf63ba36c0943b762699bc118601ffc4333062fadd6dec",
+      "preserved_existing": false
+    }
+  ],
+  "generation": "Built-in imagegen; individual original square PNGs copied byte-for-byte. Complete prompts/source paths/hashes in assets/art/skills/painted/manifest.json. No API/CLI fallback.",
+  "import": "128px runtime; source full-size PNG preserved; same SkillPresentation.icon cache/path priority in all views",
+  "luna_supervision": {
+    "report": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\swordsman_watch.json",
+    "sha256": "48f4d9abc734ddb20a6456c461230fdf885171f5d69aec1abfe26fcce223a1c2",
+    "checks_pass": 5,
+    "role": "Execution supervision, not independent semantic audit"
+  },
+  "native": {
+    "exit_code": 0,
+    "elapsed_seconds": 4.58,
+    "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\swordsman_native.log",
+    "output_sha256": "c50e28ab397516406c90f548d83b2215f8fc092d0bc51cec9ab5328dd2101d48",
+    "complete": true,
+    "class": "swordsman",
+    "probe_warning_corrected": "Probe sets explicit top-left anchors before sizing; production UI unchanged."
+  },
+  "captures": [
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\swordsman\\contact.png",
+      "sha256": "efdfaf0338922b43a10022bf6885a9251c86fdde20551c08ae91eb8a5286ada5"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\swordsman\\tree.png",
+      "sha256": "94d052f06a925f796808d2b6a41b93cfe19f4b24ea35f7e263a5609e31e355a5"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\swordsman\\list.png",
+      "sha256": "ead39145dcf7c55370a2c40104d1d9c716678cb6b1c59b7c30afc082516cc390"
+    }
+  ],
+  "visual_review": "Sol viewed rendered contact at32/64px on light/dark surfaces and existing blocked shader; all13 motifs distinct, passive contours separated. Viewed actual SkillWindow tree with new art; tree/list captures completed. Existing icon colors and blocked shader preserved.",
+  "changes_to_game_rules": false,
+  "limitations": [
+    "Human artistic preference/playtest pending. No FPS/balance conclusion.",
+    "Other75 icons remain in queued class batches. Fixed playtest application follows technical closure; this source commit is a strategic resume point."
+  ]
+}

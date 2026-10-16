@@ -1,3 +1,5 @@
+> Continuação autorizada16/10/2026: os86 ícones restantes são produzidos por classe. [Fila/checkpoints](../../../../docs/epics/e06/e06_skill_icon_batches.json) e [contrato](../../../../docs/epics/e06/e06_skill_icon_batches_scope.md). Cada PNG é uma geração individual integrada intacta; prompts, origem e SHA256 constam em manifest.json. As fontes e os sete ícones anteriores são preservados. Importação128px, leitura32/64px e estados bloqueados conferidos no renderer por classe.
+
 # Ícones pintados — E06
 
 Sete PNGs originais gerados com a ferramenta imagegen integrada em14/10/2026: Fúria, Parede de Escudos, Bola de Fogo, Rebater, Guarda de Retirada, Talho de Perseguição e Hemorragia Profunda. Fontes geradas preservadas, sem recortar/recolorir por script. Importação limita textura runtime a128px; todas as views usam a mesma Texture2D com32px de exibição. SVGs anteriores permanecem e servem como fallback dos demais86 IDs. Este lote não substitui todo o catálogo de arte.

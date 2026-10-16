@@ -1,0 +1,560 @@
+{
+  "scope": "Remaining86 painted icons for approved93 skills; one closed class batch at a time",
+  "baseline": "0af2ec5ab4ba0d181f1430da24e6866e1541ade0",
+  "existing_painted": 7,
+  "pending": 75,
+  "owner": "Sol/root: art briefs, generation, files, manifests, import settings, class probes and checkpoints. Luna: bounded execution supervision only after stable batch.",
+  "classes": [
+    {
+      "class": "swordsman",
+      "status": "validated_source",
+      "entries": [
+        {
+          "id": "blood_thirst",
+          "category": "passive",
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/blood_thirst.png",
+          "sha256": "ed65c8995c0cb6d336df3e9b2713ae57efafdb165c059c30e1e5eb9377e0a64e"
+        },
+        {
+          "id": "brutal_strike",
+          "category": "active",
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/brutal_strike.png",
+          "sha256": "063c11de27adcd93864c7e9bfd0db1414af2ba3bb12195fa520e91c46bb5d808"
+        },
+        {
+          "id": "concentrated_rage",
+          "category": "active",
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/concentrated_rage.png",
+          "sha256": "a55507e41febc41902d38e4b924a5b171fe8c5da1fd7271f7785ee916192f3c4"
+        },
+        {
+          "id": "dash",
+          "category": "active",
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/dash.png",
+          "sha256": "962ceff827c5546e22c55031c0ef634bfeeec1b8e659c1c33cfc0a662c99fc47"
+        },
+        {
+          "id": "fury",
+          "category": "active",
+          "status": "existing_painted"
+        },
+        {
+          "id": "perseverance",
+          "category": "active",
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/perseverance.png",
+          "sha256": "5604aa833cf4b33483b95e0b8f2a0f5ab457f65d97e3b754aca558b1795adbc3"
+        },
+        {
+          "id": "piercing_shout",
+          "category": "active",
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/piercing_shout.png",
+          "sha256": "a809ee1adf56f5c2fba53a7f075226e01f86fe64130b248cb73f0515d043884b"
+        },
+        {
+          "id": "provoke",
+          "category": "active",
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/provoke.png",
+          "sha256": "0b8df37234e48d6e706f42dc8ab0c680575043917727e2f616c554d6fb7647fb"
+        },
+        {
+          "id": "shield_wall",
+          "category": "active",
+          "status": "existing_painted"
+        },
+        {
+          "id": "slash",
+          "category": "active",
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/slash.png",
+          "sha256": "3fb316edfe2710b2130bb4d29b5a28c7ce1b12014c4ddca5c80816f23fd4c9a5"
+        },
+        {
+          "id": "swordsman_resistance",
+          "category": "passive",
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/swordsman_resistance.png",
+          "sha256": "e284720b73768fca202530c7321952a4855c7910e575633cec0bae39a2b9fb07"
+        },
+        {
+          "id": "terrifying_shout",
+          "category": "active",
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/terrifying_shout.png",
+          "sha256": "e0fa1d68018b5b988c34b313c566e2e0e9b5e443747f0bd77d97d198227644da"
+        },
+        {
+          "id": "vigor",
+          "category": "passive",
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/vigor.png",
+          "sha256": "37faf1c2b6488846e8cf63ba36c0943b762699bc118601ffc4333062fadd6dec"
+        }
+      ],
+      "validation": "docs/epics/e06/e06_skill_icons_swordsman_validation.json",
+      "next_action": "Preserve closed source commit; continue defender. Apply only technically closed classes to playtest."
+    },
+    {
+      "class": "defender",
+      "status": "pending",
+      "entries": [
+        {
+          "id": "defender_anchor",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "defender_counterstroke",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "defender_guard_return",
+          "category": "passive",
+          "status": "pending"
+        },
+        {
+          "id": "defender_line_lock",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "defender_reprisal_wave",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "defender_wall_advance",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "defender_watch",
+          "category": "passive",
+          "status": "pending"
+        },
+        {
+          "id": "defender_riposte",
+          "category": "active",
+          "status": "existing_painted"
+        },
+        {
+          "id": "defender_retreat_guard",
+          "category": "active",
+          "status": "existing_painted"
+        }
+      ]
+    },
+    {
+      "class": "berserker",
+      "status": "pending",
+      "entries": [
+        {
+          "id": "berserker_blood_rift",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "berserker_breath_steal",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "berserker_execution",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "berserker_obstinacy",
+          "category": "passive",
+          "status": "pending"
+        },
+        {
+          "id": "berserker_pursuit",
+          "category": "passive",
+          "status": "pending"
+        },
+        {
+          "id": "berserker_rupture",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "berserker_wound_leap",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "berserker_pursuit_cut",
+          "category": "active",
+          "status": "existing_painted"
+        },
+        {
+          "id": "berserker_deep_bleeding",
+          "category": "passive",
+          "status": "existing_painted"
+        }
+      ]
+    },
+    {
+      "class": "mage",
+      "status": "pending",
+      "entries": [
+        {
+          "id": "electric_discharge",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "fire_spear",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "fire_wall",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "fireball",
+          "category": "active",
+          "status": "existing_painted"
+        },
+        {
+          "id": "haunt",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "ice_spear",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "ice_wall",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "lightning",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "lightning_wall",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "mage_mana_regeneration",
+          "category": "passive",
+          "status": "pending"
+        },
+        {
+          "id": "phantom_barrier",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "soul_impact",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "teleport",
+          "category": "active",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "class": "elementalist",
+      "status": "pending",
+      "entries": [
+        {
+          "id": "elementalist_ember_path",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "elementalist_flame_burst",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "elementalist_glacial_ring",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "elementalist_lightning_arc",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "elementalist_prismatic_focus",
+          "category": "passive",
+          "status": "pending"
+        },
+        {
+          "id": "elementalist_prismatic_resonance",
+          "category": "passive",
+          "status": "pending"
+        },
+        {
+          "id": "elementalist_tri_nova",
+          "category": "active",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "class": "spiritualist",
+      "status": "pending",
+      "entries": [
+        {
+          "id": "spiritualist_channel_focus",
+          "category": "passive",
+          "status": "pending"
+        },
+        {
+          "id": "spiritualist_dissipation",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "spiritualist_echo_curse",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "spiritualist_echo_recovery",
+          "category": "passive",
+          "status": "pending"
+        },
+        {
+          "id": "spiritualist_procession",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "spiritualist_soul_drain",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "spiritualist_spectral_veil",
+          "category": "active",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "class": "archer",
+      "status": "pending",
+      "entries": [
+        {
+          "id": "archer_cadence",
+          "category": "passive",
+          "status": "pending"
+        },
+        {
+          "id": "archer_precision",
+          "category": "passive",
+          "status": "pending"
+        },
+        {
+          "id": "arrow_rain",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "double_shot",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "explosive_trap",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "extended_aim",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "foliage_shelter",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "piercing_arrow",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "slowing_arrow",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "snare_trap",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "trap_technique",
+          "category": "passive",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "class": "sentinel",
+      "status": "pending",
+      "entries": [
+        {
+          "id": "sentinel_absolute_focus",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "sentinel_concussion_shot",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "sentinel_explosive_shot",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "sentinel_headshot",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "sentinel_net_shot",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "sentinel_observe",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "sentinel_opening_read",
+          "category": "passive",
+          "status": "pending"
+        },
+        {
+          "id": "sentinel_piercing_shot",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "sentinel_precision_stance",
+          "category": "passive",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "class": "hunter",
+      "status": "pending",
+      "entries": [
+        {
+          "id": "hunter_covering_shot",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "hunter_easy_prey",
+          "category": "passive",
+          "status": "pending"
+        },
+        {
+          "id": "hunter_freezing_trap",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "hunter_mark",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "hunter_shooting_discipline",
+          "category": "passive",
+          "status": "pending"
+        },
+        {
+          "id": "hunter_tar_trap",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "hunter_thorn_trap",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "hunter_total_cover",
+          "category": "active",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "class": "geometer",
+      "status": "pending",
+      "entries": [
+        {
+          "id": "geometer_collapse",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "geometer_incidence",
+          "category": "passive",
+          "status": "pending"
+        },
+        {
+          "id": "geometer_rewrite",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "geometer_trace",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "geometer_translation",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "geometer_triangulation",
+          "category": "active",
+          "status": "pending"
+        },
+        {
+          "id": "geometer_vector_memory",
+          "category": "passive",
+          "status": "pending"
+        }
+      ]
+    }
+  ],
+  "generated_new": 11,
+  "next_class": "defender"
+}

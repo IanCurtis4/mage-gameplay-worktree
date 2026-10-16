@@ -1,0 +1,11 @@
+# Ícones pintados por classe — escopo autorizado16/10/2026
+
+Usuário autorizou substituir os86 símbolos ainda vetoriais por ícones pintados, preservando os7 já integrados. Mesmas93 habilidades, regras, ranks, dependências, atalhos e layout. Não cria kits nem altera save.
+
+Base0af2ec5ab4ba0d181f1430da24e6866e1541ade0; fonte codex/e06-inventory em C:/Users/João Pedro/.codex/worktrees/e06-inventory/RagRPG; destino habitual codex/playtest. Sol/root possui exclusivamente PNGs novos em assets/art/skills/painted, manifest/README, metadados de importação128px, probe de contato por classe e estes registros. Loader SkillPresentation.icon já prioriza PNG pintado e compartilha Texture2D entre árvore/lista/barra; nenhuma alteração funcional necessária. SVGs/fontes anteriores preservados.
+
+Pipeline de animações/preview inspecionado: é específico de sprites/atores, não serve para recortar ícones automaticamente. Produção com skill imagegen e ferramenta integrada, uma imagem original por habilidade, sem spritesheet/concept sheet convertido em atlas. Fontes geradas copiadas intactas ao projeto; prompts/hash/origem no manifest. Arte opaca quadrada, duas famílias de cor por classe, silhueta única legível32px e64px, margens seguras. Ativas expressivas com motivo da classe; passivas em contorno mais simples. Sem texto/moldura, colagem de primitivas ou detalhes essenciais minúsculos.
+
+Ordem/checkpoint em [fila](e06_skill_icon_batches.json): Espadachim, Defendente, Berserker, Mago, Elementalista, Espiritualista, Arqueiro, Sentinela, Caçadora, Geômetra. Cada classe fecha produção, importação, prova no renderer em fundos claro/escuro e views de skills, checks dirigidos via tools/verify.ps1 e commit antes da próxima. Luna supervisiona execução automatizada; Sol confere arte e consolida. Não há gate Astra rotineiro. Atualizar playtest apenas com classe tecnicamente fechada, preservando locais/save; interromper/retomar pelo primeiro ID pendente. Master/push/aceite humano separados.
+
+Primeiro lote:11 novos PNGs do Espadachim, Fúria e Parede de Escudos preservados. Skill imagegen também aplicada; modo integrado padrão, sem CLI/API alternativo. Limitação: checks não substituem preferência artística do jogador.
