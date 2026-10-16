@@ -1239,6 +1239,111 @@
       ],
       "sha256": "fe139e104bf660a40a82a6568dde2e645b2fb0a320333fa90039da821ea61915",
       "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep woodland green #34513a background and warm pale gold #f3d17a subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE total concealment: a hooded ranger face almost entirely hidden beneath a broad layered leafy canopy, two calm eyes in the shadow; one compact draped silhouette, clear cover identity, no background scenery."
+    },
+    {
+      "id": "geometer_trace",
+      "file": "geometer_trace.png",
+      "class": "geometer",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-a46d696a-6c8e-4615-89f7-be774e66c13d.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "83600ea719a1a20ed2fd8cf4a432aeaae88c315a149146d78715be7742bbf76f",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep slate #35434d background and luminous pale mint #8fe0c5 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE elemental trace: a luminous enchanted quill drawing one sweeping angular magical stroke between two large bright anchors, hand-painted calligraphic motion, no writing or letters."
+    },
+    {
+      "id": "geometer_triangulation",
+      "file": "geometer_triangulation.png",
+      "class": "geometer",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-3bbad2de-a9ca-4ac8-93c7-05bc04f7a73c.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "d2cadc2ebcc9aadfc945fb21f1940c267da95e79cb3902f411a8bec62315c968",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep slate #35434d background and luminous pale mint #8fe0c5 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE triangulation: three solid luminous crystal anchors connected by three thick painted energy edges forming a single clean upright triangle. Empty dark central triangle, minimal details, mystical and brush-painted rather than a vector diagram."
+    },
+    {
+      "id": "geometer_incidence",
+      "file": "geometer_incidence.png",
+      "class": "geometer",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-fe4d4c35-a5df-4706-aa44-eaa4c0e7d0b8.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "cadea47889245694323a17ee043d30bf299e6750cfe34c52e56c6ec909e64edb",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep slate #35434d background and luminous pale mint #8fe0c5 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE incidence theorem: sparse hollow outline of a ray bouncing once off a thick tilted stone boundary, one clear V-shaped reflected path. Large negative space, quiet contour, no aura or tiny formula."
+    },
+    {
+      "id": "geometer_translation",
+      "file": "geometer_translation.png",
+      "class": "geometer",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-d45dffca-8ca5-4c9e-9408-1598aad35fec.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "ab8febec7e562ba4cdba7432647c9bedc1d58566600f24c3e9a8e7af247bf404",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep slate #35434d background and luminous pale mint #8fe0c5 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE translation: one faceted crystal anchor sliding sideways on a broad flowing arrow-shaped magical ribbon, its faint painted departure silhouette behind it. Clear lateral relocation, compact horizontal motif."
+    },
+    {
+      "id": "geometer_vector_memory",
+      "file": "geometer_vector_memory.png",
+      "class": "geometer",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-c1cfc86a-91e9-4083-a3f3-a6fa8826a9e0.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "4b9e2742b02656c0e5fbbc39575ea0562cbde54bf069b97227ba7d396e3004b3",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep slate #35434d background and luminous pale mint #8fe0c5 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE vector memory: sparse hollow contour of two offset triangular loops joined by a short curved memory trail, one quiet continuous brush-drawn emblem with large dark interiors. No glow aura, no formula or text."
+    },
+    {
+      "id": "geometer_collapse",
+      "file": "geometer_collapse.png",
+      "class": "geometer",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-11a408ec-bcc6-40b1-b332-128a30571097.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "8fc1741a5b4c6d93e022bfc35a6d03b3c9eaba1d91f73ca1bee245e1f3b4106a",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep slate #35434d background and luminous pale mint #8fe0c5 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE geometric collapse: three large triangular crystal fragments drawn inward into a single brilliant central star, compressing energy inside an implied broken triangle. One forceful inward implosion silhouette, not an outward fireball."
+    },
+    {
+      "id": "geometer_rewrite",
+      "file": "geometer_rewrite.png",
+      "class": "geometer",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-ddd40b65-8fef-4fd6-9b5d-92058edf4e55.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "2ef6d047f10509af522ec42e99d11104e167f9b39b09c895c82ef4ed40ceb92c",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep slate #35434d background and luminous pale mint #8fe0c5 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE rewrite: an elegant enchanted drafting compass gripping a small crystal and redirecting one curved magical path, clear two-legged compass silhouette, coherent magical drawing tool, no letters or tiny markings."
     }
   ]
 }

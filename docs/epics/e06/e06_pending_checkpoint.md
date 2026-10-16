@@ -1,3 +1,5 @@
+> Ícones16/10: geometer VALIDADO na fonte, 7ícones pintados; importação/barra/renderer PASS com supervisão Luna e inspeção Sol. [Evidência](e06_skill_icons_geometer_validation.json). Restam0; próximo None. [Fila retomável](e06_skill_icon_batches.json). Classes anteriores aplicadas têm recibos por classe.
+
 > Ícones16/10: hunter VALIDADO na fonte, 8ícones pintados; importação/barra/renderer PASS com supervisão Luna e inspeção Sol. [Evidência](e06_skill_icons_hunter_validation.json). Restam7; próximo geometer. [Fila retomável](e06_skill_icon_batches.json). Classes anteriores aplicadas têm recibos por classe.
 
 > Ícones16/10: sentinel VALIDADO na fonte, 9ícones pintados; importação/barra/renderer PASS com supervisão Luna e inspeção Sol. [Evidência](e06_skill_icons_sentinel_validation.json). Restam15; próximo hunter. [Fila retomável](e06_skill_icon_batches.json). Classes anteriores aplicadas têm recibos por classe.

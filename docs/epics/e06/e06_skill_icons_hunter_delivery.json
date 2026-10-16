@@ -1,0 +1,16 @@
+{
+  "status": "APPLIED_VERIFIED",
+  "class": "hunter",
+  "candidate": "c9e7d26245f456e66c5894b2dcf0633bcd314ee7",
+  "base": "17dabe5fa04b55df531001abbfc59d6c065cf2ff",
+  "target_checks": 2,
+  "native_sha256": "18be8e7ca81a1a119557dfb5b6b56bffca3c908dfd1d68746454982f2ab26d8c",
+  "local_files_preserved": 199,
+  "personal_files_preserved": 3,
+  "cli_preflight": "Legacy CLI dirty target refusal; manual preserving FF according current WORKFLOW.",
+  "product_acceptance": "pending",
+  "luna_target_watch": {
+    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\art_batch_hunter\\target_watch.json",
+    "sha256": "bf297da1264947a6a2491b51d026414a7ee66dfe54a0acf24df7ebe59a09477a"
+  }
+}

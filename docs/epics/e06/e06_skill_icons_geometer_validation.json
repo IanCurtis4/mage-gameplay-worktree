@@ -1,0 +1,127 @@
+{
+  "status": "TECHNICALLY_VALIDATED_SOURCE",
+  "class": "geometer",
+  "date": "2026-10-16",
+  "new_icons": 7,
+  "preserved_icons": 0,
+  "assets": [
+    {
+      "id": "geometer_collapse",
+      "file": "assets/art/skills/painted/geometer_collapse.png",
+      "sha256": "8fc1741a5b4c6d93e022bfc35a6d03b3c9eaba1d91f73ca1bee245e1f3b4106a",
+      "preserved_existing": false
+    },
+    {
+      "id": "geometer_incidence",
+      "file": "assets/art/skills/painted/geometer_incidence.png",
+      "sha256": "cadea47889245694323a17ee043d30bf299e6750cfe34c52e56c6ec909e64edb",
+      "preserved_existing": false
+    },
+    {
+      "id": "geometer_rewrite",
+      "file": "assets/art/skills/painted/geometer_rewrite.png",
+      "sha256": "2ef6d047f10509af522ec42e99d11104e167f9b39b09c895c82ef4ed40ceb92c",
+      "preserved_existing": false
+    },
+    {
+      "id": "geometer_trace",
+      "file": "assets/art/skills/painted/geometer_trace.png",
+      "sha256": "83600ea719a1a20ed2fd8cf4a432aeaae88c315a149146d78715be7742bbf76f",
+      "preserved_existing": false
+    },
+    {
+      "id": "geometer_translation",
+      "file": "assets/art/skills/painted/geometer_translation.png",
+      "sha256": "ab8febec7e562ba4cdba7432647c9bedc1d58566600f24c3e9a8e7af247bf404",
+      "preserved_existing": false
+    },
+    {
+      "id": "geometer_triangulation",
+      "file": "assets/art/skills/painted/geometer_triangulation.png",
+      "sha256": "d2cadc2ebcc9aadfc945fb21f1940c267da95e79cb3902f411a8bec62315c968",
+      "preserved_existing": false
+    },
+    {
+      "id": "geometer_vector_memory",
+      "file": "assets/art/skills/painted/geometer_vector_memory.png",
+      "sha256": "4b9e2742b02656c0e5fbbc39575ea0562cbde54bf069b97227ba7d396e3004b3",
+      "preserved_existing": false
+    }
+  ],
+  "generation": "Built-in imagegen; original PNGs copied unchanged, full prompts/source/hash in painted/manifest.json.128px import;32/64px display.",
+  "execution": {
+    "class": "geometer",
+    "status": "CHECKS_AND_NATIVE_PASS_PENDING_VISUAL_REVIEW",
+    "checks": [
+      {
+        "timed_out": false,
+        "execution_index": 1,
+        "name": "editor_import",
+        "timeout_seconds": 300,
+        "index": 1,
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+          "--editor",
+          "--import",
+          "--quit"
+        ],
+        "exit_code": 0,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\geometer\\checks\\001.output.log",
+        "failed": false,
+        "output_sha256": "E78D1C8B94557C0020AEC9B8D0267A6A61CA97C8AA96A27165C901E9E640B537",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\geometer\\checks\\001.engine.log"
+      },
+      {
+        "timed_out": false,
+        "execution_index": 2,
+        "name": "e06_icon_bar_test",
+        "timeout_seconds": 300,
+        "index": 227,
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+          "--script",
+          "res://tests/e06_icon_bar_test.gd"
+        ],
+        "exit_code": 0,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\geometer\\checks\\227-e06_icon_bar_test.output.log",
+        "failed": false,
+        "output_sha256": "EB3F9ABDAF6F6B129E2FE140E29916FCDDECD3E077141BF2FE525A5703A692AA",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\geometer\\checks\\227-e06_icon_bar_test.engine.log"
+      }
+    ],
+    "native_sha256": "dba4234c8ca065f3d7a4c907f98522f4418bf1ff1e919817d87e4f3477d4d214",
+    "native_elapsed_seconds": 6.43,
+    "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "source_input_manifest": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner_inputs.json",
+    "source_input_manifest_sha256": "3e5adc874904240ff9305c32b60b79f2a82714dbe1430c158bd9217f5af8c6ba"
+  },
+  "luna_supervision": {
+    "report": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\geometer\\watch.json",
+    "sha256": "f52e76ac4a9cc050b217443064c26eee4a2550cffd767a0b5f1ecbb716ebc41a",
+    "role": "Execution supervision; no independent semantic audit"
+  },
+  "captures": [
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\geometer\\contact.png",
+      "sha256": "24d030f982d274bfbcbd71c4841224ea654824fefb76ea80da6c36c197d3610a"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\geometer\\tree.png",
+      "sha256": "b70f9df610071d1d9c9cb91cfb121e5e26dbd6bdf7c061ea57ba4f972ee38f7a"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\geometer\\list.png",
+      "sha256": "3553f8b0b5c8c174b395d6cc47e192b59738e18f3833a055ffcdef5c063db03e"
+    }
+  ],
+  "visual_review": "Sol viewed contact and real tree at32/64px on light/dark backgrounds and existing blocked shader; distinct skill motifs, restrained passive contours, coherent subjects; source originals preserved. Tree/list probe completed with isolated profile.",
+  "changes_to_rules_or_save": false,
+  "limitations": [
+    "Human artistic preference/playtest pending; no FPS/balance claims.",
+    "0 icons still queued; next class None"
+  ]
+}
