@@ -1,0 +1,216 @@
+{
+  "status": "APPLIED_AND_VERIFIED_READY_FOR_HUMAN_PLAYTEST",
+  "date": "2026-10-16",
+  "runtime_commit": "99f8166839d3ca1d34eaf818b48b091f62aca832",
+  "previous_target": "65d7d96d0c4743d07a23b95478b0571647c2d729",
+  "source_branch": "codex/e06-inventory",
+  "target_branch": "codex/playtest",
+  "target_project": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\project.godot",
+  "technical_validation": {
+    "report": "e06_all_skill_dependencies_validation.json",
+    "sha256": "9e3bc3ae284c24148c47672c76026d33cbe7adf6a23821d731720d9fe1e19a3a",
+    "distinct_source_steps_passed": 230,
+    "method": "Complementary execution rounds and impact-based rechecks, Luna execution supervision and Sol contract/invariant consolidation."
+  },
+  "application": {
+    "method": "git merge --ff-only --no-overwrite-ignore; same common Git directory, target ancestor, clean source, no changed-path overlap with preserved local files",
+    "cli_preflight": {
+      "tool": "C:/Users/João Pedro/.codex/worktrees/menu-tabs/RagRPG/tools/workflow/workflow.py",
+      "origin": "0c008d4843d13f772aa2b69be22d24d2300b80a1",
+      "sha256": "e642dbe882cd7ea3cd687da51ed978bdecc93675fbb31d08d26626a0b40a1bae",
+      "result": "Legacy CLI rejected target dirty worktree. Current WORKFLOW permits preserving fast-forward; manual equivalent checks were performed. No files cleaned/stashed/reset.",
+      "stdout": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\all_dependencies_delivery\\cli_preflight.stdout",
+      "stderr": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\all_dependencies_delivery\\cli_preflight.stderr"
+    },
+    "approval": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\all_dependencies_delivery\\approval.json",
+    "approval_sha256": "9b7dc06e6827d24b3029576573ce83a3572071c42e82ed097e9eea2e8e47042a",
+    "fast_forward_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\all_dependencies_delivery\\fast_forward.stdout"
+  },
+  "target_verification": {
+    "role": "Luna execution supervision; Sol output/hash review and native/private verification",
+    "watch_report": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\all_dependencies_delivery\\target_checks\\target_watch.json",
+    "watch_sha256": "87fc0242a5e33644f25480095a33e1f8fb1b92f584a8f4f7ce552a420305bde9",
+    "passed_checks": 17,
+    "checks": [
+      {
+        "index": 1,
+        "name": "editor_import",
+        "output_sha256": "CB2AB5DCDD0CBDD15D033D9AA1424B48E316D45C3B67CFC1302B44C9923DE210",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "index": 19,
+        "name": "profile_facade_test",
+        "output_sha256": "0E7C0200C1FAEDEE71AA0FEC27B6F9415F0F622606FFE2917B2718E1295292D5",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "index": 24,
+        "name": "menu_tabs_test",
+        "output_sha256": "6BDE1A2F33E543A918C79862B4F1FAB41B8372C59168DFA7EEBB7AF6524CC57D",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "index": 79,
+        "name": "e04_swordsman_shield_wall_rank_integration_test",
+        "output_sha256": "A177365260FF37996E22544E992784664A4F68B00B2763E1EF3D71800E87DABD",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "index": 119,
+        "name": "e05_geometer_triangle_projectile_test",
+        "output_sha256": "6B38B08AB9B83227B1670D4B0A0050BAC05BD08715C7E58B79AECE9EA52A2797",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "index": 138,
+        "name": "e05_sentinel_integration_test",
+        "output_sha256": "C6BFC733F91FD5719AED5CFC123545B35C2C1BA9FA67C65492FF8147E62FE8A3",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "index": 143,
+        "name": "action_bar_ui_test",
+        "output_sha256": "C2EF385893D199BA0A5C15FD51608B258E9494E90A5DB43E51E49EB7DE13CA44",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "index": 144,
+        "name": "action_bar_persistence_test",
+        "output_sha256": "4F99984C75932D7CB1D77383C133C06394DF2909846C7D0715A2B2E32A22BEBC",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "index": 177,
+        "name": "smoke",
+        "output_sha256": "99A1F5C05F8B42A98C1353A644C0527B7FBDEBFB7A944ACD272CCF7D46CC34A6",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "index": 206,
+        "name": "e06_ui_menu_test",
+        "output_sha256": "115F851F6FE74866A9F6857851112BB5E888FCF79A99AA4E19E63CE42450B688",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "index": 222,
+        "name": "skill_allocation_test",
+        "output_sha256": "4BBF4DE594BE8F142DB94129FC154393A17EBD463F30E86A1BDBB35A500317A8",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "index": 223,
+        "name": "skill_window_test",
+        "output_sha256": "5BD236B91C6C08EC2A81332DE1AA21DED1FA6A2D5635DA8D9FD7E5FE183FDFCD",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "index": 225,
+        "name": "e06_swordsman_cluster_test",
+        "output_sha256": "37EDDB990F7BAAB13A888404B874D1149EBC009EB7020F0AE4B28872DC4D2F06",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "index": 227,
+        "name": "e06_icon_bar_test",
+        "output_sha256": "EB3F9ABDAF6F6B129E2FE140E29916FCDDECD3E077141BF2FE525A5703A692AA",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "index": 228,
+        "name": "e06_skill_dependencies_test",
+        "output_sha256": "A53B9C316094AC87E2B408A91F5E454D270592DE3BF95C0F68E9A7841A9F39BB",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "index": 229,
+        "name": "e06_all_skill_migration_test",
+        "output_sha256": "CC4CC5894796CDF291A3204A5D2DF7028A98CC72317B6D989C1496C97ADF9768",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "index": 230,
+        "name": "e06_dependency_navigation_test",
+        "output_sha256": "A8065F2EB662C598BDD321AE0BADF25C499F681A04D50D85E4C50DBBB553C5B2",
+        "exit_code": 0,
+        "timed_out": false
+      }
+    ],
+    "environment_failures": "Sandbox certificate store and editor GitPlugin ownership errors retained in original logs; owner reruns pass without altering project configuration or plugin.",
+    "proofs": [
+      {
+        "name": "native",
+        "exit_code": 0,
+        "complete": true,
+        "errors": false,
+        "elapsed_seconds": 26.15,
+        "output": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\all_dependencies_delivery\\native.log",
+        "sha256": "3410c5d8b9870b697b1443233b82a31208dd5d19ebc17d00762c588e9b02137c"
+      },
+      {
+        "name": "private",
+        "exit_code": 0,
+        "complete": true,
+        "errors": false,
+        "elapsed_seconds": 4.47,
+        "output": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\all_dependencies_delivery\\private.log",
+        "sha256": "208a42cea1e66735fa3e8d7de2839f6dad2d075afe83729aa7311197bcc4b8e7"
+      }
+    ]
+  },
+  "preservation": {
+    "local_files_preserved": 128,
+    "personal_files_preserved": 3,
+    "restored_normalized_import_files": [],
+    "equivalent_nonlocal_files": 1716,
+    "source_only_documentation_delta": [
+      "docs/epics/e06/e06_all_skill_dependencies_scope.md"
+    ],
+    "native_images": [
+      {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration\\native\\dependency_evolution.png",
+        "sha256": "8166b9931306e89d495ce5ebb6dae7eedc8b71e7941baab6275578e5d333b676"
+      },
+      {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration\\native\\dependency_origin.png",
+        "sha256": "5ada74b4864365416a27e5c6e0f5413119324d9e6760925d988ccc668362b25e"
+      },
+      {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration\\native\\dependency_return.png",
+        "sha256": "b19ef17a3f764595ae70b5082322b1c46ce3584931db36df97f45452a0a2621a"
+      },
+      {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration\\native\\lobby_tree_1280.png",
+        "sha256": "71b69225b50ebfe74bcbed6662331679fce08f715a23c35e21f219ea99074d9b"
+      },
+      {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\e06_skill_ux_iteration\\native\\lobby_tree_1920.png",
+        "sha256": "af341657c7223903323dd6ceb26ddbd6fa9c46c0b879ae8130509c7dc2691ba7"
+      }
+    ],
+    "visual_inspection": "Sol inspected dependency_evolution.png at target; compact badge and prerequisite link contained, local edges readable; origin/return input asserted by probe."
+  },
+  "personal_save": "Only isolated copies opened/migrated during verification.3 original personal files and128 local project files retain original byte hashes.",
+  "playtest_guide": "e06_all_skill_dependencies_playtest.md",
+  "limitations": [
+    "Human gameplay/legibility/balance acceptance pending. Automated/native checks do not establish FPS or enjoyment.",
+    "No master merge, push, or new epic authorization."
+  ],
+  "next_action": "Stop old Godot execution, accept project reload and F5 in habitual project. Docs-only successor records delivery; runtime remains99f8166."
+}

@@ -1,3 +1,7 @@
+> APLICADO e verificado16/10: dependências das93skills/10identidades, navegação entre jobs e migração catalog14/schema6. Runtime99f8166839d3ca1d34eaf818b48b091f62aca832;230/230 etapas distintas PASS em rodadas complementares e17checks PASS no destino, com supervisão Luna/validação Sol. Provas nativa e privada PASS;128 arquivos locais e3 pessoais intactos. [Recibo](e06_all_skill_dependencies_delivery.json), [roteiro](e06_all_skill_dependencies_playtest.md). Pare a execução antiga, aceite reload e F5. Aceite humano/master/push pendentes. Registros anteriores abaixo são históricos.
+
+> Estado vigente16/10: proposta aprovada e implementação VALIDADA tecnicamente no candidato99f8166839d3ca1d34eaf818b48b091f62aca832.230/230 etapas distintas PASS em rodadas complementares; supervisão Luna e validação Sol. [Evidências](e06_all_skill_dependencies_validation.json). Aplicação no destino em verificação. Seções datadas abaixo preservam a sequência histórica e não revogam a aprovação humana.
+
 # Dependências de todas as identidades — proposta de produto
 
 Pedido humano15/10: criar retroativamente caminhos de skills nas classes existentes e representar requisitos entre jobs com pouca poluição visual.
