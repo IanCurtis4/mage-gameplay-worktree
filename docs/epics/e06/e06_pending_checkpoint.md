@@ -1,3 +1,5 @@
+> Ícones16/10: spiritualist VALIDADO na fonte, 7ícones pintados; importação/barra/renderer PASS com supervisão Luna e inspeção Sol. [Evidência](e06_skill_icons_spiritualist_validation.json). Restam35; próximo archer. [Fila retomável](e06_skill_icon_batches.json). Classes anteriores aplicadas têm recibos por classe.
+
 > Ícones16/10: elementalist VALIDADO na fonte, 7ícones pintados; importação/barra/renderer PASS com supervisão Luna e inspeção Sol. [Evidência](e06_skill_icons_elementalist_validation.json). Restam42; próximo spiritualist. [Fila retomável](e06_skill_icon_batches.json). Classes anteriores aplicadas têm recibos por classe.
 
 > Ícones16/10: mage VALIDADO na fonte, 13ícones pintados; importação/barra/renderer PASS com supervisão Luna e inspeção Sol. [Evidência](e06_skill_icons_mage_validation.json). Restam49; próximo elementalist. [Fila retomável](e06_skill_icon_batches.json). Classes anteriores aplicadas têm recibos por classe.

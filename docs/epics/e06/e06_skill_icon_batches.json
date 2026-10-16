@@ -2,7 +2,7 @@
   "scope": "Remaining86 painted icons for approved93 skills; one closed class batch at a time",
   "baseline": "0af2ec5ab4ba0d181f1430da24e6866e1541ade0",
   "existing_painted": 7,
-  "pending": 42,
+  "pending": 35,
   "owner": "Sol/root: art briefs, generation, files, manifests, import settings, class probes and checkpoints. Luna: bounded execution supervision only after stable batch.",
   "classes": [
     {
@@ -337,7 +337,7 @@
     },
     {
       "class": "elementalist",
-      "status": "validated_source",
+      "status": "applied_verified",
       "entries": [
         {
           "id": "elementalist_ember_path",
@@ -389,48 +389,64 @@
           "sha256": "dde42583ddbaf63741850a99c0604a11aceaba5bb6fb44a0024c08c18f4d7a0d"
         }
       ],
-      "validation": "docs/epics/e06/e06_skill_icons_elementalist_validation.json"
+      "validation": "docs/epics/e06/e06_skill_icons_elementalist_validation.json",
+      "commit": "254f4cac26b49db3fc4bac96d9c1e762d691e442"
     },
     {
       "class": "spiritualist",
-      "status": "pending",
+      "status": "validated_source",
       "entries": [
         {
           "id": "spiritualist_channel_focus",
           "category": "passive",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/spiritualist_channel_focus.png",
+          "sha256": "eefc6d77ba9fe8c8e45ae2d57d1e3f601add034deaa8b72080ce1b08c38cb0e3"
         },
         {
           "id": "spiritualist_dissipation",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/spiritualist_dissipation.png",
+          "sha256": "b27fef34f353a51fc7cc97bab5e66b7bbcf4d722347a8caa1146e1feda98a190"
         },
         {
           "id": "spiritualist_echo_curse",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/spiritualist_echo_curse.png",
+          "sha256": "cc2232104c4c2b87958070d56eb74fcb56fd00a7c26cf1d1e98c9a6cac8e2a04"
         },
         {
           "id": "spiritualist_echo_recovery",
           "category": "passive",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/spiritualist_echo_recovery.png",
+          "sha256": "f097223a10280ecea72321ee6932b9a4b32afbb0797bf7bcc066e4bb24cba7f7"
         },
         {
           "id": "spiritualist_procession",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/spiritualist_procession.png",
+          "sha256": "919f6230062a2d6909883445c3427e5e9d6215f36622bf9b11b30ca14a744e03"
         },
         {
           "id": "spiritualist_soul_drain",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/spiritualist_soul_drain.png",
+          "sha256": "77b1838dcefeb7c27ba30c455c3991efb7d916024808e18ba39dd84fff990996"
         },
         {
           "id": "spiritualist_spectral_veil",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/spiritualist_spectral_veil.png",
+          "sha256": "f26d855493521b1af876b163468cd5ef6509742c971cf02ea20a367fc0abd3d3"
         }
-      ]
+      ],
+      "validation": "docs/epics/e06/e06_skill_icons_spiritualist_validation.json"
     },
     {
       "class": "archer",
@@ -632,6 +648,6 @@
       ]
     }
   ],
-  "generated_new": 44,
-  "next_class": "spiritualist"
+  "generated_new": 51,
+  "next_class": "archer"
 }

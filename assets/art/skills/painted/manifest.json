@@ -714,6 +714,111 @@
       ],
       "sha256": "dde42583ddbaf63741850a99c0604a11aceaba5bb6fb44a0024c08c18f4d7a0d",
       "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep royal-blue #303d67 background and luminous pale ice-cyan #a7e1e4 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Tri-Nova: one coherent three-lobed elemental nova rotating around a single bright core; one lobe shaped as a broad curled flame, one as a large angular ice crystal, one as a thick forked lightning stroke. Bold trefoil silhouette, all light forms from the same pale ice-cyan hue family, dark royal-blue background. Exactly three large readable elemental masses, no rainbow or tiny symbols."
+    },
+    {
+      "id": "spiritualist_echo_curse",
+      "file": "spiritualist_echo_curse.png",
+      "class": "spiritualist",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-b298630c-073a-4b58-abe5-95a790797006.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "cc2232104c4c2b87958070d56eb74fcb56fd00a7c26cf1d1e98c9a6cac8e2a04",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep plum-violet #382e57 background and luminous pale lavender #d8b6ef subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Maldição do Eco: one curved ritual paper talisman bearing a single large spectral eye pictogram, surrounded by one broad echo curl of mist. The eye is a painted symbol, absolutely no writing or letters. Clear vertical talisman silhouette, curled lower tip, original gentle fantasy spirit magic."
+    },
+    {
+      "id": "spiritualist_soul_drain",
+      "file": "spiritualist_soul_drain.png",
+      "class": "spiritualist",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-bd79b2cb-e656-4536-9f00-ea13d4decac7.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "77b1838dcefeb7c27ba30c455c3991efb7d916024808e18ba39dd84fff990996",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep plum-violet #382e57 background and luminous pale lavender #d8b6ef subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Drenagem Espiritual: one open upturned spectral palm receiving a single long flowing wisp drawn downward into its center. Soft ethereal hand silhouette with correct simple anatomy, large inward energy stream, no metal gauntlet, no full person or injury. Conveys channeled spiritual draining."
+    },
+    {
+      "id": "spiritualist_spectral_veil",
+      "file": "spiritualist_spectral_veil.png",
+      "class": "spiritualist",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-09ed6dfc-55bf-4eea-bea5-fe16507b8089.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "f26d855493521b1af876b163468cd5ef6509742c971cf02ea20a367fc0abd3d3",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep plum-violet #382e57 background and luminous pale lavender #d8b6ef subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Véu Espectral: one broad flowing ghostly veil or protective cloak suspended over a small ground ellipse. Open draping curtain silhouette with a misty scalloped hem, soft airy folds, no person, no face, no metal shield or spherical bubble."
+    },
+    {
+      "id": "spiritualist_procession",
+      "file": "spiritualist_procession.png",
+      "class": "spiritualist",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-ad363ad0-21fc-42bc-811e-d989e91d7600.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "919f6230062a2d6909883445c3427e5e9d6215f36622bf9b11b30ca14a744e03",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep plum-violet #382e57 background and luminous pale lavender #d8b6ef subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Procissão de Espectros: three large simple hood-like spirit wisps flowing forward in a single sweeping S-shaped ribbon. Exactly three readable spirit heads joined by one coherent tail, two plain eye hollows each, no extra faces, no crowd or tiny particles. Gentle original fantasy spirits."
+    },
+    {
+      "id": "spiritualist_dissipation",
+      "file": "spiritualist_dissipation.png",
+      "class": "spiritualist",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-83ce251a-88ab-423c-9a15-68b863138566.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "b27fef34f353a51fc7cc97bab5e66b7bbcf4d722347a8caa1146e1feda98a190",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep plum-violet #382e57 background and luminous pale lavender #d8b6ef subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Rito de Dissipação: one simple spirit mask dissolving outward into a broad broken circular ritual pulse. The mask's two open eye hollows and two large flowing release ribbons form a single coherent silhouette; clean bright release center, no tiny particles, no writing, no horror scene."
+    },
+    {
+      "id": "spiritualist_channel_focus",
+      "file": "spiritualist_channel_focus.png",
+      "class": "spiritualist",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-5c2bd337-692a-410c-b5b2-2034a3840289.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "eefc6d77ba9fe8c8e45ae2d57d1e3f601add034deaa8b72080ce1b08c38cb0e3",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep plum-violet #382e57 background and luminous pale lavender #d8b6ef subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE Foco do Além: one hollow OUTLINE of a loop of seven large prayer beads around a single small calm spirit-flame. Broad simple bead contours, large dark gaps and empty center, restrained painted lines, no filled aura or tiny decorative runes. Original spiritual concentration symbol."
+    },
+    {
+      "id": "spiritualist_echo_recovery",
+      "file": "spiritualist_echo_recovery.png",
+      "class": "spiritualist",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-ae71e76a-3d89-4c24-a87f-74aa3b084fdd.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "f097223a10280ecea72321ee6932b9a4b32afbb0797bf7bcc066e4bb24cba7f7",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep plum-violet #382e57 background and luminous pale lavender #d8b6ef subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE Recolhimento: one bold hollow OUTLINE of a three-petaled lotus cupping a single small returning soul-wisp. One inward curling stroke unites the wisp and flower, broad open negative spaces and sparse confident brush contours. No filled aura, no detailed leaves, no writing."
     }
   ]
 }

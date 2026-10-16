@@ -1,0 +1,127 @@
+{
+  "status": "TECHNICALLY_VALIDATED_SOURCE",
+  "class": "spiritualist",
+  "date": "2026-10-16",
+  "new_icons": 7,
+  "preserved_icons": 0,
+  "assets": [
+    {
+      "id": "spiritualist_channel_focus",
+      "file": "assets/art/skills/painted/spiritualist_channel_focus.png",
+      "sha256": "eefc6d77ba9fe8c8e45ae2d57d1e3f601add034deaa8b72080ce1b08c38cb0e3",
+      "preserved_existing": false
+    },
+    {
+      "id": "spiritualist_dissipation",
+      "file": "assets/art/skills/painted/spiritualist_dissipation.png",
+      "sha256": "b27fef34f353a51fc7cc97bab5e66b7bbcf4d722347a8caa1146e1feda98a190",
+      "preserved_existing": false
+    },
+    {
+      "id": "spiritualist_echo_curse",
+      "file": "assets/art/skills/painted/spiritualist_echo_curse.png",
+      "sha256": "cc2232104c4c2b87958070d56eb74fcb56fd00a7c26cf1d1e98c9a6cac8e2a04",
+      "preserved_existing": false
+    },
+    {
+      "id": "spiritualist_echo_recovery",
+      "file": "assets/art/skills/painted/spiritualist_echo_recovery.png",
+      "sha256": "f097223a10280ecea72321ee6932b9a4b32afbb0797bf7bcc066e4bb24cba7f7",
+      "preserved_existing": false
+    },
+    {
+      "id": "spiritualist_procession",
+      "file": "assets/art/skills/painted/spiritualist_procession.png",
+      "sha256": "919f6230062a2d6909883445c3427e5e9d6215f36622bf9b11b30ca14a744e03",
+      "preserved_existing": false
+    },
+    {
+      "id": "spiritualist_soul_drain",
+      "file": "assets/art/skills/painted/spiritualist_soul_drain.png",
+      "sha256": "77b1838dcefeb7c27ba30c455c3991efb7d916024808e18ba39dd84fff990996",
+      "preserved_existing": false
+    },
+    {
+      "id": "spiritualist_spectral_veil",
+      "file": "assets/art/skills/painted/spiritualist_spectral_veil.png",
+      "sha256": "f26d855493521b1af876b163468cd5ef6509742c971cf02ea20a367fc0abd3d3",
+      "preserved_existing": false
+    }
+  ],
+  "generation": "Built-in imagegen; original PNGs copied unchanged, full prompts/source/hash in painted/manifest.json.128px import;32/64px display.",
+  "execution": {
+    "class": "spiritualist",
+    "status": "CHECKS_AND_NATIVE_PASS_PENDING_VISUAL_REVIEW",
+    "checks": [
+      {
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\spiritualist\\checks\\001.output.log",
+        "output_sha256": "785F62AAC4940D6B432722B6180749A37DE83CF0F572799A3F3CB496C5D28E7F",
+        "timed_out": false,
+        "failed": false,
+        "timeout_seconds": 300,
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\spiritualist\\checks\\001.engine.log",
+        "exit_code": 0,
+        "index": 1,
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+          "--editor",
+          "--import",
+          "--quit"
+        ],
+        "name": "editor_import",
+        "execution_index": 1
+      },
+      {
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\spiritualist\\checks\\227-e06_icon_bar_test.output.log",
+        "output_sha256": "EB3F9ABDAF6F6B129E2FE140E29916FCDDECD3E077141BF2FE525A5703A692AA",
+        "timed_out": false,
+        "failed": false,
+        "timeout_seconds": 300,
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\spiritualist\\checks\\227-e06_icon_bar_test.engine.log",
+        "exit_code": 0,
+        "index": 227,
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+          "--script",
+          "res://tests/e06_icon_bar_test.gd"
+        ],
+        "name": "e06_icon_bar_test",
+        "execution_index": 2
+      }
+    ],
+    "native_sha256": "dd543d034c5be17c3e59f51266b65cb8e1b041145c8c4c7dedb68eead622e1fd",
+    "native_elapsed_seconds": 8.98,
+    "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "source_input_manifest": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner_inputs.json",
+    "source_input_manifest_sha256": "9dc276964a50e0e4524ce6717c74d881996616cecb3967c7e23c46cfd9ac29ba"
+  },
+  "luna_supervision": {
+    "report": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\spiritualist\\watch.json",
+    "sha256": "368b7c4c1688e8faf890acf7817fea03f5069fb96d230b29f5f2c3cfd4f85ed2",
+    "role": "Execution supervision; no independent semantic audit"
+  },
+  "captures": [
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\spiritualist\\contact.png",
+      "sha256": "a58a269fbadb76ae27acc6660a978a92212e2f0ecd35c0128788752a1e48364f"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\spiritualist\\tree.png",
+      "sha256": "608e813db7a9d219e4fceb68d4b11a43cdcc0096fb8ec9e0473879a24e07a06e"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\spiritualist\\list.png",
+      "sha256": "ea705a1e466ecf6e54e8a8551143152ea9e0435edb311f3675ada9e2a8f7ce78"
+    }
+  ],
+  "visual_review": "Sol viewed contact and real tree at32/64px on light/dark backgrounds and existing blocked shader; distinct skill motifs, restrained passive contours, coherent subjects; source originals preserved. Tree/list probe completed with isolated profile.",
+  "changes_to_rules_or_save": false,
+  "limitations": [
+    "Human artistic preference/playtest pending; no FPS/balance claims.",
+    "35 icons still queued; next class archer"
+  ]
+}

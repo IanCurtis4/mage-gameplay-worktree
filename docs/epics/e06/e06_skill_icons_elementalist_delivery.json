@@ -1,0 +1,16 @@
+{
+  "status": "APPLIED_VERIFIED",
+  "class": "elementalist",
+  "candidate": "254f4cac26b49db3fc4bac96d9c1e762d691e442",
+  "base": "b971c2c914e957453f20e1841fa6bbae088e5721",
+  "target_checks": 2,
+  "native_sha256": "2a44b8e5add00eda91ce64b6513aa1a0dc74d50e8bc70106b69a63e81d01bb65",
+  "local_files_preserved": 165,
+  "personal_files_preserved": 3,
+  "cli_preflight": "Legacy CLI dirty target refusal; manual preserving FF according current WORKFLOW.",
+  "product_acceptance": "pending",
+  "luna_target_watch": {
+    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\art_batch_elementalist\\target_watch.json",
+    "sha256": "f54011020e36501baee8a6b3c05e71d74b1b6c3241310b1afdc8baf0a413997e"
+  }
+}
