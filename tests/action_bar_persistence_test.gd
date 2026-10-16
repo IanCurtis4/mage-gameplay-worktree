@@ -42,6 +42,8 @@ func _migration_and_codec() -> void:
 	var catalog := _catalog()
 	var character := _character(&"swordsman")
 	character.granted_skill_ranks = {&"slash": 1, &"dash": 1, &"swordsman_resistance": 1}
+	for prerequisite: StringName in [&"shield_wall", &"fury"]:
+		_check(CharacterProgression.learn_skill(character, catalog, prerequisite)["ok"], "legacy fixture prebuys approved ancestor")
 	for id: StringName in SWORD_ACTIVES + SWORD_PASSIVES:
 		_check(CharacterProgression.learn_skill(character, catalog, id)["ok"], "legacy fixture purchases %s legally" % id)
 	character.equipped[&"main_hand"] = &"training_sword"
@@ -97,8 +99,13 @@ func _migration_and_codec() -> void:
 	restored.action_slots = ActionBarLayout.empty()
 	var cleared := ProfileCodec.encode(decoded["profile"], catalog)
 	_check(cleared["ok"] and ProfileCodec.decode(cleared["text"], catalog)["profile"].characters[0].action_slots == ActionBarLayout.empty(), "explicitly cleared24 never refills from old preset")
+	# Current persistence retains known unlearned references in a disabled state.
+	var disabled: Dictionary = cleared["data"].duplicate(true)
+	disabled["characters"][0]["action_slots"][0] = &"terrifying_shout"
+	var disabled_read := ProfileCodec.decode(JSON.stringify(disabled), catalog)
+	_check(disabled_read["ok"] and disabled_read["profile"].characters[0].action_slots[0] == &"terrifying_shout" and not _snapshot(disabled_read["profile"].characters[0], catalog).learned_skill_ids(ProfileCatalog.ACTIVE).has(&"terrifying_shout"), "codec retains known disabled shortcut without granting learning")
 	var invalid_cases: Array[Array] = []
-	for invalid_id: StringName in [&"blood_thirst", &"fireball", &"terrifying_shout", &"defender_counterstroke"]:
+	for invalid_id: StringName in [&"blood_thirst", &"fireball", &"missing_skill", &"defender_counterstroke"]:
 		var invalid := ActionBarLayout.empty()
 		invalid[0] = invalid_id
 		invalid_cases.append(invalid)
@@ -120,6 +127,8 @@ func _facade_and_run() -> void:
 	_check(created["ok"], "facade creates actual character")
 	var id: String = created["character_id"]
 	_check(facade.grant_playtest_progression("bar-max", facade.current_profile().revision, id, &"max_levels")["ok"], "admin grants XP only")
+	for prerequisite: StringName in [&"shield_wall", &"fury"]:
+		_check(facade.learn_skill("bar-ancestor-%s" % prerequisite, facade.current_profile().revision, id, prerequisite)["ok"], "facade prebuys approved ancestor")
 	for skill: StringName in SWORD_ACTIVES + SWORD_PASSIVES:
 		_check(facade.learn_skill("bar-buy-%s" % skill, facade.current_profile().revision, id, skill)["ok"], "facade purchases %s" % skill)
 	var other := facade.create_character("bar-other", facade.current_profile().revision, "Mago", &"mage")
@@ -224,7 +233,7 @@ func _passive_identities_and_pruning() -> void:
 					_check(not gated.has_passive(skill), "below-job evolution passive remains locked despite fixture rank")
 	# Branch switch strips old evolution while keeping learned base passives.
 	var defender := _character(&"swordsman", &"defender")
-	for prerequisite: StringName in [&"shield_wall", &"shield_wall", &"defender_counterstroke"]:
+	for prerequisite: StringName in [&"shield_wall", &"shield_wall", &"fury", &"fury", &"defender_counterstroke"]:
 		_check(CharacterProgression.learn_skill(defender, catalog, prerequisite)["ok"], "switch fixture buys approved antecedent")
 	for skill: StringName in [&"swordsman_resistance", &"vigor", &"blood_thirst", &"defender_watch", &"defender_guard_return", &"defender_anchor"]:
 		_check(CharacterProgression.learn_skill(defender, catalog, skill)["ok"], "switch fixture legal purchase")

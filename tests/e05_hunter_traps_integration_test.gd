@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## H3 directed runtime transactions. AI disabled: not a solo/DPS/FPS claim.
 
 var checks := 0
@@ -36,6 +37,7 @@ func _build() -> BuildSnapshot:
 	build.job_level = 40
 	build.attribute_allocations = {&"int": 20, &"dex": 10}
 	build.skill_ranks = {&"hunter_freezing_trap": 1, &"hunter_tar_trap": 1, &"hunter_thorn_trap": 1, &"snare_trap": 1, &"explosive_trap": 1}
+	E05DependencyFixture.complete_snapshot(build)
 	return build
 
 func _controller(input_fixture: bool = false) -> RunController:

@@ -28,12 +28,13 @@ func _legal_build(triangle_rank: int = 5) -> BuildSnapshot:
 	character.evolution_id = &"mg_ar"
 	character.base_xp_total = ProgressionRules.MAX_BASE_XP
 	character.job_xp_total = ProgressionRules.MAX_JOB_XP
-	var purchases := {&"lightning": 5, &"fireball": 5, &"fire_spear": 5, &"mage_mana_regeneration": 3, &"teleport": 1, &"geometer_trace": 2, &"geometer_incidence": 3, &"geometer_triangulation": triangle_rank, &"geometer_vector_memory": 3, &"geometer_collapse": 2, &"geometer_rewrite": 5}
+	var collapse_rank := 1 if triangle_rank >= 2 else 0
+	var purchases := {&"lightning": 5, &"fireball": 2, &"fire_wall": 2, &"fire_spear": 5, &"mage_mana_regeneration": 3, &"teleport": 2, &"geometer_trace": 1, &"geometer_incidence": 3, &"geometer_triangulation": triangle_rank, &"geometer_translation": 2, &"geometer_vector_memory": 3, &"geometer_collapse": collapse_rank, &"geometer_rewrite": 5}
 	for skill: StringName in purchases:
 		for index: int in int(purchases[skill]):
 			_check(CharacterProgression.learn_skill(character, catalog, skill)["ok"], "legal purchase %s #%d" % [skill, index + 1])
 	var summary := CharacterProgression.summary(character, catalog)
-	_check(summary["base_skill_points_spent"] == 19 and summary["evolution_skill_points_spent"] == 15 + triangle_rank, "job40 legal 19 base / <=20 evolution wallet")
+	_check(summary["base_skill_points_spent"] == 19 and summary["evolution_skill_points_spent"] == 14 + triangle_rank + collapse_rank, "job40 legal 19 base / <=20 evolution wallet")
 	character.presets[0]["active_slots"] = [&"geometer_trace", &"geometer_triangulation", &"geometer_rewrite", &"geometer_collapse", &"fireball"]
 	character.presets[0]["passive_slots"] = [&"geometer_incidence", &"geometer_vector_memory"]
 	return BuildSnapshot.from_character(character, summary["base_level"], summary["job_level"], summary["effective_skill_ranks"], catalog.skill_ids_for_identity(&"mage", &"mg_ar"))

@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## S4 Net: paid projectile/area, canonical root and pre-control impact ordering.
 
 const NET := &"sentinel_net_shot"
@@ -37,6 +38,7 @@ func _scene(rank: int = 5, openings: bool = false) -> RunController:
 	build.attribute_allocations = {&"int": 20, &"dex": 20, &"luk": 10}
 	build.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"archer", &"sentinel")
 	build.skill_ranks = {NET: rank, &"sentinel_opening_read": 3}
+	E05DependencyFixture.complete_snapshot(build)
 	if not openings:
 		build.skill_ranks.erase(&"sentinel_opening_read")
 	build.active_slots = [NET, null, null, null, null]

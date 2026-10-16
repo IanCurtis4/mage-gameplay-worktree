@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## G4 first batch: real walking candidates, finite contact and shared claims.
 ## No recipes, damage, redirection, conduction or production profile writes yet.
 
@@ -132,6 +133,7 @@ func _real_walking() -> void:
 	snapshot.base_class_id = &"mage"
 	snapshot.evolution_id = &"mg_ar"
 	snapshot.skill_ranks = {&"geometer_trace": 1, &"geometer_triangulation": 5}
+	E05DependencyFixture.complete_snapshot(snapshot)
 	snapshot.library_skill_ids = [&"geometer_trace", &"geometer_triangulation"]
 	snapshot.active_slots = [&"geometer_trace", &"geometer_triangulation", null, null, null]
 	RunController.pending_run_state = RunState.from_build("", snapshot)

@@ -127,11 +127,13 @@ func _check_menu_and_controller() -> void:
 	root.add_child(menu)
 	await process_frame
 	menu._select_roster_index(0)
-	var learned_button: Button
-	for child: Node in menu.action_editor.library.get_children():
-		if child.get("skill_id") == &"lightning":
-			learned_button = child as Button
-	_check(learned_button != null and learned_button.text == "Relâmpago", "biblioteca apresenta nome humano da skill aprendida")
+	var lightning_entry: Dictionary = menu.skill_window.skill_entries[&"lightning"]
+	var learned_button: Button = lightning_entry["button"]
+	var visible_name := false
+	for child: Node in learned_button.get_children():
+		if child is Label and (child as Label).text == "Relâmpago":
+			visible_name = true
+	_check(visible_name and learned_button.tooltip_text.contains("[b]Relâmpago[/b]") and int(lightning_entry["option"]["rank"]) == 5, "biblioteca apresenta nome humano da skill aprendida")
 	menu.action_editor.assign_skill(&"lightning", 0)
 	_check(facade.current_profile().character_by_id(character_id).action_slots[0] == &"lightning", "menu salva organização de atalhos pela fachada")
 	var reopened := ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())

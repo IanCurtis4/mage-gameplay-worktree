@@ -31,7 +31,7 @@ func _build(ambusher: bool, late_passives: bool) -> BuildSnapshot:
 	character.evolution_id = &"hunter"
 	character.base_xp_total = ProgressionRules.MAX_BASE_XP
 	character.job_xp_total = ProgressionRules.MAX_JOB_XP
-	var purchases: Dictionary = {&"double_shot": 5, &"piercing_arrow": 5, &"arrow_rain": 5, &"archer_precision": 3, &"archer_cadence": 1}
+	var purchases: Dictionary = {&"double_shot": 5, &"piercing_arrow": 5, &"arrow_rain": 1, &"archer_precision": 3, &"archer_cadence": 1, &"slowing_arrow": 2, &"foliage_shelter": 2}
 	if ambusher:
 		purchases.merge({&"hunter_tar_trap": 1, &"hunter_mark": 4, &"hunter_shooting_discipline": 3, &"hunter_covering_shot": 5, &"hunter_easy_prey": 3, &"hunter_total_cover": 4})
 	else:

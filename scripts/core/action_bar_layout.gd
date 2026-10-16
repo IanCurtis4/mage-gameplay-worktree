@@ -96,3 +96,27 @@ static func for_character(character: CharacterState) -> Array[Variant]:
 	if not character.action_slots.is_empty():
 		return character.action_slots.duplicate(true)
 	return from_legacy(character.presets[character.selected_preset]["active_slots"])
+
+static func valid_references(slots: Array) -> bool:
+	## Display/persistence shape only. This never grants execution or new assignment.
+	var known: Array[StringName] = []
+	for value: Variant in slots:
+		if value == null: continue
+		var id := skill_id(value)
+		var definition := ClassCatalog.skill_definition(id)
+		if definition == null or definition.category != SkillDefinition.Category.ACTIVE: return false
+		if id not in known: known.append(id)
+	return valid(slots, known)
+
+static func valid_preserving(slots: Array, learned: Array[StringName], previous: Array, retained_item_refs: Array[StringName] = []) -> bool:
+	var retained := retained_item_refs.duplicate()
+	for value: Variant in slots:
+		if value == null: continue
+		var id := skill_id(value)
+		if id in learned or id in retained_item_refs: continue
+		var matched := false
+		for old: Variant in previous:
+			if skill_id(old) == id and selected_rank(old) == selected_rank(value): matched = true; break
+		if not matched: return false
+		if id not in retained: retained.append(id)
+	return valid_references(slots) and valid(slots,learned,retained)

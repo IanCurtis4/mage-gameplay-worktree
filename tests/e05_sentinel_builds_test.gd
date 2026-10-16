@@ -1,11 +1,12 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 const TX = preload("res://tests/e06_tx_fixture.gd")
 ## S6 legal purchases, persistence and comparable allocations. No personal saves.
 
 const PROFILE_ID := "123e4567-e89b-42d3-a456-426614174216"
 const DIRECTORIES: Array[String] = ["blocked", "gates", "critical", "caster", "menu22", "menu31", "menu37", "legacy"]
 const GATES: Array[int] = [20, 20, 23, 25, 28, 31, 31, 34, 37]
-const BASE_PURCHASES := {&"double_shot": 5, &"piercing_arrow": 5, &"arrow_rain": 5, &"archer_precision": 3, &"archer_cadence": 1}
+const BASE_PURCHASES := {&"double_shot": 5, &"piercing_arrow": 5, &"arrow_rain": 3, &"archer_precision": 3, &"archer_cadence": 1, &"extended_aim": 2}
 const EQUIPPED: Dictionary[StringName, Variant] = {&"head": null, &"neck": null, &"shoulders": null, &"arms": null, &"torso": null, &"cloak": null, &"legs": null, &"feet": null, &"main_hand": null, &"off_hand": null, &"accessory_1": null, &"accessory_2": null, &"accessory_3": null, &"accessory_4": null}
 var directory: String
 var checks := 0
@@ -22,8 +23,8 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	_blocked_candidate()
 	_progression_gates()
-	await _build("critical", {&"sentinel_headshot": 4, &"sentinel_observe": 3, &"sentinel_piercing_shot": 5, &"sentinel_concussion_shot": 1, &"sentinel_absolute_focus": 1, &"sentinel_precision_stance": 3, &"sentinel_opening_read": 3}, [&"sentinel_headshot", &"sentinel_observe", &"sentinel_piercing_shot", &"sentinel_concussion_shot", &"sentinel_absolute_focus"], {&"dex": 45, &"agi": 27, &"luk": 15})
-	await _build("caster", {&"sentinel_observe": 1, &"sentinel_piercing_shot": 5, &"sentinel_net_shot": 5, &"sentinel_explosive_shot": 5, &"sentinel_absolute_focus": 1, &"sentinel_precision_stance": 1, &"sentinel_opening_read": 2}, [&"sentinel_observe", &"sentinel_piercing_shot", &"sentinel_net_shot", &"sentinel_explosive_shot", &"sentinel_absolute_focus"], {&"int": 45, &"dex": 27, &"luk": 15})
+	await _build("critical", {&"sentinel_headshot": 2, &"sentinel_observe": 3, &"sentinel_piercing_shot": 5, &"sentinel_net_shot": 2, &"sentinel_concussion_shot": 1, &"sentinel_precision_stance": 3, &"sentinel_absolute_focus": 1, &"sentinel_opening_read": 3}, [&"sentinel_headshot", &"sentinel_observe", &"sentinel_piercing_shot", &"sentinel_concussion_shot", &"sentinel_absolute_focus"], {&"dex": 45, &"agi": 27, &"luk": 15})
+	await _build("caster", {&"sentinel_observe": 2, &"sentinel_piercing_shot": 3, &"sentinel_net_shot": 5, &"sentinel_explosive_shot": 5, &"sentinel_precision_stance": 2, &"sentinel_absolute_focus": 1, &"sentinel_opening_read": 2}, [&"sentinel_observe", &"sentinel_piercing_shot", &"sentinel_net_shot", &"sentinel_explosive_shot", &"sentinel_absolute_focus"], {&"int": 45, &"dex": 27, &"luk": 15})
 	_compare_builds()
 	await _menu(22)
 	await _menu(31)
@@ -87,7 +88,8 @@ func _progression_gates() -> void:
 		var skill := SentinelTuning.SKILL_IDS[index]
 		var max_rank := SentinelTuning.max_rank(skill)
 		for rank: int in range(1, max_rank + 1):
-			_check(not catalog.check_rank_requirements(skill, rank, GATES[index] - 1, {})["ok"] and catalog.check_rank_requirements(skill, rank, GATES[index], {})["ok"], "each rank enforces exact job gate: %s R%d" % [skill, rank])
+			var prerequisites := E05DependencyFixture.prerequisite_ranks(skill)
+			_check(not catalog.check_rank_requirements(skill, rank, GATES[index] - 1, prerequisites)["ok"] and catalog.check_rank_requirements(skill, rank, GATES[index], prerequisites)["ok"], "each rank enforces exact job gate: %s R%d" % [skill, rank])
 	for index: int in range(2, SentinelTuning.SKILL_IDS.size()):
 		var skill := SentinelTuning.SKILL_IDS[index]
 		var gate := GATES[index]
@@ -98,10 +100,23 @@ func _progression_gates() -> void:
 			var rejected := facade.learn_skill("early-%d" % index, prior_revision, id, skill)
 			_check(not rejected["ok"] and rejected["error_code"] == &"requirements_unmet" and facade.current_profile().revision == prior_revision and facade.current_profile().character_by_id(id).purchased_skill_ranks == prior_ranks, "real purchase below gate is atomic: %s" % skill)
 		_advance(facade, id, gate, "at-%d" % index)
+		_check(_buy_gate_ancestors(facade, id, skill), "real gate buys approved ancestors before %s" % skill)
 		var bought := facade.learn_skill("legal-%d" % index, facade.current_profile().revision, id, skill)
 		_check(bought["ok"] and facade.current_profile().character_by_id(id).purchased_skill_ranks.get(skill) == 1, "real purchase succeeds at gate: %s" % skill)
 	var encoded := ProfileCodec.encode(facade.current_profile(), catalog)
 	_check(encoded["ok"] and ProfileCodec.decode(encoded["text"])["ok"], "blocked production still preserves valid Sentinel identity/ranks on load")
+
+func _buy_gate_ancestors(facade: ProfileFacade, id: String, skill: StringName) -> bool:
+	var requirements: Dictionary = SkillDependencyRules.REQUIREMENTS.get(skill, {})
+	for ancestor: StringName in requirements:
+		if not _buy_gate_ancestors(facade, id, ancestor):
+			return false
+		var required_rank: int = requirements[ancestor]
+		while facade.progression_summary(id)["effective_skill_ranks"].get(ancestor, 0) < required_rank:
+			var result := facade.learn_skill("gate-ancestor-%s-%d" % [ancestor, facade.current_profile().revision], facade.current_profile().revision, id, ancestor)
+			if not result["ok"]:
+				return false
+	return true
 
 func _advance(facade: ProfileFacade, id: String, job: int, request: String) -> void:
 	var wanted := _job_xp(job)
@@ -146,7 +161,7 @@ func _build(label: String, evolution_purchases: Dictionary, active: Array[Varian
 	foreign[4] = &"geometer_trace"
 	_check(not facade.update_preset("%s-foreign" % label, revision, id, 0, foreign, passive, EQUIPPED)["ok"] and facade.current_profile().revision == revision, "%s foreign origin rejected" % label)
 	var unlearned: Array[Variant] = active.duplicate()
-	unlearned[4] = extra
+	unlearned[4] = &"sentinel_explosive_shot" if label == "critical" else &"sentinel_concussion_shot"
 	_check(not facade.update_preset("%s-unlearned" % label, revision, id, 0, unlearned, passive, EQUIPPED)["ok"] and facade.current_profile().revision == revision, "%s unlearned skills cannot equip" % label)
 	_check(not facade.update_preset("%s-category" % label, revision, id, 0, active, [&"sentinel_headshot", &"sentinel_opening_read"], EQUIPPED)["ok"] and facade.current_profile().revision == revision, "%s active/passive categories enforced" % label)
 	var encoded := ProfileCodec.encode(facade.current_profile(), _catalog())
@@ -216,14 +231,15 @@ func _menu(job: int) -> void:
 	root.add_child(menu)
 	await process_frame
 	_check(menu.evolution_state_label.text.contains("Sentinela") and menu.evolution_state_label.text.contains("Arqueiro"), "job%d menu presents fixed origin and identity" % job)
+	menu.skill_window._choose_job(&"sentinel")
 	for index: int in SentinelTuning.SKILL_IDS.size():
 		var skill := SentinelTuning.SKILL_IDS[index]
-		var label := menu.progression_skill_tree.get_node_or_null("ProgressionSkill_%s" % skill) as Label
-		var button := menu.progression_skill_tree.get_node_or_null("Learn_%s" % skill) as Button
-		_check((label != null and button != null) == (job >= GATES[index]), "job%d hides/reveals correct Sentinel gate: %s" % [job, skill])
-		if label != null:
-			_check(label.text.contains("Rank %d/%d" % [1 if index == 0 else 0, SentinelTuning.max_rank(skill)]), "job%d menu exact free/purchased rank: %s" % [job, skill])
-	_check(menu.action_editor.slot_buttons.size() == 24 and menu.active_selectors.is_empty() and menu.passive_selectors.is_empty() and menu.automatic_passives_label.text.contains("automáticas") and menu.progression_skill_tree.get_node_or_null("ProgressionSkill_geometer_trace") == null, "menu offers24 shortcuts and automatic passives while excluding unrelated Mage library")
+		var entry: Dictionary = menu.skill_window.skill_entries.get(skill, {})
+		_check(not entry.is_empty(), "job%d keeps %s visible in the owned Sentinel library" % [job, skill])
+		if not entry.is_empty():
+			var option: Dictionary = entry["option"]
+			_check(option["rank"] == (1 if index == 0 else 0) and option["maximum_rank"] == SentinelTuning.max_rank(skill) and option["next_rank_requirement"]["job_level"] == GATES[index] and (job >= GATES[index] or entry["plus"].disabled), "job%d menu exact rank and gate: %s" % [job, skill])
+	_check(menu.action_editor.slot_buttons.size() == 24 and menu.active_selectors.is_empty() and menu.passive_selectors.is_empty() and menu.automatic_passives_label.text.contains("automáticas") and not menu.skill_window.skill_entries.has(&"geometer_trace"), "menu offers24 shortcuts and automatic passives while excluding unrelated Mage library")
 	menu.queue_free()
 	await process_frame
 

@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## Continuous triangle entry, once-only projectile components and paid formation.
 
 const A := Vector2(200, 200)
@@ -34,6 +35,7 @@ func _fixture(rank: int = 5) -> void:
 	snapshot.job_level = 40
 	snapshot.library_skill_ids = [&"geometer_trace", &"geometer_triangulation", &"geometer_incidence"]
 	snapshot.skill_ranks = {&"geometer_trace": 1, &"geometer_triangulation": rank, &"geometer_incidence": 3}
+	E05DependencyFixture.complete_snapshot(snapshot)
 	snapshot.active_slots = [&"geometer_trace", &"geometer_triangulation", null, null, null]
 	snapshot.passive_slots = [&"geometer_incidence", null]
 	RunController.pending_run_state = RunState.from_build("", snapshot)

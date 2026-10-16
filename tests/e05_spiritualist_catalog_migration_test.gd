@@ -22,6 +22,7 @@ func _run() -> void:
 	evolved.base_xp_total = ProgressionRules.EVOLUTION_MIN_BASE_XP
 	evolved.job_xp_total = ProgressionRules.MAX_JOB_XP
 	evolved.evolution_id = &"elementalist"
+	evolved.purchased_skill_ranks[&"ice_spear"] = 2
 	evolved.purchased_skill_ranks[&"elementalist_glacial_ring"] = 1
 	evolved.presets[0]["active_slots"][0] = &"elementalist_glacial_ring"
 	profile.characters.append(evolved)
@@ -34,7 +35,7 @@ func _run() -> void:
 	profile.characters.append(mage)
 	profile.selected_character_id = evolved_id
 	var encoded := ProfileCodec.encode(profile)
-	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 6 and ProfileState.CATALOG_VERSION == 13, "current catalog preserves Spiritualist migration and schema")
+	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 6 and ProfileState.CATALOG_VERSION == 14, "current catalog preserves Spiritualist migration and schema")
 	if not encoded["ok"]:
 		_finish()
 		return
@@ -49,7 +50,7 @@ func _run() -> void:
 	_check(loaded["ok"] and loaded["migrated"] and loaded["profile"].revision == 13, "store migrates once in an isolated transaction")
 	var durable: ProfileState = loaded["profile"]
 	_check(durable.selected_character_id == evolved_id and durable.characters.size() == 2 and durable.character_by_id(evolved_id).evolution_id == &"elementalist" and durable.character_by_id(mage_id).evolution_id.is_empty(), "both identities and selection survive")
-	_check(durable.character_by_id(evolved_id).purchased_skill_ranks == {&"elementalist_glacial_ring": 1} and durable.character_by_id(evolved_id).presets[0]["active_slots"][0] == &"elementalist_glacial_ring" and durable.character_by_id(mage_id).purchased_skill_ranks == {&"soul_impact": 1}, "paid ranks and presets remain exact")
+	_check(durable.character_by_id(evolved_id).purchased_skill_ranks == {&"ice_spear": 2, &"elementalist_glacial_ring": 1} and durable.character_by_id(evolved_id).presets[0]["active_slots"][0] == &"elementalist_glacial_ring" and durable.character_by_id(mage_id).purchased_skill_ranks == {&"soul_impact": 1}, "legal paid ancestors and presets remain exact")
 	_check(durable.character_by_id(evolved_id).job_xp_total == evolved.job_xp_total and durable.character_by_id(mage_id).job_xp_total == mage.job_xp_total, "both XP totals remain exact")
 	var current_data: Dictionary = JSON.parse_string(_read(ProfileStore.PRIMARY_FILE))
 	_check(_read(ProfileStore.BACKUP_FILE) == old_text and current_data["catalog_version"] == ProfileState.CATALOG_VERSION, "backup retains exact catalog-5 bytes")

@@ -192,6 +192,18 @@ func update_preset(
 		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_presets"})
 	if equipped.size() != IdentityIds.equipment_slots().size():
 		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_equipment"})
+	# Existing disabled references may be retained or moved; a new unlearned
+	# assignment is still rejected before any candidate can be published.
+	var permanent := _catalog.effective_skill_ranks(character.base_class_id,character.evolution_id,character.purchased_skill_ranks,character.granted_skill_ranks)
+	for key: String in ["active_slots", "passive_slots"]:
+		var retained: Array = []
+		for preset: Dictionary in character.presets: retained.append_array(preset[key])
+		var proposed: Array = active_slots if key == "active_slots" else passive_slots
+		for value: Variant in proposed:
+			if value == null: continue
+			var id := ActionBarLayout.skill_id(value)
+			if int(permanent.get(id,0)) <= 0 and value not in retained:
+				return _finish_operation(request_id, {"ok": false, "error_code": &"requirements_unmet"})
 	var before := _profile.copy_state()
 	var candidate := before.copy_state()
 	var candidate_character := candidate.character_by_id(character_id)
@@ -248,7 +260,7 @@ func update_action_slots(request_id: String, expected_revision: int, character_i
 	if not _catalog.build_is_ready(character):
 		return _finish_operation(request_id, {"ok": false, "error_code": &"content_unavailable"})
 	var snapshot := _build_snapshot(character)
-	if not ActionBarLayout.valid(slots, snapshot.learned_skill_ids(ProfileCatalog.ACTIVE), ItemSkillAdapters.reference_ids(character.base_class_id)):
+	if not ActionBarLayout.valid_preserving(slots, snapshot.learned_skill_ids(ProfileCatalog.ACTIVE), ActionBarLayout.for_character(character), ItemSkillAdapters.reference_ids(character.base_class_id)):
 		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_action_slots"})
 	# Unlike build edits this is legal during a run: only shortcut organization.
 	if _profile.reward_session != null and _profile.reward_session.character_id != character_id:
@@ -268,7 +280,7 @@ func progression_summary(character_id: String) -> Dictionary:
 		return {"ok": false, "error_code": &"invalid_character_id"}
 	var result := CharacterProgression.summary(character, _catalog)
 	result["character_id"] = character_id
-	result["migration_report"] = _profile.extension_fields.get("swordsman_skill_tree_migration", {}).duplicate(true)
+	result["migration_report"] = _profile.extension_fields.get("all_skill_dependencies_migration", _profile.extension_fields.get("swordsman_skill_tree_migration", {})).duplicate(true)
 	return result.duplicate(true)
 
 func evolution_options(character_id: String) -> Dictionary:

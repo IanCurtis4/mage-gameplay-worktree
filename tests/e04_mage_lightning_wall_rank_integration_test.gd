@@ -132,20 +132,25 @@ func _check_menu_and_controller() -> void:
 	_check(store.commit(seeded).get("ok", false), "fixture de XP usa store real")
 	facade = ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
 	_check(facade.open_profile().get("ok", false), "perfil reabre antes das compras")
+	for rank: int in range(1, 3):
+		_check(facade.learn_skill("mg3-lightning-%d" % rank, facade.current_profile().revision, character_id, &"lightning").get("ok", false), "Relâmpago R%d antecede Descarga" % rank)
+	for rank: int in range(1, 3):
+		_check(facade.learn_skill("mg3-discharge-%d" % rank, facade.current_profile().revision, character_id, &"electric_discharge").get("ok", false), "Descarga R%d antecede Parede de Raios" % rank)
 	for rank: int in range(1, 6):
 		_check(facade.learn_skill("mg3-wall-%d" % rank, facade.current_profile().revision, character_id, &"lightning_wall").get("ok", false), "compra persistente da parede R%d" % rank)
-	_check(facade.learn_skill("mg3-discharge", facade.current_profile().revision, character_id, &"electric_discharge").get("ok", false), "Descarga R1 compõe build de raio")
 	var scene := load("res://scenes/character_menu.tscn") as PackedScene
 	var menu := scene.instantiate() as CharacterMenu
 	menu.set_profile_facade(facade)
 	root.add_child(menu)
 	await process_frame
 	menu._select_roster_index(0)
-	var learned_button: Button
-	for child: Node in menu.action_editor.library.get_children():
-		if child.get("skill_id") == &"lightning_wall":
-			learned_button = child as Button
-	_check(learned_button != null and learned_button.text == "Parede de Raios", "biblioteca apresenta nome humano da skill aprendida")
+	var skill_entry: Dictionary = menu.skill_window.skill_entries[&"lightning_wall"]
+	var learned_button: Button = skill_entry["button"]
+	var visible_name := false
+	for child: Node in learned_button.get_children():
+		if child is Label and (child as Label).text == "Parede de Raios":
+			visible_name = true
+	_check(visible_name and learned_button.tooltip_text.contains("[b]Parede de Raios[/b]") and int(skill_entry["option"]["rank"]) == 5, "biblioteca apresenta nome humano da skill aprendida")
 	menu.action_editor.assign_skill(&"lightning_wall", 0)
 	_check(menu.action_editor.learned_skills.has(&"electric_discharge"), "biblioteca também contém Descarga aprendida")
 	menu.action_editor.assign_skill(&"electric_discharge", 1)
@@ -237,7 +242,7 @@ func _snapshot(rank: int) -> BuildSnapshot:
 	var snapshot := BuildSnapshot.new()
 	snapshot.character_id = "lightning-wall-test"
 	snapshot.base_class_id = &"mage"
-	snapshot.skill_ranks = {&"lightning_wall": rank}
+	snapshot.skill_ranks = {&"lightning": 2, &"electric_discharge": 2, &"lightning_wall": rank}
 	snapshot.active_slots = [&"lightning_wall", null, null, null, null]
 	return snapshot
 

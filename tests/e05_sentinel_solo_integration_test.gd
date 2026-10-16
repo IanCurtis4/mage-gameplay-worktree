@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## Actual actor transactions and HealthState callbacks with deterministic rolls.
 ## Moving rotations apply emitted requests immediately, not real flight/AI/input;
 ## they measure paid resource supply, not DPS, global speed or human game feel.
@@ -30,6 +31,7 @@ func _build(additional: bool = false) -> BuildSnapshot:
 	build.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"archer", &"sentinel")
 	build.attribute_allocations = {&"agi": 20, &"int": 20, &"dex": 20}
 	build.skill_ranks = {HEAD: 1, PIERCE: 1}
+	E05DependencyFixture.complete_snapshot(build)
 	if additional:
 		build.skill_ranks[&"sentinel_observe"] = 5
 		build.skill_ranks[&"sentinel_opening_read"] = 3

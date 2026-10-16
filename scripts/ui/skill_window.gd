@@ -48,6 +48,7 @@ var _respec: Button
 var _jobs: Array[StringName] = []
 var _job: StringName = &""
 var _selected: StringName = &""
+var _navigation: Array[Dictionary] = []
 var _base: StringName = &""
 var _tree := true
 var _embedded := true
@@ -67,7 +68,9 @@ func _init() -> void:
 	resized.connect(_layout)
 
 func configure(facade: RefCounted, character_id: String, editable: bool) -> void:
-	if character_id != draft.character_id: _rank_choices.clear()
+	if character_id != draft.character_id:
+		_rank_choices.clear()
+		_navigation.clear()
 	draft.configure(facade, character_id, editable)
 	if draft.facade != null:
 		var profile: ProfileState = draft.facade.current_profile()
@@ -77,6 +80,7 @@ func configure(facade: RefCounted, character_id: String, editable: bool) -> void
 
 func configure_catalog(options: Array[Dictionary], summary: Dictionary, base_class: StringName) -> void:
 	if draft.is_uncertain(): return
+	_navigation.clear()
 	draft.facade = null
 	draft.character_id = ""
 	draft.revision = -1
@@ -195,6 +199,9 @@ func _build() -> void:
 	detail_panel.add_child(detail_scroll)
 	_details = RichTextLabel.new()
 	_details.bbcode_enabled = true
+	_details.focus_mode = Control.FOCUS_ALL
+	_details.meta_clicked.connect(_follow_requirement)
+	_details.gui_input.connect(_navigation_key)
 	_details.fit_content = true
 	_details.scroll_active = false
 	_details.text = "Selecione uma habilidade para ver seus efeitos e requisitos."
@@ -424,10 +431,13 @@ func _make_entry(option: Dictionary, point: Vector2) -> void:
 	button.drag_allowed = confirmed > 0 and ClassCatalog.skill_definition(id).category == SkillDefinition.Category.ACTIVE and option.get("available", false)
 	button.cast_rank = int(_rank_choices.get(id, 0))
 	if button.cast_rank > confirmed: button.cast_rank = 0
-	button.size = Vector2(92, 78) if _tree else Vector2(398, 50)
+	button.size = Vector2(92, 78) if _tree else Vector2(420, 50)
 	button.tooltip_text = SkillPresentation.describe(option, draft.preview.get("summary", {}))
 	if button.drag_allowed: button.tooltip_text += "\n[b]Versão para arrastar: %s[/b]" % ("maior rank disponível" if button.cast_rank == 0 else "R%d" % button.cast_rank)
 	button.pressed.connect(_select.bind(id))
+	button.focus_entered.connect(_select.bind(id))
+	button.mouse_entered.connect(_select.bind(id))
+	button.gui_input.connect(_navigation_key)
 	card.add_child(button)
 	var icon := TextureRect.new()
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -470,20 +480,70 @@ func _make_entry(option: Dictionary, point: Vector2) -> void:
 	plus.disabled = not can_add or not draft.editable or draft.is_uncertain() or not draft.preview.get("can_apply", false)
 	minus.disabled = pending <= 0 or not draft.editable or draft.is_uncertain()
 	minus.tooltip_text = "Remover apenas um aumento pendente; dependências precisam continuar válidas."
-	var external: Array[String] = []
-	for prerequisite: Variant in SkillPresentation.prerequisites(option):
-		var same_job := false
-		for other: Dictionary in _options:
-			if other["skill_id"] == prerequisite and StringName(other["metadata"].get("required_evolution_id", &"")) == _job: same_job = true
-		if not same_job: external.append("%s R%d" % [SkillPresentation.name_of(StringName(prerequisite)), int(SkillPresentation.prerequisites(option)[prerequisite])])
-	if _tree and not external.is_empty():
-		var requirement_label := _label(_canvas, " + ".join(external), Rect2(point.x - 4, point.y + 105, 100, 27), INK, 10, true)
-		requirement_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var inspection := SkillDependencyRules.inspect(id, _options, draft.preview.get("summary", {}))
+	var external: Array[Dictionary] = []
+	for requirement: Dictionary in inspection["requirements"]:
+		if StringName(requirement["job_id"]) != _job: external.append(requirement)
+	if not external.is_empty():
+		var badge := _label(card, "↗", Rect2(2, 2, 18, 18) if _tree else Rect2(400, 2, 18, 18), BLUE, 13)
+		badge.name = "OriginBadge"
+		var descriptions: Array[String] = []
+		for requirement: Dictionary in external:
+			var source := StringName(requirement["skill_id"])
+			var needed := int(requirement["required_rank"])
+			var learned := int(requirement["learned_rank"])
+			descriptions.append("%s · %s · R%d exigido · R%d aprendido · %s · %s" % [SkillPresentation.job_name(StringName(requirement["job_id"]), _base), SkillPresentation.name_of(source), needed, learned, "satisfeito" if requirement["satisfied"] else "falta rank", "Base" if StringName(requirement["job_id"]).is_empty() else "Evolução"])
+		button.tooltip_text += "\nVínculo externo: " + "; ".join(descriptions)
 	skill_entries[id] = {"button": button, "plus": plus, "minus": minus, "card": card, "option": option}
 
 func _select(id: StringName) -> void:
 	_selected = id
+	_render_selection()
 	_show_details()
+
+func _render_selection() -> void:
+	for entry_id: StringName in skill_entries:
+		var entry: Dictionary = skill_entries[entry_id]
+		var card: Panel = entry["card"]
+		var option: Dictionary = entry["option"]
+		var rank := int(option["rank"])
+		var color := RED if rank > 0 or int(option.get("item_rank", 0)) > 0 else (BLUE if option.get("next_rank_available", false) else GRAY)
+		card.add_theme_stylebox_override("panel", _style(Color.WHITE, BLUE if entry_id == _selected else color, 2 if entry_id == _selected else 1))
+
+func _follow_requirement(meta: Variant) -> void:
+	var target := String(meta)
+	if target == "back":
+		if _navigation.is_empty(): return
+		var previous: Dictionary = _navigation.pop_back()
+		_job = StringName(previous["job"])
+		_selected = StringName(previous["selected"])
+		_refresh()
+		_scroll.scroll_horizontal = int(previous["horizontal"])
+		_scroll.scroll_vertical = int(previous["vertical"])
+		return
+	if not target.begins_with("skill:"): return
+	var id := StringName(target.trim_prefix("skill:"))
+	for option: Dictionary in _options:
+		if StringName(option["skill_id"]) != id: continue
+		var job := StringName(option["metadata"].get("required_evolution_id", &""))
+		if not _jobs.has(job): return
+		_navigation.append({"job": _job, "selected": _selected, "horizontal": _scroll.scroll_horizontal, "vertical": _scroll.scroll_vertical})
+		_job = job
+		_selected = id
+		_refresh()
+		_scroll.ensure_control_visible(skill_entries[id]["card"])
+		return
+
+func _navigation_key(event: InputEvent) -> void:
+	if not (event is InputEventKey) or not event.pressed or event.echo: return
+	if event.keycode == KEY_B and not _navigation.is_empty():
+		_follow_requirement("back")
+		get_viewport().set_input_as_handled()
+	elif event.keycode == KEY_O:
+		var inspection := SkillDependencyRules.inspect(_selected, _options, draft.preview.get("summary", {}))
+		if inspection["requirements"].is_empty(): return
+		_follow_requirement("skill:%s" % String(inspection["requirements"][0]["skill_id"]))
+		get_viewport().set_input_as_handled()
 
 func _show_details() -> void:
 	_rank_picker.clear()
@@ -491,6 +551,51 @@ func _show_details() -> void:
 	for option: Dictionary in _options:
 		if StringName(option["skill_id"]) != _selected: continue
 		var text := SkillPresentation.describe(option, draft.preview.get("summary", {}))
+		var inspection := SkillDependencyRules.inspect(_selected, _options, draft.preview.get("summary", {}))
+		var quick_links: Array[String] = []
+		for requirement: Dictionary in inspection["requirements"]:
+			var source := StringName(requirement["skill_id"])
+			quick_links.append("[url=skill:%s]%s · %s %d/%d[/url]" % [String(source), SkillPresentation.job_name(StringName(requirement["job_id"]), _base), SkillPresentation.name_of(source), int(requirement["learned_rank"]), int(requirement["required_rank"])])
+		if not quick_links.is_empty():
+			var title_end := text.find("\n")
+			text = text.insert(title_end if title_end >= 0 else text.length(), "\nRequer: " + " · ".join(quick_links))
+		text += "\n\n[b]Requisitos e caminho[/b]"
+		for requirement: Dictionary in inspection["requirements"]:
+			var origin := StringName(requirement["job_id"])
+			var source := StringName(requirement["skill_id"])
+			var learned := int(requirement["learned_rank"])
+			var needed := int(requirement["required_rank"])
+			var state := "satisfeito" if requirement["satisfied"] else "faltam %d ranks" % (needed - learned)
+			text += "\n• [url=skill:%s]Ver na origem[/url] · %s (%s): R%d exigido · R%d aprendido · %s · %s" % [String(source), SkillPresentation.name_of(source), SkillPresentation.job_name(origin, _base), needed, learned, state, "Base" if origin.is_empty() else "Evolução"]
+		var direct: Dictionary = {}
+		for requirement: Dictionary in inspection["requirements"]: direct[StringName(requirement["skill_id"])] = true
+		var ancestors: Array = inspection.get("ancestors", [])
+		var has_older := false
+		for requirement: Dictionary in ancestors:
+			if direct.has(StringName(requirement["skill_id"])): continue
+			if not has_older:
+				text += "\n[b]Cadeia de requisitos[/b]"
+				has_older = true
+			var origin := StringName(requirement["job_id"])
+			var source := StringName(requirement["skill_id"])
+			var learned := int(requirement["learned_rank"])
+			var needed := int(requirement["required_rank"])
+			var state := "satisfeito" if requirement["satisfied"] else "faltam %d ranks" % (needed - learned)
+			text += "\n• [url=skill:%s]Ver na origem[/url] · %s (%s): R%d exigido · R%d aprendido · %s · %s" % [String(source), SkillPresentation.name_of(source), SkillPresentation.job_name(origin, _base), needed, learned, state, "Base" if origin.is_empty() else "Evolução"]
+		var missing: Dictionary = inspection["missing_by_wallet"]
+		var purchase: Dictionary = inspection["purchase_by_wallet"]
+		text += "\nFaltam para liberar: Base %d · Evolução %d." % [int(missing[&"base"]), int(missing[&"evolution"])]
+		if option.get("item_only", false):
+			text += "\nConcedida por equipamento; não conta como investimento aprendido."
+		elif not inspection["maximum"]:
+			text += "\nComprar esta habilidade R%d: Base %d · Evolução %d." % [int(option["rank"]) + 1, int(purchase[&"base"]), int(purchase[&"evolution"])]
+		else:
+			text += "\nRank máximo aprendido."
+		text += "\nJob %d: %s · Pontos por carteira: %s." % [int(inspection["required_job"]), "satisfeito" if inspection["job_met"] else "falta job", "suficientes" if inspection["points_met"] else "insuficientes"]
+		if not inspection["requirements"].is_empty(): text += "\nTeclado: O abre a primeira origem; B volta."
+		if not _navigation.is_empty():
+			var previous: Dictionary = _navigation.back()
+			text += "\n[url=back]Voltar para %s[/url]" % SkillPresentation.name_of(StringName(previous["selected"]))
 		var confirmed := maxi(int(option.get("item_rank", 0)), int(option["rank"]) - int(draft.preview.get("pending_counts", {}).get(_selected, 0)))
 		var definition := ClassCatalog.skill_definition(_selected)
 		if confirmed > 0 and definition.category == SkillDefinition.Category.ACTIVE:

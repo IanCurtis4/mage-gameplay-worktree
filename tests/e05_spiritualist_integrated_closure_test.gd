@@ -60,7 +60,7 @@ func _run() -> void:
 	var field_active: Array[Variant] = [&"spiritualist_echo_curse", &"spiritualist_spectral_veil", &"spiritualist_procession", &"spiritualist_dissipation", &"ice_wall"]
 	var field_passive: Array[Variant] = [&"mage_mana_regeneration", &"spiritualist_echo_recovery"]
 	_buy_build(facade, boss_id, {&"soul_impact": 5, &"phantom_barrier": 5, &"spiritualist_echo_curse": 4, &"spiritualist_soul_drain": 5, &"spiritualist_procession": 3, &"spiritualist_echo_recovery": 3, &"spiritualist_channel_focus": 3}, boss_active, boss_passive)
-	_buy_build(facade, field_id, {&"ice_wall": 5, &"mage_mana_regeneration": 3, &"spiritualist_echo_curse": 2, &"spiritualist_spectral_veil": 5, &"spiritualist_procession": 3, &"spiritualist_dissipation": 5, &"spiritualist_echo_recovery": 2}, field_active, field_passive)
+	_buy_build(facade, field_id, {&"ice_spear": 2, &"ice_wall": 5, &"mage_mana_regeneration": 3, &"phantom_barrier": 2, &"soul_impact": 2, &"spiritualist_echo_curse": 2, &"spiritualist_spectral_veil": 5, &"spiritualist_procession": 3, &"spiritualist_dissipation": 5, &"spiritualist_echo_recovery": 2}, field_active, field_passive)
 	var reloaded := ProfileFacade.new(ProfileStore.new(directory, catalog))
 	var opened := reloaded.open_profile()
 	_check(opened["ok"] and opened["profile"].character_by_id(boss_id).presets[0]["active_slots"] == boss_active and opened["profile"].character_by_id(field_id).presets[0]["active_slots"] == field_active, "reload mantém as duas builds independentes")

@@ -86,7 +86,7 @@ func _check_controller_traps() -> void:
 	explosive.set_process(false)
 	_check(snare.armed_duration == 21.0 and explosive.armed_duration == 21.0 and snare.lifetime_remaining == 21.0 and explosive.lifetime_remaining == 21.0, "both traps capture the authored R3 armed permanence at placement")
 	_check(snare.arming_duration == SnareTrap.ARMING_TIME and explosive.arming_duration == ExplosiveTrap.ARMING_TIME and snare.radius == SnareTrap.TRIGGER_RADIUS and explosive.radius == ExplosiveTrap.TRIGGER_RADIUS, "arming clocks and trigger geometry keep their base values")
-	_check(snare.root_duration == 1.4 and is_equal_approx(explosive.damage_request.physical_damage, controller.player.stat_breakdown.value(&"precision_attack") * 1.35), "root duration and explosion damage remain those of the equipped active ranks")
+	_check(snare.root_duration == 1.8 and is_equal_approx(explosive.damage_request.physical_damage, controller.player.stat_breakdown.value(&"precision_attack") * 1.35), "root duration and explosion damage remain those of the equipped active ranks")
 	_check(controller.player.skill_cooldown(&"snare_trap") == 8.0 and controller.player.skill_cooldown(&"explosive_trap") == 9.0, "skill cooldowns do not inherit the permanence bonus")
 	controller.player.apply_run_modifiers(RunState.from_build("trap-technique-r1-after-placement", _snapshot(1, true)))
 	_check(controller.player.trap_armed_duration(12.0) == 15.0 and snare.armed_duration == 21.0 and explosive.armed_duration == 21.0, "existing traps keep captured R3 permanence after the actor changes to R1")
@@ -106,7 +106,7 @@ func _snapshot(rank: int, equipped: bool) -> BuildSnapshot:
 	var snapshot := BuildSnapshot.new()
 	snapshot.character_id = "trap-technique-test"
 	snapshot.base_class_id = &"archer"
-	snapshot.skill_ranks = {&"snare_trap": 1, &"explosive_trap": 1, &"trap_technique": rank}
+	snapshot.skill_ranks = {&"snare_trap": 2, &"explosive_trap": 1, &"trap_technique": rank}
 	snapshot.active_slots = [&"snare_trap", &"explosive_trap", null, null, null]
 	snapshot.passive_slots = [&"trap_technique", null] if equipped else [null, null]
 	return snapshot

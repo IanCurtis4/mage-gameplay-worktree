@@ -18,6 +18,8 @@ func _run() -> void:
 		assert(facade.learn_skill("learn-fireball", facade.current_profile().revision, id, &"fireball")["ok"])
 		assert(facade.learn_skill("learn-fireball2", facade.current_profile().revision, id, &"fireball")["ok"])
 		assert(facade.learn_skill("learn-fireball3", facade.current_profile().revision, id, &"fireball")["ok"])
+		for rank: int in 2:
+			assert(facade.learn_skill("learn-wall-%d" % rank, facade.current_profile().revision, id, &"fire_wall")["ok"])
 		assert(facade.learn_skill("learn-spear", facade.current_profile().revision, id, &"fire_spear")["ok"])
 		var menu := MenuScript.new()
 		menu.set_profile_facade(facade)

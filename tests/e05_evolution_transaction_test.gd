@@ -188,13 +188,13 @@ func _catalog() -> ProfileCatalog:
 	}, {
 		&"defender_entry": _skill(ProfileCatalog.ACTIVE, 1, 4, &"defender", {1: {"job_level": 20, "skill_ranks": {}}}),
 		&"defender_guard": _skill(ProfileCatalog.ACTIVE, 0, 5, &"defender"),
-		&"defender_anchor": _skill(ProfileCatalog.PASSIVE, 0, 3, &"defender"),
+		&"fixture_defender_anchor": _skill(ProfileCatalog.PASSIVE, 0, 3, &"defender"),
 		&"berserker_entry": _skill(ProfileCatalog.ACTIVE, 1, 4, &"berserker", {1: {"job_level": 20, "skill_ranks": {}}}),
 		&"berserker_rage": _skill(ProfileCatalog.ACTIVE, 0, 5, &"berserker"),
 	}, {
 		&"defender": {
 			"entry_skill_id": &"defender_entry",
-			"exclusive_skill_ids": [&"defender_entry", &"defender_guard", &"defender_anchor"],
+			"exclusive_skill_ids": [&"defender_entry", &"defender_guard", &"fixture_defender_anchor"],
 			"content_ready": true,
 		},
 		&"berserker": {
@@ -234,12 +234,12 @@ func _seed_character(directory: String, catalog: ProfileCatalog, evolution_id: S
 	if branch_build:
 		character.purchased_skill_ranks[&"defender_entry"] = 1
 		character.purchased_skill_ranks[&"defender_guard"] = 2
-		character.purchased_skill_ranks[&"defender_anchor"] = 1
+		character.purchased_skill_ranks[&"fixture_defender_anchor"] = 1
 		character.presets[0]["active_slots"][1] = &"defender_entry"
 		character.presets[0]["active_slots"][2] = &"defender_guard"
-		character.presets[0]["passive_slots"][0] = &"defender_anchor"
+		character.presets[0]["passive_slots"][0] = &"fixture_defender_anchor"
 		character.presets[1]["active_slots"][0] = &"defender_guard"
-		character.presets[1]["passive_slots"][0] = &"defender_anchor"
+		character.presets[1]["passive_slots"][0] = &"fixture_defender_anchor"
 	profile.characters.append(character)
 	profile.selected_character_id = character_id
 	profile.next_character_counter = 2

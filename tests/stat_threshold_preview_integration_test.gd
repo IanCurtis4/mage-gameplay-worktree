@@ -81,7 +81,7 @@ func _test_allocation_passive_and_cap() -> void:
 	character.base_xp_total = ProgressionRules.MAX_BASE_XP
 	character.job_xp_total = ProgressionRules.MAX_JOB_XP
 	character.evolution_id = &"berserker"
-	character.purchased_skill_ranks = {&"slash":3, &"blood_thirst":1}
+	character.purchased_skill_ranks = {&"slash":3, &"fury":2,&"blood_thirst":1}
 	character.attribute_allocations[&"str"] = 52
 	var facade := _facade("passive",character)
 	var vit := facade.attribute_purchase_preview(character.character_id, &"vit")

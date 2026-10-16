@@ -118,6 +118,7 @@ static func pilot(
 			metadata.get("rank_requirements", {})
 		)
 	catalog._register_e00_evolutions(evolution_overrides)
+	catalog._apply_skill_dependencies()
 	catalog.seal()
 	if default_shape:
 		_default_pilot = catalog
@@ -842,7 +843,7 @@ func card_ids() -> Array[StringName]:
 
 func pre_swordsman_cluster_catalog() -> ProfileCatalog:
 	## Historical validation only. Never expose this as runtime learning authority.
-	var copy := copy_catalog()
+	var copy := pre_all_skill_dependencies_catalog()
 	for id: StringName in [&"defender_riposte", &"defender_retreat_guard", &"berserker_pursuit_cut", &"berserker_deep_bleeding"]:
 		copy._skills.erase(id)
 		for definition: EvolutionDefinition in copy._evolutions.values():
@@ -851,4 +852,22 @@ func pre_swordsman_cluster_catalog() -> ProfileCatalog:
 		if copy._skills.has(id):
 			for rank: Variant in copy._skills[id]["rank_requirements"]:
 				copy._skills[id]["rank_requirements"][rank]["skill_ranks"] = {}
+	return copy
+
+func _apply_skill_dependencies() -> void:
+	for id: StringName in SkillDependencyRules.REQUIREMENTS:
+		if not _skills.has(id): continue
+		# Fixture overrides with other IDs retain their authored contracts.
+		for requirement: Dictionary in _skills[id]["rank_requirements"].values():
+			requirement["skill_ranks"] = SkillDependencyRules.REQUIREMENTS[id].duplicate(true)
+
+func pre_all_skill_dependencies_catalog() -> ProfileCatalog:
+	## Catalog13 validation authority only; preserve its approved swordsman gates.
+	var copy := copy_catalog()
+	for id: StringName in copy._skills:
+		if not SkillDependencyRules.REQUIREMENTS.has(id): continue
+		var job := StringName(copy._skills[id]["required_evolution_id"])
+		if job in [&"defender", &"berserker"]: continue
+		for requirement: Dictionary in copy._skills[id]["rank_requirements"].values():
+			requirement["skill_ranks"] = {}
 	return copy

@@ -11,7 +11,7 @@ func _run() -> void:
 	build.base_level = 30
 	build.job_level = 40
 	build.attribute_allocations = {&"int": 20, &"dex": 10}
-	build.skill_ranks = {&"hunter_thorn_trap": 1}
+	build.skill_ranks = {&"hunter_freezing_trap": 2, &"hunter_thorn_trap": 1}
 	RunController.pending_run_state = RunState.from_build("", build)
 	RunController.pending_run_facade = null
 	RunController.pending_training_mode = false

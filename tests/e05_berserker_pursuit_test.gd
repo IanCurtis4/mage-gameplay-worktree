@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 
 var checks := 0
 var failures := 0
@@ -71,6 +72,10 @@ func _player(navigation: ArenaNavigation, pursuit_rank: int, equipped: bool, lea
 	snapshot.skill_ranks = {&"berserker_pursuit": pursuit_rank}
 	if learned_rupture:
 		snapshot.skill_ranks[&"berserker_rupture"] = 2
+	# The negative fixture deliberately omits Rupture; ancestry completion must not repair it.
+	var protected: Array[StringName] = []
+	if not learned_rupture: protected.append(&"berserker_rupture")
+	E05DependencyFixture.complete_snapshot(snapshot, protected)
 	snapshot.passive_slots = [&"berserker_pursuit" if equipped else null, null]
 	var player := PlayerActor.new()
 	player.configure(navigation, RunState.from_build("pursuit-test", snapshot))

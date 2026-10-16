@@ -25,7 +25,7 @@ func _scene(evolution: StringName, enabled: bool) -> RunController:
 	build.base_level = 30
 	build.job_level = 40
 	build.library_skill_ids = build._skill_catalog.skill_ids_for_identity(&"mage", evolution)
-	if evolution == &"spiritualist": build.skill_ranks = {&"spiritualist_echo_curse": 1, &"fire_spear": 1}
+	if evolution == &"spiritualist": build.skill_ranks = {&"spiritualist_echo_curse": 1, &"fire_wall": 2, &"fire_spear": 1}
 	else: build.skill_ranks = {&"geometer_trace": 1, &"geometer_triangulation": 5}
 	build.action_slots = ActionBarLayout.empty()
 	var state := RunState.from_build("spatial-real", build)

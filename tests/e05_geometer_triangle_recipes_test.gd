@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## G5 composition matrix and actor lifecycle, using the real run/hit adapter.
 ## No production profile writes; projectile grammar has its own integration suite.
 
@@ -34,6 +35,7 @@ func _fixture(rank: int = 5) -> void:
 	snapshot.base_class_id = &"mage"
 	snapshot.evolution_id = &"mg_ar"
 	snapshot.skill_ranks = {&"geometer_trace": 5, &"geometer_triangulation": rank}
+	E05DependencyFixture.complete_snapshot(snapshot)
 	snapshot.library_skill_ids = [&"geometer_trace", &"geometer_triangulation"]
 	snapshot.active_slots = [&"geometer_trace", &"geometer_triangulation", null, null, null]
 	RunController.pending_run_state = RunState.from_build("", snapshot)

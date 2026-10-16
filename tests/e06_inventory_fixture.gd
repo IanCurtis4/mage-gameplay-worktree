@@ -82,7 +82,7 @@ static func make(tree: SceneTree, label: String, origin: StringName = &"mage", o
 	var character := profile.characters[0]
 	character.job_xp_total = ProgressionRules.UNEVOLVED_MAX_JOB_XP
 	if origin == &"mage":
-		character.purchased_skill_ranks = {&"fire_spear": 1, &"ice_spear": 1}
+		character.purchased_skill_ranks = {&"fire_wall": 2, &"fire_spear": 1, &"ice_spear": 1}
 		character.action_slots[0] = &"fire_spear"
 	for id: StringName in TX.HISTORICAL_EQUIPMENT_IDS:
 		if own_all and profile.first_instance_for_definition(id).is_empty():

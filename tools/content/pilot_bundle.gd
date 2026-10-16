@@ -221,6 +221,22 @@ static func comparison(identity: String, branch: int, catalog: BuildEffectCatalo
 	}.get(identity, {}).get(branch, {})
 	for prerequisite: StringName in prerequisites:
 		purchased[prerequisite] = prerequisites[prerequisite]
+	# Offline comparison fixtures explicitly invest every approved ancestor.
+	# Nothing here runs as a player purchase or modifies progression rules.
+	var options: Array[Dictionary] = []
+	var effective := snapshot._skill_catalog.effective_skill_ranks(base,snapshot.evolution_id,purchased)
+	for id: StringName in snapshot.library_skill_ids:
+		var metadata := snapshot._skill_catalog.skill_metadata(id)
+		options.append({"skill_id":id,"metadata":metadata,"available":true,"rank":int(effective.get(id,0)),"maximum_rank":int(metadata["free_rank"])+int(metadata["max_purchased_rank"])})
+	for raw_skill: String in ROUTES[identity][branch]:
+		var inspected := SkillDependencyRules.inspect(StringName(raw_skill),options,{"job_level":snapshot.job_level,"base_skill_points_available":19,"evolution_skill_points_available":20})
+		if not inspected["valid"]: return BuildEffectCatalog.failure(&"invalid_comparison_ancestry")
+		for ancestor: Dictionary in inspected["ancestors"]:
+			var id := StringName(ancestor["skill_id"])
+			var paid := maxi(0,int(ancestor["required_rank"])-int(snapshot._skill_catalog.skill_metadata(id)["free_rank"]))
+			purchased[id] = maxi(int(purchased.get(id,0)),paid)
+	if snapshot._skill_catalog.skill_points_spent(purchased,&"base")>19 or snapshot._skill_catalog.skill_points_spent(purchased,&"evolution")>20:
+		return BuildEffectCatalog.failure(&"comparison_point_budget_exceeded")
 	snapshot.skill_ranks = snapshot._skill_catalog.effective_skill_ranks(base, snapshot.evolution_id, purchased)
 	var learned_check: Dictionary = snapshot._skill_catalog.validate_purchased_ranks(base, snapshot.evolution_id, snapshot.job_level, purchased)
 	if not learned_check["ok"]: return learned_check

@@ -41,48 +41,68 @@ func _run() -> void:
 	for skill_id: StringName in expected_names:
 		var entry: Dictionary = learning_menu.skill_window.skill_entries[skill_id]
 		var tooltip: String = entry["button"].tooltip_text
-		_check(tooltip.begins_with(expected_names[skill_id]) and tooltip.contains("Rank 0/") and int(entry["option"]["rank"]) == 0 and not entry["plus"].disabled, "biblioteca mostra %s comprável" % skill_id)
-	var purchases: Array[StringName] = [
-		&"slash", &"dash", &"shield_wall", &"provoke", &"perseverance", &"piercing_shout",
-		&"fury", &"brutal_strike", &"concentrated_rage", &"terrifying_shout",
-		&"swordsman_resistance", &"vigor", &"blood_thirst",
-		&"shield_wall", &"shield_wall", &"provoke", &"brutal_strike", &"vigor", &"blood_thirst",
+		var requirement: Dictionary = entry["option"].get("next_rank_requirement", {})
+		var required_ranks: Dictionary = requirement.get("skill_ranks", {})
+		var root_skill := required_ranks.is_empty()
+		_check(tooltip.begins_with("[b]%s[/b]" % expected_names[skill_id]) and tooltip.contains("R0/") and int(entry["option"]["rank"]) == 0 and entry["plus"].disabled != root_skill, "biblioteca mostra %s e seu gate de compra" % skill_id)
+	var defender_purchases: Array[StringName] = [
+		&"slash", &"shield_wall", &"shield_wall", &"shield_wall",
+		&"provoke", &"provoke", &"perseverance", &"piercing_shout",
+		&"swordsman_resistance", &"vigor", &"vigor",
 	]
-	for index: int in purchases.size():
-		_check(learning_menu._learn_skill(purchases[index]).get("ok", false), "compra %d de %d: %s" % [index + 1, purchases.size(), purchases[index]])
+	for index: int in defender_purchases.size():
+		_check(learning_menu._learn_skill(defender_purchases[index]).get("ok", false), "Defendente compra %d: %s" % [index + 1, defender_purchases[index]])
 	learning_menu.queue_free()
 	await process_frame
 	var progression := facade.progression_summary(character_id)
-	_check(progression["base_skill_points_available"] == 0 and progression["effective_skill_ranks"].size() == 13, "19 pontos compram todo o catálogo Espadachim sem crédito grátis")
+	_check(progression["base_skill_points_available"] == 8 and progression["effective_skill_ranks"].size() == 7, "Defendente compra 11 dos 19 pontos legais")
+	var berserker_created := facade.create_character("sw-integrated-berserker", facade.current_profile().revision, "Espadachim berserker", &"swordsman")
+	_check(berserker_created.get("ok", false), "segundo Espadachim isola orçamento berserker")
+	var berserker_id: String = berserker_created.get("character_id", "")
+	var two_characters := facade.current_profile()
+	two_characters.character_by_id(berserker_id).job_xp_total = ProgressionRules.UNEVOLVED_MAX_JOB_XP
+	_check(ProfileStore.new(directory, catalog).commit(two_characters).get("ok", false), "segundo orçamento de 19 pontos persiste")
+	facade = ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
+	_check(facade.open_profile().get("ok", false), "perfil com dois Espadachins reabre")
+	var berserker_purchases: Array[StringName] = [
+		&"slash", &"slash", &"dash", &"fury", &"fury",
+		&"brutal_strike", &"brutal_strike", &"concentrated_rage",
+		&"piercing_shout", &"piercing_shout", &"terrifying_shout",
+		&"vigor", &"vigor", &"blood_thirst", &"blood_thirst",
+	]
+	for index: int in berserker_purchases.size():
+		_check(facade.learn_skill("sw-berserker-%d" % index, facade.current_profile().revision, berserker_id, berserker_purchases[index]).get("ok", false), "Berserker compra %d: %s" % [index + 1, berserker_purchases[index]])
+	var berserker_progression := facade.progression_summary(berserker_id)
+	_check(berserker_progression["base_skill_points_available"] == 4 and berserker_progression["effective_skill_ranks"].size() == 9, "Berserker compra 15 dos 19 pontos legais")
 	var defender_active: Array[Variant] = [&"slash", &"shield_wall", &"provoke", &"perseverance", &"piercing_shout"]
 	var berserker_active: Array[Variant] = [&"dash", &"fury", &"brutal_strike", &"concentrated_rage", &"terrifying_shout"]
 	var defender_passive: Array[Variant] = [&"swordsman_resistance", &"vigor"]
 	var berserker_passive: Array[Variant] = [&"blood_thirst", &"vigor"]
 	var equipment: Dictionary[StringName, Variant] = facade.current_profile().character_by_id(character_id).equipped.duplicate(true)
 	var defender_saved := facade.update_preset("sw-defender", facade.current_profile().revision, character_id, 0, defender_active, defender_passive, equipment)
-	var berserker_saved := facade.update_preset("sw-berserker", facade.current_profile().revision, character_id, 1, berserker_active, berserker_passive, equipment)
+	var berserker_saved := facade.update_preset("sw-berserker", facade.current_profile().revision, berserker_id, 1, berserker_active, berserker_passive, equipment)
 	_check(defender_saved.get("ok", false) and berserker_saved.get("ok", false), "dois presets manuais persistem")
 	var reloaded := ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
 	var reopened := reloaded.open_profile()
 	_check(reopened.get("ok", false), "save reabre")
 	if reopened.get("ok", false):
 		var character: CharacterState = reopened["profile"].character_by_id(character_id)
-		_check(character.presets[0]["active_slots"] == defender_active and character.presets[1]["active_slots"] == berserker_active, "reload preserva arrays legados ativos distintos")
-		_check(character.presets[0]["passive_slots"] == defender_passive and character.presets[1]["passive_slots"] == berserker_passive, "reload preserva arrays legados passivos distintos")
-		await _run_build(reloaded, 0, defender_active, defender_passive)
-		await _run_build(reloaded, 1, berserker_active, berserker_passive)
+		var berserker: CharacterState = reopened["profile"].character_by_id(berserker_id)
+		_check(character.presets[0]["active_slots"] == defender_active and berserker.presets[1]["active_slots"] == berserker_active, "reload preserva arrays legados ativos distintos")
+		_check(character.presets[0]["passive_slots"] == defender_passive and berserker.presets[1]["passive_slots"] == berserker_passive, "reload preserva arrays legados passivos distintos")
+		await _run_build(reloaded, character_id, 0, 0, defender_active, defender_passive)
+		await _run_build(reloaded, berserker_id, 1, 1, berserker_active, berserker_passive)
 	_check(ClassCatalog.class_definition(&"mage").skill_ids.size() == 5 and ClassCatalog.class_definition(&"archer").skill_ids.size() == 5 and catalog.skill_metadata(&"haunt").get("category") == ProfileCatalog.ACTIVE and catalog.skill_metadata(&"slowing_arrow").get("category") == ProfileCatalog.ACTIVE, "catálogos Mago/Arqueiro permanecem disponíveis")
 	_cleanup(directory)
 	_finish()
 
-func _run_build(facade: ProfileFacade, preset_index: int, active: Array[Variant], passive: Array[Variant]) -> void:
+func _run_build(facade: ProfileFacade, character_id: String, roster_index: int, preset_index: int, active: Array[Variant], passive: Array[Variant]) -> void:
 	var menu := (load("res://scenes/character_menu.tscn") as PackedScene).instantiate() as CharacterMenu
 	menu.set_profile_facade(facade)
 	root.add_child(menu)
 	await process_frame
-	menu._select_roster_index(0)
+	menu._select_roster_index(roster_index)
 	var selected := menu._choose_preset(preset_index)
-	var character_id: String = facade.current_profile().characters[0].character_id
 	var learned: Array[StringName] = []
 	learned.assign(facade.available_build_options(character_id)["active_skills"])
 	var bar := ActionBarLayout.empty()
@@ -93,7 +113,7 @@ func _run_build(facade: ProfileFacade, preset_index: int, active: Array[Variant]
 	for index: int in ordered.size():
 		bar[index] = ordered[index]
 	menu._save_action_slots(bar)
-	_check(facade.current_profile().character_by_id(character_id).action_slots == bar and facade.progression_summary(character_id)["base_skill_points_available"] == 0, "organizar todas aprendidas preserva carteira e persiste barra por personagem")
+	_check(facade.current_profile().character_by_id(character_id).action_slots == bar and facade.progression_summary(character_id)["base_skill_points_available"] == (8 if preset_index == 0 else 4), "organizar todas aprendidas preserva carteira e persiste barra por personagem")
 	var preview := facade.build_preview(character_id)
 	var started := menu._start_run()
 	_check(selected.get("ok", false) and preview.get("ok", false) and started.get("ok", false), "preset %d inicia run a partir do menu" % preset_index)
@@ -110,8 +130,13 @@ func _run_build(facade: ProfileFacade, preset_index: int, active: Array[Variant]
 	for enemy: CombatActor in controller.enemies:
 		enemy.set_process(false)
 	var snapshot := controller.run_state.build_snapshot
-	_check(snapshot.active_slots == active and snapshot.passive_slots == passive and snapshot.action_slots == bar and controller.player.available_skill_ids() == learned and snapshot.learned_skill_ids(ProfileCatalog.PASSIVE).size() == 3, "run %d preserva arrays legados e disponibiliza dez ativas/três passivas aprendidas" % preset_index)
-	_check(controller.run_state.skill_levels[&"shield_wall"] == 3 and controller.run_state.skill_levels[&"provoke"] == 2 and controller.run_state.skill_levels[&"brutal_strike"] == 2 and controller.run_state.skill_levels[&"vigor"] == 2 and controller.run_state.skill_levels[&"blood_thirst"] == 2, "run %d captura ranks persistidos")
+	_check(snapshot.active_slots == active and snapshot.passive_slots == passive and snapshot.action_slots == bar and controller.player.available_skill_ids() == learned and snapshot.learned_skill_ids(ProfileCatalog.PASSIVE).size() == 2, "run %d preserva arrays legados e disponibiliza cinco ativas/duas passivas aprendidas" % preset_index)
+	var expected_ranks: bool = controller.run_state.skill_levels[&"vigor"] == 2
+	if preset_index == 0:
+		expected_ranks = expected_ranks and controller.run_state.skill_levels[&"shield_wall"] == 3 and controller.run_state.skill_levels[&"provoke"] == 2
+	else:
+		expected_ranks = expected_ranks and controller.run_state.skill_levels[&"brutal_strike"] == 2 and controller.run_state.skill_levels[&"blood_thirst"] == 2
+	_check(expected_ranks, "run %d captura ranks persistidos" % preset_index)
 	_check(is_equal_approx(controller.player.stat_breakdown.value(&"melee_attack"), preview["stat_breakdown"].value(&"melee_attack")), "run %d e preview compartilham ATQ canônico" % preset_index)
 	controller._update_hud()
 	for skill_id: StringName in _active_names(active):
@@ -188,6 +213,8 @@ func _run_build(facade: ProfileFacade, preset_index: int, active: Array[Variant]
 func _active_names(slots: Array[Variant]) -> Array[StringName]:
 	var result: Array[StringName] = []
 	for skill_id: Variant in slots:
+		if skill_id == null:
+			continue
 		result.append(StringName(skill_id))
 	return result
 

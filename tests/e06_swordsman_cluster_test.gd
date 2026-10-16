@@ -66,6 +66,8 @@ func _gates_and_builds() -> void:
 	var berserker := _character(&"berserker")
 	_buy(berserker,catalog,&"dash",2)
 	_buy(berserker,catalog,&"vigor",3)
+	_buy(berserker,catalog,&"slash",2)
+	_buy(berserker,catalog,&"brutal_strike",2)
 	_buy(berserker,catalog,&"concentrated_rage",3)
 	_buy(berserker,catalog,&"berserker_rupture",2)
 	_buy(berserker,catalog,&"berserker_wound_leap",3)
@@ -73,7 +75,7 @@ func _gates_and_builds() -> void:
 	_buy(berserker,catalog,&"berserker_blood_rift",4)
 	_buy(berserker,catalog,&"berserker_deep_bleeding",3)
 	summary = CharacterProgression.summary(berserker,catalog)
-	_check(summary["base_skill_points_available"] == 11 and summary["evolution_skill_points_available"] == 6, "approved Pursue/Bleed build spends8 base14 evolution")
+	_check(summary["base_skill_points_available"] == 7 and summary["evolution_skill_points_available"] == 6, "Pursue/Bleed plus new base ancestors spends12 base14 evolution")
 	_check(catalog.effective_skill_ranks(&"swordsman", &"defender", {}, {}).get(&"defender_counterstroke") == 1 and catalog.effective_skill_ranks(&"swordsman", &"berserker", {}, {}).get(&"berserker_rupture") == 1, "free roots preserved")
 
 func _migration() -> void:
@@ -104,10 +106,10 @@ func _migration() -> void:
 	var restored: CharacterState = migrated["profile"].characters[0]
 	_check(restored.purchased_skill_ranks.is_empty(), "fixed point refunds Marco then dependent Trava and Resguardo")
 	_check(restored.base_xp_total == character.base_xp_total and restored.job_xp_total == character.job_xp_total and restored.evolution_id == character.evolution_id and restored.granted_skill_ranks == character.granted_skill_ranks, "refund preserves XP identity and grants")
-	_check(restored.action_slots[0] == null and restored.action_slots[23] == null and restored.action_slots[12] == &"teleport", "removed skills clear slots while retained item reference survives")
+	_check(restored.action_slots[0] == &"defender_anchor" and restored.action_slots[23] == &"defender_line_lock" and restored.action_slots[12] == &"teleport", "refunded skills retain disabled shortcuts alongside the item reference")
 	_check(migrated["migration_removals"][0]["evolution_refund"] == 6 and CharacterProgression.summary(restored,catalog)["evolution_skill_points_available"] == 20, "six invested points return to original evolution wallet")
 	var saved := ProfileCodec.encode(migrated["profile"],catalog)
-	_check(saved["ok"] and saved["data"]["schema_version"] == 6 and saved["data"]["catalog_version"] == 13, "migration report encodes with schema6/catalog13")
+	_check(saved["ok"] and saved["data"]["schema_version"] == 6 and saved["data"]["catalog_version"] == 14, "migration report encodes with schema6/catalog14")
 	if saved["ok"]:
 		var reopened := ProfileCodec.decode(saved["text"],catalog)
 		_check(reopened["ok"] and not reopened.get("migrated",false), "new envelope roundtrip never repeats refund")

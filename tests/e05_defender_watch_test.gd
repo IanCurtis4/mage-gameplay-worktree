@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 
 var checks := 0
 var failures := 0
@@ -15,6 +16,7 @@ func _run() -> void:
 	snapshot.evolution_id = &"defender"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"defender")
 	snapshot.skill_ranks = {&"defender_counterstroke": 1, &"defender_watch": 1, &"brutal_strike": 1, &"concentrated_rage": 1}
+	E05DependencyFixture.complete_snapshot(snapshot)
 	snapshot.active_slots = [&"brutal_strike", &"concentrated_rage", null, null, null]
 	snapshot.passive_slots = [&"defender_watch", null]
 	var player := PlayerActor.new()

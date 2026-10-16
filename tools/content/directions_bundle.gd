@@ -4,7 +4,7 @@ const SUPPORT := {
 	"defender": {0: {&"shield_wall": 1}},
 	"berserker": {1: {&"berserker_rupture": 2}},
 	"elementalist": {0: {&"elementalist_prismatic_focus": 1}},
-	"spiritualist": {0: {&"fire_spear": 1, &"spiritualist_echo_recovery": 1}, 1: {&"fire_spear": 1}},
+	"spiritualist": {0: {&"fire_wall": 2, &"fire_spear": 1, &"spiritualist_echo_curse": 1, &"spiritualist_echo_recovery": 1}, 1: {&"fire_wall": 2, &"fire_spear": 1}},
 	"hunter": {1: {&"hunter_freezing_trap": 0}},
 	"mg_ar": {1: {&"geometer_triangulation": 3}},
 }
@@ -19,6 +19,9 @@ static func comparison(identity: String, branch: int, catalog: BuildEffectCatalo
 			var slot := snapshot.action_slots.find(null)
 			if slot < 0: return BuildEffectCatalog.failure(&"invalid_action_slots")
 			snapshot.action_slots[slot] = skill
+	# Offline support purchases include approved ancestry and must fit both real wallets.
+	if snapshot._skill_catalog.skill_points_spent(result["purchased_ranks"], &"base") > 19 or snapshot._skill_catalog.skill_points_spent(result["purchased_ranks"], &"evolution") > 20:
+		return BuildEffectCatalog.failure(&"comparison_point_budget_exceeded")
 	var checked: Dictionary = snapshot._skill_catalog.validate_purchased_ranks(snapshot.base_class_id, snapshot.evolution_id, snapshot.job_level, result["purchased_ranks"])
 	if not checked["ok"]: return checked
 	snapshot.skill_ranks = snapshot._skill_catalog.effective_skill_ranks(snapshot.base_class_id, snapshot.evolution_id, result["purchased_ranks"])

@@ -29,10 +29,12 @@ func _scene(identity: StringName, augment: StringName = &"", passives: bool = fa
 	build.base_level = 30
 	build.job_level = 40
 	build.library_skill_ids = build._skill_catalog.skill_ids_for_identity(build.base_class_id, identity)
-	if identity == &"spiritualist": build.skill_ranks = {&"spiritualist_soul_drain": 1, &"spiritualist_echo_curse": 1, &"fire_spear": 1}
-	elif identity == &"hunter": build.skill_ranks = {&"hunter_mark": 1, &"hunter_thorn_trap": 1, &"hunter_freezing_trap": 1, &"hunter_tar_trap": 1, &"hunter_covering_shot": 1}
+	if identity == &"spiritualist": build.skill_ranks = {&"spiritualist_soul_drain": 1, &"spiritualist_echo_curse": 1, &"fire_wall": 2, &"fire_spear": 1}
+	elif identity == &"hunter": build.skill_ranks = {&"hunter_mark": 1, &"hunter_thorn_trap": 1, &"hunter_freezing_trap": 2, &"hunter_tar_trap": 1, &"slowing_arrow": 2, &"hunter_covering_shot": 1}
 	else: build.skill_ranks = {&"geometer_trace": 1, &"geometer_triangulation": 5, &"geometer_collapse": 1}
 	if passives:
+		build.skill_ranks[&"double_shot"] = 2
+		build.skill_ranks[&"hunter_mark"] = 2
 		build.skill_ranks[&"hunter_shooting_discipline"] = 1
 		build.skill_ranks[&"hunter_easy_prey"] = 1
 	build.action_slots = ActionBarLayout.empty()

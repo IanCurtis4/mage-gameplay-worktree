@@ -1,0 +1,79 @@
+{
+  "status": "TECHNICALLY_VALIDATED",
+  "date": "2026-10-16",
+  "baseline": "65d7d96d0c4743d07a23b95478b0571647c2d729",
+  "branch": "codex/e06-inventory",
+  "project": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+  "contract": "docs/epics/e06/e06_all_skill_dependencies_proposal.md",
+  "roles": {
+    "architecture": "Astra: approved proposal",
+    "implementation_and_technical_validation": "Sol",
+    "automated_execution_supervision": "Luna; execution supervision is not an independent semantic audit"
+  },
+  "scope": {
+    "skills": 93,
+    "identities": 10,
+    "catalog_version": 14,
+    "schema_version": 6,
+    "cross_job_requirements": "compact marker, full ancestor chain, separate wallets, navigate owned origin and return",
+    "migration": "validate historical envelope first; transitive refund to original wallets; preserve inventory, characters and disabled explicit-rank shortcuts"
+  },
+  "verification": {
+    "distinct_steps_pass": 230,
+    "plan_total": 230,
+    "method": "Complementary rounds with impact-based reuse; not one uninterrupted full-suite execution. Round13 rechecked steps206,222,223 after corrections;227 prior passes retained.",
+    "unresolved_failures": 0,
+    "new_invariants": {
+      "dependencies": 228,
+      "migration": 34,
+      "navigation": "PASS"
+    },
+    "luna_report": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\docs\\epics\\e06\\e06_all_skill_dependencies_luna.json",
+    "luna_sha256": "c2d61f57c427e9417696a2af752c50fb7cc5ee4f9644c4fdf5a5f90c4bfd466e",
+    "sol_output_audit": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\dependency_sol_output_audit.json",
+    "sol_output_audit_sha256": "6bb92b027585ed0297085a40343a1c15d436172f1197e345531267d08588c995",
+    "runner_manifest": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner_inputs.json",
+    "runner_manifest_sha256": "a9fe3eb523da9f13f892dc26500277f398cfc6f3db3eef6031a24c021786518f",
+    "frozen_source_files": 1447,
+    "verify_sha256": "45e17e2492c7485f01b3765827c7f4e5910eab0d66164db8cecd07ec52006b5a",
+    "engine": "Godot4.7.2 standard",
+    "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "provenance_repair": "Sol restored25 missing reused-report provenance fields from original Round08 PASS records and verified original output hashes; no results or original logs changed."
+  },
+  "native_and_private_proofs": [
+    {
+      "name": "native_20261016",
+      "exit_code": 0,
+      "elapsed_seconds": 27.79,
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\dependency_native_20261016.log",
+      "sha256": "3410c5d8b9870b697b1443233b82a31208dd5d19ebc17d00762c588e9b02137c",
+      "complete": true,
+      "errors": false,
+      "personal_files_unchanged": true,
+      "personal_count": 3
+    },
+    {
+      "name": "private_20261016",
+      "exit_code": 0,
+      "elapsed_seconds": 4.19,
+      "output": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\dependency_private_20261016.log",
+      "sha256": "208a42cea1e66735fa3e8d7de2839f6dad2d075afe83729aa7311197bcc4b8e7",
+      "complete": true,
+      "errors": false,
+      "personal_files_unchanged": true,
+      "personal_count": 3
+    }
+  ],
+  "corrections_validated": [
+    "Historical catalogs and legal canonical prerequisite fixtures; negative assignment cases retain invalid IDs and explicit-rank guards.",
+    "HUD preserves zero-cost shield deactivation and per-slot Sentinel Focus, Hunter and Geometer details.",
+    "Legal offline pilot builds stay within19 Base/20 Evolution points; no player purchases added automatically.",
+    "Supervisor checks completion and ERROR markers as well as exit status; smoke/performance/navigation completion parsers corrected against actual logs."
+  ],
+  "limitations": [
+    "Manual gameplay and product acceptance pending; no FPS or balance conclusion from automated checks.",
+    "Runner excludes unavailable editor VCS addon and disables its autoload only in isolated runner; original project addon config preserved.",
+    "Native probe covers specified rendered interactions, not every possible UI state."
+  ],
+  "next_action": "Apply technically approved candidate by preserving fast-forward to codex/playtest; verify import/open and directed checks. No master merge or push."
+}

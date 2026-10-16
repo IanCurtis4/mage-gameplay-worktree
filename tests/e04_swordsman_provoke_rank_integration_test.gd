@@ -53,7 +53,7 @@ func _check_provoke_runtime() -> void:
 		var snapshot := BuildSnapshot.new()
 		snapshot.character_id = "provoke-r%d" % rank
 		snapshot.base_class_id = &"swordsman"
-		snapshot.skill_ranks = {&"provoke": rank, &"shield_wall": 1}
+		snapshot.skill_ranks = {&"provoke": rank, &"shield_wall": 2}
 		snapshot.active_slots = [&"provoke", &"shield_wall", null, null, null]
 		var player := PlayerActor.new()
 		player.configure(nav, RunState.from_build(snapshot.character_id, snapshot))

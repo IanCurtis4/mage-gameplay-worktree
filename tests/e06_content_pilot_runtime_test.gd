@@ -57,8 +57,8 @@ func _projectile(origin: StringName, catalog: BuildEffectCatalog) -> void:
 	var snapshot := BuildSnapshot.new()
 	snapshot.character_id = "pilot-projectiles"
 	snapshot.base_class_id = &"mage"
-	snapshot.skill_ranks = {&"fire_spear": 1}
-	snapshot.library_skill_ids = [&"fire_spear"]
+	snapshot.skill_ranks = {&"fire_wall": 2, &"fire_spear": 1}
+	snapshot.library_skill_ids = [&"fire_wall", &"fire_spear"]
 	var effects := {"augment_stacks": {}, "card_instances": {}, "card_sockets": {}}
 	if origin == &"augment": effects["augment_stacks"][&"extra_fire_spear"] = 1
 	else:
@@ -91,6 +91,8 @@ func _targeted_events(catalog: BuildEffectCatalog) -> void:
 	for identity: String in Pilot.EXCLUSIVE_PROCS:
 		for branch: int in 2:
 			var comparison: Dictionary = Pilot.comparison(identity, branch, catalog)
+			_check(comparison.get("ok",false), "comparison route has legal investments: %s/%d" % [identity,branch])
+			if not comparison.get("ok",false): continue
 			var effects := {"augment_stacks": {Pilot.exclusive_id(identity, branch): 1}}
 			var isolated: BuildSnapshot = comparison["snapshot"].copy_snapshot()
 			isolated.equipped = EquipmentRules.empty_layout()

@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## G6 progression fixtures: only isolated verification saves, never user://profile.
 
 const PROFILE_ID := "123e4567-e89b-42d3-a456-426614174206"
@@ -25,14 +26,14 @@ func _run() -> void:
 	_check_progression()
 	_check_production_gate()
 	await _check_build("walls", {
-		&"fireball": 5, &"ice_spear": 5, &"teleport": 5, &"mage_mana_regeneration": 3, &"fire_spear": 1,
-		&"geometer_trace": 4, &"geometer_incidence": 3, &"geometer_translation": 5,
-		&"geometer_vector_memory": 3, &"geometer_collapse": 5,
+		&"fireball": 3, &"ice_spear": 5, &"teleport": 5, &"mage_mana_regeneration": 3, &"fire_wall": 2, &"fire_spear": 1,
+		&"geometer_trace": 4, &"geometer_incidence": 3, &"geometer_translation": 3,
+		&"geometer_triangulation": 2, &"geometer_vector_memory": 3, &"geometer_collapse": 5,
 	}, [&"geometer_trace", &"geometer_translation", &"geometer_collapse", &"fireball", &"ice_spear"], [&"geometer_incidence", &"geometer_vector_memory"])
 	await _check_build("triangles", {
-		&"lightning": 5, &"fireball": 5, &"fire_spear": 5, &"mage_mana_regeneration": 3, &"teleport": 1,
-		&"geometer_trace": 2, &"geometer_incidence": 3, &"geometer_triangulation": 5,
-		&"geometer_vector_memory": 3, &"geometer_collapse": 2, &"geometer_rewrite": 5,
+		&"lightning": 5, &"fireball": 2, &"fire_wall": 2, &"fire_spear": 5, &"mage_mana_regeneration": 3, &"teleport": 2,
+		&"geometer_trace": 1, &"geometer_incidence": 3, &"geometer_triangulation": 5,
+		&"geometer_translation": 2, &"geometer_vector_memory": 3, &"geometer_collapse": 1, &"geometer_rewrite": 5,
 	}, [&"geometer_trace", &"geometer_triangulation", &"geometer_rewrite", &"geometer_collapse", &"lightning"], [&"geometer_incidence", &"geometer_vector_memory"])
 	await _check_menu(22)
 	await _check_menu(23)
@@ -72,8 +73,9 @@ func _check_catalog() -> void:
 		_check(int(metadata["free_rank"]) == free_rank and int(metadata["max_purchased_rank"]) == CAPS[index] - free_rank, "free/purchased rank cap: %s" % skill_id)
 		for rank: int in range(1, CAPS[index] + 1):
 			var requirement: Dictionary = metadata["rank_requirements"][rank]
-			_check(requirement == {"job_level": GATES[index], "skill_ranks": {}}, "uniform exact job gate: %s R%d" % [skill_id, rank])
-			_check(not ready.check_rank_requirements(skill_id, rank, GATES[index] - 1, {})["ok"] and ready.check_rank_requirements(skill_id, rank, GATES[index], {})["ok"], "job immediately below/at gate: %s R%d" % [skill_id, rank])
+			var prerequisites := E05DependencyFixture.prerequisite_ranks(skill_id)
+			_check(requirement == {"job_level": GATES[index], "skill_ranks": SkillDependencyRules.REQUIREMENTS.get(skill_id, {})}, "uniform exact job gate: %s R%d" % [skill_id, rank])
+			_check(not ready.check_rank_requirements(skill_id, rank, GATES[index] - 1, prerequisites)["ok"] and ready.check_rank_requirements(skill_id, rank, GATES[index], prerequisites)["ok"], "job immediately below/at gate: %s R%d" % [skill_id, rank])
 		_check(not ready.skill_is_allowed(skill_id, &"archer", &"ar_mg") and not ready.skill_is_allowed(skill_id, &"mage", &"elementalist"), "exclusive identity rejects other branch: %s" % skill_id)
 		var runtime := ClassCatalog.skill_definition(skill_id)
 		_check(runtime != null and runtime.ranks.size() == CAPS[index] and runtime.is_rank_catalog_valid(), "runtime catalog rank cap agrees: %s" % skill_id)
@@ -97,6 +99,7 @@ func _check_progression() -> void:
 		if metadata.is_empty():
 			continue
 		var capped := _character(40)
+		_check(E05DependencyFixture.buy_ancestors(capped, catalog, skill_id)["ok"], "legal ancestors are learned before rank cap: %s" % skill_id)
 		for purchase: int in int(metadata["max_purchased_rank"]):
 			var bought := CharacterProgression.learn_skill(capped, catalog, skill_id)
 			_check(bought["ok"] and bought.get("rank", 0) == int(metadata["free_rank"]) + purchase + 1, "purchase sequential rank: %s #%d" % [skill_id, purchase + 1])
@@ -109,6 +112,7 @@ func _check_progression() -> void:
 		var early_result := CharacterProgression.learn_skill(early, catalog, skill_id)
 		_check(not early_result["ok"] and early_result["error_code"] == &"requirements_unmet" and early.purchased_skill_ranks.is_empty(), "gate blocks purchases without mutation: %s" % skill_id)
 		var eligible := _character(GATES[index])
+		_check(E05DependencyFixture.buy_ancestors(eligible, catalog, skill_id)["ok"], "legal ancestors fit the exact job gate: %s" % skill_id)
 		_check(CharacterProgression.learn_skill(eligible, catalog, skill_id)["ok"], "purchase allowed exactly at job gate: %s" % skill_id)
 	var entry := _character(20)
 	var entry_result := CharacterProgression.learn_skill(entry, catalog, &"geometer_trace")
@@ -173,7 +177,7 @@ func _check_build(label: String, purchases: Dictionary, active: Array[Variant], 
 	_check(not facade.update_action_slots("%s-foreign-bar" % label, revision, character_id, illegal_bar)["ok"] and facade.current_profile().revision == revision, "%s foreign active shortcut is rejected without changing save" % label)
 	illegal_bar[23] = &"mage_mana_regeneration"
 	_check(not facade.update_action_slots("%s-passive-bar" % label, revision, character_id, illegal_bar)["ok"] and facade.current_profile().revision == revision, "%s passive is automatic, never an active-bar entry" % label)
-	illegal_bar[23] = &"geometer_rewrite" if label == "walls" else &"geometer_translation"
+	illegal_bar[23] = &"geometer_rewrite" if label == "walls" else &"ice_wall"
 	_check(not facade.update_action_slots("%s-unlearned-bar" % label, revision, character_id, illegal_bar)["ok"] and facade.current_profile().revision == revision, "%s legal identity alone does not let a shortcut learn a missing active" % label)
 	var encoded := ProfileCodec.encode(facade.current_profile(), catalog)
 	_check(encoded["ok"], "%s profile codec encodes all new IDs" % label)
@@ -219,7 +223,7 @@ func _check_build(label: String, purchases: Dictionary, active: Array[Variant], 
 	for id: StringName in catalog.skill_ids_for_identity(&"mage", &"mg_ar"):
 		if int(summary["effective_skill_ranks"].get(id, 0)) > 0 and catalog.skill_metadata(id)["category"] == ProfileCatalog.ACTIVE:
 			learned.append(id)
-	_check(player.available_skill_ids() == learned and learned.size() == (7 if label == "walls" else 8) and player.skill_rank(&"geometer_trace") == int(purchases[&"geometer_trace"]) + 1, "%s runtime exposes every learned legal active, including skills absent from shortcut bar" % label)
+	_check(player.available_skill_ids() == learned and learned.size() == (9 if label == "walls" else 10) and player.skill_rank(&"geometer_trace") == int(purchases[&"geometer_trace"]) + 1, "%s runtime exposes every learned legal active, including skills absent from shortcut bar" % label)
 	_check(player.run_state.build_snapshot.learned_skill_ids(ProfileCatalog.PASSIVE).size() == 3 and player.run_state.build_snapshot.has_passive(&"mage_mana_regeneration") and player.run_state.build_snapshot.has_passive(&"geometer_incidence") and player.run_state.build_snapshot.has_passive(&"geometer_vector_memory"), "%s base plus two evolution passives all operate automatically despite legacy selection of two" % label)
 	var copy: BuildSnapshot = started["run_state"].build_snapshot.copy_snapshot()
 	copy.skill_ranks[&"geometer_trace"] = 99
@@ -231,7 +235,7 @@ func _check_build(label: String, purchases: Dictionary, active: Array[Variant], 
 	var respec_character := durable.copy_state()
 	var refund := CharacterProgression.respec_skills(respec_character, catalog)
 	_check(refund["ok"] and refund["base_refund"] == 19 and refund["evolution_refund"] == 20 and CharacterProgression.summary(respec_character, catalog)["effective_skill_ranks"] == {&"geometer_trace": 1}, "%s respec refunds both wallets and preserves only free Trace" % label)
-	_check(respec_character.presets[0]["active_slots"] == [&"geometer_trace", null, null, null, null] and respec_character.presets[0]["passive_slots"] == [null, null] and respec_character.action_slots == ActionBarLayout.from_legacy([&"geometer_trace"]), "%s respec prunes paid legacy references and action shortcuts without erasing free entry" % label)
+	_check(respec_character.presets[0]["active_slots"] == [&"geometer_trace", null, null, null, null] and respec_character.presets[0]["passive_slots"] == [null, null] and respec_character.action_slots == ActionBarLayout.from_legacy([&"geometer_trace", null, null, null, &"ice_spear" if label == "walls" else null, &"teleport"]), "%s respec prunes paid references while retaining free Trace and exact disabled item-adapter shortcuts" % label)
 
 func _check_menu(job_level: int) -> void:
 	var directory := _directory("menu%d" % job_level)
@@ -243,21 +247,21 @@ func _check_menu(job_level: int) -> void:
 	root.add_child(menu)
 	await process_frame
 	_check(menu.evolution_state_label.text.contains("Geômetra") and menu.evolution_state_label.text.contains("Mago"), "job%d menu presents the correct origin/evolution" % job_level)
+	menu.skill_window._choose_job(&"mg_ar")
 	for index: int in IDS.size():
 		var skill_id := IDS[index]
-		var label := menu.progression_skill_tree.get_node_or_null("ProgressionSkill_%s" % skill_id) as Label
-		var button := menu.progression_skill_tree.get_node_or_null("Learn_%s" % skill_id) as Button
-		var revealed := job_level >= GATES[index]
-		_check((label != null and button != null) == revealed, "job%d reveals %s exactly when its gate opens" % [job_level, skill_id])
-		if label != null and button != null:
-			_check(label.text.contains("Rank %d/%d" % [1 if index == 0 else 0, CAPS[index]]) and not button.disabled, "job%d offers the legal next rank of %s" % [job_level, skill_id])
+		var entry: Dictionary = menu.skill_window.skill_entries.get(skill_id, {})
+		_check(not entry.is_empty(), "job%d keeps %s visible in the owned Geometer library" % [job_level, skill_id])
+		if not entry.is_empty():
+			var option: Dictionary = entry["option"]
+			_check(option["rank"] == (1 if index == 0 else 0) and option["maximum_rank"] == CAPS[index] and option["next_rank_requirement"]["job_level"] == GATES[index] and (job_level >= GATES[index] or entry["plus"].disabled), "job%d shows exact rank and blocks %s below its gate" % [job_level, skill_id])
 	var character_id: String = menu.facade.current_profile().selected_character_id
-	var foreign_label := menu.progression_skill_tree.get_node_or_null("ProgressionSkill_double_shot")
-	_check(foreign_label == null and menu.action_editor.slot_buttons.size() == 24 and menu.active_selectors.is_empty() and menu.passive_selectors.is_empty() and menu.automatic_passives_label.text.contains("automáticas"), "job%d menu has24 action slots and automatic passives, with no old selectors or Archer branch" % job_level)
+	_check(not menu.skill_window.skill_entries.has(&"double_shot") and menu.action_editor.slot_buttons.size() == 24 and menu.active_selectors.is_empty() and menu.passive_selectors.is_empty() and menu.automatic_passives_label.text.contains("automáticas"), "job%d menu has24 action slots and automatic passives, with no old selectors or Archer branch" % job_level)
 	if job_level == 23:
+		_check(menu._learn_skill(&"geometer_trace")["ok"], "job23 buys Trace R2 before Incidence")
 		var learned := menu._learn_skill(&"geometer_incidence")
-		var incidence := menu.progression_skill_tree.get_node_or_null("ProgressionSkill_geometer_incidence") as Label
-		_check(learned["ok"] and incidence != null and incidence.text.contains("Rank 1/3") and menu.facade.progression_summary(character_id)["evolution_skill_points_available"] == 2, "job23 menu buys Incidence and refreshes the independent evolution wallet")
+		var incidence: Dictionary = menu.skill_window.skill_entries.get(&"geometer_incidence", {})
+		_check(learned["ok"] and not incidence.is_empty() and incidence["option"]["rank"] == 1 and menu.facade.progression_summary(character_id)["evolution_skill_points_available"] == 1, "job23 menu buys Incidence after Trace R2 and refreshes the evolution wallet")
 	menu.queue_free()
 	await process_frame
 

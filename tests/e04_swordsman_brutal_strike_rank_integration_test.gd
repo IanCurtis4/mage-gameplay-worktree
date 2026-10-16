@@ -31,7 +31,7 @@ func _check_runtime() -> void:
 		var snapshot := BuildSnapshot.new()
 		snapshot.character_id = "brutal-%d" % rank
 		snapshot.base_class_id = &"swordsman"
-		snapshot.skill_ranks = {&"brutal_strike": rank, &"shield_wall": 1}
+		snapshot.skill_ranks = {&"slash": 2, &"brutal_strike": rank, &"shield_wall": 1}
 		snapshot.active_slots = [&"brutal_strike", &"shield_wall", null, null, null]
 		var player := PlayerActor.new()
 		player.configure(nav, RunState.from_build(snapshot.character_id, snapshot))

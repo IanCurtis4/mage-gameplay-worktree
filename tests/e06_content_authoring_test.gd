@@ -118,7 +118,7 @@ func _snapshot(entries: Array[Dictionary]) -> BuildSnapshot:
 	var snapshot := BuildSnapshot.new()
 	snapshot.character_id = "authoring-demo"
 	snapshot.base_class_id = &"mage"
-	snapshot.skill_ranks = {&"fire_spear": 1, &"ice_spear": 1}
+	snapshot.skill_ranks = {&"fire_wall": 2, &"fire_spear": 1, &"ice_spear": 1}
 	snapshot.library_skill_ids = [&"fire_spear", &"ice_spear"]
 	var counter := 1
 	for entry: Dictionary in entries:

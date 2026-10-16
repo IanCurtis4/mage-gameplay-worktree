@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## S5 Concussion: real reset and damage-first, source-keyed canonical support.
 
 const CONC := &"sentinel_concussion_shot"
@@ -38,6 +39,7 @@ func _scene(rank: int = 5, openings: bool = false) -> RunController:
 	build.attribute_allocations = {&"dex": 20, &"luk": 10}
 	build.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"archer", &"sentinel")
 	build.skill_ranks = {CONC: rank, &"sentinel_headshot": 1, &"sentinel_piercing_shot": 1, &"sentinel_explosive_shot": 1, &"sentinel_opening_read": 3}
+	E05DependencyFixture.complete_snapshot(build)
 	if not openings:
 		build.skill_ranks.erase(&"sentinel_opening_read")
 	build.active_slots = [CONC, &"sentinel_headshot", &"sentinel_piercing_shot", &"sentinel_explosive_shot", null]

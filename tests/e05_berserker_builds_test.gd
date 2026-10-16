@@ -13,20 +13,20 @@ func _run() -> void:
 	_cleanup(directory)
 	DirAccess.make_dir_recursive_absolute(directory)
 	await _check_build(directory.path_join("boss"), {
-		&"fury": 5, &"brutal_strike": 5, &"blood_thirst": 3,
+		&"slash": 2, &"fury": 5, &"brutal_strike": 5, &"blood_thirst": 3,
 		&"berserker_rupture": 4, &"berserker_execution": 5,
 		&"berserker_pursuit": 3, &"berserker_breath_steal": 4,
-	}, [&"fury", &"brutal_strike", &"berserker_rupture", &"berserker_execution", &"berserker_breath_steal"], [&"blood_thirst", &"berserker_pursuit"], 16)
+	}, [&"fury", &"brutal_strike", &"berserker_rupture", &"berserker_execution", &"berserker_breath_steal"], [&"blood_thirst", &"berserker_pursuit"], 16, 15)
 	await _check_build(directory.path_join("mobile"), {
-		&"dash": 5, &"concentrated_rage": 5, &"vigor": 3, &"fury": 3,
+		&"slash": 2, &"brutal_strike": 2, &"dash": 5, &"concentrated_rage": 5, &"vigor": 2, &"fury": 3,
 		&"berserker_rupture": 2, &"berserker_wound_leap": 5,
 		&"berserker_blood_rift": 5, &"berserker_obstinacy": 3,
-	}, [&"dash", &"concentrated_rage", &"berserker_rupture", &"berserker_wound_leap", &"berserker_blood_rift"], [&"vigor", &"berserker_obstinacy"], 15, 16)
+	}, [&"dash", &"concentrated_rage", &"berserker_rupture", &"berserker_wound_leap", &"berserker_blood_rift"], [&"vigor", &"berserker_obstinacy"], 15, 19)
 	_cleanup(directory)
 	print("E05 Berserker builds: %s" % ("PASS (%d checks)" % checks if failures == 0 else "FAIL (%d de %d)" % [failures, checks]))
 	quit(0 if failures == 0 else 1)
 
-func _check_build(directory: String, purchases: Dictionary, active: Array[Variant], passive: Array[Variant], evolution_spent: int, base_spent: int = 13) -> void:
+func _check_build(directory: String, purchases: Dictionary, active: Array[Variant], passive: Array[Variant], evolution_spent: int, base_spent: int) -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	var catalog := ProfileCatalog.pilot()
 	var profile := ProfileState.new(PROFILE_ID)

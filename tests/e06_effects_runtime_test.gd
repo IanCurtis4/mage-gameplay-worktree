@@ -301,7 +301,8 @@ func _echo_and_kill_exceptions() -> void:
 	build = BuildSnapshot.new()
 	build.character_id = "blood-budget"
 	build.base_class_id = &"swordsman"
-	build.skill_ranks = {&"blood_thirst": 1}
+	build.job_level = 20
+	build.skill_ranks = {&"fury": 2, &"blood_thirst": 1}
 	build.passive_slots = [&"blood_thirst"]
 	state = RunState.from_build("blood", build)
 	player = PlayerActor.new()
@@ -428,7 +429,7 @@ func _nova_component_families() -> void:
 	build.base_class_id = &"mage"
 	build.evolution_id = &"elementalist"
 	build.job_level = 40
-	build.skill_ranks = {&"elementalist_tri_nova": 1}
+	build.skill_ranks = {&"ice_spear": 2, &"elementalist_glacial_ring": 2, &"elementalist_tri_nova": 1}
 	var state := RunState.from_build("nova", build)
 	var nav := ArenaNavigation.new()
 	nav.configure(Rect2(0, 0, 1000, 1000), [], 0.0)

@@ -246,11 +246,13 @@ func _check_menu_and_controller() -> void:
 	root.add_child(menu)
 	await process_frame
 	menu._select_roster_index(0)
-	var learned_button: Button
-	for child: Node in menu.action_editor.library.get_children():
-		if child.get("skill_id") == &"phantom_barrier":
-			learned_button = child as Button
-	_check(learned_button != null and learned_button.text == "Barreira Fantasma", "biblioteca apresenta nome humano da skill aprendida")
+	var skill_entry: Dictionary = menu.skill_window.skill_entries[&"phantom_barrier"]
+	var learned_button: Button = skill_entry["button"]
+	var visible_name := false
+	for child: Node in learned_button.get_children():
+		if child is Label and (child as Label).text == "Barreira Fantasma":
+			visible_name = true
+	_check(visible_name and learned_button.tooltip_text.contains("[b]Barreira Fantasma[/b]") and int(skill_entry["option"]["rank"]) == 5, "biblioteca apresenta nome humano da skill aprendida")
 	menu.action_editor.assign_skill(&"phantom_barrier", 0)
 	_check(facade.current_profile().character_by_id(character_id).action_slots[0] == &"phantom_barrier", "menu salva organização de atalhos pela fachada")
 	var reopened := ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
@@ -268,9 +270,11 @@ func _check_menu_and_controller() -> void:
 	if not started.get("ok", false):
 		menu.queue_free()
 		return
+	RunController.pending_gameplay_extension = false
 	await scene_changed
 	await process_frame
 	var controller := current_scene as RunController
+	_check(not controller.gameplay_extension, "legacy barrier geometry fixture keeps the E06 route extension off")
 	controller.set_process(false)
 	controller.player.set_process(false)
 	for enemy: CombatActor in controller.enemies:

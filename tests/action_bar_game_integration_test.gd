@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## End-to-end viewport dispatch, paid APIs and isolated durable bar changes.
 
 const PROFILE_ID := "123e4567-e89b-42d3-a456-426614174334"
@@ -30,6 +31,7 @@ func _snapshot(base: StringName, evolution: StringName, skills: Array[StringName
 	character.base_xp_total = ProgressionRules.MAX_BASE_XP
 	character.job_xp_total = ProgressionRules.MAX_JOB_XP
 	for skill: StringName in skills:
+		_check(E05DependencyFixture.buy_ancestors(character, catalog, skill)["ok"], "input fixture buys ancestors for %s legally" % skill)
 		if int(catalog.effective_skill_ranks(base, evolution, character.purchased_skill_ranks, {}).get(skill, 0)) == 0:
 			_check(CharacterProgression.learn_skill(character, catalog, skill)["ok"], "input fixture buys %s legally" % skill)
 	var summary := CharacterProgression.summary(character, catalog)

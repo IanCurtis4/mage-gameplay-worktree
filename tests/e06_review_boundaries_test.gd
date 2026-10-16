@@ -55,7 +55,7 @@ func _proc_child_recovery() -> void:
 	var build := BuildSnapshot.new()
 	build.character_id = "review-proc-child"
 	build.base_class_id = &"swordsman"
-	build.skill_ranks = {&"blood_thirst": 1}
+	build.skill_ranks = {&"fury": 2, &"blood_thirst": 1}
 	var state := RunState.from_build("review-proc", build)
 	var nav := ArenaNavigation.new()
 	nav.configure(Rect2(0, 0, 1000, 1000), [], 0.0)

@@ -174,6 +174,8 @@ func _check_profile_and_controller() -> void:
 	_check(store.commit(seeded).get("ok", false), "fixture de XP persiste em store isolado")
 	facade = ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
 	_check(facade.open_profile().get("ok", false), "perfil reabre")
+	for rank: int in range(1, 3):
+		_check(facade.learn_skill("mg7-spear-%d" % rank, facade.current_profile().revision, character_id, &"ice_spear").get("ok", false), "Lança de Gelo R%d antecede Parede de Gelo" % rank)
 	for rank: int in range(1, 6):
 		_check(facade.learn_skill("mg7-ice-%d" % rank, facade.current_profile().revision, character_id, &"ice_wall").get("ok", false), "compra persistente R%d" % rank)
 	var scene := load("res://scenes/character_menu.tscn") as PackedScene
@@ -182,11 +184,13 @@ func _check_profile_and_controller() -> void:
 	root.add_child(menu)
 	await process_frame
 	menu._select_roster_index(0)
-	var learned_button: Button
-	for child: Node in menu.action_editor.library.get_children():
-		if child.get("skill_id") == &"ice_wall":
-			learned_button = child as Button
-	_check(learned_button != null and learned_button.text == "Parede de Gelo", "biblioteca apresenta nome humano da skill aprendida")
+	var skill_entry: Dictionary = menu.skill_window.skill_entries[&"ice_wall"]
+	var learned_button: Button = skill_entry["button"]
+	var visible_name := false
+	for child: Node in learned_button.get_children():
+		if child is Label and (child as Label).text == "Parede de Gelo":
+			visible_name = true
+	_check(visible_name and learned_button.tooltip_text.contains("[b]Parede de Gelo[/b]") and int(skill_entry["option"]["rank"]) == 5, "biblioteca apresenta nome humano da skill aprendida")
 	menu.action_editor.assign_skill(&"ice_wall", 0)
 	_check(facade.current_profile().character_by_id(character_id).action_slots[0] == &"ice_wall", "menu salva organização de atalhos pela fachada")
 	var reopened := ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
@@ -296,7 +300,7 @@ func _snapshot(rank: int) -> BuildSnapshot:
 	var snapshot := BuildSnapshot.new()
 	snapshot.character_id = "ice-wall-test"
 	snapshot.base_class_id = &"mage"
-	snapshot.skill_ranks = {&"ice_wall": rank}
+	snapshot.skill_ranks = {&"ice_spear": 2, &"ice_wall": rank}
 	snapshot.active_slots = [&"ice_wall", null, null, null, null]
 	return snapshot
 

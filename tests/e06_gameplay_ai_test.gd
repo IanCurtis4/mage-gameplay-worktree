@@ -32,7 +32,7 @@ func _fixture(summoned: bool = false, hunter: bool = false, legacy: bool = false
 		build.evolution_id = &"hunter"
 		build.base_level = 30
 		build.job_level = 40
-		build.skill_ranks = {&"hunter_total_cover": 1}
+		build.skill_ranks = {&"foliage_shelter": 2, &"hunter_total_cover": 1}
 		state = RunState.from_build("", build)
 	target.configure(nav, state)
 	var catalog := MobCatalog.new()

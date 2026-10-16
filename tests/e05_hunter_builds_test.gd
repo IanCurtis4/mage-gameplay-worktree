@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## H5 legal Hunter builds, save/menu/run round-trip. Uses only isolated verification saves.
 
 const PROFILE_ID := "123e4567-e89b-42d3-a456-426614174237"
@@ -10,8 +11,8 @@ const DIRECTORIES: Array[String] = [
 ]
 const GATES: Array[int] = [20, 20, 23, 25, 28, 31, 34, 37]
 const BASE_PURCHASES := {
-	&"double_shot": 5, &"piercing_arrow": 5, &"arrow_rain": 5,
-	&"archer_precision": 3, &"archer_cadence": 1,
+	&"double_shot": 5, &"piercing_arrow": 5, &"arrow_rain": 1,
+	&"archer_precision": 3, &"archer_cadence": 1, &"slowing_arrow": 2, &"foliage_shelter": 2,
 }
 const EQUIPPED: Dictionary[StringName, Variant] = {&"head": null, &"neck": null, &"shoulders": null, &"arms": null, &"torso": null, &"cloak": null, &"legs": null, &"feet": null, &"main_hand": null, &"off_hand": null, &"accessory_1": null, &"accessory_2": null, &"accessory_3": null, &"accessory_4": null}
 
@@ -133,8 +134,9 @@ func _check_rank_gates() -> void:
 		_check(metadata["category"] == (ProfileCatalog.PASSIVE if maximum == 3 else ProfileCatalog.ACTIVE) and metadata["free_rank"] == free_rank and metadata["max_purchased_rank"] == maximum - free_rank, "Hunter category/free-rank/cap matches the contract: %s" % skill_id)
 		for rank: int in range(1, maximum + 1):
 			var requirement: Dictionary = metadata["rank_requirements"][rank]
-			_check(requirement == {"job_level": GATES[index], "skill_ranks": {}}, "every rank of %s has the exact job gate" % skill_id)
-			_check(not catalog.check_rank_requirements(skill_id, rank, GATES[index] - 1, {})["ok"] and catalog.check_rank_requirements(skill_id, rank, GATES[index], {})["ok"], "rank %d of %s opens precisely at job %d" % [rank, skill_id, GATES[index]])
+			_check(requirement == {"job_level": GATES[index], "skill_ranks": SkillDependencyRules.REQUIREMENTS.get(skill_id, {})}, "every rank of %s has the approved job and antecedent gate" % skill_id)
+			var prerequisites := E05DependencyFixture.prerequisite_ranks(skill_id)
+			_check(not catalog.check_rank_requirements(skill_id, rank, GATES[index] - 1, prerequisites)["ok"] and catalog.check_rank_requirements(skill_id, rank, GATES[index], prerequisites)["ok"], "rank %d of %s opens precisely at job %d" % [rank, skill_id, GATES[index]])
 		_check(not catalog.skill_is_allowed(skill_id, &"mage", &"hunter") and not catalog.skill_is_allowed(skill_id, &"archer", &"sentinel"), "Hunter-only progression rejects other origins/evolutions: %s" % skill_id)
 		var definition := ClassCatalog.skill_definition(skill_id)
 		_check(definition != null and definition.ranks.size() == maximum and definition.is_rank_catalog_valid(), "runtime rank catalog agrees for %s" % skill_id)
@@ -146,20 +148,21 @@ func _check_menu_gate(job_level: int, label: String) -> void:
 	root.add_child(menu)
 	await process_frame
 	_check(menu.evolution_state_label.text.contains("Caçadora") and menu.evolution_state_label.text.contains("Arqueiro"), "job%d menu identifies Hunter and its Archer origin" % job_level)
+	menu.skill_window._choose_job(&"hunter")
 	for index: int in HunterTuning.SKILL_IDS.size():
 		var skill_id := HunterTuning.SKILL_IDS[index]
-		var visible := job_level >= GATES[index]
-		var label_node := menu.progression_skill_tree.get_node_or_null("ProgressionSkill_%s" % skill_id) as Label
-		var button := menu.progression_skill_tree.get_node_or_null("Learn_%s" % skill_id) as Button
-		_check((label_node != null and button != null) == visible, "job%d menu reveals %s at its exact gate" % [job_level, skill_id])
-		if label_node != null and button != null:
+		var entry: Dictionary = menu.skill_window.skill_entries.get(skill_id, {})
+		_check(not entry.is_empty(), "job%d shows %s in its owned library" % [job_level, skill_id])
+		if not entry.is_empty():
+			var option: Dictionary = entry["option"]
+			var tooltip: String = entry["button"].tooltip_text.replace("[b]", "").replace("[/b]", "")
 			var expected_rank := 1 if skill_id == &"hunter_freezing_trap" else 0
-			_check(label_node.text.contains("Rank %d/%d" % [expected_rank, HunterTuning.max_rank(skill_id)]), "job%d menu shows current and maximum rank for %s" % [job_level, skill_id])
-			_check(label_node.tooltip_text.contains("Próximo rank: %d · Job %d" % [expected_rank + 1, GATES[index]]), "job%d tooltip names the next rank and gate for %s" % [job_level, skill_id])
+			_check(option["rank"] == expected_rank and option["maximum_rank"] == HunterTuning.max_rank(skill_id) and tooltip.contains("R%d/%d" % [expected_rank, HunterTuning.max_rank(skill_id)]), "job%d menu shows current and maximum rank for %s" % [job_level, skill_id])
+			_check(option["next_rank_requirement"]["job_level"] == GATES[index] and tooltip.contains("Job %d" % GATES[index]) and (job_level >= GATES[index] or entry["plus"].disabled), "job%d canonical tooltip and plus enforce the next gate for %s" % [job_level, skill_id])
 			if skill_id == &"hunter_freezing_trap":
-				_check(label_node.tooltip_text.contains("Atual R1:") and label_node.tooltip_text.contains("Próximo R2:") and label_node.tooltip_text.contains("raio 52"), "Hunter tooltip shows current and next rank effect details")
+				_check(tooltip.contains(ClassCatalog.hunter_description(skill_id, 1)) and ClassCatalog.hunter_description(skill_id, 2).contains("raio 52"), "Hunter tooltip shows current effect while rank two keeps its approved radius")
 			if skill_id == &"hunter_total_cover":
-				_check(label_node.tooltip_text.contains("3s") and label_node.tooltip_text.contains("18s") and label_node.tooltip_text.contains("Abrigo"), "Cobertura Total tooltip states the shared Abrigo budget and 18-second base cooldown")
+				_check(tooltip.contains("3s") and tooltip.contains("18") and tooltip.contains("Abrigo"), "Cobertura Total tooltip states the shared Abrigo budget and base cooldown")
 	_check(menu.action_editor.slot_buttons.size() == 24 and menu.active_selectors.is_empty() and menu.passive_selectors.is_empty() and menu.automatic_passives_label.text.contains("automáticas"), "Hunter menu keeps 24 shortcuts and treats learned passives as automatic")
 	menu.queue_free()
 	await process_frame
@@ -188,9 +191,10 @@ func _check_shelter_tooltips() -> void:
 		menu.set_profile_facade(facade)
 		root.add_child(menu)
 		await process_frame
-		var shelter_label := menu.progression_skill_tree.get_node_or_null("ProgressionSkill_foliage_shelter") as Label
-		var shared_text := "recarga base de 18s"
-		_check(shelter_label != null and shelter_label.tooltip_text.contains(shared_text) == (kind == "hunter"), "%s Abrigo tooltip states the shared 18s Hunter cooldown only for Hunter identity" % kind)
+		menu.skill_window._choose_job(&"")
+		var shelter: Dictionary = menu.skill_window.skill_entries.get(&"foliage_shelter", {})
+		var text: String = shelter["button"].tooltip_text if not shelter.is_empty() else ""
+		_check(not shelter.is_empty() and text.contains("Cobertura Total") and text.contains("Recarga base") and text.contains("18"), "%s canonical Abrigo tooltip describes shared cover and its 18-second base cooldown" % kind)
 		menu.queue_free()
 		await process_frame
 
@@ -321,19 +325,21 @@ func _option(options: Array, evolution_id: StringName) -> Dictionary:
 	return {}
 
 func _check_passive_tooltip(menu: CharacterMenu, skill_id: StringName, rank: int) -> void:
-	var label := menu.progression_skill_tree.get_node_or_null("ProgressionSkill_%s" % skill_id) as Label
+	menu.skill_window._choose_job(&"hunter")
+	var entry: Dictionary = menu.skill_window.skill_entries.get(skill_id, {})
 	var maximum := HunterTuning.max_rank(skill_id)
 	var current := ClassCatalog.hunter_description(skill_id, rank)
-	var label_ok := label != null and label.tooltip_text.contains("Atual R%d: %s" % [rank, current])
+	var tooltip: String = entry["button"].tooltip_text if not entry.is_empty() else ""
+	var label_ok: bool = not entry.is_empty() and entry["option"]["rank"] == rank and tooltip.contains("R%d/%d" % [rank, maximum])
 	if rank < maximum:
 		var next := ClassCatalog.hunter_description(skill_id, rank + 1)
-		label_ok = label_ok and label.tooltip_text.contains("Próximo R%d: %s" % [rank + 1, next])
+		label_ok = label_ok and not next.is_empty() and entry["option"]["next_rank"] == rank + 1
 	else:
-		label_ok = label_ok and label.tooltip_text.contains("Rank máximo atingido.")
+		label_ok = label_ok and entry["option"]["next_rank"] == null
 	if skill_id == &"hunter_shooting_discipline":
-		label_ok = label_ok and current.contains("%d%%" % ([5, 10, 15][rank - 1]))
+		label_ok = label_ok and current.contains("%d%%" % ([5, 10, 15][rank - 1])) and tooltip.contains("%d%%" % ([5, 10, 15][rank - 1]))
 	else:
-		label_ok = label_ok and current.contains("%d%%" % ([8, 12, 16][rank - 1]))
+		label_ok = label_ok and current.contains("%d%%" % ([8, 12, 16][rank - 1])) and tooltip.contains("%d%%" % ([8, 12, 16][rank - 1]))
 	_check(label_ok, "learned passive tooltip shows exact current/next scaling: %s R%d" % [skill_id, rank])
 
 func _reward_resolver() -> ProfileRewardResolver:

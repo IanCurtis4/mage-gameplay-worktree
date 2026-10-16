@@ -62,33 +62,89 @@ static func decode(text: String, catalog: ProfileCatalog = null) -> Dictionary:
 	if text.to_utf8_buffer().size() > MAX_FILE_BYTES or json.parse(text) != OK or not json.data is Dictionary:
 		return _decode_envelope(text, effective)
 	var data: Dictionary = json.data
-	var historical := _is_exact_integer(data.get("schema_version")) and (int(data["schema_version"]) <= 5 or (int(data["schema_version"]) == 6 and _is_exact_integer(data.get("catalog_version")) and int(data["catalog_version"]) == 12))
+	var historical := _is_exact_integer(data.get("schema_version")) and (int(data["schema_version"]) <= 5 or (int(data["schema_version"]) == 6 and _is_exact_integer(data.get("catalog_version")) and int(data["catalog_version"]) in [12, 13]))
 	if not historical:
-		return _decode_envelope(text, effective)
-	var old_catalog := effective.pre_swordsman_cluster_catalog()
+		return _decode_envelope(text, effective, true)
+	var old_catalog := effective.pre_all_skill_dependencies_catalog()
 	var input := data.duplicate(true)
 	if int(input["schema_version"]) == 6:
 		input["catalog_version"] = ProfileState.CATALOG_VERSION
-	var decoded := _decode_envelope(JSON.stringify(input), old_catalog)
+	var decoded: Dictionary
+	if int(data["schema_version"]) == 6 and int(data["catalog_version"]) == 13:
+		decoded = _decode_envelope(JSON.stringify(input), old_catalog)
+	else:
+		decoded = _decode_previous_skill_tree(input, old_catalog)
 	if not decoded.get("ok", false): return decoded
 	var profile: ProfileState = decoded["profile"]
 	var reports: Array[Dictionary] = []
+	for previous: Dictionary in decoded.get("migration_removals", []):
+		reports.append({"character_id": previous["character_id"], "removed": previous["removed"].duplicate(true), "base_refund": 0, "evolution_refund": previous["evolution_refund"]})
 	for character: CharacterState in profile.characters:
-		var report := CharacterProgression.refund_illegal_swordsman_ranks(character, effective)
+		var report := CharacterProgression.refund_all_skill_dependencies(character, effective)
 		if not report["removed"].is_empty():
 			report["character_id"] = character.character_id
-			reports.append(report)
+			var merged := false
+			for previous: Dictionary in reports:
+				if previous["character_id"] != character.character_id:
+					continue
+				previous["removed"].append_array(report["removed"])
+				previous["base_refund"] += report["base_refund"]
+				previous["evolution_refund"] += report["evolution_refund"]
+				merged = true
+				break
+			if not merged:
+				reports.append(report)
 	if not reports.is_empty():
-		profile.extension_fields["swordsman_skill_tree_migration"] = {"catalog_version": ProfileState.CATALOG_VERSION, "characters": reports.duplicate(true)}
+		profile.extension_fields["all_skill_dependencies_migration"] = JSON.parse_string(JSON.stringify({"catalog_version": ProfileState.CATALOG_VERSION, "characters": reports}))
 	var valid := validate_profile(profile, effective)
 	if not valid.get("ok", false): return valid
 	decoded["migrated"] = true
-	decoded["migration_kind"] = decoded.get("migration_kind", &"swordsman_clusters_v1")
-	decoded["migration_kinds"] = [decoded["migration_kind"], &"swordsman_clusters_v1"]
+	var previous_kind: StringName = decoded.get("migration_kind", &"")
+	var kinds: Array = decoded.get("migration_kinds", []).duplicate()
+	if not previous_kind.is_empty() and previous_kind not in kinds:
+		kinds.append(previous_kind)
+	if &"all_skill_dependencies_v1" not in kinds:
+		kinds.append(&"all_skill_dependencies_v1")
+	decoded["migration_kinds"] = kinds
+	if int(data["schema_version"]) == 6 and int(data["catalog_version"]) == 13:
+		decoded["migration_kind"] = &"all_skill_dependencies_v1"
 	decoded["migration_removals"] = reports.duplicate(true)
 	return decoded
 
-static func _decode_envelope(text: String, catalog: ProfileCatalog = null) -> Dictionary:
+static func _decode_previous_skill_tree(input: Dictionary, catalog: ProfileCatalog) -> Dictionary:
+	var decoded := _decode_envelope(JSON.stringify(input), catalog.pre_swordsman_cluster_catalog())
+	if not decoded.get("ok", false):
+		return decoded
+	var profile: ProfileState = decoded["profile"]
+	var reports: Array[Dictionary] = []
+	for character: CharacterState in profile.characters:
+		var retained_action_slots := ActionBarLayout.for_character(character)
+		var retained_presets := character.presets.duplicate(true)
+		var report := CharacterProgression.refund_illegal_swordsman_ranks(character, catalog)
+		character.action_slots = retained_action_slots
+		character.presets = retained_presets
+		if not report["removed"].is_empty():
+			report["cleared_action_slots"] = []
+			report["character_id"] = character.character_id
+			reports.append(report)
+	if not reports.is_empty():
+		profile.extension_fields["swordsman_skill_tree_migration"] = JSON.parse_string(JSON.stringify({"catalog_version": 13, "characters": reports}))
+	var valid := _decode_envelope(JSON.stringify(_profile_to_dictionary(profile)), catalog, true)
+	if not valid.get("ok", false):
+		return valid
+	var original_kind: StringName = decoded.get("migration_kind", &"")
+	if original_kind.is_empty():
+		decoded["migration_kind"] = &"swordsman_clusters_v1"
+	var kinds: Array = []
+	if not original_kind.is_empty():
+		kinds.append(original_kind)
+	if &"swordsman_clusters_v1" not in kinds:
+		kinds.append(&"swordsman_clusters_v1")
+	decoded["migration_kinds"] = kinds
+	decoded["migration_removals"] = reports.duplicate(true)
+	return decoded
+
+static func _decode_envelope(text: String, catalog: ProfileCatalog = null, allow_disabled_refs: bool = false) -> Dictionary:
 	var effective_catalog := catalog if catalog != null else ProfileCatalog.pilot()
 	if not effective_catalog.is_valid():
 		return _catalog_error(&"invalid_catalog")
@@ -142,7 +198,7 @@ static func _decode_envelope(text: String, catalog: ProfileCatalog = null) -> Di
 	if schema_version == ProfileState.SCHEMA_VERSION:
 		if data.has("equipment_collection"):
 			return _catalog_error(&"invalid_catalog")
-		return _decode_v2(data, effective_catalog)
+		return _decode_v2(data, effective_catalog, false, false, false, allow_disabled_refs)
 	if not _is_exact_integer(data.get("catalog_version")) or int(data["catalog_version"]) < 1 or int(data["catalog_version"]) > 9:
 		return _catalog_error(&"invalid_catalog")
 	for reserved: String in ["equipment_instances", "next_equipment_counter"]:
@@ -221,9 +277,9 @@ static func validate_profile(profile: ProfileState, catalog: ProfileCatalog = nu
 		return _catalog_error(&"invalid_catalog")
 	if not profile._migration_equipment_ids.is_empty():
 		return _error(&"invalid_equipment_instance")
-	return _decode_v2(_profile_to_dictionary(profile), effective_catalog)
+	return _decode_v2(_profile_to_dictionary(profile), effective_catalog, false, false, false, true)
 
-static func _decode_v2(data: Dictionary, catalog: ProfileCatalog, legacy_attribute_budget: bool = false, legacy_inventory: bool = false, legacy_cards: bool = false) -> Dictionary:
+static func _decode_v2(data: Dictionary, catalog: ProfileCatalog, legacy_attribute_budget: bool = false, legacy_inventory: bool = false, legacy_cards: bool = false, allow_disabled_refs: bool = false) -> Dictionary:
 	if data.get("format_id") != ProfileState.FORMAT_ID:
 		return _error(&"unsupported_schema")
 	if not _is_exact_integer(data.get("catalog_version")) or int(data["catalog_version"]) != ProfileState.CATALOG_VERSION:
@@ -254,7 +310,7 @@ static func _decode_v2(data: Dictionary, catalog: ProfileCatalog, legacy_attribu
 	profile.next_run_counter = int(data["next_run_counter"])
 	var character_ids: Dictionary[String, bool] = {}
 	for raw_character: Variant in data["characters"]:
-		var decoded_character := _decode_character(raw_character, profile.profile_id, profile.next_character_counter, catalog, legacy_attribute_budget, legacy_inventory)
+		var decoded_character := _decode_character(raw_character, profile.profile_id, profile.next_character_counter, catalog, legacy_attribute_budget, legacy_inventory, allow_disabled_refs)
 		if not decoded_character["ok"]:
 			return decoded_character
 		var character: CharacterState = decoded_character["character"]
@@ -318,7 +374,7 @@ static func _decode_v2(data: Dictionary, catalog: ProfileCatalog, legacy_attribu
 	profile.extension_fields = _unknown_fields(data, LEGACY_ROOT_FIELDS if legacy_inventory else ROOT_FIELDS)
 	return {"ok": true, "profile": profile, "migrated": false}
 
-static func _decode_character(raw: Variant, profile_id: String, next_character_counter: int, catalog: ProfileCatalog, legacy_attribute_budget: bool = false, legacy_inventory: bool = false) -> Dictionary:
+static func _decode_character(raw: Variant, profile_id: String, next_character_counter: int, catalog: ProfileCatalog, legacy_attribute_budget: bool = false, legacy_inventory: bool = false, allow_disabled_refs: bool = false) -> Dictionary:
 	if not raw is Dictionary:
 		return _error(&"invalid_character")
 	var data: Dictionary = raw
@@ -386,7 +442,7 @@ static func _decode_character(raw: Variant, profile_id: String, next_character_c
 		grants_result["ranks"]
 	)
 	for raw_preset: Variant in data["presets"]:
-		var preset_result := _decode_preset(raw_preset, base_class_id, evolution_id, effective_ranks, catalog, legacy_inventory)
+		var preset_result := _decode_preset(raw_preset, base_class_id, evolution_id, effective_ranks, catalog, legacy_inventory, allow_disabled_refs)
 		if not preset_result["ok"]:
 			return preset_result
 		presets.append(preset_result["preset"])
@@ -406,7 +462,7 @@ static func _decode_character(raw: Variant, profile_id: String, next_character_c
 	character.presets = presets
 	character.selected_preset = selected_preset
 	if data.has("action_slots"):
-		var layout := _decode_slots(data["action_slots"], ActionBarLayout.SLOT_COUNT, ProfileCatalog.ACTIVE, base_class_id, evolution_id, effective_ranks, catalog, not legacy_inventory)
+		var layout := _decode_slots(data["action_slots"], ActionBarLayout.SLOT_COUNT, ProfileCatalog.ACTIVE, base_class_id, evolution_id, effective_ranks, catalog, not legacy_inventory, allow_disabled_refs)
 		if not layout["ok"]:
 			return layout
 		character.action_slots = layout["slots"]
@@ -511,11 +567,11 @@ static func _decode_equipped(raw: Variant, legacy_inventory: bool = false) -> Di
 		equipped[slot] = null if raw[key] == null else StringName(raw[key])
 	return {"ok": true, "equipped": equipped}
 
-static func _decode_preset(raw: Variant, base_class_id: StringName, evolution_id: StringName, effective_ranks: Dictionary[StringName, int], catalog: ProfileCatalog, legacy_inventory: bool = false) -> Dictionary:
+static func _decode_preset(raw: Variant, base_class_id: StringName, evolution_id: StringName, effective_ranks: Dictionary[StringName, int], catalog: ProfileCatalog, legacy_inventory: bool = false, allow_disabled_refs: bool = false) -> Dictionary:
 	if not raw is Dictionary or raw.size() != 3 or not raw.has("active_slots") or not raw.has("passive_slots") or not raw.has("equipped"):
 		return _error(&"invalid_presets")
-	var active_result := _decode_slots(raw["active_slots"], CharacterState.ACTIVE_SLOT_COUNT, ProfileCatalog.ACTIVE, base_class_id, evolution_id, effective_ranks, catalog)
-	var passive_result := _decode_slots(raw["passive_slots"], CharacterState.PASSIVE_SLOT_COUNT, ProfileCatalog.PASSIVE, base_class_id, evolution_id, effective_ranks, catalog)
+	var active_result := _decode_slots(raw["active_slots"], CharacterState.ACTIVE_SLOT_COUNT, ProfileCatalog.ACTIVE, base_class_id, evolution_id, effective_ranks, catalog, false, allow_disabled_refs)
+	var passive_result := _decode_slots(raw["passive_slots"], CharacterState.PASSIVE_SLOT_COUNT, ProfileCatalog.PASSIVE, base_class_id, evolution_id, effective_ranks, catalog, false, allow_disabled_refs)
 	var equipped_result := _decode_equipped(raw["equipped"], legacy_inventory)
 	if not active_result["ok"]:
 		return active_result
@@ -525,7 +581,7 @@ static func _decode_preset(raw: Variant, base_class_id: StringName, evolution_id
 		return equipped_result
 	return {"ok": true, "preset": {"active_slots": active_result["slots"], "passive_slots": passive_result["slots"], "equipped": equipped_result["equipped"]}}
 
-static func _decode_slots(raw: Variant, expected_size: int, category: StringName, base_class_id: StringName, evolution_id: StringName, effective_ranks: Dictionary[StringName, int], catalog: ProfileCatalog, allow_item_refs: bool = false) -> Dictionary:
+static func _decode_slots(raw: Variant, expected_size: int, category: StringName, base_class_id: StringName, evolution_id: StringName, effective_ranks: Dictionary[StringName, int], catalog: ProfileCatalog, allow_item_refs: bool = false, allow_disabled_refs: bool = false) -> Dictionary:
 	if not raw is Array or raw.size() != expected_size:
 		return _error(&"invalid_presets")
 	var slots: Array[Variant] = []
@@ -549,7 +605,7 @@ static func _decode_slots(raw: Variant, expected_size: int, category: StringName
 			return _catalog_error(&"invalid_catalog")
 		if metadata["category"] != category or seen.has(key):
 			return _catalog_error(&"invalid_presets") if metadata["category"] != category else _error(&"invalid_presets")
-		if effective_ranks.get(skill_id, 0) <= 0 and not item_reference:
+		if effective_ranks.get(skill_id, 0) <= 0 and not item_reference and not allow_disabled_refs:
 			return _error(&"requirements_unmet")
 		if explicit and ClassCatalog.skill_definition(skill_id).rank_definition(selected) == null:
 			return _error(&"invalid_presets")

@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## G4 actor recipes exercised through real walking and the canonical hit adapter.
 ## Fixture-only identity; no profile writes or triangle combat implementation.
 
@@ -30,12 +31,14 @@ func _fixture(trace_rank: int = 1, incidence_rank: int = 0, learned: bool = true
 	snapshot.base_class_id = &"mage"
 	snapshot.evolution_id = &"mg_ar"
 	snapshot.job_level = 28
-	snapshot.skill_ranks = {&"geometer_trace": trace_rank, &"geometer_triangulation": 5}
+	var learned_incidence := incidence_rank > 0 and learned
+	snapshot.skill_ranks = {&"geometer_trace": maxi(trace_rank, 2) if learned_incidence else trace_rank, &"geometer_triangulation": 5}
 	snapshot.library_skill_ids = [&"geometer_trace", &"geometer_triangulation"]
 	snapshot.active_slots = [&"geometer_trace", &"geometer_triangulation", null, null, null]
-	if incidence_rank > 0 and learned:
+	if learned_incidence:
 		snapshot.skill_ranks[&"geometer_incidence"] = incidence_rank
 		snapshot.library_skill_ids.append(&"geometer_incidence")
+	E05DependencyFixture.complete_snapshot(snapshot)
 	# Learned passives are automatic; no legacy equip selection is required.
 	snapshot.passive_slots = [null, null]
 	RunController.pending_run_state = RunState.from_build("", snapshot)
@@ -118,7 +121,8 @@ func _incidence() -> void:
 			_fixture(1, rank, learned)
 			_wall(&"fire", &"ice")
 			_walk(boss)
-			var expected := arena.player.stat_breakdown.value(&"magic_attack") * 0.35 * (1.0 + (0.05 + rank * 0.05 if learned else 0.0))
+			var entry_power: float = ClassCatalog.geometer_wall_tuning(2 if learned else 1)["entry_power"]
+			var expected := arena.player.stat_breakdown.value(&"magic_attack") * entry_power * (1.0 + (0.05 + rank * 0.05 if learned else 0.0))
 			var hits := _for_actor(boss)
 			_check(hits.size() == 1 and is_equal_approx(hits[0].magic_damage, expected), "Incidence rank%d bonus derives automatically only when learned (%s)" % [rank, learned])
 			await _finish_fixture()
@@ -206,7 +210,7 @@ func _snapshot() -> void:
 	casting.advance(0.01)
 	_walk(boss)
 	var hits := _for_actor(boss)
-	_check(hits.size() == 1 and is_equal_approx(hits[0].magic_damage, initial_magic * 0.35 * 1.10), "editing does not recapture magic, trace rank or Incidence bonus")
+	_check(hits.size() == 1 and is_equal_approx(hits[0].magic_damage, initial_magic * 0.40 * 1.10), "editing does not recapture magic, trace rank or Incidence bonus")
 	casting.advance(2.0)
 	_walk(boss, 300, true)
 	_check(_for_actor(boss).size() == 2, "edited instance preserves shared cadence without permanently suppressing traversal")

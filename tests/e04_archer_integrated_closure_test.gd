@@ -40,22 +40,25 @@ func _run() -> void:
 	for skill_id: StringName in expected_names:
 		var entry: Dictionary = learning_menu.skill_window.skill_entries[skill_id]
 		var tooltip: String = entry["button"].tooltip_text
-		_check(tooltip.begins_with(expected_names[skill_id]) and tooltip.contains("Rank 0/") and int(entry["option"]["rank"]) == 0 and not entry["plus"].disabled, "biblioteca identifica e permite aprender %s em R0" % skill_id)
-		_check(not tooltip.contains("ainda não estão disponíveis") and tooltip.contains("Passivas aprendidas são automáticas"), "tooltip de %s descreve o fluxo vigente" % skill_id)
+		var requirement: Dictionary = entry["option"].get("next_rank_requirement", {})
+		var root_skill: bool = requirement.get("skill_ranks", {}).is_empty()
+		_check(tooltip.begins_with("[b]%s[/b]" % expected_names[skill_id]) and tooltip.contains("R0/") and int(entry["option"]["rank"]) == 0 and entry["plus"].disabled != root_skill, "biblioteca identifica %s em R0 e aplica seu gate de compra" % skill_id)
+		_check(tooltip.contains("Passiva automática" if skill_id in [&"archer_precision", &"archer_cadence", &"trap_technique"] else "Ativa"), "tooltip de %s descreve o tipo vigente" % skill_id)
 	var purchases: Array[StringName] = [
-		&"double_shot", &"piercing_arrow", &"arrow_rain", &"extended_aim",
-		&"snare_trap", &"explosive_trap", &"slowing_arrow", &"foliage_shelter",
-		&"archer_precision", &"archer_cadence", &"trap_technique",
-		&"double_shot", &"double_shot", &"arrow_rain", &"explosive_trap",
-		&"archer_precision", &"archer_precision", &"trap_technique", &"trap_technique",
+		&"double_shot", &"double_shot", &"piercing_arrow", &"piercing_arrow",
+		&"arrow_rain", &"extended_aim", &"snare_trap", &"snare_trap",
+		&"explosive_trap", &"slowing_arrow", &"foliage_shelter",
+		&"archer_precision", &"archer_precision", &"archer_precision",
+		&"archer_cadence", &"trap_technique", &"trap_technique", &"trap_technique",
+		&"double_shot",
 	]
 	for index: int in purchases.size():
 		var skill_id := purchases[index]
 		var result := learning_menu._learn_skill(skill_id)
 		_check(result.get("ok", false), "compra persistente %d: %s" % [index + 1, skill_id])
-	for child: Node in learning_menu.action_editor.library.get_children():
-		var skill_id: StringName = child.get("skill_id")
-		_check((child as Button).text == expected_names[skill_id], "biblioteca identifica habilidade aprendida %s" % skill_id)
+	for skill_id: StringName in expected_names:
+		var entry: Dictionary = learning_menu.skill_window.skill_entries[skill_id]
+		_check(int(entry["option"]["rank"]) > 0 and entry["button"].tooltip_text.contains("[b]%s[/b]" % expected_names[skill_id]), "biblioteca identifica habilidade aprendida %s" % skill_id)
 	_check(learning_menu.action_editor.learned_skills.size() == 8 and learning_menu.action_editor.slot_buttons.size() == 24 and learning_menu.automatic_passives_label.text.contains("todas automáticas"), "biblioteca aprendida e 24 atalhos coexistem com passivas automáticas")
 	learning_menu.queue_free()
 	await process_frame

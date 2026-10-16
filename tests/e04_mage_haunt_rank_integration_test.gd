@@ -190,6 +190,8 @@ func _check_menu_and_controller() -> void:
 	_check(store.commit(seeded).get("ok", false), "fixture de XP usa store real")
 	facade = ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
 	_check(facade.open_profile().get("ok", false), "perfil reabre antes da compra")
+	for rank: int in range(1, 3):
+		_check(facade.learn_skill("mg5-impact-%d" % rank, facade.current_profile().revision, character_id, &"soul_impact").get("ok", false), "Impacto das Almas R%d antecede Assombro" % rank)
 	for rank: int in range(1, 6):
 		_check(facade.learn_skill("mg5-haunt-%d" % rank, facade.current_profile().revision, character_id, &"haunt").get("ok", false), "compra persistente R%d" % rank)
 	var scene := load("res://scenes/character_menu.tscn") as PackedScene
@@ -198,11 +200,13 @@ func _check_menu_and_controller() -> void:
 	root.add_child(menu)
 	await process_frame
 	menu._select_roster_index(0)
-	var learned_button: Button
-	for child: Node in menu.action_editor.library.get_children():
-		if child.get("skill_id") == &"haunt":
-			learned_button = child as Button
-	_check(learned_button != null and learned_button.text == "Assombro", "biblioteca apresenta nome humano da skill aprendida")
+	var skill_entry: Dictionary = menu.skill_window.skill_entries[&"haunt"]
+	var learned_button: Button = skill_entry["button"]
+	var visible_name := false
+	for child: Node in learned_button.get_children():
+		if child is Label and (child as Label).text == "Assombro":
+			visible_name = true
+	_check(visible_name and learned_button.tooltip_text.contains("[b]Assombro[/b]") and int(skill_entry["option"]["rank"]) == 5, "biblioteca apresenta nome humano da skill aprendida")
 	menu.action_editor.assign_skill(&"haunt", 0)
 	_check(facade.current_profile().character_by_id(character_id).action_slots[0] == &"haunt", "menu salva organização de atalhos pela fachada")
 	var reopened := ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
@@ -282,7 +286,7 @@ func _snapshot(rank: int) -> BuildSnapshot:
 	var snapshot := BuildSnapshot.new()
 	snapshot.character_id = "haunt-test"
 	snapshot.base_class_id = &"mage"
-	snapshot.skill_ranks = {&"haunt": rank}
+	snapshot.skill_ranks = {&"soul_impact": 2, &"haunt": rank}
 	snapshot.active_slots = [&"haunt", null, null, null, null]
 	return snapshot
 

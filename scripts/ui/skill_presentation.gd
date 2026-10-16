@@ -161,11 +161,14 @@ static func describe(option: Dictionary, summary: Dictionary = {}) -> String:
 	return "\n".join(lines)
 
 static func migration_notice(report: Dictionary, character_id: String) -> String:
-	for entry: Dictionary in report.get("characters", []):
+	var current: Dictionary = report.get("all_skill_dependencies_migration", report)
+	for entry: Dictionary in current.get("characters", []):
 		if String(entry.get("character_id", "")) != character_id: continue
 		var removed: Array[String] = []
 		for skill: Dictionary in entry.get("removed", []):
-			removed.append("%s (%d pontos)" % [name_of(StringName(skill["skill_id"])), int(skill["purchased_ranks"])])
+			removed.append("%s (%d pontos de %s)" % [name_of(StringName(skill["skill_id"])), int(skill["purchased_ranks"]), "Base" if StringName(skill.get("wallet", &"")) == &"base" else "Evolução"])
+		if entry.has("base_refund"):
+			return "Na atualização da árvore, foram devolvidos %d pontos de Base e %d de Evolução. Skills retiradas: %s. Redistribua respeitando os requisitos." % [int(entry["base_refund"]), int(entry.get("evolution_refund", 0)), ", ".join(removed)]
 		return "Na atualização da árvore, %d pontos de Evolução foram devolvidos. Skills retiradas: %s. Redistribua os pontos respeitando os novos requisitos." % [int(entry.get("evolution_refund", 0)), ", ".join(removed)]
 	return ""
 

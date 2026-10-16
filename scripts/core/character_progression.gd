@@ -261,3 +261,45 @@ static func refund_illegal_swordsman_ranks(character: CharacterState, catalog: P
 		_prune_slots(preset["active_slots"], ProfileCatalog.ACTIVE, effective, catalog)
 		_prune_slots(preset["passive_slots"], ProfileCatalog.PASSIVE, effective, catalog)
 	return {"removed": removed, "evolution_refund": refund, "cleared_action_slots": cleared}
+
+static func refund_all_skill_dependencies(character: CharacterState, catalog: ProfileCatalog) -> Dictionary:
+	# A historical profile has already passed its old catalog before this is called.
+	# Inspect the entire purchased set repeatedly: removing one rank can invalidate
+	# another purchase, including one in a different wallet.
+	var removed_by_id: Dictionary[StringName, Dictionary] = {}
+	var base_refund := 0
+	var evolution_refund := 0
+	var changed := true
+	var job_level := ProgressionRules.job_level_for_xp(character.job_xp_total, not character.evolution_id.is_empty())
+	while changed:
+		changed = false
+		var effective := catalog.effective_skill_ranks(character.base_class_id, character.evolution_id, character.purchased_skill_ranks, character.granted_skill_ranks)
+		for id: StringName in character.purchased_skill_ranks.keys():
+			var purchased: int = character.purchased_skill_ranks[id]
+			if purchased <= 0:
+				continue
+			var rank: int = effective.get(id, 0)
+			var legal := true
+			for current_rank: int in range(1, rank + 1):
+				if not catalog.check_rank_requirements(id, current_rank, job_level, effective)["ok"]:
+					legal = false
+					break
+			if legal:
+				continue
+			var wallet: StringName = catalog.skill_metadata(id).get("wallet", &"")
+			removed_by_id[id] = {"skill_id": String(id), "purchased_ranks": purchased, "wallet": String(wallet)}
+			if wallet == ProfileCatalog.BASE_WALLET:
+				base_refund += purchased
+			else:
+				evolution_refund += purchased
+			character.purchased_skill_ranks.erase(id)
+			changed = true
+	var ids: Array[StringName] = []
+	ids.assign(removed_by_id.keys())
+	ids.sort()
+	var removed: Array[Dictionary] = []
+	for id: StringName in ids:
+		removed.append(removed_by_id[id])
+	# References in all presets and all 24 action slots remain in place. The
+	# persisted rank map governs availability and execution on every use.
+	return {"removed": removed, "base_refund": base_refund, "evolution_refund": evolution_refund}

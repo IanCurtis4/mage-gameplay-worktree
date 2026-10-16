@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## Real actor/controller/HealthState transactions; directed, with AI disabled.
 ## H2 proves invariants only, not the class's later live-AI solo viability.
 
@@ -25,6 +26,7 @@ func _build() -> BuildSnapshot:
 	build.job_level = 40
 	build.attribute_allocations = {&"int": 20, &"dex": 10}
 	build.skill_ranks = {&"snare_trap": 1, &"explosive_trap": 1, &"double_shot": 1}
+	E05DependencyFixture.complete_snapshot(build)
 	return build
 
 func _player() -> PlayerActor:

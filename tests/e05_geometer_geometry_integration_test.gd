@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## G2/G3 real adapter and death callbacks; no field combat effects or profile writes.
 
 const A := Vector2(200, 200)
@@ -23,6 +24,7 @@ func _run() -> void:
 	snapshot.base_level = 30
 	snapshot.job_level = 40
 	snapshot.skill_ranks = {&"geometer_trace": 1, &"geometer_triangulation": 5}
+	E05DependencyFixture.complete_snapshot(snapshot)
 	snapshot.library_skill_ids = [&"geometer_trace", &"geometer_triangulation"]
 	snapshot.active_slots = [&"geometer_trace", &"geometer_triangulation", null, null, null]
 	RunController.pending_run_state = RunState.from_build("g23-fixture", snapshot)

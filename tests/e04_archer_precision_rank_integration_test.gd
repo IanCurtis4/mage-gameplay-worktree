@@ -94,8 +94,8 @@ func _check_contested_resolution() -> void:
 func _check_runtime_request_capture() -> void:
 	var source_snapshot := _snapshot(3, true)
 	source_snapshot.skill_ranks.merge({
-		&"double_shot": 1,
-		&"piercing_arrow": 1,
+		&"double_shot": 2,
+		&"piercing_arrow": 2,
 		&"arrow_rain": 1,
 		&"slowing_arrow": 1,
 	}, true)
@@ -115,7 +115,12 @@ func _check_runtime_request_capture() -> void:
 	player.arrow_rain_requested.connect(func(_center: Vector2, request: DamageRequest) -> void: geometry_requests.append(request))
 	var preview := state.build_snapshot.stat_breakdown()
 	_check(is_equal_approx(preview.value(&"hit_rating"), 139.6) and is_equal_approx(player.stat_breakdown.value(&"hit_rating"), 139.6), "preview, copied run snapshot and runtime actor consume the same R3 HIT")
-	_check(player.use_double_shot(Vector2.RIGHT) and player.use_piercing_arrow(Vector2.RIGHT) and player.use_slowing_arrow(Vector2.RIGHT), "all contested Archer skill families emit from the R3 runtime build")
+	var double_emitted := player.use_double_shot(Vector2.RIGHT)
+	player.current_sp = player.max_sp
+	var piercing_emitted := player.use_piercing_arrow(Vector2.RIGHT)
+	player.current_sp = player.max_sp
+	var slowing_emitted := player.use_slowing_arrow(Vector2.RIGHT)
+	_check(double_emitted and piercing_emitted and slowing_emitted, "all contested Archer skill families emit from the R3 runtime build")
 	var contested_capture_is_canonical := contested_requests.size() == 3
 	for request: DamageRequest in contested_requests:
 		contested_capture_is_canonical = contested_capture_is_canonical and request.accuracy_mode == DamageRequest.AccuracyMode.CONTESTED and is_equal_approx(request.hit_rating, 139.6)

@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## H5 directed transactions, not a live-AI or visual acceptance test.
 
 var checks := 0
@@ -79,6 +80,7 @@ func _build(job: int = 40, evolution: StringName = &"hunter", passive_rank: int 
 	build.job_level = job
 	build.attribute_allocations = {&"dex": 30, &"int": 35}
 	build.skill_ranks = {&"double_shot": 1, &"piercing_arrow": 1, &"arrow_rain": 1, &"slowing_arrow": 1, &"snare_trap": 1, &"hunter_covering_shot": 1, &"hunter_shooting_discipline": passive_rank, &"hunter_easy_prey": passive_rank}
+	E05DependencyFixture.complete_snapshot(build)
 	return build
 
 func _player(build: BuildSnapshot) -> PlayerActor:

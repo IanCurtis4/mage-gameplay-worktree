@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## S1: run-only Focus clocks/procs and actual conditional stat integration.
 
 var checks := 0
@@ -172,6 +173,7 @@ func _fixture(stance_rank: int = 3, stance_learned: bool = true) -> PlayerActor:
 	build.job_level = 40
 	build.library_skill_ids = [&"sentinel_observe", &"sentinel_precision_stance", &"sentinel_opening_read"]
 	build.skill_ranks = {&"sentinel_observe": 5, &"sentinel_precision_stance": stance_rank, &"sentinel_opening_read": 3}
+	E05DependencyFixture.complete_snapshot(build)
 	if not stance_learned:
 		build.skill_ranks.erase(&"sentinel_precision_stance")
 	build.active_slots = [&"sentinel_observe", null, null, null, null]

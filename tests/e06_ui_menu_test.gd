@@ -72,7 +72,8 @@ func _run() -> void:
 		root.size = size
 		menu._layout_panel()
 		var viewport := root.get_visible_rect()
-		_check(menu.menu_panel.position.x >= 0 and menu.menu_panel.position.y >= 0 and menu.menu_panel.position.x + menu.menu_panel.size.x <= viewport.size.x + 1 and menu.menu_panel.position.y + menu.menu_panel.size.y <= viewport.size.y + 1, "menu container remains inside %dx%d viewport" % [size.x, size.y])
+		var visible_bounds := GuiMetrics.visual_rect(menu.menu_panel)
+		_check(viewport.grow(1.0).encloses(visible_bounds), "scaled menu container remains inside %dx%d viewport" % [size.x, size.y])
 	menu.queue_free()
 	print("UI menu phase: cleanup")
 	await process_frame

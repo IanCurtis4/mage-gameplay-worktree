@@ -45,7 +45,7 @@ func _old_text(profile: ProfileState) -> String:
 	return JSON.stringify(data, "\t")
 
 func _pairs_and_validation() -> void:
-	_check(ProfileState.CATALOG_VERSION == 13 and ProfileState.SCHEMA_VERSION == 6 and ProfileState.RULESET_ID == "stat_thresholds_v1", "only catalog version changes")
+	_check(ProfileState.CATALOG_VERSION == 14 and ProfileState.SCHEMA_VERSION == 6 and ProfileState.RULESET_ID == "stat_thresholds_v1", "only catalog version changes")
 	for pair: Array in [[&"swordsman", &""], [&"mage", &""], [&"archer", &""], [&"swordsman", &"defender"], [&"swordsman", &"berserker"], [&"mage", &"elementalist"], [&"mage", &"spiritualist"], [&"mage", &"mg_ar"], [&"archer", &"sentinel"], [&"archer", &"hunter"]]:
 		var source := _profile(pair[0], pair[1])
 		var decoded := ProfileCodec.decode(_old_text(source))
@@ -78,7 +78,7 @@ func _store_and_first_mutation() -> void:
 	var profile := _profile()
 	var character := profile.characters[0]
 	character.attribute_allocations.merge({&"str": 40, &"vit": 35, &"dex": 25}, true)
-	character.purchased_skill_ranks = {&"slash": 3, &"blood_thirst": 1, &"berserker_rupture": 2, &"berserker_execution": 1}
+	character.purchased_skill_ranks = {&"slash": 3, &"fury": 2, &"blood_thirst": 1, &"berserker_rupture": 2, &"berserker_execution": 1}
 	character.action_slots[0] = &"slash"
 	character.action_slots[23] = &"berserker_execution"
 	character.extension_fields["note"] = ["preservar"]

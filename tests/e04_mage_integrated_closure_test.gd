@@ -43,24 +43,29 @@ func _run() -> void:
 	for skill_id: StringName in expected_names:
 		var entry: Dictionary = learning_menu.skill_window.skill_entries[skill_id]
 		var tooltip: String = entry["button"].tooltip_text
-		_check(tooltip.begins_with(expected_names[skill_id]) and tooltip.contains("Rank 0/") and int(entry["option"]["rank"]) == 0 and not entry["plus"].disabled, "biblioteca publica %s comprável" % skill_id)
+		var requirement: Dictionary = entry["option"].get("next_rank_requirement", {})
+		var required_ranks: Dictionary = requirement.get("skill_ranks", {})
+		var root_skill := required_ranks.is_empty()
+		_check(tooltip.begins_with("[b]%s[/b]" % expected_names[skill_id]) and tooltip.contains("R0/") and int(entry["option"]["rank"]) == 0 and entry["plus"].disabled != root_skill, "biblioteca publica %s e seu gate de compra" % skill_id)
 	var purchases: Array[StringName] = [
-		&"fireball", &"fire_wall", &"fire_spear", &"ice_spear", &"lightning",
-		&"electric_discharge", &"lightning_wall", &"soul_impact", &"haunt",
-		&"phantom_barrier", &"ice_wall", &"teleport", &"mage_mana_regeneration",
-		&"lightning", &"lightning", &"electric_discharge", &"phantom_barrier",
-		&"ice_wall", &"mage_mana_regeneration",
+		&"fireball", &"fire_wall", &"ice_spear", &"ice_spear",
+		&"lightning", &"lightning", &"lightning",
+		&"electric_discharge", &"electric_discharge",
+		&"soul_impact", &"soul_impact", &"haunt",
+		&"phantom_barrier", &"phantom_barrier", &"ice_wall", &"ice_wall",
+		&"teleport", &"mage_mana_regeneration", &"mage_mana_regeneration",
 	]
 	for index: int in purchases.size():
-		_check(learning_menu._learn_skill(purchases[index]).get("ok", false), "compra %d de 19: %s" % [index + 1, purchases[index]])
-	for child: Node in learning_menu.action_editor.library.get_children():
-		var skill_id: StringName = child.get("skill_id")
-		_check((child as Button).text == expected_names[skill_id], "biblioteca identifica habilidade aprendida %s" % skill_id)
-	_check(learning_menu.action_editor.learned_skills.size() == 12 and learning_menu.action_editor.slot_buttons.size() == 24 and learning_menu.automatic_passives_label.text.contains("todas automáticas"), "biblioteca aprendida e 24 atalhos coexistem com passivas automáticas")
+		_check(learning_menu._learn_skill(purchases[index]).get("ok", false), "compra %d de %d: %s" % [index + 1, purchases.size(), purchases[index]])
+	for skill_id: StringName in expected_names:
+		var entry: Dictionary = learning_menu.skill_window.skill_entries[skill_id]
+		var learned_here: bool = int(entry["option"]["rank"]) > 0
+		_check(entry["button"].tooltip_text.contains("[b]%s[/b]" % expected_names[skill_id]) and learned_here == (skill_id not in [&"fire_spear", &"lightning_wall"]), "biblioteca identifica rank aprendido de %s" % skill_id)
+	_check(learning_menu.action_editor.learned_skills.size() == 10 and learning_menu.action_editor.slot_buttons.size() == 24 and learning_menu.automatic_passives_label.text.contains("todas automáticas"), "dez ativas aprendidas e 24 atalhos coexistem com passiva automática")
 	learning_menu.queue_free()
 	await process_frame
 	var progression := facade.progression_summary(character_id)
-	_check(progression["base_skill_points_available"] == 0 and progression["effective_skill_ranks"].size() == 13, "19 pontos compram biblioteca Mago sem pontos gratuitos")
+	_check(progression["base_skill_points_available"] == 0 and progression["effective_skill_ranks"].size() == 11, "19 pontos compram build Mago legal sem pontos gratuitos")
 	var elemental: Array[Variant] = [&"fireball", &"fire_wall", &"ice_spear", &"lightning", &"electric_discharge"]
 	var spiritual: Array[Variant] = [&"soul_impact", &"haunt", &"phantom_barrier", &"ice_wall", &"teleport"]
 	var passive: Array[Variant] = [&"mage_mana_regeneration", null]

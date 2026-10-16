@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## S3: real directional reset, additive primaries, finite continuous collision.
 
 const SHOT := &"sentinel_piercing_shot"
@@ -51,6 +52,7 @@ func _build(rank: int = 5) -> BuildSnapshot:
 	build.attribute_allocations = {&"int": 20, &"dex": 20, &"luk": 10}
 	build.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"archer", &"sentinel")
 	build.skill_ranks = {SHOT: rank, &"sentinel_observe": 5}
+	E05DependencyFixture.complete_snapshot(build)
 	build.active_slots = [SHOT, &"sentinel_observe", null, null, null]
 	build.passive_slots = [null, null]
 	return build

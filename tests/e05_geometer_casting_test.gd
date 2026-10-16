@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## G1 real controller/player/projectile integration, on a non-persisted fixture.
 
 var checks := 0
@@ -27,6 +28,7 @@ func _run() -> void:
 	snapshot.base_level = 30
 	snapshot.job_level = 40
 	snapshot.skill_ranks = {&"geometer_trace": 1, &"geometer_triangulation": 5}
+	E05DependencyFixture.complete_snapshot(snapshot)
 	snapshot.library_skill_ids = [&"geometer_trace", &"geometer_triangulation"]
 	snapshot.active_slots = [&"geometer_trace", &"geometer_triangulation", null, null, null]
 	RunController.pending_run_state = RunState.from_build("g1-fixture", snapshot)

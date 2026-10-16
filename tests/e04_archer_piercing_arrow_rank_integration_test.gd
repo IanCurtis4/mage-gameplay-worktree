@@ -165,7 +165,7 @@ func _snapshot(rank: int) -> BuildSnapshot:
 	var snapshot := BuildSnapshot.new()
 	snapshot.character_id = "piercing-arrow-test"
 	snapshot.base_class_id = &"archer"
-	snapshot.skill_ranks = {&"piercing_arrow": rank}
+	snapshot.skill_ranks = {&"double_shot": 2, &"piercing_arrow": rank}
 	snapshot.active_slots = [&"piercing_arrow", null, null, null, null]
 	return snapshot
 

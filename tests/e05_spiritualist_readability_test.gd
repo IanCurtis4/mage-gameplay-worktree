@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 
 var checks := 0
 var failures := 0
@@ -23,6 +24,7 @@ func _run() -> void:
 	snapshot.job_level = 40
 	snapshot.library_skill_ids = catalog.skill_ids_for_identity(&"mage", &"spiritualist")
 	snapshot.skill_ranks = {&"spiritualist_echo_curse": 1, &"spiritualist_soul_drain": 1, &"spiritualist_dissipation": 1, &"spiritualist_procession": 1, &"spiritualist_echo_recovery": 1, &"spiritualist_channel_focus": 1}
+	E05DependencyFixture.complete_snapshot(snapshot)
 	snapshot.active_slots = [&"spiritualist_echo_curse", &"spiritualist_soul_drain", &"spiritualist_dissipation", &"spiritualist_procession", null]
 	snapshot.passive_slots = [&"spiritualist_echo_recovery", &"spiritualist_channel_focus"]
 	RunController.pending_run_state = RunState.from_build("", snapshot)

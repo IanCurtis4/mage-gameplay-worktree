@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## Guide/tooltip presentation only. Fixtures never open a persistent profile.
 
 var checks := 0
@@ -22,6 +23,7 @@ func _build(sentinel: bool = true) -> BuildSnapshot:
 	build.job_level = 40
 	build.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"archer", build.evolution_id)
 	build.skill_ranks = {&"sentinel_headshot": 1, &"sentinel_observe": 1, &"sentinel_explosive_shot": 1}
+	E05DependencyFixture.complete_snapshot(build)
 	build.active_slots = [&"sentinel_headshot", &"sentinel_observe", &"sentinel_explosive_shot", null, null] if sentinel else [null, null, null, null, null]
 	build.passive_slots = [null, null]
 	return build
@@ -42,17 +44,17 @@ func _fingerprint(player: PlayerActor) -> Array:
 	return [state.focus, state.stable_time, state.inactive_time, state.observed_target_id, state.observation_remaining, state.observation_charges, state.observation_cooldown, state.opening_cooldown, state.absolute_remaining, state.reserved_focus, state.reserved_sp, state.explosive_prepared, player.current_sp, player.health.current_hp, player.attack_cooldown, player.mage_cooldowns.duplicate(true), player.global_position, player.velocity]
 
 func _tooltips() -> void:
-	var menu := CharacterMenu.new()
 	for id: StringName in SentinelTuning.SKILL_IDS:
 		var maximum := SentinelTuning.max_rank(id)
 		for rank: int in [0, 1, maximum - 1, maximum]:
 			var next: Variant = rank + 1 if rank < maximum else null
 			var option := {"skill_id": id, "rank": rank, "maximum_rank": maximum, "next_rank": next, "next_rank_requirement": {"job_level": 20, "skill_ranks": {}}, "metadata": {"category": ProfileCatalog.PASSIVE if id in [&"sentinel_precision_stance", &"sentinel_opening_read"] else ProfileCatalog.ACTIVE, "wallet": ProfileCatalog.EVOLUTION_WALLET}}
-			var tooltip := menu._skill_progression_tooltip(option)
-			_check(("Atual R%d: %s" % [rank, ClassCatalog.sentinel_description(id, rank)]) in tooltip if rank > 0 else not "Atual R0" in tooltip, "%s R%d current description matches catalog without invented rank0" % [id, rank])
-			_check(("Próximo R%d: %s" % [next, ClassCatalog.sentinel_description(id, next)]) in tooltip if next != null else "Rank máximo atingido." in tooltip and not "Próximo R" in tooltip, "%s R%d next description matches catalog / bounded cap" % [id, rank])
-			_check("Ativas aprendidas ficam disponíveis na biblioteca" in tooltip and "Passivas aprendidas são automáticas" in tooltip and "carteira evolução" in tooltip, "%s tooltip preserves purchase wallet and new automatic availability contract" % id)
-	menu.free()
+			var tooltip := SkillPresentation.describe(option).replace("[b]", "").replace("[/b]", "").replace("[i]", "").replace("[/i]", "")
+			var shown_rank: int = maxi(rank, 1)
+			var description := ClassCatalog.sentinel_description(id, shown_rank).replace("Equipada:", "Aprendida (automática):")
+			_check(description in tooltip and ("R%d/%d" % [rank, maximum]) in tooltip, "%s R%d current description matches catalog without invented rank0" % [id, rank])
+			_check(("%d pontos próprios restantes" % (maximum - rank)) in tooltip and (next == null) == (rank == maximum), "%s R%d presentation respects the bounded rank cap" % [id, rank])
+			_check("1 ponto de Evolução por rank" in tooltip and ("Passiva automática" if id in [&"sentinel_precision_stance", &"sentinel_opening_read"] else "Ativa") in tooltip, "%s tooltip preserves purchase wallet and automatic passive contract" % id)
 
 func _guide() -> void:
 	root.size = Vector2i(1280, 720)

@@ -82,6 +82,7 @@ func _run() -> void:
 	menu._apply_playtest_progression(&"max_levels")
 	menu.playtest_toggle.button_pressed = false
 	_check(menu.evolution_options_list.get_child_count() == 0 and not menu.playtest_panel.visible, "leaving admin restores normal disclosure")
+	_check(menu._learn_skill(&"spiritualist_echo_curse")["ok"] and menu._learn_skill(&"spiritualist_echo_curse")["ok"], "invest the permanent antecedent before the later unlock")
 	menu.skill_window._choose_job(&"spiritualist")
 	_check(menu.skill_window.skill_entries.has(&"spiritualist_dissipation") and not menu.skill_window.skill_entries[&"spiritualist_dissipation"]["plus"].disabled, "later job gate enables the already visible exclusive skill")
 	for extent: Vector2i in [Vector2i(1280, 720), Vector2i(960, 540)]:

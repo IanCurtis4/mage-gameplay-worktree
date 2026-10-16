@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 
 var checks := 0
 var failures := 0
@@ -112,6 +113,7 @@ func _snapshot(rank: int) -> BuildSnapshot:
 	snapshot.evolution_id = &"berserker"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"berserker")
 	snapshot.skill_ranks = {&"berserker_rupture": 2, &"berserker_pursuit": 2, &"berserker_breath_steal": rank, &"blood_thirst": 1}
+	E05DependencyFixture.complete_snapshot(snapshot)
 	snapshot.active_slots = [&"berserker_rupture", &"berserker_breath_steal", null, null, null]
 	snapshot.passive_slots = [&"blood_thirst", null]
 	return snapshot

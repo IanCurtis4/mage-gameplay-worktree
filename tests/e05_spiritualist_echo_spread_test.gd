@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## Real arena: finite wave identity, overlap, positive-only rearming and solo/group comparison.
 
 var checks := 0
@@ -8,12 +9,11 @@ func _initialize() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
-	var menu := CharacterMenu.new()
 	var option := {"skill_id": &"spiritualist_echo_curse", "metadata": {"category": ProfileCatalog.ACTIVE, "wallet": ProfileCatalog.EVOLUTION_WALLET}, "rank": 1, "maximum_rank": 5, "next_rank": null}
-	_check(menu._skill_progression_tooltip(option).contains("raio de 110") and menu._skill_progression_tooltip(option).contains("autoataque não ativa"), "curse tooltip describes AoE mark and skill-only trigger")
+	var curse_tooltip := SkillPresentation.describe(option).replace("[b]", "").replace("[/b]", "")
+	_check(curse_tooltip.contains("Marca alvo e vizinhos") and curse_tooltip.contains("habilidade direta") and curse_tooltip.contains("onda de Eco") and SkillGeometry.SPIRITUALIST_ECHO_SPREAD_RADIUS == 110.0, "curse presentation and geometry describe AoE mark and skill-only trigger")
 	option["skill_id"] = &"spiritualist_dissipation"
-	_check(menu._skill_progression_tooltip(option).contains("também ativa uma onda"), "Rite tooltip reflects its new triggering rule")
-	menu.free()
+	_check(SkillPresentation.describe(option).contains("também ativa uma onda"), "Rite tooltip reflects its new triggering rule")
 	var snapshot := BuildSnapshot.new()
 	snapshot.character_id = "echo-spread-test"
 	snapshot.base_class_id = &"mage"
@@ -22,6 +22,7 @@ func _run() -> void:
 	snapshot.job_level = 40
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"mage", &"spiritualist")
 	snapshot.skill_ranks = {&"spiritualist_echo_curse": 1, &"spiritualist_dissipation": 1}
+	E05DependencyFixture.complete_snapshot(snapshot)
 	snapshot.active_slots = [&"spiritualist_echo_curse", &"spiritualist_dissipation", null, null, null]
 	RunController.pending_run_state = RunState.from_build("", snapshot)
 	RunController.pending_training_mode = true

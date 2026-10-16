@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 
 var checks := 0
 var failures := 0
@@ -15,6 +16,7 @@ func _run() -> void:
 	snapshot.evolution_id = &"defender"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"defender")
 	snapshot.skill_ranks = {&"shield_wall": 2, &"dash": 2, &"defender_counterstroke": 3, &"defender_anchor": 2, &"defender_line_lock": 1, &"defender_wall_advance": 1, &"defender_reprisal_wave": 1, &"defender_watch": 1}
+	E05DependencyFixture.complete_snapshot(snapshot)
 	snapshot.active_slots = [&"defender_counterstroke", &"defender_anchor", &"defender_line_lock", &"defender_wall_advance", &"defender_reprisal_wave"]
 	snapshot.passive_slots = [&"defender_watch", null]
 	var player := PlayerActor.new()
@@ -164,6 +166,7 @@ func _test_advance_interruptions(nav: ArenaNavigation) -> void:
 	snapshot.evolution_id = &"defender"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"defender")
 	snapshot.skill_ranks = {&"defender_counterstroke": 1, &"defender_wall_advance": 1, &"concentrated_rage": 1, &"dash": 2}
+	E05DependencyFixture.complete_snapshot(snapshot)
 	snapshot.active_slots = [&"defender_wall_advance", &"concentrated_rage", &"dash", null, null]
 	var player := PlayerActor.new()
 	player.configure(nav, RunState.from_build("defender-interrupt", snapshot))

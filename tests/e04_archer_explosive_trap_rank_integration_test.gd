@@ -179,10 +179,11 @@ func _snapshot(rank: int) -> BuildSnapshot:
 	snapshot.character_id = "explosive-test"
 	snapshot.base_class_id = &"archer"
 	snapshot.skill_ranks = {
-		&"double_shot": 1,
-		&"piercing_arrow": 1,
+		&"double_shot": 2,
+		&"piercing_arrow": 2,
 		&"arrow_rain": 1,
 		&"extended_aim": 1,
+		&"snare_trap": 2,
 		&"explosive_trap": rank,
 	}
 	snapshot.active_slots = [&"double_shot", &"piercing_arrow", &"arrow_rain", &"extended_aim", &"explosive_trap"]

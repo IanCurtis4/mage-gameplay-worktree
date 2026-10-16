@@ -32,7 +32,7 @@ func _check_ranked_shield() -> void:
 		snapshot.character_id = "perseverance-%d" % rank
 		snapshot.base_class_id = &"swordsman"
 		snapshot.attribute_allocations = {&"vit": 6, &"int": 4}
-		snapshot.skill_ranks = {&"perseverance": rank, &"shield_wall": 1}
+		snapshot.skill_ranks = {&"perseverance": rank, &"shield_wall": 2}
 		snapshot.active_slots = [&"perseverance", &"shield_wall", null, null, null]
 		var player := PlayerActor.new()
 		player.configure(nav, RunState.from_build(snapshot.character_id, snapshot))

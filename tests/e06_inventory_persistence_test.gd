@@ -73,6 +73,7 @@ func _conflicts() -> void:
 	var profile := facade.current_profile()
 	var character := profile.characters[0]
 	character.job_xp_total = ProgressionRules.UNEVOLVED_MAX_JOB_XP
+	character.purchased_skill_ranks[&"fire_wall"] = 2
 	for definition_id: StringName in [&"warden_mail", &"prismatic_charm"]: TX.own(profile, definition_id, catalog)
 	character.presets[1]["equipped"][&"torso"] = profile.first_instance_for_definition(&"warden_mail")
 	character.presets[1]["equipped"][&"accessory_1"] = profile.first_instance_for_definition(&"prismatic_charm")

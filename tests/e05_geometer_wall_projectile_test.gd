@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## Real shared projectile paths, physical distances, impact order and finite procs.
 
 const A := Vector2(200, 200)
@@ -31,13 +32,14 @@ func _fixture(incidence_rank: int = 0) -> void:
 	snapshot.evolution_id = &"mg_ar"
 	snapshot.base_level = 30
 	snapshot.job_level = 40
-	snapshot.skill_ranks = {&"geometer_trace": 1, &"geometer_triangulation": 5, &"fireball": 1}
+	snapshot.skill_ranks = {&"geometer_trace": 2 if incidence_rank > 0 else 1, &"geometer_triangulation": 5, &"fireball": 1}
 	snapshot.library_skill_ids = [&"geometer_trace", &"geometer_triangulation", &"fireball"]
 	snapshot.active_slots = [&"geometer_trace", &"geometer_triangulation", &"fireball", null, null]
 	if incidence_rank > 0:
 		snapshot.skill_ranks[&"geometer_incidence"] = incidence_rank
 		snapshot.library_skill_ids.append(&"geometer_incidence")
 		snapshot.passive_slots = [&"geometer_incidence", null, null]
+	E05DependencyFixture.complete_snapshot(snapshot)
 	RunController.pending_run_state = RunState.from_build("", snapshot)
 	RunController.pending_training_mode = true
 	arena = load("res://scenes/main.tscn").instantiate() as RunController

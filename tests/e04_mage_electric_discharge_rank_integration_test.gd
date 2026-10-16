@@ -140,6 +140,8 @@ func _check_menu_and_controller() -> void:
 	_check(store.commit(seeded).get("ok", false), "fixture de XP usa store real")
 	facade = ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
 	_check(facade.open_profile().get("ok", false), "perfil recarrega antes do aprendizado")
+	for rank: int in range(1, 3):
+		_check(facade.learn_skill("mg2-lightning-%d" % rank, facade.current_profile().revision, character_id, &"lightning").get("ok", false), "Relâmpago R%d antecede Descarga" % rank)
 	for rank: int in range(1, 6):
 		_check(facade.learn_skill("mg2-learn-%d" % rank, facade.current_profile().revision, character_id, &"electric_discharge").get("ok", false), "compra persistente R%d" % rank)
 	var scene := load("res://scenes/character_menu.tscn") as PackedScene
@@ -148,11 +150,13 @@ func _check_menu_and_controller() -> void:
 	root.add_child(menu)
 	await process_frame
 	menu._select_roster_index(0)
-	var learned_button: Button
-	for child: Node in menu.action_editor.library.get_children():
-		if child.get("skill_id") == &"electric_discharge":
-			learned_button = child as Button
-	_check(learned_button != null and learned_button.text == "Descarga Elétrica", "biblioteca apresenta nome humano da skill aprendida")
+	var skill_entry: Dictionary = menu.skill_window.skill_entries[&"electric_discharge"]
+	var learned_button: Button = skill_entry["button"]
+	var visible_name := false
+	for child: Node in learned_button.get_children():
+		if child is Label and (child as Label).text == "Descarga Elétrica":
+			visible_name = true
+	_check(visible_name and learned_button.tooltip_text.contains("[b]Descarga Elétrica[/b]") and int(skill_entry["option"]["rank"]) == 5, "biblioteca apresenta nome humano da skill aprendida")
 	menu.action_editor.assign_skill(&"electric_discharge", 0)
 	_check(facade.current_profile().character_by_id(character_id).action_slots[0] == &"electric_discharge", "menu salva organização de atalhos pela fachada")
 	var reopened := ProfileFacade.new(ProfileStore.new(directory, catalog), ProfileRewardResolver.pilot_progression())
@@ -260,7 +264,7 @@ func _snapshot(rank: int) -> BuildSnapshot:
 	var snapshot := BuildSnapshot.new()
 	snapshot.character_id = "discharge-test"
 	snapshot.base_class_id = &"mage"
-	snapshot.skill_ranks = {&"electric_discharge": rank}
+	snapshot.skill_ranks = {&"lightning": 2, &"electric_discharge": rank}
 	snapshot.active_slots = [&"electric_discharge", null, null, null, null]
 	return snapshot
 

@@ -28,7 +28,7 @@ func _run() -> void:
 	if not opened.get("ok",false): print(opened);_finish();return
 	var after: Dictionary = ProfileCodec.encode(facade.current_profile(),catalog)["data"]
 	for key: String in ["characters","equipment_instances","next_equipment_counter","next_character_counter","next_run_counter","selected_character_id","settings","lifetime_stats","legacy_loadouts","unresolved_legacy"]:check(after[key]==raw[key],"historical value preserved "+key)
-	check(after["schema_version"]==6 and after["catalog_version"]==13 and after["revision"]==raw["revision"]+1,"only schema/catalog and one migration revision advance")
+	check(after["schema_version"]==6 and after["catalog_version"]==14 and after["revision"]==raw["revision"]+1,"only schema/catalog and one migration revision advance")
 	check(facade.current_profile().card_inventory.describe()["owned"].is_empty(),"no discarded historical card reconstructed")
 	check(FileAccess.get_file_as_string(directory.path_join(ProfileStore.BACKUP_FILE))==old,"exact original primary archived as backup")
 	var before_reopen := FileAccess.get_file_as_string(directory.path_join(ProfileStore.PRIMARY_FILE))

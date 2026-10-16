@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## S4 ammunition transaction and real scene area resolution; no personal saves.
 
 const EXPLOSIVE := &"sentinel_explosive_shot"
@@ -33,6 +34,7 @@ func _build(rank: int = 5) -> BuildSnapshot:
 	build.attribute_allocations = {&"int": 35, &"dex": 20, &"luk": 15}
 	build.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"archer", &"sentinel")
 	build.skill_ranks = {EXPLOSIVE: rank, HEAD: 1, PIERCE: 1, &"sentinel_observe": 1, &"sentinel_opening_read": 3}
+	E05DependencyFixture.complete_snapshot(build)
 	build.active_slots = [EXPLOSIVE, HEAD, PIERCE, &"sentinel_observe", null]
 	build.passive_slots = [&"sentinel_opening_read", null]
 	return build

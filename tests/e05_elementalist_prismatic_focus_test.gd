@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 
 var checks := 0
 var failures := 0
@@ -15,6 +16,7 @@ func _run() -> void:
 	snapshot.evolution_id = &"elementalist"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"mage", &"elementalist")
 	snapshot.skill_ranks = {&"elementalist_prismatic_focus": 1}
+	E05DependencyFixture.complete_snapshot(snapshot)
 	snapshot.passive_slots = [&"elementalist_prismatic_focus", null]
 	var player := PlayerActor.new()
 	player.configure(navigation, RunState.from_build("focus-test", snapshot))

@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## H4 directed transactions plus active enemy pursuit. Not a gameplay/FPS claim.
 
 var checks := 0
@@ -34,6 +35,7 @@ func _build(rank: int = 1) -> BuildSnapshot:
 	build.job_level = 40
 	build.attribute_allocations = {&"int": 20, &"dex": 10}
 	build.skill_ranks = {&"hunter_mark": rank, &"hunter_covering_shot": rank, &"hunter_total_cover": rank, &"foliage_shelter": 1, &"hunter_freezing_trap": 1, &"double_shot": 1}
+	E05DependencyFixture.complete_snapshot(build)
 	return build
 
 func _controller(rank: int = 1, input_fixture: bool = false) -> RunController:

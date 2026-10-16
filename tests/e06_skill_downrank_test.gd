@@ -94,7 +94,7 @@ func _snapshot() -> BuildSnapshot:
 	var snapshot := BuildSnapshot.new()
 	snapshot.character_id = "downrank-test"
 	snapshot.base_class_id = &"mage"
-	snapshot.skill_ranks = {&"fireball": 5, &"fire_spear": 5, &"ice_spear": 5, &"teleport": 1, &"mage_mana_regeneration": 3}
+	snapshot.skill_ranks = {&"fireball": 5, &"fire_wall": 2, &"fire_spear": 5, &"ice_spear": 5, &"teleport": 1, &"mage_mana_regeneration": 3}
 	return snapshot
 
 func _paid_cast() -> void:

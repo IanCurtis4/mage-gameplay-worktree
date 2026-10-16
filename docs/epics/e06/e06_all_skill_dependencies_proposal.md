@@ -1,6 +1,6 @@
 # E06 — dependências das dez identidades jogáveis
 
-**PROPOSTA PARA APROVAÇÃO HUMANA — 15/10/2026. Não autoriza consumidores.**
+**APROVADA pelo usuário em15/10/2026: caminhos, interface e migração. Implementação autorizada.**
 Base `bedee0d0fac15016f2b10cf2fe7e2e40c0443b55`, branch `codex/e06-inventory`, checkout `C:/Users/João Pedro/.codex/worktrees/e06-inventory/RagRPG`. Escopo e propriedade: [lote documental](e06_all_skill_dependencies_scope.md). Norma: [WORKFLOW](../../WORKFLOW.md). Este arquivo propõe somente requisitos e apresentação; não cria habilidades, efeitos, pontos ou alteração de XP.
 
 ## Regras e delta de produto

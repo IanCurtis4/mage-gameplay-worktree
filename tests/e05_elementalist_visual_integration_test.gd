@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 
 var checks := 0
 var failures := 0
@@ -14,7 +15,8 @@ func _run() -> void:
 	snapshot.base_class_id = &"mage"
 	snapshot.evolution_id = &"elementalist"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"mage", &"elementalist")
-	snapshot.skill_ranks = {&"elementalist_prismatic_focus": 1, &"elementalist_prismatic_resonance": 1}
+	snapshot.skill_ranks = {&"elementalist_prismatic_focus": 2, &"elementalist_prismatic_resonance": 1}
+	E05DependencyFixture.complete_snapshot(snapshot)
 	snapshot.passive_slots = [&"elementalist_prismatic_focus", &"elementalist_prismatic_resonance"]
 	var player := PlayerActor.new()
 	player.configure(navigation, RunState.from_build("visual-integration", snapshot))
@@ -29,7 +31,7 @@ func _run() -> void:
 	_check(controller.battle_indicators.elementalist_prisms.is_empty(), "first element has no fake passive proc")
 	controller._on_enemy_damage_resolved(_hit(player, target, &"ice_spear"))
 	var feedback := controller.battle_indicators.elementalist_prisms
-	_check(player.current_sp == 12.0 and feedback.size() == 1 and feedback[0]["skill_id"] == &"elementalist_prismatic_focus" and feedback[0]["center"] == player.global_position, "actual Focus refund acknowledges the caster")
+	_check(player.current_sp == 13.0 and feedback.size() == 1 and feedback[0]["skill_id"] == &"elementalist_prismatic_focus" and feedback[0]["center"] == player.global_position, "actual Focus refund acknowledges the caster")
 	controller._on_enemy_damage_resolved(_hit(player, target, &"lightning"))
 	_check(feedback.size() == 2 and feedback[1]["skill_id"] == &"elementalist_prismatic_resonance" and feedback[1]["center"] == target.global_position, "third distinct positive element acknowledges Resonance on the target")
 	var secondary := _hit(player, target, &"fire_spear")

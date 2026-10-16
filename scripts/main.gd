@@ -855,7 +855,7 @@ func _select_geometer_element(element: StringName) -> void:
 
 func _change_action_slots(slots: Array[Variant]) -> void:
 	_cancel_casting(false)
-	if not ActionBarLayout.valid(slots, player.available_skill_ids(), ItemSkillAdapters.reference_ids(player.class_id)):
+	if not ActionBarLayout.valid_preserving(slots, player.available_skill_ids(), action_slots, ItemSkillAdapters.reference_ids(player.class_id)):
 		battle_controls.set_action_bar(player.available_skill_ids(), action_slots, control_preferences)
 		return
 	if persistent_facade != null and not training_mode:
@@ -2498,22 +2498,6 @@ func _update_hud() -> void:
 			var rank_text := " R%d" % player.skill_rank(skill_id) if not definition.ranks.is_empty() else ""
 			var state := _display_skill_state(skill_id, cost)
 			battle_controls.show_skill_state(skill_id, "%s · %s%s\n%d SP · %s" % [_skill_input_label(skill_id), definition.display_name.to_upper(), rank_text, int(cost), state], cast_intent.active_skill == skill_id or player.active_cast_skill == skill_id)
-			if player.is_sentinel() and skill_id in SentinelTuning.SKILL_IDS:
-				var focus_cost := float(SentinelTuning.values(skill_id, player.skill_rank(skill_id))["focus_cost"])
-				battle_controls.show_skill_state(skill_id, "%s · %s%s\n%d SP · %d Foco\n%s" % [_skill_input_label(skill_id), definition.display_name.to_upper(), rank_text, ceili(cost), ceili(focus_cost), state], cast_intent.active_skill == skill_id or player.active_cast_skill == skill_id)
-				if battle_controls.skill_buttons.has(skill_id):
-					battle_controls.skill_buttons[skill_id].tooltip_text += "\n" + ClassCatalog.sentinel_description(skill_id, player.skill_rank(skill_id))
-			if player.is_hunter() and battle_controls.skill_buttons.has(skill_id):
-				if skill_id in HunterTuning.SKILL_IDS:
-					battle_controls.skill_buttons[skill_id].tooltip_text += "\n" + ClassCatalog.hunter_description(skill_id, player.skill_rank(skill_id))
-				elif skill_id == &"foliage_shelter":
-					battle_controls.skill_buttons[skill_id].tooltip_text += "\n" + ClassCatalog.hunter_cover_description()
-			if skill_id == &"geometer_triangulation" and geometer_casting != null and battle_controls.skill_buttons.has(skill_id):
-				var elements := geometer_casting.construction.elements()
-				if elements.size() == 2:
-					elements.append(geometer_casting.construction.grammar.selected_element)
-				var suspended_text := "Construção suspensa — sem efeitos.\n" if geometer_casting.construction.suspended else ""
-				battle_controls.skill_buttons[skill_id].tooltip_text = suspended_text + ClassCatalog.geometer_triangle_description(elements)
 
 		_update_slot_skill_states()
 
@@ -2532,12 +2516,33 @@ func _update_slot_skill_states() -> void:
 			var preview := SkillEffectResolver.preview_retained(skill, requested, run_state.composed_build())
 			var authored := definition.rank_definition(requested)
 			cost = float(preview["values"]["sp_cost"]) if preview.get("ok", false) else (authored.sp_cost if authored != null else 0.0)
+		if accessible and skill == &"shield_wall" and player.has_shield_stance():
+			cost = 0.0
 		var state := _display_skill_state(skill, cost) if accessible else "RANK INDISPONÍVEL"
 		var active := (cast_intent.active_skill == skill and _intent_rank == requested) or (player.active_cast_skill == skill and player.active_cast_rank == resolved)
 		var rank_text := " R%d" % (resolved if resolved > 0 else requested) if not definition.ranks.is_empty() else ""
-		battle_controls.show_skill_state(skill, "%s · %s%s\n%d SP · %s" % [control_preferences.binding_label(index), definition.display_name.to_upper(), rank_text, ceili(cost), state], active, requested)
+		var resources := "%d SP" % ceili(cost)
+		if accessible and player.is_sentinel() and skill in SentinelTuning.SKILL_IDS:
+			resources += " · %d Foco" % ceili(float(SentinelTuning.values(skill, resolved)["focus_cost"]))
+		battle_controls.show_skill_state(skill, "%s · %s%s\n%s · %s" % [control_preferences.binding_label(index), definition.display_name.to_upper(), rank_text, resources, state], active, requested)
+		var details := _slot_runtime_description(skill, resolved)
+		if not details.is_empty(): battle_controls.slot_buttons[index].tooltip_text += "\n" + details
 		battle_controls.show_skill_cooldown(skill, player.skill_cooldown(skill))
 		player.restore_cast_rank(previous)
+
+func _slot_runtime_description(skill: StringName, rank: int) -> String:
+	if rank <= 0: return ""
+	if player.is_sentinel() and skill in SentinelTuning.SKILL_IDS:
+		return ClassCatalog.sentinel_description(skill, rank)
+	if player.is_hunter():
+		if skill in HunterTuning.SKILL_IDS: return ClassCatalog.hunter_description(skill, rank)
+		if skill == &"foliage_shelter": return ClassCatalog.hunter_cover_description()
+	if skill == &"geometer_triangulation" and geometer_casting != null:
+		var elements := geometer_casting.construction.elements()
+		if elements.size() == 2: elements.append(geometer_casting.construction.grammar.selected_element)
+		var suspended := "Construção suspensa — sem efeitos.\n" if geometer_casting.construction.suspended else ""
+		return suspended + ClassCatalog.geometer_triangle_description(elements)
+	return ""
 
 func _skill_input_label(skill_id: StringName) -> String:
 	var index := -1
@@ -2943,10 +2948,8 @@ func _build_ui() -> void:
 	action_slots = run_state.build_snapshot.action_slots.duplicate(true)
 	if action_slots.is_empty():
 		action_slots = ActionBarLayout.from_legacy(run_state.build_snapshot.active_slots)
-	if not ActionBarLayout.valid(action_slots, player.available_skill_ids(), ItemSkillAdapters.reference_ids(player.class_id)):
-		for index: int in action_slots.size():
-			if action_slots[index] != null and ActionBarLayout.skill_id(action_slots[index]) not in player.available_skill_ids() and ActionBarLayout.skill_id(action_slots[index]) not in ItemSkillAdapters.reference_ids(player.class_id):
-				action_slots[index] = null
+	if not ActionBarLayout.valid_references(action_slots):
+		action_slots = ActionBarLayout.empty()
 	battle_controls.set_skill_ranks(run_state.composed_build().get("skill_ranks", {}))
 	battle_controls.set_action_bar(player.available_skill_ids(), action_slots, control_preferences)
 	battle_controls.layout_changed.connect(_change_action_slots)

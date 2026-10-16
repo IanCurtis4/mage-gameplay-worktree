@@ -150,6 +150,8 @@ func _check_pending_discard() -> void:
 	var character_id := String(created["character_id"])
 	var granted := facade.grant_playtest_progression("skill-window-xp", facade.current_profile().revision, character_id, &"max_levels")
 	_check(granted["ok"], "isolated UI fixture funds its canonical skill wallet")
+	var ancestors := facade.apply_skill_allocations("skill-window-ancestors", facade.current_profile().revision, character_id, [&"fire_wall", &"fire_wall"])
+	_check(ancestors["ok"], "persistent consultation learns Fire Wall R2 before staging Fire Spear")
 	var window := SkillWindow.new()
 	window.set_embedded(true)
 	root.add_child(window)

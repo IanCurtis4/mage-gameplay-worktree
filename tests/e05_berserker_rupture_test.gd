@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 
 var checks := 0
 var failures := 0
@@ -18,6 +19,7 @@ func _run() -> void:
 	snapshot.evolution_id = &"berserker"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"berserker")
 	snapshot.skill_ranks = {&"berserker_rupture": 1}
+	E05DependencyFixture.complete_snapshot(snapshot)
 	snapshot.active_slots = [&"berserker_rupture", null, null, null, null]
 	var player := PlayerActor.new()
 	player.configure(navigation, RunState.from_build("rupture-test", snapshot))

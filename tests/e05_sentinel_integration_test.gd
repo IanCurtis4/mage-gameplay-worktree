@@ -3,7 +3,7 @@ extends SceneTree
 
 const PROFILE_ID := "123e4567-e89b-42d3-a456-426614174217"
 const LABELS: Array[String] = ["entry", "critical", "caster"]
-const BASE_PURCHASES := {&"double_shot": 5, &"piercing_arrow": 5, &"arrow_rain": 5, &"archer_precision": 3, &"archer_cadence": 1}
+const BASE_PURCHASES := {&"double_shot": 5, &"piercing_arrow": 5, &"arrow_rain": 3, &"archer_precision": 3, &"archer_cadence": 1, &"extended_aim": 2}
 var checks := 0
 var failures := 0
 var directory: String
@@ -18,8 +18,8 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	_check(ProfileCatalog.pilot().evolution_is_ready(&"sentinel", &"archer"), "complete Sentinel uses default production catalog readiness")
 	_production_entry()
-	var critical := _legal_character("critical", {&"sentinel_headshot": 4, &"sentinel_observe": 3, &"sentinel_piercing_shot": 5, &"sentinel_concussion_shot": 1, &"sentinel_absolute_focus": 1, &"sentinel_precision_stance": 3, &"sentinel_opening_read": 3}, [&"sentinel_headshot", &"sentinel_observe", &"sentinel_piercing_shot", &"sentinel_concussion_shot", &"sentinel_absolute_focus"], {&"dex": 45, &"agi": 27, &"luk": 15})
-	var caster := _legal_character("caster", {&"sentinel_observe": 1, &"sentinel_piercing_shot": 5, &"sentinel_net_shot": 5, &"sentinel_explosive_shot": 5, &"sentinel_absolute_focus": 1, &"sentinel_precision_stance": 1, &"sentinel_opening_read": 2}, [&"sentinel_observe", &"sentinel_piercing_shot", &"sentinel_net_shot", &"sentinel_explosive_shot", &"sentinel_absolute_focus"], {&"int": 45, &"dex": 27, &"luk": 15})
+	var critical := _legal_character("critical", {&"sentinel_headshot": 2, &"sentinel_observe": 3, &"sentinel_piercing_shot": 5, &"sentinel_net_shot": 2, &"sentinel_concussion_shot": 1, &"sentinel_precision_stance": 3, &"sentinel_absolute_focus": 1, &"sentinel_opening_read": 3}, [&"sentinel_headshot", &"sentinel_observe", &"sentinel_piercing_shot", &"sentinel_concussion_shot", &"sentinel_absolute_focus"], {&"dex": 45, &"agi": 27, &"luk": 15})
+	var caster := _legal_character("caster", {&"sentinel_observe": 2, &"sentinel_piercing_shot": 3, &"sentinel_net_shot": 5, &"sentinel_explosive_shot": 5, &"sentinel_precision_stance": 2, &"sentinel_absolute_focus": 1, &"sentinel_opening_read": 2}, [&"sentinel_observe", &"sentinel_piercing_shot", &"sentinel_net_shot", &"sentinel_explosive_shot", &"sentinel_absolute_focus"], {&"int": 45, &"dex": 27, &"luk": 15})
 	for label: String in ["critical", "caster"]:
 		var character := critical if label == "critical" else caster
 		var facade := _saved_facade(label, character)
@@ -128,7 +128,7 @@ func _combat(label: String, facade: ProfileFacade, dense: bool) -> void:
 			actor.set_process(false)
 	_check(arena.training_mode and arena.encounter_active and arena.training_boss.hard_controls.boss and arena.enemies.size() == (20 if dense else 1), "%s %s uses real boss and <=20 total enemies" % [label, "dense" if dense else "solo"])
 	var player := arena.player
-	_check(player.character_animation.actor_kind == &"sentinel" and player.character_animation.atlas != null and player.character_animation.atlas.resource_path.ends_with("/sentinel.png"), "actual identity selects own Sentinel atlas, not base Archer")
+	_check(player.character_animation.actor_kind == &"sentinel" and player.character_animation.atlas != null and player.character_animation.atlas.resource_path.ends_with("/sentinel_weaponless.png"), "actual identity selects own Sentinel atlas, not base Archer")
 	var guide: Variant = arena.get("sentinel_onboarding")
 	_check(guide != null and guide.visible and not arena.help_panel.visible, "real Sentinel guide replaces generic help without extra panel")
 	if guide != null:
@@ -139,8 +139,10 @@ func _combat(label: String, facade: ProfileFacade, dense: bool) -> void:
 	arena._update_hud()
 	_check(not arena.skill_label.visible and arena.sentinel_focus_bar.visible, "Sentinel HUD has one Focus meter without duplicate skill list")
 	for skill: StringName in arena.battle_controls.skill_buttons:
-		var card: Button = arena.battle_controls.skill_buttons[skill]
-		_check(card.text.split("\n").size() >= 2 and card.tooltip_text.contains("SP") and card.tooltip_text.contains("Foco"), "compact shortcut names/state retain full SP/Focus cost in tooltip")
+		var card := arena.battle_controls.skill_buttons[skill] as ActionBarSlot
+		var cost_text := "%d SP" % ceili(player.skill_cost(skill))
+		var focus_text := "%d Foco" % ceili(float(SentinelTuning.values(skill, player.skill_rank(skill))["focus_cost"]))
+		_check(card != null and card.text.is_empty() and card.combat_icon != null and card.combat_icon.texture != null and card.tooltip_text.contains(cost_text) and card.tooltip_text.contains(focus_text), "icon shortcut keeps exact SP/Focus costs in its descriptive tooltip")
 	# No invented resource grant: a measured stationary window generates60 Focus.
 	player._process(0.01) # Observe fixture reposition as effective movement.
 	player._process(6.5)

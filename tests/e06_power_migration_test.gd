@@ -38,7 +38,7 @@ func _run() -> void:
 		for effect: EffectDefinition in item.effects:
 			_check(EquipmentPowerRules.modifier_magnitude(effect, instance, item) == effect.value_at(1), "legacy exact original values")
 	var encoded := ProfileCodec.encode(migrated, catalog)
-	_check(encoded["ok"] and encoded["data"]["schema_version"] == 6 and encoded["data"]["catalog_version"] == 13, "new envelope schema6catalog13")
+	_check(encoded["ok"] and encoded["data"]["schema_version"] == 6 and encoded["data"]["catalog_version"] == 14, "new envelope schema6catalog14")
 	var again := ProfileCodec.decode(encoded["text"], catalog)
 	_check(again["ok"] and not again.get("migrated", true), "migration is not reapplied")
 	var invalid: Dictionary = encoded["data"].duplicate(true)

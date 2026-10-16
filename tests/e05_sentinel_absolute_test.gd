@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## S5 finite Absolute Focus: clocks, local range and actual scene dispatch.
 
 const ABSOLUTE := &"sentinel_absolute_focus"
@@ -29,6 +30,7 @@ func _build(rank: int = 5) -> BuildSnapshot:
 	build.attribute_allocations = {&"int": 25, &"dex": 25, &"luk": 15}
 	build.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"archer", &"sentinel")
 	build.skill_ranks = {ABSOLUTE: rank, &"sentinel_headshot": 1, &"sentinel_piercing_shot": 1, &"sentinel_net_shot": 1, &"sentinel_observe": 1, &"sentinel_precision_stance": 3}
+	E05DependencyFixture.complete_snapshot(build)
 	build.active_slots = [ABSOLUTE, &"sentinel_headshot", &"sentinel_piercing_shot", &"sentinel_net_shot", &"sentinel_observe"]
 	build.passive_slots = [&"sentinel_precision_stance", null]
 	return build

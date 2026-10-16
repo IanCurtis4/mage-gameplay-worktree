@@ -35,7 +35,7 @@ func _check_runtime() -> void:
 		snapshot.base_level = 5 # Twelve legal attribute points cover the ten VIT used below.
 		snapshot.job_level = 20
 		snapshot.attribute_allocations = {&"vit": 10}
-		snapshot.skill_ranks = {&"blood_thirst": rank}
+		snapshot.skill_ranks = {&"fury": 2, &"blood_thirst": rank}
 		snapshot.passive_slots = [null, null] # Learned Sede de Sangue operates automatically.
 		var player := PlayerActor.new()
 		player.configure(nav, RunState.from_build(snapshot.character_id, snapshot))

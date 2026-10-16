@@ -98,7 +98,7 @@ func _snapshot(rank: int, equipped: bool) -> BuildSnapshot:
 	snapshot.character_id = "archer-cadence-test"
 	snapshot.base_class_id = &"archer"
 	snapshot.job_level = 20
-	snapshot.skill_ranks = {&"archer_cadence": rank}
+	snapshot.skill_ranks = {&"double_shot": 2, &"archer_cadence": rank}
 	snapshot.passive_slots = [&"archer_cadence", null] if equipped else [null, null]
 	return snapshot
 

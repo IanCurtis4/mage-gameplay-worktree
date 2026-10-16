@@ -58,13 +58,13 @@ func _run() -> void:
 	_check(maxed["ok"], "XP de job sintético alcança todos os gates sem save real de produção")
 	entry_menu.queue_free()
 	var base_revision: int = maxed["new_revision"]
-	for base_skill_id: StringName in [&"fire_spear", &"ice_spear"]:
+	for base_skill_id: StringName in [&"fire_wall", &"fire_wall", &"fire_spear", &"ice_spear", &"ice_spear", &"lightning", &"lightning"]:
 		var base_learned := facade.learn_skill("buy-base-%s" % base_skill_id, base_revision, character_id, base_skill_id)
 		_check(base_learned["ok"], "compra %s usa carteira base separada" % base_skill_id)
 		if base_learned["ok"]:
 			base_revision = base_learned["new_revision"]
 	var purchases := {
-		&"elementalist_flame_burst": 4, &"elementalist_glacial_ring": 1,
+		&"elementalist_flame_burst": 4, &"elementalist_glacial_ring": 2,
 		&"elementalist_lightning_arc": 1, &"elementalist_ember_path": 1,
 		&"elementalist_tri_nova": 1, &"elementalist_prismatic_focus": 3,
 		&"elementalist_prismatic_resonance": 3,
@@ -93,7 +93,7 @@ func _run() -> void:
 	for index: int in learned_active.size():
 		action_slots[index] = learned_active[index]
 	var organized := facade.update_action_slots("organize-all-actions", revision, character_id, action_slots)
-	_check(organized["ok"] and learned_active.size() == 7, "sete ativas aprendidas usam biblioteca e barra independente dos presets")
+	_check(organized["ok"] and learned_active.size() == 9, "nove ativas aprendidas incluem antecedentes e usam barra independente dos presets")
 	revision = organized["new_revision"]
 	var reloaded := ProfileFacade.new(ProfileStore.new(directory, catalog), resolver)
 	var reload_result := reloaded.open_profile()
@@ -111,7 +111,7 @@ func _run() -> void:
 		await process_frame
 	var controller := current_scene as RunController
 	_check(started["ok"] and started["run_state"].build_snapshot.evolution_id == &"elementalist" and started["run_state"].build_snapshot.skill_ranks[&"elementalist_flame_burst"] == 5 and started["run_state"].build_snapshot.active_slots == build_b_active, "run snapshot preserva evolução, R5 e a build selecionada")
-	_check(controller != null and controller.player.character_animation.actor_kind == &"elementalist" and controller.battle_controls.slot_buttons.size() == 24 and controller.battle_controls.skill_buttons.size() == 7 and controller.player.available_skill_ids() == learned_active and controller.run_state.build_snapshot.learned_skill_ids(ProfileCatalog.PASSIVE).size() == 2, "real scene uses evolved atlas, all learned active skills and automatic learned passives")
+	_check(controller != null and controller.player.character_animation.actor_kind == &"elementalist" and controller.battle_controls.slot_buttons.size() == 24 and controller.battle_controls.skill_buttons.size() == 9 and controller.player.available_skill_ids() == learned_active and controller.run_state.build_snapshot.learned_skill_ids(ProfileCatalog.PASSIVE).size() == 2, "real scene uses evolved atlas, all learned active skills and automatic learned passives")
 	_check(controller != null and controller.class_button.text == "Classe: Elementalista", "run header shows evolved identity without changing the Mage origin contract")
 	if started["ok"]:
 		_check_elementalist_boss(started["run_state"])

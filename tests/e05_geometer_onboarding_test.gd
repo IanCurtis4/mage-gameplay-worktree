@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## Presentation-only guide: real state/skill APIs, no profile files or scene mutation.
 
 const GuideScript = preload("res://scripts/ui/geometer_onboarding.gd")
@@ -28,6 +29,7 @@ func _run() -> void:
 		build.evolution_id = &"mg_ar"
 		build.job_level = 40
 		build.skill_ranks = {&"geometer_trace": 1, &"geometer_triangulation": 5}
+		E05DependencyFixture.complete_snapshot(build)
 		build.library_skill_ids = [&"geometer_trace", &"geometer_triangulation"]
 		build.active_slots = [&"geometer_trace", &"geometer_triangulation", null, null, null]
 		navigation.configure(Rect2(0, 0, 1400, 1000), [], 18)

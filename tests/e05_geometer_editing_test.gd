@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## G6 real scene transactions: edits, paid collapse, learned duration snapshot.
 
 const A := Vector2(200, 200)
@@ -44,6 +45,7 @@ func _fixture(memory_rank: int = 3, triangle_rank: int = 5, collapse_rank: int =
 	build.job_level = 40
 	build.library_skill_ids = [&"geometer_trace", &"geometer_translation", &"geometer_triangulation", &"geometer_rewrite", &"geometer_collapse", &"geometer_incidence", &"geometer_vector_memory"]
 	build.skill_ranks = {&"geometer_trace": 5, &"geometer_translation": 5, &"geometer_triangulation": triangle_rank, &"geometer_rewrite": 5, &"geometer_collapse": collapse_rank, &"geometer_incidence": 3}
+	E05DependencyFixture.complete_snapshot(build, [&"geometer_triangulation"])
 	if memory_rank > 0:
 		build.skill_ranks[&"geometer_vector_memory"] = memory_rank
 	build.active_slots = [&"geometer_trace", &"geometer_triangulation", &"geometer_translation", &"geometer_collapse", &"geometer_rewrite"]

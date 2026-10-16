@@ -135,7 +135,7 @@ func _build_settings() -> void:
 func set_action_bar(skill_ids: Array[StringName], slots: Array[Variant], preferences: ControlPreferences) -> void:
 	learned_skills = skill_ids.duplicate()
 	control_preferences = preferences
-	action_slots = slots.duplicate() if ActionBarLayout.valid(slots, learned_skills, ItemSkillAdapters.IDS) else ActionBarLayout.empty()
+	action_slots = slots.duplicate() if ActionBarLayout.valid_references(slots) else ActionBarLayout.empty()
 	_rebuild_bar()
 
 func set_class_skills(skill_ids: Array[StringName]) -> void:

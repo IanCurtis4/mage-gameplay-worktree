@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 
 var checks := 0
 var failures := 0
@@ -100,6 +101,7 @@ func _player(navigation: ArenaNavigation, equip_counter: bool) -> PlayerActor:
 	snapshot.evolution_id = &"defender"
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"swordsman", &"defender")
 	snapshot.skill_ranks = {&"defender_counterstroke": 1 if equip_counter else 2, &"shield_wall": 1}
+	E05DependencyFixture.complete_snapshot(snapshot)
 	if not equip_counter: snapshot.skill_ranks[&"defender_guard_return"] = 1
 	snapshot.active_slots = [&"defender_counterstroke" if equip_counter else &"shield_wall", null, null, null, null]
 	snapshot.passive_slots = [null if equip_counter else &"defender_guard_return", null]

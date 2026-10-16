@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## Visual state is sampled from real combat results, not from UI messages.
 
 var checks := 0
@@ -16,6 +17,7 @@ func _run() -> void:
 	snapshot.job_level = 40
 	snapshot.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"mage", &"spiritualist")
 	snapshot.skill_ranks = {&"spiritualist_echo_curse": 1, &"spiritualist_dissipation": 1, &"spiritualist_soul_drain": 1, &"spiritualist_spectral_veil": 1, &"spiritualist_procession": 1, &"spiritualist_channel_focus": 1}
+	E05DependencyFixture.complete_snapshot(snapshot)
 	snapshot.active_slots = [&"spiritualist_echo_curse", &"spiritualist_dissipation", &"spiritualist_soul_drain", &"spiritualist_spectral_veil", &"spiritualist_procession"]
 	snapshot.passive_slots = [&"spiritualist_channel_focus", null]
 	RunController.pending_run_state = RunState.from_build("", snapshot)

@@ -1,4 +1,5 @@
 extends SceneTree
+const E05DependencyFixture = preload("res://tests/e05_dependency_fixture.gd")
 ## S2 transaction: immediate special emission, paid once, no extra same-frame auto.
 
 const HEAD := &"sentinel_headshot"
@@ -29,6 +30,7 @@ func _build(rank: int = 1) -> BuildSnapshot:
 	build.attribute_allocations = {&"dex": 20, &"luk": 10}
 	build.library_skill_ids = ProfileCatalog.pilot().skill_ids_for_identity(&"archer", &"sentinel")
 	build.skill_ranks = {HEAD: rank}
+	E05DependencyFixture.complete_snapshot(build)
 	build.active_slots = [HEAD, null, null, null, null]
 	build.passive_slots = [null, null]
 	return build

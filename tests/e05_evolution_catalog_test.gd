@@ -53,8 +53,8 @@ func _check_production_roster() -> void:
 			and definition.affinity_class_id == values[3],
 			"%s preserves accepted name, origin, branch and affinity" % definition.id
 		)
-		var has_defender_metadata := definition.id == &"defender" and definition.entry_skill_id == &"defender_counterstroke" and definition.exclusive_skill_ids.size() == 7
-		var has_berserker_metadata := definition.id == &"berserker" and definition.entry_skill_id == &"berserker_rupture" and definition.exclusive_skill_ids.size() == 7
+		var has_defender_metadata := definition.id == &"defender" and definition.entry_skill_id == &"defender_counterstroke" and definition.exclusive_skill_ids.size() == 9
+		var has_berserker_metadata := definition.id == &"berserker" and definition.entry_skill_id == &"berserker_rupture" and definition.exclusive_skill_ids.size() == 9
 		var has_elementalist_metadata := definition.id == &"elementalist" and definition.entry_skill_id == &"elementalist_flame_burst" and definition.exclusive_skill_ids.size() == 7
 		var has_spiritualist_metadata := definition.id == &"spiritualist" and definition.entry_skill_id == &"spiritualist_echo_curse" and definition.exclusive_skill_ids == [&"spiritualist_echo_curse", &"spiritualist_echo_recovery", &"spiritualist_soul_drain", &"spiritualist_spectral_veil", &"spiritualist_channel_focus", &"spiritualist_procession", &"spiritualist_dissipation"]
 		var has_no_kit := definition.id not in [&"defender", &"berserker", &"elementalist", &"spiritualist"] and definition.entry_skill_id.is_empty() and definition.exclusive_skill_ids.is_empty()
@@ -77,11 +77,19 @@ func _check_production_roster() -> void:
 		&"defender_counterstroke", &"defender_watch", &"defender_anchor",
 		&"defender_line_lock", &"defender_guard_return",
 		&"defender_wall_advance", &"defender_reprisal_wave",
+		&"defender_riposte", &"defender_retreat_guard",
 	]
 	var defender_library := catalog.skill_ids_for_identity(&"swordsman", &"defender")
+	var expected_berserker_ids: Array[StringName] = [
+		&"berserker_rupture", &"berserker_obstinacy", &"berserker_wound_leap",
+		&"berserker_execution", &"berserker_pursuit", &"berserker_blood_rift",
+		&"berserker_breath_steal", &"berserker_pursuit_cut", &"berserker_deep_bleeding",
+	]
+	var berserker := catalog.evolution_definition(&"berserker")
+	_check(berserker.content_ready and berserker.exclusive_skill_ids == expected_berserker_ids, "production enables the complete nine-skill Berserker library")
 	_check(defender.entry_skill_id == &"defender_counterstroke" and defender.exclusive_skill_ids == expected_defender_ids and defender.content_ready, "production enables only the complete Defender library")
-	_check(&"slash" in defender_library and defender_library.slice(defender_library.size() - 7) == expected_defender_ids and &"defender_counterstroke" not in catalog.skill_ids_for_identity(&"mage", &"mg_sp") and &"defender_counterstroke" not in catalog.skill_ids_for_identity(&"swordsman", &"berserker"), "resolved library combines Swordsman base and only the Defender-exclusive seven")
-	var job_gates: Array[int] = [20, 23, 25, 28, 31, 34, 37]
+	_check(&"slash" in defender_library and defender_library.slice(defender_library.size() - 9) == expected_defender_ids and &"defender_counterstroke" not in catalog.skill_ids_for_identity(&"mage", &"mg_sp") and &"defender_counterstroke" not in catalog.skill_ids_for_identity(&"swordsman", &"berserker"), "resolved library combines Swordsman base and only the Defender-exclusive nine")
+	var job_gates: Array[int] = [20, 23, 25, 28, 31, 34, 37, 31, 25]
 	for index: int in expected_defender_ids.size():
 		var metadata := catalog.skill_metadata(expected_defender_ids[index])
 		_check(metadata["rank_requirements"][1]["job_level"] == job_gates[index] and metadata["wallet"] == ProfileCatalog.EVOLUTION_WALLET and metadata["required_evolution_id"] == &"defender", "%s keeps its approved job gate and evolution wallet" % expected_defender_ids[index])
