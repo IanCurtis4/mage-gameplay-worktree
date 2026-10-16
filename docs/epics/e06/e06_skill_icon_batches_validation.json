@@ -1,0 +1,126 @@
+{
+  "status": "TECHNICALLY_VALIDATED_AND_APPLIED",
+  "date": "2026-10-16",
+  "scope": "86 new painted icons;7 existing preserved;93 skills across10 classes",
+  "art_candidate": "a3ad7570d5550534306871a018972516d03acff9",
+  "classes": [
+    {
+      "class": "swordsman",
+      "icons": 13,
+      "commit": "cabea447ef508680b3729b4ec1d50fb130583136",
+      "validation": "e06_skill_icons_swordsman_validation.json",
+      "delivery": "e06_skill_icons_swordsman_delivery.json"
+    },
+    {
+      "class": "defender",
+      "icons": 9,
+      "commit": "15b27c03c8ca2af5fc6ff0acfe53c90785bd83e5",
+      "validation": "e06_skill_icons_defender_validation.json",
+      "delivery": "e06_skill_icons_defender_delivery.json"
+    },
+    {
+      "class": "berserker",
+      "icons": 9,
+      "commit": "9efb300cdb3e2bc81b4155aadcd0d23ab1d7e819",
+      "validation": "e06_skill_icons_berserker_validation.json",
+      "delivery": "e06_skill_icons_berserker_delivery.json"
+    },
+    {
+      "class": "mage",
+      "icons": 13,
+      "commit": "b971c2c914e957453f20e1841fa6bbae088e5721",
+      "validation": "e06_skill_icons_mage_validation.json",
+      "delivery": "e06_skill_icons_mage_delivery.json"
+    },
+    {
+      "class": "elementalist",
+      "icons": 7,
+      "commit": "254f4cac26b49db3fc4bac96d9c1e762d691e442",
+      "validation": "e06_skill_icons_elementalist_validation.json",
+      "delivery": "e06_skill_icons_elementalist_delivery.json"
+    },
+    {
+      "class": "spiritualist",
+      "icons": 7,
+      "commit": "d0af561e07d049f649d59613b6ed46619f51b407",
+      "validation": "e06_skill_icons_spiritualist_validation.json",
+      "delivery": "e06_skill_icons_spiritualist_delivery.json"
+    },
+    {
+      "class": "archer",
+      "icons": 11,
+      "commit": "cf0fe46431d87a8a77d5f35e0f84f5c30c362ac1",
+      "validation": "e06_skill_icons_archer_validation.json",
+      "delivery": "e06_skill_icons_archer_delivery.json"
+    },
+    {
+      "class": "sentinel",
+      "icons": 9,
+      "commit": "17dabe5fa04b55df531001abbfc59d6c065cf2ff",
+      "validation": "e06_skill_icons_sentinel_validation.json",
+      "delivery": "e06_skill_icons_sentinel_delivery.json"
+    },
+    {
+      "class": "hunter",
+      "icons": 8,
+      "commit": "c9e7d26245f456e66c5894b2dcf0633bcd314ee7",
+      "validation": "e06_skill_icons_hunter_validation.json",
+      "delivery": "e06_skill_icons_hunter_delivery.json"
+    },
+    {
+      "class": "geometer",
+      "icons": 7,
+      "commit": "a3ad7570d5550534306871a018972516d03acff9",
+      "validation": "e06_skill_icons_geometer_validation.json",
+      "delivery": "e06_skill_icons_geometer_delivery.json"
+    }
+  ],
+  "coverage": {
+    "painted": 93,
+    "new": 86,
+    "preserved": 7,
+    "pending": 0
+  },
+  "tool": "built-in imagegen via imagegen and ragrpg-art skills; one individual original PNG per ability, copied unchanged",
+  "prompt_manifest": "assets/art/skills/painted/manifest.json",
+  "tests": {
+    "method": "tools/verify.ps1 directed checks by stable class, Luna execution supervision",
+    "source_and_target_each_class": [
+      "editor_import",
+      "e06_icon_bar_test"
+    ],
+    "initial_pipeline_checks": [
+      "e06_skill_window_test",
+      "e06_skill_ux_iteration_test",
+      "e06_compact_gui_test",
+      "e06_icon_bar_test"
+    ],
+    "final_native_probe": "tools/dependency_native_probe.gd",
+    "final_native_log": {
+      "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\skill_icon_batches_final\\native.log",
+      "sha256": "3410c5d8b9870b697b1443233b82a31208dd5d19ebc17d00762c588e9b02137c"
+    },
+    "markers": [
+      "COMPACT_GUI_NATIVE_OK",
+      "DEPENDENCY_NATIVE_OK",
+      "SKILL_UX_NATIVE_OK",
+      "SKILL_ICON_NATIVE icons93 pixels32",
+      "SKILL_ICON_NATIVE icons93 pixels64"
+    ]
+  },
+  "luna_final_watch": {
+    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\skill_icon_batches_final\\watch.json",
+    "sha256": "529a03da2966eb8420e0f06da27dbc2b1059adcf175952a115bd5c68d0c676dd",
+    "role": "Execution, hashes and preservation supervision; not independent semantic audit"
+  },
+  "sol_visual_review": "Each class contact/tree reviewed at32/64px, light/dark and existing blocked shader; final93 contact, production lobby and combat bar inspected at1280x720. Additional native UI captures at1920x1080.",
+  "preservation": "Ten class preservation receipts checked with zero mismatches; original7 PNG hashes match0af2ec5; personal saves untouched.",
+  "rules_and_save_changed": false,
+  "limitations": [
+    "Human artistic acceptance pending; no performance or balance claims.",
+    "Full230 gameplay suite was already completed before this art-only batch and was not repeated.",
+    "Existing blocked-icon shader preserved; technical approval is not product acceptance."
+  ],
+  "master_merge": false,
+  "push": false
+}

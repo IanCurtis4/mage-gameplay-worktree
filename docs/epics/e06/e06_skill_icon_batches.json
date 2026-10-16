@@ -671,7 +671,7 @@
     },
     {
       "class": "geometer",
-      "status": "validated_source",
+      "status": "applied_verified",
       "entries": [
         {
           "id": "geometer_collapse",
@@ -723,9 +723,11 @@
           "sha256": "4b9e2742b02656c0e5fbbc39575ea0562cbde54bf069b97227ba7d396e3004b3"
         }
       ],
-      "validation": "docs/epics/e06/e06_skill_icons_geometer_validation.json"
+      "validation": "docs/epics/e06/e06_skill_icons_geometer_validation.json",
+      "commit": "a3ad7570d5550534306871a018972516d03acff9"
     }
   ],
   "generated_new": 86,
-  "next_class": null
+  "next_class": null,
+  "status": "complete_applied_verified"
 }

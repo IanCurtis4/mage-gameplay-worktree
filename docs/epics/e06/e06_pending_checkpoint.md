@@ -1,3 +1,5 @@
+> Icones16/10 CONCLUIDOS: 86 novos + 7 preservados = 93 habilidades nas dez classes. Todos os lotes aplicados no playtest; importacao/barra/renderer e UI final PASS, supervisao Luna e revisao visual Sol. [Validacao](e06_skill_icon_batches_validation.json). Fila zerada; proximo passo: playtest humano. Sem merge master/push.
+
 > Ícones16/10: geometer VALIDADO na fonte, 7ícones pintados; importação/barra/renderer PASS com supervisão Luna e inspeção Sol. [Evidência](e06_skill_icons_geometer_validation.json). Restam0; próximo None. [Fila retomável](e06_skill_icon_batches.json). Classes anteriores aplicadas têm recibos por classe.
 
 > Ícones16/10: hunter VALIDADO na fonte, 8ícones pintados; importação/barra/renderer PASS com supervisão Luna e inspeção Sol. [Evidência](e06_skill_icons_hunter_validation.json). Restam7; próximo geometer. [Fila retomável](e06_skill_icon_batches.json). Classes anteriores aplicadas têm recibos por classe.

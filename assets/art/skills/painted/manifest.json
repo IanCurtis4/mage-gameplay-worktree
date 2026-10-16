@@ -1345,5 +1345,12 @@
       "sha256": "2ef6d047f10509af522ec42e99d11104e167f9b39b09c895c82ef4ed40ceb92c",
       "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep slate #35434d background and luminous pale mint #8fe0c5 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE rewrite: an elegant enchanted drafting compass gripping a small crystal and redirecting one curved magical path, clear two-legged compass silhouette, coherent magical drawing tool, no letters or tiny markings."
     }
-  ]
+  ],
+  "updated_date": "2026-10-16",
+  "coverage": {
+    "painted": 93,
+    "new_in_class_batches": 86,
+    "preserved_existing": 7,
+    "classes": 10
+  }
 }

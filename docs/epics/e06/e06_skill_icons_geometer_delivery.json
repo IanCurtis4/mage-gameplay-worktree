@@ -1,0 +1,16 @@
+{
+  "status": "APPLIED_VERIFIED",
+  "class": "geometer",
+  "candidate": "a3ad7570d5550534306871a018972516d03acff9",
+  "base": "c9e7d26245f456e66c5894b2dcf0633bcd314ee7",
+  "target_checks": 2,
+  "native_sha256": "dba4234c8ca065f3d7a4c907f98522f4418bf1ff1e919817d87e4f3477d4d214",
+  "local_files_preserved": 207,
+  "personal_files_preserved": 3,
+  "cli_preflight": "Legacy CLI dirty target refusal; manual preserving FF according current WORKFLOW.",
+  "product_acceptance": "pending",
+  "luna_target_watch": {
+    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\art_batch_geometer\\target_watch.json",
+    "sha256": "bb9ac2a0cf54dd9c08114083f2ff2f1d7cc159258bbbffa94b33011cd4ba78e2"
+  }
+}
