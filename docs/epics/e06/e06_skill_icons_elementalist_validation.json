@@ -1,0 +1,127 @@
+{
+  "status": "TECHNICALLY_VALIDATED_SOURCE",
+  "class": "elementalist",
+  "date": "2026-10-16",
+  "new_icons": 7,
+  "preserved_icons": 0,
+  "assets": [
+    {
+      "id": "elementalist_ember_path",
+      "file": "assets/art/skills/painted/elementalist_ember_path.png",
+      "sha256": "7664b453eff3ce1dded44d16f9735a3bfb4a9f08ece0572ec16f28ba7c41fffc",
+      "preserved_existing": false
+    },
+    {
+      "id": "elementalist_flame_burst",
+      "file": "assets/art/skills/painted/elementalist_flame_burst.png",
+      "sha256": "981bc5925e18b980dd7d3bc6c3054d6a5caec8b93e6cb40275a4d3af159fe244",
+      "preserved_existing": false
+    },
+    {
+      "id": "elementalist_glacial_ring",
+      "file": "assets/art/skills/painted/elementalist_glacial_ring.png",
+      "sha256": "cf210e046375ec3edebad9cfe59fc74ea852d8813a577f7d0a3237541fc18b9d",
+      "preserved_existing": false
+    },
+    {
+      "id": "elementalist_lightning_arc",
+      "file": "assets/art/skills/painted/elementalist_lightning_arc.png",
+      "sha256": "d52ae407f5502e6abf5f6055b3ffdb3f0747bbc1da0db4d74a34b0efd47f1261",
+      "preserved_existing": false
+    },
+    {
+      "id": "elementalist_prismatic_focus",
+      "file": "assets/art/skills/painted/elementalist_prismatic_focus.png",
+      "sha256": "eda614cda07635be1a2ed011579a13eed9f3b44ebd532a347e379a381bce3ed8",
+      "preserved_existing": false
+    },
+    {
+      "id": "elementalist_prismatic_resonance",
+      "file": "assets/art/skills/painted/elementalist_prismatic_resonance.png",
+      "sha256": "24cda0f057f82a7b124ca1fa899be7717ffa8d342cfa9c161075ba9366205dea",
+      "preserved_existing": false
+    },
+    {
+      "id": "elementalist_tri_nova",
+      "file": "assets/art/skills/painted/elementalist_tri_nova.png",
+      "sha256": "dde42583ddbaf63741850a99c0604a11aceaba5bb6fb44a0024c08c18f4d7a0d",
+      "preserved_existing": false
+    }
+  ],
+  "generation": "Built-in imagegen; original PNGs copied unchanged, full prompts/source/hash in painted/manifest.json.128px import;32/64px display.",
+  "execution": {
+    "class": "elementalist",
+    "status": "CHECKS_AND_NATIVE_PASS_PENDING_VISUAL_REVIEW",
+    "checks": [
+      {
+        "failed": false,
+        "timeout_seconds": 300,
+        "timed_out": false,
+        "exit_code": 0,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\elementalist\\checks\\001.output.log",
+        "execution_index": 1,
+        "name": "editor_import",
+        "index": 1,
+        "output_sha256": "A904099C4212DED952DE583E1B3126363719C700985844B86F8026B391DCEEF7",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\elementalist\\checks\\001.engine.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+          "--editor",
+          "--import",
+          "--quit"
+        ]
+      },
+      {
+        "failed": false,
+        "timeout_seconds": 300,
+        "timed_out": false,
+        "exit_code": 0,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\elementalist\\checks\\227-e06_icon_bar_test.output.log",
+        "execution_index": 2,
+        "name": "e06_icon_bar_test",
+        "index": 227,
+        "output_sha256": "EB3F9ABDAF6F6B129E2FE140E29916FCDDECD3E077141BF2FE525A5703A692AA",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\elementalist\\checks\\227-e06_icon_bar_test.engine.log",
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+          "--script",
+          "res://tests/e06_icon_bar_test.gd"
+        ]
+      }
+    ],
+    "native_sha256": "2a44b8e5add00eda91ce64b6513aa1a0dc74d50e8bc70106b69a63e81d01bb65",
+    "native_elapsed_seconds": 5.12,
+    "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "source_input_manifest": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner_inputs.json",
+    "source_input_manifest_sha256": "6e577a8dee13263df8499ab5172f8dc8955899013e9fe5b661a0df49f23dad4e"
+  },
+  "luna_supervision": {
+    "report": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\elementalist\\watch.json",
+    "sha256": "d4d9f3db292b1239b77df076a8eac281b8f58de188462ee4ef62b7818abfdfb8",
+    "role": "Execution supervision; no independent semantic audit"
+  },
+  "captures": [
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\elementalist\\contact.png",
+      "sha256": "b5e1d8345784b1844c3916cc753c0a1053e7338c5c71e04630446636ffdc679c"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\elementalist\\tree.png",
+      "sha256": "31164090995a846c80fb867ada5b262b7c30b8dd039e25bbc75cce453f88f59f"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\elementalist\\list.png",
+      "sha256": "05f944f4d0d10e0c541638f887de83651748fddfb317a37f3e7ffa28091c0ab9"
+    }
+  ],
+  "visual_review": "Sol viewed contact and real tree at32/64px on light/dark backgrounds and existing blocked shader; distinct skill motifs, restrained passive contours, coherent subjects; source originals preserved. Tree/list probe completed with isolated profile.",
+  "changes_to_rules_or_save": false,
+  "limitations": [
+    "Human artistic preference/playtest pending; no FPS/balance claims.",
+    "42 icons still queued; next class spiritualist"
+  ]
+}

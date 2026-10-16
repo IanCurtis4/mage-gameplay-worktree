@@ -2,7 +2,7 @@
   "scope": "Remaining86 painted icons for approved93 skills; one closed class batch at a time",
   "baseline": "0af2ec5ab4ba0d181f1430da24e6866e1541ade0",
   "existing_painted": 7,
-  "pending": 49,
+  "pending": 42,
   "owner": "Sol/root: art briefs, generation, files, manifests, import settings, class probes and checkpoints. Luna: bounded execution supervision only after stable batch.",
   "classes": [
     {
@@ -240,7 +240,7 @@
     },
     {
       "class": "mage",
-      "status": "validated_source",
+      "status": "applied_verified",
       "entries": [
         {
           "id": "electric_discharge",
@@ -332,48 +332,64 @@
           "sha256": "c9d9b1f367899306ce0a60fb47d2ff1e069f9414467178d219aabb5acef07a3b"
         }
       ],
-      "validation": "docs/epics/e06/e06_skill_icons_mage_validation.json"
+      "validation": "docs/epics/e06/e06_skill_icons_mage_validation.json",
+      "commit": "b971c2c914e957453f20e1841fa6bbae088e5721"
     },
     {
       "class": "elementalist",
-      "status": "pending",
+      "status": "validated_source",
       "entries": [
         {
           "id": "elementalist_ember_path",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/elementalist_ember_path.png",
+          "sha256": "7664b453eff3ce1dded44d16f9735a3bfb4a9f08ece0572ec16f28ba7c41fffc"
         },
         {
           "id": "elementalist_flame_burst",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/elementalist_flame_burst.png",
+          "sha256": "981bc5925e18b980dd7d3bc6c3054d6a5caec8b93e6cb40275a4d3af159fe244"
         },
         {
           "id": "elementalist_glacial_ring",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/elementalist_glacial_ring.png",
+          "sha256": "cf210e046375ec3edebad9cfe59fc74ea852d8813a577f7d0a3237541fc18b9d"
         },
         {
           "id": "elementalist_lightning_arc",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/elementalist_lightning_arc.png",
+          "sha256": "d52ae407f5502e6abf5f6055b3ffdb3f0747bbc1da0db4d74a34b0efd47f1261"
         },
         {
           "id": "elementalist_prismatic_focus",
           "category": "passive",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/elementalist_prismatic_focus.png",
+          "sha256": "eda614cda07635be1a2ed011579a13eed9f3b44ebd532a347e379a381bce3ed8"
         },
         {
           "id": "elementalist_prismatic_resonance",
           "category": "passive",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/elementalist_prismatic_resonance.png",
+          "sha256": "24cda0f057f82a7b124ca1fa899be7717ffa8d342cfa9c161075ba9366205dea"
         },
         {
           "id": "elementalist_tri_nova",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/elementalist_tri_nova.png",
+          "sha256": "dde42583ddbaf63741850a99c0604a11aceaba5bb6fb44a0024c08c18f4d7a0d"
         }
-      ]
+      ],
+      "validation": "docs/epics/e06/e06_skill_icons_elementalist_validation.json"
     },
     {
       "class": "spiritualist",
@@ -616,6 +632,6 @@
       ]
     }
   ],
-  "generated_new": 37,
-  "next_class": "elementalist"
+  "generated_new": 44,
+  "next_class": "spiritualist"
 }

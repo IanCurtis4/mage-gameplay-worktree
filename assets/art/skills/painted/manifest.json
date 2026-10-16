@@ -609,6 +609,111 @@
       ],
       "sha256": "c9d9b1f367899306ce0a60fb47d2ff1e069f9414467178d219aabb5acef07a3b",
       "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep arcane indigo #302b58 background and luminous pale lavender #d8b6ef subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Teleporte: one tall open oval portal with a broad curling ribbon of arcane light flowing inward from one side and out the other, like the curled edges of an unfurled spell scroll. Large clear dark opening, no person or extra portals. Distinct from a round protective bubble."
+    },
+    {
+      "id": "elementalist_ember_path",
+      "file": "elementalist_ember_path.png",
+      "class": "elementalist",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-49224cc5-9434-4eb9-8ead-d42bf2ca5d90.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "7664b453eff3ce1dded44d16f9735a3bfb4a9f08ece0572ec16f28ba7c41fffc",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep royal-blue #303d67 background and warm golden ivory #f1c879 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Trilha de Brasas: one winding path of three broad glowing ember patches receding into the distance, connected by a single low curling ribbon of flame. Strong serpentine ground-trail silhouette, no standing fire wall or floating fireball."
+    },
+    {
+      "id": "elementalist_flame_burst",
+      "file": "elementalist_flame_burst.png",
+      "class": "elementalist",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-9da1ff94-9f0d-44bd-8986-56341c723fc3.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "981bc5925e18b980dd7d3bc6c3054d6a5caec8b93e6cb40275a4d3af159fe244",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep royal-blue #303d67 background and warm golden ivory #f1c879 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Explosão Ígnea: one large blazing fire blossom erupting outward from a bright compact center, four broad upward-and-outward curling tongues. Strong wide detonation silhouette, no comet tail, no spear, no tiny sparks."
+    },
+    {
+      "id": "elementalist_glacial_ring",
+      "file": "elementalist_glacial_ring.png",
+      "class": "elementalist",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-f014d6bb-6826-43c7-adc7-5042f1b218da.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "cf210e046375ec3edebad9cfe59fc74ea852d8813a577f7d0a3237541fc18b9d",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep royal-blue #303d67 background and luminous pale ice-cyan #a7e1e4 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Anel Glacial: one thick unbroken circular ring of ice with three large crystalline points rising from its outer rim. Perspective ground ellipse, clean frozen open center and sharp frosted facets. No standing rectangular wall or snowflake clutter."
+    },
+    {
+      "id": "elementalist_lightning_arc",
+      "file": "elementalist_lightning_arc.png",
+      "class": "elementalist",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-ad7afbec-a47d-4e1b-98e7-5fed1e1fcc3a.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "d52ae407f5502e6abf5f6055b3ffdb3f0747bbc1da0db4d74a34b0efd47f1261",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep royal-blue #303d67 background and luminous pale ice-cyan #a7e1e4 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Arco Voltaico: one thick curved lightning arc leaping from one large glowing energy node to a second node, broad arching zigzag dominant. Exactly two big endpoints joined by one coherent electric bridge, no falling vertical bolt or circular pulse."
+    },
+    {
+      "id": "elementalist_prismatic_focus",
+      "file": "elementalist_prismatic_focus.png",
+      "class": "elementalist",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-06e906f3-17f0-4562-a79a-f44e7dc2cfcb.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "eda614cda07635be1a2ed011579a13eed9f3b44ebd532a347e379a381bce3ed8",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep royal-blue #303d67 background and luminous pale ice-cyan #a7e1e4 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE Foco Prismático: one large upright hollow OUTLINE of a faceted diamond-shaped magical prism, only three broad confident facet contours and a single short light ray at its tip. Large dark negative spaces, restrained painted contour, no aura, no rainbow and no tiny internal lines."
+    },
+    {
+      "id": "elementalist_prismatic_resonance",
+      "file": "elementalist_prismatic_resonance.png",
+      "class": "elementalist",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-066aa2ae-e0b7-4567-ae6f-2ac8f336658e.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "24cda0f057f82a7b124ca1fa899be7717ffa8d342cfa9c161075ba9366205dea",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep royal-blue #303d67 background and luminous pale ice-cyan #a7e1e4 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE Ressonância Prismática: one small hollow triangular crystal at the center of three broad nested echo rings. Rings dominant, simple open painted contours with large dark negative space, no filled glow or tiny particles. A radial resonance symbol, clearly different from a tall standing prism."
+    },
+    {
+      "id": "elementalist_tri_nova",
+      "file": "elementalist_tri_nova.png",
+      "class": "elementalist",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-a50da63e-5088-46a5-89b6-0aea54396a71.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "dde42583ddbaf63741850a99c0604a11aceaba5bb6fb44a0024c08c18f4d7a0d",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep royal-blue #303d67 background and luminous pale ice-cyan #a7e1e4 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Tri-Nova: one coherent three-lobed elemental nova rotating around a single bright core; one lobe shaped as a broad curled flame, one as a large angular ice crystal, one as a thick forked lightning stroke. Bold trefoil silhouette, all light forms from the same pale ice-cyan hue family, dark royal-blue background. Exactly three large readable elemental masses, no rainbow or tiny symbols."
     }
   ]
 }
