@@ -219,6 +219,111 @@
       ],
       "sha256": "37faf1c2b6488846e8cf63ba36c0943b762699bc118601ffc4333062fadd6dec",
       "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep blue-slate #263a47 background and warm golden ivory #f1c879 subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE Vigor: one bold hollow OUTLINE of a full heart containing one very simple upward sprouting leaf. Large empty negative space, restrained brushed contour, no aura, no filled scene. Conveys life regenerating during rest."
+    },
+    {
+      "id": "defender_counterstroke",
+      "file": "defender_counterstroke.png",
+      "class": "defender",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-531e782f-8c13-4e19-ba72-79fc801e52ca.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "844584c7b481159b04d499efd77c2524812d8de8290a0354e6a6cf37be51698a",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep navy-slate #344958 background and warm golden ivory #e8c27a subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Contraforte: a single heavy ROUND shield seen frontally with a thick raised central boss smashing outward and one broad conical shock trail. A powerful guarded shield bash, sturdy silhouette; no sword. Distinguish from the long kite shield of a defensive stance."
+    },
+    {
+      "id": "defender_anchor",
+      "file": "defender_anchor.png",
+      "class": "defender",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-a7d40449-e10d-4f9e-b942-4ba77db3cb19.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "dc3b0d0724e1f4f41af54bba44fc398a089371a1b2d99483b4c24efa1f22c267",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep navy-slate #344958 background and warm golden ivory #e8c27a subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Marco de Guarda: one sturdy medieval shield-banner planted firmly in a small stone base, surrounded at its foot by one broad protective ring on the ground. Strong vertical standard dominant, clear stationary guard landmark. No writing, emblem letters or intricate decorations."
+    },
+    {
+      "id": "defender_line_lock",
+      "file": "defender_line_lock.png",
+      "class": "defender",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-7a8e618f-0e94-4a90-96ac-009afe8af657.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "4ae5fd1e5690e76567d8fd1826200d4443f5a19ec9b73b1d2010d27656beb329",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep navy-slate #344958 background and warm golden ivory #e8c27a subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Trava de Linha: one broad heavy chain stretched taut horizontally across the path, pinned down by a single stout spear point at its center. Only three large interlocking links and spear tip, clear unified restraint silhouette, conveys a straight attack that roots enemies. No tiny chain network."
+    },
+    {
+      "id": "defender_watch",
+      "file": "defender_watch.png",
+      "class": "defender",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-d5454491-f7d1-4b84-b826-958c458672de.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "8528da742452c2afdc582cc3e9751f802201b758898e1656ebbb9eec0c46af13",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep navy-slate #344958 background and warm golden ivory #e8c27a subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE Vigília: one bold hollow OUTLINE of a watchful eye framed by the simple outline of a medieval closed helm brow. Large dark negative space, a single clear eye dominant; restrained brush contour, no filled armor, no aura or ornamental lines. Conveys constant defensive vigilance."
+    },
+    {
+      "id": "defender_guard_return",
+      "file": "defender_guard_return.png",
+      "class": "defender",
+      "category": "passive",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-1be63802-0d7f-43b7-80f3-8946afeb7ecb.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "78f93573d225a2b9b88b7bbdae485a6e3f02619224a2b6d152a3ef14a56849d4",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep navy-slate #344958 background and warm golden ivory #e8c27a subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: PASSIVE Resguardo: one bold hollow OUTLINE of a small shield enclosing a single drop of returning spirit energy, with one curved inward return stroke forming the shield rim. Sparse clear contour, dark empty interior, no aura, no scene. Conveys SP restored by guarding."
+    },
+    {
+      "id": "defender_wall_advance",
+      "file": "defender_wall_advance.png",
+      "class": "defender",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-6402a4d2-dd10-4cbe-a03e-64d509ac6b7b.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "a443896d4eac0c446372ca9fb2be227ff6606111be15449b7770070765934884",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep navy-slate #344958 background and warm golden ivory #e8c27a subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Avanço de Muralha: one tall thick fortress shield seen almost edge-on, surging forward with a broad straight horizontal pressure trail behind it. One blocky moving wall silhouette, diagonal perspective and clear leading shield edge; no person, no sword. Distinct from the planted banner and round shield bash."
+    },
+    {
+      "id": "defender_reprisal_wave",
+      "file": "defender_reprisal_wave.png",
+      "class": "defender",
+      "category": "active",
+      "tool": "built-in imagegen",
+      "date": "2026-10-16",
+      "source": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a12d55-0ce8-7061-b8e4-bf5650c8c5b7\\exec-85186c4a-744a-4a1b-8f38-9cfb5ace16f2.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "sha256": "2f2cdd516da0a58a7f48eb414208f05deaaef87acd90a99069a6133739cebb09",
+      "prompt": "Use case: stylized-concept. ONE SINGLE square original hand-painted Korean fantasy RPG skill icon for RagRPG. Finished game asset, not a UI mockup. Expressive confident brush-painted silhouette with restrained chunky shading, not vector primitives. Instantly recognizable at32x32. STRICT BICOLOR: deep navy-slate #344958 background and warm golden ivory #e8c27a subject, only tonal shades of these two hue families. Opaque flat background. One coherent central motif filling70-75% of square with12% safe margin. No text, letters, numerals, grid, border, watermark, multiple icons, mechanical vector collage, scattered particles or malformed overlaps. Subject: ACTIVE Onda de Represália: a single armored fist striking downward into the ground, releasing one broad circular shockwave spreading outward. Low viewpoint, fist above central impact, large ring dominant, minimal ground cracks and no tiny debris; strong unified radial pulse motif."
     }
   ]
 }

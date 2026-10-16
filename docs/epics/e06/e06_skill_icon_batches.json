@@ -2,12 +2,12 @@
   "scope": "Remaining86 painted icons for approved93 skills; one closed class batch at a time",
   "baseline": "0af2ec5ab4ba0d181f1430da24e6866e1541ade0",
   "existing_painted": 7,
-  "pending": 75,
+  "pending": 68,
   "owner": "Sol/root: art briefs, generation, files, manifests, import settings, class probes and checkpoints. Luna: bounded execution supervision only after stable batch.",
   "classes": [
     {
       "class": "swordsman",
-      "status": "validated_source",
+      "status": "applied_verified",
       "entries": [
         {
           "id": "blood_thirst",
@@ -98,46 +98,61 @@
         }
       ],
       "validation": "docs/epics/e06/e06_skill_icons_swordsman_validation.json",
-      "next_action": "Preserve closed source commit; continue defender. Apply only technically closed classes to playtest."
+      "next_action": "Preserve closed source commit; continue defender. Apply only technically closed classes to playtest.",
+      "commit": "cabea447ef508680b3729b4ec1d50fb130583136"
     },
     {
       "class": "defender",
-      "status": "pending",
+      "status": "validated_source",
       "entries": [
         {
           "id": "defender_anchor",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/defender_anchor.png",
+          "sha256": "dc3b0d0724e1f4f41af54bba44fc398a089371a1b2d99483b4c24efa1f22c267"
         },
         {
           "id": "defender_counterstroke",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/defender_counterstroke.png",
+          "sha256": "844584c7b481159b04d499efd77c2524812d8de8290a0354e6a6cf37be51698a"
         },
         {
           "id": "defender_guard_return",
           "category": "passive",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/defender_guard_return.png",
+          "sha256": "78f93573d225a2b9b88b7bbdae485a6e3f02619224a2b6d152a3ef14a56849d4"
         },
         {
           "id": "defender_line_lock",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/defender_line_lock.png",
+          "sha256": "4ae5fd1e5690e76567d8fd1826200d4443f5a19ec9b73b1d2010d27656beb329"
         },
         {
           "id": "defender_reprisal_wave",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/defender_reprisal_wave.png",
+          "sha256": "2f2cdd516da0a58a7f48eb414208f05deaaef87acd90a99069a6133739cebb09"
         },
         {
           "id": "defender_wall_advance",
           "category": "active",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/defender_wall_advance.png",
+          "sha256": "a443896d4eac0c446372ca9fb2be227ff6606111be15449b7770070765934884"
         },
         {
           "id": "defender_watch",
           "category": "passive",
-          "status": "pending"
+          "status": "validated_source",
+          "file": "assets/art/skills/painted/defender_watch.png",
+          "sha256": "8528da742452c2afdc582cc3e9751f802201b758898e1656ebbb9eec0c46af13"
         },
         {
           "id": "defender_riposte",
@@ -149,7 +164,8 @@
           "category": "active",
           "status": "existing_painted"
         }
-      ]
+      ],
+      "validation": "docs/epics/e06/e06_skill_icons_defender_validation.json"
     },
     {
       "class": "berserker",
@@ -555,6 +571,6 @@
       ]
     }
   ],
-  "generated_new": 11,
-  "next_class": "defender"
+  "generated_new": 18,
+  "next_class": "berserker"
 }

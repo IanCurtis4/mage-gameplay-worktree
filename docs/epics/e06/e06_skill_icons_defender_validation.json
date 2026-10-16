@@ -1,0 +1,139 @@
+{
+  "status": "TECHNICALLY_VALIDATED_SOURCE",
+  "class": "defender",
+  "date": "2026-10-16",
+  "new_icons": 7,
+  "preserved_icons": 2,
+  "assets": [
+    {
+      "id": "defender_anchor",
+      "file": "assets/art/skills/painted/defender_anchor.png",
+      "sha256": "dc3b0d0724e1f4f41af54bba44fc398a089371a1b2d99483b4c24efa1f22c267",
+      "preserved_existing": false
+    },
+    {
+      "id": "defender_counterstroke",
+      "file": "assets/art/skills/painted/defender_counterstroke.png",
+      "sha256": "844584c7b481159b04d499efd77c2524812d8de8290a0354e6a6cf37be51698a",
+      "preserved_existing": false
+    },
+    {
+      "id": "defender_guard_return",
+      "file": "assets/art/skills/painted/defender_guard_return.png",
+      "sha256": "78f93573d225a2b9b88b7bbdae485a6e3f02619224a2b6d152a3ef14a56849d4",
+      "preserved_existing": false
+    },
+    {
+      "id": "defender_line_lock",
+      "file": "assets/art/skills/painted/defender_line_lock.png",
+      "sha256": "4ae5fd1e5690e76567d8fd1826200d4443f5a19ec9b73b1d2010d27656beb329",
+      "preserved_existing": false
+    },
+    {
+      "id": "defender_reprisal_wave",
+      "file": "assets/art/skills/painted/defender_reprisal_wave.png",
+      "sha256": "2f2cdd516da0a58a7f48eb414208f05deaaef87acd90a99069a6133739cebb09",
+      "preserved_existing": false
+    },
+    {
+      "id": "defender_wall_advance",
+      "file": "assets/art/skills/painted/defender_wall_advance.png",
+      "sha256": "a443896d4eac0c446372ca9fb2be227ff6606111be15449b7770070765934884",
+      "preserved_existing": false
+    },
+    {
+      "id": "defender_watch",
+      "file": "assets/art/skills/painted/defender_watch.png",
+      "sha256": "8528da742452c2afdc582cc3e9751f802201b758898e1656ebbb9eec0c46af13",
+      "preserved_existing": false
+    },
+    {
+      "id": "defender_riposte",
+      "file": "assets/art/skills/painted/defender_riposte.png",
+      "sha256": "201b9b720968701c44868c7256bd4149fec97b5e226ee8566e9f6195f4579c2b",
+      "preserved_existing": true
+    },
+    {
+      "id": "defender_retreat_guard",
+      "file": "assets/art/skills/painted/defender_retreat_guard.png",
+      "sha256": "9144102f92460348bc4e64479d639ccb2a90d081ac69b5c447900f417e54e3d6",
+      "preserved_existing": true
+    }
+  ],
+  "generation": "Built-in imagegen; original PNGs copied unchanged, full prompts/source/hash in painted/manifest.json.128px import;32/64px display.",
+  "execution": {
+    "class": "defender",
+    "status": "CHECKS_AND_NATIVE_PASS_PENDING_VISUAL_REVIEW",
+    "checks": [
+      {
+        "exit_code": 0,
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+          "--editor",
+          "--import",
+          "--quit"
+        ],
+        "name": "editor_import",
+        "execution_index": 1,
+        "output_sha256": "F7664E51BC646452DF8039994236AD57A0D5C7B955D89CFBD12ED9B97F9F0E90",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\defender\\checks\\001.engine.log",
+        "index": 1,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\defender\\checks\\001.output.log",
+        "timeout_seconds": 300,
+        "timed_out": false,
+        "failed": false
+      },
+      {
+        "exit_code": 0,
+        "arguments": [
+          "--headless",
+          "--path",
+          "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner",
+          "--script",
+          "res://tests/e06_icon_bar_test.gd"
+        ],
+        "name": "e06_icon_bar_test",
+        "execution_index": 2,
+        "output_sha256": "EB3F9ABDAF6F6B129E2FE140E29916FCDDECD3E077141BF2FE525A5703A692AA",
+        "engine_log": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\defender\\checks\\227-e06_icon_bar_test.engine.log",
+        "index": 227,
+        "output_path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\defender\\checks\\227-e06_icon_bar_test.output.log",
+        "timeout_seconds": 300,
+        "timed_out": false,
+        "failed": false
+      }
+    ],
+    "native_sha256": "f2e71ddf09ee946ea4f9593d26ec342574841ea3cfb7c0342d107a887d1f207f",
+    "native_elapsed_seconds": 5.51,
+    "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "source_input_manifest": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner_inputs.json",
+    "source_input_manifest_sha256": "01c94f195323a30b12d17455537f28bd9ad3726acc4b85a0b6cafa3d81bf9c5b"
+  },
+  "luna_supervision": {
+    "report": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_icon_batches\\defender\\watch.json",
+    "sha256": "1b1ccf05d3af34431c92ed698341387916a581848814de183fa2cd70a4a6a0d6",
+    "role": "Execution supervision; no independent semantic audit"
+  },
+  "captures": [
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\defender\\contact.png",
+      "sha256": "a53d75573a40cf37bfe54ac4138014af55aa3547ea1f2a73de25e709787419b7"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\defender\\tree.png",
+      "sha256": "6b3eff5d838669da519bd6998a107c89f11c4e6655f51494e628c19235edd1ec"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG\\.godot\\verification\\skill_iteration_runner\\.godot\\verification\\skill_icon_batches\\defender\\list.png",
+      "sha256": "10a78122e3fa670819fef36763fc2aefbe1a666af2667b6354c589e7533ba6b9"
+    }
+  ],
+  "visual_review": "Sol viewed contact and real tree at32/64px on light/dark backgrounds and existing blocked shader; distinct skill motifs, restrained passive contours, coherent subjects; source originals preserved. Tree/list probe completed with isolated profile.",
+  "changes_to_rules_or_save": false,
+  "limitations": [
+    "Human artistic preference/playtest pending; no FPS/balance claims.",
+    "68 icons still queued; next class berserker"
+  ]
+}

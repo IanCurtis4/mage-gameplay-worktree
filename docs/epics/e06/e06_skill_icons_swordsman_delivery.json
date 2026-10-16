@@ -1,0 +1,16 @@
+{
+  "status": "APPLIED_VERIFIED",
+  "class": "swordsman",
+  "candidate": "cabea447ef508680b3729b4ec1d50fb130583136",
+  "base": "0af2ec5ab4ba0d181f1430da24e6866e1541ade0",
+  "target_checks": 2,
+  "native_sha256": "c50e28ab397516406c90f548d83b2215f8fc092d0bc51cec9ab5328dd2101d48",
+  "local_files_preserved": 128,
+  "personal_files_preserved": 3,
+  "cli_preflight": "Legacy CLI dirty target refusal; manual preserving FF according current WORKFLOW.",
+  "product_acceptance": "pending",
+  "luna_target_watch": {
+    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\art_batch_swordsman\\target_watch.json",
+    "sha256": "acf9b5bc12eb535385e598150490e9198b004dd259e78c25e241466c62dcb6ef"
+  }
+}
