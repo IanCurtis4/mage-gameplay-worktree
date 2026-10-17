@@ -1,3 +1,5 @@
+> APLICADO17/10: admin ampliado + correção do exportado, runtime `a4f846ebaef45e5fa28c113331b6e75b64759525`.233 etapas distintas na fonte e11 no destino PASS;214 locais,3 arquivos pessoais e v0.6 preservados. [Entrega](e06_admin_extension_delivery.json), [roteiro](e06_admin_extension_playtest.md). ZIP novo: build/RagRPG v0.6.1 admin hotfix.zip. Próximo passo: playtest humano; sem master/push. Cabeçalhos anteriores são históricos.
+
 >17/10: admin ampliado e correção do exportado VALIDADOS tecnicamente;233 etapas distintas PASS em rodadas complementares, painel nativo e cópia de7personagens PASS; release real com perfil novo/copiadopessoal,3ciclos, inimigos/loot/reabertura PASS. Aplicação no playtest em preparação. [Validação](e06_admin_extension_validation.json), [roteiro](e06_admin_extension_playtest.md). Supervisão final Sol; Luna indisponível por limite. Sem aceite humano/master/push.
 
 > Correção16/10 validada: retrato dos equipamentos resolve mg_ar como Geômetra; demais nove identidades conferidas.104 verificações, zero falhas, supervisão Luna. [Registro](e06_equipment_portrait_hotfix.md).

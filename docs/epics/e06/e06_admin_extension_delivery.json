@@ -1,0 +1,284 @@
+{
+  "status": "APPLIED_AND_VERIFIED_READY_FOR_HUMAN_PLAYTEST",
+  "date": "2026-10-17",
+  "runtime_commit": "a4f846ebaef45e5fa28c113331b6e75b64759525",
+  "previous_target": "ec83b45ec8fde30d6e367b27bc972cd2a3ce0b72",
+  "source_branch": "codex/e06-inventory",
+  "target_branch": "codex/playtest",
+  "technical_validation": {
+    "report": "e06_admin_extension_validation.json",
+    "sha256": "3948c9a3ae4252d968ac77abc502c37c9b1efa3c6712d2ece0daca0a88d6a9f6",
+    "distinct_source_steps": 233,
+    "target_steps": 11,
+    "roles": "Astra bounded architecture; Sol implementation and manual final execution/hash consolidation. Luna unavailable due usage limit, explicitly not an independent semantic audit."
+  },
+  "application": {
+    "method": "Preserving fast-forward --ff-only --no-overwrite-ignore, matching common repository, target ancestor, clean source, no incoming overlap with local/ignored files. Legacy CLI refused dirty target; manual equivalent under current WORKFLOW, no reset/stash/clean.",
+    "approval": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\approval.json",
+    "approval_sha256": "05e9d1b37688ae4362e078d2a89ebaeb76ec02144c1769c6fe445c53a01687d5",
+    "cli_preflight": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\cli_preflight.log",
+    "cli_preflight_sha256": "fc8bf4edfa8a468c6baf1e73c220ff78ff78b3ae9a97c92bf98e78165e2d0887",
+    "fast_forward_log_sha256": "4b662204e6794f819c8a33d7787898082463490dab9f9a46aa7eec9a557fd1a6"
+  },
+  "target_checks": [
+    {
+      "timed_out": false,
+      "execution_index": 1,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "failed": false,
+      "exit_code": 0,
+      "output_sha256": "C48E6E06B7659436BC75D0D33C311ECC4C2C784EF072845A1F3B29677E935E68",
+      "name": "editor_import",
+      "timeout_seconds": 300,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\001.engine.log",
+      "index": 1,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\001.output.log"
+    },
+    {
+      "timed_out": false,
+      "execution_index": 2,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/e06_inventory_resources_test.gd"
+      ],
+      "failed": false,
+      "exit_code": 0,
+      "output_sha256": "535C051E5EADF61A08F78A2130CF90C8A2C500C310A069569768582BA24D206C",
+      "name": "e06_inventory_resources_test",
+      "timeout_seconds": 300,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\002-e06_inventory_resources_test.engine.log",
+      "index": 2,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\002-e06_inventory_resources_test.output.log"
+    },
+    {
+      "timed_out": false,
+      "execution_index": 3,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/e06_rewards_test.gd"
+      ],
+      "failed": false,
+      "exit_code": 0,
+      "output_sha256": "1D0D94EFD583A1833C93AE6EC2F2EEE6F921D9083C5248CA2BC50E19DAE1410F",
+      "name": "e06_rewards_test",
+      "timeout_seconds": 300,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\004-e06_rewards_test.engine.log",
+      "index": 4,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\004-e06_rewards_test.output.log"
+    },
+    {
+      "timed_out": false,
+      "execution_index": 4,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/arena_flow_test.gd"
+      ],
+      "failed": false,
+      "exit_code": 0,
+      "output_sha256": "110201CA81B8DA2A6AD21A6FC5331AF48E7092149D8EB4C677130EB4ABA64F6A",
+      "name": "arena_flow_test",
+      "timeout_seconds": 300,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\014-arena_flow_test.engine.log",
+      "index": 14,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\014-arena_flow_test.output.log"
+    },
+    {
+      "timed_out": false,
+      "execution_index": 5,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/profile_store_test.gd"
+      ],
+      "failed": false,
+      "exit_code": 0,
+      "output_sha256": "5367FDB65B879E166E5BF0B32391D37A3E04E4E98AF00E9427155194EBF8E2E5",
+      "name": "profile_store_test",
+      "timeout_seconds": 300,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\018-profile_store_test.engine.log",
+      "index": 18,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\018-profile_store_test.output.log"
+    },
+    {
+      "timed_out": false,
+      "execution_index": 6,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/e06_production_loot_test.gd"
+      ],
+      "failed": false,
+      "exit_code": 0,
+      "output_sha256": "5615E139DD4554656734A8D7995D2CF226902074B581CF5747C1ABC1DF129E7C",
+      "name": "e06_production_loot_test",
+      "timeout_seconds": 300,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\209-e06_production_loot_test.engine.log",
+      "index": 209,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\209-e06_production_loot_test.output.log"
+    },
+    {
+      "timed_out": false,
+      "execution_index": 7,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/e06_inventory_profile_panel_test.gd"
+      ],
+      "failed": false,
+      "exit_code": 0,
+      "output_sha256": "6C52AF4DE080D6C286B4A39D9B7A1D73E6A0158766B0E3024CE2CD858EC356ED",
+      "name": "e06_inventory_profile_panel_test",
+      "timeout_seconds": 300,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\214-e06_inventory_profile_panel_test.engine.log",
+      "index": 214,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\214-e06_inventory_profile_panel_test.output.log"
+    },
+    {
+      "timed_out": false,
+      "execution_index": 8,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/e06_admin_profile_test.gd"
+      ],
+      "failed": false,
+      "exit_code": 0,
+      "output_sha256": "CF537601969588A9227AF995F178854512B5E6ACF5E509F840C29B86652ECA37",
+      "name": "e06_admin_profile_test",
+      "timeout_seconds": 300,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\215-e06_admin_profile_test.engine.log",
+      "index": 215,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\215-e06_admin_profile_test.output.log"
+    },
+    {
+      "timed_out": false,
+      "execution_index": 9,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/e06_admin_run_test.gd"
+      ],
+      "failed": false,
+      "exit_code": 0,
+      "output_sha256": "60764AF92E5541A8D2EDC62E69A9ABC095114F09C0C5CF54B3F93F915876F237",
+      "name": "e06_admin_run_test",
+      "timeout_seconds": 300,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\216-e06_admin_run_test.engine.log",
+      "index": 216,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\216-e06_admin_run_test.output.log"
+    },
+    {
+      "timed_out": false,
+      "execution_index": 10,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/skill_window_test.gd"
+      ],
+      "failed": false,
+      "exit_code": 0,
+      "output_sha256": "5BD236B91C6C08EC2A81332DE1AA21DED1FA6A2D5635DA8D9FD7E5FE183FDFCD",
+      "name": "skill_window_test",
+      "timeout_seconds": 300,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\225-skill_window_test.engine.log",
+      "index": 225,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\225-skill_window_test.output.log"
+    },
+    {
+      "timed_out": false,
+      "execution_index": 11,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG",
+        "--script",
+        "res://tests/e06_export_content_test.gd"
+      ],
+      "failed": false,
+      "exit_code": 0,
+      "output_sha256": "5381E54BAE54BE3D26765C05AF2CF3D3EAFA4B24FB7F9CF4869A9D7384660A5B",
+      "name": "e06_export_content_test",
+      "timeout_seconds": 300,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\233-e06_export_content_test.engine.log",
+      "index": 233,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\target_checks\\233-e06_export_content_test.output.log"
+    }
+  ],
+  "preservation": {
+    "local_files_unchanged": 214,
+    "personal_files_unchanged": 3,
+    "original_v06_unchanged": [
+      {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\build\\RagRPG v0.6.exe",
+        "sha256": "5543ab4b6fb453c5dbe7f4effa0aad7f1cc06d73c12e8436adfc9fb266ac34ee"
+      },
+      {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\build\\RagRPG v0.6.pck",
+        "sha256": "5399ef94d2d4c6493f0c496c56920cae2c344d2fd8ceda359878a0d2d07e679a"
+      }
+    ],
+    "snapshot": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\preservation_before_apply.json",
+    "snapshot_sha256": "a18c4819ea42bf78599e17816dba0df8dc24bc00b6d40d151a436be3ab7eb537"
+  },
+  "package": {
+    "archive": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\build\\RagRPG v0.6.1 admin hotfix.zip",
+    "sha256": "3f357b389650e4f7ad44f3d39f4c301a90b1f79834eb95978e2f34e63b95b01f",
+    "bytes": 47119746,
+    "files": [
+      {
+        "name": "LEIA-ME.txt",
+        "sha256": "09294296d71e0fe4eca2448b3511ab23ed58da505ceba1d83c3b65a0210385a5",
+        "bytes": 628
+      },
+      {
+        "name": "RagRPG.exe",
+        "sha256": "d34d36f3be1a6c49c56525ae86469b92e4f417ddf0b43cf00dd80c385c4b0562",
+        "bytes": 109268480
+      },
+      {
+        "name": "RagRPG.pck",
+        "sha256": "6ec1671a22148a30fefa5b19ceb71b5ec6b4e7b8c53ced5eacc3b1f6d51c5063",
+        "bytes": 9779060
+      }
+    ],
+    "tested_runtime_commit": "a4f846ebaef45e5fa28c113331b6e75b64759525",
+    "release_validation": "e06_admin_extension_validation.json"
+  },
+  "negative_reproduction": {
+    "old_pack_copy_profile": "ok=false, invalid_catalog, read_only=true",
+    "log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.godot\\verification\\admin_extension\\old_pack_profile.log",
+    "sha256": "5b426cea7d9e1111c972f8a37a776d1a892d1a9cc35ad8b8efffacdc5c23e6ad",
+    "known_old_export_errors": "Original PCK additionally reports missing editor-only VCS extension. Negative proof is not counted as a clean PASS."
+  },
+  "product_acceptance": "not_recorded",
+  "master_merge": false,
+  "push": false
+}

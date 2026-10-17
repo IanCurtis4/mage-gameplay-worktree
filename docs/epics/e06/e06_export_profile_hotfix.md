@@ -17,3 +17,5 @@ Para fechar a entrega, importar e executar o teste na fonte sem `SCRIPT ERROR`; 
 ## Resultado17/10
 
 Correção validada: PCK distribuível retorna11 mobs,85 equipamentos,6 cartas,31 augments e14 conjuntos. Entrada diagnóstica compilada no template Windows release real, com mesmo runtime, executou3ciclos em perfil novo e cópia de7personagens: spawn, HP, registro/loot, encerramento e recuperação após interrupção PASS. Inicialização do catálogo e registro de mobs saíram de assert, para executar também em release. A cópia abre em schema7/catalog14; originais preservados. Sem evidência de deterioração temporal e sem acesso aos saves privados das outras pessoas. [Validação](e06_admin_extension_validation.json).
+
+Confirmação adicional do sintoma: cópia do perfil schema6 aberta pelo PCK v0.6 original retornou `ok=false`, `invalid_catalog`, `read_only=true`. O mesmo conteúdo pessoal copiado abre no candidato corrigido. O log negativo também contém erros da extensão VCS ausente no pacote antigo; não é contado como PASS limpo. [Recibo](e06_admin_extension_delivery.json).
