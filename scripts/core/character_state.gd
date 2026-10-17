@@ -15,6 +15,7 @@ var job_xp_total: int = 0
 var attribute_allocations: Dictionary[StringName, int] = {}
 var granted_skill_ranks: Dictionary[StringName, int] = {}
 var purchased_skill_ranks: Dictionary[StringName, int] = {}
+var admin_skills_unlocked: bool = false
 var equipped: Dictionary[StringName, Variant] = {}
 var presets: Array[Dictionary] = []
 var selected_preset: int = 0
@@ -43,6 +44,7 @@ func copy_state() -> CharacterState:
 	copy.attribute_allocations = attribute_allocations.duplicate(true)
 	copy.granted_skill_ranks = granted_skill_ranks.duplicate(true)
 	copy.purchased_skill_ranks = purchased_skill_ranks.duplicate(true)
+	copy.admin_skills_unlocked = admin_skills_unlocked
 	copy.equipped = equipped.duplicate(true)
 	copy.presets = presets.duplicate(true)
 	copy.selected_preset = selected_preset

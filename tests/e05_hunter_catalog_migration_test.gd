@@ -45,7 +45,7 @@ func _old_text(profile: ProfileState) -> String:
 	return JSON.stringify(data, "\t")
 
 func _pairs_and_validation() -> void:
-	_check(ProfileState.CATALOG_VERSION == 14 and ProfileState.SCHEMA_VERSION == 6 and ProfileState.RULESET_ID == "stat_thresholds_v1", "only catalog version changes")
+	_check(ProfileState.CATALOG_VERSION == 14 and ProfileState.SCHEMA_VERSION == 7 and ProfileState.RULESET_ID == "stat_thresholds_v1", "only catalog version changes")
 	for pair: Array in [[&"swordsman", &""], [&"mage", &""], [&"archer", &""], [&"swordsman", &"defender"], [&"swordsman", &"berserker"], [&"mage", &"elementalist"], [&"mage", &"spiritualist"], [&"mage", &"mg_ar"], [&"archer", &"sentinel"], [&"archer", &"hunter"]]:
 		var source := _profile(pair[0], pair[1])
 		var decoded := ProfileCodec.decode(_old_text(source))

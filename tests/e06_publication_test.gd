@@ -69,7 +69,7 @@ func _normalize(value: Variant, reverse_mapping: bool = false) -> Variant:
 	return value
 func _legacy_definitions() -> void:
 	var profile_catalog := ProfileCatalog.pilot()
-	_check(profile_catalog.is_valid() and ProfileState.SCHEMA_VERSION == 6 and ProfileState.CATALOG_VERSION == 14, "additive publication keeps valid catalog14/schema6")
+	_check(profile_catalog.is_valid() and ProfileState.SCHEMA_VERSION == 7 and ProfileState.CATALOG_VERSION == 14, "additive publication keeps valid catalog14/schema6")
 	var starters: Array[StringName] = []
 	for id: StringName in active.ids(&"equipment"):
 		var item := active.get_definition(&"equipment", id) as EquipmentDefinition
@@ -147,6 +147,7 @@ func _profile_preservation() -> void:
 	_check(again.characters[0].equipped[&"accessory_1"] == again.characters[1].equipped[&"accessory_1"], "shared old exemplar stays shared across alts")
 	var wire: Dictionary = encoded["data"].duplicate(true)
 	wire["schema_version"] = 2; wire["catalog_version"] = 9
+	for fixture_character: Dictionary in wire["characters"]: fixture_character.erase("admin_skills_unlocked")
 	wire.erase("card_inventory")
 	wire.erase("equipment_instances"); wire.erase("next_equipment_counter")
 	wire["equipment_collection"] = []

@@ -194,7 +194,7 @@ func update_preset(
 		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_equipment"})
 	# Existing disabled references may be retained or moved; a new unlearned
 	# assignment is still rejected before any candidate can be published.
-	var permanent := _catalog.effective_skill_ranks(character.base_class_id,character.evolution_id,character.purchased_skill_ranks,character.granted_skill_ranks)
+	var permanent := CharacterProgression.effective_skill_ranks(character, _catalog)
 	for key: String in ["active_slots", "passive_slots"]:
 		var retained: Array = []
 		for preset: Dictionary in character.presets: retained.append_array(preset[key])
@@ -936,12 +936,7 @@ func _open_profile_transaction() -> Dictionary:
 	return closed
 
 func _build_snapshot(character: CharacterState, owner_profile: ProfileState = null) -> BuildSnapshot:
-	var effective_ranks := _catalog.effective_skill_ranks(
-		character.base_class_id,
-		character.evolution_id,
-		character.purchased_skill_ranks,
-		character.granted_skill_ranks
-	)
+	var effective_ranks := CharacterProgression.effective_skill_ranks(character, _catalog)
 	var snapshot := BuildSnapshot.from_character(
 		character,
 		ProgressionRules.base_level_for_xp(character.base_xp_total),
@@ -1165,3 +1160,116 @@ func _permanent_effect_preview(character: CharacterState) -> Dictionary:
 	var loaded := BuildContentLoader.load_catalog_for_profile(_catalog)
 	if not loaded.get("ok", false): return loaded
 	return BuildEffectComposer.compose(_build_snapshot(character), {}, [], loaded["catalog"])
+
+## Transaction boundary for the playtest admin. The public service validates the
+## live controller; this method owns dedupe, revision, save and reconciliation.
+var _admin_pending: Dictionary = {}
+const ADMIN_RECEIPTS_KEY := "playtest_admin_receipts_v1"
+const ADMIN_RECEIPT_LIMIT := 128
+
+func grant_playtest_admin(request_id: String, expected_revision: int, character_id: String, action: StringName, definition_id: StringName, options: Dictionary) -> Dictionary:
+	if not _admin_pending.is_empty():
+		if _admin_pending["request_id"] != request_id or _admin_pending["character_id"] != character_id or _admin_pending["action"] != action or _admin_pending["definition_id"] != definition_id or _admin_pending["options"] != options:
+			return {"ok": false, "error_code": &"result_uncertain", "request_id": request_id}
+		var reconciled := reconcile_transaction(request_id)
+		if reconciled["ok"]:
+			reconciled.merge(_admin_pending["result"], true)
+		if reconciled["ok"] or not reconciled.get("read_only", false):
+			_admin_pending.clear()
+		return reconciled
+	if _operation_in_progress:
+		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
+	if _profile == null:
+		var opened := open_profile()
+		if not opened["ok"]: return opened
+	if not _valid_request_id(request_id):
+		return {"ok": false, "error_code": &"invalid_request_id", "request_id": request_id}
+	var receipts: Array = _profile.extension_fields.get(ADMIN_RECEIPTS_KEY, [])
+	for receipt: Dictionary in receipts:
+		if receipt["request_id"] != request_id: continue
+		if receipt["character_id"] != character_id or receipt["action"] != String(action) or receipt["definition_id"] != String(definition_id) or receipt["options"] != options:
+			return {"ok": false, "error_code": &"replayed_request", "request_id": request_id}
+		var replay: Dictionary = receipt["result"].duplicate(true)
+		replay["ok"] = true
+		replay["already_applied"] = true
+		replay["new_revision"] = _profile.revision
+		replay["profile"] = _profile.copy_state()
+		replay["request_id"] = request_id
+		return replay
+	var ready := _begin_operation(request_id, expected_revision)
+	if not ready["ok"]: return _finish_operation(request_id, ready)
+	if _store.has_pending_transaction():
+		return _finish_operation(request_id, _block_with({"ok": false, "error_code": &"recovery_required", "read_only": true}))
+	var before := _profile.copy_state()
+	var candidate := before.copy_state()
+	var character := candidate.character_by_id(character_id)
+	if character == null:
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_character_id"})
+	if candidate.reward_session != null and (candidate.reward_session["character_id"] != character_id or candidate.selected_character_id != character_id):
+		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_session"})
+	var details: Dictionary = {}
+	match action:
+		&"equipment":
+			if not _catalog.knows_equipment(definition_id):
+				return _finish_operation(request_id, {"ok": false, "error_code": &"unknown_definition"})
+			var metadata := _catalog.equipment_metadata(definition_id)
+			for key: Variant in options:
+				if key not in ["item_level", "quality_id", "socket_capacity"]:
+					return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_options"})
+			if options.has("item_level"):
+				if typeof(options["item_level"]) != TYPE_INT or not EquipmentRules.exact_integer(options["item_level"], 1, 30):
+					return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_options"})
+				metadata["item_level"] = options["item_level"]
+			if options.has("quality_id"):
+				if typeof(options["quality_id"]) not in [TYPE_STRING, TYPE_STRING_NAME] or StringName(options["quality_id"]) not in EquipmentRules.QUALITY_IDS:
+					return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_options"})
+				metadata["quality_id"] = StringName(options["quality_id"])
+			if options.has("socket_capacity"):
+				if typeof(options["socket_capacity"]) != TYPE_INT or not EquipmentRules.exact_integer(options["socket_capacity"], 0, 4):
+					return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_options"})
+				metadata["socket_capacity"] = options["socket_capacity"]
+			metadata["recipe_revision_id"] = EquipmentPowerRules.RECIPE_REVISION
+			metadata["power_ruleset_id"] = EquipmentPowerRules.GROWTH_RULESET
+			var known := not candidate.first_instance_for_definition(definition_id).is_empty()
+			var added := candidate.add_equipment_instance(definition_id, metadata)
+			if not added["ok"]: return _finish_operation(request_id, added)
+			if not known: candidate.lifetime_stats[&"equipment_unlocked"] += 1
+			details["equipment_instance_id"] = String(added["instance_id"])
+		&"card":
+			if not options.is_empty(): return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_options"})
+			var content := BuildContentLoader.load_catalog_for_profile(_catalog)
+			if not content["ok"]: return _finish_operation(request_id, content)
+			var added := candidate.card_inventory.grant(definition_id, content["catalog"])
+			if not added["ok"]: return _finish_operation(request_id, added)
+			details["card_instance_id"] = String(added["card_instance_id"])
+		&"unlock_skills":
+			if not definition_id.is_empty() or not options.is_empty(): return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_options"})
+			character.admin_skills_unlocked = true
+			details["admin_skills_unlocked"] = true
+		&"max_levels":
+			if not definition_id.is_empty() or not options.is_empty(): return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_options"})
+			character.base_xp_total = ProgressionRules.MAX_BASE_XP
+			character.job_xp_total = ProgressionRules.MAX_JOB_XP if not character.evolution_id.is_empty() else ProgressionRules.UNEVOLVED_MAX_JOB_XP
+			details["base_level"] = ProgressionRules.base_level_for_xp(character.base_xp_total)
+			details["job_level"] = ProgressionRules.job_level_for_xp(character.job_xp_total, not character.evolution_id.is_empty())
+		_:
+			return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_playtest_action"})
+	if action in [&"unlock_skills", &"max_levels"] and ProfileCodec._character_to_dictionary(character) == ProfileCodec._character_to_dictionary(before.character_by_id(character_id)):
+		var no_op := {"ok": true, "already_applied": true, "new_revision": before.revision, "profile": before, "character_id": character_id}
+		no_op.merge(details)
+		return _finish_operation(request_id, no_op)
+	var result_record := {"character_id": character_id, "action": String(action), "definition_id": String(definition_id)}
+	result_record.merge(details)
+	var receipt := {"request_id": request_id, "character_id": character_id, "action": String(action), "definition_id": String(definition_id), "options": options.duplicate(true), "result": result_record}
+	var next_receipts: Array = receipts.duplicate(true)
+	next_receipts.append(receipt)
+	if next_receipts.size() > ADMIN_RECEIPT_LIMIT: next_receipts.pop_front()
+	candidate.extension_fields[ADMIN_RECEIPTS_KEY] = next_receipts
+	var committed := _resolve_commit(before, candidate, _commit_candidate(candidate, character_id), true)
+	if committed["ok"]:
+		committed.merge(result_record, true)
+		if action in [&"unlock_skills", &"max_levels"]:
+			committed["progression"] = CharacterProgression.summary(_profile.character_by_id(character_id), _catalog)
+	elif committed.get("read_only", false):
+		_admin_pending = {"request_id": request_id, "character_id": character_id, "action": action, "definition_id": definition_id, "options": options.duplicate(true), "result": result_record}
+	return _finish_operation(request_id, committed)

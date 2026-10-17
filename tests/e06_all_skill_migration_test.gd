@@ -43,6 +43,8 @@ func _run() -> void:
 		_finish()
 		return
 	var raw: Dictionary = encoded["data"].duplicate(true)
+	raw["schema_version"] = 6
+	for entry: Dictionary in raw["characters"]: entry.erase("admin_skills_unlocked")
 	raw["catalog_version"] = 13
 	var text := JSON.stringify(raw)
 	var migrated := ProfileCodec.decode(text, catalog)
@@ -93,13 +95,15 @@ func _older_shortcut_migration(catalog: ProfileCatalog) -> void:
 	if not encoded.get("ok", false):
 		return
 	var raw: Dictionary = encoded["data"].duplicate(true)
+	raw["schema_version"] = 6
+	for entry: Dictionary in raw["characters"]: entry.erase("admin_skills_unlocked")
 	raw["catalog_version"] = 12
 	var decoded := ProfileCodec.decode(JSON.stringify(raw), catalog)
 	_check(decoded.get("ok", false), "catalog 12 follows historical validation and migration")
 	if not decoded.get("ok", false):
 		return
 	var restored: CharacterState = decoded["profile"].characters[0]
-	_check(decoded["migration_kind"] == &"swordsman_clusters_v1" and decoded["migration_kinds"] == [&"swordsman_clusters_v1", &"all_skill_dependencies_v1"], "older migration keeps durable provenance and records both stages")
+	_check(decoded["migration_kind"] == &"swordsman_clusters_v1" and decoded["migration_kinds"] == [&"admin_skills_v1", &"swordsman_clusters_v1", &"all_skill_dependencies_v1"], "older migration keeps durable provenance and records all stages")
 	_check(restored.purchased_skill_ranks.is_empty() and decoded["migration_removals"][0]["evolution_refund"] == 2, "older incompatible purchase is refunded and reported")
 	_check(restored.action_slots == defender.action_slots and restored.presets == defender.presets, "older preset and both action rank forms remain disabled")
 	_check(decoded["profile"].extension_fields["swordsman_skill_tree_migration"]["characters"][0]["cleared_action_slots"].is_empty(), "historical receipt does not claim preserved slots were cleared")

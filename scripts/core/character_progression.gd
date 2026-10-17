@@ -3,6 +3,28 @@ extends RefCounted
 ## Pure E03 progression rules applied to candidate CharacterState copies.
 ## Persistence and revision ownership remain in ProfileFacade/ProfileStore.
 
+static func effective_skill_ranks(character: CharacterState, catalog: ProfileCatalog) -> Dictionary[StringName, int]:
+	var ranks := catalog.effective_skill_ranks(character.base_class_id, character.evolution_id, character.purchased_skill_ranks, character.granted_skill_ranks)
+	if not character.admin_skills_unlocked:
+		return ranks
+	var ids := catalog.skill_ids_for_identity(character.base_class_id, character.evolution_id)
+	ids.sort()
+	var job_level := ProgressionRules.job_level_for_xp(character.job_xp_total, not character.evolution_id.is_empty())
+	# A finite monotone fixed point permits dependencies between jobs without
+	# inventing ranks from items or changing the persisted purchase ledger.
+	var changed := true
+	while changed:
+		changed = false
+		for id: StringName in ids:
+			var metadata := catalog.skill_metadata(id)
+			var cap := int(metadata["free_rank"]) + int(metadata["max_purchased_rank"])
+			var next_rank := int(ranks.get(id, 0)) + 1
+			while next_rank <= cap and catalog.check_rank_requirements(id, next_rank, job_level, ranks)["ok"]:
+				ranks[id] = next_rank
+				next_rank += 1
+				changed = true
+	return ranks
+
 static func summary(character: CharacterState, catalog: ProfileCatalog) -> Dictionary:
 	if character == null:
 		return _failure(&"invalid_character_id")
@@ -28,12 +50,8 @@ static func summary(character: CharacterState, catalog: ProfileCatalog) -> Dicti
 		"evolution_skill_points_granted": evolution_granted,
 		"evolution_skill_points_spent": evolution_spent,
 		"evolution_skill_points_available": evolution_granted - evolution_spent,
-		"effective_skill_ranks": catalog.effective_skill_ranks(
-			character.base_class_id,
-			character.evolution_id,
-			character.purchased_skill_ranks,
-			character.granted_skill_ranks
-		),
+		"effective_skill_ranks": effective_skill_ranks(character, catalog),
+		"admin_skills_unlocked": character.admin_skills_unlocked,
 	}
 
 static func allocate_attributes(character: CharacterState, increments: Dictionary) -> Dictionary:
@@ -84,6 +102,8 @@ static func learn_skill(character: CharacterState, catalog: ProfileCatalog, skil
 	var legacy_grant: int = character.granted_skill_ranks.get(skill_id, 0)
 	var maximum_rank: int = int(metadata["free_rank"]) + int(metadata["max_purchased_rank"])
 	var current_rank: int = int(metadata["free_rank"]) + legacy_grant + purchased
+	if character.admin_skills_unlocked and int(effective_skill_ranks(character, catalog).get(skill_id, 0)) >= maximum_rank:
+		return _failure(&"rank_cap_reached")
 	if current_rank >= maximum_rank:
 		return _failure(&"rank_cap_reached")
 	var wallet: StringName = metadata["wallet"]
@@ -130,12 +150,7 @@ static func respec_skills(character: CharacterState, catalog: ProfileCatalog) ->
 	if base_refund == 0 and evolution_refund == 0:
 		return {"ok": true, "already_applied": true, "base_refund": 0, "evolution_refund": 0}
 	character.purchased_skill_ranks.clear()
-	var effective := catalog.effective_skill_ranks(
-		character.base_class_id,
-		character.evolution_id,
-		character.purchased_skill_ranks,
-		character.granted_skill_ranks
-	)
+	var effective := effective_skill_ranks(character, catalog)
 	for preset: Dictionary in character.presets:
 		_prune_slots(preset["active_slots"], ProfileCatalog.ACTIVE, effective, catalog)
 		_prune_slots(preset["passive_slots"], ProfileCatalog.PASSIVE, effective, catalog)
@@ -170,12 +185,7 @@ static func change_evolution(character: CharacterState, catalog: ProfileCatalog,
 	# are derived from the selected definition and must never survive a branch swap.
 	_remove_wallet_ranks(character.granted_skill_ranks, catalog, ProfileCatalog.EVOLUTION_WALLET)
 	character.evolution_id = evolution_id
-	var effective := catalog.effective_skill_ranks(
-		character.base_class_id,
-		character.evolution_id,
-		character.purchased_skill_ranks,
-		character.granted_skill_ranks
-	)
+	var effective := effective_skill_ranks(character, catalog)
 	var cleared_slots: Array[Dictionary] = []
 	character.action_slots = ActionBarLayout.for_character(character)
 	_prune_slots(character.action_slots, ProfileCatalog.ACTIVE, effective, catalog, ItemSkillAdapters.reference_ids(character.base_class_id))

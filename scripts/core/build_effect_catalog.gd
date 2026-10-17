@@ -52,7 +52,8 @@ static func pilot() -> BuildEffectCatalog:
 			effect.unit = &"count"
 			effect.limit = 16.0
 		augment.effects = [effect]
-		assert(catalog.register_definition(&"augment", augment)["ok"])
+		var registered := catalog.register_definition(&"augment", augment)
+		assert(registered["ok"])
 	return catalog
 
 func copy_catalog() -> BuildEffectCatalog:

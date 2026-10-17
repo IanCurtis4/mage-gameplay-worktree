@@ -23,10 +23,12 @@ func _run() -> void:
 	check(facade.select_character("select",facade.current_profile().revision,first)["ok"],"select first")
 	var old := ProfileCodec.encode(facade.current_profile(),catalog)["data"] as Dictionary
 	old.erase("card_inventory");old["schema_version"] = 4;old["catalog_version"] = 11
+	for entry: Dictionary in old["characters"]: entry.erase("admin_skills_unlocked")
 	var migrated := ProfileCodec.decode(JSON.stringify(old),catalog)
 	check(migrated["ok"] and migrated["migrated"] and migrated["profile"].card_inventory.describe()["owned"].is_empty(),"schema4 migration does not invent old discarded cards")
 	if migrated["ok"]:
 		var output: Dictionary = ProfileCodec.encode(migrated["profile"],catalog)["data"]
+		for entry: Dictionary in output["characters"]: entry.erase("admin_skills_unlocked")
 		for key: String in ["equipment_instances","characters","settings","lifetime_stats"]: check(output[key] == old[key],"legacy payload preserved: "+key)
 	var reserved := old.duplicate(true);reserved["card_inventory"] = {}
 	check(not ProfileCodec.decode(JSON.stringify(reserved),catalog)["ok"],"old schema cannot smuggle new collection extension")
@@ -87,7 +89,7 @@ func _run() -> void:
 	var reopened := ProfileFacade.new(F.FaultStore.new(directory,catalog),ProfileRewardResolver.pilot_progression())
 	check(reopened.open_profile()["ok"] and reopened.current_profile().card_inventory.to_record()==facade.current_profile().card_inventory.to_record(),"restart roundtrip preserves inventory and receipts")
 	var encoded := ProfileCodec.encode(reopened.current_profile(),catalog)
-	check(encoded["ok"] and encoded["data"]["schema_version"]==6 and encoded["data"]["catalog_version"]==14,"current schema/catalog real JSON")
+	check(encoded["ok"] and encoded["data"]["schema_version"]==7 and encoded["data"]["catalog_version"]==14,"current schema/catalog real JSON")
 	var raw: Dictionary = encoded["data"]
 	for change: Dictionary in [{"next_counter":0},{"next_counter":1},{"revision":-1},{"instances":{"card_01":String(ticket["card_id"])}}]:
 		var corrupt := raw.duplicate(true);corrupt["card_inventory"].merge(change,true)

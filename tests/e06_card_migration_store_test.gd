@@ -17,6 +17,7 @@ func _run() -> void:
 	for index: int in 7: check(source.create_character("create-%d" % index,index,"Preservado %d" % index,&"swordsman")["ok"],"seven historical characters %d" % index)
 	var raw: Dictionary = ProfileCodec.encode(source.current_profile(),catalog)["data"]
 	raw.erase("card_inventory");raw["schema_version"]=4;raw["catalog_version"]=11
+	for fixture_character: Dictionary in raw["characters"]: fixture_character.erase("admin_skills_unlocked")
 	var old := JSON.stringify(raw,"\t")
 	var directory := base.path_join("real-migration")
 	_write(directory,ProfileStore.PRIMARY_FILE,old)
@@ -27,8 +28,9 @@ func _run() -> void:
 	check(opened.get("ok",false) and opened.get("migrated",false),"durable schema4 migration opens facade")
 	if not opened.get("ok",false): print(opened);_finish();return
 	var after: Dictionary = ProfileCodec.encode(facade.current_profile(),catalog)["data"]
-	for key: String in ["characters","equipment_instances","next_equipment_counter","next_character_counter","next_run_counter","selected_character_id","settings","lifetime_stats","legacy_loadouts","unresolved_legacy"]:check(after[key]==raw[key],"historical value preserved "+key)
-	check(after["schema_version"]==6 and after["catalog_version"]==14 and after["revision"]==raw["revision"]+1,"only schema/catalog and one migration revision advance")
+	check(_without_new_admin_flag(after["characters"])==raw["characters"],"historical value preserved characters; new admin flag is false")
+	for key: String in ["equipment_instances","next_equipment_counter","next_character_counter","next_run_counter","selected_character_id","settings","lifetime_stats","legacy_loadouts","unresolved_legacy"]:check(after[key]==raw[key],"historical value preserved "+key)
+	check(after["schema_version"]==7 and after["catalog_version"]==14 and after["revision"]==raw["revision"]+1,"only schema/catalog and one migration revision advance")
 	check(facade.current_profile().card_inventory.describe()["owned"].is_empty(),"no discarded historical card reconstructed")
 	check(FileAccess.get_file_as_string(directory.path_join(ProfileStore.BACKUP_FILE))==old,"exact original primary archived as backup")
 	var before_reopen := FileAccess.get_file_as_string(directory.path_join(ProfileStore.PRIMARY_FILE))
@@ -39,7 +41,8 @@ func _run() -> void:
 	menu.name_input.text="Oitavo personagem"
 	check(menu.create_character(&"swordsman")["ok"] and facade.current_profile().characters.size()==8,"normal menu creates eighth character after migration")
 	var current: Dictionary = ProfileCodec.encode(facade.current_profile(),catalog)["data"]
-	for index: int in 7:check(current["characters"][index]==raw["characters"][index],"creation preserves original character %d" % index)
+	var historical_characters := _without_new_admin_flag(current["characters"])
+	for index: int in 7:check(historical_characters.size()>index and historical_characters[index]==raw["characters"][index],"creation preserves original character %d" % index)
 	menu.queue_free();await process_frame
 	for stage: StringName in [&"write_pending",&"validate_pending",&"backup",&"replace"]:
 		var target := base.path_join(String(stage));_write(target,ProfileStore.PRIMARY_FILE,old)
@@ -49,5 +52,12 @@ func _run() -> void:
 	var pending := base.path_join("pending");_write(pending,ProfileStore.PRIMARY_FILE,old);_write(pending,ProfileStore.PENDING_FILE,"user pending evidence")
 	check(not ProfileStore.new(pending,catalog).load_profile()["ok"] and FileAccess.get_file_as_string(pending.path_join(ProfileStore.PENDING_FILE))=="user pending evidence","pending evidence blocks migration without removal")
 	_finish()
+func _without_new_admin_flag(characters: Array) -> Array:
+	var normalized := characters.duplicate(true)
+	for character: Dictionary in normalized:
+		if typeof(character.get("admin_skills_unlocked")) != TYPE_BOOL or character["admin_skills_unlocked"] != false:
+			return []
+		character.erase("admin_skills_unlocked")
+	return normalized
 func _finish() -> void:
 	print("E06 durable card migration: %d checks, %d failures" % [checks,failures]);quit(1 if failures else 0)

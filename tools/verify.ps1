@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$GodotPath = '',
     [switch]$SkipEditorImport,
     [string]$VerificationDirectory = "",
@@ -279,6 +279,8 @@ Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_permanent_cards_test.gd')
 
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_inventory_profile_panel_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_admin_profile_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_admin_run_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_inventory_window_input_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_fixes_performance_cache_test.gd')
 
@@ -301,6 +303,8 @@ Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_skill_dependencies_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_all_skill_migration_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_dependency_navigation_test.gd')
+
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_export_content_test.gd')
 
 if (-not $PSBoundParameters.ContainsKey('ToStep')) { $ToStep = $checkPlan.Count }
 if ($FromStep -gt $ToStep -or $ToStep -gt $checkPlan.Count) {

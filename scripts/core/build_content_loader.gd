@@ -5,34 +5,32 @@ extends RefCounted
 # Never return a cached registry: BuildEffectCatalog copies Resources on both ingress and egress.
 static var _catalog_cache: Dictionary = {}
 
-static func definitions(origin: StringName, include_progression: bool = false) -> Array[Resource]:
+static func _definitions_in(directory: String) -> Array[Resource]:
 	var result: Array[Resource] = []
-	var directory := "res://resources/build_effects/%s" % origin
 	if not DirAccess.dir_exists_absolute(directory):
 		return result
 	var files := DirAccess.get_files_at(directory)
-	files.sort()
+	var paths: Dictionary = {}
 	for file: String in files:
-		if file.ends_with(".tres"):
-			var definition := load(directory.path_join(file)) as Resource
-			result.append(definition.duplicate(true) if definition != null else null)
+		var resource_file := file.trim_suffix(".remap") if file.ends_with(".tres.remap") else file
+		if resource_file.ends_with(".tres"):
+			paths[resource_file] = true
+	var names: Array = paths.keys()
+	names.sort()
+	for file: String in names:
+		var definition := load(directory.path_join(file)) as Resource
+		result.append(definition.duplicate(true) if definition != null else null)
+	return result
+
+static func definitions(origin: StringName, include_progression: bool = false) -> Array[Resource]:
+	var directory := "res://resources/build_effects/%s" % origin
+	var result := _definitions_in(directory)
 	if include_progression and origin in [&"equipment", &"mob"]:
 		var extra := "res://resources/loot_progression/equipment" if origin == &"equipment" else "res://resources/playtest_gameplay/mob"
-		if DirAccess.dir_exists_absolute(extra):
-			var extra_files := DirAccess.get_files_at(extra)
-			extra_files.sort()
-			for file: String in extra_files:
-				if not file.ends_with(".tres"): continue
-				var definition := load(extra.path_join(file)) as Resource
-				result.append(definition.duplicate(true) if definition != null else null)
+		result.append_array(_definitions_in(extra))
 	if include_progression and origin in [&"equipment",&"set"]:
 		var content_dir := "res://resources/e06_inventory_content/%s" % origin
-		if DirAccess.dir_exists_absolute(content_dir):
-			var names := DirAccess.get_files_at(content_dir); names.sort()
-			for file: String in names:
-				if file.ends_with(".tres"):
-					var authored := load(content_dir.path_join(file)) as Resource
-					result.append(authored.duplicate(true) if authored != null else null)
+		result.append_array(_definitions_in(content_dir))
 	return result
 
 static func load_catalog(include_progression: bool = false, gameplay_behaviors: bool = false) -> Dictionary:

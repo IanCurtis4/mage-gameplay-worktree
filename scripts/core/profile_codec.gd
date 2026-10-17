@@ -1,6 +1,6 @@
 class_name ProfileCodec
 extends RefCounted
-## Pure schema-6 encoding; validate historical envelopes before card/instance migration.
+## Pure schema-7 encoding; validate historical envelopes before migration.
 
 const MAX_FILE_BYTES := 4 * 1024 * 1024
 const MAX_EXACT_JSON_INTEGER := 9007199254740991
@@ -34,6 +34,7 @@ const CHARACTER_FIELDS := [
 	"character_id", "display_name", "base_class_id", "evolution_id", "base_xp_total",
 	"job_xp_total", "attribute_allocations", "granted_skill_ranks", "purchased_skill_ranks", "equipped",
 	"presets", "selected_preset", "action_slots",
+	"admin_skills_unlocked",
 ]
 const FORBIDDEN_RUNTIME_FIELDS := [
 	"run_state", "build_snapshot", "current_hp", "max_hp", "current_sp", "max_sp",
@@ -62,6 +63,12 @@ static func decode(text: String, catalog: ProfileCatalog = null) -> Dictionary:
 	if text.to_utf8_buffer().size() > MAX_FILE_BYTES or json.parse(text) != OK or not json.data is Dictionary:
 		return _decode_envelope(text, effective)
 	var data: Dictionary = json.data
+	if _is_exact_integer(data.get("schema_version")) and int(data["schema_version"]) < 7 and data.get("characters") is Array:
+		if data.has("playtest_admin_receipts_v1"):
+			return _error(&"invalid_admin_receipts")
+		for raw_character: Variant in data["characters"]:
+			if raw_character is Dictionary and raw_character.has("admin_skills_unlocked"):
+				return _error(&"invalid_admin_skills_unlocked")
 	var historical := _is_exact_integer(data.get("schema_version")) and (int(data["schema_version"]) <= 5 or (int(data["schema_version"]) == 6 and _is_exact_integer(data.get("catalog_version")) and int(data["catalog_version"]) in [12, 13]))
 	if not historical:
 		return _decode_envelope(text, effective, true)
@@ -133,7 +140,7 @@ static func _decode_previous_skill_tree(input: Dictionary, catalog: ProfileCatal
 	if not valid.get("ok", false):
 		return valid
 	var original_kind: StringName = decoded.get("migration_kind", &"")
-	if original_kind.is_empty():
+	if original_kind.is_empty() or original_kind == &"admin_skills_v1":
 		decoded["migration_kind"] = &"swordsman_clusters_v1"
 	var kinds: Array = []
 	if not original_kind.is_empty():
@@ -193,12 +200,16 @@ static func _decode_envelope(text: String, catalog: ProfileCatalog = null, allow
 		return _upgrade_legacy(_migrate_v1(data, effective_catalog), effective_catalog)
 	if schema_version == 3:
 		return _migrate_power_v3(data, effective_catalog)
-	if schema_version not in [2, ProfileState.SCHEMA_VERSION]:
+	if schema_version not in [2, 6, ProfileState.SCHEMA_VERSION]:
 		return _error(&"unsupported_schema")
-	if schema_version == ProfileState.SCHEMA_VERSION:
+	if schema_version in [6, ProfileState.SCHEMA_VERSION]:
 		if data.has("equipment_collection"):
 			return _catalog_error(&"invalid_catalog")
-		return _decode_v2(data, effective_catalog, false, false, false, allow_disabled_refs)
+		var decoded := _decode_v2(data, effective_catalog, false, false, false, allow_disabled_refs, schema_version == 7)
+		if decoded["ok"] and schema_version == 6:
+			decoded["migrated"] = true
+			decoded["migration_kind"] = &"admin_skills_v1"
+		return decoded
 	if not _is_exact_integer(data.get("catalog_version")) or int(data["catalog_version"]) < 1 or int(data["catalog_version"]) > 9:
 		return _catalog_error(&"invalid_catalog")
 	for reserved: String in ["equipment_instances", "next_equipment_counter"]:
@@ -277,9 +288,9 @@ static func validate_profile(profile: ProfileState, catalog: ProfileCatalog = nu
 		return _catalog_error(&"invalid_catalog")
 	if not profile._migration_equipment_ids.is_empty():
 		return _error(&"invalid_equipment_instance")
-	return _decode_v2(_profile_to_dictionary(profile), effective_catalog, false, false, false, true)
+	return _decode_v2(_profile_to_dictionary(profile), effective_catalog, false, false, false, true, true)
 
-static func _decode_v2(data: Dictionary, catalog: ProfileCatalog, legacy_attribute_budget: bool = false, legacy_inventory: bool = false, legacy_cards: bool = false, allow_disabled_refs: bool = false) -> Dictionary:
+static func _decode_v2(data: Dictionary, catalog: ProfileCatalog, legacy_attribute_budget: bool = false, legacy_inventory: bool = false, legacy_cards: bool = false, allow_disabled_refs: bool = false, strict_admin: bool = false) -> Dictionary:
 	if data.get("format_id") != ProfileState.FORMAT_ID:
 		return _error(&"unsupported_schema")
 	if not _is_exact_integer(data.get("catalog_version")) or int(data["catalog_version"]) != ProfileState.CATALOG_VERSION:
@@ -310,7 +321,7 @@ static func _decode_v2(data: Dictionary, catalog: ProfileCatalog, legacy_attribu
 	profile.next_run_counter = int(data["next_run_counter"])
 	var character_ids: Dictionary[String, bool] = {}
 	for raw_character: Variant in data["characters"]:
-		var decoded_character := _decode_character(raw_character, profile.profile_id, profile.next_character_counter, catalog, legacy_attribute_budget, legacy_inventory, allow_disabled_refs)
+		var decoded_character := _decode_character(raw_character, profile.profile_id, profile.next_character_counter, catalog, legacy_attribute_budget, legacy_inventory, allow_disabled_refs, strict_admin)
 		if not decoded_character["ok"]:
 			return decoded_character
 		var character: CharacterState = decoded_character["character"]
@@ -372,14 +383,73 @@ static func _decode_v2(data: Dictionary, catalog: ProfileCatalog, legacy_attribu
 		if not inventory_result["ok"]: return _catalog_error(inventory_result["error_code"])
 		profile.card_inventory = inventory_result["inventory"]
 	profile.extension_fields = _unknown_fields(data, LEGACY_ROOT_FIELDS if legacy_inventory else ROOT_FIELDS)
+	var receipt_check := _validate_admin_receipts(profile.extension_fields.get("playtest_admin_receipts_v1", []), profile)
+	if not receipt_check["ok"]: return receipt_check
+	_canonicalize_admin_receipts(profile)
 	return {"ok": true, "profile": profile, "migrated": false}
 
-static func _decode_character(raw: Variant, profile_id: String, next_character_counter: int, catalog: ProfileCatalog, legacy_attribute_budget: bool = false, legacy_inventory: bool = false, allow_disabled_refs: bool = false) -> Dictionary:
+static func _canonicalize_admin_receipts(profile: ProfileState) -> void:
+	if not profile.extension_fields.has("playtest_admin_receipts_v1"):
+		return
+	for receipt: Dictionary in profile.extension_fields["playtest_admin_receipts_v1"]:
+		var options: Dictionary = receipt["options"]
+		for field: String in ["item_level", "socket_capacity"]:
+			if options.has(field): options[field] = int(options[field])
+		var result: Dictionary = receipt["result"]
+		for field: String in ["base_level", "job_level"]:
+			if result.has(field): result[field] = int(result[field])
+
+static func _validate_admin_receipts(raw: Variant, profile: ProfileState) -> Dictionary:
+	if not raw is Array or raw.size() > 128:
+		return _error(&"invalid_admin_receipts")
+	var seen := {}
+	for item: Variant in raw:
+		if not item is Dictionary or item.size() != 6:
+			return _error(&"invalid_admin_receipts")
+		for field: String in ["request_id", "character_id", "action", "definition_id"]:
+			if not item.get(field) is String:
+				return _error(&"invalid_admin_receipts")
+		if item["request_id"].is_empty() or item["request_id"].length() > 64 or seen.has(item["request_id"]):
+			return _error(&"invalid_admin_receipts")
+		seen[item["request_id"]] = true
+		if item["action"] not in ["equipment", "card", "unlock_skills", "max_levels"] or not item.get("options") is Dictionary or not item.get("result") is Dictionary or not _is_json_value(item["options"]) or not _is_json_value(item["result"]):
+			return _error(&"invalid_admin_receipts")
+		var result: Dictionary = item["result"]
+		if result.get("character_id") != item["character_id"] or result.get("action") != item["action"] or result.get("definition_id") != item["definition_id"]:
+			return _error(&"invalid_admin_receipts")
+		if profile.character_by_id(item["character_id"]) == null:
+			return _error(&"invalid_admin_receipts")
+		var options: Dictionary = item["options"]
+		match item["action"]:
+			"equipment":
+				if result.size() != 4 or not result.get("equipment_instance_id") is String or not profile.equipment_instances.has(StringName(result["equipment_instance_id"])) or String(profile.equipment_instances[StringName(result["equipment_instance_id"])].definition_id) != item["definition_id"]:
+					return _error(&"invalid_admin_receipts")
+				for key: Variant in options:
+					if key not in ["item_level", "quality_id", "socket_capacity"]:
+						return _error(&"invalid_admin_receipts")
+				if options.has("item_level") and (not _is_exact_integer(options["item_level"]) or not EquipmentRules.exact_integer(options["item_level"], 1, 30)):
+					return _error(&"invalid_admin_receipts")
+				if options.has("quality_id") and (not options["quality_id"] is String or StringName(options["quality_id"]) not in EquipmentRules.QUALITY_IDS):
+					return _error(&"invalid_admin_receipts")
+				if options.has("socket_capacity") and (not _is_exact_integer(options["socket_capacity"]) or not EquipmentRules.exact_integer(options["socket_capacity"], 0, 4)):
+					return _error(&"invalid_admin_receipts")
+			"card":
+				if not options.is_empty() or result.size() != 4 or not result.get("card_instance_id") is String or profile.card_inventory.definition_id(StringName(result["card_instance_id"])) != StringName(item["definition_id"]):
+					return _error(&"invalid_admin_receipts")
+			"unlock_skills":
+				if not options.is_empty() or item["definition_id"] != "" or result.size() != 4 or result.get("admin_skills_unlocked") != true:
+					return _error(&"invalid_admin_receipts")
+			"max_levels":
+				if not options.is_empty() or item["definition_id"] != "" or result.size() != 5 or not _is_exact_integer(result.get("base_level")) or not _is_exact_integer(result.get("job_level")) or int(result["base_level"]) < 1 or int(result["job_level"]) < 1:
+					return _error(&"invalid_admin_receipts")
+	return {"ok": true}
+
+static func _decode_character(raw: Variant, profile_id: String, next_character_counter: int, catalog: ProfileCatalog, legacy_attribute_budget: bool = false, legacy_inventory: bool = false, allow_disabled_refs: bool = false, strict_admin: bool = false) -> Dictionary:
 	if not raw is Dictionary:
 		return _error(&"invalid_character")
 	var data: Dictionary = raw
 	for field: String in CHARACTER_FIELDS:
-		if field == "action_slots": # Optional schema-2 extension; legacy presets remain intact.
+		if field == "action_slots" or (field == "admin_skills_unlocked" and not strict_admin): # Legacy fields.
 			continue
 		if not data.has(field):
 			return _error(&"missing_character_field", field)
@@ -429,6 +499,8 @@ static func _decode_character(raw: Variant, profile_id: String, next_character_c
 	)
 	if not ranks_result["ok"]:
 		return ranks_result
+	if data.has("admin_skills_unlocked") and typeof(data["admin_skills_unlocked"]) != TYPE_BOOL:
+		return _error(&"invalid_admin_skills_unlocked")
 	var equipped_result := _decode_equipped(data["equipped"], legacy_inventory)
 	if not equipped_result["ok"]:
 		return equipped_result
@@ -441,6 +513,14 @@ static func _decode_character(raw: Variant, profile_id: String, next_character_c
 		ranks_result["ranks"],
 		grants_result["ranks"]
 	)
+	if data.get("admin_skills_unlocked", false):
+		var projection := CharacterState.new(data["character_id"], data["display_name"], base_class_id)
+		projection.evolution_id = evolution_id
+		projection.job_xp_total = job_xp
+		projection.purchased_skill_ranks = ranks_result["ranks"]
+		projection.granted_skill_ranks = grants_result["ranks"]
+		projection.admin_skills_unlocked = true
+		effective_ranks = CharacterProgression.effective_skill_ranks(projection, catalog)
 	for raw_preset: Variant in data["presets"]:
 		var preset_result := _decode_preset(raw_preset, base_class_id, evolution_id, effective_ranks, catalog, legacy_inventory, allow_disabled_refs)
 		if not preset_result["ok"]:
@@ -458,6 +538,7 @@ static func _decode_character(raw: Variant, profile_id: String, next_character_c
 	character.attribute_allocations = allocations_result["allocations"]
 	character.granted_skill_ranks = grants_result["ranks"]
 	character.purchased_skill_ranks = ranks_result["ranks"]
+	character.admin_skills_unlocked = data.get("admin_skills_unlocked", false)
 	character.equipped = equipped_result["equipped"]
 	character.presets = presets
 	character.selected_preset = selected_preset
@@ -862,6 +943,7 @@ static func _character_to_dictionary(character: CharacterState) -> Dictionary:
 		"attribute_allocations": _integer_map_to_dictionary(character.attribute_allocations),
 		"granted_skill_ranks": _integer_map_to_dictionary(character.granted_skill_ranks),
 		"purchased_skill_ranks": _integer_map_to_dictionary(character.purchased_skill_ranks),
+		"admin_skills_unlocked": character.admin_skills_unlocked,
 		"equipped": _equipped_to_dictionary(character.equipped),
 		"presets": presets,
 		"selected_preset": character.selected_preset,

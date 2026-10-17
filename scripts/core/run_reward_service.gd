@@ -244,6 +244,7 @@ func configure_mob_loot(table: MobLootTable) -> Dictionary:
 	return {"ok": true}
 
 func register_mob_actor(actor: EnemyActor) -> Dictionary:
+	if is_instance_valid(actor) and actor.get_meta("admin_spawn", false): return BuildEffectCatalog.failure(&"admin_mob_ineligible")
 	if is_instance_valid(actor) and actor.is_summoned: return BuildEffectCatalog.failure(&"summoned_mob_ineligible")
 	var controller := _owner.get_ref() as RunController
 	if not mob_loot_enabled() or controller == null or not is_instance_valid(actor) or not actor.is_alive() or actor.get_parent() != controller or actor not in controller.enemies or actor.occurrence == null:
@@ -258,6 +259,7 @@ func register_mob_actor(actor: EnemyActor) -> Dictionary:
 	return {"ok": true}
 
 func issue_mob_drop(actor: EnemyActor) -> Dictionary:
+	if is_instance_valid(actor) and actor.get_meta("admin_spawn", false): return BuildEffectCatalog.failure(&"admin_mob_ineligible")
 	if is_instance_valid(actor) and actor.is_summoned: return BuildEffectCatalog.failure(&"summoned_mob_ineligible")
 	var controller := _owner.get_ref() as RunController
 	if not mob_loot_enabled() or controller == null or controller.run_state != _run or controller.run_finished or not controller.player.is_alive() or not is_instance_valid(actor):

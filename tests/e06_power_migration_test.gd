@@ -20,6 +20,7 @@ func _run() -> void:
 	_check(original["ok"], "source current codec")
 	var legacy: Dictionary = original["data"].duplicate(true)
 	legacy["schema_version"] = 3; legacy["catalog_version"] = 10
+	for fixture_character: Dictionary in legacy["characters"]: fixture_character.erase("admin_skills_unlocked")
 	legacy.erase("card_inventory")
 	for record: Dictionary in legacy["equipment_instances"]:
 		record.erase("recipe_revision_id"); record.erase("power_ruleset_id")
@@ -38,7 +39,7 @@ func _run() -> void:
 		for effect: EffectDefinition in item.effects:
 			_check(EquipmentPowerRules.modifier_magnitude(effect, instance, item) == effect.value_at(1), "legacy exact original values")
 	var encoded := ProfileCodec.encode(migrated, catalog)
-	_check(encoded["ok"] and encoded["data"]["schema_version"] == 6 and encoded["data"]["catalog_version"] == 14, "new envelope schema6catalog14")
+	_check(encoded["ok"] and encoded["data"]["schema_version"] == 7 and encoded["data"]["catalog_version"] == 14, "new envelope schema6catalog14")
 	var again := ProfileCodec.decode(encoded["text"], catalog)
 	_check(again["ok"] and not again.get("migrated", true), "migration is not reapplied")
 	var invalid: Dictionary = encoded["data"].duplicate(true)

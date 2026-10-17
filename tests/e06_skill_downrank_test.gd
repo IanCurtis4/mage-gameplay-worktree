@@ -74,6 +74,7 @@ func _codec() -> void:
 	_check(copy.action_slots == character.action_slots and CharacterProgression.summary(copy, catalog) == wallet, "roundtrip preserves positions and learning wallets")
 	var old: Dictionary = encoded["data"].duplicate(true)
 	old["schema_version"] = 5
+	for fixture_character: Dictionary in old["characters"]: fixture_character.erase("admin_skills_unlocked")
 	old["catalog_version"] = 12
 	old["characters"][0]["action_slots"][23] = null
 	var migrated := ProfileCodec.decode(JSON.stringify(old), catalog)

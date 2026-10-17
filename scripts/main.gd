@@ -1,6 +1,10 @@
 class_name RunController
 extends Node2D
 
+var admin_panel: PlaytestAdminPanel
+var _admin_offer_override := false
+var _startup_error := false
+
 const IceWallScript = preload("res://scripts/world/ice_wall.gd")
 const ElementalistSequenceScript = preload("res://scripts/world/elementalist_sequence.gd")
 
@@ -153,7 +157,10 @@ func _ready() -> void:
 		run_state = RunState.new(selected_class_id)
 	if gameplay_extension:
 		var loaded := BuildContentLoader.load_catalog_for_profile(run_state.build_snapshot._skill_catalog, true)
-		assert(loaded["ok"] and run_state.set_effect_catalog(loaded["catalog"])["ok"], "Roteiro de teste inválido")
+		var configured_effects := run_state.set_effect_catalog(loaded["catalog"]) if loaded.get("ok", false) else loaded
+		if not configured_effects.get("ok", false):
+			_startup_failure("O conteúdo da partida não pôde ser carregado.")
+			return
 	control_preferences.load_settings()
 	cast_intent.set_mode(control_preferences.cast_mode)
 	arena_view = ArenaView.new()
@@ -320,8 +327,15 @@ func _input(event: InputEvent) -> void:
 		if _keyboard_text_focused():
 			_cancel_aim()
 			return
+		if event.keycode == KEY_F10 and event.pressed:
+			if admin_panel != null and admin_panel.visible: admin_panel.dismiss()
+			else: _open_admin_tools()
+			get_viewport().set_input_as_handled()
+			return
 		if event.keycode == KEY_ESCAPE and event.pressed:
-			if skill_window != null and skill_window.visible:
+			if admin_panel != null and admin_panel.visible:
+				admin_panel.dismiss()
+			elif skill_window != null and skill_window.visible:
 				skill_window.dismiss()
 			elif reward_feedback != null and reward_feedback.history_panel.visible:
 				reward_feedback.hide_history()
@@ -914,6 +928,7 @@ func _change_control_preferences(mode: int, smart_lock: bool) -> void:
 		status_label.text = "Controles aplicados; não foi possível salvar a preferência."
 
 func _spawn_encounter(index: int) -> void:
+	_clear_admin_spawns()
 	if reward_feedback != null:
 		reward_feedback.hide_history()
 	encounter_index = index
@@ -1858,7 +1873,7 @@ func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActo
 	projectile.add_to_group("enemy_projectiles")
 
 func _on_enemy_died(actor: CombatActor) -> void:
-	if not training_mode and actor is EnemyActor and not actor.is_summoned and reward_service != null and reward_service.mob_loot_enabled():
+	if not training_mode and not actor.get_meta("admin_spawn", false) and actor is EnemyActor and not actor.is_summoned and reward_service != null and reward_service.mob_loot_enabled():
 		var issued := reward_service.issue_mob_drop(actor)
 		if not issued["ok"]:
 			status_label.text = "Não foi possível preparar o loot: %s" % issued["error_code"]
@@ -1880,6 +1895,7 @@ func _on_enemy_died(actor: CombatActor) -> void:
 		_selected_enemy = null
 	enemies.erase(actor)
 	actor.queue_free()
+	if actor.get_meta("admin_spawn", false): return
 	if training_mode:
 		if actor == training_boss:
 			training_boss = null
@@ -1989,7 +2005,7 @@ func _on_enemy_damage_resolved(result: Dictionary) -> void:
 		return
 	var victim_id := int(result.get("target_id", 0))
 	var defeated := instance_from_id(victim_id) as EnemyActor
-	if defeated != null and defeated.is_summoned: return
+	if defeated != null and (defeated.is_summoned or defeated.get_meta("admin_spawn", false)): return
 	if victim_id <= 0 or _credited_kills.has(victim_id):
 		return
 	_credited_kills[victim_id] = true
@@ -2066,17 +2082,18 @@ func _reward_error_text(error_code: StringName) -> String:
 func _open_augment_menu() -> void:
 	if run_finished or inventory_frozen or get_tree().paused:
 		return
-	var offer_result := run_state.open_offer(encounter_active, rng)
+	var offer_result := run_state.open_offer(encounter_active and not _admin_offer_override, rng)
 	if not offer_result["ok"]:
 		return
 	var offer: Array[AugmentDefinition] = []
 	offer.assign(offer_result["definitions"])
 	if offer.is_empty():
-		var consumed := run_state.consume_empty_offer(offer_result, encounter_active)
+		var consumed := run_state.consume_empty_offer(offer_result, encounter_active and not _admin_offer_override)
 		if consumed["ok"]:
 			status_label.text = consumed["message"]
-			augment_button.disabled = run_state.pending_choices <= 0
-			if run_state.pending_choices <= 0:
+			_admin_offer_override = false
+			augment_button.disabled = encounter_active or run_state.pending_choices <= 0
+			if run_state.pending_choices <= 0 and not encounter_active:
 				next_button.visible = true
 				next_button.text = "Encerrar demonstração" if encounter_index >= _encounter_count() else "Próximo encontro"
 		return
@@ -2097,15 +2114,20 @@ func _open_augment_menu() -> void:
 	get_tree().paused = true
 
 func _confirm_augment(augment_id: StringName) -> void:
-	if not run_state.confirm(augment_id, encounter_active):
+	if not run_state.confirm(augment_id, encounter_active and not _admin_offer_override):
 		return
+	_admin_offer_override = false
 	player.apply_run_modifiers(run_state)
 	if not training_mode:
 		_acquisition_augment_serial += 1
 		acquisition_journal.record_augment(str(_acquisition_augment_serial), encounter_index, run_state.effect_catalog().get_definition(&"augment", augment_id) as AugmentDefinition, int(run_state.augment_stacks.get(augment_id, 1)))
 	augment_overlay.visible = false
 	get_tree().paused = false
-	augment_button.disabled = run_state.pending_choices <= 0
+	augment_button.disabled = encounter_active or run_state.pending_choices <= 0
+	if encounter_active:
+		next_button.hide()
+		status_label.text = "Augment admin aplicado — combate retomado"
+		return
 	if run_state.pending_choices > 0:
 		status_label.text = "Aprimoramento aplicado — há escolhas pendentes"
 		return
@@ -2146,6 +2168,8 @@ func _show_result(victory: bool) -> void:
 		return
 	reward_feedback.hide_history()
 	reward_feedback.hide_recent()
+	_clear_admin_spawns()
+	if admin_panel != null: admin_panel.hide()
 	run_finished = true # Claim terminal before clearing buffs can recalculate lethal maxima.
 	run_state.effect_ledger.cancel()
 	player.clear_sentinel_state()
@@ -2744,6 +2768,16 @@ func _build_ui() -> void:
 	GuiMetrics.configure_root(ui_root)
 	ui_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ui_root.theme = _battle_theme()
+	var admin_button := Button.new()
+	admin_button.text = "Admin · F10"
+	admin_button.position = Vector2(24, 172)
+	admin_button.pressed.connect(_open_admin_tools)
+	ui_root.add_child(admin_button)
+	admin_panel = PlaytestAdminPanel.new()
+	ui_root.add_child(admin_panel)
+	admin_panel.closed.connect(_close_admin_tools)
+	admin_panel.changed.connect(_refresh_admin_profile)
+	admin_panel.offer_requested.connect(_admin_open_offer)
 
 	hud_panel = PanelContainer.new()
 	ui_root.add_child(hud_panel)
@@ -3121,16 +3155,20 @@ func _configure_world(stage: int) -> void:
 	if gameplay_extension:
 		arena_view.modulate = [Color("f2ffe7"), Color("d6ead8"), Color("d8e1ef")][int((stage - 1) / 2.0)]
 
-func _spawn_route_enemy(entry: Dictionary, stage: int, summoned: bool = false, owner_id: int = 0) -> EnemyActor:
+func _spawn_route_enemy(entry: Dictionary, stage: int, summoned: bool = false, owner_id: int = 0, admin_spawn: bool = false) -> EnemyActor:
+	if _startup_error: return null
 	var from := player.global_position
 	if summoned:
 		var master := instance_from_id(owner_id) as EnemyActor
 		assert(is_instance_valid(master) and master.is_alive(), "Invocador inválido")
 		from = master.global_position
 	var path := navigation.get_path(from, entry["position"])
-	assert(not path.is_empty(), "Spawn sem caminho válido")
+	if path.is_empty():
+		_startup_failure("Uma posição de inimigo está inacessível.")
+		return null
 	var enemy := EnemyActor.new()
 	enemy.global_position = path[-1]
+	enemy.set_meta("admin_spawn", admin_spawn)
 	enemy.is_summoned = summoned
 	enemy.summoner_id = owner_id
 	enemy.companion_requested.connect(_on_companion_requested, CONNECT_DEFERRED)
@@ -3140,7 +3178,10 @@ func _spawn_route_enemy(entry: Dictionary, stage: int, summoned: bool = false, o
 	occurrence.category_id = entry["category"]
 	occurrence.origin_id = PlaytestGameplay.origin(stage)
 	var checked := enemy.configure_occurrence(occurrence, run_state.effect_catalog().mob_catalog(), navigation, player)
-	assert(checked["ok"], str(checked))
+	if not checked.get("ok", false):
+		enemy.free()
+		_startup_failure("O conteúdo de um inimigo não pôde ser carregado.")
+		return null
 	enemy.compact_control_visuals = player.is_geometer() or player.is_sentinel()
 	enemy.actor_name += " · %s · Nv.%d" % [MobPrototypeVisual.category_name(occurrence.category_id), checked.get("level", run_state.effect_catalog().mob_catalog().level_for_occurrence(occurrence)["level"])]
 	if enemy._mob_definition.animation_kind in [&"gel", &"beast_master", &"animal_companion"]:
@@ -3166,8 +3207,10 @@ func _spawn_route_enemy(entry: Dictionary, stage: int, summoned: bool = false, o
 	enemy.status_damage_requested.connect(_on_attack_requested)
 	add_child(enemy)
 	enemies.append(enemy)
-	if not summoned and reward_service.mob_loot_enabled():
-		assert(reward_service.register_mob_actor(enemy)["ok"], "Loot não registrado")
+	if not summoned and not admin_spawn and reward_service.mob_loot_enabled():
+		var registered_loot := reward_service.register_mob_actor(enemy)
+		if not registered_loot.get("ok", false):
+			_startup_failure("Não foi possível preparar as recompensas dos inimigos.")
 	if trap_registry != null:
 		for trap: PlayerTrap in trap_registry.active_traps():
 			if trap is HunterTrap: (trap as HunterTrap).track_target(enemy)
@@ -3175,7 +3218,12 @@ func _spawn_route_enemy(entry: Dictionary, stage: int, summoned: bool = false, o
 	return enemy
 
 func _on_companion_requested(master: EnemyActor) -> void:
-	if not is_instance_valid(master) or not master.is_alive() or master.is_summoned or master.get_parent() != self or master not in enemies or run_finished or not encounter_active: return
+	if not is_instance_valid(master) or not master.is_alive() or master.is_summoned or master.get_parent() != self or master not in enemies or run_finished or (not encounter_active and not master.get_meta("admin_spawn", false)): return
+	if master.get_meta("admin_spawn", false):
+		var living := 0
+		for actor: CombatActor in enemies:
+			if is_instance_valid(actor) and actor.is_alive(): living += 1
+		if living >= PlaytestRunAdmin.ACTOR_CAP: return
 	var category := MobTierRules.lower_category(master.occurrence.category_id)
 	if category.is_empty(): return
 	for offset: Vector2 in [Vector2(-185,45), Vector2(185,45), Vector2(0,170), Vector2(0,-170)]:
@@ -3185,7 +3233,7 @@ func _on_companion_requested(master: EnemyActor) -> void:
 		for actor: CombatActor in enemies:
 			if actor.is_alive() and actor.global_position.distance_to(position) < 45.0: occupied = true
 		if occupied: continue
-		_spawn_route_enemy({"species": &"test_animal_companion", "category": category, "position": position}, encounter_index, true, master.get_instance_id())
+		_spawn_route_enemy({"species": &"test_animal_companion", "category": category, "position": position}, clampi(encounter_index, 1, PlaytestGameplay.STAGE_COUNT), true, master.get_instance_id(), bool(master.get_meta("admin_spawn", false)))
 		return
 
 func _remove_master_companion(owner_id: int) -> void:
@@ -3201,7 +3249,7 @@ func _remove_remaining_companions() -> void:
 func _required_enemies() -> Array[CombatActor]:
 	var result: Array[CombatActor] = []
 	for actor: CombatActor in enemies:
-		if is_instance_valid(actor) and actor.is_alive() and not (actor is EnemyActor and actor.is_summoned): result.append(actor)
+		if is_instance_valid(actor) and actor.is_alive() and not actor.get_meta("admin_spawn", false) and not (actor is EnemyActor and actor.is_summoned): result.append(actor)
 	return result
 
 func _discard_companion(actor: EnemyActor) -> void:
@@ -3252,3 +3300,74 @@ func _close_skill_window() -> void:
 		_skill_action_editor_home.move_child(battle_controls.action_editor, _skill_action_editor_index)
 		battle_controls.action_editor.slots_grid.columns = 12
 	get_tree().paused = run_finished or augment_overlay.visible or inventory_panel.visible or class_overlay.visible or battle_controls.settings_overlay.visible
+
+func _open_admin_tools() -> void:
+	if run_finished or inventory_frozen or not player.is_alive(): return
+	if admin_panel.visible: return
+	if get_tree().paused or run_state.has_open_offer(): return
+	_cancel_casting(false)
+	_clear_hover()
+	admin_panel.configure(persistent_facade, run_state.character_id, self)
+	get_tree().paused = true
+
+func _close_admin_tools() -> void:
+	get_tree().paused = run_finished or inventory_frozen or augment_overlay.visible or inventory_panel.visible or skill_window.visible or class_overlay.visible or battle_controls.settings_overlay.visible
+
+func _admin_open_offer() -> void:
+	_close_admin_tools()
+	_open_augment_menu()
+
+func _refresh_admin_profile() -> void:
+	if persistent_facade == null: return
+	var profile := persistent_facade.current_profile()
+	var character := profile.character_by_id(run_state.character_id)
+	if character == null: return
+	var snapshot := persistent_facade._build_snapshot(character)
+	snapshot.build_version = run_state.build_snapshot.build_version + 1
+	run_state.build_snapshot = snapshot
+	run_state.skill_levels = snapshot.skill_ranks.duplicate(true)
+	run_state.card_inventory = profile.card_inventory.copy_inventory()
+	run_state.card_sockets = run_state.card_inventory.sockets()
+	run_state.card_instances = run_state.card_inventory.describe()["instances"]
+	run_state.runtime_revision += 1
+	player.apply_run_modifiers(run_state)
+	battle_controls.set_skill_ranks(run_state.composed_build()["skill_ranks"])
+	if inventory_frozen: set_inventory_freeze(false)
+
+func _clear_admin_spawns() -> void:
+	for actor: CombatActor in enemies.duplicate():
+		if is_instance_valid(actor) and actor.get_meta("admin_spawn", false):
+			_discard_companion(actor as EnemyActor)
+
+func _startup_failure(message: String) -> void:
+	if _startup_error: return
+	_startup_error = true
+	push_error(message)
+	set_process(false)
+	set_physics_process(false)
+	set_process_input(false)
+	set_process_unhandled_input(false)
+	get_tree().paused = true
+	var layer := CanvasLayer.new()
+	layer.layer = 200
+	layer.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(layer)
+	var background := ColorRect.new()
+	background.color = Color("101b27")
+	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	layer.add_child(background)
+	var box := VBoxContainer.new()
+	box.position = Vector2(80, 120)
+	box.custom_minimum_size = Vector2(640, 100)
+	background.add_child(box)
+	var label := Label.new()
+	label.text = message + "\nA partida foi interrompida sem conceder recompensas.\nConfira os arquivos da versão instalada."
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(label)
+	var back := Button.new()
+	back.text = "Voltar ao menu"
+	back.pressed.connect(func() -> void:
+		get_tree().paused = false
+		get_tree().change_scene_to_file("res://scenes/character_menu.tscn")
+	)
+	box.add_child(back)

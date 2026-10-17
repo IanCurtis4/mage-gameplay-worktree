@@ -154,6 +154,7 @@ static func legacy_data(current: Dictionary) -> Dictionary:
 		assert(not seen.has(id), "Historical fixture must not discard acquisitions")
 		seen[id] = true
 	result["schema_version"] = 2
+	for fixture_character: Dictionary in result["characters"]: fixture_character.erase("admin_skills_unlocked")
 	result.erase("equipment_instances")
 	result.erase("next_equipment_counter")
 	for character: Dictionary in result["characters"]:

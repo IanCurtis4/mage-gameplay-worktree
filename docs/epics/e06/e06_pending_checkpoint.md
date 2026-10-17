@@ -1,3 +1,5 @@
+>17/10: admin ampliado e correção do exportado VALIDADOS tecnicamente;233 etapas distintas PASS em rodadas complementares, painel nativo e cópia de7personagens PASS; release real com perfil novo/copiadopessoal,3ciclos, inimigos/loot/reabertura PASS. Aplicação no playtest em preparação. [Validação](e06_admin_extension_validation.json), [roteiro](e06_admin_extension_playtest.md). Supervisão final Sol; Luna indisponível por limite. Sem aceite humano/master/push.
+
 > Correção16/10 validada: retrato dos equipamentos resolve mg_ar como Geômetra; demais nove identidades conferidas.104 verificações, zero falhas, supervisão Luna. [Registro](e06_equipment_portrait_hotfix.md).
 
 > Icones16/10 CONCLUIDOS: 86 novos + 7 preservados = 93 habilidades nas dez classes. Todos os lotes aplicados no playtest; importacao/barra/renderer e UI final PASS, supervisao Luna e revisao visual Sol. [Validacao](e06_skill_icon_batches_validation.json). Fila zerada; proximo passo: playtest humano. Sem merge master/push.

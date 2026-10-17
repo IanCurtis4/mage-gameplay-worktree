@@ -11,6 +11,8 @@ const ProfileCatalogScript := preload("res://scripts/core/profile_catalog.gd")
 const ProfileRewardResolverScript := preload("res://scripts/core/profile_reward_resolver.gd")
 static var pending_focus_character_id := ""
 
+var admin_panel: PlaytestAdminPanel
+
 var profile_directory := DEFAULT_PROFILE_DIRECTORY
 var facade: RefCounted
 var _request_serial := 0
@@ -1141,6 +1143,12 @@ func _build_ui() -> void:
 	playtest_notice.text = "XP e troca de evolução alteram o save. Treino usa a build atual sem recompensa persistente."
 	playtest_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	playtest_panel.add_child(playtest_notice)
+	var tools_button := Button.new()
+	tools_button.name = "PlaytestAdminTools"
+	tools_button.text = "Equipamentos, cartas e skills de teste…"
+	tools_button.pressed.connect(_open_admin_tools)
+	playtest_panel.add_child(tools_button)
+	playtest_buttons.append(tools_button)
 	for shortcut: Dictionary in [
 		{"name": "PlaytestBaseXP", "text": "+1.000 XP base", "action": &"base_xp", "amount": 1000},
 		{"name": "PlaytestJobXP", "text": "+1.000 XP job", "action": &"job_xp", "amount": 1000},
@@ -1249,3 +1257,12 @@ func _build_selector(parent: Container, label_text: String) -> OptionButton:
 	selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(selector)
 	return selector
+
+func _open_admin_tools() -> void:
+	var context := _selected_progression_context()
+	if not context["ok"] or not playtest_toggle.button_pressed: return
+	if admin_panel == null:
+		admin_panel = PlaytestAdminPanel.new()
+		add_child(admin_panel)
+		admin_panel.changed.connect(_refresh)
+	admin_panel.configure(facade as ProfileFacade, context["character_id"])

@@ -148,6 +148,7 @@ func _check_catalog_v1_migration_and_respec() -> void:
 		return
 	var legacy_data: Dictionary = encoded["data"].duplicate(true)
 	legacy_data["schema_version"] = 2
+	for fixture_character: Dictionary in legacy_data["characters"]: fixture_character.erase("admin_skills_unlocked")
 	legacy_data.erase("card_inventory")
 	legacy_data.erase("equipment_instances")
 	legacy_data.erase("next_equipment_counter")

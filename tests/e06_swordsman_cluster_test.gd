@@ -97,6 +97,7 @@ func _migration() -> void:
 	if not encoded["ok"]: return
 	var raw: Dictionary = encoded["data"].duplicate(true)
 	raw["schema_version"] = 5
+	for fixture_character: Dictionary in raw["characters"]: fixture_character.erase("admin_skills_unlocked")
 	raw["catalog_version"] = 12
 	raw["characters"][0]["action_slots"][12] = "teleport"
 	_durable_migration(raw, catalog)
@@ -109,7 +110,7 @@ func _migration() -> void:
 	_check(restored.action_slots[0] == &"defender_anchor" and restored.action_slots[23] == &"defender_line_lock" and restored.action_slots[12] == &"teleport", "refunded skills retain disabled shortcuts alongside the item reference")
 	_check(migrated["migration_removals"][0]["evolution_refund"] == 6 and CharacterProgression.summary(restored,catalog)["evolution_skill_points_available"] == 20, "six invested points return to original evolution wallet")
 	var saved := ProfileCodec.encode(migrated["profile"],catalog)
-	_check(saved["ok"] and saved["data"]["schema_version"] == 6 and saved["data"]["catalog_version"] == 14, "migration report encodes with schema6/catalog14")
+	_check(saved["ok"] and saved["data"]["schema_version"] == 7 and saved["data"]["catalog_version"] == 14, "migration report encodes with schema6/catalog14")
 	if saved["ok"]:
 		var reopened := ProfileCodec.decode(saved["text"],catalog)
 		_check(reopened["ok"] and not reopened.get("migrated",false), "new envelope roundtrip never repeats refund")
