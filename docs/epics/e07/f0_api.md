@@ -15,7 +15,7 @@ Resultado: `ok: bool`, `error_code: StringName`, `request_id: String`,
 `manifest: ExpeditionManifest`, `hash: String` SHA256 e `diagnostic`
 com attempts/expansions/seed_text. Falha contém somente `diagnostic`, nunca
 manifesto parcial. A validação pré-busca informa zero attempts/expansions.
-No esgotamento, `cause`, `detail` e `obligation` identificam a restrição/slot.
+No esgotamento de expansions, `cause`, `detail` e `obligation` identificam a restrição/slot.
 Diagnósticos estruturais não têm cause/obligation quando estes não se aplicam.
 
 GenerationInput é RefCounted com campos tipados. `parts`, `species`, `policies`
@@ -164,7 +164,8 @@ Erros: invalid_payload, invalid_identity, invalid_recipe, duplicate_id,
 content_revision_unavailable, policy_unresolved, incompatible_connector,
 objective_unreachable, population_unreachable, missing_thematic_site,
 incompatible_species, generation_exhausted. A falha mais profunda alcançada é
-preservada como diagnóstico; se bater o budget, ela aparece em cause. Uma falha
+preservada como diagnóstico; se bater o budget de expansions, ela aparece em cause. Ao esgotar tentativas
+com busca exaurida, conserva o erro específico. Uma falha
 estrutural ocorre antes da busca. Mesmo input/versões reproduzem diagnóstico.
 
 ## Verificação e fronteira de F1/F2
