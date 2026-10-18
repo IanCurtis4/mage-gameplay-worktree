@@ -1,7 +1,8 @@
 class_name WorldSkillGeometryRules
 extends RefCounted
 ## Audited inventory, not permission to execute a legacy kit in multiple heights.
-## Only dash/teleport have real actor adapters in this checkpoint.
+## Actor adapters cover mobility, the oriented shield and self-only state.
+## Shared projectile/area bindings do not by themselves certify a complete skill cast.
 const GROUPS := [
 	{"rule":&"walk_path","ids":[&"dash",&"defender_wall_advance",&"defender_retreat_guard",&"berserker_wound_leap"],"components":"support path; continuous sweep; hit-on-travel keeps its own emission"},
 	{"rule":&"teleport_legal","ids":[&"teleport"],"components":"legal exact destination; 3D range; solid supporting slab; planar obstacle exception"},
@@ -23,5 +24,5 @@ const GROUPS := [
 static func rule(skill: StringName) -> Dictionary:
 	for group: Dictionary in GROUPS:
 		if skill in group["ids"]:
-			return {"geometry_rule_id":group["rule"],"components":group["components"],"actor_adapter":skill in [&"dash",&"teleport"]}
+			return {"geometry_rule_id":group["rule"],"components":group["components"],"actor_adapter":skill in [&"dash",&"teleport",&"shield_wall"] or group["rule"] == &"self_only"}
 	return {}

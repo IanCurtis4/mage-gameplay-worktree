@@ -1,4 +1,4 @@
-# E07-F1 — API lógica do checkpoint inicial
+# E07-F1 — API lógica e consumidores em integração
 
 18/10/2026. **EM_EXECUÇÃO; não é a entrega completa F1.**
 [Despacho](f1_dispatch.md), [matriz de kits](f1_skill_geometry_matrix.md),
@@ -62,9 +62,9 @@ matriz são classificações de consumidores, não regras aceitas por query_atta
 
 A identificação de laje deste checkpoint cobre sólidos AABB com topo coincidindo
 com superfície horizontal realizada. Rampas usam suporte planar contínuo; volumes
-sólidos inclinados arbitrários não são certificados por esse predicado. Também
-não há sweep contra atores dentro de WorldGeometry: ocupação é query separada e
-os consumidores de projétil ainda precisam ordenar contatos contra atores/interceptores.
+sólidos inclinados arbitrários não são certificados por esse predicado. WorldGeometry continua separando ocupação de sweep estático. WorldProjectileMotion
+compõe o sweep estático com contatos contínuos contra corpos de atores; os limites
+dos interceptores estão descritos abaixo.
 
 Erros concretos: invalid_manifest, unknown_stage, stale_geometry, invalid_profile,
 invalid_support, invalid_position, unknown_surface, invalid_identity, unreachable,
@@ -81,18 +81,93 @@ revisão obsoleta. Falha restaura ponto/cursor anteriores ao avanço. teleport
 valida destino/alcance/lajes; release remove ocupante. Sem Node2D/câmera nessa classe.
 
 `CombatActor.bind_world_geometry(world, point, traversal, occupant_id)` instala
-esse movimento e desliga o tick legado em Vector2. Só para fixture técnica limpa,
-sem efeitos legados em voo. Rebinding retorna already_bound. world_point,
-move_world_to e advance_world são as entradas lógicas. _exit_tree libera ocupação.
-Isso prova travessia manual de PlayerActor/EnemyActor, **não perseguição/leash AI**.
-Não sincroniza desenho, global_position ou input.
+movimento e mantém os relógios de status. PlayerActor/EnemyActor agora desviam a
+locomoção para o ramo espacial; não executam o caminhamento legado em Vector2.
+world_point(), world_distance_to(), world_attack_query() e world_can_reach()
+compartilham os pontos/perfis reais. O último usa LoS entre centros dos corpos.
+_exit_tree libera ocupação. Não sincroniza desenho, global_position ou input.
 
-`PlayerActor.use_world_teleport(destination, revision)` e
-`use_world_dash(destination, revision)` usam custos/cooldowns canônicos existentes;
-falha espacial não gasta nem emite cast. Dash prepara rota dentro do alcance;
-fixture dirige advance_world, sem duração/animação integrada ainda. Todas as demais
-entradas legadas de cast e ataque básico são recusadas quando há binding espacial.
-Essa barreira explícita evita fallback 2D, mas não é suporte completo de kit.
+`WorldActorMotion.cancel()/has_route()` controlam a rota explícita. displace(destination,
+maximum_distance, revision) aceita somente rota colinear em x/z (pode subir rampa),
+avança pelo orçamento 3D e encerra a rota. Rejeita desvio ao redor de parede;
+falha conserva ponto/rota anteriores. Não aproxima destino inválido.
+
+`PlayerActor.use_world_teleport(destination, revision)` e use_world_dash(destination,
+revision) usam custos/cooldowns canônicos; falha espacial não gasta. Dash agora
+avança pelo tick na duração DASH_DURATION, sobre a rota, com interrupção por
+controle/revisão. Movimento normal e pursuit de básico também usam WorldActorMotion.
+Use_world_shield_wall(direction: Vector3, revision) aceita direção horizontal
+explícita e reutiliza rank/pagamento/resistência existentes. Mitigação frontal e
+interceptação usam posições/corpos lógicos. As quatro entradas self_only ficam
+liberadas; as demais ativas legadas continuam recusadas. Não é kit completo.
+
+O básico real das dez identidades emite world_attack_requested(request, target,
+projectile_kind). RunController conecta o sinal: melee revalida oclusão/alcance,
+projéteis usam a trajetória lógica e os callbacks canônicos de dano/efeitos.
+O controlador também liga flecha e magia dos mobs bound à mesma trajetória.
+Os perfis da fixture são explícitos; o envelope emitido pelo controlador usa
+projectile_radius horizontal e height=2*radius, centralizado no corpo lógico.
+Nenhum desses valores vem da posição dos sprites.
+
+EnemyActor mantém aquisição, percepção, perseguição, medo, taunt, preparação,
+leash/timeout e retorno ao WorldPoint home. Archer conserva a política de standoff;
+o endpoint precisa ter suporte/rota exatos, sem nearest-point. Cast de mob captura
+a revisão e revalida revisão/alcance/LoS antes de SP/cooldown. A fixture prova
+travessia autônoma e retorno por rampa, laje impedindo percepção e cast obsoleto.
+Invocações/posicionamento de companions e demais spawns continuam pendentes.
+
+## Trajetórias, áreas e interceptores reais
+
+WorldProjectileMotion.configure(world, origin: WorldPoint, offset: Vector3,
+facing: Vector3, collider, maximum_distance, revision) captura a origem/collider.
+contact(distance, actors) retorna data com actor, terrain, distance, fraction,
+position, volume_id e exhausted. Usa a revisão ATUAL por passo de voo: parede
+inserida após lançamento intercepta. Alvo de outro mundo/sem binding falha com
+incompatible_target. Não procura piso para ponto aéreo e não usa BODY_OFFSET.
+O envelope é cilindro vertical: raio x/z, height para cima; contato de corpos
+intersecta quadratic radial e intervalo vertical, sem amostragem por frame.
+Empate corpo/terreno conserva a prioridade do projétil aliado; corpos empatados
+usam instance_id. Piercing exclui antes do callback e tolera alvo removido nele.
+
+PlayerProjectile.bind_world_flight(world, origin, offset, facing, collider, revision)
+instala essa trajetória para PlayerProjectile/MageProjectile/SentinelProjectile;
+_prepare_impact, causalidade e modificadores permanecem canônicos. Homing acompanha
+o corpo 3D. ArrowProjectile expõe o mesmo binding para voo hostil fixo e ordena
+corpo, terreno, escudo e PhantomBarrier. GeometerWallField legado é recusado com
+spatial_interceptor_required; transporte, payloads e triângulos ainda bloqueiam F1.
+SentinelAreaProjectile ainda não usa esse ramo: sua ativa permanece bloqueada.
+
+WorldEffectArea.configure(world, anchor, traversal, rule, revision) captura cópias;
+rule exige ground_connected ou direct_volume. query(actor, range, shape),
+query_point(WorldPoint, range), contains_actor(actor, radius), distance_to(actor)
+reconsultam a geometria atual. contains_actor acrescenta raio do perfil real;
+query conserva o alcance exato. Ground propaga por caminhos/conexões, nunca por
+sobreposição dos sprites. ArrowRain e PlayerTrap usam bind_world_area com essa
+âncora: cada volley/trigger consulta alvos atuais; ExplosiveTrap/HunterTrap usam
+a mesma regra no blast. Entrada de cast/placement dessas ativas segue pendente.
+
+HunterTarField.bind_world_area ancora slow e a reação por
+consume_for_world_explosion(center: WorldPoint, blast_radius); consumo remove slow
+antes de callbacks e retry não repete. FoliageShelter.configure_world(player, anchor,
+traversal, duration, radius, exit_grace, revision) registra suporte no PlayerActor;
+membership/revelação por observador usam query exata. HunterCoverState conserva
+seus relógios/budget/grace: dois valores sentinela apenas codificam o booleano de
+membership para sua API existente, sem fazer distância de gameplay em Vector2.
+RewardPickup.bind_world_area/can_collect_world usam distância de chão exata; a
+ligação de spawns/chegadas e do nascimento desse loot segue pendente.
+
+WorldEffectVolume.configure(world, anchor, profile, bounds: AABB, revision) recebe
+volume finito explícito; fraction/actor_fraction fazem sweep contínuo do corpo.
+PhantomBarrier.bind_world_volume usa esse volume para cruzamentos e intercepção;
+capacidade é reivindicada antes do callback. AABB técnica não certifica faixa
+rotacionada, construção multissuperfície ou uma política nova de dimensões finais.
+Barreira legada ativa em voo hostil bound falha explicitamente. Limites físicos
+novos e a escala final ainda precisam da amostra/contrato aplicável.
+
+Em atores bound, o controlador recusa input/aim legado até D05 visual. Isso não
+é renderer/projeção/clique implementados. APIs opt-in da fixture não habilitam
+um estágio de produção no menu. Teste de consumidor não certifica sozinho o cast,
+preview, item/augment, construção ou kit completo listado na matriz.
 
 ## Adaptador plano e próximos consumidores
 
@@ -106,6 +181,6 @@ O adaptador está testado, mas o piloto não foi refeito para passar por essa cl
 
 Spawn/chegada poderão usar position_query e ocupação; reserve_spawn/portal_arrival,
 lifecycle, reserva idempotente e regras de segurança da campanha não foram implementados.
-A matriz registra os consumidores ainda pendentes: projéteis, áreas, construções,
-interceptores, suportes, combate e AI dos kits. O próximo executor deve continuar
+A matriz distingue os consumidores já ligados dos casts, construções, canais,
+interceptores e suportes dos kits ainda pendentes. O próximo executor deve continuar
 neste F1, sem liberar amostra multialtura enquanto houver esses bloqueios.

@@ -39,7 +39,7 @@ func _on_triggered(_trap: PlayerTrap, _target: CombatActor) -> void:
 	for target: CombatActor in _targets:
 		if target == null or not is_instance_valid(target) or target.get_instance_id() == owner_id or not target.is_alive():
 			continue
-		if global_position.distance_to(target.global_position) <= BLAST_RADIUS + target.collision_radius:
+		if contains_target(target,BLAST_RADIUS):
 			impacted.append(target)
 	impacted.sort_custom(func(first: CombatActor, second: CombatActor) -> bool: return first.get_instance_id() < second.get_instance_id())
 	var blast_request := damage_request.copy()

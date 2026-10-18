@@ -15,6 +15,58 @@ var max_distance := 680.0
 var projectile_radius := 4.0
 var travelled := 0.0
 var geometer_field: GeometerWallField
+var world_flight: WorldProjectileMotion
+var world_failure: StringName = &""
+
+func bind_world_flight(world: WorldGeometry, origin: ExpeditionWorldPoint, offset: Vector3, facing: Vector3, collider: Dictionary, revision: int) -> Dictionary:
+	if world_flight != null: return {"ok":false,"error_code":&"already_bound"}
+	if geometer_field != null: return {"ok":false,"error_code":&"spatial_interceptor_required"}
+	var flight := WorldProjectileMotion.new()
+	var result := flight.configure(world,origin,offset,facing,collider,max_distance,revision)
+	if not result["ok"]: return result
+	result = flight.validate_targets([target])
+	if result["ok"]: world_flight = flight
+	return result
+
+func _advance_world_flight(delta: float) -> void:
+	if not is_instance_valid(target) or not target.is_alive(): queue_free(); return
+	if geometer_field != null: world_failure = &"spatial_interceptor_required"; queue_free(); return
+	var step := minf(speed*delta,max_distance-world_flight.travelled)
+	var start := world_flight.position
+	var finish := start+world_flight.direction*step
+	var impact := world_flight.contact(step,[target])
+	if not impact["ok"]: world_failure = impact["error_code"]; queue_free(); return
+	var data: Dictionary = impact["data"]
+	var first_fraction := minf(1.0,float(data["fraction"]))
+	var shielded := target as PlayerActor
+	var shield := shielded.world_shield_interception_fraction(start,finish,world_flight.collider) if shielded != null else -1.0
+	var barrier_hit: PhantomBarrier
+	var barrier_fraction := 2.0
+	if is_inside_tree():
+		for node: Node in get_tree().get_nodes_in_group("phantom_barriers"):
+			var barrier := node as PhantomBarrier
+			if barrier == null or not barrier.is_active(): continue
+			if barrier.world_volume == null: world_failure = &"spatial_interceptor_required"; queue_free(); return
+			var fraction := barrier.world_interception_fraction(start,finish,world_flight.collider,world_flight.geometry)
+			if fraction >= 0.0 and (fraction < barrier_fraction or (is_equal_approx(fraction,barrier_fraction) and (barrier_hit == null or barrier.get_instance_id() < barrier_hit.get_instance_id()))): barrier_hit = barrier; barrier_fraction = fraction
+	var terrain_limit := float(data["fraction"]) if data["terrain"] else 2.0
+	if shield >= 0.0 and shield <= first_fraction and shield <= barrier_fraction and shield < terrain_limit and shielded.absorb_shield_projectile():
+		world_flight.position = start.lerp(finish,shield)
+		world_flight.travelled = travelled+step*shield
+		travelled = world_flight.travelled
+		queue_free(); return
+	if barrier_hit != null and barrier_fraction <= first_fraction and barrier_fraction < terrain_limit and (shield < 0.0 or barrier_fraction < shield) and barrier_hit.absorb_projectile():
+		world_flight.position = start.lerp(finish,barrier_fraction)
+		world_flight.travelled = travelled+step*barrier_fraction
+		travelled = world_flight.travelled
+		queue_free(); return
+	travelled = world_flight.travelled
+	if data["actor"] != null:
+		request.target_id = target.get_instance_id()
+		hit.emit(request,target)
+		queue_free(); return
+	if data["terrain"] or data["exhausted"]: queue_free()
+
 
 func configure(damage_request: DamageRequest, target_actor: CombatActor, origin: Vector2, arena_navigation: ArenaNavigation) -> void:
 	request = damage_request
@@ -29,6 +81,9 @@ func configure(damage_request: DamageRequest, target_actor: CombatActor, origin:
 
 func _process(delta: float) -> void:
 	if is_queued_for_deletion() or (is_inside_tree() and get_tree().paused) or not is_finite(delta) or delta <= 0.0:
+		return
+	if world_flight != null:
+		_advance_world_flight(delta)
 		return
 	if target == null or not is_instance_valid(target) or not target.is_alive() or travelled >= max_distance:
 		queue_free()

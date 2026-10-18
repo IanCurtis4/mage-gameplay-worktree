@@ -29,6 +29,21 @@ var registration_order := 0
 ## base traps retain their contract when this hook is absent.
 var target_filter: Callable
 var _configured := false
+var world_area: WorldEffectArea
+
+func bind_world_area(world: WorldGeometry, anchor: ExpeditionWorldPoint, traversal: Dictionary, revision: int) -> Dictionary:
+	if world_area != null: return {"ok":false,"error_code":&"already_bound"}
+	var area := WorldEffectArea.new()
+	var checked := area.configure(world,anchor,traversal,&"ground_connected",revision)
+	if checked["ok"]: world_area = area
+	return checked
+
+func contains_target(target: CombatActor, effect_radius: float) -> bool:
+	if not is_instance_valid(target): return false
+	if world_area != null: return world_area.contains_actor(target,effect_radius)
+	if target.world_motion != null: return false
+	return global_position.distance_to(target.global_position) <= effect_radius+target.collision_radius
+
 
 func configure(
 	trap_owner_id: int,
@@ -69,7 +84,7 @@ func can_trigger(target: CombatActor) -> bool:
 		and target != null
 		and is_instance_valid(target)
 		and target.is_alive()
-		and global_position.distance_to(target.global_position) <= radius + target.collision_radius
+		and contains_target(target,radius)
 		and (not target_filter.is_valid() or bool(target_filter.call(target)))
 	)
 
@@ -79,7 +94,7 @@ func first_trigger_target(targets: Array[CombatActor]) -> CombatActor:
 	for target: CombatActor in targets:
 		if target == null or not is_instance_valid(target) or target.get_instance_id() == owner_id or not can_trigger(target):
 			continue
-		var distance := global_position.distance_squared_to(target.global_position)
+		var distance := world_area.distance_to(target) if world_area != null else global_position.distance_to(target.global_position)
 		if selected_target == null or distance < selected_distance or (is_equal_approx(distance, selected_distance) and target.get_instance_id() < selected_target.get_instance_id()):
 			selected_target = target
 			selected_distance = distance

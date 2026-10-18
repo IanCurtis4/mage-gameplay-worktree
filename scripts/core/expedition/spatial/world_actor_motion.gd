@@ -83,3 +83,37 @@ func release() -> void:
 	if geometry != null and not _occupant_id.is_empty(): geometry.remove_occupant(_occupant_id)
 	geometry = null
 	_route.clear()
+
+func cancel() -> void:
+	_route.clear()
+	_cursor = 0
+	_route_revision = geometry.geometry_revision if geometry != null else 0
+
+func has_route() -> bool:
+	return _cursor < _route.size()
+
+func displace(destination: ExpeditionWorldPoint, maximum_distance: float, revision: int) -> Dictionary:
+	if geometry == null: return {"ok":false,"error_code":&"invalid_geometry"}
+	if not is_finite(maximum_distance) or maximum_distance <= 0.0: return _failure(&"invalid_distance")
+	var route := geometry.path(_point,destination,_profile,revision)
+	if not route["ok"]: return route
+	var heading := Vector2(destination.position.x-_point.position.x,destination.position.z-_point.position.z)
+	if heading.is_zero_approx(): return _failure(&"nonlinear_displacement")
+	# Push may follow a ramp, but cannot acquire a detour around a wall.
+	for item: Dictionary in route["data"]["points"]:
+		var offset := Vector2(item["position"].x-_point.position.x,item["position"].z-_point.position.z)
+		if absf(offset.cross(heading.normalized())) > WorldGeometry.EPS or offset.dot(heading) < -WorldGeometry.EPS: return _failure(&"nonlinear_displacement")
+	var previous_route := _route.duplicate(true)
+	var previous_cursor := _cursor
+	var previous_revision := _route_revision
+	_route = route["data"]["points"].duplicate(true)
+	_cursor = 1
+	_route_revision = revision
+	var result := advance(minf(maximum_distance,float(route["data"]["cost"])))
+	if not result["ok"]:
+		_route = previous_route
+		_cursor = previous_cursor
+		_route_revision = previous_revision
+		return result
+	cancel()
+	return result

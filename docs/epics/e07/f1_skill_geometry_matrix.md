@@ -25,6 +25,16 @@ Cada consumidor pendente ainda bloqueia o fechamento F1, mesmo tendo regra inven
 - `hunter` (archer): 19 IDs legais, incluindo a biblioteca da origem.
 - `mg_ar` (mage): 20 IDs legais, incluindo a biblioteca da origem.
 
+## Delta de consumidores desta retomada
+
+`e07_f1_consumer_test` prova básico real nas dez identidades, trajetória contínua
+Player/Mage/Sentinel e flecha hostil, chuva/traps/blast ancorados, escudo/barreira,
+piche, ocultação/budget/grace, coleta, movimento/dash temporal, AI autônoma/leash,
+cast obsoleto e callbacks que removem alvos. Isso não equivale ao cast completo
+dessas ativas: entrada/preview/composição nominal ainda precisam ser integrados.
+Geômetra, canais/ecos, campos elementais, AoEs do Sentinela e demais mobilidades
+continuam bloqueios. API e recibo contêm o escopo exato; D05 visual não foi aprovado.
+
 ## Habilidades nominais
 
 Regra primária não esgota efeitos compostos; exceções por família seguem à tabela.
@@ -35,7 +45,7 @@ causal original e não adiciona LoS a DoT já aplicado.
 |---|---|---|
 | `archer_cadence` — Cadência | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `archer_precision` — Precisão | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `arrow_rain` — Chuva de Flechas | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `arrow_rain` — Chuva de Flechas | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
 | `berserker_blood_rift` — Fenda Sangrenta | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `berserker_breath_steal` — Arrancar Fôlego | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `berserker_deep_bleeding` — Hemorragia Profunda | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
@@ -67,12 +77,12 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `elementalist_prismatic_focus` — Foco Prismático | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `elementalist_prismatic_resonance` — Ressonância Prismática | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `elementalist_tri_nova` — Nova Tríplice | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
-| `explosive_trap` — Armadilha Explosiva | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `explosive_trap` — Armadilha Explosiva | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
 | `extended_aim` — Mira Estendida | `self_only` | Consumidor pendente; entrada legada bloqueada no binding |
 | `fire_spear` — Lança de Fogo | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `fire_wall` — Parede de Fogo | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `fireball` — Bola de Fogo | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
-| `foliage_shelter` — Abrigo de Folhagem | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `foliage_shelter` — Abrigo de Folhagem | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
 | `fury` — Fúria | `self_only` | Consumidor pendente; entrada legada bloqueada no binding |
 | `geometer_collapse` — Colapso Geométrico | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `geometer_incidence` — Teorema de Incidência | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
@@ -84,19 +94,19 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `haunt` — Assombro | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `hunter_covering_shot` — Tiro de Cobertura | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `hunter_easy_prey` — Presa Fácil | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `hunter_freezing_trap` — Armadilha Congelante | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `hunter_freezing_trap` — Armadilha Congelante | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
 | `hunter_mark` — Marca do Caçador | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `hunter_shooting_discipline` — Disciplina de Tiro | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `hunter_tar_trap` — Armadilha de Piche | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
-| `hunter_thorn_trap` — Armadilha de Espinhos | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
-| `hunter_total_cover` — Cobertura Total | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `hunter_tar_trap` — Armadilha de Piche | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
+| `hunter_thorn_trap` — Armadilha de Espinhos | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
+| `hunter_total_cover` — Cobertura Total | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
 | `ice_spear` — Lança de Gelo | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `ice_wall` — Parede de Gelo | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `lightning` — Relâmpago | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `lightning_wall` — Parede de Raios | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `mage_mana_regeneration` — Regeneração de SP | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `perseverance` — Perseverança | `self_only` | Consumidor pendente; entrada legada bloqueada no binding |
-| `phantom_barrier` — Barreira Fantasma | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `phantom_barrier` — Barreira Fantasma | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
 | `piercing_arrow` — Flecha Perfurante | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `piercing_shout` — Grito Perfurante | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `provoke` — Provocar | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
@@ -109,10 +119,10 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `sentinel_opening_read` — Leitura de Aberturas | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `sentinel_piercing_shot` — Tiro Perfurante | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `sentinel_precision_stance` — Postura de Precisão | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `shield_wall` — Parede de Escudos | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `shield_wall` — Parede de Escudos | `direct_volume` | Entrada world explícita e intercepção frontal real testadas; input/visual pendentes |
 | `slash` — Corte em cone | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `slowing_arrow` — Flecha Entorpecente | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
-| `snare_trap` — Armadilha de Laço | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `snare_trap` — Armadilha de Laço | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
 | `soul_impact` — Impacto das Almas | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `spiritualist_channel_focus` — Foco do Além | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `spiritualist_dissipation` — Rito de Dissipação | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
@@ -196,7 +206,7 @@ source/target/WorldPoint quando o consumidor correspondente for adaptado.
 
 | Componente | Fronteira |
 |---|---|
-| `basic_attack` | volume direto / projétil; pendente |
+| `basic_attack` | volume direto / projétil real nas dez identidades; controlador ligado; input/visual/composição dos kits pendentes |
 | `burn_tick` | inherit_parent; hit/estado causal já aceito; consumidor pendente |
 | `bleed_tick` | inherit_parent; hit/estado causal já aceito; consumidor pendente |
 | `hunter_thorn_bleed` | inherit_parent; hit/estado causal já aceito; consumidor pendente |
@@ -218,4 +228,4 @@ Famílias causais do catálogo: `elementalist_tri_nova_ice`, `elementalist_tri_n
 
 ## Próximo trabalho no mesmo F1
 
-Adaptar os consumidores nominais acima e adicionar integração real por kit/efeito antes de liberar combate multialtura. Atualmente a barreira em PlayerActor impede casts 2D após bind; isso é falha explícita, não suporte completo. D05 visual continua pendente, sem renderer/clique/inspeção nativa visual implementados. Não iniciar F2+ nem marcar F1 VALIDADA/ENTREGUE.
+Adaptar os consumidores nominais acima e adicionar integração real por kit/efeito antes de liberar combate multialtura. A barreira em PlayerActor continua impedindo as ativas espaciais sem adaptador de cast; isso é falha explícita, não suporte completo. D05 visual continua pendente, sem renderer/clique/inspeção nativa visual implementados. Não iniciar F2+ nem marcar F1 VALIDADA/ENTREGUE.

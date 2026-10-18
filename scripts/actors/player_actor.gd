@@ -459,6 +459,7 @@ func prepare_sentinel_explosive() -> bool:
 	return true
 
 func _launch_sentinel_explosive(enemy: CombatActor) -> bool:
+	if world_motion != null: return false # Area projectile consumer still requires its spatial adapter.
 	var id := &"sentinel_explosive_shot"
 	if not sentinel_state.explosive_prepared or not is_sentinel() or not is_alive() or is_stunned() or is_feared() or (is_inside_tree() and get_tree().paused):
 		return false
@@ -1333,6 +1334,15 @@ func use_lightning_wall(direction: Vector2) -> bool:
 func has_shield_stance() -> bool:
 	return is_alive() and shield_remaining > 0.0 and shield_resistance > 0
 
+var _world_shield_commit := false
+
+func use_world_shield_wall(direction: Vector3, revision: int) -> bool:
+	if world_motion == null or revision != world_motion.geometry.geometry_revision or not direction.is_finite() or direction.is_zero_approx() or absf(direction.y) > WorldGeometry.EPS: return false
+	_world_shield_commit = true
+	var result := use_shield_wall(Vector2(direction.x,direction.z))
+	_world_shield_commit = false
+	return result
+
 func use_shield_wall(direction: Vector2) -> bool:
 	if class_id != &"swordsman" or not is_alive():
 		return false
@@ -1500,6 +1510,18 @@ func clear_shield_stance() -> void:
 	resources_changed.emit()
 	queue_redraw()
 
+func world_shield_interception_fraction(from: Vector3, to: Vector3, collider: Dictionary) -> float:
+	if world_motion == null or not has_shield_stance(): return -1.0
+	var feet := world_point().position
+	var profile := world_motion.profile()
+	var radius := SHIELD_RADIUS+float(collider["radius"])
+	if WorldProjectileMotion.cylinder_fraction(from,from,feet,radius,float(profile["height"]),float(collider["height"])) >= 0.0: return -1.0
+	var fraction := WorldProjectileMotion.cylinder_fraction(from,to,feet,radius,float(profile["height"]),float(collider["height"]))
+	if fraction < 0.0: return -1.0
+	var contact_direction := (from.lerp(to,fraction)+Vector3.UP*float(collider["height"])*0.5-feet-Vector3.UP*float(profile["height"])*0.5).normalized()
+	var facing := Vector3(shield_facing.x,0.0,shield_facing.y)
+	return fraction if contact_direction.dot(facing) >= cos(SHIELD_HALF_ANGLE) else -1.0
+
 func shield_interception_fraction(from: Vector2, to: Vector2, projectile_radius: float) -> float:
 	if not has_shield_stance():
 		return -1.0
@@ -1548,19 +1570,19 @@ func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Diction
 	if source == null or not is_instance_valid(source):
 		return _apply_damage_with_shield(request, rng)
 	var front_reduction := 0.0
-	if has_shield_stance() and _faces_position(shield_facing, source.global_position):
+	if has_shield_stance() and _faces_source_actor(shield_facing, source):
 		front_reduction = SHIELD_FRONT_REDUCTION
-	if _is_defender() and defender_counter_guard_remaining > 0.0 and _faces_position(defender_counter_guard_facing, source.global_position):
+	if _is_defender() and defender_counter_guard_remaining > 0.0 and _faces_source_actor(defender_counter_guard_facing, source):
 		front_reduction = maxf(front_reduction, DEFENDER_COUNTER_GUARD_REDUCTION)
-	if _is_defender() and defender_advance_guard_active and _faces_position(defender_advance_guard_facing, source.global_position):
+	if _is_defender() and defender_advance_guard_active and _faces_source_actor(defender_advance_guard_facing, source):
 		front_reduction = maxf(front_reduction, DEFENDER_ADVANCE_GUARD_REDUCTION)
-	if _is_defender() and defender_retreat_guard_remaining > 0.0 and _faces_position(defender_retreat_guard_facing, source.global_position):
+	if _is_defender() and defender_retreat_guard_remaining > 0.0 and _faces_source_actor(defender_retreat_guard_facing, source):
 		front_reduction = maxf(front_reduction, defender_retreat_guard_reduction)
 	var effective_request := request.copy() if front_reduction > 0.0 else request
 	if front_reduction > 0.0:
 		effective_request.damage_dealt_multiplier *= 1.0 - front_reduction
 	var result := _apply_damage_with_shield(effective_request, rng)
-	var frontal_shield_absorption := _faces_position(_defender_event_facing(), source.global_position) and float(result.get("absorbed_damage", 0.0)) > 0.0
+	var frontal_shield_absorption := _faces_source_actor(_defender_event_facing(), source) and float(result.get("absorbed_damage", 0.0)) > 0.0
 	if bool(result.get("landed", false)) and float(result.get("damage", 0.0)) > 0.0 and (front_reduction > 0.0 or frontal_shield_absorption):
 		_grant_defender_front_event(result)
 	return result
@@ -1577,6 +1599,13 @@ func _apply_damage_with_shield(request: DamageRequest, rng: RandomNumberGenerato
 
 func _shield_faces_position(position: Vector2) -> bool:
 	return _faces_position(shield_facing, position)
+
+func _faces_source_actor(facing: Vector2, source: Node2D) -> bool:
+	if world_motion == null: return _faces_position(facing,source.global_position)
+	var actor := source as CombatActor
+	if actor == null or actor.world_motion == null or actor.world_motion.geometry != world_motion.geometry: return false
+	var offset := actor.world_point().position-world_point().position
+	return not offset.is_zero_approx() and offset.normalized().dot(Vector3(facing.x,0.0,facing.y)) >= cos(SkillGeometry.DEFENDER_GUARD_HALF_ANGLE)
 
 func _faces_position(facing: Vector2, position: Vector2) -> bool:
 	var offset := position - global_position
@@ -2020,6 +2049,32 @@ func use_foliage_shelter(point: Vector2) -> bool:
 	resources_changed.emit()
 	return true
 
+var _world_shelters: Dictionary[int, Dictionary] = {}
+
+func register_world_shelter(source_id: int, area: WorldEffectArea, radius: float, exit_grace: float = 0.0) -> bool:
+	if world_motion == null or area == null or area.geometry != world_motion.geometry or source_id <= 0 or not is_finite(radius) or radius <= 0.0: return false
+	if is_hunter():
+		# Reuse the canonical cover budget/reveal/grace clock. Membership is decided
+		# by WorldGeometry; the two sentinel values only encode its boolean to E06.
+		if not hunter_cover.bind_zone(source_id,Vector2.ZERO,radius,exit_grace): return false
+		_world_shelters.clear()
+	_world_shelters[source_id] = {"area":area,"radius":radius}
+	return true
+
+func unregister_world_shelter(source_id: int) -> bool:
+	if not _world_shelters.erase(source_id): return false
+	if is_hunter(): hunter_cover.unbind_zone(source_id)
+	return true
+
+func _inside_world_shelter(actor: CombatActor, shelter: Dictionary) -> bool:
+	var area: WorldEffectArea = shelter["area"]
+	var query := area.query(actor,float(shelter["radius"]))
+	return query["ok"] and query["data"]["hit"]
+
+func _world_cover_clock_point() -> Vector2:
+	var shelter: Dictionary = _world_shelters.get(hunter_cover.zone_id,{})
+	return hunter_cover.center if not shelter.is_empty() and _inside_world_shelter(self,shelter) else Vector2.INF
+
 func register_foliage_shelter(source_id: int, center: Vector2, radius: float, exit_grace: float = 0.0) -> bool:
 	if source_id <= 0 or not center.is_finite() or not is_finite(radius) or radius <= 0.0:
 		return false
@@ -2042,15 +2097,33 @@ func unregister_foliage_shelter(source_id: int) -> bool:
 	return true
 
 func clear_foliage_shelters() -> void:
+	_world_shelters.clear()
 	_foliage_shelters.clear()
 	concealment_reveal_remaining = 0.0
 	hunter_cover.clear()
 	queue_redraw()
 
 func is_concealed() -> bool:
+	if world_motion != null:
+		if not is_alive(): return false
+		if is_hunter(): return hunter_cover.is_hidden(_world_cover_clock_point())
+		if concealment_reveal_remaining > 0.0: return false
+		for shelter: Dictionary in _world_shelters.values():
+			if _inside_world_shelter(self,shelter): return true
+		return false
 	if is_hunter():
 		return is_alive() and hunter_cover.is_hidden(global_position)
 	return is_alive() and concealment_reveal_remaining <= 0.0 and not _containing_foliage_shelters().is_empty()
+
+func can_be_acquired_by_world(observer: CombatActor) -> bool:
+	if world_motion == null or not is_alive() or not is_instance_valid(observer) or observer.world_motion == null or observer.world_motion.geometry != world_motion.geometry: return false
+	if not is_concealed(): return true
+	if is_hunter():
+		var shelter: Dictionary = _world_shelters.get(hunter_cover.zone_id,{})
+		return not shelter.is_empty() and _inside_world_shelter(observer,shelter)
+	for shelter: Dictionary in _world_shelters.values():
+		if _inside_world_shelter(self,shelter) and _inside_world_shelter(observer,shelter): return true
+	return false
 
 func can_be_acquired_by(observer_position: Vector2) -> bool:
 	if not is_alive():
@@ -2071,7 +2144,7 @@ func reveal_from_offense(duration: float = CONCEALMENT_REVEAL_DURATION) -> bool:
 		concealment_reveal_remaining = hunter_cover.reveal_remaining
 		queue_redraw()
 		return revealed
-	if _foliage_shelters.is_empty() or duration <= 0.0:
+	if (_foliage_shelters.is_empty() and _world_shelters.is_empty()) or duration <= 0.0:
 		return false
 	concealment_reveal_remaining = maxf(concealment_reveal_remaining, duration)
 	queue_redraw()
@@ -2300,11 +2373,54 @@ func skill_cast_time(skill_id: StringName) -> float:
 		return 0.0
 	return StatCalculator.effective_cast_time(0.0, definition.cast_time, stat_breakdown) if definition != null else 0.0
 
+var _world_dash_remaining := 0.0
+var _world_dash_speed := 0.0
+var _world_last_position := Vector3.INF
+signal world_attack_requested(request: DamageRequest, victim: CombatActor, projectile_kind: StringName)
+
+func bind_world_geometry(world: WorldGeometry, point: ExpeditionWorldPoint, traversal: Dictionary, occupant_id: String) -> Dictionary:
+	var result := super.bind_world_geometry(world,point,traversal,occupant_id)
+	if result["ok"]:
+		_world_last_position = point.position
+		set_process(true)
+	return result
+
+func _advance_world_player(delta: float) -> void:
+	if is_stunned() or is_feared() or is_rooted():
+		world_motion.cancel()
+		_world_dash_remaining = 0.0
+		return
+	if _world_dash_remaining > 0.0:
+		var step := minf(delta,_world_dash_remaining)
+		var moved := world_motion.advance(_world_dash_speed*step)
+		_world_dash_remaining = maxf(0.0,_world_dash_remaining-step)
+		if not moved["ok"] or moved["data"]["arrived"]: _world_dash_remaining = 0.0
+		return
+	if is_instance_valid(target) and target.is_alive():
+		if can_basic_attack(target,_attack_engaged):
+			world_motion.cancel()
+			_attack_engaged = true
+			_try_basic_attack()
+			return
+		_attack_engaged = false
+		if _attack_recovery > 0.0: return
+		_repath_time -= delta
+		if _repath_time <= 0.0 or not world_motion.has_route():
+			if target.world_motion == null or not world_motion.plan(target.world_point(),world_motion.geometry.geometry_revision)["ok"]: world_motion.cancel()
+			_repath_time = 0.22
+	elif target != null:
+		target = null
+		world_motion.cancel()
+	if world_motion.has_route():
+		var moved := world_motion.advance(stat_breakdown.value(&"move_speed")*movement_speed_multiplier()*delta)
+		if not moved["ok"]: world_motion.cancel(); _repath_time = 0.0
+
 func use_world_teleport(destination: ExpeditionWorldPoint, revision: int) -> bool:
 	if world_motion == null or is_rooted() or (class_id != &"mage" and not run_state.has_item_active(&"teleport")) or not _can_pay_skill(&"teleport"): return false
 	var result := world_motion.teleport(destination,skill_range(&"teleport"),revision)
 	if not result["ok"]: return false
 	_spend(&"teleport")
+	_world_dash_remaining = 0.0
 	_path.clear()
 	_has_path_goal = false
 	velocity = Vector2.ZERO
@@ -2322,6 +2438,8 @@ func use_world_dash(destination: ExpeditionWorldPoint, revision: int) -> bool:
 	var planned := world_motion.plan(destination,revision)
 	if not planned["ok"]: return false
 	_spend(&"dash")
+	_world_dash_remaining = DASH_DURATION
+	_world_dash_speed = float(route["data"]["cost"])/DASH_DURATION
 	_path.clear()
 	_has_path_goal = false
 	velocity = Vector2.ZERO
@@ -2452,6 +2570,16 @@ func _runtime_rank_definition(skill_id: StringName) -> SkillRankDefinition:
 	return _rank_definitions.get(skill_id)
 
 func _process(delta: float) -> void:
+	if world_motion != null:
+		if (is_inside_tree() and get_tree().paused) or not is_finite(delta) or delta <= 0.0: return
+		var before := world_point().position
+		_advance_player(delta)
+		if is_sentinel() and is_alive():
+			var moved := before.distance_to(world_point().position) > SentinelFocusState.MOVEMENT_EPSILON or _world_last_position.distance_to(before) > SentinelFocusState.MOVEMENT_EPSILON
+			sentinel_state.advance(delta,moved,sentinel_combat_active)
+			_set_sentinel_stance(run_state.build_snapshot.has_passive(&"sentinel_precision_stance") and sentinel_state.stable_time >= SentinelFocusState.STANCE_DELAY)
+		_world_last_position = world_point().position
+		return
 	if is_sentinel() and is_alive() and not (is_inside_tree() and get_tree().paused):
 		if _sentinel_last_position.is_finite() and _sentinel_last_position.distance_to(global_position) > SentinelFocusState.MOVEMENT_EPSILON:
 			sentinel_state.stable_time = 0.0
@@ -2482,7 +2610,7 @@ func _advance_player(delta: float) -> void:
 	if is_hunter():
 		var had_step := hunter_state.step_remaining > 0.0
 		hunter_state.advance(delta)
-		hunter_cover.advance(delta, global_position)
+		hunter_cover.advance(delta, _world_cover_clock_point() if world_motion != null else global_position)
 		concealment_reveal_remaining = hunter_cover.reveal_remaining
 		if had_step and hunter_state.step_remaining <= 0.0:
 			_apply_derived_stats(_build_stat_breakdown())
@@ -2588,6 +2716,9 @@ func _advance_player(delta: float) -> void:
 	if _basic_visual_time > 0.0:
 		_basic_visual_time = maxf(0.0, _basic_visual_time - delta)
 		queue_redraw()
+	if world_motion != null:
+		_advance_world_player(delta)
+		return
 	if has_active_cast():
 		_advance_active_cast(delta)
 		return
@@ -2770,7 +2901,11 @@ func _try_basic_attack() -> void:
 		return
 	_begin_effect_emission()
 	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
-	_last_facing = global_position.direction_to(target.global_position)
+	if world_motion != null:
+		var delta := target.world_point().position-world_point().position
+		_last_facing = Vector2(delta.x,delta.z).normalized()
+	else:
+		_last_facing = global_position.direction_to(target.global_position)
 	attack_cooldown = 1.0 / attacks_per_second()
 	_attack_recovery = BASIC_ATTACK_RECOVERY
 	_basic_visual_time = BASIC_ATTACK_RECOVERY
@@ -2786,6 +2921,9 @@ func _try_basic_attack() -> void:
 		request = _make_physical_request(target, &"basic_attack", stat_breakdown.value(&"precision_attack") * class_definition.basic_power, DamageRequest.AccuracyMode.CONTESTED, true)
 	else:
 		request = _make_physical_request(target, &"basic_attack", stat_breakdown.value(&"melee_attack") * class_definition.basic_power, DamageRequest.AccuracyMode.CONTESTED, true)
+	if world_motion != null:
+		world_attack_requested.emit(request,target,&"mage" if is_mage() else (&"precision" if is_archer() else &"direct"))
+		return
 	if is_mage():
 		mage_projectile_requested.emit(&"basic_attack", request, target, _last_facing, 1)
 	elif is_archer():
@@ -2843,7 +2981,7 @@ func _magic_power(skill_id: StringName) -> float:
 	return stat_breakdown.value(&"magic_attack") * power
 
 func _can_spend(skill_id: StringName) -> bool:
-	if world_motion != null: return false # Explicitly reject Vector2 casts in a multi-height world.
+	if world_motion != null and WorldSkillGeometryRules.rule(skill_id).get("geometry_rule_id",&"") != &"self_only" and not (skill_id == &"shield_wall" and _world_shield_commit): return false # Spatial casts require explicit WorldPoints.
 	return _can_pay_skill(skill_id)
 
 func _can_pay_skill(skill_id: StringName) -> bool:
@@ -2972,7 +3110,10 @@ func _extended_aim_bonus(skill_id: StringName) -> float:
 	return EXTENDED_AIM_RANGE_BONUS
 
 func can_basic_attack(enemy: CombatActor, retain: bool = false) -> bool:
-	if world_motion != null: return false
+	if world_motion != null:
+		if not is_instance_valid(enemy) or not enemy.is_alive() or enemy.world_motion == null: return false
+		var body_range := float(world_motion.profile()["radius"])+float(enemy.world_motion.profile()["radius"])+(class_definition.basic_range+_extended_aim_bonus(&"basic_attack"))*sentinel_range_multiplier()
+		return world_can_reach(enemy,body_range+(ATTACK_RETENTION if retain else 0.0))
 	if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
 		return false
 	var allowed_distance := basic_attack_distance(enemy) + (ATTACK_RETENTION if retain else 0.0)

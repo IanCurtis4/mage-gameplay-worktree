@@ -15,6 +15,23 @@ var source_id: StringName
 var target_filter: Callable
 var active := false
 var _targets: Array[CombatActor] = []
+var world_area: WorldEffectArea
+
+func bind_world_area(world: WorldGeometry, anchor: ExpeditionWorldPoint, traversal: Dictionary, revision: int) -> Dictionary:
+	if world_area != null: return {"ok":false,"error_code":&"already_bound"}
+	var area := WorldEffectArea.new()
+	var checked := area.configure(world,anchor,traversal,&"ground_connected",revision)
+	if checked["ok"]: world_area = area
+	return checked
+
+func consume_for_world_explosion(center: ExpeditionWorldPoint, blast_radius: float) -> float:
+	if world_area == null or not active or remaining <= 0.0 or not is_instance_valid(owner_actor) or not owner_actor.is_alive() or (is_inside_tree() and get_tree().paused): return 0.0
+	var checked := world_area.query_point(center,RADIUS+blast_radius)
+	if not checked["ok"] or not checked["data"]["hit"]: return 0.0
+	var bonus := 0.25*clampf(remaining/duration,0.0,1.0)
+	expire(true)
+	return bonus
+
 
 static func slow_source(runtime_owner_id: int) -> StringName:
 	return StringName("hunter_tar_%d" % runtime_owner_id)
@@ -61,10 +78,12 @@ func refresh_occupants() -> void:
 		var victim := candidate as CombatActor
 		if victim == null or not victim.is_alive() or victim.is_queued_for_deletion():
 			continue
-		if global_position.distance_to(victim.global_position) <= RADIUS + victim.collision_radius and (not target_filter.is_valid() or bool(target_filter.call(victim))):
+		var inside := world_area.contains_actor(victim,RADIUS) if world_area != null else (victim.world_motion == null and global_position.distance_to(victim.global_position) <= RADIUS+victim.collision_radius)
+		if inside and (not target_filter.is_valid() or bool(target_filter.call(victim))):
 			victim.apply_slow(slow_fraction, residual_duration, source_id)
 
 func consume_for_explosion(center: Vector2, blast_radius: float, navigation: ArenaNavigation) -> float:
+	if world_area != null: return 0.0 # World explosions require an explicit WorldPoint.
 	if not active or remaining <= 0.0 or not is_instance_valid(owner_actor) or not owner_actor.is_alive() or navigation == null or (is_inside_tree() and get_tree().paused):
 		return 0.0
 	if global_position.distance_to(center) > RADIUS + blast_radius or not navigation.is_segment_clear(center, global_position, 0.0):

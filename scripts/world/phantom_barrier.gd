@@ -19,6 +19,45 @@ var axis := Vector2.DOWN
 var _previous_positions: Dictionary[int, Vector2] = {}
 var _inside: Dictionary[int, bool] = {}
 var _cooldowns: Dictionary[int, float] = {}
+var world_volume: WorldEffectVolume
+var _world_previous: Dictionary[int, ExpeditionWorldPoint] = {}
+
+func bind_world_volume(world: WorldGeometry, anchor: ExpeditionWorldPoint, profile: Dictionary, volume: AABB, revision: int) -> Dictionary:
+	if world_volume != null: return {"ok":false,"error_code":&"already_bound"}
+	var shape := WorldEffectVolume.new()
+	var checked := shape.configure(world,anchor,profile,volume,revision)
+	if not checked["ok"]: return checked
+	world_volume = shape
+	_inside.clear()
+	for candidate: Variant in targets:
+		if not is_instance_valid(candidate): continue
+		var actor := candidate as CombatActor
+		if actor.world_motion == null or actor.world_motion.geometry != world: continue
+		_world_previous[actor.get_instance_id()] = actor.world_point()
+		_inside[actor.get_instance_id()] = shape.actor_fraction(actor.world_point(),actor.world_point(),actor) >= 0.0
+	return checked
+
+func world_interception_fraction(from: Vector3, to: Vector3, collider: Dictionary, world: WorldGeometry) -> float:
+	if not is_active() or world_volume == null or world_volume.geometry != world: return -1.0
+	return world_volume.fraction(from,to,collider)
+
+func _advance_world_crossings() -> void:
+	for candidate: Variant in targets:
+		if not is_instance_valid(candidate): continue
+		var actor := candidate as CombatActor
+		var id := actor.get_instance_id()
+		if not actor.is_alive() or actor.world_motion == null or actor.world_motion.geometry != world_volume.geometry: _world_previous.erase(id); _inside.erase(id); continue
+		var current := actor.world_point()
+		var previous: ExpeditionWorldPoint = _world_previous.get(id,current)
+		var inside := world_volume.actor_fraction(current,current,actor) >= 0.0
+		if not _inside.get(id,inside) and previous.position.distance_squared_to(current.position) > WorldGeometry.EPS and world_volume.actor_fraction(previous,current,actor) >= 0.0 and float(_cooldowns.get(id,0.0)) <= 0.0:
+			var source := StringName("phantom_barrier_%d" % get_instance_id())
+			actor.apply_slow(SLOW_FRACTION,SLOW_DURATION,source)
+			actor.apply_weaken(WEAKEN_FRACTION,WEAKEN_DURATION,source)
+			_cooldowns[id] = TARGET_INTERVAL
+		_inside[id] = inside
+		_world_previous[id] = current
+
 
 func configure(caster: CombatActor, facing: Vector2, potential_targets: Array[CombatActor], placement_range: float, capacity: int) -> void:
 	assert(caster != null and is_finite(placement_range) and placement_range >= 0.0 and capacity > 0)
@@ -70,6 +109,9 @@ func _process(delta: float) -> void:
 		return
 	for actor_id: int in _cooldowns.keys():
 		_cooldowns[actor_id] = maxf(0.0, _cooldowns[actor_id] - delta)
+	if world_volume != null:
+		_advance_world_crossings()
+		return
 	for actor: CombatActor in targets:
 		if actor == null or not is_instance_valid(actor):
 			continue

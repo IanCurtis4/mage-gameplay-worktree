@@ -14,6 +14,24 @@ var duration := 0.0
 var radius := RADIUS
 var removal_reason: StringName = &""
 var _registered := false
+var world_area: WorldEffectArea
+
+func configure_world(player: PlayerActor, anchor: ExpeditionWorldPoint, traversal: Dictionary, duration_value: float, radius_value: float, exit_grace: float, revision: int) -> Dictionary:
+	if _registered or player == null or player.world_motion == null or not is_finite(duration_value) or duration_value <= 0.0: return {"ok":false,"error_code":&"invalid_shelter"}
+	var area := WorldEffectArea.new()
+	var result := area.configure(player.world_motion.geometry,anchor,traversal,&"ground_connected",revision)
+	if not result["ok"]: return result
+	if not player.register_world_shelter(get_instance_id(),area,radius_value,exit_grace): return {"ok":false,"error_code":&"invalid_shelter"}
+	world_area = area
+	player_owner = player
+	duration = duration_value
+	remaining = duration_value
+	radius = radius_value
+	_registered = true
+	process_mode = Node.PROCESS_MODE_PAUSABLE
+	add_to_group("foliage_shelters")
+	return {"ok":true,"error_code":&""}
+
 
 func configure(player: PlayerActor, center: Vector2, duration_value: float, radius_value: float = RADIUS, exit_grace: float = 0.0) -> void:
 	assert(player != null)
@@ -62,7 +80,8 @@ func _unregister() -> void:
 		return
 	_registered = false
 	if player_owner != null and is_instance_valid(player_owner):
-		player_owner.unregister_foliage_shelter(get_instance_id())
+		if world_area != null: player_owner.unregister_world_shelter(get_instance_id())
+		else: player_owner.unregister_foliage_shelter(get_instance_id())
 
 func _draw() -> void:
 	var alpha := minf(1.0, remaining * 2.0)

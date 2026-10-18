@@ -62,7 +62,7 @@ func _on_triggered(_trap: PlayerTrap, primary: CombatActor) -> void:
 			var victim := candidate as CombatActor
 			if victim == null or not victim.is_alive() or victim.is_queued_for_deletion() or victim.get_instance_id() == owner_id:
 				continue
-			if global_position.distance_to(victim.global_position) <= effect_radius + victim.collision_radius and (not target_filter.is_valid() or bool(target_filter.call(victim))):
+			if contains_target(victim,effect_radius) and (not target_filter.is_valid() or bool(target_filter.call(victim))):
 				victims.append(victim)
 		victims.sort_custom(func(first: CombatActor, second: CombatActor) -> bool: return first.get_instance_id() < second.get_instance_id())
 	sprung.emit(self, victims)

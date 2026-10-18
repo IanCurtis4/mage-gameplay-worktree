@@ -3,6 +3,20 @@ extends Node2D
 
 var ticket_id := ""
 var _time := 0.0
+var world_area: WorldEffectArea
+
+func bind_world_area(world: WorldGeometry, anchor: ExpeditionWorldPoint, traversal: Dictionary, revision: int) -> Dictionary:
+	if world_area != null: return {"ok":false,"error_code":&"already_bound"}
+	var area := WorldEffectArea.new()
+	var checked := area.configure(world,anchor,traversal,&"ground_connected",revision)
+	if checked["ok"]: world_area = area
+	return checked
+
+func can_collect_world(actor: CombatActor, maximum_range: float) -> bool:
+	if world_area == null: return false
+	var checked := world_area.query(actor,maximum_range)
+	return checked["ok"] and checked["data"]["hit"]
+
 
 func _process(delta: float) -> void:
 	_time += delta

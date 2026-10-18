@@ -29,6 +29,51 @@ var geometer_payload_identity := 0
 var geometer_triangle_foundation_request: DamageRequest
 var geometer_triangle_arc_request: DamageRequest
 var geometer_triangle_identity := 0
+var world_flight: WorldProjectileMotion
+var world_failure: StringName = &""
+
+func bind_world_flight(world: WorldGeometry, origin: ExpeditionWorldPoint, offset: Vector3, facing: Vector3, collider: Dictionary, revision: int) -> Dictionary:
+	if world_flight != null: return {"ok":false,"error_code":&"already_bound"}
+	if geometer_field != null: return {"ok":false,"error_code":&"spatial_interceptor_required"}
+	var flight := WorldProjectileMotion.new()
+	var result := flight.configure(world,origin,offset,facing,collider,max_distance,revision)
+	if not result["ok"]: return result
+	var candidates: Array[CombatActor] = [target] if homing and is_instance_valid(target) else targets
+	result = flight.validate_targets(candidates)
+	if not result["ok"]: return result
+	world_flight = flight
+	return result
+
+func _advance_world_flight(delta: float) -> void:
+	if request == null or geometer_field != null:
+		world_failure = &"spatial_interceptor_required" if geometer_field != null else &"invalid_request"
+		queue_free()
+		return
+	var candidates: Array[CombatActor] = targets
+	if homing:
+		if not is_instance_valid(target) or not target.is_alive(): queue_free(); return
+		candidates = [target]
+		if target.world_motion == null or target.world_motion.geometry != world_flight.geometry: world_failure = &"incompatible_target"; queue_free(); return
+		var center := target.world_point().position+Vector3.UP*(float(target.world_motion.profile()["height"])-float(world_flight.collider["height"]))*0.5
+		var facing := center-world_flight.position
+		if not facing.is_zero_approx(): world_flight.direction = facing.normalized()
+	var budget := speed*delta
+	while budget > WorldGeometry.EPS:
+		var result := world_flight.contact(budget,candidates)
+		if not result["ok"]: world_failure = result["error_code"]; queue_free(); return
+		var data: Dictionary = result["data"]
+		travelled = world_flight.travelled
+		budget = maxf(0.0,budget-float(data["distance"]))
+		var victim := data["actor"] as CombatActor
+		if victim != null:
+			_hit_actor_ids[victim.get_instance_id()] = true
+			_prepare_impact(victim)
+			hit.emit(request,victim)
+			if is_queued_for_deletion(): return
+			if _hit_actor_ids.size() >= max_hits: queue_free(); return
+		if data["terrain"] or data["exhausted"]: queue_free(); return
+		if victim == null: break
+
 
 func start_geometer_conduction(endpoint: Vector2, identity: int) -> void:
 	geometer_resume_direction = direction
@@ -84,6 +129,9 @@ func configure_homing(
 
 func _process(delta: float) -> void:
 	if is_queued_for_deletion() or (is_inside_tree() and get_tree().paused) or not is_finite(delta) or delta <= 0.0:
+		return
+	if world_flight != null:
+		_advance_world_flight(delta)
 		return
 	if request == null or travelled >= max_distance:
 		queue_free()

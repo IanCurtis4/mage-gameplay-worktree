@@ -204,6 +204,7 @@ func _ready() -> void:
 		assert(configured["ok"], str(configured))
 	player.global_position = PlaytestGameplay.ENTRANCE if gameplay_extension else Vector2(300, 520)
 	player.attack_requested.connect(_on_attack_requested)
+	player.world_attack_requested.connect(_on_world_attack_requested)
 	player.defender_hit_requested.connect(_on_defender_hit_requested)
 	player.berserker_rift_hit_requested.connect(_on_berserker_rift_hit_requested)
 	player.berserker_breath_hit_requested.connect(_on_berserker_breath_hit_requested)
@@ -309,10 +310,13 @@ func _process(_delta: float) -> void:
 		_update_aim(_world_mouse_point())
 	if get_tree().paused or _reward_retry_pending or reward == null or not is_instance_valid(reward):
 		return
-	if player.global_position.distance_to(reward.global_position) <= 48.0:
+	if player.world_motion != null:
+		if reward.can_collect_world(player,48.0): _collect_reward()
+	elif player.global_position.distance_to(reward.global_position) <= 48.0:
 		_collect_reward()
 
 func _input(event: InputEvent) -> void:
+	if player != null and player.world_motion != null: return # Spatial pointer/presentation awaits D05.
 	if event is InputEventMouse:
 		_geometer_pointer_screen = event.position
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed and (cast_intent.active_skill != &"" or player.has_active_cast()):
@@ -360,6 +364,7 @@ func _input(event: InputEvent) -> void:
 				get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
+	if player != null and player.world_motion != null: return # Spatial pointer/presentation awaits D05.
 	if event is InputEventKey and event.pressed and not event.echo:
 		if _keyboard_text_focused():
 			return
@@ -719,6 +724,7 @@ func _select_skill_from_bar(skill: StringName, rank: int = 0) -> void:
 	_update_aim(_world_mouse_point())
 
 func _update_aim(point: Vector2) -> void:
+	if player != null and player.world_motion != null: return # Spatial pointer/presentation awaits D05.
 	if cast_intent.active_skill.is_empty():
 		_update_aim_with_rank(point)
 		return
@@ -1041,6 +1047,31 @@ func _training_add_position() -> Vector2:
 		if not occupied:
 			return candidate
 	return Vector2.INF
+
+func _bind_world_projectile(projectile: Node, source: CombatActor, victim: CombatActor) -> Dictionary:
+	if source == null or source.world_motion == null or not is_instance_valid(victim) or victim.world_motion == null: return {"ok":false,"error_code":&"incompatible_target"}
+	var radius: float = projectile.projectile_radius
+	var height := radius*2.0
+	var offset := Vector3.UP*maxf(0.0,(float(source.world_motion.profile()["height"])-height)*0.5)
+	var endpoint := victim.world_point().position+Vector3.UP*(float(victim.world_motion.profile()["height"])-height)*0.5
+	var heading := endpoint-source.world_point().position-offset
+	if heading.is_zero_approx(): heading = Vector3.RIGHT
+	return projectile.bind_world_flight(source.world_motion.geometry,source.world_point(),offset,heading,{"radius":radius,"height":height},source.world_motion.geometry.geometry_revision)
+
+func _on_world_attack_requested(request: DamageRequest, victim: CombatActor, kind: StringName) -> void:
+	if player.world_motion == null or not is_instance_valid(victim) or not victim.is_alive(): return
+	if kind == &"direct":
+		if player.can_basic_attack(victim,true): _on_attack_requested(request,victim)
+		return
+	var projectile: PlayerProjectile = MageProjectile.new() if kind == &"mage" else PlayerProjectile.new()
+	var speed := PlayerActor.MAGE_BASIC_SPEED if kind == &"mage" else PlayerActor.ARCHER_BASIC_SPEED
+	var maximum_range := PlayerActor.MAGE_BASIC_MAX_DISTANCE if kind == &"mage" else player.archer_basic_projectile_range()
+	projectile.configure_directional(request.copy(),Vector2.ZERO,Vector2.RIGHT,[victim] if kind == &"mage" else enemies,navigation,speed,maximum_range)
+	var result := _bind_world_projectile(projectile,player,victim)
+	if not result["ok"]: projectile.free(); return
+	projectile.hit.connect(_on_mage_projectile_hit if kind == &"mage" else _on_precision_projectile_hit)
+	add_child(projectile)
+	projectile.add_to_group("player_projectiles")
 
 func _on_attack_requested(request: DamageRequest, target_actor: CombatActor) -> void:
 	if target_actor != null and target_actor.is_alive():
@@ -1857,6 +1888,19 @@ func _on_terrifying_shout_requested(origin: Vector2, radius: float, fear_duratio
 		target_actor.apply_attribute_debuff(AttributeDebuffState.DAMAGE_RECEIVED, &"terrifying_shout", PlayerActor.TERRIFYING_SHOUT_DAMAGE_RECEIVED_INCREASE, PlayerActor.TERRIFYING_SHOUT_DEBUFF_DURATION)
 
 func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActor, ranged: bool) -> void:
+	var spatial_source := instance_from_id(request.source_id) as CombatActor
+	if spatial_source != null and spatial_source.world_motion != null:
+		if not ranged:
+			if spatial_source.world_can_reach(target_actor,55.0): _on_attack_requested(request,target_actor)
+			return
+		var arrow := ArrowProjectile.new()
+		arrow.configure(request,target_actor,Vector2.ZERO,navigation)
+		var bound := _bind_world_projectile(arrow,spatial_source,target_actor)
+		if not bound["ok"]: arrow.free(); return
+		arrow.hit.connect(_on_attack_requested)
+		add_child(arrow)
+		arrow.add_to_group("enemy_projectiles")
+		return
 	if not ranged:
 		_on_attack_requested(request, target_actor)
 		return
@@ -3109,7 +3153,10 @@ func _on_mob_skill_requested(request: DamageRequest, target_actor: CombatActor, 
 	var color := Color("74c9ff") if request.skill_id == &"ice_spear" else Color("ff793d")
 	projectile.configure_homing(request.copy(), target_actor, source.global_position + Vector2(0, -18), navigation, speed, maximum_range, color)
 	projectile.hit.connect(_on_mob_skill_hit)
-	if geometer_casting != null: projectile.geometer_field = geometer_casting.wall_field
+	if source is CombatActor and source.world_motion != null:
+		var bound := _bind_world_projectile(projectile,source,target_actor)
+		if not bound["ok"]: projectile.free(); return
+	elif geometer_casting != null: projectile.geometer_field = geometer_casting.wall_field
 	add_child(projectile)
 	projectile.add_to_group("enemy_projectiles")
 

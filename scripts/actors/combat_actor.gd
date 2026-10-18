@@ -51,8 +51,8 @@ func bind_world_geometry(world: WorldGeometry, point: ExpeditionWorldPoint, trav
 	var result := motion.configure(world,point,traversal,occupant_id)
 	if result["ok"]:
 		world_motion = motion
-		# Legacy autonomous ticks consume Vector2. The technical fixture drives logical motion.
-		set_process(false)
+		# Keep status clocks alive. Player/Enemy override locomotion when bound.
+		set_process(true)
 	return result
 func world_point() -> ExpeditionWorldPoint:
 	return world_motion.point() if world_motion != null else null
@@ -62,6 +62,20 @@ func move_world_to(destination: ExpeditionWorldPoint, revision: int) -> Dictiona
 func advance_world(distance: float) -> Dictionary:
 	if world_motion == null: return {"ok":false,"error_code":&"spatial_binding_required"}
 	return world_motion.advance(distance)
+func world_distance_to(other: CombatActor) -> float:
+	if world_motion == null or not is_instance_valid(other) or other.world_motion == null or world_motion.geometry != other.world_motion.geometry: return INF
+	return world_point().position.distance_to(other.world_point().position)
+
+func world_attack_query(other: CombatActor, shape: Dictionary, revision: int) -> Dictionary:
+	if world_motion == null or not is_instance_valid(other) or other.world_motion == null or world_motion.geometry != other.world_motion.geometry: return {"ok":false,"error_code":&"incompatible_target","data":{}}
+	return world_motion.geometry.query_attack(shape,world_point(),other.world_point(),revision)
+
+func world_can_reach(other: CombatActor, maximum_range: float) -> bool:
+	if world_motion == null or not is_instance_valid(other) or other.world_motion == null: return false
+	var shape := {"geometry_rule_id":&"direct_volume","range":maximum_range,"source_offset":Vector3.UP*float(world_motion.profile()["height"])*0.5,"target_offset":Vector3.UP*float(other.world_motion.profile()["height"])*0.5}
+	var result := world_attack_query(other,shape,world_motion.geometry.geometry_revision)
+	return result["ok"] and result["data"]["hit"]
+
 func set_animation_kind(kind: StringName) -> void:
 	character_animation = CharacterAnimation.new()
 	character_animation.configure(kind)

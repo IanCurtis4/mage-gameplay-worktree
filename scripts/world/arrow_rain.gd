@@ -14,6 +14,15 @@ var damage_request: DamageRequest
 var targets: Array[CombatActor] = []
 var elapsed := 0.0
 var volleys_emitted := 0
+var world_area: WorldEffectArea
+
+func bind_world_area(world: WorldGeometry, anchor: ExpeditionWorldPoint, traversal: Dictionary, revision: int) -> Dictionary:
+	if world_area != null: return {"ok":false,"error_code":&"already_bound"}
+	var area := WorldEffectArea.new()
+	var checked := area.configure(world,anchor,traversal,&"ground_connected",revision)
+	if checked["ok"]: world_area = area
+	return checked
+
 
 func configure(center: Vector2, request: DamageRequest, potential_targets: Array[CombatActor]) -> void:
 	assert(request != null)
@@ -23,6 +32,7 @@ func configure(center: Vector2, request: DamageRequest, potential_targets: Array
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 
 func _process(delta: float) -> void:
+	if (is_inside_tree() and get_tree().paused) or not is_finite(delta) or delta <= 0.0: return
 	if damage_request == null:
 		queue_free()
 		return
@@ -39,7 +49,9 @@ func _emit_volley() -> void:
 	for actor: CombatActor in targets:
 		if actor == null or not is_instance_valid(actor) or not actor.is_alive():
 			continue
-		if global_position.distance_to(actor.global_position) > RADIUS + actor.collision_radius:
+		if world_area != null:
+			if not world_area.contains_actor(actor,RADIUS): continue
+		elif actor.world_motion != null or global_position.distance_to(actor.global_position) > RADIUS + actor.collision_radius:
 			continue
 		var impact_request := volley.copy()
 		impact_request.target_id = actor.get_instance_id()

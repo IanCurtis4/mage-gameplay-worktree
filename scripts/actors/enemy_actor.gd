@@ -35,8 +35,140 @@ var player_target_acquired := false
 var hunter_last_seen_position := Vector2.INF
 var taunt_remaining := 0.0
 var scenario_damage_multiplier := 1.0
+var _world_home: ExpeditionWorldPoint
+var _world_last_seen: ExpeditionWorldPoint
+var _world_geometry_revision := 0
+var _world_cast_revision := 0
+
+func bind_world_geometry(world: WorldGeometry, point: ExpeditionWorldPoint, traversal: Dictionary, occupant_id: String) -> Dictionary:
+	var result := super.bind_world_geometry(world,point,traversal,occupant_id)
+	if result["ok"]:
+		_world_home = world_point()
+		_world_last_seen = null
+		_world_geometry_revision = world.geometry_revision
+		set_process(true)
+	return result
+
+func _player_acquirable() -> bool:
+	if not is_instance_valid(player) or not player.is_alive(): return false
+	if world_motion != null: return player.can_be_acquired_by_world(self)
+	return player.can_be_acquired_by(global_position)
+
+func _combat_target_reachable(maximum_range: float) -> bool:
+	if not is_instance_valid(player) or not player.is_alive(): return false
+	if world_motion != null: return world_can_reach(player,maximum_range)
+	return global_position.distance_to(player.global_position) <= maximum_range and navigation != null and navigation.is_segment_clear(global_position,player.global_position,0.0)
+
+func _world_plan(destination: ExpeditionWorldPoint) -> void:
+	if _repath_time > 0.0 and world_motion.has_route(): return
+	_repath_time = 0.45
+	if destination == null or not world_motion.plan(destination,world_motion.geometry.geometry_revision)["ok"]: world_motion.cancel()
+
+func _world_walk(delta: float) -> void:
+	if is_rooted() or is_stunned() or not world_motion.has_route(): return
+	var before := world_point()
+	var movement := world_motion.advance(stat_breakdown.value(&"move_speed")*movement_speed_multiplier()*delta)
+	if not movement["ok"]: world_motion.cancel(); _repath_time = 0.0; return
+	var after := world_point()
+	if before.position != after.position:
+		# World consumers subscribe to this signal, never the projected legacy walk signal.
+		world_ground_walked.emit(before,after)
+
+signal world_ground_walked(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint)
+
+func _advance_world_ai(delta: float) -> void:
+	if player.world_motion == null or player.world_motion.geometry != world_motion.geometry:
+		player_target_acquired = false
+		world_motion.cancel()
+		_mob_cast.clear()
+		return
+	if _world_geometry_revision != world_motion.geometry.geometry_revision:
+		_world_geometry_revision = world_motion.geometry.geometry_revision
+		world_motion.cancel()
+		_repath_time = 0.0
+	_repath_time -= delta
+	if is_stunned(): _mob_cast.clear(); world_motion.cancel(); return
+	if is_feared():
+		_mob_cast.clear()
+		if is_rooted(): world_motion.cancel(); return
+		_world_fear_path()
+		_world_walk(delta)
+		return
+	if _uses_engagement():
+		_refresh_engagement(delta)
+		if engagement_mode == &"returning":
+			_world_plan(_world_home)
+			_world_walk(delta)
+			if world_point().position.distance_to(_world_home.position) <= WorldGeometry.EPS and world_point().surface_id == _world_home.surface_id:
+				engagement_mode = &"idle"
+				_world_last_seen = null
+				_sight_lost_time = 0.0
+				world_motion.cancel()
+			return
+		_request_companion_once()
+	if not _mob_cast.is_empty(): _advance_mob_cast(delta); return
+	if not _refresh_player_acquisition():
+		if _world_last_seen != null and (not _uses_engagement() or engagement_mode == &"engaged"):
+			_world_plan(_world_last_seen)
+			_world_walk(delta)
+		else: world_motion.cancel()
+		return
+	var attack_range := _declared_attack_range() if archetype == &"archer" else 55.0
+	var distance := world_distance_to(player)
+	if _combat_target_reachable(attack_range) and (taunt_remaining > 0.0 or archetype != &"archer" or distance >= minf(150.0,attack_range*0.5)):
+		world_motion.cancel()
+		_try_attack(archetype == &"archer")
+		return
+	if archetype == &"archer" and taunt_remaining <= 0.0:
+		var standoff := minf(280.0,attack_range*0.75) if _mob_definition != null and not _mob_definition.skill_ids.is_empty() else 280.0
+		_world_plan(_world_standoff_goal(standoff))
+	else:
+		_world_plan(player.world_point())
+	_world_walk(delta)
+	if _uses_engagement() and engagement_mode == &"engaged" and not _inside_leash(): _begin_return()
+
+func _world_standoff_goal(distance: float) -> ExpeditionWorldPoint:
+	var target_point := player.world_point()
+	var offset := world_point().position-target_point.position
+	var away := Vector2(offset.x,offset.z).normalized()
+	if away.is_zero_approx(): away = Vector2.RIGHT
+	var horizontal := Vector2(target_point.position.x,target_point.position.z)+away*distance
+	var support := world_motion.geometry.support_at(target_point.surface_id,horizontal,world_motion.geometry.geometry_revision)
+	if not support["ok"]: return null
+	var data: Dictionary = support["data"]["point"]
+	return ExpeditionWorldPoint.create(data["stage_id"],data["surface_id"],data["position"])
+
+func _world_fear_path() -> void:
+	if _repath_time > 0.0 and world_motion.has_route(): return
+	world_motion.cancel()
+	_repath_time = 0.18
+	var origin := world_point()
+	var offset := origin.position-player.world_point().position
+	var away := Vector2(offset.x,offset.z).normalized()
+	if away.is_zero_approx(): away = Vector2.RIGHT
+	var best_gain := 8.0
+	var destination: ExpeditionWorldPoint
+	for angle: float in [0.0,-PI*0.25,PI*0.25,-PI*0.5,PI*0.5]:
+		for distance: float in [180.0,100.0]:
+			var horizontal := Vector2(origin.position.x,origin.position.z)+away.rotated(angle)*distance
+			var support := world_motion.geometry.support_at(origin.surface_id,horizontal,world_motion.geometry.geometry_revision)
+			if not support["ok"]: continue
+			var data: Dictionary = support["data"]["point"]
+			var candidate := ExpeditionWorldPoint.create(data["stage_id"],data["surface_id"],data["position"])
+			var route := world_motion.geometry.path(origin,candidate,world_motion.profile(),world_motion.geometry.geometry_revision)
+			var gain := candidate.position.distance_to(player.world_point().position)-origin.position.distance_to(player.world_point().position)
+			if route["ok"] and gain > best_gain: best_gain = gain; destination = candidate
+	if destination != null: world_motion.plan(destination,world_motion.geometry.geometry_revision)
+
+
+func apply_world_defender_push(destination: ExpeditionWorldPoint, distance: float, revision: int) -> Dictionary:
+	if world_motion == null or not is_alive() or hard_controls.boss: return {"ok":false,"error_code":&"push_immune"}
+	var result := world_motion.displace(destination,distance,revision)
+	if result["ok"]: _repath_time = 0.0
+	return result
 
 func apply_defender_push(direction: Vector2, distance: float) -> float:
+	if world_motion != null: return 0.0
 	if not is_alive() or hard_controls.boss or navigation == null or direction.is_zero_approx() or distance <= 0.0:
 		return 0.0
 	var before := global_position
@@ -89,6 +221,7 @@ func configure_occurrence(spawn: MobOccurrence, catalog: MobCatalog, nav: ArenaN
 	return {"ok": true}
 
 func _process(delta: float) -> void:
+	if world_motion != null and (not is_finite(delta) or delta <= 0.0): return
 	if is_inside_tree() and get_tree().paused:
 		return
 	var was_feared := is_feared()
@@ -106,6 +239,9 @@ func _process(delta: float) -> void:
 	if taunt_remaining > 0.0:
 		taunt_remaining = maxf(0.0, taunt_remaining - delta)
 		queue_redraw()
+	if world_motion != null:
+		_advance_world_ai(delta)
+		return
 	if was_feared and not is_feared():
 		_path.clear()
 		_path_index = 0
@@ -179,9 +315,10 @@ func _process(delta: float) -> void:
 	_move_along_path(delta)
 
 func _try_attack(ranged: bool) -> void:
+	if world_motion != null and not _combat_target_reachable(_declared_attack_range() if ranged else 55.0): return
 	if _uses_engagement() and (not _refresh_engagement(0.0) or engagement_mode != &"engaged"):
 		return
-	if is_stunned() or is_feared() or attack_cooldown > 0.0 or not player_target_acquired or (taunt_remaining <= 0.0 and not player.can_be_acquired_by(global_position)):
+	if is_stunned() or is_feared() or attack_cooldown > 0.0 or not player_target_acquired or (taunt_remaining <= 0.0 and not _player_acquirable()):
 		return
 	if _mob_definition != null and not _mob_definition.skill_ids.is_empty():
 		_try_declared_skill()
@@ -259,8 +396,12 @@ func _update_fear_path() -> void:
 func _refresh_player_acquisition() -> bool:
 	if _uses_engagement():
 		return _refresh_engagement(0.0)
+	if world_motion != null:
+		player_target_acquired = (taunt_remaining > 0.0 or _player_acquirable()) and _combat_target_reachable(1.0e20)
+		if player_target_acquired: _world_last_seen = player.world_point()
+		return player_target_acquired
 	var was_acquired := player_target_acquired
-	player_target_acquired = player != null and is_instance_valid(player) and player.is_alive() and (taunt_remaining > 0.0 or player.can_be_acquired_by(global_position))
+	player_target_acquired = player != null and is_instance_valid(player) and player.is_alive() and (taunt_remaining > 0.0 or _player_acquirable())
 	if player != null and is_instance_valid(player) and player.is_hunter():
 		if player_target_acquired:
 			hunter_last_seen_position = player.global_position
@@ -332,10 +473,11 @@ func _try_declared_skill() -> bool:
 			continue
 		var captured := MobSkillAdapters.capture(skill, int(_mob_definition.skill_ranks[skill]), stat_breakdown, get_instance_id(), player.get_instance_id())
 		var rank: SkillRankDefinition = captured["rank_definition"]
-		if _mob_sp < rank.sp_cost or global_position.distance_to(player.global_position) > rank.range or not navigation.is_segment_clear(global_position, player.global_position, 0.0):
+		if _mob_sp < rank.sp_cost or not _combat_target_reachable(rank.range):
 			continue
 		captured["remaining"] = captured["cast_time"]
 		_mob_cast = captured
+		_world_cast_revision = world_motion.geometry.geometry_revision if world_motion != null else 0
 		_path.clear()
 		if float(captured["remaining"]) <= 0.0:
 			_advance_mob_cast(0.0)
@@ -351,8 +493,9 @@ func _advance_mob_cast(delta: float) -> void:
 		return
 	var captured := _mob_cast
 	_mob_cast = {}
+	if world_motion != null and _world_cast_revision != world_motion.geometry.geometry_revision: return
 	var rank: SkillRankDefinition = captured["rank_definition"]
-	if not is_alive() or player == null or not player.is_alive() or is_stunned() or is_feared() or global_position.distance_to(player.global_position) > rank.range or not navigation.is_segment_clear(global_position, player.global_position, 0.0) or _mob_sp < rank.sp_cost or not effect_ledger.can_create_root():
+	if not is_alive() or player == null or not player.is_alive() or is_stunned() or is_feared() or not _combat_target_reachable(rank.range) or _mob_sp < rank.sp_cost or not effect_ledger.can_create_root():
 		return
 	if is_inside_tree() and not EffectProcLedger.projectile_slots_available(get_tree(), 1): return
 	var request: DamageRequest = captured["request"]
@@ -375,12 +518,16 @@ func _uses_engagement() -> bool:
 	return _mob_definition != null and _mob_definition.aggro_radius > 0.0
 
 func _inside_leash() -> bool:
+	if world_motion != null:
+		return _world_home != null and world_point().position.distance_to(_world_home.position) <= _mob_definition.leash_radius and is_instance_valid(player) and player.world_motion != null and player.world_point().position.distance_to(_world_home.position) <= _mob_definition.leash_radius
 	return global_position.distance_to(spawn_home) <= _mob_definition.leash_radius and player != null and is_instance_valid(player) and player.global_position.distance_to(spawn_home) <= _mob_definition.leash_radius
 
 func _can_see_player() -> bool:
-	return player != null and is_instance_valid(player) and player.is_alive() and (taunt_remaining > 0.0 or player.can_be_acquired_by(global_position)) and navigation.is_segment_clear(global_position, player.global_position, 0.0)
+	if world_motion != null: return (taunt_remaining > 0.0 or _player_acquirable()) and _combat_target_reachable(1.0e20)
+	return player != null and is_instance_valid(player) and player.is_alive() and (taunt_remaining > 0.0 or _player_acquirable()) and navigation.is_segment_clear(global_position, player.global_position, 0.0)
 
 func _refresh_engagement(delta: float) -> bool:
+	if world_motion != null: return _refresh_world_engagement(delta)
 	if not is_alive() or player == null or not is_instance_valid(player) or not player.is_alive():
 		player_target_acquired = false
 		return false
@@ -413,6 +560,28 @@ func _refresh_engagement(delta: float) -> bool:
 			_begin_return()
 	return player_target_acquired
 
+func _refresh_world_engagement(delta: float) -> bool:
+	if not is_alive() or not is_instance_valid(player) or not player.is_alive() or player.world_motion == null or player.world_motion.geometry != world_motion.geometry or engagement_mode == &"returning": player_target_acquired = false; return false
+	if not _inside_leash():
+		if engagement_mode == &"engaged" or world_point().position.distance_to(_world_home.position) > _mob_definition.leash_radius: _begin_return()
+		player_target_acquired = false
+		return false
+	var visible := _can_see_player()
+	if engagement_mode == &"idle":
+		if not visible or (taunt_remaining <= 0.0 and world_distance_to(player) > _mob_definition.aggro_radius): player_target_acquired = false; return false
+		engagement_mode = &"engaged"
+		world_motion.cancel()
+		_repath_time = 0.0
+	player_target_acquired = visible
+	if visible:
+		_world_last_seen = player.world_point()
+		_sight_lost_time = 0.0
+	else:
+		if _sight_lost_time == 0.0: world_motion.cancel(); _repath_time = 0.0
+		_sight_lost_time += maxf(0.0,delta)
+		if _sight_lost_time >= _mob_definition.sight_timeout: _begin_return()
+	return player_target_acquired
+
 func _begin_return() -> void:
 	if engagement_mode == &"returning": return
 	engagement_mode = &"returning"
@@ -421,6 +590,7 @@ func _begin_return() -> void:
 	_clear_engagement_path()
 
 func _clear_engagement_path() -> void:
+	if world_motion != null: world_motion.cancel()
 	_path.clear()
 	_path_index = 0
 	_repath_time = 0.0
@@ -453,6 +623,7 @@ func _on_damage_applied(result: Dictionary) -> void:
 		return
 	if not _inside_leash(): return
 	engagement_mode = &"engaged"
+	if world_motion != null: _world_last_seen = player.world_point()
 	_last_seen_position = player.global_position
 	hunter_last_seen_position = _last_seen_position
 	_sight_lost_time = 0.0
