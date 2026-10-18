@@ -43,3 +43,10 @@ F1 autorizado para lógica espacial com combate D05 aprovado; apresentação pen
 [Despacho F1](epics/e07/f1_dispatch.md), branch codex/e07-f1 no mesmo checkout
 isolado, runner transferido exclusivamente. Chat `01a14fae-037f-7602-814a-d1dbb5942143`, base executável `ab351817a7157e90b6853556b193c5cd28757f7c`.
 Sol/Alto iniciou lógica espacial; apresentação D05 continua pendente.
+
+Atualização posterior18/10: por pedido humano explícito, criados sete chats
+temporários F2–F8 **AGUARDANDO_AVAL_HUMANO**, sem iniciar suas tarefas.
+[Títulos, IDs e modelos](epics/e07_launch_queue.md#chats-a-postos--autorização-humana1810).
+Todos receberam instrução de apenas confirmar espera e encerrar o turno, sem
+ferramentas/planejamento/implementação/testes. Não há início automático após F1.
+F6 continua opcional; base, checkout e propriedade serão definidos na liberação.

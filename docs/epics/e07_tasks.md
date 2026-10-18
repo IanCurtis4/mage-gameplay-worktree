@@ -7,6 +7,12 @@ Atualização de coordenação18/10: [F0 validado/integrado](e07/f0_integration.
 F1 autorizado pelo usuário e delimitado no [despacho F1](e07/f1_dispatch.md).
 Combate D05 aprovado; apresentação ainda pendente. F2+ não despachados.
 
+Atualização posterior18/10: usuário autorizou criar F2–F8 antecipadamente,
+**somente a postos, aguardando aval humano individual antes de iniciar**.
+[IDs e condições de espera](e07_launch_queue.md#chats-a-postos--autorização-humana1810).
+Não é dispatch de execução, transferência de arquivos nem aprovação das decisões
+pendentes. F6 permanece opcional. F1 continua com sua tarefa em andamento.
+
 Base arquitetural: `029b8ca1d7b1752929d549cbeb51e534ea6d3c1d`,
 `C:/Users/João Pedro/Documents/ChatGPT/RagRPG`, `codex/playtest`.
 SHA-base de implementação, checkout e branch de cada pacote: **A RESOLVER pela
