@@ -3,7 +3,8 @@
 18/10/2026. [Contrato v1](e07_contract.md), [decisões](e07/e07_decisions.md),
 [inventário factual I0](e07/e07_runtime_inventory.md),
 [validação](e07/guides/validation.md). Somente entrega documental nesta rodada.
-**Nenhum pacote de runtime está PRONTO ou despachado.**
+Atualização de coordenação18/10: arquitetura/I0 integrados; F0 preparado para
+execução delimitada conforme [despacho](e07/f0_dispatch.md). F1+ permanecem pendentes.
 
 Base arquitetural: `029b8ca1d7b1752929d549cbeb51e534ea6d3c1d`,
 `C:/Users/João Pedro/Documents/ChatGPT/RagRPG`, `codex/playtest`.
@@ -60,7 +61,8 @@ Nunca usar encounter_active=estágio não limpo como substituto de participaçã
 
 ## F0 — montagem reproduzível e contratos executáveis puros
 
-**PLANEJADA; primeiro pacote preparável após dispatch. Sol / Alto.** Sem decisões
+**PRONTA PARA DISPATCH delimitado18/10; Sol / Alto.** Ver base/checkout/runner e
+propriedade no [despacho F0](e07/f0_dispatch.md). Sem decisões
 de produto novas: modelar policies obrigatórias e fixtures, sem defaults de
 produção, alteração do piloto ou acesso a save. Depende deste contrato integrado.
 
