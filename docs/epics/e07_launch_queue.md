@@ -14,11 +14,16 @@ Despacho efetivo18/10, base `029b8ca1d7b1752929d549cbeb51e534ea6d3c1d`:
 
 | Pacote | Estado | Chat | Modelo/esforço |
 |---|---|---|---|
-| Arquitetura/contratos E07 | EM_EXECUÇÃO documental | 01a14e2d-630b-7c50-bd03-9448f30711fc | gpt-6-astra / high |
-| E07-I0 inventário | EM_EXECUÇÃO documental | 01a14e2d-b456-7063-bfe9-4cf727b25a59 | gpt-6.1-sol / medium |
+| Arquitetura/contratos E07 | INTEGRADA documental; decisões pendentes | 01a14e2d-630b-7c50-bd03-9448f30711fc | gpt-6-astra / high |
+| E07-I0 inventário | VALIDADA/INTEGRADA/ARQUIVADA | 01a14e2d-b456-7063-bfe9-4cf727b25a59 | gpt-6.1-sol / medium |
+| E07-F0 montagem pura | EM_EXECUÇÃO isolada | 01a14f91-d0c6-7c20-82c9-a22650fa5199 | gpt-6.1-sol / high |
 
-Ambos receberam checkout e SHA exatos, propriedade exclusiva e proibição de
-stage/commit concorrentes. Implementação não despachada. Coordenação registra
+F0 usa base `e30c49bb6442344ce8d937910ca6170effc70c7a` em codex/e07-f0;
+[despacho](e07/f0_dispatch.md). Integração documental anterior
+`3d79d83294d6bf1cfa45d7edc9a4cdd2defa86da`; I0 arquivado após conferência.
+
+Os dois chats documentais receberam checkout/SHA e proibição de commits concorrentes.
+F0 recebeu escopo fechado e permissão de commits na branch isolada. Coordenação registra
 entrega/validação/integração posteriormente; status do app não basta para arquivar.
 
 ## Base e fechamento anterior

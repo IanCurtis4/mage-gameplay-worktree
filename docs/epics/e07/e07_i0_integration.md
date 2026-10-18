@@ -20,8 +20,10 @@ F1+ não estão liberados para implementação por este registro.
 
 Sem Godot, importação, suíte de gameplay ou prova visual executados nesta rodada.
 Runtime, dados de catálogo, importações/export e save pessoal foram preservados.
-SHA da integração e arquivamento efetivo de I0 serão registrados no despacho F0.
-Depois do commit validado, I0 torna-se arquivável; Astra permanece aberto.
+Integração efetiva: `3d79d83294d6bf1cfa45d7edc9a4cdd2defa86da`. Conferidos
+91 links locais dos nove documentos e 32 IDs. I0 arquivado pelo app após integração
+validada; Astra permanece aberto. F0 despachado com base
+`e30c49bb6442344ce8d937910ca6170effc70c7a` em checkout isolado.
 
 Propriedade: autores encerraram escrita; coordenação integra os nove arquivos.
 Contratos/guias continuam sob manutenção arquitetural Astra. Coordenação pode
