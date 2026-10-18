@@ -17,6 +17,8 @@
 
 - Leia `docs/MVP.md`, `docs/ARCHITECTURE.md` e o contrato/checkpoint correspondente
   antes de editar. E00 e decisões posteriores explícitas prevalecem sobre o piloto.
+- Direção futura de mapas/economia: `docs/PRODUCT_DIRECTION.md`; skills de conteúdo:
+  `docs/DELIVERY_SKILLS.md`. Direção e skill não iniciam E07+ nem alteram runtime.
 - Usuário autoriza separadamente cada épico ou novo marco. Decisões de arquitetura
   que alterem escolhas de produto são apresentadas ao usuário antes dos consumidores.
   Correções dentro do contrato são automáticas na mesma tarefa.

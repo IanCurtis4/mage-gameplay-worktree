@@ -1,0 +1,4 @@
+interface:
+  display_name: "Inimigos do RagRPG"
+  short_description: "Entregar inimigos, populações e progressão por bioma"
+  default_prompt: "Use $ragrpg-enemydelivery para preparar ou entregar o pacote autorizado do RagRPG e registrar sua validação."

@@ -1,108 +1,67 @@
-> Atualização17/10/2026: [admin de playtest](epics/e06/e06_admin_extension_contract.md), schema7/catalog14. Flag admin projeta somente ranks legais da identidade/Job; compras, pontos e grants legados preservados. Equipamentos/cartas concedidos são permanentes; augments e spawns admin são temporários. [Correção de exportação](epics/e06/e06_export_profile_hotfix.md): recursos .tres.remap e inicialização fora de assert. Cabeçalhos anteriores são históricos.
+# Produto vigente e limites da entrega
 
-> Contrato aprovado15/10/2026: [dependências das93skills](epics/e06/e06_all_skill_dependencies_proposal.md) e [escopo](epics/e06/e06_all_skill_dependencies_scope.md). Schema6/catalog14; dez identidades, requisitos aprendidos entre jobs, custos separados Base/Evolução, reembolso transitivo de compras incompatíveis e preservação de atalhos desabilitados. Catálogos históricos validam o save antes da migração; XP, cartas, equipamentos e grants legítimos preservados. Cabeçalhos anteriores conservam histórico.
+Consolidado em 17/10/2026. Este documento substitui o antigo escopo do piloto
+como entrada de produto. Histórico: [versão anterior](MVP.history_2026_10_17.md).
+As decisões explícitas posteriores prevalecem sobre E00 apenas nos deltas
+documentados. Fluxo: [WORKFLOW](WORKFLOW.md); contratos: [ARCHITECTURE](ARCHITECTURE.md).
 
-> Contrato prevalente15/10/2026: [segunda rodada de habilidades](epics/e06/e06_skill_ux_iteration_scope.md), [expansão aprovada](epics/e06/e06_swordsman_skill_proposal.md). Schema6/catalog13; Job + antecedentes aprendidos nas evoluções puras do Espadachim, quatro novas skills e migração com reembolso transitivo dos dependentes incompatíveis. Atalhos preservam maior rank legado ou versão explícita validada; aprendizagem e recarga por habilidade continuam únicas. UI compartilha descrição canônica, árvore/lista de jobs possuídos e arraste direto para24 slots. Cabeçalhos anteriores conservam histórico.
+## Candidato existente
 
-> Contrato prevalente de 13/10/2026, correções após playtest: [contrato](epics/e06/e06_playtest_fixes_contract.md). Schema 5/catalog 12: cartas e encaixes pertencem ao perfil e sobrevivem à run/desequipar; só augments e escolhas são transitórios. Migração não inventa cartas perdidas. Coleção compartilhada; efeitos projetam hosts equipados. Transação única de loot e prévia canônica também no menu. Novos equipamentos/conjuntos usam política opcional central por identidade/ilvl; faixas base 2–5, evoluções 6–10, Geômetra 11–15. Janelas de inventário, caches imutáveis e aparência por anexos foram validados e aplicados no playtest. [Recibo](epics/e06/e06_playtest_fixes_delivery.json). Trechos anteriores contraditórios são históricos.
+Windows single-player offline; ação 2D isométrica, câmera acompanhando o jogador,
+navegação por clique, combate em tempo real e interface pt-BR. Godot 4.7.2 standard.
 
-# Escopo aprovado
+- Personagens persistentes e alts, XP Base/Job, atributos, aprendizado com
+  dependências, evolução e presets. Barra configurável de 24 atalhos;
+  passivas aprendidas legais são automáticas. Não restaurar o limite antigo 5+2.
+- Dez identidades jogáveis: Espadachim, Mago, Arqueiro, Defendente, Berserker,
+  Elementalista, Espiritualista, Sentinela, Caçadora e Geômetra. As outras cinco
+  híbridas do elenco inicial não estão implementadas; isso não encerra E05 inteiro.
+- Equipamentos são exemplares persistentes compartilhados pelo perfil, com
+  qualidade, origem, ilvl, encaixes e conjuntos conforme os contratos atuais.
+  Há 14 posições; não restaurar a coleção sem cópias ou os três slots do piloto.
+- Cartas também são exemplares permanentes. Cópias iguais podem ocupar encaixes
+  distintos; os encaixes permanecem na peça ao desequipar e ao terminar a run.
+  Cartas são passivas, podendo modificar habilidades conforme a espécie de origem.
+- Augments e escolhas pertencem somente à run: coleta, escolha manual fora de
+  encontro e efeito atual/próximo. Equipamentos/cartas vêm do loot de mobs;
+  escolhas de augment permanecem por etapa, sem transformar cada morte em escolha.
+- Roteiro de demonstração: seis etapas em três áreas predefinidas, com variação
+  de posições por seed, tiers de mobs e progressão fixa por origem. Esse roteiro
+  testa sistemas; não equivale aos grandes mapas modulares do produto futuro.
+- Inventário, comparação, feedback de aquisição, ícones, anexos visuais e admin
+  de playtest estão presentes. Abas Consumíveis/Misc vazias não são esses sistemas.
 
-> E00 entregue documentalmente: [contrato final candidato](E00_CONTRACT.md),
-> incluindo as 15 identidades do primeiro MVP. As regras do piloto abaixo continuam
-> executadas até a implementação autorizada dos novos contratos.
+Versões observadas no candidato de 17/10: schema 7, catálogo 14,
+ruleset `stat_thresholds_v1`. Conferir código e [checkpoint E06](epics/e06_checkpoint.md)
+ao retomar, em vez de usar esses números como versão futura obrigatória.
 
-> Revisão de direção em 13/09/2026: o usuário pediu um MVP expandido com personagens
-> persistentes, job/skill levels, menu/build, oito bases e evoluções. O plano vigente
-> para trabalho futuro está em LONG_TERM_EPICS.md e HYBRIDS_56_EXPLORATION.md.
-> Este documento preserva o escopo histórico do piloto. A expansão está apenas
-> planejada/reservada; não iniciar implementação sem liberação explícita.
+## Direção futura aprovada, implementação ainda não liberada
 
-## Produto
+A [direção de produto](PRODUCT_DIRECTION.md) substitui a restrição antiga a mapas
+fixos e a exclusão definitiva de lojas internas. O lobby oferecerá seleção de
+fases; estágios terão mapas grandes e labirínticos montados algoritmicamente de
+partes conectáveis, elevação com efeito em rotas, conexões em pontos definidos e
+portais que avançam ao estágio seguinte. Populações variam gradualmente entre
+mapas do mesmo bioma, com dificuldade maior em partes avançadas da campanha.
 
-Windows single-player offline, perspectiva 2D isométrica, câmera fixa seguindo
-o personagem, três fases normais e uma arena de boss, runs de 15–25 minutos.
-Arte provisória original ou gratuita com licença compatível. Sem backend ou IA no jogo.
+Consumíveis HP/SP terão CD longo e bloqueio após uso até sair do combate;
+as duas condições precisam ser satisfeitas. Itens trash/misc poderão servir
+a missões ou venda. Vendedores no lobby usarão gold para equipamentos e
+consumíveis. Modelo de carteira, preços, estoques, quests e detalhes de combate
+entre alturas precisam de contratos próprios antes de implementação.
 
-Clique no chão navega contornando obstáculos. Clique num inimigo aproxima e
-autoataca em alcance; clicar no chão cancela a perseguição. Q/W ativam skills;
-alvos direcionais usam o cursor. Mana e cooldowns impedem spam.
+O pedido de 17/10 autoriza consolidar documentação e criar quatro skills de
+entrega. Não inicia geração de mapas, economia, novas classes ou E07+.
+Quantidade final de estágios, duração da run e densidade não são fixadas pelo
+piloto de três áreas nem pelos exemplos de população do usuário.
 
-## Classes e atributos
+## Aceite e exclusões
 
-- Espadachim: ataque corpo a corpo, corte em cone, investida, passiva de resistência.
-- Mago: projétil básico, Bola de Fogo, Parede de Fogo, Lanças de Fogo e de Gelo
-  separadas, Teleporte e passiva de regeneração de mana. Este kit substitui
-  explosão/nova da proposta inicial, conforme aceite de 12–13/09/2026.
-- Kits fixos disponíveis desde o início; não se perdem entre runs.
-- FOR, AGI, VIT, INT, DES e SOR; níveis 1–5 com três pontos distribuíveis por nível ganho.
-- Nível/pontos reiniciam por run. Fórmulas simplificadas próprias, descritas na arquitetura.
+Playtest de gameplay, legibilidade e balanceamento permanece humano. A meta
+histórica de 60 FPS/1080p exige medição; checks e caps não provam desempenho.
+Persistência, preview e combate devem concordar; nenhuma aquisição se duplica
+em retry e nenhuma troca produz cura ou reset de recarga.
 
-## Encontros e boss
-
-Dois encontros delimitados por fase normal. Mapas fixos; combinações predefinidas
-variam posições e composição. Máximo de 20 inimigos simultâneos.
-Arquétipos: perseguidor, tanque, arqueiro, conjurador de área, atacante com investida,
-suporte. Fase 1 introduz o combate; fase 2 pressiona à distância; fase 3 mistura papéis.
-Boss anuncia cone, áreas no chão e investida; abaixo de 50% HP combina ataques com
-maior frequência. Transição de fase recupera HP/mana. Resumo e reinício após morte/vitória.
-
-## Augments
-
-Cada um dos seis encontros normais gera um objeto coletável. Coleta enfileira uma
-escolha; o jogador abre manualmente o menu ao eliminar todos os inimigos do encontro.
-Menu pausa o jogo; cada escolha oferece três opções distintas elegíveis. Resolver
-pendências antes de avançar de fase. Se houver menos de três elegíveis, mostrar
-somente as restantes; se não houver nenhuma, consumir a pendência com aviso.
-
-Catálogo de 12: gerais (HP, crítico, velocidade de ataque, recuperação pós-encontro),
-Espadachim (sangramento, corte ampliado, escudo após investida, explosão ao eliminar),
-Mago (projétil adicional, queimadura, expansão da nova, redução de recarga ao eliminar).
-
-Revisão do bloco Mago: o piloto já separa augments de quantidade para Lanças de
-Fogo e Lanças de Gelo. A expansão da nova deixa de ser uma implementação prevista
-para este kit; a composição final dos 12 augments exige rebalanceamento posterior.
-As oito bases, evoluções e híbridas de CLASS_ROSTER_BRAINSTORM.md são direção
-futura documentada, sem ampliar este bloco jogável para todas as classes.
-Numéricos acumulam até três; transformações são únicas. UI mostra efeito atual e
-próximo. Dano secundário não pode gerar cascatas de outros efeitos secundários.
-Todos desaparecem ao encerrar a run.
-
-## Equipamentos, cartas e persistência
-
-Três slots: arma, armadura e acessório. Doze equipamentos incluindo iniciais;
-um prêmio de equipamento por fase normal. Toda aquisição é salva imediatamente,
-mesmo que a run termine em morte. Coleção sem duplicatas; respeitar restrições de classe.
-Equipamento alterável fora de encontros; duplicata sorteada não cria cópia adicional.
-
-Seis cartas simples, uma recebida por fase normal; um encaixe por equipamento.
-Trocar cartas fora de encontros. Cartas, inclusive encaixadas, desaparecem ao fim da run.
-Coleção persistente de equipamentos, seleção por classe, preferências e estatísticas
-ficam em save local versionado, com gravação segura e backup.
-Fechar o aplicativo encerra a run; não há retomada, mas aquisições já salvas permanecem.
-Skills fixas são dados da classe, não exigem salvar um sistema de aprendizado.
-
-## Fora do MVP
-
-Multiplayer, mobile, gamepad, geração procedural de mapas, loja de distribuição,
-crafting, lojas internas, raridades, subclasses, aquisição de novas skills e
-desbloqueios de novos pools de augments. A coleção de equips aprovada está incluída.
-
-## Marcos e aceite
-
-1. Núcleo: arena, Espadachim, perseguidor e arqueiro, navegação/dano, três augments.
-2. Build: Mago, seis stats distribuíveis, equipamentos, cartas, save e 12 augments.
-3. MVP: três fases, boss, menus/áudio básico, balanceamento e exportação Windows.
-
-Critérios: completar com ambas as classes; seis escolhas fora de combate;
-duas builds distinguíveis por classe; persistência correta após morte e reinício;
-valores da UI consistentes com combate; navegação sem bloqueios recorrentes;
-teste manual de padrões do boss e efeitos simultâneos. Meta 60 FPS/1080p na máquina
-do usuário, a medir na arena do primeiro marco. Não afirmar desempenho sem medição.
-
-## Controle de custo
-
-Validar o marco 1 com o usuário antes de expandir. Evitar frameworks, dependências e
-releituras grandes. Registrar verificações por bloco. Tokens totais ainda não têm
-estimativa medida; usar consumo observável do marco 1 para projetar o restante,
-sem confundir créditos do plano com contagem de tokens.
+Multiplayer, mobile, backend, monetização e crafting não foram autorizados.
+Referências a Ragnarok e Torghast/Thanator expressam direção de experiência,
+não cópia de assets, taxas, fórmulas ou promessa de mundo online aberto.

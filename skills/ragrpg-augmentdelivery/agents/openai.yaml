@@ -1,0 +1,4 @@
+interface:
+  display_name: "Augments do RagRPG"
+  short_description: "Entregar augments, ofertas e combinações de build"
+  default_prompt: "Use $ragrpg-augmentdelivery para preparar ou entregar o pacote autorizado do RagRPG e registrar sua validação."

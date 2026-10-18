@@ -1,0 +1,4 @@
+interface:
+  display_name: "Equipamentos do RagRPG"
+  short_description: "Entregar equipamentos, cartas e regras de inventário"
+  default_prompt: "Use $ragrpg-equipmentdelivery para preparar ou entregar o pacote autorizado do RagRPG e registrar sua validação."

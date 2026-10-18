@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mapas do RagRPG"
+  short_description: "Entregar mapas, partes e conexões do RagRPG"
+  default_prompt: "Use $ragrpg-mapdelivery para preparar ou entregar o pacote autorizado do RagRPG e registrar sua validação."

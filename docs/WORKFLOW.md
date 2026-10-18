@@ -167,3 +167,19 @@ CLI local ausente: só usar origem externa explicitamente autorizada, registrand
 checkout/commit/SHA256 e passando --project. Diagnóstico não é aprovação.
 Sem monitor, mensagens automáticas, retomada de chats históricos ou automações
 por efeito deste fluxo. E06 e seu registro atual: [epics/e06.md](epics/e06.md).
+
+
+## Fontes de produto e skills — consolidação17/10/2026
+
+[MVP](MVP.md) descreve o produto existente; [ARCHITECTURE](ARCHITECTURE.md)
+indexa autoridades e contratos atuais; [PRODUCT_DIRECTION](PRODUCT_DIRECTION.md)
+registra mapas modulares, elevação, populações, consumíveis e economia futuros.
+Direção aprovada e skill instalada não são liberação de implementação de E07+.
+Contratos e recibos históricos preservam evidência; seus estados/gates revogados
+não substituem esta norma ou o [checkpoint atual E06](epics/e06_checkpoint.md).
+
+[Skills de entrega](DELIVERY_SKILLS.md) apoiam os quatro domínios de conteúdo.
+Usar o checkout informado, conferir contrato e dono, não descobrir projeto pela
+pasta da skill. Novos pacotes continuam proporcionais ao risco, com testes por
+impacto e sem auditoria Astra automática. O pedido documental17/10 não altera
+runtime, rates, save, status de aceite humano ou regras de publicação.
