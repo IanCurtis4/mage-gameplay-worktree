@@ -1,6 +1,7 @@
-﻿param(
+param(
     [string]$GodotPath = '',
     [switch]$SkipEditorImport,
+    [switch]$F1Fixture,
     [string]$VerificationDirectory = "",
     [ValidateRange(60, 300)][int]$CheckTimeoutSeconds = 120,
     [string[]]$Test = @(),
@@ -16,7 +17,7 @@ function Add-GodotCheck([string[]]$EngineArguments) {
     $scriptArgument = [Array]::IndexOf($EngineArguments, '--script')
     $name = if ($scriptArgument -ge 0) {
         [IO.Path]::GetFileNameWithoutExtension($EngineArguments[$scriptArgument + 1])
-    } elseif ($EngineArguments -contains '--import') { 'editor_import' } else { 'smoke' }
+    } elseif ($EngineArguments -contains '--recovery-mode') { 'e07_f1_native_import' } elseif ($EngineArguments -contains '--import') { 'editor_import' } else { 'smoke' }
     $checkPlan.Add([pscustomobject]@{ index = $checkPlan.Count + 1; name = $name; arguments = $EngineArguments })
 }
 
@@ -312,6 +313,17 @@ Add-GodotCheck @('--headless', '--path', $fixtureF0Path, '--script', 'res://test
 Add-GodotCheck @('--headless', '--path', $fixtureF0Path, '--script', 'res://tests/e07_f0_adversarial_test.gd')
 Add-GodotCheck @('--headless', '--path', $fixtureF0Path, '--script', 'res://tests/e07_f0_consumer_test.gd')
 
+Add-GodotCheck @('--headless', '--path', $projectPath, '--editor', '--recovery-mode', '--import', '--quit')
+
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f1_import_test.gd')
+$fixtureF1Path = Join-Path $projectPath '.godot/verification/e07_f1/fixture_project'
+Add-GodotCheck @('--headless', '--path', $fixtureF1Path, '--script', 'res://tests/e07_f1_geometry_test.gd')
+Add-GodotCheck @('--headless', '--path', $fixtureF1Path, '--script', 'res://tests/e07_f1_actor_integration_test.gd')
+
+Add-GodotCheck @('--headless', '--path', $fixtureF1Path, '--script', 'res://tests/e07_f1_inventory_test.gd')
+
+Add-GodotCheck @('--headless', '--path', $fixtureF1Path, '--script', 'res://tests/e07_f1_adversarial_test.gd')
+
 if (-not $PSBoundParameters.ContainsKey('ToStep')) { $ToStep = $checkPlan.Count }
 if ($FromStep -gt $ToStep -or $ToStep -gt $checkPlan.Count) {
     throw "Invalid step range $FromStep..$ToStep; use 1..$($checkPlan.Count)."
@@ -337,6 +349,27 @@ if ($List) {
     $selectedChecks
     return
 }
+# F1 opt-in: execute unchanged real tests against the full imported native copy.
+# Only VCS autoload differs; verify every primary source on both sides before running.
+if ($F1Fixture) {
+    $sourceManifest = Join-Path $fixtureF1Path 'source_hashes.json'
+    if (-not (Test-Path -LiteralPath $sourceManifest)) { throw 'Run e07_f1_import_test before using F1Fixture.' }
+    $sourceHashes = Get-Content -LiteralPath $sourceManifest -Raw | ConvertFrom-Json -AsHashtable
+    foreach ($relative in $sourceHashes.Keys) {
+        foreach ($root in @($projectPath, $fixtureF1Path)) {
+            $sourceFile = Join-Path $root $relative
+            if (-not (Test-Path -LiteralPath $sourceFile) -or (Get-FileHash -LiteralPath $sourceFile -Algorithm SHA256).Hash.ToLowerInvariant() -ne $sourceHashes[$relative]) { throw "F1 fixture source mismatch: $relative ($root)" }
+        }
+    }
+    $originalConfig = [IO.File]::ReadAllText((Join-Path $projectPath 'project.godot'))
+    $fixtureConfig = [IO.File]::ReadAllText((Join-Path $fixtureF1Path 'project.godot'))
+    if ($originalConfig.Replace('version_control/autoload_on_startup=true', 'version_control/autoload_on_startup=false') -cne $fixtureConfig) { throw 'Unexpected F1 project config delta.' }
+    foreach ($check in $selectedChecks) {
+        if ($check.name -in @('e07_f1_import_test', 'e07_f1_native_import', 'e07_f0_import_test')) { throw 'Bootstrap imports must run without F1Fixture.' }
+        $pathIndex = [Array]::IndexOf($check.arguments, '--path')
+        if ($pathIndex -ge 0 -and $check.arguments[$pathIndex + 1] -eq $projectPath) { $check.arguments[$pathIndex + 1] = $fixtureF1Path }
+    }
+}
 if ([string]::IsNullOrWhiteSpace($GodotPath)) { throw 'GodotPath is required to execute checks; use -List to inspect the plan.' }
 $enginePath = (Resolve-Path -LiteralPath $GodotPath).Path
 $verificationPath = if ($VerificationDirectory) { [System.IO.Path]::GetFullPath($VerificationDirectory) } else { Join-Path $projectPath '.godot/verification' }
@@ -347,6 +380,7 @@ $selection = [ordered]@{
 }
 [ordered]@{
     created_utc = [DateTime]::UtcNow.ToString('o')
+    f1_native_fixture = [bool]$F1Fixture
     source_commit = (git -C $projectPath rev-parse HEAD)
     working_tree_status = @(git -C $projectPath status --porcelain)
     runner_sha256 = (Get-FileHash -LiteralPath $PSCommandPath -Algorithm SHA256).Hash

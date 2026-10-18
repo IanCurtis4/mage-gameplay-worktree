@@ -2300,6 +2300,33 @@ func skill_cast_time(skill_id: StringName) -> float:
 		return 0.0
 	return StatCalculator.effective_cast_time(0.0, definition.cast_time, stat_breakdown) if definition != null else 0.0
 
+func use_world_teleport(destination: ExpeditionWorldPoint, revision: int) -> bool:
+	if world_motion == null or is_rooted() or (class_id != &"mage" and not run_state.has_item_active(&"teleport")) or not _can_pay_skill(&"teleport"): return false
+	var result := world_motion.teleport(destination,skill_range(&"teleport"),revision)
+	if not result["ok"]: return false
+	_spend(&"teleport")
+	_path.clear()
+	_has_path_goal = false
+	velocity = Vector2.ZERO
+	target = null
+	_attack_engaged = false
+	_attack_recovery = 0.0
+	_repath_time = 0.0
+	resources_changed.emit()
+	return true
+
+func use_world_dash(destination: ExpeditionWorldPoint, revision: int) -> bool:
+	if world_motion == null or class_id != &"swordsman" or is_rooted() or not _can_pay_skill(&"dash"): return false
+	var route := world_motion.geometry.path(world_motion.point(),destination,world_motion.profile(),revision)
+	if not route["ok"] or float(route["data"]["cost"]) > skill_range(&"dash"): return false
+	var planned := world_motion.plan(destination,revision)
+	if not planned["ok"]: return false
+	_spend(&"dash")
+	_path.clear()
+	_has_path_goal = false
+	velocity = Vector2.ZERO
+	resources_changed.emit()
+	return true
 func teleport_destination(point: Vector2) -> Vector2:
 	var offset := point - global_position
 	var maximum_range := skill_range(&"teleport")
@@ -2816,6 +2843,10 @@ func _magic_power(skill_id: StringName) -> float:
 	return stat_breakdown.value(&"magic_attack") * power
 
 func _can_spend(skill_id: StringName) -> bool:
+	if world_motion != null: return false # Explicitly reject Vector2 casts in a multi-height world.
+	return _can_pay_skill(skill_id)
+
+func _can_pay_skill(skill_id: StringName) -> bool:
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var has_runtime_definition := definition != null and (definition.ranks.is_empty() or _runtime_rank_definition(skill_id) != null)
 	return selected_cast_rank_valid(skill_id) and run_state.effect_ledger.can_create_root() and run_state.effects_valid() and has_projectile_capacity(skill_id) and has_runtime_definition and skill_id in available_skill_ids() and is_alive() and skill_cooldown(skill_id) <= 0.0 and sentinel_free_sp() >= skill_cost(skill_id)
@@ -2941,6 +2972,7 @@ func _extended_aim_bonus(skill_id: StringName) -> float:
 	return EXTENDED_AIM_RANGE_BONUS
 
 func can_basic_attack(enemy: CombatActor, retain: bool = false) -> bool:
+	if world_motion != null: return false
 	if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
 		return false
 	var allowed_distance := basic_attack_distance(enemy) + (ATTACK_RETENTION if retain else 0.0)

@@ -43,6 +43,25 @@ var attribute_debuffs := AttributeDebuffState.new()
 var hard_controls := HardControlState.new()
 var character_animation: CharacterAnimation
 
+# Explicit logical spatial binding. Rendering/input integration awaits D05 presentation.
+var world_motion: WorldActorMotion
+func bind_world_geometry(world: WorldGeometry, point: ExpeditionWorldPoint, traversal: Dictionary, occupant_id: String) -> Dictionary:
+	if world_motion != null: return {"ok":false,"error_code":&"already_bound"}
+	var motion := WorldActorMotion.new()
+	var result := motion.configure(world,point,traversal,occupant_id)
+	if result["ok"]:
+		world_motion = motion
+		# Legacy autonomous ticks consume Vector2. The technical fixture drives logical motion.
+		set_process(false)
+	return result
+func world_point() -> ExpeditionWorldPoint:
+	return world_motion.point() if world_motion != null else null
+func move_world_to(destination: ExpeditionWorldPoint, revision: int) -> Dictionary:
+	if world_motion == null: return {"ok":false,"error_code":&"spatial_binding_required"}
+	return world_motion.plan(destination,revision)
+func advance_world(distance: float) -> Dictionary:
+	if world_motion == null: return {"ok":false,"error_code":&"spatial_binding_required"}
+	return world_motion.advance(distance)
 func set_animation_kind(kind: StringName) -> void:
 	character_animation = CharacterAnimation.new()
 	character_animation.configure(kind)
@@ -459,3 +478,5 @@ func _sync_burn_display() -> void:
 	if burn_streams.is_empty():
 		burn_request = null
 	queue_redraw()
+func _exit_tree() -> void:
+	if world_motion != null: world_motion.release()
