@@ -53,6 +53,8 @@ Shape exige geometry_rule_id e range finito não negativo. Regras executáveis:
   lajes de suporte. Conserva travessia de blockers planos e paredes temporárias
   do E06; não impõe LoS universal. O corpo pode sair do topo de um piso sólido.
 
+affected_surfaces fica vazio quando hit=false; não declara pisos atingidos por uma consulta bloqueada.
+
 Kind opcional: sphere (padrão), cone ou line. Cone/line exigem direction Vector3
 finita não zero; cone usa half_angle em radianos [0,PI]; line usa half_width.
 Não há multiplicador de dano por altura. self_only/inherit_parent/walk_path da

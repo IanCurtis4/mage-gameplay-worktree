@@ -320,7 +320,8 @@ func query_attack(shape: Dictionary, source: ExpeditionWorldPoint, target: Exped
 			if not is_finite(width) or width < 0.0: return _failure(&"invalid_shape")
 			shape_ok = along >= 0.0 and (offset - direction.normalized() * along).length() <= width + EPS
 	if not surfaces.has(target.surface_id): surfaces.append(target.surface_id)
-	return _success({"range_ok": range_ok, "los_ok": los_ok, "shape_ok": shape_ok, "hit": range_ok and los_ok and shape_ok, "distance": distance, "affected_surfaces": surfaces})
+	var hit := range_ok and los_ok and shape_ok
+	return _success({"range_ok": range_ok, "los_ok": los_ok, "shape_ok": shape_ok, "hit": hit, "distance": distance, "affected_surfaces": surfaces if hit else []})
 
 func insert_obstacle(id: String, volume: AABB, revision: int) -> Dictionary:
 	if not _current(revision): return _failure(&"stale_geometry")
@@ -357,6 +358,7 @@ func resolve_surface(origin: Vector3, direction: Vector3, visible_surfaces: Arra
 	if not origin.is_finite() or not direction.is_finite() or direction.is_zero_approx(): return _failure(&"invalid_ray")
 	var nearest := INF
 	var hit: Dictionary = {}
+	var ambiguous := false
 	for cell: Dictionary in _stage["surfaces"]:
 		if not cell["surface_id"] in visible_surfaces: continue
 		var normal := Kernel.plane_normal(cell["vertices"])
@@ -366,10 +368,14 @@ func resolve_surface(origin: Vector3, direction: Vector3, visible_surfaces: Arra
 		if t < 0.0 or t > nearest + EPS: continue
 		var point := origin + direction * t
 		if not Kernel.contains(cell, point): continue
-		if absf(t - nearest) <= EPS: return _failure(&"ambiguous_surface")
+		if absf(t - nearest) <= EPS:
+			ambiguous = true
+			continue
+		ambiguous = false
 		nearest = t
 		hit = {"point": ExpeditionWorldPoint.create(_stage["stage_id"], cell["surface_id"], point).to_data(), "normal": normal if normal.y > 0 else -normal}
 	if hit.is_empty(): return _failure(&"hidden_or_missing_surface")
+	if ambiguous: return _failure(&"ambiguous_surface")
 	var obstruction := sweep(origin, hit["point"]["position"], {"radius": 0.0, "height": 0.0}, revision)
 	if obstruction["data"]["hit"] and float(obstruction["data"]["fraction"]) < 1.0 - EPS: return _failure(&"occluded_surface")
 	return _success(hit)

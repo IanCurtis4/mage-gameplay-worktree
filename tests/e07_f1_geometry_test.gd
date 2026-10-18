@@ -40,6 +40,7 @@ func _initialize() -> void:
 	var direct := {"geometry_rule_id": &"direct_volume", "range": 100.0}
 	var attack := geometry.query_attack(direct,lower,upper,revision)
 	check(attack["ok"] and attack["data"]["range_ok"] and not attack["data"]["los_ok"] and not attack["data"]["hit"], "slab blocks attacks between coincident projections")
+	check(attack["data"]["affected_surfaces"].is_empty(), "blocked query does not claim affected surfaces")
 	var airborne := geometry.sweep(Vector3(50,20,150),Vector3(50,70,150),{"radius":0.0,"height":0.0},revision)
 	check(airborne["ok"] and airborne["data"]["hit"] and is_equal_approx(airborne["data"]["fraction"],0.3200002), "continuous projectile sweep catches thin slab")
 	var ground := {"geometry_rule_id": &"ground_connected", "range": 100.0, "traversal": profile}

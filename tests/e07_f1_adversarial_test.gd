@@ -67,6 +67,9 @@ func _initialize() -> void:
 		foundation_world.configure(foundation_manifest["data"]["manifest"],"sample")
 		var teleport := foundation_world.query_attack({"geometry_rule_id":&"teleport_legal","range":200.0,"traversal":profile},origin_world,Fixture.point("slope",Vector3(150,20,50)),foundation_world.geometry_revision)
 		check(teleport["ok"] and teleport["data"]["hit"],"teleport may leave solid floor upward without falsely crossing its foundation")
+	var visible: Array[String] = [origin_world.surface_id,"sample/slope/surface/floor",upper.surface_id]
+	var near_hit := world.resolve_surface(Vector3(50,100,150),Vector3(0.5,-1,-0.5),visible,revision)
+	check(near_hit["ok"] and near_hit["data"]["point"]["surface_id"] == upper.surface_id and near_hit["data"]["point"]["position"] == Vector3(80,40,120),"far shared-edge tie cannot hide a unique nearer visible support")
 	world.configure(built["data"]["manifest"],"sample")
 	check(world.geometry_revision > revision and not world.sweep(Vector3.ZERO,Vector3.ONE,{"radius":1.0,"height":2.0},revision)["ok"],"world replacement invalidates old query revision")
 	check(WorldSkillGeometryRules.rule(&"future_skill").is_empty(),"unknown future skill has no silent geometry default")
