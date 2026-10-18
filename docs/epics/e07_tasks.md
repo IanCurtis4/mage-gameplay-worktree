@@ -61,7 +61,10 @@ Nunca usar encounter_active=estágio não limpo como substituto de participaçã
 
 ## F0 — montagem reproduzível e contratos executáveis puros
 
-**PRONTA PARA DISPATCH delimitado18/10; Sol / Alto.** Ver base/checkout/runner e
+**EM_EXECUÇÃO, dispatch18/10; Sol / Alto**, chat
+`01a14f91-d0c6-7c20-82c9-a22650fa5199`, base
+`e30c49bb6442344ce8d937910ca6170effc70c7a`, branch codex/e07-f0.
+Ver checkout/runner e
 propriedade no [despacho F0](e07/f0_dispatch.md). Sem decisões
 de produto novas: modelar policies obrigatórias e fixtures, sem defaults de
 produção, alteração do piloto ou acesso a save. Depende deste contrato integrado.
