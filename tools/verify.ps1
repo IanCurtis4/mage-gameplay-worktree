@@ -306,6 +306,12 @@ Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/
 
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e06_export_content_test.gd')
 
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f0_import_test.gd')
+$fixtureF0Path = Join-Path $projectPath '.godot/verification/e07_f0/fixture_project'
+Add-GodotCheck @('--headless', '--path', $fixtureF0Path, '--script', 'res://tests/e07_f0_generation_test.gd')
+Add-GodotCheck @('--headless', '--path', $fixtureF0Path, '--script', 'res://tests/e07_f0_adversarial_test.gd')
+Add-GodotCheck @('--headless', '--path', $fixtureF0Path, '--script', 'res://tests/e07_f0_consumer_test.gd')
+
 if (-not $PSBoundParameters.ContainsKey('ToStep')) { $ToStep = $checkPlan.Count }
 if ($FromStep -gt $ToStep -or $ToStep -gt $checkPlan.Count) {
     throw "Invalid step range $FromStep..$ToStep; use 1..$($checkPlan.Count)."

@@ -1,0 +1,7 @@
+; Artificial F0 project. No main scene, editor plugin, autoload or user save.
+config_version=5
+[application]
+config/name="E07 F0 pure fixture"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+[rendering]
+renderer/rendering_method="gl_compatibility"
