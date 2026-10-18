@@ -324,6 +324,7 @@ Add-GodotCheck @('--headless', '--path', $fixtureF1Path, '--script', 'res://test
 
 Add-GodotCheck @('--headless', '--path', $fixtureF1Path, '--script', 'res://tests/e07_f1_adversarial_test.gd')
 Add-GodotCheck @('--headless', '--path', $fixtureF1Path, '--script', 'res://tests/e07_f1_consumer_test.gd')
+Add-GodotCheck @('--headless', '--path', $fixtureF1Path, '--script', 'res://tests/e07_f1_channels_test.gd')
 
 if (-not $PSBoundParameters.ContainsKey('ToStep')) { $ToStep = $checkPlan.Count }
 if ($FromStep -gt $ToStep -or $ToStep -gt $checkPlan.Count) {

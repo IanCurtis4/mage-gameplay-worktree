@@ -32,7 +32,9 @@ Player/Mage/Sentinel e flecha hostil, chuva/traps/blast ancorados, escudo/barrei
 piche, ocultação/budget/grace, coleta, movimento/dash temporal, AI autônoma/leash,
 cast obsoleto e callbacks que removem alvos. Isso não equivale ao cast completo
 dessas ativas: entrada/preview/composição nominal ainda precisam ser integrados.
-Geômetra, canais/ecos, campos elementais, AoEs do Sentinela e demais mobilidades
+Dreno/Procissão/Véu e pulsos elementais agora possuem entrada espacial de consumidor
+e prova de schedule/oclusão; cast/preview e composição nominal continuam pendentes.
+Geômetra, ecos, paredes/campos restantes, AoEs do Sentinela e demais mobilidades
 continuam bloqueios. API e recibo contêm o escopo exato; D05 visual não foi aprovado.
 
 ## Habilidades nominais
@@ -70,13 +72,13 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `defender_watch` — Vigília | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `double_shot` — Disparo Duplo | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `electric_discharge` — Descarga Elétrica | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
-| `elementalist_ember_path` — Trilha de Brasas | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `elementalist_ember_path` — Trilha de Brasas | `ground_connected` | Consumidor espacial/schedule ligado; cast/preview/composição ainda pendentes |
 | `elementalist_flame_burst` — Explosão de Chamas | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `elementalist_glacial_ring` — Anel Glacial | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `elementalist_lightning_arc` — Arco Voltaico | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `elementalist_prismatic_focus` — Foco Prismático | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `elementalist_prismatic_resonance` — Ressonância Prismática | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `elementalist_tri_nova` — Nova Tríplice | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `elementalist_tri_nova` — Nova Tríplice | `ground_connected` | Consumidor espacial/schedule ligado; cast/preview/composição ainda pendentes |
 | `explosive_trap` — Armadilha Explosiva | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
 | `extended_aim` — Mira Estendida | `self_only` | Consumidor pendente; entrada legada bloqueada no binding |
 | `fire_spear` — Lança de Fogo | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
@@ -128,9 +130,9 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `spiritualist_dissipation` — Rito de Dissipação | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `spiritualist_echo_curse` — Maldição do Eco | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `spiritualist_echo_recovery` — Recolhimento | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `spiritualist_procession` — Procissão de Espectros | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
-| `spiritualist_soul_drain` — Drenagem Espiritual | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
-| `spiritualist_spectral_veil` — Véu Espectral | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `spiritualist_procession` — Procissão de Espectros | `direct_volume` | Consumidor espacial/schedule ligado; cast/preview/composição ainda pendentes |
+| `spiritualist_soul_drain` — Drenagem Espiritual | `direct_volume` | Consumidor espacial/schedule ligado; cast/preview/composição ainda pendentes |
+| `spiritualist_spectral_veil` — Véu Espectral | `ground_connected` | Consumidor espacial/schedule ligado; cast/preview/composição ainda pendentes |
 | `swordsman_resistance` — Resistência | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `teleport` — Teleporte | `teleport_legal` | PlayerActor lógico testado; apresentação pendente |
 | `terrifying_shout` — Grito Aterrorizante | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |

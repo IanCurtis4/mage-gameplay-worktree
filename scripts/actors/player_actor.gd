@@ -2474,6 +2474,7 @@ func use_teleport(point: Vector2) -> bool:
 	return true
 
 func can_target_skill(skill_id: StringName, enemy: CombatActor) -> bool:
+	if world_motion != null: return is_instance_valid(enemy) and enemy.is_alive() and world_can_reach(enemy,skill_range(skill_id))
 	if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
 		return false
 	if global_position.distance_to(enemy.global_position) > skill_range(skill_id):
@@ -2981,6 +2982,7 @@ func _magic_power(skill_id: StringName) -> float:
 	return stat_breakdown.value(&"magic_attack") * power
 
 func _can_spend(skill_id: StringName) -> bool:
+	if world_motion != null and not world_motion.is_current_world(): return false
 	if world_motion != null and WorldSkillGeometryRules.rule(skill_id).get("geometry_rule_id",&"") != &"self_only" and not (skill_id == &"shield_wall" and _world_shield_commit): return false # Spatial casts require explicit WorldPoints.
 	return _can_pay_skill(skill_id)
 
@@ -3112,6 +3114,12 @@ func _extended_aim_bonus(skill_id: StringName) -> float:
 func can_basic_attack(enemy: CombatActor, retain: bool = false) -> bool:
 	if world_motion != null:
 		if not is_instance_valid(enemy) or not enemy.is_alive() or enemy.world_motion == null: return false
+		if not world_motion.is_current_world() or not enemy.world_motion.is_current_world(): return false
+		if is_mage() or is_archer():
+			var radius := PlayerProjectile.DEFAULT_RADIUS
+			var origin := world_point().position+Vector3.UP*maxf(0.0,(float(world_motion.profile()["height"])-radius*2.0)*0.5)
+			var clearance := world_motion.geometry.sweep(origin,origin,{"radius":radius,"height":radius*2.0},world_motion.geometry.geometry_revision)
+			if not clearance["ok"] or clearance["data"]["hit"]: return false
 		var body_range := float(world_motion.profile()["radius"])+float(enemy.world_motion.profile()["radius"])+(class_definition.basic_range+_extended_aim_bonus(&"basic_attack"))*sentinel_range_multiplier()
 		return world_can_reach(enemy,body_range+(ATTACK_RETENTION if retain else 0.0))
 	if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():

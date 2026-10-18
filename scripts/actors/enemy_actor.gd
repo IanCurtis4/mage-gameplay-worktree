@@ -39,6 +39,7 @@ var _world_home: ExpeditionWorldPoint
 var _world_last_seen: ExpeditionWorldPoint
 var _world_geometry_revision := 0
 var _world_cast_revision := 0
+var world_ai_failure: StringName = &""
 
 func bind_world_geometry(world: WorldGeometry, point: ExpeditionWorldPoint, traversal: Dictionary, occupant_id: String) -> Dictionary:
 	var result := super.bind_world_geometry(world,point,traversal,occupant_id)
@@ -77,7 +78,7 @@ func _world_walk(delta: float) -> void:
 signal world_ground_walked(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint)
 
 func _advance_world_ai(delta: float) -> void:
-	if player.world_motion == null or player.world_motion.geometry != world_motion.geometry:
+	if not world_motion.is_current_world() or player.world_motion == null or not player.world_motion.is_current_world() or player.world_motion.geometry != world_motion.geometry:
 		player_target_acquired = false
 		world_motion.cancel()
 		_mob_cast.clear()
@@ -608,6 +609,9 @@ func _process_return(delta: float) -> void:
 
 func _request_companion_once() -> void:
 	if _mob_definition == null or not _mob_definition.summons_companion or is_summoned or summon_used or not is_alive() or is_stunned() or is_feared() or (is_inside_tree() and get_tree().paused) or (_uses_engagement() and engagement_mode != &"engaged"):
+		return
+	if world_motion != null:
+		world_ai_failure = &"spatial_spawn_required"
 		return
 	# Claim before callbacks: creation cannot recursively request another child.
 	summon_used = true

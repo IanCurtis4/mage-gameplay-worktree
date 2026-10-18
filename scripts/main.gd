@@ -1420,14 +1420,17 @@ func _on_fire_wall_requested(direction: Vector2, burn_request: DamageRequest) ->
 func _on_elementalist_flame_burst_requested(center: Vector2, request: DamageRequest) -> void:
 	_on_elementalist_area_requested(&"elementalist_flame_burst", center, SkillGeometry.ELEMENTALIST_FLAME_BURST_RADIUS, request, &"fire")
 
-func _on_elementalist_area_requested(skill_id: StringName, center: Vector2, radius: float, request: DamageRequest, element: StringName, marked_bonus: float = 0.0, once_per_target: bool = false, hit_ids: Dictionary = {}) -> void:
-	battle_indicators.show_elementalist_pulse(skill_id, center, radius, element)
+func _on_world_elementalist_area_requested(skill_id: StringName, area: WorldEffectArea, radius: float, request: DamageRequest, element: StringName, marked_bonus: float, once_per_target: bool, hit_ids: Dictionary) -> void:
+	_on_elementalist_area_requested(skill_id,Vector2.ZERO,radius,request,element,marked_bonus,once_per_target,hit_ids,area)
+
+func _on_elementalist_area_requested(skill_id: StringName, center: Vector2, radius: float, request: DamageRequest, element: StringName, marked_bonus: float = 0.0, once_per_target: bool = false, hit_ids: Dictionary = {}, world_area: WorldEffectArea = null) -> void:
+	if world_area == null and battle_indicators != null: battle_indicators.show_elementalist_pulse(skill_id, center, radius, element)
 	for target_actor: CombatActor in enemies.duplicate():
 		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
 			continue
-		if center.distance_to(target_actor.global_position) > radius + target_actor.collision_radius:
-			continue
-		if not navigation.is_segment_clear(center, target_actor.global_position, 0.0):
+		if world_area != null:
+			if not world_area.contains_actor(target_actor,radius): continue
+		elif target_actor.world_motion != null or center.distance_to(target_actor.global_position) > radius+target_actor.collision_radius or not navigation.is_segment_clear(center,target_actor.global_position,0.0):
 			continue
 		if once_per_target:
 			if hit_ids.has(target_actor.get_instance_id()):
@@ -1655,14 +1658,18 @@ func _focused_spiritualist_target() -> CombatActor:
 	return null
 
 func _on_spiritualist_drain_requested(request: DamageRequest, target_actor: CombatActor) -> void:
-	spiritualist_drain_state.start(target_actor, player.global_position, request)
+	if player.world_motion != null:
+		if not spiritualist_drain_state.start_world(player,target_actor,request,player.skill_range(&"spiritualist_soul_drain"),player.world_motion.geometry.geometry_revision)["ok"]: return
+	else:
+		spiritualist_drain_state.start(target_actor, player.global_position, request)
 	if battle_indicators != null and spiritualist_drain_state.active:
 		battle_indicators.sync_spiritualist_drain(player.get_instance_id(), spiritualist_drain_state.target_id)
 
 func _advance_spiritualist_drain(delta: float) -> void:
 	if not spiritualist_drain_state.active:
 		return
-	if not player.is_alive() or player.global_position.distance_to(spiritualist_drain_state.origin) > PlayerActor.MOVEMENT_EPSILON or player.is_stunned() or player.is_feared() or player.is_rooted():
+	var moved := player.global_position.distance_to(spiritualist_drain_state.origin) > PlayerActor.MOVEMENT_EPSILON if player.world_motion == null else spiritualist_drain_state.world_action == null
+	if not player.is_alive() or moved or player.is_stunned() or player.is_feared() or player.is_rooted():
 		_cancel_spiritualist_drain()
 		return
 	var target_actor := instance_from_id(spiritualist_drain_state.target_id) as CombatActor
@@ -1734,7 +1741,7 @@ func _advance_spiritualist_veil(delta: float) -> void:
 	for enemy: CombatActor in enemies:
 		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
 			continue
-		if not spiritualist_veil_state.contains(enemy.global_position) or not navigation.is_segment_clear(spiritualist_veil_state.center, enemy.global_position, 0.0):
+		if not spiritualist_veil_state.contains_actor(enemy) or (spiritualist_veil_state.world_area == null and not navigation.is_segment_clear(spiritualist_veil_state.center, enemy.global_position, 0.0)):
 			continue
 		enemy.apply_weaken(spiritualist_veil_fraction, 0.20, &"spiritualist_spectral_veil")
 		if not _spiritualist_veil_members.has(enemy.get_instance_id()) and enemy.attribute_debuffs.remaining(AttributeDebuffState.DAMAGE_DEALT, &"spiritualist_spectral_veil") > 0.0 and battle_indicators != null:
@@ -1763,7 +1770,10 @@ func _clear_spiritualist_veil() -> void:
 		battle_indicators.sync_spiritualist_veil_members([])
 
 func _on_spiritualist_procession_requested(request: DamageRequest, target_actor: CombatActor) -> void:
-	spiritualist_procession_state.start(player.global_position + Vector2(0, -24), target_actor, request)
+	if player.world_motion != null:
+		if not spiritualist_procession_state.start_world(player,target_actor,request,player.skill_range(&"spiritualist_procession"),player.world_motion.geometry.geometry_revision)["ok"]: return
+	else:
+		spiritualist_procession_state.start(player.global_position + Vector2(0, -24), target_actor, request)
 	_advance_spiritualist_procession(0.0)
 
 func _advance_spiritualist_procession(delta: float) -> void:

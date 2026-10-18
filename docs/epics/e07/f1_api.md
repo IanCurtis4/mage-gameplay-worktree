@@ -15,7 +15,13 @@ altura fora do plano ou destino ilegal falha; não há nearest-point em F1.
 
 Envelope de consultas: `{ok: bool, error_code: StringName, geometry_revision: int,
 data: Dictionary}`; DTOs de saída são cópias. Falha tem data vazio.
-A revisão é local à instância, monotônica em configure/insert/remove; não é a
+configuration_revision aumenta só em configure bem-sucedido. Consumidores capturam
+essa identidade: uma revisão nova de obstáculo é reconsultada, enquanto substituir
+o mundo invalida atores/voos/áreas/volumes/canais antigos com world_reconfigured.
+Release de ator antigo não remove ocupante da nova configuração com o mesmo ID.
+Isso é proteção de identidade, não implementação de transição/freeze de F2.
+
+A geometry_revision é local à instância, monotônica em configure/insert/remove; não é a
 revision de conteúdo F0. O consumidor precisa conservar também o hash do Manifest.
 Uma consulta antiga não autoriza mover ou commitar após alteração da revisão.
 
@@ -101,6 +107,8 @@ explícita e reutiliza rank/pagamento/resistência existentes. Mitigação front
 interceptação usam posições/corpos lógicos. As quatro entradas self_only ficam
 liberadas; as demais ativas legadas continuam recusadas. Não é kit completo.
 
+O preflight do básico ranged valida o envelope de lançamento antes de iniciar
+a recarga: uma linha central livre não basta se o corpo do projétil começa em parede.
 O básico real das dez identidades emite world_attack_requested(request, target,
 projectile_kind). RunController conecta o sinal: melee revalida oclusão/alcance,
 projéteis usam a trajetória lógica e os callbacks canônicos de dano/efeitos.
@@ -115,6 +123,8 @@ o endpoint precisa ter suporte/rota exatos, sem nearest-point. Cast de mob captu
 a revisão e revalida revisão/alcance/LoS antes de SP/cooldown. A fixture prova
 travessia autônoma e retorno por rampa, laje impedindo percepção e cast obsoleto.
 Invocações/posicionamento de companions e demais spawns continuam pendentes.
+Um mob bound com summons retorna diagnóstico spatial_spawn_required antes de
+reivindicar summon_used; não chama o spawn plano por fallback.
 
 ## Trajetórias, áreas e interceptores reais
 
@@ -168,6 +178,32 @@ Em atores bound, o controlador recusa input/aim legado até D05 visual. Isso nã
 é renderer/projeção/clique implementados. APIs opt-in da fixture não habilitam
 um estágio de produção no menu. Teste de consumidor não certifica sozinho o cast,
 preview, item/augment, construção ou kit completo listado na matriz.
+
+## Canais e pulsos finitos
+
+WorldLockedAction.configure(caster, target, maximum_range, stationary, revision)
+valida o par real e captura origem/identidade do mundo. validate() reconsulta
+alcance/oclusão atuais; stationary também cancela por mudança de WorldPoint ou
+root/stun/fear. paused() conserva o relógio. Usa o mesmo EPS de movimento do ator.
+SpiritualistDrainState.start_world e SpiritualistProcessionState.start_world
+recebem caster/target/request/range/revision e usam esse guard nos agendadores
+existentes: quatro ticks e três aparições, respectivamente. Não alteram potência,
+recovery, inscrição, heal ou planos causais. scheduled_tick mantém a regra E06:
+raiz intrínseca própria por pulso, com ancestor_root_id da emissão original.
+RunController liga os pedidos bound a essas entradas e consulta alvo em 3D.
+
+SpiritualistVeilState.start_world(world, anchor, profile, duration, revision) usa
+WorldEffectArea; contains_actor/query ground e o controlador mantêm aplicação e
+remoção da própria fonte de weaken. O start/placement de skill continua pendente.
+
+ElementalistSequence.configure_world(caster, anchors: Array[WorldPoint], requests,
+elements, radius, interval, once_per_target, revision, marked_bonus) valida TODAS
+as âncoras antes do primeiro pulso, copia requests e conserva schedule/hit_ids.
+world_pulse_requested entrega WorldEffectArea ao callback espacial do controlador,
+que reaproveita a aplicação elemental canônica. As posições Vector2.ZERO são
+somente placeholders de apresentação; o ramo world nunca calcula alcance nelas.
+O cast/geração de âncoras por Ember Path/Tri Nova e seus demais efeitos seguem
+pendentes. APIs de consumidor não equivalem a suporte completo de kit.
 
 ## Adaptador plano e próximos consumidores
 

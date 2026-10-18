@@ -63,11 +63,11 @@ func advance_world(distance: float) -> Dictionary:
 	if world_motion == null: return {"ok":false,"error_code":&"spatial_binding_required"}
 	return world_motion.advance(distance)
 func world_distance_to(other: CombatActor) -> float:
-	if world_motion == null or not is_instance_valid(other) or other.world_motion == null or world_motion.geometry != other.world_motion.geometry: return INF
+	if world_motion == null or not world_motion.is_current_world() or not is_instance_valid(other) or other.world_motion == null or not other.world_motion.is_current_world() or world_motion.geometry != other.world_motion.geometry: return INF
 	return world_point().position.distance_to(other.world_point().position)
 
 func world_attack_query(other: CombatActor, shape: Dictionary, revision: int) -> Dictionary:
-	if world_motion == null or not is_instance_valid(other) or other.world_motion == null or world_motion.geometry != other.world_motion.geometry: return {"ok":false,"error_code":&"incompatible_target","data":{}}
+	if world_motion == null or not world_motion.is_current_world() or not is_instance_valid(other) or other.world_motion == null or not other.world_motion.is_current_world() or world_motion.geometry != other.world_motion.geometry: return {"ok":false,"error_code":&"incompatible_target","data":{}}
 	return world_motion.geometry.query_attack(shape,world_point(),other.world_point(),revision)
 
 func world_can_reach(other: CombatActor, maximum_range: float) -> bool:

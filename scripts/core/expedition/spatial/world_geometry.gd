@@ -4,6 +4,7 @@ extends RefCounted
 const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
 const EPS := 0.00001
 var geometry_revision := 0
+var configuration_revision := 0
 var _stage: Dictionary = {}
 var _temporary: Dictionary[String, AABB] = {}
 var _solid_slabs: Array[AABB] = []
@@ -27,6 +28,7 @@ func configure(manifest: ExpeditionManifest, stage_id: String) -> Dictionary:
 			_occupancy.clear()
 			# Monotonic even when replacing a world with another revision-1 manifest.
 			geometry_revision += 1
+			configuration_revision += 1
 			return _success({"manifest_hash": manifest.canonical_hash(), "stage_id": stage_id})
 	return _failure(&"unknown_stage")
 

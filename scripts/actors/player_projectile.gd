@@ -5,6 +5,7 @@ extends Node2D
 signal hit(request: DamageRequest, target: CombatActor)
 
 const BODY_OFFSET := Vector2(0, -18)
+const DEFAULT_RADIUS := 4.0
 
 var request: DamageRequest
 var target: CombatActor
@@ -13,7 +14,7 @@ var navigation: ArenaNavigation
 var direction := Vector2.RIGHT
 var speed := 680.0
 var max_distance := 700.0
-var projectile_radius := 4.0
+var projectile_radius := DEFAULT_RADIUS
 var travelled := 0.0
 var homing := false
 var max_hits := 1

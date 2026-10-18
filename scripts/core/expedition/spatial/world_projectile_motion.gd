@@ -8,6 +8,7 @@ var stage_id := ""
 var collider: Dictionary = {}
 var travelled := 0.0
 var max_distance := 0.0
+var _configuration_revision := 0
 var _excluded: Dictionary[int, bool] = {}
 
 func configure(world: WorldGeometry, origin: ExpeditionWorldPoint, offset: Vector3, facing: Vector3, body: Dictionary, maximum_distance: float, revision: int) -> Dictionary:
@@ -20,6 +21,7 @@ func configure(world: WorldGeometry, origin: ExpeditionWorldPoint, offset: Vecto
 	if not start["ok"]: return start
 	if start["data"]["hit"]: return _failure(&"blocked_origin")
 	geometry = world
+	_configuration_revision = world.configuration_revision
 	position = origin.position + offset
 	stage_id = origin.stage_id
 	direction = facing.normalized()
@@ -34,11 +36,12 @@ func validate_targets(actors: Array[CombatActor]) -> Dictionary:
 		if not is_instance_valid(candidate_actor): continue
 		var actor := candidate_actor as CombatActor
 		if actor == null or not actor.is_alive(): continue
-		if actor.world_motion == null or actor.world_motion.geometry != geometry or actor.world_point().stage_id != stage_id: return _failure(&"incompatible_target")
+		if actor.world_motion == null or not actor.world_motion.is_current_world() or actor.world_motion.geometry != geometry or actor.world_point().stage_id != stage_id: return _failure(&"incompatible_target")
 	return {"ok":true,"error_code":&""}
 
 func contact(distance: float, actors: Array[CombatActor]) -> Dictionary:
 	if geometry == null or not is_finite(distance) or distance < 0.0: return _failure(&"invalid_distance")
+	if _configuration_revision != geometry.configuration_revision: return _failure(&"world_reconfigured")
 	var valid := validate_targets(actors)
 	if not valid["ok"]: return valid
 	var step := minf(distance,maxf(0.0,max_distance-travelled))

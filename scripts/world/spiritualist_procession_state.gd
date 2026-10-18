@@ -13,6 +13,18 @@ var elapsed := 0.0
 var departures_issued := 0
 var impacts_issued := 0
 var captured_request: DamageRequest
+var world_action: WorldLockedAction
+var world_failure: StringName = &""
+
+func start_world(caster: CombatActor, target: CombatActor, request: DamageRequest, maximum_range: float, revision: int) -> Dictionary:
+	if request == null: return {"ok":false,"error_code":&"invalid_request"}
+	var guard := WorldLockedAction.new()
+	var result := guard.configure(caster,target,maximum_range,false,revision)
+	if not result["ok"]: return result
+	start(Vector2.ZERO,target,request)
+	world_action = guard
+	return result
+
 
 func start(caster_origin: Vector2, target: CombatActor, request: DamageRequest) -> void:
 	cancel()
@@ -25,6 +37,15 @@ func start(caster_origin: Vector2, target: CombatActor, request: DamageRequest) 
 
 func advance(delta: float) -> Array[Dictionary]:
 	var due: Array[Dictionary] = []
+	if not active: return due
+	if world_action != null:
+		if world_action.paused(): return due
+		var valid := world_action.validate()
+		if not valid["ok"]:
+			var reason: StringName = valid["error_code"]
+			cancel()
+			world_failure = reason
+			return due
 	if not active or delta < 0.0:
 		return due
 	elapsed += delta
@@ -48,6 +69,8 @@ func all_impacts_issued() -> bool:
 	return impacts_issued == COUNT
 
 func cancel() -> void:
+	world_action = null
+	world_failure = &""
 	active = false
 	source = Vector2.ZERO
 	target_id = 0
