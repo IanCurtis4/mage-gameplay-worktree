@@ -38,6 +38,7 @@ func _initialize() -> void:
 	for chunk: String in output:
 		if chunk.contains("ERROR:") or chunk.contains("SCRIPT ERROR:") or chunk.contains("Parse Error:"): errors = true
 	if code != 0 or errors: push_error("F1 full isolated import failed"); quit(1); return
+	if DirAccess.make_dir_recursive_absolute(TARGET+"/.godot/verification") != OK: push_error("fixture verification directory unavailable"); quit(1); return
 	var generated_delta := {}
 	for relative: String in auxiliary:
 		var target := TARGET.path_join(relative)
