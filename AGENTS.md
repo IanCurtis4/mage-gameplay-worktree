@@ -13,7 +13,9 @@
 > e o papel de Astra permanente como gerente, implementador ou integrador.
 > Preserva a regra de 26/09: nenhum gate Astra por microtarefa.
 > E06 iniciado por autorização humana; contrato e retomada:
-> [docs/epics/e06.md](docs/epics/e06.md). E07+ não liberados.
+> [docs/epics/e06.md](docs/epics/e06.md). Gameplay E06 aceito em18/10.
+> E07: [abertura autorizada](docs/epics/e07_launch_queue.md) em18/10 após novo
+> sinal humano. Arquitetura/contratos antes dos consumidores. E08+ não liberados.
 
 - Leia `docs/MVP.md`, `docs/ARCHITECTURE.md` e o contrato/checkpoint correspondente
   antes de editar. E00 e decisões posteriores explícitas prevalecem sobre o piloto.

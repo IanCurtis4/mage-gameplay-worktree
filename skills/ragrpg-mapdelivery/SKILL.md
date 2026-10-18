@@ -23,6 +23,9 @@ mapas grandes/labirínticos com elevação funcional e portais de avanço em pon
 específicos. O roteiro `PlaytestGameplay` é predefinido: não chamar sorteio de
 spawns de geração modular. Elevação deve afetar acesso/rotas, não só desenho.
 Quantidade de estágios, dimensões e densidade precisam do contrato do pacote.
+Para cenário 3D/locais memoráveis, ler docs/gates/low_poly_environments.md.
+Não presumir conversão integral para 3D. Inimigo memorável conta para limpeza;
+acesso ao seu local não pode depender de portal que exija a morte dele.
 
 Antes dos consumidores, fechar interfaces de partes/conectores, superfícies e
 alturas, entrada/saída/objetivos, seed e versão de receita, restrições de bioma e
@@ -45,10 +48,16 @@ por posição/orientação/nível/raio, entrada segura e rota até todos os obje
 obrigatórios. Rotas alternativas e becos podem existir sem isolar a saída.
 Não corrigir desconexão teleportando silenciosamente jogador/inimigos.
 
-Portais avançam um estágio uma vez e preservam recompensas já confirmadas;
-revalidam sessão, estado e pendências. Não concedem loot/XP novamente por retry.
+Portais permitem avanço e retorno conforme grafo e preservam estado dos mapas;
+revalidam sessão, estado e pendências. Revisita/retry não repetem loot/XP/augment.
 Limpeza de atores/efeitos mantém progresso permanente e regras de run/augments.
-Critério de passagem não é automaticamente matar todos os mobs do mapa.
+Decisão humana de 18/10: derrotar todos os inimigos abre portais. Respawn tardio
+em massa só após limpeza, sem fechar portais; timer único da fase, não por estágio.
+Memoráveis contam na limpeza; fechar contabilização de invocações no contrato.
+Não substituir limpeza por objetivo parcial. Fase maculada conserva redução de
+rendimento entre tentativas até conclusão; detalhe segue PRODUCT_DIRECTION.
+Portais podem ramificar; quests devem ter objetivo ou rota garantidos conforme
+docs/PRODUCT_DIRECTION.md. Respawn não duplica conclusão ou entrada de estágio.
 
 População total e limite de atores ativos são distintos. Para ecologia/espécies,
 use o contrato de população e ragrpg-enemydelivery quando pertinente; dados só

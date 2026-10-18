@@ -36,10 +36,15 @@ gerador, superfícies em alturas, vendedores e consumíveis ainda não são APIs
 
 ## Invariantes que consumidores devem preservar
 
-Resources são definições imutáveis. Perfil contém progresso e posses permanentes;
-personagem contém preferências/identidade; run contém augments, escolhas, efeitos,
-relógios e instâncias efêmeras. Cópias runtime de cartas/equipamentos não mudam
-sua propriedade persistente. O nome legado `RunCardInventory` não torna cartas temporárias.
+Resources são definições imutáveis. No runtime observado, perfil contém progresso
+e posses compartilhadas; personagem contém preferências/identidade. **Decisão
+humana18/10 substitui esse compartilhamento futuro: itens e gold por personagem,
+unlocks por perfil.** Migração ainda não implementada; contratar destinação dos
+exemplares/encaixes e referências de alts antes de alterar save. Um arquivo de
+perfil pode armazenar bens individuais sem torná-los compartilhados.
+Transferências entre personagens ficam fora do escopo; cada um conquista seus bens.
+Run contém augments, escolhas, efeitos, relógios e instâncias efêmeras. Cópias
+runtime não mudam propriedade. `RunCardInventory` não torna cartas temporárias.
 
 Schema 7/catalog 14 e `stat_thresholds_v1` são os valores observados no candidato.
 Decoders históricos validam antes de migrar; não apagar desconhecidos, refazer
@@ -75,6 +80,24 @@ recarga compartilhada. Remover fonte não apaga atalho nem zera cooldown.
   válidos quando não substituídos; não reimplantar seus limites antigos de UI/save.
 
 ## Fronteira futura de mapas e combate
+
+[Gate de cenários low-poly](gates/low_poly_environments.md): integração de 3D
+com apresentação atual ainda exige arquitetura; não presumir conversão integral.
+Ameaça, alvo atual e participação em combate de grupo terão autoridades distintas
+conceitualmente; definir geração/controle/troca de alvo e cura antes dos consumidores.
+Contratos atuais de aggro não provam essa extensão implementada.
+Modelo aprovado: listas individuais por inimigo, geração diferenciada, limiar
+de troca de alvo, provocar/redução ativa e UI de ameaça. Valores aguardam contrato.
+Expedição conserva montagem/progresso/mácula até conclusão, inclusive entre
+visitas. Primeira limpeza inicia timer global de respawn da fase; ondas repõem
+trash morto elegível em estágios limpos, sem duplicar vivos ou respawnar bosses.
+Suspensão conserva estado completo, augments e relógios congelados, sem progresso
+offline. Captura/restauração de atores, ações e recibos ainda exige contrato;
+persistência futura não está implementada. Morte conserva expedição/build, retorna
+ao último portal e reduz tempo restante da próxima onda, disparando reposição
+elegível ao atingir zero; valor/retorno/HP/SP aguardam regra.
+Augments não viram posses permanentes e restauração não reconcede recompensas.
+Multiplayer precisará definir autoridade e congelamento com outros membros ativos.
 
 A navegação 2D atual não prova suporte a ponte sobre outra rota nem a linha de
 visão entre alturas. [PRODUCT_DIRECTION](PRODUCT_DIRECTION.md) exige contrato

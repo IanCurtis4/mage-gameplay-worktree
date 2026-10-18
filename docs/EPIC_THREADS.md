@@ -16,6 +16,9 @@ Não duplicar tarefas existentes por ler uma tabela antiga “não criado”. Co
 contrato/base/estado antes de retomar. IDs não autorizam mensagens a outros chats.
 Nenhum chat foi criado, retomado ou arquivado nesta consolidação.
 
-E07+ ainda não liberados. Ao autorizar um novo épico, criar seu Astra permanente
+E07: [abertura autorizada](epics/e07_launch_queue.md). Em18/10 o usuário revogou
+a espera por orçamento e autorizou criar conversas normalmente. Registrar IDs
+efetivos abaixo; consumidores aguardam contratos. E08+ não liberados.
+Na abertura efetiva de um novo épico, criar seu Astra permanente
 de arquitetura; execução em tarefas temporárias proporcionais, com arquivamento
 somente após registro/validação/integração. O Astra antigo não volta a ser gerente.

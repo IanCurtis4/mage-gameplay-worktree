@@ -26,6 +26,13 @@ assinaturas no checkout; UI consome prévia canônica, não fórmulas de preço/
 
 ## Regras atuais a preservar
 
+Decisão18/10 em docs/PRODUCT_DIRECTION.md: itens/gold pertencem ao personagem,
+unlocks ao perfil. Compartilhamento do runtime E06 é legado a migrar, não regra
+futura. Antes de código, fechar destinação de exemplares/cartas/referências de
+alts sem duplicar, apagar ou atribuir silenciosamente; não migrar save pessoal.
+Venda confirmada de peça com cartas remove também cartas encaixadas após aviso;
+desencaixe anterior preserva cartas. Não devolver automaticamente na venda.
+
 - Equipamentos são exemplares permanentes; receita, exemplar e seleção são
   identidades diferentes. Não fundir cópias ou reprecificar poder legado ao
   atualizar catálogo. Preservar revisão/ruleset de poder do exemplar.
@@ -56,14 +63,18 @@ Use perfis temporários; não testar no save pessoal nem criar segundo writer.
 ## Fronteiras futuras
 
 Vendedores de lobby/gold, consumíveis e trash/misc são direção futura. Antes de
-código, fechar propriedade/persistência de gold/estoque, quantidades/capacidade,
-preços, itens vendáveis/quest e condições de compra/venda. Não presumir API pronta
+código, fechar propriedade/persistência de gold/estoque, preços e transações.
+Decisões18/10: sem peso/capacidade de bag, pilhas sem limite de gameplay,
+equipamentos não empilháveis e itens de quest não vendáveis. Vendedores oferecem
+básicos/raros limitados, nunca conjuntos/épicos/lendários; consultar direção atual.
+Não presumir API pronta
 porque há abas vazias. Venda/compra deve ser transação única de item+gold com
 replay/revisão e falha sem saldo ou item parcial.
 
 Regra aprovada de poção: após uso, reutilização exige CD longo terminado **e**
-saída daquele combate; sair cedo não zera CD. Grupo HP/SP, duração, relógio,
-reentrada/morte e autoridade do combate ainda precisam de contrato. Não permitir
+saída daquele combate; sair cedo não zera CD. HP/SP têm uso separado; variantes,
+duração, relógio, reentrada/morte e autoridade do combate exigem contrato.
+Para expansão/profissões, ler docs/gates/consumables_professions.md. Não permitir
 reset por troca/menu/portal ou interpretar como spam a cada timer dentro da luta.
 Misc pode servir a missão/venda, sem inventar sistema de quests neste lote.
 

@@ -5,6 +5,13 @@ description: Preparar ou entregar augments autorizados do RagRPG, com receita, e
 
 # Entregar augments do RagRPG
 
+Cadência futura aprovada18/10 em docs/PRODUCT_DIRECTION.md: um augment de início
+da run mais um de início de estágio (dois no primeiro); extras de inimigos
+memoráveis/quests conforme contrato. Respawn não reconcede entrada/conclusão.
+Retorno a estágio visitado não concede outra escolha; usar identidade estável
+do estágio na run, não quantidade de travessias de portal.
+Isso não modifica automaticamente o piloto E06 ou libera implementação.
+
 Resolva a raiz Git do checkout informado/cwd e confirme `project.godot`.
 Leia AGENTS.md, docs/WORKFLOW.md, docs/MVP.md, docs/ARCHITECTURE.md,
 docs/epics/e06_contract.md e contrato/checkpoint autorizado. Caminhos são da
@@ -18,8 +25,12 @@ curva, limites, conflitos, trigger e resultado atual/próximo. Uma descrição
 temática não é definição de handler. Se falta escolha de produto, apresente-a;
 continue partes independentes, sem iniciar outro épico ou criar chats pela skill.
 
-Augment modifica a build durante a run. Não persistir stack, ensinar habilidade
-ou habilitar identidade futura. As dez identidades atuais têm opções próprias;
+Augment modifica a build da expedição. Decisão18/10: conservar augments/stacks e
+pendências no estado congelado entre visitas e após morte; não apagar ao voltar
+ao lobby nem reconceder na restauração. Isso exige contrato de save próprio antes
+de implementar e substitui a proibição genérica antiga de persistir stacks.
+Não converter em progressão permanente, ensinar habilidade ou habilitar identidade
+futura. Ao terminar a expedição, não levar a build à próxima. As dez identidades têm opções próprias;
 consulte o catálogo vigente em vez de fixar contagem como regra eterna. Requisitos
 usam biblioteca/ranks e executores reais, não só origem ou posição na barra.
 Passiva, auto e comando intrínseco exigem elegibilidade explícita.

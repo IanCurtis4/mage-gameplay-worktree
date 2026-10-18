@@ -35,7 +35,11 @@ normal fora de encontro, com pausa; admin tem exceção explícita própria.
 Habilidade alvo deve ser utilizável pela biblioteca/rank, sem depender de estar
 na barra. Ganho efetivo/conflitos/caps são conferidos pelo mesmo compositor.
 
-Equipamento/cartas são permanentes, compartilhados pelo perfil. Cópias físicas
+Equipamento/cartas são permanentes. O runtime E06 compartilha pelo perfil;
+decisão18/10 substitui a direção por **itens/gold por personagem, unlocks por
+perfil**, conforme [direção de produto](../PRODUCT_DIRECTION.md). A migração
+precisa de contrato e autorização próprios; não reinterpretar saves existentes.
+Cópias físicas
 têm IDs próprios. Uma carta não ocupa dois encaixes; cópias distintas da mesma
 receita podem acumular conforme contrato. Desequipar conserva encaixes e apenas
 hosts equipados contribuem. Troca/remoção/transferência valida a intenção inteira
@@ -70,4 +74,6 @@ validam a versão histórica antes de converter e preservam compras/grants legí
 O antigo lote12equipamentos/6cartas era piloto. Contagens atuais devem vir do
 catálogo/recibo correspondente, não virar quota universal das skills de entrega.
 Mapas gerados, vendedores, consumíveis e misc: [direção futura](../PRODUCT_DIRECTION.md).
-Este contrato não inicia E07 nem altera propriedade de gold/estoque ainda indefinida.
+Este contrato não inicia E07 nem implementa a nova propriedade individual.
+Preservar evidência dos contratos anteriores sem restaurar compartilhamento
+como requisito futuro de produto.

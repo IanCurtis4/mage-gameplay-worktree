@@ -9,12 +9,15 @@ anteriores. Normas: [WORKFLOW](WORKFLOW.md); direção: [PRODUCT_DIRECTION](PROD
 | E00–E03 | Fundamentos e progressão incorporados ao candidato; contratos preservados nos pontos não substituídos |
 | E04 | Três bases disponíveis, com extensões posteriores documentadas em E06 |
 | E05 | Seis evoluções puras + Geômetra disponíveis; cinco híbridas originais ainda bloqueadas. Não declarar épico inteiro encerrado |
-| E06 | Autorizado, implementado e ampliado em pacotes; candidato de 17/10 aplicado para playtest, aceite humano/merge pendentes. Ver [índice](epics/e06.md) |
-| E07 | Reservado. Replanejar campanha segundo mapas modulares, elevação, portais e gradientes; não executar o antigo plano de mapas fixos como destino final |
+| E06 | Implementado e [aceito em gameplay18/10](epics/e06/e06_gameplay_acceptance_2026_10_18.md); merge/publicação não executados |
+| E07 | [Abertura documental autorizada](epics/e07_launch_queue.md) após revogação da espera por orçamento; contratos antes de implementação |
 | E08 | Reservado. Arte/feedback futuros acompanham os contratos reais; arte entregue dentro de E04–E06 não inicia todo E08 |
 | E09 | Reservado. Integração/demo e validação operacional Luna/Sol, com aceite humano; não é auditoria Astra automática |
 | E10/E11 | Reservados. Bases restantes e híbridas futuras mantêm autorização por família/par; não produzir kits por efeito de roadmap |
-| Economia/consumíveis/misc | Direção aprovada em17/10; alocação a épico/pacotes ainda a definir, sem execução automática |
+| Economia/consumíveis/misc | Direção atualizada em18/10; alocação a épico/pacotes ainda a definir, sem execução automática |
+| Consumíveis ampliados/profissões | [Gate separado](gates/consumables_professions.md) solicitado em18/10; profissões ainda em discussão, sem implementação autorizada |
+| Cenários 3D low-poly | [Gate separado](gates/low_poly_environments.md) solicitado em18/10; natureza/construções e locais temáticos, sem produção ou mudança de renderer autorizadas |
+| Propriedade e ameaça | Itens/gold por personagem e unlocks por perfil; migração de bens e ameaça controlável precisam de contratos, sem implementação automática |
 
 ## Campanha a planejar
 

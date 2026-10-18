@@ -19,6 +19,8 @@ navegação por clique, combate em tempo real e interface pt-BR. Godot 4.7.2 sta
 - Equipamentos são exemplares persistentes compartilhados pelo perfil, com
   qualidade, origem, ilvl, encaixes e conjuntos conforme os contratos atuais.
   Há 14 posições; não restaurar a coleção sem cópias ou os três slots do piloto.
+  Esse compartilhamento descreve o candidato existente: decisão posterior de
+  18/10 exige bens por personagem, com migração ainda não implementada.
 - Cartas também são exemplares permanentes. Cópias iguais podem ocupar encaixes
   distintos; os encaixes permanecem na peça ao desequipar e ao terminar a run.
   Cartas são passivas, podendo modificar habilidades conforme a espécie de origem.
@@ -47,8 +49,41 @@ mapas do mesmo bioma, com dificuldade maior em partes avançadas da campanha.
 Consumíveis HP/SP terão CD longo e bloqueio após uso até sair do combate;
 as duas condições precisam ser satisfeitas. Itens trash/misc poderão servir
 a missões ou venda. Vendedores no lobby usarão gold para equipamentos e
-consumíveis. Modelo de carteira, preços, estoques, quests e detalhes de combate
+consumíveis. Carteira e itens serão por personagem; somente unlocks são por
+perfil. Migração, preços, estoques, quests e detalhes de combate
 entre alturas precisam de contratos próprios antes de implementação.
+
+Decisões de 18/10: fases repetíveis ramificadas, desbloqueios por perfil e nível
+mínimo; portais após derrotar todos os inimigos, com respawn tardio em massa
+somente após limpeza e sem fechar portais. Dois augments no primeiro estágio,
+um no início dos seguintes e extras de fontes memoráveis contratadas. Conclusão
+concede gold/EXP, sem equipamento garantido; aquisições permanecem, augments não.
+Vendedores acompanham progresso, com básicos e raros limitados por unlocks;
+sem conjuntos/épicos/lendários. Inventário sem peso/capacidade, equipamentos por
+exemplar, itens de quest não vendáveis. Altura conta para alcance, sem bônus de
+high ground. Detalhes e pendências na direção; consumíveis avançados/profissões
+têm [gate próprio](gates/consumables_professions.md), ainda sem implementação.
+
+Complementos18/10: todas as recompensas de mobs respawnados sofrem redução,
+com taxas próprias por tipo; fase permanece maculada até conclusão, sem reset
+por mera nova run. Retorno entre estágios permitido, com relógio de respawn único
+por fase e sem repetir augment na revisita. Montagem/progresso da expedição
+são preservados até conclusão. Augments e demais estados/relógios ficam congelados
+entre visitas. Morte conserva a expedição/build, retorna ao último portal e
+reduz o tempo restante até a próxima onda de respawn (reposição ao atingir zero);
+valor da redução e recursos ao reviver aguardam contrato.
+Primeira limpeza
+inicia ondas globais longas nos estágios já limpos, repondo somente mortos
+elegíveis sem duplicar vivos; bosses não respawnam. Destinos finais e
+saídas alternativas admitem caminhos longos, becos, múltiplos objetivos e quests
+que encerram a run antecipadamente. Memoráveis bloqueiam portal e ocupam locais
+temáticos. Cenários 3D low-poly têm [gate próprio](gates/low_poly_environments.md).
+Ameaça deve ser previsível/controlável, com participação de healers no combate
+do grupo. Lista individual por inimigo, geração diferenciada, limiar de troca,
+provocar, redução ativa e UI legível foram aprovados como direção. Encerramento
+por quest não dá bônus de conclusão por padrão; exceções exigem desafio justificado.
+Sem transferência de bens entre personagens. Venda confirmada de peça com cartas
+remove também as cartas encaixadas.
 
 O pedido de 17/10 autoriza consolidar documentação e criar quatro skills de
 entrega. Não inicia geração de mapas, economia, novas classes ou E07+.

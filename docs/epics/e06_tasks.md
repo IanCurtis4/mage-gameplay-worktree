@@ -11,7 +11,7 @@ Estado e autorização: [checkpoint](e06_checkpoint.md). Fluxo: [WORKFLOW](../WO
 | Conteúdo/transformações/UI | [Pendências e entregas](e06/e06_pending_checkpoint.md); índice datado, ler recibos das rodadas mais recentes |
 | Correções de playtest | [Contrato13/10](e06/e06_playtest_fixes_contract.md); incorporado, cartas permanentes |
 | Habilidades/ícones | [Dependências](e06/e06_all_skill_dependencies_delivery.json), [ícones](e06/e06_skill_icon_batches_validation.json); aplicados |
-| Admin/export | [Última entrega](e06/e06_admin_extension_delivery.json); aplicada, aguardando playtest humano |
+| Admin/export | [Última entrega](e06/e06_admin_extension_delivery.json); aplicada e [aceita em gameplay18/10](e06/e06_gameplay_acceptance_2026_10_18.md) |
 | Consolidação/skills17/10 | [Registro](../DOCUMENTATION_CONSOLIDATION_2026_10_17.md); somente documentação |
 
 T3/T4 não devem ser disparadas novamente como se catálogo/UI ainda não existissem.
