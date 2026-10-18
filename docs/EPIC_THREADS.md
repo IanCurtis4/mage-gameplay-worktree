@@ -11,10 +11,17 @@ Reservas e IDs antigos permanecem no [histórico](EPIC_THREADS.history_2026_10_1
 | T1 | RagRPG \| E06-T1 — Composição e causalidade | 01a11f3e-33db-7ac0-88be-c2916ea3fe1f |
 | T2 | RagRPG \| E06-T2 — Inventário e persistência | 01a1207c-fca8-79d2-9280-5dbc5e172c96 |
 | TX e extensões | RagRPG \| E06-TX — Itemização em etapas | 01a12d55-0ce8-7061-b8e4-bf5650c8c5b7 |
+| Arquitetura E07 permanente | RagRPG \| E07 — Arquitetura Astra | 01a14e2d-630b-7c50-bd03-9448f30711fc |
+| E07-I0 temporário | RagRPG \| E07-I0 — Inventário técnico | 01a14e2d-b456-7063-bfe9-4cf727b25a59 |
 
 Não duplicar tarefas existentes por ler uma tabela antiga “não criado”. Conferir
 contrato/base/estado antes de retomar. IDs não autorizam mensagens a outros chats.
 Nenhum chat foi criado, retomado ou arquivado nesta consolidação.
+
+Na abertura18/10 posterior à consolidação: dois chats E07 criados na base
+`029b8ca1d7b1752929d549cbeb51e534ea6d3c1d`, checkout habitual, apenas documentação
+em arquivos disjuntos. Astra Alto prepara contratos/guias; Sol Médio inventaria
+runtime. Não houve dispatch de implementação, arquivamento ou merge em master.
 
 E07: [abertura autorizada](epics/e07_launch_queue.md). Em18/10 o usuário revogou
 a espera por orçamento e autorizou criar conversas normalmente. Registrar IDs

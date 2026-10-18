@@ -10,6 +10,17 @@ orçamento restante de 7%. Em seguida, no mesmo dia, revogou a espera:
 chats após criação. Sem automação. Este material não é contrato arquitetural ou
 autorização para executar consumidores antes das decisões/interfaces necessárias.
 
+Despacho efetivo18/10, base `029b8ca1d7b1752929d549cbeb51e534ea6d3c1d`:
+
+| Pacote | Estado | Chat | Modelo/esforço |
+|---|---|---|---|
+| Arquitetura/contratos E07 | EM_EXECUÇÃO documental | 01a14e2d-630b-7c50-bd03-9448f30711fc | gpt-6-astra / high |
+| E07-I0 inventário | EM_EXECUÇÃO documental | 01a14e2d-b456-7063-bfe9-4cf727b25a59 | gpt-6.1-sol / medium |
+
+Ambos receberam checkout e SHA exatos, propriedade exclusiva e proibição de
+stage/commit concorrentes. Implementação não despachada. Coordenação registra
+entrega/validação/integração posteriormente; status do app não basta para arquivar.
+
 ## Base e fechamento anterior
 
 - [Aceite E06](e06/e06_gameplay_acceptance_2026_10_18.md).
