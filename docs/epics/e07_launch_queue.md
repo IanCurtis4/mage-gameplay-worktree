@@ -16,7 +16,7 @@ Despacho efetivo18/10, base `029b8ca1d7b1752929d549cbeb51e534ea6d3c1d`:
 |---|---|---|---|
 | Arquitetura/contratos E07 | INTEGRADA documental; decisões pendentes | 01a14e2d-630b-7c50-bd03-9448f30711fc | gpt-6-astra / high |
 | E07-I0 inventário | VALIDADA/INTEGRADA/ARQUIVADA | 01a14e2d-b456-7063-bfe9-4cf727b25a59 | gpt-6.1-sol / medium |
-| E07-F0 montagem pura | EM_EXECUÇÃO isolada | 01a14f91-d0c6-7c20-82c9-a22650fa5199 | gpt-6.1-sol / high |
+| E07-F0 montagem pura | VALIDADA / INTEGRADA / ARQUIVADA | 01a14f91-d0c6-7c20-82c9-a22650fa5199 | gpt-6.1-sol / high |
 
 F0 usa base `e30c49bb6442344ce8d937910ca6170effc70c7a` em codex/e07-f0;
 [despacho](e07/f0_dispatch.md). Integração documental anterior
@@ -105,3 +105,11 @@ Lista completa e decisões aprovadas: [PRODUCT_DIRECTION](../PRODUCT_DIRECTION.m
 Este preparo valida coerência documental, referências locais e diff; não repete
 gameplay. Criação e planejamento passam a ser autorizados pelo novo sinal humano;
 arquitetura não foi produzida por este arquivo. Não agenda retomada automática.
+
+## Atualização de execução18/10 — F0 integrado, F1 autorizado
+
+F0 integrado em `42604ef8674a2c28f5aadc633b73cda15178e0b3` e arquivado;
+[evidência de integração](e07/f0_integration.md). Usuário autorizou “Pode começar
+F1” e aprovou regras de combate D05. [Despacho F1](e07/f1_dispatch.md) delimita
+lógica espacial e testes independentes da apresentação D05, ainda pendente.
+Sem início de F2+ ou decisão implícita das demais propostas.

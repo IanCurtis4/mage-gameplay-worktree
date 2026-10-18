@@ -187,7 +187,12 @@ Detalhamento: [mundo](e07/guides/world_geometry.md),
 
 ## Liberação
 
-Somente arquitetura está autorizada nesta rodada. F0 é o primeiro pacote técnico
+Atualização de coordenação18/10 posterior à arquitetura: F0 integrado em
+`42604ef8674a2c28f5aadc633b73cda15178e0b3`; F1 autorizado pelo usuário, com
+combate D05 aprovado e apresentação ainda pendente. [Despacho F1](e07/f1_dispatch.md)
+delimita o trabalho independente permitido; demais propostas seguem pendentes.
+
+Registro histórico da rodada arquitetural: somente arquitetura estava autorizada. F0 é o primeiro pacote técnico
 preparável após integração documental e dispatch explícito com SHA real. Outros
 pacotes aguardam produtores e decisões indicados no plano. Nenhum SHA futuro é
 fornecido. Coordenação integra documentos e registra base; este chat permanece

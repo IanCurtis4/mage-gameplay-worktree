@@ -1,8 +1,9 @@
 # E07 — guia de mundo, montagem e altura
 
 Arquitetura v1,18/10/2026. [Contrato](../../e07_contract.md),
-[decisão D05](../e07_decisions.md). Interfaces aqui são novas. Regras visuais e
-de habilidades propostas aguardam D05; validações estruturais podem antecedê-las.
+[decisão D05](../e07_decisions.md). Interfaces aqui são novas. Regras de combate D05 aprovadas em18/10; apresentação visual ainda pendente.
+O registro D05 e o despacho F1 prevalecem sobre as menções históricas a proposta
+neste guia. Lógica espacial pode iniciar; integração visual aguarda resposta.
 
 ## Evidência e escolha técnica
 

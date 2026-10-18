@@ -3,8 +3,9 @@
 18/10/2026. [Contrato v1](e07_contract.md), [decisões](e07/e07_decisions.md),
 [inventário factual I0](e07/e07_runtime_inventory.md),
 [validação](e07/guides/validation.md). Somente entrega documental nesta rodada.
-Atualização de coordenação18/10: arquitetura/I0 integrados; F0 preparado para
-execução delimitada conforme [despacho](e07/f0_dispatch.md). F1+ permanecem pendentes.
+Atualização de coordenação18/10: [F0 validado/integrado](e07/f0_integration.md);
+F1 autorizado pelo usuário e delimitado no [despacho F1](e07/f1_dispatch.md).
+Combate D05 aprovado; apresentação ainda pendente. F2+ não despachados.
 
 Base arquitetural: `029b8ca1d7b1752929d549cbeb51e534ea6d3c1d`,
 `C:/Users/João Pedro/Documents/ChatGPT/RagRPG`, `codex/playtest`.
@@ -61,11 +62,12 @@ Nunca usar encounter_active=estágio não limpo como substituto de participaçã
 
 ## F0 — montagem reproduzível e contratos executáveis puros
 
-**EM_EXECUÇÃO, dispatch18/10; Sol / Alto**, chat
+**VALIDADA / INTEGRADA / ARQUIVADA**, Sol / Alto, chat
 `01a14f91-d0c6-7c20-82c9-a22650fa5199`, base
 `e30c49bb6442344ce8d937910ca6170effc70c7a`, branch codex/e07-f0.
-Ver checkout/runner e
-propriedade no [despacho F0](e07/f0_dispatch.md). Sem decisões
+Integrado em `42604ef8674a2c28f5aadc633b73cda15178e0b3`; evidências e limites
+no [recibo de integração](e07/f0_integration.md). Runner transferido a F1.
+Ver propriedade histórica no [despacho F0](e07/f0_dispatch.md). Sem decisões
 de produto novas: modelar policies obrigatórias e fixtures, sem defaults de
 produção, alteração do piloto ou acesso a save. Depende deste contrato integrado.
 
@@ -88,7 +90,13 @@ assina signatures/revisões reais; F1/F2 só recebem API após integração.
 
 ## F1 — altura funcional e combate espacial coerente
 
-**DECISÃO_PENDENTE D05 + depende F0. Sol / Alto.** Resultado: jogador/AI atravessam
+**PRONTA PARA LÓGICA ESPACIAL; apresentação D05 PENDENTE. Sol / Alto.**
+F0 integrado, combate D05 aprovado e início autorizado expressamente em18/10.
+Base de runtime `42604ef8674a2c28f5aadc633b73cda15178e0b3`, codex/e07-f1;
+checkout, 50 arquivos existentes, novos caminhos, runner exclusivo e cobertura
+no [despacho F1](e07/f1_dispatch.md). Somente trabalho independente da resposta
+visual pode iniciar; renderer/clique multialtura e conclusão aguardam essa decisão.
+Resultado: jogador/AI atravessam
 rampa e ponte de prova, selecionam superfície correta e usam a mesma geometria
 em ataques/movimento. Amostra técnica, sem expedição persistente liberada.
 
@@ -252,6 +260,6 @@ Astra permanente permanece aberto. Não há auditoria Astra automática por fase
 Para cada F0–F8: estado, dono/chat, decisão/revisão, base completa, branch/checkout,
 manifesto de arquivos e transferências, API/erros efetivos, hash entregue/integrado,
 testes/roles/logs/hashes, limitações e próximo passo. Todos esses campos de
-execução estão **não atribuídos** nesta entrega, não aprovados por tabela vazia.
-Primeiro passo da coordenação: integrar documentação, resolver base e preparar
-F0; encaminhar D01/D02/D05 ao humano para destravar as fundações seguintes.
+execução eram **não atribuídos** na entrega arquitetural. Atualização corrente:
+F0 integrado; F1 possui despacho real e liberação parcial D05. D01/D02 e demais
+escolhas pendentes continuam condicionando seus próprios consumidores.

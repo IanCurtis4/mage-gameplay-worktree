@@ -1,6 +1,7 @@
 # E07 — decisões humanas antes dos consumidores
 
-18/10/2026, arquitetura v1. **Todas as propostas D01–D07 abaixo estão PENDENTES.**
+18/10/2026, arquitetura v1 com delta humano D05. **D05 combate APROVADO;
+apresentação D05 PENDENTE. D01–D04/D06/D07 continuam PENDENTES.**
 Fonte aprovada: [PRODUCT_DIRECTION](../../PRODUCT_DIRECTION.md).
 Contrato: [E07](../e07_contract.md). Resposta humana futura deve registrar data,
 texto/escopo aprovado e revisão do contrato; silêncio não aprova defaults.
@@ -113,23 +114,31 @@ Bloqueia revive em F5 e adaptadores de morte; suspensão nunca usa essa regra.
 
 ## D05 — altura, combate e leitura visual
 
-**Proposta:** mundo lógico Vector3 com superfícies explícitas, atores/sprites e
-câmera atuais preservados na primeira amostra 2,5D. Desnível em mesma unidade da
-distância horizontal. Alcance direto euclidiano; movimento pela rota transitável.
-Pisos/paredes sólidos ocluem ataques. Ataque de chão fica na superfície/rotas
-locais conectadas dentro do raio; explosão aérea usa volume próprio. Dash segue
-rota transitável. O teleporte existente atravessa obstáculos planos: proposta
-preservar essa exceção, com destino legal/alcance 3D, mas impedir travessia de
-laje sólida. Esta distinção nova também precisa de aceite; LoS universal revogaria
-comportamento E06. Exceções dos demais kits devem ser mapeadas antes de alterá-las.
+**Combate APROVADO expressamente em18/10/2026.** Após “F0 acabou. Pode começar F1”,
+o usuário respondeu “Aprovar essas regras” ao conjunto apresentado: ataques de
+chão se propagam pela superfície e conexões dentro do alcance; pisos sólidos
+bloqueiam ataques entre andares; dash segue caminhos transitáveis; teleporte
+mantém a travessia de obstáculos planos existente, exige destino legal e não
+atravessa lajes sólidas. Altura conta para alcance, sem bônus de high ground,
+como já aprovado na direção humana. Alcance direto euclidiano 3D, na mesma
+unidade horizontal; movimento mede a rota transitável.
 
-Clique escolhe a superfície visível sob o ponteiro, mostra marcador e rejeita
-destino oculto/ambíguo; ponte e chão inferior têm seleção distinta. Proposta
-de ocultação visual do teto para legibilidade não remove colisão.
-Alternativa híbrida 3D precisa do gate low-poly e de nova aprovação visual.
-Bloqueia integração espacial F1 e conteúdo final; F0 pode definir WorldPoint e
-validação de conectores sem aprovar esta solução visual. Guia espacial detalha
-proposta, não força renderer ou modifica kits por inferência.
+Implementação técnica: mundo lógico Vector3 com superfícies explícitas e
+geometria comum. Explosão aérea usa volume próprio e oclusão declarada; inventariar
+as exceções de todos os kits antes de alterar comportamento. Não impor LoS
+universal ao teleporte e assim revogar sua exceção plana E06. Novas escolhas de
+produto que o inventário revelar continuam exigindo resposta específica.
+
+**Apresentação PENDENTE de resposta à pergunta enviada em18/10:** preservar
+atores/sprites e câmera atuais na primeira amostra 2,5D; clique escolhe superfície
+visível sob o ponteiro, mostra marcador e rejeita destino oculto/ambíguo; ponte e
+chão inferior têm seleção distinta. Ocultação visual de teto para legibilidade
+não remove colisão. Alternativa híbrida 3D precisa do gate low-poly e de aprovação
+visual. A ausência de resposta não aprova renderer/projeção.
+
+F1 pode iniciar a lógica espacial aprovada e testes independentes; integração
+visual/clique multialtura e conclusão do pacote aguardam a parte visual. Ver
+[despacho F1](f1_dispatch.md). F0 já integrado não depende dessa escolha.
 
 ## D06 — fronteira de ameaça
 
