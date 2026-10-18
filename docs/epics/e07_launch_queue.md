@@ -113,3 +113,8 @@ F0 integrado em `42604ef8674a2c28f5aadc633b73cda15178e0b3` e arquivado;
 F1” e aprovou regras de combate D05. [Despacho F1](e07/f1_dispatch.md) delimita
 lógica espacial e testes independentes da apresentação D05, ainda pendente.
 Sem início de F2+ ou decisão implícita das demais propostas.
+
+F1 criado e início confirmado: chat `01a14fae-037f-7602-814a-d1dbb5942143`,
+**RagRPG | E07-F1 — Altura e combate espacial**, gpt-6.1-sol/high; base
+`ab351817a7157e90b6853556b193c5cd28757f7c`, codex/e07-f1 no checkout isolado do despacho.
+Somente lógica espacial/testes independentes liberados enquanto falta resposta visual D05.

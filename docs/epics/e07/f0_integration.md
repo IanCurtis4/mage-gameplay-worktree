@@ -49,3 +49,8 @@ de F0 como validação de atores, ponte jogável, combate ou renderer multialtur
 API [F0](f0_api.md) disponível no hash integrado. F1 recebe checkout e arquivos
 por [despacho próprio](f1_dispatch.md). O recibo F0 é histórico; decisões posteriores
 e estado de integração são registrados aqui e no índice, sem reescrever sua evidência.
+
+Chat F0 arquivado com sucesso em18/10 após esta conferência. Chat F1 criado:
+`01a14fae-037f-7602-814a-d1dbb5942143`, base documental/executável
+`ab351817a7157e90b6853556b193c5cd28757f7c`. Coordenação confirmou estado ativo e
+início da lógica espacial; aprovação da apresentação D05 permanece pendente.
