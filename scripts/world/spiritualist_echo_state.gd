@@ -22,6 +22,24 @@ func mark(target_id: int, echo_power: float) -> void:
 		return
 	marks[target_id] = {"remaining": MARK_DURATION, "echo_power": echo_power}
 
+func mark_world(target: CombatActor, echo_power: float) -> bool:
+	var area := _capture_world_origin(target)
+	if area == null or not is_finite(echo_power) or echo_power <= 0.0: return false
+	mark(target.get_instance_id(),echo_power)
+	marks[target.get_instance_id()]["world_origin"] = area
+	return true
+
+func _capture_world_origin(target: CombatActor, previous: WorldEffectArea = null) -> WorldEffectArea:
+	if not is_instance_valid(target) or not target.is_alive() or target.world_motion == null or not target.world_motion.is_current_world(): return null
+	if previous != null and (not previous.is_current_world() or target.world_motion.geometry != previous.geometry or target.world_point().stage_id != previous.anchor().stage_id): return null
+	var area := WorldEffectArea.new()
+	if not area.configure(target.world_motion.geometry,target.world_point(),target.world_motion.profile(),&"ground_connected",target.world_motion.geometry.geometry_revision)["ok"]: return null
+	return area
+
+func _mark_world_current(target_id: int) -> bool:
+	var origin: WorldEffectArea = marks.get(target_id,{}).get("world_origin")
+	return origin == null or _capture_world_origin(instance_from_id(target_id) as CombatActor,origin) != null
+
 func has_mark(target_id: int) -> bool:
 	return marks.has(target_id)
 
@@ -42,6 +60,10 @@ func record_hit(result: Dictionary, magic_attack_at_trigger: float, positions: D
 	if bool(result.get("killed", false)):
 		marks.erase(target_id)
 		return false
+	if not _mark_world_current(target_id):
+		marks.erase(target_id)
+		return false
+	var world_origin: WorldEffectArea = marks[target_id].get("world_origin")
 	var emission_id := int(result.get("emission_id", 0))
 	var wave_id := int(wave_by_emission.get(emission_id, 0)) if emission_id > 0 else 0
 	if wave_id <= 0 or not waves.has(wave_id):
@@ -51,6 +73,9 @@ func record_hit(result: Dictionary, magic_attack_at_trigger: float, positions: D
 		next_wave_id += 1
 		var eligible: Dictionary[int, float] = {}
 		for marked_id: int in marks:
+			var marked_origin: WorldEffectArea = marks[marked_id].get("world_origin")
+			if world_origin == null and marked_origin != null: continue
+			if world_origin != null and (marked_origin == null or not marked_origin.is_current_world() or marked_origin.geometry != world_origin.geometry or marked_origin.anchor().stage_id != world_origin.anchor().stage_id or not _mark_world_current(marked_id)): continue
 			eligible[marked_id] = float(marks[marked_id]["echo_power"])
 		var context: CombatEventContext = result.get("context")
 		if context != null:
@@ -58,7 +83,7 @@ func record_hit(result: Dictionary, magic_attack_at_trigger: float, positions: D
 			carriers.assign(eligible.keys())
 			if context.ledger() == null or not context.ledger().bind_echo_carriers(context, carriers):
 				return false
-		waves[wave_id] = {"eligible": eligible, "fixed_origin": bool(result.get("effect_snapshot", {}).get("kit_policies", {}).get(&"echo_origin_fixed", false)), "scheduled": {}, "pairs": {}, "shown_targets": {}, "magic_attack": maxf(0.0, magic_attack_at_trigger), "context": result.get("context"), "damage_multiplier": result.get("damage_dealt_multiplier", 1.0)}
+		waves[wave_id] = {"world_origin":world_origin,"eligible": eligible, "fixed_origin": bool(result.get("effect_snapshot", {}).get("kit_policies", {}).get(&"echo_origin_fixed", false)), "scheduled": {}, "pairs": {}, "shown_targets": {}, "magic_attack": maxf(0.0, magic_attack_at_trigger), "context": result.get("context"), "damage_multiplier": result.get("damage_dealt_multiplier", 1.0)}
 		if emission_id > 0:
 			wave_by_emission[emission_id] = wave_id
 	return _schedule_carrier(wave_id, target_id, positions)
@@ -75,7 +100,9 @@ func record_echo_impact(wave_id: int, result: Dictionary, echo_power: float, pos
 	if wave["eligible"].has(target_id):
 		_schedule_carrier(wave_id, target_id, positions)
 	# Reapplication is for the next player action, never reentry into this wave.
-	mark(target_id, echo_power)
+	var world_origin: WorldEffectArea = wave.get("world_origin")
+	if world_origin == null: mark(target_id, echo_power)
+	elif _capture_world_origin(instance_from_id(target_id) as CombatActor,world_origin) != null: mark_world(instance_from_id(target_id) as CombatActor,echo_power)
 	return first_visual
 
 func claim_pair(wave_id: int, carrier_id: int, target_id: int) -> bool:
@@ -96,11 +123,16 @@ func _schedule_carrier(wave_id: int, target_id: int, positions: Dictionary[int, 
 	var wave: Dictionary = waves[wave_id]
 	if not wave["eligible"].has(target_id) or wave["scheduled"].has(target_id):
 		return false
-	if bool(wave.get("fixed_origin", false)) and (not positions.has(target_id) or not positions[target_id].is_finite()): return false
+	var world_origin: WorldEffectArea = wave.get("world_origin")
+	var captured: WorldEffectArea
+	if world_origin != null:
+		captured = _capture_world_origin(instance_from_id(target_id) as CombatActor,world_origin)
+		if captured == null: return false
+	elif bool(wave.get("fixed_origin", false)) and (not positions.has(target_id) or not positions[target_id].is_finite()): return false
 	wave["scheduled"][target_id] = true
 	marks.erase(target_id)
 	var power := float(wave["eligible"][target_id])
-	pending.append({"target_id": target_id, "wave_id": wave_id, "fixed_origin": bool(wave.get("fixed_origin", false)), "center": positions.get(target_id, Vector2.ZERO), "remaining": ECHO_DELAY, "magic_damage": float(wave["magic_attack"]) * power, "echo_power": power, "context": wave.get("context"), "damage_multiplier": wave.get("damage_multiplier", 1.0)})
+	pending.append({"world_origin":captured,"target_id": target_id, "wave_id": wave_id, "fixed_origin": bool(wave.get("fixed_origin", false)), "center": positions.get(target_id, Vector2.ZERO), "remaining": ECHO_DELAY, "magic_damage": float(wave["magic_attack"]) * power, "echo_power": power, "context": wave.get("context"), "damage_multiplier": wave.get("damage_multiplier", 1.0)})
 	return true
 
 func finish_resolution() -> void:
@@ -151,4 +183,4 @@ func clear() -> void:
 
 func can_record_hit(result: Dictionary) -> bool:
 	var target := int(result.get("target_id", 0))
-	return int(result.get("source_id", 0)) == source_id and marks.has(target) and bool(result.get("can_trigger_effects", false)) and float(result.get("actual_damage", 0.0)) > 0.0 and not bool(result.get("killed", false)) and StringName(result.get("skill_id", &"")) not in [&"", &"basic_attack", &"burn_tick", &"bleed_tick"] and pending.size() < MAX_PENDING and waves.size() < MAX_WAVES
+	return int(result.get("source_id", 0)) == source_id and marks.has(target) and _mark_world_current(target) and bool(result.get("can_trigger_effects", false)) and float(result.get("actual_damage", 0.0)) > 0.0 and not bool(result.get("killed", false)) and StringName(result.get("skill_id", &"")) not in [&"", &"basic_attack", &"burn_tick", &"bleed_tick"] and pending.size() < MAX_PENDING and waves.size() < MAX_WAVES

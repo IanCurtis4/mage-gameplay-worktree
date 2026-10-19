@@ -19,6 +19,9 @@ func configure(world: WorldGeometry, anchor: ExpeditionWorldPoint, traversal: Di
 	_rule = rule
 	return {"ok":true,"error_code":&""}
 
+func is_current_world() -> bool:
+	return geometry != null and _configuration_revision == geometry.configuration_revision
+
 func anchor() -> ExpeditionWorldPoint:
 	return ExpeditionWorldPoint.create(_anchor.stage_id,_anchor.surface_id,_anchor.position) if _anchor != null else null
 

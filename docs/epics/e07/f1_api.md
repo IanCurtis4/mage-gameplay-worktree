@@ -249,13 +249,13 @@ configura suas três áreas/schedule originais; Dreno/Procissão iniciam os guar
 espaciais existentes. Cones/linhas corpo a corpo consultam direção/LoS 3D no
 handler canônico, sem refazer fórmulas. Os placeholders Vector2 são apresentação.
 
-Whitelist nominal em WorldSkillCast (39 IDs), também exposta como cast_entry no
+Whitelist nominal em WorldSkillCast (42 IDs), também exposta como cast_entry no
 inventário: alvo dirigido, cones/linhas, oito tipos de projétil, seis placements,
 quatro áreas próprias e quatro estados self_only. Isso informa entrada disponível,
 não certifica todos os efeitos de um kit. Shield Wall/dash/teleporte conservam
 as APIs espaciais próprias já documentadas. Snare/Explosive herdadas pela Caçadora
 retornam spatial_hunter_composition_required até ligar reação/abertura espaciais;
-Geômetra, ecos, paredes, demais campos e mobilidades continuam pendentes.
+Geômetra, paredes, demais campos e mobilidades continuam pendentes.
 
 WorldTargetLock.configure(caster,target,range,revision) valida alcance/LoS somente
 na admissão e captura alvo fraco, estágio e identidade da geometria. validate()
@@ -272,6 +272,51 @@ configure legado recusa alvo bound sem guard. Assombro consulta cone/LoS 3D;
 Grito Perfurante/Intimidador consultam área de chão da origem capturada, mantendo
 a política original de raio sem padding. Dissipação usa placement WorldPoint e
 consulta membership antes de dano, Foco, bônus por marca e weaken canônicos.
+
+## Trilha direcional no suporte
+
+WorldGeometry.ground_line_samples(source,heading,spacing,count,profile,revision)
+segue a direção horizontal x/z; y vem das superfícies reais. spacing mede distância
+3D acumulada, inclusive rampas. Retorna data.points copiados com superfície e
+posição, truncated e stop_reason. Aceita só aberturas/conexões autorizadas pelo
+perfil, sem detour, salto entre projeções ou reparo de destino. Obstáculo/borda
+encerra o prefixo. Query inválida/stale falha; prefixo vazio é no_valid_centers no
+cast e não paga. A geometria não registra movimento/ocupante nesta consulta pura.
+
+WorldSkillCast captura e revalida esse plano para Trilha de Brasas antes do custo.
+preview expõe ground_points copiados; world_cast_ground_points(skill) entrega
+WorldPoints durante o handler. Os três centros a80/160/240 unidades, ou prefixo
+legal, alimentam ElementalistSequence com áreas próprias, intervalos0.15 e um
+claim por alvo/emissão. Movimento posterior do caster não move centros. Pausa,
+remoção/morte da fonte ou troca do mundo impedem próximos pulsos; cada área usa
+geometria atual ao resolver dano. Não há fórmula nova nem segundo hit na sobreposição.
+
+## Ecos e saltos elementais
+
+SpiritualistEchoState.mark_world(target,power) registra marca com identidade de
+mundo/superfície separada de posições de apresentação. No gatilho, a onda congela
+política, lista elegível e contexto causal atuais. Cada portador agenda sua própria
+WorldEffectArea copiada; a origem fixa conserva esse suporte e a origem móvel
+captura o ponto atual na resolução. A retirada de augment não muda a onda emitida.
+Reaplicação preserva identidade espacial para a próxima ação; claims de portador/
+par, delay, dano e limites finitos continuam canônicos. É a exceção explícita de
+Eco do ledger, não nova raiz/proc genérico. Inscrição de Drenagem usa mark_world.
+
+RunController aplica Maldição coletiva e ecos com ground_connected, ressample na
+resolução e entre callbacks. Laje/conexões/range usam unidades lógicas; coordenadas
+Vector2 antigas só apresentam VFX. Morte/remoção antes do delay cancela a onda do
+portador. Morte durante explosão já iniciada conserva a origem capturada e pode
+atingir vizinhos válidos, conforme o contrato nominal. Troca do mundo invalida a
+área inteira; remoção da fonte não pode desreferenciar um ator liberado.
+WorldEffectArea.is_current_world() permite esse teste de época sem query hostil.
+
+Arco Voltaico tem entrada WorldSkillCast e até dois saltos por volume direto.
+Cada salto escolhe o alvo vivo legal mais próximo do WorldPoint anterior, com
+range3D/offsets reais do corpo, oclusão e desempate por ID. Captura o próximo ponto
+antes de callbacks letais, sem permitir atravessar lajes ou migrar mundos. Repete
+admissão antes do dano; dano nulo encerra. Primário e saltos secundários continuam
+no resolver central com os coeficientes, marca/bônus/stun e orçamento originais.
+A prova lógica desses consumidores não aprova apresentação multialtura.
 
 ## Adaptador plano e próximos consumidores
 

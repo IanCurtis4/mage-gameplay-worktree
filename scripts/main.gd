@@ -1478,6 +1478,7 @@ func _on_elementalist_area_requested(skill_id: StringName, center: Vector2, radi
 		if world_area == null: return
 	if world_area == null and battle_indicators != null: battle_indicators.show_elementalist_pulse(skill_id, center, radius, element)
 	for target_actor: CombatActor in enemies.duplicate():
+		if not is_instance_valid(player): return
 		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
 			continue
 		if world_area != null:
@@ -1502,7 +1503,13 @@ func _on_elementalist_ember_path_requested(centers: Array[Vector2], request: Dam
 	sequence.pulse_requested.connect(_on_elementalist_area_requested)
 	add_child(sequence)
 	sequence.add_to_group("player_effects")
-	sequence.configure(player, centers, requests, elements, SkillGeometry.ELEMENTALIST_EMBER_PATH_RADIUS, 0.15, true)
+	if player.world_motion != null:
+		sequence.world_pulse_requested.connect(_on_world_elementalist_area_requested)
+		var anchors := player.world_cast_ground_points(&"elementalist_ember_path")
+		var valid := sequence.configure_world(player,anchors,requests,elements,SkillGeometry.ELEMENTALIST_EMBER_PATH_RADIUS,0.15,true,player.world_motion.geometry.geometry_revision)
+		if not valid["ok"]: sequence.queue_free()
+	else:
+		sequence.configure(player, centers, requests, elements, SkillGeometry.ELEMENTALIST_EMBER_PATH_RADIUS, 0.15, true)
 
 func _on_elementalist_tri_nova_requested(center: Vector2, requests: Array[DamageRequest], marked_bonus: float) -> void:
 	var centers: Array[Vector2] = [center, center, center]
@@ -1530,7 +1537,7 @@ func _apply_elementalist_hit(request: DamageRequest, target_actor: CombatActor, 
 	if marked:
 		resolved_request.magic_damage += marked_bonus
 	var result := target_actor.apply_damage(resolved_request, rng)
-	if float(result.get("actual_damage", 0.0)) <= 0.0:
+	if float(result.get("actual_damage", 0.0)) <= 0.0 or not is_instance_valid(target_actor):
 		return result
 	if element == &"ice" and target_actor.is_alive():
 		target_actor.apply_slow(0.40, 2.5, request.skill_id)
@@ -1550,7 +1557,51 @@ func _elementalist_resonance_request(request: DamageRequest, target_actor: Comba
 		resolved.magic_damage += request.prismatic_resonance_damage
 	return resolved
 
+func _on_world_elementalist_lightning_arc_requested(request: DamageRequest, target_actor: CombatActor, jump_damage: float, marked_bonus: float) -> void:
+	if not player.world_motion.is_current_world(): return
+	var origin := WorldEffectArea.new()
+	if not origin.configure(player.world_motion.geometry,player.world_point(),player.world_motion.profile(),&"direct_volume",player.world_motion.geometry.geometry_revision)["ok"]: return
+	var source_height := float(player.world_motion.profile()["height"])*0.5
+	var reach := player.skill_range(&"elementalist_lightning_arc")
+	var visited: Array[int] = []
+	var current := target_actor
+	for index: int in range(3):
+		if not is_instance_valid(current) or not current.is_alive() or current.world_motion == null: break
+		var shape := {"source_offset":Vector3.UP*source_height,"target_offset":Vector3.UP*float(current.world_motion.profile()["height"])*0.5}
+		var admission := origin.query(current,reach,shape)
+		if not admission["ok"] or not admission["data"]["hit"]: break
+		# Capture the next source before death/reentry callbacks can remove its actor.
+		var next_origin := WorldEffectArea.new()
+		if not next_origin.configure(origin.geometry,current.world_point(),current.world_motion.profile(),&"direct_volume",origin.geometry.geometry_revision)["ok"]: break
+		source_height = float(current.world_motion.profile()["height"])*0.5
+		visited.append(current.get_instance_id())
+		var hit_request := request.copy()
+		if index > 0:
+			hit_request.magic_damage = jump_damage
+			hit_request.is_secondary = true
+		var result := _apply_elementalist_hit(hit_request,current,&"lightning",marked_bonus)
+		if float(result.get("actual_damage",0.0)) <= 0.0: break
+		origin = next_origin
+		reach = SkillGeometry.ELEMENTALIST_LIGHTNING_CHAIN_RANGE
+		current = _world_elementalist_chain_target(origin,source_height,visited)
+
+func _world_elementalist_chain_target(origin: WorldEffectArea, source_height: float, visited: Array[int]) -> CombatActor:
+	var chosen: CombatActor
+	var nearest := INF
+	for enemy: CombatActor in enemies.duplicate():
+		if not is_instance_valid(enemy) or not enemy.is_alive() or enemy.world_motion == null or visited.has(enemy.get_instance_id()): continue
+		var result := origin.query(enemy,SkillGeometry.ELEMENTALIST_LIGHTNING_CHAIN_RANGE,{"source_offset":Vector3.UP*source_height,"target_offset":Vector3.UP*float(enemy.world_motion.profile()["height"])*0.5})
+		if not result["ok"] or not result["data"]["hit"]: continue
+		var distance := float(result["data"]["distance"])
+		if distance < nearest or (is_equal_approx(distance,nearest) and chosen != null and enemy.get_instance_id() < chosen.get_instance_id()):
+			chosen = enemy
+			nearest = distance
+	return chosen
+
 func _on_elementalist_lightning_arc_requested(request: DamageRequest, target_actor: CombatActor, jump_damage: float, marked_bonus: float) -> void:
+	if player.world_motion != null:
+		_on_world_elementalist_lightning_arc_requested(request,target_actor,jump_damage,marked_bonus)
+		return
 	var visited: Array[int] = []
 	var current := target_actor
 	var visual_origin := player.global_position + Vector2(0, -24)
@@ -1616,6 +1667,11 @@ func _on_spiritualist_echo_curse_requested(request: DamageRequest, target_actor:
 	if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
 		return
 	var origin := target_actor.global_position
+	var world_area: WorldEffectArea
+	if player.world_motion != null:
+		if target_actor.world_motion == null or not player.world_can_reach(target_actor,player.skill_range(&"spiritualist_echo_curse")): return
+		world_area = WorldEffectArea.new()
+		if not world_area.configure(player.world_motion.geometry,target_actor.world_point(),player.world_motion.profile(),&"ground_connected",player.world_motion.geometry.geometry_revision)["ok"]: return
 	var result := target_actor.apply_damage(request, rng)
 	if bool(result.get("can_trigger_effects", false)) and not run_finished:
 		var candidates: Array[CombatActor] = []
@@ -1627,11 +1683,15 @@ func _on_spiritualist_echo_curse_requested(request: DamageRequest, target_actor:
 		for candidate: CombatActor in candidates:
 			if candidate == null or not is_instance_valid(candidate) or not candidate.is_alive():
 				continue
-			if candidate != target_actor and origin.distance_to(candidate.global_position) > SkillGeometry.SPIRITUALIST_ECHO_SPREAD_RADIUS + candidate.collision_radius:
+			if world_area != null:
+				if not world_area.contains_actor(candidate,SkillGeometry.SPIRITUALIST_ECHO_SPREAD_RADIUS): continue
+			elif candidate != target_actor and origin.distance_to(candidate.global_position) > SkillGeometry.SPIRITUALIST_ECHO_SPREAD_RADIUS + candidate.collision_radius:
 				continue
-			if candidate != target_actor and not navigation.is_segment_clear(origin, candidate.global_position, 0.0):
+			if world_area == null and candidate != target_actor and not navigation.is_segment_clear(origin, candidate.global_position, 0.0):
 				continue
-			spiritualist_echo_state.mark(candidate.get_instance_id(), echo_power)
+			if world_area != null:
+				if not spiritualist_echo_state.mark_world(candidate,echo_power): continue
+			else: spiritualist_echo_state.mark(candidate.get_instance_id(), echo_power)
 			if battle_indicators != null:
 				battle_indicators.show_spiritualist_event(&"sigil", candidate.global_position + Vector2(0, -22), candidate)
 				if candidate != target_actor:
@@ -1645,24 +1705,38 @@ func _echo_positions() -> Dictionary[int, Vector2]:
 	return positions
 
 func _apply_spiritualist_echo(echo: Dictionary) -> void:
+	if not is_instance_valid(player): return
+	if is_instance_valid(player) and player.is_inside_tree() and player.get_tree().paused: return
 	var carrier := instance_from_id(int(echo["target_id"])) as CombatActor
 	if carrier == null or not is_instance_valid(carrier) or not carrier.is_alive():
 		return
 	var fixed := bool(echo.get("fixed_origin", false))
+	var world_area: WorldEffectArea = echo.get("world_origin")
+	if player.world_motion != null and world_area == null: return
+	if world_area != null:
+		if not world_area.is_current_world() or player.world_motion == null or player.world_motion.geometry != world_area.geometry or not player.world_motion.is_current_world() or carrier.world_motion == null or not carrier.world_motion.is_current_world() or carrier.world_motion.geometry != world_area.geometry or carrier.world_point().stage_id != world_area.anchor().stage_id: return
+		if not fixed:
+			var following := WorldEffectArea.new()
+			if not following.configure(world_area.geometry,carrier.world_point(),carrier.world_motion.profile(),&"ground_connected",world_area.geometry.geometry_revision)["ok"]: return
+			world_area = following
 	var center: Vector2 = echo["center"] if fixed else carrier.global_position
 	var affected: Array[CombatActor] = []
 	if not fixed: affected.append(carrier)
 	for candidate: CombatActor in enemies.duplicate():
 		if candidate == null or (candidate == carrier and not fixed) or not is_instance_valid(candidate) or not candidate.is_alive():
 			continue
-		if center.distance_to(candidate.global_position) <= SkillGeometry.SPIRITUALIST_ECHO_SPREAD_RADIUS + candidate.collision_radius and navigation.is_segment_clear(center, candidate.global_position, 0.0):
+		if world_area.contains_actor(candidate,SkillGeometry.SPIRITUALIST_ECHO_SPREAD_RADIUS) if world_area != null else (center.distance_to(candidate.global_position) <= SkillGeometry.SPIRITUALIST_ECHO_SPREAD_RADIUS + candidate.collision_radius and navigation.is_segment_clear(center, candidate.global_position, 0.0)):
 			affected.append(candidate)
 	affected.sort_custom(func(a: CombatActor, b: CombatActor) -> bool: return a.get_instance_id() < b.get_instance_id())
 	for target_actor: CombatActor in affected:
 		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
 			continue
+		if not is_instance_valid(player): return
 		# Recheck geometry at resolution, not only when the wave was scheduled.
-		if (fixed or target_actor != carrier) and (center.distance_to(target_actor.global_position) > SkillGeometry.SPIRITUALIST_ECHO_SPREAD_RADIUS + target_actor.collision_radius or not navigation.is_segment_clear(center, target_actor.global_position, 0.0)):
+		if world_area != null:
+			if not world_area.is_current_world(): return
+			if not world_area.contains_actor(target_actor,SkillGeometry.SPIRITUALIST_ECHO_SPREAD_RADIUS): continue
+		elif (fixed or target_actor != carrier) and (center.distance_to(target_actor.global_position) > SkillGeometry.SPIRITUALIST_ECHO_SPREAD_RADIUS + target_actor.collision_radius or not navigation.is_segment_clear(center, target_actor.global_position, 0.0)):
 			continue
 		if not spiritualist_echo_state.claim_pair(int(echo["wave_id"]), int(echo["target_id"]), target_actor.get_instance_id()):
 			continue
@@ -1751,7 +1825,8 @@ func _advance_spiritualist_drain(delta: float) -> void:
 			player.grant_spiritualist_focus(request.context)
 		var result := target_actor.apply_damage(request, rng)
 		if inscription_power > 0.0 and not run_finished and player.is_alive() and is_instance_valid(target_actor) and target_actor.is_alive() and float(result.get("actual_damage", 0.0)) > 0.0:
-			spiritualist_echo_state.mark(target_actor.get_instance_id(), inscription_power)
+			if player.world_motion != null: spiritualist_echo_state.mark_world(target_actor,inscription_power)
+			else: spiritualist_echo_state.mark(target_actor.get_instance_id(), inscription_power)
 		var healed := player.heal_from_spiritualist_drain(result, healed_before)
 		spiritualist_drain_state.healed_total = healed_before + healed
 		if healed > 0.0:

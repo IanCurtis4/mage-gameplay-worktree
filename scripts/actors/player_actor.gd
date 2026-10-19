@@ -1082,7 +1082,7 @@ func use_elementalist_glacial_ring() -> bool:
 func use_elementalist_lightning_arc(enemy: CombatActor) -> bool:
 	if not _is_elementalist() or not _can_spend(&"elementalist_lightning_arc") or not can_target_skill(&"elementalist_lightning_arc", enemy):
 		return false
-	_spend(&"elementalist_lightning_arc")
+	if not _spend(&"elementalist_lightning_arc"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"elementalist_lightning_arc")
 	var rank_definition := _runtime_rank_definition(&"elementalist_lightning_arc")
@@ -1094,6 +1094,9 @@ func use_elementalist_lightning_arc(enemy: CombatActor) -> bool:
 
 func elementalist_ember_centers(direction: Vector2) -> Array[Vector2]:
 	var centers: Array[Vector2] = []
+	if world_motion != null:
+		for _point: ExpeditionWorldPoint in world_cast_ground_points(&"elementalist_ember_path"): centers.append(Vector2.ZERO)
+		return centers
 	if navigation == null or not direction.is_finite():
 		return centers
 	var facing := direction.normalized() if not direction.is_zero_approx() else _last_facing
@@ -1110,7 +1113,7 @@ func use_elementalist_ember_path(direction: Vector2) -> bool:
 	var centers := elementalist_ember_centers(direction)
 	if centers.is_empty():
 		return false
-	_spend(&"elementalist_ember_path")
+	if not _spend(&"elementalist_ember_path"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"elementalist_ember_path")
 	var request := _make_magic_request(null, &"elementalist_ember_path", _magic_power(&"elementalist_ember_path"), definition.accuracy_mode, definition.can_crit)
@@ -1143,7 +1146,7 @@ func use_spiritualist_echo_curse(enemy: CombatActor) -> bool:
 	var rank_definition := _runtime_rank_definition(skill_id)
 	if not _is_spiritualist() or rank_definition == null or not can_target_skill(skill_id, enemy) or not _can_spend(skill_id):
 		return false
-	_spend(skill_id)
+	if not _spend(skill_id): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var request := _make_magic_request(enemy, skill_id, _magic_power(skill_id) + consume_spiritualist_focus(), definition.accuracy_mode, definition.can_crit)
@@ -2434,6 +2437,11 @@ func world_cast_direction() -> Vector3:
 	return _world_executing_cast.direction(self) if _world_executing_cast != null else Vector3.ZERO
 func world_cast_anchor() -> ExpeditionWorldPoint:
 	return _world_executing_cast.anchor() if _world_executing_cast != null else null
+func world_cast_ground_points(skill: StringName) -> Array[ExpeditionWorldPoint]:
+	var points: Array[ExpeditionWorldPoint] = []
+	if _world_executing_cast == null or _world_executing_cast.skill_id != skill: return points
+	for point: Dictionary in _world_executing_cast.ground_points: points.append(ExpeditionWorldPoint.create(point["stage_id"],point["surface_id"],point["position"]))
+	return points
 func world_cast_projectiles(skill: StringName) -> Array[Dictionary]:
 	return _world_executing_cast.projectiles.duplicate(true) if _world_executing_cast != null and _world_executing_cast.skill_id == skill and _world_executing_cast.committed else []
 
@@ -2447,7 +2455,7 @@ func preview_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing
 	_cast_rank_context = command.rank_context
 	var result := _validate_world_skill(command)
 	_cast_rank_context = previous
-	if result["ok"]: result["data"] = {"skill_id":skill,"geometry_revision":revision,"source":command.source().to_data(),"anchor":command.anchor().to_data() if command.anchor() != null else {},"projectiles":command.projectiles.duplicate(true)}
+	if result["ok"]: result["data"] = {"skill_id":skill,"geometry_revision":revision,"source":command.source().to_data(),"anchor":command.anchor().to_data() if command.anchor() != null else {},"projectiles":command.projectiles.duplicate(true),"ground_points":command.ground_points.duplicate(true)}
 	return result
 
 func request_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: Vector3, victim: CombatActor, actors: Array[CombatActor], revision: int, requested_rank: int = 0) -> Dictionary:
@@ -2498,6 +2506,12 @@ func _validate_world_skill(command: WorldSkillCast) -> Dictionary:
 	if command.skill_id in [&"sentinel_observe",&"sentinel_absolute_focus"] and not sentinel_state.can_pay(float(SentinelTuning.values(command.skill_id,skill_rank(command.skill_id)).get("focus_cost",0.0))): return WorldSkillCast.failure(&"skill_unavailable")
 	var valid := command.geometry_check(self)
 	if not valid["ok"]: return valid
+	command.ground_points.clear()
+	if command.skill_id == &"elementalist_ember_path":
+		var samples := world_motion.geometry.ground_line_samples(command.source(),command.direction(self),SkillGeometry.ELEMENTALIST_EMBER_PATH_STEP,3,world_motion.profile(),command.revision)
+		if not samples["ok"]: return samples
+		if samples["data"]["points"].is_empty(): return WorldSkillCast.failure(&"no_valid_centers")
+		command.ground_points.assign(samples["data"]["points"])
 	command.projectiles.clear()
 	if command.skill_id in WorldSkillCast.PROJECTILES:
 		var count := int(command.rank_context["capture"]["values"].get("projectile_count",1))
@@ -2549,6 +2563,9 @@ func _commit_world_skill(command: WorldSkillCast) -> Dictionary:
 	var actors := command.actors()
 	var accepted := false
 	match command.skill_id:
+		&"elementalist_ember_path": accepted = use_elementalist_ember_path(flat)
+		&"elementalist_lightning_arc": accepted = use_elementalist_lightning_arc(victim)
+		&"spiritualist_echo_curse": accepted = use_spiritualist_echo_curse(victim)
 		&"soul_impact": accepted = use_soul_impact(victim)
 		&"haunt": accepted = use_haunt(flat)
 		&"piercing_shout": accepted = use_piercing_shout()

@@ -32,13 +32,13 @@ Player/Mage/Sentinel e flecha hostil, chuva/traps/blast ancorados, escudo/barrei
 piche, ocultação/budget/grace, coleta, movimento/dash temporal, AI autônoma/leash,
 cast obsoleto e callbacks que removem alvos. Isso não equivale ao cast completo
 dessas ativas: entrada/preview/composição nominal ainda precisam ser integrados.
-A retomada seguinte acrescenta WorldSkillCast: 39 entradas nominais com preview,
+A retomada seguinte acrescenta WorldSkillCast: 42 entradas nominais com preview,
 preparo e commit 3D. Dreno/Procissão/Véu, áreas elementais, chuva/traps base,
 projéteis e melee consomem a intenção capturada. A prova nominal é delimitada no
 recibo; isso ainda não certifica os dez kits nem os 27 efeitos compostos.
 SoulImpact, Assombro, Dissipação e gritos de área também receberam prova nominal
 de pulso/oclusão/controles, sem alterar o dano canônico.
-Geômetra, ecos, paredes/campos restantes, AoEs do Sentinela e demais mobilidades
+Geômetra, paredes/campos restantes, AoEs do Sentinela e demais mobilidades
 continuam bloqueios. API e recibo contêm o escopo exato; D05 visual não foi aprovado.
 
 ## Habilidades nominais
@@ -76,10 +76,10 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `defender_watch` — Vigília | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `double_shot` — Disparo Duplo | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `electric_discharge` — Descarga Elétrica | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
-| `elementalist_ember_path` — Trilha de Brasas | `ground_connected` | Consumidor espacial/schedule ligado; cast/preview/composição ainda pendentes |
+| `elementalist_ember_path` — Trilha de Brasas | `ground_connected` | Entrada/preview/plano linear em suporte e schedule ligados; prova nominal dirigida nos testes echo/chain/ember e recibo |
 | `elementalist_flame_burst` — Explosão de Chamas | `ground_connected` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `elementalist_glacial_ring` — Anel Glacial | `ground_connected` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
-| `elementalist_lightning_arc` — Arco Voltaico | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `elementalist_lightning_arc` — Arco Voltaico | `direct_volume` | Entrada e cada salto por volume 3D ligados; prova nominal dirigida nos testes echo/chain/ember e recibo |
 | `elementalist_prismatic_focus` — Foco Prismático | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `elementalist_prismatic_resonance` — Ressonância Prismática | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `elementalist_tri_nova` — Nova Tríplice | `ground_connected` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
@@ -132,7 +132,7 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `soul_impact` — Impacto das Almas | `direct_volume` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS59 |
 | `spiritualist_channel_focus` — Foco do Além | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `spiritualist_dissipation` — Rito de Dissipação | `ground_connected` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS59 |
-| `spiritualist_echo_curse` — Maldição do Eco | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `spiritualist_echo_curse` — Maldição do Eco | `direct_volume` | Entrada/propagação/seguir ou fixar origem espaciais ligados; prova nominal dirigida nos testes echo/chain/ember e recibo |
 | `spiritualist_echo_recovery` — Recolhimento | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `spiritualist_procession` — Procissão de Espectros | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `spiritualist_soul_drain` — Drenagem Espiritual | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
@@ -152,7 +152,7 @@ causal original e não adiciona LoS a DoT já aplicado.
 | Ruptura, Execução, Arrancar Fôlego, Talho, Golpe Brutal, Provocar, Marca, Observar | Alvo e alcance 3D revalidados no commit. Custos HP/SP, marca, debuff, taunt e cura seguem emissão aprovada. Ruptura/detonação e DoTs anexados não viram outra AoE por inferência. |
 | Dash, Avanço de Muralha, Guarda de Retirada, Salto Cruento | Rota no suporte e sweep contínuo. Hits durante deslocamento mantêm máximo/ordem/emissão. Somente dash lógico entregue; outros três e empurrões ainda pendentes. |
 | Teleporte por classe/item | Destino legal/exato, range 3D, corpo não atravessa laje. Mantém passagem por obstáculos planos E06. Entrada nova não aplica clamp/nearest silencioso. Entrada legada plana conserva seu clamp de rank. |
-| PlayerProjectile/MageProjectile, ArrowProjectile e SentinelProjectile | Sweep 3D contínuo, contato mais próximo entre sólido/ator/interceptor. Separar direção fixa, homing, perfuração finita, disparo duplo/fan e consumo de foco. Preservar modificadores de impacto e limites, sem dano duplicado. Nenhum desses consumidores adaptado ainda. |
+| PlayerProjectile/MageProjectile, ArrowProjectile e SentinelProjectile | Sweep 3D contínuo, contato mais próximo entre sólido/ator/interceptor. Separar direção fixa, homing, perfuração finita, disparo duplo/fan e consumo de foco. Preservar modificadores de impacto e limites, sem dano duplicado. Consumidores reais Player/Mage/Arrow/Sentinel ligados; casts e interceptores especializados ainda delimitados no recibo. |
 | Chuva de Flechas | Centro WorldPoint capturado; chão conectado no alcance por volley. Três impactos e telegraph existentes, alvos amostrados novamente. Não atingir piso inferior/superior só por sobreposição. |
 | Laço/Explosiva e traps Caçadora | Colocação/superfície, armar, ativar, substituir/expirar e registro por dono. Filtro de alvo não substitui validação geométrica. Piche persiste em seu suporte; espinhos/bleed herdam hit; mecanismo marcado não altera geometria. |
 | Paredes fogo/raios/gelo, Barreira Fantasma, Parede de Escudos | Base no suporte e volume com altura. Cruzamento, interceptação e dano são etapas distintas. Gelo altera revision/path; parede inferior não bloqueia ponte superior. Não consumir capacidade antes do contato real. |
@@ -164,8 +164,8 @@ causal original e não adiciona LoS a DoT já aplicado.
 | Véu, Folhagem e Cobertura Total | Áreas de suporte/ocultação ancoradas à superfície; participação não atravessa laje. Grace e revelação seguem contratos atuais. Regeneração e passivas próprias não são AoE novas. |
 | Geômetra: traço/triangulação/edição/colapso | Capturar âncora de chão OU ator explicitamente, WorldPoint das arestas/interior, suporte contínuo e colisão do projétil. Refresh de âncoras móveis não troca piso por proximidade. Correntes de parede/triângulo, interações hostis, manutenção e budgets ainda não adaptados. |
 | Geômetra: ground_anchor, collapse_first_element, incidência/memória | ground_anchor fixa o ponto de emissão sem trocar receita. Primeiro elemento só seleciona regra existente. Movimento do alvo/remoção/triângulo/reflexão/canalização não podem perder surface_id. |
-| AI/mob skills/companheiro/leash | Home e destino WorldPoint, percepção/alcance pela mesma autoridade e perseguição por rota. O teste atual dirige EnemyActor manualmente; não prova aggro, leash, retorno, summon ou habilidades em multialtura. |
-| Pickup/seleção/preview | Ainda sem adaptação. Coleta precisa de suporte/rota e contexto; seleção/preview/clique aguardam apresentação D05 e devem concordar com commit. |
+| AI/mob skills/companheiro/leash | Home e destino WorldPoint, percepção/alcance pela mesma autoridade e perseguição por rota. AI autônoma/aggro/leash/retorno provados no checkpoint lógico; spawn/summon e demais habilidades ainda pendentes. |
+| Pickup/seleção/preview | Coleta espacial ligada e testada; nascimento/contexto de loot pendentes. Preview lógico nominal disponível nos casts listados; seleção/clique e inspeção visual aguardam apresentação D05. |
 
 ## Efeitos de itens, cartas e augments
 
@@ -194,8 +194,8 @@ inventados emissores espaciais para thresholds de conjunto.
 | `augment/pilot_sentinel_a` | `pilot_sentinel_a_effect` / `PROC` | sentinel_headshot | `inherit_parent`; consumidor pendente |
 | `augment/pilot_sentinel_b` | `pilot_sentinel_b_effect` / `PROC` | sentinel_net_shot | `inherit_parent`; consumidor pendente |
 | `augment/pilot_swordsman_pressure` | `pilot_swordsman_pressure_effect` / `PROC` | contato causal original | `inherit_parent`; consumidor pendente |
-| `augment/spiritualist_drain_inscription` | `spiritualist_drain_inscription_policy` / `KIT_RULE` | spiritualist_soul_drain, spiritualist_echo_curse | `drain_inscription`; consumidor pendente |
-| `augment/spiritualist_echo_fixed_origin` | `spiritualist_echo_fixed_origin_policy` / `KIT_RULE` | spiritualist_echo_curse | `echo_origin_fixed`; consumidor pendente |
+| `augment/spiritualist_drain_inscription` | `spiritualist_drain_inscription_policy` / `KIT_RULE` | spiritualist_soul_drain, spiritualist_echo_curse | `drain_inscription`; conclusão do canal cria marca espacial, prova nominal dirigida nos testes echo/chain/ember e recibo |
+| `augment/spiritualist_echo_fixed_origin` | `spiritualist_echo_fixed_origin_policy` / `KIT_RULE` | spiritualist_echo_curse | `echo_origin_fixed`; consumidor espacial e captura ligados, prova nominal dirigida nos testes echo/chain/ember e recibo |
 | `equipment/arena_ember_staff` | `pilot_staff_shape` / `SKILL_RULE` | fire_spear | `mesma regra da habilidade`; consumidor pendente |
 | `equipment/arena_hunters_bow` | `pilot_bow_hit` / `PROC` | contato causal original | `inherit_parent`; consumidor pendente |
 | `equipment/arena_prismatic_charm` | `pilot_prismatic_access` / `ACTIVE_GRANT` | fire_spear | `mesma regra da habilidade`; consumidor pendente |

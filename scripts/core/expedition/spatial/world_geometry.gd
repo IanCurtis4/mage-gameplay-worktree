@@ -325,6 +325,75 @@ func query_attack(shape: Dictionary, source: ExpeditionWorldPoint, target: Exped
 	var hit := range_ok and los_ok and shape_ok
 	return _success({"range_ok": range_ok, "los_ok": los_ok, "shape_ok": shape_ok, "hit": hit, "distance": distance, "affected_surfaces": surfaces if hit else []})
 
+func ground_line_samples(source: ExpeditionWorldPoint, heading: Vector3, spacing: float, count: int, profile: Dictionary, revision: int) -> Dictionary:
+	# Heading chooses x/z direction; support supplies y. Spacing measures actual 3D travel.
+	if not _current(revision): return _failure(&"stale_geometry")
+	if not _profile_valid(profile): return _failure(&"invalid_profile")
+	if not _point_valid(source,profile["radius"],profile["height"]): return _failure(&"invalid_support")
+	if not heading.is_finite() or Vector2(heading.x,heading.z).is_zero_approx() or not is_finite(spacing) or spacing <= 0.0 or count < 1: return _failure(&"invalid_ground_line")
+	var direction := Vector2(heading.x,heading.z).normalized()
+	var point := source.position
+	var cell := _cell(source.surface_id)
+	var distance := 0.0
+	var points: Array[Dictionary] = []
+	var visited: Array[String] = []
+	var stopped: StringName = &"unsupported_edge"
+	while not cell.is_empty() and not visited.has(cell["surface_id"]):
+		visited.append(cell["surface_id"])
+		var exit_distance := INF
+		var vertices: Array = cell["vertices"]
+		for index: int in vertices.size():
+			var a: Vector3 = vertices[index]
+			var b: Vector3 = vertices[(index+1)%vertices.size()]
+			var edge := Vector2(b.x-a.x,b.z-a.z)
+			var denominator := direction.cross(edge)
+			if absf(denominator) <= EPS: continue
+			var offset := Vector2(a.x-point.x,a.z-point.z)
+			var along := offset.cross(edge)/denominator
+			var fraction := offset.cross(direction)/denominator
+			if along > EPS and fraction >= -EPS and fraction <= 1.0+EPS: exit_distance = minf(exit_distance,along)
+		if not is_finite(exit_distance):
+			# A legal origin may already lie on the outgoing connector seam.
+			var immediate := _ground_line_connection(cell["surface_id"],point,direction,profile)
+			if immediate.is_empty(): break
+			cell = immediate
+			continue
+		var exit := Kernel.support_y(cell,point+Vector3(direction.x,0,direction.y)*exit_distance)
+		var length := point.distance_to(exit)
+		while points.size() < count and spacing*float(points.size()+1) <= distance+length+EPS:
+			var sample := point.lerp(exit,clampf((spacing*float(points.size()+1)-distance)/length,0.0,1.0))
+			var supported := ExpeditionWorldPoint.create(source.stage_id,cell["surface_id"],sample)
+			var contact := sweep(point,sample,profile,revision)
+			if not _point_valid(supported,profile["radius"],profile["height"]) or not contact["ok"] or contact["data"]["hit"]:
+				return _success({"points":points,"truncated":true,"stop_reason":&"blocked_or_unsupported"})
+			points.append(supported.to_data())
+		if points.size() == count: return _success({"points":points,"truncated":false,"stop_reason":&""})
+		var crossing := sweep(point,exit,profile,revision)
+		if not crossing["ok"] or crossing["data"]["hit"]: stopped = &"blocked"; break
+		var following := _ground_line_connection(cell["surface_id"],exit,direction,profile)
+		if following.is_empty(): break
+		distance += length
+		point = exit
+		cell = following
+	return _success({"points":points,"truncated":true,"stop_reason":stopped})
+
+func _ground_line_connection(surface: String, point: Vector3, direction: Vector2, profile: Dictionary) -> Dictionary:
+	for endpoint: Dictionary in _stage["connectors"]:
+		if endpoint["surface_id"] != surface or endpoint["kind"] not in profile["connector_kinds"] or float(endpoint["headroom"]) + EPS < float(profile["height"]): continue
+		var outward: Vector3 = endpoint["outward"]
+		if direction.dot(Vector2(outward.x,outward.z)) <= EPS: continue
+		var delta := point-Vector3(endpoint["position"])
+		var tangent := Vector2(-outward.z,outward.x)
+		if absf(Vector2(delta.x,delta.z).dot(Vector2(outward.x,outward.z))) > EPS or absf(Vector2(delta.x,delta.z).dot(tangent))+float(profile["radius"]) > float(endpoint["width"])*0.5+EPS: continue
+		for connection: Dictionary in _stage["connections"]:
+			if endpoint["connector_id"] not in [connection["a_connector"],connection["b_connector"]]: continue
+			var other_id: String = connection["b_connector"] if endpoint["connector_id"] == connection["a_connector"] else connection["a_connector"]
+			for other: Dictionary in _stage["connectors"]:
+				if other["connector_id"] != other_id or other["kind"] not in profile["connector_kinds"] or float(other["width"]) + EPS < 2.0*float(profile["radius"]) or float(other["headroom"]) + EPS < float(profile["height"]): continue
+				var following := _cell(other["surface_id"])
+				if absf(Kernel.support_y(following,point).y-point.y) <= EPS and _point_valid(ExpeditionWorldPoint.create(_stage["stage_id"],following["surface_id"],point),profile["radius"],profile["height"]): return following
+	return {}
+
 func insert_obstacle(id: String, volume: AABB, revision: int) -> Dictionary:
 	if not _current(revision): return _failure(&"stale_geometry")
 	if id.is_empty() or _temporary.has(id): return _failure(&"invalid_identity")

@@ -55,6 +55,7 @@ func _process(delta: float) -> void:
 	if is_inside_tree() and get_tree().paused:
 		return
 	var caster := _caster.get_ref() as PlayerActor if _caster != null else null
+	if is_instance_valid(caster) and caster.is_inside_tree() and caster.get_tree().paused: return
 	if caster == null or not caster.is_alive() or (not _world_areas.is_empty() and not caster.world_motion.is_current_world()):
 		queue_free()
 		return
@@ -63,6 +64,10 @@ func _process(delta: float) -> void:
 
 func _emit_due_pulses() -> void:
 	while _next_pulse < _centers.size() and _elapsed + 0.000001 >= float(_next_pulse) * _interval:
+		var caster := _caster.get_ref() as PlayerActor if _caster != null else null
+		if not is_instance_valid(caster) or not caster.is_alive(): queue_free(); return
+		if caster.is_inside_tree() and caster.get_tree().paused: return
+		if not _world_areas.is_empty() and not _world_areas[_next_pulse].is_current_world(): world_failure = &"world_reconfigured"; queue_free(); return
 		var index := _next_pulse
 		_next_pulse += 1
 		if not _world_areas.is_empty():
