@@ -249,8 +249,8 @@ configura suas três áreas/schedule originais; Dreno/Procissão iniciam os guar
 espaciais existentes. Cones/linhas corpo a corpo consultam direção/LoS 3D no
 handler canônico, sem refazer fórmulas. Os placeholders Vector2 são apresentação.
 
-Whitelist nominal em WorldSkillCast (48 IDs), também exposta como cast_entry no
-inventário: alvo dirigido, cones/linhas, oito tipos de projétil, sete placements,
+Whitelist nominal em WorldSkillCast (51 IDs), também exposta como cast_entry no
+inventário: alvo dirigido, cones/linhas, onze tipos de projétil, sete placements,
 cinco áreas próprias e quatro estados self_only. Isso informa entrada disponível,
 não certifica todos os efeitos de um kit. Shield Wall/dash/teleporte conservam
 as APIs espaciais próprias já documentadas. Snare/Explosive herdadas pela Caçadora
@@ -356,6 +356,31 @@ bordas e respeita imunidade de boss. Fenda usa ground_connected e strip nominal
 x/z220×44; alcance de chão inclui a altura percorrida, a largura não vira um tubo
 aéreo. Hemorragia/DeepBleeding herdam o evento aceito e seguem o alvo sem nova LoS.
 Não há alteração de fórmulas, catálogo ou significado de SP/token/feridas.
+
+## Disparos diretos do Sentinela
+
+WorldSkillCast acrescenta Tiro na Cabeça/Concussão dirigidos ao alvo e Perfurante
+direcional. Preflight usa o cilindro real de precisão (raio4/altura8), origem no
+corpo, alcance3D/oclusão e capacidade antes de cobrar. SP e Foco passam pelo
+handler canônico use_sentinel_reset; não se duplica SentinelMath ou o ledger.
+Cada reset mantém um único projétil especial, recuperação normal do auto e
+barreira contra outro auto no mesmo frame. Concussão continua com custo0 de Foco.
+A política SkillCastRank existente conserva esses IDs no maior rank aprendido:
+requested_rank explícito é recusado. Este delta não amplia essa política.
+
+RunController reutiliza _spawn_world_cast_projectiles(...,sentinel=true) para
+criar SentinelProjectile real. Cabeça/Concussão seguem o corpo-alvo por homing;
+Perfurante visita até20 corpos, uma vez cada. Dano/crit, stun/debuff e Foco/Leitura
+continuam nos callbacks canônicos com payload capturado no lançamento. Pausa,
+novo sólido, perda do alvo, troca do mundo e retirada posterior do build têm
+cobertura dirigida. A retirada não recalcula um projétil já emitido.
+
+PlayerActor._process remove Postura antes de um auto no mesmo frame após
+movimento lógico externo, mesmo sem deslocamento do sprite; Foco e estabilidade
+já observam WorldPoint. Marca de Observar também é limpa quando o corpo deixa
+de existir. Rede/Explosivo e suas áreas/reserva ainda exigem adaptação própria;
+os bindings legados permanecem bloqueados em multialtura. Isso não certifica o
+kit inteiro nem sua apresentação.
 
 ## Adaptador plano e próximos consumidores
 

@@ -1140,12 +1140,12 @@ func cast_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: V
 	if geometer_casting != null and geometer_casting.wall_field != null and skill in WorldSkillCast.PROJECTILES: return WorldSkillCast.failure(&"spatial_interceptor_required")
 	return player.request_world_skill(skill,anchor,facing,victim,enemies,revision,rank)
 
-func _spawn_world_cast_projectiles(skill: StringName, request: DamageRequest, victim: CombatActor, hit_limit: int, callback: Callable, mage: bool, tint: Color, discharge_bonus: float = 0.0) -> void:
+func _spawn_world_cast_projectiles(skill: StringName, request: DamageRequest, victim: CombatActor, hit_limit: int, callback: Callable, mage: bool, tint: Color, discharge_bonus: float = 0.0, sentinel: bool = false) -> void:
 	if not player.world_motion.is_current_world(): return
 	# Origins, dimensions, count and rank-sensitive speed/range were validated together before cost.
 	for spec: Dictionary in player.world_cast_projectiles(skill):
-		var projectile: PlayerProjectile = MageProjectile.new() if mage else PlayerProjectile.new()
-		if mage and skill in [&"fire_spear",&"ice_spear",&"lightning"]:
+		var projectile: PlayerProjectile = MageProjectile.new() if mage else (SentinelProjectile.new() if sentinel else PlayerProjectile.new())
+		if (mage and skill in [&"fire_spear",&"ice_spear",&"lightning"]) or (sentinel and skill != &"sentinel_piercing_shot"):
 			projectile.configure_homing(request.copy(),victim,Vector2.ZERO,navigation,spec["speed"],spec["range"],tint)
 		else:
 			projectile.configure_directional(request.copy(),Vector2.ZERO,Vector2.RIGHT,enemies,navigation,spec["speed"],spec["range"],hit_limit,tint)
@@ -1203,6 +1203,10 @@ func _on_precision_projectile_requested(skill_id: StringName, request: DamageReq
 	_spawn_precision_projectiles(skill_id, request, direction, count, hit_limit, _on_precision_projectile_hit)
 
 func _on_sentinel_projectile_requested(request: DamageRequest, target_actor: CombatActor, direction: Vector2, payload: Dictionary) -> void:
+	if player.world_motion != null:
+		if request.skill_id not in [&"sentinel_headshot",&"sentinel_piercing_shot",&"sentinel_concussion_shot"]: return # Area payloads still require their own spatial adapter.
+		_spawn_world_cast_projectiles(request.skill_id,request,target_actor,20 if request.skill_id == &"sentinel_piercing_shot" else 1,_on_sentinel_direct_hit.bind(payload.duplicate(true)),false,Color("a6e3ee") if request.skill_id == &"sentinel_piercing_shot" else Color("d7f0de"),0.0,true)
+		return
 	if request.skill_id in [&"sentinel_net_shot", &"sentinel_explosive_shot"]:
 		var area := SentinelAreaProjectile.new()
 		var origin := player.global_position + PlayerProjectile.BODY_OFFSET

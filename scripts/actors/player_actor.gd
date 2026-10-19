@@ -384,21 +384,22 @@ func use_sentinel_observe(enemy: CombatActor) -> bool:
 func use_sentinel_reset(skill_id: StringName, point: Vector2, enemy: CombatActor = null) -> bool:
 	if skill_id not in [&"sentinel_headshot", &"sentinel_piercing_shot", &"sentinel_concussion_shot"] or not point.is_finite() or not sentinel_can_use(skill_id):
 		return false
-	if navigation == null:
-		return false
 	var piercing := skill_id == &"sentinel_piercing_shot"
-	if not piercing and (not can_target_skill(skill_id, enemy) or not navigation.is_segment_clear(global_position, enemy.global_position, 0.0)):
-		return false
-	if piercing and (point.distance_squared_to(global_position) < 0.001 or not navigation.is_walkable(global_position)):
-		return false
-	var facing := _resolved_facing(aim_direction(point if piercing else enemy.global_position))
+	if world_motion != null:
+		if _world_executing_cast == null or _world_executing_cast.skill_id != skill_id: return false
+		if not piercing and (not can_target_skill(skill_id,enemy) or not _target_line_clear(enemy)): return false
+	else:
+		if navigation == null: return false
+		if not piercing and (not can_target_skill(skill_id, enemy) or not navigation.is_segment_clear(global_position, enemy.global_position, 0.0)): return false
+		if piercing and (point.distance_squared_to(global_position) < 0.001 or not navigation.is_walkable(global_position)): return false
+	var facing := _resolved_facing(Vector2(world_cast_direction().x,world_cast_direction().z) if world_motion != null else aim_direction(point if piercing else enemy.global_position))
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var tuning := SentinelTuning.values(skill_id, skill_rank(skill_id))
 	var power := SentinelMath.raw_power(skill_id, skill_rank(skill_id), stat_breakdown)
 	var request := _make_magic_request(null, skill_id, power, definition.accuracy_mode, definition.can_crit) if piercing else _make_physical_request(enemy, skill_id, power, definition.accuracy_mode, definition.can_crit)
 	# Validation complete: one special launch replaces the next ordinary shot.
 	cancel_active_cast()
-	_spend(skill_id)
+	if not _spend(skill_id): return false
 	request.context = _emission_context.copy_context()
 	request.emission_id = int(_emission_context.root_event_id.get_slice(":", _emission_context.root_event_id.get_slice_count(":") - 1))
 	sentinel_state.spend(float(tuning["focus_cost"]))
@@ -415,6 +416,7 @@ func _start_sentinel_recovery(facing: Vector2) -> void:
 	_sentinel_last_launch_frame = Engine.get_process_frames()
 	_path.clear()
 	_has_path_goal = false
+	if world_motion != null and _world_dash_remaining <= 0.0: world_motion.cancel()
 	velocity = Vector2.ZERO
 	reveal_from_offense()
 	presentation_action.emit(&"basic_attack", facing, BASIC_ATTACK_RECOVERY)
@@ -2650,7 +2652,7 @@ func _validate_world_skill(command: WorldSkillCast) -> Dictionary:
 	if not _can_pay_skill(command.skill_id): return WorldSkillCast.failure(&"skill_unavailable")
 	if command.skill_id == &"berserker_execution" and not can_pay_berserker_execution_hp(): return WorldSkillCast.failure(&"skill_unavailable")
 	if command.skill_id == &"defender_riposte" and not has_defender_token(): return WorldSkillCast.failure(&"skill_unavailable")
-	if command.skill_id in [&"sentinel_observe",&"sentinel_absolute_focus"] and not sentinel_state.can_pay(float(SentinelTuning.values(command.skill_id,skill_rank(command.skill_id)).get("focus_cost",0.0))): return WorldSkillCast.failure(&"skill_unavailable")
+	if command.skill_id in [&"sentinel_observe",&"sentinel_absolute_focus",&"sentinel_headshot",&"sentinel_piercing_shot",&"sentinel_concussion_shot"] and not sentinel_state.can_pay(float(SentinelTuning.values(command.skill_id,skill_rank(command.skill_id)).get("focus_cost",0.0))): return WorldSkillCast.failure(&"skill_unavailable")
 	var valid := command.geometry_check(self)
 	if not valid["ok"]: return valid
 	command.travel_plan.clear()
@@ -2672,6 +2674,7 @@ func _validate_world_skill(command: WorldSkillCast) -> Dictionary:
 	command.projectiles.clear()
 	if command.skill_id in WorldSkillCast.PROJECTILES:
 		var count := int(command.rank_context["capture"]["values"].get("projectile_count",1))
+		if command.skill_id in [&"sentinel_headshot",&"sentinel_piercing_shot",&"sentinel_concussion_shot"]: count = 1 # Resets are one nominal special launch.
 		if is_inside_tree() and not EffectProcLedger.projectile_slots_available(get_tree(),count): return WorldSkillCast.failure(&"skill_unavailable")
 		var facing := command.direction(self)
 		var side := facing.cross(Vector3.UP).normalized()
@@ -2720,6 +2723,7 @@ func _commit_world_skill(command: WorldSkillCast) -> Dictionary:
 	var actors := command.actors()
 	var accepted := false
 	match command.skill_id:
+		&"sentinel_headshot",&"sentinel_piercing_shot",&"sentinel_concussion_shot": accepted = use_sentinel_reset(command.skill_id,point,victim)
 		&"defender_anchor": accepted = use_defender_anchor(point)
 		&"defender_reprisal_wave": accepted = use_defender_reprisal_wave(actors)
 		&"defender_wall_advance": accepted = use_defender_wall_advance(flat,actors)
@@ -2952,11 +2956,17 @@ func _process(delta: float) -> void:
 	if world_motion != null:
 		if (is_inside_tree() and get_tree().paused) or not is_finite(delta) or delta <= 0.0: return
 		var before := world_point().position
+		if is_sentinel() and is_alive() and _world_last_position.distance_to(before) > SentinelFocusState.MOVEMENT_EPSILON:
+			sentinel_state.stable_time = 0.0
+			_set_sentinel_stance(false) # External logical displacement precedes any auto this frame.
 		_advance_player(delta)
 		if is_sentinel() and is_alive():
 			var moved := before.distance_to(world_point().position) > SentinelFocusState.MOVEMENT_EPSILON or _world_last_position.distance_to(before) > SentinelFocusState.MOVEMENT_EPSILON
 			sentinel_state.advance(delta,moved,sentinel_combat_active)
 			_set_sentinel_stance(run_state.build_snapshot.has_passive(&"sentinel_precision_stance") and sentinel_state.stable_time >= SentinelFocusState.STANCE_DELAY)
+			if sentinel_state.observed_target_id > 0:
+				var observed := instance_from_id(sentinel_state.observed_target_id) as CombatActor
+				if not is_instance_valid(observed) or not observed.is_alive(): sentinel_state.clear_observation()
 		_world_last_position = world_point().position
 		return
 	if is_sentinel() and is_alive() and not (is_inside_tree() and get_tree().paused):

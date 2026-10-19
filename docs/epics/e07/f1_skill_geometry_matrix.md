@@ -32,7 +32,7 @@ Player/Mage/Sentinel e flecha hostil, chuva/traps/blast ancorados, escudo/barrei
 piche, ocultação/budget/grace, coleta, movimento/dash temporal, AI autônoma/leash,
 cast obsoleto e callbacks que removem alvos. Isso não equivale ao cast completo
 dessas ativas: entrada/preview/composição nominal ainda precisam ser integrados.
-A retomada seguinte acrescenta WorldSkillCast: 48 entradas nominais com preview,
+A retomada seguinte acrescenta WorldSkillCast: 51 entradas nominais com preview,
 preparo e commit 3D. Dreno/Procissão/Véu, áreas elementais, chuva/traps base,
 projéteis e melee consomem a intenção capturada. A prova nominal é delimitada no
 recibo; isso ainda não certifica os dez kits nem os 27 efeitos compostos.
@@ -40,7 +40,8 @@ SoulImpact, Assombro, Dissipação e gritos de área também receberam prova nom
 de pulso/oclusão/controles, sem alterar o dano canônico.
 Marco/Onda/Fenda e Avanço/Retirada/Salto receberam bindings nominais; Contraforte
 conserva direção3D durante a guarda. Geômetra, paredes/campos restantes e mecanismos
-da Caçadora/Sentinela continuam bloqueios. API e recibo contêm o escopo exato; D05 visual não foi aprovado.
+da Caçadora/Sentinela continuam bloqueios. Cabeça/Perfurante/Concussão também têm entrada e voo3D ligados; Rede/Explosivo
+ainda não. API e recibo contêm o escopo exato; D05 visual não foi aprovado.
 
 ## Habilidades nominais
 
@@ -118,14 +119,14 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `piercing_shout` — Grito Perfurante | `ground_connected` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS59 |
 | `provoke` — Provocar | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `sentinel_absolute_focus` — Foco Absoluto | `self_only` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
-| `sentinel_concussion_shot` — Tiro de Concussão | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `sentinel_concussion_shot` — Tiro de Concussão | `direct_volume` | Entrada/homing3D e stun/debuff após dano positivo ligados; conserva Focus0 e callbacks canônicos |
 | `sentinel_explosive_shot` — Tiro Explosivo | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
-| `sentinel_headshot` — Tiro na Cabeça | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `sentinel_headshot` — Tiro na Cabeça | `direct_volume` | Entrada/preflight/homing3D e reset canônico ligados; maior rank aprendido, SP/Foco e colisão cobertos |
 | `sentinel_net_shot` — Tiro de Rede | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `sentinel_observe` — Observar | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `sentinel_opening_read` — Leitura de Aberturas | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `sentinel_piercing_shot` — Tiro Perfurante | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
-| `sentinel_precision_stance` — Postura de Precisão | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
+| `sentinel_piercing_shot` — Tiro Perfurante | `direct_volume` | Entrada/direção3D e voo perfurante finito ligados; corpos deduplicados, sólidos e snapshot cobertos |
+| `sentinel_precision_stance` — Postura de Precisão | `inherit_parent` | Movimento lógico remove Postura antes do auto do mesmo frame; prova dirigida em sentinel_direct |
 | `shield_wall` — Parede de Escudos | `direct_volume` | Entrada world explícita e intercepção frontal real testadas; input/visual pendentes |
 | `slash` — Corte em cone | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `slowing_arrow` — Flecha Entorpecente | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
