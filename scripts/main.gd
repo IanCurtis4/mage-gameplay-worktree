@@ -1128,7 +1128,47 @@ func _sync_defender_anchor() -> void:
 			_defender_slowed_enemies[enemy.get_instance_id()] = enemy
 			enemy.apply_slow(PlayerActor.DEFENDER_ANCHOR_SLOW_FRACTION, player.defender_anchor_remaining, &"defender_anchor")
 
+func cast_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: Vector3, victim: CombatActor, revision: int, rank: int = 0) -> Dictionary:
+	if not is_instance_valid(player): return WorldSkillCast.failure(&"spatial_binding_required")
+	if geometer_casting != null and geometer_casting.wall_field != null and skill in WorldSkillCast.PROJECTILES: return WorldSkillCast.failure(&"spatial_interceptor_required")
+	return player.request_world_skill(skill,anchor,facing,victim,enemies,revision,rank)
+
+func _spawn_world_cast_projectiles(skill: StringName, request: DamageRequest, victim: CombatActor, hit_limit: int, callback: Callable, mage: bool, tint: Color, discharge_bonus: float = 0.0) -> void:
+	if not player.world_motion.is_current_world(): return
+	# Origins, dimensions, count and rank-sensitive speed/range were validated together before cost.
+	for spec: Dictionary in player.world_cast_projectiles(skill):
+		var projectile: PlayerProjectile = MageProjectile.new() if mage else PlayerProjectile.new()
+		if mage and skill in [&"fire_spear",&"ice_spear",&"lightning"]:
+			projectile.configure_homing(request.copy(),victim,Vector2.ZERO,navigation,spec["speed"],spec["range"],tint)
+		else:
+			projectile.configure_directional(request.copy(),Vector2.ZERO,Vector2.RIGHT,enemies,navigation,spec["speed"],spec["range"],hit_limit,tint)
+		if projectile is MageProjectile: (projectile as MageProjectile).electrified_bonus_magic_damage = discharge_bonus
+		var point := ExpeditionWorldPoint.create(spec["origin"]["stage_id"],spec["origin"]["surface_id"],spec["origin"]["position"])
+		var bound := projectile.bind_world_flight(player.world_motion.geometry,point,spec["offset"],spec["direction"],spec["collider"],player.world_motion.geometry.geometry_revision)
+		if not bound["ok"]: projectile.free(); continue
+		projectile.hit.connect(callback)
+		add_child(projectile)
+		projectile.add_to_group("player_projectiles")
+
+func _bind_cast_ground(effect: Node) -> bool:
+	if not player.world_motion.is_current_world(): return false
+	var anchor := player.world_cast_anchor()
+	if anchor == null: return false
+	return effect.bind_world_area(player.world_motion.geometry,anchor,player.world_motion.profile(),player.world_motion.geometry.geometry_revision)["ok"]
+
+func _cast_ground_area() -> WorldEffectArea:
+	if not player.world_motion.is_current_world(): return null
+	var anchor := player.world_cast_anchor()
+	if anchor == null: return null
+	var area := WorldEffectArea.new()
+	var result := area.configure(player.world_motion.geometry,anchor,player.world_motion.profile(),&"ground_connected",player.world_motion.geometry.geometry_revision)
+	return area if result["ok"] else null
+
 func _on_mage_projectile_requested(skill_id: StringName, request: DamageRequest, target_actor: CombatActor, direction: Vector2, count: int) -> void:
+	if player.world_motion != null:
+		var tint := Color("e9d76a") if skill_id == &"lightning" else Color("74c9ff") if skill_id == &"ice_spear" else Color("ff793d")
+		_spawn_world_cast_projectiles(skill_id,request,target_actor,1,_on_mage_projectile_hit,true,tint)
+		return
 	var definition := ClassCatalog.skill_definition(skill_id)
 	for index: int in range(count):
 		var projectile := MageProjectile.new()
@@ -1224,6 +1264,9 @@ func _show_sentinel_visual(skill: StringName, center: Vector2, radius: float) ->
 	visual.add_to_group("player_effects")
 
 func _on_discharge_requested(request: DamageRequest, direction: Vector2, bonus_magic_damage: float) -> void:
+	if player.world_motion != null:
+		_spawn_world_cast_projectiles(&"electric_discharge",request,null,1,_on_discharge_hit,true,Color("ffe37a"),bonus_magic_damage)
+		return
 	var projectile := MageProjectile.new()
 	var origin := player.global_position + PlayerProjectile.BODY_OFFSET
 	projectile.configure_directional(request.copy(), origin, direction, enemies, navigation, player.skill_projectile_speed(&"electric_discharge"), player.skill_range(&"electric_discharge"), 1, Color("ffe37a"))
@@ -1247,6 +1290,9 @@ func _on_discharge_hit(request: DamageRequest, target_actor: CombatActor) -> voi
 		target_actor.apply_stun(0.6)
 
 func _spawn_precision_projectiles(skill_id: StringName, request: DamageRequest, direction: Vector2, count: int, hit_limit: int, hit_callback: Callable, visual_color: Color = Color("f6dfad"), captured_origin: Vector2 = Vector2.INF) -> void:
+	if player.world_motion != null:
+		_spawn_world_cast_projectiles(skill_id,request,null,hit_limit,hit_callback,false,visual_color)
+		return
 	for index: int in range(count):
 		var projectile := PlayerProjectile.new()
 		var side_offset := direction.orthogonal() * (float(index) - float(count - 1) * 0.5) * 14.0
@@ -1267,6 +1313,7 @@ func _on_precision_projectile_hit(request: DamageRequest, target_actor: CombatAc
 func _on_arrow_rain_requested(center: Vector2, request: DamageRequest) -> void:
 	var rain := ArrowRain.new()
 	rain.configure(center, request, enemies)
+	if player.world_motion != null and not _bind_cast_ground(rain): rain.free(); return
 	rain.hit.connect(_on_precision_projectile_hit)
 	add_child(rain)
 	rain.add_to_group("player_effects")
@@ -1274,6 +1321,7 @@ func _on_arrow_rain_requested(center: Vector2, request: DamageRequest) -> void:
 func _on_snare_trap_requested(center: Vector2, root_duration: float) -> void:
 	var trap := SnareTrap.new()
 	trap.configure_snare(player.get_instance_id(), center, root_duration, enemies, player.trap_armed_duration(SnareTrap.ARMED_DURATION))
+	if player.world_motion != null and not _bind_cast_ground(trap): trap.free(); return
 	if player.is_hunter():
 		trap.target_filter = _hunter_trap_target_valid.bind(center)
 		trap.root_applied.connect(_on_hunter_snare_triggered.bind(player.hunter_opening_snapshot(&"snare_trap")))
@@ -1290,6 +1338,7 @@ func _hunter_trap_target_valid(victim: CombatActor, center: Vector2) -> bool:
 func _on_explosive_trap_requested(center: Vector2, request: DamageRequest) -> void:
 	var trap := ExplosiveTrap.new()
 	trap.configure_explosive(player.get_instance_id(), center, request, enemies, player.trap_armed_duration(ExplosiveTrap.ARMED_DURATION))
+	if player.world_motion != null and not _bind_cast_ground(trap): trap.free(); return
 	if player.is_hunter():
 		trap.target_filter = _hunter_trap_target_valid.bind(center)
 		trap.reaction_callback = _consume_hunter_tar
@@ -1424,6 +1473,9 @@ func _on_world_elementalist_area_requested(skill_id: StringName, area: WorldEffe
 	_on_elementalist_area_requested(skill_id,Vector2.ZERO,radius,request,element,marked_bonus,once_per_target,hit_ids,area)
 
 func _on_elementalist_area_requested(skill_id: StringName, center: Vector2, radius: float, request: DamageRequest, element: StringName, marked_bonus: float = 0.0, once_per_target: bool = false, hit_ids: Dictionary = {}, world_area: WorldEffectArea = null) -> void:
+	if player.world_motion != null and world_area == null:
+		world_area = _cast_ground_area()
+		if world_area == null: return
 	if world_area == null and battle_indicators != null: battle_indicators.show_elementalist_pulse(skill_id, center, radius, element)
 	for target_actor: CombatActor in enemies.duplicate():
 		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
@@ -1459,7 +1511,15 @@ func _on_elementalist_tri_nova_requested(center: Vector2, requests: Array[Damage
 	sequence.pulse_requested.connect(_on_elementalist_area_requested)
 	add_child(sequence)
 	sequence.add_to_group("player_effects")
-	sequence.configure(player, centers, requests, elements, SkillGeometry.ELEMENTALIST_TRI_NOVA_RADIUS, 0.25, false, marked_bonus)
+	if player.world_motion != null:
+		var anchor := player.world_cast_anchor()
+		if anchor == null: sequence.queue_free(); return
+		sequence.world_pulse_requested.connect(_on_world_elementalist_area_requested)
+		var anchors: Array[ExpeditionWorldPoint] = [anchor,anchor,anchor]
+		var valid := sequence.configure_world(player,anchors,requests,elements,SkillGeometry.ELEMENTALIST_TRI_NOVA_RADIUS,0.25,false,player.world_motion.geometry.geometry_revision,marked_bonus)
+		if not valid["ok"]: sequence.queue_free()
+	else:
+		sequence.configure(player, centers, requests, elements, SkillGeometry.ELEMENTALIST_TRI_NOVA_RADIUS, 0.25, false, marked_bonus)
 
 func _apply_elementalist_hit(request: DamageRequest, target_actor: CombatActor, element: StringName, marked_bonus: float = 0.0) -> Dictionary:
 	if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
@@ -1725,7 +1785,14 @@ func _on_spiritualist_focus_event(kind: StringName) -> void:
 
 func _on_spiritualist_veil_requested(center: Vector2, duration: float, weaken_fraction: float) -> void:
 	_clear_spiritualist_veil()
-	spiritualist_veil_state.start(center, duration)
+	if player.world_motion != null:
+		if not player.world_motion.is_current_world(): return
+		var anchor := player.world_cast_anchor()
+		if anchor == null: return
+		var valid := spiritualist_veil_state.start_world(player.world_motion.geometry,anchor,player.world_motion.profile(),duration,player.world_motion.geometry.geometry_revision)
+		if not valid["ok"]: return
+	else:
+		spiritualist_veil_state.start(center, duration)
 	spiritualist_veil_fraction = weaken_fraction
 	if battle_indicators != null:
 		battle_indicators.sync_spiritualist_veil(center, duration)

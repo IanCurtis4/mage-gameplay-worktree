@@ -194,7 +194,7 @@ RunController liga os pedidos bound a essas entradas e consulta alvo em 3D.
 
 SpiritualistVeilState.start_world(world, anchor, profile, duration, revision) usa
 WorldEffectArea; contains_actor/query ground e o controlador mantêm aplicação e
-remoção da própria fonte de weaken. O start/placement de skill continua pendente.
+remoção da própria fonte de weaken. O placement de Véu agora entra por request_world_skill, conforme a seção abaixo.
 
 ElementalistSequence.configure_world(caster, anchors: Array[WorldPoint], requests,
 elements, radius, interval, once_per_target, revision, marked_bonus) valida TODAS
@@ -202,8 +202,60 @@ as âncoras antes do primeiro pulso, copia requests e conserva schedule/hit_ids.
 world_pulse_requested entrega WorldEffectArea ao callback espacial do controlador,
 que reaproveita a aplicação elemental canônica. As posições Vector2.ZERO são
 somente placeholders de apresentação; o ramo world nunca calcula alcance nelas.
-O cast/geração de âncoras por Ember Path/Tri Nova e seus demais efeitos seguem
-pendentes. APIs de consumidor não equivalem a suporte completo de kit.
+Tri Nova captura a origem pelo cast espacial; Ember Path e seus demais efeitos
+seguem pendentes. APIs de consumidor não equivalem a suporte completo de kit.
+
+## Entrada transacional de habilidades
+
+`PlayerActor.preview_world_skill(skill, anchor: WorldPoint, facing: Vector3,
+victim: CombatActor, actors: Array[CombatActor], revision, requested_rank=0)`
+retorna `{ok,error_code,data}`. Preview não inicia preparo, não move o ator,
+não paga nem altera recarga/status da última intenção. Quando aceita, data contém
+skill_id, geometry_revision, source/anchor copiados e specs de todos os projéteis.
+Não é seleção por clique: o chamador fornece superfície e direção lógicas.
+
+`request_world_skill` tem os mesmos argumentos; `RunController.cast_world_skill`
+recebe a mesma intenção sem actors, usando sua lista real de inimigos. Retorna
+state preparing ou committed quando aceita. `world_cast_status()` copia o último
+resultado. WorldSkillCast captura origem/âncora, direção, weak refs, rank/capture,
+configuration_revision, geometry_revision e composition_revision do RunState.
+Origem/destino não são reconstruídos a partir de centros Vector2 dos sinais antigos.
+Alvo dirigido pode mover durante preparo se ainda satisfizer alcance/oclusão;
+a direção do tiro acompanha o alvo atual no commit. Direção livre permanece capturada.
+
+Validação ocorre na entrada, a cada tick de preparo, no commit e imediatamente
+antes do custo canônico. Stun/fear/pausa, HP não letal de Execução, token de Riposta,
+Foco do Sentinela, elegibilidade/rank, fontes, capacidade, suporte, revisões e
+alvo/LoS pertinentes podem recusar. Alterar a composição durante preparo invalida
+com stale_build; remover a última fonte também pode retornar skill_unavailable
+ou cast_cancelled quando a camada de modificadores cancela o preparo primeiro.
+Troca do mundo, revisão de obstáculo, movimento do caster e alvo removido retornam
+world_reconfigured/stale_geometry/caster_moved/invalid_target. Falhas pré-commit
+não pagam SP/recarga nem emitem o efeito. Claims de commit precedem callbacks;
+reentrada retorna cast_busy. O contexto de rank externo é restaurado.
+
+Projéteis prevalidam TODAS as origens e seus cilindros físicos (Mago raio6/altura12,
+precisão raio4/altura8), incluindo deslocamento lateral de14 unidades. Count e
+range/custo/potência usam a captura composta do rank selecionado; geometria e
+capacidade se revalidam antes do pagamento único. `world_cast_projectiles(skill)`
+fornece cópias apenas durante a emissão comprometida. O controlador configura
+Player/MageProjectile e liga WorldProjectileMotion, homing/piercing e callbacks
+canônicos. Uma parede surgida depois do commit pode interceptar o voo pago.
+GeometerWallField legado requer spatial_interceptor_required; não é ignorado.
+
+`world_cast_anchor()` fornece cópia durante a emissão. Chuva, traps base,
+Flame Burst, Glacial Ring, Tri Nova e Véu consomem essa âncora explícita. Tri Nova
+configura suas três áreas/schedule originais; Dreno/Procissão iniciam os guards
+espaciais existentes. Cones/linhas corpo a corpo consultam direção/LoS 3D no
+handler canônico, sem refazer fórmulas. Os placeholders Vector2 são apresentação.
+
+Whitelist nominal em WorldSkillCast (34 IDs), também exposta como cast_entry no
+inventário: alvo dirigido, cones/linhas, oito tipos de projétil, cinco placements,
+duas áreas próprias e quatro estados self_only. Isso informa entrada disponível,
+não certifica todos os efeitos de um kit. Shield Wall/dash/teleporte conservam
+as APIs espaciais próprias já documentadas. Snare/Explosive herdadas pela Caçadora
+retornam spatial_hunter_composition_required até ligar reação/abertura espaciais;
+Geômetra, ecos, paredes, demais campos e mobilidades continuam pendentes.
 
 ## Adaptador plano e próximos consumidores
 

@@ -32,8 +32,10 @@ Player/Mage/Sentinel e flecha hostil, chuva/traps/blast ancorados, escudo/barrei
 piche, ocultação/budget/grace, coleta, movimento/dash temporal, AI autônoma/leash,
 cast obsoleto e callbacks que removem alvos. Isso não equivale ao cast completo
 dessas ativas: entrada/preview/composição nominal ainda precisam ser integrados.
-Dreno/Procissão/Véu e pulsos elementais agora possuem entrada espacial de consumidor
-e prova de schedule/oclusão; cast/preview e composição nominal continuam pendentes.
+A retomada seguinte acrescenta WorldSkillCast: 34 entradas nominais com preview,
+preparo e commit 3D. Dreno/Procissão/Véu, áreas elementais, chuva/traps base,
+projéteis e melee consomem a intenção capturada. A prova nominal é delimitada no
+recibo; isso ainda não certifica os dez kits nem os 27 efeitos compostos.
 Geômetra, ecos, paredes/campos restantes, AoEs do Sentinela e demais mobilidades
 continuam bloqueios. API e recibo contêm o escopo exato; D05 visual não foi aprovado.
 
@@ -47,45 +49,45 @@ causal original e não adiciona LoS a DoT já aplicado.
 |---|---|---|
 | `archer_cadence` — Cadência | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `archer_precision` — Precisão | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `arrow_rain` — Chuva de Flechas | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
+| `arrow_rain` — Chuva de Flechas | `ground_connected` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `berserker_blood_rift` — Fenda Sangrenta | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
-| `berserker_breath_steal` — Arrancar Fôlego | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `berserker_breath_steal` — Arrancar Fôlego | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `berserker_deep_bleeding` — Hemorragia Profunda | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `berserker_execution` — Execução | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `berserker_execution` — Execução | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `berserker_obstinacy` — Obstinação | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `berserker_pursuit` — Caça Persistente | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `berserker_pursuit_cut` — Talho de Perseguição | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
-| `berserker_rupture` — Ruptura | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `berserker_pursuit_cut` — Talho de Perseguição | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
+| `berserker_rupture` — Ruptura | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `berserker_wound_leap` — Salto Cruento | `walk_path` | Consumidor pendente; entrada legada bloqueada no binding |
 | `blood_thirst` — Sede de Sangue | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `brutal_strike` — Golpe Brutal | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
-| `concentrated_rage` — Raiva Concentrada | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `brutal_strike` — Golpe Brutal | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
+| `concentrated_rage` — Raiva Concentrada | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `dash` — Investida | `walk_path` | PlayerActor lógico testado; apresentação pendente |
 | `defender_anchor` — Marco de Guarda | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
-| `defender_counterstroke` — Contraforte | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `defender_counterstroke` — Contraforte | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `defender_guard_return` — Resguardo | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `defender_line_lock` — Trava de Linha | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `defender_line_lock` — Trava de Linha | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `defender_reprisal_wave` — Onda de Represália | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `defender_retreat_guard` — Guarda de Retirada | `walk_path` | Consumidor pendente; entrada legada bloqueada no binding |
-| `defender_riposte` — Rebater | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `defender_riposte` — Rebater | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `defender_wall_advance` — Avanço de Muralha | `walk_path` | Consumidor pendente; entrada legada bloqueada no binding |
 | `defender_watch` — Vigília | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `double_shot` — Disparo Duplo | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
-| `electric_discharge` — Descarga Elétrica | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `double_shot` — Disparo Duplo | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
+| `electric_discharge` — Descarga Elétrica | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `elementalist_ember_path` — Trilha de Brasas | `ground_connected` | Consumidor espacial/schedule ligado; cast/preview/composição ainda pendentes |
-| `elementalist_flame_burst` — Explosão de Chamas | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
-| `elementalist_glacial_ring` — Anel Glacial | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `elementalist_flame_burst` — Explosão de Chamas | `ground_connected` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
+| `elementalist_glacial_ring` — Anel Glacial | `ground_connected` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `elementalist_lightning_arc` — Arco Voltaico | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `elementalist_prismatic_focus` — Foco Prismático | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `elementalist_prismatic_resonance` — Ressonância Prismática | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `elementalist_tri_nova` — Nova Tríplice | `ground_connected` | Consumidor espacial/schedule ligado; cast/preview/composição ainda pendentes |
-| `explosive_trap` — Armadilha Explosiva | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
-| `extended_aim` — Mira Estendida | `self_only` | Consumidor pendente; entrada legada bloqueada no binding |
-| `fire_spear` — Lança de Fogo | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `elementalist_tri_nova` — Nova Tríplice | `ground_connected` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
+| `explosive_trap` — Armadilha Explosiva | `ground_connected` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo; composição Caçadora explicitamente bloqueada |
+| `extended_aim` — Mira Estendida | `self_only` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
+| `fire_spear` — Lança de Fogo | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `fire_wall` — Parede de Fogo | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
-| `fireball` — Bola de Fogo | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `fireball` — Bola de Fogo | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `foliage_shelter` — Abrigo de Folhagem | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
-| `fury` — Fúria | `self_only` | Consumidor pendente; entrada legada bloqueada no binding |
+| `fury` — Fúria | `self_only` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `geometer_collapse` — Colapso Geométrico | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `geometer_incidence` — Teorema de Incidência | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `geometer_rewrite` — Reescrita | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
@@ -97,42 +99,42 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `hunter_covering_shot` — Tiro de Cobertura | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `hunter_easy_prey` — Presa Fácil | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `hunter_freezing_trap` — Armadilha Congelante | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
-| `hunter_mark` — Marca do Caçador | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `hunter_mark` — Marca do Caçador | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `hunter_shooting_discipline` — Disciplina de Tiro | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `hunter_tar_trap` — Armadilha de Piche | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
 | `hunter_thorn_trap` — Armadilha de Espinhos | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
 | `hunter_total_cover` — Cobertura Total | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
-| `ice_spear` — Lança de Gelo | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `ice_spear` — Lança de Gelo | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `ice_wall` — Parede de Gelo | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
-| `lightning` — Relâmpago | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `lightning` — Relâmpago | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `lightning_wall` — Parede de Raios | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `mage_mana_regeneration` — Regeneração de SP | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `perseverance` — Perseverança | `self_only` | Consumidor pendente; entrada legada bloqueada no binding |
+| `perseverance` — Perseverança | `self_only` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `phantom_barrier` — Barreira Fantasma | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
-| `piercing_arrow` — Flecha Perfurante | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `piercing_arrow` — Flecha Perfurante | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `piercing_shout` — Grito Perfurante | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
-| `provoke` — Provocar | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
-| `sentinel_absolute_focus` — Foco Absoluto | `self_only` | Consumidor pendente; entrada legada bloqueada no binding |
+| `provoke` — Provocar | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
+| `sentinel_absolute_focus` — Foco Absoluto | `self_only` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `sentinel_concussion_shot` — Tiro de Concussão | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `sentinel_explosive_shot` — Tiro Explosivo | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `sentinel_headshot` — Tiro na Cabeça | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `sentinel_net_shot` — Tiro de Rede | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
-| `sentinel_observe` — Observar | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `sentinel_observe` — Observar | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `sentinel_opening_read` — Leitura de Aberturas | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `sentinel_piercing_shot` — Tiro Perfurante | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `sentinel_precision_stance` — Postura de Precisão | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `shield_wall` — Parede de Escudos | `direct_volume` | Entrada world explícita e intercepção frontal real testadas; input/visual pendentes |
-| `slash` — Corte em cone | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
-| `slowing_arrow` — Flecha Entorpecente | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
-| `snare_trap` — Armadilha de Laço | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
+| `slash` — Corte em cone | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
+| `slowing_arrow` — Flecha Entorpecente | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
+| `snare_trap` — Armadilha de Laço | `ground_connected` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo; composição Caçadora explicitamente bloqueada |
 | `soul_impact` — Impacto das Almas | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `spiritualist_channel_focus` — Foco do Além | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `spiritualist_dissipation` — Rito de Dissipação | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `spiritualist_echo_curse` — Maldição do Eco | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `spiritualist_echo_recovery` — Recolhimento | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `spiritualist_procession` — Procissão de Espectros | `direct_volume` | Consumidor espacial/schedule ligado; cast/preview/composição ainda pendentes |
-| `spiritualist_soul_drain` — Drenagem Espiritual | `direct_volume` | Consumidor espacial/schedule ligado; cast/preview/composição ainda pendentes |
-| `spiritualist_spectral_veil` — Véu Espectral | `ground_connected` | Consumidor espacial/schedule ligado; cast/preview/composição ainda pendentes |
+| `spiritualist_procession` — Procissão de Espectros | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
+| `spiritualist_soul_drain` — Drenagem Espiritual | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
+| `spiritualist_spectral_veil` — Véu Espectral | `ground_connected` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `swordsman_resistance` — Resistência | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `teleport` — Teleporte | `teleport_legal` | PlayerActor lógico testado; apresentação pendente |
 | `terrifying_shout` — Grito Aterrorizante | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |

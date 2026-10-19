@@ -24,5 +24,5 @@ const GROUPS := [
 static func rule(skill: StringName) -> Dictionary:
 	for group: Dictionary in GROUPS:
 		if skill in group["ids"]:
-			return {"geometry_rule_id":group["rule"],"components":group["components"],"actor_adapter":skill in [&"dash",&"teleport",&"shield_wall"] or group["rule"] == &"self_only"}
+			return {"geometry_rule_id":group["rule"],"components":group["components"],"cast_entry":WorldSkillCast.supports(skill),"actor_adapter":skill in [&"dash",&"teleport",&"shield_wall"] or group["rule"] == &"self_only"}
 	return {}

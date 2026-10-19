@@ -39,7 +39,9 @@ func bind_world_flight(world: WorldGeometry, origin: ExpeditionWorldPoint, offse
 	var flight := WorldProjectileMotion.new()
 	var result := flight.configure(world,origin,offset,facing,collider,max_distance,revision)
 	if not result["ok"]: return result
-	var candidates: Array[CombatActor] = [target] if homing and is_instance_valid(target) else targets
+	var candidates: Array[CombatActor] = []
+	if homing and is_instance_valid(target): candidates.append(target)
+	else: candidates.assign(targets)
 	result = flight.validate_targets(candidates)
 	if not result["ok"]: return result
 	world_flight = flight

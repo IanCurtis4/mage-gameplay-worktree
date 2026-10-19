@@ -369,9 +369,9 @@ func clear_sentinel_state() -> void:
 		_apply_derived_stats(_build_stat_breakdown())
 
 func use_sentinel_observe(enemy: CombatActor) -> bool:
-	if not sentinel_can_use(&"sentinel_observe") or not can_target_skill(&"sentinel_observe", enemy) or not navigation.is_segment_clear(global_position, enemy.global_position, 0.0):
+	if not sentinel_can_use(&"sentinel_observe") or not can_target_skill(&"sentinel_observe", enemy) or not _target_line_clear(enemy):
 		return false
-	_spend(&"sentinel_observe")
+	if not _spend(&"sentinel_observe"): return false
 	sentinel_state.observe(enemy.get_instance_id(), skill_rank(&"sentinel_observe"))
 	presentation_action.emit(&"cast_release", _resolved_facing(aim_direction(enemy.global_position)), 0.15)
 	resources_changed.emit()
@@ -422,7 +422,7 @@ func use_sentinel_absolute_focus() -> bool:
 	var id := &"sentinel_absolute_focus"
 	if not sentinel_can_use(id):
 		return false
-	_spend(id)
+	if not _spend(id): return false
 	sentinel_state.absolute_remaining = float(SentinelTuning.values(id, skill_rank(id))["duration"])
 	presentation_action.emit(&"cast_release", _last_facing, 0.15)
 	resources_changed.emit()
@@ -590,7 +590,7 @@ func use_slash(direction: Vector2, enemies: Array[CombatActor]) -> bool:
 		return false
 	_commit_action(ClassCatalog.skill_definition(&"slash").action_kind)
 	var facing := _resolved_facing(direction)
-	_spend(&"slash")
+	if not _spend(&"slash"): return false
 	reveal_from_offense()
 	_slash_visual_time = 0.20
 	_slash_facing = facing
@@ -599,10 +599,9 @@ func use_slash(direction: Vector2, enemies: Array[CombatActor]) -> bool:
 	presentation_action.emit(&"slash", facing, 0.20)
 	queue_redraw()
 	for enemy: CombatActor in enemies.duplicate():
-		if not enemy.is_alive():
+		if not is_instance_valid(enemy) or not enemy.is_alive():
 			continue
-		var offset := enemy.global_position - global_position
-		if SkillGeometry.cone_contains(offset, facing, rank_definition.range, SLASH_HALF_ANGLE):
+		if _cone_target(enemy,facing,rank_definition.range,SLASH_HALF_ANGLE):
 			var definition := ClassCatalog.skill_definition(&"slash")
 			attack_requested.emit(_make_physical_request(enemy, &"cone_slash", stat_breakdown.value(&"melee_attack") * rank_definition.power, definition.accuracy_mode, definition.can_crit), enemy)
 	resources_changed.emit()
@@ -615,7 +614,7 @@ func use_defender_counterstroke(direction: Vector2, enemies: Array[CombatActor])
 	var facing := _resolved_facing(direction)
 	var empowered := has_defender_token()
 	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
-	_spend(&"defender_counterstroke")
+	if not _spend(&"defender_counterstroke"): return false
 	if empowered:
 		_consume_defender_token()
 	defender_counter_guard_remaining = DEFENDER_COUNTER_GUARD_DURATION
@@ -626,10 +625,9 @@ func use_defender_counterstroke(direction: Vector2, enemies: Array[CombatActor])
 	for enemy: CombatActor in enemies.duplicate():
 		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
 			continue
-		var offset := enemy.global_position - global_position
-		if not SkillGeometry.cone_contains(offset, facing, SkillGeometry.DEFENDER_COUNTERSTROKE_RANGE, SkillGeometry.DEFENDER_COUNTERSTROKE_HALF_ANGLE):
+		if not _cone_target(enemy,facing,SkillGeometry.DEFENDER_COUNTERSTROKE_RANGE,SkillGeometry.DEFENDER_COUNTERSTROKE_HALF_ANGLE):
 			continue
-		if not navigation.is_segment_clear(global_position, enemy.global_position, 0.0):
+		if not _target_line_clear(enemy):
 			continue
 		attack_requested.emit(_make_physical_request(enemy, &"defender_counterstroke", stat_breakdown.value(&"melee_attack") * weight, definition.accuracy_mode, definition.can_crit), enemy)
 	presentation_action.emit(&"slash", facing, 0.20)
@@ -647,7 +645,7 @@ func use_berserker_rupture(enemy: CombatActor) -> bool:
 	var power := stat_breakdown.value(&"melee_attack") * (rank_definition.secondary_power * stacks if detonate else rank_definition.power)
 	var definition := ClassCatalog.skill_definition(&"berserker_rupture")
 	_commit_action(definition.action_kind)
-	_spend(&"berserker_rupture")
+	if not _spend(&"berserker_rupture"): return false
 	reveal_from_offense()
 	var request := _make_physical_request(enemy, &"berserker_rupture_detonation" if detonate else &"berserker_rupture", power, definition.accuracy_mode, definition.can_crit and not detonate)
 	request.is_secondary = detonate
@@ -673,7 +671,7 @@ func use_berserker_execution(enemy: CombatActor) -> bool:
 	if not health.spend_hp_nonlethal(hp_cost):
 		return false
 	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
-	_spend(&"berserker_execution")
+	if not _spend(&"berserker_execution"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"berserker_execution")
 	var request := _make_physical_request(enemy, &"berserker_execution", stat_breakdown.value(&"melee_attack") * weight, definition.accuracy_mode, definition.can_crit)
@@ -695,7 +693,7 @@ func use_berserker_breath_steal(enemy: CombatActor) -> bool:
 	var marked_before_hit := berserker_wound_stacks(enemy.get_instance_id()) > 0
 	var facing := _resolved_facing(global_position.direction_to(enemy.global_position))
 	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
-	_spend(&"berserker_breath_steal")
+	if not _spend(&"berserker_breath_steal"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"berserker_breath_steal")
 	var request := _make_physical_request(enemy, &"berserker_breath_steal", stat_breakdown.value(&"melee_attack") * rank_definition.power, definition.accuracy_mode, definition.can_crit)
@@ -931,15 +929,15 @@ func use_defender_line_lock(direction: Vector2, enemies: Array[CombatActor]) -> 
 		return false
 	var facing := _resolved_facing(direction)
 	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
-	_spend(&"defender_line_lock")
+	if not _spend(&"defender_line_lock"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"defender_line_lock")
 	for enemy: CombatActor in enemies.duplicate():
 		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
 			continue
-		if not SkillGeometry.strip_contains(enemy.global_position - global_position, facing, SkillGeometry.DEFENDER_LINE_LOCK_LENGTH, SkillGeometry.DEFENDER_LINE_LOCK_HALF_WIDTH, enemy.collision_radius):
+		if not _line_target(enemy,facing,SkillGeometry.DEFENDER_LINE_LOCK_LENGTH,SkillGeometry.DEFENDER_LINE_LOCK_HALF_WIDTH):
 			continue
-		if not navigation.is_segment_clear(global_position, enemy.global_position, 0.0):
+		if not _target_line_clear(enemy):
 			continue
 		var request := _make_physical_request(enemy, &"defender_line_lock", stat_breakdown.value(&"melee_attack") * rank_definition.power, definition.accuracy_mode, definition.can_crit)
 		defender_hit_requested.emit(request, enemy, rank_definition.secondary_power, Vector2.ZERO)
@@ -1027,7 +1025,7 @@ func use_fireball(direction: Vector2) -> bool:
 	if class_id != &"mage" or rank_definition == null or not _can_spend(&"fireball"):
 		return false
 	var facing := _resolved_facing(direction)
-	_spend(&"fireball")
+	if not _spend(&"fireball"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"fireball")
 	var request := _make_magic_request(null, &"fireball", _magic_power(&"fireball"), definition.accuracy_mode, definition.can_crit)
@@ -1052,6 +1050,7 @@ func elementalist_flame_burst_center(point: Vector2) -> Vector2:
 	return global_position + (point - global_position).limit_length(skill_range(&"elementalist_flame_burst"))
 
 func can_place_elementalist_flame_burst(point: Vector2) -> bool:
+	if world_motion != null: return _world_placement_ready(&"elementalist_flame_burst")
 	if navigation == null or skill_range(&"elementalist_flame_burst") <= 0.0:
 		return false
 	var center := elementalist_flame_burst_center(point)
@@ -1061,7 +1060,7 @@ func use_elementalist_flame_burst(point: Vector2) -> bool:
 	if not _is_elementalist() or _runtime_rank_definition(&"elementalist_flame_burst") == null or not _can_spend(&"elementalist_flame_burst") or not can_place_elementalist_flame_burst(point):
 		return false
 	var center := elementalist_flame_burst_center(point)
-	_spend(&"elementalist_flame_burst")
+	if not _spend(&"elementalist_flame_burst"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"elementalist_flame_burst")
 	var request := _make_magic_request(null, &"elementalist_flame_burst", _magic_power(&"elementalist_flame_burst"), definition.accuracy_mode, definition.can_crit)
@@ -1072,7 +1071,7 @@ func use_elementalist_flame_burst(point: Vector2) -> bool:
 func use_elementalist_glacial_ring() -> bool:
 	if not _is_elementalist() or not _can_spend(&"elementalist_glacial_ring"):
 		return false
-	_spend(&"elementalist_glacial_ring")
+	if not _spend(&"elementalist_glacial_ring"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"elementalist_glacial_ring")
 	var request := _make_magic_request(null, &"elementalist_glacial_ring", _magic_power(&"elementalist_glacial_ring"), definition.accuracy_mode, definition.can_crit)
@@ -1122,7 +1121,7 @@ func use_elementalist_ember_path(direction: Vector2) -> bool:
 func use_elementalist_tri_nova() -> bool:
 	if not _is_elementalist() or not _can_spend(&"elementalist_tri_nova"):
 		return false
-	_spend(&"elementalist_tri_nova")
+	if not _spend(&"elementalist_tri_nova"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"elementalist_tri_nova")
 	var rank_definition := _runtime_rank_definition(&"elementalist_tri_nova")
@@ -1172,7 +1171,7 @@ func use_spiritualist_soul_drain(enemy: CombatActor) -> bool:
 	if not _is_spiritualist() or _runtime_rank_definition(skill_id) == null or not can_target_skill(skill_id, enemy) or not _can_spend(skill_id):
 		return false
 	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
-	_spend(skill_id)
+	if not _spend(skill_id): return false
 	reveal_from_offense()
 	_path.clear()
 	_has_path_goal = false
@@ -1193,6 +1192,7 @@ func spiritualist_veil_center(point: Vector2) -> Vector2:
 	return global_position + (point - global_position).limit_length(skill_range(&"spiritualist_spectral_veil"))
 
 func can_place_spiritualist_veil(point: Vector2) -> bool:
+	if world_motion != null: return _world_placement_ready(&"spiritualist_spectral_veil")
 	if navigation == null or skill_range(&"spiritualist_spectral_veil") <= 0.0:
 		return false
 	var center := spiritualist_veil_center(point)
@@ -1204,7 +1204,7 @@ func use_spiritualist_spectral_veil(point: Vector2) -> bool:
 	if not _is_spiritualist() or rank_definition == null or not _can_spend(skill_id) or not can_place_spiritualist_veil(point):
 		return false
 	var center := spiritualist_veil_center(point)
-	_spend(skill_id)
+	if not _spend(skill_id): return false
 	reveal_from_offense()
 	spiritualist_veil_requested.emit(center, rank_definition.secondary_power, rank_definition.power)
 	resources_changed.emit()
@@ -1214,7 +1214,7 @@ func use_spiritualist_procession(enemy: CombatActor) -> bool:
 	var skill_id := &"spiritualist_procession"
 	if not _is_spiritualist() or _runtime_rank_definition(skill_id) == null or not can_target_skill(skill_id, enemy) or not _can_spend(skill_id):
 		return false
-	_spend(skill_id)
+	if not _spend(skill_id): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var request := _make_magic_request(enemy, skill_id, _magic_power(skill_id), definition.accuracy_mode, definition.can_crit)
@@ -1309,11 +1309,11 @@ func use_spear(skill_id: StringName, enemy: CombatActor) -> bool:
 	if (class_id != &"mage" and not run_state.has_item_active(skill_id)) or skill_id not in [&"fire_spear", &"ice_spear"] or not can_target_skill(skill_id, enemy) or not _can_spend(skill_id):
 		return false
 	var facing := _resolved_facing(global_position.direction_to(enemy.global_position))
-	_spend(skill_id)
+	if not _spend(skill_id): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var request := _make_magic_request(enemy, skill_id, _magic_power(skill_id), definition.accuracy_mode, definition.can_crit)
-	var count := run_state.projectile_count(skill_id)
+	var count := _projectile_count_for_cast(skill_id)
 	mage_projectile_requested.emit(skill_id, request, enemy, facing, count)
 	resources_changed.emit()
 	return true
@@ -1354,7 +1354,7 @@ func use_shield_wall(direction: Vector2) -> bool:
 		return false
 	_commit_action(ClassCatalog.skill_definition(&"shield_wall").action_kind)
 	var facing := _resolved_facing(direction)
-	_spend(&"shield_wall")
+	if not _spend(&"shield_wall"): return false
 	shield_remaining = SHIELD_DURATION
 	shield_resistance = roundi(rank_definition.power)
 	shield_facing = facing
@@ -1375,7 +1375,7 @@ func use_provoke(enemy: CombatActor) -> bool:
 		return false
 	_commit_action(ClassCatalog.skill_definition(&"provoke").action_kind)
 	var facing := _resolved_facing(global_position.direction_to(enemy.global_position))
-	_spend(&"provoke")
+	if not _spend(&"provoke"): return false
 	presentation_action.emit(&"cast", facing, 0.15)
 	provoke_requested.emit(enemy, rank_definition.power)
 	resources_changed.emit()
@@ -1389,7 +1389,7 @@ func use_perseverance() -> bool:
 	var capacity := StatCalculator.personal_shield_capacity(rank_definition.power, stat_breakdown)
 	if not health.grant_shield(capacity):
 		return false
-	_spend(&"perseverance")
+	if not _spend(&"perseverance"): return false
 	perseverance_remaining = PERSEVERANCE_DURATION
 	presentation_action.emit(&"cast", _last_facing, 0.15)
 	resources_changed.emit()
@@ -1416,7 +1416,7 @@ func use_fury() -> bool:
 	if class_id != &"swordsman" or _runtime_rank_definition(&"fury") == null or not _can_spend(&"fury"):
 		return false
 	_commit_action(ClassCatalog.skill_definition(&"fury").action_kind)
-	_spend(&"fury")
+	if not _spend(&"fury"): return false
 	fury_remaining = FURY_DURATION
 	_apply_derived_stats(_build_stat_breakdown())
 	reveal_from_offense()
@@ -1431,7 +1431,7 @@ func use_brutal_strike(enemy: CombatActor) -> bool:
 		return false
 	_commit_action(ClassCatalog.skill_definition(&"brutal_strike").action_kind)
 	var facing := _resolved_facing(global_position.direction_to(enemy.global_position))
-	_spend(&"brutal_strike")
+	if not _spend(&"brutal_strike"): return false
 	reveal_from_offense()
 	brutal_strike_visual_time = 0.20
 	brutal_strike_visual_point = enemy.global_position
@@ -1449,7 +1449,7 @@ func use_concentrated_rage(direction: Vector2, enemies: Array[CombatActor]) -> b
 		return false
 	_commit_action(ClassCatalog.skill_definition(&"concentrated_rage").action_kind)
 	var facing := _resolved_facing(direction)
-	_spend(&"concentrated_rage")
+	if not _spend(&"concentrated_rage"): return false
 	reveal_from_offense()
 	target = null
 	_path.clear()
@@ -1465,7 +1465,7 @@ func use_concentrated_rage(direction: Vector2, enemies: Array[CombatActor]) -> b
 	for enemy: CombatActor in enemies.duplicate():
 		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
 			continue
-		if SkillGeometry.strip_contains(enemy.global_position - global_position, facing, rank_definition.range, CONCENTRATED_RAGE_HALF_WIDTH, enemy.collision_radius):
+		if _line_target(enemy,facing,rank_definition.range,CONCENTRATED_RAGE_HALF_WIDTH):
 			attack_requested.emit(_make_physical_request(enemy, &"concentrated_rage", power, definition.accuracy_mode, definition.can_crit), enemy)
 	presentation_action.emit(&"slash", facing, 0.22)
 	resources_changed.emit()
@@ -1558,6 +1558,9 @@ func absorb_shield_projectile() -> bool:
 	return true
 
 func _commit_action(action_kind: SkillDefinition.ActionKind) -> void:
+	if _world_executing_cast != null:
+		_world_executing_cast.action_kind = action_kind
+		return
 	if action_kind == SkillDefinition.ActionKind.OFFENSIVE:
 		clear_shield_stance()
 
@@ -1786,7 +1789,7 @@ func use_lightning(enemy: CombatActor) -> bool:
 	if class_id != &"mage" or not can_target_skill(&"lightning", enemy) or not _can_spend(&"lightning"):
 		return false
 	var facing := _resolved_facing(global_position.direction_to(enemy.global_position))
-	_spend(&"lightning")
+	if not _spend(&"lightning"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"lightning")
 	var request := _make_magic_request(enemy, &"lightning", _magic_power(&"lightning"), definition.accuracy_mode, definition.can_crit)
@@ -1798,7 +1801,7 @@ func use_electric_discharge(direction: Vector2) -> bool:
 	if class_id != &"mage" or _runtime_rank_definition(&"electric_discharge") == null or not _can_spend(&"electric_discharge"):
 		return false
 	var facing := _resolved_facing(direction)
-	_spend(&"electric_discharge")
+	if not _spend(&"electric_discharge"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"electric_discharge")
 	var request := _make_magic_request(null, &"electric_discharge", _magic_power(&"electric_discharge"), definition.accuracy_mode, definition.can_crit)
@@ -1812,12 +1815,12 @@ func use_double_shot(direction: Vector2) -> bool:
 	if class_id != &"archer" or rank_definition == null or not _can_spend(&"double_shot"):
 		return false
 	var facing := _resolved_facing(direction)
-	_spend(&"double_shot")
+	if not _spend(&"double_shot"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"double_shot")
 	var power := stat_breakdown.value(&"precision_attack") * rank_definition.power
 	var request := _make_physical_request(null, &"double_shot", power, definition.accuracy_mode, definition.can_crit)
-	precision_projectile_requested.emit(&"double_shot", request, null, facing, run_state.projectile_count(&"double_shot"), 1)
+	precision_projectile_requested.emit(&"double_shot", request, null, facing, _projectile_count_for_cast(&"double_shot"), 1)
 	resources_changed.emit()
 	return true
 
@@ -1826,7 +1829,7 @@ func use_piercing_arrow(direction: Vector2) -> bool:
 	if class_id != &"archer" or rank_definition == null or not _can_spend(&"piercing_arrow"):
 		return false
 	var facing := _resolved_facing(direction)
-	_spend(&"piercing_arrow")
+	if not _spend(&"piercing_arrow"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"piercing_arrow")
 	var power := stat_breakdown.value(&"precision_attack") * rank_definition.power
@@ -1840,7 +1843,7 @@ func use_arrow_rain(point: Vector2) -> bool:
 	if class_id != &"archer" or rank_definition == null or not _can_spend(&"arrow_rain"):
 		return false
 	var center := arrow_rain_center(point)
-	_spend(&"arrow_rain")
+	if not _spend(&"arrow_rain"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"arrow_rain")
 	var volley_power := stat_breakdown.value(&"precision_attack") * rank_definition.power / float(ArrowRain.VOLLEY_COUNT)
@@ -1853,7 +1856,7 @@ func use_extended_aim() -> bool:
 	var rank_definition := _runtime_rank_definition(&"extended_aim")
 	if class_id != &"archer" or rank_definition == null or not _can_spend(&"extended_aim"):
 		return false
-	_spend(&"extended_aim")
+	if not _spend(&"extended_aim"): return false
 	extended_aim_remaining = rank_definition.power
 	presentation_action.emit(&"cast", _last_facing, 0.18)
 	resources_changed.emit()
@@ -1868,6 +1871,7 @@ func trap_center(skill_id: StringName, point: Vector2) -> Vector2:
 	return global_position + offset
 
 func can_place_trap(skill_id: StringName, point: Vector2) -> bool:
+	if world_motion != null: return _world_placement_ready(skill_id)
 	if not point.is_finite() or skill_id not in HunterMath.TRAP_IDS or skill_range(skill_id) <= 0.0 or navigation == null:
 		return false
 	if skill_id in HunterMath.NEW_TRAP_IDS and not is_hunter():
@@ -1914,7 +1918,7 @@ func use_snare_trap(point: Vector2) -> bool:
 	if class_id != &"archer" or rank_definition == null or not _can_spend(&"snare_trap") or not can_place_snare_trap(point):
 		return false
 	var center := snare_trap_center(point)
-	_spend(&"snare_trap")
+	if not _spend(&"snare_trap"): return false
 	reveal_from_offense()
 	snare_trap_requested.emit(center, rank_definition.power)
 	presentation_action.emit(&"cast", aim_direction(center), 0.18)
@@ -1932,7 +1936,7 @@ func use_explosive_trap(point: Vector2) -> bool:
 	if class_id != &"archer" or rank_definition == null or not _can_spend(&"explosive_trap") or not can_place_explosive_trap(point):
 		return false
 	var center := explosive_trap_center(point)
-	_spend(&"explosive_trap")
+	if not _spend(&"explosive_trap"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"explosive_trap")
 	var power := stat_breakdown.value(&"precision_attack") * rank_definition.power
@@ -1950,7 +1954,7 @@ func use_slowing_arrow(direction: Vector2) -> bool:
 	if class_id != &"archer" or rank_definition == null or not _can_spend(&"slowing_arrow"):
 		return false
 	var facing := _resolved_facing(direction)
-	_spend(&"slowing_arrow")
+	if not _spend(&"slowing_arrow"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"slowing_arrow")
 	var power := stat_breakdown.value(&"precision_attack") * definition.power
@@ -1964,7 +1968,7 @@ func use_hunter_mark(enemy: CombatActor) -> bool:
 		return false
 	if not hunter_state.mark(enemy.get_instance_id(), skill_rank(&"hunter_mark")):
 		return false
-	_spend(&"hunter_mark")
+	if not _spend(&"hunter_mark"): return false
 	reveal_from_offense()
 	presentation_action.emit(&"cast", aim_direction(enemy.global_position), 0.18)
 	resources_changed.emit()
@@ -2347,6 +2351,8 @@ func begin_skill_cast(skill_id: StringName, point: Vector2, enemy: CombatActor =
 	return true
 
 func cancel_active_cast() -> bool:
+	if _world_prepared_cast != null: _world_cast_result = WorldSkillCast.failure(&"cast_cancelled")
+	_world_prepared_cast = null
 	spiritualist_channel_interrupt_requested.emit()
 	if active_cast_skill == &"":
 		return false
@@ -2386,6 +2392,7 @@ func bind_world_geometry(world: WorldGeometry, point: ExpeditionWorldPoint, trav
 	return result
 
 func _advance_world_player(delta: float) -> void:
+	if has_active_cast(): _advance_world_cast(delta); return
 	if is_stunned() or is_feared() or is_rooted():
 		world_motion.cancel()
 		_world_dash_remaining = 0.0
@@ -2414,6 +2421,188 @@ func _advance_world_player(delta: float) -> void:
 	if world_motion.has_route():
 		var moved := world_motion.advance(stat_breakdown.value(&"move_speed")*movement_speed_multiplier()*delta)
 		if not moved["ok"]: world_motion.cancel(); _repath_time = 0.0
+
+var _world_prepared_cast: WorldSkillCast
+var _world_executing_cast: WorldSkillCast
+var _world_cast_result: Dictionary = {}
+var _world_requesting := false
+
+func world_cast_status() -> Dictionary:
+	return _world_cast_result.duplicate(true)
+func world_cast_anchor() -> ExpeditionWorldPoint:
+	return _world_executing_cast.anchor() if _world_executing_cast != null else null
+func world_cast_projectiles(skill: StringName) -> Array[Dictionary]:
+	return _world_executing_cast.projectiles.duplicate(true) if _world_executing_cast != null and _world_executing_cast.skill_id == skill and _world_executing_cast.committed else []
+
+func preview_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: Vector3, victim: CombatActor, actors: Array[CombatActor], revision: int, requested_rank: int = 0) -> Dictionary:
+	var saved_result := _world_cast_result.duplicate(true)
+	var command := _capture_world_skill(skill,anchor,facing,victim,actors,revision,requested_rank)
+	var capture_result := _world_cast_result.duplicate(true)
+	_world_cast_result = saved_result
+	if command == null: return capture_result
+	var previous := _cast_rank_context
+	_cast_rank_context = command.rank_context
+	var result := _validate_world_skill(command)
+	_cast_rank_context = previous
+	if result["ok"]: result["data"] = {"skill_id":skill,"geometry_revision":revision,"source":command.source().to_data(),"anchor":command.anchor().to_data() if command.anchor() != null else {},"projectiles":command.projectiles.duplicate(true)}
+	return result
+
+func request_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: Vector3, victim: CombatActor, actors: Array[CombatActor], revision: int, requested_rank: int = 0) -> Dictionary:
+	if _world_executing_cast != null or _world_requesting: return WorldSkillCast.failure(&"cast_busy")
+	var command := _capture_world_skill(skill,anchor,facing,victim,actors,revision,requested_rank)
+	if command == null: return _world_cast_result.duplicate(true)
+	var previous := _cast_rank_context
+	_cast_rank_context = command.rank_context
+	var result := _validate_world_skill(command)
+	if result["ok"]:
+		var duration := skill_cast_time(skill)
+		_world_requesting = true
+		cancel_active_cast()
+		if duration > 0.0:
+			_world_prepared_cast = command
+			active_cast_skill = skill
+			active_cast_rank = skill_rank(skill)
+			active_cast_total = duration
+			active_cast_remaining = duration
+			world_motion.cancel()
+			_world_dash_remaining = 0.0
+			result = {"ok":true,"error_code":&"","data":{"state":&"preparing"}}
+		else: result = _commit_world_skill(command)
+	_world_requesting = false
+	_cast_rank_context = previous
+	_world_cast_result = result.duplicate(true)
+	return result
+
+func _capture_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: Vector3, victim: CombatActor, actors: Array[CombatActor], revision: int, requested_rank: int) -> WorldSkillCast:
+	if world_motion == null or not world_motion.is_current_world(): _world_cast_result = WorldSkillCast.failure(&"spatial_binding_required"); return null
+	if not WorldSkillCast.supports(skill): _world_cast_result = WorldSkillCast.failure(&"unsupported_world_skill"); return null
+	if not facing.is_finite() or facing.is_zero_approx() or (skill in WorldSkillCast.POINT_AREAS and anchor == null): _world_cast_result = WorldSkillCast.failure(&"invalid_world_intent"); return null
+	var previous := push_cast_rank(skill,requested_rank)
+	var command := WorldSkillCast.new()
+	command.capture(self,skill,anchor,facing,victim,actors,revision,_cast_rank_context)
+	restore_cast_rank(previous)
+	return command
+
+func _validate_world_skill(command: WorldSkillCast) -> Dictionary:
+	if command.committed: return WorldSkillCast.failure(&"already_committed")
+	var controller := get_parent() as RunController
+	if controller != null and controller.geometer_casting != null and controller.geometer_casting.wall_field != null and command.skill_id in WorldSkillCast.PROJECTILES: return WorldSkillCast.failure(&"spatial_interceptor_required")
+	if is_hunter() and command.skill_id in [&"snare_trap",&"explosive_trap"]: return WorldSkillCast.failure(&"spatial_hunter_composition_required")
+	if (is_inside_tree() and get_tree().paused) or is_stunned() or is_feared() or (command.skill_id == &"spiritualist_soul_drain" and is_rooted()): return WorldSkillCast.failure(&"caster_controlled")
+	if not _can_pay_skill(command.skill_id): return WorldSkillCast.failure(&"skill_unavailable")
+	if command.skill_id == &"berserker_execution" and not can_pay_berserker_execution_hp(): return WorldSkillCast.failure(&"skill_unavailable")
+	if command.skill_id == &"defender_riposte" and not has_defender_token(): return WorldSkillCast.failure(&"skill_unavailable")
+	if command.skill_id in [&"sentinel_observe",&"sentinel_absolute_focus"] and not sentinel_state.can_pay(float(SentinelTuning.values(command.skill_id,skill_rank(command.skill_id)).get("focus_cost",0.0))): return WorldSkillCast.failure(&"skill_unavailable")
+	var valid := command.geometry_check(self)
+	if not valid["ok"]: return valid
+	command.projectiles.clear()
+	if command.skill_id in WorldSkillCast.PROJECTILES:
+		var count := int(command.rank_context["capture"]["values"].get("projectile_count",1))
+		if is_inside_tree() and not EffectProcLedger.projectile_slots_available(get_tree(),count): return WorldSkillCast.failure(&"skill_unavailable")
+		var facing := command.direction(self)
+		var side := facing.cross(Vector3.UP).normalized()
+		if side.is_zero_approx(): side = Vector3.RIGHT
+		var radius := 6.0 if command.skill_id in [&"fireball",&"fire_spear",&"ice_spear",&"lightning",&"electric_discharge"] else PlayerProjectile.DEFAULT_RADIUS
+		var body := {"radius":radius,"height":radius*2.0}
+		for index: int in range(count):
+			var offset := Vector3.UP*maxf(0.0,(float(world_motion.profile()["height"])-radius*2.0)*0.5)+side*(float(index)-float(count-1)*0.5)*14.0
+			var origin := command.source().position+offset
+			var sweep := world_motion.geometry.sweep(origin,origin,body,command.revision)
+			if not sweep["ok"]: return sweep
+			if sweep["data"]["hit"]: return WorldSkillCast.failure(&"blocked_origin")
+			command.projectiles.append({"origin":command.source().to_data(),"offset":offset,"direction":facing,"collider":body.duplicate(),"speed":skill_projectile_speed(command.skill_id),"range":skill_range(command.skill_id)})
+	return {"ok":true,"error_code":&"","data":{}}
+
+func _advance_world_cast(delta: float) -> void:
+	var command := _world_prepared_cast
+	if command == null: cancel_active_cast(); return
+	var previous := _cast_rank_context
+	_cast_rank_context = command.rank_context
+	var valid := _validate_world_skill(command)
+	if not valid["ok"]:
+		cancel_active_cast()
+		_world_cast_result = valid.duplicate(true)
+	else:
+		active_cast_remaining = maxf(0.0,active_cast_remaining-delta)
+		if active_cast_remaining <= 0.0:
+			_world_prepared_cast = null
+			active_cast_skill = &""
+			active_cast_rank = 0
+			active_cast_total = 0.0
+			_world_cast_result = _commit_world_skill(command)
+	_cast_rank_context = previous
+
+func _commit_world_skill(command: WorldSkillCast) -> Dictionary:
+	var controller := get_parent() as RunController
+	if controller != null: command.set_actors(controller.enemies)
+	var valid := _validate_world_skill(command)
+	if not valid["ok"]: return valid
+	_world_executing_cast = command
+	var direction := command.direction(self)
+	var flat := Vector2(direction.x,direction.z)
+	if flat.is_zero_approx(): flat = _last_facing
+	var point := Vector2(command.anchor().position.x,command.anchor().position.z) if command.anchor() != null else global_position+flat
+	var victim := command.target()
+	var actors := command.actors()
+	var accepted := false
+	match command.skill_id:
+		&"slash": accepted = use_slash(flat,actors)
+		&"defender_counterstroke": accepted = use_defender_counterstroke(flat,actors)
+		&"defender_line_lock": accepted = use_defender_line_lock(flat,actors)
+		&"defender_riposte": accepted = use_defender_riposte(flat,actors)
+		&"concentrated_rage": accepted = use_concentrated_rage(flat,actors)
+		&"brutal_strike": accepted = use_brutal_strike(victim)
+		&"berserker_rupture": accepted = use_berserker_rupture(victim)
+		&"berserker_execution": accepted = use_berserker_execution(victim)
+		&"berserker_breath_steal": accepted = use_berserker_breath_steal(victim)
+		&"berserker_pursuit_cut": accepted = use_berserker_pursuit_cut(victim)
+		&"provoke": accepted = use_provoke(victim)
+		&"hunter_mark": accepted = use_hunter_mark(victim)
+		&"sentinel_observe": accepted = use_sentinel_observe(victim)
+		&"fireball": accepted = use_fireball(flat)
+		&"fire_spear",&"ice_spear": accepted = use_spear(command.skill_id,victim)
+		&"lightning": accepted = use_lightning(victim)
+		&"electric_discharge": accepted = use_electric_discharge(flat)
+		&"double_shot": accepted = use_double_shot(flat)
+		&"piercing_arrow": accepted = use_piercing_arrow(flat)
+		&"slowing_arrow": accepted = use_slowing_arrow(flat)
+		&"arrow_rain": accepted = use_arrow_rain(point)
+		&"snare_trap": accepted = use_snare_trap(point)
+		&"explosive_trap": accepted = use_explosive_trap(point)
+		&"elementalist_flame_burst": accepted = use_elementalist_flame_burst(point)
+		&"elementalist_glacial_ring": accepted = use_elementalist_glacial_ring()
+		&"elementalist_tri_nova": accepted = use_elementalist_tri_nova()
+		&"spiritualist_soul_drain": accepted = use_spiritualist_soul_drain(victim)
+		&"spiritualist_procession": accepted = use_spiritualist_procession(victim)
+		&"spiritualist_spectral_veil": accepted = use_spiritualist_spectral_veil(point)
+		&"perseverance": accepted = use_perseverance()
+		&"fury": accepted = use_fury()
+		&"extended_aim": accepted = use_extended_aim()
+		&"sentinel_absolute_focus": accepted = use_sentinel_absolute_focus()
+	_world_executing_cast = null
+	return {"ok":accepted,"error_code":&"" if accepted else &"skill_rejected","data":{"state":&"committed"} if accepted else {}}
+
+func _target_line_clear(enemy: CombatActor) -> bool:
+	if world_motion != null: return world_can_reach(enemy,1.0e20)
+	return navigation != null and navigation.is_segment_clear(global_position,enemy.global_position,0.0)
+func _cone_target(enemy: CombatActor, facing: Vector2, radius: float, angle: float) -> bool:
+	if world_motion == null: return SkillGeometry.cone_contains(enemy.global_position-global_position,facing,radius,angle)
+	return _world_shape_target(enemy,{"kind":&"cone","range":radius,"half_angle":angle})
+func _line_target(enemy: CombatActor, facing: Vector2, length: float, width: float) -> bool:
+	if world_motion == null: return SkillGeometry.strip_contains(enemy.global_position-global_position,facing,length,width,enemy.collision_radius)
+	if enemy.world_motion == null: return false
+	var radius := float(enemy.world_motion.profile()["radius"])
+	return _world_shape_target(enemy,{"kind":&"line","range":length+radius,"half_width":width+radius})
+func _world_shape_target(enemy: CombatActor, shape: Dictionary) -> bool:
+	if _world_executing_cast == null: return false
+	shape["geometry_rule_id"] = &"direct_volume"
+	shape["direction"] = _world_executing_cast.direction(self)
+	var result := world_attack_query(enemy,shape,world_motion.geometry.geometry_revision)
+	return result["ok"] and result["data"]["hit"]
+func _projectile_count_for_cast(skill: StringName) -> int:
+	return _world_executing_cast.projectiles.size() if _world_executing_cast != null and _world_executing_cast.committed and skill == _world_executing_cast.skill_id else run_state.projectile_count(skill)
+func _world_placement_ready(skill: StringName) -> bool:
+	return _world_executing_cast != null and _world_executing_cast.skill_id == skill and _world_executing_cast.anchor() != null
 
 func use_world_teleport(destination: ExpeditionWorldPoint, revision: int) -> bool:
 	if world_motion == null or is_rooted() or (class_id != &"mage" and not run_state.has_item_active(&"teleport")) or not _can_pay_skill(&"teleport"): return false
@@ -2982,6 +3171,8 @@ func _magic_power(skill_id: StringName) -> float:
 	return stat_breakdown.value(&"magic_attack") * power
 
 func _can_spend(skill_id: StringName) -> bool:
+	if _world_executing_cast != null:
+		return _world_executing_cast.skill_id == skill_id and _validate_world_skill(_world_executing_cast)["ok"]
 	if world_motion != null and not world_motion.is_current_world(): return false
 	if world_motion != null and WorldSkillGeometryRules.rule(skill_id).get("geometry_rule_id",&"") != &"self_only" and not (skill_id == &"shield_wall" and _world_shield_commit): return false # Spatial casts require explicit WorldPoints.
 	return _can_pay_skill(skill_id)
@@ -2991,7 +3182,10 @@ func _can_pay_skill(skill_id: StringName) -> bool:
 	var has_runtime_definition := definition != null and (definition.ranks.is_empty() or _runtime_rank_definition(skill_id) != null)
 	return selected_cast_rank_valid(skill_id) and run_state.effect_ledger.can_create_root() and run_state.effects_valid() and has_projectile_capacity(skill_id) and has_runtime_definition and skill_id in available_skill_ids() and is_alive() and skill_cooldown(skill_id) <= 0.0 and sentinel_free_sp() >= skill_cost(skill_id)
 
-func _spend(skill_id: StringName) -> void:
+func _spend(skill_id: StringName) -> bool:
+	if _world_executing_cast != null:
+		if _world_executing_cast.skill_id != skill_id or not _validate_world_skill(_world_executing_cast)["ok"]: return false
+		_world_executing_cast.committed = true # Before root/payment callbacks can reenter.
 	_begin_effect_emission()
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var rank_definition := _runtime_rank_definition(skill_id)
@@ -3009,6 +3203,8 @@ func _spend(skill_id: StringName) -> void:
 		var shared_cooldown := StatCalculator.effective_cooldown(HunterTuning.COVER_COOLDOWN, stat_breakdown)
 		mage_cooldowns[&"foliage_shelter"] = shared_cooldown
 		mage_cooldowns[&"hunter_total_cover"] = shared_cooldown
+	if _world_executing_cast != null and _world_executing_cast.action_kind == SkillDefinition.ActionKind.OFFENSIVE: clear_shield_stance()
+	return true
 
 func _resolved_facing(direction: Vector2) -> Vector2:
 	var facing := direction.normalized()
@@ -3402,12 +3598,12 @@ func use_defender_riposte(direction: Vector2, enemies: Array[CombatActor]) -> bo
 	for enemy: CombatActor in enemies:
 		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive(): continue
 		var offset := enemy.global_position - global_position
-		if offset.length() < distance and SkillGeometry.cone_contains(offset, facing, rank.range, deg_to_rad(35.0)) and navigation.is_segment_clear(global_position, enemy.global_position, 0.0):
+		if (world_distance_to(enemy) if world_motion != null else offset.length()) < distance and _cone_target(enemy,facing,rank.range,deg_to_rad(35.0)) and _target_line_clear(enemy):
 			chosen = enemy
-			distance = offset.length()
+			distance = world_distance_to(enemy) if world_motion != null else offset.length()
 	if chosen == null: return false
 	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
-	_spend(id)
+	if not _spend(id): return false
 	_consume_defender_token()
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(id)
@@ -3443,13 +3639,13 @@ func use_defender_retreat_guard(direction: Vector2) -> bool:
 func use_berserker_pursuit_cut(enemy: CombatActor) -> bool:
 	var id := &"berserker_pursuit_cut"
 	var rank := _runtime_rank_definition(id)
-	if not _is_berserker() or rank == null or not _can_spend(id) or not can_target_skill(id, enemy) or navigation == null or not navigation.is_segment_clear(global_position, enemy.global_position, 0.0):
+	if not _is_berserker() or rank == null or not _can_spend(id) or not can_target_skill(id, enemy) or navigation == null or not _target_line_clear(enemy):
 		return false
 	var wounded := berserker_wound_stacks(enemy.get_instance_id()) > 0
 	var power := rank.power + (rank.secondary_power if wounded else 0.0)
 	var definition := ClassCatalog.skill_definition(id)
 	_commit_action(definition.action_kind)
-	_spend(id)
+	if not _spend(id): return false
 	reveal_from_offense()
 	attack_requested.emit(_make_physical_request(enemy, id, stat_breakdown.value(&"melee_attack") * power, definition.accuracy_mode, definition.can_crit), enemy)
 	presentation_action.emit(&"slash", _resolved_facing(aim_direction(enemy.global_position)), 0.2)
