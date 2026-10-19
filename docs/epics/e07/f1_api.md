@@ -250,8 +250,8 @@ espaciais existentes. Cones/linhas corpo a corpo consultam direção/LoS 3D no
 handler canônico, sem refazer fórmulas. Os placeholders Vector2 são apresentação.
 
 Whitelist nominal em WorldSkillCast (48 IDs), também exposta como cast_entry no
-inventário: alvo dirigido, cones/linhas, oito tipos de projétil, seis placements,
-quatro áreas próprias e quatro estados self_only. Isso informa entrada disponível,
+inventário: alvo dirigido, cones/linhas, oito tipos de projétil, sete placements,
+cinco áreas próprias e quatro estados self_only. Isso informa entrada disponível,
 não certifica todos os efeitos de um kit. Shield Wall/dash/teleporte conservam
 as APIs espaciais próprias já documentadas. Snare/Explosive herdadas pela Caçadora
 retornam spatial_hunter_composition_required até ligar reação/abertura espaciais;
