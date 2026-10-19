@@ -249,13 +249,14 @@ configura suas três áreas/schedule originais; Dreno/Procissão iniciam os guar
 espaciais existentes. Cones/linhas corpo a corpo consultam direção/LoS 3D no
 handler canônico, sem refazer fórmulas. Os placeholders Vector2 são apresentação.
 
-Whitelist nominal em WorldSkillCast (42 IDs), também exposta como cast_entry no
+Whitelist nominal em WorldSkillCast (48 IDs), também exposta como cast_entry no
 inventário: alvo dirigido, cones/linhas, oito tipos de projétil, seis placements,
 quatro áreas próprias e quatro estados self_only. Isso informa entrada disponível,
 não certifica todos os efeitos de um kit. Shield Wall/dash/teleporte conservam
 as APIs espaciais próprias já documentadas. Snare/Explosive herdadas pela Caçadora
 retornam spatial_hunter_composition_required até ligar reação/abertura espaciais;
-Geômetra, paredes, demais campos e mobilidades continuam pendentes.
+Geômetra, paredes, campos e mecanismos restantes continuam pendentes.
+Marco/Onda/Fenda e Avanço/Retirada/Salto usam os bindings descritos abaixo.
 
 WorldTargetLock.configure(caster,target,range,revision) valida alcance/LoS somente
 na admissão e captura alvo fraco, estágio e identidade da geometria. validate()
@@ -317,6 +318,44 @@ antes de callbacks letais, sem permitir atravessar lajes ou migrar mundos. Repet
 admissão antes do dano; dano nulo encerra. Primário e saltos secundários continuam
 no resolver central com os coeficientes, marca/bônus/stun e orçamento originais.
 A prova lógica desses consumidores não aprova apresentação multialtura.
+
+## Guardas, campos e deslocamentos com contato
+
+WorldGeometry.trace_ground(source,heading,maximum_distance,profile,revision) é
+consulta pura: conserva a direção x/z, segue y das superfícies e mede custo3D.
+Retorna data.points (rota copiada com seams), cost, destination e truncated.
+Usa ground_line_samples e até32 refinamentos de prefixo para parar antes do
+primeiro sólido/borda/abertura incompatível, sem detour ou salto por projeção.
+O suporte é verificado continuamente nos intervalos dos predicados de borda e
+abertura; endpoints legais não permitem atravessar uma lacuna intermediária.
+Prefixo de custo0 é resposta geométrica válida; o cast o recusa antes do custo.
+Ground_line_samples acrescenta data.route quando completa os centros pedidos.
+
+WorldActorMotion.plan_ground_line(heading,distance,revision) instala essa rota.
+advance(distance) acrescenta data.segments: cada segmento real tem from/to
+WorldPoint DTO, incluindo suporte correto nas transições. WorldTravelContact.first
+consulta cilindros e oclusão nesses segmentos; não testa a corda entre endpoints
+em andares distintos. Salto escolhe primeiro contato por distância/ID; Avanço
+conserva a ordem nominal da lista entre contatos elegíveis do frame. Claim antes
+do callback limita cada emissão a um alvo; alvos removidos usam referências fracas.
+
+WorldSkillCast acrescenta Marco, Onda, Fenda, Avanço, Retirada e Salto. Preview
+inclui travel_plan copiado com maximum_distance composto. Controle/rota inválida
+rejeitam antes de custo. Deslocamento pago captura dano/rank e revalida suporte
+após callbacks; troca do mundo cancela o efeito sem migrá-lo. Avanço/Salto usam
+DASH_DURATION, respeitam pausa e param por controle/revisão/epoch/cleanup ou nova
+mobilidade. Retirada faz passo imediato apoiado para trás, mantendo frente3D
+original. As três guardas guardam direção3D própria; Shield Wall conserva a frente
+horizontal de sua API explícita. Mitigação/eventos usam dano já aceito, sem nova LoS.
+
+Marco armazena WorldEffectArea no suporte colocado. DEF própria e slow de inimigos
+usam defender_anchor_contains(actor), raio100 sem padding nominal. Onda usa somente
+a origem do Marco ativo, ou somente o caster na ausência dele; conserva token,
+dano e padding originais. Empurrão de35 unidades segue suporte, para em sólidos/
+bordas e respeita imunidade de boss. Fenda usa ground_connected e strip nominal
+x/z220×44; alcance de chão inclui a altura percorrida, a largura não vira um tubo
+aéreo. Hemorragia/DeepBleeding herdam o evento aceito e seguem o alvo sem nova LoS.
+Não há alteração de fórmulas, catálogo ou significado de SP/token/feridas.
 
 ## Adaptador plano e próximos consumidores
 

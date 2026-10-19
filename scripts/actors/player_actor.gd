@@ -225,6 +225,10 @@ var defender_counter_guard_facing := Vector2.RIGHT
 var defender_advance_guard_active := false
 var defender_advance_guard_facing := Vector2.RIGHT
 var defender_guard_return_cooldown := 0.0
+var _world_counter_guard_facing := Vector3.ZERO
+var _world_advance_guard_facing := Vector3.ZERO
+var _world_retreat_guard_facing := Vector3.ZERO
+var defender_anchor_area: WorldEffectArea
 var defender_anchor_remaining := 0.0
 var defender_anchor_center := Vector2.INF
 var _defender_inside_anchor := false
@@ -619,6 +623,7 @@ func use_defender_counterstroke(direction: Vector2, enemies: Array[CombatActor])
 		_consume_defender_token()
 	defender_counter_guard_remaining = DEFENDER_COUNTER_GUARD_DURATION
 	defender_counter_guard_facing = facing
+	_world_counter_guard_facing = world_cast_direction() if world_motion != null else Vector3.ZERO
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"defender_counterstroke")
 	var weight := rank_definition.power + (rank_definition.secondary_power if empowered else 0.0)
@@ -724,6 +729,7 @@ func berserker_wound_leap_destination(direction: Vector2) -> Vector2:
 	return navigation.move_until_blocked(global_position, global_position + facing * skill_range(&"berserker_wound_leap"))
 
 func use_berserker_wound_leap(direction: Vector2, enemies: Array[CombatActor]) -> bool:
+	if world_motion != null: return _use_world_travel_skill(&"berserker_wound_leap",enemies)
 	var rank_definition := _runtime_rank_definition(&"berserker_wound_leap")
 	if not _is_berserker() or rank_definition == null or not _can_spend(&"berserker_wound_leap") or is_rooted():
 		return false
@@ -759,7 +765,7 @@ func use_berserker_blood_rift(direction: Vector2, enemies: Array[CombatActor]) -
 		return false
 	var facing := _resolved_facing(direction)
 	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
-	_spend(&"berserker_blood_rift")
+	if not _spend(&"berserker_blood_rift"): return false
 	reveal_from_offense()
 	target = null
 	_path.clear()
@@ -767,12 +773,14 @@ func use_berserker_blood_rift(direction: Vector2, enemies: Array[CombatActor]) -
 	velocity = Vector2.ZERO
 	var definition := ClassCatalog.skill_definition(&"berserker_blood_rift")
 	var melee_attack := stat_breakdown.value(&"melee_attack")
+	var area := _world_area_at(world_point()) if world_motion != null else null
+	if world_motion != null and area == null: return true
 	for enemy: CombatActor in enemies.duplicate():
 		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
 			continue
-		if not SkillGeometry.strip_contains(enemy.global_position - global_position, facing, SkillGeometry.BERSERKER_RIFT_LENGTH, SkillGeometry.BERSERKER_RIFT_HALF_WIDTH, enemy.collision_radius):
+		if not _world_ground_strip(area,enemy,world_cast_direction(),SkillGeometry.BERSERKER_RIFT_LENGTH,SkillGeometry.BERSERKER_RIFT_HALF_WIDTH) if world_motion != null else not SkillGeometry.strip_contains(enemy.global_position - global_position, facing, SkillGeometry.BERSERKER_RIFT_LENGTH, SkillGeometry.BERSERKER_RIFT_HALF_WIDTH, enemy.collision_radius):
 			continue
-		if not navigation.is_segment_clear(global_position, enemy.global_position, 0.0):
+		if world_motion == null and not navigation.is_segment_clear(global_position, enemy.global_position, 0.0):
 			continue
 		var direct := _make_physical_request(enemy, &"berserker_blood_rift", melee_attack * rank_definition.power, definition.accuracy_mode, definition.can_crit)
 		var bleed := _make_physical_request(enemy, &"berserker_blood_rift_tick", melee_attack * rank_definition.secondary_power, DamageRequest.AccuracyMode.GEOMETRY, false)
@@ -839,6 +847,7 @@ func remove_berserker_wound(target_id: int) -> void:
 	berserker_wounds.erase(target_id)
 
 func clear_berserker_state() -> void:
+	if _world_travel_skill == &"berserker_wound_leap": _stop_world_travel(true)
 	berserker_wounds.clear()
 	berserker_pursuit_cooldown = 0.0
 	if _berserker_leap_active:
@@ -910,6 +919,7 @@ func defender_wall_advance_destination(direction: Vector2) -> Vector2:
 	return navigation.move_until_blocked(global_position, global_position + facing * skill_range(&"defender_wall_advance"))
 
 func use_defender_anchor(point: Vector2) -> bool:
+	if world_motion != null: return _use_world_defender_anchor()
 	var rank_definition := _runtime_rank_definition(&"defender_anchor")
 	if not _defender_active_equipped(&"defender_anchor") or rank_definition == null or not _can_spend(&"defender_anchor") or navigation == null:
 		return false
@@ -946,6 +956,7 @@ func use_defender_line_lock(direction: Vector2, enemies: Array[CombatActor]) -> 
 	return true
 
 func use_defender_wall_advance(direction: Vector2, enemies: Array[CombatActor]) -> bool:
+	if world_motion != null: return _use_world_travel_skill(&"defender_wall_advance",enemies)
 	var rank_definition := _runtime_rank_definition(&"defender_wall_advance")
 	if not _defender_active_equipped(&"defender_wall_advance") or rank_definition == null or not _can_spend(&"defender_wall_advance") or is_rooted():
 		return false
@@ -977,6 +988,7 @@ func use_defender_wall_advance(direction: Vector2, enemies: Array[CombatActor]) 
 	return true
 
 func use_defender_reprisal_wave(enemies: Array[CombatActor]) -> bool:
+	if world_motion != null: return _use_world_defender_wave(enemies)
 	var rank_definition := _runtime_rank_definition(&"defender_reprisal_wave")
 	if not _defender_active_equipped(&"defender_reprisal_wave") or rank_definition == null or not _can_spend(&"defender_reprisal_wave"):
 		return false
@@ -1579,17 +1591,17 @@ func apply_damage(request: DamageRequest, rng: RandomNumberGenerator) -> Diction
 	var front_reduction := 0.0
 	if has_shield_stance() and _faces_source_actor(shield_facing, source):
 		front_reduction = SHIELD_FRONT_REDUCTION
-	if _is_defender() and defender_counter_guard_remaining > 0.0 and _faces_source_actor(defender_counter_guard_facing, source):
+	if _is_defender() and defender_counter_guard_remaining > 0.0 and _faces_source_actor(defender_counter_guard_facing, source, _world_counter_guard_facing):
 		front_reduction = maxf(front_reduction, DEFENDER_COUNTER_GUARD_REDUCTION)
-	if _is_defender() and defender_advance_guard_active and _faces_source_actor(defender_advance_guard_facing, source):
+	if _is_defender() and defender_advance_guard_active and _faces_source_actor(defender_advance_guard_facing, source, _world_advance_guard_facing):
 		front_reduction = maxf(front_reduction, DEFENDER_ADVANCE_GUARD_REDUCTION)
-	if _is_defender() and defender_retreat_guard_remaining > 0.0 and _faces_source_actor(defender_retreat_guard_facing, source):
+	if _is_defender() and defender_retreat_guard_remaining > 0.0 and _faces_source_actor(defender_retreat_guard_facing, source, _world_retreat_guard_facing):
 		front_reduction = maxf(front_reduction, defender_retreat_guard_reduction)
 	var effective_request := request.copy() if front_reduction > 0.0 else request
 	if front_reduction > 0.0:
 		effective_request.damage_dealt_multiplier *= 1.0 - front_reduction
 	var result := _apply_damage_with_shield(effective_request, rng)
-	var frontal_shield_absorption := _faces_source_actor(_defender_event_facing(), source) and float(result.get("absorbed_damage", 0.0)) > 0.0
+	var frontal_shield_absorption := _faces_source_actor(_defender_event_facing(), source, _defender_event_world_facing()) and float(result.get("absorbed_damage", 0.0)) > 0.0
 	if bool(result.get("landed", false)) and float(result.get("damage", 0.0)) > 0.0 and (front_reduction > 0.0 or frontal_shield_absorption):
 		_grant_defender_front_event(result)
 	return result
@@ -1607,16 +1619,22 @@ func _apply_damage_with_shield(request: DamageRequest, rng: RandomNumberGenerato
 func _shield_faces_position(position: Vector2) -> bool:
 	return _faces_position(shield_facing, position)
 
-func _faces_source_actor(facing: Vector2, source: Node2D) -> bool:
+func _faces_source_actor(facing: Vector2, source: Node2D, world_facing: Vector3 = Vector3.ZERO) -> bool:
 	if world_motion == null: return _faces_position(facing,source.global_position)
 	var actor := source as CombatActor
-	if actor == null or actor.world_motion == null or actor.world_motion.geometry != world_motion.geometry: return false
+	if actor == null or actor.world_motion == null or not actor.world_motion.is_current_world() or not world_motion.is_current_world() or actor.world_motion.geometry != world_motion.geometry or actor.world_point().stage_id != world_point().stage_id: return false
 	var offset := actor.world_point().position-world_point().position
-	return not offset.is_zero_approx() and offset.normalized().dot(Vector3(facing.x,0.0,facing.y)) >= cos(SkillGeometry.DEFENDER_GUARD_HALF_ANGLE)
+	return not offset.is_zero_approx() and offset.normalized().dot(world_facing.normalized() if not world_facing.is_zero_approx() else Vector3(facing.x,0.0,facing.y)) >= cos(SkillGeometry.DEFENDER_GUARD_HALF_ANGLE)
 
 func _faces_position(facing: Vector2, position: Vector2) -> bool:
 	var offset := position - global_position
 	return not offset.is_zero_approx() and offset.normalized().dot(facing) >= cos(SkillGeometry.DEFENDER_GUARD_HALF_ANGLE)
+
+func _defender_event_world_facing() -> Vector3:
+	if defender_retreat_guard_remaining > 0.0: return _world_retreat_guard_facing
+	if defender_advance_guard_active: return _world_advance_guard_facing
+	if defender_counter_guard_remaining > 0.0: return _world_counter_guard_facing
+	return Vector3.ZERO
 
 func _defender_event_facing() -> Vector2:
 	if defender_retreat_guard_remaining > 0.0:
@@ -1700,6 +1718,11 @@ func clear_defender_state() -> void:
 	_stop_dash()
 	defender_guard_return_cooldown = 0.0
 	defender_anchor_remaining = 0.0
+	defender_anchor_area = null
+	_world_counter_guard_facing = Vector3.ZERO
+	_world_advance_guard_facing = Vector3.ZERO
+	_world_retreat_guard_facing = Vector3.ZERO
+	_stop_world_travel(true)
 	defender_anchor_center = Vector2.INF
 	if _defender_inside_anchor:
 		_defender_inside_anchor = false
@@ -1712,12 +1735,19 @@ func has_defender_token() -> bool:
 	return _is_defender() and defender_token_remaining > 0.0 and is_alive()
 
 func has_defender_anchor() -> bool:
-	return _is_defender() and defender_anchor_remaining > 0.0 and defender_anchor_center.is_finite() and is_alive()
+	if not _is_defender() or defender_anchor_remaining <= 0.0 or not is_alive(): return false
+	if world_motion != null: return world_motion.is_current_world() and defender_anchor_area != null and defender_anchor_area.is_current_world() and defender_anchor_area.geometry == world_motion.geometry
+	return defender_anchor_center.is_finite()
+
+func defender_anchor_contains(actor: CombatActor) -> bool:
+	if not has_defender_anchor(): return false
+	if world_motion == null: return is_instance_valid(actor) and actor.is_alive() and actor.global_position.distance_to(defender_anchor_center) <= SkillGeometry.DEFENDER_ANCHOR_RADIUS
+	var query := defender_anchor_area.query(actor,SkillGeometry.DEFENDER_ANCHOR_RADIUS)
+	return query["ok"] and query["data"]["hit"]
 
 func _update_defender_anchor_presence() -> void:
-	var inside := has_defender_anchor() and global_position.distance_to(defender_anchor_center) <= SkillGeometry.DEFENDER_ANCHOR_RADIUS
-	if inside == _defender_inside_anchor:
-		return
+	var inside := defender_anchor_contains(self)
+	if inside == _defender_inside_anchor: return
 	_defender_inside_anchor = inside
 	_apply_derived_stats(_build_stat_breakdown())
 	resources_changed.emit()
@@ -2396,16 +2426,19 @@ func bind_world_geometry(world: WorldGeometry, point: ExpeditionWorldPoint, trav
 	return result
 
 func _advance_world_player(delta: float) -> void:
+	_update_defender_anchor_presence()
 	if has_active_cast(): _advance_world_cast(delta); return
 	if is_stunned() or is_feared() or is_rooted():
 		world_motion.cancel()
-		_world_dash_remaining = 0.0
+		_stop_world_travel()
 		return
 	if _world_dash_remaining > 0.0:
 		var step := minf(delta,_world_dash_remaining)
 		var moved := world_motion.advance(_world_dash_speed*step)
 		_world_dash_remaining = maxf(0.0,_world_dash_remaining-step)
-		if not moved["ok"] or moved["data"]["arrived"]: _world_dash_remaining = 0.0
+		if moved["ok"]: _resolve_world_travel_hit(moved["data"]["segments"])
+		_update_defender_anchor_presence()
+		if not moved["ok"] or moved["data"]["arrived"] or _world_dash_remaining <= 0.0: _stop_world_travel()
 		return
 	if is_instance_valid(target) and target.is_alive():
 		if can_basic_attack(target,_attack_engaged):
@@ -2425,6 +2458,120 @@ func _advance_world_player(delta: float) -> void:
 	if world_motion.has_route():
 		var moved := world_motion.advance(stat_breakdown.value(&"move_speed")*movement_speed_multiplier()*delta)
 		if not moved["ok"]: world_motion.cancel(); _repath_time = 0.0
+
+var _world_travel_request: DamageRequest
+var _world_travel_skill: StringName = &""
+var _world_travel_targets: Array[WeakRef] = []
+var _world_travel_hit := false
+signal world_defender_hit_requested(request: DamageRequest, target: CombatActor, root_duration: float, push: Vector3)
+
+func _world_area_at(point: ExpeditionWorldPoint) -> WorldEffectArea:
+	if world_motion == null or not world_motion.is_current_world(): return null
+	var area := WorldEffectArea.new()
+	return area if area.configure(world_motion.geometry,point,world_motion.profile(),&"ground_connected",world_motion.geometry.geometry_revision)["ok"] else null
+
+func _use_world_defender_anchor() -> bool:
+	var id := &"defender_anchor"
+	var rank := _runtime_rank_definition(id)
+	if not _defender_active_equipped(id) or rank == null or not _can_spend(id) or not _world_placement_ready(id): return false
+	var area := _world_area_at(world_cast_anchor())
+	if area == null or not _spend(id): return false
+	defender_anchor_area = area
+	defender_anchor_center = Vector2.ZERO # Cosmetic legacy placeholder only.
+	defender_anchor_remaining = rank.power
+	_update_defender_anchor_presence()
+	resources_changed.emit()
+	return true
+
+func _use_world_defender_wave(actors: Array[CombatActor]) -> bool:
+	var id := &"defender_reprisal_wave"
+	var rank := _runtime_rank_definition(id)
+	if not _defender_active_equipped(id) or rank == null or not _can_spend(id): return false
+	var area := defender_anchor_area if has_defender_anchor() else _world_area_at(world_point())
+	if area == null: return false
+	var empowered := has_defender_token()
+	_commit_action(SkillDefinition.ActionKind.OFFENSIVE)
+	if not _spend(id): return false
+	if empowered: _consume_defender_token()
+	reveal_from_offense()
+	var definition := ClassCatalog.skill_definition(id)
+	var weight := rank.power+(rank.secondary_power if empowered else 0.0)
+	for actor: CombatActor in actors.duplicate():
+		if not area.contains_actor(actor,SkillGeometry.DEFENDER_REPRISAL_WAVE_RADIUS): continue
+		var request := _make_physical_request(actor,id,stat_breakdown.value(&"melee_attack")*weight,definition.accuracy_mode,definition.can_crit)
+		var push := (actor.world_point().position-area.anchor().position).normalized() if empowered else Vector3.ZERO
+		world_defender_hit_requested.emit(request,actor,0.0,push)
+	resources_changed.emit()
+	return true
+
+func _world_ground_strip(area: WorldEffectArea, actor: CombatActor, heading: Vector3, length: float, width: float) -> bool:
+	if area == null or not is_instance_valid(actor) or actor.world_motion == null: return false
+	var radius := float(actor.world_motion.profile()["radius"])
+	var offset := actor.world_point().position-area.anchor().position
+	return area.contains_actor(actor,length) and SkillGeometry.strip_contains(Vector2(offset.x,offset.z),Vector2(heading.x,heading.z),length,width,radius)
+
+func _use_world_travel_skill(id: StringName, actors: Array[CombatActor]) -> bool:
+	var rank := _runtime_rank_definition(id)
+	if rank == null or not _can_spend(id) or is_rooted() or _world_executing_cast == null or _world_executing_cast.skill_id != id or _world_executing_cast.travel_plan.is_empty(): return false
+	if (id == &"berserker_wound_leap" and not _is_berserker()) or (id != &"berserker_wound_leap" and not _is_defender()): return false
+	var facing := world_cast_direction()
+	var maximum_distance := float(_world_executing_cast.travel_plan["maximum_distance"])
+	if id != &"defender_retreat_guard": _commit_action(SkillDefinition.ActionKind.OFFENSIVE)
+	if not _spend(id): return false
+	_stop_world_travel()
+	var heading := -facing if id == &"defender_retreat_guard" else facing
+	var planned := world_motion.plan_ground_line(heading,maximum_distance,world_motion.geometry.geometry_revision)
+	if not planned["ok"] or not world_motion.is_current_world(): return true
+	if id == &"defender_retreat_guard":
+		world_motion.advance(float(planned["data"]["cost"]))
+		world_motion.cancel()
+		defender_retreat_guard_facing = Vector2(facing.x,facing.z).normalized()
+		_world_retreat_guard_facing = facing
+		defender_retreat_guard_reduction = rank.power
+		defender_retreat_guard_remaining = rank.secondary_power
+		_update_defender_anchor_presence()
+	else:
+		reveal_from_offense()
+		_world_travel_skill = id
+		_world_travel_targets.clear()
+		for actor: CombatActor in actors:
+			if is_instance_valid(actor): _world_travel_targets.append(weakref(actor))
+		var definition := ClassCatalog.skill_definition(id)
+		_world_travel_request = _make_physical_request(null,id,stat_breakdown.value(&"melee_attack")*rank.power,definition.accuracy_mode,definition.can_crit)
+		_world_dash_remaining = DASH_DURATION
+		_world_dash_speed = float(planned["data"]["cost"])/DASH_DURATION
+		if id == &"defender_wall_advance":
+			defender_advance_guard_active = true
+			defender_advance_guard_facing = Vector2(facing.x,facing.z).normalized()
+			_world_advance_guard_facing = facing
+	_path.clear(); _has_path_goal = false; velocity = Vector2.ZERO; target = null; _attack_engaged = false; _attack_recovery = 0.0
+	resources_changed.emit()
+	return true
+
+func _stop_world_travel(cancel_route: bool = false) -> void:
+	if cancel_route and world_motion != null: world_motion.cancel()
+	_world_dash_remaining = 0.0
+	_world_travel_request = null
+	_world_travel_targets.clear()
+	_world_travel_skill = &""
+	_world_travel_hit = false
+	defender_advance_guard_active = false
+	_world_advance_guard_facing = Vector3.ZERO
+
+func _resolve_world_travel_hit(segments: Array) -> void:
+	if _world_travel_hit or _world_travel_request == null or not world_motion.is_current_world(): return
+	var actors: Array[CombatActor] = []
+	for reference: WeakRef in _world_travel_targets:
+		var actor := reference.get_ref() as CombatActor
+		if is_instance_valid(actor): actors.append(actor)
+	var contact := WorldTravelContact.first(world_motion.geometry,segments,world_motion.profile(),actors,_world_travel_skill == &"defender_wall_advance")
+	if contact.is_empty(): return
+	_world_travel_hit = true # Before damage/death/cancel callbacks.
+	var actor := contact["actor"] as CombatActor
+	var request := _world_travel_request.copy()
+	request.target_id = actor.get_instance_id()
+	if _world_travel_skill == &"defender_wall_advance": world_defender_hit_requested.emit(request,actor,0.0,_world_advance_guard_facing)
+	else: attack_requested.emit(request,actor)
 
 var _world_prepared_cast: WorldSkillCast
 var _world_executing_cast: WorldSkillCast
@@ -2455,7 +2602,7 @@ func preview_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing
 	_cast_rank_context = command.rank_context
 	var result := _validate_world_skill(command)
 	_cast_rank_context = previous
-	if result["ok"]: result["data"] = {"skill_id":skill,"geometry_revision":revision,"source":command.source().to_data(),"anchor":command.anchor().to_data() if command.anchor() != null else {},"projectiles":command.projectiles.duplicate(true),"ground_points":command.ground_points.duplicate(true)}
+	if result["ok"]: result["data"] = {"skill_id":skill,"geometry_revision":revision,"source":command.source().to_data(),"anchor":command.anchor().to_data() if command.anchor() != null else {},"projectiles":command.projectiles.duplicate(true),"ground_points":command.ground_points.duplicate(true),"travel_plan":command.travel_plan.duplicate(true)}
 	return result
 
 func request_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: Vector3, victim: CombatActor, actors: Array[CombatActor], revision: int, requested_rank: int = 0) -> Dictionary:
@@ -2476,7 +2623,7 @@ func request_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing
 			active_cast_total = duration
 			active_cast_remaining = duration
 			world_motion.cancel()
-			_world_dash_remaining = 0.0
+			_stop_world_travel()
 			result = {"ok":true,"error_code":&"","data":{"state":&"preparing"}}
 		else: result = _commit_world_skill(command)
 	_world_requesting = false
@@ -2506,6 +2653,16 @@ func _validate_world_skill(command: WorldSkillCast) -> Dictionary:
 	if command.skill_id in [&"sentinel_observe",&"sentinel_absolute_focus"] and not sentinel_state.can_pay(float(SentinelTuning.values(command.skill_id,skill_rank(command.skill_id)).get("focus_cost",0.0))): return WorldSkillCast.failure(&"skill_unavailable")
 	var valid := command.geometry_check(self)
 	if not valid["ok"]: return valid
+	command.travel_plan.clear()
+	if command.skill_id in [&"defender_wall_advance",&"defender_retreat_guard",&"berserker_wound_leap"]:
+		if is_rooted(): return WorldSkillCast.failure(&"caster_controlled")
+		var heading := command.direction(self)*(-1.0 if command.skill_id == &"defender_retreat_guard" else 1.0)
+		var travel := world_motion.geometry.trace_ground(command.source(),heading,skill_range(command.skill_id),world_motion.profile(),command.revision)
+		if not travel["ok"]: return travel
+		if float(travel["data"]["cost"]) <= MOVEMENT_EPSILON: return WorldSkillCast.failure(&"no_valid_destination")
+		command.travel_plan = travel["data"].duplicate(true)
+		command.travel_plan["maximum_distance"] = skill_range(command.skill_id)
+	if command.skill_id == &"berserker_blood_rift" and Vector2(command.direction(self).x,command.direction(self).z).is_zero_approx(): return WorldSkillCast.failure(&"invalid_ground_line")
 	command.ground_points.clear()
 	if command.skill_id == &"elementalist_ember_path":
 		var samples := world_motion.geometry.ground_line_samples(command.source(),command.direction(self),SkillGeometry.ELEMENTALIST_EMBER_PATH_STEP,3,world_motion.profile(),command.revision)
@@ -2563,6 +2720,12 @@ func _commit_world_skill(command: WorldSkillCast) -> Dictionary:
 	var actors := command.actors()
 	var accepted := false
 	match command.skill_id:
+		&"defender_anchor": accepted = use_defender_anchor(point)
+		&"defender_reprisal_wave": accepted = use_defender_reprisal_wave(actors)
+		&"defender_wall_advance": accepted = use_defender_wall_advance(flat,actors)
+		&"defender_retreat_guard": accepted = use_defender_retreat_guard(flat)
+		&"berserker_wound_leap": accepted = use_berserker_wound_leap(flat,actors)
+		&"berserker_blood_rift": accepted = use_berserker_blood_rift(flat,actors)
 		&"elementalist_ember_path": accepted = use_elementalist_ember_path(flat)
 		&"elementalist_lightning_arc": accepted = use_elementalist_lightning_arc(victim)
 		&"spiritualist_echo_curse": accepted = use_spiritualist_echo_curse(victim)
@@ -2634,7 +2797,7 @@ func use_world_teleport(destination: ExpeditionWorldPoint, revision: int) -> boo
 	var result := world_motion.teleport(destination,skill_range(&"teleport"),revision)
 	if not result["ok"]: return false
 	_spend(&"teleport")
-	_world_dash_remaining = 0.0
+	_stop_world_travel()
 	_path.clear()
 	_has_path_goal = false
 	velocity = Vector2.ZERO
@@ -2652,6 +2815,7 @@ func use_world_dash(destination: ExpeditionWorldPoint, revision: int) -> bool:
 	var planned := world_motion.plan(destination,revision)
 	if not planned["ok"]: return false
 	_spend(&"dash")
+	_stop_world_travel()
 	_world_dash_remaining = DASH_DURATION
 	_world_dash_speed = float(route["data"]["cost"])/DASH_DURATION
 	_path.clear()
@@ -2871,6 +3035,7 @@ func _advance_player(delta: float) -> void:
 		defender_anchor_remaining = maxf(0.0, defender_anchor_remaining - delta)
 		if defender_anchor_remaining <= 0.0:
 			defender_anchor_center = Vector2.INF
+			defender_anchor_area = null
 			_update_defender_anchor_presence()
 	if navigation != null and _navigation_revision != navigation.revision:
 		_navigation_revision = navigation.revision
@@ -3638,6 +3803,7 @@ func use_defender_riposte(direction: Vector2, enemies: Array[CombatActor]) -> bo
 	return true
 
 func use_defender_retreat_guard(direction: Vector2) -> bool:
+	if world_motion != null: return _use_world_travel_skill(&"defender_retreat_guard",[])
 	var id := &"defender_retreat_guard"
 	var rank := _runtime_rank_definition(id)
 	if not _is_defender() or rank == null or not _can_spend(id) or navigation == null or is_rooted() or not direction.is_finite():

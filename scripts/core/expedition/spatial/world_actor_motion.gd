@@ -34,6 +34,15 @@ func plan(destination: ExpeditionWorldPoint, revision: int) -> Dictionary:
 	_cursor = 1
 	_route_revision = revision
 	return result
+func plan_ground_line(heading: Vector3, distance: float, revision: int) -> Dictionary:
+	if not is_current_world(): return _failure(&"world_reconfigured")
+	var result := geometry.trace_ground(_point,heading,distance,_profile,revision)
+	if not result["ok"]: return result
+	_route = result["data"]["points"].duplicate(true)
+	_cursor = 1
+	_route_revision = revision
+	return result
+
 func advance(distance: float) -> Dictionary:
 	var before := point()
 	var previous_cursor := _cursor
@@ -49,6 +58,7 @@ func _advance(distance: float) -> Dictionary:
 	if _route_revision != geometry.geometry_revision: return _failure(&"stale_geometry")
 	var remaining := distance
 	var travelled := 0.0
+	var segments: Array[Dictionary] = []
 	while _cursor < _route.size():
 		var destination: Dictionary = _route[_cursor]
 		var position: Vector3 = destination["position"]
@@ -65,13 +75,15 @@ func _advance(distance: float) -> Dictionary:
 		next = support["data"].get("point", {})["position"]
 		var contact := geometry.sweep(_point.position,next,_profile,geometry.geometry_revision)
 		if not contact["ok"] or contact["data"]["hit"]: return _failure(&"movement_blocked")
+		var segment_start := point()
 		_point.position = next
+		segments.append({"from":segment_start.to_data(),"to":point().to_data()})
 		travelled += step
 		remaining -= step
 		if step >= length: _cursor += 1
 	var registered := geometry.set_occupant(_occupant_id,_point,_profile,geometry.geometry_revision)
 	if not registered["ok"]: return registered
-	return {"ok":true,"error_code":&"","geometry_revision":geometry.geometry_revision,"data":{"point":_point.to_data(),"travelled":travelled,"arrived":_cursor>=_route.size()}}
+	return {"ok":true,"error_code":&"","geometry_revision":geometry.geometry_revision,"data":{"point":_point.to_data(),"travelled":travelled,"segments":segments,"arrived":_cursor>=_route.size()}}
 func teleport(destination: ExpeditionWorldPoint, maximum_range: float, revision: int) -> Dictionary:
 	if geometry == null: return {"ok":false,"error_code":&"invalid_geometry"}
 	if not is_current_world(): return _failure(&"world_reconfigured")

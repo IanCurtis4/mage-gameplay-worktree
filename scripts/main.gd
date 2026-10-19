@@ -206,6 +206,7 @@ func _ready() -> void:
 	player.attack_requested.connect(_on_attack_requested)
 	player.world_attack_requested.connect(_on_world_attack_requested)
 	player.defender_hit_requested.connect(_on_defender_hit_requested)
+	player.world_defender_hit_requested.connect(_on_world_defender_hit_requested)
 	player.berserker_rift_hit_requested.connect(_on_berserker_rift_hit_requested)
 	player.berserker_breath_hit_requested.connect(_on_berserker_breath_hit_requested)
 	player.mage_projectile_requested.connect(_on_mage_projectile_requested)
@@ -1077,7 +1078,10 @@ func _on_attack_requested(request: DamageRequest, target_actor: CombatActor) -> 
 	if target_actor != null and target_actor.is_alive():
 		target_actor.apply_damage(request, rng)
 
-func _on_defender_hit_requested(request: DamageRequest, target_actor: CombatActor, root_duration: float, push_direction: Vector2) -> void:
+func _on_world_defender_hit_requested(request: DamageRequest, target_actor: CombatActor, root_duration: float, push: Vector3) -> void:
+	_on_defender_hit_requested(request,target_actor,root_duration,Vector2.ZERO,push)
+
+func _on_defender_hit_requested(request: DamageRequest, target_actor: CombatActor, root_duration: float, push_direction: Vector2, world_push: Vector3 = Vector3.ZERO) -> void:
 	if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
 		return
 	var result := target_actor.apply_damage(request, rng)
@@ -1085,7 +1089,9 @@ func _on_defender_hit_requested(request: DamageRequest, target_actor: CombatActo
 		return
 	if root_duration > 0.0:
 		target_actor.apply_root(root_duration, &"physical")
-	if not push_direction.is_zero_approx() and target_actor is EnemyActor:
+	if not world_push.is_zero_approx() and target_actor is EnemyActor and target_actor.world_motion != null:
+		(target_actor as EnemyActor).apply_world_defender_push_direction(world_push,PlayerActor.DEFENDER_PUSH_DISTANCE,target_actor.world_motion.geometry.geometry_revision)
+	elif not push_direction.is_zero_approx() and target_actor is EnemyActor:
 		(target_actor as EnemyActor).apply_defender_push(push_direction, PlayerActor.DEFENDER_PUSH_DISTANCE)
 
 func _on_berserker_rift_hit_requested(request: DamageRequest, target_actor: CombatActor, bleed_request: DamageRequest) -> void:
@@ -1112,17 +1118,18 @@ func _sync_berserker_wound_visuals() -> void:
 		enemy.set_berserker_wound_visual(player.berserker_wound_stacks(enemy_id), player.berserker_wound_remaining(enemy_id))
 
 func _sync_defender_anchor() -> void:
+	if is_instance_valid(player) and player.world_motion != null: player._update_defender_anchor_presence()
 	var active := player != null and is_instance_valid(player) and player.has_defender_anchor()
 	for enemy_id: int in _defender_slowed_enemies.keys():
 		var previous: CombatActor = _defender_slowed_enemies[enemy_id]
-		if not is_instance_valid(previous) or not active or previous.global_position.distance_to(player.defender_anchor_center) > SkillGeometry.DEFENDER_ANCHOR_RADIUS:
+		if not is_instance_valid(previous) or not active or not player.defender_anchor_contains(previous):
 			if is_instance_valid(previous):
 				previous.remove_attribute_debuff(AttributeDebuffState.MOVE_SPEED, &"defender_anchor")
 			_defender_slowed_enemies.erase(enemy_id)
 	if not active:
 		return
 	for enemy: CombatActor in enemies:
-		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive() or enemy.global_position.distance_to(player.defender_anchor_center) > SkillGeometry.DEFENDER_ANCHOR_RADIUS:
+		if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive() or not player.defender_anchor_contains(enemy):
 			continue
 		if not _defender_slowed_enemies.has(enemy.get_instance_id()):
 			_defender_slowed_enemies[enemy.get_instance_id()] = enemy

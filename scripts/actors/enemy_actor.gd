@@ -162,6 +162,15 @@ func _world_fear_path() -> void:
 	if destination != null: world_motion.plan(destination,world_motion.geometry.geometry_revision)
 
 
+func apply_world_defender_push_direction(heading: Vector3, distance: float, revision: int) -> Dictionary:
+	if world_motion == null or not is_alive() or hard_controls.boss: return {"ok":false,"error_code":&"push_immune"}
+	var plan := world_motion.plan_ground_line(heading,distance,revision)
+	if not plan["ok"]: return plan
+	var result := world_motion.advance(float(plan["data"]["cost"]))
+	world_motion.cancel()
+	if result["ok"]: _repath_time = 0.0
+	return result
+
 func apply_world_defender_push(destination: ExpeditionWorldPoint, distance: float, revision: int) -> Dictionary:
 	if world_motion == null or not is_alive() or hard_controls.boss: return {"ok":false,"error_code":&"push_immune"}
 	var result := world_motion.displace(destination,distance,revision)

@@ -325,6 +325,56 @@ func query_attack(shape: Dictionary, source: ExpeditionWorldPoint, target: Exped
 	var hit := range_ok and los_ok and shape_ok
 	return _success({"range_ok": range_ok, "los_ok": los_ok, "shape_ok": shape_ok, "hit": hit, "distance": distance, "affected_surfaces": surfaces if hit else []})
 
+func trace_ground(source: ExpeditionWorldPoint, heading: Vector3, maximum_distance: float, profile: Dictionary, revision: int) -> Dictionary:
+	if not is_finite(maximum_distance) or maximum_distance <= 0.0: return _failure(&"invalid_distance")
+	var result := ground_line_samples(source,heading,maximum_distance,1,profile,revision)
+	if not result["ok"]: return result
+	var best: Dictionary = result if not result["data"]["points"].is_empty() else {}
+	if best.is_empty():
+		var low := 0.0
+		var high := maximum_distance
+		# Refine the first obstruction/support boundary; no detour or nearest-floor repair.
+		for _iteration: int in 32:
+			var middle := (low+high)*0.5
+			var probe := ground_line_samples(source,heading,middle,1,profile,revision)
+			if not probe["ok"]: return probe
+			if probe["data"]["points"].is_empty(): high = middle
+			else: low = middle; best = probe
+	var route: Array = best["data"]["route"].duplicate(true) if not best.is_empty() else [source.to_data()]
+	var cost := 0.0
+	for index: int in range(1,route.size()): cost += Vector3(route[index-1]["position"]).distance_to(route[index]["position"])
+	return _success({"points":route,"cost":cost,"destination":route[-1],"truncated":cost < maximum_distance-EPS})
+
+func _support_segment_fraction(cell: Dictionary, from: Vector3, to: Vector3, profile: Dictionary) -> float:
+	# Every change of the convex support/opening predicates occurs at one of these planes.
+	var cuts: Array[float] = [0.0,1.0]
+	var vertices: Array = cell["vertices"]
+	var start := Vector2(from.x,from.z)
+	var delta := Vector2(to.x-from.x,to.z-from.z)
+	for index: int in vertices.size():
+		var a: Vector3 = vertices[index]
+		var b: Vector3 = vertices[(index+1)%vertices.size()]
+		var edge := Vector2(b.x-a.x,b.z-a.z).normalized()
+		var slope := edge.cross(delta)
+		if absf(slope) <= EPS: continue
+		for boundary: float in [-float(profile["radius"]),float(profile["radius"])]:
+			var t := (boundary-edge.cross(start-Vector2(a.x,a.z)))/slope
+			if t > 0.0 and t < 1.0: cuts.append(t)
+	for opening: Dictionary in _stage["connectors"]:
+		if opening["surface_id"] != cell["surface_id"]: continue
+		var normal: Vector3 = opening["outward"]
+		var tangent := Vector2(-normal.z,normal.x)
+		var slope := tangent.dot(delta)
+		if absf(slope) <= EPS: continue
+		var half_width := float(opening["width"])*0.5-float(profile["radius"])
+		for boundary: float in [-half_width,half_width]:
+			var t := (boundary-tangent.dot(start-Vector2(opening["position"].x,opening["position"].z)))/slope
+			if t > 0.0 and t < 1.0: cuts.append(t)
+	cuts.sort()
+	for index: int in range(1,cuts.size()):
+		if not _supported(cell,from.lerp(to,(cuts[index-1]+cuts[index])*0.5),profile["radius"],profile["height"]): return cuts[index-1]
+	return 1.0 if _supported(cell,to,profile["radius"],profile["height"]) else cuts[-2]
+
 func ground_line_samples(source: ExpeditionWorldPoint, heading: Vector3, spacing: float, count: int, profile: Dictionary, revision: int) -> Dictionary:
 	# Heading chooses x/z direction; support supplies y. Spacing measures actual 3D travel.
 	if not _current(revision): return _failure(&"stale_geometry")
@@ -336,6 +386,7 @@ func ground_line_samples(source: ExpeditionWorldPoint, heading: Vector3, spacing
 	var cell := _cell(source.surface_id)
 	var distance := 0.0
 	var points: Array[Dictionary] = []
+	var route: Array[Dictionary] = [source.to_data()]
 	var visited: Array[String] = []
 	var stopped: StringName = &"unsupported_edge"
 	while not cell.is_empty() and not visited.has(cell["surface_id"]):
@@ -356,6 +407,7 @@ func ground_line_samples(source: ExpeditionWorldPoint, heading: Vector3, spacing
 			# A legal origin may already lie on the outgoing connector seam.
 			var immediate := _ground_line_connection(cell["surface_id"],point,direction,profile)
 			if immediate.is_empty(): break
+			route.append(ExpeditionWorldPoint.create(source.stage_id,immediate["surface_id"],point).to_data())
 			cell = immediate
 			continue
 		var exit := Kernel.support_y(cell,point+Vector3(direction.x,0,direction.y)*exit_distance)
@@ -364,14 +416,18 @@ func ground_line_samples(source: ExpeditionWorldPoint, heading: Vector3, spacing
 			var sample := point.lerp(exit,clampf((spacing*float(points.size()+1)-distance)/length,0.0,1.0))
 			var supported := ExpeditionWorldPoint.create(source.stage_id,cell["surface_id"],sample)
 			var contact := sweep(point,sample,profile,revision)
-			if not _point_valid(supported,profile["radius"],profile["height"]) or not contact["ok"] or contact["data"]["hit"]:
+			if _support_segment_fraction(cell,point,sample,profile) < 1.0-EPS or not _point_valid(supported,profile["radius"],profile["height"]) or not contact["ok"] or contact["data"]["hit"]:
 				return _success({"points":points,"truncated":true,"stop_reason":&"blocked_or_unsupported"})
 			points.append(supported.to_data())
-		if points.size() == count: return _success({"points":points,"truncated":false,"stop_reason":&""})
+		if points.size() == count:
+			route.append(points[-1].duplicate(true))
+			return _success({"points":points,"route":route,"truncated":false,"stop_reason":&""})
 		var crossing := sweep(point,exit,profile,revision)
-		if not crossing["ok"] or crossing["data"]["hit"]: stopped = &"blocked"; break
+		if _support_segment_fraction(cell,point,exit,profile) < 1.0-EPS or not crossing["ok"] or crossing["data"]["hit"]: stopped = &"blocked"; break
 		var following := _ground_line_connection(cell["surface_id"],exit,direction,profile)
 		if following.is_empty(): break
+		route.append(ExpeditionWorldPoint.create(source.stage_id,cell["surface_id"],exit).to_data())
+		route.append(ExpeditionWorldPoint.create(source.stage_id,following["surface_id"],exit).to_data())
 		distance += length
 		point = exit
 		cell = following

@@ -32,14 +32,15 @@ Player/Mage/Sentinel e flecha hostil, chuva/traps/blast ancorados, escudo/barrei
 piche, ocultação/budget/grace, coleta, movimento/dash temporal, AI autônoma/leash,
 cast obsoleto e callbacks que removem alvos. Isso não equivale ao cast completo
 dessas ativas: entrada/preview/composição nominal ainda precisam ser integrados.
-A retomada seguinte acrescenta WorldSkillCast: 42 entradas nominais com preview,
+A retomada seguinte acrescenta WorldSkillCast: 48 entradas nominais com preview,
 preparo e commit 3D. Dreno/Procissão/Véu, áreas elementais, chuva/traps base,
 projéteis e melee consomem a intenção capturada. A prova nominal é delimitada no
 recibo; isso ainda não certifica os dez kits nem os 27 efeitos compostos.
 SoulImpact, Assombro, Dissipação e gritos de área também receberam prova nominal
 de pulso/oclusão/controles, sem alterar o dano canônico.
-Geômetra, paredes/campos restantes, AoEs do Sentinela e demais mobilidades
-continuam bloqueios. API e recibo contêm o escopo exato; D05 visual não foi aprovado.
+Marco/Onda/Fenda e Avanço/Retirada/Salto receberam bindings nominais; Contraforte
+conserva direção3D durante a guarda. Geômetra, paredes/campos restantes e mecanismos
+da Caçadora/Sentinela continuam bloqueios. API e recibo contêm o escopo exato; D05 visual não foi aprovado.
 
 ## Habilidades nominais
 
@@ -52,27 +53,27 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `archer_cadence` — Cadência | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `archer_precision` — Precisão | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `arrow_rain` — Chuva de Flechas | `ground_connected` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
-| `berserker_blood_rift` — Fenda Sangrenta | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `berserker_blood_rift` — Fenda Sangrenta | `ground_connected` | Entrada/strip de chão e bleed herdado ligados; DeepBleeding e alvo que sobe cobertos no teste guard_travel |
 | `berserker_breath_steal` — Arrancar Fôlego | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
-| `berserker_deep_bleeding` — Hemorragia Profunda | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
+| `berserker_deep_bleeding` — Hemorragia Profunda | `inherit_parent` | Duração capturada no bleed espacial de Fenda; prova dirigida guard_travel e regressões nominais |
 | `berserker_execution` — Execução | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `berserker_obstinacy` — Obstinação | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `berserker_pursuit` — Caça Persistente | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `berserker_pursuit_cut` — Talho de Perseguição | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `berserker_rupture` — Ruptura | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
-| `berserker_wound_leap` — Salto Cruento | `walk_path` | Consumidor pendente; entrada legada bloqueada no binding |
+| `berserker_wound_leap` — Salto Cruento | `walk_path` | Entrada/rota temporal em suporte e primeiro contato real ligados; controle/pausa/cleanup/revisão/epoch cobertos |
 | `blood_thirst` — Sede de Sangue | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `brutal_strike` — Golpe Brutal | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `concentrated_rage` — Raiva Concentrada | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `dash` — Investida | `walk_path` | PlayerActor lógico testado; apresentação pendente |
-| `defender_anchor` — Marco de Guarda | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
-| `defender_counterstroke` — Contraforte | `direct_volume` | Entrada/hit3D ligados; facing3D da guarda persistente ainda pendente, conforme recibo |
-| `defender_guard_return` — Resguardo | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
+| `defender_anchor` — Marco de Guarda | `ground_connected` | Placement/área persistente de chão ligados; DEF/slow e saída por rampa cobertos |
+| `defender_counterstroke` — Contraforte | `direct_volume` | Entrada/hit e direção3D persistente da guarda ligados; fonte vertical/flanco e eventos secundários cobertos |
+| `defender_guard_return` — Resguardo | `inherit_parent` | Evento frontal herdado e SP sem duplicação cobertos em guarda3D; não cria nova query hostil |
 | `defender_line_lock` — Trava de Linha | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
-| `defender_reprisal_wave` — Onda de Represália | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
-| `defender_retreat_guard` — Guarda de Retirada | `walk_path` | Consumidor pendente; entrada legada bloqueada no binding |
+| `defender_reprisal_wave` — Onda de Represália | `ground_connected` | Área de chão ligada; somente origem do Marco ativo ou caster, token e push apoiado cobertos |
+| `defender_retreat_guard` — Guarda de Retirada | `walk_path` | Passo apoiado para trás e guarda com frente3D capturada ligados; sem dano de viagem |
 | `defender_riposte` — Rebater | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
-| `defender_wall_advance` — Avanço de Muralha | `walk_path` | Consumidor pendente; entrada legada bloqueada no binding |
+| `defender_wall_advance` — Avanço de Muralha | `walk_path` | Rota temporal/guarda3D e contato único ligados; push35 apoiado, boss imune e cancelamentos cobertos |
 | `defender_watch` — Vigília | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `double_shot` — Disparo Duplo | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `electric_discharge` — Descarga Elétrica | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
@@ -213,11 +214,11 @@ source/target/WorldPoint quando o consumidor correspondente for adaptado.
 | Componente | Fronteira |
 |---|---|
 | `basic_attack` | volume direto / projétil real nas dez identidades; controlador ligado; input/visual/composição dos kits pendentes |
-| `burn_tick` | inherit_parent; hit/estado causal já aceito; consumidor pendente |
-| `bleed_tick` | inherit_parent; hit/estado causal já aceito; consumidor pendente |
-| `hunter_thorn_bleed` | inherit_parent; hit/estado causal já aceito; consumidor pendente |
-| `berserker_blood_rift_tick` | inherit_parent; hit/estado causal já aceito; consumidor pendente |
-| `berserker_rupture_detonation` | inherit_parent; hit/estado causal já aceito; consumidor pendente |
+| `burn_tick` | inherit_parent; hit/estado causal já aceito; bleed de Fenda ligado, sem nova LoS após aplicação |
+| `bleed_tick` | inherit_parent; hit/estado causal já aceito; bleed de Fenda ligado, sem nova LoS após aplicação |
+| `hunter_thorn_bleed` | inherit_parent; hit/estado causal já aceito; bleed de Fenda ligado, sem nova LoS após aplicação |
+| `berserker_blood_rift_tick` | inherit_parent; hit/estado causal já aceito; bleed de Fenda ligado, sem nova LoS após aplicação |
+| `berserker_rupture_detonation` | inherit_parent; hit/estado causal já aceito; bleed de Fenda ligado, sem nova LoS após aplicação |
 | `geometer_wall_entry` | construção no suporte + interação/projétil; pendente |
 | `geometer_wall_exit` | construção no suporte + interação/projétil; pendente |
 | `geometer_foundation_fire` | construção no suporte + interação/projétil; pendente |
