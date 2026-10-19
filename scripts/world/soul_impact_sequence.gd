@@ -10,13 +10,13 @@ const VISUAL_TAIL := 0.16
 const ORB_TEXTURE: Texture2D = preload("res://assets/art/vfx/soul_impact_orb.png")
 const ORB_DIAMETER := 88.0
 
-var world_action: WorldLockedAction
+var world_action: WorldTargetLock
 var world_failure: StringName = &""
 
 func configure_world(caster: CombatActor, total_request: DamageRequest, target: CombatActor, maximum_range: float, revision: int) -> Dictionary:
 	if total_request == null: return {"ok":false,"error_code":&"invalid_request"}
-	var action := WorldLockedAction.new()
-	var result := action.configure(caster,target,maximum_range,false,revision)
+	var action := WorldTargetLock.new()
+	var result := action.configure(caster,target,maximum_range,revision)
 	if not result["ok"]: return result
 	world_action = action
 	configure(total_request,target)

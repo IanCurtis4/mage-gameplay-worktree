@@ -97,7 +97,7 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `geometer_translation` — Translação | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `geometer_triangulation` — Triangulação | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `geometer_vector_memory` — Memória Vetorial | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `haunt` — Assombro | `direct_volume` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS47 |
+| `haunt` — Assombro | `direct_volume` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS59 |
 | `hunter_covering_shot` — Tiro de Cobertura | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `hunter_easy_prey` — Presa Fácil | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `hunter_freezing_trap` — Armadilha Congelante | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
@@ -114,7 +114,7 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `perseverance` — Perseverança | `self_only` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `phantom_barrier` — Barreira Fantasma | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
 | `piercing_arrow` — Flecha Perfurante | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
-| `piercing_shout` — Grito Perfurante | `ground_connected` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS47 |
+| `piercing_shout` — Grito Perfurante | `ground_connected` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS59 |
 | `provoke` — Provocar | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `sentinel_absolute_focus` — Foco Absoluto | `self_only` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `sentinel_concussion_shot` — Tiro de Concussão | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
@@ -129,9 +129,9 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `slash` — Corte em cone | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `slowing_arrow` — Flecha Entorpecente | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `snare_trap` — Armadilha de Laço | `ground_connected` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo; composição Caçadora explicitamente bloqueada |
-| `soul_impact` — Impacto das Almas | `direct_volume` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS47 |
+| `soul_impact` — Impacto das Almas | `direct_volume` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS59 |
 | `spiritualist_channel_focus` — Foco do Além | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `spiritualist_dissipation` — Rito de Dissipação | `ground_connected` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS47 |
+| `spiritualist_dissipation` — Rito de Dissipação | `ground_connected` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS59 |
 | `spiritualist_echo_curse` — Maldição do Eco | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `spiritualist_echo_recovery` — Recolhimento | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `spiritualist_procession` — Procissão de Espectros | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
@@ -139,7 +139,7 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `spiritualist_spectral_veil` — Véu Espectral | `ground_connected` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `swordsman_resistance` — Resistência | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `teleport` — Teleporte | `teleport_legal` | PlayerActor lógico testado; apresentação pendente |
-| `terrifying_shout` — Grito Aterrorizante | `ground_connected` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS47 |
+| `terrifying_shout` — Grito Aterrorizante | `ground_connected` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS59 |
 | `trap_technique` — Técnica de Armadilhas | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `vigor` — Vigor | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 
@@ -158,7 +158,7 @@ causal original e não adiciona LoS a DoT já aplicado.
 | Paredes fogo/raios/gelo, Barreira Fantasma, Parede de Escudos | Base no suporte e volume com altura. Cruzamento, interceptação e dano são etapas distintas. Gelo altera revision/path; parede inferior não bloqueia ponte superior. Não consumir capacidade antes do contato real. |
 | Marco/Onda, Gritos, Fenda, Explosão/Anel/Trilha/Nova | Chão ancorado/conectado por centro ou segmento. Refazer queries por pulso/ramo conforme handler. Nova mantém sequências e orçamento; push percorre suporte. Não aprovar raio aéreo só por nome “explosão”. |
 | Arco Voltaico | Cada salto tem fonte própria, range 3D, alvo vivo e oclusão da geometria atual; ordem/limite de saltos e dano continuam canônicos. |
-| Impacto das Almas | Alvo travado; três pulsos seguem o alvo como no runtime atual. A classificação espacial do cast não cria rechecagem universal de LoS a ticks já emitidos. Adaptação dos pontos/estado em voo pendente. |
+| Impacto das Almas | Alvo travado; três pulsos seguem o alvo como no runtime atual. A classificação espacial do cast não cria rechecagem universal de LoS a ticks já emitidos. WorldTargetLock conserva corpo/suporte/epoch, sem transformar o pacote em canal. |
 | Eco Espiritualista | Marca, origem que segue portador e exceção echo_origin_fixed são distintas. Onda/propagação finita captura sua própria origem/superfície; trocar desenho não move o ponto fixo. Novos alvos usam geometria, procs preservam causalidade. |
 | Drenagem e Procissão | Runtime real revalida can_target_skill antes de cada tick/evento. Movimento/controle interrompe Drenagem. Preservar cura efetiva, limite, inscrição de conclusão e foco; não inventar revive/reset. |
 | Véu, Folhagem e Cobertura Total | Áreas de suporte/ocultação ancoradas à superfície; participação não atravessa laje. Grace e revelação seguem contratos atuais. Regeneração e passivas próprias não são AoE novas. |

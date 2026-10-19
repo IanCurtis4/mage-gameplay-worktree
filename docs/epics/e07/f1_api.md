@@ -257,11 +257,17 @@ as APIs espaciais próprias já documentadas. Snare/Explosive herdadas pela Caç
 retornam spatial_hunter_composition_required até ligar reação/abertura espaciais;
 Geômetra, ecos, paredes, demais campos e mobilidades continuam pendentes.
 
+WorldTargetLock.configure(caster,target,range,revision) valida alcance/LoS somente
+na admissão e captura alvo fraco, estágio e identidade da geometria. validate()
+conserva o vínculo com esse corpo/suporte atual; não depende da vida/posição do
+caster nem adiciona LoS/range aos pulsos emitidos. Troca do mundo ou morte/remoção
+do alvo encerra o restante. point() copia o WorldPoint atual do alvo travado.
+
 SoulImpactSequence.configure_world(caster, request, target, range, revision) liga
-WorldLockedAction não estacionário ao schedule original de três impactos. Mantém
-a divisão canônica do orçamento e scheduled_tick; consulta alcance/oclusão antes
-de CADA pulso, inclusive entre callbacks dentro do mesmo frame. Pausa congela;
-alvo removido, parede ou troca do mundo encerram somente o restante já pago.
+esse lock ao schedule original de três impactos. Mantém divisão canônica,
+scheduled_tick e pausa. O alvo pode se mover/subir por conectores, inclusive
+separar-se do caster por uma parede após o commit: os pulsos já emitidos seguem
+o mesmo alvo. Revalida identidade/suporte entre callbacks sem virar um canal.
 configure legado recusa alvo bound sem guard. Assombro consulta cone/LoS 3D;
 Grito Perfurante/Intimidador consultam área de chão da origem capturada, mantendo
 a política original de raio sem padding. Dissipação usa placement WorldPoint e
