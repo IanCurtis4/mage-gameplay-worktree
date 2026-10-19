@@ -66,7 +66,7 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `concentrated_rage` — Raiva Concentrada | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `dash` — Investida | `walk_path` | PlayerActor lógico testado; apresentação pendente |
 | `defender_anchor` — Marco de Guarda | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
-| `defender_counterstroke` — Contraforte | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
+| `defender_counterstroke` — Contraforte | `direct_volume` | Entrada/hit3D ligados; facing3D da guarda persistente ainda pendente, conforme recibo |
 | `defender_guard_return` — Resguardo | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `defender_line_lock` — Trava de Linha | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `defender_reprisal_wave` — Onda de Represália | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
