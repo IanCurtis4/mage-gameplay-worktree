@@ -1603,7 +1603,11 @@ func _on_soul_impact_requested(request: DamageRequest, target_actor: CombatActor
 	if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
 		return
 	var sequence := SoulImpactSequence.new()
-	sequence.configure(request, target_actor)
+	if player.world_motion != null:
+		var valid := sequence.configure_world(player,request,target_actor,player.skill_range(&"soul_impact"),player.world_motion.geometry.geometry_revision)
+		if not valid["ok"]: sequence.free(); return
+	else:
+		sequence.configure(request, target_actor)
 	sequence.impact.connect(_on_attack_requested)
 	add_child(sequence)
 	sequence.add_to_group("player_effects")
@@ -1874,15 +1878,17 @@ func _cancel_spiritualist_procession() -> void:
 		battle_indicators.clear_spiritualist_procession_wisps()
 
 func _on_spiritualist_dissipation_requested(center: Vector2, request: DamageRequest, marked_bonus: float, focus_bonus: float) -> void:
+	var area := _cast_ground_area() if player.world_motion != null else null
+	if player.world_motion != null and area == null: return
 	if battle_indicators != null:
 		battle_indicators.show_spiritualist_event(&"ritual", center)
 	var target_index := 0
 	for target_actor: CombatActor in enemies.duplicate():
 		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
 			continue
-		if center.distance_to(target_actor.global_position) > SkillGeometry.SPIRITUALIST_DISSIPATION_RADIUS + target_actor.collision_radius:
-			continue
-		if not navigation.is_segment_clear(center, target_actor.global_position, 0.0):
+		if area != null:
+			if not area.contains_actor(target_actor,SkillGeometry.SPIRITUALIST_DISSIPATION_RADIUS): continue
+		elif target_actor.world_motion != null or center.distance_to(target_actor.global_position) > SkillGeometry.SPIRITUALIST_DISSIPATION_RADIUS + target_actor.collision_radius or not navigation.is_segment_clear(center,target_actor.global_position,0.0):
 			continue
 		var target_id := target_actor.get_instance_id()
 		var was_marked := spiritualist_echo_state.has_mark(target_id)
@@ -1911,7 +1917,11 @@ func _on_haunt_requested(origin: Vector2, direction: Vector2, cone_range: float,
 	for target_actor: CombatActor in enemies.duplicate():
 		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
 			continue
-		if not SkillGeometry.cone_contains(target_actor.global_position - origin, direction, cone_range, PlayerActor.HAUNT_HALF_ANGLE):
+		if player.world_motion != null:
+			var shape := {"geometry_rule_id":&"direct_volume","kind":&"cone","direction":player.world_cast_direction(),"range":cone_range,"half_angle":PlayerActor.HAUNT_HALF_ANGLE}
+			var checked := player.world_attack_query(target_actor,shape,player.world_motion.geometry.geometry_revision)
+			if not checked["ok"] or not checked["data"]["hit"]: continue
+		elif target_actor.world_motion != null or not SkillGeometry.cone_contains(target_actor.global_position-origin,direction,cone_range,PlayerActor.HAUNT_HALF_ANGLE):
 			continue
 		var impact := request.copy()
 		impact.target_id = target_actor.get_instance_id()
@@ -1939,9 +1949,15 @@ func _on_provoke_requested(target_actor: CombatActor, duration: float) -> void:
 	enemy.apply_attribute_debuff(AttributeDebuffState.FLEE, &"provoke", PlayerActor.PROVOKE_FLEE_REDUCTION, PlayerActor.PROVOKE_DEBUFF_DURATION)
 
 func _on_piercing_shout_requested(origin: Vector2, request: DamageRequest, radius: float, duration: float) -> void:
+	var area := _cast_ground_area() if player.world_motion != null else null
+	if player.world_motion != null and area == null: return
 	for target_actor: CombatActor in enemies.duplicate():
-		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive() or origin.distance_to(target_actor.global_position) > radius:
+		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
 			continue
+		if area != null:
+			var checked := area.query(target_actor,radius)
+			if not checked["ok"] or not checked["data"]["hit"]: continue
+		elif target_actor.world_motion != null or origin.distance_to(target_actor.global_position) > radius: continue
 		var impact := request.copy()
 		impact.target_id = target_actor.get_instance_id()
 		var result := target_actor.apply_damage(impact, rng)
@@ -1958,9 +1974,15 @@ func _on_brutal_strike_requested(request: DamageRequest, target_actor: CombatAct
 		target_actor.apply_attribute_debuff(AttributeDebuffState.PHYSICAL_DEFENSE, &"brutal_strike", PlayerActor.BRUTAL_STRIKE_DEFENSE_REDUCTION, PlayerActor.BRUTAL_STRIKE_DEBUFF_DURATION)
 
 func _on_terrifying_shout_requested(origin: Vector2, radius: float, fear_duration: float) -> void:
+	var area := _cast_ground_area() if player.world_motion != null else null
+	if player.world_motion != null and area == null: return
 	for target_actor: CombatActor in enemies.duplicate():
-		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive() or origin.distance_to(target_actor.global_position) > radius:
+		if target_actor == null or not is_instance_valid(target_actor) or not target_actor.is_alive():
 			continue
+		if area != null:
+			var checked := area.query(target_actor,radius)
+			if not checked["ok"] or not checked["data"]["hit"]: continue
+		elif target_actor.world_motion != null or origin.distance_to(target_actor.global_position) > radius: continue
 		target_actor.apply_fear(fear_duration)
 		target_actor.apply_attribute_debuff(AttributeDebuffState.DAMAGE_RECEIVED, &"terrifying_shout", PlayerActor.TERRIFYING_SHOUT_DAMAGE_RECEIVED_INCREASE, PlayerActor.TERRIFYING_SHOUT_DEBUFF_DURATION)
 

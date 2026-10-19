@@ -10,6 +10,27 @@ const VISUAL_TAIL := 0.16
 const ORB_TEXTURE: Texture2D = preload("res://assets/art/vfx/soul_impact_orb.png")
 const ORB_DIAMETER := 88.0
 
+var world_action: WorldLockedAction
+var world_failure: StringName = &""
+
+func configure_world(caster: CombatActor, total_request: DamageRequest, target: CombatActor, maximum_range: float, revision: int) -> Dictionary:
+	if total_request == null: return {"ok":false,"error_code":&"invalid_request"}
+	var action := WorldLockedAction.new()
+	var result := action.configure(caster,target,maximum_range,false,revision)
+	if not result["ok"]: return result
+	world_action = action
+	configure(total_request,target)
+	return {"ok":true,"error_code":&""}
+
+func _world_valid() -> bool:
+	if world_action == null: return true
+	var result := world_action.validate()
+	if not result["ok"]:
+		world_failure = result["error_code"]
+		queue_free()
+		return false
+	return true
+
 var target_id := 0
 var impact_request: DamageRequest
 var emitted := 0
@@ -18,6 +39,7 @@ var visual_remaining := VISUAL_TAIL
 
 func configure(total_request: DamageRequest, target: CombatActor) -> void:
 	assert(total_request != null and target != null)
+	if target.world_motion != null and world_action == null: world_failure = &"spatial_binding_required"; return
 	target_id = target.get_instance_id()
 	impact_request = total_request.copy()
 	impact_request.target_id = target_id
@@ -34,6 +56,8 @@ func configure(total_request: DamageRequest, target: CombatActor) -> void:
 func _process(delta: float) -> void:
 	if is_queued_for_deletion() or (is_inside_tree() and get_tree().paused):
 		return
+	if world_action != null and world_action.paused(): return
+	if not _world_valid(): return
 	var target := instance_from_id(target_id) as CombatActor
 	if target == null or not target.is_alive():
 		queue_free()
@@ -49,6 +73,7 @@ func _process(delta: float) -> void:
 		return
 	time_to_next -= delta
 	while time_to_next <= 0.0 and emitted < IMPACT_COUNT:
+		if not _world_valid(): return
 		var pulse := impact_request.scheduled_tick()
 		pulse.is_secondary = emitted > 0
 		emitted += 1

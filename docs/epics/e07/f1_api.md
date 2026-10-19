@@ -249,13 +249,23 @@ configura suas três áreas/schedule originais; Dreno/Procissão iniciam os guar
 espaciais existentes. Cones/linhas corpo a corpo consultam direção/LoS 3D no
 handler canônico, sem refazer fórmulas. Os placeholders Vector2 são apresentação.
 
-Whitelist nominal em WorldSkillCast (34 IDs), também exposta como cast_entry no
-inventário: alvo dirigido, cones/linhas, oito tipos de projétil, cinco placements,
-duas áreas próprias e quatro estados self_only. Isso informa entrada disponível,
+Whitelist nominal em WorldSkillCast (39 IDs), também exposta como cast_entry no
+inventário: alvo dirigido, cones/linhas, oito tipos de projétil, seis placements,
+quatro áreas próprias e quatro estados self_only. Isso informa entrada disponível,
 não certifica todos os efeitos de um kit. Shield Wall/dash/teleporte conservam
 as APIs espaciais próprias já documentadas. Snare/Explosive herdadas pela Caçadora
 retornam spatial_hunter_composition_required até ligar reação/abertura espaciais;
 Geômetra, ecos, paredes, demais campos e mobilidades continuam pendentes.
+
+SoulImpactSequence.configure_world(caster, request, target, range, revision) liga
+WorldLockedAction não estacionário ao schedule original de três impactos. Mantém
+a divisão canônica do orçamento e scheduled_tick; consulta alcance/oclusão antes
+de CADA pulso, inclusive entre callbacks dentro do mesmo frame. Pausa congela;
+alvo removido, parede ou troca do mundo encerram somente o restante já pago.
+configure legado recusa alvo bound sem guard. Assombro consulta cone/LoS 3D;
+Grito Perfurante/Intimidador consultam área de chão da origem capturada, mantendo
+a política original de raio sem padding. Dissipação usa placement WorldPoint e
+consulta membership antes de dano, Foco, bônus por marca e weaken canônicos.
 
 ## Adaptador plano e próximos consumidores
 

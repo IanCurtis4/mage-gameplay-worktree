@@ -32,10 +32,12 @@ Player/Mage/Sentinel e flecha hostil, chuva/traps/blast ancorados, escudo/barrei
 piche, ocultação/budget/grace, coleta, movimento/dash temporal, AI autônoma/leash,
 cast obsoleto e callbacks que removem alvos. Isso não equivale ao cast completo
 dessas ativas: entrada/preview/composição nominal ainda precisam ser integrados.
-A retomada seguinte acrescenta WorldSkillCast: 34 entradas nominais com preview,
+A retomada seguinte acrescenta WorldSkillCast: 39 entradas nominais com preview,
 preparo e commit 3D. Dreno/Procissão/Véu, áreas elementais, chuva/traps base,
 projéteis e melee consomem a intenção capturada. A prova nominal é delimitada no
 recibo; isso ainda não certifica os dez kits nem os 27 efeitos compostos.
+SoulImpact, Assombro, Dissipação e gritos de área também receberam prova nominal
+de pulso/oclusão/controles, sem alterar o dano canônico.
 Geômetra, ecos, paredes/campos restantes, AoEs do Sentinela e demais mobilidades
 continuam bloqueios. API e recibo contêm o escopo exato; D05 visual não foi aprovado.
 
@@ -95,7 +97,7 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `geometer_translation` — Translação | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `geometer_triangulation` — Triangulação | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `geometer_vector_memory` — Memória Vetorial | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `haunt` — Assombro | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `haunt` — Assombro | `direct_volume` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS47 |
 | `hunter_covering_shot` — Tiro de Cobertura | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `hunter_easy_prey` — Presa Fácil | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `hunter_freezing_trap` — Armadilha Congelante | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
@@ -112,7 +114,7 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `perseverance` — Perseverança | `self_only` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `phantom_barrier` — Barreira Fantasma | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
 | `piercing_arrow` — Flecha Perfurante | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
-| `piercing_shout` — Grito Perfurante | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `piercing_shout` — Grito Perfurante | `ground_connected` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS47 |
 | `provoke` — Provocar | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `sentinel_absolute_focus` — Foco Absoluto | `self_only` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `sentinel_concussion_shot` — Tiro de Concussão | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
@@ -127,9 +129,9 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `slash` — Corte em cone | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `slowing_arrow` — Flecha Entorpecente | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `snare_trap` — Armadilha de Laço | `ground_connected` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo; composição Caçadora explicitamente bloqueada |
-| `soul_impact` — Impacto das Almas | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `soul_impact` — Impacto das Almas | `direct_volume` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS47 |
 | `spiritualist_channel_focus` — Foco do Além | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `spiritualist_dissipation` — Rito de Dissipação | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `spiritualist_dissipation` — Rito de Dissipação | `ground_connected` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS47 |
 | `spiritualist_echo_curse` — Maldição do Eco | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
 | `spiritualist_echo_recovery` — Recolhimento | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `spiritualist_procession` — Procissão de Espectros | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
@@ -137,7 +139,7 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `spiritualist_spectral_veil` — Véu Espectral | `ground_connected` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `swordsman_resistance` — Resistência | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `teleport` — Teleporte | `teleport_legal` | PlayerActor lógico testado; apresentação pendente |
-| `terrifying_shout` — Grito Aterrorizante | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `terrifying_shout` — Grito Aterrorizante | `ground_connected` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS47 |
 | `trap_technique` — Técnica de Armadilhas | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `vigor` — Vigor | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 

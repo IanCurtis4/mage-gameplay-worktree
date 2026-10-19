@@ -1226,6 +1226,7 @@ func spiritualist_dissipation_center(point: Vector2) -> Vector2:
 	return global_position + (point - global_position).limit_length(skill_range(&"spiritualist_dissipation"))
 
 func can_place_spiritualist_dissipation(point: Vector2) -> bool:
+	if world_motion != null: return _world_placement_ready(&"spiritualist_dissipation")
 	if navigation == null or skill_range(&"spiritualist_dissipation") <= 0.0:
 		return false
 	var center := spiritualist_dissipation_center(point)
@@ -1237,7 +1238,7 @@ func use_spiritualist_dissipation(point: Vector2) -> bool:
 	if not _is_spiritualist() or rank_definition == null or not _can_spend(skill_id) or not can_place_spiritualist_dissipation(point):
 		return false
 	var center := spiritualist_dissipation_center(point)
-	_spend(skill_id)
+	if not _spend(skill_id): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var magic_attack := spiritualist_magic_attack()
@@ -1401,7 +1402,7 @@ func use_piercing_shout() -> bool:
 	if class_id != &"swordsman" or rank_definition == null or not _can_spend(&"piercing_shout"):
 		return false
 	_commit_action(ClassCatalog.skill_definition(&"piercing_shout").action_kind)
-	_spend(&"piercing_shout")
+	if not _spend(&"piercing_shout"): return false
 	reveal_from_offense()
 	piercing_shout_visual_time = 0.25
 	var definition := ClassCatalog.skill_definition(&"piercing_shout")
@@ -1477,7 +1478,7 @@ func use_terrifying_shout() -> bool:
 	if class_id != &"swordsman" or rank_definition == null or not _can_spend(&"terrifying_shout"):
 		return false
 	_commit_action(ClassCatalog.skill_definition(&"terrifying_shout").action_kind)
-	_spend(&"terrifying_shout")
+	if not _spend(&"terrifying_shout"): return false
 	reveal_from_offense()
 	terrifying_shout_visual_time = 0.28
 	terrifying_shout_requested.emit(global_position, rank_definition.range, rank_definition.power)
@@ -1722,7 +1723,7 @@ func _update_defender_anchor_presence() -> void:
 func use_soul_impact(enemy: CombatActor) -> bool:
 	if class_id != &"mage" or _runtime_rank_definition(&"soul_impact") == null or not can_target_skill(&"soul_impact", enemy) or not _can_spend(&"soul_impact"):
 		return false
-	_spend(&"soul_impact")
+	if not _spend(&"soul_impact"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"soul_impact")
 	var request := _make_magic_request(enemy, &"soul_impact", _magic_power(&"soul_impact"), definition.accuracy_mode, definition.can_crit)
@@ -1735,7 +1736,7 @@ func use_haunt(direction: Vector2) -> bool:
 	if class_id != &"mage" or rank_definition == null or not _can_spend(&"haunt"):
 		return false
 	var facing := _resolved_facing(direction)
-	_spend(&"haunt")
+	if not _spend(&"haunt"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"haunt")
 	var request := _make_magic_request(null, &"haunt", _magic_power(&"haunt"), definition.accuracy_mode, definition.can_crit)
@@ -2429,6 +2430,8 @@ var _world_requesting := false
 
 func world_cast_status() -> Dictionary:
 	return _world_cast_result.duplicate(true)
+func world_cast_direction() -> Vector3:
+	return _world_executing_cast.direction(self) if _world_executing_cast != null else Vector3.ZERO
 func world_cast_anchor() -> ExpeditionWorldPoint:
 	return _world_executing_cast.anchor() if _world_executing_cast != null else null
 func world_cast_projectiles(skill: StringName) -> Array[Dictionary]:
@@ -2546,6 +2549,11 @@ func _commit_world_skill(command: WorldSkillCast) -> Dictionary:
 	var actors := command.actors()
 	var accepted := false
 	match command.skill_id:
+		&"soul_impact": accepted = use_soul_impact(victim)
+		&"haunt": accepted = use_haunt(flat)
+		&"piercing_shout": accepted = use_piercing_shout()
+		&"terrifying_shout": accepted = use_terrifying_shout()
+		&"spiritualist_dissipation": accepted = use_spiritualist_dissipation(point)
 		&"slash": accepted = use_slash(flat,actors)
 		&"defender_counterstroke": accepted = use_defender_counterstroke(flat,actors)
 		&"defender_line_lock": accepted = use_defender_line_lock(flat,actors)
