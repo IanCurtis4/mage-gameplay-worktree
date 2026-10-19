@@ -91,8 +91,10 @@ func can_trigger(target: CombatActor) -> bool:
 func first_trigger_target(targets: Array[CombatActor]) -> CombatActor:
 	var selected_target: CombatActor
 	var selected_distance := INF
-	for target: CombatActor in targets:
-		if target == null or not is_instance_valid(target) or target.get_instance_id() == owner_id or not can_trigger(target):
+	for candidate: Variant in targets:
+		if not is_instance_valid(candidate): continue
+		var target := candidate as CombatActor
+		if target == null or target.get_instance_id() == owner_id or not can_trigger(target):
 			continue
 		var distance := world_area.distance_to(target) if world_area != null else global_position.distance_to(target.global_position)
 		if selected_target == null or distance < selected_distance or (is_equal_approx(distance, selected_distance) and target.get_instance_id() < selected_target.get_instance_id()):

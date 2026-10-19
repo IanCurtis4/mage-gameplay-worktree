@@ -1918,22 +1918,26 @@ func can_place_trap(skill_id: StringName, point: Vector2) -> bool:
 func trap_armed_duration(base_duration: float) -> float:
 	return run_state.build_snapshot.trap_armed_duration(base_duration)
 
+func _hunter_trap_policy_check() -> Dictionary:
+	if not bool(run_state.composed_build().get("kit_policies",{}).get(&"hunter_marked_mechanism",false)): return {"ok":true,"target_id":0}
+	var target_id := hunter_state.marked_target_id
+	var marked := instance_from_id(target_id) as CombatActor if target_id > 0 else null
+	var controller := get_parent() as RunController
+	return {"ok":hunter_state.is_marked(target_id) and is_instance_valid(marked) and marked.is_alive() and not marked.is_queued_for_deletion() and controller != null and marked in controller.enemies,"target_id":target_id}
+
 func use_hunter_trap(skill_id: StringName, point: Vector2) -> bool:
 	if not is_hunter() or skill_id not in HunterMath.NEW_TRAP_IDS or not _can_spend(skill_id) or not can_place_trap(skill_id, point) or (is_inside_tree() and get_tree().paused):
 		return false
-	var selective := bool(run_state.composed_build().get("kit_policies", {}).get(&"hunter_marked_mechanism", false))
-	var captured_target_id := hunter_state.marked_target_id if selective else 0
-	if selective:
-		var marked := instance_from_id(captured_target_id) as CombatActor if captured_target_id > 0 else null
-		var controller := get_parent() as RunController
-		if not hunter_state.is_marked(captured_target_id) or not is_instance_valid(marked) or not marked.is_alive() or marked.is_queued_for_deletion() or controller == null or marked not in controller.enemies: return false
+	var policy := _hunter_trap_policy_check()
+	if not policy["ok"]: return false
+	var captured_target_id := int(policy["target_id"])
 	var rank := skill_rank(skill_id)
 	var request := HunterMath.trap_request(get_instance_id(), skill_id, rank, stat_breakdown, outgoing_damage_multiplier())
 	var opening := hunter_opening_snapshot(skill_id)
 	if request == null or opening == null:
 		return false
 	var center := trap_center(skill_id, point)
-	_spend(skill_id)
+	if not _spend(skill_id): return false
 	request.context = _emission_context.copy_context()
 	request.effect_snapshot = {"marked_trigger_target_id": captured_target_id}
 	opening.inherit_root(_emission_context)
@@ -2015,21 +2019,28 @@ func hunter_recoil_destination(direction: Vector2) -> Vector2:
 	return global_position - facing * float(HunterTuning.values(&"hunter_covering_shot", skill_rank(&"hunter_covering_shot")).get("recoil_distance", 0.0))
 
 func can_use_hunter_covering_shot(direction: Vector2) -> bool:
+	if world_motion != null: return is_hunter() and not is_rooted() and _world_executing_cast != null and _world_executing_cast.skill_id == &"hunter_covering_shot" and not _world_executing_cast.travel_plan.is_empty()
 	return is_hunter() and direction.is_finite() and not is_rooted() and navigation != null and _runtime_rank_definition(&"hunter_covering_shot") != null and navigation.is_segment_walkable(global_position, hunter_recoil_destination(direction))
 
 func use_hunter_covering_shot(direction: Vector2) -> bool:
 	if (is_inside_tree() and get_tree().paused) or not _can_spend(&"hunter_covering_shot") or not can_use_hunter_covering_shot(direction):
 		return false
-	var facing := _resolved_facing(direction)
+	var facing := _resolved_facing(Vector2(world_cast_direction().x,world_cast_direction().z) if world_motion != null else direction)
 	var origin := global_position + PlayerProjectile.BODY_OFFSET
 	var destination := hunter_recoil_destination(facing)
 	var rank_definition := _runtime_rank_definition(&"hunter_covering_shot")
 	var request := _make_physical_request(null, &"hunter_covering_shot", stat_breakdown.value(&"precision_attack") * rank_definition.power, DamageRequest.AccuracyMode.GEOMETRY, true)
-	_spend(&"hunter_covering_shot")
+	if not _spend(&"hunter_covering_shot"): return false
 	request.context = _emission_context.copy_context()
 	request.emission_id = int(_emission_context.root_event_id.get_slice(":", _emission_context.root_event_id.get_slice_count(":") - 1))
 	reveal_from_offense()
-	global_position = destination
+	if world_motion != null:
+		var plan := world_motion.plan_ground_line(-world_cast_direction(),float(_world_executing_cast.travel_plan["maximum_distance"]),world_motion.geometry.geometry_revision)
+		if not plan["ok"] or not world_motion.is_current_world() or plan["data"]["truncated"]: return true # Paid callback invalidation cannot migrate the shot.
+		var moved := world_motion.advance(float(plan["data"]["cost"]))
+		world_motion.cancel(); _stop_world_travel()
+		if not moved["ok"]: return true
+	else: global_position = destination
 	_path.clear()
 	_path_index = 0
 	_has_path_goal = false
@@ -2045,6 +2056,7 @@ func hunter_total_cover_center(point: Vector2) -> Vector2:
 	return global_position + (point - global_position).limit_length(skill_range(&"hunter_total_cover"))
 
 func can_place_hunter_total_cover(point: Vector2) -> bool:
+	if world_motion != null: return is_hunter() and _world_placement_ready(&"hunter_total_cover")
 	if not is_hunter() or not point.is_finite() or skill_range(&"hunter_total_cover") <= 0.0 or navigation == null:
 		return false
 	var center := hunter_total_cover_center(point)
@@ -2055,7 +2067,7 @@ func use_hunter_total_cover(point: Vector2) -> bool:
 		return false
 	var center := hunter_total_cover_center(point)
 	var tuning := HunterTuning.values(&"hunter_total_cover", skill_rank(&"hunter_total_cover"))
-	_spend(&"hunter_total_cover")
+	if not _spend(&"hunter_total_cover"): return false
 	hunter_cover.begin_cycle()
 	hunter_total_cover_requested.emit(center, float(tuning["duration"]), float(tuning["radius"]), float(tuning["exit_grace"]))
 	presentation_action.emit(&"cast", aim_direction(center), 0.18)
@@ -2070,6 +2082,7 @@ func foliage_shelter_center(point: Vector2) -> Vector2:
 	return global_position + offset
 
 func can_place_foliage_shelter(point: Vector2) -> bool:
+	if world_motion != null: return _world_placement_ready(&"foliage_shelter")
 	if is_hunter() and (not point.is_finite() or navigation == null or not navigation.is_segment_clear(global_position, foliage_shelter_center(point), 0.0)):
 		return false
 	return skill_range(&"foliage_shelter") > 0.0 and navigation != null and navigation.is_walkable(foliage_shelter_center(point))
@@ -2081,7 +2094,7 @@ func use_foliage_shelter(point: Vector2) -> bool:
 	if is_hunter() and is_inside_tree() and get_tree().paused:
 		return false
 	var center := foliage_shelter_center(point)
-	_spend(&"foliage_shelter")
+	if not _spend(&"foliage_shelter"): return false
 	if is_hunter():
 		hunter_cover.begin_cycle()
 	foliage_shelter_requested.emit(center, rank_definition.power)
@@ -2092,7 +2105,7 @@ func use_foliage_shelter(point: Vector2) -> bool:
 var _world_shelters: Dictionary[int, Dictionary] = {}
 
 func register_world_shelter(source_id: int, area: WorldEffectArea, radius: float, exit_grace: float = 0.0) -> bool:
-	if world_motion == null or area == null or area.geometry != world_motion.geometry or source_id <= 0 or not is_finite(radius) or radius <= 0.0: return false
+	if world_motion == null or not world_motion.is_current_world() or area == null or not area.is_current_world() or area.geometry != world_motion.geometry or source_id <= 0 or not is_finite(radius) or radius <= 0.0: return false
 	if is_hunter():
 		# Reuse the canonical cover budget/reveal/grace clock. Membership is decided
 		# by WorldGeometry; the two sentinel values only encode its boolean to E06.
@@ -2113,6 +2126,7 @@ func _inside_world_shelter(actor: CombatActor, shelter: Dictionary) -> bool:
 
 func _world_cover_clock_point() -> Vector2:
 	var shelter: Dictionary = _world_shelters.get(hunter_cover.zone_id,{})
+	if not shelter.is_empty() and not (shelter["area"] as WorldEffectArea).is_current_world(): hunter_cover.unbind_zone(hunter_cover.zone_id); return Vector2.INF
 	return hunter_cover.center if not shelter.is_empty() and _inside_world_shelter(self,shelter) else Vector2.INF
 
 func register_foliage_shelter(source_id: int, center: Vector2, radius: float, exit_grace: float = 0.0) -> bool:
@@ -2145,7 +2159,7 @@ func clear_foliage_shelters() -> void:
 
 func is_concealed() -> bool:
 	if world_motion != null:
-		if not is_alive(): return false
+		if not is_alive() or not world_motion.is_current_world(): return false
 		if is_hunter(): return hunter_cover.is_hidden(_world_cover_clock_point())
 		if concealment_reveal_remaining > 0.0: return false
 		for shelter: Dictionary in _world_shelters.values():
@@ -2647,7 +2661,6 @@ func _validate_world_skill(command: WorldSkillCast) -> Dictionary:
 	if command.committed: return WorldSkillCast.failure(&"already_committed")
 	var controller := get_parent() as RunController
 	if controller != null and controller.geometer_casting != null and controller.geometer_casting.wall_field != null and command.skill_id in WorldSkillCast.PROJECTILES: return WorldSkillCast.failure(&"spatial_interceptor_required")
-	if is_hunter() and command.skill_id in [&"snare_trap",&"explosive_trap"]: return WorldSkillCast.failure(&"spatial_hunter_composition_required")
 	if (is_inside_tree() and get_tree().paused) or is_stunned() or is_feared() or (command.skill_id == &"spiritualist_soul_drain" and is_rooted()): return WorldSkillCast.failure(&"caster_controlled")
 	if not _can_pay_skill(command.skill_id): return WorldSkillCast.failure(&"skill_unavailable")
 	if command.skill_id == &"berserker_execution" and not can_pay_berserker_execution_hp(): return WorldSkillCast.failure(&"skill_unavailable")
@@ -2655,15 +2668,21 @@ func _validate_world_skill(command: WorldSkillCast) -> Dictionary:
 	if command.skill_id in [&"sentinel_observe",&"sentinel_absolute_focus",&"sentinel_headshot",&"sentinel_piercing_shot",&"sentinel_concussion_shot"] and not sentinel_state.can_pay(float(SentinelTuning.values(command.skill_id,skill_rank(command.skill_id)).get("focus_cost",0.0))): return WorldSkillCast.failure(&"skill_unavailable")
 	var valid := command.geometry_check(self)
 	if not valid["ok"]: return valid
+	if is_hunter() and command.skill_id in HunterMath.TRAP_IDS:
+		var sight := world_motion.geometry.query_attack({"geometry_rule_id":&"direct_volume","range":1.0e20},command.source(),command.anchor(),command.revision)
+		if not sight["ok"] or not sight["data"]["hit"]: return WorldSkillCast.failure(&"placement_occluded")
+		if command.skill_id in HunterMath.NEW_TRAP_IDS and not _hunter_trap_policy_check()["ok"]: return WorldSkillCast.failure(&"marked_trigger_required")
 	command.travel_plan.clear()
-	if command.skill_id in [&"defender_wall_advance",&"defender_retreat_guard",&"berserker_wound_leap"]:
+	if command.skill_id in [&"defender_wall_advance",&"defender_retreat_guard",&"berserker_wound_leap",&"hunter_covering_shot"]:
 		if is_rooted(): return WorldSkillCast.failure(&"caster_controlled")
-		var heading := command.direction(self)*(-1.0 if command.skill_id == &"defender_retreat_guard" else 1.0)
-		var travel := world_motion.geometry.trace_ground(command.source(),heading,skill_range(command.skill_id),world_motion.profile(),command.revision)
+		var heading := command.direction(self)*(-1.0 if command.skill_id in [&"defender_retreat_guard",&"hunter_covering_shot"] else 1.0)
+		var maximum_distance := float(HunterTuning.values(command.skill_id,skill_rank(command.skill_id))["recoil_distance"]) if command.skill_id == &"hunter_covering_shot" else skill_range(command.skill_id)
+		var travel := world_motion.geometry.trace_ground(command.source(),heading,maximum_distance,world_motion.profile(),command.revision)
 		if not travel["ok"]: return travel
+		if command.skill_id == &"hunter_covering_shot" and travel["data"]["truncated"]: return WorldSkillCast.failure(&"blocked_recoil")
 		if float(travel["data"]["cost"]) <= MOVEMENT_EPSILON: return WorldSkillCast.failure(&"no_valid_destination")
 		command.travel_plan = travel["data"].duplicate(true)
-		command.travel_plan["maximum_distance"] = skill_range(command.skill_id)
+		command.travel_plan["maximum_distance"] = maximum_distance
 	if command.skill_id == &"berserker_blood_rift" and Vector2(command.direction(self).x,command.direction(self).z).is_zero_approx(): return WorldSkillCast.failure(&"invalid_ground_line")
 	command.ground_points.clear()
 	if command.skill_id == &"elementalist_ember_path":
@@ -2674,7 +2693,7 @@ func _validate_world_skill(command: WorldSkillCast) -> Dictionary:
 	command.projectiles.clear()
 	if command.skill_id in WorldSkillCast.PROJECTILES:
 		var count := int(command.rank_context["capture"]["values"].get("projectile_count",1))
-		if command.skill_id in [&"sentinel_headshot",&"sentinel_piercing_shot",&"sentinel_concussion_shot"]: count = 1 # Resets are one nominal special launch.
+		if command.skill_id in [&"sentinel_headshot",&"sentinel_piercing_shot",&"sentinel_concussion_shot",&"hunter_covering_shot"]: count = 1 # One nominal special launch.
 		if is_inside_tree() and not EffectProcLedger.projectile_slots_available(get_tree(),count): return WorldSkillCast.failure(&"skill_unavailable")
 		var facing := command.direction(self)
 		var side := facing.cross(Vector3.UP).normalized()
@@ -2723,6 +2742,10 @@ func _commit_world_skill(command: WorldSkillCast) -> Dictionary:
 	var actors := command.actors()
 	var accepted := false
 	match command.skill_id:
+		&"hunter_covering_shot": accepted = use_hunter_covering_shot(flat)
+		&"hunter_total_cover": accepted = use_hunter_total_cover(point)
+		&"foliage_shelter": accepted = use_foliage_shelter(point)
+		&"hunter_freezing_trap",&"hunter_tar_trap",&"hunter_thorn_trap": accepted = use_hunter_trap(command.skill_id,point)
 		&"sentinel_headshot",&"sentinel_piercing_shot",&"sentinel_concussion_shot": accepted = use_sentinel_reset(command.skill_id,point,victim)
 		&"defender_anchor": accepted = use_defender_anchor(point)
 		&"defender_reprisal_wave": accepted = use_defender_reprisal_wave(actors)

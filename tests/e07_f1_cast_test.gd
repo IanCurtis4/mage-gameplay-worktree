@@ -147,7 +147,11 @@ func _run() -> void:
 	check(caster.sentinel_state.observed_target_id == lower.get_instance_id(),"Sentinel canonical observation retains target identity")
 	_setup(&"archer",&"hunter",{&"snare_trap":1})
 	before = caster.current_sp
-	check(controller.cast_world_skill(&"snare_trap",lower.world_point(),Vector3.RIGHT,null,world.geometry_revision)["error_code"] == &"spatial_hunter_composition_required" and caster.current_sp == before,"pending Hunter composition fails explicitly without flat fallback")
+	check(controller.cast_world_skill(&"snare_trap",lower.world_point(),Vector3.RIGHT,null,world.geometry_revision)["ok"],"Hunter base Snare now has a real spatial entry")
+	finish()
+	check(controller.trap_registry.active_count() == 1 and controller.trap_registry.active_traps()[0].world_area != null and caster.current_sp < before,"Hunter Snare commits one captured supported trap and canonical cost")
+	before = caster.current_sp
+	check(controller.cast_world_skill(&"unknown_spatial_fixture",null,Vector3.RIGHT,null,world.geometry_revision)["error_code"] == &"unsupported_world_skill" and caster.current_sp == before,"unknown spatial skill stays explicitly blocked without flat fallback")
 	_setup(&"swordsman",&"",{})
 	var grant := EffectDefinition.new(); grant.id = &"fixture_active"; grant.family_id = &"fixture_active"; grant.kind = EffectDefinition.Kind.ACTIVE_GRANT; grant.handler_id = EffectDefinition.Handler.ACTIVE_SKILL; grant.granted_skill_id = &"fire_spear"; grant.granted_rank = 3; grant.allowed_origins = [&"swordsman",&"mage",&"archer"]; grant.unit = &"points"
 	var effects: Array[EffectDefinition] = [grant,Effects.count_effect(),Effects.proc_effect(),Effects.range_effect()]

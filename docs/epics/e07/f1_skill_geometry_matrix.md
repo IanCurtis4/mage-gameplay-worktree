@@ -32,16 +32,17 @@ Player/Mage/Sentinel e flecha hostil, chuva/traps/blast ancorados, escudo/barrei
 piche, ocultação/budget/grace, coleta, movimento/dash temporal, AI autônoma/leash,
 cast obsoleto e callbacks que removem alvos. Isso não equivale ao cast completo
 dessas ativas: entrada/preview/composição nominal ainda precisam ser integrados.
-A retomada seguinte acrescenta WorldSkillCast: 51 entradas nominais com preview,
+A retomada seguinte acrescenta WorldSkillCast: 57 entradas nominais com preview,
 preparo e commit 3D. Dreno/Procissão/Véu, áreas elementais, chuva/traps base,
 projéteis e melee consomem a intenção capturada. A prova nominal é delimitada no
 recibo; isso ainda não certifica os dez kits nem os 27 efeitos compostos.
 SoulImpact, Assombro, Dissipação e gritos de área também receberam prova nominal
 de pulso/oclusão/controles, sem alterar o dano canônico.
 Marco/Onda/Fenda e Avanço/Retirada/Salto receberam bindings nominais; Contraforte
-conserva direção3D durante a guarda. Geômetra, paredes/campos restantes e mecanismos
-da Caçadora/Sentinela continuam bloqueios. Cabeça/Perfurante/Concussão também têm entrada e voo3D ligados; Rede/Explosivo
-ainda não. API e recibo contêm o escopo exato; D05 visual não foi aprovado.
+conserva direção3D durante a guarda. Armadilhas/reação, recuo/Leque e coberturas
+da Caçadora também têm consumidores nominais ligados. Geômetra, paredes e áreas/
+reserva do Sentinela continuam bloqueios. Cabeça/Perfurante/Concussão têm voo3D;
+Rede/Explosivo ainda não. API e recibo contêm o escopo exato; D05 visual não foi aprovado.
 
 ## Habilidades nominais
 
@@ -85,12 +86,12 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `elementalist_prismatic_focus` — Foco Prismático | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `elementalist_prismatic_resonance` — Ressonância Prismática | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `elementalist_tri_nova` — Nova Tríplice | `ground_connected` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
-| `explosive_trap` — Armadilha Explosiva | `ground_connected` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo; composição Caçadora explicitamente bloqueada |
+| `explosive_trap` — Armadilha Explosiva | `ground_connected` | Preview/commit e área ligados nas identidades de origem; Hunter tem abertura, LoS e reação espacial de Piche |
 | `extended_aim` — Mira Estendida | `self_only` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `fire_spear` — Lança de Fogo | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `fire_wall` — Parede de Fogo | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `fireball` — Bola de Fogo | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
-| `foliage_shelter` — Abrigo de Folhagem | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
+| `foliage_shelter` — Abrigo de Folhagem | `ground_connected` | Placement/área/camuflagem espacial ligados; Archer sem budget Hunter, Hunter com CD comum/raio110 sem graça extra |
 | `fury` — Fúria | `self_only` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `geometer_collapse` — Colapso Geométrico | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `geometer_incidence` — Teorema de Incidência | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
@@ -100,14 +101,14 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `geometer_triangulation` — Triangulação | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `geometer_vector_memory` — Memória Vetorial | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `haunt` — Assombro | `direct_volume` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS59 |
-| `hunter_covering_shot` — Tiro de Cobertura | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
-| `hunter_easy_prey` — Presa Fácil | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `hunter_freezing_trap` — Armadilha Congelante | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
+| `hunter_covering_shot` — Tiro de Cobertura | `direct_volume` | Recuo apoiado80 integral e tiro da origem anterior ligados; Leque3D finito e clocks do auto preservados |
+| `hunter_easy_prey` — Presa Fácil | `inherit_parent` | Snapshot/herança canônicos exercitados na abertura consumida por tiro espacial e Leque |
+| `hunter_freezing_trap` — Armadilha Congelante | `ground_connected` | Placement/trigger de chão com LoS ligado; presa única/CC/abertura e Mecanismo Marcado capturado |
 | `hunter_mark` — Marca do Caçador | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
-| `hunter_shooting_discipline` — Disciplina de Tiro | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
-| `hunter_tar_trap` — Armadilha de Piche | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
-| `hunter_thorn_trap` — Armadilha de Espinhos | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
-| `hunter_total_cover` — Cobertura Total | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
+| `hunter_shooting_discipline` — Disciplina de Tiro | `inherit_parent` | Snapshot/herança canônicos exercitados na abertura consumida por tiro espacial e Leque |
+| `hunter_tar_trap` — Armadilha de Piche | `ground_connected` | Placement/trigger/campo e reação espacial ligados; entrada tardia sem abertura, fonte exclusiva de slow e epoch |
+| `hunter_thorn_trap` — Armadilha de Espinhos | `ground_connected` | Placement/área/slow/bleed ligados; abertura inicial, vítimas revalidadas e DoT herdado após subir |
+| `hunter_total_cover` — Cobertura Total | `ground_connected` | Placement/área e budget compartilhado ligados; observador por suporte, graça1 e cleanup sem renovação |
 | `ice_spear` — Lança de Gelo | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `ice_wall` — Parede de Gelo | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `lightning` — Relâmpago | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
@@ -130,7 +131,7 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `shield_wall` — Parede de Escudos | `direct_volume` | Entrada world explícita e intercepção frontal real testadas; input/visual pendentes |
 | `slash` — Corte em cone | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `slowing_arrow` — Flecha Entorpecente | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
-| `snare_trap` — Armadilha de Laço | `ground_connected` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo; composição Caçadora explicitamente bloqueada |
+| `snare_trap` — Armadilha de Laço | `ground_connected` | Preview/commit e área ligados nas identidades de origem; Hunter tem abertura/LoS no suporte capturado |
 | `soul_impact` — Impacto das Almas | `direct_volume` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS59 |
 | `spiritualist_channel_focus` — Foco do Além | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `spiritualist_dissipation` — Rito de Dissipação | `ground_connected` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS59 |
@@ -183,8 +184,8 @@ inventados emissores espaciais para thresholds de conjunto.
 | `augment/extra_ice_spear` | `ice_spear_count_flat` / `SKILL_RULE` | ice_spear | `mesma regra da habilidade`; consumidor pendente |
 | `augment/geometer_collapse_first_element` | `geometer_collapse_first_element_policy` / `KIT_RULE` | geometer_collapse | `geometer_collapse_first_element`; consumidor pendente |
 | `augment/geometer_ground_anchor` | `geometer_ground_anchor_policy` / `KIT_RULE` | geometer_trace, geometer_triangulation | `geometer_ground_anchor`; consumidor pendente |
-| `augment/hunter_covering_fan` | `hunter_covering_fan_policy` / `KIT_RULE` | hunter_covering_shot | `hunter_covering_fan`; consumidor pendente |
-| `augment/hunter_marked_mechanism` | `hunter_marked_mechanism_policy` / `KIT_RULE` | hunter_freezing_trap, hunter_tar_trap, hunter_thorn_trap | `hunter_marked_mechanism`; consumidor pendente |
+| `augment/hunter_covering_fan` | `hunter_covering_fan_policy` / `KIT_RULE` | hunter_covering_shot | `hunter_covering_fan`; próximo corpo3D/LoS/claims/snapshot ligados |
+| `augment/hunter_marked_mechanism` | `hunter_marked_mechanism_policy` / `KIT_RULE` | hunter_freezing_trap, hunter_tar_trap, hunter_thorn_trap | `hunter_marked_mechanism`; ID capturado/preflight/trigger ligados |
 | `augment/pilot_archer_pressure` | `pilot_archer_pressure_effect` / `PROC` | contato causal original | `inherit_parent`; consumidor pendente |
 | `augment/pilot_berserker_a` | `pilot_berserker_a_effect` / `PROC` | berserker_rupture | `inherit_parent`; consumidor pendente |
 | `augment/pilot_berserker_b` | `pilot_berserker_b_effect` / `PROC` | berserker_execution | `inherit_parent`; consumidor pendente |
@@ -215,11 +216,11 @@ source/target/WorldPoint quando o consumidor correspondente for adaptado.
 | Componente | Fronteira |
 |---|---|
 | `basic_attack` | volume direto / projétil real nas dez identidades; controlador ligado; input/visual/composição dos kits pendentes |
-| `burn_tick` | inherit_parent; hit/estado causal já aceito; bleed de Fenda ligado, sem nova LoS após aplicação |
-| `bleed_tick` | inherit_parent; hit/estado causal já aceito; bleed de Fenda ligado, sem nova LoS após aplicação |
-| `hunter_thorn_bleed` | inherit_parent; hit/estado causal já aceito; bleed de Fenda ligado, sem nova LoS após aplicação |
-| `berserker_blood_rift_tick` | inherit_parent; hit/estado causal já aceito; bleed de Fenda ligado, sem nova LoS após aplicação |
-| `berserker_rupture_detonation` | inherit_parent; hit/estado causal já aceito; bleed de Fenda ligado, sem nova LoS após aplicação |
+| `burn_tick` | inherit_parent; burn aceito acompanha corpo sem nova LoS; isso não certifica a Parede de Fogo pendente |
+| `bleed_tick` | inherit_parent; fluxo canônico de bleed aceito, sem nova LoS; produtores ainda não adaptados continuam pendentes |
+| `hunter_thorn_bleed` | inherit_parent; Espinhos aplicado acompanha alvo que sobe; prova dirigida hunter_traps |
+| `berserker_blood_rift_tick` | inherit_parent; Fenda aplicada acompanha alvo que sobe, sem nova LoS; prova dirigida guard_travel |
+| `berserker_rupture_detonation` | intrínseca da Ruptura; admissão dirigida3D da ativa, sem área nova ou propagação a vizinhos |
 | `geometer_wall_entry` | construção no suporte + interação/projétil; pendente |
 | `geometer_wall_exit` | construção no suporte + interação/projétil; pendente |
 | `geometer_foundation_fire` | construção no suporte + interação/projétil; pendente |

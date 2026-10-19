@@ -249,13 +249,13 @@ configura suas três áreas/schedule originais; Dreno/Procissão iniciam os guar
 espaciais existentes. Cones/linhas corpo a corpo consultam direção/LoS 3D no
 handler canônico, sem refazer fórmulas. Os placeholders Vector2 são apresentação.
 
-Whitelist nominal em WorldSkillCast (51 IDs), também exposta como cast_entry no
-inventário: alvo dirigido, cones/linhas, onze tipos de projétil, sete placements,
+Whitelist nominal em WorldSkillCast (57 IDs), também exposta como cast_entry no
+inventário: alvo dirigido, cones/linhas, doze tipos de projétil, doze placements,
 cinco áreas próprias e quatro estados self_only. Isso informa entrada disponível,
 não certifica todos os efeitos de um kit. Shield Wall/dash/teleporte conservam
-as APIs espaciais próprias já documentadas. Snare/Explosive herdadas pela Caçadora
-retornam spatial_hunter_composition_required até ligar reação/abertura espaciais;
-Geômetra, paredes, campos e mecanismos restantes continuam pendentes.
+as APIs espaciais próprias já documentadas. As cinco famílias de armadilha,
+recuo/Leque e coberturas da Caçadora usam os bindings abaixo. Geômetra, paredes
+e áreas/reserva do Sentinela continuam pendentes.
 Marco/Onda/Fenda e Avanço/Retirada/Salto usam os bindings descritos abaixo.
 
 WorldTargetLock.configure(caster,target,range,revision) valida alcance/LoS somente
@@ -381,6 +381,47 @@ já observam WorldPoint. Marca de Observar também é limpa quando o corpo deixa
 de existir. Rede/Explosivo e suas áreas/reserva ainda exigem adaptação própria;
 os bindings legados permanecem bloqueados em multialtura. Isso não certifica o
 kit inteiro nem sua apresentação.
+
+## Mecanismos, recuo e coberturas da Caçadora
+
+WorldSkillCast acrescenta Congelante/Piche/Espinhos, Abrigo, Cobertura Total e
+Tiro de Cobertura; Laço/Explosiva herdadas deixam o bloqueio temporário anterior.
+Colocação/preview/preparo usam suporte/conexões/range reais. A LoS nominal Hunter
+é adicional à propagação de chão, consultada na colocação, trigger e em cada
+vítima após callbacks. Não se torna LoS universal para outros efeitos de chão.
+IDs desconhecidos continuam unsupported_world_skill; não há fallback por mira.
+
+_hunter_trap_policy_check() é a admissão única de Mecanismo Marcado: exige Marca
+viva elegível antes do custo e captura o ID no trap emitido. Trocar/expirar Marca
+ou retirar receita não redireciona o mecanismo; alvo morto/removido não transfere
+o trigger. FIFO3, armar, lifetime, abertura, CC, bleed e Passo continuam canônicos.
+Laço/Congelante são presa única; Piche/Espinhos abrem os ocupantes iniciais.
+Referências liberadas são filtradas antes de conversão tipada, inclusive depois
+do primeiro callback de dano. Estado TRIGGERED é reivindicado antes dos callbacks.
+
+Piche nasce com área copiada da âncora do trap. Entradas tardias recebem slow
+sem nova abertura. A reação usa consume_for_world_explosion(WorldPoint,radius),
+conexão de chão/alcance e LoS entre centros; identidade do mundo do dono também
+precisa coincidir, mesmo se dois mundos tiverem os mesmos IDs/coordenadas. Uma
+reação consome campo/slow próprio antes dos hits; bônus e pedido original mantêm
+a matemática existente. Epoch/incompatibilidade do dono encerra campo sem migrá-lo.
+Bleed aplicado herda aceitação e segue a vítima sem reavaliar LoS a cada tick.
+
+Tiro de Cobertura preflighta projétil4×8 e TODO o recuo80 em suporte (métrica3D).
+Prefixo truncado/borda/controle recusa tiro e recuo sem custo. A emissão captura
+origem anterior; o passo imediato não muda os clocks do auto e o voo usa os specs
+capturados, não a posição atual do caster. Leque seleciona após o hit o próximo
+corpo vivo mais próximo por distância3D≤80, LoS e desempate por ID. Preserva as
+metades, fallback, claims/ledger e exceção de secundário já existentes; não consome
+a abertura do segundo corpo. Receita retirada após o disparo não muda o snapshot.
+
+Abrigo e Cobertura Total usam FoliageShelter.configure_world e área no suporte.
+HunterCoverState continua dono do budget3s/revelação1.25s/graça até1s/CD comum18s;
+membership e observador usam WorldPoints. Abrigo conserva raio110 sem graça extra;
+Total usa125/graça1. Expiração/cleanup/epoch removem zona/graça sem devolver budget
+ou apagar reveal. A API de ator continua already_bound; não foi criado rebind,
+respawn ou lifecycle F2. Archer base conserva seu contrato sem budget Hunter.
+Bindings opt-in e fixtures dirigidas não habilitam apresentação D05 ou campanha.
 
 ## Adaptador plano e próximos consumidores
 

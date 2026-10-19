@@ -36,8 +36,10 @@ func _process(delta: float) -> void:
 
 func _on_triggered(_trap: PlayerTrap, _target: CombatActor) -> void:
 	var impacted: Array[CombatActor] = []
-	for target: CombatActor in _targets:
-		if target == null or not is_instance_valid(target) or target.get_instance_id() == owner_id or not target.is_alive():
+	for candidate: Variant in _targets:
+		if not is_instance_valid(candidate): continue
+		var target := candidate as CombatActor
+		if target == null or target.get_instance_id() == owner_id or not target.is_alive():
 			continue
 		if contains_target(target,BLAST_RADIUS):
 			impacted.append(target)
@@ -47,9 +49,11 @@ func _on_triggered(_trap: PlayerTrap, _target: CombatActor) -> void:
 		var bonus := float(reaction_callback.call(global_position, BLAST_RADIUS))
 		if is_finite(bonus) and bonus > 0.0:
 			blast_request.physical_damage *= 1.0 + minf(0.25, bonus)
-	for target: CombatActor in impacted:
+	for candidate: Variant in impacted:
 		# Earlier hit/death callbacks can synchronously free later victims.
-		if target == null or not is_instance_valid(target) or not target.is_alive():
+		if not is_instance_valid(candidate): continue
+		var target := candidate as CombatActor
+		if target == null or not target.is_alive():
 			continue
 		var impact_request := blast_request.copy()
 		impact_request.target_id = target.get_instance_id()

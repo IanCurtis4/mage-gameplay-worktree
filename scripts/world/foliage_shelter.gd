@@ -66,6 +66,7 @@ func _process(delta: float) -> void:
 	if player_owner == null or not is_instance_valid(player_owner) or not player_owner.is_alive():
 		expire(&"owner_unavailable")
 		return
+	if world_area != null and (not world_area.is_current_world() or player_owner.world_motion == null or not player_owner.world_motion.is_current_world() or player_owner.world_motion.geometry != world_area.geometry): expire(&"world_reconfigured"); return
 	remaining = maxf(0.0, remaining - delta)
 	if remaining <= 0.0:
 		expire()

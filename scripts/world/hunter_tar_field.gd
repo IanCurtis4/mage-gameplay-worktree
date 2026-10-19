@@ -25,9 +25,11 @@ func bind_world_area(world: WorldGeometry, anchor: ExpeditionWorldPoint, travers
 	return checked
 
 func consume_for_world_explosion(center: ExpeditionWorldPoint, blast_radius: float) -> float:
-	if world_area == null or not active or remaining <= 0.0 or not is_instance_valid(owner_actor) or not owner_actor.is_alive() or (is_inside_tree() and get_tree().paused): return 0.0
+	if world_area == null or not active or remaining <= 0.0 or not is_instance_valid(owner_actor) or not owner_actor.is_alive() or owner_actor.world_motion == null or not owner_actor.world_motion.is_current_world() or owner_actor.world_motion.geometry != world_area.geometry or (is_inside_tree() and get_tree().paused): return 0.0
 	var checked := world_area.query_point(center,RADIUS+blast_radius)
 	if not checked["ok"] or not checked["data"]["hit"]: return 0.0
+	var sight := world_area.geometry.query_attack({"geometry_rule_id":&"direct_volume","range":1.0e20},world_area.anchor(),center,world_area.geometry.geometry_revision)
+	if not sight["ok"] or not sight["data"]["hit"]: return 0.0
 	var bonus := 0.25*clampf(remaining/duration,0.0,1.0)
 	expire(true)
 	return bonus
@@ -117,7 +119,7 @@ func _exit_tree() -> void:
 func _process(delta: float) -> void:
 	if not active or not is_finite(delta) or delta <= 0.0 or (is_inside_tree() and get_tree().paused):
 		return
-	if not is_instance_valid(owner_actor) or not owner_actor.is_alive():
+	if not is_instance_valid(owner_actor) or not owner_actor.is_alive() or (world_area != null and (not world_area.is_current_world() or owner_actor.world_motion == null or not owner_actor.world_motion.is_current_world() or owner_actor.world_motion.geometry != world_area.geometry)):
 		expire()
 		return
 	remaining = maxf(0.0, remaining - delta)

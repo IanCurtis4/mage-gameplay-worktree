@@ -1334,26 +1334,34 @@ func _on_snare_trap_requested(center: Vector2, root_duration: float) -> void:
 	trap.configure_snare(player.get_instance_id(), center, root_duration, enemies, player.trap_armed_duration(SnareTrap.ARMED_DURATION))
 	if player.world_motion != null and not _bind_cast_ground(trap): trap.free(); return
 	if player.is_hunter():
-		trap.target_filter = _hunter_trap_target_valid.bind(center)
+		trap.target_filter = _hunter_trap_target_valid.bind(center,trap.world_area)
 		trap.root_applied.connect(_on_hunter_snare_triggered.bind(player.hunter_opening_snapshot(&"snare_trap")))
 	trap_registry.register_trap(trap)
 
 func _on_hunter_snare_triggered(trap: SnareTrap, victim: CombatActor, _applied_duration: float, snapshot: DamageRequest) -> void:
-	if player == null or not is_instance_valid(player) or victim == null or not is_instance_valid(victim) or not navigation.is_segment_clear(trap.global_position, victim.global_position, 0.0):
+	if not _hunter_trap_target_valid(victim,trap.global_position,trap.world_area):
 		return
 	player.activate_hunter_opening(trap.get_instance_id(), victim, snapshot)
 
-func _hunter_trap_target_valid(victim: CombatActor, center: Vector2) -> bool:
-	return player != null and is_instance_valid(player) and player.is_alive() and victim != null and is_instance_valid(victim) and navigation.is_segment_clear(center, victim.global_position, 0.0)
+func _hunter_trap_target_valid(victim: CombatActor, center: Vector2, area: WorldEffectArea = null) -> bool:
+	if not is_instance_valid(player) or not player.is_alive() or not is_instance_valid(victim) or not victim.is_alive() or victim.is_queued_for_deletion(): return false
+	if player.world_motion != null:
+		if area == null or not player.world_motion.is_current_world() or not area.is_current_world() or area.geometry != player.world_motion.geometry: return false
+		var ground := area.query(victim,1.0e20)
+		if not ground["ok"] or not ground["data"]["hit"]: return false
+		# Hunter's explicit nominal LoS is additional to connected ground membership.
+		var sight := area.geometry.query_attack({"geometry_rule_id":&"direct_volume","range":1.0e20},area.anchor(),victim.world_point(),area.geometry.geometry_revision)
+		return sight["ok"] and sight["data"]["hit"]
+	return victim.world_motion == null and area == null and navigation != null and navigation.is_segment_clear(center,victim.global_position,0.0)
 
 func _on_explosive_trap_requested(center: Vector2, request: DamageRequest) -> void:
 	var trap := ExplosiveTrap.new()
 	trap.configure_explosive(player.get_instance_id(), center, request, enemies, player.trap_armed_duration(ExplosiveTrap.ARMED_DURATION))
 	if player.world_motion != null and not _bind_cast_ground(trap): trap.free(); return
 	if player.is_hunter():
-		trap.target_filter = _hunter_trap_target_valid.bind(center)
-		trap.reaction_callback = _consume_hunter_tar
-		trap.hit.connect(_on_hunter_explosive_hit.bind(trap.get_instance_id(), center, player.hunter_opening_snapshot(&"explosive_trap")))
+		trap.target_filter = _hunter_trap_target_valid.bind(center,trap.world_area)
+		trap.reaction_callback = _consume_hunter_tar.bind(trap.world_area)
+		trap.hit.connect(_on_hunter_explosive_hit.bind(trap.get_instance_id(), center, player.hunter_opening_snapshot(&"explosive_trap"),trap.world_area))
 	else:
 		trap.hit.connect(_on_precision_projectile_hit)
 	trap_registry.register_trap(trap)
@@ -1361,7 +1369,8 @@ func _on_explosive_trap_requested(center: Vector2, request: DamageRequest) -> vo
 func _on_hunter_trap_requested(center: Vector2, rank: int, request: DamageRequest, opening: DamageRequest) -> void:
 	var trap := HunterTrap.new()
 	trap.configure_hunter(center, rank, request, opening, enemies, player.trap_armed_duration(HunterTuning.ARMED_TRAP_LIFETIME))
-	trap.target_filter = _hunter_trap_target_valid.bind(center)
+	if player.world_motion != null and not _bind_cast_ground(trap): trap.free(); return
+	trap.target_filter = _hunter_trap_target_valid.bind(center,trap.world_area)
 	trap.sprung.connect(_on_hunter_trap_sprung)
 	trap_registry.register_trap(trap)
 
@@ -1373,14 +1382,19 @@ func _on_hunter_trap_sprung(trap: HunterTrap, victims: Array[CombatActor]) -> vo
 	if trap.source_skill_id == &"hunter_tar_trap":
 		_clear_hunter_tar()
 		hunter_tar_field = HunterTarField.new()
+		if player.world_motion != null:
+			if trap.world_area == null or not trap.world_area.is_current_world() or not player.world_motion.is_current_world(): hunter_tar_field.free(); hunter_tar_field = null; return
+			var bound := hunter_tar_field.bind_world_area(player.world_motion.geometry,trap.world_area.anchor(),player.world_motion.profile(),player.world_motion.geometry.geometry_revision)
+			if not bound["ok"]: hunter_tar_field.free(); hunter_tar_field = null; return
 		hunter_tar_field.configure_tar(player, trap.global_position, trap.tuning, enemies)
-		hunter_tar_field.target_filter = _hunter_trap_target_valid.bind(trap.global_position)
+		hunter_tar_field.target_filter = _hunter_trap_target_valid.bind(trap.global_position,hunter_tar_field.world_area)
 		add_child(hunter_tar_field)
 		hunter_tar_field.add_to_group("player_effects")
 		hunter_tar_field.refresh_occupants()
-	for victim: CombatActor in victims:
-		if run_finished or victim == null or not is_instance_valid(victim) or not _hunter_trap_target_valid(victim, trap.global_position) or not victim.is_alive():
-			continue
+	for candidate: Variant in victims:
+		if not is_instance_valid(candidate): continue
+		var victim := candidate as CombatActor
+		if run_finished or not _hunter_trap_target_valid(victim,trap.global_position,trap.world_area): continue
 		player.activate_hunter_opening(trap.get_instance_id(), victim, trap.opening_request)
 		if trap.source_skill_id == &"hunter_tar_trap":
 			continue
@@ -1396,9 +1410,12 @@ func _on_hunter_trap_sprung(trap: HunterTrap, victims: Array[CombatActor]) -> vo
 			victim.apply_bleed(bleed, float(trap.tuning["bleed_duration"]))
 		_on_precision_projectile_hit(request, victim)
 
-func _consume_hunter_tar(center: Vector2, blast_radius: float) -> float:
+func _consume_hunter_tar(center: Vector2, blast_radius: float, area: WorldEffectArea = null) -> float:
 	if not is_instance_valid(hunter_tar_field) or not is_instance_valid(player) or hunter_tar_field.owner_id != player.get_instance_id() or run_finished:
 		return 0.0
+	if player.world_motion != null:
+		if area == null or not area.is_current_world() or not player.world_motion.is_current_world() or area.geometry != player.world_motion.geometry: return 0.0
+		return hunter_tar_field.consume_for_world_explosion(area.anchor(),blast_radius)
 	return hunter_tar_field.consume_for_explosion(center, blast_radius, navigation)
 
 func _clear_hunter_tar() -> void:
@@ -1417,8 +1434,8 @@ func _clear_hunter_trap_effects() -> void:
 			victim.remove_attribute_debuff(AttributeDebuffState.MOVE_SPEED, HunterTarField.slow_source(player.get_instance_id()))
 			victim.remove_attribute_debuff(AttributeDebuffState.MOVE_SPEED, &"hunter_thorn_trap")
 
-func _on_hunter_explosive_hit(request: DamageRequest, victim: CombatActor, activation_id: int, center: Vector2, snapshot: DamageRequest) -> void:
-	if run_finished or not _hunter_trap_target_valid(victim, center) or not victim.is_alive():
+func _on_hunter_explosive_hit(request: DamageRequest, victim: CombatActor, activation_id: int, center: Vector2, snapshot: DamageRequest, area: WorldEffectArea = null) -> void:
+	if run_finished or not _hunter_trap_target_valid(victim,center,area):
 		return
 	player.activate_hunter_opening(activation_id, victim, snapshot)
 	# Mark before applying damage: lethal callbacks may remove all enemy nodes.
@@ -1457,8 +1474,15 @@ func _spawn_foliage_shelter(center: Vector2, duration: float, radius: float, exi
 				if not is_instance_valid(player) or not player.is_alive() or run_finished or get_tree().paused:
 					return
 	var shelter := FoliageShelter.new()
-	add_child(shelter)
-	shelter.configure(player, center, duration, radius, exit_grace)
+	if player.world_motion != null:
+		var anchor := player.world_cast_anchor()
+		if anchor == null or not player.world_motion.is_current_world(): shelter.free(); return
+		var bound := shelter.configure_world(player,anchor,player.world_motion.profile(),duration,radius,exit_grace,player.world_motion.geometry.geometry_revision)
+		if not bound["ok"]: shelter.free(); return
+		add_child(shelter)
+	else:
+		add_child(shelter)
+		shelter.configure(player, center, duration, radius, exit_grace)
 	shelter.add_to_group("player_effects")
 
 func _on_mage_projectile_hit(request: DamageRequest, target_actor: CombatActor) -> void:
@@ -2176,8 +2200,16 @@ func _prepare_hunter_fan(result: Dictionary) -> void:
 	var distance := INF
 	for candidate: CombatActor in enemies.duplicate():
 		if not is_instance_valid(candidate) or not candidate.is_alive() or candidate.is_queued_for_deletion() or candidate == victim: continue
-		var squared := victim.global_position.distance_squared_to(candidate.global_position)
-		if squared > 80.0 * 80.0 or not navigation.is_segment_clear(victim.global_position, candidate.global_position, 0.0): continue
+		var squared: float
+		if player.world_motion != null:
+			if victim.world_motion == null or candidate.world_motion == null or not player.world_motion.is_current_world() or not victim.world_motion.is_current_world() or not candidate.world_motion.is_current_world() or victim.world_motion.geometry != player.world_motion.geometry or candidate.world_motion.geometry != player.world_motion.geometry: continue
+			var query := player.world_motion.geometry.query_attack({"geometry_rule_id":&"direct_volume","range":80.0},victim.world_point(),candidate.world_point(),player.world_motion.geometry.geometry_revision)
+			if not query["ok"] or not query["data"]["hit"]: continue
+			squared = float(query["data"]["distance"])*float(query["data"]["distance"])
+		else:
+			if candidate.world_motion != null or victim.world_motion != null: continue
+			squared = victim.global_position.distance_squared_to(candidate.global_position)
+			if squared > 80.0 * 80.0 or not navigation.is_segment_clear(victim.global_position, candidate.global_position, 0.0): continue
 		if selected == null or squared < distance or (is_equal_approx(squared, distance) and candidate.get_instance_id() < selected.get_instance_id()):
 			selected = candidate
 			distance = squared
