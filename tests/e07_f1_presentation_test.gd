@@ -1,4 +1,5 @@
 extends SceneTree
+const Dependencies = preload("res://tests/e05_dependency_fixture.gd")
 const Fixture = preload("res://tests/fixtures/e07/f1/fixture_input.gd")
 var checks := 0
 var failures := 0
@@ -58,6 +59,30 @@ func _run() -> void:
 	var region := world.ground_region(Fixture.point("root",Vector3(70,0,120)),polygon,sample.profile,world.geometry_revision)
 	check(not region["ok"] and region["error_code"] == &"invalid_region" and region["geometry_revision"] == world.geometry_revision,"region envelope rejects concave input with current revision")
 	check(not WorldSupportRegion.ground_contains({"anchor":{"stage_id":"sample"},"patches":[]},ExpeditionWorldPoint.create("other",bridge.surface_id,bridge.position)),"region never accepts a foreign stage")
+	# Pointer ground fields use horizontal heading even when the selected support rises.
+	c.run_state.skill_levels[&"phantom_barrier"] = 1
+	c.run_state.build_snapshot.skill_ranks[&"phantom_barrier"] = 1
+	Dependencies.complete_snapshot(c.run_state.build_snapshot); c.run_state.runtime_revision += 1; c.player.apply_run_modifiers(c.run_state)
+	var ramp_origin := Fixture.point("slope",Vector3(340,16,150))
+	check(c.player.move_world_to(ramp_origin,world.geometry_revision)["ok"] and c.player.advance_world(10000)["ok"],"pointer field source walks onto actual ramp support")
+	view.sync()
+	var ramp_aim := Fixture.point("slope",Vector3(380,32,150)); var aim_pixel := view.project(ramp_aim.position)
+	var field_sp := c.player.current_sp
+	var field_destination: Dictionary = {}
+	for id: StringName in [&"fire_wall",&"lightning_wall",&"phantom_barrier",&"ice_wall"]:
+		var placement := c.spatial_pointer_skill(id,aim_pixel,true)
+		check(placement["ok"] and c.player.current_sp == field_sp,"ramp pointer previews horizontal supported field without paying: "+String(id))
+		if placement["ok"]:
+			var expected: Dictionary = placement["data"]["field"]["anchor"]
+			check(view.marker != null and view.marker.to_data() == expected and Vector3(expected["position"]).distance_to(ramp_aim.position) > 50,"field marker uses actual fixed-range placement support, not the direction click")
+			if id == &"fire_wall": field_destination = expected
+	var placed := c.spatial_pointer_skill(&"fire_wall",aim_pixel,false)
+	check(placed["ok"] and view.marker != null and view.marker.to_data() == field_destination,"pointer commit preserves actual previewed field destination")
+	if c.player.has_active_cast(): c.player._advance_world_cast(10)
+	var actual: FireWall
+	for child: Node in c.get_children():
+		if child is FireWall and child.world_field != null: actual = child
+	check(c.player.world_cast_status()["ok"] and is_equal_approx(c.player.current_sp,field_sp-c.player.skill_cost(&"fire_wall")) and actual != null and actual.world_field.anchor().to_data() == field_destination,"ramp click emits real canonical field and pays exactly once on the previewed support")
 	sample.queue_free(); await process_frame
 	print("E07 F1 presentation: %d checks, %d failures; native scene, projection, click, preview, marker, occlusion" % [checks,failures])
 	quit(1 if failures else 0)

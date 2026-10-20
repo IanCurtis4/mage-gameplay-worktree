@@ -3859,7 +3859,10 @@ func spatial_pointer_skill(skill: StringName, point: Vector2, preview: bool) -> 
 	else: expedition_view.indicate(null,false); return result
 	if Input.is_key_pressed(KEY_SHIFT): victim = null
 	var facing := anchor.position-player.world_point().position
+	var ground_field := skill in [&"fire_wall",&"lightning_wall",&"phantom_barrier",&"ice_wall"]
+	if ground_field: facing.y = 0.0 # Ground heading selects x/z; support supplies height.
 	if facing.is_zero_approx(): facing = Vector3.RIGHT
+	var field_preview: Dictionary = {}
 	var rank := _intent_rank
 	if GeometerCastCommand.is_grammar_skill(skill):
 		result = geometer_casting.preview_world_trace(skill,anchor,victim,revision,rank) if preview else geometer_casting.begin_world_trace(skill,anchor,victim,revision,rank)
@@ -3874,7 +3877,13 @@ func spatial_pointer_skill(skill: StringName, point: Vector2, preview: bool) -> 
 	elif skill == &"sentinel_explosive_shot":
 		result = {"ok":player.sentinel_state.explosive_prepared or player._can_pay_skill(skill)} if preview else player.prepare_world_sentinel_explosive(revision)
 	else:
+		if ground_field and not preview: field_preview = player.preview_world_skill(skill,anchor,facing,victim,enemies,revision,rank,expedition_field_height)
 		result = player.preview_world_skill(skill,anchor,facing,victim,enemies,revision,rank,expedition_field_height) if preview else cast_world_skill(skill,anchor,facing,victim,revision,rank,expedition_field_height)
-	expedition_view.attack_preview = {"from":player.world_point().position,"to":anchor.position,"valid":result["ok"]}
-	expedition_view.indicate(anchor,result["ok"])
+		if ground_field and preview: field_preview = result
+	var feedback_anchor := anchor
+	if ground_field and field_preview.get("ok",false):
+		var data: Dictionary = field_preview.get("data",{}).get("field",{}).get("anchor",{})
+		if not data.is_empty(): feedback_anchor = ExpeditionWorldPoint.create(data["stage_id"],data["surface_id"],data["position"])
+	expedition_view.attack_preview = {"from":player.world_point().position,"to":feedback_anchor.position,"valid":result["ok"]}
+	expedition_view.indicate(feedback_anchor,result["ok"])
 	return result

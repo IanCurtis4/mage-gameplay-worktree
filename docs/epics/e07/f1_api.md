@@ -571,7 +571,7 @@ reais: altura/raio do cilindro e ordem de contato precedem absorb_projectile.
 Flecha acima do topo não gasta capacidade; capacidade esgotada deixa a próxima
 passar. Entrada 2D de interceptação recusa node já ligado a volume espacial.
 Duração, ICDs, fonte de slow/weaken, potência e capacidade por rank permanecem
-canônicos. Os draws bound aguardam D05; nenhuma projeção visual foi criada.
+canônicos. Os draws bound usam a projeção da amostra D05 descrita abaixo.
 
 Amostragem com delta zero preserva a regra legada dos campos: consome contatos
 pendentes/aplica o efeito sem avançar lifetime/ICD. Deltas negativos ou não finitos
@@ -638,7 +638,7 @@ A prova não plana e Geômetra são adicionais descritos abaixo; não certificam
 
 `WorldSupportRegion` calcula contenção e contato contínuo do footprint extrudido pela altura explícita; `ground_contains` exige também o stage original. `WorldEffectVolume.configure_ground_region` captura esses patches; `WorldSolidSegment` captura a mesma base por partes, com extremidades nas alturas reais. Círculos/cápsulas conservam os caps arredondados e a tolerância vertical do corpo. Campos de Fogo mantêm bases próprias dos quatro pilares; Raios/Barreira/Gelo seguem o suporte repartido em patches, inclusive nas costuras. A reserva de Gelo revalida a região inteira e a segurança de ocupantes/sockets antes de pagar e registrar. O footprint de placement das cápsulas é conservador (retângulo envolvente); contato usa a cápsula arredondada.
 
-A tolerância de coordenadas `point_tolerance` acrescenta quatro ULPs f32 à EPS em comparações de pontos apoiados/arestas, sem criar degrau, bônus de alcance ou tuning de produto. Linha de chão segue suporte/conexões, conserva custo real3D e não contorna paredes para reparar um cast.
+A tolerância de coordenadas `point_tolerance` acrescenta quatro ULPs f32 à EPS em comparações de pontos apoiados/arestas, sem criar degrau, bônus de alcance ou tuning de produto. Linha de chão segue suporte/conexões, conserva custo real3D e não contorna paredes para reparar um cast. Pontos e testes intermediários interpolados reavaliam y no plano da célula já selecionada, evitando erro f32 sem escolher outro piso nem relaxar clearance.
 
 ## Geômetra — gramática, figuras e receitas completas
 
@@ -661,3 +661,5 @@ Projéteis reais ordenam contato de campo contra terreno/corpo usando `WorldProj
 Amostra: `tests/fixtures/e07/f1/presentation_sample.tscn`, F0 real seed711, escala técnica3, run fixture e nenhum ProfileFacade. Usa main.tscn/HUD/PlayerActor/treinamento reais, câmera original e rampa/ponte/passagem inferior; não aparece no lobby nem abre campanha. `presentation_capture.gd` roda no projeto importado isolado e exige diretório absoluto de saída: captura ponte, ator na rampa com rota/marcador e ataque entre pisos recusado sem custo/dano. A avaliação e hashes estão no recibo; imagem não prova FPS/escala/balanceamento ou aceite humano.
 
 O bootstrap nativo inclui `docs/fixtures` imutáveis, exigidos pelos testes antigos. No modo F1Fixture, o runner preserva os relatórios efetivamente regenerados por `e06_pilot_execution_test`/`e06_directions_test` e restaura apenas esses dois arquivos na cópia isolada a partir da fonte manifestada. Hashes de saída/restore ficam em generated_reports.jsonl; logs, exit e erros dos testes não são reinterpretados. Isso preserva a verificabilidade da cópia sem editar testes antigos ou o conteúdo original.
+
+No input D05 de Fogo/Raios/Barreira/Gelo, o heading é derivado de x/z dos WorldPoints e o suporte fornece y; a inclinação do clique não transforma campo de chão em direção aérea. Preview e confirmação mostram no marcador o anchor real do campo capturado pelo placement canônico (alcance fixo), em vez do ponto usado apenas para escolher direção. Projéteis/volumes diretos conservam direção3D.

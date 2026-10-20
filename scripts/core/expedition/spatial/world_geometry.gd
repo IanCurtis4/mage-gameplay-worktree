@@ -396,7 +396,7 @@ func _support_segment_fraction(cell: Dictionary, from: Vector3, to: Vector3, pro
 			if t > 0.0 and t < 1.0: cuts.append(t)
 	cuts.sort()
 	for index: int in range(1,cuts.size()):
-		if not _supported(cell,from.lerp(to,(cuts[index-1]+cuts[index])*0.5),profile["radius"],profile["height"]): return cuts[index-1]
+		if not _supported(cell,Kernel.support_y(cell,from.lerp(to,(cuts[index-1]+cuts[index])*0.5)),profile["radius"],profile["height"]): return cuts[index-1]
 	return 1.0 if _supported(cell,to,profile["radius"],profile["height"]) else cuts[-2]
 
 static func point_tolerance(a: Vector3, b: Vector3) -> float:
@@ -480,7 +480,8 @@ func _ground_line_samples(source: ExpeditionWorldPoint, heading: Vector3, spacin
 		var exit := Kernel.support_y(cell,point+Vector3(direction.x,0,direction.y)*exit_distance)
 		var length := Vector2(exit.x-point.x,exit.z-point.z).length() if horizontal_metric else point.distance_to(exit)
 		while points.size() < count and spacing*float(points.size()+1) <= distance+length+EPS:
-			var sample := point.lerp(exit,clampf((spacing*float(points.size()+1)-distance)/length,0.0,1.0))
+			# Re-evaluate this selected support plane after f32 interpolation; never choose another floor.
+			var sample := Kernel.support_y(cell,point.lerp(exit,clampf((spacing*float(points.size()+1)-distance)/length,0.0,1.0)))
 			var supported := ExpeditionWorldPoint.create(source.stage_id,cell["surface_id"],sample)
 			var contact := sweep(point,sample,profile,revision)
 			if _support_segment_fraction(cell,point,sample,profile) < 1.0-EPS or not _point_valid(supported,profile["radius"],profile["height"]) or not contact["ok"] or contact["data"]["hit"]:
