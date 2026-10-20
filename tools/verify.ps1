@@ -49,6 +49,32 @@ function Invoke-GodotCheck($Check) {
     $checkOutput = $stdoutTask.GetAwaiter().GetResult() + $stderrTask.GetAwaiter().GetResult()
     $checkExitCode = $process.ExitCode
     $process.Dispose()
+    # Two unchanged E06 checks intentionally regenerate their versioned evidence reports.
+    # Preserve their actual output, then restore only those reports in the isolated copy.
+    # Exit/errors remain authoritative; this never changes a test expectation or source.
+    $generatedReports = @{
+        e06_pilot_execution_test = 'content/authoring/pilot_execution.json'
+        e06_directions_test = 'content/authoring/directions_execution.json'
+    }
+    if ($F1Fixture -and $generatedReports.ContainsKey($Check.name)) {
+        $relative = $generatedReports[$Check.name]
+        $generatedPath = Join-Path $fixtureF1Path $relative
+        $originalPath = Join-Path $projectPath $relative
+        if (Test-Path -LiteralPath $generatedPath) {
+            $generatedHash = (Get-FileHash -LiteralPath $generatedPath -Algorithm SHA256).Hash.ToLowerInvariant()
+            if ($generatedHash -ne $sourceHashes[$relative]) {
+                $reportDirectory = Join-Path $verificationPath ('generated_reports/' + $Check.name)
+                [void](New-Item -ItemType Directory -Force -Path $reportDirectory)
+                $preservedPath = Join-Path $reportDirectory ([IO.Path]::GetFileName($relative))
+                Copy-Item -LiteralPath $generatedPath -Destination $preservedPath
+                if ((Get-FileHash -LiteralPath $originalPath -Algorithm SHA256).Hash.ToLowerInvariant() -ne $sourceHashes[$relative]) { throw "Original report changed: $relative" }
+                Copy-Item -LiteralPath $originalPath -Destination $generatedPath
+                $restoredHash = (Get-FileHash -LiteralPath $generatedPath -Algorithm SHA256).Hash.ToLowerInvariant()
+                if ($restoredHash -ne $sourceHashes[$relative]) { throw "Fixture report restoration failed: $relative" }
+                @{ check = $Check.name; relative_path = $relative; generated_sha256 = $generatedHash; restored_sha256 = $restoredHash; preserved_path = $preservedPath } | ConvertTo-Json -Compress | Add-Content -LiteralPath (Join-Path $verificationPath 'generated_reports.jsonl') -Encoding utf8
+            }
+        }
+    }
     Set-Content -LiteralPath $outputPath -Value $checkOutput -Encoding utf8
     $checkFailed = $timedOut -or $checkExitCode -ne 0 -or ($checkOutput -match 'SCRIPT ERROR:|Parse Error:|ERROR:')
     @{ index = $Check.index; execution_index = $script:verifyCheckIndex; name = $Check.name; arguments = $EngineArguments; exit_code = $checkExitCode; timed_out = [bool]$timedOut; timeout_seconds = $CheckTimeoutSeconds; failed = [bool]$checkFailed; output_path = $outputPath; output_sha256 = (Get-FileHash -LiteralPath $outputPath -Algorithm SHA256).Hash; engine_log = $logPath } | ConvertTo-Json -Compress | Add-Content -LiteralPath $manifestPath -Encoding utf8

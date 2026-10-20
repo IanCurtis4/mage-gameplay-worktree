@@ -28,7 +28,9 @@ func _run() -> void:
 		for second: StringName in GeometerGeometry.ELEMENTS:
 			if first != second: _wall(first,second)
 			for third: StringName in GeometerGeometry.ELEMENTS: _triangle(first,second,third)
-	for skill: StringName in [&"geometer_translation",&"geometer_rewrite"]: _edit(skill)
+	for skill: StringName in [&"geometer_translation",&"geometer_rewrite"]:
+		_edit(skill)
+		_edit_cross_floor(skill)
 	for triangle: bool in [false,true]: _collapse(triangle)
 	for mode: String in ["fire","conduit","redirect","triangle"]: _owned_projectile(mode)
 	_hostile_arrow(false)
@@ -233,3 +235,25 @@ func _cleanup() -> void:
 	for item: Variant in owned:
 		if is_instance_valid(item): item.free()
 	owned.clear(); hits.clear()
+
+func _edit_cross_floor(skill: StringName) -> void:
+	_setup()
+	var first := Vector3(110,0,380)
+	check(_shoot(&"fire",first),"cross-floor edit has one real delivered lower anchor")
+	var identity := state.construction_id
+	for upper_floor: bool in [true,false]:
+		var floor_id := "bridge" if upper_floor else "root"
+		var y := 40.0 if upper_floor else 0.0
+		_move(c.player,Fixture.point(floor_id,Vector3(160,y,380)))
+		var destination := Fixture.point(floor_id,Vector3(first.x,y,first.z))
+		var old := state.world_points()[0].to_data(); var sp := c.player.current_sp
+		c.player.mage_cooldowns[skill] = 0; casting.select(&"ice")
+		var preview := casting.preview_world_trace(skill,destination,null,world.geometry_revision)
+		check(preview["ok"] and state.world_points()[0].to_data() == old and c.player.current_sp == sp,"single-anchor edit replaces removed support only in pure candidate; exact same x/z is unambiguous")
+		var commit := casting.begin_world_trace(skill,destination,null,world.geometry_revision)
+		check(commit["ok"],"real edit accepts explicit opposite-floor support after caster walks there")
+		if c.player.has_active_cast(): c.player._advance_world_cast(10)
+		check(c.player.world_cast_status()["ok"] and state.world_points()[0].to_data() == destination.to_data() and state.construction_id == identity,"committed edit keeps identity and exact explicit opposite-floor metadata")
+		check(is_equal_approx(c.player.current_sp,sp-c.player.skill_cost(skill)) and state.elements()[0] == (&"ice" if skill == &"geometer_rewrite" else &"fire"),"cross-floor edit pays once and preserves canonical translation/rewrite element")
+	var nav := WorldGeometerNavigation.new(); nav.reset(world,profile); nav.include(Fixture.point("root",first)); nav.include(Fixture.point("bridge",first+Vector3.UP*40))
+	check(nav.ambiguous and nav.point_at(Vector2(first.x,first.z)) == null,"two retained distinct supports with same x/z remain explicitly ambiguous")

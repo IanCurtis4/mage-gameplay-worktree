@@ -538,10 +538,7 @@ Layout interno vem das constantes canônicas dos três nodes; não recalcula dan
 ground_line_samples mede o alcance real3D até o centro; ground_line_point_at
 consulta os extremos laterais e quatro centros de Fogo, com raio/altura e
 clearance explícitos. Não inventa suporte, snap, rota desviada ou piso próximo.
-Neste checkpoint, diferença de altura lateral retorna non_planar_field_support
-gratuitamente; campo inclinado/piecewise ainda é lacuna. Há suporte para eixos
-laterais planos e não planos, inclusive footprint repartido em rampa/conexões conforme WorldSupportRegion.
-Esse limite não certifica paredes em todas as superfícies possíveis.
+Bases laterais planas e não planas são capturadas explicitamente, inclusive footprint repartido em rampa/conexões conforme WorldSupportRegion. Falta de suporte/cobertura ou obstrução real falha gratuitamente. O modelo certificado usa superfícies convexas planares e volumes autorados; não certifica paredes em toda autoria arbitrária.
 
 WorldActorMotion.traversed(segments:Array[Dictionary]) emite cópia dos segmentos
 reais somente após avanço/registro bem-sucedidos. Cada segmento de caminhada
@@ -651,7 +648,7 @@ A tolerância de coordenadas `point_tolerance` acrescenta quatro ULPs f32 à EPS
 
 `GeometerTraceProjectile` conserva voo cilíndrico real, homing, orçamento/timeout e captura no impacto; callbacks2D não reclamam ticket espacial. Confirmação/reserva precede dano e callbacks. Alteração da geração/identidade por callback invalida o processamento tardio anterior.
 
-As seis paredes e27 triângulos mantêm receitas e snapshots canônicos. Travessias reais, alvo por suporte/altura, manutenção1s sem catchup e contenção são consumidas pelos campos existentes. Translação/Reescrita preservam clocks/snapshots/ledger sem repetir resolução C; edição inválida não paga. Colapso captura pontos/região/altura antes de limpar e executa uma vez a receita C ou a política composta do primeiro elemento; não apaga construção nova criada por callback.
+As seis paredes e27 triângulos mantêm receitas e snapshots canônicos. Travessias reais, alvo por suporte/altura, manutenção1s sem catchup e contenção são consumidas pelos campos existentes. Translação/Reescrita preservam relógio da figura/dos vértices retidos, snapshots e ledger sem repetir resolução C; edição inválida não paga. Na validação da candidata, somente o vértice removido é excluído do índice de suportes: substituí-lo por outro andar explícito no mesmo x/z é legal quando o restante da construção permite. Dois suportes retidos na mesma chave continuam ambíguos. Colapso captura pontos/região/altura antes de limpar e executa uma vez a receita C ou a política composta do primeiro elemento; não apaga construção nova criada por callback.
 
 Projéteis reais ordenam contato de campo contra terreno/corpo usando `WorldProjectileMotion.peek` sem mutação. Condução caminha pela rota apoiada finita; redireção exige alvo legal por chão/alcance e voo livre; payloads Fogo/fundação/regra mantêm claims únicos. Flecha hostil baixa pode ser interceptada por saída Gelo com refund de Incidência canônico; acima da parede não é interceptada/refundada. Nenhuma fórmula de dano foi duplicada.
 
@@ -662,3 +659,5 @@ Projéteis reais ordenam contato de campo contra terreno/corpo usando `WorldProj
 `RunController.attach_expedition_view(view,field_height)` exige binding de mundo compatível e altura positiva. O clique esquerdo, mira por atalho/confirmação e preview chamam `spatial_pointer_move` / `spatial_pointer_skill`; selecionam WorldPoint ou alvo com suporte visível. Movimento usa path real até o andar selecionado; rejeição não cancela/move/paga. Skills usam os consumidores espaciais existentes, incluindo entradas próprias de Geômetra, dash/teleport/escudo e reserva Explosiva. Nenhum Vector2 projetado é usado como distância, destino físico ou fallback de combate. Markers/rotas e voos mostram os dados lógicos.
 
 Amostra: `tests/fixtures/e07/f1/presentation_sample.tscn`, F0 real seed711, escala técnica3, run fixture e nenhum ProfileFacade. Usa main.tscn/HUD/PlayerActor/treinamento reais, câmera original e rampa/ponte/passagem inferior; não aparece no lobby nem abre campanha. `presentation_capture.gd` roda no projeto importado isolado e exige diretório absoluto de saída: captura ponte, ator na rampa com rota/marcador e ataque entre pisos recusado sem custo/dano. A avaliação e hashes estão no recibo; imagem não prova FPS/escala/balanceamento ou aceite humano.
+
+O bootstrap nativo inclui `docs/fixtures` imutáveis, exigidos pelos testes antigos. No modo F1Fixture, o runner preserva os relatórios efetivamente regenerados por `e06_pilot_execution_test`/`e06_directions_test` e restaura apenas esses dois arquivos na cópia isolada a partir da fonte manifestada. Hashes de saída/restore ficam em generated_reports.jsonl; logs, exit e erros dos testes não são reinterpretados. Isso preserva a verificabilidade da cópia sem editar testes antigos ou o conteúdo original.

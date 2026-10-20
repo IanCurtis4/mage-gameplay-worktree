@@ -8,7 +8,7 @@ func collect(directory: String) -> void:
 	for file: String in dir.get_files(): files.append(directory.path_join(file))
 	for child: String in dir.get_directories(): collect(directory.path_join(child))
 func _initialize() -> void:
-	for directory: String in ["scripts", "scenes", "assets", "data", "resources", "content", "addons", "tests", "tools"]: collect("res://"+directory)
+	for directory: String in ["scripts", "scenes", "assets", "data", "resources", "content", "addons", "tests", "tools", "docs/fixtures"]: collect("res://"+directory)
 	files.sort()
 	var hashes := {}
 	var auxiliary := {}

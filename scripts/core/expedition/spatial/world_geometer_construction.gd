@@ -123,13 +123,13 @@ func region(points: PackedVector2Array = PackedVector2Array()) -> Dictionary:
 	return world.ground_region(anchor,polygon,profile,world.geometry_revision)
 func preview_world_edit(point: ExpeditionWorldPoint, actor_id: int, rewrite: bool, triangle_rank: int, durations: Vector2, element: StringName) -> Dictionary:
 	refresh({},world_navigation)
-	_candidate = WorldGeometerNavigation.copy_point(point); _rebuild()
+	_candidate = WorldGeometerNavigation.copy_point(point); _rebuild(_edit_replaced_id(rewrite))
 	var result := preview_edit(Vector2(point.position.x,point.position.z),actor_id,rewrite,triangle_rank,world_navigation,durations.x,durations.y,element)
 	result.erase("candidate")
 	_candidate = null; _rebuild()
 	return result
 func edit_world(point: ExpeditionWorldPoint, actor_id: int, rewrite: bool, triangle_rank: int, durations: Vector2, element: StringName) -> Dictionary:
-	_candidate = WorldGeometerNavigation.copy_point(point); _rebuild()
+	_candidate = WorldGeometerNavigation.copy_point(point); _rebuild(_edit_replaced_id(rewrite))
 	var result := edit(Vector2(point.position.x,point.position.z),actor_id,rewrite,triangle_rank,world_navigation,durations.x,durations.y,element)
 	if result["ok"]:
 		var kept: Dictionary[int, ExpeditionWorldPoint] = {}; var last: Dictionary[int, ExpeditionWorldPoint] = {}
@@ -156,9 +156,12 @@ func _actor_point(identity: int) -> ExpeditionWorldPoint:
 	var actor := _actors[identity].get_ref() as CombatActor if _actors.has(identity) else null
 	if not is_instance_valid(actor) or not actor.is_alive() or actor.world_motion == null or not actor.world_motion.is_current_world() or actor.world_motion.geometry != world: return null
 	return actor.world_point()
-func _rebuild() -> void:
+func _edit_replaced_id(rewrite: bool) -> int:
+	return vertices[0 if rewrite else -1].get_instance_id() if not vertices.is_empty() else 0
+func _rebuild(replaced_id: int = 0) -> void:
 	world_navigation.reset(world,world_navigation.profile)
-	for point: ExpeditionWorldPoint in _points.values(): world_navigation.include(point)
+	for identity: int in _points:
+		if identity != replaced_id: world_navigation.include(_points[identity])
 	for point: ExpeditionWorldPoint in _pending_points.values(): world_navigation.include(point)
 	world_navigation.include(_candidate)
 func _prune() -> void:
