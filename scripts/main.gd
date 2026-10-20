@@ -1204,7 +1204,10 @@ func _on_precision_projectile_requested(skill_id: StringName, request: DamageReq
 
 func _on_sentinel_projectile_requested(request: DamageRequest, target_actor: CombatActor, direction: Vector2, payload: Dictionary) -> void:
 	if player.world_motion != null:
-		if request.skill_id not in [&"sentinel_headshot",&"sentinel_piercing_shot",&"sentinel_concussion_shot"]: return # Area payloads still require their own spatial adapter.
+		if request.skill_id in [&"sentinel_net_shot",&"sentinel_explosive_shot"]:
+			_spawn_world_sentinel_area(request,target_actor,payload)
+			return
+		if request.skill_id not in [&"sentinel_headshot",&"sentinel_piercing_shot",&"sentinel_concussion_shot"]: return
 		_spawn_world_cast_projectiles(request.skill_id,request,target_actor,20 if request.skill_id == &"sentinel_piercing_shot" else 1,_on_sentinel_direct_hit.bind(payload.duplicate(true)),false,Color("a6e3ee") if request.skill_id == &"sentinel_piercing_shot" else Color("d7f0de"),0.0,true)
 		return
 	if request.skill_id in [&"sentinel_net_shot", &"sentinel_explosive_shot"]:
@@ -1231,6 +1234,22 @@ func _on_sentinel_projectile_requested(request: DamageRequest, target_actor: Com
 	add_child(projectile)
 	projectile.add_to_group("player_projectiles")
 
+func _spawn_world_sentinel_area(request: DamageRequest, victim: CombatActor, payload: Dictionary) -> void:
+	if not player.world_motion.is_current_world(): return
+	for spec: Dictionary in player.world_cast_projectiles(request.skill_id):
+		var area := SentinelAreaProjectile.new()
+		if request.skill_id == &"sentinel_net_shot": area.configure_directional(request.copy(),Vector2.ZERO,Vector2.RIGHT,enemies,navigation,spec["speed"],spec["range"])
+		else: area.configure_homing(request.copy(),victim,Vector2.ZERO,navigation,spec["speed"],spec["range"],Color("ffbf69"))
+		area.payload = payload.duplicate(true)
+		var valid := area.bind_world_delivery(player.world_motion.geometry,spec,player.world_motion.profile(),player.world_cast_anchor())
+		if not valid["ok"]: area.free(); continue
+		area.world_burst.connect(_on_world_sentinel_burst)
+		add_child(area)
+		area.add_to_group("player_projectiles")
+
+func _on_world_sentinel_burst(area: WorldEffectArea, center: Vector3, request: DamageRequest, payload: Dictionary) -> void:
+	_on_sentinel_burst(Vector2.ZERO,request,payload,area,center)
+
 func _on_sentinel_direct_hit(request: DamageRequest, enemy: CombatActor, payload: Dictionary) -> void:
 	if not is_instance_valid(enemy) or not enemy.is_alive():
 		return
@@ -1242,22 +1261,34 @@ func _on_sentinel_direct_hit(request: DamageRequest, enemy: CombatActor, payload
 		enemy.apply_attribute_debuff(AttributeDebuffState.DAMAGE_DEALT, &"sentinel_concussion_shot", float(payload["damage_dealt_reduction"]), float(payload["duration"]))
 	_show_sentinel_visual(request.skill_id, enemy.global_position + PlayerProjectile.BODY_OFFSET, 20.0)
 
-func _on_sentinel_burst(center: Vector2, request: DamageRequest, payload: Dictionary) -> void:
-	_show_sentinel_visual(request.skill_id, center, float(payload["radius"]))
+func _on_sentinel_burst(center: Vector2, request: DamageRequest, payload: Dictionary, world_area: WorldEffectArea = null, world_center: Vector3 = Vector3.ZERO) -> void:
+	if world_area == null: _show_sentinel_visual(request.skill_id, center, float(payload["radius"]))
 	var seen: Dictionary[int, bool] = {}
 	# Death callbacks remove actors from enemies synchronously.
-	for enemy: CombatActor in enemies.duplicate():
-		if not is_instance_valid(enemy) or not enemy.is_alive() or seen.has(enemy.get_instance_id()):
-			continue
-		if center.distance_to(enemy.global_position) > float(payload["radius"]) + enemy.collision_radius or not navigation.is_segment_clear(center + PlayerProjectile.BODY_OFFSET, enemy.global_position + PlayerProjectile.BODY_OFFSET, 0.0):
-			continue
+	for candidate: Variant in enemies.duplicate():
+		if not is_instance_valid(candidate): continue
+		var enemy := candidate as CombatActor
+		if enemy == null or not enemy.is_alive() or seen.has(enemy.get_instance_id()): continue
+		if world_area != null:
+			if not _world_sentinel_burst_contains(world_area,world_center,enemy,float(payload["radius"]),request.skill_id): continue
+		elif center.distance_to(enemy.global_position) > float(payload["radius"]) + enemy.collision_radius or not navigation.is_segment_clear(center + PlayerProjectile.BODY_OFFSET, enemy.global_position + PlayerProjectile.BODY_OFFSET, 0.0): continue
 		seen[enemy.get_instance_id()] = true
 		var hit_request := request.copy()
 		hit_request.target_id = enemy.get_instance_id()
 		# Health emits the direct impact/proc before any new root is applied.
 		var result := enemy.apply_damage(hit_request, rng)
-		if enemy.is_alive() and float(result.get("actual_damage", 0.0)) > 0.0 and request.skill_id == &"sentinel_net_shot":
+		if is_instance_valid(enemy) and enemy.is_alive() and float(result.get("actual_damage", 0.0)) > 0.0 and request.skill_id == &"sentinel_net_shot":
 			enemy.apply_root(float(payload["root_duration"]), &"magic")
+
+func _world_sentinel_burst_contains(area: WorldEffectArea, center: Vector3, enemy: CombatActor, radius: float, skill: StringName) -> bool:
+	if not area.is_current_world() or enemy.world_motion == null or not enemy.world_motion.is_current_world() or enemy.world_motion.geometry != area.geometry: return false
+	if skill == &"sentinel_net_shot":
+		if not area.contains_actor(enemy,radius): return false
+		var sight := area.geometry.query_attack({"geometry_rule_id":&"direct_volume","range":1.0e20},area.anchor(),enemy.world_point(),area.geometry.geometry_revision)
+		return sight["ok"] and sight["data"]["hit"]
+	var body := enemy.world_motion.profile()
+	var query := area.query(enemy,radius+float(body["radius"]),{"source_offset":center-area.anchor().position,"target_offset":Vector3.UP*float(body["height"])*0.5})
+	return query["ok"] and query["data"]["hit"]
 
 func _show_sentinel_visual(skill: StringName, center: Vector2, radius: float) -> void:
 	# Cosmetic scene budget independent of hit count, never suppresses damage/CC.

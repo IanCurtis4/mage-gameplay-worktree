@@ -378,9 +378,8 @@ cobertura dirigida. A retirada não recalcula um projétil já emitido.
 PlayerActor._process remove Postura antes de um auto no mesmo frame após
 movimento lógico externo, mesmo sem deslocamento do sprite; Foco e estabilidade
 já observam WorldPoint. Marca de Observar também é limpa quando o corpo deixa
-de existir. Rede/Explosivo e suas áreas/reserva ainda exigem adaptação própria;
-os bindings legados permanecem bloqueados em multialtura. Isso não certifica o
-kit inteiro nem sua apresentação.
+de existir. Rede/Explosivo usam os adaptadores próprios descritos abaixo.
+Isso não certifica o kit inteiro nem sua apresentação.
 
 ## Mecanismos, recuo e coberturas da Caçadora
 
@@ -422,6 +421,48 @@ Total usa125/graça1. Expiração/cleanup/epoch removem zona/graça sem devolver
 ou apagar reveal. A API de ator continua already_bound; não foi criado rebind,
 respawn ou lifecycle F2. Archer base conserva seu contrato sem budget Hunter.
 Bindings opt-in e fixtures dirigidas não habilitam apresentação D05 ou campanha.
+
+## Rede e munição Explosiva do Sentinela
+
+WorldSkillCast classifica59 IDs nominais: Rede acrescenta intenção de ponto e
+Explosivo usa a captura interna de alvo. Explosivo NÃO admite request/preview
+comum: retorna reservation_entry_required. A entrada explícita é
+PlayerActor.prepare_world_sentinel_explosive(revision) -> Dictionary, que valida
+binding/suporte/revisão e chama a reserva/cancelamento canônico. Nenhum custo,
+root causal, CD ou reset é criado ao reservar. Segundo toggle libera; cancelamento
+explícito anterior continua disponível. Pausa/controle, recursos livres e ranks
+continuam nas autoridades anteriores; não se inventa expiração em combate.
+
+Próximo auto revalida alvo3D/LoS, origem/cilindro4×8, capacidade e recursos totais
+reservados antes de liberar a reserva. O handler canônico paga SP/Foco uma vez,
+substitui o dano físico por SentinelMath e emite com recuperação normal. Resets
+não consomem munição. Reentrada de cast/reserva durante emissão é cast_busy.
+Falha pré-lançamento conserva reserva/custo/CD; perda do alvo após lançar termina
+sem refund. Retirar build não recalcula um pedido já emitido.
+
+Rede conserva preparo DES/custo/CD e root magic posterior ao impacto positivo,
+sem reset do auto nem custo de Foco. WorldPoint de destino é explícito e validado
+por alcance no chão conectado; não há clamp/snap silencioso do destino inválido.
+SentinelAreaProjectile.bind_world_delivery(world,spec,profile,endpoint) liga os
+specs capturados ao voo contínuo real. Primeiro corpo captura seu suporte; endpoint
+sem contato conserva o suporte escolhido. Contato de terreno consulta
+WorldGeometry.ground_line_point_at(source,horizontal,profile,revision): percorre
+somente a direção original e conexões apoiadas até aquele x/z, sem buscar andar
+vizinho, detour ou prefixo reparador. Sem suporte legal, não abre área. Compartilha
+travessia com ground_line_samples; esta mantém sua métrica3D anterior. Rede de
+distância zero abre no próprio WorldPoint, sem fabricar alcance de projétil.
+
+world_burst(WorldEffectArea,Vector3,DamageRequest,Dictionary) reivindica abertura
+antes de callbacks. Rede consulta alcance/conexão de chão e LoS nominal por
+vítima. Explosivo usa centro3D real do cilindro no impacto e o centro do corpo da
+vítima, com raio nominal+raio do corpo, sweep de oclusão e sem projetar em piso
+próximo. WorldEffectArea guarda um suporte fonte válido e source_offset explícito
+para esse centro aéreo; isso não o converte em área de chão. Um único loop de
+dano preserva deduplicação/ledger/Foco/Leitura e não soma hit direto ao burst.
+Vítimas são revalidadas após callbacks; referências liberadas são filtradas antes
+da conversão tipada. Epoch termina voo; obstáculo tardio intercepta geometria atual.
+O burst multialtura não desenha VFX com coordenadas lógicas como se fossem pixels;
+renderer/input/prova visual permanecem pendentes de D05.
 
 ## Adaptador plano e próximos consumidores
 

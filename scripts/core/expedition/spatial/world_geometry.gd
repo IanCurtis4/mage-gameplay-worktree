@@ -375,7 +375,20 @@ func _support_segment_fraction(cell: Dictionary, from: Vector3, to: Vector3, pro
 		if not _supported(cell,from.lerp(to,(cuts[index-1]+cuts[index])*0.5),profile["radius"],profile["height"]): return cuts[index-1]
 	return 1.0 if _supported(cell,to,profile["radius"],profile["height"]) else cuts[-2]
 
+func ground_line_point_at(source: ExpeditionWorldPoint, horizontal: Vector2, profile: Dictionary, revision: int) -> Dictionary:
+	if not _current(revision): return _failure(&"stale_geometry")
+	if source == null or not horizontal.is_finite(): return _failure(&"invalid_ground_line")
+	var heading := Vector3(horizontal.x-source.position.x,0,horizontal.y-source.position.z)
+	if heading.is_zero_approx(): return position_query(source,profile,revision)
+	var sampled := _ground_line_samples(source,heading,heading.length(),1,profile,revision,true)
+	if not sampled["ok"]: return sampled
+	if sampled["data"]["points"].is_empty(): return _failure(&"unsupported_contact")
+	return _success({"point":sampled["data"]["points"][0]})
+
 func ground_line_samples(source: ExpeditionWorldPoint, heading: Vector3, spacing: float, count: int, profile: Dictionary, revision: int) -> Dictionary:
+	return _ground_line_samples(source,heading,spacing,count,profile,revision,false)
+
+func _ground_line_samples(source: ExpeditionWorldPoint, heading: Vector3, spacing: float, count: int, profile: Dictionary, revision: int, horizontal_metric: bool) -> Dictionary:
 	# Heading chooses x/z direction; support supplies y. Spacing measures actual 3D travel.
 	if not _current(revision): return _failure(&"stale_geometry")
 	if not _profile_valid(profile): return _failure(&"invalid_profile")
@@ -411,7 +424,7 @@ func ground_line_samples(source: ExpeditionWorldPoint, heading: Vector3, spacing
 			cell = immediate
 			continue
 		var exit := Kernel.support_y(cell,point+Vector3(direction.x,0,direction.y)*exit_distance)
-		var length := point.distance_to(exit)
+		var length := Vector2(exit.x-point.x,exit.z-point.z).length() if horizontal_metric else point.distance_to(exit)
 		while points.size() < count and spacing*float(points.size()+1) <= distance+length+EPS:
 			var sample := point.lerp(exit,clampf((spacing*float(points.size()+1)-distance)/length,0.0,1.0))
 			var supported := ExpeditionWorldPoint.create(source.stage_id,cell["surface_id"],sample)

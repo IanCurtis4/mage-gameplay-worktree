@@ -121,9 +121,9 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `provoke` — Provocar | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `sentinel_absolute_focus` — Foco Absoluto | `self_only` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `sentinel_concussion_shot` — Tiro de Concussão | `direct_volume` | Entrada/homing3D e stun/debuff após dano positivo ligados; conserva Focus0 e callbacks canônicos |
-| `sentinel_explosive_shot` — Tiro Explosivo | `direct_volume` | Consumidor pendente; entrada legada bloqueada no binding |
+| `sentinel_explosive_shot` — Tiro Explosivo | `direct_volume` | Reserva world explícita e próximo auto canônico; voo/burst3D com centro real e oclusão, sem hit principal duplicado |
 | `sentinel_headshot` — Tiro na Cabeça | `direct_volume` | Entrada/preflight/homing3D e reset canônico ligados; maior rank aprendido, SP/Foco e colisão cobertos |
-| `sentinel_net_shot` — Tiro de Rede | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `sentinel_net_shot` — Tiro de Rede | `ground_connected` | Ponto/preparo/custo/voo ligados; primeiro corpo/terreno/endpoint captura suporte, área de chão+LoS e root magic após dano |
 | `sentinel_observe` — Observar | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `sentinel_opening_read` — Leitura de Aberturas | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `sentinel_piercing_shot` — Tiro Perfurante | `direct_volume` | Entrada/direção3D e voo perfurante finito ligados; corpos deduplicados, sólidos e snapshot cobertos |

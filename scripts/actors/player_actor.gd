@@ -447,15 +447,33 @@ func cancel_sentinel_preparation() -> bool:
 	queue_redraw()
 	return true
 
+var _world_sentinel_reservation := false
+
+func prepare_world_sentinel_explosive(revision: int) -> Dictionary:
+	if _world_requesting or _world_executing_cast != null: return WorldSkillCast.failure(&"cast_busy")
+	if world_motion == null or not world_motion.is_current_world(): return WorldSkillCast.failure(&"spatial_binding_required")
+	var valid := world_motion.geometry.position_query(world_point(),world_motion.profile(),revision)
+	if not valid["ok"]: return valid
+	_world_sentinel_reservation = true
+	_world_requesting = true
+	var accepted := prepare_sentinel_explosive()
+	_world_requesting = false
+	_world_sentinel_reservation = false
+	return {"ok":accepted,"error_code":&"" if accepted else &"skill_rejected","data":{"prepared":sentinel_state.explosive_prepared}}
+
 func prepare_sentinel_explosive() -> bool:
+	if world_motion != null and not _world_sentinel_reservation: return false
 	if not is_sentinel() or not is_alive() or (is_inside_tree() and get_tree().paused):
 		return false
 	if sentinel_state.explosive_prepared:
+		_world_sentinel_reservation = false
 		return cancel_sentinel_preparation()
 	var id := &"sentinel_explosive_shot"
 	if not sentinel_can_use(id):
 		return false
 	var tuning := SentinelTuning.values(id, skill_rank(id))
+	# Close the legacy entry before resource observers can reenter this reservation.
+	_world_sentinel_reservation = false
 	# Reservation is not payment; no cooldown or recovery is touched here.
 	sentinel_state.reserved_sp = skill_cost(id)
 	sentinel_state.reserved_focus = float(tuning["focus_cost"])
@@ -465,7 +483,27 @@ func prepare_sentinel_explosive() -> bool:
 	return true
 
 func _launch_sentinel_explosive(enemy: CombatActor) -> bool:
-	if world_motion != null: return false # Area projectile consumer still requires its spatial adapter.
+	if world_motion == null: return _commit_sentinel_explosive(enemy)
+	if _world_requesting or _world_executing_cast != null or not sentinel_state.explosive_prepared: return false
+	var actors: Array[CombatActor] = []
+	if is_instance_valid(enemy): actors.append(enemy)
+	var controller := get_parent() as RunController
+	if controller != null: actors.assign(controller.enemies)
+	var command := _capture_world_skill(&"sentinel_explosive_shot",null,Vector3.RIGHT,enemy,actors,world_motion.geometry.geometry_revision,0)
+	if command == null: return false
+	var previous := _cast_rank_context
+	_cast_rank_context = command.rank_context
+	var valid := _validate_world_skill(command,true)
+	if not valid["ok"]: _cast_rank_context = previous; return false
+	_world_executing_cast = command
+	_world_requesting = true
+	var accepted := _commit_sentinel_explosive(enemy)
+	_world_requesting = false
+	_world_executing_cast = null
+	_cast_rank_context = previous
+	return accepted
+
+func _commit_sentinel_explosive(enemy: CombatActor) -> bool:
 	var id := &"sentinel_explosive_shot"
 	if not sentinel_state.explosive_prepared or not is_sentinel() or not is_alive() or is_stunned() or is_feared() or (is_inside_tree() and get_tree().paused):
 		return false
@@ -478,10 +516,10 @@ func _launch_sentinel_explosive(enemy: CombatActor) -> bool:
 		return false
 	var reserved_focus := sentinel_state.reserved_focus
 	var request := _make_magic_request(enemy, id, SentinelMath.raw_power(id, skill_rank(id), stat_breakdown), DamageRequest.AccuracyMode.GEOMETRY, true)
-	var facing := _resolved_facing(aim_direction(enemy.global_position))
+	var facing := _resolved_facing(Vector2(world_cast_direction().x,world_cast_direction().z) if world_motion != null else aim_direction(enemy.global_position))
 	# All launch checks passed. Release then consume the reservation exactly once.
 	sentinel_state.cancel_preparation()
-	_spend(id)
+	if not _spend(id): return false
 	request.context = _emission_context.copy_context()
 	request.emission_id = int(_emission_context.root_event_id.get_slice(":", _emission_context.root_event_id.get_slice_count(":") - 1))
 	sentinel_state.spend(reserved_focus)
@@ -496,17 +534,18 @@ func sentinel_net_center(point: Vector2) -> Vector2:
 	return global_position + (point - global_position).limit_length(skill_range(&"sentinel_net_shot"))
 
 func can_place_sentinel_net(point: Vector2) -> bool:
+	if world_motion != null: return _world_placement_ready(&"sentinel_net_shot")
 	return point.is_finite() and navigation != null and navigation.is_walkable(sentinel_net_center(point))
 
 func use_sentinel_net(point: Vector2) -> bool:
 	var id := &"sentinel_net_shot"
 	if not sentinel_can_use(id) or not can_place_sentinel_net(point):
 		return false
-	var center := sentinel_net_center(point)
+	var center := Vector2.ZERO if world_motion != null else sentinel_net_center(point)
 	var tuning := SentinelTuning.values(id, skill_rank(id))
 	var request := _make_magic_request(null, id, SentinelMath.raw_power(id, skill_rank(id), stat_breakdown), DamageRequest.AccuracyMode.GEOMETRY, true)
-	var facing := _resolved_facing(aim_direction(center))
-	_spend(id)
+	var facing := _resolved_facing(Vector2(world_cast_direction().x,world_cast_direction().z) if world_motion != null else aim_direction(center))
+	if not _spend(id): return false
 	request.context = _emission_context.copy_context()
 	request.emission_id = int(_emission_context.root_event_id.get_slice(":", _emission_context.root_event_id.get_slice_count(":") - 1))
 	var payload := tuning.duplicate(true)
@@ -2609,6 +2648,7 @@ func world_cast_projectiles(skill: StringName) -> Array[Dictionary]:
 	return _world_executing_cast.projectiles.duplicate(true) if _world_executing_cast != null and _world_executing_cast.skill_id == skill and _world_executing_cast.committed else []
 
 func preview_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: Vector3, victim: CombatActor, actors: Array[CombatActor], revision: int, requested_rank: int = 0) -> Dictionary:
+	if skill == &"sentinel_explosive_shot": return WorldSkillCast.failure(&"reservation_entry_required")
 	var saved_result := _world_cast_result.duplicate(true)
 	var command := _capture_world_skill(skill,anchor,facing,victim,actors,revision,requested_rank)
 	var capture_result := _world_cast_result.duplicate(true)
@@ -2623,6 +2663,7 @@ func preview_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing
 
 func request_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: Vector3, victim: CombatActor, actors: Array[CombatActor], revision: int, requested_rank: int = 0) -> Dictionary:
 	if _world_executing_cast != null or _world_requesting: return WorldSkillCast.failure(&"cast_busy")
+	if skill == &"sentinel_explosive_shot": return WorldSkillCast.failure(&"reservation_entry_required")
 	var command := _capture_world_skill(skill,anchor,facing,victim,actors,revision,requested_rank)
 	if command == null: return _world_cast_result.duplicate(true)
 	var previous := _cast_rank_context
@@ -2657,15 +2698,18 @@ func _capture_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facin
 	restore_cast_rank(previous)
 	return command
 
-func _validate_world_skill(command: WorldSkillCast) -> Dictionary:
+func _validate_world_skill(command: WorldSkillCast, using_reservation: bool = false) -> Dictionary:
 	if command.committed: return WorldSkillCast.failure(&"already_committed")
 	var controller := get_parent() as RunController
 	if controller != null and controller.geometer_casting != null and controller.geometer_casting.wall_field != null and command.skill_id in WorldSkillCast.PROJECTILES: return WorldSkillCast.failure(&"spatial_interceptor_required")
 	if (is_inside_tree() and get_tree().paused) or is_stunned() or is_feared() or (command.skill_id == &"spiritualist_soul_drain" and is_rooted()): return WorldSkillCast.failure(&"caster_controlled")
-	if not _can_pay_skill(command.skill_id): return WorldSkillCast.failure(&"skill_unavailable")
+	if not _can_pay_skill(command.skill_id,using_reservation): return WorldSkillCast.failure(&"skill_unavailable")
 	if command.skill_id == &"berserker_execution" and not can_pay_berserker_execution_hp(): return WorldSkillCast.failure(&"skill_unavailable")
 	if command.skill_id == &"defender_riposte" and not has_defender_token(): return WorldSkillCast.failure(&"skill_unavailable")
-	if command.skill_id in [&"sentinel_observe",&"sentinel_absolute_focus",&"sentinel_headshot",&"sentinel_piercing_shot",&"sentinel_concussion_shot"] and not sentinel_state.can_pay(float(SentinelTuning.values(command.skill_id,skill_rank(command.skill_id)).get("focus_cost",0.0))): return WorldSkillCast.failure(&"skill_unavailable")
+	if command.skill_id in SentinelTuning.SKILL_IDS:
+		var focus_cost := float(SentinelTuning.values(command.skill_id,skill_rank(command.skill_id)).get("focus_cost",0.0))
+		var focus_available := sentinel_state.focus >= focus_cost if using_reservation else sentinel_state.can_pay(focus_cost)
+		if not focus_available: return WorldSkillCast.failure(&"skill_unavailable")
 	var valid := command.geometry_check(self)
 	if not valid["ok"]: return valid
 	if is_hunter() and command.skill_id in HunterMath.TRAP_IDS:
@@ -2693,9 +2737,14 @@ func _validate_world_skill(command: WorldSkillCast) -> Dictionary:
 	command.projectiles.clear()
 	if command.skill_id in WorldSkillCast.PROJECTILES:
 		var count := int(command.rank_context["capture"]["values"].get("projectile_count",1))
-		if command.skill_id in [&"sentinel_headshot",&"sentinel_piercing_shot",&"sentinel_concussion_shot",&"hunter_covering_shot"]: count = 1 # One nominal special launch.
+		if command.skill_id in [&"sentinel_headshot",&"sentinel_piercing_shot",&"sentinel_concussion_shot",&"hunter_covering_shot",&"sentinel_net_shot",&"sentinel_explosive_shot"]: count = 1 # One nominal special launch.
 		if is_inside_tree() and not EffectProcLedger.projectile_slots_available(get_tree(),count): return WorldSkillCast.failure(&"skill_unavailable")
 		var facing := command.direction(self)
+		var flight_range := archer_basic_projectile_range() if command.skill_id == &"sentinel_explosive_shot" else skill_range(command.skill_id)
+		if command.skill_id == &"sentinel_net_shot":
+			var delta := command.anchor().position-command.source().position
+			flight_range = delta.length()
+			if not delta.is_zero_approx(): facing = delta.normalized()
 		var side := facing.cross(Vector3.UP).normalized()
 		if side.is_zero_approx(): side = Vector3.RIGHT
 		var radius := 6.0 if command.skill_id in [&"fireball",&"fire_spear",&"ice_spear",&"lightning",&"electric_discharge"] else PlayerProjectile.DEFAULT_RADIUS
@@ -2706,7 +2755,7 @@ func _validate_world_skill(command: WorldSkillCast) -> Dictionary:
 			var sweep := world_motion.geometry.sweep(origin,origin,body,command.revision)
 			if not sweep["ok"]: return sweep
 			if sweep["data"]["hit"]: return WorldSkillCast.failure(&"blocked_origin")
-			command.projectiles.append({"origin":command.source().to_data(),"offset":offset,"direction":facing,"collider":body.duplicate(),"speed":skill_projectile_speed(command.skill_id),"range":skill_range(command.skill_id)})
+			command.projectiles.append({"origin":command.source().to_data(),"offset":offset,"direction":facing,"collider":body.duplicate(),"speed":skill_projectile_speed(command.skill_id),"range":flight_range})
 	return {"ok":true,"error_code":&"","data":{}}
 
 func _advance_world_cast(delta: float) -> void:
@@ -2742,6 +2791,7 @@ func _commit_world_skill(command: WorldSkillCast) -> Dictionary:
 	var actors := command.actors()
 	var accepted := false
 	match command.skill_id:
+		&"sentinel_net_shot": accepted = use_sentinel_net(point)
 		&"hunter_covering_shot": accepted = use_hunter_covering_shot(flat)
 		&"hunter_total_cover": accepted = use_hunter_total_cover(point)
 		&"foliage_shelter": accepted = use_foliage_shelter(point)
@@ -3397,13 +3447,14 @@ func _can_spend(skill_id: StringName) -> bool:
 	if _world_executing_cast != null:
 		return _world_executing_cast.skill_id == skill_id and _validate_world_skill(_world_executing_cast)["ok"]
 	if world_motion != null and not world_motion.is_current_world(): return false
-	if world_motion != null and WorldSkillGeometryRules.rule(skill_id).get("geometry_rule_id",&"") != &"self_only" and not (skill_id == &"shield_wall" and _world_shield_commit): return false # Spatial casts require explicit WorldPoints.
+	if world_motion != null and WorldSkillGeometryRules.rule(skill_id).get("geometry_rule_id",&"") != &"self_only" and not ((skill_id == &"shield_wall" and _world_shield_commit) or (skill_id == &"sentinel_explosive_shot" and _world_sentinel_reservation)): return false # Spatial casts require explicit WorldPoints.
 	return _can_pay_skill(skill_id)
 
-func _can_pay_skill(skill_id: StringName) -> bool:
+func _can_pay_skill(skill_id: StringName, using_reservation: bool = false) -> bool:
 	var definition := ClassCatalog.skill_definition(skill_id)
 	var has_runtime_definition := definition != null and (definition.ranks.is_empty() or _runtime_rank_definition(skill_id) != null)
-	return selected_cast_rank_valid(skill_id) and run_state.effect_ledger.can_create_root() and run_state.effects_valid() and has_projectile_capacity(skill_id) and has_runtime_definition and skill_id in available_skill_ids() and is_alive() and skill_cooldown(skill_id) <= 0.0 and sentinel_free_sp() >= skill_cost(skill_id)
+	var available_sp := current_sp if using_reservation and skill_id == &"sentinel_explosive_shot" and sentinel_state.explosive_prepared else sentinel_free_sp()
+	return selected_cast_rank_valid(skill_id) and run_state.effect_ledger.can_create_root() and run_state.effects_valid() and has_projectile_capacity(skill_id) and has_runtime_definition and skill_id in available_skill_ids() and is_alive() and skill_cooldown(skill_id) <= 0.0 and available_sp >= skill_cost(skill_id)
 
 func _spend(skill_id: StringName) -> bool:
 	if _world_executing_cast != null:
