@@ -249,13 +249,14 @@ configura suas três áreas/schedule originais; Dreno/Procissão iniciam os guar
 espaciais existentes. Cones/linhas corpo a corpo consultam direção/LoS 3D no
 handler canônico, sem refazer fórmulas. Os placeholders Vector2 são apresentação.
 
-Whitelist nominal em WorldSkillCast (57 IDs), também exposta como cast_entry no
-inventário: alvo dirigido, cones/linhas, doze tipos de projétil, doze placements,
-cinco áreas próprias e quatro estados self_only. Isso informa entrada disponível,
-não certifica todos os efeitos de um kit. Shield Wall/dash/teleporte conservam
+Whitelist nominal em WorldSkillCast (59 IDs), também exposta como cast_entry no
+inventário: alvo dirigido, cones/linhas,14 tipos de projétil,13 placements,
+cinco áreas próprias e quatro estados self_only. Explosivo usa captura interna
+pelo próximo auto e API de reserva própria;58 IDs admitem request comum. Isso
+classifica intenções, sem certificar todos os efeitos de um kit. Shield Wall/dash/teleporte conservam
 as APIs espaciais próprias já documentadas. As cinco famílias de armadilha,
-recuo/Leque e coberturas da Caçadora usam os bindings abaixo. Geômetra, paredes
-e áreas/reserva do Sentinela continuam pendentes.
+recuo/Leque e coberturas da Caçadora usam os bindings abaixo. Rede/Explosivo usam
+voo/áreas/reserva próprios abaixo. Geômetra e paredes continuam pendentes.
 Marco/Onda/Fenda e Avanço/Retirada/Salto usam os bindings descritos abaixo.
 
 WorldTargetLock.configure(caster,target,range,revision) valida alcance/LoS somente

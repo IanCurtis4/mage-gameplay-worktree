@@ -32,17 +32,18 @@ Player/Mage/Sentinel e flecha hostil, chuva/traps/blast ancorados, escudo/barrei
 piche, ocultação/budget/grace, coleta, movimento/dash temporal, AI autônoma/leash,
 cast obsoleto e callbacks que removem alvos. Isso não equivale ao cast completo
 dessas ativas: entrada/preview/composição nominal ainda precisam ser integrados.
-A retomada seguinte acrescenta WorldSkillCast: 57 entradas nominais com preview,
-preparo e commit 3D. Dreno/Procissão/Véu, áreas elementais, chuva/traps base,
+As retomadas acrescentam WorldSkillCast:59 IDs nominais,58 com preview/preparo/
+commit3D comum e Explosivo por reserva explícita+captura interna do próximo auto. Dreno/Procissão/Véu, áreas elementais, chuva/traps base,
 projéteis e melee consomem a intenção capturada. A prova nominal é delimitada no
 recibo; isso ainda não certifica os dez kits nem os 27 efeitos compostos.
 SoulImpact, Assombro, Dissipação e gritos de área também receberam prova nominal
 de pulso/oclusão/controles, sem alterar o dano canônico.
 Marco/Onda/Fenda e Avanço/Retirada/Salto receberam bindings nominais; Contraforte
 conserva direção3D durante a guarda. Armadilhas/reação, recuo/Leque e coberturas
-da Caçadora também têm consumidores nominais ligados. Geômetra, paredes e áreas/
-reserva do Sentinela continuam bloqueios. Cabeça/Perfurante/Concussão têm voo3D;
-Rede/Explosivo ainda não. API e recibo contêm o escopo exato; D05 visual não foi aprovado.
+da Caçadora também têm consumidores nominais ligados. Geômetra e paredes
+continuam bloqueios. Cabeça/Perfurante/Concussão têm voo3D; Rede/Explosivo têm
+voo/burst e reserva próprios. API e recibo contêm o escopo exato; D05 visual não
+foi aprovado. Supervisão Luna do último delta está pendente por indisponibilidade.
 
 ## Habilidades nominais
 
