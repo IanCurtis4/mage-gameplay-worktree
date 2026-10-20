@@ -43,7 +43,8 @@ conserva direção3D durante a guarda. Armadilhas/reação, recuo/Leque e cobert
 da Caçadora também têm consumidores nominais ligados. Geômetra e paredes
 continuam bloqueios. Cabeça/Perfurante/Concussão têm voo3D; Rede/Explosivo têm
 voo/burst e reserva próprios. API e recibo contêm o escopo exato; D05 visual não
-foi aprovado. Supervisão Luna do último delta está pendente por indisponibilidade.
+foi aprovado. Supervisão Luna retomada no candidato de nascimento/coleta:34 checks
+incluem os17 F1 atuais; não constitui auditoria semântica nem aceite F1/produto.
 
 Nascimento técnico/animal finito/coleta agora têm consumidores reais: entrada
 spawn_world_enemy com WorldPoint/profile/revisão explícitos, claim/WeakRef do Mestre,
