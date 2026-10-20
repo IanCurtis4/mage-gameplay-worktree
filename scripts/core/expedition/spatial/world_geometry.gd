@@ -7,6 +7,7 @@ var geometry_revision := 0
 var configuration_revision := 0
 var _stage: Dictionary = {}
 var _temporary: Dictionary[String, AABB] = {}
+var _segments: Dictionary[String, WorldSolidSegment] = {}
 var _solid_slabs: Array[AABB] = []
 var _occupancy: Dictionary[String, Dictionary] = {}
 
@@ -25,6 +26,7 @@ func configure(manifest: ExpeditionManifest, stage_id: String) -> Dictionary:
 						var volume := Kernel.transform_volume(original,instance["rotation_quarters"],instance["translation"])
 						if _supports_solid_floor(volume): _solid_slabs.append(volume)
 			_temporary.clear()
+			_segments.clear()
 			_occupancy.clear()
 			# Monotonic even when replacing a world with another revision-1 manifest.
 			geometry_revision += 1
@@ -136,11 +138,14 @@ func remove_occupant(id: String) -> void:
 	_occupancy.erase(id)
 
 func path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictionary, revision: int) -> Dictionary:
+	return _path(from,to,profile,revision,null)
+
+func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictionary, revision: int, candidate: WorldSolidSegment) -> Dictionary:
 	if not _current(revision): return _failure(&"stale_geometry")
 	if not _profile_valid(profile): return _failure(&"invalid_profile")
 	var radius: float = profile["radius"]
 	var height: float = profile["height"]
-	if not _point_valid(from, radius, height) or not _point_valid(to, radius, height): return _failure(&"invalid_support")
+	if not _candidate_point(from,radius,height,candidate) or not _candidate_point(to,radius,height,candidate): return _failure(&"invalid_support")
 	var nodes: Dictionary = {"@from": from.to_data(), "@to": to.to_data()}
 	var edges: Dictionary = {"@from": [], "@to": []}
 	var endpoints: Dictionary = {}
@@ -149,7 +154,7 @@ func path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Diction
 		var cell := _cell(endpoint["surface_id"])
 		var inset := Kernel.support_y(cell, Vector3(endpoint["position"]) - Vector3(endpoint["outward"]) * radius)
 		var point := ExpeditionWorldPoint.create(from.stage_id, endpoint["surface_id"], inset)
-		if not _point_valid(point, radius, height): continue
+		if not _candidate_point(point,radius,height,candidate): continue
 		var id: String = endpoint["connector_id"]
 		nodes[id] = point.to_data()
 		edges[id] = []
@@ -162,23 +167,36 @@ func path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Diction
 				for z: float in [box.position.z - radius - EPS * 4.0, box.end.z + radius + EPS * 4.0]:
 					var position := Kernel.support_y(cell, Vector3(x, 0, z))
 					var point := ExpeditionWorldPoint.create(from.stage_id, cell["surface_id"], position)
-					if not _point_valid(point, radius, height): continue
+					if not _candidate_point(point,radius,height,candidate): continue
 					var id := "@corner/%s/%d/%s/%s" % [cell["surface_id"], volume_index, x, z]
 					nodes[id] = point.to_data()
 					edges[id] = []
+	var segments: Array = []
+	var segment_ids: Array = _segments.keys(); segment_ids.sort()
+	for id: String in segment_ids: segments.append(_segments[id])
+	if candidate != null: segments.append(candidate)
+	for cell: Dictionary in _stage["surfaces"]:
+		for segment_index: int in segments.size():
+			var segment := segments[segment_index] as WorldSolidSegment
+			for corner_index: int in segment.corners(radius).size():
+				var position := Kernel.support_y(cell,segment.corners(radius)[corner_index])
+				var point := ExpeditionWorldPoint.create(from.stage_id,cell["surface_id"],position)
+				if not _candidate_point(point,radius,height,candidate): continue
+				var id := "@segment/%s/%d/%d" % [cell["surface_id"],segment_index,corner_index]
+				nodes[id] = point.to_data(); edges[id] = []
 	var ids: Array = nodes.keys()
 	ids.sort()
 	for a: String in ids:
 		for b: String in ids:
 			if a == b or nodes[a]["surface_id"] != nodes[b]["surface_id"]: continue
-			if Kernel.clear_segment(nodes[a]["position"], nodes[b]["position"], _volumes(), radius, height):
+			if _clear_path_segment(nodes[a]["position"],nodes[b]["position"],profile,candidate):
 				edges[a].append({"to": b, "via": [], "connection_id": "", "cost": Vector3(nodes[a]["position"]).distance_to(nodes[b]["position"])})
 	for connection: Dictionary in _stage["connections"]:
 		var a: String = connection["a_connector"]
 		var b: String = connection["b_connector"]
 		if not endpoints.has(a) or not endpoints.has(b): continue
 		var seam: Vector3 = endpoints[a]["position"]
-		if not Kernel.clear_segment(nodes[a]["position"], seam, _volumes(), radius, height) or not Kernel.clear_segment(seam, nodes[b]["position"], _volumes(), radius, height): continue
+		if not _clear_path_segment(nodes[a]["position"],seam,profile,candidate) or not _clear_path_segment(seam,nodes[b]["position"],profile,candidate): continue
 		var via := [ExpeditionWorldPoint.create(from.stage_id, endpoints[a]["surface_id"], seam).to_data(), ExpeditionWorldPoint.create(from.stage_id, endpoints[b]["surface_id"], seam).to_data()]
 		var cost := Vector3(nodes[a]["position"]).distance_to(seam) + seam.distance_to(nodes[b]["position"])
 		if connection["forward"]: edges[a].append({"to": b, "via": via, "connection_id": connection["connection_id"], "cost": cost})
@@ -196,9 +214,9 @@ func path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Diction
 		visited[current] = true
 		if current == "@to": break
 		for edge: Dictionary in edges[current]:
-			var candidate: float = float(distances[current]) + float(edge["cost"])
-			if candidate + EPS >= float(distances.get(edge["to"], INF)): continue
-			distances[edge["to"]] = candidate
+			var route_cost: float = float(distances[current]) + float(edge["cost"])
+			if route_cost + EPS >= float(distances.get(edge["to"], INF)): continue
+			distances[edge["to"]] = route_cost
 			previous[edge["to"]] = {"from": current, "edge": edge}
 			frontier.append(edge["to"])
 	if not visited.has("@to"): return _failure(&"unreachable")
@@ -241,6 +259,12 @@ func sweep(from: Vector3, to: Vector3, collider: Dictionary, revision: int, mask
 			var ids: Array = _temporary.keys()
 			ids.sort()
 			hit_id = "temporary/"+str(ids[index-_stage["volumes"].size()])
+	if mask == &"all":
+		var segment_ids: Array = _segments.keys(); segment_ids.sort()
+		for id: String in segment_ids:
+			var hit := _segments[id].contact(from,to,collider)
+			if hit.is_empty() or float(hit["fraction"]) > fraction: continue
+			fraction = hit["fraction"]; normal = hit["normal"]; hit_id = "temporary/"+id
 	return _success({"hit": not hit_id.is_empty(), "fraction": fraction, "position": from.lerp(to, fraction), "normal": normal, "volume_id": hit_id})
 
 static func _segment_box(from: Vector3, to: Vector3, box: AABB) -> Dictionary:
@@ -463,9 +487,49 @@ func _ground_line_connection(surface: String, point: Vector3, direction: Vector2
 				if absf(Kernel.support_y(following,point).y-point.y) <= EPS and _point_valid(ExpeditionWorldPoint.create(_stage["stage_id"],following["surface_id"],point),profile["radius"],profile["height"]): return following
 	return {}
 
+func _candidate_point(point: ExpeditionWorldPoint, radius: float, height: float, candidate: WorldSolidSegment) -> bool:
+	if not _point_valid(point,radius,height): return false
+	return candidate == null or candidate.contact(point.position,point.position,{"radius":radius,"height":height}).is_empty()
+
+func _clear_path_segment(from: Vector3, to: Vector3, profile: Dictionary, candidate: WorldSolidSegment) -> bool:
+	if not Kernel.clear_segment(from,to,_volumes(),profile["radius"],profile["height"]): return false
+	for segment: WorldSolidSegment in _segments.values():
+		if not segment.contact(from,to,profile).is_empty(): return false
+	return candidate == null or candidate.contact(from,to,profile).is_empty()
+
+func can_insert_segment(id: String, segment: WorldSolidSegment, revision: int) -> Dictionary:
+	if not _current(revision): return _failure(&"stale_geometry")
+	if id.is_empty() or _temporary.has(id) or _segments.has(id): return _failure(&"invalid_identity")
+	if segment == null or not segment.is_valid(): return _failure(&"invalid_volume")
+	var profile := segment.profile(); var anchor := segment.anchor()
+	if not _profile_valid(profile) or not _point_valid(anchor,profile["radius"],profile["height"]): return _failure(&"invalid_support")
+	var endpoints := segment.ends()
+	for endpoint: Vector3 in endpoints:
+		var support := ground_line_point_at(anchor,Vector2(endpoint.x,endpoint.z),profile,revision)
+		if not support["ok"]: return support
+		if Vector3(support["data"]["point"]["position"]).distance_to(endpoint) > EPS: return _failure(&"non_planar_field_support")
+	if sweep(endpoints[0],endpoints[1],profile,revision)["data"]["hit"]: return _failure(&"blocked_obstacle")
+	for occupant: Dictionary in _occupancy.values():
+		var position: Vector3 = occupant["point"]["position"]
+		if not segment.contact(position,position,occupant["profile"]).is_empty(): return _failure(&"occupied")
+	for occupant: Dictionary in _occupancy.values():
+		var data: Dictionary = occupant["point"]
+		var origin := ExpeditionWorldPoint.create(data["stage_id"],data["surface_id"],data["position"])
+		for socket: Dictionary in _stage["sockets"]:
+			var destination := ExpeditionWorldPoint.create(_stage["stage_id"],socket["surface_id"],socket["position"])
+			if path(origin,destination,occupant["profile"],revision)["ok"] and not _path(origin,destination,occupant["profile"],revision,segment)["ok"]: return _failure(&"would_disconnect")
+	return _success()
+
+func insert_segment(id: String, segment: WorldSolidSegment, revision: int) -> Dictionary:
+	var valid := can_insert_segment(id,segment,revision)
+	if not valid["ok"]: return valid
+	_segments[id] = segment.snapshot()
+	geometry_revision += 1
+	return _success()
+
 func insert_obstacle(id: String, volume: AABB, revision: int) -> Dictionary:
 	if not _current(revision): return _failure(&"stale_geometry")
-	if id.is_empty() or _temporary.has(id): return _failure(&"invalid_identity")
+	if id.is_empty() or _temporary.has(id) or _segments.has(id): return _failure(&"invalid_identity")
 	if not volume.position.is_finite() or not volume.size.is_finite() or volume.size.x <= 0.0 or volume.size.y <= 0.0 or volume.size.z <= 0.0: return _failure(&"invalid_volume")
 	for occupant: Dictionary in _occupancy.values():
 		if not Kernel.clear_segment(occupant["point"]["position"], occupant["point"]["position"], [volume], occupant["radius"], occupant["height"]): return _failure(&"occupied")
@@ -488,7 +552,7 @@ func insert_obstacle(id: String, volume: AABB, revision: int) -> Dictionary:
 
 func remove_obstacle(id: String, revision: int) -> Dictionary:
 	if not _current(revision): return _failure(&"stale_geometry")
-	if not _temporary.erase(id): return _failure(&"unknown_obstacle")
+	if not _temporary.erase(id) and not _segments.erase(id): return _failure(&"unknown_obstacle")
 	geometry_revision += 1
 	return _success()
 

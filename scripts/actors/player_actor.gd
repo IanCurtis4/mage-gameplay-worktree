@@ -1830,6 +1830,8 @@ func use_phantom_barrier(direction: Vector2) -> bool:
 	return true
 
 func can_place_ice_wall(direction: Vector2, nearby_actors: Array[CombatActor]) -> bool:
+	if world_motion != null:
+		return _world_executing_cast != null and _world_executing_cast.skill_id == &"ice_wall" and _validate_world_skill(_world_executing_cast)["ok"]
 	var rank_definition := _runtime_rank_definition(&"ice_wall")
 	if class_id != &"mage" or rank_definition == null or navigation == null or not is_alive():
 		return false
@@ -1838,6 +1840,7 @@ func can_place_ice_wall(direction: Vector2, nearby_actors: Array[CombatActor]) -
 	return navigation.can_add_temporary_segment(points[0], points[1], IceWallScript.HALF_WIDTH, _ice_wall_occupied_positions(nearby_actors))
 
 func use_ice_wall(direction: Vector2, nearby_actors: Array[CombatActor]) -> bool:
+	if world_motion != null: return _use_world_ice_wall()
 	var rank_definition := _runtime_rank_definition(&"ice_wall")
 	if class_id != &"mage" or rank_definition == null or not _can_spend(&"ice_wall") or not can_place_ice_wall(direction, nearby_actors):
 		return false
@@ -1848,6 +1851,23 @@ func use_ice_wall(direction: Vector2, nearby_actors: Array[CombatActor]) -> bool
 		wall.free()
 		return false
 	_spend(&"ice_wall")
+	reveal_from_offense()
+	ice_wall_requested.emit(wall)
+	resources_changed.emit()
+	return true
+
+func _use_world_ice_wall() -> bool:
+	if class_id != &"mage" or _world_executing_cast == null or _world_executing_cast.skill_id != &"ice_wall" or not _can_spend(&"ice_wall"): return false
+	var rank := _runtime_rank_definition(&"ice_wall")
+	if rank == null: return false
+	var wall := IceWallScript.new()
+	if not _spend(&"ice_wall"): wall.free(); return false
+	# _spend has no signals/yields/world writes. Its last preflight and this insertion
+	# form one synchronous transaction; all fallible placement checks precede payment.
+	var command := _world_executing_cast
+	var placed := wall.configure_world(world_motion.geometry,command.field_plan,rank.power,"ice_wall/"+str(get_instance_id())+"/"+str(command.get_instance_id()),command.revision)
+	assert(placed,"validated synchronous Ice Wall insertion changed without a world write")
+	if not placed: wall.free(); return false
 	reveal_from_offense()
 	ice_wall_requested.emit(wall)
 	resources_changed.emit()
@@ -2716,7 +2736,7 @@ func _validate_world_skill(command: WorldSkillCast, using_reservation: bool = fa
 		if not focus_available: return WorldSkillCast.failure(&"skill_unavailable")
 	var valid := command.geometry_check(self)
 	if not valid["ok"]: return valid
-	if command.skill_id in [&"fire_wall",&"lightning_wall",&"phantom_barrier"]:
+	if command.skill_id in [&"fire_wall",&"lightning_wall",&"phantom_barrier",&"ice_wall"]:
 		var field := WorldGroundField.new()
 		var centers: Array[float] = [0.0]
 		var half_length := PhantomBarrier.HALF_LENGTH
@@ -2727,8 +2747,12 @@ func _validate_world_skill(command: WorldSkillCast, using_reservation: bool = fa
 			centers.clear()
 			for index: int in FireWall.PILLAR_COUNT: centers.append((float(index)-float(FireWall.PILLAR_COUNT-1)*0.5)*FireWall.PILLAR_SPACING)
 		elif command.skill_id == &"lightning_wall": half_length = LightningWall.HALF_LENGTH; half_width = LightningWall.HALF_WIDTH
+		elif command.skill_id == &"ice_wall": half_length = IceWallScript.HALF_LENGTH; half_width = IceWallScript.HALF_WIDTH
 		var placed := field.configure(world_motion.geometry,command.source(),command.direction(self),skill_range(command.skill_id),world_motion.profile(),command.skill_id,command.field_height,command.revision,{"half_length":half_length,"half_width":half_width,"centers":centers})
 		if not placed["ok"]: return placed
+		if command.skill_id == &"ice_wall":
+			var safe := world_motion.geometry.can_insert_segment("ice_wall/"+str(get_instance_id())+"/"+str(command.get_instance_id()),field.solid,command.revision)
+			if not safe["ok"]: return safe
 		command.field_plan = field
 	if is_hunter() and command.skill_id in HunterMath.TRAP_IDS:
 		var sight := world_motion.geometry.query_attack({"geometry_rule_id":&"direct_volume","range":1.0e20},command.source(),command.anchor(),command.revision)
@@ -2809,6 +2833,7 @@ func _commit_world_skill(command: WorldSkillCast) -> Dictionary:
 	var actors := command.actors()
 	var accepted := false
 	match command.skill_id:
+		&"ice_wall": accepted = use_ice_wall(flat,actors)
 		&"fire_wall": accepted = use_fire_wall(flat)
 		&"lightning_wall": accepted = use_lightning_wall(flat)
 		&"phantom_barrier": accepted = use_phantom_barrier(flat)

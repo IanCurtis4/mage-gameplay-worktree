@@ -32,7 +32,7 @@ Player/Mage/Sentinel e flecha hostil, chuva/traps/blast ancorados, escudo/barrei
 piche, ocultação/budget/grace, coleta, movimento/dash temporal, AI autônoma/leash,
 cast obsoleto e callbacks que removem alvos. Isso não equivale ao cast completo
 dessas ativas: entrada/preview/composição nominal ainda precisam ser integrados.
-As retomadas acrescentam WorldSkillCast:62 IDs nominais,61 com preview/preparo/
+As retomadas acrescentam WorldSkillCast:63 IDs nominais,62 com preview/preparo/
 commit3D comum e Explosivo por reserva explícita+captura interna do próximo auto. Dreno/Procissão/Véu, áreas elementais, chuva/traps base,
 projéteis e melee consomem a intenção capturada. A prova nominal é delimitada no
 recibo; isso ainda não certifica os dez kits nem os 27 efeitos compostos.
@@ -42,7 +42,8 @@ Marco/Onda/Fenda e Avanço/Retirada/Salto receberam bindings nominais; Contrafor
 conserva direção3D durante a guarda. Armadilhas/reação, recuo/Leque e coberturas
 da Caçadora também têm consumidores nominais ligados. Fogo/Raios/Barreira
 têm campos orientados com altura explícita, suporte lateral plano e segmentos
-reais de movimento. Gelo, Geômetra e paredes em suporte lateral não plano
+reais de movimento. Gelo liga a cápsula sólida orientada à mesma autoridade
+de path/sweep e ao cast canônico. Geômetra e paredes em suporte lateral não plano
 continuam bloqueios. Cabeça/Perfurante/Concussão têm voo3D; Rede/Explosivo têm
 voo/burst e reserva próprios. API e recibo contêm o escopo exato; D05 visual não
 foi aprovado. Supervisão histórica de nascimento/coleta:34 testes incluem os17 F1 daquele
@@ -120,7 +121,7 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `hunter_thorn_trap` — Armadilha de Espinhos | `ground_connected` | Placement/área/slow/bleed ligados; abertura inicial, vítimas revalidadas e DoT herdado após subir |
 | `hunter_total_cover` — Cobertura Total | `ground_connected` | Placement/área e budget compartilhado ligados; observador por suporte, graça1 e cleanup sem renovação |
 | `ice_spear` — Lança de Gelo | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
-| `ice_wall` — Parede de Gelo | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `ice_wall` — Parede de Gelo | `ground_connected` | Preview/preparo/commit e cápsula sólida orientada com altura explícita; segurança de ocupantes/sockets, revisão/path/sweep e cleanup; suporte lateral plano; ice_test |
 | `lightning` — Relâmpago | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `lightning_wall` — Parede de Raios | `ground_connected` | Preview/preparo/commit e cápsula orientada; cruzamento por segmentos reais, ICD sem tick; suporte lateral plano; fields_test |
 | `mage_mana_regeneration` — Regeneração de SP | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
@@ -163,7 +164,7 @@ causal original e não adiciona LoS a DoT já aplicado.
 | Ataque básico; PlayerActor/EnemyActor | Melee usa volumes/alcance 3D. Básico mágico/arqueiro e mob ranged emitem projétil. BODY_OFFSET e sprite não são altura física. Ainda bloqueado no binding; combate autônomo pendente. |
 | Slash, Contraforte, Rebater, Trava de Linha, Raiva Concentrada, Assombro | Cone/linha orientados no mundo, oclusão por sólido e laje. Tokens, fear, root e budgets permanecem dos handlers reais; não criar bônus de altura. |
 | Ruptura, Execução, Arrancar Fôlego, Talho, Golpe Brutal, Provocar, Marca, Observar | Alvo e alcance 3D revalidados no commit. Custos HP/SP, marca, debuff, taunt e cura seguem emissão aprovada. Ruptura/detonação e DoTs anexados não viram outra AoE por inferência. |
-| Dash, Avanço de Muralha, Guarda de Retirada, Salto Cruento | Rota no suporte e sweep contínuo. Hits durante deslocamento mantêm máximo/ordem/emissão. Somente dash lógico entregue; outros três e empurrões ainda pendentes. |
+| Dash, Avanço de Muralha, Guarda de Retirada, Salto Cruento | Rota no suporte e sweep contínuo. Hits durante deslocamento mantêm máximo/ordem/emissão. Dash e os três deslocamentos nominais/empurrões dirigidos estão ligados; prova guard_travel, revisão/path/sweep compartilhados; apresentação pendente. |
 | Teleporte por classe/item | Destino legal/exato, range 3D, corpo não atravessa laje. Mantém passagem por obstáculos planos E06. Entrada nova não aplica clamp/nearest silencioso. Entrada legada plana conserva seu clamp de rank. |
 | PlayerProjectile/MageProjectile, ArrowProjectile e SentinelProjectile | Sweep 3D contínuo, contato mais próximo entre sólido/ator/interceptor. Separar direção fixa, homing, perfuração finita, disparo duplo/fan e consumo de foco. Preservar modificadores de impacto e limites, sem dano duplicado. Consumidores reais Player/Mage/Arrow/Sentinel ligados; casts e interceptores especializados ainda delimitados no recibo. |
 | Chuva de Flechas | Centro WorldPoint capturado; chão conectado no alcance por volley. Três impactos e telegraph existentes, alvos amostrados novamente. Não atingir piso inferior/superior só por sobreposição. |
@@ -177,8 +178,8 @@ causal original e não adiciona LoS a DoT já aplicado.
 | Véu, Folhagem e Cobertura Total | Áreas de suporte/ocultação ancoradas à superfície; participação não atravessa laje. Grace e revelação seguem contratos atuais. Regeneração e passivas próprias não são AoE novas. |
 | Geômetra: traço/triangulação/edição/colapso | Capturar âncora de chão OU ator explicitamente, WorldPoint das arestas/interior, suporte contínuo e colisão do projétil. Refresh de âncoras móveis não troca piso por proximidade. Correntes de parede/triângulo, interações hostis, manutenção e budgets ainda não adaptados. |
 | Geômetra: ground_anchor, collapse_first_element, incidência/memória | ground_anchor fixa o ponto de emissão sem trocar receita. Primeiro elemento só seleciona regra existente. Movimento do alvo/remoção/triângulo/reflexão/canalização não podem perder surface_id. |
-| AI/mob skills/companheiro/leash | Home e destino WorldPoint, percepção/alcance pela mesma autoridade e perseguição por rota. AI autônoma/aggro/leash/retorno provados no checkpoint lógico; spawn/summon e demais habilidades ainda pendentes. |
-| Pickup/seleção/preview | Coleta espacial ligada e testada; nascimento/contexto de loot pendentes. Preview lógico nominal disponível nos casts listados; seleção/clique e inspeção visual aguardam apresentação D05. |
+| AI/mob skills/companheiro/leash | Home e destino WorldPoint, percepção/alcance pela mesma autoridade e perseguição por rota. AI autônoma/aggro/leash/retorno provados no checkpoint lógico; nascimento técnico/animal finito ligados em birth_collect; lifecycle/respawn e campanha fora de F1. |
+| Pickup/seleção/preview | Nascimento técnico/contexto de loot/coleta ligados em birth_collect; não certificam lifecycle/campanha. Preview lógico nominal disponível nos casts listados; seleção/clique e inspeção visual aguardam apresentação D05. |
 
 ## Efeitos de itens, cartas e augments
 

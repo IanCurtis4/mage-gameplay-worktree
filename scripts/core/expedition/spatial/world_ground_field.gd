@@ -3,6 +3,7 @@ extends RefCounted
 ## Finite authored-height planar field. No projected coordinates or reconstructed walking paths.
 var geometry: WorldGeometry
 var volume: WorldEffectVolume
+var solid: WorldSolidSegment
 var kind: StringName
 var height := 0.0
 var half_length := 0.0
@@ -21,7 +22,7 @@ func configure(world: WorldGeometry, source: ExpeditionWorldPoint, facing: Vecto
 	if world == null: return WorldSkillCast.failure(&"invalid_geometry")
 	if not is_finite(vertical_extent) or vertical_extent <= 0: return WorldSkillCast.failure(&"authored_field_height_required")
 	if not facing.is_finite() or facing.is_zero_approx() or absf(facing.y) > WorldGeometry.EPS: return WorldSkillCast.failure(&"invalid_field_direction")
-	if field_kind not in [&"fire_wall",&"lightning_wall",&"phantom_barrier"]: return WorldSkillCast.failure(&"invalid_field_kind")
+	if field_kind not in [&"fire_wall",&"lightning_wall",&"phantom_barrier",&"ice_wall"]: return WorldSkillCast.failure(&"invalid_field_kind")
 	var placed := world.ground_line_samples(source,facing,placement_range,1,traversal,revision)
 	if not placed["ok"]: return placed
 	if placed["data"]["points"].is_empty(): return WorldSkillCast.failure(&"blocked_field_placement")
@@ -51,6 +52,9 @@ func configure(world: WorldGeometry, source: ExpeditionWorldPoint, facing: Vecto
 		var bound := area.configure(world,center,footprint,&"ground_connected",revision)
 		if not bound["ok"]: return bound
 		_centers.append(center); _areas.append(area)
+	if kind == &"ice_wall":
+		solid = WorldSolidSegment.new()
+		if not solid.configure(_point,_normal,half_length,half_width,height,traversal): return WorldSkillCast.failure(&"invalid_volume")
 	if kind != &"fire_wall":
 		volume = WorldEffectVolume.new()
 		var bound := volume.configure_oriented(world,_point,footprint,_normal,half_length,half_width,height,revision)

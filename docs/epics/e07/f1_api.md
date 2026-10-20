@@ -34,8 +34,8 @@ Uma consulta antiga não autoriza mover ou commitar após alteração da revisã
 | `position_query(point: ExpeditionWorldPoint, profile: Dictionary, revision: int) -> Dictionary` | Suporte/raio/altura e lista ordenada occupants cujos volumes se sobrepõem. Não reserva nem impede atualização de um ocupante existente. |
 | `set_occupant(id: String, point: ExpeditionWorldPoint, profile: Dictionary, revision: int) -> Dictionary` | Registra/atualiza cópia do ponto e perfil; IDs são fornecidos pelo consumidor. |
 | `remove_occupant(id: String) -> void` | Remove ocupação; não altera geometria. |
-| `path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictionary, revision: int) -> Dictionary` | points, connection_ids, cost. Destino exato ou erro. Dijkstra no grafo finito de visibilidade: conectores insetados e cantos dos AABBs. Custo soma segmentos 3D reais. Não promete menor caminho contínuo em toda a largura dos conectores. |
-| `sweep(from: Vector3, to: Vector3, collider: Dictionary, revision: int, mask: StringName = &"all") -> Dictionary` | hit, fraction [0,1], position, normal, volume_id. Sweep contínuo contra AABBs expandidos pelo corpo vertical. `all` inclui blockers/solids e obstáculos temporários; `supporting_slabs` só sólidos autorados que suportam piso horizontal. IDs temporários estáveis; não usa ordem de criação de Nodes. |
+| `path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictionary, revision: int) -> Dictionary` | points, connection_ids, cost. Destino exato ou erro. Dijkstra no grafo finito de visibilidade: conectores insetados, cantos dos AABBs e pontos de desvio das cápsulas orientadas. Custo soma segmentos 3D reais. Não promete menor caminho contínuo em toda a largura dos conectores. |
+| `sweep(from: Vector3, to: Vector3, collider: Dictionary, revision: int, mask: StringName = &"all") -> Dictionary` | hit, fraction [0,1], position, normal, volume_id. Sweep contínuo contra AABBs e cápsulas verticais orientadas, expandidos pelo corpo explícito. `all` inclui blockers/solids e obstáculos temporários; `supporting_slabs` só sólidos autorados que suportam piso horizontal. IDs temporários estáveis; não usa ordem de criação de Nodes. |
 | `query_attack(shape: Dictionary, source: ExpeditionWorldPoint, target: ExpeditionWorldPoint, revision: int) -> Dictionary` | range_ok, los_ok, shape_ok, hit, distance, affected_surfaces. Não causa dano e não altera SP/cooldown. |
 | `insert_obstacle(id: String, volume: AABB, revision: int) -> Dictionary` | Volume positivo/finito, ID único. Rejeita interseção com ocupantes e perda de qualquer socket autorado anteriormente alcançável por ocupante registrado. Rejeição é atômica e conserva revisão. |
 | `remove_obstacle(id: String, revision: int) -> Dictionary` | Remove ID existente e avança revisão. |
@@ -122,7 +122,8 @@ leash/timeout e retorno ao WorldPoint home. Archer conserva a política de stand
 o endpoint precisa ter suporte/rota exatos, sem nearest-point. Cast de mob captura
 a revisão e revalida revisão/alcance/LoS antes de SP/cooldown. A fixture prova
 travessia autônoma e retorno por rampa, laje impedindo percepção e cast obsoleto.
-Invocações/posicionamento de companions e demais spawns continuam pendentes.
+Nascimento técnico e animal finito usam as entradas descritas ao final;
+spawn/respawn/lifecycle de expedição continuam fora deste bloco.
 Um mob bound com summons retorna diagnóstico spatial_spawn_required antes de
 reivindicar summon_used; não chama o spawn plano por fallback.
 
@@ -249,15 +250,16 @@ configura suas três áreas/schedule originais; Dreno/Procissão iniciam os guar
 espaciais existentes. Cones/linhas corpo a corpo consultam direção/LoS 3D no
 handler canônico, sem refazer fórmulas. Os placeholders Vector2 são apresentação.
 
-Whitelist nominal em WorldSkillCast (62 IDs), também exposta como cast_entry no
+Whitelist nominal em WorldSkillCast (63 IDs), também exposta como cast_entry no
 inventário: alvo dirigido, cones/linhas,14 tipos de projétil,13 placements,
 cinco áreas próprias e quatro estados self_only. Explosivo usa captura interna
-pelo próximo auto e API de reserva própria;61 IDs admitem request comum. Isso
+pelo próximo auto e API de reserva própria;62 IDs admitem request comum. Isso
 classifica intenções, sem certificar todos os efeitos de um kit. Shield Wall/dash/teleporte conservam
 as APIs espaciais próprias já documentadas. As cinco famílias de armadilha,
 recuo/Leque e coberturas da Caçadora usam os bindings abaixo. Rede/Explosivo usam
 voo/áreas/reserva próprios abaixo. Fogo/Raios/Barreira usam os campos descritos
-abaixo; Gelo, Geômetra e suporte lateral não plano continuam pendentes.
+abaixo; Gelo usa o obstáculo orientado descrito ao final. Geômetra e suporte
+lateral não plano continuam pendentes.
 Marco/Onda/Fenda e Avanço/Retirada/Salto usam os bindings descritos abaixo.
 
 WorldTargetLock.configure(caster,target,range,revision) valida alcance/LoS somente
@@ -583,3 +585,57 @@ pendentes/aplica o efeito sem avançar lifetime/ICD. Deltas negativos ou não fi
 não avançam relógio nem drenam segmentos. A regressão de FireWall._process(0.0)
 foi detectada pelo teste legado de rank e corrigida no runtime; o oráculo original
 permanece intacto.
+
+## Parede de Gelo e obstáculo sólido orientado
+
+WorldSolidSegment.configure(point,normal,half_length,half_width,height,traversal)
+captura cópias do WorldPoint/profile e a cápsula horizontal extrudida verticalmente.
+Dimensões finitas acima de EPS, direção horizontal não nula e ponto explícito são
+obrigatórios. EPS é tolerância numérica, não tuning de altura de produção.
+snapshot retorna outro segmento; anchor/profile também são cópias. contact
+intersecta o corpo vertical com a união exata de faixa orientada e tampas
+circulares. Cantos de uma caixa maior não se tornam colisão. Os pontos corners
+são apenas candidatos de desvio, sempre filtrados pela mesma consulta física.
+
+WorldGeometry.can_insert_segment(id,segment,revision) -> Dictionary é consulta
+pura: revisão/ID único entre AABBs e cápsulas, suporte/clearance do footprint,
+ausência de interseção estática e de ocupantes, e conservação de cada socket
+autorado que qualquer ocupante registrado alcançava. Para testar alcance após
+a colocação, o grafo existente recebe o candidato como argumento privado, sem
+instalar/remover obstáculo, mutar revisão, copiar um mapa alternativo ou emitir
+callbacks. Falha occupied/would_disconnect conserva o estado inteiro.
+insert_segment usa a mesma validação, armazena snapshot e avança revisão uma vez.
+remove_obstacle atende as duas formas e avança uma vez; duplicata falha.
+configure de outro mundo/epoch limpa ambas as coleções, preservando monotonicidade.
+
+Path usa a mesma geometria prospectiva/registrada para filtrar origens, destinos,
+conectores, pontos de desvio e cada aresta. Seu custo continua soma real3D e
+destino exato; não promete caminho contínuo mínimo em qualquer autoria. Sweep
+com mask all acrescenta cápsulas com ID temporary/<id>, altura e corpo explícitos.
+supporting_slabs continua restrito às lajes autoradas: teleporte pode passar pela
+parede plana, mas não terminar dentro dela ou atravessar uma laje. Projéteis em
+voo consultam a revisão atual; atores rejeitam rotas capturadas antes da inserção.
+
+ice_wall usa a entrada comum preview/request/cast com field_height explícito.
+WorldGroundField captura alcance200 e footprint pelas constantes originais de
+IceWall, com a mesma recusa explícita de suporte lateral não plano. Preview não
+registra obstáculo. Preparo revalida ocupação, build, controle e revisão.
+O handler canônico usa o rank capturado para SP/recarga/duração, sem novo dano.
+Todas as consultas falíveis antecedem pagamento. _spend não emite sinais, cede
+execução ou escreve no mundo; seu último preflight e a inserção imediata formam
+uma transação síncrona no mesmo thread. Nenhum callback externo ocorre entre
+esses passos; a asserção de inserção detecta violação dessa invariante interna.
+
+IceWall.configure_world registra na WorldGeometry; não registra na navegação2D.
+O sinal existente publica o mesmo node no controlador. Pausa congela duração;
+delta zero só amostra, negativo/não finito não avança. Expiração ou remoção da
+árvore liberam a identidade exatamente uma vez. Mudança de build não altera o
+volume emitido; mudança de epoch cancela o node sem remover uma identidade
+reutilizada no mundo novo. Não há draw bound enquanto D05 visual permanecer
+pendente. Sem escolha de altura de produção, dano ou mudança de catálogo.
+
+e07_f1_ice_test dirige PlayerActor/RunController/IceWall/ArrowProjectile e
+MageProjectile reais: ranks1/5, orientação cardinal/diagonal, custos, rotas antigas,
+desvio real, corpo/LoS no piso inferior, passagem superior, flecha acima de parede
+baixa, parede criada durante voo, teleporte legal e cancelamentos/cleanup.
+Isso não certifica base lateral inclinada, Geômetra, campanha ou apresentação.
