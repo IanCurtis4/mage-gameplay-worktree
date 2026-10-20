@@ -1,9 +1,9 @@
-# E07-F1 — API lógica e consumidores em integração
+# E07-F1 — API espacial e consumidores
 
-18/10/2026. **EM_EXECUÇÃO; não é a entrega completa F1.**
+20/10/2026. **API de F1 implementada; validação técnica final no recibo.**
 [Despacho](f1_dispatch.md), [matriz de kits](f1_skill_geometry_matrix.md),
 [recibo](delivery/f1.md). Combate D05 e apresentação técnica 2,5D autorizados. Aprovação visual humana em20/10/2026: “Aprovar a proposta D05”. Validação do candidato no recibo.
-Este checkpoint não habilita mapa multialtura no menu nem prova os dez kits.
+A fundação e os dez kits têm prova de integração no recibo. A amostra técnica não habilita expedição de produção no menu.
 
 ## Autoridade e unidades
 

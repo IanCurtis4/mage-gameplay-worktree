@@ -10,7 +10,7 @@ retorna vazio e não recebe fallback por tipo de mira.
 D05 autoriza suporte/conexões para chão, volumes 3D/oclusão e mobilidade descrita
 no despacho. As linhas abaixo não mudam fórmulas, duração, alvos, causalidade ou
 regras particulares de E06. A coluna de adaptação informa a prova realmente obtida.
-Cada consumidor pendente ainda bloqueia o fechamento F1, mesmo tendo regra inventariada.
+Os consumidores inventariados têm evidências de integração no recibo; a classificação isolada não substitui essas provas.
 
 ## Cobertura das identidades
 
@@ -117,7 +117,7 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `sentinel_opening_read` — Leitura de Aberturas | `inherit_parent` | Herança/estatística canônica sem seleção espacial independente; regressões de kit no runner |
 | `sentinel_piercing_shot` — Tiro Perfurante | `direct_volume` | Entrada/direção3D e voo perfurante finito ligados; corpos deduplicados, sólidos e snapshot cobertos |
 | `sentinel_precision_stance` — Postura de Precisão | `inherit_parent` | Movimento lógico remove Postura antes do auto do mesmo frame; prova dirigida em sentinel_direct |
-| `shield_wall` — Parede de Escudos | `direct_volume` | Entrada world explícita e intercepção frontal real testadas; input/visual pendentes |
+| `shield_wall` — Parede de Escudos | `direct_volume` | Entrada world explícita e intercepção frontal real testadas; input D05 por superfície e direção lógica; apresentação técnica inspecionada |
 | `slash` — Corte em cone | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `slowing_arrow` — Flecha Entorpecente | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `snare_trap` — Armadilha de Laço | `ground_connected` | Preview/commit e área ligados nas identidades de origem; Hunter tem abertura/LoS no suporte capturado |
@@ -144,7 +144,7 @@ causal original e não adiciona LoS a DoT já aplicado.
 | Ruptura, Execução, Arrancar Fôlego, Talho, Golpe Brutal, Provocar, Marca, Observar | Alvo e alcance 3D revalidados no commit. Custos HP/SP, marca, debuff, taunt e cura seguem emissão aprovada. Ruptura/detonação e DoTs anexados não viram outra AoE por inferência. |
 | Dash, Avanço de Muralha, Guarda de Retirada, Salto Cruento | Rota no suporte e sweep contínuo. Hits durante deslocamento mantêm máximo/ordem/emissão. Dash e os três deslocamentos nominais/empurrões dirigidos estão ligados; prova guard_travel, revisão/path/sweep compartilhados; input D05 por superfície/rota explícita. |
 | Teleporte por classe/item | Destino legal/exato, range 3D, corpo não atravessa laje. Mantém passagem por obstáculos planos E06. Entrada nova não aplica clamp/nearest silencioso. Entrada legada plana conserva seu clamp de rank. |
-| PlayerProjectile/MageProjectile, ArrowProjectile e SentinelProjectile | Sweep 3D contínuo, contato mais próximo entre sólido/ator/interceptor. Separar direção fixa, homing, perfuração finita, disparo duplo/fan e consumo de foco. Preservar modificadores de impacto e limites, sem dano duplicado. Consumidores reais Player/Mage/Arrow/Sentinel ligados; casts e interceptores especializados ainda delimitados no recibo. |
+| PlayerProjectile/MageProjectile, ArrowProjectile e SentinelProjectile | Sweep 3D contínuo, contato mais próximo entre sólido/ator/interceptor. Separar direção fixa, homing, perfuração finita, disparo duplo/fan e consumo de foco. Preservar modificadores de impacto e limites, sem dano duplicado. Consumidores reais Player/Mage/Arrow/Sentinel ligados; casts e interceptores especializados comprovados nos testes nominais do recibo. |
 | Chuva de Flechas | Centro WorldPoint capturado; chão conectado no alcance por volley. Três impactos e telegraph existentes, alvos amostrados novamente. Não atingir piso inferior/superior só por sobreposição. |
 | Laço/Explosiva e traps Caçadora | Colocação/superfície, armar, ativar, substituir/expirar e registro por dono. Filtro de alvo não substitui validação geométrica. Piche persiste em seu suporte; espinhos/bleed herdam hit; mecanismo marcado não altera geometria. |
 | Paredes fogo/raios/gelo, Barreira Fantasma, Parede de Escudos | Base no suporte e volume com altura. Cruzamento, interceptação e dano são etapas distintas. Gelo altera revision/path; parede inferior não bloqueia ponte superior. Não consumir capacidade antes do contato real. |
@@ -154,10 +154,10 @@ causal original e não adiciona LoS a DoT já aplicado.
 | Eco Espiritualista | Marca, origem que segue portador e exceção echo_origin_fixed são distintas. Onda/propagação finita captura sua própria origem/superfície; trocar desenho não move o ponto fixo. Novos alvos usam geometria, procs preservam causalidade. |
 | Drenagem e Procissão | Runtime real revalida can_target_skill antes de cada tick/evento. Movimento/controle interrompe Drenagem. Preservar cura efetiva, limite, inscrição de conclusão e foco; não inventar revive/reset. |
 | Véu, Folhagem e Cobertura Total | Áreas de suporte/ocultação ancoradas à superfície; participação não atravessa laje. Grace e revelação seguem contratos atuais. Regeneração e passivas próprias não são AoE novas. |
-| Geômetra: traço/triangulação/edição/colapso | Capturar âncora de chão OU ator explicitamente, WorldPoint das arestas/interior, suporte contínuo e colisão do projétil. Refresh de âncoras móveis não troca piso por proximidade. Correntes de parede/triângulo, interações hostis, manutenção e budgets ainda não adaptados. |
+| Geômetra: traço/triangulação/edição/colapso | Capturar âncora de chão OU ator explicitamente, WorldPoint das arestas/interior, suporte contínuo e colisão do projétil. Refresh de âncoras móveis não troca piso por proximidade. Seis paredes e27 triângulos, interações hostis, manutenção e budgets ligados; prova geometer_full. |
 | Geômetra: ground_anchor, collapse_first_element, incidência/memória | ground_anchor fixa o ponto de emissão sem trocar receita. Primeiro elemento só seleciona regra existente. Movimento do alvo/remoção/triângulo/reflexão/canalização não podem perder surface_id. |
 | AI/mob skills/companheiro/leash | Home e destino WorldPoint, percepção/alcance pela mesma autoridade e perseguição por rota. AI autônoma/aggro/leash/retorno provados no checkpoint lógico; nascimento técnico/animal finito ligados em birth_collect; lifecycle/respawn e campanha fora de F1. |
-| Pickup/seleção/preview | Nascimento técnico/contexto de loot/coleta ligados em birth_collect; não certificam lifecycle/campanha. Preview lógico nominal disponível nos casts listados; seleção/clique e inspeção visual aguardam apresentação D05. |
+| Pickup/seleção/preview | Nascimento técnico/contexto de loot/coleta ligados em birth_collect; não certificam lifecycle/campanha. Preview lógico nominal disponível nos casts listados; seleção/clique e inspeção visual comprovados na amostra D05 aprovada. |
 
 ## Efeitos de itens, cartas e augments
 
@@ -224,6 +224,6 @@ source/target/WorldPoint quando o consumidor correspondente for adaptado.
 
 Famílias causais do catálogo: `elementalist_tri_nova_ice`, `elementalist_tri_nova_lightning`, `hunter_exploit`, `sentinel_focus`, `berserker_wound`, `berserker_pursuit`, `berserker_breath_heal`, `elementalist_focus`, `spiritualist_echo`, `spiritualist_echo_recovery`, `spiritualist_channel_focus`, `spiritualist_drain_heal`, `blood_thirst`, `defender_watch`, `defender_token`, `defender_guard_return`. Foco/token/cura/recovery herdam evento aceito; não precisam ganhar LoS ou uma área própria. Nenhuma família equivale a validação multialtura concluída.
 
-## Próximo trabalho no mesmo F1
+## Entrega e próximo passo
 
 Consumidores nominais e composições foram ligados; a evidência consolidada, a inspeção nativa e a decisão técnica estão no [recibo](delivery/f1.md). A amostra não habilita campanha/F2+, não atualiza playtest e não substitui o aceite humano do candidato.
