@@ -169,5 +169,6 @@ func _target_hit_fraction(center: Vector2, segment_start: Vector2, segment_end: 
 	return maxf(0.0, entry) if entry <= 1.0 and exit >= 0.0 else -1.0
 
 func _draw() -> void:
+	if world_flight != null: return # The D05 view renders the logical flight.
 	draw_line(Vector2(-13, 0), Vector2(12, 0), Color("f6dfad"), 3.0)
 	draw_colored_polygon(PackedVector2Array([Vector2(12, 0), Vector2(5, -5), Vector2(5, 5)]), Color("d29a4a"))

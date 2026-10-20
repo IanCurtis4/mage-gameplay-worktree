@@ -10,6 +10,9 @@ static func prepare(world: WorldGeometry, anchor: ExpeditionWorldPoint, polygon:
 	if polygon.size() < 3 or area(polygon) <= EPS: return WorldSkillCast.failure(&"invalid_region")
 	for point: Vector2 in polygon:
 		if not point.is_finite(): return WorldSkillCast.failure(&"invalid_region")
+	# Reject concave, repeated or self-crossing input: downstream clipping assumes convexity.
+	var hull := Geometry2D.convex_hull(polygon)
+	if hull.size() != polygon.size()+1 or absf(area(hull)-area(polygon)) > EPS: return WorldSkillCast.failure(&"invalid_region")
 	var valid := world.position_query(anchor,profile,revision)
 	if not valid["ok"]: return valid
 	var patches: Array[Dictionary] = []
@@ -86,7 +89,7 @@ static func fraction(region: Dictionary, from: Vector3, to: Vector3, collider: D
 		if at >= 0: first = minf(first,lerpf(interval.x,interval.y,at))
 	return first if first <= 1 else -1.0
 static func ground_contains(region: Dictionary, point: ExpeditionWorldPoint, radius: float = 0.0) -> bool:
-	if point == null: return false
+	if point == null or region.get("anchor",{}).get("stage_id","") != point.stage_id: return false
 	for patch: Dictionary in region.get("patches",[]):
 		if patch["surface_id"] == point.surface_id and absf(point.position.y-support_y(patch,Vector2(point.position.x,point.position.z))) <= EPS and contains(patch["polygon"],Vector2(point.position.x,point.position.z),radius): return true
 	return false

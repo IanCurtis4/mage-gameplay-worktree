@@ -2,7 +2,7 @@
 
 18/10/2026. **EM_EXECUÇÃO; não é a entrega completa F1.**
 [Despacho](f1_dispatch.md), [matriz de kits](f1_skill_geometry_matrix.md),
-[recibo](delivery/f1.md). Combate D05 autorizado; apresentação ainda pendente.
+[recibo](delivery/f1.md). Combate D05 e apresentação técnica 2,5D autorizados. Aprovação visual humana em20/10/2026: “Aprovar a proposta D05”. Validação do candidato no recibo.
 Este checkpoint não habilita mapa multialtura no menu nem prova os dez kits.
 
 ## Autoridade e unidades
@@ -105,7 +105,7 @@ controle/revisão. Movimento normal e pursuit de básico também usam WorldActor
 Use_world_shield_wall(direction: Vector3, revision) aceita direção horizontal
 explícita e reutiliza rank/pagamento/resistência existentes. Mitigação frontal e
 interceptação usam posições/corpos lógicos. As quatro entradas self_only ficam
-liberadas; as demais ativas legadas continuam recusadas. Não é kit completo.
+liberadas; as demais ativas usam as entradas espaciais nominais descritas abaixo e recusam a entrada2D no binding.
 
 O preflight do básico ranged valida o envelope de lançamento antes de iniciar
 a recarga: uma linha central livre não basta se o corpo do projétil começa em parede.
@@ -145,8 +145,8 @@ instala essa trajetória para PlayerProjectile/MageProjectile/SentinelProjectile
 _prepare_impact, causalidade e modificadores permanecem canônicos. Homing acompanha
 o corpo 3D. ArrowProjectile expõe o mesmo binding para voo hostil fixo e ordena
 corpo, terreno, escudo e PhantomBarrier. GeometerWallField legado é recusado com
-spatial_interceptor_required; transporte, payloads e triângulos ainda bloqueiam F1.
-SentinelAreaProjectile ainda não usa esse ramo: sua ativa permanece bloqueada.
+spatial_interceptor_required; o campo espacial suporta transporte/payloads/triângulos conforme seção Geômetra.
+SentinelAreaProjectile usa o ramo espacial próprio de Rede/Explosivo descrito abaixo.
 
 WorldEffectArea.configure(world, anchor, traversal, rule, revision) captura cópias;
 rule exige ground_connected ou direct_volume. query(actor, range, shape),
@@ -155,7 +155,7 @@ reconsultam a geometria atual. contains_actor acrescenta raio do perfil real;
 query conserva o alcance exato. Ground propaga por caminhos/conexões, nunca por
 sobreposição dos sprites. ArrowRain e PlayerTrap usam bind_world_area com essa
 âncora: cada volley/trigger consulta alvos atuais; ExplosiveTrap/HunterTrap usam
-a mesma regra no blast. Entrada de cast/placement dessas ativas segue pendente.
+a mesma regra no blast. Entradas de cast/placement dessas ativas estão descritas nas seções transacionais e nominais abaixo.
 
 HunterTarField.bind_world_area ancora slow e a reação por
 consume_for_world_explosion(center: WorldPoint, blast_radius); consumo remove slow
@@ -164,8 +164,8 @@ traversal, duration, radius, exit_grace, revision) registra suporte no PlayerAct
 membership/revelação por observador usam query exata. HunterCoverState conserva
 seus relógios/budget/grace: dois valores sentinela apenas codificam o booleano de
 membership para sua API existente, sem fazer distância de gameplay em Vector2.
-RewardPickup.bind_world_area/can_collect_world usam distância de chão exata; a
-ligação de spawns/chegadas e do nascimento desse loot segue pendente.
+RewardPickup.bind_world_area/can_collect_world usam distância de chão exata.
+Nascimento técnico e coleta estão ligados conforme seção própria; ciclo de expedição/produção continua fora de F1.
 
 WorldEffectVolume.configure(world, anchor, profile, bounds: AABB, revision) recebe
 volume finito explícito; fraction/actor_fraction fazem sweep contínuo do corpo.
@@ -175,10 +175,7 @@ rotacionada, construção multissuperfície ou uma política nova de dimensões 
 Barreira legada ativa em voo hostil bound falha explicitamente. Limites físicos
 novos e a escala final ainda precisam da amostra/contrato aplicável.
 
-Em atores bound, o controlador recusa input/aim legado até D05 visual. Isso não
-é renderer/projeção/clique implementados. APIs opt-in da fixture não habilitam
-um estágio de produção no menu. Teste de consumidor não certifica sozinho o cast,
-preview, item/augment, construção ou kit completo listado na matriz.
+Em atores bound sem adaptador de apresentação, input/aim legado é recusado. Com ExpeditionGeometryView ligado, input e preview usam WorldPoints conforme a seção D05. A amostra opt-in não habilita um estágio de produção no menu; testes lógicos, integração nominal e inspeção visual têm evidências separadas no recibo.
 
 ## Canais e pulsos finitos
 
@@ -204,7 +201,7 @@ world_pulse_requested entrega WorldEffectArea ao callback espacial do controlado
 que reaproveita a aplicação elemental canônica. As posições Vector2.ZERO são
 somente placeholders de apresentação; o ramo world nunca calcula alcance nelas.
 Tri Nova captura a origem pelo cast espacial; Ember Path e seus demais efeitos
-seguem pendentes. APIs de consumidor não equivalem a suporte completo de kit.
+têm suas entradas nominais descritas abaixo. APIs isoladas não substituem a evidência consolidada por kit.
 
 ## Entrada transacional de habilidades
 
@@ -258,8 +255,7 @@ classifica intenções, sem certificar todos os efeitos de um kit. Shield Wall/d
 as APIs espaciais próprias já documentadas. As cinco famílias de armadilha,
 recuo/Leque e coberturas da Caçadora usam os bindings abaixo. Rede/Explosivo usam
 voo/áreas/reserva próprios abaixo. Fogo/Raios/Barreira usam os campos descritos
-abaixo; Gelo usa o obstáculo orientado descrito ao final. Geômetra e suporte
-lateral não plano continuam pendentes.
+abaixo; Gelo usa o obstáculo orientado descrito ao final. Geômetra tem entrada própria e campos não planos usam patches de suporte explícitos.
 Marco/Onda/Fenda e Avanço/Retirada/Salto usam os bindings descritos abaixo.
 
 WorldTargetLock.configure(caster,target,range,revision) valida alcance/LoS somente
@@ -466,7 +462,7 @@ dano preserva deduplicação/ledger/Foco/Leitura e não soma hit direto ao burst
 Vítimas são revalidadas após callbacks; referências liberadas são filtradas antes
 da conversão tipada. Epoch termina voo; obstáculo tardio intercepta geometria atual.
 O burst multialtura não desenha VFX com coordenadas lógicas como se fossem pixels;
-renderer/input/prova visual permanecem pendentes de D05.
+renderer/input/prova visual usam a amostra D05 descrita ao final.
 
 ## Adaptador plano e próximos consumidores
 
@@ -482,8 +478,8 @@ Nascimento técnico usa spawn_world_enemy descrito abaixo. reserve_spawn/
 portal_arrival, lifecycle, reserva idempotente, reposição e regras de segurança da
 campanha não foram implementados.
 A matriz distingue os consumidores já ligados dos casts, construções, canais,
-interceptores e suportes dos kits ainda pendentes. O próximo executor deve continuar
-neste F1, sem liberar amostra multialtura enquanto houver esses bloqueios.
+interceptores e suportes dos kits descritos nas seções nominais. O recibo consolida
+as evidências deste F1 e a amostra multialtura técnica aprovada na D05.
 
 ## Nascimento técnico, animal finito e coleta
 
@@ -522,7 +518,7 @@ alcance48 de chão conectado ANTES da autoridade de grant, incluindo retry/atalh
 Pickup bound com jogador sem binding é recusado. Erro transitório preserva tickets,
 pickup e RNG; retorno legal entrega os tickets já emitidos, sem novo roll. Ator
 morto libera sua ocupação no cleanup. Apresentação multialtura/death visual segue
-pendente D05; essas APIs e fixtures não certificam campanha ou save pessoal.
+separada da prova de apresentação D05; essas APIs e fixtures não certificam campanha ou save pessoal.
 
 ## Campos Fogo/Raios/Barreira com altura explícita
 
@@ -544,7 +540,7 @@ consulta os extremos laterais e quatro centros de Fogo, com raio/altura e
 clearance explícitos. Não inventa suporte, snap, rota desviada ou piso próximo.
 Neste checkpoint, diferença de altura lateral retorna non_planar_field_support
 gratuitamente; campo inclinado/piecewise ainda é lacuna. Há suporte para eixos
-laterais planos, inclusive centro em rampa se o footprint permanecer no mesmo y.
+laterais planos e não planos, inclusive footprint repartido em rampa/conexões conforme WorldSupportRegion.
 Esse limite não certifica paredes em todas as superfícies possíveis.
 
 WorldActorMotion.traversed(segments:Array[Dictionary]) emite cópia dos segmentos
@@ -618,7 +614,7 @@ voo consultam a revisão atual; atores rejeitam rotas capturadas antes da inser�
 
 ice_wall usa a entrada comum preview/request/cast com field_height explícito.
 WorldGroundField captura alcance200 e footprint pelas constantes originais de
-IceWall, com a mesma recusa explícita de suporte lateral não plano. Preview não
+IceWall, com suporte contínuo por patches em rampa e nas conexões. Preview não
 registra obstáculo. Preparo revalida ocupação, build, controle e revisão.
 O handler canônico usa o rank capturado para SP/recarga/duração, sem novo dano.
 Todas as consultas falíveis antecedem pagamento. _spend não emite sinais, cede
@@ -631,80 +627,38 @@ O sinal existente publica o mesmo node no controlador. Pausa congela duração;
 delta zero só amostra, negativo/não finito não avança. Expiração ou remoção da
 árvore liberam a identidade exatamente uma vez. Mudança de build não altera o
 volume emitido; mudança de epoch cancela o node sem remover uma identidade
-reutilizada no mundo novo. Não há draw bound enquanto D05 visual permanecer
-pendente. Sem escolha de altura de produção, dano ou mudança de catálogo.
+reutilizada no mundo novo. A amostra D05 é uma apresentação técnica; não escolhe altura de produção, dano ou catálogo.
 
 e07_f1_ice_test dirige PlayerActor/RunController/IceWall/ArrowProjectile e
 MageProjectile reais: ranks1/5, orientação cardinal/diagonal, custos, rotas antigas,
 desvio real, corpo/LoS no piso inferior, passagem superior, flecha acima de parede
 baixa, parede criada durante voo, teleporte legal e cancelamentos/cleanup.
-Isso não certifica base lateral inclinada, Geômetra, campanha ou apresentação.
+A prova não plana e Geômetra são adicionais descritos abaixo; não certificam campanha.
 
-## Geômetra — traçados e âncoras explícitas (parcial)
+## Regiões de chão e campos não planos
 
-GeometerCasting.bind_world_construction() liga uma construção vazia ao mundo/perfil
-já ligado ao PlayerActor; recusa substituir construção legada ativa. As entradas
-preview_world_trace(skill,point:WorldPoint,victim,revision,requested_rank=0) e
-begin_world_trace(...) delegam a PlayerActor.preview_world_geometer e
-request_world_geometer. Exigem geometer_trace; a seleção de elemento é capturada
-na intenção, antes do preparo. Ponto de chão e alvo são explícitos; alvo usa sua
-própria superfície atual. Não há seleção a partir dos pixels. O whitelist comum
-permanece63/62; esta entrada própria admite Traçado parcialmente e não declara
-Triangulação/edições/Colapso disponíveis.
+`WorldGeometry.ground_region(anchor,polygon,profile,revision)` exige polígono convexo finito, perfil legal e revisão atual. Retorna o envelope comum com geometry_revision, patches copiados (surface_id, polygon, origin, normal), anchor e profile. Intersecta o footprint com as superfícies reais, exige cobertura completa e acesso por linhas apoiadas a cada patch. Bordas/vértices, volumes interiores e cápsulas registradas são validados; não infere outro andar por x/z. Concavidade, auto-interseção, lacuna, parede ou suporte incompatível falham gratuitamente.
 
-WorldGeometerCast estende WorldSkillCast: conserva origem, epoch, revisão,
-composição/rank, alvo fraco, elemento, dono fraco e geração da construção.
-O preparo comum é reutilizado. Controle, SP, slots finitos, alvo, ponto/perfil,
-alcance pelo chão conectado e sweep do corpo do projétil revalidam no commit.
-Falta de suporte, laje/parede, movimento do emissor, nova revisão/build, limpeza
-ou remoção do dono falham antes de custo/recarga/ticket. Preview retorna cópia do
-ponto/elemento e não reserva. Alturas do voo derivam dos corpos explícitos, sem
-escolha de altura de campo de produção.
+`WorldSupportRegion` calcula contenção e contato contínuo do footprint extrudido pela altura explícita; `ground_contains` exige também o stage original. `WorldEffectVolume.configure_ground_region` captura esses patches; `WorldSolidSegment` captura a mesma base por partes, com extremidades nas alturas reais. Círculos/cápsulas conservam os caps arredondados e a tolerância vertical do corpo. Campos de Fogo mantêm bases próprias dos quatro pilares; Raios/Barreira/Gelo seguem o suporte repartido em patches, inclusive nas costuras. A reserva de Gelo revalida a região inteira e a segurança de ocupantes/sockets antes de pagar e registrar. O footprint de placement das cápsulas é conservador (retângulo envolvente); contato usa a cápsula arredondada.
 
-O pagamento usa _spend e o mesmo _make_magic_request/_magic_power do Traçado;
-SP, recarga, dano, precisão, velocidade e alcance são canônicos. Último preflight,
-pagamento e reserva são síncronos, sem callback externo entre eles. Asserções
-protegem a reserva/binding previamente validados. O node real é publicado antes
-dos sinais de apresentação/recursos. O rank pedido usa a captura existente.
+A tolerância de coordenadas `point_tolerance` acrescenta quatro ULPs f32 à EPS em comparações de pontos apoiados/arestas, sem criar degrau, bônus de alcance ou tuning de produto. Linha de chão segue suporte/conexões, conserva custo real3D e não contorna paredes para reparar um cast.
 
-GeometerTraceProjectile.configure_world_trace usa WorldProjectileMotion real,
-cilindro raio4/altura8, origem/goal offset no corpo e sweep na geometria atual.
-Somente o corpo selecionado pode receber impacto; os demais são ignorados.
-Traçado de chão não causa dano de passagem. Homing acompanha o WorldPoint do
-alvo, sem renovar alcance percorrido; timeout3s e orçamento nominal permanecem.
-Nova parede/laje, epoch, perda do alvo, alcance esgotado ou timeout cancelam.
-Pausa congela voo/timeout; zero, negativo e não finito não avançam. Callback2D
-não pode reclamar um ticket espacial. Não há draw bound enquanto D05 está pendente.
+## Geômetra — gramática, figuras e receitas completas
 
-WorldGeometerConstruction estende a construção canônica sem editar seu core.
-Preserva grammar/FIFO, tickets monotônicos, classificação, identidade, clocks,
-limites e expiração. Sidecars guardam WorldPoints por âncora/ticket e referências
-fracas de portadores. Confirmação e reserva de âncora antecedem dano/callbacks.
-Chegada fora de ordem aguarda FIFO, acompanha o suporte real e desconta o tempo
-já vivido; timeout do primeiro drena os confirmados seguintes. Morte/free/remoção
-do portador deixa o último chão válido explícito. Trocar de piso por movimento
-real atualiza surface_id/y; não escolhe um piso pela proximidade em x/z.
+`GeometerCasting.bind_world_construction(field_height=0)` liga construção vazia ao mundo/perfil; altura positiva explícita é obrigatória para figuras. As entradas `preview_world_trace(skill,point,victim,revision,requested_rank=0)` e `begin_world_trace(...)` admitem Traçado, Triangulação, Translação, Reescrita e Colapso. Delegam ao PlayerActor, com captura de rank/composição, elemento, WorldPoints, alvo/dono fracos, origem, revisão/epoch e geração. O preparo comum e o pagamento canônico são reutilizados. Preview não reserva nem paga; commit revalida suporte, alcance, corpo, grammar, controle e composição antes de custo/recarga/ticket. Último preflight e reserva/edição/consumo são síncronos, sem callback externo entre eles.
 
-WorldGeometerNavigation é adaptador somente das consultas da grammar: cada chave
-x/z aponta para WorldPoint capturado; suportes diferentes na mesma chave são
-ambíguos e recusados. Não reconstrói coordenada vertical de um Vector2. Usa
-WorldGeometry.ground_line_to(source,destination,profile,revision): linha horizontal
-reta que segue suporte/conectores, conservando rota e custo3D, sem desvio por
-obstáculo ou snap. Stage/surface são exatos, posição usa EPS existente. Valida
-perfil, suporte e revisão e retorna DTO copiado. Limite de aresta600 considera
-custo real; separação24 continua a regra horizontal canônica. Geometria nova
-suspende uma aresta inválida e pode retomá-la sem trocar identidade/refrescar clock.
+`WorldGeometerConstruction` e `WorldGeometerNavigation` adaptam o core canônico sem modificá-lo: FIFO, tickets monotônicos, identidade, ranks, limites, clocks e expiração permanecem. Âncoras/tickets recebem sidecars WorldPoint; alvo móvel usa o suporte atual, morte/remoção fixa o último suporte válido. Chaves x/z conflitantes entre andares são recusadas. Cada aresta usa ground_line_to, custo3D e limite600 com tolerância numérica; separação24 continua canônica. Figuras exigem interior inteiro apoiado/livre e altura de campo explícita, incluindo ramps e costuras válidas. Obstáculo novo suspende a figura e pode retomá-la sem trocar identidade ou renovar relógios.
 
-Neste checkpoint só um vértice ou dois do mesmo elemento (PREPARATION) são
-admitidos. Segundo elemento distinto, terceiro vértice, Translação, Reescrita,
-Colapso e receitas de parede/triângulo retornam spatial_recipe_pending nas entradas
-espaciais antes do pagamento. Consumidores legados não são executados sobre
-coordenadas do mundo. Interações de projétil/reflexão/condução continuam bloqueadas.
-Isso é uma etapa verificável, não certificação do kit Geômetra completo.
+`GeometerTraceProjectile` conserva voo cilíndrico real, homing, orçamento/timeout e captura no impacto; callbacks2D não reclamam ticket espacial. Confirmação/reserva precede dano e callbacks. Alteração da geração/identidade por callback invalida o processamento tardio anterior.
 
-A política composta geometer_ground_anchor é capturada na reserva: projétil ainda
-segue o alvo até o impacto, mas a âncora fica no chão desse impacto. Remover a
-política depois do lançamento não reinterpreta a emissão. Durações continuam
-geometer_durations/Memory e são capturadas por reserva; não há fórmula nova.
-A prova dirigida cobre a política de Traçado; outras composições permanecem
-pendentes. Morte do emissor/clear/expiry invalidam tickets e voos tardios.
+As seis paredes e27 triângulos mantêm receitas e snapshots canônicos. Travessias reais, alvo por suporte/altura, manutenção1s sem catchup e contenção são consumidas pelos campos existentes. Translação/Reescrita preservam clocks/snapshots/ledger sem repetir resolução C; edição inválida não paga. Colapso captura pontos/região/altura antes de limpar e executa uma vez a receita C ou a política composta do primeiro elemento; não apaga construção nova criada por callback.
+
+Projéteis reais ordenam contato de campo contra terreno/corpo usando `WorldProjectileMotion.peek` sem mutação. Condução caminha pela rota apoiada finita; redireção exige alvo legal por chão/alcance e voo livre; payloads Fogo/fundação/regra mantêm claims únicos. Flecha hostil baixa pode ser interceptada por saída Gelo com refund de Incidência canônico; acima da parede não é interceptada/refundada. Nenhuma fórmula de dano foi duplicada.
+
+## Apresentação D05, input e amostra nativa
+
+`WorldGeometry.presentation_snapshot(revision)` retorna cópia das superfícies/volumes para leitura; renderer não escreve colisão. `ExpeditionGeometryView.configure(world)` captura epoch, projeta `(x-z)*0.85,(x+z)*0.425-y` e preserva sprites/câmera atuais. `project`, `ray`, `pick(canvas_point,revision)`, `actor_at`, `observe`, `sync` e `indicate(point,valid,route)` são o adaptador de apresentação. `pick` envia o ray lógico à mesma `resolve_surface`; superfícies ocultas, obstrução, revisão antiga e empates falham. O ray usa envelope conservador de precisão f32 nas bordas, sem escolher pela ordem de iteração. Ocultar o teto altera somente desenho/seleção, nunca volumes/revisão.
+
+`RunController.attach_expedition_view(view,field_height)` exige binding de mundo compatível e altura positiva. O clique esquerdo, mira por atalho/confirmação e preview chamam `spatial_pointer_move` / `spatial_pointer_skill`; selecionam WorldPoint ou alvo com suporte visível. Movimento usa path real até o andar selecionado; rejeição não cancela/move/paga. Skills usam os consumidores espaciais existentes, incluindo entradas próprias de Geômetra, dash/teleport/escudo e reserva Explosiva. Nenhum Vector2 projetado é usado como distância, destino físico ou fallback de combate. Markers/rotas e voos mostram os dados lógicos.
+
+Amostra: `tests/fixtures/e07/f1/presentation_sample.tscn`, F0 real seed711, escala técnica3, run fixture e nenhum ProfileFacade. Usa main.tscn/HUD/PlayerActor/treinamento reais, câmera original e rampa/ponte/passagem inferior; não aparece no lobby nem abre campanha. `presentation_capture.gd` roda no projeto importado isolado e exige diretório absoluto de saída: captura ponte, ator na rampa com rota/marcador e ataque entre pisos recusado sem custo/dano. A avaliação e hashes estão no recibo; imagem não prova FPS/escala/balanceamento ou aceite humano.

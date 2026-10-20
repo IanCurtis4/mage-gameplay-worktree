@@ -315,5 +315,6 @@ func _actor_fraction(actor: CombatActor, from: Vector2, to: Vector2) -> float:
 	return -1.0
 
 func _draw() -> void:
+	if world_flight != null: return # The D05 view renders the logical flight.
 	draw_line(Vector2(-13, 0), Vector2(12, 0), color, 3.0)
 	draw_colored_polygon(PackedVector2Array([Vector2(12, 0), Vector2(5, -5), Vector2(5, 5)]), Color("d29a4a"))

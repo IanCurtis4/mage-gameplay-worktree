@@ -406,7 +406,8 @@ static func point_tolerance(a: Vector3, b: Vector3) -> float:
 func ground_region(anchor: ExpeditionWorldPoint, polygon: PackedVector2Array, profile: Dictionary, revision: int) -> Dictionary:
 	if not _current(revision): return _failure(&"stale_geometry")
 	var segments: Array = _segments.values()
-	return WorldSupportRegion.prepare(self,anchor,polygon,profile,revision,_stage["surfaces"],_volumes(),segments)
+	var result := WorldSupportRegion.prepare(self,anchor,polygon,profile,revision,_stage["surfaces"],_volumes(),segments)
+	return _success(result["data"]) if result["ok"] else _failure(result["error_code"])
 
 func ground_line_to(source: ExpeditionWorldPoint, destination: ExpeditionWorldPoint, profile: Dictionary, revision: int) -> Dictionary:
 	if not _current(revision): return _failure(&"stale_geometry")
@@ -591,7 +592,7 @@ func remove_obstacle(id: String, revision: int) -> Dictionary:
 	return _success()
 
 func resolve_surface(origin: Vector3, direction: Vector3, visible_surfaces: Array[String], revision: int) -> Dictionary:
-	# Pure ray query only; projection, rendering and mouse wiring await visual D05.
+	# Pure logical ray query; the presentation adapter supplies the camera ray.
 	if not _current(revision): return _failure(&"stale_geometry")
 	if not origin.is_finite() or not direction.is_finite() or direction.is_zero_approx(): return _failure(&"invalid_ray")
 	var nearest := INF
@@ -603,10 +604,13 @@ func resolve_surface(origin: Vector3, direction: Vector3, visible_surfaces: Arra
 		var denominator := normal.dot(direction)
 		if absf(denominator) < EPS: continue
 		var t: float = normal.dot(Vector3(cell["vertices"][0]) - origin) / denominator
-		if t < 0.0 or t > nearest + EPS: continue
-		var point := origin + direction * t
-		if not Kernel.contains(cell, point): continue
-		if absf(t - nearest) <= EPS:
+		if t < 0.0: continue
+		var point := Kernel.support_y(cell,origin + direction * t)
+		var tolerance := point_tolerance(origin,point)
+		if not _ray_contains(cell,point,tolerance): continue
+		var time_tolerance := tolerance/direction.length()
+		if t > nearest+time_tolerance: continue
+		if absf(t - nearest) <= time_tolerance:
 			ambiguous = true
 			continue
 		ambiguous = false
@@ -617,3 +621,22 @@ func resolve_surface(origin: Vector3, direction: Vector3, visible_surfaces: Arra
 	var obstruction := sweep(origin, hit["point"]["position"], {"radius": 0.0, "height": 0.0}, revision)
 	if obstruction["data"]["hit"] and float(obstruction["data"]["fraction"]) < 1.0 - EPS: return _failure(&"occluded_surface")
 	return _success(hit)
+
+func presentation_snapshot(revision: int) -> Dictionary:
+	if not _current(revision): return _failure(&"stale_geometry")
+	# Copy only authored presentation geometry. Visibility never changes collision.
+	return _success({"stage_id":_stage["stage_id"],"surfaces":_stage["surfaces"],"volumes":_volumes()})
+
+static func _ray_contains(cell: Dictionary, point: Vector3, tolerance: float) -> bool:
+	# A projection ray far from its plane loses f32 ULPs. Conservatively refuse
+	# near-coincident edges instead of selecting a support by iteration order.
+	var side := 0.0
+	var vertices: Array = cell["vertices"]
+	for index: int in vertices.size():
+		var a: Vector3 = vertices[index]; var b: Vector3 = vertices[(index+1)%vertices.size()]
+		var edge := Vector2(b.x-a.x,b.z-a.z)
+		var signed_distance := edge.cross(Vector2(point.x-a.x,point.z-a.z))/edge.length()
+		if absf(signed_distance) <= tolerance: continue
+		if side == 0.0: side = signf(signed_distance)
+		elif side*signed_distance < 0: return false
+	return true

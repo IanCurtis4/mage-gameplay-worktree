@@ -61,6 +61,8 @@ var _spiritualist_recent_feedback_remaining := 0.0
 var spiritualist_debug_text := false
 var combat_numbers_visible := true
 var world_spawn_error: StringName = &""
+var expedition_view: ExpeditionGeometryView
+var expedition_field_height := 0.0
 var _world_companion_attempts: Dictionary[int, bool] = {}
 var _world_pending_companions: Dictionary[int, WeakRef] = {}
 var reward: RewardPickup
@@ -321,7 +323,7 @@ func _process(_delta: float) -> void:
 		_collect_reward()
 
 func _input(event: InputEvent) -> void:
-	if player != null and player.world_motion != null: return # Spatial pointer/presentation awaits D05.
+	if player != null and player.world_motion != null and expedition_view == null: return # Logical-only consumers have no pointer adapter.
 	if event is InputEventMouse:
 		_geometer_pointer_screen = event.position
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed and (cast_intent.active_skill != &"" or player.has_active_cast()):
@@ -369,7 +371,7 @@ func _input(event: InputEvent) -> void:
 				get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if player != null and player.world_motion != null: return # Spatial pointer/presentation awaits D05.
+	if player != null and player.world_motion != null and expedition_view == null: return # Logical-only consumers have no pointer adapter.
 	if event is InputEventKey and event.pressed and not event.echo:
 		if _keyboard_text_focused():
 			return
@@ -443,6 +445,11 @@ func _commit_skill(skill: StringName, point: Vector2) -> void:
 	player.restore_cast_rank(previous)
 
 func _commit_skill_with_rank(skill: StringName, point: Vector2) -> void:
+	if player.world_motion != null:
+		if expedition_view != null:
+			var result := spatial_pointer_skill(skill,point,false)
+			status_label.text = "Habilidade preparada" if result["ok"] else "Destino ou alvo indisponível; recurso preservado."
+		return
 	if skill == &"" or get_tree().paused or run_finished or not player.is_alive() or skill not in player.available_skill_ids():
 		return
 	if spiritualist_drain_state.active:
@@ -729,7 +736,11 @@ func _select_skill_from_bar(skill: StringName, rank: int = 0) -> void:
 	_update_aim(_world_mouse_point())
 
 func _update_aim(point: Vector2) -> void:
-	if player != null and player.world_motion != null: return # Spatial pointer/presentation awaits D05.
+	if player != null and player.world_motion != null:
+		if expedition_view != null and not cast_intent.active_skill.is_empty():
+			var result := spatial_pointer_skill(cast_intent.active_skill,point,true)
+			battle_controls.set_aim_text("PRONTO · clique para confirmar" if result["ok"] else "DESTINO / ALVO INDISPONÍVEL")
+		return
 	if cast_intent.active_skill.is_empty():
 		_update_aim_with_rank(point)
 		return
@@ -1076,7 +1087,10 @@ func _on_world_attack_requested(request: DamageRequest, victim: CombatActor, kin
 	var projectile: PlayerProjectile = MageProjectile.new() if kind == &"mage" else PlayerProjectile.new()
 	var speed := PlayerActor.MAGE_BASIC_SPEED if kind == &"mage" else PlayerActor.ARCHER_BASIC_SPEED
 	var maximum_range := PlayerActor.MAGE_BASIC_MAX_DISTANCE if kind == &"mage" else player.archer_basic_projectile_range()
-	projectile.configure_directional(request.copy(),Vector2.ZERO,Vector2.RIGHT,[victim] if kind == &"mage" else enemies,navigation,speed,maximum_range)
+	var targets: Array[CombatActor] = []
+	if kind == &"mage": targets.append(victim)
+	else: targets.assign(enemies)
+	projectile.configure_directional(request.copy(),Vector2.ZERO,Vector2.RIGHT,targets,navigation,speed,maximum_range)
 	var result := _bind_world_projectile(projectile,player,victim)
 	if not result["ok"]: projectile.free(); return
 	projectile.hit.connect(_on_mage_projectile_hit if kind == &"mage" else _on_precision_projectile_hit)
@@ -2659,11 +2673,15 @@ func _select_class(new_class_id: StringName) -> void:
 	get_tree().reload_current_scene()
 
 func _enemy_at(point: Vector2) -> CombatActor:
+	if expedition_view != null: return expedition_view.actor_at(point,enemies)
 	if GeometerCastCommand.is_trace_skill(cast_intent.active_skill):
 		return BattleTargeting.pick(point, enemies, null, false)
 	return BattleTargeting.pick(point, enemies, _hovered_enemy, control_preferences.smart_lock)
 
 func _handle_world_click(point: Vector2) -> void:
+	if player.world_motion != null:
+		spatial_pointer_move(point)
+		return
 	var clicked_enemy := _enemy_at(point)
 	_select_enemy(clicked_enemy)
 	if clicked_enemy != null:
@@ -3794,3 +3812,69 @@ func _startup_failure(message: String) -> void:
 		get_tree().change_scene_to_file("res://scenes/character_menu.tscn")
 	)
 	box.add_child(back)
+
+func attach_expedition_view(view: ExpeditionGeometryView, field_height: float) -> Dictionary:
+	if player.world_motion == null or not view.current() or view.geometry != player.world_motion.geometry or not is_finite(field_height) or field_height <= 0: return WorldSkillCast.failure(&"invalid_presentation_binding")
+	if geometer_casting != null:
+		var bound := geometer_casting.bind_world_construction(field_height)
+		if not bound["ok"]: return bound
+	expedition_view = view; expedition_field_height = field_height; view.controller = self
+	view.observe(player)
+	for actor: CombatActor in enemies:
+		if actor.world_motion != null and actor.world_motion.geometry == view.geometry: view.observe(actor)
+	return {"ok":true,"error_code":&""}
+func spatial_pointer_move(point: Vector2) -> Dictionary:
+	if expedition_view == null or get_tree().paused or run_finished or not player.is_alive(): return WorldSkillCast.failure(&"pointer_unavailable")
+	var victim := expedition_view.actor_at(point,enemies)
+	if victim != null:
+		player.pursue(victim); _select_enemy(victim)
+		expedition_view.indicate(victim.world_point(),true)
+		return {"ok":true,"error_code":&""}
+	var result := expedition_view.pick(point,expedition_view.geometry.geometry_revision)
+	if not result["ok"]:
+		expedition_view.indicate(null,false); status_label.text = "Clique sem superfície visível única."
+		return result
+	var data: Dictionary = result["data"]["point"]
+	var destination := ExpeditionWorldPoint.create(data["stage_id"],data["surface_id"],data["position"])
+	# Plan before cancelling the current action: a rejected click changes no gameplay state.
+	var route := expedition_view.geometry.path(player.world_point(),destination,player.world_motion.profile(),result["geometry_revision"])
+	if route["ok"]:
+		player.cancel_active_cast(); player.target = null
+		route = player.move_world_to(destination,result["geometry_revision"])
+		expedition_view.indicate(destination,route["ok"],route["data"].get("points",[]))
+	else: expedition_view.indicate(destination,false)
+	status_label.text = "Movendo pela superfície" if route["ok"] else "Destino sem caminho transitável."
+	return route
+func spatial_pointer_skill(skill: StringName, point: Vector2, preview: bool) -> Dictionary:
+	if expedition_view == null or not expedition_view.current() or get_tree().paused or run_finished or not player.is_alive(): return WorldSkillCast.failure(&"pointer_unavailable")
+	var revision := expedition_view.geometry.geometry_revision
+	var victim := expedition_view.actor_at(point,enemies)
+	var result := expedition_view.pick(point,revision)
+	var anchor: ExpeditionWorldPoint
+	if victim != null and not Input.is_key_pressed(KEY_SHIFT): anchor = victim.world_point()
+	elif result["ok"]:
+		var data: Dictionary = result["data"]["point"]
+		anchor = ExpeditionWorldPoint.create(data["stage_id"],data["surface_id"],data["position"])
+	elif skill in WorldSkillCast.SELF_AREAS or skill in WorldSkillCast.SELF_STATE or skill in [&"shield_wall",&"sentinel_explosive_shot",&"geometer_collapse"]: anchor = player.world_point()
+	else: expedition_view.indicate(null,false); return result
+	if Input.is_key_pressed(KEY_SHIFT): victim = null
+	var facing := anchor.position-player.world_point().position
+	if facing.is_zero_approx(): facing = Vector3.RIGHT
+	var rank := _intent_rank
+	if GeometerCastCommand.is_grammar_skill(skill):
+		result = geometer_casting.preview_world_trace(skill,anchor,victim,revision,rank) if preview else geometer_casting.begin_world_trace(skill,anchor,victim,revision,rank)
+	elif skill in [&"dash",&"teleport"]:
+		var rule := &"walk_path" if skill == &"dash" else &"teleport_legal"
+		if preview:
+			result = expedition_view.geometry.path(player.world_point(),anchor,player.world_motion.profile(),revision) if rule == &"walk_path" else expedition_view.geometry.query_attack({"geometry_rule_id":rule,"range":player.skill_range(skill),"traversal":player.world_motion.profile()},player.world_point(),anchor,revision)
+			if result["ok"] and (not result["data"].get("hit",true) or float(result["data"].get("cost",0)) > player.skill_range(skill)): result = WorldSkillCast.failure(&"out_of_range")
+		else: result = {"ok":player.use_world_dash(anchor,revision) if skill == &"dash" else player.use_world_teleport(anchor,revision)}
+	elif skill == &"shield_wall":
+		result = {"ok":player.has_shield_stance() or player._can_pay_skill(&"shield_wall")} if preview else {"ok":player.use_world_shield_wall(Vector3(facing.x,0,facing.z).normalized(),revision)}
+	elif skill == &"sentinel_explosive_shot":
+		result = {"ok":player.sentinel_state.explosive_prepared or player._can_pay_skill(skill)} if preview else player.prepare_world_sentinel_explosive(revision)
+	else:
+		result = player.preview_world_skill(skill,anchor,facing,victim,enemies,revision,rank,expedition_field_height) if preview else cast_world_skill(skill,anchor,facing,victim,revision,rank,expedition_field_height)
+	expedition_view.attack_preview = {"from":player.world_point().position,"to":anchor.position,"valid":result["ok"]}
+	expedition_view.indicate(anchor,result["ok"])
+	return result
