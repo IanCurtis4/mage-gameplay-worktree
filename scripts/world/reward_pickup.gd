@@ -13,7 +13,7 @@ func bind_world_area(world: WorldGeometry, anchor: ExpeditionWorldPoint, travers
 	return checked
 
 func can_collect_world(actor: CombatActor, maximum_range: float) -> bool:
-	if world_area == null: return false
+	if world_area == null or not is_instance_valid(actor) or not actor.is_alive() or (is_inside_tree() and get_tree().paused): return false
 	var checked := world_area.query(actor,maximum_range)
 	return checked["ok"] and checked["data"]["hit"]
 

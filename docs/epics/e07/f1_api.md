@@ -475,8 +475,48 @@ query_attack(source,target,maximum_range,teleport,revision) conserva a exceção
 Outra altura/superfície é invalid_support; não a descarta silenciosamente.
 O adaptador está testado, mas o piloto não foi refeito para passar por essa classe.
 
-Spawn/chegada poderão usar position_query e ocupação; reserve_spawn/portal_arrival,
-lifecycle, reserva idempotente e regras de segurança da campanha não foram implementados.
+Nascimento técnico usa spawn_world_enemy descrito abaixo. reserve_spawn/
+portal_arrival, lifecycle, reserva idempotente, reposição e regras de segurança da
+campanha não foram implementados.
 A matriz distingue os consumidores já ligados dos casts, construções, canais,
 interceptores e suportes dos kits ainda pendentes. O próximo executor deve continuar
 neste F1, sem liberar amostra multialtura enquanto houver esses bloqueios.
+
+## Nascimento técnico, animal finito e coleta
+
+RunController.spawn_world_enemy(entry,point,traversal,revision,stage=1,
+companion_traversal={}) -> Dictionary retorna data.actor após configurar a espécie/
+ocorrência real, ligar WorldActorMotion e publicar no controlador. Entry exige
+species/category; stage1–6 refere-se somente à origem do piloto atual. Point e
+profiles são copiados; raio/altura/conexões são explícitos, sem inferência visual.
+Mestre exige companion_traversal válido antes de nascer; não inventa altura do
+animal. Consulta suporte/revisão/ocupação e rota real desde o jogador antes de
+publicar. Falha não desloca jogador, consome RNG ou registra loot; falha no registro
+do serviço retira o ator e sua ocupação. Preserva configuração/tiers/stats e
+snapshot de ocorrência do serviço canônico. Outro piso no mesmo x/z permanece
+posição distinta. Não é serviço persistente/idempotente de spawn ou respawn.
+
+Entradas de spawn/encounter/configuração por pixels recusam controlador bound com
+world_birth_required/world_lifecycle_required antes de mutar etapa/navegação.
+A criação espacial não inicia lobby/expedição ou adaptação visual do piloto.
+
+Mestre criado por essa entrada conserva o claim summon_used antes do sinal real
+adiado. Atores sem controlador/contrato de nascimento conservam o bloqueio
+spatial_spawn_required. O callback valida dono vivo/atual/membro, geometria e
+estado do encontro. Uma tentativa por dono, inclusive busca sem local legal;
+pausa retém WeakRef pendente e retoma sem simulação/loop durante a pausa. Mantém
+os quatro offsets nominais e a exclusão45, agora em coordenadas3D: suporte exato
+na direção original, ocupação e rota, sem snap/detour/andar vizinho. Animal
+captura etapa de nascimento do Mestre, categoria inferior e dono; não usa um
+índice global posteriormente alterado. Não gera child/loot/XP próprio, não bloqueia
+limpeza e conserva remoção na morte do Mestre/fim. Sem retry/respawn novo.
+
+Última morte canônica cria RewardPickup apoiado no WorldPoint atual do jogador,
+como a posição nominal de limpeza do piloto estendido. Pickup duplicado conserva
+a instância. Tickets continuam no RunRewardService anterior; não migram perfil,
+carteira ou bens. _collect_reward valida binding atual, vida/pausa/encontro e
+alcance48 de chão conectado ANTES da autoridade de grant, incluindo retry/atalho.
+Pickup bound com jogador sem binding é recusado. Erro transitório preserva tickets,
+pickup e RNG; retorno legal entrega os tickets já emitidos, sem novo roll. Ator
+morto libera sua ocupação no cleanup. Apresentação multialtura/death visual segue
+pendente D05; essas APIs e fixtures não certificam campanha ou save pessoal.

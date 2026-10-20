@@ -60,6 +60,9 @@ var _spiritualist_recent_feedback_remaining := 0.0
 # Internal presentation switches for diagnostics/probes; never persisted or exposed in the UI.
 var spiritualist_debug_text := false
 var combat_numbers_visible := true
+var world_spawn_error: StringName = &""
+var _world_companion_attempts: Dictionary[int, bool] = {}
+var _world_pending_companions: Dictionary[int, WeakRef] = {}
 var reward: RewardPickup
 var encounter_index := 0
 var encounter_active := false
@@ -274,6 +277,7 @@ func _ready() -> void:
 		_spawn_encounter(1)
 
 func _process(_delta: float) -> void:
+	_advance_world_companion_requests()
 	player.sentinel_combat_active = encounter_active and not run_finished
 	player.regenerate_hp(_delta, encounter_active, get_tree().paused or run_finished)
 	if not get_tree().paused and not run_finished:
@@ -935,6 +939,9 @@ func _change_control_preferences(mode: int, smart_lock: bool) -> void:
 		status_label.text = "Controles aplicados; não foi possível salvar a preferência."
 
 func _spawn_encounter(index: int) -> void:
+	if is_instance_valid(player) and player.world_motion != null:
+		world_spawn_error = &"world_lifecycle_required"
+		return # Stage switching is outside F1; never relocate a bound actor using pixels.
 	_clear_admin_spawns()
 	if reward_feedback != null:
 		reward_feedback.hide_history()
@@ -971,6 +978,7 @@ func _spawn_encounter(index: int) -> void:
 	status_label.text = "Encontro %d/2 — elimine todos os inimigos" % index
 
 func _spawn_enemy(enemy_type: StringName, spawn_position: Vector2) -> EnemyActor:
+	if is_instance_valid(player) and player.world_motion != null: world_spawn_error = &"world_birth_required"; return null
 	var enemy := EnemyActor.new()
 	enemy.configure(enemy_type, navigation, player)
 	# The Geometer's area already defines occupancy; do not cover it with status rings.
@@ -2216,10 +2224,10 @@ func _on_enemy_died(actor: CombatActor) -> void:
 				(runtime_node as IceWallScript).expire()
 			else:
 				runtime_node.queue_free()
-	reward = RewardPickup.new()
-	reward.global_position = navigation.get_path(player.global_position, player.global_position)[-1] if gameplay_extension else Vector2(880, 500)
-	reward.process_mode = Node.PROCESS_MODE_PAUSABLE
-	add_child(reward)
+	var placed := _create_reward_pickup()
+	if not placed["ok"]:
+		status_label.text = "Não foi possível colocar a coleta: %s" % placed["error_code"]
+		return
 	_ensure_reward_ticket()
 	status_label.text = "Encontro concluído — toque no cristal dourado"
 
@@ -2304,9 +2312,26 @@ func _on_enemy_damage_resolved(result: Dictionary) -> void:
 	if build.has_passive(&"blood_thirst") and player.claim_effect_result(result, &"blood_thirst", victim_id, true):
 		player.heal_from_kill()
 
+func _create_reward_pickup() -> Dictionary:
+	if is_instance_valid(reward): return {"ok":true,"error_code":&"","data":{"already_placed":true}}
+	if not is_instance_valid(player) or not player.is_alive(): return WorldSkillCast.failure(&"invalid_collector")
+	var pickup := RewardPickup.new()
+	if player.world_motion != null:
+		if not player.world_motion.is_current_world(): pickup.free(); return WorldSkillCast.failure(&"world_reconfigured")
+		var bound := pickup.bind_world_area(player.world_motion.geometry,player.world_point(),player.world_motion.profile(),player.world_motion.geometry.geometry_revision)
+		if not bound["ok"]: pickup.free(); return bound
+	else: pickup.global_position = navigation.get_path(player.global_position,player.global_position)[-1] if gameplay_extension else Vector2(880,500)
+	pickup.process_mode = Node.PROCESS_MODE_PAUSABLE
+	reward = pickup
+	add_child(pickup)
+	return {"ok":true,"error_code":&"","data":{}}
+
 func _collect_reward() -> Dictionary:
 	if reward == null:
 		return {"ok": false, "error_code": &"reward_unavailable"}
+	if player.world_motion != null:
+		if run_finished or encounter_active or not player.is_alive() or (is_inside_tree() and get_tree().paused) or not reward.can_collect_world(player,48.0): return WorldSkillCast.failure(&"world_collection_unavailable")
+	elif reward.world_area != null: return WorldSkillCast.failure(&"spatial_binding_required")
 	var progression_result := _grant_persistent_encounter_reward()
 	if not progression_result.get("ok", false):
 		_reward_retry_pending = true
@@ -2436,6 +2461,7 @@ func _start_next_encounter() -> void:
 		_spawn_encounter(encounter_index + 1)
 
 func _spawn_death_visual(actor: CombatActor, after_run: bool = false) -> void:
+	if actor.world_motion != null: return # Multilevel presentation awaits D05.
 	if actor.character_animation == null:
 		return
 	var visual := ActorDeathVisual.new()
@@ -3430,6 +3456,7 @@ func _encounter_count() -> int:
 	return PlaytestGameplay.STAGE_COUNT if gameplay_extension else 2
 
 func _configure_world(stage: int) -> void:
+	if is_instance_valid(player) and player.world_motion != null: world_spawn_error = &"world_lifecycle_required"; return
 	active_bounds = PlaytestGameplay.BOUNDS if gameplay_extension else ARENA_BOUNDS
 	var obstacles: Array[Rect2] = PlaytestGameplay.obstacles(stage) if gameplay_extension else ARENA_OBSTACLES.duplicate()
 	navigation.configure(active_bounds, obstacles, 22.0)
@@ -3450,23 +3477,52 @@ func _configure_world(stage: int) -> void:
 	if gameplay_extension:
 		arena_view.modulate = [Color("f2ffe7"), Color("d6ead8"), Color("d8e1ef")][int((stage - 1) / 2.0)]
 
-func _spawn_route_enemy(entry: Dictionary, stage: int, summoned: bool = false, owner_id: int = 0, admin_spawn: bool = false) -> EnemyActor:
+func spawn_world_enemy(entry: Dictionary, point: ExpeditionWorldPoint, traversal: Dictionary, revision: int, stage: int = 1, companion_traversal: Dictionary = {}) -> Dictionary:
+	if not is_instance_valid(player) or player.world_motion == null: return WorldSkillCast.failure(&"spatial_binding_required")
+	if _startup_error: return WorldSkillCast.failure(&"startup_unavailable")
+	if stage < 1 or stage > PlaytestGameplay.STAGE_COUNT: return WorldSkillCast.failure(&"invalid_stage")
+	if not entry.has_all(["species","category"]): return WorldSkillCast.failure(&"invalid_occurrence")
+	if not (entry["species"] is String or entry["species"] is StringName) or not (entry["category"] is String or entry["category"] is StringName): return WorldSkillCast.failure(&"invalid_occurrence")
+	world_spawn_error = &""
+	var birth := {"point":point,"traversal":traversal.duplicate(true),"revision":revision,"companion_traversal":companion_traversal.duplicate(true)}
+	var actor := _spawn_route_enemy(entry.duplicate(true),stage,false,0,false,birth)
+	return {"ok":actor != null,"error_code":&"" if actor != null else world_spawn_error,"data":{"actor":actor} if actor != null else {}}
+
+func _world_birth_check(point: ExpeditionWorldPoint, traversal: Dictionary, revision: int, source: CombatActor) -> Dictionary:
+	if not is_instance_valid(player) or player.world_motion == null or not is_instance_valid(source) or source.world_motion == null: return WorldSkillCast.failure(&"spatial_binding_required")
+	var world := player.world_motion.geometry
+	if run_finished or (is_inside_tree() and get_tree().paused) or not player.is_alive() or not source.is_alive(): return WorldSkillCast.failure(&"world_birth_unavailable")
+	if not player.world_motion.is_current_world() or not source.world_motion.is_current_world() or source.world_motion.geometry != world: return WorldSkillCast.failure(&"world_reconfigured")
+	var placed := world.position_query(point,traversal,revision)
+	if not placed["ok"]: return placed
+	if not placed["data"]["occupants"].is_empty(): return WorldSkillCast.failure(&"occupied")
+	return world.path(source.world_point(),point,traversal,revision)
+
+func _spawn_route_enemy(entry: Dictionary, stage: int, summoned: bool = false, owner_id: int = 0, admin_spawn: bool = false, world_birth: Dictionary = {}) -> EnemyActor:
 	if _startup_error: return null
-	var from := player.global_position
+	var source: CombatActor = player
 	if summoned:
-		var master := instance_from_id(owner_id) as EnemyActor
-		assert(is_instance_valid(master) and master.is_alive(), "Invocador inválido")
-		from = master.global_position
-	var path := navigation.get_path(from, entry["position"])
-	if path.is_empty():
-		_startup_failure("Uma posição de inimigo está inacessível.")
-		return null
+		source = instance_from_id(owner_id) as EnemyActor
+		if not is_instance_valid(source) or not source.is_alive() or source.get_parent() != self or source not in enemies: world_spawn_error = &"invalid_summoner"; return null
+	var logical := player.world_motion != null
+	var position := Vector2.ZERO
+	if logical:
+		if not world_birth.has_all(["point","traversal","revision","companion_traversal"]): world_spawn_error = &"world_birth_required"; return null
+		var valid := _world_birth_check(world_birth["point"],world_birth["traversal"],world_birth["revision"],source)
+		if not valid["ok"]: world_spawn_error = valid["error_code"]; return null
+	else:
+		if not world_birth.is_empty(): world_spawn_error = &"spatial_binding_required"; return null
+		var path := navigation.get_path(source.global_position,entry["position"])
+		if path.is_empty():
+			_startup_failure("Uma posição de inimigo está inacessível.")
+			return null
+		position = path[-1]
 	var enemy := EnemyActor.new()
-	enemy.global_position = path[-1]
+	enemy.global_position = position
 	enemy.set_meta("admin_spawn", admin_spawn)
 	enemy.is_summoned = summoned
 	enemy.summoner_id = owner_id
-	enemy.companion_requested.connect(_on_companion_requested, CONNECT_DEFERRED)
+	enemy.companion_requested.connect(_queue_companion_request)
 	var occurrence := MobOccurrence.new()
 	occurrence.occurrence_id = "trial_%d_%d" % [stage, enemy.get_instance_id()]
 	occurrence.mob_base_id = entry["species"]
@@ -3475,8 +3531,16 @@ func _spawn_route_enemy(entry: Dictionary, stage: int, summoned: bool = false, o
 	var checked := enemy.configure_occurrence(occurrence, run_state.effect_catalog().mob_catalog(), navigation, player)
 	if not checked.get("ok", false):
 		enemy.free()
-		_startup_failure("O conteúdo de um inimigo não pôde ser carregado.")
+		if logical: world_spawn_error = checked["error_code"]
+		else: _startup_failure("O conteúdo de um inimigo não pôde ser carregado.")
 		return null
+	if logical:
+		if enemy._mob_definition.summons_companion and not player.world_motion.geometry._profile_valid(world_birth["companion_traversal"]):
+			enemy.free(); world_spawn_error = &"companion_profile_required"; return null
+		var bound := enemy.bind_world_geometry(player.world_motion.geometry,world_birth["point"],world_birth["traversal"],str(enemy.get_instance_id()))
+		if not bound["ok"]: enemy.free(); world_spawn_error = bound["error_code"]; return null
+		enemy.set_meta("world_companion_traversal",world_birth["companion_traversal"].duplicate(true))
+		enemy.set_meta("world_birth_stage",stage)
 	enemy.compact_control_visuals = player.is_geometer() or player.is_sentinel()
 	enemy.actor_name += " · %s · Nv.%d" % [MobPrototypeVisual.category_name(occurrence.category_id), checked.get("level", run_state.effect_catalog().mob_catalog().level_for_occurrence(occurrence)["level"])]
 	if enemy._mob_definition.animation_kind in [&"gel", &"beast_master", &"animal_companion"]:
@@ -3502,15 +3566,24 @@ func _spawn_route_enemy(entry: Dictionary, stage: int, summoned: bool = false, o
 	enemy.status_damage_requested.connect(_on_attack_requested)
 	add_child(enemy)
 	enemies.append(enemy)
-	if not summoned and not admin_spawn and reward_service.mob_loot_enabled():
+	if not summoned and not admin_spawn and reward_service != null and reward_service.mob_loot_enabled():
 		var registered_loot := reward_service.register_mob_actor(enemy)
 		if not registered_loot.get("ok", false):
+			if logical:
+				enemies.erase(enemy); enemy.free(); world_spawn_error = registered_loot["error_code"]; return null
 			_startup_failure("Não foi possível preparar as recompensas dos inimigos.")
 	if trap_registry != null:
 		for trap: PlayerTrap in trap_registry.active_traps():
 			if trap is HunterTrap: (trap as HunterTrap).track_target(enemy)
 	if is_instance_valid(hunter_tar_field) and hunter_tar_field.active: hunter_tar_field.track_target(enemy)
 	return enemy
+
+func _queue_companion_request(master: EnemyActor) -> void:
+	if is_instance_valid(master): _deliver_companion_request.call_deferred(weakref(master))
+
+func _deliver_companion_request(reference: WeakRef) -> void:
+	var master := reference.get_ref() as EnemyActor
+	if is_instance_valid(master): _on_companion_requested(master)
 
 func _on_companion_requested(master: EnemyActor) -> void:
 	if not is_instance_valid(master) or not master.is_alive() or master.is_summoned or master.get_parent() != self or master not in enemies or run_finished or (not encounter_active and not master.get_meta("admin_spawn", false)): return
@@ -3519,6 +3592,10 @@ func _on_companion_requested(master: EnemyActor) -> void:
 		for actor: CombatActor in enemies:
 			if is_instance_valid(actor) and actor.is_alive(): living += 1
 		if living >= PlaytestRunAdmin.ACTOR_CAP: return
+	if master.world_motion != null:
+		_spawn_world_companion(master)
+		return
+	if player.world_motion != null: return
 	var category := MobTierRules.lower_category(master.occurrence.category_id)
 	if category.is_empty(): return
 	for offset: Vector2 in [Vector2(-185,45), Vector2(185,45), Vector2(0,170), Vector2(0,-170)]:
@@ -3529,6 +3606,46 @@ func _on_companion_requested(master: EnemyActor) -> void:
 			if actor.is_alive() and actor.global_position.distance_to(position) < 45.0: occupied = true
 		if occupied: continue
 		_spawn_route_enemy({"species": &"test_animal_companion", "category": category, "position": position}, clampi(encounter_index, 1, PlaytestGameplay.STAGE_COUNT), true, master.get_instance_id(), bool(master.get_meta("admin_spawn", false)))
+		return
+
+func _advance_world_companion_requests() -> void:
+	if (is_inside_tree() and get_tree().paused) or _world_pending_companions.is_empty(): return
+	var pending: Array = _world_pending_companions.values()
+	_world_pending_companions.clear() # Before callbacks can add another request.
+	for reference: WeakRef in pending:
+		var master := reference.get_ref() as EnemyActor
+		if is_instance_valid(master): _on_companion_requested(master)
+
+func _spawn_world_companion(master: EnemyActor) -> void:
+	var stage := int(master.get_meta("world_birth_stage",0))
+	if stage < 1 or stage > PlaytestGameplay.STAGE_COUNT: world_spawn_error = &"invalid_stage"; return
+	if _world_companion_attempts.has(master.get_instance_id()): return
+	if not master.summon_used or master.occurrence == null or not master.world_motion.is_current_world() or player.world_motion == null or not player.world_motion.is_current_world() or master.world_motion.geometry != player.world_motion.geometry: return
+	if is_inside_tree() and get_tree().paused:
+		_world_pending_companions[master.get_instance_id()] = weakref(master)
+		return
+	_world_companion_attempts[master.get_instance_id()] = true # One finite handling, including a failed supported search.
+	var world := master.world_motion.geometry
+	var traversal: Dictionary = master.get_meta("world_companion_traversal",{})
+	if not world._profile_valid(traversal): world_spawn_error = &"companion_profile_required"; return
+	var category := MobTierRules.lower_category(master.occurrence.category_id)
+	if category.is_empty(): return
+	for offset: Vector2 in [Vector2(-185,45),Vector2(185,45),Vector2(0,170),Vector2(0,-170)]:
+		var center := master.world_point()
+		var exact := world.ground_line_point_at(center,Vector2(center.position.x,center.position.z)+offset,traversal,world.geometry_revision)
+		if not exact["ok"]: continue
+		var data: Dictionary = exact["data"]["point"]
+		var point := ExpeditionWorldPoint.create(data["stage_id"],data["surface_id"],data["position"])
+		if not _world_birth_check(point,traversal,world.geometry_revision,master)["ok"]: continue
+		var occupied := player.world_point().position.distance_to(point.position) < 45.0
+		for candidate: Variant in enemies:
+			if not is_instance_valid(candidate): continue
+			var actor := candidate as CombatActor
+			if actor == null or not actor.is_alive(): continue
+			if actor.world_motion == null or not actor.world_motion.is_current_world() or actor.world_motion.geometry != world: occupied = true; break
+			if actor.world_point().position.distance_to(point.position) < 45.0: occupied = true; break
+		if occupied: continue
+		_spawn_route_enemy({"species":&"test_animal_companion","category":category},stage,true,master.get_instance_id(),bool(master.get_meta("admin_spawn",false)),{"point":point,"traversal":traversal.duplicate(true),"revision":world.geometry_revision,"companion_traversal":{}})
 		return
 
 func _remove_master_companion(owner_id: int) -> void:

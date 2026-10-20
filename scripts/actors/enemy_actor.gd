@@ -619,7 +619,10 @@ func _process_return(delta: float) -> void:
 func _request_companion_once() -> void:
 	if _mob_definition == null or not _mob_definition.summons_companion or is_summoned or summon_used or not is_alive() or is_stunned() or is_feared() or (is_inside_tree() and get_tree().paused) or (_uses_engagement() and engagement_mode != &"engaged"):
 		return
-	if world_motion != null:
+	if world_motion != null and (not world_motion.is_current_world() or not is_instance_valid(player) or player.world_motion == null or not player.world_motion.is_current_world() or player.world_motion.geometry != world_motion.geometry):
+		world_ai_failure = &"world_reconfigured"
+		return
+	if world_motion != null and (not get_parent() is RunController or not has_meta("world_companion_traversal")):
 		world_ai_failure = &"spatial_spawn_required"
 		return
 	# Claim before callbacks: creation cannot recursively request another child.

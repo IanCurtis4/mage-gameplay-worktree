@@ -45,6 +45,11 @@ continuam bloqueios. Cabeça/Perfurante/Concussão têm voo3D; Rede/Explosivo t�
 voo/burst e reserva próprios. API e recibo contêm o escopo exato; D05 visual não
 foi aprovado. Supervisão Luna do último delta está pendente por indisponibilidade.
 
+Nascimento técnico/animal finito/coleta agora têm consumidores reais: entrada
+spawn_world_enemy com WorldPoint/profile/revisão explícitos, claim/WeakRef do Mestre,
+origem capturada e suporte/ocupação. Coleta/retry revalidam alcance de chão antes
+do grant canônico. Não equivalem a spawn/respawn/lifecycle de expedição ou D05.
+
 ## Habilidades nominais
 
 Regra primária não esgota efeitos compostos; exceções por família seguem à tabela.
