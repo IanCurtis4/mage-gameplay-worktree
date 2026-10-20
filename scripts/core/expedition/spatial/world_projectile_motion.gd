@@ -39,6 +39,12 @@ func validate_targets(actors: Array[CombatActor]) -> Dictionary:
 		if actor.world_motion == null or not actor.world_motion.is_current_world() or actor.world_motion.geometry != geometry or actor.world_point().stage_id != stage_id: return _failure(&"incompatible_target")
 	return {"ok":true,"error_code":&""}
 
+func peek(distance: float, actors: Array[CombatActor]) -> Dictionary:
+	var previous_position := position; var previous_travelled := travelled; var previous_excluded := _excluded.duplicate()
+	var result := contact(distance,actors)
+	position = previous_position; travelled = previous_travelled; _excluded = previous_excluded
+	return result
+
 func contact(distance: float, actors: Array[CombatActor]) -> Dictionary:
 	if geometry == null or not is_finite(distance) or distance < 0.0: return _failure(&"invalid_distance")
 	if _configuration_revision != geometry.configuration_revision: return _failure(&"world_reconfigured")

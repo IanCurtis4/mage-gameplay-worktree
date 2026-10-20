@@ -26,9 +26,10 @@ func is_segment_clear(from: Vector2, to: Vector2, clearance: float) -> bool:
 	if source.to_data() == destination.to_data(): return true
 	# A figure edge follows connected support in a straight x/z line, never a detouring path.
 	var edge := world.ground_line_to(source,destination,traversal,world.geometry_revision)
-	return edge["ok"] and float(edge["data"]["cost"]) <= GeometerGeometry.MAX_EDGE_LENGTH+WorldGeometry.EPS
+	return edge["ok"] and float(edge["data"]["cost"]) <= GeometerGeometry.MAX_EDGE_LENGTH+WorldGeometry.point_tolerance(source.position,destination.position)
 
-func is_polygon_clear(_polygon: PackedVector2Array, _clearance: float = 0.0) -> bool:
-	return false # Triangle consumers are deliberately not admitted by this checkpoint.
+func is_polygon_clear(polygon: PackedVector2Array, _clearance: float = 0.0) -> bool:
+	if ambiguous or polygon.is_empty() or not points.has(polygon[0]): return false
+	return world.ground_region(points[polygon[0]],polygon,profile,world.geometry_revision)["ok"]
 static func copy_point(point: ExpeditionWorldPoint) -> ExpeditionWorldPoint:
 	return ExpeditionWorldPoint.create(point.stage_id,point.surface_id,point.position) if point != null else null

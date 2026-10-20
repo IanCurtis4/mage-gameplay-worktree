@@ -1065,6 +1065,7 @@ func _bind_world_projectile(projectile: Node, source: CombatActor, victim: Comba
 	var endpoint := victim.world_point().position+Vector3.UP*(float(victim.world_motion.profile()["height"])-height)*0.5
 	var heading := endpoint-source.world_point().position-offset
 	if heading.is_zero_approx(): heading = Vector3.RIGHT
+	if geometer_casting != null: projectile.geometer_field = geometer_casting.wall_field
 	return projectile.bind_world_flight(source.world_motion.geometry,source.world_point(),offset,heading,{"radius":radius,"height":height},source.world_motion.geometry.geometry_revision)
 
 func _on_world_attack_requested(request: DamageRequest, victim: CombatActor, kind: StringName) -> void:
@@ -1145,7 +1146,7 @@ func _sync_defender_anchor() -> void:
 
 func cast_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: Vector3, victim: CombatActor, revision: int, rank: int = 0, field_height: float = 0.0) -> Dictionary:
 	if not is_instance_valid(player): return WorldSkillCast.failure(&"spatial_binding_required")
-	if geometer_casting != null and geometer_casting.wall_field != null and skill in WorldSkillCast.PROJECTILES: return WorldSkillCast.failure(&"spatial_interceptor_required")
+	if geometer_casting != null and geometer_casting.wall_field != null and skill in WorldSkillCast.PROJECTILES and not geometer_casting.wall_field.supports_world(player.world_motion.geometry): return WorldSkillCast.failure(&"spatial_interceptor_required")
 	return player.request_world_skill(skill,anchor,facing,victim,enemies,revision,rank,field_height)
 
 func _spawn_world_cast_projectiles(skill: StringName, request: DamageRequest, victim: CombatActor, hit_limit: int, callback: Callable, mage: bool, tint: Color, discharge_bonus: float = 0.0, sentinel: bool = false) -> void:
@@ -1159,6 +1160,7 @@ func _spawn_world_cast_projectiles(skill: StringName, request: DamageRequest, vi
 			projectile.configure_directional(request.copy(),Vector2.ZERO,Vector2.RIGHT,enemies,navigation,spec["speed"],spec["range"],hit_limit,tint)
 		if projectile is MageProjectile: (projectile as MageProjectile).electrified_bonus_magic_damage = discharge_bonus
 		var point := ExpeditionWorldPoint.create(spec["origin"]["stage_id"],spec["origin"]["surface_id"],spec["origin"]["position"])
+		if geometer_casting != null: projectile.geometer_field = geometer_casting.wall_field
 		var bound := projectile.bind_world_flight(player.world_motion.geometry,point,spec["offset"],spec["direction"],spec["collider"],player.world_motion.geometry.geometry_revision)
 		if not bound["ok"]: projectile.free(); continue
 		projectile.hit.connect(callback)

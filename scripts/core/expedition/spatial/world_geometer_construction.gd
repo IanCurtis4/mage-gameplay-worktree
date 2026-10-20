@@ -3,6 +3,7 @@ extends GeometerConstructionState
 ## Spatial metadata around the unchanged finite grammar, clocks, ticket order and identities.
 var world: WorldGeometry
 var world_navigation := WorldGeometerNavigation.new()
+var field_height := 0.0
 var generation := 0
 var _epoch := 0
 var _actors: Dictionary[int, WeakRef] = {}
@@ -10,10 +11,11 @@ var _points: Dictionary[int, ExpeditionWorldPoint] = {}
 var _last_points: Dictionary[int, ExpeditionWorldPoint] = {}
 var _pending_points: Dictionary[int, ExpeditionWorldPoint] = {}
 var _candidate: ExpeditionWorldPoint
-func configure(geometry: WorldGeometry, traversal: Dictionary) -> void:
+func configure(geometry: WorldGeometry, traversal: Dictionary, vertical_extent: float = 0.0) -> void:
 	clear()
 	world = geometry
 	_epoch = world.configuration_revision
+	field_height = vertical_extent
 	world_navigation.reset(world,traversal)
 func set_actors(actors: Array[CombatActor]) -> void:
 	_actors.clear()
@@ -25,18 +27,18 @@ func world_points() -> Array[ExpeditionWorldPoint]:
 	return result
 func pending_world_point(ticket: int) -> ExpeditionWorldPoint:
 	return WorldGeometerNavigation.copy_point(_pending_points.get(ticket))
-func preview_world(point: ExpeditionWorldPoint, element: StringName, triangle_rank: int) -> Dictionary:
+func preview_world(point: ExpeditionWorldPoint, element: StringName, triangle_rank: int, third: bool = false) -> Dictionary:
 	refresh({},world_navigation)
 	_candidate = WorldGeometerNavigation.copy_point(point)
 	_rebuild()
-	var result := preview_shot(Vector2(point.position.x,point.position.z),false,triangle_rank,world_navigation,element) if point != null else {"ok":false,"reason":"Ponto do mundo ausente."}
+	var result := preview_shot(Vector2(point.position.x,point.position.z),third,triangle_rank,world_navigation,element) if point != null else {"ok":false,"reason":"Ponto do mundo ausente."}
 	_candidate = null
 	_rebuild()
 	return result
-func reserve_world(point: ExpeditionWorldPoint, actor_id: int, triangle_rank: int, durations: Vector2, element: StringName, fixed_ground: bool) -> int:
+func reserve_world(point: ExpeditionWorldPoint, actor_id: int, triangle_rank: int, durations: Vector2, element: StringName, fixed_ground: bool, third: bool = false) -> int:
 	_candidate = WorldGeometerNavigation.copy_point(point)
 	_rebuild()
-	var ticket := reserve_shot(Vector2(point.position.x,point.position.z),actor_id,false,triangle_rank,world_navigation,durations.x,durations.y,element,fixed_ground)
+	var ticket := reserve_shot(Vector2(point.position.x,point.position.z),actor_id,third,triangle_rank,world_navigation,durations.x,durations.y,element,fixed_ground)
 	if ticket > 0: _pending_points[ticket] = WorldGeometerNavigation.copy_point(point)
 	_candidate = null
 	_rebuild()
@@ -85,7 +87,7 @@ func refresh(_alive_positions: Dictionary[int, Vector2], _navigation: ArenaNavig
 		delivery["point"] = Vector2(current.position.x,current.position.z)
 		delivery["last_valid_ground"] = delivery["point"]
 	_rebuild()
-	suspended = not vertices.is_empty() and not GeometerGeometry.validate(positions(),world_navigation)["ok"]
+	suspended = not vertices.is_empty() and (not GeometerGeometry.validate(positions(),world_navigation)["ok"] or (shape in [Shape.WALL,Shape.TRIANGLE] and not region()["ok"]))
 func advance(delta: float, _alive_positions: Dictionary[int, Vector2], _navigation: ArenaNavigation) -> Array[Dictionary]:
 	var result := super.advance(delta,logical_positions(),world_navigation)
 	_prune()
@@ -100,8 +102,51 @@ func add_vertex(element: StringName, point: Vector2, carrier_id: int, triangle_r
 		_last_points[key] = WorldGeometerNavigation.copy_point(explicit_point)
 	return result
 func _validate_candidate(points: PackedVector2Array, tokens: Array[StringName], triangle_rank: int, _navigation: ArenaNavigation) -> Dictionary:
-	if tokens.size() > 2 or (tokens.size() == 2 and tokens[0] != tokens[1]): return {"ok":false,"reason":"Receita espacial de parede ou triângulo ainda indisponível.","error_code":&"spatial_recipe_pending"}
-	return super._validate_candidate(points,tokens,triangle_rank,world_navigation)
+	var figure := tokens.size() == 3 or (tokens.size() == 2 and tokens[0] != tokens[1])
+	if figure and (not is_finite(field_height) or field_height <= 0): return {"ok":false,"reason":"Altura explícita da figura necessária.","error_code":&"authored_field_height_required"}
+	var valid := super._validate_candidate(points,tokens,triangle_rank,world_navigation)
+	if not valid["ok"] or not figure: return valid
+	var placed := region(points)
+	return valid if placed["ok"] else {"ok":false,"reason":"Figura sem suporte livre contínuo.","error_code":placed["error_code"]}
+func region(points: PackedVector2Array = PackedVector2Array()) -> Dictionary:
+	var footprint := points if not points.is_empty() else positions()
+	if footprint.size() < 2: return WorldSkillCast.failure(&"invalid_region")
+	var polygon := footprint
+	if footprint.size() == 2:
+		var axis := (footprint[1]-footprint[0]).normalized(); var side := axis.orthogonal()*GeometerGeometry.WALL_HALF_WIDTH
+		var cap := axis*GeometerGeometry.WALL_HALF_WIDTH
+		polygon = PackedVector2Array([footprint[0]-cap-side,footprint[1]+cap-side,footprint[1]+cap+side,footprint[0]-cap+side])
+	var anchor := world_navigation.point_at(footprint[0])
+	if anchor == null: return WorldSkillCast.failure(&"ambiguous_support")
+	var profile := world_navigation.profile.duplicate(true)
+	profile["height"] = maxf(float(profile["height"]),field_height)
+	return world.ground_region(anchor,polygon,profile,world.geometry_revision)
+func preview_world_edit(point: ExpeditionWorldPoint, actor_id: int, rewrite: bool, triangle_rank: int, durations: Vector2, element: StringName) -> Dictionary:
+	refresh({},world_navigation)
+	_candidate = WorldGeometerNavigation.copy_point(point); _rebuild()
+	var result := preview_edit(Vector2(point.position.x,point.position.z),actor_id,rewrite,triangle_rank,world_navigation,durations.x,durations.y,element)
+	result.erase("candidate")
+	_candidate = null; _rebuild()
+	return result
+func edit_world(point: ExpeditionWorldPoint, actor_id: int, rewrite: bool, triangle_rank: int, durations: Vector2, element: StringName) -> Dictionary:
+	_candidate = WorldGeometerNavigation.copy_point(point); _rebuild()
+	var result := edit(Vector2(point.position.x,point.position.z),actor_id,rewrite,triangle_rank,world_navigation,durations.x,durations.y,element)
+	if result["ok"]:
+		var kept: Dictionary[int, ExpeditionWorldPoint] = {}; var last: Dictionary[int, ExpeditionWorldPoint] = {}
+		for anchor: GeometerAnchor in vertices:
+			var id := anchor.get_instance_id()
+			kept[id] = _points[id] if _points.has(id) else WorldGeometerNavigation.copy_point(point)
+			last[id] = _last_points[id] if _last_points.has(id) else WorldGeometerNavigation.copy_point(point)
+		_points = kept; _last_points = last
+	_candidate = null; _rebuild()
+	return result
+func capture_collapse() -> Dictionary:
+	var captured_region := region()
+	var points := world_points()
+	var captured := consume_collapse()
+	if not captured.is_empty(): captured["world_points"] = points; captured["world_region"] = captured_region["data"] if captured_region["ok"] else {}; captured["height"] = field_height
+	return captured
+
 func clear() -> void:
 	super.clear()
 	generation += 1

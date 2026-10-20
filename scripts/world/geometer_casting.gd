@@ -16,6 +16,7 @@ var preview_valid := false
 var wall_contacts := GeometerWallContactState.new()
 var interaction_ledger := GeometerInteractionLedger.new()
 var _watched_walkers: Dictionary[int, EnemyActor] = {}
+var _world_walkers: Dictionary[int, Dictionary] = {}
 var wall_field := GeometerWallField.new()
 var triangle_field := GeometerTriangleField.new()
 var _shot_wall_snapshots: Dictionary[int, Dictionary] = {}
@@ -34,12 +35,13 @@ func configure(caster: PlayerActor) -> void:
 	wall_field.configure(self)
 	triangle_field.configure(self)
 
-func bind_world_construction() -> Dictionary:
+func bind_world_construction(field_height: float = 0.0) -> Dictionary:
+	if not is_finite(field_height) or field_height < 0: return WorldSkillCast.failure(&"invalid_field_height")
 	if not is_instance_valid(player) or player.world_motion == null or not player.world_motion.is_current_world(): return WorldSkillCast.failure(&"spatial_binding_required")
-	if construction is WorldGeometerConstruction: return {"ok":true,"error_code":&""}
+	if construction is WorldGeometerConstruction: return {"ok":true,"error_code":&""} if (construction as WorldGeometerConstruction).field_height == field_height else WorldSkillCast.failure(&"already_bound")
 	if not construction.vertices.is_empty() or construction.grammar.pending_count() > 0: return WorldSkillCast.failure(&"legacy_construction_active")
 	var spatial := WorldGeometerConstruction.new()
-	spatial.configure(player.world_motion.geometry,player.world_motion.profile())
+	spatial.configure(player.world_motion.geometry,player.world_motion.profile(),field_height)
 	spatial.grammar.select_element(construction.grammar.selected_element)
 	construction = spatial
 	return {"ok":true,"error_code":&""}
@@ -57,6 +59,8 @@ func launch_world(result: Dictionary, command: WorldGeometerCast) -> void:
 	assert(bound["ok"],"Preflighted Geometer trace must bind without external callbacks")
 	projectile.delivered_world.connect(_on_world_delivered.bind(projectile))
 	projectile.add_to_group("player_projectiles")
+	_shot_wall_snapshots[int(result["ticket"])] = result["wall_snapshot"]
+	_shot_triangle_snapshots[int(result["ticket"])] = result["triangle_snapshot"]
 
 func _on_world_delivered(ticket: int, success: bool, point: ExpeditionWorldPoint, victim: CombatActor, projectile: GeometerTraceProjectile) -> void:
 	if is_instance_valid(player) and not player.is_alive(): clear_construction(); return
@@ -64,12 +68,119 @@ func _on_world_delivered(ticket: int, success: bool, point: ExpeditionWorldPoint
 	if not construction.grammar.pending_snapshot().any(func(item: Dictionary) -> bool: return int(item["ticket"]) == ticket and not bool(item["resolved"])): return
 	# Ticket resolution and anchor capture precede arbitrary damage callbacks.
 	var results := (construction as WorldGeometerConstruction).resolve_world(ticket,success,point)
+	var resolved_generation := (construction as WorldGeometerConstruction).generation
+	var resolved_identity := construction.construction_id
 	if success and is_instance_valid(victim) and victim.is_alive() and projectile.request.magic_damage > 0.0:
 		projectile.request.target_id = victim.get_instance_id()
 		hit.emit(projectile.request,victim)
 	for result: Dictionary in results:
-		if not result["ok"]: feedback.emit(result["reason"])
+		if (construction as WorldGeometerConstruction).generation == resolved_generation and construction.construction_id == resolved_identity: _report_delivery(result)
+		else: _shot_wall_snapshots.erase(int(result["ticket"])); _shot_triangle_snapshots.erase(int(result["ticket"]))
+	_sync_world_walkers()
 	_retire_invalid_flights()
+
+func is_world_bound() -> bool:
+	return construction is WorldGeometerConstruction and is_instance_valid(player) and player.world_motion != null
+func actor_position(actor: CombatActor) -> Vector2:
+	if not is_world_bound(): return actor.global_position
+	return Vector2(actor.world_point().position.x,actor.world_point().position.z) if actor.world_motion != null else Vector2.INF
+func world_point_at(horizontal: Vector2, region: Dictionary = {}) -> ExpeditionWorldPoint:
+	if not is_world_bound(): return null
+	var spatial := construction as WorldGeometerConstruction
+	var origin: ExpeditionWorldPoint
+	if region.has("anchor"):
+		var data: Dictionary = region["anchor"]; origin = ExpeditionWorldPoint.create(data["stage_id"],data["surface_id"],data["position"])
+	elif not spatial.world_points().is_empty(): origin = spatial.world_points()[0]
+	if origin == null: return null
+	var result := spatial.world.ground_line_point_at(origin,horizontal,spatial.world_navigation.profile,spatial.world.geometry_revision)
+	if not result["ok"]: return null
+	var data: Dictionary = result["data"]["point"]
+	return ExpeditionWorldPoint.create(data["stage_id"],data["surface_id"],data["position"])
+func ground_visible(origin: Vector2, actor: CombatActor, limit: float = INF) -> bool:
+	if not is_world_bound(): return player.navigation.is_segment_clear(origin,actor.global_position,0.0) and origin.distance_to(actor.global_position) <= limit
+	var point := world_point_at(origin)
+	if point == null or not is_instance_valid(actor) or actor.world_motion == null or actor.world_motion.geometry != player.world_motion.geometry or not actor.world_motion.is_current_world(): return false
+	var edge := player.world_motion.geometry.ground_line_to(point,actor.world_point(),player.world_motion.profile(),player.world_motion.geometry.geometry_revision)
+	return edge["ok"] and float(edge["data"]["cost"]) <= limit+WorldGeometry.EPS
+func pulse_contains(origin: ExpeditionWorldPoint, actor: CombatActor, radius: float) -> bool:
+	if origin == null or not is_instance_valid(actor) or actor.world_motion == null or not actor.world_motion.is_current_world() or actor.world_motion.geometry != player.world_motion.geometry: return false
+	var edge := player.world_motion.geometry.ground_line_to(origin,actor.world_point(),player.world_motion.profile(),player.world_motion.geometry.geometry_revision)
+	return edge["ok"] and float(edge["data"]["cost"]) <= radius+float(actor.world_motion.profile()["radius"])+WorldGeometry.EPS
+func region_contains(actor: CombatActor, region: Dictionary = {}, points: PackedVector2Array = PackedVector2Array()) -> bool:
+	if not is_world_bound() or not is_instance_valid(actor) or actor.world_motion == null or not actor.world_motion.is_current_world() or actor.world_motion.geometry != player.world_motion.geometry: return false
+	var spatial := construction as WorldGeometerConstruction
+	var data := region
+	if data.is_empty():
+		var query := spatial.region(points)
+		if not query["ok"]: return false
+		data = query["data"]
+	var radius := float(actor.world_motion.profile()["radius"])
+	if not WorldSupportRegion.ground_contains(data,actor.world_point(),radius): return false
+	var footprint := points if not points.is_empty() else construction.positions()
+	return footprint.size() != 2 or GeometerGeometry.wall_contains(footprint,actor_position(actor),radius)
+func world_contact(from: Vector3, to: Vector3, collider: Dictionary, wall: bool) -> Dictionary:
+	if not is_world_bound(): return {}
+	var spatial := construction as WorldGeometerConstruction
+	var region := spatial.region()
+	if not region["ok"]: return {}
+	var at := WorldSupportRegion.fraction(region["data"],from,to,collider,spatial.field_height)
+	if at < 0: return {}
+	if wall:
+		var points := construction.positions()
+		var contact := GeometerGeometry.wall_contact(Vector2(from.x,from.z),Vector2(to.x,to.z),points[0],points[1],float(collider["radius"]))
+		if contact.is_empty(): return {}
+		at = maxf(at,float(contact["fraction"]))
+		var position := from.lerp(to,at)
+		if not GeometerGeometry.wall_contains(points,Vector2(position.x,position.z),float(collider["radius"])): return {}
+	return {"fraction":at,"inside_triangle":not wall and at == 0.0}
+func world_edited() -> void:
+	wall_contacts.sync(0,false)
+	wall_field.capture_construction()
+	_sync_world_walkers()
+func collapse_world(captured: Dictionary) -> void:
+	clear_construction()
+	var points: PackedVector2Array = captured["points"]
+	if captured["shape"] == GeometerConstructionState.Shape.TRIANGLE:
+		triangle_field.resolve_world_captured(points,captured["world_region"],captured["resolution_element"],captured["request"],int(captured["resolution_vertex"]))
+	else:
+		for actor: CombatActor in targets.duplicate():
+			if not player.is_alive() or (is_inside_tree() and get_tree().paused): break
+			if not is_instance_valid(actor) or not actor.is_alive() or not region_contains(actor,captured["world_region"],points): continue
+			var request := (captured["request"] as DamageRequest).copy(); request.target_id = actor.get_instance_id(); hit.emit(request,actor)
+func _sync_world_walkers() -> void:
+	var ids: Array[int] = []
+	for candidate: Variant in targets:
+		if not is_instance_valid(candidate): continue
+		var actor := candidate as CombatActor
+		if actor == null or not actor.is_alive() or actor.world_motion == null or actor.world_motion.geometry != player.world_motion.geometry: continue
+		var id := actor.get_instance_id(); ids.append(id)
+		if not _world_walkers.has(id):
+			var callback := Callable(self,"_on_world_walked").bind(weakref(actor))
+			actor.world_motion.traversed.connect(callback)
+			_world_walkers[id] = {"motion":actor.world_motion,"callback":callback}
+	for id: int in _world_walkers.keys():
+		if id not in ids:
+			var item := _world_walkers[id]; var motion := item["motion"] as WorldActorMotion
+			if motion.traversed.is_connected(item["callback"]): motion.traversed.disconnect(item["callback"])
+			_world_walkers.erase(id)
+	wall_contacts.sync(construction.construction_id,construction.shape == GeometerConstructionState.Shape.WALL and construction.has_active_figure())
+	wall_contacts.prune(ids)
+func _on_world_walked(segments: Array[Dictionary], reference: WeakRef) -> void:
+	var actor := reference.get_ref() as CombatActor
+	if not is_world_bound() or not is_instance_valid(actor) or not actor.is_alive() or not player.is_alive() or (is_inside_tree() and get_tree().paused): return
+	construction.refresh(alive_positions(),player.navigation)
+	_sync_world_walkers()
+	if construction.shape != GeometerConstructionState.Shape.WALL or not construction.has_active_figure(): return
+	var points := construction.positions()
+	for segment: Dictionary in segments:
+		if segment.get("kind",&"walk") != &"walk": continue
+		var a: Vector3 = segment["from"]["position"]; var b: Vector3 = segment["to"]["position"]
+		var contact := wall_contacts.observe(actor.get_instance_id(),Vector2(a.x,a.z),Vector2(b.x,b.z),points[0],points[1],float(actor.world_motion.profile()["radius"]))
+		if contact.is_empty(): continue
+		var at: Vector3 = a.lerp(b,float(contact["fraction"]))
+		var support := world_point_at(contact["wall_point"])
+		if support == null or absf(support.position.y-at.y) > WorldGeometry.EPS: continue
+		wall_crossed.emit(contact,actor)
 
 func alive_positions() -> Dictionary[int, Vector2]:
 	if construction is WorldGeometerConstruction: return (construction as WorldGeometerConstruction).logical_positions()
@@ -203,7 +314,12 @@ func advance(delta: float) -> void:
 		if not construction is WorldGeometerConstruction: return
 		var spatial := construction as WorldGeometerConstruction
 		spatial.set_actors(targets)
-		spatial.advance(delta,{},spatial.world_navigation)
+		interaction_ledger.sync(construction.construction_id)
+		interaction_ledger.advance(delta)
+		for result: Dictionary in spatial.advance(delta,{},spatial.world_navigation): _report_delivery(result)
+		wall_field.capture_construction()
+		_sync_world_walkers()
+		triangle_field.advance(delta)
 		_retire_invalid_flights()
 		return
 	_visual_time = fmod(_visual_time + delta, TAU * 10.0)
@@ -229,6 +345,7 @@ func advance(delta: float) -> void:
 	queue_redraw()
 
 func show_wall_reaction(point: Vector2, element: StringName) -> void:
+	if is_world_bound(): return
 	if point.is_finite():
 		if _wall_reactions.size() >= 12:
 			_wall_reactions.pop_front()
@@ -236,6 +353,7 @@ func show_wall_reaction(point: Vector2, element: StringName) -> void:
 		_redraw_wall_reactions()
 
 func show_triangle_reaction(points: PackedVector2Array, element: StringName, links: PackedVector2Array = PackedVector2Array(), duration: float = 0.4) -> void:
+	if is_world_bound(): return
 	if points.size() != 3 or not is_finite(duration) or duration <= 0.0:
 		return
 	for point: Vector2 in points + links:
@@ -315,6 +433,10 @@ func clear_construction() -> void:
 	queue_redraw()
 
 func _exit_tree() -> void:
+	for item: Dictionary in _world_walkers.values():
+		var motion := item["motion"] as WorldActorMotion
+		if motion.traversed.is_connected(item["callback"]): motion.traversed.disconnect(item["callback"])
+	_world_walkers.clear()
 	for actor: EnemyActor in _watched_walkers.values():
 		if is_instance_valid(actor):
 			actor.ground_walked.disconnect(_on_ground_walked.bind(actor))

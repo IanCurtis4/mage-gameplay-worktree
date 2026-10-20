@@ -47,6 +47,10 @@ func form(snapshot: Dictionary = {}) -> void:
 	resolve_captured(casting.construction.positions(), element, _snapshot[StringName("resolution_" + String(element))], _identity)
 
 func resolve_captured(points: PackedVector2Array, element: StringName, prototype: DamageRequest, formation_identity: int = 0, resolution_vertex: int = 2) -> void:
+	if casting.is_world_bound():
+		var region := (casting.construction as WorldGeometerConstruction).region(points)
+		if region["ok"]: resolve_world_captured(points,region["data"],element,prototype,resolution_vertex,formation_identity)
+		return
 	# Also used by explicit collapse AFTER consumption. No maintenance or snapshot replay.
 	var occupants := _occupants_for(points)
 	var links := PackedVector2Array()
@@ -128,9 +132,11 @@ func _inside_visible(actor: CombatActor) -> bool:
 	return _inside_visible_points(actor, casting.construction.positions())
 
 func _inside_visible_points(actor: CombatActor, points: PackedVector2Array) -> bool:
+	if casting.is_world_bound(): return casting.region_contains(actor,{},points)
 	return GeometerGeometry.triangle_contains(points, actor.global_position, actor.collision_radius) and casting.player.navigation.is_segment_clear((points[0] + points[1] + points[2]) / 3.0, actor.global_position, 0.0)
 
 func _nearest(candidates: Array[CombatActor], origin: Vector2, limit: float) -> CombatActor:
+	if casting.is_world_bound(): return _world_nearest(candidates,casting.world_point_at(origin),limit)
 	var best: CombatActor
 	var distance := INF
 	for actor: CombatActor in candidates:
@@ -151,6 +157,7 @@ func _damage(prototype: DamageRequest, actor: CombatActor) -> void:
 		casting.hit.emit(request, actor)
 
 func owned_contact(projectile: PlayerProjectile, from: Vector2, to: Vector2) -> Dictionary:
+	if casting.is_world_bound(): return {}
 	if not _active() or projectile is GeometerTraceProjectile or projectile.request == null or projectile.request.is_secondary or GeometerCastCommand.is_trace_skill(projectile.request.skill_id) or projectile.request.source_id != casting.player.get_instance_id():
 		return {}
 	var elements := casting.construction.elements()
@@ -160,6 +167,13 @@ func owned_contact(projectile: PlayerProjectile, from: Vector2, to: Vector2) -> 
 	if not foundation and not rule:
 		return {}
 	return GeometerGeometry.triangle_contact(casting.construction.positions(), from - PlayerProjectile.BODY_OFFSET, to - PlayerProjectile.BODY_OFFSET, projectile.projectile_radius)
+
+func owned_world_contact(projectile: PlayerProjectile, from: Vector3, to: Vector3) -> Dictionary:
+	if not _active() or projectile is GeometerTraceProjectile or projectile.request == null or projectile.request.is_secondary or GeometerCastCommand.is_trace_skill(projectile.request.skill_id) or projectile.request.source_id != casting.player.get_instance_id(): return {}
+	var elements := casting.construction.elements(); var ledger := casting.interaction_ledger
+	var foundation := elements[0] == &"lightning" and not ledger.projectile_claimed(projectile.get_instance_id(),GeometerInteractionLedger.Component.LIGHTNING_FOUNDATION)
+	var rule := elements[1] == &"lightning" and not ledger.projectile_claimed(projectile.get_instance_id(),GeometerInteractionLedger.Component.LIGHTNING_RULE)
+	return casting.world_contact(from,to,projectile.world_flight.collider,false) if foundation or rule else {}
 
 func apply_owned_contact(projectile: PlayerProjectile) -> void:
 	if not _active():
@@ -188,7 +202,7 @@ func projectile_impact(projectile: PlayerProjectile, victim: CombatActor) -> voi
 	projectile.geometer_triangle_arc_request = null
 	if not _active() or identity != _identity or not is_instance_valid(victim) or not _inside_visible(victim):
 		return
-	var origin := victim.global_position
+	var origin := casting.actor_position(victim)
 	if foundation != null:
 		_damage(foundation, victim)
 	if arc == null or not _active():
@@ -198,3 +212,35 @@ func projectile_impact(projectile: PlayerProjectile, victim: CombatActor) -> voi
 	if neighbor != null:
 		_damage(arc, neighbor)
 		casting.show_triangle_reaction(casting.construction.positions(), &"lightning", PackedVector2Array([origin, neighbor.global_position]), 0.25)
+
+func _world_nearest(candidates: Array[CombatActor], origin: ExpeditionWorldPoint, limit: float) -> CombatActor:
+	if origin == null: return null
+	var best: CombatActor; var distance := INF
+	var geometry := casting.player.world_motion.geometry
+	for actor: CombatActor in candidates:
+		if not is_instance_valid(actor) or not actor.is_alive() or actor.world_motion == null or not actor.world_motion.is_current_world() or actor.world_motion.geometry != geometry: continue
+		var edge := geometry.ground_line_to(origin,actor.world_point(),casting.player.world_motion.profile(),geometry.geometry_revision)
+		if not edge["ok"] or float(edge["data"]["cost"]) > limit: continue
+		var current := float(edge["data"]["cost"])
+		if current < distance or (is_equal_approx(current,distance) and (best == null or actor.get_instance_id() < best.get_instance_id())): best = actor; distance = current
+	return best
+func resolve_world_captured(points: PackedVector2Array, region: Dictionary, element: StringName, prototype: DamageRequest, resolution_vertex: int = 2, formation_identity: int = 0) -> void:
+	var occupants: Array[CombatActor] = []
+	for candidate: Variant in casting.targets.duplicate():
+		if not is_instance_valid(candidate): continue
+		var actor := candidate as CombatActor
+		if actor != null and actor.is_alive() and casting.region_contains(actor,region,points): occupants.append(actor)
+	occupants.sort_custom(func(a: CombatActor,b: CombatActor) -> bool: return a.get_instance_id() < b.get_instance_id())
+	if element == &"lightning":
+		var origin := casting.world_point_at(points[clampi(resolution_vertex,0,2)],region)
+		for index: int in 3:
+			if not _can_resolve(formation_identity): break
+			var victim := _world_nearest(occupants,origin,INF if index == 0 else LINK_RANGE)
+			if victim == null: break
+			occupants.erase(victim); origin = victim.world_point()
+			_damage(prototype,victim)
+	else:
+		for victim: CombatActor in occupants:
+			if not _can_resolve(formation_identity): break
+			_damage(prototype,victim)
+			if element == &"ice" and is_instance_valid(victim) and victim.is_alive(): victim.apply_root(ROOT_DURATION,&"magic")

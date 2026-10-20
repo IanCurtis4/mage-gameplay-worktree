@@ -40,7 +40,7 @@ func on_crossed(contact: Dictionary, actor: CombatActor) -> void:
 	var candidates: Array[CombatActor] = [actor]
 	if second == &"fire":
 		for victim: CombatActor in casting.targets.duplicate():
-			if is_instance_valid(victim) and victim.is_alive() and victim != actor and center.distance_to(victim.global_position) <= PULSE_RADIUS + victim.collision_radius:
+			if is_instance_valid(victim) and victim.is_alive() and victim != actor and (casting.pulse_contains(casting.world_point_at(center),victim,PULSE_RADIUS) if casting.is_world_bound() else center.distance_to(casting.actor_position(victim)) <= PULSE_RADIUS + victim.collision_radius):
 				candidates.append(victim)
 	var identity := _identity
 	var affected := false
@@ -50,7 +50,7 @@ func on_crossed(contact: Dictionary, actor: CombatActor) -> void:
 	for victim: CombatActor in candidates:
 		if casting.construction.construction_id != identity or not casting.player.is_alive():
 			break
-		if not is_instance_valid(victim) or not victim.is_alive() or not casting.player.navigation.is_segment_clear(center, victim.global_position, 0.0) or not casting.interaction_ledger.claim_victim(victim.get_instance_id()):
+		if not is_instance_valid(victim) or not victim.is_alive() or not casting.ground_visible(center,victim) or not casting.interaction_ledger.claim_victim(victim.get_instance_id()):
 			continue
 		affected = true
 		if victim == actor and first == &"ice":
@@ -66,6 +66,7 @@ func conduction_active(identity: int) -> bool:
 	return _available() and identity == casting.construction.construction_id
 
 func owned_contact(projectile: PlayerProjectile, from: Vector2, to: Vector2) -> Dictionary:
+	if casting.is_world_bound(): return {}
 	if is_instance_valid(casting) and casting.construction.shape == GeometerConstructionState.Shape.TRIANGLE:
 		var contact := casting.triangle_field.owned_contact(projectile, from, to)
 		if not contact.is_empty():
@@ -99,13 +100,14 @@ func apply_owned_contact(projectile: PlayerProjectile) -> void:
 	var transformed := false
 	if elements[0] == &"lightning":
 		if casting.interaction_ledger.claim_owned_projectile(projectile.get_instance_id(), GeometerInteractionLedger.Component.TRANSPORT, projectile.request, owner):
-			projectile.start_geometer_conduction(points[1] + PlayerProjectile.BODY_OFFSET, _identity)
+			projectile.start_world_geometer_conduction(casting.world_point_at(points[1]),_identity) if casting.is_world_bound() else projectile.start_geometer_conduction(points[1] + PlayerProjectile.BODY_OFFSET, _identity)
 			transformed = true
 	elif elements[1] == &"lightning":
 		var redirect := _redirect_target(projectile, points[1])
 		if not redirect.is_empty() and casting.interaction_ledger.claim_owned_projectile(projectile.get_instance_id(), GeometerInteractionLedger.Component.TRANSPORT, projectile.request, owner):
 			projectile.homing = false
 			projectile.direction = projectile.global_position.direction_to(redirect["actor"].global_position + PlayerProjectile.BODY_OFFSET)
+			if casting.is_world_bound(): projectile.world_flight.direction = (redirect["actor"].world_point().position+Vector3.UP*maxf(0.0,(float(redirect["actor"].world_motion.profile()["height"])-float(projectile.world_flight.collider["height"]))*0.5)-projectile.world_flight.position).normalized()
 			projectile.targets = casting.targets.duplicate()
 			transformed = true
 	if elements[1] == &"fire" and casting.interaction_ledger.claim_owned_projectile(projectile.get_instance_id(), GeometerInteractionLedger.Component.FIRE_EXIT, projectile.request, owner):
@@ -129,14 +131,15 @@ func apply_owned_contact(projectile: PlayerProjectile) -> void:
 		casting.show_wall_reaction(projectile.global_position - PlayerProjectile.BODY_OFFSET, &"lightning" if elements.has(&"lightning") else &"fire")
 
 func _redirect_target(projectile: PlayerProjectile, exit: Vector2, origin: Vector2 = Vector2.INF) -> Dictionary:
+	if casting.is_world_bound(): return _world_redirect_target(projectile,exit)
 	var from := projectile.global_position if not origin.is_finite() else origin
 	var best: CombatActor
 	var distance := INF
 	for actor: CombatActor in casting.targets:
 		if not is_instance_valid(actor) or not actor.is_alive() or projectile._hit_actor_ids.has(actor.get_instance_id()):
 			continue
-		var current := exit.distance_to(actor.global_position)
-		if current > REDIRECT_RANGE or not casting.player.navigation.is_segment_clear(exit, actor.global_position, 0.0) or not casting.player.navigation.is_segment_clear(from, actor.global_position + PlayerProjectile.BODY_OFFSET, projectile.projectile_radius):
+		var current := exit.distance_to(casting.actor_position(actor))
+		if current > REDIRECT_RANGE or not casting.player.navigation.is_segment_clear(exit, casting.actor_position(actor), 0.0) or not casting.player.navigation.is_segment_clear(from, casting.actor_position(actor) + PlayerProjectile.BODY_OFFSET, projectile.projectile_radius):
 			continue
 		if current < distance or (is_equal_approx(current, distance) and (best == null or actor.get_instance_id() < best.get_instance_id())):
 			best = actor
@@ -159,10 +162,11 @@ func projectile_impact(projectile: PlayerProjectile, victim: CombatActor) -> voi
 	if fire == null:
 		return
 	var center := projectile.global_position - PlayerProjectile.BODY_OFFSET
+	if casting.is_world_bound(): center = casting.actor_position(victim)
 	for actor: CombatActor in casting.targets.duplicate():
 		if casting.construction.construction_id != identity or not casting.player.is_alive():
 			break
-		if not is_instance_valid(actor) or not actor.is_alive() or center.distance_to(actor.global_position) > PULSE_RADIUS + actor.collision_radius or not casting.player.navigation.is_segment_clear(center, actor.global_position, 0.0) or not casting.interaction_ledger.claim_victim(actor.get_instance_id()):
+		if not is_instance_valid(actor) or not actor.is_alive() or (not casting.pulse_contains(victim.world_point(),actor,PULSE_RADIUS) if casting.is_world_bound() else center.distance_to(casting.actor_position(actor)) > PULSE_RADIUS + actor.collision_radius or not casting.ground_visible(center,actor)) or not casting.interaction_ledger.claim_victim(actor.get_instance_id()):
 			continue
 		var request := fire.copy()
 		request.target_id = actor.get_instance_id()
@@ -184,3 +188,33 @@ func intercept_hostile(point: Vector2, context: CombatEventContext = null) -> vo
 		player.recover_sp(refund)
 		player.resources_changed.emit()
 	casting.show_wall_reaction(point, &"ice")
+
+func supports_world(world: WorldGeometry) -> bool:
+	return is_instance_valid(casting) and casting.is_world_bound() and casting.player.world_motion.is_current_world() and casting.player.world_motion.geometry == world
+func owned_world_contact(projectile: PlayerProjectile, from: Vector3, to: Vector3) -> Dictionary:
+	if casting.construction.shape == GeometerConstructionState.Shape.TRIANGLE: return casting.triangle_field.owned_world_contact(projectile,from,to)
+	if not _available() or projectile is GeometerTraceProjectile or projectile.request == null or projectile.request.is_secondary or GeometerCastCommand.is_trace_skill(projectile.request.skill_id) or projectile.request.source_id != casting.player.get_instance_id(): return {}
+	var elements := casting.construction.elements(); var ledger := casting.interaction_ledger
+	var transport := (elements[0] == &"lightning" or elements[1] == &"lightning") and not ledger.projectile_claimed(projectile.get_instance_id(),GeometerInteractionLedger.Component.TRANSPORT)
+	var fire := elements[1] == &"fire" and not ledger.projectile_claimed(projectile.get_instance_id(),GeometerInteractionLedger.Component.FIRE_EXIT)
+	if not transport and not fire: return {}
+	var contact := casting.world_contact(from,to,projectile.world_flight.collider,true)
+	if contact.is_empty(): return {}
+	if transport and elements[0] != &"lightning" and _world_redirect_target(projectile,casting.construction.positions()[1],from.lerp(to,float(contact["fraction"]))).is_empty() and not fire: return {}
+	return contact
+func hostile_world_contact(projectile: ArrowProjectile, from: Vector3, to: Vector3) -> Dictionary:
+	if not _available() or projectile.request == null or projectile.request.source_id <= 0 or projectile.request.source_id == casting.player.get_instance_id() or casting.construction.elements()[1] != &"ice": return {}
+	return casting.world_contact(from,to,projectile.world_flight.collider,true)
+func _world_redirect_target(projectile: PlayerProjectile, exit: Vector2, origin: Vector3 = Vector3.INF) -> Dictionary:
+	var best: CombatActor; var distance := INF
+	for candidate: Variant in casting.targets:
+		if not is_instance_valid(candidate): continue
+		var actor := candidate as CombatActor
+		if actor == null or not actor.is_alive() or actor.world_motion == null or projectile._hit_actor_ids.has(actor.get_instance_id()) or not casting.ground_visible(exit,actor,REDIRECT_RANGE): continue
+		var offset := Vector3.UP*maxf(0.0,(float(actor.world_motion.profile()["height"])-float(projectile.world_flight.collider["height"]))*0.5)
+		var clear := projectile.world_flight.geometry.sweep(origin if origin.is_finite() else projectile.world_flight.position,actor.world_point().position+offset,projectile.world_flight.collider,projectile.world_flight.geometry.geometry_revision)
+		if not clear["ok"] or clear["data"]["hit"]: continue
+		var route := projectile.world_flight.geometry.ground_line_to(casting.world_point_at(exit),actor.world_point(),casting.player.world_motion.profile(),projectile.world_flight.geometry.geometry_revision)
+		var current := float(route["data"]["cost"])
+		if current < distance or (is_equal_approx(current,distance) and (best == null or actor.get_instance_id() < best.get_instance_id())): best = actor; distance = current
+	return {"actor":best} if best != null else {}

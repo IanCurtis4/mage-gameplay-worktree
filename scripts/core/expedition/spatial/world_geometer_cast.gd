@@ -20,11 +20,15 @@ func geometry_check(actor: PlayerActor) -> Dictionary:
 	if not common["ok"]: return common
 	var casting := owner()
 	if not is_instance_valid(casting) or casting.is_queued_for_deletion() or casting.player != actor or casting.construction != construction or construction.generation != _generation: return failure(&"stale_construction")
-	if skill_id != &"geometer_trace": return failure(&"spatial_recipe_pending")
+	if not GeometerCastCommand.is_grammar_skill(skill_id): return failure(&"invalid_world_intent")
 	if not actor.is_geometer() or element not in GeometerGeometry.ELEMENTS: return failure(&"invalid_world_intent")
 	if target() != null and (not is_instance_valid(target()) or not target().is_alive() or target() not in actors()): return failure(&"invalid_target")
 	# A freed selected actor must not silently become a ground shot.
 	if _target != null and not is_instance_valid(target()): return failure(&"invalid_target")
+	construction.set_actors(actors())
+	construction.refresh({},construction.world_navigation)
+	if skill_id == &"geometer_collapse":
+		return {"ok":true,"error_code":&""} if construction.has_active_figure() and construction.grammar.pending_count() == 0 else failure(&"invalid_construction")
 	var point := destination()
 	if point == null: return failure(&"invalid_support")
 	var geometry := actor.world_motion.geometry
@@ -33,6 +37,9 @@ func geometry_check(actor: PlayerActor) -> Dictionary:
 	var grounded := geometry.query_attack({"geometry_rule_id":&"ground_connected","range":actor.skill_range(skill_id),"traversal":actor.world_motion.profile()},source(),point,revision)
 	if not grounded["ok"]: return grounded
 	if not grounded["data"]["hit"]: return failure(&"out_of_range_or_occluded")
+	if GeometerCastCommand.is_edit_skill(skill_id):
+		var edit := construction.preview_world_edit(point,target().get_instance_id() if is_instance_valid(target()) else 0,skill_id == &"geometer_rewrite",actor.skill_rank(&"geometer_triangulation"),actor.geometer_durations(),element)
+		return {"ok":true,"error_code":&"","data":{"point":point.to_data(),"element":element}} if edit["ok"] else failure(edit.get("error_code",&"invalid_construction"))
 	var radius := PlayerProjectile.DEFAULT_RADIUS
 	var offset := Vector3.UP*maxf(0.0,(float(actor.world_motion.profile()["height"])-radius*2.0)*0.5)
 	var target_offset := Vector3.UP*maxf(0.0,(float(target().world_motion.profile()["height"])-radius*2.0)*0.5) if is_instance_valid(target()) else offset
@@ -45,7 +52,7 @@ func geometry_check(actor: PlayerActor) -> Dictionary:
 	if clear["data"]["hit"]: return failure(&"out_of_range_or_occluded")
 	if actor.is_inside_tree() and not EffectProcLedger.projectile_slots_available(actor.get_tree(),1): return failure(&"skill_unavailable")
 	construction.set_actors(actors())
-	var preview := construction.preview_world(point,element,actor.skill_rank(&"geometer_triangulation"))
+	var preview := construction.preview_world(point,element,actor.skill_rank(&"geometer_triangulation"),skill_id == &"geometer_triangulation")
 	if not preview["ok"]:
 		var rejected := failure(preview.get("error_code",&"invalid_construction"))
 		rejected["reason"] = preview["reason"]

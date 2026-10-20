@@ -54,3 +54,27 @@ func contact(from: Vector3, to: Vector3, collider: Dictionary) -> Dictionary:
 	elif absf(position.y-(_anchor.position.y-body_height)) <= WorldGeometry.EPS and absf(to.y-from.y) > WorldGeometry.EPS: normal = Vector3.DOWN
 	elif normal.is_zero_approx(): normal = _normal
 	return {"fraction":first,"normal":normal}
+
+func intersects_region(polygon: PackedVector2Array, origin: Vector3, plane: Vector3, height: float) -> bool:
+	# Restrict the region footprint to vertical overlap before exact capsule footprint tests.
+	var clipped := polygon
+	for side: int in 2:
+		var output := PackedVector2Array()
+		for index: int in clipped.size():
+			var a := clipped[index]; var b := clipped[(index+1)%clipped.size()]
+			var ay := origin.y-(plane.x*(a.x-origin.x)+plane.z*(a.y-origin.z))/plane.y-_anchor.position.y
+			var by := origin.y-(plane.x*(b.x-origin.x)+plane.z*(b.y-origin.z))/plane.y-_anchor.position.y
+			var av := _height-WorldGeometry.EPS-ay if side == 0 else ay+height-WorldGeometry.EPS
+			var bv := _height-WorldGeometry.EPS-by if side == 0 else by+height-WorldGeometry.EPS
+			if av >= 0: output.append(a)
+			if (av < 0) != (bv < 0): output.append(a.lerp(b,av/(av-bv)))
+		clipped = output
+		if clipped.size() < 3: return false
+	var endpoints := ends()
+	for endpoint: Vector3 in endpoints:
+		if WorldSupportRegion.contains(clipped,Vector2(endpoint.x,endpoint.z)): return true
+	for index: int in clipped.size():
+		var a := clipped[index]; var b := clipped[(index+1)%clipped.size()]
+		# Capsule footprint contact at its captured base height, independent of region's y.
+		if not contact(Vector3(a.x,_anchor.position.y,a.y),Vector3(b.x,_anchor.position.y,b.y),{"radius":0.0,"height":0.0}).is_empty(): return true
+	return false

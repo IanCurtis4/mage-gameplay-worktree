@@ -399,6 +399,15 @@ func _support_segment_fraction(cell: Dictionary, from: Vector3, to: Vector3, pro
 		if not _supported(cell,from.lerp(to,(cuts[index-1]+cuts[index])*0.5),profile["radius"],profile["height"]): return cuts[index-1]
 	return 1.0 if _supported(cell,to,profile["radius"],profile["height"]) else cuts[-2]
 
+static func point_tolerance(a: Vector3, b: Vector3) -> float:
+	# Standard Godot Vector3 components are f32; comparisons must account for their ULP scale.
+	return EPS+maxf(a.length(),b.length())*1.1920928955078125e-7*4.0
+
+func ground_region(anchor: ExpeditionWorldPoint, polygon: PackedVector2Array, profile: Dictionary, revision: int) -> Dictionary:
+	if not _current(revision): return _failure(&"stale_geometry")
+	var segments: Array = _segments.values()
+	return WorldSupportRegion.prepare(self,anchor,polygon,profile,revision,_stage["surfaces"],_volumes(),segments)
+
 func ground_line_to(source: ExpeditionWorldPoint, destination: ExpeditionWorldPoint, profile: Dictionary, revision: int) -> Dictionary:
 	if not _current(revision): return _failure(&"stale_geometry")
 	if source == null or destination == null: return _failure(&"invalid_ground_line")
@@ -413,7 +422,7 @@ func ground_line_to(source: ExpeditionWorldPoint, destination: ExpeditionWorldPo
 	if not sampled["ok"]: return sampled
 	if sampled["data"]["points"].is_empty(): return _failure(&"unsupported_contact")
 	var reached: Dictionary = sampled["data"]["points"][0]
-	if reached["stage_id"] != destination.stage_id or reached["surface_id"] != destination.surface_id or Vector3(reached["position"]).distance_to(destination.position) > EPS: return _failure(&"unsupported_contact")
+	if reached["stage_id"] != destination.stage_id or reached["surface_id"] != destination.surface_id or Vector3(reached["position"]).distance_to(destination.position) > point_tolerance(source.position,destination.position): return _failure(&"unsupported_contact")
 	var route: Array = sampled["data"]["route"]
 	var cost := 0.0
 	for index: int in range(1,route.size()): cost += Vector3(route[index-1]["position"]).distance_to(route[index]["position"])

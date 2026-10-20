@@ -2390,16 +2390,20 @@ func commit_geometer_collapse(command: GeometerCastCommand, construction: Geomet
 	# Consume before any signal/damage; callbacks cannot finalize the same instance twice.
 	cancel_active_cast()
 	_spend(command.skill_id)
+	captured = geometer_collapse_snapshot(captured,first)
+	reveal_from_offense()
+	return captured
+
+func geometer_collapse_snapshot(captured: Dictionary, first: bool) -> Dictionary:
 	var resolution_vertex := 0 if first else 2
 	var element: StringName = captured["elements"][resolution_vertex] if captured["shape"] == GeometerConstructionState.Shape.TRIANGLE else &"wall"
 	captured["resolution_element"] = element
 	captured["resolution_vertex"] = resolution_vertex
-	var tuning := ClassCatalog.geometer_collapse_tuning(skill_rank(command.skill_id))
-	var request := _make_magic_request(null, command.skill_id, stat_breakdown.value(&"magic_attack") * float(tuning[element]), DamageRequest.AccuracyMode.GEOMETRY, false)
+	var tuning := ClassCatalog.geometer_collapse_tuning(skill_rank(&"geometer_collapse"))
+	var request := _make_magic_request(null, &"geometer_collapse", stat_breakdown.value(&"magic_attack") * float(tuning[element]), DamageRequest.AccuracyMode.GEOMETRY, false)
 	request.is_secondary = true
 	captured["request"] = request
 	captured["ok"] = true
-	reveal_from_offense()
 	return captured
 
 func geometer_wall_snapshot() -> Dictionary:
@@ -2738,7 +2742,7 @@ func request_world_geometer(casting: GeometerCasting, skill: StringName, anchor:
 func _capture_world_geometer(casting: GeometerCasting, skill: StringName, anchor: ExpeditionWorldPoint, victim: CombatActor, revision: int, requested_rank: int) -> WorldGeometerCast:
 	if world_motion == null or not world_motion.is_current_world(): _world_cast_result = WorldSkillCast.failure(&"spatial_binding_required"); return null
 	if not is_instance_valid(casting) or casting.player != self or not casting.construction is WorldGeometerConstruction: _world_cast_result = WorldSkillCast.failure(&"spatial_construction_required"); return null
-	if skill != &"geometer_trace": _world_cast_result = WorldSkillCast.failure(&"spatial_recipe_pending"); return null
+	if not GeometerCastCommand.is_grammar_skill(skill): _world_cast_result = WorldSkillCast.failure(&"invalid_world_intent"); return null
 	if victim != null and (not is_instance_valid(victim) or not victim.is_alive() or victim not in casting.targets): _world_cast_result = WorldSkillCast.failure(&"invalid_target"); return null
 	var previous := push_cast_rank(skill,requested_rank)
 	var command := WorldGeometerCast.new()
@@ -2751,11 +2755,25 @@ func _commit_world_geometer(command: WorldGeometerCast) -> bool:
 	# _spend's final pure preflight and reservation are synchronous: no callbacks between them.
 	var point := command.destination()
 	if not _spend(command.skill_id): return false
-	var ticket := command.construction.reserve_world(point,command.target().get_instance_id() if is_instance_valid(command.target()) else 0,skill_rank(&"geometer_triangulation"),geometer_durations(),command.element,bool(run_state.composed_build().get("kit_policies",{}).get(&"geometer_ground_anchor",false)))
+	if GeometerCastCommand.is_edit_skill(command.skill_id):
+		var edited := command.construction.edit_world(point,command.target().get_instance_id() if is_instance_valid(command.target()) else 0,command.skill_id == &"geometer_rewrite",skill_rank(&"geometer_triangulation"),geometer_durations(),command.element)
+		assert(edited["ok"],"Validated world edit must commit synchronously")
+		command.owner().world_edited()
+		resources_changed.emit()
+		return true
+	if command.skill_id == &"geometer_collapse":
+		var first := bool(run_state.composed_build().get("kit_policies",{}).get(&"geometer_collapse_first_element",false))
+		var captured := command.construction.capture_collapse()
+		assert(not captured.is_empty(),"Validated world collapse must consume synchronously")
+		captured = geometer_collapse_snapshot(captured,first)
+		command.owner().collapse_world(captured)
+		resources_changed.emit()
+		return true
+	var ticket := command.construction.reserve_world(point,command.target().get_instance_id() if is_instance_valid(command.target()) else 0,skill_rank(&"geometer_triangulation"),geometer_durations(),command.element,bool(run_state.composed_build().get("kit_policies",{}).get(&"geometer_ground_anchor",false)),command.skill_id == &"geometer_triangulation")
 	assert(ticket > 0,"Validated spatial Geometer reservation must commit synchronously")
 	var definition := ClassCatalog.skill_definition(command.skill_id)
 	var request := _make_magic_request(command.target(),command.skill_id,_magic_power(command.skill_id),definition.accuracy_mode,definition.can_crit)
-	var launch := {"ticket":ticket,"request":request,"target":command.target(),"point":point,"speed":skill_projectile_speed(command.skill_id),"range":skill_range(command.skill_id),"flight":command.flight.duplicate(true)}
+	var launch := {"ticket":ticket,"request":request,"target":command.target(),"point":point,"speed":skill_projectile_speed(command.skill_id),"range":skill_range(command.skill_id),"flight":command.flight.duplicate(true),"wall_snapshot":geometer_wall_snapshot(),"triangle_snapshot":geometer_triangle_snapshot()}
 	command.owner().launch_world(launch,command)
 	reveal_from_offense()
 	presentation_action.emit(&"cast_release",_last_facing,0.12)
@@ -2776,7 +2794,7 @@ func _capture_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facin
 func _validate_world_skill(command: WorldSkillCast, using_reservation: bool = false) -> Dictionary:
 	if command.committed: return WorldSkillCast.failure(&"already_committed")
 	var controller := get_parent() as RunController
-	if controller != null and controller.geometer_casting != null and controller.geometer_casting.wall_field != null and command.skill_id in WorldSkillCast.PROJECTILES: return WorldSkillCast.failure(&"spatial_interceptor_required")
+	if controller != null and controller.geometer_casting != null and controller.geometer_casting.wall_field != null and command.skill_id in WorldSkillCast.PROJECTILES and not controller.geometer_casting.wall_field.supports_world(world_motion.geometry): return WorldSkillCast.failure(&"spatial_interceptor_required")
 	if (is_inside_tree() and get_tree().paused) or is_stunned() or is_feared() or (command.skill_id == &"spiritualist_soul_drain" and is_rooted()): return WorldSkillCast.failure(&"caster_controlled")
 	if not _can_pay_skill(command.skill_id,using_reservation): return WorldSkillCast.failure(&"skill_unavailable")
 	if command.skill_id == &"berserker_execution" and not can_pay_berserker_execution_hp(): return WorldSkillCast.failure(&"skill_unavailable")

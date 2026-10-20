@@ -20,7 +20,7 @@ var world_failure: StringName = &""
 
 func bind_world_flight(world: WorldGeometry, origin: ExpeditionWorldPoint, offset: Vector3, facing: Vector3, collider: Dictionary, revision: int) -> Dictionary:
 	if world_flight != null: return {"ok":false,"error_code":&"already_bound"}
-	if geometer_field != null: return {"ok":false,"error_code":&"spatial_interceptor_required"}
+	if geometer_field != null and not geometer_field.supports_world(world): return {"ok":false,"error_code":&"spatial_interceptor_required"}
 	var flight := WorldProjectileMotion.new()
 	var result := flight.configure(world,origin,offset,facing,collider,max_distance,revision)
 	if not result["ok"]: return result
@@ -30,7 +30,7 @@ func bind_world_flight(world: WorldGeometry, origin: ExpeditionWorldPoint, offse
 
 func _advance_world_flight(delta: float) -> void:
 	if not is_instance_valid(target) or not target.is_alive(): queue_free(); return
-	if geometer_field != null: world_failure = &"spatial_interceptor_required"; queue_free(); return
+	if geometer_field != null and not geometer_field.supports_world(world_flight.geometry): world_failure = &"spatial_interceptor_required"; queue_free(); return
 	var step := minf(speed*delta,max_distance-world_flight.travelled)
 	var start := world_flight.position
 	var finish := start+world_flight.direction*step
@@ -50,6 +50,12 @@ func _advance_world_flight(delta: float) -> void:
 			var fraction := barrier.world_interception_fraction(start,finish,world_flight.collider,world_flight.geometry)
 			if fraction >= 0.0 and (fraction < barrier_fraction or (is_equal_approx(fraction,barrier_fraction) and (barrier_hit == null or barrier.get_instance_id() < barrier_hit.get_instance_id()))): barrier_hit = barrier; barrier_fraction = fraction
 	var terrain_limit := float(data["fraction"]) if data["terrain"] else 2.0
+	var contact := geometer_field.hostile_world_contact(self,start,finish) if geometer_field != null else {}
+	var fraction := float(contact.get("fraction",2.0))
+	if not contact.is_empty() and fraction <= first_fraction and fraction < terrain_limit and (shield < 0 or fraction < shield) and fraction < barrier_fraction:
+		world_flight.position = start.lerp(finish,fraction); world_flight.travelled = travelled+step*fraction; travelled = world_flight.travelled
+		geometer_field.intercept_hostile(Vector2(world_flight.position.x,world_flight.position.z),request.context)
+		queue_free(); return
 	if shield >= 0.0 and shield <= first_fraction and shield <= barrier_fraction and shield < terrain_limit and shielded.absorb_shield_projectile():
 		world_flight.position = start.lerp(finish,shield)
 		world_flight.travelled = travelled+step*shield

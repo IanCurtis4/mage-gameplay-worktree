@@ -32,10 +32,12 @@ var geometer_triangle_arc_request: DamageRequest
 var geometer_triangle_identity := 0
 var world_flight: WorldProjectileMotion
 var world_failure: StringName = &""
+var _world_conduit: Array[Vector3] = []
+var _world_resume_direction := Vector3.RIGHT
 
 func bind_world_flight(world: WorldGeometry, origin: ExpeditionWorldPoint, offset: Vector3, facing: Vector3, collider: Dictionary, revision: int) -> Dictionary:
 	if world_flight != null: return {"ok":false,"error_code":&"already_bound"}
-	if geometer_field != null: return {"ok":false,"error_code":&"spatial_interceptor_required"}
+	if geometer_field != null and not geometer_field.supports_world(world): return {"ok":false,"error_code":&"spatial_interceptor_required"}
 	var flight := WorldProjectileMotion.new()
 	var result := flight.configure(world,origin,offset,facing,collider,max_distance,revision)
 	if not result["ok"]: return result
@@ -47,11 +49,29 @@ func bind_world_flight(world: WorldGeometry, origin: ExpeditionWorldPoint, offse
 	world_flight = flight
 	return result
 
+func start_world_geometer_conduction(endpoint: ExpeditionWorldPoint, identity: int) -> void:
+	if world_flight == null or endpoint == null or geometer_field == null: return
+	var casting := geometer_field.casting
+	var origin := casting.world_point_at(Vector2(world_flight.position.x,world_flight.position.z))
+	if origin == null: return
+	var route := world_flight.geometry.ground_line_to(origin,endpoint,casting.player.world_motion.profile(),world_flight.geometry.geometry_revision)
+	if not route["ok"]: return
+	_world_resume_direction = world_flight.direction
+	geometer_transport_identity = identity
+	_world_conduit.clear()
+	var vertical_offset := world_flight.position.y-origin.position.y
+	for point: Dictionary in route["data"]["points"]:
+		var next: Vector3 = point["position"]+Vector3.UP*vertical_offset
+		if next.distance_to(world_flight.position) > WorldGeometry.EPS: _world_conduit.append(next)
+	if homing:
+		targets.clear()
+		if is_instance_valid(target): targets.append(target)
+	homing = false
+
 func _advance_world_flight(delta: float) -> void:
-	if request == null or geometer_field != null:
+	if request == null or (geometer_field != null and not geometer_field.supports_world(world_flight.geometry)):
 		world_failure = &"spatial_interceptor_required" if geometer_field != null else &"invalid_request"
-		queue_free()
-		return
+		queue_free(); return
 	var candidates: Array[CombatActor] = targets
 	if homing:
 		if not is_instance_valid(target) or not target.is_alive(): queue_free(); return
@@ -62,20 +82,42 @@ func _advance_world_flight(delta: float) -> void:
 		if not facing.is_zero_approx(): world_flight.direction = facing.normalized()
 	var budget := speed*delta
 	while budget > WorldGeometry.EPS:
-		var result := world_flight.contact(budget,candidates)
+		if not _world_conduit.is_empty() and (geometer_field == null or not geometer_field.conduction_active(geometer_transport_identity)):
+			_world_conduit.clear(); world_flight.direction = _world_resume_direction
+		while not _world_conduit.is_empty() and world_flight.position.distance_to(_world_conduit[0]) <= WorldGeometry.EPS:
+			_world_conduit.pop_front()
+			if _world_conduit.is_empty(): world_flight.direction = _world_resume_direction
+		var step := minf(budget,world_flight.max_distance-world_flight.travelled)
+		if not _world_conduit.is_empty():
+			world_flight.direction = (_world_conduit[0]-world_flight.position).normalized()
+			step = minf(step,world_flight.position.distance_to(_world_conduit[0]))
+		var from := world_flight.position; var to := from+world_flight.direction*step
+		var next := world_flight.peek(step,candidates)
+		if not next["ok"]: world_failure = next["error_code"]; queue_free(); return
+		var predicted: Dictionary = next["data"]
+		var field := geometer_field.owned_world_contact(self,from,to) if geometer_field != null else {}
+		var at := float(field.get("fraction",2.0))
+		var precedes: bool = at < float(predicted["fraction"]) or (field.get("inside_triangle",false) and at == float(predicted["fraction"]))
+		if not field.is_empty() and precedes:
+			var moved := world_flight.contact(step*at,[])
+			if not moved["ok"]: world_failure = moved["error_code"]; queue_free(); return
+			budget -= float(moved["data"]["distance"]); travelled = world_flight.travelled
+			geometer_field.apply_owned_contact(self)
+			continue
+		var result := world_flight.contact(step,candidates)
 		if not result["ok"]: world_failure = result["error_code"]; queue_free(); return
 		var data: Dictionary = result["data"]
-		travelled = world_flight.travelled
-		budget = maxf(0.0,budget-float(data["distance"]))
+		travelled = world_flight.travelled; budget = maxf(0.0,budget-float(data["distance"]))
 		var victim := data["actor"] as CombatActor
 		if victim != null:
 			_hit_actor_ids[victim.get_instance_id()] = true
 			_prepare_impact(victim)
 			hit.emit(request,victim)
+			if geometer_field != null: geometer_field.projectile_impact(self,victim)
 			if is_queued_for_deletion(): return
 			if _hit_actor_ids.size() >= max_hits: queue_free(); return
 		if data["terrain"] or data["exhausted"]: queue_free(); return
-		if victim == null: break
+		if victim == null and _world_conduit.is_empty(): break
 
 
 func start_geometer_conduction(endpoint: Vector2, identity: int) -> void:
