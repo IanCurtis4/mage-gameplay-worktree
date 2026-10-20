@@ -23,7 +23,7 @@ func _run() -> void:
 	if not Fixture.sources_current(): push_error("stale fixture"); quit(1); return
 	for rank: int in [1,5]:
 		for facing: Vector3 in [Vector3.RIGHT,Vector3(1,0,1).normalized()]: _nominal(rank,facing)
-	for reason: String in ["height","nan","direction","sp","stun","pause","stale","edge","ceiling","sloped","occupied","socket"]: _invalid(reason)
+	for reason: String in ["height","nan","direction","sp","stun","pause","stale","edge","ceiling","occupied","socket"]: _invalid(reason)
 	for mode: String in ["pause","build","epoch","free"]: _lifetime(mode)
 	for mode: String in ["occupied","revision","build","stun"]: _during_preparation(mode)
 	_capsule_snapshot()
@@ -129,16 +129,13 @@ func _invalid(reason: String) -> void:
 		"stale": revision -= 1
 		"edge": facing = Vector3.LEFT
 		"ceiling": height = 40
-		"sloped":
-			check(c.player.move_world_to(Fixture.point("slope",Vector3(600,20,300)),world.geometry_revision)["ok"] and c.player.advance_world(10000)["ok"],"ramp approach is legal before unsupported lateral placement")
-			facing = Vector3.FORWARD
+
 		"occupied": _move(lower,Fixture.point("root",center))
 	var before := c.player.current_sp; var geometry_before := world.geometry_revision
 	var result := c.cast_world_skill(ID,null,facing,null,revision,0,height)
 	check(not result["ok"] and c.player.current_sp == before and c.player.skill_cooldown(ID) == 0 and world.geometry_revision == geometry_before and _wall() == null,"invalid ice placement is atomic/free: "+reason)
 	if reason == "occupied": check(result["error_code"] == &"occupied","registered downstairs body blocks placement; upstairs body alone does not")
 	if reason == "socket": check(result["error_code"] == &"would_disconnect","currently reachable authored socket cannot become inaccessible")
-	if reason == "sloped": check(result["error_code"] == &"non_planar_field_support","uneven lateral field remains explicit unsupported case")
 	paused = false
 func _lifetime(mode: String) -> void:
 	_setup(5)

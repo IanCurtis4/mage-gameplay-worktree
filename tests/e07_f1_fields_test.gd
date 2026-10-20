@@ -25,7 +25,7 @@ func _run() -> void:
 	if not Fixture.sources_current(): push_error("stale fixture"); quit(1); return
 	for id: StringName in IDS:
 		for rank: int in [1,5]: _nominal(id,rank)
-		for reason: String in ["height","nan","direction","sp","stun","pause","stale","edge","sloped","ceiling"]: _invalid(id,reason)
+		for reason: String in ["height","nan","direction","sp","stun","pause","stale","edge","ceiling"]: _invalid(id,reason)
 		for mode: String in ["pause","epoch","removed","build"]: _late(id,mode)
 		_oblique(id)
 		_zero_delta(id)
@@ -84,14 +84,11 @@ func _invalid(id: StringName,reason: String) -> void:
 		"pause": paused = true
 		"stale": revision -= 1
 		"edge": facing = Vector3.LEFT
-		"sloped":
-			check(c.player.move_world_to(Fixture.point("slope",Vector3(600,20,300)),world.geometry_revision)["ok"],"sloped lateral footprint has a legal caster approach")
-			c.player.advance_world(10000); facing = Vector3.FORWARD
+
 	var before := c.player.current_sp
 	var result := c.cast_world_skill(id,null,facing,null,revision,0,height)
 	if result["ok"] and c.player.has_active_cast(): c.player._advance_world_cast(10); result = c.player.world_cast_status()
 	check(not result["ok"] and c.player.current_sp == before and c.player.skill_cooldown(id) == 0 and _field() == null,"invalid/missing authored field data is free: "+reason+" "+String(id))
-	if reason == "sloped": check(result["error_code"] == &"non_planar_field_support","uneven lateral footprint has an explicit unsupported contract, without flattening")
 	paused = false
 func _late(id: StringName,mode: String) -> void:
 	_setup(id,5)

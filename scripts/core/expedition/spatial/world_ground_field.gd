@@ -8,6 +8,7 @@ var kind: StringName
 var height := 0.0
 var half_length := 0.0
 var half_width := 0.0
+var _non_planar := false
 var _point: ExpeditionWorldPoint
 var _normal := Vector3.RIGHT
 var _axis := Vector3.BACK
@@ -38,7 +39,7 @@ func configure(world: WorldGeometry, source: ExpeditionWorldPoint, facing: Vecto
 	for distance: float in [-half_length,half_length]:
 		var endpoint := _supported_axis(distance,footprint,revision)
 		if not endpoint["ok"]: return endpoint
-		if absf(float(endpoint["data"]["point"]["position"].y)-_point.position.y) > WorldGeometry.EPS: return WorldSkillCast.failure(&"non_planar_field_support")
+		if absf(float(endpoint["data"]["point"]["position"].y)-_point.position.y) > WorldGeometry.EPS: _non_planar = true
 	var distances: Array[float] = []
 	distances.assign(layout["centers"])
 	if distances.is_empty(): return WorldSkillCast.failure(&"invalid_field_layout")
@@ -47,17 +48,27 @@ func configure(world: WorldGeometry, source: ExpeditionWorldPoint, facing: Vecto
 		if not supported["ok"]: return supported
 		var point: Dictionary = supported["data"]["point"]
 		var center := ExpeditionWorldPoint.create(point["stage_id"],point["surface_id"],point["position"])
-		if absf(center.position.y-_point.position.y) > WorldGeometry.EPS: return WorldSkillCast.failure(&"non_planar_field_support")
+		if absf(center.position.y-_point.position.y) > WorldGeometry.EPS: _non_planar = true
 		var area := WorldEffectArea.new()
 		var bound := area.configure(world,center,footprint,&"ground_connected",revision)
 		if not bound["ok"]: return bound
 		_centers.append(center); _areas.append(area)
-	if kind == &"ice_wall":
+	var region: Dictionary = {}
+	if _non_planar and kind != &"fire_wall":
+		var cap := half_width if kind in [&"ice_wall",&"lightning_wall"] else 0.0
+		var a := Vector2(_point.position.x,_point.position.z); var axis := Vector2(_axis.x,_axis.z)*(half_length+cap); var side := Vector2(_normal.x,_normal.z)*half_width
+		var polygon := PackedVector2Array([a-axis-side,a+axis-side,a+axis+side,a-axis+side])
+		var support_profile := traversal.duplicate(true); support_profile["height"] = height
+		var supported := world.ground_region(_point,polygon,support_profile,revision)
+		if not supported["ok"]: return supported
+		region = supported["data"]
+	if kind == &"ice_wall" or (_non_planar and kind == &"lightning_wall"):
 		solid = WorldSolidSegment.new()
 		if not solid.configure(_point,_normal,half_length,half_width,height,traversal): return WorldSkillCast.failure(&"invalid_volume")
+		if not region.is_empty(): solid.bind_support_region(region)
 	if kind != &"fire_wall":
 		volume = WorldEffectVolume.new()
-		var bound := volume.configure_oriented(world,_point,footprint,_normal,half_length,half_width,height,revision)
+		var bound := volume.configure_ground_region(world,_point,footprint,region,height,revision) if not region.is_empty() else volume.configure_oriented(world,_point,footprint,_normal,half_length,half_width,height,revision)
 		if not bound["ok"]: return bound
 	return {"ok":true,"error_code":&""}
 func _supported_axis(distance: float, profile: Dictionary, revision: int) -> Dictionary:
@@ -113,12 +124,15 @@ func fraction(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, actor: Comba
 		for i: int in _centers.size():
 			candidates.append({"fraction":WorldProjectileMotion.cylinder_fraction(from.position,to.position,_centers[i].position,radius+half_width,height,body_height),"area":i})
 	else:
-		if kind == &"lightning_wall":
+		if kind == &"lightning_wall" and _non_planar:
+			var contact := solid.contact(from.position,to.position,body)
+			candidates.append({"fraction":float(contact["fraction"]) if not contact.is_empty() else -1.0,"area":0})
+		elif kind == &"lightning_wall":
 			var start := from.position-_point.position; var finish := to.position-_point.position
 			var hit := WorldGeometry._segment_box(Vector3(start.dot(_normal),start.y,start.dot(_axis)),Vector3(finish.dot(_normal),finish.y,finish.dot(_axis)),AABB(Vector3(-half_width-radius,-body_height,-half_length),Vector3(2*(half_width+radius),height+body_height,2*half_length)))
 			candidates.append({"fraction":float(hit["fraction"]) if not hit.is_empty() else -1.0,"area":0})
 		else: candidates.append({"fraction":volume.fraction(from.position,to.position,body),"area":0})
-		if kind == &"lightning_wall":
+		if kind == &"lightning_wall" and not _non_planar:
 			for side: float in [-1.0,1.0]: candidates.append({"fraction":WorldProjectileMotion.cylinder_fraction(from.position,to.position,_point.position+_axis*half_length*side,radius+half_width,height,body_height),"area":0})
 	var first := 2.0
 	for candidate: Dictionary in candidates:
@@ -127,7 +141,7 @@ func fraction(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, actor: Comba
 		var point := _ground_contact(from,to,from.position.lerp(to.position,at),actor)
 		if point == null: continue
 		var area := _areas[int(candidate["area"])]
-		var query := area.query_point(point,(half_width if kind == &"fire_wall" else half_length+half_width)+radius)
+		var query := area.query_point(point,1.0e20 if _non_planar and kind != &"fire_wall" else (half_width if kind == &"fire_wall" else half_length+half_width)+radius)
 		if query["ok"] and query["data"]["hit"]: first = at
 	return first if first <= 1.0 else -1.0
 func contains(actor: CombatActor) -> bool: return fraction(actor.world_point(),actor.world_point(),actor) >= 0

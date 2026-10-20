@@ -90,3 +90,45 @@ static func ground_contains(region: Dictionary, point: ExpeditionWorldPoint, rad
 	for patch: Dictionary in region.get("patches",[]):
 		if patch["surface_id"] == point.surface_id and absf(point.position.y-support_y(patch,Vector2(point.position.x,point.position.z))) <= EPS and contains(patch["polygon"],Vector2(point.position.x,point.position.z),radius): return true
 	return false
+
+static func capsule_fraction_2d(a: Vector2, b: Vector2, from: Vector2, to: Vector2, radius: float) -> float:
+	var axis := (b-a).normalized(); var normal := axis.orthogonal()
+	var start := from-a; var finish := to-a
+	var strip := WorldGeometry._segment_box(Vector3(start.dot(axis),0,start.dot(normal)),Vector3(finish.dot(axis),0,finish.dot(normal)),AABB(Vector3(0,-1,-radius),Vector3(a.distance_to(b),2,2*radius)))
+	var first := float(strip["fraction"]) if not strip.is_empty() else 2.0
+	for endpoint: Vector2 in [a,b]:
+		var at := WorldProjectileMotion.cylinder_fraction(Vector3(from.x,0,from.y),Vector3(to.x,0,to.y),Vector3(endpoint.x,0,endpoint.y),radius,0,0)
+		if at >= 0: first = minf(first,at)
+	return first if first <= 1 else -1.0
+static func capsule_fraction(region: Dictionary, a: Vector2, b: Vector2, width: float, from: Vector3, to: Vector3, collider: Dictionary, height: float) -> float:
+	var radius := float(collider["radius"]); var body_height := float(collider["height"])
+	var start := Vector2(from.x,from.z); var finish := Vector2(to.x,to.z)
+	var enter := capsule_fraction_2d(a,b,start,finish,width+radius)
+	var reverse := capsule_fraction_2d(a,b,finish,start,width+radius)
+	if enter < 0 or reverse < 0: return -1.0
+	var first := 2.0
+	for patch: Dictionary in region.get("patches",[]):
+		var pin := polygon_fraction(patch["polygon"],start,finish,radius)
+		var pout := polygon_fraction(patch["polygon"],finish,start,radius)
+		if pin < 0 or pout < 0: continue
+		var normal: Vector3 = patch["normal"]
+		var radial_height := radius*Vector2(normal.x,normal.z).length()/absf(normal.y)
+		var vertical := height_interval(from.y-support_y(patch,start),to.y-support_y(patch,finish),-body_height-radial_height,height+radial_height-EPS)
+		var low := maxf(enter,maxf(pin,vertical.x)); var high := minf(1.0-reverse,minf(1.0-pout,vertical.y))
+		if low <= high: first = minf(first,low)
+	return first if first <= 1 else -1.0
+static func clip_vertical_overlap(polygon: PackedVector2Array, region_patch: Dictionary, other_patch: Dictionary, lower: float, upper: float) -> PackedVector2Array:
+	var clipped := polygon
+	for side: int in 2:
+		var output := PackedVector2Array()
+		for index: int in clipped.size():
+			var a := clipped[index]; var b := clipped[(index+1)%clipped.size()]
+			var ay := support_y(region_patch,a)-support_y(other_patch,a)
+			var by := support_y(region_patch,b)-support_y(other_patch,b)
+			var av := upper-ay if side == 0 else ay-lower
+			var bv := upper-by if side == 0 else by-lower
+			if av >= 0: output.append(a)
+			if (av < 0) != (bv < 0): output.append(a.lerp(b,av/(av-bv)))
+		clipped = output
+		if clipped.size() < 3: break
+	return clipped

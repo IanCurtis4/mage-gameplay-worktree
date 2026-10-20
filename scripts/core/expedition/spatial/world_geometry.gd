@@ -532,12 +532,17 @@ func can_insert_segment(id: String, segment: WorldSolidSegment, revision: int) -
 	if segment == null or not segment.is_valid(): return _failure(&"invalid_volume")
 	var profile := segment.profile(); var anchor := segment.anchor()
 	if not _profile_valid(profile) or not _point_valid(anchor,profile["radius"],profile["height"]): return _failure(&"invalid_support")
-	var endpoints := segment.ends()
-	for endpoint: Vector3 in endpoints:
-		var support := ground_line_point_at(anchor,Vector2(endpoint.x,endpoint.z),profile,revision)
+	var region := segment.support_region()
+	if not region.is_empty():
+		var support := ground_region(anchor,region["polygon"],region["profile"],revision)
 		if not support["ok"]: return support
-		if Vector3(support["data"]["point"]["position"]).distance_to(endpoint) > EPS: return _failure(&"non_planar_field_support")
-	if sweep(endpoints[0],endpoints[1],profile,revision)["data"]["hit"]: return _failure(&"blocked_obstacle")
+	else:
+		var endpoints := segment.ends()
+		for endpoint: Vector3 in endpoints:
+			var support := ground_line_point_at(anchor,Vector2(endpoint.x,endpoint.z),profile,revision)
+			if not support["ok"]: return support
+			if Vector3(support["data"]["point"]["position"]).distance_to(endpoint) > EPS: return _failure(&"non_planar_field_support")
+		if sweep(endpoints[0],endpoints[1],profile,revision)["data"]["hit"]: return _failure(&"blocked_obstacle")
 	for occupant: Dictionary in _occupancy.values():
 		var position: Vector3 = occupant["point"]["position"]
 		if not segment.contact(position,position,occupant["profile"]).is_empty(): return _failure(&"occupied")

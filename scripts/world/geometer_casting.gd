@@ -123,15 +123,12 @@ func world_contact(from: Vector3, to: Vector3, collider: Dictionary, wall: bool)
 	var spatial := construction as WorldGeometerConstruction
 	var region := spatial.region()
 	if not region["ok"]: return {}
-	var at := WorldSupportRegion.fraction(region["data"],from,to,collider,spatial.field_height)
-	if at < 0: return {}
+	var at: float
 	if wall:
 		var points := construction.positions()
-		var contact := GeometerGeometry.wall_contact(Vector2(from.x,from.z),Vector2(to.x,to.z),points[0],points[1],float(collider["radius"]))
-		if contact.is_empty(): return {}
-		at = maxf(at,float(contact["fraction"]))
-		var position := from.lerp(to,at)
-		if not GeometerGeometry.wall_contains(points,Vector2(position.x,position.z),float(collider["radius"])): return {}
+		at = WorldSupportRegion.capsule_fraction(region["data"],points[0],points[1],GeometerGeometry.WALL_HALF_WIDTH,from,to,collider,spatial.field_height)
+	else: at = WorldSupportRegion.fraction(region["data"],from,to,collider,spatial.field_height)
+	if at < 0: return {}
 	return {"fraction":at,"inside_triangle":not wall and at == 0.0}
 func world_edited() -> void:
 	wall_contacts.sync(0,false)

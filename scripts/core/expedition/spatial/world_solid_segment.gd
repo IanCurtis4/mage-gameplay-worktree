@@ -9,8 +9,10 @@ var _width := 0.0
 var _height := 0.0
 var _profile: Dictionary = {}
 var _valid := false
+var _support_region: Dictionary = {}
 func configure(point: ExpeditionWorldPoint, normal: Vector3, half_length: float, half_width: float, height: float, traversal: Dictionary) -> bool:
 	_valid = false
+	_support_region.clear()
 	if point == null or not point.position.is_finite() or not normal.is_finite() or normal.is_zero_approx() or absf(normal.y) > WorldGeometry.EPS: return false
 	if not is_finite(half_length) or not is_finite(half_width) or not is_finite(height) or minf(half_length,minf(half_width,height)) <= WorldGeometry.EPS: return false
 	_anchor = ExpeditionWorldPoint.create(point.stage_id,point.surface_id,point.position)
@@ -26,8 +28,17 @@ func snapshot() -> WorldSolidSegment:
 	if not _valid: return null
 	var result := WorldSolidSegment.new()
 	result.configure(anchor(),_normal,_length,_width,_height,_profile)
+	result._support_region = _support_region.duplicate(true)
 	return result
-func ends() -> Array[Vector3]: return [_anchor.position-_axis*_length,_anchor.position+_axis*_length]
+func bind_support_region(region: Dictionary) -> void: _support_region = region.duplicate(true)
+func support_region() -> Dictionary: return _support_region.duplicate(true)
+func ends() -> Array[Vector3]:
+	var result: Array[Vector3] = [_anchor.position-_axis*_length,_anchor.position+_axis*_length]
+	for index: int in result.size():
+		for patch: Dictionary in _support_region.get("patches",[]):
+			var horizontal := Vector2(result[index].x,result[index].z)
+			if WorldSupportRegion.contains(patch["polygon"],horizontal): result[index].y = WorldSupportRegion.support_y(patch,horizontal); break
+	return result
 func corners(radius: float) -> Array[Vector3]:
 	var result: Array[Vector3] = []
 	var padding := _width+radius+WorldGeometry.EPS*4
@@ -37,6 +48,10 @@ func corners(radius: float) -> Array[Vector3]:
 func contact(from: Vector3, to: Vector3, collider: Dictionary) -> Dictionary:
 	if not _valid or not from.is_finite() or not to.is_finite() or not collider.has_all(["radius","height"]): return {}
 	if not WorldGeometry._finite_number(collider["radius"]) or not WorldGeometry._finite_number(collider["height"]) or minf(float(collider["radius"]),float(collider["height"])) < 0: return {}
+	if not _support_region.is_empty():
+		var a := _anchor.position-_axis*_length; var b := _anchor.position+_axis*_length
+		var at := WorldSupportRegion.capsule_fraction(_support_region,Vector2(a.x,a.z),Vector2(b.x,b.z),_width,from,to,collider,_height)
+		return {"fraction":at,"normal":_normal} if at >= 0 else {}
 	var start := from-_anchor.position; var finish := to-_anchor.position
 	var radius := _width+float(collider["radius"])
 	var body_height := float(collider["height"])
@@ -56,6 +71,17 @@ func contact(from: Vector3, to: Vector3, collider: Dictionary) -> Dictionary:
 	return {"fraction":first,"normal":normal}
 
 func intersects_region(polygon: PackedVector2Array, origin: Vector3, plane: Vector3, height: float) -> bool:
+	if not _support_region.is_empty():
+		var source_patch := {"origin":origin,"normal":plane}
+		var endpoints := ends(); var a := Vector2(endpoints[0].x,endpoints[0].z); var b := Vector2(endpoints[1].x,endpoints[1].z)
+		for patch: Dictionary in _support_region["patches"]:
+			for intersection: PackedVector2Array in Geometry2D.intersect_polygons(polygon,patch["polygon"]):
+				var clipped := WorldSupportRegion.clip_vertical_overlap(intersection,source_patch,patch,-height+WorldGeometry.EPS,_height-WorldGeometry.EPS)
+				if clipped.size() < 3: continue
+				if WorldSupportRegion.contains(clipped,a) or WorldSupportRegion.contains(clipped,b): return true
+				for index: int in clipped.size():
+					if WorldSupportRegion.capsule_fraction_2d(a,b,clipped[index],clipped[(index+1)%clipped.size()],_width) >= 0: return true
+		return false
 	# Restrict the region footprint to vertical overlap before exact capsule footprint tests.
 	var clipped := polygon
 	for side: int in 2:
