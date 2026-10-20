@@ -2,7 +2,7 @@ class_name WorldSkillCast
 extends RefCounted
 ## One captured intention. Geometry/rank are validated before the canonical payment.
 const TARGETED: Array[StringName] = [&"sentinel_explosive_shot",&"sentinel_headshot",&"sentinel_concussion_shot",&"elementalist_lightning_arc",&"spiritualist_echo_curse",&"soul_impact",&"brutal_strike",&"berserker_rupture",&"berserker_execution",&"berserker_breath_steal",&"berserker_pursuit_cut",&"provoke",&"hunter_mark",&"sentinel_observe",&"fire_spear",&"ice_spear",&"lightning",&"spiritualist_soul_drain",&"spiritualist_procession"]
-const DIRECTIONAL: Array[StringName] = [&"hunter_covering_shot",&"sentinel_piercing_shot",&"defender_wall_advance",&"defender_retreat_guard",&"berserker_wound_leap",&"berserker_blood_rift",&"elementalist_ember_path",&"haunt",&"slash",&"defender_counterstroke",&"defender_line_lock",&"defender_riposte",&"concentrated_rage",&"fireball",&"electric_discharge",&"double_shot",&"piercing_arrow",&"slowing_arrow"]
+const DIRECTIONAL: Array[StringName] = [&"fire_wall",&"lightning_wall",&"phantom_barrier",&"hunter_covering_shot",&"sentinel_piercing_shot",&"defender_wall_advance",&"defender_retreat_guard",&"berserker_wound_leap",&"berserker_blood_rift",&"elementalist_ember_path",&"haunt",&"slash",&"defender_counterstroke",&"defender_line_lock",&"defender_riposte",&"concentrated_rage",&"fireball",&"electric_discharge",&"double_shot",&"piercing_arrow",&"slowing_arrow"]
 const POINT_AREAS: Array[StringName] = [&"sentinel_net_shot",&"foliage_shelter",&"hunter_total_cover",&"hunter_freezing_trap",&"hunter_tar_trap",&"hunter_thorn_trap",&"defender_anchor",&"spiritualist_dissipation",&"arrow_rain",&"snare_trap",&"explosive_trap",&"elementalist_flame_burst",&"spiritualist_spectral_veil"]
 const SELF_AREAS: Array[StringName] = [&"defender_reprisal_wave",&"piercing_shout",&"terrifying_shout",&"elementalist_glacial_ring",&"elementalist_tri_nova"]
 const SELF_STATE: Array[StringName] = [&"perseverance",&"fury",&"extended_aim",&"sentinel_absolute_focus"]
@@ -15,6 +15,8 @@ var rank_context: Dictionary = {}
 var projectiles: Array[Dictionary] = []
 var ground_points: Array[Dictionary] = []
 var travel_plan: Dictionary = {}
+var field_height := 0.0
+var field_plan: WorldGroundField
 var committed := false
 var action_kind := -1
 var _source: ExpeditionWorldPoint

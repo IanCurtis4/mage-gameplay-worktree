@@ -32,7 +32,7 @@ Player/Mage/Sentinel e flecha hostil, chuva/traps/blast ancorados, escudo/barrei
 piche, ocultação/budget/grace, coleta, movimento/dash temporal, AI autônoma/leash,
 cast obsoleto e callbacks que removem alvos. Isso não equivale ao cast completo
 dessas ativas: entrada/preview/composição nominal ainda precisam ser integrados.
-As retomadas acrescentam WorldSkillCast:59 IDs nominais,58 com preview/preparo/
+As retomadas acrescentam WorldSkillCast:62 IDs nominais,61 com preview/preparo/
 commit3D comum e Explosivo por reserva explícita+captura interna do próximo auto. Dreno/Procissão/Véu, áreas elementais, chuva/traps base,
 projéteis e melee consomem a intenção capturada. A prova nominal é delimitada no
 recibo; isso ainda não certifica os dez kits nem os 27 efeitos compostos.
@@ -40,11 +40,14 @@ SoulImpact, Assombro, Dissipação e gritos de área também receberam prova nom
 de pulso/oclusão/controles, sem alterar o dano canônico.
 Marco/Onda/Fenda e Avanço/Retirada/Salto receberam bindings nominais; Contraforte
 conserva direção3D durante a guarda. Armadilhas/reação, recuo/Leque e coberturas
-da Caçadora também têm consumidores nominais ligados. Geômetra e paredes
+da Caçadora também têm consumidores nominais ligados. Fogo/Raios/Barreira
+têm campos orientados com altura explícita, suporte lateral plano e segmentos
+reais de movimento. Gelo, Geômetra e paredes em suporte lateral não plano
 continuam bloqueios. Cabeça/Perfurante/Concussão têm voo3D; Rede/Explosivo têm
 voo/burst e reserva próprios. API e recibo contêm o escopo exato; D05 visual não
-foi aprovado. Supervisão Luna retomada no candidato de nascimento/coleta:34 checks
-incluem os17 F1 atuais; não constitui auditoria semântica nem aceite F1/produto.
+foi aprovado. Supervisão histórica de nascimento/coleta:34 testes incluem os17 F1 daquele
+candidato. A validação dos campos e seus limites ficam no recibo atual; supervisão
+de execução não constitui auditoria semântica nem aceite F1/produto.
 
 Nascimento técnico/animal finito/coleta agora têm consumidores reais: entrada
 spawn_world_enemy com WorldPoint/profile/revisão explícitos, claim/WeakRef do Mestre,
@@ -96,7 +99,7 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `explosive_trap` — Armadilha Explosiva | `ground_connected` | Preview/commit e área ligados nas identidades de origem; Hunter tem abertura, LoS e reação espacial de Piche |
 | `extended_aim` — Mira Estendida | `self_only` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `fire_spear` — Lança de Fogo | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
-| `fire_wall` — Parede de Fogo | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `fire_wall` — Parede de Fogo | `ground_connected` | Preview/preparo/commit e quatro cilindros com altura explícita; burn único por ator, suporte lateral plano; fields_test |
 | `fireball` — Bola de Fogo | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `foliage_shelter` — Abrigo de Folhagem | `ground_connected` | Placement/área/camuflagem espacial ligados; Archer sem budget Hunter, Hunter com CD comum/raio110 sem graça extra |
 | `fury` — Fúria | `self_only` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
@@ -119,10 +122,10 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `ice_spear` — Lança de Gelo | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `ice_wall` — Parede de Gelo | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `lightning` — Relâmpago | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
-| `lightning_wall` — Parede de Raios | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `lightning_wall` — Parede de Raios | `ground_connected` | Preview/preparo/commit e cápsula orientada; cruzamento por segmentos reais, ICD sem tick; suporte lateral plano; fields_test |
 | `mage_mana_regeneration` — Regeneração de SP | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `perseverance` — Perseverança | `self_only` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
-| `phantom_barrier` — Barreira Fantasma | `ground_connected` | Consumidor espacial opt-in ligado; cast/placement/preview ainda bloqueados |
+| `phantom_barrier` — Barreira Fantasma | `ground_connected` | Preview/preparo/commit, faixa orientada e flecha hostil real; altura explícita, capacidade só no contato; suporte lateral plano; fields_test |
 | `piercing_arrow` — Flecha Perfurante | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
 | `piercing_shout` — Grito Perfurante | `ground_connected` | Preview/preparo/commit e consumidor espacial ligados; teste nominal area_cast PASS59 |
 | `provoke` — Provocar | `direct_volume` | Preview/preparo/commit espaciais ligados; prova nominal delimitada no recibo |
@@ -223,7 +226,7 @@ source/target/WorldPoint quando o consumidor correspondente for adaptado.
 | Componente | Fronteira |
 |---|---|
 | `basic_attack` | volume direto / projétil real nas dez identidades; controlador ligado; input/visual/composição dos kits pendentes |
-| `burn_tick` | inherit_parent; burn aceito acompanha corpo sem nova LoS; isso não certifica a Parede de Fogo pendente |
+| `burn_tick` | inherit_parent; burn aceito acompanha corpo sem nova LoS; Parede de Fogo tem fonte única ligada no fields_test, com suporte lateral plano |
 | `bleed_tick` | inherit_parent; fluxo canônico de bleed aceito, sem nova LoS; produtores ainda não adaptados continuam pendentes |
 | `hunter_thorn_bleed` | inherit_parent; Espinhos aplicado acompanha alvo que sobe; prova dirigida hunter_traps |
 | `berserker_blood_rift_tick` | inherit_parent; Fenda aplicada acompanha alvo que sobe, sem nova LoS; prova dirigida guard_travel |

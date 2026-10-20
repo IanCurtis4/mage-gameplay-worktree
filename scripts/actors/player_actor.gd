@@ -1091,7 +1091,7 @@ func use_fire_wall(direction: Vector2) -> bool:
 	if class_id != &"mage" or rank_definition == null or not _can_spend(&"fire_wall"):
 		return false
 	var facing := _resolved_facing(direction)
-	_spend(&"fire_wall")
+	if not _spend(&"fire_wall"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"fire_wall")
 	var request := _make_magic_request(null, &"fire_wall", _magic_power(&"fire_wall"), definition.accuracy_mode, definition.can_crit)
@@ -1379,7 +1379,7 @@ func use_lightning_wall(direction: Vector2) -> bool:
 	if class_id != &"mage" or _runtime_rank_definition(&"lightning_wall") == null or not _can_spend(&"lightning_wall"):
 		return false
 	var facing := _resolved_facing(direction)
-	_spend(&"lightning_wall")
+	if not _spend(&"lightning_wall"): return false
 	reveal_from_offense()
 	var definition := ClassCatalog.skill_definition(&"lightning_wall")
 	var request := _make_magic_request(null, &"lightning_wall", _magic_power(&"lightning_wall"), definition.accuracy_mode, definition.can_crit)
@@ -1823,7 +1823,7 @@ func use_phantom_barrier(direction: Vector2) -> bool:
 	if class_id != &"mage" or rank_definition == null or not _can_spend(&"phantom_barrier"):
 		return false
 	var facing := _resolved_facing(direction)
-	_spend(&"phantom_barrier")
+	if not _spend(&"phantom_barrier"): return false
 	reveal_from_offense()
 	phantom_barrier_requested.emit(facing, rank_definition.range, roundi(rank_definition.power))
 	resources_changed.emit()
@@ -2647,10 +2647,13 @@ func world_cast_ground_points(skill: StringName) -> Array[ExpeditionWorldPoint]:
 func world_cast_projectiles(skill: StringName) -> Array[Dictionary]:
 	return _world_executing_cast.projectiles.duplicate(true) if _world_executing_cast != null and _world_executing_cast.skill_id == skill and _world_executing_cast.committed else []
 
-func preview_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: Vector3, victim: CombatActor, actors: Array[CombatActor], revision: int, requested_rank: int = 0) -> Dictionary:
+func world_cast_field(skill: StringName) -> WorldGroundField:
+	return _world_executing_cast.field_plan if _world_executing_cast != null and _world_executing_cast.skill_id == skill and _world_executing_cast.committed else null
+
+func preview_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: Vector3, victim: CombatActor, actors: Array[CombatActor], revision: int, requested_rank: int = 0, field_height: float = 0.0) -> Dictionary:
 	if skill == &"sentinel_explosive_shot": return WorldSkillCast.failure(&"reservation_entry_required")
 	var saved_result := _world_cast_result.duplicate(true)
-	var command := _capture_world_skill(skill,anchor,facing,victim,actors,revision,requested_rank)
+	var command := _capture_world_skill(skill,anchor,facing,victim,actors,revision,requested_rank,field_height)
 	var capture_result := _world_cast_result.duplicate(true)
 	_world_cast_result = saved_result
 	if command == null: return capture_result
@@ -2658,13 +2661,13 @@ func preview_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing
 	_cast_rank_context = command.rank_context
 	var result := _validate_world_skill(command)
 	_cast_rank_context = previous
-	if result["ok"]: result["data"] = {"skill_id":skill,"geometry_revision":revision,"source":command.source().to_data(),"anchor":command.anchor().to_data() if command.anchor() != null else {},"projectiles":command.projectiles.duplicate(true),"ground_points":command.ground_points.duplicate(true),"travel_plan":command.travel_plan.duplicate(true)}
+	if result["ok"]: result["data"] = {"skill_id":skill,"geometry_revision":revision,"source":command.source().to_data(),"anchor":command.anchor().to_data() if command.anchor() != null else {},"projectiles":command.projectiles.duplicate(true),"ground_points":command.ground_points.duplicate(true),"travel_plan":command.travel_plan.duplicate(true),"field":command.field_plan.describe() if command.field_plan != null else {}}
 	return result
 
-func request_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: Vector3, victim: CombatActor, actors: Array[CombatActor], revision: int, requested_rank: int = 0) -> Dictionary:
+func request_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: Vector3, victim: CombatActor, actors: Array[CombatActor], revision: int, requested_rank: int = 0, field_height: float = 0.0) -> Dictionary:
 	if _world_executing_cast != null or _world_requesting: return WorldSkillCast.failure(&"cast_busy")
 	if skill == &"sentinel_explosive_shot": return WorldSkillCast.failure(&"reservation_entry_required")
-	var command := _capture_world_skill(skill,anchor,facing,victim,actors,revision,requested_rank)
+	var command := _capture_world_skill(skill,anchor,facing,victim,actors,revision,requested_rank,field_height)
 	if command == null: return _world_cast_result.duplicate(true)
 	var previous := _cast_rank_context
 	_cast_rank_context = command.rank_context
@@ -2688,13 +2691,14 @@ func request_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing
 	_world_cast_result = result.duplicate(true)
 	return result
 
-func _capture_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: Vector3, victim: CombatActor, actors: Array[CombatActor], revision: int, requested_rank: int) -> WorldSkillCast:
+func _capture_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: Vector3, victim: CombatActor, actors: Array[CombatActor], revision: int, requested_rank: int, field_height: float = 0.0) -> WorldSkillCast:
 	if world_motion == null or not world_motion.is_current_world(): _world_cast_result = WorldSkillCast.failure(&"spatial_binding_required"); return null
 	if not WorldSkillCast.supports(skill): _world_cast_result = WorldSkillCast.failure(&"unsupported_world_skill"); return null
 	if not facing.is_finite() or facing.is_zero_approx() or (skill in WorldSkillCast.POINT_AREAS and anchor == null): _world_cast_result = WorldSkillCast.failure(&"invalid_world_intent"); return null
 	var previous := push_cast_rank(skill,requested_rank)
 	var command := WorldSkillCast.new()
 	command.capture(self,skill,anchor,facing,victim,actors,revision,_cast_rank_context)
+	command.field_height = field_height
 	restore_cast_rank(previous)
 	return command
 
@@ -2712,6 +2716,20 @@ func _validate_world_skill(command: WorldSkillCast, using_reservation: bool = fa
 		if not focus_available: return WorldSkillCast.failure(&"skill_unavailable")
 	var valid := command.geometry_check(self)
 	if not valid["ok"]: return valid
+	if command.skill_id in [&"fire_wall",&"lightning_wall",&"phantom_barrier"]:
+		var field := WorldGroundField.new()
+		var centers: Array[float] = [0.0]
+		var half_length := PhantomBarrier.HALF_LENGTH
+		var half_width := PhantomBarrier.HALF_WIDTH
+		if command.skill_id == &"fire_wall":
+			half_length = FireWall.PILLAR_SPACING*float(FireWall.PILLAR_COUNT-1)*0.5
+			half_width = FireWall.PILLAR_RADIUS
+			centers.clear()
+			for index: int in FireWall.PILLAR_COUNT: centers.append((float(index)-float(FireWall.PILLAR_COUNT-1)*0.5)*FireWall.PILLAR_SPACING)
+		elif command.skill_id == &"lightning_wall": half_length = LightningWall.HALF_LENGTH; half_width = LightningWall.HALF_WIDTH
+		var placed := field.configure(world_motion.geometry,command.source(),command.direction(self),skill_range(command.skill_id),world_motion.profile(),command.skill_id,command.field_height,command.revision,{"half_length":half_length,"half_width":half_width,"centers":centers})
+		if not placed["ok"]: return placed
+		command.field_plan = field
 	if is_hunter() and command.skill_id in HunterMath.TRAP_IDS:
 		var sight := world_motion.geometry.query_attack({"geometry_rule_id":&"direct_volume","range":1.0e20},command.source(),command.anchor(),command.revision)
 		if not sight["ok"] or not sight["data"]["hit"]: return WorldSkillCast.failure(&"placement_occluded")
@@ -2791,6 +2809,9 @@ func _commit_world_skill(command: WorldSkillCast) -> Dictionary:
 	var actors := command.actors()
 	var accepted := false
 	match command.skill_id:
+		&"fire_wall": accepted = use_fire_wall(flat)
+		&"lightning_wall": accepted = use_lightning_wall(flat)
+		&"phantom_barrier": accepted = use_phantom_barrier(flat)
 		&"sentinel_net_shot": accepted = use_sentinel_net(point)
 		&"hunter_covering_shot": accepted = use_hunter_covering_shot(flat)
 		&"hunter_total_cover": accepted = use_hunter_total_cover(point)

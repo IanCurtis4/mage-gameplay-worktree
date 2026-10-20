@@ -18,6 +18,20 @@ var _previous_positions: Dictionary[int, Vector2] = {}
 var _inside: Dictionary[int, bool] = {}
 var _cooldowns: Dictionary[int, float] = {}
 
+var _world_advancing := false
+var world_field: WorldGroundField
+func bind_world_field(field: WorldGroundField) -> Dictionary:
+	if world_field != null: return WorldSkillCast.failure(&"already_bound")
+	if field == null or not field.is_current(): return WorldSkillCast.failure(&"world_reconfigured")
+	world_field = field
+	world_field.track(self,targets)
+	_inside.clear()
+	for actor: CombatActor in world_field.actors(): _inside[actor.get_instance_id()] = world_field.contains(actor)
+	return {"ok":true,"error_code":&""}
+func _on_world_field_motion(segments: Array[Dictionary], actor: WeakRef) -> void: world_field.queue_motion(segments,actor)
+func _exit_tree() -> void:
+	if world_field != null: world_field.close()
+
 func configure(caster: CombatActor, facing: Vector2, damage_request: DamageRequest, potential_targets: Array[CombatActor], placement_range: float) -> void:
 	assert(caster != null and damage_request != null)
 	assert(is_finite(placement_range) and placement_range >= 0.0)
@@ -36,6 +50,8 @@ func configure(caster: CombatActor, facing: Vector2, damage_request: DamageReque
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 
 func _process(delta: float) -> void:
+	if _world_advancing: return
+	if is_queued_for_deletion() or not is_finite(delta) or delta <= 0: return
 	if is_inside_tree() and get_tree().paused:
 		return
 	if remaining <= 0.0:
@@ -46,6 +62,12 @@ func _process(delta: float) -> void:
 		return
 	for actor_id: int in _cooldowns.keys():
 		_cooldowns[actor_id] = maxf(0.0, _cooldowns[actor_id] - delta)
+	if world_field != null:
+		if not world_field.is_current(): queue_free(); return
+		_world_advancing = true
+		_advance_world_field()
+		_world_advancing = false
+		return
 	for actor: CombatActor in targets:
 		if actor == null or not is_instance_valid(actor):
 			continue
@@ -67,6 +89,21 @@ func _process(delta: float) -> void:
 		_previous_positions[actor_id] = current
 	queue_redraw()
 
+func _advance_world_field() -> void:
+	for candidate: Variant in world_field.actors():
+		if not is_instance_valid(candidate) or candidate.is_queued_for_deletion(): continue
+		var actor := candidate as CombatActor
+		if is_queued_for_deletion(): return
+		var id := actor.get_instance_id()
+		for segment: Dictionary in world_field.take_motion(actor):
+			var start_inside := world_field.contains_point(actor,segment["from"])
+			if not start_inside and world_field.crossed(actor,segment) and float(_cooldowns.get(id,0.0)) <= 0:
+				_cooldowns[id] = TARGET_INTERVAL # Claim before any callback/reentry.
+				var impact := request.scheduled_tick(); impact.target_id = id
+				crossed.emit(impact,actor)
+			if not is_instance_valid(actor) or not actor.is_alive() or is_queued_for_deletion(): break
+		if is_instance_valid(actor) and actor.is_alive(): _inside[id] = world_field.contains(actor)
+
 func _within_band(point: Vector2, radius: float) -> bool:
 	var wall_start := global_position - axis * HALF_LENGTH
 	var wall_end := global_position + axis * HALF_LENGTH
@@ -87,6 +124,7 @@ func _swept_contact(previous: Vector2, current: Vector2, radius: float) -> bool:
 	return distance <= radius + HALF_WIDTH
 
 func _draw() -> void:
+	if world_field != null: return # D05 projection is pending.
 	var alpha := minf(1.0, remaining * 2.0)
 	draw_rect(Rect2(-HALF_WIDTH, -HALF_LENGTH, HALF_WIDTH * 2.0, HALF_LENGTH * 2.0), Color(0.94, 0.80, 0.24, 0.10 * alpha))
 	draw_line(Vector2(0, -HALF_LENGTH), Vector2(0, HALF_LENGTH), Color(1.0, 0.88, 0.38, 0.78 * alpha), 3.0, true)

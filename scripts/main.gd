@@ -1143,10 +1143,10 @@ func _sync_defender_anchor() -> void:
 			_defender_slowed_enemies[enemy.get_instance_id()] = enemy
 			enemy.apply_slow(PlayerActor.DEFENDER_ANCHOR_SLOW_FRACTION, player.defender_anchor_remaining, &"defender_anchor")
 
-func cast_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: Vector3, victim: CombatActor, revision: int, rank: int = 0) -> Dictionary:
+func cast_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: Vector3, victim: CombatActor, revision: int, rank: int = 0, field_height: float = 0.0) -> Dictionary:
 	if not is_instance_valid(player): return WorldSkillCast.failure(&"spatial_binding_required")
 	if geometer_casting != null and geometer_casting.wall_field != null and skill in WorldSkillCast.PROJECTILES: return WorldSkillCast.failure(&"spatial_interceptor_required")
-	return player.request_world_skill(skill,anchor,facing,victim,enemies,revision,rank)
+	return player.request_world_skill(skill,anchor,facing,victim,enemies,revision,rank,field_height)
 
 func _spawn_world_cast_projectiles(skill: StringName, request: DamageRequest, victim: CombatActor, hit_limit: int, callback: Callable, mage: bool, tint: Color, discharge_bonus: float = 0.0, sentinel: bool = false) -> void:
 	if not player.world_motion.is_current_world(): return
@@ -1537,6 +1537,9 @@ func _on_mage_projectile_hit(request: DamageRequest, target_actor: CombatActor) 
 func _on_fire_wall_requested(direction: Vector2, burn_request: DamageRequest) -> void:
 	var wall := FireWall.new()
 	wall.configure(player, direction, burn_request, enemies, player.skill_range(&"fire_wall"))
+	if player.world_motion != null:
+		var field := player.world_cast_field(&"fire_wall")
+		if field == null or not wall.bind_world_field(field)["ok"]: wall.free(); return
 	add_child(wall)
 	wall.add_to_group("player_effects")
 
@@ -1714,14 +1717,17 @@ func _on_lightning_wall_requested(direction: Vector2, request: DamageRequest) ->
 	var wall := LightningWall.new()
 	wall.configure(player, direction, request, enemies, player.skill_range(&"lightning_wall"))
 	wall.crossed.connect(_on_lightning_wall_crossed)
+	if player.world_motion != null:
+		var field := player.world_cast_field(&"lightning_wall")
+		if field == null or not wall.bind_world_field(field)["ok"]: wall.free(); return
 	add_child(wall)
 	wall.add_to_group("player_effects")
 
 func _on_lightning_wall_crossed(request: DamageRequest, target_actor: CombatActor) -> void:
-	if target_actor == null or not target_actor.is_alive():
+	if not is_instance_valid(target_actor) or not target_actor.is_alive():
 		return
 	var result := target_actor.apply_damage(request, rng)
-	if not result.is_empty() and bool(result["landed"]) and float(result["actual_damage"]) > 0.0 and target_actor.is_alive():
+	if not result.is_empty() and bool(result["landed"]) and float(result["actual_damage"]) > 0.0 and is_instance_valid(target_actor) and not target_actor.is_queued_for_deletion() and target_actor.is_alive():
 		target_actor.apply_electrified(4.0)
 
 func _on_soul_impact_requested(request: DamageRequest, target_actor: CombatActor) -> void:
@@ -2082,6 +2088,9 @@ func _on_haunt_requested(origin: Vector2, direction: Vector2, cone_range: float,
 func _on_phantom_barrier_requested(direction: Vector2, placement_range: float, capacity: int) -> void:
 	var barrier := PhantomBarrier.new()
 	barrier.configure(player, direction, enemies, placement_range, capacity)
+	if player.world_motion != null:
+		var field := player.world_cast_field(&"phantom_barrier")
+		if field == null or not barrier.bind_world_field(field)["ok"]: barrier.free(); return
 	add_child(barrier)
 	barrier.add_to_group("player_effects")
 

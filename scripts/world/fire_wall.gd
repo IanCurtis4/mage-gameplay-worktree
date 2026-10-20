@@ -15,6 +15,17 @@ var remaining := DURATION
 var pillar_offsets := PackedVector2Array()
 var _previous_positions: Dictionary[int, Vector2] = {}
 
+var world_field: WorldGroundField
+func bind_world_field(field: WorldGroundField) -> Dictionary:
+	if world_field != null: return WorldSkillCast.failure(&"already_bound")
+	if field == null or not field.is_current(): return WorldSkillCast.failure(&"world_reconfigured")
+	world_field = field
+	world_field.track(self,targets)
+	return {"ok":true,"error_code":&""}
+func _on_world_field_motion(segments: Array[Dictionary], actor: WeakRef) -> void: world_field.queue_motion(segments,actor)
+func _exit_tree() -> void:
+	if world_field != null: world_field.close()
+
 func configure(caster: CombatActor, facing: Vector2, damage_request: DamageRequest, potential_targets: Array[CombatActor], placement_range: float) -> void:
 	assert(damage_request != null)
 	assert(is_finite(placement_range) and placement_range >= 0.0)
@@ -30,7 +41,19 @@ func configure(caster: CombatActor, facing: Vector2, damage_request: DamageReque
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 
 func _process(delta: float) -> void:
+	if is_queued_for_deletion() or (is_inside_tree() and get_tree().paused) or not is_finite(delta) or delta <= 0: return
 	remaining = maxf(0.0, remaining - delta)
+	if world_field != null:
+		if not world_field.is_current(): queue_free(); return
+		for candidate: Variant in world_field.actors():
+			if not is_instance_valid(candidate) or candidate.is_queued_for_deletion(): continue
+			var actor := candidate as CombatActor
+			var touched := world_field.contains(actor)
+			for segment: Dictionary in world_field.take_motion(actor):
+				if world_field.crossed(actor,segment): touched = true
+			if touched: actor.apply_burn(burn_request,BURN_DURATION)
+		if remaining <= 0: queue_free()
+		return
 	for actor: CombatActor in targets:
 		if actor == null or not is_instance_valid(actor) or not actor.is_alive():
 			continue
@@ -46,6 +69,7 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 func _draw() -> void:
+	if world_field != null: return # D05 projection is pending.
 	var alpha := minf(1.0, remaining * 2.0)
 	for index: int in range(pillar_offsets.size()):
 		var offset := pillar_offsets[index]

@@ -1,5 +1,7 @@
 class_name WorldActorMotion
 extends RefCounted
+
+signal traversed(segments: Array[Dictionary])
 ## Logical movement, independent of rendering. Surface transitions occur only in a current route.
 var geometry: WorldGeometry
 var _point: ExpeditionWorldPoint
@@ -50,6 +52,7 @@ func advance(distance: float) -> Dictionary:
 	if not result["ok"]:
 		_point = before
 		_cursor = previous_cursor
+	elif not result["data"]["segments"].is_empty(): traversed.emit(result["data"]["segments"].duplicate(true))
 	return result
 func _advance(distance: float) -> Dictionary:
 	if geometry == null: return {"ok":false,"error_code":&"invalid_geometry"}
@@ -90,9 +93,14 @@ func teleport(destination: ExpeditionWorldPoint, maximum_range: float, revision:
 	var check := geometry.query_attack({"geometry_rule_id":&"teleport_legal","range":maximum_range,"traversal":_profile},_point,destination,revision)
 	if not check["ok"]: return check
 	if not check["data"]["hit"]: return _failure(&"illegal_teleport")
+	var before := point()
 	_point = ExpeditionWorldPoint.create(destination.stage_id,destination.surface_id,destination.position)
 	_route.clear()
-	return geometry.set_occupant(_occupant_id,_point,_profile,revision)
+	var registered := geometry.set_occupant(_occupant_id,_point,_profile,revision)
+	if registered["ok"]:
+		var segments: Array[Dictionary] = [{"from":before.to_data(),"to":point().to_data(),"kind":&"teleport"}]
+		traversed.emit(segments)
+	return registered
 func _failure(code: StringName) -> Dictionary:
 	return {"ok":false,"error_code":code,"geometry_revision":geometry.geometry_revision if geometry != null else 0,"data":{}}
 

@@ -208,7 +208,7 @@ seguem pendentes. APIs de consumidor não equivalem a suporte completo de kit.
 ## Entrada transacional de habilidades
 
 `PlayerActor.preview_world_skill(skill, anchor: WorldPoint, facing: Vector3,
-victim: CombatActor, actors: Array[CombatActor], revision, requested_rank=0)`
+victim: CombatActor, actors: Array[CombatActor], revision, requested_rank=0, field_height=0.0)`
 retorna `{ok,error_code,data}`. Preview não inicia preparo, não move o ator,
 não paga nem altera recarga/status da última intenção. Quando aceita, data contém
 skill_id, geometry_revision, source/anchor copiados e specs de todos os projéteis.
@@ -249,14 +249,15 @@ configura suas três áreas/schedule originais; Dreno/Procissão iniciam os guar
 espaciais existentes. Cones/linhas corpo a corpo consultam direção/LoS 3D no
 handler canônico, sem refazer fórmulas. Os placeholders Vector2 são apresentação.
 
-Whitelist nominal em WorldSkillCast (59 IDs), também exposta como cast_entry no
+Whitelist nominal em WorldSkillCast (62 IDs), também exposta como cast_entry no
 inventário: alvo dirigido, cones/linhas,14 tipos de projétil,13 placements,
 cinco áreas próprias e quatro estados self_only. Explosivo usa captura interna
-pelo próximo auto e API de reserva própria;58 IDs admitem request comum. Isso
+pelo próximo auto e API de reserva própria;61 IDs admitem request comum. Isso
 classifica intenções, sem certificar todos os efeitos de um kit. Shield Wall/dash/teleporte conservam
 as APIs espaciais próprias já documentadas. As cinco famílias de armadilha,
 recuo/Leque e coberturas da Caçadora usam os bindings abaixo. Rede/Explosivo usam
-voo/áreas/reserva próprios abaixo. Geômetra e paredes continuam pendentes.
+voo/áreas/reserva próprios abaixo. Fogo/Raios/Barreira usam os campos descritos
+abaixo; Gelo, Geômetra e suporte lateral não plano continuam pendentes.
 Marco/Onda/Fenda e Avanço/Retirada/Salto usam os bindings descritos abaixo.
 
 WorldTargetLock.configure(caster,target,range,revision) valida alcance/LoS somente
@@ -425,7 +426,7 @@ Bindings opt-in e fixtures dirigidas não habilitam apresentação D05 ou campan
 
 ## Rede e munição Explosiva do Sentinela
 
-WorldSkillCast classifica59 IDs nominais: Rede acrescenta intenção de ponto e
+Na retomada de Rede/Explosivo, WorldSkillCast classificava59 IDs nominais: Rede acrescenta intenção de ponto e
 Explosivo usa a captura interna de alvo. Explosivo NÃO admite request/preview
 comum: retorna reservation_entry_required. A entrada explícita é
 PlayerActor.prepare_world_sentinel_explosive(revision) -> Dictionary, que valida
@@ -520,3 +521,59 @@ Pickup bound com jogador sem binding é recusado. Erro transitório preserva tic
 pickup e RNG; retorno legal entrega os tickets já emitidos, sem novo roll. Ator
 morto libera sua ocupação no cleanup. Apresentação multialtura/death visual segue
 pendente D05; essas APIs e fixtures não certificam campanha ou save pessoal.
+
+## Campos Fogo/Raios/Barreira com altura explícita
+
+preview_world_skill e request_world_skill recebem field_height:float=0.0 após
+requested_rank; RunController.cast_world_skill o recebe após rank. Os demais
+casts conservam seus argumentos/semântica. Para fire_wall, lightning_wall e
+phantom_barrier, altura ausente/não finita/não positiva falha com
+authored_field_height_required antes de custo, root, recarga ou publicação.
+Altura é dado técnico explícito do chamador, não dimensão derivada de sprite nem
+valor de produção escolhido por F1. Direção precisa ser horizontal não nula.
+Preview acrescenta data.field, um DTO copiado com kind/anchor/normal/height/
+half_length/half_width. Mutar esse DTO não altera um cast posterior.
+
+WorldGroundField.configure(world,source,facing,placement_range,traversal,kind,
+vertical_extent,revision,layout) captura geometria/epoch, suporte e direção.
+Layout interno vem das constantes canônicas dos três nodes; não recalcula dano.
+ground_line_samples mede o alcance real3D até o centro; ground_line_point_at
+consulta os extremos laterais e quatro centros de Fogo, com raio/altura e
+clearance explícitos. Não inventa suporte, snap, rota desviada ou piso próximo.
+Neste checkpoint, diferença de altura lateral retorna non_planar_field_support
+gratuitamente; campo inclinado/piecewise ainda é lacuna. Há suporte para eixos
+laterais planos, inclusive centro em rampa se o footprint permanecer no mesmo y.
+Esse limite não certifica paredes em todas as superfícies possíveis.
+
+WorldActorMotion.traversed(segments:Array[Dictionary]) emite cópia dos segmentos
+reais somente após avanço/registro bem-sucedidos. Cada segmento de caminhada
+conserva from/to com suporte próprio. Não reconstrói uma corda entre extremos
+quando a rota passa por rampa/ponte. Teleport emite relocação from/to com
+kind=teleport após sucesso; contato de campo exige suporte exato no ponto
+interpolado, em uma das superfícies dos extremos. Não é certificação de travessia
+teleportada por todo suporte intermediário. Falha de movimento não emite contato.
+
+world_cast_field(skill) fornece o plano somente durante emissão comprometida.
+O controlador liga FireWall/LightningWall/PhantomBarrier reais; track captura
+alvos fracos, conecta seus segmentos e close desconecta no cleanup. Contatos
+usam o corpo explícito, volume vertical e ground_connected na revisão atual.
+Mesmo x/z em piso superior não é contato. Mudança de epoch cancela o campo;
+mudança de build não reinterpreta emissão já paga. Pausa congela relógio/contatos.
+
+Fogo usa quatro cilindros nos espaçamentos/raios existentes, um único burn source
+por ator; o DoT já aplicado continua pela autoridade canônica. Raios usa cápsula
+horizontal com tampas circulares, não cantos de um retângulo expandido. Barreira
+usa faixa retangular orientada. Ocupação inicial de Raios/Barreira não cria
+travessia; segmentos que entram/cruzam aplicam o efeito nominal, com claim do ICD
+antes de callbacks. Não há tick por permanecer dentro. Alvos removidos durante
+outro impacto são filtrados antes da conversão tipada; reentrada não avança o
+relógio ou duplica hit.
+
+WorldEffectVolume.configure_oriented(world,point,profile,normal,half_length,
+half_width,height,revision) adiciona caixa local orientada horizontalmente.
+PhantomBarrier.world_interception_fraction usa esse volume para flechas hostis
+reais: altura/raio do cilindro e ordem de contato precedem absorb_projectile.
+Flecha acima do topo não gasta capacidade; capacidade esgotada deixa a próxima
+passar. Entrada 2D de interceptação recusa node já ligado a volume espacial.
+Duração, ICDs, fonte de slow/weaken, potência e capacidade por rank permanecem
+canônicos. Os draws bound aguardam D05; nenhuma projeção visual foi criada.
