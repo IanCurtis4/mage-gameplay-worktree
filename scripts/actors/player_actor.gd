@@ -2275,6 +2275,7 @@ func is_geometer() -> bool:
 	return class_id == &"mage" and run_state != null and run_state.uses_persistent_build() and run_state.build_snapshot.evolution_id == &"mg_ar"
 
 func geometer_shot_check(command: GeometerCastCommand, construction: GeometerConstructionState, actors: Array[CombatActor]) -> Dictionary:
+	if world_motion != null: return {"ok":false,"reason":"Traçado espacial requer um ponto explícito do mundo.","error_code":&"world_intent_required"}
 	if not is_geometer() or command == null or construction == null or not GeometerCastCommand.is_trace_skill(command.skill_id) or command.element not in GeometerGeometry.ELEMENTS or command.actor_id < 0 or not command.point.is_finite():
 		return {"ok": false, "reason": "Comando de Traçado inválido."}
 	if is_inside_tree() and get_tree().paused:
@@ -2335,6 +2336,7 @@ func geometer_durations() -> Vector2:
 	return Vector2(minf(12.0, durations.x), minf(12.0, durations.y))
 
 func geometer_action_check(command: GeometerCastCommand, construction: GeometerConstructionState, actors: Array[CombatActor]) -> Dictionary:
+	if world_motion != null: return {"ok":false,"reason":"Comando geométrico espacial requer entrada própria.","error_code":&"world_intent_required"}
 	if command != null and GeometerCastCommand.is_trace_skill(command.skill_id):
 		return geometer_shot_check(command, construction, actors)
 	if not is_geometer() or command == null or construction == null or not GeometerCastCommand.is_grammar_skill(command.skill_id) or command.element not in GeometerGeometry.ELEMENTS or command.actor_id < 0 or not command.point.is_finite():
@@ -2689,6 +2691,10 @@ func request_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing
 	if skill == &"sentinel_explosive_shot": return WorldSkillCast.failure(&"reservation_entry_required")
 	var command := _capture_world_skill(skill,anchor,facing,victim,actors,revision,requested_rank,field_height)
 	if command == null: return _world_cast_result.duplicate(true)
+	return _request_captured_world_skill(command)
+
+func _request_captured_world_skill(command: WorldSkillCast) -> Dictionary:
+	var skill := command.skill_id
 	var previous := _cast_rank_context
 	_cast_rank_context = command.rank_context
 	var result := _validate_world_skill(command)
@@ -2710,6 +2716,51 @@ func request_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing
 	_cast_rank_context = previous
 	_world_cast_result = result.duplicate(true)
 	return result
+
+func preview_world_geometer(casting: GeometerCasting, skill: StringName, anchor: ExpeditionWorldPoint, victim: CombatActor, revision: int, requested_rank: int = 0) -> Dictionary:
+	var saved := _world_cast_result.duplicate(true)
+	var command := _capture_world_geometer(casting,skill,anchor,victim,revision,requested_rank)
+	var capture_result := _world_cast_result.duplicate(true)
+	_world_cast_result = saved
+	if command == null: return capture_result
+	var previous := _cast_rank_context
+	_cast_rank_context = command.rank_context
+	var result := _validate_world_skill(command)
+	_cast_rank_context = previous
+	return result
+
+func request_world_geometer(casting: GeometerCasting, skill: StringName, anchor: ExpeditionWorldPoint, victim: CombatActor, revision: int, requested_rank: int = 0) -> Dictionary:
+	if _world_executing_cast != null or _world_requesting: return WorldSkillCast.failure(&"cast_busy")
+	var command := _capture_world_geometer(casting,skill,anchor,victim,revision,requested_rank)
+	if command == null: return _world_cast_result.duplicate(true)
+	return _request_captured_world_skill(command)
+
+func _capture_world_geometer(casting: GeometerCasting, skill: StringName, anchor: ExpeditionWorldPoint, victim: CombatActor, revision: int, requested_rank: int) -> WorldGeometerCast:
+	if world_motion == null or not world_motion.is_current_world(): _world_cast_result = WorldSkillCast.failure(&"spatial_binding_required"); return null
+	if not is_instance_valid(casting) or casting.player != self or not casting.construction is WorldGeometerConstruction: _world_cast_result = WorldSkillCast.failure(&"spatial_construction_required"); return null
+	if skill != &"geometer_trace": _world_cast_result = WorldSkillCast.failure(&"spatial_recipe_pending"); return null
+	if victim != null and (not is_instance_valid(victim) or not victim.is_alive() or victim not in casting.targets): _world_cast_result = WorldSkillCast.failure(&"invalid_target"); return null
+	var previous := push_cast_rank(skill,requested_rank)
+	var command := WorldGeometerCast.new()
+	command.capture(self,skill,anchor,Vector3.RIGHT,victim,casting.targets,revision,_cast_rank_context)
+	command.bind_owner(casting,casting.construction.grammar.selected_element)
+	restore_cast_rank(previous)
+	return command
+
+func _commit_world_geometer(command: WorldGeometerCast) -> bool:
+	# _spend's final pure preflight and reservation are synchronous: no callbacks between them.
+	var point := command.destination()
+	if not _spend(command.skill_id): return false
+	var ticket := command.construction.reserve_world(point,command.target().get_instance_id() if is_instance_valid(command.target()) else 0,skill_rank(&"geometer_triangulation"),geometer_durations(),command.element,bool(run_state.composed_build().get("kit_policies",{}).get(&"geometer_ground_anchor",false)))
+	assert(ticket > 0,"Validated spatial Geometer reservation must commit synchronously")
+	var definition := ClassCatalog.skill_definition(command.skill_id)
+	var request := _make_magic_request(command.target(),command.skill_id,_magic_power(command.skill_id),definition.accuracy_mode,definition.can_crit)
+	var launch := {"ticket":ticket,"request":request,"target":command.target(),"point":point,"speed":skill_projectile_speed(command.skill_id),"range":skill_range(command.skill_id),"flight":command.flight.duplicate(true)}
+	command.owner().launch_world(launch,command)
+	reveal_from_offense()
+	presentation_action.emit(&"cast_release",_last_facing,0.12)
+	resources_changed.emit()
+	return true
 
 func _capture_world_skill(skill: StringName, anchor: ExpeditionWorldPoint, facing: Vector3, victim: CombatActor, actors: Array[CombatActor], revision: int, requested_rank: int, field_height: float = 0.0) -> WorldSkillCast:
 	if world_motion == null or not world_motion.is_current_world(): _world_cast_result = WorldSkillCast.failure(&"spatial_binding_required"); return null
@@ -2736,6 +2787,7 @@ func _validate_world_skill(command: WorldSkillCast, using_reservation: bool = fa
 		if not focus_available: return WorldSkillCast.failure(&"skill_unavailable")
 	var valid := command.geometry_check(self)
 	if not valid["ok"]: return valid
+	if command is WorldGeometerCast: return valid
 	if command.skill_id in [&"fire_wall",&"lightning_wall",&"phantom_barrier",&"ice_wall"]:
 		var field := WorldGroundField.new()
 		var centers: Array[float] = [0.0]
@@ -2825,6 +2877,10 @@ func _commit_world_skill(command: WorldSkillCast) -> Dictionary:
 	var valid := _validate_world_skill(command)
 	if not valid["ok"]: return valid
 	_world_executing_cast = command
+	if command is WorldGeometerCast:
+		var result := _commit_world_geometer(command)
+		_world_executing_cast = null
+		return {"ok":result,"error_code":&"" if result else &"skill_rejected","data":{"state":&"committed"} if result else {}}
 	var direction := command.direction(self)
 	var flat := Vector2(direction.x,direction.z)
 	if flat.is_zero_approx(): flat = _last_facing

@@ -107,7 +107,7 @@ causal original e não adiciona LoS a DoT já aplicado.
 | `geometer_collapse` — Colapso Geométrico | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `geometer_incidence` — Teorema de Incidência | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
 | `geometer_rewrite` — Reescrita | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
-| `geometer_trace` — Traçado Elemental | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
+| `geometer_trace` — Traçado Elemental | `ground_connected` | Entrada própria parcial: chão/alvo explícitos, sweep3D real, FIFO/portador/último suporte; um vértice ou dois iguais. Parede/triângulo ainda bloqueados antes de custo |
 | `geometer_translation` — Translação | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `geometer_triangulation` — Triangulação | `ground_connected` | Consumidor pendente; entrada legada bloqueada no binding |
 | `geometer_vector_memory` — Memória Vetorial | `inherit_parent` | Herança/estatística inventariada; consumidor pendente |
@@ -194,7 +194,7 @@ inventados emissores espaciais para thresholds de conjunto.
 | `augment/extra_fire_spear` | `fire_spear_count_flat` / `SKILL_RULE` | fire_spear | `mesma regra da habilidade`; consumidor pendente |
 | `augment/extra_ice_spear` | `ice_spear_count_flat` / `SKILL_RULE` | ice_spear | `mesma regra da habilidade`; consumidor pendente |
 | `augment/geometer_collapse_first_element` | `geometer_collapse_first_element_policy` / `KIT_RULE` | geometer_collapse | `geometer_collapse_first_element`; consumidor pendente |
-| `augment/geometer_ground_anchor` | `geometer_ground_anchor_policy` / `KIT_RULE` | geometer_trace, geometer_triangulation | `geometer_ground_anchor`; consumidor pendente |
+| `augment/geometer_ground_anchor` | `geometer_ground_anchor_policy` / `KIT_RULE` | geometer_trace, geometer_triangulation | `geometer_ground_anchor`; Traçado parcial provado: homing até impacto, chão fixo capturado apesar de remoção posterior. Triangulação pendente |
 | `augment/hunter_covering_fan` | `hunter_covering_fan_policy` / `KIT_RULE` | hunter_covering_shot | `hunter_covering_fan`; próximo corpo3D/LoS/claims/snapshot ligados |
 | `augment/hunter_marked_mechanism` | `hunter_marked_mechanism_policy` / `KIT_RULE` | hunter_freezing_trap, hunter_tar_trap, hunter_thorn_trap | `hunter_marked_mechanism`; ID capturado/preflight/trigger ligados |
 | `augment/pilot_archer_pressure` | `pilot_archer_pressure_effect` / `PROC` | contato causal original | `inherit_parent`; consumidor pendente |

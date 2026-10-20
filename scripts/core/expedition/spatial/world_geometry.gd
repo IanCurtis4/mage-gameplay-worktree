@@ -399,6 +399,26 @@ func _support_segment_fraction(cell: Dictionary, from: Vector3, to: Vector3, pro
 		if not _supported(cell,from.lerp(to,(cuts[index-1]+cuts[index])*0.5),profile["radius"],profile["height"]): return cuts[index-1]
 	return 1.0 if _supported(cell,to,profile["radius"],profile["height"]) else cuts[-2]
 
+func ground_line_to(source: ExpeditionWorldPoint, destination: ExpeditionWorldPoint, profile: Dictionary, revision: int) -> Dictionary:
+	if not _current(revision): return _failure(&"stale_geometry")
+	if source == null or destination == null: return _failure(&"invalid_ground_line")
+	if not _profile_valid(profile): return _failure(&"invalid_profile")
+	if not _point_valid(destination,float(profile.get("radius",-1.0)),float(profile.get("height",-1.0))): return _failure(&"invalid_support")
+	var heading := Vector3(destination.position.x-source.position.x,0,destination.position.z-source.position.z)
+	if heading.is_zero_approx():
+		var valid := position_query(source,profile,revision)
+		if not valid["ok"]: return valid
+		return _success({"points":[source.to_data()],"cost":0.0,"destination":destination.to_data()}) if source.to_data() == destination.to_data() else _failure(&"unsupported_contact")
+	var sampled := _ground_line_samples(source,heading,heading.length(),1,profile,revision,true)
+	if not sampled["ok"]: return sampled
+	if sampled["data"]["points"].is_empty(): return _failure(&"unsupported_contact")
+	var reached: Dictionary = sampled["data"]["points"][0]
+	if reached["stage_id"] != destination.stage_id or reached["surface_id"] != destination.surface_id or Vector3(reached["position"]).distance_to(destination.position) > EPS: return _failure(&"unsupported_contact")
+	var route: Array = sampled["data"]["route"]
+	var cost := 0.0
+	for index: int in range(1,route.size()): cost += Vector3(route[index-1]["position"]).distance_to(route[index]["position"])
+	return _success({"points":route.duplicate(true),"cost":cost,"destination":destination.to_data()})
+
 func ground_line_point_at(source: ExpeditionWorldPoint, horizontal: Vector2, profile: Dictionary, revision: int) -> Dictionary:
 	if not _current(revision): return _failure(&"stale_geometry")
 	if source == null or not horizontal.is_finite(): return _failure(&"invalid_ground_line")

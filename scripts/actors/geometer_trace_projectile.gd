@@ -3,6 +3,9 @@ extends PlayerProjectile
 ## Explicit point/actor delivery. Never collides with an unselected actor.
 
 signal delivered(ticket: int, success: bool, point: Vector2, victim: CombatActor)
+signal delivered_world(ticket: int, success: bool, point: ExpeditionWorldPoint, victim: CombatActor)
+var _world_ground: ExpeditionWorldPoint
+var _world_goal_offset := Vector3.ZERO
 
 var ticket := 0
 var element: StringName = &"fire"
@@ -19,8 +22,53 @@ func configure_trace(launch: Dictionary, command: GeometerCastCommand, origin: V
 	homing = command.actor_id > 0
 	rotation = 0.0
 
+func configure_world_trace(launch: Dictionary, command: WorldGeometerCast) -> Dictionary:
+	request = launch["request"]
+	ticket = int(launch["ticket"])
+	element = command.element
+	target = launch["target"]
+	homing = is_instance_valid(target)
+	speed = float(launch["speed"])
+	max_distance = float(launch["range"])
+	_world_ground = WorldGeometerNavigation.copy_point(launch["point"])
+	var plan: Dictionary = launch["flight"]
+	_world_goal_offset = plan["goal_offset"]
+	return bind_world_flight(command.construction.world,command.source(),plan["offset"],plan["direction"],plan["collider"],command.revision)
+
+func _advance_world_trace(delta: float) -> void:
+	remaining = maxf(0.0,remaining-delta)
+	if remaining <= 0.0 or request == null:
+		_finish_world(false,null); return
+	if homing and (not is_instance_valid(target) or not target.is_alive() or target.world_motion == null or not target.world_motion.is_current_world() or target.world_motion.geometry != world_flight.geometry):
+		_finish_world(false,null); return
+	var point := target.world_point() if homing else _world_ground
+	var goal := point.position+_world_goal_offset
+	var delta_position := goal-world_flight.position
+	if not delta_position.is_zero_approx(): world_flight.direction = delta_position.normalized()
+	var actors: Array[CombatActor] = []
+	if homing: actors.append(target)
+	var step := minf(speed*delta,delta_position.length())
+	var result := world_flight.contact(step,actors)
+	if not result["ok"]:
+		world_failure = result["error_code"]; _finish_world(false,null); return
+	var data: Dictionary = result["data"]
+	travelled = world_flight.travelled
+	if data["actor"] != null: _finish_world(true,target.world_point(),target)
+	elif data["terrain"]: _finish_world(false,null)
+	elif not homing and world_flight.position.distance_to(goal) <= WorldGeometry.EPS: _finish_world(true,_world_ground)
+	elif data["exhausted"]: _finish_world(false,null)
+
+func _finish_world(success: bool, point: ExpeditionWorldPoint, victim: CombatActor = null) -> void:
+	if _completed: return
+	_completed = true
+	delivered_world.emit(ticket,success,WorldGeometerNavigation.copy_point(point),victim)
+	queue_free()
+
 func _process(delta: float) -> void:
 	if _completed or is_queued_for_deletion() or (is_inside_tree() and get_tree().paused) or not is_finite(delta) or delta <= 0.0:
+		return
+	if world_flight != null:
+		_advance_world_trace(delta)
 		return
 	remaining = maxf(0.0, remaining - delta)
 	if remaining <= 0.0 or request == null:
@@ -64,6 +112,7 @@ func _finish(success: bool, point: Vector2, victim: CombatActor = null) -> void:
 	queue_free()
 
 func _draw() -> void:
+	if world_flight != null: return
 	var tint := Color("ffac68") if element == &"fire" else (Color("a9e9ff") if element == &"ice" else Color("ebe29b"))
 	draw_set_transform(BODY_OFFSET, direction.angle())
 	draw_line(Vector2(-14, 0), Vector2(10, 0), tint, 2.0)

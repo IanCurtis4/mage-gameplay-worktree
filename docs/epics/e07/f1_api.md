@@ -639,3 +639,72 @@ MageProjectile reais: ranks1/5, orientação cardinal/diagonal, custos, rotas an
 desvio real, corpo/LoS no piso inferior, passagem superior, flecha acima de parede
 baixa, parede criada durante voo, teleporte legal e cancelamentos/cleanup.
 Isso não certifica base lateral inclinada, Geômetra, campanha ou apresentação.
+
+## Geômetra — traçados e âncoras explícitas (parcial)
+
+GeometerCasting.bind_world_construction() liga uma construção vazia ao mundo/perfil
+já ligado ao PlayerActor; recusa substituir construção legada ativa. As entradas
+preview_world_trace(skill,point:WorldPoint,victim,revision,requested_rank=0) e
+begin_world_trace(...) delegam a PlayerActor.preview_world_geometer e
+request_world_geometer. Exigem geometer_trace; a seleção de elemento é capturada
+na intenção, antes do preparo. Ponto de chão e alvo são explícitos; alvo usa sua
+própria superfície atual. Não há seleção a partir dos pixels. O whitelist comum
+permanece63/62; esta entrada própria admite Traçado parcialmente e não declara
+Triangulação/edições/Colapso disponíveis.
+
+WorldGeometerCast estende WorldSkillCast: conserva origem, epoch, revisão,
+composição/rank, alvo fraco, elemento, dono fraco e geração da construção.
+O preparo comum é reutilizado. Controle, SP, slots finitos, alvo, ponto/perfil,
+alcance pelo chão conectado e sweep do corpo do projétil revalidam no commit.
+Falta de suporte, laje/parede, movimento do emissor, nova revisão/build, limpeza
+ou remoção do dono falham antes de custo/recarga/ticket. Preview retorna cópia do
+ponto/elemento e não reserva. Alturas do voo derivam dos corpos explícitos, sem
+escolha de altura de campo de produção.
+
+O pagamento usa _spend e o mesmo _make_magic_request/_magic_power do Traçado;
+SP, recarga, dano, precisão, velocidade e alcance são canônicos. Último preflight,
+pagamento e reserva são síncronos, sem callback externo entre eles. Asserções
+protegem a reserva/binding previamente validados. O node real é publicado antes
+dos sinais de apresentação/recursos. O rank pedido usa a captura existente.
+
+GeometerTraceProjectile.configure_world_trace usa WorldProjectileMotion real,
+cilindro raio4/altura8, origem/goal offset no corpo e sweep na geometria atual.
+Somente o corpo selecionado pode receber impacto; os demais são ignorados.
+Traçado de chão não causa dano de passagem. Homing acompanha o WorldPoint do
+alvo, sem renovar alcance percorrido; timeout3s e orçamento nominal permanecem.
+Nova parede/laje, epoch, perda do alvo, alcance esgotado ou timeout cancelam.
+Pausa congela voo/timeout; zero, negativo e não finito não avançam. Callback2D
+não pode reclamar um ticket espacial. Não há draw bound enquanto D05 está pendente.
+
+WorldGeometerConstruction estende a construção canônica sem editar seu core.
+Preserva grammar/FIFO, tickets monotônicos, classificação, identidade, clocks,
+limites e expiração. Sidecars guardam WorldPoints por âncora/ticket e referências
+fracas de portadores. Confirmação e reserva de âncora antecedem dano/callbacks.
+Chegada fora de ordem aguarda FIFO, acompanha o suporte real e desconta o tempo
+já vivido; timeout do primeiro drena os confirmados seguintes. Morte/free/remoção
+do portador deixa o último chão válido explícito. Trocar de piso por movimento
+real atualiza surface_id/y; não escolhe um piso pela proximidade em x/z.
+
+WorldGeometerNavigation é adaptador somente das consultas da grammar: cada chave
+x/z aponta para WorldPoint capturado; suportes diferentes na mesma chave são
+ambíguos e recusados. Não reconstrói coordenada vertical de um Vector2. Usa
+WorldGeometry.ground_line_to(source,destination,profile,revision): linha horizontal
+reta que segue suporte/conectores, conservando rota e custo3D, sem desvio por
+obstáculo ou snap. Stage/surface são exatos, posição usa EPS existente. Valida
+perfil, suporte e revisão e retorna DTO copiado. Limite de aresta600 considera
+custo real; separação24 continua a regra horizontal canônica. Geometria nova
+suspende uma aresta inválida e pode retomá-la sem trocar identidade/refrescar clock.
+
+Neste checkpoint só um vértice ou dois do mesmo elemento (PREPARATION) são
+admitidos. Segundo elemento distinto, terceiro vértice, Translação, Reescrita,
+Colapso e receitas de parede/triângulo retornam spatial_recipe_pending nas entradas
+espaciais antes do pagamento. Consumidores legados não são executados sobre
+coordenadas do mundo. Interações de projétil/reflexão/condução continuam bloqueadas.
+Isso é uma etapa verificável, não certificação do kit Geômetra completo.
+
+A política composta geometer_ground_anchor é capturada na reserva: projétil ainda
+segue o alvo até o impacto, mas a âncora fica no chão desse impacto. Remover a
+política depois do lançamento não reinterpreta a emissão. Durações continuam
+geometer_durations/Memory e são capturadas por reserva; não há fórmula nova.
+A prova dirigida cobre a política de Traçado; outras composições permanecem
+pendentes. Morte do emissor/clear/expiry invalidam tickets e voos tardios.

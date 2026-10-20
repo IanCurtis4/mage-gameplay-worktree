@@ -34,7 +34,45 @@ func configure(caster: PlayerActor) -> void:
 	wall_field.configure(self)
 	triangle_field.configure(self)
 
+func bind_world_construction() -> Dictionary:
+	if not is_instance_valid(player) or player.world_motion == null or not player.world_motion.is_current_world(): return WorldSkillCast.failure(&"spatial_binding_required")
+	if construction is WorldGeometerConstruction: return {"ok":true,"error_code":&""}
+	if not construction.vertices.is_empty() or construction.grammar.pending_count() > 0: return WorldSkillCast.failure(&"legacy_construction_active")
+	var spatial := WorldGeometerConstruction.new()
+	spatial.configure(player.world_motion.geometry,player.world_motion.profile())
+	spatial.grammar.select_element(construction.grammar.selected_element)
+	construction = spatial
+	return {"ok":true,"error_code":&""}
+
+func preview_world_trace(skill: StringName, point: ExpeditionWorldPoint, victim: CombatActor, revision: int, requested_rank: int = 0) -> Dictionary:
+	return player.preview_world_geometer(self,skill,point,victim,revision,requested_rank)
+
+func begin_world_trace(skill: StringName, point: ExpeditionWorldPoint, victim: CombatActor, revision: int, requested_rank: int = 0) -> Dictionary:
+	return player.request_world_geometer(self,skill,point,victim,revision,requested_rank)
+
+func launch_world(result: Dictionary, command: WorldGeometerCast) -> void:
+	var projectile := GeometerTraceProjectile.new()
+	add_child(projectile)
+	var bound := projectile.configure_world_trace(result,command)
+	assert(bound["ok"],"Preflighted Geometer trace must bind without external callbacks")
+	projectile.delivered_world.connect(_on_world_delivered.bind(projectile))
+	projectile.add_to_group("player_projectiles")
+
+func _on_world_delivered(ticket: int, success: bool, point: ExpeditionWorldPoint, victim: CombatActor, projectile: GeometerTraceProjectile) -> void:
+	if is_instance_valid(player) and not player.is_alive(): clear_construction(); return
+	if not is_instance_valid(player) or not player.is_alive() or not construction is WorldGeometerConstruction or (construction as WorldGeometerConstruction).world != projectile.world_flight.geometry or (is_inside_tree() and get_tree().paused): return
+	if not construction.grammar.pending_snapshot().any(func(item: Dictionary) -> bool: return int(item["ticket"]) == ticket and not bool(item["resolved"])): return
+	# Ticket resolution and anchor capture precede arbitrary damage callbacks.
+	var results := (construction as WorldGeometerConstruction).resolve_world(ticket,success,point)
+	if success and is_instance_valid(victim) and victim.is_alive() and projectile.request.magic_damage > 0.0:
+		projectile.request.target_id = victim.get_instance_id()
+		hit.emit(projectile.request,victim)
+	for result: Dictionary in results:
+		if not result["ok"]: feedback.emit(result["reason"])
+	_retire_invalid_flights()
+
 func alive_positions() -> Dictionary[int, Vector2]:
+	if construction is WorldGeometerConstruction: return (construction as WorldGeometerConstruction).logical_positions()
 	var positions: Dictionary[int, Vector2] = {}
 	for actor: CombatActor in targets:
 		if is_instance_valid(actor) and actor.is_alive():
@@ -116,6 +154,7 @@ func collapse(command: GeometerCastCommand) -> bool:
 	return true
 
 func launch(command: GeometerCastCommand) -> void:
+	if player.world_motion != null: return
 	construction.refresh(alive_positions(), player.navigation)
 	var result := player.commit_geometer_shot(command, construction, targets)
 	if not result["ok"]:
@@ -132,6 +171,7 @@ func launch(command: GeometerCastCommand) -> void:
 	queue_redraw()
 
 func _on_delivered(ticket: int, success: bool, point: Vector2, victim: CombatActor, projectile: GeometerTraceProjectile) -> void:
+	if is_instance_valid(player) and player.world_motion != null: return
 	# Validate ticket before damage: clear/timeout cannot leave a damaging late shot.
 	if not construction.grammar.pending_snapshot().any(func(item: Dictionary) -> bool: return int(item["ticket"]) == ticket and not bool(item["resolved"])) or not player.is_alive():
 		return
@@ -158,6 +198,13 @@ func _report_delivery(result: Dictionary) -> void:
 
 func advance(delta: float) -> void:
 	if not is_finite(delta) or delta <= 0.0 or not is_instance_valid(player) or not player.is_alive() or (is_inside_tree() and get_tree().paused):
+		return
+	if player.world_motion != null:
+		if not construction is WorldGeometerConstruction: return
+		var spatial := construction as WorldGeometerConstruction
+		spatial.set_actors(targets)
+		spatial.advance(delta,{},spatial.world_navigation)
+		_retire_invalid_flights()
 		return
 	_visual_time = fmod(_visual_time + delta, TAU * 10.0)
 	interaction_ledger.sync(construction.construction_id)
@@ -204,6 +251,7 @@ func _redraw_wall_reactions() -> void:
 	_reaction_visual.queue_redraw()
 
 func _sync_wall_observers() -> void:
+	if is_instance_valid(player) and player.world_motion != null: return
 	interaction_ledger.sync(construction.construction_id)
 	wall_contacts.sync(construction.construction_id, construction.shape == GeometerConstructionState.Shape.WALL and construction.has_active_figure())
 	var alive_ids: Array[int] = []
@@ -223,6 +271,7 @@ func _sync_wall_observers() -> void:
 	wall_contacts.prune(alive_ids)
 
 func _on_ground_walked(from: Vector2, to: Vector2, actor: EnemyActor) -> void:
+	if is_instance_valid(player) and player.world_motion != null: return
 	if not is_instance_valid(player) or not player.is_alive() or not actor.is_alive() or actor not in targets or (is_inside_tree() and get_tree().paused):
 		return
 	construction.refresh(alive_positions(), player.navigation)
@@ -283,6 +332,7 @@ func outline_segments() -> Array[PackedVector2Array]:
 	return segments
 
 func _draw() -> void:
+	if is_instance_valid(player) and player.world_motion != null: return
 	var points := construction.positions()
 	if construction.shape == GeometerConstructionState.Shape.TRIANGLE and construction.has_active_figure():
 		var polygon := PackedVector2Array()
