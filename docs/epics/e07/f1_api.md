@@ -577,3 +577,9 @@ Flecha acima do topo não gasta capacidade; capacidade esgotada deixa a próxima
 passar. Entrada 2D de interceptação recusa node já ligado a volume espacial.
 Duração, ICDs, fonte de slow/weaken, potência e capacidade por rank permanecem
 canônicos. Os draws bound aguardam D05; nenhuma projeção visual foi criada.
+
+Amostragem com delta zero preserva a regra legada dos campos: consome contatos
+pendentes/aplica o efeito sem avançar lifetime/ICD. Deltas negativos ou não finitos
+não avançam relógio nem drenam segmentos. A regressão de FireWall._process(0.0)
+foi detectada pelo teste legado de rank e corrigida no runtime; o oráculo original
+permanece intacto.

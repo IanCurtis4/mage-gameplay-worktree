@@ -41,7 +41,7 @@ func configure(caster: CombatActor, facing: Vector2, damage_request: DamageReque
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 
 func _process(delta: float) -> void:
-	if is_queued_for_deletion() or (is_inside_tree() and get_tree().paused) or not is_finite(delta) or delta <= 0: return
+	if is_queued_for_deletion() or (is_inside_tree() and get_tree().paused) or not is_finite(delta) or delta < 0: return
 	remaining = maxf(0.0, remaining - delta)
 	if world_field != null:
 		if not world_field.is_current(): queue_free(); return

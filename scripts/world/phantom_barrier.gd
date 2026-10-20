@@ -116,7 +116,7 @@ func interception_fraction(from: Vector2, to: Vector2, radius: float) -> float:
 
 func _process(delta: float) -> void:
 	if _world_advancing: return
-	if is_queued_for_deletion() or not is_finite(delta) or delta <= 0: return
+	if is_queued_for_deletion() or not is_finite(delta) or delta < 0: return
 	if is_inside_tree() and get_tree().paused:
 		return
 	if not is_active():

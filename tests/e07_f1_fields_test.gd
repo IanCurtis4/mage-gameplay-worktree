@@ -28,6 +28,7 @@ func _run() -> void:
 		for reason: String in ["height","nan","direction","sp","stun","pause","stale","edge","sloped","ceiling"]: _invalid(id,reason)
 		for mode: String in ["pause","epoch","removed","build"]: _late(id,mode)
 		_oblique(id)
+		_zero_delta(id)
 	_fire_multi()
 	_cadence()
 	_motion()
@@ -118,6 +119,19 @@ func _oblique(id: StringName) -> void:
 	effect._process(0.1)
 	_check_contact(id,lower,true)
 	check(not effect.world_field.contains(upper),"rotated volume cannot count upper projected overlap")
+func _zero_delta(id: StringName) -> void:
+	_setup(id,1)
+	check(_cast(id,12),"zero-time field emitted")
+	var effect: Variant = _field()
+	if effect == null: return
+	var remaining: float = effect.remaining
+	_move(lower,contact+normal*40)
+	effect._process(NAN); effect._process(-1)
+	check(effect.remaining == remaining,"invalid delta cannot change lifetime or drain queued movement")
+	_check_contact(id,lower,false)
+	effect._process(0)
+	check(effect.remaining == remaining,"zero delta samples contact without advancing canonical lifetime")
+	_check_contact(id,lower,true)
 func _fire_multi() -> void:
 	_setup(&"fire_wall",5)
 	c.enemies.erase(inside); inside.free()

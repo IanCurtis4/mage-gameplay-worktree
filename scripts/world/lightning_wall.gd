@@ -51,7 +51,7 @@ func configure(caster: CombatActor, facing: Vector2, damage_request: DamageReque
 
 func _process(delta: float) -> void:
 	if _world_advancing: return
-	if is_queued_for_deletion() or not is_finite(delta) or delta <= 0: return
+	if is_queued_for_deletion() or not is_finite(delta) or delta < 0: return
 	if is_inside_tree() and get_tree().paused:
 		return
 	if remaining <= 0.0:
