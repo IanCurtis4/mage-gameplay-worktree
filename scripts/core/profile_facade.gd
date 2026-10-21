@@ -774,6 +774,7 @@ func _grant_reward_payload(request_id: String, expected_revision: int, run_id: S
 	if _profile.reward_session == null:
 		return _finish_operation(request_id, {"ok": false, "error_code": &"run_inactive"})
 	var session: Dictionary = _profile.reward_session
+	if _profile.expedition_for_character(session["character_id"]) != null: return _finish_operation(request_id,BuildEffectCatalog.failure(&"locked_by_expedition"))
 	if run_id != session["run_id"] or sequence < 1:
 		return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_reward_sequence"})
 	var cursor: int = session["last_committed_seq"]
@@ -800,48 +801,11 @@ func _grant_reward_payload(request_id: String, expected_revision: int, run_id: S
 			return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_catalog"})
 
 	var before := _profile.copy_state()
-	var candidate := before.copy_state()
-	var candidate_session: Dictionary = candidate.reward_session
-	var character := candidate.character_by_id(candidate_session["character_id"])
-	if character == null:
-		return _finish_operation(request_id, _block_with({"ok": false, "error_code": &"invalid_reward_session", "read_only": true}))
-	character.base_xp_total = ProgressionRules.add_base_xp(character.base_xp_total, reward["base_xp"])
-	character.job_xp_total = ProgressionRules.add_job_xp(character.job_xp_total, reward["job_xp"], not character.evolution_id.is_empty())
-	var acquired: Array[StringName] = []
-	var drops: Array = reward.get("equipment_drops", [])
-	if not reward.has("equipment_drops"):
-		for definition_id: StringName in reward["equipment_ids"]:
-			var metadata := _catalog.equipment_metadata(definition_id)
-			metadata["definition_id"] = definition_id
-			drops.append(metadata)
-	for drop: Dictionary in drops:
-		var definition_id := StringName(drop.get("definition_id", &""))
-		if not _catalog.knows_equipment(definition_id):
-			return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_catalog"})
-		var metadata := _catalog.equipment_metadata(definition_id)
-		for field: String in ["origin_id", "item_level", "quality_id", "socket_capacity"]:
-			metadata[field] = drop.get(field)
-		metadata["recipe_revision_id"] = drop.get("recipe_revision_id", &"catalog_v1")
-		metadata["power_ruleset_id"] = drop.get("power_ruleset_id", &"legacy_unscaled")
-		var was_known := not candidate.first_instance_for_definition(definition_id).is_empty()
-		var added := candidate.add_equipment_instance(definition_id, metadata, character.character_id)
-		if not added["ok"]:
-			return _finish_operation(request_id, added)
-		acquired.append(added["instance_id"])
-		if not was_known:
-			candidate.lifetime_stats[&"equipment_unlocked"] += 1
-	var card_id := StringName(reward.get("card_id", &""))
-	var acquired_card: StringName = &""
-	if not card_id.is_empty():
-		var content := BuildContentLoader.load_catalog_for_profile(_catalog)
-		if not content["ok"]: return _finish_operation(request_id,content)
-		var grant := candidate.card_inventory.grant(card_id,content["catalog"],run_id+":"+request_id, character.character_id)
-		if not grant["ok"]: return _finish_operation(request_id,grant)
-		acquired_card = grant["card_instance_id"]
-	for stat_id: StringName in reward["stat_increments"]:
-		candidate.lifetime_stats[stat_id] = candidate.lifetime_stats.get(stat_id, 0) + reward["stat_increments"][stat_id]
-	candidate_session["last_committed_seq"] = sequence
-	candidate.reward_session = candidate_session
+	var prepared := prepare_ticket_candidate(before,request_id,sequence,reward)
+	if not prepared["ok"]: return _finish_operation(request_id,prepared)
+	var candidate: ProfileState = prepared["candidate"]
+	var acquired: Array[StringName] = prepared["equipment_instance_ids"]
+	var acquired_card: StringName = prepared["card_instance_id"]
 	var committed := _resolve_commit(before, candidate, _store.commit(candidate), not frozen_payload.is_empty())
 	if committed["ok"]:
 		committed["run_id"] = run_id
@@ -853,6 +817,7 @@ func _grant_reward_payload(request_id: String, expected_revision: int, run_id: S
 	return _finish_operation(request_id, committed)
 
 func end_run(request_id: String, expected_revision: int, run_id: String, outcome: StringName) -> Dictionary:
+	if _profile != null and _profile.reward_session != null and _profile.expedition_for_character(_profile.reward_session["character_id"]) != null: return BuildEffectCatalog.failure(&"locked_by_expedition")
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
 	var ready := _begin_operation(request_id, expected_revision)
@@ -944,7 +909,14 @@ func _open_profile_transaction() -> Dictionary:
 		return _block_with(loaded)
 	_profile = loaded["profile"].copy_state()
 	_clear_read_only()
+	if _store.has_pending_transaction():
+		return _block_with({"ok":false,"error_code":&"recovery_required","read_only":true})
 	if _profile.reward_session == null:
+		return loaded
+	var pending_expedition := _profile.expedition_for_character(_profile.reward_session["character_id"])
+	if pending_expedition != null and not pending_expedition.checkpoint.is_empty():
+		if pending_expedition.checkpoint["session"] != _profile.reward_session: return _block_with({"ok":false,"error_code":&"invalid_checkpoint","read_only":true})
+		loaded["expedition_resume_available"] = true
 		return loaded
 	if _store.has_pending_transaction():
 		return _block_with({"ok": false, "error_code": &"recovery_required", "read_only": true})
@@ -1347,6 +1319,71 @@ func apply_asset_migration(plan: Dictionary, confirmed_digest: String, request_i
 	_operation_in_progress = true
 	var result := _store.apply_migration(plan, confirmed_digest, request_id)
 	if result["ok"]:
+		_profile = result["profile"].copy_state()
+		_clear_read_only()
+	_operation_in_progress = false
+	return _public_result(result)
+
+func prepare_ticket_candidate(before: ProfileState, request_id: String, sequence: int, reward: Dictionary) -> Dictionary:
+	if before.reward_session == null or sequence != int(before.reward_session["last_committed_seq"])+1: return BuildEffectCatalog.failure(&"invalid_reward_sequence")
+	var run_id: String = before.reward_session["run_id"]
+	var candidate := before.copy_state()
+	var candidate_session: Dictionary = candidate.reward_session
+	var character := candidate.character_by_id(candidate_session["character_id"])
+	if character == null:
+		return {"ok":false,"error_code":&"invalid_reward_session"}
+	character.base_xp_total = ProgressionRules.add_base_xp(character.base_xp_total, reward["base_xp"])
+	character.job_xp_total = ProgressionRules.add_job_xp(character.job_xp_total, reward["job_xp"], not character.evolution_id.is_empty())
+	var acquired: Array[StringName] = []
+	var drops: Array = reward.get("equipment_drops", [])
+	if not reward.has("equipment_drops"):
+		for definition_id: StringName in reward["equipment_ids"]:
+			var metadata := _catalog.equipment_metadata(definition_id)
+			metadata["definition_id"] = definition_id
+			drops.append(metadata)
+	for drop: Dictionary in drops:
+		var definition_id := StringName(drop.get("definition_id", &""))
+		if not _catalog.knows_equipment(definition_id):
+			return {"ok":false,"error_code":&"invalid_catalog"}
+		var metadata := _catalog.equipment_metadata(definition_id)
+		for field: String in ["origin_id", "item_level", "quality_id", "socket_capacity"]:
+			metadata[field] = drop.get(field)
+		metadata["recipe_revision_id"] = drop.get("recipe_revision_id", &"catalog_v1")
+		metadata["power_ruleset_id"] = drop.get("power_ruleset_id", &"legacy_unscaled")
+		var was_known := not candidate.first_instance_for_definition(definition_id).is_empty()
+		var added := candidate.add_equipment_instance(definition_id, metadata, character.character_id)
+		if not added["ok"]:
+			return added
+		acquired.append(added["instance_id"])
+		if not was_known:
+			candidate.lifetime_stats[&"equipment_unlocked"] += 1
+	var card_id := StringName(reward.get("card_id", &""))
+	var acquired_card: StringName = &""
+	if not card_id.is_empty():
+		var content := BuildContentLoader.load_catalog_for_profile(_catalog)
+		if not content["ok"]: return content
+		var grant := candidate.card_inventory.grant(card_id,content["catalog"],run_id+":"+request_id, character.character_id)
+		if not grant["ok"]: return grant
+		acquired_card = grant["card_instance_id"]
+	for stat_id: StringName in reward["stat_increments"]:
+		candidate.lifetime_stats[stat_id] = candidate.lifetime_stats.get(stat_id, 0) + reward["stat_increments"][stat_id]
+	candidate_session["last_committed_seq"] = sequence
+	candidate.reward_session = candidate_session
+	return {"ok":true,"candidate":candidate,"equipment_instance_ids":acquired,"card_instance_id":acquired_card}
+
+func commit_expedition_candidate(candidate: ProfileState, request_id: String, expected_revision: int) -> Dictionary:
+	if _operation_in_progress: return BuildEffectCatalog.failure(&"save_in_progress")
+	var ready := _begin_operation(request_id,expected_revision)
+	if not ready["ok"]: return _finish_operation(request_id,ready)
+	if candidate.profile_id != _profile.profile_id or candidate.revision != expected_revision: return _finish_operation(request_id,BuildEffectCatalog.failure(&"stale_revision"))
+	if _store.has_pending_transaction(): return _finish_operation(request_id,_block_with({"ok":false,"error_code":&"recovery_required","read_only":true}))
+	return _finish_operation(request_id,_resolve_commit(_profile.copy_state(),candidate,_store.commit(candidate),true))
+
+func recover_expedition_pending() -> Dictionary:
+	if _operation_in_progress or not _uncertain_transaction.is_empty(): return BuildEffectCatalog.failure(&"save_in_progress")
+	_operation_in_progress = true
+	var result := _store.recover_expedition_pending()
+	if result.get("ok",false):
 		_profile = result["profile"].copy_state()
 		_clear_read_only()
 	_operation_in_progress = false

@@ -11,7 +11,7 @@ var _memory_snapshot_previous_pause := false
 var _memory_snapshot_barrier: SnapshotTickBarrier
 
 func request_memory_snapshot() -> Dictionary:
-	if _memory_snapshot_pending or not is_inside_tree(): return WorldSkillCast.failure(&"snapshot_barrier_busy")
+	if snapshot_passive or _memory_snapshot_pending or not is_inside_tree(): return WorldSkillCast.failure(&"snapshot_barrier_busy")
 	_memory_snapshot_pending = true
 	_capture_memory_snapshot.call_deferred()
 	return {"ok":true,"queued":true}
@@ -28,7 +28,12 @@ func _capture_memory_snapshot() -> void:
 	memory_snapshot_ready.emit(result)
 
 func release_memory_snapshot() -> void:
-	if not _memory_snapshot_pending: return
+	if snapshot_passive or not _memory_snapshot_pending: return
+	if persistent_facade != null and run_state != null:
+		var profile := persistent_facade.current_profile()
+		var lock := profile.expedition_for_character(run_state.character_id) if profile != null else null
+		# A committed suspension is replaced by a restored graph, never resumed in place.
+		if lock != null and lock.lifecycle == &"suspended" and not lock.checkpoint.is_empty(): return
 	if _memory_snapshot_barrier != null:
 		_memory_snapshot_barrier.release()
 		if is_inside_tree(): get_tree().paused = _memory_snapshot_previous_pause
@@ -3929,4 +3934,19 @@ func spatial_pointer_skill(skill: StringName, point: Vector2, preview: bool) -> 
 		if not data.is_empty(): feedback_anchor = ExpeditionWorldPoint.create(data["stage_id"],data["surface_id"],data["position"])
 	expedition_view.attack_preview = {"from":player.world_point().position,"to":feedback_anchor.position,"valid":result["ok"]}
 	expedition_view.indicate(feedback_anchor,result["ok"])
+	return result
+
+# This foundation API queues the same F3 barrier. F7 owns lobby/navigation UI.
+func request_durable_suspend(expedition_id: String, phase_id: StringName, request_id: String, expected_revision: int) -> Dictionary:
+	if persistent_facade == null: return WorldSkillCast.failure(&"invalid_session")
+	var requested := request_memory_snapshot()
+	if not requested["ok"]: return requested
+	var captured: Dictionary = await memory_snapshot_ready
+	# Complete the signal emission before a caller may retire/free this host.
+	await get_tree().process_frame
+	if not captured["ok"]: return captured
+	var service := ExpeditionService.new(persistent_facade)
+	var result := service.commit_cut(self,captured["snapshot"],expedition_id,phase_id,request_id,expected_revision,true)
+	# Keep reconciliation context reachable while this scene remains frozen.
+	if result.get("read_only",false): result["transaction_service"] = service
 	return result

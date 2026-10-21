@@ -1187,7 +1187,8 @@ static func decode(text: String, catalog: ProfileCatalog = null) -> Dictionary:
 		profile.profile_unlocks[StringName(id)] = true
 	for id: Variant in raw["expeditions"]:
 		var slot := ExpeditionAssetLock.from_record(raw["expeditions"][id])
-		if not id is String or not slot.get("ok", false) or slot["lock"].expedition_id != id: return _error(&"invalid_expedition_slot")
+		if not slot.get("ok", false): return slot
+		if not id is String or slot["lock"].expedition_id != id: return _error(&"invalid_expedition_slot")
 		profile.expeditions[id] = slot["lock"]
 	profile.asset_receipts = raw["asset_receipts"].duplicate(true)
 	profile.migration_receipt = raw["migration_receipt"].duplicate(true)

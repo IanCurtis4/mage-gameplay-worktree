@@ -23,8 +23,13 @@ static func validate(profile: ProfileState) -> Dictionary:
 	for id: String in profile.expeditions:
 		var slot: ExpeditionAssetLock = profile.expeditions[id]
 		var check := ExpeditionAssetLock.from_record(slot.to_record())
-		if not check.get("ok", false) or id != slot.expedition_id or profile.character_by_id(slot.character_id) == null or seen.has(slot.character_id): return BuildEffectCatalog.failure(&"expedition_conflict")
+		if not check.get("ok", false): return check
+		if id != slot.expedition_id or profile.character_by_id(slot.character_id) == null or seen.has(slot.character_id): return BuildEffectCatalog.failure(&"expedition_conflict")
 		seen[slot.character_id] = true
+		if not slot.checkpoint.is_empty():
+			if ExpeditionCheckpointCodec.owner_digest(profile,slot.character_id) != slot.checkpoint["owner_digest"]: return BuildEffectCatalog.failure(&"checkpoint_assets_mismatch")
+			if slot.lifecycle == &"active" and profile.reward_session != slot.checkpoint["session"]: return BuildEffectCatalog.failure(&"invalid_checkpoint")
+			if slot.lifecycle == &"suspended" and profile.reward_session != null and profile.reward_session["character_id"] == slot.character_id: return BuildEffectCatalog.failure(&"invalid_checkpoint")
 	for id: StringName in profile.profile_unlocks:
 		if not IdentityIds.is_technical_id(String(id)) or not profile.profile_unlocks[id]: return BuildEffectCatalog.failure(&"invalid_unlock")
 	for id: Variant in profile.asset_receipts:
@@ -70,10 +75,29 @@ static func validate_transition(before: ProfileState, after: ProfileState) -> Di
 	if before.migration_receipt != after.migration_receipt: return BuildEffectCatalog.failure(&"invalid_migration_receipt")
 	for acquisition: Variant in before.card_inventory._grants:
 		if not after.card_inventory._grants.has(acquisition) or before.card_inventory._grants[acquisition] != after.card_inventory._grants[acquisition]: return BuildEffectCatalog.failure(&"request_conflict")
+	for id: String in before.expeditions:
+		var previous: ExpeditionAssetLock = before.expeditions[id]
+		if previous.checkpoint.is_empty(): continue
+		if not after.expeditions.has(id): return BuildEffectCatalog.failure(&"locked_by_expedition")
+		var next: ExpeditionAssetLock = after.expeditions[id]
+		if next.character_id != previous.character_id or next.phase_id != previous.phase_id or next.revision < previous.revision or next.checkpoint.is_empty(): return BuildEffectCatalog.failure(&"invalid_checkpoint")
+		for request: String in previous.receipts:
+			if next.receipts.get(request) != previous.receipts[request]: return BuildEffectCatalog.failure(&"request_conflict")
 	for character: CharacterState in before.characters:
 		if before.expedition_for_character(character.character_id) == null: continue
 		var changed := after.character_by_id(character.character_id)
-		if changed == null or ProfileCodec._character_to_dictionary(character) != ProfileCodec._character_to_dictionary(changed) or changed.gold < character.gold: return BuildEffectCatalog.failure(&"locked_by_expedition")
+		if changed == null or changed.gold < character.gold: return BuildEffectCatalog.failure(&"locked_by_expedition")
+		var old_record := ProfileCodec._character_to_dictionary(character)
+		var new_record := ProfileCodec._character_to_dictionary(changed)
+		if old_record != new_record:
+			# Only a material checkpoint may advance XP; build and lobby edits stay locked.
+			var previous := before.expedition_for_character(character.character_id)
+			var next := after.expedition_for_character(character.character_id)
+			if next == null or next.revision != previous.revision+1 or next.checkpoint.is_empty() or next.checkpoint == previous.checkpoint or ExpeditionCheckpointCodec.owner_digest(after,character.character_id) != next.checkpoint["owner_digest"]: return BuildEffectCatalog.failure(&"locked_by_expedition")
+			for key: String in ["base_xp_total","job_xp_total"]:
+				if new_record[key] < old_record[key]: return BuildEffectCatalog.failure(&"locked_by_expedition")
+				old_record.erase(key); new_record.erase(key)
+			if old_record != new_record: return BuildEffectCatalog.failure(&"locked_by_expedition")
 		var old_cards := before.card_inventory.for_character(character.character_id, before.equipment_for_character(character.character_id))
 		var new_cards := after.card_inventory.for_character(character.character_id, after.equipment_for_character(character.character_id))
 		if old_cards.sockets() != new_cards.sockets(): return BuildEffectCatalog.failure(&"locked_by_expedition")

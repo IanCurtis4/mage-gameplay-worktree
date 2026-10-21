@@ -142,6 +142,11 @@ func _durable_ticket(ticket_id: String) -> Dictionary:
 	return _tickets[ticket_id].duplicate(true) if _busy and _tickets.has(ticket_id) and not _queue.is_empty() and _queue[0] == ticket_id else {}
 
 func collect(ticket_id: String) -> Dictionary:
+	var host := _owner.get_ref() as RunController
+	if host != null and host.persistent_facade != null:
+		var current := host.persistent_facade.current_profile()
+		if current != null and current.expedition_for_character(_run.character_id) != null:
+			return BuildEffectCatalog.failure(&"checkpoint_required")
 	if _busy:
 		return BuildEffectCatalog.failure(&"save_in_progress")
 	var controller := _owner.get_ref() as RunController
@@ -168,28 +173,7 @@ func collect(ticket_id: String) -> Dictionary:
 	if persistent:
 		result = controller.persistent_facade.reconcile_transaction(ticket_id) if _uncertain_ticket == ticket_id else controller.persistent_facade.grant_run_ticket(controller, ticket_id)
 	if result["ok"]:
-		entry["delivered"] = true # Claim before any grant/callback.
-		_queue.pop_front()
-		if persistent:
-			var profile := controller.persistent_facade.current_profile()
-			_run.local_equipment_instances.clear()
-			for id: StringName in profile.equipment_for_character(_run.character_id):
-				_run.local_equipment_instances[id] = profile.equipment_instances[id].copy_instance()
-		else:
-			for drop: Dictionary in entry["payload"]["equipment_drops"]:
-				_run.add_local_equipment(StringName(drop["definition_id"]), drop)
-		if persistent:
-			_run.card_inventory = controller.persistent_facade.current_profile().card_inventory.for_character(_run.character_id, _run.local_equipment_instances)
-			_run.build_snapshot.card_inventory = _run.card_inventory.copy_inventory()
-			entry["card_instance_id"] = result.get("card_instance_id", &"")
-			_run.card_instances = _run.card_inventory.describe()["instances"]
-			_run.card_sockets = _run.card_inventory.sockets()
-		if not persistent and not StringName(entry["card_id"]).is_empty():
-			var granted := _run.card_inventory.grant(entry["card_id"], _run.effect_catalog(), ticket_id)
-			entry["card_instance_id"] = granted.get("card_instance_id", &"")
-			_run.card_instances = _run.card_inventory.describe()["instances"]
-		if not entry.get("mob_ticket", false):
-			_run.queue_choice()
+		apply_collected(ticket_id,result,controller.persistent_facade.current_profile() if persistent else null)
 		_uncertain_ticket = ""
 		controller.set_inventory_freeze(false)
 		result["persistent"] = persistent
@@ -305,3 +289,27 @@ func _confirmed_receipt(controller: RunController, entry: Dictionary, persistent
 	var after := _observe_xp(controller) if persistent else before
 	var payload: Dictionary = entry["payload"]
 	return {"ticket_id": entry["ticket_id"], "encounter_index": entry["encounter_index"], "persistent": persistent, "base_xp": maxi(0, int(after["base_xp"]) - int(before["base_xp"])), "job_xp": maxi(0, int(after["job_xp"]) - int(before["job_xp"])), "offered_base_xp": int(payload["base_xp"]) if persistent else 0, "offered_job_xp": int(payload["job_xp"]) if persistent else 0, "equipment_drops": payload["equipment_drops"].duplicate(true), "card_id": entry["card_id"]}
+
+func apply_collected(ticket_id: String, result: Dictionary, profile: ProfileState = null) -> void:
+	var entry: Dictionary = _tickets[ticket_id]
+	entry["delivered"] = true # Claim before any grant/callback.
+	_queue.pop_front()
+	if profile != null:
+		_run.local_equipment_instances.clear()
+		for id: StringName in profile.equipment_for_character(_run.character_id):
+			_run.local_equipment_instances[id] = profile.equipment_instances[id].copy_instance()
+	else:
+		for drop: Dictionary in entry["payload"]["equipment_drops"]:
+			_run.add_local_equipment(StringName(drop["definition_id"]), drop)
+	if profile != null:
+		_run.card_inventory = profile.card_inventory.for_character(_run.character_id, _run.local_equipment_instances)
+		_run.build_snapshot.card_inventory = _run.card_inventory.copy_inventory()
+		entry["card_instance_id"] = result.get("card_instance_id", &"")
+		_run.card_instances = _run.card_inventory.describe()["instances"]
+		_run.card_sockets = _run.card_inventory.sockets()
+	if profile == null and not StringName(entry["card_id"]).is_empty():
+		var granted := _run.card_inventory.grant(entry["card_id"], _run.effect_catalog(), ticket_id)
+		entry["card_instance_id"] = granted.get("card_instance_id", &"")
+		_run.card_instances = _run.card_inventory.describe()["instances"]
+	if not entry.get("mob_ticket", false):
+		_run.queue_choice()

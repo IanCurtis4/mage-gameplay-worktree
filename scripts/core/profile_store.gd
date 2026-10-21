@@ -126,6 +126,8 @@ func _write_transaction(text: String, candidate: ProfileState, archive_legacy: b
 			return {"ok": false, "error_code": &"save_failed"}
 	if _should_fail(&"replace") or DirAccess.rename_absolute(_absolute_path(PENDING_FILE), _absolute_path(PRIMARY_FILE)) != OK:
 		return {"ok": false, "error_code": &"save_failed"}
+	if _should_fail(&"after_replace"):
+		return {"ok":false,"error_code":&"save_failed"}
 	return {"ok": true, "profile": candidate, "new_revision": candidate.revision}
 
 func _commit_migration(migrated_profile: ProfileState, migration_kind: StringName) -> Dictionary:
@@ -188,6 +190,7 @@ func _preflight_commit(source: ProfileState, allow_migration: bool) -> Dictionar
 		if source.revision != 0:
 			return {"ok": false, "error_code": &"stale_revision"}
 		return {"ok": true}
+	if has_pending_transaction(): return {"ok":false,"error_code":&"recovery_required","read_only":true}
 	var disk := _read_and_decode(PRIMARY_FILE)
 	if not disk["ok"]:
 		return {"ok": false, "error_code": disk["error_code"], "read_only": true}
@@ -264,7 +267,7 @@ func _should_fail(_stage: StringName) -> bool:
 	return false
 
 func _must_preserve_incompatible(result: Dictionary) -> bool:
-	return result.get("future_schema", false) or result.get("catalog_incompatible", false) or result.get("error_code", &"") in [&"unsupported_schema", &"invalid_catalog", &"invalid_origin", &"migration_required", &"invalid_owner", &"not_owner", &"invalid_ownership_section", &"invalid_expedition_slot", &"expedition_conflict", &"invalid_gold", &"invalid_unlock", &"invalid_asset_receipt", &"invalid_migration_receipt", &"invalid_json_value", &"profile_too_large"]
+	return result.get("future_schema", false) or result.get("catalog_incompatible", false) or result.get("error_code", &"") in [&"unsupported_schema", &"invalid_catalog", &"invalid_origin", &"migration_required", &"invalid_owner", &"not_owner", &"invalid_ownership_section", &"invalid_expedition_slot", &"expedition_conflict", &"invalid_gold", &"invalid_unlock", &"invalid_asset_receipt", &"invalid_migration_receipt", &"invalid_json_value", &"profile_too_large", &"checkpoint_assets_mismatch", &"invalid_checkpoint", &"checkpoint_version_unavailable", &"snapshot_too_large"]
 
 func _same_profile(left: ProfileState, right: ProfileState) -> bool:
 	var left_encoded := ProfileCodec.encode(left, _catalog)
@@ -336,3 +339,24 @@ func apply_migration(plan: Dictionary, confirmed_digest: String, request_id: Str
 		result["migrated"] = true
 		result["warning"] = &"profile_migrated"
 	return result
+
+func recover_expedition_pending() -> Dictionary:
+	if _write_in_progress: return BuildEffectCatalog.failure(&"save_in_progress")
+	if not has_pending_transaction(): return load_profile()
+	# A pending rename is uncommitted. Preserve it before choosing the last primary cut.
+	var primary := _read_and_decode(PRIMARY_FILE)
+	var pending := _read_and_decode(PENDING_FILE)
+	if not primary.get("ok",false) or not pending.get("ok",false): return BuildEffectCatalog.failure(&"recovery_required")
+	var before: ProfileState = primary["profile"]
+	var candidate: ProfileState = pending["profile"]
+	if candidate.profile_id != before.profile_id or candidate.revision != before.revision+1 or candidate.expeditions.is_empty(): return BuildEffectCatalog.failure(&"recovery_required")
+	var transition := CharacterAssets.validate_transition(before,candidate)
+	if not transition["ok"]: return BuildEffectCatalog.failure(&"recovery_required")
+	var digest := FileAccess.get_sha256(_path(PENDING_FILE))
+	var archive := "profile.uncommitted.%s.json" % digest
+	if FileAccess.file_exists(_path(archive)):
+		if FileAccess.get_sha256(_path(archive)) != digest: return BuildEffectCatalog.failure(&"recovery_required")
+	elif DirAccess.copy_absolute(_absolute_path(PENDING_FILE),_absolute_path(archive)) != OK: return BuildEffectCatalog.failure(&"recovery_required")
+	if DirAccess.remove_absolute(_absolute_path(PENDING_FILE)) != OK: return BuildEffectCatalog.failure(&"recovery_required")
+	primary["uncommitted_checkpoint_archived"] = true
+	return primary
