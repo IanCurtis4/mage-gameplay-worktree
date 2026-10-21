@@ -11,6 +11,7 @@ var _applied: Dictionary = {}
 var _pending: Dictionary = {}
 
 func _init(controller: RunController) -> void:
+	if controller == null: return # Snapshot factory: no transaction or publication.
 	_owner = weakref(controller)
 	_run = controller.run_state
 	_actor = weakref(controller.player)

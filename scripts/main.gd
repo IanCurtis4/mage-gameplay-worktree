@@ -4,6 +4,36 @@ extends Node2D
 var admin_panel: PlaytestAdminPanel
 var _admin_offer_override := false
 var _startup_error := false
+var snapshot_passive := false
+signal memory_snapshot_ready(result: Dictionary)
+var _memory_snapshot_pending := false
+var _memory_snapshot_previous_pause := false
+var _memory_snapshot_barrier: SnapshotTickBarrier
+
+func request_memory_snapshot() -> Dictionary:
+	if _memory_snapshot_pending or not is_inside_tree(): return WorldSkillCast.failure(&"snapshot_barrier_busy")
+	_memory_snapshot_pending = true
+	_capture_memory_snapshot.call_deferred()
+	return {"ok":true,"queued":true}
+
+func _capture_memory_snapshot() -> void:
+	if not _memory_snapshot_pending: return
+	_memory_snapshot_previous_pause = get_tree().paused
+	get_tree().paused = true
+	_memory_snapshot_barrier = SnapshotTickBarrier.new()
+	var result := _memory_snapshot_barrier.acquire(self)
+	if result["ok"]: result = SnapshotRegistry.new().capture(self,_memory_snapshot_barrier)
+	# Stay frozen until the consumer accepts the cut or explicitly recovers.
+	# No lobby transition or durable-save claim belongs to this API.
+	memory_snapshot_ready.emit(result)
+
+func release_memory_snapshot() -> void:
+	if not _memory_snapshot_pending: return
+	if _memory_snapshot_barrier != null:
+		_memory_snapshot_barrier.release()
+		if is_inside_tree(): get_tree().paused = _memory_snapshot_previous_pause
+	_memory_snapshot_barrier = null
+	_memory_snapshot_pending = false
 
 const IceWallScript = preload("res://scripts/world/ice_wall.gd")
 const ElementalistSequenceScript = preload("res://scripts/world/elementalist_sequence.gd")
@@ -146,6 +176,7 @@ var class_overlay: Control
 var class_label: Label
 
 func _ready() -> void:
+	if snapshot_passive: return
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	y_sort_enabled = true
 	rng.seed = Time.get_ticks_usec()
@@ -263,6 +294,14 @@ func _ready() -> void:
 		geometer_casting.hit.connect(_on_attack_requested)
 		geometer_casting.feedback.connect(_on_geometer_feedback)
 	spiritualist_echo_state.source_id = player.get_instance_id()
+	_create_runtime_camera()
+	_build_ui()
+	if training_mode:
+		_spawn_training_boss()
+	else:
+		_spawn_encounter(1)
+
+func _create_runtime_camera() -> void:
 	var camera := Camera2D.new()
 	route_camera = camera
 	camera.position_smoothing_enabled = true
@@ -272,14 +311,9 @@ func _ready() -> void:
 	camera.limit_right = int(active_bounds.end.x + 40.0)
 	camera.limit_bottom = int(active_bounds.end.y + 40.0)
 	player.add_child(camera)
-	_build_ui()
-	if training_mode:
-		_spawn_training_boss()
-	else:
-		_spawn_encounter(1)
 
-func _process(_delta: float) -> void:
-	_advance_world_companion_requests()
+func _advance_runtime(_delta: float) -> void:
+	if not get_tree().paused and not run_finished: _advance_world_companion_requests()
 	player.sentinel_combat_active = encounter_active and not run_finished
 	player.regenerate_hp(_delta, encounter_active, get_tree().paused or run_finished)
 	if not get_tree().paused and not run_finished:
@@ -304,6 +338,9 @@ func _process(_delta: float) -> void:
 			_advance_spiritualist_procession(_delta)
 			_sync_spiritualist_combat_state()
 			battle_indicators.sync_spiritualist_focus(player.get_instance_id(), player.spiritualist_focus_remaining)
+
+func _process(_delta: float) -> void:
+	_advance_runtime(_delta)
 	_update_hud()
 	for element: StringName in geometer_element_buttons:
 		var element_button := geometer_element_buttons[element]
@@ -323,6 +360,7 @@ func _process(_delta: float) -> void:
 		_collect_reward()
 
 func _input(event: InputEvent) -> void:
+	if snapshot_passive or _memory_snapshot_pending: return
 	if player != null and player.world_motion != null and expedition_view == null: return # Logical-only consumers have no pointer adapter.
 	if event is InputEventMouse:
 		_geometer_pointer_screen = event.position
@@ -926,6 +964,7 @@ func _clear_hover() -> void:
 	_hovered_enemy = null
 
 func _notification(what: int) -> void:
+	if snapshot_passive or _memory_snapshot_pending: return
 	if what == NOTIFICATION_WM_WINDOW_FOCUS_OUT:
 		_cancel_casting(false)
 
@@ -3608,11 +3647,15 @@ func _spawn_route_enemy(entry: Dictionary, stage: int, summoned: bool = false, o
 	return enemy
 
 func _queue_companion_request(master: EnemyActor) -> void:
-	if is_instance_valid(master): _deliver_companion_request.call_deferred(weakref(master))
+	if not is_instance_valid(master): return
+	_world_pending_companions[master.get_instance_id()] = weakref(master)
+	_deliver_companion_request.call_deferred(weakref(master))
 
 func _deliver_companion_request(reference: WeakRef) -> void:
 	var master := reference.get_ref() as EnemyActor
-	if is_instance_valid(master): _on_companion_requested(master)
+	if not is_instance_valid(master) or not _world_pending_companions.has(master.get_instance_id()) or (is_inside_tree() and get_tree().paused): return
+	_world_pending_companions.erase(master.get_instance_id())
+	_on_companion_requested(master)
 
 func _on_companion_requested(master: EnemyActor) -> void:
 	if not is_instance_valid(master) or not master.is_alive() or master.is_summoned or master.get_parent() != self or master not in enemies or run_finished or (not encounter_active and not master.get_meta("admin_spawn", false)): return

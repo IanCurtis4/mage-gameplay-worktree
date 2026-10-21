@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$GodotPath = '',
     [switch]$SkipEditorImport,
     [switch]$F1Fixture,
@@ -346,6 +346,11 @@ Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f2_migration_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f2_store_test.gd')
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f2_integration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f3_snapshot_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f3_continuation_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f3_action_matrix_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f3_lifecycle_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f3_mob_state_test.gd')
 $fixtureF1Path = Join-Path $projectPath '.godot/verification/e07_f1/fixture_project'
 Add-GodotCheck @('--headless', '--path', $fixtureF1Path, '--script', 'res://tests/e07_f1_geometry_test.gd')
 Add-GodotCheck @('--headless', '--path', $fixtureF1Path, '--script', 'res://tests/e07_f1_actor_integration_test.gd')

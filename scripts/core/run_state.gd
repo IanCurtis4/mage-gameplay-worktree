@@ -47,7 +47,8 @@ var _offer_revision := 0
 var _offer_ids: Array[StringName] = []
 var _uses_persistent_build: bool = false
 
-func _init(selected_class: StringName = DEFAULT_CLASS_ID) -> void:
+func _init(selected_class: StringName = DEFAULT_CLASS_ID, snapshot_passive: bool = false) -> void:
+	if snapshot_passive: return
 	_effect_catalog = BuildContentLoader.pilot()
 	select_class(selected_class)
 

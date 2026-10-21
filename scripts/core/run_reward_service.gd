@@ -19,6 +19,7 @@ var _mob_actors: Dictionary = {}
 var _occurrence_actors: Dictionary = {}
 
 func _init(controller: RunController) -> void:
+	if controller == null: return # Snapshot factory: references are linked in pass 2.
 	_owner = weakref(controller)
 	_run = controller.run_state
 	if controller.persistent_facade != null:

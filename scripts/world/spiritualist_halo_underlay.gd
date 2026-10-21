@@ -11,7 +11,8 @@ func _ready() -> void:
 	if indicators == null:
 		push_error("SpiritualistHaloUnderlay requires BattleIndicators")
 		return
-	indicators.spiritualist_ground_changed.connect(queue_redraw)
+	if not indicators.spiritualist_ground_changed.is_connected(queue_redraw):
+		indicators.spiritualist_ground_changed.connect(queue_redraw)
 	queue_redraw()
 
 func _process(_delta: float) -> void:

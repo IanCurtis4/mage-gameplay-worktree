@@ -1,0 +1,1898 @@
+{
+  "res://scripts/actors/arrow_projectile.gd": {
+    "revision": 1,
+    "fields": [
+      "request",
+      "target",
+      "navigation",
+      "direction",
+      "speed",
+      "max_distance",
+      "projectile_radius",
+      "travelled",
+      "geometer_field",
+      "world_flight",
+      "world_failure"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/actors/character_animation.gd": {
+    "revision": 1,
+    "fields": [
+      "state",
+      "atlas",
+      "actor_kind",
+      "_equipment_visual",
+      "_last_position",
+      "_observed_position",
+      "_ground_offsets",
+      "_base_atlas",
+      "_base_ground_offsets"
+    ],
+    "omitted": {
+      "equipment_visual": "computed projection; _equipment_visual is authoritative"
+    }
+  },
+  "res://scripts/actors/combat_actor.gd": {
+    "revision": 1,
+    "fields": [
+      "actor_name",
+      "actor_color",
+      "stat_breakdown",
+      "health",
+      "collision_radius",
+      "sprite_visual_scale",
+      "body_drawer",
+      "body_visual_owner",
+      "compact_control_visuals",
+      "is_hovered",
+      "is_selected",
+      "_flash_time",
+      "sprite_texture",
+      "sprite_rect",
+      "_sprite_visible_height",
+      "burn_remaining",
+      "burn_tick_remaining",
+      "burn_streams",
+      "burn_request",
+      "bleed_streams",
+      "berserker_wound_visual_stacks",
+      "berserker_wound_visual_remaining",
+      "_berserker_wound_visual_pulse",
+      "slow_remaining",
+      "slow_fraction",
+      "electrified_remaining",
+      "weaken_remaining",
+      "weaken_fraction",
+      "attribute_debuffs",
+      "hard_controls",
+      "character_animation",
+      "world_motion"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/actors/enemy_actor.gd": {
+    "revision": 1,
+    "fields": [
+      "effect_ledger",
+      "is_summoned",
+      "summoner_id",
+      "summon_used",
+      "spawn_home",
+      "engagement_mode",
+      "_last_seen_position",
+      "_sight_lost_time",
+      "occurrence",
+      "_mob_definition",
+      "_mob_cast",
+      "_mob_cooldowns",
+      "_mob_sp",
+      "archetype",
+      "navigation",
+      "player",
+      "attack_cooldown",
+      "_path",
+      "_path_index",
+      "_repath_time",
+      "_navigation_revision",
+      "player_target_acquired",
+      "hunter_last_seen_position",
+      "taunt_remaining",
+      "scenario_damage_multiplier",
+      "_world_home",
+      "_world_last_seen",
+      "_world_geometry_revision",
+      "_world_cast_revision",
+      "world_ai_failure"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/actors/equipment_attachment_visual.gd": {
+    "revision": 1,
+    "fields": [],
+    "omitted": {}
+  },
+  "res://scripts/actors/equipment_hand_rig.gd": {
+    "revision": 1,
+    "fields": [],
+    "omitted": {}
+  },
+  "res://scripts/actors/equipment_head_visual.gd": {
+    "revision": 1,
+    "fields": [
+      "actor"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/actors/geometer_trace_projectile.gd": {
+    "revision": 1,
+    "fields": [
+      "_world_ground",
+      "_world_goal_offset",
+      "ticket",
+      "element",
+      "ground_point",
+      "remaining",
+      "_completed"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/actors/mage_projectile.gd": {
+    "revision": 1,
+    "fields": [
+      "electrified_bonus_magic_damage"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/actors/player_actor.gd": {
+    "revision": 1,
+    "fields": [
+      "navigation",
+      "run_state",
+      "class_id",
+      "class_definition",
+      "_sp_deficit",
+      "max_sp",
+      "attack_cooldown",
+      "sentinel_state",
+      "hunter_state",
+      "hunter_presentation",
+      "hunter_cover",
+      "_hunter_emission_serial",
+      "sentinel_combat_active",
+      "_sentinel_last_position",
+      "_sentinel_stance_active",
+      "_sentinel_emission_serial",
+      "_sentinel_last_launch_frame",
+      "slash_cooldown",
+      "dash_cooldown",
+      "mage_cooldowns",
+      "target",
+      "velocity",
+      "_path",
+      "_path_index",
+      "_repath_time",
+      "_navigation_revision",
+      "_path_goal",
+      "_has_path_goal",
+      "_last_facing",
+      "_slash_visual_time",
+      "_slash_facing",
+      "_slash_origin",
+      "_slash_visual_range",
+      "_basic_visual_time",
+      "_basic_facing",
+      "_basic_origin",
+      "_basic_visual_radius",
+      "_attack_engaged",
+      "_attack_recovery",
+      "_dash_active",
+      "_dash_endpoint",
+      "_dash_speed",
+      "_defender_advance_targets",
+      "_defender_advance_hit",
+      "_berserker_leap_targets",
+      "_berserker_leap_request",
+      "_defender_advance_request",
+      "_berserker_leap_active",
+      "_berserker_leap_hit",
+      "_cast_rank_context",
+      "_prepared_rank_context",
+      "active_cast_rank",
+      "active_cast_skill",
+      "active_cast_remaining",
+      "active_cast_total",
+      "extended_aim_remaining",
+      "concealment_reveal_remaining",
+      "_active_cast_point",
+      "_active_cast_target_id",
+      "_active_geometer_command",
+      "_active_cast_direction",
+      "_emission_context",
+      "_rank_definitions",
+      "_effect_rank_cache",
+      "_effect_rank_revision",
+      "_foliage_shelters",
+      "shield_remaining",
+      "shield_resistance",
+      "shield_facing",
+      "perseverance_remaining",
+      "piercing_shout_visual_time",
+      "fury_remaining",
+      "brutal_strike_visual_time",
+      "brutal_strike_visual_point",
+      "concentrated_rage_visual_time",
+      "concentrated_rage_visual_origin",
+      "concentrated_rage_visual_direction",
+      "concentrated_rage_visual_range",
+      "terrifying_shout_visual_time",
+      "defender_token_remaining",
+      "defender_token_notice",
+      "defender_token_notice_remaining",
+      "defender_retreat_guard_remaining",
+      "defender_retreat_guard_facing",
+      "defender_retreat_guard_reduction",
+      "defender_counter_guard_remaining",
+      "defender_counter_guard_facing",
+      "defender_advance_guard_active",
+      "defender_advance_guard_facing",
+      "defender_guard_return_cooldown",
+      "_world_counter_guard_facing",
+      "_world_advance_guard_facing",
+      "_world_retreat_guard_facing",
+      "defender_anchor_area",
+      "defender_anchor_remaining",
+      "defender_anchor_center",
+      "_defender_inside_anchor",
+      "berserker_wounds",
+      "berserker_pursuit_cooldown",
+      "elementalist_focus_history",
+      "elementalist_focus_cooldown",
+      "elementalist_resonance_history",
+      "_elementalist_emission_serial",
+      "_elementalist_refunded_emissions",
+      "spiritualist_recovery_cooldown",
+      "_spiritualist_emission_serial",
+      "_spiritualist_refunded_emissions",
+      "spiritualist_focus_remaining",
+      "spiritualist_focus_power",
+      "_world_sentinel_reservation",
+      "_world_shield_commit",
+      "_world_shelters",
+      "_world_dash_remaining",
+      "_world_dash_speed",
+      "_world_last_position",
+      "_world_travel_request",
+      "_world_travel_skill",
+      "_world_travel_targets",
+      "_world_travel_hit",
+      "_world_prepared_cast",
+      "_world_executing_cast",
+      "_world_cast_result",
+      "_world_requesting",
+      "_equipment_visual_key"
+    ],
+    "omitted": {
+      "current_sp": "computed from deficit; no healing setter on restore"
+    }
+  },
+  "res://scripts/actors/player_projectile.gd": {
+    "revision": 1,
+    "fields": [
+      "request",
+      "target",
+      "targets",
+      "navigation",
+      "direction",
+      "speed",
+      "max_distance",
+      "projectile_radius",
+      "travelled",
+      "homing",
+      "max_hits",
+      "color",
+      "_hit_actor_ids",
+      "geometer_field",
+      "geometer_conduction_endpoint",
+      "geometer_resume_direction",
+      "geometer_transport_identity",
+      "geometer_fire_request",
+      "geometer_bonus_request",
+      "geometer_payload_identity",
+      "geometer_triangle_foundation_request",
+      "geometer_triangle_arc_request",
+      "geometer_triangle_identity",
+      "world_flight",
+      "world_failure",
+      "_world_conduit",
+      "_world_resume_direction"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/actors/sentinel_area_projectile.gd": {
+    "revision": 1,
+    "fields": [
+      "world_origin",
+      "_world_endpoint",
+      "_world_profile",
+      "_world_zero_delivery",
+      "endpoint",
+      "payload",
+      "opened"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/actors/sentinel_projectile.gd": {
+    "revision": 1,
+    "fields": [],
+    "omitted": {}
+  },
+  "res://scripts/core/acquisition_journal.gd": {
+    "revision": 1,
+    "fields": [
+      "_entries",
+      "_seen"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/arena_navigation.gd": {
+    "revision": 1,
+    "fields": [
+      "_bounds",
+      "_obstacles",
+      "_temporary_segments",
+      "_actor_radius",
+      "_columns",
+      "_rows",
+      "revision"
+    ],
+    "omitted": {
+      "_grid": "derived AStar2D; rebuild only after all state is loaded"
+    }
+  },
+  "res://scripts/core/attribute_debuff_state.gd": {
+    "revision": 1,
+    "fields": [
+      "_entries"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/build_effect_catalog.gd": {
+    "revision": 1,
+    "fields": [
+      "_definitions",
+      "_mob_catalog",
+      "_sets"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/build_snapshot.gd": {
+    "revision": 1,
+    "fields": [
+      "ruleset_id",
+      "catalog_version",
+      "character_id",
+      "base_class_id",
+      "evolution_id",
+      "base_level",
+      "job_level",
+      "attribute_allocations",
+      "skill_ranks",
+      "library_skill_ids",
+      "active_slots",
+      "passive_slots",
+      "equipped",
+      "equipment_instances",
+      "card_inventory",
+      "build_version",
+      "action_slots",
+      "_skill_catalog"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/cast_intent.gd": {
+    "revision": 1,
+    "fields": [
+      "mode",
+      "active_skill"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/combat_animation_state.gd": {
+    "revision": 1,
+    "fields": [
+      "facing",
+      "back_view",
+      "flip_h",
+      "moving",
+      "dead",
+      "idle_time",
+      "walk_distance",
+      "action",
+      "action_remaining",
+      "action_duration",
+      "hurt_remaining",
+      "death_time"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/combat_event_context.gd": {
+    "revision": 1,
+    "fields": [
+      "_ledger",
+      "_budget",
+      "event_id",
+      "parent_event_id",
+      "family_id",
+      "source_id",
+      "target_id",
+      "secondary",
+      "depth",
+      "intrinsic",
+      "proc_child",
+      "root_event_id",
+      "ancestor_root_id"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/damage_request.gd": {
+    "revision": 1,
+    "fields": [
+      "source_id",
+      "target_id",
+      "skill_id",
+      "emission_id",
+      "physical_damage",
+      "magic_damage",
+      "prismatic_resonance_damage",
+      "hunter_precision_damage",
+      "hunter_easy_prey_bonus",
+      "damage_dealt_multiplier",
+      "accuracy_mode",
+      "hit_rating",
+      "crit_chance",
+      "crit_multiplier",
+      "can_crit",
+      "force_critical",
+      "intrinsic_contested",
+      "cancelled",
+      "context",
+      "effect_snapshot",
+      "weapon_instance_ids",
+      "_is_secondary"
+    ],
+    "omitted": {
+      "is_secondary": "computed setter projection; _is_secondary is authoritative"
+    }
+  },
+  "res://scripts/core/effect_proc_ledger.gd": {
+    "revision": 1,
+    "fields": [
+      "_roots",
+      "_serial",
+      "_run_id",
+      "_cancelled"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/equipment_instance.gd": {
+    "revision": 1,
+    "fields": [
+      "owner_character_id",
+      "instance_id",
+      "definition_id",
+      "origin_id",
+      "item_level",
+      "quality_id",
+      "socket_capacity",
+      "recipe_revision_id",
+      "power_ruleset_id"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/expedition/spatial/flat_world_geometry.gd": {
+    "revision": 1,
+    "fields": [
+      "navigation"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/expedition/spatial/world_actor_motion.gd": {
+    "revision": 1,
+    "fields": [
+      "geometry",
+      "_point",
+      "_profile",
+      "_route",
+      "_cursor",
+      "_route_revision",
+      "_occupant_id",
+      "_configuration_revision"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/expedition/spatial/world_effect_area.gd": {
+    "revision": 1,
+    "fields": [
+      "geometry",
+      "_anchor",
+      "_profile",
+      "_rule",
+      "_configuration_revision"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/expedition/spatial/world_effect_volume.gd": {
+    "revision": 1,
+    "fields": [
+      "geometry",
+      "_anchor",
+      "bounds",
+      "_configuration_revision",
+      "_oriented",
+      "_support_region",
+      "_region_height",
+      "_normal",
+      "_axis"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/expedition/spatial/world_geometer_cast.gd": {
+    "revision": 1,
+    "fields": [
+      "element",
+      "construction",
+      "flight",
+      "_owner",
+      "_generation"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/expedition/spatial/world_geometer_construction.gd": {
+    "revision": 1,
+    "fields": [
+      "world",
+      "world_navigation",
+      "field_height",
+      "generation",
+      "_epoch",
+      "_actors",
+      "_points",
+      "_last_points",
+      "_pending_points",
+      "_candidate"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/expedition/spatial/world_geometer_navigation.gd": {
+    "revision": 1,
+    "fields": [
+      "world",
+      "profile",
+      "points",
+      "ambiguous"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/expedition/spatial/world_geometry.gd": {
+    "revision": 1,
+    "fields": [
+      "geometry_revision",
+      "configuration_revision",
+      "_stage",
+      "_temporary",
+      "_segments",
+      "_solid_slabs",
+      "_occupancy"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/expedition/spatial/world_ground_field.gd": {
+    "revision": 1,
+    "fields": [
+      "geometry",
+      "volume",
+      "solid",
+      "kind",
+      "height",
+      "half_length",
+      "half_width",
+      "_non_planar",
+      "_point",
+      "_normal",
+      "_axis",
+      "_configuration",
+      "_profile",
+      "_areas",
+      "_centers",
+      "_actors",
+      "_pending",
+      "_connections"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/expedition/spatial/world_locked_action.gd": {
+    "revision": 1,
+    "fields": [
+      "_caster",
+      "_target",
+      "_origin",
+      "_world",
+      "_configuration_revision",
+      "_maximum_range",
+      "_stationary"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/expedition/spatial/world_projectile_motion.gd": {
+    "revision": 1,
+    "fields": [
+      "geometry",
+      "position",
+      "direction",
+      "stage_id",
+      "collider",
+      "travelled",
+      "max_distance",
+      "_configuration_revision",
+      "_excluded"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/expedition/spatial/world_skill_cast.gd": {
+    "revision": 1,
+    "fields": [
+      "skill_id",
+      "revision",
+      "configuration_revision",
+      "composition_revision",
+      "rank_context",
+      "projectiles",
+      "ground_points",
+      "travel_plan",
+      "field_height",
+      "field_plan",
+      "committed",
+      "action_kind",
+      "_source",
+      "_anchor",
+      "_direction",
+      "_target",
+      "_actors"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/expedition/spatial/world_skill_geometry_rules.gd": {
+    "revision": 1,
+    "fields": [],
+    "omitted": {}
+  },
+  "res://scripts/core/expedition/spatial/world_solid_segment.gd": {
+    "revision": 1,
+    "fields": [
+      "_anchor",
+      "_normal",
+      "_axis",
+      "_length",
+      "_width",
+      "_height",
+      "_profile",
+      "_valid",
+      "_support_region"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/expedition/spatial/world_support_region.gd": {
+    "revision": 1,
+    "fields": [],
+    "omitted": {}
+  },
+  "res://scripts/core/expedition/spatial/world_target_lock.gd": {
+    "revision": 1,
+    "fields": [
+      "geometry",
+      "_configuration_revision",
+      "_stage_id",
+      "_target"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/expedition/spatial/world_travel_contact.gd": {
+    "revision": 1,
+    "fields": [],
+    "omitted": {}
+  },
+  "res://scripts/core/geometer_anchor.gd": {
+    "revision": 1,
+    "fields": [
+      "element",
+      "position",
+      "last_valid_ground",
+      "actor_id",
+      "remaining"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/geometer_cast_command.gd": {
+    "revision": 1,
+    "fields": [
+      "skill_id",
+      "element",
+      "point",
+      "actor_id"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/geometer_construction_state.gd": {
+    "revision": 1,
+    "fields": [
+      "grammar",
+      "vertices",
+      "shape",
+      "suspended",
+      "figure_remaining",
+      "construction_id",
+      "_next_construction_id",
+      "_closed_once"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/geometer_grammar_state.gd": {
+    "revision": 1,
+    "fields": [
+      "selected_element",
+      "_next_ticket",
+      "_pending"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/geometer_interaction_ledger.gd": {
+    "revision": 1,
+    "fields": [
+      "construction_id",
+      "elapsed",
+      "_victim_ready",
+      "_projectile_components",
+      "_interception_ready"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/geometer_wall_contact_state.gd": {
+    "revision": 1,
+    "fields": [
+      "construction_id",
+      "_actors",
+      "_active_wall"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/hard_control_state.gd": {
+    "revision": 1,
+    "fields": [
+      "boss",
+      "unstoppable_remaining",
+      "boss_window_remaining",
+      "boss_budget_remaining",
+      "_family_remaining"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/health_state.gd": {
+    "revision": 1,
+    "fields": [
+      "actor_id",
+      "max_hp",
+      "_hp_deficit",
+      "physical_defense",
+      "magic_defense",
+      "flee_rating",
+      "crit_resistance",
+      "shield_hp",
+      "_death_emitted"
+    ],
+    "omitted": {
+      "current_hp": "computed from deficit/death latch"
+    }
+  },
+  "res://scripts/core/hunter_cover_state.gd": {
+    "revision": 1,
+    "fields": [
+      "budget_remaining",
+      "reveal_remaining",
+      "grace_remaining",
+      "zone_id",
+      "center",
+      "radius",
+      "exit_grace",
+      "_inside"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/hunter_opening_state.gd": {
+    "revision": 1,
+    "fields": [
+      "owner_id",
+      "step_remaining",
+      "step_cooldown",
+      "marked_target_id",
+      "mark_rank",
+      "mark_remaining",
+      "_openings",
+      "_activations",
+      "_emissions"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/mob_catalog.gd": {
+    "revision": 1,
+    "fields": [
+      "_definitions"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/mob_loot_resolver.gd": {
+    "revision": 1,
+    "fields": [
+      "_catalog",
+      "_profiles",
+      "_strict_quality_pools",
+      "_recipe_revision_id",
+      "_power_ruleset_id",
+      "_cardless_base_ids"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/mob_occurrence.gd": {
+    "revision": 1,
+    "fields": [
+      "occurrence_id",
+      "mob_base_id",
+      "category_id",
+      "origin_id"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/profile_catalog.gd": {
+    "revision": 1,
+    "fields": [
+      "_skills",
+      "_equipment",
+      "_evolutions",
+      "_evolution_order",
+      "_card_ids",
+      "_sealed",
+      "_build_error"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/run_build_service.gd": {
+    "revision": 1,
+    "fields": [
+      "_owner",
+      "_run",
+      "_actor",
+      "_busy",
+      "_committing_intent",
+      "_applied",
+      "_pending"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/run_card_inventory.gd": {
+    "revision": 1,
+    "fields": [
+      "_projection_owner",
+      "_owners",
+      "_instances",
+      "_sockets",
+      "_grants",
+      "_next_counter",
+      "revision"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/run_reward_service.gd": {
+    "revision": 1,
+    "fields": [
+      "_presentation_xp_before",
+      "_owner",
+      "_run",
+      "_tickets",
+      "_events",
+      "_queue",
+      "_next_sequence",
+      "_busy",
+      "_uncertain_ticket",
+      "_loot_resolver",
+      "_mob_actors",
+      "_occurrence_actors"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/run_state.gd": {
+    "revision": 1,
+    "fields": [
+      "class_id",
+      "run_id",
+      "character_id",
+      "build_snapshot",
+      "skill_levels",
+      "augment_stacks",
+      "pending_choices",
+      "current_offer",
+      "_effect_catalog",
+      "effect_ledger",
+      "runtime_revision",
+      "transaction_locked",
+      "_catalog_frozen",
+      "card_sockets",
+      "card_instances",
+      "card_inventory",
+      "local_equipment_instances",
+      "next_local_equipment_counter",
+      "_effect_cache_key",
+      "_effect_cache",
+      "_effect_cache_serial",
+      "_offer_open",
+      "_offer_serial",
+      "_choice_serial",
+      "_choice_ids",
+      "_offer_id",
+      "_offer_revision",
+      "_offer_ids",
+      "_uses_persistent_build"
+    ],
+    "omitted": {
+      "local_equipment": "computed inventory query"
+    }
+  },
+  "res://scripts/core/sentinel_focus_state.gd": {
+    "revision": 1,
+    "fields": [
+      "focus",
+      "stable_time",
+      "inactive_time",
+      "observed_target_id",
+      "observation_remaining",
+      "observation_charges",
+      "observation_gain",
+      "observation_cooldown",
+      "opening_cooldown",
+      "intrinsic_cooldown",
+      "absolute_remaining",
+      "reserved_focus",
+      "reserved_sp",
+      "explosive_prepared",
+      "_observed_emissions",
+      "_opening_emissions",
+      "_intrinsic_emissions"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/stat_breakdown.gd": {
+    "revision": 1,
+    "fields": [
+      "base_level",
+      "primary",
+      "derived",
+      "modifier_sources"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/data/augment_definition.gd": {
+    "revision": 1,
+    "fields": [
+      "id",
+      "display_name",
+      "flavor_text",
+      "description",
+      "class_id",
+      "max_stacks",
+      "effect_id",
+      "magnitude_per_stack",
+      "icon",
+      "allowed_origins",
+      "allowed_evolutions",
+      "effects"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/data/card_definition.gd": {
+    "revision": 1,
+    "fields": [
+      "id",
+      "display_name",
+      "flavor_text",
+      "description",
+      "icon",
+      "allowed_origins",
+      "allowed_evolutions",
+      "allowed_slots",
+      "mob_base_id",
+      "effects"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/data/class_catalog.gd": {
+    "revision": 1,
+    "fields": [],
+    "omitted": {}
+  },
+  "res://scripts/data/class_definition.gd": {
+    "revision": 1,
+    "fields": [
+      "id",
+      "display_name",
+      "attributes",
+      "skill_ids",
+      "passive_id",
+      "basic_power",
+      "basic_range"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/data/effect_definition.gd": {
+    "revision": 1,
+    "fields": [
+      "id",
+      "unique_effect_id",
+      "tags",
+      "granted_skill_id",
+      "granted_rank",
+      "family_id",
+      "kind",
+      "handler_id",
+      "stacking_mode",
+      "conflict_group",
+      "trigger",
+      "target_skill_ids",
+      "allowed_origins",
+      "allowed_evolutions",
+      "minimum_rank",
+      "channel",
+      "axis",
+      "unit",
+      "magnitude",
+      "increased",
+      "limit",
+      "stack_values"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/data/equipment_definition.gd": {
+    "revision": 1,
+    "fields": [
+      "id",
+      "display_name",
+      "flavor_text",
+      "description",
+      "icon",
+      "allowed_origins",
+      "allowed_evolutions",
+      "slot",
+      "item_kind",
+      "hand_usage",
+      "origin_id",
+      "item_level",
+      "quality_id",
+      "socket_capacity",
+      "set_id",
+      "starter",
+      "effects",
+      "min_item_level",
+      "max_item_level",
+      "allowed_identities",
+      "visual_key"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/data/equipment_set_definition.gd": {
+    "revision": 1,
+    "fields": [
+      "id",
+      "display_name",
+      "flavor_text",
+      "description",
+      "thresholds",
+      "min_item_level",
+      "max_item_level",
+      "allowed_identities"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/data/evolution_definition.gd": {
+    "revision": 1,
+    "fields": [
+      "id",
+      "display_name",
+      "origin_class_id",
+      "branch_kind",
+      "affinity_class_id",
+      "required_base_level",
+      "required_job_level",
+      "entry_skill_id",
+      "exclusive_skill_ids",
+      "content_ready"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/data/expedition/connector_definition.gd": {
+    "revision": 1,
+    "fields": [
+      "connector_id",
+      "surface_id",
+      "position",
+      "outward",
+      "width",
+      "headroom",
+      "kind",
+      "tags",
+      "direction"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/data/expedition/part_definition.gd": {
+    "revision": 1,
+    "fields": [
+      "part_id",
+      "revision",
+      "biome_tags",
+      "allowed_rotations",
+      "surfaces",
+      "connectors",
+      "sockets",
+      "solid_volumes",
+      "blockers"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/data/expedition/policy_definition.gd": {
+    "revision": 1,
+    "fields": [
+      "policy_id",
+      "revision",
+      "domain",
+      "parameters"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/data/expedition/socket_definition.gd": {
+    "revision": 1,
+    "fields": [
+      "socket_id",
+      "surface_id",
+      "position",
+      "kind",
+      "tags"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/data/expedition/species_definition.gd": {
+    "revision": 1,
+    "fields": [
+      "species_id",
+      "revision",
+      "biome_tags",
+      "occurrence_categories",
+      "required_site_tags"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/data/expedition/surface_definition.gd": {
+    "revision": 1,
+    "fields": [
+      "surface_id",
+      "vertices",
+      "headroom"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/data/expedition/traversal_profile.gd": {
+    "revision": 1,
+    "fields": [
+      "profile_id",
+      "revision",
+      "radius",
+      "height",
+      "connector_kinds"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/data/hunter_tuning.gd": {
+    "revision": 1,
+    "fields": [],
+    "omitted": {}
+  },
+  "res://scripts/data/mob_definition.gd": {
+    "revision": 1,
+    "fields": [
+      "id",
+      "display_name",
+      "flavor_text",
+      "description",
+      "base_category",
+      "allowed_occurrence_categories",
+      "fixed_level",
+      "primary_attributes",
+      "modifier_sources",
+      "archetype",
+      "animation_kind",
+      "tint",
+      "collision_radius",
+      "skill_ranks",
+      "skill_ids",
+      "card_id",
+      "origin_levels",
+      "encounter_tiers",
+      "aggro_radius",
+      "leash_radius",
+      "sight_timeout",
+      "visual_kind",
+      "summons_companion"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/data/mob_loot_table.gd": {
+    "revision": 1,
+    "fields": [
+      "profiles",
+      "strict_quality_pools",
+      "recipe_revision_id",
+      "power_ruleset_id",
+      "cardless_base_ids"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/data/sentinel_tuning.gd": {
+    "revision": 1,
+    "fields": [],
+    "omitted": {}
+  },
+  "res://scripts/data/skill_definition.gd": {
+    "revision": 1,
+    "fields": [
+      "tags",
+      "id",
+      "display_name",
+      "input_key",
+      "targeting",
+      "category",
+      "action_kind",
+      "handler_id",
+      "ranks",
+      "accuracy_mode",
+      "can_crit",
+      "sp_cost",
+      "cooldown",
+      "cast_time",
+      "power",
+      "range",
+      "projectile_speed"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/data/skill_rank_definition.gd": {
+    "revision": 1,
+    "fields": [
+      "rank",
+      "sp_cost",
+      "fixed_cast_time",
+      "variable_cast_time",
+      "post_cast_time",
+      "cooldown",
+      "range",
+      "power",
+      "secondary_power",
+      "physical_weight",
+      "precision_weight",
+      "magic_weight",
+      "projectile_speed",
+      "effect_ids"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/main.gd": {
+    "revision": 1,
+    "fields": [
+      "_admin_offer_override",
+      "_startup_error",
+      "rng",
+      "run_state",
+      "navigation",
+      "player",
+      "enemies",
+      "hunter_tar_field",
+      "_credited_kills",
+      "_defender_slowed_enemies",
+      "spiritualist_echo_state",
+      "spiritualist_drain_state",
+      "spiritualist_veil_state",
+      "spiritualist_procession_state",
+      "spiritualist_veil_fraction",
+      "_spiritualist_veil_members",
+      "_spiritualist_echo_number_target_id",
+      "_spiritualist_channel_notice_remaining",
+      "_spiritualist_recent_feedback",
+      "_spiritualist_recent_feedback_remaining",
+      "spiritualist_debug_text",
+      "combat_numbers_visible",
+      "world_spawn_error",
+      "expedition_field_height",
+      "_world_companion_attempts",
+      "_world_pending_companions",
+      "reward",
+      "encounter_index",
+      "encounter_active",
+      "run_finished",
+      "build_service",
+      "acquisition_journal",
+      "_acquisition_augment_serial",
+      "reward_service",
+      "inventory_frozen",
+      "_inventory_previous_pause",
+      "_terminal_outcome",
+      "_close_request_serial",
+      "_reward_retry_pending",
+      "training_mode",
+      "gameplay_extension",
+      "active_bounds",
+      "training_boss",
+      "_training_add_elapsed",
+      "_training_wave_index",
+      "_feedback_serial",
+      "cast_intent",
+      "_intent_rank",
+      "action_slots",
+      "geometer_casting",
+      "trap_registry",
+      "battle_indicators",
+      "spiritualist_ground",
+      "control_preferences",
+      "_selected_enemy",
+      "_hovered_enemy"
+    ],
+    "omitted": {
+      "admin_panel": "presentation/input settings or externally rebound profile authority",
+      "_spiritualist_feedback_labels": "presentation/input settings or externally rebound profile authority",
+      "reward_feedback": "presentation/input settings or externally rebound profile authority",
+      "skill_window": "presentation/input settings or externally rebound profile authority",
+      "_skill_action_editor_home": "presentation/input settings or externally rebound profile authority",
+      "_skill_action_editor_index": "presentation/input settings or externally rebound profile authority",
+      "inventory_panel": "presentation/input settings or externally rebound profile authority",
+      "inventory_button": "presentation/input settings or externally rebound profile authority",
+      "persistent_facade": "presentation/input settings or externally rebound profile authority",
+      "_world_obstacle_views": "presentation/input settings or externally rebound profile authority",
+      "route_camera": "presentation/input settings or externally rebound profile authority",
+      "health_label": "presentation/input settings or externally rebound profile authority",
+      "sp_label": "presentation/input settings or externally rebound profile authority",
+      "skill_label": "presentation/input settings or externally rebound profile authority",
+      "defender_status_label": "presentation/input settings or externally rebound profile authority",
+      "training_status_label": "presentation/input settings or externally rebound profile authority",
+      "status_label": "presentation/input settings or externally rebound profile authority",
+      "augment_button": "presentation/input settings or externally rebound profile authority",
+      "next_button": "presentation/input settings or externally rebound profile authority",
+      "ui_root": "presentation/input settings or externally rebound profile authority",
+      "hud_panel": "presentation/input settings or externally rebound profile authority",
+      "help_panel": "presentation/input settings or externally rebound profile authority",
+      "spiritualist_panel": "presentation/input settings or externally rebound profile authority",
+      "spiritualist_state_label": "presentation/input settings or externally rebound profile authority",
+      "spiritualist_hint_label": "presentation/input settings or externally rebound profile authority",
+      "spiritualist_help_label": "presentation/input settings or externally rebound profile authority",
+      "spiritualist_help_toggle": "presentation/input settings or externally rebound profile authority",
+      "bottom_controls": "presentation/input settings or externally rebound profile authority",
+      "augment_overlay": "presentation/input settings or externally rebound profile authority",
+      "choice_column": "presentation/input settings or externally rebound profile authority",
+      "choice_buttons": "presentation/input settings or externally rebound profile authority",
+      "choice_title": "presentation/input settings or externally rebound profile authority",
+      "augment_panel": "presentation/input settings or externally rebound profile authority",
+      "result_overlay": "presentation/input settings or externally rebound profile authority",
+      "result_panel": "presentation/input settings or externally rebound profile authority",
+      "result_title": "presentation/input settings or externally rebound profile authority",
+      "result_body": "presentation/input settings or externally rebound profile authority",
+      "restart_button": "presentation/input settings or externally rebound profile authority",
+      "action_bar_input": "presentation/input settings or externally rebound profile authority",
+      "geometer_onboarding": "presentation/input settings or externally rebound profile authority",
+      "sentinel_onboarding": "presentation/input settings or externally rebound profile authority",
+      "sentinel_focus_label": "presentation/input settings or externally rebound profile authority",
+      "sentinel_focus_bar": "presentation/input settings or externally rebound profile authority",
+      "geometer_element_buttons": "presentation/input settings or externally rebound profile authority",
+      "_geometer_pointer_screen": "presentation/input settings or externally rebound profile authority",
+      "battle_controls": "presentation/input settings or externally rebound profile authority",
+      "class_button": "presentation/input settings or externally rebound profile authority",
+      "class_overlay": "presentation/input settings or externally rebound profile authority",
+      "class_label": "presentation/input settings or externally rebound profile authority",
+      "snapshot_passive": "factory/activation guard, never gameplay state",
+      "_memory_snapshot_pending": "transient capture/recovery coordination; not simulation state",
+      "_memory_snapshot_previous_pause": "transient capture/recovery coordination; not simulation state",
+      "_memory_snapshot_barrier": "transient capture/recovery coordination; not simulation state",
+      "arena_view": "disposable presentation, rebuilt from logical data after validation",
+      "expedition_view": "disposable presentation, rebuilt from logical data after validation",
+      "equipment_head": "disposable presentation, rebuilt from logical data after validation"
+    },
+    "omitted_signals": {
+      "memory_snapshot_ready": "out-of-graph capture result consumer, emitted only after capture"
+    }
+  },
+  "res://scripts/world/actor_death_visual.gd": {
+    "revision": 1,
+    "fields": [
+      "animation",
+      "_elapsed"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/arena_obstacle_view.gd": {
+    "revision": 1,
+    "fields": [
+      "footprint"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/arena_view.gd": {
+    "revision": 1,
+    "fields": [
+      "bounds",
+      "obstacles",
+      "_ground"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/arrow_rain.gd": {
+    "revision": 1,
+    "fields": [
+      "damage_request",
+      "targets",
+      "elapsed",
+      "volleys_emitted",
+      "world_area"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/battle_indicators.gd": {
+    "revision": 1,
+    "fields": [
+      "skill",
+      "origin",
+      "direction",
+      "endpoint",
+      "hunter_recoil_endpoint",
+      "cover_preview_radius",
+      "body_radius",
+      "active_range",
+      "available",
+      "click_position",
+      "click_lifetime",
+      "click_is_target",
+      "target_actor",
+      "defender_anchor_position",
+      "defender_anchor_remaining",
+      "defender_wave_position",
+      "defender_wave_lifetime",
+      "elementalist_pulses",
+      "elementalist_arc_links",
+      "elementalist_prisms",
+      "elementalist_ember_preview",
+      "spiritualist_marks",
+      "spiritualist_mark_remaining",
+      "spiritualist_pending_remaining",
+      "spiritualist_weakened",
+      "spiritualist_veil_members",
+      "spiritualist_events",
+      "spiritualist_wisps",
+      "spiritualist_return_wisps",
+      "spiritualist_visual_clock",
+      "spiritualist_drain_caster_id",
+      "spiritualist_drain_target_id",
+      "spiritualist_veil_center",
+      "spiritualist_veil_remaining",
+      "spiritualist_focus_caster_id",
+      "spiritualist_focus_remaining"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/elementalist_sequence.gd": {
+    "revision": 1,
+    "fields": [
+      "_caster",
+      "_centers",
+      "_requests",
+      "_elements",
+      "_radius",
+      "_interval",
+      "_marked_bonus",
+      "_once_per_target",
+      "_hit_ids",
+      "_elapsed",
+      "_next_pulse",
+      "_world_areas",
+      "world_failure"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/expedition_geometry_view.gd": {
+    "revision": 1,
+    "fields": [
+      "geometry",
+      "_epoch",
+      "_surfaces",
+      "_hidden",
+      "_decks",
+      "_solids",
+      "_actors",
+      "marker",
+      "marker_valid",
+      "route",
+      "attack_preview",
+      "controller",
+      "_effects"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/explosive_trap.gd": {
+    "revision": 1,
+    "fields": [
+      "damage_request",
+      "reaction_callback",
+      "_targets"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/fire_wall.gd": {
+    "revision": 1,
+    "fields": [
+      "burn_request",
+      "targets",
+      "remaining",
+      "pillar_offsets",
+      "_previous_positions",
+      "world_field"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/foliage_shelter.gd": {
+    "revision": 1,
+    "fields": [
+      "player_owner",
+      "remaining",
+      "duration",
+      "radius",
+      "removal_reason",
+      "_registered",
+      "world_area"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/geometer_casting.gd": {
+    "revision": 1,
+    "fields": [
+      "player",
+      "targets",
+      "construction",
+      "preview_command",
+      "preview_valid",
+      "wall_contacts",
+      "interaction_ledger",
+      "_watched_walkers",
+      "_world_walkers",
+      "wall_field",
+      "triangle_field",
+      "_shot_wall_snapshots",
+      "_shot_triangle_snapshots",
+      "_wall_reactions",
+      "_reaction_visual",
+      "_visual_time"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/geometer_triangle_field.gd": {
+    "revision": 1,
+    "fields": [
+      "casting",
+      "enabled",
+      "_identity",
+      "_snapshot",
+      "_elapsed",
+      "_next_tick"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/geometer_wall_field.gd": {
+    "revision": 1,
+    "fields": [
+      "casting",
+      "enabled",
+      "_identity",
+      "_snapshot"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/haunt_cone_visual.gd": {
+    "revision": 1,
+    "fields": [
+      "remaining",
+      "cone_range",
+      "half_angle"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/hunter_presentation.gd": {
+    "revision": 1,
+    "fields": [
+      "player_owner",
+      "events",
+      "trails",
+      "visual_time",
+      "_last_foot"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/hunter_tar_field.gd": {
+    "revision": 1,
+    "fields": [
+      "owner_id",
+      "owner_actor",
+      "duration",
+      "remaining",
+      "slow_fraction",
+      "residual_duration",
+      "source_id",
+      "target_filter",
+      "active",
+      "_targets",
+      "world_area"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/hunter_trap.gd": {
+    "revision": 1,
+    "fields": [
+      "tuning",
+      "damage_request",
+      "opening_request",
+      "effect_radius",
+      "_targets",
+      "marked_trigger_target_id"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/ice_wall.gd": {
+    "revision": 1,
+    "fields": [
+      "navigation",
+      "remaining",
+      "normal",
+      "axis",
+      "_registered",
+      "world",
+      "_world_configuration",
+      "_world_id"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/lightning_wall.gd": {
+    "revision": 1,
+    "fields": [
+      "request",
+      "targets",
+      "remaining",
+      "normal",
+      "axis",
+      "_previous_positions",
+      "_inside",
+      "_cooldowns",
+      "_world_advancing",
+      "world_field"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/mob_prototype_visual.gd": {
+    "revision": 1,
+    "fields": [
+      "kind",
+      "category"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/phantom_barrier.gd": {
+    "revision": 1,
+    "fields": [
+      "targets",
+      "remaining",
+      "remaining_capacity",
+      "normal",
+      "axis",
+      "_previous_positions",
+      "_inside",
+      "_cooldowns",
+      "world_volume",
+      "_world_previous",
+      "_world_advancing",
+      "world_field"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/player_trap.gd": {
+    "revision": 1,
+    "fields": [
+      "owner_id",
+      "source_skill_id",
+      "radius",
+      "arming_duration",
+      "armed_duration",
+      "arming_remaining",
+      "lifetime_remaining",
+      "state",
+      "removal_reason",
+      "registration_order",
+      "target_filter",
+      "_configured",
+      "world_area"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/player_trap_registry.gd": {
+    "revision": 1,
+    "fields": [
+      "_traps",
+      "_next_registration_order"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/reward_pickup.gd": {
+    "revision": 1,
+    "fields": [
+      "ticket_id",
+      "_time",
+      "world_area"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/sentinel_burst.gd": {
+    "revision": 1,
+    "fields": [
+      "skill_id",
+      "radius",
+      "remaining"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/snare_trap.gd": {
+    "revision": 1,
+    "fields": [
+      "root_duration",
+      "applied_root_duration",
+      "_targets"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/soul_impact_sequence.gd": {
+    "revision": 1,
+    "fields": [
+      "world_action",
+      "world_failure",
+      "target_id",
+      "impact_request",
+      "emitted",
+      "time_to_next",
+      "visual_remaining"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/spiritualist_drain_state.gd": {
+    "revision": 1,
+    "fields": [
+      "active",
+      "target_id",
+      "origin",
+      "elapsed",
+      "ticks_issued",
+      "ticks_resolved",
+      "healed_total",
+      "captured_request",
+      "world_action",
+      "world_failure",
+      "_inscription_claimed"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/spiritualist_echo_state.gd": {
+    "revision": 1,
+    "fields": [
+      "source_id",
+      "marks",
+      "pending",
+      "waves",
+      "wave_by_emission",
+      "next_wave_id"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/spiritualist_halo_underlay.gd": {
+    "revision": 1,
+    "fields": [
+      "indicators",
+      "_was_active"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/spiritualist_procession_state.gd": {
+    "revision": 1,
+    "fields": [
+      "active",
+      "source",
+      "target_id",
+      "elapsed",
+      "departures_issued",
+      "impacts_issued",
+      "captured_request",
+      "world_action",
+      "world_failure"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/world/spiritualist_veil_state.gd": {
+    "revision": 1,
+    "fields": [
+      "active",
+      "center",
+      "remaining",
+      "world_area"
+    ],
+    "omitted": {}
+  },
+  "root_budget": {
+    "revision": 1,
+    "fields": [
+      "root_event_id",
+      "ancestor_root_id",
+      "owner_id",
+      "next_event_id",
+      "used",
+      "application_limit",
+      "plan",
+      "families",
+      "targets",
+      "carriers",
+      "echo_bound",
+      "claims",
+      "applied",
+      "cancelled"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/expedition/model/world_point.gd": {
+    "revision": 1,
+    "fields": [
+      "stage_id",
+      "surface_id",
+      "position"
+    ],
+    "omitted": {}
+  },
+  "wall_reaction_visual": {
+    "revision": 1,
+    "fields": [
+      "reactions"
+    ],
+    "omitted": {}
+  },
+  "rng": {
+    "revision": 1,
+    "fields": [
+      "seed",
+      "state"
+    ],
+    "omitted": {}
+  },
+  "res://scripts/core/control_preferences.gd": {
+    "revision": 1,
+    "fields": [
+      "cast_mode",
+      "smart_lock",
+      "bindings"
+    ],
+    "omitted": {
+      "path": "external settings write destination; host default, never selected by snapshot"
+    }
+  }
+}
