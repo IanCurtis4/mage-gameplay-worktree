@@ -1,6 +1,6 @@
 # E07-F2 — despacho e propriedade exclusiva
 
-20/10/2026. **EM_EXECUÇÃO**, por aval humano neste chat: “F1 foi entregue. Podemos começar F2.” Executor Sol/Alto, chat `01a150a6-7a1d-7ef2-8c91-cfd5ea1dc93c`.
+20/10/2026. **ENTREGUE/VALIDADA TECNICAMENTE**, aguardando integração; [recibo e candidato final](delivery/f2.md). Iniciada por aval humano neste chat: “F1 foi entregue. Podemos começar F2.” Executor Sol/Alto, chat `01a150a6-7a1d-7ef2-8c91-cfd5ea1dc93c`.
 
 Base real `61c3828085f7c5f757f436379f67e4edbfdf414e`, fechamento documental de F1, runtime `5b54cf4820502b50cc4d9159a01f866ad687b9ad`. F0 integrado é ancestral (`42604ef8674a2c28f5aadc633b73cda15178e0b3`). F1 entregue/validada, ainda sem integração operacional no playtest. F2 usa sua árvore exata como base isolada; não afirma que F1 foi integrada. Branch `codex/e07-f2`, checkout `C:/Users/João Pedro/.codex/worktrees/e07-f2/RagRPG`. Não escreve no checkout F1 nem no habitual.
 
