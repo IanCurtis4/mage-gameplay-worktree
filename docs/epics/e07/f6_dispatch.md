@@ -1,6 +1,6 @@
 # E07-F6 — ameaça e participação
 
-21/10/2026. EM_EXECUÇÃO. Executor Sol/Alto, chat 01a150a6-ba84-7691-a248-2c63911c12d4.
+21/10/2026. VALIDADA tecnicamente; integração operacional e aceite humano pendentes. Executor Sol/Alto, chat 01a150a6-ba84-7691-a248-2c63911c12d4.
 Aval: “F5 foi concluída. Podemos começar F6.” D06 aprovada em seguida:
 “Aprovar essas regras de D06”, referente à pergunta completa registrada neste chat.
 
@@ -55,3 +55,5 @@ mudança de ID de produção F5, fórmulas ou expectativas históricas. O lote L
 foi interrompido pelo autor após seis PASS, sem falha de teste; retomar somente
 com novo SHA/importação. Os seis consumidores sem snapshot podem ser reaproveitados
 por impacto porque seus inputs/rotinas não mudam neste adendo.
+
+Fechamento: runtime `22f98bc3016a99b705dece08b8a03490bf763571`; [recibo, supervisão e limites](delivery/f6.md), [checkpoint](f6_checkpoint.md). 34 IDs/6780 checks; nenhuma liberação de F7/F8 ou atualização do playtest por este fechamento.

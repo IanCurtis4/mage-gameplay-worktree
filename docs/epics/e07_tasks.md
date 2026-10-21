@@ -272,3 +272,11 @@ escolhas pendentes continuam condicionando seus próprios consumidores.
 F6 autorizado expressamente e D06 completa aprovada pelo usuário. EM_EXECUÇÃO,
 Sol/Alto; [base real, manifesto exclusivo e critérios](e07/f6_dispatch.md).
 As pendências históricas acima não substituem esse aval. F7/F8 não liberados.
+
+## F6 — fechamento técnico21/10/2026
+
+**VALIDADA tecnicamente**, D06 aprovada. Runtime `22f98bc3016a99b705dece08b8a03490bf763571`,
+codex/e07-f6; [recibo e propriedade](e07/delivery/f6.md), [checkpoint](e07/f6_checkpoint.md).
+34 IDs/6780 checks,28 finais e6 reaproveitados por impacto; sem erros conhecidos
+nos checks contratados. Sem integração operacional/aceite humano, UI nova,
+multiplayer, push/master ou arquivamento. F7/F8 continuam sem liberação.

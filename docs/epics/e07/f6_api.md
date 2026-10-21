@@ -1,7 +1,7 @@
 # E07-F6 — API de ameaça e participação
 
 21/10/2026. Contrato aprovado e manifesto de propriedade em [f6_dispatch.md](f6_dispatch.md).
-Validação final em andamento. Sem UI nova, rede ou novas habilidades.
+VALIDADA tecnicamente; [evidências e limites](delivery/f6.md). Sem UI nova, rede ou novas habilidades.
 
 ## Autoridade e entradas
 
