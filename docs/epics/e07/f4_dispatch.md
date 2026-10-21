@@ -51,5 +51,14 @@ com o personagem original suspenso, antes da correção (alt_red).
 Corrigir somente a projeção do digest em expedition_checkpoint_codec.gd;
 contadores globais permanecem íntegros no perfil/snapshot para IDs únicos.
 A seleção final desse delta inclui seis F4, quatro F2 e transações inventory/loot.
-Os outros16 IDs aprovados em8e53b40 são reaproveitáveis por impacto: nenhum
+Os outros 16 IDs aprovados em 8e53b40 são reaproveitáveis por impacto: nenhum
 algoritmo/adaptador de snapshot, atores, combate ou operação legada foi alterado.
+
+## Fechamento técnico F4 —21/10/2026
+
+**VALIDADA tecnicamente** por Sol, com supervisão automatizada Luna.
+Runtime final `cdda02f9cfcec52a6f27646711e4dadedce1a63b`; [recibo, cobertura e limites](delivery/f4.md).
+28 IDs únicos consolidados:12 finais e16 reaproveitados por impacto;6165 checks.
+Importação final com 1596 primários idênticos; pacote de evidência preservado fora
+da worktree. Integração operacional/playtest/aceite humano permanecem separados.
+F5+ exige nova liberação; correções continuam neste chat/checkout.
