@@ -14,6 +14,11 @@ func _received(result: Dictionary) -> void:
 func _disable(node: Node) -> void:
 	node.set_process(false); node.set_physics_process(false)
 	for child: Node in node.get_children(): _disable(child)
+func _all_inert(node: Node) -> bool:
+	if node.can_process(): return false
+	for child: Node in node.get_children(true):
+		if not _all_inert(child): return false
+	return true
 func _run() -> void:
 	RunController.selected_class_id = &"mage"
 	var source := RunController.new(); root.add_child(source); _disable(source)
@@ -27,6 +32,7 @@ func _run() -> void:
 	var ticket_id: String = issued.get("ticket_id","")
 	check(source._create_reward_pickup()["ok"],"real reward pickup is placed before capture")
 	source.reward.ticket_id = ticket_id
+	_disable(source.reward) # This new child also uses the fixture's manual clock.
 	source.player.attack_cooldown = 0.7
 	var enemy: CombatActor = source.enemies[0]
 	source._selected_enemy = enemy; source._hovered_enemy = enemy
@@ -63,7 +69,12 @@ func _run() -> void:
 	check(restored["ok"],"tickets/claims/cast restore without a writer")
 	if not restored["ok"]: source.free(); quit(1); return
 	var copy: RunController = restored["root"]
-	check(restorer.install(restored,root)["ok"] and restorer.activate(restored)["ok"],"passive scene installs then activates")
+	check(restorer.activate(restored).get("error_code") == &"invalid_session" and copy.snapshot_passive,"controller cannot activate before passive installation")
+	check(restorer.install(restored,root)["ok"] and _all_inert(copy) and copy.snapshot_passive,"installation freezes every new presentation node until explicit activation")
+	await process_frame
+	check(_all_inert(copy) and copy.player.active_cast_remaining == remaining and copy.player.attack_cooldown == 0.7,"waiting after installation advances no clocks and exposes no active controls")
+	check(restorer.activate(restored)["ok"] and not copy.snapshot_passive and copy.battle_controls.can_process(),"activation publishes the validated scene and presentation together")
+	check(restorer.activate(restored).get("already_active",false),"repeated activation is idempotent")
 	_disable(copy)
 	check(is_same(copy.rng,copy.get_meta("shared_rng")),"shared RNG stream remains one object")
 	check(copy.get_meta("numeric_collision") == numeric,"ordinary numeric data equal to an engine ID is never remapped")

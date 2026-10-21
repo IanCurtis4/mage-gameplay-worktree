@@ -428,6 +428,11 @@ func _signal_omitted(value: Object, name: String) -> bool:
 
 func validate(snapshot: Dictionary) -> Dictionary:
 	if snapshot.get("format") != FORMAT: return StableEntityRegistry.failure(&"content_revision_unavailable")
+	var pure := _validate_pure_value(snapshot,0)
+	if not pure["ok"]: return pure
+	var envelope_fields := ["format","engine","sources","root","objects","containers","dead_references","tombstones","identity_generations","next_entity_serial","assets","coverage","authority","world_view"]
+	if not snapshot.has_all(envelope_fields): return StableEntityRegistry.failure(&"checkpoint_incomplete")
+	if snapshot.size() != envelope_fields.size(): return StableEntityRegistry.failure(&"invalid_payload","unknown envelope field")
 	if snapshot.get("engine") != Engine.get_version_info()["string"] or not snapshot.get("sources") is Dictionary or snapshot["sources"] != _source_revisions(): return StableEntityRegistry.failure(&"content_revision_unavailable")
 	if not snapshot.get("objects") is Dictionary or not snapshot.get("containers") is Dictionary or not snapshot.get("assets") is Dictionary or not snapshot.get("tombstones") is Array or not snapshot.get("coverage") is Dictionary: return StableEntityRegistry.failure(&"checkpoint_incomplete")
 	if not snapshot.get("authority") is Dictionary or typeof(snapshot.get("world_view")) != TYPE_BOOL: return StableEntityRegistry.failure(&"checkpoint_incomplete")
@@ -525,6 +530,21 @@ func validate(snapshot: Dictionary) -> Dictionary:
 	var authority_check := _validate_value(snapshot["authority"],objects,references,snapshot["assets"],0)
 	if not authority_check["ok"]: return authority_check
 	if var_to_bytes(snapshot).size() > MAX_BYTES: return StableEntityRegistry.failure(&"snapshot_too_large")
+	return {"ok":true}
+
+func _validate_pure_value(value: Variant, depth: int) -> Dictionary:
+	if depth > MAX_DEPTH: return StableEntityRegistry.failure(&"snapshot_too_large")
+	if typeof(value) in [TYPE_OBJECT,TYPE_CALLABLE,TYPE_SIGNAL,TYPE_RID,TYPE_NODE_PATH]: return StableEntityRegistry.failure(&"invalid_payload","runtime handle")
+	if value is Array:
+		for item: Variant in value:
+			var checked := _validate_pure_value(item,depth+1)
+			if not checked["ok"]: return checked
+	if value is Dictionary:
+		for key: Variant in value:
+			var checked := _validate_pure_value(key,depth+1)
+			if not checked["ok"]: return checked
+			checked = _validate_pure_value(value[key],depth+1)
+			if not checked["ok"]: return checked
 	return {"ok":true}
 
 func _native_class(kind: String) -> String:
@@ -735,7 +755,10 @@ func restore(snapshot: Dictionary, facade: ProfileFacade = null) -> Dictionary:
 	_release_dead_proxies()
 	root.set_meta(StableEntityRegistry.SCOPE_META,entities)
 	if root is RunController: root.persistent_facade = facade
-	return {"ok":true,"root":root,"entities":entities,"owners":_objects.duplicate(),"snapshot":snapshot,"restore_usec":Time.get_ticks_usec()-started}
+	var result := {"ok":true,"root":root,"entities":entities,"owners":_objects.duplicate(),"snapshot":snapshot,"restore_usec":Time.get_ticks_usec()-started}
+	# The result owns hydration temporaries until activation, not this helper.
+	_objects.clear(); _decoded_containers.clear()
+	return result
 
 func install(restored: Dictionary, parent: Node) -> Dictionary:
 	if not restored.get("ok",false) or not is_instance_valid(parent) or not restored.get("root") is Node or restored["root"].is_inside_tree(): return StableEntityRegistry.failure(&"invalid_session")
@@ -752,11 +775,26 @@ func install(restored: Dictionary, parent: Node) -> Dictionary:
 			var view := ExpeditionGeometryView.new()
 			root.add_child(view)
 			var configured := view.configure(root.player.world_motion.geometry)
-			if not configured["ok"]: return configured
+			if not configured["ok"]: return _abort_install(root,configured)
 			var attached: Dictionary = root.attach_expedition_view(view,root.expedition_field_height)
-			if not attached["ok"]: return attached
-		root.snapshot_passive = false
+			if not attached["ok"]: return _abort_install(root,attached)
+	var modes: Array[Dictionary] = []
+	_freeze_installed(root,restored["entities"],modes)
+	restored["presentation_modes"] = modes
+	restored["installed"] = true
 	return {"ok":true}
+
+func _freeze_installed(node: Node, identity_service: StableEntityRegistry, modes: Array[Dictionary]) -> void:
+	if identity_service.stable_for(node.get_instance_id()).is_empty(): modes.append({"node":weakref(node),"mode":node.process_mode})
+	for child: Node in node.get_children(true): _freeze_installed(child,identity_service,modes)
+	node.process_mode = Node.PROCESS_MODE_DISABLED
+
+func _abort_install(root: Node, reason: Dictionary) -> Dictionary:
+	# Return the rejected scene detached and inert for its caller to discard.
+	root.get_parent().remove_child(root)
+	var ignored: Array[Dictionary] = []
+	_freeze_installed(root,StableEntityRegistry.new(),ignored)
+	return reason
 
 func _assignable(owner: Object, field: String, value: Variant) -> bool:
 	for property: Dictionary in owner.get_property_list():
@@ -822,9 +860,18 @@ func _container_accepts(value: Variant, builtin: int, class_name_value: String, 
 
 func activate(restored: Dictionary) -> Dictionary:
 	if not restored.get("ok",false): return StableEntityRegistry.failure(&"checkpoint_incomplete")
+	var root: Node = restored["root"]
+	if root is RunController and (not restored.get("installed",false) or not root.is_inside_tree()): return StableEntityRegistry.failure(&"invalid_session")
+	if restored.get("activated",false): return {"ok":true,"already_active":true}
 	for id: String in restored["snapshot"]["objects"]:
 		var value: Object = restored["entities"].resolve(id)
 		if value is Node: value.process_mode = int(restored["snapshot"]["objects"][id]["node"]["mode"])
+	for entry: Dictionary in restored.get("presentation_modes",[]):
+		var node: Node = entry["node"].get_ref()
+		if is_instance_valid(node): node.process_mode = entry["mode"]
+	if root is RunController: root.snapshot_passive = false
+	restored["activated"] = true
+	restored.erase("presentation_modes")
 	# Release temporary graph ownership: a weak root must retire when its last
 	# real envelope retires, just as in uninterrupted execution.
 	restored["owners"].clear()

@@ -30,6 +30,10 @@ tipos e invariantes dos objetos antes de ligar sinais e entregar a raiz passiva.
 `install(result, parent)` reconstrói apresentação básica sem configure/reset/start
 de gameplay; `activate(result)` publica os modos de processamento explicitamente.
 Quem rejeitar um resultado válido deve liberar sua raiz desconectada.
+Para RunController, instalar precede obrigatoriamente a ativação. A instalação
+congela também os novos controles/câmera e mantém a guarda passiva; esperar nessa
+etapa não expõe controles nem avança relógios. Uma instalação rejeitada devolve
+a raiz desconectada e inerte. Ativação repetida é idempotente.
 
 O envelope de formato1 contém objetos por kind/revision, campos explícitos,
 contêineres tipados compartilhados, referências por ID estável, gerações,

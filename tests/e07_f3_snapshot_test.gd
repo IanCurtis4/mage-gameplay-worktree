@@ -53,7 +53,8 @@ func _run() -> void:
 	var expected_hp := actor.health.current_hp
 	var binary_round_trip: Variant = bytes_to_var(var_to_bytes(payload))
 	check(binary_round_trip is Dictionary and registry.validate(binary_round_trip)["ok"],"pure Variant bytes round-trip in memory without native handles")
-	var restored := SnapshotRegistry.new().restore(binary_round_trip)
+	var hydrator := SnapshotRegistry.new()
+	var restored := hydrator.restore(binary_round_trip)
 	check(restored["ok"],"two-pass reconstruction succeeds: "+str(restored.get("detail",restored.get("error_code",""))))
 	if restored["ok"]:
 		var copy: PlayerActor = restored["root"]
@@ -73,6 +74,10 @@ func _run() -> void:
 		var recaptured := SnapshotRegistry.new().capture(copy,copy_barrier)
 		check(recaptured["ok"] and recaptured["snapshot"]["root"] == payload["root"],"restored IDs and dead-target tombstone survive the following cut")
 		copy_barrier.release()
+		var budget_weak: WeakRef = weakref(copy._emission_context._budget)
+		check(SnapshotRegistry.new().activate(restored)["ok"],"detached actor graph transfers temporary ownership to its host")
+		copy._emission_context = null; copy.target.burn_request.context = null
+		check(budget_weak.get_ref() == null,"retained hydrator cannot prolong a causal root after its last real envelope retires")
 		copy.free()
 	var future := payload.duplicate(true); future["format"] = 999
 	check(not registry.validate(future)["ok"],"future snapshot rejected")
@@ -90,6 +95,10 @@ func _run() -> void:
 	check(registry.validate(revision)["error_code"] == &"content_revision_unavailable","incompatible runtime source revision cannot resume")
 	var native := payload.duplicate(true); native["objects"][native["root"]]["fields"]["target"] = actor
 	check(SnapshotRegistry.new().restore(native)["error_code"] == &"invalid_payload","native object smuggled into envelope is rejected")
+	var extra_native := payload.duplicate(true); extra_native["unregistered"] = actor
+	check(registry.validate(extra_native).get("error_code") == &"invalid_payload","native handle in an unknown envelope field is rejected")
+	var descriptor_native := payload.duplicate(true); descriptor_native["containers"].values()[0]["unregistered"] = actor
+	check(registry.validate(descriptor_native).get("error_code") == &"invalid_payload","unused descriptor data cannot smuggle native handles")
 	var wrong_namespace := payload.duplicate(true); wrong_namespace["objects"][wrong_namespace["root"]]["fields"]["_path"] = {"$":"container","id":payload["root"]}
 	check(SnapshotRegistry.new().restore(wrong_namespace)["error_code"] == &"dangling_entity_reference","an entity ID cannot masquerade as a container")
 	var malformed_signal := payload.duplicate(true); malformed_signal["objects"][malformed_signal["root"]]["signals"].append({"signal":"health_changed"})
