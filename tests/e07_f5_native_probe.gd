@@ -13,6 +13,7 @@ func _run() -> void:
 	var registry: SnapshotRegistry = result["registry"]
 	check(registry.install(result, root)["ok"], "native install of durable F5 world")
 	check(host.expedition_view != null and host.expedition_view.geometry == host.player.world_motion.geometry, "restored presentation uses same current geometry")
+	check(host.geometer_casting == null, "mage expedition does not create geometer-only controls")
 	check(registry.activate(result)["ok"], "explicit native activation")
 	disable(host)
 	paused = false

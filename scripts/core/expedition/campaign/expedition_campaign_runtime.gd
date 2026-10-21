@@ -95,15 +95,19 @@ func activate_stage(host: RunController, stage_id: String, arrival: Dictionary) 
 		host._defender_slowed_enemies = {}
 		host._world_pending_companions = {}
 		host._world_companion_attempts = {}
-		host.geometer_casting = GeometerCasting.new()
-		host.geometer_casting.configure(host.player)
-		host.geometer_casting.targets = host.enemies
-		host.geometer_casting.hit.connect(host._on_attack_requested)
-		host.add_child(host.geometer_casting)
 		if host.expedition_field_height <= 0.0: host.expedition_field_height = float(profile["height"]) * 0.5
-		var spatial := host.geometer_casting.bind_world_construction(host.expedition_field_height)
-		if not spatial["ok"]: return spatial
-		records[stage_id] = {"fields": {}, "nodes": [host.trap_registry, host.geometer_casting], "modes": {}}
+		host.geometer_casting = null
+		var local_nodes: Array[Node] = [host.trap_registry]
+		if host.run_state.build_snapshot.evolution_id == &"mg_ar":
+			host.geometer_casting = GeometerCasting.new()
+			host.geometer_casting.configure(host.player)
+			host.geometer_casting.targets = host.enemies
+			host.geometer_casting.hit.connect(host._on_attack_requested)
+			host.add_child(host.geometer_casting)
+			var spatial := host.geometer_casting.bind_world_construction(host.expedition_field_height)
+			if not spatial["ok"]: return spatial
+			local_nodes.append(host.geometer_casting)
+		records[stage_id] = {"fields": {}, "nodes": local_nodes, "modes": {}}
 		for id: String in state.slots:
 			if state.slots[id]["stage_id"] == stage_id and state.slots[id]["life_state"] == "alive":
 				var spawned := spawn_slot(host, id)

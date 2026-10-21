@@ -3,6 +3,7 @@ func _run() -> void:
 	var f := make("campaign")
 	if not enter(f)["ok"]: dispose(f); finish_test(); return
 	var host: RunController = f["controller"]
+	check(host.geometer_casting == null, "stage services preserve mage class identity")
 	check(host.run_state.pending_choices == 2 and host.campaign_runtime.actors.size() == 2, "first stage creates two claims and required population")
 	check(command(f, {"kind": "travel", "portal_id": "entry_to_left", "stage_id": "entry"}, "closed").get("error_code") == &"portal_closed", "uncleared travel cannot bypass service")
 	check(kill(f, "entry_field", "kill_field")["ok"], "normal death ticket/tombstone same commit")
