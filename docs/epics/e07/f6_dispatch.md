@@ -46,3 +46,12 @@ participação congelada e snapshot/durabilidade pelo writer F4, sem reset.
 Testes por impacto via tools/verify.ps1, Godot4.7.2 standard; Luna supervisiona
 execução/saídas/erros/hashes do lote, Sol corrige e consolida. Não é auditoria
 semântica independente. Sem push, master, avanço do playtest ou arquivamento.
+
+Adendo21/10 antes da correção: scripts/core/expedition/snapshot/snapshot_identity_roles.gd
+transferido exclusivamente a F6. Declarar enemy_id e recibos outgoing de participação
+nas gramáticas fechadas de remapagem trial/demo já usadas pelo snapshot legado;
+provar identidade reconstruída/replay em tests/e07_f6_snapshot_test.gd. Nenhuma
+mudança de ID de produção F5, fórmulas ou expectativas históricas. O lote Luna
+foi interrompido pelo autor após seis PASS, sem falha de teste; retomar somente
+com novo SHA/importação. Os seis consumidores sem snapshot podem ser reaproveitados
+por impacto porque seus inputs/rotinas não mudam neste adendo.

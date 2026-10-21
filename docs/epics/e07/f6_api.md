@@ -84,3 +84,10 @@ de ator são remapeadas pelo registry; IDs estáveis de participante conservam-s
 Writer F4 confirma o mesmo corte de mundo/perfil/recibos. Revisões exatas e limite
 4MiB permanecem: não truncar ledger para caber, nem prometer migração entre builds.
 Claims crescem com os eventos da expedição, sem reset por viagem/suspensão.
+
+Compatibilidade de prova legada: enemy_id e recibos outgoing de trial/demo
+seguem gramáticas fechadas de identidade do registry, como occurrence_id.
+IDs locais são substituídos por referências estáveis no envelope e remapeados
+na reconstrução; contadores/sequências e IDs de expedição de produção não são
+interpretados como Node IDs. A prova exige ausência do ID local no snapshot e
+replay inerte do recibo reconstruído.

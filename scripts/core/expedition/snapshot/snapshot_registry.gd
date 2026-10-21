@@ -269,7 +269,8 @@ func _identity_spans(text: String, field: String) -> Array[Dictionary]:
 	elif field == "pairs": pattern = "^([0-9]+):([0-9]+)$"
 	elif field in ["burn_streams","bleed_streams"]: pattern = "^([0-9]+):[a-z][a-z0-9_]*$"
 	elif field in ["_world_id","_segments","_temporary"]: pattern = "^ice_wall/([0-9]+)/(-?[0-9]+)$"
-	elif field in ["occurrence_id","event_id","_events","_occurrence_actors"]: pattern = "^(?:mob:)?trial_[0-9]+_([0-9]+)$"
+	elif field in ["occurrence_id","enemy_id","event_id","_events","_occurrence_actors"]: pattern = "^(?:mob:)?(?:trial_[0-9]+_|demo_)([0-9]+)$"
+	elif field == "events": pattern = "^outgoing_(?:trial_[0-9]+_|demo_)([0-9]+)_[0-9]+$"
 	elif text.begins_with("hunter_tar_") or text.begins_with("phantom_barrier_"): pattern = "^(?:hunter_tar_|phantom_barrier_)([0-9]+)$"
 	var regex := RegEx.new(); regex.compile(pattern)
 	var found := regex.search(text)
