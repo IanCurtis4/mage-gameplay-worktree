@@ -15,7 +15,7 @@ func checkpoint(controller: RunController, barrier: SnapshotTickBarrier, expedit
 	if profile == null or profile.reward_session == null or profile.reward_session["run_id"] != controller.run_state.run_id or profile.reward_session["character_id"] != controller.run_state.character_id: return _fail(&"invalid_session")
 	if not IdentityIds.is_technical_id(expedition_id) or not IdentityIds.is_technical_id(String(phase_id)): return _fail(&"invalid_identity")
 	var lock := profile.expedition_for_character(controller.run_state.character_id)
-	if lock != null and lock.lifecycle not in [&"active",&"suspended"]: return _fail(&"policy_unresolved")
+	if lock != null and lock.lifecycle not in [&"active",&"suspended",&"recovering"]: return _fail(&"policy_unresolved")
 	if lock != null and (lock.expedition_id != expedition_id or lock.phase_id != phase_id): return _fail(&"expedition_conflict")
 	if profile.expeditions.has(expedition_id) and profile.expeditions[expedition_id].character_id != controller.run_state.character_id: return _fail(&"expedition_conflict")
 	var captured := SnapshotRegistry.new().capture(controller,barrier)
@@ -35,7 +35,7 @@ func commit_cut(controller: RunController, snapshot: Dictionary, expedition_id: 
 	if profile.reward_session == null or profile.reward_session["run_id"] != controller.run_state.run_id or profile.reward_session["character_id"] != controller.run_state.character_id: return _fail(&"invalid_session")
 	if profile.revision != expected_revision: return _fail(&"stale_revision")
 	var lock := profile.expedition_for_character(controller.run_state.character_id)
-	if lock != null and lock.lifecycle not in [&"active",&"suspended"]: return _fail(&"policy_unresolved")
+	if lock != null and lock.lifecycle not in [&"active",&"suspended",&"recovering"]: return _fail(&"policy_unresolved")
 	if lock != null and (lock.expedition_id != expedition_id or lock.phase_id != phase_id): return _fail(&"expedition_conflict")
 	if profile.expeditions.has(expedition_id) and profile.expeditions[expedition_id].character_id != controller.run_state.character_id: return _fail(&"expedition_conflict")
 	var authority: Dictionary = snapshot.get("authority",{})
@@ -45,7 +45,7 @@ func commit_cut(controller: RunController, snapshot: Dictionary, expedition_id: 
 	slot.expedition_id = expedition_id
 	slot.character_id = controller.run_state.character_id
 	slot.phase_id = phase_id
-	slot.lifecycle = &"suspended" if suspend else &"active"
+	slot.lifecycle = &"suspended" if suspend else (&"recovering" if _unrevived_death(controller) else &"active")
 	slot.revision += 1
 	var packed := ExpeditionCheckpointCodec.pack(snapshot,ExpeditionCheckpointCodec.owner_digest(candidate,slot.character_id),profile.reward_session)
 	if not packed["ok"]: return packed
@@ -111,12 +111,12 @@ func resume(expedition_id: String, character_id: String, request_id: String, exp
 	var lock := profile.expeditions[expedition_id].copy_lock()
 	if lock.character_id != character_id: return _fail(&"not_owner")
 	if lock.checkpoint.is_empty(): return _fail(&"checkpoint_incomplete")
-	if lock.lifecycle not in [&"active",&"suspended"]: return _fail(&"policy_unresolved")
+	if lock.lifecycle not in [&"active",&"suspended",&"recovering"]: return _fail(&"policy_unresolved")
 	var fingerprint := _fingerprint("resume",expedition_id,lock.phase_id,character_id)
 	var replay := _replay(profile,expedition_id,request_id,fingerprint)
 	if not replay.is_empty():
 		if not replay.get("ok",false): return replay
-		if lock.lifecycle != &"active" or profile.reward_session != lock.checkpoint["session"]: return _fail(&"invalid_session")
+		if lock.lifecycle not in [&"active", &"recovering"] or profile.reward_session != lock.checkpoint["session"]: return _fail(&"invalid_session")
 		var reopened := _restore(lock)
 		if reopened["ok"]: reopened["already_applied"] = true
 		return reopened
@@ -125,11 +125,12 @@ func resume(expedition_id: String, character_id: String, request_id: String, exp
 	# Compatibility and passive reconstruction must succeed BEFORE changing the durable state.
 	var restored := _restore(lock)
 	if not restored["ok"]: return restored
+	var recovering := _unrevived_death(restored["root"])
 	restored["root"].free()
 	var candidate := profile.copy_state()
 	candidate.selected_character_id = character_id
 	candidate.reward_session = lock.checkpoint["session"].duplicate(true)
-	lock.lifecycle = &"active"
+	lock.lifecycle = &"recovering" if recovering else &"active"
 	lock.revision += 1
 	lock.receipts[request_id] = {"fingerprint":fingerprint,"operation":"resume","revision":lock.revision}
 	candidate.expeditions[expedition_id] = lock
@@ -143,7 +144,9 @@ func reconcile(request_id: String) -> Dictionary:
 		var context := _pending.duplicate()
 		_pending.clear()
 		return _publish(result,context)
-	if not result.get("read_only",false): _pending.clear()
+	if not result.get("read_only",false):
+		_discard_staged(_pending)
+		_pending.clear()
 	return result
 
 func _restore(lock: ExpeditionAssetLock) -> Dictionary:
@@ -162,6 +165,7 @@ func _restore(lock: ExpeditionAssetLock) -> Dictionary:
 		if host == null or host.run_state.character_id != lock.character_id or host.run_state.run_id != lock.checkpoint["session"]["run_id"]:
 			result["root"].free()
 			return _fail(&"invalid_session")
+		if host.campaign_runtime != null: host.campaign_runtime.state.lifecycle = "recovering" if _unrevived_death(host) else String(lock.lifecycle)
 		result["registry"] = registry
 	return result
 
@@ -170,11 +174,26 @@ func _commit(candidate: ProfileState, request_id: String, expected_revision: int
 	var result := facade.commit_expedition_candidate(candidate,request_id,expected_revision)
 	if result.get("ok",false): return _publish(result,context)
 	if result.get("read_only",false): _pending = context
+	else: _discard_staged(context)
 	return result
 
 func _publish(result: Dictionary, context: Dictionary) -> Dictionary:
 	var profile := facade.current_profile()
 	var lock: ExpeditionAssetLock = profile.expeditions[context["expedition_id"]]
+	if context.get("inplace_build", false):
+		var host := context["source"].get_ref() as RunController
+		if host != null: host.build_service._publish(context["prepared_build"])
+		_discard_staged(context)
+	elif context.get("campaign", false):
+		# This exact world was fully decoded/validated BEFORE the commit. Keep it
+		# inert through uncertain writes and publish it only after confirmation.
+		var restored: Dictionary = context["staged"]
+		restored["snapshot"]["authority"] = {"profile_id": profile.profile_id, "revision": profile.revision, "reward_session": profile.reward_session}
+		restored["root"].campaign_runtime.state.lifecycle = String(lock.lifecycle)
+		result.merge(restored, true)
+		result["registry"] = context["staged_registry"]
+		var previous := context["source"].get_ref() as RunController
+		if previous != null: previous.snapshot_passive = true
 	if lock.lifecycle == &"suspended" and context.has("source"):
 		var suspended_host := context["source"].get_ref() as RunController
 		if suspended_host != null: suspended_host.snapshot_passive = true
@@ -204,6 +223,54 @@ func _publish(result: Dictionary, context: Dictionary) -> Dictionary:
 	result["lifecycle"] = lock.lifecycle
 	return result
 
+# Active equipment/card changes use the same profile writer and a fully decoded
+# post-change world. The inventory consumer keeps its original scene on success.
+func change_build(controller: RunController, barrier: SnapshotTickBarrier, intent: Dictionary) -> Dictionary:
+	if not _pending.is_empty(): return _fail(&"recovery_required")
+	if controller == null or controller.persistent_facade != facade or controller.campaign_runtime == null or barrier == null or not barrier.owns(controller): return _fail(&"tick_barrier_required")
+	var prepared := controller.build_service._prepare(intent)
+	if not prepared["ok"]: return prepared
+	var profile := facade.current_profile()
+	var lock := profile.expedition_for_character(controller.run_state.character_id)
+	if lock == null or lock.lifecycle != &"active": return _fail(&"invalid_session")
+	var request_id: String = intent["request_id"]
+	var fingerprint := _fingerprint("build", lock.expedition_id, lock.phase_id, ExpeditionCanonical.encode(intent))
+	var replay := _replay(profile, lock.expedition_id, request_id, fingerprint)
+	if not replay.is_empty(): return replay
+	var material := facade.prepare_build_candidate(profile, prepared, lock.character_id)
+	if not material["ok"]: return material
+	var candidate: ProfileState = material["candidate"]
+	var cut := SnapshotRegistry.new().capture(controller, barrier)
+	if not cut["ok"]: return cut
+	var restored := SnapshotRegistry.new().restore(cut["snapshot"], facade)
+	if not restored["ok"]: return restored
+	var staged: RunController = restored["root"]
+	for id: String in cut["snapshot"]["objects"]:
+		var object: Object = restored["entities"].resolve(id)
+		if object is Node: object.process_mode = int(cut["snapshot"]["objects"][id]["node"]["mode"])
+	var staged_prepared := staged.build_service._prepare(intent)
+	if not staged_prepared["ok"]: staged.free(); return staged_prepared
+	staged.build_service._publish(staged_prepared)
+	staged.build_service._busy = false
+	staged.build_service._committing_intent = {}
+	staged.build_service._pending = {}
+	var staged_barrier := SnapshotTickBarrier.new()
+	staged_barrier.acquire(staged)
+	var after := SnapshotRegistry.new().capture(staged, staged_barrier)
+	staged_barrier.release()
+	staged.free()
+	if not after["ok"]: return after
+	var final_registry := SnapshotRegistry.new()
+	var final_world := final_registry.restore(after["snapshot"], facade)
+	if not final_world["ok"]: return final_world
+	lock.revision += 1
+	var packed := ExpeditionCheckpointCodec.pack(after["snapshot"], ExpeditionCheckpointCodec.owner_digest(candidate, lock.character_id), candidate.reward_session)
+	if not packed["ok"]: final_world["root"].free(); return packed
+	lock.checkpoint = packed["checkpoint"]
+	lock.receipts[request_id] = {"fingerprint": fingerprint, "operation": "build", "revision": lock.revision}
+	candidate.expeditions[lock.expedition_id] = lock
+	return _commit(candidate, request_id, int(intent["profile_revision"]), {"source": weakref(controller), "expedition_id": lock.expedition_id, "inplace_build": true, "prepared_build": prepared, "staged": final_world})
+
 func _replay(profile: ProfileState, expedition_id: String, request_id: String, fingerprint: String) -> Dictionary:
 	if not CharacterAssets.valid_request(request_id): return _fail(&"invalid_request_id")
 	# A request ID cannot silently move to another character/expedition.
@@ -218,3 +285,235 @@ func _fingerprint(operation: String, expedition_id: String, phase_id: StringName
 
 func _fail(code: StringName) -> Dictionary:
 	return ExpeditionCheckpointCodec.fail(code)
+
+func _unrevived_death(host: RunController) -> bool:
+	if host.campaign_runtime == null: return false
+	var state := host.campaign_runtime.state
+	return not host.player.is_alive() and state.death_events.has(state.current_death_id) and not state.death_events[state.current_death_id]["revived"]
+
+func _discard_staged(context: Dictionary) -> void:
+	if context.has("staged"):
+		var root: Node = context["staged"].get("root")
+		if is_instance_valid(root): root.free()
+
+# F5 commands stage a complete passive graph. No world callback, grant, scene
+# replacement or portal flag is published before the canonical writer commits.
+func enter(controller: RunController, barrier: SnapshotTickBarrier, expedition_id: String, manifest: ExpeditionManifest, rules: Dictionary, request_id: String, expected_revision: int) -> Dictionary:
+	if manifest == null: return _fail(&"invalid_manifest")
+	return campaign_command(controller, barrier, {"kind": "enter", "expedition_id": expedition_id, "manifest": manifest.to_data(), "rules": rules.duplicate(true)}, request_id, expected_revision)
+
+func travel(controller: RunController, barrier: SnapshotTickBarrier, portal_id: String, stage_id: String, request_id: String, expected_revision: int) -> Dictionary:
+	return campaign_command(controller, barrier, {"kind": "travel", "portal_id": portal_id, "stage_id": stage_id}, request_id, expected_revision)
+
+func record_death(controller: RunController, barrier: SnapshotTickBarrier, slot_id: String, generation: int, event_id: String, request_id: String, expected_revision: int) -> Dictionary:
+	return campaign_command(controller, barrier, {"kind": "events", "events": [{"kind": "mob_death", "slot_id": slot_id, "generation": generation, "event_id": event_id}]}, request_id, expected_revision)
+
+func revive(controller: RunController, barrier: SnapshotTickBarrier, death_event_id: String, request_id: String, expected_revision: int) -> Dictionary:
+	return campaign_command(controller, barrier, {"kind": "revive", "event_id": death_event_id}, request_id, expected_revision)
+
+func finish(controller: RunController, barrier: SnapshotTickBarrier, outcome: String, source: String, request_id: String, expected_revision: int) -> Dictionary:
+	return campaign_command(controller, barrier, {"kind": "finish", "outcome": outcome, "source": source}, request_id, expected_revision)
+
+func campaign_command(controller: RunController, barrier: SnapshotTickBarrier, command: Dictionary, request_id: String, expected_revision: int) -> Dictionary:
+	if not _pending.is_empty(): return _fail(&"recovery_required")
+	if not _valid_campaign_command(command): return _fail(&"invalid_payload")
+	if controller == null or controller.persistent_facade != facade or barrier == null or not barrier.owns(controller): return _fail(&"tick_barrier_required")
+	var profile := facade.current_profile()
+	if profile == null: return _fail(&"profile_unavailable")
+	var entering: bool = command.get("kind") == "enter"
+	if entering and controller.campaign_runtime != null: return _fail(&"expedition_conflict")
+	if not entering and controller.campaign_runtime == null: return _fail(&"invalid_session")
+	var id: String = command.get("expedition_id", "") if entering else controller.campaign_runtime.state.expedition_id
+	var phase: StringName = StringName(command["manifest"]["input"]["phase_id"]) if entering else StringName(controller.campaign_runtime.state.manifest_data["input"]["phase_id"])
+	if not IdentityIds.is_technical_id(id): return _fail(&"invalid_identity")
+	var fingerprint := _fingerprint("campaign", id, phase, ExpeditionCanonical.encode(command))
+	var replay := _replay(profile, id, request_id, fingerprint)
+	if not replay.is_empty():
+		if replay.get("ok", false):
+			if profile.expeditions[id].lifecycle == &"completed": return replay
+			var reopened := _restore(profile.expeditions[id])
+			if not reopened["ok"]: return reopened
+			replay.merge(reopened, true)
+		return replay
+	if profile.revision != expected_revision: return _fail(&"stale_revision")
+	if profile.reward_session == null or profile.reward_session["run_id"] != controller.run_state.run_id or profile.reward_session["character_id"] != controller.run_state.character_id: return _fail(&"invalid_session")
+	var lock := profile.expedition_for_character(controller.run_state.character_id)
+	if entering and lock != null: return _fail(&"expedition_conflict")
+	if not entering and (lock == null or lock.expedition_id != id): return _fail(&"invalid_session")
+	var cut := SnapshotRegistry.new().capture(controller, barrier)
+	if not cut["ok"]: return cut
+	var registry := SnapshotRegistry.new()
+	var restored := registry.restore(cut["snapshot"], facade)
+	if not restored["ok"]: return restored
+	var staged: RunController = restored["root"]
+	# Restore captured modes off-tree, without advancing or installing the graph.
+	for entity_id: String in cut["snapshot"]["objects"]:
+		var object: Object = restored["entities"].resolve(entity_id)
+		if object is Node: object.process_mode = int(cut["snapshot"]["objects"][entity_id]["node"]["mode"])
+	var changed := _apply_campaign(staged, command)
+	if not changed["ok"]: staged.free(); return changed
+	var candidate := profile.copy_state()
+	var state := staged.campaign_runtime.state
+	if state.completed:
+		var character := candidate.character_by_id(state.character_id)
+		var gold: int = int(state.policy["completion_gold"])
+		if gold > EquipmentRules.MAX_EXACT_INTEGER - character.gold: staged.free(); return _fail(&"gold_overflow")
+		character.gold += gold
+		character.base_xp_total = ProgressionRules.add_base_xp(character.base_xp_total, int(state.policy["completion_base_xp"]))
+		character.job_xp_total = ProgressionRules.add_job_xp(character.job_xp_total, int(state.policy["completion_job_xp"]), not character.evolution_id.is_empty())
+		candidate.profile_unlocks[StringName("completed_" + String(phase).sha256_text().substr(0, 54))] = true
+		candidate.lifetime_stats[&"runs_completed"] += 1
+		candidate.reward_session = null
+	var staged_barrier := SnapshotTickBarrier.new()
+	staged_barrier.acquire(staged)
+	var after := SnapshotRegistry.new().capture(staged, staged_barrier)
+	staged_barrier.release()
+	staged.free()
+	if not after["ok"]: return after
+	var final_registry := SnapshotRegistry.new()
+	var final_world := final_registry.restore(after["snapshot"], facade)
+	if not final_world["ok"]: return final_world
+	var slot := lock if lock != null else ExpeditionAssetLock.new()
+	slot.expedition_id = id
+	slot.character_id = controller.run_state.character_id
+	slot.phase_id = phase
+	slot.lifecycle = StringName(state.lifecycle)
+	slot.revision += 1
+	var packed := ExpeditionCheckpointCodec.pack(after["snapshot"], ExpeditionCheckpointCodec.owner_digest(candidate, slot.character_id), profile.reward_session)
+	if not packed["ok"]: final_world["root"].free(); return packed
+	slot.checkpoint = packed["checkpoint"]
+	slot.receipts[request_id] = {"fingerprint": fingerprint, "operation": "campaign", "revision": slot.revision}
+	candidate.expeditions[id] = slot
+	if state.lifecycle == "suspended": candidate.reward_session = null
+	return _commit(candidate, request_id, expected_revision, {"source": weakref(controller), "expedition_id": id, "campaign": true, "staged": final_world, "staged_registry": final_registry})
+
+func _valid_campaign_command(command: Dictionary) -> bool:
+	if not command.get("kind") is String: return false
+	match command["kind"]:
+		"enter":
+			if command.size() != 4 or not command.get("expedition_id") is String or not command.get("manifest") is Dictionary or not command.get("rules") is Dictionary: return false
+			var manifest: Dictionary = command["manifest"]
+			if not manifest.has_all(["input", "stages", "population", "witnesses", "portals", "objectives"]) or not manifest["input"] is Dictionary or not manifest["stages"] is Array or manifest["stages"].is_empty() or not manifest["population"] is Dictionary or not manifest["population"].get("slots") is Array or not manifest["witnesses"] is Dictionary or not manifest["portals"] is Array or not manifest["objectives"] is Array: return false
+			return manifest["input"].get("phase_id") is String and manifest["input"].get("entry_stage_id") is String and manifest["input"].get("traversal") is Dictionary
+		"travel": return command.size() == 3 and command.get("portal_id") is String and command.get("stage_id") is String
+		"revive": return command.size() == 2 and command.get("event_id") is String and not command["event_id"].is_empty()
+		"finish": return command.size() == 3 and command.get("outcome") in ["completed", "quest"] and command.get("source") is String
+		"events":
+			if command.size() != 2 or not command.get("events") is Array or command["events"].is_empty(): return false
+			for event: Variant in command["events"]:
+				if not event is Dictionary: return false
+				match event.get("kind"):
+					"wave":
+						if event.size() != 2 or not EquipmentRules.exact_integer(event.get("wave_index"), 0): return false
+					"player_death":
+						if event.size() != 2 or not event.get("event_id") is String or event["event_id"].is_empty(): return false
+					"mob_death":
+						if event.size() != 4 or not event.get("slot_id") is String or not event.get("event_id") is String or event["event_id"].is_empty() or not EquipmentRules.exact_integer(event.get("generation"), 0): return false
+					_: return false
+			return true
+	return false
+
+func _apply_campaign(host: RunController, command: Dictionary) -> Dictionary:
+	var kind: String = command.get("kind", "")
+	if kind == "enter":
+		var manifest := ExpeditionManifest.new()
+		manifest._data = command["manifest"].duplicate(true)
+		host.campaign_runtime = ExpeditionCampaignRuntime.new()
+		host.combat_participation = CombatParticipation.new()
+		return host.campaign_runtime.configure(host, command["expedition_id"], manifest, command["rules"])
+	var runtime := host.campaign_runtime
+	var state := runtime.state
+	if kind == "events":
+		for event: Dictionary in command.get("events", []):
+			var result: Dictionary
+			if event["kind"] == "wave":
+				result = runtime.admit_pending(host)
+			elif event["kind"] == "player_death":
+				if host.player.is_alive(): return _fail(&"invalid_death_source")
+				result = state.player_died(event["event_id"])
+			else:
+				if not runtime.actors.has(event.get("slot_id")): return _fail(&"invalid_death_source")
+				var actor: EnemyActor = runtime.actors[event["slot_id"]]
+				result = state.record_death(event["slot_id"], event["generation"], event["event_id"])
+				if not result["ok"]: return result
+				if not result.get("already_applied", false):
+					if actor.is_alive(): return _fail(&"invalid_death_source")
+					var ticket := host.reward_service.issue_mob_drop(actor)
+					if not ticket["ok"]: return ticket
+					# The finite companion follows its dead owner, without rewards or
+					# affecting the required population. Keep tombstones for snapshot.
+					for companion: CombatActor in host.enemies.duplicate():
+						if companion is EnemyActor and companion.is_summoned and companion.summoner_id == actor.get_instance_id():
+							host.enemies.erase(companion)
+							if companion.world_motion != null: companion.world_motion.release()
+							companion.health.current_hp = 0.0
+							companion.health._death_emitted = true
+							companion.hide()
+							companion.process_mode = Node.PROCESS_MODE_DISABLED
+					host._world_pending_companions.erase(actor.get_instance_id())
+					if actor.world_motion != null: actor.world_motion.release()
+					host.enemies.erase(actor)
+					actor.hide()
+					actor.process_mode = Node.PROCESS_MODE_DISABLED
+			if not result["ok"]: return result
+		runtime.pending_events.clear()
+		return {"ok": true}
+	if kind == "wave": return runtime.admit_pending(host)
+	if kind == "travel":
+		if state.lifecycle != "active" or command.get("stage_id") != state.current_stage_id or not host.player.is_alive(): return _fail(&"invalid_destination")
+		var portal := state.portal_view(command.get("portal_id", ""))
+		if portal.is_empty() or portal["from_stage"] != state.current_stage_id: return _fail(&"invalid_destination")
+		if not portal["open"]: return _fail(&"portal_closed")
+		if not _at_point(host, portal["from_anchor"]): return _fail(&"out_of_range")
+		var moved := runtime.activate_stage(host, portal["to_stage"], portal["to_anchor"])
+		if not moved["ok"]: return moved
+		state.traversed_edges[ExpeditionCanonical.digest([portal["from_stage"], portal["to_stage"]])] = true
+		if portal["kind"] != "local": state.anchor = portal["to_anchor"].duplicate(true)
+		for source: String in state.visit(state.current_stage_id): host.run_state.queue_choice()
+		return runtime.admit_pending(host)
+	if kind == "revive":
+		var revived := state.revive(command.get("event_id", ""))
+		if not revived["ok"] or revived.get("already_applied", false): return revived
+		var returned := runtime.activate_stage(host, state.anchor["stage_id"], state.anchor)
+		if not returned["ok"]: return returned
+		ExpeditionDeathRecovery.revive(host.player, state.policy)
+		return runtime.admit_pending(host)
+	if kind == "finish":
+		if state.lifecycle != "active" or not host.player.is_alive(): return _fail(&"completion_unmet")
+		var source := {}
+		for objective: Dictionary in state.manifest_data["objectives"]:
+			if objective["objective_id"] == command.get("source"): source = objective; break
+		if source.is_empty() or not _at_point(host, source["point"]): return _fail(&"completion_unmet")
+		if command.get("outcome") == "quest":
+			if source["outcome"] != "early_exit": return _fail(&"unsupported_quest_exception")
+			state.objectives[source["objective_id"]] = true
+			state.lifecycle = "suspended"
+			return {"ok": true}
+		if command.get("outcome") != "completed" or source["outcome"] != "phase_completion" or not state.stages[state.current_stage_id]["cleared_once"]: return _fail(&"completion_unmet")
+		if host.reward_service.has_uncollected(): return _fail(&"rewards_pending")
+		for objective: Dictionary in state.manifest_data["objectives"]:
+			if objective["required"] and objective["objective_id"] != source["objective_id"] and not state.objectives.has(objective["objective_id"]): return _fail(&"completion_unmet")
+		state.completed = true
+		state.lifecycle = "completed"
+		host.run_finished = true
+		host.run_state.augment_stacks.clear()
+		host.run_state.pending_choices = 0
+		host.run_state._choice_ids.clear()
+		host.run_state.current_offer.clear()
+		host.run_state._offer_ids.clear()
+		host.run_state._offer_open = false
+		host.run_state.runtime_revision += 1
+		return {"ok": true}
+	return _fail(&"invalid_payload")
+
+func _at_point(host: RunController, record: Dictionary) -> bool:
+	var from := host.player.world_point()
+	var target := ExpeditionPopulationPlanner.point(record)
+	if from == null or from.stage_id != target.stage_id or from.position.distance_to(target.position) > 48.0: return false
+	var world := host.player.world_motion.geometry
+	var path := world.path(from, target, host.player.world_motion.profile(), world.geometry_revision)
+	if not path["ok"]: return false
+	var distance := 0.0
+	var points: Array = path["data"]["points"]
+	for index: int in range(1, points.size()): distance += points[index - 1]["position"].distance_to(points[index]["position"])
+	return distance <= 48.0

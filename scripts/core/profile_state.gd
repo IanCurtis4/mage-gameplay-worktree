@@ -114,5 +114,5 @@ func equipment_for_character(character_id: String) -> Dictionary[StringName, Equ
 
 func expedition_for_character(character_id: String) -> ExpeditionAssetLock:
 	for lock: ExpeditionAssetLock in expeditions.values():
-		if lock.character_id == character_id: return lock.copy_lock()
+		if lock.character_id == character_id and lock.lifecycle != &"completed": return lock.copy_lock()
 	return null

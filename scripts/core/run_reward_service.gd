@@ -29,6 +29,7 @@ func _init(controller: RunController) -> void:
 
 func issue(event_id: String, reward_id: StringName, stage_reward: bool = false) -> Dictionary:
 	var controller := _owner.get_ref() as RunController
+	if controller != null and controller.campaign_runtime != null: return BuildEffectCatalog.failure(&"expedition_reward_source_required")
 	if controller == null or controller.run_state != _run or controller.encounter_active or controller.run_finished or not controller.player.is_alive() or event_id.is_empty():
 		return BuildEffectCatalog.failure(&"invalid_reward_event")
 	if _events.has(event_id):
@@ -247,7 +248,7 @@ func issue_mob_drop(actor: EnemyActor) -> Dictionary:
 	if is_instance_valid(actor) and actor.get_meta("admin_spawn", false): return BuildEffectCatalog.failure(&"admin_mob_ineligible")
 	if is_instance_valid(actor) and actor.is_summoned: return BuildEffectCatalog.failure(&"summoned_mob_ineligible")
 	var controller := _owner.get_ref() as RunController
-	if not mob_loot_enabled() or controller == null or controller.run_state != _run or controller.run_finished or not controller.player.is_alive() or not is_instance_valid(actor):
+	if not mob_loot_enabled() or controller == null or controller.run_state != _run or controller.run_finished or (not controller.player.is_alive() and controller.campaign_runtime == null) or not is_instance_valid(actor):
 		return BuildEffectCatalog.failure(&"invalid_mob_event")
 	var registered: Dictionary = _mob_actors.get(actor.get_instance_id(), {})
 	if registered.is_empty() or registered["actor"].get_ref() != actor or actor.get_parent() != controller or actor.is_alive():
@@ -260,9 +261,14 @@ func issue_mob_drop(actor: EnemyActor) -> Dictionary:
 	if not checked["ok"]: return checked
 	var values: Array[float] = []
 	for index: int in 5: values.append(controller.rng.randf())
-	var rolled := _loot_resolver.roll(occurrence, values)
+	var terms := {"base_xp": 0, "job_xp": 0, "equipment_factor": 1.0, "card_factor": 1.0}
+	if controller.campaign_runtime != null:
+		var slot_id := controller.campaign_runtime.slot_for_actor(actor)
+		if slot_id.is_empty(): return BuildEffectCatalog.failure(&"invalid_death_source")
+		terms = controller.campaign_runtime.state.reward_terms(slot_id)
+	var rolled := _loot_resolver.roll(occurrence, values, terms["equipment_factor"], terms["card_factor"])
 	assert(rolled["ok"], "Validated immutable loot must resolve without failure")
-	var payload := {"base_xp": 0, "job_xp": 0, "equipment_ids": [], "equipment_drops": rolled["equipment_drops"].duplicate(true), "stat_increments": {}}
+	var payload := {"base_xp": terms["base_xp"], "job_xp": terms["job_xp"], "equipment_ids": [], "equipment_drops": rolled["equipment_drops"].duplicate(true), "stat_increments": {}}
 	for drop: Dictionary in payload["equipment_drops"]: payload["equipment_ids"].append(drop["definition_id"])
 	payload["card_id"] = rolled["card_id"]
 	var ticket_id := "reward-%s-%d" % [_run.run_id.md5_text(), _next_sequence]

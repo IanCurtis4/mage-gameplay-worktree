@@ -876,7 +876,7 @@
       "_applied",
       "_pending"
     ],
-    "omitted": {}
+    "omitted": {"_expedition_service": "external in-flight profile writer coordinator; uncertain transactions freeze the live consumer"}
   },
   "res://scripts/core/run_card_inventory.gd": {
     "revision": 1,
@@ -1322,7 +1322,7 @@
       "_world_pending_companions",
       "reward",
       "encounter_index",
-      "encounter_active",
+      "_legacy_encounter_active",
       "run_finished",
       "build_service",
       "acquisition_journal",
@@ -1349,7 +1349,9 @@
       "spiritualist_ground",
       "control_preferences",
       "_selected_enemy",
-      "_hovered_enemy"
+      "_hovered_enemy",
+      "campaign_runtime",
+      "combat_participation"
     ],
     "omitted": {
       "admin_panel": "presentation/input settings or externally rebound profile authority",
@@ -1407,7 +1409,11 @@
       "_memory_snapshot_barrier": "transient capture/recovery coordination; not simulation state",
       "arena_view": "disposable presentation, rebuilt from logical data after validation",
       "expedition_view": "disposable presentation, rebuilt from logical data after validation",
-      "equipment_head": "disposable presentation, rebuilt from logical data after validation"
+      "equipment_head": "disposable presentation, rebuilt from logical data after validation",
+      "encounter_active": "computed directly from serialized combat participation in expeditions, legacy backing otherwise",
+      "_expedition_transaction_service": "external in-flight writer coordinator, never serialized; pending commands remain frozen in campaign",
+      "_expedition_flush_running": "ephemeral scheduling guard; durable campaign pending_events is authoritative",
+      "expedition_entry_mode": "construction-only switch; restored hosts are passive and never rerun startup"
     },
     "omitted_signals": {
       "memory_snapshot_ready": "out-of-graph capture result consumer, emitted only after capture"
@@ -1894,5 +1900,70 @@
     "omitted": {
       "path": "external settings write destination; host default, never selected by snapshot"
     }
+  },
+  "res://scripts/core/expedition/campaign/expedition_campaign_runtime.gd": {
+    "omitted": {},
+    "revision": 1,
+    "fields": [
+      "state",
+      "worlds",
+      "records",
+      "actors",
+      "pending_events",
+      "death_serial"
+    ]
+  },
+  "res://scripts/core/expedition/combat/combat_participation.gd": {
+    "omitted": {},
+    "revision": 1,
+    "fields": [
+      "links",
+      "remaining",
+      "exit_delay",
+      "damage_since_tick"
+    ]
+  },
+  "res://scripts/core/expedition/population/expedition_wave_clock.gd": {
+    "omitted": {},
+    "revision": 1,
+    "fields": [
+      "started",
+      "remaining",
+      "interval",
+      "wave_index"
+    ]
+  },
+  "res://scripts/core/expedition/campaign/expedition_campaign_state.gd": {
+    "omitted": {},
+    "revision": 1,
+    "fields": [
+      "expedition_id",
+      "character_id",
+      "manifest_data",
+      "policy",
+      "current_stage_id",
+      "lifecycle",
+      "stages",
+      "slots",
+      "clock",
+      "anchor",
+      "entry_claims",
+      "death_events",
+      "current_death_id",
+      "objectives",
+      "traversed_edges",
+      "completed",
+      "population_rules"
+    ]
+  },
+  "res://scripts/world/expedition_portal.gd": {
+    "omitted": {},
+    "revision": 1,
+    "fields": [
+      "portal_id",
+      "kind",
+      "open",
+      "anchor"
+    ]
   }
 }

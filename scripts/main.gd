@@ -73,6 +73,11 @@ static var pending_training_mode := false
 static var pending_gameplay_extension := false
 
 var rng := RandomNumberGenerator.new()
+var campaign_runtime: ExpeditionCampaignRuntime
+var combat_participation: CombatParticipation
+var _expedition_transaction_service: ExpeditionService
+var _expedition_flush_running := false
+var expedition_entry_mode := false
 var run_state: RunState
 var navigation := ArenaNavigation.new()
 var arena_view: ArenaView
@@ -102,7 +107,11 @@ var _world_companion_attempts: Dictionary[int, bool] = {}
 var _world_pending_companions: Dictionary[int, WeakRef] = {}
 var reward: RewardPickup
 var encounter_index := 0
-var encounter_active := false
+var _legacy_encounter_active := false
+var encounter_active: bool:
+	get:
+		return combat_participation.active() if campaign_runtime != null and combat_participation != null else _legacy_encounter_active
+	set(value): _legacy_encounter_active = value
 var run_finished := false
 var build_service: RunBuildService
 var acquisition_journal := AcquisitionJournal.new()
@@ -303,7 +312,7 @@ func _ready() -> void:
 	_build_ui()
 	if training_mode:
 		_spawn_training_boss()
-	else:
+	elif not expedition_entry_mode:
 		_spawn_encounter(1)
 
 func _create_runtime_camera() -> void:
@@ -318,6 +327,8 @@ func _create_runtime_camera() -> void:
 	player.add_child(camera)
 
 func _advance_runtime(_delta: float) -> void:
+	if campaign_runtime != null:
+		_advance_expedition_runtime(_delta)
 	if not get_tree().paused and not run_finished: _advance_world_companion_requests()
 	player.sentinel_combat_active = encounter_active and not run_finished
 	player.regenerate_hp(_delta, encounter_active, get_tree().paused or run_finished)
@@ -1994,6 +2005,7 @@ func _cancel_spiritualist_drain() -> void:
 			battle_indicators.clear_spiritualist_drain_wisps()
 
 func _on_player_damage_resolved(result: Dictionary) -> void:
+	if combat_participation != null and float(result.get("actual_damage", 0.0)) > 0.0: combat_participation.hostile_damage()
 	if float(result.get("actual_damage", 0.0)) > 0.0:
 		_cancel_spiritualist_drain()
 
@@ -2234,6 +2246,19 @@ func _on_enemy_attack_requested(request: DamageRequest, target_actor: CombatActo
 	projectile.add_to_group("enemy_projectiles")
 
 func _on_enemy_died(actor: CombatActor) -> void:
+	if campaign_runtime != null and not actor.get_meta("admin_spawn", false):
+		var slot_id := campaign_runtime.slot_for_actor(actor)
+		if not slot_id.is_empty():
+			var slot: Dictionary = campaign_runtime.state.slots[slot_id]
+			campaign_runtime.pending_events.append({"kind": "mob_death", "slot_id": slot_id, "generation": slot["generation"], "event_id": "death_" + actor.occurrence.occurrence_id})
+			_flush_expedition_events.call_deferred()
+			return
+		if actor is EnemyActor and actor.is_summoned:
+			enemies.erase(actor)
+			actor.hide()
+			actor.process_mode = Node.PROCESS_MODE_DISABLED
+			return
+		return # Unknown/stale campaign actors can never enter the legacy clear path.
 	if not training_mode and not actor.get_meta("admin_spawn", false) and actor is EnemyActor and not actor.is_summoned and reward_service != null and reward_service.mob_loot_enabled():
 		var issued := reward_service.issue_mob_drop(actor)
 		if not issued["ok"]:
@@ -2325,6 +2350,7 @@ func _prepare_hunter_fan(result: Dictionary) -> void:
 	if selected != null and context != null and context.ledger() != null and context.ledger().admit_hunter_fan(result, selected.get_instance_id()): result["_hunter_fan_target_id"] = selected.get_instance_id()
 
 func _on_enemy_damage_resolved(result: Dictionary) -> void:
+	if combat_participation != null and float(result.get("actual_damage", 0.0)) > 0.0: combat_participation.hostile_damage()
 	if player == null or not is_instance_valid(player) or not player.is_alive() or int(result.get("source_id", 0)) != player.get_instance_id():
 		return
 	var candidates: Array[Dictionary] = []
@@ -2544,9 +2570,74 @@ func _spawn_death_visual(actor: CombatActor, after_run: bool = false) -> void:
 	actor.hide()
 
 func _on_player_died(_actor: CombatActor) -> void:
+	if campaign_runtime != null:
+		campaign_runtime.death_serial += 1
+		campaign_runtime.pending_events.append({"kind": "player_death", "event_id": "player_death_%d" % campaign_runtime.death_serial})
+		_flush_expedition_events.call_deferred()
+		return
 	_spawn_death_visual(_actor, true)
 	encounter_active = false
 	_show_result(false)
+
+func _advance_expedition_runtime(delta: float) -> void:
+	if snapshot_passive or run_finished or get_tree().paused or _memory_snapshot_pending: return
+	var links := {}
+	for enemy: CombatActor in enemies:
+		if enemy is EnemyActor and enemy.is_alive() and enemy.engagement_mode == &"engaged":
+			links[enemy.occurrence.occurrence_id if enemy.occurrence != null else "companion"] = true
+	combat_participation.observe(links, delta)
+	encounter_active = combat_participation.active()
+	var wave := campaign_runtime.state.advance(delta)
+	var pending_safe := false
+	for slot: Dictionary in campaign_runtime.state.slots.values():
+		if slot["stage_id"] != campaign_runtime.state.current_stage_id or slot["life_state"] != "respawn_pending": continue
+		var world: WorldGeometry = campaign_runtime.worlds[slot["stage_id"]]
+		var query := world.position_query(ExpeditionPopulationPlanner.point(slot["home"]), slot["traversal"], world.geometry_revision)
+		if query["ok"] and query["data"]["occupants"].is_empty(): pending_safe = true; break
+	if wave or pending_safe:
+		if not campaign_runtime.pending_events.any(func(event: Dictionary) -> bool: return event["kind"] == "wave"):
+			campaign_runtime.pending_events.append({"kind": "wave", "wave_index": campaign_runtime.state.clock.wave_index})
+		_flush_expedition_events.call_deferred()
+
+func _flush_expedition_events() -> void:
+	if campaign_runtime == null or _expedition_flush_running or campaign_runtime.pending_events.is_empty() or _memory_snapshot_pending: return
+	_expedition_flush_running = true
+	var requested := request_memory_snapshot()
+	if not requested["ok"]: _expedition_flush_running = false; return
+	var captured: Dictionary = await memory_snapshot_ready
+	if not captured["ok"]:
+		status_label.text = "A expedição está pausada: %s" % captured["error_code"]
+		return
+	_expedition_transaction_service = ExpeditionService.new(persistent_facade)
+	var command := {"kind": "events", "events": campaign_runtime.pending_events.duplicate(true)}
+	var request := "events_" + ExpeditionCanonical.digest(command).substr(0, 56)
+	var result := _expedition_transaction_service.campaign_command(self, _memory_snapshot_barrier, command, request, persistent_facade.current_profile().revision)
+	if result["ok"]:
+		_install_expedition_result(result)
+	else:
+		status_label.text = "A expedição está pausada; confirme a recuperação antes de continuar: %s" % result["error_code"]
+
+func reconcile_expedition_transaction(request_id: String) -> Dictionary:
+	if _expedition_transaction_service == null: return WorldSkillCast.failure(&"invalid_transaction")
+	var result := _expedition_transaction_service.reconcile(request_id)
+	if result["ok"]: _install_expedition_result(result)
+	return result
+
+func _install_expedition_result(result: Dictionary) -> Dictionary:
+	if not result.has("root"): return result
+	var registry: SnapshotRegistry = result["registry"]
+	var copy: RunController = result["root"]
+	var parent := get_parent()
+	var installed := registry.install(result, parent)
+	if not installed["ok"]: return installed
+	var activated := registry.activate(result)
+	if not activated["ok"]: return activated
+	var tree := get_tree()
+	if tree.current_scene == self: tree.current_scene = copy
+	parent.remove_child(self)
+	tree.paused = copy.campaign_runtime.state.lifecycle != "active"
+	queue_free()
+	return result
 
 func _show_result(victory: bool) -> void:
 	if run_finished:
@@ -3601,6 +3692,9 @@ func _spawn_route_enemy(entry: Dictionary, stage: int, summoned: bool = false, o
 	occurrence.mob_base_id = entry["species"]
 	occurrence.category_id = entry["category"]
 	occurrence.origin_id = PlaytestGameplay.origin(stage)
+	if summoned and campaign_runtime != null and source is EnemyActor and source.occurrence != null:
+		occurrence.origin_id = source.occurrence.origin_id
+		occurrence.occurrence_id = "summon_" + source.occurrence.occurrence_id.sha256_text().substr(0, 57)
 	var checked := enemy.configure_occurrence(occurrence, run_state.effect_catalog().mob_catalog(), navigation, player)
 	if not checked.get("ok", false):
 		enemy.free()

@@ -3665,6 +3665,11 @@ func _move_step(delta: float) -> void:
 		_last_facing = velocity.normalized()
 
 func _on_health_died(actor_id: int) -> void:
+	var host := get_parent() as RunController
+	if host != null and host.campaign_runtime != null:
+		ExpeditionDeathRecovery.prepare(host)
+		super._on_health_died(actor_id)
+		return
 	clear_sentinel_state()
 	clear_hunter_state()
 	cancel_active_cast()

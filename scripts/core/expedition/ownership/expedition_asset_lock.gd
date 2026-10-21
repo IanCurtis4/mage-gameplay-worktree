@@ -32,8 +32,9 @@ static func from_record(raw: Variant) -> Dictionary:
 	if not raw is Dictionary or raw.size() not in [5,7]: return BuildEffectCatalog.failure(&"invalid_expedition_slot")
 	for key: String in ["expedition_id", "character_id", "phase_id", "lifecycle"]:
 		if not raw.get(key) is String or raw[key].is_empty(): return BuildEffectCatalog.failure(&"invalid_expedition_slot")
-	if not IdentityIds.is_technical_id(raw["expedition_id"]) or not IdentityIds.is_technical_id(raw["phase_id"]) or raw["lifecycle"] not in ["active", "suspended", "recovering", "reconciling"] or not EquipmentRules.exact_integer(raw.get("revision"), 0): return BuildEffectCatalog.failure(&"invalid_expedition_slot")
+	if not IdentityIds.is_technical_id(raw["expedition_id"]) or not IdentityIds.is_technical_id(raw["phase_id"]) or raw["lifecycle"] not in ["active", "suspended", "recovering", "reconciling", "completed"] or not EquipmentRules.exact_integer(raw.get("revision"), 0): return BuildEffectCatalog.failure(&"invalid_expedition_slot")
 	var slot := ExpeditionAssetLock.new()
+	if raw["lifecycle"] == "completed" and raw.size() != 7: return BuildEffectCatalog.failure(&"invalid_expedition_slot")
 	slot.expedition_id = raw["expedition_id"]
 	slot.character_id = raw["character_id"]
 	slot.phase_id = StringName(raw["phase_id"])
@@ -46,7 +47,7 @@ static func from_record(raw: Variant) -> Dictionary:
 		if not raw.get("receipts") is Dictionary: return BuildEffectCatalog.failure(&"invalid_checkpoint")
 		for request: Variant in raw["receipts"]:
 			var receipt: Variant = raw["receipts"][request]
-			if not request is String or not CharacterAssets.valid_request(request) or not receipt is Dictionary or receipt.size() != 3 or not CharacterAssets.valid_digest(receipt.get("fingerprint")) or receipt.get("operation") not in ["checkpoint","suspend","collect","resume"] or not EquipmentRules.exact_integer(receipt.get("revision"),1,slot.revision): return BuildEffectCatalog.failure(&"invalid_checkpoint")
+			if not request is String or not CharacterAssets.valid_request(request) or not receipt is Dictionary or receipt.size() != 3 or not CharacterAssets.valid_digest(receipt.get("fingerprint")) or receipt.get("operation") not in ["checkpoint","suspend","collect","resume","campaign","build"] or not EquipmentRules.exact_integer(receipt.get("revision"),1,slot.revision): return BuildEffectCatalog.failure(&"invalid_checkpoint")
 		slot.checkpoint = raw["checkpoint"].duplicate(true)
 		slot.checkpoint["session"]["last_committed_seq"] = int(slot.checkpoint["session"]["last_committed_seq"])
 		slot.checkpoint["format"] = int(slot.checkpoint["format"])

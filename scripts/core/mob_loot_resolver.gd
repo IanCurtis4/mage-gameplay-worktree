@@ -77,7 +77,9 @@ func validate_occurrence(occurrence: MobOccurrence) -> Dictionary:
 	for quality: Variant in _profiles[occurrence.category_id]["quality_weights"]:
 		if _item_pool(occurrence.category_id,minimum_quality(occurrence.category_id,StringName(quality)),int(checked["level"])).is_empty(): return BuildEffectCatalog.failure(&"empty_eligible_pool")
 	return checked
-func roll(occurrence: MobOccurrence, uniforms: Array) -> Dictionary:
+func roll(occurrence: MobOccurrence, uniforms: Array, equipment_factor: float = 1.0, card_factor: float = 1.0) -> Dictionary:
+	if not is_finite(equipment_factor) or not is_finite(card_factor) or equipment_factor < 0.0 or equipment_factor > 1.0 or card_factor < 0.0 or card_factor > 1.0: return BuildEffectCatalog.failure(&"invalid_loot_chance")
+	if occurrence != null and FLOORS.has(occurrence.category_id) and (equipment_factor != 1.0 or card_factor != 1.0): return BuildEffectCatalog.failure(&"invalid_respawn_policy")
 	var checked := validate_occurrence(occurrence)
 	if not checked["ok"]:
 		return checked
@@ -89,13 +91,13 @@ func roll(occurrence: MobOccurrence, uniforms: Array) -> Dictionary:
 	var row: Dictionary = _profiles[occurrence.category_id]
 	var mob: MobDefinition = checked["definition"]
 	var drops: Array[Dictionary] = []
-	if FLOORS.has(occurrence.category_id) or _passes(float(uniforms[0]), float(row["equipment_chance"])):
+	if FLOORS.has(occurrence.category_id) or _passes(float(uniforms[0]), float(row["equipment_chance"]) * equipment_factor):
 		var quality := minimum_quality(occurrence.category_id, StringName(_weighted(row["quality_weights"], float(uniforms[1]), EquipmentRules.QUALITY_IDS)))
 		var id := StringName(_weighted(_item_pool(occurrence.category_id, quality, int(checked["level"])), float(uniforms[2])))
 		var item := _catalog.get_definition(&"equipment", id) as EquipmentDefinition
 		var sockets := int(_weighted(row["socket_weights"], float(uniforms[3]))) if EquipmentRules.allows_sockets(item.metadata()) else 0
 		drops.append({"definition_id": id, "origin_id": occurrence.origin_id, "item_level": int(checked["level"]), "quality_id": quality, "socket_capacity": sockets, "recipe_revision_id": _recipe_revision_id, "power_ruleset_id": _power_ruleset_id})
-	var card: StringName = mob.card_id if mob.id not in _cardless_base_ids and _passes(float(uniforms[4]), float(row["card_chance"])) else &""
+	var card: StringName = mob.card_id if mob.id not in _cardless_base_ids and _passes(float(uniforms[4]), float(row["card_chance"]) * card_factor) else &""
 	return {"ok": true, "equipment_drops": drops, "card_id": card, "mob_base_id": mob.id, "category_id": occurrence.category_id, "occurrence_id": occurrence.occurrence_id}
 func _item_pool(category: StringName, quality: StringName, level: int = 0) -> Dictionary:
 	var result: Dictionary = {}

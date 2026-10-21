@@ -173,7 +173,8 @@ func capture(root: Node, barrier: SnapshotTickBarrier) -> Dictionary:
 	var generations: Dictionary = {}
 	for id: String in _records: generations[id] = entities.generation_for(id)
 	for id: String in _referenced_tombstones: generations[id] = entities.generation_for(id)
-	var envelope := {"format":FORMAT,"engine":Engine.get_version_info()["string"],"sources":_source_revisions(),"root":entities.stable_for(root.get_instance_id()),"objects":_records,"containers":_containers,"dead_references":_dead_references,"tombstones":_referenced_tombstones.keys(),"identity_generations":generations,"next_entity_serial":entities.next_serial(),"assets":_assets,"coverage":_coverage(),"authority":authority.duplicate(true),"world_view":root is RunController and root.expedition_view != null}
+	var has_world_view: bool = root is RunController and (root.expedition_view != null or (root.campaign_runtime != null and root.player.world_motion != null))
+	var envelope := {"format":FORMAT,"engine":Engine.get_version_info()["string"],"sources":_source_revisions(),"root":entities.stable_for(root.get_instance_id()),"objects":_records,"containers":_containers,"dead_references":_dead_references,"tombstones":_referenced_tombstones.keys(),"identity_generations":generations,"next_entity_serial":entities.next_serial(),"assets":_assets,"coverage":_coverage(),"authority":authority.duplicate(true),"world_view":has_world_view}
 	var bytes := var_to_bytes(envelope).size()
 	if bytes > MAX_BYTES: return StableEntityRegistry.failure(&"snapshot_too_large")
 	var checked := validate(envelope)
@@ -188,7 +189,7 @@ func _container_seen(value: Variant) -> bool:
 	return false
 
 func _source_revisions() -> Dictionary:
-	var paths: Array[String] = [MANIFEST]
+	var paths: Array[String] = [MANIFEST, "res://data/expedition/policies/e07_initial.json"]
 	_collect_sources("res://scripts",paths)
 	paths.sort()
 	var result: Dictionary = {}
@@ -769,6 +770,7 @@ func install(restored: Dictionary, parent: Node) -> Dictionary:
 		root.arena_view.z_index = -2
 		root.add_child(root.arena_view)
 		root.arena_view.configure(root.navigation._bounds,root.navigation._obstacles)
+		if root.campaign_runtime != null: root.arena_view.hide()
 		root._create_runtime_camera()
 		root._build_ui()
 		if restored["snapshot"]["world_view"]:
@@ -824,6 +826,8 @@ func _assignable(owner: Object, field: String, value: Variant) -> bool:
 
 func _validate_runtime_graph() -> Dictionary:
 	for value: Object in _objects:
+		if value is ExpeditionCampaignRuntime and not value.valid(): return StableEntityRegistry.failure(&"invalid_payload", "campaign state")
+		if value is CombatParticipation and not value.valid(): return StableEntityRegistry.failure(&"invalid_payload", "combat participation")
 		if value is BuildSnapshot:
 			if value.catalog_version != ProfileState.CATALOG_VERSION or value.ruleset_id != ProfileState.RULESET_ID: return StableEntityRegistry.failure(&"content_revision_unavailable")
 		if value is CombatActor:

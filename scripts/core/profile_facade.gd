@@ -221,8 +221,10 @@ func update_preset(
 		committed["selected_preset"] = preset_index
 	return _finish_operation(request_id, committed)
 
-func run_mutation_status(run_id: String, character_id: String) -> Dictionary:
-	if _profile != null and _profile.expedition_for_character(character_id) != null: return BuildEffectCatalog.failure(&"locked_by_expedition")
+func run_mutation_status(run_id: String, character_id: String, expedition_controller: RunController = null) -> Dictionary:
+	var lock := _profile.expedition_for_character(character_id) if _profile != null else null
+	if lock != null:
+		if expedition_controller == null or expedition_controller.persistent_facade != self or expedition_controller.campaign_runtime == null or expedition_controller.campaign_runtime.state.expedition_id != lock.expedition_id or lock.lifecycle != &"active": return BuildEffectCatalog.failure(&"locked_by_expedition")
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress"}
 	if _read_only or not _uncertain_transaction.is_empty() or _store.has_pending_transaction():
@@ -234,6 +236,7 @@ func run_mutation_status(run_id: String, character_id: String) -> Dictionary:
 	return {"ok": true}
 
 func equip_between_encounters(request_id: String, expected_revision: int, controller: RunController, intent: Dictionary) -> Dictionary:
+	if controller != null and controller.campaign_runtime != null: return BuildEffectCatalog.failure(&"checkpoint_required")
 	if controller == null or controller.persistent_facade != self or controller.build_service == null or request_id != intent.get("request_id") or not intent.has("resource_state") or not controller.build_service._busy or controller.build_service._committing_intent != intent:
 		return {"ok": false, "error_code": &"invalid_session", "request_id": request_id}
 	var prepared := controller.build_service._prepare(intent)
@@ -243,15 +246,22 @@ func equip_between_encounters(request_id: String, expected_revision: int, contro
 	if not ready["ok"]:
 		return _finish_operation(request_id, ready)
 	var before := _profile.copy_state()
+	var material := prepare_build_candidate(before, prepared, controller.run_state.character_id)
+	if not material["ok"]: return _finish_operation(request_id, material)
+	var candidate: ProfileState = material["candidate"]
+	return _finish_operation(request_id, _resolve_commit(before, candidate, _commit_candidate(candidate, controller.run_state.character_id), true))
+
+func prepare_build_candidate(before: ProfileState, prepared: Dictionary, character_id: String) -> Dictionary:
 	var candidate := before.copy_state()
-	var character := candidate.character_by_id(controller.run_state.character_id)
+	var character := candidate.character_by_id(character_id)
+	if character == null: return BuildEffectCatalog.failure(&"invalid_character_id")
 	var merged := candidate.card_inventory.merge_character_projection(prepared["inventory"], character.character_id, candidate.equipment_instances)
-	if merged == null: return _finish_operation(request_id, BuildEffectCatalog.failure(&"not_owner"))
+	if merged == null: return BuildEffectCatalog.failure(&"not_owner")
 	candidate.card_inventory = merged
 	var equipped: Dictionary = prepared["snapshot"].equipped
 	character.equipped.assign(equipped)
 	character.presets[character.selected_preset]["equipped"] = equipped.duplicate(true)
-	return _finish_operation(request_id, _resolve_commit(before, candidate, _commit_candidate(candidate, character.character_id), true))
+	return {"ok": true, "candidate": candidate}
 
 func update_action_slots(request_id: String, expected_revision: int, character_id: String, slots: Array[Variant]) -> Dictionary:
 	if _profile != null and _profile.expedition_for_character(character_id) != null:

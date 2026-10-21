@@ -1,0 +1,16 @@
+{
+  "policy_id": "e07_initial",
+  "revision": 1,
+  "interval_seconds": 900.0,
+  "death_penalty_seconds": 120.0,
+  "hp_fraction": 0.5,
+  "sp_fraction": 0.25,
+  "xp_factor": 0.7,
+  "gold_factor": 0.6,
+  "equipment_factor": 0.5,
+  "card_factor": 0.5,
+  "combat_exit_seconds": 5.0,
+  "completion_gold": 100,
+  "completion_base_xp": 300,
+  "completion_job_xp": 200
+}

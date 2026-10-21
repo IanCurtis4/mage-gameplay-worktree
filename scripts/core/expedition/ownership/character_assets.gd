@@ -24,11 +24,11 @@ static func validate(profile: ProfileState) -> Dictionary:
 		var slot: ExpeditionAssetLock = profile.expeditions[id]
 		var check := ExpeditionAssetLock.from_record(slot.to_record())
 		if not check.get("ok", false): return check
-		if id != slot.expedition_id or profile.character_by_id(slot.character_id) == null or seen.has(slot.character_id): return BuildEffectCatalog.failure(&"expedition_conflict")
-		seen[slot.character_id] = true
+		if id != slot.expedition_id or profile.character_by_id(slot.character_id) == null or (slot.lifecycle != &"completed" and seen.has(slot.character_id)): return BuildEffectCatalog.failure(&"expedition_conflict")
+		if slot.lifecycle != &"completed": seen[slot.character_id] = true
 		if not slot.checkpoint.is_empty():
-			if ExpeditionCheckpointCodec.owner_digest(profile,slot.character_id) != slot.checkpoint["owner_digest"]: return BuildEffectCatalog.failure(&"checkpoint_assets_mismatch")
-			if slot.lifecycle == &"active" and profile.reward_session != slot.checkpoint["session"]: return BuildEffectCatalog.failure(&"invalid_checkpoint")
+			if slot.lifecycle != &"completed" and ExpeditionCheckpointCodec.owner_digest(profile,slot.character_id) != slot.checkpoint["owner_digest"]: return BuildEffectCatalog.failure(&"checkpoint_assets_mismatch")
+			if slot.lifecycle in [&"active", &"recovering"] and profile.reward_session != slot.checkpoint["session"]: return BuildEffectCatalog.failure(&"invalid_checkpoint")
 			if slot.lifecycle == &"suspended" and profile.reward_session != null and profile.reward_session["character_id"] == slot.character_id: return BuildEffectCatalog.failure(&"invalid_checkpoint")
 	for id: StringName in profile.profile_unlocks:
 		if not IdentityIds.is_technical_id(String(id)) or not profile.profile_unlocks[id]: return BuildEffectCatalog.failure(&"invalid_unlock")
@@ -46,10 +46,11 @@ static func validate(profile: ProfileState) -> Dictionary:
 		if not valid_digest(profile.migration_receipt["source_digest"]) or not valid_digest(profile.migration_receipt["plan_digest"]) or not valid_request(profile.migration_receipt["request_id"]) or profile.migration_receipt["policy_revision"] != MigrationPlan.POLICY_REVISION: return BuildEffectCatalog.failure(&"invalid_migration_receipt")
 	return {"ok": true}
 
-static func check_intent(profile: ProfileState, character_id: String, intent: Dictionary) -> Dictionary:
+static func check_intent(profile: ProfileState, character_id: String, intent: Dictionary, active_expedition_id: String = "") -> Dictionary:
 	if profile.ownership_migration_required: return BuildEffectCatalog.failure(&"migration_required")
 	if profile.character_by_id(character_id) == null: return BuildEffectCatalog.failure(&"invalid_character_id")
-	if profile.expedition_for_character(character_id) != null: return BuildEffectCatalog.failure(&"locked_by_expedition")
+	var lock := profile.expedition_for_character(character_id)
+	if lock != null and (active_expedition_id != lock.expedition_id or lock.lifecycle != &"active"): return BuildEffectCatalog.failure(&"locked_by_expedition")
 	for key: String in ["equipment_instance_id", "from_equipment_instance_id"]:
 		var id := StringName(intent.get(key, &""))
 		if not id.is_empty() and profile.equipment_instances.has(id) and profile.equipment_instances[id].owner_character_id != character_id: return BuildEffectCatalog.failure(&"not_owner")
@@ -80,6 +81,7 @@ static func validate_transition(before: ProfileState, after: ProfileState) -> Di
 		if previous.checkpoint.is_empty(): continue
 		if not after.expeditions.has(id): return BuildEffectCatalog.failure(&"locked_by_expedition")
 		var next: ExpeditionAssetLock = after.expeditions[id]
+		if previous.lifecycle == &"completed" and next.to_record() != previous.to_record(): return BuildEffectCatalog.failure(&"request_conflict")
 		if next.character_id != previous.character_id or next.phase_id != previous.phase_id or next.revision < previous.revision or next.checkpoint.is_empty(): return BuildEffectCatalog.failure(&"invalid_checkpoint")
 		for request: String in previous.receipts:
 			if next.receipts.get(request) != previous.receipts[request]: return BuildEffectCatalog.failure(&"request_conflict")
@@ -89,19 +91,45 @@ static func validate_transition(before: ProfileState, after: ProfileState) -> Di
 		if changed == null or changed.gold < character.gold: return BuildEffectCatalog.failure(&"locked_by_expedition")
 		var old_record := ProfileCodec._character_to_dictionary(character)
 		var new_record := ProfileCodec._character_to_dictionary(changed)
-		if old_record != new_record:
+		var build_commit := _is_build_checkpoint(before, after, character.character_id)
+		if old_record != new_record or changed.gold != character.gold:
 			# Only a material checkpoint may advance XP; build and lobby edits stay locked.
 			var previous := before.expedition_for_character(character.character_id)
-			var next := after.expedition_for_character(character.character_id)
+			var next: ExpeditionAssetLock = after.expeditions.get(previous.expedition_id)
 			if next == null or next.revision != previous.revision+1 or next.checkpoint.is_empty() or next.checkpoint == previous.checkpoint or ExpeditionCheckpointCodec.owner_digest(after,character.character_id) != next.checkpoint["owner_digest"]: return BuildEffectCatalog.failure(&"locked_by_expedition")
-			for key: String in ["base_xp_total","job_xp_total"]:
+			var material_keys := ["base_xp_total", "job_xp_total"]
+			if changed.gold != character.gold and next.lifecycle != &"completed": return BuildEffectCatalog.failure(&"locked_by_expedition")
+			for key: String in material_keys:
 				if new_record[key] < old_record[key]: return BuildEffectCatalog.failure(&"locked_by_expedition")
 				old_record.erase(key); new_record.erase(key)
+			if build_commit:
+				# Only the selected preset's equipment may follow the runtime layout.
+				if changed.selected_preset != character.selected_preset or changed.presets.size() != character.presets.size(): return BuildEffectCatalog.failure(&"locked_by_expedition")
+				var old_presets: Array = old_record["presets"].duplicate(true)
+				var new_presets: Array = new_record["presets"].duplicate(true)
+				if new_presets[changed.selected_preset]["equipped"] != new_record["equipped"]: return BuildEffectCatalog.failure(&"invalid_equipment")
+				old_presets[character.selected_preset].erase("equipped")
+				new_presets[changed.selected_preset].erase("equipped")
+				if old_presets != new_presets: return BuildEffectCatalog.failure(&"locked_by_expedition")
+				old_record.erase("equipped"); new_record.erase("equipped")
+				old_record.erase("presets"); new_record.erase("presets")
 			if old_record != new_record: return BuildEffectCatalog.failure(&"locked_by_expedition")
 		var old_cards := before.card_inventory.for_character(character.character_id, before.equipment_for_character(character.character_id))
 		var new_cards := after.card_inventory.for_character(character.character_id, after.equipment_for_character(character.character_id))
-		if old_cards.sockets() != new_cards.sockets(): return BuildEffectCatalog.failure(&"locked_by_expedition")
+		if old_cards.sockets() != new_cards.sockets() and not build_commit: return BuildEffectCatalog.failure(&"locked_by_expedition")
 	return {"ok": true}
+
+static func _is_build_checkpoint(before: ProfileState, after: ProfileState, character_id: String) -> bool:
+	var previous := before.expedition_for_character(character_id)
+	if previous == null or previous.lifecycle != &"active": return false
+	var next: ExpeditionAssetLock = after.expeditions.get(previous.expedition_id)
+	if next == null or next.lifecycle != &"active" or next.revision != previous.revision + 1 or next.checkpoint.is_empty() or next.checkpoint == previous.checkpoint or ExpeditionCheckpointCodec.owner_digest(after, character_id) != next.checkpoint["owner_digest"]: return false
+	var additions := 0
+	for request: String in next.receipts:
+		if previous.receipts.has(request): continue
+		if next.receipts[request]["operation"] != "build" or next.receipts[request]["revision"] != next.revision: return false
+		additions += 1
+	return additions == 1
 
 static func _preview(profile: ProfileState, character_id: String, intent: Dictionary, request_id: String, expected_revision: int) -> Dictionary:
 	if not valid_request(request_id): return BuildEffectCatalog.failure(&"invalid_request_id")

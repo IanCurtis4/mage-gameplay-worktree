@@ -9,6 +9,7 @@ var _busy := false
 var _committing_intent: Dictionary = {}
 var _applied: Dictionary = {}
 var _pending: Dictionary = {}
+var _expedition_service: ExpeditionService
 
 func _init(controller: RunController) -> void:
 	if controller == null: return # Snapshot factory: no transaction or publication.
@@ -45,10 +46,17 @@ func commit_change(intent: Dictionary) -> Dictionary:
 	_busy = true
 	_committing_intent = intent.duplicate(true)
 	var result := {"ok": true, "error_code": &"", "request_id": intent["request_id"]}
-	if controller.persistent_facade != null:
+	var campaign := controller.campaign_runtime != null
+	if campaign:
+		_expedition_service = ExpeditionService.new(controller.persistent_facade)
+		var barrier := SnapshotTickBarrier.new()
+		result = barrier.acquire(controller)
+		if result["ok"]: result = _expedition_service.change_build(controller, barrier, intent)
+		barrier.release()
+	elif controller.persistent_facade != null:
 		result = controller.persistent_facade.equip_between_encounters(String(intent["request_id"]), int(intent["profile_revision"]), controller, intent)
 	if result["ok"]:
-		_publish(prepared)
+		if not campaign: _publish(prepared)
 		result.merge(context(), true)
 	elif result.get("read_only", false):
 		_pending = prepared
@@ -65,9 +73,10 @@ func reconcile_change(request_id: String) -> Dictionary:
 		return BuildEffectCatalog.failure(&"invalid_session")
 	_busy = true
 	_committing_intent = _pending["intent"].duplicate(true)
-	var result := controller.persistent_facade.reconcile_transaction(request_id)
+	var campaign := controller.campaign_runtime != null
+	var result := _expedition_service.reconcile(request_id) if campaign and _expedition_service != null else controller.persistent_facade.reconcile_transaction(request_id)
 	if result["ok"]:
-		_publish(_pending)
+		if not campaign: _publish(_pending)
 		_pending = {}
 		controller.set_inventory_freeze(false)
 		result.merge(context(), true)
@@ -119,11 +128,12 @@ func _prepare(intent: Dictionary) -> Dictionary:
 		return _failure(&"stale_revision", intent)
 	var instances: Dictionary = _run.local_equipment_instances.duplicate(true)
 	if controller.persistent_facade != null:
-		var boundary := controller.persistent_facade.run_mutation_status(_run.run_id, _run.character_id)
+		var boundary := controller.persistent_facade.run_mutation_status(_run.run_id, _run.character_id, controller)
 		if not boundary["ok"]:
 			return _failure(boundary["error_code"], intent)
 		var profile := controller.persistent_facade.current_profile()
-		var ownership := CharacterAssets.check_intent(profile, _run.character_id, intent)
+		var expedition_id := controller.campaign_runtime.state.expedition_id if controller.campaign_runtime != null else ""
+		var ownership := CharacterAssets.check_intent(profile, _run.character_id, intent, expedition_id)
 		if not ownership["ok"]: return _failure(ownership["error_code"], intent)
 		instances = profile.equipment_for_character(_run.character_id)
 	elif not _run.run_id.is_empty():
