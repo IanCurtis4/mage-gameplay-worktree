@@ -53,9 +53,16 @@ func _run() -> void:
 		_check(category == &"boss" or drop["quality_id"] != &"legendary", "legendary impossible outside boss")
 		if category == &"boss": _check(drop["definition_id"] == &"arena_legendary_ward", "boss uses exclusive authored legendary")
 	var uniforms := [0.0, 0.0, 0.0, 0.0, 1.0]
+	# Independent socket CDF exposure must use an item that permits sockets.
+	# The full production pool may select a focus/accessory at item uniform zero.
+	var socket_table := EquipmentLootProfiles.production(catalog)
+	socket_table.profiles[&"normal"]["equipment_weights"] = {&"arena_starter_staff": 1}
+	socket_table.profiles[&"normal"]["quality_weights"] = {&"common": 1}
+	var socket_fixture := MobLootResolver.create(catalog, socket_table)
+	_check(socket_fixture["ok"] and EquipmentRules.allows_sockets((catalog.get_definition(&"equipment", &"arena_starter_staff") as EquipmentDefinition).metadata()), "socket oracle has an explicit eligible weapon")
 	for pair: Array in [[0.0, 0], [0.6, 1], [0.85, 2], [0.95, 3], [0.99, 4]]:
 		uniforms[3] = pair[0]
-		var drop: Dictionary = resolver.roll(_occurrence(&"normal"), uniforms)["equipment_drops"][0]
+		var drop: Dictionary = socket_fixture["resolver"].roll(_occurrence(&"normal"), uniforms)["equipment_drops"][0]
 		_check(drop["socket_capacity"] == pair[1], "literal independent socket threshold")
 	var no_drop := resolver.roll(_occurrence(&"normal"), [0.04, 0.0, 0.0, 0.0, 1.0])
 	_check(no_drop["equipment_drops"].is_empty(), "literal4percent exact boundary")

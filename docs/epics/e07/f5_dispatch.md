@@ -79,6 +79,13 @@ Transferência sequencial de produtores entregues, sem escritores paralelos:
 Outros arquivos exigem adendo nominal antes da edição. Proprietário F5 não
 modifica checkout dos produtores nem playtest. Correções permanecem neste chat.
 
+Adendo21/10 após regressão Luna: propriedade exclusiva de
+tests/e06_production_loot_test.gd, somente preparação da exposição de sockets.
+Diagnóstico preservado mostra arena_traveler_charm (accessory, sem sockets)
+selecionado pela pré-condição implícita do teste. Restringir esse caso a arma
+canônica explícita; conservar os cinco limiares literais e demais oráculos,
+sem alterar taxas/tabelas/runtime ou desabilitar uma asserção.
+
 ## Resultado, validação e exclusões
 
 API enter/travel/record_death/revive/finish, planner e relógio global,
