@@ -36,7 +36,7 @@ func _run() -> void:
 	var before: float = actor.threat.amounts["player"]
 	check(actor.threat.observe("precut_dot", &"damage", "player", 17.0).get("already_applied", false) and actor.threat.amounts["player"] == before, "DoT replay remains claimed after restart")
 	host._on_player_healed(3.0, 1)
-	check(actor.threat.amounts["player"] == before, "healing replay remains claimed after restart")
+	check(actor.threat.amounts["player"] == before and host.combat_participation.remaining == 3.75, "healing replay preserves both threat and combat grace after restart")
 	actor.threat.advance(3.0); check(actor.threat.forced_remaining == 0.25, "next simulation step continues existing fixation")
 	actor.threat.amounts["player"] = -1.0
 	var rejected := SnapshotRegistry.new().capture(host, f["barrier"])

@@ -18,8 +18,12 @@ func _run() -> void:
 	var boss_before: float = boss.threat.amounts["player"]
 	check(host.player.health.heal(1000.0) == 8.0, "canonical heal clips overheal")
 	check(actor.threat.amounts["player"] == amount + 2.0 and boss.threat.amounts["player"] == boss_before + 2.0, "real heal signal divides only the effective eight among two enemies")
+	host.combat_participation.observe({}, 2.0)
+	var grace := host.combat_participation.remaining
 	host._on_player_healed(8.0, host.player.health.heal_sequence)
-	check(actor.threat.amounts["player"] == amount + 2.0, "heal callback replay is inert")
+	check(actor.threat.amounts["player"] == amount + 2.0 and host.combat_participation.remaining == grace, "heal callback replay changes neither threat nor combat grace")
+	host._on_enemy_damage_resolved(result)
+	check(host.combat_participation.remaining == grace, "damage callback replay cannot renew combat grace")
 	check(host.player.health.heal(1000.0) == 0.0 and host.player.health.heal_sequence == 1, "overheal emits no event")
 	check(host.encounter_active, "real damage/healing blocks immediate out-of-combat consumers")
 	host.player.health._hp_deficit = 4.0
@@ -36,6 +40,12 @@ func _run() -> void:
 	check(not host.encounter_active and host.run_state.open_offer(host.encounter_active, rng)["ok"], "five-second exit releases offer on uncleared stage")
 	actor.engagement_mode = &"idle"
 	check(actor.observe_threat_damage(result).get("already_applied", false) and actor.engagement_mode == &"idle" and not actor.threat.engaged, "old damage replay cannot restart engagement after leash")
+	host.player.health._hp_deficit = 1.0; host.player.health.heal(1.0)
+	var outside_sequence := host.player.health.heal_sequence
+	actor.threat.engage("player")
+	var outside_amount: float = actor.threat.amounts["player"]
+	host._on_player_healed(1.0, outside_sequence)
+	check(actor.threat.amounts["player"] == outside_amount and not host.combat_participation.active(), "replay of out-of-combat healing cannot acquire new recipients later")
 	# Two actual source actors exercise target adapter, independently of multiplayer.
 	var source := PlayerActor.new(); source.configure(host.navigation, RunState.new(&"mage")); host.add_child(source)
 	source.set_process(false)

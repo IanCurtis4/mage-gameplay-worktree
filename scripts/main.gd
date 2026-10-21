@@ -74,7 +74,7 @@ static var pending_gameplay_extension := false
 
 var rng := RandomNumberGenerator.new()
 var campaign_runtime: ExpeditionCampaignRuntime
-var combat_participation: CombatParticipation
+var combat_participation := CombatParticipation.new()
 var _expedition_transaction_service: ExpeditionService
 var _expedition_flush_running := false
 var expedition_entry_mode := false
@@ -2006,7 +2006,9 @@ func _cancel_spiritualist_drain() -> void:
 			battle_indicators.clear_spiritualist_drain_wisps()
 
 func _on_player_healed(amount: float, sequence: int) -> void:
-	if not is_instance_valid(player) or amount <= 0.0: return
+	if not is_instance_valid(player) or not is_finite(amount) or amount <= 0.0 or sequence <= 0: return
+	# Freeze the recipient decision even when the effective heal happened outside combat.
+	if not combat_participation.claim_event("heal_player_%d" % sequence): return
 	var engaged_enemies: Array[EnemyActor] = []
 	for actor: CombatActor in enemies:
 		if actor is EnemyActor and actor.is_alive() and actor.threat.linked("local_party"): engaged_enemies.append(actor)
@@ -2016,7 +2018,7 @@ func _on_player_healed(amount: float, sequence: int) -> void:
 	if not engaged_enemies.is_empty() and combat_participation != null: combat_participation.hostile_damage()
 
 func _on_player_damage_resolved(result: Dictionary) -> void:
-	if combat_participation != null and float(result.get("actual_damage", 0.0)) > 0.0: combat_participation.hostile_damage()
+	if combat_participation != null and float(result.get("actual_damage", 0.0)) > 0.0: combat_participation.hostile_damage("incoming_%d" % int(result.get("application_sequence", 0)))
 	if float(result.get("actual_damage", 0.0)) > 0.0:
 		_cancel_spiritualist_drain()
 
@@ -2361,7 +2363,9 @@ func _prepare_hunter_fan(result: Dictionary) -> void:
 	if selected != null and context != null and context.ledger() != null and context.ledger().admit_hunter_fan(result, selected.get_instance_id()): result["_hunter_fan_target_id"] = selected.get_instance_id()
 
 func _on_enemy_damage_resolved(result: Dictionary) -> void:
-	if combat_participation != null and float(result.get("actual_damage", 0.0)) > 0.0: combat_participation.hostile_damage()
+	if combat_participation != null and float(result.get("actual_damage", 0.0)) > 0.0:
+		var recipient := instance_from_id(int(result.get("target_id", 0))) as EnemyActor
+		if is_instance_valid(recipient): combat_participation.hostile_damage("outgoing_%s_%d" % [recipient.threat.enemy_id, int(result.get("application_sequence", 0))])
 	if player == null or not is_instance_valid(player) or not player.is_alive() or int(result.get("source_id", 0)) != player.get_instance_id():
 		return
 	var candidates: Array[Dictionary] = []

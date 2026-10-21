@@ -1928,7 +1928,8 @@
       "links",
       "remaining",
       "exit_delay",
-      "damage_since_tick"
+      "damage_since_tick",
+      "events"
     ]
   },
   "res://scripts/core/expedition/population/expedition_wave_clock.gd": {

@@ -61,6 +61,12 @@ remove elegibilidade/fixação da fonte nos estágios, preservando crédito/clai
 
 ## Participação, DTO e persistência
 
+CombatParticipation claim_event registra o evento confirmado antes do fan-out de
+cura, inclusive fora de combate, congelando a decisão de destinatários. Replay
+não renova o atraso nem atribui uma cura antiga a inimigos engajados depois.
+Eventos de dano recebido/aplicado usam as sequências de HealthState e a identidade
+estável do inimigo; recibos de participação entram no mesmo snapshot.
+
 CombatParticipation conserva vínculos reais e cinco segundos sem vínculo/dano.
 Alvo atual, ameaça zero e estágio limpo são consultas distintas. encounter_active
 continua a adaptação única para ofertas, trocas, coleta e regeneração de HP,
