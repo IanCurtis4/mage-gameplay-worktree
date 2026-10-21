@@ -55,6 +55,8 @@ static func load_confirmed(store: ProfileStore) -> Dictionary:
 	if store.has_pending_transaction(): return opened
 	var source := store._migration_source()
 	if not source.get("ok", false): return opened
+	# Opening may diagnose a legacy backup while primary is corrupt; no source was chosen.
+	if ProfileCodec.decode(source["text"], store.catalog_copy()).get("error_code") != &"migration_required": return opened
 	var selected := _chosen_preview(source["text"], store.catalog_copy())
 	if not selected.get("ok", false): return selected
 	var preview := store.preview_migration(selected["plan"]["destinations"])

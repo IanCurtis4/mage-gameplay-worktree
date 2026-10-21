@@ -19,7 +19,6 @@ func _run() -> void:
 	var raw: Dictionary = H.legacy_envelope(ProfileCodec.encode(source.current_profile(),catalog)["data"])
 	raw.erase("card_inventory");raw["schema_version"]=4;raw["catalog_version"]=11
 	for fixture_character: Dictionary in raw["characters"]: fixture_character.erase("admin_skills_unlocked")
-		character.erase("gold")
 	var old := JSON.stringify(raw,"\t")
 	var directory := base.path_join("real-migration")
 	_write(directory,ProfileStore.PRIMARY_FILE,old)

@@ -74,13 +74,13 @@ func _run() -> void:
 	var evolved := facade.change_evolution("evolve-admin", facade.current_profile().revision, character_id, &"defender")
 	check(evolved["ok"] and facade.current_profile().character_by_id(character_id).admin_skills_unlocked, "evolution preserves flag")
 	var saved := ProfileCodec.encode(facade.current_profile(), catalog)
-	check(saved["ok"] and saved["data"]["schema_version"] == 7 and saved["data"]["characters"][0]["admin_skills_unlocked"] == true, "schema 7 serializes strict flag")
+	check(saved["ok"] and saved["data"]["schema_version"] == 8 and saved["data"]["characters"][0]["admin_skills_unlocked"] == true, "schema 8 serializes strict flag")
 	if saved["ok"]:
 		var historical: Dictionary = H.legacy_envelope(saved["data"])
 		historical["schema_version"] = 6
 		historical["characters"][0].erase("admin_skills_unlocked")
 		historical.erase("playtest_admin_receipts_v1")
-		var migrated := ProfileCodec.decode(JSON.stringify(historical), catalog)
+		var migrated := H.decode_confirmed(JSON.stringify(historical), catalog)
 		check(migrated["ok"] and migrated["migrated"] and not migrated["profile"].characters[0].admin_skills_unlocked, "schema 6 migrates to false after validation")
 		var invalid: Dictionary = saved["data"].duplicate(true)
 		invalid["characters"][0]["admin_skills_unlocked"] = 1
@@ -126,7 +126,7 @@ func _run() -> void:
 
 func _durable_migration(saved: Dictionary, catalog: ProfileCatalog, character_id: String) -> void:
 	if not saved["ok"]: return
-	var historical: Dictionary = saved["data"].duplicate(true)
+	var historical: Dictionary = H.legacy_envelope(saved["data"])
 	historical["schema_version"] = 6
 	for entry: Dictionary in historical["characters"]: entry.erase("admin_skills_unlocked")
 	historical.erase("playtest_admin_receipts_v1")
@@ -141,6 +141,7 @@ func _durable_migration(saved: Dictionary, catalog: ProfileCatalog, character_id
 	var first := H.open_confirmed(migrated_facade)
 	check(first["ok"] and first.get("migrated", false) and migrated_facade.current_profile().revision == int(historical["revision"]) + 1, "store durably migrates real schema 6 exactly once")
 	check(FileAccess.get_file_as_bytes(directory.path_join(ProfileStore.BACKUP_FILE)) == original_bytes, "migration backup preserves exact schema 6 bytes")
+	if not first["ok"]: return
 	check(migrated_facade.current_profile().character_by_id(character_id) != null and not migrated_facade.current_profile().character_by_id(character_id).admin_skills_unlocked, "migration preserves character with admin flag false")
 	var second_facade := ProfileFacade.new(ProfileStore.new(directory, catalog))
 	var second := second_facade.open_profile()

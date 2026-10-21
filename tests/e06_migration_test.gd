@@ -73,11 +73,12 @@ func _payload(version: int) -> Dictionary:
 	profile.revision = 5
 	profile.next_character_counter = 2
 	profile.selected_character_id = IdentityIds.character_id(ID, 1)
+	var character := CharacterState.new(profile.selected_character_id, "Migração", &"mage")
+	profile.characters.append(character)
 	for id: StringName in [&"warden_mail", &"channeler_robe"]: TX.own(profile, id)
 	profile.extension_fields["extension"] = {"keep": [1, 2]}
 	profile.legacy_loadouts = {"custom": "keep"}
 	profile.unresolved_legacy = {"unknown": "keep"}
-	var character := CharacterState.new(profile.selected_character_id, "MigraÃ§Ã£o", &"mage")
 	character.base_xp_total = 225
 	character.job_xp_total = ProgressionRules.UNEVOLVED_MAX_JOB_XP
 	character.purchased_skill_ranks = {&"fire_spear": 1}
@@ -88,7 +89,6 @@ func _payload(version: int) -> Dictionary:
 	character.presets[0]["equipped"][&"torso"] = profile.first_instance_for_definition(&"warden_mail")
 	character.presets[1]["equipped"][&"torso"] = profile.first_instance_for_definition(&"channeler_robe")
 	character.extension_fields["note"] = "keep"
-	profile.characters.append(character)
 	var encoded := ProfileCodec.encode(profile, ProfileCatalog.pilot().pre_all_skill_dependencies_catalog())
 	assert(encoded["ok"])
 	var payload: Dictionary = TX.legacy_data(encoded["data"])

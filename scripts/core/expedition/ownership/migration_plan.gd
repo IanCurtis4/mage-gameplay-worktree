@@ -69,7 +69,12 @@ static func dry_run(source_text: String, catalog: ProfileCatalog = null, assignm
 				var item: Variant = layouts[index][slot]
 				if item != null and destinations.has(String(item)) and destinations[String(item)] != character.character_id:
 					removals.append({"character_id": character.character_id, "layout": index - 1, "slot": String(slot), "instance_id": String(item)})
-	var plan := {"policy_revision": POLICY_REVISION, "source_digest": source_text.sha256_text(), "source_revision": source.revision, "profile_id": source.profile_id, "destinations": destinations, "suggestions": suggestions, "references": references, "removals": removals, "missing": missing, "gold_initial": 0}
+	var warnings: Array[String] = ["legacy_gold_initialized_zero"]
+	if not missing.is_empty(): warnings.append("missing_asset_destinations")
+	if source.characters.is_empty() and not all_ids.is_empty(): warnings.append("no_destination_character")
+	if decoded["historical_changes"]["converted"]: warnings.append("historical_conversion")
+	var preserved_fields: Array[String] = ["existing_asset_ids", "equipment_metadata", "card_sockets", "acquisition_counters", "acquisition_receipts", "existing_identity", "unknown_fields", "source_archive"]
+	var plan := {"warnings": warnings, "preserved_fields": preserved_fields, "historical_changes": decoded["historical_changes"].duplicate(true), "policy_revision": POLICY_REVISION, "source_digest": source_text.sha256_text(), "source_revision": source.revision, "profile_id": source.profile_id, "destinations": destinations, "suggestions": suggestions, "references": references, "removals": removals, "missing": missing, "gold_initial": 0}
 	return {"ok": true, "plan": plan, "plan_digest": digest(plan), "complete": missing.is_empty()}
 
 static func validate(plan: Dictionary, source_text: String, catalog: ProfileCatalog = null) -> Dictionary:

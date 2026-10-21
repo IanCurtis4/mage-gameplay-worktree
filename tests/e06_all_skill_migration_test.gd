@@ -48,6 +48,12 @@ func _run() -> void:
 	for entry: Dictionary in raw["characters"]: entry.erase("admin_skills_unlocked")
 	raw["catalog_version"] = 13
 	var text := JSON.stringify(raw)
+	var preview := MigrationPlan.dry_run(text, catalog)
+	_check(preview.get("ok", false) and preview["plan"]["historical_changes"]["removals"][0]["base_refund"] == 6 and preview["plan"]["historical_changes"]["removals"][0]["evolution_refund"] == 2, "confirmed ownership preview exposes exact historical skill refunds")
+	if preview.get("ok", false):
+		var forged: Dictionary = preview["plan"].duplicate(true)
+		forged["historical_changes"]["removals"].clear()
+		_check(MigrationPlan.validate(forged, text, catalog).get("error_code") == &"invalid_migration_plan", "historical refund report cannot be removed from confirmed plan")
 	var migrated := H.decode_confirmed(text, catalog)
 	_check(migrated.get("ok", false) and migrated.get("migration_kind", &"") == &"all_skill_dependencies_v1", "catalog 13 migrates with dedicated kind")
 	if not migrated.get("ok", false):

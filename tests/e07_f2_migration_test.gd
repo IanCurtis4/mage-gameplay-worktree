@@ -14,12 +14,16 @@ func _run() -> void:
 	var plan: Dictionary = complete["plan"]
 	check(complete["ok"] and complete["complete"] and not plan["removals"].is_empty(), "preview accounts for every asset and removed alt reference")
 	check(MigrationPlan.validate(plan, source)["ok"], "complete map validates")
+	check("existing_asset_ids" in plan["preserved_fields"] and "acquisition_receipts" in plan["preserved_fields"] and "legacy_gold_initialized_zero" in plan["warnings"], "preview exposes preservation and zero-gold warning before confirmation")
+	check(not plan["historical_changes"]["converted"] and plan["historical_changes"]["source_schema"] == 7, "current historical envelope does not claim unrelated catalog conversion")
 	check(MigrationPlan.apply(plan, source, "", "migration").get("error_code") == &"confirmation_required", "confirmation required before apply")
 	check(MigrationPlan.validate(plan, source + " ").get("error_code") == &"source_changed", "even semantically equivalent changed source invalidates preview")
 	var incomplete: Dictionary = first["plan"]
 	check(MigrationPlan.validate(incomplete, source).get("error_code") == &"incomplete_migration_map", "incomplete map cannot commit")
 	var forged := plan.duplicate(true); forged["removals"].clear()
 	check(MigrationPlan.validate(forged, source).get("error_code") == &"invalid_migration_plan", "removal report cannot be forged")
+	forged = plan.duplicate(true); forged["warnings"].clear()
+	check(MigrationPlan.validate(forged, source).get("error_code") == &"invalid_migration_plan", "confirmed digest covers full visible warnings")
 	forged = plan["destinations"].duplicate(true); forged["equipment_unknown"] = f["a"]
 	check(MigrationPlan.dry_run(source, null, forged).get("error_code") == &"unknown_asset", "unknown assignment rejected")
 	var host: String = ""; var socket_card: String = ""
@@ -49,6 +53,7 @@ func _run() -> void:
 	var historical_preview := MigrationPlan.dry_run(historical_text)
 	check(historical_preview["ok"], "actual E00 envelope passes historical validator before preview")
 	if historical_preview["ok"]:
+		check(historical_preview["plan"]["historical_changes"]["source_schema"] == historical["profile"]["schema_version"] and "historical_conversion" in historical_preview["plan"]["warnings"], "actual historical catalog conversion is visible in preview")
 		var old: ProfileState = ProfileCodec.decode(historical_text)["legacy_profile"]
 		var destinations := {}
 		for id: StringName in old.equipment_instances: destinations[String(id)] = old.characters[0].character_id

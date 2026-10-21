@@ -1153,7 +1153,9 @@ static func decode(text: String, catalog: ProfileCatalog = null) -> Dictionary:
 			var hash := text.sha256_text()
 			profile.profile_id = "%s-%s-5%s-a%s-%s" % [hash.substr(0,8), hash.substr(8,4), hash.substr(13,3), hash.substr(17,3), hash.substr(20,12)]
 		profile.ownership_migration_required = true
-		return {"ok": false, "error_code": &"migration_required", "read_only": true, "legacy_profile": profile, "source_digest": text.sha256_text()}
+		var historical_changes := {"source_schema": schema, "source_catalog": raw.get("catalog_version", 0), "source_ruleset": raw.get("ruleset_id", ""), "converted": historical.get("migrated", false), "kind": String(historical.get("migration_kind", "")), "kinds": [], "removals": historical.get("migration_removals", []).duplicate(true)}
+		for kind: Variant in historical.get("migration_kinds", []): historical_changes["kinds"].append(String(kind))
+		return {"ok": false, "error_code": &"migration_required", "read_only": true, "legacy_profile": profile, "source_digest": text.sha256_text(), "historical_changes": historical_changes}
 	if schema != ProfileState.SCHEMA_VERSION: return _error(&"unsupported_schema")
 	for field: String in OWNERSHIP_FIELDS:
 		if not raw.get(field) is Dictionary: return _error(&"invalid_ownership_section", field)
