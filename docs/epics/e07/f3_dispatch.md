@@ -1,6 +1,6 @@
 # E07-F3 — captura e restauração em memória
 
-20/10/2026. **EM_EXECUÇÃO**, Sol/Alto, chat `01a150a6-8993-7c72-946a-2a35ca56f4d5`.
+Autorizado20/10/2026; consolidado21/10. **VALIDADA tecnicamente**, Sol/Alto, chat `01a150a6-8993-7c72-946a-2a35ca56f4d5`.
 Aval humano: “F2 terminou. Podemos começar com F3.”
 
 Base executável `6a64d7ba3846a19a86a63fa25b66fb51e5d6ade7`, fechamento de F2;
@@ -62,3 +62,11 @@ ações em voo e causalidade das dez identidades. Comparar próximos resultados
 reais com execução contínua em deltas distintos. Registrar tamanho/tempo e
 cobertura exata; lacuna de kind bloqueia F4. Luna supervisiona testes e hashes;
 Sol corrige e consolida contrato/limites. Não prometer save durável.
+
+## Fechamento F3
+
+Runtime inicial `64d7cc8c4a496d587f0b8cc3813deb32a11c9913`; candidato final
+`4c97e52017b82df09735c86e9fb6cc8fdf76a372`. [Recibo e limites](delivery/f3.md).
+Luna supervisionou importação/cinco F3 finais e13 regressões reaproveitadas por
+impacto; Sol consolidou contrato/invariantes. Sem integração operacional, aceite
+humano de produto, playtest, master ou push. F4 requer nova liberação.

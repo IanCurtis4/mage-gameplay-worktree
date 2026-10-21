@@ -2,7 +2,7 @@
 
 Implementação F3,21/10/2026. [Escopo, decisão D02, base e propriedade](f3_dispatch.md).
 Esta API não grava perfil, não migra save e não publica suspensão no lobby.
-O recibo final deverá identificar o candidato e a cobertura efetivamente validada.
+[Recibo técnico](delivery/f3.md): candidato, cobertura, evidências e limites.
 
 ## Corte e recuperação
 
