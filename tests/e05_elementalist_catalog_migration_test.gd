@@ -1,4 +1,5 @@
 extends SceneTree
+const H = preload("res://tests/fixtures/e07/f2/confirmed_history.gd")
 const TX = preload("res://tests/e06_tx_fixture.gd")
 
 const PROFILE_ID := "123e4567-e89b-42d3-a456-426614174078"
@@ -35,22 +36,22 @@ func _run() -> void:
 	profile.characters.append(defender)
 	profile.selected_character_id = mage_id
 	var encoded := ProfileCodec.encode(profile)
-	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 7 and ProfileState.CATALOG_VERSION == 14, "new catalog keeps schema and ruleset")
+	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 8 and ProfileState.CATALOG_VERSION == 14, "new catalog keeps schema and ruleset")
 	var old_data: Dictionary = TX.legacy_data(encoded["data"])
 	old_data["catalog_version"] = ProfileCodec.PRE_ELEMENTALIST_CATALOG_VERSION
 	old_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	var old_text := JSON.stringify(old_data, "\t")
 	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), old_text)
-	var decoded := ProfileCodec.decode(old_text)
+	var decoded := H.decode_confirmed(old_text)
 	_check(decoded["ok"] and decoded["migration_kind"] == &"catalog_v4" and decoded["profile"].revision == 9, "catalog 4 migrates additively without revision change in codec")
-	var loaded := ProfileStore.new(directory).load_profile()
+	var loaded := H.load_confirmed(ProfileStore.new(directory))
 	_check(loaded["ok"] and loaded["migrated"] and loaded["profile"].revision == 10, "store commits migration transaction once")
 	var durable: ProfileState = loaded["profile"]
 	_check(durable.selected_character_id == mage_id and durable.characters.size() == 2 and durable.character_by_id(mage_id).purchased_skill_ranks == {&"ice_spear": 1} and durable.character_by_id(defender_id).purchased_skill_ranks == {&"shield_wall": 2, &"defender_anchor": 1}, "characters, selection and builds survive")
 	_check(durable.character_by_id(mage_id).base_xp_total == mage.base_xp_total and durable.character_by_id(mage_id).job_xp_total == mage.job_xp_total and durable.character_by_id(defender_id).job_xp_total == defender.job_xp_total, "XP remains exact")
 	var current_data: Dictionary = JSON.parse_string(_read_text(directory.path_join(ProfileStore.PRIMARY_FILE)))
 	_check(_read_text(directory.path_join(ProfileStore.BACKUP_FILE)) == old_text and current_data["catalog_version"] == ProfileState.CATALOG_VERSION and current_data["ruleset_id"] == ProfileState.RULESET_ID, "backup retains exact source bytes")
-	var reloaded := ProfileStore.new(directory).load_profile()
+	var reloaded := H.load_confirmed(ProfileStore.new(directory))
 	_check(reloaded["ok"] and not reloaded.get("migrated", false) and reloaded["profile"].revision == 10, "current catalog reload is idempotent")
 	var newer := profile.copy_state()
 	newer.revision = 11
@@ -72,7 +73,7 @@ func _assert_protected_backup(primary_text: String, backup_text: String, descrip
 	DirAccess.make_dir_recursive_absolute(directory)
 	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), primary_text)
 	_write_text(directory.path_join(ProfileStore.BACKUP_FILE), backup_text)
-	var result := ProfileStore.new(directory).load_profile()
+	var result := H.load_confirmed(ProfileStore.new(directory))
 	_check(not result["ok"] and result["error_code"] == &"recovery_required" and result.get("read_only", false), "%s requires read-only recovery" % description)
 	_check(_read_text(directory.path_join(ProfileStore.PRIMARY_FILE)) == primary_text and _read_text(directory.path_join(ProfileStore.BACKUP_FILE)) == backup_text and not FileAccess.file_exists(directory.path_join(ProfileStore.PENDING_FILE)), "%s preserves both files exactly" % description)
 

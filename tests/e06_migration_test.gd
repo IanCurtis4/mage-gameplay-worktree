@@ -1,4 +1,5 @@
 extends SceneTree
+const H = preload("res://tests/fixtures/e07/f2/confirmed_history.gd")
 const TX = preload("res://tests/e06_tx_fixture.gd")
 const F = preload("res://tests/e06_inventory_fixture.gd")
 const ID := "123e4567-e89b-42d3-a456-426614174000"
@@ -9,7 +10,7 @@ func _initialize() -> void:
 	directory = ProjectSettings.globalize_path("res://.godot/verification/e06_t2/migration_%d" % Time.get_ticks_usec())
 	DirAccess.make_dir_recursive_absolute(directory)
 	var catalog := ProfileCatalog.pilot()
-	_check(ProfileState.CATALOG_VERSION == 14 and ProfileState.SCHEMA_VERSION == 7 and ProfileState.RULESET_ID == "stat_thresholds_v1", "historical catalogs -> catalog14/schema6, stat ruleset unchanged")
+	_check(ProfileState.CATALOG_VERSION == 14 and ProfileState.SCHEMA_VERSION == 8 and ProfileState.RULESET_ID == "stat_thresholds_v1", "historical catalogs -> catalog14/schema6, stat ruleset unchanged")
 	var effects := BuildContentLoader.pilot()
 	_check(effects.ids(&"equipment").size() == 85 and effects.ids(&"card").size() == 6, "runtime metadata preserves 39 previous and adds 46 recipes")
 	for origin: StringName in [&"swordsman", &"mage", &"archer"]:
@@ -22,7 +23,7 @@ func _initialize() -> void:
 	for version: int in range(1, 9):
 		var payload := _payload(version)
 		var encoded := JSON.stringify(payload)
-		var result := ProfileCodec.decode(encoded)
+		var result := H.decode_confirmed(encoded)
 		_check(result["ok"] and result["migrated"], "explicit supported catalog migration " + str(version))
 		if not result["ok"]: continue
 		var profile: ProfileState = result["profile"]
@@ -31,24 +32,24 @@ func _initialize() -> void:
 		_check(character.action_slots.size() == 24 and character.action_slots[0] == &"fire_spear" and character.attribute_allocations[&"int"] == (7 if version >= 7 else 1) and character.base_xp_total == 225, "XP ranks/actions and threshold investment preserved")
 		_check(profile.extension_fields["extension"] == {"keep": [1.0, 2.0]} and character.extension_fields["note"] == "keep" and profile.legacy_loadouts == {"custom": "keep"} and profile.unresolved_legacy == {"unknown": "keep"}, "extensions and unresolved legacy preserved")
 		var serialized := ProfileCodec.encode(profile)
-		var again := ProfileCodec.decode(serialized["text"])
+		var again := H.decode_confirmed(serialized["text"])
 		_check(again["ok"] and not again["migrated"] and ProfileCodec.encode(again["profile"])["text"] == serialized["text"], "migration idempotent")
 	var old := JSON.stringify(_payload(8))
 	var migration_dir := directory.path_join("durable")
 	_write(migration_dir, ProfileStore.PRIMARY_FILE, old)
-	var migrated := ProfileStore.new(migration_dir).load_profile()
+	var migrated := H.load_confirmed(ProfileStore.new(migration_dir))
 	_check(migrated["ok"] and migrated["profile"].revision == 6 and FileAccess.get_file_as_string(migration_dir.path_join(ProfileStore.BACKUP_FILE)) == old, "migration saves once with exact old backup")
-	_check(ProfileStore.new(migration_dir).load_profile()["profile"].revision == 6, "reopen never repeats additive migration")
+	_check(H.load_confirmed(ProfileStore.new(migration_dir))["profile"].revision == 6, "reopen never repeats additive migration")
 	for stage: StringName in [&"write_pending", &"validate_pending", &"backup", &"replace"]:
 		var target := directory.path_join(String(stage))
 		_write(target, ProfileStore.PRIMARY_FILE, old)
 		var store := F.FaultStore.new(target)
 		store.failure_stage = stage
-		var failed := store.load_profile()
+		var failed := H.load_confirmed(store)
 		_check(not failed["ok"] and FileAccess.get_file_as_string(target.path_join(ProfileStore.PRIMARY_FILE)) == old, "migration failure preserves original: " + String(stage))
 		if stage != &"write_pending":
 			var pending := FileAccess.get_file_as_string(target.path_join(ProfileStore.PENDING_FILE))
-			_check(not ProfileStore.new(target).load_profile()["ok"] and FileAccess.get_file_as_string(target.path_join(ProfileStore.PENDING_FILE)) == pending, "unconfirmed pending untouched")
+			_check(not H.load_confirmed(ProfileStore.new(target))["ok"] and FileAccess.get_file_as_string(target.path_join(ProfileStore.PENDING_FILE)) == pending, "unconfirmed pending untouched")
 	for artifact: String in [ProfileStore.PRIMARY_FILE, ProfileStore.BACKUP_FILE]:
 		var target := directory.path_join("future_" + artifact)
 		_write(target, ProfileStore.PRIMARY_FILE, old)
@@ -56,14 +57,14 @@ func _initialize() -> void:
 		future["catalog_version"] = 10
 		var bytes := JSON.stringify(future)
 		_write(target, artifact, bytes)
-		_check(not ProfileStore.new(target).load_profile()["ok"] and FileAccess.get_file_as_string(target.path_join(artifact)) == bytes, "future catalog preserved, no downgrade")
+		_check(not H.load_confirmed(ProfileStore.new(target))["ok"] and FileAccess.get_file_as_string(target.path_join(artifact)) == bytes, "future catalog preserved, no downgrade")
 	var pending_dir := directory.path_join("pending_backup")
 	_write(pending_dir, ProfileStore.BACKUP_FILE, old)
 	_write(pending_dir, ProfileStore.PENDING_FILE, "pending evidence")
-	_check(not ProfileStore.new(pending_dir).load_profile()["ok"] and FileAccess.get_file_as_string(pending_dir.path_join(ProfileStore.PENDING_FILE)) == "pending evidence", "backup cannot overwrite pending evidence")
+	_check(not H.load_confirmed(ProfileStore.new(pending_dir))["ok"] and FileAccess.get_file_as_string(pending_dir.path_join(ProfileStore.PENDING_FILE)) == "pending evidence", "backup cannot overwrite pending evidence")
 	var runtime := _payload(8)
 	runtime["cards"] = ["echo_card"]
-	_check(not ProfileCodec.decode(JSON.stringify(runtime))["ok"], "runtime cards cannot enter save through migration")
+	_check(not H.decode_confirmed(JSON.stringify(runtime))["ok"], "runtime cards cannot enter save through migration")
 	print("E06 migration: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)
 

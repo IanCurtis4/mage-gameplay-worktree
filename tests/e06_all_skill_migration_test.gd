@@ -1,4 +1,5 @@
 extends SceneTree
+const H = preload("res://tests/fixtures/e07/f2/confirmed_history.gd")
 ## Catalog 13 is validated before catalog 14 refunds; references survive disabled.
 
 const PROFILE_ID := "123e4567-e89b-42d3-a456-426614174390"
@@ -42,12 +43,12 @@ func _run() -> void:
 	if not encoded["ok"]:
 		_finish()
 		return
-	var raw: Dictionary = encoded["data"].duplicate(true)
+	var raw: Dictionary = H.legacy_envelope(encoded["data"])
 	raw["schema_version"] = 6
 	for entry: Dictionary in raw["characters"]: entry.erase("admin_skills_unlocked")
 	raw["catalog_version"] = 13
 	var text := JSON.stringify(raw)
-	var migrated := ProfileCodec.decode(text, catalog)
+	var migrated := H.decode_confirmed(text, catalog)
 	_check(migrated.get("ok", false) and migrated.get("migration_kind", &"") == &"all_skill_dependencies_v1", "catalog 13 migrates with dedicated kind")
 	if not migrated.get("ok", false):
 		_finish()
@@ -62,17 +63,17 @@ func _run() -> void:
 	var current := ProfileCodec.encode(result, catalog)
 	_check(current.get("ok", false) and current["data"]["catalog_version"] == 14, "disabled references encode in catalog 14")
 	if current.get("ok", false):
-		var again := ProfileCodec.decode(current["text"], catalog)
+		var again := H.decode_confirmed(current["text"], catalog)
 		_check(again.get("ok", false) and not again.get("migrated", false) and again["profile"].characters[0].action_slots == restored.action_slots, "catalog 14 roundtrip is idempotent")
 	var forged := raw.duplicate(true)
 	forged["characters"][0]["purchased_skill_ranks"]["lightning_wall"] = 99
-	_check(not ProfileCodec.decode(JSON.stringify(forged), catalog)["ok"], "invalid catalog 13 purchase is rejected before refund")
+	_check(not H.decode_confirmed(JSON.stringify(forged), catalog)["ok"], "invalid catalog 13 purchase is rejected before refund")
 	forged = raw.duplicate(true)
 	forged["characters"][0]["action_slots"][5] = "soul_impact"
-	_check(not ProfileCodec.decode(JSON.stringify(forged), catalog)["ok"], "catalog 13 cannot smuggle unlearned reference")
+	_check(not H.decode_confirmed(JSON.stringify(forged), catalog)["ok"], "catalog 13 cannot smuggle unlearned reference")
 	forged = raw.duplicate(true)
 	forged["catalog_version"] = 15
-	_check(not ProfileCodec.decode(JSON.stringify(forged), catalog)["ok"], "future catalog is rejected")
+	_check(not H.decode_confirmed(JSON.stringify(forged), catalog)["ok"], "future catalog is rejected")
 	_older_shortcut_migration(catalog)
 	_store(text, catalog)
 	_finish()
@@ -94,11 +95,11 @@ func _older_shortcut_migration(catalog: ProfileCatalog) -> void:
 	_check(encoded.get("ok", false), "catalog 12 fixture validates under its original gates")
 	if not encoded.get("ok", false):
 		return
-	var raw: Dictionary = encoded["data"].duplicate(true)
+	var raw: Dictionary = H.legacy_envelope(encoded["data"])
 	raw["schema_version"] = 6
 	for entry: Dictionary in raw["characters"]: entry.erase("admin_skills_unlocked")
 	raw["catalog_version"] = 12
-	var decoded := ProfileCodec.decode(JSON.stringify(raw), catalog)
+	var decoded := H.decode_confirmed(JSON.stringify(raw), catalog)
 	_check(decoded.get("ok", false), "catalog 12 follows historical validation and migration")
 	if not decoded.get("ok", false):
 		return
@@ -108,7 +109,7 @@ func _older_shortcut_migration(catalog: ProfileCatalog) -> void:
 	_check(restored.action_slots == defender.action_slots and restored.presets == defender.presets, "older preset and both action rank forms remain disabled")
 	_check(decoded["profile"].extension_fields["swordsman_skill_tree_migration"]["characters"][0]["cleared_action_slots"].is_empty(), "historical receipt does not claim preserved slots were cleared")
 	var saved := ProfileCodec.encode(decoded["profile"], catalog)
-	_check(saved.get("ok", false) and ProfileCodec.decode(saved.get("text", ""), catalog).get("ok", false), "older disabled reference survives catalog 14 roundtrip")
+	_check(saved.get("ok", false) and H.decode_confirmed(saved.get("text", ""), catalog).get("ok", false), "older disabled reference survives catalog 14 roundtrip")
 
 func _character(origin: StringName, evolution: StringName, index: int) -> CharacterState:
 	var character := CharacterState.new(IdentityIds.character_id(PROFILE_ID, index), "Migração", origin)
@@ -133,17 +134,17 @@ func _store(text: String, catalog: ProfileCatalog) -> void:
 	file.close()
 	var store := FailingStore.new(directory, catalog)
 	store.stage = &"replace"
-	var failed := store.load_profile()
+	var failed := H.load_confirmed(store)
 	_check(not failed.get("ok", false) and FileAccess.get_file_as_string(path) == text, "failed replace preserves historical primary")
 	# Pending is evidence of an interrupted transaction; recovery must not discard it.
 	_check(FileAccess.file_exists(directory.path_join(ProfileStore.PENDING_FILE)), "failed replace retains pending")
 	DirAccess.remove_absolute(directory.path_join(ProfileStore.PENDING_FILE))
 	store.stage = &""
-	var loaded := store.load_profile()
+	var loaded := H.load_confirmed(store)
 	_check(loaded.get("ok", false) and loaded.get("migrated", false), "durable migration commits")
 	if loaded.get("ok", false):
 		_check(loaded["profile"].revision == 1 and FileAccess.get_file_as_string(directory.path_join(ProfileStore.BACKUP_FILE)) == text, "revision advances once and original backup survives")
-		var reopened := store.load_profile()
+		var reopened := H.load_confirmed(store)
 		_check(reopened.get("ok", false) and not reopened.get("migrated", false), "durable reload does not refund again")
 
 func _check(condition: bool, message: String) -> void:

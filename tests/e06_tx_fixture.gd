@@ -68,8 +68,8 @@ static func make(tree: SceneTree, label: String) -> Dictionary:
 	var profile := facade.current_profile()
 	for id: StringName in catalog.equipment_ids():
 		if profile.first_instance_for_definition(id).is_empty():
-			assert(profile.add_equipment_instance(id, catalog.equipment_metadata(id))["ok"])
-	assert(profile.add_equipment_instance(&"traveler_charm", catalog.equipment_metadata(&"traveler_charm"))["ok"])
+			assert(profile.add_equipment_instance(id, catalog.equipment_metadata(id), profile.characters[0].character_id)["ok"])
+	assert(profile.add_equipment_instance(&"traveler_charm", catalog.equipment_metadata(&"traveler_charm"), profile.characters[0].character_id)["ok"])
 	assert(store.commit(profile)["ok"])
 	facade = ProfileFacade.new(store)
 	assert(facade.open_profile()["ok"])
@@ -125,7 +125,7 @@ static func own(profile: ProfileState, definition: StringName, catalog: ProfileC
 	if not id.is_empty():
 		return id
 	var source := catalog if catalog != null else ProfileCatalog.pilot()
-	var added := profile.add_equipment_instance(definition, source.equipment_metadata(definition))
+	var added := profile.add_equipment_instance(definition, source.equipment_metadata(definition), profile.characters[0].character_id if not profile.characters.is_empty() else "")
 	assert(added["ok"], str(added))
 	return added["instance_id"]
 
@@ -143,7 +143,7 @@ static func definition(profile: ProfileState, id: Variant) -> Variant:
 static func legacy_data(current: Dictionary) -> Dictionary:
 	if not current.has("equipment_instances"):
 		return current.duplicate(true)
-	var result := current.duplicate(true)
+	var result: Dictionary = preload("res://tests/fixtures/e07/f2/confirmed_history.gd").legacy_envelope(current)
 	result.erase("card_inventory")
 	var lookup: Dictionary = {}
 	for record: Dictionary in current["equipment_instances"]:

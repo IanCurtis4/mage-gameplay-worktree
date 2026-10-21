@@ -1,4 +1,5 @@
 extends SceneTree
+const H = preload("res://tests/fixtures/e07/f2/confirmed_history.gd")
 const TX = preload("res://tests/e06_tx_fixture.gd")
 
 const PROFILE_ID := "123e4567-e89b-42d3-a456-426614174066"
@@ -28,27 +29,27 @@ func _run() -> void:
 	profile.characters.append(character)
 	profile.selected_character_id = character_id
 	var encoded := ProfileCodec.encode(profile)
-	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 7 and ProfileState.CATALOG_VERSION == 14, "current catalog keeps schema 2 and accepts the earlier Defender migration")
+	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 8 and ProfileState.CATALOG_VERSION == 14, "current catalog keeps schema 2 and accepts the earlier Defender migration")
 	var old_data: Dictionary = TX.legacy_data(encoded["data"])
 	old_data["catalog_version"] = ProfileCodec.PRE_DEFENDER_CATALOG_VERSION
 	old_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	var old_text := JSON.stringify(old_data, "\t")
 	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), old_text)
-	var decoded := ProfileCodec.decode(old_text)
+	var decoded := H.decode_confirmed(old_text)
 	_check(decoded["ok"] and decoded["migrated"] and decoded["migration_kind"] == &"catalog_v2" and &"swordsman_clusters_v1" in decoded["migration_kinds"] and decoded["profile"].revision == 4, "catalog-2 payload is accepted without changing in-memory progression")
 	var store := ProfileStore.new(directory)
-	var loaded := store.load_profile()
+	var loaded := H.load_confirmed(store)
 	_check(loaded["ok"] and loaded["migrated"] and loaded["profile"].revision == 5, "store commits one atomic catalog migration revision")
 	var migrated_character: CharacterState = loaded["profile"].character_by_id(character_id)
 	_check(migrated_character.evolution_id == &"defender" and migrated_character.purchased_skill_ranks == {&"slash": 1} and migrated_character.presets[0]["active_slots"][0] == &"slash" and migrated_character.base_xp_total == character.base_xp_total and migrated_character.job_xp_total == character.job_xp_total, "migration preserves identity, XP, purchases and preset")
 	var backup_text := _read_text(directory.path_join(ProfileStore.BACKUP_FILE))
 	var durable_data: Dictionary = JSON.parse_string(_read_text(directory.path_join(ProfileStore.PRIMARY_FILE)))
 	_check(backup_text == old_text and durable_data["catalog_version"] == ProfileState.CATALOG_VERSION and durable_data["ruleset_id"] == ProfileState.RULESET_ID and durable_data["schema_version"] == ProfileState.SCHEMA_VERSION, "transaction preserves exact old bytes as backup and writes current catalog")
-	var reloaded := ProfileStore.new(directory).load_profile()
+	var reloaded := H.load_confirmed(ProfileStore.new(directory))
 	_check(reloaded["ok"] and not reloaded.get("migrated", false) and reloaded["profile"].revision == 5, "catalog migration is idempotent on reload")
 	var future_data: Dictionary = durable_data.duplicate(true)
 	future_data["catalog_version"] = ProfileState.CATALOG_VERSION + 1
-	var future := ProfileCodec.decode(JSON.stringify(future_data))
+	var future := H.decode_confirmed(JSON.stringify(future_data))
 	_check(not future["ok"] and future["error_code"] == &"invalid_catalog", "unknown future catalog stays incompatible")
 	_check_catalog_backup_guard(profile, old_text)
 	_cleanup_directory()
@@ -82,7 +83,7 @@ func _check_catalog_backup_guard(source: ProfileState, primary_text: String) -> 
 	older_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), primary_text)
 	_write_text(directory.path_join(ProfileStore.BACKUP_FILE), JSON.stringify(older_data, "\t"))
-	var migrated := ProfileStore.new(directory).load_profile()
+	var migrated := H.load_confirmed(ProfileStore.new(directory))
 	_check(migrated["ok"] and migrated.get("migrated", false) and migrated["profile"].revision == source.revision + 1, "compatible older catalog-2 backup permits normal migration")
 	_check(_read_text(directory.path_join(ProfileStore.BACKUP_FILE)) == primary_text, "successful migration preserves exact former primary as backup")
 
@@ -91,7 +92,7 @@ func _assert_protected_backup(primary_text: String, backup_text: String, descrip
 	DirAccess.make_dir_recursive_absolute(directory)
 	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), primary_text)
 	_write_text(directory.path_join(ProfileStore.BACKUP_FILE), backup_text)
-	var result := ProfileStore.new(directory).load_profile()
+	var result := H.load_confirmed(ProfileStore.new(directory))
 	_check(not result["ok"] and result["error_code"] == &"recovery_required" and result.get("read_only", false), "%s requires read-only recovery" % description)
 	_check(_read_text(directory.path_join(ProfileStore.PRIMARY_FILE)) == primary_text and _read_text(directory.path_join(ProfileStore.BACKUP_FILE)) == backup_text and not FileAccess.file_exists(directory.path_join(ProfileStore.PENDING_FILE)), "%s preserves both payloads byte-for-byte" % description)
 

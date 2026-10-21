@@ -1,4 +1,5 @@
 extends SceneTree
+const H = preload("res://tests/fixtures/e07/f2/confirmed_history.gd")
 const TX = preload("res://tests/e06_tx_fixture.gd")
 ## Catalog 7→9 migration with additive inventory starters. All file writes are isolated test fixtures.
 
@@ -45,34 +46,34 @@ func _old_text(profile: ProfileState) -> String:
 	return JSON.stringify(data, "\t")
 
 func _pairs_and_validation() -> void:
-	_check(ProfileState.CATALOG_VERSION == 14 and ProfileState.SCHEMA_VERSION == 7 and ProfileState.RULESET_ID == "stat_thresholds_v1", "only catalog version changes")
+	_check(ProfileState.CATALOG_VERSION == 14 and ProfileState.SCHEMA_VERSION == 8 and ProfileState.RULESET_ID == "stat_thresholds_v1", "only catalog version changes")
 	for pair: Array in [[&"swordsman", &""], [&"mage", &""], [&"archer", &""], [&"swordsman", &"defender"], [&"swordsman", &"berserker"], [&"mage", &"elementalist"], [&"mage", &"spiritualist"], [&"mage", &"mg_ar"], [&"archer", &"sentinel"], [&"archer", &"hunter"]]:
 		var source := _profile(pair[0], pair[1])
-		var decoded := ProfileCodec.decode(_old_text(source))
+		var decoded := H.decode_confirmed(_old_text(source))
 		_check(decoded.get("ok", false) and decoded.get("migration_kind", &"") == &"catalog_v7", "known threshold envelope migrates every existing origin")
 		if not decoded.get("ok", false): continue
 		var migrated: ProfileState = decoded["profile"]
 		_check(migrated.revision == source.revision and migrated.characters[0].base_xp_total == source.characters[0].base_xp_total and migrated.characters[0].job_xp_total == source.characters[0].job_xp_total and migrated.characters[0].evolution_id == pair[1], "pure codec never changes identity/XP/revision")
 		_check(migrated.characters[0].granted_skill_ranks.is_empty() and migrated.characters[0].purchased_skill_ranks.is_empty(), "catalog addition never injects saved rank grants")
 		var encoded := ProfileCodec.encode(migrated)
-		_check(encoded["ok"] and not ProfileCodec.decode(encoded["text"])["migrated"], "current envelope reload is idempotent")
+		_check(encoded["ok"] and not H.decode_confirmed(encoded["text"])["migrated"], "current envelope reload is idempotent")
 	var profile := _profile()
 	profile.characters[0].attribute_allocations.merge({&"str": 40, &"vit": 35, &"dex": 25}, true)
 	var text := _old_text(profile)
-	_check(ProfileCodec.decode(text)["ok"], "legitimate threshold-era investment above 87 increments migrates")
+	_check(H.decode_confirmed(text)["ok"], "legitimate threshold-era investment above 87 increments migrates")
 	for change: Dictionary in [
 		{"ruleset_id": ProfileCodec.PRE_THRESHOLDS_RULESET_ID}, {"ruleset_id": "unknown"},
 		{"catalog_version": 10}, {"schema_version": ProfileState.SCHEMA_VERSION + 1},
 	]:
 		var data: Dictionary = JSON.parse_string(text)
 		data.merge(change, true)
-		_check(not ProfileCodec.decode(JSON.stringify(data))["ok"], "unknown/future catalog/ruleset/schema cannot be certified by migration")
+		_check(not H.decode_confirmed(JSON.stringify(data))["ok"], "unknown/future catalog/ruleset/schema cannot be certified by migration")
 	for kind: StringName in [&"budget", &"rank", &"runtime"]:
 		var invalid: Dictionary = JSON.parse_string(text)
 		if kind == &"budget": invalid["characters"][0]["attribute_allocations"] = {"str": 56, "agi": 55, "vit": 55, "int": 57, "dex": 55, "luk": 57}
 		if kind == &"rank": invalid["characters"][0]["purchased_skill_ranks"] = {"slash": 99}
 		if kind == &"runtime": invalid["current_hp"] = 30
-		_check(not ProfileCodec.decode(JSON.stringify(invalid))["ok"], "migration does not rescue invalid current costs/ranks/runtime fields")
+		_check(not H.decode_confirmed(JSON.stringify(invalid))["ok"], "migration does not rescue invalid current costs/ranks/runtime fields")
 
 func _store_and_first_mutation() -> void:
 	var profile := _profile()
@@ -90,7 +91,7 @@ func _store_and_first_mutation() -> void:
 	var directory := _directory("roundtrip")
 	_write(directory.path_join(ProfileStore.PRIMARY_FILE), text)
 	var store := ProfileStore.new(directory)
-	var result := store.load_profile()
+	var result := H.load_confirmed(store)
 	_check(result.get("ok", false) and result.get("warning", &"") == &"profile_migrated", "store durably migrates with explicit warning")
 	if not result.get("ok", false): return
 	var migrated: ProfileState = result["profile"]
@@ -120,7 +121,7 @@ func _store_and_first_mutation() -> void:
 		var active := reload.current_profile()
 		var active_dir := _directory("active")
 		_write(active_dir.path_join(ProfileStore.PRIMARY_FILE), _old_text(active))
-		var active_result := ProfileStore.new(active_dir).load_profile()
+		var active_result := H.load_confirmed(ProfileStore.new(active_dir))
 		_check(active_result["ok"] and active_result["profile"].reward_session == active.reward_session and active_result["profile"].next_run_counter == active.next_run_counter and active_result["profile"].lifetime_stats == active.lifetime_stats, "migration preserves active reward cursor and lifetime counters exactly")
 
 func _transaction_guards() -> void:
@@ -130,11 +131,11 @@ func _transaction_guards() -> void:
 		_write(directory.path_join(ProfileStore.PRIMARY_FILE), text)
 		var store := FailingStore.new(directory)
 		store.failure_stage = stage
-		var result := store.load_profile()
+		var result := H.load_confirmed(store)
 		_check(not result["ok"] and FileAccess.get_file_as_string(directory.path_join(ProfileStore.PRIMARY_FILE)) == text, "failed migration keeps original primary at each transaction stage")
 		if stage != &"write_pending":
 			var pending := FileAccess.get_file_as_string(directory.path_join(ProfileStore.PENDING_FILE))
-			var blocked := ProfileStore.new(directory).load_profile()
+			var blocked := H.load_confirmed(ProfileStore.new(directory))
 			_check(not blocked["ok"] and blocked.get("read_only", false) and FileAccess.get_file_as_string(directory.path_join(ProfileStore.PENDING_FILE)) == pending, "uncertain pending neither promoted nor overwritten")
 	for artifact: String in [ProfileStore.PRIMARY_FILE, ProfileStore.BACKUP_FILE, ProfileStore.PENDING_FILE]:
 		for field: String in ["catalog_version", "ruleset_id", "schema_version"]:
@@ -145,7 +146,7 @@ func _transaction_guards() -> void:
 			future[field] = "unknown" if field == "ruleset_id" else 99
 			var future_text := JSON.stringify(future)
 			_write(directory.path_join(artifact), future_text)
-			var blocked := ProfileStore.new(directory).load_profile()
+			var blocked := H.load_confirmed(ProfileStore.new(directory))
 			_check(not blocked["ok"] and blocked.get("read_only", false), "future/incompatible artifact blocks envelope write")
 			for name: String in [ProfileStore.PRIMARY_FILE, ProfileStore.BACKUP_FILE, ProfileStore.PENDING_FILE]:
 				if name == artifact:
@@ -155,8 +156,8 @@ func _transaction_guards() -> void:
 	var recovery_dir := _directory("backup_recovery")
 	_write(recovery_dir.path_join(ProfileStore.PRIMARY_FILE), "{broken")
 	_write(recovery_dir.path_join(ProfileStore.BACKUP_FILE), text)
-	var recovered := ProfileStore.new(recovery_dir).load_profile()
-	_check(recovered["ok"] and recovered.get("warning", &"") == &"profile_migrated_from_backup" and FileAccess.get_file_as_string(recovery_dir.path_join(ProfileStore.BACKUP_FILE)) == text, "recognized catalog-7 backup recovers conservatively")
+	var recovered := H.load_confirmed(ProfileStore.new(recovery_dir))
+	_check(not recovered["ok"] and recovered.get("error_code") == &"migration_required" and FileAccess.get_file_as_string(recovery_dir.path_join(ProfileStore.BACKUP_FILE)) == text and FileAccess.get_file_as_string(recovery_dir.path_join(ProfileStore.PRIMARY_FILE)) == "{broken", "legacy catalog7 backup is preserved until explicit recovery selection")
 
 func _directory(name: String) -> String:
 	var result := root_directory.path_join(name)

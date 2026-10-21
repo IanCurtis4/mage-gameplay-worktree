@@ -19,7 +19,14 @@ var transaction_locked := false
 var _catalog_frozen := false
 var card_sockets: Dictionary = {}
 var card_instances: Dictionary = {}
-var card_inventory := RunCardInventory.new()
+var card_inventory := RunCardInventory.new():
+	set(value):
+		if _uses_persistent_build and not character_id.is_empty():
+			var equipment := local_equipment_instances.duplicate()
+			if build_snapshot != null: equipment.merge(build_snapshot.equipment_instances, true)
+			card_inventory = value.for_character(character_id, equipment)
+		else:
+			card_inventory = value
 var local_equipment_instances: Dictionary[StringName, EquipmentInstance] = {}
 var next_local_equipment_counter := 1
 var local_equipment: Array[StringName]:

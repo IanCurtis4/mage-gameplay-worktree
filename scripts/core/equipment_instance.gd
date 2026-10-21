@@ -2,6 +2,7 @@ class_name EquipmentInstance
 extends RefCounted
 ## Acquisition data copied by value. Cards and combat state never persist here.
 
+var owner_character_id: String = ""
 var instance_id: StringName
 var definition_id: StringName
 var origin_id: StringName
@@ -13,6 +14,7 @@ var power_ruleset_id: StringName = &"legacy_unscaled"
 
 func copy_instance() -> EquipmentInstance:
 	var copy := EquipmentInstance.new()
+	copy.owner_character_id = owner_character_id
 	copy.instance_id = instance_id
 	copy.definition_id = definition_id
 	copy.origin_id = origin_id

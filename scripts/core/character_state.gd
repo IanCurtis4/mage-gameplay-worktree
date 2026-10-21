@@ -6,6 +6,7 @@ const PRESET_COUNT := 2
 const ACTIVE_SLOT_COUNT := 5
 const PASSIVE_SLOT_COUNT := 2
 
+var gold: int = 0
 var character_id: String
 var display_name: String
 var base_class_id: StringName
@@ -38,6 +39,7 @@ func _init(
 
 func copy_state() -> CharacterState:
 	var copy := CharacterState.new(character_id, display_name, base_class_id)
+	copy.gold = gold
 	copy.evolution_id = evolution_id
 	copy.base_xp_total = base_xp_total
 	copy.job_xp_total = job_xp_total

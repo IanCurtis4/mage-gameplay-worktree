@@ -3,11 +3,16 @@ extends RefCounted
 ## Persistent profile-owned state. Persistence mechanics are introduced in E01.2.
 
 const FORMAT_ID := "ragrpg_character_profile"
-const SCHEMA_VERSION := 7
+const SCHEMA_VERSION := 8
 const CATALOG_VERSION := 14
 const RULESET_ID := "stat_thresholds_v1"
 const MAX_CHARACTERS := 8
 
+var ownership_migration_required := false
+var profile_unlocks: Dictionary[StringName, bool] = {}
+var expeditions: Dictionary[String, ExpeditionAssetLock] = {}
+var asset_receipts: Dictionary = {}
+var migration_receipt: Dictionary = {}
 var profile_id: String
 var revision: int = 0
 var next_character_counter: int = 1
@@ -47,6 +52,11 @@ func character_by_id(search_id: String) -> CharacterState:
 func copy_state() -> ProfileState:
 	var copy := ProfileState.new(profile_id)
 	copy.revision = revision
+	copy.ownership_migration_required = ownership_migration_required
+	copy.profile_unlocks = profile_unlocks.duplicate()
+	copy.asset_receipts = asset_receipts.duplicate(true)
+	copy.migration_receipt = migration_receipt.duplicate(true)
+	for id: String in expeditions: copy.expeditions[id] = expeditions[id].copy_lock()
 	copy.next_character_counter = next_character_counter
 	copy.next_run_counter = next_run_counter
 	copy.selected_character_id = selected_character_id
@@ -77,7 +87,7 @@ func first_instance_for_definition(id: StringName) -> StringName:
 			return instance_id
 	return &""
 
-func add_equipment_instance(id: StringName, metadata: Dictionary) -> Dictionary:
+func add_equipment_instance(id: StringName, metadata: Dictionary, owner_character_id: String = "") -> Dictionary:
 	if next_equipment_counter < 1 or next_equipment_counter >= EquipmentRules.MAX_EXACT_INTEGER:
 		return BuildEffectCatalog.failure(&"invalid_equipment_counter")
 	var instance_id := StringName("equipment_%d" % next_equipment_counter)
@@ -90,6 +100,19 @@ func add_equipment_instance(id: StringName, metadata: Dictionary) -> Dictionary:
 	var checked := EquipmentRules.validate_instance(instance, metadata)
 	if not checked["ok"]:
 		return checked
+	instance.owner_character_id = owner_character_id
 	equipment_instances[instance_id] = instance
 	next_equipment_counter += 1
 	return {"ok": true, "instance_id": instance_id}
+
+func equipment_for_character(character_id: String) -> Dictionary[StringName, EquipmentInstance]:
+	var result: Dictionary[StringName, EquipmentInstance] = {}
+	for id: StringName in equipment_instance_ids():
+		if equipment_instances[id].owner_character_id == character_id:
+			result[id] = equipment_instances[id].copy_instance()
+	return result
+
+func expedition_for_character(character_id: String) -> ExpeditionAssetLock:
+	for lock: ExpeditionAssetLock in expeditions.values():
+		if lock.character_id == character_id: return lock.copy_lock()
+	return null

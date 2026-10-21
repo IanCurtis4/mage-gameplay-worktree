@@ -1,4 +1,5 @@
 extends SceneTree
+const H = preload("res://tests/fixtures/e07/f2/confirmed_history.gd")
 ## Schema-4 durable migration must open the roster, preserve bytes and permit creation.
 const F = preload("res://tests/e06_inventory_fixture.gd")
 var checks := 0
@@ -15,22 +16,23 @@ func _run() -> void:
 	var catalog := ProfileCatalog.pilot()
 	var source := ProfileFacade.new(ProfileStore.new(base.path_join("source"),catalog))
 	for index: int in 7: check(source.create_character("create-%d" % index,index,"Preservado %d" % index,&"swordsman")["ok"],"seven historical characters %d" % index)
-	var raw: Dictionary = ProfileCodec.encode(source.current_profile(),catalog)["data"]
+	var raw: Dictionary = H.legacy_envelope(ProfileCodec.encode(source.current_profile(),catalog)["data"])
 	raw.erase("card_inventory");raw["schema_version"]=4;raw["catalog_version"]=11
 	for fixture_character: Dictionary in raw["characters"]: fixture_character.erase("admin_skills_unlocked")
+		character.erase("gold")
 	var old := JSON.stringify(raw,"\t")
 	var directory := base.path_join("real-migration")
 	_write(directory,ProfileStore.PRIMARY_FILE,old)
 	var previous := raw.duplicate(true);previous["revision"]-=1
 	_write(directory,ProfileStore.BACKUP_FILE,JSON.stringify(previous))
 	var facade := ProfileFacade.new(ProfileStore.new(directory,catalog))
-	var opened := facade.open_profile()
+	var opened := H.open_confirmed(facade)
 	check(opened.get("ok",false) and opened.get("migrated",false),"durable schema4 migration opens facade")
 	if not opened.get("ok",false): print(opened);_finish();return
 	var after: Dictionary = ProfileCodec.encode(facade.current_profile(),catalog)["data"]
 	check(_without_new_admin_flag(after["characters"])==raw["characters"],"historical value preserved characters; new admin flag is false")
-	for key: String in ["equipment_instances","next_equipment_counter","next_character_counter","next_run_counter","selected_character_id","settings","lifetime_stats","legacy_loadouts","unresolved_legacy"]:check(after[key]==raw[key],"historical value preserved "+key)
-	check(after["schema_version"]==7 and after["catalog_version"]==14 and after["revision"]==raw["revision"]+1,"only schema/catalog and one migration revision advance")
+	for key: String in ["equipment_instances","next_equipment_counter","next_character_counter","next_run_counter","selected_character_id","settings","lifetime_stats","legacy_loadouts","unresolved_legacy"]:check(H.legacy_envelope(after)[key]==raw[key],"historical value preserved "+key)
+	check(after["schema_version"]==8 and after["catalog_version"]==14 and after["revision"]==raw["revision"]+1,"only schema/catalog and one migration revision advance")
 	check(facade.current_profile().card_inventory.describe()["owned"].is_empty(),"no discarded historical card reconstructed")
 	check(FileAccess.get_file_as_string(directory.path_join(ProfileStore.BACKUP_FILE))==old,"exact original primary archived as backup")
 	var before_reopen := FileAccess.get_file_as_string(directory.path_join(ProfileStore.PRIMARY_FILE))
@@ -47,10 +49,10 @@ func _run() -> void:
 	for stage: StringName in [&"write_pending",&"validate_pending",&"backup",&"replace"]:
 		var target := base.path_join(String(stage));_write(target,ProfileStore.PRIMARY_FILE,old)
 		var fault := F.FaultStore.new(target,catalog);fault.failure_stage=stage
-		check(not fault.load_profile()["ok"] and FileAccess.get_file_as_string(target.path_join(ProfileStore.PRIMARY_FILE))==old,"failed migration keeps old primary "+String(stage))
-		if stage!=&"write_pending":check(FileAccess.file_exists(target.path_join(ProfileStore.PENDING_FILE)) and not ProfileStore.new(target,catalog).load_profile()["ok"],"unconfirmed pending is preserved "+String(stage))
+		check(not H.load_confirmed(fault)["ok"] and FileAccess.get_file_as_string(target.path_join(ProfileStore.PRIMARY_FILE))==old,"failed migration keeps old primary "+String(stage))
+		if stage!=&"write_pending":check(FileAccess.file_exists(target.path_join(ProfileStore.PENDING_FILE)) and not H.load_confirmed(ProfileStore.new(target,catalog))["ok"],"unconfirmed pending is preserved "+String(stage))
 	var pending := base.path_join("pending");_write(pending,ProfileStore.PRIMARY_FILE,old);_write(pending,ProfileStore.PENDING_FILE,"user pending evidence")
-	check(not ProfileStore.new(pending,catalog).load_profile()["ok"] and FileAccess.get_file_as_string(pending.path_join(ProfileStore.PENDING_FILE))=="user pending evidence","pending evidence blocks migration without removal")
+	check(not H.load_confirmed(ProfileStore.new(pending,catalog))["ok"] and FileAccess.get_file_as_string(pending.path_join(ProfileStore.PENDING_FILE))=="user pending evidence","pending evidence blocks migration without removal")
 	_finish()
 func _without_new_admin_flag(characters: Array) -> Array:
 	var normalized := characters.duplicate(true)
@@ -58,6 +60,7 @@ func _without_new_admin_flag(characters: Array) -> Array:
 		if typeof(character.get("admin_skills_unlocked")) != TYPE_BOOL or character["admin_skills_unlocked"] != false:
 			return []
 		character.erase("admin_skills_unlocked")
+		character.erase("gold")
 	return normalized
 func _finish() -> void:
 	print("E06 durable card migration: %d checks, %d failures" % [checks,failures]);quit(1 if failures else 0)

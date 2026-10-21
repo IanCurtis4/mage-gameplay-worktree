@@ -1,4 +1,5 @@
 extends SceneTree
+const H = preload("res://tests/fixtures/e07/f2/confirmed_history.gd")
 const TX = preload("res://tests/e06_tx_fixture.gd")
 
 class FailingStore:
@@ -32,7 +33,7 @@ func _test_all_worst_distributions() -> void:
 		for index: int in IdentityIds.attribute_ids().size():
 			profile.characters[0].attribute_allocations[IdentityIds.attribute_ids()[index]] = int(allocation[index])
 		var text := _old_text(profile)
-		var result := ProfileCodec.decode(text, ProfileCatalog.pilot())
+		var result := H.decode_confirmed(text, ProfileCatalog.pilot())
 		_check(result.get("ok",false) and result.get("migrated",false), "worst distribution migrates for every origin/level")
 		if not result.get("ok",false): continue
 		var current: ProfileState = result["profile"]
@@ -46,23 +47,23 @@ func _test_known_envelopes() -> void:
 	for version: int in range(1,7):
 		var profile := _profile(&"swordsman",3)
 		profile.characters[0].attribute_allocations[&"str"] = 6
-		var result := ProfileCodec.decode(_old_text(profile,version), ProfileCatalog.pilot())
+		var result := H.decode_confirmed(_old_text(profile,version), ProfileCatalog.pilot())
 		_check(result.get("ok",false) and result.get("migrated",false), "each known catalog/ruleset pair migrates explicitly")
 		if not result.get("ok",false): continue
 		var grants: Dictionary = result["profile"].characters[0].granted_skill_ranks
 		_check(grants == {&"slash":1,&"dash":1,&"swordsman_resistance":1} if version == 1 else grants.is_empty(), "old learning rights preserved only where specified")
 		var encoded := ProfileCodec.encode(result["profile"], ProfileCatalog.pilot())
-		_check(encoded["ok"] and not ProfileCodec.decode(encoded["text"],ProfileCatalog.pilot())["migrated"], "conversion idempotent on reload")
+		_check(encoded["ok"] and not H.decode_confirmed(encoded["text"],ProfileCatalog.pilot())["migrated"], "conversion idempotent on reload")
 		var bad_profile := _profile(&"swordsman",3)
 		bad_profile.characters[0].attribute_allocations[&"str"] = 7 # New budget fits, old6 increments does not.
-		var invalid := ProfileCodec.decode(_old_text(bad_profile,version),ProfileCatalog.pilot())
+		var invalid := H.decode_confirmed(_old_text(bad_profile,version),ProfileCatalog.pilot())
 		_check(not invalid["ok"] and invalid["error_code"] == &"overspent_attributes", "larger budget cannot certify illegal old investment")
 	var unknown: Dictionary = JSON.parse_string(_old_text(_profile(&"swordsman",3)))
 	unknown["ruleset_id"] = "unknown_rules"
-	_check(not ProfileCodec.decode(JSON.stringify(unknown),ProfileCatalog.pilot())["ok"], "unknown old pair rejected")
+	_check(not H.decode_confirmed(JSON.stringify(unknown),ProfileCatalog.pilot())["ok"], "unknown old pair rejected")
 	unknown["catalog_version"] = ProfileState.CATALOG_VERSION
 	unknown["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
-	_check(not ProfileCodec.decode(JSON.stringify(unknown),ProfileCatalog.pilot())["ok"], "old rules never silently assigned to new catalog")
+	_check(not H.decode_confirmed(JSON.stringify(unknown),ProfileCatalog.pilot())["ok"], "old rules never silently assigned to new catalog")
 
 func _test_store_migration_and_respec() -> void:
 	var directory := _directory("whole_profile")
@@ -84,7 +85,7 @@ func _test_store_migration_and_respec() -> void:
 	var old_text := _old_text(profile)
 	_write(directory.path_join(ProfileStore.PRIMARY_FILE),old_text)
 	var store := ProfileStore.new(directory,ProfileCatalog.pilot())
-	var migrated := store.load_profile()
+	var migrated := H.load_confirmed(store)
 	_check(migrated.get("ok",false) and migrated.get("warning",&"") == &"profile_migrated", "durable migration reports explicit warning")
 	if not migrated.get("ok",false): return
 	_check(FileAccess.get_file_as_string(directory.path_join(ProfileStore.BACKUP_FILE)) == old_text, "backup keeps original bytes before changing envelope")
@@ -111,7 +112,7 @@ func _test_store_migration_and_respec() -> void:
 	var active_profile := again.current_profile()
 	var active_dir := _directory("active_session")
 	_write(active_dir.path_join(ProfileStore.PRIMARY_FILE), _old_text(active_profile))
-	var active_migrated := ProfileStore.new(active_dir, ProfileCatalog.pilot()).load_profile()
+	var active_migrated := H.load_confirmed(ProfileStore.new(active_dir, ProfileCatalog.pilot()))
 	_check(active_migrated["ok"] and active_migrated["profile"].reward_session == active_profile.reward_session and active_migrated["profile"].next_run_counter == active_profile.next_run_counter and active_migrated["profile"].lifetime_stats == active_profile.lifetime_stats, "envelope migration preserves active reward cursor, run counters and lifetime totals")
 
 func _test_failure_backup_pending_future() -> void:
@@ -124,30 +125,30 @@ func _test_failure_backup_pending_future() -> void:
 		_write(directory.path_join(ProfileStore.PRIMARY_FILE),old_text)
 		var store := FailingStore.new(directory,ProfileCatalog.pilot())
 		store.failure_stage = stage
-		var result := store.load_profile()
+		var result := H.load_confirmed(store)
 		_check(not result["ok"] and FileAccess.get_file_as_string(directory.path_join(ProfileStore.PRIMARY_FILE)) == old_text, "failed migration leaves original primary intact at each write stage")
 		if stage != &"write_pending":
 			var pending_text := FileAccess.get_file_as_string(directory.path_join(ProfileStore.PENDING_FILE))
-			var retry := ProfileStore.new(directory,ProfileCatalog.pilot()).load_profile()
+			var retry := H.load_confirmed(ProfileStore.new(directory,ProfileCatalog.pilot()))
 			_check(not retry["ok"] and retry.get("read_only",false) and FileAccess.get_file_as_string(directory.path_join(ProfileStore.PENDING_FILE)) == pending_text, "uncertain migration pending preserved, never overwritten or promoted")
 	var backup_dir := _directory("recovery_backup")
 	_write(backup_dir.path_join(ProfileStore.PRIMARY_FILE),"{broken")
 	_write(backup_dir.path_join(ProfileStore.BACKUP_FILE),old_text)
-	var recovered := ProfileStore.new(backup_dir,ProfileCatalog.pilot()).load_profile()
-	_check(recovered.get("ok",false) and recovered.get("recovered",false) and recovered.get("warning",&"") == &"profile_migrated_from_backup", "recognized old backup recovers and migrates explicitly: %s" % recovered)
+	var recovered := H.load_confirmed(ProfileStore.new(backup_dir,ProfileCatalog.pilot()))
+	_check(not recovered.get("ok", false) and recovered.get("error_code") == &"migration_required" and FileAccess.get_file_as_string(backup_dir.path_join(ProfileStore.BACKUP_FILE)) == old_text and FileAccess.get_file_as_string(backup_dir.path_join(ProfileStore.PRIMARY_FILE)) == "{broken", "legacy backup preserves both sources pending explicit recovery selection")
 	for corrupt_primary: bool in [false, true]:
 		var guarded_dir := _directory("backup_pending_%s" % corrupt_primary)
 		_write(guarded_dir.path_join(ProfileStore.BACKUP_FILE), old_text)
 		_write(guarded_dir.path_join(ProfileStore.PENDING_FILE), "unconfirmed transaction evidence")
 		if corrupt_primary:
 			_write(guarded_dir.path_join(ProfileStore.PRIMARY_FILE), "{broken")
-		var blocked_pending := ProfileStore.new(guarded_dir, ProfileCatalog.pilot()).load_profile()
+		var blocked_pending := H.load_confirmed(ProfileStore.new(guarded_dir, ProfileCatalog.pilot()))
 		_check(not blocked_pending["ok"] and blocked_pending.get("read_only", false), "backup recovery cannot replace an unconfirmed pending transaction")
 		_check(FileAccess.get_file_as_string(guarded_dir.path_join(ProfileStore.PENDING_FILE)) == "unconfirmed transaction evidence" and FileAccess.get_file_as_string(guarded_dir.path_join(ProfileStore.BACKUP_FILE)) == old_text, "recovery preserves pending and backup bytes")
 		_check(FileAccess.get_file_as_string(guarded_dir.path_join(ProfileStore.PRIMARY_FILE)) == "{broken" if corrupt_primary else not FileAccess.file_exists(guarded_dir.path_join(ProfileStore.PRIMARY_FILE)), "guarded recovery neither replaces nor creates primary")
 	var only_pending := _directory("pending_only")
 	_write(only_pending.path_join(ProfileStore.PENDING_FILE),old_text)
-	_check(not ProfileStore.new(only_pending,ProfileCatalog.pilot()).load_profile()["ok"] and not FileAccess.file_exists(only_pending.path_join(ProfileStore.PRIMARY_FILE)), "orphan old pending never promoted")
+	_check(not H.load_confirmed(ProfileStore.new(only_pending,ProfileCatalog.pilot()))["ok"] and not FileAccess.file_exists(only_pending.path_join(ProfileStore.PRIMARY_FILE)), "orphan old pending never promoted")
 	for artifact: String in [ProfileStore.PRIMARY_FILE,ProfileStore.BACKUP_FILE]:
 		var directory := _directory("future_"+artifact)
 		var future: Dictionary = JSON.parse_string(old_text)
@@ -156,7 +157,7 @@ func _test_failure_backup_pending_future() -> void:
 		_write(directory.path_join(ProfileStore.PRIMARY_FILE),old_text)
 		_write(directory.path_join(ProfileStore.BACKUP_FILE),old_text)
 		_write(directory.path_join(artifact),future_text)
-		var blocked := ProfileStore.new(directory,ProfileCatalog.pilot()).load_profile()
+		var blocked := H.load_confirmed(ProfileStore.new(directory,ProfileCatalog.pilot()))
 		_check(not blocked["ok"] and blocked.get("read_only",false) and FileAccess.get_file_as_string(directory.path_join(artifact)) == future_text, "future primary or backup blocks migration without overwrite")
 
 func _profile(origin: StringName, level: int) -> ProfileState:

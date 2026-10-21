@@ -1,4 +1,5 @@
 extends SceneTree
+const H = preload("res://tests/fixtures/e07/f2/confirmed_history.gd")
 
 const NEW_PROFILE_ID := "123e4567-e89b-42d3-a456-426614174010"
 const LEGACY_PROFILE_ID := "123e4567-e89b-42d3-a456-426614174011"
@@ -146,7 +147,7 @@ func _check_catalog_v1_migration_and_respec() -> void:
 	_check(encoded["ok"], "source profile encodes before conversion to historical envelope")
 	if not encoded["ok"]:
 		return
-	var legacy_data: Dictionary = encoded["data"].duplicate(true)
+	var legacy_data: Dictionary = H.legacy_envelope(encoded["data"])
 	legacy_data["schema_version"] = 2
 	for fixture_character: Dictionary in legacy_data["characters"]: fixture_character.erase("admin_skills_unlocked")
 	legacy_data.erase("card_inventory")
@@ -164,7 +165,7 @@ func _check_catalog_v1_migration_and_respec() -> void:
 	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), legacy_text)
 
 	var store := ProfileStore.new(directory)
-	var migrated := store.load_profile()
+	var migrated := H.load_confirmed(store)
 	_check(migrated["ok"], "actual historical envelope migrates without truncating test flow")
 	if not migrated["ok"]:
 		return
@@ -225,7 +226,7 @@ func _check_catalog_v1_migration_and_respec() -> void:
 		and respec_character.presets[0]["passive_slots"][0] == &"swordsman_resistance",
 		"legacy-granted skills remain legal in presets after respec"
 	)
-	var final_reload := ProfileStore.new(directory).load_profile()
+	var final_reload := H.load_confirmed(ProfileStore.new(directory))
 	_check(
 		final_reload["ok"]
 		and not final_reload.get("migrated", false)

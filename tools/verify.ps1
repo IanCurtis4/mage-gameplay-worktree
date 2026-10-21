@@ -342,6 +342,10 @@ Add-GodotCheck @('--headless', '--path', $fixtureF0Path, '--script', 'res://test
 Add-GodotCheck @('--headless', '--path', $projectPath, '--editor', '--recovery-mode', '--import', '--quit')
 
 Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f1_import_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f2_ownership_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f2_migration_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f2_store_test.gd')
+Add-GodotCheck @('--headless', '--path', $projectPath, '--script', 'res://tests/e07_f2_integration_test.gd')
 $fixtureF1Path = Join-Path $projectPath '.godot/verification/e07_f1/fixture_project'
 Add-GodotCheck @('--headless', '--path', $fixtureF1Path, '--script', 'res://tests/e07_f1_geometry_test.gd')
 Add-GodotCheck @('--headless', '--path', $fixtureF1Path, '--script', 'res://tests/e07_f1_actor_integration_test.gd')

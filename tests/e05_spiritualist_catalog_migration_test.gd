@@ -1,4 +1,5 @@
 extends SceneTree
+const H = preload("res://tests/fixtures/e07/f2/confirmed_history.gd")
 const TX = preload("res://tests/e06_tx_fixture.gd")
 
 const PROFILE_ID := "123e4567-e89b-42d3-a456-426614174180"
@@ -35,7 +36,7 @@ func _run() -> void:
 	profile.characters.append(mage)
 	profile.selected_character_id = evolved_id
 	var encoded := ProfileCodec.encode(profile)
-	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 7 and ProfileState.CATALOG_VERSION == 14, "current catalog preserves Spiritualist migration and schema")
+	_check(encoded["ok"] and ProfileState.SCHEMA_VERSION == 8 and ProfileState.CATALOG_VERSION == 14, "current catalog preserves Spiritualist migration and schema")
 	if not encoded["ok"]:
 		_finish()
 		return
@@ -44,9 +45,9 @@ func _run() -> void:
 	old_data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	var old_text := JSON.stringify(old_data, "\t")
 	_write(ProfileStore.PRIMARY_FILE, old_text)
-	var decoded := ProfileCodec.decode(old_text)
+	var decoded := H.decode_confirmed(old_text)
 	_check(decoded["ok"] and decoded["migrated"] and decoded["migration_kind"] == &"catalog_v5" and decoded["profile"].revision == 12, "catalog 5 decodes additively in memory")
-	var loaded := ProfileStore.new(directory).load_profile()
+	var loaded := H.load_confirmed(ProfileStore.new(directory))
 	_check(loaded["ok"] and loaded["migrated"] and loaded["profile"].revision == 13, "store migrates once in an isolated transaction")
 	var durable: ProfileState = loaded["profile"]
 	_check(durable.selected_character_id == evolved_id and durable.characters.size() == 2 and durable.character_by_id(evolved_id).evolution_id == &"elementalist" and durable.character_by_id(mage_id).evolution_id.is_empty(), "both identities and selection survive")
@@ -54,16 +55,16 @@ func _run() -> void:
 	_check(durable.character_by_id(evolved_id).job_xp_total == evolved.job_xp_total and durable.character_by_id(mage_id).job_xp_total == mage.job_xp_total, "both XP totals remain exact")
 	var current_data: Dictionary = JSON.parse_string(_read(ProfileStore.PRIMARY_FILE))
 	_check(_read(ProfileStore.BACKUP_FILE) == old_text and current_data["catalog_version"] == ProfileState.CATALOG_VERSION, "backup retains exact catalog-5 bytes")
-	var reloaded := ProfileStore.new(directory).load_profile()
+	var reloaded := H.load_confirmed(ProfileStore.new(directory))
 	_check(reloaded["ok"] and not reloaded.get("migrated", false) and reloaded["profile"].revision == 13, "subsequent load is idempotent")
 	var future: Dictionary = current_data.duplicate(true)
 	future["catalog_version"] = ProfileState.CATALOG_VERSION + 1
 	var future_text := JSON.stringify(future, "\t")
-	_check(not ProfileCodec.decode(future_text)["ok"], "future catalog remains incompatible")
+	_check(not H.decode_confirmed(future_text)["ok"], "future catalog remains incompatible")
 	_cleanup()
 	DirAccess.make_dir_recursive_absolute(directory)
 	_write(ProfileStore.PRIMARY_FILE, future_text)
-	var rejected := ProfileStore.new(directory).load_profile()
+	var rejected := H.load_confirmed(ProfileStore.new(directory))
 	_check(not rejected["ok"] and rejected.get("read_only", false) and _read(ProfileStore.PRIMARY_FILE) == future_text and not FileAccess.file_exists(directory.path_join(ProfileStore.PENDING_FILE)), "future primary remains byte-identical and read only")
 	_assert_backup_guard(old_text, profile, true)
 	_assert_backup_guard(old_text, profile, false)
@@ -82,7 +83,7 @@ func _assert_backup_guard(primary_text: String, original: ProfileState, newer: b
 	data["ruleset_id"] = ProfileCodec.PRE_THRESHOLDS_RULESET_ID
 	var backup_text := JSON.stringify(data, "\t")
 	_write(ProfileStore.BACKUP_FILE, backup_text)
-	var loaded := ProfileStore.new(directory).load_profile()
+	var loaded := H.load_confirmed(ProfileStore.new(directory))
 	_check(not loaded["ok"] and loaded["error_code"] == &"recovery_required" and loaded.get("read_only", false), "newer or foreign catalog-5 backup blocks migration")
 	_check(_read(ProfileStore.PRIMARY_FILE) == primary_text and _read(ProfileStore.BACKUP_FILE) == backup_text and not FileAccess.file_exists(directory.path_join(ProfileStore.PENDING_FILE)), "blocked migration preserves both exact files")
 

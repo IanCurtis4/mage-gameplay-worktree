@@ -207,6 +207,8 @@ func _preflight_commit(source: ProfileState, allow_migration: bool) -> Dictionar
 			return {"ok": true, "archive_legacy": true}
 		return {"ok": false, "error_code": &"stale_revision", "read_only": true}
 	var disk_profile: ProfileState = disk["profile"]
+	var ownership_check := CharacterAssets.validate_transition(disk_profile, source)
+	if not ownership_check["ok"]: return ownership_check
 	if disk_profile.profile_id != source.profile_id or disk_profile.revision != source.revision:
 		return {"ok": false, "error_code": &"stale_revision"}
 	if source.next_character_counter < disk_profile.next_character_counter or source.next_run_counter < disk_profile.next_run_counter:
@@ -218,6 +220,13 @@ func _guard_existing_backup(primary_result: Dictionary) -> Dictionary:
 		return {"ok": true}
 	var backup := _read_and_decode(BACKUP_FILE)
 	if not backup["ok"]:
+		if backup.get("error_code") == &"migration_required" and backup.has("legacy_profile") and primary_result.get("ok", false):
+			var current: ProfileState = primary_result["profile"]
+			var digest: String = current.migration_receipt.get("source_digest", "")
+			var archive := _path("profile.ownership.%s.json" % digest)
+			if digest == FileAccess.get_sha256(_path(BACKUP_FILE)):
+				if FileAccess.file_exists(archive) and FileAccess.get_sha256(archive) == digest: return {"ok": true}
+				return {"ok": false, "error_code": &"recovery_required", "read_only": true}
 		if _must_preserve_incompatible(backup):
 			return {"ok": false, "error_code": backup["error_code"], "read_only": true}
 		return {"ok": true}
@@ -255,9 +264,75 @@ func _should_fail(_stage: StringName) -> bool:
 	return false
 
 func _must_preserve_incompatible(result: Dictionary) -> bool:
-	return result.get("future_schema", false) or result.get("catalog_incompatible", false) or result.get("error_code", &"") in [&"unsupported_schema", &"invalid_catalog", &"invalid_origin"]
+	return result.get("future_schema", false) or result.get("catalog_incompatible", false) or result.get("error_code", &"") in [&"unsupported_schema", &"invalid_catalog", &"invalid_origin", &"migration_required", &"invalid_owner", &"not_owner", &"invalid_ownership_section", &"invalid_expedition_slot", &"expedition_conflict", &"invalid_gold", &"invalid_unlock", &"invalid_asset_receipt", &"invalid_migration_receipt", &"invalid_json_value", &"profile_too_large"]
 
 func _same_profile(left: ProfileState, right: ProfileState) -> bool:
 	var left_encoded := ProfileCodec.encode(left, _catalog)
 	var right_encoded := ProfileCodec.encode(right, _catalog)
 	return left_encoded["ok"] and right_encoded["ok"] and left_encoded["text"] == right_encoded["text"]
+
+
+func preview_migration(assignments: Dictionary = {}) -> Dictionary:
+	if _write_in_progress: return BuildEffectCatalog.failure(&"save_in_progress")
+	if has_pending_transaction(): return BuildEffectCatalog.failure(&"recovery_required")
+	var source := _migration_source()
+	if not source["ok"]: return source
+	return MigrationPlan.dry_run(source["text"], _catalog, assignments)
+
+func _migration_source() -> Dictionary:
+	if not FileAccess.file_exists(_path(PRIMARY_FILE)): return BuildEffectCatalog.failure(&"file_missing")
+	if FileAccess.get_size(_path(PRIMARY_FILE)) > ProfileCodec.MAX_FILE_BYTES: return BuildEffectCatalog.failure(&"profile_too_large")
+	var file := FileAccess.open(_path(PRIMARY_FILE), FileAccess.READ)
+	if file == null: return BuildEffectCatalog.failure(&"file_unreadable")
+	var bytes := file.get_buffer(file.get_length())
+	file.close()
+	var text := bytes.get_string_from_utf8()
+	if text.to_utf8_buffer() != bytes: return BuildEffectCatalog.failure(&"invalid_utf8")
+	return {"ok": true, "text": text}
+
+func apply_migration(plan: Dictionary, confirmed_digest: String, request_id: String) -> Dictionary:
+	if _write_in_progress: return BuildEffectCatalog.failure(&"save_in_progress")
+	if not CharacterAssets.valid_request(request_id): return BuildEffectCatalog.failure(&"invalid_request_id")
+	if MigrationPlan.digest(plan) != confirmed_digest: return BuildEffectCatalog.failure(&"confirmation_required")
+	var source := _migration_source()
+	if not source["ok"]: return source
+	var disk := ProfileCodec.decode(source["text"], _catalog)
+	if disk.get("ok", false):
+		var current: ProfileState = disk["profile"]
+		if current.migration_receipt.get("request_id") == request_id:
+			if current.migration_receipt.get("plan_digest") != confirmed_digest: return BuildEffectCatalog.failure(&"request_conflict")
+			return {"ok": true, "already_applied": true, "profile": current, "new_revision": current.revision}
+		return BuildEffectCatalog.failure(&"migration_not_required")
+	var applied := MigrationPlan.apply(plan, source["text"], confirmed_digest, request_id, _catalog)
+	if not applied["ok"]: return applied
+	if has_pending_transaction():
+		var pending := _read_and_decode(PENDING_FILE)
+		var expected: ProfileState = applied["profile"].copy_state()
+		expected.revision += 1
+		if not pending.get("ok", false) or not _same_profile(pending["profile"], expected): return BuildEffectCatalog.failure(&"recovery_required")
+		if DirAccess.remove_absolute(_absolute_path(PENDING_FILE)) != OK: return BuildEffectCatalog.failure(&"recovery_required")
+	if FileAccess.file_exists(_path(BACKUP_FILE)):
+		var backup := _read_and_decode(BACKUP_FILE)
+		var previous: ProfileState = backup.get("profile", backup.get("legacy_profile"))
+		var candidate: ProfileState = applied["profile"]
+		if previous == null or previous.profile_id != candidate.profile_id or previous.revision > candidate.revision: return BuildEffectCatalog.failure(&"recovery_required")
+	var candidate: ProfileState = applied["profile"]
+	candidate.revision += 1
+	var encoded := ProfileCodec.encode(candidate, _catalog)
+	if not encoded["ok"]: return encoded
+	_write_in_progress = true
+	# Exact legacy bytes remain archived independently of subsequent backup rotation.
+	var archive := _path("profile.ownership.%s.json" % plan["source_digest"])
+	if FileAccess.file_exists(archive):
+		if FileAccess.get_sha256(archive) != plan["source_digest"]:
+			_write_in_progress = false
+			return BuildEffectCatalog.failure(&"recovery_required")
+	elif DirAccess.copy_absolute(_absolute_path(PRIMARY_FILE), ProjectSettings.globalize_path(archive)) != OK:
+		_write_in_progress = false
+		return BuildEffectCatalog.failure(&"save_failed")
+	var result := _write_transaction(encoded["text"], candidate, false)
+	_write_in_progress = false
+	if result.get("ok", false):
+		result["migrated"] = true
+		result["warning"] = &"profile_migrated"
+	return result

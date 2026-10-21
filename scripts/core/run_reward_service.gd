@@ -172,13 +172,13 @@ func collect(ticket_id: String) -> Dictionary:
 		if persistent:
 			var profile := controller.persistent_facade.current_profile()
 			_run.local_equipment_instances.clear()
-			for id: StringName in profile.equipment_instances:
+			for id: StringName in profile.equipment_for_character(_run.character_id):
 				_run.local_equipment_instances[id] = profile.equipment_instances[id].copy_instance()
 		else:
 			for drop: Dictionary in entry["payload"]["equipment_drops"]:
 				_run.add_local_equipment(StringName(drop["definition_id"]), drop)
 		if persistent:
-			_run.card_inventory = controller.persistent_facade.current_profile().card_inventory.copy_inventory()
+			_run.card_inventory = controller.persistent_facade.current_profile().card_inventory.for_character(_run.character_id, _run.local_equipment_instances)
 			_run.build_snapshot.card_inventory = _run.card_inventory.copy_inventory()
 			entry["card_instance_id"] = result.get("card_instance_id", &"")
 			_run.card_instances = _run.card_inventory.describe()["instances"]

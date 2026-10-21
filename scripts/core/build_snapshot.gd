@@ -52,7 +52,11 @@ static func from_character(
 	snapshot.passive_slots = preset["passive_slots"].duplicate(true)
 	snapshot.equipped = preset["equipped"].duplicate(true)
 	for id: StringName in instances:
-		snapshot.equipment_instances[id] = instances[id].copy_instance()
+		if instances[id].owner_character_id.is_empty() or instances[id].owner_character_id == character.character_id:
+			snapshot.equipment_instances[id] = instances[id].copy_instance()
+	for slot: StringName in snapshot.equipped:
+		var id: Variant = snapshot.equipped[slot]
+		if id != null and instances.has(id) and not snapshot.equipment_instances.has(id): snapshot.equipped[slot] = null
 	snapshot.action_slots = ActionBarLayout.for_character(character)
 	return snapshot
 

@@ -131,7 +131,7 @@ func _setup(base: StringName,evolution: StringName,origin: StringName,id: String
 	elif origin == &"card":
 		var host := catalog.get_definition(&"equipment",&"arena_ember_staff") as EquipmentDefinition
 		_equip(build,host,&"card_host")
-		var acquired := build.card_inventory.grant(id,catalog,"f1_card")
+		var acquired := build.card_inventory.grant(id,catalog,"f1_card",build.character_id)
 		check(acquired["ok"],"real card instance acquired in isolated value fixture")
 		var definitions := {host.id:host.metadata()}
 		var socketed := build.card_inventory.preview({"kind":&"socket","equipment_instance_id":&"card_host","socket_index":0,"card_instance_id":acquired["card_instance_id"]},build.equipped,build.equipment_instances,definitions)
@@ -159,6 +159,7 @@ func _setup(base: StringName,evolution: StringName,origin: StringName,id: String
 func _equip(build: BuildSnapshot,definition: EquipmentDefinition,instance: StringName) -> void:
 	var created := EquipmentInstance.from_metadata(instance,definition.id,definition.metadata()); check(created["ok"],"real equipment metadata creates explicit item instance")
 	if not created["ok"]: return
+	created["instance"].owner_character_id = build.character_id
 	build.equipment_instances[instance] = created["instance"]
 	build.equipped[&"accessory_1" if definition.slot == &"accessory" else definition.slot] = instance
 func _actor(point: ExpeditionWorldPoint) -> CombatActor:

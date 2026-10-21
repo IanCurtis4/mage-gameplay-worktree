@@ -26,14 +26,14 @@ static func describe_profile(facade: ProfileFacade, character_id: String) -> Dic
 	var catalog := _profile_catalog
 	var snapshot: BuildSnapshot = preview["snapshot"]
 	var equipment: Array[Dictionary] = []
-	for id: StringName in profile.equipment_instance_ids():
+	for id: StringName in profile.equipment_for_character(character_id):
 		var instance: EquipmentInstance = profile.equipment_instances[id]
 		var item := catalog.get_definition(&"equipment", instance.definition_id) as EquipmentDefinition
 		if item == null: continue
 		var row := instance.to_record()
 		row.merge({"id": id, "name": EquipmentPresentation.item_name(item), "description": _equipment_description(item, instance, catalog), "flavor": item.flavor_text, "icon": EquipmentPresentation.icon(item), "hand_usage": item.hand_usage, "origin_label": PlaytestGameplay.origin_name(instance.origin_id), "slot": item.slot, "selected": id in snapshot.equipped.values(), "allowed": BuildEffectCatalog.definition_allowed(item, snapshot)})
 		equipment.append(row)
-	var inventory: Dictionary = profile.card_inventory.describe()
+	var inventory: Dictionary = profile.card_inventory.for_character(character_id, profile.equipment_for_character(character_id)).describe()
 	var cards: Array[Dictionary] = []
 	for id: StringName in inventory["owned"]:
 		var definition_id: StringName = inventory["instances"][id]
@@ -56,7 +56,7 @@ static func describe(controller: RunController) -> Dictionary:
 	if controller.persistent_facade != null:
 		var profile := controller.persistent_facade.current_profile()
 		if profile != null:
-			owned = profile.equipment_instances
+			owned = profile.equipment_for_character(state.character_id)
 	var equipment: Array[Dictionary] = []
 	var ids: Array = owned.keys()
 	ids.sort()
@@ -99,6 +99,9 @@ static func compare(service: RunBuildService, intent: Dictionary) -> Dictionary:
 
 static func error_text(code: StringName) -> String:
 	match code:
+		&"not_owner": return "Este item pertence a outro personagem."
+		&"locked_by_expedition": return "Conclua a expedição antes de alterar este personagem."
+		&"migration_required": return "Confira e confirme a migração dos bens antes de continuar."
 		&"encounter_active": return "Conclua o encontro antes de trocar."
 		&"offer_open": return "Resolva a escolha de aprimoramento aberta."
 		&"hp_deficit": return "A troca deixaria o personagem sem vida."

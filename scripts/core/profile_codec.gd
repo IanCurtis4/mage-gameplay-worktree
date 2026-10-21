@@ -1,7 +1,9 @@
 class_name ProfileCodec
 extends RefCounted
-## Pure schema-7 encoding; validate historical envelopes before migration.
+## Owned schema-8 envelope; closed historical schema-7 reader precedes assisted migration.
 
+const LEGACY_SCHEMA_VERSION := 7
+const OWNERSHIP_FIELDS := ["profile_unlocks", "expeditions", "asset_receipts", "migration_receipt"]
 const MAX_FILE_BYTES := 4 * 1024 * 1024
 const MAX_EXACT_JSON_INTEGER := 9007199254740991
 const LEGACY_CATALOG_VERSION := 1
@@ -49,7 +51,7 @@ static func encode(profile: ProfileState, catalog: ProfileCatalog = null) -> Dic
 	var validation := validate_profile(profile, effective_catalog)
 	if not validation["ok"]:
 		return validation
-	var payload := _profile_to_dictionary(profile)
+	var payload := owned_dictionary(profile)
 	if not _is_json_value(payload):
 		return _error(&"invalid_json_value")
 	var text := JSON.stringify(payload, "\t")
@@ -57,7 +59,7 @@ static func encode(profile: ProfileState, catalog: ProfileCatalog = null) -> Dic
 		return _error(&"profile_too_large")
 	return {"ok": true, "text": text, "data": payload}
 
-static func decode(text: String, catalog: ProfileCatalog = null) -> Dictionary:
+static func _decode_legacy(text: String, catalog: ProfileCatalog = null) -> Dictionary:
 	var effective := catalog if catalog != null else ProfileCatalog.pilot()
 	var json := JSON.new()
 	if text.to_utf8_buffer().size() > MAX_FILE_BYTES or json.parse(text) != OK or not json.data is Dictionary:
@@ -103,7 +105,7 @@ static func decode(text: String, catalog: ProfileCatalog = null) -> Dictionary:
 				reports.append(report)
 	if not reports.is_empty():
 		profile.extension_fields["all_skill_dependencies_migration"] = JSON.parse_string(JSON.stringify({"catalog_version": ProfileState.CATALOG_VERSION, "characters": reports}))
-	var valid := validate_profile(profile, effective)
+	var valid := _validate_legacy_profile(profile, effective)
 	if not valid.get("ok", false): return valid
 	decoded["migrated"] = true
 	var previous_kind: StringName = decoded.get("migration_kind", &"")
@@ -164,7 +166,7 @@ static func _decode_envelope(text: String, catalog: ProfileCatalog = null, allow
 	if not _is_exact_integer(data.get("schema_version")):
 		return _error(&"unsupported_schema")
 	var schema_version := int(data["schema_version"])
-	if schema_version > ProfileState.SCHEMA_VERSION:
+	if schema_version > LEGACY_SCHEMA_VERSION:
 		return {"ok": false, "error_code": &"unsupported_schema", "future_schema": true}
 	if schema_version < 6 and data.get("characters") is Array:
 		for character: Variant in data["characters"]:
@@ -178,7 +180,7 @@ static func _decode_envelope(text: String, catalog: ProfileCatalog = null, allow
 		if not _is_exact_integer(data.get("catalog_version")) or int(data["catalog_version"]) != 12:
 			return _catalog_error(&"invalid_catalog")
 		var upgraded := data.duplicate(true)
-		upgraded["schema_version"] = ProfileState.SCHEMA_VERSION
+		upgraded["schema_version"] = LEGACY_SCHEMA_VERSION
 		upgraded["catalog_version"] = ProfileState.CATALOG_VERSION
 		var migrated := _decode_v2(upgraded, effective_catalog)
 		if migrated["ok"]:
@@ -189,7 +191,7 @@ static func _decode_envelope(text: String, catalog: ProfileCatalog = null, allow
 		if not _is_exact_integer(data.get("catalog_version")) or int(data["catalog_version"]) != 11:
 			return _catalog_error(&"invalid_catalog")
 		var upgraded := data.duplicate(true)
-		upgraded["schema_version"] = ProfileState.SCHEMA_VERSION
+		upgraded["schema_version"] = LEGACY_SCHEMA_VERSION
 		upgraded["catalog_version"] = ProfileState.CATALOG_VERSION
 		var migrated := _decode_v2(upgraded,effective_catalog,false,false,true)
 		if migrated["ok"]:
@@ -200,9 +202,9 @@ static func _decode_envelope(text: String, catalog: ProfileCatalog = null, allow
 		return _upgrade_legacy(_migrate_v1(data, effective_catalog), effective_catalog)
 	if schema_version == 3:
 		return _migrate_power_v3(data, effective_catalog)
-	if schema_version not in [2, 6, ProfileState.SCHEMA_VERSION]:
+	if schema_version not in [2, 6, LEGACY_SCHEMA_VERSION]:
 		return _error(&"unsupported_schema")
-	if schema_version in [6, ProfileState.SCHEMA_VERSION]:
+	if schema_version in [6, LEGACY_SCHEMA_VERSION]:
 		if data.has("equipment_collection"):
 			return _catalog_error(&"invalid_catalog")
 		var decoded := _decode_v2(data, effective_catalog, false, false, false, allow_disabled_refs, schema_version == 7)
@@ -274,7 +276,7 @@ static func _migrate_power_v3(data: Dictionary, catalog: ProfileCatalog) -> Dict
 		if not checked["ok"]: return _catalog_error(checked["error_code"])
 		record["recipe_revision_id"] = "catalog_v1"
 		record["power_ruleset_id"] = "legacy_unscaled"
-	upgraded["schema_version"] = ProfileState.SCHEMA_VERSION
+	upgraded["schema_version"] = LEGACY_SCHEMA_VERSION
 	upgraded["catalog_version"] = ProfileState.CATALOG_VERSION
 	var decoded := _decode_v2(upgraded, catalog, false, false, true)
 	if decoded["ok"]:
@@ -282,7 +284,7 @@ static func _migrate_power_v3(data: Dictionary, catalog: ProfileCatalog) -> Dict
 		decoded["migration_kind"] = &"equipment_power_v1"
 	return decoded
 
-static func validate_profile(profile: ProfileState, catalog: ProfileCatalog = null) -> Dictionary:
+static func _validate_legacy_profile(profile: ProfileState, catalog: ProfileCatalog = null) -> Dictionary:
 	var effective_catalog := catalog if catalog != null else ProfileCatalog.pilot()
 	if not effective_catalog.is_valid():
 		return _catalog_error(&"invalid_catalog")
@@ -902,7 +904,7 @@ static func _profile_to_dictionary(profile: ProfileState) -> Dictionary:
 	var data := profile.extension_fields.duplicate(true)
 	data.merge({
 		"format_id": ProfileState.FORMAT_ID,
-		"schema_version": ProfileState.SCHEMA_VERSION,
+		"schema_version": LEGACY_SCHEMA_VERSION,
 		"catalog_version": ProfileState.CATALOG_VERSION,
 		"ruleset_id": ProfileState.RULESET_ID,
 		"profile_id": profile.profile_id,
@@ -1083,10 +1085,12 @@ static func _derived_counter(identifier: String, profile_id: String) -> int:
 	return counter
 
 static func _is_json_value(value: Variant) -> bool:
-	if value == null or value is bool or value is String or value is int:
+	if value == null or value is bool or value is String:
 		return true
+	if value is int:
+		return value >= -MAX_EXACT_JSON_INTEGER and value <= MAX_EXACT_JSON_INTEGER
 	if value is float:
-		return is_finite(value)
+		return is_finite(value) and (value != floor(value) or abs(value) <= MAX_EXACT_JSON_INTEGER)
 	if value is Array:
 		for item: Variant in value:
 			if not _is_json_value(item):
@@ -1107,3 +1111,86 @@ static func _error(error_code: StringName, field: String = "") -> Dictionary:
 
 static func _catalog_error(error_code: StringName) -> Dictionary:
 	return {"ok": false, "error_code": error_code, "catalog_incompatible": true}
+
+
+static func validate_profile(profile: ProfileState, catalog: ProfileCatalog = null) -> Dictionary:
+	if profile == null: return _error(&"invalid_profile")
+	if profile.ownership_migration_required: return _error(&"migration_required")
+	var legacy := _validate_legacy_profile(profile, catalog)
+	if not legacy.get("ok", false): return legacy
+	return CharacterAssets.validate(profile)
+
+static func owned_dictionary(profile: ProfileState) -> Dictionary:
+	var data := _profile_to_dictionary(profile)
+	data["schema_version"] = ProfileState.SCHEMA_VERSION
+	data["profile_unlocks"] = _integer_map_to_dictionary(profile.profile_unlocks)
+	data["expeditions"] = {}
+	for id: String in profile.expeditions: data["expeditions"][id] = profile.expeditions[id].to_record()
+	data["asset_receipts"] = profile.asset_receipts.duplicate(true)
+	data["migration_receipt"] = profile.migration_receipt.duplicate(true)
+	for raw: Dictionary in data["characters"]:
+		raw["gold"] = profile.character_by_id(raw["character_id"]).gold
+	for raw: Dictionary in data["equipment_instances"]:
+		raw["owner_character_id"] = profile.equipment_instances[StringName(raw["instance_id"])].owner_character_id
+	data["card_inventory"]["owners"] = profile.card_inventory.owner_records()
+	return data
+
+static func decode(text: String, catalog: ProfileCatalog = null) -> Dictionary:
+	var json := JSON.new()
+	if text.to_utf8_buffer().size() > MAX_FILE_BYTES or json.parse(text) != OK or not json.data is Dictionary:
+		return _decode_legacy(text, catalog)
+	var raw: Dictionary = json.data
+	if not _is_json_value(raw): return _error(&"invalid_json_value")
+	if not _is_exact_integer(raw.get("schema_version")): return _error(&"unsupported_schema")
+	var schema := int(raw["schema_version"])
+	if schema > ProfileState.SCHEMA_VERSION: return {"ok": false, "error_code": &"unsupported_schema", "future_schema": true}
+	if schema <= LEGACY_SCHEMA_VERSION:
+		var historical := _decode_legacy(text, catalog)
+		if not historical.get("ok", false): return historical
+		var profile: ProfileState = historical["profile"]
+		if schema == 1:
+			# Historical schema1 had no identity; derive one stably without inventing a character.
+			var hash := text.sha256_text()
+			profile.profile_id = "%s-%s-5%s-a%s-%s" % [hash.substr(0,8), hash.substr(8,4), hash.substr(13,3), hash.substr(17,3), hash.substr(20,12)]
+		profile.ownership_migration_required = true
+		return {"ok": false, "error_code": &"migration_required", "read_only": true, "legacy_profile": profile, "source_digest": text.sha256_text()}
+	if schema != ProfileState.SCHEMA_VERSION: return _error(&"unsupported_schema")
+	for field: String in OWNERSHIP_FIELDS:
+		if not raw.get(field) is Dictionary: return _error(&"invalid_ownership_section", field)
+	if not raw.get("characters") is Array or not raw.get("equipment_instances") is Array or not raw.get("card_inventory") is Dictionary or not raw["card_inventory"].get("owners") is Dictionary: return _error(&"invalid_ownership_section")
+	var legacy := raw.duplicate(true)
+	legacy["schema_version"] = LEGACY_SCHEMA_VERSION
+	for field: String in OWNERSHIP_FIELDS: legacy.erase(field)
+	for item: Variant in legacy["equipment_instances"]:
+		if not item is Dictionary or not item.get("owner_character_id") is String: return _error(&"invalid_owner")
+		item.erase("owner_character_id")
+	for character: Variant in legacy["characters"]:
+		if not character is Dictionary or not EquipmentRules.exact_integer(character.get("gold"), 0): return _error(&"invalid_gold")
+		character.erase("gold")
+	legacy["card_inventory"].erase("owners")
+	var decoded := _decode_legacy(JSON.stringify(legacy), catalog)
+	if not decoded.get("ok", false): return decoded
+	var profile: ProfileState = decoded["profile"]
+	for item: Dictionary in raw["equipment_instances"]:
+		profile.equipment_instances[StringName(item["instance_id"])].owner_character_id = item["owner_character_id"]
+	for character: Dictionary in raw["characters"]:
+		profile.character_by_id(character["character_id"]).gold = int(character["gold"])
+	var owners: Dictionary = raw["card_inventory"]["owners"]
+	if owners.size() != profile.card_inventory.describe()["owned"].size(): return _error(&"invalid_owner")
+	for id: Variant in owners:
+		if not id is String or not owners[id] is String or not profile.card_inventory.owns(StringName(id)): return _error(&"invalid_owner")
+		profile.card_inventory._owners[StringName(id)] = owners[id]
+	for id: Variant in raw["profile_unlocks"]:
+		if not id is String or not IdentityIds.is_technical_id(id) or typeof(raw["profile_unlocks"][id]) != TYPE_BOOL or not raw["profile_unlocks"][id]: return _error(&"invalid_unlock")
+		profile.profile_unlocks[StringName(id)] = true
+	for id: Variant in raw["expeditions"]:
+		var slot := ExpeditionAssetLock.from_record(raw["expeditions"][id])
+		if not id is String or not slot.get("ok", false) or slot["lock"].expedition_id != id: return _error(&"invalid_expedition_slot")
+		profile.expeditions[id] = slot["lock"]
+	profile.asset_receipts = raw["asset_receipts"].duplicate(true)
+	profile.migration_receipt = raw["migration_receipt"].duplicate(true)
+	var valid := CharacterAssets.validate(profile)
+	if not valid.get("ok", false): return valid
+	# JSON parses numeric receipt fields as float; normalize only after exact-integer validation.
+	for receipt: Dictionary in profile.asset_receipts.values(): receipt["data"]["gold"] = int(receipt["data"]["gold"])
+	return {"ok": true, "profile": profile, "migrated": false}

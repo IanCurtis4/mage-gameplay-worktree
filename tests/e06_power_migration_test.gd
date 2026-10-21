@@ -1,4 +1,5 @@
 extends SceneTree
+const H = preload("res://tests/fixtures/e07/f2/confirmed_history.gd")
 var checks := 0
 var failures := 0
 func _initialize() -> void: _run.call_deferred()
@@ -15,10 +16,10 @@ func _run() -> void:
 	for id: StringName in catalog.equipment_ids():
 		# Historical catalog-10 contained only the preceding 39 recipes.
 		if catalog.equipment_metadata(id).has("allowed_identities"): continue
-		if profile.first_instance_for_definition(id).is_empty(): profile.add_equipment_instance(id, catalog.equipment_metadata(id))
+		if profile.first_instance_for_definition(id).is_empty(): profile.add_equipment_instance(id, catalog.equipment_metadata(id), profile.characters[0].character_id)
 	var original := ProfileCodec.encode(profile)
 	_check(original["ok"], "source current codec")
-	var legacy: Dictionary = original["data"].duplicate(true)
+	var legacy: Dictionary = H.legacy_envelope(original["data"])
 	legacy["schema_version"] = 3; legacy["catalog_version"] = 10
 	for fixture_character: Dictionary in legacy["characters"]: fixture_character.erase("admin_skills_unlocked")
 	legacy.erase("card_inventory")
@@ -26,7 +27,7 @@ func _run() -> void:
 		record.erase("recipe_revision_id"); record.erase("power_ruleset_id")
 		record["item_level"] = 30
 	var text := JSON.stringify(legacy)
-	var decoded := ProfileCodec.decode(text, catalog)
+	var decoded := H.decode_confirmed(text, catalog)
 	_check(decoded["ok"] and decoded.get("migrated", false), "schema3catalog10 migrates explicitly")
 	if not decoded["ok"]: print(decoded); quit(1); return
 	var migrated: ProfileState = decoded["profile"]
@@ -39,53 +40,59 @@ func _run() -> void:
 		for effect: EffectDefinition in item.effects:
 			_check(EquipmentPowerRules.modifier_magnitude(effect, instance, item) == effect.value_at(1), "legacy exact original values")
 	var encoded := ProfileCodec.encode(migrated, catalog)
-	_check(encoded["ok"] and encoded["data"]["schema_version"] == 7 and encoded["data"]["catalog_version"] == 14, "new envelope schema6catalog14")
-	var again := ProfileCodec.decode(encoded["text"], catalog)
+	_check(encoded["ok"] and encoded["data"]["schema_version"] == 8 and encoded["data"]["catalog_version"] == 14, "new envelope schema6catalog14")
+	var again := H.decode_confirmed(encoded["text"], catalog)
 	_check(again["ok"] and not again.get("migrated", true), "migration is not reapplied")
-	var invalid: Dictionary = encoded["data"].duplicate(true)
+	var invalid: Dictionary = H.legacy_envelope(encoded["data"])
 	invalid["equipment_instances"][0].erase("power_ruleset_id")
-	_check(not ProfileCodec.decode(JSON.stringify(invalid), catalog)["ok"], "schema4 missing refs rejected")
+	_check(not H.decode_confirmed(JSON.stringify(invalid), catalog)["ok"], "schema4 missing refs rejected")
 	invalid = legacy.duplicate(true)
 	invalid["equipment_instances"][0]["power_ruleset_id"] = "equipment_growth_v1"
-	_check(not ProfileCodec.decode(JSON.stringify(invalid), catalog)["ok"], "historical envelope cannot smuggle growth")
-	invalid = encoded["data"].duplicate(true)
+	_check(not H.decode_confirmed(JSON.stringify(invalid), catalog)["ok"], "historical envelope cannot smuggle growth")
+	invalid = H.legacy_envelope(encoded["data"])
 	invalid["equipment_instances"][0]["recipe_revision_id"] = "unknown_revision"
-	_check(not ProfileCodec.decode(JSON.stringify(invalid), catalog)["ok"], "unknown revision rejected")
+	_check(not H.decode_confirmed(JSON.stringify(invalid), catalog)["ok"], "unknown revision rejected")
+	var original_file := FileAccess.open(directory.path_join(ProfileStore.PRIMARY_FILE), FileAccess.WRITE)
+	original_file.store_string(text); original_file.close()
+	var confirmed := H.load_confirmed(store)
+	_check(confirmed["ok"], "growth test starts from actual confirmed durable migration")
+	if not confirmed["ok"]: quit(1); return
+	migrated = confirmed["profile"]
 	var meta := catalog.equipment_metadata(&"arena_warden_mail")
 	meta["power_ruleset_id"] = &"equipment_growth_v1"; meta["item_level"] = 30
-	var added := migrated.add_equipment_instance(&"arena_warden_mail", meta)
+	var added := migrated.add_equipment_instance(&"arena_warden_mail", meta, migrated.characters[0].character_id)
 	_check(added["ok"], "new exemplar growth explicit")
 	var growth: EquipmentInstance = migrated.equipment_instances[added["instance_id"]]
 	var definition := effects.get_definition(&"equipment", growth.definition_id) as EquipmentDefinition
 	_check(EquipmentPresentation.instance_description(definition, growth).contains("8.64"), "tooltip uses canonical growth value")
 	_check(store.commit(migrated)["ok"], "current growth saved")
-	var reopened := store.load_profile()
+	var reopened := H.load_confirmed(store)
 	_check(reopened["ok"] and reopened["profile"].equipment_instances[growth.instance_id].to_record() == growth.to_record(), "growth refs stable after reopen")
 	# Real store migration protects original bytes in backup and pending does not overwrite.
 	var second := directory.path_join("historical")
 	DirAccess.make_dir_recursive_absolute(second)
 	var file := FileAccess.open(second.path_join("profile.json"), FileAccess.WRITE); file.store_string(text); file.close()
 	var old_store := ProfileStore.new(second, catalog)
-	var loaded := old_store.load_profile()
+	var loaded := H.load_confirmed(old_store)
 	_check(loaded["ok"] and loaded.get("migrated", false), "historical store performs durable migration")
 	_check(FileAccess.get_file_as_string(second.path_join("profile.backup.json")) == text, "historical original backup byte-preserved")
 	var pending_dir := directory.path_join("pending")
 	DirAccess.make_dir_recursive_absolute(pending_dir)
 	file = FileAccess.open(pending_dir.path_join("profile.json"), FileAccess.WRITE); file.store_string(text); file.close()
 	file = FileAccess.open(pending_dir.path_join("profile.pending.json"), FileAccess.WRITE); file.store_string("pending-user-bytes"); file.close()
-	loaded = ProfileStore.new(pending_dir, catalog).load_profile()
+	loaded = H.load_confirmed(ProfileStore.new(pending_dir, catalog))
 	_check(not loaded["ok"] and loaded.get("read_only", false), "pending blocks migration")
 	_check(FileAccess.get_file_as_string(pending_dir.path_join("profile.json")) == text and FileAccess.get_file_as_string(pending_dir.path_join("profile.pending.json")) == "pending-user-bytes", "pending and original never overwritten")
 	var incompatible := legacy.duplicate(true)
 	incompatible["equipment_instances"][0]["quality_id"] = "future_quality"
 	var bad_text := JSON.stringify(incompatible)
-	var bad_decode := ProfileCodec.decode(bad_text, catalog)
+	var bad_decode := H.decode_confirmed(bad_text, catalog)
 	_check(not bad_decode["ok"] and bad_decode.get("catalog_incompatible", false), "old unknown metadata is incompatible, not repairable corruption")
 	var protected_dir := directory.path_join("incompatible")
 	DirAccess.make_dir_recursive_absolute(protected_dir)
 	file = FileAccess.open(protected_dir.path_join("profile.json"), FileAccess.WRITE); file.store_string(bad_text); file.close()
 	file = FileAccess.open(protected_dir.path_join("profile.backup.json"), FileAccess.WRITE); file.store_string(encoded["text"]); file.close()
-	loaded = ProfileStore.new(protected_dir, catalog).load_profile()
+	loaded = H.load_confirmed(ProfileStore.new(protected_dir, catalog))
 	_check(not loaded["ok"] and loaded.get("read_only", false), "incompatible historical primary blocks backup recovery")
 	_check(FileAccess.get_file_as_string(protected_dir.path_join("profile.json")) == bad_text and FileAccess.get_file_as_string(protected_dir.path_join("profile.backup.json")) == encoded["text"], "incompatible primary and good backup preserved byte for byte")
 	print("E06 power migration: %d checks, %d failures" % [checks, failures])

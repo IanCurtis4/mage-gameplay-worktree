@@ -1,4 +1,5 @@
 extends SceneTree
+const H = preload("res://tests/fixtures/e07/f2/confirmed_history.gd")
 const Faults = preload("res://tests/e06_inventory_fixture.gd")
 var checks := 0
 var failures := 0
@@ -12,7 +13,7 @@ func _run() -> void:
 	var second := facade.create_character("second", facade.current_profile().revision, "Arqueiro", &"archer")
 	_check(second["ok"], "shared alt source")
 	var source := facade.current_profile()
-	var armor: StringName = source.add_equipment_instance(&"warden_mail", ProfileCatalog.pilot().equipment_metadata(&"warden_mail"))["instance_id"]
+	var armor: StringName = source.add_equipment_instance(&"warden_mail", ProfileCatalog.pilot().equipment_metadata(&"warden_mail"), source.characters[0].character_id)["instance_id"]
 	source.characters[0].equipped[&"torso"] = null
 	source.characters[0].presets[0]["equipped"][&"torso"] = null
 	source.characters[0].presets[1]["equipped"][&"torso"] = armor
@@ -24,7 +25,7 @@ func _run() -> void:
 	var old := _legacy_data(encoded["data"], source)
 	var old_text := JSON.stringify(old, "\t")
 	var wire: Dictionary = JSON.parse_string(old_text)
-	var decoded := ProfileCodec.decode(old_text)
+	var decoded := H.decode_confirmed(old_text)
 	_check(decoded["ok"] and decoded.get("migrated", false), "schema2 catalog9 migrates")
 	if decoded["ok"]:
 		var migrated: ProfileState = decoded["profile"]
@@ -33,15 +34,15 @@ func _run() -> void:
 		var mage := migrated.characters[0]
 		var archer := migrated.characters[1]
 		_check(mage.equipped[&"torso"] == null and mage.presets[0]["equipped"][&"torso"] == null and mage.presets[1]["equipped"][&"torso"] == migrated.first_instance_for_definition(&"warden_mail"), "catalog9 nulls and inactive preference preserved")
-		_check(mage.equipped[&"accessory_1"] == archer.equipped[&"accessory_1"], "alts share one preserved exemplar")
+		_check(mage.equipped[&"accessory_1"] != null and archer.equipped[&"accessory_1"] == null, "confirmed shared exemplar belongs to primary; alternate reference is removed")
 		_check(mage.action_slots == source.characters[0].action_slots and mage.attribute_allocations == source.characters[0].attribute_allocations and mage.purchased_skill_ranks == source.characters[0].purchased_skill_ranks and mage.base_xp_total == source.characters[0].base_xp_total and mage.job_xp_total == source.characters[0].job_xp_total, "progression and layout unchanged")
 		var instances := migrated.equipment_instances.values()
 		var starter: EquipmentInstance = migrated.equipment_instances[mage.equipped[&"main_hand"]]
 		var rare: EquipmentInstance = migrated.equipment_instances[migrated.first_instance_for_definition(&"warden_mail")]
 		_check(starter.quality_id == &"common" and rare.quality_id == &"rare" and starter.item_level == 1 and rare.origin_id == &"demo_arena" and rare.socket_capacity == 1, "approved migration metadata")
 		var current := ProfileCodec.encode(migrated)
-		_check(current["ok"] and current["data"]["schema_version"] == 7 and current["data"]["catalog_version"] == 14 and not current["data"].has("equipment_collection") and not current["data"].has("card_sockets"), "only exemplar records persist")
-		var again := ProfileCodec.decode(current["text"])
+		_check(current["ok"] and current["data"]["schema_version"] == 8 and current["data"]["catalog_version"] == 14 and not current["data"].has("equipment_collection") and not current["data"].has("card_sockets"), "only exemplar records persist")
+		var again := H.decode_confirmed(current["text"])
 		_check(again["ok"] and not again.get("migrated", false) and ProfileCodec.encode(again["profile"])["text"] == current["text"], "current envelope reopens without remigration")
 		var duplicate := migrated.copy_state()
 		var zero := ProfileCatalog.pilot().equipment_metadata(&"warden_mail")
@@ -59,7 +60,7 @@ func _run() -> void:
 		if version == 1:
 			for character: Dictionary in historical["characters"]:
 				character.erase("granted_skill_ranks")
-		var result := ProfileCodec.decode(JSON.stringify(historical))
+		var result := H.decode_confirmed(JSON.stringify(historical))
 		_check(result["ok"] and result.get("migrated", false), "supported old catalog: %d" % version)
 	var path := ProjectSettings.globalize_path("res://.godot/verification/e06_tx/migration_store_%d" % Time.get_ticks_usec())
 	DirAccess.make_dir_recursive_absolute(path)
@@ -67,24 +68,24 @@ func _run() -> void:
 	_write(primary, old_text)
 	var store := Faults.FaultStore.new(path)
 	store.failure_stage = &"write_pending"
-	var failed := store.load_profile()
+	var failed := H.load_confirmed(store)
 	_check(not failed["ok"] and FileAccess.get_file_as_string(primary) == old_text, "failed migration preserves source")
 	store.failure_stage = &""
-	var loaded := store.load_profile()
+	var loaded := H.load_confirmed(store)
 	_check(loaded["ok"] and loaded["profile"].revision == source.revision + 1 and FileAccess.get_file_as_string(path.path_join(ProfileStore.BACKUP_FILE)) == old_text, "migration commits once with verbatim backup")
 	var durable := FileAccess.get_file_as_string(primary)
-	var reopened := store.load_profile()
+	var reopened := H.load_confirmed(store)
 	_check(reopened["ok"] and reopened["profile"].revision == loaded["profile"].revision and FileAccess.get_file_as_string(primary) == durable, "reopen is idempotent")
 	var future := JSON.parse_string(durable) as Dictionary
 	future["schema_version"] = ProfileState.SCHEMA_VERSION + 1
 	var future_text := JSON.stringify(future)
 	_write(primary, future_text)
-	var protected := store.load_profile()
+	var protected := H.load_confirmed(store)
 	_check(not protected["ok"] and protected.get("read_only", false) and FileAccess.get_file_as_string(primary) == future_text, "future schema preserved despite old backup")
 	print("E06 TX1 migration: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 func _legacy_data(current: Dictionary, profile: ProfileState) -> Dictionary:
-	var result := current.duplicate(true)
+	var result := H.legacy_envelope(current)
 	result["schema_version"] = 2
 	for fixture_character: Dictionary in result["characters"]: fixture_character.erase("admin_skills_unlocked")
 	result.erase("card_inventory")
@@ -93,7 +94,8 @@ func _legacy_data(current: Dictionary, profile: ProfileState) -> Dictionary:
 	result.erase("next_equipment_counter")
 	result["equipment_collection"] = []
 	for id: StringName in profile.equipment_instance_ids():
-		result["equipment_collection"].append(String(profile.equipment_instances[id].definition_id))
+		var definition := String(profile.equipment_instances[id].definition_id)
+		if definition not in result["equipment_collection"]: result["equipment_collection"].append(definition)
 	for character: Dictionary in result["characters"]:
 		character["equipped"] = _old_layout(character["equipped"], profile)
 		for preset: Dictionary in character["presets"]:

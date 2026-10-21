@@ -56,13 +56,11 @@ func create_character(request_id: String, expected_revision: int, display_name: 
 		var definition_id: Variant = _catalog.starter_equipment(base_class_id)[slot]
 		if definition_id == null:
 			continue
-		var instance_id := candidate.first_instance_for_definition(definition_id)
-		if instance_id.is_empty():
-			var created_instance := candidate.add_equipment_instance(definition_id, _catalog.equipment_metadata(definition_id))
-			if not created_instance["ok"]:
-				return _finish_operation(request_id, created_instance)
-			instance_id = created_instance["instance_id"]
-			candidate.lifetime_stats[&"equipment_unlocked"] += 1
+		var known := not candidate.first_instance_for_definition(definition_id).is_empty()
+		var created_instance := candidate.add_equipment_instance(definition_id, _catalog.equipment_metadata(definition_id), character_id)
+		if not created_instance["ok"]: return _finish_operation(request_id, created_instance)
+		var instance_id: StringName = created_instance["instance_id"]
+		if not known: candidate.lifetime_stats[&"equipment_unlocked"] += 1
 		starter_equipment[slot] = instance_id
 	character.equipped = starter_equipment.duplicate(true)
 	for preset: Dictionary in character.presets:
@@ -106,6 +104,8 @@ func select_character(request_id: String, expected_revision: int, character_id: 
 	return _finish_operation(request_id, committed)
 
 func select_preset(request_id: String, expected_revision: int, character_id: String, preset_index: int) -> Dictionary:
+	if _profile != null and _profile.expedition_for_character(character_id) != null:
+		return {"ok": false, "error_code": &"locked_by_expedition", "request_id": request_id}
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
 	var ready := _begin_operation(request_id, expected_revision)
@@ -153,7 +153,7 @@ func available_build_options(character_id: String) -> Dictionary:
 	var equipment_by_slot: Dictionary[StringName, Array] = {}
 	for slot: StringName in IdentityIds.equipment_slots():
 		equipment_by_slot[slot] = []
-	for instance_id: StringName in _profile.equipment_instance_ids():
+	for instance_id: StringName in _profile.equipment_for_character(character_id):
 		var item_id := _profile.equipment_instances[instance_id].definition_id
 		for slot: StringName in IdentityIds.equipment_slots():
 			if _catalog.equipment_is_allowed(item_id, slot, character.base_class_id, character.evolution_id):
@@ -176,6 +176,8 @@ func update_preset(
 	passive_slots: Array[Variant],
 	equipped: Dictionary[StringName, Variant]
 ) -> Dictionary:
+	if _profile != null and _profile.expedition_for_character(character_id) != null:
+		return {"ok": false, "error_code": &"locked_by_expedition", "request_id": request_id}
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
 	var ready := _begin_operation(request_id, expected_revision)
@@ -220,6 +222,7 @@ func update_preset(
 	return _finish_operation(request_id, committed)
 
 func run_mutation_status(run_id: String, character_id: String) -> Dictionary:
+	if _profile != null and _profile.expedition_for_character(character_id) != null: return BuildEffectCatalog.failure(&"locked_by_expedition")
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress"}
 	if _read_only or not _uncertain_transaction.is_empty() or _store.has_pending_transaction():
@@ -242,13 +245,17 @@ func equip_between_encounters(request_id: String, expected_revision: int, contro
 	var before := _profile.copy_state()
 	var candidate := before.copy_state()
 	var character := candidate.character_by_id(controller.run_state.character_id)
-	candidate.card_inventory = prepared["inventory"].copy_inventory()
+	var merged := candidate.card_inventory.merge_character_projection(prepared["inventory"], character.character_id, candidate.equipment_instances)
+	if merged == null: return _finish_operation(request_id, BuildEffectCatalog.failure(&"not_owner"))
+	candidate.card_inventory = merged
 	var equipped: Dictionary = prepared["snapshot"].equipped
 	character.equipped.assign(equipped)
 	character.presets[character.selected_preset]["equipped"] = equipped.duplicate(true)
 	return _finish_operation(request_id, _resolve_commit(before, candidate, _commit_candidate(candidate, character.character_id), true))
 
 func update_action_slots(request_id: String, expected_revision: int, character_id: String, slots: Array[Variant]) -> Dictionary:
+	if _profile != null and _profile.expedition_for_character(character_id) != null:
+		return {"ok": false, "error_code": &"locked_by_expedition", "request_id": request_id}
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
 	var ready := _begin_operation(request_id, expected_revision)
@@ -311,6 +318,8 @@ func _evolution_options(character_id: String, allow_switch: bool) -> Dictionary:
 			blocking_reasons.append(&"content_unavailable")
 		if run_active:
 			blocking_reasons.append(&"run_active")
+		if _profile.expedition_for_character(character_id) != null:
+			blocking_reasons.append(&"locked_by_expedition")
 		if _read_only:
 			blocking_reasons.append(&"profile_read_only")
 		if is_current:
@@ -437,7 +446,8 @@ func skill_allocation_preview(character_id: String, expected_revision: int, orde
 	options["original_ranks"] = CharacterProgression.summary(character, _catalog)["effective_skill_ranks"].duplicate(true)
 	options["profile_revision"] = _profile.revision
 	options["pending_count"] = ordered_skill_ids.size()
-	options["can_apply"] = not _read_only and _profile.reward_session == null
+	options["locked_by_expedition"] = _profile.expedition_for_character(character_id) != null
+	options["can_apply"] = not _read_only and _profile.reward_session == null and not options["locked_by_expedition"]
 	options["run_active"] = _profile.reward_session != null
 	options["pending_counts"] = simulation["pending_counts"].duplicate(true)
 	return options.duplicate(true)
@@ -460,6 +470,8 @@ func _apply_skill_sequence(character: CharacterState, ordered_skill_ids: Array) 
 	return {"ok": true, "pending_counts": counts, "spent": ordered_skill_ids.size()}
 
 func apply_skill_allocations(request_id: String, expected_revision: int, character_id: String, ordered_skill_ids: Array) -> Dictionary:
+	if _profile != null and _profile.expedition_for_character(character_id) != null:
+		return {"ok": false, "error_code": &"locked_by_expedition", "request_id": request_id}
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
 	var ready := _begin_operation(request_id, expected_revision)
@@ -542,6 +554,8 @@ func attribute_purchase_preview(character_id: String, attribute_id: StringName, 
 	result["derived_changes"] = changes
 	if _read_only:
 		result["blocking_reason"] = &"profile_read_only"
+	elif _profile.expedition_for_character(character_id) != null:
+		result["blocking_reason"] = &"locked_by_expedition"
 	elif _profile.reward_session != null:
 		result["blocking_reason"] = &"run_active"
 	elif available < cost:
@@ -551,6 +565,8 @@ func attribute_purchase_preview(character_id: String, attribute_id: StringName, 
 	return result
 
 func allocate_attributes(request_id: String, expected_revision: int, character_id: String, increments: Dictionary) -> Dictionary:
+	if _profile != null and _profile.expedition_for_character(character_id) != null:
+		return {"ok": false, "error_code": &"locked_by_expedition", "request_id": request_id}
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
 	var ready := _begin_operation(request_id, expected_revision)
@@ -565,6 +581,8 @@ func allocate_attributes(request_id: String, expected_revision: int, character_i
 	return _finish_progression_mutation(request_id, before, candidate, character_id, mutation)
 
 func learn_skill(request_id: String, expected_revision: int, character_id: String, skill_id: StringName) -> Dictionary:
+	if _profile != null and _profile.expedition_for_character(character_id) != null:
+		return {"ok": false, "error_code": &"locked_by_expedition", "request_id": request_id}
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
 	var ready := _begin_operation(request_id, expected_revision)
@@ -579,6 +597,8 @@ func learn_skill(request_id: String, expected_revision: int, character_id: Strin
 	return _finish_progression_mutation(request_id, before, candidate, character_id, mutation)
 
 func respec_attributes(request_id: String, expected_revision: int, character_id: String) -> Dictionary:
+	if _profile != null and _profile.expedition_for_character(character_id) != null:
+		return {"ok": false, "error_code": &"locked_by_expedition", "request_id": request_id}
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
 	var ready := _begin_operation(request_id, expected_revision)
@@ -593,6 +613,8 @@ func respec_attributes(request_id: String, expected_revision: int, character_id:
 	return _finish_progression_mutation(request_id, before, candidate, character_id, mutation)
 
 func respec_skills(request_id: String, expected_revision: int, character_id: String) -> Dictionary:
+	if _profile != null and _profile.expedition_for_character(character_id) != null:
+		return {"ok": false, "error_code": &"locked_by_expedition", "request_id": request_id}
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
 	var ready := _begin_operation(request_id, expected_revision)
@@ -613,6 +635,8 @@ func change_playtest_evolution(request_id: String, expected_revision: int, chara
 	return _change_evolution(request_id, expected_revision, character_id, evolution_id, true)
 
 func _change_evolution(request_id: String, expected_revision: int, character_id: String, evolution_id: StringName, allow_switch: bool) -> Dictionary:
+	if _profile != null and _profile.expedition_for_character(character_id) != null:
+		return {"ok": false, "error_code": &"locked_by_expedition", "request_id": request_id}
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
 	var ready := _begin_operation(request_id, expected_revision)
@@ -651,6 +675,8 @@ func prepare_playtest_training(character_id: String) -> Dictionary:
 ## Menu-only playtest shortcut. XP remains ordinary persisted progression; no ranks,
 ## allocations, evolution, or catalog availability are changed here.
 func grant_playtest_progression(request_id: String, expected_revision: int, character_id: String, action: StringName, amount: int = 0) -> Dictionary:
+	if _profile != null and _profile.expedition_for_character(character_id) != null:
+		return {"ok": false, "error_code": &"locked_by_expedition", "request_id": request_id}
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
 	var ready := _begin_operation(request_id, expected_revision)
@@ -682,6 +708,7 @@ func grant_playtest_progression(request_id: String, expected_revision: int, char
 	return _finish_progression_mutation(request_id, before, candidate, character_id, {"ok": true, "already_applied": unchanged, "playtest_action": action})
 
 func start_run(request_id: String, expected_revision: int) -> Dictionary:
+	if _profile != null and _profile.expedition_for_character(_profile.selected_character_id) != null: return BuildEffectCatalog.failure(&"locked_by_expedition")
 	if _operation_in_progress:
 		return {"ok": false, "error_code": &"save_in_progress", "request_id": request_id}
 	var ready := _begin_operation(request_id, expected_revision)
@@ -797,7 +824,7 @@ func _grant_reward_payload(request_id: String, expected_revision: int, run_id: S
 		metadata["recipe_revision_id"] = drop.get("recipe_revision_id", &"catalog_v1")
 		metadata["power_ruleset_id"] = drop.get("power_ruleset_id", &"legacy_unscaled")
 		var was_known := not candidate.first_instance_for_definition(definition_id).is_empty()
-		var added := candidate.add_equipment_instance(definition_id, metadata)
+		var added := candidate.add_equipment_instance(definition_id, metadata, character.character_id)
 		if not added["ok"]:
 			return _finish_operation(request_id, added)
 		acquired.append(added["instance_id"])
@@ -808,7 +835,7 @@ func _grant_reward_payload(request_id: String, expected_revision: int, run_id: S
 	if not card_id.is_empty():
 		var content := BuildContentLoader.load_catalog_for_profile(_catalog)
 		if not content["ok"]: return _finish_operation(request_id,content)
-		var grant := candidate.card_inventory.grant(card_id,content["catalog"],run_id+":"+request_id)
+		var grant := candidate.card_inventory.grant(card_id,content["catalog"],run_id+":"+request_id, character.character_id)
 		if not grant["ok"]: return _finish_operation(request_id,grant)
 		acquired_card = grant["card_instance_id"]
 	for stat_id: StringName in reward["stat_increments"]:
@@ -944,9 +971,9 @@ func _build_snapshot(character: CharacterState, owner_profile: ProfileState = nu
 		effective_ranks,
 		_catalog.skill_ids_for_identity(character.base_class_id, character.evolution_id),
 		_catalog,
-		(owner_profile if owner_profile != null else _profile).equipment_instances
+		(owner_profile if owner_profile != null else _profile).equipment_for_character(character.character_id)
 	)
-	snapshot.card_inventory = (owner_profile if owner_profile != null else _profile).card_inventory.copy_inventory()
+	snapshot.card_inventory = (owner_profile if owner_profile != null else _profile).card_inventory.for_character(character.character_id, snapshot.equipment_instances)
 	return snapshot
 
 func _commit_candidate(candidate: ProfileState, character_id: String) -> Dictionary:
@@ -1133,6 +1160,8 @@ func _prepare_inventory_change(character_id: String, intent: Dictionary) -> Dict
 		if key not in ["request_id","profile_revision","kind","slot","equipment_instance_id","card_instance_id","socket_index","from_equipment_instance_id","from_socket_index"]: return BuildEffectCatalog.failure(&"invalid_intent")
 	for key: String in ["kind","slot","equipment_instance_id","card_instance_id","from_equipment_instance_id"]:
 		if intent.has(key) and typeof(intent[key]) not in [TYPE_STRING,TYPE_STRING_NAME]: return BuildEffectCatalog.failure(&"invalid_intent")
+	var ownership := CharacterAssets.check_intent(_profile, character_id, intent)
+	if not ownership["ok"]: return ownership
 	var candidate := _profile.copy_state()
 	var character := candidate.character_by_id(character_id)
 	if character == null: return BuildEffectCatalog.failure(&"invalid_character_id")
@@ -1153,7 +1182,7 @@ func _prepare_inventory_change(character_id: String, intent: Dictionary) -> Dict
 	if not previous["ok"]: return previous
 	if not after["ok"]: return after
 	if character.equipped == _profile.character_by_id(character_id).equipped and candidate.card_inventory.sockets() == _profile.card_inventory.sockets(): return BuildEffectCatalog.failure(&"no_change")
-	return {"ok":true,"intent":intent.duplicate(true),"candidate":candidate,"request_id":intent["request_id"],"equipped":character.equipped.duplicate(true),"inventory":candidate.card_inventory.describe(),"before":previous["breakdown"].values(),"after":after["breakdown"].values(),"sources":after["provenance"],"inactive":after["inactive"],"skill_rules":after["skill_rules"],"skill_ranks":after["skill_ranks"],"item_grants":after["item_grants"],"kit_policies":after["kit_policies"],"procs":after["procs"]}
+	return {"ok":true,"intent":intent.duplicate(true),"candidate":candidate,"request_id":intent["request_id"],"equipped":character.equipped.duplicate(true),"inventory":candidate.card_inventory.for_character(character_id, candidate.equipment_for_character(character_id)).describe(),"before":previous["breakdown"].values(),"after":after["breakdown"].values(),"sources":after["provenance"],"inactive":after["inactive"],"skill_rules":after["skill_rules"],"skill_ranks":after["skill_ranks"],"item_grants":after["item_grants"],"kit_policies":after["kit_policies"],"procs":after["procs"]}
 
 func _permanent_effect_preview(character: CharacterState) -> Dictionary:
 	## Pure snapshot/composition; never creates a run, opens a save, or grants a purchase.
@@ -1168,6 +1197,8 @@ const ADMIN_RECEIPTS_KEY := "playtest_admin_receipts_v1"
 const ADMIN_RECEIPT_LIMIT := 128
 
 func grant_playtest_admin(request_id: String, expected_revision: int, character_id: String, action: StringName, definition_id: StringName, options: Dictionary) -> Dictionary:
+	if _profile != null and _profile.expedition_for_character(character_id) != null:
+		return {"ok": false, "error_code": &"locked_by_expedition", "request_id": request_id}
 	if not _admin_pending.is_empty():
 		if _admin_pending["request_id"] != request_id or _admin_pending["character_id"] != character_id or _admin_pending["action"] != action or _admin_pending["definition_id"] != definition_id or _admin_pending["options"] != options:
 			return {"ok": false, "error_code": &"result_uncertain", "request_id": request_id}
@@ -1231,7 +1262,7 @@ func grant_playtest_admin(request_id: String, expected_revision: int, character_
 			metadata["recipe_revision_id"] = EquipmentPowerRules.RECIPE_REVISION
 			metadata["power_ruleset_id"] = EquipmentPowerRules.GROWTH_RULESET
 			var known := not candidate.first_instance_for_definition(definition_id).is_empty()
-			var added := candidate.add_equipment_instance(definition_id, metadata)
+			var added := candidate.add_equipment_instance(definition_id, metadata, character.character_id)
 			if not added["ok"]: return _finish_operation(request_id, added)
 			if not known: candidate.lifetime_stats[&"equipment_unlocked"] += 1
 			details["equipment_instance_id"] = String(added["instance_id"])
@@ -1239,7 +1270,7 @@ func grant_playtest_admin(request_id: String, expected_revision: int, character_
 			if not options.is_empty(): return _finish_operation(request_id, {"ok": false, "error_code": &"invalid_options"})
 			var content := BuildContentLoader.load_catalog_for_profile(_catalog)
 			if not content["ok"]: return _finish_operation(request_id, content)
-			var added := candidate.card_inventory.grant(definition_id, content["catalog"])
+			var added := candidate.card_inventory.grant(definition_id, content["catalog"], "", character_id)
 			if not added["ok"]: return _finish_operation(request_id, added)
 			details["card_instance_id"] = String(added["card_instance_id"])
 		&"unlock_skills":
@@ -1273,3 +1304,50 @@ func grant_playtest_admin(request_id: String, expected_revision: int, character_
 	elif committed.get("read_only", false):
 		_admin_pending = {"request_id": request_id, "character_id": character_id, "action": action, "definition_id": definition_id, "options": options.duplicate(true), "result": result_record}
 	return _finish_operation(request_id, committed)
+
+
+func preview_assets(character_id: String, intent: Dictionary, request_id: String, expected_revision: int) -> Dictionary:
+	if _operation_in_progress or not _uncertain_transaction.is_empty() or not _inventory_pending.is_empty(): return BuildEffectCatalog.failure(&"save_in_progress")
+	if _read_only: return BuildEffectCatalog.failure(_read_only_error_code)
+	var result := CharacterAssets.preview(_profile, character_id, intent, request_id, expected_revision)
+	result.erase("candidate")
+	return result
+
+var _asset_pending: Dictionary = {}
+
+func commit_assets(character_id: String, intent: Dictionary, request_id: String, expected_revision: int) -> Dictionary:
+	if _operation_in_progress: return BuildEffectCatalog.failure(&"save_in_progress")
+	if not _uncertain_transaction.is_empty():
+		var fingerprint := MigrationPlan.canonical({"character_id": character_id, "intent": intent}).sha256_text()
+		if _asset_pending.is_empty(): return BuildEffectCatalog.failure(&"result_uncertain")
+		if _asset_pending["request_id"] != request_id or _asset_pending["fingerprint"] != fingerprint: return BuildEffectCatalog.failure(&"request_conflict")
+		var reconciled := reconcile_transaction(request_id)
+		if reconciled["ok"]: reconciled["data"] = _asset_pending["data"].duplicate(true)
+		if reconciled["ok"] or not reconciled.get("read_only", false): _asset_pending.clear()
+		return reconciled
+	var ready := _begin_context(request_id)
+	if not ready["ok"]: return _finish_operation(request_id, ready)
+	var prepared := CharacterAssets.preview(_profile, character_id, intent, request_id, expected_revision)
+	if not prepared["ok"] or prepared.get("already_applied", false): return _finish_operation(request_id, prepared)
+	var candidate: ProfileState = prepared["candidate"]
+	var result := _resolve_commit(_profile.copy_state(), candidate, _store.commit(candidate), true)
+	if result["ok"]: result["data"] = prepared["data"].duplicate(true)
+	elif result.get("read_only", false): _asset_pending = {"request_id": request_id, "fingerprint": candidate.asset_receipts[request_id]["fingerprint"], "data": prepared["data"].duplicate(true)}
+	return _finish_operation(request_id, result)
+
+func assets_for_character(character_id: String) -> Dictionary:
+	return CharacterAssets.query(_profile, character_id)
+
+func preview_asset_migration(assignments: Dictionary = {}) -> Dictionary:
+	if _operation_in_progress or not _uncertain_transaction.is_empty(): return BuildEffectCatalog.failure(&"save_in_progress")
+	return _store.preview_migration(assignments)
+
+func apply_asset_migration(plan: Dictionary, confirmed_digest: String, request_id: String) -> Dictionary:
+	if _operation_in_progress or not _uncertain_transaction.is_empty(): return BuildEffectCatalog.failure(&"save_in_progress")
+	_operation_in_progress = true
+	var result := _store.apply_migration(plan, confirmed_digest, request_id)
+	if result["ok"]:
+		_profile = result["profile"].copy_state()
+		_clear_read_only()
+	_operation_in_progress = false
+	return _public_result(result)

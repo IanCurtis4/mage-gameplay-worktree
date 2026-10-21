@@ -121,7 +121,10 @@ func _prepare(intent: Dictionary) -> Dictionary:
 		var boundary := controller.persistent_facade.run_mutation_status(_run.run_id, _run.character_id)
 		if not boundary["ok"]:
 			return _failure(boundary["error_code"], intent)
-		instances = controller.persistent_facade.current_profile().equipment_instances
+		var profile := controller.persistent_facade.current_profile()
+		var ownership := CharacterAssets.check_intent(profile, _run.character_id, intent)
+		if not ownership["ok"]: return _failure(ownership["error_code"], intent)
+		instances = profile.equipment_for_character(_run.character_id)
 	elif not _run.run_id.is_empty():
 		return _failure(&"invalid_session", intent)
 	var candidate := _run.build_snapshot.copy_snapshot()

@@ -40,7 +40,9 @@ func _check_reference_fixture() -> void:
 	_check(fixture_file != null, "E00 reference fixture is readable")
 	var fixture: Dictionary = JSON.parse_string(fixture_file.get_as_text())
 	fixture_file.close()
-	var decoded := ProfileCodec.decode(JSON.stringify(fixture["profile"]))
+	var external := ProfileCodec.decode(JSON.stringify(fixture["profile"]))
+	_check(external.get("error_code") == &"migration_required", "historical fixture is validated but cannot bypass assisted migration")
+	var decoded := ProfileCodec._decode_legacy(JSON.stringify(fixture["profile"]))
 	_check(decoded["ok"] and decoded["migrated"] and decoded["profile"].characters.size() == 1, "schema decoder migrates the accepted E00 profile fixture")
 	_check(decoded["profile"].characters[0].display_name == "Referência", "Unicode display names survive fixture decoding")
 	_check(decoded["profile"].characters[0].granted_skill_ranks == {&"slash": 1, &"dash": 1, &"swordsman_resistance": 1}, "E00 free ranks become explicit legacy grants")
@@ -102,7 +104,7 @@ func _check_round_trip_and_unknown_fields() -> void:
 	overspent_skill_payload["characters"][0]["purchased_skill_ranks"]["slash"] = 2
 	_check(ProfileCodec.decode(JSON.stringify(overspent_skill_payload))["error_code"] == &"overspent_skill_points", "purchased ranks cannot exceed granted base skill points")
 	var unknown_owned_item_payload: Dictionary = encoded["data"].duplicate(true)
-	unknown_owned_item_payload["equipment_instances"] = [{"instance_id": "equipment_1", "definition_id": "nonexistent_item", "origin_id": "fixture_origin", "item_level": 1, "quality_id": "common", "socket_capacity": 1, "recipe_revision_id": "catalog_v1", "power_ruleset_id": "legacy_unscaled"}]
+	unknown_owned_item_payload["equipment_instances"] = [{"instance_id": "equipment_1", "definition_id": "nonexistent_item", "origin_id": "fixture_origin", "item_level": 1, "quality_id": "common", "socket_capacity": 1, "recipe_revision_id": "catalog_v1", "power_ruleset_id": "legacy_unscaled", "owner_character_id": encoded["data"]["characters"][0]["character_id"]}]
 	unknown_owned_item_payload["next_equipment_counter"] = 2
 	unknown_owned_item_payload["characters"][0]["equipped"]["main_hand"] = "nonexistent_item"
 	_check(ProfileCodec.decode(JSON.stringify(unknown_owned_item_payload))["error_code"] == &"invalid_catalog", "syntactically valid but unknown equipment blocks the profile")
@@ -329,95 +331,27 @@ func _check_future_and_invalid_files() -> void:
 func _check_v1_migration() -> void:
 	var directory := root_directory.path_join("migration")
 	_prepare_directory(directory)
-	var legacy := {
-		"schema_version": 1,
-		"equipment_collection": {"swordsman": ["training_sword", "lost_relic"], "mage": ["training_sword"]},
-		"equipped": {"swordsman": {"weapon": "training_sword", "armor": null, "accessory": null}},
-		"settings": {"legacy_volume": 0.5},
-		"lifetime_stats": {"kills": 7},
-	}
-	var legacy_text := JSON.stringify(legacy)
-	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), legacy_text)
-	var migration_catalog := _catalog_with_training_sword()
-	var store := ProfileStore.new(directory, migration_catalog)
-	var migrated := store.load_profile()
-	_check(migrated["ok"] and migrated["migrated"] and migrated["warning"] == &"profile_migrated", "recognized schema 1 migrates once to schema 2")
-	var profile: ProfileState = migrated["profile"]
-	_check(profile.characters.is_empty() and TX.definition_ids(profile) == [&"training_sword"], "migration never invents characters or duplicate known equipment")
-	_check(profile.unresolved_legacy["equipment_ids"] == ["lost_relic"] and profile.legacy_loadouts.has("swordsman"), "unknown equipment and legacy loadouts remain recoverable")
-	_check(_read_text(directory.path_join(ProfileStore.BACKUP_FILE)) == legacy_text, "migration preserves the original schema-1 file as backup")
-	var reloaded := store.load_profile()
-	_check(reloaded["ok"] and not reloaded.get("migrated", false) and reloaded["profile"].revision == 1, "reloading migrated schema 2 is idempotent")
-	_check(_read_text(directory.path_join(ProfileStore.LEGACY_FILE)) == legacy_text, "schema-1 migration archives its exact source before a later save rotates the backup")
-	_check(profile.extension_fields.get(ProfileStore.LEGACY_SOURCE_HASH_FIELD, "") == legacy_text.sha256_text(), "migrated profile records the legacy source fingerprint")
-	_assert_v1_followup(directory, migration_catalog, legacy_text, reloaded, false)
-
+	var legacy := {"schema_version": 1, "equipment_collection": {"swordsman": ["training_sword", "lost_relic"], "mage": ["training_sword"]}, "equipped": {"swordsman": {"weapon": "training_sword"}}, "settings": {"volume": 0.5}}
+	var text := JSON.stringify(legacy)
+	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), text)
+	var catalog := _catalog_with_training_sword()
+	var store := ProfileStore.new(directory, catalog)
+	var blocked := store.load_profile()
+	_check(not blocked["ok"] and blocked.get("error_code") == &"migration_required" and blocked.get("read_only", false), "schema1 requires explicit destination and confirmation")
+	_check(_read_text(directory.path_join(ProfileStore.PRIMARY_FILE)) == text and not FileAccess.file_exists(directory.path_join(ProfileStore.BACKUP_FILE)), "opening schema1 preserves exact bytes without a silent migration")
+	var preview := store.preview_migration()
+	_check(preview["ok"] and not preview["complete"] and preview["plan"]["destinations"].is_empty(), "schema1 without characters never invents an owner")
+	_check(store.preview_migration()["plan_digest"] == preview["plan_digest"], "schema1 preview identity stable across calls")
+	_check(store.apply_migration(preview["plan"], preview["plan_digest"], "incomplete").get("error_code") == &"incomplete_migration_map", "confirmation alone cannot accept missing owner")
 	var backup_directory := root_directory.path_join("migration_from_backup")
 	_prepare_directory(backup_directory)
-	_write_text(backup_directory.path_join(ProfileStore.BACKUP_FILE), legacy_text)
-	var backup_migration := ProfileStore.new(backup_directory, migration_catalog).load_profile()
-	_check(backup_migration["ok"] and backup_migration["migrated"] and backup_migration["recovered"] and backup_migration["warning"] == &"profile_migrated_from_backup", "schema-1 backup can be recovered and migrated without a primary")
-	_check(ProfileCodec.decode(_read_text(backup_directory.path_join(ProfileStore.PRIMARY_FILE)), migration_catalog)["ok"], "backup migration installs a validated schema-2 primary")
-	_check(_read_text(backup_directory.path_join(ProfileStore.LEGACY_FILE)) == legacy_text, "backup migration archives its exact schema-1 source")
-	_assert_v1_followup(backup_directory, migration_catalog, legacy_text, ProfileStore.new(backup_directory, migration_catalog).load_profile(), true)
-
-	var conflict_directory := root_directory.path_join("migration_conflict")
-	_prepare_directory(conflict_directory)
-	var other_legacy: Dictionary = legacy.duplicate(true)
-	other_legacy["settings"] = {"legacy_volume": 0.75}
-	var other_text := JSON.stringify(other_legacy)
-	_write_text(conflict_directory.path_join(ProfileStore.PRIMARY_FILE), legacy_text)
-	_write_text(conflict_directory.path_join(ProfileStore.BACKUP_FILE), other_text)
-	var conflict := ProfileStore.new(conflict_directory, migration_catalog).load_profile()
-	_check(not conflict["ok"] and conflict["error_code"] == &"recovery_required" and conflict.get("read_only", false), "conflicting schema-1 pair requires explicit recovery")
-	_check(_read_text(conflict_directory.path_join(ProfileStore.PRIMARY_FILE)) == legacy_text and _read_text(conflict_directory.path_join(ProfileStore.BACKUP_FILE)) == other_text and not FileAccess.file_exists(conflict_directory.path_join(ProfileStore.LEGACY_FILE)), "conflicting legacy pair remains byte-for-byte intact without an archive")
-
-func _assert_v1_followup(directory: String, catalog: ProfileCatalog, legacy_text: String, loaded: Dictionary, replay_legacy_recovery: bool) -> void:
-	if not loaded["ok"]:
-		_check(false, "migrated schema-1 profile reloads before follow-up save")
-		return
-	if replay_legacy_recovery:
-		_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), "{broken before first save")
-		var legacy_recovery := ProfileStore.new(directory, catalog).load_profile()
-		_check(legacy_recovery["ok"] and legacy_recovery.get("recovered", false) and legacy_recovery.get("migrated", false) and legacy_recovery["profile"].revision == 1, "schema-1 backup can recover a corrupt migrated primary before the first follow-up save")
-		_check(_read_text(directory.path_join(ProfileStore.LEGACY_FILE)) == legacy_text, "replaying legacy backup recovery keeps the original archive")
-		if not legacy_recovery["ok"]:
-			return
-		loaded = legacy_recovery
-	var profile: ProfileState = loaded["profile"]
-	var character_id := IdentityIds.character_id(profile.profile_id, profile.next_character_counter)
-	profile.characters.append(CharacterState.new(character_id, "Novo", &"swordsman"))
-	profile.selected_character_id = character_id
-	profile.next_character_counter += 1
-	var committed := ProfileStore.new(directory, catalog).commit(profile)
-	_check(committed["ok"] and committed.get("new_revision", -1) == 2, "first character save after schema-1 migration succeeds")
-	_check(_read_text(directory.path_join(ProfileStore.LEGACY_FILE)) == legacy_text, "follow-up save retains exact original schema-1 bytes in archive")
-	var backup := ProfileCodec.decode(_read_text(directory.path_join(ProfileStore.BACKUP_FILE)), catalog)
-	_check(backup["ok"] and not backup.get("migrated", false) and backup["profile"].revision == 1, "follow-up save rotates a current schema-2 backup")
-	var again := ProfileStore.new(directory, catalog).load_profile()
-	_check(again["ok"] and again["profile"].revision == 2 and again["profile"].character_by_id(character_id) != null, "created character survives another reload")
-	if not committed["ok"]:
-		return
-	var current_text := _read_text(directory.path_join(ProfileStore.PRIMARY_FILE))
-	_write_text(directory.path_join(ProfileStore.PRIMARY_FILE), "{broken")
-	var recovered := ProfileStore.new(directory, catalog).load_profile()
-	_check(recovered["ok"] and recovered.get("recovered", false) and recovered["profile"].revision == 1, "schema-2 backup remains recoverable after legacy archive rotation")
-	_check(_read_text(directory.path_join(ProfileStore.LEGACY_FILE)) == legacy_text and current_text != _read_text(directory.path_join(ProfileStore.PRIMARY_FILE)), "backup recovery preserves legacy archive and repairs primary")
-	if not recovered["ok"]:
-		return
-	var foreign_legacy: Dictionary = JSON.parse_string(legacy_text)
-	foreign_legacy["settings"] = {"legacy_volume": 0.25}
-	var foreign_text := JSON.stringify(foreign_legacy)
-	_write_text(directory.path_join(ProfileStore.BACKUP_FILE), foreign_text)
-	var protected_primary := _read_text(directory.path_join(ProfileStore.PRIMARY_FILE))
-	var foreign_attempt := ProfileStore.new(directory, catalog).commit(recovered["profile"])
-	_check(not foreign_attempt["ok"] and foreign_attempt["error_code"] == &"recovery_required" and foreign_attempt.get("read_only", false), "foreign schema-1 backup cannot borrow the migrated primary's provenance")
-	_check(_read_text(directory.path_join(ProfileStore.PRIMARY_FILE)) == protected_primary and _read_text(directory.path_join(ProfileStore.BACKUP_FILE)) == foreign_text and _read_text(directory.path_join(ProfileStore.LEGACY_FILE)) == legacy_text, "blocked foreign backup keeps primary, backup and legacy archive intact")
+	_write_text(backup_directory.path_join(ProfileStore.BACKUP_FILE), text)
+	var recovered := ProfileStore.new(backup_directory, catalog).load_profile()
+	_check(not recovered["ok"] and recovered.get("error_code") == &"migration_required" and not FileAccess.file_exists(backup_directory.path_join(ProfileStore.PRIMARY_FILE)), "legacy backup remains protected instead of being promoted automatically")
+	_check(_read_text(backup_directory.path_join(ProfileStore.BACKUP_FILE)) == text, "legacy recovery preserves original backup bytes")
 
 func _catalog_with_training_sword() -> ProfileCatalog:
-	return ProfileCatalog.pilot({
-		&"training_sword": {"slot": &"main_hand", "allowed_base_classes": [&"swordsman"]},
-	})
+	return ProfileCatalog.pilot({&"training_sword": {"slot": &"main_hand", "allowed_base_classes": [&"swordsman"]}})
 
 func _profile_with_character() -> ProfileState:
 	var profile := ProfileState.new(PROFILE_ID)
