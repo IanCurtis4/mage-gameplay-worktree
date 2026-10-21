@@ -41,3 +41,15 @@ hashes; Sol corrige/consolida. Sem save pessoal, playtest/master/push ou F5+.
 
 Captura F3 custa segundos nas fixtures: F4 expõe checkpoints explícitos e
 transacionais; não inventa intervalo periódico de produção. Medir custo/limite.
+
+## Adendo antes da correção final — isolamento por dono
+
+A revisão Sol encontrou next_counter/revision globais da projeção de cartas no
+digest do dono. Novo teste nominal tests/e07_f4_alt_isolation_test.gd/.uid fica
+exclusivo de F4. Reproduziu checkpoint_assets_mismatch ao conceder carta a alt
+com o personagem original suspenso, antes da correção (alt_red).
+Corrigir somente a projeção do digest em expedition_checkpoint_codec.gd;
+contadores globais permanecem íntegros no perfil/snapshot para IDs únicos.
+A seleção final desse delta inclui seis F4, quatro F2 e transações inventory/loot.
+Os outros16 IDs aprovados em8e53b40 são reaproveitáveis por impacto: nenhum
+algoritmo/adaptador de snapshot, atores, combate ou operação legada foi alterado.

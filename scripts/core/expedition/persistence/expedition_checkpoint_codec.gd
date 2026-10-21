@@ -43,7 +43,12 @@ static func owner_digest(profile: ProfileState, character_id: String) -> String:
 	if character == null: return ""
 	var equipment := {}
 	for id: StringName in profile.equipment_for_character(character_id): equipment[String(id)] = profile.equipment_instances[id].to_record()
-	return MigrationPlan.canonical({"character":ProfileCodec._character_to_dictionary(character),"gold":character.gold,"equipment":equipment,"cards":profile.card_inventory.for_character(character_id,profile.equipment_for_character(character_id)).to_record()}).sha256_text()
+	var cards := profile.card_inventory.for_character(character_id,profile.equipment_for_character(character_id)).to_record()
+	# These are profile-wide allocation/version counters, not this owner's assets.
+	# They remain intact in ProfileState and the runtime snapshot for unique IDs.
+	cards.erase("next_counter")
+	cards.erase("revision")
+	return MigrationPlan.canonical({"character":ProfileCodec._character_to_dictionary(character),"gold":character.gold,"equipment":equipment,"cards":cards}).sha256_text()
 
 static func fail(code: StringName) -> Dictionary:
 	return {"ok":false,"error_code":code}

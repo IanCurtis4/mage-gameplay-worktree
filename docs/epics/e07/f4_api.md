@@ -105,3 +105,12 @@ checkpoint_version_unavailable, checkpoint_assets_mismatch,
 checkpoint_reload_required, content_revision_unavailable, snapshot_too_large,
 profile_too_large, not_owner, invalid_session, expedition_conflict,
 stale_revision, request_conflict, save_in_progress e recovery_required.
+
+Isolamento entre alts: o digest inclui exemplares/encaixes/grants do dono,
+mas exclui next_counter/revision globais da projeção de cartas. Esses contadores
+continuam no perfil e no snapshot; a próxima transação usa os IDs globais atuais.
+Adquirir bens com outro personagem não invalida a pendência congelada.
+A emissão bruta de ticket ainda é uma intenção em memória: só uma fronteira de
+checkpoint confirmada permite ao consumidor de F5 publicar sua durabilidade.
+Lifecycle recovering/reconciling exige a política do consumidor e é recusado por
+esta API de retomada comum com policy_unresolved; não é atalho para reviver.
