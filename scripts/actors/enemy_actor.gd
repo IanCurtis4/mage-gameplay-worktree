@@ -1,6 +1,10 @@
 class_name EnemyActor
 extends CombatActor
 
+var threat := ThreatService.new()
+var threat_actors: Dictionary[String, PlayerActor] = {}
+var threat_taunt_sequence := 0
+
 var effect_ledger := EffectProcLedger.new("enemy")
 
 signal attack_requested(request: DamageRequest, target: CombatActor, ranged: bool)
@@ -33,7 +37,8 @@ var _repath_time := 0.0
 var _navigation_revision := 0
 var player_target_acquired := false
 var hunter_last_seen_position := Vector2.INF
-var taunt_remaining := 0.0
+var taunt_remaining: float:
+	get: return threat.forced_remaining
 var scenario_damage_multiplier := 1.0
 var _world_home: ExpeditionWorldPoint
 var _world_last_seen: ExpeditionWorldPoint
@@ -214,6 +219,11 @@ func configure_occurrence(spawn: MobOccurrence, catalog: MobCatalog, nav: ArenaN
 	navigation = nav
 	_navigation_revision = nav.revision
 	player = target_player
+	threat = ThreatService.new()
+	threat_actors.clear()
+	threat_taunt_sequence = 0
+	threat.enemy_id = spawn.occurrence_id
+	register_threat_actor("player", "player", "local_party", target_player)
 	hunter_last_seen_position = Vector2.INF
 	spawn_home = global_position
 	engagement_mode = &"idle"
@@ -234,6 +244,7 @@ func _process(delta: float) -> void:
 	if world_motion != null and (not is_finite(delta) or delta <= 0.0): return
 	if is_inside_tree() and get_tree().paused:
 		return
+	_advance_threat(delta)
 	var was_feared := is_feared()
 	super._process(delta)
 	if not is_alive() or player == null or not player.is_alive():
@@ -246,9 +257,7 @@ func _process(delta: float) -> void:
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
 	for skill: StringName in _mob_cooldowns:
 		_mob_cooldowns[skill] = maxf(0.0, float(_mob_cooldowns[skill]) - delta)
-	if taunt_remaining > 0.0:
-		taunt_remaining = maxf(0.0, taunt_remaining - delta)
-		queue_redraw()
+	if taunt_remaining > 0.0: queue_redraw()
 	if world_motion != null:
 		_advance_world_ai(delta)
 		return
@@ -361,10 +370,15 @@ func apply_fear(base_duration: float) -> float:
 		_repath_time = 0.0
 	return applied_duration
 
-func apply_taunt(duration: float) -> bool:
+func apply_taunt(duration: float, source_actor: PlayerActor = null) -> bool:
 	if not is_alive() or not is_finite(duration) or duration <= 0.0:
 		return false
-	taunt_remaining = duration
+	var source := threat_id_for(source_actor if source_actor != null else player)
+	if source.is_empty(): return false
+	threat_taunt_sequence += 1
+	var applied := threat.observe("taunt_%d" % threat_taunt_sequence, &"taunt", source, 0.0, 1, duration)
+	if not applied["ok"]: return false
+	_select_threat_target()
 	_path.clear()
 	_path_index = 0
 	_repath_time = 0.0
@@ -373,7 +387,9 @@ func apply_taunt(duration: float) -> bool:
 
 func clear_statuses() -> void:
 	_mob_cast.clear()
-	taunt_remaining = 0.0
+	threat.forced_id = ""
+	threat.forced_remaining = 0.0
+	threat._choose()
 	super.clear_statuses()
 
 func _draw() -> void:
@@ -545,7 +561,7 @@ func _refresh_engagement(delta: float) -> bool:
 		player_target_acquired = false
 		return false
 	if not _inside_leash():
-		if engagement_mode == &"engaged" or global_position.distance_to(spawn_home) > _mob_definition.leash_radius:
+		if engagement_mode == &"engaged" or threat.engaged or global_position.distance_to(spawn_home) > _mob_definition.leash_radius:
 			_begin_return()
 		player_target_acquired = false
 		return false
@@ -557,6 +573,7 @@ func _refresh_engagement(delta: float) -> bool:
 		engagement_mode = &"engaged"
 		_clear_engagement_path()
 	player_target_acquired = visible
+	if visible: threat.engage(threat_id_for(player))
 	if visible:
 		_last_seen_position = player.global_position
 		hunter_last_seen_position = _last_seen_position
@@ -573,7 +590,7 @@ func _refresh_engagement(delta: float) -> bool:
 func _refresh_world_engagement(delta: float) -> bool:
 	if not is_alive() or not is_instance_valid(player) or not player.is_alive() or player.world_motion == null or player.world_motion.geometry != world_motion.geometry or engagement_mode == &"returning": player_target_acquired = false; return false
 	if not _inside_leash():
-		if engagement_mode == &"engaged" or world_point().position.distance_to(_world_home.position) > _mob_definition.leash_radius: _begin_return()
+		if engagement_mode == &"engaged" or threat.engaged or world_point().position.distance_to(_world_home.position) > _mob_definition.leash_radius: _begin_return()
 		player_target_acquired = false
 		return false
 	var visible := _can_see_player()
@@ -583,6 +600,7 @@ func _refresh_world_engagement(delta: float) -> bool:
 		world_motion.cancel()
 		_repath_time = 0.0
 	player_target_acquired = visible
+	if visible: threat.engage(threat_id_for(player))
 	if visible:
 		_world_last_seen = player.world_point()
 		_sight_lost_time = 0.0
@@ -595,6 +613,7 @@ func _refresh_world_engagement(delta: float) -> bool:
 func _begin_return() -> void:
 	if engagement_mode == &"returning": return
 	engagement_mode = &"returning"
+	threat.disengage()
 	player_target_acquired = false
 	_mob_cast.clear()
 	_clear_engagement_path()
@@ -630,6 +649,7 @@ func _request_companion_once() -> void:
 	companion_requested.emit(self)
 
 func _on_damage_applied(result: Dictionary) -> void:
+	observe_threat_damage(result)
 	super._on_damage_applied(result)
 	if not _uses_engagement() or not is_alive() or engagement_mode == &"returning" or float(result.get("actual_damage", 0.0)) <= 0.0 or player == null or not is_instance_valid(player) or not player.is_alive() or int(result.get("source_id", 0)) != player.get_instance_id():
 		return
@@ -646,3 +666,65 @@ func _on_damage_applied(result: Dictionary) -> void:
 	_clear_engagement_path()
 	player_target_acquired = _can_see_player()
 	_request_companion_once()
+
+func register_threat_actor(id: String, owner: String, group: String, actor: PlayerActor) -> Dictionary:
+	if not is_instance_valid(actor): return {"ok": false, "error_code": &"invalid_participant"}
+	if threat_actors.has(id) and threat_actors[id] != actor: return {"ok": false, "error_code": &"request_conflict"}
+	for existing: String in threat_actors:
+		if existing != id and threat_actors[existing] == actor: return {"ok": false, "error_code": &"request_conflict"}
+	var result := threat.register(id, owner, group)
+	if result["ok"]: threat_actors[id] = actor
+	return result
+
+func threat_id_for(actor: Object) -> String:
+	for id: String in threat_actors:
+		if is_instance_valid(threat_actors[id]) and threat_actors[id] == actor: return id
+	return ""
+
+func observe_threat_damage(result: Dictionary) -> Dictionary:
+	var source := threat_id_for(instance_from_id(int(result.get("source_id", 0))))
+	if source.is_empty(): return {"ok": false, "error_code": &"invalid_participant"}
+	var sequence := int(result.get("application_sequence", 0))
+	if sequence <= 0: return {"ok": false, "error_code": &"invalid_payload"}
+	var observed := threat.observe("damage_%d" % sequence, &"damage", source, float(result.get("actual_damage", 0.0)))
+	if observed.get("already_applied", false): return observed
+	if not is_alive() or engagement_mode == &"returning": threat.disengage()
+	elif observed["ok"] and float(result.get("actual_damage", 0.0)) > 0.0:
+		_select_threat_target()
+		if _uses_engagement() and _inside_leash() and engagement_mode == &"idle":
+			engagement_mode = &"engaged"
+			if world_motion != null: _world_last_seen = player.world_point()
+			else: _last_seen_position = player.global_position
+	return observed
+
+func observe_threat_heal(source: String, amount: float, sequence: int, divisor: int) -> Dictionary:
+	if sequence <= 0: return {"ok": false, "error_code": &"invalid_payload"}
+	var observed := threat.observe("heal_%s_%d" % [source, sequence], &"heal", source, amount, divisor)
+	if observed["ok"]: _select_threat_target()
+	return observed
+
+func _advance_threat(delta: float) -> void:
+	threat.advance(delta)
+	for id: String in threat_actors.keys():
+		var actor: PlayerActor = threat_actors[id]
+		var alive := is_instance_valid(actor) and actor.is_alive()
+		var visible := false
+		if alive:
+			if world_motion != null:
+				visible = actor.world_motion != null and actor.world_motion.is_current_world() and actor.world_motion.geometry == world_motion.geometry and actor.can_be_acquired_by_world(self) and world_can_reach(actor, 1.0e20)
+			else: visible = actor.can_be_acquired_by(global_position) and navigation != null and navigation.is_segment_clear(global_position, actor.global_position, 0.0)
+		# Existing taunt bypasses stealth but never a solid floor/occlusion.
+		if alive and threat.forced_id == id and threat.forced_remaining > 0.0:
+			visible = world_can_reach(actor, 1.0e20) if world_motion != null else navigation != null and navigation.is_segment_clear(global_position, actor.global_position, 0.0)
+		threat.eligibility(id, alive, visible)
+		if not is_instance_valid(actor): threat_actors.erase(id)
+	if not is_alive(): threat.disengage()
+	_select_threat_target()
+
+func _select_threat_target() -> void:
+	if threat_actors.has(threat.current_id):
+		var target: PlayerActor = threat_actors[threat.current_id]
+		if player != target:
+			player = target
+			_mob_cast.clear() # Never redirect an already captured cast to another actor.
+			_clear_engagement_path()

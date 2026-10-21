@@ -1,6 +1,6 @@
 class_name CombatParticipation
 extends RefCounted
-## Minimal local combat authority. Threat values and target selection remain F6.
+## Local party participation. Links are independent of target and threat amount.
 var links: Dictionary[String, bool] = {}
 var remaining := 0.0
 var exit_delay := 5.0

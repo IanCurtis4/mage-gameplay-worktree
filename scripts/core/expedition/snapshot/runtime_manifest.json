@@ -97,15 +97,19 @@
       "_navigation_revision",
       "player_target_acquired",
       "hunter_last_seen_position",
-      "taunt_remaining",
       "scenario_damage_multiplier",
       "_world_home",
       "_world_last_seen",
       "_world_geometry_revision",
       "_world_cast_revision",
-      "world_ai_failure"
+      "world_ai_failure",
+      "threat",
+      "threat_actors",
+      "threat_taunt_sequence"
     ],
-    "omitted": {}
+    "omitted": {
+      "taunt_remaining": "computed projection of threat.forced_remaining"
+    }
   },
   "res://scripts/actors/equipment_attachment_visual.gd": {
     "revision": 1,
@@ -788,7 +792,9 @@
       "flee_rating",
       "crit_resistance",
       "shield_hp",
-      "_death_emitted"
+      "_death_emitted",
+      "damage_sequence",
+      "heal_sequence"
     ],
     "omitted": {
       "current_hp": "computed from deficit/death latch"
@@ -876,7 +882,9 @@
       "_applied",
       "_pending"
     ],
-    "omitted": {"_expedition_service": "external in-flight profile writer coordinator; uncertain transactions freeze the live consumer"}
+    "omitted": {
+      "_expedition_service": "external in-flight profile writer coordinator; uncertain transactions freeze the live consumer"
+    }
   },
   "res://scripts/core/run_card_inventory.gd": {
     "revision": 1,
@@ -1965,5 +1973,21 @@
       "open",
       "anchor"
     ]
+  },
+  "res://scripts/core/expedition/combat/threat_service.gd": {
+    "revision": 1,
+    "fields": [
+      "enemy_id",
+      "participants",
+      "amounts",
+      "current_id",
+      "forced_id",
+      "forced_remaining",
+      "engaged",
+      "revision",
+      "claims",
+      "groups"
+    ],
+    "omitted": {}
   }
 }

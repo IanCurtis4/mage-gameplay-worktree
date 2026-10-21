@@ -285,6 +285,7 @@ func _ready() -> void:
 	player.spiritualist_channel_interrupt_requested.connect(_cancel_spiritualist_drain)
 	player.spiritualist_focus_event.connect(_on_spiritualist_focus_event)
 	player.health.damage_applied.connect(_on_player_damage_resolved)
+	player.health.healed.connect(_on_player_healed)
 	player.lightning_wall_requested.connect(_on_lightning_wall_requested)
 	player.soul_impact_requested.connect(_on_soul_impact_requested)
 	player.haunt_requested.connect(_on_haunt_requested)
@@ -2004,6 +2005,16 @@ func _cancel_spiritualist_drain() -> void:
 		if was_active:
 			battle_indicators.clear_spiritualist_drain_wisps()
 
+func _on_player_healed(amount: float, sequence: int) -> void:
+	if not is_instance_valid(player) or amount <= 0.0: return
+	var engaged_enemies: Array[EnemyActor] = []
+	for actor: CombatActor in enemies:
+		if actor is EnemyActor and actor.is_alive() and actor.threat.linked("local_party"): engaged_enemies.append(actor)
+	for enemy: EnemyActor in engaged_enemies:
+		var source := enemy.threat_id_for(player)
+		if not source.is_empty(): enemy.observe_threat_heal(source, amount, sequence, engaged_enemies.size())
+	if not engaged_enemies.is_empty() and combat_participation != null: combat_participation.hostile_damage()
+
 func _on_player_damage_resolved(result: Dictionary) -> void:
 	if combat_participation != null and float(result.get("actual_damage", 0.0)) > 0.0: combat_participation.hostile_damage()
 	if float(result.get("actual_damage", 0.0)) > 0.0:
@@ -2174,7 +2185,7 @@ func _on_provoke_requested(target_actor: CombatActor, duration: float) -> void:
 	var enemy := target_actor as EnemyActor
 	if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
 		return
-	enemy.apply_taunt(duration)
+	enemy.apply_taunt(duration, player)
 	enemy.apply_attribute_debuff(AttributeDebuffState.PHYSICAL_DEFENSE, &"provoke", PlayerActor.PROVOKE_DEFENSE_REDUCTION, PlayerActor.PROVOKE_DEBUFF_DURATION)
 	enemy.apply_attribute_debuff(AttributeDebuffState.FLEE, &"provoke", PlayerActor.PROVOKE_FLEE_REDUCTION, PlayerActor.PROVOKE_DEBUFF_DURATION)
 
@@ -2570,6 +2581,14 @@ func _spawn_death_visual(actor: CombatActor, after_run: bool = false) -> void:
 	actor.hide()
 
 func _on_player_died(_actor: CombatActor) -> void:
+	var hostiles: Array = enemies.duplicate()
+	if campaign_runtime != null:
+		for actor: EnemyActor in campaign_runtime.actors.values():
+			if actor not in hostiles: hostiles.append(actor)
+	for actor: CombatActor in hostiles:
+		if actor is EnemyActor and is_instance_valid(actor):
+			var source: String = actor.threat_id_for(player)
+			if not source.is_empty(): actor.threat.eligibility(source, false, false); actor._select_threat_target()
 	if campaign_runtime != null:
 		campaign_runtime.death_serial += 1
 		campaign_runtime.pending_events.append({"kind": "player_death", "event_id": "player_death_%d" % campaign_runtime.death_serial})
@@ -2583,7 +2602,7 @@ func _advance_expedition_runtime(delta: float) -> void:
 	if snapshot_passive or run_finished or get_tree().paused or _memory_snapshot_pending: return
 	var links := {}
 	for enemy: CombatActor in enemies:
-		if enemy is EnemyActor and enemy.is_alive() and enemy.engagement_mode == &"engaged":
+		if enemy is EnemyActor and enemy.is_alive() and (enemy.engagement_mode == &"engaged" or enemy.threat.linked("local_party")):
 			links[enemy.occurrence.occurrence_id if enemy.occurrence != null else "companion"] = true
 	combat_participation.observe(links, delta)
 	encounter_active = combat_participation.active()

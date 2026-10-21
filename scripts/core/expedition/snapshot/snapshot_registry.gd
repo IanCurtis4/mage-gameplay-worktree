@@ -827,6 +827,12 @@ func _assignable(owner: Object, field: String, value: Variant) -> bool:
 func _validate_runtime_graph() -> Dictionary:
 	for value: Object in _objects:
 		if value is ExpeditionCampaignRuntime and not value.valid(): return StableEntityRegistry.failure(&"invalid_payload", "campaign state")
+		if value is ThreatService and not value.valid(): return StableEntityRegistry.failure(&"invalid_payload", "threat state")
+		if value is HealthState and (value.damage_sequence < 0 or value.heal_sequence < 0): return StableEntityRegistry.failure(&"invalid_payload", "health sequence")
+		if value is EnemyActor:
+			if value.threat == null or value.threat_taunt_sequence < 0: return StableEntityRegistry.failure(&"invalid_payload", "threat binding")
+			for id: String in value.threat_actors:
+				if not value.threat.participants.has(id) or not is_instance_valid(value.threat_actors[id]): return StableEntityRegistry.failure(&"invalid_payload", "threat actor")
 		if value is CombatParticipation and not value.valid(): return StableEntityRegistry.failure(&"invalid_payload", "combat participation")
 		if value is BuildSnapshot:
 			if value.catalog_version != ProfileState.CATALOG_VERSION or value.ruleset_id != ProfileState.RULESET_ID: return StableEntityRegistry.failure(&"content_revision_unavailable")

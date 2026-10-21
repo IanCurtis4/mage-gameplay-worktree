@@ -266,3 +266,9 @@ testes/roles/logs/hashes, limitações e próximo passo. Todos esses campos de
 execução eram **não atribuídos** na entrega arquitetural. Atualização corrente:
 F0 integrado; F1 possui despacho real e liberação parcial D05. D01/D02 e demais
 escolhas pendentes continuam condicionando seus próprios consumidores.
+
+## Registro posterior F6 —21/10/2026
+
+F6 autorizado expressamente e D06 completa aprovada pelo usuário. EM_EXECUÇÃO,
+Sol/Alto; [base real, manifesto exclusivo e critérios](e07/f6_dispatch.md).
+As pendências históricas acima não substituem esse aval. F7/F8 não liberados.

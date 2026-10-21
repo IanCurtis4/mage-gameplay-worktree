@@ -4,6 +4,9 @@ extends RefCounted
 
 signal damage_applied(result: Dictionary)
 signal actor_died(actor_id: int)
+signal healed(actual_amount: float, application_sequence: int)
+var damage_sequence := 0
+var heal_sequence := 0
 
 var actor_id: int
 var max_hp: float
@@ -83,6 +86,8 @@ func apply(request: DamageRequest, hit_roll: float, crit_roll: float, debuffs: A
 	result["absorbed_damage"] = absorbed_damage
 	result["can_trigger_effects"] = bool(result["can_trigger_effects"]) and actual_damage > 0.0
 	result["killed"] = killed
+	damage_sequence += 1
+	result["application_sequence"] = damage_sequence
 	damage_applied.emit(result)
 	if killed and not _death_emitted:
 		_death_emitted = true
@@ -114,6 +119,9 @@ func heal(amount: float) -> float:
 		return 0.0
 	var restored := minf(amount, _hp_deficit)
 	_hp_deficit -= restored
+	if restored > 0.0:
+		heal_sequence += 1
+		healed.emit(restored, heal_sequence)
 	return restored
 
 func grant_shield(capacity: float) -> bool:
