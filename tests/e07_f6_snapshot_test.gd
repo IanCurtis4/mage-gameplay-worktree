@@ -58,24 +58,27 @@ func _legacy_identity_cases() -> void:
 		enemy.threat.observe("legacy_hit", &"damage", "player", 3.0)
 		var participation := CombatParticipation.new()
 		participation.hostile_damage("outgoing_%s_1" % enemy.threat.enemy_id)
+		participation.hostile_damage("taunt_%s_1" % enemy.threat.enemy_id)
 		participation.observe({}, 1.0)
-		hero.set_meta("f6_participation", participation)
-		var barrier := SnapshotTickBarrier.new(); barrier.acquire(hero)
+		var controller := RunController.new()
+		controller.run_state = hero.run_state; controller.player = hero; controller.navigation = nav; controller.combat_participation = participation
+		controller.add_child(hero)
+		var barrier := SnapshotTickBarrier.new(); barrier.acquire(controller)
 		var registry := SnapshotRegistry.new()
-		var capture := registry.capture(hero, barrier)
-		check(capture["ok"], "legacy " + grammar + " captures complete threat graph")
+		var capture := registry.capture(controller, barrier)
+		check(capture["ok"], "legacy " + grammar + " captures complete threat graph: " + str(capture.get("detail", capture.get("error_code"))))
 		if capture["ok"]:
 			check(not var_to_str(capture["snapshot"]).contains(str(local_id)), "legacy " + grammar + " never stores local enemy ID in threat or participation receipts")
 			var restored := SnapshotRegistry.new().restore(capture["snapshot"])
 			check(restored["ok"], "legacy " + grammar + " restores")
 			if restored["ok"]:
-				var copy: PlayerActor = restored["root"]
+				var copy: RunController = restored["root"]
 				var target: EnemyActor = restored["entities"].resolve(registry.entities.stable_for(local_id))
 				check(target.threat.enemy_id == target.occurrence.occurrence_id and target.threat.enemy_id.ends_with(str(target.get_instance_id())), "legacy " + grammar + " threat identity binds the rebuilt target")
-				var copied_participation: CombatParticipation = copy.get_meta("f6_participation")
+				var copied_participation: CombatParticipation = copy.combat_participation
 				var event := "outgoing_%s_1" % target.threat.enemy_id
-				check(copied_participation.events.has(event), "legacy " + grammar + " outgoing receipt is rebound with its enemy")
+				check(copied_participation.events.has(event) and copied_participation.events.has("taunt_%s_1" % target.threat.enemy_id), "legacy " + grammar + " outgoing receipt is rebound with its enemy")
 				copied_participation.hostile_damage(event)
 				check(copied_participation.remaining == 4.0, "legacy " + grammar + " rebound replay cannot renew grace")
 				copy.free()
-		barrier.release(); hero.free()
+		barrier.release(); controller.free()

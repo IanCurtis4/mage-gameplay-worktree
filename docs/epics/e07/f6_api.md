@@ -91,3 +91,7 @@ IDs locais são substituídos por referências estáveis no envelope e remapeado
 na reconstrução; contadores/sequências e IDs de expedição de produção não são
 interpretados como Node IDs. A prova exige ausência do ID local no snapshot e
 replay inerte do recibo reconstruído.
+
+Provocar aceito notifica participação no mesmo callback, antes de ofertas/trocas/
+coleta; não aguarda o tick seguinte. Falha de aplicação não publica debuffs.
+O recibo taunt usa a identidade estável do inimigo e a sequência já capturada.

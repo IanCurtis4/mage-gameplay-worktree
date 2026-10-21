@@ -2187,7 +2187,8 @@ func _on_provoke_requested(target_actor: CombatActor, duration: float) -> void:
 	var enemy := target_actor as EnemyActor
 	if enemy == null or not is_instance_valid(enemy) or not enemy.is_alive():
 		return
-	enemy.apply_taunt(duration, player)
+	if not enemy.apply_taunt(duration, player): return
+	if combat_participation != null: combat_participation.hostile_damage("taunt_%s_%d" % [enemy.threat.enemy_id, enemy.threat_taunt_sequence])
 	enemy.apply_attribute_debuff(AttributeDebuffState.PHYSICAL_DEFENSE, &"provoke", PlayerActor.PROVOKE_DEFENSE_REDUCTION, PlayerActor.PROVOKE_DEBUFF_DURATION)
 	enemy.apply_attribute_debuff(AttributeDebuffState.FLEE, &"provoke", PlayerActor.PROVOKE_FLEE_REDUCTION, PlayerActor.PROVOKE_DEBUFF_DURATION)
 

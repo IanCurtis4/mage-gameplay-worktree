@@ -40,6 +40,9 @@ func _run() -> void:
 	check(not host.encounter_active and host.run_state.open_offer(host.encounter_active, rng)["ok"], "five-second exit releases offer on uncleared stage")
 	actor.engagement_mode = &"idle"
 	check(actor.observe_threat_damage(result).get("already_applied", false) and actor.engagement_mode == &"idle" and not actor.threat.engaged, "old damage replay cannot restart engagement after leash")
+	host._on_provoke_requested(actor, 2.0)
+	check(host.encounter_active and actor.threat.forced_id == "player", "successful taunt blocks out-of-combat consumers in the same tick")
+	actor._begin_return(); host.combat_participation.observe({}, 5.0)
 	host.player.health._hp_deficit = 1.0; host.player.health.heal(1.0)
 	var outside_sequence := host.player.health.heal_sequence
 	actor.threat.engage("player")
