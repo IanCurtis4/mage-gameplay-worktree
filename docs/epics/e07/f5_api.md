@@ -1,6 +1,6 @@
-# E07-F5 — API em implementação
+# E07-F5 — API v1
 
-21/10/2026. **Provisória; aguarda fechamento técnico**.
+21/10/2026. **VALIDADA tecnicamente**; [recibo e limites](delivery/f5.md).
 [Despacho e decisões humanas](f5_dispatch.md), [checkpoint](f5_checkpoint.md).
 Consome APIs F0/F1/F3/F4, sem novo writer nem serializador paralelo.
 
@@ -61,6 +61,8 @@ entrega root/registry/snapshot para install/activate F3. A cena anterior não po
 voltar a simular após publicação. Falha incerta conserva a mesma instância de
 serviço para reconcile(request), bloqueando novas intenções. Falha conhecida
 conserva o corte durável anterior e permite retry da intenção congelada.
+Troca de build publica na cena existente, após a mesma confirmação; seu grafo
+passivo previamente validado é descartado. Não instala uma segunda cena.
 
 RunController adapta eventos reais de morte em uma fila de fim de tick. Grafo
 local de estágio ausente permanece desativado no mesmo snapshot, sem reconstrução
@@ -74,6 +76,6 @@ trocas, coleta e regen. Estado/atraso entram no manifesto explícito de snapshot
 Não é ThreatService nem contém as fórmulas opcionais F6.
 
 Limites F3/F4 de4MiB e compatibilidade exata de fontes/engine continuam. Medição,
-falhas finais, inspeção nativa e restrições concretas serão consolidadas no recibo.
+falhas corrigidas, inspeção nativa e restrições concretas estão no recibo.
 Não há UI de lobby/migração/campanha F7, promessa de FPS, export release ou aceite
-de gameplay nesta API em construção.
+de gameplay nesta entrega técnica.

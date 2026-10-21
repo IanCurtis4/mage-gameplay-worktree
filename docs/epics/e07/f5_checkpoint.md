@@ -1,49 +1,44 @@
-# E07-F5 — checkpoint de implementação
+# E07-F5 — checkpoint consolidado
 
-21/10/2026. **EM_EXECUÇÃO**, não é entrega nem aprovação técnica.
-[Liberação, base, decisões aprovadas e donos](f5_dispatch.md).
+21/10/2026. **VALIDADA tecnicamente**, pendente de integração operacional e
+aceite humano. [Recibo completo](delivery/f5.md), [API](f5_api.md),
+[autorização e propriedade](f5_dispatch.md).
 
-Base `ee76b442c336c5818ee90b8e9d7478cdd739d593`, branch `codex/e07-f5`,
-checkout `C:/Users/João Pedro/.codex/worktrees/e07-f5/RagRPG`.
-Alterações ainda não consolidadas em commit. CLI de workflow ausente; retomada
-por Git/contrato, sem instalação alternativa. project.godot confirmado.
+Base `ee76b442c336c5818ee90b8e9d7478cdd739d593`, branch `codex/e07-f5`, checkout
+`C:/Users/João Pedro/.codex/worktrees/e07-f5/RagRPG`.
+Runtime final `8911d81d0857143f36daea824f3b64fb75d8d5c3`; fechamento documental
+posterior não altera o candidato. CLI de workflow/WORKFLOW_TOOLING ausentes;
+retomada por Git/contratos, conforme F2–F4. Não usar outra instalação presumida.
 
-D03, D04 geral e tabela das dez identidades, D06 mínimo, quest antecipada D02 e
-amostra D07 receberam resposta humana explícita neste chat. Não perguntar de novo.
-Delta transacional da troca ativa também aprovado: “Aprovar esse delta
-transacional”; implementação em RunBuildService/ExpeditionService com um writer,
-sem liberar edição no lobby. Proposta e despacho registram o adendo.
-Não inclui F6 completo, UI F7, catálogo extenso, economia, save pessoal ou E08+.
+D03, D04 geral e tabela das dez identidades, D06 mínimo, quest antecipada D02,
+amostra D07 e delta transacional da troca ativa receberam aprovação explícita
+neste chat. Não perguntar de novo. Nenhuma pendência de decisão para F5.
+O aval não autoriza F6/F7, UI/catálogo extensos ou novos épicos.
 
-Implementação parcial: planner sobre F0/F1, população por slot/generation,
-relógio global, claims de entrada, participação mínima, transações passivas pelo
-writer F4, viagens com grafos locais congelados, morte/revive e término.
-EXP por abate com redução inteira exata; probabilidades passam pelo loot canônico.
+Sol implementou/consolidou contrato e invariantes. Luna supervisionou saídas,
+erros, timeouts, conclusão e hashes: 37 IDs únicos/6845 checks sem falhas;
+29 do lote final, 7 E06 reaproveitados do prefixo anterior e death_kits (191 checks) de
+author_07. Não é auditoria semântica independente. Native_02: 20 checks,
+duas imagens inspecionadas por Sol; sem controles Geômetro no Mago.
+Import_12: 1639 primários idênticos, VCS autoload desligado somente na cópia.
+Manifesto `2c7025bfd76fdd5cdcab93079728faa0bfc7ba4cabbf1041228b4b4a9f7ee578`.
 
-Evidência autoral até este corte, não supervisão Luna nem fechamento Sol:
-- import_04:1608 primários idênticos na cópia; population28/campaign26 PASS.
-- import_05:1613 primários idênticos; author_03 já concluiu population32,
-  recovery27 e fault19 PASS; conclusão/quest ainda em execução neste registro.
-- population_01 falhou na rampa artificial escalada; corrigida somente a fixture
-  para uma inclinação exatamente representável. Logs preservados.
-- author_03: término falhou por acesso a gold no DTO legado que não contém esse
-  campo; correção compara gold separado. Ainda aguarda repetição final.
-- import_08:1618 primários idênticos. author_04 population38/1 falha:
-  teste alterava cópia defensiva de espécie, não catálogo copiado; preparação
-  corrigida sem remover a exigência de alcance para o corpo real.
-- author_05: erro em death_kits chamando serviço Geômetro inexistente nas outras
-  identidades; Luna reportou, Sol interrompeu processo (exit-1, não timeout).
-  Preparação restringida à identidade pertinente. Reward/build não executados.
-- import_09:1618 primários idênticos; author_06 em execução. Luna acompanha logs,
-  sem editar fontes/oráculos; supervisão não é auditoria semântica independente.
+Evidências e fontes preservadas fora da worktree em
+`C:/Users/João Pedro/.codex/visualizations/2026/10/18/01a150a6-a9f0-7753-afa5-0081569879a9/e07_f5_8911d81/`.
+ZIP `e07_f5_8911d81_evidence.zip`, 255127227 bytes/1911 entradas, SHA256
+`3d72a1d8850ae8e3b244c24c22679f62c8f7ec777a522420ae5002ff5c0bdb55`.
+CRC/SHA de payloads e cópia externa conferidos. Logs autorais/falhas permanecem
+diagnóstico; o recibo mapeia somente PASS compatíveis para a cobertura final.
 
-Godot4.7.2 standard registrado por F4:
-`C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/review-engine/Godot.exe`.
-Logs em `.godot/verification/e07_f5/`; perfis exclusivamente sob fixture_project.
-Nenhuma suíte completa repetida; ainda há código/testes novos sem evidência final.
+Limites: snapshot/perfil de 4 MiB, revisões exatas de fonte/engine, custo síncrono
+material; não prova FPS/export/escala/UI final. Amostra técnica de 4 estágios/8 slots,
+rota final visita 3 e ramo opcional provado separadamente. Interface F7 pendente.
 
-Próximos passos autorizados: concluir testes de término/quest, validar morte das
-dez identidades e chances de loot, endurecer validação/continuidade de snapshot,
-inspecionar apresentação nativa pertinente e executar regressões por impacto.
-Só depois consolidar candidato/evidências. Integração operacional/playtest/master
-permanecem separados e inalterados. Não arquivar esta tarefa enquanto pendente.
+Próximo passo permitido: tarefa operacional explicitamente designada compor e
+validar o candidato. Hash integrado F5 ainda inexistente. Playtest continua em
+codex/playtest/163829617bccba0c201af9e87993851157100bc3 com 214 alterações locais
+preexistentes; não houve escrita nele nem no save pessoal. Sem push/merge/master,
+avanço automático do playtest ou arquivamento. Correções permanecem nesta tarefa.
+
+Este fechamento somente documental validou coerência, referências e diff;
+não repetiu a suíte de gameplay.

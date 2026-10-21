@@ -1,8 +1,11 @@
 # E07-F5 — ciclo de expedição
 
-21/10/2026. EM_EXECUÇÃO; decisões consumidas aprovadas. Executor Sol/Alto,
+21/10/2026. VALIDADA tecnicamente; decisões consumidas aprovadas. Executor Sol/Alto,
 chat `01a150a6-a9f0-7753-afa5-0081569879a9`.
 Aval humano: “F4 terminou. Podemos começar F5.”
+Runtime final `8911d81d0857143f36daea824f3b64fb75d8d5c3`;
+[recibo, evidências Luna/Sol e limites](delivery/f5.md).
+Integração operacional e aceite de produto permanecem pendentes.
 
 Base real `ee76b442c336c5818ee90b8e9d7478cdd739d593`, fechamento F4;
 runtime F4 `cdda02f9cfcec52a6f27646711e4dadedce1a63b`.
@@ -61,7 +64,7 @@ Transferência sequencial de produtores entregues, sem escritores paralelos:
   profile_codec.gd, profile_state.gd;
   scripts/core/expedition/ownership/expedition_asset_lock.gd,
   character_assets.gd; scripts/core/expedition/persistence/expedition_checkpoint_codec.gd.
-  Somente lifecycle/recibos/conclusão atômicos pelo writer existente; nenhum
+  Somente lifecycle/recibos/conclusão e troca ativa aprovada pelo writer existente; nenhum
   fork de serialização ou descarte de compatibilidade/recibos.
 - Snapshot: scripts/core/expedition/snapshot/runtime_manifest.json,
   snapshot_registry.gd. Registrar campos/kinds novos e validação explícita;
@@ -85,6 +88,9 @@ Diagnóstico preservado mostra arena_traveler_charm (accessory, sem sockets)
 selecionado pela pré-condição implícita do teste. Restringir esse caso a arma
 canônica explícita; conservar os cinco limiares literais e demais oráculos,
 sem alterar taxas/tabelas/runtime ou desabilitar uma asserção.
+
+Adendo documental de fechamento: docs/epics/e07_tasks.md, somente registro do
+estado F5 e link para o recibo. Sem mudar contratos ou liberar F6/F7.
 
 ## Resultado, validação e exclusões
 

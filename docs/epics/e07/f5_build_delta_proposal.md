@@ -1,6 +1,6 @@
 # F5 — proposta de transação de troca ativa
 
-21/10/2026. **APROVADA; implementação e validação em andamento.**
+21/10/2026. **APROVADA e VALIDADA tecnicamente**; [entrega](delivery/f5.md).
 Resposta humana explícita: “Aprovar esse delta transacional”.
 Revisão automática rejeitou aplicar a mudança por considerá-la ampliação de
 semântica de mutações persistentes/locks sem aprovação específica.

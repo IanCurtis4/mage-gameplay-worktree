@@ -171,8 +171,11 @@ troca de personagem. Sem save pessoal; sem checkpoint que publique antes do comm
 
 ## F5 — população, portais e ciclo completo de expedição
 
-**DECISÃO_PENDENTE D02/D03/D04/D07 e regra de saída de combate de D06;
-depende F4/F0/F1. Sol / Alto.** Resultado:
+**VALIDADA tecnicamente em21/10/2026; Sol / Alto, supervisão Luna.**
+Decisões consumidas aprovadas no [despacho F5](e07/f5_dispatch.md).
+Runtime `8911d81d0857143f36daea824f3b64fb75d8d5c3`;
+[recibo e limites](e07/delivery/f5.md):37 IDs únicos/6845 checks, mais20 nativos.
+Integração operacional e aceite humano pendentes. Não libera F6/F7. Resultado:
 fase fixture/receita aprovada oferece primeira entrada, limpeza, ida/volta,
 ondas globais, morte recuperável e conclusão, com identidade e recibos persistidos.
 Não cria catálogo extenso nem economia/quests completas.
