@@ -1,5 +1,32 @@
 # E07 — pacotes substanciais e fronteiras de execução
 
+## Estado operacional consolidado —22/10/2026
+
+Esta seção prevalece sobre estados históricos da arquitetura e da execução abaixo.
+F1–F6 integradas em `f6ba5a9735846ca87fc735178df7bbe932539b6f`, com runtime
+idêntico ao candidato F6 e validação descrita no [recibo](e07/f1_f6_integration.md).
+Todos os despachos/decisões e recibos de F1–F6 estão presentes nesta composição.
+
+| Pacote | Estado atual | Referência |
+|---|---|---|
+| F0 | Integrada/arquivada anteriormente | [integração](e07/f0_integration.md) |
+| F1 | VALIDADA/INTEGRADA | [entrega](e07/delivery/f1.md) |
+| F2 | VALIDADA/INTEGRADA | [entrega](e07/delivery/f2.md) |
+| F3 | VALIDADA/INTEGRADA | [entrega](e07/delivery/f3.md) |
+| F4 | VALIDADA/INTEGRADA | [entrega](e07/delivery/f4.md) |
+| F5 | VALIDADA/INTEGRADA | [entrega](e07/delivery/f5.md) |
+| F6 | Incluída por aval, VALIDADA/INTEGRADA | [entrega](e07/delivery/f6.md) |
+| F7 | Autorizada pelo usuário; base/checkout/propriedade preparados | [despacho](e07/f7_dispatch.md) |
+| F8 | AGUARDANDO_AVAL_HUMANO; depende da entrega F7 | [fila](e07_launch_queue.md) |
+
+Runner e arquivos UI/controller nominalmente transferidos a F7 após encerrar a
+validação da coordenação. Nenhum escritor paralelo dos produtores. F7 não precisa
+pedir novamente integração, D01–D07 ou escolha de checkout: estão nos registros.
+Correção de core exige transferência delimitada para Sol. F8 não foi iniciado.
+
+## Plano arquitetural e histórico das liberações
+
+
 18/10/2026. [Contrato v1](e07_contract.md), [decisões](e07/e07_decisions.md),
 [inventário factual I0](e07/e07_runtime_inventory.md),
 [validação](e07/guides/validation.md). Somente entrega documental nesta rodada.

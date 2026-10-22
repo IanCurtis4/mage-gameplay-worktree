@@ -1,7 +1,25 @@
 # E07 — decisões humanas antes dos consumidores
 
-18/10/2026, arquitetura v1 com delta humano D05. **D05 combate APROVADO;
-apresentação D05 PENDENTE. D01–D04/D06/D07 continuam PENDENTES.**
+Atualização22/10/2026: **as decisões consumidas por F1–F6 foram aprovadas nos
+chats executores e estão integradas**. A proposta arquitetural de18/10 é mantida
+abaixo como histórico, incluindo alternativas não escolhidas; suas marcações
+antigas de pendência não revogam os aceites posteriores deste quadro.
+
+| Decisão | Aceite efetivo e limite | Registro prevalecente |
+|---|---|---|
+| D01 | Migração assistida com destinos e confirmação completos; gold legado zero. Não autoriza migrar save pessoal. | [F2](f2_dispatch.md) |
+| D02 | Uma pendência/personagem e locks de lobby; alts livres. Estágios ausentes congelam ações locais; relógio global ativo continua; suspensão total congela tudo. Quest antecipada suspende a mesma expedição sem bônus. | [F2](f2_dispatch.md), [F3](f3_dispatch.md), [F5](f5_dispatch.md) |
+| D03 | Ondas900s, trash normal/elite elegível, bosses/raros/memoráveis únicos; fatores0,70/0,60/0,50 por geração; EXP por abate. Gold de mob não criado. | [F5](f5_dispatch.md) |
+| D04 | Última chegada/entrada;50%HP/25%SP; penalidade120s; tabela específica de cancelamento por identidade. | [F5](f5_dispatch.md), [tabela aprovada](f5_death_policy_proposal.md) |
+| D05 | Regras espaciais e apresentação2,5D aprovadas, inclusive clique/marcador e oclusão. | [entrega F1](delivery/f1.md) |
+| D06 | Saída5s e ameaça completa1x dano/0,5x cura, limiar estrito110%, provocar e identidade/replay conforme contrato. | [F5](f5_dispatch.md), [F6](f6_dispatch.md) |
+| D07 | Amostra pequena de4 estágios ramificados, nível1 sem custo/chave, bônus100gold/300EXP Base/200EXP Job sem item. Expansão de área/densidade/taxas não é implícita. | [F5](f5_dispatch.md) |
+
+Delta adicional aprovado: [troca ativa transacional](f5_build_delta_proposal.md),
+fora de combate na mesma expedição, com perfil/build/mundo no mesmo commit;
+locks de lobby/suspensão preservados. Não significa transferência entre alts.
+[F1–F6 integradas](f1_f6_integration.md); [despacho F7](f7_dispatch.md).
+Não perguntar novamente as aprovações acima. Escolhas novas continuam próprias.
 Fonte aprovada: [PRODUCT_DIRECTION](../../PRODUCT_DIRECTION.md).
 Contrato: [E07](../e07_contract.md). Resposta humana futura deve registrar data,
 texto/escopo aprovado e revisão do contrato; silêncio não aprova defaults.

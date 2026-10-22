@@ -1,5 +1,10 @@
 # E07 — guia de propriedade e estado congelado
 
+Atualização22/10: as aprovações posteriores e APIs F1–F6 estão indexadas no
+[registro de decisões](../e07_decisions.md) e no [recibo integrado](../f1_f6_integration.md).
+As propostas e pendências da versão arquitetural abaixo são históricas quando
+substituídas por esses registros; não reabrir decisões já respondidas.
+
 Arquitetura v1,18/10/2026. [Contrato](../../e07_contract.md),
 [decisões D01/D02/D04](../e07_decisions.md). Este guia define requisitos técnicos;
 não aprova migração real, multiplicidade de expedições ou recursos ao reviver.

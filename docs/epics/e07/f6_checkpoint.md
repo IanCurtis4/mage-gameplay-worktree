@@ -1,5 +1,10 @@
 # E07-F6 — checkpoint consolidado
 
+Atualização operacional22/10: **INTEGRADA** em
+`f6ba5a9735846ca87fc735178df7bbe932539b6f`. [Recibo de integração](f1_f6_integration.md)
+e [despacho F7](f7_dispatch.md) substituem a pendência operacional histórica abaixo;
+aceite de gameplay E07 permanece separado. Evidências originais preservadas.
+
 21/10/2026. **VALIDADA tecnicamente**, pendente de integração operacional e
 aceite humano. [Recibo completo](delivery/f6.md), [API](f6_api.md),
 [autorização D06 e propriedade](f6_dispatch.md).

@@ -1,5 +1,13 @@
 # Produto vigente e limites da entrega
 
+## Candidato técnico E07 —22/10/2026
+
+[F1–F6 integradas](epics/e07/f1_f6_integration.md): fundações espaciais, bens por
+personagem/schema8, conservação durável, ciclo e ameaça. Interface de migração,
+seleção/retomada e amostra autorada ficam em [F7](epics/e07/f7_dispatch.md).
+Isso não concede aceite de gameplay E07 nem migração automática do save pessoal;
+o inventário do candidato de17/10 abaixo é histórico nessas fronteiras.
+
 Consolidado em 17/10/2026. Este documento substitui o antigo escopo do piloto
 como entrada de produto. Histórico: [versão anterior](MVP.history_2026_10_17.md).
 As decisões explícitas posteriores prevalecem sobre E00 apenas nos deltas

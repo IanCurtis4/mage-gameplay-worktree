@@ -1,5 +1,15 @@
 # E07 — abertura documental autorizada
 
+## Situação atual22/10 — F1–F6 integradas
+
+[Integração operacional](e07/f1_f6_integration.md) resolvida, com base conjunta
+`f6ba5a9735846ca87fc735178df7bbe932539b6f`. F7 recebeu aval explícito no próprio
+chat: “F6 foi entregue, podemos começar F7.” [Despacho F7](e07/f7_dispatch.md)
+entrega checkout/branch, APIs, decisões e propriedade nominal dos arquivos.
+As condições de espera18/10 abaixo são histórico; F8 ainda aguarda aval próprio.
+Criar a base não reiniciou automaticamente o chat F7 nem aprovou gameplay E07.
+
+
 18/10/2026. Usuário autorizou preparar o mesmo esquema de chats de E06 para E07,
 depois concedeu aceite de gameplay de E06 e determinou: **não começar nenhuma
 conversa agora; deixar a postos, sem iniciar planejamento ou implementação**, por

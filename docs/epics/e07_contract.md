@@ -1,5 +1,12 @@
 # E07 — contrato de arquitetura v1
 
+## Atualização operacional —22/10/2026
+
+F1–F6 integradas conforme [recibo](e07/f1_f6_integration.md). Aprovações humanas
+posteriores estão indexadas nas [decisões](e07/e07_decisions.md) e prevalecem sobre
+as propostas/pendências históricas v1. F7 autorizado, com [despacho](e07/f7_dispatch.md).
+Não há liberação de F8/E08+, merge master ou aceite humano de gameplay E07.
+
 18/10/2026. Papel: Astra, arquitetura documental; esforço Alto. Estado:
 **ENTREGUE PARA DECISÕES E INTEGRAÇÃO DOCUMENTAL**, sem liberação de runtime.
 Base inspecionada: `029b8ca1d7b1752929d549cbeb51e534ea6d3c1d`, checkout

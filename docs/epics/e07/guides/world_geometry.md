@@ -1,5 +1,10 @@
 # E07 — guia de mundo, montagem e altura
 
+Atualização22/10: as aprovações posteriores e APIs F1–F6 estão indexadas no
+[registro de decisões](../e07_decisions.md) e no [recibo integrado](../f1_f6_integration.md).
+As propostas e pendências da versão arquitetural abaixo são históricas quando
+substituídas por esses registros; não reabrir decisões já respondidas.
+
 Arquitetura v1,18/10/2026. [Contrato](../../e07_contract.md),
 [decisão D05](../e07_decisions.md). Interfaces aqui são novas. Regras de combate D05 aprovadas em18/10; apresentação visual ainda pendente.
 O registro D05 e o despacho F1 prevalecem sobre as menções históricas a proposta

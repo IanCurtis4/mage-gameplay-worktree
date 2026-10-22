@@ -1,5 +1,17 @@
 # Chats e retomada — conferido em 17/10/2026
 
+## Situação atual22/10 — integração e consumidor F7
+
+F1–F6 foram integradas; evidência, base efetiva e arquivamento estão no
+[recibo operacional](epics/e07/f1_f6_integration.md). Worktrees produtoras e logs
+permanecem preservados para correção, mesmo após arquivar os chats entregues.
+F7 recebeu aval humano no próprio chat e tem [despacho real](epics/e07/f7_dispatch.md),
+checkout `C:/Users/João Pedro/.codex/worktrees/e07-f7/RagRPG`, branch codex/e07-f7.
+F8 continua aguardando aval. As reservas e pendências datadas18/10 abaixo são
+históricas; não reabrir integração/decisões já comprovadas pelos novos registros.
+Nenhuma mensagem automática foi enviada a F7 por esta integração.
+
+
 Fonte normativa: [WORKFLOW](WORKFLOW.md). Estado de execução mora no
 [checkpoint E06](epics/e06_checkpoint.md), não no status idle/completed do app.
 Reservas e IDs antigos permanecem no [histórico](EPIC_THREADS.history_2026_10_17.md).
