@@ -41,3 +41,7 @@ Snapshot/perfil continuam limitados a 4 MiB, com revisões exatas e custos sínc
 As 214 alterações pessoais do checkout habitual foram inventariadas por SHA256 em `.godot/verification/e07_integration_2026_10_22/preservation.json`; o avanço deve ser fast-forward e conferir os mesmos bytes. Logs e worktrees dos produtores permanecem preservados. CLI de workflow ausente; usadas conferência Git, contratos e runner existentes.
 
 A atualização documental valida referências e precedência, sem repetir gameplay após os testes acima. O registro de liberação posterior informa o HEAD entregue a F7, aplicação no playtest e arquivamento efetivo.
+
+## Liberação efetivada — 22/10/2026
+
+Base documental entregue a F7: `a511584fbde36364b7b47cc9839bcf3c6b429e45`. Playtest e codex/e07-f7 avançaram por fast-forward para essa base; as 214 alterações locais foram conferidas e preservadas byte a byte. Chats F1–F6 arquivados com sucesso após integração e validação. Worktrees e evidências permanecem disponíveis. Este registro posterior altera somente documentação; ambos os destinos recebem também esse registro. F7 pode retomar pelo despacho, sem novo planejamento de arquitetura.
