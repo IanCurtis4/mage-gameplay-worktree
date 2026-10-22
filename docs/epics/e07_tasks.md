@@ -7,6 +7,12 @@ Atualização de coordenação18/10: [F0 validado/integrado](e07/f0_integration.
 F1 autorizado pelo usuário e delimitado no [despacho F1](e07/f1_dispatch.md).
 Combate D05 aprovado; apresentação ainda pendente. F2+ não despachados.
 
+Atualização posterior18/10: usuário autorizou criar F2–F8 antecipadamente,
+**somente a postos, aguardando aval humano individual antes de iniciar**.
+[IDs e condições de espera](e07_launch_queue.md#chats-a-postos--autorização-humana1810).
+Não é dispatch de execução, transferência de arquivos nem aprovação das decisões
+pendentes. F6 permanece opcional. F1 continua com sua tarefa em andamento.
+
 Base arquitetural: `029b8ca1d7b1752929d549cbeb51e534ea6d3c1d`,
 `C:/Users/João Pedro/Documents/ChatGPT/RagRPG`, `codex/playtest`.
 SHA-base de implementação, checkout e branch de cada pacote: **A RESOLVER pela
@@ -90,7 +96,9 @@ assina signatures/revisões reais; F1/F2 só recebem API após integração.
 
 ## F1 — altura funcional e combate espacial coerente
 
-**PRONTA PARA LÓGICA ESPACIAL; apresentação D05 PENDENTE. Sol / Alto.**
+**EM_EXECUÇÃO — lógica espacial; apresentação D05 PENDENTE. Sol / Alto.**
+Chat `01a14fae-037f-7602-814a-d1dbb5942143`, base executável
+`ab351817a7157e90b6853556b193c5cd28757f7c`.
 F0 integrado, combate D05 aprovado e início autorizado expressamente em18/10.
 Base de runtime `42604ef8674a2c28f5aadc633b73cda15178e0b3`, codex/e07-f1;
 checkout, 50 arquivos existentes, novos caminhos, runner exclusivo e cobertura

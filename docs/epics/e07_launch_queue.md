@@ -113,3 +113,44 @@ F0 integrado em `42604ef8674a2c28f5aadc633b73cda15178e0b3` e arquivado;
 F1” e aprovou regras de combate D05. [Despacho F1](e07/f1_dispatch.md) delimita
 lógica espacial e testes independentes da apresentação D05, ainda pendente.
 Sem início de F2+ ou decisão implícita das demais propostas.
+
+F1 criado e início confirmado: chat `01a14fae-037f-7602-814a-d1dbb5942143`,
+**RagRPG | E07-F1 — Altura e combate espacial**, gpt-6.1-sol/high; base
+`ab351817a7157e90b6853556b193c5cd28757f7c`, codex/e07-f1 no checkout isolado do despacho.
+Somente lógica espacial/testes independentes liberados enquanto falta resposta visual D05.
+
+## Chats a postos — autorização humana18/10
+
+Pedido posterior: “Pode criar as outras conversas para cada tarefa, mas peça para
+só iniciar a tarefa depois que eu der o aval, já que F1 ainda está em execução.”
+Esta autorização permite criar antecipadamente F2–F8 e substitui a restrição
+anterior de não criar reservas somente nesse escopo. **Estado de todos os chats
+abaixo: AGUARDANDO_AVAL_HUMANO, sem início de tarefa.**
+
+| Pacote | Título no app | Chat | Modelo/esforço |
+|---|---|---|---|
+| F2 | RagRPG \| E07-F2 — Bens por personagem | 01a150a6-7a1d-7ef2-8c91-cfd5ea1dc93c | gpt-6.1-sol / high |
+| F3 | RagRPG \| E07-F3 — Estado congelado da expedição | 01a150a6-8993-7c72-946a-2a35ca56f4d5 | gpt-6.1-sol / high |
+| F4 | RagRPG \| E07-F4 — Suspensão e retomada persistentes | 01a150a6-9c43-7391-ad9d-febcab815a76 | gpt-6.1-sol / high |
+| F5 | RagRPG \| E07-F5 — População e ciclo da expedição | 01a150a6-a9f0-7753-afa5-0081569879a9 | gpt-6.1-sol / high |
+| F6 (opcional) | RagRPG \| E07-F6 — Ameaça e participação em combate | 01a150a6-ba84-7691-a248-2c63911c12d4 | gpt-6.1-sol / high |
+| F7 | RagRPG \| E07-F7 — Amostra de campanha e interface | 01a150a6-c7d0-7623-90fc-365643b86d3c | gpt-5.6-terra / medium |
+| F8 | RagRPG \| E07-F8 — Validação e candidato integrado | 01a150a6-d6f6-7192-9c19-17f52753d35c | gpt-6.1-sol / high |
+
+Cada mensagem inicial exige apenas confirmação de espera e encerramento do turno,
+sem ferramentas, leitura, pesquisa, planejamento, implementação, testes ou
+perguntas de produto. Nenhum monitor, automação, subagente ou mensagem a outro
+chat foi autorizado. Conclusão de F1/produtores ou passagem de tempo não libera
+essas tarefas automaticamente. Cada uma aguarda aval humano explícito próprio.
+
+As dependências e os limites do [plano](e07_tasks.md) continuam vigentes.
+F6 permanece opcional, sem inclusão implícita no marco. Na liberação, conferir
+decisões atuais e produtores integrados, resolver SHA-base, branch/checkout e
+lista nominal de propriedade antes da edição. A reserva não concede arquivos,
+não disputa o runner/atores/main com F1 e não autoriza usar o checkout habitual
+ou a worktree ativa de outro executor. Nenhuma base executável futura foi inventada.
+
+Registro documental de criação, sem mudança de runtime ou suíte de gameplay.
+Conferência no app: os sete chats encerraram o turno inicial em idle, com a
+resposta “E07-Fn a postos. Aguardando seu aval para iniciar.” e sem marcador de
+ferramentas. Validados 24 links locais e os sete registros únicos, além do diff.

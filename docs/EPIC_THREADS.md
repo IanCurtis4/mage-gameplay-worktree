@@ -14,6 +14,7 @@ Reservas e IDs antigos permanecem no [histórico](EPIC_THREADS.history_2026_10_1
 | Arquitetura E07 permanente | RagRPG \| E07 — Arquitetura Astra | 01a14e2d-630b-7c50-bd03-9448f30711fc |
 | E07-I0 arquivado após integração | RagRPG \| E07-I0 — Inventário técnico | 01a14e2d-b456-7063-bfe9-4cf727b25a59 |
 | E07-F0 arquivado após integração | RagRPG \| E07-F0 — Montagem reproduzível | 01a14f91-d0c6-7c20-82c9-a22650fa5199 |
+| E07-F1 executor | RagRPG \| E07-F1 — Altura e combate espacial | 01a14fae-037f-7602-814a-d1dbb5942143 |
 
 Não duplicar tarefas existentes por ler uma tabela antiga “não criado”. Conferir
 contrato/base/estado antes de retomar. IDs não autorizam mensagens a outros chats.
@@ -40,4 +41,12 @@ Atualização18/10: F0 integrado em `42604ef8674a2c28f5aadc633b73cda15178e0b3`
 e arquivado após conferência dos comprovantes; [registro](epics/e07/f0_integration.md).
 F1 autorizado para lógica espacial com combate D05 aprovado; apresentação pendente.
 [Despacho F1](epics/e07/f1_dispatch.md), branch codex/e07-f1 no mesmo checkout
-isolado, runner transferido exclusivamente. ID e base documental após criação.
+isolado, runner transferido exclusivamente. Chat `01a14fae-037f-7602-814a-d1dbb5942143`, base executável `ab351817a7157e90b6853556b193c5cd28757f7c`.
+Sol/Alto iniciou lógica espacial; apresentação D05 continua pendente.
+
+Atualização posterior18/10: por pedido humano explícito, criados sete chats
+temporários F2–F8 **AGUARDANDO_AVAL_HUMANO**, sem iniciar suas tarefas.
+[Títulos, IDs e modelos](epics/e07_launch_queue.md#chats-a-postos--autorização-humana1810).
+Todos receberam instrução de apenas confirmar espera e encerrar o turno, sem
+ferramentas/planejamento/implementação/testes. Não há início automático após F1.
+F6 continua opcional; base, checkout e propriedade serão definidos na liberação.
