@@ -373,8 +373,12 @@ func apply_fear(base_duration: float) -> float:
 func apply_taunt(duration: float, source_actor: PlayerActor = null) -> bool:
 	if not is_alive() or not is_finite(duration) or duration <= 0.0:
 		return false
-	var source := threat_id_for(source_actor if source_actor != null else player)
-	if source.is_empty(): return false
+	var actor := source_actor if source_actor != null else player
+	var source := threat_id_for(actor)
+	if source.is_empty() or not is_instance_valid(actor) or not actor.is_alive(): return false
+	# Existing taunt bypasses concealment, while the same geometry still vetoes
+	# solid occlusion. Refresh eligibility before the ledger chooses its target.
+	threat.eligibility(source, true, _threat_actor_visible(actor, true))
 	threat_taunt_sequence += 1
 	var applied := threat.observe("taunt_%d" % threat_taunt_sequence, &"taunt", source, 0.0, 1, duration)
 	if not applied["ok"]: return false
@@ -682,7 +686,16 @@ func threat_id_for(actor: Object) -> String:
 	return ""
 
 func observe_threat_damage(result: Dictionary) -> Dictionary:
-	var source := threat_id_for(instance_from_id(int(result.get("source_id", 0))))
+	# Damage may contain a stale/foreign numeric identity. Match registered live
+	# references without asking the engine to resolve an arbitrary instance slot.
+	var source := ""
+	var source_id := int(result.get("source_id", 0))
+	for id: String in threat_actors:
+		var actor: PlayerActor = threat_actors[id]
+		if is_instance_valid(actor) and actor.get_instance_id() == source_id:
+			source = id
+			threat.eligibility(id, actor.is_alive(), _threat_actor_visible(actor, threat.forced_id == id and threat.forced_remaining > 0.0))
+			break
 	if source.is_empty(): return {"ok": false, "error_code": &"invalid_participant"}
 	var sequence := int(result.get("application_sequence", 0))
 	if sequence <= 0: return {"ok": false, "error_code": &"invalid_payload"}
@@ -691,7 +704,7 @@ func observe_threat_damage(result: Dictionary) -> Dictionary:
 	if not is_alive() or engagement_mode == &"returning": threat.disengage()
 	elif observed["ok"] and float(result.get("actual_damage", 0.0)) > 0.0:
 		_select_threat_target()
-		if _uses_engagement() and _inside_leash() and engagement_mode == &"idle":
+		if not threat.current_id.is_empty() and is_instance_valid(player) and player.is_alive() and _uses_engagement() and _inside_leash() and engagement_mode == &"idle":
 			engagement_mode = &"engaged"
 			if world_motion != null: _world_last_seen = player.world_point()
 			else: _last_seen_position = player.global_position
@@ -703,19 +716,18 @@ func observe_threat_heal(source: String, amount: float, sequence: int, divisor: 
 	if observed["ok"]: _select_threat_target()
 	return observed
 
+func _threat_actor_visible(actor: PlayerActor, bypass_concealment: bool = false) -> bool:
+	if not is_instance_valid(actor) or not actor.is_alive(): return false
+	if world_motion != null:
+		return actor.world_motion != null and actor.world_motion.is_current_world() and actor.world_motion.geometry == world_motion.geometry and (bypass_concealment or actor.can_be_acquired_by_world(self)) and world_can_reach(actor, 1.0e20)
+	return (bypass_concealment or actor.can_be_acquired_by(global_position)) and navigation != null and navigation.is_segment_clear(global_position, actor.global_position, 0.0)
+
 func _advance_threat(delta: float) -> void:
 	threat.advance(delta)
 	for id: String in threat_actors.keys():
 		var actor: PlayerActor = threat_actors[id]
 		var alive := is_instance_valid(actor) and actor.is_alive()
-		var visible := false
-		if alive:
-			if world_motion != null:
-				visible = actor.world_motion != null and actor.world_motion.is_current_world() and actor.world_motion.geometry == world_motion.geometry and actor.can_be_acquired_by_world(self) and world_can_reach(actor, 1.0e20)
-			else: visible = actor.can_be_acquired_by(global_position) and navigation != null and navigation.is_segment_clear(global_position, actor.global_position, 0.0)
-		# Existing taunt bypasses stealth but never a solid floor/occlusion.
-		if alive and threat.forced_id == id and threat.forced_remaining > 0.0:
-			visible = world_can_reach(actor, 1.0e20) if world_motion != null else navigation != null and navigation.is_segment_clear(global_position, actor.global_position, 0.0)
+		var visible := _threat_actor_visible(actor, threat.forced_id == id and threat.forced_remaining > 0.0)
 		threat.eligibility(id, alive, visible)
 		if not is_instance_valid(actor): threat_actors.erase(id)
 	if not is_alive(): threat.disengage()

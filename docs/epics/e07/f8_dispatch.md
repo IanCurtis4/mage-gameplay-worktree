@@ -47,3 +47,12 @@ Reprodução no probe prepare, nível1 real: projétil mata entry_guard; captura
 no callback adiado retorna checkpoint_incomplete, enquanto a mesma captura no
 frame seguinte funciona (dev_03/dev_04). Não é PASS e não será mascarada com
 retry automático do probe. Correção e regressão permanecem neste chat por aval.
+
+## Transferência nominal autorizada23/10 — regressões de ameaça
+
+Usuário escolheu “Autorizar correção aqui com transferência nominal”. Sol/F8
+recebe `scripts/actors/enemy_actor.gd` para validar fonte viva/registrada sem
+resolver IDs inválidos e preservar provocar contra ocultação sem atravessar
+oclusão/leash. Falhas reais em e06_gameplay_ai_test: fonte morta engaja, provocar
+não adquire Caçadora oculta e ID12345 dispara erro de engine. Nenhuma expectativa
+será alterada. Regressão do próprio teste legado e F6 antes de concluir.

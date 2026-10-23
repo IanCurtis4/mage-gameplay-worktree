@@ -1,11 +1,12 @@
-param(
+﻿param(
  [ValidateSet('Prepare','Resume','Export','Smoke')][string]$Action,
  [string]$GodotPath = 'C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/review-engine/Godot.exe',
  [string]$OutputDirectory,
  [string]$Seed = '42',
  [switch]$Release,
  [switch]$Headless,
- [switch]$IncludePolicyJson
+ [switch]$IncludePolicyJson,
+ [switch]$Diagnostic
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
@@ -17,7 +18,7 @@ $probeOutput = [IO.Path]::GetFullPath($OutputDirectory)
 [void][IO.Directory]::CreateDirectory((Join-Path $probeOutput 'appdata'))
 [void][IO.Directory]::CreateDirectory((Join-Path $probeOutput 'localappdata'))
 $releaseRoot = Join-Path $evidenceRoot 'release'
-$releaseExe = Join-Path $releaseRoot 'RagRPG-E07.exe'
+$releaseExe = Join-Path $releaseRoot $(if ($Diagnostic) { 'RagRPG-E07-probe.exe' } else { 'RagRPG-E07.exe' })
 $engineArgs = [System.Collections.Generic.List[string]]::new()
 $label = ($Action.ToLowerInvariant() + $(if ($Release) { '_release' } else { '_source' }))
 $executable = if ($Release) { $releaseExe } else { $GodotPath }
@@ -26,14 +27,19 @@ if ($Action -eq 'Export') {
  $preset = [IO.File]::ReadAllText((Join-Path $projectRoot 'export_presets.cfg'))
  $template = 'C:/Users/João Pedro/AppData/Roaming/Godot/export_templates/4.7.2.stable/windows_release_x86_64.exe'
  if (-not (Test-Path -LiteralPath $template)) { throw 'Verified Windows release template missing.' }
+ $preset = $preset.Replace('exclude_filter=""', 'exclude_filter="addons/godot-git-plugin/*"')
  $preset = $preset.Replace('custom_template/release=""', ('custom_template/release="' + $template + '"'))
  if ($IncludePolicyJson) { $preset = $preset.Replace('include_filter=""', 'include_filter="data/expedition/policies/*.json,scripts/core/expedition/snapshot/runtime_manifest.json"') }
  [IO.File]::WriteAllText((Join-Path $fixtureRoot 'export_presets.cfg'), $preset)
+ $projectFile = Join-Path $fixtureRoot 'project.godot'
+ $projectBefore = [IO.File]::ReadAllText($projectFile)
+ if ($Diagnostic) { [IO.File]::WriteAllText($projectFile, $projectBefore.Replace('run/main_scene="res://scenes/character_menu.tscn"', 'run/main_scene="res://tools/e07_f8_candidate_probe.tscn"')) }
  @('--headless','--path',$fixtureRoot,'--export-release','Windows Desktop',$releaseExe) | ForEach-Object { $engineArgs.Add($_) }
 } else {
  if ($Headless) { $engineArgs.Add('--headless') }
  if (-not $Release) { $engineArgs.Add('--path'); $engineArgs.Add($fixtureRoot) }
- if ($Action -ne 'Smoke') { $engineArgs.Add('res://tools/e07_f8_candidate_probe.tscn') }
+ if ($Action -ne 'Smoke' -and -not $Release) { $engineArgs.Add('res://tools/e07_f8_candidate_probe.tscn') }
+ if ($Release -and $Action -ne 'Smoke' -and -not $Diagnostic) { throw 'Release probe requires the diagnostic main-scene export; official templates disable path overrides.' }
  if ($Action -eq 'Smoke') { $engineArgs.Add('--quit-after'); $engineArgs.Add('8') }
 }
 $engineArgs.Add('--log-file'); $engineArgs.Add((Join-Path $probeOutput ($label + '.engine.log')))
@@ -58,6 +64,7 @@ $timedOut = -not $process.WaitForExit(300000)
 if ($timedOut) { $process.Kill($true); $process.WaitForExit() }
 $text = $stdoutTask.GetAwaiter().GetResult() + $stderrTask.GetAwaiter().GetResult()
 $code = $process.ExitCode; $process.Dispose()
+if ($Action -eq 'Export') { [IO.File]::WriteAllText($projectFile, $projectBefore) }
 $logPath = Join-Path $probeOutput ($label + '.output.log')
 Set-Content -LiteralPath $logPath -Value $text -Encoding utf8
 $failed = $timedOut -or $code -ne 0 -or $text -match 'SCRIPT ERROR:|Parse Error:|ERROR:'
