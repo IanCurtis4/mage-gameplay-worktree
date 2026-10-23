@@ -67,3 +67,11 @@ regra de migração entre builds ou política de gameplay novo. Reprodução rel
 content_revision_unavailable no PNG original mage_weaponless.png; o PCK contém
 .ctex/.import. Script .gd.remap deve integrar a revisão exata do mesmo build.
 Testes fonte F3/F4/F5/F7, negativos de compatibilidade e release real são exigidos.
+
+## Refinamento da captura após regressão de lifecycle
+
+O teste existente F3 exige entrega no primeiro callback adiado quando o grafo
+já está estável. A espera passa a ocorrer exclusivamente para a falha transitória
+`checkpoint_incomplete: deferred deletion pending`, sob a barreira congelada.
+Retorno por sinal de uma única emissão, ligado à mesma barreira, evita coroutine
+em host liberado e ignora callback cancelado/substituído. Sem mudar expectativas.

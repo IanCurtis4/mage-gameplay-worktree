@@ -23,10 +23,20 @@ func _capture_memory_snapshot() -> void:
 	_memory_snapshot_barrier = SnapshotTickBarrier.new()
 	var result := _memory_snapshot_barrier.acquire(self)
 	if result["ok"]:
-		# The barrier freezes this tick before waiting. Deferred projectile/actor
-		# deletions must finish before traversing the graph; no gameplay advances.
-		await get_tree().process_frame
 		result = SnapshotRegistry.new().capture(self,_memory_snapshot_barrier)
+		if result.get("error_code") == &"checkpoint_incomplete" and result.get("detail") == "deferred deletion pending":
+			# Only a queued deletion needs another frame. The barrier already
+			# freezes gameplay; a bound signal disconnects if this host is freed.
+			get_tree().process_frame.connect(_capture_after_deletion.bind(_memory_snapshot_barrier),CONNECT_ONE_SHOT)
+			return
+	_finish_memory_snapshot(result)
+
+func _capture_after_deletion(barrier: SnapshotTickBarrier) -> void:
+	# A release/new request must never receive the previous request's callback.
+	if not _memory_snapshot_pending or not is_same(barrier,_memory_snapshot_barrier) or not is_inside_tree(): return
+	_finish_memory_snapshot(SnapshotRegistry.new().capture(self,barrier))
+
+func _finish_memory_snapshot(result: Dictionary) -> void:
 	if ui_root != null:
 		var recovery_ui := ui_root.get_node_or_null("ExpeditionStatus") as ExpeditionStatusPanel
 		if recovery_ui != null: recovery_ui.retain_recovery_input()
