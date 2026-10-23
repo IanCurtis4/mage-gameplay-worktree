@@ -18,6 +18,7 @@ function Add-GodotCheck([string[]]$EngineArguments) {
     $name = if ($scriptArgument -ge 0) {
         [IO.Path]::GetFileNameWithoutExtension($EngineArguments[$scriptArgument + 1])
     } elseif ($EngineArguments -contains '--recovery-mode') { 'e07_f1_native_import' } elseif ($EngineArguments -contains '--import') { 'editor_import' } else { 'smoke' }
+    if ($EngineArguments -contains 'res://tools/e07_f8_candidate_probe.tscn') { $name = if ($EngineArguments -contains '--f8-mode=resume') { 'e07_f8_candidate_resume' } else { 'e07_f8_candidate_prepare' } }
     $checkPlan.Add([pscustomobject]@{ index = $checkPlan.Count + 1; name = $name; arguments = $EngineArguments })
 }
 
@@ -404,6 +405,9 @@ Add-GodotCheck @('--headless', '--path', $fixtureF1Path, '--script', 'res://test
 Add-GodotCheck @('--headless', '--path', $fixtureF1Path, '--script', 'res://tests/e07_f1_composition_test.gd')
 Add-GodotCheck @('--headless', '--path', $fixtureF1Path, '--script', 'res://tests/e07_f1_pilot_scene_test.gd')
 Add-GodotCheck @('--headless', '--path', $fixtureF1Path, '--script', 'res://tests/e07_f1_presentation_test.gd')
+
+Add-GodotCheck @('--headless', '--path', $projectPath, 'res://tools/e07_f8_candidate_probe.tscn', '--', '--f8-mode=prepare')
+Add-GodotCheck @('--headless', '--path', $projectPath, 'res://tools/e07_f8_candidate_probe.tscn', '--', '--f8-mode=resume')
 
 if (-not $PSBoundParameters.ContainsKey('ToStep')) { $ToStep = $checkPlan.Count }
 if ($FromStep -gt $ToStep -or $ToStep -gt $checkPlan.Count) {

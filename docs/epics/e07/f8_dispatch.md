@@ -13,7 +13,7 @@ branch `codex/e07-f8`. Árvore inicial limpa; nenhuma mudança de base/rebase.
 D01–D07 aprovadas conforme e07_decisions.md e recibos dos produtores.
 
 F8 recebe exclusivamente, sequencialmente de F7, `tools/verify.ps1`.
-Novos arquivos exclusivos: `tools/e07_f8_candidate_probe.gd` e .uid,
+Novos arquivos exclusivos: `tools/e07_f8_candidate_probe.gd` e .uid, `tools/e07_f8_candidate_probe.tscn`,
 `tools/e07_f8_validation.ps1`, `docs/epics/e07/f8_dispatch.md`,
 `f8_checkpoint.md`, `f8_playtest.md`, `delivery/f8.md`.
 Coordenação deste pacote possui atualizações de estado em `docs/epics/e07.md`,
@@ -36,3 +36,14 @@ CLI de workflow e docs/WORKFLOW_TOOLING.md ausentes nesta base; diagnóstico por
 Git/contratos/runner existentes, sem instalar ou inventar CLI.
 Master/push e migração pessoal não autorizados. Após aprovação técnica, preparar
 playtest conforme WORKFLOW preservando alterações e save. Aceite de produto é humano.
+
+## Transferência nominal autorizada23/10 — correção de snapshot
+
+Usuário escolheu “Autorizar Sol a corrigir aqui, com transferência nominal e
+regressão”. F8/Sol recebe exclusivamente `scripts/main.gd` (e .uid somente se
+necessário) para drenar exclusões adiadas após congelar o tick, antes da captura.
+Nenhum campo persistente/API/política novo. Produtores encerraram a escrita.
+Reprodução no probe prepare, nível1 real: projétil mata entry_guard; captura
+no callback adiado retorna checkpoint_incomplete, enquanto a mesma captura no
+frame seguinte funciona (dev_03/dev_04). Não é PASS e não será mascarada com
+retry automático do probe. Correção e regressão permanecem neste chat por aval.

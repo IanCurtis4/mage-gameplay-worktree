@@ -22,7 +22,11 @@ func _capture_memory_snapshot() -> void:
 	get_tree().paused = true
 	_memory_snapshot_barrier = SnapshotTickBarrier.new()
 	var result := _memory_snapshot_barrier.acquire(self)
-	if result["ok"]: result = SnapshotRegistry.new().capture(self,_memory_snapshot_barrier)
+	if result["ok"]:
+		# The barrier freezes this tick before waiting. Deferred projectile/actor
+		# deletions must finish before traversing the graph; no gameplay advances.
+		await get_tree().process_frame
+		result = SnapshotRegistry.new().capture(self,_memory_snapshot_barrier)
 	if ui_root != null:
 		var recovery_ui := ui_root.get_node_or_null("ExpeditionStatus") as ExpeditionStatusPanel
 		if recovery_ui != null: recovery_ui.retain_recovery_input()
