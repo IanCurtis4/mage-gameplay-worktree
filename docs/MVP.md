@@ -7,7 +7,7 @@ altura, bens por personagem/schema8, migração com confirmação humana, expedi
 com suspensão/retomada e amostra ramificada de 4 estágios/5 slots. 87 IDs únicos PASS
 por impacto e Windows release nativo validado. Checkpoints síncronos custam 8–15s;
 sem certificação de fluidez/escala ou aceite de gameplay. [Roteiro](epics/e07/f8_playtest.md).
-Preparação de playtest autorizada; resultado efetivo no [checkpoint](epics/e07/f8_checkpoint.md).
+Aplicada em codex/playtest; importação/smoke e preservação no [checkpoint](epics/e07/f8_checkpoint.md).
 O inventário de 17/10 abaixo é histórico nas fronteiras substituídas. Migração
 pessoal, master/push e E08+ dependem de autorização própria.
 

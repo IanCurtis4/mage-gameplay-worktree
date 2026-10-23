@@ -23,3 +23,32 @@ locais, sem cópia de save; nenhum caminho se sobrepõe ao delta do candidato.
 Estado inicial habitual 9e457f222b0bc7dbbc67078ec7712eecee1bb353.
 CLI ausente; avanço/import/smoke e hashes efetivos serão registrados abaixo.
 Master/push, migração pessoal, E08+ e arquivamento não autorizados.
+
+## Aplicação no diretório habitual —23/10/2026
+
+**F0–F8 INTEGRADAS em codex/playtest; aceite humano pendente.** Fast-forward de
+9e457f222b0bc7dbbc67078ec7712eecee1bb353 para a aprovação técnica
+`12c606441ed309788d49e4a88ee5006869b733d4`, em
+`C:/Users/João Pedro/Documents/ChatGPT/RagRPG`. Commit subsequente só registra
+este resultado; fontes de runtime permanecem7775f44 e conteúdo aprovado12c6064.
+
+Importação normal com Godot4.7.2 e smoke headless no próprio diretório habitual
+PASS, sem markers de erro, usando APPDATA/LOCALAPPDATA isolados. Primeira tentativa
+com recovery-mode registrou erro de GitPlugin desabilitado pelo próprio modo;
+não é PASS. Segunda importação normal carregou o plugin local e passou sem alterar
+configuração versionada. Logs e resultado em playtest_checks_01.json/playtest_checks.json.
+Nenhuma expectativa ou fonte foi alterada para contornar a tentativa negativa.
+
+246 arquivos locais permanecem byte-idênticos; nenhum precisou de restauração.
+Dois saves pessoais preservados por hash, sem abrir/copiar/migrar/gravar seu conteúdo.
+Master permanece8df3a67a21f26ff69249eadfc29d3d78eee8842e; nenhum push.
+Git normalizou o diagnóstico de sidecars por final de linha, sem mudar seus bytes;
+o inventário por hash, e não a contagem de status, fundamenta a preservação.
+
+Build normal final e play_isolated.cmd também abriram em perfil descartável;
+o lançador criou somente test_profile/Godot/app_userdata/RagRPG sob sua pasta.
+O projeto habitual mantém os sidecars/export locais; a distribuição usa staging.
+F7 está integrada e tecnicamente arquivável, sem arquivamento automático. F8
+permanece aberta para feedback do candidato. Próximo passo: parar a partida antiga,
+aceitar reload no Godot e executar F5, ou usar a distribuição isolada com o roteiro.
+Edição final exclusivamente documental validou referências/diff; não repetiu a suíte.

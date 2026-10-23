@@ -16,8 +16,8 @@ Todos os despachos/decisões e recibos de F1–F6 estão presentes nesta composi
 | F4 | VALIDADA/INTEGRADA | [entrega](e07/delivery/f4.md) |
 | F5 | VALIDADA/INTEGRADA | [entrega](e07/delivery/f5.md) |
 | F6 | Incluída por aval, VALIDADA/INTEGRADA | [entrega](e07/delivery/f6.md) |
-| F7 | ENTREGUE/VALIDADA tecnicamente em23/10; integração pendente | [recibo](e07/delivery/f7.md) |
-| F8 | ENTREGUE/VALIDADA tecnicamente; aceite humano pendente | [checkpoint](e07/f8_checkpoint.md) |
+| F7 | VALIDADA/INTEGRADA no candidato F8; tecnicamente arquivável | [recibo](e07/delivery/f7.md) |
+| F8 | VALIDADA/INTEGRADA em codex/playtest; aceite humano pendente | [checkpoint](e07/f8_checkpoint.md) |
 
 Runner e três fontes de runtime tiveram transferências sequenciais nominais em
 [despacho F8](e07/f8_dispatch.md). D01–D07 preservadas. 85 testes selecionados +2 probes
