@@ -31,6 +31,19 @@ static func dry_run(source_text: String, catalog: ProfileCatalog = null, assignm
 	for key: Variant in assignments:
 		if not key is String or not assignments[key] is String or source.character_by_id(assignments[key]) == null: return BuildEffectCatalog.failure(&"invalid_destination")
 	var destinations := assignments.duplicate(true)
+	# Public, detached identity projection for the assistive UI. It is part of
+	# the confirmed plan digest; no writable legacy profile escapes the writer.
+	var characters: Array[Dictionary] = []
+	for character: CharacterState in source.characters:
+		characters.append({"character_id": character.character_id, "display_name": character.display_name})
+	var assets: Array[Dictionary] = []
+	for id: StringName in source.equipment_instance_ids():
+		assets.append({"instance_id": String(id), "kind": "equipment", "definition_id": String(source.equipment_instances[id].definition_id), "host_id": "", "metadata": source.equipment_instances[id].to_record()})
+	for id: StringName in source.card_inventory.describe()["owned"]:
+		var host_id := ""
+		for host: Variant in source.card_inventory.sockets():
+			if id in source.card_inventory.sockets()[host]: host_id = String(host)
+		assets.append({"instance_id": String(id), "kind": "card", "definition_id": String(source.card_inventory.definition_id(id)), "host_id": host_id, "metadata": {}})
 	var suggestions := {}
 	var references := {}
 	var all_ids: Array[String] = []
@@ -75,6 +88,8 @@ static func dry_run(source_text: String, catalog: ProfileCatalog = null, assignm
 	if decoded["historical_changes"]["converted"]: warnings.append("historical_conversion")
 	var preserved_fields: Array[String] = ["existing_asset_ids", "equipment_metadata", "card_sockets", "acquisition_counters", "acquisition_receipts", "existing_identity", "unknown_fields", "source_archive"]
 	var plan := {"warnings": warnings, "preserved_fields": preserved_fields, "historical_changes": decoded["historical_changes"].duplicate(true), "policy_revision": POLICY_REVISION, "source_digest": source_text.sha256_text(), "source_revision": source.revision, "profile_id": source.profile_id, "destinations": destinations, "suggestions": suggestions, "references": references, "removals": removals, "missing": missing, "gold_initial": 0}
+	plan["characters"] = characters
+	plan["assets"] = assets
 	return {"ok": true, "plan": plan, "plan_digest": digest(plan), "complete": missing.is_empty()}
 
 static func validate(plan: Dictionary, source_text: String, catalog: ProfileCatalog = null) -> Dictionary:

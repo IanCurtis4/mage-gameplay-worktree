@@ -1,0 +1,89 @@
+extends SceneTree
+const F = preload("res://tests/fixtures/e07/f2/fixture.gd")
+func _initialize() -> void: _run.call_deferred()
+func _run() -> void:
+	root.size = Vector2i(1280,720)
+	var f := F.make("f7_scene_flow")
+	var facade: ProfileFacade = f["facade"]
+	var menu := CharacterMenu.new()
+	menu.set_profile_facade(facade)
+	root.add_child(menu)
+	current_scene = menu
+	var panel := PhaseSelectionPanel.new()
+	menu.add_child(panel)
+	panel.configure(menu, f["a"])
+	panel.seed_input.text = "43" if "--seed-43" in OS.get_cmdline_user_args() else "42"
+	var chosen_seed := panel.seed_input.text
+	if "--capture-f7" in OS.get_cmdline_user_args():
+		await process_frame
+		await RenderingServer.frame_post_draw
+		var native_directory := "res://.godot/verification/e07_f7/native"
+		DirAccess.make_dir_recursive_absolute(native_directory)
+		assert(root.get_texture().get_image().save_png(native_directory.path_join("selection_%s.png" % chosen_seed)) == OK)
+	var entered: Dictionary = await panel.start()
+	assert(entered.get("ok", false), str(entered))
+	var host := entered["root"] as RunController
+	assert(current_scene == host and host.campaign_runtime != null)
+	assert(host.visible, "published world must remain visible after staging")
+	assert(host.route_camera.is_current(), "published world owns the active camera")
+	assert(host.get_children().all(func(child: Node) -> bool: return not child is ArenaObstacleView), "expedition startup carries no pilot decorations")
+	assert(host.run_state.pending_choices == 2 and host.enemies.size() == 2)
+	assert(host.ui_root.get_node_or_null("ExpeditionStatus") != null and host.expedition_view != null)
+	if "--capture-f7" in OS.get_cmdline_user_args():
+		paused = true
+		host._select_enemy(host.enemies[0])
+		(host.ui_root.get_node("ExpeditionStatus") as ExpeditionStatusPanel).refresh()
+		host.route_camera.position = Vector2(120,260)
+		host.route_camera.zoom = Vector2(0.65,0.65)
+		host.route_camera.reset_smoothing()
+		host.route_camera.force_update_scroll()
+		await process_frame
+		await RenderingServer.frame_post_draw
+		var directory := "res://.godot/verification/e07_f7/native"
+		DirAccess.make_dir_recursive_absolute(directory)
+		assert(root.get_texture().get_image().save_png(directory.path_join("campaign_%s.png" % chosen_seed)) == OK)
+	var manifest_hash: String = host.campaign_runtime.state.manifest_data["input_hash"]
+	var status := host.ui_root.get_node("ExpeditionStatus") as ExpeditionStatusPanel
+	var blocked: Dictionary = await status.run_action({"kind": "travel", "portal_id": "entry_to_left", "stage_id": "entry"})
+	assert(blocked.get("error_code") == &"portal_closed" and current_scene == host)
+	assert(host.run_state.pending_choices == 2 and not host._memory_snapshot_pending)
+	f["store"].lose_ack = true
+	f["store"].hide_after_ack = true
+	var closed: Dictionary = await status.run_action({"kind": "suspend"})
+	assert(not closed.get("ok", false) and closed.get("read_only", false))
+	assert(current_scene == host and paused and host._memory_snapshot_pending)
+	status.refresh()
+	assert(status.can_process() and status.actions.get_child(0).can_process() and not host.player.can_process(), "recovery UI remains usable while gameplay is frozen")
+	var retained_service := status.service
+	if "--capture-f7" in OS.get_cmdline_user_args():
+		await process_frame
+		await RenderingServer.frame_post_draw
+		assert(root.get_texture().get_image().save_png("res://.godot/verification/e07_f7/native/recovery.png") == OK)
+	f["store"].hide_reads = false
+	closed = status.retry()
+	assert(retained_service.facade == facade)
+	assert(closed.get("ok", false), str(closed))
+	var lobby := current_scene as CharacterMenu
+	assert(lobby != null and not paused)
+	var lock := facade.current_profile().expedition_for_character(f["a"])
+	assert(lock != null and lock.lifecycle == &"suspended")
+	assert(lobby.start_run_button.disabled and lobby.preset_selector.disabled, "suspended owner exposes the authoritative lobby lock")
+	lobby._select_roster_index(1)
+	assert(not lobby.start_run_button.disabled, "an unrelated alt remains free after suspension")
+	var resumed_panel := PhaseSelectionPanel.new()
+	lobby.add_child(resumed_panel)
+	resumed_panel.configure(lobby, f["a"])
+	var resumed := await resumed_panel.start()
+	assert(resumed.get("ok", false), str(resumed))
+	host = resumed["root"]
+	assert(host.run_state.pending_choices == 2 and host.campaign_runtime.state.manifest_data["input_hash"] == manifest_hash)
+	assert(host.ui_root.get_node_or_null("ExpeditionStatus") != null)
+	if "--capture-f7" in OS.get_cmdline_user_args():
+		paused = true
+		await process_frame
+		await RenderingServer.frame_post_draw
+		assert(root.get_texture().get_image().save_png("res://.godot/verification/e07_f7/native/resumed.png") == OK)
+	print("E07 F7 flow: PASS (21 assertions, visible/camera-owned enter/lobby locks/closed portal/usable uncertain recovery/resume/install/activate)")
+	host.queue_free()
+	await process_frame
+	quit(0)

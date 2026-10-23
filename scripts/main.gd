@@ -23,6 +23,9 @@ func _capture_memory_snapshot() -> void:
 	_memory_snapshot_barrier = SnapshotTickBarrier.new()
 	var result := _memory_snapshot_barrier.acquire(self)
 	if result["ok"]: result = SnapshotRegistry.new().capture(self,_memory_snapshot_barrier)
+	if ui_root != null:
+		var recovery_ui := ui_root.get_node_or_null("ExpeditionStatus") as ExpeditionStatusPanel
+		if recovery_ui != null: recovery_ui.retain_recovery_input()
 	# Stay frozen until the consumer accepts the cut or explicitly recovers.
 	# No lobby transition or durable-save claim belongs to this API.
 	memory_snapshot_ready.emit(result)
@@ -2552,6 +2555,10 @@ func _confirm_augment(augment_id: StringName) -> void:
 	augment_overlay.visible = false
 	get_tree().paused = false
 	augment_button.disabled = encounter_active or run_state.pending_choices <= 0
+	if campaign_runtime != null:
+		next_button.hide()
+		status_label.text = "Augment aplicado — continue explorando."
+		return
 	if encounter_active:
 		next_button.hide()
 		status_label.text = "Augment admin aplicado — combate retomado"
@@ -2564,6 +2571,7 @@ func _confirm_augment(augment_id: StringName) -> void:
 	status_label.text = "Recompensas disponíveis — prepare a build ou encerre a demonstração" if encounter_index >= _encounter_count() else "Augment aplicado — inicie o próximo encontro"
 
 func _start_next_encounter() -> void:
+	if campaign_runtime != null: return
 	if encounter_active or reward != null or run_state.pending_choices > 0 or run_state.has_open_offer() or inventory_frozen or run_finished or reward_service.has_uncollected():
 		return
 	if encounter_index >= _encounter_count():
@@ -2647,6 +2655,19 @@ func reconcile_expedition_transaction(request_id: String) -> Dictionary:
 	if result["ok"]: _install_expedition_result(result)
 	return result
 
+func retry_expedition_events() -> Dictionary:
+	if campaign_runtime == null or not _memory_snapshot_pending: return WorldSkillCast.failure(&"invalid_transaction")
+	var command := {"kind": "events", "events": campaign_runtime.pending_events.duplicate(true)}
+	var request := "events_" + ExpeditionCanonical.digest(command).substr(0, 56)
+	if _expedition_transaction_service != null:
+		var result := _expedition_transaction_service.reconcile(request)
+		if result["ok"]: return _install_expedition_result(result)
+		if result.get("read_only", false): return result
+	_expedition_flush_running = false
+	release_memory_snapshot()
+	_flush_expedition_events.call_deferred()
+	return {"ok": true, "queued": true}
+
 func _install_expedition_result(result: Dictionary) -> Dictionary:
 	if not result.has("root"): return result
 	var registry: SnapshotRegistry = result["registry"]
@@ -2656,6 +2677,10 @@ func _install_expedition_result(result: Dictionary) -> Dictionary:
 	if not installed["ok"]: return installed
 	var activated := registry.activate(result)
 	if not activated["ok"]: return activated
+	if copy.route_camera != null:
+		copy.route_camera.make_current()
+		copy.route_camera.reset_smoothing()
+		copy.route_camera.force_update_scroll()
 	var tree := get_tree()
 	if tree.current_scene == self: tree.current_scene = copy
 	parent.remove_child(self)
@@ -2750,6 +2775,12 @@ func _training_restart_state() -> RunState:
 	return RunState.from_build("", snapshot)
 
 func _return_to_character_menu() -> void:
+	if campaign_runtime != null:
+		if campaign_runtime.state.lifecycle == "completed": ExpeditionSceneFlow.lobby(self)
+		else:
+			var panel := ui_root.get_node_or_null("ExpeditionStatus") as ExpeditionStatusPanel
+			if panel != null: panel.run_action({"kind": "suspend"})
+		return
 	var closed := _close_persistent_run(_terminal_outcome)
 	if not closed["ok"]:
 		_report_run_close_failure(closed)
@@ -3564,6 +3595,10 @@ func _build_ui() -> void:
 	skill_open.focus_mode = Control.FOCUS_NONE
 	buttons.add_child(skill_open)
 	skill_open.pressed.connect(_open_skill_window)
+	if campaign_runtime != null:
+		var expedition_status := ExpeditionStatusPanel.new()
+		expedition_status.host = self
+		ui_root.add_child(expedition_status)
 
 
 func _battle_theme() -> Theme:
@@ -3647,6 +3682,7 @@ func _configure_world(stage: int) -> void:
 	if is_instance_valid(player) and player.world_motion != null: world_spawn_error = &"world_lifecycle_required"; return
 	active_bounds = PlaytestGameplay.BOUNDS if gameplay_extension else ARENA_BOUNDS
 	var obstacles: Array[Rect2] = PlaytestGameplay.obstacles(stage) if gameplay_extension else ARENA_OBSTACLES.duplicate()
+	if expedition_entry_mode: obstacles.clear()
 	navigation.configure(active_bounds, obstacles, 22.0)
 	arena_view.configure(active_bounds, obstacles)
 	for view: Node2D in _world_obstacle_views:
@@ -3986,6 +4022,7 @@ func attach_expedition_view(view: ExpeditionGeometryView, field_height: float) -
 		if not bound["ok"]: return bound
 	expedition_view = view; expedition_field_height = field_height; view.controller = self
 	view.observe(player)
+	view.present_campaign(self)
 	for actor: CombatActor in enemies:
 		if actor.world_motion != null and actor.world_motion.geometry == view.geometry: view.observe(actor)
 	return {"ok":true,"error_code":&""}

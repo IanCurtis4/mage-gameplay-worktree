@@ -77,6 +77,7 @@ var menu_panel: VBoxContainer
 var action_editor: ActionBarEditor
 var action_preferences := ControlPreferences.new()
 var automatic_passives_label: Label
+var profile_recovery_button: Button
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and action_editor != null and action_editor.handle_binding_event(event):
@@ -157,6 +158,21 @@ func _open_profile() -> void:
 			ProfileRewardResolverScript.pilot_progression()
 		)
 	_show_result(facade.open_profile(), "Perfil carregado.")
+	var migration: Dictionary = facade.preview_asset_migration()
+	if migration.get("ok", false):
+		var notice := Button.new()
+		notice.text = "Revisar distribuição dos bens legados"
+		menu_panel.add_child(notice)
+		notice.pressed.connect(func() -> void:
+			var panel := AssetMigrationPanel.new()
+			add_child(panel)
+			panel.configure(facade as ProfileFacade)
+			panel.completed.connect(func(result: Dictionary) -> void: notice.hide(); _show_result(result, "Bens distribuídos e perfil salvo."))
+		)
+
+func _recover_pending_profile() -> Dictionary:
+	var result: Dictionary = facade.recover_expedition_pending()
+	return _show_result(result, "Último checkpoint confirmado recuperado.")
 
 func _select_current_character() -> void:
 	select_character_at(_selected_index)
@@ -179,7 +195,11 @@ func _select_roster_index(index: int) -> void:
 		_refresh_progression_panel(profile.characters[index], profile)
 		_refresh_start_run_action(profile)
 	select_button.disabled = _read_only
-	_set_build_controls_disabled(_read_only or profile.reward_session != null)
+	var expedition_locked: bool = profile.expedition_for_character(_focused_character_id) != null
+	preset_selector.disabled = _read_only or expedition_locked
+	_set_build_controls_disabled(_read_only or profile.reward_session != null or expedition_locked)
+	_set_attribute_actions_disabled(_read_only or profile.reward_session != null or expedition_locked)
+	_set_skill_actions_disabled(_read_only or profile.reward_session != null or expedition_locked)
 
 func _choose_preset(preset_index: int) -> Dictionary:
 	var profile: Variant = facade.current_profile() if facade != null else null
@@ -319,6 +339,8 @@ func _show_result(result: Dictionary, success_text: String = "Perfil atualizado.
 	else:
 		status_label.text = _error_text(StringName(result.get("error_code", &"unknown")), result.get("read_only", false))
 	_refresh()
+	if profile_recovery_button != null:
+		profile_recovery_button.visible = not ok and result.get("error_code") == &"recovery_required"
 	return result
 
 func _refresh() -> void:
@@ -373,14 +395,15 @@ func _refresh() -> void:
 	empty_label.visible = roster_list.item_count == 0
 	empty_label.text = "Nenhum personagem criado. Crie seu primeiro alt para começar."
 	var locked := _read_only
+	var expedition_locked: bool = _selected_index >= 0 and profile.expedition_for_character(profile.characters[_selected_index].character_id) != null
 	for button: Button in create_buttons:
 		button.disabled = locked or profile.characters.size() >= MAX_CHARACTERS
 	select_button.disabled = locked or _selected_index < 0
-	preset_selector.disabled = locked or _selected_index < 0
-	_set_build_controls_disabled(locked or _selected_index < 0 or profile.reward_session != null)
+	preset_selector.disabled = locked or _selected_index < 0 or expedition_locked
+	_set_build_controls_disabled(locked or _selected_index < 0 or profile.reward_session != null or expedition_locked)
 	_refresh_start_run_action(profile)
-	_set_attribute_actions_disabled(locked or _selected_index < 0 or profile.reward_session != null)
-	_set_skill_actions_disabled(locked or _selected_index < 0 or profile.reward_session != null)
+	_set_attribute_actions_disabled(locked or _selected_index < 0 or profile.reward_session != null or expedition_locked)
+	_set_skill_actions_disabled(locked or _selected_index < 0 or profile.reward_session != null or expedition_locked)
 	_refresh_playtest_controls(profile)
 	if profile.characters.size() >= MAX_CHARACTERS:
 		status_label.text = "Limite de %d personagens atingido." % MAX_CHARACTERS
@@ -395,6 +418,11 @@ func _refresh_start_run_action(profile: ProfileState) -> void:
 		start_run_button.disabled = true
 		return
 	var focused: CharacterState = profile.characters[_selected_index]
+	if profile.expedition_for_character(focused.character_id) != null:
+		start_run_button.text = "Expedição pendente — abra Expedições"
+		start_run_button.tooltip_text = "Este personagem está reservado. Retome a montagem e a build preservadas pelo botão Expedições."
+		start_run_button.disabled = true
+		return
 	start_run_button.text = "Iniciar run com %s" % focused.display_name
 	start_run_button.tooltip_text = "Seleciona %s e inicia a arena com a build salva deste personagem." % focused.display_name
 	start_run_button.disabled = _read_only or profile.reward_session != null
@@ -403,6 +431,8 @@ func _error_text(error_code: StringName, read_only: bool) -> String:
 	if read_only:
 		return "Perfil em modo somente leitura. %s" % _error_text(error_code, false)
 	match error_code:
+		&"migration_required", &"locked_by_expedition", &"result_uncertain", &"content_revision_unavailable", &"checkpoint_version_unavailable":
+			return ExpeditionPresentation.error_text(error_code)
 		&"save_in_progress": return "O perfil ainda está sendo salvo. Tente novamente em instantes."
 		&"stale_revision": return "O perfil mudou; a lista foi atualizada. Escolha novamente."
 		&"character_limit": return "Você atingiu o limite de personagens."
@@ -1172,6 +1202,12 @@ func _build_ui() -> void:
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status_label.add_theme_color_override("font_color", Color("9ddbd3"))
 	menu_panel.add_child(status_label)
+	profile_recovery_button = Button.new()
+	profile_recovery_button.text = "Recuperar último checkpoint confirmado"
+	profile_recovery_button.tooltip_text = "Pede ao serviço a recuperação do primary confirmado; preserva a intenção pendente em arquivo."
+	profile_recovery_button.hide()
+	profile_recovery_button.pressed.connect(_recover_pending_profile)
+	menu_panel.add_child(profile_recovery_button)
 	var footer := HBoxContainer.new()
 	footer.add_theme_constant_override("separation", 12)
 	menu_panel.add_child(footer)
@@ -1189,6 +1225,17 @@ func _build_ui() -> void:
 	start_run_button.pressed.connect(_start_run)
 	footer.add_child(start_run_button)
 	start_run_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var phases := Button.new()
+	phases.text = "Expedições"
+	phases.custom_minimum_size = Vector2(150, 48)
+	footer.add_child(phases)
+	phases.pressed.connect(func() -> void:
+		var profile: ProfileState = facade.current_profile() if facade != null else null
+		if profile == null or _selected_index < 0 or _read_only: return
+		var panel := PhaseSelectionPanel.new()
+		add_child(panel)
+		panel.configure(self, profile.characters[_selected_index].character_id)
+	)
 	for selector: OptionButton in active_selectors + passive_selectors + [weapon_selector, armor_selector, accessory_selector]:
 		selector.item_selected.connect(func(_index: int) -> void: _save_build())
 

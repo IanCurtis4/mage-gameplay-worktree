@@ -53,6 +53,30 @@ func configure(world: WorldGeometry) -> Dictionary:
 	return result
 func current() -> bool:
 	return geometry != null and geometry.configuration_revision == _epoch
+
+func present_campaign(host: RunController) -> void:
+	if host.campaign_runtime == null or _effects == null: return
+	var state := host.campaign_runtime.state
+	for portal: Dictionary in state.manifest_data["portals"]:
+		if portal["from_stage"] != state.current_stage_id: continue
+		var marker_name := "Portal_" + String(portal["portal_id"])
+		var marker_node := _effects.get_node_or_null(marker_name) as ExpeditionPortal
+		if marker_node == null:
+			marker_node = ExpeditionPortal.new()
+			marker_node.name = marker_name
+			_effects.add_child(marker_node)
+		marker_node.configure(state.portal_view(portal["portal_id"]))
+	for objective: Dictionary in state.manifest_data["objectives"]:
+		if objective["stage_id"] != state.current_stage_id: continue
+		var marker_name := "Objective_" + String(objective["objective_id"])
+		var caption := _effects.get_node_or_null(marker_name) as Label
+		if caption == null:
+			caption = Label.new(); caption.name = marker_name
+			caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			caption.add_theme_color_override("font_color", Color("ffe49d"))
+			_effects.add_child(caption)
+		caption.text = "◆ SAÍDA FINAL" if objective["outcome"] == "phase_completion" else "◆ REFÚGIO — SUSPENDER"
+		caption.position = project(objective["point"]["position"]) + Vector2(-80,-36)
 func visible_surfaces() -> Array[String]:
 	var result: Array[String] = []
 	for cell: Dictionary in _surfaces:

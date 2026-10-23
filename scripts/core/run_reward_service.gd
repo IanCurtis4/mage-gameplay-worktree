@@ -139,6 +139,9 @@ func eligible_cards() -> Array[StringName]:
 func ticket(ticket_id: String) -> Dictionary:
 	return _tickets[ticket_id].duplicate(true) if _tickets.has(ticket_id) else BuildEffectCatalog.failure(&"invalid_reward")
 
+func next_pending_ticket() -> Dictionary:
+	return ticket(_queue[0]) if not _queue.is_empty() else {}
+
 func _durable_ticket(ticket_id: String) -> Dictionary:
 	return _tickets[ticket_id].duplicate(true) if _busy and _tickets.has(ticket_id) and not _queue.is_empty() and _queue[0] == ticket_id else {}
 

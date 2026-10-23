@@ -254,6 +254,13 @@ bloqueios de transação e as exceções de treino/admin contratadas.
 
 ## F7 — amostra de conteúdo e UI sobre APIs integradas
 
+Atualização22/10: **EM_EXECUÇÃO**, aval humano reiterado, base real
+`9e457f222b0bc7dbbc67078ec7712eecee1bb353`, codex/e07-f7 no checkout exclusivo
+do [despacho](e07/f7_dispatch.md). [Checkpoint](e07/f7_checkpoint.md) registra
+as duas extensões mínimas de consulta autorizadas nominalmente pelo usuário.
+As dependências/decisões do cabeçalho histórico abaixo foram satisfeitas pela
+integração F1–F6 e pelo despacho. Não representa entrega ou liberação de F8.
+
 **DECISÃO_PENDENTE D07 e demais regras consumidas; depende F5 e F6 somente
 se ameaça completa entrar no marco. Terra / Médio.**
 Resultado: seleção de fase/retomada, prévia de migração, estado de portais/ameaça
