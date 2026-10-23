@@ -193,14 +193,37 @@ func _source_revisions() -> Dictionary:
 	_collect_sources("res://scripts",paths)
 	paths.sort()
 	var result: Dictionary = {}
-	for path: String in paths: result[path] = FileAccess.get_sha256(path)
+	for path: String in paths: result[path] = _content_digest(path)
 	return result
+
+func _content_digest(logical_path: String) -> String:
+	# Editor files and exported resources have different physical storage.
+	# Hash the exact bytes actually loaded by this build; never omit a digest
+	# or accept a missing asset. Cross-build checkpoint migration stays unsupported.
+	if FileAccess.file_exists(logical_path): return FileAccess.get_sha256(logical_path)
+	for suffix: String in [".remap", ".import"]:
+		var sidecar := logical_path + suffix
+		if not FileAccess.file_exists(sidecar): continue
+		var config := ConfigFile.new()
+		if config.load(sidecar) != OK or not config.has_section("remap"): return ""
+		var target := ""
+		for key: String in config.get_section_keys("remap"):
+			if key == "path": target = str(config.get_value("remap", key)); break
+			if key.begins_with("path."):
+				var compatible := true
+				for feature: String in key.trim_prefix("path.").split("."):
+					if not OS.has_feature(feature): compatible = false; break
+				if compatible: target = str(config.get_value("remap", key))
+		if not target.begins_with("res://") or not FileAccess.file_exists(target): return ""
+		return FileAccess.get_sha256(target)
+	return ""
 
 func _collect_sources(directory: String, paths: Array[String]) -> void:
 	var source := DirAccess.open(directory)
 	if source == null: return
 	for file: String in source.get_files():
-		if file.ends_with(".gd") or file.ends_with(".gdshader"): paths.append(directory.path_join(file))
+		var logical := directory.path_join(file.trim_suffix(".remap"))
+		if (logical.ends_with(".gd") or logical.ends_with(".gdshader")) and logical not in paths: paths.append(logical)
 	for child: String in source.get_directories(): _collect_sources(directory.path_join(child),paths)
 
 func _scan_children(node: Node) -> void:
@@ -339,7 +362,7 @@ func _encode(value: Variant, field: String = "", role: String = "", depth: int =
 		if _presentation_target(value): return null
 		if _is_asset(value):
 			var path: String = value.resource_path
-			var digest := FileAccess.get_sha256(path.get_slice("::",0))
+			var digest := _content_digest(path.get_slice("::",0))
 			if digest.length() != 64: _fail(&"content_revision_unavailable",path); return null
 			_assets[path] = digest
 			return {"$":"asset","path":path}
@@ -478,7 +501,7 @@ func validate(snapshot: Dictionary) -> Dictionary:
 		var valid := _validate_value(descriptor["items"],objects,references,snapshot["assets"],0)
 		if not valid["ok"]: return valid
 	for path: Variant in snapshot["assets"]:
-		if not path is String or not path.begins_with("res://") or not snapshot["assets"][path] is String or snapshot["assets"][path].length() != 64 or FileAccess.get_sha256(path.get_slice("::",0)) != snapshot["assets"][path]: return StableEntityRegistry.failure(&"content_revision_unavailable")
+		if not path is String or not path.begins_with("res://") or not snapshot["assets"][path] is String or snapshot["assets"][path].length() != 64 or _content_digest(path.get_slice("::",0)) != snapshot["assets"][path]: return StableEntityRegistry.failure(&"content_revision_unavailable")
 	var coverage: Dictionary = {}
 	for record: Variant in objects.values():
 		if not record is Dictionary or not schemas.has(record.get("kind","")): return StableEntityRegistry.failure(&"unknown_runtime_kind")

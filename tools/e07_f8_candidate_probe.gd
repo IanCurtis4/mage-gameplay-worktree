@@ -53,6 +53,9 @@ func _run() -> void:
 	if DisplayServer.get_name() != "headless": DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	Engine.max_fps = 0
 	report = {"mode": mode, "seed": seed_text, "release": not OS.is_debug_build(), "engine": Engine.get_version_info(), "cpu": OS.get_processor_name(), "cpu_threads": OS.get_processor_count(), "renderer": RenderingServer.get_current_rendering_method(), "display": DisplayServer.get_name(), "gpu": RenderingServer.get_video_adapter_name(), "window": str(tree.root.size), "vsync": "disabled", "max_fps": 0}
+	var registry := SnapshotRegistry.new()
+	if not check(not registry.coverage_manifest().is_empty(), "snapshot adapter manifest is packaged"): stop(); return
+	if not check(registry._content_digest("res://assets/art/animations/mage_weaponless.png").length() == 64 and registry._content_digest("res://assets/art/animations/f8_missing_asset.png").is_empty(), "source or imported texture has a strict digest; missing content is rejected"): stop(); return
 	var loaded := BuildContentLoader.load_catalog(true)
 	if not check(loaded.get("ok", false), "production catalog available from source or PCK"): stop(); return
 	var catalog := ProfileCatalog.pilot()

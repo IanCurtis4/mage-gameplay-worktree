@@ -56,3 +56,14 @@ resolver IDs inválidos e preservar provocar contra ocultação sem atravessar
 oclusão/leash. Falhas reais em e06_gameplay_ai_test: fonte morta engaja, provocar
 não adquire Caçadora oculta e ID12345 dispara erro de engine. Nenhuma expectativa
 será alterada. Regressão do próprio teste legado e F6 antes de concluir.
+
+## Transferência nominal autorizada23/10 — hashes no Windows release
+
+Usuário escolheu “Autorizar correção aqui com transferência nominal”. Sol/F8
+recebe `scripts/core/expedition/snapshot/snapshot_registry.gd` para resolver
+armazenamento físico .remap/.import de recursos e scripts no pacote, conservando
+hash obrigatório e falha fechada para recurso ausente. Nenhum formato/schema,
+regra de migração entre builds ou política de gameplay novo. Reprodução release:
+content_revision_unavailable no PNG original mage_weaponless.png; o PCK contém
+.ctex/.import. Script .gd.remap deve integrar a revisão exata do mesmo build.
+Testes fonte F3/F4/F5/F7, negativos de compatibilidade e release real são exigidos.
