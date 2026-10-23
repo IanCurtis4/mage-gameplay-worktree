@@ -325,3 +325,11 @@ codex/e07-f6; [recibo e propriedade](e07/delivery/f6.md), [checkpoint](e07/f6_ch
 34 IDs/6780 checks,28 finais e6 reaproveitados por impacto; sem erros conhecidos
 nos checks contratados. Sem integração operacional/aceite humano, UI nova,
 multiplayer, push/master ou arquivamento. F7/F8 continuam sem liberação.
+
+## F8 — início autorizado23/10/2026
+
+Usuário: “F7 terminou, podemos começar F8.” [Despacho F8](e07/f8_dispatch.md)
+registra base5ee16ebdce1888c84f15b29f286e956db7b55d42, checkout/branch isolados,
+transferência exclusiva do runner, probe nominal e critérios. F7 entregue/validada;
+integração final/medição/release em execução. Estados antigos de espera acima
+são históricos. Sem aceite de produto, migração pessoal, master ou push.
