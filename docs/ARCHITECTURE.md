@@ -1,12 +1,14 @@
 # Arquitetura vigente — índice de autoridades e contratos
 
-## Atualização de fundações E07 —22/10/2026
+## Composição técnica E07 —23/10/2026
 
-A [integração F1–F6](epics/e07/f1_f6_integration.md) incorpora geometria com altura,
-posse individual/schema8, snapshot, writer durável, ciclo e ameaça. APIs concretas
-e deltas humanos estão nos recibos/despachos desse registro. A UI de migração,
-seleção/retomada e amostra final pertence a [F7](epics/e07/f7_dispatch.md). A leitura
-de runtime de17/10 abaixo permanece histórica onde descreve essas APIs como futuras.
+[F8](epics/e07/delivery/f8.md) consolida F0–F7 sobre runtime 7775f44: geometria com
+altura, posse por personagem/schema8, conservação/durabilidade, ciclo, ameaça e UI
+com amostra ramificada. Captura aguarda somente descarte pendente; elegibilidade
+valida fonte viva; digest resolve recursos remapeados no export. Format1, revisão
+estrita e limites de 4MiB preservados; sem migração de grafo entre builds prometida.
+APIs permanecem nos recibos dos produtores. Custos síncronos de 8–15s foram medidos;
+a leitura de 17/10 abaixo é histórica onde descreve essas fronteiras como futuras.
 
 Consolidado em 17/10/2026 sobre `5beea5cd0c70813fbb85207e18bd249dd89c8384`.
 É leitura do runtime e dos contratos existentes, sem nova implementação.

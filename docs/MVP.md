@@ -1,12 +1,15 @@
 # Produto vigente e limites da entrega
 
-## Candidato técnico E07 —22/10/2026
+## Candidato técnico E07 —23/10/2026
 
-[F1–F6 integradas](epics/e07/f1_f6_integration.md): fundações espaciais, bens por
-personagem/schema8, conservação durável, ciclo e ameaça. Interface de migração,
-seleção/retomada e amostra autorada ficam em [F7](epics/e07/f7_dispatch.md).
-Isso não concede aceite de gameplay E07 nem migração automática do save pessoal;
-o inventário do candidato de17/10 abaixo é histórico nessas fronteiras.
+[F8 validada tecnicamente](epics/e07/delivery/f8.md) compõe F0–F7: geometria com
+altura, bens por personagem/schema8, migração com confirmação humana, expedições
+com suspensão/retomada e amostra ramificada de 4 estágios/5 slots. 87 IDs únicos PASS
+por impacto e Windows release nativo validado. Checkpoints síncronos custam 8–15s;
+sem certificação de fluidez/escala ou aceite de gameplay. [Roteiro](epics/e07/f8_playtest.md).
+Preparação de playtest autorizada; resultado efetivo no [checkpoint](epics/e07/f8_checkpoint.md).
+O inventário de 17/10 abaixo é histórico nas fronteiras substituídas. Migração
+pessoal, master/push e E08+ dependem de autorização própria.
 
 Consolidado em 17/10/2026. Este documento substitui o antigo escopo do piloto
 como entrada de produto. Histórico: [versão anterior](MVP.history_2026_10_17.md).
