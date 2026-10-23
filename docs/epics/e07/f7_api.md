@@ -1,6 +1,7 @@
 # E07-F7 — APIs e apresentação
 
-23/10/2026. Implementação em validação. Base, propriedade e adendos humanos:
+23/10/2026. Implementação entregue/validada tecnicamente; integração pendente.
+Base, propriedade e adendos humanos:
 [checkpoint](f7_checkpoint.md), [despacho](f7_dispatch.md).
 
 ## Consumidores de UI
@@ -83,4 +84,4 @@ e actions (eventos de morte, tickets copiados, coleta, viagem/retorno e revive
 pelas intenções reais da UI, sem teleporte ou concessão alternativa).
 Capturas opcionais nativas em flow/migration com --capture-f7; --seed-43 escolhe
 segunda seed no fluxo. Saves ficam em .godot/verification, nunca user://.
-Regressões por impacto e evidência consolidada constarão do recibo final.
+Regressões por impacto, capturas, hashes e limites: [recibo final](delivery/f7.md).

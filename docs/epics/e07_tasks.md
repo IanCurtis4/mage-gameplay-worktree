@@ -16,7 +16,7 @@ Todos os despachos/decisões e recibos de F1–F6 estão presentes nesta composi
 | F4 | VALIDADA/INTEGRADA | [entrega](e07/delivery/f4.md) |
 | F5 | VALIDADA/INTEGRADA | [entrega](e07/delivery/f5.md) |
 | F6 | Incluída por aval, VALIDADA/INTEGRADA | [entrega](e07/delivery/f6.md) |
-| F7 | Autorizada pelo usuário; base/checkout/propriedade preparados | [despacho](e07/f7_dispatch.md) |
+| F7 | ENTREGUE/VALIDADA tecnicamente em23/10; integração pendente | [recibo](e07/delivery/f7.md) |
 | F8 | AGUARDANDO_AVAL_HUMANO; depende da entrega F7 | [fila](e07_launch_queue.md) |
 
 Runner e arquivos UI/controller nominalmente transferidos a F7 após encerrar a
@@ -254,12 +254,15 @@ bloqueios de transação e as exceções de treino/admin contratadas.
 
 ## F7 — amostra de conteúdo e UI sobre APIs integradas
 
-Atualização22/10: **EM_EXECUÇÃO**, aval humano reiterado, base real
+Atualização23/10: **ENTREGUE/VALIDADA tecnicamente**, runtime
+`6a7a31b1303eaa57e6868e4453fc682aee59cea7`;20 IDs/565 checks e inspeção nativa,
+[recibo e limites](e07/delivery/f7.md). Integração/aceite humano pendentes.
+Aval humano reiterado, base real
 `9e457f222b0bc7dbbc67078ec7712eecee1bb353`, codex/e07-f7 no checkout exclusivo
 do [despacho](e07/f7_dispatch.md). [Checkpoint](e07/f7_checkpoint.md) registra
 as duas extensões mínimas de consulta autorizadas nominalmente pelo usuário.
 As dependências/decisões do cabeçalho histórico abaixo foram satisfeitas pela
-integração F1–F6 e pelo despacho. Não representa entrega ou liberação de F8.
+integração F1–F6 e pelo despacho. Não representa integração nem liberação de F8.
 
 **DECISÃO_PENDENTE D07 e demais regras consumidas; depende F5 e F6 somente
 se ameaça completa entrar no marco. Terra / Médio.**
