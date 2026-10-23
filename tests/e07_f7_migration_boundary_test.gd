@@ -22,6 +22,7 @@ func _run() -> void:
 	var panel := AssetMigrationPanel.new()
 	root.add_child(panel)
 	panel.configure(facade)
+	assert((panel.get_theme_stylebox("panel") as StyleBoxFlat).bg_color.a == 1.0, "migration modal hides underlying preparation text")
 	assert(panel.confirm().get("error_code") == &"confirmation_required")
 	for asset: Dictionary in plan["assets"]:
 		if asset["host_id"].is_empty(): panel.choose(asset["instance_id"], plan["characters"][0]["character_id"])
@@ -46,5 +47,5 @@ func _run() -> void:
 	assert(FileAccess.get_file_as_string(directory.path_join("profile.ownership.%s.json" % source.sha256_text())) == source)
 	assert(ProfileFacade.new(ProfileStore.new(directory)).open_profile()["ok"])
 	panel.free()
-	print("E07 F7 migration: PASS (15 assertions; original missing-roster boundary resolved)")
+	print("E07 F7 migration: PASS (16 assertions; opaque modal/original missing-roster boundary resolved)")
 	quit(0)

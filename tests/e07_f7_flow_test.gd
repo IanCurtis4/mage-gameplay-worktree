@@ -12,6 +12,7 @@ func _run() -> void:
 	var panel := PhaseSelectionPanel.new()
 	menu.add_child(panel)
 	panel.configure(menu, f["a"])
+	assert((panel.get_theme_stylebox("panel") as StyleBoxFlat).bg_color.a == 1.0, "phase selection hides the lobby text beneath it")
 	panel.seed_input.text = "43" if "--seed-43" in OS.get_cmdline_user_args() else "42"
 	var chosen_seed := panel.seed_input.text
 	if "--capture-f7" in OS.get_cmdline_user_args():
@@ -26,6 +27,7 @@ func _run() -> void:
 	assert(current_scene == host and host.campaign_runtime != null)
 	assert(host.visible, "published world must remain visible after staging")
 	assert(host.route_camera.is_current(), "published world owns the active camera")
+	assert(host.route_camera.limit_left < -10000 and host.route_camera.limit_top < -10000, "pilot flat bounds must not push the isometric player off-screen")
 	assert(host.get_children().all(func(child: Node) -> bool: return not child is ArenaObstacleView), "expedition startup carries no pilot decorations")
 	assert(host.run_state.pending_choices == 2 and host.enemies.size() == 2)
 	assert(host.ui_root.get_node_or_null("ExpeditionStatus") != null and host.expedition_view != null)
@@ -83,7 +85,7 @@ func _run() -> void:
 		await process_frame
 		await RenderingServer.frame_post_draw
 		assert(root.get_texture().get_image().save_png("res://.godot/verification/e07_f7/native/resumed.png") == OK)
-	print("E07 F7 flow: PASS (21 assertions, visible/camera-owned enter/lobby locks/closed portal/usable uncertain recovery/resume/install/activate)")
+	print("E07 F7 flow: PASS (23 assertions, opaque selection/visible/isometric camera/enter/lobby locks/closed portal/usable uncertain recovery/resume/install/activate)")
 	host.queue_free()
 	await process_frame
 	quit(0)

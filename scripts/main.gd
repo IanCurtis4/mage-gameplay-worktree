@@ -328,6 +328,11 @@ func _create_runtime_camera() -> void:
 	camera.limit_top = int(active_bounds.position.y - 40.0)
 	camera.limit_right = int(active_bounds.end.x + 40.0)
 	camera.limit_bottom = int(active_bounds.end.y + 40.0)
+	if campaign_runtime != null:
+		# The pilot's positive flat bounds are not projected expedition bounds.
+		# Keep following the player; WorldGeometry still constrains movement.
+		camera.limit_left = -1000000; camera.limit_top = -1000000
+		camera.limit_right = 1000000; camera.limit_bottom = 1000000
 	player.add_child(camera)
 
 func _advance_runtime(_delta: float) -> void:

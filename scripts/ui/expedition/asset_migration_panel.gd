@@ -20,6 +20,10 @@ func configure(value: ProfileFacade) -> void:
 func _build() -> void:
 	name = "AssetMigration"
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var background := StyleBoxFlat.new()
+	background.bg_color = Color("101821")
+	background.set_content_margin_all(20.0)
+	add_theme_stylebox_override("panel", background)
 	var column := VBoxContainer.new()
 	add_child(column)
 	var title := Label.new()

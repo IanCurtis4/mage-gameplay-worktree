@@ -21,6 +21,10 @@ func configure(owner_menu: CharacterMenu, id: String) -> void:
 	menu = owner_menu; facade = menu.facade as ProfileFacade; character_id = id
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var background := StyleBoxFlat.new()
+	background.bg_color = Color("101821")
+	background.set_content_margin_all(20.0)
+	add_theme_stylebox_override("panel", background)
 	var column := VBoxContainer.new()
 	add_child(column)
 	var title := Label.new()
