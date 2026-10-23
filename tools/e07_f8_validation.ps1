@@ -2,6 +2,7 @@
  [ValidateSet('Prepare','Resume','Export','Smoke')][string]$Action,
  [string]$GodotPath = 'C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/review-engine/Godot.exe',
  [string]$OutputDirectory,
+ [string]$FixtureDirectory,
  [string]$Seed = '42',
  [switch]$Release,
  [switch]$Headless,
@@ -10,7 +11,7 @@
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
-$fixtureRoot = Join-Path $projectRoot '.godot/verification/e07_f1/fixture_project'
+$fixtureRoot = if ($FixtureDirectory) { [IO.Path]::GetFullPath($FixtureDirectory) } else { Join-Path $projectRoot '.godot/verification/e07_f1/fixture_project' }
 $evidenceRoot = Join-Path $projectRoot '.godot/verification/e07_f8'
 if (-not $OutputDirectory) { throw 'Explicit isolated OutputDirectory is required.' }
 $probeOutput = [IO.Path]::GetFullPath($OutputDirectory)
