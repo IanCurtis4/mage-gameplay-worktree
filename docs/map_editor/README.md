@@ -9,8 +9,9 @@ seus bugs corrigidos; as autoridades reaproveitadas serão verificadas por impac
 com fixtures do editor. Não abre F1/M1 automaticamente.
 
 D1 aprovada: **dentro do Godot, em tela própria amigável**. D3 aprovada:
-**grade por camada + pontes/rampas especiais**. D2 continua pendente antes do
-bake visual M2; D4 antes do aceite M2. O status desta rodada está no
+**grade por camada + pontes/rampas especiais**. D2 aprovada no F2: manter a
+apresentação isométrica atual com dois materiais simples. D4 segue pendente
+antes do aceite M2. O status da fundação está no
 [recibo M0](delivery/m0.md) e no [contrato candidato](contracts/m0_preparation.md).
 Os parágrafos datados de23/10 abaixo registram a proposta original; a dependência
 de F8 integrada fica substituída por esta decisão.
@@ -83,13 +84,13 @@ consumidor próprio. Uma ferramenta não torna uma mecânica existente por exibi
 ## Decisões antes dos consumidores
 
 As recomendações abaixo registram a proposta original. D1/D3 foram aprovadas
-em24/10 conforme o registro acima; D2/D4 seguem seus prazos por consumidor,
+em24/10 conforme o registro acima; D2 foi aprovada no F2 e D4 segue seu prazo,
 assim como D5/D6. Alterações técnicas dentro da escolha aprovada ficam com Sol.
 
 | ID | Recomendação | Alternativa / consequência | Momento |
 |---|---|---|---|
 | D1 — hospedagem | Plugin interno Godot com tela própria amigável, sem dependências externas | Aplicativo dedicado dispensa Godot na autoria, mas exige empacotamento e infraestrutura adicionais | Antes de M1 |
-| D2 — apresentação | Prova comparativa pequena do renderer corrigido F8 e de cenário híbrido, se autorizado; decidir pela legibilidade/custo | Manter 2D pode limitar materiais/oclusão; híbrido amplia fronteira e exige aceite visual | Antes do bake visual M2 |
+| D2 — apresentação | Aprovada no F2: projeção isométrica atual, Grama/Terra simples | Comparação híbrida/3D continua fora do escopo | Resolvida em24/10 |
 | D3 — terreno | Grade de alturas editável por camada + superfícies especiais para pontes/rampas; compilação para células válidas | Malha livre oferece liberdade, mas aumenta custo de edição/validação | Antes de M1/M2 |
 | D4 — primeiras metas | Área pequena representativa: clareira, platô, passagem sob ponte, duas peças e um encontro | Fixar dimensões, resolução, hardware e budgets após medição M0, sem herdar quota F7 | Antes de aceitar M2 |
 | D5 — patrulhas | Loop/ida e volta, espera, aggro interrompe, retorno a waypoint validado; home de leash fixo | Home móvel altera comportamento de combate e precisa de decisão distinta | Antes de M5 |
@@ -105,4 +106,6 @@ antecipada de todos os chats.
 Autorização humana: F1 terminou, pode começar F2. Base M1 integrada por
 ancestralidade em codex/map-editor-m2; [dispatch e propriedade](contracts/m2_dispatch.md).
 D2 aprovada neste chat: manter a apresentação isométrica atual no F2, com dois
-materiais simples. D4 apresentada com medições antes do fechamento. Não abre F3.
+materiais simples. D4 apresentada com medições; resposta pendente. F2 validado tecnicamente no
+candidato69837145b7857bb630bcfecef0747bf525deeec8; [recibo](delivery/m2.md).
+Sem atualização de playtest/master; não abre F3.

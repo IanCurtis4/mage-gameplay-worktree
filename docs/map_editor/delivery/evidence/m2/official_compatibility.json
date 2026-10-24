@@ -1,0 +1,33 @@
+{
+  "current_candidate": "69837145b7857bb630bcfecef0747bf525deeec8",
+  "total_official_inputs": 1726,
+  "runtime_geometry_actors_fixtures_unchanged": true,
+  "divergent_inputs": [
+    {
+      "official_sha256": "ed2bc50688c7f96dfb3097240429d4f04360ab4f85f7e61c99ad4971087b548d",
+      "path": "scripts/map_authoring/terrain/brush.gd",
+      "current_sha256": "52db60a553155d1cfa9cc98f4c78c7ee943fec826da79221b93bfc7e6de1f4ac"
+    },
+    {
+      "official_sha256": "9d6b86f764630c3c6b61c8a2d167ffbbb991088bd13a35586b1b4e2675e117eb",
+      "path": "scripts/map_authoring/terrain/terrain_canvas.gd",
+      "current_sha256": "88fdbe82dc2940eb3829abbbea76229b34f80939b1231b4c3d4bd754b6fff914"
+    },
+    {
+      "official_sha256": "125bcaea09dbe6868b8c3c1d9282e87b77df94b819252ac03a9a76cae6173248",
+      "path": "tests/map_editor_terrain_test.gd",
+      "current_sha256": "23ebdc7db627b7c04d737c108baf544420d1827d3a5019ffccfa445f0fa3f0e7"
+    },
+    {
+      "official_sha256": "c754581636010e87b9a76624fe5df2be7fd52e47127b48bc54d62b6c441ddbda",
+      "path": "tests/map_editor_terrain_ui_test.gd",
+      "current_sha256": "975e4c9aab1b2472aabf1cc5924d61a361aed66d1d093ef4a116b0dce4b8de3d"
+    },
+    {
+      "official_sha256": "d614cc2a7eff3c812bf5bc2d7d91f34f03b9cb75ac0392a27bc5f79f7ec26560",
+      "path": "tools/map_editor_terrain/run.ps1",
+      "current_sha256": "51e2c77fef03bd7401b792d8010c6d601ebc88974565a49dd87ff8a64d2aebef"
+    }
+  ],
+  "official_candidate": "9d39144ffbc1cf180f7b64c69b0aa0388461ab05"
+}

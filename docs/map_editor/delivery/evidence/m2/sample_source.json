@@ -1,0 +1,125 @@
+{
+	"composition": null,
+	"connectors": [],
+	"dependencies": [],
+	"document_id": "terrain_fixture",
+	"layers": [
+		{
+			"columns": 2,
+			"heights": [
+				0,
+				0,
+				0,
+				0,
+				0,
+				0
+			],
+			"layer_id": "lower",
+			"locked": false,
+			"material_masks": {
+				"earth": [
+					0,
+					0,
+					0.7,
+					0.7,
+					0,
+					0
+				],
+				"grass": [
+					1,
+					1,
+					0.3,
+					0.3,
+					1,
+					1
+				]
+			},
+			"name": "Clareira / passagem inferior",
+			"origin_xz": [
+				0.0,
+				0.0
+			],
+			"protected_regions": [],
+			"rows": 3,
+			"sample_spacing": 100.0
+		},
+		{
+			"columns": 2,
+			"heights": [
+				0,
+				40,
+				0,
+				40
+			],
+			"layer_id": "ramp",
+			"locked": false,
+			"material_masks": {},
+			"name": "Rampa",
+			"origin_xz": [
+				100.0,
+				0.0
+			],
+			"protected_regions": [],
+			"rows": 2,
+			"sample_spacing": 100.0
+		},
+		{
+			"columns": 2,
+			"heights": [
+				40,
+				40,
+				40,
+				40,
+				40,
+				40
+			],
+			"layer_id": "plateau",
+			"locked": false,
+			"material_masks": {},
+			"name": "Platô",
+			"origin_xz": [
+				200.0,
+				0.0
+			],
+			"protected_regions": [],
+			"rows": 3,
+			"sample_spacing": 100.0
+		}
+	],
+	"name": "Clareira, rampa e ponte",
+	"placements": [],
+	"regions": [],
+	"revision": 1,
+	"schema_version": 1,
+	"sockets": [],
+	"special_surfaces": [
+		{
+			"headroom": 100,
+			"layer_id": "plateau",
+			"surface_id": "bridge",
+			"vertices_xyz": [
+				[
+					0,
+					40,
+					100
+				],
+				[
+					200,
+					40,
+					100
+				],
+				[
+					200,
+					40,
+					200
+				],
+				[
+					0,
+					40,
+					200
+				]
+			]
+		}
+	],
+	"units": "e07_world"
+}

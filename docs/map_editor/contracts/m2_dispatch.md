@@ -79,3 +79,7 @@ separada. Bake completo em worker cancelável, sem cache nem bake incremental ne
 entrega; não afirmar estes últimos. Cores simples interpoladas nos vértices;
 sem texturas/UV/blend de bioma. Máscaras são normalizadas para apresentação.
 
+Proteção adicional: prévia recusa fontes com mais de256 quadrados/superfícies
+antes da triangulação; brush em grade acima desse teto falha sem mutação. Traço
+com mais de4096 pontos é recusado inteiro; a UI cancela ao atingir o teto.
+Contraprovas próprias executadas no candidato corrigido, sem mudar o leitor M1.
