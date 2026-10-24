@@ -6,7 +6,10 @@ ancestralidade `c6484ffebebaef588410e8002babc2eaf48e30e8` (M0 fdceea0).
 Branch `codex/map-editor-m2`; checkout
 `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m2`.
 D1/D3 aprovadas. D2 aprovada neste chat: “Manter apresentação isométrica atual
-no F2”. D4 fica pendente de medição/aceite; não inventar tamanho final ou FPS.
+no F2”. D4 aprovada em24/10 após medição: “Adotar esses limites para o F2”.
+Limite inicial de256 células por peça; uma peça com clareira, rampa, platô e ponte
+neste pacote, duas peças em F3 e encontro em F4. Aceite visual/de uso separado;
+não fixa escala final do produto nem promessa de FPS.
 
 ## Propriedade exclusiva e fronteira
 
@@ -51,7 +54,8 @@ convexos planares são suportes especiais, sem inferir sólido de rampa. Headroo
 padrão100, perfil técnico radius2/height12, valores em unidades E07, não escala
 final de produto. Rejeitar sobreposição, suporte inválido, conector inválido,
 folga insuficiente, capacidade não implementada e limite de células. Limites
-medidos são defensivos, não metas D4. Sem quantização oculta de controles.
+medidos delimitam o escopo inicial aprovado em D4, sem promessa de escala final.
+Sem quantização oculta de controles.
 
 Pacote versionado contém parte canônica, adjacências internas, fronteiras
 estáveis por aresta/célula, materiais visuais nos mesmos vértices, source_hash,
@@ -69,7 +73,7 @@ platô/rampa, passagem inferior e slab bloqueando ataque/raio, geometria e visua
 no mesmo vértice, conectores/folga/NaN/concavidade, cancelamento/retorno obsoleto,
 UI nativa e medições com contagens. Listar runner oficial e selecionar import e
 geometria por impacto; runner próprio exercita fonte real em fixture isolada.
-Nenhum teste lê save pessoal. D4 é apresentada com evidências antes do aceite.
+Nenhum teste lê save pessoal. D4 foi aprovada após apresentação das evidências.
 
 A peça deve formar componente conectado para o perfil técnico, com inclinação
 máxima45°, coordenadas até8192 e erro fonte→Vector3 limitado a0,001 unidade
