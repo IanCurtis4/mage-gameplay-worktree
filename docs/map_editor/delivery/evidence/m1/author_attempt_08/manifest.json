@@ -1,0 +1,758 @@
+{
+  "engine": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+  "sources": [
+    {
+      "path": "scripts/map_authoring/document/document_session.gd",
+      "sha256": "AA6A62A5F35EBFFEA9500344E82C5F8B57BA24DE95732A0356A3D231E4D04600"
+    },
+    {
+      "path": "scripts/map_authoring/document/document_session.gd.uid",
+      "sha256": "ED4FEC98EF5FB173D07FF62A099E56B392821ED4391EB7DFB613DA52D15BDF37"
+    },
+    {
+      "path": "scripts/map_authoring/document/source_document.gd",
+      "sha256": "D0BFB7CC74E9AEF802FC447871F10588D1ECB9872068EA9B3685378F4FA49A83"
+    },
+    {
+      "path": "scripts/map_authoring/document/source_document.gd.uid",
+      "sha256": "ED4F21F5A381827675017164E1F6511D5BB8BD366AF17B0569393C3FAB3A9AFC"
+    },
+    {
+      "path": "scripts/map_authoring/document/source_schema.gd",
+      "sha256": "6F60F0C9FA56F7B96628A37AAC5F6B910FD3EAA8EDDAE154ADAA8DEFEAD89DDB"
+    },
+    {
+      "path": "scripts/map_authoring/document/source_schema.gd.uid",
+      "sha256": "FE4D994D0784FD62AB1B423E781971F8938669012AABCBE08D50FC12F9DF70AE"
+    },
+    {
+      "path": "scripts/map_authoring/io/headless.gd",
+      "sha256": "8C203031B8AF8E0E92521751BD2B314E613DE3ADD8169FE9963B10317AAEC1CB"
+    },
+    {
+      "path": "scripts/map_authoring/io/headless.gd.uid",
+      "sha256": "4706E6768F0063B482E481C75A20D52AA48C50188CE53E5A3D2B457D558421E1"
+    },
+    {
+      "path": "scripts/map_authoring/io/source_store.gd",
+      "sha256": "4E57A422B41DBDDEEEE56980BE59F8AD8BC0D63E4B5293A321920412CB5088ED"
+    },
+    {
+      "path": "scripts/map_authoring/io/source_store.gd.uid",
+      "sha256": "2371590565954B44D9EB0C8B9064D3E0A46C25036428FB120D65A9A2E7BC2DF2"
+    },
+    {
+      "path": "scripts/map_authoring/io/strict_json.gd",
+      "sha256": "E85A03B7E1393ED984EEDF7F9578D91895609E9727EBA564CB2D73FE34B8D064"
+    },
+    {
+      "path": "scripts/map_authoring/io/strict_json.gd.uid",
+      "sha256": "AB07E957B51F1B86CEDDA0009F657493B291944E20C9F6BC4B91F962EC591E5A"
+    },
+    {
+      "path": "addons/ragrpg_map_editor/plugin.cfg",
+      "sha256": "AEF59A3435523334C69C03F61E3EDB7D57C0EEC2888750EE7C745A5F329294C1"
+    },
+    {
+      "path": "addons/ragrpg_map_editor/plugin.gd",
+      "sha256": "9935EF344FFC9CA5F3B08B0A4C36CF2EA4CFE9CBA9F28DE22012208CB099BD36"
+    },
+    {
+      "path": "addons/ragrpg_map_editor/plugin.gd.uid",
+      "sha256": "46C046F95E3D1105271EE58BEC14FEA558A8E92AF2A4D41DF21C8802FB97E951"
+    },
+    {
+      "path": "addons/ragrpg_map_editor/shell.gd",
+      "sha256": "08FDE000BC98C721CA238CFBB68124B7BDF00850F60E1C8105C989F076CC22AF"
+    },
+    {
+      "path": "addons/ragrpg_map_editor/shell.gd.uid",
+      "sha256": "F95E0C69B7BAFCEC22A57DEC17EAC11C010F3B3AD8C4AE3D5C9797C6C7598B8A"
+    },
+    {
+      "path": "tests/map_editor_document_test.gd",
+      "sha256": "B32E81F2906B97B320456EBF536075D6371E6724E797E5079A5D616FC1A65C00"
+    },
+    {
+      "path": "tests/map_editor_document_ui_test.gd",
+      "sha256": "7BCACFF56C5F5EE96D20DD178DE11D74B1586C2F4C2C6902692EAAC559455CB2"
+    },
+    {
+      "path": "tools/map_editor_document/run.ps1",
+      "sha256": "2D44ECFD2B3163B0C00AA1F26BD6B201C3DE037D4C7DC57522F519036097BF07"
+    }
+  ],
+  "runs": [
+    {
+      "ok": true,
+      "timed_out": false,
+      "name": "import",
+      "arguments": [
+        "--headless",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "started_utc": "2026-10-24T19:42:01.0387724Z",
+      "output_sha256": "20376801EC99137F389AC910C43CA81D3599375AD2D275148C90FE29FEE9E9F1",
+      "exit_code": 0,
+      "finished_utc": "2026-10-24T19:42:04.9142636Z",
+      "result": null,
+      "deliberately_terminated": false
+    },
+    {
+      "ok": true,
+      "timed_out": false,
+      "name": "document",
+      "arguments": [
+        "--headless",
+        "--script",
+        "res://tests/map_editor_document_test.gd"
+      ],
+      "started_utc": "2026-10-24T19:42:04.9527166Z",
+      "output_sha256": "402CD147007F4BEF2F5D0790759E97B77338FAB72E8AB83081DF82D569632AD9",
+      "exit_code": 0,
+      "finished_utc": "2026-10-24T19:42:06.3786047Z",
+      "result": {
+        "checks": [
+          {
+            "id": "full_source_roundtrip",
+            "ok": true
+          },
+          {
+            "id": "copy_boundary",
+            "ok": true
+          },
+          {
+            "id": "set_order_hash",
+            "ok": true
+          },
+          {
+            "id": "sequence_order_hash",
+            "ok": true
+          },
+          {
+            "id": "canonical_numeric_oracle",
+            "ok": true
+          },
+          {
+            "id": "canonical_unicode_oracle",
+            "ok": true
+          },
+          {
+            "id": "sha256_oracle",
+            "ok": true
+          },
+          {
+            "id": "duplicate_key_7",
+            "ok": true
+          },
+          {
+            "id": "duplicate_key_8",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_9",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_10",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_11",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_12",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_13",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_14",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_15",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_16",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_17",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_18",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_19",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_20",
+            "ok": true
+          },
+          {
+            "id": "non_finite",
+            "ok": true
+          },
+          {
+            "id": "bounded_depth",
+            "ok": true
+          },
+          {
+            "id": "bounded_string",
+            "ok": true
+          },
+          {
+            "id": "bounded_bytes",
+            "ok": true
+          },
+          {
+            "id": "utf8_strict_25",
+            "ok": true
+          },
+          {
+            "id": "utf8_strict_26",
+            "ok": true
+          },
+          {
+            "id": "utf8_strict_27",
+            "ok": true
+          },
+          {
+            "id": "utf8_strict_28",
+            "ok": true
+          },
+          {
+            "id": "surrogate_strict_29",
+            "ok": true
+          },
+          {
+            "id": "surrogate_strict_30",
+            "ok": true
+          },
+          {
+            "id": "surrogate_strict_31",
+            "ok": true
+          },
+          {
+            "id": "surrogate_pair",
+            "ok": true
+          },
+          {
+            "id": "token_budget",
+            "ok": true
+          },
+          {
+            "id": "unknown_version",
+            "ok": true
+          },
+          {
+            "id": "unknown_field",
+            "ok": true
+          },
+          {
+            "id": "typed_bool",
+            "ok": true
+          },
+          {
+            "id": "typed_integer",
+            "ok": true
+          },
+          {
+            "id": "invalid_draft_readable",
+            "ok": true
+          },
+          {
+            "id": "duplicate_ids",
+            "ok": true
+          },
+          {
+            "id": "broken_reference",
+            "ok": true
+          },
+          {
+            "id": "dependency_reference",
+            "ok": true
+          },
+          {
+            "id": "entity_limit",
+            "ok": true
+          },
+          {
+            "id": "clean_baseline",
+            "ok": true
+          },
+          {
+            "id": "edit_atomic",
+            "ok": true
+          },
+          {
+            "id": "undo",
+            "ok": true
+          },
+          {
+            "id": "redo",
+            "ok": true
+          },
+          {
+            "id": "reject_without_mutation",
+            "ok": true
+          },
+          {
+            "id": "redo_branch_cleared",
+            "ok": true
+          },
+          {
+            "id": "replace_rejection",
+            "ok": true
+          },
+          {
+            "id": "identity_stable",
+            "ok": true
+          },
+          {
+            "id": "duplicate_layer_graph",
+            "ok": true
+          },
+          {
+            "id": "duplicate_internal_references",
+            "ok": true
+          },
+          {
+            "id": "duplicate_atomic_undo",
+            "ok": true
+          },
+          {
+            "id": "duplicate_missing_rejected",
+            "ok": true
+          },
+          {
+            "id": "save_roundtrip",
+            "ok": true
+          },
+          {
+            "id": "overwrite_requires_hash",
+            "ok": true
+          },
+          {
+            "id": "save_backup",
+            "ok": true
+          },
+          {
+            "id": "autosave",
+            "ok": true
+          },
+          {
+            "id": "external_edit",
+            "ok": true
+          },
+          {
+            "id": "recovery_divergence",
+            "ok": true
+          },
+          {
+            "id": "interruption_original_intact",
+            "ok": true
+          },
+          {
+            "id": "pending_preserved",
+            "ok": true
+          },
+          {
+            "id": "concurrent_writer_rejected",
+            "ok": true
+          },
+          {
+            "id": "truncated_pending_rejected",
+            "ok": true
+          },
+          {
+            "id": "missing_directory",
+            "ok": true
+          },
+          {
+            "id": "truncated_file",
+            "ok": true
+          },
+          {
+            "id": "draft_saved",
+            "ok": true
+          },
+          {
+            "id": "recovery_kind_safe",
+            "ok": true
+          },
+          {
+            "id": "io_length_limit",
+            "ok": true
+          }
+        ],
+        "count": 70,
+        "ok": true
+      },
+      "deliberately_terminated": false
+    },
+    {
+      "ok": true,
+      "timed_out": false,
+      "name": "cli_create",
+      "arguments": [
+        "--headless",
+        "--script",
+        "res://scripts/map_authoring/io/headless.gd",
+        "--",
+        "create",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m1\\.tools\\m1_attempt_08\\fixture\\.godot\\cli.json",
+        "cli_piece"
+      ],
+      "started_utc": "2026-10-24T19:42:06.4018103Z",
+      "output_sha256": "CFBF5FA524724C3707CDA2ED161D588DA0EED8848E0FDCC00FE809AB37093DEC",
+      "exit_code": 0,
+      "finished_utc": "2026-10-24T19:42:06.6999180Z",
+      "result": {
+        "byte_hash": "ab7b65c47701e7eca2df9f896abda68a4e56053081d77893d6773668684022c7",
+        "code": "",
+        "diagnostics": [],
+        "expected_byte_hash": "",
+        "input_hash": "2783ea2307eccb76a765153c6f437c99afc6ae62c85aa36e9fffb847c696e30f",
+        "ok": true,
+        "output_hash": "2783ea2307eccb76a765153c6f437c99afc6ae62c85aa36e9fffb847c696e30f",
+        "valid": true
+      },
+      "deliberately_terminated": false
+    },
+    {
+      "ok": true,
+      "timed_out": false,
+      "name": "cli_validate",
+      "arguments": [
+        "--headless",
+        "--script",
+        "res://scripts/map_authoring/io/headless.gd",
+        "--",
+        "validate",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m1\\.tools\\m1_attempt_08\\fixture\\.godot\\cli.json"
+      ],
+      "started_utc": "2026-10-24T19:42:06.7037262Z",
+      "output_sha256": "9D428709D2E92211DCE194EA91EF1622AC442D0689DEE162FD582BEF943834AB",
+      "exit_code": 0,
+      "finished_utc": "2026-10-24T19:42:07.0046772Z",
+      "result": {
+        "byte_hash": "ab7b65c47701e7eca2df9f896abda68a4e56053081d77893d6773668684022c7",
+        "code": "",
+        "diagnostics": [],
+        "input_hash": "2783ea2307eccb76a765153c6f437c99afc6ae62c85aa36e9fffb847c696e30f",
+        "ok": true,
+        "output_hash": "2783ea2307eccb76a765153c6f437c99afc6ae62c85aa36e9fffb847c696e30f",
+        "valid": true
+      },
+      "deliberately_terminated": false
+    },
+    {
+      "ok": true,
+      "timed_out": false,
+      "name": "cli_copy",
+      "arguments": [
+        "--headless",
+        "--script",
+        "res://scripts/map_authoring/io/headless.gd",
+        "--",
+        "copy",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m1\\.tools\\m1_attempt_08\\fixture\\.godot\\cli.json",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m1\\.tools\\m1_attempt_08\\fixture\\.godot\\cli_copy.json",
+        "absent"
+      ],
+      "started_utc": "2026-10-24T19:42:07.0084843Z",
+      "output_sha256": "CFBF5FA524724C3707CDA2ED161D588DA0EED8848E0FDCC00FE809AB37093DEC",
+      "exit_code": 0,
+      "finished_utc": "2026-10-24T19:42:07.3013279Z",
+      "result": {
+        "byte_hash": "ab7b65c47701e7eca2df9f896abda68a4e56053081d77893d6773668684022c7",
+        "code": "",
+        "diagnostics": [],
+        "expected_byte_hash": "",
+        "input_hash": "2783ea2307eccb76a765153c6f437c99afc6ae62c85aa36e9fffb847c696e30f",
+        "ok": true,
+        "output_hash": "2783ea2307eccb76a765153c6f437c99afc6ae62c85aa36e9fffb847c696e30f",
+        "valid": true
+      },
+      "deliberately_terminated": false
+    },
+    {
+      "ok": true,
+      "timed_out": false,
+      "name": "interruption",
+      "arguments": [
+        "--headless",
+        "--script",
+        "res://tests/map_editor_document_test.gd",
+        "--",
+        "--interruption"
+      ],
+      "started_utc": "2026-10-24T19:42:07.3090141Z",
+      "output_sha256": "F7209365324E35083B190A4AAA366ECC93BB5851D0FC6B1428FDD5AD08C52C5F",
+      "exit_code": -1,
+      "finished_utc": "2026-10-24T19:42:07.6055018Z",
+      "result": {
+        "ok": true,
+        "output_hash": "610de968f415cf5c5561ff851ebba816af4337852f2891a0198c26766aa48df3"
+      },
+      "deliberately_terminated": true
+    },
+    {
+      "ok": true,
+      "timed_out": false,
+      "name": "restart_recover",
+      "arguments": [
+        "--headless",
+        "--script",
+        "res://scripts/map_authoring/io/headless.gd",
+        "--",
+        "recover",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m1\\.tools\\m1_attempt_08\\fixture\\.godot\\interruption.json",
+        "autosave",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m1\\.tools\\m1_attempt_08\\fixture\\.godot\\recovered.json"
+      ],
+      "started_utc": "2026-10-24T19:42:07.6142675Z",
+      "output_sha256": "C4F340B9CC524A587506AE3A88E601E61E48FD860096D970B8A4F3501A74F4E5",
+      "exit_code": 0,
+      "finished_utc": "2026-10-24T19:42:07.9036844Z",
+      "result": {
+        "byte_hash": "4bec82ca3c0620ae1e2fcb6b20cfef587ca41f315bc55ded68bb99fcb4b3a2a1",
+        "code": "",
+        "diagnostics": [],
+        "expected_byte_hash": "",
+        "input_hash": "610de968f415cf5c5561ff851ebba816af4337852f2891a0198c26766aa48df3",
+        "ok": true,
+        "output_hash": "610de968f415cf5c5561ff851ebba816af4337852f2891a0198c26766aa48df3",
+        "valid": true
+      },
+      "deliberately_terminated": false
+    },
+    {
+      "ok": true,
+      "timed_out": false,
+      "name": "restart_pending",
+      "arguments": [
+        "--headless",
+        "--script",
+        "res://scripts/map_authoring/io/headless.gd",
+        "--",
+        "recover",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m1\\.tools\\m1_attempt_08\\fixture\\.godot\\interruption.json",
+        "pending",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m1\\.tools\\m1_attempt_08\\fixture\\.godot\\recovered_pending.json"
+      ],
+      "started_utc": "2026-10-24T19:42:07.9138169Z",
+      "output_sha256": "C4F340B9CC524A587506AE3A88E601E61E48FD860096D970B8A4F3501A74F4E5",
+      "exit_code": 0,
+      "finished_utc": "2026-10-24T19:42:08.2065292Z",
+      "result": {
+        "byte_hash": "4bec82ca3c0620ae1e2fcb6b20cfef587ca41f315bc55ded68bb99fcb4b3a2a1",
+        "code": "",
+        "diagnostics": [],
+        "expected_byte_hash": "",
+        "input_hash": "610de968f415cf5c5561ff851ebba816af4337852f2891a0198c26766aa48df3",
+        "ok": true,
+        "output_hash": "610de968f415cf5c5561ff851ebba816af4337852f2891a0198c26766aa48df3",
+        "valid": true
+      },
+      "deliberately_terminated": false
+    },
+    {
+      "ok": true,
+      "timed_out": false,
+      "name": "native_ui",
+      "arguments": [
+        "--editor",
+        "--rendering-method",
+        "gl_compatibility"
+      ],
+      "started_utc": "2026-10-24T19:42:08.2143988Z",
+      "output_sha256": "8BDD261652FA42DAF1FBB1B040CB6D25E36441D9D64D9EB844D5A38764B8A421",
+      "exit_code": 0,
+      "finished_utc": "2026-10-24T19:42:13.9811530Z",
+      "result": {
+        "checks": [
+          {
+            "id": "global_sentinel_committed",
+            "ok": true
+          },
+          {
+            "id": "plugin_enabled_0",
+            "ok": true
+          },
+          {
+            "id": "focus_0",
+            "ok": true
+          },
+          {
+            "id": "shell_add_0",
+            "ok": true
+          },
+          {
+            "id": "shell_duplicate_0",
+            "ok": true
+          },
+          {
+            "id": "shell_lock_0",
+            "ok": true
+          },
+          {
+            "id": "shell_rename_0",
+            "ok": true
+          },
+          {
+            "id": "shell_history_0",
+            "ok": true
+          },
+          {
+            "id": "undo_button_0",
+            "ok": true
+          },
+          {
+            "id": "redo_button_0",
+            "ok": true
+          },
+          {
+            "id": "shell_save_0",
+            "ok": true
+          },
+          {
+            "id": "shell_autosave_0",
+            "ok": true
+          },
+          {
+            "id": "shell_reject_open_0",
+            "ok": true
+          },
+          {
+            "id": "shell_reopen_0",
+            "ok": true
+          },
+          {
+            "id": "save_commits_name_0",
+            "ok": true
+          },
+          {
+            "id": "new_requires_preservation_0",
+            "ok": true
+          },
+          {
+            "id": "new_preserves_draft_0",
+            "ok": true
+          },
+          {
+            "id": "recovery_copy_0",
+            "ok": true
+          },
+          {
+            "id": "plugin_freed_0",
+            "ok": true
+          },
+          {
+            "id": "plugin_enabled_1",
+            "ok": true
+          },
+          {
+            "id": "focus_1",
+            "ok": true
+          },
+          {
+            "id": "shell_add_1",
+            "ok": true
+          },
+          {
+            "id": "shell_duplicate_1",
+            "ok": true
+          },
+          {
+            "id": "shell_lock_1",
+            "ok": true
+          },
+          {
+            "id": "shell_rename_1",
+            "ok": true
+          },
+          {
+            "id": "shell_history_1",
+            "ok": true
+          },
+          {
+            "id": "undo_button_1",
+            "ok": true
+          },
+          {
+            "id": "redo_button_1",
+            "ok": true
+          },
+          {
+            "id": "shell_save_1",
+            "ok": true
+          },
+          {
+            "id": "shell_autosave_1",
+            "ok": true
+          },
+          {
+            "id": "shell_reject_open_1",
+            "ok": true
+          },
+          {
+            "id": "shell_reopen_1",
+            "ok": true
+          },
+          {
+            "id": "save_commits_name_1",
+            "ok": true
+          },
+          {
+            "id": "new_requires_preservation_1",
+            "ok": true
+          },
+          {
+            "id": "new_preserves_draft_1",
+            "ok": true
+          },
+          {
+            "id": "recovery_copy_1",
+            "ok": true
+          },
+          {
+            "id": "native_capture",
+            "ok": true
+          },
+          {
+            "id": "plugin_freed_1",
+            "ok": true
+          },
+          {
+            "id": "global_history_preserved",
+            "ok": true
+          },
+          {
+            "id": "global_undo_preserved",
+            "ok": true
+          },
+          {
+            "id": "global_redo_preserved",
+            "ok": true
+          }
+        ],
+        "count": 41,
+        "ok": true
+      },
+      "deliberately_terminated": false
+    }
+  ],
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424"
+}

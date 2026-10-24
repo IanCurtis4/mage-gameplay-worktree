@@ -1,0 +1,17 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Started Inicialização do Projeto (5 steps)[39m[0m
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Escaneando estrutura de arquivos...[39m[0m
+[  16% ] [90m[1mfirst_scan_filesystem[22m | Carregando nomes de classe globais...[39m[0m
+[  33% ] [90m[1mfirst_scan_filesystem[22m | Verificando GDExtensions...[39m[0m
+[  50% ] [90m[1mfirst_scan_filesystem[22m | Criando scripts autoload...[39m[0m
+[  66% ] [90m[1mfirst_scan_filesystem[22m | Inicializando plugins...[39m[0m
+[  83% ] [90m[1mfirst_scan_filesystem[22m | Iniciando escaneamento de arquivos...[39m[0m
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Started Carregando editor (5 steps)[39m[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Carregando layout do editor...[39m[0m
+[  16% ] [90m[1mloading_editor_layout[22m | Carregando abas...[39m[0m
+[92m[ DONE ][39m [1mloading_editor_layout[22m
+[0m
+M1_UI_RESULT {"checks":[{"id":"global_sentinel_committed","ok":true},{"id":"plugin_enabled_0","ok":true},{"id":"focus_0","ok":true},{"id":"shell_add_0","ok":true},{"id":"shell_duplicate_0","ok":true},{"id":"shell_lock_0","ok":true},{"id":"shell_rename_0","ok":true},{"id":"shell_history_0","ok":true},{"id":"shell_save_0","ok":true},{"id":"shell_autosave_0","ok":true},{"id":"shell_reject_open_0","ok":true},{"id":"shell_reopen_0","ok":true},{"id":"plugin_freed_0","ok":true},{"id":"plugin_enabled_1","ok":true},{"id":"focus_1","ok":true},{"id":"shell_add_1","ok":true},{"id":"shell_duplicate_1","ok":true},{"id":"shell_lock_1","ok":true},{"id":"shell_rename_1","ok":true},{"id":"shell_history_1","ok":true},{"id":"shell_save_1","ok":true},{"id":"shell_autosave_1","ok":true},{"id":"shell_reject_open_1","ok":true},{"id":"shell_reopen_1","ok":true},{"id":"plugin_freed_1","ok":true},{"id":"global_history_preserved","ok":true},{"id":"global_undo_preserved","ok":true},{"id":"global_redo_preserved","ok":true}],"count":28,"ok":true}

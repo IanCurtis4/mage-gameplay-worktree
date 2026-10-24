@@ -1,0 +1,29 @@
+[
+  {
+    "name": "diverged",
+    "output_sha256": "D60C8FAFEA1E206F2E3AFE7E9858226F18253FB5BC021B0179BD553CE9E0D348",
+    "exit_code": 1,
+    "result": {
+      "code": "base_diverged",
+      "diagnostics": [],
+      "input_hash": "",
+      "ok": false,
+      "output_hash": ""
+    }
+  },
+  {
+    "name": "apply",
+    "output_sha256": "3EA3C6FDB68CCFBE56E7587754DA558F25F5D32B7EAEB7DF91C42D75C8DB44C3",
+    "exit_code": 0,
+    "result": {
+      "byte_hash": "9ed31e994d8151e11831b6c9d0293e40ca9dd4fa86008a0422b932e424054419",
+      "code": "",
+      "diagnostics": [],
+      "expected_byte_hash": "ab7b65c47701e7eca2df9f896abda68a4e56053081d77893d6773668684022c7",
+      "input_hash": "cd74ef352133d428e3a332bbfc720c92a917661da93b7910b346f773c2f8c684",
+      "ok": true,
+      "output_hash": "cd74ef352133d428e3a332bbfc720c92a917661da93b7910b346f773c2f8c684",
+      "valid": true
+    }
+  }
+]
