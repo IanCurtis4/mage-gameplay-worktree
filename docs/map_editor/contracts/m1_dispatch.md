@@ -35,6 +35,8 @@ Luna possui apenas `docs/map_editor/delivery/evidence/m1/luna.md` e logs sob
 mesma pasta antes da supervisão, sem escritores simultâneos. Nenhum outro arquivo
 compartilhado é transferido. `project.godot` permanece sem plugin ativado por padrão;
 o usuário pode habilitá-lo nas configurações do Godot. Fixture isolada o habilita.
+Sol possui também o `.gitattributes` local da pasta de evidência, apenas para
+preservar os bytes dos logs e manifestos ao transportar os hashes entre checkouts.
 UI permanece com M1 até transferência explícita para M2. Runner próprio evita
 tomar propriedade de `tools/verify.ps1`; listar/verificar `editor_import` por impacto.
 
