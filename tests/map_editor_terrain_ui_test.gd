@@ -17,6 +17,9 @@ func _run() -> void:
 	check("native_shell_visible",shell != null and shell.visible)
 	if shell == null: finish(); return
 	var panel: Control = shell.terrain
+	var oversized: Dictionary = shell.session.document().to_data()
+	oversized.layers = [{"rows":257,"columns":257}]
+	check("oversized_preview_preflight",not panel.canvas.preview_supported(oversized) and panel.canvas._triangles(oversized).is_empty())
 	panel.create_sample()
 	for _i: int in 5: await get_tree().process_frame
 	panel.canvas.fit()

@@ -61,7 +61,7 @@ function Invoke-M2([string]$Name,[string[]]$Arguments,[string]$Marker = '',[int]
     if (-not $m2Pass) { Write-Output $m2Text; throw ('M2 failed: '+$Name) }
 }
 Invoke-M2 'import' @('--headless','--editor','--import','--quit')
-Invoke-M2 'terrain' @('--headless','--script','res://tests/map_editor_terrain_test.gd') 'M2_RESULT' 102
+Invoke-M2 'terrain' @('--headless','--script','res://tests/map_editor_terrain_test.gd') 'M2_RESULT' 104
 Invoke-M2 'cli_a' @('--headless','--script','res://scripts/map_authoring/compiler/headless.gd','--',$m2Runs[1].result.source_path) 'MAP_TERRAIN_RESULT'
 Invoke-M2 'cli_b' @('--headless','--script','res://scripts/map_authoring/compiler/headless.gd','--',$m2Runs[1].result.source_path) 'MAP_TERRAIN_RESULT'
 if ($m2Runs[1].result.package_hash -ne $m2Runs[2].result.output_hash -or $m2Runs[2].result.output_hash -ne $m2Runs[3].result.output_hash) { throw 'Independent process compilation mismatch.' }
@@ -73,7 +73,7 @@ if ($Native) {
     Copy-Item -LiteralPath (Join-Path $m2Root 'tests/map_editor_terrain_ui_test.gd') -Destination (Join-Path $m2Driver 'plugin.gd') -Force
     '[plugin]', 'name="Fixture F2"', 'description="Teste isolado"', 'author="RagRPG"', 'version="1"', 'script="plugin.gd"' | Set-Content -LiteralPath (Join-Path $m2Driver 'plugin.cfg') -Encoding utf8
     Add-Content -LiteralPath (Join-Path $m2Fixture 'project.godot') -Value "`n[editor_plugins]`nenabled=PackedStringArray(`"res://addons/m2_driver/plugin.cfg`")" -Encoding utf8
-    Invoke-M2 'native_ui' @('--editor','--rendering-method','gl_compatibility') 'M2_UI_RESULT' 24
+    Invoke-M2 'native_ui' @('--editor','--rendering-method','gl_compatibility') 'M2_UI_RESULT' 25
 }
 $m2Inputs=@()
 foreach ($m2Dir in @('scripts/map_authoring','addons/ragrpg_map_editor','tests/map_editor_terrain_test.gd','tests/map_editor_terrain_ui_test.gd','tools/map_editor_terrain/run.ps1')) {

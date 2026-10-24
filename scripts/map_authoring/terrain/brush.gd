@@ -5,6 +5,7 @@ extends RefCounted
 const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 
 static func stroke(source: Dictionary, layer_id: String, points: Array, options: Dictionary) -> Dictionary:
+	if points.size() > 4096: return Schema.result(false, "brush_limit_exceeded")
 	var read := Schema.read(JSON.stringify(source, "", true, true).to_utf8_buffer())
 	if not read.ok or not read.valid: return Schema.result(false, "source_invalid")
 	var data: Dictionary = read.data
@@ -13,6 +14,7 @@ static func stroke(source: Dictionary, layer_id: String, points: Array, options:
 		if layer.layer_id == layer_id: selected = layer
 	if selected.is_empty(): return Schema.result(false, "source_reference_missing")
 	if selected.locked: return Schema.result(false, "layer_locked")
+	if (int(selected.rows)-1)*(int(selected.columns)-1) > 256: return Schema.result(false, "terrain_limit_exceeded")
 	var mode: String = options.get("mode", "raise")
 	var radius: float = options.get("radius", 32.0)
 	var strength: float = options.get("strength", 8.0)

@@ -49,6 +49,7 @@ func screen(point: Vector3) -> Vector2: return WorldProjection.project(point)*_s
 func _triangles(data: Dictionary) -> Array:
 	var triangles: Array = []
 	if data.is_empty(): return triangles
+	if not preview_supported(data): return triangles
 	for layer: Dictionary in data.layers:
 		if layer.layer_id in hidden_layers: continue
 		if layer.heights.size() != int(layer.rows)*int(layer.columns): continue
@@ -77,6 +78,13 @@ func _triangles(data: Dictionary) -> Array:
 		return ay < by)
 	return triangles
 
+static func preview_supported(data: Dictionary) -> bool:
+	var count: int = data.get("special_surfaces",[]).size()
+	for layer: Dictionary in data.get("layers",[]):
+		count += (int(layer.rows)-1)*(int(layer.columns)-1)
+		if count > 256: return false
+	return count <= 256
+
 func pick(at: Vector2) -> Dictionary:
 	var triangles := _triangles(source)
 	triangles.reverse()
@@ -95,6 +103,9 @@ func pick(at: Vector2) -> Dictionary:
 func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO,size),Color("111b24"))
 	var data := _preview if not _preview.is_empty() else source
+	if not preview_supported(data):
+		draw_string(get_theme_default_font(),Vector2(20,35),"Prévia indisponível: reduza a peça para até 256 células de grade.",HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("ffe298"))
+		return
 	for triangle: Dictionary in _triangles(data):
 		if triangle.special:
 			for special: Dictionary in data.special_surfaces:
@@ -156,6 +167,7 @@ func _gui_input(event: InputEvent) -> void:
 		if _dragging:
 			var hit := pick(event.position)
 			if hit.ok and _points[-1].distance_to(hit.point) > 0.01:
+				if _points.size() >= 4096: cancel_stroke(); return
 				_points.append(hit.point); _update_preview()
 		queue_redraw()
 
