@@ -1,0 +1,21 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Started Inicialização do Projeto (5 steps)[39m[0m
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Escaneando estrutura de arquivos...[39m[0m
+[  16% ] [90m[1mfirst_scan_filesystem[22m | Carregando nomes de classe globais...[39m[0m
+[  33% ] [90m[1mfirst_scan_filesystem[22m | Verificando GDExtensions...[39m[0m
+[  50% ] [90m[1mfirst_scan_filesystem[22m | Criando scripts autoload...[39m[0m
+[  66% ] [90m[1mfirst_scan_filesystem[22m | Inicializando plugins...[39m[0m
+[  83% ] [90m[1mfirst_scan_filesystem[22m | Iniciando escaneamento de arquivos...[39m[0m
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Started Carregando editor (5 steps)[39m[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Carregando layout do editor...[39m[0m
+[  16% ] [90m[1mloading_editor_layout[22m | Carregando abas...[39m[0m
+[  33% ] [90m[1mloading_editor_layout[22m | Reabrindo cenas...[39m[0m
+[  50% ] [90m[1mloading_editor_layout[22m | Carregando layout do editor central...[39m[0m
+[  66% ] [90m[1mloading_editor_layout[22m | Carregando layout da janela de plugins...[39m[0m
+[  83% ] [90m[1mloading_editor_layout[22m | Layout do editor pronto.[39m[0m
+[92m[ DONE ][39m [1mloading_editor_layout[22m
+[0m
+M0_RESULT {"checks":[{"name":"real_editor_process","ok":true},{"name":"no_game_autoloads","ok":true},{"name":"plugin_enabled_0","ok":true},{"name":"transitive_resource_tool_0","ok":true},{"name":"own_main_screen_visible_0","ok":true},{"name":"control_focus_0","ok":true},{"name":"editor_commit_0","ok":true},{"name":"external_document_history_0","ok":true},{"name":"editor_undo_0","ok":true},{"name":"editor_redo_0","ok":true},{"name":"main_screen_hidden_0","ok":true},{"name":"plugin_disabled_0","ok":true},{"name":"panel_freed_0","ok":true},{"name":"plugin_freed_0","ok":true},{"name":"history_cleanup_0","ok":true},{"name":"plugin_enabled_1","ok":true},{"name":"transitive_resource_tool_1","ok":true},{"name":"own_main_screen_visible_1","ok":true},{"name":"control_focus_1","ok":true},{"name":"editor_commit_1","ok":true},{"name":"external_document_history_1","ok":true},{"name":"editor_undo_1","ok":true},{"name":"editor_redo_1","ok":true},{"name":"main_screen_hidden_1","ok":true},{"name":"plugin_disabled_1","ok":true},{"name":"panel_freed_1","ok":true},{"name":"plugin_freed_1","ok":true},{"name":"history_cleanup_1","ok":true},{"name":"balanced_lifecycle","ok":true},{"name":"no_orphan_panel","ok":true}],"enable_including_three_frames_us":[18122,20437],"engine":"4.7.2-stable (official)","mode":"headless","ok":true}

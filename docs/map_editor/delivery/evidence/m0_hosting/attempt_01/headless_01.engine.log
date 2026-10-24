@@ -1,0 +1,48 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[   0% ] first_scan_filesystem | Started Inicialização do Projeto (5 steps)
+[   0% ] first_scan_filesystem | Escaneando estrutura de arquivos...
+[  16% ] first_scan_filesystem | Carregando nomes de classe globais...
+[  33% ] first_scan_filesystem | Verificando GDExtensions...
+[  50% ] first_scan_filesystem | Criando scripts autoload...
+[  66% ] first_scan_filesystem | Inicializando plugins...
+[  83% ] first_scan_filesystem | Iniciando escaneamento de arquivos...
+[ DONE ] first_scan_filesystem
+
+[   0% ] update_scripts_classes | Started Registrando classes globais... (4 steps)
+[   0% ] update_scripts_classes | 
+[  20% ] update_scripts_classes | 
+[  40% ] update_scripts_classes | 
+[  60% ] update_scripts_classes | 
+[ DONE ] update_scripts_classes
+
+[   0% ] loading_editor_layout | Started Carregando editor (5 steps)
+[   0% ] loading_editor_layout | Carregando layout do editor...
+[  16% ] loading_editor_layout | Carregando abas...
+[ DONE ] loading_editor_layout
+
+ERROR: M0: external_document_history_0
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://addons/m0_driver/plugin.gd:16)
+       [1] _run (res://addons/m0_driver/plugin.gd:52)
+       [2] frames (res://addons/m0_driver/plugin.gd:20)
+ERROR: M0: history_cleanup_0
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://addons/m0_driver/plugin.gd:16)
+       [1] _run (res://addons/m0_driver/plugin.gd:70)
+       [2] frames (res://addons/m0_driver/plugin.gd:20)
+ERROR: M0: external_document_history_1
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://addons/m0_driver/plugin.gd:16)
+       [1] _run (res://addons/m0_driver/plugin.gd:52)
+       [2] frames (res://addons/m0_driver/plugin.gd:20)
+ERROR: M0: history_cleanup_1
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://addons/m0_driver/plugin.gd:16)
+       [1] _run (res://addons/m0_driver/plugin.gd:70)
+       [2] frames (res://addons/m0_driver/plugin.gd:20)
+M0_RESULT {"checks":[{"name":"real_editor_process","ok":true},{"name":"no_game_autoloads","ok":true},{"name":"plugin_enabled_0","ok":true},{"name":"transitive_resource_tool_0","ok":true},{"name":"own_main_screen_visible_0","ok":true},{"name":"control_focus_0","ok":true},{"name":"editor_commit_0","ok":true},{"name":"external_document_history_0","ok":false},{"name":"editor_undo_0","ok":true},{"name":"editor_redo_0","ok":true},{"name":"main_screen_hidden_0","ok":true},{"name":"plugin_disabled_0","ok":true},{"name":"panel_freed_0","ok":true},{"name":"plugin_freed_0","ok":true},{"name":"history_cleanup_0","ok":false},{"name":"plugin_enabled_1","ok":true},{"name":"transitive_resource_tool_1","ok":true},{"name":"own_main_screen_visible_1","ok":true},{"name":"control_focus_1","ok":true},{"name":"editor_commit_1","ok":true},{"name":"external_document_history_1","ok":false},{"name":"editor_undo_1","ok":true},{"name":"editor_redo_1","ok":true},{"name":"main_screen_hidden_1","ok":true},{"name":"plugin_disabled_1","ok":true},{"name":"panel_freed_1","ok":true},{"name":"plugin_freed_1","ok":true},{"name":"history_cleanup_1","ok":false},{"name":"balanced_lifecycle","ok":true},{"name":"no_orphan_panel","ok":true}],"enable_including_three_frames_us":[19313,21045],"engine":"4.7.2-stable (official)","mode":"headless","ok":false}

@@ -1,0 +1,440 @@
+[
+  {
+    "name": "headless_01",
+    "ok": true,
+    "exit_code": 0,
+    "timed_out": false,
+    "elapsed_ms": 4056.5073,
+    "output_sha256": "5FC3927327507B6A7F98AC224E5E1852EB47D4F69E03BC573699CAF36DB72FE6",
+    "result": {
+      "checks": [
+        {
+          "name": "real_editor_process",
+          "ok": true
+        },
+        {
+          "name": "no_game_autoloads",
+          "ok": true
+        },
+        {
+          "name": "plugin_enabled_0",
+          "ok": true
+        },
+        {
+          "name": "transitive_resource_tool_0",
+          "ok": true
+        },
+        {
+          "name": "own_main_screen_visible_0",
+          "ok": true
+        },
+        {
+          "name": "control_focus_0",
+          "ok": true
+        },
+        {
+          "name": "editor_commit_0",
+          "ok": true
+        },
+        {
+          "name": "external_document_history_0",
+          "ok": true
+        },
+        {
+          "name": "editor_undo_0",
+          "ok": true
+        },
+        {
+          "name": "editor_redo_0",
+          "ok": true
+        },
+        {
+          "name": "main_screen_hidden_0",
+          "ok": true
+        },
+        {
+          "name": "plugin_disabled_0",
+          "ok": true
+        },
+        {
+          "name": "panel_freed_0",
+          "ok": true
+        },
+        {
+          "name": "plugin_freed_0",
+          "ok": true
+        },
+        {
+          "name": "history_cleanup_0",
+          "ok": true
+        },
+        {
+          "name": "plugin_enabled_1",
+          "ok": true
+        },
+        {
+          "name": "transitive_resource_tool_1",
+          "ok": true
+        },
+        {
+          "name": "own_main_screen_visible_1",
+          "ok": true
+        },
+        {
+          "name": "control_focus_1",
+          "ok": true
+        },
+        {
+          "name": "editor_commit_1",
+          "ok": true
+        },
+        {
+          "name": "external_document_history_1",
+          "ok": true
+        },
+        {
+          "name": "editor_undo_1",
+          "ok": true
+        },
+        {
+          "name": "editor_redo_1",
+          "ok": true
+        },
+        {
+          "name": "main_screen_hidden_1",
+          "ok": true
+        },
+        {
+          "name": "plugin_disabled_1",
+          "ok": true
+        },
+        {
+          "name": "panel_freed_1",
+          "ok": true
+        },
+        {
+          "name": "plugin_freed_1",
+          "ok": true
+        },
+        {
+          "name": "history_cleanup_1",
+          "ok": true
+        },
+        {
+          "name": "balanced_lifecycle",
+          "ok": true
+        },
+        {
+          "name": "no_orphan_panel",
+          "ok": true
+        }
+      ],
+      "enable_including_three_frames_us": [
+        17165,
+        20989
+      ],
+      "engine": "4.7.2-stable (official)",
+      "mode": "headless",
+      "ok": true
+    }
+  },
+  {
+    "name": "headless_02",
+    "ok": true,
+    "exit_code": 0,
+    "timed_out": false,
+    "elapsed_ms": 3954.8803,
+    "output_sha256": "6895AC9416D9E7CEEA4857549DB14A74F1CA7732C43ABECD12E73D99D38EB602",
+    "result": {
+      "checks": [
+        {
+          "name": "real_editor_process",
+          "ok": true
+        },
+        {
+          "name": "no_game_autoloads",
+          "ok": true
+        },
+        {
+          "name": "plugin_enabled_0",
+          "ok": true
+        },
+        {
+          "name": "transitive_resource_tool_0",
+          "ok": true
+        },
+        {
+          "name": "own_main_screen_visible_0",
+          "ok": true
+        },
+        {
+          "name": "control_focus_0",
+          "ok": true
+        },
+        {
+          "name": "editor_commit_0",
+          "ok": true
+        },
+        {
+          "name": "external_document_history_0",
+          "ok": true
+        },
+        {
+          "name": "editor_undo_0",
+          "ok": true
+        },
+        {
+          "name": "editor_redo_0",
+          "ok": true
+        },
+        {
+          "name": "main_screen_hidden_0",
+          "ok": true
+        },
+        {
+          "name": "plugin_disabled_0",
+          "ok": true
+        },
+        {
+          "name": "panel_freed_0",
+          "ok": true
+        },
+        {
+          "name": "plugin_freed_0",
+          "ok": true
+        },
+        {
+          "name": "history_cleanup_0",
+          "ok": true
+        },
+        {
+          "name": "plugin_enabled_1",
+          "ok": true
+        },
+        {
+          "name": "transitive_resource_tool_1",
+          "ok": true
+        },
+        {
+          "name": "own_main_screen_visible_1",
+          "ok": true
+        },
+        {
+          "name": "control_focus_1",
+          "ok": true
+        },
+        {
+          "name": "editor_commit_1",
+          "ok": true
+        },
+        {
+          "name": "external_document_history_1",
+          "ok": true
+        },
+        {
+          "name": "editor_undo_1",
+          "ok": true
+        },
+        {
+          "name": "editor_redo_1",
+          "ok": true
+        },
+        {
+          "name": "main_screen_hidden_1",
+          "ok": true
+        },
+        {
+          "name": "plugin_disabled_1",
+          "ok": true
+        },
+        {
+          "name": "panel_freed_1",
+          "ok": true
+        },
+        {
+          "name": "plugin_freed_1",
+          "ok": true
+        },
+        {
+          "name": "history_cleanup_1",
+          "ok": true
+        },
+        {
+          "name": "balanced_lifecycle",
+          "ok": true
+        },
+        {
+          "name": "no_orphan_panel",
+          "ok": true
+        }
+      ],
+      "enable_including_three_frames_us": [
+        18122,
+        20437
+      ],
+      "engine": "4.7.2-stable (official)",
+      "mode": "headless",
+      "ok": true
+    }
+  },
+  {
+    "name": "native_01",
+    "ok": true,
+    "exit_code": 0,
+    "timed_out": false,
+    "elapsed_ms": 6970.7703,
+    "output_sha256": "B3397445A03436485BAF94B438C03603F74A6DF46244ECECC1E7192BC84C5225",
+    "result": {
+      "checks": [
+        {
+          "name": "real_editor_process",
+          "ok": true
+        },
+        {
+          "name": "no_game_autoloads",
+          "ok": true
+        },
+        {
+          "name": "plugin_enabled_0",
+          "ok": true
+        },
+        {
+          "name": "transitive_resource_tool_0",
+          "ok": true
+        },
+        {
+          "name": "own_main_screen_visible_0",
+          "ok": true
+        },
+        {
+          "name": "control_focus_0",
+          "ok": true
+        },
+        {
+          "name": "editor_commit_0",
+          "ok": true
+        },
+        {
+          "name": "external_document_history_0",
+          "ok": true
+        },
+        {
+          "name": "editor_undo_0",
+          "ok": true
+        },
+        {
+          "name": "editor_redo_0",
+          "ok": true
+        },
+        {
+          "name": "native_capture_saved",
+          "ok": true
+        },
+        {
+          "name": "main_screen_hidden_0",
+          "ok": true
+        },
+        {
+          "name": "plugin_disabled_0",
+          "ok": true
+        },
+        {
+          "name": "panel_freed_0",
+          "ok": true
+        },
+        {
+          "name": "plugin_freed_0",
+          "ok": true
+        },
+        {
+          "name": "history_cleanup_0",
+          "ok": true
+        },
+        {
+          "name": "plugin_enabled_1",
+          "ok": true
+        },
+        {
+          "name": "transitive_resource_tool_1",
+          "ok": true
+        },
+        {
+          "name": "own_main_screen_visible_1",
+          "ok": true
+        },
+        {
+          "name": "control_focus_1",
+          "ok": true
+        },
+        {
+          "name": "editor_commit_1",
+          "ok": true
+        },
+        {
+          "name": "external_document_history_1",
+          "ok": true
+        },
+        {
+          "name": "editor_undo_1",
+          "ok": true
+        },
+        {
+          "name": "editor_redo_1",
+          "ok": true
+        },
+        {
+          "name": "main_screen_hidden_1",
+          "ok": true
+        },
+        {
+          "name": "plugin_disabled_1",
+          "ok": true
+        },
+        {
+          "name": "panel_freed_1",
+          "ok": true
+        },
+        {
+          "name": "plugin_freed_1",
+          "ok": true
+        },
+        {
+          "name": "history_cleanup_1",
+          "ok": true
+        },
+        {
+          "name": "balanced_lifecycle",
+          "ok": true
+        },
+        {
+          "name": "no_orphan_panel",
+          "ok": true
+        }
+      ],
+      "enable_including_three_frames_us": [
+        19160,
+        21960
+      ],
+      "engine": "4.7.2-stable (official)",
+      "mode": "Windows",
+      "ok": true
+    }
+  },
+  {
+    "name": "runtime_guard",
+    "ok": true,
+    "exit_code": 0,
+    "timed_out": false,
+    "elapsed_ms": 313.9599,
+    "output_sha256": "AE679A96A291DA1032A3315DA036A695C09BD798635B19E0839851BB932458B2",
+    "result": {
+      "checks": [
+        {
+          "name": "editor_plugins_absent_in_runtime",
+          "ok": true
+        }
+      ],
+      "ok": true
+    }
+  }
+]

@@ -1,0 +1,498 @@
+{
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+  "sources": [
+    {
+      "path": "README.md",
+      "sha256": "B9F4D9A3020BF27D8625A36B01AF3A0E2D4307C044347CB54969AD8994DFA951"
+    },
+    {
+      "path": "run_hosting.ps1",
+      "sha256": "D87024BE4D93630737F37AC9AC02732A6772F45A49CBA6CC5CCD7F4028B4EA89"
+    },
+    {
+      "path": "hosting/project.godot",
+      "sha256": "26D33BD9392C88B4D02211C4FD09483872012CD669D74403177080956D3A9A49"
+    },
+    {
+      "path": "hosting/runtime_guard.gd",
+      "sha256": "63DF51D1503AC43B54E0FA474F0408884FA7FF0DD596D34A6F737BDABDC174BF"
+    },
+    {
+      "path": "hosting/runtime_guard.gd.uid",
+      "sha256": "70E19EEFDF3E32426B781C93CE6EE0F5052341D610649D870BCD821642B0B235"
+    },
+    {
+      "path": "hosting/addons/m0_driver/plugin.cfg",
+      "sha256": "DA736A0AD25CA0620654E8749E2E131F8A990AD2723DB1122C5A658228E0772B"
+    },
+    {
+      "path": "hosting/addons/m0_driver/plugin.gd",
+      "sha256": "752DCD8C0182C9876B458C1A7A8352606F24A17B3F6BFAAA43CE36E29220633B"
+    },
+    {
+      "path": "hosting/addons/m0_driver/plugin.gd.uid",
+      "sha256": "C9874155225405CAAF3AE003EC0FCC9226CAA09D089A459CFE3F89B9ED5A4AA6"
+    },
+    {
+      "path": "hosting/addons/m0_subject/plugin.cfg",
+      "sha256": "4155D1175745AE58768DAD7260E57C280AF541BC521D76185CB1099B04F93AF5"
+    },
+    {
+      "path": "hosting/addons/m0_subject/plugin.gd",
+      "sha256": "F6045796BBF95A6D9C002D190858EBAA4A3D41467B8478B98990C0B377654B8B"
+    },
+    {
+      "path": "hosting/addons/m0_subject/plugin.gd.uid",
+      "sha256": "43A69FCCA8B39251A374BF68EEE5E893D86E9A478D63F3565D61BB723C4AA537"
+    },
+    {
+      "path": "hosting/addons/m0_subject/probe_document.gd",
+      "sha256": "5D0BF906E8B913B9D42B36DD5689AADB3AC8A937D002A0679C8F8C482BDC42AD"
+    },
+    {
+      "path": "hosting/addons/m0_subject/probe_document.gd.uid",
+      "sha256": "F67C197DA0EFC8F658BE98F2D631720A8B6F042A900FF8E46E08257D952CC660"
+    }
+  ],
+  "runs": [
+    {
+      "name": "headless_01",
+      "ok": true,
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 4056.5073,
+      "output_sha256": "5FC3927327507B6A7F98AC224E5E1852EB47D4F69E03BC573699CAF36DB72FE6",
+      "result": {
+        "checks": [
+          {
+            "name": "real_editor_process",
+            "ok": true
+          },
+          {
+            "name": "no_game_autoloads",
+            "ok": true
+          },
+          {
+            "name": "plugin_enabled_0",
+            "ok": true
+          },
+          {
+            "name": "transitive_resource_tool_0",
+            "ok": true
+          },
+          {
+            "name": "own_main_screen_visible_0",
+            "ok": true
+          },
+          {
+            "name": "control_focus_0",
+            "ok": true
+          },
+          {
+            "name": "editor_commit_0",
+            "ok": true
+          },
+          {
+            "name": "external_document_history_0",
+            "ok": true
+          },
+          {
+            "name": "editor_undo_0",
+            "ok": true
+          },
+          {
+            "name": "editor_redo_0",
+            "ok": true
+          },
+          {
+            "name": "main_screen_hidden_0",
+            "ok": true
+          },
+          {
+            "name": "plugin_disabled_0",
+            "ok": true
+          },
+          {
+            "name": "panel_freed_0",
+            "ok": true
+          },
+          {
+            "name": "plugin_freed_0",
+            "ok": true
+          },
+          {
+            "name": "history_cleanup_0",
+            "ok": true
+          },
+          {
+            "name": "plugin_enabled_1",
+            "ok": true
+          },
+          {
+            "name": "transitive_resource_tool_1",
+            "ok": true
+          },
+          {
+            "name": "own_main_screen_visible_1",
+            "ok": true
+          },
+          {
+            "name": "control_focus_1",
+            "ok": true
+          },
+          {
+            "name": "editor_commit_1",
+            "ok": true
+          },
+          {
+            "name": "external_document_history_1",
+            "ok": true
+          },
+          {
+            "name": "editor_undo_1",
+            "ok": true
+          },
+          {
+            "name": "editor_redo_1",
+            "ok": true
+          },
+          {
+            "name": "main_screen_hidden_1",
+            "ok": true
+          },
+          {
+            "name": "plugin_disabled_1",
+            "ok": true
+          },
+          {
+            "name": "panel_freed_1",
+            "ok": true
+          },
+          {
+            "name": "plugin_freed_1",
+            "ok": true
+          },
+          {
+            "name": "history_cleanup_1",
+            "ok": true
+          },
+          {
+            "name": "balanced_lifecycle",
+            "ok": true
+          },
+          {
+            "name": "no_orphan_panel",
+            "ok": true
+          }
+        ],
+        "enable_including_three_frames_us": [
+          17165,
+          20989
+        ],
+        "engine": "4.7.2-stable (official)",
+        "mode": "headless",
+        "ok": true
+      }
+    },
+    {
+      "name": "headless_02",
+      "ok": true,
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 3954.8803,
+      "output_sha256": "6895AC9416D9E7CEEA4857549DB14A74F1CA7732C43ABECD12E73D99D38EB602",
+      "result": {
+        "checks": [
+          {
+            "name": "real_editor_process",
+            "ok": true
+          },
+          {
+            "name": "no_game_autoloads",
+            "ok": true
+          },
+          {
+            "name": "plugin_enabled_0",
+            "ok": true
+          },
+          {
+            "name": "transitive_resource_tool_0",
+            "ok": true
+          },
+          {
+            "name": "own_main_screen_visible_0",
+            "ok": true
+          },
+          {
+            "name": "control_focus_0",
+            "ok": true
+          },
+          {
+            "name": "editor_commit_0",
+            "ok": true
+          },
+          {
+            "name": "external_document_history_0",
+            "ok": true
+          },
+          {
+            "name": "editor_undo_0",
+            "ok": true
+          },
+          {
+            "name": "editor_redo_0",
+            "ok": true
+          },
+          {
+            "name": "main_screen_hidden_0",
+            "ok": true
+          },
+          {
+            "name": "plugin_disabled_0",
+            "ok": true
+          },
+          {
+            "name": "panel_freed_0",
+            "ok": true
+          },
+          {
+            "name": "plugin_freed_0",
+            "ok": true
+          },
+          {
+            "name": "history_cleanup_0",
+            "ok": true
+          },
+          {
+            "name": "plugin_enabled_1",
+            "ok": true
+          },
+          {
+            "name": "transitive_resource_tool_1",
+            "ok": true
+          },
+          {
+            "name": "own_main_screen_visible_1",
+            "ok": true
+          },
+          {
+            "name": "control_focus_1",
+            "ok": true
+          },
+          {
+            "name": "editor_commit_1",
+            "ok": true
+          },
+          {
+            "name": "external_document_history_1",
+            "ok": true
+          },
+          {
+            "name": "editor_undo_1",
+            "ok": true
+          },
+          {
+            "name": "editor_redo_1",
+            "ok": true
+          },
+          {
+            "name": "main_screen_hidden_1",
+            "ok": true
+          },
+          {
+            "name": "plugin_disabled_1",
+            "ok": true
+          },
+          {
+            "name": "panel_freed_1",
+            "ok": true
+          },
+          {
+            "name": "plugin_freed_1",
+            "ok": true
+          },
+          {
+            "name": "history_cleanup_1",
+            "ok": true
+          },
+          {
+            "name": "balanced_lifecycle",
+            "ok": true
+          },
+          {
+            "name": "no_orphan_panel",
+            "ok": true
+          }
+        ],
+        "enable_including_three_frames_us": [
+          18122,
+          20437
+        ],
+        "engine": "4.7.2-stable (official)",
+        "mode": "headless",
+        "ok": true
+      }
+    },
+    {
+      "name": "native_01",
+      "ok": true,
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 6970.7703,
+      "output_sha256": "B3397445A03436485BAF94B438C03603F74A6DF46244ECECC1E7192BC84C5225",
+      "result": {
+        "checks": [
+          {
+            "name": "real_editor_process",
+            "ok": true
+          },
+          {
+            "name": "no_game_autoloads",
+            "ok": true
+          },
+          {
+            "name": "plugin_enabled_0",
+            "ok": true
+          },
+          {
+            "name": "transitive_resource_tool_0",
+            "ok": true
+          },
+          {
+            "name": "own_main_screen_visible_0",
+            "ok": true
+          },
+          {
+            "name": "control_focus_0",
+            "ok": true
+          },
+          {
+            "name": "editor_commit_0",
+            "ok": true
+          },
+          {
+            "name": "external_document_history_0",
+            "ok": true
+          },
+          {
+            "name": "editor_undo_0",
+            "ok": true
+          },
+          {
+            "name": "editor_redo_0",
+            "ok": true
+          },
+          {
+            "name": "native_capture_saved",
+            "ok": true
+          },
+          {
+            "name": "main_screen_hidden_0",
+            "ok": true
+          },
+          {
+            "name": "plugin_disabled_0",
+            "ok": true
+          },
+          {
+            "name": "panel_freed_0",
+            "ok": true
+          },
+          {
+            "name": "plugin_freed_0",
+            "ok": true
+          },
+          {
+            "name": "history_cleanup_0",
+            "ok": true
+          },
+          {
+            "name": "plugin_enabled_1",
+            "ok": true
+          },
+          {
+            "name": "transitive_resource_tool_1",
+            "ok": true
+          },
+          {
+            "name": "own_main_screen_visible_1",
+            "ok": true
+          },
+          {
+            "name": "control_focus_1",
+            "ok": true
+          },
+          {
+            "name": "editor_commit_1",
+            "ok": true
+          },
+          {
+            "name": "external_document_history_1",
+            "ok": true
+          },
+          {
+            "name": "editor_undo_1",
+            "ok": true
+          },
+          {
+            "name": "editor_redo_1",
+            "ok": true
+          },
+          {
+            "name": "main_screen_hidden_1",
+            "ok": true
+          },
+          {
+            "name": "plugin_disabled_1",
+            "ok": true
+          },
+          {
+            "name": "panel_freed_1",
+            "ok": true
+          },
+          {
+            "name": "plugin_freed_1",
+            "ok": true
+          },
+          {
+            "name": "history_cleanup_1",
+            "ok": true
+          },
+          {
+            "name": "balanced_lifecycle",
+            "ok": true
+          },
+          {
+            "name": "no_orphan_panel",
+            "ok": true
+          }
+        ],
+        "enable_including_three_frames_us": [
+          19160,
+          21960
+        ],
+        "engine": "4.7.2-stable (official)",
+        "mode": "Windows",
+        "ok": true
+      }
+    },
+    {
+      "name": "runtime_guard",
+      "ok": true,
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_ms": 313.9599,
+      "output_sha256": "AE679A96A291DA1032A3315DA036A695C09BD798635B19E0839851BB932458B2",
+      "result": {
+        "checks": [
+          {
+            "name": "editor_plugins_absent_in_runtime",
+            "ok": true
+          }
+        ],
+        "ok": true
+      }
+    }
+  ],
+  "engine_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe"
+}
