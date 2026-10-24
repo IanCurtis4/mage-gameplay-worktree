@@ -99,3 +99,10 @@ Uma versão fixa de mapa continua passando pela geometria/validação canônica.
 Não há obrigação de aleatoriedade. Primeira entrega não depende de WFC nem de
 patrulhas. Os pacotes avançam por dependência e autorização; não por criação
 antecipada de todos os chats.
+
+## Editor F2 / M2 — ativado em24/10/2026
+
+Autorização humana: F1 terminou, pode começar F2. Base M1 integrada por
+ancestralidade em codex/map-editor-m2; [dispatch e propriedade](contracts/m2_dispatch.md).
+D2 aprovada neste chat: manter a apresentação isométrica atual no F2, com dois
+materiais simples. D4 apresentada com medições antes do fechamento. Não abre F3.

@@ -4,6 +4,8 @@ const Session = preload("res://scripts/map_authoring/document/document_session.g
 const Document = preload("res://scripts/map_authoring/document/source_document.gd")
 const Store = preload("res://scripts/map_authoring/io/source_store.gd")
 const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
+const Terrain = preload("res://scripts/map_authoring/terrain/terrain_panel.gd")
+var terrain: Control
 var session := Session.new()
 var source_path := ""
 var expected_hash := ""
@@ -26,7 +28,7 @@ func _ready() -> void:
 	recovery_root = ProjectSettings.globalize_path("res://.godot/map_authoring")
 	DirAccess.make_dir_recursive_absolute(recovery_root)
 	var heading := Label.new()
-	heading.text = "Editor de mapas · Documento e camadas"
+	heading.text = "Editor de mapas · Terreno e camadas"
 	heading.add_theme_font_size_override("font_size", 24)
 	add_child(heading)
 	var toolbar := HBoxContainer.new()
@@ -60,6 +62,8 @@ func _ready() -> void:
 	layers = ItemList.new()
 	layers.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	left.add_child(layers)
+	layers.item_selected.connect(func(index: int) -> void:
+		terrain.select_layer(session.document().to_data().layers[index].layer_id))
 	var layer_actions := HBoxContainer.new()
 	left.add_child(layer_actions)
 	_button(layer_actions, "Adicionar", add_layer)
@@ -67,7 +71,12 @@ func _ready() -> void:
 	_button(layer_actions, "Travar", toggle_layer_lock)
 	var right := VBoxContainer.new()
 	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	split.add_child(right)
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	split.add_child(scroll)
+	scroll.add_child(right)
 	var name_label := Label.new()
 	name_label.text = "Nome da peça"
 	right.add_child(name_label)
@@ -81,17 +90,17 @@ func _ready() -> void:
 	info = Label.new()
 	info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	right.add_child(info)
-	var placeholder := Label.new()
-	placeholder.text = "A fonte está pronta para edição.\nTerreno, materiais e teste jogável serão entregues nas próximas etapas."
-	placeholder.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	placeholder.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	placeholder.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	right.add_child(placeholder)
+	terrain = Terrain.new()
+	right.add_child(terrain)
+	terrain.layer_selected.connect(func(id: String) -> void:
+		for i: int in session.document().to_data().layers.size():
+			if session.document().to_data().layers[i].layer_id == id: layers.select(i))
+	terrain.bind(session)
 	var problem_title := Label.new()
 	problem_title.text = "Diagnósticos"
 	right.add_child(problem_title)
 	problems = ItemList.new()
-	problems.custom_minimum_size.y = 130
+	problems.custom_minimum_size.y = 65
 	problems.item_selected.connect(_select_problem)
 	right.add_child(problems)
 	_dialog = ConfirmationDialog.new()
@@ -148,8 +157,11 @@ func _commit_name() -> void:
 
 func add_layer() -> void:
 	var data: Dictionary = session.document().to_data()
-	data.layers.append({"layer_id": _id("layer"), "name": "Camada %d" % (data.layers.size() + 1), "origin_xz": [0, 0], "sample_spacing": 1, "columns": 2, "rows": 2, "heights": [0, 0, 0, 0], "material_masks": {}, "locked": false, "protected_regions": []})
+	var heights: Array = []; heights.resize(81); heights.fill(0.0)
+	data.layers.append({"layer_id": _id("layer"), "name": "Camada %d" % (data.layers.size() + 1), "origin_xz": [0, 0], "sample_spacing": 32, "columns": 9, "rows": 9, "heights": heights, "material_masks": {}, "locked": false, "protected_regions": []})
 	_show(session.apply(data))
+	terrain.select_layer(data.layers[-1].layer_id)
+	terrain.canvas.fit()
 
 func duplicate_layer() -> void:
 	var selected := layers.get_selected_items()
@@ -171,15 +183,16 @@ func _refresh() -> void:
 	layers.clear()
 	for layer: Dictionary in data.layers:
 		layers.add_item(("[Travada] " if layer.locked else "") + layer.name)
+		if terrain != null and layer.layer_id == terrain.selected_layer: layers.select(layers.item_count-1)
 	undo_button.disabled = not session.can_undo()
 	redo_button.disabled = not session.can_redo()
-	info.text = "Revisão %d · %s\nRascunho: %s" % [data.revision, "alterado" if session.dirty() else "salvo", _draft_path() + ".autosave"]
-	info.tooltip_text = data.document_id
+	info.text = "Revisão %d · %s · rascunho automático a cada 10 s" % [data.revision, "alterado" if session.dirty() else "salvo"]
+	info.tooltip_text = data.document_id + "\nRascunho: " + _draft_path() + ".autosave"
 	problems.clear()
 	for diagnostic: Dictionary in session.document().diagnostics():
 		problems.add_item(diagnostic.message)
 		problems.set_item_metadata(problems.item_count - 1, diagnostic)
-	if problems.item_count == 0: problems.add_item("Sem problemas de documento. Compilação ainda indisponível.")
+	if problems.item_count == 0: problems.add_item("Sem problemas de documento. Compile a peça para conferir o terreno.")
 
 func _select_problem(index: int) -> void:
 	var diagnostic: Variant = problems.get_item_metadata(index)
