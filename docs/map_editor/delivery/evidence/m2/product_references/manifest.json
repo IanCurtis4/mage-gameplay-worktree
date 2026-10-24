@@ -1,0 +1,30 @@
+[
+  {
+    "bytes": 3364544,
+    "intent": "Coleção de peças de dungeon fornecida como referência humana",
+    "file": "01_torghast.png",
+    "sha256": "36AD62D2FEB6D3972A265D6EEC13BDCA66ACBE8469431EF6E8189A193F5C0299",
+    "origin": "Anexo do usuário em24/10/2026; referência conceitual, não asset de produção"
+  },
+  {
+    "bytes": 293106,
+    "intent": "Mapa amplo concebível como peça única",
+    "file": "02_prt_fild08.png",
+    "sha256": "5AC92B9725D6D426F11E5F558D725B52E05194853D5B0C3AC5A042C5CC723A7C",
+    "origin": "Anexo do usuário em24/10/2026; referência conceitual, não asset de produção"
+  },
+  {
+    "bytes": 117355,
+    "intent": "Mapa de castelo concebível como conjunto de blocos",
+    "file": "03_castle.png",
+    "sha256": "C4DCDBE43FF4A009A60BCCB6FD29960603311CABA146163B0D012209B9B9E255",
+    "origin": "Anexo do usuário em24/10/2026; referência conceitual, não asset de produção"
+  },
+  {
+    "bytes": 44365,
+    "intent": "Mapa de igreja concebível como conjunto de blocos",
+    "file": "04_church.png",
+    "sha256": "C38D1FFCFFB742A65137213F4D229A0B7C55FA84C6F1AB0F8A2682828F41004C",
+    "origin": "Anexo do usuário em24/10/2026; referência conceitual, não asset de produção"
+  }
+]

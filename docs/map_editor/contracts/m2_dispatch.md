@@ -1,5 +1,11 @@
 # F2 / M2 — terreno e compilação, contrato v1
 
+> Retificação humana posterior em24/10: [semântica de peças e terreno](terrain_piece_semantics.md)
+> prevalece sobre a interpretação de tamanho/representação deste protótipo.
+> Célula e peça são sinônimos de autoria. As superfícies convexas abaixo são
+> subdivisões técnicas geradas, não peças/células do produto. O limite256 e as
+> cores simples não constituem a fundação final de escala/apresentação solicitada.
+
 24/10/2026. Autorização: “F1 terminou, pode começar F2.” Sol implementa/valida;
 Luna supervisiona execução automatizada delimitada. Base M1 integrada por
 ancestralidade `c6484ffebebaef588410e8002babc2eaf48e30e8` (M0 fdceea0).
@@ -27,8 +33,14 @@ Demais arquivos M1 são consumidos sem escrita. Novos arquivos exclusivos Sol:
 - `tools/map_editor_terrain/run.ps1`
 - `.gd.uid` correspondentes a cada script acima
 - `docs/map_editor/contracts/m2_dispatch.md`
+- `docs/map_editor/contracts/terrain_piece_semantics.md` (registro literal da direção humana posterior)
 - `docs/map_editor/delivery/m2.md`
 - `docs/map_editor/delivery/evidence/m2/.gitattributes` e evidência autoral
+- `docs/map_editor/delivery/evidence/m2/product_references/01_torghast.png`
+- `docs/map_editor/delivery/evidence/m2/product_references/02_prt_fild08.png`
+- `docs/map_editor/delivery/evidence/m2/product_references/03_castle.png`
+- `docs/map_editor/delivery/evidence/m2/product_references/04_church.png`
+- `docs/map_editor/delivery/evidence/m2/product_references/manifest.json`
 
 Luna possui somente `docs/map_editor/delivery/evidence/m2/luna.md` e subdiretório
 `luna_run/`; nenhum escritor simultâneo. Índice do editor: este contrato é o
