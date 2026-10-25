@@ -1,0 +1,116 @@
+[
+  {
+    "finished_utc": "2026-10-25T06:58:14.6820416Z",
+    "result": null,
+    "aborted": false,
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "ok": true,
+    "name": "import",
+    "timed_out": false,
+    "output_sha256": "8D10E51F4765C0F5CBF06D90BCBDA96C1527EA22B227AD099F249618FECE8A54",
+    "started_utc": "2026-10-25T06:58:05.6517734Z",
+    "exit_code": 0
+  },
+  {
+    "finished_utc": "2026-10-25T06:59:34.8975459Z",
+    "result": {
+      "checks": [
+        {
+          "id": "opens_from_encounters",
+          "ok": true
+        },
+        {
+          "id": "snapshot_imported",
+          "ok": true
+        },
+        {
+          "id": "new_route",
+          "ok": true
+        },
+        {
+          "id": "reject_unknown_paint_fields",
+          "ok": true
+        },
+        {
+          "id": "paints_ordered_waypoints",
+          "ok": true
+        },
+        {
+          "id": "assigns_existing_slot",
+          "ok": true
+        },
+        {
+          "id": "mode_changes",
+          "ok": true
+        },
+        {
+          "id": "edits_wait",
+          "ok": true
+        },
+        {
+          "id": "undo_redo",
+          "ok": true
+        },
+        {
+          "id": "reorders_points",
+          "ok": true
+        },
+        {
+          "id": "native_compile_completed",
+          "ok": true
+        },
+        {
+          "id": "gui_headless_same_compiler",
+          "ok": true
+        },
+        {
+          "id": "native_save_reopens",
+          "ok": true
+        },
+        {
+          "id": "local_package",
+          "ok": true
+        },
+        {
+          "id": "test_uses_separate_real_process",
+          "ok": true
+        },
+        {
+          "id": "native_preview_suspends_checkpoint",
+          "ok": true
+        },
+        {
+          "id": "native_preview_resumes_checkpoint",
+          "ok": true
+        },
+        {
+          "id": "removes_with_confirmation",
+          "ok": true
+        },
+        {
+          "id": "capture_saved",
+          "ok": true
+        }
+      ],
+      "count": 19,
+      "ok": true
+    },
+    "aborted": false,
+    "arguments": [
+      "--editor",
+      "--rendering-method",
+      "gl_compatibility"
+    ],
+    "ok": true,
+    "name": "native_ui",
+    "timed_out": false,
+    "output_sha256": "E7923C791ACF682C360D3120C462DCD36C6F65FB915A4EC619239EFB18F3FBB6",
+    "started_utc": "2026-10-25T06:58:14.7346808Z",
+    "exit_code": 0
+  }
+]

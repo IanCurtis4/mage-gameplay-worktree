@@ -1,0 +1,86 @@
+[
+  {
+    "stash": "",
+    "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\a9a4\\RagRPG",
+    "changed_entries": 0,
+    "head": "495ee16f8f1bf3b9ad14823cfbb4869d8f84f1c0"
+  },
+  {
+    "stash": "",
+    "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\content-delivery-docs\\RagRPG",
+    "changed_entries": 0,
+    "head": "61c3828085f7c5f757f436379f67e4edbfdf414e"
+  },
+  {
+    "stash": "",
+    "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-architecture\\RagRPG",
+    "changed_entries": 0,
+    "head": "3a9f62dbf1edb98559579b0426055b11f730b619"
+  },
+  {
+    "stash": "",
+    "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-effects\\RagRPG",
+    "changed_entries": 0,
+    "head": "2daebf620c03bf4010dad57dcf2864a07ec8ddbe"
+  },
+  {
+    "stash": "",
+    "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e06-inventory\\RagRPG",
+    "changed_entries": 0,
+    "head": "5beea5cd0c70813fbb85207e18bd249dd89c8384"
+  },
+  {
+    "stash": "",
+    "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e07-f7\\RagRPG",
+    "changed_entries": 0,
+    "head": "5ee16ebdce1888c84f15b29f286e956db7b55d42"
+  },
+  {
+    "stash": "",
+    "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e07-f8\\RagRPG",
+    "changed_entries": 0,
+    "head": "26004852d2455c6f1a57fb603eadcbcaa4f38cfa"
+  },
+  {
+    "stash": "",
+    "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\e07-integration\\RagRPG",
+    "changed_entries": 0,
+    "head": "9e457f222b0bc7dbbc67078ec7712eecee1bb353"
+  },
+  {
+    "stash": "",
+    "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\map-editor-m0\\RagRPG",
+    "changed_entries": 0,
+    "head": "fdceea038ca72f34f03542909609583f44181647"
+  },
+  {
+    "stash": "5829618ddb52999d47cb8803b902f31255197280",
+    "path": "C:\\Users\\João Pedro\\.codex\\worktrees\\menu-tabs\\RagRPG",
+    "changed_entries": 41,
+    "head": "0c008d4843d13f772aa2b69be22d24d2300b80a1"
+  },
+  {
+    "stash": "1a2f87bf19417079ce0050ad36572c42dac6223d",
+    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m1",
+    "changed_entries": 245,
+    "head": "c6484ffebebaef588410e8002babc2eaf48e30e8"
+  },
+  {
+    "stash": "",
+    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m2",
+    "changed_entries": 0,
+    "head": "15c0d196105b8801e54d784a6226edf27a06b7bd"
+  },
+  {
+    "stash": "998f08d96698982a82221e74ec93f448e751c662",
+    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m3",
+    "changed_entries": 265,
+    "head": "4c2adf80470d86989742daf426be965f606c5539"
+  },
+  {
+    "stash": "",
+    "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m4",
+    "changed_entries": 0,
+    "head": "b5ad440b100be7d50da8fc5b84218d0c54a886d2"
+  }
+]

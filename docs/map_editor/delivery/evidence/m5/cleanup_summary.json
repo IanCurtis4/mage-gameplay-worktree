@@ -1,0 +1,21 @@
+{
+  "free_before_bytes": 4006838272,
+  "retained_checkouts": [
+    "C:/Users/João Pedro/Documents/ChatGPT/RagRPG",
+    "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5"
+  ],
+  "removed_old_outputs": [
+    "main builds, including old E07 v6",
+    "old .tools probes/review copies/review engine/recovery bundle",
+    "main .godot evidence_archive/exported/documentation_consolidation",
+    "known old F8/F0 visualization artifacts"
+  ],
+  "personal_save_touched": false,
+  "current_fixture": "one reusable temporary F5 fixture, removed after final validation",
+  "free_after_bytes": 17412403200,
+  "removed_worktrees": 14,
+  "runtime_changed_by_cleanup": false,
+  "date": "2026-10-25",
+  "preservation": "cleanup_worktrees.json: stashes and existing branches; historical bundle refs in refs/archive/storage-2026-09-20; cleanup_legacy_sources.zip 203543 bytes",
+  "retained_engine": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/godot"
+}

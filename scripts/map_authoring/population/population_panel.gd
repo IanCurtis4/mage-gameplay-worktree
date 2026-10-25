@@ -46,6 +46,14 @@ var _pending := ""
 var _autosave := ""
 var source_path := ""
 var expected_hash := ""
+var patrol_window: Window
+func open_patrols() -> void:
+	if patrol_window == null:
+		patrol_window = Window.new(); patrol_window.title = "Patrulhas do encontro"; patrol_window.size = Vector2i(1280,860); patrol_window.min_size = Vector2i(1100,700)
+		patrol_window.close_requested.connect(patrol_window.hide); add_child(patrol_window)
+		var panel := preload("res://scripts/map_authoring/patrol/patrol_panel.gd").new(); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); patrol_window.add_child(panel)
+		panel.import_population(session.data)
+	patrol_window.popup_centered()
 func _ready() -> void:
 	size_flags_vertical = Control.SIZE_EXPAND_FILL; size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var heading := Label.new(); heading.text = "Encontros · População e interações"; heading.add_theme_font_size_override("font_size",22); add_child(heading)
@@ -55,6 +63,7 @@ func _ready() -> void:
 	for entry: Array in [["Preparar prévia",prepare_plan],["Atual / prévia",toggle_proposal],["Aplicar prévia…",request_apply],["Compilar",bake],["Cancelar",func() -> void:
 		if job != null: job.cancel()],["Testar / parar",toggle_test],["Publicar localmente…",func() -> void: choose("publish")]]: _button(actions,entry[0],entry[1])
 	var split := HSplitContainer.new(); split.size_flags_vertical = Control.SIZE_EXPAND_FILL; add_child(split)
+	_button(actions,"Patrulhas…",open_patrols)
 	var scroll := ScrollContainer.new(); scroll.custom_minimum_size.x = 365; scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; split.add_child(scroll)
 	var inspector := VBoxContainer.new(); inspector.size_flags_horizontal = Control.SIZE_EXPAND_FILL; scroll.add_child(inspector)
 	_label(inspector,"Clique no mapa para a ação escolhida")

@@ -137,6 +137,9 @@ func spawn_slot(host: RunController, slot_id: String) -> Dictionary:
 	if not checked["ok"]: actor.free(); return checked
 	var binding := actor.bind_world_geometry(world, home, profile, "slot_" + slot_id)
 	if not binding["ok"]: actor.free(); return binding
+	if slot.has("patrol"):
+		var patrolled := actor.bind_patrol(slot["patrol"])
+		if not patrolled["ok"]: actor.world_motion.release(); actor.free(); return patrolled
 	actor.global_position = Vector2(home.position.x, home.position.z)
 	actor.actor_died.connect(host._on_enemy_died)
 	actor.attack_requested.connect(host._on_enemy_attack_requested)

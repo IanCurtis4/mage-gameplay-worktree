@@ -1,0 +1,35 @@
+[
+  {
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "timed_out": false,
+    "name": "import",
+    "finished_utc": "2026-10-25T06:32:40.2148405Z",
+    "started_utc": "2026-10-25T06:32:13.0905923Z",
+    "result": null,
+    "output_sha256": "C7A9581AADD29AE626EB7D947E47D1B9067C96F459E246A4A2E1A7B0F17316D1",
+    "ok": true,
+    "exit_code": 0,
+    "aborted": false
+  },
+  {
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_patrol_test.gd"
+    ],
+    "timed_out": false,
+    "name": "patrol",
+    "finished_utc": "2026-10-25T06:32:40.8289926Z",
+    "started_utc": "2026-10-25T06:32:40.2683216Z",
+    "result": null,
+    "output_sha256": "689AEEFD2110CAD435C644B75E36156F31A7BACB795A788E2D29E2D72239BC69",
+    "ok": false,
+    "exit_code": -1,
+    "aborted": true
+  }
+]

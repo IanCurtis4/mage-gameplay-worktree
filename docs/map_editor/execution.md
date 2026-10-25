@@ -1,5 +1,10 @@
 # Pacotes e chats preparados
 
+**Regra humana25/10/2026:** manter somente o checkout principal e um worktree
+atual; reutilizar uma fixture e remover artefatos antigos de teste/build.
+Todo próximo pacote deve seguir [armazenamento e limpeza](STORAGE.md).
+As instruções históricas abaixo não autorizam acumular checkouts/cópias.
+
 **Atualização humana24/10/2026:** o encerramento/teste/integração de E07 não
 bloqueia mais o editor. F0/M0 está autorizado a continuar; D1 (tela própria no
 Godot) e D3 (grade por camada com pontes/rampas especiais) aprovadas. D2 deve

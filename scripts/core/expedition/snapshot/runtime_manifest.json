@@ -72,13 +72,14 @@
     "omitted": {}
   },
   "res://scripts/actors/enemy_actor.gd": {
-    "revision": 1,
+    "revision": 2,
     "fields": [
       "effect_ledger",
       "is_summoned",
       "summoner_id",
       "summon_used",
       "spawn_home",
+      "patrol",
       "engagement_mode",
       "_last_seen_position",
       "_sight_lost_time",

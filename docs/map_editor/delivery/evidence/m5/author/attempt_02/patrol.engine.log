@@ -1,0 +1,4 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Cannot infer the type of "routes" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/patrol/patrol_compiler.gd:29)

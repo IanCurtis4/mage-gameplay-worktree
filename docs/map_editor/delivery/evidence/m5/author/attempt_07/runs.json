@@ -1,0 +1,324 @@
+[
+  {
+    "ok": true,
+    "aborted": false,
+    "result": null,
+    "timed_out": false,
+    "output_sha256": "F94E07CF50F3C6D8F150EA56B86DD7F1685BCE424D4A29E948153889F57EE672",
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "started_utc": "2026-10-25T06:43:13.9068523Z",
+    "finished_utc": "2026-10-25T06:43:23.6728701Z",
+    "name": "import",
+    "exit_code": 0
+  },
+  {
+    "ok": true,
+    "aborted": false,
+    "result": {
+      "checks": [
+        {
+          "id": "strict_source",
+          "ok": true
+        },
+        {
+          "id": "compile_canonical_body_route",
+          "ok": true
+        },
+        {
+          "id": "immutable_source",
+          "ok": true
+        },
+        {
+          "id": "repeat_hash",
+          "ok": true
+        },
+        {
+          "id": "json_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "future_source_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_slot",
+          "ok": true
+        },
+        {
+          "id": "duplicate_assignment",
+          "ok": true
+        },
+        {
+          "id": "nan_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_support",
+          "ok": true
+        },
+        {
+          "id": "outside_leash",
+          "ok": true
+        },
+        {
+          "id": "unfinished_route_draft_allowed",
+          "ok": true
+        },
+        {
+          "id": "unfinished_route_cannot_publish",
+          "ok": true
+        },
+        {
+          "id": "cancelled_no_package",
+          "ok": true
+        },
+        {
+          "id": "undo_whole_route",
+          "ok": true
+        },
+        {
+          "id": "redo_whole_route",
+          "ok": true
+        },
+        {
+          "id": "reject_without_mutation",
+          "ok": true
+        },
+        {
+          "id": "source_saved",
+          "ok": true
+        },
+        {
+          "id": "source_reopened",
+          "ok": true
+        },
+        {
+          "id": "external_conflict",
+          "ok": true
+        },
+        {
+          "id": "publish_local",
+          "ok": true
+        },
+        {
+          "id": "immutable_repeat",
+          "ok": true
+        },
+        {
+          "id": "package_reload",
+          "ok": true
+        },
+        {
+          "id": "stale_refused",
+          "ok": true
+        },
+        {
+          "id": "hash_integrity",
+          "ok": true
+        },
+        {
+          "id": "real_actors_bind",
+          "ok": true
+        },
+        {
+          "id": "wait_begins_at_first_point",
+          "ok": true
+        },
+        {
+          "id": "zero_delta_frozen",
+          "ok": true
+        },
+        {
+          "id": "dead_does_not_advance",
+          "ok": true
+        },
+        {
+          "id": "loop_next_cursor",
+          "ok": true
+        },
+        {
+          "id": "real_movement_from_home",
+          "ok": true
+        },
+        {
+          "id": "fixed_home_preserved",
+          "ok": true
+        },
+        {
+          "id": "patrol_reaches_later_points",
+          "ok": true
+        },
+        {
+          "id": "aggro_interrupts_wait",
+          "ok": true
+        },
+        {
+          "id": "leash_starts_return",
+          "ok": true
+        },
+        {
+          "id": "returns_and_resumes",
+          "ok": true
+        },
+        {
+          "id": "blocked_diagnosed_without_teleport",
+          "ok": true
+        },
+        {
+          "id": "retry_budget",
+          "ok": true
+        },
+        {
+          "id": "blocked_snapshot_valid",
+          "ok": true
+        },
+        {
+          "id": "obstacle_removed_route_recalculated",
+          "ok": true
+        },
+        {
+          "id": "blocked_graph_restores",
+          "ok": true
+        },
+        {
+          "id": "blocked_state_exact",
+          "ok": true
+        },
+        {
+          "id": "invalid_cursor_blocks_snapshot",
+          "ok": true
+        },
+        {
+          "id": "ping_pong_expected_sequence",
+          "ok": true
+        }
+      ],
+      "count": 44,
+      "ok": true,
+      "package_hash": "96f8ead600671ad971a45d151d16dea214d3a740b894a7b86792d499920e6a59"
+    },
+    "timed_out": false,
+    "output_sha256": "C27E1C584F5B366C85A94A9BB083DA43E3D400CC6782FDD855994C4B978165A1",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_patrol_test.gd"
+    ],
+    "started_utc": "2026-10-25T06:43:23.7035821Z",
+    "finished_utc": "2026-10-25T06:44:01.9586901Z",
+    "name": "patrol",
+    "exit_code": 0
+  },
+  {
+    "ok": false,
+    "aborted": false,
+    "result": {
+      "checks": [
+        {
+          "id": "compiled restart source",
+          "ok": true
+        },
+        {
+          "id": "made wait",
+          "ok": true
+        },
+        {
+          "id": "captured wait",
+          "ok": true
+        },
+        {
+          "id": "codec packed wait",
+          "ok": true
+        },
+        {
+          "id": "made travel",
+          "ok": true
+        },
+        {
+          "id": "captured travel",
+          "ok": true
+        },
+        {
+          "id": "codec packed travel",
+          "ok": true
+        },
+        {
+          "id": "made blocked",
+          "ok": true
+        },
+        {
+          "id": "captured blocked",
+          "ok": true
+        },
+        {
+          "id": "codec packed blocked",
+          "ok": true
+        },
+        {
+          "id": "made aggro",
+          "ok": true
+        },
+        {
+          "id": "captured aggro",
+          "ok": true
+        },
+        {
+          "id": "codec packed aggro",
+          "ok": true
+        },
+        {
+          "id": "fixture character",
+          "ok": true
+        },
+        {
+          "id": "fixture session",
+          "ok": true
+        },
+        {
+          "id": "canonical gameplay content",
+          "ok": true
+        },
+        {
+          "id": "explicit expedition startup does not create a pilot encounter",
+          "ok": true
+        },
+        {
+          "id": "canonical loot profiles",
+          "ok": true
+        },
+        {
+          "id": "coherent fixture barrier",
+          "ok": true
+        },
+        {
+          "id": "four-stage generated fixture",
+          "ok": true
+        },
+        {
+          "id": "canonical campaign consumes patrol manifest",
+          "ok": false
+        }
+      ],
+      "count": 21,
+      "ok": false
+    },
+    "timed_out": false,
+    "output_sha256": "83EF021B89457B0568EA4440927EC0BBA83D4F61DC20B61357DF524D866E9D97",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_patrol_restart_test.gd",
+      "--",
+      "prepare"
+    ],
+    "started_utc": "2026-10-25T06:44:01.9753928Z",
+    "finished_utc": "2026-10-25T06:44:53.7980992Z",
+    "name": "restart_prepare",
+    "exit_code": 1
+  }
+]

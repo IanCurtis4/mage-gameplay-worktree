@@ -1,0 +1,125 @@
+[
+  {
+    "ok": true,
+    "result": null,
+    "timed_out": false,
+    "name": "import",
+    "aborted": false,
+    "finished_utc": "2026-10-25T06:34:50.6880940Z",
+    "exit_code": 0,
+    "output_sha256": "10BDBE1D16EE18312E9C670A2BA922C9FF7977A9A0289E6C4295DD5546145225",
+    "started_utc": "2026-10-25T06:34:28.3851619Z",
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ]
+  },
+  {
+    "ok": false,
+    "result": {
+      "checks": [
+        {
+          "id": "strict_source",
+          "ok": true
+        },
+        {
+          "id": "compile_canonical_body_route",
+          "ok": true
+        },
+        {
+          "id": "immutable_source",
+          "ok": true
+        },
+        {
+          "id": "repeat_hash",
+          "ok": true
+        },
+        {
+          "id": "json_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "future_source_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_slot",
+          "ok": true
+        },
+        {
+          "id": "duplicate_assignment",
+          "ok": true
+        },
+        {
+          "id": "nan_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_support",
+          "ok": true
+        },
+        {
+          "id": "outside_leash",
+          "ok": true
+        },
+        {
+          "id": "unfinished_route_draft_allowed",
+          "ok": true
+        },
+        {
+          "id": "unfinished_route_cannot_publish",
+          "ok": true
+        },
+        {
+          "id": "cancelled_no_package",
+          "ok": true
+        },
+        {
+          "id": "undo_whole_route",
+          "ok": true
+        },
+        {
+          "id": "redo_whole_route",
+          "ok": true
+        },
+        {
+          "id": "reject_without_mutation",
+          "ok": true
+        },
+        {
+          "id": "source_saved",
+          "ok": true
+        },
+        {
+          "id": "source_reopened",
+          "ok": true
+        },
+        {
+          "id": "external_conflict",
+          "ok": true
+        },
+        {
+          "id": "publish_local",
+          "ok": false
+        }
+      ],
+      "count": 21,
+      "ok": false,
+      "package_hash": "bc5ec87a7ce90d59e138e050fcaf13b7b072a07399fa2c2b6d1254d06051a0d1"
+    },
+    "timed_out": false,
+    "name": "patrol",
+    "aborted": false,
+    "finished_utc": "2026-10-25T06:34:59.2147937Z",
+    "exit_code": 1,
+    "output_sha256": "67734449DEE52EDF38B4A2AA54C4D5207F258089C6E4EFE9ADEF9C8E2AF853A1",
+    "started_utc": "2026-10-25T06:34:50.7368597Z",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_patrol_test.gd"
+    ]
+  }
+]

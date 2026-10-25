@@ -1,0 +1,217 @@
+[
+  {
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "aborted": false,
+    "timed_out": false,
+    "exit_code": 0,
+    "result": null,
+    "name": "import",
+    "ok": true,
+    "finished_utc": "2026-10-25T06:35:42.2862309Z",
+    "started_utc": "2026-10-25T06:35:34.2566102Z",
+    "output_sha256": "603B6F7A9E37F2CAA83DF9B2B7832D6371C57996C0C5164F45C8F2D6450D5C88"
+  },
+  {
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_patrol_test.gd"
+    ],
+    "aborted": false,
+    "timed_out": false,
+    "exit_code": 1,
+    "result": {
+      "checks": [
+        {
+          "id": "strict_source",
+          "ok": true
+        },
+        {
+          "id": "compile_canonical_body_route",
+          "ok": true
+        },
+        {
+          "id": "immutable_source",
+          "ok": true
+        },
+        {
+          "id": "repeat_hash",
+          "ok": true
+        },
+        {
+          "id": "json_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "future_source_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_slot",
+          "ok": true
+        },
+        {
+          "id": "duplicate_assignment",
+          "ok": true
+        },
+        {
+          "id": "nan_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_support",
+          "ok": true
+        },
+        {
+          "id": "outside_leash",
+          "ok": true
+        },
+        {
+          "id": "unfinished_route_draft_allowed",
+          "ok": true
+        },
+        {
+          "id": "unfinished_route_cannot_publish",
+          "ok": true
+        },
+        {
+          "id": "cancelled_no_package",
+          "ok": true
+        },
+        {
+          "id": "undo_whole_route",
+          "ok": true
+        },
+        {
+          "id": "redo_whole_route",
+          "ok": true
+        },
+        {
+          "id": "reject_without_mutation",
+          "ok": true
+        },
+        {
+          "id": "source_saved",
+          "ok": true
+        },
+        {
+          "id": "source_reopened",
+          "ok": true
+        },
+        {
+          "id": "external_conflict",
+          "ok": true
+        },
+        {
+          "id": "publish_local",
+          "ok": true
+        },
+        {
+          "id": "immutable_repeat",
+          "ok": true
+        },
+        {
+          "id": "package_reload",
+          "ok": true
+        },
+        {
+          "id": "stale_refused",
+          "ok": true
+        },
+        {
+          "id": "hash_integrity",
+          "ok": true
+        },
+        {
+          "id": "real_actors_bind",
+          "ok": true
+        },
+        {
+          "id": "wait_begins_at_first_point",
+          "ok": true
+        },
+        {
+          "id": "zero_delta_frozen",
+          "ok": true
+        },
+        {
+          "id": "dead_does_not_advance",
+          "ok": true
+        },
+        {
+          "id": "loop_next_cursor",
+          "ok": true
+        },
+        {
+          "id": "real_movement_from_home",
+          "ok": false
+        },
+        {
+          "id": "fixed_home_preserved",
+          "ok": true
+        },
+        {
+          "id": "patrol_reaches_later_points",
+          "ok": true
+        },
+        {
+          "id": "aggro_interrupts_wait",
+          "ok": true
+        },
+        {
+          "id": "leash_starts_return",
+          "ok": true
+        },
+        {
+          "id": "returns_and_resumes",
+          "ok": true
+        },
+        {
+          "id": "blocked_diagnosed_without_teleport",
+          "ok": true
+        },
+        {
+          "id": "retry_budget",
+          "ok": true
+        },
+        {
+          "id": "blocked_snapshot_valid",
+          "ok": true
+        },
+        {
+          "id": "obstacle_removed_route_recalculated",
+          "ok": true
+        },
+        {
+          "id": "blocked_graph_restores",
+          "ok": true
+        },
+        {
+          "id": "blocked_state_exact",
+          "ok": true
+        },
+        {
+          "id": "invalid_cursor_blocks_snapshot",
+          "ok": true
+        },
+        {
+          "id": "ping_pong_expected_sequence",
+          "ok": true
+        }
+      ],
+      "count": 44,
+      "ok": false,
+      "package_hash": "96f8ead600671ad971a45d151d16dea214d3a740b894a7b86792d499920e6a59"
+    },
+    "name": "patrol",
+    "ok": false,
+    "finished_utc": "2026-10-25T06:36:12.8384056Z",
+    "started_utc": "2026-10-25T06:35:42.3295206Z",
+    "output_sha256": "821652A63EAC6053EAE12613FE238C0D5636AD6ACC5FE43CF6812E3FD1E84849"
+  }
+]

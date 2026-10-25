@@ -1,0 +1,51 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+M5_CHECK strict_source true
+M5_CHECK compile_canonical_body_route true
+M5_CHECK immutable_source true
+M5_CHECK repeat_hash true
+M5_CHECK json_roundtrip true
+M5_CHECK future_source_rejected true
+M5_CHECK missing_slot true
+M5_CHECK duplicate_assignment true
+M5_CHECK nan_rejected true
+M5_CHECK missing_support true
+M5_CHECK outside_leash true
+M5_CHECK unfinished_route_draft_allowed true
+M5_CHECK unfinished_route_cannot_publish true
+M5_CHECK cancelled_no_package true
+M5_CHECK undo_whole_route true
+M5_CHECK redo_whole_route true
+M5_CHECK reject_without_mutation true
+M5_CHECK source_saved true
+M5_CHECK source_reopened true
+M5_CHECK external_conflict true
+M5_PACKAGE_DIAGNOSTIC 6 canonical=true hash=true population=true definition=true
+M5_CHECK publish_local true
+M5_CHECK immutable_repeat true
+M5_CHECK package_reload true
+M5_CHECK stale_refused true
+M5_CHECK hash_integrity true
+M5_CHECK real_actors_bind true
+M5_CHECK wait_begins_at_first_point true
+M5_CHECK zero_delta_frozen true
+M5_CHECK root_freezes_wait true
+M5_CHECK stun_freezes_wait true
+M5_CHECK tree_pause_freezes_wait true
+M5_CHECK dead_does_not_advance true
+M5_CHECK loop_next_cursor false
+M5_CHECK real_movement_from_home false
+M5_CHECK fixed_home_preserved true
+M5_CHECK patrol_reaches_later_points true
+M5_CHECK aggro_interrupts_wait false
+M5_CHECK leash_starts_return true
+M5_CHECK returns_and_resumes true
+SCRIPT ERROR: Invalid access to property or key '_stage' on a base object of type 'Nil'.
+   at: far_player (res://tests/map_editor_patrol_test.gd:25)
+   GDScript backtrace (most recent call first):
+       [0] far_player (res://tests/map_editor_patrol_test.gd:25)
+       [1] _run (res://tests/map_editor_patrol_test.gd:102)
+SCRIPT ERROR: Invalid access to property or key '_temporary' on a base object of type 'Nil'.
+   at: _run (res://tests/map_editor_patrol_test.gd:108)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/map_editor_patrol_test.gd:108)

@@ -1,0 +1,108 @@
+[
+  {
+    "result": null,
+    "exit_code": 0,
+    "finished_utc": "2026-10-25T06:54:22.2907852Z",
+    "timed_out": false,
+    "ok": true,
+    "name": "import",
+    "output_sha256": "97DE1434D595697DA8DE92D4C1E5E1C716306E3976CE34625992C0AA7EBB3F28",
+    "aborted": false,
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "started_utc": "2026-10-25T06:54:13.2647719Z"
+  },
+  {
+    "result": {
+      "checks": [
+        {
+          "id": "opens_from_encounters",
+          "ok": true
+        },
+        {
+          "id": "snapshot_imported",
+          "ok": true
+        },
+        {
+          "id": "new_route",
+          "ok": true
+        },
+        {
+          "id": "reject_unknown_paint_fields",
+          "ok": true
+        },
+        {
+          "id": "paints_ordered_waypoints",
+          "ok": true
+        },
+        {
+          "id": "assigns_existing_slot",
+          "ok": true
+        },
+        {
+          "id": "mode_changes",
+          "ok": true
+        },
+        {
+          "id": "edits_wait",
+          "ok": true
+        },
+        {
+          "id": "undo_redo",
+          "ok": true
+        },
+        {
+          "id": "reorders_points",
+          "ok": true
+        },
+        {
+          "id": "native_compile_completed",
+          "ok": true
+        },
+        {
+          "id": "gui_headless_same_compiler",
+          "ok": true
+        },
+        {
+          "id": "native_save_reopens",
+          "ok": false
+        },
+        {
+          "id": "local_package",
+          "ok": false
+        },
+        {
+          "id": "test_uses_separate_real_process",
+          "ok": false
+        },
+        {
+          "id": "removes_with_confirmation",
+          "ok": true
+        },
+        {
+          "id": "capture_saved",
+          "ok": true
+        }
+      ],
+      "count": 17,
+      "ok": false
+    },
+    "exit_code": 1,
+    "finished_utc": "2026-10-25T06:55:01.1781480Z",
+    "timed_out": false,
+    "ok": false,
+    "name": "native_ui",
+    "output_sha256": "108CC18205E2759C655D65FAC646841582009FD9CDF859FEC23A1CA3FC991F70",
+    "aborted": false,
+    "arguments": [
+      "--editor",
+      "--rendering-method",
+      "gl_compatibility"
+    ],
+    "started_utc": "2026-10-25T06:54:22.3665679Z"
+  }
+]

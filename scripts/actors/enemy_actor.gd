@@ -1,6 +1,30 @@
 class_name EnemyActor
 extends CombatActor
 
+const Patrol = preload("res://scripts/core/expedition/patrol/enemy_patrol.gd")
+var patrol: Dictionary = {}
+
+func bind_patrol(definition: Dictionary) -> Dictionary:
+	if world_motion == null or world_motion.geometry == null or not world_motion.is_current_world() or _world_home == null or _mob_definition == null or not is_alive() or not _uses_engagement(): return {"ok":false,"code":"patrol_binding_invalid"}
+	var checked := Patrol.validate_route(definition,Patrol.authored_world(world_motion.geometry),_world_home,world_motion.profile(),_mob_definition.leash_radius)
+	if not checked.ok: return checked
+	patrol = Patrol.create(definition)
+	world_motion.cancel()
+	return {"ok":true}
+
+func patrol_valid() -> bool:
+	if not Patrol.valid(patrol): return false
+	if patrol.is_empty(): return true
+	if world_motion == null or _world_home == null or _mob_definition == null: return false
+	if world_motion.geometry == null and is_alive(): return false
+	for waypoint: Dictionary in patrol.definition.waypoints:
+		var p := ExpeditionPopulationPlanner.point(waypoint.point)
+		if p.stage_id != _world_home.stage_id or p.position.distance_to(_world_home.position) > _mob_definition.leash_radius: return false
+		if world_motion.geometry != null:
+			var support := world_motion.geometry.support_at(p.surface_id,Vector2(p.position.x,p.position.z),world_motion.geometry.geometry_revision)
+			if not support.ok or support.data.point.position.distance_to(p.position) > WorldGeometry.EPS: return false
+	return true
+
 var threat := ThreatService.new()
 var threat_actors: Dictionary[String, PlayerActor] = {}
 var threat_taunt_sequence := 0
@@ -66,6 +90,15 @@ func _combat_target_reachable(maximum_range: float) -> bool:
 	return global_position.distance_to(player.global_position) <= maximum_range and navigation != null and navigation.is_segment_clear(global_position,player.global_position,0.0)
 
 func _world_plan(destination: ExpeditionWorldPoint) -> void:
+	if not patrol.is_empty() and engagement_mode == &"returning":
+		if _repath_time > 0.0: return
+		_repath_time = 1.0
+		var planned := world_motion.plan(destination,world_motion.geometry.geometry_revision)
+		if not planned.ok:
+			world_motion.cancel(); world_ai_failure = planned.get("error_code",&"patrol_blocked")
+			patrol.state = "blocked"; patrol.error = String(world_ai_failure)
+		else: patrol.state = "interrupted"; patrol.error = ""; world_ai_failure = &""
+		return
 	if _repath_time > 0.0 and world_motion.has_route(): return
 	_repath_time = 0.45
 	if destination == null or not world_motion.plan(destination,world_motion.geometry.geometry_revision)["ok"]: world_motion.cancel()
@@ -95,6 +128,7 @@ func _advance_world_ai(delta: float) -> void:
 	_repath_time -= delta
 	if is_stunned(): _mob_cast.clear(); world_motion.cancel(); return
 	if is_feared():
+		Patrol.interrupt(self)
 		_mob_cast.clear()
 		if is_rooted(): world_motion.cancel(); return
 		_world_fear_path()
@@ -102,6 +136,7 @@ func _advance_world_ai(delta: float) -> void:
 		return
 	if _uses_engagement():
 		_refresh_engagement(delta)
+		if engagement_mode != &"idle": Patrol.interrupt(self)
 		if engagement_mode == &"returning":
 			_world_plan(_world_home)
 			_world_walk(delta)
@@ -112,6 +147,9 @@ func _advance_world_ai(delta: float) -> void:
 				world_motion.cancel()
 			return
 		_request_companion_once()
+		if engagement_mode == &"idle" and not patrol.is_empty():
+			Patrol.tick(self,delta)
+			return
 	if not _mob_cast.is_empty(): _advance_mob_cast(delta); return
 	if not _refresh_player_acquisition():
 		if _world_last_seen != null and (not _uses_engagement() or engagement_mode == &"engaged"):

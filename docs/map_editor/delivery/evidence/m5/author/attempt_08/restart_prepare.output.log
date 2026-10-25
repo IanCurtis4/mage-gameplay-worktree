@@ -1,0 +1,37 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+M5_RESTART_CHECK compiled restart source true
+M5_RESTART_CHECK made wait true
+M5_RESTART_CHECK captured wait true
+M5_RESTART_CHECK codec packed wait true
+M5_RESTART_CHECK made travel true
+M5_RESTART_CHECK captured travel true
+M5_RESTART_CHECK codec packed travel true
+M5_RESTART_CHECK made blocked true
+M5_RESTART_CHECK captured blocked true
+M5_RESTART_CHECK codec packed blocked true
+M5_RESTART_CHECK made aggro true
+M5_RESTART_CHECK captured aggro true
+M5_RESTART_CHECK codec packed aggro true
+M5_RESTART_CHECK fixture character true
+M5_RESTART_CHECK fixture session true
+M5_RESTART_CHECK canonical gameplay content true
+M5_RESTART_CHECK explicit expedition startup does not create a pilot encounter true
+M5_RESTART_CHECK canonical loot profiles true
+M5_RESTART_CHECK coherent fixture barrier true
+M5_RESTART_CHECK four-stage generated fixture true
+M5_RESTART_CHECK canonical campaign consumes patrol manifest true
+M5_RESTART_CHECK next off-tree coherent barrier true
+M5_RESTART_CHECK canonical spawn binds patrol true
+M5_RESTART_CHECK death while waiting through canonical command false
+SCRIPT ERROR: Invalid access to property or key 'geometry_revision' on a base object of type 'Nil'.
+   at: EnemyActor.patrol_valid (res://scripts/actors/enemy_actor.gd:22)
+   GDScript backtrace (most recent call first):
+       [0] patrol_valid (res://scripts/actors/enemy_actor.gd:22)
+       [1] _validate_runtime_graph (res://scripts/core/expedition/snapshot/snapshot_registry.gd:857)
+       [2] capture (res://scripts/core/expedition/snapshot/snapshot_registry.gd:139)
+       [3] campaign_command (res://scripts/core/expedition/expedition_service.gd:369)
+       [4] command (res://tests/fixtures/e07/f5/suite.gd:64)
+       [5] kill (res://tests/fixtures/e07/f5/suite.gd:75)
+       [6] campaign (res://tests/map_editor_patrol_restart_test.gd:56)
+       [7] _run (res://tests/map_editor_patrol_restart_test.gd:41)

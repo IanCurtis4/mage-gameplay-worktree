@@ -1,0 +1,28 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+M5_CHECK strict_source true
+M5_CHECK compile_canonical_body_route true
+M5_CHECK immutable_source true
+M5_CHECK repeat_hash true
+M5_CHECK json_roundtrip true
+M5_CHECK future_source_rejected true
+M5_CHECK missing_slot true
+M5_CHECK duplicate_assignment true
+M5_CHECK nan_rejected true
+M5_CHECK missing_support true
+M5_CHECK outside_leash true
+M5_CHECK unfinished_route_draft_allowed true
+M5_CHECK unfinished_route_cannot_publish true
+M5_CHECK cancelled_no_package true
+M5_CHECK undo_whole_route true
+M5_CHECK redo_whole_route true
+M5_CHECK reject_without_mutation true
+M5_CHECK source_saved true
+M5_CHECK source_reopened true
+M5_CHECK external_conflict true
+M5_CHECK publish_local false
+M5_CHECK immutable_repeat false
+SCRIPT ERROR: Invalid access to property or key 'path' on a base object of type 'Dictionary'.
+   at: _run (res://tests/map_editor_patrol_test.gd:64)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://tests/map_editor_patrol_test.gd:64)

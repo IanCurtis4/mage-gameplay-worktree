@@ -1,5 +1,16 @@
 # Editor de mapas — proposta de arquitetura e execução
 
+## Decisões humanas25/10/2026
+
+F5/M5 autorizado após F4. D5 confirmada: loop/ida e volta, espera, interrupção
+por aggro, retorno a waypoint válido e home/leash fixos. Transferência nominal
+dos quatro arquivos críticos de runtime autorizada no [dispatch F5](contracts/m5_dispatch.md).
+Aceite/merge de produto não é inferido dessa autorização de execução.
+
+**Armazenamento:** manter somente o checkout principal e o worktree atual;
+remover artefatos antigos de teste/produção e reaproveitar uma fixture.
+[Regra obrigatória para os próximos passos](STORAGE.md).
+
 F3/M3 entregue e validado tecnicamente no checkout dedicado, consumindo o aceite
 completo F2; aceite humano F3 registrado em24/10, com a travessia pelo centro da
 conexão aceita como limitação temporária. [Contrato e manifesto nominal](contracts/m3_dispatch.md), [recibo F3](delivery/m3.md).
@@ -148,5 +159,6 @@ Retomada em25/10 pela skill ragrpg-resume; validação técnica concluída com
 supervisão Luna no código `7a391431fad54e396194ec0c3ce8e6491fbe178e`:
 91 checks de população,70 de documento,29 de UI e sete IDs oficiais por impacto
 conforme a linhagem registrada no recibo.
-O candidato não recebeu aceite humano. Sem liberação de F5/D5 ou F6/D6,
-sem atualização de master/playtest/push. M3-NAV-01 permanece temporária.
+O candidato F4 não recebeu aceite humano neste recibo. A execução F5/D5 foi
+liberada posteriormente conforme o registro de25/10 acima; F6/D6 continua
+pendente. Sem atualização de master/playtest/push. M3-NAV-01 permanece temporária.

@@ -1,0 +1,108 @@
+[
+  {
+    "result": null,
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "started_utc": "2026-10-25T06:56:11.8982548Z",
+    "ok": true,
+    "output_sha256": "D7099478B5AB8E960CC816E871E6FE4653B63ACF513C528EE77B6E2675E083D1",
+    "aborted": false,
+    "finished_utc": "2026-10-25T06:56:21.2233987Z",
+    "exit_code": 0,
+    "name": "import",
+    "timed_out": false
+  },
+  {
+    "result": {
+      "checks": [
+        {
+          "id": "opens_from_encounters",
+          "ok": true
+        },
+        {
+          "id": "snapshot_imported",
+          "ok": true
+        },
+        {
+          "id": "new_route",
+          "ok": true
+        },
+        {
+          "id": "reject_unknown_paint_fields",
+          "ok": true
+        },
+        {
+          "id": "paints_ordered_waypoints",
+          "ok": true
+        },
+        {
+          "id": "assigns_existing_slot",
+          "ok": true
+        },
+        {
+          "id": "mode_changes",
+          "ok": true
+        },
+        {
+          "id": "edits_wait",
+          "ok": true
+        },
+        {
+          "id": "undo_redo",
+          "ok": true
+        },
+        {
+          "id": "reorders_points",
+          "ok": true
+        },
+        {
+          "id": "native_compile_completed",
+          "ok": true
+        },
+        {
+          "id": "gui_headless_same_compiler",
+          "ok": true
+        },
+        {
+          "id": "native_save_reopens",
+          "ok": true
+        },
+        {
+          "id": "local_package",
+          "ok": true
+        },
+        {
+          "id": "test_uses_separate_real_process",
+          "ok": true
+        },
+        {
+          "id": "removes_with_confirmation",
+          "ok": true
+        },
+        {
+          "id": "capture_saved",
+          "ok": true
+        }
+      ],
+      "count": 17,
+      "ok": true
+    },
+    "arguments": [
+      "--editor",
+      "--rendering-method",
+      "gl_compatibility"
+    ],
+    "started_utc": "2026-10-25T06:56:21.2777201Z",
+    "ok": true,
+    "output_sha256": "FFE940BA51106BBB08D1CAF1D04C0533F5A5DD21D5E6D76BFE31EA176A4DE03C",
+    "aborted": false,
+    "finished_utc": "2026-10-25T06:57:04.1150381Z",
+    "exit_code": 0,
+    "name": "native_ui",
+    "timed_out": false
+  }
+]

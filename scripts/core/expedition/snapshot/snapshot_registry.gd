@@ -155,7 +155,7 @@ func capture(root: Node, barrier: SnapshotTickBarrier) -> Dictionary:
 			if value is PlayerActor and field == "_sentinel_last_launch_frame": raw = int(raw) - Engine.get_process_frames()
 			var declared_kind := _field_dead_kind(value,field) if typeof(raw) == TYPE_OBJECT and not is_instance_valid(raw) else ""
 			fields[field] = _encode(raw, field,"",0,declared_kind)
-		var record := {"kind":_kind(value),"revision":1,"generation":entities.generation_for(id),"fields":fields,"signals":_signals(value)}
+		var record := {"kind":_kind(value),"revision":int(schemas[_kind(value)]["revision"]),"generation":entities.generation_for(id),"fields":fields,"signals":_signals(value)}
 		if value is Node:
 			var parent := (value as Node).get_parent()
 			record["node"] = {"parent":entities.stable_for(parent.get_instance_id()) if parent != null else "","name":String(value.name),"index":value.get_index(),"mode":barrier.saved_mode(value),"process":value.is_processing(),"physics":value.is_physics_processing(),"priority":value.process_priority,"physics_priority":value.process_physics_priority,"groups":value.get_groups(),"meta":_encode(_metadata(value))}
@@ -854,6 +854,7 @@ func _validate_runtime_graph() -> Dictionary:
 		if value is ThreatService and not value.valid(): return StableEntityRegistry.failure(&"invalid_payload", "threat state")
 		if value is HealthState and (value.damage_sequence < 0 or value.heal_sequence < 0): return StableEntityRegistry.failure(&"invalid_payload", "health sequence")
 		if value is EnemyActor:
+			if not value.patrol_valid(): return StableEntityRegistry.failure(&"invalid_payload", "patrol state")
 			if value.threat == null or value.threat_taunt_sequence < 0: return StableEntityRegistry.failure(&"invalid_payload", "threat binding")
 			for id: String in value.threat_actors:
 				if not value.threat.participants.has(id) or not is_instance_valid(value.threat_actors[id]): return StableEntityRegistry.failure(&"invalid_payload", "threat actor")

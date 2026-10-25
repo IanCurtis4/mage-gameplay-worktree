@@ -1,0 +1,235 @@
+[
+  {
+    "ok": true,
+    "finished_utc": "2026-10-25T06:45:59.8977290Z",
+    "timed_out": false,
+    "output_sha256": "F94E07CF50F3C6D8F150EA56B86DD7F1685BCE424D4A29E948153889F57EE672",
+    "exit_code": 0,
+    "result": null,
+    "started_utc": "2026-10-25T06:45:49.6695307Z",
+    "name": "import",
+    "aborted": false,
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ]
+  },
+  {
+    "ok": true,
+    "finished_utc": "2026-10-25T06:46:41.8102587Z",
+    "timed_out": false,
+    "output_sha256": "2DB3B5DF19983D0E81FFB6DF5F4E56514163D3B0369DFD196C7D9F992FD9F609",
+    "exit_code": 0,
+    "result": {
+      "checks": [
+        {
+          "id": "strict_source",
+          "ok": true
+        },
+        {
+          "id": "compile_canonical_body_route",
+          "ok": true
+        },
+        {
+          "id": "immutable_source",
+          "ok": true
+        },
+        {
+          "id": "repeat_hash",
+          "ok": true
+        },
+        {
+          "id": "json_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "future_source_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_slot",
+          "ok": true
+        },
+        {
+          "id": "duplicate_assignment",
+          "ok": true
+        },
+        {
+          "id": "nan_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_support",
+          "ok": true
+        },
+        {
+          "id": "outside_leash",
+          "ok": true
+        },
+        {
+          "id": "unfinished_route_draft_allowed",
+          "ok": true
+        },
+        {
+          "id": "unfinished_route_cannot_publish",
+          "ok": true
+        },
+        {
+          "id": "cancelled_no_package",
+          "ok": true
+        },
+        {
+          "id": "undo_whole_route",
+          "ok": true
+        },
+        {
+          "id": "redo_whole_route",
+          "ok": true
+        },
+        {
+          "id": "reject_without_mutation",
+          "ok": true
+        },
+        {
+          "id": "source_saved",
+          "ok": true
+        },
+        {
+          "id": "source_reopened",
+          "ok": true
+        },
+        {
+          "id": "external_conflict",
+          "ok": true
+        },
+        {
+          "id": "publish_local",
+          "ok": true
+        },
+        {
+          "id": "immutable_repeat",
+          "ok": true
+        },
+        {
+          "id": "package_reload",
+          "ok": true
+        },
+        {
+          "id": "stale_refused",
+          "ok": true
+        },
+        {
+          "id": "hash_integrity",
+          "ok": true
+        },
+        {
+          "id": "real_actors_bind",
+          "ok": true
+        },
+        {
+          "id": "wait_begins_at_first_point",
+          "ok": true
+        },
+        {
+          "id": "zero_delta_frozen",
+          "ok": true
+        },
+        {
+          "id": "dead_does_not_advance",
+          "ok": true
+        },
+        {
+          "id": "loop_next_cursor",
+          "ok": true
+        },
+        {
+          "id": "real_movement_from_home",
+          "ok": true
+        },
+        {
+          "id": "fixed_home_preserved",
+          "ok": true
+        },
+        {
+          "id": "patrol_reaches_later_points",
+          "ok": true
+        },
+        {
+          "id": "aggro_interrupts_wait",
+          "ok": true
+        },
+        {
+          "id": "leash_starts_return",
+          "ok": true
+        },
+        {
+          "id": "returns_and_resumes",
+          "ok": true
+        },
+        {
+          "id": "blocked_diagnosed_without_teleport",
+          "ok": true
+        },
+        {
+          "id": "retry_budget",
+          "ok": true
+        },
+        {
+          "id": "blocked_snapshot_valid",
+          "ok": true
+        },
+        {
+          "id": "obstacle_removed_route_recalculated",
+          "ok": true
+        },
+        {
+          "id": "blocked_graph_restores",
+          "ok": true
+        },
+        {
+          "id": "blocked_state_exact",
+          "ok": true
+        },
+        {
+          "id": "invalid_cursor_blocks_snapshot",
+          "ok": true
+        },
+        {
+          "id": "ping_pong_expected_sequence",
+          "ok": true
+        }
+      ],
+      "count": 44,
+      "ok": true,
+      "package_hash": "152ffcacdfea8da1762f49ed584e3bcf25528f7ae9e991f3b083a4ac9717a5ba"
+    },
+    "started_utc": "2026-10-25T06:45:59.9248792Z",
+    "name": "patrol",
+    "aborted": false,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_patrol_test.gd"
+    ]
+  },
+  {
+    "ok": false,
+    "finished_utc": "2026-10-25T06:47:52.8859151Z",
+    "timed_out": false,
+    "output_sha256": "A2EF122D4EEF575F726B6B44DA35E077D50E97069C83D1F2DC8F70EC969210E2",
+    "exit_code": -1,
+    "result": null,
+    "started_utc": "2026-10-25T06:46:41.8231349Z",
+    "name": "restart_prepare",
+    "aborted": true,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_patrol_restart_test.gd",
+      "--",
+      "prepare"
+    ]
+  }
+]

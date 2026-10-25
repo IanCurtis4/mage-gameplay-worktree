@@ -1,0 +1,25 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+M5_RESTART_CHECK compiled restart source true
+M5_RESTART_CHECK made wait true
+M5_RESTART_CHECK captured wait true
+M5_RESTART_CHECK codec packed wait true
+M5_RESTART_CHECK made travel true
+M5_RESTART_CHECK captured travel true
+M5_RESTART_CHECK codec packed travel true
+M5_RESTART_CHECK made blocked true
+M5_RESTART_CHECK captured blocked true
+M5_RESTART_CHECK codec packed blocked true
+M5_RESTART_CHECK made aggro true
+M5_RESTART_CHECK captured aggro true
+M5_RESTART_CHECK codec packed aggro true
+M5_RESTART_CHECK fixture character true
+M5_RESTART_CHECK fixture session true
+M5_RESTART_CHECK canonical gameplay content true
+M5_RESTART_CHECK explicit expedition startup does not create a pilot encounter true
+M5_RESTART_CHECK canonical loot profiles true
+M5_RESTART_CHECK coherent fixture barrier true
+M5_RESTART_CHECK four-stage generated fixture true
+M5_RESTART_CHECK canonical campaign consumes patrol manifest false
+{ "ok": false, "error_code": &"invalid_payload" }
+M5_RESTART_RESULT {"checks":[{"id":"compiled restart source","ok":true},{"id":"made wait","ok":true},{"id":"captured wait","ok":true},{"id":"codec packed wait","ok":true},{"id":"made travel","ok":true},{"id":"captured travel","ok":true},{"id":"codec packed travel","ok":true},{"id":"made blocked","ok":true},{"id":"captured blocked","ok":true},{"id":"codec packed blocked","ok":true},{"id":"made aggro","ok":true},{"id":"captured aggro","ok":true},{"id":"codec packed aggro","ok":true},{"id":"fixture character","ok":true},{"id":"fixture session","ok":true},{"id":"canonical gameplay content","ok":true},{"id":"explicit expedition startup does not create a pilot encounter","ok":true},{"id":"canonical loot profiles","ok":true},{"id":"coherent fixture barrier","ok":true},{"id":"four-stage generated fixture","ok":true},{"id":"canonical campaign consumes patrol manifest","ok":false}],"count":21,"ok":false}
