@@ -48,7 +48,8 @@ e ambientação quando estes recursos estiverem disponíveis. Autor humano e age
 seguem a mesma direção. O compilador não pretende avaliar qualidade narrativa.
 
 Palcos temáticos do F4 permanecem utilizáveis e validam referências quando
-declarados. Sorteio de raros usa a permissão configurada; reserva é intenção de
+declarados. A permissão de sorteio não impede um raro fixo manual; espécies,
+reservas, catálogo e corpo continuam sendo conferidos. Sorteio de raros usa a permissão configurada; reserva é intenção de
 conteúdo explícita. Nenhum campo temático altera loot, respawn ou fórmula de dano.
 
 ## Duas apresentações, mesmas operações

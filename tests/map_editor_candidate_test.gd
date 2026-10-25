@@ -106,6 +106,12 @@ func run() -> void:
 	manual.slots = [{"slot_id":"manual_rare","brush_id":"field","surface_id":manual.brushes[0].surface_id,"position_xyz":[260,0,240],"species_id":"test_gel","category":"rare","origin_id":"trial_stage_1","fixed":true,"site_id":""}]
 	manual.plan_hash = Population.Document.recipe_hash(manual)
 	check("manual_rare_without_theme_allowed",Population.compile(manual).ok)
+	var manual_context := contextual(); manual_context.brushes = [manual_context.brushes[0]]; manual_context.brushes[0].quantity = 1
+	manual_context.slots = manual.slots.duplicate(true); manual_context.interactions = []; manual_context.exclusions = []
+	for index: int in manual_context.map[0].pieces.size():
+		manual_context.map[0].pieces[index].source.context.allow_rare = false; rehash(manual_context.map[0],index)
+	manual_context.plan_hash = Population.Document.recipe_hash(manual_context)
+	check("manual_rare_ignores_random_permission",Population.compile(manual_context).ok)
 	var reserved := contextual(); add_reservation(reserved)
 	var reserved_plan := Population.regenerate(reserved)
 	check("reservation_realized",reserved_plan.ok)

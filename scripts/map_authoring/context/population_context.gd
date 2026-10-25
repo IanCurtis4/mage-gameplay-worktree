@@ -29,7 +29,10 @@ static func site_id(instance: String, encounter: Dictionary) -> String:
 static func policy(source: Dictionary, context: Dictionary, point: ExpeditionWorldPoint, spec: Dictionary, radius: float, site: String = "") -> String:
 	var info := record(source,context,point)
 	if info.is_empty(): return ""
-	var map: Dictionary = source.map[0]; var rare: bool = spec.category in ["rare","rare_elite","boss"]
+	var map: Dictionary = source.map[0]
+	# This switch controls random eligibility. A manually pinned rare is an
+	# explicit author choice; species, reservation, catalog and body still apply.
+	var random_rare: bool = spec.category in ["rare","rare_elite","boss"] and not spec.get("fixed",false)
 	for area: Dictionary in info.context.areas:
 		var region := Context._find(info.source.regions,"region_id",area.region_id)
 		if info.family != info.id+"/layer/"+region.layer_id or not touches(region.polygon_xz,info.local,radius): continue
@@ -39,9 +42,9 @@ static func policy(source: Dictionary, context: Dictionary, point: ExpeditionWor
 			# A named reservation is explicit eligibility, independent of random pools.
 			return "" if _inside(region.polygon_xz,info.local,radius) else "context_reserved"
 		if not area.allowed_species.is_empty() and spec.species_id not in area.allowed_species and not Context.overridden(map,info.id,"species"): return "context_species"
-		if rare and not area.allow_rare and not Context.overridden(map,info.id,"rare"): return "context_rare"
+		if random_rare and not area.allow_rare and not Context.overridden(map,info.id,"rare"): return "context_rare"
 	if not info.context.allowed_species.is_empty() and spec.species_id not in info.context.allowed_species and not Context.overridden(map,info.id,"species"): return "context_species"
-	if rare and not info.context.allow_rare and not Context.overridden(map,info.id,"rare"): return "context_rare"
+	if random_rare and not info.context.allow_rare and not Context.overridden(map,info.id,"rare"): return "context_rare"
 	return ""
 
 static func rare_allowed(source: Dictionary, context: Dictionary, slot: Dictionary, radius: float) -> bool:

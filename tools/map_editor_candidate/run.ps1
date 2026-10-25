@@ -1,4 +1,4 @@
-param([Parameter(Mandatory)][string]$GodotPath,[Parameter(Mandatory)][string]$EvidenceDirectory,[string]$ReuseFixture='',[ValidateSet('Import','Candidate','Core','Native','Release','All')][string]$Stage='All')
+param([Parameter(Mandatory)][string]$GodotPath,[Parameter(Mandatory)][string]$EvidenceDirectory,[string]$ReuseFixture='',[ValidateSet('Import','Candidate','Context','Core','Native','Release','All')][string]$Stage='All')
 $ErrorActionPreference='Stop'
 $m8Root=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $m8GitRoot=git -C $m8Root rev-parse --show-toplevel
@@ -57,7 +57,7 @@ function Invoke-M8([string]$Name,[string[]]$Arguments,[string]$Marker='',[int]$E
         $m8Match=[regex]::Match($m8Text,'(?m)^'+$Marker+' (.+)$')
         if($m8Match.Success){$m8Payload=ConvertFrom-Json $m8Match.Groups[1].Value}
         $m8Pass=$m8Pass -and $null -ne $m8Payload -and $m8Payload.ok -and $m8Payload.count -gt 0 -and @($m8Payload.checks|Where-Object {-not $_.ok}).Count -eq 0
-        $m8Expected=@{candidate=52;document=70;terrain=102;composition=63;population=91;patrol=58;generation=89;exchange=113;native_ui=49;release=6}
+        $m8Expected=@{candidate=53;document=70;terrain=102;composition=63;population=91;patrol=58;generation=89;exchange=113;native_ui=49;release=6}
         if($m8Expected.ContainsKey($Name)){$m8Pass=$m8Pass -and $m8Payload.count -eq $m8Expected[$Name] -and @($m8Payload.checks).Count -eq $m8Expected[$Name]}
     }
     $m8Runs.Add(@{name=$Name;ok=$m8Pass;arguments=$Arguments;started_utc=$m8Start;finished_utc=[DateTime]::UtcNow.ToString('o');exit_code=$m8Process.ExitCode;timed_out=$m8Timeout;aborted=$m8Aborted;output_sha256=(Get-FileHash -LiteralPath $m8Log).Hash;result=$m8Payload})
@@ -66,9 +66,10 @@ function Invoke-M8([string]$Name,[string[]]$Arguments,[string]$Marker='',[int]$E
     if(-not $m8Pass){Write-Output $m8Text; throw ('M8 failed: '+$Name)}
 }
 Invoke-M8 'import' @('--headless','--editor','--import','--quit')
-if($Stage -in @('Candidate','Core','All')) {
+if($Stage -in @('Candidate','Context','Core','All')) {
     Invoke-M8 'candidate' @('--headless','--script','res://tests/map_editor_candidate_test.gd') 'M8_RESULT'
     if($Stage -ne 'Candidate') { foreach($m8Suite in @('document','terrain','composition','population','patrol','generation','exchange')) {
+        if($Stage -eq 'Context' -and $m8Suite -notin @('population','patrol','exchange')){continue}
         Invoke-M8 $m8Suite @('--headless','--script',('res://tests/map_editor_'+$m8Suite+'_test.gd')) ('M'+@{document=1;terrain=2;composition=3;population=4;patrol=5;generation=6;exchange=7}[$m8Suite]+'_RESULT')
     }
 }
