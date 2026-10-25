@@ -2,6 +2,7 @@
 extends RefCounted
 const StrictJSON = preload("res://scripts/map_authoring/io/strict_json.gd")
 const Context = preload("res://scripts/map_authoring/context/piece_context.gd")
+const Objects = preload("res://scripts/map_authoring/objects/object_schema.gd")
 const IDS := {"dependencies": "definition_id", "layers": "layer_id", "special_surfaces": "surface_id", "placements": "placement_id", "regions": "region_id", "connectors": "connector_id", "sockets": "socket_id"}
 const ROOT := {"schema_version": "int", "document_id": "id", "revision": "int", "units": "string", "name": "string", "dependencies": "array", "layers": "array", "special_surfaces": "array", "placements": "array", "regions": "array", "connectors": "array", "sockets": "array", "composition": "reference"}
 const REFERENCE := {"document_id": "id", "revision": "int", "sha256": "hash"}
@@ -28,6 +29,7 @@ static func read(bytes: PackedByteArray) -> Dictionary:
 	var data: Dictionary = decoded.value
 	var errors: Array = []
 	var root_fields := ROOT.duplicate(); if data.has("context"): root_fields.context = "object"
+	if data.has("objects"): root_fields.objects = "object"
 	_shape(data, root_fields, "$", errors)
 	if errors.is_empty() and data.schema_version != 1:
 		output.code = "source_version_unsupported"
@@ -103,6 +105,11 @@ static func _issue(errors: Array, code: String, field: String, entity_id: String
 
 static func validate(data: Dictionary) -> Array:
 	var errors: Array = []
+	if data.has("objects"):
+		var checked_objects := Objects.validate(data.objects,data.placements,load("res://scripts/map_authoring/document/source_schema.gd"))
+		if not checked_objects.ok:
+			if checked_objects.diagnostics.is_empty(): _issue(errors,checked_objects.code,"objects")
+			else: errors.append_array(checked_objects.diagnostics)
 	if data.has("context"):
 		var checked := Context.validate(data.context,data.regions,load("res://scripts/map_authoring/document/source_schema.gd"))
 		if not checked.ok: errors.append_array(checked.diagnostics)
@@ -149,6 +156,9 @@ static func bytes_hash(bytes: PackedByteArray) -> String:
 
 static func semantic_hash(data: Dictionary) -> String:
 	var normalized := data.duplicate(true)
+	if normalized.has("objects"):
+		normalized.objects.groups.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.group_id < b.group_id)
+		normalized.objects.states.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.placement_id < b.placement_id)
 	for collection: String in IDS:
 		if normalized.has(collection):
 			var id_key: String = IDS[collection]

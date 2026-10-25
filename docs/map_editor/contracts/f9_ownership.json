@@ -91,6 +91,54 @@
       "base_sha256": "0e81eb3da0611c5e60b9496b65ff759eb67163af011284ee2034ea58589a17fb"
     },
     {
+      "path": "assets/art/map_authoring/props/README.md",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/art/map_authoring/props/moss_boulder.png",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/art/map_authoring/props/moss_boulder.png.import",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/art/map_authoring/props/oak_tree.png",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/art/map_authoring/props/oak_tree.png.import",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/art/map_authoring/props/provenance.json",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/art/map_authoring/props/woodland_shrub.png",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/art/map_authoring/props/woodland_shrub.png.import",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
       "path": "data/map_authoring/candidate_preview.gd",
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
@@ -107,6 +155,12 @@
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
       "base_sha256": "6b9623f65075a5203bbddfe95e7c37387c651f85912705bca4238619467308f8"
+    },
+    {
+      "path": "data/map_authoring/prop_catalog.json",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
     },
     {
       "path": "data/map_authoring/representative.rpp",
@@ -163,9 +217,21 @@
       "base_sha256": "c556d01bba04bcbed9bed25b23db8bdf9cc4ec9cebe6e1e40d02b762b7452c6f"
     },
     {
+      "path": "docs/map_editor/contracts/f9_objects.md",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
       "path": "docs/map_editor/contracts/f9_ownership.json",
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/.gitattributes",
+      "owner": "Sol F9",
+      "previous_owner": "new evidence byte preservation",
       "base_sha256": null
     },
     {
@@ -569,6 +635,78 @@
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
       "base_sha256": "901514965c63bd7da411fc7ebf0e54b1a4fa41067d1fcde9d81ce2d6a17ea957"
+    },
+    {
+      "path": "scripts/map_authoring/objects/object_compiler.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/objects/object_compiler.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/objects/object_operations.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/objects/object_operations.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/objects/object_panel.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/objects/object_panel.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/objects/object_schema.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/objects/object_schema.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/objects/object_view.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/objects/object_view.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/objects/prop_catalog.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/objects/prop_catalog.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
     },
     {
       "path": "scripts/map_authoring/patrol/headless.gd",
@@ -1033,6 +1171,30 @@
       "base_sha256": "6f6d4e8b7ba0f263a9ad87867b96f693e9feed46b1885ab1e4c86dda36547264"
     },
     {
+      "path": "tests/map_editor_objects_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_objects_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_objects_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_objects_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
       "path": "tests/map_editor_patrol_restart_test.gd",
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
@@ -1181,12 +1343,6 @@
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
       "base_sha256": "527001f8a348ec2435e052d3fb8e335c8a674fb4c9ca52bef4a25ede16ba0418"
-    },
-    {
-      "path": "docs/map_editor/delivery/evidence/f9/.gitattributes",
-      "owner": "Sol F9",
-      "previous_owner": "new evidence byte preservation",
-      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -1200,14 +1356,23 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "frozen geometry selection pending",
+    "state": "objects checkpoint frozen for Luna; geometry supervision complete",
     "files": [
-      "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md"
+      "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
+      "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
+      "docs/map_editor/delivery/evidence/f9/luna/objects/report.md"
     ],
     "generated_evidence_roots": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/core",
-      "docs/map_editor/delivery/evidence/f9/luna/geometry/official"
+      "docs/map_editor/delivery/evidence/f9/luna/geometry/official",
+      "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities_retry01",
+      "docs/map_editor/delivery/evidence/f9/luna/geometry/core_retry01",
+      "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities_final",
+      "docs/map_editor/delivery/evidence/f9/luna/geometry/official_final",
+      "docs/map_editor/delivery/evidence/f9/luna/objects/authorities",
+      "docs/map_editor/delivery/evidence/f9/luna/objects/native",
+      "docs/map_editor/delivery/evidence/f9/luna/objects/official"
     ]
   }
 }

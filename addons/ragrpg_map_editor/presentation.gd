@@ -4,6 +4,7 @@ extends VBoxContainer
 static var active_mode := "ux"
 static var hosts: Array[WeakRef] = []
 const ACTION_IDS := {
+	"Objetos e vegetação…":"open_objects",
 	"Nova peça":"new_piece","Compor mapa…":"compose_map","Abrir…":"open","Salvar":"save","Salvar como…":"save_as","Desfazer":"undo","Refazer":"redo",
 	"Recuperar cópia":"recover_copy","Buscar rascunho…":"browse_draft","Adicionar":"add_layer","Duplicar":"duplicate_layer","Travar":"toggle_layer_lock","Aplicar nome":"apply_name",
 	"Contexto da peça…":"piece_context","Intercâmbio com skills…":"exchange","Enquadrar":"fit_view","Compilar peça":"compile_piece","Cancelar":"cancel",

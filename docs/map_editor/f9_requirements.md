@@ -23,9 +23,9 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 03 floresta/deserto/planície/ruína | map_composition_and_seams | só ruin_envelope_v1; perfis/arte/envelopes faltantes | pendente |
 | 03 transições/dono/abertura/frestas | emendas, F3 | fechamento ruína existe; ampliar sem estreitar passagem | pendente |
 | 03 ausência de perfil/asset | emendas | preservar erro explícito sem barreira invisível | pendente de regressão |
-| 04 largura útil M3-NAV-01 | recibo F3, F8 | path ancora centro; corrigir autoridade WorldGeometry | reprodução/correção em curso |
-| 04 rampa400/160 e400/200 | recibo F8 | falhas de plano e rota registradas; reproduzir sem alterar amostra | reprodução/correção em curso |
-| 04 precisão/altura/escala/corpo/folga/sentido | F2, F3, E07 | justificar limite numérico e regressões compartilhadas | pendente |
+| 04 largura útil M3-NAV-01 | recibo F3, F8 | corrigida em WorldGeometry, inclusive desvio com centro bloqueado e curva entre aberturas | validado tecnicamente ce7bd59;46 checks + Core639 +25 IDs F1, recibo F9 |
+| 04 rampa400/160 e400/200 | recibo F8 | corrigidos plano escalar e precisão do envelope da laje; amostra conserva escala original | validado tecnicamente ce7bd59, movimento real sobre rampa/ponte e oráculo de altura |
+| 04 precisão/altura/escala/corpo/folga/sentido | F2, F3, E07 | EPS preservado, erro final de suporte limitado a meio ULP de y; sentido/corpo/obstáculos preservados | validado tecnicamente no corpus registrado; sem garantia universal de geometria/escala |
 | 05 mesma peça/manual/seed/contexto | autoria F8 | entregue; preservar APIs/revisões e hash | pendente de regressão |
 | 05 síntese/regeneração interna real | arquitetura, F6 | troca de slots não esculpe; entregar operação regional | pendente |
 | 05 proteção terreno/props/encontros/patrulhas/pins | arquitetura, F6 | pins de instância apenas; entregar máscaras e seleção real | pendente |

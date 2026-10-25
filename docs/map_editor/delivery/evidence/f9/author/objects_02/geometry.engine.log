@@ -1,0 +1,46 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_OBJECT_CHECK catalog_loads true
+F9_OBJECT_CHECK catalog_origin_and_rights true
+F9_OBJECT_CHECK catalog_immutable true
+F9_OBJECT_CHECK definition_missing true
+F9_OBJECT_CHECK place_and_snap false
+F9_OBJECT_SNAP [{ "definition_id": "woodland_shrub", "placement_id": "shrub", "position_xyz": [200.0, 0.0, 200.0], "revision": 1, "rotation_y": 0, "surface_id": "floor" }]
+F9_OBJECT_CHECK source_not_mutated true
+F9_OBJECT_CHECK invalid_selection_type_rejected true
+F9_OBJECT_CHECK duplicate_identity_rejected true
+F9_OBJECT_CHECK place_solid true
+F9_OBJECT_CHECK place_tree true
+F9_OBJECT_CHECK compile_objects true
+F9_OBJECT_CHECK only_two_body_envelopes true
+F9_OBJECT_CHECK catalog_and_sprite_dependencies true
+F9_OBJECT_CHECK package_integrity true
+F9_OBJECT_CHECK source_roundtrip true
+F9_OBJECT_CHECK roundtrip_compiled_identity true
+F9_OBJECT_CHECK order_independent true
+F9_OBJECT_CHECK rock_has_body_collision true
+F9_OBJECT_CHECK shrub_is_decoration true
+F9_OBJECT_CHECK rock_blocks_attack true
+F9_OBJECT_CHECK route_detours_around_rock true
+F9_OBJECT_CHECK move_preserves_identity true
+F9_OBJECT_CHECK rotation_preserved false
+F9_OBJECT_ROTATION { "ok": false, "code": "object_rotation", "diagnostics": [{ "code": "object_rotation", "severity": "error", "entity_id": "rock", "field": "placements", "location": (0.0, 0.0, 0.0), "message": "A definição não permite essa rotação.", "suggestion": "Ajuste o objeto, o piso ou a proteção indicada." }] }
+F9_OBJECT_CHECK unsupported_rotation_rejected true
+F9_OBJECT_CHECK outside_floor_rejected true
+F9_OBJECT_CHECK overlapping_solids_rejected true
+F9_OBJECT_CHECK group_metadata true
+F9_OBJECT_CHECK lock_blocks_move_and_remove true
+F9_OBJECT_CHECK layer_lock_blocks_duplicate true
+F9_OBJECT_CHECK duplicate_new_identity true
+F9_OBJECT_CHECK editor_hiding_keeps_published_collision true
+F9_OBJECT_CHECK session_apply true
+F9_OBJECT_CHECK metadata_undo_redo true
+F9_OBJECT_CHECK changed_dependency_rejected true
+F9_OBJECT_CHECK floating_object_rejected true
+F9_OBJECT_CHECK protected_region_rejected true
+F9_OBJECT_CHECK scatter_count true
+F9_OBJECT_CHECK scatter_repeatable true
+F9_OBJECT_CHECK scatter_exclusion true
+F9_OBJECT_CHECK scatter_quota_failure_no_partial true
+F9_OBJECT_CHECK bundle_preserves_objects true
+F9_OBJECTS_RESULT {"checks":[{"id":"catalog_loads","ok":true},{"id":"catalog_origin_and_rights","ok":true},{"id":"catalog_immutable","ok":true},{"id":"definition_missing","ok":true},{"id":"place_and_snap","ok":false},{"id":"source_not_mutated","ok":true},{"id":"invalid_selection_type_rejected","ok":true},{"id":"duplicate_identity_rejected","ok":true},{"id":"place_solid","ok":true},{"id":"place_tree","ok":true},{"id":"compile_objects","ok":true},{"id":"only_two_body_envelopes","ok":true},{"id":"catalog_and_sprite_dependencies","ok":true},{"id":"package_integrity","ok":true},{"id":"source_roundtrip","ok":true},{"id":"roundtrip_compiled_identity","ok":true},{"id":"order_independent","ok":true},{"id":"rock_has_body_collision","ok":true},{"id":"shrub_is_decoration","ok":true},{"id":"rock_blocks_attack","ok":true},{"id":"route_detours_around_rock","ok":true},{"id":"move_preserves_identity","ok":true},{"id":"rotation_preserved","ok":false},{"id":"unsupported_rotation_rejected","ok":true},{"id":"outside_floor_rejected","ok":true},{"id":"overlapping_solids_rejected","ok":true},{"id":"group_metadata","ok":true},{"id":"lock_blocks_move_and_remove","ok":true},{"id":"layer_lock_blocks_duplicate","ok":true},{"id":"duplicate_new_identity","ok":true},{"id":"editor_hiding_keeps_published_collision","ok":true},{"id":"session_apply","ok":true},{"id":"metadata_undo_redo","ok":true},{"id":"changed_dependency_rejected","ok":true},{"id":"floating_object_rejected","ok":true},{"id":"protected_region_rejected","ok":true},{"id":"scatter_count","ok":true},{"id":"scatter_repeatable","ok":true},{"id":"scatter_exclusion","ok":true},{"id":"scatter_quota_failure_no_partial","ok":true},{"id":"bundle_preserves_objects","ok":true}],"count":41,"ok":false}

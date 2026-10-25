@@ -8,6 +8,7 @@ const Manifest = preload("res://scripts/core/expedition/model/manifest.gd")
 const World = preload("res://scripts/core/expedition/spatial/world_geometry.gd")
 const Point = preload("res://scripts/core/expedition/model/world_point.gd")
 const Context = preload("res://scripts/map_authoring/context/piece_context.gd")
+const Objects = preload("res://scripts/map_authoring/objects/object_compiler.gd")
 const REVISION := "map_composition_v1"
 const EPS := 0.0001
 var _thread: Thread
@@ -52,6 +53,7 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 		var eligible := Context.eligible(source,instance,_find(source.pieces,"piece_hash",instance.piece_hash).source)
 		if not eligible.ok: return eligible
 	var packages: Dictionary = {}; var definitions: Array = []; var render: Array = []
+	var all_dependencies: Array = []
 	var pieces: Array = source.pieces.duplicate(true); pieces.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.piece_hash < b.piece_hash)
 	for piece: Dictionary in pieces:
 		if cancellation.is_valid() and cancellation.call(0.1): return fail("cancelled")
@@ -59,6 +61,8 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 		if not built.ok:
 			built.diagnostics[0].entity_id = piece.source.document_id+"/"+str(built.diagnostics[0].entity_id); return built
 		packages[piece.piece_hash] = built.package
+		for dependency: Dictionary in built.package.dependencies:
+			if dependency not in all_dependencies: all_dependencies.append(dependency.duplicate(true))
 	var instances: Array = source.instances.duplicate(true)
 	# Array order is not identity. Recipe root is the lexicographically first instance.
 	instances.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.instance_id < b.instance_id)
@@ -111,7 +115,17 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 			copy.a = Kernel.rotate(copy.a,q)+offset; copy.b = Kernel.rotate(copy.b,q)+offset
 			for i: int in copy.openings.size(): copy.openings[i] = prefix+copy.openings[i]
 			boundaries.append(copy)
-		render.append({"instance_id":instance.instance_id,"rotation_quarters":q,"translation":offset,"layers":package.render_layers.duplicate(true),"visuals":package.visuals.duplicate(true)})
+		var presentation := {"instance_id":instance.instance_id,"rotation_quarters":q,"translation":offset,"layers":package.render_layers.duplicate(true),"visuals":package.visuals.duplicate(true)}
+		if package.has("objects"):
+			presentation["objects"] = []
+			for object: Dictionary in package.objects:
+				var copy := object.duplicate(true)
+				copy.placement_id = prefix+copy.placement_id; copy.surface_id = prefix+copy.surface_id
+				copy.position = Kernel.rotate(copy.position,q)+offset
+				copy.rotation_y = fposmod(float(copy.rotation_y)+float(q)*90.0,360.0)
+				if copy.has("body_volume"): copy.body_volume = Kernel.transform_volume(copy.body_volume,q,offset)
+				presentation.objects.append(copy)
+		render.append(presentation)
 	if stage.surfaces.size() > 1024: return fail("map_limit")
 	var used: Dictionary = {}
 	for link: Dictionary in links:
@@ -152,17 +166,19 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 	for barrier: Dictionary in barriers: stage.volumes.append(barrier.volume)
 	var manifest := Manifest.new(); manifest._data = {"manifest_revision":1,"geometry_revision":1,"input":{"parts":definitions},"stages":[stage],"traversal":Terrain.PROFILE.duplicate(true),"population":{"slots":[]},"objectives":[],"portals":[],"witnesses":{}}
 	var world := World.new(); world.configure(manifest,"map_preview")
-	var root := Point.create("map_preview",stage.surfaces[0].surface_id,_center(stage.surfaces[0]))
+	var root := _walkable_point(world,stage.surfaces[0],Terrain.PROFILE)
+	if root == null: return fail("route_unreachable",stage.surfaces[0].surface_id)
 	for cell: Dictionary in stage.surfaces:
 		if cancellation.is_valid() and cancellation.call(0.9): return fail("cancelled")
-		var destination := Point.create("map_preview",cell.surface_id,_center(cell))
+		var destination := _walkable_point(world,cell,Terrain.PROFILE)
+		if destination == null: return fail("route_unreachable",cell.surface_id,_center(cell))
 		var outward := world.path(root,destination,Terrain.PROFILE,world.geometry_revision)
 		var inward := world.path(destination,root,Terrain.PROFILE,world.geometry_revision)
 		if not outward.ok or not inward.ok:
 			var failure := fail("route_unreachable",cell.surface_id,destination.position)
 			failure["geometry_diagnostic"] = {"from":root.to_data(),"to":destination.to_data(),"outward_code":outward.error_code,"inward_code":inward.error_code}
 			return failure
-	var output := {"format_version":1,"compiler_revision":REVISION,"source_hash":validated.output_hash,"dependencies":packages.values()[0].dependencies.duplicate(true),"profile":Terrain.PROFILE.duplicate(true),"manifest":manifest.to_data(),"render_instances":render,"barriers":barriers,"realized_instances":instances,"piece_count":instances.size()}
+	var output := {"format_version":1,"compiler_revision":REVISION,"source_hash":validated.output_hash,"dependencies":all_dependencies,"profile":Terrain.PROFILE.duplicate(true),"manifest":manifest.to_data(),"render_instances":render,"barriers":barriers,"realized_instances":instances,"piece_count":instances.size()}
 	if source.has("context"): output["authoring_context"] = source.context.duplicate(true)
 	var piece_contexts := {}
 	for instance: Dictionary in instances:
@@ -209,9 +225,24 @@ static func validate_package(package: Dictionary) -> bool:
 	if package.get("format_version") != 1 or package.get("compiler_revision") != REVISION or not package.has("package_hash"): return false
 	if not Canonical.valid(package) or not package.has_all(["source_hash","dependencies","profile","manifest","render_instances","barriers","realized_instances","piece_count"]): return false
 	if not package.manifest is Dictionary or not package.render_instances is Array or not package.barriers is Array: return false
+	for instance: Variant in package.render_instances:
+		if not instance is Dictionary or (instance.has("objects") and not Objects.validate_records(instance.objects)): return false
 	if not package.manifest.has_all(["input","stages","traversal","population","objectives","portals","witnesses"]): return false
 	var content := package.duplicate(true); content.erase("package_hash")
-	return Canonical.digest(content) == package.package_hash and package.get("dependencies") == preload("res://scripts/map_authoring/terrain/terrain_material.gd").dependencies()
+	return Canonical.digest(content) == package.package_hash and Objects.validate_dependencies(package.get("dependencies",[]),preload("res://scripts/map_authoring/terrain/terrain_material.gd").dependencies())
+
+static func _walkable_point(world: WorldGeometry, cell: Dictionary, profile: Dictionary) -> ExpeditionWorldPoint:
+	var center := _center(cell)
+	var candidates: Array[Vector3] = [center]
+	for vertex: Vector3 in cell.vertices:
+		for amount: float in [0.05,0.15,0.35,0.65]: candidates.append(Kernel.support_y(cell,vertex.lerp(center,amount)))
+	for box: AABB in world._volumes():
+		for x: float in [box.position.x-float(profile.radius)-EPS,box.end.x+float(profile.radius)+EPS]:
+			for z: float in [box.position.z-float(profile.radius)-EPS,box.end.z+float(profile.radius)+EPS]: candidates.append(Kernel.support_y(cell,Vector3(x,0,z)))
+	for position: Vector3 in candidates:
+		var point := Point.create("map_preview",cell.surface_id,position)
+		if world.position_query(point,profile,world.geometry_revision).ok: return point
+	return null
 static func manifest(package: Dictionary) -> Manifest:
 	if not validate_package(package): return null
 	var result := Manifest.new(); result._data = package.manifest.duplicate(true); return result

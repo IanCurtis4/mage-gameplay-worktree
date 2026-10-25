@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_OBJECT_CHECK catalog_loads true
+F9_OBJECT_CHECK catalog_origin_and_rights true
+F9_OBJECT_CHECK catalog_immutable true
+F9_OBJECT_CHECK definition_missing true
+F9_OBJECT_CHECK place_and_snap false
+F9_OBJECT_CHECK source_not_mutated true
+{ "ok": false, "code": "object_support_missing", "diagnostics": [{ "code": "object_support_missing", "severity": "error", "entity_id": "shrub", "field": "placements", "location": (200.0, 0.0, 200.0), "message": "O objeto não tem suporte no piso escolhido.", "suggestion": "Ajuste o objeto, o piso ou a proteção indicada." }] }
+F9_OBJECTS_RESULT {"checks":[{"id":"catalog_loads","ok":true},{"id":"catalog_origin_and_rights","ok":true},{"id":"catalog_immutable","ok":true},{"id":"definition_missing","ok":true},{"id":"place_and_snap","ok":false},{"id":"source_not_mutated","ok":true}],"count":6,"ok":false}

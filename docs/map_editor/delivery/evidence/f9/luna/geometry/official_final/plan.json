@@ -1,0 +1,298 @@
+{
+  "created_utc": "2026-10-25T18:04:54.7668104Z",
+  "f1_native_fixture": true,
+  "source_commit": "ce7bd5906accf71fffb60cc17c8c2f7ebffc2dd8",
+  "working_tree_status": [
+    "?? docs/map_editor/delivery/evidence/f9/luna/geometry/authorities_final/"
+  ],
+  "runner_sha256": "D9F652BAB91C4BFAE98E254E8FB36148A17DE75E569DB9F0C3DC3814B69A4937",
+  "engine_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+  "timeout_seconds": 300,
+  "selection": {
+    "test": [],
+    "test_filter_specified": false,
+    "from_step": 273,
+    "to_step": 297,
+    "skip_editor_import": false
+  },
+  "total_steps": 299,
+  "selected_steps": 25,
+  "checks": [
+    {
+      "index": 273,
+      "name": "e07_f1_geometry_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_geometry_test.gd"
+      ]
+    },
+    {
+      "index": 274,
+      "name": "e07_f1_actor_integration_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_actor_integration_test.gd"
+      ]
+    },
+    {
+      "index": 275,
+      "name": "e07_f1_inventory_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_inventory_test.gd"
+      ]
+    },
+    {
+      "index": 276,
+      "name": "e07_f1_adversarial_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_adversarial_test.gd"
+      ]
+    },
+    {
+      "index": 277,
+      "name": "e07_f1_consumer_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_consumer_test.gd"
+      ]
+    },
+    {
+      "index": 278,
+      "name": "e07_f1_channels_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_channels_test.gd"
+      ]
+    },
+    {
+      "index": 279,
+      "name": "e07_f1_cast_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_cast_test.gd"
+      ]
+    },
+    {
+      "index": 280,
+      "name": "e07_f1_area_cast_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_area_cast_test.gd"
+      ]
+    },
+    {
+      "index": 281,
+      "name": "e07_f1_echo_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_echo_test.gd"
+      ]
+    },
+    {
+      "index": 282,
+      "name": "e07_f1_chain_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_chain_test.gd"
+      ]
+    },
+    {
+      "index": 283,
+      "name": "e07_f1_ember_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_ember_test.gd"
+      ]
+    },
+    {
+      "index": 284,
+      "name": "e07_f1_guard_travel_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_guard_travel_test.gd"
+      ]
+    },
+    {
+      "index": 285,
+      "name": "e07_f1_sentinel_direct_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_sentinel_direct_test.gd"
+      ]
+    },
+    {
+      "index": 286,
+      "name": "e07_f1_hunter_traps_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_hunter_traps_test.gd"
+      ]
+    },
+    {
+      "index": 287,
+      "name": "e07_f1_hunter_cover_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_hunter_cover_test.gd"
+      ]
+    },
+    {
+      "index": 288,
+      "name": "e07_f1_sentinel_area_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_sentinel_area_test.gd"
+      ]
+    },
+    {
+      "index": 289,
+      "name": "e07_f1_birth_collect_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_birth_collect_test.gd"
+      ]
+    },
+    {
+      "index": 290,
+      "name": "e07_f1_fields_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_fields_test.gd"
+      ]
+    },
+    {
+      "index": 291,
+      "name": "e07_f1_ice_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_ice_test.gd"
+      ]
+    },
+    {
+      "index": 292,
+      "name": "e07_f1_geometer_trace_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_geometer_trace_test.gd"
+      ]
+    },
+    {
+      "index": 293,
+      "name": "e07_f1_geometer_full_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_geometer_full_test.gd"
+      ]
+    },
+    {
+      "index": 294,
+      "name": "e07_f1_non_planar_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_non_planar_test.gd"
+      ]
+    },
+    {
+      "index": 295,
+      "name": "e07_f1_composition_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_composition_test.gd"
+      ]
+    },
+    {
+      "index": 296,
+      "name": "e07_f1_pilot_scene_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_pilot_scene_test.gd"
+      ]
+    },
+    {
+      "index": 297,
+      "name": "e07_f1_presentation_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_presentation_test.gd"
+      ]
+    }
+  ]
+}

@@ -2,7 +2,7 @@ param(
     [Parameter(Mandatory)][string]$GodotPath,
     [Parameter(Mandatory)][string]$EvidenceDirectory,
     [switch]$SkipImport,
-    [ValidateSet('Geometry')][string]$Stage='Geometry'
+    [ValidateSet('Geometry','Objects','ObjectsNative')][string]$Stage='Geometry'
 )
 $ErrorActionPreference='Stop'
 $f9Root=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
@@ -20,32 +20,63 @@ if(-not $SkipImport){
     }
 }
 $f9Head=git -C $f9Root rev-parse HEAD
-$f9Inputs=@(Get-ChildItem -LiteralPath (Join-Path $f9Root 'scripts/core/expedition'),(Join-Path $f9Root 'scripts/map_authoring'),(Join-Path $f9Root 'tests') -Recurse -File | ForEach-Object { @{path=[IO.Path]::GetRelativePath($f9Root,$_.FullName).Replace('\','/');sha256=(Get-FileHash -LiteralPath $_.FullName).Hash} })
+$f9Inputs=@()
+foreach($f9Directory in @('scripts','scenes','data','assets','resources','content','addons/ragrpg_map_editor','tests','tools')){
+    foreach($f9File in Get-ChildItem -LiteralPath (Join-Path $f9Root $f9Directory) -Recurse -File){
+        $f9Relative=[IO.Path]::GetRelativePath($f9Root,$f9File.FullName).Replace('\','/')
+        if($f9File.Name.EndsWith('.import') -and -not $f9Relative.StartsWith('assets/art/map_authoring/props/')){continue}
+        $f9Inputs+=@{path=$f9Relative;sha256=(Get-FileHash -LiteralPath $f9File.FullName).Hash}
+    }
+}
 $f9Info=[Diagnostics.ProcessStartInfo]::new()
 $f9Info.FileName=(Resolve-Path -LiteralPath $GodotPath).Path
 $f9Info.UseShellExecute=$false; $f9Info.CreateNoWindow=$true; $f9Info.WindowStyle=[Diagnostics.ProcessWindowStyle]::Hidden
 $f9Info.RedirectStandardOutput=$true; $f9Info.RedirectStandardError=$true
 $f9Info.Environment['APPDATA']=Join-Path $f9Fixture '.godot/discardable_profile'
 $f9Info.Environment['LOCALAPPDATA']=$f9Info.Environment['APPDATA']
-foreach($f9Arg in @('--path',$f9Fixture,'--headless','--log-file',(Join-Path $f9Evidence 'geometry.engine.log'),'--script','res://tests/map_editor_f9_geometry_test.gd')){$f9Info.ArgumentList.Add($f9Arg)}
+$f9Info.Environment['F9_EVIDENCE']=$f9Evidence
+$f9Script=if($Stage -eq 'Geometry'){'res://tests/map_editor_f9_geometry_test.gd'}else{'res://tests/map_editor_objects_test.gd'}
+$f9Marker=if($Stage -eq 'Geometry'){'F9_GEOMETRY_RESULT'}else{'F9_OBJECTS_RESULT'}
+$f9Arguments=@('--path',$f9Fixture,'--headless','--log-file',(Join-Path $f9Evidence 'geometry.engine.log'),'--script',$f9Script)
+$f9RestoreProject=$null
+if($Stage -eq 'ObjectsNative'){
+    $f9Marker='F9_OBJECTS_UI_RESULT'
+    $f9Driver=Join-Path $f9Fixture 'addons/f9_objects_driver'; [void](New-Item -ItemType Directory -Force -Path $f9Driver)
+    Copy-Item -LiteralPath (Join-Path $f9Root 'tests/map_editor_objects_ui_test.gd') -Destination (Join-Path $f9Driver 'plugin.gd') -Force
+    '[plugin]','name="Fixture objetos F9"','description="Teste isolado"','author="RagRPG"','version="1"','script="plugin.gd"' | Set-Content -LiteralPath (Join-Path $f9Driver 'plugin.cfg') -Encoding utf8
+    $f9RestoreProject=[IO.File]::ReadAllText((Join-Path $f9Fixture 'project.godot'))
+    [IO.File]::WriteAllText((Join-Path $f9Fixture 'project.godot'),$f9RestoreProject+"`n[editor_plugins]`nenabled=PackedStringArray(`"res://addons/ragrpg_map_editor/plugin.cfg`",`"res://addons/f9_objects_driver/plugin.cfg`")")
+    $f9Arguments=@('--path',$f9Fixture,'--editor','--rendering-method','gl_compatibility','--log-file',(Join-Path $f9Evidence 'geometry.engine.log'))
+}
+foreach($f9Arg in $f9Arguments){$f9Info.ArgumentList.Add($f9Arg)}
 $f9Process=[Diagnostics.Process]::new(); $f9Process.StartInfo=$f9Info
 $f9Started=[DateTime]::UtcNow.ToString('o'); [void]$f9Process.Start()
 $f9Out=$f9Process.StandardOutput.ReadToEndAsync(); $f9Err=$f9Process.StandardError.ReadToEndAsync()
-$f9Timeout=-not $f9Process.WaitForExit(300000)
-if($f9Timeout){$f9Process.Kill($true);$f9Process.WaitForExit()}
+$f9Watch=[Diagnostics.Stopwatch]::StartNew();$f9Timeout=$false;$f9Aborted=$false
+while(-not $f9Process.WaitForExit(500)){
+    if($f9Watch.ElapsedMilliseconds -gt 300000){$f9Timeout=$true;break}
+    try{
+        $f9Live=Get-Content -LiteralPath (Join-Path $f9Evidence 'geometry.engine.log') -Raw -ErrorAction SilentlyContinue
+        if($f9Live -match 'SCRIPT ERROR:|Parse Error:|ERROR:'){$f9Aborted=$true;break}
+    }catch [IO.IOException]{}
+}
+if($f9Timeout -or $f9Aborted){$f9Process.Kill($true);$f9Process.WaitForExit()}
 $f9Text=$f9Out.GetAwaiter().GetResult()+$f9Err.GetAwaiter().GetResult()
+if($null -ne $f9RestoreProject){[IO.File]::WriteAllText((Join-Path $f9Fixture 'project.godot'),$f9RestoreProject)}
 [IO.File]::WriteAllText((Join-Path $f9Evidence 'geometry.output.log'),$f9Text)
 $f9EngineText=Get-Content -LiteralPath (Join-Path $f9Evidence 'geometry.engine.log') -Raw
-$f9Match=[regex]::Match($f9Text,'(?m)^F9_GEOMETRY_RESULT (.+)$')
+$f9Match=[regex]::Match($f9Text,'(?m)^'+$f9Marker+' (.+)$')
 $f9Result=if($f9Match.Success){ConvertFrom-Json $f9Match.Groups[1].Value}else{$null}
-$f9Pass=-not $f9Timeout -and $f9Process.ExitCode -eq 0 -and $null -ne $f9Result -and $f9Result.ok -and $f9Result.count -eq 46 -and @($f9Result.checks).Count -eq 46 -and @($f9Result.checks | Where-Object {-not $_.ok}).Count -eq 0 -and $f9Text -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:' -and $f9EngineText -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:'
+$f9Pass=-not $f9Timeout -and -not $f9Aborted -and $f9Process.ExitCode -eq 0 -and $null -ne $f9Result -and $f9Result.ok -and $f9Result.count -gt 0 -and @($f9Result.checks).Count -eq $f9Result.count -and @($f9Result.checks | Where-Object {-not $_.ok}).Count -eq 0 -and $f9Text -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:' -and $f9EngineText -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:'
+$f9Expected=@{Geometry=46;Objects=53;ObjectsNative=25}
+$f9Pass=$f9Pass -and $f9Result.count -eq $f9Expected[$Stage]
 foreach($f9Input in $f9Inputs){
     $f9Source=Join-Path $f9Root $f9Input.path; $f9Copy=Join-Path $f9Fixture $f9Input.path
     if((Get-FileHash -LiteralPath $f9Source).Hash -ne $f9Input.sha256 -or (Get-FileHash -LiteralPath $f9Copy).Hash -ne $f9Input.sha256){$f9Pass=$false}
 }
-$f9Manifest=@{head_before=$f9Head;head_after=(git -C $f9Root rev-parse HEAD);engine=(Resolve-Path -LiteralPath $GodotPath).Path;engine_sha256=(Get-FileHash -LiteralPath $GodotPath).Hash;fixture=$f9Fixture;inputs=$f9Inputs;started_utc=$f9Started;finished_utc=[DateTime]::UtcNow.ToString('o');exit_code=$f9Process.ExitCode;timed_out=$f9Timeout;ok=$f9Pass;result=$f9Result}
+$f9Manifest=@{stage=$Stage;head_before=$f9Head;head_after=(git -C $f9Root rev-parse HEAD);engine=(Resolve-Path -LiteralPath $GodotPath).Path;engine_sha256=(Get-FileHash -LiteralPath $GodotPath).Hash;fixture=$f9Fixture;inputs=$f9Inputs;started_utc=$f9Started;finished_utc=[DateTime]::UtcNow.ToString('o');exit_code=$f9Process.ExitCode;timed_out=$f9Timeout;aborted=$f9Aborted;ok=$f9Pass;result=$f9Result}
 [IO.File]::WriteAllText((Join-Path $f9Evidence 'runs.json'),(ConvertTo-Json -InputObject $f9Manifest -Depth 30))
 $f9Process.Dispose()
-Write-Output ('F9 geometry: '+$f9Pass)
+Write-Output ('F9 '+$Stage+': '+$f9Pass)
 Write-Output $f9Text
-if(-not $f9Pass){throw 'F9 geometry failed; logs preserved.'}
+if(-not $f9Pass){throw ('F9 '+$Stage+' failed; logs preserved.')}

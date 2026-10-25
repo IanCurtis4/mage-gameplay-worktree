@@ -8,6 +8,7 @@ const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometr
 const World = preload("res://scripts/core/expedition/spatial/world_geometry.gd")
 const Motion = preload("res://scripts/core/expedition/spatial/world_actor_motion.gd")
 const Point = preload("res://scripts/core/expedition/model/world_point.gd")
+const Objects = preload("res://scripts/map_authoring/objects/object_view.gd")
 signal selected(instance_id: String)
 signal status(message: String)
 var package: Dictionary = {}
@@ -20,6 +21,8 @@ var _scale := 1.0
 var _origin := Vector2.ZERO
 var _meshes: Node2D
 var _overlay: Node2D
+var _object_sprites: Array[Sprite2D] = []
+var _object_volumes: Array[AABB] = []
 func _ready() -> void:
 	custom_minimum_size = Vector2(600,360); size_flags_vertical = Control.SIZE_EXPAND_FILL; size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	clip_contents = true; mouse_filter = Control.MOUSE_FILTER_STOP
@@ -28,10 +31,12 @@ func _ready() -> void:
 	resized.connect(fit)
 func clear() -> void:
 	stop_test(); package = {}; geometry = null
+	_object_sprites.clear(); _object_volumes.clear()
 	if _meshes != null:
 		for child: Node in _meshes.get_children(): child.free()
 	redraw()
 func set_package(value: Dictionary) -> void:
+	if not Compiler.validate_package(value): status.emit("O pacote é inválido ou suas dependências mudaram."); return
 	clear(); package = value.duplicate(true)
 	geometry = World.new(); geometry.configure(Compiler.manifest(package),"map_preview")
 	for instance: Dictionary in package.render_instances:
@@ -50,6 +55,9 @@ func set_package(value: Dictionary) -> void:
 			var polygon := Polygon2D.new(); var points := PackedVector2Array()
 			for original: Vector3 in visual.vertices: points.append(WorldProjection.project(Kernel.rotate(original,instance.rotation_quarters)+Vector3(instance.translation)))
 			polygon.polygon = points; polygon.color = Color("88a28c"); _meshes.add_child(polygon)
+		_object_sprites.append_array(Objects.attach(_meshes,instance.get("objects",[])))
+		for object: Dictionary in instance.get("objects",[]):
+			if object.has("body_volume"): _object_volumes.append(object.body_volume)
 	fit()
 func fit() -> void:
 	if package.is_empty(): return
@@ -66,7 +74,9 @@ func start_test() -> Dictionary:
 	if package.is_empty(): return {"ok":false}
 	stop_test(); motion = Motion.new()
 	var cell: Dictionary = package.manifest.stages[0].surfaces[0]
-	var result := motion.configure(geometry,Point.create("map_preview",cell.surface_id,Compiler._center(cell)),package.profile,"discardable_editor_actor")
+	var start := Compiler._walkable_point(geometry,cell,package.profile)
+	if start == null: motion = null; return {"ok":false,"code":"route_unreachable"}
+	var result := motion.configure(geometry,start,package.profile,"discardable_editor_actor")
 	testing = result.ok; redraw(); return result
 func stop_test() -> void:
 	if motion != null: motion.release(); motion = null
@@ -76,6 +86,10 @@ func _process(delta: float) -> void:
 		var result := motion.advance(minf(delta,0.05)*60.0)
 		if not result.ok: motion.cancel(); status.emit("Movimento bloqueado pela geometria.")
 		redraw()
+	if motion != null and motion.point() != null: reveal_object_occlusion(motion.point().position)
+
+func reveal_object_occlusion(position: Vector3) -> void:
+	Objects.reveal_actor(_object_sprites,position)
 func pick(at: Vector2) -> Dictionary:
 	if geometry == null: return {"ok":false}
 	var ray := WorldProjection.ray((at-_origin)/_scale)
@@ -104,6 +118,7 @@ func _draw_world() -> void:
 	if package.is_empty(): return
 	# Render solids from the exact canonical AABBs, including bridge slabs.
 	for box: AABB in package.manifest.stages[0].volumes:
+		if box in _object_volumes: continue
 		var p := box.position; var e := box.end
 		var corners := [Vector3(p.x,p.y,p.z),Vector3(e.x,p.y,p.z),Vector3(e.x,p.y,e.z),Vector3(p.x,p.y,e.z)]
 		for i: int in 4:

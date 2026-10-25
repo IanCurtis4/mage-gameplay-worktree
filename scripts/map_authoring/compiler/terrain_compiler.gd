@@ -6,6 +6,7 @@ const Canonical = preload("res://scripts/core/expedition/generation/canonical.gd
 const Manifest = preload("res://scripts/core/expedition/model/manifest.gd")
 const Partition = preload("res://scripts/map_authoring/compiler/terrain_partition.gd")
 const Materials = preload("res://scripts/map_authoring/terrain/terrain_material.gd")
+const Objects = preload("res://scripts/map_authoring/objects/object_compiler.gd")
 const REVISION := "map_terrain_v2"
 const MAX_SUPPORTS := 1024
 const MAX_GRID_QUADS := 65536
@@ -79,7 +80,7 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 	var read := Schema.read(JSON.stringify(source,"",true,true).to_utf8_buffer())
 	if not read.ok: return read
 	if not read.valid: return failure("source_invalid")
-	if not source.placements.is_empty() or source.composition != null or not source.dependencies.is_empty(): return failure("capability_unsupported", "placements_dependencies_composition")
+	if source.composition != null: return failure("capability_unsupported", "composition")
 	var cells: Array = []; var visuals: Array = []; var slabs: Array = []; var edges: Array = []
 	var layers: Array = source.layers.duplicate(true)
 	layers.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.layer_id < b.layer_id)
@@ -234,6 +235,14 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 		render_layers.append({"layer_id":layer.layer_id,"origin_xz":layer.origin_xz.duplicate(),"sample_spacing":float(layer.sample_spacing),"columns":int(layer.columns),"rows":int(layer.rows),"heights":layer.heights.duplicate(),"material_masks":layer.material_masks.duplicate(true)})
 	var package := {"format_version":2,"compiler_revision":REVISION,"source_hash":read.output_hash,"dependencies":material_dependencies,"part":part,"adjacency":adjacency,"boundaries":boundaries,"visuals":visuals,"render_layers":render_layers,"profile":PROFILE.duplicate(true),"grid_quads":grid_quads,"piece_count":1}
 	package.package_hash = Canonical.digest(package)
+	if not source.placements.is_empty() or not source.dependencies.is_empty():
+		var compiled_objects := Objects.compile(source,package,preview_manifest(package))
+		if not compiled_objects.ok: return compiled_objects
+		package.erase("package_hash")
+		package["objects"] = compiled_objects.objects
+		package.part.solid_volumes.append_array(compiled_objects.volumes)
+		package.dependencies.append_array(compiled_objects.dependencies)
+		package.package_hash = Canonical.digest(package)
 	var result := Schema.result(true)
 	result.input_hash = read.output_hash; result.output_hash = package.package_hash; result.package = package
 	return result
@@ -272,8 +281,11 @@ static func _opening_fits(endpoint: Dictionary, boundary: Dictionary) -> bool:
 
 static func validate_package(package: Dictionary) -> bool:
 	if package.get("compiler_revision") != REVISION or package.get("format_version") != 2 or not package.has("package_hash"): return false
+	# Existing v2 producers may store textual keys as StringName via dot assignment.
+	# Keep the same bounded passive-value check used by the source preflight.
+	if not _valid_authoring_value(package) or (package.has("objects") and not Objects.validate_records(package.objects)): return false
 	var content := package.duplicate(true); content.erase("package_hash")
-	return Canonical.digest(content) == package.package_hash and package.get("dependencies") == Materials.dependencies()
+	return Canonical.digest(content) == package.package_hash and Objects.validate_dependencies(package.get("dependencies",[]),Materials.dependencies())
 
 static func preview_manifest(package: Dictionary) -> Manifest:
 	if not validate_package(package): return null

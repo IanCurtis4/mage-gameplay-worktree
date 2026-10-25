@@ -4,8 +4,14 @@ const WorldProjection = preload("res://scripts/world/expedition_geometry_view.gd
 const Brush = preload("res://scripts/map_authoring/terrain/brush.gd")
 const Partition = preload("res://scripts/map_authoring/compiler/terrain_partition.gd")
 const TerrainMaterial = preload("res://scripts/map_authoring/terrain/terrain_material.gd")
+const Objects = preload("res://scripts/map_authoring/objects/object_view.gd")
 signal stroke_finished(points: Array, options: Dictionary)
 signal cancelled
+signal object_pressed(hit: Dictionary)
+var object_edit_mode := ""
+var object_surface_id := ""
+var selected_objects: Array[String] = []
+var _object_records: Array = []
 var source: Dictionary = {}
 var selected_layer := ""
 var options: Dictionary = {}
@@ -163,6 +169,12 @@ func redraw_terrain() -> void:
 			if not is_equal_approx(a.y,b.y): continue
 			var side := Polygon2D.new(); side.polygon = PackedVector2Array([WorldProjection.project(a),WorldProjection.project(b),WorldProjection.project(b-Vector3.UP*4),WorldProjection.project(a-Vector3.UP*4)])
 			side.color = Color("3d505d"); side.z_index = polygon.z_index-1; _mesh_root.add_child(side)
+	_object_records = Objects.source_records(data) if not data.get("placements",[]).is_empty() else []
+	var hidden_surfaces := hidden_layers.duplicate()
+	for special: Dictionary in data.special_surfaces:
+		if special.layer_id in hidden_layers: hidden_surfaces.append(special.surface_id)
+	_object_records = _object_records.filter(func(object: Dictionary) -> bool: return object.source_surface_id not in hidden_surfaces)
+	Objects.attach(_mesh_root,_object_records,true,hidden_surfaces)
 	queue_redraw()
 
 func _draw() -> void:
@@ -207,6 +219,32 @@ func _draw_overlays() -> void:
 	for i: int in range(1,_points.size()):
 		_overlay.draw_line(_stroke_screen(_points[i-1]),_stroke_screen(_points[i]),Color("ffe298"),2,true)
 	if has_focus(): _overlay.draw_arc(_cursor,8,0,TAU,24,Color("ffe298"),1,true)
+	for object: Dictionary in _object_records:
+		if object.placement_id in selected_objects:
+			_overlay.draw_arc(screen(object.position),maxf(6,float(object.definition.footprint_radius)*_scale),0,TAU,40,Color("ffe298"),2,true)
+			_overlay.draw_string(get_theme_default_font(),screen(object.position)+Vector2(8,16),object.definition.name,HORIZONTAL_ALIGNMENT_LEFT,-1,13,Color("ffe298"))
+
+func object_pick(at: Vector2) -> Dictionary:
+	if object_surface_id.is_empty() or object_surface_id == selected_layer: return pick(at)
+	var previous := selected_layer
+	for layer: Dictionary in source.layers:
+		if layer.layer_id != object_surface_id: continue
+		selected_layer = object_surface_id
+		var found := pick(at); selected_layer = previous; return found
+	for special: Dictionary in source.special_surfaces:
+		if special.surface_id != object_surface_id or special.layer_id in hidden_layers: continue
+		for i: int in range(1,special.vertices_xyz.size()-1):
+			var vertices: Array[Vector3] = []
+			for k: int in [0,i,i+1]:
+				var xyz: Array = special.vertices_xyz[k]; vertices.append(Vector3(xyz[0],xyz[1],xyz[2]))
+			var a := screen(vertices[0]); var b := screen(vertices[1]); var c := screen(vertices[2])
+			var determinant := (b-a).cross(c-a)
+			if absf(determinant) < 0.00001: continue
+			var v := (at-a).cross(c-a)/determinant; var w := (b-a).cross(at-a)/determinant
+			if minf(1-v-w,minf(v,w)) < -0.00001: continue
+			var point := vertices[0]*(1-v-w)+vertices[1]*v+vertices[2]*w
+			return {"ok":true,"position":point,"point":Vector2(point.x,point.z),"surface_id":special.surface_id}
+	return {"ok":false}
 
 func _stroke_screen(point: Vector2) -> Vector2:
 	for layer: Dictionary in source.get("layers",[]):
@@ -235,6 +273,13 @@ func _gui_input(event: InputEvent) -> void:
 			_pan = event.position-_origin-(event.position-_origin-_pan)*(_scale/previous)
 			queue_redraw(); accept_event(); return
 		if event.button_index != MOUSE_BUTTON_LEFT: return
+		if object_edit_mode != "":
+			if event.pressed:
+				grab_focus()
+				var hit := object_pick(event.position)
+				hit["placement_id"] = Objects.pick(_object_records,event.position,screen,_scale)
+				object_pressed.emit(hit)
+			accept_event(); return
 		if event.pressed:
 			grab_focus()
 			var hit := pick(event.position)

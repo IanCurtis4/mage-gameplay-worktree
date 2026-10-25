@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "catalog_id": "ragrpg_editor_props",
+  "revision": 1,
+  "definitions": [
+    {
+      "definition_id": "oak_tree",
+      "revision": 1,
+      "name": "Carvalho",
+      "category": "trees",
+      "biome_ids": [
+        "forest",
+        "meadow",
+        "ruin"
+      ],
+      "sprite_path": "res://assets/art/map_authoring/props/oak_tree.png",
+      "sprite_sha256": "28d94d4dc98fde64c4e4e1be0875d9f9af0aaa08917c95186abfe43950ba406c",
+      "pivot_uv": [
+        0.53,
+        0.94
+      ],
+      "world_height": 226,
+      "footprint_radius": 26,
+      "body_box_xyz": [
+        -18,
+        0,
+        -18,
+        36,
+        96,
+        36
+      ],
+      "max_slope_degrees": 20,
+      "allowed_rotations": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "rotation_mode": "symmetric",
+      "capabilities": {
+        "decoration": false,
+        "body": true,
+        "attack_los": true,
+        "camera_occlusion": true
+      },
+      "origin": {
+        "kind": "generated",
+        "tool": "image_gen built-in",
+        "license": "project_generated_output",
+        "record": "res://assets/art/map_authoring/props/provenance.json"
+      }
+    },
+    {
+      "definition_id": "moss_boulder",
+      "revision": 1,
+      "name": "Rocha musgosa",
+      "category": "rocks",
+      "biome_ids": [
+        "forest",
+        "meadow",
+        "ruin"
+      ],
+      "sprite_path": "res://assets/art/map_authoring/props/moss_boulder.png",
+      "sprite_sha256": "db95217541dda096f763c823efc302bd634e63f9340939e862b2955ed2c05077",
+      "pivot_uv": [
+        0.5,
+        0.7
+      ],
+      "world_height": 120,
+      "footprint_radius": 38,
+      "body_box_xyz": [
+        -28,
+        0,
+        -25,
+        56,
+        45,
+        50
+      ],
+      "max_slope_degrees": 35,
+      "allowed_rotations": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "rotation_mode": "symmetric",
+      "capabilities": {
+        "decoration": false,
+        "body": true,
+        "attack_los": true,
+        "camera_occlusion": true
+      },
+      "origin": {
+        "kind": "generated",
+        "tool": "image_gen built-in",
+        "license": "project_generated_output",
+        "record": "res://assets/art/map_authoring/props/provenance.json"
+      }
+    },
+    {
+      "definition_id": "woodland_shrub",
+      "revision": 1,
+      "name": "Arbusto florido",
+      "category": "vegetation",
+      "biome_ids": [
+        "forest",
+        "meadow",
+        "ruin"
+      ],
+      "sprite_path": "res://assets/art/map_authoring/props/woodland_shrub.png",
+      "sprite_sha256": "e3d1798b0eb14ccdbb5e33e930533e1f1e0a82e812379e25593932ffea56aae7",
+      "pivot_uv": [
+        0.49,
+        0.91
+      ],
+      "world_height": 46,
+      "footprint_radius": 4,
+      "body_box_xyz": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "max_slope_degrees": 45,
+      "allowed_rotations": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "rotation_mode": "symmetric",
+      "capabilities": {
+        "decoration": true,
+        "body": false,
+        "attack_los": false,
+        "camera_occlusion": false
+      },
+      "origin": {
+        "kind": "generated",
+        "tool": "image_gen built-in",
+        "license": "project_generated_output",
+        "record": "res://assets/art/map_authoring/props/provenance.json"
+      }
+    }
+  ]
+}

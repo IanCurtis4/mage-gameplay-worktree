@@ -7,6 +7,7 @@ const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 const Terrain = preload("res://scripts/map_authoring/terrain/terrain_panel.gd")
 const Composition = preload("res://scripts/map_authoring/composition/map_panel.gd")
 var composition_window: Window
+var objects_window: Window
 var terrain: Control
 var session := Session.new()
 var source_path := ""
@@ -39,6 +40,7 @@ func _ready() -> void:
 	add_child(toolbar)
 	_button(toolbar, "Nova peça", request_new)
 	_button(toolbar, "Compor mapa…", open_composition)
+	_button(toolbar, "Objetos e vegetação…",open_objects)
 	_button(toolbar, "Abrir…", _choose_open)
 	_button(toolbar, "Salvar", save_current)
 	_button(toolbar, "Salvar como…", _choose_save)
@@ -142,6 +144,15 @@ func open_composition() -> void:
 			panel.preserve_draft(); panel.canvas.stop_test(); composition_window.hide())
 		add_child(composition_window)
 	composition_window.popup_centered()
+
+func open_objects() -> void:
+	if objects_window == null:
+		objects_window = Window.new(); objects_window.title = "RagRPG · Objetos e vegetação"; objects_window.size = Vector2i(1360,850)
+		var panel := preload("res://scripts/map_authoring/objects/object_panel.gd").new()
+		objects_window.add_child(panel)
+		objects_window.close_requested.connect(func() -> void: panel.discard_preview(); preserve_draft(); objects_window.hide())
+		add_child(objects_window); panel.bind(session)
+	objects_window.popup_centered()
 
 func _id(prefix: String) -> String:
 	return prefix + "_" + Crypto.new().generate_random_bytes(12).hex_encode()

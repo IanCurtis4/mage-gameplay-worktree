@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "scope": "Editor F9-01 / F9-03, human authorization 2026-10-25",
+  "tool": "image_gen built-in",
+  "rights_basis": "project_generated_output",
+  "external_reference_images": [],
+  "processing": "Selected tool output copied byte-for-byte. Alpha preserved. Pivot and scale are renderer parameters; no raster editing code.",
+  "assets": [
+    {
+      "id": "oak_tree",
+      "path": "oak_tree.png",
+      "sha256": "28d94d4dc98fde64c4e4e1be0875d9f9af0aaa08917c95186abfe43950ba406c",
+      "original_output": "exec-467a792c-7c2b-40fc-9a08-9034216409aa.png",
+      "width": 1214,
+      "height": 1295,
+      "prompts": [
+        "Use case: stylized-concept. Asset type: one isolated production game environment sprite, transparent cutout, for a 2D isometric fantasy RPG map editor. Subject: a single mature deciduous oak tree with a broad asymmetrical lush canopy, a readable sturdy brown trunk with a few roots at its base, compact organically clustered foliage. Style: polished hand-painted naturalistic Korean fantasy RPG / classic strategy environment quality, rounded organic forms, detailed leaves grouped into clear shapes, warm medium olive and forest greens, subtle cool shadows, no heavy black outlines, no pixel art, no low-poly facets. Orthographic 2:1 isometric world, view looking down about 30 degrees, vertical trunk stays vertical in the image. Light from upper left, neutral soft diffuse light, restrained contrast. Composition: full single tree from top of crown to root base, centered, occupying about 85 percent image height, generous clean transparent margin around silhouette. Transparent background with real alpha; no ground tile, no grass platform, no backdrop, no horizon, no other trees or objects, no text, no watermark, no frame, no diagram, no shadow detached from the tree. Trunk base contact point visually unambiguous for the foot pivot. No cropped foliage. The canopy may overhang the base but the tree must have a well-defined clean silhouette at small game scale. This will be used as an actual reusable sprite, not concept art or a scene."
+      ]
+    },
+    {
+      "id": "moss_boulder",
+      "path": "moss_boulder.png",
+      "sha256": "db95217541dda096f763c823efc302bd634e63f9340939e862b2955ed2c05077",
+      "original_output": "exec-73f0308c-b5e2-47d7-97a4-625a98c3f2c2.png",
+      "width": 1254,
+      "height": 1254,
+      "prompts": [
+        "Use case: stylized-concept. Asset type: a single production isometric fantasy RPG environment sprite with genuine transparent alpha. Subject: one substantial irregular weathered granite boulder, broad squat organic silhouette, partly moss covered on its top and one edge, readable rock strata and rounded worn corners. View: orthographic 2:1 isometric from above about30 degrees, no perspective, base visibly contacts the ground. Style: polished hand-painted naturalistic fantasy game environment, softly modeled sculptural detail, cool slate gray stone with subtle warm highlights and muted olive moss, warm light upper left and cool shadows, no heavy black outline, no pixel art, no low-poly facets. One isolated boulder only, absolutely no ground tile or terrain platform, no scenery, no plants except attached moss, no labels/text/watermark. Center the whole boulder with generous transparent padding of at least12 percent on every side; no clipping. Image can be square. The object is intended to look like a solid obstacle large enough to stand beside a compact RPG character, clear at small game scale. Transparent background, not black or white. No detached cast shadow; only subtle contact shading at the base."
+      ]
+    },
+    {
+      "id": "woodland_shrub",
+      "path": "woodland_shrub.png",
+      "sha256": "e3d1798b0eb14ccdbb5e33e930533e1f1e0a82e812379e25593932ffea56aae7",
+      "original_output": "exec-8692abd2-9ed2-441f-b5bb-056a51ec373f.png",
+      "width": 1536,
+      "height": 1024,
+      "prompts": [
+        "Use case: stylized-concept. Asset type: one reusable game environment sprite, true transparent alpha, for a2D isometric fantasy RPG. Subject: a single low, wide wild woodland shrub with dense small rounded leaves, a few fernlike fronds and tiny white wildflowers naturally mixed in, an organic irregular silhouette, leaves in distinct clusters, a few dark woody stems visible at the base. Polished painterly naturalistic classic fantasy RPG/strategy environment artwork; soft sculptural shading, warm medium olive/forest greens, muted cool shadows, selective texture and clear readable shape, not photographic, not pixel art, no black outlines, no low-poly facets. Orthographic 2:1 isometric view from above around30 degrees; diffuse upper-left light. One isolated plant only, full object fully inside image with12percent or more transparent empty margin on every side. No ground tile, platform, dirt patch, scene, horizon, other object, frame, text, watermark or detached cast shadow. A clearly defined ground contact base for the sprite pivot. This is decorative foliage without physical collision. Clean genuine transparent background.",
+        "Use case: background-extraction. Edit this shrub sprite only: remove the surrounding green/brown blurred haze, glow and all background pixels completely. Preserve the exact plant, leaves, flowers, woody stems, original colors, shape and painterly detail. The alpha must be cleanly transparent immediately outside the actual leaf silhouettes, including gaps among isolated stems and leaves. No fog, tinted halo, opaque matte, backdrop or ground shadow. Keep every leaf and full plant within the image. Do not add objects or redesign the shrub. This is a game sprite cutout on real transparent alpha, with the same canvas size and same subject position."
+      ]
+    }
+  ]
+}
