@@ -1,0 +1,35 @@
+[
+  {
+    "finished_utc": "2026-10-25T11:58:46.9643023Z",
+    "started_utc": "2026-10-25T11:58:28.4036317Z",
+    "result": null,
+    "ok": true,
+    "exit_code": 0,
+    "aborted": false,
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "output_sha256": "2FA6A792E1441597A26CCF2362568A2469B0EA180CE12A3FEF4DE7CB42BF793C",
+    "name": "import",
+    "timed_out": false
+  },
+  {
+    "finished_utc": "2026-10-25T11:58:47.5745933Z",
+    "started_utc": "2026-10-25T11:58:46.9931423Z",
+    "result": null,
+    "ok": false,
+    "exit_code": -1,
+    "aborted": true,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_generation_test.gd"
+    ],
+    "output_sha256": "C3EFDD4B3049E6DC6864E7E7C506C6DAB7321A364F959338FBCB5BFB7603EF6B",
+    "name": "generation",
+    "timed_out": false
+  }
+]

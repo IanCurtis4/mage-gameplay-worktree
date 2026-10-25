@@ -2,6 +2,12 @@
 
 ## Decisões humanas25/10/2026
 
+F6/M6 autorizado: “F5 terminou. Podemos começar F6.” D6 confirmada neste chat:
+composição manual e assembler atual preservados; WFC opcional/experimental,
+comparação, pins e regeneração parcial. [Contrato e propriedade](contracts/m6_dispatch.md),
+[recibo F6](delivery/m6.md). Reutiliza o único worktree atual na branch
+codex/map-editor-m6, com F0–F5 por ancestralidade. Não abre F7 nem altera master/playtest.
+
 F5/M5 autorizado após F4. D5 confirmada: loop/ida e volta, espera, interrupção
 por aggro, retorno a waypoint válido e home/leash fixos. Transferência nominal
 dos quatro arquivos críticos de runtime autorizada no [dispatch F5](contracts/m5_dispatch.md).
@@ -14,7 +20,7 @@ remover artefatos antigos de teste/produção e reaproveitar uma fixture.
 F5 está **validado tecnicamente**, código `470904ea7f49ed5c8c0a60e182816c52f0ebde7a`:
 131 checks próprios, dois CLIs e oito IDs oficiais aprovados com supervisão Luna,
 inspeção Sol e fixture removida. [Recibo e roteiro humano](delivery/m5.md).
-Somente principal/F5 mantidos; aceite humano, master/playtest e F6 permanecem separados.
+Somente principal/worktree atual mantidos; aceite humano e master/playtest permanecem separados.
 
 F3/M3 entregue e validado tecnicamente no checkout dedicado, consumindo o aceite
 completo F2; aceite humano F3 registrado em24/10, com a travessia pelo centro da
@@ -165,5 +171,6 @@ supervisão Luna no código `7a391431fad54e396194ec0c3ce8e6491fbe178e`:
 91 checks de população,70 de documento,29 de UI e sete IDs oficiais por impacto
 conforme a linhagem registrada no recibo.
 O candidato F4 não recebeu aceite humano neste recibo. A execução F5/D5 foi
-liberada posteriormente conforme o registro de25/10 acima; F6/D6 continua
-pendente. Sem atualização de master/playtest/push. M3-NAV-01 permanece temporária.
+liberada posteriormente conforme o registro de25/10 acima; F6/D6 também foi
+liberada posteriormente neste índice. Sem atualização de master/playtest/push.
+M3-NAV-01 permanece temporária.

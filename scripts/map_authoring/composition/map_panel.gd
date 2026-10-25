@@ -8,6 +8,8 @@ const PieceStore = preload("res://scripts/map_authoring/io/source_store.gd")
 const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 const Canvas = preload("res://scripts/map_authoring/preview/map_canvas.gd")
 const Population = preload("res://scripts/map_authoring/population/population_panel.gd")
+const Generation = preload("res://scripts/map_authoring/generation/generation_panel.gd")
+var generation_window: Window
 var population_window: Window
 var session := Session.new()
 var canvas: Control
@@ -46,6 +48,7 @@ func _ready() -> void:
 	_button(actions,"Testar / parar",toggle_test); _button(actions,"Publicar localmente…",func() -> void: choose("publish"))
 	_button(actions,"Recuperar rascunho",recover)
 	_button(actions,"Encontros…",open_population)
+	_button(actions,"Geração assistida…",open_generation)
 	var split := HSplitContainer.new(); split.size_flags_vertical = Control.SIZE_EXPAND_FILL; add_child(split)
 	var inspector := VBoxContainer.new(); inspector.custom_minimum_size.x = 290; split.add_child(inspector)
 	instances = ItemList.new(); instances.custom_minimum_size.y = 100; inspector.add_child(instances); instances.item_selected.connect(select_instance)
@@ -80,6 +83,12 @@ func open_population() -> void:
 		var panel := Population.new(); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); population_window.add_child(panel)
 		if not session.data.instances.is_empty(): panel.import_map(session.data)
 	population_window.popup_centered()
+func open_generation() -> void:
+	if generation_window == null:
+		generation_window = Window.new(); generation_window.title = "Geração assistida"; generation_window.size = Vector2i(1360,900); generation_window.min_size = Vector2i(1180,760)
+		generation_window.close_requested.connect(generation_window.hide); add_child(generation_window)
+		var panel := Generation.new(); panel.target = session; panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); generation_window.add_child(panel)
+	generation_window.popup_centered()
 func _number(parent: Node, label: String) -> SpinBox:
 	var title := Label.new(); title.text = label; parent.add_child(title)
 	var value := SpinBox.new(); value.min_value = -16000; value.max_value = 16000; value.step = 1; value.custom_minimum_size.x = 80; parent.add_child(value); return value

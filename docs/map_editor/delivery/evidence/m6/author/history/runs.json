@@ -1,0 +1,152 @@
+[
+  {
+    "finished_utc": "2026-10-25T12:09:09.8376756Z",
+    "result": null,
+    "exit_code": 0,
+    "started_utc": "2026-10-25T12:09:01.4405932Z",
+    "aborted": false,
+    "ok": true,
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "timed_out": false,
+    "output_sha256": "CC03A15C5A832FC22F75F41EB2F5EC800DA02B944EDA85E00DD7155926320B5D",
+    "name": "import"
+  },
+  {
+    "finished_utc": "2026-10-25T12:09:22.5252572Z",
+    "result": {
+      "checks": [
+        {
+          "id": "opens_from_composition",
+          "ok": true
+        },
+        {
+          "id": "snapshot_import",
+          "ok": true
+        },
+        {
+          "id": "experimental_default_off",
+          "ok": true
+        },
+        {
+          "id": "opt_in_ui",
+          "ok": true
+        },
+        {
+          "id": "candidate_ui",
+          "ok": true
+        },
+        {
+          "id": "pin_ui",
+          "ok": true
+        },
+        {
+          "id": "request_undo_redo",
+          "ok": true
+        },
+        {
+          "id": "seed_text_exact",
+          "ok": true
+        },
+        {
+          "id": "quota_ui",
+          "ok": true
+        },
+        {
+          "id": "native_completed",
+          "ok": true
+        },
+        {
+          "id": "gui_headless_equivalent",
+          "ok": true
+        },
+        {
+          "id": "before_after_preview",
+          "ok": true
+        },
+        {
+          "id": "diff_visible",
+          "ok": true
+        },
+        {
+          "id": "preview_not_applied",
+          "ok": true
+        },
+        {
+          "id": "native_apply",
+          "ok": true
+        },
+        {
+          "id": "native_undo",
+          "ok": true
+        },
+        {
+          "id": "native_redo",
+          "ok": true
+        },
+        {
+          "id": "stale_reapply",
+          "ok": true
+        },
+        {
+          "id": "native_save",
+          "ok": true
+        },
+        {
+          "id": "draft_recovery",
+          "ok": true
+        },
+        {
+          "id": "native_open",
+          "ok": true
+        },
+        {
+          "id": "open_preserves_prior_draft",
+          "ok": true
+        },
+        {
+          "id": "native_cancel",
+          "ok": true
+        },
+        {
+          "id": "assembler_completes",
+          "ok": true
+        },
+        {
+          "id": "seed_history",
+          "ok": true
+        },
+        {
+          "id": "history_keeps_distinct_seeds",
+          "ok": true
+        },
+        {
+          "id": "history_restores_request",
+          "ok": true
+        },
+        {
+          "id": "capture_saved",
+          "ok": true
+        }
+      ],
+      "count": 28,
+      "ok": true
+    },
+    "exit_code": 0,
+    "started_utc": "2026-10-25T12:09:09.8812390Z",
+    "aborted": false,
+    "ok": true,
+    "arguments": [
+      "--editor",
+      "--rendering-method",
+      "gl_compatibility"
+    ],
+    "timed_out": false,
+    "output_sha256": "E8EA329DCD127D9172ACEBB31C7267329DF617DCCBF7511D83B2D35284C0AC1D",
+    "name": "native_ui"
+  }
+]

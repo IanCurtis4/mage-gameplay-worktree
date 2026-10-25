@@ -1,0 +1,136 @@
+[
+  {
+    "exit_code": 0,
+    "name": "import",
+    "ok": true,
+    "started_utc": "2026-10-25T12:02:13.3015998Z",
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "timed_out": false,
+    "aborted": false,
+    "finished_utc": "2026-10-25T12:02:21.8151451Z",
+    "output_sha256": "603B6F7A9E37F2CAA83DF9B2B7832D6371C57996C0C5164F45C8F2D6450D5C88",
+    "result": null
+  },
+  {
+    "exit_code": 1,
+    "name": "native_ui",
+    "ok": false,
+    "started_utc": "2026-10-25T12:02:21.8532809Z",
+    "arguments": [
+      "--editor",
+      "--rendering-method",
+      "gl_compatibility"
+    ],
+    "timed_out": false,
+    "aborted": false,
+    "finished_utc": "2026-10-25T12:02:40.0828448Z",
+    "output_sha256": "950AF6085A8875AB426AFD10B06AFF39A2D6D2545F4A27A6F2071FA6FFBBD639",
+    "result": {
+      "checks": [
+        {
+          "id": "opens_from_composition",
+          "ok": true
+        },
+        {
+          "id": "snapshot_import",
+          "ok": true
+        },
+        {
+          "id": "experimental_default_off",
+          "ok": true
+        },
+        {
+          "id": "opt_in_ui",
+          "ok": true
+        },
+        {
+          "id": "candidate_ui",
+          "ok": true
+        },
+        {
+          "id": "pin_ui",
+          "ok": true
+        },
+        {
+          "id": "request_undo_redo",
+          "ok": true
+        },
+        {
+          "id": "seed_text_exact",
+          "ok": false
+        },
+        {
+          "id": "quota_ui",
+          "ok": true
+        },
+        {
+          "id": "native_completed",
+          "ok": true
+        },
+        {
+          "id": "gui_headless_equivalent",
+          "ok": true
+        },
+        {
+          "id": "before_after_preview",
+          "ok": true
+        },
+        {
+          "id": "diff_visible",
+          "ok": true
+        },
+        {
+          "id": "preview_not_applied",
+          "ok": true
+        },
+        {
+          "id": "native_apply",
+          "ok": true
+        },
+        {
+          "id": "native_undo",
+          "ok": true
+        },
+        {
+          "id": "native_redo",
+          "ok": true
+        },
+        {
+          "id": "stale_reapply",
+          "ok": true
+        },
+        {
+          "id": "native_save",
+          "ok": true
+        },
+        {
+          "id": "draft_recovery",
+          "ok": false
+        },
+        {
+          "id": "native_open",
+          "ok": false
+        },
+        {
+          "id": "native_cancel",
+          "ok": true
+        },
+        {
+          "id": "assembler_completes",
+          "ok": true
+        },
+        {
+          "id": "capture_saved",
+          "ok": true
+        }
+      ],
+      "count": 24,
+      "ok": false
+    }
+  }
+]

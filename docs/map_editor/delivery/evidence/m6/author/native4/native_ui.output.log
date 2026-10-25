@@ -1,0 +1,33 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+M6_UI_CHECK opens_from_composition true
+M6_UI_CHECK snapshot_import true
+M6_UI_CHECK experimental_default_off true
+M6_UI_CHECK opt_in_ui true
+M6_UI_CHECK candidate_ui true
+M6_UI_CHECK pin_ui true
+M6_UI_CHECK request_undo_redo true
+M6_UI_CHECK seed_text_exact true
+M6_UI_CHECK quota_ui true
+M6_UI_CHECK native_completed true
+M6_UI_CHECK gui_headless_equivalent true
+M6_UI_CHECK before_after_preview true
+M6_UI_CHECK diff_visible true
+M6_UI_CHECK preview_not_applied true
+M6_UI_CHECK native_apply true
+M6_UI_CHECK native_undo true
+M6_UI_CHECK native_redo true
+M6_UI_CHECK stale_reapply true
+M6_UI_CHECK native_save true
+M6_UI_CHECK draft_recovery true
+M6_UI_CHECK native_open true
+M6_UI_CHECK open_preserves_prior_draft true
+M6_UI_CHECK native_cancel true
+M6_UI_CHECK assembler_completes true
+M6_UI_CHECK seed_history true
+M6_UI_CHECK history_restores_request true
+M6_UI_CHECK capture_saved true
+M6_UI_RESULT {"checks":[{"id":"opens_from_composition","ok":true},{"id":"snapshot_import","ok":true},{"id":"experimental_default_off","ok":true},{"id":"opt_in_ui","ok":true},{"id":"candidate_ui","ok":true},{"id":"pin_ui","ok":true},{"id":"request_undo_redo","ok":true},{"id":"seed_text_exact","ok":true},{"id":"quota_ui","ok":true},{"id":"native_completed","ok":true},{"id":"gui_headless_equivalent","ok":true},{"id":"before_after_preview","ok":true},{"id":"diff_visible","ok":true},{"id":"preview_not_applied","ok":true},{"id":"native_apply","ok":true},{"id":"native_undo","ok":true},{"id":"native_redo","ok":true},{"id":"stale_reapply","ok":true},{"id":"native_save","ok":true},{"id":"draft_recovery","ok":true},{"id":"native_open","ok":true},{"id":"open_preserves_prior_draft","ok":true},{"id":"native_cancel","ok":true},{"id":"assembler_completes","ok":true},{"id":"seed_history","ok":true},{"id":"history_restores_request","ok":true},{"id":"capture_saved","ok":true}],"count":27,"ok":true}
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)

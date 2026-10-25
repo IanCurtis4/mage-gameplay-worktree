@@ -30,5 +30,10 @@ acumulação de checkouts, fixtures e pacotes por tentativa/pacote.
 
 Worktree corrente em25/10:
 `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5`.
+Reutilizado por F6 na branch `codex/map-editor-m6`, base F5
+`fab5c7b2b26c311c274e7f30b4d8b41c8506e27a`; sem terceiro checkout.
+F6 usa uma única fixture em `.godot/verification/e07_f1/fixture_project`,
+compartilhada sequencialmente pelos runners próprio e oficial. A engine continua
+no principal em `.tools/godot`. Limpeza final e medidas no recibo M6.
 Principal: `C:/Users/João Pedro/Documents/ChatGPT/RagRPG`.
 O estado entregue de F0–F4 segue no histórico Git e por ancestralidade no F5.
