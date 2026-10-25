@@ -19,6 +19,8 @@ func run() -> void:
 	var patrol := PatrolFixture.fixture()
 	var sources := {"piece":Map.sample().pieces[0].source,"map":Map.sample(),"population":patrol.population[0],"patrol":patrol,"generation":Generation.from_map(Map.sample())}
 	var root := ProjectSettings.globalize_path("res://.godot/m7_samples"); DirAccess.make_dir_recursive_absolute(root)
+	save_sample(root.path_join("permissions.json"),Exchange.policy(["name"]))
+	Exchange.IO._write(root.path_join("invalid.json"),"[]".to_utf8_buffer())
 	for kind: String in sources:
 		var source: Dictionary = sources[kind]; var original := Exchange.digest(source)
 		var allowed := ["name"] if kind != "generation" else ["seed_text"]

@@ -26,7 +26,7 @@ $m7Profile=Join-Path $m7Fixture '.godot/discardable_profile'
 $m7Head=git -C $m7Root rev-parse HEAD
 if(Test-Path -LiteralPath (Join-Path $m7Fixture 'addons/m7_driver/plugin.gd')){Copy-Item -LiteralPath (Join-Path $m7Root 'tests/map_editor_exchange_ui_test.gd') -Destination (Join-Path $m7Fixture 'addons/m7_driver/plugin.gd') -Force}
 $m7Runs=[Collections.Generic.List[object]]::new()
-function Invoke-M7([string]$Name,[string[]]$Arguments,[string]$Marker=''){
+function Invoke-M7([string]$Name,[string[]]$Arguments,[string]$Marker='',[int]$ExpectedExit=0){
     $m7Info=[Diagnostics.ProcessStartInfo]::new()
     $m7Info.FileName=(Resolve-Path -LiteralPath $GodotPath).Path
     $m7Info.UseShellExecute=$false; $m7Info.CreateNoWindow=$true; $m7Info.WindowStyle=[Diagnostics.ProcessWindowStyle]::Hidden
@@ -50,7 +50,7 @@ function Invoke-M7([string]$Name,[string[]]$Arguments,[string]$Marker=''){
     $m7Log=Join-Path $m7Evidence ($Name+'.output.log'); [IO.File]::WriteAllText($m7Log,$m7Text)
     $m7Payload=$null
     $m7EngineText=Get-Content -LiteralPath (Join-Path $m7Evidence ($Name+'.engine.log')) -Raw
-    $m7Pass= -not $m7Timeout -and -not $m7Aborted -and $m7Process.ExitCode -eq 0 -and $m7Text -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:'
+    $m7Pass= -not $m7Timeout -and -not $m7Aborted -and $m7Process.ExitCode -eq $ExpectedExit -and $m7Text -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:'
     $m7Pass=$m7Pass -and $m7EngineText -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:'
     if($Marker){
         $m7Match=[regex]::Match($m7Text,'(?m)^'+$Marker+' (.+)$')
@@ -71,6 +71,27 @@ foreach($m7Label in @('a','b')){Invoke-M7 ('cli_'+$m7Label) @('--headless','--sc
 $m7HashA=[regex]::Match((Get-Content -LiteralPath (Join-Path $m7Evidence 'cli_a.output.log') -Raw),'MAP_EXCHANGE_RESULT (.+)').Groups[1].Value|ConvertFrom-Json
 $m7HashB=[regex]::Match((Get-Content -LiteralPath (Join-Path $m7Evidence 'cli_b.output.log') -Raw),'MAP_EXCHANGE_RESULT (.+)').Groups[1].Value|ConvertFrom-Json
 if(-not $m7HashA.ok -or -not $m7HashB.ok -or $m7HashA.output_hash -ne $m7Runs[1].result.package_hash -or $m7HashB.output_hash -ne $m7HashA.output_hash){throw 'CLI completion/hash mismatch.'}
+$m7CliRoot=Join-Path $m7Fixture ('.godot/m7_cli_'+[Guid]::NewGuid().ToString('N')); [void](New-Item -ItemType Directory -Force -Path $m7CliRoot)
+$m7Script='res://scripts/map_authoring/exchange/headless.gd'
+$m7Request=Join-Path $m7CliRoot 'request.rpx'; $m7Proposal=Join-Path $m7CliRoot 'proposal.rpx'
+$m7Permissions=Join-Path $m7Fixture '.godot/m7_samples/permissions.json'; $m7Invalid=Join-Path $m7Fixture '.godot/m7_samples/invalid.json'
+Invoke-M7 'cli_export' @('--headless','--script',$m7Script,'--','export','map',(Join-Path $m7Fixture '.godot/m7_samples/map.json'),$m7Permissions,$m7Request)
+Invoke-M7 'cli_propose' @('--headless','--script',$m7Script,'--','propose',$m7Request,(Join-Path $m7Fixture '.godot/m7_samples/map_candidate.json'),$m7Proposal)
+foreach($m7Command in @('export','propose','review')){
+    $m7Rejected=Join-Path $m7CliRoot ($m7Command+'_rejected.rpx')
+    $m7Args=switch($m7Command){
+        'export'{@('export','map',$m7Invalid,$m7Permissions,$m7Rejected)}
+        'propose'{@('propose',$m7Request,$m7Invalid,$m7Rejected)}
+        'review'{@('review',$m7Request,$m7Proposal,$m7Invalid)}
+    }
+    Invoke-M7 ('cli_invalid_'+$m7Command) (@('--headless','--script',$m7Script,'--')+$m7Args) '' 1
+    $m7Bad=[regex]::Match((Get-Content -LiteralPath (Join-Path $m7Evidence ('cli_invalid_'+$m7Command+'.output.log')) -Raw),'MAP_EXCHANGE_RESULT (.+)').Groups[1].Value|ConvertFrom-Json
+    if($m7Bad.ok -or $m7Bad.code -ne 'exchange_invalid_type' -or (Test-Path -LiteralPath $m7Rejected)){throw 'Invalid CLI input did not reject without output.'}
+}
+$m7ExportResult=[regex]::Match((Get-Content -LiteralPath (Join-Path $m7Evidence 'cli_export.output.log') -Raw),'MAP_EXCHANGE_RESULT (.+)').Groups[1].Value|ConvertFrom-Json
+$m7ProposeResult=[regex]::Match((Get-Content -LiteralPath (Join-Path $m7Evidence 'cli_propose.output.log') -Raw),'MAP_EXCHANGE_RESULT (.+)').Groups[1].Value|ConvertFrom-Json
+if(-not $m7ExportResult.ok -or -not $m7ProposeResult.ok -or -not (Test-Path -LiteralPath $m7Request) -or -not (Test-Path -LiteralPath $m7Proposal) -or $m7ProposeResult.output_hash -ne $m7HashA.output_hash){throw 'CLI export/propose completion/hash mismatch.'}
+
 }
 if($Native -or $UIOnly){
     $m7Driver=Join-Path $m7Fixture 'addons/m7_driver'; [void](New-Item -ItemType Directory -Force -Path $m7Driver)

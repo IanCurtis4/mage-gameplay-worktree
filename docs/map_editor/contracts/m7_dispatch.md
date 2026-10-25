@@ -31,7 +31,7 @@ Sol possui scripts/map_authoring/exchange/{exchange,exchange_panel,headless}.gd
 com respectivos .gd.uid; tests/map_editor_exchange{,_ui}_test.gd + .uid;
 tools/map_editor_exchange/run.ps1; docs/map_editor/contracts/m7_dispatch.md;
 docs/map_editor/delivery/m7.md; docs/map_editor/exchange.md;
-docs/map_editor/delivery/evidence/m7/author/; atualização de estado/link no README.
+docs/map_editor/delivery/evidence/m7/author/ e .gitattributes local (logs brutos); atualização de estado/link no README.
 Fontes versionadas skills/ragrpg-{mapdelivery,enemydelivery,art}/SKILL.md;
 art passa a ter fonte versionada baseada na cópia instalada lida, sem sincronizar
 instalações nesta tarefa. Nenhuma geração raster solicitada.
