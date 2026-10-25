@@ -64,8 +64,7 @@ func _ready() -> void:
 	problems = ItemList.new(); problems.custom_minimum_size.y = 65; add_child(problems); problems.item_selected.connect(focus_problem)
 	_dialog = FileDialog.new(); _dialog.access = FileDialog.ACCESS_FILESYSTEM; _dialog.file_selected.connect(file_selected); _dialog.dir_selected.connect(file_selected); add_child(_dialog)
 	_confirmation = ConfirmationDialog.new(); add_child(_confirmation); _confirmation.confirmed.connect(remove_instance)
-	_autosave = ProjectSettings.globalize_path("res://.godot/map_authoring/composition_"+str(Time.get_unix_time_from_system()).replace(".","_")+".json")
-	DirAccess.make_dir_recursive_absolute(_autosave.get_base_dir())
+	_new_draft_path()
 	session.changed.connect(refresh)
 	var timer := Timer.new(); timer.wait_time = 10; timer.autostart = true; timer.timeout.connect(preserve_draft); add_child(timer)
 	refresh()
@@ -77,6 +76,9 @@ func _number(parent: Node, label: String) -> SpinBox:
 func _exit_tree() -> void:
 	if job != null: job.close()
 	if session.dirty(): preserve_draft()
+func _new_draft_path() -> void:
+	_autosave = ProjectSettings.globalize_path("res://.godot/map_authoring/composition_"+Crypto.new().generate_random_bytes(12).hex_encode()+".json")
+	DirAccess.make_dir_recursive_absolute(_autosave.get_base_dir())
 func preserve_draft() -> void:
 	if _autosave.is_empty() or not session.dirty(): return
 	var saved := Store.save_source(_autosave,session.data,PieceStore.disk_hash(_autosave))
@@ -86,7 +88,7 @@ func recover() -> void:
 	if loaded.ok: show_result(session.replace(loaded.data))
 	else: show_result(loaded)
 func new_map() -> void:
-	preserve_draft(); source_path = ""; expected_hash = ""; session.saved_hash = ""; session.replace(Document.empty())
+	preserve_draft(); _new_draft_path(); source_path = ""; expected_hash = ""; session.saved_hash = ""; session.replace(Document.empty())
 func sample() -> void:
 	# Do not replace authored content with an example.
 	if not session.data.instances.is_empty(): status.text = "Crie um novo mapa para carregar o exemplo."; return
@@ -102,7 +104,7 @@ func file_selected(path: String) -> void:
 		"open":
 			var loaded := Store.load_source(path)
 			if loaded.ok:
-				preserve_draft(); source_path = path; expected_hash = PieceStore.disk_hash(path); session.replace(loaded.data); session.saved_hash = Document.hash_source(session.data)
+				preserve_draft(); _new_draft_path(); source_path = path; expected_hash = PieceStore.disk_hash(path); session.replace(loaded.data); session.saved_hash = Document.hash_source(session.data)
 			show_result(loaded)
 		"save":
 			# Existing destinations require an explicit overwrite dialog from FileDialog,

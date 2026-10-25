@@ -77,6 +77,12 @@ func _run() -> void:
 	var image: Image = shell.composition_window.get_texture().get_image()
 	if capture_path != "": image.save_png(capture_path)
 	check("native_capture",capture_path != "" and FileAccess.file_exists(capture_path))
+	var prior: Dictionary = panel.session.data.duplicate(true); prior.name = "Mapa anterior"; panel.session.apply(prior); panel.preserve_draft()
+	var prior_path: String = panel._autosave
+	panel.new_map(); panel.sample(); panel.preserve_draft(); panel.preserve_draft()
+	check("switch_map_preserves_prior_draft",panel._autosave != prior_path and Store.load_source(prior_path).data.name == "Mapa anterior")
+	var recover_hash := Document.hash_source(panel.session.data); var edited: Dictionary = panel.session.data.duplicate(true); edited.instances[1].position_xyz[0] = 180; panel.session.apply(edited); panel.recover()
+	check("recover_current_draft",Document.hash_source(panel.session.data) == recover_hash)
 	panel.canvas.stop_test(); shell.composition_window.hide(); finish()
 func finish() -> void:
 	var ok := true

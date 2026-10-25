@@ -75,7 +75,7 @@ if ($Native) {
     Copy-Item -LiteralPath (Join-Path $m3Root 'tests/map_editor_composition_ui_test.gd') -Destination (Join-Path $m3Driver 'plugin.gd') -Force
     '[plugin]', 'name="Fixture F3"', 'description="Teste isolado"', 'author="RagRPG"', 'version="1"', 'script="plugin.gd"' | Set-Content -LiteralPath (Join-Path $m3Driver 'plugin.cfg') -Encoding utf8
     Add-Content -LiteralPath (Join-Path $m3Fixture 'project.godot') -Value "`n[editor_plugins]`nenabled=PackedStringArray(`"res://addons/m3_driver/plugin.cfg`")" -Encoding utf8
-    Invoke-M3 'native_ui' @('--editor','--rendering-method','gl_compatibility') 'M3_UI_RESULT' 22
+    Invoke-M3 'native_ui' @('--editor','--rendering-method','gl_compatibility') 'M3_UI_RESULT' 24
 }
 $m3Inputs=@()
 foreach ($m3Dir in @('scripts/map_authoring','scripts/core/expedition','scripts/world/expedition_geometry_view.gd','addons/ragrpg_map_editor','assets/art/map_authoring','tests/map_editor_composition_test.gd','tests/map_editor_composition_ui_test.gd','tests/map_editor_document_test.gd','tools/map_editor_composition/run.ps1')) {
