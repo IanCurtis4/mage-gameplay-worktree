@@ -45,7 +45,9 @@ var apply_button: Button
 var history_list: ItemList
 var history: Array = []
 
+var exchange_panel: Control
 func _ready() -> void:
+	exchange_panel = preload("res://scripts/map_authoring/exchange/exchange_panel.gd").mount(self,"generation",func() -> Dictionary: return source.duplicate(true),change)
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
 	var heading := Label.new(); heading.text = "Geração assistida · Regiões fixas e variantes"; heading.add_theme_font_size_override("font_size",22); add_child(heading)
 	var toolbar := HFlowContainer.new(); add_child(toolbar)

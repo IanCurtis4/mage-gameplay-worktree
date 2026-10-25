@@ -1,0 +1,149 @@
+[
+  {
+    "ok": true,
+    "result": null,
+    "exit_code": 0,
+    "aborted": false,
+    "started_utc": "2026-10-25T13:29:09.9030272Z",
+    "timed_out": false,
+    "name": "import",
+    "finished_utc": "2026-10-25T13:29:28.7096998Z",
+    "output_sha256": "D493C97811A447F7AA30D4D3014E1266FCED4B4EF2CA6CD01FA143C3EABA94A0",
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ]
+  },
+  {
+    "ok": false,
+    "result": {
+      "checks": [
+        {
+          "id": "piece_export",
+          "ok": true
+        },
+        {
+          "id": "piece_safe_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "piece_propose",
+          "ok": true
+        },
+        {
+          "id": "piece_prepare",
+          "ok": true
+        },
+        {
+          "id": "piece_authority_hash",
+          "ok": true
+        },
+        {
+          "id": "piece_no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "piece_idempotent",
+          "ok": true
+        },
+        {
+          "id": "piece_io_request",
+          "ok": true
+        },
+        {
+          "id": "piece_io_proposal",
+          "ok": true
+        },
+        {
+          "id": "piece_io_source",
+          "ok": true
+        },
+        {
+          "id": "piece_io_candidate",
+          "ok": true
+        },
+        {
+          "id": "piece_disk_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "map_export",
+          "ok": true
+        },
+        {
+          "id": "map_safe_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "map_propose",
+          "ok": true
+        },
+        {
+          "id": "map_prepare",
+          "ok": true
+        },
+        {
+          "id": "map_authority_hash",
+          "ok": true
+        },
+        {
+          "id": "map_no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "map_idempotent",
+          "ok": true
+        },
+        {
+          "id": "map_io_request",
+          "ok": true
+        },
+        {
+          "id": "map_io_proposal",
+          "ok": true
+        },
+        {
+          "id": "map_io_source",
+          "ok": true
+        },
+        {
+          "id": "map_io_candidate",
+          "ok": true
+        },
+        {
+          "id": "map_disk_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "population_export",
+          "ok": true
+        },
+        {
+          "id": "population_safe_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "population_propose",
+          "ok": false
+        }
+      ],
+      "count": 27,
+      "ok": false,
+      "package_hash": "39507046833ff82ba82840421bbe3cf133806611fdcdacb92368db5d5b1bd037"
+    },
+    "exit_code": 1,
+    "aborted": false,
+    "started_utc": "2026-10-25T13:29:28.7403799Z",
+    "timed_out": false,
+    "name": "exchange",
+    "finished_utc": "2026-10-25T13:29:35.4631978Z",
+    "output_sha256": "D5DAA5449B72745C9411A4E555FC9C8D1AAD12D316E6B913646409113E11FCD9",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_exchange_test.gd"
+    ]
+  }
+]

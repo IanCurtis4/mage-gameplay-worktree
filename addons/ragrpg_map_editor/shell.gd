@@ -23,7 +23,9 @@ var recovery_kind: OptionButton
 var _dialog: ConfirmationDialog
 var _pending_action: Callable
 
+var exchange_panel: Control
 func _ready() -> void:
+	exchange_panel = preload("res://scripts/map_authoring/exchange/exchange_panel.gd").mount(self,"piece",func() -> Dictionary: return session.document().to_data().duplicate(true),session.apply)
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	size_flags_vertical = Control.SIZE_EXPAND_FILL

@@ -54,7 +54,9 @@ func open_patrols() -> void:
 		var panel := preload("res://scripts/map_authoring/patrol/patrol_panel.gd").new(); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); patrol_window.add_child(panel)
 		panel.import_population(session.data)
 	patrol_window.popup_centered()
+var exchange_panel: Control
 func _ready() -> void:
+	exchange_panel = preload("res://scripts/map_authoring/exchange/exchange_panel.gd").mount(self,"population",func() -> Dictionary: return session.data.duplicate(true),session.apply)
 	size_flags_vertical = Control.SIZE_EXPAND_FILL; size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var heading := Label.new(); heading.text = "Encontros · População e interações"; heading.add_theme_font_size_override("font_size",22); add_child(heading)
 	var toolbar := HBoxContainer.new(); add_child(toolbar)

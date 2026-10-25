@@ -30,6 +30,15 @@ completo F2; aceite humano F3 registrado em24/10, com a travessia pelo centro da
 conexão aceita como limitação temporária. [Contrato e manifesto nominal](contracts/m3_dispatch.md), [recibo F3](delivery/m3.md).
 Os estados históricos de planejamento abaixo não revogam essa autorização.
 
+## Editor F7 / M7 —25/10/2026
+
+Autorização humana: “F6 acabou, podemos começar F7.” F0–F6 incluídos por
+ancestralidade na base685d585; checkout atual reutilizado sob a regra de dois
+checkouts. [Contrato/propriedade](contracts/m7_dispatch.md), [fluxo executável
+para skills](exchange.md), [recibo](delivery/m7.md). F7 está em execução; não
+abre F8 nem implica aceite de produto/merge. As propostas de23/10 abaixo são
+históricas onde os recibos produtores já entregam a capacidade.
+
 ## Decisão humana vigente —24/10/2026
 
 **Retificação posterior de produto:** [peças/células, mapa e terreno](contracts/terrain_piece_semantics.md).

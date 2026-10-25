@@ -1,0 +1,30 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+M7_UI_CHECK mounted_native true
+M7_UI_CHECK native_export true
+M7_UI_CHECK safe_default true
+M7_UI_CHECK native_proposal_compiles true
+M7_UI_CHECK trusted_request_open true
+M7_UI_CHECK import_completed true
+M7_UI_CHECK diff_visible true
+M7_UI_CHECK before_after_values true
+M7_UI_CHECK before_after_preview true
+M7_UI_CHECK gui_cli_authority_hash true
+M7_UI_CHECK preview_no_mutation true
+M7_UI_CHECK confirmation_required true
+M7_UI_CHECK native_apply true
+M7_UI_CHECK native_undo true
+M7_UI_CHECK native_redo true
+M7_UI_CHECK idempotent_disabled true
+M7_UI_CHECK stale_commit true
+M7_UI_CHECK reject_no_mutation true
+M7_UI_CHECK cancel_no_commit true
+M7_UI_CHECK binding_piece true
+M7_UI_CHECK binding_population true
+M7_UI_CHECK binding_patrol true
+M7_UI_CHECK binding_generation true
+M7_UI_CHECK capture_saved true
+M7_UI_RESULT {"checks":[{"id":"mounted_native","ok":true},{"id":"native_export","ok":true},{"id":"safe_default","ok":true},{"id":"native_proposal_compiles","ok":true},{"id":"trusted_request_open","ok":true},{"id":"import_completed","ok":true},{"id":"diff_visible","ok":true},{"id":"before_after_values","ok":true},{"id":"before_after_preview","ok":true},{"id":"gui_cli_authority_hash","ok":true},{"id":"preview_no_mutation","ok":true},{"id":"confirmation_required","ok":true},{"id":"native_apply","ok":true},{"id":"native_undo","ok":true},{"id":"native_redo","ok":true},{"id":"idempotent_disabled","ok":true},{"id":"stale_commit","ok":true},{"id":"reject_no_mutation","ok":true},{"id":"cancel_no_commit","ok":true},{"id":"binding_piece","ok":true},{"id":"binding_population","ok":true},{"id":"binding_patrol","ok":true},{"id":"binding_generation","ok":true},{"id":"capture_saved","ok":true}],"count":24,"ok":true}

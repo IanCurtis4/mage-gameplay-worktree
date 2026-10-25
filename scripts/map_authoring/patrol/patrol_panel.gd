@@ -31,7 +31,9 @@ var cancelled := false
 var mutex := Mutex.new()
 var preview_pid := -1
 var preview_package := ""
+var exchange_panel: Control
 func _ready() -> void:
+	exchange_panel = preload("res://scripts/map_authoring/exchange/exchange_panel.gd").mount(self,"patrol",func() -> Dictionary: return session.data.duplicate(true),session.apply)
 	size_flags_vertical = SIZE_EXPAND_FILL; size_flags_horizontal = SIZE_EXPAND_FILL
 	var heading := Label.new(); heading.text = "Patrulhas · rotas, espera e continuidade"; heading.add_theme_font_size_override("font_size",22); add_child(heading)
 	var toolbar := HBoxContainer.new(); add_child(toolbar)

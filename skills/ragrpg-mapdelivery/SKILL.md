@@ -79,3 +79,24 @@ passo em checkpoint. Luna acompanha testes; Sol corrige/valida; Astra somente
 arquitetura/exceção justificada por WORKFLOW. Não criar gate por módulo.
 Documento apenas: conferir referências/coerência e declarar gameplay não executado.
 Playtest/merge/arquivamento seguem WORKFLOW e a autorização concreta da tarefa.
+
+
+## Intercâmbio no editor de mapas F7
+
+Use piece/map para terreno, materiais existentes, props autorizados e composição.
+Leia `docs/map_editor/exchange.md` no checkout autorizado para schema, CLI e limites.
+Receba o pedido `.rpx` exportado pela pessoa, preserve-o byte a byte e trabalhe
+numa cópia de `files[source.json].data`. Não edite ticket, base, permissões ou
+relatório para ampliar o escopo. Declare o hash do pedido/base e os IDs que vai
+alterar. As seções/IDs e caminhos protegidos são autorização local; camadas
+travadas, regiões protegidas, slots fixos e pins permanecem conservados.
+
+Produza candidate.json estrito e rode a CLI versionada `propose <pedido.rpx>
+<candidate.json> <proposta.rpx>` com o Godot contratado. O produtor valida/compila;
+falha conserva o original, sem scripts/cenas, paths absolutos/traversal ou
+reparo silencioso. Confira `review <pedido.rpx> <proposta.rpx> <fonte_atual.json>`
+e entregue proposta, diff, hashes e limitações. Base divergente exige novo pedido
+exportado/reconciliação humana explícita. A pessoa importa a proposta no editor,
+compara Antes/Proposta e confirma uma ação desfazível. Não sobrescreva a fonte
+humana, não publique nem ative o WFC por inferência. A mesma autoridade atende
+GUI/CLI. Essa adaptação da fonte versionada não sincroniza cópias instaladas.

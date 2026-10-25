@@ -1,0 +1,23 @@
+{
+  "quick_validate": "unavailable: ModuleNotFoundError yaml in system and bundled Python",
+  "manual_validation": [
+    {
+      "skill": "ragrpg-mapdelivery",
+      "name_description_valid": true,
+      "flow_reference_exists": true,
+      "installed_copy_unchanged": true
+    },
+    {
+      "skill": "ragrpg-enemydelivery",
+      "name_description_valid": true,
+      "flow_reference_exists": true,
+      "installed_copy_unchanged": true
+    },
+    {
+      "skill": "ragrpg-art",
+      "name_description_valid": true,
+      "flow_reference_exists": true,
+      "installed_copy_unchanged": true
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+M7_CHECK piece_export true
+M7_CHECK piece_safe_roundtrip true
+M7_CHECK piece_propose true
+M7_CHECK piece_prepare true
+M7_CHECK piece_authority_hash true
+M7_CHECK piece_no_input_mutation true
+M7_CHECK piece_idempotent true
+M7_CHECK piece_io_request true
+M7_CHECK piece_io_proposal true
+M7_CHECK piece_io_source true
+M7_CHECK piece_io_candidate true
+M7_CHECK piece_disk_roundtrip true
+M7_CHECK map_export true
+M7_CHECK map_safe_roundtrip true
+M7_CHECK map_propose true
+M7_CHECK map_prepare true
+M7_CHECK map_authority_hash true
+M7_CHECK map_no_input_mutation true
+M7_CHECK map_idempotent true
+M7_CHECK map_io_request true
+M7_CHECK map_io_proposal true
+M7_CHECK map_io_source true
+M7_CHECK map_io_candidate true
+M7_CHECK map_disk_roundtrip true
+M7_CHECK population_export true
+M7_CHECK population_safe_roundtrip true
+M7_CHECK population_propose false
+{ "ok": false, "code": "plan_stale", "diagnostics": [{ "code": "plan_stale", "entity_id": "", "field": "population", "surface_id": "", "location": (0.0, 0.0, 0.0), "severity": "error", "message": "Prepare e aplique uma nova prévia após alterar a receita.", "counts": {  }, "suggestion": "Selecione o marcador e ajuste a fonte." }] }
+M7_RESULT {"checks":[{"id":"piece_export","ok":true},{"id":"piece_safe_roundtrip","ok":true},{"id":"piece_propose","ok":true},{"id":"piece_prepare","ok":true},{"id":"piece_authority_hash","ok":true},{"id":"piece_no_input_mutation","ok":true},{"id":"piece_idempotent","ok":true},{"id":"piece_io_request","ok":true},{"id":"piece_io_proposal","ok":true},{"id":"piece_io_source","ok":true},{"id":"piece_io_candidate","ok":true},{"id":"piece_disk_roundtrip","ok":true},{"id":"map_export","ok":true},{"id":"map_safe_roundtrip","ok":true},{"id":"map_propose","ok":true},{"id":"map_prepare","ok":true},{"id":"map_authority_hash","ok":true},{"id":"map_no_input_mutation","ok":true},{"id":"map_idempotent","ok":true},{"id":"map_io_request","ok":true},{"id":"map_io_proposal","ok":true},{"id":"map_io_source","ok":true},{"id":"map_io_candidate","ok":true},{"id":"map_disk_roundtrip","ok":true},{"id":"population_export","ok":true},{"id":"population_safe_roundtrip","ok":true},{"id":"population_propose","ok":false}],"count":27,"ok":false,"package_hash":"39507046833ff82ba82840421bbe3cf133806611fdcdacb92368db5d5b1bd037"}

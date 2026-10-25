@@ -1,0 +1,136 @@
+[
+  {
+    "output_sha256": "50B8E082E8473E01FA934EB46158108904EC8769C19EA2BC7AB56BE0D2FF9CAF",
+    "started_utc": "2026-10-25T13:33:09.1925010Z",
+    "exit_code": 0,
+    "result": null,
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "aborted": false,
+    "ok": true,
+    "finished_utc": "2026-10-25T13:33:17.0566140Z",
+    "name": "import",
+    "timed_out": false
+  },
+  {
+    "output_sha256": "96696D11709AB026D0E235255C0217EB2016289646E9F0C43804E3BD61BB71D3",
+    "started_utc": "2026-10-25T13:33:17.1052763Z",
+    "exit_code": 0,
+    "result": {
+      "checks": [
+        {
+          "id": "mounted_native",
+          "ok": true
+        },
+        {
+          "id": "native_export",
+          "ok": true
+        },
+        {
+          "id": "safe_default",
+          "ok": true
+        },
+        {
+          "id": "native_proposal_compiles",
+          "ok": true
+        },
+        {
+          "id": "trusted_request_open",
+          "ok": true
+        },
+        {
+          "id": "import_completed",
+          "ok": true
+        },
+        {
+          "id": "diff_visible",
+          "ok": true
+        },
+        {
+          "id": "before_after_values",
+          "ok": true
+        },
+        {
+          "id": "before_after_preview",
+          "ok": true
+        },
+        {
+          "id": "gui_cli_authority_hash",
+          "ok": true
+        },
+        {
+          "id": "preview_no_mutation",
+          "ok": true
+        },
+        {
+          "id": "confirmation_required",
+          "ok": true
+        },
+        {
+          "id": "native_apply",
+          "ok": true
+        },
+        {
+          "id": "native_undo",
+          "ok": true
+        },
+        {
+          "id": "native_redo",
+          "ok": true
+        },
+        {
+          "id": "idempotent_disabled",
+          "ok": true
+        },
+        {
+          "id": "stale_commit",
+          "ok": true
+        },
+        {
+          "id": "reject_no_mutation",
+          "ok": true
+        },
+        {
+          "id": "cancel_no_commit",
+          "ok": true
+        },
+        {
+          "id": "binding_piece",
+          "ok": true
+        },
+        {
+          "id": "binding_population",
+          "ok": true
+        },
+        {
+          "id": "binding_patrol",
+          "ok": true
+        },
+        {
+          "id": "binding_generation",
+          "ok": true
+        },
+        {
+          "id": "capture_saved",
+          "ok": true
+        }
+      ],
+      "count": 24,
+      "ok": true
+    },
+    "arguments": [
+      "--editor",
+      "--rendering-method",
+      "gl_compatibility"
+    ],
+    "aborted": false,
+    "ok": true,
+    "finished_utc": "2026-10-25T13:33:44.2541810Z",
+    "name": "native_ui",
+    "timed_out": false
+  }
+]

@@ -75,3 +75,24 @@ Checkpoint reúne ficha/contrato, base/SHA, consumidores, evidências, limitaç�
 e próximo passo. Luna supervisiona; Sol corrige/consolida; Astra só arquitetura
 ou exceção justificada. Documento apenas confere coerência e não repete gameplay.
 Playtest, merge e arquivamento continuam sujeitos ao WORKFLOW e escopo autorizado.
+
+
+## Intercâmbio no editor de mapas F7
+
+Use population/patrol para encontros e rotas sobre espécies existentes. O pacote não autoriza espécies, loot ou políticas novas.
+Leia `docs/map_editor/exchange.md` no checkout autorizado para schema, CLI e limites.
+Receba o pedido `.rpx` exportado pela pessoa, preserve-o byte a byte e trabalhe
+numa cópia de `files[source.json].data`. Não edite ticket, base, permissões ou
+relatório para ampliar o escopo. Declare o hash do pedido/base e os IDs que vai
+alterar. As seções/IDs e caminhos protegidos são autorização local; camadas
+travadas, regiões protegidas, slots fixos e pins permanecem conservados.
+
+Produza candidate.json estrito e rode a CLI versionada `propose <pedido.rpx>
+<candidate.json> <proposta.rpx>` com o Godot contratado. O produtor valida/compila;
+falha conserva o original, sem scripts/cenas, paths absolutos/traversal ou
+reparo silencioso. Confira `review <pedido.rpx> <proposta.rpx> <fonte_atual.json>`
+e entregue proposta, diff, hashes e limitações. Base divergente exige novo pedido
+exportado/reconciliação humana explícita. A pessoa importa a proposta no editor,
+compara Antes/Proposta e confirma uma ação desfazível. Não sobrescreva a fonte
+humana, não publique nem ative o WFC por inferência. A mesma autoridade atende
+GUI/CLI. Essa adaptação da fonte versionada não sincroniza cópias instaladas.
