@@ -1,0 +1,139 @@
+extends RefCounted
+## Exact local support union. Triangle seams are openings, not clearance walls.
+const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
+const EPS := 0.00001
+
+static func index(stage: Dictionary) -> Dictionary:
+	var cells: Dictionary = {}; var ports: Dictionary = {}; var by_surface: Dictionary = {}; var links: Dictionary = {}
+	for cell: Dictionary in stage.get("surfaces",[]):
+		cells[cell.surface_id] = cell; by_surface[cell.surface_id] = []
+	for port: Dictionary in stage.get("connectors",[]):
+		ports[port.connector_id] = port
+		if by_surface.has(port.surface_id): by_surface[port.surface_id].append(port)
+	for link: Dictionary in stage.get("connections",[]):
+		if not link.forward and not link.backward: continue
+		for pair: Array in [[link.a_connector,link.b_connector],[link.b_connector,link.a_connector]]:
+			if not ports.has(pair[0]) or not ports.has(pair[1]): continue
+			var a: Dictionary = ports[pair[0]]; var b: Dictionary = ports[pair[1]]
+			if Vector3(a.position).distance_to(b.position) > EPS or Vector3(a.outward).dot(b.outward) > -1.0+EPS: continue
+			if not links.has(pair[0]): links[pair[0]] = []
+			links[pair[0]].append(ports[pair[1]])
+	var outlines: Dictionary = {}
+	for id: String in cells:
+		var cell: Dictionary = cells[id]; var edges: Array = []
+		for k: int in cell.vertices.size():
+			var va: Vector3 = cell.vertices[k]; var vb: Vector3 = cell.vertices[(k+1)%cell.vertices.size()]
+			var a := Vector2(va.x,va.z); var b := Vector2(vb.x,vb.z)
+			var length := a.distance_to(b); var axis := (b-a)/length; var openings: Array = []
+			for port: Dictionary in by_surface[id]:
+				var center := Vector2(port.position.x,port.position.z)
+				var normal := Vector2(port.outward.x,port.outward.z)
+				if absf((center-a).cross(axis)) > EPS or absf(normal.dot(axis)) > EPS: continue
+				for other: Dictionary in links.get(port.connector_id,[]):
+					if not cells.has(other.surface_id) or other.kind != port.kind: continue
+					var half := minf(float(port.width),float(other.width))*0.5
+					var t := (center-a).dot(axis)
+					var low := clampf(t-half,0,length); var high := clampf(t+half,0,length)
+					if high <= low: continue
+					openings.append({"lo":low,"hi":high,"a":_along(a,b,low,length),"b":_along(a,b,high,length),"neighbor":other.surface_id,"headroom":minf(float(port.headroom),minf(float(other.headroom),float(cells[other.surface_id].headroom)))})
+			openings.sort_custom(func(x: Dictionary,y: Dictionary) -> bool: return x.lo < y.lo)
+			edges.append({"a":a,"b":b,"length":length,"openings":openings})
+		outlines[id] = edges
+	return {"cells":cells,"ports":by_surface,"outlines":outlines}
+
+static func _along(a: Vector2, b: Vector2, at: float, length: float) -> Vector2:
+	if at <= EPS: return a
+	if length-at <= EPS: return b
+	return a.lerp(b,at/length)
+
+static func _patch(id: String, from: Vector2, to: Vector2, radius: float, height: float, data: Dictionary) -> Dictionary:
+	var included := {id:true}; var queue: Array[String] = [id]; var cursor := 0
+	while cursor < queue.size():
+		var current := queue[cursor]; cursor += 1
+		for edge: Dictionary in data.outlines[current]:
+			for opening: Dictionary in edge.openings:
+				if included.has(opening.neighbor) or opening.headroom+EPS < height: continue
+				if segment_distance_squared(from,to,opening.a,opening.b) > (radius+EPS)*(radius+EPS): continue
+				included[opening.neighbor] = true; queue.append(opening.neighbor)
+	return included
+
+static func _closed(patch: Dictionary, height: float, data: Dictionary) -> Array:
+	var result: Array = []
+	for id: String in patch:
+		for edge: Dictionary in data.outlines[id]:
+			var at := 0.0
+			for opening: Dictionary in edge.openings:
+				if opening.headroom+EPS < height or not patch.has(opening.neighbor): continue
+				if opening.lo > at+EPS: result.append([_along(edge.a,edge.b,at,edge.length),_along(edge.a,edge.b,opening.lo,edge.length)])
+				at = maxf(at,opening.hi)
+			if edge.length > at+EPS: result.append([_along(edge.a,edge.b,at,edge.length),edge.b])
+	return result
+
+static func contains(cell: Dictionary, position: Vector3, radius: float, height: float, data: Dictionary) -> bool:
+	if not Kernel.contains(cell,position) or float(cell.headroom)+EPS < height: return false
+	if Kernel.contains(cell,position,radius): return true
+	var point := Vector2(position.x,position.z)
+	var patch := _patch(cell.surface_id,point,point,radius,height,data)
+	var clearance := maxf(0,radius-EPS)
+	for edge: Array in _closed(patch,height,data):
+		if point_distance_squared(point,edge[0],edge[1]) < clearance*clearance: return false
+	return true
+
+static func fraction(cell: Dictionary, from: Vector3, to: Vector3, profile: Dictionary, data: Dictionary) -> float:
+	if not Kernel.contains(cell,from) or not Kernel.contains(cell,to): return 0.0
+	var a := Vector2(from.x,from.z); var b := Vector2(to.x,to.z)
+	var radius := float(profile.radius); var height := float(profile.height)
+	var patch := _patch(cell.surface_id,a,b,radius,height,data)
+	var clearance := maxf(0,radius-EPS); var first := 1.0
+	for edge: Array in _closed(patch,height,data):
+		if segment_distance_squared(a,b,edge[0],edge[1]) >= clearance*clearance: continue
+		first = minf(first,_capsule_fraction(a,b,edge[0],edge[1],clearance))
+	return first
+
+static func point_distance_squared(p: Vector2, a: Vector2, b: Vector2) -> float:
+	# Scalar math avoids an extra f32 rounding at large world coordinates.
+	var dx: float = float(b.x)-float(a.x); var dz: float = float(b.y)-float(a.y)
+	var px: float = float(p.x)-float(a.x); var pz: float = float(p.y)-float(a.y)
+	var length := dx*dx+dz*dz
+	var t := clampf((px*dx+pz*dz)/length,0,1) if length > 0 else 0.0
+	return (px-dx*t)*(px-dx*t)+(pz-dz*t)*(pz-dz*t)
+
+static func segment_distance_squared(a: Vector2, b: Vector2, c: Vector2, d: Vector2) -> float:
+	var ux: float = float(b.x)-float(a.x); var uz: float = float(b.y)-float(a.y)
+	var vx: float = float(d.x)-float(c.x); var vz: float = float(d.y)-float(c.y)
+	var wx: float = float(c.x)-float(a.x); var wz: float = float(c.y)-float(a.y)
+	var cross := ux*vz-uz*vx
+	if cross != 0.0:
+		var s := (wx*vz-wz*vx)/cross; var t := (wx*uz-wz*ux)/cross
+		if s >= 0 and s <= 1 and t >= 0 and t <= 1: return 0.0
+	return minf(minf(point_distance_squared(a,c,d),point_distance_squared(b,c,d)),minf(point_distance_squared(c,a,b),point_distance_squared(d,a,b)))
+
+static func _circle_fraction(from: Vector2, to: Vector2, center: Vector2, radius: float) -> float:
+	var dx: float = float(to.x)-float(from.x); var dz: float = float(to.y)-float(from.y)
+	var px: float = float(from.x)-float(center.x); var pz: float = float(from.y)-float(center.y)
+	var c := px*px+pz*pz-radius*radius
+	if c <= 0: return 0.0
+	var a := dx*dx+dz*dz; var b := 2.0*(px*dx+pz*dz)
+	if a == 0: return 1.0
+	var discriminant := b*b-4.0*a*c
+	if discriminant < 0: return 1.0
+	var at := (-b-sqrt(discriminant))/(2.0*a)
+	return at if at >= 0 and at <= 1 else 1.0
+
+static func _capsule_fraction(from: Vector2, to: Vector2, a: Vector2, b: Vector2, radius: float) -> float:
+	var first := minf(_circle_fraction(from,to,a,radius),_circle_fraction(from,to,b,radius))
+	var ex: float = float(b.x)-float(a.x); var ez: float = float(b.y)-float(a.y)
+	var length := sqrt(ex*ex+ez*ez)
+	if length == 0: return first
+	ex /= length; ez /= length
+	var px: float = float(from.x)-float(a.x); var pz: float = float(from.y)-float(a.y)
+	var dx: float = float(to.x)-float(from.x); var dz: float = float(to.y)-float(from.y)
+	var lo := 0.0; var hi := 1.0
+	for slab: Array in [[px*ex+pz*ez,dx*ex+dz*ez,0.0,length],[-px*ez+pz*ex,-dx*ez+dz*ex,-radius,radius]]:
+		if absf(slab[1]) < 1e-15:
+			if slab[0] < slab[2] or slab[0] > slab[3]: return first
+			continue
+		var enter: float = (slab[2]-slab[0])/slab[1]; var exit: float = (slab[3]-slab[0])/slab[1]
+		lo = maxf(lo,minf(enter,exit)); hi = minf(hi,maxf(enter,exit))
+		if lo > hi: return first
+	return minf(first,lo)

@@ -11,12 +11,12 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 
 | Requisito | Origem adicional | Estado comprovado na base / ação necessária | Implementação/prova F9 |
 |---|---|---|---|
-| 01 catálogo/origem/licença/dependências | arquitetura, recibo F8 | placements existem no schema, compiler recusa; entregar catálogo real | pendente |
-| 01 colocar/mover/rotacionar/duplicar/remover | arquitetura | nenhum consumidor de placement; entregar sessão/GUI/AX | pendente |
-| 01 seleção/inspector/grupo/camadas/travas | arquitetura | camadas de terreno existem; objetos ausentes | pendente |
-| 01 snap/assentamento/inclinação | arquitetura | entregar suporte e limites por definição | pendente |
-| 01 decoração/corpo/ataque/LoS/oclusão | arquitetura, emendas | capacidades explícitas e único envelope; folhas sem collider | pendente |
-| 01 scatter/exclusões/undo/roundtrip/export | arquitetura, validação | entregar determinismo, proteção e pipeline inteiro | pendente |
+| 01 catálogo/origem/licença/dependências | arquitetura, recibo F8 | catálogo passivo de3 definições, PNGs/proveniência e hashes entregues no checkpoint18fa57f |53 checks + supervisão Luna; transporte limpo pendente |
+| 01 colocar/mover/rotacionar/duplicar/remover | arquitetura | API comum e GUI implementadas; AX/CLI parametrizados faltam | checkpoint18fa57f:53 checks,25 nativos e supervisão |
+| 01 seleção/inspector/grupo/camadas/travas | arquitetura | seleção alpha, inspector e grupos editoriais com travas e cópia de IDs | comprovado no checkpoint de objetos; restante da biblioteca em06 |
+| 01 snap/assentamento/inclinação | arquitetura | snap numérico, inclinação por catálogo e escolha explícita do piso superior |53 checks de objetos, incluindo ponte e piso travado |
+| 01 decoração/corpo/ataque/LoS/oclusão | arquitetura, emendas | rocha/tronco sólidos e arbusto decorativo usam capacidades explícitas; combinação não suportada falha | movimento/ataque comprovados; prova final de oclusão/apresentação pendente |
+| 01 scatter/exclusões/undo/roundtrip/export | arquitetura, validação | scatter determinístico revisável, quota/exclusões/undo/roundtrip comprovados |53+25 checks; export e pipeline final pendentes |
 | 02 relevo suave/silhueta | terrain_piece_semantics | grade e smooth existem; planos de amostra não demonstram orgânico | pendente |
 | 02 caminho/cobertura/encosta e pintura | terrain_piece_semantics | duas texturas com máscaras; fechar mistura gradual por inclinação | pendente |
 | 02 penhasco/faces não caminháveis | F2 closure | compiler recusa >45°; fechar suporte/sólido/visual | pendente |

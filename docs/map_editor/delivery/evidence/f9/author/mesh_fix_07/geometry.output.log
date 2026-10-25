@@ -1,0 +1,26 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_MESH_CHECK curved_grid_compiles true
+F9_MESH_CHECK curved_grid_has_eight_exact_triangles true
+F9_MESH_CHECK six_triangles_meet_at_same_vertex true
+F9_MESH_CHECK body_supported_over_all_six_triangles true
+F9_MESH_CHECK body_wider_than_individual_internal_edge true
+F9_MESH_CHECK ground_line_crosses_mesh_vertex true
+F9_MESH_CHECK real_actor_crosses_mesh_vertex true
+F9_MESH_CHECK exterior_edge_still_closed true
+F9_MESH_CHECK unconnected_neighbors_do_not_support_disk true
+F9_MESH_CHECK discontinuous_floor_cannot_fill_support_patch true
+F9_MESH_CHECK reconfigure_rebuilds_derived_index true
+F9_MESH_CHECK neighbor_headroom_is_required true
+F9_MESH_CHECK hole_corner_rejects_partial_support true
+F9_MESH_CHECK closed_corner_radial_clearance true
+F9_MESH_CHECK segment_cannot_cut_reentrant_corner true
+F9_MESH_CHECK solid_obstacle_still_blocks_center true
+F9_MESH_CHECK player_binds_over_shared_vertex true
+F9_MESH_CHECK derived_index_is_populated true
+F9_MESH_CHECK snapshot_captures_without_derived_index true
+F9_MESH_CHECK snapshot_restores_mesh_actor true
+F9_MESH_CHECK restored_mesh_support_rebuilds_index true
+F9_MESH_CHECK representative_curved_grid_compiles true
+F9_MESH_CHECK representative_internal_vertex_supported true
+F9_MESH_RESULT {"checks":[{"id":"curved_grid_compiles","ok":true},{"id":"curved_grid_has_eight_exact_triangles","ok":true},{"id":"six_triangles_meet_at_same_vertex","ok":true},{"id":"body_supported_over_all_six_triangles","ok":true},{"id":"body_wider_than_individual_internal_edge","ok":true},{"id":"ground_line_crosses_mesh_vertex","ok":true},{"id":"real_actor_crosses_mesh_vertex","ok":true},{"id":"exterior_edge_still_closed","ok":true},{"id":"unconnected_neighbors_do_not_support_disk","ok":true},{"id":"discontinuous_floor_cannot_fill_support_patch","ok":true},{"id":"reconfigure_rebuilds_derived_index","ok":true},{"id":"neighbor_headroom_is_required","ok":true},{"id":"hole_corner_rejects_partial_support","ok":true},{"id":"closed_corner_radial_clearance","ok":true},{"id":"segment_cannot_cut_reentrant_corner","ok":true},{"id":"solid_obstacle_still_blocks_center","ok":true},{"id":"player_binds_over_shared_vertex","ok":true},{"id":"derived_index_is_populated","ok":true},{"id":"snapshot_captures_without_derived_index","ok":true},{"id":"snapshot_restores_mesh_actor","ok":true},{"id":"restored_mesh_support_rebuilds_index","ok":true},{"id":"representative_curved_grid_compiles","ok":true},{"id":"representative_internal_vertex_supported","ok":true}],"count":23,"metrics":{"cold_support_ms":12.11,"compile_9x9_ms":290.014,"warm_support_100_ms":20.94},"ok":true}

@@ -1,0 +1,36 @@
+{
+  "created_utc": "2026-10-25T22:20:57.7685303Z",
+  "f1_native_fixture": false,
+  "source_commit": "18fa57fc1cb21c47e88e6cf2d54d41ae2fd87e37",
+  "working_tree_status": [
+    "?? docs/map_editor/delivery/evidence/f9/luna/objects/"
+  ],
+  "runner_sha256": "D9F652BAB91C4BFAE98E254E8FB36148A17DE75E569DB9F0C3DC3814B69A4937",
+  "engine_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+  "timeout_seconds": 300,
+  "selection": {
+    "test": [
+      "e07_f1_import_test"
+    ],
+    "test_filter_specified": true,
+    "from_step": 1,
+    "to_step": 299,
+    "skip_editor_import": true
+  },
+  "total_steps": 299,
+  "selected_steps": 1,
+  "checks": [
+    {
+      "index": 239,
+      "name": "e07_f1_import_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5",
+        "--script",
+        "res://tests/e07_f1_import_test.gd"
+      ]
+    }
+  ]
+}

@@ -229,6 +229,12 @@
       "base_sha256": null
     },
     {
+      "path": "docs/map_editor/contracts/f9_terrain_engineering.md",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 support mesh engineering",
+      "base_sha256": null
+    },
+    {
       "path": "docs/map_editor/delivery/evidence/f9/.gitattributes",
       "owner": "Sol F9",
       "previous_owner": "new evidence byte preservation",
@@ -277,6 +283,12 @@
       "base_sha256": "9fa0a946fbfe306ed551f6e27cfb09daa62b705c246f27cb05004b86aed68339"
     },
     {
+      "path": "scripts/core/expedition/snapshot/runtime_manifest.json",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer for derived geometry index; no active second writer",
+      "base_sha256": "eab951ba861bbc80403ee508b2947d516941b4a202dd5bf8dd5ffef22505d529"
+    },
+    {
       "path": "scripts/core/expedition/spatial/world_geometry.gd",
       "owner": "Sol F9",
       "previous_owner": "E07 geometry; sequential transfer for F9-04",
@@ -287,6 +299,18 @@
       "owner": "Sol F9",
       "previous_owner": "E07 geometry; sequential transfer for F9-04",
       "base_sha256": "2630f572b431a9a19df8b25c246e30bc1e4f7b2c477d8114448412a36108c28b"
+    },
+    {
+      "path": "scripts/core/expedition/spatial/world_support_patch.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 support mesh engineering",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/core/expedition/spatial/world_support_patch.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 support mesh engineering",
+      "base_sha256": null
     },
     {
       "path": "scripts/map_authoring/compiler/headless.gd",
@@ -1171,6 +1195,18 @@
       "base_sha256": "6f6d4e8b7ba0f263a9ad87867b96f693e9feed46b1885ab1e4c86dda36547264"
     },
     {
+      "path": "tests/map_editor_mesh_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 support mesh engineering",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_mesh_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 support mesh engineering",
+      "base_sha256": null
+    },
+    {
       "path": "tests/map_editor_objects_test.gd",
       "owner": "Sol F9",
       "previous_owner": "new F9 objects/authorized art asset",
@@ -1348,7 +1384,6 @@
   "read_only_shared": [
     "project.godot",
     "tools/verify.ps1",
-    "scripts/core/expedition/snapshot/runtime_manifest.json",
     "scripts/core/expedition/snapshot/snapshot_registry.gd",
     "scripts/actors/enemy_actor.gd"
   ],
@@ -1356,11 +1391,12 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "objects checkpoint frozen for Luna; geometry supervision complete",
+    "state": "mesh checkpoint frozen for Luna; source stable",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
-      "docs/map_editor/delivery/evidence/f9/luna/objects/report.md"
+      "docs/map_editor/delivery/evidence/f9/luna/objects/report.md",
+      "docs/map_editor/delivery/evidence/f9/luna/mesh/report.md"
     ],
     "generated_evidence_roots": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
@@ -1372,7 +1408,10 @@
       "docs/map_editor/delivery/evidence/f9/luna/geometry/official_final",
       "docs/map_editor/delivery/evidence/f9/luna/objects/authorities",
       "docs/map_editor/delivery/evidence/f9/luna/objects/native",
-      "docs/map_editor/delivery/evidence/f9/luna/objects/official"
+      "docs/map_editor/delivery/evidence/f9/luna/objects/official",
+      "docs/map_editor/delivery/evidence/f9/luna/mesh/authorities",
+      "docs/map_editor/delivery/evidence/f9/luna/mesh/geometry",
+      "docs/map_editor/delivery/evidence/f9/luna/mesh/official"
     ]
   }
 }

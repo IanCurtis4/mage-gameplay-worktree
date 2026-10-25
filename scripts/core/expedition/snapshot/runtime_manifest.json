@@ -590,7 +590,9 @@
       "_solid_slabs",
       "_occupancy"
     ],
-    "omitted": {}
+    "omitted": {
+      "_support_index": "derived read-only support topology; empty after restore, lazily rebuilt from _stage on first query"
+    }
   },
   "res://scripts/core/expedition/spatial/world_ground_field.gd": {
     "revision": 1,
