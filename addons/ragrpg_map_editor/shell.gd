@@ -5,6 +5,8 @@ const Document = preload("res://scripts/map_authoring/document/source_document.g
 const Store = preload("res://scripts/map_authoring/io/source_store.gd")
 const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 const Terrain = preload("res://scripts/map_authoring/terrain/terrain_panel.gd")
+const Composition = preload("res://scripts/map_authoring/composition/map_panel.gd")
+var composition_window: Window
 var terrain: Control
 var session := Session.new()
 var source_path := ""
@@ -34,6 +36,7 @@ func _ready() -> void:
 	var toolbar := HBoxContainer.new()
 	add_child(toolbar)
 	_button(toolbar, "Nova peça", request_new)
+	_button(toolbar, "Compor mapa…", open_composition)
 	_button(toolbar, "Abrir…", _choose_open)
 	_button(toolbar, "Salvar", save_current)
 	_button(toolbar, "Salvar como…", _choose_save)
@@ -126,6 +129,15 @@ func _button(parent: Node, text: String, action: Callable) -> Button:
 
 func focus_primary() -> void:
 	if is_instance_valid(title_edit): title_edit.grab_focus()
+
+func open_composition() -> void:
+	if composition_window == null:
+		composition_window = Window.new(); composition_window.title = "RagRPG · Composição de mapas"; composition_window.size = Vector2i(1360,850)
+		var panel := Composition.new(); composition_window.add_child(panel); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		composition_window.close_requested.connect(func() -> void:
+			panel.preserve_draft(); panel.canvas.stop_test(); composition_window.hide())
+		add_child(composition_window)
+	composition_window.popup_centered()
 
 func _id(prefix: String) -> String:
 	return prefix + "_" + Crypto.new().generate_random_bytes(12).hex_encode()

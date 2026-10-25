@@ -1,5 +1,9 @@
 # Editor de mapas — proposta de arquitetura e execução
 
+F3/M3 autorizado e em execução no checkout dedicado, consumindo o aceite completo
+F2. [Contrato e manifesto nominal](contracts/m3_dispatch.md), [recibo F3](delivery/m3.md).
+Os estados históricos de planejamento abaixo não revogam essa autorização.
+
 ## Decisão humana vigente —24/10/2026
 
 **Retificação posterior de produto:** [peças/células, mapa e terreno](contracts/terrain_piece_semantics.md).

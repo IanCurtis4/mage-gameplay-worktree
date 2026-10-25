@@ -1,0 +1,197 @@
+@tool
+extends VBoxContainer
+const Document = preload("res://scripts/map_authoring/composition/map_document.gd")
+const Session = preload("res://scripts/map_authoring/composition/map_session.gd")
+const Compiler = preload("res://scripts/map_authoring/composition/map_compiler.gd")
+const Store = preload("res://scripts/map_authoring/composition/map_store.gd")
+const PieceStore = preload("res://scripts/map_authoring/io/source_store.gd")
+const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
+const Canvas = preload("res://scripts/map_authoring/preview/map_canvas.gd")
+var session := Session.new()
+var canvas: Control
+var job: RefCounted
+var result: Dictionary = {}
+var source_path := ""
+var expected_hash := ""
+var instances: ItemList
+var problems: ItemList
+var status: Label
+var x: SpinBox
+var z: SpinBox
+var rotation_choice: OptionButton
+var mode: OptionButton
+var surface: OptionButton
+var port_a: OptionButton
+var port_b: OptionButton
+var links: ItemList
+var _endpoints: Array = []
+var _dialog: FileDialog
+var _file_action := ""
+var _pending_remove := ""
+var _confirmation: ConfirmationDialog
+var _autosave := ""
+func _ready() -> void:
+	size_flags_horizontal = Control.SIZE_EXPAND_FILL; size_flags_vertical = Control.SIZE_EXPAND_FILL
+	var heading := Label.new(); heading.text = "Composição de mapas · Peças, vínculos e teste"; heading.add_theme_font_size_override("font_size",22); add_child(heading)
+	var toolbar := HBoxContainer.new(); add_child(toolbar)
+	for entry: Array in [["Novo mapa",new_map],["Abrir…",func() -> void: choose("open")],["Salvar como…",func() -> void: choose("save")],["Adicionar peça…",func() -> void: choose("piece")],["Exemplo com duas peças",sample],["Desfazer",func() -> void: session.undo()],["Refazer",func() -> void: session.redo()]]: _button(toolbar,entry[0],entry[1])
+	var actions := HBoxContainer.new(); add_child(actions)
+	mode = OptionButton.new(); mode.add_item("Manual · posições fixadas"); mode.add_item("Receita · encaixe por árvore"); actions.add_child(mode)
+	mode.item_selected.connect(func(index: int) -> void:
+		var data := session.data.duplicate(true); data.mode = "manual" if index == 0 else "recipe"; show_result(session.apply(data)))
+	_button(actions,"Compilar mapa",bake); _button(actions,"Cancelar",func() -> void:
+		if job != null: job.cancel())
+	_button(actions,"Testar / parar",toggle_test); _button(actions,"Publicar localmente…",func() -> void: choose("publish"))
+	_button(actions,"Recuperar rascunho",recover)
+	var split := HSplitContainer.new(); split.size_flags_vertical = Control.SIZE_EXPAND_FILL; add_child(split)
+	var inspector := VBoxContainer.new(); inspector.custom_minimum_size.x = 290; split.add_child(inspector)
+	instances = ItemList.new(); instances.custom_minimum_size.y = 100; inspector.add_child(instances); instances.item_selected.connect(select_instance)
+	var placement := HBoxContainer.new(); inspector.add_child(placement)
+	x = _number(placement,"X"); z = _number(placement,"Z")
+	rotation_choice = OptionButton.new(); for degrees: int in [0,90,180,270]: rotation_choice.add_item("%d°"%degrees)
+	placement.add_child(rotation_choice)
+	var placement_actions := HBoxContainer.new(); inspector.add_child(placement_actions)
+	_button(placement_actions,"Aplicar posição",apply_placement); _button(placement_actions,"Remover…",request_remove)
+	var label := Label.new(); label.text = "Aberturas a vincular"; inspector.add_child(label)
+	port_a = OptionButton.new(); port_b = OptionButton.new(); inspector.add_child(port_a); inspector.add_child(port_b)
+	_button(inspector,"Vincular aberturas",add_link)
+	links = ItemList.new(); links.custom_minimum_size.y = 80; inspector.add_child(links)
+	_button(inspector,"Remover vínculo selecionado",remove_link)
+	var hint := Label.new(); hint.text = "Ruína técnica: bordas fechadas por volumes visíveis.\nClique numa peça para selecionar. No teste, clique para andar.\nEscolha a superfície para testar pisos sobrepostos."; hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; inspector.add_child(hint)
+	surface = OptionButton.new(); inspector.add_child(surface); surface.item_selected.connect(func(index: int) -> void: canvas.selected_surface = "" if index == 0 else surface.get_item_text(index))
+	canvas = Canvas.new(); split.add_child(canvas); canvas.selected.connect(select_id); canvas.status.connect(func(message: String) -> void: status.text = message)
+	status = Label.new(); status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; add_child(status)
+	problems = ItemList.new(); problems.custom_minimum_size.y = 65; add_child(problems); problems.item_selected.connect(focus_problem)
+	_dialog = FileDialog.new(); _dialog.access = FileDialog.ACCESS_FILESYSTEM; _dialog.file_selected.connect(file_selected); _dialog.dir_selected.connect(file_selected); add_child(_dialog)
+	_confirmation = ConfirmationDialog.new(); add_child(_confirmation); _confirmation.confirmed.connect(remove_instance)
+	_autosave = ProjectSettings.globalize_path("res://.godot/map_authoring/composition_"+str(Time.get_unix_time_from_system()).replace(".","_")+".json")
+	DirAccess.make_dir_recursive_absolute(_autosave.get_base_dir())
+	session.changed.connect(refresh)
+	var timer := Timer.new(); timer.wait_time = 10; timer.autostart = true; timer.timeout.connect(preserve_draft); add_child(timer)
+	refresh()
+func _button(parent: Node, text: String, action: Callable) -> Button:
+	var button := Button.new(); button.text = text; button.pressed.connect(action); parent.add_child(button); return button
+func _number(parent: Node, label: String) -> SpinBox:
+	var title := Label.new(); title.text = label; parent.add_child(title)
+	var value := SpinBox.new(); value.min_value = -16000; value.max_value = 16000; value.step = 1; value.custom_minimum_size.x = 80; parent.add_child(value); return value
+func _exit_tree() -> void:
+	if job != null: job.close()
+	if session.dirty(): preserve_draft()
+func preserve_draft() -> void:
+	if _autosave.is_empty() or not session.dirty(): return
+	var saved := Store.save_source(_autosave,session.data,PieceStore.disk_hash(_autosave))
+	if not saved.ok: status.text = "Não foi possível preservar o rascunho: "+saved.code
+func recover() -> void:
+	var loaded := Store.load_source(_autosave)
+	if loaded.ok: show_result(session.replace(loaded.data))
+	else: show_result(loaded)
+func new_map() -> void:
+	preserve_draft(); source_path = ""; expected_hash = ""; session.saved_hash = ""; session.replace(Document.empty())
+func sample() -> void:
+	# Do not replace authored content with an example.
+	if not session.data.instances.is_empty(): status.text = "Crie um novo mapa para carregar o exemplo."; return
+	show_result(session.apply(Document.sample()))
+func choose(action: String) -> void:
+	_file_action = action
+	_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE if action == "save" else (FileDialog.FILE_MODE_OPEN_DIR if action == "publish" else FileDialog.FILE_MODE_OPEN_FILE)
+	_dialog.filters = PackedStringArray(["*.json ; Fontes de mapa/peça"]) if action != "publish" else PackedStringArray()
+	_dialog.title = {"open":"Abrir mapa ou rascunho","save":"Salvar composição","piece":"Adicionar snapshot de peça","publish":"Pasta de publicações locais"}[action]
+	_dialog.popup_centered_ratio(0.75)
+func file_selected(path: String) -> void:
+	match _file_action:
+		"open":
+			var loaded := Store.load_source(path)
+			if loaded.ok:
+				preserve_draft(); source_path = path; expected_hash = PieceStore.disk_hash(path); session.replace(loaded.data); session.saved_hash = Document.hash_source(session.data)
+			show_result(loaded)
+		"save":
+			# Existing destinations require an explicit overwrite dialog from FileDialog,
+			# and an optimistic byte hash prevents overwriting a later external edit.
+			var expected := expected_hash if path == source_path else PieceStore.disk_hash(path)
+			var saved := Store.save_source(path,session.data,expected)
+			if saved.ok: source_path = path; expected_hash = saved.byte_hash; session.saved_hash = Document.hash_source(session.data)
+			show_result(saved)
+		"piece": import_piece(path)
+		"publish":
+			if not result.get("ok",false): status.text = "Compile o mapa antes de publicar."; return
+			var published := Store.publish(path,result.package,Document.hash_source(session.data)); show_result(published)
+			if published.ok: status.text = "Revisão imutável publicada: "+published.path
+func import_piece(path: String) -> Dictionary:
+	var loaded := PieceStore.load_source(path)
+	if not loaded.ok: show_result(loaded); return loaded
+	var data := session.data.duplicate(true); var hash_value: String = loaded.output_hash
+	var found := false
+	for piece: Dictionary in data.pieces:
+		if piece.piece_hash == hash_value: found = true
+	if not found: data.pieces.append({"piece_hash":hash_value,"source":loaded.data})
+	data.instances.append({"instance_id":"piece_"+Crypto.new().generate_random_bytes(6).hex_encode(),"piece_hash":hash_value,"position_xyz":[x.value,0,z.value],"rotation_quarters":rotation_choice.selected})
+	var applied := session.apply(data); show_result(applied); return applied
+func refresh() -> void:
+	if job != null: job.cancel()
+	result = {}; canvas.clear(); instances.clear(); links.clear(); port_a.clear(); port_b.clear(); surface.clear(); surface.add_item("Todas as superfícies visíveis"); _endpoints.clear()
+	mode.select(0 if session.data.mode == "manual" else 1)
+	for instance: Dictionary in session.data.instances:
+		instances.add_item(instance.instance_id)
+		for piece: Dictionary in session.data.pieces:
+			if piece.piece_hash != instance.piece_hash: continue
+			for connector: Dictionary in piece.source.connectors:
+				_endpoints.append({"instance":instance.instance_id,"connector":connector.connector_id})
+				port_a.add_item(instance.instance_id+" / "+connector.connector_id); port_b.add_item(instance.instance_id+" / "+connector.connector_id)
+	for link: Dictionary in session.data.links: links.add_item(link.link_id+": "+link.a_instance+" → "+link.b_instance)
+	if port_b.item_count > 1: port_b.select(1)
+	status.text = "Rascunho alterado; compile para validar emendas e testar."; problems.clear()
+func select_instance(index: int) -> void:
+	var instance: Dictionary = session.data.instances[index]
+	x.value = instance.position_xyz[0]; z.value = instance.position_xyz[2]; rotation_choice.select(instance.rotation_quarters); canvas.selected_instance = instance.instance_id; canvas.redraw()
+func select_id(id: String) -> void:
+	for i: int in session.data.instances.size():
+		if session.data.instances[i].instance_id == id: instances.select(i); select_instance(i)
+func apply_placement() -> void:
+	var selected := instances.get_selected_items()
+	if selected.is_empty(): return
+	var data := session.data.duplicate(true); data.instances[selected[0]].position_xyz = [x.value,0,z.value]; data.instances[selected[0]].rotation_quarters = rotation_choice.selected; show_result(session.apply(data))
+func request_remove() -> void:
+	var selected := instances.get_selected_items()
+	if selected.is_empty(): return
+	_pending_remove = session.data.instances[selected[0]].instance_id
+	var affected := 0
+	for link: Dictionary in session.data.links:
+		if _pending_remove in [link.a_instance,link.b_instance]: affected += 1
+	_confirmation.dialog_text = "Remover %s e seus %d vínculos? A operação pode ser desfeita."%[_pending_remove,affected]; _confirmation.popup_centered()
+func remove_instance() -> void:
+	var data := session.data.duplicate(true)
+	data.instances = data.instances.filter(func(item: Dictionary) -> bool: return item.instance_id != _pending_remove)
+	data.links = data.links.filter(func(item: Dictionary) -> bool: return _pending_remove not in [item.a_instance,item.b_instance])
+	show_result(session.apply(data))
+func add_link() -> void:
+	if port_a.selected < 0 or port_b.selected < 0: return
+	var a: Dictionary = _endpoints[port_a.selected]; var b: Dictionary = _endpoints[port_b.selected]
+	var data := session.data.duplicate(true)
+	data.links.append({"link_id":"link_"+Crypto.new().generate_random_bytes(6).hex_encode(),"a_instance":a.instance,"a_connector":a.connector,"b_instance":b.instance,"b_connector":b.connector}); show_result(session.apply(data))
+func remove_link() -> void:
+	var selected := links.get_selected_items()
+	if selected.is_empty(): return
+	var data := session.data.duplicate(true); data.links.remove_at(selected[0]); show_result(session.apply(data))
+func bake() -> void:
+	if job != null: status.text = "Aguarde o cancelamento da compilação anterior."; return
+	result = {}; canvas.clear(); job = Compiler.new(); job.start(session.data); status.text = "Compilando mapa…"
+func _process(_delta: float) -> void:
+	if job == null or not job.ready(): return
+	result = job.take(Document.hash_source(session.data)); job = null; show_result(result)
+	if result.ok:
+		canvas.set_package(result.package); surface.clear(); surface.add_item("Todas as superfícies visíveis")
+		for cell: Dictionary in result.package.manifest.stages[0].surfaces: surface.add_item(cell.surface_id)
+		status.text = "%d peças · emendas e rotas validadas · clique para selecionar ou teste para andar."%result.package.piece_count
+func toggle_test() -> void:
+	if canvas.testing: canvas.stop_test(); status.text = "Teste encerrado; rascunho preservado."; return
+	if not result.get("ok",false): status.text = "Compile o mapa antes de testar."; return
+	var started: Dictionary = canvas.start_test(); status.text = "Teste isolado · clique no chão para andar." if started.ok else "Não foi possível iniciar o teste."
+func show_result(value: Dictionary) -> void:
+	problems.clear()
+	for diagnostic: Dictionary in value.get("diagnostics",[]):
+		problems.add_item(diagnostic.message); problems.set_item_metadata(problems.item_count-1,diagnostic)
+	if not value.ok: status.text = value.get("code","Falha")
+func focus_problem(index: int) -> void:
+	var diagnostic: Variant = problems.get_item_metadata(index)
+	if diagnostic is Dictionary:
+		select_id(str(diagnostic.entity_id).get_slice("/",0)); status.text = diagnostic.message
