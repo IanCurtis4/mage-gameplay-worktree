@@ -1,0 +1,1213 @@
+{
+  "version": 1,
+  "state": "in_progress",
+  "authorized_user_message": "F8 terminou. Podemos começar F9.",
+  "base": "e8d6f62dbba986e5096f5f6779c8774b7f79530a",
+  "branch": "codex/map-editor-f9",
+  "checkout": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5",
+  "files": [
+    {
+      "path": "addons/ragrpg_map_editor/export_plugin.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "6bf3abc088a21f54cb7d0dd8d4b40dbacd31a1d758063623d5c1087ffef38b20"
+    },
+    {
+      "path": "addons/ragrpg_map_editor/export_plugin.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "99ab0746019585e85d176ed091aaedf43b2c8c3f055d19525796cf08012c707e"
+    },
+    {
+      "path": "addons/ragrpg_map_editor/plugin.cfg",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "74742d2b3b52c2a2a710c5d920ce5153dd71a8a110c516df306099f05567f235"
+    },
+    {
+      "path": "addons/ragrpg_map_editor/plugin.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "8a66fc2d1bff01c0da805f39bd5055fa5d4fbadea1e66fa6a881014cdb5cd855"
+    },
+    {
+      "path": "addons/ragrpg_map_editor/plugin.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "1462f0027051c125835e8ce4a098a580b3b9150643e72440ec7c14eddca15161"
+    },
+    {
+      "path": "addons/ragrpg_map_editor/presentation.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "c9c992048791c7cabb57b35d4c1feb2f61a8efdfdc29c05f9f520283a486e2e1"
+    },
+    {
+      "path": "addons/ragrpg_map_editor/presentation.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "dfecff37adc84c8765d14a5a9410f80518eb3fa6ac4d1ce473803e2fe8d592db"
+    },
+    {
+      "path": "addons/ragrpg_map_editor/shell.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "5e43165c3aee2ea8b8e504c166160aa4a7e4ffe3050ebd78fc9723c1a51e53b1"
+    },
+    {
+      "path": "addons/ragrpg_map_editor/shell.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "043e0fc4213b5c4ce8e85e7307fa05df8cbed2f01ff22cd45ca0eea071abb5c2"
+    },
+    {
+      "path": "assets/art/map_authoring/earth_tile.png",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "e0f2b0f1987a1a01ec02254c14320e45de942be458d15047b6c6f0bff507c9eb"
+    },
+    {
+      "path": "assets/art/map_authoring/earth_tile.png.import",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "94ce39a14b28c3653e62de11b039131a11a717221cff947118d029dbb21bd34d"
+    },
+    {
+      "path": "assets/art/map_authoring/grass_tile.png",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "795bec1749232e2f6c79a90a1c02aea4b44016066e29728699f6bb6729c34171"
+    },
+    {
+      "path": "assets/art/map_authoring/grass_tile.png.import",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "52d8f47ded3002ea1d92cfa75521439d8956dc230663decde72a711514d846cc"
+    },
+    {
+      "path": "assets/art/map_authoring/materials.md",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "0e81eb3da0611c5e60b9496b65ff759eb67163af011284ee2034ea58589a17fb"
+    },
+    {
+      "path": "data/map_authoring/candidate_preview.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "cccf1b918ca65722b8279ffde80ee6b473c0c7160f4b5b0ec5881b26ade13ab4"
+    },
+    {
+      "path": "data/map_authoring/candidate_preview.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "0f0483f9dfe5a919bd8dabf16f7cda740629dcbc86d72c9712b56c4e6ad17945"
+    },
+    {
+      "path": "data/map_authoring/candidate_preview.tscn",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "6b9623f65075a5203bbddfe95e7c37387c651f85912705bca4238619467308f8"
+    },
+    {
+      "path": "data/map_authoring/representative.rpp",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "77f4efe9d83c56f97eff1d88b277131d33871883daba5821c4d91ef2e0e27f6f"
+    },
+    {
+      "path": "data/map_authoring/representative_map.json",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "069461020ea9b16b0e25bd1988afa3a727b7d4c8999835055d501dae6b9c05d2"
+    },
+    {
+      "path": "data/map_authoring/representative_patrol.json",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "6cad7855af061486e43e998b4f28c2278f7bda4a3fd3cef0b52b44205c24fc43"
+    },
+    {
+      "path": "data/map_authoring/representative_population.json",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "be592721b26bc0debd823da256b44a7a33ea59d784049c98f505b5b7aa812360"
+    },
+    {
+      "path": "docs/map_editor/README.md",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "25bcdcfbbe2354beab15b7c83afd6b7d6f634073aaa0ce8dfcbd0123cfc948dd"
+    },
+    {
+      "path": "docs/map_editor/architecture.md",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "eac76707372be7e32ee2f0af403ef6f50fb10074f6f7616bb10932b1be627471"
+    },
+    {
+      "path": "docs/map_editor/authoring_modes.md",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "ced7764dc8a605457b7f7131b618455a992709edccc7be09a5b8ffe0805c32a2"
+    },
+    {
+      "path": "docs/map_editor/contracts/f9_completion.md",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "0bad015275e8222e87982cd692d55f8cdfde8863a3f898e64512cc02487a8300"
+    },
+    {
+      "path": "docs/map_editor/contracts/f9_dispatch.md",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "c556d01bba04bcbed9bed25b23db8bdf9cc4ec9cebe6e1e40d02b762b7452c6f"
+    },
+    {
+      "path": "docs/map_editor/contracts/f9_ownership.json",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/f9.md",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/exchange.md",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "03bc9a15b37e8a04f8b4534e5f6d33a855cd4a7e41f630ccfc64bb84412b4da9"
+    },
+    {
+      "path": "docs/map_editor/execution.md",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "075164ea3d3fa25653e111e6bb225df6771299db0cd7f7c804189da4a0e364e4"
+    },
+    {
+      "path": "docs/map_editor/f9_requirements.md",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "765d731d1980be4ca0e1a9a850b6758026c0c1bf083b9e305ee60e59465ec78c"
+    },
+    {
+      "path": "docs/map_editor/validation.md",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "7117e7840adcf46d1c9f30aef4bd612fe34eb40f9e0bef7c07f9020d3b9db16a"
+    },
+    {
+      "path": "scripts/core/expedition/generation/fixture_geometry.gd",
+      "owner": "Sol F9",
+      "previous_owner": "E07 geometry; sequential transfer for F9-04",
+      "base_sha256": "5054ce96b70dd8e65ce5760119e108d9ffdadecb1ea85fc91fe9a263be440b96"
+    },
+    {
+      "path": "scripts/core/expedition/generation/fixture_geometry.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "E07 geometry; sequential transfer for F9-04",
+      "base_sha256": "9fa0a946fbfe306ed551f6e27cfb09daa62b705c246f27cb05004b86aed68339"
+    },
+    {
+      "path": "scripts/core/expedition/spatial/world_geometry.gd",
+      "owner": "Sol F9",
+      "previous_owner": "E07 geometry; sequential transfer for F9-04",
+      "base_sha256": "4565797cfb28ccbe9a80bdf262fbcd770d8bbf49d0ec01d8079f8e3319bc1ca8"
+    },
+    {
+      "path": "scripts/core/expedition/spatial/world_geometry.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "E07 geometry; sequential transfer for F9-04",
+      "base_sha256": "2630f572b431a9a19df8b25c246e30bc1e4f7b2c477d8114448412a36108c28b"
+    },
+    {
+      "path": "scripts/map_authoring/compiler/headless.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "24018ccb4a278acbe4ffb54f317c3198c25a4ad1c8a21682f013bd89fff6252b"
+    },
+    {
+      "path": "scripts/map_authoring/compiler/headless.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "ef98967ad1c40a23ca3f1d51caeeea96ee53472504497ec00f6cc463e4280c05"
+    },
+    {
+      "path": "scripts/map_authoring/compiler/terrain_compiler.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "367d1104edd54c2333fcc005a405599ed4f98e24c7faa3c5433521d89ca5a873"
+    },
+    {
+      "path": "scripts/map_authoring/compiler/terrain_compiler.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "7397d65f9e5f280ddb52f313401cea1bb0a6d05967f1dad35d5a75882897e1e5"
+    },
+    {
+      "path": "scripts/map_authoring/compiler/terrain_partition.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "5a59d144bf8115b4dadb49f23089d801beb8487846eb79e7e52930687dec22a4"
+    },
+    {
+      "path": "scripts/map_authoring/compiler/terrain_partition.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "5a6ec4b38e3d67fb49394b0713abf86b23b0446fa2ed803805c3745898c270d8"
+    },
+    {
+      "path": "scripts/map_authoring/composition/headless.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "137dbcd952653702888e53702051e56836fbfe486697f971e67030c7a7884bb6"
+    },
+    {
+      "path": "scripts/map_authoring/composition/headless.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "f99b89667a50c64015cef0cb9810cf892e8817009417060f813634531ad19791"
+    },
+    {
+      "path": "scripts/map_authoring/composition/map_compiler.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "7bcb3b4d84bf151bd1d5b29105b4d3ea27fc9ebf99ad0e4548a7695e5b2dfe6a"
+    },
+    {
+      "path": "scripts/map_authoring/composition/map_compiler.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "225a7b659f0e3956da7bf40a4288bd877f7c09c61fdd65740095e6c86c4fd274"
+    },
+    {
+      "path": "scripts/map_authoring/composition/map_document.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "0cc9da42f9b0a66ebce83cf2d2c3d1dd05edef3dfda73c77aafd40899e9645f5"
+    },
+    {
+      "path": "scripts/map_authoring/composition/map_document.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "cc885b62a848192df6f6826b6efc5bda82f0fa3db010b736fe094962521b2751"
+    },
+    {
+      "path": "scripts/map_authoring/composition/map_panel.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "aefd0d03fc3c83c5726e8af2afe1c72409eddb6a0ab6f63878c604803814dea4"
+    },
+    {
+      "path": "scripts/map_authoring/composition/map_panel.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "3aff0a338d2500bc7a2531114e9da8a3010177d1e87582d340007071a2785db5"
+    },
+    {
+      "path": "scripts/map_authoring/composition/map_session.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "9349e7927b05a85d248c8598e13ffcdae86e517b36bfc7a9066bb46835bb6a72"
+    },
+    {
+      "path": "scripts/map_authoring/composition/map_session.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "6e1a28fd001581b1a6ce5567c2ab8cec8ac5729d3128423ce678ccad011d6c76"
+    },
+    {
+      "path": "scripts/map_authoring/composition/map_store.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "4841348238b9a4a1c861cd7ebd38d01d2bb0bf5bf46347c800ff4c737fc75c09"
+    },
+    {
+      "path": "scripts/map_authoring/composition/map_store.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "a06c4df2e222ecb1574c38cc663a772b6414853ff287fe639cf4a120e8a8e319"
+    },
+    {
+      "path": "scripts/map_authoring/context/context_panel.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "3f42fba8c2c7a1f9b1a7575318c9b51190d26d67de13ceef724f7d478c359d98"
+    },
+    {
+      "path": "scripts/map_authoring/context/context_panel.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "55681af63c008726f470901efda65a467b2c1b0b5fae5db80e790788b0c1b03f"
+    },
+    {
+      "path": "scripts/map_authoring/context/map_context_panel.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "f48934defe1458ce783fd5f447e11605db95ebf00b6d5387cef07f682ca60f33"
+    },
+    {
+      "path": "scripts/map_authoring/context/map_context_panel.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "c9f08236de0de180ac74eee4ae62acf3d25c83beac63f3394afbee80f5b25b20"
+    },
+    {
+      "path": "scripts/map_authoring/context/piece_context.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "0ba3b5663738827c7eec5ed7ab2b70e3af458224cf461eff8cc13fae905bd41c"
+    },
+    {
+      "path": "scripts/map_authoring/context/piece_context.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "6c23258930dd19d4b83e07d87ca148e9739ee3966e2fd3fc5e732b2d5a4a8d6a"
+    },
+    {
+      "path": "scripts/map_authoring/context/population_context.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "25a09b84c096e849cced5ee229cb4c93518cd50a4de63180dcdedf7a012282e0"
+    },
+    {
+      "path": "scripts/map_authoring/context/population_context.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "edf813850d80106e2befa7df063920fe8c4e5b0b71928de05ca2257ce85af354"
+    },
+    {
+      "path": "scripts/map_authoring/document/document_session.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "c70a22c4b273aa371c5411fa33d970025beae666be1efa8db6be6614e7058eff"
+    },
+    {
+      "path": "scripts/map_authoring/document/document_session.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "5160b1636698eac7feebed66eae391e5a41a5b2017e26da43a2fa4b64981a918"
+    },
+    {
+      "path": "scripts/map_authoring/document/source_document.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "2758159451c2aea8c386ad45df7c7a5a1fa65b8151588968b97a1d3363852754"
+    },
+    {
+      "path": "scripts/map_authoring/document/source_document.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "09b91c385b8bc09cb2253ccc471d860f811d41d6e74a7d36fa191dca4b9d35f6"
+    },
+    {
+      "path": "scripts/map_authoring/document/source_schema.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "5abea47297573872f5c78437f81624cea7d4ca97860bf30234036264717a5b46"
+    },
+    {
+      "path": "scripts/map_authoring/document/source_schema.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "b80a7cad5747c44edaa213661e0e4052a714273ae3f17d3f39ecfdc0049284bf"
+    },
+    {
+      "path": "scripts/map_authoring/exchange/exchange.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "5216a27853d841a12c195ffd184b8281fb508d2967e88f4327c551f4f148c3cb"
+    },
+    {
+      "path": "scripts/map_authoring/exchange/exchange.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "0eafb02d5a482770531eed4b5166d6618a9e9fb60c3ef3e2fc07929c2562faf8"
+    },
+    {
+      "path": "scripts/map_authoring/exchange/exchange_panel.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "8e2262c167bfacc9278cc919294d04b7bc4ac8d5024ff0e52ba8fcae62f74c9c"
+    },
+    {
+      "path": "scripts/map_authoring/exchange/exchange_panel.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "49d3705c4739e43c5d5c7ce56bd1b6cec9b2c49a894d06a0e38190462517de27"
+    },
+    {
+      "path": "scripts/map_authoring/exchange/headless.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "30235f771a97e9816b1097d5e8f66f83c1d9a5b5d4d6ae0cb74d7a730a760052"
+    },
+    {
+      "path": "scripts/map_authoring/exchange/headless.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "566599d23c0b369c192c1fb5aed977d2f968fb850b129ab6d815439c52d719ef"
+    },
+    {
+      "path": "scripts/map_authoring/generation/assembler_adapter.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "3bdcfef8a7f69c4b142a8ef32eeae8e8847519690e4d9e442b8725dd8e16b79a"
+    },
+    {
+      "path": "scripts/map_authoring/generation/assembler_adapter.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "11ccbf0b70d9992cb48a4924600b1fc5419266141339aad8bb370579c6b3192f"
+    },
+    {
+      "path": "scripts/map_authoring/generation/generation_document.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "67910b54cc2a6bdf631d543d8a8be02bea98f5b2b1984281390bb36b61954748"
+    },
+    {
+      "path": "scripts/map_authoring/generation/generation_document.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "dc12469546560e786ecdfd262e77623623e910afb90ed4fd92d33ae35a22b9cb"
+    },
+    {
+      "path": "scripts/map_authoring/generation/generation_panel.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "6389265d5b1fa21ddaf03e4ae6785334bec0f7df5e76491d77a312e97b4b8be2"
+    },
+    {
+      "path": "scripts/map_authoring/generation/generation_panel.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "36ce316803de7a3e1f0eb6df10d9e791aa09e07e2276f81642aef1f47b8570b2"
+    },
+    {
+      "path": "scripts/map_authoring/generation/generation_solver.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "78a1cf18a4a551d67e97790d3354664dd1a9e71ed9bf02783216ad7d1ee82b3b"
+    },
+    {
+      "path": "scripts/map_authoring/generation/generation_solver.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "e4adb48e2cfc84f7a57c9645dae87d7c0d9c42755d106ae7648ebdf57fd5e0fb"
+    },
+    {
+      "path": "scripts/map_authoring/generation/generation_store.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "a564ddc64d685329269c247a0bbe7f4055a3f5214d2dc716fde892cebd77dfb9"
+    },
+    {
+      "path": "scripts/map_authoring/generation/generation_store.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "a10cb3668aaf5c5b0368e8eb28be6ce115c99e6656df7a8664a1fde47b793e4d"
+    },
+    {
+      "path": "scripts/map_authoring/generation/headless.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "5eff52ea6b8858b8e5434924e2a49f89b035f72b994e900b79721b090731a72d"
+    },
+    {
+      "path": "scripts/map_authoring/generation/headless.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "a2d772c0065ff8e59dfeecd5061382336c46522e831d87cfef2a89176fe1135e"
+    },
+    {
+      "path": "scripts/map_authoring/io/decimal_float.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "78a0a16744ed67f77418febb7e5779180622f12283a057889e9693848dfd0120"
+    },
+    {
+      "path": "scripts/map_authoring/io/decimal_float.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "5d8987f99083a4c8195f050225e110e1edc91a90362ba5e22a10285ddbe36090"
+    },
+    {
+      "path": "scripts/map_authoring/io/headless.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "d63d967c81d5869df5cc7205256804802aaa75b2169f2cad6e7371812d463f36"
+    },
+    {
+      "path": "scripts/map_authoring/io/headless.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "828861b2d95f3df43faf5e8225b53c7b6f17cc71da38c6ce1fcb80a3ed311393"
+    },
+    {
+      "path": "scripts/map_authoring/io/source_store.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "a0161b881684189aa4c5ba5fb20a22fbf2ecd18677296f959673e8b078c820ea"
+    },
+    {
+      "path": "scripts/map_authoring/io/source_store.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "ac6adbabbb658b75435aba957c800db4addeb4113c494cea05b8990e84e63adc"
+    },
+    {
+      "path": "scripts/map_authoring/io/strict_json.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "6130ee253a48ef982f2109c5d6c32149ce265d765a4dd3afa1d6648f12d1661c"
+    },
+    {
+      "path": "scripts/map_authoring/io/strict_json.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "901514965c63bd7da411fc7ebf0e54b1a4fa41067d1fcde9d81ce2d6a17ea957"
+    },
+    {
+      "path": "scripts/map_authoring/patrol/headless.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "e25e607cf720139689ee2b75cc4dffacd098703459925db05da8c678bfbac32b"
+    },
+    {
+      "path": "scripts/map_authoring/patrol/headless.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "9b6d99cf659051989a95aa33c81da3cf92eac559035fc267f3edb4133e7dbc54"
+    },
+    {
+      "path": "scripts/map_authoring/patrol/patrol_canvas.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "e2ee2a02fae2dd18d20c16ec8b100cdf622f7cba624aeb219fb7369af1cff3c4"
+    },
+    {
+      "path": "scripts/map_authoring/patrol/patrol_canvas.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "d21154d56e81719374b4da041afdcdd4f5e6fc74f169e7dd877b60a6c2c51483"
+    },
+    {
+      "path": "scripts/map_authoring/patrol/patrol_compiler.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "52e6f35f6ea341d909e76e1d3addf692670cf32a09ea7fd79a8525f3277d0031"
+    },
+    {
+      "path": "scripts/map_authoring/patrol/patrol_compiler.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "d5758bb91d5763ffe3f2d765f7fe46e2e4bd936619d8b50b2c8d5c84e79a68b1"
+    },
+    {
+      "path": "scripts/map_authoring/patrol/patrol_document.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "5db206e42780da9bf843d686c83fc5b3620e179471e854d71e3767db3a1774bd"
+    },
+    {
+      "path": "scripts/map_authoring/patrol/patrol_document.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "bab9788a6c751928b522fe32a5e3b217adc0ee4860138d02a68025b422cac7a2"
+    },
+    {
+      "path": "scripts/map_authoring/patrol/patrol_panel.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "26edcc5a2ee213b468ce0618d13eb0019ed4796fda870fd36e8e653bdcb077f8"
+    },
+    {
+      "path": "scripts/map_authoring/patrol/patrol_panel.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "e1e4ea42dd68ed483088761076824dc041bbfbd1b815604bb0258376780676a2"
+    },
+    {
+      "path": "scripts/map_authoring/patrol/patrol_preview.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "55a703ea646f19aa7eddf0807079bde987d6288097849ee01f148530ae6d30a0"
+    },
+    {
+      "path": "scripts/map_authoring/patrol/patrol_preview.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "6e37e0449cd7871a35fab71a9eec151018d462ee240358d070165e20b92343a8"
+    },
+    {
+      "path": "scripts/map_authoring/patrol/patrol_session.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "899abd728392873744277e83422347a63c394f4eb2e4e62f60cd39ebc99461c9"
+    },
+    {
+      "path": "scripts/map_authoring/patrol/patrol_session.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "1fc9bec02451f86d396ade5fe52599b4727ca54803542f0b696e85653010421f"
+    },
+    {
+      "path": "scripts/map_authoring/patrol/patrol_store.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "a69c8c7d029fe2fe8acb82a016eedee58edfeb8e43925ac654f0bb4f92d9c221"
+    },
+    {
+      "path": "scripts/map_authoring/patrol/patrol_store.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "bec283bb6f62e77155d7cbf1361c54f551e2ce64d75f4ace486f1a8475f05be5"
+    },
+    {
+      "path": "scripts/map_authoring/patrol/worker_headless.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "c51faacfd908c90e39717dc73b333d87bedf840c2e73f54b9889e80239a78412"
+    },
+    {
+      "path": "scripts/map_authoring/patrol/worker_headless.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "f8f77c4ee274b81b46c006d843692747af74606999bcc2c57114c89d6e19ac8e"
+    },
+    {
+      "path": "scripts/map_authoring/population/headless.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "b70dc14c3fedfa20a3824d53b8b2325e5c5679a85acc79b5eda2a8c97a172efd"
+    },
+    {
+      "path": "scripts/map_authoring/population/headless.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "8cd7b73e6589b6e07909f7a1e27cbfb1b6c4d3817629dd0f95622e8e02496cf6"
+    },
+    {
+      "path": "scripts/map_authoring/population/population_canvas.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "4dce194ae2e9f767d28bbd9bdcd3998fdf317e8acec0e0097584fd1fcb32ec0c"
+    },
+    {
+      "path": "scripts/map_authoring/population/population_canvas.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "947a8c89f50af0e7413e1120077cca0876bb228ceb03a13b98b07dcdf9d818f1"
+    },
+    {
+      "path": "scripts/map_authoring/population/population_catalog.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "cf58ea12cbdb8610348a3480c282279aec0c44483cdf2fa9f9224af69a8e3271"
+    },
+    {
+      "path": "scripts/map_authoring/population/population_catalog.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "cc1caec469d67f18efa79f6bbd701c5d5c25a7ff18b588ede9aebd41354e57db"
+    },
+    {
+      "path": "scripts/map_authoring/population/population_compiler.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "838e94f345dd0ce4604a042447078be3a5f6f6d300b4957097cedefb3d5ee39d"
+    },
+    {
+      "path": "scripts/map_authoring/population/population_compiler.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "9946a9a8daa3316971855add3bcb066fe11cdf4096b321f2629a83c197bc3de9"
+    },
+    {
+      "path": "scripts/map_authoring/population/population_document.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "f314a6f25ccd77fefc7f74d94425bb6ab887f77279b59f04eb9d0a2493f6661b"
+    },
+    {
+      "path": "scripts/map_authoring/population/population_document.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "b7cdea254d1f2ecaf35478958a47bf016fa449917e5fd54bbf0f6554444e3900"
+    },
+    {
+      "path": "scripts/map_authoring/population/population_panel.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "69e3fea77629ed2ba6961b908fd19287db11d8b2ac4fe063a9ea04f83742e5c7"
+    },
+    {
+      "path": "scripts/map_authoring/population/population_panel.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "3fdf8782c3b5ecf608e05573b538a66c3277b4c05a5c19dcb3a5375cbc0625ce"
+    },
+    {
+      "path": "scripts/map_authoring/population/population_session.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "1c97aaed5811e09c819c5ea056b1a030f6ab6dad23780de506e535784ec4b7f7"
+    },
+    {
+      "path": "scripts/map_authoring/population/population_session.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "573ed71dc895358090122b27aad2d79802fd76d5a40d670746df91d49823cca9"
+    },
+    {
+      "path": "scripts/map_authoring/population/population_store.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "afa40290be95802b0efa53032683460604850be6fbcf39223341354436310392"
+    },
+    {
+      "path": "scripts/map_authoring/population/population_store.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "5ab2884b933e50bb2c652ce94b769a1de98ef9098b4c4ca3d73c94bbf5081bde"
+    },
+    {
+      "path": "scripts/map_authoring/population/population_worker.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "4aff233f942cde2b166af9bf4462a36e9e2bb02b93d9f151921a971b973c4306"
+    },
+    {
+      "path": "scripts/map_authoring/population/population_worker.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "57be4477bce097a9a5d1735dd819d2dd59ab91283f92e2d7b3e5a52aaf7651f2"
+    },
+    {
+      "path": "scripts/map_authoring/population/worker_headless.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "c8bbb299498d823b8ef1d0fe823aefa2e644963ac4ea451706aaa5cf3fcef51c"
+    },
+    {
+      "path": "scripts/map_authoring/population/worker_headless.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "d3969c6f9cf81092be876eae4881911f647f16e47be3335dbc13076f5a701d43"
+    },
+    {
+      "path": "scripts/map_authoring/preview/map_canvas.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "c6a9c77a9bd2501c449329b9d7f780733e50428e5aa4ffc1dee9ef723b39f4b9"
+    },
+    {
+      "path": "scripts/map_authoring/preview/map_canvas.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "e86b434112cd1fc70c1cdeb403a2aa24172dc89daab270c5dfd2b284bf096702"
+    },
+    {
+      "path": "scripts/map_authoring/terrain/brush.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "b929a01a373ece4fe305842a2ad3b9011184dfc6ac1446561ca3f0934d144375"
+    },
+    {
+      "path": "scripts/map_authoring/terrain/brush.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "2b91e7bf3691be40c3d977ee685137295680450f0c7129cda9afff91f1c3680f"
+    },
+    {
+      "path": "scripts/map_authoring/terrain/terrain_canvas.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "e279974f7d905c5b699cb1927c62626c780e76f4f97d245468f1b1289455704b"
+    },
+    {
+      "path": "scripts/map_authoring/terrain/terrain_canvas.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "a4a7145462a66339b5f3aa5594e077395b0206f45efe3c22333d843c9d724ed4"
+    },
+    {
+      "path": "scripts/map_authoring/terrain/terrain_material.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "d880815ce82b10e0b1ffe924af66780301d55a9732a7e7dbd9f3a2d5e08daedd"
+    },
+    {
+      "path": "scripts/map_authoring/terrain/terrain_material.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "398567b662483b699563cb165dae37de8154d3637e445a8af75b2910e5ae343c"
+    },
+    {
+      "path": "scripts/map_authoring/terrain/terrain_material.gdshader",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "4dff793d9f6339af72f2853652abcb8d09637a40fded3e61604795bcc6176404"
+    },
+    {
+      "path": "scripts/map_authoring/terrain/terrain_material.gdshader.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "1e316164fa09ec832c7ca9c2cbb2f2b3ace8610236c092ddf0f3c91ef7fe38c0"
+    },
+    {
+      "path": "scripts/map_authoring/terrain/terrain_panel.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "2c018e3aeae577d1771228f095dde425e2f3a2a58952fe77e98c92603676bd8a"
+    },
+    {
+      "path": "scripts/map_authoring/terrain/terrain_panel.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "875d8971f481e83d09cbdd2d0d61054ce1c42efec47d9d1e05f435b9d152aeca"
+    },
+    {
+      "path": "skills/ragrpg-art/SKILL.md",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "bed4b24017bc1b2f27d50c80f28d21f0b42be775ecc6ec02121188ccccf79b45"
+    },
+    {
+      "path": "skills/ragrpg-enemydelivery/SKILL.md",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "9ae7748d62d1ad25c02546884091a5cf07b129d3f2c02b751360064a52cf7324"
+    },
+    {
+      "path": "skills/ragrpg-enemydelivery/agents/openai.yaml",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "8961c08b5529031ac6f323d70dfc9111897db9fb2adf59c0fda8c390d4979a1c"
+    },
+    {
+      "path": "skills/ragrpg-mapdelivery/SKILL.md",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "cd070cfa93fd8e46d71159d9256d29d1774dc6c3298960126f203ff2675141e5"
+    },
+    {
+      "path": "skills/ragrpg-mapdelivery/agents/openai.yaml",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "a79813bab9e303fe4210470149510421db931d02f48041ee669adbe722ed2c3e"
+    },
+    {
+      "path": "tests/map_editor_candidate_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "3cfcf3ec9ea83b1c1b95b273c441c1d325dde3282d87153b3fa33732f1212a47"
+    },
+    {
+      "path": "tests/map_editor_candidate_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "10274d810d89533fc8c44d08f3aca6173fe7f4351ff0ef00eeba921e82089068"
+    },
+    {
+      "path": "tests/map_editor_candidate_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "8e1355f81d694247241e1ae71bdd7c0bb04feb922249804633544a83ec8920f2"
+    },
+    {
+      "path": "tests/map_editor_candidate_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "16b3a8f1e32aa889818c80be24bdf4086d9d8eabe5464a3cbe0f8726c28b4686"
+    },
+    {
+      "path": "tests/map_editor_composition_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "a14864a8d07061691c3734eefea8a4a6521f501b3b43206d9da02dbe1b847a07"
+    },
+    {
+      "path": "tests/map_editor_composition_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "6b891c93e1f0bac70a766f2450515a7a38fe8520c9ffa63301a1a61c98a55ffd"
+    },
+    {
+      "path": "tests/map_editor_composition_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "60e50b92475d4a97bd5498fea6bf29260fc789e506fe7c44f877fad2fa9828ec"
+    },
+    {
+      "path": "tests/map_editor_composition_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "ae0c1d2189691cf25cc7ed5b23c157da1860b5765c1fdb2e994a1e75c608bbf0"
+    },
+    {
+      "path": "tests/map_editor_document_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "d1442458818760b0444d33a8262be638ce0f28aaba640147088b4a55c3b4ce76"
+    },
+    {
+      "path": "tests/map_editor_document_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "f3fc78fa78b9edae536be35a2d6e7a29e91b745ce52d6ed9ffc553d8a14312c8"
+    },
+    {
+      "path": "tests/map_editor_document_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "90dd92da5dd4393f1b51fd9935aab5455a44112b2130b8dd1b5f1026d3117e14"
+    },
+    {
+      "path": "tests/map_editor_document_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "a47fa74902f9da5472c0202aefd215820b287262cdaf45f136e42d76c7afc531"
+    },
+    {
+      "path": "tests/map_editor_exchange_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "9e64bad0e8799d35abee2820e45b4f3311d96ce406e4c74967b3b18188ee286c"
+    },
+    {
+      "path": "tests/map_editor_exchange_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "eac371978040004776974001ae2010763148fb93a16b2d23ec4d15c01df8b082"
+    },
+    {
+      "path": "tests/map_editor_exchange_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "09a417c99d8d39e6c966b016367f56529b5800c7103b2b34c5afb98ef9220177"
+    },
+    {
+      "path": "tests/map_editor_exchange_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "a99a05e6e46d75a7561076ae4b075a435a9d47d869b55873487d6e19189319a5"
+    },
+    {
+      "path": "tests/map_editor_f9_geometry_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_f9_geometry_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_generation_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "904e9529d8b197073380b76b0aaabe1e489f62e8819c1c91dd6fe81eee6c7983"
+    },
+    {
+      "path": "tests/map_editor_generation_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "dec3b758272aa313f66e5ca7c62d6224d77d481f938e5c8d4304bcdefc8c298e"
+    },
+    {
+      "path": "tests/map_editor_generation_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "bae18fd25102b18f9ca88af252b5876fb1f9eeab25cad287ecc6c52a66855f2b"
+    },
+    {
+      "path": "tests/map_editor_generation_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "6f6d4e8b7ba0f263a9ad87867b96f693e9feed46b1885ab1e4c86dda36547264"
+    },
+    {
+      "path": "tests/map_editor_patrol_restart_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "9d8e5013bca2d95a3b7dece57aa21e64de01a12d78a377f728a925a10e3d1504"
+    },
+    {
+      "path": "tests/map_editor_patrol_restart_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "514d33773d19733a971c3f7115c8c1ee2aab88deac2cc47e2c897f05c772713a"
+    },
+    {
+      "path": "tests/map_editor_patrol_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "32a9a6c960bc0415bad2bfa34ed66c31d74e75de0fdb70ea7f2e4d4680f2f15d"
+    },
+    {
+      "path": "tests/map_editor_patrol_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "ef923346b3742d248e83676729c5aec2f0b20f36032724bee39e86229acb2d51"
+    },
+    {
+      "path": "tests/map_editor_patrol_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "ada3d256d3293f7a086e16c938be1f5d50d7a252f309058cffe0c2d1132ef593"
+    },
+    {
+      "path": "tests/map_editor_patrol_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "0c5011025e44b2f2ea845a782455246936f8d1a4e0d10335d489473793fd391d"
+    },
+    {
+      "path": "tests/map_editor_population_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "e34bd0fd27bd539f7f900215bfbb520c5439ee283431589572ee4367c9ea1f55"
+    },
+    {
+      "path": "tests/map_editor_population_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "54f8af28069b295f90b0018a533b8fb421f6a6338d250241a9db779749af813f"
+    },
+    {
+      "path": "tests/map_editor_population_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "4b5d92ed1e07c2fd258408329c724fc957703553fb8eaa3f9eeba0f179a965f2"
+    },
+    {
+      "path": "tests/map_editor_population_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "99de325e3268578d2f747b1312a0450a11d730c0c69083c907c3879c94e40ba8"
+    },
+    {
+      "path": "tests/map_editor_terrain_scale_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "17654f30cd67c6f9796346cb8b0ad5ce768e98ffa9f843a01390574a668709fa"
+    },
+    {
+      "path": "tests/map_editor_terrain_scale_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "02eae062577e9bd98d4fb157cd0bd33a5092f9c3f41c5c2297223786a53c958e"
+    },
+    {
+      "path": "tests/map_editor_terrain_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "fbaf2a67752559533813b3dc050df1513398883eef53c6dc238ec912d5d55e33"
+    },
+    {
+      "path": "tests/map_editor_terrain_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "c00c2a6f835308dd60ee994f4f6b457a20c19e51ad73cbe6ab83b6ed713b696a"
+    },
+    {
+      "path": "tests/map_editor_terrain_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "399e4795aa2f8e7ef9fa81161e3bf27add34b546c9da8518a657fccb8a9edd42"
+    },
+    {
+      "path": "tests/map_editor_terrain_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "87c9c746d0566b3d69877207b7dd2990af44bd57af6eb63f70bc5ce1df343827"
+    },
+    {
+      "path": "tools/map_editor_candidate/run.ps1",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "52f3de7a725d84c49600ef3d3007940bd3e83d13109740dfb32a005d3c845aba"
+    },
+    {
+      "path": "tools/map_editor_completion/run.ps1",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": null
+    },
+    {
+      "path": "tools/map_editor_composition/run.ps1",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "b659378f3605905f5921d457bd5a944a1f1805bd88dc44891b56eec27369055e"
+    },
+    {
+      "path": "tools/map_editor_document/run.ps1",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "3c343603e068975b9feba8dabde664f02d69347f4f8e12ed9f1cdaee51902c0d"
+    },
+    {
+      "path": "tools/map_editor_exchange/run.ps1",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "f3710e87ffefd5641830c8f4cc69c9902433d669d3df0cb9185e18b08becb172"
+    },
+    {
+      "path": "tools/map_editor_generation/run.ps1",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "07562bd75c0a504d72a3cb53e2c2ba677fb0cba251ca8508695b1dd2a59638d4"
+    },
+    {
+      "path": "tools/map_editor_patrol/run.ps1",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "d511025d6d66bae48e5b3750d62fc48cc6a4304a047c9f628668fa69fec05ba3"
+    },
+    {
+      "path": "tools/map_editor_population/run.ps1",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "ae5a4f57607480ce7ca2f3282f9badc448642cdf0969450e08fea08d4a77a8aa"
+    },
+    {
+      "path": "tools/map_editor_terrain/run.ps1",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "527001f8a348ec2435e052d3fb8e335c8a674fb4c9ca52bef4a25ede16ba0418"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/.gitattributes",
+      "owner": "Sol F9",
+      "previous_owner": "new evidence byte preservation",
+      "base_sha256": null
+    }
+  ],
+  "read_only_shared": [
+    "project.godot",
+    "tools/verify.ps1",
+    "scripts/core/expedition/snapshot/runtime_manifest.json",
+    "scripts/core/expedition/snapshot/snapshot_registry.gd",
+    "scripts/actors/enemy_actor.gd"
+  ],
+  "supervision": {
+    "owner": "Luna",
+    "model": "gpt-6-luna",
+    "effort": "low",
+    "state": "frozen geometry selection pending",
+    "files": [
+      "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md"
+    ],
+    "generated_evidence_roots": [
+      "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
+      "docs/map_editor/delivery/evidence/f9/luna/geometry/core",
+      "docs/map_editor/delivery/evidence/f9/luna/geometry/official"
+    ]
+  }
+}

@@ -1,5 +1,9 @@
 # Pacotes e chats preparados
 
+**F9 em execução25/10/2026**, autorização humana neste chat; [dispatch nominal](contracts/f9_dispatch.md)
+e [rastreabilidade](f9_requirements.md). Reserva F9 abaixo substituída somente
+nesse ponto. F10 não foi iniciado.
+
 ## Extensão de fechamento F9/F10 — pedido humano25/10/2026
 
 [F9](contracts/f9_completion.md) implementa os pendentes F0–F8 em uma matriz

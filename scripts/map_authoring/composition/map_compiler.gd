@@ -156,7 +156,12 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 	for cell: Dictionary in stage.surfaces:
 		if cancellation.is_valid() and cancellation.call(0.9): return fail("cancelled")
 		var destination := Point.create("map_preview",cell.surface_id,_center(cell))
-		if not world.path(root,destination,Terrain.PROFILE,world.geometry_revision).ok or not world.path(destination,root,Terrain.PROFILE,world.geometry_revision).ok: return fail("route_unreachable",cell.surface_id,destination.position)
+		var outward := world.path(root,destination,Terrain.PROFILE,world.geometry_revision)
+		var inward := world.path(destination,root,Terrain.PROFILE,world.geometry_revision)
+		if not outward.ok or not inward.ok:
+			var failure := fail("route_unreachable",cell.surface_id,destination.position)
+			failure["geometry_diagnostic"] = {"from":root.to_data(),"to":destination.to_data(),"outward_code":outward.error_code,"inward_code":inward.error_code}
+			return failure
 	var output := {"format_version":1,"compiler_revision":REVISION,"source_hash":validated.output_hash,"dependencies":packages.values()[0].dependencies.duplicate(true),"profile":Terrain.PROFILE.duplicate(true),"manifest":manifest.to_data(),"render_instances":render,"barriers":barriers,"realized_instances":instances,"piece_count":instances.size()}
 	if source.has("context"): output["authoring_context"] = source.context.duplicate(true)
 	var piece_contexts := {}

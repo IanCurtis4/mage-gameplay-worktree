@@ -1,5 +1,11 @@
 # Editor de mapas — proposta de arquitetura e execução
 
+**F9 autorizado25/10/2026 e em execução:** “F8 terminou. Podemos começar F9.”
+[Dispatch/base/propriedade](contracts/f9_dispatch.md), [matriz](f9_requirements.md).
+Reutiliza o checkout atual na branch `codex/map-editor-f9`, base completa
+`e8d6f62dbba986e5096f5f6779c8774b7f79530a`. F10 continua reservado, dependente
+da entrega F9 e de aval próprio. Estados de reserva F9 abaixo são históricos.
+
 **Fechamento adicional solicitado25/10/2026:** preparar os chats
 [F9 — completar os pendentes](contracts/f9_completion.md) e
 [F10 — pente-fino integrado](contracts/f10_final_review.md), para deixar o editor

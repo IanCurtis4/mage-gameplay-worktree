@@ -1,0 +1,127 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_CHECK wide_opening_compiles true
+F9_CHECK free_off_center_25 true
+F9_CHECK continuous_actor_25 true
+F9_CHECK free_off_center_75 true
+F9_CHECK continuous_actor_75 true
+F9_CHECK center_obstacle_installed true
+F9_CHECK center_blocked_side_open true
+F9_CHECK blocked_diagonal_uses_free_portal_interval true
+F9_CHECK body_wider_than_opening_rejected true
+F9_CHECK disabled_direction_still_rejected true
+F9_CHECK one_way_forward true
+F9_CHECK one_way_backward_rejected true
+F9_CHECK closed_opening_has_no_route true
+F9_CHECK ramp400_height40_terrain true
+F9_CHECK ramp400_height40_map true
+F9_CHECK ramp400_height40_walk true
+F9_CHECK bridge_height40_walk_on_slab true
+F9_CHECK ramp400_height40_half_height true
+F9_CHECK ramp400_height160_terrain true
+F9_CHECK ramp400_height160_map true
+F9_CHECK ramp400_height160_walk true
+F9_CHECK bridge_height160_walk_on_slab true
+F9_CHECK ramp400_height160_half_height true
+F9_CHECK ramp400_height200_terrain true
+F9_CHECK ramp400_height200_map true
+F9_CHECK ramp400_height200_walk true
+F9_CHECK bridge_height200_walk_on_slab true
+F9_CHECK ramp400_height200_half_height true
+F9_CHECK planarity_0_160 true
+F9_CHECK support_height_oracle_0_160 true
+F9_CHECK off_plane_rejected_0_160 true
+F9_CHECK planarity_0_200 true
+F9_CHECK support_height_oracle_0_200 true
+F9_CHECK off_plane_rejected_0_200 true
+F9_CHECK planarity_1200_160 true
+F9_CHECK support_height_oracle_1200_160 true
+F9_CHECK off_plane_rejected_1200_160 true
+F9_CHECK planarity_1200_200 true
+F9_CHECK support_height_oracle_1200_200 true
+F9_CHECK off_plane_rejected_1200_200 true
+F9_CHECK planarity_7600_160 true
+F9_CHECK support_height_oracle_7600_160 true
+F9_CHECK off_plane_rejected_7600_160 true
+F9_CHECK planarity_7600_200 true
+F9_CHECK support_height_oracle_7600_200 true
+F9_CHECK off_plane_rejected_7600_200 true
+F9_GEOMETRY_RESULT {"checks":[{"detail":"","id":"wide_opening_compiles","ok":true},{"detail":{"connection_ids":["door"],"cost":160.0,"points":[{"position":"(20.0, 0.0, 25.0)","stage_id":"map_preview","surface_id":"left/c_a3e1f4935b0919b3_0_0_1_1"},{"position":"(100.0, 0.0, 25.0)","stage_id":"map_preview","surface_id":"left/c_a3e1f4935b0919b3_0_0_1_1"},{"position":"(100.0, 0.0, 25.0)","stage_id":"map_preview","surface_id":"right/c_a3e1f4935b0919b3_0_0_1_1"},{"position":"(180.0, 0.0, 25.0)","stage_id":"map_preview","surface_id":"right/c_a3e1f4935b0919b3_0_0_1_1"}]},"id":"free_off_center_25","ok":true},{"detail":"","id":"continuous_actor_25","ok":true},{"detail":{"connection_ids":["door"],"cost":160.0,"points":[{"position":"(20.0, 0.0, 75.0)","stage_id":"map_preview","surface_id":"left/c_a3e1f4935b0919b3_0_0_1_1"},{"position":"(100.0, 0.0, 75.0)","stage_id":"map_preview","surface_id":"left/c_a3e1f4935b0919b3_0_0_1_1"},{"position":"(100.0, 0.0, 75.0)","stage_id":"map_preview","surface_id":"right/c_a3e1f4935b0919b3_0_0_1_1"},{"position":"(180.0, 0.0, 75.0)","stage_id":"map_preview","surface_id":"right/c_a3e1f4935b0919b3_0_0_1_1"}]},"id":"free_off_center_75","ok":true},{"detail":"","id":"continuous_actor_75","ok":true},{"detail":"","id":"center_obstacle_installed","ok":true},{"detail":"","id":"center_blocked_side_open","ok":true},{"detail":"","id":"blocked_diagonal_uses_free_portal_interval","ok":true},{"detail":"","id":"body_wider_than_opening_rejected","ok":true},{"detail":"","id":"disabled_direction_still_rejected","ok":true},{"detail":"","id":"one_way_forward","ok":true},{"detail":"","id":"one_way_backward_rejected","ok":true},{"detail":"","id":"closed_opening_has_no_route","ok":true},{"detail":"","id":"ramp400_height40_terrain","ok":true},{"detail":"","id":"ramp400_height40_map","ok":true},{"detail":"","id":"ramp400_height40_walk","ok":true},{"detail":"","id":"bridge_height40_walk_on_slab","ok":true},{"detail":"","id":"ramp400_height40_half_height","ok":true},{"detail":"","id":"ramp400_height160_terrain","ok":true},{"detail":"","id":"ramp400_height160_map","ok":true},{"detail":"","id":"ramp400_height160_walk","ok":true},{"detail":"","id":"bridge_height160_walk_on_slab","ok":true},{"detail":"","id":"ramp400_height160_half_height","ok":true},{"detail":"","id":"ramp400_height200_terrain","ok":true},{"detail":"","id":"ramp400_height200_map","ok":true},{"detail":"","id":"ramp400_height200_walk","ok":true},{"detail":"","id":"bridge_height200_walk_on_slab","ok":true},{"detail":"","id":"ramp400_height200_half_height","ok":true},{"detail":"","id":"planarity_0_160","ok":true},{"detail":"","id":"support_height_oracle_0_160","ok":true},{"detail":"","id":"off_plane_rejected_0_160","ok":true},{"detail":"","id":"planarity_0_200","ok":true},{"detail":"","id":"support_height_oracle_0_200","ok":true},{"detail":"","id":"off_plane_rejected_0_200","ok":true},{"detail":"","id":"planarity_1200_160","ok":true},{"detail":"","id":"support_height_oracle_1200_160","ok":true},{"detail":"","id":"off_plane_rejected_1200_160","ok":true},{"detail":"","id":"planarity_1200_200","ok":true},{"detail":"","id":"support_height_oracle_1200_200","ok":true},{"detail":"","id":"off_plane_rejected_1200_200","ok":true},{"detail":"","id":"planarity_7600_160","ok":true},{"detail":"","id":"support_height_oracle_7600_160","ok":true},{"detail":"","id":"off_plane_rejected_7600_160","ok":true},{"detail":"","id":"planarity_7600_200","ok":true},{"detail":"","id":"support_height_oracle_7600_200","ok":true},{"detail":"","id":"off_plane_rejected_7600_200","ok":true}],"count":46,"ok":true}
+SCRIPT ERROR: Parse Error: Static function "_segment_box()" not found in base "WorldGeometry".
+   at: GDScript::reload (res://scripts/core/expedition/spatial/world_solid_segment.gd:58)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "hit" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/core/expedition/spatial/world_solid_segment.gd:58)
+SCRIPT ERROR: Parse Error: Static function "_segment_box()" not found in base "WorldGeometry".
+   at: GDScript::reload (res://scripts/core/expedition/spatial/world_support_region.gd:69)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "hit" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/core/expedition/spatial/world_support_region.gd:69)
+SCRIPT ERROR: Parse Error: Static function "_segment_box()" not found in base "WorldGeometry".
+   at: GDScript::reload (res://scripts/core/expedition/spatial/world_support_region.gd:100)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "strip" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/core/expedition/spatial/world_support_region.gd:100)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/core/expedition/spatial/world_geometry.gd:0)
+SCRIPT ERROR: Parse Error: Static function "_segment_box()" not found in base "WorldGeometry".
+   at: GDScript::reload (res://scripts/core/expedition/spatial/world_ground_field.gd:132)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "hit" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/core/expedition/spatial/world_ground_field.gd:132)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/world/ice_wall.gd:0)
+SCRIPT ERROR: Parse Error: Static function "_segment_box()" not found in base "WorldGeometry".
+   at: GDScript::reload (res://scripts/core/expedition/spatial/world_effect_volume.gd:59)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "hit" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/core/expedition/spatial/world_effect_volume.gd:59)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/world/phantom_barrier.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/actors/arrow_projectile.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/world/geometer_wall_field.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/world/geometer_casting.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/actors/player_actor.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/actors/enemy_actor.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/core/expedition/expedition_service.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/core/run_build_service.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/core/profile_facade.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/core/expedition/snapshot/snapshot_registry.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/core/expedition/persistence/expedition_checkpoint_codec.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/core/expedition/ownership/expedition_asset_lock.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/core/profile_state.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/core/build_snapshot.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/core/build_effect_catalog.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/core/equipment_instance.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/core/equipment_rules.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/core/expedition/population/expedition_wave_clock.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/core/expedition/campaign/expedition_campaign_state.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/core/expedition/campaign/expedition_campaign_runtime.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/main.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/world/expedition_geometry_view.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/map_authoring/terrain/terrain_material.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/map_authoring/compiler/terrain_compiler.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://tests/map_editor_f9_geometry_test.gd:0)
+ERROR: Failed to load script "res://tests/map_editor_f9_geometry_test.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

@@ -1,6 +1,8 @@
 # Editor F9 — completar o editor antes dos próximos épicos
 
-25/10/2026. **RESERVADO — execução aguarda aval humano neste chat.**
+25/10/2026. **EM EXECUÇÃO — autorizado pelo humano: “F8 terminou. Podemos começar F9.”**
+Base/propriedade e sequência no [dispatch vigente](f9_dispatch.md);
+[matriz de completude](../f9_requirements.md). A reserva abaixo é histórica.
 Chat local criado: `01a1741f-bcf1-7bd2-9328-d7a91e514ee4`.
 Pedido humano: criar F9 como implementador de todos os pendentes dos Fx anteriores
 e F10 como pente-fino integrado; deixar o editor usável e robusto para os Ex

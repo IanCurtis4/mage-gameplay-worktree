@@ -146,19 +146,41 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 	var radius: float = profile["radius"]
 	var height: float = profile["height"]
 	if not _candidate_point(from,radius,height,candidate) or not _candidate_point(to,radius,height,candidate): return _failure(&"invalid_support")
+	# A clear straight ground route may cross any legal point of each opening.
+	# Keep its support-plane transitions and recheck a proposed temporary segment.
+	var direct := ground_line_to(from,to,profile,revision)
+	if direct["ok"]:
+		var route: Array = direct["data"]["points"]
+		var clear := true
+		for index: int in range(1,route.size()):
+			if not _clear_path_segment(route[index-1]["position"],route[index]["position"],profile,candidate): clear = false; break
+		if clear:
+			route[-1] = to.to_data()
+			return _success({"points":route,"connection_ids":_route_connection_ids(route),"cost":direct["data"]["cost"]})
 	var nodes: Dictionary = {"@from": from.to_data(), "@to": to.to_data()}
 	var edges: Dictionary = {"@from": [], "@to": []}
 	var endpoints: Dictionary = {}
 	for endpoint: Dictionary in _stage["connectors"]:
 		if not endpoint["kind"] in profile["connector_kinds"] or float(endpoint["width"]) + EPS < radius * 2.0 or float(endpoint["headroom"]) + EPS < height: continue
-		var cell := _cell(endpoint["surface_id"])
-		var inset := Kernel.support_y(cell, Vector3(endpoint["position"]) - Vector3(endpoint["outward"]) * radius)
-		var point := ExpeditionWorldPoint.create(from.stage_id, endpoint["surface_id"], inset)
-		if not _candidate_point(point,radius,height,candidate): continue
-		var id: String = endpoint["connector_id"]
-		nodes[id] = point.to_data()
-		edges[id] = []
-		endpoints[id] = endpoint
+		endpoints[endpoint["connector_id"]] = endpoint
+	# Portals are traversable intervals, clipped by the body radius. Visibility
+	# candidates include interval ends, source/destination projections and obstacle
+	# corners. A blocked center never removes the whole opening from the graph.
+	for connection: Dictionary in _stage["connections"]:
+		if not endpoints.has(connection["a_connector"]) or not endpoints.has(connection["b_connector"]): continue
+		var a: Dictionary = endpoints[connection["a_connector"]]
+		var b: Dictionary = endpoints[connection["b_connector"]]
+		var index := 0
+		for seam: Vector3 in _portal_candidates(a,b,from.position,to.position,radius,candidate):
+			var pa := ExpeditionWorldPoint.create(from.stage_id,a["surface_id"],seam)
+			var pb := ExpeditionWorldPoint.create(from.stage_id,b["surface_id"],seam)
+			if not _candidate_point(pa,radius,height,candidate) or not _candidate_point(pb,radius,height,candidate): continue
+			var aid := "@portal/%s/%d/a"%[connection["connection_id"],index]
+			var bid := "@portal/%s/%d/b"%[connection["connection_id"],index]
+			index += 1
+			nodes[aid] = pa.to_data(); nodes[bid] = pb.to_data(); edges[aid] = []; edges[bid] = []
+			if connection["forward"]: edges[aid].append({"to":bid,"via":[],"connection_id":connection["connection_id"],"cost":0.0})
+			if connection["backward"]: edges[bid].append({"to":aid,"via":[],"connection_id":connection["connection_id"],"cost":0.0})
 	# Visibility graph corners give detours around AABBs within convex supports.
 	for cell: Dictionary in _stage["surfaces"]:
 		for volume_index: int in range(_volumes().size()):
@@ -189,20 +211,8 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 	for a: String in ids:
 		for b: String in ids:
 			if a == b or nodes[a]["surface_id"] != nodes[b]["surface_id"]: continue
-			if _clear_path_segment(nodes[a]["position"],nodes[b]["position"],profile,candidate):
+			if _clear_path_segment(nodes[a]["position"],nodes[b]["position"],profile,candidate) and _support_segment_fraction(_cell(nodes[a]["surface_id"]),nodes[a]["position"],nodes[b]["position"],profile) >= 1.0-EPS:
 				edges[a].append({"to": b, "via": [], "connection_id": "", "cost": Vector3(nodes[a]["position"]).distance_to(nodes[b]["position"])})
-	for connection: Dictionary in _stage["connections"]:
-		var a: String = connection["a_connector"]
-		var b: String = connection["b_connector"]
-		if not endpoints.has(a) or not endpoints.has(b): continue
-		var seam: Vector3 = endpoints[a]["position"]
-		if not _clear_path_segment(nodes[a]["position"],seam,profile,candidate) or not _clear_path_segment(seam,nodes[b]["position"],profile,candidate): continue
-		var via := [ExpeditionWorldPoint.create(from.stage_id, endpoints[a]["surface_id"], seam).to_data(), ExpeditionWorldPoint.create(from.stage_id, endpoints[b]["surface_id"], seam).to_data()]
-		var cost := Vector3(nodes[a]["position"]).distance_to(seam) + seam.distance_to(nodes[b]["position"])
-		if connection["forward"]: edges[a].append({"to": b, "via": via, "connection_id": connection["connection_id"], "cost": cost})
-		via = via.duplicate(true)
-		via.reverse()
-		if connection["backward"]: edges[b].append({"to": a, "via": via, "connection_id": connection["connection_id"], "cost": cost})
 	var distances := {"@from": 0.0}
 	var previous: Dictionary = {}
 	var frontier: Array[String] = ["@from"]
@@ -234,6 +244,50 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 		if not edge["connection_id"].is_empty(): connections.append(edge["connection_id"])
 	return _success({"points": points, "connection_ids": connections, "cost": distances["@to"]})
 
+func _portal_candidates(a: Dictionary, b: Dictionary, source: Vector3, target: Vector3, radius: float, candidate: WorldSolidSegment) -> Array[Vector3]:
+	var center: Vector3 = a["position"]
+	var normal: Vector3 = a["outward"]
+	var tangent := Vector3(-normal.z,0,normal.x)
+	var half_width := maxf(0.0,minf(float(a["width"]),float(b["width"]))*0.5-radius)
+	var offsets: Array[float] = [-half_width,0.0,half_width]
+	var landmarks: Array[Vector3] = [source,target]
+	for box: AABB in _volumes():
+		for x: float in [box.position.x-radius-EPS*4.0,box.end.x+radius+EPS*4.0]:
+			for z: float in [box.position.z-radius-EPS*4.0,box.end.z+radius+EPS*4.0]: landmarks.append(Vector3(x,center.y,z))
+	for segment: WorldSolidSegment in _segments.values(): landmarks.append_array(segment.corners(radius))
+	if candidate != null: landmarks.append_array(candidate.corners(radius))
+	for point: Vector3 in landmarks:
+		offsets.append(clampf((point-center).dot(tangent),-half_width,half_width))
+	var delta := target-source
+	var denominator := delta.dot(normal)
+	if absf(denominator) > EPS:
+		var intersection := source+delta*((center-source).dot(normal)/denominator)
+		offsets.append(clampf((intersection-center).dot(tangent),-half_width,half_width))
+	offsets.sort()
+	var result: Array[Vector3] = []
+	for offset: float in offsets:
+		var point := Kernel.support_y(_cell(a["surface_id"]),center+tangent*offset)
+		if result.is_empty() or result[-1].distance_to(point) > EPS: result.append(point)
+	return result
+
+func _route_connection_ids(route: Array) -> Array[String]:
+	var result: Array[String] = []
+	for index: int in range(1,route.size()):
+		if route[index-1]["surface_id"] == route[index]["surface_id"]: continue
+		for connection: Dictionary in _stage["connections"]:
+			var a: Dictionary = {}; var b: Dictionary = {}
+			for endpoint: Dictionary in _stage["connectors"]:
+				if endpoint["connector_id"] == connection["a_connector"]: a = endpoint
+				if endpoint["connector_id"] == connection["b_connector"]: b = endpoint
+			if a.is_empty() or b.is_empty(): continue
+			if [a["surface_id"],b["surface_id"]] == [route[index-1]["surface_id"],route[index]["surface_id"]] or [b["surface_id"],a["surface_id"]] == [route[index-1]["surface_id"],route[index]["surface_id"]]:
+				var point: Vector3 = route[index]["position"]
+				var normal: Vector3 = a["outward"]
+				var delta := point-Vector3(a["position"])
+				if absf(delta.dot(normal)) > EPS or absf(delta.dot(Vector3(-normal.z,0,normal.x))) > minf(float(a["width"]),float(b["width"]))*0.5+EPS: continue
+				result.append(connection["connection_id"]); break
+	return result
+
 func sweep(from: Vector3, to: Vector3, collider: Dictionary, revision: int, mask: StringName = &"all") -> Dictionary:
 	if not _current(revision): return _failure(&"stale_geometry")
 	if not from.is_finite() or not to.is_finite() or not collider.has_all(["radius", "height"]) or not _finite_number(collider["radius"]) or not _finite_number(collider["height"]) or float(collider["radius"]) < 0.0 or float(collider["height"]) < 0.0: return _failure(&"invalid_collider")
@@ -246,8 +300,7 @@ func sweep(from: Vector3, to: Vector3, collider: Dictionary, revision: int, mask
 		var volume: AABB = volumes[index]
 		var radius: float = collider["radius"]
 		var height: float = collider["height"]
-		var expanded := AABB(volume.position - Vector3(radius, height, radius) + Vector3(EPS, 0, EPS), volume.size + Vector3(2 * radius, height, 2 * radius) - Vector3(2 * EPS, EPS, 2 * EPS))
-		var hit := _segment_box(from, to, expanded)
+		var hit := Kernel.sweep_box(from,to,volume,radius,height)
 		if hit.is_empty() or float(hit["fraction"]) > fraction: continue
 		fraction = hit["fraction"]
 		normal = hit["normal"]
@@ -268,24 +321,8 @@ func sweep(from: Vector3, to: Vector3, collider: Dictionary, revision: int, mask
 	return _success({"hit": not hit_id.is_empty(), "fraction": fraction, "position": from.lerp(to, fraction), "normal": normal, "volume_id": hit_id})
 
 static func _segment_box(from: Vector3, to: Vector3, box: AABB) -> Dictionary:
-	var low := 0.0
-	var high := 1.0
-	var normal := Vector3.ZERO
-	var delta := to - from
-	for axis: int in range(3):
-		if absf(delta[axis]) < EPS:
-			if from[axis] < box.position[axis] or from[axis] > box.end[axis]: return {}
-			continue
-		var a: float = (box.position[axis] - from[axis]) / delta[axis]
-		var b: float = (box.end[axis] - from[axis]) / delta[axis]
-		var entry: float = minf(a, b)
-		if entry >= low:
-			low = entry
-			normal = Vector3.ZERO
-			normal[axis] = -signf(delta[axis])
-		high = minf(high, maxf(a, b))
-		if low > high: return {}
-	return {"fraction": low, "normal": normal}
+	# Existing consumers supply their own expanded/local box; preserve this API.
+	return Kernel.sweep_box(from,to,box,0.0,0.0,false)
 
 func query_attack(shape: Dictionary, source: ExpeditionWorldPoint, target: ExpeditionWorldPoint, revision: int) -> Dictionary:
 	if not _current(revision): return _failure(&"stale_geometry")
@@ -511,11 +548,13 @@ func _ground_line_connection(surface: String, point: Vector3, direction: Vector2
 		if absf(Vector2(delta.x,delta.z).dot(Vector2(outward.x,outward.z))) > EPS or absf(Vector2(delta.x,delta.z).dot(tangent))+float(profile["radius"]) > float(endpoint["width"])*0.5+EPS: continue
 		for connection: Dictionary in _stage["connections"]:
 			if endpoint["connector_id"] not in [connection["a_connector"],connection["b_connector"]]: continue
+			if endpoint["connector_id"] == connection["a_connector"] and not connection["forward"]: continue
+			if endpoint["connector_id"] == connection["b_connector"] and not connection["backward"]: continue
 			var other_id: String = connection["b_connector"] if endpoint["connector_id"] == connection["a_connector"] else connection["a_connector"]
 			for other: Dictionary in _stage["connectors"]:
 				if other["connector_id"] != other_id or other["kind"] not in profile["connector_kinds"] or float(other["width"]) + EPS < 2.0*float(profile["radius"]) or float(other["headroom"]) + EPS < float(profile["height"]): continue
 				var following := _cell(other["surface_id"])
-				if absf(Kernel.support_y(following,point).y-point.y) <= EPS and _point_valid(ExpeditionWorldPoint.create(_stage["stage_id"],following["surface_id"],point),profile["radius"],profile["height"]): return following
+				if Kernel.contains(following,point) and _point_valid(ExpeditionWorldPoint.create(_stage["stage_id"],following["surface_id"],point),profile["radius"],profile["height"]): return following
 	return {}
 
 func _candidate_point(point: ExpeditionWorldPoint, radius: float, height: float, candidate: WorldSolidSegment) -> bool:
