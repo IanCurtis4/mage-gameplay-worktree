@@ -76,7 +76,7 @@ function Invoke-M4([string]$Name,[string[]]$Arguments,[string]$Marker = '',[int]
 }
 Invoke-M4 'import' @('--headless','--editor','--import','--quit')
 if (-not $UIOnly) {
-Invoke-M4 'population' @('--headless','--script','res://tests/map_editor_population_test.gd') 'M4_RESULT' 90
+Invoke-M4 'population' @('--headless','--script','res://tests/map_editor_population_test.gd') 'M4_RESULT' 91
 Invoke-M4 'cli_a' @('--headless','--script','res://scripts/map_authoring/population/headless.gd','--',$m4Runs[1].result.source_path) 'MAP_POPULATION_RESULT'
 Invoke-M4 'cli_b' @('--headless','--script','res://scripts/map_authoring/population/headless.gd','--',$m4Runs[1].result.source_path) 'MAP_POPULATION_RESULT'
 if ($m4Runs[1].result.package_hash -ne $m4Runs[2].result.output_hash -or $m4Runs[2].result.output_hash -ne $m4Runs[3].result.output_hash) { throw 'Independent process mismatch.' }

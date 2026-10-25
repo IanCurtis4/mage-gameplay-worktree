@@ -96,6 +96,8 @@ func _run() -> void:
 	bad = source.duplicate(true); bad.entrance[0].position_xyz = [0,0,0]; check("unsafe_entry_rejected",Compiler.regenerate(bad).code == "entrance_invalid")
 	bad = source.duplicate(true); bad.interactions[2].target_id = "absent"; check("broken_portal_rejected",Compiler.regenerate(bad).code == "interaction_invalid")
 	bad = source.duplicate(true); bad.interactions[0].position_xyz = [9999,0,9999]; check("unreachable_exit_rejected",Compiler.regenerate(bad).code == "interaction_invalid")
+	bad = source.duplicate(true); var extra_exit: Dictionary = bad.interactions[0].duplicate(true); extra_exit.interaction_id = "second_finish"; bad.interactions.append(extra_exit)
+	check("mutually_required_terminal_exits_rejected",Compiler.regenerate(bad).code == "interaction_invalid")
 	bad = source.duplicate(true); bad.brushes[0].surface_id = "missing"; check("missing_layer_rejected",not Compiler.regenerate(bad).ok)
 	var dense := source.duplicate(true); dense.brushes[0].quota_mode = "density"; dense.brushes[0].density = 1.0
 	var density_plan := Compiler.regenerate(dense)

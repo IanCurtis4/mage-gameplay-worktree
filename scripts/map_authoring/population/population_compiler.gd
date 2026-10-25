@@ -70,8 +70,17 @@ static func prepare(source: Dictionary, cancel: Callable = Callable()) -> Dictio
 	if not configured.ok: return fail("entrance_invalid")
 	var entry := anchor(source.entrance[0])
 	if not world.position_query(entry,PROFILE,world.geometry_revision).ok: return fail("entrance_invalid")
-	var ids: Dictionary = {}
-	for interaction: Dictionary in source.interactions: ids[interaction.interaction_id] = interaction
+	var ids: Dictionary = {}; var completion_count := 0
+	for interaction: Dictionary in source.interactions:
+		ids[interaction.interaction_id] = interaction
+		if interaction.kind == "phase_completion":
+			completion_count += 1
+			# The existing service requires every other required objective before
+			# completion. Two terminal required exits cannot satisfy one another.
+			if completion_count > 1:
+				var invalid := fail("interaction_invalid",interaction.interaction_id)
+				invalid.diagnostics[0].message = "Este protótipo admite uma saída de conclusão por mapa. Mantenha as demais como saídas antecipadas ou rascunho."
+				return invalid
 	for interaction: Dictionary in _sorted(source.interactions,"interaction_id"):
 		if not _path(world,entry,anchor(interaction),PROFILE): return fail("interaction_invalid",interaction.interaction_id,{},vector(interaction.position_xyz))
 		var socket_id: String = "interaction_"+interaction.interaction_id

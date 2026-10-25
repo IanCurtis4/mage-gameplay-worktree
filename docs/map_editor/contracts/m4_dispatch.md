@@ -35,6 +35,9 @@ catálogo/categoria/origem e palco explícito para memoráveis são obrigatório
 
 Interações: entrada; pares de portais locais no mesmo estágio e saídas
 phase_completion/early_exit, parametrizando o manifesto/serviços existentes.
+No máximo uma saída phase_completion por mapa: o serviço vigente exige os outros
+objetivos obrigatórios antes de concluir; duas saídas terminais required não
+podem satisfazer uma à outra. Não inventar semântica de objetivos alternativos.
 Sem novo efeito de refúgio, quest, trigger, patrulha, economia ou writer.
 Palco de memorável é marcador de autoria, não comportamento novo.
 Políticas de slot: referência explícita à fase ruined_crossing (origem trial_stage_N,
