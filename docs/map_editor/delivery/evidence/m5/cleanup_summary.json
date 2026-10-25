@@ -13,7 +13,7 @@
   "personal_save_touched": false,
   "current_fixture": "one reusable temporary F5 fixture, removed after final validation",
   "free_after_bytes": 17412403200,
-  "removed_worktrees": 14,
+  "removed_worktrees": 15,
   "runtime_changed_by_cleanup": false,
   "date": "2026-10-25",
   "preservation": "cleanup_worktrees.json: stashes and existing branches; historical bundle refs in refs/archive/storage-2026-09-20; cleanup_legacy_sources.zip 203543 bytes",

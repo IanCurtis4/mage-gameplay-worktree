@@ -1,6 +1,8 @@
 param([Parameter(Mandatory)][string]$GodotPath,[Parameter(Mandatory)][string]$EvidenceDirectory,[switch]$Native,[string]$ReuseFixture='',[switch]$UIOnly)
 $ErrorActionPreference='Stop'
 $m5Root=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$m5GitRoot=git -C $m5Root rev-parse --show-toplevel
+if($LASTEXITCODE -ne 0 -or [IO.Path]::GetFullPath($m5GitRoot) -ne [IO.Path]::GetFullPath($m5Root)){throw 'Invoke this runner only from the source checkout; a fixture runner would create a nested copy.'}
 $m5Evidence=[IO.Path]::GetFullPath($EvidenceDirectory)
 if(Test-Path -LiteralPath $m5Evidence){throw 'Use an absent evidence directory.'}
 [void](New-Item -ItemType Directory -Force -Path $m5Evidence)
