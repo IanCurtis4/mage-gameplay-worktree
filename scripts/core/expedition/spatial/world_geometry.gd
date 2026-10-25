@@ -175,12 +175,21 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 			var pa := ExpeditionWorldPoint.create(from.stage_id,a["surface_id"],seam)
 			var pb := ExpeditionWorldPoint.create(from.stage_id,b["surface_id"],seam)
 			if not _candidate_point(pa,radius,height,candidate) or not _candidate_point(pb,radius,height,candidate): continue
+			# Keep an inset state on each support, allowing turns between adjacent
+			# openings without forcing the body to travel along their shared edge.
+			var ia := Kernel.support_y(_cell(a["surface_id"]),seam-Vector3(a["outward"])*radius)
+			var ib := Kernel.support_y(_cell(b["surface_id"]),seam-Vector3(b["outward"])*radius)
+			var inside_a := ExpeditionWorldPoint.create(from.stage_id,a["surface_id"],ia)
+			var inside_b := ExpeditionWorldPoint.create(from.stage_id,b["surface_id"],ib)
+			if not _candidate_point(inside_a,radius,height,candidate) or not _candidate_point(inside_b,radius,height,candidate): continue
+			if not _clear_path_segment(ia,seam,profile,candidate) or not _clear_path_segment(seam,ib,profile,candidate): continue
 			var aid := "@portal/%s/%d/a"%[connection["connection_id"],index]
 			var bid := "@portal/%s/%d/b"%[connection["connection_id"],index]
 			index += 1
-			nodes[aid] = pa.to_data(); nodes[bid] = pb.to_data(); edges[aid] = []; edges[bid] = []
-			if connection["forward"]: edges[aid].append({"to":bid,"via":[],"connection_id":connection["connection_id"],"cost":0.0})
-			if connection["backward"]: edges[bid].append({"to":aid,"via":[],"connection_id":connection["connection_id"],"cost":0.0})
+			nodes[aid] = inside_a.to_data(); nodes[bid] = inside_b.to_data(); edges[aid] = []; edges[bid] = []
+			var cost := ia.distance_to(seam)+seam.distance_to(ib)
+			if connection["forward"]: edges[aid].append({"to":bid,"via":[pa.to_data(),pb.to_data()],"connection_id":connection["connection_id"],"cost":cost})
+			if connection["backward"]: edges[bid].append({"to":aid,"via":[pb.to_data(),pa.to_data()],"connection_id":connection["connection_id"],"cost":cost})
 	# Visibility graph corners give detours around AABBs within convex supports.
 	for cell: Dictionary in _stage["surfaces"]:
 		for volume_index: int in range(_volumes().size()):
