@@ -1,0 +1,604 @@
+{
+	"document_id": "patrols",
+	"name": "Patrulhas",
+	"patrols": [
+		{
+			"mode": "ping_pong",
+			"patrol_id": "scout_route",
+			"revision": 1,
+			"slot_ids": [
+				"scout"
+			],
+			"waypoints": [
+				{
+					"point_id": "a",
+					"position_xyz": [
+						240,
+						0,
+						200
+					],
+					"surface_id": "land/c_8c6fb1e9e37a1aea_0_0_1_2",
+					"wait_seconds": 1
+				},
+				{
+					"point_id": "b",
+					"position_xyz": [
+						320,
+						0,
+						260
+					],
+					"surface_id": "land/c_8c6fb1e9e37a1aea_0_0_1_2",
+					"wait_seconds": 0.5
+				}
+			]
+		}
+	],
+	"population": [
+		{
+			"brushes": [
+				{
+					"brush_id": "field",
+					"center_xyz": [
+						240.0,
+						0.0,
+						200.0
+					],
+					"density": 1.0,
+					"group_radius": 60,
+					"mode": "dispersed",
+					"quantity": 3,
+					"quota_mode": "count",
+					"radius": 112,
+					"round": 0,
+					"seed": "0",
+					"spacing": 8,
+					"species": [
+						{
+							"category": "normal",
+							"origin_id": "trial_stage_1",
+							"species_id": "test_gel",
+							"weight": 1
+						}
+					],
+					"surface_id": "land/c_8c6fb1e9e37a1aea_0_0_1_2"
+				},
+				{
+					"brush_id": "group",
+					"center_xyz": [
+						1400.0,
+						40.0,
+						200.0
+					],
+					"density": 1.0,
+					"group_radius": 100,
+					"mode": "concentrated",
+					"quantity": 3,
+					"quota_mode": "count",
+					"radius": 112,
+					"round": 0,
+					"seed": "0",
+					"spacing": 8,
+					"species": [
+						{
+							"category": "normal",
+							"origin_id": "trial_stage_1",
+							"species_id": "test_gel",
+							"weight": 1
+						}
+					],
+					"surface_id": "sanctuary/c_a3e1f4935b0919b3_0_0_1_2"
+				},
+				{
+					"brush_id": "reserved_902ef15eded2a1ba5dc25d82",
+					"center_xyz": [
+						1352.0,
+						40.0,
+						424.0
+					],
+					"density": 1.0,
+					"group_radius": 32,
+					"mode": "dispersed",
+					"quantity": 1,
+					"quota_mode": "count",
+					"radius": 32,
+					"round": 0,
+					"seed": "0",
+					"spacing": 8,
+					"species": [
+						{
+							"category": "boss",
+							"origin_id": "trial_stage_1",
+							"species_id": "test_gel",
+							"weight": 1
+						}
+					],
+					"surface_id": "sanctuary/c_a3e1f4935b0919b3_0_0_1_2"
+				}
+			],
+			"document_id": "representative_encounters",
+			"entrance": [
+				{
+					"position_xyz": [
+						64,
+						0,
+						200
+					],
+					"surface_id": "land/c_8c6fb1e9e37a1aea_0_0_1_2"
+				}
+			],
+			"exclusions": [],
+			"interactions": [
+				{
+					"interaction_id": "finish",
+					"kind": "phase_completion",
+					"position_xyz": [
+						1512,
+						40,
+						720
+					],
+					"surface_id": "sanctuary/c_a3e1f4935b0919b3_0_0_1_2",
+					"target_id": ""
+				},
+				{
+					"interaction_id": "refuge",
+					"kind": "early_exit",
+					"position_xyz": [
+						64,
+						0,
+						320
+					],
+					"surface_id": "land/c_8c6fb1e9e37a1aea_0_0_1_2",
+					"target_id": ""
+				},
+				{
+					"interaction_id": "reserved_902ef15eded2a1ba5dc25d82",
+					"kind": "thematic_encounter",
+					"position_xyz": [
+						1352.0,
+						40.0,
+						424.0
+					],
+					"surface_id": "sanctuary/c_a3e1f4935b0919b3_0_0_1_2",
+					"target_id": "find_guardian"
+				}
+			],
+			"map": [
+				{
+					"barrier_profile": "ruin_envelope_v1",
+					"context": {
+						"biome_id": "ruin",
+						"overrides": [],
+						"version": 1
+					},
+					"document_id": "representative_map",
+					"instances": [
+						{
+							"instance_id": "land",
+							"piece_hash": "474a7f91532009d0cec13227fbdb6c64c2a4fee7d24df487e49ecd1fd15c3607",
+							"position_xyz": [
+								0,
+								0,
+								0
+							],
+							"rotation_quarters": 0
+						},
+						{
+							"instance_id": "sanctuary",
+							"piece_hash": "68ad7fb4267c95f6148555743412efdb628a9e5d787471ada3e47ef8d84f82b4",
+							"position_xyz": [
+								1200,
+								0,
+								0
+							],
+							"rotation_quarters": 0
+						}
+					],
+					"links": [
+						{
+							"a_connector": "east",
+							"a_instance": "land",
+							"b_connector": "west",
+							"b_instance": "sanctuary",
+							"link_id": "sanctuary_gate"
+						}
+					],
+					"mode": "manual",
+					"name": "Clareira, ponte e santuário",
+					"pieces": [
+						{
+							"piece_hash": "474a7f91532009d0cec13227fbdb6c64c2a4fee7d24df487e49ecd1fd15c3607",
+							"source": {
+								"composition": null,
+								"connectors": [
+									{
+										"connector_id": "east",
+										"direction": "both",
+										"headroom": 100,
+										"kind": "walk",
+										"normal_xyz": [
+											1,
+											0,
+											0
+										],
+										"position_xyz": [
+											1200,
+											40,
+											200
+										],
+										"surface_id": "plateau",
+										"tags": [
+											"ruin"
+										],
+										"width": 120
+									}
+								],
+								"context": {
+									"allow_rare": true,
+									"allowed_species": [
+										"test_gel"
+									],
+									"areas": [],
+									"biome_ids": [
+										"ruin",
+										"forest"
+									],
+									"version": 1
+								},
+								"dependencies": [],
+								"document_id": "land",
+								"layers": [
+									{
+										"columns": 2,
+										"heights": [
+											0,
+											0,
+											0,
+											0,
+											0,
+											0
+										],
+										"layer_id": "lower",
+										"locked": false,
+										"material_masks": {
+											"earth": [
+												0,
+												0,
+												0.7,
+												0.7,
+												0,
+												0
+											],
+											"grass": [
+												1,
+												1,
+												0.3,
+												0.3,
+												1,
+												1
+											]
+										},
+										"name": "Clareira / passagem inferior",
+										"origin_xz": [
+											0.0,
+											0.0
+										],
+										"protected_regions": [],
+										"rows": 3,
+										"sample_spacing": 400.0
+									},
+									{
+										"columns": 2,
+										"heights": [
+											0,
+											40,
+											0,
+											40
+										],
+										"layer_id": "ramp",
+										"locked": false,
+										"material_masks": {},
+										"name": "Rampa",
+										"origin_xz": [
+											400.0,
+											0.0
+										],
+										"protected_regions": [],
+										"rows": 2,
+										"sample_spacing": 400.0
+									},
+									{
+										"columns": 2,
+										"heights": [
+											40,
+											40,
+											40,
+											40,
+											40,
+											40
+										],
+										"layer_id": "plateau",
+										"locked": false,
+										"material_masks": {},
+										"name": "Platô",
+										"origin_xz": [
+											800.0,
+											0.0
+										],
+										"protected_regions": [],
+										"rows": 3,
+										"sample_spacing": 400.0
+									}
+								],
+								"name": "Clareira, rampa e ponte",
+								"placements": [],
+								"regions": [],
+								"revision": 1,
+								"schema_version": 1,
+								"sockets": [],
+								"special_surfaces": [
+									{
+										"headroom": 100,
+										"layer_id": "plateau",
+										"surface_id": "bridge",
+										"vertices_xyz": [
+											[
+												0,
+												40,
+												400
+											],
+											[
+												800,
+												40,
+												400
+											],
+											[
+												800,
+												40,
+												800
+											],
+											[
+												0,
+												40,
+												800
+											]
+										]
+									}
+								],
+								"units": "e07_world"
+							}
+						},
+						{
+							"piece_hash": "68ad7fb4267c95f6148555743412efdb628a9e5d787471ada3e47ef8d84f82b4",
+							"source": {
+								"composition": null,
+								"connectors": [
+									{
+										"connector_id": "west",
+										"direction": "both",
+										"headroom": 100,
+										"kind": "walk",
+										"normal_xyz": [
+											-1,
+											0,
+											0
+										],
+										"position_xyz": [
+											0,
+											40,
+											200
+										],
+										"surface_id": "floor",
+										"tags": [
+											"ruin"
+										],
+										"width": 120
+									}
+								],
+								"context": {
+									"allow_rare": true,
+									"allowed_species": [
+										"test_gel"
+									],
+									"areas": [
+										{
+											"allow_rare": false,
+											"allowed_species": [],
+											"region_id": "guardian_area",
+											"reserved": [
+												{
+													"category": "boss",
+													"encounter_id": "sanctuary_guardian",
+													"origin_id": "trial_stage_1",
+													"quest_id": "find_guardian",
+													"species_id": "test_gel"
+												}
+											]
+										}
+									],
+									"biome_ids": [
+										"ruin",
+										"forest"
+									],
+									"version": 1
+								},
+								"dependencies": [],
+								"document_id": "sanctuary",
+								"layers": [
+									{
+										"columns": 2,
+										"heights": [
+											40,
+											40,
+											40,
+											40,
+											40,
+											40
+										],
+										"layer_id": "floor",
+										"locked": false,
+										"material_masks": {},
+										"name": "Santuário",
+										"origin_xz": [
+											0.0,
+											0.0
+										],
+										"protected_regions": [],
+										"rows": 3,
+										"sample_spacing": 400.0
+									}
+								],
+								"name": "Santuário · encontro reservado",
+								"placements": [],
+								"regions": [
+									{
+										"layer_id": "floor",
+										"polygon_xz": [
+											[
+												120,
+												400
+											],
+											[
+												280,
+												400
+											],
+											[
+												280,
+												600
+											],
+											[
+												120,
+												600
+											]
+										],
+										"purpose": "encounter",
+										"region_id": "guardian_area"
+									}
+								],
+								"revision": 1,
+								"schema_version": 1,
+								"sockets": [],
+								"special_surfaces": [],
+								"units": "e07_world"
+							}
+						}
+					],
+					"revision": 1,
+					"schema_version": 1
+				}
+			],
+			"name": "Clareira e santuário",
+			"plan_hash": "bef5471aece5006a40b3776f617136f5719332bdb5a1d63540a584a2a66b2968",
+			"revision": 1,
+			"schema_version": 1,
+			"slots": [
+				{
+					"brush_id": "reserved_902ef15eded2a1ba5dc25d82",
+					"category": "boss",
+					"fixed": true,
+					"origin_id": "trial_stage_1",
+					"position_xyz": [
+						1352.0,
+						40.0,
+						424.0
+					],
+					"site_id": "reserved_902ef15eded2a1ba5dc25d82",
+					"slot_id": "reserved_902ef15eded2a1ba5dc25d82",
+					"species_id": "test_gel",
+					"surface_id": "sanctuary/c_a3e1f4935b0919b3_0_0_1_2"
+				},
+				{
+					"brush_id": "field",
+					"category": "normal",
+					"fixed": true,
+					"origin_id": "trial_stage_1",
+					"position_xyz": [
+						240,
+						0,
+						200
+					],
+					"site_id": "",
+					"slot_id": "scout",
+					"species_id": "test_gel",
+					"surface_id": "land/c_8c6fb1e9e37a1aea_0_0_1_2"
+				},
+				{
+					"brush_id": "group",
+					"category": "normal",
+					"fixed": false,
+					"origin_id": "trial_stage_1",
+					"position_xyz": [
+						1384.0,
+						40.0,
+						136.0
+					],
+					"site_id": "",
+					"slot_id": "slot_4967985057423aa20a1305e6e07c7c62738e61e5",
+					"species_id": "test_gel",
+					"surface_id": "sanctuary/c_a3e1f4935b0919b3_0_0_1_2"
+				},
+				{
+					"brush_id": "field",
+					"category": "normal",
+					"fixed": false,
+					"origin_id": "trial_stage_1",
+					"position_xyz": [
+						312.0,
+						0.0,
+						264.0
+					],
+					"site_id": "",
+					"slot_id": "slot_58f9b2d56b8fb7098a3ae46f17c2559ecfd12f18",
+					"species_id": "test_gel",
+					"surface_id": "land/c_8c6fb1e9e37a1aea_0_0_1_2"
+				},
+				{
+					"brush_id": "group",
+					"category": "normal",
+					"fixed": false,
+					"origin_id": "trial_stage_1",
+					"position_xyz": [
+						1432.0,
+						40.0,
+						168.0
+					],
+					"site_id": "",
+					"slot_id": "slot_6f54e34a0b4212fef54da5ae1fd40003a549880d",
+					"species_id": "test_gel",
+					"surface_id": "sanctuary/c_a3e1f4935b0919b3_0_0_1_2"
+				},
+				{
+					"brush_id": "group",
+					"category": "normal",
+					"fixed": false,
+					"origin_id": "trial_stage_1",
+					"position_xyz": [
+						1400.0,
+						40.0,
+						216.0
+					],
+					"site_id": "",
+					"slot_id": "slot_c48c473e76a09e4b94f4725447514cb551558930",
+					"species_id": "test_gel",
+					"surface_id": "sanctuary/c_a3e1f4935b0919b3_0_0_1_2"
+				},
+				{
+					"brush_id": "field",
+					"category": "normal",
+					"fixed": false,
+					"origin_id": "trial_stage_1",
+					"position_xyz": [
+						232.0,
+						0.0,
+						248.0
+					],
+					"site_id": "",
+					"slot_id": "slot_e2923845b292debba4066824948f5ecf39c329eb",
+					"species_id": "test_gel",
+					"surface_id": "land/c_8c6fb1e9e37a1aea_0_0_1_2"
+				}
+			]
+		}
+	],
+	"revision": 1,
+	"schema_version": 1
+}

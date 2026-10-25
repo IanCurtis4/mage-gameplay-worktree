@@ -1,0 +1,188 @@
+[
+  {
+    "finished_utc": "2026-10-25T14:37:57.8870493Z",
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "aborted": false,
+    "name": "import",
+    "result": null,
+    "timed_out": false,
+    "started_utc": "2026-10-25T14:37:49.3560106Z",
+    "ok": true,
+    "output_sha256": "F94E07CF50F3C6D8F150EA56B86DD7F1685BCE424D4A29E948153889F57EE672",
+    "exit_code": 0
+  },
+  {
+    "finished_utc": "2026-10-25T14:38:13.6656384Z",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_candidate_test.gd"
+    ],
+    "aborted": false,
+    "name": "candidate",
+    "result": {
+      "checks": [
+        {
+          "id": "legacy_hash_unchanged",
+          "ok": true
+        },
+        {
+          "id": "context_source_valid",
+          "ok": true
+        },
+        {
+          "id": "context_compile",
+          "ok": true
+        },
+        {
+          "id": "context_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "biome_rejected",
+          "ok": true
+        },
+        {
+          "id": "manual_override_compiles",
+          "ok": true
+        },
+        {
+          "id": "manual_override_warns",
+          "ok": true
+        },
+        {
+          "id": "manual_override_exported",
+          "ok": true
+        },
+        {
+          "id": "override_bundle_preserved",
+          "ok": true
+        },
+        {
+          "id": "solver_does_not_inherit_override",
+          "ok": true
+        },
+        {
+          "id": "assembler_does_not_inherit_override",
+          "ok": true
+        },
+        {
+          "id": "override_reason_required",
+          "ok": true
+        },
+        {
+          "id": "recipe_override_rejected",
+          "ok": true
+        },
+        {
+          "id": "seed_context_contradiction",
+          "ok": true
+        },
+        {
+          "id": "seed_0",
+          "ok": true
+        },
+        {
+          "id": "seed_-1",
+          "ok": true
+        },
+        {
+          "id": "seed_9223372036854775807",
+          "ok": true
+        },
+        {
+          "id": "seed_-9223372036854775808",
+          "ok": true
+        },
+        {
+          "id": "population_context_plan",
+          "ok": true
+        },
+        {
+          "id": "no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "population_context_compile",
+          "ok": true
+        },
+        {
+          "id": "species_policy_enforced",
+          "ok": true
+        },
+        {
+          "id": "manual_species_exception",
+          "ok": true
+        },
+        {
+          "id": "rare_generation_allowed",
+          "ok": true
+        },
+        {
+          "id": "rare_theme_is_not_gate",
+          "ok": true
+        },
+        {
+          "id": "rare_policy_enforced",
+          "ok": true
+        },
+        {
+          "id": "manual_rare_without_theme_allowed",
+          "ok": true
+        },
+        {
+          "id": "reservation_realized",
+          "ok": true
+        },
+        {
+          "id": "reservation_compiles",
+          "ok": true
+        },
+        {
+          "id": "reservation_fixed_unique",
+          "ok": true
+        },
+        {
+          "id": "reservation_quest_passive",
+          "ok": true
+        },
+        {
+          "id": "reservation_regeneration_idempotent",
+          "ok": true
+        },
+        {
+          "id": "reservation_required_on_compile",
+          "ok": true
+        },
+        {
+          "id": "ordinary_spawn_cannot_take_reserved_area",
+          "ok": true
+        },
+        {
+          "id": "reservation_editorial_reference_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "missing_region_rejected",
+          "ok": true
+        },
+        {
+          "id": "representative_geometry",
+          "ok": false
+        }
+      ],
+      "count": 37,
+      "ok": false
+    },
+    "timed_out": false,
+    "started_utc": "2026-10-25T14:37:57.9084065Z",
+    "ok": false,
+    "output_sha256": "2BC6F2732E75FB1FDFEA7A2A5DEBBC8DC6473643AB3C77A083B015A1BDA30991",
+    "exit_code": 1
+  }
+]

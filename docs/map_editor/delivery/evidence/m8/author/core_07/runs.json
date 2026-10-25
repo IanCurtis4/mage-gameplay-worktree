@@ -1,0 +1,188 @@
+[
+  {
+    "ok": true,
+    "finished_utc": "2026-10-25T14:36:26.2062675Z",
+    "timed_out": false,
+    "exit_code": 0,
+    "started_utc": "2026-10-25T14:36:18.0345843Z",
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "output_sha256": "603B6F7A9E37F2CAA83DF9B2B7832D6371C57996C0C5164F45C8F2D6450D5C88",
+    "result": null,
+    "aborted": false,
+    "name": "import"
+  },
+  {
+    "ok": false,
+    "finished_utc": "2026-10-25T14:36:41.5497281Z",
+    "timed_out": false,
+    "exit_code": 1,
+    "started_utc": "2026-10-25T14:36:26.2279058Z",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_candidate_test.gd"
+    ],
+    "output_sha256": "49F4FF2FA713D6B7AF4B958DC808113C038C89592AE699C3E6E8939274124F2B",
+    "result": {
+      "checks": [
+        {
+          "id": "legacy_hash_unchanged",
+          "ok": true
+        },
+        {
+          "id": "context_source_valid",
+          "ok": true
+        },
+        {
+          "id": "context_compile",
+          "ok": true
+        },
+        {
+          "id": "context_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "biome_rejected",
+          "ok": true
+        },
+        {
+          "id": "manual_override_compiles",
+          "ok": true
+        },
+        {
+          "id": "manual_override_warns",
+          "ok": true
+        },
+        {
+          "id": "manual_override_exported",
+          "ok": true
+        },
+        {
+          "id": "override_bundle_preserved",
+          "ok": true
+        },
+        {
+          "id": "solver_does_not_inherit_override",
+          "ok": true
+        },
+        {
+          "id": "assembler_does_not_inherit_override",
+          "ok": true
+        },
+        {
+          "id": "override_reason_required",
+          "ok": true
+        },
+        {
+          "id": "recipe_override_rejected",
+          "ok": true
+        },
+        {
+          "id": "seed_context_contradiction",
+          "ok": true
+        },
+        {
+          "id": "seed_0",
+          "ok": true
+        },
+        {
+          "id": "seed_-1",
+          "ok": true
+        },
+        {
+          "id": "seed_9223372036854775807",
+          "ok": true
+        },
+        {
+          "id": "seed_-9223372036854775808",
+          "ok": true
+        },
+        {
+          "id": "population_context_plan",
+          "ok": true
+        },
+        {
+          "id": "no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "population_context_compile",
+          "ok": true
+        },
+        {
+          "id": "species_policy_enforced",
+          "ok": true
+        },
+        {
+          "id": "manual_species_exception",
+          "ok": true
+        },
+        {
+          "id": "rare_generation_allowed",
+          "ok": true
+        },
+        {
+          "id": "rare_theme_is_not_gate",
+          "ok": true
+        },
+        {
+          "id": "rare_policy_enforced",
+          "ok": true
+        },
+        {
+          "id": "manual_rare_without_theme_allowed",
+          "ok": true
+        },
+        {
+          "id": "reservation_realized",
+          "ok": true
+        },
+        {
+          "id": "reservation_compiles",
+          "ok": true
+        },
+        {
+          "id": "reservation_fixed_unique",
+          "ok": true
+        },
+        {
+          "id": "reservation_quest_passive",
+          "ok": true
+        },
+        {
+          "id": "reservation_regeneration_idempotent",
+          "ok": true
+        },
+        {
+          "id": "reservation_required_on_compile",
+          "ok": true
+        },
+        {
+          "id": "ordinary_spawn_cannot_take_reserved_area",
+          "ok": true
+        },
+        {
+          "id": "reservation_editorial_reference_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "missing_region_rejected",
+          "ok": true
+        },
+        {
+          "id": "representative_geometry",
+          "ok": false
+        }
+      ],
+      "count": 37,
+      "ok": false
+    },
+    "aborted": false,
+    "name": "candidate"
+  }
+]

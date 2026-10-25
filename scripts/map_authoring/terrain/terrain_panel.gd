@@ -42,6 +42,7 @@ var connector_y: SpinBox
 var connector_z: SpinBox
 var connector_width: SpinBox
 var connector_headroom: SpinBox
+var connector_tags: LineEdit
 
 func _ready() -> void:
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -105,6 +106,7 @@ func _ready() -> void:
 	connector_direction = OptionButton.new()
 	for caption: String in ["Ida e volta","Só entrada","Só saída"]: connector_direction.add_item(caption)
 	connection_names.add_child(connector_direction)
+	connector_tags = LineEdit.new(); connector_tags.placeholder_text = "Compatibilidade · tags separadas por vírgula"; connector_tags.text = "map_editor"; connector_tags.custom_minimum_size.x = 230; connections.add_child(connector_tags)
 	var connection_values := HFlowContainer.new(); connections.add_child(connection_values)
 	connector_x = _number(connection_values,"X",-8192,8192,0)
 	connector_y = _number(connection_values,"Altura",-8192,8192,0)
@@ -118,6 +120,7 @@ func _ready() -> void:
 	for control: OptionButton in [mode,shape,material_choice]: control.item_selected.connect(func(_i: int) -> void: _options_changed())
 	for control: SpinBox in [radius,strength,hardness,target,end_height]: control.value_changed.connect(func(_v: float) -> void: _options_changed())
 	_options_changed()
+	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"terrain",func() -> Dictionary: return session.document().to_data() if session != null else {},null,{"Pincel":[row,settings],"Nova grade":[grid],"Ponte":[bridge],"Conexões":[connection_toggle,connections]})
 
 func _number(parent: Node, caption: String, low: float, high: float, value: float, step: float = 1.0) -> SpinBox:
 	var label := Label.new(); label.text = caption; parent.add_child(label)
@@ -242,6 +245,7 @@ func _select_connector(index: int) -> void:
 	connector_width.value = connector.width; connector_headroom.value = connector.headroom
 	connector_side.select(0 if connector.normal_xyz[0] < 0 else (1 if connector.normal_xyz[0] > 0 else (2 if connector.normal_xyz[2] < 0 else 3)))
 	connector_direction.select(["both","in","out"].find(connector.direction))
+	connector_tags.text = ", ".join(connector.tags)
 
 func _surface_locked(data: Dictionary, id: String) -> bool:
 	var layer_id := id
@@ -258,6 +262,10 @@ func save_connector() -> void:
 	if _surface_locked(data,surface_id): status.text = "Destrave a camada para editar a conexão."; return
 	var normals: Array = [[-1,0,0],[1,0,0],[0,0,-1],[0,0,1]]
 	var next := {"connector_id":connector_id.text.strip_edges(),"surface_id":surface_id,"position_xyz":[connector_x.value,connector_y.value,connector_z.value],"normal_xyz":normals[connector_side.selected],"width":connector_width.value,"headroom":connector_headroom.value,"kind":"walk","tags":["map_editor"],"direction":["both","in","out"][connector_direction.selected]}
+	next.tags = []
+	for tag: String in connector_tags.text.split(",",false):
+		var value := tag.strip_edges()
+		if value not in next.tags: next.tags.append(value)
 	for i: int in data.connectors.size():
 		if data.connectors[i].connector_id == next.connector_id:
 			if _surface_locked(data,data.connectors[i].surface_id): status.text = "Destrave a camada de origem da conexão."; return

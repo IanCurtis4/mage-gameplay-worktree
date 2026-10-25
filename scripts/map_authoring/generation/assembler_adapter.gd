@@ -11,8 +11,11 @@ const Terrain = preload("res://scripts/map_authoring/compiler/terrain_compiler.g
 static func build(source: Dictionary) -> Dictionary:
 	var checked := Document.validate(source)
 	if not checked.ok: return checked
+	if not source.map.get("context",{}).get("overrides",[]).is_empty(): return Document.fail("context_override_invalid")
 	var domains := Document.domains(source)
 	for id: String in domains:
+		var instance := Compiler._find(source.map.instances,"instance_id",id)
+		domains[id] = domains[id].filter(func(option: Dictionary) -> bool: return Compiler.Context.eligible(source.map,instance,Compiler._find(source.map.pieces,"piece_hash",option.piece_hash).source,true).ok)
 		if domains[id].is_empty(): return Document.fail("contradiction",id)
 	var ids: Array = domains.keys(); ids.sort()
 	var root: String = ids[0]

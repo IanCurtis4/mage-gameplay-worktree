@@ -121,6 +121,8 @@ func _ready() -> void:
 		if session.dirty(): preserve_draft())
 	add_child(timer)
 	_new_document()
+	preload("res://scripts/map_authoring/context/context_panel.gd").mount(self,session,terrain)
+	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"piece",func() -> Dictionary: return session.document().to_data(),terrain.canvas)
 
 func _button(parent: Node, text: String, action: Callable) -> Button:
 	var button := Button.new()

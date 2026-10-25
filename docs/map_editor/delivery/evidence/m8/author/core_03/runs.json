@@ -1,0 +1,35 @@
+[
+  {
+    "aborted": false,
+    "name": "import",
+    "finished_utc": "2026-10-25T14:32:13.7833555Z",
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "result": null,
+    "exit_code": 0,
+    "started_utc": "2026-10-25T14:32:05.6474088Z",
+    "timed_out": false,
+    "ok": true,
+    "output_sha256": "D55F0C7FD07F1C4FD84A0591F69CF1E02030BDAC33A5117730B00A8918B20F1A"
+  },
+  {
+    "aborted": true,
+    "name": "candidate",
+    "finished_utc": "2026-10-25T14:32:18.4127134Z",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_candidate_test.gd"
+    ],
+    "result": null,
+    "exit_code": -1,
+    "started_utc": "2026-10-25T14:32:13.8101729Z",
+    "timed_out": false,
+    "ok": false,
+    "output_sha256": "85ABF6BF9B2A67AA558443496A219208E03965231A39366D148C9693AFB2FC33"
+  }
+]

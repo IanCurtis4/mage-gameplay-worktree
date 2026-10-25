@@ -1,0 +1,19 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+M8_CHECK legacy_hash_unchanged true
+M8_CHECK context_source_valid false
+M8_CHECK context_compile false
+M8_CHECK context_roundtrip false
+M8_CHECK biome_rejected false
+M8_CHECK manual_override_compiles false
+M8_CHECK manual_override_warns false
+M8_CHECK manual_override_exported false
+M8_CHECK override_bundle_preserved false
+M8_CHECK solver_does_not_inherit_override false
+M8_CHECK assembler_does_not_inherit_override false
+M8_CHECK override_reason_required true
+M8_CHECK recipe_override_rejected true
+SCRIPT ERROR: Invalid access to property or key 'diagnostic' on a base object of type 'Dictionary'.
+   at: run (res://tests/map_editor_candidate_test.gd:61)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/map_editor_candidate_test.gd:61)

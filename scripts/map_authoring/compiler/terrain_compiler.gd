@@ -53,8 +53,22 @@ static func failure(code: String, entity: String = "", field: String = "terrain"
 	var messages := {"terrain_empty":"Adicione uma camada de terreno.","material_missing":"Um material de terreno está ausente.","terrain_sample_limit":"A fonte excede o orçamento de 65536 quadrados de grade nesta sessão.","terrain_limit_exceeded":"O relevo excede o orçamento de 1024 suportes gerados. Reduza a densidade ou simplifique o relevo.","source_invalid":"Corrija os diagnósticos da fonte.","source_non_finite":"A fonte contém um número inválido.","capability_unsupported":"Esta peça usa uma capacidade ainda não disponível na compilação de terreno.","material_unsupported":"Use os materiais Grama e Terra nesta entrega.","geometry_invalid":"O piso precisa ser convexo e plano.","geometry_overlap":"Há pisos sobrepostos na mesma altura.","geometry_non_manifold":"Mais de dois pisos disputam a mesma borda.","insufficient_headroom":"Não há folga para o corpo de teste.","slope_too_steep":"A inclinação supera 45°; alongue a rampa.","geometry_precision_limit":"A coordenada excede o domínio técnico de 8192 unidades.","connector_invalid":"O conector não coincide com uma abertura válida.","connector_ambiguous":"O conector coincide com mais de uma borda.","socket_invalid":"O ponto marcado não tem suporte ou tipo válido.","route_unreachable":"Há uma região sem ligação para o corpo de teste.","cancelled":"Compilação cancelada.","stale_source":"A fonte mudou; compile novamente."}
 	return Schema.result(false, code, [{"code":code,"severity":"error","entity_id":entity,"field":field,"message":messages.get(code,"Não foi possível concluir a compilação."),"suggestion":"Corrija a região indicada e compile novamente."}])
 
+static func _valid_authoring_value(value: Variant, depth: int = 0) -> bool:
+	# GDScript dot assignment introduces StringName keys; the source reader
+	# canonicalizes them to text. Keep the same finite-value preflight for both APIs.
+	if depth > 64: return false
+	if value is Dictionary:
+		for key: Variant in value:
+			if not (key is String or key is StringName) or not _valid_authoring_value(value[key],depth+1): return false
+		return true
+	if value is Array:
+		for item: Variant in value:
+			if not _valid_authoring_value(item,depth+1): return false
+		return true
+	return Canonical.valid(value,depth)
+
 static func compile(source: Dictionary, cancellation: Callable = Callable()) -> Dictionary:
-	if not Canonical.valid(source): return failure("source_non_finite")
+	if not _valid_authoring_value(source): return failure("source_non_finite")
 	# Cheap bounded preflight before decimal parsing/copying an over-budget height field.
 	if source.get("layers") is Array:
 		var preflight_quads := 0.0

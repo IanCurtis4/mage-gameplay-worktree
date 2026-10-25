@@ -1,0 +1,14 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Static function "export_request()" not found in base "res://scripts/map_authoring/exchange/exchange.gd".
+   at: GDScript::reload (res://tests/map_editor_candidate_test.gd:51)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "request" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_candidate_test.gd:51)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "denied" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_candidate_test.gd:80)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "missing" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_candidate_test.gd:97)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "occupying" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_candidate_test.gd:99)
+ERROR: Failed to load script "res://tests/map_editor_candidate_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

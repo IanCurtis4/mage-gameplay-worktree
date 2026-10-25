@@ -3,6 +3,7 @@ extends RefCounted
 const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 const StrictJSON = preload("res://scripts/map_authoring/io/strict_json.gd")
 const Piece = preload("res://scripts/map_authoring/document/source_document.gd")
+const Context = preload("res://scripts/map_authoring/context/piece_context.gd")
 const ROOT := {"schema_version":"int","document_id":"id","revision":"int","name":"string","mode":"id","barrier_profile":"id","pieces":"array","instances":"array","links":"array"}
 const INSTANCE := {"instance_id":"id","piece_hash":"hash","position_xyz":"v3","rotation_quarters":"number"}
 const LINK := {"link_id":"id","a_instance":"id","a_connector":"id","b_instance":"id","b_connector":"id"}
@@ -24,7 +25,8 @@ static func read(bytes: PackedByteArray) -> Dictionary:
 
 static func validate(data: Variant) -> Dictionary:
 	var errors: Array = []
-	Schema._shape(data,ROOT,"map",errors)
+	var root_fields := ROOT.duplicate(); if data is Dictionary and data.has("context"): root_fields.context = "object"
+	Schema._shape(data,root_fields,"map",errors)
 	if not errors.is_empty(): return Schema.result(false,"map_invalid",errors)
 	if data.schema_version != 1: return Schema.result(false,"map_version_unsupported")
 	if data.mode not in ["manual","recipe"]: return Schema.result(false,"map_mode_unsupported")
@@ -44,6 +46,9 @@ static func validate(data: Variant) -> Dictionary:
 		if not pieces.has(instance.piece_hash): return Schema.result(false,"piece_reference_missing")
 		if instance.rotation_quarters != floor(instance.rotation_quarters) or instance.rotation_quarters < 0 or instance.rotation_quarters > 3 or instance.position_xyz[1] != 0: return Schema.result(false,"transform_unsupported")
 		instances[instance.instance_id] = true
+	if data.has("context"):
+		var checked := Context.validate_map(data.context,data.instances,data.mode,Schema)
+		if not checked.ok: return checked
 	for link: Variant in data.links:
 		Schema._shape(link,LINK,"link",errors)
 		if not errors.is_empty(): return Schema.result(false,"link_invalid",errors)

@@ -76,6 +76,8 @@ func _ready() -> void:
 	session.changed.connect(refresh)
 	var timer := Timer.new(); timer.wait_time = 10; timer.autostart = true; timer.timeout.connect(preserve_draft); add_child(timer)
 	refresh()
+	preload("res://scripts/map_authoring/context/map_context_panel.gd").mount(self,session)
+	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"map",func() -> Dictionary: return session.data,canvas)
 func _button(parent: Node, text: String, action: Callable) -> Button:
 	var button := Button.new(); button.text = text; button.pressed.connect(action); parent.add_child(button); return button
 func open_population() -> void:
@@ -163,6 +165,7 @@ func refresh() -> void:
 	for link: Dictionary in session.data.links: links.add_item(link.link_id+": "+link.a_instance+" → "+link.b_instance)
 	if port_b.item_count > 1: port_b.select(1)
 	status.text = "Rascunho alterado; compile para validar emendas e testar."; problems.clear()
+	for warning: Dictionary in Compiler.Context.warnings(session.data): problems.add_item(warning.message); problems.set_item_metadata(problems.item_count-1,warning)
 func select_instance(index: int) -> void:
 	var instance: Dictionary = session.data.instances[index]
 	x.value = instance.position_xyz[0]; z.value = instance.position_xyz[2]; rotation_choice.select(instance.rotation_quarters); canvas.selected_instance = instance.instance_id; canvas.redraw()
@@ -185,6 +188,7 @@ func remove_instance() -> void:
 	var data := session.data.duplicate(true)
 	data.instances = data.instances.filter(func(item: Dictionary) -> bool: return item.instance_id != _pending_remove)
 	data.links = data.links.filter(func(item: Dictionary) -> bool: return _pending_remove not in [item.a_instance,item.b_instance])
+	if data.has("context"): data.context.overrides = data.context.overrides.filter(func(item: Dictionary) -> bool: return item.instance_id != _pending_remove)
 	show_result(session.apply(data))
 func add_link() -> void:
 	if port_a.selected < 0 or port_b.selected < 0: return

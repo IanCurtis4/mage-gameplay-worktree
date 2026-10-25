@@ -1,0 +1,212 @@
+[
+  {
+    "name": "import",
+    "aborted": false,
+    "finished_utc": "2026-10-25T14:48:50.1090001Z",
+    "timed_out": false,
+    "started_utc": "2026-10-25T14:48:41.4049375Z",
+    "output_sha256": "C00D11B5537B0D315DF3375E6B3820EC21D7D9B4561A16085EE664D736A9C9A7",
+    "result": null,
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "exit_code": 0,
+    "ok": true
+  },
+  {
+    "name": "native_ui",
+    "aborted": false,
+    "finished_utc": "2026-10-25T14:49:40.3100911Z",
+    "timed_out": false,
+    "started_utc": "2026-10-25T14:48:50.1642692Z",
+    "output_sha256": "2098CAB73F6AACD20BC45C0F8171054A1D548EADC26486B4E72B4B92C4CAB9B4",
+    "result": {
+      "checks": [
+        {
+          "id": "ux_default",
+          "ok": true
+        },
+        {
+          "id": "ux_menus_grouped",
+          "ok": true
+        },
+        {
+          "id": "ux_original_actions_hidden",
+          "ok": true
+        },
+        {
+          "id": "ux_terrain_dropdown",
+          "ok": true
+        },
+        {
+          "id": "ux_terrain_noise_reduced",
+          "ok": true
+        },
+        {
+          "id": "ax_action_requires_mode",
+          "ok": true
+        },
+        {
+          "id": "ax_flat_actions",
+          "ok": true
+        },
+        {
+          "id": "ax_overlay_on_viewport",
+          "ok": true
+        },
+        {
+          "id": "ax_snapshot_source",
+          "ok": true
+        },
+        {
+          "id": "ax_shared_mode",
+          "ok": true
+        },
+        {
+          "id": "ax_missing_action",
+          "ok": true
+        },
+        {
+          "id": "ax_disabled_action",
+          "ok": true
+        },
+        {
+          "id": "ax_existing_command_dispatch",
+          "ok": true
+        },
+        {
+          "id": "toggle_preserves_document_history",
+          "ok": true
+        },
+        {
+          "id": "toggle_preserves_hash_validation_dirty",
+          "ok": true
+        },
+        {
+          "id": "invalid_mode_rejected",
+          "ok": true
+        },
+        {
+          "id": "capture_piece_ux",
+          "ok": true
+        },
+        {
+          "id": "menu_metadata_stable",
+          "ok": true
+        },
+        {
+          "id": "snapshot_is_copy",
+          "ok": true
+        },
+        {
+          "id": "piece_context_gui_saves_biomes",
+          "ok": true
+        },
+        {
+          "id": "piece_context_gui_saves_area_reservation",
+          "ok": true
+        },
+        {
+          "id": "piece_context_undo",
+          "ok": true
+        },
+        {
+          "id": "native_map_compiles",
+          "ok": true
+        },
+        {
+          "id": "context_action_exposed",
+          "ok": true
+        },
+        {
+          "id": "map_context_gui_exception",
+          "ok": true
+        },
+        {
+          "id": "map_context_gui_warning",
+          "ok": true
+        },
+        {
+          "id": "capture_map_ux",
+          "ok": true
+        },
+        {
+          "id": "capture_map_ax",
+          "ok": true
+        },
+        {
+          "id": "ux_ax_call_refused",
+          "ok": true
+        },
+        {
+          "id": "ax_test_calls_real_authority",
+          "ok": true
+        },
+        {
+          "id": "ax_test_stops",
+          "ok": true
+        },
+        {
+          "id": "native_ax_population",
+          "ok": true
+        },
+        {
+          "id": "native_switch_pure_population",
+          "ok": true
+        },
+        {
+          "id": "exchange_binding_population",
+          "ok": true
+        },
+        {
+          "id": "test_tools_hidden_in_ux",
+          "ok": true
+        },
+        {
+          "id": "native_population_compiles",
+          "ok": true
+        },
+        {
+          "id": "capture_population_ux",
+          "ok": true
+        },
+        {
+          "id": "native_ax_patrol",
+          "ok": true
+        },
+        {
+          "id": "native_switch_pure_patrol",
+          "ok": true
+        },
+        {
+          "id": "exchange_binding_patrol",
+          "ok": true
+        },
+        {
+          "id": "native_ax_generation",
+          "ok": true
+        },
+        {
+          "id": "native_switch_pure_generation",
+          "ok": true
+        },
+        {
+          "id": "exchange_binding_generation",
+          "ok": true
+        }
+      ],
+      "count": 43,
+      "ok": true
+    },
+    "arguments": [
+      "--editor",
+      "--rendering-method",
+      "gl_compatibility"
+    ],
+    "exit_code": 0,
+    "ok": true
+  }
+]

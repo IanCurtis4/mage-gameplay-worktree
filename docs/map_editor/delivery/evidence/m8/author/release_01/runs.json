@@ -1,0 +1,83 @@
+[
+  {
+    "result": null,
+    "timed_out": false,
+    "aborted": false,
+    "started_utc": "2026-10-25T15:09:25.6248253Z",
+    "output_sha256": "8D10E51F4765C0F5CBF06D90BCBDA96C1527EA22B227AD099F249618FECE8A54",
+    "ok": true,
+    "exit_code": 0,
+    "finished_utc": "2026-10-25T15:09:33.7720657Z",
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "name": "import"
+  },
+  {
+    "result": null,
+    "timed_out": false,
+    "aborted": false,
+    "started_utc": "2026-10-25T15:09:33.8037938Z",
+    "output_sha256": "FC8D6E57CAA06DF6B59905D5D0BF3909A1F17729970028F2AE870A572D810B7A",
+    "ok": true,
+    "exit_code": 0,
+    "finished_utc": "2026-10-25T15:09:56.4586829Z",
+    "arguments": [
+      "--headless",
+      "--export-release",
+      "Windows Desktop",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\m8_release\\RagRPG-Map-Candidate.exe"
+    ],
+    "name": "export_release"
+  },
+  {
+    "result": {
+      "checks": [
+        {
+          "id": "new_release_process",
+          "ok": true
+        },
+        {
+          "id": "immutable_package",
+          "ok": true
+        },
+        {
+          "id": "seven_real_actors",
+          "ok": true
+        },
+        {
+          "id": "patrol_bound",
+          "ok": true
+        },
+        {
+          "id": "traverse_0.0",
+          "ok": true
+        },
+        {
+          "id": "traverse_40.0",
+          "ok": true
+        }
+      ],
+      "count": 6,
+      "engine": "4.7.2-stable (official)",
+      "ok": true,
+      "package_hash": "2a80bdbcc5d2b70f3119e227d362c441389feb5d302e0047c4a2dc98cd9e9021",
+      "source_hash": "a208ac25d0ca039b22d1a7c7c4537ee4bf04f66ee0f747bfe07cd82fd9d07870"
+    },
+    "timed_out": false,
+    "aborted": false,
+    "started_utc": "2026-10-25T15:09:56.4704478Z",
+    "output_sha256": "42DDD43B835756A453477CB49CE6A0B2590D521CF21489F3D87E4E02845C47C7",
+    "ok": true,
+    "exit_code": 0,
+    "finished_utc": "2026-10-25T15:10:06.5845537Z",
+    "arguments": [
+      "--",
+      "--m8-probe"
+    ],
+    "name": "release"
+  }
+]

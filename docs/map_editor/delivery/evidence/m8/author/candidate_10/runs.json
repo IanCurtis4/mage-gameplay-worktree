@@ -1,0 +1,248 @@
+[
+  {
+    "finished_utc": "2026-10-25T15:10:44.2548761Z",
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "started_utc": "2026-10-25T15:10:35.9998078Z",
+    "exit_code": 0,
+    "name": "import",
+    "result": null,
+    "aborted": false,
+    "ok": true,
+    "output_sha256": "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+    "timed_out": false
+  },
+  {
+    "finished_utc": "2026-10-25T15:11:10.4690379Z",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_candidate_test.gd"
+    ],
+    "started_utc": "2026-10-25T15:10:44.3140108Z",
+    "exit_code": 0,
+    "name": "candidate",
+    "result": {
+      "checks": [
+        {
+          "id": "legacy_hash_unchanged",
+          "ok": true
+        },
+        {
+          "id": "context_source_valid",
+          "ok": true
+        },
+        {
+          "id": "context_compile",
+          "ok": true
+        },
+        {
+          "id": "context_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "textual_key_identity",
+          "ok": true
+        },
+        {
+          "id": "malformed_instance_rejects_without_script_error",
+          "ok": true
+        },
+        {
+          "id": "future_context_rejected",
+          "ok": true
+        },
+        {
+          "id": "biome_rejected",
+          "ok": true
+        },
+        {
+          "id": "manual_override_compiles",
+          "ok": true
+        },
+        {
+          "id": "manual_override_warns",
+          "ok": true
+        },
+        {
+          "id": "manual_override_exported",
+          "ok": true
+        },
+        {
+          "id": "override_exact_payload",
+          "ok": true
+        },
+        {
+          "id": "override_is_per_instance",
+          "ok": true
+        },
+        {
+          "id": "override_is_per_rule",
+          "ok": true
+        },
+        {
+          "id": "override_never_bypasses_seam",
+          "ok": true
+        },
+        {
+          "id": "override_bundle_preserved",
+          "ok": true
+        },
+        {
+          "id": "override_import_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "solver_does_not_inherit_override",
+          "ok": true
+        },
+        {
+          "id": "assembler_does_not_inherit_override",
+          "ok": true
+        },
+        {
+          "id": "override_reason_required",
+          "ok": true
+        },
+        {
+          "id": "recipe_override_rejected",
+          "ok": true
+        },
+        {
+          "id": "seed_context_contradiction",
+          "ok": true
+        },
+        {
+          "id": "seed_0",
+          "ok": true
+        },
+        {
+          "id": "seed_-1",
+          "ok": true
+        },
+        {
+          "id": "seed_9223372036854775807",
+          "ok": true
+        },
+        {
+          "id": "seed_-9223372036854775808",
+          "ok": true
+        },
+        {
+          "id": "population_context_plan",
+          "ok": true
+        },
+        {
+          "id": "no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "population_context_compile",
+          "ok": true
+        },
+        {
+          "id": "species_policy_enforced",
+          "ok": true
+        },
+        {
+          "id": "manual_species_exception",
+          "ok": true
+        },
+        {
+          "id": "rare_generation_allowed",
+          "ok": true
+        },
+        {
+          "id": "rare_theme_is_not_gate",
+          "ok": true
+        },
+        {
+          "id": "rare_policy_enforced",
+          "ok": true
+        },
+        {
+          "id": "manual_rare_exception",
+          "ok": true
+        },
+        {
+          "id": "manual_rare_without_theme_allowed",
+          "ok": true
+        },
+        {
+          "id": "reservation_realized",
+          "ok": true
+        },
+        {
+          "id": "reservation_compiles",
+          "ok": true
+        },
+        {
+          "id": "reservation_fixed_unique",
+          "ok": true
+        },
+        {
+          "id": "reservation_quest_passive",
+          "ok": true
+        },
+        {
+          "id": "quest_does_not_change_objectives_or_rewards",
+          "ok": true
+        },
+        {
+          "id": "reservation_regeneration_idempotent",
+          "ok": true
+        },
+        {
+          "id": "reservation_required_on_compile",
+          "ok": true
+        },
+        {
+          "id": "ordinary_spawn_cannot_take_reserved_area",
+          "ok": true
+        },
+        {
+          "id": "ordinary_pool_excludes_reservation_directly",
+          "ok": true
+        },
+        {
+          "id": "ordinary_population_stays_outside_reservation",
+          "ok": true
+        },
+        {
+          "id": "reservation_editorial_reference_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "missing_region_rejected",
+          "ok": true
+        },
+        {
+          "id": "representative_geometry",
+          "ok": true
+        },
+        {
+          "id": "representative_encounters",
+          "ok": true
+        },
+        {
+          "id": "representative_patrol",
+          "ok": true
+        },
+        {
+          "id": "representative_package_published",
+          "ok": true
+        }
+      ],
+      "count": 52,
+      "ok": true
+    },
+    "aborted": false,
+    "ok": true,
+    "output_sha256": "584E38473996A33C1E96C324A4CE6971C07F11F62AF10A8AB37F81815B953241",
+    "timed_out": false
+  }
+]

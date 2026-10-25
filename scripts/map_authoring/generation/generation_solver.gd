@@ -50,6 +50,7 @@ func solve(source: Dictionary, enabled: bool = false, cancel_callback: Callable 
 	var checked := Document.validate(source)
 	if not checked.ok: return checked
 	request = checked.data; cancellation = cancel_callback
+	if not request.map.get("context",{}).get("overrides",[]).is_empty(): return Document.fail("context_override_invalid")
 	operations = 0; backtracks = 0; validations = 0; stopped = ""; last_entity = ""; last_rule = "domain"
 	var result := _search(Document.domains(request))
 	if not result.ok:
@@ -101,6 +102,13 @@ func _propagate(domains: Dictionary) -> bool:
 		changed = false
 		for id: String in domains:
 			if not _spend(id,"domain"): return false
+			var kept: Array = []
+			for option: Dictionary in domains[id]:
+				var instance := Compiler._find(request.map.instances,"instance_id",id)
+				var piece := Compiler._find(request.map.pieces,"piece_hash",option.piece_hash)
+				if Compiler.Context.eligible(request.map,instance,piece.source,true).ok: kept.append(option)
+			if kept.size() != domains[id].size(): changed = true; last_rule = "context_biome"; last_entity = id
+			domains[id] = kept
 			if domains[id].is_empty(): return false
 		for link: Dictionary in links:
 			for forward: bool in [true,false]:

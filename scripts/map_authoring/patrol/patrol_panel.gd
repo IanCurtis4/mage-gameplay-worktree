@@ -66,6 +66,7 @@ func _ready() -> void:
 	confirmation = ConfirmationDialog.new(); confirmation.confirmed.connect(confirm_remove); add_child(confirmation)
 	session.changed.connect(changed); _new_draft(); refresh()
 	var timer := Timer.new(); timer.wait_time = 10; timer.autostart = true; timer.timeout.connect(preserve_draft); add_child(timer)
+	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"patrol",func() -> Dictionary: return session.data,canvas)
 func button(parent: Node, caption: String, callback: Callable) -> void:
 	var b := Button.new(); b.text = caption; b.pressed.connect(callback); parent.add_child(b)
 func _new_draft() -> void:

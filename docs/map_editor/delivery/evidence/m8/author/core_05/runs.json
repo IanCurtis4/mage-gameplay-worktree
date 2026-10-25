@@ -1,0 +1,48 @@
+[
+  {
+    "started_utc": "2026-10-25T14:33:44.6921184Z",
+    "ok": true,
+    "aborted": false,
+    "result": null,
+    "finished_utc": "2026-10-25T14:33:52.7273458Z",
+    "output_sha256": "603B6F7A9E37F2CAA83DF9B2B7832D6371C57996C0C5164F45C8F2D6450D5C88",
+    "exit_code": 0,
+    "name": "import",
+    "timed_out": false,
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ]
+  },
+  {
+    "started_utc": "2026-10-25T14:33:52.7460607Z",
+    "ok": false,
+    "aborted": false,
+    "result": {
+      "checks": [
+        {
+          "id": "legacy_hash_unchanged",
+          "ok": true
+        },
+        {
+          "id": "context_source_valid",
+          "ok": false
+        }
+      ],
+      "count": 2,
+      "ok": false
+    },
+    "finished_utc": "2026-10-25T14:33:57.1810752Z",
+    "output_sha256": "4FD6DB244108F34D5326328CD0991DA80EF59D58BB8760DC32D9AF26EACC1C8A",
+    "exit_code": 1,
+    "name": "candidate",
+    "timed_out": false,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_candidate_test.gd"
+    ]
+  }
+]

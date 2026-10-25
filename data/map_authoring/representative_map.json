@@ -1,0 +1,322 @@
+{
+	"barrier_profile": "ruin_envelope_v1",
+	"context": {
+		"biome_id": "ruin",
+		"overrides": [],
+		"version": 1
+	},
+	"document_id": "representative_map",
+	"instances": [
+		{
+			"instance_id": "land",
+			"piece_hash": "474a7f91532009d0cec13227fbdb6c64c2a4fee7d24df487e49ecd1fd15c3607",
+			"position_xyz": [
+				0,
+				0,
+				0
+			],
+			"rotation_quarters": 0
+		},
+		{
+			"instance_id": "sanctuary",
+			"piece_hash": "68ad7fb4267c95f6148555743412efdb628a9e5d787471ada3e47ef8d84f82b4",
+			"position_xyz": [
+				1200,
+				0,
+				0
+			],
+			"rotation_quarters": 0
+		}
+	],
+	"links": [
+		{
+			"a_connector": "east",
+			"a_instance": "land",
+			"b_connector": "west",
+			"b_instance": "sanctuary",
+			"link_id": "sanctuary_gate"
+		}
+	],
+	"mode": "manual",
+	"name": "Clareira, ponte e santuário",
+	"pieces": [
+		{
+			"piece_hash": "474a7f91532009d0cec13227fbdb6c64c2a4fee7d24df487e49ecd1fd15c3607",
+			"source": {
+				"composition": null,
+				"connectors": [
+					{
+						"connector_id": "east",
+						"direction": "both",
+						"headroom": 100,
+						"kind": "walk",
+						"normal_xyz": [
+							1,
+							0,
+							0
+						],
+						"position_xyz": [
+							1200,
+							40,
+							200
+						],
+						"surface_id": "plateau",
+						"tags": [
+							"ruin"
+						],
+						"width": 120
+					}
+				],
+				"context": {
+					"allow_rare": true,
+					"allowed_species": [
+						"test_gel"
+					],
+					"areas": [],
+					"biome_ids": [
+						"ruin",
+						"forest"
+					],
+					"version": 1
+				},
+				"dependencies": [],
+				"document_id": "land",
+				"layers": [
+					{
+						"columns": 2,
+						"heights": [
+							0,
+							0,
+							0,
+							0,
+							0,
+							0
+						],
+						"layer_id": "lower",
+						"locked": false,
+						"material_masks": {
+							"earth": [
+								0,
+								0,
+								0.7,
+								0.7,
+								0,
+								0
+							],
+							"grass": [
+								1,
+								1,
+								0.3,
+								0.3,
+								1,
+								1
+							]
+						},
+						"name": "Clareira / passagem inferior",
+						"origin_xz": [
+							0.0,
+							0.0
+						],
+						"protected_regions": [],
+						"rows": 3,
+						"sample_spacing": 400.0
+					},
+					{
+						"columns": 2,
+						"heights": [
+							0,
+							40,
+							0,
+							40
+						],
+						"layer_id": "ramp",
+						"locked": false,
+						"material_masks": {},
+						"name": "Rampa",
+						"origin_xz": [
+							400.0,
+							0.0
+						],
+						"protected_regions": [],
+						"rows": 2,
+						"sample_spacing": 400.0
+					},
+					{
+						"columns": 2,
+						"heights": [
+							40,
+							40,
+							40,
+							40,
+							40,
+							40
+						],
+						"layer_id": "plateau",
+						"locked": false,
+						"material_masks": {},
+						"name": "Platô",
+						"origin_xz": [
+							800.0,
+							0.0
+						],
+						"protected_regions": [],
+						"rows": 3,
+						"sample_spacing": 400.0
+					}
+				],
+				"name": "Clareira, rampa e ponte",
+				"placements": [],
+				"regions": [],
+				"revision": 1,
+				"schema_version": 1,
+				"sockets": [],
+				"special_surfaces": [
+					{
+						"headroom": 100,
+						"layer_id": "plateau",
+						"surface_id": "bridge",
+						"vertices_xyz": [
+							[
+								0,
+								40,
+								400
+							],
+							[
+								800,
+								40,
+								400
+							],
+							[
+								800,
+								40,
+								800
+							],
+							[
+								0,
+								40,
+								800
+							]
+						]
+					}
+				],
+				"units": "e07_world"
+			}
+		},
+		{
+			"piece_hash": "68ad7fb4267c95f6148555743412efdb628a9e5d787471ada3e47ef8d84f82b4",
+			"source": {
+				"composition": null,
+				"connectors": [
+					{
+						"connector_id": "west",
+						"direction": "both",
+						"headroom": 100,
+						"kind": "walk",
+						"normal_xyz": [
+							-1,
+							0,
+							0
+						],
+						"position_xyz": [
+							0,
+							40,
+							200
+						],
+						"surface_id": "floor",
+						"tags": [
+							"ruin"
+						],
+						"width": 120
+					}
+				],
+				"context": {
+					"allow_rare": true,
+					"allowed_species": [
+						"test_gel"
+					],
+					"areas": [
+						{
+							"allow_rare": false,
+							"allowed_species": [],
+							"region_id": "guardian_area",
+							"reserved": [
+								{
+									"category": "boss",
+									"encounter_id": "sanctuary_guardian",
+									"origin_id": "trial_stage_1",
+									"quest_id": "find_guardian",
+									"species_id": "test_gel"
+								}
+							]
+						}
+					],
+					"biome_ids": [
+						"ruin",
+						"forest"
+					],
+					"version": 1
+				},
+				"dependencies": [],
+				"document_id": "sanctuary",
+				"layers": [
+					{
+						"columns": 2,
+						"heights": [
+							40,
+							40,
+							40,
+							40,
+							40,
+							40
+						],
+						"layer_id": "floor",
+						"locked": false,
+						"material_masks": {},
+						"name": "Santuário",
+						"origin_xz": [
+							0.0,
+							0.0
+						],
+						"protected_regions": [],
+						"rows": 3,
+						"sample_spacing": 400.0
+					}
+				],
+				"name": "Santuário · encontro reservado",
+				"placements": [],
+				"regions": [
+					{
+						"layer_id": "floor",
+						"polygon_xz": [
+							[
+								120,
+								400
+							],
+							[
+								280,
+								400
+							],
+							[
+								280,
+								600
+							],
+							[
+								120,
+								600
+							]
+						],
+						"purpose": "encounter",
+						"region_id": "guardian_area"
+					}
+				],
+				"revision": 1,
+				"schema_version": 1,
+				"sockets": [],
+				"special_surfaces": [],
+				"units": "e07_world"
+			}
+		}
+	],
+	"revision": 1,
+	"schema_version": 1
+}

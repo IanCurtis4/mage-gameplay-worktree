@@ -8,6 +8,7 @@ const Canonical = preload("res://scripts/core/expedition/generation/canonical.gd
 const Point = preload("res://scripts/core/expedition/model/world_point.gd")
 const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
 const Worker = preload("res://scripts/map_authoring/population/population_worker.gd")
+const Context = preload("res://scripts/map_authoring/context/population_context.gd")
 const REVISION := "map_population_v1"
 const PROFILE := {"profile_id":"ruins_player","revision":1,"radius":20.0,"height":32.0,"connector_kinds":["walk"]}
 const STEP := 16.0
@@ -172,6 +173,10 @@ static func pool(source: Dictionary, context: Dictionary, brush: Dictionary, can
 				var point := Point.create("map_preview",cell.surface_id,position)
 				var code := placement_code(source,context,point,profile)
 				if code != "": rejected[code] += 1; continue
+				var eligible := false
+				for spec: Dictionary in brush.species:
+					if Context.policy(source,context,point,spec,profile.radius) == "": eligible = true; break
+				if not eligible: continue
 				count += 1; candidates.append(point); break
 			if not contained: rejected.outside_support += 1
 	var quota := int(brush.quantity) if brush.quota_mode == "count" else int(floor(count*STEP*STEP*brush.density/10000.0))
@@ -181,6 +186,11 @@ static func regenerate(source: Dictionary, cancel: Callable = Callable()) -> Dic
 	if Engine.is_editor_hint(): return Worker.request({"operation":"regenerate","source":source},cancel)
 	var context := prepare(source,cancel)
 	if not context.ok: return context
+	var original_hash := Document.hash_source(source)
+	var original_source := source.duplicate(true)
+	var authored := Context.realize(source,context,load("res://scripts/map_authoring/population/population_compiler.gd"),cancel)
+	if not authored.ok: return authored
+	source = authored.data
 	var realized: Array = []; var occupied: Array = []; var metrics: Array = []
 	# All pins reserve space before any brush draws candidates.
 	for slot: Dictionary in _sorted(source.slots,"slot_id"):
@@ -207,13 +217,17 @@ static func regenerate(source: Dictionary, cancel: Callable = Callable()) -> Dic
 		for point: ExpeditionWorldPoint in candidates:
 			if made == sampled.quota: break
 			if brush.mode == "concentrated" and distance_xz(point.position,cluster) > brush.group_radius: group_rejections += 1; continue
-			var draw: int = (stream+":species:"+str(made)).sha256_text().substr(0,7).hex_to_int()%total_weight
-			var chosen: Dictionary = species[0]
+			var eligible: Array = []; var eligible_weight := 0
 			for spec: Dictionary in species:
+				if Context.policy(source,context,point,spec,sampled.profile.radius) == "": eligible.append(spec); eligible_weight += int(spec.weight)
+			if eligible.is_empty(): continue
+			var draw: int = (stream+":species:"+str(made)).sha256_text().substr(0,7).hex_to_int()%eligible_weight
+			var chosen: Dictionary = eligible[0]
+			for spec: Dictionary in eligible:
 				draw -= int(spec.weight)
 				if draw < 0: chosen = spec; break
-			# Memorable occurrences are authored as fixed slots at an explicit site.
-			if chosen.category not in ["normal","elite"]: return fail("thematic_site_required",brush.brush_id)
+			# Legacy random brushes need explicit context for rare generation. Theme is editorial.
+			if chosen.category not in ["normal","elite"] and Context.record(source,context,point).is_empty(): return fail("thematic_site_required",brush.brush_id)
 			var valid := _spec(chosen,context.catalog)
 			if not _separated(point,valid.profile.radius,brush.spacing,occupied): spacing_rejections += 1; continue
 			var slot := {"slot_id":"slot_"+(stream+":"+Canonical.encode(point.position)).sha256_text().substr(0,40),"brush_id":brush.brush_id,"surface_id":point.surface_id,"position_xyz":xyz(point.position),"species_id":chosen.species_id,"category":chosen.category,"origin_id":chosen.origin_id,"fixed":false,"site_id":""}
@@ -226,9 +240,9 @@ static func regenerate(source: Dictionary, cancel: Callable = Callable()) -> Dic
 			return failure
 		metrics.append({"brush_id":brush.brush_id,"quantity":made,"sampled_area":sampled.sampled_area})
 	if realized.size() > 128: return fail("population_limit")
-	var proposed := source.duplicate(true); proposed.slots = _sorted(realized,"slot_id"); proposed.plan_hash = Document.recipe_hash(source)
+	var proposed := source.duplicate(true); proposed.slots = _sorted(realized,"slot_id"); proposed.plan_hash = Document.recipe_hash(proposed)
 	var previous: Dictionary = {}; var next: Dictionary = {}
-	for slot: Dictionary in source.slots: previous[slot.slot_id] = slot
+	for slot: Dictionary in original_source.slots: previous[slot.slot_id] = slot
 	for slot: Dictionary in realized: next[slot.slot_id] = slot
 	var diff := {"added":[],"removed":[],"changed":[],"preserved":[]}
 	for id: String in next:
@@ -238,13 +252,18 @@ static func regenerate(source: Dictionary, cancel: Callable = Callable()) -> Dic
 	for id: String in previous:
 		if not next.has(id): diff.removed.append(id)
 	for field: String in diff: diff[field].sort()
-	return {"ok":true,"code":"","data":proposed,"base_hash":Document.hash_source(source),"diff":diff,"metrics":metrics}
+	var checked := Document.validate(proposed)
+	if not checked.ok: return checked
+	return {"ok":true,"code":"","data":proposed,"base_hash":original_hash,"diff":diff,"metrics":metrics}
 static func validate_slot(source: Dictionary, context: Dictionary, slot: Dictionary, occupied: Array) -> Dictionary:
 	var spec := _spec(slot,context.catalog)
 	if not spec.ok: return spec
 	var brush := MapCompiler._find(source.brushes,"brush_id",slot.brush_id)
 	if brush.is_empty(): return fail("slot_invalid",slot.slot_id)
 	var point := anchor(slot)
+	var context_code := Context.policy(source,context,point,slot,spec.profile.radius,slot.site_id)
+	if context_code != "": return Context.Context.fail(context_code,slot.slot_id)
+	if slot.site_id.begins_with("reserved_") and not slot.fixed: return Context.Context.fail("context_reserved",slot.slot_id)
 	if not slot.fixed and (not same_layer(context,slot.surface_id,brush.surface_id) or distance_xz(point.position,vector(brush.center_xyz)) > brush.radius+0.001): return fail("slot_invalid",slot.slot_id)
 	if not slot.fixed:
 		var matches := false
@@ -253,7 +272,9 @@ static func validate_slot(source: Dictionary, context: Dictionary, slot: Diction
 		if not matches: return fail("slot_invalid",slot.slot_id)
 	if slot.category not in ["normal","elite"]:
 		var site := MapCompiler._find(source.interactions,"interaction_id",slot.site_id)
-		if not slot.fixed or site.is_empty() or site.kind != "thematic_encounter" or site.surface_id != slot.surface_id or vector(site.position_xyz).distance_to(point.position) > 0.001: return fail("thematic_site_required",slot.slot_id)
+		var generated_rare: bool = not slot.fixed and Context.rare_allowed(source,context,slot,spec.profile.radius)
+		if not slot.fixed and not generated_rare: return fail("thematic_site_required",slot.slot_id)
+		if not slot.site_id.is_empty() and (site.is_empty() or site.kind != "thematic_encounter" or site.surface_id != slot.surface_id or vector(site.position_xyz).distance_to(point.position) > 0.001): return fail("thematic_site_required",slot.slot_id)
 	var code := placement_code(source,context,point,spec.profile,slot.site_id)
 	if code != "": return fail(code,slot.slot_id,{},point.position)
 	if not _separated(point,spec.profile.radius,brush.spacing,occupied): return fail("population_overlap",slot.slot_id,{},point.position)
@@ -263,6 +284,8 @@ static func compile(source: Dictionary, cancel: Callable = Callable()) -> Dictio
 	var context := prepare(source,cancel)
 	if not context.ok: return context
 	if source.plan_hash != Document.recipe_hash(source): return fail("plan_stale")
+	var required := Context.check_reservations(source,context)
+	if not required.ok: return required
 	var occupied: Array = []; var rules: Dictionary = {}; var counts: Dictionary = {}
 	var manifest: ExpeditionManifest = context.manifest
 	for slot: Dictionary in _sorted(source.slots,"slot_id"):

@@ -1,6 +1,7 @@
 @tool
 extends RefCounted
 const StrictJSON = preload("res://scripts/map_authoring/io/strict_json.gd")
+const Context = preload("res://scripts/map_authoring/context/piece_context.gd")
 const IDS := {"dependencies": "definition_id", "layers": "layer_id", "special_surfaces": "surface_id", "placements": "placement_id", "regions": "region_id", "connectors": "connector_id", "sockets": "socket_id"}
 const ROOT := {"schema_version": "int", "document_id": "id", "revision": "int", "units": "string", "name": "string", "dependencies": "array", "layers": "array", "special_surfaces": "array", "placements": "array", "regions": "array", "connectors": "array", "sockets": "array", "composition": "reference"}
 const REFERENCE := {"document_id": "id", "revision": "int", "sha256": "hash"}
@@ -26,7 +27,8 @@ static func read(bytes: PackedByteArray) -> Dictionary:
 		return output
 	var data: Dictionary = decoded.value
 	var errors: Array = []
-	_shape(data, ROOT, "$", errors)
+	var root_fields := ROOT.duplicate(); if data.has("context"): root_fields.context = "object"
+	_shape(data, root_fields, "$", errors)
 	if errors.is_empty() and data.schema_version != 1:
 		output.code = "source_version_unsupported"
 		return output
@@ -70,6 +72,7 @@ static func _type(value: Variant, kind: String) -> bool:
 		"int": return _type(value, "number") and float(value) == floor(float(value)) and value >= 1 and value <= 2147483647
 		"bool": return value is bool
 		"array": return value is Array
+		"object": return value is Dictionary
 		"v2", "v3", "numbers":
 			if not value is Array: return false
 			if kind == "v2" and value.size() != 2: return false
@@ -100,6 +103,9 @@ static func _issue(errors: Array, code: String, field: String, entity_id: String
 
 static func validate(data: Dictionary) -> Array:
 	var errors: Array = []
+	if data.has("context"):
+		var checked := Context.validate(data.context,data.regions,load("res://scripts/map_authoring/document/source_schema.gd"))
+		if not checked.ok: errors.append_array(checked.diagnostics)
 	if data.units != "e07_world": _issue(errors, "source_units_unsupported", "units")
 	var ids: Dictionary = {}
 	for collection: String in IDS:
@@ -157,12 +163,15 @@ static func _canonical(value: Variant) -> String:
 		bytes.resize(8)
 		bytes.encode_double(0, 0.0 if value == 0 else float(value))
 		return "d" + bytes.hex_encode()
-	if value is String: return "s" + JSON.stringify(value)
+	if value is String or value is StringName: return "s" + JSON.stringify(String(value))
 	var parts := PackedStringArray()
 	if value is Array:
 		for item: Variant in value: parts.append(_canonical(item))
 		return "a%d[%s]" % [value.size(), ",".join(parts)]
-	var keys: Array = value.keys()
+	# Dictionary dot assignment can introduce StringName keys. Sort textual keys
+	# before encoding, so GUI additions and JSON reads have identical identity.
+	var keys: Array[String] = []
+	for key: Variant in value.keys(): keys.append(String(key))
 	keys.sort()
 	for key: String in keys: parts.append(_canonical(key) + ":" + _canonical(value[key]))
 	return "o%d{%s}" % [keys.size(), ",".join(parts)]

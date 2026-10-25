@@ -1,0 +1,35 @@
+[
+  {
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "ok": true,
+    "started_utc": "2026-10-25T14:30:41.2821799Z",
+    "name": "import",
+    "result": null,
+    "output_sha256": "603B6F7A9E37F2CAA83DF9B2B7832D6371C57996C0C5164F45C8F2D6450D5C88",
+    "finished_utc": "2026-10-25T14:30:49.6849804Z",
+    "timed_out": false,
+    "exit_code": 0,
+    "aborted": false
+  },
+  {
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_candidate_test.gd"
+    ],
+    "ok": false,
+    "started_utc": "2026-10-25T14:30:49.7117746Z",
+    "name": "candidate",
+    "result": null,
+    "output_sha256": "0314E4D7EB175671561C763FF84C3F96279B6DA937AD54FED7D10347E7F22915",
+    "finished_utc": "2026-10-25T14:30:53.8002792Z",
+    "timed_out": false,
+    "exit_code": -1,
+    "aborted": true
+  }
+]

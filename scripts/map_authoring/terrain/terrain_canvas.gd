@@ -195,6 +195,15 @@ func _draw_overlays() -> void:
 		var tangent := Vector3(-direction.z,0,direction.x)*float(connector.width)*0.5
 		_overlay.draw_line(screen(Vector3(xyz[0],xyz[1],xyz[2])-tangent),screen(Vector3(xyz[0],xyz[1],xyz[2])+tangent),Color("ffe298"),3,true)
 		_overlay.draw_line(center,screen(Vector3(xyz[0],xyz[1],xyz[2])+direction*24),Color("ffe298"),2,true)
+	for area: Dictionary in data.get("context",{}).get("areas",[]):
+		for region: Dictionary in data.get("regions",[]):
+			if region.region_id != area.region_id or region.layer_id != selected_layer or selected_layer in hidden_layers: continue
+			var points := PackedVector2Array()
+			for xz: Array in region.polygon_xz: points.append(_stroke_screen(Vector2(xz[0],xz[1])))
+			if points.size() < 3: continue
+			var color := Color("c998ee") if not area.reserved.is_empty() else Color("8adeb0")
+			_overlay.draw_colored_polygon(points,Color(color,0.15)); points.append(points[0]); _overlay.draw_polyline(points,color,2,true)
+			_overlay.draw_string(get_theme_default_font(),points[0]-Vector2(0,8),("Reserva · " if not area.reserved.is_empty() else "Encontro · ")+region.region_id,HORIZONTAL_ALIGNMENT_LEFT,-1,14,color)
 	for i: int in range(1,_points.size()):
 		_overlay.draw_line(_stroke_screen(_points[i-1]),_stroke_screen(_points[i]),Color("ffe298"),2,true)
 	if has_focus(): _overlay.draw_arc(_cursor,8,0,TAU,24,Color("ffe298"),1,true)

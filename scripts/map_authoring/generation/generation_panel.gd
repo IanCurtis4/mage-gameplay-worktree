@@ -95,6 +95,7 @@ func _ready() -> void:
 	var timer := Timer.new(); timer.wait_time = 10; timer.autostart = true; timer.timeout.connect(preserve); add_child(timer)
 	if source.is_empty() and target != null: show_result(import_map(target.data))
 	elif not source.is_empty(): refresh()
+	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"generation",func() -> Dictionary: return source,after_canvas)
 
 func button(parent: Node, text: String, callback: Callable) -> Button:
 	var control := Button.new(); control.text = text; control.pressed.connect(callback); parent.add_child(control); return control

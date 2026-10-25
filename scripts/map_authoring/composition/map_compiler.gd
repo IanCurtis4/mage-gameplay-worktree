@@ -7,6 +7,7 @@ const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometr
 const Manifest = preload("res://scripts/core/expedition/model/manifest.gd")
 const World = preload("res://scripts/core/expedition/spatial/world_geometry.gd")
 const Point = preload("res://scripts/core/expedition/model/world_point.gd")
+const Context = preload("res://scripts/map_authoring/context/piece_context.gd")
 const REVISION := "map_composition_v1"
 const EPS := 0.0001
 var _thread: Thread
@@ -47,6 +48,9 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 	if not validated.ok: return validated
 	if source.instances.is_empty(): return fail("map_empty")
 	if source.barrier_profile != "ruin_envelope_v1": return fail("profile_missing")
+	for instance: Dictionary in source.instances:
+		var eligible := Context.eligible(source,instance,_find(source.pieces,"piece_hash",instance.piece_hash).source)
+		if not eligible.ok: return eligible
 	var packages: Dictionary = {}; var definitions: Array = []; var render: Array = []
 	var pieces: Array = source.pieces.duplicate(true); pieces.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.piece_hash < b.piece_hash)
 	for piece: Dictionary in pieces:
@@ -154,9 +158,15 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 		var destination := Point.create("map_preview",cell.surface_id,_center(cell))
 		if not world.path(root,destination,Terrain.PROFILE,world.geometry_revision).ok or not world.path(destination,root,Terrain.PROFILE,world.geometry_revision).ok: return fail("route_unreachable",cell.surface_id,destination.position)
 	var output := {"format_version":1,"compiler_revision":REVISION,"source_hash":validated.output_hash,"dependencies":packages.values()[0].dependencies.duplicate(true),"profile":Terrain.PROFILE.duplicate(true),"manifest":manifest.to_data(),"render_instances":render,"barriers":barriers,"realized_instances":instances,"piece_count":instances.size()}
+	if source.has("context"): output["authoring_context"] = source.context.duplicate(true)
+	var piece_contexts := {}
+	for instance: Dictionary in instances:
+		var piece := _find(source.pieces,"piece_hash",instance.piece_hash)
+		if piece.source.has("context"): piece_contexts[instance.instance_id] = piece.source.context.duplicate(true)
+	if not piece_contexts.is_empty(): output["piece_contexts"] = piece_contexts
 	output["package_hash"] = Canonical.digest(output)
 	if var_to_bytes(output).size() > 4*1024*1024: return fail("map_limit")
-	return {"ok":true,"code":"","diagnostics":[],"input_hash":validated.output_hash,"output_hash":output.package_hash,"package":output}
+	return {"ok":true,"code":"","diagnostics":Context.warnings(source),"input_hash":validated.output_hash,"output_hash":output.package_hash,"package":output}
 
 static func _add_wall(barriers: Array, keys: Dictionary, a: Vector3, b: Vector3, owner: String) -> void:
 	if a.distance_to(b) < EPS: return

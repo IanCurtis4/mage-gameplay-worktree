@@ -1,5 +1,12 @@
 # Editor de mapas — proposta de arquitetura e execução
 
+**F8/M8 autorizado25/10/2026 e em validação:** integração F0–F7, autoria dual com
+contexto compartilhado e modos UX/AX. [Guia e decisões atuais](authoring_modes.md),
+[recibo](delivery/m8.md). A mesma peça atende manual/seed; exceções manuais são
+explícitas por instância. Tema de raros é diretriz editorial, não gate obrigatório.
+Os textos de planejamento abaixo são históricos onde os recibos produtores os
+substituem; não implicam que toda capacidade aspiracional esteja implementada.
+
 ## Decisões humanas25/10/2026
 
 F6/M6 autorizado: “F5 terminou. Podemos começar F6.” D6 confirmada neste chat:

@@ -1,0 +1,120 @@
+[
+  {
+    "output_sha256": "603B6F7A9E37F2CAA83DF9B2B7832D6371C57996C0C5164F45C8F2D6450D5C88",
+    "started_utc": "2026-10-25T14:34:40.6840731Z",
+    "ok": true,
+    "finished_utc": "2026-10-25T14:34:48.6636862Z",
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "aborted": false,
+    "timed_out": false,
+    "exit_code": 0,
+    "name": "import",
+    "result": null
+  },
+  {
+    "output_sha256": "7410171B540BFE6E74ACDC8D85DF9BCEA083DAA1F184FFF5336B84EEEDAE4F57",
+    "started_utc": "2026-10-25T14:34:48.6849090Z",
+    "ok": false,
+    "finished_utc": "2026-10-25T14:34:53.5312403Z",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_candidate_test.gd"
+    ],
+    "aborted": false,
+    "timed_out": false,
+    "exit_code": 1,
+    "name": "candidate",
+    "result": {
+      "checks": [
+        {
+          "id": "legacy_hash_unchanged",
+          "ok": true
+        },
+        {
+          "id": "context_source_valid",
+          "ok": true
+        },
+        {
+          "id": "context_compile",
+          "ok": false
+        },
+        {
+          "id": "context_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "biome_rejected",
+          "ok": true
+        },
+        {
+          "id": "manual_override_compiles",
+          "ok": false
+        },
+        {
+          "id": "manual_override_warns",
+          "ok": false
+        },
+        {
+          "id": "manual_override_exported",
+          "ok": false
+        },
+        {
+          "id": "override_bundle_preserved",
+          "ok": false
+        },
+        {
+          "id": "solver_does_not_inherit_override",
+          "ok": true
+        },
+        {
+          "id": "assembler_does_not_inherit_override",
+          "ok": true
+        },
+        {
+          "id": "override_reason_required",
+          "ok": true
+        },
+        {
+          "id": "recipe_override_rejected",
+          "ok": true
+        },
+        {
+          "id": "seed_context_contradiction",
+          "ok": true
+        },
+        {
+          "id": "seed_0",
+          "ok": false
+        },
+        {
+          "id": "seed_-1",
+          "ok": false
+        },
+        {
+          "id": "seed_9223372036854775807",
+          "ok": false
+        },
+        {
+          "id": "seed_-9223372036854775808",
+          "ok": false
+        },
+        {
+          "id": "population_context_plan",
+          "ok": false
+        },
+        {
+          "id": "no_input_mutation",
+          "ok": true
+        }
+      ],
+      "count": 20,
+      "ok": false
+    }
+  }
+]

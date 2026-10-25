@@ -1,0 +1,41 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+M8_CHECK legacy_hash_unchanged true
+M8_CHECK context_source_valid true
+M8_CHECK context_compile true
+M8_CHECK context_roundtrip true
+M8_CHECK biome_rejected true
+M8_CHECK manual_override_compiles true
+M8_CHECK manual_override_warns true
+M8_CHECK manual_override_exported true
+M8_CHECK override_bundle_preserved true
+M8_CHECK solver_does_not_inherit_override true
+M8_CHECK assembler_does_not_inherit_override true
+M8_CHECK override_reason_required true
+M8_CHECK recipe_override_rejected true
+M8_CHECK seed_context_contradiction true
+M8_CHECK seed_0 true
+M8_CHECK seed_-1 true
+M8_CHECK seed_9223372036854775807 true
+M8_CHECK seed_-9223372036854775808 true
+M8_CHECK population_context_plan true
+M8_CHECK no_input_mutation true
+M8_CHECK population_context_compile true
+M8_CHECK species_policy_enforced true
+M8_CHECK manual_species_exception true
+M8_CHECK rare_generation_allowed true
+M8_CHECK rare_theme_is_not_gate true
+M8_CHECK rare_policy_enforced true
+M8_CHECK manual_rare_without_theme_allowed true
+M8_CHECK reservation_realized true
+M8_CHECK reservation_compiles true
+M8_CHECK reservation_fixed_unique true
+M8_CHECK reservation_quest_passive true
+M8_CHECK reservation_regeneration_idempotent true
+M8_CHECK reservation_required_on_compile true
+M8_CHECK ordinary_spawn_cannot_take_reserved_area true
+M8_CHECK reservation_editorial_reference_roundtrip true
+M8_CHECK missing_region_rejected true
+M8_CHECK representative_geometry false
+{ "ok": false, "code": "route_unreachable", "diagnostics": [{ "code": "route_unreachable", "entity_id": "land/s_17f29b073143d8cd97b5", "field": "composition", "location": (400.0, 200.0, 600.0), "severity": "error", "message": "Há uma região inacessível ao corpo de teste.", "suggestion": "Selecione a região indicada e corrija a fonte." }] }
+M8_RESULT {"checks":[{"id":"legacy_hash_unchanged","ok":true},{"id":"context_source_valid","ok":true},{"id":"context_compile","ok":true},{"id":"context_roundtrip","ok":true},{"id":"biome_rejected","ok":true},{"id":"manual_override_compiles","ok":true},{"id":"manual_override_warns","ok":true},{"id":"manual_override_exported","ok":true},{"id":"override_bundle_preserved","ok":true},{"id":"solver_does_not_inherit_override","ok":true},{"id":"assembler_does_not_inherit_override","ok":true},{"id":"override_reason_required","ok":true},{"id":"recipe_override_rejected","ok":true},{"id":"seed_context_contradiction","ok":true},{"id":"seed_0","ok":true},{"id":"seed_-1","ok":true},{"id":"seed_9223372036854775807","ok":true},{"id":"seed_-9223372036854775808","ok":true},{"id":"population_context_plan","ok":true},{"id":"no_input_mutation","ok":true},{"id":"population_context_compile","ok":true},{"id":"species_policy_enforced","ok":true},{"id":"manual_species_exception","ok":true},{"id":"rare_generation_allowed","ok":true},{"id":"rare_theme_is_not_gate","ok":true},{"id":"rare_policy_enforced","ok":true},{"id":"manual_rare_without_theme_allowed","ok":true},{"id":"reservation_realized","ok":true},{"id":"reservation_compiles","ok":true},{"id":"reservation_fixed_unique","ok":true},{"id":"reservation_quest_passive","ok":true},{"id":"reservation_regeneration_idempotent","ok":true},{"id":"reservation_required_on_compile","ok":true},{"id":"ordinary_spawn_cannot_take_reserved_area","ok":true},{"id":"reservation_editorial_reference_roundtrip","ok":true},{"id":"missing_region_rejected","ok":true},{"id":"representative_geometry","ok":false}],"count":37,"ok":false}

@@ -1,5 +1,11 @@
 # Validação e aceite do editor
 
+Atualização F8/M8 de25/10/2026: [autoria dual, UX/AX e revisão das lacunas](authoring_modes.md),
+[candidato e evidências](delivery/m8.md). A matriz abaixo preserva metas originais;
+props/doodads/biblioteca artística e usabilidade humana não ganham certificação
+por existirem linhas planejadas. Tema dos raros é diretriz editorial; palco não
+é gate para um raro manual. Regras técnicas explícitas de contexto são verificadas.
+
 [Índice](README.md), [arquitetura](architecture.md), [pacotes](execution.md).
 Testes abaixo são critérios planejados, não resultados executados ou IDs já
 registrados em `tools/verify.ps1`.
