@@ -1,7 +1,8 @@
 # Editor de mapas — proposta de arquitetura e execução
 
 F3/M3 entregue e validado tecnicamente no checkout dedicado, consumindo o aceite
-completo F2; aceite humano F3 pendente. [Contrato e manifesto nominal](contracts/m3_dispatch.md), [recibo F3](delivery/m3.md).
+completo F2; aceite humano F3 registrado em24/10, com a travessia pelo centro da
+conexão aceita como limitação temporária. [Contrato e manifesto nominal](contracts/m3_dispatch.md), [recibo F3](delivery/m3.md).
 Os estados históricos de planejamento abaixo não revogam essa autorização.
 
 ## Decisão humana vigente —24/10/2026

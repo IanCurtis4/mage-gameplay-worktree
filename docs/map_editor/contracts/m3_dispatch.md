@@ -1,6 +1,9 @@
 # Editor F3 / M3 — contrato executável 1
 
-24/10/2026. ENTREGUE / VALIDADA TECNICAMENTE; ACEITE HUMANO PENDENTE. Autorização humana neste chat: “F2 terminou, F3 pode começar.”
+24/10/2026. ENTREGUE / VALIDADA TECNICAMENTE / ACEITE HUMANO REGISTRADO.
+Aceite condicionado a não tratar a travessia pelo centro como navegação final;
+pendência e critério no recibo m3.md. Integração ainda não realizada.
+Autorização humana neste chat: “F2 terminou, F3 pode começar.”
 Base completa `15c0d196105b8801e54d784a6226edf27a06b7bd`, incluindo aceite/passagem F2;
 branch `codex/map-editor-m3`, checkout `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m3`.
 M0/M1/F2 integrados por ancestralidade. Sol implementa e valida; Luna supervisionará
