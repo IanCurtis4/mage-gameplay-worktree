@@ -175,3 +175,17 @@ Estado confrontado diretamente por Git e contratos. Checkout habitual continua
 em codex/playtest/fba777b3822356a10e7f6e050971e54ab1a9819b; este candidato está
 na worktree dedicada. Alterações finais de recibos/evidência são documentais;
 conferir seus links/hashes não exige repetir gameplay com os mesmos inputs.
+
+## Retorno humano sobre as capturas —24/10/2026
+
+O usuário considerou bom o gradiente de terrain_detail e boa a diferença de
+texturas do declive em steep_terrain. Acrescentou a referência AoM para mistura
+gradual entre caminho e penhasco e relevo arredondado nas mudanças de inclinação,
+em lugar de planos retos encostados. [Direção e referência preservadas](../contracts/terrain_piece_semantics.md#complemento-visual-após-as-capturas-do-f2-24102026).
+
+Registra retorno positivo parcial, sem converter em aceite humano integral ou
+integração. O exemplo técnico atual não prova o acabamento orgânico pretendido.
+Essa evolução pertence ao terreno; sua atribuição a pacote será explícita, sem
+iniciar F3 por este comentário. Preservados o candidato testado, seus limites e
+as evidências. Esta atualização conferiu referências e bytes do anexo; gameplay
+não foi repetido, pois não houve alteração executável.

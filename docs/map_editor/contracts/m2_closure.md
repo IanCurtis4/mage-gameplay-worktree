@@ -91,3 +91,9 @@ de bloqueios do consumidor correspondente antes de publicar esse tipo de mapa.
 Esta fronteira fica explícita; o contraste de material já pode ser inspecionado
 na autoria e não mascara um suporte inválido. Testes exigem mistura derivada do
 declive e preservação da pintura original.
+
+Registro documental posterior ao fechamento: Sol conserva o retorno visual do
+usuário em terrain_piece_semantics.md e no recibo m2_closure.md, com propriedade
+adicional de delivery/evidence/m2/product_references/05_aom_terrain.png e da entrada
+correspondente no manifesto de referências. Sem transferência de arquivos
+executáveis, produção de asset ou abertura de outro marco por esse registro.

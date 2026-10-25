@@ -65,11 +65,46 @@ no contrato de arquitetura antes dos consumidores dependentes.
 | [2 — prt_fild08](../delivery/evidence/m2/product_references/02_prt_fild08.png) | Exemplo de mapa amplo que pode ser concebido como uma única peça grande |
 | [3 — castelo](../delivery/evidence/m2/product_references/03_castle.png) | Exemplo que pode ser concebido como conjunto de blocos distintos no mesmo mapa |
 | [4 — igreja](../delivery/evidence/m2/product_references/04_church.png) | Outro exemplo de composição de áreas/blocos de tamanhos e alturas variados |
+| [5 — relevo AoM](../delivery/evidence/m2/product_references/05_aom_terrain.png) | Relevo arredondado e transição gradual entre cobertura do chão e encosta rochosa |
 
 São referências conceituais fornecidas pelo usuário. Não se afirma ter verificado
 o pipeline real desses jogos, os IDs exatos dos mapas ou seus formatos proprietários.
 Não se copiam layouts/assets para produção. Os originais anexados foram preservados
 com hashes no [manifesto](../delivery/evidence/m2/product_references/manifest.json).
+
+## Complemento visual após as capturas do F2 —24/10/2026
+
+O usuário considerou bom o gradiente de terrain_detail e boa a diferença de
+texturas de steep_terrain. Esse retorno é positivo sobre esses aspectos das
+capturas, sem equivaler a aceite integral do F2, teste manual ou integração.
+
+A referência AoM acrescenta duas expectativas para o acabamento do terreno:
+
+- Mistura gradual entre caminho/cobertura do chão e textura do penhasco, com
+  transições naturais na borda do declive, além do contraste entre materiais.
+- Relevo efetivamente suavizado e arredondado nas mudanças de inclinação;
+  planos retos encostados com quinas marcadas não são o resultado visual final.
+
+Isso exige tratar a forma do relevo e a mistura de materiais. Normais suavizadas
+ajudam a iluminação, mas não arredondam a silhueta nem substituem a geometria
+correspondente para suporte, clique e navegação. Refinar/suavizar alturas deve
+preservar a coerência com a geometria canônica, conectores e folgas, sem uma
+superfície visual diferente da usada pelo movimento.
+
+As amostras planas/rampa do candidato163c509 são provas controladas da fundação,
+não uma demonstração desse acabamento orgânico. Sua validação técnica permanece;
+o requisito visual completo ainda precisa de amostra representativa, medição do
+custo da curvatura e avaliação humana. A partição coplanar e seu orçamento não
+podem impor quinas artificiais à aparência final por conveniência de compilação.
+O limite atual de45° e o contrato pendente de faces não caminháveis permanecem
+explícitos; a referência não os resolve apenas por troca de textura.
+
+O usuário dispensou correção imediata caso pertença a outro passo. Este registro
+não inicia implementação nem atribui automaticamente o trabalho a F3: é direção
+de acabamento do sistema de terreno, a localizar no contrato do produtor antes
+da próxima entrega que prometa essa aparência. A imagem é referência conceitual
+anexada pelo usuário, sem afirmação sobre o pipeline interno do AoM e sem uso como
+asset de produção. Rodada documental: sem alteração de runtime ou repetição de gameplay.
 
 ## Consequência para F2, D2 e D4
 

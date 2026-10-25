@@ -26,5 +26,12 @@
     "file": "04_church.png",
     "sha256": "C38D1FFCFFB742A65137213F4D229A0B7C55FA84C6F1AB0F8A2682828F41004C",
     "origin": "Anexo do usuário em24/10/2026; referência conceitual, não asset de produção"
+  },
+  {
+    "bytes": 1131551,
+    "sha256": "4490892778BADA8E72B679C7BDD9358A893BD809B999CBE16E84E5238F847D7C",
+    "intent": "Relevo arredondado e mistura gradual entre caminho, cobertura do chão e penhasco",
+    "file": "05_aom_terrain.png",
+    "origin": "Anexo do usuário em24/10/2026 após retorno sobre capturas F2; referência conceitual, não asset de produção"
   }
 ]
