@@ -1,0 +1,283 @@
+{
+	"algorithm_revision": "map_slot_wfc_v1",
+	"budget": {
+		"backtracks": 128,
+		"operations": 200000,
+		"validations": 32
+	},
+	"domains": [
+		{
+			"instance_id": "left",
+			"options": [
+				{
+					"piece_hash": "b85f49daf46ad4b45d613e771fe5365c46d188a62fc427ad3caa095244ceb45b",
+					"rotation_quarters": 0,
+					"weight": 1
+				}
+			]
+		},
+		{
+			"instance_id": "right",
+			"options": [
+				{
+					"piece_hash": "8fab6493701a4d4bf0b6a2ad038f8420392f1b1c6a45357e83437fffb12e9074",
+					"rotation_quarters": 0,
+					"weight": 1
+				},
+				{
+					"piece_hash": "1dab36c00a4740450147fdfd780dce09e1262e3bbfa0abe77b03f9498d656bad",
+					"rotation_quarters": 0,
+					"weight": 1
+				}
+			]
+		}
+	],
+	"map": {
+		"barrier_profile": "ruin_envelope_v1",
+		"document_id": "two_rooms",
+		"instances": [
+			{
+				"instance_id": "left",
+				"piece_hash": "b85f49daf46ad4b45d613e771fe5365c46d188a62fc427ad3caa095244ceb45b",
+				"position_xyz": [
+					0,
+					0,
+					0
+				],
+				"rotation_quarters": 0
+			},
+			{
+				"instance_id": "right",
+				"piece_hash": "8fab6493701a4d4bf0b6a2ad038f8420392f1b1c6a45357e83437fffb12e9074",
+				"position_xyz": [
+					100,
+					0,
+					0
+				],
+				"rotation_quarters": 0
+			}
+		],
+		"links": [
+			{
+				"a_connector": "east",
+				"a_instance": "left",
+				"b_connector": "west",
+				"b_instance": "right",
+				"link_id": "door"
+			}
+		],
+		"mode": "manual",
+		"name": "Duas peças · Ruína",
+		"pieces": [
+			{
+				"piece_hash": "b85f49daf46ad4b45d613e771fe5365c46d188a62fc427ad3caa095244ceb45b",
+				"source": {
+					"composition": null,
+					"connectors": [
+						{
+							"connector_id": "east",
+							"direction": "both",
+							"headroom": 100,
+							"kind": "walk",
+							"normal_xyz": [
+								1,
+								0,
+								0
+							],
+							"position_xyz": [
+								100,
+								0,
+								50
+							],
+							"surface_id": "floor",
+							"tags": [
+								"ruin"
+							],
+							"width": 24
+						}
+					],
+					"dependencies": [],
+					"document_id": "room_left",
+					"layers": [
+						{
+							"columns": 2,
+							"heights": [
+								0,
+								0,
+								0,
+								0
+							],
+							"layer_id": "floor",
+							"locked": false,
+							"material_masks": {},
+							"name": "Chão",
+							"origin_xz": [
+								0,
+								0
+							],
+							"protected_regions": [],
+							"rows": 2,
+							"sample_spacing": 100
+						}
+					],
+					"name": "Sala de grama",
+					"placements": [],
+					"regions": [],
+					"revision": 1,
+					"schema_version": 1,
+					"sockets": [],
+					"special_surfaces": [],
+					"units": "e07_world"
+				}
+			},
+			{
+				"piece_hash": "8fab6493701a4d4bf0b6a2ad038f8420392f1b1c6a45357e83437fffb12e9074",
+				"source": {
+					"composition": null,
+					"connectors": [
+						{
+							"connector_id": "west",
+							"direction": "both",
+							"headroom": 100,
+							"kind": "walk",
+							"normal_xyz": [
+								-1,
+								0,
+								0
+							],
+							"position_xyz": [
+								0,
+								0,
+								50
+							],
+							"surface_id": "floor",
+							"tags": [
+								"ruin"
+							],
+							"width": 24
+						}
+					],
+					"dependencies": [],
+					"document_id": "room_right",
+					"layers": [
+						{
+							"columns": 2,
+							"heights": [
+								0,
+								0,
+								0,
+								0
+							],
+							"layer_id": "floor",
+							"locked": false,
+							"material_masks": {},
+							"name": "Chão",
+							"origin_xz": [
+								0,
+								0
+							],
+							"protected_regions": [],
+							"rows": 2,
+							"sample_spacing": 100
+						}
+					],
+					"name": "Sala de grama",
+					"placements": [],
+					"regions": [],
+					"revision": 1,
+					"schema_version": 1,
+					"sockets": [],
+					"special_surfaces": [],
+					"units": "e07_world"
+				}
+			},
+			{
+				"piece_hash": "1dab36c00a4740450147fdfd780dce09e1262e3bbfa0abe77b03f9498d656bad",
+				"source": {
+					"composition": null,
+					"connectors": [
+						{
+							"connector_id": "west",
+							"direction": "both",
+							"headroom": 100,
+							"kind": "walk",
+							"normal_xyz": [
+								-1,
+								0,
+								0
+							],
+							"position_xyz": [
+								0,
+								0,
+								50
+							],
+							"surface_id": "floor",
+							"tags": [
+								"ruin"
+							],
+							"width": 24
+						}
+					],
+					"dependencies": [],
+					"document_id": "room_earth",
+					"layers": [
+						{
+							"columns": 2,
+							"heights": [
+								0,
+								0,
+								0,
+								0
+							],
+							"layer_id": "floor",
+							"locked": false,
+							"material_masks": {
+								"earth": [
+									1,
+									1,
+									1,
+									1
+								],
+								"grass": [
+									0,
+									0,
+									0,
+									0
+								]
+							},
+							"name": "Chão",
+							"origin_xz": [
+								0,
+								0
+							],
+							"protected_regions": [],
+							"rows": 2,
+							"sample_spacing": 100
+						}
+					],
+					"name": "Sala de terra",
+					"placements": [],
+					"regions": [],
+					"revision": 1,
+					"schema_version": 1,
+					"sockets": [],
+					"special_surfaces": [],
+					"units": "e07_world"
+				}
+			}
+		],
+		"revision": 1,
+		"schema_version": 1
+	},
+	"min_diversity": 1,
+	"pins": [
+		"left"
+	],
+	"quotas": [],
+	"schema_version": 1,
+	"seed_text": "0",
+	"selection": [
+		"left",
+		"right"
+	]
+}

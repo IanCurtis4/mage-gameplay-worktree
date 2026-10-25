@@ -255,4 +255,3 @@ func _exit_tree() -> void:
 	if job != null: job.close(); job = null
 	if comparison_thread != null: comparison_thread.wait_to_finish(); comparison_thread = null
 	preserve()
-

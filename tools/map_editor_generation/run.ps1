@@ -100,5 +100,3 @@ $m6Primary=@{}
 foreach($m6Input in $m6Inputs){$m6Primary[$m6Input.path]=$m6Input.sha256.ToLowerInvariant()}
 [IO.File]::WriteAllText((Join-Path $m6Fixture 'source_hashes.json'),(ConvertTo-Json -InputObject $m6Primary -Depth 5))
 [IO.File]::WriteAllText((Join-Path $m6Fixture 'source_root.txt'),$m6Root)
-
-

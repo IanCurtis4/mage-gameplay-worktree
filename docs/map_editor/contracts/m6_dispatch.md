@@ -1,6 +1,10 @@
 # Editor F6 / M6 — contrato executável 1
 
-25/10/2026. EM EXECUÇÃO. Autorização humana: “F5 terminou. Podemos começar F6.”
+25/10/2026. VALIDADA TECNICAMENTE; aceite humano pendente.
+[Recibo e evidência](../delivery/m6.md). Código congelado/supervisionado
+`227dfb4e3646c4312ea075bca4d1e4a6dfb64a93`; fechamento posterior apenas documental
+e remoção comprovada de linhas vazias extras no EOF, conforme recibo.
+Autorização humana: “F5 terminou. Podemos começar F6.”
 D6 confirmada: “Confirmo sim.” Composição manual/assembler preservados; WFC
 opcional, experimental e ativado explicitamente. Sem substituição de produção.
 Base completa `fab5c7b2b26c311c274e7f30b4d8b41c8506e27a`, F0–F5 por ancestralidade.

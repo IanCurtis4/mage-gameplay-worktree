@@ -7,6 +7,9 @@ composição manual e assembler atual preservados; WFC opcional/experimental,
 comparação, pins e regeneração parcial. [Contrato e propriedade](contracts/m6_dispatch.md),
 [recibo F6](delivery/m6.md). Reutiliza o único worktree atual na branch
 codex/map-editor-m6, com F0–F5 por ancestralidade. Não abre F7 nem altera master/playtest.
+F6 está **validado tecnicamente** no código `227dfb4e3646c4312ea075bca4d1e4a6dfb64a93`:
+89 checks de geração,28 nativos,dois CLIs e três IDs oficiais aprovados,
+com supervisão Luna e inspeção Sol. Fixture removida; aceite humano separado.
 
 F5/M5 autorizado após F4. D5 confirmada: loop/ida e volta, espera, interrupção
 por aggro, retorno a waypoint válido e home/leash fixos. Transferência nominal

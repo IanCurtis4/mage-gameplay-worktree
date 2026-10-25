@@ -1,0 +1,15 @@
+{
+  "fixture_removed": true,
+  "personal_save": "untouched",
+  "engine_preserved": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/godot",
+  "preserved": "source tests, immutable source snapshots, logs, hashes, reports, captures",
+  "free_after": 17140334592,
+  "time_utc": "2026-10-25T12:16:12.2066804Z",
+  "checkouts": [
+    "C:/Users/João Pedro/Documents/ChatGPT/RagRPG",
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5"
+  ],
+  "free_before": 16820039680,
+  "removed": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+  "bytes_removed": 311475880.0
+}

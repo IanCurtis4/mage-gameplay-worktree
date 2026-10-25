@@ -64,4 +64,3 @@ func run() -> void:
 func finish() -> void:
 	var ok := checks.all(func(item: Dictionary) -> bool: return item.ok)
 	print("M6_UI_RESULT "+JSON.stringify({"ok":ok,"count":checks.size(),"checks":checks})); get_tree().quit(0 if ok else 1)
-

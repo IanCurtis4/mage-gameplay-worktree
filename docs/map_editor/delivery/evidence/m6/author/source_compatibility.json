@@ -1,0 +1,27 @@
+{
+  "certified_commit": "227dfb4e3646c4312ea075bca4d1e4a6dfb64a93",
+  "changes": [
+    {
+      "current_sha256": "8A243D18C01F081928BE648321085AD2B6FA68C64AD80C498657F551DE378A5B",
+      "path": "scripts/map_authoring/generation/generation_panel.gd",
+      "only_trailing_blank_lines": true,
+      "certified_sha256": "0E32C200DC2900E0AAF96B0E152F4EACD5DBAE01F0EFD230C616698C46E1A584"
+    },
+    {
+      "current_sha256": "BAE18FD25102B18F9CA88AF252B5876FB1F9EEAB25CAD287ECC6C52A66855F2B",
+      "path": "tests/map_editor_generation_ui_test.gd",
+      "only_trailing_blank_lines": true,
+      "certified_sha256": "6A830806827F912CF0B56BB56FA4C9CCE42D3A790517F45540FE70FB40DB74E4"
+    },
+    {
+      "current_sha256": "07562BD75C0A504D72A3CB53E2C2BA677FB0CBA251CA8508695B1DD2A59638D4",
+      "path": "tools/map_editor_generation/run.ps1",
+      "only_trailing_blank_lines": true,
+      "certified_sha256": "DFB37A068363F90C13A38FB1DC64920B471638EBDD7C23D6133D4A919BE8E60F"
+    }
+  ],
+  "reason": "Remove only extra empty EOF lines after supervision; all non-trailing content byte-equivalent.",
+  "certified_inputs": 1805,
+  "unchanged_inputs": 1802,
+  "cosmetic_inputs": 3
+}
