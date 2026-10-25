@@ -1,0 +1,100 @@
+{
+  "cli_processes": [
+    {
+      "name": "cli_a",
+      "package_hash": "d8a9591ab0b0c05ebddd189eb196af3c0150b2cf8b37df1dc4e9d0f3b12b4f34",
+      "wall_ms": 4578.7496
+    },
+    {
+      "name": "cli_b",
+      "package_hash": "d8a9591ab0b0c05ebddd189eb196af3c0150b2cf8b37df1dc4e9d0f3b12b4f34",
+      "wall_ms": 4590.9849
+    },
+    {
+      "name": "large_cli_a",
+      "package_hash": "25f1722af88b1c0a1420a5589a1aea505f9b5bd6ede47bb0ceac2b5affccca78",
+      "wall_ms": 6618.7005
+    },
+    {
+      "name": "large_cli_b",
+      "package_hash": "25f1722af88b1c0a1420a5589a1aea505f9b5bd6ede47bb0ceac2b5affccca78",
+      "wall_ms": 6893.2588
+    }
+  ],
+  "first_compile_65_ms": 1538.614,
+  "warm_dimensions": [
+    {
+      "bake_ms": {
+        "min": 82.9,
+        "max": 99.474
+      },
+      "render_build_ms": {
+        "min": 4.757,
+        "max": 5.407
+      },
+      "samples": 1089,
+      "visual_triangles": 2048,
+      "package_bytes": 35488,
+      "axis": 33,
+      "source_bytes": 18446,
+      "brush_preview_ms": {
+        "min": 0.27,
+        "max": 0.397
+      },
+      "supports": 3,
+      "brush_commit_ms": {
+        "min": 35.207,
+        "max": 40.205
+      }
+    },
+    {
+      "bake_ms": {
+        "min": 292.77,
+        "max": 319.685
+      },
+      "render_build_ms": {
+        "min": 18.609,
+        "max": 19.793
+      },
+      "samples": 4225,
+      "visual_triangles": 8192,
+      "package_bytes": 113792,
+      "axis": 65,
+      "source_bytes": 70206,
+      "brush_preview_ms": {
+        "min": 0.811,
+        "max": 0.852
+      },
+      "supports": 3,
+      "brush_commit_ms": {
+        "min": 136.34,
+        "max": 149.461
+      }
+    },
+    {
+      "bake_ms": {
+        "min": 7012.116,
+        "max": 8204.458
+      },
+      "render_build_ms": {
+        "min": 77.175,
+        "max": 114.01
+      },
+      "samples": 16641,
+      "visual_triangles": 32768,
+      "package_bytes": 423928,
+      "axis": 129,
+      "source_bytes": 275346,
+      "brush_preview_ms": {
+        "min": 2.984,
+        "max": 3.345
+      },
+      "supports": 3,
+      "brush_commit_ms": {
+        "min": 579.335,
+        "max": 731.88
+      }
+    }
+  ],
+  "candidate": "163c509de8a47f60523196aeaea76e9b08b3e471"
+}

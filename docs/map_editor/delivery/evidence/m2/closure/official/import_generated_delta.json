@@ -1,0 +1,986 @@
+{
+  "addons/godot-git-plugin/windows/~libgit_plugin.windows.editor.x86_64.dll": {
+    "imported_sha256": "removed_by_native_import",
+    "source_sha256": "a4f37ad7caa45652d74c99c886c21cbc1f89c484c17c7520e8abfa93a39554bc"
+  },
+  "assets/art/animations/animal_companion.png.import": {
+    "imported_sha256": "71f9233bd9bb415edb457e1141d21a29f8689534a0055e47576358f4dacee48d",
+    "source_sha256": "52fc6e22ac6b7c8fb68bce98c67f3ee88b283765f4b39c645056dcce5627acaf"
+  },
+  "assets/art/animations/archer.png.import": {
+    "imported_sha256": "ec19c2485e94e32b18d0f2c40a5738c6cbe04cfbababd3d52fdfbcc505d8d591",
+    "source_sha256": "4d913df7b241d2bfa34d96f6a2c33c6d6e8cfaaa59e0bee4a7489d6903b1dc54"
+  },
+  "assets/art/animations/archer_weaponless.png.import": {
+    "imported_sha256": "360a05b0d1183484a99f3ac76c2a1fada91558df0f1815de143a146c6f89db5f",
+    "source_sha256": "cfa863c99e9b6ee718bfc49d8b1edb48e5d9b055aea1dd3dd6b8d01ee60665b2"
+  },
+  "assets/art/animations/beast_master.png.import": {
+    "imported_sha256": "4bf8090666d1bcc7ffa60592c30da6363488e59cca63925d1f2d64041dd7ca35",
+    "source_sha256": "244bcf68c4d595cfcfce186cde149a2637fae1a83086b9365cddd54b8274095b"
+  },
+  "assets/art/animations/berserker.png.import": {
+    "imported_sha256": "9412f45c12af745cc53db102bd2516eb9a632ddefea344fdb606c2c559447d83",
+    "source_sha256": "76cb90a39c647bb689e8589fff515340098eede80ae96c5cb1d09c5efdc90b9b"
+  },
+  "assets/art/animations/berserker_weaponless.png.import": {
+    "imported_sha256": "3127b4f6325d34c253f7a7f156567f214d5eb51cd81e93c7b24eef40d1fa3239",
+    "source_sha256": "4fa562ad0140d1c91d3ef3ab14a50940f8bc5936cbdd753cd6b2bab27b318ab3"
+  },
+  "assets/art/animations/defender.png.import": {
+    "imported_sha256": "7595d13165e83ebc31f4f7aa7ae3e8bb4c84dcc9c90356ac25764c5a3f51519f",
+    "source_sha256": "a188f592ae115e643757e584d10d85c0587e479c79f3c308157681634435ace7"
+  },
+  "assets/art/animations/defender_weaponless.png.import": {
+    "imported_sha256": "8d93c3d15aa989da6f7c6ff01aab5fc3611764ade18dae36001f4eae00942978",
+    "source_sha256": "deab4c88e51f00b6a42f539bdcc27ba914add5666fb286f75bfda98050531c4e"
+  },
+  "assets/art/animations/elementalist.png.import": {
+    "imported_sha256": "f79295010bc5ecc68c76ae446c48f090a9a2ff8efe55b0828fe653397ba046f9",
+    "source_sha256": "e973068cbc349d30841704b1fc6e3c15f30796f52b7dfcdad90ce417f24048af"
+  },
+  "assets/art/animations/elementalist_weaponless.png.import": {
+    "imported_sha256": "c7766d325d6a5564e9c559ecb7c70279064dd4658e8c5b993789832d9e2fd506",
+    "source_sha256": "310f57dcf96aefd626c0903dddad2cc479819a4c0b4d59729f8f39416265b7b0"
+  },
+  "assets/art/animations/gel.png.import": {
+    "imported_sha256": "7a12d92e6a68992657456c4c38635562471ca2db132bfcaa095e71891a400794",
+    "source_sha256": "9a022633d68fca7c93a3ef28450fa18686a3ab43db820798279b778da29d3eca"
+  },
+  "assets/art/animations/geometer.png.import": {
+    "imported_sha256": "6cd530fa926bcbf7ff394024bfb3db71037642c3aad7aafd830d50fafc4fe1ec",
+    "source_sha256": "9dc5625b26048603cbbaefa9c7caf0454f914c60501fbfa89a2b7a42497bc04b"
+  },
+  "assets/art/animations/geometer_weaponless.png.import": {
+    "imported_sha256": "f655db749308180e36c56c6a0378cf5b5adef4becf768aa2af32b36aeab632de",
+    "source_sha256": "c5434e8ed3cced5584afb70f609958c20e527b1c43dbddd3097de90ec3edf26a"
+  },
+  "assets/art/animations/hunter.png.import": {
+    "imported_sha256": "809a3ffed67ec51aecc4ff4370e8bddce0dcb236f980dc825fde506bf203f23b",
+    "source_sha256": "4d8a4432f3dab613d44ea7576f7cf5fb3fb65ee19520c1fc6b6c10e573ee56cf"
+  },
+  "assets/art/animations/hunter_weaponless.png.import": {
+    "imported_sha256": "1cc13f5c3cadfb23b55fafbe60c89d9150f298288e0eb304d7fcecc5d77131ea",
+    "source_sha256": "fb74cca1502c9ab8b44a1459d77b25e99a4d410c8d02e46f0a2672f38eb39a64"
+  },
+  "assets/art/animations/mage.png.import": {
+    "imported_sha256": "c03a6521fc8ef386ed6940fd367f72549254023640ed7424627d0d12313902a2",
+    "source_sha256": "5aa02c5989224e7f88f9649dd0113b97ad6427cbbc0246c2a2162322dd691935"
+  },
+  "assets/art/animations/mage_weaponless.png.import": {
+    "imported_sha256": "186a2693bf0021573f794fcadace9b5e27c02ce23a973790f1b40a6e00602786",
+    "source_sha256": "6585fd265bf5b88aa368f2061d1f8ed82bf901e40ef6fff61e27101552e9c74b"
+  },
+  "assets/art/animations/sentinel.png.import": {
+    "imported_sha256": "ee9eee067ffea3c5f5e99033f8a77051be197f0dc120c1b8314347141bcdba38",
+    "source_sha256": "caf2cdacaf6c40df711d66890b808d8d26ca534033949139043269b72a0c56a1"
+  },
+  "assets/art/animations/sentinel_weaponless.png.import": {
+    "imported_sha256": "0662995eebed28b3c0d954dd47bb36c32e67b16dbee490c1c2513885cebb2a86",
+    "source_sha256": "e700431e980d3c5e4143473faaf0da58a914453171ab8dbf72515b325f709ef4"
+  },
+  "assets/art/animations/spiritualist.png.import": {
+    "imported_sha256": "7a7c9f5349fadbf4e8ee63e989f2a6b85420b3542d952fab63e761d2c82aa71b",
+    "source_sha256": "c2c6cc1019ceef8fca11dbf8ed0f43a1a2147a944905c469b111a06757e75d93"
+  },
+  "assets/art/animations/spiritualist_weaponless.png.import": {
+    "imported_sha256": "9859ac68bf7513fde175f3df1e64680dfdd033fe0fa1357299689d1ba2746397",
+    "source_sha256": "9dece4f94132a93746109bd63afc66c80c6f414065ef9c4935fbad85051f0478"
+  },
+  "assets/art/animations/swordsman.png.import": {
+    "imported_sha256": "e413ed1993efd232982dbbb8d080d7ff93eb8f316db84a9f706cbdb652680fc3",
+    "source_sha256": "55b73b11f06c911b3795cbf00a2776a57862b88bb33465bc35123e8fb9ebd72d"
+  },
+  "assets/art/animations/swordsman_weaponless.png.import": {
+    "imported_sha256": "c53782bb1edd9b3bca32a60c83151bf05064b441348d7acc91d6b3b1360f2fec",
+    "source_sha256": "7e47707563f56b11fa70c75d5326afb429c257ae08cc52b00b5d1787c33cd25c"
+  },
+  "assets/art/animations/warrior.png.import": {
+    "imported_sha256": "7f22f8dda1b8c6d217e02d1e5f67cc911954a0506db5df4fb3457c615b1c8808",
+    "source_sha256": "e87432646cb5397ce9a8e28233a60d075058f1a99023dd9e676502d69fae8b91"
+  },
+  "assets/art/equipment/axe.svg.import": {
+    "imported_sha256": "62ad0cafb0968f2526ef70c469eb1c8a810e2177289310eedf2a9b73f55decbe",
+    "source_sha256": "5270e1cda3a89d39fd085edc6f64e31dd6566d84eba0fe423f30d54e0d5c18d2"
+  },
+  "assets/art/equipment/bow.svg.import": {
+    "imported_sha256": "3e9a79c8c0189a4b4d4cd0615ff3b061a0782b7c93f52d783bca1089fe36eb48",
+    "source_sha256": "c5990a8c487a12a89715aba4dc7a6e433a0d84cd862f5d1f433adaad220c5dbf"
+  },
+  "assets/art/equipment/prismatic_focus.svg.import": {
+    "imported_sha256": "7a705f253398117f5368f54c327ba8bc2621189638bdb50d7ef5bdb39fe24bfe",
+    "source_sha256": "80def0e1bdbf132049a9ff8b22c1e8648b4060487b62572e3c99a085fbc3bff3"
+  },
+  "assets/art/equipment/shield.svg.import": {
+    "imported_sha256": "fdfb5b009df86155c88f6394c9df44f67c1679cc41aeb7d1325a52973c3b57b1",
+    "source_sha256": "cf7cd53eb9a2d53a42ba5bc41fb671925cb1ecb409d1e6a942c178500a9082ad"
+  },
+  "assets/art/equipment/staff.svg.import": {
+    "imported_sha256": "56ad1fcf095b61487d96d5dad6eb62a51576fe5396aca7f32afe16e5e6e175d6",
+    "source_sha256": "40fae6b8881163f92da4b1104706b2b5ff63eeaf25a973fd3cf03dbb86f97599"
+  },
+  "assets/art/equipment/sword.svg.import": {
+    "imported_sha256": "1c7baf30d45f994f46af38379272b41d5fc812341c9fdd61aa458f7fb7bcffe1",
+    "source_sha256": "885f4e181dbdf1bbb7b73c004bfdbde8576ad0d4405e427346c7a59b360c4674"
+  },
+  "assets/art/equipment/wooden_beads.svg.import": {
+    "imported_sha256": "9e56c2fee6f08e9a4ea21730eba44743eaaca5e5470766d446481b8d6d22c436",
+    "source_sha256": "5b6b7ac7149df9dc60f2072739dd9c6413c9856754e76fe88a1202bb05cb1d46"
+  },
+  "assets/art/icons/equipment/card.svg.import": {
+    "imported_sha256": "43a576e6a203c14e1faa1fcebdfe06647f236fe145258cb35ff995759e984a3b",
+    "source_sha256": "30ecfaa02dd01f476ad584f400d95bc5232c6f07eea50a2f6deceacaf2f3b253"
+  },
+  "assets/art/icons/equipment/cloth.svg.import": {
+    "imported_sha256": "b59260204395c28204126262ffc5baa33db9696a9156ccbae1690867b5b44c0c",
+    "source_sha256": "2bd3375bfa3a0feb1434b13e5bacc42e181833d9df8d3b3b61875766acdd24c7"
+  },
+  "assets/art/icons/equipment/focus.svg.import": {
+    "imported_sha256": "4c7ce02667d73e560fc22f755598251783be729a724c9ffe4db8b3206d2786d3",
+    "source_sha256": "598e4a20a66b7f013431724543e707683770001376e8598a842744bf28f93cf4"
+  },
+  "assets/art/icons/equipment/head.svg.import": {
+    "imported_sha256": "d518d7809241522ec41f0877ebb181bc5e48b9f16e6be5f647ab6ccbe7981fb3",
+    "source_sha256": "6cc70104f2b07e124c22526e5a85ce64eecd2fa210bf4885fb020844f6144372"
+  },
+  "assets/art/icons/equipment/jewelry.svg.import": {
+    "imported_sha256": "f7767bdcdf5f6d5322d9ce1b28a191083af5267304109aea3b750b174e87291b",
+    "source_sha256": "1328319ac89c224a42babff49076a398a39d7df8df186fa046e24033058e12a1"
+  },
+  "assets/art/icons/equipment/leather.svg.import": {
+    "imported_sha256": "1cadc86e283fd173e37f2d3749243cc77dd99d33b1f408ead7c61d2f2895aa70",
+    "source_sha256": "84536518fc280c17c6b24d02b1ddb8bc0b68c5dd245c1cf16404c9700857d48d"
+  },
+  "assets/art/icons/equipment/mail.svg.import": {
+    "imported_sha256": "810752ef67789daef70c2b454dabddb043e5116afa01efd406087bcc369aa0e6",
+    "source_sha256": "52ba98396860df5d4330976fb8c220182e2d34a296cba5d9703be6258aa91fa2"
+  },
+  "assets/art/icons/equipment/plate.svg.import": {
+    "imported_sha256": "81f173d4ed8e58c88f7950aa3a6ad08ae075227e27cd79a2552676ceb5524390",
+    "source_sha256": "af88f3441137f861336c69593f68168453f08931be1d48df8da95373167a431a"
+  },
+  "assets/art/icons/equipment/scales.svg.import": {
+    "imported_sha256": "9fa751f40bcec7e243c032c72edc0299a868735665172d0503fc844d8b538e4c",
+    "source_sha256": "1fa04567a8139dffaa67b3da053e03b5376e13db3a5fe486ddf9438fc05c8207"
+  },
+  "assets/art/icons/equipment/shield.svg.import": {
+    "imported_sha256": "0825205be4d66452b5e753f9c6e158b4bc10689534d34619338c03ad7598d674",
+    "source_sha256": "6456eed2fb0059e1d0852b424165cff9599a9ca4575222baef2371cd23641efe"
+  },
+  "assets/art/icons/equipment/weapon.svg.import": {
+    "imported_sha256": "08800baa7f5fb9bb34b12129cfd2191e4584232156f5dfbad6df9c225778e2d7",
+    "source_sha256": "dfcfff21ba176a041df2bdb2bf6dc7a83081c20737f4208df6d117d3469a01dd"
+  },
+  "assets/art/icons/hunter/hunter_covering_shot.svg.import": {
+    "imported_sha256": "c529259f349e9aac1357371c3a617c95de6964666ecb491b84f8467162c68aa8",
+    "source_sha256": "f2fb5007c779938a6a5f5b708371b2d78c15a012db79feeffba0c6031c29c9ae"
+  },
+  "assets/art/icons/hunter/hunter_easy_prey.svg.import": {
+    "imported_sha256": "40c0d1f01cb1c27ab3a37efbedbbf213a3db8b2ab6dd41df5fcf5cf5f1b1032d",
+    "source_sha256": "dcfcfa9f54f1e33ce7b68f9d9b6b68663de1438c626b89bdd8eea347d096c26c"
+  },
+  "assets/art/icons/hunter/hunter_freezing_trap.svg.import": {
+    "imported_sha256": "7ac0c2dc1c003ab80d8337deb16f6086a636327ef6a97ed666ed4782b1daf332",
+    "source_sha256": "c26ffd6c06a0ad4d7278a11b8ba1ed392a64f98a8ee7da4ee4136c48f7a6b5ef"
+  },
+  "assets/art/icons/hunter/hunter_mark.svg.import": {
+    "imported_sha256": "1b52edf0ec571a67837be8740fd9f605f5b262d9d824641fb34c861e32e0c0b4",
+    "source_sha256": "9a8e39fbec06fca69a8bc0e8bbb698bfcb8219cda09284740bd83900f2997486"
+  },
+  "assets/art/icons/hunter/hunter_shooting_discipline.svg.import": {
+    "imported_sha256": "4de04196a9c4f7bf3f188e242de55f3ad8570566bbdebbb4da62537e069ca4c6",
+    "source_sha256": "0be7de689798a1f085268d1db472d5670974b23dcfd981c2218aaf7e86b78a62"
+  },
+  "assets/art/icons/hunter/hunter_tar_trap.svg.import": {
+    "imported_sha256": "b4de3f0439abf2f84e3928c8c367f245bec5c5afa1624eb95b8fd8a663f97a95",
+    "source_sha256": "9887024e0c1754946984fafa68584d38b827176c60033a9cb6037f00a7d19f1b"
+  },
+  "assets/art/icons/hunter/hunter_thorn_trap.svg.import": {
+    "imported_sha256": "a2ba372aa59c5f3c0f07e08c3721630dbbe87a465919e15b0850cd801c4fa4e1",
+    "source_sha256": "1273a826758f71b7929747983542b6c55a630a84fbaea32192480d442661f705"
+  },
+  "assets/art/icons/hunter/hunter_total_cover.svg.import": {
+    "imported_sha256": "dac8040014bf4bf3be081b9b6bd8fcea65102f7d657bfb4cf3750fe5f3b235e9",
+    "source_sha256": "1ff88b7c9e0ad1103191dc6bae6fd27e22cd79aba7d4d49d37a061bfaa65d2ec"
+  },
+  "assets/art/pilot/archer.png.import": {
+    "imported_sha256": "f647fe40d074d41cb469193181f6398094d27d63ab4b276b1894558c5052997d",
+    "source_sha256": "7a2937893bcc5c90300a3444f35e34c7d825ec5ba0b8bd7b80a114878a493d5f"
+  },
+  "assets/art/pilot/dirt.png.import": {
+    "imported_sha256": "842daa689459073b7bf97f10b350d978e6531f8ff7adeea4b43a2b9bb04ce753",
+    "source_sha256": "9f28920efad19d65b0cd080c595da3437909927f7b0e617057387b2820b5ce7b"
+  },
+  "assets/art/pilot/grass.png.import": {
+    "imported_sha256": "f270175cb99c3a5e753b7d8167139dd13bf4471d6f56c814230b5e6ee51c518e",
+    "source_sha256": "8ae51748b416581c3ee0a2cf20d0e75dc1e074769935a653a1efd3016ee2404d"
+  },
+  "assets/art/pilot/hero.png.import": {
+    "imported_sha256": "dd366a0aee9022273e017ab8a59cdb484021674aff835c1f93256f3a9275822b",
+    "source_sha256": "54d0db8f0dbbd1d19a715b0a42e7c5cf70aa0cc6e8e682b0f85c02bea16125e6"
+  },
+  "assets/art/pilot/stone.png.import": {
+    "imported_sha256": "65a7948b3bb7b2afdc1546e9949ad2e84b3c503fed84dd8750e8e4704e152029",
+    "source_sha256": "181fdca0bd5494bac5618954981938fa996da609f73b74274c71f684dd8fe9d1"
+  },
+  "assets/art/pilot/warrior.png.import": {
+    "imported_sha256": "3db48ce68689d100f74b6bd1f312925fc9b2876bd461fab043fa6e78c4f2aaac",
+    "source_sha256": "b3b9e6b92952aba273681be43c47dce541191577cc6922ec399249494cc60ce3"
+  },
+  "assets/art/skills/archer_cadence.svg.import": {
+    "imported_sha256": "decac5c01c776ceeb2b41631f5bfcf8482ad79c6ff8c14e1be3d4a1de7308a19",
+    "source_sha256": "bb05bbf61300512a464c02017207131e75d0ea7a7515f4fb12eb4d73effaa8e7"
+  },
+  "assets/art/skills/archer_precision.svg.import": {
+    "imported_sha256": "3cb44ff2d3b18d7b99905f1270a104f92725869d44ced30988ce8341e2794ab3",
+    "source_sha256": "2808927d698d40810374ae75f1ccb5c6d9d6508720a7e3bdf5045f264b6cbb0a"
+  },
+  "assets/art/skills/arrow_rain.svg.import": {
+    "imported_sha256": "36144a5e2baae58e833c3d23439d70a4a8ecf189192aeef47926fc057217c7fb",
+    "source_sha256": "3cf3919d8d84e7edea96095e384b1ad9f704994079e20272a3f4b32f543fd921"
+  },
+  "assets/art/skills/berserker_blood_rift.svg.import": {
+    "imported_sha256": "5ee87b96adacfd062a0993a83665df75f2d994cd1a636381ae4918ae907d1b17",
+    "source_sha256": "5a472ad8fffaaa925f66b5ef9552a68883c68c1fea73e2aea720d6b49424ca8c"
+  },
+  "assets/art/skills/berserker_breath_steal.svg.import": {
+    "imported_sha256": "280379029df83c8299614db5303dbe9580850d5fdad5b7baa5e7a38a4ef22e72",
+    "source_sha256": "de710c6e4b15216be7dbc022d53df7d57488c309d2bf45a9e4d9e3619b8b1f22"
+  },
+  "assets/art/skills/berserker_execution.svg.import": {
+    "imported_sha256": "804fb783e53ea5767bfbd9629f918a3f5a29aafe9d1af947aa9805fc5d5b3448",
+    "source_sha256": "f839c578b4895271a47084b2e8264b9330ac9f19faf3030d38eb736b0220f986"
+  },
+  "assets/art/skills/berserker_obstinacy.svg.import": {
+    "imported_sha256": "a52713ddb0c5d390330db4724a22e1d7b490e4de220a2b52787484b5f3f440fc",
+    "source_sha256": "738d0edbdb141ed1e06b51b22c96fd91a54f7d3fdf2d5566f395245874b7cbc8"
+  },
+  "assets/art/skills/berserker_pursuit.svg.import": {
+    "imported_sha256": "6f0bb917e5fbd6461bac8c6c6e5afe154520231ab2991aee865893a539f75074",
+    "source_sha256": "37bd84275d558177aef9b343734b34b9eb7d5322a37b014a77ebfaab7e31e1f5"
+  },
+  "assets/art/skills/berserker_rupture.svg.import": {
+    "imported_sha256": "c3d0de91a772ef61a844ac59013aafd36c2909f86ad271837c31e454bed7ba09",
+    "source_sha256": "cb994f9d37f2033905305feaab7466105464fa45bca297b9e124c1a8493e8f03"
+  },
+  "assets/art/skills/berserker_wound_leap.svg.import": {
+    "imported_sha256": "86f7984aa13e0b7e54d6ff3c59ff979d5337c98debb4a6449cbb338662feb804",
+    "source_sha256": "5d5f45bc17ce10fe62a71786bf9ec50ee2fdab0bade2b143ac2a2d2bef0eb7ca"
+  },
+  "assets/art/skills/blood_thirst.svg.import": {
+    "imported_sha256": "f7460ebad8ed1e8ed3314a1af81a1ff5ac2e0727b936fb46df9c03ae02e8f444",
+    "source_sha256": "e78b9cda493b8f0ce087d4407e211d0e02a64dd5e331df5b130bebd87d4e2c69"
+  },
+  "assets/art/skills/brutal_strike.svg.import": {
+    "imported_sha256": "3fee00c9d7d5de1d348978894ec3baef0f302a60da70b61e07c7e8481bc7412e",
+    "source_sha256": "c25ea33230ea57428a9d4a9904091d8a044f4e504f1c277d37fb991cce33186d"
+  },
+  "assets/art/skills/concentrated_rage.svg.import": {
+    "imported_sha256": "365be7ec54c8609d90b7eebdd220eb52d080ef176b14663946fa0d9f81c47277",
+    "source_sha256": "756372fc3e8cac4f5b9f4ca28e941b1e04d5dab3b65139905875608418f43aa8"
+  },
+  "assets/art/skills/dash.svg.import": {
+    "imported_sha256": "2c3e14f34490a69606c872904677ea684413602fcffc6fa4cfe5ccd1ff4cac24",
+    "source_sha256": "88b51c1137304e086933e86a8ece4e5daa32e287e050ffafe2e8d0cd1df318d6"
+  },
+  "assets/art/skills/defender_anchor.svg.import": {
+    "imported_sha256": "75187bb4471b81a9bf2bba2f49b14e120a92a428cc6a8b682f4453c76380c937",
+    "source_sha256": "9fcc4d0784328c06725552a6247435477f245091eb104dbf2af72f1fbb514e9c"
+  },
+  "assets/art/skills/defender_counterstroke.svg.import": {
+    "imported_sha256": "ea23a80166eabd1f97363b5f06772895c11da0c9515de4c22f2d83f912c02564",
+    "source_sha256": "8a90e9b44a4e9f719ea39481bb1e82ebf6ef47bc7aeaf24730ea503cbc4b3726"
+  },
+  "assets/art/skills/defender_guard_return.svg.import": {
+    "imported_sha256": "4ed3780263adb6a3bbea88af92d7952b3392d3d15f7471ae966fd8a95326c7ae",
+    "source_sha256": "1c74527d5a7fa625069655a70790208d93f6e60a269c89db22d070be4b600b5a"
+  },
+  "assets/art/skills/defender_line_lock.svg.import": {
+    "imported_sha256": "9faa2316ae7669ca589795ad595f44de9b1b0360a7395026ead85cc62c8e0126",
+    "source_sha256": "177549d29aff3f76a42c4559f20b08071e02f5f2ee598a949afc1f129ac49ae5"
+  },
+  "assets/art/skills/defender_reprisal_wave.svg.import": {
+    "imported_sha256": "3b25a84a6b01b893a44e060836f09c971e798882b729bacb4e08ec4401f3f0a3",
+    "source_sha256": "cf09d97f5191a5259fa2852393b72a196b2fb9faf8eebd82a36e5241adcdaefc"
+  },
+  "assets/art/skills/defender_wall_advance.svg.import": {
+    "imported_sha256": "3f8880deef7f46f9ede95ca829e87e106d0ed3761fb30119858f4545d08e05f3",
+    "source_sha256": "86ff30b8dd17b9ca19e155638d0bed1421e231aa011b3d095fe70666d3595e8e"
+  },
+  "assets/art/skills/defender_watch.svg.import": {
+    "imported_sha256": "99dda679b420ffba0dcb095597da9562b314ec204fb67c72b414360339e8b416",
+    "source_sha256": "f9c57d01f83e3cffee2c4072cb5c7a0cb8f9b9d7d51e59e300ecde4d78cd2443"
+  },
+  "assets/art/skills/double_shot.svg.import": {
+    "imported_sha256": "aa2bfe774d66593337aea36f846f2aa8a4aa846b83846edbab38131912f6020e",
+    "source_sha256": "d5a8f132ddd614ae53a15e147ffa52a21b12cc30666fbab89561f3cd78f62f15"
+  },
+  "assets/art/skills/electric_discharge.svg.import": {
+    "imported_sha256": "8ce06ba1963dc2a35eb60936eb9601ed72246c93e864dd5dceb01cd66856f829",
+    "source_sha256": "4fdb838f0ab6dcf97da730919445d01b0de24af1baec221ed50a34f27e4bd2e9"
+  },
+  "assets/art/skills/elementalist_ember_path.svg.import": {
+    "imported_sha256": "ebe986e7368fa0e3b3605d8d4945c44e5f182bc8c218f3e50e2c43aa4fba4a4f",
+    "source_sha256": "84004ab97491edd4d06794762fb64be5318dc54d576e12e0bf4593855097f8a6"
+  },
+  "assets/art/skills/elementalist_flame_burst.svg.import": {
+    "imported_sha256": "48daf22d24165887f9ecfb1f1dba9b9dd452aae31c97f9928f625f9b8a977b8e",
+    "source_sha256": "322a0bb23324871f1b36de85fd4de80f3ff503a44db1c997ae50655933fdda5e"
+  },
+  "assets/art/skills/elementalist_glacial_ring.svg.import": {
+    "imported_sha256": "375b2c0fdd442e82e22c81985cf3635770b7ae489bfd9b1460ea9457ca3a3db3",
+    "source_sha256": "b315c990482fa5efa71ab966f4db7d1d62633a6f820dde32be440956b64c1621"
+  },
+  "assets/art/skills/elementalist_lightning_arc.svg.import": {
+    "imported_sha256": "b72d8bbcda857073a8a179abecae3c68df4dc11c02a1054c2a10aeaccb0e7af4",
+    "source_sha256": "5e61073d7d8a0a6641b07447199979a03900341374f5c537440426b44a7586a4"
+  },
+  "assets/art/skills/elementalist_prismatic_focus.svg.import": {
+    "imported_sha256": "34c370f295c8b54987858e0e2c67af344ed7ff2f722e9606a6a40edbdc5c7200",
+    "source_sha256": "27197b816d965e6a07aefc6fcbb2a3683e43780428c52e64c58ff2961064d010"
+  },
+  "assets/art/skills/elementalist_prismatic_resonance.svg.import": {
+    "imported_sha256": "53623061c994011f40b9e7b157903fe4d20db695598bd287435d6b5a2213f2e2",
+    "source_sha256": "ce49b8fc997b1024679b2343369cf012ae1a53f21f9c3b8f882d7d423cc6a239"
+  },
+  "assets/art/skills/elementalist_tri_nova.svg.import": {
+    "imported_sha256": "ba3f100f04a95cb05b8054e3c9c7d95a188deed54113b3d6ea4f3e1279e9b8f8",
+    "source_sha256": "429376196ee44e2dfef01cad2c30046448eb0134a59331db77f2e560d427f9f0"
+  },
+  "assets/art/skills/explosive_trap.svg.import": {
+    "imported_sha256": "20868e4ad0368feeb3738356b948c7a6ac111ee8df66cdd060aca4015bf7a529",
+    "source_sha256": "fb6ef4c01443f2ff759795324f57692cfa413f245f414ec8de8a56f10e1102c3"
+  },
+  "assets/art/skills/extended_aim.svg.import": {
+    "imported_sha256": "f6bfc5fca3c90fce83d55b93f780b975feb7bca4bcadeb9386a8bb83d065038b",
+    "source_sha256": "8fb3f9c94ac5656105d5f9da03066aaad7a4bfbb6c88e00a7e10fb977f3df830"
+  },
+  "assets/art/skills/fire_spear.svg.import": {
+    "imported_sha256": "93ad0de2f7c5a32c0421fe87e125d550671e43a044c8d793fa3e040e2c34b885",
+    "source_sha256": "16c62be9031ac5c20312257fe66bf85e455ca188df6d80ecc7cdc7757c2a06ed"
+  },
+  "assets/art/skills/fire_wall.svg.import": {
+    "imported_sha256": "98654453b0080598a6e849bd349726df5c665155701a28a3ff2a9dc5e0af4352",
+    "source_sha256": "18ecc318b0b70fff485ee2421eac2c6de43b4d06e94e8f659d0fb9eaddfb62f7"
+  },
+  "assets/art/skills/fireball.svg.import": {
+    "imported_sha256": "510ebdc591f2f9da2413462c45396482b59fb711cbe80f63157bcd32d3d0dda7",
+    "source_sha256": "8a33962ea9210fe042585ae1ff255edde23bea4aa1e64ae143b1077cb0dbbe3d"
+  },
+  "assets/art/skills/foliage_shelter.svg.import": {
+    "imported_sha256": "98d76243843fd559da3928b043be16c3bdf93eb750b72bcfb534317337a3eba6",
+    "source_sha256": "98d5556e88bd60165e7358ae06640b7b8903c2e421241bd6d58e2f99bf8653aa"
+  },
+  "assets/art/skills/fury.svg.import": {
+    "imported_sha256": "0be3461bbafcadd63e373305042e434693e7535ba52eb29745d5dc5abfca3b47",
+    "source_sha256": "79a54d5d5a329335462bac831ea2abc508156a4bf0403060b0ea86fec874b58f"
+  },
+  "assets/art/skills/geometer_collapse.svg.import": {
+    "imported_sha256": "90f004649b16a9fd9aa575141317eefb7352ccd69b63ebe3174c7b925ced166d",
+    "source_sha256": "40cbd288ca10aa4abf6a679c50e662ac1ceb2d2a87a58716341db41cc2bc91a9"
+  },
+  "assets/art/skills/geometer_incidence.svg.import": {
+    "imported_sha256": "1f206d19098d450efe9a1cb9bee5be2690789d35e8ea722ff5ad91e4beaf7275",
+    "source_sha256": "dbd8f4a2e110070a542205d63acf31a11927b290823c03b479a55c6d0a50041c"
+  },
+  "assets/art/skills/geometer_rewrite.svg.import": {
+    "imported_sha256": "2fc9c76b1512d9f2cb3be58f664fa7cdb46e6b4fd023fdc28515fab0de554ff8",
+    "source_sha256": "0ff00b4c4abbff38d3c85001efba3980ba8c42e81f6ed84aab6120ff82404c1e"
+  },
+  "assets/art/skills/geometer_trace.svg.import": {
+    "imported_sha256": "42aa2586700de539c85ef1e8fdd82531dde14ff1aa29984334f77766732070b2",
+    "source_sha256": "b951317bb8c54cdb243533d89cdaa9d0f637b31f80e2285ab36b7e0c082ea821"
+  },
+  "assets/art/skills/geometer_translation.svg.import": {
+    "imported_sha256": "f3c7d6eec7943e2e142c73afdc8ac4823be092112a9dbabe81564e1e1472e35f",
+    "source_sha256": "a484b3603608435a25cd3155159f8921d8e8e62ae81e7916d9d7732f6390bd2e"
+  },
+  "assets/art/skills/geometer_triangulation.svg.import": {
+    "imported_sha256": "6ee4baead950ccbb541a9952c7c9766cb9bff03ca38d3297ddf5a940cc26832f",
+    "source_sha256": "9a42a16936d4038fc25923b498b6fb894b65ab87e755f36e3200a21ce874068a"
+  },
+  "assets/art/skills/geometer_vector_memory.svg.import": {
+    "imported_sha256": "d95d0e56747bb4b10e82b06fc1b51f3f2d7ffbe7a78138d4e3294ffff8331963",
+    "source_sha256": "e72e56bf52040c041494676c92b03a4388e579745949437b5b4c75eb3944b465"
+  },
+  "assets/art/skills/haunt.svg.import": {
+    "imported_sha256": "fbc108185d1dd89816c9d8f6d50f8fed8d3d33eeab302bdfcacaeda73b39a9cb",
+    "source_sha256": "c109b8f4cfddc6d98cc131cbab8d019c1d70871d6df8e8cc83a35edfd3fe86c8"
+  },
+  "assets/art/skills/hunter_covering_shot.svg.import": {
+    "imported_sha256": "9f48f3a527951d2acada24cde72d91b8197bcf8018891a597f414a6d52574eb3",
+    "source_sha256": "9a3387ee078759802252c0ea3d61b4c7a79765cfb2176a450d1eeb5cfa1573e8"
+  },
+  "assets/art/skills/hunter_easy_prey.svg.import": {
+    "imported_sha256": "041368b234ff2a573e9dde52c664d19e24e8f984b0abc87aace098be9209ae8a",
+    "source_sha256": "485743591246cdc078fb2f514338f9171218d2001f4dccae09773ec22df9f43a"
+  },
+  "assets/art/skills/hunter_freezing_trap.svg.import": {
+    "imported_sha256": "eb0ad28eded0b0ca2f14be38bc80c212498cb5a0ca7f476d8d7f8e9c899e7fd8",
+    "source_sha256": "53861950c3cdee0617edd316f908946d4a44b17760b4df000a6aad0b63dff59a"
+  },
+  "assets/art/skills/hunter_mark.svg.import": {
+    "imported_sha256": "05a6028334bcdb0c3b0d991acdcdb240b1494be05b3fef52ef2ff7e81e71fb01",
+    "source_sha256": "22628d4b7ad1aa4d384b8d8448df87f45a92914bcec0629b69f45b7c56f8d044"
+  },
+  "assets/art/skills/hunter_shooting_discipline.svg.import": {
+    "imported_sha256": "ff1b0785c9bb3f28aca2ef537e10f9331bf033373d9b627a2e46d7f3e5d5b65f",
+    "source_sha256": "fa77d06f4a4a868f9de35587366801ace62ec9a4e9a49bd1882d2670cb4a207f"
+  },
+  "assets/art/skills/hunter_tar_trap.svg.import": {
+    "imported_sha256": "450cd4bb7a8acce325ac47525a699b928926f8d0f03ef274aa3a0c6cb89c43ab",
+    "source_sha256": "f1eec2be58f6dbfa68b818e7cbcef9a0b0a43eb3b84609fa4679e99b71270700"
+  },
+  "assets/art/skills/hunter_thorn_trap.svg.import": {
+    "imported_sha256": "62a1d790edd34458e8a68101f90d8d34a57eedba95682d0f5ab5c641843f0062",
+    "source_sha256": "82e7e7e5471581102305557f7d81ff91a8f2d74dd864170719aa330c4fabb21f"
+  },
+  "assets/art/skills/hunter_total_cover.svg.import": {
+    "imported_sha256": "0fd0dc618b669046e467a3f16720026fa6f8029fcda610faa01a314f3bfe37c2",
+    "source_sha256": "13d4be077d724bc185ceb0ac1e97f43ad0a44e127516f9ed3e8d950223b0c8b6"
+  },
+  "assets/art/skills/ice_spear.svg.import": {
+    "imported_sha256": "e6ef244c5e02f7d958461cb15663cdb28e52b6c213ff4525d8d8e81edb9e75f7",
+    "source_sha256": "610e952286954f979b694ea8d6740e4ad2d8ba51ae4b1782499443e14d32d00f"
+  },
+  "assets/art/skills/ice_wall.svg.import": {
+    "imported_sha256": "c85a7e67001faaeb9c507e8077f03acc499519e9ea0b671944ba36a35073920b",
+    "source_sha256": "33f0f1941149c417964d32a3dde51e24ebe76ebaadfa3fcf87da754675f7d794"
+  },
+  "assets/art/skills/lightning.svg.import": {
+    "imported_sha256": "b186e6705bee418853e95ff01d360b1b0f0acff0cf7224d39df0d3d53a87a7b3",
+    "source_sha256": "9f057b87c49c7c3d31494e14cccd6bd9f9c27666e9d3e5ff2f5bc07041af9cec"
+  },
+  "assets/art/skills/lightning_wall.svg.import": {
+    "imported_sha256": "2f0e5ae9c69e6287ebe3f3d09e651dcff32e681197eb82faba36d6c2569edb4a",
+    "source_sha256": "94a8a075756ad54a2a9bea06409596c1fcb03cb680cf88e0c5763ef0ed1081f6"
+  },
+  "assets/art/skills/mage_mana_regeneration.svg.import": {
+    "imported_sha256": "a0975484ef0112d700ffbfa3f824d40ed668603d942511054b7fa66b72e76d90",
+    "source_sha256": "a96061ca67fdaab1e1b864e3b037526df397f2213769750d235571333619011f"
+  },
+  "assets/art/skills/painted/archer_cadence.png.import": {
+    "imported_sha256": "24b4f60a46a10a9b4ebbfadf95c07b2e2bd2fe32cd27606443c3fa2ce55ec091",
+    "source_sha256": "bcc3c2901f2dc08dc71326d68c2341ea6b89e5db5472142a624b383e22296a8f"
+  },
+  "assets/art/skills/painted/archer_precision.png.import": {
+    "imported_sha256": "ad37cb6bbdb3e7ef56b6bcee70ce44fd6efe83f2af46a8757026ce82ba1259b7",
+    "source_sha256": "29962fad3e39c9fcb5580e9ce0400dee60eeaf66ce4bcc3de9d0c7ad2c3103b4"
+  },
+  "assets/art/skills/painted/arrow_rain.png.import": {
+    "imported_sha256": "1dca94a4148d92d34de837514c186cad0ce3971d5f446831579012587410a4e3",
+    "source_sha256": "ca3719899ab4a0fa7e7659f4aa6401e81b00db49156f9b9902375b8075ce5b1e"
+  },
+  "assets/art/skills/painted/berserker_blood_rift.png.import": {
+    "imported_sha256": "f675a894fe5d85aa7c190c856077e694f428b2c210992c3ffb4f062f8681707e",
+    "source_sha256": "0ff8ac26b0d298891d61b3f94f87f23633c35b2efd730a4312e56eba38bc20fb"
+  },
+  "assets/art/skills/painted/berserker_breath_steal.png.import": {
+    "imported_sha256": "a37de94ac1798862253844068fa87f529143c71fba3dc90ee3010cc96b39641e",
+    "source_sha256": "ba570b3ab06a75f21a3fedaddc09477b86e7e7570420b8f9ee832e369e706e41"
+  },
+  "assets/art/skills/painted/berserker_deep_bleeding.png.import": {
+    "imported_sha256": "07da02a401755c017e1da7cc50698269479a8e28251c37e58099a3bf5a57c9f5",
+    "source_sha256": "8284fde3508732950789e19b76935062b92298182edfb7fb3ba0d26258376d10"
+  },
+  "assets/art/skills/painted/berserker_execution.png.import": {
+    "imported_sha256": "db8c5a5ffbe51790313d8f662c35e3f669145577d13f8487b8a98b0a18d5bbc6",
+    "source_sha256": "3e6a0eeeda5a5842050454e4f3fa78be6aa48013c281d61e603a98e0302226f7"
+  },
+  "assets/art/skills/painted/berserker_obstinacy.png.import": {
+    "imported_sha256": "b1967e213f83a3939595c3b7e6608da1b59e9ae124fab411269bd18359099d5d",
+    "source_sha256": "24526255eb8d48cce0ad3cd859543c433a3b61d08b4a3417960a2d5504cd5d8d"
+  },
+  "assets/art/skills/painted/berserker_pursuit.png.import": {
+    "imported_sha256": "449757ed51230ab21cefbccafbea8eec0b82f7a69526c429517f29cf476d2c82",
+    "source_sha256": "36014108e929d05dd59a654229268a136db12bd497f759fe2ead78dca04295d6"
+  },
+  "assets/art/skills/painted/berserker_pursuit_cut.png.import": {
+    "imported_sha256": "f06cbc855e81f144ef0d688f41f18adc28bee2af514cfe1bef5812e40ab65f32",
+    "source_sha256": "03748b8c6ae0a8b5b63f2122097603185cdfb6d19a58b934632e66586aa0e12d"
+  },
+  "assets/art/skills/painted/berserker_rupture.png.import": {
+    "imported_sha256": "d0fdc028d2773c6d1d750b6a3db6e73462b495661327ad912294bbb0ecf7a055",
+    "source_sha256": "06f0c5044f422292264349e275537e2af575ef1114f2b6ea41a1bb4ada2c928d"
+  },
+  "assets/art/skills/painted/berserker_wound_leap.png.import": {
+    "imported_sha256": "45966bba9faae3793c4e5897b6370a7b8ab301f869a0e5f44895ab0a4d0bf600",
+    "source_sha256": "69bbf9149ea2f2429241ff9f8262401ffa99f468f4cf6e9e23fa55988f78d702"
+  },
+  "assets/art/skills/painted/blood_thirst.png.import": {
+    "imported_sha256": "1152262d99d50457825cb7a428fc7ad5663b176bf5fdd5b0320377c6839d2379",
+    "source_sha256": "6f825c7686d755db5a60442f0e1535b67ae1dc7a093bd73b6c710cd8f439ba11"
+  },
+  "assets/art/skills/painted/brutal_strike.png.import": {
+    "imported_sha256": "edf1682da065c1072ad66ad2c18424591910203a81c58bbcb9a990c0f5dea1fe",
+    "source_sha256": "e4ae59cb7b508900400174aeeabbeb21d956379b6b535c7037d4de52ea3d6c1b"
+  },
+  "assets/art/skills/painted/concentrated_rage.png.import": {
+    "imported_sha256": "cfc2cfc16a6ffca0c9e58667a16a37430a079469f89ca77289f8e9fcbb6201e5",
+    "source_sha256": "aef9c636db02f69954940c52817af905c0c3e78e5c89bd21623ff0822e34b3d6"
+  },
+  "assets/art/skills/painted/dash.png.import": {
+    "imported_sha256": "bc95a07d55a405ca2b3658740ea25bcb87d56f1c1616377b3f486c24b49e0eaf",
+    "source_sha256": "2ad29c084dc69f517b6aac08f2f9d47ba0e1a4cd9fffcb4b4820dd24b516deed"
+  },
+  "assets/art/skills/painted/defender_anchor.png.import": {
+    "imported_sha256": "33b85ccebb28477fb67936265d2e491575c939dfee02c5509ad268baf64a7d68",
+    "source_sha256": "1213e3ec6a5b8b235526fce5f70b3da6e3779aa7ec243efac6c4dcbadc309d5c"
+  },
+  "assets/art/skills/painted/defender_counterstroke.png.import": {
+    "imported_sha256": "fe8380c435144fbcc441a547492ee55811dfc2de76d695d75a2091f576f9c5ec",
+    "source_sha256": "311fd47e40e8ea6d4c4ae10b1f8d165406123c733296396a7f1a12cc261899da"
+  },
+  "assets/art/skills/painted/defender_guard_return.png.import": {
+    "imported_sha256": "24944b4c21a1db3d753c15b00bced23ff36b42775b2bc6d921d35263525cd256",
+    "source_sha256": "e1dc3d19355abe32cc11f65c9bd4925b7690644dd5e331060b556e60cf91d718"
+  },
+  "assets/art/skills/painted/defender_line_lock.png.import": {
+    "imported_sha256": "cb8dcd1a002d2c312cda296f9f2f22b36ea5729b07d447aaecd40bd0f0e398c8",
+    "source_sha256": "4c9779a3d59dfc4cc5754417623dd22f20d81da935c7fb1cb96272627b23ac22"
+  },
+  "assets/art/skills/painted/defender_reprisal_wave.png.import": {
+    "imported_sha256": "a98083bb4946cb984f9594aabb483fc93480ca88035f4fdaabf4f995a44de52a",
+    "source_sha256": "7d3aed6ce93e73c70194a0c38f59a71d62664d6203a8672de7d12b2cf6cfa92e"
+  },
+  "assets/art/skills/painted/defender_retreat_guard.png.import": {
+    "imported_sha256": "409d482dd9c0f5ce2728635129a949b169cdc811bde9a81ad86056479840a5ae",
+    "source_sha256": "0e86607ad00fadb9a2d0500ff7f7686e1ed97dedf27ca13f14793f890545c376"
+  },
+  "assets/art/skills/painted/defender_riposte.png.import": {
+    "imported_sha256": "d824982b9c51207a49bb4c58ab8493b149abc1f8859f48e36cdc9b140d2fc621",
+    "source_sha256": "3392fa31fad3e5939598e78f0b051d1cfd444af269a51ca21ff44bd6aa00b573"
+  },
+  "assets/art/skills/painted/defender_wall_advance.png.import": {
+    "imported_sha256": "17c09c0767eeceaec706eaf2a50a6860f4ec5a295d84f1e469a85a388126a925",
+    "source_sha256": "73e91b55514d0f51c2041d220f9c78df67dda8022e2a41a9db030e2bb5b7f5b2"
+  },
+  "assets/art/skills/painted/defender_watch.png.import": {
+    "imported_sha256": "23004ba1732f8bcfcac42007d870fea5945d67610b9e9c07d3cd791e91a46a2f",
+    "source_sha256": "6115043001b172d80075e7afded26a81aa651be9a2be4e7685c738fb240daf22"
+  },
+  "assets/art/skills/painted/double_shot.png.import": {
+    "imported_sha256": "248a83fd5e5204f0db86a69baf5912386d9d916782d172b33a5883a327221733",
+    "source_sha256": "41a59c6caee130b4f5b2a4c40a30bf4589c390df28a332eeb2a64f2976f4bddc"
+  },
+  "assets/art/skills/painted/electric_discharge.png.import": {
+    "imported_sha256": "e8fd7a76d168b87eaa930552e13db4d69c268e66f4cf39036c7633f6ed469924",
+    "source_sha256": "dad76b5c1aadd11b601fd3b58cb30cac7d2581c4d7dd147edcc1f19f6144cf8d"
+  },
+  "assets/art/skills/painted/elementalist_ember_path.png.import": {
+    "imported_sha256": "1a017c91eedf5355b1771927e5d0338b5b0f50e8a11b4f462cd8ccce917d3a5e",
+    "source_sha256": "4beb023a09e2a7a98ee8188ee4ea50536b2ec08b75c9b63248756b1953568fc7"
+  },
+  "assets/art/skills/painted/elementalist_flame_burst.png.import": {
+    "imported_sha256": "e415ae596453fe5980c30f18cd497a6caafa8ee8e0703594c34516950c32faf2",
+    "source_sha256": "1a0f24c8b821b9c6eaecdc2a89bfa1954d3b4047d80154233b0010527ba4d458"
+  },
+  "assets/art/skills/painted/elementalist_glacial_ring.png.import": {
+    "imported_sha256": "1c8a51fad235974283916218e0fbec5cc030c5f2f541da2736967d4ab0f6cc1e",
+    "source_sha256": "749a7da454b4874f0108d6686932c1a69793d2e901110f6cf298251eacd76fb6"
+  },
+  "assets/art/skills/painted/elementalist_lightning_arc.png.import": {
+    "imported_sha256": "e150c4e6d30914a2cdaf4b236aa28b4fde70edcf0f0a8e9b28c6e47015c4517c",
+    "source_sha256": "39b4f8d50bf11e7d3c66736c6bdfb3cf4f2dc2ec0a7732912bb85d71b2ff0a40"
+  },
+  "assets/art/skills/painted/elementalist_prismatic_focus.png.import": {
+    "imported_sha256": "34db4b2b3a467b9346e69fab65a4e554644c657283dd6965642fdf91449f27a8",
+    "source_sha256": "40b944a282e7c5fb0322a75d48a1f0d4b4bd7aa48f5e2e33037cf32fd05d60a2"
+  },
+  "assets/art/skills/painted/elementalist_prismatic_resonance.png.import": {
+    "imported_sha256": "956350dc08bc5d4a56e707d329197f067aa93e835916fc18d8bcbeaf82146927",
+    "source_sha256": "46dc03865cd41143b2e11f5fa1e642fcc42a978593b3884437242da7b91cab1d"
+  },
+  "assets/art/skills/painted/elementalist_tri_nova.png.import": {
+    "imported_sha256": "6859727d3c18f5d96b2bdac48209e84eceda8a964b92b8818c7a74338da22b1e",
+    "source_sha256": "459cb3fb54b7426c0d7ffa3835bb6c6734f69b97723350c4d65f9c3de781b5a6"
+  },
+  "assets/art/skills/painted/explosive_trap.png.import": {
+    "imported_sha256": "faf276d5aa4d4287542497adcbb5340dc590c7cc9c082c597e6a1476f6506121",
+    "source_sha256": "4645b86e56f7114b0e242c964cf98b71420afb9364aa93588a8a387937f03489"
+  },
+  "assets/art/skills/painted/extended_aim.png.import": {
+    "imported_sha256": "28e7be6d2c291f7f8d4cebad428d2f8a95b3e26a38fffd19c89142ade3af78bd",
+    "source_sha256": "84cf9493d883222cc7ee3bbc0cbbf7fb5b42a68fb47980b11368467ddfbfc5e2"
+  },
+  "assets/art/skills/painted/fire_spear.png.import": {
+    "imported_sha256": "f4bdce4c61c5be4668205d049b8a0312b62d55cbfef7580f2a757b84d4ba9f0b",
+    "source_sha256": "9718e61875045460d95c7b4bd6be3da02e9b7f1631f02908db41b9bbe857867f"
+  },
+  "assets/art/skills/painted/fire_wall.png.import": {
+    "imported_sha256": "5b2fa99e1c762a7506fb6d742d5208e33bd7e94c787a3bb2d4ba6a0cbbca1f9b",
+    "source_sha256": "b6181f8b185768abe570972cbe21d184e4dc0bb5a631cfdfaab3cc02cc795cb3"
+  },
+  "assets/art/skills/painted/fireball.png.import": {
+    "imported_sha256": "a99721aa210b1f8fad58ce764cc8a7354bb8f06b2a5fd37898fed0b25e875d9b",
+    "source_sha256": "f53acf4f3f7c9212c7d59ce33c25a056ac40b991ac85eee71db2a7b7b745ac24"
+  },
+  "assets/art/skills/painted/foliage_shelter.png.import": {
+    "imported_sha256": "7ffbffb643b6f552bc985b71d4acb812301dd464b3d305343a14b56424a42329",
+    "source_sha256": "4964ef1cb1f9d0ce141f5e8a1abb781a5dd276ddd35a5d68990ce455969d0ef3"
+  },
+  "assets/art/skills/painted/fury.png.import": {
+    "imported_sha256": "9b1bb01566129862e15d8e06b6a10ebda3c86f3a10bf8a83e0d8d456d69722cb",
+    "source_sha256": "a339171272766c005b87655d88bf76fa7a11ce1479a77b4952071f3d4bab04fa"
+  },
+  "assets/art/skills/painted/geometer_collapse.png.import": {
+    "imported_sha256": "a897f9e49d75aa120d79ee19c9248d8e3b8e8f5970b097c2230f1484939197fa",
+    "source_sha256": "bc25fb382c1780041f7542059de69cb101d511df004b5e85cbc8c5b14e56e8b3"
+  },
+  "assets/art/skills/painted/geometer_incidence.png.import": {
+    "imported_sha256": "b501c5a6aadc5533bb4381e27ae98a1977ffe38abd2d143e7680859e7b02a072",
+    "source_sha256": "fbb486218978558b3f9640dce7b632d3bca0f7e921b424fa9254211d13b0cecb"
+  },
+  "assets/art/skills/painted/geometer_rewrite.png.import": {
+    "imported_sha256": "44e5659ff4d12d3231044ae1ab5373f88ebd11f361d9adb550c0144b58104c6f",
+    "source_sha256": "1b6bbda49acbb6e684e869bab9b7f5ecb9df822952341a40c84ad8119ff37390"
+  },
+  "assets/art/skills/painted/geometer_trace.png.import": {
+    "imported_sha256": "37320df8aeac301675478134090be2eeb6e66a80b5959aaa2572aef8372b1c8b",
+    "source_sha256": "74c54d9dbe7ca22b0ec18bfeef90562886d6b1f27a8f2f7e20bd156547d15b94"
+  },
+  "assets/art/skills/painted/geometer_translation.png.import": {
+    "imported_sha256": "2e69463c83d5c9089f8a28f42e726ca08fc513fe21f7375774f439bf8bd92f18",
+    "source_sha256": "411f7aededf37eeeb88ece73963dc9f3ed30936d4890c5d6c1f52fc241e1cc91"
+  },
+  "assets/art/skills/painted/geometer_triangulation.png.import": {
+    "imported_sha256": "e7898e50eaa09ec9ea91129f5e3b8d64674973d71b4a4d8cd7a534e587236b5b",
+    "source_sha256": "e837383dfc63ced1032eb1e57c2c2a0dccb6bd3d231b3a10b7d2a6caebe05b15"
+  },
+  "assets/art/skills/painted/geometer_vector_memory.png.import": {
+    "imported_sha256": "a1cea6522946aecf94ed50c7c7a7bf04d42fc8b2a0441b02ecd32fcd1e58e6a5",
+    "source_sha256": "e5cd76f2a1179b5a7d470494693c3d26062608f0d7238f98e14202b724ffca92"
+  },
+  "assets/art/skills/painted/haunt.png.import": {
+    "imported_sha256": "96dae4bc61973807ce7b878d55a1348d14dcbf012b0bc3abb614582736a906ac",
+    "source_sha256": "69d42243002602f1735409a69ae0cbcd9fb3dc0232d8f237ffe34ce059bcf07b"
+  },
+  "assets/art/skills/painted/hunter_covering_shot.png.import": {
+    "imported_sha256": "51eb600d707c9ae5cb611f54cc505f7f6e77d64132ac1905c547e13648461ee5",
+    "source_sha256": "79c18e4bb3c8651b5fe08801144d829d6762cf32b809e954419eefeb35cd4071"
+  },
+  "assets/art/skills/painted/hunter_easy_prey.png.import": {
+    "imported_sha256": "d53a0c07cb7cbf6af82dd342e89a858ab9aa0476f6bd044526b914cbebac0e6c",
+    "source_sha256": "ff02817ee71b3210fe19899e1422bb49990f92bf07beaa638b941bceda47b02a"
+  },
+  "assets/art/skills/painted/hunter_freezing_trap.png.import": {
+    "imported_sha256": "4c5267c7cdfe8583d8f9f79a91973c4e3c10ef44114d9ae1a4711a40efa6f9f0",
+    "source_sha256": "700a7f463c4cc0ebe49f688cdb91cd9af49a5084f35e566e4b36da13e0bdf3ef"
+  },
+  "assets/art/skills/painted/hunter_mark.png.import": {
+    "imported_sha256": "71f32e1f5a71365be99cd00d7a00ab841bc761ebed8f0795604981a86a1d11ed",
+    "source_sha256": "3294c2c7cdbdf23a0c37b3277ef8fbee2cb44debf8aafce3320cf761c7e240c9"
+  },
+  "assets/art/skills/painted/hunter_shooting_discipline.png.import": {
+    "imported_sha256": "3d05da0a57d28798e0fea3e05302f69e0ff877a8563945708f096e2248deeb4a",
+    "source_sha256": "12ed35d149fa9a8fa17e78600007ec1af3477b5f7bc80055795a53d5a2396aae"
+  },
+  "assets/art/skills/painted/hunter_tar_trap.png.import": {
+    "imported_sha256": "dabc9acd74e39f69d99030009e168e54b53b7386f740061ce2702205a0d887c2",
+    "source_sha256": "2033382f8778e0902654e6de794795fb4967350401e7a9926fc60c6153fff54f"
+  },
+  "assets/art/skills/painted/hunter_thorn_trap.png.import": {
+    "imported_sha256": "39b3ef60bad0be9186f16e96129d2d633ede3baa5bb1931e988c3c8dd62c9e15",
+    "source_sha256": "b2f9e9add2f1d4802e8dbfda399a16a2b4664bcdcc8ae7a40ec4c56167b7efc9"
+  },
+  "assets/art/skills/painted/hunter_total_cover.png.import": {
+    "imported_sha256": "7d47fb6ed6feffbebc131fecc696979d69c334d79677a7ec75e130ef67d42bd3",
+    "source_sha256": "9901c9cd62ae6fd191f0c04abcbf486f0480995db2c08fd0b342ae16c04fc451"
+  },
+  "assets/art/skills/painted/ice_spear.png.import": {
+    "imported_sha256": "4628e68a4bf0cd013f454b6bb94d974257416038c42420f4e1943e55d81d756c",
+    "source_sha256": "d0cb8343358b460ed32e40def531275d9cfd13648cbfb0086fec4032078c96ab"
+  },
+  "assets/art/skills/painted/ice_wall.png.import": {
+    "imported_sha256": "7d33637eefcd3ac2287e92955451080c31f27d6091d586d41957a3f0db68e38e",
+    "source_sha256": "f1e1337ceac64dcfdb557e4bd6b7b08bd40991fb78ca4bcda1f813edf2b0f3fb"
+  },
+  "assets/art/skills/painted/lightning.png.import": {
+    "imported_sha256": "f94e7bdcb1662f8b0bfd5ed4725bd15fbdb21c5059feb3d7b5e1d57f398dbaae",
+    "source_sha256": "d2187a0c144630193023b53546706dc6a23c4031ad82eeb0bab421f13531773b"
+  },
+  "assets/art/skills/painted/lightning_wall.png.import": {
+    "imported_sha256": "5d21981c71d2d7e93aadff00b1436af32904c5a723df3dcdd38c66aa4f26b66b",
+    "source_sha256": "99d99381d204aa3710fcd04a74c91c99add17906afb0bd7ae50fdd55759bb37f"
+  },
+  "assets/art/skills/painted/mage_mana_regeneration.png.import": {
+    "imported_sha256": "8b21b4ccbb9c323f9f173fe5f0e9dcaafa9a6bd4b87b7fd25ad1f5e1b58a10db",
+    "source_sha256": "8cbe6b2b87a9195198301dc17c05f38703afbe0ae6731e9f2db5d437331f32fe"
+  },
+  "assets/art/skills/painted/perseverance.png.import": {
+    "imported_sha256": "6bd0bda1484b2dba239dc22b956c1128f95cb3781e2ac3e761e8d6a68aaa2d74",
+    "source_sha256": "d19f542d20f20bcff942966f755c8e5d69de5978a605d9ba881c3970a965d523"
+  },
+  "assets/art/skills/painted/phantom_barrier.png.import": {
+    "imported_sha256": "a9498dd34f012f24a8ddc0258d6588e9e5a50da41f175d06ec69aa93cc55d3f4",
+    "source_sha256": "a8c7523cda14d2c4a6f5afb3a38a29fee475266291a16e8f7eef13aedf067833"
+  },
+  "assets/art/skills/painted/piercing_arrow.png.import": {
+    "imported_sha256": "033cf13e4e78a7b0d3234132bb89ded6024f361d53051a1d72c1494d467fe7bc",
+    "source_sha256": "0a811eb2c929c615606bd3828ea00925c44c26b8551675507a70ffde08152628"
+  },
+  "assets/art/skills/painted/piercing_shout.png.import": {
+    "imported_sha256": "e500ad4a3456786f7cc16bee26eff61de0941d9d3c66b3254120503f14b57d3b",
+    "source_sha256": "025c97b956c4bb239a935bd846a469dabbc8dc908fb5201e1c1874fd41948daa"
+  },
+  "assets/art/skills/painted/provoke.png.import": {
+    "imported_sha256": "eee5c33974d66ec4cd5cce226ac29a9ea270cf53eff35d894351914186986130",
+    "source_sha256": "17f031ebd1f5b1d069f1463fe9f13db6d8408cc3f1331fc94b84f3cd09b5e5c0"
+  },
+  "assets/art/skills/painted/sentinel_absolute_focus.png.import": {
+    "imported_sha256": "7c17a97811caaaaf42fd96151c1b6e068e3663073b9f75c8f73e0cd8d2610a21",
+    "source_sha256": "ffdbe4f8754419cb48b0dc303b7dbf6d1974142ca82bc2b487840973c562c0dd"
+  },
+  "assets/art/skills/painted/sentinel_concussion_shot.png.import": {
+    "imported_sha256": "e955e2afa7032c35156ddb1bae099b68de6cd44315a6ac42313524143da352f0",
+    "source_sha256": "0a0e64741afde4acfd80ba3cf18b4334dbafc30523dc51367f661c1f6f84b08e"
+  },
+  "assets/art/skills/painted/sentinel_explosive_shot.png.import": {
+    "imported_sha256": "a892e6adad3ae92c3af858080c24b75c897ec7c69c1b7ede7fe75a7b0c774f54",
+    "source_sha256": "f91b823759f23eda08bf86ccaf47de04a8e0fd22ff7787bccb481e75d7d41613"
+  },
+  "assets/art/skills/painted/sentinel_headshot.png.import": {
+    "imported_sha256": "4371763c5dbe8e0f99009c791d4e1d8659ca3e97803b7745afaecd9feaad36ba",
+    "source_sha256": "62c803b396ebaef030951ae5ef03ff6006e099755ac96d5ccf0aa787dc6fb9c2"
+  },
+  "assets/art/skills/painted/sentinel_net_shot.png.import": {
+    "imported_sha256": "d8bbbd11cfee050a14ac51093691e14d95c34f7d45f474324fb1fb543406c880",
+    "source_sha256": "1d8f76b165ede6a6774e33393373c4d8a5ed945cd6af5179b21b2c7d1a662a90"
+  },
+  "assets/art/skills/painted/sentinel_observe.png.import": {
+    "imported_sha256": "9608d5b075b021bd26d72caf9e557c3877949d517b1cbb96e684e47d13ff6de6",
+    "source_sha256": "dcca23982a1fc0805a263221e3f0a31d535c78e2d6325fe98081469672219beb"
+  },
+  "assets/art/skills/painted/sentinel_opening_read.png.import": {
+    "imported_sha256": "6a392458ff74d27ad7564344e6f5929d08d341a77b1c3d7ffb259cb841139f14",
+    "source_sha256": "6e2231f711f40ec65a6efb353794fdaf8fc475110d76ee088c9efdb4cb804b7d"
+  },
+  "assets/art/skills/painted/sentinel_piercing_shot.png.import": {
+    "imported_sha256": "4f66d4bb99e29faef5427f5d26f308274a4d5404637d2acfecd345fd066c0687",
+    "source_sha256": "6758e3e953aec3fbe34cb8e2f747fb3301e2c3e9cf18fe78951f6a5ed2ef3859"
+  },
+  "assets/art/skills/painted/sentinel_precision_stance.png.import": {
+    "imported_sha256": "26e6fa8f4c5011e8a9ea3003393b0e4223f465f09ed0365b1165a9c32b405d04",
+    "source_sha256": "70bf4fbc80ee1dd31d68497042ba3337ddb105e2d441a2792775e37e3884a1f3"
+  },
+  "assets/art/skills/painted/shield_wall.png.import": {
+    "imported_sha256": "14e7849ad03a23a049e4416064abe708208b1f99dfe0f1f07a902941d249b98f",
+    "source_sha256": "fc5c0943d7c5967e360ff9d68d224d4f13c6a08bb74ec0c9b4e61834408f02a6"
+  },
+  "assets/art/skills/painted/slash.png.import": {
+    "imported_sha256": "c43e2a239d1a3a82a681d19b72923d0c855553283dc2c32e099c0cb910e9ef5e",
+    "source_sha256": "9c823b4267e83760be5644e9fb456090ab943b11b535cc9e9433257ed7603f5f"
+  },
+  "assets/art/skills/painted/slowing_arrow.png.import": {
+    "imported_sha256": "2f2e490c41394bd54f8547c49ab4de6d079b8968680ba0ca0bda893a7e14c689",
+    "source_sha256": "b4fb515111b8d8a69fe5492b182da54c144923ebdca6a10445c337ca43240fd1"
+  },
+  "assets/art/skills/painted/snare_trap.png.import": {
+    "imported_sha256": "ea82089b92e0eba9e21eb60902707e5f03950355c39976e31b91b00a33b4015e",
+    "source_sha256": "ddf018c2ec1d43f38b00154951be91b4c94229064cbdb860d8a3e78fe2ca1184"
+  },
+  "assets/art/skills/painted/soul_impact.png.import": {
+    "imported_sha256": "a50313b5f027b1c95c8d9f86e6ab2f16e8ffb16004615f7a5af78b45d3305761",
+    "source_sha256": "28e4593dc6ac1ea182e7b5f063cb0327d1d119824f7fadbd06d3d0a18683c529"
+  },
+  "assets/art/skills/painted/spiritualist_channel_focus.png.import": {
+    "imported_sha256": "90100d538a303364b7d5e79d77171e6c6f87af7b316fa00cebc6340f6cd3890e",
+    "source_sha256": "1434af1b2433d4bb40c81c3e8e3f1c5ad56648eba330b9ebbf5376479eb389a6"
+  },
+  "assets/art/skills/painted/spiritualist_dissipation.png.import": {
+    "imported_sha256": "3b74666f72b5b87ea0acd040bf62516cf1309f2ab8872b735357e45736c8e013",
+    "source_sha256": "f925b66147caac710863b25a3ffd3d979137619db117bbd7b2515d851a432574"
+  },
+  "assets/art/skills/painted/spiritualist_echo_curse.png.import": {
+    "imported_sha256": "17346b6b9c095a855ea443f8a4d0beee2d372f604e51241111a7aa883edb9a9a",
+    "source_sha256": "1795e7ad282c7ea2b8df487577121e19c4302d837a1ba3ac66bd49899a237f9a"
+  },
+  "assets/art/skills/painted/spiritualist_echo_recovery.png.import": {
+    "imported_sha256": "a9a8affbc69037435df313dc28397c7265a024b34c8765f17c3a3302b88009ed",
+    "source_sha256": "9d43196a5fe84fb5a92202dc7b72cddaaf4b1a64e2160721303dffd5a4604635"
+  },
+  "assets/art/skills/painted/spiritualist_procession.png.import": {
+    "imported_sha256": "44764014cae8cfb968ce3ac80a907b38d9a6f8a7242a937dd11e1ae8ecea44dc",
+    "source_sha256": "54f5a7f9fa3a6c9d774f505e1f9c7e43fb3e62763ce6fad28793ac60799177cc"
+  },
+  "assets/art/skills/painted/spiritualist_soul_drain.png.import": {
+    "imported_sha256": "e25a789201fd8ceb1a41054c118f1449f326007796a3264f51d73292b01a581c",
+    "source_sha256": "84cec8af29e9956bfe63ff59b1e18b7aee1b441ec953130c26b13e266b5cc585"
+  },
+  "assets/art/skills/painted/spiritualist_spectral_veil.png.import": {
+    "imported_sha256": "a58e38dc24d24605baad16962c9b4b5f3e1ce073e714bfe76c1b117fc6ce0b5f",
+    "source_sha256": "a6c4918d540e26bbbe535317d99c42e480055829311e7bcd9ee124395272d752"
+  },
+  "assets/art/skills/painted/swordsman_resistance.png.import": {
+    "imported_sha256": "0e828a3fe1e297c83b6879fd908cca09e6884518065fc0482de7d11770a9f2f5",
+    "source_sha256": "3de6c80f12c5d0623703a91438bbbf95b326127f0f44d9d7cd5e843460b19481"
+  },
+  "assets/art/skills/painted/teleport.png.import": {
+    "imported_sha256": "b153c15c819f697885d2779f5ce2cda9b38319a1bd277297d4ce8622b2f6d509",
+    "source_sha256": "41fe8a6087e44c6f9821d159e195e871c1c57ff4f3cf6dd038794345e0248050"
+  },
+  "assets/art/skills/painted/terrifying_shout.png.import": {
+    "imported_sha256": "7ea42ca2eb9ebf75bcc2625838cf068b3ef40dc86a1b1700f2126a3cca9a48dc",
+    "source_sha256": "eb114011a8857fc77ac0126ceebb03391f2e2e0d52c40a5c4d0a877dc983e7a8"
+  },
+  "assets/art/skills/painted/trap_technique.png.import": {
+    "imported_sha256": "190c1462fea44cb438eb774853614be6a9e2660a032ed01f749542895915f534",
+    "source_sha256": "e133ab9b9c76a3afb89ac9d7b218c708202f4ef85dd43723e3f9d5be40e736dc"
+  },
+  "assets/art/skills/painted/vigor.png.import": {
+    "imported_sha256": "61bd5a792acde6bf0c38e30eef7036e87d6a9b67ddb0e3cbd83ad39c584c305f",
+    "source_sha256": "3eb8ffeb29e8c031bcf390c0b6c1cf0281ed56a48f5d44b8cf0d2160822f0f04"
+  },
+  "assets/art/skills/perseverance.svg.import": {
+    "imported_sha256": "f0c838e5e834b3a4702410165d0e8f07b597dfed0a723e48e96b8dda6269ef53",
+    "source_sha256": "d91a1b8eee42b624efa697eab4916a698549e1087f68a50bb61e18f24775607e"
+  },
+  "assets/art/skills/phantom_barrier.svg.import": {
+    "imported_sha256": "594a2dfd18168728b12c1213183c922e8d6702445882a9514154b76b1e92273e",
+    "source_sha256": "f6d33cf3ed00175e60bad1d5dae2d6d25aa6ed2c3685d8992e5de10afd585128"
+  },
+  "assets/art/skills/piercing_arrow.svg.import": {
+    "imported_sha256": "fd38b533c0ffa8cb6ccab768a2d29cf1d56d2f978b05936b1f216c078aec5900",
+    "source_sha256": "f034496c75cd1e67e2a294e10f033bdeaf9c7ccbac45426aa563d7fde15226e6"
+  },
+  "assets/art/skills/piercing_shout.svg.import": {
+    "imported_sha256": "5290a835c325cf572c1704af376ed2348b91c6ba5c999d80d41b6bee82d06cc9",
+    "source_sha256": "8b7aff06e3a30aace8f5a1ab4b8fb98e36986042b1748ddd92ca7ac618db976e"
+  },
+  "assets/art/skills/provoke.svg.import": {
+    "imported_sha256": "581e18fc0a9d93e8ab69f5157000e75533bbd797efa2e9a89cb18de4deb02b18",
+    "source_sha256": "4611b072086d066cb55e936dffb9dd6dca16a1d2815d9ec3e1d3442ac6a4915f"
+  },
+  "assets/art/skills/sentinel_absolute_focus.svg.import": {
+    "imported_sha256": "b689241cbf73ce0042ef7462a63ec653f3867a60f53ec92d698c935f206b9697",
+    "source_sha256": "ca801df43386eede92e48dec07f9983f55a001ae1e0343de6a69822ca8920b43"
+  },
+  "assets/art/skills/sentinel_concussion_shot.svg.import": {
+    "imported_sha256": "a15a3ab6f5b59e4ff259286aa14002acb7ff7102b90c30cffb9187a4785811da",
+    "source_sha256": "1c64ec52867970e3eb164e5b1b440b3f7dad1b74fa192cd80866be48ed2628f1"
+  },
+  "assets/art/skills/sentinel_explosive_shot.svg.import": {
+    "imported_sha256": "80eb3799a4755027b009f5127a7f5051a157bc526a4323e4bcbdb0995125f932",
+    "source_sha256": "711b212d0bef457aead45dfc81a628e2af4ccde1515ded164c4dcb74d936781f"
+  },
+  "assets/art/skills/sentinel_headshot.svg.import": {
+    "imported_sha256": "e2796b207d3928efb24b4a4e7f200f1c8b6772d64fcc2ae8049222bf6d3a4877",
+    "source_sha256": "5493c1e52770fa81f6b6b3ce807dab66247e0c151a23863c1ae28fba28b601e8"
+  },
+  "assets/art/skills/sentinel_net_shot.svg.import": {
+    "imported_sha256": "fc26850d0dd8f1b5cf119fcee01689523d40ab38522d9bd8cd70af85ecb00520",
+    "source_sha256": "841f8a636046b26bf6a10943ff401921f7ac273573fa26a9853303b48af1aa4e"
+  },
+  "assets/art/skills/sentinel_observe.svg.import": {
+    "imported_sha256": "c14adf676552e94c5e846686b443d8d006fcf788acb90f8a006940d12c298510",
+    "source_sha256": "6744c5de51b126851aa106d3f96506832a4a4e65e2e53996ff22e9f6e939b457"
+  },
+  "assets/art/skills/sentinel_opening_read.svg.import": {
+    "imported_sha256": "935cd904b6b8a07204d760fab5813828915fe1911bb47abb701e7f0ffc64537c",
+    "source_sha256": "8ba12bd55792a1342bce079cd5710d5d794a6d4bde0d6f5a870b991facc66d37"
+  },
+  "assets/art/skills/sentinel_piercing_shot.svg.import": {
+    "imported_sha256": "3564686608402d2a7851b8c4b5ad4e48370b38df7c6847493d332bcb88048b6c",
+    "source_sha256": "c80aed00e623fa3974d560a36bd3b16d6e665ea75687b1c704a9bcccc07e4d38"
+  },
+  "assets/art/skills/sentinel_precision_stance.svg.import": {
+    "imported_sha256": "6cd8d720347515ba33e54e077c53838b1b45ba0d1ced64ed51315a0bb66c9d17",
+    "source_sha256": "f2056cd6ac9cf40728905dcfa3bd95ca886a5a24ec7673018ae2beed149a1cca"
+  },
+  "assets/art/skills/shield_wall.svg.import": {
+    "imported_sha256": "d8e93d729e223df70a2294b96d54cc3bcec91cf2ef6b5c5b99bb031a17f5088c",
+    "source_sha256": "fee152538f9d93ce9849c05fb953dac2a871cafc6099065b4b522789e4f40f4a"
+  },
+  "assets/art/skills/slash.svg.import": {
+    "imported_sha256": "0b8a64cb8c49e54e7a201cffb034f3444fca6c4d2510d5e8ff4699df44591f64",
+    "source_sha256": "e174f4dbfccbeb784c23d61665a3a78d1ff7118304fb4055e8c5f5e33d0b7334"
+  },
+  "assets/art/skills/slowing_arrow.svg.import": {
+    "imported_sha256": "bb6c629ad454c62b6e01b7c80c8625b6c77a0f89603dc9dff4c92cb7bd0e42bf",
+    "source_sha256": "abbda6ded25e836b1e9ebac0d5bae6d27fb7adb44af6f8e5fec25c8ff0648aeb"
+  },
+  "assets/art/skills/snare_trap.svg.import": {
+    "imported_sha256": "b233b6e13c677ae8d8304f986325558a2b2028d7fe93f7dec7b8bbc0f786769d",
+    "source_sha256": "3beb89775f798b34ef2e09762e4d7de2911028ae4a68e2b9342525a376c56c97"
+  },
+  "assets/art/skills/soul_impact.svg.import": {
+    "imported_sha256": "9f5957a967e7aa50f7bde0aeec2b6bc021d03ff2c87315b31d19ddbff1523586",
+    "source_sha256": "b4b1fb054c83eb960a477d37385114a705282d07b7da8558dc0db38cfb8e51fc"
+  },
+  "assets/art/skills/spiritualist_channel_focus.svg.import": {
+    "imported_sha256": "8ebb47936b734a299c043ca65511d2c243d299aae7eb61f9ac63b641a67ec6f8",
+    "source_sha256": "4e9ddcee905f7fe52debf6b2a4750e3ccd6599efaf0917f5d3f8a78992510b53"
+  },
+  "assets/art/skills/spiritualist_dissipation.svg.import": {
+    "imported_sha256": "470d93456186afd3ebbb6dbaecf89368ad2aa7de824718671710a5d1dda6cd33",
+    "source_sha256": "4f920d7c4650d254aaf1591bed138399f5556a0a91787d4b7fede2dc009e839b"
+  },
+  "assets/art/skills/spiritualist_echo_curse.svg.import": {
+    "imported_sha256": "907910b11b98925f5dda63ad34bd7c15765a875a06577a583a8ec280f97b345e",
+    "source_sha256": "30709ee7216f88254bd6d1b15a1285f30b783de884f10f1da49fdbd530f1f689"
+  },
+  "assets/art/skills/spiritualist_echo_recovery.svg.import": {
+    "imported_sha256": "c6064abc14d5a9c9bec6110ca8603dca356d263a1bd779b2b9256503501d02ce",
+    "source_sha256": "94d18c4628277710dc6b1315e11b0bf404875ee0efc08d3b7f6f756aac161df0"
+  },
+  "assets/art/skills/spiritualist_procession.svg.import": {
+    "imported_sha256": "414a6a4e890bd86b62e1393d61428e6143f83531784bc4f4d8454f35ae3441e6",
+    "source_sha256": "5aa0f649f7edc30340a6e850cbb7cd83f0e008892385a8f496e32bf151b91288"
+  },
+  "assets/art/skills/spiritualist_soul_drain.svg.import": {
+    "imported_sha256": "4de99f9e4471a73cb850ad14f0c23b42320a94bbc6b35aafb563888819174ff1",
+    "source_sha256": "e26d26cbd05697e37602f8f294eb135313ef52c285520e4f5c43ca92def99a01"
+  },
+  "assets/art/skills/spiritualist_spectral_veil.svg.import": {
+    "imported_sha256": "75f884322bf73e0bbd57e8124b84838e8fd2e8256c52f67faf4b77fd545cb5c6",
+    "source_sha256": "bdad345f1528addafe2ed3a3ddbeb0e88211c28038d90cacb964bcfdc216689a"
+  },
+  "assets/art/skills/swordsman_resistance.svg.import": {
+    "imported_sha256": "4ec85b38681113b57bb6ffd3dade35ba689a69fad6de470e05da36c5b1fc8cb9",
+    "source_sha256": "49bc72d4cb390ef2a85413242a3650bab0b1d5ba9d1900382446a1221dc3490a"
+  },
+  "assets/art/skills/teleport.svg.import": {
+    "imported_sha256": "dbd847ddf6bdd4846c8f289610f62a09b08be7f69270abd0cbbcdb7a2dfbd8ac",
+    "source_sha256": "d059f647a31c0f5151a43d02bd530df851273a611e384f4b77a382aa961f2333"
+  },
+  "assets/art/skills/terrifying_shout.svg.import": {
+    "imported_sha256": "6cbd7eff91cf177b34fb902d5512610095742756d0e11af98dd2b0a9c55f581f",
+    "source_sha256": "e572ee4162fb7706a943cdab175a3fb31540d77ee3fd93836142c32091a047ba"
+  },
+  "assets/art/skills/trap_technique.svg.import": {
+    "imported_sha256": "fbaf6432d372a4159e89eba9537819dd6cc98739229a9ba2237cb183d476bc62",
+    "source_sha256": "cb69f395366944d668fed6f25bc38b24c0c2a8909b7a4376234568b979e2de86"
+  },
+  "assets/art/skills/vigor.svg.import": {
+    "imported_sha256": "09bb1a54a51ddde90df79f2ed74f167e9f52d9f92e9079670fa233da239f5a2a",
+    "source_sha256": "a348c940e6dbb754a3dd218fa2b7df517119904195d2b81a0bf20ea824025086"
+  },
+  "assets/art/vfx/soul_impact_orb.png.import": {
+    "imported_sha256": "3bc39c06044863bd5a1903dea9aef64c0d43b79f8947bfea2da5fe603d1626bc",
+    "source_sha256": "7a62f9212161d1da10e5fc79266dd28ac3e8b01cf539839d78a6e21ac1d0258a"
+  },
+  "assets/art/vfx/soul_impact_orb_source.png.import": {
+    "imported_sha256": "ac6e15e91463b34c47abf9bdfc64095e239a708dadcbfc6d4a1e0398fafede8b",
+    "source_sha256": "6922e807fda7408aa9430375297852d19bfead6cc22caf5f93a66c36cfa2a14b"
+  },
+  "assets/art/vfx/spiritualist_curse_sigil.png.import": {
+    "imported_sha256": "cd33ca0fe1c1849a93b86d1f724a5afe39f57fa6fe9d0e2b1a87ebdb932ac8ec",
+    "source_sha256": "9cfc08e4c1777fe1edbe922c934d20bed6bfc33d298f82b91879d07e2c12ad88"
+  },
+  "assets/art/vfx/spiritualist_effects.png.import": {
+    "imported_sha256": "54da1a081c9c0ba87c7e0d93a8ce4e692d6736d165ef51bfe897cab1b7c8e92c",
+    "source_sha256": "cce6644b9234067370b3ae8ccebc236f1a4517f846813cba2e23b3bf951eb484"
+  },
+  "assets/art/vfx/spiritualist_ritual_halo.png.import": {
+    "imported_sha256": "675d1827e61e5db46bb1b573977834d9b970b3c27c4bfff727a0515cd3af0a09",
+    "source_sha256": "5eb7a5509782eb3de51d4bd601c30e10dd87e804b426c61c52c28807c506cc36"
+  },
+  "assets/art/vfx/spiritualist_soul_wisp.png.import": {
+    "imported_sha256": "b2de9857a8e586fc94c1af59074724591f2fa49cbf94bb032dee7a4972748c28",
+    "source_sha256": "8636bfb5257a5bdbedba5615a73d8d7adda9baedabfb35a1c5b66258cdd8d1b0"
+  },
+  "assets/art/vfx/spiritualist_spectral_burst.png.import": {
+    "imported_sha256": "2fa64b394f5876663130b0f5d7f9b26d885ba21363eb9c6c6dabcd795506f8a4",
+    "source_sha256": "48e49df156cee842f6bb3fefe31975312b5752b3cb4285a16ddcf3c03fe168c1"
+  }
+}

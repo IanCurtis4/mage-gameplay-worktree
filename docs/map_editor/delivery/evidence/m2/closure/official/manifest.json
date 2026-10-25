@@ -1,0 +1,157 @@
+{
+  "role": "Sol official regression execution",
+  "files": [
+    {
+      "path": "import_generated_delta.json",
+      "sha256": "794AD60EBD4D397651DB026E8893D6628B4C7BB44BBD1CB6C2EE415A046F1AE0"
+    },
+    {
+      "path": "producer.runner.log",
+      "sha256": "FE57D6E816FE6067CDD7985070E186372146EBE84F4940C7AFC57CCE357EAA65"
+    },
+    {
+      "path": "regression.runner.log",
+      "sha256": "07999CCD9F6DC717A6395B2CBBB4BD032F2C9F622BE1FFB8C4845CEB2BDF5D5E"
+    },
+    {
+      "path": "source_hashes.json",
+      "sha256": "C48B39CB40DF9A0E9261F4B9DD9840D532E35AA442A6D5575EAB0761DF888118"
+    },
+    {
+      "path": "producer/239-e07_f1_import_test.engine.log",
+      "sha256": "B94327EE5C5C8A92E85AB99C053B967D94CB25B75BA78F68F8181B40F12ED463"
+    },
+    {
+      "path": "producer/239-e07_f1_import_test.output.log",
+      "sha256": "A0D1016ABA7E19F89C7060E4A537F2A32F64B6B2E73E5C09A2B2196EE97C00F5"
+    },
+    {
+      "path": "producer/checks.jsonl",
+      "sha256": "FCC3927C40B788340136B8BB91798EB760F7747E92AC6F2D92A7DA1A01F4A973"
+    },
+    {
+      "path": "producer/plan.json",
+      "sha256": "B1324BFD241F9CCA82B5B45E5EC0D312B96D1B8C238193B2F1B8EC48BD2DCB25"
+    },
+    {
+      "path": "regression/001.engine.log",
+      "sha256": "748328213C74CB2AC479BF35910C960BCCC29145D407137E54D66FFA7D3D91DD"
+    },
+    {
+      "path": "regression/001.output.log",
+      "sha256": "12398DA69CD77C09E329A06F25E8E4F9ECCC10EEE5BCB447655C85697BA76D7A"
+    },
+    {
+      "path": "regression/273-e07_f1_geometry_test.engine.log",
+      "sha256": "9952DEC095753E42EB9EA511E5457619DAF54BBC708300170C5ABD2B146E8106"
+    },
+    {
+      "path": "regression/273-e07_f1_geometry_test.output.log",
+      "sha256": "71628C66E650C01AEE64383E660745233CC8908C6C07CE436BD389457176DE81"
+    },
+    {
+      "path": "regression/274-e07_f1_actor_integration_test.engine.log",
+      "sha256": "FB5C6ADF5F346C4593A4B312FE7968B37777D50D08A0A358E403302E69F5BC0E"
+    },
+    {
+      "path": "regression/274-e07_f1_actor_integration_test.output.log",
+      "sha256": "3228E013C9DC947B57FB21801D73C20CE639257E73554894961555FD5960A14E"
+    },
+    {
+      "path": "regression/checks.jsonl",
+      "sha256": "DEC58F6F08F82E53FB0AD777B5BF4145507AB50480177B7F997C14BF3FB4DEAD"
+    },
+    {
+      "path": "regression/plan.json",
+      "sha256": "79070D5AAB984E2D8C22B0E661A3ACF8415DAC3320B33E6D4502F84FF070CBE0"
+    }
+  ],
+  "checks": [
+    {
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m2\\.godot\\m2_official_closure\\producer\\239-e07_f1_import_test.output.log",
+      "name": "e07_f1_import_test",
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m2\\.godot\\m2_official_closure\\producer\\239-e07_f1_import_test.engine.log",
+      "output_sha256": "A0D1016ABA7E19F89C7060E4A537F2A32F64B6B2E73E5C09A2B2196EE97C00F5",
+      "failed": false,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m2",
+        "--script",
+        "res://tests/e07_f1_import_test.gd"
+      ],
+      "timeout_seconds": 120,
+      "exit_code": 0,
+      "execution_index": 1,
+      "index": 239,
+      "timed_out": false
+    },
+    {
+      "exit_code": 0,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m2\\.godot\\m2_official_closure\\regression\\001.output.log",
+      "execution_index": 1,
+      "timed_out": false,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m2\\.godot\\verification\\e07_f1\\fixture_project",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "output_sha256": "12398DA69CD77C09E329A06F25E8E4F9ECCC10EEE5BCB447655C85697BA76D7A",
+      "failed": false,
+      "index": 1,
+      "timeout_seconds": 120,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m2\\.godot\\m2_official_closure\\regression\\001.engine.log",
+      "name": "editor_import"
+    },
+    {
+      "exit_code": 0,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m2\\.godot\\m2_official_closure\\regression\\273-e07_f1_geometry_test.output.log",
+      "execution_index": 2,
+      "timed_out": false,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m2\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_geometry_test.gd"
+      ],
+      "output_sha256": "71628C66E650C01AEE64383E660745233CC8908C6C07CE436BD389457176DE81",
+      "failed": false,
+      "index": 273,
+      "timeout_seconds": 120,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m2\\.godot\\m2_official_closure\\regression\\273-e07_f1_geometry_test.engine.log",
+      "name": "e07_f1_geometry_test"
+    },
+    {
+      "exit_code": 0,
+      "output_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m2\\.godot\\m2_official_closure\\regression\\274-e07_f1_actor_integration_test.output.log",
+      "execution_index": 3,
+      "timed_out": false,
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m2\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_actor_integration_test.gd"
+      ],
+      "output_sha256": "3228E013C9DC947B57FB21801D73C20CE639257E73554894961555FD5960A14E",
+      "failed": false,
+      "index": 274,
+      "timeout_seconds": 120,
+      "engine_log": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m2\\.godot\\m2_official_closure\\regression\\274-e07_f1_actor_integration_test.engine.log",
+      "name": "e07_f1_actor_integration_test"
+    }
+  ],
+  "selected_unique_ids": [
+    "e07_f1_import_test",
+    "editor_import",
+    "e07_f1_geometry_test",
+    "e07_f1_actor_integration_test"
+  ],
+  "plan_total": 299,
+  "source_files_byte_identical": 1739,
+  "candidate": "163c509de8a47f60523196aeaea76e9b08b3e471"
+}

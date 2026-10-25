@@ -1,0 +1,12 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+M2_SCALE_PHASE begin
+M2_SCALE_PHASE large_built
+M2_SCALE_PHASE all_samples
+M2_SCALE_PHASE traversal
+M2_SCALE_PHASE roundtrip
+M2_SCALE_PHASE budgets
+M2_SCALE_PHASE measured_33
+M2_SCALE_PHASE measured_65
+M2_SCALE_PHASE measured_129
+M2_SCALE_RESULT {"checks":[{"id":"large_contiguous_piece_compiles","ok":true},{"id":"one_piece_is_not_grid_count","ok":true},{"id":"full_extent_preserved","ok":true},{"id":"dense_paint_retained","ok":true},{"id":"dependencies_hashed","ok":true},{"id":"forged_asset_dependency_rejected","ok":true},{"id":"visual_source_package_equivalence","ok":true},{"id":"dense_visual_count","ok":true},{"id":"world_uv_scale_independent_of_partition","ok":true},{"id":"continuous_blend_and_shading_range","ok":true},{"id":"steep_rock_material_derived_from_geometry","ok":true},{"id":"steep_material_preserves_author_paint","ok":true},{"id":"all4225_source_samples_on_exact_support","ok":true},{"id":"large_piece_route","ok":true},{"id":"large_real_continuous_traversal","ok":true},{"id":"large_local_brush_exact_oracle","ok":true},{"id":"preview_commit_same_data","ok":false},{"id":"edited_large_piece_still_compiles","ok":false},{"id":"source_immutable","ok":true},{"id":"large_atomic_undo","ok":false},{"id":"large_atomic_redo","ok":true},{"id":"large_source_saved","ok":true},{"id":"large_roundtrip_hash","ok":false},{"id":"flat129_is_one_generated_support","ok":true},{"id":"logical_budget_fails_without_partial_package","ok":true},{"id":"sample_budget_distinct_from_piece_size","ok":true},{"id":"large_measurement_33_0","ok":true},{"id":"large_measurement_33_1","ok":true},{"id":"large_measurement_33_2","ok":true},{"id":"large_measurement_33_3","ok":true},{"id":"large_measurement_33_4","ok":true},{"id":"large_measurement_65_0","ok":true},{"id":"large_measurement_65_1","ok":true},{"id":"large_measurement_65_2","ok":true},{"id":"large_measurement_65_3","ok":true},{"id":"large_measurement_65_4","ok":true},{"id":"large_measurement_129_0","ok":true},{"id":"large_measurement_129_1","ok":true},{"id":"large_measurement_129_2","ok":true},{"id":"large_measurement_129_3","ok":true},{"id":"large_measurement_129_4","ok":true}],"count":41,"ok":false,"package_hash":"024c5663c3de39d7ae31712b58740302c2736605bb654b1879ac86eac3aa8927","source_path":"C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m2/.godot/m2_luna_01/fixture/.godot/large_piece_842c96fc71769981.json"}

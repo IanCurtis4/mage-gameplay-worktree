@@ -5,8 +5,9 @@
 **Retificação posterior de produto:** [peças/células, mapa e terreno](contracts/terrain_piece_semantics.md).
 Célula e peça são sinônimos; um mapa tem uma ou mais peças, que podem variar de
 uma sala a um mapa inteiro. Terreno contínuo editável e texturizado, objetos de
-alta fidelidade e conexões editáveis são a direção vigente. O F2 atual é prova
-técnica; escala/apresentação da fundação precisam de realinhamento. Não adotar
+alta fidelidade e conexões editáveis são a direção vigente. O fechamento F2
+realinha a fundação com peça grande contínua, texturas e edição de conexões;
+[recibo vigente](delivery/m2_closure.md). Não adotar
 montagem do terreno por objetos poligonais pré-desenhados sobrepostos.
 
 O usuário retirou o encerramento, aceite do teste e integração das correções E07
@@ -105,7 +106,7 @@ da escolha aprovada ficam com Sol.
 | D1 — hospedagem | Plugin interno Godot com tela própria amigável, sem dependências externas | Aplicativo dedicado dispensa Godot na autoria, mas exige empacotamento e infraestrutura adicionais | Antes de M1 |
 | D2 — apresentação | Aprovada no F2: projeção isométrica atual, Grama/Terra simples | Comparação híbrida/3D continua fora do escopo | Resolvida em24/10 |
 | D3 — terreno | Grade de alturas editável por camada + superfícies especiais para pontes/rampas; compilação para superfícies de suporte válidas | Malha livre oferece liberdade, mas aumenta custo de edição/validação | Antes de M1/M2 |
-| D4 — primeiras metas | Prova aprovada: até256 superfícies técnicas geradas; clareira, rampa, platô e ponte em F2 | Não define tamanho máximo de peça/célula; fundação precisa do realinhamento de escala/apresentação | Retificada em24/10 |
+| D4 — primeiras metas | A prova inicial de256 suportes foi substituída pelo fechamento F2 com peça grande e limites distintos de amostras/suportes | Não define tamanho máximo de peça/célula do produto; medições e limites no recibo vigente | Realinhada em24/10 |
 | D5 — patrulhas | Loop/ida e volta, espera, aggro interrompe, retorno a waypoint validado; home de leash fixo | Home móvel altera comportamento de combate e precisa de decisão distinta | Antes de M5 |
 | D6 — geração | Composição manual + assembler existente primeiro; WFC opcional depois | Trocar o gerador de produção de imediato aumenta risco de reprodutibilidade | Antes de M6 |
 
@@ -120,7 +121,10 @@ Autorização humana: F1 terminou, pode começar F2. Base M1 integrada por
 ancestralidade em codex/map-editor-m2; [dispatch e propriedade](contracts/m2_dispatch.md).
 D2 aprovada neste chat: manter a apresentação isométrica atual no F2, com dois
 materiais simples na prova. D4 aprovada após medição para o protótipo limitado,
-com aceite visual/de uso separado. Prova técnica validada no
-candidato69837145b7857bb630bcfecef0747bf525deeec8; [recibo](delivery/m2.md).
-Estado atual: realinhamento da fundação pendente conforme a retificação humana.
+com aceite visual/de uso separado. Fechamento realinhado no candidato
+163c509de8a47f60523196aeaea76e9b08b3e471; [recibo vigente](delivery/m2_closure.md),
+[protótipo histórico](delivery/m2.md). A documentação vigente distingue peça,
+grade visual e suporte gerado, com textura e conexões editáveis.
+Estado: **F2 fechado tecnicamente / VALIDADA**, com263 checks próprios e quatro
+IDs oficiais por impacto aprovados. Aceite humano visual/de uso permanece separado.
 Sem atualização de playtest/master; não abre F3.

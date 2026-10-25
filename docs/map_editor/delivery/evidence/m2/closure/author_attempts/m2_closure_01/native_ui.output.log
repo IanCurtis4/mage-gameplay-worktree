@@ -1,0 +1,108 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+M2_UI_RESULT {"checks":[{"id":"native_shell_visible","ok":true},{"id":"oversized_preview_preflight","ok":true},{"id":"sample_three_layers","ok":true},{"id":"sample_bridge","ok":true},{"id":"native_bake_completed","ok":true},{"id":"native_headless_equivalent","ok":true},{"id":"native_compiled_boundaries","ok":true},{"id":"example_preserves_nonempty_piece","ok":true},{"id":"isometric_pick_matches_support","ok":true},{"id":"stroke_preview_without_source_mutation","ok":true},{"id":"cancel_preserves_source","ok":true},{"id":"release_applies_one_action","ok":true},{"id":"one_undo_restores_whole_stroke","ok":true},{"id":"leave_canvas_discards_stroke","ok":true},{"id":"locked_layer_rejected_in_ui","ok":true},{"id":"explicit_layer_selection","ok":true},{"id":"selection_tree_matches_target","ok":true},{"id":"hide_layer_explicit","ok":true},{"id":"native_save","ok":true},{"id":"native_reopen","ok":true},{"id":"native_cancel_discarded","ok":true},{"id":"native_stale_result_discarded","ok":true},{"id":"native_final_bake","ok":true},{"id":"native_capture","ok":true},{"id":"native_unload_frees_shell","ok":true}],"count":25,"ok":true}
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/demo_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_content_authoring_test.gd:2)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "only_text_changed" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/e06_content_authoring_test.gd:95)
+ERROR: Failed to load script "res://tests/e06_content_authoring_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/demo_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_content_editorial_test.gd:2)
+ERROR: Failed to load script "res://tests/e06_content_editorial_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/pilot_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_content_pilot_runtime_test.gd:2)
+ERROR: Failed to load script "res://tests/e06_content_pilot_runtime_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/pilot_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_content_pilot_test.gd:2)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "chosen" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/e06_content_pilot_test.gd:57)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "changed" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/e06_content_pilot_test.gd:84)
+ERROR: Failed to load script "res://tests/e06_content_pilot_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/directions_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_directions_test.gd:3)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/transform_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_directions_test.gd:4)
+ERROR: Failed to load script "res://tests/e06_directions_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/inventory_fixes_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_expanded_equipment_content_test.gd:22)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "authored" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/e06_expanded_equipment_content_test.gd:22)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/transform_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_expanded_equipment_content_test.gd:82)
+ERROR: Failed to load script "res://tests/e06_expanded_equipment_content_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/transform_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_gameplay_content_test.gd:67)
+ERROR: Failed to load script "res://tests/e06_gameplay_content_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/pilot_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_pilot_execution_test.gd:3)
+ERROR: Failed to load script "res://tests/e06_pilot_execution_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/publication_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_power_progression_test.gd:3)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "publication" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/e06_power_progression_test.gd:14)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "published" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/e06_power_progression_test.gd:99)
+ERROR: Failed to load script "res://tests/e06_power_progression_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/publication_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_publication_test.gd:3)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/directions_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_publication_test.gd:4)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/transform_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_publication_test.gd:5)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "publication" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/e06_publication_test.gd:20)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "old" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/e06_publication_test.gd:98)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "current" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/e06_publication_test.gd:99)
+ERROR: Failed to load script "res://tests/e06_publication_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/spatial_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_spatial_execution_test.gd:2)
+ERROR: Failed to load script "res://tests/e06_spatial_execution_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/spatial_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_spatial_policies_test.gd:2)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/pilot_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_spatial_policies_test.gd:3)
+ERROR: Failed to load script "res://tests/e06_spatial_policies_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/transform_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_transform_execution_test.gd:2)
+ERROR: Failed to load script "res://tests/e06_transform_execution_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/transform_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_transform_policies_test.gd:2)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/spatial_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e06_transform_policies_test.gd:3)
+ERROR: Failed to load script "res://tests/e06_transform_policies_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/transform_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e07_f1_echo_test.gd:3)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "entries" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/e07_f1_echo_test.gd:21)
+ERROR: Failed to load script "res://tests/e07_f1_echo_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/spatial_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e07_f1_geometer_trace_test.gd:3)
+ERROR: Failed to load script "res://tests/e07_f1_geometer_trace_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/transform_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e07_f1_hunter_cover_test.gd:3)
+ERROR: Failed to load script "res://tests/e07_f1_hunter_cover_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Parse Error: Preload file "res://tools/content/transform_bundle.gd" does not exist.
+   at: GDScript::reload (res://tests/e07_f1_hunter_traps_test.gd:3)
+ERROR: Failed to load script "res://tests/e07_f1_hunter_traps_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

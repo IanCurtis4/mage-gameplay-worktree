@@ -1,5 +1,10 @@
 # Peças/células, mapa e terreno — retificação humana
 
+> Situação posterior: a autorização de fechar F2 foi executada no
+> [contrato revisão2](m2_closure.md), com [recibo vigente](../delivery/m2_closure.md).
+> A definição de produto abaixo permanece; os estados pendentes descrevem a rodada
+> documental anterior ao realinhamento implementado, sem aceite visual humano.
+
 24/10/2026, posterior à aprovação inicial de D4. Registra a explicação explícita
 do usuário neste chat e as quatro imagens anexadas, sem escolher implementação
 nova ou iniciar outro pacote. Esta direção prevalece sobre a interpretação
@@ -77,7 +82,8 @@ O teto256 implementado conta superfícies de suporte geradas (e há tetos própr
 de grade/prévia), não256 peças/células do mapa. A aprovação inicial de D4 fica
 preservada como aceite de limite de uma prova pequena. A retificação posterior
 impede promovê-lo a definição de tamanho máximo das peças do produto. O limite
-permanece no código atual; esta alteração documental não anuncia sua remoção.
+permanecia no código daquela rodada; o fechamento posterior o substitui por
+orçamentos técnicos separados, sem alterar o significado de peça/célula.
 
 D2 autorizou a projeção isométrica atual para a prova F2. Isso não escolhe como
 representação final um conjunto de polígonos planos coloridos, nem fecha a
@@ -85,7 +91,7 @@ integração entre terreno texturizado, objetos detalhados e a apresentação do
 Da mesma forma, o gate histórico low-poly não pode reduzir a fidelidade pedida
 agora por inferência; sua reconciliação é assunto de arquitetura/direção de arte.
 
-Estado: **PROVA TÉCNICA VALIDADA / REALINHAMENTO DA FUNDAÇÃO PENDENTE**.
+Estado naquela rodada: **PROVA TÉCNICA VALIDADA / REALINHAMENTO DA FUNDAÇÃO PENDENTE**.
 Antes de apoiar consumidores nessa interpretação, o contrato de arquitetura deve
 reconciliar escala de peça versus resolução interna, terreno texturizado e sua
 apresentação, autoria de conexões e coerência geométrica das emendas. Não basta

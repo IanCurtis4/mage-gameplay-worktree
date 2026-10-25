@@ -1,5 +1,9 @@
 # F2 / M2 — terreno e compilação, contrato v1
 
+> Contrato histórico do protótipo. O [fechamento revisão2](m2_closure.md) e seu
+> [recibo](../delivery/m2_closure.md) substituem os limites e a apresentação v1.
+> Fonte1 permanece; compilador/pacote passam a revisão2.
+
 > Retificação humana posterior em24/10: [semântica de peças e terreno](terrain_piece_semantics.md)
 > prevalece sobre a interpretação de tamanho/representação deste protótipo.
 > Célula e peça são sinônimos de autoria. As superfícies convexas abaixo são

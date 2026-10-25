@@ -1,0 +1,39 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+ERROR: Condition "p_enabled && addon_name_to_plugin.has(addon_path)" is true.
+   at: set_addon_plugin_enabled (editor/editor_node.cpp:4448)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://addons/m2_driver/plugin.gd:15)
+M2_UI_CHECK native_shell_visible true
+M2_UI_CHECK oversized_preview_preflight true
+M2_UI_CHECK sample_three_layers true
+M2_UI_CHECK sample_bridge true
+M2_UI_CHECK native_bake_completed true
+M2_UI_CHECK native_headless_equivalent true
+M2_UI_CHECK native_compiled_boundaries true
+M2_UI_CHECK example_preserves_nonempty_piece true
+M2_UI_CHECK isometric_pick_matches_support true
+M2_UI_CHECK stroke_preview_without_source_mutation true
+M2_UI_CHECK cancel_preserves_source true
+M2_UI_CHECK release_applies_one_action true
+M2_UI_CHECK one_undo_restores_whole_stroke true
+M2_UI_CHECK leave_canvas_discards_stroke true
+M2_UI_CHECK locked_layer_rejected_in_ui true
+M2_UI_CHECK explicit_layer_selection true
+M2_UI_CHECK selection_tree_matches_target true
+M2_UI_CHECK hide_layer_explicit true
+M2_UI_CHECK connector_add_and_compile true
+M2_UI_CHECK connector_update_same_identity true
+M2_UI_CHECK connector_update_undo true
+M2_UI_CHECK connector_form_reselection true
+M2_UI_CHECK locked_connector_update_remove_rejected true
+M2_UI_CHECK connector_remove true
+M2_UI_CHECK connector_remove_undo true
+M2_UI_CHECK native_save true
+M2_UI_CHECK native_reopen true
+M2_UI_CHECK native_cancel_discarded true
+M2_UI_CHECK native_stale_result_discarded true
+M2_UI_CHECK native_final_bake true
