@@ -1,0 +1,87 @@
+{
+  "created_utc": "2026-10-25T15:19:41.6161439Z",
+  "f1_native_fixture": true,
+  "source_commit": "be84558fa1c6041d4dd2d4f7911b5f3bd62ba2f4",
+  "working_tree_status": [
+    " M docs/map_editor/delivery/m8.md",
+    "?? docs/map_editor/delivery/evidence/m8/author/document_references.json",
+    "?? docs/map_editor/delivery/evidence/m8/author/primary_checkout.json",
+    "?? docs/map_editor/delivery/evidence/m8/luna/"
+  ],
+  "runner_sha256": "D9F652BAB91C4BFAE98E254E8FB36148A17DE75E569DB9F0C3DC3814B69A4937",
+  "engine_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+  "timeout_seconds": 120,
+  "selection": {
+    "test": [
+      "e07_f1_geometry_test",
+      "e07_f1_composition_test",
+      "e07_f1_presentation_test",
+      "e07_f5_population_test",
+      "e07_f5_quest_test"
+    ],
+    "test_filter_specified": true,
+    "from_step": 1,
+    "to_step": 299,
+    "skip_editor_import": false
+  },
+  "total_steps": 299,
+  "selected_steps": 5,
+  "checks": [
+    {
+      "index": 258,
+      "name": "e07_f5_population_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f5_population_test.gd"
+      ]
+    },
+    {
+      "index": 263,
+      "name": "e07_f5_quest_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f5_quest_test.gd"
+      ]
+    },
+    {
+      "index": 273,
+      "name": "e07_f1_geometry_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_geometry_test.gd"
+      ]
+    },
+    {
+      "index": 295,
+      "name": "e07_f1_composition_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_composition_test.gd"
+      ]
+    },
+    {
+      "index": 297,
+      "name": "e07_f1_presentation_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_presentation_test.gd"
+      ]
+    }
+  ]
+}

@@ -3,6 +3,21 @@ extends VBoxContainer
 ## Presentation only. Every action calls its original producer control.
 static var active_mode := "ux"
 static var hosts: Array[WeakRef] = []
+const ACTION_IDS := {
+	"Nova peça":"new_piece","Compor mapa…":"compose_map","Abrir…":"open","Salvar":"save","Salvar como…":"save_as","Desfazer":"undo","Refazer":"redo",
+	"Recuperar cópia":"recover_copy","Buscar rascunho…":"browse_draft","Adicionar":"add_layer","Duplicar":"duplicate_layer","Travar":"toggle_layer_lock","Aplicar nome":"apply_name",
+	"Contexto da peça…":"piece_context","Intercâmbio com skills…":"exchange","Enquadrar":"fit_view","Compilar peça":"compile_piece","Cancelar":"cancel",
+	"Exemplo rampa/ponte":"ramp_bridge_sample","Exemplo de peça grande":"large_piece_sample","Nova grade":"add_grid","Adicionar ponte":"add_bridge","Adicionar / atualizar":"save_connector","Remover":"remove_connector",
+	"Novo mapa":"new_map","Adicionar peça…":"add_piece","Exemplo com duas peças":"two_piece_sample","Compilar mapa":"compile_map","Testar / parar":"toggle_test",
+	"Publicar localmente…":"publish_local","Recuperar rascunho":"recover_draft","Encontros…":"open_population","Geração assistida…":"open_generation","Aplicar posição":"apply_placement",
+	"Remover…":"remove_selected","Vincular aberturas":"link_connectors","Remover vínculo selecionado":"remove_link","Contexto do mapa…":"map_context",
+	"Novo":"new_document","Importar mapa…":"import_map","Recuperar":"recover","Preparar prévia":"prepare_preview","Atual / prévia":"toggle_preview","Aplicar prévia…":"apply_preview","Compilar":"compile",
+	"Patrulhas…":"open_patrols","Aplicar parâmetros ao pincel":"apply_brush","Adicionar / atualizar peso":"save_species_weight","Remover espécie":"remove_species","Fixar / liberar":"toggle_slot_pin",
+	"Remover slot…":"remove_slot","Vincular portal selecionado ao destino":"link_portal","Remover marcador / pincel…":"remove_marker","Simular morte do slot selecionado":"simulate_death","Avançar uma onda de respawn":"advance_respawn_wave",
+	"Importar encontros…":"import_population","Testar atores":"test_actors","Retomar teste":"resume_test","Nova rota":"add_route","Aplicar":"apply_wait","↑":"move_waypoint_up","↓":"move_waypoint_down",
+	"Remover ponto…":"remove_waypoint","Vincular slots selecionados":"assign_slots","Reimportar composição":"reimport_map","Abrir pedido…":"open_request","Salvar pedido…":"save_request",
+	"Desfazer pedido":"undo_request","Refazer pedido":"redo_request","Gerar prévia":"generate_preview","Comparar assembler atual":"compare_assembler","Aplicar proposta ao mapa":"apply_map_proposal",
+	"Adicionar candidato":"add_candidate","Remover candidato selecionado":"remove_candidate","Definir quota da peça escolhida":"set_piece_quota","Remover quota selecionada":"remove_quota"}
 var screen: Control
 var screen_id := ""
 var get_source: Callable
@@ -60,7 +75,7 @@ func _collect(node: Node) -> void:
 		if child != screen and child.get_node_or_null("AuthoringPresentation") != null: continue
 		if child.get_class() == "Button":
 			var button := child as Button
-			var base := screen_id+"/"+_slug(button.text); var id := base; var ordinal := 2
+			var base: String = screen_id+"/"+ACTION_IDS.get(button.text,"action_"+button.text.sha256_text().substr(0,12)); var id := base; var ordinal := 2
 			while actions.has(id): id = base+"_"+str(ordinal); ordinal += 1
 			button.set_meta("authoring_action_id",id)
 			var category := _category(button.text)
@@ -70,15 +85,6 @@ func _collect(node: Node) -> void:
 				var popup: PopupMenu = menus[category].get_popup(); popup.add_item(button.text)
 				popup.set_item_metadata(popup.item_count-1,id)
 		else: _collect(child)
-
-static func _slug(value: String) -> String:
-	var normalized := value.to_lower()
-	for pair: Array in [["á","a"],["à","a"],["ã","a"],["â","a"],["é","e"],["ê","e"],["í","i"],["ó","o"],["õ","o"],["ô","o"],["ú","u"],["ç","c"]]: normalized = normalized.replace(pair[0],pair[1])
-	var result := ""
-	for character: String in normalized:
-		if character in "abcdefghijklmnopqrstuvwxyz0123456789": result += character
-		elif not result.ends_with("_"): result += "_"
-	return result.trim_suffix("_")
 
 static func _category(caption: String) -> String:
 	if "Intercâmbio" in caption: return "Intercâmbio"

@@ -34,7 +34,7 @@ func run() -> void:
 	host.set_mode("ux")
 	check("ux_default",host.ax_snapshot().mode == "ux" and host.mode_choice.selected == 0)
 	check("ux_menus_grouped",host.menus.Arquivo.visible and host.menus.Criar.visible)
-	check("ux_original_actions_hidden",host.actions["piece/nova_peca"].control.visible == false)
+	check("ux_original_actions_hidden",host.actions["piece/new_piece"].control.visible == false)
 	check("ux_terrain_dropdown",terrain_host.section_choice.visible and terrain_host.section_choice.item_count == 5)
 	check("ux_terrain_noise_reduced",not shell.terrain.grid_columns.is_visible_in_tree())
 	var before: Dictionary = shell.session.document().to_data(); var generation: int = shell.session.generation
@@ -42,23 +42,23 @@ func run() -> void:
 	var hash_before: String = shell.session.document().semantic_hash()
 	var validation_before: Array = shell.session.document().diagnostics()
 	var dirty_before: bool = shell.session.dirty(); var redo_before: bool = shell.session.can_redo()
-	check("ax_action_requires_mode",host.ax_invoke("piece/aplicar_nome").code == "ax_mode_required")
+	check("ax_action_requires_mode",host.ax_invoke("piece/apply_name").code == "ax_mode_required")
 	host.set_mode("ax"); await frames()
-	check("ax_flat_actions",host.overlay.visible and host.actions["piece/nova_peca"].control.visible)
+	check("ax_flat_actions",host.overlay.visible and host.actions["piece/new_piece"].control.visible)
 	check("ax_overlay_on_viewport",host.overlay.get_parent() == shell.terrain.canvas and host.overlay_buttons.size() == host.actions.size())
 	check("ax_snapshot_source",host.ax_snapshot().source == before)
 	check("ax_shared_mode",terrain_host.mode_choice.selected == 1)
 	check("ax_missing_action",host.ax_invoke("missing").code == "action_missing")
-	var control: Button = host.actions["piece/aplicar_nome"].control; control.disabled = true
-	check("ax_disabled_action",host.ax_invoke("piece/aplicar_nome").code == "action_disabled"); control.disabled = false
-	check("ax_existing_command_dispatch",host.ax_invoke("piece/aplicar_nome").ok)
+	var control: Button = host.actions["piece/apply_name"].control; control.disabled = true
+	check("ax_disabled_action",host.ax_invoke("piece/apply_name").code == "action_disabled"); control.disabled = false
+	check("ax_existing_command_dispatch",host.ax_invoke("piece/apply_name").ok)
 	host.set_mode("ux"); await frames()
 	check("toggle_preserves_document_history",shell.session.document().to_data() == before and shell.session.generation == generation and shell.session.can_undo() == undo)
 	check("toggle_preserves_hash_validation_dirty",shell.session.document().semantic_hash() == hash_before and shell.session.document().diagnostics() == validation_before and shell.session.dirty() == dirty_before and shell.session.can_redo() == redo_before)
 	check("invalid_mode_rejected",not host.set_mode("invalid").ok and host.ax_snapshot().mode == "ux")
 	await capture(shell,"piece_ux")
 	var menu: PopupMenu = host.menus.Arquivo.get_popup(); host._update_menu("Arquivo")
-	check("menu_metadata_stable",menu.get_item_metadata(0) is String and host.actions.has(menu.get_item_metadata(0)))
+	check("menu_metadata_stable",menu.get_item_metadata(0) == "piece/open" and host.actions.has("piece/open"))
 	var saved: Dictionary = host.ax_snapshot(); saved.source.name = "Snapshot alterado"
 	check("snapshot_is_copy",shell.session.document().to_data().name == before.name)
 	var context_window: Window
@@ -80,7 +80,7 @@ func run() -> void:
 	map_panel.session.replace(Fixture.representative_map()); map_panel.bake(); await wait_job(map_panel); await frames()
 	check("native_map_compiles",map_panel.result.get("ok",false))
 	var map_host: Control = map_panel.get_node("AuthoringPresentation")
-	check("context_action_exposed",map_host.actions.has("map/contexto_do_mapa"))
+	check("context_action_exposed",map_host.actions.has("map/map_context"))
 	var map_context_window: Window
 	for child: Node in map_panel.get_children():
 		if child is Window and child.title.begins_with("Contexto do mapa"): map_context_window = child
@@ -88,14 +88,16 @@ func run() -> void:
 	map_context.refresh(); map_context.instances.select(0); map_context.rules.select(0); map_context.reason.text = "Exceção GUI revisada"; map_context.save_context()
 	check("map_context_gui_exception",map_panel.session.data.context.overrides.size() == 1 and map_panel.session.data.context.overrides[0].reason == "Exceção GUI revisada")
 	check("map_context_gui_warning","Exceção GUI revisada" in map_context.warnings.text and map_panel.problems.item_count > 0)
+	map_panel.mode.select(1); map_panel.mode.item_selected.emit(1)
+	check("rejected_recipe_restores_selector",map_panel.session.data.mode == "manual" and map_panel.mode.selected == 0)
 	map_panel.session.undo(); map_panel.bake(); await wait_job(map_panel)
 	await capture(map_panel,"map_ux")
 	map_host.set_mode("ax"); await capture(map_panel,"map_ax"); map_host.set_mode("ux")
 	var map_hash := Map.hash_source(map_panel.session.data)
-	map_host.ax_invoke("map/testar_parar")
+	map_host.ax_invoke("map/toggle_test")
 	check("ux_ax_call_refused",not map_panel.canvas.testing and Map.hash_source(map_panel.session.data) == map_hash)
-	map_host.set_mode("ax"); check("ax_test_calls_real_authority",map_host.ax_invoke("map/testar_parar").ok and map_panel.canvas.testing)
-	map_host.ax_invoke("map/testar_parar"); check("ax_test_stops",not map_panel.canvas.testing)
+	map_host.set_mode("ax"); check("ax_test_calls_real_authority",map_host.ax_invoke("map/toggle_test").ok and map_panel.canvas.testing)
+	map_host.ax_invoke("map/toggle_test"); check("ax_test_stops",not map_panel.canvas.testing)
 	map_host.set_mode("ux"); shell.composition_window.hide()
 	var population_screen: Control
 	for entry: Array in [["population","res://scripts/map_authoring/population/population_panel.gd"],["patrol","res://scripts/map_authoring/patrol/patrol_panel.gd"],["generation","res://scripts/map_authoring/generation/generation_panel.gd"]]:
@@ -117,7 +119,7 @@ func run() -> void:
 		check("native_switch_pure_"+entry[0],presentation.ax_snapshot().source == snapshot)
 		check("exchange_binding_"+entry[0],screen.exchange_panel.kind == entry[0])
 		if entry[0] == "population":
-			check("test_tools_hidden_in_ux",presentation.actions["population/simular_morte_do_slot_selecionado"].ax_only and not presentation.actions["population/simular_morte_do_slot_selecionado"].control.visible)
+			check("test_tools_hidden_in_ux",presentation.actions["population/simulate_death"].ax_only and not presentation.actions["population/simulate_death"].control.visible)
 			screen.bake(); await wait_job(screen); check("native_population_compiles",screen.result.get("ok",false)); await capture(screen,"population_ux")
 		screen.get_parent().hide()
 	var ok := checks.all(func(item: Dictionary) -> bool: return item.ok)

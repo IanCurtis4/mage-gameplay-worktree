@@ -44,7 +44,10 @@ func _ready() -> void:
 	var actions := HBoxContainer.new(); add_child(actions)
 	mode = OptionButton.new(); mode.add_item("Manual · posições fixadas"); mode.add_item("Receita · encaixe por árvore"); actions.add_child(mode)
 	mode.item_selected.connect(func(index: int) -> void:
-		var data := session.data.duplicate(true); data.mode = "manual" if index == 0 else "recipe"; show_result(session.apply(data)))
+		var data := session.data.duplicate(true); data.mode = "manual" if index == 0 else "recipe"
+		var applied := session.apply(data)
+		if not applied.ok: mode.select(0 if session.data.mode == "manual" else 1)
+		show_result(applied))
 	_button(actions,"Compilar mapa",bake); _button(actions,"Cancelar",func() -> void:
 		if job != null: job.cancel())
 	_button(actions,"Testar / parar",toggle_test); _button(actions,"Publicar localmente…",func() -> void: choose("publish"))

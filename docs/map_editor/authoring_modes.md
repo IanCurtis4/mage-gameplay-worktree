@@ -60,7 +60,9 @@ central; grade técnica é opcional. Diálogos mantêm confirmação, histórico
 proteção de arquivo dos respectivos produtores.
 
 AX expõe ações diretas e uma paleta sobre a prévia, com identificadores estáveis
-por tela/ação. Ferramentas de simulação técnica ficam neste modo. A API local de
+em inglês por tela/ação, como `piece/apply_name`, `map/toggle_test` e
+`population/simulate_death`; rótulos permanecem pt-BR. A tabela explícita de IDs
+não depende da tradução de um rótulo. Ferramentas de simulação ficam neste modo. A API local de
 inspeção `ax_snapshot()` retorna fonte em cópia, ações, IDs e disponibilidade;
 `ax_invoke(id)` exige AX, rejeita ação ausente/desabilitada e chama o controle
 original. Não oferece bypass de validação, publicação, histórico ou confirmação.

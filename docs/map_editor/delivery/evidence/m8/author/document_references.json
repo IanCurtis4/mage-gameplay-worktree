@@ -1,0 +1,251 @@
+{
+  "ok": true,
+  "count": 49,
+  "checks": [
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "authoring_modes.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "delivery/m8.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "contracts/m6_dispatch.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "delivery/m6.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "contracts/m5_dispatch.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "STORAGE.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "delivery/m5.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "contracts/m3_dispatch.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "delivery/m3.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "contracts/m7_dispatch.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "exchange.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "delivery/m7.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "contracts/terrain_piece_semantics.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "delivery/m2_closure.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "delivery/m0.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "contracts/m0_preparation.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "architecture.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "execution.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "validation.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "contracts/terrain_piece_semantics.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "contracts/map_composition_and_seams.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "../WORKFLOW.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "../MVP.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "../ARCHITECTURE.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "../PRODUCT_DIRECTION.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "../DELIVERY_SKILLS.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "../gates/low_poly_environments.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "contracts/m2_dispatch.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "delivery/m2_closure.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "delivery/m2.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "contracts/m3_preparation.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "contracts/m4_dispatch.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/README.md",
+      "target": "delivery/m4.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/validation.md",
+      "target": "authoring_modes.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/validation.md",
+      "target": "delivery/m8.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/validation.md",
+      "target": "README.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/validation.md",
+      "target": "architecture.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/validation.md",
+      "target": "execution.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/authoring_modes.md",
+      "target": "delivery/m8.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "../contracts/m8_dispatch.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "../authoring_modes.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "../authoring_modes.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/author/core_09/runs.json",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/author/candidate_10/runs.json",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/author/native_02/runs.json",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/author/release_01/runs.json",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "../../../data/map_authoring/representative_map.json",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "../../../data/map_authoring/representative_population.json",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "../../../data/map_authoring/representative_patrol.json",
+      "exists": true
+    }
+  ]
+}

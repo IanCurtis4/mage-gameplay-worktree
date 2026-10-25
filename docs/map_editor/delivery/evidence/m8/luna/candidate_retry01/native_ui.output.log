@@ -1,0 +1,54 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+M8_UI_CHECK real_main_screen_host true
+M8_UI_CHECK ux_default true
+M8_UI_CHECK ux_menus_grouped true
+M8_UI_CHECK ux_original_actions_hidden true
+M8_UI_CHECK ux_terrain_dropdown true
+M8_UI_CHECK ux_terrain_noise_reduced true
+M8_UI_CHECK ax_action_requires_mode true
+M8_UI_CHECK ax_flat_actions true
+M8_UI_CHECK ax_overlay_on_viewport true
+M8_UI_CHECK ax_snapshot_source true
+M8_UI_CHECK ax_shared_mode true
+M8_UI_CHECK ax_missing_action true
+M8_UI_CHECK ax_disabled_action true
+M8_UI_CHECK ax_existing_command_dispatch true
+M8_UI_CHECK toggle_preserves_document_history true
+M8_UI_CHECK toggle_preserves_hash_validation_dirty true
+M8_UI_CHECK invalid_mode_rejected true
+M8_UI_CHECK capture_piece_ux true
+M8_UI_CHECK menu_metadata_stable true
+M8_UI_CHECK snapshot_is_copy true
+M8_UI_CHECK piece_context_gui_saves_biomes true
+M8_UI_CHECK piece_context_gui_saves_area_reservation true
+M8_UI_CHECK piece_context_undo true
+M8_UI_CHECK real_composition_window true
+M8_UI_CHECK native_map_compiles true
+M8_UI_CHECK context_action_exposed true
+M8_UI_CHECK map_context_gui_exception true
+M8_UI_CHECK map_context_gui_warning true
+M8_UI_CHECK capture_map_ux true
+M8_UI_CHECK capture_map_ax true
+M8_UI_CHECK ux_ax_call_refused true
+M8_UI_CHECK ax_test_calls_real_authority true
+M8_UI_CHECK ax_test_stops true
+M8_UI_CHECK real_window_population true
+M8_UI_CHECK native_ax_population true
+M8_UI_CHECK native_switch_pure_population true
+M8_UI_CHECK exchange_binding_population true
+M8_UI_CHECK test_tools_hidden_in_ux true
+M8_UI_CHECK native_population_compiles true
+M8_UI_CHECK capture_population_ux true
+M8_UI_CHECK real_window_patrol true
+M8_UI_CHECK native_ax_patrol true
+M8_UI_CHECK native_switch_pure_patrol true
+M8_UI_CHECK exchange_binding_patrol true
+M8_UI_CHECK real_window_generation true
+M8_UI_CHECK native_ax_generation true
+M8_UI_CHECK native_switch_pure_generation true
+M8_UI_CHECK exchange_binding_generation true
+M8_UI_RESULT {"checks":[{"id":"real_main_screen_host","ok":true},{"id":"ux_default","ok":true},{"id":"ux_menus_grouped","ok":true},{"id":"ux_original_actions_hidden","ok":true},{"id":"ux_terrain_dropdown","ok":true},{"id":"ux_terrain_noise_reduced","ok":true},{"id":"ax_action_requires_mode","ok":true},{"id":"ax_flat_actions","ok":true},{"id":"ax_overlay_on_viewport","ok":true},{"id":"ax_snapshot_source","ok":true},{"id":"ax_shared_mode","ok":true},{"id":"ax_missing_action","ok":true},{"id":"ax_disabled_action","ok":true},{"id":"ax_existing_command_dispatch","ok":true},{"id":"toggle_preserves_document_history","ok":true},{"id":"toggle_preserves_hash_validation_dirty","ok":true},{"id":"invalid_mode_rejected","ok":true},{"id":"capture_piece_ux","ok":true},{"id":"menu_metadata_stable","ok":true},{"id":"snapshot_is_copy","ok":true},{"id":"piece_context_gui_saves_biomes","ok":true},{"id":"piece_context_gui_saves_area_reservation","ok":true},{"id":"piece_context_undo","ok":true},{"id":"real_composition_window","ok":true},{"id":"native_map_compiles","ok":true},{"id":"context_action_exposed","ok":true},{"id":"map_context_gui_exception","ok":true},{"id":"map_context_gui_warning","ok":true},{"id":"capture_map_ux","ok":true},{"id":"capture_map_ax","ok":true},{"id":"ux_ax_call_refused","ok":true},{"id":"ax_test_calls_real_authority","ok":true},{"id":"ax_test_stops","ok":true},{"id":"real_window_population","ok":true},{"id":"native_ax_population","ok":true},{"id":"native_switch_pure_population","ok":true},{"id":"exchange_binding_population","ok":true},{"id":"test_tools_hidden_in_ux","ok":true},{"id":"native_population_compiles","ok":true},{"id":"capture_population_ux","ok":true},{"id":"real_window_patrol","ok":true},{"id":"native_ax_patrol","ok":true},{"id":"native_switch_pure_patrol","ok":true},{"id":"exchange_binding_patrol","ok":true},{"id":"real_window_generation","ok":true},{"id":"native_ax_generation","ok":true},{"id":"native_switch_pure_generation","ok":true},{"id":"exchange_binding_generation","ok":true}],"count":48,"ok":true}
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
