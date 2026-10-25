@@ -1,0 +1,30 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+M3_UI_CHECK native_shell_visible true
+M3_UI_CHECK composition_window_visible true
+M3_UI_CHECK sample_preserves_nonempty_map true
+M3_UI_CHECK native_worker_completed true
+M3_UI_CHECK native_headless_same_package true
+M3_UI_CHECK render_two_piece_layers true
+M3_UI_CHECK visible_closed_perimeter true
+M3_UI_CHECK ui_placement_edit true
+M3_UI_CHECK edit_invalidates_preview true
+M3_UI_CHECK ui_undo_restores_links true
+M3_UI_CHECK recompile_after_undo true
+M3_UI_CHECK discardable_profile_starts true
+M3_UI_CHECK wall_occludes_hidden_floor true
+M3_UI_CHECK click_resolves_canonical_support true
+M3_UI_CHECK click_plans_real_actor true
+M3_UI_CHECK native_actor_crosses_seam true
+M3_UI_CHECK test_preserves_draft true
+M3_UI_CHECK ui_save_reopen_exact true
+M3_UI_CHECK ui_local_publication true
+M3_UI_CHECK localized_opening_diagnostic true
+M3_UI_CHECK diagnostic_selects_instance true
+M3_UI_CHECK native_capture true
+M3_UI_CHECK switch_map_preserves_prior_draft true
+M3_UI_CHECK recover_current_draft true
+M3_UI_RESULT {"checks":[{"id":"native_shell_visible","ok":true},{"id":"composition_window_visible","ok":true},{"id":"sample_preserves_nonempty_map","ok":true},{"id":"native_worker_completed","ok":true},{"id":"native_headless_same_package","ok":true},{"id":"render_two_piece_layers","ok":true},{"id":"visible_closed_perimeter","ok":true},{"id":"ui_placement_edit","ok":true},{"id":"edit_invalidates_preview","ok":true},{"id":"ui_undo_restores_links","ok":true},{"id":"recompile_after_undo","ok":true},{"id":"discardable_profile_starts","ok":true},{"id":"wall_occludes_hidden_floor","ok":true},{"id":"click_resolves_canonical_support","ok":true},{"id":"click_plans_real_actor","ok":true},{"id":"native_actor_crosses_seam","ok":true},{"id":"test_preserves_draft","ok":true},{"id":"ui_save_reopen_exact","ok":true},{"id":"ui_local_publication","ok":true},{"id":"localized_opening_diagnostic","ok":true},{"id":"diagnostic_selects_instance","ok":true},{"id":"native_capture","ok":true},{"id":"switch_map_preserves_prior_draft","ok":true},{"id":"recover_current_draft","ok":true}],"count":24,"ok":true}

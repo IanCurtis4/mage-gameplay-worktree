@@ -1,0 +1,91 @@
+{
+  "head": "5c25f837c939e459757829b052a49e036174bd1d",
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+  "previous_head": "a6d516ef08585a7ca6ba2ba00479cdcbe16e6edf",
+  "selection": [
+    "e07_f1_import_test",
+    "editor_import",
+    "e07_f1_geometry_test",
+    "e07_f1_actor_integration_test"
+  ],
+  "reuse": "Geometria e atores do SHA anterior; delta GUI/runner reimportado e testado no SHA final",
+  "primary_inputs": 1758,
+  "evidence": [
+    {
+      "path": "recovery_compatibility.json",
+      "sha256": "4C2CB4F0F41206D3CA1E80BB43EEFF2173B3BF52A1412A4E288FDD9484622FBB"
+    },
+    {
+      "path": "source_hashes_recovery.json",
+      "sha256": "3A7D15F11B1A215D12C31012A9A381B258426C380E168C57C24B5D1826981EC6"
+    },
+    {
+      "path": "source_hashes.json",
+      "sha256": "0044E2EDA677E05A8B36991659A7DE27C3BECE8B8A08A40634D6AF6A9A58C6F0"
+    },
+    {
+      "path": "bootstrap/239-e07_f1_import_test.engine.log",
+      "sha256": "8A53DC98A09834D9E068BF190C01672249C391F0C925AD2960FE6781855540E7"
+    },
+    {
+      "path": "bootstrap/239-e07_f1_import_test.output.log",
+      "sha256": "F819EA0783953CCDB33BA58DF816C8805169DC7A2A886B8E669F88A0302EF146"
+    },
+    {
+      "path": "bootstrap/checks.jsonl",
+      "sha256": "DFE758F484BBDD61F75A23329753BE1E5B8AE7FD2ACCB75EBB004708873362D3"
+    },
+    {
+      "path": "bootstrap/plan.json",
+      "sha256": "8A5276CE3EE2D956CBAABD6411EAB92FD5E8056D45D03433A948E5C9AAB1C535"
+    },
+    {
+      "path": "recovery_bootstrap/239-e07_f1_import_test.engine.log",
+      "sha256": "AD3E3E0BEDFBCEC9C40C85A0B8C544E31C7BBD9E3DCB1CE4DB28E452866C3F7D"
+    },
+    {
+      "path": "recovery_bootstrap/239-e07_f1_import_test.output.log",
+      "sha256": "F2B72EB69F63C337E909B8444E39ECC9A8255DBD012B91DB7FF8CADBA4B89C77"
+    },
+    {
+      "path": "recovery_bootstrap/checks.jsonl",
+      "sha256": "99DF2581173CEA836686C09DEA32111D97509A431F38AF4500319A2AD0969B4F"
+    },
+    {
+      "path": "recovery_bootstrap/plan.json",
+      "sha256": "EFCBCF8D6DE5BABFDC156140BBB519B1F6454118CDEACFE76A4D641FDC758202"
+    },
+    {
+      "path": "regression/001.engine.log",
+      "sha256": "748328213C74CB2AC479BF35910C960BCCC29145D407137E54D66FFA7D3D91DD"
+    },
+    {
+      "path": "regression/001.output.log",
+      "sha256": "12398DA69CD77C09E329A06F25E8E4F9ECCC10EEE5BCB447655C85697BA76D7A"
+    },
+    {
+      "path": "regression/273-e07_f1_geometry_test.engine.log",
+      "sha256": "9952DEC095753E42EB9EA511E5457619DAF54BBC708300170C5ABD2B146E8106"
+    },
+    {
+      "path": "regression/273-e07_f1_geometry_test.output.log",
+      "sha256": "71628C66E650C01AEE64383E660745233CC8908C6C07CE436BD389457176DE81"
+    },
+    {
+      "path": "regression/274-e07_f1_actor_integration_test.engine.log",
+      "sha256": "FB5C6ADF5F346C4593A4B312FE7968B37777D50D08A0A358E403302E69F5BC0E"
+    },
+    {
+      "path": "regression/274-e07_f1_actor_integration_test.output.log",
+      "sha256": "3228E013C9DC947B57FB21801D73C20CE639257E73554894961555FD5960A14E"
+    },
+    {
+      "path": "regression/checks.jsonl",
+      "sha256": "DCA7018573168D4A01F415FFBC422B76495CFC09419D40436447A0478CC053D3"
+    },
+    {
+      "path": "regression/plan.json",
+      "sha256": "D5E52E9751DD0A77C91199FB5BFBC64B17A21ADF65B50924E97801FC6AF69A5C"
+    }
+  ]
+}

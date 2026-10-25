@@ -1,6 +1,6 @@
 # Editor F3 / M3 — contrato executável 1
 
-24/10/2026. EM_EXECUÇÃO. Autorização humana neste chat: “F2 terminou, F3 pode começar.”
+24/10/2026. ENTREGUE / VALIDADA TECNICAMENTE; ACEITE HUMANO PENDENTE. Autorização humana neste chat: “F2 terminou, F3 pode começar.”
 Base completa `15c0d196105b8801e54d784a6226edf27a06b7bd`, incluindo aceite/passagem F2;
 branch `codex/map-editor-m3`, checkout `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m3`.
 M0/M1/F2 integrados por ancestralidade. Sol implementa e valida; Luna supervisionará
@@ -53,6 +53,7 @@ Sol F3 possui os seguintes arquivos novos (cada .gd inclui seu .gd.uid):
 - docs/map_editor/delivery/m3.md
 - docs/map_editor/README.md (entrada de estado/índice)
 - docs/map_editor/delivery/evidence/m3/author/ (evidência autoral)
+- docs/map_editor/delivery/evidence/m3/official/ (regressões oficiais Sol)
 
 Transferência M2→F3 de addons/ragrpg_map_editor/shell.gd: somente abrir janela
 de composição, preservando autoria de peça. M2 encerrou escrita por seu fechamento;

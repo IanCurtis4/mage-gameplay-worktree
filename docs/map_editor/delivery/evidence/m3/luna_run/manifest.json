@@ -1,0 +1,1504 @@
+{
+  "runs": [
+    {
+      "ok": true,
+      "exit_code": 0,
+      "output_sha256": "7F71973E100B6A360D600768E8B6823D65578346A24154BEDFF15C54CFE03D7E",
+      "timeout_ms": 60000,
+      "started_utc": "2026-10-25T01:05:49.1329316Z",
+      "arguments": [
+        "--headless",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "result": null,
+      "timed_out": false,
+      "name": "import",
+      "finished_utc": "2026-10-25T01:06:32.3075432Z"
+    },
+    {
+      "ok": true,
+      "exit_code": 0,
+      "output_sha256": "B943636F8D5E5D8ACBE9703EEC08C6ED6EE4217657B01B2AE185B1FB8131753D",
+      "timeout_ms": 60000,
+      "started_utc": "2026-10-25T01:06:32.4713003Z",
+      "arguments": [
+        "--headless",
+        "--script",
+        "res://tests/map_editor_composition_test.gd"
+      ],
+      "result": {
+        "checks": [
+          {
+            "id": "two_piece_compile",
+            "ok": true
+          },
+          {
+            "id": "authorship_unchanged",
+            "ok": true
+          },
+          {
+            "id": "exact_authored_transforms",
+            "ok": true
+          },
+          {
+            "id": "two_authored_pieces_two_supports",
+            "ok": true
+          },
+          {
+            "id": "package_integrity",
+            "ok": true
+          },
+          {
+            "id": "deterministic",
+            "ok": true
+          },
+          {
+            "id": "order_independent_identity",
+            "ok": true
+          },
+          {
+            "id": "canonical_world",
+            "ok": true
+          },
+          {
+            "id": "seam_route",
+            "ok": true
+          },
+          {
+            "id": "actor_bind",
+            "ok": true
+          },
+          {
+            "id": "actor_plan",
+            "ok": true
+          },
+          {
+            "id": "continuous_actor_crosses_seam",
+            "ok": true
+          },
+          {
+            "id": "wall_matches_manifest",
+            "ok": true
+          },
+          {
+            "id": "closed_edge_blocks_sweep",
+            "ok": true
+          },
+          {
+            "id": "seam_closed_outside_opening",
+            "ok": true
+          },
+          {
+            "id": "seam_opening_free",
+            "ok": true
+          },
+          {
+            "id": "wall_blocks_los",
+            "ok": true
+          },
+          {
+            "id": "misaligned_seam_rejected",
+            "ok": true
+          },
+          {
+            "id": "overlap_rejected",
+            "ok": true
+          },
+          {
+            "id": "unlinked_opening_rejected",
+            "ok": true
+          },
+          {
+            "id": "broken_reference_rejected",
+            "ok": true
+          },
+          {
+            "id": "connector_single_owner",
+            "ok": true
+          },
+          {
+            "id": "rotated_wrong_opening_rejected",
+            "ok": true
+          },
+          {
+            "id": "no_vertical_repair",
+            "ok": true
+          },
+          {
+            "id": "nonfinite_rejected",
+            "ok": true
+          },
+          {
+            "id": "duplicate_id_rejected",
+            "ok": true
+          },
+          {
+            "id": "missing_biome_profile_rejected",
+            "ok": true
+          },
+          {
+            "id": "immutable_piece_reference",
+            "ok": true
+          },
+          {
+            "id": "unknown_fields_rejected",
+            "ok": true
+          },
+          {
+            "id": "unknown_version_rejected",
+            "ok": true
+          },
+          {
+            "id": "width_mismatch_rejected",
+            "ok": true
+          },
+          {
+            "id": "height_mismatch_rejected",
+            "ok": true
+          },
+          {
+            "id": "direction_mismatch_rejected",
+            "ok": true
+          },
+          {
+            "id": "tag_mismatch_rejected",
+            "ok": true
+          },
+          {
+            "id": "recipe_realizes_explicit_tree",
+            "ok": true
+          },
+          {
+            "id": "recipe_does_not_mutate_draft",
+            "ok": true
+          },
+          {
+            "id": "recipe_deterministic",
+            "ok": true
+          },
+          {
+            "id": "recipe_disconnected_rejected",
+            "ok": true
+          },
+          {
+            "id": "quarter_rotation_preserves_seam",
+            "ok": true
+          },
+          {
+            "id": "different_piece_dimensions",
+            "ok": true
+          },
+          {
+            "id": "partial_shared_boundary_single_owner",
+            "ok": true
+          },
+          {
+            "id": "placement_edit_atomic",
+            "ok": true
+          },
+          {
+            "id": "undo_placements_links",
+            "ok": true
+          },
+          {
+            "id": "redo_placements_links",
+            "ok": true
+          },
+          {
+            "id": "invalid_edit_no_mutation",
+            "ok": true
+          },
+          {
+            "id": "save_composition",
+            "ok": true
+          },
+          {
+            "id": "reopen_exact_placements_links",
+            "ok": true
+          },
+          {
+            "id": "reopen_same_package",
+            "ok": true
+          },
+          {
+            "id": "writer_conflict_preserves_source",
+            "ok": true
+          },
+          {
+            "id": "duplicate_json_key_rejected",
+            "ok": true
+          },
+          {
+            "id": "local_immutable_publish",
+            "ok": true
+          },
+          {
+            "id": "published_package_readable",
+            "ok": true
+          },
+          {
+            "id": "idempotent_publication",
+            "ok": true
+          },
+          {
+            "id": "stale_publication_rejected",
+            "ok": true
+          },
+          {
+            "id": "tampered_package_rejected",
+            "ok": true
+          },
+          {
+            "id": "tampered_publication_rejected",
+            "ok": true
+          },
+          {
+            "id": "corrupted_file_no_overwrite",
+            "ok": true
+          },
+          {
+            "id": "cancellation_no_package",
+            "ok": true
+          },
+          {
+            "id": "stale_worker_no_package",
+            "ok": true
+          },
+          {
+            "id": "cancelled_worker_no_package",
+            "ok": true
+          },
+          {
+            "id": "f2_internal_adjacency_consumed",
+            "ok": true
+          },
+          {
+            "id": "large_field_plus_small_room",
+            "ok": true
+          },
+          {
+            "id": "large_source_roundtrip",
+            "ok": true
+          }
+        ],
+        "compile_ms": 94.946,
+        "count": 63,
+        "large_compile_ms": 2267.033,
+        "large_package_bytes": 122116,
+        "ok": true,
+        "package_bytes": 10036,
+        "package_hash": "30caeb622d2b052ec795b8eaa3ff0f91501ab2e23dc41cecb5250460c125b50c",
+        "piece_count": 2,
+        "source_path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m3/.tools/m3_luna_final/fixture/.godot/m3_5c2483f3d0/map.json"
+      },
+      "timed_out": false,
+      "name": "composition",
+      "finished_utc": "2026-10-25T01:06:44.5184698Z"
+    },
+    {
+      "ok": true,
+      "exit_code": 0,
+      "output_sha256": "08C0245F7A66B303CF455BB7DA452569E9D212575A3B0A305A68518B78BF6A65",
+      "timeout_ms": 60000,
+      "started_utc": "2026-10-25T01:06:44.5504171Z",
+      "arguments": [
+        "--headless",
+        "--script",
+        "res://scripts/map_authoring/composition/headless.gd",
+        "--",
+        "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m3/.tools/m3_luna_final/fixture/.godot/m3_5c2483f3d0/map.json"
+      ],
+      "result": {
+        "code": "",
+        "diagnostics": [],
+        "input_hash": "127fdd80c5a075c1ad3f77c0df796dff84210d81af50ec54d11698dc8edd69ee",
+        "ok": true,
+        "output_hash": "30caeb622d2b052ec795b8eaa3ff0f91501ab2e23dc41cecb5250460c125b50c"
+      },
+      "timed_out": false,
+      "name": "cli_a",
+      "finished_utc": "2026-10-25T01:06:48.7491916Z"
+    },
+    {
+      "ok": true,
+      "exit_code": 0,
+      "output_sha256": "08C0245F7A66B303CF455BB7DA452569E9D212575A3B0A305A68518B78BF6A65",
+      "timeout_ms": 60000,
+      "started_utc": "2026-10-25T01:06:48.7570447Z",
+      "arguments": [
+        "--headless",
+        "--script",
+        "res://scripts/map_authoring/composition/headless.gd",
+        "--",
+        "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m3/.tools/m3_luna_final/fixture/.godot/m3_5c2483f3d0/map.json"
+      ],
+      "result": {
+        "code": "",
+        "diagnostics": [],
+        "input_hash": "127fdd80c5a075c1ad3f77c0df796dff84210d81af50ec54d11698dc8edd69ee",
+        "ok": true,
+        "output_hash": "30caeb622d2b052ec795b8eaa3ff0f91501ab2e23dc41cecb5250460c125b50c"
+      },
+      "timed_out": false,
+      "name": "cli_b",
+      "finished_utc": "2026-10-25T01:06:53.2321076Z"
+    },
+    {
+      "ok": true,
+      "exit_code": 0,
+      "output_sha256": "E3540287126E64252635C94DFA87F20BF22097F03D5BBFCB15BDA94A2B5AC2D7",
+      "timeout_ms": 60000,
+      "started_utc": "2026-10-25T01:06:53.2377069Z",
+      "arguments": [
+        "--headless",
+        "--script",
+        "res://tests/map_editor_document_test.gd"
+      ],
+      "result": {
+        "checks": [
+          {
+            "id": "full_source_roundtrip",
+            "ok": true
+          },
+          {
+            "id": "copy_boundary",
+            "ok": true
+          },
+          {
+            "id": "set_order_hash",
+            "ok": true
+          },
+          {
+            "id": "sequence_order_hash",
+            "ok": true
+          },
+          {
+            "id": "canonical_numeric_oracle",
+            "ok": true
+          },
+          {
+            "id": "canonical_unicode_oracle",
+            "ok": true
+          },
+          {
+            "id": "sha256_oracle",
+            "ok": true
+          },
+          {
+            "id": "duplicate_key_7",
+            "ok": true
+          },
+          {
+            "id": "duplicate_key_8",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_9",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_10",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_11",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_12",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_13",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_14",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_15",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_16",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_17",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_18",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_19",
+            "ok": true
+          },
+          {
+            "id": "strict_grammar_20",
+            "ok": true
+          },
+          {
+            "id": "non_finite",
+            "ok": true
+          },
+          {
+            "id": "bounded_depth",
+            "ok": true
+          },
+          {
+            "id": "bounded_string",
+            "ok": true
+          },
+          {
+            "id": "bounded_bytes",
+            "ok": true
+          },
+          {
+            "id": "utf8_strict_25",
+            "ok": true
+          },
+          {
+            "id": "utf8_strict_26",
+            "ok": true
+          },
+          {
+            "id": "utf8_strict_27",
+            "ok": true
+          },
+          {
+            "id": "utf8_strict_28",
+            "ok": true
+          },
+          {
+            "id": "surrogate_strict_29",
+            "ok": true
+          },
+          {
+            "id": "surrogate_strict_30",
+            "ok": true
+          },
+          {
+            "id": "surrogate_strict_31",
+            "ok": true
+          },
+          {
+            "id": "surrogate_pair",
+            "ok": true
+          },
+          {
+            "id": "token_budget",
+            "ok": true
+          },
+          {
+            "id": "unknown_version",
+            "ok": true
+          },
+          {
+            "id": "unknown_field",
+            "ok": true
+          },
+          {
+            "id": "typed_bool",
+            "ok": true
+          },
+          {
+            "id": "typed_integer",
+            "ok": true
+          },
+          {
+            "id": "invalid_draft_readable",
+            "ok": true
+          },
+          {
+            "id": "duplicate_ids",
+            "ok": true
+          },
+          {
+            "id": "broken_reference",
+            "ok": true
+          },
+          {
+            "id": "dependency_reference",
+            "ok": true
+          },
+          {
+            "id": "entity_limit",
+            "ok": true
+          },
+          {
+            "id": "clean_baseline",
+            "ok": true
+          },
+          {
+            "id": "edit_atomic",
+            "ok": true
+          },
+          {
+            "id": "undo",
+            "ok": true
+          },
+          {
+            "id": "redo",
+            "ok": true
+          },
+          {
+            "id": "reject_without_mutation",
+            "ok": true
+          },
+          {
+            "id": "redo_branch_cleared",
+            "ok": true
+          },
+          {
+            "id": "replace_rejection",
+            "ok": true
+          },
+          {
+            "id": "identity_stable",
+            "ok": true
+          },
+          {
+            "id": "duplicate_layer_graph",
+            "ok": true
+          },
+          {
+            "id": "duplicate_internal_references",
+            "ok": true
+          },
+          {
+            "id": "duplicate_atomic_undo",
+            "ok": true
+          },
+          {
+            "id": "duplicate_missing_rejected",
+            "ok": true
+          },
+          {
+            "id": "save_roundtrip",
+            "ok": true
+          },
+          {
+            "id": "overwrite_requires_hash",
+            "ok": true
+          },
+          {
+            "id": "save_backup",
+            "ok": true
+          },
+          {
+            "id": "autosave",
+            "ok": true
+          },
+          {
+            "id": "external_edit",
+            "ok": true
+          },
+          {
+            "id": "recovery_divergence",
+            "ok": true
+          },
+          {
+            "id": "interruption_original_intact",
+            "ok": true
+          },
+          {
+            "id": "pending_preserved",
+            "ok": true
+          },
+          {
+            "id": "concurrent_writer_rejected",
+            "ok": true
+          },
+          {
+            "id": "truncated_pending_rejected",
+            "ok": true
+          },
+          {
+            "id": "missing_directory",
+            "ok": true
+          },
+          {
+            "id": "truncated_file",
+            "ok": true
+          },
+          {
+            "id": "draft_saved",
+            "ok": true
+          },
+          {
+            "id": "recovery_kind_safe",
+            "ok": true
+          },
+          {
+            "id": "io_length_limit",
+            "ok": true
+          }
+        ],
+        "count": 70,
+        "ok": true
+      },
+      "timed_out": false,
+      "name": "document_regression",
+      "finished_utc": "2026-10-25T01:06:54.7538707Z"
+    },
+    {
+      "ok": true,
+      "exit_code": 0,
+      "output_sha256": "8000C21D3411378796944B42225FBF03433F539AB4DC899824C74CF51734B14A",
+      "timeout_ms": 60000,
+      "started_utc": "2026-10-25T01:06:54.8080873Z",
+      "arguments": [
+        "--editor",
+        "--rendering-method",
+        "gl_compatibility"
+      ],
+      "result": {
+        "checks": [
+          {
+            "id": "native_shell_visible",
+            "ok": true
+          },
+          {
+            "id": "composition_window_visible",
+            "ok": true
+          },
+          {
+            "id": "sample_preserves_nonempty_map",
+            "ok": true
+          },
+          {
+            "id": "native_worker_completed",
+            "ok": true
+          },
+          {
+            "id": "native_headless_same_package",
+            "ok": true
+          },
+          {
+            "id": "render_two_piece_layers",
+            "ok": true
+          },
+          {
+            "id": "visible_closed_perimeter",
+            "ok": true
+          },
+          {
+            "id": "ui_placement_edit",
+            "ok": true
+          },
+          {
+            "id": "edit_invalidates_preview",
+            "ok": true
+          },
+          {
+            "id": "ui_undo_restores_links",
+            "ok": true
+          },
+          {
+            "id": "recompile_after_undo",
+            "ok": true
+          },
+          {
+            "id": "discardable_profile_starts",
+            "ok": true
+          },
+          {
+            "id": "wall_occludes_hidden_floor",
+            "ok": true
+          },
+          {
+            "id": "click_resolves_canonical_support",
+            "ok": true
+          },
+          {
+            "id": "click_plans_real_actor",
+            "ok": true
+          },
+          {
+            "id": "native_actor_crosses_seam",
+            "ok": true
+          },
+          {
+            "id": "test_preserves_draft",
+            "ok": true
+          },
+          {
+            "id": "ui_save_reopen_exact",
+            "ok": true
+          },
+          {
+            "id": "ui_local_publication",
+            "ok": true
+          },
+          {
+            "id": "localized_opening_diagnostic",
+            "ok": true
+          },
+          {
+            "id": "diagnostic_selects_instance",
+            "ok": true
+          },
+          {
+            "id": "native_capture",
+            "ok": true
+          }
+        ],
+        "count": 22,
+        "ok": true
+      },
+      "timed_out": false,
+      "name": "native_ui",
+      "finished_utc": "2026-10-25T01:07:16.7002372Z"
+    }
+  ],
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+  "inputs": [
+    {
+      "fixture_sha256": "24018CCB4A278ACBE4FFB54F317C3198C25A4AD1C8A21682F013BD89FFF6252B",
+      "sha256": "24018CCB4A278ACBE4FFB54F317C3198C25A4AD1C8A21682F013BD89FFF6252B",
+      "path": "scripts/map_authoring/compiler/headless.gd"
+    },
+    {
+      "fixture_sha256": "EF98967AD1C40A23CA3F1D51CAEEEA96EE53472504497EC00F6CC463E4280C05",
+      "sha256": "EF98967AD1C40A23CA3F1D51CAEEEA96EE53472504497EC00F6CC463E4280C05",
+      "path": "scripts/map_authoring/compiler/headless.gd.uid"
+    },
+    {
+      "fixture_sha256": "CC9D133767D3B98CDEA2BF607F7A1A7C8FB9A06BA4AFFE53B797C88B7762F028",
+      "sha256": "CC9D133767D3B98CDEA2BF607F7A1A7C8FB9A06BA4AFFE53B797C88B7762F028",
+      "path": "scripts/map_authoring/compiler/terrain_compiler.gd"
+    },
+    {
+      "fixture_sha256": "7397D65F9E5F280DDB52F313401CEA1BB0A6D05967F1DAD35D5A75882897E1E5",
+      "sha256": "7397D65F9E5F280DDB52F313401CEA1BB0A6D05967F1DAD35D5A75882897E1E5",
+      "path": "scripts/map_authoring/compiler/terrain_compiler.gd.uid"
+    },
+    {
+      "fixture_sha256": "5A59D144BF8115B4DADB49F23089D801BEB8487846EB79E7E52930687DEC22A4",
+      "sha256": "5A59D144BF8115B4DADB49F23089D801BEB8487846EB79E7E52930687DEC22A4",
+      "path": "scripts/map_authoring/compiler/terrain_partition.gd"
+    },
+    {
+      "fixture_sha256": "5A6EC4B38E3D67FB49394B0713ABF86B23B0446FA2ED803805C3745898C270D8",
+      "sha256": "5A6EC4B38E3D67FB49394B0713ABF86B23B0446FA2ED803805C3745898C270D8",
+      "path": "scripts/map_authoring/compiler/terrain_partition.gd.uid"
+    },
+    {
+      "fixture_sha256": "F3232CCA2F314BD559A1DC5B5078A0D55F3E1E103BAA93268C77322A6CDC3632",
+      "sha256": "F3232CCA2F314BD559A1DC5B5078A0D55F3E1E103BAA93268C77322A6CDC3632",
+      "path": "scripts/map_authoring/composition/headless.gd"
+    },
+    {
+      "fixture_sha256": "DE0940D6698109D82DE5C7BFDACCE6716C90D59A87708447CF1B3A9E79940BC1",
+      "sha256": "DE0940D6698109D82DE5C7BFDACCE6716C90D59A87708447CF1B3A9E79940BC1",
+      "path": "scripts/map_authoring/composition/headless.gd.uid"
+    },
+    {
+      "fixture_sha256": "4DD30B0E118EC8B6D62B01B3CE45E68D9FD09111D0B3666B8015F6B61994621B",
+      "sha256": "4DD30B0E118EC8B6D62B01B3CE45E68D9FD09111D0B3666B8015F6B61994621B",
+      "path": "scripts/map_authoring/composition/map_compiler.gd"
+    },
+    {
+      "fixture_sha256": "69EDAB2A37D6016A24901B3C3B26A97320B2480EDA3E3106038136989775D88D",
+      "sha256": "69EDAB2A37D6016A24901B3C3B26A97320B2480EDA3E3106038136989775D88D",
+      "path": "scripts/map_authoring/composition/map_compiler.gd.uid"
+    },
+    {
+      "fixture_sha256": "93B1F6721B43A9D5A305213FE3354D49B563FCB779DDAF6AA750B177416B2BBD",
+      "sha256": "93B1F6721B43A9D5A305213FE3354D49B563FCB779DDAF6AA750B177416B2BBD",
+      "path": "scripts/map_authoring/composition/map_document.gd"
+    },
+    {
+      "fixture_sha256": "CCAAABD1FA44A01CB32A806E3C60FA1AE2142DA80041C075247C21825D17487B",
+      "sha256": "CCAAABD1FA44A01CB32A806E3C60FA1AE2142DA80041C075247C21825D17487B",
+      "path": "scripts/map_authoring/composition/map_document.gd.uid"
+    },
+    {
+      "fixture_sha256": "F66A53F301F9C2AC8FEAFF38090EE9967C01793A3EEDC49A15154AF08F161244",
+      "sha256": "F66A53F301F9C2AC8FEAFF38090EE9967C01793A3EEDC49A15154AF08F161244",
+      "path": "scripts/map_authoring/composition/map_panel.gd"
+    },
+    {
+      "fixture_sha256": "CADA4459BAEA5ABEEF3C0B9BC977158BBEA26F712CD6EFAAB5DED3CF052FA98D",
+      "sha256": "CADA4459BAEA5ABEEF3C0B9BC977158BBEA26F712CD6EFAAB5DED3CF052FA98D",
+      "path": "scripts/map_authoring/composition/map_panel.gd.uid"
+    },
+    {
+      "fixture_sha256": "6BD83B3482FFD044BA3F2B41F9C0792EB2D49910A00DB606178BA399521C0BE9",
+      "sha256": "6BD83B3482FFD044BA3F2B41F9C0792EB2D49910A00DB606178BA399521C0BE9",
+      "path": "scripts/map_authoring/composition/map_session.gd"
+    },
+    {
+      "fixture_sha256": "A5100008E66C75F7E7B2D43424394C8C0E78CBA2E2012112A404A81424716797",
+      "sha256": "A5100008E66C75F7E7B2D43424394C8C0E78CBA2E2012112A404A81424716797",
+      "path": "scripts/map_authoring/composition/map_session.gd.uid"
+    },
+    {
+      "fixture_sha256": "18E75FF23611C05DF49C4F9BA74891877E29363A5C6010BC0F013ECE49FDE925",
+      "sha256": "18E75FF23611C05DF49C4F9BA74891877E29363A5C6010BC0F013ECE49FDE925",
+      "path": "scripts/map_authoring/composition/map_store.gd"
+    },
+    {
+      "fixture_sha256": "587C2F9E2B071546C803A4A2FF0D1177058C373169878CBE14C262E1F9098856",
+      "sha256": "587C2F9E2B071546C803A4A2FF0D1177058C373169878CBE14C262E1F9098856",
+      "path": "scripts/map_authoring/composition/map_store.gd.uid"
+    },
+    {
+      "fixture_sha256": "C70A22C4B273AA371C5411FA33D970025BEAE666BE1EFA8DB6BE6614E7058EFF",
+      "sha256": "C70A22C4B273AA371C5411FA33D970025BEAE666BE1EFA8DB6BE6614E7058EFF",
+      "path": "scripts/map_authoring/document/document_session.gd"
+    },
+    {
+      "fixture_sha256": "5160B1636698EAC7FEEBED66EAE391E5A41A5B2017E26DA43A2FA4B64981A918",
+      "sha256": "5160B1636698EAC7FEEBED66EAE391E5A41A5B2017E26DA43A2FA4B64981A918",
+      "path": "scripts/map_authoring/document/document_session.gd.uid"
+    },
+    {
+      "fixture_sha256": "2758159451C2AEA8C386AD45DF7C7A5A1FA65B8151588968B97A1D3363852754",
+      "sha256": "2758159451C2AEA8C386AD45DF7C7A5A1FA65B8151588968B97A1D3363852754",
+      "path": "scripts/map_authoring/document/source_document.gd"
+    },
+    {
+      "fixture_sha256": "09B91C385B8BC09CB2253CCC471D860F811D41D6E74A7D36FA191DCA4B9D35F6",
+      "sha256": "09B91C385B8BC09CB2253CCC471D860F811D41D6E74A7D36FA191DCA4B9D35F6",
+      "path": "scripts/map_authoring/document/source_document.gd.uid"
+    },
+    {
+      "fixture_sha256": "C1E89D7D6E2F49714F9A6530E65D8222176AB9587830206A0FD6D56DA1DE82C4",
+      "sha256": "C1E89D7D6E2F49714F9A6530E65D8222176AB9587830206A0FD6D56DA1DE82C4",
+      "path": "scripts/map_authoring/document/source_schema.gd"
+    },
+    {
+      "fixture_sha256": "B80A7CAD5747C44EDAA213661E0E4052A714273AE3F17D3F39ECFDC0049284BF",
+      "sha256": "B80A7CAD5747C44EDAA213661E0E4052A714273AE3F17D3F39ECFDC0049284BF",
+      "path": "scripts/map_authoring/document/source_schema.gd.uid"
+    },
+    {
+      "fixture_sha256": "78A0A16744ED67F77418FEBB7E5779180622F12283A057889E9693848DFD0120",
+      "sha256": "78A0A16744ED67F77418FEBB7E5779180622F12283A057889E9693848DFD0120",
+      "path": "scripts/map_authoring/io/decimal_float.gd"
+    },
+    {
+      "fixture_sha256": "5D8987F99083A4C8195F050225E110E1EDC91A90362BA5E22A10285DDBE36090",
+      "sha256": "5D8987F99083A4C8195F050225E110E1EDC91A90362BA5E22A10285DDBE36090",
+      "path": "scripts/map_authoring/io/decimal_float.gd.uid"
+    },
+    {
+      "fixture_sha256": "D63D967C81D5869DF5CC7205256804802AAA75B2169F2CAD6E7371812D463F36",
+      "sha256": "D63D967C81D5869DF5CC7205256804802AAA75B2169F2CAD6E7371812D463F36",
+      "path": "scripts/map_authoring/io/headless.gd"
+    },
+    {
+      "fixture_sha256": "828861B2D95F3DF43FAF5E8225B53C7B6F17CC71DA38C6CE1FCB80A3ED311393",
+      "sha256": "828861B2D95F3DF43FAF5E8225B53C7B6F17CC71DA38C6CE1FCB80A3ED311393",
+      "path": "scripts/map_authoring/io/headless.gd.uid"
+    },
+    {
+      "fixture_sha256": "A0161B881684189AA4C5BA5FB20A22FBF2ECD18677296F959673E8B078C820EA",
+      "sha256": "A0161B881684189AA4C5BA5FB20A22FBF2ECD18677296F959673E8B078C820EA",
+      "path": "scripts/map_authoring/io/source_store.gd"
+    },
+    {
+      "fixture_sha256": "AC6ADBABBB658B75435ABA957C800DB4ADDEB4113C494CEA05B8990E84E63ADC",
+      "sha256": "AC6ADBABBB658B75435ABA957C800DB4ADDEB4113C494CEA05B8990E84E63ADC",
+      "path": "scripts/map_authoring/io/source_store.gd.uid"
+    },
+    {
+      "fixture_sha256": "6130EE253A48EF982F2109C5D6C32149CE265D765A4DD3AFA1D6648F12D1661C",
+      "sha256": "6130EE253A48EF982F2109C5D6C32149CE265D765A4DD3AFA1D6648F12D1661C",
+      "path": "scripts/map_authoring/io/strict_json.gd"
+    },
+    {
+      "fixture_sha256": "901514965C63BD7DA411FC7EBF0E54B1A4FA41067D1FCDE9D81CE2D6A17EA957",
+      "sha256": "901514965C63BD7DA411FC7EBF0E54B1A4FA41067D1FCDE9D81CE2D6A17EA957",
+      "path": "scripts/map_authoring/io/strict_json.gd.uid"
+    },
+    {
+      "fixture_sha256": "57BEB0B13E66BE2D4D8EED3E9CD4968447BCC26DFC673C426162C16D6A8B7C4D",
+      "sha256": "57BEB0B13E66BE2D4D8EED3E9CD4968447BCC26DFC673C426162C16D6A8B7C4D",
+      "path": "scripts/map_authoring/preview/map_canvas.gd"
+    },
+    {
+      "fixture_sha256": "ECF557E109BAB94382961841FCE73A4C79D7CCD2AC8121DCA06029377B760ECD",
+      "sha256": "ECF557E109BAB94382961841FCE73A4C79D7CCD2AC8121DCA06029377B760ECD",
+      "path": "scripts/map_authoring/preview/map_canvas.gd.uid"
+    },
+    {
+      "fixture_sha256": "B929A01A373ECE4FE305842A2AD3B9011184DFC6AC1446561CA3F0934D144375",
+      "sha256": "B929A01A373ECE4FE305842A2AD3B9011184DFC6AC1446561CA3F0934D144375",
+      "path": "scripts/map_authoring/terrain/brush.gd"
+    },
+    {
+      "fixture_sha256": "2B91E7BF3691BE40C3D977EE685137295680450F0C7129CDA9AFFF91F1C3680F",
+      "sha256": "2B91E7BF3691BE40C3D977EE685137295680450F0C7129CDA9AFFF91F1C3680F",
+      "path": "scripts/map_authoring/terrain/brush.gd.uid"
+    },
+    {
+      "fixture_sha256": "23AB6DF6358AB366DD5F29F11F93E8088EFB9F08D7270931EF39CE88E98B612E",
+      "sha256": "23AB6DF6358AB366DD5F29F11F93E8088EFB9F08D7270931EF39CE88E98B612E",
+      "path": "scripts/map_authoring/terrain/terrain_canvas.gd"
+    },
+    {
+      "fixture_sha256": "A4A7145462A66339B5F3AA5594E077395B0206F45EFE3C22333D843C9D724ED4",
+      "sha256": "A4A7145462A66339B5F3AA5594E077395B0206F45EFE3C22333D843C9D724ED4",
+      "path": "scripts/map_authoring/terrain/terrain_canvas.gd.uid"
+    },
+    {
+      "fixture_sha256": "D880815CE82B10E0B1FFE924AF66780301D55A9732A7E7DBD9F3A2D5E08DAEDD",
+      "sha256": "D880815CE82B10E0B1FFE924AF66780301D55A9732A7E7DBD9F3A2D5E08DAEDD",
+      "path": "scripts/map_authoring/terrain/terrain_material.gd"
+    },
+    {
+      "fixture_sha256": "398567B662483B699563CB165DAE37DE8154D3637E445A8AF75B2910E5AE343C",
+      "sha256": "398567B662483B699563CB165DAE37DE8154D3637E445A8AF75B2910E5AE343C",
+      "path": "scripts/map_authoring/terrain/terrain_material.gd.uid"
+    },
+    {
+      "fixture_sha256": "4DFF793D9F6339AF72F2853652ABCB8D09637A40FDED3E61604795BCC6176404",
+      "sha256": "4DFF793D9F6339AF72F2853652ABCB8D09637A40FDED3E61604795BCC6176404",
+      "path": "scripts/map_authoring/terrain/terrain_material.gdshader"
+    },
+    {
+      "fixture_sha256": "1E316164FA09EC832C7CA9C2CBB2F2B3ACE8610236C092DDF0F3C91EF7FE38C0",
+      "sha256": "1E316164FA09EC832C7CA9C2CBB2F2B3ACE8610236C092DDF0F3C91EF7FE38C0",
+      "path": "scripts/map_authoring/terrain/terrain_material.gdshader.uid"
+    },
+    {
+      "fixture_sha256": "020D4D60967D4BB0E937726F6D2CD49C69FBD206EE5AA388ADD9DB4676E28FC1",
+      "sha256": "020D4D60967D4BB0E937726F6D2CD49C69FBD206EE5AA388ADD9DB4676E28FC1",
+      "path": "scripts/map_authoring/terrain/terrain_panel.gd"
+    },
+    {
+      "fixture_sha256": "875D8971F481E83D09CBDD2D0D61054CE1C42EFEC47D9D1E05F435B9D152AECA",
+      "sha256": "875D8971F481E83D09CBDD2D0D61054CE1C42EFEC47D9D1E05F435B9D152AECA",
+      "path": "scripts/map_authoring/terrain/terrain_panel.gd.uid"
+    },
+    {
+      "fixture_sha256": "3B90B55AFA7A9319FE2BDB72C4E0F44F9D4B16EB9D77F5F17CAF14E312646F48",
+      "sha256": "3B90B55AFA7A9319FE2BDB72C4E0F44F9D4B16EB9D77F5F17CAF14E312646F48",
+      "path": "scripts/core/expedition/expedition_service.gd"
+    },
+    {
+      "fixture_sha256": "952B667874CBFE131C9D86E926C3D7F75ED462827AA32E02A7260E8B8341D432",
+      "sha256": "952B667874CBFE131C9D86E926C3D7F75ED462827AA32E02A7260E8B8341D432",
+      "path": "scripts/core/expedition/expedition_service.gd.uid"
+    },
+    {
+      "fixture_sha256": "873A182BEA84A0CB1C4E1802B610CC4E59014061A97C743152B0B0D515312D9F",
+      "sha256": "873A182BEA84A0CB1C4E1802B610CC4E59014061A97C743152B0B0D515312D9F",
+      "path": "scripts/core/expedition/campaign/expedition_campaign_runtime.gd"
+    },
+    {
+      "fixture_sha256": "40028DC7F99E5AAE52C62F84268EFC41A8EDAB05C2900EF4F697BB9911B6CFE8",
+      "sha256": "40028DC7F99E5AAE52C62F84268EFC41A8EDAB05C2900EF4F697BB9911B6CFE8",
+      "path": "scripts/core/expedition/campaign/expedition_campaign_runtime.gd.uid"
+    },
+    {
+      "fixture_sha256": "E801255CF02A4257D82B892FA916505D7D084FD02AAE094C3EE0C9CB5823E3C2",
+      "sha256": "E801255CF02A4257D82B892FA916505D7D084FD02AAE094C3EE0C9CB5823E3C2",
+      "path": "scripts/core/expedition/campaign/expedition_campaign_state.gd"
+    },
+    {
+      "fixture_sha256": "5E357B857CFEF9206B5D42D934A5058CFD11B5535C0BC408DD527B2106DF0A0E",
+      "sha256": "5E357B857CFEF9206B5D42D934A5058CFD11B5535C0BC408DD527B2106DF0A0E",
+      "path": "scripts/core/expedition/campaign/expedition_campaign_state.gd.uid"
+    },
+    {
+      "fixture_sha256": "0B893EA374B14A45C63ADCEE94CF26903661E9C5EBB920853B88E9B81CFC96EA",
+      "sha256": "0B893EA374B14A45C63ADCEE94CF26903661E9C5EBB920853B88E9B81CFC96EA",
+      "path": "scripts/core/expedition/campaign/expedition_death_recovery.gd"
+    },
+    {
+      "fixture_sha256": "132AE01A31A57EC93A86912A2E5F66C0024712219939E48FEC4C0BE410CE733C",
+      "sha256": "132AE01A31A57EC93A86912A2E5F66C0024712219939E48FEC4C0BE410CE733C",
+      "path": "scripts/core/expedition/campaign/expedition_death_recovery.gd.uid"
+    },
+    {
+      "fixture_sha256": "4225B520391C844EA2AC7D99D8322A61D7D073FCB530DB28B077FB2C15845CAD",
+      "sha256": "4225B520391C844EA2AC7D99D8322A61D7D073FCB530DB28B077FB2C15845CAD",
+      "path": "scripts/core/expedition/campaign/expedition_reward_policy.gd"
+    },
+    {
+      "fixture_sha256": "B43E39A2B4F748D8E3EFF2C9360EAD00B222DB32B30FB833252CEC2D7D6A2418",
+      "sha256": "B43E39A2B4F748D8E3EFF2C9360EAD00B222DB32B30FB833252CEC2D7D6A2418",
+      "path": "scripts/core/expedition/campaign/expedition_reward_policy.gd.uid"
+    },
+    {
+      "fixture_sha256": "319E574EB54500C909060BEA6F394463AFF9CDBCAA4C88C46D5DFF453E4DCDA9",
+      "sha256": "319E574EB54500C909060BEA6F394463AFF9CDBCAA4C88C46D5DFF453E4DCDA9",
+      "path": "scripts/core/expedition/combat/combat_participation.gd"
+    },
+    {
+      "fixture_sha256": "B40545EC79BA05F835BF267956022FAF79E39DBE7D10E6BA226238D266BBA0D7",
+      "sha256": "B40545EC79BA05F835BF267956022FAF79E39DBE7D10E6BA226238D266BBA0D7",
+      "path": "scripts/core/expedition/combat/combat_participation.gd.uid"
+    },
+    {
+      "fixture_sha256": "0E1AD64DB08AE4694E422C424460E7DE9199D9A1D31A8A9FC88F6FE4971F261A",
+      "sha256": "0E1AD64DB08AE4694E422C424460E7DE9199D9A1D31A8A9FC88F6FE4971F261A",
+      "path": "scripts/core/expedition/combat/threat_service.gd"
+    },
+    {
+      "fixture_sha256": "E5FBEF839F62F653CC2285C1810777AF390F647F5827C52D857C8ED63274F192",
+      "sha256": "E5FBEF839F62F653CC2285C1810777AF390F647F5827C52D857C8ED63274F192",
+      "path": "scripts/core/expedition/combat/threat_service.gd.uid"
+    },
+    {
+      "fixture_sha256": "1F05C04E8CFFD309C6F786E05AC961118B11C0DDBE3F0A27EF182462637C23A6",
+      "sha256": "1F05C04E8CFFD309C6F786E05AC961118B11C0DDBE3F0A27EF182462637C23A6",
+      "path": "scripts/core/expedition/combat/threat_view.gd"
+    },
+    {
+      "fixture_sha256": "E5E95660834A8D4132A5815D69A9BAE0181906C1FABAD9114E089DF0F2B3CDCF",
+      "sha256": "E5E95660834A8D4132A5815D69A9BAE0181906C1FABAD9114E089DF0F2B3CDCF",
+      "path": "scripts/core/expedition/combat/threat_view.gd.uid"
+    },
+    {
+      "fixture_sha256": "EDE6B6ED8BC503539F7D29F28AD29C6C7F467AE88AE01DF7D0A829A434628B23",
+      "sha256": "EDE6B6ED8BC503539F7D29F28AD29C6C7F467AE88AE01DF7D0A829A434628B23",
+      "path": "scripts/core/expedition/generation/assembler.gd"
+    },
+    {
+      "fixture_sha256": "560A61B482F674812BB31FA94E35937C0B06B843BCEFA8C2873C806D7080783C",
+      "sha256": "560A61B482F674812BB31FA94E35937C0B06B843BCEFA8C2873C806D7080783C",
+      "path": "scripts/core/expedition/generation/assembler.gd.uid"
+    },
+    {
+      "fixture_sha256": "569D8B7E250145F31A50125B8E5FC56E20E345CAF7D163ECFD1F0A556804A98C",
+      "sha256": "569D8B7E250145F31A50125B8E5FC56E20E345CAF7D163ECFD1F0A556804A98C",
+      "path": "scripts/core/expedition/generation/canonical.gd"
+    },
+    {
+      "fixture_sha256": "94C00BBDB9D37307814EC28B8ECE729E086A2C23EF4FB271D3376314FA536A36",
+      "sha256": "94C00BBDB9D37307814EC28B8ECE729E086A2C23EF4FB271D3376314FA536A36",
+      "path": "scripts/core/expedition/generation/canonical.gd.uid"
+    },
+    {
+      "fixture_sha256": "5054CE96B70DD8E65CE5760119E108D9FFDADECB1EA85FC91FE9A263BE440B96",
+      "sha256": "5054CE96B70DD8E65CE5760119E108D9FFDADECB1EA85FC91FE9A263BE440B96",
+      "path": "scripts/core/expedition/generation/fixture_geometry.gd"
+    },
+    {
+      "fixture_sha256": "9FA0A946FBFE306ED551F6E27CFB09DAA62B705C246F27CB05004B86AED68339",
+      "sha256": "9FA0A946FBFE306ED551F6E27CFB09DAA62B705C246F27CB05004B86AED68339",
+      "path": "scripts/core/expedition/generation/fixture_geometry.gd.uid"
+    },
+    {
+      "fixture_sha256": "0BE751597630F4092D420149A2B850275453EF19504CEDE22229DD5D05023E02",
+      "sha256": "0BE751597630F4092D420149A2B850275453EF19504CEDE22229DD5D05023E02",
+      "path": "scripts/core/expedition/generation/input_validator.gd"
+    },
+    {
+      "fixture_sha256": "8D160F87A6B293B186D6E71442C1BE2747371626A0558D70FA144DD3FE127BC7",
+      "sha256": "8D160F87A6B293B186D6E71442C1BE2747371626A0558D70FA144DD3FE127BC7",
+      "path": "scripts/core/expedition/generation/input_validator.gd.uid"
+    },
+    {
+      "fixture_sha256": "863FE078C1E85C7CAD341D41B0F68188A7A95B718F90D318B8F111CEED49E51F",
+      "sha256": "863FE078C1E85C7CAD341D41B0F68188A7A95B718F90D318B8F111CEED49E51F",
+      "path": "scripts/core/expedition/generation/witness_graph.gd"
+    },
+    {
+      "fixture_sha256": "053F302107DE8ED26EF51608CF5ABB153C4D529E5864E04E82A0E8824B473336",
+      "sha256": "053F302107DE8ED26EF51608CF5ABB153C4D529E5864E04E82A0E8824B473336",
+      "path": "scripts/core/expedition/generation/witness_graph.gd.uid"
+    },
+    {
+      "fixture_sha256": "AB98071943B4795BD37B26B120DA9F9F7B3E7EA231DB0A49C51748BFFE2779DE",
+      "sha256": "AB98071943B4795BD37B26B120DA9F9F7B3E7EA231DB0A49C51748BFFE2779DE",
+      "path": "scripts/core/expedition/model/generation_input.gd"
+    },
+    {
+      "fixture_sha256": "983DD84DBC91B7F845E9E91E4F1EE656DD065208355E34737F480F075094ECA1",
+      "sha256": "983DD84DBC91B7F845E9E91E4F1EE656DD065208355E34737F480F075094ECA1",
+      "path": "scripts/core/expedition/model/generation_input.gd.uid"
+    },
+    {
+      "fixture_sha256": "4CCA293626CED9CF8CC83DF51BB3A6967C9F69356974FABE92A3A661EDA1B5F7",
+      "sha256": "4CCA293626CED9CF8CC83DF51BB3A6967C9F69356974FABE92A3A661EDA1B5F7",
+      "path": "scripts/core/expedition/model/manifest.gd"
+    },
+    {
+      "fixture_sha256": "0EFDFFFA7CB9400ABCD4FF981B8D2EB21665378489A422884D2FACD234691DB9",
+      "sha256": "0EFDFFFA7CB9400ABCD4FF981B8D2EB21665378489A422884D2FACD234691DB9",
+      "path": "scripts/core/expedition/model/manifest.gd.uid"
+    },
+    {
+      "fixture_sha256": "A79C36BB45DB03446D3FF550038D0EA4FA98DA966C2F46F5C7F59B7955079705",
+      "sha256": "A79C36BB45DB03446D3FF550038D0EA4FA98DA966C2F46F5C7F59B7955079705",
+      "path": "scripts/core/expedition/model/population_plan.gd"
+    },
+    {
+      "fixture_sha256": "4D16F6498145AB084C8D0AE1852DB3E10C8CD617114861A4070D2A8BA70D016D",
+      "sha256": "4D16F6498145AB084C8D0AE1852DB3E10C8CD617114861A4070D2A8BA70D016D",
+      "path": "scripts/core/expedition/model/population_plan.gd.uid"
+    },
+    {
+      "fixture_sha256": "429D28E4F29F25B1146E5D4EBAFFF84027BA754AA937852D51B355BC11764E04",
+      "sha256": "429D28E4F29F25B1146E5D4EBAFFF84027BA754AA937852D51B355BC11764E04",
+      "path": "scripts/core/expedition/model/world_point.gd"
+    },
+    {
+      "fixture_sha256": "1DA780C3BDFEF047E072E21FF8D8D09FD56D82D18A443101BFCA1E3FF6891BBB",
+      "sha256": "1DA780C3BDFEF047E072E21FF8D8D09FD56D82D18A443101BFCA1E3FF6891BBB",
+      "path": "scripts/core/expedition/model/world_point.gd.uid"
+    },
+    {
+      "fixture_sha256": "1FB81A0754177DF693AA64C0BF971B226EE45A30661EC30922EB03A7B58622EB",
+      "sha256": "1FB81A0754177DF693AA64C0BF971B226EE45A30661EC30922EB03A7B58622EB",
+      "path": "scripts/core/expedition/ownership/character_assets.gd"
+    },
+    {
+      "fixture_sha256": "DD94FA4DE41EA449A6243706250A3B5028B51556F748246EC899FAF7479C4050",
+      "sha256": "DD94FA4DE41EA449A6243706250A3B5028B51556F748246EC899FAF7479C4050",
+      "path": "scripts/core/expedition/ownership/character_assets.gd.uid"
+    },
+    {
+      "fixture_sha256": "B38DB208DEA5C9F75ABF52B9E1946ABA4F037E93E63BC26C4195F2F6127FF957",
+      "sha256": "B38DB208DEA5C9F75ABF52B9E1946ABA4F037E93E63BC26C4195F2F6127FF957",
+      "path": "scripts/core/expedition/ownership/expedition_asset_lock.gd"
+    },
+    {
+      "fixture_sha256": "5C0CC8CB10046FD0CCF338C9F29CF797144592E3989E934AE189A7B83D4478A9",
+      "sha256": "5C0CC8CB10046FD0CCF338C9F29CF797144592E3989E934AE189A7B83D4478A9",
+      "path": "scripts/core/expedition/ownership/expedition_asset_lock.gd.uid"
+    },
+    {
+      "fixture_sha256": "76C3521D15EF93031DFB85022358AF051E5D779919FF8351DAC5EAB07D4E894F",
+      "sha256": "76C3521D15EF93031DFB85022358AF051E5D779919FF8351DAC5EAB07D4E894F",
+      "path": "scripts/core/expedition/ownership/migration_plan.gd"
+    },
+    {
+      "fixture_sha256": "AAF4AAD75CC47B67DF1A31124CB16C0565BFFEA32D39382F71FD9085C3CEB8F0",
+      "sha256": "AAF4AAD75CC47B67DF1A31124CB16C0565BFFEA32D39382F71FD9085C3CEB8F0",
+      "path": "scripts/core/expedition/ownership/migration_plan.gd.uid"
+    },
+    {
+      "fixture_sha256": "A9E6168469268D2914280D444E5D17264423CEC784224334A13FD269470FBF31",
+      "sha256": "A9E6168469268D2914280D444E5D17264423CEC784224334A13FD269470FBF31",
+      "path": "scripts/core/expedition/persistence/expedition_checkpoint_codec.gd"
+    },
+    {
+      "fixture_sha256": "B3FDDFA25D413FC28ADCB28FD012999D0EC4D7B0060F8602E91CF6E054C4107F",
+      "sha256": "B3FDDFA25D413FC28ADCB28FD012999D0EC4D7B0060F8602E91CF6E054C4107F",
+      "path": "scripts/core/expedition/persistence/expedition_checkpoint_codec.gd.uid"
+    },
+    {
+      "fixture_sha256": "3E29744779296A918A81E4D057A5FDA0F86D12335C586ED2E71B7BE929CDDBFF",
+      "sha256": "3E29744779296A918A81E4D057A5FDA0F86D12335C586ED2E71B7BE929CDDBFF",
+      "path": "scripts/core/expedition/population/expedition_wave_clock.gd"
+    },
+    {
+      "fixture_sha256": "B5DBAD960D082E78BAA2F108DDA4E5DD68DD34B439F6BD31461D06C2774DBBF5",
+      "sha256": "B5DBAD960D082E78BAA2F108DDA4E5DD68DD34B439F6BD31461D06C2774DBBF5",
+      "path": "scripts/core/expedition/population/expedition_wave_clock.gd.uid"
+    },
+    {
+      "fixture_sha256": "9FE61222A3AA49E6E16D438315C32413AA9C59A0120ABB939001A829C056D1CB",
+      "sha256": "9FE61222A3AA49E6E16D438315C32413AA9C59A0120ABB939001A829C056D1CB",
+      "path": "scripts/core/expedition/population/population_planner.gd"
+    },
+    {
+      "fixture_sha256": "F1DAEA1DAF27D6091844DB68F0C48B48D826B895F2D1F65004D1C1A528CF8792",
+      "sha256": "F1DAEA1DAF27D6091844DB68F0C48B48D826B895F2D1F65004D1C1A528CF8792",
+      "path": "scripts/core/expedition/population/population_planner.gd.uid"
+    },
+    {
+      "fixture_sha256": "4467D855F641BCC941B3E363C006C8B91904793020FC17C143AE36222AE6BFC0",
+      "sha256": "4467D855F641BCC941B3E363C006C8B91904793020FC17C143AE36222AE6BFC0",
+      "path": "scripts/core/expedition/snapshot/runtime_manifest.json"
+    },
+    {
+      "fixture_sha256": "0FF76E9EDEDFFBAE06FA4319BB5B061A98EF02DCC749A3379EF0F916C1E4CF59",
+      "sha256": "0FF76E9EDEDFFBAE06FA4319BB5B061A98EF02DCC749A3379EF0F916C1E4CF59",
+      "path": "scripts/core/expedition/snapshot/snapshot_identity_roles.gd"
+    },
+    {
+      "fixture_sha256": "87B3B7A2877E818642E32185415015B0F3E0C105C23034D3497C1D195380D901",
+      "sha256": "87B3B7A2877E818642E32185415015B0F3E0C105C23034D3497C1D195380D901",
+      "path": "scripts/core/expedition/snapshot/snapshot_identity_roles.gd.uid"
+    },
+    {
+      "fixture_sha256": "941BB677E8A5D73AD47E5FA7517B31DC07EF116B55A3C2D18B2E8B9984FE60B0",
+      "sha256": "941BB677E8A5D73AD47E5FA7517B31DC07EF116B55A3C2D18B2E8B9984FE60B0",
+      "path": "scripts/core/expedition/snapshot/snapshot_registry.gd"
+    },
+    {
+      "fixture_sha256": "392A3B9EFBEE276691E77DFC2406A9D50D316DE4ED17F13244D1CD9999F0FB34",
+      "sha256": "392A3B9EFBEE276691E77DFC2406A9D50D316DE4ED17F13244D1CD9999F0FB34",
+      "path": "scripts/core/expedition/snapshot/snapshot_registry.gd.uid"
+    },
+    {
+      "fixture_sha256": "DC4417722EE912B33869B5017A88B6784A49CDB51FC840657269EF80BC5EEEC6",
+      "sha256": "DC4417722EE912B33869B5017A88B6784A49CDB51FC840657269EF80BC5EEEC6",
+      "path": "scripts/core/expedition/snapshot/snapshot_tick_barrier.gd"
+    },
+    {
+      "fixture_sha256": "E06A503743FA703E899CBB2B51FD02ADEB7B3D0D45AE419B9705A7675863EA81",
+      "sha256": "E06A503743FA703E899CBB2B51FD02ADEB7B3D0D45AE419B9705A7675863EA81",
+      "path": "scripts/core/expedition/snapshot/snapshot_tick_barrier.gd.uid"
+    },
+    {
+      "fixture_sha256": "40065AEF4F47ABC105173C964628C429DF9E4F40CBC4251EAFD7A9409BF8034B",
+      "sha256": "40065AEF4F47ABC105173C964628C429DF9E4F40CBC4251EAFD7A9409BF8034B",
+      "path": "scripts/core/expedition/snapshot/stable_entity_registry.gd"
+    },
+    {
+      "fixture_sha256": "69736301E0FF18A86121F68B430836E8CD626395C5CB716788BEB7BF2EA01D36",
+      "sha256": "69736301E0FF18A86121F68B430836E8CD626395C5CB716788BEB7BF2EA01D36",
+      "path": "scripts/core/expedition/snapshot/stable_entity_registry.gd.uid"
+    },
+    {
+      "fixture_sha256": "6D85A9A50871EE22F6F67D39686AB39B32C81CEE18722D8D09DC2DF53DDD7038",
+      "sha256": "6D85A9A50871EE22F6F67D39686AB39B32C81CEE18722D8D09DC2DF53DDD7038",
+      "path": "scripts/core/expedition/spatial/flat_world_geometry.gd"
+    },
+    {
+      "fixture_sha256": "6A4F0BCEE4883C59EB6F9A727F59310A0AD7EA30B49DA3387B82C017CB3FE020",
+      "sha256": "6A4F0BCEE4883C59EB6F9A727F59310A0AD7EA30B49DA3387B82C017CB3FE020",
+      "path": "scripts/core/expedition/spatial/flat_world_geometry.gd.uid"
+    },
+    {
+      "fixture_sha256": "98765A455334FF083819AE22384FB059F6A4C871741F55DC9E862AE56B259918",
+      "sha256": "98765A455334FF083819AE22384FB059F6A4C871741F55DC9E862AE56B259918",
+      "path": "scripts/core/expedition/spatial/world_actor_motion.gd"
+    },
+    {
+      "fixture_sha256": "A4E081CF116BA9CA4527628FB5AF8F09516475289EA6C53912D481D6AD94187D",
+      "sha256": "A4E081CF116BA9CA4527628FB5AF8F09516475289EA6C53912D481D6AD94187D",
+      "path": "scripts/core/expedition/spatial/world_actor_motion.gd.uid"
+    },
+    {
+      "fixture_sha256": "F40EE0F9D696CB29FC872D9EF4A341C0542A872C2D75CF9A62EC3444D6200AFE",
+      "sha256": "F40EE0F9D696CB29FC872D9EF4A341C0542A872C2D75CF9A62EC3444D6200AFE",
+      "path": "scripts/core/expedition/spatial/world_effect_area.gd"
+    },
+    {
+      "fixture_sha256": "98C08AC6E9B5C09F0C3720A5466FA27EF99B60AE162A638DB6D502B901CE903B",
+      "sha256": "98C08AC6E9B5C09F0C3720A5466FA27EF99B60AE162A638DB6D502B901CE903B",
+      "path": "scripts/core/expedition/spatial/world_effect_area.gd.uid"
+    },
+    {
+      "fixture_sha256": "2B40F144217F81B8D65CBA77DF62BA88CF9CBB13577ECFFF98FCE5125E8DE626",
+      "sha256": "2B40F144217F81B8D65CBA77DF62BA88CF9CBB13577ECFFF98FCE5125E8DE626",
+      "path": "scripts/core/expedition/spatial/world_effect_volume.gd"
+    },
+    {
+      "fixture_sha256": "5300DEE3E01DFD84C07A5D45B6DF870617A1B124698252D8862769832F16135B",
+      "sha256": "5300DEE3E01DFD84C07A5D45B6DF870617A1B124698252D8862769832F16135B",
+      "path": "scripts/core/expedition/spatial/world_effect_volume.gd.uid"
+    },
+    {
+      "fixture_sha256": "1356E3A2956EEA8171B1867822C59307FFC132F9AC685680EF6F032A9694CF7D",
+      "sha256": "1356E3A2956EEA8171B1867822C59307FFC132F9AC685680EF6F032A9694CF7D",
+      "path": "scripts/core/expedition/spatial/world_geometer_cast.gd"
+    },
+    {
+      "fixture_sha256": "E9C03F7176111E7BE81EE5470F249956789D6FD9887E54F84CE72DDE3E0592DA",
+      "sha256": "E9C03F7176111E7BE81EE5470F249956789D6FD9887E54F84CE72DDE3E0592DA",
+      "path": "scripts/core/expedition/spatial/world_geometer_cast.gd.uid"
+    },
+    {
+      "fixture_sha256": "BB1F7DB0CF4614642154814F7DA33FD9484478DF4197998FBA61013E75D8E218",
+      "sha256": "BB1F7DB0CF4614642154814F7DA33FD9484478DF4197998FBA61013E75D8E218",
+      "path": "scripts/core/expedition/spatial/world_geometer_construction.gd"
+    },
+    {
+      "fixture_sha256": "F44DCD21B0642B84E79E9A33D2A8A3D1594F2FDA337171AA496EF8F1F6CAE184",
+      "sha256": "F44DCD21B0642B84E79E9A33D2A8A3D1594F2FDA337171AA496EF8F1F6CAE184",
+      "path": "scripts/core/expedition/spatial/world_geometer_construction.gd.uid"
+    },
+    {
+      "fixture_sha256": "616B1537598E63A698E2481A424FBD68DD01D38D2108143A64FA10F21F17553A",
+      "sha256": "616B1537598E63A698E2481A424FBD68DD01D38D2108143A64FA10F21F17553A",
+      "path": "scripts/core/expedition/spatial/world_geometer_navigation.gd"
+    },
+    {
+      "fixture_sha256": "8407D5B96861C1C99658B0AA387EF90E98CDA8DFCEAE4B89B8D6EA50C552FBA6",
+      "sha256": "8407D5B96861C1C99658B0AA387EF90E98CDA8DFCEAE4B89B8D6EA50C552FBA6",
+      "path": "scripts/core/expedition/spatial/world_geometer_navigation.gd.uid"
+    },
+    {
+      "fixture_sha256": "4565797CFB28CCBE9A80BDF262FBCD770D8BBF49D0EC01D8079F8E3319BC1CA8",
+      "sha256": "4565797CFB28CCBE9A80BDF262FBCD770D8BBF49D0EC01D8079F8E3319BC1CA8",
+      "path": "scripts/core/expedition/spatial/world_geometry.gd"
+    },
+    {
+      "fixture_sha256": "2630F572B431A9A19DF8B25C246E30BC1E4F7B2C477D8114448412A36108C28B",
+      "sha256": "2630F572B431A9A19DF8B25C246E30BC1E4F7B2C477D8114448412A36108C28B",
+      "path": "scripts/core/expedition/spatial/world_geometry.gd.uid"
+    },
+    {
+      "fixture_sha256": "736CDD2680818358B487336BF905B033D3AE6931335D43B6BC13A1AD756C4156",
+      "sha256": "736CDD2680818358B487336BF905B033D3AE6931335D43B6BC13A1AD756C4156",
+      "path": "scripts/core/expedition/spatial/world_ground_field.gd"
+    },
+    {
+      "fixture_sha256": "7A706423B0A8AFDFB6E515F2ED15B25BA3CDACF1983F83DFCA9D6C27274D19D8",
+      "sha256": "7A706423B0A8AFDFB6E515F2ED15B25BA3CDACF1983F83DFCA9D6C27274D19D8",
+      "path": "scripts/core/expedition/spatial/world_ground_field.gd.uid"
+    },
+    {
+      "fixture_sha256": "FB68BE3AE360FE1626E48486C2A935BF9EE8419CE4835C0E70AC440CF5EB5423",
+      "sha256": "FB68BE3AE360FE1626E48486C2A935BF9EE8419CE4835C0E70AC440CF5EB5423",
+      "path": "scripts/core/expedition/spatial/world_locked_action.gd"
+    },
+    {
+      "fixture_sha256": "F5084D8BBE95D59BA38D2AC2F9626CAFD6CD282AD28113A102F8CC3B4F88D085",
+      "sha256": "F5084D8BBE95D59BA38D2AC2F9626CAFD6CD282AD28113A102F8CC3B4F88D085",
+      "path": "scripts/core/expedition/spatial/world_locked_action.gd.uid"
+    },
+    {
+      "fixture_sha256": "074B844B7826049B80826E44272572888AC80ECA968F1027825A52FC09E17A1C",
+      "sha256": "074B844B7826049B80826E44272572888AC80ECA968F1027825A52FC09E17A1C",
+      "path": "scripts/core/expedition/spatial/world_projectile_motion.gd"
+    },
+    {
+      "fixture_sha256": "D04FC5D17BFFEC294860EF4FCC643699E8ED6B182997E62E52F2B3365D03C3BA",
+      "sha256": "D04FC5D17BFFEC294860EF4FCC643699E8ED6B182997E62E52F2B3365D03C3BA",
+      "path": "scripts/core/expedition/spatial/world_projectile_motion.gd.uid"
+    },
+    {
+      "fixture_sha256": "3EF92FAB9D8D55227220579AFB88C18A820B7A41F11A437DB04DE58E61B18A07",
+      "sha256": "3EF92FAB9D8D55227220579AFB88C18A820B7A41F11A437DB04DE58E61B18A07",
+      "path": "scripts/core/expedition/spatial/world_skill_cast.gd"
+    },
+    {
+      "fixture_sha256": "82A13FC736E5B35487A83275838B1380E54C1D09DAA5CC115B24145BFB2B8D6B",
+      "sha256": "82A13FC736E5B35487A83275838B1380E54C1D09DAA5CC115B24145BFB2B8D6B",
+      "path": "scripts/core/expedition/spatial/world_skill_cast.gd.uid"
+    },
+    {
+      "fixture_sha256": "78628107E52A62C68FBADF6A4C9B72E9E4EBE4F2350ED0776EDE7033413D0270",
+      "sha256": "78628107E52A62C68FBADF6A4C9B72E9E4EBE4F2350ED0776EDE7033413D0270",
+      "path": "scripts/core/expedition/spatial/world_skill_geometry_rules.gd"
+    },
+    {
+      "fixture_sha256": "6D7428AA006DAF15DD84233C1D4947B804AA0FBC7BA6AC789F9A019367D4230E",
+      "sha256": "6D7428AA006DAF15DD84233C1D4947B804AA0FBC7BA6AC789F9A019367D4230E",
+      "path": "scripts/core/expedition/spatial/world_skill_geometry_rules.gd.uid"
+    },
+    {
+      "fixture_sha256": "D74A83561D86E9FF7625D7E3CD9F31C1EA3B4BD312AF8825396F27CAAF042778",
+      "sha256": "D74A83561D86E9FF7625D7E3CD9F31C1EA3B4BD312AF8825396F27CAAF042778",
+      "path": "scripts/core/expedition/spatial/world_solid_segment.gd"
+    },
+    {
+      "fixture_sha256": "9871E35C5C7D9D1BFA0536C177D7B66EF5E9FA84BB383861683FF59CE1F10849",
+      "sha256": "9871E35C5C7D9D1BFA0536C177D7B66EF5E9FA84BB383861683FF59CE1F10849",
+      "path": "scripts/core/expedition/spatial/world_solid_segment.gd.uid"
+    },
+    {
+      "fixture_sha256": "F987643EF35DDF4B6640BAB9C738794BAEC95DD6958009DA6A313FE4E0433C2A",
+      "sha256": "F987643EF35DDF4B6640BAB9C738794BAEC95DD6958009DA6A313FE4E0433C2A",
+      "path": "scripts/core/expedition/spatial/world_support_region.gd"
+    },
+    {
+      "fixture_sha256": "773F47F4D741BA90DD56AC3D6C2D07B82134892D803E734705BB4B0920D65B2A",
+      "sha256": "773F47F4D741BA90DD56AC3D6C2D07B82134892D803E734705BB4B0920D65B2A",
+      "path": "scripts/core/expedition/spatial/world_support_region.gd.uid"
+    },
+    {
+      "fixture_sha256": "8DC98D1383291111532BB688D2EF4DC66D479E67400D6227877C898B9B595C12",
+      "sha256": "8DC98D1383291111532BB688D2EF4DC66D479E67400D6227877C898B9B595C12",
+      "path": "scripts/core/expedition/spatial/world_target_lock.gd"
+    },
+    {
+      "fixture_sha256": "1383C1526AE75F8B25059689BA21F19E0748B65069FA900ACE148CFDAD943227",
+      "sha256": "1383C1526AE75F8B25059689BA21F19E0748B65069FA900ACE148CFDAD943227",
+      "path": "scripts/core/expedition/spatial/world_target_lock.gd.uid"
+    },
+    {
+      "fixture_sha256": "7B177D0B419CAE52573360F6B6EB036FC8B2FA56B18E561FDD2D608DAEAC7177",
+      "sha256": "7B177D0B419CAE52573360F6B6EB036FC8B2FA56B18E561FDD2D608DAEAC7177",
+      "path": "scripts/core/expedition/spatial/world_travel_contact.gd"
+    },
+    {
+      "fixture_sha256": "C9206257C4FE5D36E4D2BA8996D1D8C6E2E80DF590B77C7BC91CA3B76DD84760",
+      "sha256": "C9206257C4FE5D36E4D2BA8996D1D8C6E2E80DF590B77C7BC91CA3B76DD84760",
+      "path": "scripts/core/expedition/spatial/world_travel_contact.gd.uid"
+    },
+    {
+      "fixture_sha256": "C304A658A76F3F3E04FE37B277F150F0A045701CF31BDB7BA50C705CA3018CCE",
+      "sha256": "C304A658A76F3F3E04FE37B277F150F0A045701CF31BDB7BA50C705CA3018CCE",
+      "path": "scripts/world/expedition_geometry_view.gd"
+    },
+    {
+      "fixture_sha256": "74742D2B3B52C2A2A710C5D920CE5153DD71A8A110C516DF306099F05567F235",
+      "sha256": "74742D2B3B52C2A2A710C5D920CE5153DD71A8A110C516DF306099F05567F235",
+      "path": "addons/ragrpg_map_editor/plugin.cfg"
+    },
+    {
+      "fixture_sha256": "EEE1EECB6E115A4370BB59A01BF79A783FD24D4EF1F2769F8F0120BC77D31DE3",
+      "sha256": "EEE1EECB6E115A4370BB59A01BF79A783FD24D4EF1F2769F8F0120BC77D31DE3",
+      "path": "addons/ragrpg_map_editor/plugin.gd"
+    },
+    {
+      "fixture_sha256": "1462F0027051C125835E8CE4A098A580B3B9150643E72440EC7C14EDDCA15161",
+      "sha256": "1462F0027051C125835E8CE4A098A580B3B9150643E72440EC7C14EDDCA15161",
+      "path": "addons/ragrpg_map_editor/plugin.gd.uid"
+    },
+    {
+      "fixture_sha256": "150DEB1F9B4C6D26A829439D06749BA269ABAB98C895E6BDD4C9FC5721DB0C11",
+      "sha256": "150DEB1F9B4C6D26A829439D06749BA269ABAB98C895E6BDD4C9FC5721DB0C11",
+      "path": "addons/ragrpg_map_editor/shell.gd"
+    },
+    {
+      "fixture_sha256": "043E0FC4213B5C4CE8E85E7307FA05DF8CBED2F01FF22CD45CA0EEA071ABB5C2",
+      "sha256": "043E0FC4213B5C4CE8E85E7307FA05DF8CBED2F01FF22CD45CA0EEA071ABB5C2",
+      "path": "addons/ragrpg_map_editor/shell.gd.uid"
+    },
+    {
+      "fixture_sha256": "E0F2B0F1987A1A01EC02254C14320E45DE942BE458D15047B6C6F0BFF507C9EB",
+      "sha256": "E0F2B0F1987A1A01EC02254C14320E45DE942BE458D15047B6C6F0BFF507C9EB",
+      "path": "assets/art/map_authoring/earth_tile.png"
+    },
+    {
+      "fixture_sha256": "8A7FB5DE02A0D061C99E6C88E875B8F5582EB83BE134BB0941F6E4863C2BB117",
+      "sha256": "8A7FB5DE02A0D061C99E6C88E875B8F5582EB83BE134BB0941F6E4863C2BB117",
+      "path": "assets/art/map_authoring/earth_tile.png.import"
+    },
+    {
+      "fixture_sha256": "795BEC1749232E2F6C79A90A1C02AEA4B44016066E29728699F6BB6729C34171",
+      "sha256": "795BEC1749232E2F6C79A90A1C02AEA4B44016066E29728699F6BB6729C34171",
+      "path": "assets/art/map_authoring/grass_tile.png"
+    },
+    {
+      "fixture_sha256": "5A080026FE6E9C15A3039019ECB24607EAA4E76E00A4694B3563610D194DF66B",
+      "sha256": "5A080026FE6E9C15A3039019ECB24607EAA4E76E00A4694B3563610D194DF66B",
+      "path": "assets/art/map_authoring/grass_tile.png.import"
+    },
+    {
+      "fixture_sha256": "0E81EB3DA0611C5E60B9496B65FF759EB67163AF011284EE2034EA58589A17FB",
+      "sha256": "0E81EB3DA0611C5E60B9496B65FF759EB67163AF011284EE2034EA58589A17FB",
+      "path": "assets/art/map_authoring/materials.md"
+    },
+    {
+      "fixture_sha256": "F013625B14F91FA4C95C507C453388890E737B8B92EA443B19B284D464703F92",
+      "sha256": "F013625B14F91FA4C95C507C453388890E737B8B92EA443B19B284D464703F92",
+      "path": "tests/map_editor_composition_test.gd"
+    },
+    {
+      "fixture_sha256": "4EA13CCF0970C5E088E4AEA0B32A3BDFB849837BABD4751F9F90BF5520FCCD6E",
+      "sha256": "4EA13CCF0970C5E088E4AEA0B32A3BDFB849837BABD4751F9F90BF5520FCCD6E",
+      "path": "tests/map_editor_composition_ui_test.gd"
+    },
+    {
+      "fixture_sha256": "D1442458818760B0444D33A8262BE638CE0F28AABA640147088B4A55C3B4CE76",
+      "sha256": "D1442458818760B0444D33A8262BE638CE0F28AABA640147088B4A55C3B4CE76",
+      "path": "tests/map_editor_document_test.gd"
+    },
+    {
+      "fixture_sha256": "810FC863C8B2ED1CB6A358845C6479DEE5E61DD3F19F764992BFEA4997A6169B",
+      "sha256": "810FC863C8B2ED1CB6A358845C6479DEE5E61DD3F19F764992BFEA4997A6169B",
+      "path": "tools/map_editor_composition/run.ps1"
+    }
+  ],
+  "head": "a6d516ef08585a7ca6ba2ba00479cdcbe16e6edf",
+  "engine": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe"
+}

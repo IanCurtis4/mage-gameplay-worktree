@@ -1,0 +1,27 @@
+{
+  "head": "5c25f837c939e459757829b052a49e036174bd1d",
+  "previous_head": "a6d516ef08585a7ca6ba2ba00479cdcbe16e6edf",
+  "differences": [
+    {
+      "path": "scripts/map_authoring/composition/map_panel.gd",
+      "current_sha256": "66ec9d0857ba9dc678f513be0b495876db424f676332d53cb250449dc4089e93",
+      "previous_sha256": "f66a53f301f9c2ac8feaff38090ee9967c01793a3eedc49a15154af08f161244"
+    },
+    {
+      "path": "tests/map_editor_composition_ui_test.gd",
+      "current_sha256": "33e6fc0eb25cc954991b23a614475f56b5f437bc767e9c2eddb294f0dc7b5cba",
+      "previous_sha256": "4ea13ccf0970c5e088e4aea0b32a3bdfb849837babd4751f9f90bf5520fccd6e"
+    },
+    {
+      "path": "tools/map_editor_composition/run.ps1",
+      "current_sha256": "fc43f36164119e09462ea1e123b411631e9d289ce9cc545451c993d68b5762ce",
+      "previous_sha256": "810fc863c8b2ed1cb6a358845c6479dee5e61dd3f19f764992bfea4997a6169b"
+    }
+  ],
+  "new_validation": "Importação oficial e runner F3 nativo no candidato corrigido",
+  "reused_tests": [
+    "e07_f1_geometry_test",
+    "e07_f1_actor_integration_test"
+  ],
+  "input_count": 1758
+}
