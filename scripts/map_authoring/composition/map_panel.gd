@@ -7,6 +7,8 @@ const Store = preload("res://scripts/map_authoring/composition/map_store.gd")
 const PieceStore = preload("res://scripts/map_authoring/io/source_store.gd")
 const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 const Canvas = preload("res://scripts/map_authoring/preview/map_canvas.gd")
+const Population = preload("res://scripts/map_authoring/population/population_panel.gd")
+var population_window: Window
 var session := Session.new()
 var canvas: Control
 var job: RefCounted
@@ -43,6 +45,7 @@ func _ready() -> void:
 		if job != null: job.cancel())
 	_button(actions,"Testar / parar",toggle_test); _button(actions,"Publicar localmente…",func() -> void: choose("publish"))
 	_button(actions,"Recuperar rascunho",recover)
+	_button(actions,"Encontros…",open_population)
 	var split := HSplitContainer.new(); split.size_flags_vertical = Control.SIZE_EXPAND_FILL; add_child(split)
 	var inspector := VBoxContainer.new(); inspector.custom_minimum_size.x = 290; split.add_child(inspector)
 	instances = ItemList.new(); instances.custom_minimum_size.y = 100; inspector.add_child(instances); instances.item_selected.connect(select_instance)
@@ -70,6 +73,13 @@ func _ready() -> void:
 	refresh()
 func _button(parent: Node, text: String, action: Callable) -> Button:
 	var button := Button.new(); button.text = text; button.pressed.connect(action); parent.add_child(button); return button
+func open_population() -> void:
+	if population_window == null:
+		population_window = Window.new(); population_window.title = "Encontros do mapa"; population_window.size = Vector2i(1280,860); population_window.min_size = Vector2i(1100,650)
+		population_window.close_requested.connect(population_window.hide); add_child(population_window)
+		var panel := Population.new(); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); population_window.add_child(panel)
+		if not session.data.instances.is_empty(): panel.import_map(session.data)
+	population_window.popup_centered()
 func _number(parent: Node, label: String) -> SpinBox:
 	var title := Label.new(); title.text = label; parent.add_child(title)
 	var value := SpinBox.new(); value.min_value = -16000; value.max_value = 16000; value.step = 1; value.custom_minimum_size.x = 80; parent.add_child(value); return value

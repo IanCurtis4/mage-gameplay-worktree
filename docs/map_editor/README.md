@@ -136,3 +136,14 @@ mistura caminho/penhasco e terreno não caminhável continuam registrados como
 evoluções pendentes; o aceite não os declara entregues.
 Sem atualização de playtest/master nesta rodada. O usuário autorizou seguir para
 **F3/M3: composição, emendas e teste jogável isolado**; [passagem](contracts/m3_preparation.md).
+
+## Editor F4 / M4 — autorizado em24/10/2026
+
+“F3 foi concluída. Podemos começar F4.” Base aceita F3
+`4c2adf80470d86989742daf426be965f606c5539`, integrada neste consumidor por
+ancestralidade, incluindo M0–M2. [Contrato/propriedade](contracts/m4_dispatch.md)
+e [recibo/checkpoint](delivery/m4.md). Branch codex/map-editor-m4 em checkout
+isolado; pincéis, pins, exclusões e referências a interações existentes.
+Retomada25/10 pela skill ragrpg-resume; validação final/supervisão em andamento.
+O candidato não recebeu aceite humano. Sem liberação de F5/D5 ou F6/D6,
+sem atualização de master/playtest/push. M3-NAV-01 permanece temporária.
