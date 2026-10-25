@@ -1,0 +1,46 @@
+[
+  {
+    "result": null,
+    "started_utc": "2026-10-25T01:48:46.7496168Z",
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "timed_out": false,
+    "name": "import",
+    "output_sha256": "B35B1F57813780DC1F908CCBC1F6400CC35CD6EA56E9047FF894B352EABB0504",
+    "finished_utc": "2026-10-25T01:48:59.6432655Z",
+    "exit_code": 0,
+    "ok": true,
+    "timeout_ms": 60000
+  },
+  {
+    "result": {
+      "checks": [
+        {
+          "id": "fixture_two_rooms",
+          "ok": false
+        }
+      ],
+      "count": 1,
+      "ok": false,
+      "package_hash": "",
+      "source_path": ""
+    },
+    "started_utc": "2026-10-25T01:48:59.7126210Z",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_population_test.gd"
+    ],
+    "timed_out": false,
+    "name": "population",
+    "output_sha256": "9E819F55CB093A19F1D74CE93793544CC9BF8708B449A44FC0EC75E8F9E5223C",
+    "finished_utc": "2026-10-25T01:49:04.3066022Z",
+    "exit_code": 1,
+    "ok": false,
+    "timeout_ms": 60000
+  }
+]

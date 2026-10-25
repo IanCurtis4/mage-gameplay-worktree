@@ -1,0 +1,34 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+M4_UI_CHECK native_shell_visible true
+M4_UI_CHECK population_window_from_composition true
+M4_UI_CHECK imports_snapshot true
+M4_UI_CHECK catalog_populates_ui true
+M4_UI_CHECK paint_entry true
+M4_UI_CHECK gui_prepares_diff true
+M4_UI_CHECK unapplied_spatial_preview true
+M4_UI_CHECK compare_current_before_apply true
+M4_UI_CHECK diff_confirmation_visible true
+M4_UI_CHECK apply_plan_one_undo_step true
+M4_UI_CHECK undo_whole_plan true
+M4_UI_CHECK redo_whole_plan true
+M4_UI_CHECK native_compile_complete true
+M4_UI_CHECK gui_headless_equal true
+M4_UI_CHECK pin_ui true
+M4_UI_CHECK reroll_diff_preserves_pin true
+M4_UI_CHECK pin_home_preserved true
+M4_UI_CHECK canonical_discardable_test true
+M4_UI_CHECK canonical_clear_from_ui true
+M4_UI_CHECK canonical_respawn_from_ui true
+M4_UI_CHECK test_preserves_source true
+M4_UI_CHECK native_save_roundtrip true
+M4_UI_CHECK new_preserves_prior_draft true
+M4_UI_CHECK reopen_compiles_existing_plan true
+M4_UI_CHECK ui_local_immutable_package true
+M4_UI_CHECK native_click_paints_exclusion true
+M4_UI_CHECK native_capture true
+M4_UI_CHECK cancelled_native_worker true
+M4_UI_RESULT {"checks":[{"id":"native_shell_visible","ok":true},{"id":"population_window_from_composition","ok":true},{"id":"imports_snapshot","ok":true},{"id":"catalog_populates_ui","ok":true},{"id":"paint_entry","ok":true},{"id":"gui_prepares_diff","ok":true},{"id":"unapplied_spatial_preview","ok":true},{"id":"compare_current_before_apply","ok":true},{"id":"diff_confirmation_visible","ok":true},{"id":"apply_plan_one_undo_step","ok":true},{"id":"undo_whole_plan","ok":true},{"id":"redo_whole_plan","ok":true},{"id":"native_compile_complete","ok":true},{"id":"gui_headless_equal","ok":true},{"id":"pin_ui","ok":true},{"id":"reroll_diff_preserves_pin","ok":true},{"id":"pin_home_preserved","ok":true},{"id":"canonical_discardable_test","ok":true},{"id":"canonical_clear_from_ui","ok":true},{"id":"canonical_respawn_from_ui","ok":true},{"id":"test_preserves_source","ok":true},{"id":"native_save_roundtrip","ok":true},{"id":"new_preserves_prior_draft","ok":true},{"id":"reopen_compiles_existing_plan","ok":true},{"id":"ui_local_immutable_package","ok":true},{"id":"native_click_paints_exclusion","ok":true},{"id":"native_capture","ok":true},{"id":"cancelled_native_worker","ok":true}],"count":28,"ok":true}
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)

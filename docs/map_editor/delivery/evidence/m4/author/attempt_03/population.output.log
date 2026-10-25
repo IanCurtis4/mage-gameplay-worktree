@@ -1,0 +1,19 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+M4_CHECK fixture_two_rooms false
+M4_RESULT {"checks":[{"id":"fixture_two_rooms","ok":false}],"count":1,"ok":false,"package_hash":"","source_path":""}
+SCRIPT ERROR: Parse Error: Cannot infer the type of "key" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_document.gd:56)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "stream" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:145)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "draw" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_compiler.gd:156)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://tests/map_editor_population_test.gd:0)
+ERROR: Failed to load script "res://tests/map_editor_population_test.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Invalid call. Nonexistent function 'empty' in base 'GDScript'.
+   at: fixture (res://tests/map_editor_population_test.gd:27)
+   GDScript backtrace (most recent call first):
+       [0] fixture (res://tests/map_editor_population_test.gd:27)
+       [1] _run (res://tests/map_editor_population_test.gd:39)

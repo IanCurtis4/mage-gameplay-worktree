@@ -144,6 +144,9 @@ Sem atualização de playtest/master nesta rodada. O usuário autorizou seguir p
 ancestralidade, incluindo M0–M2. [Contrato/propriedade](contracts/m4_dispatch.md)
 e [recibo/checkpoint](delivery/m4.md). Branch codex/map-editor-m4 em checkout
 isolado; pincéis, pins, exclusões e referências a interações existentes.
-Retomada25/10 pela skill ragrpg-resume; validação final/supervisão em andamento.
+Retomada em25/10 pela skill ragrpg-resume; validação técnica concluída com
+supervisão Luna no código `7a391431fad54e396194ec0c3ce8e6491fbe178e`:
+91 checks de população,70 de documento,29 de UI e sete IDs oficiais por impacto
+conforme a linhagem registrada no recibo.
 O candidato não recebeu aceite humano. Sem liberação de F5/D5 ou F6/D6,
 sem atualização de master/playtest/push. M3-NAV-01 permanece temporária.

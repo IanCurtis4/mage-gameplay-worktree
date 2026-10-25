@@ -1,0 +1,110 @@
+{
+  "created_utc": "2026-10-25T05:06:15.1345420Z",
+  "f1_native_fixture": false,
+  "source_commit": "de38ac857de9ec0eb8bc9048fdfd193a3c76013f",
+  "working_tree_status": [
+    "?? docs/map_editor/delivery/evidence/m4/author/",
+    "?? docs/map_editor/delivery/evidence/m4/official/"
+  ],
+  "runner_sha256": "D9F652BAB91C4BFAE98E254E8FB36148A17DE75E569DB9F0C3DC3814B69A4937",
+  "engine_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+  "timeout_seconds": 120,
+  "selection": {
+    "test": [
+      "editor_import",
+      "e07_f5_population_test",
+      "e07_f5_campaign_test",
+      "e07_f5_waves_test",
+      "e07_f5_reward_test",
+      "e07_f5_completion_test",
+      "e07_f5_quest_test"
+    ],
+    "test_filter_specified": true,
+    "from_step": 1,
+    "to_step": 299,
+    "skip_editor_import": false
+  },
+  "total_steps": 299,
+  "selected_steps": 7,
+  "checks": [
+    {
+      "index": 1,
+      "name": "editor_import",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m4\\docs\\map_editor\\delivery\\evidence\\m4\\author\\attempt_01\\fixture",
+        "--editor",
+        "--import",
+        "--quit"
+      ]
+    },
+    {
+      "index": 258,
+      "name": "e07_f5_population_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m4\\docs\\map_editor\\delivery\\evidence\\m4\\author\\attempt_01\\fixture",
+        "--script",
+        "res://tests/e07_f5_population_test.gd"
+      ]
+    },
+    {
+      "index": 259,
+      "name": "e07_f5_campaign_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m4\\docs\\map_editor\\delivery\\evidence\\m4\\author\\attempt_01\\fixture",
+        "--script",
+        "res://tests/e07_f5_campaign_test.gd"
+      ]
+    },
+    {
+      "index": 262,
+      "name": "e07_f5_completion_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m4\\docs\\map_editor\\delivery\\evidence\\m4\\author\\attempt_01\\fixture",
+        "--script",
+        "res://tests/e07_f5_completion_test.gd"
+      ]
+    },
+    {
+      "index": 263,
+      "name": "e07_f5_quest_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m4\\docs\\map_editor\\delivery\\evidence\\m4\\author\\attempt_01\\fixture",
+        "--script",
+        "res://tests/e07_f5_quest_test.gd"
+      ]
+    },
+    {
+      "index": 265,
+      "name": "e07_f5_reward_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m4\\docs\\map_editor\\delivery\\evidence\\m4\\author\\attempt_01\\fixture",
+        "--script",
+        "res://tests/e07_f5_reward_test.gd"
+      ]
+    },
+    {
+      "index": 266,
+      "name": "e07_f5_waves_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m4\\docs\\map_editor\\delivery\\evidence\\m4\\author\\attempt_01\\fixture",
+        "--script",
+        "res://tests/e07_f5_waves_test.gd"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+SCRIPT ERROR: Parse Error: The member "Panel" shadows a native class.
+   at: GDScript::reload (res://addons/m4_driver/plugin.gd:4)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "realized" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://addons/m4_driver/plugin.gd:38)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "pin" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://addons/m4_driver/plugin.gd:44)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "reroll" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://addons/m4_driver/plugin.gd:44)
+ERROR: Failed to load script "res://addons/m4_driver/plugin.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "alive" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_canvas.gd:57)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/map_authoring/population/population_panel.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_panel.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://addons/ragrpg_map_editor/shell.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://addons/ragrpg_map_editor/plugin.gd:0)
+ERROR: Failed to load script "res://addons/ragrpg_map_editor/plugin.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Parse Error: The member "Panel" shadows a native class.
+   at: GDScript::reload (res://tests/map_editor_population_ui_test.gd:4)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "realized" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_population_ui_test.gd:38)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "pin" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_population_ui_test.gd:44)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "reroll" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_population_ui_test.gd:44)
+ERROR: Failed to load script "res://tests/map_editor_population_ui_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

@@ -1,0 +1,401 @@
+{
+	"brushes": [
+		{
+			"brush_id": "field",
+			"center_xyz": [
+				240.0,
+				0.0,
+				200.0
+			],
+			"density": 1.0,
+			"group_radius": 100,
+			"mode": "dispersed",
+			"quantity": 4,
+			"quota_mode": "count",
+			"radius": 112,
+			"round": 1,
+			"seed": "0",
+			"spacing": 8,
+			"species": [
+				{
+					"category": "normal",
+					"origin_id": "trial_stage_1",
+					"species_id": "test_gel",
+					"weight": 1
+				}
+			],
+			"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+		},
+		{
+			"brush_id": "group",
+			"center_xyz": [
+				600.0,
+				0.0,
+				200.0
+			],
+			"density": 1.0,
+			"group_radius": 100,
+			"mode": "concentrated",
+			"quantity": 3,
+			"quota_mode": "count",
+			"radius": 112,
+			"round": 1,
+			"seed": "0",
+			"spacing": 8,
+			"species": [
+				{
+					"category": "normal",
+					"origin_id": "trial_stage_1",
+					"species_id": "test_gel",
+					"weight": 1
+				}
+			],
+			"surface_id": "right/c_a3e1f4935b0919b3_0_0_1_1"
+		}
+	],
+	"document_id": "encounters",
+	"entrance": [
+		{
+			"position_xyz": [
+				64,
+				0,
+				200
+			],
+			"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+		}
+	],
+	"exclusions": [
+		{
+			"center_xyz": [
+				210,
+				0,
+				160
+			],
+			"exclusion_id": "safe",
+			"radius": 16,
+			"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+		}
+	],
+	"interactions": [
+		{
+			"interaction_id": "finish",
+			"kind": "phase_completion",
+			"position_xyz": [
+				736,
+				0,
+				320
+			],
+			"surface_id": "right/c_a3e1f4935b0919b3_0_0_1_1",
+			"target_id": ""
+		},
+		{
+			"interaction_id": "rest",
+			"kind": "early_exit",
+			"position_xyz": [
+				64,
+				0,
+				320
+			],
+			"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1",
+			"target_id": ""
+		},
+		{
+			"interaction_id": "gate_a",
+			"kind": "portal",
+			"position_xyz": [
+				64,
+				0,
+				80
+			],
+			"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1",
+			"target_id": "gate_b"
+		},
+		{
+			"interaction_id": "gate_b",
+			"kind": "portal",
+			"position_xyz": [
+				736,
+				0,
+				80
+			],
+			"surface_id": "right/c_a3e1f4935b0919b3_0_0_1_1",
+			"target_id": "gate_a"
+		}
+	],
+	"map": [
+		{
+			"barrier_profile": "ruin_envelope_v1",
+			"document_id": "two_rooms",
+			"instances": [
+				{
+					"instance_id": "left",
+					"piece_hash": "889bfb2aeab9478cbeb1c24e81b46bb9bd9db1b0ac7eb7e2061ebabfd6de4ddd",
+					"position_xyz": [
+						0,
+						0,
+						0
+					],
+					"rotation_quarters": 0
+				},
+				{
+					"instance_id": "right",
+					"piece_hash": "b716f4200946e61096d0824d1f1bbf46fddbcdb54ecbacad57f3091bd5185122",
+					"position_xyz": [
+						400,
+						0,
+						0
+					],
+					"rotation_quarters": 0
+				}
+			],
+			"links": [
+				{
+					"a_connector": "east",
+					"a_instance": "left",
+					"b_connector": "west",
+					"b_instance": "right",
+					"link_id": "door"
+				}
+			],
+			"mode": "manual",
+			"name": "Duas peças · Ruína",
+			"pieces": [
+				{
+					"piece_hash": "889bfb2aeab9478cbeb1c24e81b46bb9bd9db1b0ac7eb7e2061ebabfd6de4ddd",
+					"source": {
+						"composition": null,
+						"connectors": [
+							{
+								"connector_id": "east",
+								"direction": "both",
+								"headroom": 100,
+								"kind": "walk",
+								"normal_xyz": [
+									1,
+									0,
+									0
+								],
+								"position_xyz": [
+									400,
+									0,
+									200
+								],
+								"surface_id": "floor",
+								"tags": [
+									"ruin"
+								],
+								"width": 120
+							}
+						],
+						"dependencies": [],
+						"document_id": "room_left",
+						"layers": [
+							{
+								"columns": 2,
+								"heights": [
+									0,
+									0,
+									0,
+									0
+								],
+								"layer_id": "floor",
+								"locked": false,
+								"material_masks": {},
+								"name": "Chão",
+								"origin_xz": [
+									0,
+									0
+								],
+								"protected_regions": [],
+								"rows": 2,
+								"sample_spacing": 400
+							}
+						],
+						"name": "Peça sem título",
+						"placements": [],
+						"regions": [],
+						"revision": 1,
+						"schema_version": 1,
+						"sockets": [],
+						"special_surfaces": [],
+						"units": "e07_world"
+					}
+				},
+				{
+					"piece_hash": "b716f4200946e61096d0824d1f1bbf46fddbcdb54ecbacad57f3091bd5185122",
+					"source": {
+						"composition": null,
+						"connectors": [
+							{
+								"connector_id": "west",
+								"direction": "both",
+								"headroom": 100,
+								"kind": "walk",
+								"normal_xyz": [
+									-1,
+									0,
+									0
+								],
+								"position_xyz": [
+									0,
+									0,
+									200
+								],
+								"surface_id": "floor",
+								"tags": [
+									"ruin"
+								],
+								"width": 120
+							}
+						],
+						"dependencies": [],
+						"document_id": "room_right",
+						"layers": [
+							{
+								"columns": 2,
+								"heights": [
+									0,
+									0,
+									0,
+									0
+								],
+								"layer_id": "floor",
+								"locked": false,
+								"material_masks": {},
+								"name": "Chão",
+								"origin_xz": [
+									0,
+									0
+								],
+								"protected_regions": [],
+								"rows": 2,
+								"sample_spacing": 400
+							}
+						],
+						"name": "Peça sem título",
+						"placements": [],
+						"regions": [],
+						"revision": 1,
+						"schema_version": 1,
+						"sockets": [],
+						"special_surfaces": [],
+						"units": "e07_world"
+					}
+				}
+			],
+			"revision": 1,
+			"schema_version": 1
+		}
+	],
+	"name": "Encontros",
+	"plan_hash": "59f79811b576b85ad627ec1378be669976528539f44135db72f2f8e5edd79997",
+	"revision": 1,
+	"schema_version": 1,
+	"slots": [
+		{
+			"brush_id": "field",
+			"category": "normal",
+			"fixed": true,
+			"origin_id": "trial_stage_1",
+			"position_xyz": [
+				232.0,
+				0.0,
+				200.0
+			],
+			"site_id": "",
+			"slot_id": "slot_01ca18138c0920eda4c41fb3cec47fc582a1fc89",
+			"species_id": "test_gel",
+			"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+		},
+		{
+			"brush_id": "field",
+			"category": "normal",
+			"fixed": false,
+			"origin_id": "trial_stage_1",
+			"position_xyz": [
+				280.0,
+				0.0,
+				152.0
+			],
+			"site_id": "",
+			"slot_id": "slot_6247c32a62a63292c6613a60eb3a4a214c0e9955",
+			"species_id": "test_gel",
+			"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+		},
+		{
+			"brush_id": "group",
+			"category": "normal",
+			"fixed": false,
+			"origin_id": "trial_stage_1",
+			"position_xyz": [
+				664.0,
+				0.0,
+				184.0
+			],
+			"site_id": "",
+			"slot_id": "slot_6691228b676ed8b3a3bf37e9bb0222f7db9f18ee",
+			"species_id": "test_gel",
+			"surface_id": "right/c_a3e1f4935b0919b3_0_0_1_1"
+		},
+		{
+			"brush_id": "group",
+			"category": "normal",
+			"fixed": false,
+			"origin_id": "trial_stage_1",
+			"position_xyz": [
+				584.0,
+				0.0,
+				216.0
+			],
+			"site_id": "",
+			"slot_id": "slot_74a1794f9e09e4d7aee711478fb5b5efb3eb883a",
+			"species_id": "test_gel",
+			"surface_id": "right/c_a3e1f4935b0919b3_0_0_1_1"
+		},
+		{
+			"brush_id": "field",
+			"category": "normal",
+			"fixed": false,
+			"origin_id": "trial_stage_1",
+			"position_xyz": [
+				232.0,
+				0.0,
+				280.0
+			],
+			"site_id": "",
+			"slot_id": "slot_9be8c30add76b840902bdd09833eb97af26acea4",
+			"species_id": "test_gel",
+			"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+		},
+		{
+			"brush_id": "group",
+			"category": "normal",
+			"fixed": false,
+			"origin_id": "trial_stage_1",
+			"position_xyz": [
+				632.0,
+				0.0,
+				264.0
+			],
+			"site_id": "",
+			"slot_id": "slot_bb4b9723627dcd9b6e52cf6c522b8b5a2015f095",
+			"species_id": "test_gel",
+			"surface_id": "right/c_a3e1f4935b0919b3_0_0_1_1"
+		},
+		{
+			"brush_id": "field",
+			"category": "normal",
+			"fixed": false,
+			"origin_id": "trial_stage_1",
+			"position_xyz": [
+				296.0,
+				0.0,
+				296.0
+			],
+			"site_id": "",
+			"slot_id": "slot_c676ff15faf64d08edd18f2b2a487108ce050884",
+			"species_id": "test_gel",
+			"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+		}
+	]
+}

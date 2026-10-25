@@ -1,0 +1,35 @@
+[
+  {
+    "finished_utc": "2026-10-25T01:57:12.8523234Z",
+    "ok": true,
+    "exit_code": 0,
+    "result": null,
+    "name": "import",
+    "output_sha256": "603B6F7A9E37F2CAA83DF9B2B7832D6371C57996C0C5164F45C8F2D6450D5C88",
+    "timed_out": false,
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "timeout_ms": 60000,
+    "started_utc": "2026-10-25T01:57:02.9480028Z"
+  },
+  {
+    "finished_utc": "2026-10-25T01:58:19.5543747Z",
+    "ok": false,
+    "exit_code": -1,
+    "result": null,
+    "name": "native_ui",
+    "output_sha256": "D3771E429EE254370B46E64F19CA7A94CBBAA6F819ADC9E507CF5F67690659F2",
+    "timed_out": false,
+    "arguments": [
+      "--editor",
+      "--rendering-method",
+      "gl_compatibility"
+    ],
+    "timeout_ms": 180000,
+    "started_utc": "2026-10-25T01:57:12.9336072Z"
+  }
+]

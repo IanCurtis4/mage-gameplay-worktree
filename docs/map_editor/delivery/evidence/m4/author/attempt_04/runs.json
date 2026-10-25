@@ -1,0 +1,62 @@
+[
+  {
+    "result": null,
+    "timed_out": false,
+    "name": "import",
+    "ok": true,
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "finished_utc": "2026-10-25T01:49:29.7676177Z",
+    "started_utc": "2026-10-25T01:49:19.4162131Z",
+    "output_sha256": "2968151ABC4B6341C1C7287AC88EA12174E003FA8AB92DB4EE7E0CB6349FF786",
+    "timeout_ms": 60000,
+    "exit_code": 0
+  },
+  {
+    "result": {
+      "checks": [
+        {
+          "id": "fixture_two_rooms",
+          "ok": true
+        },
+        {
+          "id": "canonical_catalog",
+          "ok": true
+        },
+        {
+          "id": "catalog_offers_real_species_and_origins",
+          "ok": false
+        },
+        {
+          "id": "summon_not_offered",
+          "ok": true
+        },
+        {
+          "id": "both_brushes_realize",
+          "ok": false
+        }
+      ],
+      "count": 5,
+      "ok": false,
+      "package_hash": "",
+      "source_path": ""
+    },
+    "timed_out": false,
+    "name": "population",
+    "ok": false,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_population_test.gd"
+    ],
+    "finished_utc": "2026-10-25T01:49:34.9851253Z",
+    "started_utc": "2026-10-25T01:49:29.8203774Z",
+    "output_sha256": "F2048AD60A41168FE9076B8CF6E326AC2E14AE671041852052F027E3CC5BF44B",
+    "timeout_ms": 60000,
+    "exit_code": 1
+  }
+]

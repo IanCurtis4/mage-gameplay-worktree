@@ -1,0 +1,28 @@
+{
+  "unchanged_inputs": 1609,
+  "differences": [
+    {
+      "current_sha256": "ECBF5F349781CCA5366DF35124A0B3DCC1FC5122D58C7FE5DE472579BE62045C",
+      "old_sha256": "E9FF50682808F40450E9BB088E3979509572B243E7F403A89F8606E51C07793B",
+      "path": "scripts/map_authoring/population/population_compiler.gd"
+    },
+    {
+      "current_sha256": "F43EB74A26147B53EC6CACDCC95C4BAA03ABE19EB4E35BD4D1517FAE803F7EB7",
+      "old_sha256": "B0FFB0590B717E93E5D280C01B1B58914ED9381E4EBE956C9EBBA2E120C1A689",
+      "path": "tests/map_editor_population_test.gd"
+    }
+  ],
+  "compared_inputs": 1611,
+  "reused_selection": [
+    "editor_import",
+    "e07_f5_population_test",
+    "e07_f5_campaign_test",
+    "e07_f5_completion_test",
+    "e07_f5_quest_test",
+    "e07_f5_reward_test",
+    "e07_f5_waves_test"
+  ],
+  "scope": "E07 runtime, geometry, data, six selected E07 test scripts/shared fixtures and official runner unchanged. Delta only stricter validation of duplicate terminal exits in M4 and its headless counterexample. New M4 check is executed by Luna on current SHA.",
+  "tested_commit": "de38ac857de9ec0eb8bc9048fdfd193a3c76013f",
+  "current_commit": "7a391431fad54e396194ec0c3ce8e6491fbe178e"
+}

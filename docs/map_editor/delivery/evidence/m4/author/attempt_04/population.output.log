@@ -1,0 +1,26 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+M4_CHECK fixture_two_rooms true
+M4_CHECK canonical_catalog true
+M4_CHECK catalog_offers_real_species_and_origins false
+M4_CHECK summon_not_offered true
+M4_CHECK both_brushes_realize false
+{ "ok": false, "code": "policy_unresolved", "diagnostics": [{ "code": "policy_unresolved", "entity_id": "", "field": "population", "surface_id": "", "location": (0.0, 0.0, 0.0), "severity": "error", "message": "A origem não tem política de recompensa publicada.", "counts": {  }, "suggestion": "Selecione o marcador e ajuste a fonte." }] }
+M4_RESULT {"checks":[{"id":"fixture_two_rooms","ok":true},{"id":"canonical_catalog","ok":true},{"id":"catalog_offers_real_species_and_origins","ok":false},{"id":"summon_not_offered","ok":true},{"id":"both_brushes_realize","ok":false}],"count":5,"ok":false,"package_hash":"","source_path":""}
+SCRIPT ERROR: Invalid access to property or key 'stage_id' on a base object of type 'Dictionary'.
+   at: rules (res://data/expedition/phases/ruined_crossing.gd:89)
+   GDScript backtrace (most recent call first):
+       [0] rules (res://data/expedition/phases/ruined_crossing.gd:89)
+       [1] rule (res://scripts/map_authoring/population/population_catalog.gd:40)
+       [2] _spec (res://scripts/map_authoring/population/population_compiler.gd:44)
+       [3] pool (res://scripts/map_authoring/population/population_compiler.gd:105)
+       [4] regenerate (res://scripts/map_authoring/population/population_compiler.gd:139)
+       [5] _run (res://tests/map_editor_population_test.gd:46)
+SCRIPT ERROR: Invalid access to property or key 'rule' on a base object of type 'Dictionary'.
+   at: rule (res://scripts/map_authoring/population/population_catalog.gd:40)
+   GDScript backtrace (most recent call first):
+       [0] rule (res://scripts/map_authoring/population/population_catalog.gd:40)
+       [1] _spec (res://scripts/map_authoring/population/population_compiler.gd:44)
+       [2] pool (res://scripts/map_authoring/population/population_compiler.gd:105)
+       [3] regenerate (res://scripts/map_authoring/population/population_compiler.gd:139)
+       [4] _run (res://tests/map_editor_population_test.gd:46)

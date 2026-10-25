@@ -1,0 +1,2 @@
+# Preserve exact evidence bytes, including log line endings, for SHA256 receipts.
+* -text

@@ -1,0 +1,35 @@
+[
+  {
+    "output_sha256": "6F975FA12D0E4B676E27BA291CF03D18F4B0B262E59A1CA95891DD8DC8F6139E",
+    "ok": true,
+    "finished_utc": "2026-10-25T01:54:48.4141452Z",
+    "name": "import",
+    "exit_code": 0,
+    "result": null,
+    "timed_out": false,
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "started_utc": "2026-10-25T01:54:37.8758859Z",
+    "timeout_ms": 60000
+  },
+  {
+    "output_sha256": "6048FD3EA5B256BFFA537651B656D58550DD39D2980D2F6F7BC1D666F9E7471D",
+    "ok": false,
+    "finished_utc": "2026-10-25T01:54:49.1182231Z",
+    "name": "population",
+    "exit_code": 1,
+    "result": null,
+    "timed_out": false,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_population_test.gd"
+    ],
+    "started_utc": "2026-10-25T01:54:48.5567985Z",
+    "timeout_ms": 180000
+  }
+]

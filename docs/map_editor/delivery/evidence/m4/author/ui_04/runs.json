@@ -1,0 +1,142 @@
+[
+  {
+    "ok": true,
+    "started_utc": "2026-10-25T02:01:49.2368824Z",
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "timed_out": false,
+    "exit_code": 0,
+    "output_sha256": "242FABD535AA87A8E5E20E53FF182E7B8784E30FF63A25F87E503EDAB5F70E4F",
+    "timeout_ms": 60000,
+    "name": "import",
+    "finished_utc": "2026-10-25T02:01:59.6479391Z",
+    "aborted_on_error": false,
+    "result": null
+  },
+  {
+    "ok": true,
+    "started_utc": "2026-10-25T02:01:59.7084534Z",
+    "arguments": [
+      "--editor",
+      "--rendering-method",
+      "gl_compatibility"
+    ],
+    "timed_out": false,
+    "exit_code": 0,
+    "output_sha256": "9EE25658DD1ABA95B1077DB7A79972CD1E235C49C0CD62A2DB0200A60A291F02",
+    "timeout_ms": 180000,
+    "name": "native_ui",
+    "finished_utc": "2026-10-25T02:03:31.5010648Z",
+    "aborted_on_error": false,
+    "result": {
+      "checks": [
+        {
+          "id": "native_shell_visible",
+          "ok": true
+        },
+        {
+          "id": "population_window_from_composition",
+          "ok": true
+        },
+        {
+          "id": "imports_snapshot",
+          "ok": true
+        },
+        {
+          "id": "catalog_populates_ui",
+          "ok": true
+        },
+        {
+          "id": "paint_entry",
+          "ok": true
+        },
+        {
+          "id": "gui_prepares_diff",
+          "ok": true
+        },
+        {
+          "id": "diff_confirmation_visible",
+          "ok": true
+        },
+        {
+          "id": "apply_plan_one_undo_step",
+          "ok": true
+        },
+        {
+          "id": "undo_whole_plan",
+          "ok": true
+        },
+        {
+          "id": "redo_whole_plan",
+          "ok": true
+        },
+        {
+          "id": "native_compile_complete",
+          "ok": true
+        },
+        {
+          "id": "gui_headless_equal",
+          "ok": true
+        },
+        {
+          "id": "pin_ui",
+          "ok": true
+        },
+        {
+          "id": "reroll_diff_preserves_pin",
+          "ok": true
+        },
+        {
+          "id": "pin_home_preserved",
+          "ok": true
+        },
+        {
+          "id": "canonical_discardable_test",
+          "ok": true
+        },
+        {
+          "id": "canonical_clear_from_ui",
+          "ok": true
+        },
+        {
+          "id": "canonical_respawn_from_ui",
+          "ok": true
+        },
+        {
+          "id": "test_preserves_source",
+          "ok": true
+        },
+        {
+          "id": "native_save_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "new_preserves_prior_draft",
+          "ok": true
+        },
+        {
+          "id": "reopen_compiles_existing_plan",
+          "ok": true
+        },
+        {
+          "id": "ui_local_immutable_package",
+          "ok": true
+        },
+        {
+          "id": "native_click_paints_exclusion",
+          "ok": true
+        },
+        {
+          "id": "native_capture",
+          "ok": true
+        }
+      ],
+      "count": 25,
+      "ok": true
+    }
+  }
+]

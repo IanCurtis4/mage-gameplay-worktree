@@ -1,6 +1,9 @@
 # Editor F4 / M4 — contrato executável 1
 
-24/10/2026. EM_EXECUÇÃO. Autorização humana: “F3 foi concluída. Podemos começar F4.”
+24/10/2026. VALIDADA TECNICAMENTE em 25/10; aceite humano pendente.
+Código entregue `7a391431fad54e396194ec0c3ce8e6491fbe178e`;
+[recibo e evidências](../delivery/m4.md).
+Autorização humana: “F3 foi concluída. Podemos começar F4.”
 Base `4c2adf80470d86989742daf426be965f606c5539`, F0–F3 por ancestralidade,
 incluindo aceite F3 e pendência temporária M3-NAV-01. Branch `codex/map-editor-m4`,
 checkout `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m4`.
