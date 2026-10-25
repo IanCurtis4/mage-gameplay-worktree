@@ -1,5 +1,19 @@
 # Pacotes e chats preparados
 
+## Extensão de fechamento F9/F10 — pedido humano25/10/2026
+
+[F9](contracts/f9_completion.md) implementa os pendentes F0–F8 em uma matriz
+exaustiva de completude; [F10](contracts/f10_final_review.md) faz revisão,
+reprodução e fechamento integrados sobre a entrega F9. Ambos são reservas,
+sem autorização de execução por criação do chat. F10 não começa automaticamente
+quando F9 terminar. São nomes novos solicitados pelo humano; M0–M8 abaixo
+continuam sendo a nomenclatura histórica dos produtores, sem épico novo.
+
+Propriedade/runtime/base/branches nominais serão resolvidos na ativação e
+transferidos sequencialmente, usando apenas o worktree atual. O critério do
+fechamento é satisfazer os requisitos do editor, sem reclassificar faltas como
+opcionais/futuras; produto realmente novo exige decisão própria. Não abre E08+.
+
 **Regra humana25/10/2026:** manter somente o checkout principal e um worktree
 atual; reutilizar uma fixture e remover artefatos antigos de teste/build.
 Todo próximo pacote deve seguir [armazenamento e limpeza](STORAGE.md).

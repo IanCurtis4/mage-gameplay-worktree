@@ -1,5 +1,12 @@
 # Editor de mapas — proposta de arquitetura e execução
 
+**Fechamento adicional solicitado25/10/2026:** preparar os chats
+[F9 — completar os pendentes](contracts/f9_completion.md) e
+[F10 — pente-fino integrado](contracts/f10_final_review.md), para deixar o editor
+usável e robusto para os Ex seguintes. São extensões do plano F0–F8/M0–M8,
+sem novo épico. Reservados: execução aguarda aval humano; F10 também depende
+da entrega F9. Não se encerra o escopo com requisitos do editor ainda adiados.
+
 **F8/M8 candidato técnico25/10/2026, aceite humano pendente:** integração F0–F7, autoria dual com
 contexto compartilhado e modos UX/AX. [Guia e decisões atuais](authoring_modes.md),
 [recibo](delivery/m8.md). A mesma peça atende manual/seed; exceções manuais são
