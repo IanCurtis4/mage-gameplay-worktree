@@ -32,6 +32,16 @@ var grid_spacing: SpinBox
 var grid_x: SpinBox
 var grid_z: SpinBox
 var grid_y: SpinBox
+var connector_list: ItemList
+var connector_id: LineEdit
+var connector_surface: OptionButton
+var connector_side: OptionButton
+var connector_direction: OptionButton
+var connector_x: SpinBox
+var connector_y: SpinBox
+var connector_z: SpinBox
+var connector_width: SpinBox
+var connector_headroom: SpinBox
 
 func _ready() -> void:
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -45,7 +55,9 @@ func _ready() -> void:
 	hide_layer.toggled.connect(func(hidden: bool) -> void:
 		if hidden and selected_layer not in canvas.hidden_layers: canvas.hidden_layers.append(selected_layer)
 		elif not hidden: canvas.hidden_layers.erase(selected_layer)
-		canvas.cancel_stroke(); canvas.queue_redraw())
+		canvas.cancel_stroke(); canvas.redraw_terrain())
+	var overlay := CheckBox.new(); overlay.text = "Grade técnica"; row.add_child(overlay)
+	overlay.toggled.connect(func(enabled: bool) -> void: canvas.wire_overlay = enabled; canvas.queue_redraw())
 	var settings := HFlowContainer.new(); add_child(settings)
 	radius = _number(settings,"Raio",1,512,48)
 	strength = _number(settings,"Força",0,128,8)
@@ -59,11 +71,12 @@ func _ready() -> void:
 		canvas.cancel_stroke()
 		if job != null: job.cancel())
 	_button(toolbar,"Exemplo rampa/ponte",create_sample)
+	_button(toolbar,"Exemplo de peça grande",create_large_sample)
 	progress_bar = ProgressBar.new(); progress_bar.custom_minimum_size.x = 150; toolbar.add_child(progress_bar)
 	status = Label.new(); status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; add_child(status)
 	var grid := HFlowContainer.new(); add_child(grid)
-	grid_columns = _number(grid,"Grade X",2,17,5)
-	grid_rows = _number(grid,"Z",2,17,5)
+	grid_columns = _number(grid,"Amostras X",2,257,5)
+	grid_rows = _number(grid,"Z",2,257,5)
 	grid_spacing = _number(grid,"Passo",4,256,32)
 	grid_x = _number(grid,"Origem X",-8192,8192,0)
 	grid_z = _number(grid,"Z",-8192,8192,0)
@@ -78,7 +91,29 @@ func _ready() -> void:
 	bridge_length = _number(bridge,"Z",4,1024,100)
 	bridge_height = _number(bridge,"Altura",4,1024,40)
 	_button(bridge,"Adicionar ponte",add_bridge)
-	var help := Label.new(); help.text = "Selecione a camada antes de pintar. Arraste: um traço; Esc/sair do quadro: cancelar. Roda: zoom · botão central: mover.\nRampa/nivelar/suavizar/material: força entre 0 e 1. Ponte: piso retangular com 4 unidades de espessura. Teste jogável completo: F3."
+	var connection_toggle := CheckBox.new(); connection_toggle.text = "Editar pontos de conexão"; add_child(connection_toggle)
+	var connections := VBoxContainer.new(); connections.visible = false; add_child(connections)
+	connection_toggle.toggled.connect(func(enabled: bool) -> void: connections.visible = enabled)
+	connector_list = ItemList.new(); connector_list.custom_minimum_size.y = 75; connections.add_child(connector_list)
+	connector_list.item_selected.connect(_select_connector)
+	var connection_names := HFlowContainer.new(); connections.add_child(connection_names)
+	connector_id = LineEdit.new(); connector_id.placeholder_text = "ID da conexão"; connector_id.custom_minimum_size.x = 180; connection_names.add_child(connector_id)
+	connector_surface = OptionButton.new(); connection_names.add_child(connector_surface)
+	connector_side = OptionButton.new()
+	for caption: String in ["Oeste ←","Leste →","Norte ↖","Sul ↘"]: connector_side.add_item(caption)
+	connection_names.add_child(connector_side)
+	connector_direction = OptionButton.new()
+	for caption: String in ["Ida e volta","Só entrada","Só saída"]: connector_direction.add_item(caption)
+	connection_names.add_child(connector_direction)
+	var connection_values := HFlowContainer.new(); connections.add_child(connection_values)
+	connector_x = _number(connection_values,"X",-8192,8192,0)
+	connector_y = _number(connection_values,"Altura",-8192,8192,0)
+	connector_z = _number(connection_values,"Z",-8192,8192,50)
+	connector_width = _number(connection_values,"Largura",4,8192,32)
+	connector_headroom = _number(connection_values,"Folga",12,8192,100)
+	_button(connection_values,"Adicionar / atualizar",save_connector)
+	_button(connection_values,"Remover",remove_connector)
+	var help := Label.new(); help.text = "Selecione a camada antes de pintar. Arraste: um traço; Esc/sair do quadro: cancelar. Roda: zoom · botão central: mover.\nRampa/nivelar/suavizar/material: força entre 0 e 1. Salve a peça para preservar o terreno e as conexões."
 	help.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; add_child(help)
 	for control: OptionButton in [mode,shape,material_choice]: control.item_selected.connect(func(_i: int) -> void: _options_changed())
 	for control: SpinBox in [radius,strength,hardness,target,end_height]: control.value_changed.connect(func(_v: float) -> void: _options_changed())
@@ -111,6 +146,7 @@ func refresh() -> void:
 		if layer.layer_id == selected_layer: exists = true
 	if not exists: selected_layer = data.layers[0].layer_id if not data.layers.is_empty() else ""
 	canvas.set_source(data,selected_layer)
+	_refresh_connectors(data)
 	result = {}
 	if job != null: job.cancel()
 	status.text = "Selecione ou adicione uma camada; compile após editar para conferir suporte e aberturas."
@@ -161,6 +197,83 @@ static func sample_source(data: Dictionary) -> Dictionary:
 static func _layer(id: String, caption: String, x: float, z: float, spacing: float, columns: int, rows: int, heights: Array) -> Dictionary:
 	return {"layer_id":id,"name":caption,"origin_xz":[x,z],"sample_spacing":spacing,"columns":columns,"rows":rows,"heights":heights,"material_masks":{},"locked":false,"protected_regions":[]}
 
+static func large_sample_source(data: Dictionary, axis: int = 65) -> Dictionary:
+	var source := data.duplicate(true); source.name = "Campo amplo · uma peça"
+	var heights: Array = []; var earth: Array = []; var grass: Array = []
+	var spacing := 8192.0/float(axis-1)
+	for z: int in axis:
+		for x: int in axis:
+			var wx := x*spacing; var wz := z*spacing
+			heights.append(clampf((wx-3072.0)/1024.0,0.0,1.0)*128.0)
+			var center := 3500.0+sin(wx/1700.0)*700.0
+			var weight := clampf(1.0-absf(wz-center)/500.0,0.0,1.0)
+			earth.append(weight); grass.append(1.0-weight)
+	source.layers = [_layer("field","Campo, subida e platô",0,0,spacing,axis,axis,heights)]
+	source.layers[0].material_masks = {"grass":grass,"earth":earth}
+	source.special_surfaces = []; source.regions = []; source.dependencies = []; source.placements = []; source.sockets = []; source.composition = null
+	source.connectors = [{"connector_id":"west_gate","surface_id":"field","position_xyz":[0,0,3500],"kind":"walk","normal_xyz":[-1,0,0],"width":256,"headroom":100,"tags":["map_editor"],"direction":"both"}]
+	return source
+
+func create_large_sample() -> void:
+	if not session.document().to_data().layers.is_empty(): status.text = "Crie uma peça vazia para abrir o exemplo grande; seu terreno foi preservado."; return
+	session.apply(large_sample_source(session.document().to_data()))
+	select_layer("field"); canvas.fit()
+
+func _refresh_connectors(data: Dictionary) -> void:
+	if not is_instance_valid(connector_list): return
+	var current_surface := str(connector_surface.get_item_metadata(connector_surface.selected)) if connector_surface.selected >= 0 else selected_layer
+	connector_list.clear(); connector_surface.clear()
+	for layer: Dictionary in data.layers:
+		connector_surface.add_item(layer.name); connector_surface.set_item_metadata(connector_surface.item_count-1,layer.layer_id)
+		if layer.layer_id == current_surface: connector_surface.select(connector_surface.item_count-1)
+	for special: Dictionary in data.special_surfaces:
+		connector_surface.add_item("Piso especial · "+special.surface_id); connector_surface.set_item_metadata(connector_surface.item_count-1,special.surface_id)
+		if special.surface_id == current_surface: connector_surface.select(connector_surface.item_count-1)
+	for connector: Dictionary in data.connectors:
+		connector_list.add_item(connector.connector_id)
+		if connector.connector_id == connector_id.text: connector_list.select(connector_list.item_count-1)
+
+func _select_connector(index: int) -> void:
+	var connector: Dictionary = session.document().to_data().connectors[index]
+	connector_id.text = connector.connector_id
+	for i: int in connector_surface.item_count:
+		if connector_surface.get_item_metadata(i) == connector.surface_id: connector_surface.select(i)
+	connector_x.value = connector.position_xyz[0]; connector_y.value = connector.position_xyz[1]; connector_z.value = connector.position_xyz[2]
+	connector_width.value = connector.width; connector_headroom.value = connector.headroom
+	connector_side.select(0 if connector.normal_xyz[0] < 0 else (1 if connector.normal_xyz[0] > 0 else (2 if connector.normal_xyz[2] < 0 else 3)))
+	connector_direction.select(["both","in","out"].find(connector.direction))
+
+func _surface_locked(data: Dictionary, id: String) -> bool:
+	var layer_id := id
+	for special: Dictionary in data.special_surfaces:
+		if special.surface_id == id: layer_id = special.layer_id
+	for layer: Dictionary in data.layers:
+		if layer.layer_id == layer_id: return layer.locked
+	return true
+
+func save_connector() -> void:
+	if connector_surface.selected < 0: return
+	var data: Dictionary = session.document().to_data()
+	var surface_id: String = connector_surface.get_item_metadata(connector_surface.selected)
+	if _surface_locked(data,surface_id): status.text = "Destrave a camada para editar a conexão."; return
+	var normals: Array = [[-1,0,0],[1,0,0],[0,0,-1],[0,0,1]]
+	var next := {"connector_id":connector_id.text.strip_edges(),"surface_id":surface_id,"position_xyz":[connector_x.value,connector_y.value,connector_z.value],"normal_xyz":normals[connector_side.selected],"width":connector_width.value,"headroom":connector_headroom.value,"kind":"walk","tags":["map_editor"],"direction":["both","in","out"][connector_direction.selected]}
+	for i: int in data.connectors.size():
+		if data.connectors[i].connector_id == next.connector_id:
+			if _surface_locked(data,data.connectors[i].surface_id): status.text = "Destrave a camada de origem da conexão."; return
+			data.connectors.remove_at(i); break
+	data.connectors.append(next)
+	var applied: Dictionary = session.apply(data)
+	if not applied.ok: status.text = "A conexão não pôde ser aplicada. Use um ID técnico e confira os parâmetros."
+	else: status.text = "Conexão atualizada. Compile para conferir a abertura geométrica."
+
+func remove_connector() -> void:
+	var data: Dictionary = session.document().to_data()
+	for i: int in data.connectors.size():
+		if data.connectors[i].connector_id != connector_id.text: continue
+		if _surface_locked(data,data.connectors[i].surface_id): status.text = "Destrave a camada para remover a conexão."; return
+		data.connectors.remove_at(i); session.apply(data); return
+
 func create_sample() -> void:
 	if not session.document().to_data().layers.is_empty():
 		status.text = "Crie uma peça vazia para abrir o exemplo; seu terreno atual foi preservado."
@@ -184,9 +297,9 @@ func _process(_delta: float) -> void:
 	result = completed
 	if completed.ok:
 		canvas.package = completed.package; canvas.queue_redraw()
-		status.text = "%d células · %d ligações · %d bordas · pacote %s" % [completed.package.part.surfaces.size(),completed.package.adjacency.size(),completed.package.boundaries.size(),completed.output_hash.substr(0,12)]
+		status.text = "Peça compilada. Terreno e pontos de conexão válidos."
 	else:
-		var messages := {"cancelled":"Compilação cancelada.","stale_source":"A fonte mudou; compile novamente.","geometry_overlap":"Há pisos sobrepostos na mesma altura.","insufficient_headroom":"A passagem sob a ponte não tem folga.","slope_too_steep":"A inclinação supera 45°; alongue a rampa.","terrain_limit_exceeded":"A peça excede o limite técnico de 256 células.","connector_invalid":"Um conector não coincide com uma abertura válida."}
+		var messages := {"cancelled":"Compilação cancelada.","stale_source":"A fonte mudou; compile novamente.","geometry_overlap":"Há pisos sobrepostos na mesma altura.","insufficient_headroom":"A passagem sob a ponte não tem folga.","slope_too_steep":"A inclinação supera 45°; alongue a rampa.","terrain_limit_exceeded":"O relevo excede o orçamento de 1024 suportes gerados. Reduza a densidade de amostras ou simplifique o relevo.","connector_invalid":"Um conector não coincide com uma abertura válida."}
 		status.text = messages.get(completed.code,completed.diagnostics[0].message if not completed.diagnostics.is_empty() else "Não foi possível compilar; confira a fonte.")
 		if not completed.diagnostics.is_empty(): status.text += " Região: " + str(completed.diagnostics[0].entity_id)
 

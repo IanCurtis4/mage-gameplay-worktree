@@ -4,8 +4,11 @@ const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
 const Canonical = preload("res://scripts/core/expedition/generation/canonical.gd")
 const Manifest = preload("res://scripts/core/expedition/model/manifest.gd")
-const REVISION := "map_terrain_v1"
-const MAX_CELLS := 256
+const Partition = preload("res://scripts/map_authoring/compiler/terrain_partition.gd")
+const Materials = preload("res://scripts/map_authoring/terrain/terrain_material.gd")
+const REVISION := "map_terrain_v2"
+const MAX_SUPPORTS := 1024
+const MAX_GRID_QUADS := 65536
 const PROFILE := {"radius":2.0,"height":12.0,"connector_kinds":["walk"]}
 const EPS := 0.00001
 var _thread: Thread
@@ -47,11 +50,18 @@ func close() -> void:
 		cancel(); _thread.wait_to_finish(); _thread = null
 
 static func failure(code: String, entity: String = "", field: String = "terrain") -> Dictionary:
-	var messages := {"terrain_empty":"Adicione uma camada de terreno.","terrain_limit_exceeded":"A peça excede o limite técnico de 256 células.","source_invalid":"Corrija os diagnósticos da fonte.","source_non_finite":"A fonte contém um número inválido.","capability_unsupported":"Esta peça usa uma capacidade ainda não disponível na compilação de terreno.","material_unsupported":"Use os materiais Grama e Terra nesta entrega.","geometry_invalid":"O piso precisa ser convexo e plano.","geometry_overlap":"Há pisos sobrepostos na mesma altura.","geometry_non_manifold":"Mais de dois pisos disputam a mesma borda.","insufficient_headroom":"Não há folga para o corpo de teste.","slope_too_steep":"A inclinação supera 45°; alongue a rampa.","geometry_precision_limit":"A coordenada excede o domínio técnico de 8192 unidades.","connector_invalid":"O conector não coincide com uma abertura válida.","connector_ambiguous":"O conector coincide com mais de uma borda.","socket_invalid":"O ponto marcado não tem suporte ou tipo válido.","route_unreachable":"Há uma região sem ligação para o corpo de teste.","cancelled":"Compilação cancelada.","stale_source":"A fonte mudou; compile novamente."}
+	var messages := {"terrain_empty":"Adicione uma camada de terreno.","material_missing":"Um material de terreno está ausente.","terrain_sample_limit":"A fonte excede o orçamento de 65536 quadrados de grade nesta sessão.","terrain_limit_exceeded":"O relevo excede o orçamento de 1024 suportes gerados. Reduza a densidade ou simplifique o relevo.","source_invalid":"Corrija os diagnósticos da fonte.","source_non_finite":"A fonte contém um número inválido.","capability_unsupported":"Esta peça usa uma capacidade ainda não disponível na compilação de terreno.","material_unsupported":"Use os materiais Grama e Terra nesta entrega.","geometry_invalid":"O piso precisa ser convexo e plano.","geometry_overlap":"Há pisos sobrepostos na mesma altura.","geometry_non_manifold":"Mais de dois pisos disputam a mesma borda.","insufficient_headroom":"Não há folga para o corpo de teste.","slope_too_steep":"A inclinação supera 45°; alongue a rampa.","geometry_precision_limit":"A coordenada excede o domínio técnico de 8192 unidades.","connector_invalid":"O conector não coincide com uma abertura válida.","connector_ambiguous":"O conector coincide com mais de uma borda.","socket_invalid":"O ponto marcado não tem suporte ou tipo válido.","route_unreachable":"Há uma região sem ligação para o corpo de teste.","cancelled":"Compilação cancelada.","stale_source":"A fonte mudou; compile novamente."}
 	return Schema.result(false, code, [{"code":code,"severity":"error","entity_id":entity,"field":field,"message":messages.get(code,"Não foi possível concluir a compilação."),"suggestion":"Corrija a região indicada e compile novamente."}])
 
 static func compile(source: Dictionary, cancellation: Callable = Callable()) -> Dictionary:
 	if not Canonical.valid(source): return failure("source_non_finite")
+	# Cheap bounded preflight before decimal parsing/copying an over-budget height field.
+	if source.get("layers") is Array:
+		var preflight_quads := 0.0
+		for entry: Variant in source.layers:
+			if entry is Dictionary and (entry.get("rows") is int or entry.get("rows") is float) and (entry.get("columns") is int or entry.get("columns") is float):
+				if entry.rows >= 2 and entry.columns >= 2: preflight_quads += (float(entry.rows)-1.0)*(float(entry.columns)-1.0)
+		if preflight_quads > MAX_GRID_QUADS: return failure("terrain_sample_limit")
 	var read := Schema.read(JSON.stringify(source,"",true,true).to_utf8_buffer())
 	if not read.ok: return read
 	if not read.valid: return failure("source_invalid")
@@ -59,30 +69,30 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 	var cells: Array = []; var visuals: Array = []; var slabs: Array = []; var edges: Array = []
 	var layers: Array = source.layers.duplicate(true)
 	layers.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.layer_id < b.layer_id)
-	var estimated: int = source.special_surfaces.size()
-	for layer: Dictionary in layers: estimated += (int(layer.rows)-1)*(int(layer.columns)-1)*2
-	# Conservative preflight bounds the worker before allocating surfaces.
-	if estimated > MAX_CELLS*2: return failure("terrain_limit_exceeded")
+	var grid_quads := 0
+	for layer: Dictionary in layers: grid_quads += (int(layer.rows)-1)*(int(layer.columns)-1)
+	if grid_quads > MAX_GRID_QUADS: return failure("terrain_sample_limit")
+	var material_dependencies := Materials.dependencies()
+	if material_dependencies.is_empty(): return failure("material_missing")
 	for layer: Dictionary in layers:
 		for material: String in layer.material_masks:
 			if material not in ["grass","earth"]: return failure("material_unsupported",layer.layer_id)
-		for z: int in range(int(layer.rows)-1):
-			if cancellation.is_valid() and cancellation.call(float(cells.size())/maxi(1,estimated)*0.4): return failure("cancelled")
-			for x: int in range(int(layer.columns)-1):
-				var indices := [z*int(layer.columns)+x,z*int(layer.columns)+x+1,(z+1)*int(layer.columns)+x+1,(z+1)*int(layer.columns)+x]
-				var vertices: Array = []
-				for index: int in indices:
-					var vx: float = layer.origin_xz[0] + (index%int(layer.columns))*float(layer.sample_spacing)
-					var vz: float = layer.origin_xz[1] + floori(float(index)/int(layer.columns))*float(layer.sample_spacing)
-					vertices.append(Vector3(vx,layer.heights[index],vz))
-				var id: String = "c_" + layer.layer_id.sha256_text().substr(0,16) + "_%d_%d" % [x,z]
-				var quad := {"surface_id":id,"vertices":vertices,"headroom":100.0}
-				if Kernel.valid_cell(quad):
-					_add_cell(cells,visuals,quad,layer,indices)
-				else:
-					for triangle: Array in [[0,1,2],[0,2,3]]:
-						var tri := {"surface_id":id+"_t%d"%triangle[1],"vertices":[vertices[triangle[0]],vertices[triangle[1]],vertices[triangle[2]]],"headroom":100.0}
-						_add_cell(cells,visuals,tri,layer,[indices[triangle[0]],indices[triangle[1]],indices[triangle[2]]])
+		var cancelled := func() -> bool: return cancellation.is_valid() and cancellation.call(0.1)
+		var patches := Partition.build(layer,cancelled)
+		if patches.is_empty(): return failure("cancelled")
+		for patch: Dictionary in patches:
+			var x: int = patch.x; var z: int = patch.z; var width: int = patch.width; var height: int = patch.height
+			var columns: int = layer.columns
+			var indices := [z*columns+x,z*columns+x+width,(z+height)*columns+x+width,(z+height)*columns+x]
+			var vertices: Array = [Partition.point(layer,x,z),Partition.point(layer,x+width,z),Partition.point(layer,x+width,z+height),Partition.point(layer,x,z+height)]
+			var id: String = "c_" + layer.layer_id.sha256_text().substr(0,16) + "_%d_%d_%d_%d" % [x,z,width,height]
+			if not patch.triangles:
+				_add_cell(cells,visuals,{"surface_id":id,"vertices":vertices,"headroom":100.0},layer,indices)
+			else:
+				for triangle: Array in [[0,1,2],[0,2,3]]:
+					var tri := {"surface_id":id+"_t%d"%triangle[1],"vertices":[vertices[triangle[0]],vertices[triangle[1]],vertices[triangle[2]]],"headroom":100.0}
+					_add_cell(cells,visuals,tri,layer,[indices[triangle[0]],indices[triangle[1]],indices[triangle[2]]])
+			if cells.size() > MAX_SUPPORTS: return failure("terrain_limit_exceeded",layer.layer_id)
 	var specials: Array = source.special_surfaces.duplicate(true)
 	specials.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.surface_id < b.surface_id)
 	for special: Dictionary in specials:
@@ -97,7 +107,7 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 			if box.size.y < EPS and absf(box.size.x*box.size.z-_area(vertices)) < EPS:
 				slabs.append(AABB(box.position-Vector3(0,4,0),Vector3(box.size.x,4,box.size.z)))
 	if cells.is_empty(): return failure("terrain_empty")
-	if cells.size() > MAX_CELLS: return failure("terrain_limit_exceeded")
+	if cells.size() > MAX_SUPPORTS: return failure("terrain_limit_exceeded")
 	for i: int in cells.size():
 		if cancellation.is_valid() and cancellation.call(0.4+0.3*float(i)/cells.size()): return failure("cancelled")
 		var cell: Dictionary = cells[i]
@@ -108,6 +118,8 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 		for vertex: Vector3 in cell.vertices:
 			if not vertex.is_finite() or maxf(absf(vertex.x),maxf(absf(vertex.y),absf(vertex.z))) > 8192: return failure("geometry_precision_limit",cell.surface_id)
 		for j: int in i:
+			# Generated regions of the same height grid have disjoint interiors by construction.
+			if visuals[i].source_id == visuals[j].source_id: continue
 			if Kernel.cells_overlap(cell,cells[j]): return failure("geometry_overlap",cell.surface_id)
 		for slab: AABB in slabs:
 			var polygon := PackedVector2Array()
@@ -128,16 +140,20 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 	for i: int in edges.size():
 		if cancellation.is_valid() and cancellation.call(0.7+0.25*float(i)/edges.size()): return failure("cancelled")
 		var edge: Dictionary = edges[i]
-		var cuts: Array[float] = [0.0,1.0]
+		var cuts: Array = [{"t":0.0,"point":edge.a},{"t":1.0,"point":edge.b}]
 		var delta: Vector3 = edge.b-edge.a
 		for other: Dictionary in edges:
 			for vertex: Vector3 in [other.a,other.b]:
 				var t := (vertex-Vector3(edge.a)).dot(delta)/delta.length_squared()
-				if t > EPS and t < 1.0-EPS and (Vector3(edge.a)+delta*t).distance_to(vertex) <= EPS:
-					if not cuts.has(t): cuts.append(t)
-		cuts.sort()
+				if t > 0.0 and t < 1.0 and vertex.distance_to(edge.a) > EPS and vertex.distance_to(edge.b) > EPS and (Vector3(edge.a)+delta*t).distance_to(vertex) <= EPS:
+					var exists := false
+					for cut: Dictionary in cuts:
+						if Vector3(cut.point).distance_to(vertex) <= EPS: exists = true; break
+					if not exists: cuts.append({"t":t,"point":vertex})
+		cuts.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.t < b.t)
 		for k: int in range(1,cuts.size()):
-			var a: Vector3 = Vector3(edge.a)+delta*cuts[k-1]; var b: Vector3 = Vector3(edge.a)+delta*cuts[k]
+			# Reuse exact source endpoints; re-interpolation can drift one float32 ULP.
+			var a: Vector3 = cuts[k-1].point; var b: Vector3 = cuts[k].point
 			var ends: Array = [Canonical.encode(a),Canonical.encode(b)]; ends.sort()
 			var key: String = "|".join(ends)
 			if not spans.has(key): spans[key] = []
@@ -199,7 +215,10 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 			if not reachable.has(cell.surface_id): return failure("route_unreachable",cell.surface_id)
 	if cancellation.is_valid() and cancellation.call(1.0): return failure("cancelled")
 	var part := {"part_id":"piece_"+source.document_id.sha256_text().substr(0,20),"revision":int(source.revision),"biome_tags":["authored"],"allowed_rotations":[0],"surfaces":cells,"connectors":connectors,"sockets":sockets,"solid_volumes":slabs,"blockers":[]}
-	var package := {"format_version":1,"compiler_revision":REVISION,"source_hash":read.output_hash,"dependencies":[],"part":part,"adjacency":adjacency,"boundaries":boundaries,"visuals":visuals,"profile":PROFILE.duplicate(true)}
+	var render_layers: Array = []
+	for layer: Dictionary in layers:
+		render_layers.append({"layer_id":layer.layer_id,"origin_xz":layer.origin_xz.duplicate(),"sample_spacing":float(layer.sample_spacing),"columns":int(layer.columns),"rows":int(layer.rows),"heights":layer.heights.duplicate(),"material_masks":layer.material_masks.duplicate(true)})
+	var package := {"format_version":2,"compiler_revision":REVISION,"source_hash":read.output_hash,"dependencies":material_dependencies,"part":part,"adjacency":adjacency,"boundaries":boundaries,"visuals":visuals,"render_layers":render_layers,"profile":PROFILE.duplicate(true),"grid_quads":grid_quads,"piece_count":1}
 	package.package_hash = Canonical.digest(package)
 	var result := Schema.result(true)
 	result.input_hash = read.output_hash; result.output_hash = package.package_hash; result.package = package
@@ -238,9 +257,9 @@ static func _opening_fits(endpoint: Dictionary, boundary: Dictionary) -> bool:
 	return Geometry2D.get_closest_point_to_segment(p+Vector2(tangent.x,tangent.z),a,b).distance_to(p+Vector2(tangent.x,tangent.z)) < EPS and Geometry2D.get_closest_point_to_segment(p-Vector2(tangent.x,tangent.z),a,b).distance_to(p-Vector2(tangent.x,tangent.z)) < EPS
 
 static func validate_package(package: Dictionary) -> bool:
-	if package.get("compiler_revision") != REVISION or package.get("format_version") != 1 or not package.has("package_hash"): return false
+	if package.get("compiler_revision") != REVISION or package.get("format_version") != 2 or not package.has("package_hash"): return false
 	var content := package.duplicate(true); content.erase("package_hash")
-	return Canonical.digest(content) == package.package_hash
+	return Canonical.digest(content) == package.package_hash and package.get("dependencies") == Materials.dependencies()
 
 static func preview_manifest(package: Dictionary) -> Manifest:
 	if not validate_package(package): return null

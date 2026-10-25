@@ -9,7 +9,9 @@ func _initialize() -> void:
 		var source := Store.load_source(args[0])
 		result = Compiler.compile(source.data) if source.ok else source
 	if result.has("package"):
-		result.cells = result.package.part.surfaces.size()
+		result.piece_count = result.package.piece_count
+		result.grid_quads = result.package.grid_quads
+		result.support_count = result.package.part.surfaces.size()
 		result.connections = result.package.adjacency.size()
 		result.erase("package")
 	print("MAP_TERRAIN_RESULT " + JSON.stringify(result))

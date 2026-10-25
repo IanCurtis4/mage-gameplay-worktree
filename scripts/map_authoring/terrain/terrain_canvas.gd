@@ -2,6 +2,8 @@
 extends Control
 const WorldProjection = preload("res://scripts/world/expedition_geometry_view.gd")
 const Brush = preload("res://scripts/map_authoring/terrain/brush.gd")
+const Partition = preload("res://scripts/map_authoring/compiler/terrain_partition.gd")
+const TerrainMaterial = preload("res://scripts/map_authoring/terrain/terrain_material.gd")
 signal stroke_finished(points: Array, options: Dictionary)
 signal cancelled
 var source: Dictionary = {}
@@ -17,6 +19,10 @@ var _scale := 1.0
 var _pan := Vector2.ZERO
 var _origin := Vector2.ZERO
 var _cursor := Vector2.ZERO
+var wire_overlay := false
+var _mesh_root: Node2D
+var _overlay: Node2D
+var _height_bounds: Dictionary = {}
 
 func _ready() -> void:
 	custom_minimum_size = Vector2(480,300)
@@ -25,22 +31,34 @@ func _ready() -> void:
 	mouse_exited.connect(cancel_stroke)
 	get_window().focus_exited.connect(cancel_stroke)
 	resized.connect(queue_redraw)
+	_mesh_root = Node2D.new(); add_child(_mesh_root)
+	_overlay = Node2D.new(); _overlay.z_index = 4090; add_child(_overlay)
+	_overlay.draw.connect(_draw_overlays)
 
 func set_source(data: Dictionary, layer_id: String) -> void:
 	cancel_stroke()
-	source = data.duplicate(true); selected_layer = layer_id; package = {}; queue_redraw()
+	source = data.duplicate(true); selected_layer = layer_id; package = {}
+	redraw_terrain()
 
 func fit() -> void:
-	var triangles := _triangles(source)
 	var bounds := Rect2(); var first := true
-	for triangle: Dictionary in triangles:
-		for vertex: Vector3 in triangle.vertices:
+	for layer: Dictionary in source.get("layers",[]):
+		if layer.layer_id in hidden_layers or layer.heights.size() != int(layer.rows)*int(layer.columns): continue
+		for z: int in int(layer.rows):
+			for x: int in int(layer.columns):
+				var vertex := Partition.point(layer,x,z)
+				var point := WorldProjection.project(vertex)
+				if first: bounds = Rect2(point,Vector2.ZERO); first = false
+				else: bounds = bounds.expand(point)
+	for special: Dictionary in source.get("special_surfaces",[]):
+		for xyz: Array in special.vertices_xyz:
+			var vertex := Vector3(xyz[0],xyz[1],xyz[2])
 			var point := WorldProjection.project(vertex)
 			if first: bounds = Rect2(point,Vector2.ZERO); first = false
 			else: bounds = bounds.expand(point)
 	if first: _scale = 1.0; _pan = Vector2.ZERO; _origin = size*0.5
 	else:
-		_scale = clampf(minf((size.x-100)/maxf(1,bounds.size.x),(size.y-90)/maxf(1,bounds.size.y)),0.1,8)
+		_scale = clampf(minf((size.x-100)/maxf(1,bounds.size.x),(size.y-90)/maxf(1,bounds.size.y)),0.005,8)
 		_origin = size*0.5-bounds.get_center()*_scale; _pan = Vector2.ZERO
 	queue_redraw()
 
@@ -79,62 +97,124 @@ func _triangles(data: Dictionary) -> Array:
 	return triangles
 
 static func preview_supported(data: Dictionary) -> bool:
-	var count: int = data.get("special_surfaces",[]).size()
+	var count := 0
 	for layer: Dictionary in data.get("layers",[]):
 		count += (int(layer.rows)-1)*(int(layer.columns)-1)
-		if count > 256: return false
-	return count <= 256
+		if count > 65536: return false
+	return count <= 65536
 
 func pick(at: Vector2) -> Dictionary:
-	var triangles := _triangles(source)
-	triangles.reverse()
-	for triangle: Dictionary in triangles:
-		if triangle.source_id != selected_layer: continue
-		var vertices: Array = triangle.vertices
-		var a := screen(vertices[0]); var b := screen(vertices[1]); var c := screen(vertices[2])
-		var denominator := (b-a).cross(c-a)
-		if absf(denominator) < 0.00001: continue
-		var v := (at-a).cross(c-a)/denominator; var w := (b-a).cross(at-a)/denominator; var u := 1-v-w
-		if minf(u,minf(v,w)) >= -0.00001:
-			var point: Vector3 = vertices[0]*u+vertices[1]*v+vertices[2]*w
-			return {"ok":true,"point":Vector2(point.x,point.z)}
-	return {"ok":false}
+	if not preview_supported(source): return {"ok":false}
+	var result := {"ok":false}; var highest := -INF
+	for layer: Dictionary in source.layers:
+		if layer.layer_id != selected_layer or layer.layer_id in hidden_layers or not _height_bounds.has(layer.layer_id): continue
+		var ray := WorldProjection.ray((at-_origin-_pan)/_scale)
+		var low: Vector3 = ray.origin+ray.direction*((_height_bounds[layer.layer_id].x-ray.origin.y)/ray.direction.y)
+		var high: Vector3 = ray.origin+ray.direction*((_height_bounds[layer.layer_id].y-ray.origin.y)/ray.direction.y)
+		var spacing: float = layer.sample_spacing
+		var x0 := clampi(floori((minf(low.x,high.x)-layer.origin_xz[0])/spacing)-1,0,int(layer.columns)-2)
+		var x1 := clampi(ceili((maxf(low.x,high.x)-layer.origin_xz[0])/spacing)+1,0,int(layer.columns)-2)
+		var z0 := clampi(floori((minf(low.z,high.z)-layer.origin_xz[1])/spacing)-1,0,int(layer.rows)-2)
+		var z1 := clampi(ceili((maxf(low.z,high.z)-layer.origin_xz[1])/spacing)+1,0,int(layer.rows)-2)
+		for z: int in range(z0,z1+1):
+			for x: int in range(x0,x1+1):
+				var quad: Array = [Partition.point(layer,x,z),Partition.point(layer,x+1,z),Partition.point(layer,x+1,z+1),Partition.point(layer,x,z+1)]
+				for triangle: Array in [[0,1,2],[0,2,3]]:
+					var vertices: Array = [quad[triangle[0]],quad[triangle[1]],quad[triangle[2]]]
+					var a := screen(vertices[0]); var b := screen(vertices[1]); var c := screen(vertices[2])
+					var denominator := (b-a).cross(c-a)
+					if absf(denominator) < 0.00001: continue
+					var v := (at-a).cross(c-a)/denominator; var w := (b-a).cross(at-a)/denominator; var u := 1-v-w
+					if minf(u,minf(v,w)) >= -0.00001:
+						var point: Vector3 = vertices[0]*u+vertices[1]*v+vertices[2]*w
+						if point.y >= highest:
+							highest = point.y; result = {"ok":true,"point":Vector2(point.x,point.z),"position":point,"surface_id":layer.layer_id}
+	return result
+
+func redraw_terrain() -> void:
+	if not is_instance_valid(_mesh_root): return
+	for child: Node in _mesh_root.get_children(): child.free()
+	_height_bounds.clear()
+	var data := _preview if not _preview.is_empty() else source
+	if data.is_empty() or not preview_supported(data): queue_redraw(); return
+	for layer: Dictionary in data.layers:
+		if layer.layer_id in hidden_layers or layer.heights.is_empty() or int(layer.columns) < 2 or int(layer.rows) < 2 or layer.sample_spacing <= 0 or layer.heights.size() != int(layer.columns)*int(layer.rows): continue
+		_height_bounds[layer.layer_id] = Vector2(layer.heights.min(),layer.heights.max())
+		var regions := Partition.build(layer)
+		if regions.size() > 1024: regions = [{}] # Invalid complex drafts remain visible; bake reports its logical budget.
+		for region: Dictionary in regions:
+			var mesh := MeshInstance2D.new()
+			mesh.mesh = TerrainMaterial.mesh(layer,region)
+			mesh.material = TerrainMaterial.material(true)
+			var x: int = region.get("x",0); var z: int = region.get("z",0)
+			var width: int = region.get("width",int(layer.columns)-1); var height: int = region.get("height",int(layer.rows)-1)
+			mesh.z_index = clampi(floori((Partition.point(layer,x,z).y+Partition.point(layer,x+width,z+height).y)*2),-4000,4000)
+			_mesh_root.add_child(mesh)
+	for special: Dictionary in data.special_surfaces:
+		if special.layer_id in hidden_layers or special.vertices_xyz.size() < 3: continue
+		var polygon := Polygon2D.new(); var points := PackedVector2Array(); var y := 0.0
+		for xyz: Array in special.vertices_xyz:
+			var point := Vector3(xyz[0],xyz[1],xyz[2]); points.append(WorldProjection.project(point)); y += point.y
+		polygon.polygon = points; polygon.color = Color("889295"); polygon.z_index = clampi(floori(y/special.vertices_xyz.size()*4),-4000,4000)
+		_mesh_root.add_child(polygon)
+		for i: int in special.vertices_xyz.size():
+			var av: Array = special.vertices_xyz[i]; var bv: Array = special.vertices_xyz[(i+1)%special.vertices_xyz.size()]
+			var a := Vector3(av[0],av[1],av[2]); var b := Vector3(bv[0],bv[1],bv[2])
+			if not is_equal_approx(a.y,b.y): continue
+			var side := Polygon2D.new(); side.polygon = PackedVector2Array([WorldProjection.project(a),WorldProjection.project(b),WorldProjection.project(b-Vector3.UP*4),WorldProjection.project(a-Vector3.UP*4)])
+			side.color = Color("3d505d"); side.z_index = polygon.z_index-1; _mesh_root.add_child(side)
+	queue_redraw()
 
 func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO,size),Color("111b24"))
+	if is_instance_valid(_mesh_root):
+		_mesh_root.scale = Vector2.ONE*_scale; _mesh_root.position = _origin+_pan
+	if is_instance_valid(_overlay): _overlay.queue_redraw()
+
+func _draw_overlays() -> void:
 	var data := _preview if not _preview.is_empty() else source
 	if not preview_supported(data):
-		draw_string(get_theme_default_font(),Vector2(20,35),"Prévia indisponível: reduza a peça para até 256 células de grade.",HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("ffe298"))
-		return
-	for triangle: Dictionary in _triangles(data):
-		if triangle.special:
-			for special: Dictionary in data.special_surfaces:
-				if special.surface_id != triangle.source_id: continue
-				for i: int in special.vertices_xyz.size():
-					var av: Array = special.vertices_xyz[i]; var bv: Array = special.vertices_xyz[(i+1)%special.vertices_xyz.size()]
-					var a := Vector3(av[0],av[1],av[2]); var b := Vector3(bv[0],bv[1],bv[2])
-					if is_equal_approx(a.y,b.y): draw_colored_polygon(PackedVector2Array([screen(a),screen(b),screen(b-Vector3.UP*4),screen(a-Vector3.UP*4)]),Color("43576b"))
-		var polygon := PackedVector2Array(); var colors := PackedColorArray()
-		for i: int in 3:
-			polygon.append(screen(triangle.vertices[i]))
-			var tint := Color("768a9d") if triangle.special else Color("568458").lerp(Color("a27b4b"),triangle.weights[i])
-			if triangle.source_id != selected_layer: tint = tint.darkened(0.22)
-			colors.append(tint)
-		draw_polygon(polygon,colors)
-		draw_polyline(PackedVector2Array([polygon[0],polygon[1],polygon[2],polygon[0]]),Color(0.8,0.9,1,0.13),1,true)
+		_overlay.draw_string(get_theme_default_font(),Vector2(20,35),"A prévia excede o orçamento de amostras visuais desta sessão.",HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("ffe298")); return
+	if wire_overlay:
+		for layer: Dictionary in data.get("layers",[]):
+			if layer.layer_id in hidden_layers or not _height_bounds.has(layer.layer_id): continue
+			for z: int in int(layer.rows):
+				var points := PackedVector2Array()
+				for x: int in int(layer.columns): points.append(screen(Partition.point(layer,x,z)))
+				_overlay.draw_polyline(points,Color(1,1,1,0.18),1,true)
+			for x: int in int(layer.columns):
+				var points := PackedVector2Array()
+				for z: int in int(layer.rows): points.append(screen(Partition.point(layer,x,z)))
+				_overlay.draw_polyline(points,Color(1,1,1,0.18),1,true)
 	if not package.is_empty():
 		for boundary: Dictionary in package.boundaries:
-			draw_line(screen(boundary.a),screen(boundary.b),Color("f1c778") if boundary.kind == "opening" else Color("354e3e"),2,true)
+			if wire_overlay or boundary.kind == "opening": _overlay.draw_line(screen(boundary.a),screen(boundary.b),Color("f1c778") if boundary.kind == "opening" else Color("354e3e"),2,true)
+	for connector: Dictionary in data.get("connectors",[]):
+		var xyz: Array = connector.position_xyz; var center := screen(Vector3(xyz[0],xyz[1],xyz[2]))
+		var normal: Array = connector.normal_xyz; var direction := Vector3(normal[0],normal[1],normal[2])
+		var tangent := Vector3(-direction.z,0,direction.x)*float(connector.width)*0.5
+		_overlay.draw_line(screen(Vector3(xyz[0],xyz[1],xyz[2])-tangent),screen(Vector3(xyz[0],xyz[1],xyz[2])+tangent),Color("ffe298"),3,true)
+		_overlay.draw_line(center,screen(Vector3(xyz[0],xyz[1],xyz[2])+direction*24),Color("ffe298"),2,true)
 	for i: int in range(1,_points.size()):
-		draw_line(_stroke_screen(_points[i-1]),_stroke_screen(_points[i]),Color("ffe298"),2,true)
-	if has_focus(): draw_arc(_cursor,8,0,TAU,24,Color("ffe298"),1,true)
+		_overlay.draw_line(_stroke_screen(_points[i-1]),_stroke_screen(_points[i]),Color("ffe298"),2,true)
+	if has_focus(): _overlay.draw_arc(_cursor,8,0,TAU,24,Color("ffe298"),1,true)
 
 func _stroke_screen(point: Vector2) -> Vector2:
+	for layer: Dictionary in source.get("layers",[]):
+		if layer.layer_id != selected_layer or not _height_bounds.has(layer.layer_id): continue
+		var local := (point-Vector2(layer.origin_xz[0],layer.origin_xz[1]))/float(layer.sample_spacing)
+		var x := clampi(floori(local.x),0,int(layer.columns)-2); var z := clampi(floori(local.y),0,int(layer.rows)-2)
+		var u := clampf(local.x-x,0,1); var v := clampf(local.y-z,0,1)
+		var a := Partition.point(layer,x,z); var b := Partition.point(layer,x+1,z); var c := Partition.point(layer,x+1,z+1); var d := Partition.point(layer,x,z+1)
+		var y := a.y+(b.y-a.y)*u+(c.y-b.y)*v if u >= v else a.y+(c.y-d.y)*u+(d.y-a.y)*v
+		return screen(Vector3(point.x,y,point.y))
 	return screen(Vector3(point.x,0,point.y))
 
 func cancel_stroke() -> void:
+	var redraw := not _preview.is_empty()
 	if _dragging: cancelled.emit()
 	_dragging = false; _points.clear(); _preview = {}; queue_redraw()
+	if redraw and is_instance_valid(_mesh_root): redraw_terrain()
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
@@ -142,7 +222,7 @@ func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index in [MOUSE_BUTTON_WHEEL_UP,MOUSE_BUTTON_WHEEL_DOWN] and event.pressed:
 			var previous := _scale
-			_scale = clampf(_scale*(1.15 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 1/1.15),0.1,8.0)
+			_scale = clampf(_scale*(1.15 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 1/1.15),0.005,8.0)
 			_pan = event.position-_origin-(event.position-_origin-_pan)*(_scale/previous)
 			queue_redraw(); accept_event(); return
 		if event.button_index != MOUSE_BUTTON_LEFT: return
@@ -176,6 +256,5 @@ func _update_preview() -> void:
 	if _active_options.get("mode") == "ramp":
 		if points.size() < 2: return
 		points = [points[0],points[-1]]
-	var proposal := Brush.stroke(source,selected_layer,points,_active_options)
-	if proposal.ok: _preview = proposal.data
-	queue_redraw()
+	var proposal := Brush.stroke(source,selected_layer,points,_active_options,true)
+	if proposal.ok: _preview = proposal.data; redraw_terrain()

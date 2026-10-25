@@ -71,7 +71,7 @@ func _run() -> void:
 			await RenderingServer.frame_post_draw
 			var image := EditorInterface.get_base_control().get_viewport().get_texture().get_image()
 			check("native_capture", image.save_png(OS.get_environment("M1_CAPTURE")) == OK)
-		var weak := weakref(shell)
+		var weak: WeakRef = weakref(shell)
 		EditorInterface.set_plugin_enabled("ragrpg_map_editor", false)
 		await get_tree().process_frame
 		check("plugin_freed_" + str(cycle), weak.get_ref() == null)

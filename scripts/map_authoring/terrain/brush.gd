@@ -4,9 +4,10 @@ extends RefCounted
 ## Extra collinear pointer events and repeated events cannot accumulate strength.
 const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 
-static func stroke(source: Dictionary, layer_id: String, points: Array, options: Dictionary) -> Dictionary:
+static func stroke(source: Dictionary, layer_id: String, points: Array, options: Dictionary, preview_only: bool = false) -> Dictionary:
 	if points.size() > 4096: return Schema.result(false, "brush_limit_exceeded")
-	var read := Schema.read(JSON.stringify(source, "", true, true).to_utf8_buffer())
+	# UI previews receive structurally checked session snapshots; still validate semantics.
+	var read := {"ok":true,"valid":Schema.validate(source).is_empty(),"data":source.duplicate(true),"output_hash":""} if preview_only else Schema.read(JSON.stringify(source, "", true, true).to_utf8_buffer())
 	if not read.ok or not read.valid: return Schema.result(false, "source_invalid")
 	var data: Dictionary = read.data
 	var selected: Dictionary = {}
@@ -14,7 +15,6 @@ static func stroke(source: Dictionary, layer_id: String, points: Array, options:
 		if layer.layer_id == layer_id: selected = layer
 	if selected.is_empty(): return Schema.result(false, "source_reference_missing")
 	if selected.locked: return Schema.result(false, "layer_locked")
-	if (int(selected.rows)-1)*(int(selected.columns)-1) > 256: return Schema.result(false, "terrain_limit_exceeded")
 	var mode: String = options.get("mode", "raise")
 	var radius: float = options.get("radius", 32.0)
 	var strength: float = options.get("strength", 8.0)
@@ -39,8 +39,16 @@ static func stroke(source: Dictionary, layer_id: String, points: Array, options:
 				weights.resize(original.size()); weights.fill(1.0 if id == "grass" else 0.0)
 				selected.material_masks[id] = weights
 	var changed := 0
-	for z: int in int(selected.rows):
-		for x: int in int(selected.columns):
+	var bounds := Rect2(points[0],Vector2.ZERO)
+	for point: Vector2 in points: bounds = bounds.expand(point)
+	bounds = bounds.grow(radius)
+	var origin := Vector2(selected.origin_xz[0],selected.origin_xz[1])
+	var min_x := clampi(floori((bounds.position.x-origin.x)/selected.sample_spacing),0,int(selected.columns)-1)
+	var max_x := clampi(ceili((bounds.end.x-origin.x)/selected.sample_spacing),0,int(selected.columns)-1)
+	var min_z := clampi(floori((bounds.position.y-origin.y)/selected.sample_spacing),0,int(selected.rows)-1)
+	var max_z := clampi(ceili((bounds.end.y-origin.y)/selected.sample_spacing),0,int(selected.rows)-1)
+	for z: int in range(min_z,max_z+1):
+		for x: int in range(min_x,max_x+1):
 			var index: int = z * int(selected.columns) + x
 			var at := Vector2(selected.origin_xz[0], selected.origin_xz[1]) + Vector2(x,z) * float(selected.sample_spacing)
 			if protected(data, selected, at): continue
@@ -79,7 +87,7 @@ static func stroke(source: Dictionary, layer_id: String, points: Array, options:
 			selected.heights[index] = value
 	var output := Schema.result(true)
 	output.data = data; output.changed = changed; output.input_hash = read.output_hash
-	output.output_hash = Schema.semantic_hash(data)
+	output.output_hash = "" if preview_only else Schema.semantic_hash(data)
 	return output
 
 static func _distance(delta: Vector2, shape: String) -> float:

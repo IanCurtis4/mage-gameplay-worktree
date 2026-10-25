@@ -20,7 +20,7 @@ func _run() -> void:
 	if not built.ok: finish(); return
 	var package: Dictionary = built.package
 	package_hash = built.output_hash
-	check("independent_cell_count",package.part.surfaces.size() == 6)
+	check("exact_coplanar_compaction_count",package.part.surfaces.size() == 4)
 	check("solid_slab_exact",package.part.solid_volumes == [AABB(Vector3(0,36,100),Vector3(200,4,100))])
 	check("source_not_mutated",Schema.semantic_hash(source) == original)
 	check("repeat_identical_package",Compiler.compile(source).output_hash == built.output_hash)
@@ -128,7 +128,7 @@ func _run() -> void:
 	check("unconnected_ramp_rejected",Compiler.compile(invalid).code == "route_unreachable")
 	var warped := flat.duplicate(true); warped.layers[0].heights[12] = 1.0
 	var triangulated := Compiler.compile(warped)
-	check("warped_grid_compiles_to_triangles",triangulated.ok and triangulated.package.part.surfaces.size() == 20)
+	check("warped_grid_compiles_to_triangles",triangulated.ok and triangulated.package.part.surfaces.size() == 12)
 	check("invalid_brush_radius_rejected",not Brush.stroke(flat,"floor",[Vector2.ZERO],{"radius":-1}).ok)
 	check("nonfinite_brush_point_rejected",not Brush.stroke(flat,"floor",[Vector2(NAN,0)],options).ok)
 	options.shape = "square"; options.radius = 10.0; options.hardness = 1.0
@@ -155,8 +155,8 @@ func _run() -> void:
 			started = Time.get_ticks_usec(); Brush.stroke(data,"floor",[Vector2(32,32),Vector2(64,64)],{"radius":32.0,"strength":2.0}); brush_samples.append((Time.get_ticks_usec()-started)/1000.0)
 		measures.append({"axis":axis,"area":pow((axis-1)*32,2),"cells":(axis-1)*(axis-1),"visual_triangles":(axis-1)*(axis-1)*2,"bake_ms":samples,"brush_ms":brush_samples,"source_bytes":JSON.stringify(data).to_utf8_buffer().size(),"package_bytes":var_to_bytes(measured_package).size()})
 	var too_large := flat.duplicate(true); too_large.layers[0].columns = 18; too_large.layers[0].rows = 18; too_large.layers[0].heights.resize(324); too_large.layers[0].heights.fill(0.0)
-	check("cell_limit_rejected",Compiler.compile(too_large).code == "terrain_limit_exceeded")
-	check("oversized_grid_brush_rejected",Brush.stroke(too_large,"floor",[Vector2.ZERO],options).code == "terrain_limit_exceeded")
+	check("flat_grid_above_old_limit_compiles",Compiler.compile(too_large).ok and Compiler.compile(too_large).package.part.surfaces.size() == 1)
+	check("brush_above_old_grid_limit",Brush.stroke(too_large,"floor",[Vector2.ZERO],options).ok)
 	var long_trace: Array = []; long_trace.resize(4097); long_trace.fill(Vector2.ZERO)
 	check("long_stroke_rejected_whole",Brush.stroke(flat,"floor",long_trace,options).code == "brush_limit_exceeded" and flat.layers[0].heights[12] == 0.0)
 	var metrics := FileAccess.open("res://.godot/terrain_measurements.json",FileAccess.WRITE); metrics.store_string(JSON.stringify(measures)); metrics.close()

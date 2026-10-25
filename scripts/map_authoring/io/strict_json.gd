@@ -1,5 +1,6 @@
 @tool
 extends RefCounted
+const DecimalFloat = preload("res://scripts/map_authoring/io/decimal_float.gd")
 const MAX_BYTES := 16 * 1024 * 1024
 const MAX_DEPTH := 32
 const MAX_STRING := 65536
@@ -80,7 +81,7 @@ func _value(depth: int) -> Variant:
 		_error = "source_parse_error"
 		return null
 	if token.is_valid_int() and token.length() < 19: return token.to_int()
-	var number := token.to_float()
+	var number := DecimalFloat.parse(token)
 	if not is_finite(number): _error = "source_non_finite"
 	return number
 
