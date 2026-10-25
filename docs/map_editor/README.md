@@ -11,6 +11,11 @@ Aceite/merge de produto não é inferido dessa autorização de execução.
 remover artefatos antigos de teste/produção e reaproveitar uma fixture.
 [Regra obrigatória para os próximos passos](STORAGE.md).
 
+F5 está **validado tecnicamente**, código `470904ea7f49ed5c8c0a60e182816c52f0ebde7a`:
+131 checks próprios, dois CLIs e oito IDs oficiais aprovados com supervisão Luna,
+inspeção Sol e fixture removida. [Recibo e roteiro humano](delivery/m5.md).
+Somente principal/F5 mantidos; aceite humano, master/playtest e F6 permanecem separados.
+
 F3/M3 entregue e validado tecnicamente no checkout dedicado, consumindo o aceite
 completo F2; aceite humano F3 registrado em24/10, com a travessia pelo centro da
 conexão aceita como limitação temporária. [Contrato e manifesto nominal](contracts/m3_dispatch.md), [recibo F3](delivery/m3.md).

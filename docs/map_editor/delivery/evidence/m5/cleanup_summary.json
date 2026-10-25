@@ -11,11 +11,14 @@
     "known old F8/F0 visualization artifacts"
   ],
   "personal_save_touched": false,
-  "current_fixture": "one reusable temporary F5 fixture, removed after final validation",
+  "current_fixture": "REMOVED after final Luna/Sol validation; minimal samples retained in author/samples",
   "free_after_bytes": 17412403200,
   "removed_worktrees": 15,
   "runtime_changed_by_cleanup": false,
   "date": "2026-10-25",
   "preservation": "cleanup_worktrees.json: stashes and existing branches; historical bundle refs in refs/archive/storage-2026-09-20; cleanup_legacy_sources.zip 203543 bytes",
-  "retained_engine": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/godot"
+  "retained_engine": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/godot",
+  "final_fixture_removed_bytes": 316462648.0,
+  "final_free_bytes": 17676410880,
+  "final_nested_fixture_present": false
 }

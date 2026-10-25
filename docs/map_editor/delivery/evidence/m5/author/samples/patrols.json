@@ -1,0 +1,279 @@
+{
+	"document_id": "patrols",
+	"name": "Patrulhas",
+	"patrols": [
+		{
+			"mode": "loop",
+			"patrol_id": "guard_route",
+			"revision": 1,
+			"slot_ids": [
+				"guard"
+			],
+			"waypoints": [
+				{
+					"point_id": "west",
+					"position_xyz": [
+						240,
+						0,
+						200
+					],
+					"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1",
+					"wait_seconds": 2.0
+				},
+				{
+					"point_id": "north",
+					"position_xyz": [
+						300,
+						0,
+						260
+					],
+					"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1",
+					"wait_seconds": 0.0
+				},
+				{
+					"point_id": "south",
+					"position_xyz": [
+						300,
+						0,
+						140
+					],
+					"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1",
+					"wait_seconds": 0.5
+				}
+			]
+		}
+	],
+	"population": [
+		{
+			"brushes": [
+				{
+					"brush_id": "field",
+					"center_xyz": [
+						240.0,
+						0.0,
+						200.0
+					],
+					"density": 1.0,
+					"group_radius": 100,
+					"mode": "dispersed",
+					"quantity": 1,
+					"quota_mode": "count",
+					"radius": 112,
+					"round": 0,
+					"seed": "0",
+					"spacing": 8,
+					"species": [
+						{
+							"category": "normal",
+							"origin_id": "trial_stage_1",
+							"species_id": "test_gel",
+							"weight": 1
+						}
+					],
+					"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+				}
+			],
+			"document_id": "encounters",
+			"entrance": [
+				{
+					"position_xyz": [
+						64,
+						0,
+						200
+					],
+					"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+				}
+			],
+			"exclusions": [],
+			"interactions": [],
+			"map": [
+				{
+					"barrier_profile": "ruin_envelope_v1",
+					"document_id": "two_rooms",
+					"instances": [
+						{
+							"instance_id": "left",
+							"piece_hash": "889bfb2aeab9478cbeb1c24e81b46bb9bd9db1b0ac7eb7e2061ebabfd6de4ddd",
+							"position_xyz": [
+								0,
+								0,
+								0
+							],
+							"rotation_quarters": 0
+						},
+						{
+							"instance_id": "right",
+							"piece_hash": "b716f4200946e61096d0824d1f1bbf46fddbcdb54ecbacad57f3091bd5185122",
+							"position_xyz": [
+								400,
+								0,
+								0
+							],
+							"rotation_quarters": 0
+						}
+					],
+					"links": [
+						{
+							"a_connector": "east",
+							"a_instance": "left",
+							"b_connector": "west",
+							"b_instance": "right",
+							"link_id": "door"
+						}
+					],
+					"mode": "manual",
+					"name": "Duas peças · Ruína",
+					"pieces": [
+						{
+							"piece_hash": "889bfb2aeab9478cbeb1c24e81b46bb9bd9db1b0ac7eb7e2061ebabfd6de4ddd",
+							"source": {
+								"composition": null,
+								"connectors": [
+									{
+										"connector_id": "east",
+										"direction": "both",
+										"headroom": 100,
+										"kind": "walk",
+										"normal_xyz": [
+											1,
+											0,
+											0
+										],
+										"position_xyz": [
+											400,
+											0,
+											200
+										],
+										"surface_id": "floor",
+										"tags": [
+											"ruin"
+										],
+										"width": 120
+									}
+								],
+								"dependencies": [],
+								"document_id": "room_left",
+								"layers": [
+									{
+										"columns": 2,
+										"heights": [
+											0,
+											0,
+											0,
+											0
+										],
+										"layer_id": "floor",
+										"locked": false,
+										"material_masks": {},
+										"name": "Chão",
+										"origin_xz": [
+											0,
+											0
+										],
+										"protected_regions": [],
+										"rows": 2,
+										"sample_spacing": 400
+									}
+								],
+								"name": "Peça sem título",
+								"placements": [],
+								"regions": [],
+								"revision": 1,
+								"schema_version": 1,
+								"sockets": [],
+								"special_surfaces": [],
+								"units": "e07_world"
+							}
+						},
+						{
+							"piece_hash": "b716f4200946e61096d0824d1f1bbf46fddbcdb54ecbacad57f3091bd5185122",
+							"source": {
+								"composition": null,
+								"connectors": [
+									{
+										"connector_id": "west",
+										"direction": "both",
+										"headroom": 100,
+										"kind": "walk",
+										"normal_xyz": [
+											-1,
+											0,
+											0
+										],
+										"position_xyz": [
+											0,
+											0,
+											200
+										],
+										"surface_id": "floor",
+										"tags": [
+											"ruin"
+										],
+										"width": 120
+									}
+								],
+								"dependencies": [],
+								"document_id": "room_right",
+								"layers": [
+									{
+										"columns": 2,
+										"heights": [
+											0,
+											0,
+											0,
+											0
+										],
+										"layer_id": "floor",
+										"locked": false,
+										"material_masks": {},
+										"name": "Chão",
+										"origin_xz": [
+											0,
+											0
+										],
+										"protected_regions": [],
+										"rows": 2,
+										"sample_spacing": 400
+									}
+								],
+								"name": "Peça sem título",
+								"placements": [],
+								"regions": [],
+								"revision": 1,
+								"schema_version": 1,
+								"sockets": [],
+								"special_surfaces": [],
+								"units": "e07_world"
+							}
+						}
+					],
+					"revision": 1,
+					"schema_version": 1
+				}
+			],
+			"name": "Encontros",
+			"plan_hash": "a188f042a78866d39bac86f3b97c46378229f24a2e20943a8ae716a7a46caa6d",
+			"revision": 1,
+			"schema_version": 1,
+			"slots": [
+				{
+					"brush_id": "field",
+					"category": "normal",
+					"fixed": true,
+					"origin_id": "trial_stage_1",
+					"position_xyz": [
+						240,
+						0,
+						200
+					],
+					"site_id": "",
+					"slot_id": "guard",
+					"species_id": "test_gel",
+					"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+				}
+			]
+		}
+	],
+	"revision": 1,
+	"schema_version": 1
+}

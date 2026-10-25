@@ -1,6 +1,8 @@
 # Editor F5 / M5 — contrato executável 1
 
-25/10/2026. EM EXECUÇÃO. Autorização humana: “F4 terminou, podemos começar F5.”
+25/10/2026. VALIDADA TECNICAMENTE; aceite humano pendente.
+[Código470904e, evidências e limpeza concluídos](../delivery/m5.md).
+Autorização humana: “F4 terminou, podemos começar F5.”
 D5 confirmada explicitamente neste chat: loop/ida e volta, espera, interrupção
 por aggro, retorno a waypoint validado e home de leash fixo.
 Base F4 `b5ad440b100be7d50da8fc5b84218d0c54a886d2`, código validado

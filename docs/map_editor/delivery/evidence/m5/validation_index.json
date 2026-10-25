@@ -1,0 +1,29 @@
+{
+  "own_checks": 131,
+  "source_fixture_inputs": 1788,
+  "runtime_origin_sha": "198d09f67509b38e799d5e3404b9ea962f172414",
+  "package_hash": "152ffcacdfea8da1762f49ed584e3bcf25528f7ae9e991f3b083a4ac9717a5ba",
+  "official_ids": [
+    247,
+    251,
+    252,
+    258,
+    266,
+    268,
+    269,
+    272
+  ],
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+  "fixture_removed": true,
+  "code_sha": "470904ea7f49ed5c8c0a60e182816c52f0ebde7a",
+  "files": {
+    "docs/map_editor/delivery/evidence/m5/luna_run/corrected/manifest.json": "22AB1A7B7055059556858324F91799877607E219618463197538362B16F0560B",
+    "docs/map_editor/delivery/evidence/m5/luna_run/corrected/runs.json": "2C594E31C7461947F5128C207B6FC9CFFE6C47E40E94C96566B0A062C84316E6",
+    "docs/map_editor/delivery/evidence/m5/luna.md": "C6405F86F9AFDE217D75E0EFBF17F290F169D7A58727248260EFC982F5ABA123",
+    "docs/map_editor/delivery/evidence/m5/author/samples/patrols.json": "FF4AA952412371BE21CE51FF72C23A36BB8BBAAA2621C95AFCE7DB9CD8A11E56",
+    "docs/map_editor/delivery/evidence/m5/author/samples/patrols.rpp": "DC428D8BE7AFD7432B0E4F0DC793EF78F406FB3D32E55ADCD07811F5E5EA4617",
+    "docs/map_editor/delivery/evidence/m5/luna_run/official/checks.jsonl": "2C2EC2763E674B17BC06855F5731B460A3C164D8D36B107136CA8012C5F8BDEF",
+    "docs/map_editor/delivery/evidence/m5/luna_run/corrected/preview.png": "EC6A0BA9A3C3378986724CD2F2E1A9D455147D26F820D3757CE0273EEB5D44E1",
+    "docs/map_editor/delivery/evidence/m5/luna_run/corrected/patrols.png": "29FD37EEF855F014370D7F3CDB0BF006ACF0F8987D7023F409E9E88BD58FFD68"
+  }
+}

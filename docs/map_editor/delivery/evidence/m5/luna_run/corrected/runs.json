@@ -1,0 +1,668 @@
+[
+  {
+    "result": null,
+    "exit_code": 0,
+    "timed_out": false,
+    "finished_utc": "2026-10-25T07:05:21.7879002Z",
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "ok": true,
+    "aborted": false,
+    "name": "import",
+    "output_sha256": "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+    "started_utc": "2026-10-25T07:05:12.8604927Z"
+  },
+  {
+    "result": {
+      "checks": [
+        {
+          "id": "strict_source",
+          "ok": true
+        },
+        {
+          "id": "compile_canonical_body_route",
+          "ok": true
+        },
+        {
+          "id": "immutable_source",
+          "ok": true
+        },
+        {
+          "id": "repeat_hash",
+          "ok": true
+        },
+        {
+          "id": "json_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "future_source_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_slot",
+          "ok": true
+        },
+        {
+          "id": "duplicate_assignment",
+          "ok": true
+        },
+        {
+          "id": "nan_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_support",
+          "ok": true
+        },
+        {
+          "id": "outside_leash",
+          "ok": true
+        },
+        {
+          "id": "unfinished_route_draft_allowed",
+          "ok": true
+        },
+        {
+          "id": "unfinished_route_cannot_publish",
+          "ok": true
+        },
+        {
+          "id": "cancelled_no_package",
+          "ok": true
+        },
+        {
+          "id": "undo_whole_route",
+          "ok": true
+        },
+        {
+          "id": "redo_whole_route",
+          "ok": true
+        },
+        {
+          "id": "reject_without_mutation",
+          "ok": true
+        },
+        {
+          "id": "source_saved",
+          "ok": true
+        },
+        {
+          "id": "source_reopened",
+          "ok": true
+        },
+        {
+          "id": "external_conflict",
+          "ok": true
+        },
+        {
+          "id": "publish_local",
+          "ok": true
+        },
+        {
+          "id": "immutable_repeat",
+          "ok": true
+        },
+        {
+          "id": "package_reload",
+          "ok": true
+        },
+        {
+          "id": "stale_refused",
+          "ok": true
+        },
+        {
+          "id": "hash_integrity",
+          "ok": true
+        },
+        {
+          "id": "forged_hash_does_not_bypass_geometry",
+          "ok": true
+        },
+        {
+          "id": "real_actors_bind",
+          "ok": true
+        },
+        {
+          "id": "wait_begins_at_first_point",
+          "ok": true
+        },
+        {
+          "id": "zero_delta_frozen",
+          "ok": true
+        },
+        {
+          "id": "root_freezes_wait",
+          "ok": true
+        },
+        {
+          "id": "stun_freezes_wait",
+          "ok": true
+        },
+        {
+          "id": "tree_pause_freezes_wait",
+          "ok": true
+        },
+        {
+          "id": "dead_does_not_advance",
+          "ok": true
+        },
+        {
+          "id": "loop_next_cursor",
+          "ok": true
+        },
+        {
+          "id": "real_movement_from_home",
+          "ok": true
+        },
+        {
+          "id": "fixed_home_preserved",
+          "ok": true
+        },
+        {
+          "id": "patrol_reaches_later_points",
+          "ok": true
+        },
+        {
+          "id": "aggro_interrupts_wait",
+          "ok": true
+        },
+        {
+          "id": "leash_starts_return",
+          "ok": true
+        },
+        {
+          "id": "returns_and_resumes",
+          "ok": true
+        },
+        {
+          "id": "blocked_diagnosed_without_teleport",
+          "ok": true
+        },
+        {
+          "id": "temporary_blocker_does_not_refuse_birth_binding",
+          "ok": true
+        },
+        {
+          "id": "retry_budget",
+          "ok": true
+        },
+        {
+          "id": "blocked_snapshot_valid",
+          "ok": true
+        },
+        {
+          "id": "obstacle_removed_route_recalculated",
+          "ok": true
+        },
+        {
+          "id": "blocked_graph_restores",
+          "ok": true
+        },
+        {
+          "id": "blocked_state_exact",
+          "ok": true
+        },
+        {
+          "id": "invalid_cursor_blocks_snapshot",
+          "ok": true
+        },
+        {
+          "id": "released_actor_binding_refused",
+          "ok": true
+        },
+        {
+          "id": "ping_pong_expected_sequence",
+          "ok": true
+        },
+        {
+          "id": "canonical_ramp_bridge_fixture",
+          "ok": true
+        },
+        {
+          "id": "ramp_route_valid_for_real_body",
+          "ok": true
+        },
+        {
+          "id": "body_too_large_refused",
+          "ok": true
+        },
+        {
+          "id": "actual_actor_reaches_mid_ramp",
+          "ok": true
+        },
+        {
+          "id": "aggro_on_ramp_preserves_cursor",
+          "ok": true
+        },
+        {
+          "id": "blocked_return_has_diagnostic_no_teleport",
+          "ok": true
+        },
+        {
+          "id": "blocked_return_captures",
+          "ok": true
+        },
+        {
+          "id": "return_from_ramp_resumes_legal_waypoint",
+          "ok": true
+        }
+      ],
+      "count": 58,
+      "ok": true,
+      "package_hash": "152ffcacdfea8da1762f49ed584e3bcf25528f7ae9e991f3b083a4ac9717a5ba"
+    },
+    "exit_code": 0,
+    "timed_out": false,
+    "finished_utc": "2026-10-25T07:06:03.9587100Z",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_patrol_test.gd"
+    ],
+    "ok": true,
+    "aborted": false,
+    "name": "patrol",
+    "output_sha256": "92C295D4A83A8F41624FF9E70D452F2849C10609BC89D5F0885D8DC0730C7FA3",
+    "started_utc": "2026-10-25T07:05:21.9339043Z"
+  },
+  {
+    "result": {
+      "checks": [
+        {
+          "id": "compiled restart source",
+          "ok": true
+        },
+        {
+          "id": "made wait",
+          "ok": true
+        },
+        {
+          "id": "captured wait",
+          "ok": true
+        },
+        {
+          "id": "codec packed wait",
+          "ok": true
+        },
+        {
+          "id": "made travel",
+          "ok": true
+        },
+        {
+          "id": "captured travel",
+          "ok": true
+        },
+        {
+          "id": "codec packed travel",
+          "ok": true
+        },
+        {
+          "id": "made blocked",
+          "ok": true
+        },
+        {
+          "id": "captured blocked",
+          "ok": true
+        },
+        {
+          "id": "codec packed blocked",
+          "ok": true
+        },
+        {
+          "id": "made aggro",
+          "ok": true
+        },
+        {
+          "id": "captured aggro",
+          "ok": true
+        },
+        {
+          "id": "codec packed aggro",
+          "ok": true
+        },
+        {
+          "id": "fixture character",
+          "ok": true
+        },
+        {
+          "id": "fixture session",
+          "ok": true
+        },
+        {
+          "id": "canonical gameplay content",
+          "ok": true
+        },
+        {
+          "id": "explicit expedition startup does not create a pilot encounter",
+          "ok": true
+        },
+        {
+          "id": "canonical loot profiles",
+          "ok": true
+        },
+        {
+          "id": "coherent fixture barrier",
+          "ok": true
+        },
+        {
+          "id": "four-stage generated fixture",
+          "ok": true
+        },
+        {
+          "id": "canonical campaign consumes patrol manifest",
+          "ok": true
+        },
+        {
+          "id": "next off-tree coherent barrier",
+          "ok": true
+        },
+        {
+          "id": "canonical spawn binds patrol",
+          "ok": true
+        },
+        {
+          "id": "next off-tree coherent barrier",
+          "ok": true
+        },
+        {
+          "id": "death while waiting through canonical command",
+          "ok": true
+        },
+        {
+          "id": "next off-tree coherent barrier",
+          "ok": true
+        },
+        {
+          "id": "canonical respawn command",
+          "ok": true
+        },
+        {
+          "id": "new generation restarts route",
+          "ok": true
+        },
+        {
+          "id": "one birth no entry grant duplicate",
+          "ok": true
+        },
+        {
+          "id": "next off-tree coherent barrier",
+          "ok": true
+        },
+        {
+          "id": "same wave with living slot",
+          "ok": true
+        },
+        {
+          "id": "living slot not duplicated",
+          "ok": true
+        },
+        {
+          "id": "canonical profile suspends patrol",
+          "ok": true
+        }
+      ],
+      "count": 33,
+      "ok": true
+    },
+    "exit_code": 0,
+    "timed_out": false,
+    "finished_utc": "2026-10-25T07:07:27.2499603Z",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_patrol_restart_test.gd",
+      "--",
+      "prepare"
+    ],
+    "ok": true,
+    "aborted": false,
+    "name": "restart_prepare",
+    "output_sha256": "2E5F1803F25BC8856F1F7DE0CD72A0B4BFEE1F161F316CA44D11A8DD4572E631",
+    "started_utc": "2026-10-25T07:06:03.9696204Z"
+  },
+  {
+    "result": {
+      "checks": [
+        {
+          "id": "compiled restart source",
+          "ok": true
+        },
+        {
+          "id": "new process unpacked wait",
+          "ok": true
+        },
+        {
+          "id": "new process restored wait",
+          "ok": true
+        },
+        {
+          "id": "exact state before tick wait",
+          "ok": true
+        },
+        {
+          "id": "same next tick as uninterrupted wait",
+          "ok": true
+        },
+        {
+          "id": "new process unpacked travel",
+          "ok": true
+        },
+        {
+          "id": "new process restored travel",
+          "ok": true
+        },
+        {
+          "id": "exact state before tick travel",
+          "ok": true
+        },
+        {
+          "id": "same next tick as uninterrupted travel",
+          "ok": true
+        },
+        {
+          "id": "new process unpacked blocked",
+          "ok": true
+        },
+        {
+          "id": "new process restored blocked",
+          "ok": true
+        },
+        {
+          "id": "exact state before tick blocked",
+          "ok": true
+        },
+        {
+          "id": "same next tick as uninterrupted blocked",
+          "ok": true
+        },
+        {
+          "id": "new process unpacked aggro",
+          "ok": true
+        },
+        {
+          "id": "new process restored aggro",
+          "ok": true
+        },
+        {
+          "id": "exact state before tick aggro",
+          "ok": true
+        },
+        {
+          "id": "same next tick as uninterrupted aggro",
+          "ok": true
+        },
+        {
+          "id": "new process reopens canonical profile",
+          "ok": true
+        },
+        {
+          "id": "new process resumes durable campaign",
+          "ok": true
+        },
+        {
+          "id": "durable patrol wait and cursor exact",
+          "ok": true
+        },
+        {
+          "id": "durable generation claims and single actor",
+          "ok": true
+        }
+      ],
+      "count": 21,
+      "ok": true
+    },
+    "exit_code": 0,
+    "timed_out": false,
+    "finished_utc": "2026-10-25T07:08:09.6580940Z",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_patrol_restart_test.gd",
+      "--",
+      "resume"
+    ],
+    "ok": true,
+    "aborted": false,
+    "name": "restart_resume",
+    "output_sha256": "072A69FCBD7DB37841B14C787A4051256B3A3AAA495DA4A035F6AC59552FF871",
+    "started_utc": "2026-10-25T07:07:27.2592092Z"
+  },
+  {
+    "result": null,
+    "exit_code": 0,
+    "timed_out": false,
+    "finished_utc": "2026-10-25T07:08:14.7951015Z",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://scripts/map_authoring/patrol/headless.gd",
+      "--",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\m5_fixture\\.godot\\m5_samples\\patrols.json"
+    ],
+    "ok": true,
+    "aborted": false,
+    "name": "cli_a",
+    "output_sha256": "9F4B5E26D339093A3EE9E574B9D0B49DC2DDCCE1D70211601F501CEB6EE4B67D",
+    "started_utc": "2026-10-25T07:08:09.6668177Z"
+  },
+  {
+    "result": null,
+    "exit_code": 0,
+    "timed_out": false,
+    "finished_utc": "2026-10-25T07:08:20.0266730Z",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://scripts/map_authoring/patrol/headless.gd",
+      "--",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\m5_fixture\\.godot\\m5_samples\\patrols.json"
+    ],
+    "ok": true,
+    "aborted": false,
+    "name": "cli_b",
+    "output_sha256": "9F4B5E26D339093A3EE9E574B9D0B49DC2DDCCE1D70211601F501CEB6EE4B67D",
+    "started_utc": "2026-10-25T07:08:14.8033967Z"
+  },
+  {
+    "result": {
+      "checks": [
+        {
+          "id": "opens_from_encounters",
+          "ok": true
+        },
+        {
+          "id": "snapshot_imported",
+          "ok": true
+        },
+        {
+          "id": "new_route",
+          "ok": true
+        },
+        {
+          "id": "reject_unknown_paint_fields",
+          "ok": true
+        },
+        {
+          "id": "paints_ordered_waypoints",
+          "ok": true
+        },
+        {
+          "id": "assigns_existing_slot",
+          "ok": true
+        },
+        {
+          "id": "mode_changes",
+          "ok": true
+        },
+        {
+          "id": "edits_wait",
+          "ok": true
+        },
+        {
+          "id": "undo_redo",
+          "ok": true
+        },
+        {
+          "id": "reorders_points",
+          "ok": true
+        },
+        {
+          "id": "native_compile_completed",
+          "ok": true
+        },
+        {
+          "id": "gui_headless_same_compiler",
+          "ok": true
+        },
+        {
+          "id": "native_save_reopens",
+          "ok": true
+        },
+        {
+          "id": "local_package",
+          "ok": true
+        },
+        {
+          "id": "test_uses_separate_real_process",
+          "ok": true
+        },
+        {
+          "id": "native_preview_suspends_checkpoint",
+          "ok": true
+        },
+        {
+          "id": "native_preview_resumes_checkpoint",
+          "ok": true
+        },
+        {
+          "id": "removes_with_confirmation",
+          "ok": true
+        },
+        {
+          "id": "capture_saved",
+          "ok": true
+        }
+      ],
+      "count": 19,
+      "ok": true
+    },
+    "exit_code": 0,
+    "timed_out": false,
+    "finished_utc": "2026-10-25T07:09:39.0258705Z",
+    "arguments": [
+      "--editor",
+      "--rendering-method",
+      "gl_compatibility"
+    ],
+    "ok": true,
+    "aborted": false,
+    "name": "native_ui",
+    "output_sha256": "E7923C791ACF682C360D3120C462DCD36C6F65FB915A4EC619239EFB18F3FBB6",
+    "started_utc": "2026-10-25T07:08:20.0538969Z"
+  }
+]
