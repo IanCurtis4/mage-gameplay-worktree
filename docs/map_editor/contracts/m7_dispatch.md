@@ -1,6 +1,8 @@
 # Editor F7 / M7 — contrato executável 1
 
-25/10/2026. EM_EXECUÇÃO. Autorização humana: “F6 acabou, podemos começar F7.”
+25/10/2026. VALIDADA TECNICAMENTE — aceite humano pendente.
+Código congelado `c2d6aea78ce45c974d96d688ce591e339dbbe383`.
+[Recibo/evidência](../delivery/m7.md). Autorização humana: “F6 acabou, podemos começar F7.”
 Base `685d585b4b211e9228258a149d676aa2642d8e81` resolvida abaixo; F0–F6 integrados por ancestralidade.
 Checkout reutilizado: C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5.
 Branch codex/map-editor-m7. Principal/save pessoal preservados; dois checkouts.

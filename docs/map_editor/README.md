@@ -35,7 +35,7 @@ Os estados históricos de planejamento abaixo não revogam essa autorização.
 Autorização humana: “F6 acabou, podemos começar F7.” F0–F6 incluídos por
 ancestralidade na base685d585; checkout atual reutilizado sob a regra de dois
 checkouts. [Contrato/propriedade](contracts/m7_dispatch.md), [fluxo executável
-para skills](exchange.md), [recibo](delivery/m7.md). F7 está em execução; não
+para skills](exchange.md), [recibo](delivery/m7.md). F7 está validado tecnicamente; aceite humano pendente. Não
 abre F8 nem implica aceite de produto/merge. As propostas de23/10 abaixo são
 históricas onde os recibos produtores já entregam a capacidade.
 

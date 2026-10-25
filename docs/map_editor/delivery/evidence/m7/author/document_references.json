@@ -1,0 +1,231 @@
+{
+  "ok": true,
+  "references_checked": 56,
+  "references": [
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "contracts/m6_dispatch.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "delivery/m6.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "contracts/m5_dispatch.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "STORAGE.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "delivery/m5.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "contracts/m3_dispatch.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "delivery/m3.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "contracts/m7_dispatch.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "exchange.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "delivery/m7.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "contracts/terrain_piece_semantics.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "delivery/m2_closure.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "delivery/m0.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "contracts/m0_preparation.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "architecture.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "execution.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "validation.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "contracts/terrain_piece_semantics.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "contracts/map_composition_and_seams.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "../WORKFLOW.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "../MVP.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "../ARCHITECTURE.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "../PRODUCT_DIRECTION.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "../DELIVERY_SKILLS.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "../gates/low_poly_environments.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "contracts/m2_dispatch.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "delivery/m2_closure.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "delivery/m2.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "contracts/m3_preparation.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "contracts/m4_dispatch.md"
+    },
+    {
+      "from": "docs\\map_editor\\README.md",
+      "target": "delivery/m4.md"
+    },
+    {
+      "from": "docs\\map_editor\\contracts\\m7_dispatch.md",
+      "target": "../delivery/m7.md"
+    },
+    {
+      "from": "docs\\map_editor\\exchange.md",
+      "target": "contracts/m7_dispatch.md"
+    },
+    {
+      "from": "docs\\map_editor\\exchange.md",
+      "target": "delivery/m7.md"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\m7.md",
+      "target": "../contracts/m7_dispatch.md"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\m7.md",
+      "target": "../exchange.md"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\m7.md",
+      "target": "evidence/m7/author/samples/map.json"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\m7.md",
+      "target": "evidence/m7/author/samples/map.rpx"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\m7.md",
+      "target": "evidence/m7/author/samples/map_proposal.rpx"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\m7.md",
+      "target": "../exchange.md"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\m7.md",
+      "target": "evidence/m7/luna.md"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\m7.md",
+      "target": "evidence/m7/luna_run/corrected/runs.json"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\m7.md",
+      "target": "evidence/m7/luna_run/corrected/manifest.json"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\m7.md",
+      "target": "evidence/m7/luna_run/corrected/exchange.png"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\m7.md",
+      "target": "evidence/m7/luna_run/official/checks.jsonl"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\m7.md",
+      "target": "evidence/m7/author/skills_validation.json"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\m7.md",
+      "target": "evidence/m7/author/document_references.json"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\m7.md",
+      "target": "evidence/m7/luna_run/corrected/native_cli.output.log"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\m7.md",
+      "target": "evidence/m7/luna_run/corrected/native_inputs/"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\m7.md",
+      "target": "../STORAGE.md"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\m7.md",
+      "target": "evidence/m7/author/cleanup.json"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\evidence\\m7\\luna.md",
+      "target": "luna_run/corrected/manifest.json"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\evidence\\m7\\luna.md",
+      "target": "luna_run/corrected/native_inputs/"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\evidence\\m7\\luna.md",
+      "target": "luna_run/corrected/native_cli.output.log"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\evidence\\m7\\luna.md",
+      "target": "luna_run/corrected/native_cli.engine.log"
+    },
+    {
+      "from": "docs\\map_editor\\delivery\\evidence\\m7\\luna.md",
+      "target": "luna_run/official/checks.jsonl"
+    }
+  ],
+  "gameplay_repeated_for_documents": false
+}

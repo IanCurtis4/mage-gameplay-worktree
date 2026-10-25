@@ -1,0 +1,605 @@
+{
+  "frozen_source_commit": "c2d6aea78ce45c974d96d688ce591e339dbbe383",
+  "inputs_verified": 1821,
+  "runner_stages": 10,
+  "core_checks": 113,
+  "native_checks": 36,
+  "official_ids": [
+    1,
+    258,
+    273
+  ],
+  "native_cli_hash": "dc4774b22241032984a35d4be4b930aca4ec1ee3e947a8ce2efb679da5b1a154",
+  "files": [
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/.gitattributes",
+      "bytes": 13,
+      "sha256": "d91263f8075671bd30be9efc2b2cff966cb0c46ab41280e44e71175dede42226"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_01/import.output.log",
+      "bytes": 33,
+      "sha256": "c2de39d8fca7225c140343dde941fcd71cf10f9db9ad6bfc3ec4b9237e208bbf"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_02/import.engine.log",
+      "bytes": 196,
+      "sha256": "554054a141b798078e4a93fc360a602b580addeb5324c47d43134694ac7c0de1"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_02/import.output.log",
+      "bytes": 200,
+      "sha256": "f0509d7aead71e12324459f8661449e7d16b8b5b18034707caa269a14ecbc543"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_02/runs.json",
+      "bytes": 442,
+      "sha256": "66eae7b2603973306dab392d7fb6043bde6c25553cb4f4173930c6059affe586"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_03/exchange.engine.log",
+      "bytes": 2366,
+      "sha256": "0eef79564d60965e1dec6542d5e4744e0281a6fcdc183fe47c1461586a951e8e"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_03/exchange.output.log",
+      "bytes": 2397,
+      "sha256": "d5daa5449b72745c9411a4e555fc9c8d1aad12d316e6b913646409113e11fcd9"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_03/import.engine.log",
+      "bytes": 66246,
+      "sha256": "d30e23c0a6b48b114a7ebcd63ab43435917ab21fadbd020a2c53e6439091d0d0"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_03/import.output.log",
+      "bytes": 100096,
+      "sha256": "d493c97811a447f7aa30d4d3014e1266fced4b4ef2ca6cd01fa143c3eaba94a0"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_03/runs.json",
+      "bytes": 3283,
+      "sha256": "6ec776670bf79f22f4d93a3ba32158896c5c9041e2b11dd574278abb57e333f6"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_04/cli_a.engine.log",
+      "bytes": 2508,
+      "sha256": "f28d893cbe23447b91ea110e810340ce342f359590bcc44b07cf4b527599efe2"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_04/cli_a.output.log",
+      "bytes": 2511,
+      "sha256": "7bf8dffef26180b19653988a82d6e75c0ad7b4dc641fe9d1bd337d7dc45931df"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_04/cli_b.engine.log",
+      "bytes": 2508,
+      "sha256": "f28d893cbe23447b91ea110e810340ce342f359590bcc44b07cf4b527599efe2"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_04/cli_b.output.log",
+      "bytes": 2511,
+      "sha256": "7bf8dffef26180b19653988a82d6e75c0ad7b4dc641fe9d1bd337d7dc45931df"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_04/exchange.engine.log",
+      "bytes": 7421,
+      "sha256": "3b09b13f37c351f0d9e1dd80a52ed52711c32cd3c1530b02b8705acd255388ed"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_04/exchange.output.log",
+      "bytes": 7526,
+      "sha256": "d38be4fff33a3cf1d03af32674943095b2f456ad2d357733a7b1d38a42c944bd"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_04/import.engine.log",
+      "bytes": 1200,
+      "sha256": "2bb9c9949379ba50875aa56d6cd665752c88cbaf0ceba33792246e50196a89f6"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_04/import.output.log",
+      "bytes": 1615,
+      "sha256": "f94e07cf50f3c6d8f150ea56b86dd7f1685bce424d4a29e948153889f57ee672"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_04/native_ui.engine.log",
+      "bytes": 684,
+      "sha256": "416d7593ed9339affcbbd70b983d1b7ec4d6ffb541d25faec1517b9fe57d85be"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_04/native_ui.output.log",
+      "bytes": 693,
+      "sha256": "712aef2b990ab75ffa2aa62757d6335cc53b1bdbb5b9af820013efcb51011228"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/attempt_04/runs.json",
+      "bytes": 12016,
+      "sha256": "e95ad25eb98df1c3375345fb785f8898658578e87ee55d5ff74b8633fdbb6373"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cleanup.json",
+      "bytes": 659,
+      "sha256": "1175dcd2aac36c829c6f866c45d55bb3277fd0539ae3eafd0811620fe49d4a1b"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/cli_a.engine.log",
+      "bytes": 2508,
+      "sha256": "f28d893cbe23447b91ea110e810340ce342f359590bcc44b07cf4b527599efe2"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/cli_a.output.log",
+      "bytes": 2511,
+      "sha256": "7bf8dffef26180b19653988a82d6e75c0ad7b4dc641fe9d1bd337d7dc45931df"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/cli_b.engine.log",
+      "bytes": 2508,
+      "sha256": "f28d893cbe23447b91ea110e810340ce342f359590bcc44b07cf4b527599efe2"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/cli_b.output.log",
+      "bytes": 2511,
+      "sha256": "7bf8dffef26180b19653988a82d6e75c0ad7b4dc641fe9d1bd337d7dc45931df"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/cli_export.engine.log",
+      "bytes": 196,
+      "sha256": "ddb48b2472618bd4a54e728a6be8451a2c26224d4ca6317338261375ae9f5510"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/cli_export.output.log",
+      "bytes": 199,
+      "sha256": "90001694a438a61716700a3767e068a009f55fedf495f7581451f8ba9a57e123"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/cli_invalid_export.engine.log",
+      "bytes": 262,
+      "sha256": "a90a98df56dc2032f24c7e3f2c2b86f3501298826a468df2d8388e314eacdcd4"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/cli_invalid_export.output.log",
+      "bytes": 265,
+      "sha256": "01ef864cc9a9a86ae839a07da8fc5b97d59a52c053215937439be22f17027675"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/cli_invalid_propose.engine.log",
+      "bytes": 262,
+      "sha256": "a90a98df56dc2032f24c7e3f2c2b86f3501298826a468df2d8388e314eacdcd4"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/cli_invalid_propose.output.log",
+      "bytes": 265,
+      "sha256": "01ef864cc9a9a86ae839a07da8fc5b97d59a52c053215937439be22f17027675"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/cli_invalid_review.engine.log",
+      "bytes": 262,
+      "sha256": "a90a98df56dc2032f24c7e3f2c2b86f3501298826a468df2d8388e314eacdcd4"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/cli_invalid_review.output.log",
+      "bytes": 265,
+      "sha256": "01ef864cc9a9a86ae839a07da8fc5b97d59a52c053215937439be22f17027675"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/cli_propose.engine.log",
+      "bytes": 196,
+      "sha256": "1038848b57b7e0b860c63c58316a41c0664d2b3a8a39d039db4f03639981cc24"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/cli_propose.output.log",
+      "bytes": 199,
+      "sha256": "f3b404beabe1df3b79bda89759d5908ecc1a24209a29b9280ac9193f0e016979"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/exchange.engine.log",
+      "bytes": 8284,
+      "sha256": "4f001353c644fe70adbef9977f04d2e4131da09c97888c318933dddeb54ed469"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/exchange.output.log",
+      "bytes": 8400,
+      "sha256": "1001864261e30b44e6c86b95afa2d46e7b837d39625d5764f11e838518c8b655"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/import.engine.log",
+      "bytes": 1422,
+      "sha256": "b66b2ddf5dda15b8cf3768a68ae2974dcf333258914f31642ee9c0010606847f"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/import.output.log",
+      "bytes": 1909,
+      "sha256": "cc03a15c5a832fc22f75f41eb2f5ec800da02b944eda85e00dd7155926320b5d"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/manifest.json",
+      "bytes": 480438,
+      "sha256": "0d3b7441b6c96eaff56a45ae80bfaf80463ebd9a78b45b84f0ad0503f8861c2c"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/cli_fix_01/runs.json",
+      "bytes": 17799,
+      "sha256": "91633c047858e1c094cc3b70996bb9e3cc5dacaa85231ca88a0a5fc4a93b7d6f"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/document_references.json",
+      "bytes": 6323,
+      "sha256": "2b92765e3a09124e8362ce7eccc9879c880de4655cb8f9556febf1716d101681"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/final_01/cli_a.engine.log",
+      "bytes": 2508,
+      "sha256": "f28d893cbe23447b91ea110e810340ce342f359590bcc44b07cf4b527599efe2"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/final_01/cli_a.output.log",
+      "bytes": 2511,
+      "sha256": "7bf8dffef26180b19653988a82d6e75c0ad7b4dc641fe9d1bd337d7dc45931df"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/final_01/cli_b.engine.log",
+      "bytes": 2508,
+      "sha256": "f28d893cbe23447b91ea110e810340ce342f359590bcc44b07cf4b527599efe2"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/final_01/cli_b.output.log",
+      "bytes": 2511,
+      "sha256": "7bf8dffef26180b19653988a82d6e75c0ad7b4dc641fe9d1bd337d7dc45931df"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/final_01/exchange.engine.log",
+      "bytes": 8284,
+      "sha256": "4f001353c644fe70adbef9977f04d2e4131da09c97888c318933dddeb54ed469"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/final_01/exchange.output.log",
+      "bytes": 8400,
+      "sha256": "1001864261e30b44e6c86b95afa2d46e7b837d39625d5764f11e838518c8b655"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/final_01/exchange.png",
+      "bytes": 200676,
+      "sha256": "1ae29a69cbcfa3da3e770a747428d4627296b778ff66ea729a4f87c552a059f3"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/final_01/import.engine.log",
+      "bytes": 1492,
+      "sha256": "9aca2c585978372f03285d5bcc09dbec228036af146478221ade6a556c7749dc"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/final_01/import.output.log",
+      "bytes": 2027,
+      "sha256": "8d10e51f4765c0f5cbf06d90bcbda96c1527ea22b227ad099f249618fece8a54"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/final_01/manifest.json",
+      "bytes": 477540,
+      "sha256": "4c934aa47cf99437c7e7c254db7f9f691580bced42ad63f06b17404dcc0cdb5a"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/final_01/native_ui.engine.log",
+      "bytes": 2932,
+      "sha256": "16849a11c15a5dabc734b9d3062f36eb987cce2bec3023c1ab5972de399dd1b3"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/final_01/native_ui.output.log",
+      "bytes": 2974,
+      "sha256": "9ca7da65d11c28e4e4688c0b8978a82d8c85a706c70c0daa0e731612550c718f"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/final_01/runs.json",
+      "bytes": 16006,
+      "sha256": "c51a71ccc827f150c78cbb7b3993bd7b2465f738a7b2fd2f08911cfe11c938dc"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/native_01/exchange.png",
+      "bytes": 208043,
+      "sha256": "4bfbcbb8f68b513a05759bb5bd0fb70f251b71cce14f5ae5bcf08c652f503207"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/native_01/import.engine.log",
+      "bytes": 1235,
+      "sha256": "53d0ee1240768aff10829e18d23ee619fcb3c213bcf82db443af9b78349ef1ea"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/native_01/import.output.log",
+      "bytes": 1674,
+      "sha256": "50b8e082e8473e01fa934eb46158108904ec8769c19ea2bc7ab56be0d2ff9caf"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/native_01/manifest.json",
+      "bytes": 463328,
+      "sha256": "a825cea09dcc0af50257b1f04072849e2797d51b5abe512a6e776142d43485b4"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/native_01/native_ui.engine.log",
+      "bytes": 2090,
+      "sha256": "0febcd5e2a53ba9755ce8cf9134f571742dbc9385787f1d76bb6bbd78777b206"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/native_01/native_ui.output.log",
+      "bytes": 2120,
+      "sha256": "96696d11709ab026d0e235255c0217eb2016289646e9f0c43804e3bd61bb71d3"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/native_01/runs.json",
+      "bytes": 2922,
+      "sha256": "cdf84fe964464091c0a9ae4de0059318b593d3f3c2f3f192b0c8614489fc59a6"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/samples/map.json",
+      "bytes": 2912,
+      "sha256": "2789f428521f29e28ee4b8788c844e127e2d79146749bdb6f91c94b9e8c86a29"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/samples/map.rpx",
+      "bytes": 9071,
+      "sha256": "b370e06b7a26bc65cda55fbc7aa27e7530c927ad9231f475717b0cbc1e23f8b2"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/samples/map_proposal.rpx",
+      "bytes": 9063,
+      "sha256": "bf006379ea7075713c9c5079bd4642c2d1744a2c0f1927a27ee815b545a3fa79"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/skills_validation.json",
+      "bytes": 629,
+      "sha256": "62ab69f208e71ec3cf4ed2cf92cf54433a1aed410e2a92517fba94b3db4d69bd"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/author/verify_list.txt",
+      "bytes": 37521,
+      "sha256": "4f5454c58d762be98f4c7f969085b272e9e74d7ab0e22a1ae848012a490504d9"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna.md",
+      "bytes": 3680,
+      "sha256": "c166030d9b7abbe4a4eddd958e7f17956a0e2e42eb10a8e6aef58547fa9370bb"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/cli_a.engine.log",
+      "bytes": 2508,
+      "sha256": "f28d893cbe23447b91ea110e810340ce342f359590bcc44b07cf4b527599efe2"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/cli_a.output.log",
+      "bytes": 2511,
+      "sha256": "7bf8dffef26180b19653988a82d6e75c0ad7b4dc641fe9d1bd337d7dc45931df"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/cli_b.engine.log",
+      "bytes": 2508,
+      "sha256": "f28d893cbe23447b91ea110e810340ce342f359590bcc44b07cf4b527599efe2"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/cli_b.output.log",
+      "bytes": 2511,
+      "sha256": "7bf8dffef26180b19653988a82d6e75c0ad7b4dc641fe9d1bd337d7dc45931df"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/cli_export.engine.log",
+      "bytes": 196,
+      "sha256": "ddb48b2472618bd4a54e728a6be8451a2c26224d4ca6317338261375ae9f5510"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/cli_export.output.log",
+      "bytes": 199,
+      "sha256": "90001694a438a61716700a3767e068a009f55fedf495f7581451f8ba9a57e123"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/cli_invalid_export.engine.log",
+      "bytes": 262,
+      "sha256": "a90a98df56dc2032f24c7e3f2c2b86f3501298826a468df2d8388e314eacdcd4"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/cli_invalid_export.output.log",
+      "bytes": 265,
+      "sha256": "01ef864cc9a9a86ae839a07da8fc5b97d59a52c053215937439be22f17027675"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/cli_invalid_propose.engine.log",
+      "bytes": 262,
+      "sha256": "a90a98df56dc2032f24c7e3f2c2b86f3501298826a468df2d8388e314eacdcd4"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/cli_invalid_propose.output.log",
+      "bytes": 265,
+      "sha256": "01ef864cc9a9a86ae839a07da8fc5b97d59a52c053215937439be22f17027675"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/cli_invalid_review.engine.log",
+      "bytes": 262,
+      "sha256": "a90a98df56dc2032f24c7e3f2c2b86f3501298826a468df2d8388e314eacdcd4"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/cli_invalid_review.output.log",
+      "bytes": 265,
+      "sha256": "01ef864cc9a9a86ae839a07da8fc5b97d59a52c053215937439be22f17027675"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/cli_propose.engine.log",
+      "bytes": 196,
+      "sha256": "1038848b57b7e0b860c63c58316a41c0664d2b3a8a39d039db4f03639981cc24"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/cli_propose.output.log",
+      "bytes": 199,
+      "sha256": "f3b404beabe1df3b79bda89759d5908ecc1a24209a29b9280ac9193f0e016979"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/exchange.engine.log",
+      "bytes": 8284,
+      "sha256": "4f001353c644fe70adbef9977f04d2e4131da09c97888c318933dddeb54ed469"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/exchange.output.log",
+      "bytes": 8400,
+      "sha256": "1001864261e30b44e6c86b95afa2d46e7b837d39625d5764f11e838518c8b655"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/exchange.png",
+      "bytes": 200676,
+      "sha256": "1ae29a69cbcfa3da3e770a747428d4627296b778ff66ea729a4f87c552a059f3"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/import.engine.log",
+      "bytes": 1236,
+      "sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/import.output.log",
+      "bytes": 1626,
+      "sha256": "65266ecc51590d7e85010dab58e897ac1a8bd879079aa036bdfa5f18a05c9aa7"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/manifest.json",
+      "bytes": 484234,
+      "sha256": "f4cc5b19a98ed8b6710e80820ef875debca3d8f038ce321dbb0640ae454b2766"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/native_cli.engine.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/native_cli.output.log",
+      "bytes": 2515,
+      "sha256": "de3f8d15f332425a53513e335c5c0604cae671b909ea7191b9cb4c74f8c92be2"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/native_inputs/map.json",
+      "bytes": 2912,
+      "sha256": "2789f428521f29e28ee4b8788c844e127e2d79146749bdb6f91c94b9e8c86a29"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/native_inputs/native_7f0950fd.rpx",
+      "bytes": 9007,
+      "sha256": "f238811c4931022500a00f10d396ba8ee65da6753415a607e8b9957c824e7030"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/native_inputs/native_7f0950fd.rpx.proposal.rpx",
+      "bytes": 9001,
+      "sha256": "5cc8d78297a782e0585a2e62713f6ce75c953b82c46f3e1971a2b60a1185831c"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/native_ui.engine.log",
+      "bytes": 2932,
+      "sha256": "16849a11c15a5dabc734b9d3062f36eb987cce2bec3023c1ab5972de399dd1b3"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/native_ui.output.log",
+      "bytes": 2974,
+      "sha256": "9ca7da65d11c28e4e4688c0b8978a82d8c85a706c70c0daa0e731612550c718f"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/corrected/runs.json",
+      "bytes": 21265,
+      "sha256": "73ff80f8545f910d0834ba59a7965080dd8ab151cea3485bd962e49f4b81cbbf"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/exchange/cli_a.engine.log",
+      "bytes": 2508,
+      "sha256": "f28d893cbe23447b91ea110e810340ce342f359590bcc44b07cf4b527599efe2"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/exchange/cli_a.output.log",
+      "bytes": 2511,
+      "sha256": "7bf8dffef26180b19653988a82d6e75c0ad7b4dc641fe9d1bd337d7dc45931df"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/exchange/cli_b.engine.log",
+      "bytes": 2508,
+      "sha256": "f28d893cbe23447b91ea110e810340ce342f359590bcc44b07cf4b527599efe2"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/exchange/cli_b.output.log",
+      "bytes": 2511,
+      "sha256": "7bf8dffef26180b19653988a82d6e75c0ad7b4dc641fe9d1bd337d7dc45931df"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/exchange/exchange.engine.log",
+      "bytes": 8284,
+      "sha256": "4f001353c644fe70adbef9977f04d2e4131da09c97888c318933dddeb54ed469"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/exchange/exchange.output.log",
+      "bytes": 8400,
+      "sha256": "1001864261e30b44e6c86b95afa2d46e7b837d39625d5764f11e838518c8b655"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/exchange/exchange.png",
+      "bytes": 200676,
+      "sha256": "1ae29a69cbcfa3da3e770a747428d4627296b778ff66ea729a4f87c552a059f3"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/exchange/import.engine.log",
+      "bytes": 1236,
+      "sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/exchange/import.output.log",
+      "bytes": 1626,
+      "sha256": "65266ecc51590d7e85010dab58e897ac1a8bd879079aa036bdfa5f18a05c9aa7"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/exchange/manifest.json",
+      "bytes": 478761,
+      "sha256": "eb3ffbf941e23d03dff78fed2277f9aee1ab3fd9acfa61d4d4e4fdd9ad59f8b5"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/exchange/native_ui.engine.log",
+      "bytes": 2932,
+      "sha256": "16849a11c15a5dabc734b9d3062f36eb987cce2bec3023c1ab5972de399dd1b3"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/exchange/native_ui.output.log",
+      "bytes": 2974,
+      "sha256": "9ca7da65d11c28e4e4688c0b8978a82d8c85a706c70c0daa0e731612550c718f"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/exchange/runs.json",
+      "bytes": 16006,
+      "sha256": "41ce3a3c0f6e3aa4de9ba48bd8f2301cedc4538237fd3b4da2941bfb76904dc0"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/official/001.engine.log",
+      "bytes": 1236,
+      "sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/official/001.output.log",
+      "bytes": 1628,
+      "sha256": "25fca8a857a8124f4ce408cd0c0220024ce77463c49cfc70dbd6de33a5ef97f0"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/official/258-e07_f5_population_test.engine.log",
+      "bytes": 114,
+      "sha256": "254d6844b0e192e4a55d970f8e095b5678c0a624cbe02d33ec78cbefa06c4f2d"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/official/258-e07_f5_population_test.output.log",
+      "bytes": 119,
+      "sha256": "594087c5e4379bfe40e94245662ede8e2711513b7b919e9f8cd4f2de30d6b364"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/official/273-e07_f1_geometry_test.engine.log",
+      "bytes": 196,
+      "sha256": "9952dec095753e42eb9ea511e5457619daf54bbc708300170c5abd2b146e8106"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/official/273-e07_f1_geometry_test.output.log",
+      "bytes": 201,
+      "sha256": "71628c66e650c01aee64383e660745233cc8908c6c07ce436bd389457176de81"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/official/checks.jsonl",
+      "bytes": 2347,
+      "sha256": "9ca5d69c7e3951e815374a1e6c9887c53b347cc46ebd0822b8cb51e75bbd0710"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/m7/luna_run/official/plan.json",
+      "bytes": 1997,
+      "sha256": "9f6a4892a2060cfdc7ec41492d7c56a4a7bb0bfa43e32e7cda44ef7a578948a6"
+    }
+  ]
+}

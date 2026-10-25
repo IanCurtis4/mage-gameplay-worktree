@@ -1,0 +1,399 @@
+{
+	"bundle_hash": "5875c98cb08a64f5ce8491ce986a98f1e5cb3d8feafbf8bbcda21d6fa1e870db",
+	"exchange_version": 1,
+	"files": [
+		{
+			"data": {
+				"barrier_profile": "ruin_envelope_v1",
+				"document_id": "two_rooms",
+				"instances": [
+					{
+						"instance_id": "left",
+						"piece_hash": "e0c39a36dfa133a4db8c3ee1509f84346c4e5eff3f50948a1968eae0fba247dd",
+						"position_xyz": [
+							0,
+							0,
+							0
+						],
+						"rotation_quarters": 0
+					},
+					{
+						"instance_id": "right",
+						"piece_hash": "041850da2af6dd180ea723d93411b68933c75ece681d04ed34d62752ebc83e5a",
+						"position_xyz": [
+							100,
+							0,
+							0
+						],
+						"rotation_quarters": 0
+					}
+				],
+				"links": [
+					{
+						"a_connector": "east",
+						"a_instance": "left",
+						"b_connector": "west",
+						"b_instance": "right",
+						"link_id": "door"
+					}
+				],
+				"mode": "manual",
+				"name": "Duas peças · Ruína",
+				"pieces": [
+					{
+						"piece_hash": "e0c39a36dfa133a4db8c3ee1509f84346c4e5eff3f50948a1968eae0fba247dd",
+						"source": {
+							"composition": null,
+							"connectors": [
+								{
+									"connector_id": "east",
+									"direction": "both",
+									"headroom": 100,
+									"kind": "walk",
+									"normal_xyz": [
+										1,
+										0,
+										0
+									],
+									"position_xyz": [
+										100,
+										0,
+										50
+									],
+									"surface_id": "floor",
+									"tags": [
+										"ruin"
+									],
+									"width": 24
+								}
+							],
+							"dependencies": [],
+							"document_id": "room_left",
+							"layers": [
+								{
+									"columns": 2,
+									"heights": [
+										0,
+										0,
+										0,
+										0
+									],
+									"layer_id": "floor",
+									"locked": false,
+									"material_masks": {},
+									"name": "Chão",
+									"origin_xz": [
+										0,
+										0
+									],
+									"protected_regions": [],
+									"rows": 2,
+									"sample_spacing": 100
+								}
+							],
+							"name": "Peça sem título",
+							"placements": [],
+							"regions": [],
+							"revision": 1,
+							"schema_version": 1,
+							"sockets": [],
+							"special_surfaces": [],
+							"units": "e07_world"
+						}
+					},
+					{
+						"piece_hash": "041850da2af6dd180ea723d93411b68933c75ece681d04ed34d62752ebc83e5a",
+						"source": {
+							"composition": null,
+							"connectors": [
+								{
+									"connector_id": "west",
+									"direction": "both",
+									"headroom": 100,
+									"kind": "walk",
+									"normal_xyz": [
+										-1,
+										0,
+										0
+									],
+									"position_xyz": [
+										0,
+										0,
+										50
+									],
+									"surface_id": "floor",
+									"tags": [
+										"ruin"
+									],
+									"width": 24
+								}
+							],
+							"dependencies": [],
+							"document_id": "room_right",
+							"layers": [
+								{
+									"columns": 2,
+									"heights": [
+										0,
+										0,
+										0,
+										0
+									],
+									"layer_id": "floor",
+									"locked": false,
+									"material_masks": {},
+									"name": "Chão",
+									"origin_xz": [
+										0,
+										0
+									],
+									"protected_regions": [],
+									"rows": 2,
+									"sample_spacing": 100
+								}
+							],
+							"name": "Peça sem título",
+							"placements": [],
+							"regions": [],
+							"revision": 1,
+							"schema_version": 1,
+							"sockets": [],
+							"special_surfaces": [],
+							"units": "e07_world"
+						}
+					}
+				],
+				"revision": 1,
+				"schema_version": 1
+			},
+			"path": "source.json",
+			"sha256": "2f8d1a4cbe7b89cab8dba327e49dd2526a8a8ccb32445ded55463d7685f59520"
+		},
+		{
+			"data": {
+				"catalog_hash": "",
+				"code": "",
+				"compiled_hash": "30caeb622d2b052ec795b8eaa3ff0f91501ab2e23dc41cecb5250460c125b50c",
+				"compiler_revision": "map_composition_v1",
+				"dependencies": [
+					{
+						"definition_id": "grass_tile_png",
+						"path": "res://assets/art/map_authoring/grass_tile.png",
+						"revision": 1,
+						"sha256": "795bec1749232e2f6c79a90a1c02aea4b44016066e29728699f6bb6729c34171"
+					},
+					{
+						"definition_id": "earth_tile_png",
+						"path": "res://assets/art/map_authoring/earth_tile.png",
+						"revision": 1,
+						"sha256": "e0f2b0f1987a1a01ec02254c14320e45de942be458d15047b6c6f0bff507c9eb"
+					},
+					{
+						"definition_id": "terrain_material_gdshader",
+						"path": "res://scripts/map_authoring/terrain/terrain_material.gdshader",
+						"revision": 1,
+						"sha256": "4dff793d9f6339af72f2853652abcb8d09637a40fded3e61604795bcc6176404"
+					},
+					{
+						"definition_id": "grass_tile_png_import",
+						"path": "res://assets/art/map_authoring/grass_tile.png.import",
+						"revision": 1,
+						"sha256": "5a080026fe6e9c15a3039019ecb24607eaa4e76e00a4694b3563610d194df66b"
+					},
+					{
+						"definition_id": "earth_tile_png_import",
+						"path": "res://assets/art/map_authoring/earth_tile.png.import",
+						"revision": 1,
+						"sha256": "8a7fb5de02a0d061c99e6c88e875b8f5582eb83be134bb0941f6e4863c2bb117"
+					}
+				],
+				"ok": true,
+				"policy_hash": ""
+			},
+			"path": "report.json",
+			"sha256": "748eca7a222babaeeaa700dc7c263049e9795f55b9caaa2ec1342bedf5ca285d"
+		}
+	],
+	"revision": "map_exchange_v1",
+	"source_hash": "127fdd80c5a075c1ad3f77c0df796dff84210d81af50ec54d11698dc8edd69ee",
+	"ticket": {
+		"base": {
+			"barrier_profile": "ruin_envelope_v1",
+			"document_id": "two_rooms",
+			"instances": [
+				{
+					"instance_id": "left",
+					"piece_hash": "e0c39a36dfa133a4db8c3ee1509f84346c4e5eff3f50948a1968eae0fba247dd",
+					"position_xyz": [
+						0,
+						0,
+						0
+					],
+					"rotation_quarters": 0
+				},
+				{
+					"instance_id": "right",
+					"piece_hash": "041850da2af6dd180ea723d93411b68933c75ece681d04ed34d62752ebc83e5a",
+					"position_xyz": [
+						100,
+						0,
+						0
+					],
+					"rotation_quarters": 0
+				}
+			],
+			"links": [
+				{
+					"a_connector": "east",
+					"a_instance": "left",
+					"b_connector": "west",
+					"b_instance": "right",
+					"link_id": "door"
+				}
+			],
+			"mode": "manual",
+			"name": "Duas peças · Ruína",
+			"pieces": [
+				{
+					"piece_hash": "e0c39a36dfa133a4db8c3ee1509f84346c4e5eff3f50948a1968eae0fba247dd",
+					"source": {
+						"composition": null,
+						"connectors": [
+							{
+								"connector_id": "east",
+								"direction": "both",
+								"headroom": 100,
+								"kind": "walk",
+								"normal_xyz": [
+									1,
+									0,
+									0
+								],
+								"position_xyz": [
+									100,
+									0,
+									50
+								],
+								"surface_id": "floor",
+								"tags": [
+									"ruin"
+								],
+								"width": 24
+							}
+						],
+						"dependencies": [],
+						"document_id": "room_left",
+						"layers": [
+							{
+								"columns": 2,
+								"heights": [
+									0,
+									0,
+									0,
+									0
+								],
+								"layer_id": "floor",
+								"locked": false,
+								"material_masks": {},
+								"name": "Chão",
+								"origin_xz": [
+									0,
+									0
+								],
+								"protected_regions": [],
+								"rows": 2,
+								"sample_spacing": 100
+							}
+						],
+						"name": "Peça sem título",
+						"placements": [],
+						"regions": [],
+						"revision": 1,
+						"schema_version": 1,
+						"sockets": [],
+						"special_surfaces": [],
+						"units": "e07_world"
+					}
+				},
+				{
+					"piece_hash": "041850da2af6dd180ea723d93411b68933c75ece681d04ed34d62752ebc83e5a",
+					"source": {
+						"composition": null,
+						"connectors": [
+							{
+								"connector_id": "west",
+								"direction": "both",
+								"headroom": 100,
+								"kind": "walk",
+								"normal_xyz": [
+									-1,
+									0,
+									0
+								],
+								"position_xyz": [
+									0,
+									0,
+									50
+								],
+								"surface_id": "floor",
+								"tags": [
+									"ruin"
+								],
+								"width": 24
+							}
+						],
+						"dependencies": [],
+						"document_id": "room_right",
+						"layers": [
+							{
+								"columns": 2,
+								"heights": [
+									0,
+									0,
+									0,
+									0
+								],
+								"layer_id": "floor",
+								"locked": false,
+								"material_masks": {},
+								"name": "Chão",
+								"origin_xz": [
+									0,
+									0
+								],
+								"protected_regions": [],
+								"rows": 2,
+								"sample_spacing": 100
+							}
+						],
+						"name": "Peça sem título",
+						"placements": [],
+						"regions": [],
+						"revision": 1,
+						"schema_version": 1,
+						"sockets": [],
+						"special_surfaces": [],
+						"units": "e07_world"
+					}
+				}
+			],
+			"revision": 1,
+			"schema_version": 1
+		},
+		"base_hash": "127fdd80c5a075c1ad3f77c0df796dff84210d81af50ec54d11698dc8edd69ee",
+		"brief": "Renomear preservando geometria",
+		"compiler_revision": "map_composition_v1",
+		"corpus": [],
+		"exchange_version": 1,
+		"kind": "map",
+		"policy": {
+			"ids": [],
+			"max_changes": 256,
+			"protected_paths": [],
+			"sections": [
+				"name"
+			]
+		}
+	},
+	"ticket_hash": "d0e4c6959afb3733b3fc8607365a9021b855d6c796600410088740f71906c8d4"
+}
