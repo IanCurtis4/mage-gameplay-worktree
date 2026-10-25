@@ -1,0 +1,83 @@
+[
+  {
+    "ok": true,
+    "name": "import",
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "output_sha256": "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+    "exit_code": 0,
+    "aborted": false,
+    "timed_out": false,
+    "result": null,
+    "finished_utc": "2026-10-25T17:17:13.8749255Z",
+    "started_utc": "2026-10-25T17:17:05.4091480Z"
+  },
+  {
+    "ok": true,
+    "name": "export_release",
+    "arguments": [
+      "--headless",
+      "--export-release",
+      "Windows Desktop",
+      "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\m8_release\\RagRPG-Map-Candidate.exe"
+    ],
+    "output_sha256": "FC8D6E57CAA06DF6B59905D5D0BF3909A1F17729970028F2AE870A572D810B7A",
+    "exit_code": 0,
+    "aborted": false,
+    "timed_out": false,
+    "result": null,
+    "finished_utc": "2026-10-25T17:17:35.4677571Z",
+    "started_utc": "2026-10-25T17:17:13.9063853Z"
+  },
+  {
+    "ok": true,
+    "name": "release",
+    "arguments": [
+      "--",
+      "--m8-probe"
+    ],
+    "output_sha256": "42DDD43B835756A453477CB49CE6A0B2590D521CF21489F3D87E4E02845C47C7",
+    "exit_code": 0,
+    "aborted": false,
+    "timed_out": false,
+    "result": {
+      "checks": [
+        {
+          "id": "new_release_process",
+          "ok": true
+        },
+        {
+          "id": "immutable_package",
+          "ok": true
+        },
+        {
+          "id": "seven_real_actors",
+          "ok": true
+        },
+        {
+          "id": "patrol_bound",
+          "ok": true
+        },
+        {
+          "id": "traverse_0.0",
+          "ok": true
+        },
+        {
+          "id": "traverse_40.0",
+          "ok": true
+        }
+      ],
+      "count": 6,
+      "engine": "4.7.2-stable (official)",
+      "ok": true,
+      "package_hash": "2a80bdbcc5d2b70f3119e227d362c441389feb5d302e0047c4a2dc98cd9e9021",
+      "source_hash": "a208ac25d0ca039b22d1a7c7c4537ee4bf04f66ee0f747bfe07cd82fd9d07870"
+    },
+    "finished_utc": "2026-10-25T17:17:45.8548367Z",
+    "started_utc": "2026-10-25T17:17:35.4810751Z"
+  }
+]

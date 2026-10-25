@@ -1,0 +1,11 @@
+{
+  "prior_candidate": "b26830de07fe1ba3889be686f2b8d7b4a0e15469",
+  "candidate": "f90511be6aa65262f5b1943a1f518385963a4001",
+  "changed_inputs": [
+    "scripts/map_authoring/context/population_context.gd",
+    "tests/map_editor_candidate_test.gd",
+    "tools/map_editor_candidate/run.ps1"
+  ],
+  "expected_only": true,
+  "selection": "Context: candidate53 population91 patrol58 exchange113; Release6; Native49 reused unchanged presentation inputs."
+}

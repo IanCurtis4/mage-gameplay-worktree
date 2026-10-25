@@ -1,0 +1,8 @@
+{
+  "candidate": "f90511be6aa65262f5b1943a1f518385963a4001",
+  "source_inputs": 1845,
+  "source_mismatches_after_cleanup": [],
+  "references_ok": true,
+  "report_sha256": "382ea3bc88425de680d352f2ea4236ca351939d9d7e8ac52fe25a62175279401",
+  "package_sha256": "77f4efe9d83c56f97eff1d88b277131d33871883daba5821c4d91ef2e0e27f6f"
+}

@@ -1,6 +1,8 @@
 # Editor F8 / M8 — integração e autoria dual, revisão 1
 
-25/10/2026. EM_EXECUÇÃO. Autorização humana: “F7 acabou, podemos começar F8”,
+25/10/2026. CANDIDATO VALIDADO TECNICAMENTE; aceite humano pendente.
+Código final `f90511be6aa65262f5b1943a1f518385963a4001`.
+[Recibo e limitações](../delivery/m8.md). Autorização humana: “F7 acabou, podemos começar F8”,
 incluindo implementação de UX/AX e revisão das lacunas da autoria dual.
 Base completa `7af993f955a503e42fcffc9abebb158aa591d27b`; F0–F7 por ancestralidade.
 Branch `codex/map-editor-m8`; único worktree reutilizado:

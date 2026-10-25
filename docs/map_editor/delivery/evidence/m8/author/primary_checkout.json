@@ -1,5 +1,5 @@
 {
-  "note": "Only inspected; no source checkout branch, imports, export preset, documents or personal save written by F8.",
+  "note": "Initial inspection: no primary branch, imports, export preset or personal save changes by Sol.",
   "head": "fba777b3822356a10e7f6e050971e54ab1a9819b",
   "status": [
     " M assets/art/animations/animal_companion.png.import",
@@ -219,5 +219,6 @@
     " M export_presets.cfg",
     "?? docs/map_editor/"
   ],
-  "branch": "codex/playtest"
+  "branch": "codex/playtest",
+  "transient_report_correction": "Luna later created a new report on the primary by mistake, verified/copied it into the execution checkout and removed only that newly created untracked file. No pre-existing file overwritten."
 }

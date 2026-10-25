@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "count": 49,
+  "count": 67,
   "checks": [
     {
       "file": "docs/map_editor/README.md",
@@ -198,6 +198,11 @@
       "exists": true
     },
     {
+      "file": "docs/map_editor/contracts/m8_dispatch.md",
+      "target": "../delivery/m8.md",
+      "exists": true
+    },
+    {
       "file": "docs/map_editor/delivery/m8.md",
       "target": "../contracts/m8_dispatch.md",
       "exists": true
@@ -230,6 +235,91 @@
     {
       "file": "docs/map_editor/delivery/m8.md",
       "target": "evidence/m8/author/release_01/runs.json",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/luna/report.md",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/luna/candidate_retry01/runs.json",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/luna/candidate_retry01/manifest.json",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/luna/final_delta/runs.json",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/luna/rare_policy/runs.json",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/luna/rare_release/runs.json",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/luna/rare_release/release_manifest.json",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/author/compatible_evidence.json",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/author/sample_metrics.json",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/author/document_references.json",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/luna/final_delta/piece_ux.png",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/luna/final_delta/map_ux.png",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/luna/final_delta/map_ax.png",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/luna/rare_release/release.png",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/author/primary_checkout.json",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/author/cleanup.json",
+      "exists": true
+    },
+    {
+      "file": "docs/map_editor/delivery/m8.md",
+      "target": "evidence/m8/author/final_validation.json",
       "exists": true
     },
     {

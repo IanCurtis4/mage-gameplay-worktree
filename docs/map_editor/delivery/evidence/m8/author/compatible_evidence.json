@@ -1,0 +1,15 @@
+{
+  "base_commit": "be84558fa1c6041d4dd2d4f7911b5f3bd62ba2f4",
+  "candidate_commit": "b26830de07fe1ba3889be686f2b8d7b4a0e15469",
+  "base_input_count": 1845,
+  "candidate_input_count": 1845,
+  "changed_inputs": [
+    "addons/ragrpg_map_editor/presentation.gd",
+    "scripts/map_authoring/composition/map_panel.gd",
+    "tests/map_editor_candidate_ui_test.gd",
+    "tools/map_editor_candidate/run.ps1"
+  ],
+  "expected_ui_delta_only": true,
+  "semantic_gameplay_compiler_data_inputs_unchanged": true,
+  "evidence_scope": "Core52 + F1-F7 regression and official5 reused from Luna base; Native49 exercises the changed presentation and refusal path."
+}

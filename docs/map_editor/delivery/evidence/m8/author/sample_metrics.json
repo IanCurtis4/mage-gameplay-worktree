@@ -1,0 +1,22 @@
+{
+  "piece_count": 2,
+  "height_range": [
+    0,
+    40
+  ],
+  "horizontal_bounds": [
+    0,
+    0,
+    1600,
+    800
+  ],
+  "grid_quads": 7,
+  "special_surfaces": 1,
+  "package_bytes": 65584,
+  "source_file_bytes": {
+    "representative_map.json": 5442,
+    "representative_patrol.json": 12623,
+    "representative_population.json": 10880
+  },
+  "scope": "One representative sample, not a performance or scale benchmark."
+}
