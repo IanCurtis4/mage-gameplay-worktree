@@ -2,8 +2,9 @@
 
 > Situação posterior: a autorização de fechar F2 foi executada no
 > [contrato revisão2](m2_closure.md), com [recibo vigente](../delivery/m2_closure.md).
-> A definição de produto abaixo permanece; os estados pendentes descrevem a rodada
-> documental anterior ao realinhamento implementado, sem aceite visual humano.
+> A definição de produto abaixo permanece; os estados pendentes descrevem rodadas
+> anteriores. O [aceite visual posterior do F2](../delivery/m2_closure.md) encerra
+> seu escopo atual e autoriza seguir para F3, preservando as evoluções de terreno.
 
 24/10/2026, posterior à aprovação inicial de D4. Registra a explicação explícita
 do usuário neste chat e as quatro imagens anexadas, sem escolher implementação
@@ -105,6 +106,12 @@ de acabamento do sistema de terreno, a localizar no contrato do produtor antes
 da próxima entrega que prometa essa aparência. A imagem é referência conceitual
 anexada pelo usuário, sem afirmação sobre o pipeline interno do AoM e sem uso como
 asset de produção. Rodada documental: sem alteração de runtime ou repetição de gameplay.
+
+Confirmação humana posterior em24/10: aceite visual das demais partes e
+encerramento do F2, com passagem autorizada para F3. O retorno parcial descrito
+acima é histórico; agora há aceite visual explícito do escopo F2 apresentado.
+Suavização orgânica, mistura caminho/penhasco e faces não caminháveis permanecem
+requisitos futuros, sem serem convertidos em funcionalidades já entregues.
 
 ## Consequência para F2, D2 e D4
 

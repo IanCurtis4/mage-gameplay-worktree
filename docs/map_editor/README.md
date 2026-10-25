@@ -125,6 +125,9 @@ com aceite visual/de uso separado. Fechamento realinhado no candidato
 163c509de8a47f60523196aeaea76e9b08b3e471; [recibo vigente](delivery/m2_closure.md),
 [protótipo histórico](delivery/m2.md). A documentação vigente distingue peça,
 grade visual e suporte gerado, com textura e conexões editáveis.
-Estado: **F2 fechado tecnicamente / VALIDADA**, com263 checks próprios e quatro
-IDs oficiais por impacto aprovados. Aceite humano visual/de uso permanece separado.
-Sem atualização de playtest/master; não abre F3.
+Estado: **F2 encerrado com validação técnica e aceite visual explícito**, com263
+checks próprios e quatro IDs oficiais por impacto aprovados. Relevo orgânico,
+mistura caminho/penhasco e terreno não caminhável continuam registrados como
+evoluções pendentes; o aceite não os declara entregues.
+Sem atualização de playtest/master nesta rodada. O usuário autorizou seguir para
+**F3/M3: composição, emendas e teste jogável isolado**; [passagem](contracts/m3_preparation.md).

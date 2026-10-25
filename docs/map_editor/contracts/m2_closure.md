@@ -97,3 +97,8 @@ usuário em terrain_piece_semantics.md e no recibo m2_closure.md, com propriedad
 adicional de delivery/evidence/m2/product_references/05_aom_terrain.png e da entrada
 correspondente no manifesto de referências. Sem transferência de arquivos
 executáveis, produção de asset ou abertura de outro marco por esse registro.
+
+Confirmação humana posterior encerrou F2 com aceite visual e autorizou a sequência
+F3. Sol registra a decisão no recibo/índice e possui exclusivamente
+docs/map_editor/contracts/m3_preparation.md para a passagem documental. Isso não
+transfere arquivos executáveis de M2, cria chat ou registra integração em playtest.

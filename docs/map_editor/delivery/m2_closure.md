@@ -1,6 +1,6 @@
 # F2 / M2 — fechamento da fundação de terreno
 
-24/10/2026. **F2 FECHADO TECNICAMENTE / VALIDADA.** Autorização humana: “Faça o que
+24/10/2026. **F2 ENCERRADO / VALIDAÇÃO TÉCNICA E ACEITE VISUAL REGISTRADOS.** Autorização humana: “Faça o que
 tiver que ser feito agora, com a documentação nova em mente, para fechar F2”.
 Candidato executável `163c509de8a47f60523196aeaea76e9b08b3e471`, branch
 `codex/map-editor-m2`, checkout
@@ -165,8 +165,9 @@ de bake de7–8s. O teto defensivo65536 quadrados não é uma meta de fluidez.
 O candidato foi medido com uma peça de terreno sem população/props. Não prova
 desempenho de mapa final com simulação, composição ou objetos. Bundle/publicação,
 duas peças em F3 e encontro em F4 continuam em seus escopos e dependem da próxima
-autorização. Este fechamento não concede aceite humano visual/de uso, integração
-em playtest, merge/master, push ou abertura de F3. Checkout habitual e save pessoal
+autorização. O registro técnico original ainda não tinha aceite humano; a decisão
+posterior abaixo encerra F2 e autoriza seguir para F3. Integração em playtest,
+merge/master e push não foram executados. Checkout habitual e save pessoal
 permanecem fora da escrita desta entrega.
 
 Retomada pela skill ragrpg-resume: CLI de status e WORKFLOW_TOOLING.md ausentes
@@ -189,3 +190,29 @@ Essa evolução pertence ao terreno; sua atribuição a pacote será explícita,
 iniciar F3 por este comentário. Preservados o candidato testado, seus limites e
 as evidências. Esta atualização conferiu referências e bytes do anexo; gameplay
 não foi repetido, pois não houve alteração executável.
+
+## Aceite visual e encerramento humano —24/10/2026
+
+Confirmação explícita posterior: “Eu dei o aceite visual das outras partes,
+então acho que podemos fechar por aqui e seguirmos para F3 com a doc atualizada,
+certo?” Registra aceite visual do escopo apresentado e encerramento de F2,
+junto da validação técnica já concluída. Não se exige repetir essa confirmação.
+Não se afirma que houve teste manual de edição ou nova execução de gameplay.
+
+Permanecem como requisitos futuros explícitos o relevo orgânico/arredondado, a
+mistura gradual entre caminho e penhasco conforme AoM e o suporte a terreno não
+caminhável acima do limite atual. O aceite não os apaga nem declara o exemplo
+de planos como estética final do produto. Eles não bloqueiam o encerramento do
+escopo F2 aceito pelo usuário.
+
+F3/M3 está autorizado como próximo marco: composição de peças, emendas e teste
+jogável isolado, conforme a [passagem atualizada](../contracts/m3_preparation.md).
+O candidato de código continua163c509de8a47f60523196aeaea76e9b08b3e471;
+documentação anterior a este aceite em3176df962e4010d7b647069ef221ac1a0659f834.
+O executor F3 deve consumir também o commit deste registro. F2 permanece na
+worktree dedicada; este aceite não registra integração inexistente nem arquiva
+automaticamente o checkout/chat. Correções de F2 continuam rastreáveis aqui.
+
+Rodada de encerramento documental: conferidos referências, precedência e ausência
+de alteração executável. Evidência técnica reaproveitada; suíte de gameplay não
+repetida. Nenhuma alteração no checkout habitual ou save pessoal.
