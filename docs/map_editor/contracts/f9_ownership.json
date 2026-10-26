@@ -1719,7 +1719,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "ports foundation validated at e6fdf43; materials checkpoint awaiting frozen supervision",
+    "state": "materials foundation technically validated at ef88996651bc7783e51dc90cb63996de0b7399b1; fixture released",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
