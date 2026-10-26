@@ -1761,7 +1761,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "mixed terrain directed PASS; explicit bool fixed in historical terrain test and direct check-only parsed; Core/Verify retry pending",
+    "state": "scalar opening receiver fixed after population nil reproduction; Cliff61 author PASS; directed/Core/official supervision pending",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -1819,7 +1819,10 @@
       "docs/map_editor/delivery/evidence/f9/luna/cliffs/official",
       "docs/map_editor/delivery/evidence/f9/luna/cliffs/objects_retry01",
       "docs/map_editor/delivery/evidence/f9/luna/cliffs/core_retry01",
-      "docs/map_editor/delivery/evidence/f9/luna/cliffs/core_retry02"
+      "docs/map_editor/delivery/evidence/f9/luna/cliffs/core_retry02",
+      "docs/map_editor/delivery/evidence/f9/luna/cliffs/cliffs_retry01",
+      "docs/map_editor/delivery/evidence/f9/luna/cliffs/ports_retry01",
+      "docs/map_editor/delivery/evidence/f9/luna/cliffs/core_retry03"
     ]
   }
 }

@@ -6,6 +6,8 @@ const Map = preload("res://scripts/map_authoring/composition/map_document.gd")
 const MapCompiler = preload("res://scripts/map_authoring/composition/map_compiler.gd")
 const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 const Canonical = preload("res://scripts/core/expedition/generation/canonical.gd")
+const Population = preload("res://scripts/map_authoring/population/population_compiler.gd")
+const PopulationSource = preload("res://scripts/map_authoring/population/population_document.gd")
 const Objects = preload("res://scripts/map_authoring/objects/object_compiler.gd")
 const Materials = preload("res://scripts/map_authoring/terrain/terrain_material.gd")
 const Ops = preload("res://scripts/map_authoring/objects/object_operations.gd")
@@ -137,6 +139,27 @@ func run() -> void:
 	check("map_rehash_cannot_forge_transformed_mass",not MapCompiler.validate_package(rehash(malformed)))
 	malformed = composed.package.duplicate(true); malformed.render_instances[0].layers[0].heights[0] += 10
 	check("map_rehash_cannot_forge_render_cap",not MapCompiler.validate_package(rehash(malformed)))
+	var population := PopulationSource.empty("mixed_population"); population.map = [map]
+	population.entrance = [{"surface_id":composed.package.manifest.stages[0].surfaces[0].surface_id,"position_xyz":[250,0,50]}]
+	var prepared: Dictionary = Population.prepare(population)
+	check("population_families_exclude_cliff_visuals",prepared.ok and prepared.families.size() == 1 and not prepared.families.has("mixed/"))
+	var narrow := Map.sample(); var replacements := {}
+	for piece: Dictionary in narrow.pieces:
+		var old: String = piece.piece_hash
+		piece.source.layers[0].sample_spacing = 400
+		for port: Dictionary in piece.source.connectors:
+			port.position_xyz[0] *= 4; port.position_xyz[2] *= 4; port.width = 24
+		piece.piece_hash = Schema.semantic_hash(piece.source); replacements[old] = piece.piece_hash
+	for instance: Dictionary in narrow.instances:
+		instance.piece_hash = replacements[instance.piece_hash]
+		if instance.instance_id == "right": instance.position_xyz = [400,0,0]
+	var narrow_built := MapCompiler.compile(narrow)
+	check("width24_on_edge400_receives_own_package",narrow_built.ok and MapCompiler.validate_package(narrow_built.package))
+	population = PopulationSource.empty("narrow_population"); population.map = [narrow]
+	population.entrance = [{"surface_id":narrow_built.package.manifest.stages[0].surfaces[0].surface_id,"position_xyz":[64,0,200]}]
+	population.interactions = [{"interaction_id":"finish","kind":"phase_completion","surface_id":narrow_built.package.manifest.stages[0].surfaces[1].surface_id,"position_xyz":[600,0,200],"target_id":""}]
+	prepared = Population.prepare(population)
+	check("real_population_body_rejects_width24_without_crash",not prepared.ok and prepared.code == "interaction_invalid")
 	finish()
 func finish() -> void:
 	var ok := not checks.is_empty() and checks.all(func(item: Dictionary) -> bool: return item.ok)

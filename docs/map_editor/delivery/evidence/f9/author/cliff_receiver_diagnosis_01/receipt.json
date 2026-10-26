@@ -1,0 +1,23 @@
+{
+  "head": "d788a3160a9e8594aa1f4fbbcba7ea929e68504a",
+  "role": "author_diagnostic",
+  "case": "width24 on edge400",
+  "observed_endpoints": [
+    188,
+    212
+  ],
+  "closest_point_error": 1.525878906e-05,
+  "geometric_epsilon": 1e-05,
+  "before": {
+    "compile": true,
+    "package_valid": false,
+    "logical_metadata_valid": true,
+    "terrain_geometry_valid": true,
+    "terrain_ports_valid": false
+  },
+  "evidence_sha256": {
+    "before.errors.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "before.output.log": "d79eeeb34179ad8168676bddf1d9f1d178c9f9176f29c871aeeb097e57200561",
+    "repro.gd": "90448f8974534f07d9d7c916d943eca515c245585e970057069cd62632be55f5"
+  }
+}

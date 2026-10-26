@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+REPRO closest_point_roundoff 0.0
+REPRO compile true
+REPRO package false logical true terrain false
+REPRO opening false bounds [(400.0, 0.0), (400.0, 400.0)] ends [(400.0, 188.0), (400.0, 212.0)] errors [0.0, 0.00001525878906]
+REPRO local left geometry true ports false
+REPRO opening false bounds [(0.0, 400.0), (0.0, 0.0)] ends [(0.0, 212.0), (0.0, 188.0)] errors [0.0, 0.00001525878906]
+REPRO local right geometry true ports false

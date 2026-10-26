@@ -33,6 +33,7 @@ func close() -> void:
 	if _thread != null: cancel(); _thread.wait_to_finish(); _thread = null
 static func fail(code: String, id: String = "", counts: Dictionary = {}, location: Vector3 = Vector3.ZERO) -> Dictionary:
 	var messages := {"population_empty":"Importe uma composição e marque a entrada.","entrance_invalid":"A entrada não tem suporte ou folga para o jogador.","species_invalid":"Espécie, categoria ou origem não permitida no catálogo.","policy_unresolved":"A origem não tem política de recompensa publicada.","population_unreachable":"O corpo real não cabe aqui ou não alcança a entrada e o retorno.","population_excluded":"O slot invade uma exclusão, entrada, abertura ou interação.","population_overlap":"Dois corpos não respeitam o espaçamento solicitado.","population_deficit":"Não há espaço para a quota solicitada.","fixed_excess":"Há mais slots fixados que a quota; ajuste explicitamente.","plan_stale":"Prepare e aplique uma nova prévia após alterar a receita.","slot_invalid":"O slot não pertence à receita ou está fora da região.","thematic_site_required":"Memoráveis exigem um palco temático explícito e acessível.","interaction_invalid":"Interação sem destino válido, suporte ou rota de ida e volta.","population_limit":"O encontro excede o orçamento técnico.","cancelled":"Operação cancelada.","stale_source":"A fonte mudou; compile novamente."}
+	messages["map_package_invalid"] = "O pacote do mapa foi recusado. Recompile a composição antes de preparar encontros."
 	var message: String = messages.get(code,"Revise os dados do encontro: "+code)
 	if not counts.is_empty(): message += " Solicitados: %d; realizados: %d; déficit: %d."%[counts.requested,counts.realized,maxi(0,counts.requested-counts.realized)]
 	return {"ok":false,"code":code,"diagnostics":[{"code":code,"entity_id":id,"field":"population","surface_id":"","location":location,"severity":"error","message":message,"counts":counts,"suggestion":"Selecione o marcador e ajuste a fonte."}]}
@@ -64,7 +65,9 @@ static func prepare(source: Dictionary, cancel: Callable = Callable()) -> Dictio
 	if not built.ok: return built
 	var loaded := Catalog.load_current()
 	if not loaded.ok: return loaded
-	var manifest := MapCompiler.manifest(built.package); var stage: Dictionary = manifest._data.stages[0]
+	var manifest := MapCompiler.manifest(built.package)
+	if manifest == null: return fail("map_package_invalid")
+	var stage: Dictionary = manifest._data.stages[0]
 	manifest._data.input["traversal"] = PROFILE.duplicate(true); manifest._data.traversal = PROFILE.duplicate(true); manifest._data.input["entry_stage_id"] = "map_preview"
 	stage.entrance = "authored_entry"; stage.sockets.append({"socket_id":"authored_entry","kind":"entrance","tags":[],"surface_id":source.entrance[0].surface_id,"position":vector(source.entrance[0].position_xyz)})
 	var world := WorldGeometry.new(); var configured := world.configure(manifest,"map_preview")
@@ -98,6 +101,7 @@ static func prepare(source: Dictionary, cancel: Callable = Callable()) -> Dictio
 	var families: Dictionary = {}; var family_cells: Dictionary = {}
 	for instance: Dictionary in built.package.render_instances:
 		for visual: Dictionary in instance.visuals:
+			if not visual.walkable: continue
 			families[instance.instance_id+"/"+visual.surface_id] = instance.instance_id+("/special/" if visual.special else "/layer/")+visual.source_id
 	for cell: Dictionary in _sorted(stage.surfaces,"surface_id"):
 		var family: String = families.get(cell.surface_id,cell.surface_id)

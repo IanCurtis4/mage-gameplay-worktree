@@ -325,11 +325,21 @@ static func _on_segment(point: Vector3, a: Vector3, b: Vector3) -> bool:
 	return Geometry3D.get_closest_point_to_segment(point,a,b).distance_to(point) < EPS
 
 static func _opening_fits(endpoint: Dictionary, boundary: Dictionary) -> bool:
-	var tangent: Vector3 = Vector3(-endpoint.outward.z,0,endpoint.outward.x)*endpoint.width*0.5
-	# Project endpoints onto the same sloping edge rather than flattening their y.
-	var a := Vector2(boundary.a.x,boundary.a.z); var b := Vector2(boundary.b.x,boundary.b.z)
-	var p := Vector2(endpoint.position.x,endpoint.position.z)
-	return Geometry2D.get_closest_point_to_segment(p+Vector2(tangent.x,tangent.z),a,b).distance_to(p+Vector2(tangent.x,tangent.z)) < EPS and Geometry2D.get_closest_point_to_segment(p-Vector2(tangent.x,tangent.z),a,b).distance_to(p-Vector2(tangent.x,tangent.z)) < EPS
+	# A Vector2 closest-point interpolation rounds an exact212 on a400-unit
+	# edge to211.9999847. Use scalar geometry with the existing projected
+	# coordinate budget. The geometric EPS and opening width stay unchanged.
+	var a: Vector3 = boundary.a; var b: Vector3 = boundary.b
+	var dx := float(b.x)-float(a.x); var dz := float(b.z)-float(a.z); var length := sqrt(dx*dx+dz*dz)
+	if length <= EPS: return false
+	var ax := dx/length; var az := dz/length; var nx := -az; var nz := ax
+	for offset: float in [-float(endpoint.width)*0.5,float(endpoint.width)*0.5]:
+		var point := Ports._horizontal(endpoint,offset)
+		var px := float(point.x)-float(a.x); var pz := float(point.z)-float(a.z)
+		if absf(px*nx+pz*nz) > EPS+Kernel.horizontal_roundoff(nx,nz,point)+Kernel.horizontal_roundoff(nx,nz,a): return false
+		var at := px*ax+pz*az
+		if at < -EPS-Kernel.horizontal_roundoff(ax,az,point)-Kernel.horizontal_roundoff(ax,az,a): return false
+		if at > length+EPS+Kernel.horizontal_roundoff(ax,az,point)+Kernel.horizontal_roundoff(ax,az,b): return false
+	return true
 
 static func _face(visual: Dictionary) -> Dictionary:
 	var face := {}
