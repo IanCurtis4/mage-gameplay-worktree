@@ -115,7 +115,7 @@ func _run() -> void:
 	# F9 explicitly accepts mixed relief. Keep steep faces as unbound masses;
 	# do not raise the walking limit or quietly discard the peak.
 	var mixed_peak := Compiler.compile(invalid)
-	var walking_only := mixed_peak.ok
+	var walking_only: bool = mixed_peak.ok
 	if mixed_peak.ok:
 		for cell: Dictionary in mixed_peak.package.part.surfaces:
 			var v: Array = cell.vertices
