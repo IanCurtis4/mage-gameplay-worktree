@@ -42,7 +42,7 @@ func run() -> void:
 	check("compile_objects",compiled.ok and compiled.package.objects.size() == 3)
 	if not compiled.ok: print(compiled); finish(); return
 	check("only_two_body_envelopes",compiled.package.part.solid_volumes.size() == 2)
-	check("catalog_and_sprite_dependencies",compiled.package.dependencies.size() == 12)
+	check("catalog_and_sprite_dependencies",expected_asset_set(compiled.package.dependencies))
 	check("package_integrity",Terrain.validate_package(compiled.package))
 	var legacy_keys: Dictionary = compiled.package.duplicate(true)
 	var old_hash: String = legacy_keys.package_hash; legacy_keys.erase("package_hash"); legacy_keys[&"package_hash"] = old_hash
@@ -135,6 +135,23 @@ func run() -> void:
 	var bundle := Exchange.export_bundle("piece",source,Exchange.policy(["name"]),"Objetos F9")
 	check("bundle_preserves_objects",bundle.ok and Exchange.validate_bundle(bundle.bundle).ok and bundle.bundle.ticket.base.placements == source.placements)
 	finish()
+
+static func expected_asset_set(dependencies: Array) -> bool:
+	# Independent inventory: four material images/imports, one shader, one prop
+	# catalog and the three placed sprite images/imports. Reject duplicates/extras.
+	var expected: Array[String] = ["res://scripts/map_authoring/terrain/terrain_material.gdshader","res://data/map_authoring/prop_catalog.json"]
+	for name: String in ["grass_tile","earth_tile","sand_tile","cliff_tile"]:
+		var path := "res://assets/art/map_authoring/"+name+".png"
+		expected.append(path); expected.append(path+".import")
+	for name: String in ["oak_tree","moss_boulder","woodland_shrub"]:
+		var path := "res://assets/art/map_authoring/props/"+name+".png"
+		expected.append(path); expected.append(path+".import")
+	if dependencies.size() != 16 or expected.size() != 16: return false
+	var actual := {}
+	for item: Dictionary in dependencies:
+		if item.path not in expected or actual.has(item.path) or FileAccess.get_sha256(item.path) != item.sha256: return false
+		actual[item.path] = true
+	return actual.size() == expected.size()
 
 static func fixture() -> Dictionary:
 	var source := Piece.empty("objects_fixture")
