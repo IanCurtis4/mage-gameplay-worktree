@@ -9,7 +9,8 @@ const Materials = preload("res://scripts/map_authoring/terrain/terrain_material.
 const SolidPrism = preload("res://scripts/core/expedition/spatial/world_solid_prism.gd")
 const Objects = preload("res://scripts/map_authoring/objects/object_compiler.gd")
 const Ports = preload("res://scripts/core/expedition/generation/connector_partition.gd")
-const REVISION := "map_terrain_v4"
+const Topology = preload("res://scripts/map_authoring/compiler/terrain_topology.gd")
+const REVISION := "map_terrain_v5"
 const MAX_SUPPORTS := 1024
 const MAX_GRID_QUADS := 65536
 const PROFILE := {"radius":2.0,"height":12.0,"connector_kinds":["walk"]}
@@ -84,7 +85,107 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 	if not read.ok: return read
 	if not read.valid: return failure("source_invalid")
 	if source.composition != null: return failure("capability_unsupported", "composition")
-	var cells: Array = []; var visuals: Array = []; var slabs: Array = []; var edges: Array = []
+	var generated := _collect_geometry(source,cancellation)
+	if not generated.ok: return generated
+	var candidates: Array = generated.candidates; var visuals: Array = generated.visuals; var slabs: Array = generated.slabs; var cells: Array = []
+	var layers: Array = generated.layers; var grid_quads: int = generated.grid_quads; var material_dependencies: Array = generated.material_dependencies
+	if candidates.is_empty(): return failure("terrain_empty")
+	if candidates.size() > MAX_SUPPORTS: return failure("terrain_limit_exceeded")
+	var faces: Array = []; var origins := {}
+	for i: int in candidates.size():
+		if cancellation.is_valid() and cancellation.call(0.4+0.3*float(i)/candidates.size()): return failure("cancelled")
+		var cell: Dictionary = candidates[i]; var visual: Dictionary = visuals[i]
+		if not Kernel.valid_cell(cell): return failure("geometry_invalid",cell.surface_id)
+		for vertex: Vector3 in cell.vertices:
+			if not vertex.is_finite() or maxf(absf(vertex.x),maxf(absf(vertex.y),absf(vertex.z))) > 8192: return failure("geometry_precision_limit",cell.surface_id)
+		for j: int in i:
+			# Generated regions of one height grid have disjoint interiors by construction.
+			if visual.source_id != visuals[j].source_id and Kernel.cells_overlap(cell,candidates[j]): return failure("geometry_overlap",cell.surface_id)
+		var walkable: bool = visual.walkable
+		faces.append(_face(visual))
+		if not walkable: continue
+		if cell.headroom < PROFILE.height: return failure("insufficient_headroom",cell.surface_id)
+		for slab: AABB in slabs:
+			var polygon := PackedVector2Array()
+			for vertex: Vector3 in cell.vertices: polygon.append(Vector2(vertex.x,vertex.z))
+			var rectangle := PackedVector2Array([Vector2(slab.position.x,slab.position.z),Vector2(slab.end.x,slab.position.z),Vector2(slab.end.x,slab.end.z),Vector2(slab.position.x,slab.end.z)])
+			for intersection: PackedVector2Array in Geometry2D.intersect_polygons(polygon,rectangle):
+				for horizontal: Vector2 in intersection:
+					var y := Kernel.support_y(cell,Vector3(horizontal.x,0,horizontal.y)).y
+					if y < slab.end.y-EPS and slab.position.y-y < PROFILE.height-EPS: return failure("insufficient_headroom",cell.surface_id)
+		cells.append(cell); origins[cell.surface_id] = visual.source_id
+	if cells.is_empty(): return failure("slope_too_steep",candidates[0].surface_id)
+	var topology := Topology.build(faces,func() -> bool: return cancellation.is_valid() and cancellation.call(0.8))
+	if not topology.ok: return failure(topology.code,topology.get("entity_id",""))
+	var connectors: Array = topology.connectors; var adjacency: Array = topology.adjacency; var boundaries: Array = topology.boundaries
+	var authored_ports: Array = []; var connector_groups: Array = []
+	var authored_connectors: Array = source.connectors.duplicate(true)
+	authored_connectors.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.connector_id < b.connector_id)
+	for authored: Dictionary in authored_connectors:
+		var built_port := _compile_authored_port(authored,boundaries,cells)
+		if not built_port.ok: return built_port
+		for fragment: Dictionary in built_port.authored_port.fragments:
+			for boundary: Dictionary in boundaries:
+				if boundary.span_id != fragment.span_id: continue
+				for prior: Dictionary in connectors:
+					if prior.connector_id not in boundary.openings: continue
+					var incoming: Dictionary = _port_endpoint(built_port.endpoints,fragment.connector_id)
+					var axis := Vector2(-incoming.outward.z,incoming.outward.x)
+					var separation := absf((float(prior.position.x)-float(incoming.position.x))*float(axis.x)+(float(prior.position.z)-float(incoming.position.z))*float(axis.y))
+					if separation < (float(prior.width)+float(incoming.width))*0.5: return failure("connector_ambiguous",authored.connector_id)
+				boundary.openings.append(fragment.connector_id); boundary.kind = "opening"
+		connectors.append_array(built_port.endpoints); authored_ports.append(built_port.authored_port); connector_groups.append(built_port.group)
+	var sockets: Array = []
+	for authored: Dictionary in source.sockets:
+		if authored.kind not in ["entrance","exit","objective","thematic_encounter","population","portal"]: return failure("socket_invalid",authored.socket_id)
+		var position := Vector3(authored.position_xyz[0],authored.position_xyz[1],authored.position_xyz[2])
+		var matches: Array = []
+		for i: int in cells.size():
+			if origins[cells[i].surface_id] == authored.surface_id and Kernel.contains(cells[i],position): matches.append(cells[i])
+		if matches.is_empty(): return failure("socket_invalid",authored.socket_id)
+		sockets.append({"socket_id":"socket_"+authored.socket_id.sha256_text().substr(0,20),"surface_id":matches[0].surface_id,"position":position,"kind":authored.kind,"tags":[]})
+	# One authored piece must be connected for the declared technical body.
+	var reachable := {cells[0].surface_id:true}
+	var endpoints: Dictionary = {}
+	for endpoint: Dictionary in connectors: endpoints[endpoint.connector_id] = endpoint
+	var changed := true
+	while changed:
+		changed = false
+		for link: Dictionary in adjacency:
+			var a: Dictionary = endpoints[link.a_connector]; var b: Dictionary = endpoints[link.b_connector]
+			# Internal mesh fragments need not each fit the full disk: support is
+			# the connected local union. Consumers validate the actual body/path.
+			if minf(a.headroom,b.headroom) < PROFILE.height: continue
+			if reachable.has(a.surface_id) and not reachable.has(b.surface_id): reachable[b.surface_id] = true; changed = true
+			if reachable.has(b.surface_id) and not reachable.has(a.surface_id): reachable[a.surface_id] = true; changed = true
+	if reachable.size() != cells.size():
+		for cell: Dictionary in cells:
+			if not reachable.has(cell.surface_id): return failure("route_unreachable",cell.surface_id)
+	if cancellation.is_valid() and cancellation.call(1.0): return failure("cancelled")
+	var solid_prisms: Array = []
+	for visual: Dictionary in visuals: solid_prisms.append(_mass(visual))
+	var part := {"part_id":"piece_"+source.document_id.sha256_text().substr(0,20),"revision":int(source.revision),"biome_tags":["authored"],"allowed_rotations":[0],"surfaces":cells,"connectors":connectors,"sockets":sockets,"solid_volumes":[],"solid_prisms":solid_prisms,"blockers":[]}
+	if not connector_groups.is_empty(): part["connector_groups"] = connector_groups
+	var render_layers: Array = []
+	for layer: Dictionary in layers:
+		render_layers.append({"layer_id":layer.layer_id,"origin_xz":layer.origin_xz.duplicate(),"sample_spacing":float(layer.sample_spacing),"columns":int(layer.columns),"rows":int(layer.rows),"heights":layer.heights.duplicate(),"material_masks":layer.material_masks.duplicate(true)})
+	var package := {"format_version":5,"compiler_revision":REVISION,"source_hash":read.output_hash,"dependencies":material_dependencies,"part":part,"authored_ports":authored_ports,"adjacency":adjacency,"boundaries":boundaries,"visuals":visuals,"exposed_sides":topology.exposed_sides,"render_layers":render_layers,"profile":PROFILE.duplicate(true),"grid_quads":grid_quads,"piece_count":1}
+	package.package_hash = Canonical.digest(package)
+	if not source.placements.is_empty() or not source.dependencies.is_empty():
+		var compiled_objects := Objects.compile(source,package,preview_manifest(package))
+		if not compiled_objects.ok: return compiled_objects
+		package.erase("package_hash")
+		package["objects"] = compiled_objects.objects
+		package.part.solid_volumes.append_array(compiled_objects.volumes)
+		package.dependencies.append_array(compiled_objects.dependencies)
+		package.package_hash = Canonical.digest(package)
+	if var_to_bytes(package).size() > 4*1024*1024: return failure("terrain_limit_exceeded")
+	var result := Schema.result(true)
+	result.input_hash = read.output_hash; result.output_hash = package.package_hash; result.package = package
+	return result
+
+static func _collect_geometry(source: Dictionary, cancellation: Callable = Callable()) -> Dictionary:
+	var candidates: Array = []; var visuals: Array = []; var slabs: Array = []
 	var mass_bases: Dictionary = {}
 	var layers: Array = source.layers.duplicate(true)
 	layers.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.layer_id < b.layer_id)
@@ -109,171 +210,50 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 			var vertices: Array = [Partition.point(layer,x,z),Partition.point(layer,x+width,z),Partition.point(layer,x+width,z+height),Partition.point(layer,x,z+height)]
 			var id: String = "c_" + layer.layer_id.sha256_text().substr(0,16) + "_%d_%d_%d_%d" % [x,z,width,height]
 			if not patch.triangles:
-				_add_cell(cells,visuals,{"surface_id":id,"vertices":vertices,"headroom":100.0},layer,indices)
+				_add_cell(candidates,visuals,{"surface_id":id,"vertices":vertices,"headroom":100.0},layer,indices)
 			else:
 				for triangle: Array in [[0,1,2],[0,2,3]]:
 					var tri := {"surface_id":id+"_t%d"%triangle[1],"vertices":[vertices[triangle[0]],vertices[triangle[1]],vertices[triangle[2]]],"headroom":100.0}
-					_add_cell(cells,visuals,tri,layer,[indices[triangle[0]],indices[triangle[1]],indices[triangle[2]]])
-			if cells.size() > MAX_SUPPORTS: return failure("terrain_limit_exceeded",layer.layer_id)
+					_add_cell(candidates,visuals,tri,layer,[indices[triangle[0]],indices[triangle[1]],indices[triangle[2]]])
+			if candidates.size() > MAX_SUPPORTS: return failure("terrain_limit_exceeded",layer.layer_id)
 	var specials: Array = source.special_surfaces.duplicate(true)
 	specials.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.surface_id < b.surface_id)
 	for special: Dictionary in specials:
 		var vertices: Array = []
 		for xyz: Array in special.vertices_xyz: vertices.append(Vector3(xyz[0],xyz[1],xyz[2]))
 		var cell := {"surface_id":"s_"+special.surface_id.sha256_text().substr(0,20),"vertices":vertices,"headroom":float(special.headroom)}
-		cells.append(cell)
-		visuals.append({"surface_id":cell.surface_id,"source_id":special.surface_id,"vertices":vertices.duplicate(),"earth_weights":[],"special":true})
+		candidates.append(cell)
+		visuals.append({"surface_id":cell.surface_id,"source_id":special.surface_id,"vertices":vertices.duplicate(),"earth_weights":[],"material_weights":[],"special":true})
 		if vertices.size() == 4:
 			var box := AABB(vertices[0],Vector3.ZERO)
 			for vertex: Vector3 in vertices: box = box.expand(vertex)
 			if box.size.y < EPS and absf(box.size.x*box.size.z-_area(vertices)) < EPS:
 				slabs.append(AABB(box.position-Vector3(0,4,0),Vector3(box.size.x,4,box.size.z)))
-	if cells.is_empty(): return failure("terrain_empty")
-	if cells.size() > MAX_SUPPORTS: return failure("terrain_limit_exceeded")
-	for i: int in cells.size():
-		if cancellation.is_valid() and cancellation.call(0.4+0.3*float(i)/cells.size()): return failure("cancelled")
-		var cell: Dictionary = cells[i]
-		if not Kernel.valid_cell(cell): return failure("geometry_invalid",cell.surface_id)
-		if cell.headroom < PROFILE.height: return failure("insufficient_headroom",cell.surface_id)
-		var normal := Kernel.plane_normal(cell.vertices)
-		if absf(normal.y) < sqrt(0.5)-EPS: return failure("slope_too_steep",cell.surface_id)
-		for vertex: Vector3 in cell.vertices:
-			if not vertex.is_finite() or maxf(absf(vertex.x),maxf(absf(vertex.y),absf(vertex.z))) > 8192: return failure("geometry_precision_limit",cell.surface_id)
-		for j: int in i:
-			# Generated regions of the same height grid have disjoint interiors by construction.
-			if visuals[i].source_id == visuals[j].source_id: continue
-			if Kernel.cells_overlap(cell,cells[j]): return failure("geometry_overlap",cell.surface_id)
-		for slab: AABB in slabs:
-			var polygon := PackedVector2Array()
-			for vertex: Vector3 in cell.vertices: polygon.append(Vector2(vertex.x,vertex.z))
-			var rectangle := PackedVector2Array([Vector2(slab.position.x,slab.position.z),Vector2(slab.end.x,slab.position.z),Vector2(slab.end.x,slab.end.z),Vector2(slab.position.x,slab.end.z)])
-			for intersection: PackedVector2Array in Geometry2D.intersect_polygons(polygon,rectangle):
-				for horizontal: Vector2 in intersection:
-					var y := Kernel.support_y(cell,Vector3(horizontal.x,0,horizontal.y)).y
-					if y < slab.end.y-EPS and slab.position.y-y < PROFILE.height-EPS: return failure("insufficient_headroom",cell.surface_id)
-		var vertices: Array = cell.vertices
-		var sign_value := signf(Vector2(vertices[1].x-vertices[0].x,vertices[1].z-vertices[0].z).cross(Vector2(vertices[2].x-vertices[1].x,vertices[2].z-vertices[1].z)))
-		for k: int in vertices.size():
-			var a: Vector3 = vertices[k]; var b: Vector3 = vertices[(k+1)%vertices.size()]
-			var delta := b-a
-			edges.append({"a":a,"b":b,"surface_id":cell.surface_id,"edge_id":cell.surface_id+"_e%d"%k,"outward":Vector3(delta.z,0,-delta.x).normalized()*sign_value,"headroom":cell.headroom,"source_id":visuals[i].source_id})
-	# Split collinear edges at existing vertices, so a long edge joins two short ones.
-	var spans: Dictionary = {}
-	for i: int in edges.size():
-		if cancellation.is_valid() and cancellation.call(0.7+0.25*float(i)/edges.size()): return failure("cancelled")
-		var edge: Dictionary = edges[i]
-		var cuts: Array = [{"t":0.0,"point":edge.a},{"t":1.0,"point":edge.b}]
-		var delta: Vector3 = edge.b-edge.a
-		for other: Dictionary in edges:
-			for vertex: Vector3 in [other.a,other.b]:
-				var t := (vertex-Vector3(edge.a)).dot(delta)/delta.length_squared()
-				if t > 0.0 and t < 1.0 and vertex.distance_to(edge.a) > EPS and vertex.distance_to(edge.b) > EPS and (Vector3(edge.a)+delta*t).distance_to(vertex) <= EPS:
-					var exists := false
-					for cut: Dictionary in cuts:
-						if Vector3(cut.point).distance_to(vertex) <= EPS: exists = true; break
-					if not exists: cuts.append({"t":t,"point":vertex})
-		cuts.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.t < b.t)
-		for k: int in range(1,cuts.size()):
-			# Reuse exact source endpoints; re-interpolation can drift one float32 ULP.
-			var a: Vector3 = cuts[k-1].point; var b: Vector3 = cuts[k].point
-			var ends: Array = [Canonical.encode(a),Canonical.encode(b)]; ends.sort()
-			var key: String = "|".join(ends)
-			if not spans.has(key): spans[key] = []
-			var span := edge.duplicate(); span.a = a; span.b = b
-			span.span_id = edge.edge_id+"_"+key.sha256_text().substr(0,12)
-			spans[key].append(span)
-	var connectors: Array = []; var adjacency: Array = []; var boundaries: Array = []
-	var keys: Array = spans.keys(); keys.sort()
-	for key: String in keys:
-		var pair: Array = spans[key]
-		if pair.size() > 2: return failure("geometry_non_manifold")
-		if pair.size() == 2:
-			if Vector3(pair[0].outward).dot(pair[1].outward) > -1.0+EPS: return failure("geometry_invalid")
-			var ids: Array = []
-			for span: Dictionary in pair:
-				var id: String = "j_"+span.span_id
-				connectors.append(_endpoint(id,span)); ids.append(id)
-			adjacency.append({"connection_id":"join_"+key.sha256_text().substr(0,20),"a_connector":ids[0],"b_connector":ids[1],"forward":true,"backward":true})
-		else:
-			var span: Dictionary = pair[0]
-			boundaries.append({"span_id":span.span_id,"surface_id":span.surface_id,"source_id":span.source_id,"a":span.a,"b":span.b,"outward":span.outward,"kind":"support_edge","openings":[]})
-	var authored_ports: Array = []; var connector_groups: Array = []
-	var authored_connectors: Array = source.connectors.duplicate(true)
-	authored_connectors.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.connector_id < b.connector_id)
-	for authored: Dictionary in authored_connectors:
-		var built_port := _compile_authored_port(authored,boundaries,cells)
-		if not built_port.ok: return built_port
-		for fragment: Dictionary in built_port.authored_port.fragments:
-			for boundary: Dictionary in boundaries:
-				if boundary.span_id != fragment.span_id: continue
-				for prior: Dictionary in connectors:
-					if prior.connector_id not in boundary.openings: continue
-					var incoming: Dictionary = _port_endpoint(built_port.endpoints,fragment.connector_id)
-					var axis := Vector2(-incoming.outward.z,incoming.outward.x)
-					var separation := absf((float(prior.position.x)-float(incoming.position.x))*float(axis.x)+(float(prior.position.z)-float(incoming.position.z))*float(axis.y))
-					if separation < (float(prior.width)+float(incoming.width))*0.5: return failure("connector_ambiguous",authored.connector_id)
-				boundary.openings.append(fragment.connector_id); boundary.kind = "opening"
-		connectors.append_array(built_port.endpoints); authored_ports.append(built_port.authored_port); connector_groups.append(built_port.group)
-	var sockets: Array = []
-	for authored: Dictionary in source.sockets:
-		if authored.kind not in ["entrance","exit","objective","thematic_encounter","population","portal"]: return failure("socket_invalid",authored.socket_id)
-		var position := Vector3(authored.position_xyz[0],authored.position_xyz[1],authored.position_xyz[2])
-		var candidates: Array = []
-		for i: int in cells.size():
-			if visuals[i].source_id == authored.surface_id and Kernel.contains(cells[i],position): candidates.append(cells[i])
-		if candidates.is_empty(): return failure("socket_invalid",authored.socket_id)
-		sockets.append({"socket_id":"socket_"+authored.socket_id.sha256_text().substr(0,20),"surface_id":candidates[0].surface_id,"position":position,"kind":authored.kind,"tags":[]})
-	# One authored piece must be connected for the declared technical body.
-	var reachable := {cells[0].surface_id:true}
-	var endpoints: Dictionary = {}
-	for endpoint: Dictionary in connectors: endpoints[endpoint.connector_id] = endpoint
-	var changed := true
-	while changed:
-		changed = false
-		for link: Dictionary in adjacency:
-			var a: Dictionary = endpoints[link.a_connector]; var b: Dictionary = endpoints[link.b_connector]
-			# Internal mesh fragments need not each fit the full disk: support is
-			# the connected local union. Consumers validate the actual body/path.
-			if minf(a.headroom,b.headroom) < PROFILE.height: continue
-			if reachable.has(a.surface_id) and not reachable.has(b.surface_id): reachable[b.surface_id] = true; changed = true
-			if reachable.has(b.surface_id) and not reachable.has(a.surface_id): reachable[a.surface_id] = true; changed = true
-	if reachable.size() != cells.size():
-		for cell: Dictionary in cells:
-			if not reachable.has(cell.surface_id): return failure("route_unreachable",cell.surface_id)
-	if cancellation.is_valid() and cancellation.call(1.0): return failure("cancelled")
-	var solid_prisms: Array = []
-	for i: int in cells.size():
-		var cell: Dictionary = cells[i]; var visual: Dictionary = visuals[i]
-		var mass := {"volume_id":"terrain/"+str(cell.surface_id),"support_surface_id":cell.surface_id,"top":cell.vertices.duplicate()}
-		if visual.special: mass["thickness_y"] = 4.0
-		else: mass["bottom_y"] = mass_bases[visual.source_id]
-		if not SolidPrism.valid(mass): return failure("geometry_invalid",cell.surface_id)
-		solid_prisms.append(mass)
-	var part := {"part_id":"piece_"+source.document_id.sha256_text().substr(0,20),"revision":int(source.revision),"biome_tags":["authored"],"allowed_rotations":[0],"surfaces":cells,"connectors":connectors,"sockets":sockets,"solid_volumes":[],"solid_prisms":solid_prisms,"blockers":[]}
-	if not connector_groups.is_empty(): part["connector_groups"] = connector_groups
-	var render_layers: Array = []
-	for layer: Dictionary in layers:
-		render_layers.append({"layer_id":layer.layer_id,"origin_xz":layer.origin_xz.duplicate(),"sample_spacing":float(layer.sample_spacing),"columns":int(layer.columns),"rows":int(layer.rows),"heights":layer.heights.duplicate(),"material_masks":layer.material_masks.duplicate(true)})
-	var package := {"format_version":4,"compiler_revision":REVISION,"source_hash":read.output_hash,"dependencies":material_dependencies,"part":part,"authored_ports":authored_ports,"adjacency":adjacency,"boundaries":boundaries,"visuals":visuals,"render_layers":render_layers,"profile":PROFILE.duplicate(true),"grid_quads":grid_quads,"piece_count":1}
-	package.package_hash = Canonical.digest(package)
-	if not source.placements.is_empty() or not source.dependencies.is_empty():
-		var compiled_objects := Objects.compile(source,package,preview_manifest(package))
-		if not compiled_objects.ok: return compiled_objects
-		package.erase("package_hash")
-		package["objects"] = compiled_objects.objects
-		package.part.solid_volumes.append_array(compiled_objects.volumes)
-		package.dependencies.append_array(compiled_objects.dependencies)
-		package.package_hash = Canonical.digest(package)
-	var result := Schema.result(true)
-	result.input_hash = read.output_hash; result.output_hash = package.package_hash; result.package = package
-	return result
+	for i: int in candidates.size():
+		var cell: Dictionary = candidates[i]; var visual: Dictionary = visuals[i]
+		visual["face_id"] = cell.surface_id; visual["walkable"] = Topology.is_walkable(cell.vertices); visual["headroom"] = cell.headroom
+		visual.surface_id = cell.surface_id if visual.walkable else ""
+		if visual.special:
+			visual["thickness_y"] = 4.0
+			for _vertex: Vector3 in cell.vertices: visual.material_weights.append([0.0,0.0,0.0,1.0])
+		else: visual["bottom_y"] = mass_bases[visual.source_id]
+	return {"ok":true,"candidates":candidates,"visuals":visuals,"slabs":slabs,"layers":layers,"grid_quads":grid_quads,"material_dependencies":material_dependencies}
+
+static func preview_geometry(source: Dictionary) -> Dictionary:
+	var generated := _collect_geometry(source)
+	if not generated.ok: return generated
+	var faces: Array = []
+	for visual: Dictionary in generated.visuals: faces.append(_face(visual))
+	var topology := Topology.build(faces)
+	if not topology.ok: return topology
+	return {"ok":true,"visuals":generated.visuals,"exposed_sides":topology.exposed_sides}
 
 static func _add_cell(cells: Array, visuals: Array, cell: Dictionary, layer: Dictionary, indices: Array) -> void:
 	cells.append(cell)
-	var weights: Array = []
+	var weights: Array = []; var paints: Array = []
 	for index: int in indices:
-		weights.append(Materials.weights(layer,index)[1])
-	visuals.append({"surface_id":cell.surface_id,"source_id":layer.layer_id,"vertices":cell.vertices.duplicate(),"earth_weights":weights,"special":false})
+		var paint := Materials.weights(layer,index); weights.append(paint[1]); paints.append(paint)
+	visuals.append({"surface_id":cell.surface_id,"source_id":layer.layer_id,"vertices":cell.vertices.duplicate(),"earth_weights":weights,"material_weights":paints,"special":false})
 
 static func _port_endpoint(endpoints: Array, id: String) -> Dictionary:
 	for endpoint: Dictionary in endpoints:
@@ -295,7 +275,7 @@ static func _compile_authored_port(authored: Dictionary, boundaries: Array, cell
 	var tangent := Vector2(-normal.z,normal.x); var half := float(authored.width)*0.5
 	var pieces: Array = []
 	for boundary: Dictionary in boundaries:
-		if boundary.source_id != authored.surface_id or normal.dot(boundary.outward) < 1.0-EPS: continue
+		if boundary.closure != "profile" or boundary.source_id != authored.surface_id or normal.dot(boundary.outward) < 1.0-EPS: continue
 		var parameters: Array[float] = []; var collinear := true
 		for point: Vector3 in [boundary.a,boundary.b]:
 			var dx := float(point.x)-float(position.x); var dz := float(point.z)-float(position.z)
@@ -351,14 +331,92 @@ static func _opening_fits(endpoint: Dictionary, boundary: Dictionary) -> bool:
 	var p := Vector2(endpoint.position.x,endpoint.position.z)
 	return Geometry2D.get_closest_point_to_segment(p+Vector2(tangent.x,tangent.z),a,b).distance_to(p+Vector2(tangent.x,tangent.z)) < EPS and Geometry2D.get_closest_point_to_segment(p-Vector2(tangent.x,tangent.z),a,b).distance_to(p-Vector2(tangent.x,tangent.z)) < EPS
 
+static func _face(visual: Dictionary) -> Dictionary:
+	var face := {}
+	for field: String in Topology.FIELDS: face[field] = visual[field]
+	var base := "bottom_y" if visual.has("bottom_y") else "thickness_y"
+	face[base] = visual[base]
+	return face
+
+static func _mass(visual: Dictionary) -> Dictionary:
+	var result := {"volume_id":"terrain/"+str(visual.face_id),"support_surface_id":visual.surface_id,"top":visual.vertices.duplicate()}
+	var base := "bottom_y" if visual.has("bottom_y") else "thickness_y"
+	result[base] = visual[base]
+	return result
+
+static func _render_geometry_valid(package: Dictionary) -> bool:
+	if not package.get("render_layers") is Array or package.render_layers.size() > 4096: return false
+	var fields := Schema.FIELDS.layers.duplicate(); fields.erase("name"); fields.erase("locked"); fields.erase("protected_regions")
+	var errors: Array = []; var ids := {}; var quads := 0.0
+	for layer: Variant in package.render_layers:
+		Schema._shape(layer,fields,"render_layer",errors)
+		if not errors.is_empty() or layer.columns < 2 or layer.rows < 2 or layer.sample_spacing <= 0 or ids.has(layer.layer_id): return false
+		ids[layer.layer_id] = true
+		quads += (float(layer.columns)-1.0)*(float(layer.rows)-1.0)
+		if quads > MAX_GRID_QUADS or layer.heights.size() != int(layer.columns)*int(layer.rows): return false
+		for material: String in layer.material_masks:
+			if material not in Materials.IDS or layer.material_masks[material].size() != layer.heights.size(): return false
+			for weight: float in layer.material_masks[material]:
+				if weight < 0 or weight > 1: return false
+	if package.has("grid_quads") and package.grid_quads != quads: return false
+	var special: Array = []
+	for visual: Dictionary in package.visuals:
+		if not visual.special: continue
+		var xyz: Array = []
+		for point: Vector3 in visual.vertices: xyz.append([point.x,point.y,point.z])
+		special.append({"surface_id":visual.source_id,"vertices_xyz":xyz,"headroom":visual.headroom})
+	var generated := _collect_geometry({"layers":package.render_layers,"special_surfaces":special})
+	return generated.ok and Canonical.encode(generated.visuals) == Canonical.encode(package.visuals)
+
+static func _geometry_metadata_valid(package: Dictionary) -> bool:
+	if not package.get("visuals") is Array or package.visuals.is_empty() or package.visuals.size() > MAX_SUPPORTS or not package.get("exposed_sides") is Array or not package.get("boundaries") is Array or not package.get("adjacency") is Array: return false
+	if not package.part.get("surfaces") is Array or package.part.surfaces.is_empty() or not package.part.get("solid_prisms") is Array: return false
+	var faces: Array = []; var cells: Array = []; var masses: Array = []
+	for visual: Variant in package.visuals:
+		if not visual is Dictionary or visual.size() != 10 or not visual.has_all(["face_id","surface_id","source_id","vertices","earth_weights","material_weights","special","headroom","walkable"]): return false
+		if not visual.surface_id is String or not visual.has("bottom_y") and not visual.has("thickness_y"): return false
+		var face := _face(visual)
+		if not Topology.valid_face(face) or visual.surface_id != (visual.face_id if visual.walkable else ""): return false
+		for point: Vector3 in visual.vertices:
+			if maxf(absf(point.x),maxf(absf(point.y),absf(point.z))) > 8192: return false
+		if visual.walkable and visual.headroom < PROFILE.height: return false
+		if not visual.material_weights is Array or visual.material_weights.size() != visual.vertices.size() or not visual.earth_weights is Array: return false
+		if visual.earth_weights.size() != (0 if visual.special else visual.vertices.size()): return false
+		for k: int in visual.material_weights.size():
+			var weights: Variant = visual.material_weights[k]
+			if not weights is Array or weights.size() != 4: return false
+			var total := 0.0
+			for weight: Variant in weights:
+				if not (weight is int or weight is float) or not is_finite(float(weight)) or weight < 0 or weight > 1: return false
+				total += float(weight)
+			if absf(total-1.0) > 0.000000001: return false
+			if not visual.special and visual.earth_weights[k] != weights[1]: return false
+		faces.append(face); masses.append(_mass(visual))
+		if visual.walkable: cells.append({"surface_id":visual.face_id,"vertices":visual.vertices,"headroom":visual.headroom})
+	if Canonical.encode(cells) != Canonical.encode(package.part.surfaces) or Canonical.encode(masses) != Canonical.encode(package.part.solid_prisms): return false
+	if not _render_geometry_valid(package): return false
+	var rebuilt := Topology.build(faces)
+	if not rebuilt.ok or Canonical.encode(rebuilt.exposed_sides) != Canonical.encode(package.exposed_sides) or Canonical.encode(rebuilt.adjacency) != Canonical.encode(package.adjacency): return false
+	var endpoints := {}
+	for endpoint: Dictionary in package.part.connectors: endpoints[endpoint.connector_id] = endpoint
+	for endpoint: Dictionary in rebuilt.connectors:
+		if not endpoints.has(endpoint.connector_id) or Canonical.encode(endpoints[endpoint.connector_id]) != Canonical.encode(endpoint): return false
+	var closed: Array = package.boundaries.duplicate(true)
+	for boundary: Variant in closed:
+		if not boundary is Dictionary or not boundary.get("openings") is Array: return false
+		boundary.openings = []
+		boundary.kind = "support_edge" if boundary.get("closure") == "profile" else "cliff_edge"
+	return Canonical.encode(rebuilt.boundaries) == Canonical.encode(closed)
+
 static func validate_package(package: Dictionary) -> bool:
-	if package.get("compiler_revision") != REVISION or package.get("format_version") != 4 or not package.has("package_hash"): return false
+	if var_to_bytes(package).size() > 4*1024*1024: return false
+	if package.get("compiler_revision") != REVISION or package.get("format_version") != 5 or not package.has("package_hash"): return false
 	# Existing v2 producers may store textual keys as StringName via dot assignment.
 	# Keep the same bounded passive-value check used by the source preflight.
 	if not _valid_authoring_value(package) or (package.has("objects") and not Objects.validate_records(package.objects)): return false
 	if not package.get("profile") is Dictionary or package.profile != PROFILE or not package.get("part") is Dictionary or not Ports.validate_groups(package.part).ok: return false
 	if not WorldGeometry._stage_prisms_valid({"surfaces":package.part.surfaces,"solid_prisms":package.part.get("solid_prisms",[])}): return false
-	if not _ports_metadata_valid(package): return false
+	if not _geometry_metadata_valid(package) or not _ports_metadata_valid(package): return false
 	var content := package.duplicate(true); content.erase("package_hash")
 	return Canonical.digest(content) == package.package_hash and Objects.validate_dependencies(package.get("dependencies",[]),Materials.dependencies())
 
@@ -372,20 +430,16 @@ static func _ports_metadata_valid(package: Dictionary) -> bool:
 	for endpoint: Dictionary in part.connectors:
 		if not Ports._physical(endpoint,part.surfaces).ok: return false
 		endpoints[endpoint.connector_id] = endpoint
-	for visual: Variant in package.visuals:
-		if not visual is Dictionary or not visual.get("surface_id") is String or not cells.has(visual.surface_id) or origins.has(visual.surface_id) or not visual.get("source_id") is String or visual.get("vertices") != cells[visual.surface_id].vertices: return false
-		origins[visual.surface_id] = visual.source_id
+	for visual: Dictionary in package.visuals:
+		if visual.walkable: origins[visual.surface_id] = visual.source_id
 	if origins.size() != cells.size(): return false
 	for boundary: Variant in package.boundaries:
-		if not boundary is Dictionary or not Ports._shape(boundary,["span_id","surface_id","source_id","a","b","outward","kind","openings"]): return false
-		if not Ports._text(boundary.span_id) or spans.has(boundary.span_id) or not boundary.surface_id is String or not cells.has(boundary.surface_id) or boundary.source_id != origins[boundary.surface_id] or not boundary.openings is Array or boundary.kind != ("support_edge" if boundary.openings.is_empty() else "opening"): return false
-		for point: Variant in [boundary.a,boundary.b,boundary.outward]:
-			if not point is Vector3 or not point.is_finite(): return false
-		var cell: Dictionary = cells[boundary.surface_id]
-		var width := Vector2(boundary.b.x-boundary.a.x,boundary.b.z-boundary.a.z).length()
-		if width <= EPS or not Kernel.contains(cell,boundary.a) or not Kernel.contains(cell,boundary.b): return false
-		var edge_port := {"connector_id":boundary.span_id,"surface_id":boundary.surface_id,"position":Kernel.support_y(cell,(boundary.a+boundary.b)*0.5),"outward":boundary.outward,"width":width,"headroom":cell.headroom,"kind":"walk","tags":["boundary"],"direction":"both"}
-		if not Ports._physical(edge_port,part.surfaces).ok: return false
+		# Exact geometry, closure and side ownership were checked by the topology receiver.
+		if spans.has(boundary.span_id) or not boundary.openings is Array: return false
+		if boundary.closure == "terrain":
+			if not boundary.openings.is_empty() or boundary.kind != "cliff_edge": return false
+			spans[boundary.span_id] = boundary; continue
+		if not cells.has(boundary.surface_id) or boundary.source_id != origins[boundary.surface_id] or boundary.kind != ("support_edge" if boundary.openings.is_empty() else "opening"): return false
 		spans[boundary.span_id] = boundary
 		for id: Variant in boundary.openings:
 			if not id is String or openings.has(id) or not groups.members.has(id) or not endpoints.has(id) or endpoints[id].surface_id != boundary.surface_id or not _opening_fits(endpoints[id],boundary): return false

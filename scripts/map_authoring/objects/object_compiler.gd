@@ -60,9 +60,12 @@ static func support(terrain: Dictionary, world: WorldGeometry, placement: Dictio
 	var raw: Array = placement.position_xyz
 	var position := Vector3(raw[0],raw[1],raw[2])
 	if not position.is_finite(): return fail("object_support_missing",placement.placement_id)
-	for index: int in terrain.visuals.size():
-		if terrain.visuals[index].source_id != placement.surface_id: continue
-		var cell: Dictionary = terrain.part.surfaces[index]
+	for visual: Dictionary in terrain.visuals:
+		if visual.source_id != placement.surface_id or not visual.walkable: continue
+		var cell: Dictionary = {}
+		for support_cell: Dictionary in terrain.part.surfaces:
+			if support_cell.surface_id == visual.surface_id: cell = support_cell; break
+		if cell.is_empty(): continue
 		var point := Kernel.support_y(cell,position)
 		if not Kernel.contains(cell,point): continue
 		if not settle and absf(float(raw[1])-float(point.y)) > 0.001: return fail("object_not_settled",placement.placement_id,position)

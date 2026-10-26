@@ -19,7 +19,7 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 01 scatter/exclusões/undo/roundtrip/export | arquitetura, validação | scatter determinístico revisável, quota/exclusões/undo/roundtrip comprovados |53+25 checks; export e pipeline final pendentes |
 | 02 relevo suave/silhueta | terrain_piece_semantics | grade e smooth existem; planos de amostra não demonstram orgânico | pendente |
 | 02 caminho/cobertura/encosta e pintura | terrain_piece_semantics | quatro materiais, pesos normalizados, mistura gradual de Pedra por declive e UV mundial/triplanar integrados | fundação validada ef88996:35/20/46, objetos nativos25, Core639 e2 oficiais Luna; acabamento orgânico/lados e área final ainda exigidos |
-| 02 penhasco/faces não caminháveis | F2 closure | compiler recusa >45°; fechar suporte/sólido/visual | pendente |
+| 02 penhasco/faces não caminháveis | F2 closure | terrain v5/composição v4 preservam todas as faces/massas, suportes só até45°, pele exposta e faixa inferior junto da ponte | 58 invariantes autorais e17 nativos com imagens; supervisão/regressão pendentes; relevo orgânico/área final ainda exigidos |
 | 03 floresta/deserto/planície/ruína | map_composition_and_seams | só ruin_envelope_v1; perfis/arte/envelopes faltantes | pendente |
 | 03 transições/dono/abertura/frestas | emendas, F3 | fechamento ruína existe; ampliar sem estreitar passagem | pendente |
 | 03 ausência de perfil/asset | emendas | preservar erro explícito sem barreira invisível | pendente de regressão |

@@ -56,22 +56,27 @@ func set_package(value: Dictionary) -> void:
 			_meshes.add_child(view)
 		for visual: Dictionary in instance.visuals:
 			if not visual.special: continue
-			var polygon := Polygon2D.new(); var points := PackedVector2Array()
-			for original: Vector3 in visual.vertices: points.append(WorldProjection.project(Kernel.rotate(original,instance.rotation_quarters)+Vector3(instance.translation)))
-			var height := 0.0
-			for point: Vector3 in visual.vertices: height += point.y
-			polygon.polygon = points; polygon.color = Color("88a28c"); polygon.z_index = Objects.depth_order(height/visual.vertices.size()+float(instance.translation.y),depth_domain); _meshes.add_child(polygon)
+			_attach_face(visual.vertices,visual.material_weights,Vector3.ZERO,instance,depth_domain)
+		for side: Dictionary in instance.exposed_sides: _attach_face(side.vertices,[],side.outward,instance,depth_domain)
 		_object_sprites.append_array(Objects.attach(_meshes,instance.get("objects",[]),false,[],depth_domain))
 		for object: Dictionary in instance.get("objects",[]):
 			if object.has("body_volume"): _object_volumes.append(object.body_volume)
 	fit()
+func _attach_face(vertices: Array, paint: Array, normal: Vector3, instance: Dictionary, domain: Vector2) -> void:
+	var view := MeshInstance2D.new(); view.mesh = Materials.from_arrays(Materials.face_arrays(vertices,paint,normal,instance.rotation_quarters,instance.translation)); view.material = Materials.material()
+	var height := 0.0
+	for point: Vector3 in vertices: height += point.y
+	view.z_index = Objects.depth_order(height/vertices.size()+float(instance.translation.y),domain); _meshes.add_child(view)
+
 func fit() -> void:
 	if package.is_empty(): return
 	var bounds := Rect2(); var first := true
-	for cell: Dictionary in package.manifest.stages[0].surfaces:
-		for point: Vector3 in cell.vertices:
-			if first: bounds = Rect2(WorldProjection.project(point),Vector2.ZERO); first = false
-			else: bounds = bounds.expand(WorldProjection.project(point))
+	for instance: Dictionary in package.render_instances:
+		for face: Dictionary in instance.visuals+instance.exposed_sides:
+			for original: Vector3 in face.vertices:
+				var point := WorldProjection.project(Kernel.rotate(original,instance.rotation_quarters)+Vector3(instance.translation))
+				if first: bounds = Rect2(point,Vector2.ZERO); first = false
+				else: bounds = bounds.expand(point)
 	_scale = minf((size.x-80)/maxf(1,bounds.size.x),(size.y-100)/maxf(1,bounds.size.y))
 	_scale = clampf(_scale,0.01,5); _origin = size*0.5-bounds.get_center()*_scale
 	_meshes.scale = Vector2.ONE*_scale; _meshes.position = _origin; redraw()

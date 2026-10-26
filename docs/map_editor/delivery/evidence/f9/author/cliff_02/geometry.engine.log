@@ -1,0 +1,38 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Cannot infer the type of "local" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:290)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://tests/map_editor_cliff_test.gd:0)
+ERROR: Failed to load script "res://tests/map_editor_cliff_test.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+F9_CLIFF_CHECK flat_pair_valid true
+F9_CLIFF_CHECK flat_pair_has_one_join true
+F9_CLIFF_CHECK equal_bases_have_only_six_sides true
+F9_CLIFF_CHECK flat_pair_side_area_26400 true
+F9_CLIFF_CHECK all_flat_external_boundaries_use_profile true
+F9_CLIFF_CHECK topology_does_not_mutate_faces true
+F9_CLIFF_CHECK face_order_is_not_identity true
+F9_CLIFF_CHECK ground_bridge_has_seven_sides true
+F9_CLIFF_CHECK ground_bridge_area_18400 true
+F9_CLIFF_CHECK bridge_reveals_ground_lower_strip true
+F9_CLIFF_CHECK bridge_lower_strip_exact_bounds true
+F9_CLIFF_CHECK steep_face_is_nonwalking true
+F9_CLIFF_CHECK mixed_pair_has_no_virtual_join true
+F9_CLIFF_CHECK mixed_external_skin_area_6080 true
+F9_CLIFF_CHECK walking_cliff_contact_closed_by_terrain true
+F9_CLIFF_CHECK cliff_external_boundary_has_no_support true
+F9_CLIFF_CHECK crossed_bases_split_into_two_skins true
+F9_CLIFF_CHECK crossed_bases_area_1190 true
+F9_CLIFF_CHECK crossed_bases_switch_owner true
+F9_CLIFF_CHECK crossing_point_z20_retained true
+F9_CLIFF_CHECK false_walkable_flag_rejected true
+F9_CLIFF_CHECK closed_face_schema true
+F9_CLIFF_CHECK duplicate_face_id_rejected true
+F9_CLIFF_CHECK cancellation_returns_no_partial_geometry true
+F9_CLIFF_CHECK face_budget_precedes_support_filter true
+F9_CLIFF_CHECK compiler_accepts_mixed_piece true
+F9_CLIFF_CHECK terrain_v5_receives_own_package true
+F9_CLIFF_CHECK all_faces_keep_mass_and_visuals true
+F9_CLIFF_CHECK cliff_mass_has_empty_support_binding true
+F9_CLIFF_CHECK source_unchanged_by_compile true

@@ -4,6 +4,7 @@ const WorldProjection = preload("res://scripts/world/expedition_geometry_view.gd
 const Brush = preload("res://scripts/map_authoring/terrain/brush.gd")
 const Partition = preload("res://scripts/map_authoring/compiler/terrain_partition.gd")
 const TerrainMaterial = preload("res://scripts/map_authoring/terrain/terrain_material.gd")
+const Terrain = preload("res://scripts/map_authoring/compiler/terrain_compiler.gd")
 const Objects = preload("res://scripts/map_authoring/objects/object_view.gd")
 signal stroke_finished(points: Array, options: Dictionary)
 signal cancelled
@@ -29,6 +30,7 @@ var wire_overlay := false
 var _mesh_root: Node2D
 var _overlay: Node2D
 var _height_bounds: Dictionary = {}
+var _shape: Dictionary = {}
 
 func _ready() -> void:
 	custom_minimum_size = Vector2(480,300)
@@ -62,6 +64,12 @@ func fit() -> void:
 			var point := WorldProjection.project(vertex)
 			if first: bounds = Rect2(point,Vector2.ZERO); first = false
 			else: bounds = bounds.expand(point)
+	if _shape.get("ok",false):
+		for side: Dictionary in _shape.exposed_sides:
+			for vertex: Vector3 in side.vertices:
+				var point := WorldProjection.project(vertex)
+				if first: bounds = Rect2(point,Vector2.ZERO); first = false
+				else: bounds = bounds.expand(point)
 	if first: _scale = 1.0; _pan = Vector2.ZERO; _origin = size*0.5
 	else:
 		_scale = clampf(minf((size.x-100)/maxf(1,bounds.size.x),(size.y-90)/maxf(1,bounds.size.y)),0.005,8)
@@ -165,25 +173,29 @@ func redraw_terrain() -> void:
 			var width: int = region.get("width",int(layer.columns)-1); var height: int = region.get("height",int(layer.rows)-1)
 			mesh.z_index = Objects.depth_order((Partition.point(layer,x,z).y+Partition.point(layer,x+width,z+height).y)*0.5,depth_domain)
 			_mesh_root.add_child(mesh)
-	for special: Dictionary in data.special_surfaces:
-		if special.layer_id in hidden_layers or special.vertices_xyz.size() < 3: continue
-		var polygon := Polygon2D.new(); var points := PackedVector2Array(); var y := 0.0
-		for xyz: Array in special.vertices_xyz:
-			var point := Vector3(xyz[0],xyz[1],xyz[2]); points.append(WorldProjection.project(point)); y += point.y
-		polygon.polygon = points; polygon.color = Color("889295"); polygon.z_index = Objects.depth_order(y/special.vertices_xyz.size(),depth_domain)
-		_mesh_root.add_child(polygon)
-		for i: int in special.vertices_xyz.size():
-			var av: Array = special.vertices_xyz[i]; var bv: Array = special.vertices_xyz[(i+1)%special.vertices_xyz.size()]
-			var a := Vector3(av[0],av[1],av[2]); var b := Vector3(bv[0],bv[1],bv[2])
-			if not is_equal_approx(a.y,b.y): continue
-			var side := Polygon2D.new(); side.polygon = PackedVector2Array([WorldProjection.project(a),WorldProjection.project(b),WorldProjection.project(b-Vector3.UP*4),WorldProjection.project(a-Vector3.UP*4)])
-			side.color = Color("3d505d"); side.z_index = polygon.z_index-1; _mesh_root.add_child(side)
+	_shape = Terrain.preview_geometry(data)
+	if _shape.ok:
+		var hidden_faces := {}
+		for visual: Dictionary in _shape.visuals:
+			var hidden: bool = visual.source_id in hidden_layers
+			for special: Dictionary in data.special_surfaces:
+				if special.surface_id == visual.source_id and special.layer_id in hidden_layers: hidden = true
+			if hidden: hidden_faces[visual.face_id] = true; continue
+			if visual.special: _attach_face(visual.vertices,visual.material_weights,Vector3.ZERO,depth_domain)
+		for side: Dictionary in _shape.exposed_sides:
+			if not hidden_faces.has(side.face_id): _attach_face(side.vertices,[],side.outward,depth_domain)
 	var hidden_surfaces := hidden_layers.duplicate()
 	for special: Dictionary in data.special_surfaces:
 		if special.layer_id in hidden_layers: hidden_surfaces.append(special.surface_id)
 	_object_records = _object_records.filter(func(object: Dictionary) -> bool: return object.source_surface_id not in hidden_surfaces)
 	Objects.attach(_mesh_root,_object_records,true,hidden_surfaces,depth_domain)
 	queue_redraw()
+
+func _attach_face(vertices: Array, paint: Array, normal: Vector3, domain: Vector2) -> void:
+	var view := MeshInstance2D.new(); view.mesh = TerrainMaterial.from_arrays(TerrainMaterial.face_arrays(vertices,paint,normal)); view.material = TerrainMaterial.material()
+	var height := 0.0
+	for point: Vector3 in vertices: height += point.y
+	view.z_index = Objects.depth_order(height/vertices.size(),domain); _mesh_root.add_child(view)
 
 func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO,size),Color("111b24"))

@@ -82,3 +82,23 @@ static func from_arrays(values: Array) -> ArrayMesh:
 
 static func mesh(layer: Dictionary, region: Dictionary = {}, quarter: int = 0, offset: Vector3 = Vector3.ZERO) -> ArrayMesh:
 	return from_arrays(arrays(layer,region,quarter,offset))
+
+static func face_arrays(vertices: Array, paint: Array = [], normal: Vector3 = Vector3.ZERO, quarter: int = 0, offset: Vector3 = Vector3.ZERO) -> Array:
+	var positions := PackedVector2Array(); var uv := PackedVector2Array(); var colors := PackedColorArray()
+	var world_values := PackedFloat32Array(); var normals := PackedFloat32Array(); var indices := PackedInt32Array()
+	if normal == Vector3.ZERO:
+		normal = Kernel.plane_normal(vertices)
+		if normal.y < 0: normal = -normal
+	normal = Kernel.rotate(normal,quarter)
+	for k: int in vertices.size():
+		var point := Kernel.rotate(vertices[k],quarter)+offset
+		positions.append(ProjectionView.project(point)); uv.append(Vector2(point.x,point.z)/TILE_UNITS)
+		var weights: Array = paint[k] if paint.size() == vertices.size() else [0.0,0.0,0.0,1.0]
+		colors.append(Color(weights[0],weights[1],weights[2],weights[3]))
+		world_values.append_array(PackedFloat32Array([point.x,point.y,point.z,1.0]))
+		normals.append_array(PackedFloat32Array([normal.x,normal.y,normal.z,1.0]))
+		if k >= 2: indices.append_array(PackedInt32Array([0,k-1,k]))
+	var result: Array = []; result.resize(Mesh.ARRAY_MAX)
+	result[Mesh.ARRAY_VERTEX] = positions; result[Mesh.ARRAY_TEX_UV] = uv; result[Mesh.ARRAY_COLOR] = colors
+	result[Mesh.ARRAY_CUSTOM0] = world_values; result[Mesh.ARRAY_CUSTOM1] = normals; result[Mesh.ARRAY_INDEX] = indices
+	return result

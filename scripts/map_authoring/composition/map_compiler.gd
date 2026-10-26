@@ -11,7 +11,7 @@ const Context = preload("res://scripts/map_authoring/context/piece_context.gd")
 const SolidPrism = preload("res://scripts/core/expedition/spatial/world_solid_prism.gd")
 const Objects = preload("res://scripts/map_authoring/objects/object_compiler.gd")
 const Ports = preload("res://scripts/core/expedition/generation/connector_partition.gd")
-const REVISION := "map_composition_v3"
+const REVISION := "map_composition_v4"
 const EPS := 0.0001
 var _thread: Thread
 var _mutex := Mutex.new()
@@ -120,14 +120,20 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 		for socket: Dictionary in part.sockets:
 			var copy := socket.duplicate(true); copy.socket_id = prefix+copy.socket_id; copy.surface_id = prefix+copy.surface_id; copy.position = Kernel.rotate(copy.position,q)+offset; stage.sockets.append(copy)
 		for volume: AABB in part.solid_volumes: stage.volumes.append(Kernel.transform_volume(volume,q,offset))
-		for prism: Dictionary in part.get("solid_prisms",[]): stage.solid_prisms.append(SolidPrism.transformed(prism,q,offset,prefix,prefix))
+		for prism: Dictionary in part.get("solid_prisms",[]):
+			var transformed := SolidPrism.transformed(prism,q,offset,prefix,prefix)
+			for point: Vector3 in transformed.top:
+				if point.length() > 32768: return fail("map_limit",instance.instance_id)
+			stage.solid_prisms.append(transformed)
 		for boundary: Dictionary in package.boundaries:
-			var copy := boundary.duplicate(true); copy.span_id = prefix+copy.span_id; copy.surface_id = prefix+copy.surface_id
+			var copy := boundary.duplicate(true); copy.span_id = prefix+copy.span_id; copy.face_id = prefix+copy.face_id
+			copy.surface_id = prefix+copy.surface_id if not copy.surface_id.is_empty() else ""
+			if not copy.adjacent_face_id.is_empty(): copy.adjacent_face_id = prefix+copy.adjacent_face_id
 			copy.a = Kernel.rotate(copy.a,q)+offset; copy.b = Kernel.rotate(copy.b,q)+offset
 			copy.outward = Kernel.rotate(copy.outward,q)
 			for i: int in copy.openings.size(): copy.openings[i] = prefix+copy.openings[i]
 			boundaries.append(copy)
-		var presentation := {"instance_id":instance.instance_id,"rotation_quarters":q,"translation":offset,"layers":package.render_layers.duplicate(true),"visuals":package.visuals.duplicate(true)}
+		var presentation := {"instance_id":instance.instance_id,"rotation_quarters":q,"translation":offset,"layers":package.render_layers.duplicate(true),"visuals":package.visuals.duplicate(true),"exposed_sides":package.exposed_sides.duplicate(true),"boundaries":package.boundaries.duplicate(true),"adjacency":package.adjacency.duplicate(true),"authored_ports":package.authored_ports.duplicate(true)}
 		if package.has("objects"):
 			presentation["objects"] = []
 			for object: Dictionary in package.objects:
@@ -138,7 +144,7 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 				if copy.has("body_volume"): copy.body_volume = Kernel.transform_volume(copy.body_volume,q,offset)
 				presentation.objects.append(copy)
 		render.append(presentation)
-	if stage.surfaces.size() > 1024: return fail("map_limit")
+	if stage.surfaces.size() > 1024 or stage.solid_prisms.size() > 2048: return fail("map_limit")
 	var used: Dictionary = {}; var realized_links: Array = []
 	for link: Dictionary in links:
 		var aid := _port_id(link.a_instance,link.a_connector); var bid := _port_id(link.b_instance,link.b_connector)
@@ -161,6 +167,7 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 		if not used.has(port.port_id): return fail("opening_unlinked",str(port.instance_id)+"/"+str(port.connector_id),port.position)
 	var barriers: Array = []; var wall_keys: Dictionary = {}
 	for boundary: Dictionary in boundaries:
+		if boundary.closure == "terrain": continue
 		var a: Vector3 = boundary.a; var b: Vector3 = boundary.b; var delta := b-a
 		var dx := float(b.x)-float(a.x); var dz := float(b.z)-float(a.z); var length := sqrt(dx*dx+dz*dz)
 		if absf(delta.x) > EPS and absf(delta.z) > EPS: return fail("barrier_unsupported",boundary.span_id,a)
@@ -205,7 +212,7 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 			failure["geometry_diagnostic"] = {"from":root.to_data(),"to":target.point,"outward_code":"" if target.outward_reachable else "unreachable","inward_code":"" if target.inward_reachable else "unreachable","metrics":certified.data.metrics}
 			return failure
 	if Document.hash_source(source) != validated.output_hash: return fail("stale_source")
-	var output := {"format_version":3,"compiler_revision":REVISION,"source_hash":validated.output_hash,"dependencies":all_dependencies,"profile":Terrain.PROFILE.duplicate(true),"manifest":manifest.to_data(),"render_instances":render,"barriers":barriers,"realized_instances":instances,"piece_count":instances.size(),"logical_ports":logical_ports,"realized_links":realized_links}
+	var output := {"format_version":4,"compiler_revision":REVISION,"source_hash":validated.output_hash,"dependencies":all_dependencies,"profile":Terrain.PROFILE.duplicate(true),"manifest":manifest.to_data(),"render_instances":render,"barriers":barriers,"realized_instances":instances,"piece_count":instances.size(),"logical_ports":logical_ports,"realized_links":realized_links}
 	if source.has("context"): output["authoring_context"] = source.context.duplicate(true)
 	var piece_contexts := {}
 	for instance: Dictionary in instances:
@@ -254,7 +261,7 @@ static func _normalize_walls(raw: Array) -> Array:
 	return output
 
 static func validate_package(package: Dictionary) -> bool:
-	if package.get("format_version") != 3 or package.get("compiler_revision") != REVISION or not package.has("package_hash"): return false
+	if package.get("format_version") != 4 or package.get("compiler_revision") != REVISION or not package.has("package_hash"): return false
 	if not Canonical.valid(package) or not package.has_all(["source_hash","dependencies","profile","manifest","render_instances","barriers","realized_instances","piece_count"]): return false
 	if not package.profile is Dictionary or package.profile != Terrain.PROFILE: return false
 	if not package.manifest is Dictionary or not package.render_instances is Array or not package.barriers is Array: return false
@@ -267,9 +274,28 @@ static func validate_package(package: Dictionary) -> bool:
 	if not package.manifest.input is Dictionary or not package.manifest.input.get("parts") is Array: return false
 	for part: Variant in package.manifest.input.parts:
 		if not part is Dictionary or not Ports.validate_groups(part).ok: return false
-	if not _logical_metadata_valid(package): return false
+	if not _logical_metadata_valid(package) or not _terrain_metadata_valid(package): return false
 	var content := package.duplicate(true); content.erase("package_hash")
 	return Canonical.digest(content) == package.package_hash and Objects.validate_dependencies(package.get("dependencies",[]),preload("res://scripts/map_authoring/terrain/terrain_material.gd").dependencies())
+
+static func _terrain_metadata_valid(package: Dictionary) -> bool:
+	# A render record remains in piece coordinates. Rebuild its terrain topology,
+	# then compare the transformed physical masses with the actual stage.
+	var definitions := {}; var instances := {}; var seen := {}; var masses: Array = []
+	for part: Dictionary in package.manifest.input.parts: definitions[part.part_id] = part
+	var stage: Dictionary = package.manifest.stages[0]
+	for instance: Dictionary in stage.part_instances: instances[instance.instance_id] = instance
+	if package.render_instances.size() != instances.size(): return false
+	for render: Variant in package.render_instances:
+		if not render is Dictionary or not render.get("instance_id") is String or not instances.has(render.instance_id) or seen.has(render.instance_id): return false
+		seen[render.instance_id] = true
+		var instance: Dictionary = instances[render.instance_id]
+		if render.get("rotation_quarters") != instance.rotation_quarters or render.get("translation") != instance.translation: return false
+		var local: Dictionary = render.duplicate(true); local["part"] = definitions[instance.part_id]; local["render_layers"] = render.get("layers")
+		if not Terrain._geometry_metadata_valid(local) or not Terrain._ports_metadata_valid(local): return false
+		var prefix: String = render.instance_id+"/"
+		for mass: Dictionary in local.part.solid_prisms: masses.append(SolidPrism.transformed(mass,instance.rotation_quarters,instance.translation,prefix,prefix))
+	return Canonical.encode(masses) == Canonical.encode(stage.get("solid_prisms",[]))
 
 static func _logical_metadata_valid(package: Dictionary) -> bool:
 	if not package.get("logical_ports") is Array or not package.get("realized_links") is Array or not package.manifest.stages is Array or package.manifest.stages.size() != 1: return false

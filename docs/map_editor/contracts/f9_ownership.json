@@ -301,6 +301,12 @@
       "base_sha256": "c556d01bba04bcbed9bed25b23db8bdf9cc4ec9cebe6e1e40d02b762b7452c6f"
     },
     {
+      "path": "docs/map_editor/contracts/f9_mixed_relief.md",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 mixed walkable/cliff terrain and exposed-mass presentation",
+      "base_sha256": null
+    },
+    {
       "path": "docs/map_editor/contracts/f9_navigation_batch.md",
       "owner": "Astra F9 — bounded shared navigation architecture consultation",
       "previous_owner": "new F9 dense composition performance frontier",
@@ -575,6 +581,18 @@
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
       "base_sha256": "5a6ec4b38e3d67fb49394b0713abf86b23b0446fa2ed803805c3745898c270d8"
+    },
+    {
+      "path": "scripts/map_authoring/compiler/terrain_topology.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 mixed walkable/cliff terrain and exposed-mass presentation",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/compiler/terrain_topology.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 mixed walkable/cliff terrain and exposed-mass presentation",
+      "base_sha256": null
     },
     {
       "path": "scripts/map_authoring/composition/border_profiles.gd",
@@ -1339,6 +1357,30 @@
       "base_sha256": "16b3a8f1e32aa889818c80be24bdf4086d9d8eabe5464a3cbe0f8726c28b4686"
     },
     {
+      "path": "tests/map_editor_cliff_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 mixed walkable/cliff terrain and exposed-mass presentation",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_cliff_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 mixed walkable/cliff terrain and exposed-mass presentation",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_cliff_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 mixed walkable/cliff terrain and exposed-mass presentation",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_cliff_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 mixed walkable/cliff terrain and exposed-mass presentation",
+      "base_sha256": null
+    },
+    {
       "path": "tests/map_editor_composition_test.gd",
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
@@ -1719,7 +1761,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "materials foundation technically validated at ef88996651bc7783e51dc90cb63996de0b7399b1; fixture released",
+    "state": "mixed terrain foundation frozen for sequential Luna supervision; code/test expectations owned by Sol",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -1727,7 +1769,8 @@
       "docs/map_editor/delivery/evidence/f9/luna/mesh/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/relief/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/ports/report.md",
-      "docs/map_editor/delivery/evidence/f9/luna/materials/report.md"
+      "docs/map_editor/delivery/evidence/f9/luna/materials/report.md",
+      "docs/map_editor/delivery/evidence/f9/luna/cliffs/report.md"
     ],
     "generated_evidence_roots": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
@@ -1764,7 +1807,16 @@
       "docs/map_editor/delivery/evidence/f9/luna/materials/scale",
       "docs/map_editor/delivery/evidence/f9/luna/materials/objects_native",
       "docs/map_editor/delivery/evidence/f9/luna/materials/core",
-      "docs/map_editor/delivery/evidence/f9/luna/materials/official"
+      "docs/map_editor/delivery/evidence/f9/luna/materials/official",
+      "docs/map_editor/delivery/evidence/f9/luna/cliffs/cliffs",
+      "docs/map_editor/delivery/evidence/f9/luna/cliffs/native",
+      "docs/map_editor/delivery/evidence/f9/luna/cliffs/ports",
+      "docs/map_editor/delivery/evidence/f9/luna/cliffs/mesh",
+      "docs/map_editor/delivery/evidence/f9/luna/cliffs/relief",
+      "docs/map_editor/delivery/evidence/f9/luna/cliffs/objects",
+      "docs/map_editor/delivery/evidence/f9/luna/cliffs/scale",
+      "docs/map_editor/delivery/evidence/f9/luna/cliffs/core",
+      "docs/map_editor/delivery/evidence/f9/luna/cliffs/official"
     ]
   }
 }
