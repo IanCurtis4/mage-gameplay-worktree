@@ -1761,7 +1761,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "mixed terrain: five stages passed at6400dac; Objects53 oracle inventory corrected for four materials; retry and remaining stages pending",
+    "state": "mixed terrain: directed stages PASS; historical all-piece steepness rejection oracle updated to approved mixed-relief contract; Core/Verify retry pending",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -1817,7 +1817,8 @@
       "docs/map_editor/delivery/evidence/f9/luna/cliffs/scale",
       "docs/map_editor/delivery/evidence/f9/luna/cliffs/core",
       "docs/map_editor/delivery/evidence/f9/luna/cliffs/official",
-      "docs/map_editor/delivery/evidence/f9/luna/cliffs/objects_retry01"
+      "docs/map_editor/delivery/evidence/f9/luna/cliffs/objects_retry01",
+      "docs/map_editor/delivery/evidence/f9/luna/cliffs/core_retry01"
     ]
   }
 }

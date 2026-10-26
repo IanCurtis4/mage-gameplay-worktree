@@ -112,7 +112,17 @@ func _run() -> void:
 	for vertex: Array in invalid.special_surfaces[0].vertices_xyz: vertex[1] = 10
 	check("insufficient_clearance_rejected",Compiler.compile(invalid).code == "insufficient_headroom")
 	invalid = flat.duplicate(true); invalid.layers[0].heights[1] = 100
-	check("too_steep_rejected",Compiler.compile(invalid).code == "slope_too_steep")
+	# F9 explicitly accepts mixed relief. Keep steep faces as unbound masses;
+	# do not raise the walking limit or quietly discard the peak.
+	var mixed_peak := Compiler.compile(invalid)
+	var walking_only := mixed_peak.ok
+	if mixed_peak.ok:
+		for cell: Dictionary in mixed_peak.package.part.surfaces:
+			var v: Array = cell.vertices
+			if absf((Vector3(v[1])-Vector3(v[0])).cross(Vector3(v[2])-Vector3(v[0])).normalized().y) < sqrt(0.5)-0.00001: walking_only = false
+	var steep_only := flat.duplicate(true)
+	steep_only.layers[0].columns = 2; steep_only.layers[0].rows = 2; steep_only.layers[0].heights = [0,100,0,100]
+	check("mixed_relief_retains_mass_and_45_degree_support_limit",walking_only and mixed_peak.package.part.solid_prisms.size() == mixed_peak.package.visuals.size() and mixed_peak.package.part.solid_prisms.any(func(mass: Dictionary) -> bool: return mass.support_surface_id == "") and Compiler.compile(steep_only).code == "slope_too_steep")
 	var port_source := flat.duplicate(true)
 	port_source.connectors = [{"connector_id":"west","surface_id":"floor","position_xyz":[0,0,5],"normal_xyz":[-1,0,0],"width":6,"headroom":100,"tags":["walk"],"kind":"walk","direction":"both"}]
 	var port_package := Compiler.compile(port_source)
