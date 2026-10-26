@@ -15,7 +15,7 @@ static func load_catalog() -> Dictionary:
 	var raw := Reader.new().decode(FileAccess.get_file_as_bytes(PATH))
 	if not raw.ok or not raw.value is Dictionary: return failure("object_catalog_invalid")
 	var data: Dictionary = raw.value
-	if data.size() != 4 or not data.has_all(["schema_version","catalog_id","revision","definitions"]) or data.schema_version != 1 or not data.definitions is Array or data.definitions.size() > 128: return failure("object_catalog_invalid")
+	if data.size() != 4 or not data.has_all(["schema_version","catalog_id","revision","definitions"]) or not _positive(data.schema_version) or data.schema_version != 1 or not data.catalog_id is String or data.catalog_id != "ragrpg_editor_props" or not _positive(data.revision) or data.revision != floor(float(data.revision)) or data.revision > 2147483647 or not data.definitions is Array or data.definitions.size() > 128: return failure("object_catalog_invalid")
 	var definitions := {}; var dependencies: Array = []
 	for value: Variant in data.definitions:
 		if not value is Dictionary or value.size() != FIELDS.size() or not value.has_all(FIELDS): return failure("object_catalog_invalid")
@@ -40,7 +40,7 @@ static func load_catalog() -> Dictionary:
 		definitions[item.definition_id] = item.duplicate(true)
 		dependencies.append({"definition_id":item.definition_id+"_sprite","revision":1,"path":item.sprite_path,"sha256":item.sprite_sha256})
 	dependencies.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.definition_id < b.definition_id)
-	return {"ok":true,"code":"","definitions":definitions,"dependencies":dependencies,"catalog_hash":Canonical.digest(data)}
+	return {"ok":true,"code":"","definitions":definitions,"dependencies":dependencies,"catalog_hash":Canonical.digest(data),"revision":int(data.revision)}
 
 static func definition(id: String, catalog: Dictionary = {}) -> Dictionary:
 	var current := catalog if not catalog.is_empty() else load_catalog()

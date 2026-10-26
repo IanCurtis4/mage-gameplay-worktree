@@ -51,7 +51,7 @@ static func compile(source: Dictionary, terrain: Dictionary, manifest: Expeditio
 		var import_path: String = definition.sprite_path+".import"
 		if not FileAccess.file_exists(import_path): return Catalog.failure("object_asset_missing",definition.definition_id)
 		assets[import_path] = {"definition_id":definition.definition_id+"_sprite_import","revision":1,"path":import_path,"sha256":FileAccess.get_sha256(import_path)}
-	var output_dependencies: Array = [{"definition_id":"prop_catalog_json","revision":1,"path":Catalog.PATH,"sha256":FileAccess.get_sha256(Catalog.PATH)}]
+	var output_dependencies: Array = [{"definition_id":"prop_catalog_json","revision":int(catalog.revision),"path":Catalog.PATH,"sha256":FileAccess.get_sha256(Catalog.PATH)}]
 	var keys: Array = assets.keys(); keys.sort()
 	for path: String in keys: output_dependencies.append(assets[path])
 	return {"ok":true,"objects":objects,"volumes":volumes,"dependencies":output_dependencies}

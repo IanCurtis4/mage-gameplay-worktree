@@ -29,7 +29,7 @@ func run() -> void:
 	presentation.actions["piece/open_objects"].control.pressed.emit(); await frames()
 	var panel: Control = shell.objects_window.get_child(0)
 	check("native_objects_window",shell.objects_window.visible and panel.is_visible_in_tree())
-	check("catalog_thumbnails",panel.palette.item_count == 3 and panel.palette.get_item_icon(0) != null)
+	check("catalog_thumbnails",panel.palette.item_count == 6 and panel.palette.get_item_icon(0) != null)
 	var oak_texture := load("res://assets/art/map_authoring/props/oak_tree.png") as Texture2D
 	check("mipmaps_imported",oak_texture != null and oak_texture.get_image().has_mipmaps())
 	panel.selected_definition = "oak_tree"; panel.x.value = 600; panel.z.value = 600; panel.snap.value = 0

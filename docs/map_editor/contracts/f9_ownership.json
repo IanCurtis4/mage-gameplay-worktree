@@ -1797,7 +1797,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "mixed terrain validated at7073d38 with explicit receipt reuse; biome props integration next, sequential",
+    "state": "three biome props implemented; author30/native23 PASS with inspected light/dark renders; frozen supervision next",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -1806,7 +1806,8 @@
       "docs/map_editor/delivery/evidence/f9/luna/relief/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/ports/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/materials/report.md",
-      "docs/map_editor/delivery/evidence/f9/luna/cliffs/report.md"
+      "docs/map_editor/delivery/evidence/f9/luna/cliffs/report.md",
+      "docs/map_editor/delivery/evidence/f9/luna/biome_props/report.md"
     ],
     "generated_evidence_roots": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
@@ -1858,7 +1859,12 @@
       "docs/map_editor/delivery/evidence/f9/luna/cliffs/core_retry02",
       "docs/map_editor/delivery/evidence/f9/luna/cliffs/cliffs_retry01",
       "docs/map_editor/delivery/evidence/f9/luna/cliffs/ports_retry01",
-      "docs/map_editor/delivery/evidence/f9/luna/cliffs/core_retry03"
+      "docs/map_editor/delivery/evidence/f9/luna/cliffs/core_retry03",
+      "docs/map_editor/delivery/evidence/f9/luna/biome_props/props",
+      "docs/map_editor/delivery/evidence/f9/luna/biome_props/native",
+      "docs/map_editor/delivery/evidence/f9/luna/biome_props/objects",
+      "docs/map_editor/delivery/evidence/f9/luna/biome_props/objects_native",
+      "docs/map_editor/delivery/evidence/f9/luna/biome_props/official"
     ]
   }
 }

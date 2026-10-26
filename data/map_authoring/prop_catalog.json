@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "catalog_id": "ragrpg_editor_props",
-  "revision": 1,
+  "revision": 2,
   "definitions": [
     {
       "definition_id": "oak_tree",
@@ -136,6 +136,143 @@
         "body": false,
         "attack_los": false,
         "camera_occlusion": false
+      },
+      "origin": {
+        "kind": "generated",
+        "tool": "image_gen built-in",
+        "license": "project_generated_output",
+        "record": "res://assets/art/map_authoring/props/provenance.json"
+      }
+    },
+    {
+      "definition_id": "desert_cactus",
+      "revision": 1,
+      "name": "Cacto adulto",
+      "category": "vegetation",
+      "biome_ids": [
+        "desert"
+      ],
+      "sprite_path": "res://assets/art/map_authoring/props/desert_cactus.png",
+      "sprite_sha256": "883efccf56ed86ff51cbae2eda7430e24a864dec38ab75a5282fbb309c38c41b",
+      "pivot_uv": [
+        0.507,
+        0.928
+      ],
+      "world_height": 150,
+      "footprint_radius": 18,
+      "body_box_xyz": [
+        -12,
+        0,
+        -12,
+        24,
+        96,
+        24
+      ],
+      "max_slope_degrees": 20,
+      "allowed_rotations": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "rotation_mode": "symmetric",
+      "capabilities": {
+        "decoration": false,
+        "body": true,
+        "attack_los": true,
+        "camera_occlusion": true
+      },
+      "origin": {
+        "kind": "generated",
+        "tool": "image_gen built-in",
+        "license": "project_generated_output",
+        "record": "res://assets/art/map_authoring/props/provenance.json"
+      }
+    },
+    {
+      "definition_id": "broken_pillar",
+      "revision": 1,
+      "name": "Pilar quebrado",
+      "category": "structures",
+      "biome_ids": [
+        "ruin",
+        "forest"
+      ],
+      "sprite_path": "res://assets/art/map_authoring/props/broken_pillar.png",
+      "sprite_sha256": "2e2edc9c889ae124632a2863c5ee989b69b8b66f8ee0e014e6163236dfa776d1",
+      "pivot_uv": [
+        0.5,
+        0.806
+      ],
+      "world_height": 160,
+      "footprint_radius": 36,
+      "body_box_xyz": [
+        -25,
+        0,
+        -25,
+        50,
+        96,
+        50
+      ],
+      "max_slope_degrees": 10,
+      "allowed_rotations": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "rotation_mode": "symmetric",
+      "capabilities": {
+        "decoration": false,
+        "body": true,
+        "attack_los": true,
+        "camera_occlusion": true
+      },
+      "origin": {
+        "kind": "generated",
+        "tool": "image_gen built-in",
+        "license": "project_generated_output",
+        "record": "res://assets/art/map_authoring/props/provenance.json"
+      }
+    },
+    {
+      "definition_id": "sandstone_boulder",
+      "revision": 1,
+      "name": "Rocha de arenito",
+      "category": "rocks",
+      "biome_ids": [
+        "desert",
+        "meadow"
+      ],
+      "sprite_path": "res://assets/art/map_authoring/props/sandstone_boulder.png",
+      "sprite_sha256": "6828e2983d661865b340e45fbfde5b16d30df83c685856e7df037dce93ca387c",
+      "pivot_uv": [
+        0.5,
+        0.645
+      ],
+      "world_height": 110,
+      "footprint_radius": 49,
+      "body_box_xyz": [
+        -36,
+        0,
+        -32,
+        72,
+        36,
+        64
+      ],
+      "max_slope_degrees": 35,
+      "allowed_rotations": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "rotation_mode": "symmetric",
+      "capabilities": {
+        "decoration": false,
+        "body": true,
+        "attack_los": true,
+        "camera_occlusion": true
       },
       "origin": {
         "kind": "generated",

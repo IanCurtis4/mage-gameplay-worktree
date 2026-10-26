@@ -1,0 +1,29 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+F9_BIOME_PROPS_UI_CHECK native_shell true
+F9_BIOME_PROPS_UI_CHECK six_named_palette_entries true
+F9_BIOME_PROPS_UI_CHECK structure_category_uses_portuguese_search true
+F9_BIOME_PROPS_UI_CHECK native_place_desert_cactus true
+F9_BIOME_PROPS_UI_CHECK native_place_broken_pillar true
+F9_BIOME_PROPS_UI_CHECK native_place_sandstone_boulder true
+F9_BIOME_PROPS_UI_CHECK three_native_sprite_nodes true
+F9_BIOME_PROPS_UI_CHECK desert_cactus_sprite_scale_and_mipmaps true
+F9_BIOME_PROPS_UI_CHECK desert_cactus_alpha_pick_hits_actual_asset true
+F9_BIOME_PROPS_UI_CHECK desert_cactus_occlusion_preserves_actor true
+F9_BIOME_PROPS_UI_CHECK broken_pillar_sprite_scale_and_mipmaps true
+F9_BIOME_PROPS_UI_CHECK broken_pillar_alpha_pick_hits_actual_asset true
+F9_BIOME_PROPS_UI_CHECK broken_pillar_occlusion_preserves_actor true
+F9_BIOME_PROPS_UI_CHECK sandstone_boulder_sprite_scale_and_mipmaps true
+F9_BIOME_PROPS_UI_CHECK sandstone_boulder_alpha_pick_hits_actual_asset true
+F9_BIOME_PROPS_UI_CHECK sandstone_boulder_occlusion_preserves_actor true
+F9_BIOME_PROPS_UI_CHECK occlusion_clears_after_actor_leaves true
+F9_BIOME_PROPS_UI_CHECK capture_biome_props_light true
+F9_BIOME_PROPS_UI_CHECK dark_ground_uses_shared_source_operation true
+F9_BIOME_PROPS_UI_CHECK capture_biome_props_dark true
+F9_BIOME_PROPS_UI_CHECK dark_ground_keeps_same_object_definitions true
+F9_BIOME_PROPS_UI_CHECK undo_restores_exact_light_source true
+F9_BIOME_PROPS_UI_CHECK native_source_receives_compiled_objects true
+F9_BIOME_PROPS_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"six_named_palette_entries","ok":true},{"id":"structure_category_uses_portuguese_search","ok":true},{"id":"native_place_desert_cactus","ok":true},{"id":"native_place_broken_pillar","ok":true},{"id":"native_place_sandstone_boulder","ok":true},{"id":"three_native_sprite_nodes","ok":true},{"id":"desert_cactus_sprite_scale_and_mipmaps","ok":true},{"id":"desert_cactus_alpha_pick_hits_actual_asset","ok":true},{"id":"desert_cactus_occlusion_preserves_actor","ok":true},{"id":"broken_pillar_sprite_scale_and_mipmaps","ok":true},{"id":"broken_pillar_alpha_pick_hits_actual_asset","ok":true},{"id":"broken_pillar_occlusion_preserves_actor","ok":true},{"id":"sandstone_boulder_sprite_scale_and_mipmaps","ok":true},{"id":"sandstone_boulder_alpha_pick_hits_actual_asset","ok":true},{"id":"sandstone_boulder_occlusion_preserves_actor","ok":true},{"id":"occlusion_clears_after_actor_leaves","ok":true},{"id":"capture_biome_props_light","ok":true},{"id":"dark_ground_uses_shared_source_operation","ok":true},{"id":"capture_biome_props_dark","ok":true},{"id":"dark_ground_keeps_same_object_definitions","ok":true},{"id":"undo_restores_exact_light_source","ok":true},{"id":"native_source_receives_compiled_objects","ok":true}],"count":23,"ok":true}

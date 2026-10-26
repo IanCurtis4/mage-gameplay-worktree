@@ -1,0 +1,14 @@
+{
+  "original": "assets/art/map_authoring/props/sandstone_boulder.png",
+  "alpha_samples": {
+    "0,0": 0,
+    "100,500": 0,
+    "150,250": 0,
+    "600,10": 0,
+    "1000,10": 0,
+    "700,1000": 0,
+    "10,500": 0
+  },
+  "rejected_generated_variant": "C:\\Users\\João Pedro\\.codex\\generated_images\\01a1741f-bcf1-7bd2-9328-d7a91e514ee4\\exec-b9f21c37-297a-4d05-b413-b590a51a5962.png",
+  "reason": "Background-extraction attempt was unnecessary after measuring original alpha; original preserved and no new raster promoted."
+}

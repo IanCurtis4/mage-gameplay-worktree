@@ -5,7 +5,7 @@ const Ops = preload("res://scripts/map_authoring/objects/object_operations.gd")
 const Metadata = preload("res://scripts/map_authoring/objects/object_schema.gd")
 const Canvas = preload("res://scripts/map_authoring/terrain/terrain_canvas.gd")
 const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
-const CATEGORIES := {"trees":"Árvores","rocks":"Rochas","vegetation":"Vegetação"}
+const CATEGORIES := {"trees":"Árvores","rocks":"Rochas","vegetation":"Vegetação","structures":"Estruturas"}
 var session: RefCounted
 var canvas: Control
 var palette: ItemList

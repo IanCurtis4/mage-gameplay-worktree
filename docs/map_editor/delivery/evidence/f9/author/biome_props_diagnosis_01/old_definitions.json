@@ -1,0 +1,21 @@
+{
+  "role": "author_independent_semantic_comparison",
+  "original_catalog_sha256": "4527a93aeb4e1015aeaba35ad7b086e8c1a10dc9eec0a2d1f4ec5e68f16a7c6e",
+  "definitions": [
+    {
+      "definition_id": "oak_tree",
+      "unchanged": true,
+      "semantic_sha256": "5e2812fb1536740341c8ebdbe842d26ad569b091392f291d570fabebddc8b4c7"
+    },
+    {
+      "definition_id": "moss_boulder",
+      "unchanged": true,
+      "semantic_sha256": "6a028f28492ed38be6f21c87707e6752c5cfa874348fd9c23cf4b9b7255c9042"
+    },
+    {
+      "definition_id": "woodland_shrub",
+      "unchanged": true,
+      "semantic_sha256": "b09bf5bf35f3ef80feadbfd11b8232eab2df3729be2c515bccdacbc55fb3a3dc"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_BIOME_PROPS_CHECK six_catalog_definitions true
+F9_BIOME_PROPS_CHECK existing_definitions_immutable false
+F9_BIOME_PROPS_CHECK desert_cactus_provenance_and_actual_hash true
+F9_BIOME_PROPS_CHECK desert_cactus_transparent_corners true
+F9_BIOME_PROPS_CHECK desert_cactus_ground_pivot_inside_asset true
+F9_BIOME_PROPS_CHECK desert_cactus_places_on_real_support true
+F9_BIOME_PROPS_CHECK broken_pillar_provenance_and_actual_hash true
+F9_BIOME_PROPS_CHECK broken_pillar_transparent_corners true
+F9_BIOME_PROPS_CHECK broken_pillar_ground_pivot_inside_asset true
+F9_BIOME_PROPS_CHECK broken_pillar_places_on_real_support true
+F9_BIOME_PROPS_CHECK sandstone_boulder_provenance_and_actual_hash true
+F9_BIOME_PROPS_CHECK sandstone_boulder_transparent_corners true
+F9_BIOME_PROPS_CHECK sandstone_boulder_ground_pivot_inside_asset true
+F9_BIOME_PROPS_CHECK sandstone_boulder_places_on_real_support true
+F9_BIOME_PROPS_CHECK placement_does_not_mutate_empty_source true
+F9_BIOME_PROPS_CHECK three_new_props_compile true
+F9_BIOME_PROPS_CHECK new_props_package_receives true
+F9_BIOME_PROPS_CHECK complete_selected_asset_transport true
+F9_BIOME_PROPS_CHECK catalog_dependency_tracks_revision true
+F9_BIOME_PROPS_CHECK source_roundtrip_keeps_new_definitions true
+F9_BIOME_PROPS_CHECK world_accepts_three_real_envelopes true
+F9_BIOME_PROPS_CHECK desert_cactus_blocks_body_at_declared_mass true
+F9_BIOME_PROPS_CHECK desert_cactus_blocks_ray_through_declared_mass true
+F9_BIOME_PROPS_CHECK broken_pillar_blocks_body_at_declared_mass true
+F9_BIOME_PROPS_CHECK broken_pillar_blocks_ray_through_declared_mass true
+F9_BIOME_PROPS_CHECK sandstone_boulder_blocks_body_at_declared_mass true
+F9_BIOME_PROPS_CHECK sandstone_boulder_blocks_ray_through_declared_mass true
+F9_BIOME_PROPS_CHECK real_actor_detours_three_props true
+F9_BIOME_PROPS_CHECK new_props_survive_rotated_composition true
+F9_BIOME_PROPS_CHECK new_definitions_are_copies true
+F9_BIOME_PROPS_RESULT {"checks":[{"id":"six_catalog_definitions","ok":true},{"id":"existing_definitions_immutable","ok":false},{"id":"desert_cactus_provenance_and_actual_hash","ok":true},{"id":"desert_cactus_transparent_corners","ok":true},{"id":"desert_cactus_ground_pivot_inside_asset","ok":true},{"id":"desert_cactus_places_on_real_support","ok":true},{"id":"broken_pillar_provenance_and_actual_hash","ok":true},{"id":"broken_pillar_transparent_corners","ok":true},{"id":"broken_pillar_ground_pivot_inside_asset","ok":true},{"id":"broken_pillar_places_on_real_support","ok":true},{"id":"sandstone_boulder_provenance_and_actual_hash","ok":true},{"id":"sandstone_boulder_transparent_corners","ok":true},{"id":"sandstone_boulder_ground_pivot_inside_asset","ok":true},{"id":"sandstone_boulder_places_on_real_support","ok":true},{"id":"placement_does_not_mutate_empty_source","ok":true},{"id":"three_new_props_compile","ok":true},{"id":"new_props_package_receives","ok":true},{"id":"complete_selected_asset_transport","ok":true},{"id":"catalog_dependency_tracks_revision","ok":true},{"id":"source_roundtrip_keeps_new_definitions","ok":true},{"id":"world_accepts_three_real_envelopes","ok":true},{"id":"desert_cactus_blocks_body_at_declared_mass","ok":true},{"id":"desert_cactus_blocks_ray_through_declared_mass","ok":true},{"id":"broken_pillar_blocks_body_at_declared_mass","ok":true},{"id":"broken_pillar_blocks_ray_through_declared_mass","ok":true},{"id":"sandstone_boulder_blocks_body_at_declared_mass","ok":true},{"id":"sandstone_boulder_blocks_ray_through_declared_mass","ok":true},{"id":"real_actor_detours_three_props","ok":true},{"id":"new_props_survive_rotated_composition","ok":true},{"id":"new_definitions_are_copies","ok":true}],"count":30,"ok":false}
+WARNING: Loaded resource as image file, this will not work on export: 'res://assets/art/map_authoring/props/desert_cactus.png'. Instead, import the image file as an Image resource and load it normally as a resource.
+   at: load_from_file (core/io/image.cpp:2780)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/map_editor_biome_props_test.gd:34)
+WARNING: Loaded resource as image file, this will not work on export: 'res://assets/art/map_authoring/props/broken_pillar.png'. Instead, import the image file as an Image resource and load it normally as a resource.
+   at: load_from_file (core/io/image.cpp:2780)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/map_editor_biome_props_test.gd:34)
+WARNING: Loaded resource as image file, this will not work on export: 'res://assets/art/map_authoring/props/sandstone_boulder.png'. Instead, import the image file as an Image resource and load it normally as a resource.
+   at: load_from_file (core/io/image.cpp:2780)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/map_editor_biome_props_test.gd:34)
