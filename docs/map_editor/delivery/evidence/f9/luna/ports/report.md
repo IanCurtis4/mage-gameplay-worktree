@@ -34,3 +34,19 @@ Local: `scripts/map_authoring/compiler/terrain_compiler.gd:357`, chamado por `te
 ## Limitações e liberação
 
 Esta tentativa não valida o candidato: falhou no primeiro runner. Não fiz alterações em runtime, testes, runner ou expectativas. Supervisão de execução não é auditoria semântica nem aprovação de F9 completo. A execução encerrou e a fixture compartilhada está liberada para a próxima correção/reprodução; preservar esta pasta como tentativa histórica.
+
+## Retomada após correção — SHA `bea3f6fc2b4defbbf00bc864f5209d167f32750c`
+
+- HEAD confirmado antes da execução; árvore limpa. Godot 4.7.2 standard SHA256 `AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424`.
+- Nova execução Ports preservada em `ports_retry01/`: 91/91, `F9 Ports: True`, `ok:true`, sem erro ou timeout. `runs.json` SHA256 `06465295A0967620AC3AE48ADE55A8434ADF1CD3CD101AB079E015570837C26F`; `import/manifest.json` SHA256 `88F8F331D6230FA6C1E17D8D45EE1B145525A16FDCBD23D9DD626D79AEEF0361`; `geometry.engine.log` SHA256 `65BA2CD3D77A97577837AFE8936090E99C734CCC0B8991CEB95A284DAADC4EA5`.
+- Batch: 34/34, `F9 Batch: True`, `ok:true`. `batch/runs.json` SHA256 `08BA5C97DBE1F7E1BFDACA1BACEE5CEF82A7034C87D41443A99BF4D05D51A22A`; `batch/geometry.engine.log` SHA256 `2C441A1792CB7B2445F024160F5906E8D064A7028B0B515E537CF36E3C4AADA4`.
+- Geometry: 46/46, `F9 Geometry: True`, `ok:true`. `geometry/runs.json` SHA256 `070339A48FAE77A6410F67B5D01B764F3628E5543EEE0DE5FE293EFE74389FFD`; `geometry/geometry.engine.log` SHA256 `D2508953C26AF3DF8A3AE518B7275D7ED83DEF8F8F6FB82CF84F8B853996E6F4`.
+- Relief: 58/58, `F9 Relief: True`, `ok:true`. `relief/runs.json` SHA256 `3CB8E82608882A975DA71EEE98060EFDC842EDE04FC1D23D199CA79559410DF2`; `relief/geometry.engine.log` SHA256 `517CB5E7411D58D486F46BCF2A76B264413B10E1FA39C9720440FF3C3769B56D`.
+- Mesh: 34/34, `F9 Mesh: True`, `ok:true`. `mesh/runs.json` SHA256 `A1C7D8FDEA7A241EF96E276162CEFA8EEF800C36F06FEA97EF55C26C3B3CC910`; `mesh/geometry.engine.log` SHA256 `2037B1EDF25404C71EDA8937B22861457E9B6F713E04A8CC1D9846C7B6BF0FC1`.
+- Objects: 53/53, `F9 Objects: True`, `ok:true`. `objects/runs.json` SHA256 `88D0EE85A4A282F650A341E828E290E67A73A5509045B9B93D79F6226F1D1BFB`; `objects/geometry.engine.log` SHA256 `1084920B203BA0592F81788DA122D484E63D19C5A67B122CB8EAD56E641C1F63`.
+
+## Core interrompido
+
+Core foi iniciado com a fixture única via runner primário. Candidate e Document passaram; Terrain teve `ok:false`, 102 checks, 101 verdadeiros e um falso: `port_wider_than_edge_rejected`. O runner interrompeu com `M8 failed: terrain`. `core/runs.json` SHA256 `158A26AD01BFA184DCD81D46D3852EE6A59018EF7A1E559084576F00ACDEC366`; `core/terrain.engine.log` SHA256 `B649B1B1E1C63C3C48BA647894242E35A6E47A8F4809DFB9819266DE26AD9762`; `core/terrain.output.log` SHA256 `F3A06D74F2AC83C74A1F173E0F31CB6FBDCE7E5A93FC762B03C4438131ABD55D`. Core esperado (639) não completou; official verify não foi iniciado. Nenhum erro de runner antes desse check falso; sem timeout relatado. A fixture foi liberada após o runner encerrar.
+
+Os seis PASS dirigidos são evidência nova no SHA `bea3f6f`; o recibo Core e a regressão oficial permanecem pendentes. Limite continua: supervisão de execução não auditoria semântica nem aprovação de F9 completo.

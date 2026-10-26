@@ -309,6 +309,9 @@ static func _compile_authored_port(authored: Dictionary, boundaries: Array, cell
 		pieces.append({"boundary":boundary,"t0":lo,"t1":hi})
 	pieces.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.t0 < b.t0 if a.t0 != b.t0 else a.boundary.span_id < b.boundary.span_id)
 	if pieces.is_empty(): return failure("connector_invalid",id)
+	# Preserve the legacy out-of-edge diagnostic; an internal gap is coverage.
+	if pieces[0].t0 != -half: return failure("geometry_precision_limit" if absf(float(pieces[0].t0)+half) <= EPS else "connector_invalid",id)
+	if pieces[-1].t1 != half: return failure("geometry_precision_limit" if absf(float(pieces[-1].t1)-half) <= EPS else "connector_invalid",id)
 	var endpoints: Array = []; var provenance: Array = []; var cursor := -half
 	for piece: Dictionary in pieces:
 		if piece.t0 < cursor: return failure("connector_ambiguous",id)

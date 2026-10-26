@@ -1731,7 +1731,9 @@
       "docs/map_editor/delivery/evidence/f9/luna/ports/objects",
       "docs/map_editor/delivery/evidence/f9/luna/ports/core",
       "docs/map_editor/delivery/evidence/f9/luna/ports/official",
-      "docs/map_editor/delivery/evidence/f9/luna/ports/ports_retry01"
+      "docs/map_editor/delivery/evidence/f9/luna/ports/ports_retry01",
+      "docs/map_editor/delivery/evidence/f9/luna/ports/ports_retry02",
+      "docs/map_editor/delivery/evidence/f9/luna/ports/core_retry01"
     ]
   }
 }

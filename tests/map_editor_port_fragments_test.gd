@@ -276,6 +276,8 @@ func terrain_cases() -> void:
 	var resolved := Ports.resolve_port(built.package.part,metadata[0].port_id)
 	check("terrain_group_covers_whole_opening",resolved.ok and resolved.fragments.size() == 8 and resolved.port.width == 80.0)
 	check("compiling_fragments_does_not_rewrite_source",Schema.semantic_hash(source) == original and built.input_hash == original)
+	var too_wide := source.duplicate(true); too_wide.connectors[0].width = 120.0
+	check("opening_beyond_whole_boundary_keeps_legacy_diagnostic",Terrain.compile(too_wide).code == "connector_invalid")
 	check("terrain_package_revalidates",Terrain.validate_package(built.package))
 	var bad: Dictionary = built.package.duplicate(true); bad.authored_ports[0].fragments[0].span_id = "absent"; rehash(bad)
 	check("terrain_receiver_rejects_forged_span",not Terrain.validate_package(bad))
