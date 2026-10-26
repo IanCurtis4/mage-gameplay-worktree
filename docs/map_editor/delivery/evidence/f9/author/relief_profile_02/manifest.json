@@ -1,0 +1,123 @@
+{
+  "kind": "diagnostic only; instrumented fixture; normalized line endings; source untouched",
+  "patched": [
+    {
+      "path": "scripts/core/expedition/spatial/world_geometry.gd",
+      "original_sha256": "e22dd20809bca516391239c70b982b669dac36d3bdd6bb614eeaff6c3adfe0a8",
+      "instrumented_sha256": "e7b700358a065713bbb16bf2608c7ac4265f32e0a4aada4a3dc2642b1101de7f"
+    },
+    {
+      "path": "scripts/core/expedition/spatial/world_support_patch.gd",
+      "original_sha256": "995b4d1027ef05c20162fbf7c0fe03899a9129f8715ba9c5f2ad4810e4506877",
+      "instrumented_sha256": "a6c83525f280522981fa68d8731309f8915f6b052b7d9f3beb137f9653eba4fe"
+    },
+    {
+      "path": "scripts/core/expedition/spatial/world_solid_prism.gd",
+      "original_sha256": "beb84863f8839a60d6cf8ab28a16185e8713d99b10c1024778cf89f1597acbf2",
+      "instrumented_sha256": "f6b16140dd1bf849d2a840888e9a44e949c4f4d26546a675a53fee4f62f38594"
+    }
+  ],
+  "syntax_exit": 0,
+  "exit_code": 0,
+  "timed_out": false,
+  "aborted": false,
+  "elapsed_seconds": 125.18235898017883,
+  "result": {
+    "code": "",
+    "elapsed_ms": 118547.514,
+    "ok": true,
+    "profile": {
+      "world_geometry._clear_path_segment": {
+        "calls": 277420,
+        "max_usec": 73341,
+        "self_usec": 2792068,
+        "total_usec": 56499293
+      },
+      "world_geometry._path": {
+        "calls": 424,
+        "max_usec": 3276321,
+        "self_usec": 17988132,
+        "total_usec": 117743731
+      },
+      "world_geometry._portal_candidates": {
+        "calls": 424,
+        "max_usec": 10787,
+        "self_usec": 176884,
+        "total_usec": 239574
+      },
+      "world_geometry._support_segment_fraction": {
+        "calls": 275157,
+        "max_usec": 85036,
+        "self_usec": 2768478,
+        "total_usec": 36807729
+      },
+      "world_geometry._supported": {
+        "calls": 45051,
+        "max_usec": 47803,
+        "self_usec": 391421,
+        "total_usec": 2282731
+      },
+      "world_geometry._sweep": {
+        "calls": 298968,
+        "max_usec": 73188,
+        "self_usec": 20050050,
+        "total_usec": 30769145
+      },
+      "world_geometry.ground_line_to": {
+        "calls": 424,
+        "max_usec": 38660,
+        "self_usec": 159892,
+        "total_usec": 964531
+      },
+      "world_geometry.ground_sweep": {
+        "calls": 298978,
+        "max_usec": 73325,
+        "self_usec": 13177947,
+        "total_usec": 57461045
+      },
+      "world_geometry.path": {
+        "calls": 424,
+        "max_usec": 3276343,
+        "self_usec": 5937,
+        "total_usec": 117749668
+      },
+      "world_solid_prism.blocking_polygon": {
+        "calls": 5936,
+        "max_usec": 1860,
+        "self_usec": 107840,
+        "total_usec": 107840
+      },
+      "world_solid_prism.spatial_candidates": {
+        "calls": 299816,
+        "max_usec": 28791,
+        "self_usec": 6454537,
+        "total_usec": 6454537
+      },
+      "world_solid_prism.sweep": {
+        "calls": 605352,
+        "max_usec": 32261,
+        "self_usec": 4285732,
+        "total_usec": 4285732
+      },
+      "world_support_patch.contains": {
+        "calls": 45051,
+        "max_usec": 47778,
+        "self_usec": 1891310,
+        "total_usec": 1891310
+      },
+      "world_support_patch.fraction": {
+        "calls": 275157,
+        "max_usec": 85004,
+        "self_usec": 34039251,
+        "total_usec": 34039251
+      },
+      "world_support_patch.members": {
+        "calls": 298968,
+        "max_usec": 64753,
+        "self_usec": 13513953,
+        "total_usec": 13513953
+      }
+    }
+  },
+  "restored": true
+}

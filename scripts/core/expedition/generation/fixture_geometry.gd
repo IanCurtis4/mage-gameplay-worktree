@@ -32,15 +32,19 @@ static func plane_distance(vertices: Array, point: Vector3) -> float:
 	if length == 0.0: return INF
 	return (normal[0]*(float(point.x)-float(a.x))+normal[1]*(float(point.y)-float(a.y))+normal[2]*(float(point.z)-float(a.z)))/length
 
+static func _half_ulp(value: float) -> float:
+	return pow(2.0,-150.0) if absf(value) < pow(2.0,-126.0) else pow(2.0,floor(log(absf(value))/log(2.0))-24.0)
+
+static func horizontal_roundoff(nx: float, nz: float, point: Vector3) -> float:
+	return absf(nx)*_half_ulp(point.x)+absf(nz)*_half_ulp(point.z)
+
 static func _support_roundoff(vertices: Array, point: Vector3) -> float:
-	# support_y stores its exact scalar result in an f32 y component. Permit only
-	# that final half-ULP of height, projected on the plane normal; EPS is unchanged.
+	# A ray/seam point stores all three components as f32. Project their individual
+	# final half-ULPs onto the exact plane; the geometric EPS remains unchanged.
 	var normal := _plane(vertices)
 	var length := sqrt(normal[0]*normal[0]+normal[1]*normal[1]+normal[2]*normal[2])
 	if length == 0.0: return 0.0
-	var half_ulp := pow(2.0,-150.0)
-	if absf(point.y) >= pow(2.0,-126.0): half_ulp = pow(2.0,floor(log(absf(point.y))/log(2.0))-24.0)
-	return absf(normal[1])/length*half_ulp
+	return (absf(normal[0])*_half_ulp(point.x)+absf(normal[1])*_half_ulp(point.y)+absf(normal[2])*_half_ulp(point.z))/length
 
 static func valid_cell(cell: Dictionary) -> bool:
 	var vertices: Array = cell["vertices"]
@@ -63,16 +67,21 @@ static func valid_cell(cell: Dictionary) -> bool:
 	return true
 
 static func contains(cell: Dictionary, point: Vector3, radius: float = 0.0) -> bool:
+	if not point.is_finite() or not is_finite(radius) or radius < 0: return false
 	var vertices: Array = cell["vertices"]
 	if absf(plane_distance(vertices,point)) > EPSILON+_support_roundoff(vertices,point): return false
 	var side := 0.0
 	for index: int in range(vertices.size()):
 		var a: Vector3 = vertices[index]
 		var b: Vector3 = vertices[(index + 1) % vertices.size()]
-		var edge := Vector2(b.x-a.x, b.z-a.z)
-		var cross_value := edge.cross(Vector2(point.x-a.x, point.z-a.z))
-		if absf(cross_value) > EPSILON and side == 0.0: side = signf(cross_value)
-		if side * cross_value < -EPSILON or absf(cross_value) / edge.length() + EPSILON < radius: return false
+		var ex := float(b.x)-float(a.x); var ez := float(b.z)-float(a.z)
+		var length := sqrt(ex*ex+ez*ez)
+		if length == 0: return false
+		var signed := (ex*(float(point.z)-float(a.z))-ez*(float(point.x)-float(a.x)))/length
+		var tolerance := EPSILON+horizontal_roundoff(-ez/length,ex/length,point)
+		if absf(signed) > tolerance and side == 0.0: side = signf(signed)
+		# Roundoff applies to the stored anchor, never to the body radius/clearance.
+		if side*signed < -tolerance or absf(signed)+EPSILON < radius: return false
 	return true
 
 static func support_y(cell: Dictionary, point: Vector3) -> Vector3:

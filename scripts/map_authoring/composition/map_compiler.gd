@@ -8,8 +8,9 @@ const Manifest = preload("res://scripts/core/expedition/model/manifest.gd")
 const World = preload("res://scripts/core/expedition/spatial/world_geometry.gd")
 const Point = preload("res://scripts/core/expedition/model/world_point.gd")
 const Context = preload("res://scripts/map_authoring/context/piece_context.gd")
+const SolidPrism = preload("res://scripts/core/expedition/spatial/world_solid_prism.gd")
 const Objects = preload("res://scripts/map_authoring/objects/object_compiler.gd")
-const REVISION := "map_composition_v1"
+const REVISION := "map_composition_v2"
 const EPS := 0.0001
 var _thread: Thread
 var _mutex := Mutex.new()
@@ -84,7 +85,7 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 				if absf(offset.y) > EPS: return fail("seam_position",link.link_id,offset)
 				child.position_xyz = [offset.x,offset.y,offset.z]; fixed[child.instance_id] = true; changed = true
 		if fixed.size() != instances.size(): return fail("recipe_tree")
-	var stage := {"stage_id":"map_preview","biome":"ruin","entrance":"","part_instances":[],"surfaces":[],"connectors":[],"connections":[],"sockets":[],"volumes":[]}
+	var stage := {"stage_id":"map_preview","biome":"ruin","entrance":"","part_instances":[],"surfaces":[],"connectors":[],"connections":[],"sockets":[],"volumes":[],"solid_prisms":[]}
 	var boundaries: Array = []; var endpoints: Dictionary = {}; var provenance: Dictionary = {}
 	for instance: Dictionary in instances:
 		var package: Dictionary = packages[instance.piece_hash]; var part: Dictionary = package.part.duplicate(true)
@@ -110,6 +111,7 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 		for socket: Dictionary in part.sockets:
 			var copy := socket.duplicate(true); copy.socket_id = prefix+copy.socket_id; copy.surface_id = prefix+copy.surface_id; copy.position = Kernel.rotate(copy.position,q)+offset; stage.sockets.append(copy)
 		for volume: AABB in part.solid_volumes: stage.volumes.append(Kernel.transform_volume(volume,q,offset))
+		for prism: Dictionary in part.get("solid_prisms",[]): stage.solid_prisms.append(SolidPrism.transformed(prism,q,offset,prefix,prefix))
 		for boundary: Dictionary in package.boundaries:
 			var copy := boundary.duplicate(true); copy.span_id = prefix+copy.span_id; copy.surface_id = prefix+copy.surface_id
 			copy.a = Kernel.rotate(copy.a,q)+offset; copy.b = Kernel.rotate(copy.b,q)+offset
@@ -178,7 +180,7 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 			var failure := fail("route_unreachable",cell.surface_id,destination.position)
 			failure["geometry_diagnostic"] = {"from":root.to_data(),"to":destination.to_data(),"outward_code":outward.error_code,"inward_code":inward.error_code}
 			return failure
-	var output := {"format_version":1,"compiler_revision":REVISION,"source_hash":validated.output_hash,"dependencies":all_dependencies,"profile":Terrain.PROFILE.duplicate(true),"manifest":manifest.to_data(),"render_instances":render,"barriers":barriers,"realized_instances":instances,"piece_count":instances.size()}
+	var output := {"format_version":2,"compiler_revision":REVISION,"source_hash":validated.output_hash,"dependencies":all_dependencies,"profile":Terrain.PROFILE.duplicate(true),"manifest":manifest.to_data(),"render_instances":render,"barriers":barriers,"realized_instances":instances,"piece_count":instances.size()}
 	if source.has("context"): output["authoring_context"] = source.context.duplicate(true)
 	var piece_contexts := {}
 	for instance: Dictionary in instances:
@@ -222,17 +224,19 @@ static func _normalize_walls(raw: Array) -> Array:
 	return output
 
 static func validate_package(package: Dictionary) -> bool:
-	if package.get("format_version") != 1 or package.get("compiler_revision") != REVISION or not package.has("package_hash"): return false
+	if package.get("format_version") != 2 or package.get("compiler_revision") != REVISION or not package.has("package_hash"): return false
 	if not Canonical.valid(package) or not package.has_all(["source_hash","dependencies","profile","manifest","render_instances","barriers","realized_instances","piece_count"]): return false
 	if not package.manifest is Dictionary or not package.render_instances is Array or not package.barriers is Array: return false
 	for instance: Variant in package.render_instances:
 		if not instance is Dictionary or (instance.has("objects") and not Objects.validate_records(instance.objects)): return false
 	if not package.manifest.has_all(["input","stages","traversal","population","objectives","portals","witnesses"]): return false
+	for stage: Variant in package.manifest.stages:
+		if not stage is Dictionary or not World._stage_prisms_valid(stage): return false
 	var content := package.duplicate(true); content.erase("package_hash")
 	return Canonical.digest(content) == package.package_hash and Objects.validate_dependencies(package.get("dependencies",[]),preload("res://scripts/map_authoring/terrain/terrain_material.gd").dependencies())
 
-static func _walkable_point(world: WorldGeometry, cell: Dictionary, profile: Dictionary) -> ExpeditionWorldPoint:
-	var center := _center(cell)
+static func _walkable_point(world: WorldGeometry, cell: Dictionary, profile: Dictionary, stage_id: String = "map_preview") -> ExpeditionWorldPoint:
+	var center := Kernel.support_y(cell,_center(cell))
 	var candidates: Array[Vector3] = [center]
 	for vertex: Vector3 in cell.vertices:
 		for amount: float in [0.05,0.15,0.35,0.65]: candidates.append(Kernel.support_y(cell,vertex.lerp(center,amount)))
@@ -240,7 +244,7 @@ static func _walkable_point(world: WorldGeometry, cell: Dictionary, profile: Dic
 		for x: float in [box.position.x-float(profile.radius)-EPS,box.end.x+float(profile.radius)+EPS]:
 			for z: float in [box.position.z-float(profile.radius)-EPS,box.end.z+float(profile.radius)+EPS]: candidates.append(Kernel.support_y(cell,Vector3(x,0,z)))
 	for position: Vector3 in candidates:
-		var point := Point.create("map_preview",cell.surface_id,position)
+		var point := Point.create(stage_id,cell.surface_id,position)
 		if world.position_query(point,profile,world.geometry_revision).ok: return point
 	return null
 static func manifest(package: Dictionary) -> Manifest:

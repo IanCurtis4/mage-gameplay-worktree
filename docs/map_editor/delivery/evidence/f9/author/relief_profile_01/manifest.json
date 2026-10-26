@@ -1,0 +1,25 @@
+{
+  "kind": "diagnostic only; instrumented fixture, source untouched",
+  "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "patched": [
+    {
+      "path": "scripts/core/expedition/spatial/world_geometry.gd",
+      "original_sha256": "e22dd20809bca516391239c70b982b669dac36d3bdd6bb614eeaff6c3adfe0a8",
+      "instrumented_sha256": "1311a6086e48e15a5074a02e100109d752b93845ba94ca256bafcb680bcc521d"
+    },
+    {
+      "path": "scripts/core/expedition/spatial/world_support_patch.gd",
+      "original_sha256": "995b4d1027ef05c20162fbf7c0fe03899a9129f8715ba9c5f2ad4810e4506877",
+      "instrumented_sha256": "e06d4d500d29e934c36a998c625213e57c614abb0fb35861fdd091e51712649c"
+    },
+    {
+      "path": "scripts/core/expedition/spatial/world_solid_prism.gd",
+      "original_sha256": "beb84863f8839a60d6cf8ab28a16185e8713d99b10c1024778cf89f1597acbf2",
+      "instrumented_sha256": "d02a985ef2deeb083b5321d8b21fab8e975e1d9f7d40af77a8f349d18440c126"
+    }
+  ],
+  "exit_code": null,
+  "timed_out": true,
+  "elapsed_seconds": 180.10870671272278,
+  "restored": true
+}

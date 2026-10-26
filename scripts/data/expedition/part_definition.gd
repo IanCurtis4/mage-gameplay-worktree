@@ -9,6 +9,8 @@ extends Resource
 @export var sockets: Array[ExpeditionSocketDefinition] = []
 @export var solid_volumes: Array[AABB] = []
 @export var blockers: Array[AABB] = []
+@export var solid_prisms: Array[Dictionary] = []
+@export var internal_connections: Array[Dictionary] = []
 
 func to_data() -> Dictionary:
 	var surface_data: Array[Dictionary] = []
@@ -34,6 +36,14 @@ func to_data() -> Dictionary:
 	var obstacles := Array(blockers)
 	for volumes: Array in [solids, obstacles]:
 		volumes.sort_custom(func(a: AABB, b: AABB) -> bool: return ExpeditionCanonical.encode(a) < ExpeditionCanonical.encode(b))
-	return {"part_id": part_id, "revision": revision, "biome_tags": tags, "allowed_rotations": rotations,
+	var result := {"part_id": part_id, "revision": revision, "biome_tags": tags, "allowed_rotations": rotations,
 		"surfaces": surface_data, "connectors": connector_data, "sockets": socket_data,
 		"solid_volumes": solids, "blockers": obstacles}
+
+	for extension: String in ["solid_prisms","internal_connections"]:
+		var values: Array = get(extension)
+		if values.is_empty(): continue
+		var copied := values.duplicate(true)
+		copied.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return ExpeditionCanonical.encode(a) < ExpeditionCanonical.encode(b))
+		result[extension] = copied
+	return result

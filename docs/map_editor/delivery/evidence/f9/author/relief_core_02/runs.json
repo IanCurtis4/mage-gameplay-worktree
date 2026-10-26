@@ -1,0 +1,2757 @@
+[
+  {
+    "ok": true,
+    "name": "import",
+    "result": null,
+    "finished_utc": "2026-10-26T03:22:26.1965780Z",
+    "output_sha256": "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+    "started_utc": "2026-10-26T03:22:13.4401307Z",
+    "timed_out": false,
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "aborted": false,
+    "exit_code": 0
+  },
+  {
+    "ok": true,
+    "name": "candidate",
+    "result": {
+      "checks": [
+        {
+          "id": "legacy_hash_unchanged",
+          "ok": true
+        },
+        {
+          "id": "context_source_valid",
+          "ok": true
+        },
+        {
+          "id": "context_compile",
+          "ok": true
+        },
+        {
+          "id": "context_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "textual_key_identity",
+          "ok": true
+        },
+        {
+          "id": "malformed_instance_rejects_without_script_error",
+          "ok": true
+        },
+        {
+          "id": "future_context_rejected",
+          "ok": true
+        },
+        {
+          "id": "biome_rejected",
+          "ok": true
+        },
+        {
+          "id": "manual_override_compiles",
+          "ok": true
+        },
+        {
+          "id": "manual_override_warns",
+          "ok": true
+        },
+        {
+          "id": "manual_override_exported",
+          "ok": true
+        },
+        {
+          "id": "override_exact_payload",
+          "ok": true
+        },
+        {
+          "id": "override_is_per_instance",
+          "ok": true
+        },
+        {
+          "id": "override_is_per_rule",
+          "ok": true
+        },
+        {
+          "id": "override_never_bypasses_seam",
+          "ok": true
+        },
+        {
+          "id": "override_bundle_preserved",
+          "ok": true
+        },
+        {
+          "id": "override_import_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "solver_does_not_inherit_override",
+          "ok": true
+        },
+        {
+          "id": "assembler_does_not_inherit_override",
+          "ok": true
+        },
+        {
+          "id": "override_reason_required",
+          "ok": true
+        },
+        {
+          "id": "recipe_override_rejected",
+          "ok": true
+        },
+        {
+          "id": "seed_context_contradiction",
+          "ok": true
+        },
+        {
+          "id": "seed_0",
+          "ok": true
+        },
+        {
+          "id": "seed_-1",
+          "ok": true
+        },
+        {
+          "id": "seed_9223372036854775807",
+          "ok": true
+        },
+        {
+          "id": "seed_-9223372036854775808",
+          "ok": true
+        },
+        {
+          "id": "population_context_plan",
+          "ok": true
+        },
+        {
+          "id": "no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "population_context_compile",
+          "ok": true
+        },
+        {
+          "id": "species_policy_enforced",
+          "ok": true
+        },
+        {
+          "id": "manual_species_exception",
+          "ok": true
+        },
+        {
+          "id": "rare_generation_allowed",
+          "ok": true
+        },
+        {
+          "id": "rare_theme_is_not_gate",
+          "ok": true
+        },
+        {
+          "id": "rare_policy_enforced",
+          "ok": true
+        },
+        {
+          "id": "manual_rare_exception",
+          "ok": true
+        },
+        {
+          "id": "manual_rare_without_theme_allowed",
+          "ok": true
+        },
+        {
+          "id": "manual_rare_ignores_random_permission",
+          "ok": true
+        },
+        {
+          "id": "reservation_realized",
+          "ok": true
+        },
+        {
+          "id": "reservation_compiles",
+          "ok": true
+        },
+        {
+          "id": "reservation_fixed_unique",
+          "ok": true
+        },
+        {
+          "id": "reservation_quest_passive",
+          "ok": true
+        },
+        {
+          "id": "quest_does_not_change_objectives_or_rewards",
+          "ok": true
+        },
+        {
+          "id": "reservation_regeneration_idempotent",
+          "ok": true
+        },
+        {
+          "id": "reservation_required_on_compile",
+          "ok": true
+        },
+        {
+          "id": "ordinary_spawn_cannot_take_reserved_area",
+          "ok": true
+        },
+        {
+          "id": "ordinary_pool_excludes_reservation_directly",
+          "ok": true
+        },
+        {
+          "id": "ordinary_population_stays_outside_reservation",
+          "ok": true
+        },
+        {
+          "id": "reservation_editorial_reference_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "missing_region_rejected",
+          "ok": true
+        },
+        {
+          "id": "representative_geometry",
+          "ok": true
+        },
+        {
+          "id": "representative_encounters",
+          "ok": true
+        },
+        {
+          "id": "representative_patrol",
+          "ok": true
+        },
+        {
+          "id": "representative_package_published",
+          "ok": true
+        }
+      ],
+      "count": 53,
+      "ok": true
+    },
+    "finished_utc": "2026-10-26T03:25:00.0415870Z",
+    "output_sha256": "F2989A4A0F2AD73BFE42C380C60B27E2F315615C873D3E20E6C6BECF3326C79F",
+    "started_utc": "2026-10-26T03:22:26.2267247Z",
+    "timed_out": false,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_candidate_test.gd"
+    ],
+    "aborted": false,
+    "exit_code": 0
+  },
+  {
+    "ok": true,
+    "name": "document",
+    "result": {
+      "checks": [
+        {
+          "id": "full_source_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "copy_boundary",
+          "ok": true
+        },
+        {
+          "id": "set_order_hash",
+          "ok": true
+        },
+        {
+          "id": "sequence_order_hash",
+          "ok": true
+        },
+        {
+          "id": "canonical_numeric_oracle",
+          "ok": true
+        },
+        {
+          "id": "canonical_unicode_oracle",
+          "ok": true
+        },
+        {
+          "id": "sha256_oracle",
+          "ok": true
+        },
+        {
+          "id": "duplicate_key_7",
+          "ok": true
+        },
+        {
+          "id": "duplicate_key_8",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_9",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_10",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_11",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_12",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_13",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_14",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_15",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_16",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_17",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_18",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_19",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_20",
+          "ok": true
+        },
+        {
+          "id": "non_finite",
+          "ok": true
+        },
+        {
+          "id": "bounded_depth",
+          "ok": true
+        },
+        {
+          "id": "bounded_string",
+          "ok": true
+        },
+        {
+          "id": "bounded_bytes",
+          "ok": true
+        },
+        {
+          "id": "utf8_strict_25",
+          "ok": true
+        },
+        {
+          "id": "utf8_strict_26",
+          "ok": true
+        },
+        {
+          "id": "utf8_strict_27",
+          "ok": true
+        },
+        {
+          "id": "utf8_strict_28",
+          "ok": true
+        },
+        {
+          "id": "surrogate_strict_29",
+          "ok": true
+        },
+        {
+          "id": "surrogate_strict_30",
+          "ok": true
+        },
+        {
+          "id": "surrogate_strict_31",
+          "ok": true
+        },
+        {
+          "id": "surrogate_pair",
+          "ok": true
+        },
+        {
+          "id": "token_budget",
+          "ok": true
+        },
+        {
+          "id": "unknown_version",
+          "ok": true
+        },
+        {
+          "id": "unknown_field",
+          "ok": true
+        },
+        {
+          "id": "typed_bool",
+          "ok": true
+        },
+        {
+          "id": "typed_integer",
+          "ok": true
+        },
+        {
+          "id": "invalid_draft_readable",
+          "ok": true
+        },
+        {
+          "id": "duplicate_ids",
+          "ok": true
+        },
+        {
+          "id": "broken_reference",
+          "ok": true
+        },
+        {
+          "id": "dependency_reference",
+          "ok": true
+        },
+        {
+          "id": "entity_limit",
+          "ok": true
+        },
+        {
+          "id": "clean_baseline",
+          "ok": true
+        },
+        {
+          "id": "edit_atomic",
+          "ok": true
+        },
+        {
+          "id": "undo",
+          "ok": true
+        },
+        {
+          "id": "redo",
+          "ok": true
+        },
+        {
+          "id": "reject_without_mutation",
+          "ok": true
+        },
+        {
+          "id": "redo_branch_cleared",
+          "ok": true
+        },
+        {
+          "id": "replace_rejection",
+          "ok": true
+        },
+        {
+          "id": "identity_stable",
+          "ok": true
+        },
+        {
+          "id": "duplicate_layer_graph",
+          "ok": true
+        },
+        {
+          "id": "duplicate_internal_references",
+          "ok": true
+        },
+        {
+          "id": "duplicate_atomic_undo",
+          "ok": true
+        },
+        {
+          "id": "duplicate_missing_rejected",
+          "ok": true
+        },
+        {
+          "id": "save_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "overwrite_requires_hash",
+          "ok": true
+        },
+        {
+          "id": "save_backup",
+          "ok": true
+        },
+        {
+          "id": "autosave",
+          "ok": true
+        },
+        {
+          "id": "external_edit",
+          "ok": true
+        },
+        {
+          "id": "recovery_divergence",
+          "ok": true
+        },
+        {
+          "id": "interruption_original_intact",
+          "ok": true
+        },
+        {
+          "id": "pending_preserved",
+          "ok": true
+        },
+        {
+          "id": "concurrent_writer_rejected",
+          "ok": true
+        },
+        {
+          "id": "truncated_pending_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_directory",
+          "ok": true
+        },
+        {
+          "id": "truncated_file",
+          "ok": true
+        },
+        {
+          "id": "draft_saved",
+          "ok": true
+        },
+        {
+          "id": "recovery_kind_safe",
+          "ok": true
+        },
+        {
+          "id": "io_length_limit",
+          "ok": true
+        }
+      ],
+      "count": 70,
+      "ok": true
+    },
+    "finished_utc": "2026-10-26T03:25:02.0128271Z",
+    "output_sha256": "E3540287126E64252635C94DFA87F20BF22097F03D5BBFCB15BDA94A2B5AC2D7",
+    "started_utc": "2026-10-26T03:25:00.0519265Z",
+    "timed_out": false,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_document_test.gd"
+    ],
+    "aborted": false,
+    "exit_code": 0
+  },
+  {
+    "ok": true,
+    "name": "terrain",
+    "result": {
+      "checks": [
+        {
+          "id": "compile_sample",
+          "ok": true
+        },
+        {
+          "id": "exact_coplanar_compaction_count",
+          "ok": true
+        },
+        {
+          "id": "solid_slab_exact",
+          "ok": true
+        },
+        {
+          "id": "source_not_mutated",
+          "ok": true
+        },
+        {
+          "id": "repeat_identical_package",
+          "ok": true
+        },
+        {
+          "id": "collection_order_independent",
+          "ok": true
+        },
+        {
+          "id": "package_valid",
+          "ok": true
+        },
+        {
+          "id": "tampered_package_rejected",
+          "ok": true
+        },
+        {
+          "id": "same_visual_logic_vertices_0",
+          "ok": true
+        },
+        {
+          "id": "same_visual_logic_vertices_1",
+          "ok": true
+        },
+        {
+          "id": "same_visual_logic_vertices_2",
+          "ok": true
+        },
+        {
+          "id": "same_visual_logic_vertices_3",
+          "ok": true
+        },
+        {
+          "id": "canonical_configure",
+          "ok": true
+        },
+        {
+          "id": "ramp_intermediate_support",
+          "ok": true
+        },
+        {
+          "id": "ramp_rejects_flattening",
+          "ok": true
+        },
+        {
+          "id": "lower_support_under_bridge",
+          "ok": true
+        },
+        {
+          "id": "connected_route_to_bridge",
+          "ok": true
+        },
+        {
+          "id": "canonical_motion_bind",
+          "ok": true
+        },
+        {
+          "id": "canonical_motion_plan",
+          "ok": true
+        },
+        {
+          "id": "continuous_motion_no_teleport",
+          "ok": true
+        },
+        {
+          "id": "underpass_route",
+          "ok": true
+        },
+        {
+          "id": "slab_rejects_tall_body",
+          "ok": true
+        },
+        {
+          "id": "bridge_blocks_attack",
+          "ok": true
+        },
+        {
+          "id": "ray_picks_upper_deck",
+          "ok": true
+        },
+        {
+          "id": "slab_occludes_hidden_lower",
+          "ok": true
+        },
+        {
+          "id": "brush_raise_oracle",
+          "ok": true
+        },
+        {
+          "id": "brush_input_density_independent",
+          "ok": true
+        },
+        {
+          "id": "brush_lower_oracle",
+          "ok": true
+        },
+        {
+          "id": "flatten_oracle",
+          "ok": true
+        },
+        {
+          "id": "ramp_control_oracle",
+          "ok": true
+        },
+        {
+          "id": "ramp_rejects_zero_length",
+          "ok": true
+        },
+        {
+          "id": "smooth_frozen_neighbors_oracle",
+          "ok": true
+        },
+        {
+          "id": "paint_two_materials",
+          "ok": true
+        },
+        {
+          "id": "layer_lock",
+          "ok": true
+        },
+        {
+          "id": "region_protected",
+          "ok": true
+        },
+        {
+          "id": "connector_protected",
+          "ok": true
+        },
+        {
+          "id": "stroke_atomic_apply",
+          "ok": true
+        },
+        {
+          "id": "stroke_atomic_undo",
+          "ok": true
+        },
+        {
+          "id": "stroke_atomic_redo",
+          "ok": true
+        },
+        {
+          "id": "save_source",
+          "ok": true
+        },
+        {
+          "id": "reopen_preserves_compilation",
+          "ok": true
+        },
+        {
+          "id": "nonfinite_rejected",
+          "ok": true
+        },
+        {
+          "id": "overlap_rejected",
+          "ok": true
+        },
+        {
+          "id": "nonplanar_special_rejected",
+          "ok": true
+        },
+        {
+          "id": "concave_special_rejected",
+          "ok": true
+        },
+        {
+          "id": "insufficient_clearance_rejected",
+          "ok": true
+        },
+        {
+          "id": "too_steep_rejected",
+          "ok": true
+        },
+        {
+          "id": "authored_opening_compiles",
+          "ok": true
+        },
+        {
+          "id": "one_stable_boundary_opening",
+          "ok": true
+        },
+        {
+          "id": "interior_port_rejected",
+          "ok": true
+        },
+        {
+          "id": "port_wider_than_edge_rejected",
+          "ok": true
+        },
+        {
+          "id": "unconnected_ramp_rejected",
+          "ok": true
+        },
+        {
+          "id": "warped_grid_compiles_to_triangles",
+          "ok": true
+        },
+        {
+          "id": "invalid_brush_radius_rejected",
+          "ok": true
+        },
+        {
+          "id": "nonfinite_brush_point_rejected",
+          "ok": true
+        },
+        {
+          "id": "square_stamp_corner_oracle",
+          "ok": true
+        },
+        {
+          "id": "compile_cancelled",
+          "ok": true
+        },
+        {
+          "id": "late_result_rejected",
+          "ok": true
+        },
+        {
+          "id": "thread_cancelled_no_package",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_0",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_1",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_2",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_3",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_4",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_5",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_6",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_7",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_8",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_9",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_0",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_1",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_2",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_3",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_4",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_5",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_6",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_7",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_8",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_9",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_0",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_1",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_2",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_3",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_4",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_5",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_6",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_7",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_8",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_9",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_0",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_1",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_2",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_3",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_4",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_5",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_6",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_7",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_8",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_9",
+          "ok": true
+        },
+        {
+          "id": "flat_grid_above_old_limit_compiles",
+          "ok": true
+        },
+        {
+          "id": "brush_above_old_grid_limit",
+          "ok": true
+        },
+        {
+          "id": "long_stroke_rejected_whole",
+          "ok": true
+        }
+      ],
+      "count": 102,
+      "ok": true,
+      "package_hash": "2f637ee010a70902c8835adb8408bd3a3e22fd2b42a5df9fc93bab4307e3c703",
+      "source_path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project/.godot/terrain_source_7e1543e4612d0e80.json"
+    },
+    "finished_utc": "2026-10-26T03:25:11.2300426Z",
+    "output_sha256": "01C061C96E150A0FF2275841D7C8530D657540FDCF3CDEE1D8025F4C84052E30",
+    "started_utc": "2026-10-26T03:25:02.0187150Z",
+    "timed_out": false,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_terrain_test.gd"
+    ],
+    "aborted": false,
+    "exit_code": 0
+  },
+  {
+    "ok": true,
+    "name": "composition",
+    "result": {
+      "checks": [
+        {
+          "id": "two_piece_compile",
+          "ok": true
+        },
+        {
+          "id": "authorship_unchanged",
+          "ok": true
+        },
+        {
+          "id": "exact_authored_transforms",
+          "ok": true
+        },
+        {
+          "id": "two_authored_pieces_two_supports",
+          "ok": true
+        },
+        {
+          "id": "package_integrity",
+          "ok": true
+        },
+        {
+          "id": "deterministic",
+          "ok": true
+        },
+        {
+          "id": "order_independent_identity",
+          "ok": true
+        },
+        {
+          "id": "canonical_world",
+          "ok": true
+        },
+        {
+          "id": "seam_route",
+          "ok": true
+        },
+        {
+          "id": "actor_bind",
+          "ok": true
+        },
+        {
+          "id": "actor_plan",
+          "ok": true
+        },
+        {
+          "id": "continuous_actor_crosses_seam",
+          "ok": true
+        },
+        {
+          "id": "wall_matches_manifest",
+          "ok": true
+        },
+        {
+          "id": "closed_edge_blocks_sweep",
+          "ok": true
+        },
+        {
+          "id": "seam_closed_outside_opening",
+          "ok": true
+        },
+        {
+          "id": "seam_opening_free",
+          "ok": true
+        },
+        {
+          "id": "wall_blocks_los",
+          "ok": true
+        },
+        {
+          "id": "misaligned_seam_rejected",
+          "ok": true
+        },
+        {
+          "id": "overlap_rejected",
+          "ok": true
+        },
+        {
+          "id": "unlinked_opening_rejected",
+          "ok": true
+        },
+        {
+          "id": "broken_reference_rejected",
+          "ok": true
+        },
+        {
+          "id": "connector_single_owner",
+          "ok": true
+        },
+        {
+          "id": "rotated_wrong_opening_rejected",
+          "ok": true
+        },
+        {
+          "id": "no_vertical_repair",
+          "ok": true
+        },
+        {
+          "id": "nonfinite_rejected",
+          "ok": true
+        },
+        {
+          "id": "duplicate_id_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_biome_profile_rejected",
+          "ok": true
+        },
+        {
+          "id": "immutable_piece_reference",
+          "ok": true
+        },
+        {
+          "id": "unknown_fields_rejected",
+          "ok": true
+        },
+        {
+          "id": "unknown_version_rejected",
+          "ok": true
+        },
+        {
+          "id": "width_mismatch_rejected",
+          "ok": true
+        },
+        {
+          "id": "height_mismatch_rejected",
+          "ok": true
+        },
+        {
+          "id": "direction_mismatch_rejected",
+          "ok": true
+        },
+        {
+          "id": "tag_mismatch_rejected",
+          "ok": true
+        },
+        {
+          "id": "recipe_realizes_explicit_tree",
+          "ok": true
+        },
+        {
+          "id": "recipe_does_not_mutate_draft",
+          "ok": true
+        },
+        {
+          "id": "recipe_deterministic",
+          "ok": true
+        },
+        {
+          "id": "recipe_disconnected_rejected",
+          "ok": true
+        },
+        {
+          "id": "quarter_rotation_preserves_seam",
+          "ok": true
+        },
+        {
+          "id": "different_piece_dimensions",
+          "ok": true
+        },
+        {
+          "id": "partial_shared_boundary_single_owner",
+          "ok": true
+        },
+        {
+          "id": "placement_edit_atomic",
+          "ok": true
+        },
+        {
+          "id": "undo_placements_links",
+          "ok": true
+        },
+        {
+          "id": "redo_placements_links",
+          "ok": true
+        },
+        {
+          "id": "invalid_edit_no_mutation",
+          "ok": true
+        },
+        {
+          "id": "save_composition",
+          "ok": true
+        },
+        {
+          "id": "reopen_exact_placements_links",
+          "ok": true
+        },
+        {
+          "id": "reopen_same_package",
+          "ok": true
+        },
+        {
+          "id": "writer_conflict_preserves_source",
+          "ok": true
+        },
+        {
+          "id": "duplicate_json_key_rejected",
+          "ok": true
+        },
+        {
+          "id": "local_immutable_publish",
+          "ok": true
+        },
+        {
+          "id": "published_package_readable",
+          "ok": true
+        },
+        {
+          "id": "idempotent_publication",
+          "ok": true
+        },
+        {
+          "id": "stale_publication_rejected",
+          "ok": true
+        },
+        {
+          "id": "tampered_package_rejected",
+          "ok": true
+        },
+        {
+          "id": "tampered_publication_rejected",
+          "ok": true
+        },
+        {
+          "id": "corrupted_file_no_overwrite",
+          "ok": true
+        },
+        {
+          "id": "cancellation_no_package",
+          "ok": true
+        },
+        {
+          "id": "stale_worker_no_package",
+          "ok": true
+        },
+        {
+          "id": "cancelled_worker_no_package",
+          "ok": true
+        },
+        {
+          "id": "f2_internal_adjacency_consumed",
+          "ok": true
+        },
+        {
+          "id": "large_field_plus_small_room",
+          "ok": true
+        },
+        {
+          "id": "large_source_roundtrip",
+          "ok": true
+        }
+      ],
+      "compile_ms": 215.02,
+      "count": 63,
+      "large_compile_ms": 4378.795,
+      "large_package_bytes": 124216,
+      "ok": true,
+      "package_bytes": 11112,
+      "package_hash": "1e05df97751dc7563c512b24aa57fd142832ca8a7453fa9c81a0756ce7149c55",
+      "piece_count": 2,
+      "source_path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project/.godot/m3_276c44fc3a/map.json"
+    },
+    "finished_utc": "2026-10-26T03:25:25.8006967Z",
+    "output_sha256": "2F7098D2DF064A9F0DAD01DE1B4DB34F10EE4895ABAA0C9F4C57D9EEF0717B64",
+    "started_utc": "2026-10-26T03:25:11.2444639Z",
+    "timed_out": false,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_composition_test.gd"
+    ],
+    "aborted": false,
+    "exit_code": 0
+  },
+  {
+    "ok": true,
+    "name": "population",
+    "result": {
+      "checks": [
+        {
+          "id": "fixture_two_rooms",
+          "ok": true
+        },
+        {
+          "id": "canonical_catalog",
+          "ok": true
+        },
+        {
+          "id": "catalog_offers_real_species_and_origins",
+          "ok": true
+        },
+        {
+          "id": "summon_not_offered",
+          "ok": true
+        },
+        {
+          "id": "both_brushes_realize",
+          "ok": true
+        },
+        {
+          "id": "no_mutation_before_apply",
+          "ok": true
+        },
+        {
+          "id": "explicit_diff_seven_births",
+          "ok": true
+        },
+        {
+          "id": "deterministic_regeneration",
+          "ok": true
+        },
+        {
+          "id": "dispersed_and_concentrated_counts",
+          "ok": true
+        },
+        {
+          "id": "canonical_compilation",
+          "ok": true
+        },
+        {
+          "id": "canonical_manifest_seven_slots",
+          "ok": true
+        },
+        {
+          "id": "canonical_interaction_records",
+          "ok": true
+        },
+        {
+          "id": "repeated_compile_same_hash",
+          "ok": true
+        },
+        {
+          "id": "array_order_not_identity",
+          "ok": true
+        },
+        {
+          "id": "strict_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "roundtrip_compiles_identically",
+          "ok": true
+        },
+        {
+          "id": "seed_0",
+          "ok": true
+        },
+        {
+          "id": "seed_-1",
+          "ok": true
+        },
+        {
+          "id": "seed_9223372036854775807",
+          "ok": true
+        },
+        {
+          "id": "seed_-9223372036854775808",
+          "ok": true
+        },
+        {
+          "id": "overflow_seed_rejected",
+          "ok": true
+        },
+        {
+          "id": "unknown_field_rejected",
+          "ok": true
+        },
+        {
+          "id": "duplicate_id_rejected",
+          "ok": true
+        },
+        {
+          "id": "nan_rejected",
+          "ok": true
+        },
+        {
+          "id": "truncated_json_rejected",
+          "ok": true
+        },
+        {
+          "id": "summon_rejected",
+          "ok": true
+        },
+        {
+          "id": "unknown_origin_rejected",
+          "ok": true
+        },
+        {
+          "id": "illegal_category_rejected",
+          "ok": true
+        },
+        {
+          "id": "memorable_requires_fixed_site",
+          "ok": true
+        },
+        {
+          "id": "impossible_quota_explicit_deficit",
+          "ok": true
+        },
+        {
+          "id": "deficit_reports_actual_constraint_counts",
+          "ok": true
+        },
+        {
+          "id": "deficit_preserves_prior_plan",
+          "ok": true
+        },
+        {
+          "id": "pinned_reroll_succeeds",
+          "ok": true
+        },
+        {
+          "id": "pin_exact_identity_and_home",
+          "ok": true
+        },
+        {
+          "id": "reroll_explicit_removals",
+          "ok": true
+        },
+        {
+          "id": "pinned_plan_compiles",
+          "ok": true
+        },
+        {
+          "id": "pin_above_quota_rejected",
+          "ok": true
+        },
+        {
+          "id": "excluded_pin_never_silently_deleted",
+          "ok": true
+        },
+        {
+          "id": "stale_recipe_blocks_publication",
+          "ok": true
+        },
+        {
+          "id": "entry_occupied_rejected",
+          "ok": true
+        },
+        {
+          "id": "overlapping_bodies_rejected",
+          "ok": true
+        },
+        {
+          "id": "unsafe_entry_rejected",
+          "ok": true
+        },
+        {
+          "id": "broken_portal_rejected",
+          "ok": true
+        },
+        {
+          "id": "unreachable_exit_rejected",
+          "ok": true
+        },
+        {
+          "id": "mutually_required_terminal_exits_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_layer_rejected",
+          "ok": true
+        },
+        {
+          "id": "density_counts_navigable_samples",
+          "ok": true
+        },
+        {
+          "id": "weighted_catalog_choices",
+          "ok": true
+        },
+        {
+          "id": "same_identity_content_change_is_in_diff",
+          "ok": true
+        },
+        {
+          "id": "weight_enumeration_stable",
+          "ok": true
+        },
+        {
+          "id": "cancelled_no_package",
+          "ok": true
+        },
+        {
+          "id": "undo_atomic_plan",
+          "ok": true
+        },
+        {
+          "id": "redo_atomic_plan",
+          "ok": true
+        },
+        {
+          "id": "obsolete_worker_discarded",
+          "ok": true
+        },
+        {
+          "id": "source_safe_save",
+          "ok": true
+        },
+        {
+          "id": "reopen_preserves_realization",
+          "ok": true
+        },
+        {
+          "id": "external_edit_conflict",
+          "ok": true
+        },
+        {
+          "id": "local_publish",
+          "ok": true
+        },
+        {
+          "id": "immutable_idempotent",
+          "ok": true
+        },
+        {
+          "id": "package_real_reload",
+          "ok": true
+        },
+        {
+          "id": "stale_publish_rejected",
+          "ok": true
+        },
+        {
+          "id": "tampered_package_rejected",
+          "ok": true
+        },
+        {
+          "id": "catalog_not_mutated",
+          "ok": true
+        },
+        {
+          "id": "real_body_radius_cannot_fit",
+          "ok": true
+        },
+        {
+          "id": "giant_fixture_catalog_isolated",
+          "ok": true
+        },
+        {
+          "id": "narrow_source_rejected",
+          "ok": true
+        },
+        {
+          "id": "canonical_mob_profile_blocks_narrow_route",
+          "ok": true
+        },
+        {
+          "id": "fixed_memorable_on_authored_site",
+          "ok": true
+        },
+        {
+          "id": "memorable_compiles_with_policy",
+          "ok": true
+        },
+        {
+          "id": "canonical_boss_never_respawns",
+          "ok": true
+        },
+        {
+          "id": "inaccessible_memorable_site_rejected",
+          "ok": true
+        },
+        {
+          "id": "relief_has_connected_logical_cells",
+          "ok": true
+        },
+        {
+          "id": "brush_crosses_cells_in_selected_layer",
+          "ok": true
+        },
+        {
+          "id": "layer_brush_uses_multiple_heights_and_cells",
+          "ok": true
+        },
+        {
+          "id": "relief_plan_compiles",
+          "ok": true
+        },
+        {
+          "id": "protected_route_realizes_without_spawns",
+          "ok": true
+        },
+        {
+          "id": "protected_route_keeps_body_clearance",
+          "ok": true
+        },
+        {
+          "id": "runtime_planner_accepts_exported_manifest",
+          "ok": true
+        },
+        {
+          "id": "entry_grants_once",
+          "ok": true
+        },
+        {
+          "id": "canonical_state_valid",
+          "ok": true
+        },
+        {
+          "id": "clear_and_clock",
+          "ok": true
+        },
+        {
+          "id": "wave_queues_only_trash",
+          "ok": true
+        },
+        {
+          "id": "one_generation_only",
+          "ok": true
+        },
+        {
+          "id": "existing_reward_policy",
+          "ok": true
+        },
+        {
+          "id": "death_return_anchor_unchanged",
+          "ok": true
+        },
+        {
+          "id": "local_portal_canonical_view",
+          "ok": true
+        },
+        {
+          "id": "real_runtime_configures_actors",
+          "ok": true
+        },
+        {
+          "id": "real_actor_count",
+          "ok": true
+        },
+        {
+          "id": "real_player_at_authored_entry",
+          "ok": true
+        },
+        {
+          "id": "real_canonical_portal_arrival",
+          "ok": true
+        },
+        {
+          "id": "return_keeps_existing_actors",
+          "ok": true
+        }
+      ],
+      "count": 91,
+      "ok": true,
+      "package_hash": "22ffa5599039e1c7e0990ca0e7f75f726696ea13beeaaa814bc837fb083ed2fd",
+      "source_path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project/.godot/m4_test_b2ae5515c8/encounters.json"
+    },
+    "finished_utc": "2026-10-26T03:27:32.3047710Z",
+    "output_sha256": "1AFC775486FFBC8DB160923EB1B15C6BA7645DD7D183560A38DD368B7D636891",
+    "started_utc": "2026-10-26T03:25:25.8123870Z",
+    "timed_out": false,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_population_test.gd"
+    ],
+    "aborted": false,
+    "exit_code": 0
+  },
+  {
+    "ok": true,
+    "name": "patrol",
+    "result": {
+      "checks": [
+        {
+          "id": "strict_source",
+          "ok": true
+        },
+        {
+          "id": "compile_canonical_body_route",
+          "ok": true
+        },
+        {
+          "id": "immutable_source",
+          "ok": true
+        },
+        {
+          "id": "repeat_hash",
+          "ok": true
+        },
+        {
+          "id": "json_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "future_source_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_slot",
+          "ok": true
+        },
+        {
+          "id": "duplicate_assignment",
+          "ok": true
+        },
+        {
+          "id": "nan_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_support",
+          "ok": true
+        },
+        {
+          "id": "outside_leash",
+          "ok": true
+        },
+        {
+          "id": "unfinished_route_draft_allowed",
+          "ok": true
+        },
+        {
+          "id": "unfinished_route_cannot_publish",
+          "ok": true
+        },
+        {
+          "id": "cancelled_no_package",
+          "ok": true
+        },
+        {
+          "id": "undo_whole_route",
+          "ok": true
+        },
+        {
+          "id": "redo_whole_route",
+          "ok": true
+        },
+        {
+          "id": "reject_without_mutation",
+          "ok": true
+        },
+        {
+          "id": "source_saved",
+          "ok": true
+        },
+        {
+          "id": "source_reopened",
+          "ok": true
+        },
+        {
+          "id": "external_conflict",
+          "ok": true
+        },
+        {
+          "id": "publish_local",
+          "ok": true
+        },
+        {
+          "id": "immutable_repeat",
+          "ok": true
+        },
+        {
+          "id": "package_reload",
+          "ok": true
+        },
+        {
+          "id": "stale_refused",
+          "ok": true
+        },
+        {
+          "id": "hash_integrity",
+          "ok": true
+        },
+        {
+          "id": "forged_hash_does_not_bypass_geometry",
+          "ok": true
+        },
+        {
+          "id": "real_actors_bind",
+          "ok": true
+        },
+        {
+          "id": "wait_begins_at_first_point",
+          "ok": true
+        },
+        {
+          "id": "zero_delta_frozen",
+          "ok": true
+        },
+        {
+          "id": "root_freezes_wait",
+          "ok": true
+        },
+        {
+          "id": "stun_freezes_wait",
+          "ok": true
+        },
+        {
+          "id": "tree_pause_freezes_wait",
+          "ok": true
+        },
+        {
+          "id": "dead_does_not_advance",
+          "ok": true
+        },
+        {
+          "id": "loop_next_cursor",
+          "ok": true
+        },
+        {
+          "id": "real_movement_from_home",
+          "ok": true
+        },
+        {
+          "id": "fixed_home_preserved",
+          "ok": true
+        },
+        {
+          "id": "patrol_reaches_later_points",
+          "ok": true
+        },
+        {
+          "id": "aggro_interrupts_wait",
+          "ok": true
+        },
+        {
+          "id": "leash_starts_return",
+          "ok": true
+        },
+        {
+          "id": "returns_and_resumes",
+          "ok": true
+        },
+        {
+          "id": "blocked_diagnosed_without_teleport",
+          "ok": true
+        },
+        {
+          "id": "temporary_blocker_does_not_refuse_birth_binding",
+          "ok": true
+        },
+        {
+          "id": "retry_budget",
+          "ok": true
+        },
+        {
+          "id": "blocked_snapshot_valid",
+          "ok": true
+        },
+        {
+          "id": "obstacle_removed_route_recalculated",
+          "ok": true
+        },
+        {
+          "id": "blocked_graph_restores",
+          "ok": true
+        },
+        {
+          "id": "blocked_state_exact",
+          "ok": true
+        },
+        {
+          "id": "invalid_cursor_blocks_snapshot",
+          "ok": true
+        },
+        {
+          "id": "released_actor_binding_refused",
+          "ok": true
+        },
+        {
+          "id": "ping_pong_expected_sequence",
+          "ok": true
+        },
+        {
+          "id": "canonical_ramp_bridge_fixture",
+          "ok": true
+        },
+        {
+          "id": "ramp_route_valid_for_real_body",
+          "ok": true
+        },
+        {
+          "id": "body_too_large_refused",
+          "ok": true
+        },
+        {
+          "id": "actual_actor_reaches_mid_ramp",
+          "ok": true
+        },
+        {
+          "id": "aggro_on_ramp_preserves_cursor",
+          "ok": true
+        },
+        {
+          "id": "blocked_return_has_diagnostic_no_teleport",
+          "ok": true
+        },
+        {
+          "id": "blocked_return_captures",
+          "ok": true
+        },
+        {
+          "id": "return_from_ramp_resumes_legal_waypoint",
+          "ok": true
+        }
+      ],
+      "count": 58,
+      "ok": true,
+      "package_hash": "16e63f554e9e8133eb6bb9c722c8d0d17e7e17cc43a77be3fc2fcba3c28add2f"
+    },
+    "finished_utc": "2026-10-26T03:28:31.6574000Z",
+    "output_sha256": "45EBE523A71398A0396C0A2A77061FF81F92EC84AFD123C40A4BF5FD719A1CF0",
+    "started_utc": "2026-10-26T03:27:32.3209310Z",
+    "timed_out": false,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_patrol_test.gd"
+    ],
+    "aborted": false,
+    "exit_code": 0
+  },
+  {
+    "ok": true,
+    "name": "generation",
+    "result": {
+      "checks": [
+        {
+          "id": "schema",
+          "ok": true
+        },
+        {
+          "id": "opt_in_required",
+          "ok": true
+        },
+        {
+          "id": "generates",
+          "ok": true
+        },
+        {
+          "id": "unchanged_authorship",
+          "ok": true
+        },
+        {
+          "id": "package_valid",
+          "ok": true
+        },
+        {
+          "id": "same_authority",
+          "ok": true
+        },
+        {
+          "id": "pin_exact",
+          "ok": true
+        },
+        {
+          "id": "fixed_transforms_links",
+          "ok": true
+        },
+        {
+          "id": "snapshot_unchanged",
+          "ok": true
+        },
+        {
+          "id": "repeat",
+          "ok": true
+        },
+        {
+          "id": "order_hash",
+          "ok": true
+        },
+        {
+          "id": "order_result",
+          "ok": true
+        },
+        {
+          "id": "seed_valid_0",
+          "ok": true
+        },
+        {
+          "id": "seed_repeat_0",
+          "ok": true
+        },
+        {
+          "id": "assembler_real_0",
+          "ok": true
+        },
+        {
+          "id": "seed_valid_-1",
+          "ok": true
+        },
+        {
+          "id": "seed_repeat_-1",
+          "ok": true
+        },
+        {
+          "id": "assembler_real_-1",
+          "ok": true
+        },
+        {
+          "id": "seed_valid_9223372036854775807",
+          "ok": true
+        },
+        {
+          "id": "seed_repeat_9223372036854775807",
+          "ok": true
+        },
+        {
+          "id": "assembler_real_9223372036854775807",
+          "ok": true
+        },
+        {
+          "id": "seed_valid_-9223372036854775808",
+          "ok": true
+        },
+        {
+          "id": "seed_repeat_-9223372036854775808",
+          "ok": true
+        },
+        {
+          "id": "assembler_real_-9223372036854775808",
+          "ok": true
+        },
+        {
+          "id": "seed_valid_1",
+          "ok": true
+        },
+        {
+          "id": "seed_repeat_1",
+          "ok": true
+        },
+        {
+          "id": "assembler_real_1",
+          "ok": true
+        },
+        {
+          "id": "seed_valid_2",
+          "ok": true
+        },
+        {
+          "id": "seed_repeat_2",
+          "ok": true
+        },
+        {
+          "id": "assembler_real_2",
+          "ok": true
+        },
+        {
+          "id": "seed_valid_3",
+          "ok": true
+        },
+        {
+          "id": "seed_repeat_3",
+          "ok": true
+        },
+        {
+          "id": "assembler_real_3",
+          "ok": true
+        },
+        {
+          "id": "seed_valid_4",
+          "ok": true
+        },
+        {
+          "id": "seed_repeat_4",
+          "ok": true
+        },
+        {
+          "id": "assembler_real_4",
+          "ok": true
+        },
+        {
+          "id": "two_real_variants",
+          "ok": true
+        },
+        {
+          "id": "allowed_rotation_works",
+          "ok": true
+        },
+        {
+          "id": "cyclic_graph_global_validation",
+          "ok": true
+        },
+        {
+          "id": "assembler_cycle_explicit",
+          "ok": true
+        },
+        {
+          "id": "seed_overflow",
+          "ok": true
+        },
+        {
+          "id": "seed_reject_-9223372036854775809",
+          "ok": true
+        },
+        {
+          "id": "seed_reject_01",
+          "ok": true
+        },
+        {
+          "id": "seed_reject_-0",
+          "ok": true
+        },
+        {
+          "id": "seed_reject_1.0",
+          "ok": true
+        },
+        {
+          "id": "seed_reject_+1",
+          "ok": true
+        },
+        {
+          "id": "seed_reject_",
+          "ok": true
+        },
+        {
+          "id": "unknown_field",
+          "ok": true
+        },
+        {
+          "id": "future_version",
+          "ok": true
+        },
+        {
+          "id": "future_algorithm",
+          "ok": true
+        },
+        {
+          "id": "zero_candidates",
+          "ok": true
+        },
+        {
+          "id": "nonfinite",
+          "ok": true
+        },
+        {
+          "id": "rotation_integer",
+          "ok": true
+        },
+        {
+          "id": "weight_positive",
+          "ok": true
+        },
+        {
+          "id": "pin_reference",
+          "ok": true
+        },
+        {
+          "id": "selection_duplicate",
+          "ok": true
+        },
+        {
+          "id": "domain_duplicate",
+          "ok": true
+        },
+        {
+          "id": "option_duplicate",
+          "ok": true
+        },
+        {
+          "id": "incompatible_pin",
+          "ok": true
+        },
+        {
+          "id": "error_has_context",
+          "ok": true
+        },
+        {
+          "id": "no_partial_proposal",
+          "ok": true
+        },
+        {
+          "id": "outside_selection_exact",
+          "ok": true
+        },
+        {
+          "id": "all_pinned",
+          "ok": true
+        },
+        {
+          "id": "quota_forces_variant",
+          "ok": true
+        },
+        {
+          "id": "impossible_quota",
+          "ok": true
+        },
+        {
+          "id": "diversity",
+          "ok": true
+        },
+        {
+          "id": "diversity_limit",
+          "ok": true
+        },
+        {
+          "id": "global_budget",
+          "ok": true
+        },
+        {
+          "id": "cancel_no_output",
+          "ok": true
+        },
+        {
+          "id": "global_validation_backtracks",
+          "ok": true
+        },
+        {
+          "id": "backtrack_budget",
+          "ok": true
+        },
+        {
+          "id": "validation_budget",
+          "ok": true
+        },
+        {
+          "id": "global_reject_not_local_success",
+          "ok": true
+        },
+        {
+          "id": "connector_rotation_contradiction",
+          "ok": true
+        },
+        {
+          "id": "apply_one_action",
+          "ok": true
+        },
+        {
+          "id": "undo_map",
+          "ok": true
+        },
+        {
+          "id": "redo_map",
+          "ok": true
+        },
+        {
+          "id": "stale_apply",
+          "ok": true
+        },
+        {
+          "id": "failure_not_applied",
+          "ok": true
+        },
+        {
+          "id": "tampered_proposal_rejected",
+          "ok": true
+        },
+        {
+          "id": "stale_worker",
+          "ok": true
+        },
+        {
+          "id": "cancel_worker",
+          "ok": true
+        },
+        {
+          "id": "save",
+          "ok": true
+        },
+        {
+          "id": "roundtrip",
+          "ok": true
+        },
+        {
+          "id": "conflict_preserves",
+          "ok": true
+        },
+        {
+          "id": "pending_preserved",
+          "ok": true
+        },
+        {
+          "id": "duplicate_json_rejected",
+          "ok": true
+        },
+        {
+          "id": "assembler_unsupported",
+          "ok": true
+        },
+        {
+          "id": "assembler_preserves_authoring_or_fails",
+          "ok": true
+        }
+      ],
+      "count": 89,
+      "ok": true,
+      "package_hash": "1d2a9cebb960139de712e2058ac0059defe7941ce4d2f30da8c2d6d26e06baf0"
+    },
+    "finished_utc": "2026-10-26T03:28:52.7819966Z",
+    "output_sha256": "2027BE28B4E5DA97010E35CDA13BC94F9DE0939ED0D12E6B436F81B3FC4C4414",
+    "started_utc": "2026-10-26T03:28:31.6671116Z",
+    "timed_out": false,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_generation_test.gd"
+    ],
+    "aborted": false,
+    "exit_code": 0
+  },
+  {
+    "ok": true,
+    "name": "exchange",
+    "result": {
+      "checks": [
+        {
+          "id": "piece_export",
+          "ok": true
+        },
+        {
+          "id": "piece_safe_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "piece_propose",
+          "ok": true
+        },
+        {
+          "id": "piece_prepare",
+          "ok": true
+        },
+        {
+          "id": "piece_authority_hash",
+          "ok": true
+        },
+        {
+          "id": "piece_no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "piece_idempotent",
+          "ok": true
+        },
+        {
+          "id": "piece_io_request",
+          "ok": true
+        },
+        {
+          "id": "piece_io_proposal",
+          "ok": true
+        },
+        {
+          "id": "piece_io_source",
+          "ok": true
+        },
+        {
+          "id": "piece_io_candidate",
+          "ok": true
+        },
+        {
+          "id": "piece_disk_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "map_export",
+          "ok": true
+        },
+        {
+          "id": "map_safe_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "map_propose",
+          "ok": true
+        },
+        {
+          "id": "map_prepare",
+          "ok": true
+        },
+        {
+          "id": "map_authority_hash",
+          "ok": true
+        },
+        {
+          "id": "map_no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "map_idempotent",
+          "ok": true
+        },
+        {
+          "id": "map_io_request",
+          "ok": true
+        },
+        {
+          "id": "map_io_proposal",
+          "ok": true
+        },
+        {
+          "id": "map_io_source",
+          "ok": true
+        },
+        {
+          "id": "map_io_candidate",
+          "ok": true
+        },
+        {
+          "id": "map_disk_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "population_export",
+          "ok": true
+        },
+        {
+          "id": "population_safe_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "population_propose",
+          "ok": true
+        },
+        {
+          "id": "population_prepare",
+          "ok": true
+        },
+        {
+          "id": "population_authority_hash",
+          "ok": true
+        },
+        {
+          "id": "population_no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "population_idempotent",
+          "ok": true
+        },
+        {
+          "id": "population_io_request",
+          "ok": true
+        },
+        {
+          "id": "population_io_proposal",
+          "ok": true
+        },
+        {
+          "id": "population_io_source",
+          "ok": true
+        },
+        {
+          "id": "population_io_candidate",
+          "ok": true
+        },
+        {
+          "id": "population_disk_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "patrol_export",
+          "ok": true
+        },
+        {
+          "id": "patrol_safe_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "patrol_propose",
+          "ok": true
+        },
+        {
+          "id": "patrol_prepare",
+          "ok": true
+        },
+        {
+          "id": "patrol_authority_hash",
+          "ok": true
+        },
+        {
+          "id": "patrol_no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "patrol_idempotent",
+          "ok": true
+        },
+        {
+          "id": "patrol_io_request",
+          "ok": true
+        },
+        {
+          "id": "patrol_io_proposal",
+          "ok": true
+        },
+        {
+          "id": "patrol_io_source",
+          "ok": true
+        },
+        {
+          "id": "patrol_io_candidate",
+          "ok": true
+        },
+        {
+          "id": "patrol_disk_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "generation_export",
+          "ok": true
+        },
+        {
+          "id": "generation_safe_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "generation_propose",
+          "ok": true
+        },
+        {
+          "id": "generation_prepare",
+          "ok": true
+        },
+        {
+          "id": "generation_authority_hash",
+          "ok": true
+        },
+        {
+          "id": "generation_no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "generation_idempotent",
+          "ok": true
+        },
+        {
+          "id": "generation_io_request",
+          "ok": true
+        },
+        {
+          "id": "generation_io_proposal",
+          "ok": true
+        },
+        {
+          "id": "generation_io_source",
+          "ok": true
+        },
+        {
+          "id": "generation_io_candidate",
+          "ok": true
+        },
+        {
+          "id": "generation_disk_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "atomic_apply",
+          "ok": true
+        },
+        {
+          "id": "undo_preserves_authorship",
+          "ok": true
+        },
+        {
+          "id": "redo",
+          "ok": true
+        },
+        {
+          "id": "reapply_noop",
+          "ok": true
+        },
+        {
+          "id": "base_diverged",
+          "ok": true
+        },
+        {
+          "id": "section_denied",
+          "ok": true
+        },
+        {
+          "id": "untrusted_permissions",
+          "ok": true
+        },
+        {
+          "id": "base_integrity",
+          "ok": true
+        },
+        {
+          "id": "file_integrity",
+          "ok": true
+        },
+        {
+          "id": "bundle_integrity",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_../source.json",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_C:/source.json",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_/tmp/source.json",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_source.gd",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_scene.tscn",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_assets/evil.svg",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_https://example.com/x",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_a\\b.json",
+          "ok": true
+        },
+        {
+          "id": "duplicate_file",
+          "ok": true
+        },
+        {
+          "id": "compiled_integrity",
+          "ok": true
+        },
+        {
+          "id": "duplicate_identity",
+          "ok": true
+        },
+        {
+          "id": "unknown_version",
+          "ok": true
+        },
+        {
+          "id": "duplicate_json_key",
+          "ok": true
+        },
+        {
+          "id": "truncated_json",
+          "ok": true
+        },
+        {
+          "id": "size_limit",
+          "ok": true
+        },
+        {
+          "id": "depth_limit",
+          "ok": true
+        },
+        {
+          "id": "unknown_source_field",
+          "ok": true
+        },
+        {
+          "id": "io_conflict",
+          "ok": true
+        },
+        {
+          "id": "pending_preserved",
+          "ok": true
+        },
+        {
+          "id": "pending_intact",
+          "ok": true
+        },
+        {
+          "id": "ids_denied",
+          "ok": true
+        },
+        {
+          "id": "semantic_entity_diff",
+          "ok": true
+        },
+        {
+          "id": "change_budget",
+          "ok": true
+        },
+        {
+          "id": "protected_path",
+          "ok": true
+        },
+        {
+          "id": "locked_layer",
+          "ok": true
+        },
+        {
+          "id": "fixed_slot",
+          "ok": true
+        },
+        {
+          "id": "pinned_region",
+          "ok": true
+        },
+        {
+          "id": "missing_asset",
+          "ok": true
+        },
+        {
+          "id": "invalid_apply_no_mutation",
+          "ok": true
+        },
+        {
+          "id": "new_identity_denied",
+          "ok": true
+        },
+        {
+          "id": "policy_invalid",
+          "ok": true
+        },
+        {
+          "id": "not_request",
+          "ok": true
+        },
+        {
+          "id": "material_proposal",
+          "ok": true
+        },
+        {
+          "id": "piece_revision_matches_session",
+          "ok": true
+        },
+        {
+          "id": "piece_package_matches_preview",
+          "ok": true
+        },
+        {
+          "id": "piece_undo",
+          "ok": true
+        },
+        {
+          "id": "route_wait_proposal",
+          "ok": true
+        },
+        {
+          "id": "route_wait_compiled",
+          "ok": true
+        },
+        {
+          "id": "protected_region_exports",
+          "ok": true
+        },
+        {
+          "id": "protected_region_geometry",
+          "ok": true
+        },
+        {
+          "id": "broken_seam_not_importable",
+          "ok": true
+        },
+        {
+          "id": "semantic_diff_stable_ids",
+          "ok": true
+        },
+        {
+          "id": "cancelled_export",
+          "ok": true
+        }
+      ],
+      "count": 113,
+      "ok": true,
+      "package_hash": "6db37e6b699bac247258ebfdf926a20825cc707fba3ac037b2264a5836f2292a"
+    },
+    "finished_utc": "2026-10-26T03:29:14.7503286Z",
+    "output_sha256": "B2A3ACEABD9D584DE71051440A4119815D149857A1EE2E694C299AA937B5DBFF",
+    "started_utc": "2026-10-26T03:28:52.7981895Z",
+    "timed_out": false,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_exchange_test.gd"
+    ],
+    "aborted": false,
+    "exit_code": 0
+  }
+]

@@ -1,0 +1,25 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_RELIEF_CHECK convex_terrain_mass_valid true
+F9_RELIEF_CHECK concave_cap_rejected true
+F9_RELIEF_CHECK base_above_cap_rejected true
+F9_RELIEF_CHECK non_finite_mass_rejected true
+F9_RELIEF_CHECK closed_passive_fields true
+F9_RELIEF_CHECK cap_height_oracle true
+F9_RELIEF_CHECK sloping_face_not_bounding_box true
+F9_RELIEF_CHECK ray_above_mass_clear true
+F9_RELIEF_CHECK ray_below_base_clear true
+F9_RELIEF_CHECK tangent_to_floor_is_clear true
+F9_RELIEF_CHECK body_height_hits_underside true
+F9_RELIEF_CHECK body_radius_hits_side true
+F9_RELIEF_CHECK zero_radius_outside_is_clear true
+F9_RELIEF_CHECK triangle_corner_outside_mass true
+F9_RELIEF_CHECK transform_preserves_identity_namespace true
+F9_RELIEF_CHECK rotated_translated_height_oracle true
+F9_RELIEF_CHECK record_immutable true
+F9_RELIEF_CHECK far_coordinates_keep_height_oracle true
+F9_RELIEF_CHECK region_above_mass_clear true
+F9_RELIEF_CHECK region_under_mass_hits_underside true
+F9_RELIEF_CHECK region_on_own_cap_is_clear true
+F9_RELIEF_CHECK region_outside_footprint_clear true
+F9_RELIEF_RESULT {"checks":[{"id":"convex_terrain_mass_valid","ok":true},{"id":"concave_cap_rejected","ok":true},{"id":"base_above_cap_rejected","ok":true},{"id":"non_finite_mass_rejected","ok":true},{"id":"closed_passive_fields","ok":true},{"id":"cap_height_oracle","ok":true},{"id":"sloping_face_not_bounding_box","ok":true},{"id":"ray_above_mass_clear","ok":true},{"id":"ray_below_base_clear","ok":true},{"id":"tangent_to_floor_is_clear","ok":true},{"id":"body_height_hits_underside","ok":true},{"id":"body_radius_hits_side","ok":true},{"id":"zero_radius_outside_is_clear","ok":true},{"id":"triangle_corner_outside_mass","ok":true},{"id":"transform_preserves_identity_namespace","ok":true},{"id":"rotated_translated_height_oracle","ok":true},{"id":"record_immutable","ok":true},{"id":"far_coordinates_keep_height_oracle","ok":true},{"id":"region_above_mass_clear","ok":true},{"id":"region_under_mass_hits_underside","ok":true},{"id":"region_on_own_cap_is_clear","ok":true},{"id":"region_outside_footprint_clear","ok":true}],"count":22,"ok":true}

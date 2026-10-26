@@ -4,7 +4,7 @@ const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometr
 const EPS := 0.00001
 
 static func index(stage: Dictionary) -> Dictionary:
-	var cells: Dictionary = {}; var ports: Dictionary = {}; var by_surface: Dictionary = {}; var links: Dictionary = {}
+	var cells: Dictionary = {}; var ports: Dictionary = {}; var by_surface: Dictionary = {}; var links: Dictionary = {}; var transitions: Dictionary = {}
 	for cell: Dictionary in stage.get("surfaces",[]):
 		cells[cell.surface_id] = cell; by_surface[cell.surface_id] = []
 	for port: Dictionary in stage.get("connectors",[]):
@@ -18,28 +18,45 @@ static func index(stage: Dictionary) -> Dictionary:
 			if Vector3(a.position).distance_to(b.position) > EPS or Vector3(a.outward).dot(b.outward) > -1.0+EPS: continue
 			if not links.has(pair[0]): links[pair[0]] = []
 			links[pair[0]].append(ports[pair[1]])
+			if not transitions.has(pair[0]): transitions[pair[0]] = []
+			transitions[pair[0]].append({"other_id":pair[1],"allowed":link.forward if pair[0] == link.a_connector else link.backward,"connection_id":link.connection_id})
 	var outlines: Dictionary = {}
 	for id: String in cells:
 		var cell: Dictionary = cells[id]; var edges: Array = []
 		for k: int in cell.vertices.size():
 			var va: Vector3 = cell.vertices[k]; var vb: Vector3 = cell.vertices[(k+1)%cell.vertices.size()]
 			var a := Vector2(va.x,va.z); var b := Vector2(vb.x,vb.z)
-			var length := a.distance_to(b); var axis := (b-a)/length; var openings: Array = []
+			var dx := float(b.x)-float(a.x); var dz := float(b.y)-float(a.y)
+			var length := sqrt(dx*dx+dz*dz); var ax := dx/length; var az := dz/length; var openings: Array = []
 			for port: Dictionary in by_surface[id]:
 				var center := Vector2(port.position.x,port.position.z)
 				var normal := Vector2(port.outward.x,port.outward.z)
-				if absf((center-a).cross(axis)) > EPS or absf(normal.dot(axis)) > EPS: continue
+				var cross := (float(center.y)-float(a.y))*ax-(float(center.x)-float(a.x))*az
+				if absf(cross) > EPS+Kernel.horizontal_roundoff(-az,ax,port.position) or absf(float(normal.x)*ax+float(normal.y)*az) > EPS: continue
 				for other: Dictionary in links.get(port.connector_id,[]):
 					if not cells.has(other.surface_id) or other.kind != port.kind: continue
 					var half := minf(float(port.width),float(other.width))*0.5
-					var t := (center-a).dot(axis)
+					var t := (float(center.x)-float(a.x))*ax+(float(center.y)-float(a.y))*az
 					var low := clampf(t-half,0,length); var high := clampf(t+half,0,length)
+					var tolerance := EPS+Kernel.horizontal_roundoff(ax,az,port.position)
+					if low <= tolerance: low = 0
+					if length-high <= tolerance: high = length
 					if high <= low: continue
-					openings.append({"lo":low,"hi":high,"a":_along(a,b,low,length),"b":_along(a,b,high,length),"neighbor":other.surface_id,"headroom":minf(float(port.headroom),minf(float(other.headroom),float(cells[other.surface_id].headroom)))})
+					openings.append({"connector_id":port.connector_id,"lo":low,"hi":high,"a":_along(a,b,low,length),"b":_along(a,b,high,length),"neighbor":other.surface_id,"headroom":minf(float(port.headroom),minf(float(other.headroom),float(cells[other.surface_id].headroom)))})
 			openings.sort_custom(func(x: Dictionary,y: Dictionary) -> bool: return x.lo < y.lo)
-			edges.append({"a":a,"b":b,"length":length,"openings":openings})
+			edges.append({"a":a,"b":b,"ax":ax,"az":az,"length":length,"openings":openings})
 		outlines[id] = edges
-	return {"cells":cells,"ports":by_surface,"outlines":outlines}
+	return {"cells":cells,"ports":by_surface,"endpoints":ports,"transitions":transitions,"outlines":outlines}
+
+static func on_opening(surface_id: String, connector_id: String, point: Vector3, data: Dictionary) -> bool:
+	for edge: Dictionary in data.outlines.get(surface_id,[]):
+		var x := float(point.x)-float(Vector2(edge.a).x); var z := float(point.z)-float(Vector2(edge.a).y)
+		if absf(z*float(edge.ax)-x*float(edge.az)) > EPS+Kernel.horizontal_roundoff(-float(edge.az),float(edge.ax),point): continue
+		var along := x*float(edge.ax)+z*float(edge.az)
+		var tolerance := EPS+Kernel.horizontal_roundoff(float(edge.ax),float(edge.az),point)
+		for opening: Dictionary in edge.openings:
+			if opening.connector_id == connector_id and along >= opening.lo-tolerance and along <= opening.hi+tolerance: return true
+	return false
 
 static func _along(a: Vector2, b: Vector2, at: float, length: float) -> Vector2:
 	if at <= EPS: return a
@@ -56,6 +73,9 @@ static func _patch(id: String, from: Vector2, to: Vector2, radius: float, height
 				if segment_distance_squared(from,to,opening.a,opening.b) > (radius+EPS)*(radius+EPS): continue
 				included[opening.neighbor] = true; queue.append(opening.neighbor)
 	return included
+
+static func members(id: String, from: Vector2, to: Vector2, radius: float, height: float, data: Dictionary) -> Dictionary:
+	return _patch(id,from,to,radius,height,data)
 
 static func _closed(patch: Dictionary, height: float, data: Dictionary) -> Array:
 	var result: Array = []

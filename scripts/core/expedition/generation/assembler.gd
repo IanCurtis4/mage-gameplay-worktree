@@ -146,6 +146,18 @@ static func place(task: Dictionary, definition: Dictionary, rotation: int, place
 			instance[kind].append(item)
 	for kind: String in ["solid_volumes","blockers"]:
 		for volume: AABB in definition[kind]: instance[kind].append(Geometry.transform_volume(volume,rotation,offset))
+	if not definition.get("solid_prisms",[]).is_empty():
+		instance["solid_prisms"] = []
+		for prism: Dictionary in definition.solid_prisms:
+			instance.solid_prisms.append(preload("res://scripts/core/expedition/spatial/world_solid_prism.gd").transformed(prism,rotation,offset,qualified(stage,instance_id,"mass",""),qualified(stage,instance_id,"surface","")))
+	if not definition.get("internal_connections",[]).is_empty():
+		instance["internal_connections"] = []
+		for original: Dictionary in definition.internal_connections:
+			var link := original.duplicate(true)
+			link.connection_id = qualified(stage,instance_id,"join",original.connection_id)
+			link.a_connector = qualified(stage,instance_id,"connector",original.a_connector)
+			link.b_connector = qualified(stage,instance_id,"connector",original.b_connector)
+			instance.internal_connections.append(link)
 	for other: Dictionary in placements:
 		if other["stage_id"] != stage: continue
 		for cell: Dictionary in instance["surfaces"]:
@@ -166,6 +178,10 @@ static func finalize(snapshot: Dictionary, placements: Array[Dictionary]) -> Dic
 			for field: String in ["surfaces","connectors","sockets"]: stage[field].append_array(instance[field])
 			stage["volumes"].append_array(instance["solid_volumes"])
 			stage["volumes"].append_array(instance["blockers"])
+			if instance.has("solid_prisms"):
+				if not stage.has("solid_prisms"): stage["solid_prisms"] = []
+				stage.solid_prisms.append_array(instance.solid_prisms)
+			stage.connections.append_array(instance.get("internal_connections",[]))
 			if not instance["connection"].is_empty(): stage["connections"].append(instance["connection"])
 		var entrance := lookup(stage["sockets"],"socket_id",stage["entrance"])
 		if entrance.is_empty() or entrance["kind"] != "entrance": return failed(&"objective_unreachable","stage entrance: "+stage["stage_id"])

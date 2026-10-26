@@ -46,6 +46,7 @@ static func prepare(world: WorldGeometry, anchor: ExpeditionWorldPoint, polygon:
 						var y := support_y(patch,point)
 						low = minf(low,y); high = maxf(high,y)
 					if low < volume.end.y-EPS and high+float(profile["height"]) > volume.position.y+EPS: return WorldSkillCast.failure(&"region_occluded")
+			if world._region_mass_overlap(intersection,patch,float(profile["height"])): return WorldSkillCast.failure(&"region_occluded")
 			for segment: WorldSolidSegment in segments:
 				if segment.intersects_region(intersection,origin,normal,float(profile["height"])): return WorldSkillCast.failure(&"region_occluded")
 			patches.append(patch); covered += size

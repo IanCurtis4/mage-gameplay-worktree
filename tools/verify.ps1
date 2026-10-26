@@ -452,7 +452,7 @@ if ($F1Fixture) {
     foreach ($check in $selectedChecks) {
         if ($check.name -in @('e07_f1_import_test', 'e07_f1_native_import', 'e07_f0_import_test')) { throw 'Bootstrap imports must run without F1Fixture.' }
         $pathIndex = [Array]::IndexOf($check.arguments, '--path')
-        if ($pathIndex -ge 0 -and $check.arguments[$pathIndex + 1] -eq $projectPath) { $check.arguments[$pathIndex + 1] = $fixtureF1Path }
+        if ($pathIndex -ge 0 -and $check.arguments[$pathIndex + 1] -in @($projectPath, $fixtureF0Path)) { $check.arguments[$pathIndex + 1] = $fixtureF1Path }
     }
 }
 if ([string]::IsNullOrWhiteSpace($GodotPath)) { throw 'GodotPath is required to execute checks; use -List to inspect the plan.' }

@@ -61,6 +61,18 @@
       "base_sha256": "043e0fc4213b5c4ce8e85e7307fa05df8cbed2f01ff22cd45ca0eea071abb5c2"
     },
     {
+      "path": "assets/art/map_authoring/cliff_tile.png",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/art/map_authoring/cliff_tile.png.import",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
       "path": "assets/art/map_authoring/earth_tile.png",
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
@@ -91,9 +103,39 @@
       "base_sha256": "0e81eb3da0611c5e60b9496b65ff759eb67163af011284ee2034ea58589a17fb"
     },
     {
+      "path": "assets/art/map_authoring/materials_provenance.json",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
       "path": "assets/art/map_authoring/props/README.md",
       "owner": "Sol F9",
       "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/art/map_authoring/props/broken_pillar.png",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/art/map_authoring/props/broken_pillar.png.import",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/art/map_authoring/props/desert_cactus.png",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/art/map_authoring/props/desert_cactus.png.import",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
       "base_sha256": null
     },
     {
@@ -127,6 +169,18 @@
       "base_sha256": null
     },
     {
+      "path": "assets/art/map_authoring/props/sandstone_boulder.png",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/art/map_authoring/props/sandstone_boulder.png.import",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
       "path": "assets/art/map_authoring/props/woodland_shrub.png",
       "owner": "Sol F9",
       "previous_owner": "new F9 objects/authorized art asset",
@@ -136,6 +190,36 @@
       "path": "assets/art/map_authoring/props/woodland_shrub.png.import",
       "owner": "Sol F9",
       "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/art/map_authoring/sand_tile.png",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/art/map_authoring/sand_tile.png.import",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/art/map_authoring/water_tile.png",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/art/map_authoring/water_tile.png.import",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
+      "path": "data/map_authoring/border_profiles.json",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
       "base_sha256": null
     },
     {
@@ -211,6 +295,12 @@
       "base_sha256": "0bad015275e8222e87982cd692d55f8cdfde8863a3f898e64512cc02487a8300"
     },
     {
+      "path": "docs/map_editor/contracts/f9_connector_fragments.md",
+      "owner": "Astra F9 — bounded connector representation consultation",
+      "previous_owner": "new architecture note; no runtime/test ownership",
+      "base_sha256": null
+    },
+    {
       "path": "docs/map_editor/contracts/f9_dispatch.md",
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
@@ -232,6 +322,12 @@
       "path": "docs/map_editor/contracts/f9_terrain_engineering.md",
       "owner": "Sol F9",
       "previous_owner": "new F9 support mesh engineering",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/contracts/f9_terrain_solids.md",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
       "base_sha256": null
     },
     {
@@ -271,6 +367,18 @@
       "base_sha256": "7117e7840adcf46d1c9f30aef4bd612fe34eb40f9e0bef7c07f9020d3b9db16a"
     },
     {
+      "path": "scripts/core/expedition/generation/assembler.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer: Editor F0-F8, E07 catalog and validation inactive per app inventory25/10",
+      "base_sha256": "ede6b6ed8bc503539f7d29f28ad29c6c7f467ae88ae01df7d0a829a434628b23"
+    },
+    {
+      "path": "scripts/core/expedition/generation/assembler.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer: Editor F0-F8, E07 catalog and validation inactive per app inventory25/10",
+      "base_sha256": "560a61b482f674812bb31fa94e35937c0b06b843bcefa8c2873c806d7080783c"
+    },
+    {
       "path": "scripts/core/expedition/generation/fixture_geometry.gd",
       "owner": "Sol F9",
       "previous_owner": "E07 geometry; sequential transfer for F9-04",
@@ -283,10 +391,52 @@
       "base_sha256": "9fa0a946fbfe306ed551f6e27cfb09daa62b705c246f27cb05004b86aed68339"
     },
     {
+      "path": "scripts/core/expedition/generation/input_validator.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer: Editor F0-F8, E07 catalog and validation inactive per app inventory25/10",
+      "base_sha256": "0be751597630f4092d420149a2b850275453ef19504cede22229dd5d05023e02"
+    },
+    {
+      "path": "scripts/core/expedition/generation/input_validator.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer: Editor F0-F8, E07 catalog and validation inactive per app inventory25/10",
+      "base_sha256": "8d160f87a6b293b186d6e71442c1be2747371626a0558d70fa144dd3fe127bc7"
+    },
+    {
+      "path": "scripts/core/expedition/generation/witness_graph.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer: Editor F0-F8, E07 catalog and validation inactive per app inventory25/10",
+      "base_sha256": "863fe078c1e85c7cad341d41b0f68188a7a95b718f90d318b8f111ceed49e51f"
+    },
+    {
+      "path": "scripts/core/expedition/generation/witness_graph.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer: Editor F0-F8, E07 catalog and validation inactive per app inventory25/10",
+      "base_sha256": "053f302107de8ed26ef51608cf5abb153c4d529e5864e04e82a0e8824b473336"
+    },
+    {
       "path": "scripts/core/expedition/snapshot/runtime_manifest.json",
       "owner": "Sol F9",
       "previous_owner": "sequential transfer for derived geometry index; no active second writer",
       "base_sha256": "eab951ba861bbc80403ee508b2947d516941b4a202dd5bf8dd5ffef22505d529"
+    },
+    {
+      "path": "scripts/core/expedition/snapshot/snapshot_registry.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer for validation of new terrain mass on capture/restore; E07 writers inactive25/10",
+      "base_sha256": "3677e7cf67d921e33ef5a51ade340fde2098f98068342c3cb6beea9afbf1f1d7"
+    },
+    {
+      "path": "scripts/core/expedition/spatial/world_actor_motion.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer: Editor F0-F8, E07 catalog and validation inactive per app inventory25/10",
+      "base_sha256": "98765a455334ff083819ae22384fb059f6a4c871741f55dc9e862ae56b259918"
+    },
+    {
+      "path": "scripts/core/expedition/spatial/world_actor_motion.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer: Editor F0-F8, E07 catalog and validation inactive per app inventory25/10",
+      "base_sha256": "a4e081cf116ba9ca4527628fb5af8f09516475289ea6c53912d481d6ad94187d"
     },
     {
       "path": "scripts/core/expedition/spatial/world_geometry.gd",
@@ -301,6 +451,18 @@
       "base_sha256": "2630f572b431a9a19df8b25c246e30bc1e4f7b2c477d8114448412a36108c28b"
     },
     {
+      "path": "scripts/core/expedition/spatial/world_solid_prism.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/core/expedition/spatial/world_solid_prism.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
       "path": "scripts/core/expedition/spatial/world_support_patch.gd",
       "owner": "Sol F9",
       "previous_owner": "new F9 support mesh engineering",
@@ -311,6 +473,30 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 support mesh engineering",
       "base_sha256": null
+    },
+    {
+      "path": "scripts/core/expedition/spatial/world_support_region.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer: Editor F0-F8, E07 catalog and validation inactive per app inventory25/10",
+      "base_sha256": "f987643ef35ddf4b6640bab9c738794baec95dd6958009da6a313fe4e0433c2a"
+    },
+    {
+      "path": "scripts/core/expedition/spatial/world_support_region.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer: Editor F0-F8, E07 catalog and validation inactive per app inventory25/10",
+      "base_sha256": "773f47f4d741ba90dd56ac3d6c2d07b82134892d803e734705bb4b0920d65b2a"
+    },
+    {
+      "path": "scripts/data/expedition/part_definition.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer: Editor F0-F8, E07 catalog and validation inactive per app inventory25/10",
+      "base_sha256": "1c7235152d900412ca5a7d40b8cad2905caff528a745a75c235ea6567a6aab68"
+    },
+    {
+      "path": "scripts/data/expedition/part_definition.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer: Editor F0-F8, E07 catalog and validation inactive per app inventory25/10",
+      "base_sha256": "6133745fd98a4c287909d6a62ae3883c54663ec8cb1dddd3540d4004e96d7d38"
     },
     {
       "path": "scripts/map_authoring/compiler/headless.gd",
@@ -347,6 +533,30 @@
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
       "base_sha256": "5a6ec4b38e3d67fb49394b0713abf86b23b0446fa2ed803805c3745898c270d8"
+    },
+    {
+      "path": "scripts/map_authoring/composition/border_profiles.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/composition/border_profiles.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/composition/border_view.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/composition/border_view.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
     },
     {
       "path": "scripts/map_authoring/composition/headless.gd",
@@ -1291,6 +1501,30 @@
       "base_sha256": "99de325e3268578d2f747b1312a0450a11d730c0c69083c907c3879c94e40ba8"
     },
     {
+      "path": "tests/map_editor_relief_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_relief_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_relief_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_relief_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 relief/material/biome engineering",
+      "base_sha256": null
+    },
+    {
       "path": "tests/map_editor_terrain_scale_test.gd",
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
@@ -1379,24 +1613,29 @@
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
       "base_sha256": "527001f8a348ec2435e052d3fb8e335c8a674fb4c9ca52bef4a25ede16ba0418"
+    },
+    {
+      "path": "tools/verify.ps1",
+      "owner": "Sol F9",
+      "previous_owner": "sequential transfer: allow official F0 selection in the one existing F1 fixture; bootstrap restrictions preserved",
+      "base_sha256": "d9f652bab91c4bfae98e254e8fb36148a17de75e569db9f0c3dc3814b69a4937"
     }
   ],
   "read_only_shared": [
     "project.godot",
-    "tools/verify.ps1",
-    "scripts/core/expedition/snapshot/snapshot_registry.gd",
     "scripts/actors/enemy_actor.gd"
   ],
   "supervision": {
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "mesh checkpoint frozen for Luna; source stable",
+    "state": "mesh supervised at50ba51ac; relief foundation awaiting frozen candidate and sequential supervision",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
       "docs/map_editor/delivery/evidence/f9/luna/objects/report.md",
-      "docs/map_editor/delivery/evidence/f9/luna/mesh/report.md"
+      "docs/map_editor/delivery/evidence/f9/luna/mesh/report.md",
+      "docs/map_editor/delivery/evidence/f9/luna/relief/report.md"
     ],
     "generated_evidence_roots": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
@@ -1411,7 +1650,12 @@
       "docs/map_editor/delivery/evidence/f9/luna/objects/official",
       "docs/map_editor/delivery/evidence/f9/luna/mesh/authorities",
       "docs/map_editor/delivery/evidence/f9/luna/mesh/geometry",
-      "docs/map_editor/delivery/evidence/f9/luna/mesh/official"
+      "docs/map_editor/delivery/evidence/f9/luna/mesh/official",
+      "docs/map_editor/delivery/evidence/f9/luna/relief/mesh",
+      "docs/map_editor/delivery/evidence/f9/luna/relief/authorities",
+      "docs/map_editor/delivery/evidence/f9/luna/relief/geometry",
+      "docs/map_editor/delivery/evidence/f9/luna/relief/objects",
+      "docs/map_editor/delivery/evidence/f9/luna/relief/official"
     ]
   }
 }

@@ -7,7 +7,7 @@ const Map = preload("res://scripts/map_authoring/composition/map_document.gd")
 const Terrain = preload("res://scripts/map_authoring/compiler/terrain_compiler.gd")
 
 ## Measurement adapter only. Production assembler and its policies remain unchanged.
-## Internal-cell adjacency and graph cycles are not represented by its tree API.
+## Rich parts share canonical geometry; external recipe cycles still exceed the tree API.
 static func build(source: Dictionary) -> Dictionary:
 	var checked := Document.validate(source)
 	if not checked.ok: return checked
@@ -36,7 +36,7 @@ static func build(source: Dictionary) -> Dictionary:
 	for pair: Array in [["editor_generation","generation",{"max_attempts":1,"max_expansions":int(source.budget.operations)}],["editor_population","population",{}]]:
 		var policy := ExpeditionPolicyDefinition.new(); policy.policy_id = pair[0]; policy.domain = pair[1]; policy.revision = 1; policy.parameters = pair[2]; input.policies.append(policy)
 	var traversal := ExpeditionTraversalProfile.new(); traversal.profile_id = "editor_body"; traversal.revision = 1; traversal.radius = Terrain.PROFILE.radius; traversal.height = Terrain.PROFILE.height; traversal.connector_kinds = PackedStringArray(["walk"]); input.traversal = traversal
-	var compiled := {}; var lookup := {}; var nodes: Array = []
+	var compiled := {}; var worlds := {}; var lookup := {}; var nodes: Array = []
 	for id: String in ids:
 		var candidates: Array = []
 		for option: Dictionary in domains[id]:
@@ -44,9 +44,9 @@ static func build(source: Dictionary) -> Dictionary:
 				var piece := Compiler._find(source.map.pieces,"piece_hash",option.piece_hash)
 				var built := Terrain.compile(piece.source)
 				if not built.ok: return built
-				if not built.package.adjacency.is_empty(): return Document.fail("assembler_unsupported",id,"internal_adjacency")
-				compiled[option.piece_hash] = built.package.part
-			var data: Dictionary = compiled[option.piece_hash]
+				compiled[option.piece_hash] = built.package
+				var world := WorldGeometry.new(); world.configure(Terrain.preview_manifest(built.package),"terrain_preview"); worlds[option.piece_hash] = world
+			var data: Dictionary = compiled[option.piece_hash].part
 			var part := ExpeditionPartDefinition.new(); part.part_id = "p_"+(id+Document.option_key(option)).sha256_text().substr(0,24); part.revision = data.revision; part.biome_tags = PackedStringArray(["authored"]); part.allowed_rotations.assign([int(option.rotation_quarters)])
 			for cell: Dictionary in data.surfaces:
 				var surface := ExpeditionSurfaceDefinition.new(); surface.surface_id = cell.surface_id; surface.vertices = PackedVector3Array(cell.vertices); surface.headroom = cell.headroom; part.surfaces.append(surface)
@@ -55,8 +55,11 @@ static func build(source: Dictionary) -> Dictionary:
 				for key: String in ["connector_id","surface_id","position","outward","width","headroom","kind","direction"]: connector.set(key,port[key])
 				connector.tags = PackedStringArray(port.tags); part.connectors.append(connector)
 			# Synthetic entrance makes the comparison a generation-only request; no grants.
-			var socket := ExpeditionSocketDefinition.new(); socket.socket_id = "entry"; socket.surface_id = part.surfaces[0].surface_id; socket.kind = "entrance"; socket.position = Compiler._center(data.surfaces[0]); part.sockets.append(socket)
+			var entry := Compiler._walkable_point(worlds[option.piece_hash],data.surfaces[0],Terrain.PROFILE,"terrain_preview")
+			if entry == null: return Document.fail("assembler_constraint",id,"entrance")
+			var socket := ExpeditionSocketDefinition.new(); socket.socket_id = "entry"; socket.surface_id = entry.surface_id; socket.kind = "entrance"; socket.position = entry.position; part.sockets.append(socket)
 			part.solid_volumes.assign(data.solid_volumes); part.blockers.assign(data.blockers)
+			part.solid_prisms.assign(data.get("solid_prisms",[])); part.internal_connections.assign(compiled[option.piece_hash].adjacency)
 			input.parts.append(part); candidates.append(part.part_id); lookup[part.part_id] = option
 		var node: Dictionary = parents[id].duplicate(true); node["instance_id"] = id; node["candidates"] = candidates; nodes.append(node)
 	input.stages.assign([{"stage_id":"authored","biome":"authored","entrance":root+"/entry","parts":nodes}])

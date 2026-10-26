@@ -39,6 +39,39 @@
         "Use case: stylized-concept. Asset type: one reusable game environment sprite, true transparent alpha, for a2D isometric fantasy RPG. Subject: a single low, wide wild woodland shrub with dense small rounded leaves, a few fernlike fronds and tiny white wildflowers naturally mixed in, an organic irregular silhouette, leaves in distinct clusters, a few dark woody stems visible at the base. Polished painterly naturalistic classic fantasy RPG/strategy environment artwork; soft sculptural shading, warm medium olive/forest greens, muted cool shadows, selective texture and clear readable shape, not photographic, not pixel art, no black outlines, no low-poly facets. Orthographic 2:1 isometric view from above around30 degrees; diffuse upper-left light. One isolated plant only, full object fully inside image with12percent or more transparent empty margin on every side. No ground tile, platform, dirt patch, scene, horizon, other object, frame, text, watermark or detached cast shadow. A clearly defined ground contact base for the sprite pivot. This is decorative foliage without physical collision. Clean genuine transparent background.",
         "Use case: background-extraction. Edit this shrub sprite only: remove the surrounding green/brown blurred haze, glow and all background pixels completely. Preserve the exact plant, leaves, flowers, woody stems, original colors, shape and painterly detail. The alpha must be cleanly transparent immediately outside the actual leaf silhouettes, including gaps among isolated stems and leaves. No fog, tinted halo, opaque matte, backdrop or ground shadow. Keep every leaf and full plant within the image. Do not add objects or redesign the shrub. This is a game sprite cutout on real transparent alpha, with the same canvas size and same subject position."
       ]
+    },
+    {
+      "id": "desert_cactus",
+      "path": "desert_cactus.png",
+      "sha256": "883efccf56ed86ff51cbae2eda7430e24a864dec38ab75a5282fbb309c38c41b",
+      "original_output": "exec-5d50210c-c93d-471e-a02b-56825a12d224.png",
+      "width": 1226,
+      "height": 1283,
+      "prompts": [
+        "Use case: stylized-concept. Asset type: one isolated production environment sprite on genuine transparent alpha for a2D isometric fantasy RPG. Subject: a single mature desert cactus with a thick ribbed main trunk and a few sturdy upward arms, naturally asymmetrical yet compact, small warm cream spines clearly grouped rather than noisy, subtle sun-worn ochre around the base, a grounded clean root contact with no terrain tile. Polished hand-painted fantasy RPG/strategy environment art, softly sculpted volume, muted sage/olive greens, warm highlights upper left and restrained cool shadows; no black outline, no pixel art, no low-poly facets, no photographic backdrop. Orthographic isometric view from above about30degrees; vertical plant stays vertical. Full cactus completely visible with at least12percent empty transparent margin on all sides, well-defined silhouette readable at small game scale. Exactly one cactus, no additional plants or rocks, no ground patch, no platform, no horizon, no cast shadow detached from its base, no haze or glow, no text, frame or watermark. Transparent background with real alpha. Intended as a usable world sprite, not concept sheet or scene."
+      ]
+    },
+    {
+      "id": "broken_pillar",
+      "path": "broken_pillar.png",
+      "sha256": "2e2edc9c889ae124632a2863c5ee989b69b8b66f8ee0e014e6163236dfa776d1",
+      "original_output": "exec-39ba666a-57b6-4436-b256-b61b8a3c2b88.png",
+      "width": 1230,
+      "height": 1278,
+      "prompts": [
+        "Use case: stylized-concept. Asset type: a single production environment sprite on genuine transparent alpha for a polished 2D isometric fantasy RPG. Subject: one ancient broken limestone pillar, square low stepped base, a short broad shaft with subtle simple carved bands and a fractured irregular top, a few attached small chips at its base. Visually stable and solid, worn corners and layered pale gray weathered stone, muted olive moss in a few sheltered cracks, no magical glow. Orthographic isometric view from above about30degrees, no perspective vanishing point. Hand-painted naturalistic classic fantasy strategy/RPG environment quality, softly modeled sculptural detail, warm diffuse upper-left highlights and restrained cool shadows, no black outline, no pixel art, no low-poly facets. Entire isolated pillar including base fully visible with at least12percent empty transparent margin around all sides. Exactly one pillar, no ground tile, scene, surrounding rubble pile, other architecture, plants beyond attached moss, detached cast shadow, haze, backdrop, text, border or watermark. Strong readable silhouette at small game scale. Transparent background with real alpha, no opaque matte."
+      ]
+    },
+    {
+      "id": "sandstone_boulder",
+      "path": "sandstone_boulder.png",
+      "sha256": "6828e2983d661865b340e45fbfde5b16d30df83c685856e7df037dce93ca387c",
+      "original_output": "exec-819ed879-4ee9-480c-a8a0-bf6cf821c280.png",
+      "width": 1536,
+      "height": 1024,
+      "prompts": [
+        "Use case: stylized-concept. Asset type: a single production environment sprite on genuine transparent alpha for a polished 2D isometric fantasy RPG. Subject: one broad low sun-weathered desert sandstone boulder, asymmetrical rounded wind-worn mass with a few restrained shallow strata, tan ochre and muted reddish-brown stone, a clearly defined stable ground contact base. Orthographic isometric view from above about30degrees. Polished hand-painted naturalistic fantasy strategy/RPG environment art, softly sculpted volume, fine readable stone texture, warm diffuse upper-left highlights and soft cool shadows, no black outline, no pixel art, no low-poly facets. Exactly one boulder, whole object fully visible with at least12percent transparent empty margin on every side. No grass, moss, flowers, cactus, sand patch, ground tile, platform, scene, other rocks, horizon, detached cast shadow, glow, haze, frame, text or watermark. A solid obstacle clear at small game scale. Transparent background with real alpha, no opaque matte."
+      ]
     }
   ]
 }

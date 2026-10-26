@@ -1,0 +1,1280 @@
+[
+  {
+    "output_sha256": "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+    "finished_utc": "2026-10-26T00:00:59.3641447Z",
+    "started_utc": "2026-10-26T00:00:45.8391224Z",
+    "name": "import",
+    "ok": true,
+    "exit_code": 0,
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "aborted": false,
+    "timed_out": false,
+    "result": null
+  },
+  {
+    "output_sha256": "F2989A4A0F2AD73BFE42C380C60B27E2F315615C873D3E20E6C6BECF3326C79F",
+    "finished_utc": "2026-10-26T00:03:28.6436872Z",
+    "started_utc": "2026-10-26T00:00:59.3913024Z",
+    "name": "candidate",
+    "ok": true,
+    "exit_code": 0,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_candidate_test.gd"
+    ],
+    "aborted": false,
+    "timed_out": false,
+    "result": {
+      "checks": [
+        {
+          "id": "legacy_hash_unchanged",
+          "ok": true
+        },
+        {
+          "id": "context_source_valid",
+          "ok": true
+        },
+        {
+          "id": "context_compile",
+          "ok": true
+        },
+        {
+          "id": "context_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "textual_key_identity",
+          "ok": true
+        },
+        {
+          "id": "malformed_instance_rejects_without_script_error",
+          "ok": true
+        },
+        {
+          "id": "future_context_rejected",
+          "ok": true
+        },
+        {
+          "id": "biome_rejected",
+          "ok": true
+        },
+        {
+          "id": "manual_override_compiles",
+          "ok": true
+        },
+        {
+          "id": "manual_override_warns",
+          "ok": true
+        },
+        {
+          "id": "manual_override_exported",
+          "ok": true
+        },
+        {
+          "id": "override_exact_payload",
+          "ok": true
+        },
+        {
+          "id": "override_is_per_instance",
+          "ok": true
+        },
+        {
+          "id": "override_is_per_rule",
+          "ok": true
+        },
+        {
+          "id": "override_never_bypasses_seam",
+          "ok": true
+        },
+        {
+          "id": "override_bundle_preserved",
+          "ok": true
+        },
+        {
+          "id": "override_import_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "solver_does_not_inherit_override",
+          "ok": true
+        },
+        {
+          "id": "assembler_does_not_inherit_override",
+          "ok": true
+        },
+        {
+          "id": "override_reason_required",
+          "ok": true
+        },
+        {
+          "id": "recipe_override_rejected",
+          "ok": true
+        },
+        {
+          "id": "seed_context_contradiction",
+          "ok": true
+        },
+        {
+          "id": "seed_0",
+          "ok": true
+        },
+        {
+          "id": "seed_-1",
+          "ok": true
+        },
+        {
+          "id": "seed_9223372036854775807",
+          "ok": true
+        },
+        {
+          "id": "seed_-9223372036854775808",
+          "ok": true
+        },
+        {
+          "id": "population_context_plan",
+          "ok": true
+        },
+        {
+          "id": "no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "population_context_compile",
+          "ok": true
+        },
+        {
+          "id": "species_policy_enforced",
+          "ok": true
+        },
+        {
+          "id": "manual_species_exception",
+          "ok": true
+        },
+        {
+          "id": "rare_generation_allowed",
+          "ok": true
+        },
+        {
+          "id": "rare_theme_is_not_gate",
+          "ok": true
+        },
+        {
+          "id": "rare_policy_enforced",
+          "ok": true
+        },
+        {
+          "id": "manual_rare_exception",
+          "ok": true
+        },
+        {
+          "id": "manual_rare_without_theme_allowed",
+          "ok": true
+        },
+        {
+          "id": "manual_rare_ignores_random_permission",
+          "ok": true
+        },
+        {
+          "id": "reservation_realized",
+          "ok": true
+        },
+        {
+          "id": "reservation_compiles",
+          "ok": true
+        },
+        {
+          "id": "reservation_fixed_unique",
+          "ok": true
+        },
+        {
+          "id": "reservation_quest_passive",
+          "ok": true
+        },
+        {
+          "id": "quest_does_not_change_objectives_or_rewards",
+          "ok": true
+        },
+        {
+          "id": "reservation_regeneration_idempotent",
+          "ok": true
+        },
+        {
+          "id": "reservation_required_on_compile",
+          "ok": true
+        },
+        {
+          "id": "ordinary_spawn_cannot_take_reserved_area",
+          "ok": true
+        },
+        {
+          "id": "ordinary_pool_excludes_reservation_directly",
+          "ok": true
+        },
+        {
+          "id": "ordinary_population_stays_outside_reservation",
+          "ok": true
+        },
+        {
+          "id": "reservation_editorial_reference_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "missing_region_rejected",
+          "ok": true
+        },
+        {
+          "id": "representative_geometry",
+          "ok": true
+        },
+        {
+          "id": "representative_encounters",
+          "ok": true
+        },
+        {
+          "id": "representative_patrol",
+          "ok": true
+        },
+        {
+          "id": "representative_package_published",
+          "ok": true
+        }
+      ],
+      "count": 53,
+      "ok": true
+    }
+  },
+  {
+    "output_sha256": "E3540287126E64252635C94DFA87F20BF22097F03D5BBFCB15BDA94A2B5AC2D7",
+    "finished_utc": "2026-10-26T00:03:30.4317182Z",
+    "started_utc": "2026-10-26T00:03:28.6485945Z",
+    "name": "document",
+    "ok": true,
+    "exit_code": 0,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_document_test.gd"
+    ],
+    "aborted": false,
+    "timed_out": false,
+    "result": {
+      "checks": [
+        {
+          "id": "full_source_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "copy_boundary",
+          "ok": true
+        },
+        {
+          "id": "set_order_hash",
+          "ok": true
+        },
+        {
+          "id": "sequence_order_hash",
+          "ok": true
+        },
+        {
+          "id": "canonical_numeric_oracle",
+          "ok": true
+        },
+        {
+          "id": "canonical_unicode_oracle",
+          "ok": true
+        },
+        {
+          "id": "sha256_oracle",
+          "ok": true
+        },
+        {
+          "id": "duplicate_key_7",
+          "ok": true
+        },
+        {
+          "id": "duplicate_key_8",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_9",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_10",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_11",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_12",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_13",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_14",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_15",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_16",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_17",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_18",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_19",
+          "ok": true
+        },
+        {
+          "id": "strict_grammar_20",
+          "ok": true
+        },
+        {
+          "id": "non_finite",
+          "ok": true
+        },
+        {
+          "id": "bounded_depth",
+          "ok": true
+        },
+        {
+          "id": "bounded_string",
+          "ok": true
+        },
+        {
+          "id": "bounded_bytes",
+          "ok": true
+        },
+        {
+          "id": "utf8_strict_25",
+          "ok": true
+        },
+        {
+          "id": "utf8_strict_26",
+          "ok": true
+        },
+        {
+          "id": "utf8_strict_27",
+          "ok": true
+        },
+        {
+          "id": "utf8_strict_28",
+          "ok": true
+        },
+        {
+          "id": "surrogate_strict_29",
+          "ok": true
+        },
+        {
+          "id": "surrogate_strict_30",
+          "ok": true
+        },
+        {
+          "id": "surrogate_strict_31",
+          "ok": true
+        },
+        {
+          "id": "surrogate_pair",
+          "ok": true
+        },
+        {
+          "id": "token_budget",
+          "ok": true
+        },
+        {
+          "id": "unknown_version",
+          "ok": true
+        },
+        {
+          "id": "unknown_field",
+          "ok": true
+        },
+        {
+          "id": "typed_bool",
+          "ok": true
+        },
+        {
+          "id": "typed_integer",
+          "ok": true
+        },
+        {
+          "id": "invalid_draft_readable",
+          "ok": true
+        },
+        {
+          "id": "duplicate_ids",
+          "ok": true
+        },
+        {
+          "id": "broken_reference",
+          "ok": true
+        },
+        {
+          "id": "dependency_reference",
+          "ok": true
+        },
+        {
+          "id": "entity_limit",
+          "ok": true
+        },
+        {
+          "id": "clean_baseline",
+          "ok": true
+        },
+        {
+          "id": "edit_atomic",
+          "ok": true
+        },
+        {
+          "id": "undo",
+          "ok": true
+        },
+        {
+          "id": "redo",
+          "ok": true
+        },
+        {
+          "id": "reject_without_mutation",
+          "ok": true
+        },
+        {
+          "id": "redo_branch_cleared",
+          "ok": true
+        },
+        {
+          "id": "replace_rejection",
+          "ok": true
+        },
+        {
+          "id": "identity_stable",
+          "ok": true
+        },
+        {
+          "id": "duplicate_layer_graph",
+          "ok": true
+        },
+        {
+          "id": "duplicate_internal_references",
+          "ok": true
+        },
+        {
+          "id": "duplicate_atomic_undo",
+          "ok": true
+        },
+        {
+          "id": "duplicate_missing_rejected",
+          "ok": true
+        },
+        {
+          "id": "save_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "overwrite_requires_hash",
+          "ok": true
+        },
+        {
+          "id": "save_backup",
+          "ok": true
+        },
+        {
+          "id": "autosave",
+          "ok": true
+        },
+        {
+          "id": "external_edit",
+          "ok": true
+        },
+        {
+          "id": "recovery_divergence",
+          "ok": true
+        },
+        {
+          "id": "interruption_original_intact",
+          "ok": true
+        },
+        {
+          "id": "pending_preserved",
+          "ok": true
+        },
+        {
+          "id": "concurrent_writer_rejected",
+          "ok": true
+        },
+        {
+          "id": "truncated_pending_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_directory",
+          "ok": true
+        },
+        {
+          "id": "truncated_file",
+          "ok": true
+        },
+        {
+          "id": "draft_saved",
+          "ok": true
+        },
+        {
+          "id": "recovery_kind_safe",
+          "ok": true
+        },
+        {
+          "id": "io_length_limit",
+          "ok": true
+        }
+      ],
+      "count": 70,
+      "ok": true
+    }
+  },
+  {
+    "output_sha256": "9ECD56EFB3E21602FE345997D8CBFFA7E5C7D5FA496A971AAF1974F8A62F0B12",
+    "finished_utc": "2026-10-26T00:03:41.1184376Z",
+    "started_utc": "2026-10-26T00:03:30.4356776Z",
+    "name": "terrain",
+    "ok": true,
+    "exit_code": 0,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_terrain_test.gd"
+    ],
+    "aborted": false,
+    "timed_out": false,
+    "result": {
+      "checks": [
+        {
+          "id": "compile_sample",
+          "ok": true
+        },
+        {
+          "id": "exact_coplanar_compaction_count",
+          "ok": true
+        },
+        {
+          "id": "solid_slab_exact",
+          "ok": true
+        },
+        {
+          "id": "source_not_mutated",
+          "ok": true
+        },
+        {
+          "id": "repeat_identical_package",
+          "ok": true
+        },
+        {
+          "id": "collection_order_independent",
+          "ok": true
+        },
+        {
+          "id": "package_valid",
+          "ok": true
+        },
+        {
+          "id": "tampered_package_rejected",
+          "ok": true
+        },
+        {
+          "id": "same_visual_logic_vertices_0",
+          "ok": true
+        },
+        {
+          "id": "same_visual_logic_vertices_1",
+          "ok": true
+        },
+        {
+          "id": "same_visual_logic_vertices_2",
+          "ok": true
+        },
+        {
+          "id": "same_visual_logic_vertices_3",
+          "ok": true
+        },
+        {
+          "id": "canonical_configure",
+          "ok": true
+        },
+        {
+          "id": "ramp_intermediate_support",
+          "ok": true
+        },
+        {
+          "id": "ramp_rejects_flattening",
+          "ok": true
+        },
+        {
+          "id": "lower_support_under_bridge",
+          "ok": true
+        },
+        {
+          "id": "connected_route_to_bridge",
+          "ok": true
+        },
+        {
+          "id": "canonical_motion_bind",
+          "ok": true
+        },
+        {
+          "id": "canonical_motion_plan",
+          "ok": true
+        },
+        {
+          "id": "continuous_motion_no_teleport",
+          "ok": true
+        },
+        {
+          "id": "underpass_route",
+          "ok": true
+        },
+        {
+          "id": "slab_rejects_tall_body",
+          "ok": true
+        },
+        {
+          "id": "bridge_blocks_attack",
+          "ok": true
+        },
+        {
+          "id": "ray_picks_upper_deck",
+          "ok": true
+        },
+        {
+          "id": "slab_occludes_hidden_lower",
+          "ok": true
+        },
+        {
+          "id": "brush_raise_oracle",
+          "ok": true
+        },
+        {
+          "id": "brush_input_density_independent",
+          "ok": true
+        },
+        {
+          "id": "brush_lower_oracle",
+          "ok": true
+        },
+        {
+          "id": "flatten_oracle",
+          "ok": true
+        },
+        {
+          "id": "ramp_control_oracle",
+          "ok": true
+        },
+        {
+          "id": "ramp_rejects_zero_length",
+          "ok": true
+        },
+        {
+          "id": "smooth_frozen_neighbors_oracle",
+          "ok": true
+        },
+        {
+          "id": "paint_two_materials",
+          "ok": true
+        },
+        {
+          "id": "layer_lock",
+          "ok": true
+        },
+        {
+          "id": "region_protected",
+          "ok": true
+        },
+        {
+          "id": "connector_protected",
+          "ok": true
+        },
+        {
+          "id": "stroke_atomic_apply",
+          "ok": true
+        },
+        {
+          "id": "stroke_atomic_undo",
+          "ok": true
+        },
+        {
+          "id": "stroke_atomic_redo",
+          "ok": true
+        },
+        {
+          "id": "save_source",
+          "ok": true
+        },
+        {
+          "id": "reopen_preserves_compilation",
+          "ok": true
+        },
+        {
+          "id": "nonfinite_rejected",
+          "ok": true
+        },
+        {
+          "id": "overlap_rejected",
+          "ok": true
+        },
+        {
+          "id": "nonplanar_special_rejected",
+          "ok": true
+        },
+        {
+          "id": "concave_special_rejected",
+          "ok": true
+        },
+        {
+          "id": "insufficient_clearance_rejected",
+          "ok": true
+        },
+        {
+          "id": "too_steep_rejected",
+          "ok": true
+        },
+        {
+          "id": "authored_opening_compiles",
+          "ok": true
+        },
+        {
+          "id": "one_stable_boundary_opening",
+          "ok": true
+        },
+        {
+          "id": "interior_port_rejected",
+          "ok": true
+        },
+        {
+          "id": "port_wider_than_edge_rejected",
+          "ok": true
+        },
+        {
+          "id": "unconnected_ramp_rejected",
+          "ok": true
+        },
+        {
+          "id": "warped_grid_compiles_to_triangles",
+          "ok": true
+        },
+        {
+          "id": "invalid_brush_radius_rejected",
+          "ok": true
+        },
+        {
+          "id": "nonfinite_brush_point_rejected",
+          "ok": true
+        },
+        {
+          "id": "square_stamp_corner_oracle",
+          "ok": true
+        },
+        {
+          "id": "compile_cancelled",
+          "ok": true
+        },
+        {
+          "id": "late_result_rejected",
+          "ok": true
+        },
+        {
+          "id": "thread_cancelled_no_package",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_0",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_1",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_2",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_3",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_4",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_5",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_6",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_7",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_8",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_3_9",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_0",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_1",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_2",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_3",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_4",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_5",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_6",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_7",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_8",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_5_9",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_0",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_1",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_2",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_3",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_4",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_5",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_6",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_7",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_8",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_9_9",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_0",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_1",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_2",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_3",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_4",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_5",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_6",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_7",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_8",
+          "ok": true
+        },
+        {
+          "id": "measurement_success_17_9",
+          "ok": true
+        },
+        {
+          "id": "flat_grid_above_old_limit_compiles",
+          "ok": true
+        },
+        {
+          "id": "brush_above_old_grid_limit",
+          "ok": true
+        },
+        {
+          "id": "long_stroke_rejected_whole",
+          "ok": true
+        }
+      ],
+      "count": 102,
+      "ok": true,
+      "package_hash": "2f637ee010a70902c8835adb8408bd3a3e22fd2b42a5df9fc93bab4307e3c703",
+      "source_path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project/.godot/terrain_source_1cf856d942e1dd1c.json"
+    }
+  },
+  {
+    "output_sha256": "831668FF350E36C35076387D200ACE1F0BF22B7BB57A96BDF6B12364296AADFA",
+    "finished_utc": "2026-10-26T00:03:55.7463047Z",
+    "started_utc": "2026-10-26T00:03:41.1309604Z",
+    "name": "composition",
+    "ok": true,
+    "exit_code": 0,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_composition_test.gd"
+    ],
+    "aborted": false,
+    "timed_out": false,
+    "result": {
+      "checks": [
+        {
+          "id": "two_piece_compile",
+          "ok": true
+        },
+        {
+          "id": "authorship_unchanged",
+          "ok": true
+        },
+        {
+          "id": "exact_authored_transforms",
+          "ok": true
+        },
+        {
+          "id": "two_authored_pieces_two_supports",
+          "ok": true
+        },
+        {
+          "id": "package_integrity",
+          "ok": true
+        },
+        {
+          "id": "deterministic",
+          "ok": true
+        },
+        {
+          "id": "order_independent_identity",
+          "ok": true
+        },
+        {
+          "id": "canonical_world",
+          "ok": true
+        },
+        {
+          "id": "seam_route",
+          "ok": true
+        },
+        {
+          "id": "actor_bind",
+          "ok": true
+        },
+        {
+          "id": "actor_plan",
+          "ok": true
+        },
+        {
+          "id": "continuous_actor_crosses_seam",
+          "ok": true
+        },
+        {
+          "id": "wall_matches_manifest",
+          "ok": true
+        },
+        {
+          "id": "closed_edge_blocks_sweep",
+          "ok": true
+        },
+        {
+          "id": "seam_closed_outside_opening",
+          "ok": true
+        },
+        {
+          "id": "seam_opening_free",
+          "ok": true
+        },
+        {
+          "id": "wall_blocks_los",
+          "ok": true
+        },
+        {
+          "id": "misaligned_seam_rejected",
+          "ok": true
+        },
+        {
+          "id": "overlap_rejected",
+          "ok": true
+        },
+        {
+          "id": "unlinked_opening_rejected",
+          "ok": true
+        },
+        {
+          "id": "broken_reference_rejected",
+          "ok": true
+        },
+        {
+          "id": "connector_single_owner",
+          "ok": true
+        },
+        {
+          "id": "rotated_wrong_opening_rejected",
+          "ok": true
+        },
+        {
+          "id": "no_vertical_repair",
+          "ok": true
+        },
+        {
+          "id": "nonfinite_rejected",
+          "ok": true
+        },
+        {
+          "id": "duplicate_id_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_biome_profile_rejected",
+          "ok": true
+        },
+        {
+          "id": "immutable_piece_reference",
+          "ok": true
+        },
+        {
+          "id": "unknown_fields_rejected",
+          "ok": true
+        },
+        {
+          "id": "unknown_version_rejected",
+          "ok": true
+        },
+        {
+          "id": "width_mismatch_rejected",
+          "ok": true
+        },
+        {
+          "id": "height_mismatch_rejected",
+          "ok": true
+        },
+        {
+          "id": "direction_mismatch_rejected",
+          "ok": true
+        },
+        {
+          "id": "tag_mismatch_rejected",
+          "ok": true
+        },
+        {
+          "id": "recipe_realizes_explicit_tree",
+          "ok": true
+        },
+        {
+          "id": "recipe_does_not_mutate_draft",
+          "ok": true
+        },
+        {
+          "id": "recipe_deterministic",
+          "ok": true
+        },
+        {
+          "id": "recipe_disconnected_rejected",
+          "ok": true
+        },
+        {
+          "id": "quarter_rotation_preserves_seam",
+          "ok": true
+        },
+        {
+          "id": "different_piece_dimensions",
+          "ok": true
+        },
+        {
+          "id": "partial_shared_boundary_single_owner",
+          "ok": true
+        },
+        {
+          "id": "placement_edit_atomic",
+          "ok": true
+        },
+        {
+          "id": "undo_placements_links",
+          "ok": true
+        },
+        {
+          "id": "redo_placements_links",
+          "ok": true
+        },
+        {
+          "id": "invalid_edit_no_mutation",
+          "ok": true
+        },
+        {
+          "id": "save_composition",
+          "ok": true
+        },
+        {
+          "id": "reopen_exact_placements_links",
+          "ok": true
+        },
+        {
+          "id": "reopen_same_package",
+          "ok": true
+        },
+        {
+          "id": "writer_conflict_preserves_source",
+          "ok": true
+        },
+        {
+          "id": "duplicate_json_key_rejected",
+          "ok": true
+        },
+        {
+          "id": "local_immutable_publish",
+          "ok": true
+        },
+        {
+          "id": "published_package_readable",
+          "ok": true
+        },
+        {
+          "id": "idempotent_publication",
+          "ok": true
+        },
+        {
+          "id": "stale_publication_rejected",
+          "ok": true
+        },
+        {
+          "id": "tampered_package_rejected",
+          "ok": true
+        },
+        {
+          "id": "tampered_publication_rejected",
+          "ok": true
+        },
+        {
+          "id": "corrupted_file_no_overwrite",
+          "ok": true
+        },
+        {
+          "id": "cancellation_no_package",
+          "ok": true
+        },
+        {
+          "id": "stale_worker_no_package",
+          "ok": true
+        },
+        {
+          "id": "cancelled_worker_no_package",
+          "ok": true
+        },
+        {
+          "id": "f2_internal_adjacency_consumed",
+          "ok": true
+        },
+        {
+          "id": "large_field_plus_small_room",
+          "ok": true
+        },
+        {
+          "id": "large_source_roundtrip",
+          "ok": true
+        }
+      ],
+      "compile_ms": 104.693,
+      "count": 63,
+      "large_compile_ms": 3664.958,
+      "large_package_bytes": 124216,
+      "ok": true,
+      "package_bytes": 11112,
+      "package_hash": "1e05df97751dc7563c512b24aa57fd142832ca8a7453fa9c81a0756ce7149c55",
+      "piece_count": 2,
+      "source_path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project/.godot/m3_008fd77a52/map.json"
+    }
+  },
+  {
+    "output_sha256": "FBA43473CD11F1FA9CC9F7680C5545531097E594CE41A02B2D74A11BC2F00A4C",
+    "finished_utc": "2026-10-26T00:08:56.1186443Z",
+    "started_utc": "2026-10-26T00:03:55.7584203Z",
+    "name": "population",
+    "ok": false,
+    "exit_code": -1,
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_population_test.gd"
+    ],
+    "aborted": false,
+    "timed_out": true,
+    "result": null
+  }
+]

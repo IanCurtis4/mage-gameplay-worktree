@@ -76,7 +76,7 @@ func _advance(distance: float) -> Dictionary:
 		var support := geometry.support_at(_point.surface_id,Vector2(next.x,next.z),geometry.geometry_revision)
 		if not support["ok"]: return support
 		next = support["data"].get("point", {})["position"]
-		var contact := geometry.sweep(_point.position,next,_profile,geometry.geometry_revision)
+		var contact := geometry.ground_sweep(_point.surface_id,_point.position,next,_profile,geometry.geometry_revision)
 		if not contact["ok"] or contact["data"]["hit"]: return _failure(&"movement_blocked")
 		var segment_start := point()
 		_point.position = next

@@ -850,6 +850,7 @@ func _assignable(owner: Object, field: String, value: Variant) -> bool:
 
 func _validate_runtime_graph() -> Dictionary:
 	for value: Object in _objects:
+		if value is WorldGeometry and not WorldGeometry._stage_prisms_valid(value._stage): return StableEntityRegistry.failure(&"invalid_payload", "terrain mass")
 		if value is ExpeditionCampaignRuntime and not value.valid(): return StableEntityRegistry.failure(&"invalid_payload", "campaign state")
 		if value is ThreatService and not value.valid(): return StableEntityRegistry.failure(&"invalid_payload", "threat state")
 		if value is HealthState and (value.damage_sequence < 0 or value.heal_sequence < 0): return StableEntityRegistry.failure(&"invalid_payload", "health sequence")

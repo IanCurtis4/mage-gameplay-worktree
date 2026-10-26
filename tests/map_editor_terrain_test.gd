@@ -6,6 +6,7 @@ const Document = preload("res://scripts/map_authoring/document/source_document.g
 const Session = preload("res://scripts/map_authoring/document/document_session.gd")
 const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 const Store = preload("res://scripts/map_authoring/io/source_store.gd")
+const Prism = preload("res://scripts/core/expedition/spatial/world_solid_prism.gd")
 var checks: Array[Dictionary] = []
 var source_file := ""
 var package_hash := ""
@@ -21,7 +22,8 @@ func _run() -> void:
 	var package: Dictionary = built.package
 	package_hash = built.output_hash
 	check("exact_coplanar_compaction_count",package.part.surfaces.size() == 4)
-	check("solid_slab_exact",package.part.solid_volumes == [AABB(Vector3(0,36,100),Vector3(200,4,100))])
+	var slabs: Array = package.part.solid_prisms.filter(func(mass: Dictionary) -> bool: return mass.has("thickness_y"))
+	check("solid_slab_exact",package.part.solid_volumes.is_empty() and slabs.size() == 1 and slabs[0].thickness_y == 4.0 and Prism.prepare(slabs[0]).bounds == AABB(Vector3(0,36,100),Vector3(200,4,100)))
 	check("source_not_mutated",Schema.semantic_hash(source) == original)
 	check("repeat_identical_package",Compiler.compile(source).output_hash == built.output_hash)
 	var reordered := source.duplicate(true); reordered.layers.reverse()

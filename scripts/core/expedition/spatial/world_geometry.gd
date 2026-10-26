@@ -2,6 +2,7 @@ class_name WorldGeometry
 extends RefCounted
 ## Logical world units: x/z horizontal, y height. No camera or projected pixels.
 const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
+const SolidPrism = preload("res://scripts/core/expedition/spatial/world_solid_prism.gd")
 const SupportPatch = preload("res://scripts/core/expedition/spatial/world_support_patch.gd")
 const EPS := 0.00001
 var geometry_revision := 0
@@ -18,6 +19,7 @@ func configure(manifest: ExpeditionManifest, stage_id: String) -> Dictionary:
 	var data := manifest.to_data()
 	for stage: Dictionary in data.get("stages", []):
 		if stage["stage_id"] == stage_id:
+			if not _stage_prisms_valid(stage): return _failure(&"invalid_manifest")
 			_stage = stage.duplicate(true)
 			_support_index.clear()
 			_solid_slabs.clear()
@@ -36,6 +38,27 @@ func configure(manifest: ExpeditionManifest, stage_id: String) -> Dictionary:
 			configuration_revision += 1
 			return _success({"manifest_hash": manifest.canonical_hash(), "stage_id": stage_id})
 	return _failure(&"unknown_stage")
+
+static func _stage_prisms_valid(stage: Dictionary) -> bool:
+	var values: Variant = stage.get("solid_prisms",[])
+	if not values is Array or values.size() > 2048: return false
+	if values.is_empty(): return true
+	if not stage.get("surfaces") is Array: return false
+	var ids: Dictionary = {}; var cells: Dictionary = {}
+	for cell: Variant in stage.surfaces:
+		if not cell is Dictionary or not cell.get("surface_id") is String or not cell.get("vertices") is Array or not _finite_number(cell.get("headroom")): return false
+		for vertex: Variant in cell.vertices:
+			if not vertex is Vector3 or not vertex.is_finite(): return false
+		if not Kernel.valid_cell(cell): return false
+		cells[cell.surface_id] = cell
+	for value: Variant in values:
+		if not SolidPrism.valid(value) or ids.has(value.volume_id): return false
+		ids[value.volume_id] = true
+		if value.support_surface_id.is_empty(): continue
+		if not cells.has(value.support_surface_id): return false
+		for vertex: Vector3 in value.top:
+			if not Kernel.contains(cells[value.support_surface_id],vertex): return false
+	return true
 
 func _supports_solid_floor(volume: AABB) -> bool:
 	var rectangle := PackedVector2Array([Vector2(volume.position.x,volume.position.z),Vector2(volume.end.x,volume.position.z),Vector2(volume.end.x,volume.end.z),Vector2(volume.position.x,volume.end.z)])
@@ -57,7 +80,13 @@ func _current(revision: int) -> bool:
 	return not _stage.is_empty() and revision == geometry_revision
 
 func _ensure_support_index() -> void:
-	if _support_index.is_empty() and not _stage.is_empty(): _support_index = SupportPatch.index(_stage)
+	if _support_index.is_empty() and not _stage.is_empty():
+		_support_index = SupportPatch.index(_stage)
+		_support_index["solid_prisms"] = []
+		var masses: Array = _stage.get("solid_prisms",[]).duplicate()
+		masses.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.volume_id < b.volume_id)
+		for prism: Dictionary in masses: _support_index.solid_prisms.append(SolidPrism.prepare(prism))
+		_support_index["mass_broadphase"] = SolidPrism.spatial_index(_support_index.solid_prisms)
 
 func _cell(id: String) -> Dictionary:
 	_ensure_support_index()
@@ -84,7 +113,9 @@ static func _finite_number(value: Variant) -> bool:
 func _point_valid(point: ExpeditionWorldPoint, radius: float = 0.0, height: float = 0.0) -> bool:
 	if point == null or not point.position.is_finite() or point.stage_id != _stage.get("stage_id", ""): return false
 	var cell := _cell(point.surface_id)
-	return not cell.is_empty() and float(cell["headroom"]) + EPS >= height and _supported(cell, point.position, radius, height) and not sweep(point.position, point.position, {"radius":radius,"height":height}, geometry_revision)["data"]["hit"]
+	if cell.is_empty() or float(cell["headroom"])+EPS < height or not _supported(cell,point.position,radius,height): return false
+	var contact := ground_sweep(point.surface_id,point.position,point.position,{"radius":radius,"height":height},geometry_revision)
+	return contact["ok"] and not contact["data"]["hit"]
 
 func _supported(cell: Dictionary, position: Vector3, radius: float, height: float) -> bool:
 	_ensure_support_index()
@@ -136,7 +167,7 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 		var route: Array = direct["data"]["points"]
 		var clear := true
 		for index: int in range(1,route.size()):
-			if not _clear_path_segment(route[index-1]["position"],route[index]["position"],profile,candidate): clear = false; break
+			if not _clear_path_segment(route[index-1]["position"],route[index]["position"],profile,candidate,route[index-1]["surface_id"]): clear = false; break
 		if clear:
 			route[-1] = to.to_data()
 			return _success({"points":route,"connection_ids":_route_connection_ids(route),"cost":direct["data"]["cost"]})
@@ -154,7 +185,7 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 		var a: Dictionary = endpoints[connection["a_connector"]]
 		var b: Dictionary = endpoints[connection["b_connector"]]
 		var index := 0
-		for seam: Vector3 in _portal_candidates(a,b,from.position,to.position,radius,candidate):
+		for seam: Vector3 in _portal_candidates(a,b,from.position,to.position,radius,candidate,height):
 			var pa := ExpeditionWorldPoint.create(from.stage_id,a["surface_id"],seam)
 			var pb := ExpeditionWorldPoint.create(from.stage_id,b["surface_id"],seam)
 			if not _candidate_point(pa,radius,height,candidate) or not _candidate_point(pb,radius,height,candidate): continue
@@ -166,7 +197,7 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 			var inside_b := ExpeditionWorldPoint.create(from.stage_id,b["surface_id"],ib)
 			if not _candidate_point(inside_a,radius,height,candidate): inside_a = pa; ia = seam
 			if not _candidate_point(inside_b,radius,height,candidate): inside_b = pb; ib = seam
-			if not _clear_path_segment(ia,seam,profile,candidate) or not _clear_path_segment(seam,ib,profile,candidate): continue
+			if not _clear_path_segment(ia,seam,profile,candidate,a["surface_id"]) or not _clear_path_segment(seam,ib,profile,candidate,b["surface_id"]): continue
 			if _support_segment_fraction(_cell(a["surface_id"]),ia,seam,profile) < 1.0-EPS or _support_segment_fraction(_cell(b["surface_id"]),seam,ib,profile) < 1.0-EPS: continue
 			var aid := "@portal/%s/%d/a"%[connection["connection_id"],index]
 			var bid := "@portal/%s/%d/b"%[connection["connection_id"],index]
@@ -187,6 +218,26 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 					var id := "@corner/%s/%d/%s/%s" % [cell["surface_id"], volume_index, x, z]
 					nodes[id] = point.to_data()
 					edges[id] = []
+	# Generate detour states from the mass cut by THIS support plane/profile.
+	# Candidate padding only makes an outside point representable; all contacts
+	# and support predicates retain their original EPS and are checked again.
+	for cell: Dictionary in _stage["surfaces"]:
+		var bounds := AABB(cell["vertices"][0],Vector3.ZERO)
+		for vertex: Vector3 in cell["vertices"]: bounds = bounds.expand(vertex)
+		for prism: Dictionary in SolidPrism.spatial_candidates(_support_index.solid_prisms,_support_index.mass_broadphase,bounds.position,bounds.end,radius,height):
+			if prism.support_surface_id == cell["surface_id"]: continue
+			var blocked := SolidPrism.blocking_polygon(prism,cell,radius,height)
+			if blocked.is_empty(): continue
+			var padding := EPS*4.0
+			for vertex: Vector2 in blocked: padding = maxf(padding,point_tolerance(Vector3(vertex.x,0,vertex.y),Vector3.ZERO))
+			var corner_index := 0
+			for outline: PackedVector2Array in Geometry2D.offset_polygon(blocked,padding,Geometry2D.JOIN_MITER):
+				for corner: Vector2 in outline:
+					var position := Kernel.support_y(cell,Vector3(corner.x,0,corner.y))
+					var point := ExpeditionWorldPoint.create(from.stage_id,cell["surface_id"],position)
+					if not _candidate_point(point,radius,height,candidate): continue
+					var id := "@mass/%s/%s/%d"%[cell["surface_id"],prism.volume_id,corner_index]; corner_index += 1
+					nodes[id] = point.to_data(); edges[id] = []
 	var segments: Array = []
 	var segment_ids: Array = _segments.keys(); segment_ids.sort()
 	for id: String in segment_ids: segments.append(_segments[id])
@@ -210,7 +261,7 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 		for a: String in group:
 			for b: String in group:
 				if a == b: continue
-				if _clear_path_segment(nodes[a]["position"],nodes[b]["position"],profile,candidate) and _support_segment_fraction(_cell(nodes[a]["surface_id"]),nodes[a]["position"],nodes[b]["position"],profile) >= 1.0-EPS:
+				if _clear_path_segment(nodes[a]["position"],nodes[b]["position"],profile,candidate,nodes[a]["surface_id"]) and _support_segment_fraction(_cell(nodes[a]["surface_id"]),nodes[a]["position"],nodes[b]["position"],profile) >= 1.0-EPS:
 					edges[a].append({"to": b, "via": [], "connection_id": "", "cost": Vector3(nodes[a]["position"]).distance_to(nodes[b]["position"])})
 	var distances := {"@from": 0.0}
 	var previous: Dictionary = {}
@@ -243,7 +294,7 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 		if not edge["connection_id"].is_empty(): connections.append(edge["connection_id"])
 	return _success({"points": points, "connection_ids": connections, "cost": distances["@to"]})
 
-func _portal_candidates(a: Dictionary, b: Dictionary, source: Vector3, target: Vector3, radius: float, candidate: WorldSolidSegment) -> Array[Vector3]:
+func _portal_candidates(a: Dictionary, b: Dictionary, source: Vector3, target: Vector3, radius: float, candidate: WorldSolidSegment, height: float = 0.0) -> Array[Vector3]:
 	var center: Vector3 = a["position"]
 	var normal: Vector3 = a["outward"]
 	var tangent := Vector3(-normal.z,0,normal.x)
@@ -251,6 +302,11 @@ func _portal_candidates(a: Dictionary, b: Dictionary, source: Vector3, target: V
 	var inset := maxf(0.0,half_width-radius)
 	var offsets: Array[float] = [-half_width,-inset,0.0,inset,half_width]
 	var landmarks: Array[Vector3] = [source,target]
+	var cell := _cell(a["surface_id"])
+	var seam_a := Kernel.support_y(cell,center-tangent*half_width); var seam_b := Kernel.support_y(cell,center+tangent*half_width)
+	for prism: Dictionary in SolidPrism.spatial_candidates(_support_index.solid_prisms,_support_index.mass_broadphase,seam_a,seam_b,radius,height):
+		if prism.support_surface_id == a["surface_id"]: continue
+		for vertex: Vector2 in SolidPrism.blocking_polygon(prism,cell,radius,height): landmarks.append(Vector3(vertex.x,center.y,vertex.y))
 	for box: AABB in _volumes():
 		for x: float in [box.position.x-radius-EPS*4.0,box.end.x+radius+EPS*4.0]:
 			for z: float in [box.position.z-radius-EPS*4.0,box.end.z+radius+EPS*4.0]: landmarks.append(Vector3(x,center.y,z))
@@ -272,23 +328,31 @@ func _portal_candidates(a: Dictionary, b: Dictionary, source: Vector3, target: V
 
 func _route_connection_ids(route: Array) -> Array[String]:
 	var result: Array[String] = []
+	_ensure_support_index()
 	for index: int in range(1,route.size()):
 		if route[index-1]["surface_id"] == route[index]["surface_id"]: continue
-		for connection: Dictionary in _stage["connections"]:
-			var a: Dictionary = {}; var b: Dictionary = {}
-			for endpoint: Dictionary in _stage["connectors"]:
-				if endpoint["connector_id"] == connection["a_connector"]: a = endpoint
-				if endpoint["connector_id"] == connection["b_connector"]: b = endpoint
-			if a.is_empty() or b.is_empty(): continue
-			if [a["surface_id"],b["surface_id"]] == [route[index-1]["surface_id"],route[index]["surface_id"]] or [b["surface_id"],a["surface_id"]] == [route[index-1]["surface_id"],route[index]["surface_id"]]:
-				var point: Vector3 = route[index]["position"]
-				var normal: Vector3 = a["outward"]
-				var delta := point-Vector3(a["position"])
-				if absf(delta.dot(normal)) > EPS or absf(delta.dot(Vector3(-normal.z,0,normal.x))) > minf(float(a["width"]),float(b["width"]))*0.5+EPS: continue
-				result.append(connection["connection_id"]); break
+		var found := false; var point: Vector3 = route[index]["position"]
+		for a: Dictionary in _support_index.ports.get(route[index-1]["surface_id"],[]):
+			if not SupportPatch.on_opening(a.surface_id,a.connector_id,point,_support_index): continue
+			for transition: Dictionary in _support_index.transitions.get(a.connector_id,[]):
+				var b: Dictionary = _support_index.endpoints[transition.other_id]
+				if transition.allowed and b.surface_id == route[index]["surface_id"] and SupportPatch.on_opening(b.surface_id,b.connector_id,point,_support_index):
+					result.append(transition.connection_id); found = true; break
+			if found: break
 	return result
 
 func sweep(from: Vector3, to: Vector3, collider: Dictionary, revision: int, mask: StringName = &"all") -> Dictionary:
+	return _sweep(from,to,collider,revision,mask,{})
+
+func ground_sweep(surface_id: String, from: Vector3, to: Vector3, collider: Dictionary, revision: int) -> Dictionary:
+	if not _current(revision): return _failure(&"stale_geometry")
+	if not collider.has_all(["radius","height"]) or not _finite_number(collider["radius"]) or not _finite_number(collider["height"]) or float(collider["radius"]) < 0 or float(collider["height"]) < 0: return _failure(&"invalid_collider")
+	var cell := _cell(surface_id)
+	if cell.is_empty() or not from.is_finite() or not to.is_finite() or not Kernel.contains(cell,from) or not Kernel.contains(cell,to): return _failure(&"invalid_support")
+	var excluded := SupportPatch.members(surface_id,Vector2(from.x,from.z),Vector2(to.x,to.z),float(collider["radius"]),float(collider["height"]),_support_index)
+	return _sweep(from,to,collider,revision,&"all",excluded)
+
+func _sweep(from: Vector3, to: Vector3, collider: Dictionary, revision: int, mask: StringName, excluded_supports: Dictionary) -> Dictionary:
 	if not _current(revision): return _failure(&"stale_geometry")
 	if not from.is_finite() or not to.is_finite() or not collider.has_all(["radius", "height"]) or not _finite_number(collider["radius"]) or not _finite_number(collider["height"]) or float(collider["radius"]) < 0.0 or float(collider["height"]) < 0.0: return _failure(&"invalid_collider")
 	if mask not in [&"all",&"supporting_slabs"]: return _failure(&"invalid_mask")
@@ -312,6 +376,12 @@ func sweep(from: Vector3, to: Vector3, collider: Dictionary, revision: int, mask
 			var ids: Array = _temporary.keys()
 			ids.sort()
 			hit_id = "temporary/"+str(ids[index-_stage["volumes"].size()])
+	_ensure_support_index()
+	for prism: Dictionary in SolidPrism.spatial_candidates(_support_index.solid_prisms,_support_index.mass_broadphase,from,to,float(collider["radius"]),float(collider["height"])):
+		if excluded_supports.has(prism.support_surface_id): continue
+		var hit := SolidPrism.sweep(from,to,prism,float(collider["radius"]),float(collider["height"]))
+		if hit.is_empty() or float(hit["fraction"]) > fraction: continue
+		fraction = hit["fraction"]; normal = hit["normal"]; hit_id = "terrain/"+str(prism.volume_id)
 	if mask == &"all":
 		var segment_ids: Array = _segments.keys(); segment_ids.sort()
 		for id: String in segment_ids:
@@ -359,7 +429,12 @@ func query_attack(shape: Dictionary, source: ExpeditionWorldPoint, target: Exped
 		if not _point_valid(target, shape["traversal"]["radius"], shape["traversal"]["height"]): return _failure(&"invalid_destination")
 		# The swept body may leave a supporting top, but may not enter its solid slab.
 		# Authored planar blockers and temporary walls retain E06's bypass exception.
-		var check := sweep(source.position,target.position,shape["traversal"],revision,&"supporting_slabs")
+		var body: Dictionary = shape["traversal"]
+		var local := SupportPatch.members(source.surface_id,Vector2(source.position.x,source.position.z),Vector2(target.position.x,target.position.z),body["radius"],body["height"],_support_index)
+		var excluded: Dictionary = {}
+		for prism: Dictionary in _support_index.get("solid_prisms",[]):
+			if local.has(prism.support_surface_id) and SolidPrism.above_cap(prism,source.position,target.position): excluded[prism.support_surface_id] = true
+		var check := _sweep(source.position,target.position,body,revision,&"supporting_slabs",excluded)
 		los_ok = not check["data"]["hit"]
 	else:
 		var check := sweep(source_position, target_position, {"radius": 0.0, "height": 0.0}, revision)
@@ -429,13 +504,24 @@ func ground_line_to(source: ExpeditionWorldPoint, destination: ExpeditionWorldPo
 	if heading.is_zero_approx():
 		var valid := position_query(source,profile,revision)
 		if not valid["ok"]: return valid
-		return _success({"points":[source.to_data()],"cost":0.0,"destination":destination.to_data()}) if source.to_data() == destination.to_data() else _failure(&"unsupported_contact")
+		if source.stage_id != destination.stage_id or source.position != destination.position: return _failure(&"unsupported_contact")
+		var stationary := _ground_contact_route(source.surface_id,destination.surface_id,destination.position,profile)
+		return _success({"points":stationary,"cost":0.0,"destination":destination.to_data()}) if not stationary.is_empty() else _failure(&"unsupported_contact")
 	var sampled := _ground_line_samples(source,heading,heading.length(),1,profile,revision,true)
 	if not sampled["ok"]: return sampled
 	if sampled["data"]["points"].is_empty(): return _failure(&"unsupported_contact")
 	var reached: Dictionary = sampled["data"]["points"][0]
-	if reached["stage_id"] != destination.stage_id or reached["surface_id"] != destination.surface_id or Vector3(reached["position"]).distance_to(destination.position) > point_tolerance(source.position,destination.position): return _failure(&"unsupported_contact")
+	if reached["stage_id"] != destination.stage_id or Vector3(reached["position"]).distance_to(destination.position) > point_tolerance(source.position,destination.position): return _failure(&"unsupported_contact")
 	var route: Array = sampled["data"]["route"]
+	# Sampling stores f32 coordinates. Revalidate the exact requested endpoint on
+	# the reached support before changing context across a coincident opening.
+	var last_cell := _cell(reached["surface_id"])
+	var end_start: Vector3 = route[-2]["position"] if route.size() > 1 else source.position
+	if _support_segment_fraction(last_cell,end_start,destination.position,profile) < 1.0-EPS or not _clear_path_segment(end_start,destination.position,profile,null,reached["surface_id"]): return _failure(&"unsupported_contact")
+	var contact := _ground_contact_route(reached["surface_id"],destination.surface_id,destination.position,profile)
+	if contact.is_empty(): return _failure(&"unsupported_contact")
+	route[-1]["position"] = destination.position
+	for index: int in range(1,contact.size()): route.append(contact[index])
 	var cost := 0.0
 	for index: int in range(1,route.size()): cost += Vector3(route[index-1]["position"]).distance_to(route[index]["position"])
 	return _success({"points":route.duplicate(true),"cost":cost,"destination":destination.to_data()})
@@ -472,6 +558,7 @@ func _ground_line_samples(source: ExpeditionWorldPoint, heading: Vector3, spacin
 		var exit_distance := INF
 		var exit := point
 		var vertices: Array = cell["vertices"]
+		var plane := Kernel._plane(vertices)
 		for index: int in vertices.size():
 			var a: Vector3 = vertices[index]
 			var b: Vector3 = vertices[(index+1)%vertices.size()]
@@ -481,6 +568,10 @@ func _ground_line_samples(source: ExpeditionWorldPoint, heading: Vector3, spacin
 			var ox: float = float(a.x)-float(point.x); var oz: float = float(a.z)-float(point.z)
 			var denominator: float = float(direction.x)*ez-float(direction.y)*ex
 			if absf(denominator) <= EPS: continue
+			# An f32 seam anchor can lie a half-ULP outside the entered cell.
+			# Select only outgoing edges; never immediately re-cross the incoming
+			# edge because its rounded ray intersection has a tiny positive distance.
+			if denominator*plane[1] >= 0: continue
 			var along: float = (ox*ez-oz*ex)/denominator
 			var fraction: float = (ox*float(direction.y)-oz*float(direction.x))/denominator
 			if along > EPS and along < exit_distance and fraction >= -EPS and fraction <= 1.0+EPS:
@@ -499,14 +590,14 @@ func _ground_line_samples(source: ExpeditionWorldPoint, heading: Vector3, spacin
 			# Re-evaluate this selected support plane after f32 interpolation; never choose another floor.
 			var sample := Kernel.support_y(cell,point.lerp(exit,clampf((spacing*float(points.size()+1)-distance)/length,0.0,1.0)))
 			var supported := ExpeditionWorldPoint.create(source.stage_id,cell["surface_id"],sample)
-			var contact := sweep(point,sample,profile,revision)
+			var contact := ground_sweep(cell["surface_id"],point,sample,profile,revision)
 			if _support_segment_fraction(cell,point,sample,profile) < 1.0-EPS or not _point_valid(supported,profile["radius"],profile["height"]) or not contact["ok"] or contact["data"]["hit"]:
 				return _success({"points":points,"truncated":true,"stop_reason":&"blocked_or_unsupported"})
 			points.append(supported.to_data())
 		if points.size() == count:
 			route.append(points[-1].duplicate(true))
 			return _success({"points":points,"route":route,"truncated":false,"stop_reason":&""})
-		var crossing := sweep(point,exit,profile,revision)
+		var crossing := ground_sweep(cell["surface_id"],point,exit,profile,revision)
 		if _support_segment_fraction(cell,point,exit,profile) < 1.0-EPS or not crossing["ok"] or crossing["data"]["hit"]: stopped = &"blocked"; break
 		var following := _ground_line_connection(cell["surface_id"],exit,direction,profile)
 		if following.is_empty(): break
@@ -518,33 +609,56 @@ func _ground_line_samples(source: ExpeditionWorldPoint, heading: Vector3, spacin
 	return _success({"points":points,"route":route,"truncated":true,"stop_reason":stopped,"stopped_at":ExpeditionWorldPoint.create(source.stage_id,cell["surface_id"],point).to_data()})
 
 func _ground_line_connection(surface: String, point: Vector3, direction: Vector2, profile: Dictionary) -> Dictionary:
-	for endpoint: Dictionary in _stage["connectors"]:
-		if endpoint["surface_id"] != surface or endpoint["kind"] not in profile["connector_kinds"] or float(endpoint["headroom"]) + EPS < float(profile["height"]): continue
+	_ensure_support_index()
+	for endpoint: Dictionary in _support_index.ports.get(surface,[]):
+		if endpoint["kind"] not in profile["connector_kinds"] or float(endpoint["headroom"]) + EPS < float(profile["height"]): continue
 		var outward: Vector3 = endpoint["outward"]
 		if direction.dot(Vector2(outward.x,outward.z)) <= EPS: continue
-		var delta := point-Vector3(endpoint["position"])
-		var tangent := Vector2(-outward.z,outward.x)
-		if absf(Vector2(delta.x,delta.z).dot(Vector2(outward.x,outward.z))) > EPS or absf(Vector2(delta.x,delta.z).dot(tangent)) > float(endpoint["width"])*0.5+EPS: continue
-		for connection: Dictionary in _stage["connections"]:
-			if endpoint["connector_id"] not in [connection["a_connector"],connection["b_connector"]]: continue
-			if endpoint["connector_id"] == connection["a_connector"] and not connection["forward"]: continue
-			if endpoint["connector_id"] == connection["b_connector"] and not connection["backward"]: continue
-			var other_id: String = connection["b_connector"] if endpoint["connector_id"] == connection["a_connector"] else connection["a_connector"]
-			for other: Dictionary in _stage["connectors"]:
-				if other["connector_id"] != other_id or other["kind"] not in profile["connector_kinds"] or float(other["headroom"]) + EPS < float(profile["height"]): continue
-				var following := _cell(other["surface_id"])
-				if Kernel.contains(following,point) and _point_valid(ExpeditionWorldPoint.create(_stage["stage_id"],following["surface_id"],point),profile["radius"],profile["height"]): return following
+		for following: String in _ground_contact_neighbors(endpoint,point,profile): return _cell(following)
 	return {}
+
+func _ground_contact_neighbors(endpoint: Dictionary, point: Vector3, profile: Dictionary) -> Array[String]:
+	var result: Array[String] = []
+	if endpoint.kind not in profile.connector_kinds or float(endpoint.headroom)+EPS < float(profile.height) or not SupportPatch.on_opening(endpoint.surface_id,endpoint.connector_id,point,_support_index): return result
+	for transition: Dictionary in _support_index.transitions.get(endpoint.connector_id,[]):
+		if not transition.allowed: continue
+		var other: Dictionary = _support_index.endpoints[transition.other_id]
+		if other.kind not in profile.connector_kinds or float(other.headroom)+EPS < float(profile.height) or not SupportPatch.on_opening(other.surface_id,other.connector_id,point,_support_index): continue
+		if _point_valid(ExpeditionWorldPoint.create(_stage.stage_id,other.surface_id,point),profile.radius,profile.height): result.append(other.surface_id)
+	return result
+
+func _ground_contact_route(surface: String, target: String, point: Vector3, profile: Dictionary) -> Array:
+	_ensure_support_index()
+	if not _point_valid(ExpeditionWorldPoint.create(_stage.stage_id,surface,point),profile.radius,profile.height): return []
+	var previous := {surface:""}; var queue: Array[String] = [surface]; var cursor := 0
+	while cursor < queue.size():
+		var current := queue[cursor]; cursor += 1
+		if current == target:
+			var route: Array = []
+			while not current.is_empty():
+				route.push_front(ExpeditionWorldPoint.create(_stage.stage_id,current,point).to_data()); current = previous[current]
+			return route
+		for endpoint: Dictionary in _support_index.ports.get(current,[]):
+			for neighbor: String in _ground_contact_neighbors(endpoint,point,profile):
+				if previous.has(neighbor): continue
+				previous[neighbor] = current; queue.append(neighbor)
+	return []
 
 func _candidate_point(point: ExpeditionWorldPoint, radius: float, height: float, candidate: WorldSolidSegment) -> bool:
 	if not _point_valid(point,radius,height): return false
 	return candidate == null or candidate.contact(point.position,point.position,{"radius":radius,"height":height}).is_empty()
 
-func _clear_path_segment(from: Vector3, to: Vector3, profile: Dictionary, candidate: WorldSolidSegment) -> bool:
-	if not Kernel.clear_segment(from,to,_volumes(),profile["radius"],profile["height"]): return false
-	for segment: WorldSolidSegment in _segments.values():
-		if not segment.contact(from,to,profile).is_empty(): return false
+func _clear_path_segment(from: Vector3, to: Vector3, profile: Dictionary, candidate: WorldSolidSegment, surface_id: String = "") -> bool:
+	var contact := ground_sweep(surface_id,from,to,profile,geometry_revision) if not surface_id.is_empty() else sweep(from,to,profile,geometry_revision)
+	if not contact["ok"] or contact["data"]["hit"]: return false
 	return candidate == null or candidate.contact(from,to,profile).is_empty()
+
+func _region_mass_overlap(polygon: PackedVector2Array, support: Dictionary, height: float) -> bool:
+	_ensure_support_index()
+	for prism: Dictionary in _support_index.get("solid_prisms",[]):
+		if not prism.support_surface_id.is_empty() and prism.support_surface_id == support.get("surface_id",""): continue
+		if SolidPrism.intersects_patch(prism,polygon,support,height): return true
+	return false
 
 func can_insert_segment(id: String, segment: WorldSolidSegment, revision: int) -> Dictionary:
 	if not _current(revision): return _failure(&"stale_geometry")
@@ -562,7 +676,8 @@ func can_insert_segment(id: String, segment: WorldSolidSegment, revision: int) -
 			var support := ground_line_point_at(anchor,Vector2(endpoint.x,endpoint.z),profile,revision)
 			if not support["ok"]: return support
 			if Vector3(support["data"]["point"]["position"]).distance_to(endpoint) > EPS: return _failure(&"non_planar_field_support")
-		if sweep(endpoints[0],endpoints[1],profile,revision)["data"]["hit"]: return _failure(&"blocked_obstacle")
+		var excluded := SupportPatch.members(anchor.surface_id,Vector2(endpoints[0].x,endpoints[0].z),Vector2(endpoints[1].x,endpoints[1].z),profile["radius"],profile["height"],_support_index)
+		if _sweep(endpoints[0],endpoints[1],profile,revision,&"all",excluded)["data"]["hit"]: return _failure(&"blocked_obstacle")
 	for occupant: Dictionary in _occupancy.values():
 		var position: Vector3 = occupant["point"]["position"]
 		if not segment.contact(position,position,occupant["profile"]).is_empty(): return _failure(&"occupied")

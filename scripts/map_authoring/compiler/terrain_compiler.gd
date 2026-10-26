@@ -6,8 +6,9 @@ const Canonical = preload("res://scripts/core/expedition/generation/canonical.gd
 const Manifest = preload("res://scripts/core/expedition/model/manifest.gd")
 const Partition = preload("res://scripts/map_authoring/compiler/terrain_partition.gd")
 const Materials = preload("res://scripts/map_authoring/terrain/terrain_material.gd")
+const SolidPrism = preload("res://scripts/core/expedition/spatial/world_solid_prism.gd")
 const Objects = preload("res://scripts/map_authoring/objects/object_compiler.gd")
-const REVISION := "map_terrain_v2"
+const REVISION := "map_terrain_v3"
 const MAX_SUPPORTS := 1024
 const MAX_GRID_QUADS := 65536
 const PROFILE := {"radius":2.0,"height":12.0,"connector_kinds":["walk"]}
@@ -82,6 +83,7 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 	if not read.valid: return failure("source_invalid")
 	if source.composition != null: return failure("capability_unsupported", "composition")
 	var cells: Array = []; var visuals: Array = []; var slabs: Array = []; var edges: Array = []
+	var mass_bases: Dictionary = {}
 	var layers: Array = source.layers.duplicate(true)
 	layers.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.layer_id < b.layer_id)
 	var grid_quads := 0
@@ -90,6 +92,9 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 	var material_dependencies := Materials.dependencies()
 	if material_dependencies.is_empty(): return failure("material_missing")
 	for layer: Dictionary in layers:
+		var base_y := float(layer.heights[0])
+		for value: float in layer.heights: base_y = minf(base_y,value)
+		mass_bases[layer.layer_id] = base_y-4.0
 		for material: String in layer.material_masks:
 			if material not in ["grass","earth"]: return failure("material_unsupported",layer.layer_id)
 		var cancelled := func() -> bool: return cancellation.is_valid() and cancellation.call(0.1)
@@ -229,11 +234,19 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 		for cell: Dictionary in cells:
 			if not reachable.has(cell.surface_id): return failure("route_unreachable",cell.surface_id)
 	if cancellation.is_valid() and cancellation.call(1.0): return failure("cancelled")
-	var part := {"part_id":"piece_"+source.document_id.sha256_text().substr(0,20),"revision":int(source.revision),"biome_tags":["authored"],"allowed_rotations":[0],"surfaces":cells,"connectors":connectors,"sockets":sockets,"solid_volumes":slabs,"blockers":[]}
+	var solid_prisms: Array = []
+	for i: int in cells.size():
+		var cell: Dictionary = cells[i]; var visual: Dictionary = visuals[i]
+		var mass := {"volume_id":"terrain/"+str(cell.surface_id),"support_surface_id":cell.surface_id,"top":cell.vertices.duplicate()}
+		if visual.special: mass["thickness_y"] = 4.0
+		else: mass["bottom_y"] = mass_bases[visual.source_id]
+		if not SolidPrism.valid(mass): return failure("geometry_invalid",cell.surface_id)
+		solid_prisms.append(mass)
+	var part := {"part_id":"piece_"+source.document_id.sha256_text().substr(0,20),"revision":int(source.revision),"biome_tags":["authored"],"allowed_rotations":[0],"surfaces":cells,"connectors":connectors,"sockets":sockets,"solid_volumes":[],"solid_prisms":solid_prisms,"blockers":[]}
 	var render_layers: Array = []
 	for layer: Dictionary in layers:
 		render_layers.append({"layer_id":layer.layer_id,"origin_xz":layer.origin_xz.duplicate(),"sample_spacing":float(layer.sample_spacing),"columns":int(layer.columns),"rows":int(layer.rows),"heights":layer.heights.duplicate(),"material_masks":layer.material_masks.duplicate(true)})
-	var package := {"format_version":2,"compiler_revision":REVISION,"source_hash":read.output_hash,"dependencies":material_dependencies,"part":part,"adjacency":adjacency,"boundaries":boundaries,"visuals":visuals,"render_layers":render_layers,"profile":PROFILE.duplicate(true),"grid_quads":grid_quads,"piece_count":1}
+	var package := {"format_version":3,"compiler_revision":REVISION,"source_hash":read.output_hash,"dependencies":material_dependencies,"part":part,"adjacency":adjacency,"boundaries":boundaries,"visuals":visuals,"render_layers":render_layers,"profile":PROFILE.duplicate(true),"grid_quads":grid_quads,"piece_count":1}
 	package.package_hash = Canonical.digest(package)
 	if not source.placements.is_empty() or not source.dependencies.is_empty():
 		var compiled_objects := Objects.compile(source,package,preview_manifest(package))
@@ -280,17 +293,18 @@ static func _opening_fits(endpoint: Dictionary, boundary: Dictionary) -> bool:
 	return Geometry2D.get_closest_point_to_segment(p+Vector2(tangent.x,tangent.z),a,b).distance_to(p+Vector2(tangent.x,tangent.z)) < EPS and Geometry2D.get_closest_point_to_segment(p-Vector2(tangent.x,tangent.z),a,b).distance_to(p-Vector2(tangent.x,tangent.z)) < EPS
 
 static func validate_package(package: Dictionary) -> bool:
-	if package.get("compiler_revision") != REVISION or package.get("format_version") != 2 or not package.has("package_hash"): return false
+	if package.get("compiler_revision") != REVISION or package.get("format_version") != 3 or not package.has("package_hash"): return false
 	# Existing v2 producers may store textual keys as StringName via dot assignment.
 	# Keep the same bounded passive-value check used by the source preflight.
 	if not _valid_authoring_value(package) or (package.has("objects") and not Objects.validate_records(package.objects)): return false
+	if not package.get("part") is Dictionary or not WorldGeometry._stage_prisms_valid({"surfaces":package.part.get("surfaces",[]),"solid_prisms":package.part.get("solid_prisms",[])}): return false
 	var content := package.duplicate(true); content.erase("package_hash")
 	return Canonical.digest(content) == package.package_hash and Objects.validate_dependencies(package.get("dependencies",[]),Materials.dependencies())
 
 static func preview_manifest(package: Dictionary) -> Manifest:
 	if not validate_package(package): return null
 	var part: Dictionary = package.part
-	var stage := {"stage_id":"terrain_preview","biome":"authored","entrance":"","part_instances":[{"part_id":part.part_id,"rotation_quarters":0,"translation":Vector3.ZERO}],"surfaces":part.surfaces.duplicate(true),"connectors":part.connectors.duplicate(true),"connections":package.adjacency.duplicate(true),"sockets":part.sockets.duplicate(true),"volumes":part.solid_volumes.duplicate(true)}
+	var stage := {"stage_id":"terrain_preview","biome":"authored","entrance":"","part_instances":[{"part_id":part.part_id,"rotation_quarters":0,"translation":Vector3.ZERO}],"surfaces":part.surfaces.duplicate(true),"connectors":part.connectors.duplicate(true),"connections":package.adjacency.duplicate(true),"sockets":part.sockets.duplicate(true),"volumes":part.solid_volumes.duplicate(true),"solid_prisms":part.get("solid_prisms",[]).duplicate(true)}
 	var manifest := Manifest.new()
 	manifest._data = {"manifest_revision":1,"geometry_revision":1,"input":{"parts":[part.duplicate(true)]},"stages":[stage],"traversal":package.profile.duplicate(true),"population":{"slots":[]},"objectives":[],"portals":[],"witnesses":{}}
 	return manifest

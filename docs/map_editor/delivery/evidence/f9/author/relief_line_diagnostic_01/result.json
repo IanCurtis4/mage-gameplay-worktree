@@ -1,0 +1,424 @@
+{
+  "counts": {
+    "blocked": 37,
+    "direct_ok": 388,
+    "same_point_other_support": 24,
+    "unsupported_edge": 13
+  },
+  "examples": [
+    {
+      "from": {
+        "position": "(133.3333, 5.333333, 66.66666)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+      },
+      "key": "same_point_other_support",
+      "sampled": {
+        "data": {
+          "points": [
+            {
+              "position": "(200.0, 3.2, 40.0)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+            }
+          ],
+          "route": [
+            {
+              "position": "(133.3333, 5.333333, 66.66666)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+            },
+            {
+              "position": "(200.0, 3.2, 40.0)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+            }
+          ],
+          "stop_reason": "",
+          "truncated": false
+        },
+        "error_code": "",
+        "geometry_revision": 2,
+        "ok": true
+      },
+      "to": {
+        "position": "(200.0, 3.2, 40.0)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t2"
+      }
+    },
+    {
+      "from": {
+        "position": "(133.3333, 5.333333, 66.66666)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+      },
+      "key": "same_point_other_support",
+      "sampled": {
+        "data": {
+          "points": [
+            {
+              "position": "(200.0, 4.48, 56.0)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+            }
+          ],
+          "route": [
+            {
+              "position": "(133.3333, 5.333333, 66.66666)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+            },
+            {
+              "position": "(200.0, 4.48, 56.0)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+            }
+          ],
+          "stop_reason": "",
+          "truncated": false
+        },
+        "error_code": "",
+        "geometry_revision": 2,
+        "ok": true
+      },
+      "to": {
+        "position": "(200.0, 4.48, 56.0)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t2"
+      }
+    },
+    {
+      "from": {
+        "position": "(133.3333, 5.333333, 66.66666)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+      },
+      "key": "unsupported_edge",
+      "sampled": {
+        "data": {
+          "points": [],
+          "route": [
+            {
+              "position": "(133.3333, 5.333333, 66.66666)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+            },
+            {
+              "position": "(200.0, 4.897959, 61.22449)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+            },
+            {
+              "position": "(200.0, 4.897959, 61.22449)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t2"
+            }
+          ],
+          "stop_reason": "unsupported_edge",
+          "stopped_at": {
+            "position": "(200.0, 4.897959, 61.22449)",
+            "stage_id": "map_preview",
+            "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t2"
+          },
+          "truncated": true
+        },
+        "error_code": "",
+        "geometry_revision": 2,
+        "ok": true
+      },
+      "to": {
+        "position": "(264.0, 0.0, 56.0)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t1"
+      }
+    },
+    {
+      "from": {
+        "position": "(264.0, 0.0, 56.0)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t1"
+      },
+      "key": "blocked",
+      "sampled": {
+        "data": {
+          "points": [],
+          "route": [
+            {
+              "position": "(264.0, 0.0, 56.0)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t1"
+            }
+          ],
+          "stop_reason": "blocked",
+          "stopped_at": {
+            "position": "(264.0, 0.0, 56.0)",
+            "stage_id": "map_preview",
+            "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t1"
+          },
+          "truncated": true
+        },
+        "error_code": "",
+        "geometry_revision": 2,
+        "ok": true
+      },
+      "to": {
+        "position": "(133.3333, 5.333333, 66.66666)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+      }
+    },
+    {
+      "from": {
+        "position": "(133.3333, 5.333333, 66.66666)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+      },
+      "key": "same_point_other_support",
+      "sampled": {
+        "data": {
+          "points": [
+            {
+              "position": "(200.0, 5.76, 72.0)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+            }
+          ],
+          "route": [
+            {
+              "position": "(133.3333, 5.333333, 66.66666)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+            },
+            {
+              "position": "(200.0, 5.76, 72.0)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+            }
+          ],
+          "stop_reason": "",
+          "truncated": false
+        },
+        "error_code": "",
+        "geometry_revision": 2,
+        "ok": true
+      },
+      "to": {
+        "position": "(200.0, 5.76, 72.0)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t2"
+      }
+    },
+    {
+      "from": {
+        "position": "(133.3333, 5.333333, 66.66666)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+      },
+      "key": "blocked",
+      "sampled": {
+        "data": {
+          "points": [],
+          "route": [
+            {
+              "position": "(133.3333, 5.333333, 66.66666)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+            },
+            {
+              "position": "(200.0, 5.527272, 69.0909)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+            },
+            {
+              "position": "(200.0, 5.527272, 69.0909)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t2"
+            }
+          ],
+          "stop_reason": "blocked",
+          "stopped_at": {
+            "position": "(200.0, 5.527272, 69.0909)",
+            "stage_id": "map_preview",
+            "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t2"
+          },
+          "truncated": true
+        },
+        "error_code": "",
+        "geometry_revision": 2,
+        "ok": true
+      },
+      "to": {
+        "position": "(280.0, 0.0, 72.0)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t1"
+      }
+    },
+    {
+      "from": {
+        "position": "(280.0, 0.0, 72.0)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t1"
+      },
+      "key": "unsupported_edge",
+      "sampled": {
+        "data": {
+          "points": [],
+          "route": [
+            {
+              "position": "(280.0, 0.0, 72.0)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t1"
+            }
+          ],
+          "stop_reason": "unsupported_edge",
+          "stopped_at": {
+            "position": "(280.0, 0.0, 72.0)",
+            "stage_id": "map_preview",
+            "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t1"
+          },
+          "truncated": true
+        },
+        "error_code": "",
+        "geometry_revision": 2,
+        "ok": true
+      },
+      "to": {
+        "position": "(133.3333, 5.333333, 66.66666)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+      }
+    },
+    {
+      "from": {
+        "position": "(133.3333, 5.333333, 66.66666)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+      },
+      "key": "same_point_other_support",
+      "sampled": {
+        "data": {
+          "points": [
+            {
+              "position": "(200.0, 7.04, 88.0)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+            }
+          ],
+          "route": [
+            {
+              "position": "(133.3333, 5.333333, 66.66666)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+            },
+            {
+              "position": "(200.0, 7.04, 88.0)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+            }
+          ],
+          "stop_reason": "",
+          "truncated": false
+        },
+        "error_code": "",
+        "geometry_revision": 2,
+        "ok": true
+      },
+      "to": {
+        "position": "(200.0, 7.04, 88.0)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t2"
+      }
+    },
+    {
+      "from": {
+        "position": "(133.3333, 5.333333, 66.66666)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+      },
+      "key": "unsupported_edge",
+      "sampled": {
+        "data": {
+          "points": [],
+          "route": [
+            {
+              "position": "(133.3333, 5.333333, 66.66666)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+            },
+            {
+              "position": "(200.0, 6.447761, 80.59702)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+            },
+            {
+              "position": "(200.0, 6.447761, 80.59702)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t2"
+            }
+          ],
+          "stop_reason": "unsupported_edge",
+          "stopped_at": {
+            "position": "(200.0, 6.447761, 80.59702)",
+            "stage_id": "map_preview",
+            "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t2"
+          },
+          "truncated": true
+        },
+        "error_code": "",
+        "geometry_revision": 2,
+        "ok": true
+      },
+      "to": {
+        "position": "(312.0, 0.0, 104.0)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t1"
+      }
+    },
+    {
+      "from": {
+        "position": "(312.0, 0.0, 104.0)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t1"
+      },
+      "key": "blocked",
+      "sampled": {
+        "data": {
+          "points": [],
+          "route": [
+            {
+              "position": "(312.0, 0.0, 104.0)",
+              "stage_id": "map_preview",
+              "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t1"
+            }
+          ],
+          "stop_reason": "blocked",
+          "stopped_at": {
+            "position": "(312.0, 0.0, 104.0)",
+            "stage_id": "map_preview",
+            "surface_id": "relief/c_a3e1f4935b0919b3_1_0_1_1_t1"
+          },
+          "truncated": true
+        },
+        "error_code": "",
+        "geometry_revision": 2,
+        "ok": true
+      },
+      "to": {
+        "position": "(133.3333, 5.333333, 66.66666)",
+        "stage_id": "map_preview",
+        "surface_id": "relief/c_a3e1f4935b0919b3_0_0_1_1_t1"
+      }
+    }
+  ],
+  "profile": {
+    "connector_kinds": [
+      "walk"
+    ],
+    "height": 32.0,
+    "profile_id": "ruins_player",
+    "radius": 20.0,
+    "revision": 1
+  },
+  "total": 462
+}

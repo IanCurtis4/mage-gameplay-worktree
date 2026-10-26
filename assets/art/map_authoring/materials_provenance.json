@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "scope": "Editor F9-02 / F9-03, human authorization 2026-10-25",
+  "tool": "image_gen built-in",
+  "rights_basis": "project_generated_output",
+  "external_reference_images": [],
+  "processing": "Selected tool outputs copied byte-for-byte. Opaque terrain textures; no raster editing code.",
+  "assets": [
+    {
+      "id": "sand_tile",
+      "path": "sand_tile.png",
+      "sha256": "6c8930b2cd7df987d5bfa940ccb18e9cae8ecfca85bfbb9d84ce81db432c4e9e",
+      "original_output": "exec-98c52da9-b800-4121-b7f5-ae7087f4b975.png",
+      "width": 1254,
+      "height": 1254,
+      "prompts": [
+        "Use case: stylized-concept. Asset type: one seamless tileable opaque square terrain texture for a polished hand-painted isometric fantasy RPG. Full-bleed top-down orthographic view of warm natural pale ochre desert sand, small restrained wind-smoothed ripples, fine granular variation and a few tiny subdued mineral flecks. Soft painterly naturalistic classic strategy game texture with broad quiet color variation and detailed but low-contrast grain; readable and pleasant when repeated over a large map. Uniform diffuse illumination without directional cast shadows, no perspective, no horizon, no objects or cactus, no stones larger than small gravel, no grass, no borders, no text or symbols. Opposite edges match seamlessly in color and pattern. Entire image is continuous dry sand material, not a scene, photograph or sample board. Muted warm beige and honey tones that contrast clearly with green grass and cool stone. Square format."
+      ]
+    },
+    {
+      "id": "cliff_tile",
+      "path": "cliff_tile.png",
+      "sha256": "aa5e24d7e9fb33688051899f339e13bfc56fbfb1904d58dec123f94fc88926c7",
+      "original_output": "exec-2e0e8f24-32b6-4531-94e6-592b84a57019.png",
+      "width": 1254,
+      "height": 1254,
+      "prompts": [
+        "Use case: stylized-concept. Asset type: one seamless tileable opaque square rock terrain texture for a polished hand-painted isometric fantasy RPG. Full-bleed orthographic close surface of naturally weathered gray-brown limestone with irregular soft horizontal strata, fine mineral texture, restrained fissures and rounded worn fracture edges, muted cool slate gray and subtle warm taupe highlights. A detailed classic fantasy strategy game material painted with softly modeled natural volume, not photographic and not low-poly. Uniform diffuse illumination, no cast shadows, no perspective, no horizon, no terrain scene, no individual boulders, grass, moss or snow, no frame, text, watermark or swatch board. Opposite edges match seamlessly. Continuous stone material across the whole image, low to moderate contrast suitable for small slopes and cliff faces, no giant dark cracks that dominate repetition. Square format."
+      ]
+    },
+    {
+      "id": "water_tile",
+      "path": "water_tile.png",
+      "sha256": "d49a573faabd934e941f976e42fb71bc154010e21c73dbb77269d6603ef13108",
+      "original_output": "exec-88ce2f21-b493-45c7-8385-095fb01fd178.png",
+      "width": 1254,
+      "height": 1254,
+      "prompts": [
+        "Use case: stylized-concept. Asset type: one seamless tileable opaque square water albedo texture for a polished hand-painted isometric fantasy RPG. Full-bleed exact top-down orthographic view of quiet shallow creek water, muted deep teal and cool blue-green tones with restrained soft ripples and small gently broken pale turquoise highlights. A few very subtle submerged muted stone shapes, no visible shoreline, no grass or plants, no islands, no objects, no sky reflection, no horizon, no perspective, no foam swirls, no large waves. Polished softly painted classic fantasy strategy/RPG ground material, not photographic, not pixel art. Even diffuse illumination with moderate quiet variation; all opposite edges match seamlessly. Entire image is continuous water material, not a scene, map or swatch board. No text, border, frame or watermark. Square format."
+      ]
+    }
+  ]
+}
