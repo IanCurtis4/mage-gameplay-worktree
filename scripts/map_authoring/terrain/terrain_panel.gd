@@ -51,7 +51,9 @@ func _ready() -> void:
 	for caption: String in ["Elevar","Baixar","Nivelar","Suavizar","Pintar material","Rampa (arraste início → fim)"]: mode.add_item(caption)
 	row.add_child(mode)
 	shape = OptionButton.new(); shape.add_item("Círculo"); shape.add_item("Quadrado"); row.add_child(shape)
-	material_choice = OptionButton.new(); material_choice.add_item("Terra"); material_choice.add_item("Grama"); row.add_child(material_choice)
+	material_choice = OptionButton.new()
+	for caption: String in ["Terra","Grama","Areia","Pedra"]: material_choice.add_item(caption)
+	row.add_child(material_choice)
 	hide_layer = CheckBox.new(); hide_layer.text = "Ocultar camada"; row.add_child(hide_layer)
 	hide_layer.toggled.connect(func(hidden: bool) -> void:
 		if hidden and selected_layer not in canvas.hidden_layers: canvas.hidden_layers.append(selected_layer)
@@ -157,7 +159,7 @@ func refresh() -> void:
 func _options_changed() -> void:
 	if not is_instance_valid(canvas): return
 	canvas.cancel_stroke()
-	canvas.options = {"mode":["raise","lower","flatten","smooth","material","ramp"][mode.selected],"shape":"circle" if shape.selected == 0 else "square","material":"earth" if material_choice.selected == 0 else "grass","radius":radius.value,"strength":strength.value,"hardness":hardness.value,"target":target.value,"end_height":end_height.value}
+	canvas.options = {"mode":["raise","lower","flatten","smooth","material","ramp"][mode.selected],"shape":"circle" if shape.selected == 0 else "square","material":["earth","grass","sand","stone"][material_choice.selected],"radius":radius.value,"strength":strength.value,"hardness":hardness.value,"target":target.value,"end_height":end_height.value}
 
 func apply_stroke(points: Array, options: Dictionary) -> Dictionary:
 	var proposal := Brush.stroke(session.document().to_data(),selected_layer,points,options)

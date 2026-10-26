@@ -39,7 +39,7 @@ func _run() -> void:
 	check("one_piece_is_not_grid_count",package.piece_count == 1 and package.grid_quads == 4096 and package.part.surfaces.size() == 3)
 	check("full_extent_preserved",package.render_layers[0].columns == 65 and package.render_layers[0].rows == 65 and Partition.point(package.render_layers[0],64,64) == Vector3(8192,128,8192))
 	check("dense_paint_retained",package.render_layers[0].material_masks == source.layers[0].material_masks)
-	check("dependencies_hashed",package.dependencies.size() == 5 and package.dependencies == Materials.dependencies())
+	check("dependencies_hashed",package.dependencies.size() == 9 and package.dependencies == Materials.dependencies())
 	var forged := package.duplicate(true); forged.dependencies[0].sha256 = "0".repeat(64); forged.erase("package_hash"); forged.package_hash = ExpeditionCanonical.digest(forged)
 	check("forged_asset_dependency_rejected",not Compiler.validate_package(forged))
 	var arrays := Materials.arrays(source.layers[0])
@@ -49,14 +49,20 @@ func _run() -> void:
 	check("world_uv_scale_independent_of_partition",arrays[Mesh.ARRAY_TEX_UV][0] == Vector2.ZERO and arrays[Mesh.ARRAY_TEX_UV][-1] == Vector2(64,64))
 	var normal_ok := true
 	for color: Color in arrays[Mesh.ARRAY_COLOR]:
-		if color.r < 0 or color.r > 1 or color.g < 0.65 or color.g > 1.0: normal_ok = false
-	check("continuous_blend_and_shading_range",normal_ok)
+		for weight: float in [color.r,color.g,color.b,color.a]:
+			if weight < 0 or weight > 1.0: normal_ok = false
+		if absf(color.r+color.g+color.b+color.a-1.0) > 0.000001: normal_ok = false
+	for k: int in 4225:
+		var normal := Vector3(arrays[Mesh.ARRAY_CUSTOM1][k*4],arrays[Mesh.ARRAY_CUSTOM1][k*4+1],arrays[Mesh.ARRAY_CUSTOM1][k*4+2])
+		if absf(normal.length()-1.0) > 0.000001: normal_ok = false
+	check("continuous_blend_and_normal_range",normal_ok)
 	var steep_layer: Dictionary = source.layers[0].duplicate(true)
 	for z: int in 65:
 		for x: int in 65: steep_layer.heights[z*65+x] = float(x)*128.0
 	var paint_before: Dictionary = steep_layer.material_masks.duplicate(true)
 	var steep_arrays := Materials.arrays(steep_layer)
-	check("steep_rock_material_derived_from_geometry",steep_arrays[Mesh.ARRAY_COLOR][32*65+32].b > 0.999 and arrays[Mesh.ARRAY_COLOR][32*65+32].b == 0)
+	var center := (32*65+32)*4
+	check("steep_material_receives_real_slope_normal",absf(steep_arrays[Mesh.ARRAY_CUSTOM1][center]+sqrt(0.5)) < 0.000001 and absf(steep_arrays[Mesh.ARRAY_CUSTOM1][center+1]-sqrt(0.5)) < 0.000001 and arrays[Mesh.ARRAY_CUSTOM1][center+1] > 0.99)
 	check("steep_material_preserves_author_paint",steep_layer.material_masks == paint_before)
 	var all_supported := true
 	for z: int in 65:

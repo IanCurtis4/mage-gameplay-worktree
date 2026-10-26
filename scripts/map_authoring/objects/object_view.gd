@@ -4,6 +4,18 @@ const Catalog = preload("res://scripts/map_authoring/objects/prop_catalog.gd")
 const Metadata = preload("res://scripts/map_authoring/objects/object_schema.gd")
 const ProjectionView = preload("res://scripts/world/expedition_geometry_view.gd")
 
+static func depth_domain(heights: Array) -> Vector2:
+	if heights.is_empty(): return Vector2.ZERO
+	var low := float(heights[0]); var high := low
+	for value: float in heights: low = minf(low,value); high = maxf(high,value)
+	return Vector2(low,high)
+
+static func depth_order(height: float, domain: Vector2, offset: int = 0) -> int:
+	# Editor backgrounds stay at zero and interaction overlays at4090. Normalize
+	# display depth only; negative world heights and physical geometry are intact.
+	var scale := minf(4.0,3984.0/maxf(1.0,float(domain.y)-float(domain.x)))
+	return clampi(8+floori((height-float(domain.x))*scale)+offset,1,4000)
+
 static func source_records(source: Dictionary) -> Array:
 	var catalog := Catalog.load_catalog(); var records: Array = []
 	if not catalog.ok: return records
@@ -14,7 +26,7 @@ static func source_records(source: Dictionary) -> Array:
 		records.append({"placement_id":placement.placement_id,"definition_id":placement.definition_id,"position":Vector3(p[0],p[1],p[2]),"source_surface_id":placement.surface_id,"rotation_y":placement.rotation_y,"definition":found.definition,"editor_state":Metadata.state(source,placement.placement_id)})
 	return records
 
-static func attach(root: Node2D, records: Array, authoring: bool = false, hidden_surfaces: Array[String] = []) -> Array[Sprite2D]:
+static func attach(root: Node2D, records: Array, authoring: bool = false, hidden_surfaces: Array[String] = [], domain: Vector2 = Vector2.ZERO) -> Array[Sprite2D]:
 	var result: Array[Sprite2D] = []
 	if records.is_empty(): return result
 	var catalog := Catalog.load_catalog()
@@ -38,7 +50,7 @@ static func attach(root: Node2D, records: Array, authoring: bool = false, hidden
 		sprite.offset = -Vector2(definition.pivot_uv[0]*texture.get_width(),definition.pivot_uv[1]*texture.get_height())
 		sprite.scale = Vector2.ONE*float(definition.world_height)/float(texture.get_height())
 		sprite.position = ProjectionView.project(object.position)
-		sprite.z_index = clampi(floori(object.position.y*4.0)+1,-4000,4000)
+		sprite.z_index = depth_order(object.position.y,domain,1)
 		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		sprite.flip_h = int(round(float(object.rotation_y)/90.0)) in [1,2]
 		if sprite.flip_h: sprite.offset.x = -(1.0-float(definition.pivot_uv[0]))*texture.get_width()

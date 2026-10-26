@@ -143,6 +143,15 @@ func redraw_terrain() -> void:
 	_height_bounds.clear()
 	var data := _preview if not _preview.is_empty() else source
 	if data.is_empty() or not preview_supported(data): queue_redraw(); return
+	var heights: Array = []
+	for layer: Dictionary in data.layers:
+		if layer.layer_id not in hidden_layers: heights.append_array(layer.heights)
+	for special: Dictionary in data.special_surfaces:
+		if special.layer_id not in hidden_layers:
+			for point: Array in special.vertices_xyz: heights.append(point[1])
+	_object_records = Objects.source_records(data) if not data.get("placements",[]).is_empty() else []
+	for object: Dictionary in _object_records: heights.append(object.position.y)
+	var depth_domain := Objects.depth_domain(heights)
 	for layer: Dictionary in data.layers:
 		if layer.layer_id in hidden_layers or layer.heights.is_empty() or int(layer.columns) < 2 or int(layer.rows) < 2 or layer.sample_spacing <= 0 or layer.heights.size() != int(layer.columns)*int(layer.rows): continue
 		_height_bounds[layer.layer_id] = Vector2(layer.heights.min(),layer.heights.max())
@@ -154,14 +163,14 @@ func redraw_terrain() -> void:
 			mesh.material = TerrainMaterial.material(true)
 			var x: int = region.get("x",0); var z: int = region.get("z",0)
 			var width: int = region.get("width",int(layer.columns)-1); var height: int = region.get("height",int(layer.rows)-1)
-			mesh.z_index = clampi(floori((Partition.point(layer,x,z).y+Partition.point(layer,x+width,z+height).y)*2),-4000,4000)
+			mesh.z_index = Objects.depth_order((Partition.point(layer,x,z).y+Partition.point(layer,x+width,z+height).y)*0.5,depth_domain)
 			_mesh_root.add_child(mesh)
 	for special: Dictionary in data.special_surfaces:
 		if special.layer_id in hidden_layers or special.vertices_xyz.size() < 3: continue
 		var polygon := Polygon2D.new(); var points := PackedVector2Array(); var y := 0.0
 		for xyz: Array in special.vertices_xyz:
 			var point := Vector3(xyz[0],xyz[1],xyz[2]); points.append(WorldProjection.project(point)); y += point.y
-		polygon.polygon = points; polygon.color = Color("889295"); polygon.z_index = clampi(floori(y/special.vertices_xyz.size()*4),-4000,4000)
+		polygon.polygon = points; polygon.color = Color("889295"); polygon.z_index = Objects.depth_order(y/special.vertices_xyz.size(),depth_domain)
 		_mesh_root.add_child(polygon)
 		for i: int in special.vertices_xyz.size():
 			var av: Array = special.vertices_xyz[i]; var bv: Array = special.vertices_xyz[(i+1)%special.vertices_xyz.size()]
@@ -169,12 +178,11 @@ func redraw_terrain() -> void:
 			if not is_equal_approx(a.y,b.y): continue
 			var side := Polygon2D.new(); side.polygon = PackedVector2Array([WorldProjection.project(a),WorldProjection.project(b),WorldProjection.project(b-Vector3.UP*4),WorldProjection.project(a-Vector3.UP*4)])
 			side.color = Color("3d505d"); side.z_index = polygon.z_index-1; _mesh_root.add_child(side)
-	_object_records = Objects.source_records(data) if not data.get("placements",[]).is_empty() else []
 	var hidden_surfaces := hidden_layers.duplicate()
 	for special: Dictionary in data.special_surfaces:
 		if special.layer_id in hidden_layers: hidden_surfaces.append(special.surface_id)
 	_object_records = _object_records.filter(func(object: Dictionary) -> bool: return object.source_surface_id not in hidden_surfaces)
-	Objects.attach(_mesh_root,_object_records,true,hidden_surfaces)
+	Objects.attach(_mesh_root,_object_records,true,hidden_surfaces,depth_domain)
 	queue_redraw()
 
 func _draw() -> void:

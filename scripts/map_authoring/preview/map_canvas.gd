@@ -27,7 +27,7 @@ func _ready() -> void:
 	custom_minimum_size = Vector2(600,360); size_flags_vertical = Control.SIZE_EXPAND_FILL; size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	clip_contents = true; mouse_filter = Control.MOUSE_FILTER_STOP
 	_meshes = Node2D.new(); add_child(_meshes)
-	_overlay = Node2D.new(); add_child(_overlay); _overlay.draw.connect(_draw_world)
+	_overlay = Node2D.new(); _overlay.z_index = 4090; add_child(_overlay); _overlay.draw.connect(_draw_world)
 	resized.connect(fit)
 func clear() -> void:
 	stop_test(); package = {}; geometry = null
@@ -39,23 +39,29 @@ func set_package(value: Dictionary) -> void:
 	if not Compiler.validate_package(value): status.emit("O pacote é inválido ou suas dependências mudaram."); return
 	clear(); package = value.duplicate(true)
 	geometry = World.new(); geometry.configure(Compiler.manifest(package),"map_preview")
+	var heights: Array = []
 	for instance: Dictionary in package.render_instances:
 		for layer: Dictionary in instance.layers:
-			var arrays := Materials.arrays(layer)
-			var positions := PackedVector2Array(); var uv := PackedVector2Array()
-			for z: int in int(layer.rows):
-				for x: int in int(layer.columns):
-					var point := Kernel.rotate(Partition.point(layer,x,z),instance.rotation_quarters)+Vector3(instance.translation)
-					positions.append(WorldProjection.project(point)); uv.append(Vector2(point.x,point.z)/Materials.TILE_UNITS)
-			arrays[Mesh.ARRAY_VERTEX] = positions; arrays[Mesh.ARRAY_TEX_UV] = uv
-			var mesh := ArrayMesh.new(); mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
-			var view := MeshInstance2D.new(); view.mesh = mesh; view.material = Materials.material(); _meshes.add_child(view)
+			for height: float in layer.heights: heights.append(height+float(instance.translation.y))
+		for visual: Dictionary in instance.visuals:
+			for point: Vector3 in visual.vertices: heights.append(point.y+float(instance.translation.y))
+		for object: Dictionary in instance.get("objects",[]): heights.append(object.position.y)
+	var depth_domain := Objects.depth_domain(heights)
+	for instance: Dictionary in package.render_instances:
+		for layer: Dictionary in instance.layers:
+			var arrays := Materials.arrays(layer,{},instance.rotation_quarters,instance.translation)
+			var mesh := Materials.from_arrays(arrays)
+			var view := MeshInstance2D.new(); view.mesh = mesh; view.material = Materials.material()
+			view.z_index = Objects.depth_order((float(layer.heights.min())+float(layer.heights.max()))*0.5+float(instance.translation.y),depth_domain)
+			_meshes.add_child(view)
 		for visual: Dictionary in instance.visuals:
 			if not visual.special: continue
 			var polygon := Polygon2D.new(); var points := PackedVector2Array()
 			for original: Vector3 in visual.vertices: points.append(WorldProjection.project(Kernel.rotate(original,instance.rotation_quarters)+Vector3(instance.translation)))
-			polygon.polygon = points; polygon.color = Color("88a28c"); _meshes.add_child(polygon)
-		_object_sprites.append_array(Objects.attach(_meshes,instance.get("objects",[])))
+			var height := 0.0
+			for point: Vector3 in visual.vertices: height += point.y
+			polygon.polygon = points; polygon.color = Color("88a28c"); polygon.z_index = Objects.depth_order(height/visual.vertices.size()+float(instance.translation.y),depth_domain); _meshes.add_child(polygon)
+		_object_sprites.append_array(Objects.attach(_meshes,instance.get("objects",[]),false,[],depth_domain))
 		for object: Dictionary in instance.get("objects",[]):
 			if object.has("body_volume"): _object_volumes.append(object.body_volume)
 	fit()

@@ -54,6 +54,7 @@ func close() -> void:
 
 static func failure(code: String, entity: String = "", field: String = "terrain") -> Dictionary:
 	var messages := {"terrain_empty":"Adicione uma camada de terreno.","material_missing":"Um material de terreno está ausente.","terrain_sample_limit":"A fonte excede o orçamento de 65536 quadrados de grade nesta sessão.","terrain_limit_exceeded":"O relevo excede o orçamento de 1024 suportes gerados. Reduza a densidade ou simplifique o relevo.","source_invalid":"Corrija os diagnósticos da fonte.","source_non_finite":"A fonte contém um número inválido.","capability_unsupported":"Esta peça usa uma capacidade ainda não disponível na compilação de terreno.","material_unsupported":"Use os materiais Grama e Terra nesta entrega.","geometry_invalid":"O piso precisa ser convexo e plano.","geometry_overlap":"Há pisos sobrepostos na mesma altura.","geometry_non_manifold":"Mais de dois pisos disputam a mesma borda.","insufficient_headroom":"Não há folga para o corpo de teste.","slope_too_steep":"A inclinação supera 45°; alongue a rampa.","geometry_precision_limit":"A coordenada excede o domínio técnico de 8192 unidades.","connector_invalid":"O conector não coincide com uma abertura válida.","connector_ambiguous":"O conector coincide com mais de uma borda.","socket_invalid":"O ponto marcado não tem suporte ou tipo válido.","route_unreachable":"Há uma região sem ligação para o corpo de teste.","cancelled":"Compilação cancelada.","stale_source":"A fonte mudou; compile novamente."}
+	messages["material_unsupported"] = "Use os materiais Grama, Terra, Areia ou Pedra."
 	return Schema.result(false, code, [{"code":code,"severity":"error","entity_id":entity,"field":field,"message":messages.get(code,"Não foi possível concluir a compilação."),"suggestion":"Corrija a região indicada e compile novamente."}])
 
 static func _valid_authoring_value(value: Variant, depth: int = 0) -> bool:
@@ -97,7 +98,7 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 		for value: float in layer.heights: base_y = minf(base_y,value)
 		mass_bases[layer.layer_id] = base_y-4.0
 		for material: String in layer.material_masks:
-			if material not in ["grass","earth"]: return failure("material_unsupported",layer.layer_id)
+			if material not in Materials.IDS: return failure("material_unsupported",layer.layer_id)
 		var cancelled := func() -> bool: return cancellation.is_valid() and cancellation.call(0.1)
 		var patches := Partition.build(layer,cancelled)
 		if patches.is_empty(): return failure("cancelled")
@@ -271,9 +272,7 @@ static func _add_cell(cells: Array, visuals: Array, cell: Dictionary, layer: Dic
 	cells.append(cell)
 	var weights: Array = []
 	for index: int in indices:
-		var grass: float = layer.material_masks.get("grass",[])[index] if layer.material_masks.has("grass") else 1.0
-		var earth: float = layer.material_masks.get("earth",[])[index] if layer.material_masks.has("earth") else 0.0
-		weights.append(earth/maxf(EPS,grass+earth))
+		weights.append(Materials.weights(layer,index)[1])
 	visuals.append({"surface_id":cell.surface_id,"source_id":layer.layer_id,"vertices":cell.vertices.duplicate(),"earth_weights":weights,"special":false})
 
 static func _port_endpoint(endpoints: Array, id: String) -> Dictionary:

@@ -3,6 +3,7 @@ extends RefCounted
 ## A stroke is a distance field over a polyline, applied once to a frozen source.
 ## Extra collinear pointer events and repeated events cannot accumulate strength.
 const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
+const Materials = preload("res://scripts/map_authoring/terrain/terrain_material.gd")
 
 static func stroke(source: Dictionary, layer_id: String, points: Array, options: Dictionary, preview_only: bool = false) -> Dictionary:
 	if points.size() > 4096: return Schema.result(false, "brush_limit_exceeded")
@@ -30,14 +31,9 @@ static func stroke(source: Dictionary, layer_id: String, points: Array, options:
 	var original: Array = selected.heights.duplicate()
 	var material: String = options.get("material", "earth")
 	if mode == "material":
-		if material not in ["grass", "earth"]: return Schema.result(false, "material_unsupported")
+		if material not in Materials.IDS: return Schema.result(false, "material_unsupported")
 		for id: String in selected.material_masks:
-			if id not in ["grass", "earth"]: return Schema.result(false, "material_unsupported")
-		for id: String in ["grass", "earth"]:
-			if not selected.material_masks.has(id):
-				var weights: Array = []
-				weights.resize(original.size()); weights.fill(1.0 if id == "grass" else 0.0)
-				selected.material_masks[id] = weights
+			if id not in Materials.IDS: return Schema.result(false, "material_unsupported")
 	var changed := 0
 	var bounds := Rect2(points[0],Vector2.ZERO)
 	for point: Vector2 in points: bounds = bounds.expand(point)
@@ -77,11 +73,20 @@ static func stroke(source: Dictionary, layer_id: String, points: Array, options:
 							total += float(original[nz*int(selected.columns)+nx]); count += 1
 					value = lerpf(value, total/count, minf(strength,1.0)*weight)
 				"material":
-					var old: float = selected.material_masks[material][index]
-					var next := lerpf(old, 1.0, minf(strength,1.0)*weight)
-					selected.material_masks[material][index] = next
-					selected.material_masks["grass" if material == "earth" else "earth"][index] = 1.0-next
-					if next != old: changed += 1
+					var previous: Array[float] = Materials.weights(selected,index)
+					var alpha := minf(strength,1.0)*weight
+					var next := previous.duplicate()
+					var selected_index: int = Materials.IDS.find(material)
+					for k: int in next.size(): next[k] = previous[k]*(1.0-alpha)+(alpha if k == selected_index else 0.0)
+					if previous != next:
+						for k: int in next.size():
+							var id: String = Materials.IDS[k]
+							var implicit := 1.0 if id == "grass" else 0.0
+							if not selected.material_masks.has(id) and next[k] != implicit:
+								var values: Array = []; values.resize(original.size()); values.fill(implicit)
+								selected.material_masks[id] = values
+							if selected.material_masks.has(id): selected.material_masks[id][index] = next[k]
+						changed += 1
 			if not is_finite(value): return Schema.result(false, "source_non_finite")
 			if value != original[index]: changed += 1
 			selected.heights[index] = value

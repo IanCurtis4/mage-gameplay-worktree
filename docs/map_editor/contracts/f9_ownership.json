@@ -97,22 +97,16 @@
       "base_sha256": "52d8f47ded3002ea1d92cfa75521439d8956dc230663decde72a711514d846cc"
     },
     {
-      "path": "assets/art/map_authoring/materials.md",
-      "owner": "Sol F9",
-      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
-      "base_sha256": "0e81eb3da0611c5e60b9496b65ff759eb67163af011284ee2034ea58589a17fb"
-    },
-    {
       "path": "assets/art/map_authoring/materials_provenance.json",
       "owner": "Sol F9",
       "previous_owner": "new F9 relief/material/biome engineering",
       "base_sha256": null
     },
     {
-      "path": "assets/art/map_authoring/props/README.md",
+      "path": "assets/art/map_authoring/materials.md",
       "owner": "Sol F9",
-      "previous_owner": "new F9 objects/authorized art asset",
-      "base_sha256": null
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "0e81eb3da0611c5e60b9496b65ff759eb67163af011284ee2034ea58589a17fb"
     },
     {
       "path": "assets/art/map_authoring/props/broken_pillar.png",
@@ -164,6 +158,12 @@
     },
     {
       "path": "assets/art/map_authoring/props/provenance.json",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 objects/authorized art asset",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/art/map_authoring/props/README.md",
       "owner": "Sol F9",
       "previous_owner": "new F9 objects/authorized art asset",
       "base_sha256": null
@@ -247,12 +247,6 @@
       "base_sha256": null
     },
     {
-      "path": "data/map_authoring/representative.rpp",
-      "owner": "Sol F9",
-      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
-      "base_sha256": "77f4efe9d83c56f97eff1d88b277131d33871883daba5821c4d91ef2e0e27f6f"
-    },
-    {
       "path": "data/map_authoring/representative_map.json",
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
@@ -271,10 +265,10 @@
       "base_sha256": "be592721b26bc0debd823da256b44a7a33ea59d784049c98f505b5b7aa812360"
     },
     {
-      "path": "docs/map_editor/README.md",
+      "path": "data/map_authoring/representative.rpp",
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
-      "base_sha256": "25bcdcfbbe2354beab15b7c83afd6b7d6f634073aaa0ce8dfcbd0123cfc948dd"
+      "base_sha256": "77f4efe9d83c56f97eff1d88b277131d33871883daba5821c4d91ef2e0e27f6f"
     },
     {
       "path": "docs/map_editor/architecture.md",
@@ -365,6 +359,12 @@
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
       "base_sha256": "765d731d1980be4ca0e1a9a850b6758026c0c1bf083b9e305ee60e59465ec78c"
+    },
+    {
+      "path": "docs/map_editor/README.md",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "25bcdcfbbe2354beab15b7c83afd6b7d6f634073aaa0ce8dfcbd0123cfc948dd"
     },
     {
       "path": "docs/map_editor/validation.md",
@@ -757,18 +757,6 @@
       "base_sha256": "b80a7cad5747c44edaa213661e0e4052a714273ae3f17d3f39ecfdc0049284bf"
     },
     {
-      "path": "scripts/map_authoring/exchange/exchange.gd",
-      "owner": "Sol F9",
-      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
-      "base_sha256": "5216a27853d841a12c195ffd184b8281fb508d2967e88f4327c551f4f148c3cb"
-    },
-    {
-      "path": "scripts/map_authoring/exchange/exchange.gd.uid",
-      "owner": "Sol F9",
-      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
-      "base_sha256": "0eafb02d5a482770531eed4b5166d6618a9e9fb60c3ef3e2fc07929c2562faf8"
-    },
-    {
       "path": "scripts/map_authoring/exchange/exchange_panel.gd",
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
@@ -779,6 +767,18 @@
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
       "base_sha256": "49d3705c4739e43c5d5c7ce56bd1b6cec9b2c49a894d06a0e38190462517de27"
+    },
+    {
+      "path": "scripts/map_authoring/exchange/exchange.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "5216a27853d841a12c195ffd184b8281fb508d2967e88f4327c551f4f148c3cb"
+    },
+    {
+      "path": "scripts/map_authoring/exchange/exchange.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "0eafb02d5a482770531eed4b5166d6618a9e9fb60c3ef3e2fc07929c2562faf8"
     },
     {
       "path": "scripts/map_authoring/exchange/headless.gd",
@@ -1291,28 +1291,28 @@
       "base_sha256": "bed4b24017bc1b2f27d50c80f28d21f0b42be775ecc6ec02121188ccccf79b45"
     },
     {
-      "path": "skills/ragrpg-enemydelivery/SKILL.md",
-      "owner": "Sol F9",
-      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
-      "base_sha256": "9ae7748d62d1ad25c02546884091a5cf07b129d3f2c02b751360064a52cf7324"
-    },
-    {
       "path": "skills/ragrpg-enemydelivery/agents/openai.yaml",
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
       "base_sha256": "8961c08b5529031ac6f323d70dfc9111897db9fb2adf59c0fda8c390d4979a1c"
     },
     {
-      "path": "skills/ragrpg-mapdelivery/SKILL.md",
+      "path": "skills/ragrpg-enemydelivery/SKILL.md",
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
-      "base_sha256": "cd070cfa93fd8e46d71159d9256d29d1774dc6c3298960126f203ff2675141e5"
+      "base_sha256": "9ae7748d62d1ad25c02546884091a5cf07b129d3f2c02b751360064a52cf7324"
     },
     {
       "path": "skills/ragrpg-mapdelivery/agents/openai.yaml",
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
       "base_sha256": "a79813bab9e303fe4210470149510421db931d02f48041ee669adbe722ed2c3e"
+    },
+    {
+      "path": "skills/ragrpg-mapdelivery/SKILL.md",
+      "owner": "Sol F9",
+      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "base_sha256": "cd070cfa93fd8e46d71159d9256d29d1774dc6c3298960126f203ff2675141e5"
     },
     {
       "path": "tests/map_editor_candidate_test.gd",
@@ -1445,6 +1445,30 @@
       "owner": "Sol F9",
       "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
       "base_sha256": "6f6d4e8b7ba0f263a9ad87867b96f693e9feed46b1885ab1e4c86dda36547264"
+    },
+    {
+      "path": "tests/map_editor_materials_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 four-material and terrain presentation integration",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_materials_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 four-material and terrain presentation integration",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_materials_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 four-material and terrain presentation integration",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_materials_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 four-material and terrain presentation integration",
+      "base_sha256": null
     },
     {
       "path": "tests/map_editor_mesh_test.gd",
@@ -1695,14 +1719,15 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "logical openings and canonical batch technically validated at e6fdf437ad4f39ef690699941124ad6e8b485867; fixture released",
+    "state": "ports foundation validated at e6fdf43; materials checkpoint awaiting frozen supervision",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
       "docs/map_editor/delivery/evidence/f9/luna/objects/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/mesh/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/relief/report.md",
-      "docs/map_editor/delivery/evidence/f9/luna/ports/report.md"
+      "docs/map_editor/delivery/evidence/f9/luna/ports/report.md",
+      "docs/map_editor/delivery/evidence/f9/luna/materials/report.md"
     ],
     "generated_evidence_roots": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
@@ -1733,7 +1758,13 @@
       "docs/map_editor/delivery/evidence/f9/luna/ports/official",
       "docs/map_editor/delivery/evidence/f9/luna/ports/ports_retry01",
       "docs/map_editor/delivery/evidence/f9/luna/ports/ports_retry02",
-      "docs/map_editor/delivery/evidence/f9/luna/ports/core_retry01"
+      "docs/map_editor/delivery/evidence/f9/luna/ports/core_retry01",
+      "docs/map_editor/delivery/evidence/f9/luna/materials/authorities",
+      "docs/map_editor/delivery/evidence/f9/luna/materials/native",
+      "docs/map_editor/delivery/evidence/f9/luna/materials/scale",
+      "docs/map_editor/delivery/evidence/f9/luna/materials/objects_native",
+      "docs/map_editor/delivery/evidence/f9/luna/materials/core",
+      "docs/map_editor/delivery/evidence/f9/luna/materials/official"
     ]
   }
 }
