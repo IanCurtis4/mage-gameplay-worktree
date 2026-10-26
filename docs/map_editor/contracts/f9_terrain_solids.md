@@ -110,7 +110,9 @@ novos oráculos de canto passaram no corpus56. Core639 e seleção oficial F0
 56/149/198 concluíram sem erro/timeout. População passou em126,504s com o teto
 300s mantido. Rodadas autorais anteriores à guarda final do segmento inteiro
 até o destino exato; SHA de consolidação e supervisão serão registrados no
-recibo. Nenhuma apresentação/material/bioma é certificada por essas provas.
+recibo. Supervisão no SHA270ff3ab concluiu34/56/46/53 dirigidos e30 etapas
+oficiais sem erro/timeout; Sol consolidou a fundação tecnicamente. Nenhuma
+apresentação/material/bioma é certificada por essas provas.
 
 Depois fechar emissão de terreno misto caminhável/penhasco, materiais e famílias
 de borda, além da abertura lógica sobre malha refinada no contrato próprio.

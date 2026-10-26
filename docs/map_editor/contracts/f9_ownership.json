@@ -379,6 +379,18 @@
       "base_sha256": "560a61b482f674812bb31fa94e35937c0b06b843bcefa8c2873c806d7080783c"
     },
     {
+      "path": "scripts/core/expedition/generation/connector_partition.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 logical port and physical fragment implementation",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/core/expedition/generation/connector_partition.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 logical port and physical fragment implementation",
+      "base_sha256": null
+    },
+    {
       "path": "scripts/core/expedition/generation/fixture_geometry.gd",
       "owner": "Sol F9",
       "previous_owner": "E07 geometry; sequential transfer for F9-04",
@@ -1501,6 +1513,18 @@
       "base_sha256": "99de325e3268578d2f747b1312a0450a11d730c0c69083c907c3879c94e40ba8"
     },
     {
+      "path": "tests/map_editor_port_fragments_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 logical port and physical fragment implementation",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_port_fragments_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 logical port and physical fragment implementation",
+      "base_sha256": null
+    },
+    {
       "path": "tests/map_editor_relief_test.gd",
       "owner": "Sol F9",
       "previous_owner": "new F9 relief/material/biome engineering",
@@ -1629,7 +1653,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "mesh supervised at50ba51ac; relief foundation awaiting frozen candidate and sequential supervision",
+    "state": "relief foundation supervised at270ff3a; logical port implementation sequential",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
