@@ -1751,6 +1751,42 @@
       "owner": "Sol F9",
       "previous_owner": "sequential transfer: allow official F0 selection in the one existing F1 fixture; bootstrap restrictions preserved",
       "base_sha256": "d9f652bab91c4bfae98e254e8fb36148a17de75e569db9f0c3dc3814b69a4937"
+    },
+    {
+      "path": "docs/map_editor/contracts/f9_biome_props.md",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 catalog expansion and native prop integration invariants",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_biome_props_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 catalog expansion and native prop integration invariants",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_biome_props_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 catalog expansion and native prop integration invariants",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_biome_props_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 catalog expansion and native prop integration invariants",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_biome_props_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 catalog expansion and native prop integration invariants",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/fixtures/map_authoring/f9_original_props.json",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 catalog expansion and native prop integration invariants",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -1761,7 +1797,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "scalar opening receiver fixed after population nil reproduction; Cliff61 author PASS; directed/Core/official supervision pending",
+    "state": "mixed terrain validated at7073d38 with explicit receipt reuse; biome props integration next, sequential",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
