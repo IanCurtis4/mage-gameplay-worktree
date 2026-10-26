@@ -1,0 +1,61 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_PORT_CHECK refined_group_valid true
+F9_PORT_CHECK single_group_valid true
+F9_PORT_CHECK logical_opening_resolves_eight_fragments true
+F9_PORT_CHECK physical_member_cannot_be_attached_separately true
+F9_PORT_CHECK single_endpoint_alias_resolves_group true
+F9_PORT_CHECK simple_link_preserves_physical_id true
+F9_PORT_CHECK one_to_eight_partition true
+F9_PORT_CHECK independent_interval_oracle true
+F9_PORT_CHECK whole_eighty_units_preserved true
+F9_PORT_CHECK physical_pairs_share_exact_position true
+F9_PORT_CHECK operator_preserves_inputs true
+F9_PORT_CHECK all_consumed_endpoints_have_remapping true
+F9_PORT_CHECK different_subdivisions_common_partition true
+F9_PORT_CHECK array_order_is_not_identity true
+F9_PORT_CHECK sloping_piecewise_edge_matches true
+F9_PORT_CHECK matching_gradient_changes_preserve_piecewise_height true
+F9_PORT_CHECK matching_center_does_not_hide_wrong_end_heights true
+F9_PORT_CHECK middle_gap_rejected true
+F9_PORT_CHECK positive_gap_below_geometric_epsilon_is_not_erased true
+F9_PORT_CHECK positive_overlap_rejected true
+F9_PORT_CHECK missing_fragment_rejected true
+F9_PORT_CHECK wrong_surface_rejected true
+F9_PORT_CHECK inverted_normal_rejected true
+F9_PORT_CHECK compound_group_alias_rejected true
+F9_PORT_CHECK member_cannot_belong_to_two_groups true
+F9_PORT_CHECK malformed_cell_rejected_without_script_error true
+F9_PORT_CHECK non_finite_group_rejected true
+F9_PORT_CHECK body_wider_than_logical_opening_rejected true
+F9_PORT_CHECK physical_fragment_headroom_is_required true
+F9_PORT_CHECK incompatible_tags_rejected true
+F9_PORT_CHECK shared_tag_suffices_for_grouped_opening true
+F9_PORT_CHECK authored_dimensions_must_match true
+F9_PORT_CHECK one_way_flags_preserved true
+F9_PORT_CHECK incompatible_directions_rejected true
+F9_PORT_CHECK legacy_assembler_keeps_unequal_width_rule true
+F9_PORT_CHECK legacy_assembler_keeps_exact_tag_rule true
+F9_PORT_CHECK ungrouped_endpoint_remains_resolvable true
+F9_PORT_CHECK group_is_closed_passive_data true
+F9_PORT_CHECK partition_realizes_canonical_world true
+F9_PORT_CHECK body_spans_multiple_smaller_fragments true
+F9_PORT_CHECK off_center_route_crosses_full_union true
+F9_PORT_CHECK real_actor_crosses_fragmented_opening true
+F9_PORT_CHECK oversized_body_cannot_cross_closed_opening_ends true
+F9_PORT_CHECK central_obstacle_keeps_lateral_passage true
+F9_PORT_CHECK closed_fragmented_opening_has_no_route true
+F9_PORT_CHECK one_way_world_rejects_reverse_crossing true
+F9_PORT_CHECK refined_authored_terrain_compiles true
+F9_PORT_CHECK source_logical_id_survives_refinement true
+F9_PORT_CHECK terrain_group_covers_whole_opening true
+F9_PORT_CHECK compiling_fragments_does_not_rewrite_source true
+F9_PORT_CHECK terrain_package_revalidates true
+F9_PORT_CHECK terrain_receiver_rejects_forged_span true
+SCRIPT ERROR: Invalid operands 'Array' and 'Dictionary' in operator '!='.
+   at: validate_package (res://scripts/map_authoring/compiler/terrain_compiler.gd:357)
+   GDScript backtrace (most recent call first):
+       [0] validate_package (res://scripts/map_authoring/compiler/terrain_compiler.gd:357)
+       [1] terrain_cases (res://tests/map_editor_port_fragments_test.gd:283)
+       [2] run (res://tests/map_editor_port_fragments_test.gd:109)
+F9_PORT_CHECK terrain_receiver_rejects_malformed_profile_without_error true

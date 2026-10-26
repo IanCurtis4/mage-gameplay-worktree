@@ -354,7 +354,7 @@ static func validate_package(package: Dictionary) -> bool:
 	# Existing v2 producers may store textual keys as StringName via dot assignment.
 	# Keep the same bounded passive-value check used by the source preflight.
 	if not _valid_authoring_value(package) or (package.has("objects") and not Objects.validate_records(package.objects)): return false
-	if package.get("profile") != PROFILE or not package.get("part") is Dictionary or not Ports.validate_groups(package.part).ok: return false
+	if not package.get("profile") is Dictionary or package.profile != PROFILE or not package.get("part") is Dictionary or not Ports.validate_groups(package.part).ok: return false
 	if not WorldGeometry._stage_prisms_valid({"surfaces":package.part.surfaces,"solid_prisms":package.part.get("solid_prisms",[])}): return false
 	if not _ports_metadata_valid(package): return false
 	var content := package.duplicate(true); content.erase("package_hash")

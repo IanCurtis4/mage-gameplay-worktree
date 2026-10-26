@@ -256,12 +256,12 @@ static func _normalize_walls(raw: Array) -> Array:
 static func validate_package(package: Dictionary) -> bool:
 	if package.get("format_version") != 3 or package.get("compiler_revision") != REVISION or not package.has("package_hash"): return false
 	if not Canonical.valid(package) or not package.has_all(["source_hash","dependencies","profile","manifest","render_instances","barriers","realized_instances","piece_count"]): return false
-	if package.profile != Terrain.PROFILE: return false
+	if not package.profile is Dictionary or package.profile != Terrain.PROFILE: return false
 	if not package.manifest is Dictionary or not package.render_instances is Array or not package.barriers is Array: return false
 	for instance: Variant in package.render_instances:
 		if not instance is Dictionary or (instance.has("objects") and not Objects.validate_records(instance.objects)): return false
 	if not package.manifest.has_all(["input","stages","traversal","population","objectives","portals","witnesses"]): return false
-	if package.manifest.traversal != Terrain.PROFILE or not package.manifest.stages is Array: return false
+	if not package.manifest.traversal is Dictionary or package.manifest.traversal != Terrain.PROFILE or not package.manifest.stages is Array: return false
 	for stage: Variant in package.manifest.stages:
 		if not stage is Dictionary or not World._stage_prisms_valid(stage): return false
 	if not package.manifest.input is Dictionary or not package.manifest.input.get("parts") is Array: return false
