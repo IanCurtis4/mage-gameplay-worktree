@@ -1,6 +1,7 @@
 @tool
 extends RefCounted
 const Document = preload("res://scripts/map_authoring/composition/map_document.gd")
+const Borders = preload("res://scripts/map_authoring/composition/border_operations.gd")
 signal changed
 var data: Dictionary = Document.empty()
 var saved_hash := ""
@@ -25,3 +26,10 @@ func redo() -> bool:
 	if _redo.is_empty(): return false
 	_undo.append(data); data = _redo.pop_back(); changed.emit(); return true
 func dirty() -> bool: return Document.hash_source(data) != saved_hash
+func apply_border(command: Dictionary, expected_source_hash: String) -> Dictionary:
+	if Document.hash_source(data) != expected_source_hash: return {"ok":false,"code":"stale_source"}
+	var proposed := Borders.apply(data,command)
+	if not proposed.ok: return proposed
+	var applied := apply(proposed.data)
+	if applied.ok: applied["diff"] = proposed.diff; applied["source_hash"] = Document.hash_source(data)
+	return applied

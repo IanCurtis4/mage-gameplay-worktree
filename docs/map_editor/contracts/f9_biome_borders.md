@@ -43,7 +43,13 @@ e visual. Perfis distintos exigem preset compatível ou escolha de transição
 explícita; não decidir pela ordem de instâncias. Não estreitar o corredor por
 copa, volume, decoração ou normalização. Pontas abertas não recebem acabamento
 que invada a abertura. Cantos/junções precisam de massa e pele coerentes, sem
-buraco físico, dupla camada visível ou props flutuantes.
+buraco físico, dupla camada visível ou props flutuantes. Miters conectam as
+faixas; caps que se cruzam são particionados no envelope superior, com dono
+estável no empate e base mínima da união em cada região. Na consulta canônica,
+raios sem volume usam faces laterais fechadas: encolher cada prisma por EPS
+abria uma fresta exatamente na subdivisão. Cap/base tangentes e folga de corpo
+conservam EPS; uma distância real para fora continua livre. A prova inclui
+emenda diagonal, emenda alinhada aos eixos e contato tangente ao cap.
 
 ## Geometria e leitura
 

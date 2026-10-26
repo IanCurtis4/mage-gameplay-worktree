@@ -11,7 +11,11 @@ const Context = preload("res://scripts/map_authoring/context/piece_context.gd")
 const SolidPrism = preload("res://scripts/core/expedition/spatial/world_solid_prism.gd")
 const Objects = preload("res://scripts/map_authoring/objects/object_compiler.gd")
 const Ports = preload("res://scripts/core/expedition/generation/connector_partition.gd")
-const REVISION := "map_composition_v4"
+const BorderCatalog = preload("res://scripts/map_authoring/composition/border_profile_catalog.gd")
+const BorderOperations = preload("res://scripts/map_authoring/composition/border_operations.gd")
+const BorderSpans = preload("res://scripts/map_authoring/composition/border_spans.gd")
+const BorderGeometry = preload("res://scripts/map_authoring/composition/border_geometry.gd")
+const REVISION := "map_composition_v5"
 const EPS := 0.0001
 var _thread: Thread
 var _mutex := Mutex.new()
@@ -32,7 +36,7 @@ func close() -> void:
 	if _thread != null: cancel(); _thread.wait_to_finish(); _thread = null
 
 static func fail(code: String, entity: String = "", location: Vector3 = Vector3.ZERO) -> Dictionary:
-	var messages := {"map_empty":"Adicione uma peça ao mapa.","piece_invalid":"A peça não pôde ser compilada.","profile_missing":"Não há perfil de barreira publicado para este bioma. Use a ruína técnica ou mantenha rascunho.","connector_missing":"O vínculo aponta para uma abertura ausente.","connector_reused":"Uma abertura só pode participar de um vínculo.","opening_unlinked":"Esta abertura não tem destino. Vincule-a ou remova-a na peça.","seam_position":"As aberturas não coincidem. Revise posição e altura.","seam_orientation":"As aberturas precisam apontar em sentidos opostos.","seam_dimensions":"Largura ou folga incompatível na emenda.","seam_tags":"Os tipos ou tags das aberturas não são compatíveis.","seam_direction":"Os sentidos das aberturas não permitem travessia.","geometry_overlap":"Duas peças têm suporte sobreposto.","barrier_unsupported":"Este perfil de ruína requer bordas alinhadas aos eixos.","route_unreachable":"Há uma região inacessível ao corpo de teste.","map_limit":"A composição excede o orçamento técnico.","recipe_tree":"A receita precisa ser uma árvore conectada a partir da primeira instância.","cancelled":"Compilação cancelada.","stale_source":"O mapa mudou; compile novamente."}
+	var messages := {"map_empty":"Adicione uma peça ao mapa.","piece_invalid":"A peça não pôde ser compilada.","profile_missing":"O perfil de borda escolhido não está publicado. Selecione um perfil disponível.","connector_missing":"O vínculo aponta para uma abertura ausente.","connector_reused":"Uma abertura só pode participar de um vínculo.","opening_unlinked":"Esta abertura não tem destino. Vincule-a ou remova-a na peça.","seam_position":"As aberturas não coincidem. Revise posição e altura.","seam_orientation":"As aberturas precisam apontar em sentidos opostos.","seam_dimensions":"Largura ou folga incompatível na emenda.","seam_tags":"Os tipos ou tags das aberturas não são compatíveis.","seam_direction":"Os sentidos das aberturas não permitem travessia.","geometry_overlap":"Duas peças têm suporte sobreposto.","barrier_unsupported":"Este perfil de ruína requer bordas alinhadas aos eixos.","route_unreachable":"Há uma região inacessível ao corpo de teste.","map_limit":"A composição excede o orçamento técnico.","recipe_tree":"A receita precisa ser uma árvore conectada a partir da primeira instância.","cancelled":"Compilação cancelada.","stale_source":"O mapa mudou; compile novamente."}
 	messages.merge({"navigation_budget_exceeded":"A validação atingiu o orçamento técnico; nenhum pacote foi publicado.","stale_geometry":"A geometria mudou durante a validação. Compile novamente.","geometry_invalid":"A geometria recebida é inválida.","connector_invalid":"A abertura contém dados ou referências inválidos.","connector_coverage":"Os fragmentos não cobrem toda a abertura.","connector_ambiguous":"Mais de um fragmento ocupa o mesmo trecho da abertura.","geometry_precision_limit":"Este trecho excede a precisão geométrica disponível.","insufficient_headroom":"A abertura não oferece folga suficiente ao corpo de teste."})
 	return {"ok":false,"code":code,"diagnostics":[{"code":code,"entity_id":entity,"field":"composition","location":location,"severity":"error","message":messages.get(code,"Revise os dados do mapa: "+code),"suggestion":"Selecione a região indicada e corrija a fonte."}]}
 
@@ -52,7 +56,9 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 	var validated := Document.validate(source)
 	if not validated.ok: return validated
 	if source.instances.is_empty(): return fail("map_empty")
-	if source.barrier_profile != "ruin_envelope_v1": return fail("profile_missing")
+	if source.barrier_profile != BorderOperations.LEGACY:
+		var selected := BorderCatalog.resolve(source.barrier_profile)
+		if not selected.ok or not selected.definition.has("biome_id"): return fail("profile_missing")
 	for instance: Dictionary in source.instances:
 		var eligible := Context.eligible(source,instance,_find(source.pieces,"piece_hash",instance.piece_hash).source)
 		if not eligible.ok: return eligible
@@ -131,6 +137,7 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 			if not copy.adjacent_face_id.is_empty(): copy.adjacent_face_id = prefix+copy.adjacent_face_id
 			copy.a = Kernel.rotate(copy.a,q)+offset; copy.b = Kernel.rotate(copy.b,q)+offset
 			copy.outward = Kernel.rotate(copy.outward,q)
+			copy["instance_id"] = instance.instance_id
 			for i: int in copy.openings.size(): copy.openings[i] = prefix+copy.openings[i]
 			boundaries.append(copy)
 		var presentation := {"instance_id":instance.instance_id,"rotation_quarters":q,"translation":offset,"layers":package.render_layers.duplicate(true),"visuals":package.visuals.duplicate(true),"exposed_sides":package.exposed_sides.duplicate(true),"boundaries":package.boundaries.duplicate(true),"adjacency":package.adjacency.duplicate(true),"authored_ports":package.authored_ports.duplicate(true)}
@@ -165,28 +172,17 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 		used[aid] = true; used[bid] = true
 	for port: Dictionary in logical_ports:
 		if not used.has(port.port_id): return fail("opening_unlinked",str(port.instance_id)+"/"+str(port.connector_id),port.position)
-	var barriers: Array = []; var wall_keys: Dictionary = {}
-	for boundary: Dictionary in boundaries:
-		if boundary.closure == "terrain": continue
-		var a: Vector3 = boundary.a; var b: Vector3 = boundary.b; var delta := b-a
-		var dx := float(b.x)-float(a.x); var dz := float(b.z)-float(a.z); var length := sqrt(dx*dx+dz*dz)
-		if absf(delta.x) > EPS and absf(delta.z) > EPS: return fail("barrier_unsupported",boundary.span_id,a)
-		var gaps: Array = []
-		for port_id: String in boundary.openings:
-			if not used.has(port_id): return fail("opening_unlinked",port_id,endpoints[port_id].position)
-			var port: Dictionary = endpoints[port_id]
-			var t := ((float(port.position.x)-float(a.x))*dx+(float(port.position.z)-float(a.z))*dz)/length
-			var half_width: float = float(port.width)*0.5
-			gaps.append([maxf(0,t-half_width),minf(length,t+half_width)])
-		gaps.sort_custom(func(x: Array,y: Array) -> bool: return x[0] < y[0])
-		var cursor := 0.0
-		for gap: Array in gaps:
-			if gap[0] < cursor-EPS: return fail("seam_dimensions",boundary.span_id,a)
-			_add_wall(barriers,wall_keys,_span_point(a,b,cursor/length),_span_point(a,b,float(gap[0])/length),boundary.span_id)
-			cursor = gap[1]
-		_add_wall(barriers,wall_keys,_span_point(a,b,cursor/length),b,boundary.span_id)
-	barriers = _normalize_walls(barriers)
+	var selection := {"barrier_profile":source.barrier_profile}
+	if source.has("borders"): selection["borders"] = BorderOperations.normalized(source.borders)
+	var border_result := _build_borders(boundaries,endpoints,selection,instances,stage,cancellation)
+	if not border_result.ok: return border_result
+	var barriers: Array = border_result.barriers
 	for barrier: Dictionary in barriers: stage.volumes.append(barrier.volume)
+	stage.solid_prisms.append_array(border_result.realization.solid_prisms)
+	stage.volumes.append_array(border_result.realization.volumes)
+	for dependency: Dictionary in border_result.dependencies:
+		if dependency not in all_dependencies: all_dependencies.append(dependency.duplicate(true))
+	if stage.solid_prisms.size() > 2048 or stage.volumes.size() > 2048: return fail("map_limit")
 	var manifest := Manifest.new(); manifest._data = {"manifest_revision":1,"geometry_revision":1,"input":{"parts":definitions},"stages":[stage],"traversal":Terrain.PROFILE.duplicate(true),"population":{"slots":[]},"objectives":[],"portals":[],"witnesses":{}}
 	var world := World.new(); var configured := world.configure(manifest,"map_preview")
 	if not configured.ok: return fail("geometry_invalid")
@@ -212,7 +208,7 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 			failure["geometry_diagnostic"] = {"from":root.to_data(),"to":target.point,"outward_code":"" if target.outward_reachable else "unreachable","inward_code":"" if target.inward_reachable else "unreachable","metrics":certified.data.metrics}
 			return failure
 	if Document.hash_source(source) != validated.output_hash: return fail("stale_source")
-	var output := {"format_version":4,"compiler_revision":REVISION,"source_hash":validated.output_hash,"dependencies":all_dependencies,"profile":Terrain.PROFILE.duplicate(true),"manifest":manifest.to_data(),"render_instances":render,"barriers":barriers,"realized_instances":instances,"piece_count":instances.size(),"logical_ports":logical_ports,"realized_links":realized_links}
+	var output := {"format_version":5,"compiler_revision":REVISION,"source_hash":validated.output_hash,"dependencies":all_dependencies,"profile":Terrain.PROFILE.duplicate(true),"manifest":manifest.to_data(),"render_instances":render,"barriers":barriers,"realized_instances":instances,"piece_count":instances.size(),"logical_ports":logical_ports,"realized_links":realized_links,"border_selection":selection,"border_spans":border_result.spans,"border_geometry":border_result.realization}
 	if source.has("context"): output["authoring_context"] = source.context.duplicate(true)
 	var piece_contexts := {}
 	for instance: Dictionary in instances:
@@ -223,10 +219,95 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 	if var_to_bytes(output).size() > 4*1024*1024: return fail("map_limit")
 	return {"ok":true,"code":"","diagnostics":Context.warnings(source),"input_hash":validated.output_hash,"output_hash":output.package_hash,"package":output,"metrics":{"elapsed_ms":(Time.get_ticks_usec()-started)/1000.0,"navigation":certified.data.metrics.duplicate(true)}}
 
+static func _legacy_barriers(boundaries: Array, endpoints: Dictionary) -> Dictionary:
+	var barriers: Array = []; var wall_keys: Dictionary = {}
+	for boundary: Dictionary in boundaries:
+		if boundary.closure == "terrain": continue
+		var a: Vector3 = boundary.a; var b: Vector3 = boundary.b; var delta := b-a
+		var dx := float(b.x)-float(a.x); var dz := float(b.z)-float(a.z); var length := sqrt(dx*dx+dz*dz)
+		if absf(delta.x) > EPS and absf(delta.z) > EPS: return fail("barrier_unsupported",boundary.span_id,a)
+		var gaps: Array = []
+		for port_id: String in boundary.openings:
+			if not endpoints.has(port_id): return fail("opening_unlinked",port_id)
+			var port: Dictionary = endpoints[port_id]
+			var t := ((float(port.position.x)-float(a.x))*dx+(float(port.position.z)-float(a.z))*dz)/length
+			var half_width: float = float(port.width)*0.5
+			gaps.append([maxf(0,t-half_width),minf(length,t+half_width)])
+		gaps.sort_custom(func(x: Array,y: Array) -> bool: return x[0] < y[0])
+		var cursor := 0.0
+		for gap: Array in gaps:
+			if gap[0] < cursor-EPS: return fail("seam_dimensions",boundary.span_id,a)
+			_add_wall(barriers,wall_keys,_span_point(a,b,cursor/length),_span_point(a,b,float(gap[0])/length),boundary.span_id)
+			cursor = gap[1]
+		_add_wall(barriers,wall_keys,_span_point(a,b,cursor/length),b,boundary.span_id)
+	barriers = _normalize_walls(barriers)
+	return {"ok":true,"barriers":barriers}
+
 static func _span_point(a: Vector3, b: Vector3, t: float) -> Vector3:
 	if t == 0.0: return a
 	if t == 1.0: return b
 	return Vector3(float(a.x)+(float(b.x)-float(a.x))*t,float(a.y)+(float(b.y)-float(a.y))*t,float(a.z)+(float(b.z)-float(a.z))*t)
+
+static func _build_borders(boundaries: Array, endpoints: Dictionary, selection: Dictionary, instances: Array, stage: Dictionary, cancellation: Callable = Callable()) -> Dictionary:
+	if selection.size() != (2 if selection.has("borders") else 1) or not selection.get("barrier_profile") is String: return BorderCatalog.fail("profile_invalid")
+	var blank := {"ok":true,"barriers":[],"spans":[],"dependencies":[],"realization":{"ok":true,"solid_prisms":[],"volumes":[],"faces":[],"water":[],"props":[]}}
+	if selection.barrier_profile == BorderOperations.LEGACY and not selection.has("borders"):
+		var legacy := _legacy_barriers(boundaries,endpoints)
+		if not legacy.ok: return legacy
+		blank.barriers = legacy.barriers
+		return blank
+	var cancel := func() -> bool: return cancellation.is_valid() and bool(cancellation.call(0.8))
+	if selection.has("borders") and not selection.borders is Dictionary: return BorderCatalog.fail("profile_invalid")
+	var settings: Dictionary = selection.get("borders",BorderOperations.empty())
+	var arrangement := BorderSpans.build(boundaries,endpoints,settings,selection.barrier_profile,instances,cancel)
+	if not arrangement.ok: return arrangement
+	var catalog := BorderCatalog.load_catalog()
+	if not catalog.ok: return catalog
+	var rich: Array = []; var keys := {}; var profiles := {}
+	for span: Dictionary in arrangement.spans:
+		if span.profile_id == BorderOperations.LEGACY:
+			if absf(float(span.b.x)-float(span.a.x)) > EPS and absf(float(span.b.z)-float(span.a.z)) > EPS: return fail("barrier_unsupported",span.span_id,span.a)
+			_add_wall(blank.barriers,keys,span.a,span.b,span.span_id)
+		else:
+			rich.append(span); profiles[span.profile_id] = true
+	for id: String in profiles:
+		var dependencies := BorderCatalog.dependencies(catalog.definitions[id])
+		if not dependencies.ok: return dependencies
+		for dependency: Dictionary in dependencies.dependencies:
+			if dependency not in blank.dependencies: blank.dependencies.append(dependency)
+	var geometry := BorderGeometry.build(rich,catalog.definitions,settings.decorations,cancel)
+	if not geometry.ok: return geometry
+	if not _channel_space_clear(geometry,arrangement.spans,catalog.definitions,stage): return BorderCatalog.fail("profile_space_conflict")
+	blank.spans = arrangement.spans; blank.realization = geometry
+	return blank
+
+static func _channel_space_clear(geometry: Dictionary, spans: Array, definitions: Dictionary, stage: Dictionary) -> bool:
+	var profiles := {}; var masses := {}
+	for span: Dictionary in spans: profiles[span.span_id] = span.profile_id
+	for mass: Dictionary in stage.solid_prisms: masses[mass.support_surface_id] = mass
+	for water: Dictionary in geometry.water:
+		var profile: Dictionary = definitions[profiles[water.span_id]]
+		# A finite column covers the actual channel, including its authored margin.
+		# The canonical half-space clip excludes touching caps by EPS; adding exactly
+		# two EPS here makes the editorial conflict test include that contact.
+		for k: int in range(1,water.vertices.size()-1):
+			var triangle: Array = [water.vertices[0],water.vertices[k],water.vertices[k+1]]; var cap: Array = []; var bottom := INF
+			for point: Vector3 in triangle:
+				cap.append(point+Vector3.UP*(-float(profile.rise)+Kernel.EPSILON*2.0)); bottom = minf(bottom,float(point.y)-Kernel.EPSILON*2.0)
+			var column := SolidPrism.prepare({"volume_id":"channel_space","support_surface_id":"","top":cap,"bottom_y":bottom})
+			if column.is_empty(): return false
+			for cell: Dictionary in stage.surfaces:
+				var overlap := SolidPrism.blocking_polygon(column,cell,0,0)
+				if overlap.size() < 3: continue
+				var mass: Dictionary = masses.get(cell.surface_id,{})
+				# Only an explicit elevated slab is a bridge. Ordinary floor cannot
+				# silently cover the missing-support channel, even at the same top Y.
+				if not mass.has("thickness_y"): return false
+				for p: Vector2 in overlap:
+					var top := Kernel.support_y(cell,Vector3(p.x,0,p.y))
+					var level := Kernel.support_y({"vertices":triangle,"headroom":1.0},top)
+					if float(top.y)-float(mass.thickness_y) <= float(level.y)+Kernel.EPSILON: return false
+	return true
 
 static func _add_wall(barriers: Array, keys: Dictionary, a: Vector3, b: Vector3, owner: String) -> void:
 	if a.distance_to(b) < EPS: return
@@ -261,8 +342,8 @@ static func _normalize_walls(raw: Array) -> Array:
 	return output
 
 static func validate_package(package: Dictionary) -> bool:
-	if package.get("format_version") != 4 or package.get("compiler_revision") != REVISION or not package.has("package_hash"): return false
-	if not Canonical.valid(package) or not package.has_all(["source_hash","dependencies","profile","manifest","render_instances","barriers","realized_instances","piece_count"]): return false
+	if package.get("format_version") != 5 or package.get("compiler_revision") != REVISION or not package.has("package_hash"): return false
+	if not Canonical.valid(package) or not package.has_all(["source_hash","dependencies","profile","manifest","render_instances","barriers","realized_instances","piece_count","border_selection","border_spans","border_geometry"]): return false
 	if not package.profile is Dictionary or package.profile != Terrain.PROFILE: return false
 	if not package.manifest is Dictionary or not package.render_instances is Array or not package.barriers is Array: return false
 	for instance: Variant in package.render_instances:
@@ -276,15 +357,32 @@ static func validate_package(package: Dictionary) -> bool:
 		if not part is Dictionary or not Ports.validate_groups(part).ok: return false
 	if not _logical_metadata_valid(package) or not _terrain_metadata_valid(package): return false
 	var content := package.duplicate(true); content.erase("package_hash")
-	return Canonical.digest(content) == package.package_hash and Objects.validate_dependencies(package.get("dependencies",[]),preload("res://scripts/map_authoring/terrain/terrain_material.gd").dependencies())
+	var expected := preload("res://scripts/map_authoring/terrain/terrain_material.gd").dependencies()
+	for span: Dictionary in package.border_spans:
+		if span.profile_id == BorderOperations.LEGACY: continue
+		var resolved := BorderCatalog.resolve(span.profile_id)
+		if not resolved.ok: return false
+		var dependencies := BorderCatalog.dependencies(resolved.definition)
+		if not dependencies.ok: return false
+		for dependency: Dictionary in dependencies.dependencies:
+			if dependency not in expected: expected.append(dependency)
+	return Canonical.digest(content) == package.package_hash and Objects.validate_dependencies(package.get("dependencies",[]),expected)
 
 static func _terrain_metadata_valid(package: Dictionary) -> bool:
 	# A render record remains in piece coordinates. Rebuild its terrain topology,
 	# then compare the transformed physical masses with the actual stage.
-	var definitions := {}; var instances := {}; var seen := {}; var masses: Array = []
+	var definitions := {}; var instances := {}; var seen := {}; var masses: Array = []; var volumes: Array = []; var boundaries: Array = []
 	for part: Dictionary in package.manifest.input.parts: definitions[part.part_id] = part
 	var stage: Dictionary = package.manifest.stages[0]
 	for instance: Dictionary in stage.part_instances: instances[instance.instance_id] = instance
+	if not package.realized_instances is Array or package.realized_instances.size() != instances.size(): return false
+	var realized := {}
+	for entry: Variant in package.realized_instances:
+		var errors: Array = []; Document.Schema._shape(entry,Document.INSTANCE,"realized_instance",errors)
+		if not errors.is_empty() or not instances.has(entry.instance_id) or realized.has(entry.instance_id): return false
+		var actual: Dictionary = instances[entry.instance_id]
+		if actual.rotation_quarters != entry.rotation_quarters or actual.translation != _vector(entry.position_xyz) or actual.part_id != "piece_"+str(entry.piece_hash): return false
+		realized[entry.instance_id] = true
 	if package.render_instances.size() != instances.size(): return false
 	for render: Variant in package.render_instances:
 		if not render is Dictionary or not render.get("instance_id") is String or not instances.has(render.instance_id) or seen.has(render.instance_id): return false
@@ -295,7 +393,36 @@ static func _terrain_metadata_valid(package: Dictionary) -> bool:
 		if not Terrain._geometry_metadata_valid(local) or not Terrain._ports_metadata_valid(local): return false
 		var prefix: String = render.instance_id+"/"
 		for mass: Dictionary in local.part.solid_prisms: masses.append(SolidPrism.transformed(mass,instance.rotation_quarters,instance.translation,prefix,prefix))
-	return Canonical.encode(masses) == Canonical.encode(stage.get("solid_prisms",[]))
+		for volume: AABB in local.part.solid_volumes: volumes.append(Kernel.transform_volume(volume,instance.rotation_quarters,instance.translation))
+		for boundary: Dictionary in render.boundaries:
+			var copy := boundary.duplicate(true)
+			copy.span_id = prefix+copy.span_id; copy.face_id = prefix+copy.face_id; copy["instance_id"] = instance.instance_id
+			copy.a = Kernel.rotate(copy.a,instance.rotation_quarters)+instance.translation; copy.b = Kernel.rotate(copy.b,instance.rotation_quarters)+instance.translation
+			copy.outward = Kernel.rotate(copy.outward,instance.rotation_quarters)
+			for k: int in copy.openings.size(): copy.openings[k] = prefix+copy.openings[k]
+			boundaries.append(copy)
+	var endpoints := {}; var remaps := {}
+	for endpoint: Dictionary in stage.connectors: endpoints[endpoint.connector_id] = endpoint
+	for link: Dictionary in package.realized_links:
+		for fragment: Dictionary in link.fragments:
+			# Provenance stores the source endpoint for each realized partition end.
+			for side: String in ["a","b"]:
+				var original: String = fragment[side+"_original"]
+				if not remaps.has(original): remaps[original] = []
+				if fragment[side+"_connector"] not in remaps[original]: remaps[original].append(fragment[side+"_connector"])
+	for boundary: Dictionary in boundaries:
+		var rewritten: Array = []
+		for original: String in boundary.openings: rewritten.append_array(remaps.get(original,[original]))
+		boundary.openings = rewritten
+	if not package.border_selection is Dictionary or not package.border_spans is Array or not package.border_geometry is Dictionary: return false
+	var context := stage.duplicate(true); context.solid_prisms = masses; context.volumes = volumes
+	var rebuilt := _build_borders(boundaries,endpoints,package.border_selection,package.realized_instances,context)
+	if not rebuilt.ok or Canonical.encode(rebuilt.spans) != Canonical.encode(package.border_spans) or Canonical.encode(rebuilt.realization) != Canonical.encode(package.border_geometry) or Canonical.encode(rebuilt.barriers) != Canonical.encode(package.barriers): return false
+	for dependency: Dictionary in rebuilt.dependencies:
+		if dependency not in package.dependencies: return false
+	masses.append_array(rebuilt.realization.solid_prisms); volumes.append_array(rebuilt.realization.volumes)
+	for barrier: Dictionary in rebuilt.barriers: volumes.append(barrier.volume)
+	return Canonical.encode(masses) == Canonical.encode(stage.get("solid_prisms",[])) and Canonical.encode(volumes) == Canonical.encode(stage.get("volumes",[]))
 
 static func _logical_metadata_valid(package: Dictionary) -> bool:
 	if not package.get("logical_ports") is Array or not package.get("realized_links") is Array or not package.manifest.stages is Array or package.manifest.stages.size() != 1: return false

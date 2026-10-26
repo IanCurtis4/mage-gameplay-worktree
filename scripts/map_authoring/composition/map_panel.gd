@@ -9,6 +9,8 @@ const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 const Canvas = preload("res://scripts/map_authoring/preview/map_canvas.gd")
 const Population = preload("res://scripts/map_authoring/population/population_panel.gd")
 const Generation = preload("res://scripts/map_authoring/generation/generation_panel.gd")
+const BorderOperations = preload("res://scripts/map_authoring/composition/border_operations.gd")
+const BorderCatalog = preload("res://scripts/map_authoring/composition/border_profile_catalog.gd")
 var generation_window: Window
 var population_window: Window
 var session := Session.new()
@@ -35,6 +37,9 @@ var _pending_remove := ""
 var _confirmation: ConfirmationDialog
 var _autosave := ""
 var exchange_panel: Control
+var border_choice: OptionButton
+var border_decorations: CheckButton
+var transition_target: OptionButton
 func _ready() -> void:
 	exchange_panel = preload("res://scripts/map_authoring/exchange/exchange_panel.gd").mount(self,"map",func() -> Dictionary: return session.data.duplicate(true),session.apply)
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL; size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -63,12 +68,24 @@ func _ready() -> void:
 	placement.add_child(rotation_choice)
 	var placement_actions := HBoxContainer.new(); inspector.add_child(placement_actions)
 	_button(placement_actions,"Aplicar posição",apply_placement); _button(placement_actions,"Remover…",request_remove)
+	var border_label := Label.new(); border_label.text = "Borda da peça selecionada"; inspector.add_child(border_label)
+	border_choice = OptionButton.new(); border_choice.add_item("Herdar perfil do mapa"); border_choice.set_item_metadata(0,"")
+	border_choice.add_item("Ruína técnica"); border_choice.set_item_metadata(1,BorderOperations.LEGACY)
+	var catalog := BorderCatalog.load_catalog()
+	if catalog.ok:
+		for id: String in BorderCatalog.IDS:
+			border_choice.add_item(catalog.definitions[id].name); border_choice.set_item_metadata(border_choice.item_count-1,id)
+	inspector.add_child(border_choice); _button(inspector,"Aplicar borda à peça",apply_border_choice)
+	border_decorations = CheckButton.new(); border_decorations.text = "Vegetação e escombros das bordas"; inspector.add_child(border_decorations)
+	border_decorations.toggled.connect(func(enabled: bool) -> void: _border_command({"operation":"set_decorations","enabled":enabled}))
+	transition_target = OptionButton.new(); inspector.add_child(transition_target)
+	_button(inspector,"Ligar por talude de transição",apply_border_transition)
 	var label := Label.new(); label.text = "Aberturas a vincular"; inspector.add_child(label)
 	port_a = OptionButton.new(); port_b = OptionButton.new(); inspector.add_child(port_a); inspector.add_child(port_b)
 	_button(inspector,"Vincular aberturas",add_link)
 	links = ItemList.new(); links.custom_minimum_size.y = 80; inspector.add_child(links)
 	_button(inspector,"Remover vínculo selecionado",remove_link)
-	var hint := Label.new(); hint.text = "Ruína técnica: bordas fechadas por volumes visíveis.\nClique numa peça para selecionar. No teste, clique para andar.\nEscolha a superfície para testar pisos sobrepostos."; hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; inspector.add_child(hint)
+	var hint := Label.new(); hint.text = "Bordas fecham o perímetro e preservam as aberturas vinculadas.\nClique numa peça para selecionar. No teste, clique para andar.\nEscolha a superfície para testar pisos sobrepostos."; hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; inspector.add_child(hint)
 	surface = OptionButton.new(); inspector.add_child(surface); surface.item_selected.connect(func(index: int) -> void: canvas.selected_surface = "" if index == 0 else surface.get_item_text(index))
 	canvas = Canvas.new(); split.add_child(canvas); canvas.selected.connect(select_id); canvas.status.connect(func(message: String) -> void: status.text = message)
 	status = Label.new(); status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; add_child(status)
@@ -158,8 +175,10 @@ func refresh() -> void:
 	if job != null: job.cancel()
 	result = {}; canvas.clear(); instances.clear(); links.clear(); port_a.clear(); port_b.clear(); surface.clear(); surface.add_item("Todas as superfícies visíveis"); _endpoints.clear()
 	mode.select(0 if session.data.mode == "manual" else 1)
+	border_choice.select(0); border_decorations.set_pressed_no_signal(session.data.get("borders",{}).get("decorations",true)); transition_target.clear()
 	for instance: Dictionary in session.data.instances:
 		instances.add_item(instance.instance_id)
+		transition_target.add_item(instance.instance_id); transition_target.set_item_metadata(transition_target.item_count-1,instance.instance_id)
 		for piece: Dictionary in session.data.pieces:
 			if piece.piece_hash != instance.piece_hash: continue
 			for connector: Dictionary in piece.source.connectors:
@@ -172,6 +191,11 @@ func refresh() -> void:
 func select_instance(index: int) -> void:
 	var instance: Dictionary = session.data.instances[index]
 	x.value = instance.position_xyz[0]; z.value = instance.position_xyz[2]; rotation_choice.select(instance.rotation_quarters); canvas.selected_instance = instance.instance_id; canvas.redraw()
+	border_choice.select(0)
+	for entry: Dictionary in session.data.get("borders",{}).get("instances",[]):
+		if entry.instance_id != instance.instance_id: continue
+		for k: int in border_choice.item_count:
+			if border_choice.get_item_metadata(k) == entry.profile_id: border_choice.select(k)
 func select_id(id: String) -> void:
 	for i: int in session.data.instances.size():
 		if session.data.instances[i].instance_id == id: instances.select(i); select_instance(i)
@@ -188,11 +212,32 @@ func request_remove() -> void:
 		if _pending_remove in [link.a_instance,link.b_instance]: affected += 1
 	_confirmation.dialog_text = "Remover %s e seus %d vínculos? A operação pode ser desfeita."%[_pending_remove,affected]; _confirmation.popup_centered()
 func remove_instance() -> void:
-	var data := session.data.duplicate(true)
+	var data := BorderOperations.remove_references(session.data,_pending_remove)
 	data.instances = data.instances.filter(func(item: Dictionary) -> bool: return item.instance_id != _pending_remove)
 	data.links = data.links.filter(func(item: Dictionary) -> bool: return _pending_remove not in [item.a_instance,item.b_instance])
 	if data.has("context"): data.context.overrides = data.context.overrides.filter(func(item: Dictionary) -> bool: return item.instance_id != _pending_remove)
 	show_result(session.apply(data))
+func _border_command(command: Dictionary) -> Dictionary:
+	var selected := instances.get_selected_items(); var previous := "" if selected.is_empty() else str(session.data.instances[selected[0]].instance_id)
+	var applied := session.apply_border(command,Document.hash_source(session.data)); show_result(applied)
+	if applied.ok and not previous.is_empty(): select_id(previous)
+	return applied
+func apply_border_choice() -> void:
+	var selected := instances.get_selected_items()
+	if selected.is_empty(): status.text = "Selecione a peça que receberá a borda."; return
+	var id: String = session.data.instances[selected[0]].instance_id; var profile: String = border_choice.get_item_metadata(border_choice.selected)
+	_border_command({"operation":"clear_instance_profile","instance_id":id} if profile.is_empty() else {"operation":"set_instance_profile","instance_id":id,"profile_id":profile})
+func apply_border_transition() -> void:
+	var selected := instances.get_selected_items()
+	if selected.is_empty() or transition_target.selected < 0: status.text = "Selecione as duas peças da transição."; return
+	_border_command({"operation":"set_transition","a_instance":session.data.instances[selected[0]].instance_id,"b_instance":transition_target.get_item_metadata(transition_target.selected),"profile_id":"transition_terrace_v1"})
+func authoring_commands() -> Array:
+	return [{"id":"map/borders/apply","label":"Editar perfil, transição ou decoração","parameters":{"expected_source_hash":"hash","command":{"operation":["set_instance_profile","clear_instance_profile","set_transition","set_decorations"],"fields":"closed_by_operation"}}}]
+func ax_command(id: String, parameters: Dictionary) -> Dictionary:
+	if id != "map/borders/apply": return {"ok":false,"code":"action_missing"}
+	var errors: Array = []; Schema._shape(parameters,{"expected_source_hash":"hash","command":"object"},"border_request",errors)
+	if not errors.is_empty(): return {"ok":false,"code":"arguments_invalid","diagnostics":errors}
+	var applied := session.apply_border(parameters.command,parameters.expected_source_hash); show_result(applied); return applied
 func add_link() -> void:
 	if port_a.selected < 0 or port_b.selected < 0: return
 	var a: Dictionary = _endpoints[port_a.selected]; var b: Dictionary = _endpoints[port_b.selected]

@@ -1877,6 +1877,78 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 biome border definitions, physical geometry and shared authoring operations",
       "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/terrain/border_material.gdshader",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 biome border material using existing world-coordinate vertex pipeline",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/terrain/border_material.gdshader.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 biome border material using existing world-coordinate vertex pipeline",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/composition/border_union.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 normalized border junction geometry",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/composition/border_union.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 normalized border junction geometry",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/contracts/f9_contact_shadows.md",
+      "owner": "Sol F9",
+      "previous_owner": "human shadow addendum26/10; sequential presentation scope only",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/world/ground_shadow.gd",
+      "owner": "Sol F9",
+      "previous_owner": "human shadow addendum26/10; sequential presentation scope only",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/world/ground_shadow.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "human shadow addendum26/10; sequential presentation scope only",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/actors/combat_actor.gd",
+      "owner": "Sol F9",
+      "previous_owner": "human shadow addendum26/10; sequential presentation scope only",
+      "base_sha256": "0d6a41a0bed41f2d76498c736dab388ada24cc730da88857beb52731de27511b"
+    },
+    {
+      "path": "tests/map_editor_shadows_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "human shadow addendum26/10; sequential presentation scope only",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_shadows_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "human shadow addendum26/10; sequential presentation scope only",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_shadows_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "human shadow addendum26/10; sequential presentation scope only",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_shadows_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "human shadow addendum26/10; sequential presentation scope only",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -1887,7 +1959,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "biome props validated at a44cfb1; four border families implementation next, sequential",
+    "state": "border families complete candidate; Luna regression selection Borders93 Native32 Ports92 Cliff61 Relief58 Core639 Verify30, frozen inputs",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -1897,7 +1969,8 @@
       "docs/map_editor/delivery/evidence/f9/luna/ports/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/materials/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/cliffs/report.md",
-      "docs/map_editor/delivery/evidence/f9/luna/biome_props/report.md"
+      "docs/map_editor/delivery/evidence/f9/luna/biome_props/report.md",
+      "docs/map_editor/delivery/evidence/f9/luna/borders/report.md"
     ],
     "generated_evidence_roots": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
@@ -1954,7 +2027,14 @@
       "docs/map_editor/delivery/evidence/f9/luna/biome_props/native",
       "docs/map_editor/delivery/evidence/f9/luna/biome_props/objects",
       "docs/map_editor/delivery/evidence/f9/luna/biome_props/objects_native",
-      "docs/map_editor/delivery/evidence/f9/luna/biome_props/official"
+      "docs/map_editor/delivery/evidence/f9/luna/biome_props/official",
+      "docs/map_editor/delivery/evidence/f9/luna/borders/borders",
+      "docs/map_editor/delivery/evidence/f9/luna/borders/native",
+      "docs/map_editor/delivery/evidence/f9/luna/borders/ports",
+      "docs/map_editor/delivery/evidence/f9/luna/borders/cliffs",
+      "docs/map_editor/delivery/evidence/f9/luna/borders/relief",
+      "docs/map_editor/delivery/evidence/f9/luna/borders/core",
+      "docs/map_editor/delivery/evidence/f9/luna/borders/official"
     ]
   }
 }

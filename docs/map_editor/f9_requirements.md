@@ -11,6 +11,7 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 
 | Requisito | Origem adicional | Estado comprovado na base / ação necessária | Implementação/prova F9 |
 |---|---|---|---|
+| 01/11/12 sombras e profundidade visual | adendo humano26/10 | personagens já têm elipse de contato; props/prévia precisam acabamento coerente e prova em pisos/cotas reais | [contrato e opções da engine](contracts/f9_contact_shadows.md); integração em execução, sem certificação visual/desempenho antecipada |
 | 01 catálogo/origem/licença/dependências | arquitetura, recibo F8 | catálogo passivo de6 definições, PNGs/proveniência e hashes; três originais imutáveis e cacto/pilar/arenito integrados |expansão validada a44cfb1:30/23/53/25 e2 oficiais Luna; transporte limpo pendente |
 | 01 colocar/mover/rotacionar/duplicar/remover | arquitetura | API comum e GUI implementadas; AX/CLI parametrizados faltam | checkpoint18fa57f:53 checks,25 nativos e supervisão |
 | 01 seleção/inspector/grupo/camadas/travas | arquitetura | seleção alpha, inspector e grupos editoriais com travas e cópia de IDs | comprovado no checkpoint de objetos; restante da biblioteca em06 |

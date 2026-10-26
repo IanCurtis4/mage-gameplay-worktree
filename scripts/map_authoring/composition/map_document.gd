@@ -4,6 +4,7 @@ const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 const StrictJSON = preload("res://scripts/map_authoring/io/strict_json.gd")
 const Piece = preload("res://scripts/map_authoring/document/source_document.gd")
 const Context = preload("res://scripts/map_authoring/context/piece_context.gd")
+const Borders = preload("res://scripts/map_authoring/composition/border_operations.gd")
 const ROOT := {"schema_version":"int","document_id":"id","revision":"int","name":"string","mode":"id","barrier_profile":"id","pieces":"array","instances":"array","links":"array"}
 const INSTANCE := {"instance_id":"id","piece_hash":"hash","position_xyz":"v3","rotation_quarters":"number"}
 const LINK := {"link_id":"id","a_instance":"id","a_connector":"id","b_instance":"id","b_connector":"id"}
@@ -16,6 +17,7 @@ static func hash_source(data: Dictionary) -> String:
 	for collection: String in ["pieces","instances","links"]:
 		var key: String = {"pieces":"piece_hash","instances":"instance_id","links":"link_id"}[collection]
 		normalized[collection].sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a[key] < b[key])
+	if normalized.has("borders"): normalized.borders = Borders.normalized(normalized.borders)
 	return Schema.semantic_hash(normalized)
 
 static func read(bytes: PackedByteArray) -> Dictionary:
@@ -26,6 +28,7 @@ static func read(bytes: PackedByteArray) -> Dictionary:
 static func validate(data: Variant) -> Dictionary:
 	var errors: Array = []
 	var root_fields := ROOT.duplicate(); if data is Dictionary and data.has("context"): root_fields.context = "object"
+	if data is Dictionary and data.has("borders"): root_fields.borders = "object"
 	Schema._shape(data,root_fields,"map",errors)
 	if not errors.is_empty(): return Schema.result(false,"map_invalid",errors)
 	if data.schema_version != 1: return Schema.result(false,"map_version_unsupported")
@@ -48,6 +51,9 @@ static func validate(data: Variant) -> Dictionary:
 		instances[instance.instance_id] = true
 	if data.has("context"):
 		var checked := Context.validate_map(data.context,data.instances,data.mode,Schema)
+		if not checked.ok: return checked
+	if data.has("borders"):
+		var checked := Borders.validate(data.borders,data.instances)
 		if not checked.ok: return checked
 	for link: Variant in data.links:
 		Schema._shape(link,LINK,"link",errors)

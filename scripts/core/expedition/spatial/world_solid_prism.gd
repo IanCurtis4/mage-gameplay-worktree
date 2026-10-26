@@ -83,11 +83,17 @@ static func blocking_polygon(prepared: Dictionary, cell: Dictionary, radius: flo
 
 static func sweep(from: Vector3, to: Vector3, prepared: Dictionary, radius: float, height: float) -> Dictionary:
 	if prepared.is_empty() or not from.is_finite() or not to.is_finite() or not is_finite(radius) or not is_finite(height) or radius < 0 or height < 0: return {}
-	if Kernel.sweep_box(from,to,prepared.bounds,radius,height).is_empty(): return {}
+	var body := radius > 0 or height > 0
+	if Kernel.sweep_box(from,to,prepared.bounds,radius,height,body).is_empty(): return {}
 	var enter := 0.0; var exit := 1.0; var normal := Vector3.ZERO
 	var dx := float(to.x)-float(from.x); var dy := float(to.y)-float(from.y); var dz := float(to.z)-float(from.z)
-	for plane: PackedFloat64Array in prepared.planes:
-		var margin := radius*sqrt(plane[0]*plane[0]+plane[2]*plane[2])+height*maxf(0,-plane[1])-EPS
+	for index: int in prepared.planes.size():
+		var plane: PackedFloat64Array = prepared.planes[index]
+		# A zero-volume ray sees closed lateral faces. Shrinking every prism's
+		# footprint opens a ray-sized crack along each internal triangulation seam.
+		# Cap/base contact and actor clearance keep their existing EPS semantics.
+		var contact := EPS if body or index < 2 else 0.0
+		var margin := radius*sqrt(plane[0]*plane[0]+plane[2]*plane[2])+height*maxf(0,-plane[1])-contact
 		var distance := plane[0]*float(from.x)+plane[1]*float(from.y)+plane[2]*float(from.z)-plane[3]-margin
 		var speed := plane[0]*dx+plane[1]*dy+plane[2]*dz
 		if absf(speed) <= 1e-15:

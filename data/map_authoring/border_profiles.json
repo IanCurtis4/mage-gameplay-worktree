@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "catalog_id": "ragrpg_editor_border_profiles",
+  "revision": 1,
+  "profiles": [
+    {
+      "profile_id": "ruin_rubble_v1",
+      "revision": 1,
+      "name": "Ruína · alvenaria e escombros",
+      "biome_id": "ruin",
+      "geometry": "raised_bank",
+      "outward_width": 120.0,
+      "rise": 20.0,
+      "base_depth": 4.0,
+      "material_weights": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "props": [
+        "broken_pillar",
+        "moss_boulder"
+      ],
+      "minimum_spacing": 140.0
+    },
+    {
+      "profile_id": "forest_rootbank_v1",
+      "revision": 1,
+      "name": "Floresta · raízes e mata densa",
+      "biome_id": "forest",
+      "geometry": "raised_bank",
+      "outward_width": 80.0,
+      "rise": 24.0,
+      "base_depth": 4.0,
+      "material_weights": [
+        0.65,
+        0.25,
+        0.0,
+        0.1
+      ],
+      "props": [
+        "oak_tree",
+        "woodland_shrub"
+      ],
+      "minimum_spacing": 120.0
+    },
+    {
+      "profile_id": "desert_ridge_v1",
+      "revision": 1,
+      "name": "Deserto · montes e cactos",
+      "biome_id": "desert",
+      "geometry": "raised_bank",
+      "outward_width": 112.0,
+      "rise": 20.0,
+      "base_depth": 4.0,
+      "material_weights": [
+        0.0,
+        0.1,
+        0.8,
+        0.1
+      ],
+      "props": [
+        "desert_cactus",
+        "sandstone_boulder"
+      ],
+      "minimum_spacing": 100.0
+    },
+    {
+      "profile_id": "meadow_stream_v1",
+      "revision": 1,
+      "name": "Planície · córrego e margens",
+      "biome_id": "meadow",
+      "geometry": "unsupported_channel",
+      "outward_width": 32.0,
+      "rise": -12.0,
+      "base_depth": 4.0,
+      "material_weights": [
+        0.45,
+        0.45,
+        0.0,
+        0.1
+      ],
+      "props": [
+        "woodland_shrub"
+      ],
+      "minimum_spacing": 96.0
+    }
+  ],
+  "transitions": [
+    {
+      "profile_id": "transition_terrace_v1",
+      "revision": 1,
+      "name": "Transição autorada · talude de pedra e terra",
+      "pairs": [
+        [
+          "desert",
+          "forest"
+        ],
+        [
+          "desert",
+          "meadow"
+        ],
+        [
+          "desert",
+          "ruin"
+        ],
+        [
+          "forest",
+          "meadow"
+        ],
+        [
+          "forest",
+          "ruin"
+        ],
+        [
+          "meadow",
+          "ruin"
+        ]
+      ],
+      "geometry": "raised_bank",
+      "outward_width": 12.0,
+      "rise": 20.0,
+      "base_depth": 4.0,
+      "material_weights": [
+        0.2,
+        0.25,
+        0.15,
+        0.4
+      ],
+      "props": [],
+      "minimum_spacing": 120.0
+    }
+  ]
+}

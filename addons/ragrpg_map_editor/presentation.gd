@@ -4,6 +4,7 @@ extends VBoxContainer
 static var active_mode := "ux"
 static var hosts: Array[WeakRef] = []
 const ACTION_IDS := {
+	"Aplicar borda à peça":"apply_border_profile","Ligar por talude de transição":"apply_border_transition",
 	"Objetos e vegetação…":"open_objects",
 	"Nova peça":"new_piece","Compor mapa…":"compose_map","Abrir…":"open","Salvar":"save","Salvar como…":"save_as","Desfazer":"undo","Refazer":"redo",
 	"Recuperar cópia":"recover_copy","Buscar rascunho…":"browse_draft","Adicionar":"add_layer","Duplicar":"duplicate_layer","Travar":"toggle_layer_lock","Aplicar nome":"apply_name",
@@ -138,11 +139,18 @@ func _invoke(id: String, agent: bool) -> Dictionary:
 	action.control.pressed.emit()
 	return {"ok":true,"action_id":id}
 
-func ax_invoke(id: String) -> Dictionary: return _invoke(id,true)
+func ax_invoke(id: String, parameters: Dictionary = {}) -> Dictionary:
+	if screen.has_method("authoring_commands") and screen.has_method("ax_command"):
+		for command: Dictionary in screen.authoring_commands():
+			if command.id != id: continue
+			if active_mode != "ax": return {"ok":false,"code":"ax_mode_required"}
+			return screen.ax_command(id,parameters)
+	if not parameters.is_empty(): return {"ok":false,"code":"arguments_invalid"}
+	return _invoke(id,true)
 
 func ax_snapshot() -> Dictionary:
 	var records: Array = []
 	for id: String in actions:
 		var action: Dictionary = actions[id]
 		records.append({"id":id,"label":action.text,"enabled":not action.control.disabled,"test_only":action.ax_only})
-	return {"mode":active_mode,"screen":screen_id,"source":get_source.call().duplicate(true),"actions":records}
+	return {"mode":active_mode,"screen":screen_id,"source":get_source.call().duplicate(true),"actions":records,"commands":screen.authoring_commands() if screen.has_method("authoring_commands") else []}

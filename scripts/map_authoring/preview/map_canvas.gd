@@ -9,6 +9,7 @@ const World = preload("res://scripts/core/expedition/spatial/world_geometry.gd")
 const Motion = preload("res://scripts/core/expedition/spatial/world_actor_motion.gd")
 const Point = preload("res://scripts/core/expedition/model/world_point.gd")
 const Objects = preload("res://scripts/map_authoring/objects/object_view.gd")
+const BorderCatalog = preload("res://scripts/map_authoring/composition/border_profile_catalog.gd")
 signal selected(instance_id: String)
 signal status(message: String)
 var package: Dictionary = {}
@@ -46,6 +47,9 @@ func set_package(value: Dictionary) -> void:
 		for visual: Dictionary in instance.visuals:
 			for point: Vector3 in visual.vertices: heights.append(point.y+float(instance.translation.y))
 		for object: Dictionary in instance.get("objects",[]): heights.append(object.position.y)
+	for face: Dictionary in package.border_geometry.faces+package.border_geometry.water:
+		for point: Vector3 in face.vertices: heights.append(point.y)
+	for object: Dictionary in package.border_geometry.props: heights.append(object.position.y)
 	var depth_domain := Objects.depth_domain(heights)
 	for instance: Dictionary in package.render_instances:
 		for layer: Dictionary in instance.layers:
@@ -61,7 +65,23 @@ func set_package(value: Dictionary) -> void:
 		_object_sprites.append_array(Objects.attach(_meshes,instance.get("objects",[]),false,[],depth_domain))
 		for object: Dictionary in instance.get("objects",[]):
 			if object.has("body_volume"): _object_volumes.append(object.body_volume)
+	var border_material := Materials.material(); border_material.shader = load(BorderCatalog.BORDER_SHADER)
+	for k: int in Materials.IDS.size(): border_material.set_shader_parameter(Materials.IDS[k]+"_tile",load(Materials.PATHS[k]))
+	border_material.set_shader_parameter("tile_units",Materials.TILE_UNITS)
+	for face: Dictionary in package.border_geometry.faces: _attach_border_face(face,border_material,depth_domain)
+	if not package.border_geometry.water.is_empty():
+		var water_material := ShaderMaterial.new(); water_material.shader = load(BorderCatalog.WATER_SHADER)
+		water_material.set_shader_parameter("water_tile",load(BorderCatalog.WATER_PATH)); water_material.set_shader_parameter("tile_units",Materials.TILE_UNITS)
+		for face: Dictionary in package.border_geometry.water: _attach_border_face(face,water_material,depth_domain)
+	_object_sprites.append_array(Objects.attach(_meshes,package.border_geometry.props,false,[],depth_domain))
+	for object: Dictionary in package.border_geometry.props:
+		if object.has("body_volume"): _object_volumes.append(object.body_volume)
 	fit()
+func _attach_border_face(face: Dictionary, material: ShaderMaterial, domain: Vector2) -> void:
+	var view := MeshInstance2D.new(); view.mesh = Materials.from_arrays(Materials.face_arrays(face.vertices,face.get("material_weights",[]),face.get("outward",Vector3.ZERO))); view.material = material
+	var height := 0.0
+	for point: Vector3 in face.vertices: height += point.y
+	view.z_index = Objects.depth_order(height/face.vertices.size(),domain); view.set_meta("border_face_id",face.face_id); _meshes.add_child(view)
 func _attach_face(vertices: Array, paint: Array, normal: Vector3, instance: Dictionary, domain: Vector2) -> void:
 	var view := MeshInstance2D.new(); view.mesh = Materials.from_arrays(Materials.face_arrays(vertices,paint,normal,instance.rotation_quarters,instance.translation)); view.material = Materials.material()
 	var height := 0.0
@@ -77,6 +97,11 @@ func fit() -> void:
 				var point := WorldProjection.project(Kernel.rotate(original,instance.rotation_quarters)+Vector3(instance.translation))
 				if first: bounds = Rect2(point,Vector2.ZERO); first = false
 				else: bounds = bounds.expand(point)
+	for face: Dictionary in package.border_geometry.faces+package.border_geometry.water:
+		for original: Vector3 in face.vertices:
+			var point := WorldProjection.project(original)
+			if first: bounds = Rect2(point,Vector2.ZERO); first = false
+			else: bounds = bounds.expand(point)
 	_scale = minf((size.x-80)/maxf(1,bounds.size.x),(size.y-100)/maxf(1,bounds.size.y))
 	_scale = clampf(_scale,0.01,5); _origin = size*0.5-bounds.get_center()*_scale
 	_meshes.scale = Vector2.ONE*_scale; _meshes.position = _origin; redraw()

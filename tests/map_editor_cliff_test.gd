@@ -129,7 +129,7 @@ func run() -> void:
 	var composed := MapCompiler.compile(map)
 	check("rotated_mixed_map_compiles",composed.ok)
 	if not composed.ok: print(composed); finish(); return
-	check("map_v4_receives_own_package",composed.package.format_version == 4 and MapCompiler.validate_package(composed.package))
+	check("map_v5_receives_own_package",composed.package.format_version == 5 and MapCompiler.validate_package(composed.package))
 	check("rotated_cliff_mass_stays_unbound",composed.package.manifest.stages[0].solid_prisms.any(func(mass: Dictionary) -> bool: return mass.support_surface_id == ""))
 	check("cliff_receives_no_biome_wall",composed.package.barriers.size() == 3)
 	check("map_keeps_exposed_geometry",composed.package.render_instances[0].exposed_sides == package.exposed_sides)

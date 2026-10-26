@@ -1,0 +1,43 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_BORDER_CHECK four_families_and_transition_catalog true
+F9_BORDER_CHECK unknown_profile_is_explicit true
+F9_BORDER_CHECK legacy_profile_is_not_redefined true
+F9_BORDER_CHECK ruin_rubble_v1_definition_immutable true
+F9_BORDER_CHECK ruin_rubble_v1_closed_asset_dependencies true
+F9_BORDER_CHECK forest_rootbank_v1_definition_immutable true
+F9_BORDER_CHECK forest_rootbank_v1_closed_asset_dependencies true
+F9_BORDER_CHECK desert_ridge_v1_definition_immutable true
+F9_BORDER_CHECK desert_ridge_v1_closed_asset_dependencies true
+F9_BORDER_CHECK meadow_stream_v1_definition_immutable true
+F9_BORDER_CHECK meadow_stream_v1_closed_asset_dependencies true
+F9_BORDER_CHECK forest_span_builds true
+F9_BORDER_CHECK obstacle_cap_never_emits_support true
+F9_BORDER_CHECK forest_mass_exact_bounds true
+F9_BORDER_CHECK forest_cap_height12_oracle true
+F9_BORDER_CHECK forest_real_side_area5760 true
+F9_BORDER_CHECK short_forest_span_uses_small_safe_fallback true
+F9_BORDER_CHECK decorations_use_catalog_record_contract true
+F9_BORDER_CHECK input_span_remains_immutable true
+F9_BORDER_CHECK disabling_dressing_keeps_visible_mass true
+F9_BORDER_CHECK desert_has_four_grounded_props true
+F9_BORDER_CHECK desert_mass_matches_width_and_height true
+F9_BORDER_CHECK rich_ruin_uses_pillar_and_rock true
+F9_BORDER_CHECK mass_and_prop_transform_once true
+F9_BORDER_CHECK span_order_does_not_change_geometry true
+F9_BORDER_CHECK stream_has_two_banks_and_visual_water true
+F9_BORDER_CHECK water_has_no_support_or_collider true
+F9_BORDER_CHECK water_level_and_channel_width_oracle true
+F9_BORDER_CHECK canonical_world_accepts_bank_geometry true
+F9_BORDER_CHECK bank_has_real_mass_below_margin true
+F9_BORDER_CHECK ray_above_water_and_banks_clear true
+F9_BORDER_CHECK water_film_does_not_block_rays true
+F9_BORDER_CHECK water_destination_is_unsupported true
+F9_BORDER_CHECK body_cannot_cross_without_bridge true
+F9_BORDER_CHECK canonical_attack_can_cross_channel true
+F9_BORDER_CHECK cancel_returns_no_partial_package true
+F9_BORDER_CHECK duplicate_span_id_rejected true
+F9_BORDER_CHECK nonperpendicular_normal_rejected true
+F9_BORDER_CHECK zero_span_rejected true
+F9_BORDER_CHECK mass_budget_is_whole_failure true
+F9_BORDER_RESULT {"checks":[{"id":"four_families_and_transition_catalog","ok":true},{"id":"unknown_profile_is_explicit","ok":true},{"id":"legacy_profile_is_not_redefined","ok":true},{"id":"ruin_rubble_v1_definition_immutable","ok":true},{"id":"ruin_rubble_v1_closed_asset_dependencies","ok":true},{"id":"forest_rootbank_v1_definition_immutable","ok":true},{"id":"forest_rootbank_v1_closed_asset_dependencies","ok":true},{"id":"desert_ridge_v1_definition_immutable","ok":true},{"id":"desert_ridge_v1_closed_asset_dependencies","ok":true},{"id":"meadow_stream_v1_definition_immutable","ok":true},{"id":"meadow_stream_v1_closed_asset_dependencies","ok":true},{"id":"forest_span_builds","ok":true},{"id":"obstacle_cap_never_emits_support","ok":true},{"id":"forest_mass_exact_bounds","ok":true},{"id":"forest_cap_height12_oracle","ok":true},{"id":"forest_real_side_area5760","ok":true},{"id":"short_forest_span_uses_small_safe_fallback","ok":true},{"id":"decorations_use_catalog_record_contract","ok":true},{"id":"input_span_remains_immutable","ok":true},{"id":"disabling_dressing_keeps_visible_mass","ok":true},{"id":"desert_has_four_grounded_props","ok":true},{"id":"desert_mass_matches_width_and_height","ok":true},{"id":"rich_ruin_uses_pillar_and_rock","ok":true},{"id":"mass_and_prop_transform_once","ok":true},{"id":"span_order_does_not_change_geometry","ok":true},{"id":"stream_has_two_banks_and_visual_water","ok":true},{"id":"water_has_no_support_or_collider","ok":true},{"id":"water_level_and_channel_width_oracle","ok":true},{"id":"canonical_world_accepts_bank_geometry","ok":true},{"id":"bank_has_real_mass_below_margin","ok":true},{"id":"ray_above_water_and_banks_clear","ok":true},{"id":"water_film_does_not_block_rays","ok":true},{"id":"water_destination_is_unsupported","ok":true},{"id":"body_cannot_cross_without_bridge","ok":true},{"id":"canonical_attack_can_cross_channel","ok":true},{"id":"cancel_returns_no_partial_package","ok":true},{"id":"duplicate_span_id_rejected","ok":true},{"id":"nonperpendicular_normal_rejected","ok":true},{"id":"zero_span_rejected","ok":true},{"id":"mass_budget_is_whole_failure","ok":true}],"count":40,"ok":true}
