@@ -1787,6 +1787,96 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 catalog expansion and native prop integration invariants",
       "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/contracts/f9_biome_borders.md",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 biome border definitions, physical geometry and shared authoring operations",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/composition/border_profile_catalog.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 biome border definitions, physical geometry and shared authoring operations",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/composition/border_profile_catalog.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 biome border definitions, physical geometry and shared authoring operations",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/composition/border_geometry.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 biome border definitions, physical geometry and shared authoring operations",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/composition/border_geometry.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 biome border definitions, physical geometry and shared authoring operations",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/composition/border_spans.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 biome border definitions, physical geometry and shared authoring operations",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/composition/border_spans.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 biome border definitions, physical geometry and shared authoring operations",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/composition/border_operations.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 biome border definitions, physical geometry and shared authoring operations",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/composition/border_operations.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 biome border definitions, physical geometry and shared authoring operations",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/terrain/water_material.gdshader",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 biome border definitions, physical geometry and shared authoring operations",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/terrain/water_material.gdshader.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 biome border definitions, physical geometry and shared authoring operations",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_borders_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 biome border definitions, physical geometry and shared authoring operations",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_borders_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 biome border definitions, physical geometry and shared authoring operations",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_borders_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 biome border definitions, physical geometry and shared authoring operations",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_borders_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 biome border definitions, physical geometry and shared authoring operations",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -1797,7 +1887,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "three biome props implemented; author30/native23 PASS with inspected light/dark renders; frozen supervision next",
+    "state": "biome props validated at a44cfb1; four border families implementation next, sequential",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
