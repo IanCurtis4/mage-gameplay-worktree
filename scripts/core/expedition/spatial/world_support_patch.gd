@@ -20,7 +20,7 @@ static func index(stage: Dictionary) -> Dictionary:
 			links[pair[0]].append(ports[pair[1]])
 			if not transitions.has(pair[0]): transitions[pair[0]] = []
 			transitions[pair[0]].append({"other_id":pair[1],"allowed":link.forward if pair[0] == link.a_connector else link.backward,"connection_id":link.connection_id})
-	var outlines: Dictionary = {}
+	var outlines: Dictionary = {}; var orientations: Dictionary = {}
 	for id: String in cells:
 		var cell: Dictionary = cells[id]; var edges: Array = []
 		for k: int in cell.vertices.size():
@@ -46,7 +46,8 @@ static func index(stage: Dictionary) -> Dictionary:
 			openings.sort_custom(func(x: Dictionary,y: Dictionary) -> bool: return x.lo < y.lo)
 			edges.append({"a":a,"b":b,"ax":ax,"az":az,"length":length,"openings":openings})
 		outlines[id] = edges
-	return {"cells":cells,"ports":by_surface,"endpoints":ports,"transitions":transitions,"outlines":outlines}
+		orientations[id] = -signf(Kernel._plane(cell.vertices)[1])
+	return {"cells":cells,"ports":by_surface,"endpoints":ports,"transitions":transitions,"outlines":outlines,"orientations":orientations}
 
 static func on_opening(surface_id: String, connector_id: String, point: Vector3, data: Dictionary) -> bool:
 	for edge: Dictionary in data.outlines.get(surface_id,[]):
@@ -65,6 +66,9 @@ static func _along(a: Vector2, b: Vector2, at: float, length: float) -> Vector2:
 
 static func _patch(id: String, from: Vector2, to: Vector2, radius: float, height: float, data: Dictionary) -> Dictionary:
 	var included := {id:true}; var queue: Array[String] = [id]; var cursor := 0
+	# A convex support contains the entire swept disk when it contains both
+	# endpoint disks. Neighbor caps cannot touch that interior capsule.
+	if _disk_within(id,from,radius,data,true) and _disk_within(id,to,radius,data,true): return included
 	while cursor < queue.size():
 		var current := queue[cursor]; cursor += 1
 		for edge: Dictionary in data.outlines[current]:
@@ -73,6 +77,14 @@ static func _patch(id: String, from: Vector2, to: Vector2, radius: float, height
 				if segment_distance_squared(from,to,opening.a,opening.b) > (radius+EPS)*(radius+EPS): continue
 				included[opening.neighbor] = true; queue.append(opening.neighbor)
 	return included
+
+static func _disk_within(id: String, point: Vector2, radius: float, data: Dictionary, strict: bool = false) -> bool:
+	for edge: Dictionary in data.outlines[id]:
+		var x := float(point.x)-float(Vector2(edge.a).x); var z := float(point.y)-float(Vector2(edge.a).y)
+		var distance := (z*float(edge.ax)-x*float(edge.az))*float(data.orientations[id])
+		if strict and distance-radius <= EPS: return false
+		if distance+EPS < radius: return false
+	return true
 
 static func members(id: String, from: Vector2, to: Vector2, radius: float, height: float, data: Dictionary) -> Dictionary:
 	return _patch(id,from,to,radius,height,data)
@@ -103,6 +115,8 @@ static func fraction(cell: Dictionary, from: Vector3, to: Vector3, profile: Dict
 	if not Kernel.contains(cell,from) or not Kernel.contains(cell,to): return 0.0
 	var a := Vector2(from.x,from.z); var b := Vector2(to.x,to.z)
 	var radius := float(profile.radius); var height := float(profile.height)
+	if float(cell.headroom)+EPS < height: return 0.0
+	if _disk_within(cell.surface_id,a,radius,data) and _disk_within(cell.surface_id,b,radius,data): return 1.0
 	var patch := _patch(cell.surface_id,a,b,radius,height,data)
 	var clearance := maxf(0,radius-EPS); var first := 1.0
 	for edge: Array in _closed(patch,height,data):

@@ -130,8 +130,7 @@ func _draw_world() -> void:
 			var outline := PackedVector2Array()
 			for point: Vector3 in cell.vertices: outline.append(screen(point))
 			outline.append(outline[0]); _overlay.draw_polyline(outline,Color("e7c77a"),2)
-	for endpoint: Dictionary in package.manifest.stages[0].connectors:
-		if "/port_" in endpoint.connector_id: _overlay.draw_circle(screen(endpoint.position),4,Color("77e4cc"))
+	for port: Dictionary in package.get("logical_ports",[]): _overlay.draw_circle(screen(port.position),4,Color("77e4cc"))
 	if motion != null and motion.point() != null:
 		var at := screen(motion.point().position)
 		_overlay.draw_circle(at,5,Color("ffe4a8")); _overlay.draw_line(at,screen(motion.point().position+Vector3.UP*12),Color("fff2da"),5)

@@ -60,6 +60,7 @@ static func build(source: Dictionary) -> Dictionary:
 			var socket := ExpeditionSocketDefinition.new(); socket.socket_id = "entry"; socket.surface_id = entry.surface_id; socket.kind = "entrance"; socket.position = entry.position; part.sockets.append(socket)
 			part.solid_volumes.assign(data.solid_volumes); part.blockers.assign(data.blockers)
 			part.solid_prisms.assign(data.get("solid_prisms",[])); part.internal_connections.assign(compiled[option.piece_hash].adjacency)
+			part.connector_groups.assign(data.get("connector_groups",[]))
 			input.parts.append(part); candidates.append(part.part_id); lookup[part.part_id] = option
 		var node: Dictionary = parents[id].duplicate(true); node["instance_id"] = id; node["candidates"] = candidates; nodes.append(node)
 	input.stages.assign([{"stage_id":"authored","biome":"authored","entrance":root+"/entry","parts":nodes}])

@@ -307,6 +307,12 @@
       "base_sha256": "c556d01bba04bcbed9bed25b23db8bdf9cc4ec9cebe6e1e40d02b762b7452c6f"
     },
     {
+      "path": "docs/map_editor/contracts/f9_navigation_batch.md",
+      "owner": "Astra F9 — bounded shared navigation architecture consultation",
+      "previous_owner": "new F9 dense composition performance frontier",
+      "base_sha256": null
+    },
+    {
       "path": "docs/map_editor/contracts/f9_objects.md",
       "owner": "Sol F9",
       "previous_owner": "new F9 objects/authorized art asset",
@@ -451,6 +457,18 @@
       "base_sha256": "a4e081cf116ba9ca4527628fb5af8f09516475289ea6c53912d481d6ad94187d"
     },
     {
+      "path": "scripts/core/expedition/spatial/world_connectivity_batch.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 canonical connectivity batch or sequential F1 snapshot precision transfer",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/core/expedition/spatial/world_connectivity_batch.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 canonical connectivity batch or sequential F1 snapshot precision transfer",
+      "base_sha256": null
+    },
+    {
       "path": "scripts/core/expedition/spatial/world_geometry.gd",
       "owner": "Sol F9",
       "previous_owner": "E07 geometry; sequential transfer for F9-04",
@@ -473,6 +491,18 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 relief/material/biome engineering",
       "base_sha256": null
+    },
+    {
+      "path": "scripts/core/expedition/spatial/world_solid_segment.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 canonical connectivity batch or sequential F1 snapshot precision transfer",
+      "base_sha256": "d74a83561d86e9ff7625d7e3cd9f31c1ea3b4bd312af8825396f27caaf042778"
+    },
+    {
+      "path": "scripts/core/expedition/spatial/world_solid_segment.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 canonical connectivity batch or sequential F1 snapshot precision transfer",
+      "base_sha256": "9871e35c5c7d9d1bfa0536c177d7b66ef5e9fa84bb383861683ff59ce1f10849"
     },
     {
       "path": "scripts/core/expedition/spatial/world_support_patch.gd",
@@ -1429,6 +1459,18 @@
       "base_sha256": null
     },
     {
+      "path": "tests/map_editor_navigation_batch_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 canonical connectivity batch or sequential F1 snapshot precision transfer",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_navigation_batch_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 canonical connectivity batch or sequential F1 snapshot precision transfer",
+      "base_sha256": null
+    },
+    {
       "path": "tests/map_editor_objects_test.gd",
       "owner": "Sol F9",
       "previous_owner": "new F9 objects/authorized art asset",
@@ -1653,13 +1695,14 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "relief foundation supervised at270ff3a; logical port implementation sequential",
+    "state": "logical ports and canonical batch pending frozen sequential supervision",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
       "docs/map_editor/delivery/evidence/f9/luna/objects/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/mesh/report.md",
-      "docs/map_editor/delivery/evidence/f9/luna/relief/report.md"
+      "docs/map_editor/delivery/evidence/f9/luna/relief/report.md",
+      "docs/map_editor/delivery/evidence/f9/luna/ports/report.md"
     ],
     "generated_evidence_roots": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
@@ -1679,7 +1722,15 @@
       "docs/map_editor/delivery/evidence/f9/luna/relief/authorities",
       "docs/map_editor/delivery/evidence/f9/luna/relief/geometry",
       "docs/map_editor/delivery/evidence/f9/luna/relief/objects",
-      "docs/map_editor/delivery/evidence/f9/luna/relief/official"
+      "docs/map_editor/delivery/evidence/f9/luna/relief/official",
+      "docs/map_editor/delivery/evidence/f9/luna/ports/ports",
+      "docs/map_editor/delivery/evidence/f9/luna/ports/batch",
+      "docs/map_editor/delivery/evidence/f9/luna/ports/geometry",
+      "docs/map_editor/delivery/evidence/f9/luna/ports/relief",
+      "docs/map_editor/delivery/evidence/f9/luna/ports/mesh",
+      "docs/map_editor/delivery/evidence/f9/luna/ports/objects",
+      "docs/map_editor/delivery/evidence/f9/luna/ports/core",
+      "docs/map_editor/delivery/evidence/f9/luna/ports/official"
     ]
   }
 }

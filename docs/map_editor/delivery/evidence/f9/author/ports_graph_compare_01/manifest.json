@@ -1,0 +1,19 @@
+{
+  "kind": "differential diagnostic; fixture compiler reachability proof bypassed in both variants; not publication or gameplay certification",
+  "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "compiler_original_sha256": "28222b0beef0198b9a9459dff0f1849381d5ded7518df5555d8906ba5be1d3dd",
+  "compiler_diagnostic_sha256": "a5d44072ef87db71c5fb2c8824e98fd46bc34a4448f571387b80a65f68a7e0ae",
+  "restored_world_matches_primary": true,
+  "restored_compiler": true,
+  "records": [
+    {
+      "variant": "eager",
+      "world_sha256": "83b24b32a452aab7ed6956b6b369ebd846aa3857831b433d9166ccaf4e1b947c",
+      "exit_code": 1,
+      "timed_out": true,
+      "errors": false,
+      "elapsed_seconds": 300.0839963000035,
+      "result": null
+    }
+  ]
+}

@@ -2,7 +2,7 @@ param(
     [Parameter(Mandatory)][string]$GodotPath,
     [Parameter(Mandatory)][string]$EvidenceDirectory,
     [switch]$SkipImport,
-    [ValidateSet('Geometry','Objects','ObjectsNative','Mesh','Relief')][string]$Stage='Geometry'
+    [ValidateSet('Geometry','Objects','ObjectsNative','Mesh','Relief','Ports','Batch')][string]$Stage='Geometry'
 )
 $ErrorActionPreference='Stop'
 $f9Root=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
@@ -39,6 +39,8 @@ $f9Script=if($Stage -eq 'Geometry'){'res://tests/map_editor_f9_geometry_test.gd'
 $f9Marker=if($Stage -eq 'Geometry'){'F9_GEOMETRY_RESULT'}else{'F9_OBJECTS_RESULT'}
 if($Stage -eq 'Mesh'){$f9Script='res://tests/map_editor_mesh_test.gd';$f9Marker='F9_MESH_RESULT'}
 if($Stage -eq 'Relief'){$f9Script='res://tests/map_editor_relief_test.gd';$f9Marker='F9_RELIEF_RESULT'}
+if($Stage -eq 'Ports'){$f9Script='res://tests/map_editor_port_fragments_test.gd';$f9Marker='F9_PORT_RESULT'}
+if($Stage -eq 'Batch'){$f9Script='res://tests/map_editor_navigation_batch_test.gd';$f9Marker='F9_BATCH_RESULT'}
 $f9Arguments=@('--path',$f9Fixture,'--headless','--log-file',(Join-Path $f9Evidence 'geometry.engine.log'),'--script',$f9Script)
 $f9RestoreProject=$null
 if($Stage -eq 'ObjectsNative'){
@@ -70,7 +72,7 @@ $f9EngineText=Get-Content -LiteralPath (Join-Path $f9Evidence 'geometry.engine.l
 $f9Match=[regex]::Match($f9Text,'(?m)^'+$f9Marker+' (.+)$')
 $f9Result=if($f9Match.Success){ConvertFrom-Json $f9Match.Groups[1].Value}else{$null}
 $f9Pass=-not $f9Timeout -and -not $f9Aborted -and $f9Process.ExitCode -eq 0 -and $null -ne $f9Result -and $f9Result.ok -and $f9Result.count -gt 0 -and @($f9Result.checks).Count -eq $f9Result.count -and @($f9Result.checks | Where-Object {-not $_.ok}).Count -eq 0 -and $f9Text -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:' -and $f9EngineText -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:'
-$f9Expected=@{Geometry=46;Objects=53;ObjectsNative=25;Mesh=34;Relief=56}
+$f9Expected=@{Geometry=46;Objects=53;ObjectsNative=25;Mesh=34;Relief=58;Ports=91;Batch=34}
 $f9Pass=$f9Pass -and $f9Result.count -eq $f9Expected[$Stage]
 foreach($f9Input in $f9Inputs){
     $f9Source=Join-Path $f9Root $f9Input.path; $f9Copy=Join-Path $f9Fixture $f9Input.path

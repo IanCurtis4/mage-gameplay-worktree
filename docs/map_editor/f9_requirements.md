@@ -24,7 +24,7 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 03 transições/dono/abertura/frestas | emendas, F3 | fechamento ruína existe; ampliar sem estreitar passagem | pendente |
 | 03 ausência de perfil/asset | emendas | preservar erro explícito sem barreira invisível | pendente de regressão |
 | 04 largura útil M3-NAV-01 | recibo F3, F8 | corrigida em WorldGeometry, inclusive desvio com centro bloqueado e curva entre aberturas | validado tecnicamente ce7bd59;46 checks + Core639 +25 IDs F1, recibo F9 |
-| 04 abertura larga sobre malha refinada | fronteira encontrada ao completar02 | conector canônico atual pertence a uma célula; largura pode ultrapassar sua borda após refino | consulta delimitada de arquitetura; manter largura/altura e fonte, sem achatar relevo para caber |
+| 04 abertura larga sobre malha refinada | fronteira encontrada ao completar02 | operador lógico/físico, terrain v4, composição v3 e assembler v2 integrados |78 checks autorais: N:M12/largura80, ator, adaptador, reserva atômica, reordenação/imutabilidade; receptor/emenda inclinada e supervisão em prova |
 | 04 rampa400/160 e400/200 | recibo F8 | corrigidos plano escalar e precisão do envelope da laje; amostra conserva escala original | validado tecnicamente ce7bd59, movimento real sobre rampa/ponte e oráculo de altura |
 | 04 precisão/altura/escala/corpo/folga/sentido | F2, F3, E07 | EPS preservado; checkpoint inicial tratou meio ULP de y, delta de relevo projeta half-ULPs de x/y/z no plano/borda | corpus anterior validado; malha34 autoral PASS no delta, supervisão de relevo pendente; sem garantia universal de escala |
 | 04 suporte contínuo e massa do relevo | F9-02/11, física compartilhada | união local e massa convexa/índice/desvios, transporte ao assembler e contato direcional implementados | validado tecnicamente270ff3a: malha34, massa56, geometria46, objetos53 e30 etapas oficiais Luna; Core639 autoral com proveniência no recibo |
@@ -51,7 +51,7 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 10 autosave/backup/pending/conflito | F1, F3, validação | entregue em documentos; conferir novos estados | pendente de regressão |
 | 10 cancelamento/progresso/stale/atomicidade | F2, F6, F7 | worker parcial; commit e prévia síncronos F7 | pendente |
 | 10 cache/invalidação regional | arquitetura, F2 | ausência registrada de cache/bake incremental | pendente |
-| 10 medição pequeno/representativo/estresse | validação, F2 | medições parciais históricas; completar frio/quente/custos relevantes | pendente |
+| 10 medição pequeno/representativo/estresse | validação, F2 | lote canônico permite composição densa antes excedida300s; busca individual densa ainda174671,384ms |34 checks autorais do lote, com direção/testemunhas, snapshot, orçamento/cache local e união de grafos; responsividade final e medições amplas pendentes |
 | 11 pacote imutável/revisão/consumo sem código | arquitetura, F3–F8 | publicação existe; ponto de consumo integrado incompleto | pendente |
 | 11 preview real/apresentação de jogo | F8 | pacote real, atores técnicos; completar apresentação e fluxo | pendente |
 | 11 restart/continuidade/compatibilidade | F5, validação | snapshot estrito; preservar revisão ou erro sem destruição | pendente |

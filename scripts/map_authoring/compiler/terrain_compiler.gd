@@ -8,7 +8,8 @@ const Partition = preload("res://scripts/map_authoring/compiler/terrain_partitio
 const Materials = preload("res://scripts/map_authoring/terrain/terrain_material.gd")
 const SolidPrism = preload("res://scripts/core/expedition/spatial/world_solid_prism.gd")
 const Objects = preload("res://scripts/map_authoring/objects/object_compiler.gd")
-const REVISION := "map_terrain_v3"
+const Ports = preload("res://scripts/core/expedition/generation/connector_partition.gd")
+const REVISION := "map_terrain_v4"
 const MAX_SUPPORTS := 1024
 const MAX_GRID_QUADS := 65536
 const PROFILE := {"radius":2.0,"height":12.0,"connector_kinds":["walk"]}
@@ -194,21 +195,24 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 			adjacency.append({"connection_id":"join_"+key.sha256_text().substr(0,20),"a_connector":ids[0],"b_connector":ids[1],"forward":true,"backward":true})
 		else:
 			var span: Dictionary = pair[0]
-			boundaries.append({"span_id":span.span_id,"surface_id":span.surface_id,"source_id":span.source_id,"a":span.a,"b":span.b,"kind":"support_edge","openings":[]})
-	for authored: Dictionary in source.connectors:
-		if authored.kind != "walk" or authored.tags.is_empty(): return failure("connector_invalid",authored.connector_id)
-		if authored.width < PROFILE.radius*2 or authored.headroom < PROFILE.height: return failure("insufficient_headroom",authored.connector_id)
-		var position := Vector3(authored.position_xyz[0],authored.position_xyz[1],authored.position_xyz[2])
-		var normal := Vector3(authored.normal_xyz[0],authored.normal_xyz[1],authored.normal_xyz[2])
-		var found := false
-		for boundary: Dictionary in boundaries:
-			if boundary.source_id != authored.surface_id: continue
-			var candidate := {"connector_id":"port_"+authored.connector_id.sha256_text().substr(0,20),"surface_id":boundary.surface_id,"position":position,"outward":normal,"kind":authored.kind,"tags":authored.tags.duplicate(),"width":float(authored.width),"headroom":float(authored.headroom),"direction":authored.direction}
-			var cell := _cell(cells,boundary.surface_id)
-			if Kernel.connector_valid(candidate,cell) and _on_segment(position,boundary.a,boundary.b) and _opening_fits(candidate,boundary):
-				if found: return failure("connector_ambiguous",authored.connector_id)
-				connectors.append(candidate); boundary.openings.append(candidate.connector_id); boundary.kind = "opening"; found = true
-		if not found: return failure("connector_invalid",authored.connector_id)
+			boundaries.append({"span_id":span.span_id,"surface_id":span.surface_id,"source_id":span.source_id,"a":span.a,"b":span.b,"outward":span.outward,"kind":"support_edge","openings":[]})
+	var authored_ports: Array = []; var connector_groups: Array = []
+	var authored_connectors: Array = source.connectors.duplicate(true)
+	authored_connectors.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.connector_id < b.connector_id)
+	for authored: Dictionary in authored_connectors:
+		var built_port := _compile_authored_port(authored,boundaries,cells)
+		if not built_port.ok: return built_port
+		for fragment: Dictionary in built_port.authored_port.fragments:
+			for boundary: Dictionary in boundaries:
+				if boundary.span_id != fragment.span_id: continue
+				for prior: Dictionary in connectors:
+					if prior.connector_id not in boundary.openings: continue
+					var incoming: Dictionary = _port_endpoint(built_port.endpoints,fragment.connector_id)
+					var axis := Vector2(-incoming.outward.z,incoming.outward.x)
+					var separation := absf((float(prior.position.x)-float(incoming.position.x))*float(axis.x)+(float(prior.position.z)-float(incoming.position.z))*float(axis.y))
+					if separation < (float(prior.width)+float(incoming.width))*0.5: return failure("connector_ambiguous",authored.connector_id)
+				boundary.openings.append(fragment.connector_id); boundary.kind = "opening"
+		connectors.append_array(built_port.endpoints); authored_ports.append(built_port.authored_port); connector_groups.append(built_port.group)
 	var sockets: Array = []
 	for authored: Dictionary in source.sockets:
 		if authored.kind not in ["entrance","exit","objective","thematic_encounter","population","portal"]: return failure("socket_invalid",authored.socket_id)
@@ -227,7 +231,9 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 		changed = false
 		for link: Dictionary in adjacency:
 			var a: Dictionary = endpoints[link.a_connector]; var b: Dictionary = endpoints[link.b_connector]
-			if minf(a.width,b.width) < PROFILE.radius*2 or minf(a.headroom,b.headroom) < PROFILE.height: continue
+			# Internal mesh fragments need not each fit the full disk: support is
+			# the connected local union. Consumers validate the actual body/path.
+			if minf(a.headroom,b.headroom) < PROFILE.height: continue
 			if reachable.has(a.surface_id) and not reachable.has(b.surface_id): reachable[b.surface_id] = true; changed = true
 			if reachable.has(b.surface_id) and not reachable.has(a.surface_id): reachable[a.surface_id] = true; changed = true
 	if reachable.size() != cells.size():
@@ -243,10 +249,11 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 		if not SolidPrism.valid(mass): return failure("geometry_invalid",cell.surface_id)
 		solid_prisms.append(mass)
 	var part := {"part_id":"piece_"+source.document_id.sha256_text().substr(0,20),"revision":int(source.revision),"biome_tags":["authored"],"allowed_rotations":[0],"surfaces":cells,"connectors":connectors,"sockets":sockets,"solid_volumes":[],"solid_prisms":solid_prisms,"blockers":[]}
+	if not connector_groups.is_empty(): part["connector_groups"] = connector_groups
 	var render_layers: Array = []
 	for layer: Dictionary in layers:
 		render_layers.append({"layer_id":layer.layer_id,"origin_xz":layer.origin_xz.duplicate(),"sample_spacing":float(layer.sample_spacing),"columns":int(layer.columns),"rows":int(layer.rows),"heights":layer.heights.duplicate(),"material_masks":layer.material_masks.duplicate(true)})
-	var package := {"format_version":3,"compiler_revision":REVISION,"source_hash":read.output_hash,"dependencies":material_dependencies,"part":part,"adjacency":adjacency,"boundaries":boundaries,"visuals":visuals,"render_layers":render_layers,"profile":PROFILE.duplicate(true),"grid_quads":grid_quads,"piece_count":1}
+	var package := {"format_version":4,"compiler_revision":REVISION,"source_hash":read.output_hash,"dependencies":material_dependencies,"part":part,"authored_ports":authored_ports,"adjacency":adjacency,"boundaries":boundaries,"visuals":visuals,"render_layers":render_layers,"profile":PROFILE.duplicate(true),"grid_quads":grid_quads,"piece_count":1}
 	package.package_hash = Canonical.digest(package)
 	if not source.placements.is_empty() or not source.dependencies.is_empty():
 		var compiled_objects := Objects.compile(source,package,preview_manifest(package))
@@ -268,6 +275,56 @@ static func _add_cell(cells: Array, visuals: Array, cell: Dictionary, layer: Dic
 		var earth: float = layer.material_masks.get("earth",[])[index] if layer.material_masks.has("earth") else 0.0
 		weights.append(earth/maxf(EPS,grass+earth))
 	visuals.append({"surface_id":cell.surface_id,"source_id":layer.layer_id,"vertices":cell.vertices.duplicate(),"earth_weights":weights,"special":false})
+
+static func _port_endpoint(endpoints: Array, id: String) -> Dictionary:
+	for endpoint: Dictionary in endpoints:
+		if endpoint.connector_id == id: return endpoint
+	return {}
+
+static func _compile_authored_port(authored: Dictionary, boundaries: Array, cells: Array) -> Dictionary:
+	var id: String = authored.connector_id
+	if authored.kind != "walk" or authored.tags.is_empty(): return failure("connector_invalid",id)
+	if authored.width < PROFILE.radius*2 or authored.headroom < PROFILE.height: return failure("insufficient_headroom",id)
+	var position := Vector3(authored.position_xyz[0],authored.position_xyz[1],authored.position_xyz[2])
+	var normal := Vector3(authored.normal_xyz[0],authored.normal_xyz[1],authored.normal_xyz[2])
+	var tags: Array = []
+	for tag: String in authored.tags:
+		if tag not in tags: tags.append(tag)
+	tags.sort()
+	var group := {"connector_id":"port_"+id.sha256_text().substr(0,20),"position":position,"outward":normal,"width":float(authored.width),"headroom":float(authored.headroom),"kind":authored.kind,"tags":tags,"direction":authored.direction,"fragments":[]}
+	if not Ports._port_schema(group): return failure("connector_invalid",id)
+	var tangent := Vector2(-normal.z,normal.x); var half := float(authored.width)*0.5
+	var pieces: Array = []
+	for boundary: Dictionary in boundaries:
+		if boundary.source_id != authored.surface_id or normal.dot(boundary.outward) < 1.0-EPS: continue
+		var parameters: Array[float] = []; var collinear := true
+		for point: Vector3 in [boundary.a,boundary.b]:
+			var dx := float(point.x)-float(position.x); var dz := float(point.z)-float(position.z)
+			if absf(dx*float(normal.x)+dz*float(normal.z)) > EPS+Kernel.horizontal_roundoff(normal.x,normal.z,point)+Kernel.horizontal_roundoff(normal.x,normal.z,position): collinear = false; break
+			parameters.append(dx*float(tangent.x)+dz*float(tangent.y))
+		if not collinear: continue
+		var lo := maxf(-half,minf(parameters[0],parameters[1])); var hi := minf(half,maxf(parameters[0],parameters[1]))
+		if hi <= lo: continue
+		if hi-lo <= EPS: return failure("geometry_precision_limit",id)
+		pieces.append({"boundary":boundary,"t0":lo,"t1":hi})
+	pieces.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.t0 < b.t0 if a.t0 != b.t0 else a.boundary.span_id < b.boundary.span_id)
+	if pieces.is_empty(): return failure("connector_invalid",id)
+	var endpoints: Array = []; var provenance: Array = []; var cursor := -half
+	for piece: Dictionary in pieces:
+		if piece.t0 < cursor: return failure("connector_ambiguous",id)
+		if piece.t0 != cursor: return failure("geometry_precision_limit" if absf(piece.t0-cursor) <= EPS else "connector_coverage",id)
+		var boundary: Dictionary = piece.boundary; var cell := _cell(cells,boundary.surface_id)
+		var connector_id: String = group.connector_id if pieces.size() == 1 else str(group.connector_id)+"_f_"+Canonical.digest([boundary.span_id,piece.t0,piece.t1]).substr(0,20)
+		var center := Kernel.support_y(cell,Ports._horizontal(group,(float(piece.t0)+float(piece.t1))*0.5))
+		var endpoint := {"connector_id":connector_id,"surface_id":cell.surface_id,"position":center,"outward":normal,"width":float(piece.t1)-float(piece.t0),"headroom":minf(authored.headroom,cell.headroom),"kind":authored.kind,"tags":tags.duplicate(),"direction":authored.direction}
+		if endpoint.headroom < PROFILE.height or not Kernel.connector_valid(endpoint,cell): return failure("connector_invalid",id)
+		endpoints.append(endpoint); group.fragments.append({"connector_id":connector_id,"t0":piece.t0,"t1":piece.t1})
+		provenance.append({"connector_id":connector_id,"span_id":boundary.span_id,"t0":piece.t0,"t1":piece.t1}); cursor = piece.t1
+	if cursor != half: return failure("geometry_precision_limit" if absf(cursor-half) <= EPS else "connector_coverage",id)
+	var checked := Ports.validate_port_group(group,{"connectors":endpoints,"surfaces":cells})
+	if not checked.ok: return failure(checked.code,id)
+	var authored_port := group.duplicate(true); authored_port.connector_id = id; authored_port["port_id"] = group.connector_id; authored_port["surface_id"] = authored.surface_id; authored_port.fragments = provenance
+	return {"ok":true,"group":group,"authored_port":authored_port,"endpoints":endpoints}
 
 static func _area(vertices: Array) -> float:
 	var total := 0.0
@@ -293,13 +350,67 @@ static func _opening_fits(endpoint: Dictionary, boundary: Dictionary) -> bool:
 	return Geometry2D.get_closest_point_to_segment(p+Vector2(tangent.x,tangent.z),a,b).distance_to(p+Vector2(tangent.x,tangent.z)) < EPS and Geometry2D.get_closest_point_to_segment(p-Vector2(tangent.x,tangent.z),a,b).distance_to(p-Vector2(tangent.x,tangent.z)) < EPS
 
 static func validate_package(package: Dictionary) -> bool:
-	if package.get("compiler_revision") != REVISION or package.get("format_version") != 3 or not package.has("package_hash"): return false
+	if package.get("compiler_revision") != REVISION or package.get("format_version") != 4 or not package.has("package_hash"): return false
 	# Existing v2 producers may store textual keys as StringName via dot assignment.
 	# Keep the same bounded passive-value check used by the source preflight.
 	if not _valid_authoring_value(package) or (package.has("objects") and not Objects.validate_records(package.objects)): return false
-	if not package.get("part") is Dictionary or not WorldGeometry._stage_prisms_valid({"surfaces":package.part.get("surfaces",[]),"solid_prisms":package.part.get("solid_prisms",[])}): return false
+	if package.get("profile") != PROFILE or not package.get("part") is Dictionary or not Ports.validate_groups(package.part).ok: return false
+	if not WorldGeometry._stage_prisms_valid({"surfaces":package.part.surfaces,"solid_prisms":package.part.get("solid_prisms",[])}): return false
+	if not _ports_metadata_valid(package): return false
 	var content := package.duplicate(true); content.erase("package_hash")
 	return Canonical.digest(content) == package.package_hash and Objects.validate_dependencies(package.get("dependencies",[]),Materials.dependencies())
+
+static func _ports_metadata_valid(package: Dictionary) -> bool:
+	for field: String in ["authored_ports","boundaries","adjacency","visuals"]:
+		if not package.get(field) is Array: return false
+	var part: Dictionary = package.part; var groups := Ports.validate_groups(part)
+	if not groups.ok or package.authored_ports.size() != groups.ports.size(): return false
+	var cells := {}; var endpoints := {}; var origins := {}; var spans := {}; var openings := {}; var authored_ids := {}; var group_ids := {}
+	for cell: Dictionary in part.surfaces: cells[cell.surface_id] = cell
+	for endpoint: Dictionary in part.connectors:
+		if not Ports._physical(endpoint,part.surfaces).ok: return false
+		endpoints[endpoint.connector_id] = endpoint
+	for visual: Variant in package.visuals:
+		if not visual is Dictionary or not visual.get("surface_id") is String or not cells.has(visual.surface_id) or origins.has(visual.surface_id) or not visual.get("source_id") is String or visual.get("vertices") != cells[visual.surface_id].vertices: return false
+		origins[visual.surface_id] = visual.source_id
+	if origins.size() != cells.size(): return false
+	for boundary: Variant in package.boundaries:
+		if not boundary is Dictionary or not Ports._shape(boundary,["span_id","surface_id","source_id","a","b","outward","kind","openings"]): return false
+		if not Ports._text(boundary.span_id) or spans.has(boundary.span_id) or not boundary.surface_id is String or not cells.has(boundary.surface_id) or boundary.source_id != origins[boundary.surface_id] or not boundary.openings is Array or boundary.kind != ("support_edge" if boundary.openings.is_empty() else "opening"): return false
+		for point: Variant in [boundary.a,boundary.b,boundary.outward]:
+			if not point is Vector3 or not point.is_finite(): return false
+		var cell: Dictionary = cells[boundary.surface_id]
+		var width := Vector2(boundary.b.x-boundary.a.x,boundary.b.z-boundary.a.z).length()
+		if width <= EPS or not Kernel.contains(cell,boundary.a) or not Kernel.contains(cell,boundary.b): return false
+		var edge_port := {"connector_id":boundary.span_id,"surface_id":boundary.surface_id,"position":Kernel.support_y(cell,(boundary.a+boundary.b)*0.5),"outward":boundary.outward,"width":width,"headroom":cell.headroom,"kind":"walk","tags":["boundary"],"direction":"both"}
+		if not Ports._physical(edge_port,part.surfaces).ok: return false
+		spans[boundary.span_id] = boundary
+		for id: Variant in boundary.openings:
+			if not id is String or openings.has(id) or not groups.members.has(id) or not endpoints.has(id) or endpoints[id].surface_id != boundary.surface_id or not _opening_fits(endpoints[id],boundary): return false
+			openings[id] = boundary.span_id
+	if openings.size() != groups.members.size(): return false
+	for authored: Variant in package.authored_ports:
+		if not authored is Dictionary or not Ports._shape(authored,["connector_id","port_id","surface_id","position","outward","width","headroom","kind","tags","direction","fragments"]) or not Ports._port_schema(authored): return false
+		if authored_ids.has(authored.connector_id) or not authored.surface_id is String or not authored.port_id is String or group_ids.has(authored.port_id) or not groups.ports.has(authored.port_id) or not authored.fragments is Array: return false
+		authored_ids[authored.connector_id] = true; group_ids[authored.port_id] = true
+		for fragment: Variant in authored.fragments:
+			if not fragment is Dictionary or not Ports._shape(fragment,["connector_id","span_id","t0","t1"]) or not fragment.get("connector_id") is String or not fragment.get("span_id") is String or not openings.has(fragment.connector_id) or openings[fragment.connector_id] != fragment.span_id: return false
+		var position: Vector3 = authored.position; var outward: Vector3 = authored.outward
+		var raw := {"connector_id":authored.connector_id,"surface_id":authored.surface_id,"position_xyz":[position.x,position.y,position.z],"normal_xyz":[outward.x,outward.y,outward.z],"width":authored.width,"headroom":authored.headroom,"kind":authored.kind,"tags":authored.tags,"direction":authored.direction}
+		var rebuilt := _compile_authored_port(raw,package.boundaries,part.surfaces)
+		if not rebuilt.ok or Canonical.encode(rebuilt.authored_port) != Canonical.encode(authored) or Canonical.encode(rebuilt.group) != Canonical.encode(groups.ports[authored.port_id].port): return false
+		for endpoint: Dictionary in rebuilt.endpoints:
+			if Canonical.encode(endpoint) != Canonical.encode(endpoints[endpoint.connector_id]): return false
+	var internal := {}; var link_ids := {}
+	for link: Variant in package.adjacency:
+		if not link is Dictionary or not Ports._shape(link,["connection_id","a_connector","b_connector","forward","backward"]) or not Ports._text(link.connection_id) or link_ids.has(link.connection_id) or not link.forward is bool or not link.backward is bool or not link.forward or not link.backward: return false
+		link_ids[link.connection_id] = true
+		for id: Variant in [link.a_connector,link.b_connector]:
+			if not id is String or not endpoints.has(id) or internal.has(id) or groups.members.has(id): return false
+			internal[id] = true
+		var a: Dictionary = endpoints[link.a_connector]; var b: Dictionary = endpoints[link.b_connector]
+		if a.position != b.position or Vector3(a.outward).dot(b.outward) > -1.0+EPS or a.width != b.width: return false
+	return internal.size()+groups.members.size() == endpoints.size()
 
 static func preview_manifest(package: Dictionary) -> Manifest:
 	if not validate_package(package): return null

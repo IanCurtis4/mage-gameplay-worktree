@@ -1,0 +1,26 @@
+{
+  "kind": "differential diagnostic; fixture compiler reachability proof bypassed in both variants; not publication or gameplay certification",
+  "driver": "res://.godot/f9_port_cost.gd",
+  "driver_sha256": "42445c39cbadcb25e6929d33d6693aa304f74bbda4b43d72255823083dd62290",
+  "helper_sha256": {
+    "scripts/core/expedition/generation/fixture_geometry.gd": "c2a17c939de05e1ffb8652b27314741b0b410e6bb4ebfe59a3beb7e353e55a3c",
+    "scripts/core/expedition/spatial/world_solid_prism.gd": "3b8c9cf84aa6978f556781b14c6d3d728f5ef7fe8d09683c7054acf58c2392a4",
+    "scripts/core/expedition/spatial/world_support_patch.gd": "afa4da70fda518336df22cb2b7b9c37db72c5f004048225242fc2ff5291f0c7c"
+  },
+  "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "compiler_original_sha256": "28222b0beef0198b9a9459dff0f1849381d5ded7518df5555d8906ba5be1d3dd",
+  "compiler_diagnostic_sha256": "a5d44072ef87db71c5fb2c8824e98fd46bc34a4448f571387b80a65f68a7e0ae",
+  "restored_world_matches_primary": true,
+  "restored_compiler": true,
+  "records": [
+    {
+      "variant": "lazy",
+      "world_sha256": "e7735e4e7da35aedc623f55e365a3728172954a8bd08df337d6d652ba78513a0",
+      "exit_code": 1,
+      "timed_out": true,
+      "errors": false,
+      "elapsed_seconds": 300.0699425999992,
+      "result": null
+    }
+  ]
+}

@@ -5,7 +5,7 @@ const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometr
 const SupportPatch = preload("res://scripts/core/expedition/spatial/world_support_patch.gd")
 const EPS := 0.00001
 const FIELDS := ["volume_id","top","support_surface_id"]
-const GRID_UNITS := 128.0
+const GRID_UNITS := 32.0
 const MAX_ITEM_BUCKETS := 256
 
 static func valid(data: Variant) -> bool:
@@ -179,8 +179,11 @@ static func spatial_candidates(items: Array, index: Dictionary, from: Vector3, t
 				for id: int in index.buckets.get(Vector2i(x,z),[]): selected[id] = true
 	var result: Array = []; var ids: Array = selected.keys(); ids.sort()
 	var low := minf(from.y,to.y)-EPS; var high := maxf(from.y,to.y)+height+EPS
+	var min_x := minf(from.x,to.x)-radius-EPS; var max_x := maxf(from.x,to.x)+radius+EPS
+	var min_z := minf(from.z,to.z)-radius-EPS; var max_z := maxf(from.z,to.z)+radius+EPS
 	for id: int in ids:
 		var box: AABB = items[id].bounds
 		if float(box.end.y) < low or float(box.position.y) > high: continue
+		if float(box.end.x) < min_x or float(box.position.x) > max_x or float(box.end.z) < min_z or float(box.position.z) > max_z: continue
 		result.append(items[id])
 	return result

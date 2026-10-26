@@ -69,7 +69,14 @@ static func valid_cell(cell: Dictionary) -> bool:
 static func contains(cell: Dictionary, point: Vector3, radius: float = 0.0) -> bool:
 	if not point.is_finite() or not is_finite(radius) or radius < 0: return false
 	var vertices: Array = cell["vertices"]
-	if absf(plane_distance(vertices,point)) > EPSILON+_support_roundoff(vertices,point): return false
+	var normal := _plane(vertices); var origin: Vector3 = vertices[0]
+	var normal_length := sqrt(normal[0]*normal[0]+normal[1]*normal[1]+normal[2]*normal[2])
+	if normal_length == 0: return false
+	# Reuse the exact coordinate budgets and plane within this query.
+	var round_x := _half_ulp(point.x); var round_y := _half_ulp(point.y); var round_z := _half_ulp(point.z)
+	var distance := (normal[0]*(float(point.x)-float(origin.x))+normal[1]*(float(point.y)-float(origin.y))+normal[2]*(float(point.z)-float(origin.z)))/normal_length
+	var roundoff := (absf(normal[0])*round_x+absf(normal[1])*round_y+absf(normal[2])*round_z)/normal_length
+	if absf(distance) > EPSILON+roundoff: return false
 	var side := 0.0
 	for index: int in range(vertices.size()):
 		var a: Vector3 = vertices[index]
@@ -78,7 +85,7 @@ static func contains(cell: Dictionary, point: Vector3, radius: float = 0.0) -> b
 		var length := sqrt(ex*ex+ez*ez)
 		if length == 0: return false
 		var signed := (ex*(float(point.z)-float(a.z))-ez*(float(point.x)-float(a.x)))/length
-		var tolerance := EPSILON+horizontal_roundoff(-ez/length,ex/length,point)
+		var tolerance := EPSILON+(absf(-ez/length)*round_x+absf(ex/length)*round_z)
 		if absf(signed) > tolerance and side == 0.0: side = signf(signed)
 		# Roundoff applies to the stored anchor, never to the body radius/clearance.
 		if side*signed < -tolerance or absf(signed)+EPSILON < radius: return false

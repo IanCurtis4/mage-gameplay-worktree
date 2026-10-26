@@ -11,6 +11,7 @@ extends Resource
 @export var blockers: Array[AABB] = []
 @export var solid_prisms: Array[Dictionary] = []
 @export var internal_connections: Array[Dictionary] = []
+@export var connector_groups: Array[Dictionary] = []
 
 func to_data() -> Dictionary:
 	var surface_data: Array[Dictionary] = []
@@ -40,10 +41,22 @@ func to_data() -> Dictionary:
 		"surfaces": surface_data, "connectors": connector_data, "sockets": socket_data,
 		"solid_volumes": solids, "blockers": obstacles}
 
-	for extension: String in ["solid_prisms","internal_connections"]:
+	for extension: String in ["solid_prisms","internal_connections","connector_groups"]:
 		var values: Array = get(extension)
 		if values.is_empty(): continue
 		var copied := values.duplicate(true)
+		if extension == "connector_groups":
+			for group: Dictionary in copied:
+				if group.get("fragments") is Array: group.fragments.sort_custom(_fragment_before)
 		copied.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return ExpeditionCanonical.encode(a) < ExpeditionCanonical.encode(b))
 		result[extension] = copied
 	return result
+
+static func _fragment_before(a: Variant, b: Variant) -> bool:
+	var valid_a: bool = a is Dictionary and (a.get("t0") is int or a.get("t0") is float) and (a.get("t1") is int or a.get("t1") is float) and is_finite(float(a.t0)) and is_finite(float(a.t1))
+	var valid_b: bool = b is Dictionary and (b.get("t0") is int or b.get("t0") is float) and (b.get("t1") is int or b.get("t1") is float) and is_finite(float(b.t0)) and is_finite(float(b.t1))
+	if valid_a != valid_b: return valid_a
+	if valid_a:
+		if a.t0 != b.t0: return a.t0 < b.t0
+		if a.t1 != b.t1: return a.t1 < b.t1
+	return ExpeditionCanonical.encode(a) < ExpeditionCanonical.encode(b)

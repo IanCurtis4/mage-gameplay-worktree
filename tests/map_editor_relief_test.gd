@@ -94,6 +94,21 @@ func spatial_cases() -> void:
 	for item: Dictionary in items:
 		if not Prism.sweep(Vector3(0,25,0),Vector3(0,25,0),item,1e20,12).is_empty() and item not in huge: huge_matches = false
 	check("extreme_finite_radius_uses_safe_fallback",huge_matches and not huge.is_empty())
+	var small := fixture()
+	for k: int in small.top.size(): small.top[k] *= 0.1
+	small.bottom_y = -1.0
+	var dense: Array = []
+	for z: int in 20:
+		for x: int in 20: dense.append(Prism.prepare(Prism.transformed(small,0,Vector3(x*14,0,z*14),"dense_%d_%d/"%[x,z])))
+	var dense_index := Prism.spatial_index(dense); var dense_matches := true
+	for sample: int in 40:
+		var from := Vector3(rng.randf_range(-10,280),rng.randf_range(0,8),rng.randf_range(-10,280))
+		var to := Vector3(rng.randf_range(-10,280),rng.randf_range(0,8),rng.randf_range(-10,280))
+		var selected := Prism.spatial_candidates(dense,dense_index,from,to,2,3)
+		for item: Dictionary in dense:
+			if not Prism.sweep(from,to,item,2,3).is_empty() and item not in selected: dense_matches = false
+	check("dense_index_keeps_all_full_scan_hits",dense_matches)
+	check("dense_point_query_prunes_unrelated_masses",Prism.spatial_candidates(dense,dense_index,Vector3(70,2,70),Vector3(70,2,70),2,3).size() < 10)
 func world_cases() -> void:
 	var source := Piece.empty("relief_world")
 	source.layers = [{"layer_id":"floor","name":"Encosta","origin_xz":[0,0],"sample_spacing":100,"columns":2,"rows":2,"heights":[0,50,0,50],"material_masks":{},"locked":false,"protected_regions":[]}]

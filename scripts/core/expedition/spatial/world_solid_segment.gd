@@ -27,9 +27,15 @@ func profile() -> Dictionary: return _profile.duplicate(true)
 func snapshot() -> WorldSolidSegment:
 	if not _valid: return null
 	var result := WorldSolidSegment.new()
-	result.configure(anchor(),_normal,_length,_width,_height,_profile)
+	# Snapshot copies the captured geometry exactly; normalizing again can move
+	# a diagonal unit vector by one f32 ULP on each successive copy.
+	result._anchor = anchor(); result._normal = _normal; result._axis = _axis
+	result._length = _length; result._width = _width; result._height = _height
+	result._profile = _profile.duplicate(true); result._valid = _valid
 	result._support_region = _support_region.duplicate(true)
 	return result
+func geometry_record() -> Dictionary:
+	return {"anchor":anchor().to_data() if _valid else {},"normal":_normal,"axis":_axis,"half_length":_length,"half_width":_width,"height":_height,"profile":_profile.duplicate(true),"valid":_valid,"support_region":_support_region.duplicate(true)}
 func bind_support_region(region: Dictionary) -> void: _support_region = region.duplicate(true)
 func support_region() -> Dictionary: return _support_region.duplicate(true)
 func ends() -> Array[Vector3]:

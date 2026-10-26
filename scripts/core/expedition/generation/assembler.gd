@@ -1,7 +1,8 @@
 class_name ExpeditionAssembler
 extends RefCounted
-const REVISION := "f0_convex_cells_v1"
+const REVISION := "f0_convex_parts_v2"
 const Geometry = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
+const Ports = preload("res://scripts/core/expedition/generation/connector_partition.gd")
 
 static func result(input: ExpeditionGenerationInput, code: StringName, data: Dictionary) -> Dictionary:
 	return {"ok": code == &"", "error_code": code, "request_id": input.request_id if input != null else "", "revision": 1, "data": data}
@@ -101,26 +102,31 @@ static func place(task: Dictionary, definition: Dictionary, rotation: int, place
 	if not task["biome"] in definition["biome_tags"]: return failed(&"invalid_recipe","biome: "+definition["part_id"])
 	var offset := Vector3.ZERO
 	var connection := {}
+	var parent_port := {}
 	if not node["parent"].is_empty():
 		var parent := {}
 		for placement: Dictionary in placements:
 			if placement["stage_id"] == stage and placement["instance_id"] == node["parent"]: parent = placement
-		var a := lookup(parent["connectors"],"local_id",node["parent_connector"])
-		var b := lookup(definition["connectors"],"connector_id",node["connector"])
-		if a.is_empty() or b.is_empty(): return failed(&"incompatible_connector","missing endpoint: "+instance_id)
+		if parent.is_empty(): return failed(&"incompatible_connector","missing parent: "+instance_id)
+		var parent_id := qualified(stage,node.parent,"connector",node.parent_connector)
+		parent_port = Ports.resolve_port(parent,parent_id)
+		var child_port := Ports.resolve_port(definition,node.connector)
+		if not parent_port.ok or not child_port.ok: return failed(&"incompatible_connector","invalid endpoint: "+instance_id)
 		for placement: Dictionary in placements:
-			if not placement["connection"].is_empty() and a["connector_id"] in [placement["connection"]["a_connector"],placement["connection"]["b_connector"]]: return failed(&"incompatible_connector","endpoint already used: "+a["connector_id"])
-		var forward: bool = a["direction"] in ["both","out"] and b["direction"] in ["both","in"]
-		var backward: bool = a["direction"] in ["both","in"] and b["direction"] in ["both","out"]
-		if not forward and not backward: return failed(&"incompatible_connector","directions: "+instance_id)
-		if a["kind"] != b["kind"] or a["tags"] != b["tags"] or not a["kind"] in traversal["connector_kinds"]: return failed(&"incompatible_connector","type/tags: "+instance_id)
-		if minf(a["width"],b["width"]) + Geometry.EPSILON < 2.0*traversal["radius"] or minf(a["headroom"],b["headroom"]) + Geometry.EPSILON < traversal["height"]: return failed(&"incompatible_connector","clearance: "+instance_id)
-		if Vector3(a["outward"]).distance_to(-Geometry.rotate(b["outward"],rotation)) > Geometry.EPSILON: return failed(&"incompatible_connector","orientation: "+instance_id)
+			var attached: Dictionary = placement.get("attachment",{})
+			if parent_id in [attached.get("a_port"),attached.get("b_port")]: return failed(&"incompatible_connector","endpoint already used: "+parent_id)
+			if not placement["connection"].is_empty() and parent_id in [placement["connection"]["a_connector"],placement["connection"]["b_connector"]]: return failed(&"incompatible_connector","endpoint already used: "+parent_id)
+		var a: Dictionary = parent_port.port
+		var b: Dictionary = child_port.port
 		offset = Vector3(a["position"]) - Geometry.rotate(b["position"],rotation)
 		# Horizontal attachment cannot repair a mismatched authored level silently.
 		if absf(offset.y) > Geometry.EPSILON: return failed(&"incompatible_connector","level: "+instance_id)
 		offset.y = 0.0
-		connection = {"connection_id": stage+"/"+instance_id,"a_connector": a["connector_id"],"b_connector": qualified(stage,instance_id,"connector",b["connector_id"]),"forward": forward,"backward": backward}
+		var transformed := b.duplicate(true)
+		transformed.position = Geometry.rotate(b.position,rotation)+offset
+		transformed.outward = Geometry.rotate(b.outward,rotation)
+		var matched := Ports.compatibility(a,transformed,traversal,not parent_port.grouped and not child_port.grouped)
+		if not matched.ok: return failed(&"incompatible_connector",str(matched.code)+": "+instance_id)
 	var instance := {"stage_id": stage,"instance_id": instance_id,"part_id": definition["part_id"],"part_revision": definition["revision"],"part_hash": ExpeditionCanonical.digest(definition),"rotation_quarters": rotation,"translation": offset,"surfaces": [],"connectors": [],"sockets": [],"solid_volumes": [],"blockers": [],"connection": connection}
 	for original: Dictionary in definition["surfaces"]:
 		var cell := original.duplicate(true)
@@ -158,6 +164,19 @@ static func place(task: Dictionary, definition: Dictionary, rotation: int, place
 			link.a_connector = qualified(stage,instance_id,"connector",original.a_connector)
 			link.b_connector = qualified(stage,instance_id,"connector",original.b_connector)
 			instance.internal_connections.append(link)
+	if not definition.get("connector_groups",[]).is_empty():
+		instance["connector_groups"] = []
+		for group: Dictionary in definition.connector_groups:
+			instance.connector_groups.append(Ports.transform_group(group,rotation,offset,qualified(stage,instance_id,"connector","")))
+	if not parent_port.is_empty():
+		var child_port := Ports.resolve_port(instance,qualified(stage,instance_id,"connector",node.connector))
+		var partition := Ports.partition_link(parent_port,child_port,stage+"/"+instance_id,traversal,true)
+		if not partition.ok: return failed(&"incompatible_connector",str(partition.code)+": "+instance_id)
+		if not parent_port.grouped and not child_port.grouped:
+			instance.connection = partition.connections[0]
+		else:
+			instance["external_connections"] = partition.connections
+			instance["attachment"] = {"a_port":parent_port.port.connector_id,"b_port":child_port.port.connector_id,"consumed":partition.consumed,"endpoints":partition.endpoints,"fragments":partition.provenance}
 	for other: Dictionary in placements:
 		if other["stage_id"] != stage: continue
 		for cell: Dictionary in instance["surfaces"]:
@@ -172,9 +191,17 @@ static func finalize(snapshot: Dictionary, placements: Array[Dictionary]) -> Dic
 	var stages: Array[Dictionary] = []
 	for recipe: Dictionary in snapshot["stages"]:
 		var stage := {"stage_id": recipe["stage_id"],"biome": recipe["biome"],"entrance": recipe["stage_id"]+"/"+recipe["entrance"].replace("/","/socket/"),"part_instances": [],"surfaces": [],"connectors": [],"sockets": [],"connections": [],"volumes": []}
+		var consumed := {}; var replacements: Array = []
 		for instance: Dictionary in placements:
 			if instance["stage_id"] != stage["stage_id"]: continue
 			stage["part_instances"].append({"instance_id": instance["instance_id"],"part_id": instance["part_id"],"part_revision": instance["part_revision"],"part_hash": instance["part_hash"],"rotation_quarters": instance["rotation_quarters"],"translation": instance["translation"]})
+			if instance.has("attachment"):
+				var attached: Dictionary = instance.attachment
+				stage.part_instances[-1]["attachment"] = {"a_port":attached.a_port,"b_port":attached.b_port,"fragments":attached.fragments.duplicate(true)}
+				for id: String in attached.consumed:
+					if consumed.has(id): return failed(&"incompatible_connector","endpoint already used: "+id)
+					consumed[id] = true
+				replacements.append_array(attached.endpoints)
 			for field: String in ["surfaces","connectors","sockets"]: stage[field].append_array(instance[field])
 			stage["volumes"].append_array(instance["solid_volumes"])
 			stage["volumes"].append_array(instance["blockers"])
@@ -183,6 +210,12 @@ static func finalize(snapshot: Dictionary, placements: Array[Dictionary]) -> Dic
 				stage.solid_prisms.append_array(instance.solid_prisms)
 			stage.connections.append_array(instance.get("internal_connections",[]))
 			if not instance["connection"].is_empty(): stage["connections"].append(instance["connection"])
+			stage.connections.append_array(instance.get("external_connections",[]))
+		if not consumed.is_empty():
+			stage.connectors = stage.connectors.filter(func(port: Dictionary) -> bool: return not consumed.has(port.connector_id))
+			stage.connectors.append_array(replacements)
+			stage.connectors.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.connector_id < b.connector_id)
+			stage.connections.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.connection_id < b.connection_id)
 		var entrance := lookup(stage["sockets"],"socket_id",stage["entrance"])
 		if entrance.is_empty() or entrance["kind"] != "entrance": return failed(&"objective_unreachable","stage entrance: "+stage["stage_id"])
 		stages.append(stage)

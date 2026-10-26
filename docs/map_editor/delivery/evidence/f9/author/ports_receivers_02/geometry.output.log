@@ -1,0 +1,24 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_PORT_CHECK refined_group_valid true
+F9_PORT_CHECK single_group_valid true
+F9_PORT_CHECK logical_opening_resolves_eight_fragments true
+F9_PORT_CHECK physical_member_cannot_be_attached_separately true
+F9_PORT_CHECK single_endpoint_alias_resolves_group true
+F9_PORT_CHECK simple_link_preserves_physical_id true
+F9_PORT_CHECK one_to_eight_partition true
+F9_PORT_CHECK independent_interval_oracle true
+F9_PORT_CHECK whole_eighty_units_preserved true
+F9_PORT_CHECK physical_pairs_share_exact_position true
+F9_PORT_CHECK operator_preserves_inputs true
+F9_PORT_CHECK all_consumed_endpoints_have_remapping true
+F9_PORT_CHECK different_subdivisions_common_partition true
+F9_PORT_CHECK array_order_is_not_identity true
+F9_PORT_CHECK sloping_piecewise_edge_matches true
+F9_PORT_CHECK matching_gradient_changes_preserve_piecewise_height true
+SCRIPT ERROR: Parse Error: Cannot infer the type of "actual" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/map_authoring/composition/map_compiler.gd:308)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://tests/map_editor_port_fragments_test.gd:0)
+ERROR: Failed to load script "res://tests/map_editor_port_fragments_test.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

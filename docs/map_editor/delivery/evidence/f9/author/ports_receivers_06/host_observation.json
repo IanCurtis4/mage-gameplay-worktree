@@ -1,0 +1,9 @@
+{
+  "source": "read-only Get-Process sample; entire Ports suite process, not isolated MapCompiler allocation",
+  "peak_working_set_bytes": 551636992,
+  "process_id": 24640,
+  "observed_utc": "2026-10-26T13:07:10.4421288Z",
+  "limits": "Single sample of cumulative process peak during the timed-out 06 suite. Not a heap bound, steady-state benchmark, or isolated navigation memory measurement.",
+  "process_start": "2026-10-26T10:02:39.447837-03:00",
+  "cpu_seconds": 269.171875
+}

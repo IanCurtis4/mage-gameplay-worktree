@@ -1,0 +1,362 @@
+{
+  "kind": "differential diagnostic; fixture compiler reachability proof bypassed in both variants; not publication or gameplay certification",
+  "driver": "res://.godot/f9_port_small_cost.gd",
+  "driver_sha256": "530cba63305556d1a534e05d18c3a94cfb9dedd3fe4c82ad96eacdaa61b1f738",
+  "helper_sha256": {
+    "scripts/core/expedition/generation/fixture_geometry.gd": "c2a17c939de05e1ffb8652b27314741b0b410e6bb4ebfe59a3beb7e353e55a3c",
+    "scripts/core/expedition/spatial/world_solid_prism.gd": "3b8c9cf84aa6978f556781b14c6d3d728f5ef7fe8d09683c7054acf58c2392a4",
+    "scripts/core/expedition/spatial/world_support_patch.gd": "afa4da70fda518336df22cb2b7b9c37db72c5f004048225242fc2ff5291f0c7c"
+  },
+  "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "compiler_original_sha256": "28222b0beef0198b9a9459dff0f1849381d5ded7518df5555d8906ba5be1d3dd",
+  "compiler_diagnostic_sha256": "a5d44072ef87db71c5fb2c8824e98fd46bc34a4448f571387b80a65f68a7e0ae",
+  "restored_world_matches_primary": true,
+  "restored_compiler": true,
+  "records": [
+    {
+      "variant": "eager",
+      "canonical_world_sha256": "83b24b32a452aab7ed6956b6b369ebd846aa3857831b433d9166ccaf4e1b947c",
+      "world_sha256": "83b24b32a452aab7ed6956b6b369ebd846aa3857831b433d9166ccaf4e1b947c",
+      "exit_code": 0,
+      "timed_out": false,
+      "errors": false,
+      "elapsed_seconds": 7.264539999996487,
+      "result": {
+        "cases": [
+          {
+            "elapsed_ms": 7.636,
+            "result": {
+              "data": {
+                "connection_ids": [
+                  "a/join_25.0",
+                  "a/join_37.5",
+                  "a/join_50.0",
+                  "bridge/cut_034730f75e9f1eb3d807",
+                  "b/join_60.0"
+                ],
+                "cost": 158.113889694214,
+                "points": [
+                  {
+                    "position": "(25.0, 0.0, 25.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "a/cell_12.5"
+                  },
+                  {
+                    "position": "(25.0, 0.0, 25.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "a/cell_25.0"
+                  },
+                  {
+                    "position": "(62.5, 0.0, 37.5)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "a/cell_25.0"
+                  },
+                  {
+                    "position": "(62.5, 0.0, 37.5)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "a/cell_37.5"
+                  },
+                  {
+                    "position": "(100.0, 0.0, 50.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "a/cell_37.5"
+                  },
+                  {
+                    "position": "(100.0, 0.0, 50.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "a/cell_50.0"
+                  },
+                  {
+                    "position": "(100.0, 0.0, 50.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_40.0"
+                  },
+                  {
+                    "position": "(130.0, 0.0, 60.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_40.0"
+                  },
+                  {
+                    "position": "(130.0, 0.0, 60.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_60.0"
+                  },
+                  {
+                    "position": "(175.0, 0.0, 75.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_60.0"
+                  }
+                ]
+              },
+              "error_code": "",
+              "geometry_revision": 1,
+              "ok": true
+            }
+          },
+          {
+            "elapsed_ms": 733.641,
+            "result": {
+              "data": {
+                "connection_ids": [
+                  "bridge/cut_71b624f5e5ed61490ee2",
+                  "b/join_40.0",
+                  "b/join_60.0"
+                ],
+                "cost": 187.54084777832,
+                "points": [
+                  {
+                    "position": "(25.0, 0.0, 25.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "a/cell_12.5"
+                  },
+                  {
+                    "position": "(92.0, 0.0, 25.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "a/cell_12.5"
+                  },
+                  {
+                    "position": "(100.0, 0.0, 25.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "a/cell_12.5"
+                  },
+                  {
+                    "position": "(100.0, 0.0, 25.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_20.0"
+                  },
+                  {
+                    "position": "(108.0, 0.0, 25.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_20.0"
+                  },
+                  {
+                    "position": "(150.0, 0.0, 32.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_20.0"
+                  },
+                  {
+                    "position": "(150.0, 0.0, 40.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_20.0"
+                  },
+                  {
+                    "position": "(150.0, 0.0, 40.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_40.0"
+                  },
+                  {
+                    "position": "(150.0, 0.0, 48.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_40.0"
+                  },
+                  {
+                    "position": "(150.0, 0.0, 52.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_40.0"
+                  },
+                  {
+                    "position": "(150.0, 0.0, 60.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_40.0"
+                  },
+                  {
+                    "position": "(150.0, 0.0, 60.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_60.0"
+                  },
+                  {
+                    "position": "(150.0, 0.0, 68.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_60.0"
+                  },
+                  {
+                    "position": "(175.0, 0.0, 75.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_60.0"
+                  }
+                ]
+              },
+              "error_code": "",
+              "geometry_revision": 2,
+              "ok": true
+            }
+          }
+        ],
+        "ok": true
+      }
+    },
+    {
+      "variant": "lazy",
+      "canonical_world_sha256": "7d9f1a85ed01e0ff1a0017d4315ec6838e1cbd862e1c412a9e20948e976d48da",
+      "world_sha256": "7d9f1a85ed01e0ff1a0017d4315ec6838e1cbd862e1c412a9e20948e976d48da",
+      "exit_code": 0,
+      "timed_out": false,
+      "errors": false,
+      "elapsed_seconds": 6.761382000004232,
+      "result": {
+        "cases": [
+          {
+            "elapsed_ms": 5.517,
+            "result": {
+              "data": {
+                "connection_ids": [
+                  "a/join_25.0",
+                  "a/join_37.5",
+                  "a/join_50.0",
+                  "bridge/cut_034730f75e9f1eb3d807",
+                  "b/join_60.0"
+                ],
+                "cost": 158.113889694214,
+                "points": [
+                  {
+                    "position": "(25.0, 0.0, 25.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "a/cell_12.5"
+                  },
+                  {
+                    "position": "(25.0, 0.0, 25.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "a/cell_25.0"
+                  },
+                  {
+                    "position": "(62.5, 0.0, 37.5)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "a/cell_25.0"
+                  },
+                  {
+                    "position": "(62.5, 0.0, 37.5)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "a/cell_37.5"
+                  },
+                  {
+                    "position": "(100.0, 0.0, 50.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "a/cell_37.5"
+                  },
+                  {
+                    "position": "(100.0, 0.0, 50.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "a/cell_50.0"
+                  },
+                  {
+                    "position": "(100.0, 0.0, 50.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_40.0"
+                  },
+                  {
+                    "position": "(130.0, 0.0, 60.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_40.0"
+                  },
+                  {
+                    "position": "(130.0, 0.0, 60.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_60.0"
+                  },
+                  {
+                    "position": "(175.0, 0.0, 75.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_60.0"
+                  }
+                ]
+              },
+              "error_code": "",
+              "geometry_revision": 1,
+              "ok": true
+            }
+          },
+          {
+            "elapsed_ms": 656.714,
+            "result": {
+              "data": {
+                "connection_ids": [
+                  "bridge/cut_71b624f5e5ed61490ee2",
+                  "b/join_40.0",
+                  "b/join_60.0"
+                ],
+                "cost": 187.54084777832,
+                "points": [
+                  {
+                    "position": "(25.0, 0.0, 25.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "a/cell_12.5"
+                  },
+                  {
+                    "position": "(92.0, 0.0, 25.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "a/cell_12.5"
+                  },
+                  {
+                    "position": "(100.0, 0.0, 25.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "a/cell_12.5"
+                  },
+                  {
+                    "position": "(100.0, 0.0, 25.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_20.0"
+                  },
+                  {
+                    "position": "(108.0, 0.0, 25.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_20.0"
+                  },
+                  {
+                    "position": "(150.0, 0.0, 32.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_20.0"
+                  },
+                  {
+                    "position": "(150.0, 0.0, 40.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_20.0"
+                  },
+                  {
+                    "position": "(150.0, 0.0, 40.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_40.0"
+                  },
+                  {
+                    "position": "(150.0, 0.0, 48.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_40.0"
+                  },
+                  {
+                    "position": "(150.0, 0.0, 52.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_40.0"
+                  },
+                  {
+                    "position": "(150.0, 0.0, 60.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_40.0"
+                  },
+                  {
+                    "position": "(150.0, 0.0, 60.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_60.0"
+                  },
+                  {
+                    "position": "(150.0, 0.0, 68.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_60.0"
+                  },
+                  {
+                    "position": "(175.0, 0.0, 75.0)",
+                    "stage_id": "port_fixture",
+                    "surface_id": "b/cell_60.0"
+                  }
+                ]
+              },
+              "error_code": "",
+              "geometry_revision": 2,
+              "ok": true
+            }
+          }
+        ],
+        "ok": true
+      }
+    }
+  ],
+  "identical_query_results": true
+}

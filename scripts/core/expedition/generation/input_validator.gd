@@ -1,5 +1,6 @@
 class_name ExpeditionInputValidator
 extends RefCounted
+const Ports = preload("res://scripts/core/expedition/generation/connector_partition.gd")
 
 static func identity(value: Variant) -> bool:
 	if not value is String or value.is_empty(): return false
@@ -74,11 +75,16 @@ static func validate(input: ExpeditionGenerationInput) -> Dictionary:
 			if not cells.has(connector["surface_id"]) or not identity(connector["kind"]) or not strings(connector["tags"]) or connector["width"] <= 0.0 or connector["headroom"] <= 0.0 or not connector["direction"] in ["both","in","out"]: return failure(&"invalid_recipe", "connector schema")
 			if not ExpeditionFixtureGeometry.connector_valid(connector,cells[connector["surface_id"]]): return failure(&"incompatible_connector", part.part_id+"/"+connector["connector_id"])
 		if not WorldGeometry._stage_prisms_valid({"surfaces":data.surfaces,"solid_prisms":data.get("solid_prisms",[])}): return failure(&"invalid_recipe","terrain mass")
+		var groups := Ports.validate_groups(data)
+		if not groups.ok: return failure(&"incompatible_connector","group "+str(groups.get("entity_id",""))+": "+str(groups.code))
+		for group: Dictionary in data.get("connector_groups",[]):
+			if not identity(group.connector_id): return failure(&"invalid_identity","connector group")
 		var connection_ids: Dictionary = {}
 		for link: Dictionary in data.get("internal_connections",[]):
 			if not shape(link,["connection_id","a_connector","b_connector","forward","backward"]) or not identity(link.connection_id) or connection_ids.has(link.connection_id): return failure(&"invalid_recipe","internal connection")
 			if not link.a_connector is String or not link.b_connector is String or link.a_connector == link.b_connector or not connectors.has(link.a_connector) or not connectors.has(link.b_connector) or not link.forward is bool or not link.backward is bool: return failure(&"invalid_recipe","internal endpoints")
 			connection_ids[link.connection_id] = true
+			if groups.members.has(link.a_connector) or groups.members.has(link.b_connector): return failure(&"invalid_recipe","authored group used internally")
 			var a := ExpeditionAssembler.lookup(data.connectors,"connector_id",link.a_connector); var b := ExpeditionAssembler.lookup(data.connectors,"connector_id",link.b_connector)
 			if Vector3(a.position).distance_to(b.position) > ExpeditionFixtureGeometry.EPSILON or Vector3(a.outward).dot(b.outward) > -1.0+ExpeditionFixtureGeometry.EPSILON: return failure(&"incompatible_connector","internal seam")
 		var sockets := {}
