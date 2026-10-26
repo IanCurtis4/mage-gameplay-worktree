@@ -46,6 +46,19 @@ Referências primárias conferidas26/10:
 e [CanvasItem/desenho](https://docs.godotengine.org/en/stable/classes/class_canvasitem.html).
 Pesquisa não constitui evidência de integração ou desempenho.
 
-Propriedade nominal será ampliada antes dos consumidores compartilhados de
-atores. Nenhuma alteração de ator durante um lote Luna congelado. Sem novo
+Propriedade nominal ampliada para GroundShadow/CombatActor, testes e extração
+pura da projeção compartilhada (GeometryView conserva suas assinaturas e
+delega a mesma fórmula, evitando ciclo de classes). Consumidores aguardam
+a liberação do lote congelado. Nenhuma alteração de ator durante um lote Luna congelado. Sem novo
 épico, plugin, campanha, mecânica de água, mudança de save ou publicação.
+
+
+Outras possibilidades levantadas pelo pedido de imersão: ondulação/brilho
+suave no shader da água; pequena oscilação de copa com base fixa; partículas
+ambientais limitadas; som por proximidade. São opções avaliadas, ainda sem
+ativação ou kit novo de áudio/arte. Água/folhagem visuais conservam a geometria
+canônica; som2D não infere a altura de andares. Comparar leitura/custo no renderer
+Compatibility utilizado antes de incorporar cada recurso ao produto.
+Referências: [partículas2D](https://docs.godotengine.org/en/stable/tutorials/2d/particle_systems_2d.html),
+[áudio posicional2D](https://docs.godotengine.org/en/stable/classes/class_audiostreamplayer2d.html)
+e [gradiente radial nativo](https://docs.godotengine.org/en/stable/classes/class_gradienttexture2d.html).

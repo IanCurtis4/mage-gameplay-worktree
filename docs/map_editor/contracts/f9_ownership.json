@@ -1949,6 +1949,24 @@
       "owner": "Sol F9",
       "previous_owner": "human shadow addendum26/10; sequential presentation scope only",
       "base_sha256": null
+    },
+    {
+      "path": "scripts/world/expedition_projection.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential F9 contact shadow presentation; pure projection authority extraction, signatures and formulas unchanged",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/world/expedition_projection.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "sequential F9 contact shadow presentation; pure projection authority extraction, signatures and formulas unchanged",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/world/expedition_geometry_view.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential F9 contact shadow presentation; pure projection authority extraction, signatures and formulas unchanged",
+      "base_sha256": "c304a658a76f3f3e04fe37b277f150f0a045701cf31bdb7ba50c705ca3018cce"
     }
   ],
   "read_only_shared": [
@@ -1959,7 +1977,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "border families complete candidate; Luna regression selection Borders93 Native32 Ports92 Cliff61 Relief58 Core639 Verify30, frozen inputs",
+    "state": "border families technically validated at d3c0e25854a2623020b6fb3f83b5b9483e2ea810; fixture released; contact shadow delta next",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
