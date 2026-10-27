@@ -4,6 +4,7 @@ extends VBoxContainer
 static var active_mode := "ux"
 static var hosts: Array[WeakRef] = []
 const ACTION_IDS := {
+	"Focar seleção":"focus_view_selection",
 	"Salvar predefinição":"save_brush_preset","Remover predefinição":"remove_brush_preset",
 	"Biblioteca…":"open_library",
 	"Recuperar preferências…":"recover_library_preferences",
@@ -144,17 +145,34 @@ func _invoke(id: String, agent: bool) -> Dictionary:
 	return {"ok":true,"action_id":id}
 
 func ax_invoke(id: String, parameters: Dictionary = {}) -> Dictionary:
-	if screen.has_method("authoring_commands") and screen.has_method("ax_command"):
-		for command: Dictionary in screen.authoring_commands():
+	var matches: Array[Node] = []
+	for provider: Node in _command_providers():
+		for command: Dictionary in provider.authoring_commands():
 			if command.id != id: continue
-			if active_mode != "ax": return {"ok":false,"code":"ax_mode_required"}
-			return screen.ax_command(id,parameters)
+			matches.append(provider)
+	if matches.size() > 1: return {"ok":false,"code":"action_ambiguous"}
+	if matches.size() == 1:
+		if active_mode != "ax": return {"ok":false,"code":"ax_mode_required"}
+		return matches[0].ax_command(id,parameters)
 	if not parameters.is_empty(): return {"ok":false,"code":"arguments_invalid"}
 	return _invoke(id,true)
+
+func _command_providers() -> Array[Node]:
+	var providers: Array[Node] = []
+	if screen.has_method("authoring_commands") and screen.has_method("ax_command"): providers.append(screen)
+	_collect_providers(screen,providers); return providers
+func _collect_providers(parent: Node, providers: Array[Node]) -> void:
+	for child: Node in parent.get_children():
+		if child == self or child is Window: continue
+		if child.get_node_or_null("AuthoringPresentation") != null: continue
+		if child.get_meta("authoring_command_provider",false) and child.has_method("authoring_commands") and child.has_method("ax_command"): providers.append(child)
+		_collect_providers(child,providers)
 
 func ax_snapshot() -> Dictionary:
 	var records: Array = []
 	for id: String in actions:
 		var action: Dictionary = actions[id]
 		records.append({"id":id,"label":action.text,"enabled":not action.control.disabled,"test_only":action.ax_only})
-	return {"mode":active_mode,"screen":screen_id,"source":get_source.call().duplicate(true),"actions":records,"commands":screen.authoring_commands() if screen.has_method("authoring_commands") else []}
+	var commands: Array = []
+	for provider: Node in _command_providers(): commands.append_array(provider.authoring_commands())
+	return {"mode":active_mode,"screen":screen_id,"source":get_source.call().duplicate(true),"actions":records,"commands":commands}

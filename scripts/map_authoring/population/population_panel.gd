@@ -109,6 +109,7 @@ func _ready() -> void:
 	_confirmation = ConfirmationDialog.new(); _confirmation.confirmed.connect(confirm_action); add_child(_confirmation)
 	session.changed.connect(refresh); _new_draft()
 	var timer := Timer.new(); timer.wait_time = 10; timer.autostart = true; timer.timeout.connect(preserve_draft); add_child(timer); refresh()
+	preload("res://scripts/map_authoring/preview/viewport_tools.gd").mount(canvas,"population")
 	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"population",func() -> Dictionary: return session.data,canvas)
 func _button(parent: Node, text: String, action: Callable) -> Button:
 	var button := Button.new(); button.text = text; button.pressed.connect(action); parent.add_child(button); return button
@@ -333,3 +334,4 @@ func focus_problem(index: int) -> void:
 	for i: int in _marker_ids.size():
 		if _marker_ids[i].id == id: markers.select(i)
 	status.text = diagnostic.message
+	canvas._viewport_tools.focus_entity(id)

@@ -6,6 +6,7 @@ const Canvas = preload("res://scripts/map_authoring/terrain/terrain_canvas.gd")
 const Preferences = preload("res://scripts/map_authoring/library/editor_preferences.gd")
 const Library = preload("res://scripts/map_authoring/library/library_model.gd")
 signal layer_selected(id: String)
+signal inspection_compiled(completed: Dictionary)
 var session: RefCounted
 var canvas: Control
 var selected_layer := ""
@@ -146,6 +147,7 @@ func _ready() -> void:
 		field.get_line_edit().focus_exited.connect(func() -> void: _display_brush_number.call_deferred(field))
 	_options_changed()
 	_refresh_presets()
+	preload("res://scripts/map_authoring/preview/viewport_tools.gd").mount(canvas,"terrain")
 	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"terrain",func() -> Dictionary: return session.document().to_data() if session != null else {},null,{"Pincel":[row,settings,preset_row],"Nova grade":[grid],"Ponte":[bridge],"Conexões":[connection_toggle,connections]})
 
 func _number(parent: Node, caption: String, low: float, high: float, value: float, step: float = 1.0) -> SpinBox:
@@ -407,6 +409,7 @@ func _process(_delta: float) -> void:
 		var messages := {"cancelled":"Compilação cancelada.","stale_source":"A fonte mudou; compile novamente.","geometry_overlap":"Há pisos sobrepostos na mesma altura.","insufficient_headroom":"A passagem sob a ponte não tem folga.","slope_too_steep":"A inclinação supera 45°; alongue a rampa.","terrain_limit_exceeded":"O relevo excede o orçamento de 1024 suportes gerados. Reduza a densidade de amostras ou simplifique o relevo.","connector_invalid":"Um conector não coincide com uma abertura válida."}
 		status.text = messages.get(completed.code,completed.diagnostics[0].message if not completed.diagnostics.is_empty() else "Não foi possível compilar; confira a fonte.")
 		if not completed.diagnostics.is_empty(): status.text += " Região: " + str(completed.diagnostics[0].entity_id)
+	inspection_compiled.emit(completed.duplicate(true))
 
 func _exit_tree() -> void:
 	if job != null: job.close(); job = null

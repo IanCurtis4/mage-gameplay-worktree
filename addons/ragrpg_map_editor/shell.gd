@@ -76,6 +76,7 @@ func _ready() -> void:
 	left.add_child(layers)
 	layers.item_selected.connect(func(index: int) -> void:
 		terrain.select_layer(session.document().to_data().layers[index].layer_id))
+	layers.item_activated.connect(func(index: int) -> void: terrain.canvas._viewport_tools.focus_entity("layer/"+str(session.document().to_data().layers[index].layer_id)))
 	var layer_actions := HBoxContainer.new()
 	left.add_child(layer_actions)
 	_button(layer_actions, "Adicionar", add_layer)
@@ -154,9 +155,12 @@ func open_objects() -> void:
 	if objects_window == null:
 		objects_window = Window.new(); objects_window.title = "RagRPG · Objetos e vegetação"; objects_window.size = Vector2i(1360,850)
 		var panel := preload("res://scripts/map_authoring/objects/object_panel.gd").new()
+		panel.prepare_inspection = terrain.bake
 		objects_window.add_child(panel)
 		objects_window.close_requested.connect(func() -> void: panel.discard_preview(); preserve_draft(); objects_window.hide())
 		add_child(objects_window); panel.bind(session)
+		terrain.inspection_compiled.connect(panel.accept_inspection)
+		if terrain.result.get("ok",false): panel.accept_inspection(terrain.result)
 	objects_window.popup_centered()
 	await get_tree().process_frame
 	if is_instance_valid(objects_window): objects_window.get_child(0).canvas.fit()
@@ -301,6 +305,7 @@ func _select_problem(index: int) -> void:
 	var data: Dictionary = session.document().to_data()
 	for i: int in data.layers.size():
 		if data.layers[i].layer_id == diagnostic.entity_id: layers.select(i)
+	terrain.canvas._viewport_tools.focus_entity(str(diagnostic.entity_id))
 
 func _draft_path() -> String:
 	return source_path if not source_path.is_empty() else recovery_root.path_join(session.document().to_data().document_id + ".json")

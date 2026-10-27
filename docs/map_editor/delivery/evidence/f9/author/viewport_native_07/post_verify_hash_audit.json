@@ -1,0 +1,81 @@
+{
+  "role": "Sol author; not Luna supervision",
+  "source_head": "431414e7a8d4cbeb65f3ed44187e09c4de6f17fa",
+  "source_is_head_plus_recorded_worktree_delta": true,
+  "completion": [
+    {
+      "path": "viewport_model_04",
+      "manifest_sha256": "47f436c991360f51db1397bb4333c4e0cd49420693e5d43f7b87e2e878c881b8",
+      "count": 20,
+      "ok": true,
+      "inputs": 1961,
+      "mismatches": []
+    },
+    {
+      "path": "viewport_native_07",
+      "manifest_sha256": "8a7413fee9ec22ce9344ca2bce69149eaa8fa4166d22dc807ac0337a2c12ddc0",
+      "count": 52,
+      "ok": true,
+      "inputs": 1961,
+      "mismatches": []
+    },
+    {
+      "path": "viewport_library_native_03",
+      "manifest_sha256": "ea75f8e10fa8f622f5c995819530f8a4a444839eff307c9caaa4a7067117b70e",
+      "count": 53,
+      "ok": true,
+      "inputs": 1961,
+      "mismatches": []
+    },
+    {
+      "path": "viewport_shadow_snapshot_01",
+      "manifest_sha256": "226f4c94bf0d72d90f0f920f20eadb8eebfa169af3f508c5f9019a5811f67f60",
+      "count": 28,
+      "ok": true,
+      "inputs": 1961,
+      "mismatches": []
+    }
+  ],
+  "official": [
+    {
+      "name": "combat_animation_test",
+      "exit_code": 0,
+      "timed_out": false,
+      "failed": false,
+      "output_sha256": "DF1D52002E18C5524FA60801186A018CDBC71C91E0248051E38F6565C154FB1E",
+      "output_hash_matches": true
+    },
+    {
+      "name": "e07_f6_snapshot_test",
+      "exit_code": 0,
+      "timed_out": false,
+      "failed": false,
+      "output_sha256": "2E091952F53115A75311BF2F4CFD595A18B2E8C64FA3076CBF6F844F4CC4EDC6",
+      "output_hash_matches": true
+    },
+    {
+      "name": "e07_f3_snapshot_test",
+      "exit_code": 0,
+      "timed_out": false,
+      "failed": false,
+      "output_sha256": "D4E8B993059D8E4C12243F8E997DE5174EA51AFF610CFF1B014F25D06AB2CF3D",
+      "output_hash_matches": true
+    },
+    {
+      "name": "e07_f1_pilot_scene_test",
+      "exit_code": 0,
+      "timed_out": false,
+      "failed": false,
+      "output_sha256": "CF7D445BDD00B411EA310B76C304EE3A7CFE50345C5F87FDC2258A7821810291",
+      "output_hash_matches": true
+    },
+    {
+      "name": "e07_f1_presentation_test",
+      "exit_code": 0,
+      "timed_out": false,
+      "failed": false,
+      "output_sha256": "BEBF132DC5433B71A8CF4626DF5B24C7E1A899B3C12AEFF5A2C81595456F7339",
+      "output_hash_matches": true
+    }
+  ]
+}

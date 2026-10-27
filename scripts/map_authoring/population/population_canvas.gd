@@ -4,7 +4,8 @@ const Population = preload("res://scripts/map_authoring/population/population_co
 const Catalog = preload("res://scripts/map_authoring/population/population_catalog.gd")
 signal painted(point: Dictionary)
 signal slot_selected(id: String)
-var source: Dictionary = {}
+var source: Dictionary = {}:
+	set(value): source = value; _navigation_revision += 1
 var preview_diff: Dictionary = {}
 var encounters: Dictionary = {}
 var campaign: ExpeditionCampaignState
@@ -35,6 +36,7 @@ func simulate_wave() -> void:
 		if campaign.slots[id].life_state == "respawn_pending": campaign.admit_respawn(id)
 	redraw()
 func _gui_input(event: InputEvent) -> void:
+	if navigation_input(event): accept_event(); return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT and not testing:
 		var hit := pick(event.position)
 		if not hit.ok: status.emit("Sem superfície visível. Escolha a camada correta."); return
@@ -47,7 +49,7 @@ func _gui_input(event: InputEvent) -> void:
 	super._gui_input(event)
 func _draw_world() -> void:
 	super._draw_world()
-	if package.is_empty() or source.is_empty(): return
+	if package.is_empty() or source.is_empty() or not show_population_overlay: return
 	for region: Dictionary in source.get("exclusions",[]): _ring(Population.vector(region.center_xyz),region.radius,Color("f28b82"))
 	for brush: Dictionary in source.get("brushes",[]): _ring(Population.vector(brush.center_xyz),brush.radius,Color("92bde8"))
 	for entry: Dictionary in source.get("entrance",[]): _label(Population.vector(entry.position_xyz),"Entrada",Color("9ae2ba"))
@@ -72,3 +74,4 @@ func _ring(point: Vector3, radius: float, color: Color) -> void:
 	for i: int in 49:
 		var angle := TAU*float(i)/48; points.append(screen(point+Vector3(cos(angle)*radius,0,sin(angle)*radius)))
 	_overlay.draw_polyline(points,color,1.5)
+func navigation_snapshot() -> Dictionary: return ViewportTools.population_model(super.navigation_snapshot(),source)

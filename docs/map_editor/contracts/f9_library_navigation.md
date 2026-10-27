@@ -94,3 +94,39 @@ geometria/fonte/visibilidade; moldura de câmera é desenhada à parte para não
 reconstruir toda a geometria a cada pan. Capacidades/custos só serão declarados
 após provas de rampa, ponte com piso inferior, corpo grande, obstáculo e clique
 do minimapa, sem inferir FPS de testes funcionais.
+
+## Implementação do componente de navegação
+
+ViewportTools é montado nas cinco telas; canvases usados apenas para miniatura
+continuam sem toolbar/minimapa. Câmera tem estado/zoom/pan comuns. MinimapXZ,
+busca/foco de entidade, duplo clique em camada/objeto e diagnóstico localizado
+usam bounds do modelo atual. Oito comandos por tela em `<screen>/viewport/`
+expõem inspeção, foco, busca, flags e consultas parametrizadas. Presentation
+descobre providers locais sem atravessar outra tela/janela; IDs duplicados
+falham em vez de escolher um alvo pela ordem. Ações de biblioteca/presets
+continuam publicadas junto dos oito comandos, sem substituí-las.
+
+Modelo usa índices de entidade para evitar busca quadrática ao agrupar faces.
+Token de geometria/revisão/fonte/visibilidade invalida o modelo, enquanto câmera
+reutiliza sua geometria. A moldura do minimapa é node separado. Alturas têm
+escala azul/vermelho e cotas esparsas identificadas por apoio; corpos reais
+incluem camadas ocultas. Metadados de objetos e rotas mantêm suas autoridades.
+Caches/overlays continuam apresentação, sem novo formato ou volume persistido.
+
+Inspeção padrão conserva resolve_surface, inclusive oclusão. A lista de apoio
+explícito é uma seção editorial para andares sobrepostos: intersecta o raio
+com aquele plano e confirma o ponto por WorldGeometry.support_at. Não move
+personagem, altera corpo, atravessa obstáculo em gameplay ou relaxa tolerância.
+position_query e sweep continuam conferindo o mundo completo, incluindo a ponte
+oculta. GUI e AX set_probe.surface_id escolhem a mesma seção. Fonte alterada
+retira o pacote de inspeção; apoio oculto sai da lista, sem retirar seu collider.
+
+Na janela de objetos, “Compilar peça” aciona o worker da tela de terreno;
+o sinal de conclusão compartilha o pacote somente se o hash ainda corresponde
+à fonte aberta. Não há compilador/estado geométrico alternativo nessa janela.
+
+Provas autorais: Viewport20, Native52, LibraryNative53, ShadowsNative86 e3 etapas
+oficiais. Native usa CombatActor real animado, pacote compilado, consultas de
+corpo/LoS, ocupante e obstáculo inserido/removido pelas APIs canônicas. Não prova
+PlayerActor/RunController em gameplay, FPS da UI ou conclusão de F9-10/11.
+Relatórios/inputs e falhas estão no [checkpoint](../delivery/f9.md).

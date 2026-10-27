@@ -1,13 +1,14 @@
 @tool
 extends "res://scripts/map_authoring/population/population_canvas.gd"
-var patrol_source: Dictionary = {}
+var patrol_source: Dictionary = {}:
+	set(value): patrol_source = value; _navigation_revision += 1
 var selected_route := ""
 var actors: Array = []
 var player_point: Dictionary = {}
 func _draw_world() -> void:
 	super._draw_world()
 	if package.is_empty(): return
-	for route: Dictionary in patrol_source.get("patrols",[]):
+	for route: Dictionary in (patrol_source.get("patrols",[]) if show_routes_overlay else []):
 		var color := Color("bcebc1") if route.patrol_id == selected_route else Color("b8c5ff")
 		var path := PackedVector2Array()
 		for i: int in route.waypoints.size():
@@ -22,3 +23,4 @@ func _draw_world() -> void:
 		var at := screen(actor.position); _overlay.draw_circle(at,8,Color("f6bc76"))
 		_overlay.draw_string(ThemeDB.fallback_font,at+Vector2(10,-10),actor.label,HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color.WHITE)
 	if not player_point.is_empty(): _overlay.draw_circle(screen(player_point.position),8,Color("68d9f7"))
+func navigation_snapshot() -> Dictionary: return ViewportTools.population_model(ViewportTools.map_model(package,geometry),source,patrol_source)

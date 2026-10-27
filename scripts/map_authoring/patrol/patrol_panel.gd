@@ -61,11 +61,13 @@ func _ready() -> void:
 	problems.item_selected.connect(func(i: int) -> void:
 		var diagnostic: Dictionary = problems.get_item_metadata(i)
 		for n: int in session.data.patrols.size():
-			if session.data.patrols[n].patrol_id == diagnostic.entity_id: routes.select(n); refresh_route())
+			if session.data.patrols[n].patrol_id == diagnostic.entity_id: routes.select(n); refresh_route()
+		canvas._viewport_tools.focus_entity(str(diagnostic.entity_id)))
 	dialog = FileDialog.new(); dialog.access = FileDialog.ACCESS_FILESYSTEM; dialog.file_selected.connect(file_selected); dialog.dir_selected.connect(file_selected); add_child(dialog)
 	confirmation = ConfirmationDialog.new(); confirmation.confirmed.connect(confirm_remove); add_child(confirmation)
 	session.changed.connect(changed); _new_draft(); refresh()
 	var timer := Timer.new(); timer.wait_time = 10; timer.autostart = true; timer.timeout.connect(preserve_draft); add_child(timer)
+	preload("res://scripts/map_authoring/preview/viewport_tools.gd").mount(canvas,"patrol")
 	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"patrol",func() -> Dictionary: return session.data,canvas)
 func button(parent: Node, caption: String, callback: Callable) -> void:
 	var b := Button.new(); b.text = caption; b.pressed.connect(callback); parent.add_child(b)

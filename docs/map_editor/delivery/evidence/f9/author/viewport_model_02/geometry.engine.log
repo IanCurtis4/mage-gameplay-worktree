@@ -1,0 +1,23 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_VIEWPORT_CHECK real_ramp_bridge_and_port_compile true
+F9_VIEWPORT_CHECK canonical_world_point_decodes_exactly true
+F9_VIEWPORT_CHECK passive_world_point_decodes_exactly true
+F9_VIEWPORT_CHECK foreign_stage_rejected true
+F9_VIEWPORT_CHECK unknown_point_field_rejected true
+F9_VIEWPORT_CHECK nonfinite_point_rejected true
+F9_VIEWPORT_CHECK boolean_coordinate_rejected true
+F9_VIEWPORT_CHECK wrong_vector_length_rejected true
+F9_VIEWPORT_CHECK draft_does_not_claim_compiled_body_support true
+F9_VIEWPORT_CHECK ramp_model_keeps_vertex_heights true
+F9_VIEWPORT_CHECK compiled_model_includes_actual_supports true
+F9_VIEWPORT_CHECK upper_and_lower_remain_distinct true
+F9_VIEWPORT_CHECK hidden_lower_layer_removed_from_visual_targets true
+F9_VIEWPORT_CHECK hiding_owner_layer_hides_its_bridge true
+F9_VIEWPORT_CHECK hidden_bridge_retains_physical_underside true
+F9_VIEWPORT_CHECK full_width_port_not_replaced_by_center_dot true
+F9_VIEWPORT_CHECK port_direction_and_headroom_preserved true
+F9_VIEWPORT_CHECK layer_focus_includes_attached_bridge true
+F9_VIEWPORT_CHECK source_unchanged_by_all_view_models true
+F9_VIEWPORT_CHECK geometry_unchanged_by_all_view_models true
+F9_VIEWPORT_RESULT {"checks":[{"id":"real_ramp_bridge_and_port_compile","ok":true},{"id":"canonical_world_point_decodes_exactly","ok":true},{"id":"passive_world_point_decodes_exactly","ok":true},{"id":"foreign_stage_rejected","ok":true},{"id":"unknown_point_field_rejected","ok":true},{"id":"nonfinite_point_rejected","ok":true},{"id":"boolean_coordinate_rejected","ok":true},{"id":"wrong_vector_length_rejected","ok":true},{"id":"draft_does_not_claim_compiled_body_support","ok":true},{"id":"ramp_model_keeps_vertex_heights","ok":true},{"id":"compiled_model_includes_actual_supports","ok":true},{"id":"upper_and_lower_remain_distinct","ok":true},{"id":"hidden_lower_layer_removed_from_visual_targets","ok":true},{"id":"hiding_owner_layer_hides_its_bridge","ok":true},{"id":"hidden_bridge_retains_physical_underside","ok":true},{"id":"full_width_port_not_replaced_by_center_dot","ok":true},{"id":"port_direction_and_headroom_preserved","ok":true},{"id":"layer_focus_includes_attached_bridge","ok":true},{"id":"source_unchanged_by_all_view_models","ok":true},{"id":"geometry_unchanged_by_all_view_models","ok":true}],"count":20,"ok":true}

@@ -1,0 +1,26 @@
+{
+  "role": "Sol author, supervision pending",
+  "audit": [
+    {
+      "path": "viewport_native_05",
+      "count": 49,
+      "ok": true,
+      "inputs": 1961,
+      "mismatches": []
+    },
+    {
+      "path": "viewport_library_native_02",
+      "count": 53,
+      "ok": true,
+      "inputs": 1961,
+      "mismatches": []
+    },
+    {
+      "path": "viewport_shadows_native_01",
+      "count": 86,
+      "ok": true,
+      "inputs": 1961,
+      "mismatches": []
+    }
+  ]
+}

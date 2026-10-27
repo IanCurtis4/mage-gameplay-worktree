@@ -35,8 +35,8 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 05 diff/contradição antes do commit | F6, validação | existe para slots; ampliar às regiões internas | pendente |
 | 06 biblioteca/busca/miniaturas/categorias | arquitetura, F8 | paleta de objetos e biblioteca de fontes com busca/categorias/miniaturas locais; componente em validação | [biblioteca e navegação](contracts/f9_library_navigation.md), integração em execução |
 | 06 presets/favoritos | arquitetura, F8 | preferências por projeto, presets reais de brush, favoritos e recuperação implementados |50 verificações de dados e53 nativas autorais; supervisão pendente |
-| 06 minimap/árvore de objetos/camadas | arquitetura, F8 | árvore de camadas existe; completar | pendente |
-| 06 overlays/foco/atalhos/diagnóstico localizado | arquitetura | overlays parciais; entregar conjunto acionável | pendente |
+| 06 minimap/árvore de objetos/camadas | arquitetura, F8 | minimapaXZ/câmera e busca/foco por camada/objeto/apoio/rota integrados às5 telas; árvore/listas dos produtores preservadas | Viewport20/Native52 autorais; biblioteca53 e sombras86 regredidas, supervisão pendente; custos e fluxo final seguem em10/12 |
+| 06 overlays/foco/atalhos/diagnóstico localizado | arquitetura | altura/cotas, apoio, corpo, aberturas, encontros e rotas com flags; folga/LoS/ocupação reais, foco e atalhos no quadro; apoio explícito para seção editorial entre andares | Native52 autoral, três oficiais por impacto; diagnóstico/custos/UX final ainda exigidos no conjunto12; supervisão pendente |
 | 07 UX coerente/guiada | autoria F8 | menus e seletores existem; fechar fluxo humano inteiro | pendente |
 | 07 AX IDs/ações parametrizadas/estado/diagnóstico | autoria F8 | ax_invoke só botão; entregar operações com parâmetros | pendente |
 | 07 histórico/hash/confirmação/modos | F8 | entregue; preservar invariantes | pendente de regressão |

@@ -98,6 +98,7 @@ func _ready() -> void:
 	var timer := Timer.new(); timer.wait_time = 10; timer.autostart = true; timer.timeout.connect(preserve_draft); add_child(timer)
 	refresh()
 	preload("res://scripts/map_authoring/context/map_context_panel.gd").mount(self,session)
+	preload("res://scripts/map_authoring/preview/viewport_tools.gd").mount(canvas,"map")
 	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"map",func() -> Dictionary: return session.data,canvas)
 func _button(parent: Node, text: String, action: Callable) -> Button:
 	var button := Button.new(); button.text = text; button.pressed.connect(action); parent.add_child(button); return button
@@ -278,3 +279,4 @@ func focus_problem(index: int) -> void:
 	var diagnostic: Variant = problems.get_item_metadata(index)
 	if diagnostic is Dictionary:
 		select_id(str(diagnostic.entity_id).get_slice("/",0)); status.text = diagnostic.message
+		canvas._viewport_tools.focus_entity(str(diagnostic.entity_id))

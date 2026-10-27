@@ -43,7 +43,7 @@ func run() -> void:
 	var queried: Dictionary = panel.ax_command("objects/library/query",{"favorites_only":true})
 	check("gui_and_ax_share_favorite_query",queried.ok and queried.entries.size() == 1 and queried.entries[0].definition_id == panel.palette.get_item_metadata(0))
 	var object_presentation: Control = panel.get_node("AuthoringPresentation"); object_presentation.set_mode("ax")
-	check("object_library_commands_bound_to_ax_presentation",object_presentation.ax_snapshot().commands.size() == 3 and object_presentation.ax_invoke("objects/library/query",{"favorites_only":true}).entries == queried.entries)
+	check("object_library_commands_bound_to_ax_presentation",object_presentation.ax_snapshot().commands.size() == 11 and object_presentation.ax_invoke("objects/library/query",{"favorites_only":true}).entries == queried.entries and object_presentation.ax_invoke("objects/viewport/inspect").ok)
 	object_presentation.set_mode("ux")
 	check("library_controls_leave_source_and_history",shell.session.document().semantic_hash() == hash and shell.session.can_undo() == undo)
 	await capture(panel,"library_favorite_palette")
@@ -69,7 +69,7 @@ func run() -> void:
 	check("native_named_preset_saved",Library.preset(custom_id,Preferences.read().data).preset.options.radius == 37)
 	var presentation: Control = terrain.get_node("AuthoringPresentation"); presentation.set_mode("ax")
 	var list: Dictionary = presentation.ax_invoke("terrain/presets/list")
-	check("semantic_ax_commands_are_inspectable",presentation.ax_snapshot().commands.size() == 3 and list.ok and list.presets.size() == 4)
+	check("semantic_ax_commands_are_inspectable",presentation.ax_snapshot().commands.size() == 11 and list.ok and list.presets.size() == 4 and presentation.ax_invoke("terrain/viewport/inspect").ok)
 	terrain.radius.value = 100
 	check("ax_apply_matches_gui_preset",presentation.ax_invoke("terrain/presets/apply",{"preset_id":custom_id}).ok and terrain.radius.value == 37 and terrain.canvas.options.radius == 37)
 	var before: String = Preferences.read().hash

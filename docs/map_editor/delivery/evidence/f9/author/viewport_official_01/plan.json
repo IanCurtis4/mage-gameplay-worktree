@@ -1,0 +1,89 @@
+{
+  "created_utc": "2026-10-27T05:50:28.8089266Z",
+  "f1_native_fixture": true,
+  "source_commit": "431414e7a8d4cbeb65f3ed44187e09c4de6f17fa",
+  "working_tree_status": [
+    " M addons/ragrpg_map_editor/presentation.gd",
+    " M addons/ragrpg_map_editor/shell.gd",
+    " M scripts/map_authoring/composition/map_panel.gd",
+    " M scripts/map_authoring/objects/object_panel.gd",
+    " M scripts/map_authoring/patrol/patrol_canvas.gd",
+    " M scripts/map_authoring/patrol/patrol_panel.gd",
+    " M scripts/map_authoring/population/population_canvas.gd",
+    " M scripts/map_authoring/population/population_panel.gd",
+    " M scripts/map_authoring/preview/map_canvas.gd",
+    " M scripts/map_authoring/terrain/terrain_canvas.gd",
+    " M scripts/map_authoring/terrain/terrain_panel.gd",
+    " M tests/map_editor_library_ui_test.gd",
+    " M tools/map_editor_completion/run.ps1",
+    "?? docs/map_editor/delivery/evidence/f9/author/viewport_library_native_01/",
+    "?? docs/map_editor/delivery/evidence/f9/author/viewport_library_native_02/",
+    "?? docs/map_editor/delivery/evidence/f9/author/viewport_model_01/",
+    "?? docs/map_editor/delivery/evidence/f9/author/viewport_model_02/",
+    "?? docs/map_editor/delivery/evidence/f9/author/viewport_model_03/",
+    "?? docs/map_editor/delivery/evidence/f9/author/viewport_native_01/",
+    "?? docs/map_editor/delivery/evidence/f9/author/viewport_native_02/",
+    "?? docs/map_editor/delivery/evidence/f9/author/viewport_native_03/",
+    "?? docs/map_editor/delivery/evidence/f9/author/viewport_native_04/",
+    "?? docs/map_editor/delivery/evidence/f9/author/viewport_native_05/",
+    "?? docs/map_editor/delivery/evidence/f9/author/viewport_shadows_native_01/",
+    "?? scripts/map_authoring/preview/viewport_tools.gd",
+    "?? scripts/map_authoring/preview/viewport_tools.gd.uid",
+    "?? tests/map_editor_viewport_test.gd",
+    "?? tests/map_editor_viewport_test.gd.uid",
+    "?? tests/map_editor_viewport_ui_test.gd",
+    "?? tests/map_editor_viewport_ui_test.gd.uid"
+  ],
+  "runner_sha256": "9D92A48A613127B6DA109F42E53B7D78E167FC484051BC3F0E985729F2F8E27D",
+  "engine_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+  "timeout_seconds": 300,
+  "selection": {
+    "test": [
+      "combat_animation_test",
+      "e07_f1_pilot_scene_test",
+      "e07_f1_presentation_test"
+    ],
+    "test_filter_specified": true,
+    "from_step": 1,
+    "to_step": 299,
+    "skip_editor_import": true
+  },
+  "total_steps": 299,
+  "selected_steps": 3,
+  "checks": [
+    {
+      "index": 10,
+      "name": "combat_animation_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/combat_animation_test.gd"
+      ]
+    },
+    {
+      "index": 296,
+      "name": "e07_f1_pilot_scene_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_pilot_scene_test.gd"
+      ]
+    },
+    {
+      "index": 297,
+      "name": "e07_f1_presentation_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_presentation_test.gd"
+      ]
+    }
+  ]
+}

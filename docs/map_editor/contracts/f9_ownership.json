@@ -2109,7 +2109,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "library stages 50/53/25/23 passed at 73b6ee8; Core found shadow snapshot omission; Luna usage limit interrupted report. Sol corrective 28/Core639/official5 passed; supervision continuation pending. Viewport tools next.",
+    "state": "viewport frozen component ready: author Model20/Native52/Library53/Shadows28 and five official stages passed,1961 inputs per final manifest audited. Prior Core639 proves snapshot fix. Luna continuation and prior library report pending.",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -2123,7 +2123,8 @@
       "docs/map_editor/delivery/evidence/f9/luna/borders/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/shadows/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/canvas_broadphase/report.md",
-      "docs/map_editor/delivery/evidence/f9/luna/library/report.md"
+      "docs/map_editor/delivery/evidence/f9/luna/library/report.md",
+      "docs/map_editor/delivery/evidence/f9/luna/viewport/report.md"
     ],
     "generated_evidence_roots": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
@@ -2205,7 +2206,13 @@
       "docs/map_editor/delivery/evidence/f9/luna/library/objects_native",
       "docs/map_editor/delivery/evidence/f9/luna/library/biome_props_native",
       "docs/map_editor/delivery/evidence/f9/luna/library/core",
-      "docs/map_editor/delivery/evidence/f9/luna/library/official"
+      "docs/map_editor/delivery/evidence/f9/luna/library/official",
+      "docs/map_editor/delivery/evidence/f9/luna/viewport/model",
+      "docs/map_editor/delivery/evidence/f9/luna/viewport/native",
+      "docs/map_editor/delivery/evidence/f9/luna/viewport/library",
+      "docs/map_editor/delivery/evidence/f9/luna/viewport/shadows",
+      "docs/map_editor/delivery/evidence/f9/luna/viewport/core",
+      "docs/map_editor/delivery/evidence/f9/luna/viewport/official"
     ]
   }
 }

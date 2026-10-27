@@ -1,0 +1,56 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+F9_VIEWPORT_UI_CHECK real_bridge_map_compiles true
+F9_VIEWPORT_UI_CHECK native_tools_and_minimap_visible true
+F9_VIEWPORT_UI_CHECK map_model_is_compiled_geometry true
+F9_VIEWPORT_UI_CHECK two_levels_preserved_in_model true
+F9_VIEWPORT_UI_CHECK focus_centers_actual_upper_support true
+F9_VIEWPORT_UI_CHECK focus_preserves_actor_source_and_physics true
+F9_VIEWPORT_UI_CHECK camera_footprint_matches_projection_at_named_height true
+F9_VIEWPORT_UI_CHECK minimap_click_moves_camera_to_xz_at_focus_height true
+F9_VIEWPORT_UI_CHECK minimap_never_teleports_actor true
+F9_VIEWPORT_UI_CHECK zoom_preserves_point_under_cursor true
+F9_VIEWPORT_UI_CHECK middle_button_pans_exactly true
+F9_VIEWPORT_UI_CHECK fit_shortcut_ignores_text_focus true
+F9_VIEWPORT_UI_CHECK fit_shortcut_runs_only_on_canvas true
+F9_VIEWPORT_UI_CHECK ax_requires_authoring_mode true
+F9_VIEWPORT_UI_CHECK eight_viewport_commands_in_presentation true
+F9_VIEWPORT_UI_CHECK ax_and_gui_focus_share_camera_authority true
+F9_VIEWPORT_UI_CHECK invalid_ax_arguments_do_not_move_camera true
+F9_VIEWPORT_UI_CHECK gui_overlay_and_ax_snapshot_agree true
+F9_VIEWPORT_UI_CHECK missing_focus_target_is_explicit true
+F9_VIEWPORT_UI_CHECK exact_probe_dimensions_and_visible_decimals true
+F9_VIEWPORT_UI_CHECK lower_body_fits_below_bridge true
+F9_VIEWPORT_UI_CHECK large_body_fails_real_bridge_headroom true
+F9_VIEWPORT_UI_CHECK false_support_height_rejected true
+F9_VIEWPORT_UI_CHECK occupancy_is_reported_without_calling_it_free true
+F9_VIEWPORT_UI_CHECK real_los_clear_without_obstacle true
+F9_VIEWPORT_UI_CHECK real_los_hits_named_volume_at_exact_entry true
+F9_VIEWPORT_UI_CHECK overlay_cache_tracks_world_revision_and_actual_blocker true
+F9_VIEWPORT_UI_CHECK removing_obstacle_restores_los true
+F9_VIEWPORT_DEFAULT_PICK { "ok": false, "error_code": &"occluded_surface", "geometry_revision": 3, "data": {  } }
+F9_VIEWPORT_UI_CHECK ordinary_click_preserves_real_occlusion true
+F9_VIEWPORT_EXPLICIT_PICK { "kind": "clearance", "from": (50.0, 0.0, 150.0), "profile": { "radius": 2.0, "height": 12.0, "connector_kinds": ["walk"] }, "result": { "ok": true, "error_code": &"", "geometry_revision": 3, "data": { "point": { "stage_id": "map_preview", "surface_id": "land/c_8c6fb1e9e37a1aea_0_0_1_2", "position": (50.0, 0.0, 150.0) }, "occupants": [] } } }
+F9_VIEWPORT_UI_CHECK gui_inspection_uses_canonical_query_without_moving_actor true
+F9_VIEWPORT_UI_CHECK explicit_support_keeps_real_bridge_collision true
+F9_VIEWPORT_UI_CHECK camera_only_changes_reuse_static_model true
+F9_VIEWPORT_UI_CHECK capture_viewport_map true
+F9_VIEWPORT_UI_CHECK terrain_has_shared_native_navigation true
+F9_VIEWPORT_UI_CHECK draft_refuses_physics_inspection true
+F9_VIEWPORT_UI_CHECK terrain_pick_uses_real_upper_support true
+F9_VIEWPORT_UI_CHECK hidden_bridge_unpickable_but_still_blocks_large_body true
+F9_VIEWPORT_UI_CHECK terrain_overlays_reflect_same_flags true
+F9_VIEWPORT_UI_CHECK inspection_click_never_starts_brush_transaction true
+F9_VIEWPORT_UI_CHECK terrain_zoom_is_camera_only true
+F9_VIEWPORT_UI_CHECK source_edit_invalidates_compiled_inspection true
+F9_VIEWPORT_UI_CHECK capture_viewport_terrain true
+F9_VIEWPORT_UI_CHECK real_patrol_package_compiles true
+F9_VIEWPORT_UI_CHECK minimap_uses_real_slots_and_waypoints true
+F9_VIEWPORT_UI_CHECK route_focus_uses_authored_bounds true
+F9_VIEWPORT_UI_CHECK overlay_toggle_controls_existing_population_and_route_renderer true
+F9_VIEWPORT_UI_CHECK focus_and_visibility_preserve_encounter_authorship true
+F9_VIEWPORT_UI_CHECK capture_viewport_patrol true
+F9_VIEWPORT_UI_RESULT {"checks":[{"id":"real_bridge_map_compiles","ok":true},{"id":"native_tools_and_minimap_visible","ok":true},{"id":"map_model_is_compiled_geometry","ok":true},{"id":"two_levels_preserved_in_model","ok":true},{"id":"focus_centers_actual_upper_support","ok":true},{"id":"focus_preserves_actor_source_and_physics","ok":true},{"id":"camera_footprint_matches_projection_at_named_height","ok":true},{"id":"minimap_click_moves_camera_to_xz_at_focus_height","ok":true},{"id":"minimap_never_teleports_actor","ok":true},{"id":"zoom_preserves_point_under_cursor","ok":true},{"id":"middle_button_pans_exactly","ok":true},{"id":"fit_shortcut_ignores_text_focus","ok":true},{"id":"fit_shortcut_runs_only_on_canvas","ok":true},{"id":"ax_requires_authoring_mode","ok":true},{"id":"eight_viewport_commands_in_presentation","ok":true},{"id":"ax_and_gui_focus_share_camera_authority","ok":true},{"id":"invalid_ax_arguments_do_not_move_camera","ok":true},{"id":"gui_overlay_and_ax_snapshot_agree","ok":true},{"id":"missing_focus_target_is_explicit","ok":true},{"id":"exact_probe_dimensions_and_visible_decimals","ok":true},{"id":"lower_body_fits_below_bridge","ok":true},{"id":"large_body_fails_real_bridge_headroom","ok":true},{"id":"false_support_height_rejected","ok":true},{"id":"occupancy_is_reported_without_calling_it_free","ok":true},{"id":"real_los_clear_without_obstacle","ok":true},{"id":"real_los_hits_named_volume_at_exact_entry","ok":true},{"id":"overlay_cache_tracks_world_revision_and_actual_blocker","ok":true},{"id":"removing_obstacle_restores_los","ok":true},{"id":"ordinary_click_preserves_real_occlusion","ok":true},{"id":"gui_inspection_uses_canonical_query_without_moving_actor","ok":true},{"id":"explicit_support_keeps_real_bridge_collision","ok":true},{"id":"camera_only_changes_reuse_static_model","ok":true},{"id":"capture_viewport_map","ok":true},{"id":"terrain_has_shared_native_navigation","ok":true},{"id":"draft_refuses_physics_inspection","ok":true},{"id":"terrain_pick_uses_real_upper_support","ok":true},{"id":"hidden_bridge_unpickable_but_still_blocks_large_body","ok":true},{"id":"terrain_overlays_reflect_same_flags","ok":true},{"id":"inspection_click_never_starts_brush_transaction","ok":true},{"id":"terrain_zoom_is_camera_only","ok":true},{"id":"source_edit_invalidates_compiled_inspection","ok":true},{"id":"capture_viewport_terrain","ok":true},{"id":"real_patrol_package_compiles","ok":true},{"id":"minimap_uses_real_slots_and_waypoints","ok":true},{"id":"route_focus_uses_authored_bounds","ok":true},{"id":"overlay_toggle_controls_existing_population_and_route_renderer","ok":true},{"id":"focus_and_visibility_preserve_encounter_authorship","ok":true},{"id":"capture_viewport_patrol","ok":true}],"count":48,"ok":true}
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)

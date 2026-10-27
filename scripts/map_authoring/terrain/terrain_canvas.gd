@@ -9,6 +9,7 @@ const CanvasOrder = preload("res://scripts/world/world_canvas_order.gd")
 const GroundShadow = preload("res://scripts/world/ground_shadow.gd")
 const TerrainTopology = preload("res://scripts/map_authoring/compiler/terrain_topology.gd")
 const Objects = preload("res://scripts/map_authoring/objects/object_view.gd")
+const ViewportTools = preload("res://scripts/map_authoring/preview/viewport_tools.gd")
 signal stroke_finished(points: Array, options: Dictionary)
 signal cancelled
 signal object_pressed(hit: Dictionary)
@@ -19,9 +20,17 @@ var selected_objects: Array[String] = []
 var _object_records: Array = []
 var source: Dictionary = {}
 var selected_layer := ""
+var inspection_surface := ""
 var options: Dictionary = {}
 var hidden_layers: Array[String] = []
-var package: Dictionary = {}
+var package: Dictionary = {}:
+	set(value):
+		package = value; _inspection_geometry = null; _navigation_revision += 1
+var _inspection_geometry: WorldGeometry
+var _navigation_revision := 0
+var _viewport_tools: Control
+var show_population_overlay := true
+var show_routes_overlay := true
 var _preview: Dictionary = {}
 var _points: Array = []
 var _active_options: Dictionary = {}
@@ -155,6 +164,7 @@ func pick(at: Vector2) -> Dictionary:
 	return result
 
 func redraw_terrain() -> void:
+	_navigation_revision += 1
 	if not is_instance_valid(_mesh_root): return
 	for child: Node in _mesh_root.get_children(): child.free()
 	_height_bounds.clear()
@@ -239,7 +249,7 @@ func _draw_overlays() -> void:
 	if not package.is_empty():
 		for boundary: Dictionary in package.boundaries:
 			if wire_overlay or boundary.kind == "opening": _overlay.draw_line(screen(boundary.a),screen(boundary.b),Color("f1c778") if boundary.kind == "opening" else Color("354e3e"),2,true)
-	for connector: Dictionary in data.get("connectors",[]):
+	for connector: Dictionary in (data.get("connectors",[]) if not is_instance_valid(_viewport_tools) else []):
 		var xyz: Array = connector.position_xyz; var center := screen(Vector3(xyz[0],xyz[1],xyz[2]))
 		var normal: Array = connector.normal_xyz; var direction := Vector3(normal[0],normal[1],normal[2])
 		var tangent := Vector3(-direction.z,0,direction.x)*float(connector.width)*0.5
@@ -302,6 +312,7 @@ func cancel_stroke() -> void:
 	if redraw and is_instance_valid(_mesh_root): redraw_terrain()
 
 func _gui_input(event: InputEvent) -> void:
+	if navigation_input(event): accept_event(); return
 	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
 		cancel_stroke(); accept_event(); return
 	if event is InputEventMouseButton:
@@ -342,6 +353,43 @@ func _gui_input(event: InputEvent) -> void:
 				if _points.size() >= 4096: cancel_stroke(); return
 				_points.append(hit.point); _update_preview()
 		queue_redraw()
+
+func camera_state() -> Dictionary: return {"scale":_scale,"offset":_origin+_pan,"size":size}
+func set_camera(zoom: float, offset: Vector2) -> void:
+	if not is_finite(zoom) or zoom < 0.005 or zoom > 8 or not offset.is_finite(): return
+	_scale = zoom; _pan = offset-_origin; queue_redraw()
+func navigation_revision() -> Array: return [_navigation_revision,_inspection_geometry.geometry_revision if _inspection_geometry != null else 1]
+func navigation_snapshot() -> Dictionary:
+	return ViewportTools.terrain_model(_preview if not _preview.is_empty() else source,_shape,_object_records,hidden_layers,package if _preview.is_empty() else {})
+func redraw_navigation() -> void:
+	queue_redraw()
+	if is_instance_valid(_overlay): _overlay.queue_redraw()
+func navigation_input(event: InputEvent) -> bool:
+	return _viewport_tools.handle_input(event) if is_instance_valid(_viewport_tools) else ViewportTools.camera_input(self,event)
+func inspection_world() -> WorldGeometry:
+	if package.is_empty() or not _preview.is_empty(): return null
+	if _inspection_geometry == null:
+		var manifest := Terrain.preview_manifest(package)
+		if manifest == null: return null
+		_inspection_geometry = WorldGeometry.new(); _inspection_geometry.configure(manifest,"terrain_preview")
+	return _inspection_geometry
+func inspection_pick(at: Vector2) -> Dictionary:
+	var world := inspection_world()
+	if world == null: return ViewportTools.failure("compile_required")
+	var ids: Array[String] = []
+	for visual: Dictionary in package.visuals:
+		if not visual.walkable or ViewportTools.source_hidden(visual.source_id,source,hidden_layers): continue
+		if not inspection_surface.is_empty():
+			if visual.surface_id == inspection_surface: ids.append(visual.surface_id)
+		elif selected_layer.is_empty() or visual.source_id == selected_layer:
+			ids.append(visual.surface_id)
+		else:
+			for special: Dictionary in source.special_surfaces:
+				if special.surface_id == visual.source_id and special.layer_id == selected_layer: ids.append(visual.surface_id)
+	if ids.is_empty(): return ViewportTools.failure("invalid_support")
+	var ray := WorldProjection.ray((at-_origin-_pan)/_scale)
+	if not inspection_surface.is_empty(): return ViewportTools.pick_support(world,inspection_surface,ray)
+	return world.resolve_surface(ray.origin,ray.direction,ids,world.geometry_revision)
 
 func _update_preview() -> void:
 	var points := _points

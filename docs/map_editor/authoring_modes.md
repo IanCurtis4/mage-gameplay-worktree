@@ -92,3 +92,33 @@ nem representa aceite de ambientação handmade. M3-NAV-01 continua pendente.
 O roteiro humano final deve pedir avaliação real da criação manual, leitura dos
 encaixes/áreas, quantidade de cliques, menus, tamanho da prévia e alternância AX.
 Tests automatizados não aprovam essa experiência em nome do usuário.
+
+## Delta F9 de navegação e inspeção
+
+O inventário F8 acima é histórico. F9 integrou props, materiais/perfis, biblioteca,
+presets/favoritos e navegação; estado e pendências atuais estão na
+[matriz F9](f9_requirements.md), sem aceite humano implícito. M3-NAV-01 foi
+corrigido e validado no checkpoint ce7bd59, conforme o recibo F9.
+
+Nas telas de terreno, objetos, mapa, encontros e patrulhas, use a roda para
+zoom e o botão do meio para mover a câmera. F enquadra com o desenho focado.
+O minimapa centraliza a câmera na cota indicada. Busque uma entidade e use
+“Focar seleção”; duplo clique em camada/objeto também enquadra seu conteúdo.
+Essas ações preservam fonte, histórico e posição de personagens.
+
+Em “Overlays”, altura/cotas, apoio e bloqueios ajudam a conferir o relevo;
+conexões mostram sua largura, encontros e rotas mantêm os dados dos produtores.
+“Inspecionar folga” pede raio/altura do corpo. “Inspecionar linha de visão” pede
+dois cliques e consulta o mundo à meia altura escolhida. Compile a fonte atual
+antes das consultas; na janela de objetos, “Compilar peça” usa o worker comum.
+
+O clique padrão respeita oclusão. Para conferir outro andar, escolha um apoio
+explícito na lista: é uma seção editorial e a colisão completa permanece ativa.
+Assim, ocultar a ponte ou selecionar a passagem inferior não faz um corpo alto
+caber sob ela. Texto de ocupação diferencia espaço físico válido de posição
+ocupada. A inspeção não pinta, move ou teleporta personagens.
+
+Em AX, os oito comandos de navegação usam `<screen>/viewport/` e os mesmos
+parâmetros/APIs dos controles. Biblioteca/presets continuam com seus comandos
+próprios. Esta integração ainda não certifica todas as ações AX/CLI nem a
+responsividade em escala ou a área final de aceite.

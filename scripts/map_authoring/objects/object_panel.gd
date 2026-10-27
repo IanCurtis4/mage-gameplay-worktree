@@ -34,6 +34,8 @@ var pending: Dictionary = {}
 var _confirmation: ConfirmationDialog
 var _refreshing := false
 var _preferences_seen := ""
+var prepare_inspection: Callable
+var prepare_button: Button
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -48,6 +50,11 @@ func _ready() -> void:
 	button(toolbar,"Desfazer",func() -> void: session.undo())
 	button(toolbar,"Refazer",func() -> void: session.redo())
 	button(toolbar,"Enquadrar",func() -> void: canvas.fit())
+	prepare_button = Button.new(); prepare_button.text = "Compilar peça"; prepare_button.disabled = not prepare_inspection.is_valid(); prepare_button.set_meta("authoring_keep_visible",true)
+	prepare_button.tooltip_text = "Prepara a inspeção de corpo e linha de visão com o compilador compartilhado da peça."
+	prepare_button.pressed.connect(func() -> void:
+		if prepare_inspection.is_valid(): status.text = "Preparando a inspeção da peça…"; prepare_inspection.call())
+	toolbar.add_child(prepare_button)
 	var split := HSplitContainer.new(); split.size_flags_vertical = SIZE_EXPAND_FILL; add_child(split)
 	var left := VBoxContainer.new(); left.custom_minimum_size.x = 210; split.add_child(left)
 	search = LineEdit.new(); search.placeholder_text = "Buscar objeto ou categoria"; left.add_child(search); search.text_changed.connect(func(_s: String) -> void: refresh_palette())
@@ -103,6 +110,8 @@ func _ready() -> void:
 	for field: SpinBox in [x,z,snap,radius,quantity,spacing]: field.value_changed.connect(func(_v: float) -> void: invalidate_preview())
 	seed_text.text_changed.connect(func(_v: String) -> void: invalidate_preview())
 	refresh_palette()
+	preload("res://scripts/map_authoring/preview/viewport_tools.gd").mount(canvas,"objects")
+	objects.item_activated.connect(func(index: int) -> void: canvas._viewport_tools.focus_entity("object/"+str(objects.get_item_metadata(index))))
 	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"objects",source)
 
 func bind(value: RefCounted) -> void:
@@ -110,6 +119,12 @@ func bind(value: RefCounted) -> void:
 
 func source() -> Dictionary:
 	return session.document().to_data() if session != null and session.document() != null else {}
+
+func accept_inspection(completed: Dictionary) -> void:
+	if not completed.get("ok",false): status.text = "A inspeção não está pronta. Confira o diagnóstico da compilação da peça."; return
+	if completed.get("input_hash","") != Schema.semantic_hash(source()): return
+	canvas.package = completed.package.duplicate(true); canvas.queue_redraw()
+	status.text = "Peça compilada. Inspeção de corpo e linha de visão disponível."
 
 func refresh_palette() -> void:
 	if palette == null: return
