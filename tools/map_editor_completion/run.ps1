@@ -2,7 +2,7 @@ param(
     [Parameter(Mandatory)][string]$GodotPath,
     [Parameter(Mandatory)][string]$EvidenceDirectory,
     [switch]$SkipImport,
-    [ValidateSet('Geometry','Objects','ObjectsNative','Mesh','Relief','Ports','Batch','Materials','MaterialsNative','Scale','Cliff','CliffNative','BiomeProps','BiomePropsNative','Borders','BordersNative','Shadows','ShadowsNative','CanvasOrder','Library','LibraryNative','Viewport','ViewportNative','RuntimeView')][string]$Stage='Geometry'
+    [ValidateSet('Geometry','Objects','ObjectsNative','Mesh','Relief','Ports','Batch','Materials','MaterialsNative','Scale','Cliff','CliffNative','BiomeProps','BiomePropsNative','Borders','BordersNative','Shadows','ShadowsNative','CanvasOrder','Library','LibraryNative','Viewport','ViewportNative','RuntimeView','GameplayNative')][string]$Stage='Geometry'
 )
 $ErrorActionPreference='Stop'
 $f9Root=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
@@ -52,6 +52,10 @@ if($Stage -eq 'BiomeProps'){$f9Script='res://tests/map_editor_biome_props_test.g
 if($Stage -eq 'Cliff'){$f9Script='res://tests/map_editor_cliff_test.gd';$f9Marker='F9_CLIFF_RESULT'}
 if($Stage -eq 'Scale'){$f9Script='res://tests/map_editor_terrain_scale_test.gd';$f9Marker='M2_SCALE_RESULT'}
 $f9Arguments=@('--path',$f9Fixture,'--headless','--log-file',(Join-Path $f9Evidence 'geometry.engine.log'),'--script',$f9Script)
+if($Stage -eq 'GameplayNative'){
+    $f9Marker='F9_GAMEPLAY_RESULT'
+    $f9Arguments=@('--path',$f9Fixture,'--rendering-method','gl_compatibility','--log-file',(Join-Path $f9Evidence 'geometry.engine.log'),'--script','res://tests/map_editor_gameplay_ui_test.gd')
+}
 $f9RestoreProject=$null
 if($Stage -in @('ObjectsNative','MaterialsNative','CliffNative','BiomePropsNative','BordersNative','ShadowsNative','LibraryNative','ViewportNative')){
     $f9Marker=if($Stage -eq 'ViewportNative'){'F9_VIEWPORT_UI_RESULT'}elseif($Stage -eq 'LibraryNative'){'F9_LIBRARY_UI_RESULT'}elseif($Stage -eq 'ShadowsNative'){'F9_SHADOW_UI_RESULT'}elseif($Stage -eq 'BordersNative'){'F9_BORDER_UI_RESULT'}elseif($Stage -eq 'BiomePropsNative'){'F9_BIOME_PROPS_UI_RESULT'}elseif($Stage -eq 'CliffNative'){'F9_CLIFF_UI_RESULT'}elseif($Stage -eq 'MaterialsNative'){'F9_MATERIAL_UI_RESULT'}else{'F9_OBJECTS_UI_RESULT'}
@@ -84,7 +88,7 @@ $f9EngineText=Get-Content -LiteralPath (Join-Path $f9Evidence 'geometry.engine.l
 $f9Match=[regex]::Match($f9Text,'(?m)^'+$f9Marker+' (.+)$')
 $f9Result=if($f9Match.Success){ConvertFrom-Json $f9Match.Groups[1].Value}else{$null}
 $f9Pass=-not $f9Timeout -and -not $f9Aborted -and $f9Process.ExitCode -eq 0 -and $null -ne $f9Result -and $f9Result.ok -and $f9Result.count -gt 0 -and @($f9Result.checks).Count -eq $f9Result.count -and @($f9Result.checks | Where-Object {-not $_.ok}).Count -eq 0 -and $f9Text -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:' -and $f9EngineText -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:'
-$f9Expected=@{Geometry=46;Objects=53;ObjectsNative=25;Mesh=34;Relief=58;Ports=92;Batch=34;Materials=35;MaterialsNative=20;Scale=46;Cliff=61;CliffNative=17;BiomeProps=30;BiomePropsNative=23;Borders=93;BordersNative=32;Shadows=28;ShadowsNative=90;CanvasOrder=43;Library=50;LibraryNative=53;Viewport=20;ViewportNative=52;RuntimeView=12}
+$f9Expected=@{Geometry=46;Objects=53;ObjectsNative=25;Mesh=34;Relief=58;Ports=92;Batch=34;Materials=35;MaterialsNative=20;Scale=46;Cliff=61;CliffNative=17;BiomeProps=30;BiomePropsNative=23;Borders=93;BordersNative=32;Shadows=28;ShadowsNative=90;CanvasOrder=43;Library=50;LibraryNative=53;Viewport=20;ViewportNative=52;RuntimeView=12;GameplayNative=52}
 $f9Pass=$f9Pass -and $f9Result.count -eq $f9Expected[$Stage]
 foreach($f9Input in $f9Inputs){
     $f9Source=Join-Path $f9Root $f9Input.path; $f9Copy=Join-Path $f9Fixture $f9Input.path

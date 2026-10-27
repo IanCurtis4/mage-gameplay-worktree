@@ -1,0 +1,16 @@
+{
+  "note": "Before final presentation-only label correction",
+  "rows": [
+    {
+      "manifest": "gameplay_native_07/runs.json",
+      "inputs": 1976,
+      "mismatches": []
+    },
+    {
+      "manifest": "gameplay_core_01/manifest.json",
+      "inputs": 1970,
+      "mismatches": []
+    }
+  ],
+  "ok": true
+}

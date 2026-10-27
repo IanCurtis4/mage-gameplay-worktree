@@ -1,0 +1,43 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+F9_GAMEPLAY_CHECK authored_patrol_with_real_population_compiles true
+F9_GAMEPLAY_CHECK passive_candidate_accepted true
+F9_GAMEPLAY_CHECK stale_authorship_rejected true
+F9_GAMEPLAY_CHECK tampered_payload_rejected true
+F9_GAMEPLAY_CHECK executable_field_rejected true
+F9_GAMEPLAY_CHECK canonical_body_and_patrol_validation_succeeds true
+F9_GAMEPLAY_CHECK real_player_profile_not_inspection_radius true
+F9_GAMEPLAY_CHECK authored_entry_kept_and_candidate_bound true
+F9_GAMEPLAY_CHECK preparation_preserves_source_and_published_package true
+F9_GAMEPLAY_CHECK map_without_entry_gets_explicit_ephemeral_safe_anchor true
+F9_GAMEPLAY_CHECK isolated_session_created true
+F9_GAMEPLAY_CHECK session_resolves_same_immutable_candidate true
+F9_GAMEPLAY_CHECK foreign_session_path_refused true
+F9_GAMEPLAY_CHECK app_claims_session true
+F9_GAMEPLAY_CHECK second_owner_refused true
+F9_GAMEPLAY_CHECK real_campaign_enters_transactionally true
+F9_GAMEPLAY_CHECK actual_player_enemy_and_hud_installed true
+F9_GAMEPLAY_CHECK authored_skin_replaces_technical_decks true
+F9_GAMEPLAY_CHECK profile_and_controls_use_session_paths true
+F9_GAMEPLAY_CHECK actor_owner_and_world_binding_preserved true
+F9_GAMEPLAY_CHECK existing_patrol_and_threat_are_real true
+F9_GAMEPLAY_CHECK shared_ordering_runs_over_foreign_actors true
+F9_GAMEPLAY_CHECK capture_gameplay_start true
+F9_GAMEPLAY_CHECK canonical_pointer_starts_real_movement true
+F9_GAMEPLAY_CHECK player_advances_world_point_without_editor_circle true
+F9_GAMEPLAY_CHECK canonical_suspend_returns_to_preview_controls true
+F9_GAMEPLAY_CHECK suspension_contains_restorable_real_graph true
+F9_GAMEPLAY_CHECK resume_installs_same_candidate true
+F9_GAMEPLAY_CHECK resume_changes_only_expected_lifecycle true
+F9_GAMEPLAY_CUT_DIFF actors { "guard": { "point": { "stage_id": "map_preview", "surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1", "position": (173.2666, 0.0, 200.0) }, "hp": 88.0, "patrol": { "definition": { "patrol_id": "guard_route", "revision": 1, "mode": "loop", "slot_ids": ["guard"], "waypoints": [{ "point_id": "west", "point": { "stage_id": "map_preview", "surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1", "position": (240.0, 0.0, 200.0) }, "wait_seconds": 2.0 }, { "point_id": "north", "point": { "stage_id": "map_preview", "surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1", "position": (300.0, 0.0, 260.0) }, "wait_seconds": 0.0 }, { "point_id": "south", "point": { "stage_id": "map_preview", "surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1", "position": (300.0, 0.0, 140.0) }, "wait_seconds": 0.5 }] }, "cursor": 0, "direction": 1, "waiting": false, "wait_remaining": 0.0, "retry_remaining": 0.0, "interrupted": true, "state": "interrupted", "error": "" }, "threat": <RefCounted#-9223370334806204985> } } -> { "guard": { "point": { "stage_id": "map_preview", "surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1", "position": (173.2666, 0.0, 200.0) }, "hp": 88.0, "patrol": { "definition": { "patrol_id": "guard_route", "revision": 1, "mode": "loop", "slot_ids": ["guard"], "waypoints": [{ "point_id": "west", "point": { "stage_id": "map_preview", "surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1", "position": (240.0, 0.0, 200.0) }, "wait_seconds": 2.0 }, { "point_id": "north", "point": { "stage_id": "map_preview", "surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1", "position": (300.0, 0.0, 260.0) }, "wait_seconds": 0.0 }, { "point_id": "south", "point": { "stage_id": "map_preview", "surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1", "position": (300.0, 0.0, 140.0) }, "wait_seconds": 0.5 }] }, "cursor": 0, "direction": 1, "waiting": false, "wait_remaining": 0.0, "retry_remaining": 0.0, "interrupted": true, "state": "interrupted", "error": "" }, "threat": <RefCounted#-9223369916516659013> } }
+F9_GAMEPLAY_CHECK resume_preserves_exact_gameplay_cut false
+F9_GAMEPLAY_CHECK pointer_selects_actual_enemy_for_combat true
+F9_GAMEPLAY_CHECK real_attack_changes_enemy_health true
+F9_GAMEPLAY_CHECK real_combat_resolves_population_slot true
+F9_GAMEPLAY_CHECK capture_gameplay_combat true
+F9_GAMEPLAY_CHECK restart_creates_fresh_disposable_session true
+F9_GAMEPLAY_CHECK restart_preserves_old_profile_and_resets_encounter true
+F9_GAMEPLAY_CHECK personal_controls_remain_untouched true
+F9_GAMEPLAY_CHECK close_releases_only_owned_session_lease true
+F9_GAMEPLAY_RESULT {"checks":[{"id":"authored_patrol_with_real_population_compiles","ok":true},{"id":"passive_candidate_accepted","ok":true},{"id":"stale_authorship_rejected","ok":true},{"id":"tampered_payload_rejected","ok":true},{"id":"executable_field_rejected","ok":true},{"id":"canonical_body_and_patrol_validation_succeeds","ok":true},{"id":"real_player_profile_not_inspection_radius","ok":true},{"id":"authored_entry_kept_and_candidate_bound","ok":true},{"id":"preparation_preserves_source_and_published_package","ok":true},{"id":"map_without_entry_gets_explicit_ephemeral_safe_anchor","ok":true},{"id":"isolated_session_created","ok":true},{"id":"session_resolves_same_immutable_candidate","ok":true},{"id":"foreign_session_path_refused","ok":true},{"id":"app_claims_session","ok":true},{"id":"second_owner_refused","ok":true},{"id":"real_campaign_enters_transactionally","ok":true},{"id":"actual_player_enemy_and_hud_installed","ok":true},{"id":"authored_skin_replaces_technical_decks","ok":true},{"id":"profile_and_controls_use_session_paths","ok":true},{"id":"actor_owner_and_world_binding_preserved","ok":true},{"id":"existing_patrol_and_threat_are_real","ok":true},{"id":"shared_ordering_runs_over_foreign_actors","ok":true},{"id":"capture_gameplay_start","ok":true},{"id":"canonical_pointer_starts_real_movement","ok":true},{"id":"player_advances_world_point_without_editor_circle","ok":true},{"id":"canonical_suspend_returns_to_preview_controls","ok":true},{"id":"suspension_contains_restorable_real_graph","ok":true},{"id":"resume_installs_same_candidate","ok":true},{"id":"resume_changes_only_expected_lifecycle","ok":true},{"id":"resume_preserves_exact_gameplay_cut","ok":false},{"id":"pointer_selects_actual_enemy_for_combat","ok":true},{"id":"real_attack_changes_enemy_health","ok":true},{"id":"real_combat_resolves_population_slot","ok":true},{"id":"capture_gameplay_combat","ok":true},{"id":"restart_creates_fresh_disposable_session","ok":true},{"id":"restart_preserves_old_profile_and_resets_encounter","ok":true},{"id":"personal_controls_remain_untouched","ok":true},{"id":"close_releases_only_owned_session_lease","ok":true}],"count":38,"ok":false}

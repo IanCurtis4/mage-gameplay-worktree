@@ -2205,7 +2205,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "Shared renderer producer technically validated at81e2f4252c85567173acd6557abed6b147c7cb36:12/43/90/52,official5,7860 full inputs,11 equal image comparisons. Fixture released; actual gameplay consumer in progress.",
+    "state": "Gameplay consumer authorNative08 52 PASS; Core639 and official6 PASS before presentation-only label delta; full input audits recorded. Await frozen Luna52/Core639/official6 on final source. Full F9, editor launch, window broker, AX/CLI/export remain open.",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -2221,7 +2221,8 @@
       "docs/map_editor/delivery/evidence/f9/luna/canvas_broadphase/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/library/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/viewport/report.md",
-      "docs/map_editor/delivery/evidence/f9/luna/shared_renderer/report.md"
+      "docs/map_editor/delivery/evidence/f9/luna/shared_renderer/report.md",
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay/report.md"
     ],
     "generated_evidence_roots": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
@@ -2314,7 +2315,10 @@
       "docs/map_editor/delivery/evidence/f9/luna/shared_renderer/order",
       "docs/map_editor/delivery/evidence/f9/luna/shared_renderer/native",
       "docs/map_editor/delivery/evidence/f9/luna/shared_renderer/viewport",
-      "docs/map_editor/delivery/evidence/f9/luna/shared_renderer/official"
+      "docs/map_editor/delivery/evidence/f9/luna/shared_renderer/official",
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay/native",
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay/core",
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay/official"
     ]
   }
 }

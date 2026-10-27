@@ -81,3 +81,62 @@ validação de dependências e funcionar em ambiente limpo com perfil isolado.
 Não basta abrir no editor ou copiar o próprio checkout para afirmar isso.
 Fechamento exige todas as linhas F9, a área temática12 e roteiro humano sem
 código. Este contrato não libera F10/E08 nem declara o preview entregue.
+
+## API do primeiro consumidor (em validação)
+
+`gameplay_candidate.gd` oferece create(kind, package, current_source_hash),
+valid, prepare, publish e read. Kinds map/population/patrol, conforme seus
+validadores. Envelope passivo versão1: format_version, kind, source_hash,
+package, candidate_hash (digest canônico dos quatro campos anteriores). Limite
+5MiB incluindo envelope; produtores conservam seus4MiB. Leitura usa bytes_to_var
+sem objetos, nunca bytes_to_var_with_objects. Não aceita script/cena do remetente.
+Publicação local por hash, temporário verificado e rename; revisão existente
+conservada em conflito. Material/arte/dependências seguem validação do produtor.
+
+prepare só funciona no processo normal de jogo. Clona o manifest; usa traversal
+20/32 da fase RuinedCrossing e o PlayerActor configurado real tem raio20, embora
+o valor inicial do CombatActor antes de configure seja18. Inspeção2/12 não vira
+perfil do jogador. Sem entrada autorada, procura apoio seguro e registra socket
+efêmero. Consulta corpo, conectividade de ida/volta dos apoios, interações e
+portais, Planner de população e validador de patrulha. Manifest derivado declara
+phase_id editor_gameplay_preview e input.preview_candidate_hash; fonte/pacote
+originais continuam imutáveis. Mapa com porta24 passa no compilador técnico e
+é recusado para o corpo real, sem reduzir seu raio ou corrigir o ponto.
+
+`gameplay_launcher.gd` cria candidate CAS e sessions/<nonce24>/session.bin,
+resolve somente o namespace local .godot/map_authoring/play ou
+user://map_authoring/play, e deriva profile/ e controls.cfg dentro da sessão.
+Descriptor versão1 contém format_version, session_id, class_id, candidate_hash;
+nenhum caminho de perfil vindo do payload. Classe deve ser identidade base
+existente. Claim por diretório atômico+PID impede dois donos; PID vivo é recusa
+conservadora e nunca alvo de kill. Stop é pedido com token da sessão. A API de
+OS.create_process existe; a primeira prova nativa chama App diretamente, ainda
+não certifica o caminho de lançamento pelo editor nem o binário exportado.
+
+`GameplayApp.open(path)` valida candidato e reivindica sessão; start cria o
+perfil/personagem e entra via ExpeditionService/SceneFlow; resume primeiro
+restaura passivamente para conferir código e candidate_hash, só depois confirma
+a retomada. suspend e restart são assíncronos e usam a UI/serviço canônicos.
+Restart cria nonce/perfil novos e preserva o anterior. App é Control fora do grafo
+de simulação e intercepta o CharacterMenu criado com a facade explícita, antes
+de oferecer controles da prévia novamente. Atores não mudam de pai. Bootstrap ou
+instalação recusados removem apresentação transitória e preservam o corte durável.
+
+ControlPreferences.path é omitido intencionalmente pelo contrato de snapshot.
+O dono da janela o atribui no child_entered_tree de cada RunController, antes de
+_ready/UI; não mudar o manifest para permitir que um save escolha destino externo.
+Isso inclui substituições por eventos/recompensas e retomada. Perfis e caminhos
+pessoais não são fallback. Estado resumido local por token, gravação atômica e
+cache de bytes evita reescrever status idêntico quatro vezes por segundo.
+
+A prova de corte compara ponto, HP/SP, cooldowns, RNG, slots/claims/relógio,
+patrulha e dados completos de ThreatView. Lifecycle suspended→active é transição
+explícita do serviço, testada separadamente; não é avanço offline. O observador
+de dano é Control de teste, escuta HealthState.damage_applied e não altera HP,
+WorldPoint ou morte. Comparação por identidade de um ThreatView novo seria falsa:
+os dados são conferidos, não o endereço do RefCounted.
+
+Próximos consumidores dentro de F9: ligar telas/AX/CLI às mesmas APIs, provar
+lançamento externo, ações/interação/habilidades, casos de revisão incompatível e
+falha de IO da prévia, export limpo e roteiro humano. Os botões técnicos antigos
+não foram trocados neste primeiro consumidor. Não declarar F9-11 ou F9 completos.
