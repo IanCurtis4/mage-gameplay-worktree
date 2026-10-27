@@ -2,7 +2,7 @@ param(
     [Parameter(Mandatory)][string]$GodotPath,
     [Parameter(Mandatory)][string]$EvidenceDirectory,
     [switch]$SkipImport,
-    [ValidateSet('Geometry','Objects','ObjectsNative','Mesh','Relief','Ports','Batch','Materials','MaterialsNative','Scale','Cliff','CliffNative','BiomeProps','BiomePropsNative','Borders','BordersNative','Shadows','ShadowsNative','CanvasOrder','Library','LibraryNative','Viewport','ViewportNative')][string]$Stage='Geometry'
+    [ValidateSet('Geometry','Objects','ObjectsNative','Mesh','Relief','Ports','Batch','Materials','MaterialsNative','Scale','Cliff','CliffNative','BiomeProps','BiomePropsNative','Borders','BordersNative','Shadows','ShadowsNative','CanvasOrder','Library','LibraryNative','Viewport','ViewportNative','RuntimeView')][string]$Stage='Geometry'
 )
 $ErrorActionPreference='Stop'
 $f9Root=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
@@ -44,6 +44,7 @@ if($Stage -eq 'Batch'){$f9Script='res://tests/map_editor_navigation_batch_test.g
 if($Stage -eq 'Materials'){$f9Script='res://tests/map_editor_materials_test.gd';$f9Marker='F9_MATERIAL_RESULT'}
 if($Stage -eq 'Library'){$f9Script='res://tests/map_editor_library_test.gd';$f9Marker='F9_LIBRARY_RESULT'}
 if($Stage -eq 'Viewport'){$f9Script='res://tests/map_editor_viewport_test.gd';$f9Marker='F9_VIEWPORT_RESULT'}
+if($Stage -eq 'RuntimeView'){$f9Script='res://tests/map_editor_gameplay_test.gd';$f9Marker='F9_RUNTIME_VIEW_RESULT'}
 if($Stage -eq 'CanvasOrder'){$f9Script='res://tests/map_editor_canvas_order_test.gd';$f9Marker='F9_ORDER_RESULT'}
 if($Stage -eq 'Shadows'){$f9Script='res://tests/map_editor_shadows_test.gd';$f9Marker='F9_SHADOW_RESULT'}
 if($Stage -eq 'Borders'){$f9Script='res://tests/map_editor_borders_test.gd';$f9Marker='F9_BORDER_RESULT'}
@@ -83,7 +84,7 @@ $f9EngineText=Get-Content -LiteralPath (Join-Path $f9Evidence 'geometry.engine.l
 $f9Match=[regex]::Match($f9Text,'(?m)^'+$f9Marker+' (.+)$')
 $f9Result=if($f9Match.Success){ConvertFrom-Json $f9Match.Groups[1].Value}else{$null}
 $f9Pass=-not $f9Timeout -and -not $f9Aborted -and $f9Process.ExitCode -eq 0 -and $null -ne $f9Result -and $f9Result.ok -and $f9Result.count -gt 0 -and @($f9Result.checks).Count -eq $f9Result.count -and @($f9Result.checks | Where-Object {-not $_.ok}).Count -eq 0 -and $f9Text -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:' -and $f9EngineText -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:'
-$f9Expected=@{Geometry=46;Objects=53;ObjectsNative=25;Mesh=34;Relief=58;Ports=92;Batch=34;Materials=35;MaterialsNative=20;Scale=46;Cliff=61;CliffNative=17;BiomeProps=30;BiomePropsNative=23;Borders=93;BordersNative=32;Shadows=28;ShadowsNative=86;CanvasOrder=36;Library=50;LibraryNative=53;Viewport=20;ViewportNative=52}
+$f9Expected=@{Geometry=46;Objects=53;ObjectsNative=25;Mesh=34;Relief=58;Ports=92;Batch=34;Materials=35;MaterialsNative=20;Scale=46;Cliff=61;CliffNative=17;BiomeProps=30;BiomePropsNative=23;Borders=93;BordersNative=32;Shadows=28;ShadowsNative=90;CanvasOrder=43;Library=50;LibraryNative=53;Viewport=20;ViewportNative=52;RuntimeView=12}
 $f9Pass=$f9Pass -and $f9Result.count -eq $f9Expected[$Stage]
 foreach($f9Input in $f9Inputs){
     $f9Source=Join-Path $f9Root $f9Input.path; $f9Copy=Join-Path $f9Fixture $f9Input.path

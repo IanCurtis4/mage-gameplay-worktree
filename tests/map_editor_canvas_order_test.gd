@@ -69,6 +69,7 @@ func run() -> void:
 	root.free()
 	broadphase_checks()
 	priority_cache_checks()
+	external_actor_checks()
 	benchmark()
 	benchmark_cases()
 	var ok := checks.all(func(entry: Dictionary) -> bool: return entry.ok)
@@ -91,6 +92,40 @@ func benchmark() -> void:
 	var directory := OS.get_environment("F9_EVIDENCE")
 	if not directory.is_empty():
 		var file := FileAccess.open(directory.path_join("canvas_order_metrics.json"),FileAccess.WRITE); file.store_string(JSON.stringify(metrics,"\t",true,true)); file.close()
+
+func external_actor_checks() -> void:
+	var renderer := Node2D.new(); self.root.add_child(renderer)
+	var owner := Node2D.new(); self.root.add_child(owner)
+	var before := Node.new(); owner.add_child(before)
+	var actor := CombatActor.new(); actor.name = "ExternalSort"; owner.add_child(actor); actor.set_process(false)
+	var after := Node.new(); owner.add_child(after)
+	var input := preload("res://tests/fixtures/e07/f1/fixture_input.gd").make()
+	var assembled := ExpeditionAssembler.build(input); var world := WorldGeometry.new(); world.configure(assembled.data.manifest,"sample")
+	var point := ExpeditionWorldPoint.create("sample","sample/root/surface/floor",Vector3(50,0,50))
+	actor.bind_world_geometry(world,point,input.traversal.to_data(),"external_sort_actor"); actor.set_process(false)
+	actor._sprite_visible_height = 32
+	var point_before := actor.world_point().to_data(); var revision := world.geometry_revision; var profile := actor.world_motion.profile()
+	var first := Node2D.new(); first.set_meta("canvas_order_record",box("first",AABB(Vector3(-1000,0,0),Vector3(1,1,1)))); renderer.add_child(first)
+	for index: int in 4500:
+		var node := Node2D.new(); renderer.add_child(node)
+		node.set_meta("canvas_order_record",box("item_%04d"%index,AABB(Vector3(1000+index*64,0,0),Vector3(1,1,1))))
+	var result := Ordering.apply(renderer,[actor])
+	check("external_actor_more_than4096_static_items_resolve",result.ok and result.order.size() == 4502)
+	check("external_actor_hierarchy_and_execution_order_preserved",actor.get_parent() == owner and actor.get_index() == 1 and owner.get_child(0) == before and owner.get_child(2) == after)
+	var grouped: bool = first.z_index < actor.z_index and actor.z_index < renderer.get_child(1).z_index and not actor.z_as_relative
+	var actual: Array = []; var wanted: Array = []
+	for node: Node in renderer.get_children(): actual.append(node.get_meta("canvas_order_record").id)
+	for id: String in result.get("order",[]):
+		if id.begins_with("actor_"): continue
+		wanted.append(id)
+	check("external_actor_has_strict_z_between_static_runs",grouped)
+	check("static_relative_order_matches_shared_topology",actual == wanted)
+	var z := actor.z_index; var warm := Ordering.apply(renderer,[actor,actor])
+	check("duplicate_external_observation_deduplicates_and_reuses_order",warm.ok and warm.order.size() == 4502 and warm.unchanged and actor.z_index == z)
+	check("external_order_preserves_world_point_profile_and_geometry",actor.world_point().to_data() == point_before and actor.world_motion.profile() == profile and world.geometry_revision == revision)
+	var invalid := Ordering.apply(renderer,[42])
+	check("invalid_external_observation_fails_without_reordering",not invalid.ok and invalid.code == "canvas_order_invalid_observer" and actor.z_index == z and actor.get_parent() == owner)
+	actor.world_motion.release(); renderer.free(); owner.free()
 
 # Exhaustive broadphase oracle: every unordered pair, then an independent stable
 # zero-degree scan. It deliberately has no buckets or incremental state.

@@ -1,0 +1,46 @@
+{
+  "baseline": "author/viewport_shadows_native_01",
+  "candidate": "author/shared_renderer_native_01",
+  "images": [
+    {
+      "image": "bridge_after.png",
+      "equal": true
+    },
+    {
+      "image": "bridge_before.png",
+      "equal": true
+    },
+    {
+      "image": "earth_flat_after.png",
+      "equal": true
+    },
+    {
+      "image": "earth_flat_before.png",
+      "equal": true
+    },
+    {
+      "image": "sand_flat_after.png",
+      "equal": true
+    },
+    {
+      "image": "sand_flat_before.png",
+      "equal": true
+    },
+    {
+      "image": "sand_ramp_after.png",
+      "equal": true
+    },
+    {
+      "image": "sand_ramp_before.png",
+      "equal": true
+    },
+    {
+      "image": "sand_rotated_after.png",
+      "equal": true
+    },
+    {
+      "image": "sand_rotated_before.png",
+      "equal": true
+    }
+  ]
+}

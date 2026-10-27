@@ -218,9 +218,16 @@ static func _mesh_record(node: MeshInstance2D, id: String) -> Dictionary:
 	var record := {"id":"mesh_"+Canonical.digest([vertices,caps]).substr(0,32),"kind":"mesh","bounds":bounds,"screen":_screen(vertices),"anchor":bounds.get_center(),"caps":caps}
 	node.set_meta("canvas_order_record",record); return record
 
-static func apply(root: Node2D) -> Dictionary:
-	var records: Array = []; var nodes := {}; var bindings := {}
-	for node: Node in root.get_children():
+static func apply(root: Node2D, observed: Array = []) -> Dictionary:
+	var records: Array = []; var nodes := {}; var bindings := {}; var seen := {}; var foreign := {}
+	var candidates: Array = root.get_children()
+	for value: Variant in observed:
+		if typeof(value) != TYPE_OBJECT or not is_instance_valid(value) or not value is Node2D: return {"ok":false,"code":"canvas_order_invalid_observer"}
+		if root.is_inside_tree() and value.is_inside_tree() and root.get_canvas() != value.get_canvas(): return {"ok":false,"code":"canvas_order_canvas_mismatch"}
+		candidates.append(value)
+	for node: Node in candidates:
+		if seen.has(node.get_instance_id()): continue
+		seen[node.get_instance_id()] = true
 		if not node is Node2D or not node.visible: continue
 		var id := str(node.get_instance_id()); var record := {}
 		if node.has_meta("canvas_order_record"): record = node.get_meta("canvas_order_record")
@@ -231,7 +238,7 @@ static func apply(root: Node2D) -> Dictionary:
 			var rect := Rect2(node.position+node.get_rect().position*node.scale,node.get_rect().size*node.scale)
 			record = {"id":id,"kind":"sprite","anchor":anchor,"bounds":AABB(anchor-Vector3(radius,0,radius),Vector3(radius*2,height,radius*2)),"screen":rect}
 		elif node.has_method("world_point"):
-			id = "actor_"+str(node.name)
+			id = "actor_"+(str(node.get_path()) if node.get_parent() != root and node.is_inside_tree() else str(node.name))
 			var point: Variant = node.call("world_point")
 			if point == null: continue
 			var radius := float(node.get("collision_radius")); var height := float(node.get("_sprite_visible_height"))*float(node.get("sprite_visual_scale"))
@@ -239,15 +246,32 @@ static func apply(root: Node2D) -> Dictionary:
 			record = {"id":id,"kind":"sprite","anchor":anchor,"bounds":AABB(anchor-Vector3(radius,0,radius),Vector3(radius*2,height,radius*2)),"screen":Rect2(screen-Vector2(height*0.65,height),Vector2(height*1.3,height+8))}
 		if record.is_empty(): continue
 		records.append(record); nodes[record.id] = node; bindings[record.id] = node.get_instance_id()
+		if node.get_parent() != root: foreign[record.id] = true
+	var external_mode := not foreign.is_empty()
+	if external_mode:
+		var dynamic_count := 0
+		for id: String in nodes:
+			if foreign.has(id) or nodes[id].has_method("world_point"): dynamic_count += 1
+		# Static runs share a Z level and retain their safe renderer child order.
+		# Only simulated/external nodes require a distinct interleaving level.
+		if dynamic_count > 1999: return {"ok":false,"code":"canvas_order_external_limit"}
 	var cache: Dictionary = root.get_meta("canvas_order_cache",{})
 	var result := solve(records,cache)
 	if not result.ok: return result
 	root.set_meta("canvas_order_cache",cache)
 	var same_bindings: bool = root.get_meta("canvas_order_bindings",{}) == bindings
+	var same_scope: bool = root.get_meta("canvas_order_external_scope",false) == external_mode
 	root.set_meta("canvas_order_bindings",bindings)
-	if not result.order_changed and same_bindings: return result
+	root.set_meta("canvas_order_external_scope",external_mode)
+	if not result.order_changed and same_bindings and same_scope: return result
+	var layer := 1
 	for i: int in result.order.size():
 		var node: Node2D = nodes[result.order[i]]
-		node.z_index = mini(4000,2+i*2) if result.order.size() <= 2000 else 1+floori(float(i)*3999/maxi(1,result.order.size()-1))
-		root.move_child(node,root.get_child_count()-1)
+		if external_mode:
+			node.z_as_relative = false
+			if foreign.has(result.order[i]) or node.has_method("world_point"):
+				layer += 1; node.z_index = layer; layer += 1
+			else: node.z_index = layer
+		else: node.z_index = mini(4000,2+i*2) if result.order.size() <= 2000 else 1+floori(float(i)*3999/maxi(1,result.order.size()-1))
+		if node.get_parent() == root and (not external_mode or not node.has_method("world_point")): root.move_child(node,root.get_child_count()-1)
 	return result

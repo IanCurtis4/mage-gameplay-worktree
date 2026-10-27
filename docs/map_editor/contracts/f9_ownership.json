@@ -2099,6 +2099,102 @@
       "owner": "Sol F9",
       "previous_owner": "new F9-06/07 viewport model, camera and canonical inspection proofs",
       "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/contracts/f9_gameplay_preview.md",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-11 runtime preview and shared existing renderer extraction, after supervised viewport checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/world/map_package_view.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-11 runtime preview and shared existing renderer extraction, after supervised viewport checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/world/map_package_view.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-11 runtime preview and shared existing renderer extraction, after supervised viewport checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/world/authored_expedition_view.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-11 runtime preview and shared existing renderer extraction, after supervised viewport checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/world/authored_expedition_view.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-11 runtime preview and shared existing renderer extraction, after supervised viewport checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/preview/gameplay_candidate.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-11 runtime preview and shared existing renderer extraction, after supervised viewport checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/preview/gameplay_candidate.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-11 runtime preview and shared existing renderer extraction, after supervised viewport checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/preview/gameplay_launcher.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-11 runtime preview and shared existing renderer extraction, after supervised viewport checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/preview/gameplay_launcher.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-11 runtime preview and shared existing renderer extraction, after supervised viewport checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/preview/gameplay_app.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-11 runtime preview and shared existing renderer extraction, after supervised viewport checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/preview/gameplay_app.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-11 runtime preview and shared existing renderer extraction, after supervised viewport checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "scenes/map_authoring/gameplay_preview.tscn",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-11 runtime preview and shared existing renderer extraction, after supervised viewport checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_gameplay_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-11 runtime preview and shared existing renderer extraction, after supervised viewport checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_gameplay_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-11 runtime preview and shared existing renderer extraction, after supervised viewport checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_gameplay_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-11 runtime preview and shared existing renderer extraction, after supervised viewport checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_gameplay_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-11 runtime preview and shared existing renderer extraction, after supervised viewport checkpoint",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -2109,7 +2205,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "viewport/library component and shadow snapshot fix validated technically at 6d729724ca29449d02847146f989378e194d2073: Luna20/52/53/28,Core639,official5;9799 full-manifest inputs audited. Fixture released. Remaining F9 not complete.",
+    "state": "shared renderer producer awaits frozen Luna supervision; source/HEAD/fixture exclusive until report. Remaining F9 open.",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -2124,7 +2220,8 @@
       "docs/map_editor/delivery/evidence/f9/luna/shadows/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/canvas_broadphase/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/library/report.md",
-      "docs/map_editor/delivery/evidence/f9/luna/viewport/report.md"
+      "docs/map_editor/delivery/evidence/f9/luna/viewport/report.md",
+      "docs/map_editor/delivery/evidence/f9/luna/shared_renderer/report.md"
     ],
     "generated_evidence_roots": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
@@ -2212,7 +2309,12 @@
       "docs/map_editor/delivery/evidence/f9/luna/viewport/library",
       "docs/map_editor/delivery/evidence/f9/luna/viewport/shadows",
       "docs/map_editor/delivery/evidence/f9/luna/viewport/core",
-      "docs/map_editor/delivery/evidence/f9/luna/viewport/official"
+      "docs/map_editor/delivery/evidence/f9/luna/viewport/official",
+      "docs/map_editor/delivery/evidence/f9/luna/shared_renderer/model",
+      "docs/map_editor/delivery/evidence/f9/luna/shared_renderer/order",
+      "docs/map_editor/delivery/evidence/f9/luna/shared_renderer/native",
+      "docs/map_editor/delivery/evidence/f9/luna/shared_renderer/viewport",
+      "docs/map_editor/delivery/evidence/f9/luna/shared_renderer/official"
     ]
   }
 }

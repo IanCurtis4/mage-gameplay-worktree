@@ -1,0 +1,86 @@
+{
+  "inputs": 7860,
+  "checks": [
+    {
+      "manifest": "shared_renderer_native_03",
+      "inputs": 1965,
+      "mismatches": [],
+      "ok": true
+    },
+    {
+      "manifest": "shared_renderer_model_02",
+      "inputs": 1965,
+      "mismatches": [],
+      "ok": true
+    },
+    {
+      "manifest": "shared_renderer_order_03",
+      "inputs": 1965,
+      "mismatches": [],
+      "ok": true
+    },
+    {
+      "manifest": "shared_renderer_viewport_01",
+      "inputs": 1965,
+      "mismatches": [],
+      "ok": true
+    }
+  ],
+  "images": [
+    {
+      "image": "bridge_after.png",
+      "equal": true,
+      "sha256": "9EC7A556F131D9B1F7F4C8FB512ECA763AF920B35AB0649E080BBE21EEF6B9CD"
+    },
+    {
+      "image": "bridge_before.png",
+      "equal": true,
+      "sha256": "480E68F53B5D218C8B91ACCF63F740A12531FF2445E69C38F43839B198D07BEB"
+    },
+    {
+      "image": "earth_flat_after.png",
+      "equal": true,
+      "sha256": "CAE5857E03F1A3E0AB23F13C765A54AABCD8CBFEFDABB77CFD0B497A760D9111"
+    },
+    {
+      "image": "earth_flat_before.png",
+      "equal": true,
+      "sha256": "DFEA3A56F18776399F1F83D8C607F3729DD7B5DDA323469BD719A3768B995D7C"
+    },
+    {
+      "image": "sand_flat_after.png",
+      "equal": true,
+      "sha256": "B3686D2B935F6FE3BFAF06B7ADFF23E916019A3AE6B23055F265014B882C1FDB"
+    },
+    {
+      "image": "sand_flat_before.png",
+      "equal": true,
+      "sha256": "FC3593A45ACA45BEEE229DAA559FA47E5AAC3E79BFC43E5BE00CFE7985501A5E"
+    },
+    {
+      "image": "sand_ramp_after.png",
+      "equal": true,
+      "sha256": "D7BC1CD3686A49D5097CFC05DC2D815F9E996F3E7C1AC19646D32C6D44A5F447"
+    },
+    {
+      "image": "sand_ramp_before.png",
+      "equal": true,
+      "sha256": "F8166D2A784641A7524333BFA680F26CE5D07C922CD09488FC3B778065B6CC9D"
+    },
+    {
+      "image": "sand_rotated_after.png",
+      "equal": true,
+      "sha256": "C394292CE86727E7C3F684B95C259C7905D1077811698C0987AA08C3D3222917"
+    },
+    {
+      "image": "sand_rotated_before.png",
+      "equal": true,
+      "sha256": "D74B27A8060C6BE4D8CF89D6221A74FD6EFA7837B279BCA2B830D83A684DB8D8"
+    },
+    {
+      "image": "bridge_external.png = bridge_after.png",
+      "equal": true
+    }
+  ],
+  "ok": true
+}

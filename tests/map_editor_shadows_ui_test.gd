@@ -11,6 +11,7 @@ const ProjectionView = preload("res://scripts/world/expedition_geometry_view.gd"
 const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
 const Shadow = preload("res://scripts/world/ground_shadow.gd")
 const SampleTerrainPanel = preload("res://scripts/map_authoring/terrain/terrain_panel.gd")
+const CanvasOrder = preload("res://scripts/world/world_canvas_order.gd")
 var checks: Array[Dictionary] = []
 func _enter_tree() -> void: run.call_deferred()
 func frames() -> void:
@@ -136,4 +137,17 @@ func bridge_case(window: Window, canvas: Control) -> void:
 	check("bridge_shadow_changes_upper_ground_pixels",darkened_in(before,after,upper) > 4)
 	check("bridge_shadow_does_not_paint_lower_floor",darkened_in(before,after,lower) == 0)
 	check("bridge_shadow_preserves_physics_and_package",canvas.geometry.geometry_revision == revision and canvas.package.package_hash == hash_value)
+	var gameplay_owner := Node2D.new(); canvas.add_child(gameplay_owner)
+	var prior_transform := actor.global_transform; var prior_point := actor.world_point().to_data()
+	# A live reparent exits the tree and correctly releases WorldActorMotion.
+	# Build the comparison actor in its gameplay parent before its initial binding.
 	actor.world_motion.release(); actor.queue_free(); await frames()
+	actor = CombatActor.new(); actor.set_animation_kind(&"swordsman"); gameplay_owner.add_child(actor)
+	var external_bound := actor.bind_world_geometry(canvas.geometry,ExpeditionWorldPoint.create("map_preview",cell.surface_id,point),built.package.profile,"shadow_bridge_external_actor")
+	actor.global_transform = prior_transform; actor.set_process(false)
+	var external_order := CanvasOrder.apply(canvas._meshes,[actor])
+	check("external_actor_canvas_order_resolves",external_order.ok)
+	check("external_actor_keeps_gameplay_hierarchy_and_world_point",external_bound.ok and actor.world_motion.is_current_world() and actor.get_parent() == gameplay_owner and actor.get_index() == 0 and actor.world_point().to_data() == prior_point and canvas.geometry.geometry_revision == revision)
+	var external := await capture(window,"bridge_external")
+	check("external_actor_render_matches_direct_root_baseline",external.get_data() == after.get_data())
+	actor.world_motion.release(); actor.queue_free(); gameplay_owner.queue_free(); await frames()
