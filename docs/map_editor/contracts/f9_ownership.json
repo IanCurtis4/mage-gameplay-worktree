@@ -2289,7 +2289,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "GUI/AX/CLI consumer freeze pending at code3418303544fada82f3485de1c63a04e847805fbf. Root EditorNative22 and Cli18 PASS. Failed attempts preserved; conservative leases. No overlapping writers; full F9 open.",
+    "state": "GUI/AX/CLI partial PASS at8610171; Core composition failed3 inherited technical24 fixture assumptions. Sol explicitly restores only that test setup to24, keeping oracles and human sample80. Retest Core+official pending; full F9 open.",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -2308,7 +2308,8 @@
       "docs/map_editor/delivery/evidence/f9/luna/shared_renderer/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/gameplay/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/window_controls/report.md",
-      "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/report.md"
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/report.md",
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/report_final.md"
     ],
     "generated_evidence_roots": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
@@ -2416,7 +2417,8 @@
       "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/window",
       "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/candidate_native",
       "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/core",
-      "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/official"
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/official",
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/core_corrected"
     ]
   }
 }

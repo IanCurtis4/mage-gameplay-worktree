@@ -13,7 +13,13 @@ func check(id: String, ok: bool) -> void:
 	checks.append({"id":id,"ok":ok}); print("M3_CHECK "+id+" "+str(ok))
 func _initialize() -> void: _run.call_deferred()
 func _run() -> void:
-	var source := Document.sample(); var original := Document.hash_source(source)
+	# These legacy obstruction oracles intentionally use the technical24 door.
+	# The human sample80 is covered by the actual Editor/CLI player tests.
+	var source := Document.sample()
+	for index: int in source.pieces.size():
+		for port: Dictionary in source.pieces[index].source.connectors: port.width = 24
+		rehash(source,index)
+	var original := Document.hash_source(source)
 	var tick := Time.get_ticks_usec(); var built := Compiler.compile(source); var elapsed := (Time.get_ticks_usec()-tick)/1000.0
 	check("two_piece_compile",built.ok)
 	if not built.ok: print(built); finish(); return
