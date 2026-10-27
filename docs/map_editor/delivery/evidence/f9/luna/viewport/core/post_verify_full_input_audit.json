@@ -1,0 +1,59 @@
+{
+  "audit": "post_verify_full_input_audit",
+  "head": "6d729724ca29449d02847146f989378e194d2073",
+  "fixture": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+  "evaluated_utc": "2026-10-27T06:23:59.1523132Z",
+  "sets": [
+    {
+      "name": "model",
+      "input_evidence": "model/runs.json",
+      "project_metadata_manifest": "model/import/manifest.json",
+      "input_count": 1961,
+      "source_fixture_manifest_mismatches": 0,
+      "project_source_sha256": "ADF17C0941269918DEE0A0005329D874DA199778DDEFCE294CA00E655367857E",
+      "project_fixture_sha256": "33726AFE86093A0D6F580114F803045E4F6624DC94528ECBEBD61FB199A06517"
+    },
+    {
+      "name": "native",
+      "input_evidence": "native/runs.json",
+      "project_metadata_manifest": "native/import/manifest.json",
+      "input_count": 1961,
+      "source_fixture_manifest_mismatches": 0,
+      "project_source_sha256": "ADF17C0941269918DEE0A0005329D874DA199778DDEFCE294CA00E655367857E",
+      "project_fixture_sha256": "33726AFE86093A0D6F580114F803045E4F6624DC94528ECBEBD61FB199A06517"
+    },
+    {
+      "name": "library",
+      "input_evidence": "library/runs.json",
+      "project_metadata_manifest": "library/import/manifest.json",
+      "input_count": 1961,
+      "source_fixture_manifest_mismatches": 0,
+      "project_source_sha256": "ADF17C0941269918DEE0A0005329D874DA199778DDEFCE294CA00E655367857E",
+      "project_fixture_sha256": "33726AFE86093A0D6F580114F803045E4F6624DC94528ECBEBD61FB199A06517"
+    },
+    {
+      "name": "shadows",
+      "input_evidence": "shadows/runs.json",
+      "project_metadata_manifest": "shadows/import/manifest.json",
+      "input_count": 1961,
+      "source_fixture_manifest_mismatches": 0,
+      "project_source_sha256": "ADF17C0941269918DEE0A0005329D874DA199778DDEFCE294CA00E655367857E",
+      "project_fixture_sha256": "33726AFE86093A0D6F580114F803045E4F6624DC94528ECBEBD61FB199A06517"
+    },
+    {
+      "name": "core",
+      "input_evidence": "core/manifest.json",
+      "project_metadata_manifest": "core/manifest.json",
+      "input_count": 1955,
+      "source_fixture_manifest_mismatches": 0,
+      "project_source_sha256": "ADF17C0941269918DEE0A0005329D874DA199778DDEFCE294CA00E655367857E",
+      "project_fixture_sha256": "33726AFE86093A0D6F580114F803045E4F6624DC94528ECBEBD61FB199A06517"
+    }
+  ],
+  "total_input_entries": 9799,
+  "all_source_and_fixture_inputs_match": true,
+  "project_source_sha256": "adf17c0941269918dee0a0005329d874da199778ddefce294ca00e655367857e",
+  "project_fixture_sha256": "33726afe86093a0d6f580114f803045e4f6624dc94528ecbebd61fb199a06517",
+  "project_only_difference": "version_control/autoload_on_startup true in source; false in fixture",
+  "project_difference_verified_line_by_line": true
+}
