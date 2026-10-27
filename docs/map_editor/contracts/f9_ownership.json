@@ -2265,7 +2265,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "Stable window and passive controls author33/52/29 plus official6 PASS,1982 final inputs audited. Await frozen Luna native52/window33/controls29/Core639/official6; GUI/AX/CLI and world field visuals still open.",
+    "state": "Window/controls technically validated at581dae4b236f84f178abde67ccf1587f70a147e7: Luna52/33/29/Core639/official6 PASS,7922 full inputs zero divergence. Fixture released. NextGUI/AX/CLI and worldfieldvisuals; fullF9open.",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
