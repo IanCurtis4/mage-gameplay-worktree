@@ -140,3 +140,66 @@ Próximos consumidores dentro de F9: ligar telas/AX/CLI às mesmas APIs, provar
 lançamento externo, ações/interação/habilidades, casos de revisão incompatível e
 falha de IO da prévia, export limpo e roteiro humano. Os botões técnicos antigos
 não foram trocados neste primeiro consumidor. Não declarar F9-11 ou F9 completos.
+
+## Consumidor de janela e controles — continuação em execução
+
+Código base supervisionadobf406c3, consolidação1dddfc2. Manter envelope de RUN
+versão1. Acrescentar WINDOW independente: windows/<nonce>/window.bin imutável,
+versão1/window_id/candidate_hash/initial_session. Cabeçalhos baratos validam
+namespace fechado e referência à sessão; pacote só é revalidado ao abrir jogo.
+Uma janela é usada uma vez (started.token) e tem lease próprio. Reabrir faz nova
+WINDOW sobre a sessão atual indicada no status validado da antiga. Não retomar
+uma janela consumida ou reproduzir entradas incertas após crash.
+
+Restart troca RUN/perfil e conserva WINDOW/processo; status da janela aponta a
+sessão atual e stop usa o token estável da janela. Liberar leases independentes
+em close/falha; nenhum PID é morto. Testar na instância App e em processo Godot
+normal separado, inclusive stop após restart e recusa de janela consumida. O
+lançamento headless é parâmetro booleano fechado para AX/CLI e prova de processo;
+não equivale a prova visual do binário release. Janela humana segue nativa.
+
+Ações remotas serão envelopes passivos limitados e com window_id/session_id/
+request_id. Recusar sessão antiga após restart. Antes de executar, registrar
+receipt em memória; persistir ACK a partir do resultado em cache, sem executar
+novamente se o ACK falhar. Janela nova não consome entradas da anterior. UI/AX/
+CLI delegam a movimento/skill/interação/serviços existentes, não aplicam dano ou
+morte simulados. Respostas não transportam root/registry/objetos executáveis.
+Registrar limites, revisão incompatível, falhas e custos antes de fechar F9-11.
+
+### Protocolo de controles versão1 implementado
+
+Arquivo command.request por WINDOW, lock de escritor sem sobrescrever outro
+pedido. Envelope fechado: format_version1/window_id/session_id/request_id/payload.
+request_id24hex; resposta reply_<request_id>.json com versão/tokens/fingerprint/
+result. Inputs4KiB, respostas128KiB, até256 receipts por janela. Limite conserva
+histórico em memória e recusa novos pedidos; stop estável e input humano direto
+continuam disponíveis. Janela consumida não é reaberta, evitando replay de
+entrada incerta depois de crash. JSON estrito rejeita campos duplicados; nenhuma
+cena/script/objeto vem do payload. Versão/revisão não aceitam booleano como número.
+
+Payloads: inspect/suspend/resume/restart/close têm só kind; move acrescenta
+position_xyz[3] e geometry_revision; skill acrescenta também skill_id/preview/rank.
+Rank0 usa o máximo canônico, outros ranks passam pela política SkillCastRank,
+sem alterar intenção anterior da UI. interaction recebe interaction_id e consulta
+portal/objetivo reais; collect recebe ticket_id existente. Ponto é projetado pelo
+adaptador e usa clique normal/oclusão; não é teleporte nem seção editorial.
+
+Normalizar revisão/rank para int e coordenadas para float antes do fingerprint,
+pois JSON pode mudar o tipo numérico, enquanto ExpeditionCanonical os distingue.
+Mesmo request_id com outro payload é conflito. Resultado concluído fica em cache
+antes do ACK; falha de rename do ACK tenta novamente só a resposta. Cache é da
+WINDOW e sobrevive a restart da RUN. Header da resposta conserva session_id do
+pedido original; result.state informa sessão atual. Pedidos de RUN antiga são
+recusados depois de restart. Poll de reply usa os tokens/fingerprint originais.
+
+App.describe_gameplay é projeção de ponto/HP/SP/cooldowns/ranks/inimigos/interações/
+recompensa/época reais. Não oferece dano estimado, fórmulas ou objetos do serviço.
+Durante substituição transacional, host destacado/passivo não é alvo de input.
+App.command delega às mesmas autoridades usadas pela UI nativa. ObservedApp do
+teste conta despachos e chama super, sem simular efeito; IOfail real é diretório
+no destino do ACK, removido apenas dentro do namespace descartável do teste.
+
+As telas/AX/CLI ainda precisam ser conectadas e validadas. VFX dos quatro campos
+(FOGO/GELO/RAIO/BARREIRA) têm projeção D05 pendente no renderer legado; existência
+de campo e custo real nesta prova não equivalem à apresentação visual desses
+campos. Fechar essa projeção dentro de F9, sem nova fórmula de combate.

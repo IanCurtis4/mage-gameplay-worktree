@@ -1,0 +1,112 @@
+{
+  "created_utc": "2026-10-27T14:51:45.6265909Z",
+  "f1_native_fixture": true,
+  "source_commit": "1dddfc22baf39aabcd71043627aa71dc157890c3",
+  "working_tree_status": [
+    " M docs/map_editor/contracts/f9_gameplay_preview.md",
+    " M docs/map_editor/contracts/f9_ownership.json",
+    " M scripts/map_authoring/preview/gameplay_app.gd",
+    " M scripts/map_authoring/preview/gameplay_launcher.gd",
+    " M tools/map_editor_completion/run.ps1",
+    "?? docs/map_editor/delivery/evidence/f9/author/gameplay_controls_01/",
+    "?? docs/map_editor/delivery/evidence/f9/author/gameplay_controls_02/",
+    "?? docs/map_editor/delivery/evidence/f9/author/gameplay_protocol_window_01/",
+    "?? docs/map_editor/delivery/evidence/f9/author/gameplay_window_01/",
+    "?? docs/map_editor/delivery/evidence/f9/author/gameplay_window_02/",
+    "?? docs/map_editor/delivery/evidence/f9/author/gameplay_window_native_01/",
+    "?? scripts/map_authoring/preview/gameplay_protocol.gd",
+    "?? scripts/map_authoring/preview/gameplay_protocol.gd.uid",
+    "?? tests/map_editor_gameplay_controls_test.gd",
+    "?? tests/map_editor_gameplay_controls_test.gd.uid",
+    "?? tests/map_editor_gameplay_launch_test.gd",
+    "?? tests/map_editor_gameplay_launch_test.gd.uid"
+  ],
+  "runner_sha256": "9D92A48A613127B6DA109F42E53B7D78E167FC484051BC3F0E985729F2F8E27D",
+  "engine_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+  "timeout_seconds": 300,
+  "selection": {
+    "test": [
+      "combat_animation_test",
+      "e07_f3_snapshot_test",
+      "e07_f6_snapshot_test",
+      "e07_f1_pilot_scene_test",
+      "e07_f1_presentation_test",
+      "e07_f5_fault_test"
+    ],
+    "test_filter_specified": true,
+    "from_step": 1,
+    "to_step": 299,
+    "skip_editor_import": true
+  },
+  "total_steps": 299,
+  "selected_steps": 6,
+  "checks": [
+    {
+      "index": 10,
+      "name": "combat_animation_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/combat_animation_test.gd"
+      ]
+    },
+    {
+      "index": 252,
+      "name": "e07_f6_snapshot_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f6_snapshot_test.gd"
+      ]
+    },
+    {
+      "index": 261,
+      "name": "e07_f5_fault_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f5_fault_test.gd"
+      ]
+    },
+    {
+      "index": 268,
+      "name": "e07_f3_snapshot_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f3_snapshot_test.gd"
+      ]
+    },
+    {
+      "index": 296,
+      "name": "e07_f1_pilot_scene_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_pilot_scene_test.gd"
+      ]
+    },
+    {
+      "index": 297,
+      "name": "e07_f1_presentation_test",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--script",
+        "res://tests/e07_f1_presentation_test.gd"
+      ]
+    }
+  ]
+}

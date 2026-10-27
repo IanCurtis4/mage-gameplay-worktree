@@ -1,0 +1,36 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_WINDOW_CHECK actual_wide_map_compiles true
+F9_WINDOW_CHECK run_session_created true
+F9_WINDOW_CHECK window_descriptor_is_independent_from_run true
+F9_WINDOW_CHECK window_header_roundtrips_closed_namespace true
+F9_WINDOW_CHECK foreign_window_path_refused true
+F9_WINDOW_CHECK run_header_has_no_loaded_payload true
+F9_WINDOW_CHECK app_claims_window_and_run true
+F9_WINDOW_CHECK second_window_owner_refused true
+F9_WINDOW_CHECK second_run_owner_refused true
+F9_WINDOW_CHECK window_boots_actual_campaign true
+F9_WINDOW_CHECK window_status_names_current_run true
+F9_WINDOW_CHECK native_window_title_identifies_candidate true
+F9_WINDOW_CHECK restart_keeps_window_identity true
+F9_WINDOW_CHECK restart_creates_new_run_identity true
+F9_WINDOW_CHECK stable_window_tracks_restarted_run true
+F9_WINDOW_CHECK old_profile_is_preserved true
+F9_WINDOW_CHECK restart_releases_old_run_lease true
+F9_WINDOW_CHECK restart_holds_new_run_lease true
+F9_WINDOW_CHECK foreign_stop_token_does_not_suspend true
+F9_WINDOW_CHECK stop_targets_window_after_internal_restart true
+F9_WINDOW_CHECK stable_stop_suspends_restarted_campaign true
+F9_WINDOW_CHECK both_owned_leases_released true
+F9_WINDOW_CHECK previous_profile_unchanged_by_new_run_stop true
+F9_WINDOW_CHECK launcher_follows_current_run_without_pid_kill true
+F9_WINDOW_CHECK used_window_is_not_replayed true
+F9_WINDOW_CHECK rejected_replay_preserves_closed_window_status true
+F9_WINDOW_CHECK launcher_starts_separate_normal_godot_process true
+F9_WINDOW_CHECK reopen_creates_fresh_window true
+F9_WINDOW_CHECK separate_process_resumes_same_saved_run false
+F9_WINDOW_CHECK separate_process_keeps_candidate_identity true
+F9_WINDOW_CHECK separate_process_accepts_tokened_stop true
+F9_WINDOW_CHECK owned_process_exits_after_canonical_suspend true
+F9_WINDOW_CHECK separate_process_log_has_no_engine_or_script_errors true
+F9_WINDOW_RESULT {"checks":[{"id":"actual_wide_map_compiles","ok":true},{"id":"run_session_created","ok":true},{"id":"window_descriptor_is_independent_from_run","ok":true},{"id":"window_header_roundtrips_closed_namespace","ok":true},{"id":"foreign_window_path_refused","ok":true},{"id":"run_header_has_no_loaded_payload","ok":true},{"id":"app_claims_window_and_run","ok":true},{"id":"second_window_owner_refused","ok":true},{"id":"second_run_owner_refused","ok":true},{"id":"window_boots_actual_campaign","ok":true},{"id":"window_status_names_current_run","ok":true},{"id":"native_window_title_identifies_candidate","ok":true},{"id":"restart_keeps_window_identity","ok":true},{"id":"restart_creates_new_run_identity","ok":true},{"id":"stable_window_tracks_restarted_run","ok":true},{"id":"old_profile_is_preserved","ok":true},{"id":"restart_releases_old_run_lease","ok":true},{"id":"restart_holds_new_run_lease","ok":true},{"id":"foreign_stop_token_does_not_suspend","ok":true},{"id":"stop_targets_window_after_internal_restart","ok":true},{"id":"stable_stop_suspends_restarted_campaign","ok":true},{"id":"both_owned_leases_released","ok":true},{"id":"previous_profile_unchanged_by_new_run_stop","ok":true},{"id":"launcher_follows_current_run_without_pid_kill","ok":true},{"id":"used_window_is_not_replayed","ok":true},{"id":"rejected_replay_preserves_closed_window_status","ok":true},{"id":"launcher_starts_separate_normal_godot_process","ok":true},{"id":"reopen_creates_fresh_window","ok":true},{"id":"separate_process_resumes_same_saved_run","ok":false},{"id":"separate_process_keeps_candidate_identity","ok":true},{"id":"separate_process_accepts_tokened_stop","ok":true},{"id":"owned_process_exits_after_canonical_suspend","ok":true},{"id":"separate_process_log_has_no_engine_or_script_errors","ok":true}],"count":33,"ok":false}

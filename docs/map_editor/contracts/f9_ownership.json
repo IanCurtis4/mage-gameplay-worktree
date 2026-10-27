@@ -2195,6 +2195,66 @@
       "owner": "Sol F9",
       "previous_owner": "new F9-11 runtime preview and shared existing renderer extraction, after supervised viewport checkpoint",
       "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_gameplay_launch_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new bounded F9 window broker, passive controls and editor/CLI consumer after bf406 supervised gameplay producer",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_gameplay_launch_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new bounded F9 window broker, passive controls and editor/CLI consumer after bf406 supervised gameplay producer",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/preview/gameplay_tools.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new bounded F9 window broker, passive controls and editor/CLI consumer after bf406 supervised gameplay producer",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/preview/gameplay_tools.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new bounded F9 window broker, passive controls and editor/CLI consumer after bf406 supervised gameplay producer",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/preview/gameplay_cli.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new bounded F9 window broker, passive controls and editor/CLI consumer after bf406 supervised gameplay producer",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/preview/gameplay_cli.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new bounded F9 window broker, passive controls and editor/CLI consumer after bf406 supervised gameplay producer",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_gameplay_controls_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new bounded F9 window broker, passive controls and editor/CLI consumer after bf406 supervised gameplay producer",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_gameplay_controls_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new bounded F9 window broker, passive controls and editor/CLI consumer after bf406 supervised gameplay producer",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/preview/gameplay_protocol.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new bounded passive command protocol over stable F9 window authority",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/preview/gameplay_protocol.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new bounded passive command protocol over stable F9 window authority",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -2205,7 +2265,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "Gameplay consumer technically validated atbf406c36415b9c3508d888ba200d2d1b4ef24494: Luna52/Core639/official6 PASS,3946 full inputs zero divergence, fixture released. Next: stable window broker and editor/AX/CLI launch; full F9 open.",
+    "state": "Stable window and passive controls author33/52/29 plus official6 PASS,1982 final inputs audited. Await frozen Luna native52/window33/controls29/Core639/official6; GUI/AX/CLI and world field visuals still open.",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -2222,7 +2282,8 @@
       "docs/map_editor/delivery/evidence/f9/luna/library/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/viewport/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/shared_renderer/report.md",
-      "docs/map_editor/delivery/evidence/f9/luna/gameplay/report.md"
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay/report.md",
+      "docs/map_editor/delivery/evidence/f9/luna/window_controls/report.md"
     ],
     "generated_evidence_roots": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
@@ -2318,7 +2379,12 @@
       "docs/map_editor/delivery/evidence/f9/luna/shared_renderer/official",
       "docs/map_editor/delivery/evidence/f9/luna/gameplay/native",
       "docs/map_editor/delivery/evidence/f9/luna/gameplay/core",
-      "docs/map_editor/delivery/evidence/f9/luna/gameplay/official"
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay/official",
+      "docs/map_editor/delivery/evidence/f9/luna/window_controls/native",
+      "docs/map_editor/delivery/evidence/f9/luna/window_controls/window",
+      "docs/map_editor/delivery/evidence/f9/luna/window_controls/controls",
+      "docs/map_editor/delivery/evidence/f9/luna/window_controls/core",
+      "docs/map_editor/delivery/evidence/f9/luna/window_controls/official"
     ]
   }
 }
