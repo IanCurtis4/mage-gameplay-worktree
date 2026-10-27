@@ -201,7 +201,7 @@ func _entry_fraction(from: Vector2, to: Vector2, radius: float) -> float:
 	return entry if entry <= 1.0 and exit >= 0.0 else -1.0
 
 func _draw() -> void:
-	if world_field != null: return # D05 projection is pending.
+	if world_field != null: return # Shared WorldFieldView draws the committed world shape.
 	var alpha := minf(1.0, remaining * 2.0)
 	var charge_fraction := float(remaining_capacity) / 6.0
 	draw_rect(Rect2(-HALF_WIDTH, -HALF_LENGTH, HALF_WIDTH * 2.0, HALF_LENGTH * 2.0), Color(0.59, 0.37, 0.85, 0.13 * alpha))

@@ -124,7 +124,7 @@ func _swept_contact(previous: Vector2, current: Vector2, radius: float) -> bool:
 	return distance <= radius + HALF_WIDTH
 
 func _draw() -> void:
-	if world_field != null: return # D05 projection is pending.
+	if world_field != null: return # Shared WorldFieldView draws the committed world shape.
 	var alpha := minf(1.0, remaining * 2.0)
 	draw_rect(Rect2(-HALF_WIDTH, -HALF_LENGTH, HALF_WIDTH * 2.0, HALF_LENGTH * 2.0), Color(0.94, 0.80, 0.24, 0.10 * alpha))
 	draw_line(Vector2(0, -HALF_LENGTH), Vector2(0, HALF_LENGTH), Color(1.0, 0.88, 0.38, 0.78 * alpha), 3.0, true)

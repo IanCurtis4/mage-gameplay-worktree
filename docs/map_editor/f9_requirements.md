@@ -53,9 +53,9 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 10 cancelamento/progresso/stale/atomicidade | F2, F6, F7 | worker parcial; commit e prévia síncronos F7 | pendente |
 | 10 cache/invalidação regional | arquitetura, F2 | ausência registrada de cache/bake incremental | pendente |
 | 10 medição pequeno/representativo/estresse | validação, F2 | lote canônico permite composição densa antes excedida300s; busca individual densa ainda174671,384ms |34 checks autorais do lote, com direção/testemunhas, snapshot, orçamento/cache local e união de grafos; responsividade final e medições amplas pendentes |
-| 11 pacote imutável/revisão/consumo sem código | arquitetura, F3–F8 | publicação existe; ponto de consumo integrado incompleto | pendente |
-| 11 preview real/apresentação de jogo | F8 | pacote real, atores técnicos; completar apresentação e fluxo | pendente |
-| 11 restart/continuidade/compatibilidade | F5, validação | snapshot estrito; preservar revisão ou erro sem destruição | pendente |
+| 11 pacote imutável/revisão/consumo sem código | arquitetura, F3–F8 | candidato passivo, janela/perfil descartável e clientes GUI/AX/CLI integrados | clientes consolidados7f723ac:22/18/52/33/49,Core639 e6 oficiais; [papéis/evidência](delivery/evidence/f9/author/gameplay_clients_consolidation.md); release/fluxo final pendentes |
+| 11 preview real/apresentação de jogo | F8 | pacote rico compartilhado e Player/Enemy/Campaign/HUD reais; quatro campos com apoio/cota/ordem em validação | pele81e2f42 e app/janela/controles581dae4 supervisionados; campos73 autorais e regressão52/29 PASS, demais VFX/área/release pendentes |
+| 11 restart/continuidade/compatibilidade | F5, validação | janela estável, RUN nova no restart, revisão antiga preservada, stop tokenizado sem kill e corte canônico | fonte581dae4 supervisionada52/33/29 e clientes7f723ac; revisão/export/recuperação/área final continuam no conjunto |
 | 11 export limpo/dependências/API | F8 | release técnico existe; ampliar aos consumidores F9 | pendente |
 | 12 área temática/fluxo humano sem código | validação, F8 | amostra técnica; caminho curvo/bifurcação/vegetação/rocha/arte faltantes | pendente |
 | 12 clareira/rampa/platô/ponte/rota inferior/santuário/emenda | validação, F8 | amostra técnica existente; demonstrar produto final | pendente |

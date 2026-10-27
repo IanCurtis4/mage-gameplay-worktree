@@ -1,0 +1,116 @@
+{
+  "role": "Sol authorship and post-Verify audit; new-field Luna supervision pending usage limit",
+  "head": "9d527ed5ab4742521f89e1066017bc32215c0f3f",
+  "stages": [
+    {
+      "stage": "FieldsNative",
+      "count": 73,
+      "ok": true,
+      "inputs": 1994,
+      "mismatches": [],
+      "manifest_sha256": "6CEE6F0FB887A590D803A47E658A8D22C3114AEADC523CA39346492800E82198"
+    },
+    {
+      "stage": "GameplayNative",
+      "count": 52,
+      "ok": true,
+      "inputs": 1994,
+      "mismatches": [],
+      "manifest_sha256": "8867EC0F367445E4D0898DC079A93B9AE2FB49C4A7A573FAA8520A070171E457"
+    },
+    {
+      "stage": "GameplayControls",
+      "count": 29,
+      "ok": true,
+      "inputs": 1994,
+      "mismatches": [],
+      "manifest_sha256": "DDB066C1819236C3A91829E25CF2F9037AC8CA05AFE998A44CB13C27475E10F0"
+    }
+  ],
+  "official": [
+    {
+      "name": "combat_animation_test",
+      "checks": 39,
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "output_sha256": "DF1D52002E18C5524FA60801186A018CDBC71C91E0248051E38F6565C154FB1E",
+      "output_matches_runner": true,
+      "logs_clean": true
+    },
+    {
+      "name": "e07_f6_snapshot_test",
+      "checks": 40,
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "output_sha256": "2E091952F53115A75311BF2F4CFD595A18B2E8C64FA3076CBF6F844F4CC4EDC6",
+      "output_matches_runner": true,
+      "logs_clean": true
+    },
+    {
+      "name": "e07_f5_fault_test",
+      "checks": 20,
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "output_sha256": "BE81413FE4296D28F328743D223D1D6E07BABFA5AF3A23133D4BB77444D2511C",
+      "output_matches_runner": true,
+      "logs_clean": true
+    },
+    {
+      "name": "e07_f3_snapshot_test",
+      "checks": 50,
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "output_sha256": "D4E8B993059D8E4C12243F8E997DE5174EA51AFF610CFF1B014F25D06AB2CF3D",
+      "output_matches_runner": true,
+      "logs_clean": true
+    },
+    {
+      "name": "e07_f1_fields_test",
+      "checks": 499,
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "output_sha256": "744A407EEA74CADE6E02C79293FE926814CB6085A173B58BA9DD2CD860D0A0C8",
+      "output_matches_runner": true,
+      "logs_clean": true
+    },
+    {
+      "name": "e07_f1_ice_test",
+      "checks": 262,
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "output_sha256": "672267F283A81A1821FE6BAC500D80866DE89980B01B64ED0C78E49D4B2E5187",
+      "output_matches_runner": true,
+      "logs_clean": true
+    },
+    {
+      "name": "e07_f1_pilot_scene_test",
+      "checks": 102,
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "output_sha256": "CF7D445BDD00B411EA310B76C304EE3A7CFE50345C5F87FDC2258A7821810291",
+      "output_matches_runner": true,
+      "logs_clean": true
+    },
+    {
+      "name": "e07_f1_presentation_test",
+      "checks": 37,
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "output_sha256": "BEBF132DC5433B71A8CF4626DF5B24C7E1A899B3C12AEFF5A2C81595456F7339",
+      "output_matches_runner": true,
+      "logs_clean": true
+    }
+  ],
+  "project_ok": true,
+  "project_source_sha256": "ADF17C0941269918DEE0A0005329D874DA199778DDEFCE294CA00E655367857E",
+  "project_fixture_sha256": "33726AFE86093A0D6F580114F803045E4F6624DC94528ECBEBD61FB199A06517",
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424"
+}

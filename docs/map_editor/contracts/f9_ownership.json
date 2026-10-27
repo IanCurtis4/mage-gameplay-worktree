@@ -2291,6 +2291,60 @@
       "owner": "Sol F9",
       "previous_owner": "new Sol consolidation; Luna executed stages and exhausted usage before final report",
       "base_sha256": null
+    },
+    {
+      "path": "scripts/world/world_field_view.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new/explicit sequential transfer for shared world field presentation; no field mechanics change",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/world/world_field_view.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new/explicit sequential transfer for shared world field presentation; no field mechanics change",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_fields_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new/explicit sequential transfer for shared world field presentation; no field mechanics change",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_fields_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new/explicit sequential transfer for shared world field presentation; no field mechanics change",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/world/fire_wall.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new/explicit sequential transfer for shared world field presentation; no field mechanics change",
+      "base_sha256": "1d8c6b698d3977b7a0a8bbd5f78d8078b3a84af00b1f02d5952e6fd49785964d"
+    },
+    {
+      "path": "scripts/world/lightning_wall.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new/explicit sequential transfer for shared world field presentation; no field mechanics change",
+      "base_sha256": "9d4fc4a0087308665414c5f5668731181d81c2a4aada09f71ffee48e2096d97d"
+    },
+    {
+      "path": "scripts/world/phantom_barrier.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new/explicit sequential transfer for shared world field presentation; no field mechanics change",
+      "base_sha256": "d9c5e0a610f33e2dd452bde19d4062909cfc37113e271500e05036c5b0d27b09"
+    },
+    {
+      "path": "scripts/world/ice_wall.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new/explicit sequential transfer for shared world field presentation; no field mechanics change",
+      "base_sha256": "6d632e6877f6fce1e882d8195aec9d934a0294adbf182db1ba618e18ec62bd71"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/fields_audit.json",
+      "owner": "Sol F9",
+      "previous_owner": "new authored field post-Verify input audit",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -2301,7 +2355,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "Clients22/18/52/33/49 supervised PASS at8610171, sole testcomposition24 setup delta at7f723ac; correctedCore639 and official6 completed by Luna. Usage limit interrupted final report. Post-Verify full input/project audit and technical consolidation by Sol with roles explicit. Fixture released after no owned Godot remained; full F9 open.",
+    "state": "Gameplay clients technically consolidated at7f723ac with executed Luna stages and Sol post-Verify audit. New shared field presentation has authored73/52/29 and8official PASS, full5982 input comparison zero divergence; Luna supervision pending usage limit. Full F9 remains open.",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -2321,7 +2375,8 @@
       "docs/map_editor/delivery/evidence/f9/luna/gameplay/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/window_controls/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/report.md",
-      "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/report_final.md"
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/report_final.md",
+      "docs/map_editor/delivery/evidence/f9/luna/world_fields/report.md"
     ],
     "generated_evidence_roots": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
@@ -2430,7 +2485,11 @@
       "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/candidate_native",
       "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/core",
       "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/official",
-      "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/core_corrected"
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/core_corrected",
+      "docs/map_editor/delivery/evidence/f9/luna/world_fields/native",
+      "docs/map_editor/delivery/evidence/f9/luna/world_fields/gameplay",
+      "docs/map_editor/delivery/evidence/f9/luna/world_fields/controls",
+      "docs/map_editor/delivery/evidence/f9/luna/world_fields/official"
     ]
   }
 }

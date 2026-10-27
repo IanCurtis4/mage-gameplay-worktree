@@ -2,7 +2,9 @@ class_name ExpeditionGeometryView
 extends Node2D
 ## Approved D05 adapter. Projection is presentation only; all picks return WorldPoints.
 const ProjectionMath = preload("res://scripts/world/expedition_projection.gd")
+const FieldViews = preload("res://scripts/world/world_field_view.gd")
 const AXIS := ProjectionMath.AXIS
+var field_views := FieldViews.new()
 var geometry: WorldGeometry
 var _epoch := 0
 var _surfaces: Array = []
@@ -22,6 +24,7 @@ static func ray(canvas_point: Vector2) -> Dictionary: return ProjectionMath.ray(
 func configure(world: WorldGeometry) -> Dictionary:
 	var result := world.presentation_snapshot(world.geometry_revision)
 	if not result["ok"]: return result
+	field_views.clear()
 	geometry = world; _epoch = world.configuration_revision
 	_surfaces = result["data"]["surfaces"]
 	for deck: Polygon2D in _decks: deck.queue_free()
@@ -98,6 +101,11 @@ func sync() -> void:
 		actor.global_position = to_global(project(actor.world_point().position))
 		actor.z_index = clampi(floori(actor.world_point().position.y*4)+2,-4000,4000)
 		actor.visible = actor.world_point().surface_id not in _hidden
+	field_views.sync(self,controller,geometry,_hidden)
+	for entry: Dictionary in field_views.entries.values():
+		for part: Node2D in entry.parts:
+			var record: Dictionary = part.get_meta("canvas_order_record")
+			part.z_index = clampi(floori(float(record.anchor.y)*4)+2,-4000,4000)
 	if _effects != null: _effects.queue_redraw()
 func actor_at(canvas_point: Vector2, candidates: Array[CombatActor]) -> CombatActor:
 	var selected: CombatActor; var nearest := INF; var ambiguous := false
@@ -152,3 +160,6 @@ func _draw_flights(node: Node) -> void:
 				var head := project(flight.position); var tail := project(flight.position-flight.direction*18)
 				_effects.draw_line(tail,head,Color("ffd58d"),3,true)
 		elif child is GeometerCasting: _draw_flights(child)
+
+func _exit_tree() -> void:
+	field_views.clear()

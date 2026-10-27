@@ -251,3 +251,49 @@ nem mata processo por PID. Abrir sessão já ocupada é recusado antes de lança
 outra janela. Recuperação explícita de crash segue exigida na frente10.
 Referências primárias: [contrato de OS](https://docs.godotengine.org/en/stable/classes/class_os.html#class-os-method-is-process-running)
 e [implementação Windows4.7](https://github.com/godotengine/godot/blob/4.7-stable/platform/windows/os_windows.cpp).
+
+
+## Apresentação dos campos existentes — integração F9 em validação
+
+WorldFieldView observa FireWall/LightningWall/PhantomBarrier vinculados ao mundo
+e o WorldSolidSegment capturado de IceWall. Lê âncora/centros reais, altura,
+eixos, dimensões e support_region; não emite collider, ataque, dano, caminho,
+RNG ou outra área de gameplay. Estado do efeito permanece no dono canônico.
+
+Fragmentos de apresentação são filhos da pele do mapa, fora do grafo simulado.
+AuthoredExpeditionView os intercala por WorldCanvasOrder antes de desenhar os
+atores observados. O adaptador D05 também usa esse produtor, com seu Z por cota.
+Os desenhos planos legados continuam somente quando não há binding espacial.
+O próprio efeito não muda de pai nem de posição para ser desenhado.
+
+Fogo usa os quatro centros capturados e glow radial recortado pelo mesmo
+receptor conectado de GroundShadow. Os outros campos usam a região de apoio
+capturada, cápsula visual com dimensões canônicas e fragmentos30u para conservar
+ordem sobre rampas/ponte/atores. A tesselação decorativa não vira colisão.
+Cache nasce com o efeito, muda somente fase/opacidade por remaining/capacidade
+e é descartado na expiração/reconfiguração. Gradientes procedurais locais não
+alteram catálogo nem precisam de PNG remetido. last_result registra criação,
+remoção, fragmentos, falha de apresentação e tempo de sincronização; isto não é
+certificação de FPS ou custo total da cena.
+
+Prova nativa autoral73: doze lançamentos reais (quatro estilos em chão sob ponte,
+sobre ponte e rampa), custo canônico, pixels, apoio/cota/inclinação, oclusão,
+cache estável e invariantes de ator/efeito/geometry_revision. Na tomada sob a
+ponte, a captura normal comprova oclusão completa; uma seção somente visual
+remove a pele superior para conferir os pixels inferiores, mantendo a geometria.
+Cortes completos do RunController antes/depois de reconstruir os visuais são
+idênticos. Não há exclusão nova no manifesto de save ou normalização no oráculo.
+
+A primeira tentativa69/73 usava um controlador auxiliar sem schema persistente;
+a segunda usa RunController real, entrada passiva antes de _ready e lançamentos
+canônicos, e passou73. Logs/capturas de ambas preservados. A regressão autoral
+do app passou52 e a dos controles/corte/retomada com efeito ativo29. Seleção
+oficial por tools/verify.ps1 passou8 etapas39/40/20/50/499/262/102/37; auditoria
+pós-Verify5982 inputs sem divergências. Autoria/validação Sol; supervisão Luna
+deste novo lote visual pendente por limite de uso do subagente.
+
+Este lote cobre os quatro campos; não declara apresentação de toda habilidade
+existente. Revisar ainda morte espacial, desenho de áreas/traps/rain ligados ao
+mundo e direções visuais que misturam vetoresXZ com vetores já projetados.
+Não converter globalmente Actor.facing: ele participa das regras de combate.
+O acabamento/área final e export limpo continuam parte da entrega F9.

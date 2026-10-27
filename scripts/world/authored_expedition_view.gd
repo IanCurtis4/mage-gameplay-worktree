@@ -12,6 +12,7 @@ func configure_package(value: Dictionary, world: WorldGeometry) -> Dictionary:
 	if not made.ok: proposed.free(); return made
 	var snapshot := world.presentation_snapshot(world.geometry_revision)
 	if not snapshot.ok: proposed.free(); return snapshot
+	field_views.clear()
 	if is_instance_valid(skin): skin.free()
 	package = value.duplicate(true); skin = proposed; add_child(skin)
 	geometry = world; _epoch = world.configuration_revision; _surfaces = snapshot.data.surfaces
@@ -41,5 +42,6 @@ func sync() -> void:
 		observed.append(actor)
 	_actors = kept
 	# Never call the base height-Z assignment: it invalidates warm topology reuse.
+	field_views.sync(skin,controller,geometry,_hidden)
 	ordering = CanvasOrder.apply(skin,observed)
 	if _effects != null: _effects.queue_redraw()

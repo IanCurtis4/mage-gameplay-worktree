@@ -69,7 +69,7 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 func _draw() -> void:
-	if world_field != null: return # D05 projection is pending.
+	if world_field != null: return # Shared WorldFieldView draws the committed world shape.
 	var alpha := minf(1.0, remaining * 2.0)
 	for index: int in range(pillar_offsets.size()):
 		var offset := pillar_offsets[index]

@@ -73,7 +73,7 @@ func _unregister() -> void:
 	else: navigation.remove_temporary_segment(get_instance_id())
 
 func _draw() -> void:
-	if world != null: return # D05 presentation remains pending.
+	if world != null: return # Shared WorldFieldView draws the committed world shape.
 	var alpha := minf(1.0, remaining * 2.0)
 	draw_line(Vector2(0, -HALF_LENGTH), Vector2(0, HALF_LENGTH), Color(0.19, 0.44, 0.59, 0.58 * alpha), HALF_WIDTH * 2.0, true)
 	draw_line(Vector2(0, -HALF_LENGTH), Vector2(0, HALF_LENGTH), Color(0.66, 0.91, 1.0, 0.82 * alpha), 5.0, true)
