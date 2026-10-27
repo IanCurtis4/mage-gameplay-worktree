@@ -1,0 +1,22 @@
+{
+	"actor_items": 64,
+	"cold_ok": true,
+	"cold_pairs": 12076,
+	"cold_usec": 84756,
+	"cpu": "Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz",
+	"ground_items": 512,
+	"items": 576,
+	"one_actor_update_ok": true,
+	"one_actor_update_usec": 26388,
+	"one_actor_updated_pairs": 38,
+	"scope": "CPU order only; no rendering/FPS claim",
+	"warm_samples_usec": [
+		3275,
+		3301,
+		3113,
+		3151,
+		2929,
+		4594,
+		4812
+	]
+}

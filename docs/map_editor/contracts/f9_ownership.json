@@ -2007,7 +2007,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "F9-10 canvas broadphase delta in progress; shadows baseline04a7dfc retained",
+    "state": "canvas broadphase technically validated atfec5bc193f45f55bea54d27557aa9b76b15a5597; fixture released; library/navigation delta next",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
