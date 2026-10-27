@@ -8,6 +8,7 @@ const Canvas = preload("res://scripts/map_authoring/patrol/patrol_canvas.gd")
 const Population = preload("res://scripts/map_authoring/population/population_compiler.gd")
 const PopulationStore = preload("res://scripts/map_authoring/population/population_store.gd")
 const IO = preload("res://scripts/map_authoring/io/source_store.gd")
+var gameplay_tools: Control
 var session := Session.new()
 var canvas: Control
 var routes: ItemList
@@ -68,6 +69,7 @@ func _ready() -> void:
 	session.changed.connect(changed); _new_draft(); refresh()
 	var timer := Timer.new(); timer.wait_time = 10; timer.autostart = true; timer.timeout.connect(preserve_draft); add_child(timer)
 	preload("res://scripts/map_authoring/preview/viewport_tools.gd").mount(canvas,"patrol")
+	gameplay_tools = preload("res://scripts/map_authoring/preview/gameplay_tools.gd").mount(self,"patrol","patrol",func() -> Dictionary: return session.data,func() -> Dictionary: return result.get("package",{}) if result.get("ok",false) else {},func() -> String: return Document.hash_source(session.data))
 	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"patrol",func() -> Dictionary: return session.data,canvas)
 func button(parent: Node, caption: String, callback: Callable) -> void:
 	var b := Button.new(); b.text = caption; b.pressed.connect(callback); parent.add_child(b)
@@ -202,15 +204,8 @@ func file_selected(path: String) -> void:
 		var published := Store.publish(path,result.package,Document.hash_source(session.data)); show_result(published)
 		if published.ok: status.text = "Pacote local publicado: "+published.path
 func test(resume: bool) -> void:
-	if not result.get("ok",false): status.text = "Compile antes de testar."; return
-	if preview_pid > 0 and OS.is_process_running(preview_pid): status.text = "O teste já está aberto."; return
-	var directory := ProjectSettings.globalize_path("res://.godot/map_authoring/patrol_tests/"+result.output_hash); DirAccess.make_dir_recursive_absolute(directory)
-	var published := Store.publish(directory,result.package,Document.hash_source(session.data))
-	if not published.ok: show_result(published); return
-	preview_package = published.path
-	var args := PackedStringArray(["--path",ProjectSettings.globalize_path("res://"),"--log-file",directory.path_join("preview.log"),"--script","res://scripts/map_authoring/patrol/patrol_preview.gd","--",preview_package])
-	if resume: args.append("resume")
-	preview_pid = OS.create_process(OS.get_executable_path(),args,false); status.text = "Teste descartável aberto. Suspenda na janela para retomar depois."
+	var opened: Dictionary = gameplay_tools.resume() if resume else gameplay_tools.launch()
+	status.text = "Teste de jogo solicitado; use a janela para jogar ou suspender." if opened.ok else gameplay_tools.message.text
 func _exit_tree() -> void:
 	if job != null: cancel(); job.wait_to_finish(); job = null
 	preserve_draft()

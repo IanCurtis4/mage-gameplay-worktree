@@ -4,6 +4,7 @@ extends VBoxContainer
 static var active_mode := "ux"
 static var hosts: Array[WeakRef] = []
 const ACTION_IDS := {
+	"Abrir jogo":"open_game","Suspender e fechar teste":"stop_game",
 	"Focar seleção":"focus_view_selection",
 	"Salvar predefinição":"save_brush_preset","Remover predefinição":"remove_brush_preset",
 	"Biblioteca…":"open_library",

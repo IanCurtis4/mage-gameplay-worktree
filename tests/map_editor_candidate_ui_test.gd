@@ -93,11 +93,25 @@ func run() -> void:
 	map_panel.session.undo(); map_panel.bake(); await wait_job(map_panel)
 	await capture(map_panel,"map_ux")
 	map_host.set_mode("ax"); await capture(map_panel,"map_ax"); map_host.set_mode("ux")
+	map_panel.session.replace(Map.sample()); map_panel.bake(); await wait_job(map_panel)
 	var map_hash := Map.hash_source(map_panel.session.data)
 	map_host.ax_invoke("map/toggle_test")
 	check("ux_ax_call_refused",not map_panel.canvas.testing and Map.hash_source(map_panel.session.data) == map_hash)
-	map_host.set_mode("ax"); check("ax_test_calls_real_authority",map_host.ax_invoke("map/toggle_test").ok and map_panel.canvas.testing)
-	map_host.ax_invoke("map/toggle_test"); check("ax_test_stops",not map_panel.canvas.testing)
+	map_host.set_mode("ax")
+	var launched: Dictionary = map_host.ax_invoke("map/gameplay/launch",{"headless":true})
+	var deadline := Time.get_ticks_msec()+90000
+	var running: Dictionary = {"ok":false}
+	while launched.ok and Time.get_ticks_msec() < deadline:
+		running = map_panel.gameplay_tools.inspect()
+		if not running.ok or running.state.state not in ["starting","ready"]: break
+		await get_tree().create_timer(0.1).timeout
+	check("ax_test_calls_real_authority",launched.ok and running.ok and running.state.state == "active" and running.state.gameplay.ready and not map_panel.canvas.testing)
+	map_host.ax_invoke("map/gameplay/stop"); deadline = Time.get_ticks_msec()+90000
+	while Time.get_ticks_msec() < deadline:
+		running = map_panel.gameplay_tools.inspect()
+		if running.ok and running.state.state == "closed": break
+		await get_tree().create_timer(0.1).timeout
+	check("ax_test_stops",running.ok and running.state.state == "closed" and not map_panel.canvas.testing)
 	map_host.set_mode("ux"); shell.composition_window.hide()
 	var population_screen: Control
 	for entry: Array in [["population","res://scripts/map_authoring/population/population_panel.gd"],["patrol","res://scripts/map_authoring/patrol/patrol_panel.gd"],["generation","res://scripts/map_authoring/generation/generation_panel.gd"]]:

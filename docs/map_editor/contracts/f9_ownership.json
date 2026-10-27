@@ -2255,6 +2255,30 @@
       "owner": "Sol F9",
       "previous_owner": "new bounded passive command protocol over stable F9 window authority",
       "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_gameplay_editor_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 GUI/AX/CLI consumer and no-code continuation proof over supervised581dae4",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_gameplay_editor_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 GUI/AX/CLI consumer and no-code continuation proof over supervised581dae4",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_gameplay_cli_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 GUI/AX/CLI consumer and no-code continuation proof over supervised581dae4",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_gameplay_cli_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 GUI/AX/CLI consumer and no-code continuation proof over supervised581dae4",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [

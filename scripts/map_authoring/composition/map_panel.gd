@@ -14,6 +14,7 @@ const BorderCatalog = preload("res://scripts/map_authoring/composition/border_pr
 const Library = preload("res://scripts/map_authoring/library/library_model.gd")
 var generation_window: Window
 var population_window: Window
+var gameplay_tools: Control
 var session := Session.new()
 var canvas: Control
 var job: RefCounted
@@ -99,6 +100,7 @@ func _ready() -> void:
 	refresh()
 	preload("res://scripts/map_authoring/context/map_context_panel.gd").mount(self,session)
 	preload("res://scripts/map_authoring/preview/viewport_tools.gd").mount(canvas,"map")
+	gameplay_tools = preload("res://scripts/map_authoring/preview/gameplay_tools.gd").mount(self,"map","map",func() -> Dictionary: return session.data,func() -> Dictionary: return result.get("package",{}) if result.get("ok",false) else {},func() -> String: return Document.hash_source(session.data))
 	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"map",func() -> Dictionary: return session.data,canvas)
 func _button(parent: Node, text: String, action: Callable) -> Button:
 	var button := Button.new(); button.text = text; button.pressed.connect(action); parent.add_child(button); return button
@@ -267,9 +269,8 @@ func _process(_delta: float) -> void:
 		for cell: Dictionary in result.package.manifest.stages[0].surfaces: surface.add_item(cell.surface_id)
 		status.text = "%d peças · emendas e rotas validadas · clique para selecionar ou teste para andar."%result.package.piece_count
 func toggle_test() -> void:
-	if canvas.testing: canvas.stop_test(); status.text = "Teste encerrado; rascunho preservado."; return
-	if not result.get("ok",false): status.text = "Compile o mapa antes de testar."; return
-	var started: Dictionary = canvas.start_test(); status.text = "Teste isolado · clique no chão para andar." if started.ok else "Não foi possível iniciar o teste."
+	var opened: Dictionary = gameplay_tools.toggle()
+	status.text = "Teste de jogo solicitado; o rascunho foi preservado." if opened.ok else gameplay_tools.message.text
 func show_result(value: Dictionary) -> void:
 	problems.clear()
 	for diagnostic: Dictionary in value.get("diagnostics",[]):

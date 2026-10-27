@@ -10,6 +10,7 @@ const MapCompiler = preload("res://scripts/map_authoring/composition/map_compile
 const MapDocument = preload("res://scripts/map_authoring/composition/map_document.gd")
 const IO = preload("res://scripts/map_authoring/io/source_store.gd")
 const Canvas = preload("res://scripts/map_authoring/population/population_canvas.gd")
+var gameplay_tools: Control
 var session := Session.new()
 var canvas: Control
 var job: RefCounted
@@ -110,6 +111,7 @@ func _ready() -> void:
 	session.changed.connect(refresh); _new_draft()
 	var timer := Timer.new(); timer.wait_time = 10; timer.autostart = true; timer.timeout.connect(preserve_draft); add_child(timer); refresh()
 	preload("res://scripts/map_authoring/preview/viewport_tools.gd").mount(canvas,"population")
+	gameplay_tools = preload("res://scripts/map_authoring/preview/gameplay_tools.gd").mount(self,"population","population",func() -> Dictionary: return session.data,func() -> Dictionary: return result.get("package",{}) if result.get("ok",false) else {},func() -> String: return Document.hash_source(session.data))
 	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"population",func() -> Dictionary: return session.data,canvas)
 func _button(parent: Node, text: String, action: Callable) -> Button:
 	var button := Button.new(); button.text = text; button.pressed.connect(action); parent.add_child(button); return button
@@ -285,10 +287,8 @@ func _process(_delta: float) -> void:
 	result = job.take(Document.hash_source(session.data)); job = null; show_result(result)
 	if result.ok: canvas.set_encounters(result.package); canvas.source = session.data.duplicate(true); _surfaces(); status.text = "%d slots validados · pronto para teste técnico e publicação local."%session.data.slots.size()
 func toggle_test() -> void:
-	if canvas.testing: canvas.stop_test(); status.text = "Teste encerrado; fonte preservada."; return
-	if not result.get("ok",false): status.text = "Compile um plano aplicado antes de testar."; return
-	canvas.source = session.data.duplicate(true); showing_proposal = false; canvas.preview_diff = {}
-	var started: Dictionary = canvas.start_test(); status.text = "Teste técnico: clique para andar; simule mortes/ondas pelos controles." if started.ok else "Falha ao iniciar teste."
+	var opened: Dictionary = gameplay_tools.toggle()
+	status.text = "Teste de jogo solicitado; o rascunho foi preservado." if opened.ok else gameplay_tools.message.text
 func simulate_death() -> void:
 	var selected := slots.get_selected_items()
 	if selected.is_empty() or not canvas.testing: return

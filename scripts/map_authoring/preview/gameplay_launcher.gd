@@ -133,12 +133,10 @@ static func write_atomic(path: String, bytes: PackedByteArray) -> Dictionary:
 
 static func claim(resolved: Dictionary) -> Dictionary:
 	var lock: String = resolved.directory.path_join("active.lock")
-	if DirAccess.dir_exists_absolute(lock):
-		if not FileAccess.file_exists(lock.path_join("pid.txt")): return {"ok":false,"code":"preview_busy"}
-		var pid_text := FileAccess.get_file_as_string(lock.path_join("pid.txt"))
-		# Conservatively refuse a reused live PID. Never terminate it.
-		if not pid_text.is_valid_int() or OS.is_process_running(int(pid_text)): return {"ok":false,"code":"preview_busy","message":"Esta sessão já está aberta ou requer recuperação."}
-		if DirAccess.remove_absolute(lock.path_join("pid.txt")) != OK or DirAccess.remove_absolute(lock) != OK: return Candidate.fail("candidate_io")
+	# A foreign PID is not observable with OS.is_process_running on Windows.
+	# An existing lease is conservatively busy, including after a crash. Only
+	# its tokened owner releases it; explicit recovery must preserve old data.
+	if DirAccess.dir_exists_absolute(lock): return {"ok":false,"code":"preview_busy","message":"Esta sessão já está aberta ou requer recuperação."}
 	if DirAccess.make_dir_absolute(lock) != OK: return {"ok":false,"code":"preview_busy"}
 	var owner := FileAccess.open(lock.path_join("pid.txt"),FileAccess.WRITE)
 	if owner == null: DirAccess.remove_absolute(lock); return Candidate.fail("candidate_io")
@@ -150,24 +148,29 @@ static func release(resolved: Dictionary) -> void:
 	if not FileAccess.file_exists(lock.path_join("pid.txt")) or FileAccess.get_file_as_string(lock.path_join("pid.txt")) != str(OS.get_process_id()): return
 	DirAccess.remove_absolute(lock.path_join("pid.txt")); DirAccess.remove_absolute(lock)
 
-func launch(kind: String, package: Dictionary, current_source_hash: String, class_id: String = "swordsman") -> Dictionary:
+func launch(kind: String, package: Dictionary, current_source_hash: String, class_id: String = "swordsman", headless: bool = false) -> Dictionary:
 	if running(): return {"ok":false,"code":"preview_busy"}
 	var made := Candidate.create(kind,package,current_source_hash)
 	if not made.ok: return made
 	var created := create_session(made.candidate,class_id)
 	if not created.ok: return created
-	return open_session(created.path)
+	return open_session(created.path,headless)
 
 func running() -> bool:
-	if process_id <= 0 or not OS.is_process_running(process_id): return false
-	if window_path.is_empty(): return true
+	if window_path.is_empty(): return process_id > 0 and OS.is_process_running(process_id)
 	var current := window_state(window_path)
-	return not current.ok or current.state.state != "closed"
+	if current.ok and current.state.state == "closed": return false
+	if process_id > 0 and OS.is_process_running(process_id): return true
+	var window := window_header(window_path)
+	if not window.ok: return false
+	# A reloaded panel did not spawn this process and cannot probe its PID.
+	return DirAccess.dir_exists_absolute(String(window.directory).path_join("active.lock"))
 
 func open_session(path: String, headless: bool = false) -> Dictionary:
 	if running(): return {"ok":false,"code":"preview_busy"}
 	var resolved := resolve(path)
 	if not resolved.ok: return resolved
+	if DirAccess.dir_exists_absolute(String(resolved.directory).path_join("active.lock")): return {"ok":false,"code":"preview_busy"}
 	var window := create_window(resolved.path)
 	if not window.ok: return window
 	var args := PackedStringArray()

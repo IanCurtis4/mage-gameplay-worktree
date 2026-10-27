@@ -69,7 +69,7 @@ static func sample() -> Dictionary:
 	var source := Piece.empty("room")
 	source.layers = [{"layer_id":"floor","name":"Chão","origin_xz":[0,0],"sample_spacing":100,"columns":2,"rows":2,"heights":[0,0,0,0],"material_masks":{},"locked":false,"protected_regions":[]}]
 	for side: String in ["west","east"]:
-		source.connectors.append({"connector_id":side,"surface_id":"floor","position_xyz":[0 if side == "west" else 100,0,50],"normal_xyz":[-1 if side == "west" else 1,0,0],"kind":"walk","width":24,"headroom":100,"tags":["ruin"],"direction":"both"})
+		source.connectors.append({"connector_id":side,"surface_id":"floor","position_xyz":[0 if side == "west" else 100,0,50],"normal_xyz":[-1 if side == "west" else 1,0,0],"kind":"walk","width":80,"headroom":100,"tags":["ruin"],"direction":"both"})
 	# Terminal pieces have only their inward opening: external edges remain closed.
 	var left := source.duplicate(true); left.document_id = "room_left"; left.connectors.remove_at(0)
 	var right := source.duplicate(true); right.document_id = "room_right"; right.connectors.remove_at(1)

@@ -39,7 +39,14 @@ func run() -> void:
 	var mapped := Candidate.create("map",Candidate.map_package(made.candidate),Candidate.map_package(made.candidate).source_hash)
 	var map_prepared := Candidate.prepare(mapped.candidate)
 	check("map_without_entry_gets_explicit_ephemeral_safe_anchor",map_prepared.ok and map_prepared.ephemeral_entry and not map_prepared.entry.is_empty())
-	var narrow := Maps.compile(Maps.Document.sample())
+	var narrow_source := Maps.Document.sample()
+	for piece: Dictionary in narrow_source.pieces:
+		var previous: String = piece.piece_hash
+		for port: Dictionary in piece.source.connectors: port.width = 24
+		piece.piece_hash = Maps.Document.Schema.semantic_hash(piece.source)
+		for instance: Dictionary in narrow_source.instances:
+			if instance.piece_hash == previous: instance.piece_hash = piece.piece_hash
+	var narrow := Maps.compile(narrow_source)
 	check("small_inspection_body_accepts_narrow_door",narrow.ok)
 	var narrow_candidate := Candidate.create("map",narrow.package,narrow.package.source_hash)
 	var narrow_runtime := Candidate.prepare(narrow_candidate.candidate)

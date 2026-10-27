@@ -2,7 +2,7 @@ param(
     [Parameter(Mandatory)][string]$GodotPath,
     [Parameter(Mandatory)][string]$EvidenceDirectory,
     [switch]$SkipImport,
-    [ValidateSet('Geometry','Objects','ObjectsNative','Mesh','Relief','Ports','Batch','Materials','MaterialsNative','Scale','Cliff','CliffNative','BiomeProps','BiomePropsNative','Borders','BordersNative','Shadows','ShadowsNative','CanvasOrder','Library','LibraryNative','Viewport','ViewportNative','RuntimeView','GameplayNative','GameplayWindow','GameplayControls')][string]$Stage='Geometry'
+    [ValidateSet('Geometry','Objects','ObjectsNative','Mesh','Relief','Ports','Batch','Materials','MaterialsNative','Scale','Cliff','CliffNative','BiomeProps','BiomePropsNative','Borders','BordersNative','Shadows','ShadowsNative','CanvasOrder','Library','LibraryNative','Viewport','ViewportNative','RuntimeView','GameplayNative','GameplayWindow','GameplayControls','GameplayEditorNative','GameplayCli')][string]$Stage='Geometry'
 )
 $ErrorActionPreference='Stop'
 $f9Root=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
@@ -46,6 +46,7 @@ if($Stage -eq 'Library'){$f9Script='res://tests/map_editor_library_test.gd';$f9M
 if($Stage -eq 'Viewport'){$f9Script='res://tests/map_editor_viewport_test.gd';$f9Marker='F9_VIEWPORT_RESULT'}
 if($Stage -eq 'RuntimeView'){$f9Script='res://tests/map_editor_gameplay_test.gd';$f9Marker='F9_RUNTIME_VIEW_RESULT'}
 if($Stage -eq 'GameplayControls'){$f9Script='res://tests/map_editor_gameplay_controls_test.gd';$f9Marker='F9_CONTROLS_RESULT'}
+if($Stage -eq 'GameplayCli'){$f9Script='res://tests/map_editor_gameplay_cli_test.gd';$f9Marker='F9_GAMEPLAY_CLI_RESULT'}
 if($Stage -eq 'GameplayWindow'){$f9Script='res://tests/map_editor_gameplay_launch_test.gd';$f9Marker='F9_WINDOW_RESULT'}
 if($Stage -eq 'CanvasOrder'){$f9Script='res://tests/map_editor_canvas_order_test.gd';$f9Marker='F9_ORDER_RESULT'}
 if($Stage -eq 'Shadows'){$f9Script='res://tests/map_editor_shadows_test.gd';$f9Marker='F9_SHADOW_RESULT'}
@@ -59,10 +60,10 @@ if($Stage -eq 'GameplayNative'){
     $f9Arguments=@('--path',$f9Fixture,'--rendering-method','gl_compatibility','--log-file',(Join-Path $f9Evidence 'geometry.engine.log'),'--script','res://tests/map_editor_gameplay_ui_test.gd')
 }
 $f9RestoreProject=$null
-if($Stage -in @('ObjectsNative','MaterialsNative','CliffNative','BiomePropsNative','BordersNative','ShadowsNative','LibraryNative','ViewportNative')){
-    $f9Marker=if($Stage -eq 'ViewportNative'){'F9_VIEWPORT_UI_RESULT'}elseif($Stage -eq 'LibraryNative'){'F9_LIBRARY_UI_RESULT'}elseif($Stage -eq 'ShadowsNative'){'F9_SHADOW_UI_RESULT'}elseif($Stage -eq 'BordersNative'){'F9_BORDER_UI_RESULT'}elseif($Stage -eq 'BiomePropsNative'){'F9_BIOME_PROPS_UI_RESULT'}elseif($Stage -eq 'CliffNative'){'F9_CLIFF_UI_RESULT'}elseif($Stage -eq 'MaterialsNative'){'F9_MATERIAL_UI_RESULT'}else{'F9_OBJECTS_UI_RESULT'}
-    $f9DriverName=if($Stage -eq 'ViewportNative'){'f9_viewport_driver'}elseif($Stage -eq 'LibraryNative'){'f9_library_driver'}elseif($Stage -eq 'ShadowsNative'){'f9_shadows_driver'}elseif($Stage -eq 'BordersNative'){'f9_borders_driver'}elseif($Stage -eq 'BiomePropsNative'){'f9_biome_props_driver'}elseif($Stage -eq 'CliffNative'){'f9_cliff_driver'}elseif($Stage -eq 'MaterialsNative'){'f9_materials_driver'}else{'f9_objects_driver'}
-    $f9DriverScript=if($Stage -eq 'ViewportNative'){'tests/map_editor_viewport_ui_test.gd'}elseif($Stage -eq 'LibraryNative'){'tests/map_editor_library_ui_test.gd'}elseif($Stage -eq 'ShadowsNative'){'tests/map_editor_shadows_ui_test.gd'}elseif($Stage -eq 'BordersNative'){'tests/map_editor_borders_ui_test.gd'}elseif($Stage -eq 'BiomePropsNative'){'tests/map_editor_biome_props_ui_test.gd'}elseif($Stage -eq 'CliffNative'){'tests/map_editor_cliff_ui_test.gd'}elseif($Stage -eq 'MaterialsNative'){'tests/map_editor_materials_ui_test.gd'}else{'tests/map_editor_objects_ui_test.gd'}
+if($Stage -in @('ObjectsNative','MaterialsNative','CliffNative','BiomePropsNative','BordersNative','ShadowsNative','LibraryNative','ViewportNative','GameplayEditorNative')){
+    $f9Marker=if($Stage -eq 'GameplayEditorNative'){'F9_GAMEPLAY_EDITOR_RESULT'}elseif($Stage -eq 'ViewportNative'){'F9_VIEWPORT_UI_RESULT'}elseif($Stage -eq 'LibraryNative'){'F9_LIBRARY_UI_RESULT'}elseif($Stage -eq 'ShadowsNative'){'F9_SHADOW_UI_RESULT'}elseif($Stage -eq 'BordersNative'){'F9_BORDER_UI_RESULT'}elseif($Stage -eq 'BiomePropsNative'){'F9_BIOME_PROPS_UI_RESULT'}elseif($Stage -eq 'CliffNative'){'F9_CLIFF_UI_RESULT'}elseif($Stage -eq 'MaterialsNative'){'F9_MATERIAL_UI_RESULT'}else{'F9_OBJECTS_UI_RESULT'}
+    $f9DriverName=if($Stage -eq 'GameplayEditorNative'){'f9_gameplay_editor_driver'}elseif($Stage -eq 'ViewportNative'){'f9_viewport_driver'}elseif($Stage -eq 'LibraryNative'){'f9_library_driver'}elseif($Stage -eq 'ShadowsNative'){'f9_shadows_driver'}elseif($Stage -eq 'BordersNative'){'f9_borders_driver'}elseif($Stage -eq 'BiomePropsNative'){'f9_biome_props_driver'}elseif($Stage -eq 'CliffNative'){'f9_cliff_driver'}elseif($Stage -eq 'MaterialsNative'){'f9_materials_driver'}else{'f9_objects_driver'}
+    $f9DriverScript=if($Stage -eq 'GameplayEditorNative'){'tests/map_editor_gameplay_editor_ui_test.gd'}elseif($Stage -eq 'ViewportNative'){'tests/map_editor_viewport_ui_test.gd'}elseif($Stage -eq 'LibraryNative'){'tests/map_editor_library_ui_test.gd'}elseif($Stage -eq 'ShadowsNative'){'tests/map_editor_shadows_ui_test.gd'}elseif($Stage -eq 'BordersNative'){'tests/map_editor_borders_ui_test.gd'}elseif($Stage -eq 'BiomePropsNative'){'tests/map_editor_biome_props_ui_test.gd'}elseif($Stage -eq 'CliffNative'){'tests/map_editor_cliff_ui_test.gd'}elseif($Stage -eq 'MaterialsNative'){'tests/map_editor_materials_ui_test.gd'}else{'tests/map_editor_objects_ui_test.gd'}
     $f9Driver=Join-Path $f9Fixture ('addons/'+$f9DriverName); [void](New-Item -ItemType Directory -Force -Path $f9Driver)
     Copy-Item -LiteralPath (Join-Path $f9Root $f9DriverScript) -Destination (Join-Path $f9Driver 'plugin.gd') -Force
     '[plugin]','name="Fixture objetos F9"','description="Teste isolado"','author="RagRPG"','version="1"','script="plugin.gd"' | Set-Content -LiteralPath (Join-Path $f9Driver 'plugin.cfg') -Encoding utf8
@@ -90,13 +91,32 @@ $f9EngineText=Get-Content -LiteralPath (Join-Path $f9Evidence 'geometry.engine.l
 $f9Match=[regex]::Match($f9Text,'(?m)^'+$f9Marker+' (.+)$')
 $f9Result=if($f9Match.Success){ConvertFrom-Json $f9Match.Groups[1].Value}else{$null}
 $f9Pass=-not $f9Timeout -and -not $f9Aborted -and $f9Process.ExitCode -eq 0 -and $null -ne $f9Result -and $f9Result.ok -and $f9Result.count -gt 0 -and @($f9Result.checks).Count -eq $f9Result.count -and @($f9Result.checks | Where-Object {-not $_.ok}).Count -eq 0 -and $f9Text -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:' -and $f9EngineText -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:'
-$f9Expected=@{Geometry=46;Objects=53;ObjectsNative=25;Mesh=34;Relief=58;Ports=92;Batch=34;Materials=35;MaterialsNative=20;Scale=46;Cliff=61;CliffNative=17;BiomeProps=30;BiomePropsNative=23;Borders=93;BordersNative=32;Shadows=28;ShadowsNative=90;CanvasOrder=43;Library=50;LibraryNative=53;Viewport=20;ViewportNative=52;RuntimeView=12;GameplayNative=52;GameplayWindow=33;GameplayControls=29}
+$f9Expected=@{Geometry=46;Objects=53;ObjectsNative=25;Mesh=34;Relief=58;Ports=92;Batch=34;Materials=35;MaterialsNative=20;Scale=46;Cliff=61;CliffNative=17;BiomeProps=30;BiomePropsNative=23;Borders=93;BordersNative=32;Shadows=28;ShadowsNative=90;CanvasOrder=43;Library=50;LibraryNative=53;Viewport=20;ViewportNative=52;RuntimeView=12;GameplayNative=52;GameplayWindow=33;GameplayControls=29;GameplayEditorNative=22;GameplayCli=18}
 $f9Pass=$f9Pass -and $f9Result.count -eq $f9Expected[$Stage]
+$f9PreviewExit=$null
+if($Stage -eq 'GameplayCli'){
+    $f9Pids=@()
+    foreach($f9Log in Get-ChildItem -LiteralPath $f9Evidence -Filter 'cli_*.output.log'){
+        $f9CliMatch=[regex]::Match([IO.File]::ReadAllText($f9Log.FullName),'(?m)^F9_GAMEPLAY_CLI_RESULT (.+)$')
+        if($f9CliMatch.Success){
+            $f9Cli=ConvertFrom-Json $f9CliMatch.Groups[1].Value
+            if($f9Cli.ok -and $null -ne $f9Cli.process_id){$f9Pids+=([int]$f9Cli.process_id)}
+        }
+    }
+    $f9ExitWatch=[Diagnostics.Stopwatch]::StartNew()
+    do{
+        $f9Alive=@($f9Pids | Where-Object {Get-Process -Id $_ -ErrorAction SilentlyContinue})
+        if($f9Alive.Count -eq 0){break}
+        Start-Sleep -Milliseconds 200
+    }while($f9ExitWatch.ElapsedMilliseconds -lt 15000)
+    $f9PreviewExit=@{pids=$f9Pids;remaining=$f9Alive;all_closed=($f9Pids.Count -gt 0 -and $f9Alive.Count -eq 0)}
+    $f9Pass=$f9Pass -and $f9PreviewExit.all_closed
+}
 foreach($f9Input in $f9Inputs){
     $f9Source=Join-Path $f9Root $f9Input.path; $f9Copy=Join-Path $f9Fixture $f9Input.path
     if((Get-FileHash -LiteralPath $f9Source).Hash -ne $f9Input.sha256 -or (Get-FileHash -LiteralPath $f9Copy).Hash -ne $f9Input.sha256){$f9Pass=$false}
 }
-$f9Manifest=@{stage=$Stage;head_before=$f9Head;head_after=(git -C $f9Root rev-parse HEAD);engine=(Resolve-Path -LiteralPath $GodotPath).Path;engine_sha256=(Get-FileHash -LiteralPath $GodotPath).Hash;fixture=$f9Fixture;inputs=$f9Inputs;started_utc=$f9Started;finished_utc=[DateTime]::UtcNow.ToString('o');exit_code=$f9Process.ExitCode;timed_out=$f9Timeout;aborted=$f9Aborted;ok=$f9Pass;result=$f9Result}
+$f9Manifest=@{preview_process_exit=$f9PreviewExit;stage=$Stage;head_before=$f9Head;head_after=(git -C $f9Root rev-parse HEAD);engine=(Resolve-Path -LiteralPath $GodotPath).Path;engine_sha256=(Get-FileHash -LiteralPath $GodotPath).Hash;fixture=$f9Fixture;inputs=$f9Inputs;started_utc=$f9Started;finished_utc=[DateTime]::UtcNow.ToString('o');exit_code=$f9Process.ExitCode;timed_out=$f9Timeout;aborted=$f9Aborted;ok=$f9Pass;result=$f9Result}
 [IO.File]::WriteAllText((Join-Path $f9Evidence 'runs.json'),(ConvertTo-Json -InputObject $f9Manifest -Depth 30))
 $f9Process.Dispose()
 Write-Output ('F9 '+$Stage+': '+$f9Pass)
