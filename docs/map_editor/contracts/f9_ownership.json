@@ -2289,7 +2289,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "Window/controls technically validated at581dae4b236f84f178abde67ccf1587f70a147e7: Luna52/33/29/Core639/official6 PASS,7922 full inputs zero divergence. Fixture released. NextGUI/AX/CLI and worldfieldvisuals; fullF9open.",
+    "state": "GUI/AX/CLI consumer freeze pending at code3418303544fada82f3485de1c63a04e847805fbf. Root EditorNative22 and Cli18 PASS. Failed attempts preserved; conservative leases. No overlapping writers; full F9 open.",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -2307,7 +2307,8 @@
       "docs/map_editor/delivery/evidence/f9/luna/viewport/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/shared_renderer/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/gameplay/report.md",
-      "docs/map_editor/delivery/evidence/f9/luna/window_controls/report.md"
+      "docs/map_editor/delivery/evidence/f9/luna/window_controls/report.md",
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/report.md"
     ],
     "generated_evidence_roots": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
@@ -2408,7 +2409,14 @@
       "docs/map_editor/delivery/evidence/f9/luna/window_controls/window",
       "docs/map_editor/delivery/evidence/f9/luna/window_controls/controls",
       "docs/map_editor/delivery/evidence/f9/luna/window_controls/core",
-      "docs/map_editor/delivery/evidence/f9/luna/window_controls/official"
+      "docs/map_editor/delivery/evidence/f9/luna/window_controls/official",
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/editor",
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/cli",
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/native",
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/window",
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/candidate_native",
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/core",
+      "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/official"
     ]
   }
 }

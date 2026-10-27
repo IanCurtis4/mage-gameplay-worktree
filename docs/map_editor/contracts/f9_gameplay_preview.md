@@ -203,3 +203,51 @@ As telas/AX/CLI ainda precisam ser conectadas e validadas. VFX dos quatro campos
 (FOGO/GELO/RAIO/BARREIRA) têm projeção D05 pendente no renderer legado; existência
 de campo e custo real nesta prova não equivalem à apresentação visual desses
 campos. Fechar essa projeção dentro de F9, sem nova fórmula de combate.
+
+
+## Clientes humanos, AX e CLI — consumidor integrado em validação
+
+As telas de mapa, encontros e patrulhas montam GameplayTools. Os botões
+Abrir jogo, Retomar teste e Suspender e fechar teste chamam Launcher; o
+seletor usa as três identidades base existentes. Retomar indica explicitamente
+que preserva a última revisão testada, mesmo quando o rascunho mudou. Fonte e
+histórico ficam na sessão editorial original; lançar exige compilação vigente.
+O exemplo humano de duas salas agora tem abertura80 para o corpo real20;
+o teste negativo reconstrói explicitamente a abertura24 e continua recusado.
+
+Por identidade kind/document_id, referência local limitada a64 documentos em
+.godot/map_authoring/play/references aponta a WINDOW validada. Não contém
+perfil nem código. Gravação usa CAS por hash de bytes. Referência inválida
+permanece preservada; recuperação revisável e limpeza seguem na frente10.
+Janela em execução e rascunho com outra identidade não se substituem entre si.
+
+Os sete comandos por tela são <screen>/gameplay/launch, resume, stop, inspect,
+select_class, action e reply. Parâmetros fechados delegam ao mesmo componente;
+headless é booleano opcional para agentes/testes, false no botão humano.
+
+CLI: executar a engine com --headless --path <projeto> --script
+res://scripts/map_authoring/preview/gameplay_cli.gd -- <pedido.json>.
+Um único JSON estrito, até16KiB, sem script/cena remetidos. Resultado de uma
+linha após F9_GAMEPLAY_CLI_RESULT; processo retorna0 apenas em sucesso.
+JSON de saída usa escapes Unicode para conservar caminhos com acentos em
+leitores Windows com code page diferente. Pedido action espera ACK por até90s
+por padrão; wait:false só publica. Erro de gameplay no ACK é ok:false e saída
+não zero; conclusão do transporte sozinha não é aceite da ação.
+
+- launch: command, kind, source_path, package_path; class_id/headless opcionais.
+  Relê fonte JSON validada e pacote publicado pelo produtor original; compara
+  hash atual, sem confiar num hash remetido nem recompilar silenciosamente.
+- resume: command, window_path; headless opcional. Janela nova sobre a sessão
+  corrente da revisão anterior validada.
+- stop/inspect: command, window_path.
+- action: command, window_path, action; session_id/request_id/wait opcionais.
+- reply: command, window_path, request_id; session_id/fingerprint opcionais.
+
+Uma lease existente é recusa conservadora, inclusive após crash; somente o
+próprio dono a libera no fluxo normal. OS.is_process_running no Windows observa
+processos criados pela instância chamadora, não serve como prova de morte de
+um PID estrangeiro. Painel recarregado conserva a lease; não apaga trava antiga
+nem mata processo por PID. Abrir sessão já ocupada é recusado antes de lançar
+outra janela. Recuperação explícita de crash segue exigida na frente10.
+Referências primárias: [contrato de OS](https://docs.godotengine.org/en/stable/classes/class_os.html#class-os-method-is-process-running)
+e [implementação Windows4.7](https://github.com/godotengine/godot/blob/4.7-stable/platform/windows/os_windows.cpp).

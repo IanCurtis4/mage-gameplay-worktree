@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_GAMEPLAY_CLI_CHECK same_canonical_sample_source_and_package true
+F9_GAMEPLAY_CLI_CHECK published_package_is_immutable_input true
+F9_GAMEPLAY_CLI_CHECK actual_cli_process_launches_fixed_preview_scene true
+F9_GAMEPLAY_CLI_CHECK cli_launched_game_is_active false
+{ "ok": false, "code": "candidate_invalid", "message": "O candidato de teste está inválido ou foi alterado.", "entity": "", "detail": {  } }
+F9_GAMEPLAY_CLI_RESULT {"checks":[{"id":"same_canonical_sample_source_and_package","ok":true},{"id":"published_package_is_immutable_input","ok":true},{"id":"actual_cli_process_launches_fixed_preview_scene","ok":true},{"id":"cli_launched_game_is_active","ok":false}],"count":4,"ok":false}
