@@ -34,7 +34,7 @@
     }
   },
   "res://scripts/actors/combat_actor.gd": {
-    "revision": 1,
+    "revision": 2,
     "fields": [
       "actor_name",
       "actor_color",
@@ -69,7 +69,10 @@
       "character_animation",
       "world_motion"
     ],
-    "omitted": {}
+    "omitted": {
+      "contact_shadows_enabled": "local presentation preference; defaults to enabled on restore",
+      "_ground_shadow_cache": "derived receiver mesh and process-local geometry epoch; rebuilt from restored world support"
+    }
   },
   "res://scripts/actors/enemy_actor.gd": {
     "revision": 2,

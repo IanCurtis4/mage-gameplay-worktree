@@ -2075,6 +2075,30 @@
       "owner": "Sol F9",
       "previous_owner": "sequential F9-06/07 library and viewport navigation, after frozen canvas checkpoint",
       "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_viewport_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-06/07 viewport model, camera and canonical inspection proofs",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_viewport_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-06/07 viewport model, camera and canonical inspection proofs",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_viewport_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-06/07 viewport model, camera and canonical inspection proofs",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_viewport_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9-06/07 viewport model, camera and canonical inspection proofs",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -2085,7 +2109,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "library preferences/browser component preparing frozen Luna selection; F9-06 viewport tools still open",
+    "state": "library stages 50/53/25/23 passed at 73b6ee8; Core found shadow snapshot omission; Luna usage limit interrupted report. Sol corrective 28/Core639/official5 passed; supervision continuation pending. Viewport tools next.",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",

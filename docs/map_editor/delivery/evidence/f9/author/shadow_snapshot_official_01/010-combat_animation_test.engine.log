@@ -1,0 +1,86 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Identifier "CombatAnimationState" not declared in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:7)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "state" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:7)
+SCRIPT ERROR: Parse Error: Identifier "CombatAnimationState" not declared in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:24)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "preparation" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:24)
+SCRIPT ERROR: Parse Error: Identifier "CombatAnimationState" not declared in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:31)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "paced" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:31)
+SCRIPT ERROR: Parse Error: Identifier "CharacterAnimation" not declared in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:36)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "animation" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:36)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "bitmap" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:41)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "frame" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:45)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "used" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:46)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "clone" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:49)
+SCRIPT ERROR: Parse Error: Identifier "ArenaNavigation" not declared in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:54)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "navigation" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:54)
+SCRIPT ERROR: Parse Error: Identifier "BuildSnapshot" not declared in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:56)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "base_snapshot" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:56)
+SCRIPT ERROR: Parse Error: Identifier "PlayerActor" not declared in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:58)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "base_player" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:58)
+SCRIPT ERROR: Parse Error: Identifier "RunState" not declared in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:59)
+SCRIPT ERROR: Parse Error: Identifier "BuildSnapshot" not declared in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:61)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "defender_snapshot" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:61)
+SCRIPT ERROR: Parse Error: Identifier "PlayerActor" not declared in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:64)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "defender_player" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:64)
+SCRIPT ERROR: Parse Error: Identifier "RunState" not declared in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:65)
+SCRIPT ERROR: Parse Error: Identifier "BuildSnapshot" not declared in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:67)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "berserker_snapshot" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:67)
+SCRIPT ERROR: Parse Error: Identifier "PlayerActor" not declared in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:70)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "berserker_player" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:70)
+SCRIPT ERROR: Parse Error: Identifier "RunState" not declared in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:71)
+SCRIPT ERROR: Parse Error: Identifier "RunController" not declared in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:76)
+SCRIPT ERROR: Parse Error: Identifier "RunController" not declared in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:77)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "controller" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:77)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "player" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:80)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "phase" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:84)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "enemy" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:89)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "initial_count" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:90)
+SCRIPT ERROR: Parse Error: Identifier "DamageRequest" not declared in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:91)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "damage" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:91)
+SCRIPT ERROR: Parse Error: Identifier "DamageRequest" not declared in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:93)
+SCRIPT ERROR: Parse Error: Could not find type "ActorDeathVisual" in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:100)
+SCRIPT ERROR: Parse Error: Identifier "RunController" not declared in the current scope.
+   at: GDScript::reload (res://tests/combat_animation_test.gd:109)
+ERROR: Failed to load script "res://tests/combat_animation_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

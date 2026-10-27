@@ -68,3 +68,29 @@ o hash dos bytes efetivamente lidos, eliminando a janela em que um hash de uma
 leitura posterior poderia autorizar sobrescrever uma edição externa.
 Minimap/overlays/foco e paridade CLI integral continuam em execução, sem fechamento
 antecipado de F9-06/07/09/10/11.
+
+## Próximo componente: minimapa e inspeção espacial
+
+Ferramentas comuns às telas de terreno, objetos, composição, encontros e
+patrulhas. MinimapXZ é projeção editorial: desenha caps, objetos e marcadores
+com uma moldura de câmera calculada na cota de foco indicada. Clique centraliza
+a câmera nessa cota; nunca move atores. Ajustes de zoom/pan/foco não mudam
+fonte, revisão, histórico, compilação ou colisão. TeclaF atua apenas com foco
+na área de desenho; busca não intercepta edição de texto nem janela inativa.
+
+Overlays usam faces, massas/AABBs, aberturas, slots e rotas dos produtores.
+Preview de relevo ainda não compilado é identificado como prévia; não certifica
+folga ou navegação. Inspeção de corpo/LoS exige pacote compilado atual, usa
+WorldGeometry.position_query/sweep e informa suporte inválido/ocupação/obstáculo,
+com ponto e volume reais. Camadas ocultas deixam de ser alvos visuais, mas
+conservam seus corpos nas consultas do pacote. Nenhum sweep por sprite ou
+fórmula alternativa de rota/altura. LoS é segmento à meia altura do corpo
+escolhido entre pontos de apoio válidos, não visibilidade de toda a silhueta.
+
+Foco por entidade/diagnóstico usa o ID e bounds da geometria correspondente;
+alvo ausente ou ambíguo tem erro explícito. GUI e comandos AX parametrizados
+delegam às mesmas APIs. Cache do modelo de desenho invalida na mudança de
+geometria/fonte/visibilidade; moldura de câmera é desenhada à parte para não
+reconstruir toda a geometria a cada pan. Capacidades/custos só serão declarados
+após provas de rampa, ponte com piso inferior, corpo grande, obstáculo e clique
+do minimapa, sem inferir FPS de testes funcionais.

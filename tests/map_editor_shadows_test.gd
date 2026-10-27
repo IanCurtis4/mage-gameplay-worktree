@@ -59,7 +59,51 @@ func run() -> void:
 	var attached := Shadow.attach(sprite,anchor,Vector2(20,20),index,"left",ProjectionView.project)
 	check("shadow_stays_positive_at_lowest_sprite_depth",attached.ok and attached.node.z_index == 0 and attached.node.show_behind_parent and attached.node.scale == Vector2(4,4))
 	sprite.free()
+	snapshot_cases()
 	finish()
+func snapshot_cases() -> void:
+	var input := preload("res://tests/fixtures/e07/f1/fixture_input.gd").make()
+	var assembled := ExpeditionAssembler.build(input)
+	if not assembled.ok: check("shadow_snapshot_bound_to_real_ramp",false); print(assembled); return
+	var world := WorldGeometry.new(); world.configure(assembled.data.manifest,"sample")
+	var nav := ArenaNavigation.new(); nav.configure(Rect2(0,0,800,800),[],18)
+	var actor := PlayerActor.new(); actor.configure(nav,RunState.new(&"mage"))
+	var point := ExpeditionWorldPoint.create("sample","sample/slope/surface/floor",Vector3(150,20,50))
+	var binding := actor.bind_world_geometry(world,point,input.traversal.to_data(),"shadow_snapshot_player")
+	check("shadow_snapshot_bound_to_real_ramp",binding.ok)
+	if not binding.ok: actor.free(); return
+	actor.health._hp_deficit = 7.25; actor.attack_cooldown = 0.375
+	var expected_hp := actor.health.current_hp
+	var data := Shadow.mesh_data(point.position,Vector2(10,10),world._support_index,point.surface_id,ProjectionView.project)
+	if not data.ok: check("snapshot_cache_contains_real_mesh",false); actor.free(); return
+	var cached_mesh := Shadow.mesh(data)
+	actor._ground_shadow_cache = {"mesh":cached_mesh,"anchor":point.position,"radii":Vector2(10,10),"surface_id":point.surface_id,"epoch":[world.get_instance_id(),world.configuration_revision,world.geometry_revision]}
+	actor.contact_shadows_enabled = false
+	check("snapshot_cache_contains_real_mesh",cached_mesh.get_surface_count() == 1 and data.receivers == [point.surface_id])
+	var barrier := SnapshotTickBarrier.new(); barrier.acquire(actor)
+	var captured := SnapshotRegistry.new().capture(actor,barrier)
+	check("snapshot_with_visual_cache_captures",captured.ok)
+	if not captured.ok: print(captured); barrier.release(); actor.free(); return
+	var payload: Dictionary = bytes_to_var(var_to_bytes(captured.snapshot))
+	check("snapshot_binary_roundtrip_valid",SnapshotRegistry.new().validate(payload).ok)
+	actor.contact_shadows_enabled = true; actor._ground_shadow_cache.clear()
+	var without_cache := SnapshotRegistry.new().capture(actor,barrier)
+	check("visual_toggles_do_not_change_snapshot",without_cache.ok and without_cache.snapshot == captured.snapshot)
+	barrier.release()
+	var restored := SnapshotRegistry.new().restore(payload)
+	var gameplay_ok := false; var rebuilt_ok := false
+	if restored.ok:
+		var copy: PlayerActor = restored.root
+		gameplay_ok = copy.world_point().to_data() == point.to_data() and copy.health.current_hp == expected_hp and copy.attack_cooldown == 0.375 and copy.contact_shadows_enabled and copy._ground_shadow_cache.is_empty()
+		# CombatActor._draw lazily reconstructs this derived index after hydration.
+		copy.world_motion.geometry._ensure_support_index()
+		var rebuilt := Shadow.mesh_data(copy.world_point().position,Vector2(10,10),copy.world_motion.geometry._support_index,copy.world_point().surface_id,ProjectionView.project)
+		rebuilt_ok = rebuilt.ok and rebuilt.world_vertices == data.world_vertices and Shadow.mesh(rebuilt) != cached_mesh
+		copy.free()
+	else: print(restored)
+	check("snapshot_restores_gameplay_and_default_presentation",gameplay_ok)
+	check("restored_shadow_rebuilds_from_preserved_support",rebuilt_ok)
+	actor.free()
 func finish() -> void:
 	var ok := checks.all(func(entry: Dictionary) -> bool: return entry.ok)
 	print("F9_SHADOW_RESULT "+JSON.stringify({"ok":ok,"count":checks.size(),"checks":checks})); quit(0 if ok else 1)

@@ -78,3 +78,22 @@ de oclusão para o pilar diante do avatar. Confere mudança de pixels no footpri
 de cada objeto/ator, não apenas existência do node. Isto amplia a evidência de
 opacidade isolada anterior, mas o pipeline completo de gameplay11 ainda exige
 população/combate/restart/export e sua área final.
+
+## Correção de suspensão identificada na regressão integrada
+
+Em27/10 a supervisão da biblioteca no SHA73b6ee8 atingiu a patrulha e encontrou
+`checkpoint_incomplete` para `CombatActor.contact_shadows_enabled`. A seleção
+anterior de sombras não exercitava esse corte; seus PASS continuam limitados
+às etapas registradas. O manifesto explícito do ator passa à revisão2 e
+classifica os dois campos novos como omitidos: preferência local de apresentação
+e cache de malha/receptor/época. O formato do envelope permanece1; nenhuma
+ArrayMesh ou identidade local de geometria passa a ser persistida. A política
+existente de compatibilidade por hash de fontes continua estrita.
+
+A prova adicionada usa PlayerActor e WorldGeometry reais sobre uma rampa,
+cache com ArrayMesh gerada e sombra desativada. Captura binária/restauração
+preservam ponto, vida e cooldown; apresentação volta ao padrão e deriva a mesma
+malha do suporte restaurado. Alterar só preferência/cache não muda o envelope.
+O preparo tardio do índice usa a mesma API já chamada por CombatActor._draw.
+Falha inicial desse setup, que ainda não preparava o índice derivado, é preservada.
+Regressão de patrulhas e testes oficiais de snapshot integram a seleção corretiva.

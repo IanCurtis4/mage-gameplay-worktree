@@ -1,0 +1,62 @@
+{
+  "role": "Sol author verification, not Luna supervision",
+  "source_head": "73b6ee8ff578343e7804cc7275d0b87d3afc0ffc",
+  "date": "2026-10-27",
+  "inputs": [
+    {
+      "manifest": "author/shadow_snapshot_02/runs.json",
+      "manifest_sha256": "24fd3d438a56f2b5a28f9f9b1b37620df30adcdf0b8c6db372cdc2560bd0e7f5",
+      "count": 1955,
+      "source_and_fixture_mismatches": []
+    },
+    {
+      "manifest": "author/shadow_snapshot_core_01/manifest.json",
+      "manifest_sha256": "042250f13c76952e03f18ceff0155aefed99f53f335bb7268f049807203217cc",
+      "count": 1949,
+      "source_and_fixture_mismatches": []
+    }
+  ],
+  "supervision_pending": true,
+  "official": [
+    {
+      "name": "combat_animation_test",
+      "exit_code": 0,
+      "timed_out": false,
+      "failed": false,
+      "output_sha256": "DF1D52002E18C5524FA60801186A018CDBC71C91E0248051E38F6565C154FB1E",
+      "output_hash_matches": true
+    },
+    {
+      "name": "e07_f6_snapshot_test",
+      "exit_code": 0,
+      "timed_out": false,
+      "failed": false,
+      "output_sha256": "2E091952F53115A75311BF2F4CFD595A18B2E8C64FA3076CBF6F844F4CC4EDC6",
+      "output_hash_matches": true
+    },
+    {
+      "name": "e07_f3_snapshot_test",
+      "exit_code": 0,
+      "timed_out": false,
+      "failed": false,
+      "output_sha256": "D4E8B993059D8E4C12243F8E997DE5174EA51AFF610CFF1B014F25D06AB2CF3D",
+      "output_hash_matches": true
+    },
+    {
+      "name": "e07_f1_pilot_scene_test",
+      "exit_code": 0,
+      "timed_out": false,
+      "failed": false,
+      "output_sha256": "CF7D445BDD00B411EA310B76C304EE3A7CFE50345C5F87FDC2258A7821810291",
+      "output_hash_matches": true
+    },
+    {
+      "name": "e07_f1_presentation_test",
+      "exit_code": 0,
+      "timed_out": false,
+      "failed": false,
+      "output_sha256": "BEBF132DC5433B71A8CF4626DF5B24C7E1A899B3C12AEFF5A2C81595456F7339",
+      "output_hash_matches": true
+    }
+  ]
+}
