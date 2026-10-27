@@ -5,10 +5,14 @@ const Brush = preload("res://scripts/map_authoring/terrain/brush.gd")
 const Partition = preload("res://scripts/map_authoring/compiler/terrain_partition.gd")
 const TerrainMaterial = preload("res://scripts/map_authoring/terrain/terrain_material.gd")
 const Terrain = preload("res://scripts/map_authoring/compiler/terrain_compiler.gd")
+const CanvasOrder = preload("res://scripts/world/world_canvas_order.gd")
+const GroundShadow = preload("res://scripts/world/ground_shadow.gd")
+const TerrainTopology = preload("res://scripts/map_authoring/compiler/terrain_topology.gd")
 const Objects = preload("res://scripts/map_authoring/objects/object_view.gd")
 signal stroke_finished(points: Array, options: Dictionary)
 signal cancelled
 signal object_pressed(hit: Dictionary)
+signal status(message: String)
 var object_edit_mode := ""
 var object_surface_id := ""
 var selected_objects: Array[String] = []
@@ -70,6 +74,11 @@ func fit() -> void:
 				var point := WorldProjection.project(vertex)
 				if first: bounds = Rect2(point,Vector2.ZERO); first = false
 				else: bounds = bounds.expand(point)
+	if _mesh_root != null:
+		for node: Node in _mesh_root.get_children():
+			if not node is Sprite2D: continue
+			var rect := Rect2(node.position+node.get_rect().position*node.scale,node.get_rect().size*node.scale)
+			bounds = rect if first else bounds.merge(rect); first = false
 	if first: _scale = 1.0; _pan = Vector2.ZERO; _origin = size*0.5
 	else:
 		_scale = clampf(minf((size.x-100)/maxf(1,bounds.size.x),(size.y-90)/maxf(1,bounds.size.y)),0.005,8)
@@ -168,11 +177,13 @@ func redraw_terrain() -> void:
 		for region: Dictionary in regions:
 			var mesh := MeshInstance2D.new()
 			mesh.mesh = TerrainMaterial.mesh(layer,region)
+			CanvasOrder.tag_grid(mesh,int(region.get("width",int(layer.columns)-1))+1,int(region.get("height",int(layer.rows)-1))+1)
 			mesh.material = TerrainMaterial.material(true)
 			var x: int = region.get("x",0); var z: int = region.get("z",0)
 			var width: int = region.get("width",int(layer.columns)-1); var height: int = region.get("height",int(layer.rows)-1)
 			mesh.z_index = Objects.depth_order((Partition.point(layer,x,z).y+Partition.point(layer,x+width,z+height).y)*0.5,depth_domain)
 			_mesh_root.add_child(mesh)
+	var shadow_index := {}
 	_shape = Terrain.preview_geometry(data)
 	if _shape.ok:
 		var hidden_faces := {}
@@ -184,11 +195,18 @@ func redraw_terrain() -> void:
 			if visual.special: _attach_face(visual.vertices,visual.material_weights,Vector3.ZERO,depth_domain)
 		for side: Dictionary in _shape.exposed_sides:
 			if not hidden_faces.has(side.face_id): _attach_face(side.vertices,[],side.outward,depth_domain)
+		if not _object_records.is_empty():
+			var faces: Array = []
+			for visual: Dictionary in _shape.visuals:
+				if visual.walkable and not hidden_faces.has(visual.face_id): faces.append(Terrain._face(visual))
+			shadow_index = GroundShadow.index_from_topology(faces,TerrainTopology.build(faces))
 	var hidden_surfaces := hidden_layers.duplicate()
 	for special: Dictionary in data.special_surfaces:
 		if special.layer_id in hidden_layers: hidden_surfaces.append(special.surface_id)
 	_object_records = _object_records.filter(func(object: Dictionary) -> bool: return object.source_surface_id not in hidden_surfaces)
-	Objects.attach(_mesh_root,_object_records,true,hidden_surfaces,depth_domain)
+	Objects.attach(_mesh_root,_object_records,true,hidden_surfaces,depth_domain,shadow_index)
+	var ordered := CanvasOrder.apply(_mesh_root)
+	if not ordered.ok: status.emit("A prévia precisa de revisão na ordem de desenho: "+str(ordered.code))
 	queue_redraw()
 
 func _attach_face(vertices: Array, paint: Array, normal: Vector3, domain: Vector2) -> void:

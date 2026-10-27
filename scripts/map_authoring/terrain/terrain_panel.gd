@@ -87,6 +87,7 @@ func _ready() -> void:
 	_button(grid,"Nova grade",add_grid)
 	canvas = Canvas.new(); add_child(canvas)
 	canvas.stroke_finished.connect(apply_stroke)
+	canvas.status.connect(func(message: String) -> void: status.text = message)
 	var bridge := HFlowContainer.new(); add_child(bridge)
 	bridge_x = _number(bridge,"Ponte X",-8192,8192,0)
 	bridge_z = _number(bridge,"Z",-8192,8192,100)

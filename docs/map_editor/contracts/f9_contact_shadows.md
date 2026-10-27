@@ -48,8 +48,8 @@ Pesquisa não constitui evidência de integração ou desempenho.
 
 Propriedade nominal ampliada para GroundShadow/CombatActor, testes e extração
 pura da projeção compartilhada (GeometryView conserva suas assinaturas e
-delega a mesma fórmula, evitando ciclo de classes). Consumidores aguardam
-a liberação do lote congelado. Nenhuma alteração de ator durante um lote Luna congelado. Sem novo
+delega a mesma fórmula, evitando ciclo de classes). O lote de bordas foi liberado após validação d3c0e25; consumidores de sombra
+estão em execução. Nenhuma alteração de ator durante um lote Luna congelado. Sem novo
 épico, plugin, campanha, mecânica de água, mudança de save ou publicação.
 
 
@@ -62,3 +62,19 @@ Compatibility utilizado antes de incorporar cada recurso ao produto.
 Referências: [partículas2D](https://docs.godotengine.org/en/stable/tutorials/2d/particle_systems_2d.html),
 [áudio posicional2D](https://docs.godotengine.org/en/stable/classes/class_audiostreamplayer2d.html)
 e [gradiente radial nativo](https://docs.godotengine.org/en/stable/classes/class_gradienttexture2d.html).
+
+
+Implementação atual: GradientTexture2D radial local128², sem PNG/shader novo,
+malha recortada aos membros conectados de WorldSupportPatch. Recebedor explícito
+é conferido por cota, sem fallback para outro andar. Props herdam pivô/escala e
+visibilidade/opacidade; a sombra usa o mesmo nível da sprite com behind_parent,
+evitando cair atrás do fundo no menor nível de desenho. CombatActor compartilha
+o gradiente, com cache por ponto/raios/suporte e tupla exata de instância/revisões.
+Atores sem binding espacial conservam elipse plana suave. Toda a mudança é
+apresentação; novo shape/collider, perfil, loot ou save não são emitidos.
+
+A prova nativa usa CombatActor/atlas reais, movimento canônico e a API existente
+de oclusão para o pilar diante do avatar. Confere mudança de pixels no footprint
+de cada objeto/ator, não apenas existência do node. Isto amplia a evidência de
+opacidade isolada anterior, mas o pipeline completo de gameplay11 ainda exige
+população/combate/restart/export e sua área final.

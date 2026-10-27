@@ -1,0 +1,19 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_ORDER_CHECK actor_on_low_ramp_draws_after_own_ground true
+F9_ORDER_CHECK ordering_does_not_mutate_geometry true
+F9_ORDER_CHECK wall_behind_sprite_is_not_overlay true
+F9_ORDER_CHECK foreground_wall_stays_in_front true
+F9_ORDER_CHECK projected_bridge_occludes_lower_actor true
+F9_ORDER_CHECK actor_on_bridge_draws_after_its_cap true
+F9_ORDER_CHECK array_order_is_not_presentation_identity true
+F9_ORDER_CHECK cold_order_tracks_all_pairs true
+F9_ORDER_CHECK stationary_order_reuses_verified_records true
+F9_ORDER_CHECK movement_updates_only_affected_pairs true
+F9_ORDER_CHECK incremental_order_matches_cold_rebuild true
+F9_ORDER_CHECK malformed_cap_returns_diagnostic true
+F9_ORDER_CHECK duplicate_id_rejected true
+F9_ORDER_CHECK nan_anchor_rejected true
+F9_ORDER_CHECK cycle_is_explicit_without_partial_cache true
+F9_ORDER_CHECK item_budget_rejects_whole_operation true
+F9_ORDER_RESULT {"checks":[{"id":"actor_on_low_ramp_draws_after_own_ground","ok":true},{"id":"ordering_does_not_mutate_geometry","ok":true},{"id":"wall_behind_sprite_is_not_overlay","ok":true},{"id":"foreground_wall_stays_in_front","ok":true},{"id":"projected_bridge_occludes_lower_actor","ok":true},{"id":"actor_on_bridge_draws_after_its_cap","ok":true},{"id":"array_order_is_not_presentation_identity","ok":true},{"id":"cold_order_tracks_all_pairs","ok":true},{"id":"stationary_order_reuses_verified_records","ok":true},{"id":"movement_updates_only_affected_pairs","ok":true},{"id":"incremental_order_matches_cold_rebuild","ok":true},{"id":"malformed_cap_returns_diagnostic","ok":true},{"id":"duplicate_id_rejected","ok":true},{"id":"nan_anchor_rejected","ok":true},{"id":"cycle_is_explicit_without_partial_cache","ok":true},{"id":"item_budget_rejects_whole_operation","ok":true}],"count":16,"ok":true}

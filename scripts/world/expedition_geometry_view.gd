@@ -1,7 +1,8 @@
 class_name ExpeditionGeometryView
 extends Node2D
 ## Approved D05 adapter. Projection is presentation only; all picks return WorldPoints.
-const AXIS := Vector2(0.85,0.425)
+const ProjectionMath = preload("res://scripts/world/expedition_projection.gd")
+const AXIS := ProjectionMath.AXIS
 var geometry: WorldGeometry
 var _epoch := 0
 var _surfaces: Array = []
@@ -16,13 +17,8 @@ var attack_preview: Dictionary = {}
 var controller: RunController
 var _effects: Node2D
 
-static func project(point: Vector3) -> Vector2:
-	return Vector2((point.x-point.z)*AXIS.x,(point.x+point.z)*AXIS.y-point.y)
-static func ray(canvas_point: Vector2) -> Dictionary:
-	var x := (canvas_point.x/AXIS.x+canvas_point.y/AXIS.y)*0.5
-	var z := (canvas_point.y/AXIS.y-canvas_point.x/AXIS.x)*0.5
-	var height := 10000.0
-	return {"origin":Vector3(x+height/(2*AXIS.y),height,z+height/(2*AXIS.y)),"direction":Vector3(-1/(2*AXIS.y),-1,-1/(2*AXIS.y))}
+static func project(point: Vector3) -> Vector2: return ProjectionMath.project(point)
+static func ray(canvas_point: Vector2) -> Dictionary: return ProjectionMath.ray(canvas_point)
 func configure(world: WorldGeometry) -> Dictionary:
 	var result := world.presentation_snapshot(world.geometry_revision)
 	if not result["ok"]: return result

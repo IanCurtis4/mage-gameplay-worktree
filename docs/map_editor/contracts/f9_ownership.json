@@ -1967,6 +1967,36 @@
       "owner": "Sol F9",
       "previous_owner": "sequential F9 contact shadow presentation; pure projection authority extraction, signatures and formulas unchanged",
       "base_sha256": "c304a658a76f3f3e04fe37b277f150f0a045701cf31bdb7ba50c705ca3018cce"
+    },
+    {
+      "path": "docs/map_editor/contracts/f9_canvas_order.md",
+      "owner": "Sol F9",
+      "previous_owner": "F9 shadow native regression exposes existing ramp/overlay layering failure; shared presentation correction",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/world/world_canvas_order.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F9 shadow native regression exposes existing ramp/overlay layering failure; shared presentation correction",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/world/world_canvas_order.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F9 shadow native regression exposes existing ramp/overlay layering failure; shared presentation correction",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_canvas_order_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F9 shadow native regression exposes existing ramp/overlay layering failure; shared presentation correction",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_canvas_order_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "F9 shadow native regression exposes existing ramp/overlay layering failure; shared presentation correction",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -1977,7 +2007,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "border families technically validated at d3c0e25854a2623020b6fb3f83b5b9483e2ea810; fixture released; contact shadow delta next",
+    "state": "contact shadows and canvas order candidate preparing frozen Luna selection; fixture reserved after dispatch",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -1988,7 +2018,8 @@
       "docs/map_editor/delivery/evidence/f9/luna/materials/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/cliffs/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/biome_props/report.md",
-      "docs/map_editor/delivery/evidence/f9/luna/borders/report.md"
+      "docs/map_editor/delivery/evidence/f9/luna/borders/report.md",
+      "docs/map_editor/delivery/evidence/f9/luna/shadows/report.md"
     ],
     "generated_evidence_roots": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
@@ -2052,7 +2083,16 @@
       "docs/map_editor/delivery/evidence/f9/luna/borders/cliffs",
       "docs/map_editor/delivery/evidence/f9/luna/borders/relief",
       "docs/map_editor/delivery/evidence/f9/luna/borders/core",
-      "docs/map_editor/delivery/evidence/f9/luna/borders/official"
+      "docs/map_editor/delivery/evidence/f9/luna/borders/official",
+      "docs/map_editor/delivery/evidence/f9/luna/shadows/geometry",
+      "docs/map_editor/delivery/evidence/f9/luna/shadows/order",
+      "docs/map_editor/delivery/evidence/f9/luna/shadows/native",
+      "docs/map_editor/delivery/evidence/f9/luna/shadows/borders_native",
+      "docs/map_editor/delivery/evidence/f9/luna/shadows/objects_native",
+      "docs/map_editor/delivery/evidence/f9/luna/shadows/biome_props_native",
+      "docs/map_editor/delivery/evidence/f9/luna/shadows/materials_native",
+      "docs/map_editor/delivery/evidence/f9/luna/shadows/cliff_native",
+      "docs/map_editor/delivery/evidence/f9/luna/shadows/official"
     ]
   }
 }

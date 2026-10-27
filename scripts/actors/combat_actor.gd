@@ -2,6 +2,11 @@ class_name CombatActor
 extends Node2D
 ## Shared runtime presentation and health ownership for combat actors.
 
+const GroundShadow = preload("res://scripts/world/ground_shadow.gd")
+const ProjectionMath = preload("res://scripts/world/expedition_projection.gd")
+var contact_shadows_enabled := true
+var _ground_shadow_cache := {}
+
 const MAX_SLOW_FRACTION := 0.50
 const MAX_WEAKEN_FRACTION := 0.50
 
@@ -385,11 +390,14 @@ func _process(delta: float) -> void:
 		queue_redraw()
 
 func _draw() -> void:
-	# Compact contact shadow centered under the soles; no detached tile diamond.
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, 0.30))
-	draw_circle(Vector2.ZERO, 15.0, Color(0.02, 0.03, 0.04, 0.14))
-	draw_circle(Vector2.ZERO, 11.0, Color(0.02, 0.03, 0.04, 0.26))
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+	if contact_shadows_enabled:
+		if world_motion == null: GroundShadow.draw_flat(self)
+		elif world_motion.is_current_world() and world_point() != null:
+			var world := world_motion.geometry; world._ensure_support_index()
+			var point := world_point()
+			var radius := clampf(collision_radius*0.72*sqrt(maxf(0.25,sprite_visual_scale)),5.0,128.0)
+			var epoch: Array = [world.get_instance_id(),world.configuration_revision,world.geometry_revision]
+			GroundShadow.draw_on(self,point.position,Vector2.ONE*radius,world._support_index,point.surface_id,ProjectionMath.project,_ground_shadow_cache,epoch)
 	var color := Color.WHITE if _flash_time > 0.0 else actor_color
 	if is_selected:
 		_draw_target_ring(collision_radius + 14.0, Color("f5cc77"), 3.0)

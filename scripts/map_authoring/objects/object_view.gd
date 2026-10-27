@@ -1,6 +1,7 @@
 @tool
 extends RefCounted
 const Catalog = preload("res://scripts/map_authoring/objects/prop_catalog.gd")
+const GroundShadow = preload("res://scripts/world/ground_shadow.gd")
 const Metadata = preload("res://scripts/map_authoring/objects/object_schema.gd")
 const ProjectionView = preload("res://scripts/world/expedition_geometry_view.gd")
 
@@ -26,7 +27,7 @@ static func source_records(source: Dictionary) -> Array:
 		records.append({"placement_id":placement.placement_id,"definition_id":placement.definition_id,"position":Vector3(p[0],p[1],p[2]),"source_surface_id":placement.surface_id,"rotation_y":placement.rotation_y,"definition":found.definition,"editor_state":Metadata.state(source,placement.placement_id)})
 	return records
 
-static func attach(root: Node2D, records: Array, authoring: bool = false, hidden_surfaces: Array[String] = [], domain: Vector2 = Vector2.ZERO) -> Array[Sprite2D]:
+static func attach(root: Node2D, records: Array, authoring: bool = false, hidden_surfaces: Array[String] = [], domain: Vector2 = Vector2.ZERO, shadow_index: Dictionary = {}) -> Array[Sprite2D]:
 	var result: Array[Sprite2D] = []
 	if records.is_empty(): return result
 	var catalog := Catalog.load_catalog()
@@ -56,8 +57,12 @@ static func attach(root: Node2D, records: Array, authoring: bool = false, hidden
 		if sprite.flip_h: sprite.offset.x = -(1.0-float(definition.pivot_uv[0]))*texture.get_width()
 		sprite.set_meta("placement_id",object.placement_id)
 		sprite.set_meta("world_position",object.position)
+		sprite.set_meta("footprint_radius",float(definition.footprint_radius)); sprite.set_meta("world_height",float(definition.world_height))
 		sprite.set_meta("camera_occlusion",definition.capabilities.camera_occlusion)
 		root.add_child(sprite); result.append(sprite)
+		if not shadow_index.is_empty():
+			var receiver_id := GroundShadow.receiver(object.position,shadow_index,str(object.get("surface_id","")))
+			if not receiver_id.is_empty(): GroundShadow.attach(sprite,object.position,Vector2.ONE*maxf(3.0,float(definition.footprint_radius)*0.85),shadow_index,receiver_id,ProjectionView.project)
 	return result
 
 static func pick(records: Array, local: Vector2, project: Callable, scale: float) -> String:
