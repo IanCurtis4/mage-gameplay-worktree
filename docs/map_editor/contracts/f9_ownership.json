@@ -2205,7 +2205,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "Gameplay consumer authorNative08 52 PASS; Core639 and official6 PASS before presentation-only label delta; full input audits recorded. Await frozen Luna52/Core639/official6 on final source. Full F9, editor launch, window broker, AX/CLI/export remain open.",
+    "state": "Gameplay consumer technically validated atbf406c36415b9c3508d888ba200d2d1b4ef24494: Luna52/Core639/official6 PASS,3946 full inputs zero divergence, fixture released. Next: stable window broker and editor/AX/CLI launch; full F9 open.",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
