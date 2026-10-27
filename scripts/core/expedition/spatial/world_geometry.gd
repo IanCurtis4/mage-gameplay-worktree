@@ -5,6 +5,7 @@ const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometr
 const SolidPrism = preload("res://scripts/core/expedition/spatial/world_solid_prism.gd")
 const SupportPatch = preload("res://scripts/core/expedition/spatial/world_support_patch.gd")
 const EPS := 0.00001
+const NAVIGATION_MEMO_LIMIT := 32768
 var geometry_revision := 0
 var configuration_revision := 0
 var _stage: Dictionary = {}
@@ -154,32 +155,65 @@ func remove_occupant(id: String) -> void:
 func path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictionary, revision: int) -> Dictionary:
 	return _path(from,to,profile,revision,null)
 
-func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictionary, revision: int, candidate: WorldSolidSegment) -> Dictionary:
+func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictionary, revision: int, candidate: WorldSolidSegment, lazy_graph: bool = true, trace: Dictionary = {}, memoize: bool = true) -> Dictionary:
 	if not _current(revision): return _failure(&"stale_geometry")
 	if not _profile_valid(profile): return _failure(&"invalid_profile")
 	var radius: float = profile["radius"]
 	var height: float = profile["height"]
 	if not _candidate_point(from,radius,height,candidate) or not _candidate_point(to,radius,height,candidate): return _failure(&"invalid_support")
+	var tracing: bool = trace.get("enabled",false) == true
+	var query_started := Time.get_ticks_usec() if tracing else 0
+	if tracing:
+		trace["build_usec"] = 0; trace["surfaces"] = 0; trace["expansions"] = 0; trace["edge_tests"] = 0
 	var direct := _navigation_direct(from,to,profile,revision,candidate)
-	if direct.ok: return direct
-	var graph := _navigation_graph(from,to,profile,candidate)
+	if tracing: trace["direct_usec"] = Time.get_ticks_usec()-query_started
+	if direct.ok:
+		if tracing: trace["direct"] = true; trace["total_usec"] = Time.get_ticks_usec()-query_started
+		return direct
+	var graph := {"ok":true,"nodes":{},"edges":{},"by_surface":{}}
+	var context: Dictionary = {}
+	if lazy_graph:
+		context = _navigation_index(profile,trace,memoize)
+		if not context.ok: return _failure(&"navigation_budget_exceeded")
+		var made := _navigation_surface(graph,context,from.surface_id,from,to,profile,candidate)
+		if not made.ok: return _failure(&"navigation_budget_exceeded")
+	else:
+		var build_started := Time.get_ticks_usec() if tracing else 0
+		graph = _navigation_graph(from,to,profile,candidate)
+		if tracing: trace["build_usec"] = Time.get_ticks_usec()-build_started; trace["surfaces"] = _stage["surfaces"].size()
 	if not graph.ok: return _failure(&"navigation_budget_exceeded")
+	var memo: Dictionary = context.get("memo",{}); var query_scopes: Dictionary = context.get("query",{})
 	var nodes: Dictionary = graph.nodes; var edges: Dictionary = graph.edges; var by_surface: Dictionary = graph.by_surface
 	var distances := {"@from": 0.0}
 	var previous: Dictionary = {}
 	var frontier: Array[Dictionary] = [{"id":"@from","cost":0.0}]
-	var visited: Dictionary = {}
+	var visited: Dictionary = {}; var expanded_surfaces := {}
 	while not frontier.is_empty():
 		var next := _navigation_heap_pop(frontier); var current: String = next.id
 		if visited.has(current) or float(next.cost) != float(distances[current]): continue
 		visited[current] = true
+		if tracing: trace["expansions"] += 1
 		if current == "@to": break
+		if lazy_graph and not context.prepared.has(nodes[current]["surface_id"]):
+			var made := _navigation_surface(graph,context,nodes[current]["surface_id"],from,to,profile,candidate)
+			if not made.ok: return _failure(&"navigation_budget_exceeded")
 		# The same visibility graph is evaluated when Dijkstra expands its source
 		# state. Unvisited cells/states need no pair tests. Candidate nodes, costs,
 		# tie order, directed portals and all geometry checks remain identical.
+		var portal_edge_count: int = edges[current].size()
 		for other: String in by_surface[nodes[current]["surface_id"]]:
 			if current == other: continue
-			if _clear_path_segment(nodes[current]["position"],nodes[other]["position"],profile,candidate,nodes[current]["surface_id"]) and _support_segment_fraction(_cell(nodes[current]["surface_id"]),nodes[current]["position"],nodes[other]["position"],profile) >= 1.0-EPS:
+			if tracing: trace["edge_tests"] += 1
+			var segment_context: Variant = {} if lazy_graph else null
+			var clear_started := Time.get_ticks_usec() if tracing else 0
+			var clear := _navigation_clear(nodes[current]["position"],nodes[other]["position"],profile,candidate,nodes[current]["surface_id"],memo,query_scopes.get(nodes[current]["surface_id"],{}),segment_context)
+			if tracing: trace["clear_usec"] = int(trace.get("clear_usec",0))+Time.get_ticks_usec()-clear_started
+			var supported := false
+			if clear:
+				var support_started := Time.get_ticks_usec() if tracing else 0
+				supported = _navigation_fraction(_cell(nodes[current]["surface_id"]),nodes[current]["position"],nodes[other]["position"],profile,memo,segment_context if segment_context != null else {}) >= 1.0-EPS
+				if tracing: trace["support_usec"] = int(trace.get("support_usec",0))+Time.get_ticks_usec()-support_started
+			if clear and supported:
 				edges[current].append({"to":other,"via":[],"connection_id":"","cost":Vector3(nodes[current]["position"]).distance_to(nodes[other]["position"])})
 		for edge: Dictionary in edges[current]:
 			var route_cost: float = float(distances[current]) + float(edge["cost"])
@@ -187,6 +221,18 @@ func _path(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictio
 			distances[edge["to"]] = route_cost
 			previous[edge["to"]] = {"from": current, "edge": edge}
 			_navigation_heap_push(frontier,edge["to"],route_cost)
+		# This state is expanded once. Previous records retain their accepted
+		# edges; unselected local visibility edges need no lifetime past here.
+		if lazy_graph:
+			edges[current].resize(portal_edge_count)
+			var completed_surface: String = nodes[current]["surface_id"]
+			expanded_surfaces[completed_surface] = int(expanded_surfaces.get(completed_surface,0))+1
+			if expanded_surfaces[completed_surface] == by_surface[completed_surface].size():
+				_navigation_memo_release(memo,completed_surface); context.query.erase(completed_surface)
+	if tracing:
+		trace["total_usec"] = Time.get_ticks_usec()-query_started; trace["states"] = nodes.size()
+		trace["memo_entries"] = memo.get("entries",0); trace["memo_hits"] = memo.get("hits",0); trace["memo_misses"] = memo.get("misses",0)
+		trace["memo_peak"] = memo.get("peak",0); trace["memo_stored"] = memo.get("stored",0); trace["memo_released"] = memo.get("released",0)
 	if not visited.has("@to"): return _failure(&"unreachable")
 	var steps: Array[Dictionary] = []
 	var cursor := "@to"
@@ -211,21 +257,101 @@ func _navigation_direct(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, pr
 			return _success({"points":route,"connection_ids":_route_connection_ids(route),"cost":direct["data"]["cost"]})
 	return _failure(&"unsupported_contact")
 
-func _navigation_graph(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictionary, candidate: WorldSolidSegment, terminals: Dictionary = {}, pairs: Array = [], control: Dictionary = {}) -> Dictionary:
+# Generation scopes never replace _stage: every body/support/mass predicate
+# still sees the whole canonical world and the original ordered pair.
+func _navigation_endpoints(profile: Dictionary, control: Dictionary = {}) -> Dictionary:
+	var endpoints: Dictionary = {}
+	for endpoint: Dictionary in _stage["connectors"]:
+		if not WorldConnectivityBatch.tick(control,"endpoint_checks"): return {"ok":false}
+		if not endpoint["kind"] in profile["connector_kinds"] or float(endpoint["headroom"])+EPS < float(profile["height"]): continue
+		endpoints[endpoint["connector_id"]] = endpoint
+	return {"ok":true,"endpoints":endpoints}
+
+func _navigation_index(profile: Dictionary, trace: Dictionary = {}, memoize: bool = true) -> Dictionary:
+	var started := Time.get_ticks_usec() if trace.get("enabled",false) == true else 0
+	var selected := _navigation_endpoints(profile)
+	if not selected.ok: return selected
+	var endpoints: Dictionary = selected.endpoints; var incidents := {}
+	for connection: Dictionary in _stage["connections"]:
+		if not endpoints.has(connection["a_connector"]) or not endpoints.has(connection["b_connector"]): continue
+		var a: String = endpoints[connection["a_connector"]]["surface_id"]; var b: String = endpoints[connection["b_connector"]]["surface_id"]
+		var ids: Array = [a] if a == b else [a,b]
+		for id: String in ids:
+			if not incidents.has(id): incidents[id] = []
+			incidents[id].append(connection)
+	if started > 0: trace["build_usec"] = Time.get_ticks_usec()-started
+	return {"ok":true,"endpoints":endpoints,"incidents":incidents,"generated":{},"prepared":{},"query":{},"trace":trace,"memo":{"point":{},"clear":{},"fraction":{},"entries":0,"hits":0,"misses":0,"peak":0,"stored":0,"released":0} if memoize else {}}
+
+func _navigation_surface(graph: Dictionary, context: Dictionary, id: String, from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictionary, candidate: WorldSolidSegment) -> Dictionary:
+	if context.prepared.has(id): return {"ok":true}
+	var cell := _cell(id)
+	if cell.is_empty(): return {"ok":false}
+	var started := Time.get_ticks_usec() if context.trace.get("enabled",false) == true else 0
+	var fresh: Array = []
+	for connection: Dictionary in context.incidents.get(id,[]):
+		if not context.generated.has(connection["connection_id"]): fresh.append(connection)
+	var part := _navigation_graph(from,to,profile,candidate,{},[],{},{"endpoints":context.endpoints,"connections":fresh,"surfaces":[cell],"memo":context.memo})
+	if not part.ok: return part
+	for state: String in part.nodes:
+		if graph.nodes.has(state):
+			if graph.nodes[state] != part.nodes[state]: return {"ok":false}
+		else:
+			graph.nodes[state] = part.nodes[state]; graph.edges[state] = []
+			var support: String = part.nodes[state]["surface_id"]
+			if not graph.by_surface.has(support): graph.by_surface[support] = []
+			graph.by_surface[support].append(state)
+	for state: String in part.edges:
+		for edge: Dictionary in part.edges[state]:
+			if not graph.edges[state].has(edge): graph.edges[state].append(edge)
+	for connection: Dictionary in fresh: context.generated[connection["connection_id"]] = true
+	# Every incident connection is now generated. Future slices cannot append
+	# another local state here. Sorting matches the original eager producer.
+	if not graph.by_surface.has(id): graph.by_surface[id] = []
+	graph.by_surface[id].sort(); context.prepared[id] = true
+	context.query[id] = _navigation_mass_context(graph,id,profile)
+	context.query[id]["trace"] = context.trace
+	if started > 0:
+		context.trace["build_usec"] += Time.get_ticks_usec()-started
+		context.trace["surfaces"] += 1
+	return {"ok":true}
+
+# The completed bin is immutable. Every subsequent local segment has endpoints
+# in this exact finite envelope, so the global broadphase supplies a conservative
+# subset for all of them. Keep original mass order and the same pair filter/sweep.
+func _navigation_mass_context(graph: Dictionary, id: String, profile: Dictionary) -> Dictionary:
+	if graph.by_surface[id].is_empty(): return {}
+	var low: Vector3 = graph.nodes[graph.by_surface[id][0]]["position"]; var high := low
+	for state: String in graph.by_surface[id]:
+		var point: Vector3 = graph.nodes[state]["position"]
+		low = low.min(point); high = high.max(point)
+	var masses := SolidPrism.spatial_candidates(_support_index.solid_prisms,_support_index.mass_broadphase,low,high,profile.radius,profile.height)
+	var volume_ids: Array[int] = []
+	for index: int in _stage["volumes"].size():
+		var box: AABB = _stage["volumes"][index]; var outside := false
+		for axis: int in 3:
+			var margin: float = profile.radius if axis != 1 else profile.height
+			var minimum := float(box.position[axis])-margin-EPS
+			var maximum := float(box.position[axis])+float(box.size[axis])+(float(profile.radius) if axis != 1 else 0.0)+EPS
+			if float(high[axis]) < minimum or float(low[axis]) > maximum: outside = true; break
+		if not outside: volume_ids.append(index)
+	return {"items":masses,"index":SolidPrism.spatial_index(masses),"volumes":volume_ids}
+
+func _navigation_graph(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, profile: Dictionary, candidate: WorldSolidSegment, terminals: Dictionary = {}, pairs: Array = [], control: Dictionary = {}, generation: Dictionary = {}) -> Dictionary:
 	var radius: float = profile.radius; var height: float = profile.height
+	var memo: Dictionary = generation.get("memo",{})
 	var nodes: Dictionary = terminals.duplicate(true) if not terminals.is_empty() else {"@from":from.to_data(),"@to":to.to_data()}
 	if not WorldConnectivityBatch.reserve(control,nodes,2): return {"ok":false}
 	var edges: Dictionary = {}
 	for id: String in nodes: edges[id] = []
-	var endpoints: Dictionary = {}
-	for endpoint: Dictionary in _stage["connectors"]:
-		if not WorldConnectivityBatch.tick(control,"endpoint_checks"): return {"ok":false}
-		if not endpoint["kind"] in profile["connector_kinds"] or float(endpoint["headroom"]) + EPS < height: continue
-		endpoints[endpoint["connector_id"]] = endpoint
+	var endpoints: Dictionary = generation.get("endpoints",{})
+	if not generation.has("endpoints"):
+		var selected := _navigation_endpoints(profile,control)
+		if not selected.ok: return selected
+		endpoints = selected.endpoints
 	# Portals are traversable intervals, clipped by the body radius. Visibility
 	# candidates include interval ends, source/destination projections and obstacle
 	# corners. A blocked center never removes the whole opening from the graph.
-	for connection: Dictionary in _stage["connections"]:
+	for connection: Dictionary in generation.get("connections",_stage["connections"]):
 		if not WorldConnectivityBatch.tick(control,"connections"): return {"ok":false}
 		if not endpoints.has(connection["a_connector"]) or not endpoints.has(connection["b_connector"]): continue
 		var a: Dictionary = endpoints[connection["a_connector"]]
@@ -238,17 +364,17 @@ func _navigation_graph(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, pro
 			if not WorldConnectivityBatch.tick(control,"portal_checks"): return {"ok":false}
 			var pa := ExpeditionWorldPoint.create(from.stage_id,a["surface_id"],seam)
 			var pb := ExpeditionWorldPoint.create(from.stage_id,b["surface_id"],seam)
-			if not _candidate_point(pa,radius,height,candidate) or not _candidate_point(pb,radius,height,candidate): continue
+			if not _navigation_point(pa,radius,height,candidate,memo) or not _navigation_point(pb,radius,height,candidate,memo): continue
 			# Keep an inset state on each support, allowing turns between adjacent
 			# openings without forcing the body to travel along their shared edge.
 			var ia := Kernel.support_y(_cell(a["surface_id"]),seam-Vector3(a["outward"])*radius)
 			var ib := Kernel.support_y(_cell(b["surface_id"]),seam-Vector3(b["outward"])*radius)
 			var inside_a := ExpeditionWorldPoint.create(from.stage_id,a["surface_id"],ia)
 			var inside_b := ExpeditionWorldPoint.create(from.stage_id,b["surface_id"],ib)
-			if not _candidate_point(inside_a,radius,height,candidate): inside_a = pa; ia = seam
-			if not _candidate_point(inside_b,radius,height,candidate): inside_b = pb; ib = seam
-			if not _clear_path_segment(ia,seam,profile,candidate,a["surface_id"]) or not _clear_path_segment(seam,ib,profile,candidate,b["surface_id"]): continue
-			if _support_segment_fraction(_cell(a["surface_id"]),ia,seam,profile) < 1.0-EPS or _support_segment_fraction(_cell(b["surface_id"]),seam,ib,profile) < 1.0-EPS: continue
+			if not _navigation_point(inside_a,radius,height,candidate,memo): inside_a = pa; ia = seam
+			if not _navigation_point(inside_b,radius,height,candidate,memo): inside_b = pb; ib = seam
+			if not _navigation_clear(ia,seam,profile,candidate,a["surface_id"],memo) or not _navigation_clear(seam,ib,profile,candidate,b["surface_id"],memo): continue
+			if _navigation_fraction(_cell(a["surface_id"]),ia,seam,profile,memo) < 1.0-EPS or _navigation_fraction(_cell(b["surface_id"]),seam,ib,profile,memo) < 1.0-EPS: continue
 			if not WorldConnectivityBatch.tick(control,"states",2): return {"ok":false}
 			var token := str(index) if pairs.is_empty() else ExpeditionCanonical.digest([seam,ia,ib])
 			var aid := "@portal/%s/%s/a"%[connection["connection_id"],token]
@@ -262,7 +388,7 @@ func _navigation_graph(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, pro
 			if not WorldConnectivityBatch.reserve(control,[aid,bid,ad,bd,edges[aid],edges[bid]]): return {"ok":false}
 		WorldConnectivityBatch.release_scratch(control,scratch_mark)
 	# Visibility graph corners give detours around AABBs within convex supports.
-	for cell: Dictionary in _stage["surfaces"]:
+	for cell: Dictionary in generation.get("surfaces",_stage["surfaces"]):
 		for volume_index: int in range(_volumes().size()):
 			var box: AABB = _volumes()[volume_index]
 			for x: float in [box.position.x - radius - EPS * 4.0, box.end.x + radius + EPS * 4.0]:
@@ -270,7 +396,7 @@ func _navigation_graph(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, pro
 					if not WorldConnectivityBatch.tick(control,"landmark_checks"): return {"ok":false}
 					var position := Kernel.support_y(cell, Vector3(x, 0, z))
 					var point := ExpeditionWorldPoint.create(from.stage_id, cell["surface_id"], position)
-					if not _candidate_point(point,radius,height,candidate): continue
+					if not _navigation_point(point,radius,height,candidate,memo): continue
 					var id := "@corner/%s/%d/%s/%s" % [cell["surface_id"], volume_index, x, z]
 					if not WorldConnectivityBatch.tick(control,"states"): return {"ok":false}
 					if not WorldConnectivityBatch.reserve(control,[id,point.to_data(),[]]): return {"ok":false}
@@ -279,7 +405,7 @@ func _navigation_graph(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, pro
 	# Generate detour states from the mass cut by THIS support plane/profile.
 	# Candidate padding only makes an outside point representable; all contacts
 	# and support predicates retain their original EPS and are checked again.
-	for cell: Dictionary in _stage["surfaces"]:
+	for cell: Dictionary in generation.get("surfaces",_stage["surfaces"]):
 		var bounds := AABB(cell["vertices"][0],Vector3.ZERO)
 		for vertex: Vector3 in cell["vertices"]: bounds = bounds.expand(vertex)
 		for prism: Dictionary in SolidPrism.spatial_candidates(_support_index.solid_prisms,_support_index.mass_broadphase,bounds.position,bounds.end,radius,height):
@@ -295,7 +421,7 @@ func _navigation_graph(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, pro
 					if not WorldConnectivityBatch.tick(control,"landmark_checks"): return {"ok":false}
 					var position := Kernel.support_y(cell,Vector3(corner.x,0,corner.y))
 					var point := ExpeditionWorldPoint.create(from.stage_id,cell["surface_id"],position)
-					if not _candidate_point(point,radius,height,candidate): continue
+					if not _navigation_point(point,radius,height,candidate,memo): continue
 					var id := "@mass/%s/%s/%d"%[cell["surface_id"],prism.volume_id,corner_index]; corner_index += 1
 					if not WorldConnectivityBatch.tick(control,"states"): return {"ok":false}
 					if not WorldConnectivityBatch.reserve(control,[id,point.to_data(),[]]): return {"ok":false}
@@ -304,14 +430,14 @@ func _navigation_graph(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, pro
 	var segment_ids: Array = _segments.keys(); segment_ids.sort()
 	for id: String in segment_ids: segments.append(_segments[id])
 	if candidate != null: segments.append(candidate)
-	for cell: Dictionary in _stage["surfaces"]:
+	for cell: Dictionary in generation.get("surfaces",_stage["surfaces"]):
 		for segment_index: int in segments.size():
 			var segment := segments[segment_index] as WorldSolidSegment
 			for corner_index: int in segment.corners(radius).size():
 				if not WorldConnectivityBatch.tick(control,"landmark_checks"): return {"ok":false}
 				var position := Kernel.support_y(cell,segment.corners(radius)[corner_index])
 				var point := ExpeditionWorldPoint.create(from.stage_id,cell["surface_id"],position)
-				if not _candidate_point(point,radius,height,candidate): continue
+				if not _navigation_point(point,radius,height,candidate,memo): continue
 				var id := "@segment/%s/%d/%d" % [cell["surface_id"],segment_index,corner_index]
 				if not WorldConnectivityBatch.tick(control,"states"): return {"ok":false}
 				if not WorldConnectivityBatch.reserve(control,[id,point.to_data(),[]]): return {"ok":false}
@@ -325,6 +451,62 @@ func _navigation_graph(from: ExpeditionWorldPoint, to: ExpeditionWorldPoint, pro
 		if not by_surface.has(surface): by_surface[surface] = []
 		by_surface[surface].append(id)
 	return {"ok":true,"nodes":nodes,"edges":edges,"by_surface":by_surface}
+
+# Private memo is born and discarded with ONE synchronous path query. Its
+# stage, full profile, candidate and effective geometry never cross a query.
+# Keep ordered Vector3 endpoints as dictionary keys: no EPS/string rounding or
+# reverse-edge inference. Saturation computes normally without retaining more.
+static func _navigation_memo_get(memo: Dictionary, family: String, surface: String, a: Vector3, b: Vector3) -> Variant:
+	if memo.is_empty(): return null
+	var surfaces: Dictionary = memo[family]
+	var starts: Dictionary = surfaces.get(surface,{})
+	var ends: Dictionary = starts.get(a,{})
+	var value: Variant = ends.get(b)
+	memo["misses" if value == null else "hits"] += 1
+	return value
+
+static func _navigation_memo_put(memo: Dictionary, family: String, surface: String, a: Vector3, b: Vector3, value: Variant) -> void:
+	if memo.is_empty() or int(memo.entries) >= NAVIGATION_MEMO_LIMIT: return
+	var surfaces: Dictionary = memo[family]
+	if not surfaces.has(surface): surfaces[surface] = {}
+	if not surfaces[surface].has(a): surfaces[surface][a] = {}
+	surfaces[surface][a][b] = value; memo.entries += 1; memo.stored += 1
+	memo.peak = maxi(memo.peak,memo.entries)
+
+# Every local state of a completed support has now expanded. All incident
+# connections were already generated before its first expansion; no subsequent
+# slice can query a new point or local edge here. Recycle the bounded memo.
+static func _navigation_memo_release(memo: Dictionary, surface: String) -> void:
+	if memo.is_empty(): return
+	var removed := 0
+	for family: String in ["point","clear","fraction"]:
+		var surfaces: Dictionary = memo[family]
+		for ends: Dictionary in surfaces.get(surface,{}).values(): removed += ends.size()
+		surfaces.erase(surface)
+	memo.entries -= removed; memo.released += removed
+
+func _navigation_point(point: ExpeditionWorldPoint, radius: float, height: float, candidate: WorldSolidSegment, memo: Dictionary) -> bool:
+	if point.stage_id != _stage.stage_id: return false
+	var value: Variant = _navigation_memo_get(memo,"point",point.surface_id,point.position,point.position)
+	if value != null: return bool(value)
+	var accepted := _candidate_point(point,radius,height,candidate)
+	_navigation_memo_put(memo,"point",point.surface_id,point.position,point.position,accepted)
+	return accepted
+
+func _navigation_clear(a: Vector3, b: Vector3, profile: Dictionary, candidate: WorldSolidSegment, surface: String, memo: Dictionary, mass_context: Dictionary = {}, segment_context: Variant = null) -> bool:
+	var value: Variant = _navigation_memo_get(memo,"clear",surface,a,b)
+	if value != null: return bool(value)
+	var accepted := _clear_path_segment(a,b,profile,candidate,surface,mass_context,segment_context)
+	_navigation_memo_put(memo,"clear",surface,a,b,accepted)
+	return accepted
+
+func _navigation_fraction(cell: Dictionary, a: Vector3, b: Vector3, profile: Dictionary, memo: Dictionary, segment_context: Dictionary = {}) -> float:
+	var value: Variant = _navigation_memo_get(memo,"fraction",cell.surface_id,a,b)
+	if value != null: return float(value)
+	_ensure_support_index()
+	var fraction: float = SupportPatch._fraction_prepared(cell,a,b,profile,_support_index,segment_context.get("members",{}))
+	_navigation_memo_put(memo,"fraction",cell.surface_id,a,b,fraction)
+	return fraction
 
 func _navigation_seams(a: Dictionary, b: Dictionary, source: Vector3, target: Vector3, radius: float, candidate: WorldSolidSegment, height: float, pairs: Array, control: Dictionary) -> Dictionary:
 	if pairs.is_empty(): return {"ok":true,"points":_portal_candidates(a,b,source,target,radius,candidate,height)}
@@ -456,14 +638,25 @@ func sweep(from: Vector3, to: Vector3, collider: Dictionary, revision: int, mask
 	return _sweep(from,to,collider,revision,mask,{})
 
 func ground_sweep(surface_id: String, from: Vector3, to: Vector3, collider: Dictionary, revision: int) -> Dictionary:
+	return _ground_sweep(surface_id,from,to,collider,revision,{})
+
+func _ground_sweep(surface_id: String, from: Vector3, to: Vector3, collider: Dictionary, revision: int, mass_context: Dictionary, segment_context: Variant = null) -> Dictionary:
 	if not _current(revision): return _failure(&"stale_geometry")
 	if not collider.has_all(["radius","height"]) or not _finite_number(collider["radius"]) or not _finite_number(collider["height"]) or float(collider["radius"]) < 0 or float(collider["height"]) < 0: return _failure(&"invalid_collider")
 	var cell := _cell(surface_id)
 	if cell.is_empty() or not from.is_finite() or not to.is_finite() or not Kernel.contains(cell,from) or not Kernel.contains(cell,to): return _failure(&"invalid_support")
-	var excluded := SupportPatch.members(surface_id,Vector2(from.x,from.z),Vector2(to.x,to.z),float(collider["radius"]),float(collider["height"]),_support_index)
-	return _sweep(from,to,collider,revision,&"all",excluded)
+	var trace: Dictionary = mass_context.get("trace",{})
+	var tracing: bool = trace.get("enabled",false) == true
+	var members_started := Time.get_ticks_usec() if tracing else 0
+	var excluded: Dictionary = {}
+	if segment_context != null and segment_context.has("members"): excluded = segment_context.members
+	else:
+		excluded = SupportPatch.members(surface_id,Vector2(from.x,from.z),Vector2(to.x,to.z),float(collider["radius"]),float(collider["height"]),_support_index)
+		if segment_context != null: segment_context["members"] = excluded
+	if tracing: trace["members_usec"] = int(trace.get("members_usec",0))+Time.get_ticks_usec()-members_started
+	return _sweep(from,to,collider,revision,&"all",excluded,mass_context)
 
-func _sweep(from: Vector3, to: Vector3, collider: Dictionary, revision: int, mask: StringName, excluded_supports: Dictionary) -> Dictionary:
+func _sweep(from: Vector3, to: Vector3, collider: Dictionary, revision: int, mask: StringName, excluded_supports: Dictionary, mass_context: Dictionary = {}) -> Dictionary:
 	if not _current(revision): return _failure(&"stale_geometry")
 	if not from.is_finite() or not to.is_finite() or not collider.has_all(["radius", "height"]) or not _finite_number(collider["radius"]) or not _finite_number(collider["height"]) or float(collider["radius"]) < 0.0 or float(collider["height"]) < 0.0: return _failure(&"invalid_collider")
 	if mask not in [&"all",&"supporting_slabs"]: return _failure(&"invalid_mask")
@@ -471,7 +664,12 @@ func _sweep(from: Vector3, to: Vector3, collider: Dictionary, revision: int, mas
 	var normal := Vector3.ZERO
 	var hit_id := ""
 	var volumes: Array = _volumes() if mask == &"all" else _solid_slabs
-	for index: int in range(volumes.size()):
+	var volume_ids: Array = range(volumes.size())
+	if mask == &"all" and mass_context.has("volumes"):
+		volume_ids = mass_context.volumes.duplicate()
+		# Temporaries always use the complete current list, after authored indices.
+		for index: int in range(_stage["volumes"].size(),volumes.size()): volume_ids.append(index)
+	for index: int in volume_ids:
 		var volume: AABB = volumes[index]
 		var radius: float = collider["radius"]
 		var height: float = collider["height"]
@@ -488,7 +686,7 @@ func _sweep(from: Vector3, to: Vector3, collider: Dictionary, revision: int, mas
 			ids.sort()
 			hit_id = "temporary/"+str(ids[index-_stage["volumes"].size()])
 	_ensure_support_index()
-	for prism: Dictionary in SolidPrism.spatial_candidates(_support_index.solid_prisms,_support_index.mass_broadphase,from,to,float(collider["radius"]),float(collider["height"])):
+	for prism: Dictionary in SolidPrism.spatial_candidates(mass_context.get("items",_support_index.solid_prisms),mass_context.get("index",_support_index.mass_broadphase),from,to,float(collider["radius"]),float(collider["height"])):
 		if excluded_supports.has(prism.support_surface_id): continue
 		var hit := SolidPrism.sweep(from,to,prism,float(collider["radius"]),float(collider["height"]))
 		if hit.is_empty() or float(hit["fraction"]) > fraction: continue
@@ -759,8 +957,8 @@ func _candidate_point(point: ExpeditionWorldPoint, radius: float, height: float,
 	if not _point_valid(point,radius,height): return false
 	return candidate == null or candidate.contact(point.position,point.position,{"radius":radius,"height":height}).is_empty()
 
-func _clear_path_segment(from: Vector3, to: Vector3, profile: Dictionary, candidate: WorldSolidSegment, surface_id: String = "") -> bool:
-	var contact := ground_sweep(surface_id,from,to,profile,geometry_revision) if not surface_id.is_empty() else sweep(from,to,profile,geometry_revision)
+func _clear_path_segment(from: Vector3, to: Vector3, profile: Dictionary, candidate: WorldSolidSegment, surface_id: String = "", mass_context: Dictionary = {}, segment_context: Variant = null) -> bool:
+	var contact := _ground_sweep(surface_id,from,to,profile,geometry_revision,mass_context,segment_context) if not surface_id.is_empty() else _sweep(from,to,profile,geometry_revision,&"all",{},mass_context)
 	if not contact["ok"] or contact["data"]["hit"]: return false
 	return candidate == null or candidate.contact(from,to,profile).is_empty()
 

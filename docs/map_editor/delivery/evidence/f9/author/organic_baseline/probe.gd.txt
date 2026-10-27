@@ -1,0 +1,28 @@
+extends SceneTree
+const Piece = preload("res://scripts/map_authoring/document/source_document.gd")
+const Terrain = preload("res://scripts/map_authoring/compiler/terrain_compiler.gd")
+const Maps = preload("res://scripts/map_authoring/composition/map_compiler.gd")
+const MapDocument = preload("res://scripts/map_authoring/composition/map_document.gd")
+const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
+const Candidate = preload("res://scripts/map_authoring/preview/gameplay_candidate.gd")
+func _initialize() -> void: run.call_deferred()
+func run() -> void:
+	for axis: int in [9,17]:
+		var source := Piece.empty("organic_probe"); var heights: Array = []
+		for z: int in axis:
+			for x: int in axis:
+				var px := float(x)*1200.0/(axis-1)-600.0; var pz := float(z)*1200.0/(axis-1)-600.0
+				heights.append(220.0*exp(-(px*px+pz*pz)/(2.0*180.0*180.0)))
+		source.layers = [{"layer_id":"hill","name":"Relevo contínuo","origin_xz":[0,0],"sample_spacing":1200.0/(axis-1),"columns":axis,"rows":axis,"heights":heights,"material_masks":{},"locked":false,"protected_regions":[]}]
+		var started := Time.get_ticks_usec(); var terrain := Terrain.compile(source)
+		print("ORGANIC_TERRAIN "+JSON.stringify({"axis":axis,"ok":terrain.ok,"code":terrain.get("code",""),"ms":(Time.get_ticks_usec()-started)/1000.0,"surfaces":terrain.get("package",{}).get("part",{}).get("surfaces",[]).size()}))
+		if not terrain.ok: print(terrain); continue
+		var data := MapDocument.empty("organic_probe_map"); var hash_value := Schema.semantic_hash(source)
+		data.pieces = [{"piece_hash":hash_value,"source":source}]; data.instances = [{"instance_id":"hill","piece_hash":hash_value,"position_xyz":[0,0,0],"rotation_quarters":0}]
+		started = Time.get_ticks_usec(); print("ORGANIC_MAP_BEGIN "+str(axis)); var map := Maps.compile(data)
+		print("ORGANIC_MAP "+JSON.stringify({"axis":axis,"ok":map.ok,"code":map.get("code",""),"ms":(Time.get_ticks_usec()-started)/1000.0}))
+		if not map.ok: print(map); continue
+		started = Time.get_ticks_usec(); print("ORGANIC_BODY_BEGIN "+str(axis)); var made := Candidate.create("map",map.package,map.package.source_hash); var prepared := Candidate.prepare(made.candidate)
+		print("ORGANIC_BODY "+JSON.stringify({"axis":axis,"ok":prepared.ok,"code":prepared.get("code",""),"ms":(Time.get_ticks_usec()-started)/1000.0}))
+		if not prepared.ok: print(prepared)
+	quit()

@@ -1,0 +1,22 @@
+extends SceneTree
+const Test = preload("res://tests/map_editor_port_fragments_test.gd")
+const Compiler = preload("res://scripts/map_authoring/composition/map_compiler.gd")
+func _initialize() -> void: run.call_deferred()
+func run() -> void:
+	# Fixture compiler bypasses only its repeated reachability proof for timing.
+	# The actual query below uses unchanged WorldGeometry for that variant.
+	print("F9_COST_BUILD_START"); var building := Time.get_ticks_usec()
+	var built := Compiler.compile(Test.map_source())
+	print("F9_COST_BUILD_DONE "+str((Time.get_ticks_usec()-building)/1000.0))
+	if not built.ok: print("F9_COST_BUILD_FAILED "+str(built)); quit(1); return
+	var world := WorldGeometry.new(); world.configure(Compiler.manifest(built.package),"map_preview")
+	var cases: Array = []
+	for target: Vector2 in [Vector2(175,4),Vector2(175,95)]:
+		print("F9_COST_CASE_START "+str(target))
+		var from := Test.instance_at(world,"left",Vector2(8,4)); var to := Test.instance_at(world,"right",target)
+		var direct := world.ground_line_to(from,to,built.package.profile,world.geometry_revision)
+		print("F9_COST_DIRECT "+str(direct.ok))
+		var tick := Time.get_ticks_usec(); var result := world.path(from,to,built.package.profile,world.geometry_revision)
+		cases.append({"direct":direct.ok,"elapsed_ms":(Time.get_ticks_usec()-tick)/1000.0,"result":result})
+		print("F9_COST_CASE_DONE "+str(cases[-1].elapsed_ms))
+	print("F9_COST_RESULT "+JSON.stringify({"ok":cases.all(func(c: Dictionary) -> bool: return c.result.ok),"cases":cases})); quit()

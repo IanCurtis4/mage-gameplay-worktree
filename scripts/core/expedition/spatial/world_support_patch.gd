@@ -112,12 +112,17 @@ static func contains(cell: Dictionary, position: Vector3, radius: float, height:
 	return true
 
 static func fraction(cell: Dictionary, from: Vector3, to: Vector3, profile: Dictionary, data: Dictionary) -> float:
+	return _fraction_prepared(cell,from,to,profile,data,{})
+
+# One ordered segment can reuse the exact members already computed by its sweep.
+# This private preparation is never accepted from a public witness/certificate.
+static func _fraction_prepared(cell: Dictionary, from: Vector3, to: Vector3, profile: Dictionary, data: Dictionary, members: Dictionary) -> float:
 	if not Kernel.contains(cell,from) or not Kernel.contains(cell,to): return 0.0
 	var a := Vector2(from.x,from.z); var b := Vector2(to.x,to.z)
 	var radius := float(profile.radius); var height := float(profile.height)
 	if float(cell.headroom)+EPS < height: return 0.0
 	if _disk_within(cell.surface_id,a,radius,data) and _disk_within(cell.surface_id,b,radius,data): return 1.0
-	var patch := _patch(cell.surface_id,a,b,radius,height,data)
+	var patch := members if not members.is_empty() else _patch(cell.surface_id,a,b,radius,height,data)
 	var clearance := maxf(0,radius-EPS); var first := 1.0
 	for edge: Array in _closed(patch,height,data):
 		if segment_distance_squared(a,b,edge[0],edge[1]) >= clearance*clearance: continue

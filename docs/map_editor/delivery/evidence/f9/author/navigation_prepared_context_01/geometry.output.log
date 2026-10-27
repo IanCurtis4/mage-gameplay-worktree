@@ -1,0 +1,14 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_CONTEXT_CHECK real_curved_terrain_publishes_with_masses true
+F9_CONTEXT_CHECK authored_volume_subset_preserves_equal_fraction_hit_order false
+F9_CONTEXT_CHECK envelope_selects_a_strict_mass_subset true
+F9_CONTEXT_CHECK ordered_pair_candidates_match_full_index true
+F9_CONTEXT_CHECK all_sampled_ground_sweeps_match_full_authority true
+F9_CONTEXT_CHECK all_sampled_clear_predicates_match_full_authority true
+F9_CONTEXT_CHECK temporary_volume_is_still_checked false
+F9_CONTEXT_CHECK speculative_segment_is_still_checked true
+F9_CONTEXT_CHECK real_mass_detour_matches_eager_exactly true
+F9_CONTEXT_CHECK real_mass_route_walks_with_player_body true
+F9_CONTEXT_CHECK queries_preserve_stage_and_release_actor true
+F9_CONTEXT_RESULT {"checks":[{"id":"real_curved_terrain_publishes_with_masses","ok":true},{"id":"authored_volume_subset_preserves_equal_fraction_hit_order","ok":false},{"id":"envelope_selects_a_strict_mass_subset","ok":true},{"id":"ordered_pair_candidates_match_full_index","ok":true},{"id":"all_sampled_ground_sweeps_match_full_authority","ok":true},{"id":"all_sampled_clear_predicates_match_full_authority","ok":true},{"id":"temporary_volume_is_still_checked","ok":false},{"id":"speculative_segment_is_still_checked","ok":true},{"id":"real_mass_detour_matches_eager_exactly","ok":true},{"id":"real_mass_route_walks_with_player_body","ok":true},{"id":"queries_preserve_stage_and_release_actor","ok":true}],"count":11,"ok":false}

@@ -18,7 +18,7 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 01 snap/assentamento/inclinação | arquitetura | snap numérico, inclinação por catálogo e escolha explícita do piso superior |53 checks de objetos, incluindo ponte e piso travado |
 | 01 decoração/corpo/ataque/LoS/oclusão | arquitetura, emendas | rocha/tronco sólidos e arbusto decorativo usam capacidades explícitas; combinação não suportada falha | movimento/ataque comprovados; prova final de oclusão/apresentação pendente |
 | 01 scatter/exclusões/undo/roundtrip/export | arquitetura, validação | scatter determinístico revisável, quota/exclusões/undo/roundtrip comprovados |53+25 checks; export e pipeline final pendentes |
-| 02 relevo suave/silhueta | terrain_piece_semantics | grade e smooth existem; planos de amostra não demonstram orgânico | pendente |
+| 02 relevo suave/silhueta | terrain_piece_semantics | grade/smooth e Gauss17 com512 apoios reais, corpo20/32, publicação e1024 testemunhas/movimento comprovados por Sol; acabamento humano/nativo continua exigido | checkpoint19 e contrato de desempenho; Organic15, não fecha visual orgânico |
 | 02 caminho/cobertura/encosta e pintura | terrain_piece_semantics | quatro materiais, pesos normalizados, mistura gradual de Pedra por declive e UV mundial/triplanar integrados | fundação validada ef88996:35/20/46, objetos nativos25, Core639 e2 oficiais Luna; acabamento orgânico/lados e área final ainda exigidos |
 | 02 penhasco/faces não caminháveis | F2 closure | terrain v5/composição v4 preservam todas as faces/massas, suportes só até45°, pele exposta e faixa inferior junto da ponte | fundação validada7073d38: Cliff61, Ports92, Core639 e30 oficiais Luna; Native17/Mesh34/Relief58 e Objects53/Scale46 reaproveitados com deltas; relevo orgânico/área final ainda exigidos |
 | 03 floresta/deserto/planície/ruína | map_composition_and_seams | quatro perfis ricos, canal/água sem collider, ruína legada preservada | fundação validada d3c0e25: Borders93/Native32/Ports92/Cliff61/Relief58/Core639 e30 oficiais Luna; integração visual/área orgânica final continua obrigatória |
@@ -30,7 +30,7 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 04 precisão/altura/escala/corpo/folga/sentido | F2, F3, E07 | EPS preservado; half-ULPs de x/y/z projetados no plano/borda e transição física local | checkpoints270ff3a/e6fdf43 com supervisão por impacto; sem garantia universal de escala |
 | 04 suporte contínuo e massa do relevo | F9-02/11, física compartilhada | união local e massa convexa/índice/desvios, transporte ao assembler e contato direcional implementados | validado tecnicamente270ff3a: malha34, massa56, geometria46, objetos53 e30 etapas oficiais Luna; Core639 autoral com proveniência no recibo |
 | 05 mesma peça/manual/seed/contexto | autoria F8 | entregue; preservar APIs/revisões e hash | pendente de regressão |
-| 05 síntese/regeneração interna real | arquitetura, F6 | troca de slots não esculpe; entregar operação regional | pendente |
+| 05 síntese/regeneração interna real | arquitetura, F6 | troca de slots não esculpe; contrato regional preparado com consulta Astra, consumidores ainda pendentes | [síntese regional](contracts/f9_regional_synthesis.md), sem conclusão antecipada |
 | 05 proteção terreno/props/encontros/patrulhas/pins | arquitetura, F6 | pins de instância apenas; entregar máscaras e seleção real | pendente |
 | 05 diff/contradição antes do commit | F6, validação | existe para slots; ampliar às regiões internas | pendente |
 | 06 biblioteca/busca/miniaturas/categorias | arquitetura, F8 | paleta de objetos e biblioteca de fontes com busca/categorias/miniaturas locais; componente em validação | [biblioteca e navegação](contracts/f9_library_navigation.md), integração em execução |
@@ -64,3 +64,9 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 Medições antigas não certificam mudanças F9. Limites defensivos medidos não são
 requisitos adiados; exclusões explícitas continuam as do contrato (campanha,
 quests/economia nova, multiplayer, renderer novo e execução de conteúdo remetido).
+
+Checkpoint19 acrescenta publicação de Gauss17/512 dentro do orçamento original,
+consulta individual preparada e provas Context11/Lazy24/Geometry46/Ports92/Batch36.
+A comparação densa atual preserva resultado integral e reduz160389ms para100731ms;
+continua limitação concreta de10 e não certifica fluidez. Core/oficiais/supervisão
+integrada ainda pendentes no congelamento, conforme recibo. Nenhuma linha é removida.

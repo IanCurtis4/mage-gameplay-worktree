@@ -2345,6 +2345,66 @@
       "owner": "Sol F9",
       "previous_owner": "new authored field post-Verify input audit",
       "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/contracts/f9_navigation_performance.md",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 organic navigation regression/performance authority; bounded Astra design consultation only",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_organic_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 organic navigation regression/performance authority; bounded Astra design consultation only",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_organic_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 organic navigation regression/performance authority; bounded Astra design consultation only",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_navigation_lazy_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 organic navigation regression/performance authority; bounded Astra design consultation only",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_navigation_lazy_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 organic navigation regression/performance authority; bounded Astra design consultation only",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_navigation_dense_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9; repeat exact historic dense scenario without compiler bypass",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_navigation_dense_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9; repeat exact historic dense scenario without compiler bypass",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_navigation_context_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9; exact mass subset equivalence on real terrain",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_navigation_context_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9; exact mass subset equivalence on real terrain",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/contracts/f9_regional_synthesis.md",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 regional synthesis contract; bounded read-only Astra consultation",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -2355,7 +2415,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "Gameplay clients technically consolidated at7f723ac with executed Luna stages and Sol post-Verify audit. New shared field presentation has authored73/52/29 and8official PASS, full5982 input comparison zero divergence; Luna supervision pending usage limit. Full F9 remains open.",
+    "state": "navigation_and_fields_pending_frozen_candidate",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -2376,7 +2436,8 @@
       "docs/map_editor/delivery/evidence/f9/luna/window_controls/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/report_final.md",
-      "docs/map_editor/delivery/evidence/f9/luna/world_fields/report.md"
+      "docs/map_editor/delivery/evidence/f9/luna/world_fields/report.md",
+      "docs/map_editor/delivery/evidence/f9/luna/navigation_and_fields/report.md"
     ],
     "generated_evidence_roots": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
@@ -2489,7 +2550,12 @@
       "docs/map_editor/delivery/evidence/f9/luna/world_fields/native",
       "docs/map_editor/delivery/evidence/f9/luna/world_fields/gameplay",
       "docs/map_editor/delivery/evidence/f9/luna/world_fields/controls",
-      "docs/map_editor/delivery/evidence/f9/luna/world_fields/official"
+      "docs/map_editor/delivery/evidence/f9/luna/world_fields/official",
+      "docs/map_editor/delivery/evidence/f9/luna/navigation_and_fields/core",
+      "docs/map_editor/delivery/evidence/f9/luna/navigation_and_fields/official",
+      "docs/map_editor/delivery/evidence/f9/luna/navigation_and_fields/fields_native",
+      "docs/map_editor/delivery/evidence/f9/luna/navigation_and_fields/gameplay_native",
+      "docs/map_editor/delivery/evidence/f9/luna/navigation_and_fields/controls"
     ]
   }
 }

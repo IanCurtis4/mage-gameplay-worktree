@@ -1,0 +1,11 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ORGANIC_TERRAIN {"axis":9,"code":"","ms":399.176,"ok":true,"surfaces":128}
+ORGANIC_MAP_BEGIN 9
+ORGANIC_MAP {"axis":9,"code":"","ms":6403.392,"ok":true}
+ORGANIC_BODY_BEGIN 9
+ORGANIC_BODY {"axis":9,"code":"","ms":8917.685,"ok":true}
+ORGANIC_TERRAIN {"axis":17,"code":"","ms":2943.777,"ok":true,"surfaces":512}
+ORGANIC_MAP_BEGIN 17
+ORGANIC_MAP {"axis":17,"code":"navigation_budget_exceeded","ms":54288.412,"ok":false}
+{ "ok": false, "code": "navigation_budget_exceeded", "diagnostics": [{ "code": "navigation_budget_exceeded", "entity_id": "", "field": "composition", "location": (0.0, 0.0, 0.0), "severity": "error", "message": "A validação atingiu o orçamento técnico; nenhum pacote foi publicado.", "suggestion": "Selecione a região indicada e corrija a fonte." }], "geometry_diagnostic": { "phase": "witnesses", "metrics": { "storage_bytes": 268436124, "peak_storage_bytes": 268436124, "snapshot_storage_units": 21823716, "terminal_checks": 512, "states": 512, "direct_pairs": 1022, "expansions": 2, "witness_points": 35296, "reconstruction_steps": 897, "witness_segments": 34359 } } }

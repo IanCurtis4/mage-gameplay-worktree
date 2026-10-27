@@ -1,0 +1,140 @@
+{
+  "role": "Sol author post-execution content audit; not independent semantic review",
+  "head": "f21709ae0065b34a534d40d5eeeff0742e07dea9",
+  "records": [
+    {
+      "evidence": "navigation_prepared_context_02",
+      "ok": true,
+      "count": 11,
+      "exit_code": 0,
+      "timed_out": false,
+      "aborted": false,
+      "input_count": 2002,
+      "missing": [],
+      "changed": [],
+      "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+      "head_before": "f21709ae0065b34a534d40d5eeeff0742e07dea9",
+      "head_after": "f21709ae0065b34a534d40d5eeeff0742e07dea9"
+    },
+    {
+      "evidence": "navigation_prepared_lazy_02",
+      "ok": true,
+      "count": 24,
+      "exit_code": 0,
+      "timed_out": false,
+      "aborted": false,
+      "input_count": 2002,
+      "missing": [],
+      "changed": [],
+      "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+      "head_before": "f21709ae0065b34a534d40d5eeeff0742e07dea9",
+      "head_after": "f21709ae0065b34a534d40d5eeeff0742e07dea9"
+    },
+    {
+      "evidence": "navigation_prepared_dense_02",
+      "ok": true,
+      "count": 5,
+      "exit_code": 0,
+      "timed_out": false,
+      "aborted": false,
+      "input_count": 2002,
+      "missing": [],
+      "changed": [],
+      "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+      "head_before": "f21709ae0065b34a534d40d5eeeff0742e07dea9",
+      "head_after": "f21709ae0065b34a534d40d5eeeff0742e07dea9"
+    },
+    {
+      "evidence": "navigation_prepared_eager_01",
+      "ok": true,
+      "count": 5,
+      "exit_code": 0,
+      "timed_out": false,
+      "aborted": false,
+      "input_count": 2002,
+      "missing": [],
+      "changed": [],
+      "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+      "head_before": "f21709ae0065b34a534d40d5eeeff0742e07dea9",
+      "head_after": "f21709ae0065b34a534d40d5eeeff0742e07dea9"
+    },
+    {
+      "evidence": "navigation_prepared_geometry_01",
+      "ok": true,
+      "count": 46,
+      "exit_code": 0,
+      "timed_out": false,
+      "aborted": false,
+      "input_count": 2002,
+      "missing": [],
+      "changed": [],
+      "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+      "head_before": "f21709ae0065b34a534d40d5eeeff0742e07dea9",
+      "head_after": "f21709ae0065b34a534d40d5eeeff0742e07dea9"
+    },
+    {
+      "evidence": "navigation_prepared_ports_01",
+      "ok": true,
+      "count": 92,
+      "exit_code": 0,
+      "timed_out": false,
+      "aborted": false,
+      "input_count": 2002,
+      "missing": [],
+      "changed": [],
+      "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+      "head_before": "f21709ae0065b34a534d40d5eeeff0742e07dea9",
+      "head_after": "f21709ae0065b34a534d40d5eeeff0742e07dea9"
+    },
+    {
+      "evidence": "navigation_prepared_batch_01",
+      "ok": true,
+      "count": 36,
+      "exit_code": 0,
+      "timed_out": false,
+      "aborted": false,
+      "input_count": 2002,
+      "missing": [],
+      "changed": [],
+      "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+      "head_before": "f21709ae0065b34a534d40d5eeeff0742e07dea9",
+      "head_after": "f21709ae0065b34a534d40d5eeeff0742e07dea9"
+    },
+    {
+      "evidence": "organic_direct_01",
+      "ok": true,
+      "count": 15,
+      "exit_code": 0,
+      "timed_out": false,
+      "aborted": false,
+      "input_count": 1995,
+      "missing": [],
+      "changed": [
+        "scripts/core/expedition/spatial/world_geometry.gd",
+        "scripts/core/expedition/spatial/world_support_patch.gd",
+        "tests/map_editor_navigation_batch_test.gd",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+      "head_before": "f21709ae0065b34a534d40d5eeeff0742e07dea9",
+      "head_after": "f21709ae0065b34a534d40d5eeeff0742e07dea9"
+    }
+  ],
+  "dense_comparison": {
+    "same_world": true,
+    "same_profile": true,
+    "all_results_equal": true,
+    "all_digests_equal": true,
+    "eager_ms": [
+      160389.246,
+      24.956
+    ],
+    "prepared_ms": [
+      100730.692,
+      19.811
+    ]
+  },
+  "fixture_input_differences": [],
+  "fixture_project_only_vcs_disabled": true,
+  "organic_compatibility": "Original Gauss17/512 and all1024 public witnesses/movement ran before private path preparation. Direct batch helper unchanged. Public support fraction wraps unchanged body with empty preparation; public clear/sweep defaults retain full indices. Four changed input paths and seven added declared tests/UIDs are recorded; not a new1024-witness run at the final hash."
+}

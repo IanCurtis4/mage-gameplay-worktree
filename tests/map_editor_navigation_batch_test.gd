@@ -16,6 +16,17 @@ func run() -> void:
 	check("stationary_root_witness",world.connectivity_witness(direct,1,true,world.geometry_revision).data.points.size() == 1)
 	check("direct_forward_witness_walks",walk(world,world.connectivity_witness(direct,0,true,world.geometry_revision),PROFILE))
 	check("direct_reverse_witness_walks",walk(world,world.connectivity_witness(direct,0,false,world.geometry_revision),PROFILE))
+	# A zero-distance contact can change support only through a real opening.
+	var link: Dictionary = world._stage.connections[0]
+	var ea: Dictionary = world._support_index.endpoints[link.a_connector]
+	var eb: Dictionary = world._support_index.endpoints[link.b_connector]
+	var contact_a := ExpeditionWorldPoint.create("port_fixture",ea.surface_id,ea.position)
+	var contact_b := ExpeditionWorldPoint.create("port_fixture",eb.surface_id,eb.position)
+	var contact := request(world,contact_a,[contact_b],PROFILE)
+	var contact_forward := world.connectivity_witness(contact,0,true,world.geometry_revision)
+	var contact_reverse := world.connectivity_witness(contact,0,false,world.geometry_revision)
+	check("stationary_connected_support_transition_keeps_both_contexts",contact.ok and contact.data.metrics.get("direct_witness_proofs_reused",0) == 1 and contact_forward.ok and contact_forward.data.points.size() == 2 and contact_forward.data.cost == 0.0 and contact_forward.data.points[0] == contact_a.to_data() and contact_forward.data.points[1] == contact_b.to_data() and walk(world,contact_forward,PROFILE))
+	check("stationary_connected_support_transition_reverse_walks",contact_reverse.ok and contact_reverse.data.points.size() == 2 and contact_reverse.data.points[0] == contact_b.to_data() and contact_reverse.data.points[1] == contact_a.to_data() and walk(world,contact_reverse,PROFILE))
 	var original_witness := world.connectivity_witness(direct,0,true,world.geometry_revision)
 	var forged := direct.duplicate(true); var goal_id: String = forged.data.targets[0].node_id
 	forged.data.outward_previous[goal_id].edge.cost += 10000.0

@@ -1,7 +1,7 @@
 class_name WorldConnectivityBatch
 extends RefCounted
 ## Internal WorldGeometry consumer. Certificates prove existence, never shortest cost.
-const REVISION := "canonical_connectivity_batch_v1"
+const REVISION := "canonical_connectivity_batch_v2"
 const LIMITS := {"max_targets":4096,"max_states":131072,"max_pair_candidates":8000000,"max_edge_tests":4000000,"max_expansions":262144,"max_storage_bytes":268435456,"max_usec":240000000}
 
 ## Conservative allocation-accounting units, not an OS heap/RSS measurement.
@@ -26,8 +26,10 @@ static func reserve(ctx: Dictionary, value: Variant, copies: int = 1) -> bool:
 	return tick(ctx,"storage_bytes",storage_units(value)*copies)
 
 static func scratch(ctx: Dictionary, value: Variant, copies: int = 1) -> bool:
+	return _scratch_units(ctx,storage_units(value)*copies)
+
+static func _scratch_units(ctx: Dictionary, units: int) -> bool:
 	if ctx.is_empty(): return true
-	var units := storage_units(value)*copies
 	if not tick(ctx,"storage_bytes",units): return false
 	ctx["scratch_live"] = int(ctx.get("scratch_live",0))+units
 	return true
@@ -175,7 +177,7 @@ static func execute(world: WorldGeometry, root: ExpeditionWorldPoint, targets: A
 	var ordered_nodes: Dictionary = {}
 	for id: String in sorted: ordered_nodes[id] = nodes[id]
 	nodes = ordered_nodes
-	var pairs: Array = []; var direct_edges: Dictionary = {}; var all_direct := true
+	var pairs: Array = []; var direct_edges: Dictionary = {}; var trusted_direct: Dictionary = {}; var all_direct := true
 	ctx.phase = "direct"
 	for id: String in sorted:
 		if id == "@root": continue
@@ -186,12 +188,19 @@ static func execute(world: WorldGeometry, root: ExpeditionWorldPoint, targets: A
 			if not reserve(ctx,[a,b],4): return failed(world,ctx)
 			var direct := shadow._navigation_direct(points[a],points[b],traversal,revision,null)
 			if not direct.ok: all_direct = false; continue
-			var via: Array = direct.data.points.duplicate(true)
-			if not via.is_empty(): via.pop_front()
-			if not via.is_empty(): via.pop_back()
+			var scratch_mark := int(ctx.get("scratch_live",0))
+			if not scratch(ctx,direct): return failed(world,ctx)
+			var kept := _direct_edge(ctx,direct,nodes[a],nodes[b],b)
+			direct.clear(); release_scratch(ctx,scratch_mark)
+			if not kept.ok: return failed(world,ctx,ctx.error_code if not ctx.error_code.is_empty() else &"invalid_support")
+			var edge: Dictionary = kept.edge
 			if not direct_edges.has(a): direct_edges[a] = []
-			direct_edges[a].append({"to":b,"via":via,"connection_id":"","connection_ids":direct.data.connection_ids.duplicate(),"cost":direct.data.cost})
-			if not reserve(ctx,direct_edges[a][-1],3): return failed(world,ctx)
+			direct_edges[a].append(edge)
+			if not trusted_direct.has(a):
+				if not tick(ctx,"storage_bytes",256): return failed(world,ctx)
+				trusted_direct[a] = {}
+			if not tick(ctx,"storage_bytes",128): return failed(world,ctx)
+			trusted_direct[a][b] = edge
 	var graph := {"ok":true,"nodes":nodes,"edges":{},"by_surface":{}}
 	if not all_direct:
 		ctx.phase = "construct"
@@ -220,12 +229,20 @@ static func execute(world: WorldGeometry, root: ExpeditionWorldPoint, targets: A
 	for index: int in ids.size():
 		var id := ids[index]; var out: bool = outward.visited.has(id); var back: bool = inward.visited.has(id)
 		all_reachable = all_reachable and out and back
-		for direction: bool in [true,false]:
-			if not (out if direction else back): continue
-			var scratch_mark := int(ctx.get("scratch_live",0))
-			var route := reconstruct(graph.nodes,(outward if direction else inward).previous,id,direction,ctx)
-			if not route.ok or not route_valid(shadow,route.data.points,traversal,ctx): return failed(world,ctx,ctx.error_code if not ctx.error_code.is_empty() else &"invalid_support")
-			release_scratch(ctx,scratch_mark)
+		if all_direct:
+			# The canonical direct authority already accepted these exact sequences.
+			# No public certificate flag can confer this private proof identity.
+			if not tick(ctx,"direct_witness_proofs_reused",1,true): return failed(world,ctx)
+			if id == "@root":
+				if nodes[id] != captured[index].to_data(): return failed(world,ctx,&"invalid_support")
+			elif not out or not back or not _direct_previous(outward.previous,id,true,trusted_direct) or not _direct_previous(inward.previous,id,false,trusted_direct): return failed(world,ctx,&"invalid_support")
+		else:
+			for direction: bool in [true,false]:
+				if not (out if direction else back): continue
+				var scratch_mark := int(ctx.get("scratch_live",0))
+				var route := reconstruct(graph.nodes,(outward if direction else inward).previous,id,direction,ctx)
+				if not route.ok or not route_valid(shadow,route.data.points,traversal,ctx): return failed(world,ctx,ctx.error_code if not ctx.error_code.is_empty() else &"invalid_support")
+				release_scratch(ctx,scratch_mark)
 		results.append({"input_index":index,"point":captured[index].to_data(),"node_id":id,"outward_reachable":out,"inward_reachable":back})
 		if not reserve(ctx,results[-1]): return failed(world,ctx)
 	ctx.phase = "publish"
@@ -235,6 +252,28 @@ static func execute(world: WorldGeometry, root: ExpeditionWorldPoint, targets: A
 	ctx.metrics["elapsed_ms"] = (Time.get_ticks_usec()-int(ctx.started))/1000.0
 	var data := {"complete":true,"all_reachable":all_reachable,"configuration_revision":ctx.configuration,"profile_hash":ctx.profile_hash,"profile":traversal,"graph_revision":REVISION,"snapshot_hash":ctx.snapshot_hash,"targets":results,"states":graph.nodes,"outward_previous":outward.previous,"inward_previous":inward.previous,"metrics":ctx.metrics}
 	return world._success(data)
+
+static func _direct_edge(ctx: Dictionary, direct: Dictionary, source: Dictionary, target: Dictionary, target_id: String) -> Dictionary:
+	if not direct.get("data") is Dictionary or not direct.data.get("points") is Array: return {"ok":false}
+	var points: Array = direct.data.points
+	# Unit routes are handled by execute's exact coincident-root deduplication.
+	# No distinct-terminal edge may manufacture a second endpoint for one item.
+	if points.size() < 2 or points[0] != source or points[-1] != target: return {"ok":false}
+	var via: Array = points.duplicate(true); via.pop_front(); via.pop_back()
+	var composed: Array = [source]; composed.append_array(via); composed.append(target)
+	if not _scratch_units(ctx,128+composed.size()*32) or composed != points: return {"ok":false}
+	var edge := {"to":target_id,"via":via,"connection_id":"","connection_ids":direct.data.connection_ids.duplicate(),"cost":direct.data.cost}
+	# One retained content allocation; incidence and predecessor references are
+	# accounted separately. The original direct result is scoped scratch.
+	if not reserve(ctx,edge): return {"ok":false}
+	return {"ok":true,"edge":edge}
+
+static func _direct_previous(previous: Dictionary, id: String, outward: bool, trusted: Dictionary) -> bool:
+	if not previous.get(id) is Dictionary: return false
+	var record: Dictionary = previous[id]
+	var source := "@root" if outward else id; var target := id if outward else "@root"
+	if record.get("from") != "@root" or not record.get("edge") is Dictionary or record.edge.get("to") != target: return false
+	return trusted.has(source) and trusted[source].has(target) and is_same(record.edge,trusted[source][target])
 
 static func _search(world: WorldGeometry, graph: Dictionary, incoming: Dictionary, targets: Array[String], profile: Dictionary, ctx: Dictionary, reverse: bool, direct_only: bool) -> Dictionary:
 	var visited := {"@root":true}; var previous: Dictionary = {}; var queue: Array[String] = ["@root"]; var cursor := 0

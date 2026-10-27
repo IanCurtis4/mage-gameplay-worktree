@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_DENSE_CHECK historic_dense_source_publishes_without_bypass true
+F9_DENSE_CHECK historic_target_4.0_route true
+F9_DENSE_CASE {"elapsed_usec":150296593,"target_z":4.0,"trace":{"build_usec":6078667,"direct_usec":6700,"edge_tests":524360,"enabled":true,"expansions":8683,"states":8955,"surfaces":155,"total_usec":149860540}}
+F9_DENSE_CHECK historic_target_95.0_route true
+F9_DENSE_CASE {"elapsed_usec":18661,"target_z":95.0,"trace":{"build_usec":0,"direct":true,"direct_usec":18287,"edge_tests":0,"enabled":true,"expansions":0,"surfaces":0,"total_usec":18288}}
+F9_DENSE_CHECK detour_and_direct_fast_path_are_both_exercised true
+F9_DENSE_CHECK query_preserves_world true
+F9_DENSE_RESULT {"checks":[{"id":"historic_dense_source_publishes_without_bypass","ok":true},{"id":"historic_target_4.0_route","ok":true},{"id":"historic_target_95.0_route","ok":true},{"id":"detour_and_direct_fast_path_are_both_exercised","ok":true},{"id":"query_preserves_world","ok":true}],"count":5,"ok":true}
