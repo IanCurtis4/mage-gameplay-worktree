@@ -1,0 +1,149 @@
+{
+  "head": "7f723acc0186741abb3f93769d3f01b9065716a8",
+  "current_inputs": 1984,
+  "current_mismatches": [],
+  "old_stage_compatibility": [
+    {
+      "stage": "editor",
+      "input_count": 1990,
+      "changed_paths": [
+        "tests/map_editor_composition_test.gd"
+      ],
+      "expected_delta": true,
+      "current_fixture_mismatches": []
+    },
+    {
+      "stage": "cli",
+      "input_count": 1990,
+      "changed_paths": [
+        "tests/map_editor_composition_test.gd"
+      ],
+      "expected_delta": true,
+      "current_fixture_mismatches": []
+    },
+    {
+      "stage": "native",
+      "input_count": 1990,
+      "changed_paths": [
+        "tests/map_editor_composition_test.gd"
+      ],
+      "expected_delta": true,
+      "current_fixture_mismatches": []
+    },
+    {
+      "stage": "window",
+      "input_count": 1990,
+      "changed_paths": [
+        "tests/map_editor_composition_test.gd"
+      ],
+      "expected_delta": true,
+      "current_fixture_mismatches": []
+    },
+    {
+      "stage": "candidate_native",
+      "input_count": 1984,
+      "changed_paths": [
+        "tests/map_editor_composition_test.gd"
+      ],
+      "expected_delta": true,
+      "current_fixture_mismatches": []
+    }
+  ],
+  "project_ok": true,
+  "project_source_sha256": "ADF17C0941269918DEE0A0005329D874DA199778DDEFCE294CA00E655367857E",
+  "project_fixture_sha256": "33726AFE86093A0D6F580114F803045E4F6624DC94528ECBEBD61FB199A06517",
+  "official": [
+    {
+      "name": "combat_animation_test",
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "counts": [
+        "39",
+        "0"
+      ],
+      "output_sha256": "DF1D52002E18C5524FA60801186A018CDBC71C91E0248051E38F6565C154FB1E",
+      "output_file": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\luna\\gameplay_clients\\official\\010-combat_animation_test.output.log",
+      "engine_sha256": "93DE56F18131527BEF7E074074477B21E409365BD02C190B9D05A2293AE9D42D",
+      "output_matches_runner": true,
+      "logs_clean": true
+    },
+    {
+      "name": "e07_f6_snapshot_test",
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "counts": [
+        "40",
+        "0"
+      ],
+      "output_sha256": "2E091952F53115A75311BF2F4CFD595A18B2E8C64FA3076CBF6F844F4CC4EDC6",
+      "output_file": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\luna\\gameplay_clients\\official\\252-e07_f6_snapshot_test.output.log",
+      "engine_sha256": "6F981465018FC3BAA01B91E591786FF491834D81FA90FD41F5F99385463BE48A",
+      "output_matches_runner": true,
+      "logs_clean": true
+    },
+    {
+      "name": "e07_f5_fault_test",
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "counts": [
+        "20",
+        "0"
+      ],
+      "output_sha256": "BE81413FE4296D28F328743D223D1D6E07BABFA5AF3A23133D4BB77444D2511C",
+      "output_file": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\luna\\gameplay_clients\\official\\261-e07_f5_fault_test.output.log",
+      "engine_sha256": "330A499AC0D32637E908ADEA033EC0CBB8B3809A9D09226DE191DB18BC73557D",
+      "output_matches_runner": true,
+      "logs_clean": true
+    },
+    {
+      "name": "e07_f3_snapshot_test",
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "counts": [
+        "50",
+        "0"
+      ],
+      "output_sha256": "D4E8B993059D8E4C12243F8E997DE5174EA51AFF610CFF1B014F25D06AB2CF3D",
+      "output_file": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\luna\\gameplay_clients\\official\\268-e07_f3_snapshot_test.output.log",
+      "engine_sha256": "97C338DC60FFAD6A192E2DC955B139B33733A2710287075740232FF792AF1E1B",
+      "output_matches_runner": true,
+      "logs_clean": true
+    },
+    {
+      "name": "e07_f1_pilot_scene_test",
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "counts": [
+        "102",
+        "0"
+      ],
+      "output_sha256": "CF7D445BDD00B411EA310B76C304EE3A7CFE50345C5F87FDC2258A7821810291",
+      "output_file": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\luna\\gameplay_clients\\official\\296-e07_f1_pilot_scene_test.output.log",
+      "engine_sha256": "E528F592DB55337AA8F2B67515DB8ADD0470583F64253D92B7823F9921454FFD",
+      "output_matches_runner": true,
+      "logs_clean": true
+    },
+    {
+      "name": "e07_f1_presentation_test",
+      "failed": false,
+      "exit_code": 0,
+      "timed_out": false,
+      "counts": [
+        "37",
+        "0"
+      ],
+      "output_sha256": "BEBF132DC5433B71A8CF4626DF5B24C7E1A899B3C12AEFF5A2C81595456F7339",
+      "output_file": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\luna\\gameplay_clients\\official\\297-e07_f1_presentation_test.output.log",
+      "engine_sha256": "5D75D566F9B2ABBB00D2FAE0D1592A345430FF5356A1CFC5CEE4B6B7CE81D25F",
+      "output_matches_runner": true,
+      "logs_clean": true
+    }
+  ],
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+  "role": "Post-Verify audit by Sol; automated execution by Luna. Final Luna report interrupted by usage limit."
+}

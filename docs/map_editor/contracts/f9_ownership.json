@@ -2279,6 +2279,18 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 GUI/AX/CLI consumer and no-code continuation proof over supervised581dae4",
       "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/gameplay_clients_consolidation.md",
+      "owner": "Sol F9",
+      "previous_owner": "new Sol consolidation; Luna executed stages and exhausted usage before final report",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/gameplay_clients_audit.json",
+      "owner": "Sol F9",
+      "previous_owner": "new Sol consolidation; Luna executed stages and exhausted usage before final report",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -2289,7 +2301,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "GUI/AX/CLI partial PASS at8610171; Core composition failed3 inherited technical24 fixture assumptions. Sol explicitly restores only that test setup to24, keeping oracles and human sample80. Retest Core+official pending; full F9 open.",
+    "state": "Clients22/18/52/33/49 supervised PASS at8610171, sole testcomposition24 setup delta at7f723ac; correctedCore639 and official6 completed by Luna. Usage limit interrupted final report. Post-Verify full input/project audit and technical consolidation by Sol with roles explicit. Fixture released after no owned Godot remained; full F9 open.",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
