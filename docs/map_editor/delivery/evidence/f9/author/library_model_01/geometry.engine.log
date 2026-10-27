@@ -1,0 +1,38 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_LIBRARY_CHECK empty_preferences_valid true
+F9_LIBRARY_CHECK boolean_version_rejected true
+F9_LIBRARY_CHECK unknown_fields_rejected true
+F9_LIBRARY_CHECK favorite_added_without_mutating_input true
+F9_LIBRARY_CHECK favorite_is_idempotent true
+F9_LIBRARY_CHECK favorite_removed true
+F9_LIBRARY_CHECK duplicate_favorite_rejected true
+F9_LIBRARY_CHECK favorite_unknown_parameter_rejected true
+F9_LIBRARY_CHECK builtin_presets_use_existing_brush_options true
+F9_LIBRARY_CHECK builtin_preset_returns_immutable_copy true
+F9_LIBRARY_CHECK custom_preset_roundtrip true
+F9_LIBRARY_CHECK custom_preset_copies_input true
+F9_LIBRARY_CHECK preset_update_preserves_identity true
+F9_LIBRARY_CHECK preset_removed true
+F9_LIBRARY_CHECK builtin_preset_cannot_be_removed true
+F9_LIBRARY_CHECK unsupported_brush_mode_rejected true
+F9_LIBRARY_CHECK nonfinite_preset_rejected true
+F9_LIBRARY_CHECK negative_radius_rejected true
+F9_LIBRARY_CHECK preference_hash_ignores_list_order true
+F9_LIBRARY_CHECK headless_preferences_roundtrip true
+F9_LIBRARY_CHECK stale_preferences_refuse_write true
+F9_LIBRARY_CHECK preferences_do_not_change_source_hash true
+F9_LIBRARY_CHECK catalog_has_six_props_four_materials_five_borders true
+F9_LIBRARY_CHECK portuguese_search_folds_accents true
+F9_LIBRARY_CHECK category_filter_uses_catalog_category true
+F9_LIBRARY_CHECK favorite_filter_uses_exact_ids true
+F9_LIBRARY_CHECK search_combines_all_tokens true
+F9_LIBRARY_CHECK piece_registration_is_passive_and_hashed true
+F9_LIBRARY_CHECK source_registered_without_mutating_file true
+F9_LIBRARY_CHECK map_kind_detected_by_its_producer true
+F9_LIBRARY_CHECK wrong_kind_and_executable_extension_rejected true
+F9_LIBRARY_CHECK piece_copy_has_new_identity_and_revision true
+F9_LIBRARY_CHECK copy_cannot_reuse_original_identity true
+F9_LIBRARY_CHECK forget_source_preserves_original_file true
+F9_LIBRARY_CHECK forged_registry_identity_rejected true
+F9_LIBRARY_RESULT {"checks":[{"id":"empty_preferences_valid","ok":true},{"id":"boolean_version_rejected","ok":true},{"id":"unknown_fields_rejected","ok":true},{"id":"favorite_added_without_mutating_input","ok":true},{"id":"favorite_is_idempotent","ok":true},{"id":"favorite_removed","ok":true},{"id":"duplicate_favorite_rejected","ok":true},{"id":"favorite_unknown_parameter_rejected","ok":true},{"id":"builtin_presets_use_existing_brush_options","ok":true},{"id":"builtin_preset_returns_immutable_copy","ok":true},{"id":"custom_preset_roundtrip","ok":true},{"id":"custom_preset_copies_input","ok":true},{"id":"preset_update_preserves_identity","ok":true},{"id":"preset_removed","ok":true},{"id":"builtin_preset_cannot_be_removed","ok":true},{"id":"unsupported_brush_mode_rejected","ok":true},{"id":"nonfinite_preset_rejected","ok":true},{"id":"negative_radius_rejected","ok":true},{"id":"preference_hash_ignores_list_order","ok":true},{"id":"headless_preferences_roundtrip","ok":true},{"id":"stale_preferences_refuse_write","ok":true},{"id":"preferences_do_not_change_source_hash","ok":true},{"id":"catalog_has_six_props_four_materials_five_borders","ok":true},{"id":"portuguese_search_folds_accents","ok":true},{"id":"category_filter_uses_catalog_category","ok":true},{"id":"favorite_filter_uses_exact_ids","ok":true},{"id":"search_combines_all_tokens","ok":true},{"id":"piece_registration_is_passive_and_hashed","ok":true},{"id":"source_registered_without_mutating_file","ok":true},{"id":"map_kind_detected_by_its_producer","ok":true},{"id":"wrong_kind_and_executable_extension_rejected","ok":true},{"id":"piece_copy_has_new_identity_and_revision","ok":true},{"id":"copy_cannot_reuse_original_identity","ok":true},{"id":"forget_source_preserves_original_file","ok":true},{"id":"forged_registry_identity_rejected","ok":true}],"count":35,"ok":true}

@@ -5,12 +5,17 @@ const Ops = preload("res://scripts/map_authoring/objects/object_operations.gd")
 const Metadata = preload("res://scripts/map_authoring/objects/object_schema.gd")
 const Canvas = preload("res://scripts/map_authoring/terrain/terrain_canvas.gd")
 const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
+const Preferences = preload("res://scripts/map_authoring/library/editor_preferences.gd")
+const Library = preload("res://scripts/map_authoring/library/library_model.gd")
 const CATEGORIES := {"trees":"Árvores","rocks":"Rochas","vegetation":"Vegetação","structures":"Estruturas"}
 var session: RefCounted
 var canvas: Control
 var palette: ItemList
 var objects: ItemList
 var search: LineEdit
+var category_filter: OptionButton
+var favorites_only: CheckButton
+var favorite_button: Button
 var surfaces: OptionButton
 var mode: OptionButton
 var x: SpinBox
@@ -28,6 +33,7 @@ var selected_definition := "woodland_shrub"
 var pending: Dictionary = {}
 var _confirmation: ConfirmationDialog
 var _refreshing := false
+var _preferences_seen := ""
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -45,9 +51,15 @@ func _ready() -> void:
 	var split := HSplitContainer.new(); split.size_flags_vertical = SIZE_EXPAND_FILL; add_child(split)
 	var left := VBoxContainer.new(); left.custom_minimum_size.x = 210; split.add_child(left)
 	search = LineEdit.new(); search.placeholder_text = "Buscar objeto ou categoria"; left.add_child(search); search.text_changed.connect(func(_s: String) -> void: refresh_palette())
+	category_filter = OptionButton.new(); category_filter.add_item("Todas as categorias"); category_filter.set_item_metadata(0,"")
+	for id: String in CATEGORIES: category_filter.add_item(CATEGORIES[id]); category_filter.set_item_metadata(category_filter.item_count-1,id)
+	left.add_child(category_filter); category_filter.item_selected.connect(func(_i: int) -> void: refresh_palette())
+	favorites_only = CheckButton.new(); favorites_only.text = "Somente favoritos"; left.add_child(favorites_only); favorites_only.toggled.connect(func(_on: bool) -> void: refresh_palette())
+	favorite_button = button(left,"Favoritar selecionado",toggle_favorite)
+	favorite_button.set_meta("authoring_keep_visible",true)
 	palette = ItemList.new(); palette.size_flags_vertical = SIZE_EXPAND_FILL; palette.fixed_icon_size = Vector2i(72,72); palette.icon_mode = ItemList.ICON_MODE_TOP; palette.max_columns = 2; left.add_child(palette)
 	palette.item_selected.connect(func(i: int) -> void:
-		invalidate_preview(); selected_definition = palette.get_item_metadata(i); mode.select(1); _sync_tool(); _describe_definition())
+		invalidate_preview(); selected_definition = palette.get_item_metadata(i); mode.select(1); _sync_tool(); _describe_definition(); _favorite_label())
 	var middle := VBoxContainer.new(); middle.size_flags_horizontal = SIZE_EXPAND_FILL; split.add_child(middle)
 	canvas = Canvas.new(); canvas.size_flags_vertical = SIZE_EXPAND_FILL; middle.add_child(canvas)
 	canvas.object_pressed.connect(_canvas_pressed)
@@ -91,6 +103,7 @@ func _ready() -> void:
 	for field: SpinBox in [x,z,snap,radius,quantity,spacing]: field.value_changed.connect(func(_v: float) -> void: invalidate_preview())
 	seed_text.text_changed.connect(func(_v: String) -> void: invalidate_preview())
 	refresh_palette()
+	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"objects",source)
 
 func bind(value: RefCounted) -> void:
 	session = value; session.changed.connect(refresh); refresh(); canvas.fit()
@@ -104,14 +117,64 @@ func refresh_palette() -> void:
 	if not catalog.ok:
 		if status != null: status.text = "Catálogo de objetos indisponível."
 		return
-	var ids: Array = catalog.definitions.keys(); ids.sort()
+	var prefs := Preferences.read()
+	if not prefs.ok:
+		if status != null: status.text = "As preferências da biblioteca precisam de recuperação; nenhum dado foi substituído."
+		return
+	var entries := _palette_entries(catalog)
+	for entry: Dictionary in Library.query(entries,search.text,str(category_filter.get_item_metadata(category_filter.selected)),favorites_only.button_pressed,prefs.data.favorites):
+		var definition: Dictionary = catalog.definitions[entry.definition_id]
+		var starred: bool = entry.id in prefs.data.favorites
+		var i := palette.add_item(("★ " if starred else "")+definition.name,load(definition.sprite_path) as Texture2D)
+		palette.set_item_metadata(i,entry.definition_id); palette.set_item_tooltip(i,definition.name+" · "+CATEGORIES.get(definition.category,definition.category)+"\nOrigem: geração integrada · licença de conteúdo gerado para o projeto")
+		if entry.definition_id == selected_definition: palette.select(i)
+	_favorite_label()
+	_preferences_seen = prefs.hash
+
+func _palette_entries(catalog: Dictionary) -> Array:
+	var entries: Array = []; var ids: Array = catalog.definitions.keys(); ids.sort()
 	for id: String in ids:
-		var definition: Dictionary = catalog.definitions[id]
-		var category: String = CATEGORIES.get(definition.category,definition.category)
-		if not search.text.is_empty() and search.text.to_lower() not in (definition.name+" "+category+" "+id).to_lower(): continue
-		var i := palette.add_item(definition.name,load(definition.sprite_path) as Texture2D)
-		palette.set_item_metadata(i,id); palette.set_item_tooltip(i,definition.name+" · "+category+"\nOrigem: geração integrada · licença de conteúdo gerado para o projeto")
-		if id == selected_definition: palette.select(i)
+		var d: Dictionary = catalog.definitions[id]
+		entries.append({"id":"prop:"+id,"definition_id":id,"name":d.name,"category":d.category,"tags":d.biome_ids})
+	return entries
+
+func _favorite_label() -> void:
+	var prefs := Preferences.read()
+	if is_instance_valid(favorite_button): favorite_button.text = "Remover dos favoritos" if prefs.ok and "prop:"+selected_definition in prefs.data.favorites else "Favoritar selecionado"
+
+func favorite(id: String, enabled: bool) -> Dictionary:
+	if not Catalog.definition(id).ok: return {"ok":false,"code":"object_definition_missing"}
+	var result := Preferences.transact({"operation":"favorite","id":"prop:"+id,"enabled":enabled})
+	if result.ok: refresh_palette()
+	elif status != null: status.text = "Não foi possível atualizar os favoritos (%s)."%result.code
+	return result
+
+func toggle_favorite() -> void:
+	var prefs := Preferences.read()
+	if prefs.ok: favorite(selected_definition,"prop:"+selected_definition not in prefs.data.favorites)
+
+func authoring_commands() -> Array:
+	return [{"id":"objects/library/query","parameters":{"query":"string?","category":"string?","favorites_only":"bool?"}},{"id":"objects/library/favorite","parameters":{"definition_id":"string","enabled":"bool"}},{"id":"objects/library/select","parameters":{"definition_id":"string"}}]
+
+func ax_command(id: String, parameters: Dictionary) -> Dictionary:
+	if id == "objects/library/query":
+		for key: Variant in parameters:
+			if key not in ["query","category","favorites_only"]: return {"ok":false,"code":"arguments_invalid"}
+		if not parameters.get("query","") is String or not parameters.get("category","") is String or parameters.get("category","") not in [""]+CATEGORIES.keys() or not parameters.get("favorites_only",false) is bool: return {"ok":false,"code":"arguments_invalid"}
+		var catalog := Catalog.load_catalog(); var prefs := Preferences.read()
+		if not catalog.ok: return catalog
+		if not prefs.ok: return prefs
+		return {"ok":true,"entries":Library.query(_palette_entries(catalog),parameters.get("query",""),parameters.get("category",""),parameters.get("favorites_only",false),prefs.data.favorites),"preferences_hash":prefs.hash}
+	if id == "objects/library/favorite":
+		if not Preferences._keys(parameters,["definition_id","enabled"]) or not parameters.definition_id is String or not parameters.enabled is bool: return {"ok":false,"code":"arguments_invalid"}
+		return favorite(parameters.definition_id,parameters.enabled)
+	if id == "objects/library/select":
+		if not Preferences._keys(parameters,["definition_id"]) or not parameters.definition_id is String: return {"ok":false,"code":"arguments_invalid"}
+		var found := Catalog.definition(parameters.definition_id)
+		if not found.ok: return found
+		invalidate_preview(); selected_definition = parameters.definition_id; mode.select(1); _sync_tool(); refresh_palette(); _describe_definition()
+		return {"ok":true,"definition_id":selected_definition}
+	return {"ok":false,"code":"action_missing"}
 
 func refresh() -> void:
 	if session == null or _refreshing: return

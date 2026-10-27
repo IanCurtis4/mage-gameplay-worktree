@@ -1997,6 +1997,84 @@
       "owner": "Sol F9",
       "previous_owner": "F9 shadow native regression exposes existing ramp/overlay layering failure; shared presentation correction",
       "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/contracts/f9_library_navigation.md",
+      "owner": "Sol F9",
+      "previous_owner": "sequential F9-06/07 library and viewport navigation, after frozen canvas checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/library/editor_preferences.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential F9-06/07 library and viewport navigation, after frozen canvas checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/library/editor_preferences.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "sequential F9-06/07 library and viewport navigation, after frozen canvas checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/library/library_model.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential F9-06/07 library and viewport navigation, after frozen canvas checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/library/library_model.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "sequential F9-06/07 library and viewport navigation, after frozen canvas checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/library/library_panel.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential F9-06/07 library and viewport navigation, after frozen canvas checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/library/library_panel.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "sequential F9-06/07 library and viewport navigation, after frozen canvas checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/preview/viewport_tools.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential F9-06/07 library and viewport navigation, after frozen canvas checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/preview/viewport_tools.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "sequential F9-06/07 library and viewport navigation, after frozen canvas checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_library_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential F9-06/07 library and viewport navigation, after frozen canvas checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_library_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "sequential F9-06/07 library and viewport navigation, after frozen canvas checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_library_ui_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "sequential F9-06/07 library and viewport navigation, after frozen canvas checkpoint",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_library_ui_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "sequential F9-06/07 library and viewport navigation, after frozen canvas checkpoint",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -2007,7 +2085,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "canvas broadphase technically validated atfec5bc193f45f55bea54d27557aa9b76b15a5597; fixture released; library/navigation delta next",
+    "state": "library preferences/browser component preparing frozen Luna selection; F9-06 viewport tools still open",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -2020,7 +2098,8 @@
       "docs/map_editor/delivery/evidence/f9/luna/biome_props/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/borders/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/shadows/report.md",
-      "docs/map_editor/delivery/evidence/f9/luna/canvas_broadphase/report.md"
+      "docs/map_editor/delivery/evidence/f9/luna/canvas_broadphase/report.md",
+      "docs/map_editor/delivery/evidence/f9/luna/library/report.md"
     ],
     "generated_evidence_roots": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
@@ -2096,7 +2175,13 @@
       "docs/map_editor/delivery/evidence/f9/luna/shadows/official",
       "docs/map_editor/delivery/evidence/f9/luna/canvas_broadphase/order",
       "docs/map_editor/delivery/evidence/f9/luna/canvas_broadphase/native",
-      "docs/map_editor/delivery/evidence/f9/luna/canvas_broadphase/official"
+      "docs/map_editor/delivery/evidence/f9/luna/canvas_broadphase/official",
+      "docs/map_editor/delivery/evidence/f9/luna/library/model",
+      "docs/map_editor/delivery/evidence/f9/luna/library/native",
+      "docs/map_editor/delivery/evidence/f9/luna/library/objects_native",
+      "docs/map_editor/delivery/evidence/f9/luna/library/biome_props_native",
+      "docs/map_editor/delivery/evidence/f9/luna/library/core",
+      "docs/map_editor/delivery/evidence/f9/luna/library/official"
     ]
   }
 }

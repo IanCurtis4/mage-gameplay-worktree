@@ -6,8 +6,12 @@ const Store = preload("res://scripts/map_authoring/io/source_store.gd")
 const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 const Terrain = preload("res://scripts/map_authoring/terrain/terrain_panel.gd")
 const Composition = preload("res://scripts/map_authoring/composition/map_panel.gd")
+const Library = preload("res://scripts/map_authoring/library/library_model.gd")
+const LibraryPanel = preload("res://scripts/map_authoring/library/library_panel.gd")
+const Preferences = preload("res://scripts/map_authoring/library/editor_preferences.gd")
 var composition_window: Window
 var objects_window: Window
+var library_window: Window
 var terrain: Control
 var session := Session.new()
 var source_path := ""
@@ -41,6 +45,7 @@ func _ready() -> void:
 	_button(toolbar, "Nova peça", request_new)
 	_button(toolbar, "Compor mapa…", open_composition)
 	_button(toolbar, "Objetos e vegetação…",open_objects)
+	_button(toolbar, "Biblioteca…",open_library)
 	_button(toolbar, "Abrir…", _choose_open)
 	_button(toolbar, "Salvar", save_current)
 	_button(toolbar, "Salvar como…", _choose_save)
@@ -153,6 +158,75 @@ func open_objects() -> void:
 		objects_window.close_requested.connect(func() -> void: panel.discard_preview(); preserve_draft(); objects_window.hide())
 		add_child(objects_window); panel.bind(session)
 	objects_window.popup_centered()
+	await get_tree().process_frame
+	if is_instance_valid(objects_window): objects_window.get_child(0).canvas.fit()
+
+func open_library() -> void:
+	if library_window == null:
+		library_window = Window.new(); library_window.title = "RagRPG · Biblioteca de autoria"; library_window.size = Vector2i(1280,820); library_window.min_size = Vector2i(1000,620)
+		var panel := LibraryPanel.new(); panel.source_action = _library_source; panel.asset_action = _library_asset; library_window.add_child(panel)
+		library_window.close_requested.connect(func() -> void: panel.cancel_preview(); library_window.hide())
+		add_child(library_window)
+	else: library_window.get_child(0).refresh()
+	library_window.popup_centered()
+
+func authoring_preferences_changed() -> void:
+	var prefs := Preferences.read()
+	if not prefs.ok: return
+	if is_instance_valid(terrain) and terrain._preferences_seen != prefs.hash:
+		var selected: String = terrain.preset_choice.get_item_metadata(terrain.preset_choice.selected)
+		terrain._refresh_presets(selected)
+	if is_instance_valid(objects_window):
+		var panel: Control = objects_window.get_child(0)
+		if panel._preferences_seen != prefs.hash: panel.refresh_palette()
+	if is_instance_valid(library_window): library_window.get_child(0).refresh_preferences()
+
+func _library_source(path: String, kind: String, copy_requested: bool) -> Dictionary:
+	var described := Library.describe_source(path,kind)
+	if not described.ok: return described
+	var data: Dictionary = described.data
+	if copy_requested:
+		var copied := Library.duplicate_source(data,kind,_id(kind))
+		if not copied.ok: return copied
+		data = copied.data
+	if kind == "map":
+		open_composition(); var panel: Control = composition_window.get_child(0)
+		if not panel.preserve_draft(): return {"ok":false,"code":"io_recovery_required"}
+		panel._new_draft_path(); panel.source_path = "" if copy_requested else described.entry.path; panel.expected_hash = "" if copy_requested else described.entry.byte_hash
+		panel.session.saved_hash = "" if copy_requested else described.entry.source_hash; panel.session.replace(data)
+		if not copy_requested: Preferences.transact({"operation":"source_register","entry":described.entry})
+		if library_window != null: library_window.hide()
+		return {"ok":true,"state":"applied","copy":copy_requested}
+	var outcome := {"ok":true,"state":"confirmation_pending","copy":copy_requested}
+	_confirm(func() -> void:
+		var current := Library.describe_source(path,kind)
+		if not current.ok or current.entry.byte_hash != described.entry.byte_hash:
+			outcome.ok = false; outcome["code"] = "library_source_changed"; outcome.state = "rejected"
+			info.text = "A fonte da biblioteca mudou. Confira a nova revisão antes de abrir; o documento atual foi preservado."; return
+		source_path = "" if copy_requested else described.entry.path; expected_hash = "" if copy_requested else described.entry.byte_hash; path_edit.text = source_path
+		session.saved_hash = "" if copy_requested else described.entry.source_hash; session.replace(data); terrain.canvas.fit()
+		if not copy_requested: Preferences.transact({"operation":"source_register","entry":described.entry})
+		outcome.state = "applied")
+	if library_window != null: library_window.hide()
+	return outcome
+
+func _library_asset(entry: Dictionary) -> Dictionary:
+	match entry.kind:
+		"prop":
+			open_objects(); var panel: Control = objects_window.get_child(0)
+			var selected: Dictionary = panel.ax_command("objects/library/select",{"definition_id":entry.definition_id})
+			if not selected.ok: return selected
+		"material":
+			terrain.mode.select(4); terrain.material_choice.select(["earth","grass","sand","stone"].find(entry.definition_id)); terrain._options_changed()
+		"border":
+			open_composition(); var panel: Control = composition_window.get_child(0); var found := false
+			for i: int in panel.border_choice.item_count:
+				if panel.border_choice.get_item_metadata(i) == entry.definition_id: panel.border_choice.select(i); found = true
+			if not found: return {"ok":false,"code":"border_transition_requires_two_instances"}
+			panel.status.text = "Borda escolhida. Selecione a peça do mapa e aplique o perfil."
+		_: return {"ok":false,"code":"library_entry_missing"}
+	if library_window != null: library_window.hide()
+	return {"ok":true,"state":"tool_selected"}
 
 func _id(prefix: String) -> String:
 	return prefix + "_" + Crypto.new().generate_random_bytes(12).hex_encode()
@@ -246,6 +320,8 @@ func open_path(path: String) -> Dictionary:
 		session.saved_hash = result.output_hash
 		path_edit.text = path
 		session.replace(result.data)
+		terrain.canvas.fit()
+		Library.register_source(path,"piece")
 	_show(result)
 	return result
 
@@ -259,6 +335,7 @@ func save_path(path: String) -> Dictionary:
 		session.saved_hash = result.output_hash
 		path_edit.text = path
 		_refresh()
+		Library.register_source(path,"piece")
 	_show(result)
 	return result
 

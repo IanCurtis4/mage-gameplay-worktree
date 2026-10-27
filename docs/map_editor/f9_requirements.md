@@ -33,8 +33,8 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 05 síntese/regeneração interna real | arquitetura, F6 | troca de slots não esculpe; entregar operação regional | pendente |
 | 05 proteção terreno/props/encontros/patrulhas/pins | arquitetura, F6 | pins de instância apenas; entregar máscaras e seleção real | pendente |
 | 05 diff/contradição antes do commit | F6, validação | existe para slots; ampliar às regiões internas | pendente |
-| 06 biblioteca/busca/miniaturas/categorias | arquitetura, F8 | ausente | pendente |
-| 06 presets/favoritos | arquitetura, F8 | ausente | pendente |
+| 06 biblioteca/busca/miniaturas/categorias | arquitetura, F8 | paleta de objetos e biblioteca de fontes com busca/categorias/miniaturas locais; componente em validação | [biblioteca e navegação](contracts/f9_library_navigation.md), integração em execução |
+| 06 presets/favoritos | arquitetura, F8 | preferências por projeto, presets reais de brush, favoritos e recuperação implementados |50 verificações de dados e53 nativas autorais; supervisão pendente |
 | 06 minimap/árvore de objetos/camadas | arquitetura, F8 | árvore de camadas existe; completar | pendente |
 | 06 overlays/foco/atalhos/diagnóstico localizado | arquitetura | overlays parciais; entregar conjunto acionável | pendente |
 | 07 UX coerente/guiada | autoria F8 | menus e seletores existem; fechar fluxo humano inteiro | pendente |

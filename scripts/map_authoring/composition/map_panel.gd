@@ -11,6 +11,7 @@ const Population = preload("res://scripts/map_authoring/population/population_pa
 const Generation = preload("res://scripts/map_authoring/generation/generation_panel.gd")
 const BorderOperations = preload("res://scripts/map_authoring/composition/border_operations.gd")
 const BorderCatalog = preload("res://scripts/map_authoring/composition/border_profile_catalog.gd")
+const Library = preload("res://scripts/map_authoring/library/library_model.gd")
 var generation_window: Window
 var population_window: Window
 var session := Session.new()
@@ -122,16 +123,19 @@ func _exit_tree() -> void:
 func _new_draft_path() -> void:
 	_autosave = ProjectSettings.globalize_path("res://.godot/map_authoring/composition_"+Crypto.new().generate_random_bytes(12).hex_encode()+".json")
 	DirAccess.make_dir_recursive_absolute(_autosave.get_base_dir())
-func preserve_draft() -> void:
-	if _autosave.is_empty() or not session.dirty(): return
+func preserve_draft() -> bool:
+	if not session.dirty(): return true
+	if _autosave.is_empty(): return false
 	var saved := Store.save_source(_autosave,session.data,PieceStore.disk_hash(_autosave))
 	if not saved.ok: status.text = "Não foi possível preservar o rascunho: "+saved.code
+	return saved.ok
 func recover() -> void:
 	var loaded := Store.load_source(_autosave)
 	if loaded.ok: show_result(session.replace(loaded.data))
 	else: show_result(loaded)
 func new_map() -> void:
-	preserve_draft(); _new_draft_path(); source_path = ""; expected_hash = ""; session.saved_hash = ""; session.replace(Document.empty())
+	if not preserve_draft(): return
+	_new_draft_path(); source_path = ""; expected_hash = ""; session.saved_hash = ""; session.replace(Document.empty())
 func sample() -> void:
 	# Do not replace authored content with an example.
 	if not session.data.instances.is_empty(): status.text = "Crie um novo mapa para carregar o exemplo."; return
@@ -147,14 +151,18 @@ func file_selected(path: String) -> void:
 		"open":
 			var loaded := Store.load_source(path)
 			if loaded.ok:
-				preserve_draft(); _new_draft_path(); source_path = path; expected_hash = PieceStore.disk_hash(path); session.replace(loaded.data); session.saved_hash = Document.hash_source(session.data)
+				if not preserve_draft(): return
+				_new_draft_path(); source_path = path; expected_hash = loaded.byte_hash; session.replace(loaded.data); session.saved_hash = Document.hash_source(session.data)
+				Library.register_source(path,"map")
 			show_result(loaded)
 		"save":
 			# Existing destinations require an explicit overwrite dialog from FileDialog,
 			# and an optimistic byte hash prevents overwriting a later external edit.
 			var expected := expected_hash if path == source_path else PieceStore.disk_hash(path)
 			var saved := Store.save_source(path,session.data,expected)
-			if saved.ok: source_path = path; expected_hash = saved.byte_hash; session.saved_hash = Document.hash_source(session.data)
+			if saved.ok:
+				source_path = path; expected_hash = saved.byte_hash; session.saved_hash = Document.hash_source(session.data)
+				Library.register_source(path,"map")
 			show_result(saved)
 		"piece": import_piece(path)
 		"publish":

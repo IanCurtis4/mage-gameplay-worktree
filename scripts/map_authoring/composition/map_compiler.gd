@@ -20,10 +20,19 @@ const EPS := 0.0001
 var _thread: Thread
 var _mutex := Mutex.new()
 var _cancelled := false
+var _progress := 0.0
 func start(source: Dictionary) -> void:
 	var copy := source.duplicate(true)
-	_thread = Thread.new(); _thread.start(func() -> Dictionary: return compile(copy,func(_p: float) -> bool:
-		_mutex.lock(); var cancelled := _cancelled; _mutex.unlock(); return cancelled))
+	_cancelled = false; _progress = 0.0
+	_thread = Thread.new(); _thread.start(func() -> Dictionary:
+		var result := compile(copy,_poll)
+		_mutex.lock()
+		if result.ok: _progress = 1.0
+		_mutex.unlock(); return result)
+func _poll(value: float) -> bool:
+	_mutex.lock(); _progress = maxf(_progress,clampf(value,0.0,0.99)); var cancelled := _cancelled; _mutex.unlock(); return cancelled
+func progress() -> float:
+	_mutex.lock(); var value := _progress; _mutex.unlock(); return value
 func ready() -> bool: return _thread != null and not _thread.is_alive()
 func cancel() -> void:
 	_mutex.lock(); _cancelled = true; _mutex.unlock()
@@ -65,9 +74,11 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 	var packages: Dictionary = {}; var definitions: Array = []; var render: Array = []
 	var all_dependencies: Array = []
 	var pieces: Array = source.pieces.duplicate(true); pieces.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.piece_hash < b.piece_hash)
-	for piece: Dictionary in pieces:
+	for piece_index: int in pieces.size():
+		var piece: Dictionary = pieces[piece_index]
 		if cancellation.is_valid() and cancellation.call(0.1): return fail("cancelled")
-		var built := Terrain.compile(piece.source,cancellation)
+		var piece_progress := func(value: float) -> bool: return cancellation.is_valid() and bool(cancellation.call(0.1+0.55*(piece_index+clampf(value,0.0,1.0))/maxi(1,pieces.size())))
+		var built := Terrain.compile(piece.source,piece_progress)
 		if not built.ok:
 			built.diagnostics[0].entity_id = piece.source.document_id+"/"+str(built.diagnostics[0].entity_id); return built
 		packages[piece.piece_hash] = built.package

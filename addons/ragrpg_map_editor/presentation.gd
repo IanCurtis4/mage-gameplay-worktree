@@ -4,6 +4,10 @@ extends VBoxContainer
 static var active_mode := "ux"
 static var hosts: Array[WeakRef] = []
 const ACTION_IDS := {
+	"Salvar predefinição":"save_brush_preset","Remover predefinição":"remove_brush_preset",
+	"Biblioteca…":"open_library",
+	"Recuperar preferências…":"recover_library_preferences",
+	"Registrar fonte…":"register_library_source","Atualizar biblioteca":"refresh_library","Abrir / usar seleção":"use_library_selection","Criar cópia da fonte":"copy_library_source","Favoritar / desfavoritar":"toggle_library_favorite","Esquecer registro":"forget_library_source","Cancelar miniaturas":"cancel_library_thumbnails",
 	"Aplicar borda à peça":"apply_border_profile","Ligar por talude de transição":"apply_border_transition",
 	"Objetos e vegetação…":"open_objects",
 	"Nova peça":"new_piece","Compor mapa…":"compose_map","Abrir…":"open","Salvar":"save","Salvar como…":"save_as","Desfazer":"undo","Refazer":"redo",
@@ -82,7 +86,7 @@ func _collect(node: Node) -> void:
 			button.set_meta("authoring_action_id",id)
 			var category := _category(button.text)
 			var ax_only := button.text.begins_with("Simular") or button.text.begins_with("Avançar uma onda") or button.text in ["Matar selecionado","Avançar onda"]
-			actions[id] = {"control":button,"text":button.text,"category":category,"ax_only":ax_only,"visible":button.visible}
+			actions[id] = {"control":button,"text":button.text,"category":category,"ax_only":ax_only,"visible":button.visible,"keep_visible":button.get_meta("authoring_keep_visible",false)}
 			if not ax_only:
 				var popup: PopupMenu = menus[category].get_popup(); popup.add_item(button.text)
 				popup.set_item_metadata(popup.item_count-1,id)
@@ -113,7 +117,7 @@ func _apply_mode() -> void:
 	for category: String in menus: menus[category].visible = not ax and menus[category].get_popup().item_count > 0
 	for id: String in actions:
 		var action: Dictionary = actions[id]
-		action.control.visible = ax and action.visible
+		action.control.visible = (ax or action.get("keep_visible",false)) and action.visible
 	if overlay != null: overlay.visible = ax
 	if section_choice != null:
 		section_choice.visible = not ax

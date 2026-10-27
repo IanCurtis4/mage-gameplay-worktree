@@ -6,7 +6,10 @@ const IO = preload("res://scripts/map_authoring/io/source_store.gd")
 const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 static func load_source(path: String) -> Dictionary:
 	var raw := IO._bytes(path)
-	return Document.read(raw.bytes) if raw.ok else raw
+	if not raw.ok: return raw
+	var loaded := Document.read(raw.bytes)
+	if loaded.ok: loaded["byte_hash"] = Schema.bytes_hash(raw.bytes)
+	return loaded
 static func save_source(path: String, data: Dictionary, expected: String) -> Dictionary:
 	var checked := Document.read(JSON.stringify(data,"\t",true,true).to_utf8_buffer())
 	if not checked.ok: return checked

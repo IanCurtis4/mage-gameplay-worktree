@@ -1,0 +1,30 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+F9_LIBRARY_UI_CHECK native_shell true
+F9_LIBRARY_UI_CHECK native_project_metadata_storage_bound true
+F9_LIBRARY_UI_CHECK six_catalog_thumbnails true
+F9_LIBRARY_UI_CHECK favorite_button_writes_project_metadata true
+F9_LIBRARY_UI_CHECK favorite_filter_matches_current_palette true
+F9_LIBRARY_UI_CHECK gui_and_ax_share_favorite_query true
+F9_LIBRARY_UI_CHECK library_controls_leave_source_and_history true
+F9_LIBRARY_UI_CHECK capture_library_favorite_palette true
+F9_LIBRARY_UI_CHECK portuguese_accent_search_in_native_palette true
+F9_LIBRARY_UI_CHECK category_control_filters_structure true
+F9_LIBRARY_UI_CHECK parameterized_selection_uses_existing_tool true
+F9_LIBRARY_UI_CHECK malformed_library_arguments_rejected true
+F9_LIBRARY_UI_CHECK favorite_toggle_returns_to_previous_state true
+F9_LIBRARY_UI_CHECK preset_control_applies_exact_brush_options false
+F9_LIBRARY_UI_CHECK preset_control_preserves_source_and_history true
+F9_LIBRARY_UI_CHECK native_named_preset_saved true
+F9_LIBRARY_UI_CHECK semantic_ax_commands_are_inspectable true
+F9_LIBRARY_UI_CHECK ax_apply_matches_gui_preset true
+F9_LIBRARY_UI_CHECK ax_bad_preset_preserves_preferences true
+F9_LIBRARY_UI_CHECK ax_arguments_are_closed true
+F9_LIBRARY_UI_CHECK capture_library_brush_presets true
+F9_LIBRARY_UI_CHECK mode_switch_preserves_source_and_history true
+F9_LIBRARY_UI_CHECK remove_custom_keeps_current_brush true
+F9_LIBRARY_UI_CHECK project_metadata_restored true
+F9_LIBRARY_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"native_project_metadata_storage_bound","ok":true},{"id":"six_catalog_thumbnails","ok":true},{"id":"favorite_button_writes_project_metadata","ok":true},{"id":"favorite_filter_matches_current_palette","ok":true},{"id":"gui_and_ax_share_favorite_query","ok":true},{"id":"library_controls_leave_source_and_history","ok":true},{"id":"capture_library_favorite_palette","ok":true},{"id":"portuguese_accent_search_in_native_palette","ok":true},{"id":"category_control_filters_structure","ok":true},{"id":"parameterized_selection_uses_existing_tool","ok":true},{"id":"malformed_library_arguments_rejected","ok":true},{"id":"favorite_toggle_returns_to_previous_state","ok":true},{"id":"preset_control_applies_exact_brush_options","ok":false},{"id":"preset_control_preserves_source_and_history","ok":true},{"id":"native_named_preset_saved","ok":true},{"id":"semantic_ax_commands_are_inspectable","ok":true},{"id":"ax_apply_matches_gui_preset","ok":true},{"id":"ax_bad_preset_preserves_preferences","ok":true},{"id":"ax_arguments_are_closed","ok":true},{"id":"capture_library_brush_presets","ok":true},{"id":"mode_switch_preserves_source_and_history","ok":true},{"id":"remove_custom_keeps_current_brush","ok":true},{"id":"project_metadata_restored","ok":true}],"count":24,"ok":false}

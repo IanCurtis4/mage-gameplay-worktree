@@ -1,0 +1,13 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+F9_LIBRARY_UI_CHECK native_shell true
+ERROR: Couldn't find the given section "ragrpg_map_editor" and key "authoring_library_v1_last_valid", and no default was given.
+   at: get_value (core/io/config_file.cpp:60)
+   GDScript backtrace (most recent call first):
+       [0] run (res://addons/f9_library_driver/plugin.gd:27)
+       [1] frames (res://addons/f9_library_driver/plugin.gd:14)
+F9_LIBRARY_UI_CHECK native_project_metadata_storage_bound true
+F9_LIBRARY_UI_CHECK editor_settings_use_discardable_profile true

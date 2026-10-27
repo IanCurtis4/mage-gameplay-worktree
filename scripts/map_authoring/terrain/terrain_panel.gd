@@ -3,6 +3,8 @@ extends VBoxContainer
 const Brush = preload("res://scripts/map_authoring/terrain/brush.gd")
 const Compiler = preload("res://scripts/map_authoring/compiler/terrain_compiler.gd")
 const Canvas = preload("res://scripts/map_authoring/terrain/terrain_canvas.gd")
+const Preferences = preload("res://scripts/map_authoring/library/editor_preferences.gd")
+const Library = preload("res://scripts/map_authoring/library/library_model.gd")
 signal layer_selected(id: String)
 var session: RefCounted
 var canvas: Control
@@ -43,6 +45,10 @@ var connector_z: SpinBox
 var connector_width: SpinBox
 var connector_headroom: SpinBox
 var connector_tags: LineEdit
+var preset_choice: OptionButton
+var preset_name: LineEdit
+var _applying_preset := false
+var _preferences_seen := ""
 
 func _ready() -> void:
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -67,6 +73,19 @@ func _ready() -> void:
 	hardness = _number(settings,"Dureza",0,1,0.5,0.05)
 	target = _number(settings,"Altura inicial",-512,512,0)
 	end_height = _number(settings,"Final",-512,512,40)
+	# Presets/AX may carry exact fractional values. Arrow increments must not
+	# quantize the stored brush parameters when a preset is loaded.
+	for field: SpinBox in [radius,strength,hardness,target,end_height]:
+		field.custom_arrow_step = field.step; field.step = 0
+	strength.custom_arrow_step = 0.05
+	var preset_row := HFlowContainer.new(); add_child(preset_row)
+	preset_choice = OptionButton.new(); preset_row.add_child(preset_choice)
+	preset_choice.item_selected.connect(func(index: int) -> void:
+		var id := str(preset_choice.get_item_metadata(index))
+		if not id.is_empty(): apply_preset(id))
+	preset_name = LineEdit.new(); preset_name.placeholder_text = "Nome da predefinição"; preset_name.max_length = 80; preset_name.custom_minimum_size.x = 180; preset_row.add_child(preset_name)
+	_button(preset_row,"Salvar predefinição",save_preset).set_meta("authoring_keep_visible",true)
+	_button(preset_row,"Remover predefinição",remove_preset).set_meta("authoring_keep_visible",true)
 	var toolbar := HBoxContainer.new(); add_child(toolbar)
 	_button(toolbar,"Enquadrar",func() -> void: canvas.fit())
 	_button(toolbar,"Compilar peça",bake)
@@ -122,16 +141,21 @@ func _ready() -> void:
 	help.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; add_child(help)
 	for control: OptionButton in [mode,shape,material_choice]: control.item_selected.connect(func(_i: int) -> void: _options_changed())
 	for control: SpinBox in [radius,strength,hardness,target,end_height]: control.value_changed.connect(func(_v: float) -> void: _options_changed())
+	for field: SpinBox in [radius,strength,hardness,target,end_height]:
+		field.get_line_edit().text_submitted.connect(func(_text: String) -> void: _display_brush_number.call_deferred(field))
+		field.get_line_edit().focus_exited.connect(func() -> void: _display_brush_number.call_deferred(field))
 	_options_changed()
-	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"terrain",func() -> Dictionary: return session.document().to_data() if session != null else {},null,{"Pincel":[row,settings],"Nova grade":[grid],"Ponte":[bridge],"Conexões":[connection_toggle,connections]})
+	_refresh_presets()
+	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"terrain",func() -> Dictionary: return session.document().to_data() if session != null else {},null,{"Pincel":[row,settings,preset_row],"Nova grade":[grid],"Ponte":[bridge],"Conexões":[connection_toggle,connections]})
 
 func _number(parent: Node, caption: String, low: float, high: float, value: float, step: float = 1.0) -> SpinBox:
 	var label := Label.new(); label.text = caption; parent.add_child(label)
 	var number := SpinBox.new(); number.min_value = low; number.max_value = high; number.step = step; number.value = value; number.custom_minimum_size.x = 80; parent.add_child(number)
 	return number
 
-func _button(parent: Node, caption: String, action: Callable) -> void:
+func _button(parent: Node, caption: String, action: Callable) -> Button:
 	var button := Button.new(); button.text = caption; button.pressed.connect(action); parent.add_child(button)
+	return button
 
 func bind(document_session: RefCounted) -> void:
 	session = document_session
@@ -158,9 +182,79 @@ func refresh() -> void:
 	status.text = "Selecione ou adicione uma camada; compile após editar para conferir suporte e aberturas."
 
 func _options_changed() -> void:
-	if not is_instance_valid(canvas): return
+	if _applying_preset or not is_instance_valid(canvas): return
 	canvas.cancel_stroke()
 	canvas.options = {"mode":["raise","lower","flatten","smooth","material","ramp"][mode.selected],"shape":"circle" if shape.selected == 0 else "square","material":["earth","grass","sand","stone"][material_choice.selected],"radius":radius.value,"strength":strength.value,"hardness":hardness.value,"target":target.value,"end_height":end_height.value}
+	for field: SpinBox in [radius,strength,hardness,target,end_height]:
+		_display_brush_number(field); _display_brush_number.call_deferred(field)
+
+func _display_brush_number(field: SpinBox) -> void:
+	if not is_instance_valid(field): return
+	# SpinBox formats step0 as an integer. Keep the shortest decimal that parses
+	# back to the exact value, independently of the arrow increment.
+	var text := JSON.stringify(field.value,"",true,true)
+	for decimals: int in 18:
+		var candidate := String.num(field.value,decimals)
+		if candidate.to_float() == field.value: text = candidate; break
+	field.get_line_edit().text = text
+
+func _refresh_presets(selected: String = "") -> void:
+	preset_choice.clear(); preset_choice.add_item("Predefinição · parâmetros atuais"); preset_choice.set_item_metadata(0,"")
+	var prefs := Preferences.read()
+	if not prefs.ok:
+		status.text = "As preferências precisam de recuperação; as predefinições foram preservadas."
+		return
+	for item: Dictionary in Library.presets(prefs.data):
+		preset_choice.add_item(item.name); preset_choice.set_item_metadata(preset_choice.item_count-1,item.id)
+		if item.id == selected: preset_choice.select(preset_choice.item_count-1)
+	_preferences_seen = prefs.hash
+
+func apply_preset(id: String) -> Dictionary:
+	var prefs := Preferences.read()
+	if not prefs.ok: return prefs
+	var found := Library.preset(id,prefs.data)
+	if not found.ok: return found
+	var options: Dictionary = found.preset.options
+	_applying_preset = true
+	mode.select(Preferences.MODES.find(options.mode)); shape.select(0 if options.shape == "circle" else 1); material_choice.select(["earth","grass","sand","stone"].find(options.material))
+	radius.value = options.radius; strength.value = options.strength; hardness.value = options.hardness; target.value = options.target; end_height.value = options.end_height
+	_applying_preset = false; _options_changed(); preset_name.text = found.preset.name; _refresh_presets(id)
+	status.text = "Predefinição aplicada ao pincel. O terreno muda somente no próximo traço."
+	return {"ok":true,"preset_id":id,"options":canvas.options.duplicate(true)}
+
+func save_preset() -> void:
+	var saved := save_named_preset(preset_name.text,canvas.options)
+	status.text = "Predefinição salva neste projeto." if saved.ok else "Não foi possível salvar a predefinição (%s)."%saved.code
+
+func save_named_preset(caption: String, options: Dictionary) -> Dictionary:
+	var title := caption.strip_edges()
+	if title.is_empty(): return {"ok":false,"code":"preset_name_missing"}
+	var id := "custom_"+Library.folded(title).sha256_text().substr(0,24)
+	var saved := Preferences.transact({"operation":"preset_save","preset":{"id":id,"name":title,"options":options.duplicate(true)}})
+	if saved.ok: _refresh_presets(id)
+	return saved
+
+func remove_preset() -> void:
+	var id := str(preset_choice.get_item_metadata(preset_choice.selected))
+	var result := Preferences.transact({"operation":"preset_remove","id":id})
+	if result.ok: _refresh_presets(); status.text = "Predefinição removida; os parâmetros atuais do pincel foram mantidos."
+	else: status.text = "Escolha uma predefinição pessoal para remover. As predefinições do projeto são preservadas."
+
+func authoring_commands() -> Array:
+	return [{"id":"terrain/presets/list","parameters":{}},{"id":"terrain/presets/apply","parameters":{"preset_id":"string"}},{"id":"terrain/presets/save","parameters":{"name":"string","options":"brush_options"}}]
+
+func ax_command(id: String, parameters: Dictionary) -> Dictionary:
+	if id == "terrain/presets/list":
+		if not parameters.is_empty(): return {"ok":false,"code":"arguments_invalid"}
+		var prefs := Preferences.read()
+		return {"ok":true,"presets":Library.presets(prefs.data),"preferences_hash":prefs.hash} if prefs.ok else prefs
+	if id == "terrain/presets/apply":
+		if not Preferences._keys(parameters,["preset_id"]) or not parameters.preset_id is String: return {"ok":false,"code":"arguments_invalid"}
+		return apply_preset(parameters.preset_id)
+	if id == "terrain/presets/save":
+		if not Preferences._keys(parameters,["name","options"]) or not parameters.name is String or not parameters.options is Dictionary: return {"ok":false,"code":"arguments_invalid"}
+		return save_named_preset(parameters.name,parameters.options)
+	return {"ok":false,"code":"action_missing"}
 
 func apply_stroke(points: Array, options: Dictionary) -> Dictionary:
 	var proposal := Brush.stroke(session.document().to_data(),selected_layer,points,options)
