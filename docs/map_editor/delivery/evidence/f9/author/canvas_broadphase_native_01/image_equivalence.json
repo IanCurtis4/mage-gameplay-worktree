@@ -1,0 +1,69 @@
+{
+  "baseline_commit": "04a7dfcfb0ca8bd9ef2ef98a27073ca4cbe86734",
+  "baseline_root": "docs/map_editor/delivery/evidence/f9/luna/shadows/native",
+  "candidate_head": "8bd04203ed67b9ccda7e178ebff26daba13b4141",
+  "candidate_working_tree_delta": true,
+  "images": [
+    {
+      "file": "bridge_after.png",
+      "baseline_sha256": "9ec7a556f131d9b1f7f4c8fb512eca763af920b35ab0649e080bbe21eef6b9cd",
+      "candidate_sha256": "9ec7a556f131d9b1f7f4c8fb512eca763af920b35ab0649e080bbe21eef6b9cd",
+      "identical": true
+    },
+    {
+      "file": "bridge_before.png",
+      "baseline_sha256": "480e68f53b5d218c8b91accf63f740a12531ff2445e69c38f43839b198d07beb",
+      "candidate_sha256": "480e68f53b5d218c8b91accf63f740a12531ff2445e69c38f43839b198d07beb",
+      "identical": true
+    },
+    {
+      "file": "earth_flat_after.png",
+      "baseline_sha256": "cae5857e03f1a3e0ab23f13c765a54aabcd8cbfefdabb77cfd0b497a760d9111",
+      "candidate_sha256": "cae5857e03f1a3e0ab23f13c765a54aabcd8cbfefdabb77cfd0b497a760d9111",
+      "identical": true
+    },
+    {
+      "file": "earth_flat_before.png",
+      "baseline_sha256": "dfea3a56f18776399f1f83d8c607f3729dd7b5dda323469bd719a3768b995d7c",
+      "candidate_sha256": "dfea3a56f18776399f1f83d8c607f3729dd7b5dda323469bd719a3768b995d7c",
+      "identical": true
+    },
+    {
+      "file": "sand_flat_after.png",
+      "baseline_sha256": "b3686d2b935f6fe3bfaf06b7adff23e916019a3ae6b23055f265014b882c1fdb",
+      "candidate_sha256": "b3686d2b935f6fe3bfaf06b7adff23e916019a3ae6b23055f265014b882c1fdb",
+      "identical": true
+    },
+    {
+      "file": "sand_flat_before.png",
+      "baseline_sha256": "fc3593a45aca45beee229daa559fa47e5aac3e79bfc43e5be00cfe7985501a5e",
+      "candidate_sha256": "fc3593a45aca45beee229daa559fa47e5aac3e79bfc43e5be00cfe7985501a5e",
+      "identical": true
+    },
+    {
+      "file": "sand_ramp_after.png",
+      "baseline_sha256": "d7bc1cd3686a49d5097cfc05dc2d815f9e996f3e7c1ac19646d32c6d44a5f447",
+      "candidate_sha256": "d7bc1cd3686a49d5097cfc05dc2d815f9e996f3e7c1ac19646d32c6d44a5f447",
+      "identical": true
+    },
+    {
+      "file": "sand_ramp_before.png",
+      "baseline_sha256": "f8166d2a784641a7524333bfa680f26ce5d07c922cd09488fc3b778065b6cc9d",
+      "candidate_sha256": "f8166d2a784641a7524333bfa680f26ce5d07c922cd09488fc3b778065b6cc9d",
+      "identical": true
+    },
+    {
+      "file": "sand_rotated_after.png",
+      "baseline_sha256": "c394292ce86727e7c3f684b95c259c7905d1077811698c0987aa08c3d3222917",
+      "candidate_sha256": "c394292ce86727e7c3f684b95c259c7905d1077811698c0987aa08c3d3222917",
+      "identical": true
+    },
+    {
+      "file": "sand_rotated_before.png",
+      "baseline_sha256": "d74b27a8060c6be4d8cf89d6221a74fd6efa7837b279bca2b830d83a684db8d8",
+      "candidate_sha256": "d74b27a8060c6be4d8cf89d6221a74fd6efa7837b279bca2b830d83a684db8d8",
+      "identical": true
+    }
+  ],
+  "ok": true
+}

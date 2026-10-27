@@ -33,3 +33,29 @@ ponte/ator inferior e superior, reorder e ciclo/entrada inválida); comparação
 nativa por sombra/objeto/ator em Areia/Terra/rampa. Preservar os atributos de
 mundo do shader, pintura interna, corpos, clique e navegação. Usar a mesma
 autoridade nos consumidores do preview de jogo; esse fluxo completo continua11.
+
+
+## F9-10 — seleção espacial de pares
+
+Delta sequencial posterior ao checkpoint04a7dfc. Conservar _before, geometria,
+ordenação topológica e desempate. Grade da projeção com buckets128, retângulos
+fechados inclusive coordenadas negativas e bordas exatas. Até256 buckets/item;
+retângulo maior ou distante usa conjunto de overflow limitado pelo orçamento
+existente de8192 itens/8388608 pares. Não impor pré-limite quadrático a itens
+esparsos que nunca se sobrepõem. Cacheversion2 é derivado, sem formato de save.
+
+Registros alterados atualizam somente seus buckets, com cópia dos buckets
+tocados; candidatos atuais incluem vizinhos de restrições anteriores, removendo
+arestas obsoletas após separação. Erro/ciclo/orçamento não publica cache parcial.
+Verificar contra grafo exaustivo independente da seleção espacial, incluindo
+entrada/saída de vizinho, várias mudanças, reorder, limite, overflow e8mil itens
+esparsos. Medir frio/quente/movimento com amostras repetidas em72/576/2176 itens;
+isolar CPU e não inferir FPS ou latência de toda a interface. Trabalho de UI
+assíncrona/cancelamento e busca densa canônica continua obrigatório em F9-10.
+
+Se as restrições de pares e a ordem total de prioridade permanecem iguais,
+reutilizar o resultado topológico. Verificar os vizinhos de prioridade de cada
+registro alterado com coordenadas novas de todos os registros; inversão exige
+reconstrução. Mesmo resultado com bindings iguais dispensa mover todos os
+nodes/Z novamente. Geometria/posição novas ainda atualizam snapshots e índice.
+Oráculos cobrem inversões múltiplas e restrições alteradas com mesmo resultado.

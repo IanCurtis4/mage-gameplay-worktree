@@ -7,6 +7,8 @@ const Canonical = preload("res://scripts/core/expedition/generation/canonical.gd
 const EPS := Kernel.EPSILON
 const MAX_ITEMS := 8192
 const MAX_PAIRS := 8388608
+const BUCKET_SIZE := 128.0
+const MAX_BUCKETS := 256
 
 static func _bounds(vertices: Array) -> AABB:
 	var result := AABB(vertices[0],Vector3.ZERO)
@@ -63,10 +65,62 @@ static func _pop(heap: Array[String], records: Dictionary) -> String:
 			var old: String = heap[cursor]; heap[cursor] = heap[child]; heap[child] = old; cursor = child
 	return result
 
+# Closed projected rectangles occupy their boundary buckets too. Huge or very
+# distant rectangles use the bounded overflow set instead of integer overflow.
+static func _bucket_keys(rect: Rect2) -> Array[Vector2i]:
+	var keys: Array[Vector2i] = []
+	if not rect.end.is_finite(): return keys
+	var low := rect.position/BUCKET_SIZE; var high := rect.end/BUCKET_SIZE
+	if maxf(absf(low.x),maxf(absf(low.y),maxf(absf(high.x),absf(high.y)))) > 1073741824.0: return keys
+	var first := Vector2i(floori(low.x),floori(low.y)); var last := Vector2i(floori(high.x),floori(high.y))
+	var width := last.x-first.x+1; var height := last.y-first.y+1
+	if width > MAX_BUCKETS or height > MAX_BUCKETS or width*height > MAX_BUCKETS: return keys
+	for y: int in range(first.y,last.y+1):
+		for x: int in range(first.x,last.x+1): keys.append(Vector2i(x,y))
+	return keys
+
+static func _spatial_index(records: Dictionary, ids: Array[String], changed: Dictionary, previous: Dictionary) -> Dictionary:
+	var buckets: Dictionary = previous.get("buckets",{}).duplicate()
+	var members: Dictionary = previous.get("members",{}).duplicate()
+	var overflow: Dictionary = previous.get("overflow",{}).duplicate()
+	var touched := {}
+	for id: String in ids:
+		if not changed.has(id): continue
+		for key: Vector2i in members.get(id,[]):
+			if not touched.has(key): buckets[key] = buckets[key].duplicate(); touched[key] = true
+			buckets[key].erase(id)
+		overflow.erase(id)
+		var keys := _bucket_keys(records[id].screen); members[id] = keys
+		if keys.is_empty(): overflow[id] = true
+		for key: Vector2i in keys:
+			if not touched.has(key): buckets[key] = buckets.get(key,{}).duplicate(); touched[key] = true
+			buckets[key][id] = true
+	for key: Vector2i in touched:
+		if buckets[key].is_empty(): buckets.erase(key)
+	return {"buckets":buckets,"members":members,"overflow":overflow}
+
+static func _nearby(id: String, spatial: Dictionary, ids: Array[String]) -> Dictionary:
+	var found: Dictionary = spatial.overflow.duplicate()
+	var keys: Array = spatial.members[id]
+	if keys.is_empty():
+		for other: String in ids: found[other] = true
+	else:
+		for key: Vector2i in keys: found.merge(spatial.buckets[key],true)
+	return found
+
+static func _priority_unchanged(records: Dictionary, changed: Array, cache: Dictionary) -> bool:
+	if not cache.has_all(["priority","ranks"]): return false
+	var priority: Array = cache.priority
+	for id: String in changed:
+		var rank: int = cache.ranks[id]
+		if rank > 0 and not _less(priority[rank-1],id,records): return false
+		if rank+1 < priority.size() and not _less(id,priority[rank+1],records): return false
+	return true
+
 static func solve(items: Array, cache: Dictionary = {}) -> Dictionary:
 	if items.size() > MAX_ITEMS: return {"ok":false,"code":"presentation_limit"}
 	var records := {}; var ids: Array[String] = []; var changed := {}
-	var previous: Dictionary = cache.get("records",{}) if cache.get("version") == 1 else {}
+	var previous: Dictionary = cache.get("records",{}) if cache.get("version") == 2 else {}
 	for item: Variant in items:
 		if not item is Dictionary or not item.has_all(["id","kind","bounds","screen","anchor"]) or not item.id is String or item.id.is_empty() or records.has(item.id) or item.kind not in ["mesh","sprite"] or not item.bounds is AABB or not item.screen is Rect2 or not item.anchor is Vector3 or not item.anchor.is_finite() or not item.bounds.position.is_finite() or not item.bounds.size.is_finite(): return {"ok":false,"code":"presentation_invalid"}
 		if not item.screen.position.is_finite() or not item.screen.size.is_finite() or minf(item.screen.size.x,item.screen.size.y) < 0 or minf(item.bounds.size.x,minf(item.bounds.size.y,item.bounds.size.z)) < 0: return {"ok":false,"code":"presentation_invalid"}
@@ -81,14 +135,19 @@ static func solve(items: Array, cache: Dictionary = {}) -> Dictionary:
 		ids.append(item.id); records[item.id] = item
 		if not identical: changed[item.id] = true
 	ids.sort()
-	var same_ids: bool = cache.get("version") == 1 and cache.get("ids",[]) == ids
-	if same_ids and changed.is_empty() and cache.has("order"): return {"ok":true,"order":cache.order.duplicate(),"updated_pairs":0,"constraints":cache.pairs.size(),"unchanged":true}
+	var same_ids: bool = cache.get("version") == 2 and cache.get("ids",[]) == ids
+	if same_ids and changed.is_empty() and cache.has("order"): return {"ok":true,"order":cache.order.duplicate(),"updated_pairs":0,"constraints":cache.pairs.size(),"unchanged":true,"order_changed":false,"reused_order":true}
 	var pairs: Dictionary = cache.get("pairs",{}).duplicate() if same_ids else {}
+	var active: Dictionary = changed if same_ids else records
+	var spatial := _spatial_index(records,ids,active,cache.get("spatial",{}) if same_ids else {})
 	var work := 0
-	var changed_ids: Array = changed.keys() if same_ids else ids.duplicate(); changed_ids.sort()
-	if not same_ids and ids.size()*(ids.size()-1)/2 > MAX_PAIRS: return {"ok":false,"code":"presentation_limit"}
+	var changed_ids: Array = active.keys(); changed_ids.sort()
 	for a: String in changed_ids:
-		for b: String in ids:
+		var nearby := _nearby(a,spatial,ids)
+		# An old constraint must be removed even after its rectangles separate.
+		if same_ids: nearby.merge(cache.neighbors.get(a,{}),true)
+		var candidates: Array = nearby.keys(); candidates.sort()
+		for b: String in candidates:
 			if a == b or (a > b and (not same_ids or changed.has(b))): continue
 			work += 1
 			if work > MAX_PAIRS: return {"ok":false,"code":"presentation_limit"}
@@ -96,22 +155,36 @@ static func solve(items: Array, cache: Dictionary = {}) -> Dictionary:
 			var order := _before(records[key[0]],records[key[1]])
 			if order == 0: pairs.erase(key)
 			else: pairs[key] = key if order < 0 else [key[1],key[0]]
-	var next := {}; var degree := {}
-	for id: String in ids: next[id] = []; degree[id] = 0
-	for pair: Array in pairs.values(): next[pair[0]].append(pair[1]); degree[pair[1]] += 1
-	var heap: Array[String] = []; var ordered: Array[String] = []
-	for id: String in ids:
-		if degree[id] == 0: _push(heap,id,records)
-	while not heap.is_empty():
-		var id := _pop(heap,records); ordered.append(id)
-		for other: String in next[id]:
-			degree[other] -= 1
-			if degree[other] == 0: _push(heap,other,records)
-	if ordered.size() != ids.size(): return {"ok":false,"code":"presentation_order_ambiguous"}
+	var same_priority: bool = same_ids and _priority_unchanged(records,changed_ids,cache)
+	var reused: bool = same_priority and pairs == cache.pairs
+	var ordered: Array[String] = []; var neighbors := {}
+	if reused:
+		ordered.assign(cache.order); neighbors = cache.neighbors
+	else:
+		var next := {}; var degree := {}
+		for id: String in ids: next[id] = []; degree[id] = 0; neighbors[id] = {}
+		for pair: Array in pairs.values():
+			next[pair[0]].append(pair[1]); degree[pair[1]] += 1
+			neighbors[pair[0]][pair[1]] = true; neighbors[pair[1]][pair[0]] = true
+		var heap: Array[String] = []
+		for id: String in ids:
+			if degree[id] == 0: _push(heap,id,records)
+		while not heap.is_empty():
+			var id := _pop(heap,records); ordered.append(id)
+			for other: String in next[id]:
+				degree[other] -= 1
+				if degree[other] == 0: _push(heap,other,records)
+		if ordered.size() != ids.size(): return {"ok":false,"code":"presentation_order_ambiguous"}
+	var priority: Array = cache.priority if same_priority else ids.duplicate()
+	var ranks: Dictionary = cache.ranks if same_priority else {}
+	if not same_priority:
+		priority.sort_custom(func(a: String,b: String) -> bool: return _less(a,b,records))
+		for i: int in priority.size(): ranks[priority[i]] = i
+	var order_changed: bool = not same_ids or cache.order != ordered
 	var snapshots := {}
 	for id: String in ids: snapshots[id] = records[id].duplicate(true) if changed.has(id) else previous[id]
-	cache.clear(); cache["version"] = 1; cache["ids"] = ids; cache["records"] = snapshots; cache["pairs"] = pairs; cache["order"] = ordered.duplicate()
-	return {"ok":true,"order":ordered,"updated_pairs":work,"constraints":pairs.size(),"unchanged":false}
+	cache.clear(); cache["version"] = 2; cache["ids"] = ids; cache["records"] = snapshots; cache["pairs"] = pairs; cache["order"] = ordered.duplicate(); cache["spatial"] = spatial; cache["neighbors"] = neighbors; cache["priority"] = priority; cache["ranks"] = ranks
+	return {"ok":true,"order":ordered,"updated_pairs":work,"constraints":pairs.size(),"unchanged":false,"order_changed":order_changed,"reused_order":reused}
 
 static func world_vertices(mesh: ArrayMesh) -> Array:
 	var values: PackedFloat32Array = mesh.surface_get_arrays(0)[Mesh.ARRAY_CUSTOM0]; var result: Array = []
@@ -172,7 +245,7 @@ static func apply(root: Node2D) -> Dictionary:
 	root.set_meta("canvas_order_cache",cache)
 	var same_bindings: bool = root.get_meta("canvas_order_bindings",{}) == bindings
 	root.set_meta("canvas_order_bindings",bindings)
-	if result.unchanged and same_bindings: return result
+	if not result.order_changed and same_bindings: return result
 	for i: int in result.order.size():
 		var node: Node2D = nodes[result.order[i]]
 		node.z_index = mini(4000,2+i*2) if result.order.size() <= 2000 else 1+floori(float(i)*3999/maxi(1,result.order.size()-1))
