@@ -2205,7 +2205,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "shared renderer producer awaits frozen Luna supervision; source/HEAD/fixture exclusive until report. Remaining F9 open.",
+    "state": "Shared renderer producer technically validated at81e2f4252c85567173acd6557abed6b147c7cb36:12/43/90/52,official5,7860 full inputs,11 equal image comparisons. Fixture released; actual gameplay consumer in progress.",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
