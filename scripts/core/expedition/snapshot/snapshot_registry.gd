@@ -3,11 +3,12 @@ extends RefCounted
 ## Explicit versioned object graph. No Object, Callable, WeakRef, NodePath or
 ## process-local identity is stored in the envelope. Factories run off-tree;
 ## references/signals are resolved before a host may activate the result.
+const Encoding = preload("res://scripts/core/expedition/snapshot/snapshot_graph_encoding.gd")
 const FORMAT := 1
 const MANIFEST := "res://scripts/core/expedition/snapshot/runtime_manifest.json"
 const MAX_OBJECTS := 16384
 const MAX_DEPTH := 96
-const MAX_BYTES := 4 * 1024 * 1024
+const MAX_BYTES := Encoding.MAX_BYTES
 var schemas: Dictionary = {}
 var entities := StableEntityRegistry.new()
 var _objects: Array[Object] = []
@@ -18,6 +19,8 @@ var _assets: Dictionary = {}
 var _barrier: SnapshotTickBarrier
 var _visited_containers: Array = []
 var _container_values: Array = []
+var _visited_buckets: Dictionary[int,Array] = {}
+var _value_buckets: Dictionary[int,Array] = {}
 var _containers: Dictionary = {}
 var _decoded_containers: Dictionary = {}
 var _referenced_tombstones: Dictionary[String, bool] = {}
@@ -121,7 +124,7 @@ func capture(root: Node, barrier: SnapshotTickBarrier) -> Dictionary:
 	var started := Time.get_ticks_usec()
 	if barrier == null or not barrier.owns(root): return StableEntityRegistry.failure(&"tick_barrier_required")
 	_objects.clear(); _seen.clear(); _records = {}; _error.clear(); _assets = {}
-	_visited_containers.clear(); _container_values.clear(); _containers = {}
+	_visited_containers.clear(); _container_values.clear(); _visited_buckets.clear(); _value_buckets.clear(); _containers = {}
 	_referenced_tombstones.clear()
 	_dead_values.clear(); _dead_references = {}
 	if root.has_meta(StableEntityRegistry.SCOPE_META):
@@ -175,15 +178,14 @@ func capture(root: Node, barrier: SnapshotTickBarrier) -> Dictionary:
 	for id: String in _referenced_tombstones: generations[id] = entities.generation_for(id)
 	var has_world_view: bool = root is RunController and (root.expedition_view != null or (root.campaign_runtime != null and root.player.world_motion != null))
 	var envelope := {"format":FORMAT,"engine":Engine.get_version_info()["string"],"sources":_source_revisions(),"root":entities.stable_for(root.get_instance_id()),"objects":_records,"containers":_containers,"dead_references":_dead_references,"tombstones":_referenced_tombstones.keys(),"identity_generations":generations,"next_entity_serial":entities.next_serial(),"assets":_assets,"coverage":_coverage(),"authority":authority.duplicate(true),"world_view":has_world_view}
-	var bytes := var_to_bytes(envelope).size()
-	if bytes > MAX_BYTES:
-		var failed := StableEntityRegistry.failure(&"snapshot_too_large", "capture envelope byte budget")
-		failed["snapshot_metrics"] = _size_metrics(envelope,bytes)
-		return failed
+	var logical_bytes := var_to_bytes(envelope).size()
 	var checked := validate(envelope)
-	if not checked["ok"]: return checked
-	_objects.clear(); _visited_containers.clear(); _container_values.clear()
-	return {"ok":true,"snapshot":envelope,"bytes":bytes,"capture_usec":Time.get_ticks_usec()-started}
+	if not checked["ok"]:
+		if checked.get("error_code") == &"snapshot_too_large":
+			checked["snapshot_metrics"] = _size_metrics(envelope,logical_bytes)
+		return checked
+	_objects.clear(); _visited_containers.clear(); _container_values.clear(); _visited_buckets.clear(); _value_buckets.clear()
+	return {"ok":true,"snapshot":envelope,"bytes":checked.byte_count,"logical_bytes":logical_bytes,"capture_usec":Time.get_ticks_usec()-started}
 
 func _size_metrics(envelope: Dictionary, byte_count: int) -> Dictionary:
 	# Diagnostics contain counts only; no profile or source payload is exported.
@@ -200,10 +202,35 @@ func _size_metrics(envelope: Dictionary, byte_count: int) -> Dictionary:
 	return {"envelope_bytes":byte_count,"limit_bytes":MAX_BYTES,"object_count":_objects.size(),"object_record_bytes":var_to_bytes(envelope.objects).size(),"container_count":_containers.size(),"container_record_bytes":var_to_bytes(envelope.containers).size(),"container_kinds":kinds,"raw_geometry":raw_geometry}
 
 func _container_seen(value: Variant) -> bool:
-	for previous: Variant in _visited_containers:
-		if is_same(previous,value): return true
+	var bucket := _container_bucket(value)
+	for index: int in _visited_buckets.get(bucket,[]):
+		if is_same(_visited_containers[index],value): return true
+	if not _visited_buckets.has(bucket): _visited_buckets[bucket] = []
+	_visited_buckets[bucket].append(_visited_containers.size())
 	_visited_containers.append(value)
 	return false
+
+func _container_bucket(value: Variant) -> int:
+	# The barrier keeps backing containers stable throughout capture. This shallow
+	# fingerprint never follows nested containers (cycles are legal). A hash is
+	# only a search bucket: is_same remains the authority for container identity.
+	var signature: Array[int] = [typeof(value),value.size()]
+	if value is Array:
+		signature.append(value.get_typed_builtin())
+		for index: int in mini(value.size(),8): signature.append(_shallow_hash(value[index]))
+	else:
+		signature.append(value.get_typed_key_builtin()); signature.append(value.get_typed_value_builtin())
+		var count := 0
+		for key: Variant in value:
+			signature.append(_shallow_hash(key)); signature.append(_shallow_hash(value[key]))
+			count += 1
+			if count == 8: break
+	return hash(signature)
+
+func _shallow_hash(value: Variant) -> int:
+	if value is Array or value is Dictionary: return hash(Vector2i(typeof(value),value.size()))
+	if typeof(value) in [TYPE_OBJECT,TYPE_CALLABLE,TYPE_SIGNAL,TYPE_RID]: return typeof(value)
+	return hash(value)
 
 func _source_revisions() -> Dictionary:
 	var paths: Array[String] = [MANIFEST, "res://data/expedition/policies/e07_initial.json"]
@@ -441,11 +468,14 @@ func _encode_dead_reference(value: Variant, kind: String) -> Variant:
 	return {"$":"dead_reference","id":id}
 
 func _container_id(value: Variant) -> String:
-	for index: int in _container_values.size():
+	for index: int in _value_buckets.get(_container_bucket(value),[]):
 		if is_same(_container_values[index],value): return "container_%06d" % (index+1)
 	return ""
 
 func _reserve_container(value: Variant) -> String:
+	var bucket := _container_bucket(value)
+	if not _value_buckets.has(bucket): _value_buckets[bucket] = []
+	_value_buckets[bucket].append(_container_values.size())
 	_container_values.append(value)
 	return "container_%06d" % _container_values.size()
 
@@ -571,8 +601,7 @@ func validate(snapshot: Dictionary) -> Dictionary:
 		if id != snapshot["root"] and objects[id].has("node") and String(objects[id]["node"]["parent"]).is_empty(): return StableEntityRegistry.failure(&"dangling_entity_reference","node outside scope")
 	var authority_check := _validate_value(snapshot["authority"],objects,references,snapshot["assets"],0)
 	if not authority_check["ok"]: return authority_check
-	if var_to_bytes(snapshot).size() > MAX_BYTES: return StableEntityRegistry.failure(&"snapshot_too_large")
-	return {"ok":true}
+	return Encoding.encode_snapshot(snapshot)
 
 func _validate_pure_value(value: Variant, depth: int) -> Dictionary:
 	if depth > MAX_DEPTH: return StableEntityRegistry.failure(&"snapshot_too_large")

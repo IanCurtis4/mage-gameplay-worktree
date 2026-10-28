@@ -66,3 +66,37 @@ concordar no mesmo encoding e orçamento. Helpers/UIDs, ownership nominal e
 invariantes serão registrados antes da edição. Não é uma correção já aprovada
 por prova: validar layout/roundtrip, limites, payload malformado, F3/F6 pertinentes
 e a App real33x33/20x32, mantendo relato de custos de abertura/início separados.
+
+
+## Layout concretizado para implementação28/10
+
+Sol recebe SnapshotGraphEncoding.gd/.uid e ExpeditionCheckpointCodec.gd;
+Registry permanece seu. Inventário do app28/10: demais chats RagRPG notLoaded,
+sem outro escritor. Baseba15cf22a8ca1ab2116f7be2b0c6903b343d3b5c.
+O grafo semântico F3 permanece formato1, com IDs/aliases/tipos/ciclos intactos.
+Encoding físico novo tem versão1 própria: array [versão, corpo, tabela]. O corpo
+mantém a posição da chave containers, substituída por null; tabela indexada guarda
+identidade original e descriptor posicional, sem unir valores iguais. Arrays/dicts
+sem tipo omitem metadata vazia; typed descriptors mantêm tudo. Formas excepcionais
+podem manter descriptor integral. Valores estruturais têm tags posicionais
+inequívocas e refs de container por índice. Ordem de dicionário preservada.
+
+SnapshotRegistry.capture/validate usam tamanho desse encoding SEM DEFLATE como
+orçamento4MiB; bytes é tamanho físico e logical_bytes o envelope de trabalho.
+Codec de checkpoint formato2 comprime exatamente esses bytes e mantém o teto de
+byte_count4MiB e base64/DEFLATE/digest/owner existentes. Leitura formato1 legada
+continua limitada aos4MiB originais e passa pela validação canônica. Decodificação
+não carrega objetos/scripts; schema, sources, identidades e tipos são conferidos
+pelo Registry antes da restauração. Formato desconhecido/truncado/ref inválida/
+metadata parcial/tipo incorreto falha sem commit. Limites de objetos/profundidade
+continuam. É troca de representação serializada, não aumento do teto nem contagem
+apenas de bytes comprimidos. Luna prova roundtrip exato e regressão por impacto;
+mesma App T01 precisa iniciar, andar e manter continuidade antes de aceite técnico.
+
+
+Captura também troca busca linear global de containers por buckets de fingerprint
+raso (tipo/tamanho e até8 chaves/valores imediatos), com is_same obrigatório em
+cada candidato. Não usa hash recursivo, não segue ciclos, não unifica conteúdos
+iguais e não serializa o índice. Containers são estáveis durante o TickBarrier;
+colisões mantêm busca exata. Os dois índices locais são limpos a cada captura.
+O ganho atinge captura/checkpoint in-game, não só cronômetro de testes.

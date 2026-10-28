@@ -2537,6 +2537,24 @@
       "owner": "Sol F9 — portable consolidation",
       "previous_owner": "new evidence artifact; inert test draft",
       "base_sha256": null
+    },
+    {
+      "path": "scripts/core/expedition/snapshot/snapshot_graph_encoding.gd",
+      "owner": "Sol F9 — exact compact snapshot transport",
+      "previous_owner": "new helper or sequential E07 transfer; other project threads notLoaded28/10",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/core/expedition/snapshot/snapshot_graph_encoding.gd.uid",
+      "owner": "Sol F9 — exact compact snapshot transport",
+      "previous_owner": "new helper or sequential E07 transfer; other project threads notLoaded28/10",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/core/expedition/persistence/expedition_checkpoint_codec.gd",
+      "owner": "Sol F9 — exact compact snapshot transport",
+      "previous_owner": "new helper or sequential E07 transfer; other project threads notLoaded28/10",
+      "base_sha256": "a9e6168469268d2914280d444e5d17264423cec784224334a13fd269470fbf31"
     }
   ],
   "read_only_shared": [
@@ -2547,7 +2565,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "f9_t01_foundation_pass_gameplay_snapshot_density_failure_fixture_released",
+    "state": "f9_snapshot_encoding_implementation_and_density_tests_authoring_no_freeze",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",

@@ -1,21 +1,22 @@
 class_name ExpeditionCheckpointCodec
 extends RefCounted
 ## Transport of the F3 envelope, never another runtime serializer or writer.
-const FORMAT := 1
-const MAX_BYTES := 4 * 1024 * 1024
+const Encoding = preload("res://scripts/core/expedition/snapshot/snapshot_graph_encoding.gd")
+const FORMAT := 2
+const MAX_BYTES := Encoding.MAX_BYTES
 const MAX_ENCODED := 6 * 1024 * 1024
 
 static func pack(snapshot: Dictionary, owner_digest: String, session: Dictionary) -> Dictionary:
 	var checked := SnapshotRegistry.new().validate(snapshot)
 	if not checked["ok"]: return checked
-	var bytes := var_to_bytes(snapshot)
+	var bytes: PackedByteArray = checked.encoding
 	if bytes.size() > MAX_BYTES: return fail(&"snapshot_too_large")
 	var compressed := bytes.compress(FileAccess.COMPRESSION_DEFLATE)
 	return {"ok":true,"checkpoint":{"format":FORMAT,"snapshot":Marshalls.raw_to_base64(compressed),"byte_count":bytes.size(),"sha256":digest_bytes(bytes),"owner_digest":owner_digest,"session":session.duplicate(true)}}
 
 static func validate_record(raw: Variant) -> Dictionary:
 	if not raw is Dictionary or raw.size() != 6: return fail(&"invalid_checkpoint")
-	if not EquipmentRules.exact_integer(raw.get("format"),1) or int(raw["format"]) != FORMAT: return fail(&"checkpoint_version_unavailable")
+	if not EquipmentRules.exact_integer(raw.get("format"),1) or int(raw["format"]) not in [1,FORMAT]: return fail(&"checkpoint_version_unavailable")
 	if not raw.get("snapshot") is String or raw["snapshot"].is_empty() or raw["snapshot"].length() > MAX_ENCODED: return fail(&"snapshot_too_large")
 	if not EquipmentRules.exact_integer(raw.get("byte_count"),1,MAX_BYTES): return fail(&"snapshot_too_large")
 	if not CharacterAssets.valid_digest(raw.get("sha256")) or not CharacterAssets.valid_digest(raw.get("owner_digest")): return fail(&"invalid_checkpoint")
@@ -32,7 +33,13 @@ static func unpack(raw: Dictionary) -> Dictionary:
 	var checked := validate_record(raw)
 	if not checked["ok"]: return checked
 	# Object decoding stays disabled. F3 owns all explicit runtime descriptors.
-	var snapshot: Variant = bytes_to_var(checked["bytes"])
+	var snapshot: Variant
+	if int(raw["format"]) == 1:
+		snapshot = bytes_to_var(checked["bytes"])
+	else:
+		var decoded := Encoding.decode_snapshot(checked["bytes"])
+		if not decoded.ok: return decoded
+		snapshot = decoded.snapshot
 	if not snapshot is Dictionary: return fail(&"invalid_checkpoint")
 	var valid := SnapshotRegistry.new().validate(snapshot)
 	if not valid["ok"]: return valid
