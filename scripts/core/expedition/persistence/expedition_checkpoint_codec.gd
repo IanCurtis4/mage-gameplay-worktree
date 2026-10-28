@@ -23,11 +23,28 @@ static func validate_record(raw: Variant) -> Dictionary:
 	var session: Variant = raw.get("session")
 	if not session is Dictionary or session.size() != 3 or not session.get("run_id") is String or session["run_id"].is_empty() or not session.get("character_id") is String or not EquipmentRules.exact_integer(session.get("last_committed_seq"),0): return fail(&"invalid_checkpoint")
 	var encoded: String = raw["snapshot"]
+	if not _canonical_base64(encoded): return fail(&"invalid_checkpoint")
 	var compressed := Marshalls.base64_to_raw(encoded)
-	if Marshalls.raw_to_base64(compressed) != encoded: return fail(&"invalid_checkpoint")
+	if compressed.is_empty() or Marshalls.raw_to_base64(compressed) != encoded: return fail(&"invalid_checkpoint")
 	var bytes := compressed.decompress(int(raw["byte_count"]),FileAccess.COMPRESSION_DEFLATE)
 	if bytes.size() != int(raw["byte_count"]) or digest_bytes(bytes) != raw["sha256"]: return fail(&"invalid_checkpoint")
 	return {"ok":true,"bytes":bytes}
+
+static func _canonical_base64(encoded: String) -> bool:
+	# Marshalls logs native errors on malformed input. Check syntax and padding
+	# bits before invoking it; rejected checkpoint data is an ordinary result.
+	if encoded.length() < 4 or encoded.length()%4 != 0: return false
+	var alphabet := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+	var padding := 2 if encoded.ends_with("==") else (1 if encoded.ends_with("=") else 0)
+	var data_end := encoded.length()-padding
+	for index: int in encoded.length():
+		if index < data_end:
+			if alphabet.find(encoded[index]) < 0: return false
+		elif encoded[index] != "=": return false
+	if padding > 0:
+		var tail := alphabet.find(encoded[data_end-1])
+		if (tail & (15 if padding == 2 else 3)) != 0: return false
+	return true
 
 static func unpack(raw: Dictionary) -> Dictionary:
 	var checked := validate_record(raw)
