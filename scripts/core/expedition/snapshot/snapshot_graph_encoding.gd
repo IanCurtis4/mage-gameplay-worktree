@@ -2,7 +2,7 @@ class_name SnapshotGraphEncoding
 extends RefCounted
 ## Physical encoding of the existing explicit graph, never a second runtime serializer.
 ## Container IDs remain distinct even when their contents compare equal.
-const VERSION := 1
+const VERSION := 2
 const MAX_BYTES := 4 * 1024 * 1024
 const MAX_DEPTH := 96
 const W_DICTIONARY := 0
@@ -13,6 +13,8 @@ const W_TYPED_DICTIONARY := 4
 var _indices: Dictionary[String,int] = {}
 var _ids: Array[String] = []
 var _error: Dictionary = {}
+var _key_layouts: Array[Array] = []
+var _layout_indices: Dictionary[String,int] = {}
 
 static func encode_snapshot(snapshot: Dictionary) -> Dictionary:
 	return SnapshotGraphEncoding.new()._pack(snapshot)
@@ -39,7 +41,8 @@ func _pack(snapshot: Dictionary) -> Dictionary:
 	var body := snapshot.duplicate()
 	# Keep the key's original insertion position for exact envelope roundtrips.
 	body.containers = null
-	var encoded: Array = [VERSION,_wire(body,0),table]
+	var wire_body: Variant = _wire(body,0)
+	var encoded: Array = [VERSION,wire_body,table,_key_layouts]
 	if not _error.is_empty(): return _error
 	var bytes := var_to_bytes(encoded)
 	if bytes.size() > MAX_BYTES:
@@ -67,6 +70,23 @@ func _descriptor(value: Dictionary) -> Array:
 		return result
 	if value.get("$") == "dictionary" and value.keys() == dictionary_keys and value.items is Array:
 		var untyped: bool = value.key_type == TYPE_NIL and value.value_type == TYPE_NIL and value.key_class == "" and value.key_script == "" and value.value_class == "" and value.value_script == ""
+		if untyped and value.items.size() >= 2:
+			var keys: Array = []
+			var values: Array = []
+			var eligible := true
+			for pair: Variant in value.items:
+				if not pair is Array or pair.size() != 2: _fail("dictionary pair"); return []
+				if typeof(pair[0]) not in [TYPE_STRING,TYPE_STRING_NAME]: eligible = false; break
+				keys.append(pair[0]); values.append(_wire(pair[1],0))
+			if eligible:
+				# Keys are literal scalar values, never graph container identities.
+				# Exact bytes distinguish StringName and String and retain key order.
+				var layout_key := var_to_bytes(keys).hex_encode()
+				if not _layout_indices.has(layout_key):
+					_layout_indices[layout_key] = _key_layouts.size(); _key_layouts.append(keys)
+				var pooled: Array = [5,_layout_indices[layout_key]]
+				pooled.append_array(values)
+				return pooled
 		var result: Array = [2] if untyped else [3,value.key_type,value.key_class,value.key_script,value.value_type,value.value_class,value.value_script]
 		for pair: Variant in value.items:
 			if not pair is Array or pair.size() != 2: _fail("dictionary pair"); return []
@@ -100,7 +120,17 @@ func _unpack(bytes: PackedByteArray) -> Dictionary:
 	if bytes.is_empty() or bytes.size() > MAX_BYTES: return {"ok":false,"error_code":&"snapshot_too_large"}
 	# Native Object decoding is deliberately disabled, as in the legacy codec.
 	var encoded: Variant = bytes_to_var(bytes)
-	if not encoded is Array or encoded.size() != 3 or typeof(encoded[0]) != TYPE_INT or encoded[0] != VERSION or not encoded[2] is Array: return _failure("encoding version or shape")
+	if not encoded is Array or encoded.size() < 3 or typeof(encoded[0]) != TYPE_INT or encoded[0] not in [1,VERSION] or not encoded[2] is Array: return _failure("encoding version or shape")
+	if encoded.size() != (3 if encoded[0] == 1 else 4): return _failure("encoding shape")
+	if encoded[0] == VERSION:
+		if not encoded[3] is Array: return _failure("key layouts")
+		for layout: Variant in encoded[3]:
+			if not layout is Array: return _failure("key layout")
+			var seen_keys := {}
+			for key: Variant in layout:
+				if typeof(key) not in [TYPE_STRING,TYPE_STRING_NAME] or seen_keys.has(key): return _failure("key layout entry")
+				seen_keys[key] = true
+			_key_layouts.append(layout)
 	var table: Array = encoded[2]
 	var seen := {}
 	for record: Variant in table:
@@ -125,6 +155,13 @@ func _unpack(bytes: PackedByteArray) -> Dictionary:
 func _restore_descriptor(record: Array) -> Variant:
 	if typeof(record[1]) != TYPE_INT: return _fail("descriptor tag")
 	var tag: int = record[1]
+	if tag == 5:
+		if record.size() < 3 or typeof(record[2]) != TYPE_INT or record[2] < 0 or record[2] >= _key_layouts.size(): return _fail("key layout reference")
+		var keys: Array = _key_layouts[record[2]]
+		if record.size() != 3+keys.size(): return _fail("key layout arity")
+		var pairs: Array = []
+		for index: int in keys.size(): pairs.append([keys[index],_unwire(record[3+index],0)])
+		return {"$":"dictionary","items":pairs,"key_type":TYPE_NIL,"key_class":"","key_script":"","value_type":TYPE_NIL,"value_class":"","value_script":""}
 	if tag == 4:
 		if record.size() != 3: return _fail("descriptor fallback")
 		var value: Variant = _unwire(record[2],0)

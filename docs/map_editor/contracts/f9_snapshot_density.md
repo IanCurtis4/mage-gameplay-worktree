@@ -110,3 +110,13 @@ antes de inflate, além do sha256 original dosbytes semcompressão. Formato1 leg
 mantém6campos/protocolo anterior. SHA é integridade, não autenticação. Isto evita
 passar corrupção de transporte ao inflater; validações de payload canônico e
 source/owner continuam obrigatórias. Leitura antiga permanece limitada aos4MiB.
+
+
+Execução9a32ca2: Density28 PASS, Native ainda excedeu4MiB:4.680.008B para
+10.309.084B lógicos, excesso485.704B. App.start17.490s ante71.334s do diagnóstico;
+ainda falha antes de caminhar, sem FPS. Próxima otimização é layout de chaves
+literais de dicionários untyped: Wire2=[versão,corpo,tabela,layouts]. Descriptor5
+referencia layout de chaves por índice; valores/identidades/alias permanecem
+separados. Ordem e distinçãoStringName/String usam bytes exatos no índice local;
+tabelas malformadas/ref/arity/duplicata falham. Decoder lêWire1e2, transporte2
+mantém7campos e orçamento4MiB préDEFLATE. Não houve redução de fonte/corpo/caps.
