@@ -76,3 +76,12 @@ FieldsNative73/GameplayNative52/Controls29 e12 oficiais/3649 checks no4642dbf,
 sem erros/timeouts; supervisão integrada pendente acima foi satisfeita. Fixture
 liberada. Performance in-game, autoria AX útil e robustez são prioridades humanas;
 cronômetro de suíte não é meta. Restante F9 continua exigido; T01 é só proposta.
+
+
+Checkpoint20 parcial28/10: T01 integrado, novo brush/preset/exemplo e modelo19
+PASS. GUI/AX/menu/undo e captura orgânica comprovados, mas Native falha no início
+da App por snapshot10.308.936B >4MiB. Ainda sem caminhada real, frames ou conclusão
+de02/11/12. [Diagnóstico](contracts/f9_snapshot_density.md); limites/corpo/amostra
+preservados. Bosque do Santuário é desenho Terra, não mapa entregue. Meta humana
+renovada cobre TODO F9; Sol código/Terra autoria AX/Luna testes. Permanecem todos
+os pendentes; próxima autoridadeAX em contrato próprio, sem empurrar paraF10.

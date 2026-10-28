@@ -2066,8 +2066,8 @@
     },
     {
       "path": "tests/map_editor_library_ui_test.gd",
-      "owner": "Sol F9",
-      "previous_owner": "sequential F9-06/07 library and viewport navigation, after frozen canvas checkpoint",
+      "owner": "Luna F9 — legitimate T01 native library contract extension",
+      "previous_owner": "Sol F9",
       "base_sha256": null
     },
     {
@@ -2506,6 +2506,24 @@
       "path": "docs/map_editor/contracts/f9_snapshot_density.md",
       "owner": "Sol F9 — dense gameplay snapshot integration",
       "previous_owner": "new F9 diagnostic contract",
+      "base_sha256": null
+    },
+    {
+      "path": ".godot/f9_shadow_draft/luna_snapshot_density/test.gd",
+      "owner": "Luna F9 — bounded snapshot density proof",
+      "previous_owner": "new F9 test; author draft outside inputs during freeze",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_snapshot_density_test.gd",
+      "owner": "Luna F9 — bounded snapshot density proof",
+      "previous_owner": "new F9 test; author draft outside inputs during freeze",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_snapshot_density_test.gd.uid",
+      "owner": "Luna F9 — bounded snapshot density proof",
+      "previous_owner": "new F9 test; author draft outside inputs during freeze",
       "base_sha256": null
     }
   ],

@@ -1,5 +1,25 @@
 # Retomada F9 —27/10/2026
 
+## Vigente28/10 — T01 integrado, gameplay bloqueado
+
+Meta continua TODO F9 e mapa para testar. Sol código; Terra mapas via editorAX;
+Luna testes. [Desenho do Bosque](f9_area_design.md) está pronto, ainda não autorado.
+HEAD82cc23d17eb472f1bc21bdab0591678d4a2c2f4a, branchcodex/map-editor-f9 no mesmo
+checkout .tools/map-editor-m5. Aplicação T01 de5e6f6cc; modelo19 PASS em57ffdc2;
+provaGUI/menu/AX/undo/relevo nativo passou em82cc23d, mas a etapaNative FALHA:
+App.start snapshot_too_large,13/14 checks PASS (20 esperados). Sem caminhada,
+picking ou captura gameplay; não declarar T01 jogável nem F9-02/12 concluídos.
+Diagnóstico: snapshot10.308.936B >4.194.304B,22.405 containers,634 objetos;
+estágio geométrico bruto1.024.396B/536 apoios/828 conexões. Detalhes e próxima
+correção no [contrato de densidade](../contracts/f9_snapshot_density.md).
+Engine4.7.2 e fixture única preservadas; logs completos rounded_hill/. Não elevar
+caps, reduzir33x33/220/420 ou corpo20/32. AX parametrizado ainda falta;
+[próxima fatia](../contracts/f9_ax_authoring.md) prepara sua autoridade real.
+Luna executa biblioteca/oficiais proporcionais no freeze82cc23d, confirmar
+report/handles antes de editar inputs/HEAD. TesteSnapshotDensity ainda rascunho
+ignorado, sem UID/import/teste. Não reaplicar propostaTerra antiga nem iniciarF10.
+
+
 F9 autorizado, ainda EM EXECUÇÃO. Runtime testado (congelamento concluído):
 4642dbf878fab4004f98141c7e2437ee11e22bd5, branch codex/map-editor-f9.
 Checkout C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5.

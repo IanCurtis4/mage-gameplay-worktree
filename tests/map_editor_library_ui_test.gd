@@ -69,7 +69,21 @@ func run() -> void:
 	check("native_named_preset_saved",Library.preset(custom_id,Preferences.read().data).preset.options.radius == 37)
 	var presentation: Control = terrain.get_node("AuthoringPresentation"); presentation.set_mode("ax")
 	var list: Dictionary = presentation.ax_invoke("terrain/presets/list")
-	check("semantic_ax_commands_are_inspectable",presentation.ax_snapshot().commands.size() == 11 and list.ok and list.presets.size() == 4 and presentation.ax_invoke("terrain/viewport/inspect").ok)
+	var commands: Array = presentation.ax_snapshot().commands
+	var command_ids: Array[String] = []
+	var seen_command_ids: Dictionary[String,bool] = {}
+	var command_ids_unique := true
+	for command: Dictionary in commands:
+		var command_id: String = str(command.get("id",""))
+		command_ids.append(command_id)
+		if seen_command_ids.has(command_id): command_ids_unique = false
+		seen_command_ids[command_id] = true
+	var expected_command_ids: Array[String] = ["terrain/example/organic","terrain/brush/stroke","terrain/presets/list","terrain/presets/apply","terrain/presets/save","terrain/viewport/inspect","terrain/viewport/focus_world","terrain/viewport/focus_entity","terrain/viewport/set_overlays","terrain/viewport/search","terrain/viewport/set_probe","terrain/viewport/probe_point","terrain/viewport/probe_los"]
+	command_ids.sort(); expected_command_ids.sort()
+	var preset_ids: Array[String] = []
+	if list.get("presets",[]) is Array:
+		for preset: Dictionary in list.presets: preset_ids.append(str(preset.get("id","")))
+	check("semantic_ax_commands_are_inspectable",commands.size() == 13 and command_ids_unique and command_ids == expected_command_ids and list.ok and preset_ids == ["builtin_soft_hill","builtin_smooth_ground","builtin_earth_path","builtin_rounded_hill",custom_id] and presentation.ax_invoke("terrain/viewport/inspect").ok)
 	terrain.radius.value = 100
 	check("ax_apply_matches_gui_preset",presentation.ax_invoke("terrain/presets/apply",{"preset_id":custom_id}).ok and terrain.radius.value == 37 and terrain.canvas.options.radius == 37)
 	var before: String = Preferences.read().hash
