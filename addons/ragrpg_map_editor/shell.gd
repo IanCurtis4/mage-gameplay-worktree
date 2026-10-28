@@ -12,6 +12,7 @@ const Preferences = preload("res://scripts/map_authoring/library/editor_preferen
 var composition_window: Window
 var objects_window: Window
 var library_window: Window
+var context_panel: Control
 var terrain: Control
 var session := Session.new()
 var source_path := ""
@@ -130,7 +131,7 @@ func _ready() -> void:
 		if session.dirty(): preserve_draft())
 	add_child(timer)
 	_new_document()
-	preload("res://scripts/map_authoring/context/context_panel.gd").mount(self,session,terrain)
+	context_panel = preload("res://scripts/map_authoring/context/context_panel.gd").mount(self,session,terrain)
 	preload("res://addons/ragrpg_map_editor/presentation.gd").mount(self,"piece",func() -> Dictionary: return session.document().to_data(),terrain.canvas)
 
 func _button(parent: Node, text: String, action: Callable) -> Button:
@@ -267,9 +268,21 @@ func authoring_commands() -> Array:
 		{"id":"piece/document/name","parameters":{"name":"string"}},
 		{"id":"piece/document/open","parameters":{"path":"string","confirm_discard":"boolean"}},
 		{"id":"piece/document/save","parameters":{"path":"string"}},
-		{"id":"piece/history/undo","parameters":{}},{"id":"piece/history/redo","parameters":{}}]
+		{"id":"piece/history/undo","parameters":{}},{"id":"piece/history/redo","parameters":{}},
+		{"id":"piece/context/options","parameters":{}},
+		{"id":"piece/context/rules/set","parameters":context_panel.Operations.FIELDS["rules/set"]},
+		{"id":"piece/context/area/upsert","parameters":context_panel.Operations.FIELDS["area/upsert"]},
+		{"id":"piece/context/area/remove","parameters":context_panel.Operations.FIELDS["area/remove"]},
+		{"id":"piece/socket/upsert","parameters":Schema.FIELDS.sockets},
+		{"id":"piece/socket/remove","parameters":{"socket_id":"id"}}]
 
 func ax_command(id: String, parameters: Dictionary) -> Dictionary:
+	if id == "piece/context/options":
+		return context_panel.Catalog.list_options() if parameters.is_empty() else Schema.result(false,"arguments_invalid")
+	if id in ["piece/context/rules/set","piece/context/area/upsert","piece/context/area/remove"]:
+		return context_panel.apply_operation(id.trim_prefix("piece/context/"),parameters)
+	if id in ["piece/socket/upsert","piece/socket/remove"]:
+		return context_panel.apply_operation(id.trim_prefix("piece/"),parameters)
 	var fields := {"piece/document/new":{"document_id":"id","name":"string","confirm_discard":"bool"},"piece/document/name":{"name":"string"},"piece/document/open":{"path":"string","confirm_discard":"bool"},"piece/document/save":{"path":"string"},"piece/history/undo":{},"piece/history/redo":{}}
 	if not fields.has(id): return Schema.result(false,"action_missing")
 	var errors: Array = []

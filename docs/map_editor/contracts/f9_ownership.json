@@ -2699,6 +2699,60 @@
       "owner": "Sol F9",
       "previous_owner": "repository integration metadata; terrain import checkout normalization",
       "base_sha256": "2163907a8f15fc285bd37bc9a715c606d7809620600250abbda065f94fbef809"
+    },
+    {
+      "path": "scripts/map_authoring/context/context_operations.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new AX content producer or bounded validation",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/context/context_operations.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new AX content producer or bounded validation",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_ax_content_test.gd",
+      "owner": "Sol F9 temporary validation",
+      "previous_owner": "Luna F9 AX content; draft interrupted by usage limit, sequential transfer",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_ax_content_test.gd.uid",
+      "owner": "Sol F9 temporary validation",
+      "previous_owner": "Luna F9 AX content; draft interrupted by usage limit, sequential transfer",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_ax_content_ui_test.gd",
+      "owner": "Sol F9 temporary validation",
+      "previous_owner": "Luna F9 AX content; draft interrupted by usage limit, sequential transfer",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_ax_content_ui_test.gd.uid",
+      "owner": "Sol F9 temporary validation",
+      "previous_owner": "Luna F9 AX content; draft interrupted by usage limit, sequential transfer",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/ax_content/",
+      "owner": "Sol F9",
+      "previous_owner": "new AX content producer or bounded validation",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/ax_content/",
+      "owner": "Luna F9 AX content",
+      "previous_owner": "new AX content producer or bounded validation",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/terra/area_content/",
+      "owner": "Terra F9 area",
+      "previous_owner": "new passive AX content recipes and evidence",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -2957,6 +3011,14 @@
       "body_consumer": "two linked sources; Maps/Candidate/prepare20x32/all supports PASS; no live walking",
       "body_prepare_ms": 18914.186,
       "map_compile_ms": 15518.45
+    },
+    "ax_content": {
+      "state": "implementation",
+      "base": "8601af84",
+      "runtime_owner": "Sol F9",
+      "test_owner": "Luna F9 AX content",
+      "scope": "parameterized objects/context/sockets and actual editor client routing; no source replacement",
+      "validation_role": "Luna drafted model test; usage limit interrupted before native test; Sol completed and executes checks temporarily, no independent supervision claim"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

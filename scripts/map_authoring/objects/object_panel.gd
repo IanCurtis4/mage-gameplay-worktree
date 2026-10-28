@@ -169,9 +169,44 @@ func toggle_favorite() -> void:
 	if prefs.ok: favorite(selected_definition,"prop:"+selected_definition not in prefs.data.favorites)
 
 func authoring_commands() -> Array:
-	return [{"id":"objects/library/query","parameters":{"query":"string?","category":"string?","favorites_only":"bool?"}},{"id":"objects/library/favorite","parameters":{"definition_id":"string","enabled":"bool"}},{"id":"objects/library/select","parameters":{"definition_id":"string"}}]
+	var commands: Array = [{"id":"objects/library/query","parameters":{"query":"string?","category":"string?","favorites_only":"bool?"}},{"id":"objects/library/favorite","parameters":{"definition_id":"string","enabled":"bool"}},{"id":"objects/library/select","parameters":{"definition_id":"string"}},
+		{"id":"objects/select","parameters":{"ids":"id[]"}},{"id":"objects/surface/select","parameters":{"surface_id":"id"}},
+		{"id":"objects/scatter/preview","parameters":Ops.PARAMETERS.scatter},
+		{"id":"objects/scatter/apply","parameters":{"proposal_hash":"sha256"}},{"id":"objects/scatter/discard","parameters":{}}]
+	for operation: String in Ops.PARAMETERS:
+		if operation == "scatter": continue
+		commands.append({"id":"objects/"+("group/state" if operation == "group_state" else operation),"parameters":Ops.PARAMETERS[operation].duplicate(true)})
+	return commands
 
 func ax_command(id: String, parameters: Dictionary) -> Dictionary:
+	if id == "objects/select":
+		if not Preferences._keys(parameters,["ids"]) or not Schema._type(parameters.ids,"strings") or parameters.ids.size() > 1024: return {"ok":false,"code":"arguments_invalid"}
+		var ids: Array[String] = []
+		for value: String in parameters.ids:
+			if value in ids or Ops._find(source().placements,"placement_id",value).is_empty(): return {"ok":false,"code":"object_selection_invalid"}
+			ids.append(value)
+		selected_ids = ids; refresh()
+		return {"ok":true,"selected_ids":selected_ids.duplicate(),"output_hash":Schema.semantic_hash(source())}
+	if id == "objects/surface/select":
+		if not Preferences._keys(parameters,["surface_id"]) or not Schema._type(parameters.surface_id,"id"): return {"ok":false,"code":"arguments_invalid"}
+		for index: int in surfaces.item_count:
+			if surfaces.get_item_metadata(index) != parameters.surface_id: continue
+			discard_preview(); surfaces.select(index); _sync_tool()
+			return {"ok":true,"surface_id":parameters.surface_id,"output_hash":Schema.semantic_hash(source())}
+		return {"ok":false,"code":"source_reference_missing"}
+	if id == "objects/scatter/preview":
+		if not Ops.valid_parameters("scatter",parameters): return {"ok":false,"code":"object_parameters_invalid"}
+		return prepare_scatter(parameters)
+	if id == "objects/scatter/apply":
+		if not Preferences._keys(parameters,["proposal_hash"]) or not Schema._type(parameters.proposal_hash,"hash"): return {"ok":false,"code":"arguments_invalid"}
+		if pending.is_empty(): return {"ok":false,"code":"object_preview_missing"}
+		if parameters.proposal_hash != pending.proposal.output_hash: return {"ok":false,"code":"object_preview_changed"}
+		return apply_preview()
+	if id == "objects/scatter/discard":
+		if not parameters.is_empty(): return {"ok":false,"code":"arguments_invalid"}
+		discard_preview(); return {"ok":true,"output_hash":Schema.semantic_hash(source())}
+	var operation := id.trim_prefix("objects/").replace("group/state","group_state")
+	if operation in Ops.PARAMETERS and operation != "scatter": return apply_operation(operation,parameters)
 	if id == "objects/library/query":
 		for key: Variant in parameters:
 			if key not in ["query","category","favorites_only"]: return {"ok":false,"code":"arguments_invalid"}
@@ -265,23 +300,31 @@ func move_at_fields() -> Dictionary:
 	return apply_operation("translate",{"ids":selected_ids,"delta_xz":[x.value-center.x,z.value-center.y],"snap":snap.value})
 
 func apply_operation(operation: String, params: Dictionary) -> Dictionary:
-	var proposal := Ops.propose(source(),operation,params)
+	var before := source()
+	var proposal := Ops.propose(before,operation,params)
 	if not proposal.ok:
 		status.text = proposal.get("diagnostics",[{}])[0].get("message","Operação recusada.") if not proposal.get("diagnostics",[]).is_empty() else "Operação recusada: "+proposal.get("code","")
 		return proposal
-	if proposal.no_op: return proposal
+	if proposal.no_op: return _identities(proposal,before,proposal.data)
 	var applied: Dictionary = session.apply(proposal.data)
 	status.text = "Alteração aplicada; use Desfazer para reverter." if applied.ok else "A alteração foi recusada."
-	return applied
+	return _identities(applied,before,proposal.data) if applied.ok else applied
 
-func prepare_scatter() -> Dictionary:
-	var params := {"definition_id":selected_definition,"surface_id":surface_id(),"center_xz":[x.value,z.value],"radius":radius.value,"count":int(quantity.value),"spacing":spacing.value,"seed_text":seed_text.text,"snap":snap.value,"exclusions":[]}
+func prepare_scatter(parameters: Dictionary = {}) -> Dictionary:
+	var params: Dictionary = parameters.duplicate(true) if not parameters.is_empty() else {"definition_id":selected_definition,"surface_id":surface_id(),"center_xz":[x.value,z.value],"radius":radius.value,"count":int(quantity.value),"spacing":spacing.value,"seed_text":seed_text.text,"snap":snap.value,"exclusions":[]}
 	var proposal := Ops.propose(source(),"scatter",params)
 	if not proposal.ok:
 		status.text = "A distribuição não cabe: faltam%d objeto(s). Nenhum objeto foi aplicado."%proposal.get("deficit",int(quantity.value)); return proposal
 	pending = {"proposal":proposal,"params":params,"base_hash":Schema.semantic_hash(source())}
 	canvas.set_source(proposal.data,canvas.selected_layer); _sync_tool()
 	status.text = "Prévia com%d novos objetos. Confira a distribuição antes de aplicar."%int(quantity.value)
+	proposal["proposal_hash"] = proposal.output_hash
+	proposal["base_hash"] = pending.base_hash
+	proposal = _identities(proposal,source(),proposal.data)
+	var records: Array = []
+	for item: Dictionary in proposal.data.placements:
+		if item.placement_id in proposal.added_ids: records.append(item.duplicate(true))
+	proposal["preview_objects"] = records
 	return proposal
 
 func apply_preview() -> Dictionary:
@@ -292,7 +335,23 @@ func apply_preview() -> Dictionary:
 	return apply_proposal(repeated)
 
 func apply_proposal(proposal: Dictionary) -> Dictionary:
-	pending = {}; return session.apply(proposal.data)
+	var before := source()
+	pending = {}
+	var applied: Dictionary = session.apply(proposal.data)
+	return _identities(applied,before,proposal.data) if applied.ok else applied
+
+func _identities(result: Dictionary, before: Dictionary, after: Dictionary) -> Dictionary:
+	var old_ids: Dictionary = {}; var new_ids: Dictionary = {}
+	for item: Dictionary in before.placements: old_ids[item.placement_id] = true
+	for item: Dictionary in after.placements: new_ids[item.placement_id] = true
+	var added: Array = []; var removed: Array = []
+	for id: String in new_ids:
+		if not old_ids.has(id): added.append(id)
+	for id: String in old_ids:
+		if not new_ids.has(id): removed.append(id)
+	added.sort(); removed.sort()
+	result.added_ids = added; result.removed_ids = removed
+	return result
 
 func discard_preview() -> void:
 	pending = {}; refresh(); status.text = "Prévia descartada; autoria preservada."

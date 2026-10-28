@@ -1,5 +1,6 @@
 @tool
 extends VBoxContainer
+const Operations = preload("res://scripts/map_authoring/context/context_operations.gd")
 const Context = preload("res://scripts/map_authoring/context/piece_context.gd")
 const Catalog = preload("res://scripts/map_authoring/population/population_catalog.gd")
 var session: RefCounted
@@ -20,8 +21,14 @@ var options: Array = []
 var bounds: Array[SpinBox] = []
 var message: Label
 var _species: Array = []
+var socket_list: ItemList
+var socket_id: LineEdit
+var socket_surface: OptionButton
+var socket_kind: OptionButton
+var socket_position: Array[SpinBox] = []
+const SOCKET_KINDS := ["entrance","exit","objective","thematic_encounter","population","portal"]
 
-static func mount(parent: Control, document_session: RefCounted, terrain_panel: Control) -> void:
+static func mount(parent: Control, document_session: RefCounted, terrain_panel: Control) -> Control:
 	var window := Window.new(); window.title = "Contexto da peça · Biomas e encontros"; window.size = Vector2i(750,820)
 	window.hide()
 	parent.add_child(window); window.close_requested.connect(window.hide)
@@ -30,6 +37,7 @@ static func mount(parent: Control, document_session: RefCounted, terrain_panel: 
 	panel.session = document_session; panel.terrain = terrain_panel; panel.size_flags_horizontal = SIZE_EXPAND_FILL; scroll.add_child(panel)
 	var button := Button.new(); button.text = "Contexto da peça…"; parent.add_child(button)
 	button.pressed.connect(func() -> void: panel.refresh(); window.popup_centered())
+	return panel
 
 func _ready() -> void:
 	label("Uma peça pode servir a vários biomas. Lista de espécies vazia permite todo o catálogo.")
@@ -56,6 +64,18 @@ func _ready() -> void:
 		for option: Dictionary in options: occurrence.add_item(option.label)
 	quest = text("Referência de quest opcional · não cria comportamento de quest")
 	button("Adicionar / atualizar área",save_area); button("Remover área selecionada",remove_area)
+	label("Marcadores da peça · entrada, saída e objetivos")
+	socket_list = ItemList.new(); socket_list.custom_minimum_size.y = 80; add_child(socket_list); socket_list.item_selected.connect(select_socket)
+	socket_id = text("ID do marcador")
+	socket_surface = OptionButton.new(); add_child(socket_surface)
+	socket_kind = OptionButton.new()
+	for caption: String in ["Entrada","Saída","Objetivo","Encontro temático","População","Portal"]: socket_kind.add_item(caption)
+	add_child(socket_kind)
+	var socket_row := HFlowContainer.new(); add_child(socket_row)
+	for caption: String in ["X","Altura","Z"]:
+		var title := Label.new(); title.text = caption; socket_row.add_child(title)
+		var field := SpinBox.new(); field.min_value = -8192; field.max_value = 8192; field.step = 0; field.custom_arrow_step = 1; field.custom_minimum_size.x = 140; socket_row.add_child(field); socket_position.append(field)
+	button("Adicionar / atualizar marcador",save_socket); button("Remover marcador",remove_socket)
 	message = Label.new(); message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; add_child(message)
 
 func label(caption: String) -> void:
@@ -90,15 +110,33 @@ func refresh() -> void:
 	areas.clear(); layer.clear()
 	for entry: Dictionary in data.layers: layer.add_item(entry.name); layer.set_item_metadata(layer.item_count-1,entry.layer_id)
 	for area: Dictionary in context.areas: areas.add_item(area.region_id+(" · reservado" if not area.reserved.is_empty() else " · livre"))
-func apply(data: Dictionary) -> void:
-	var result: Dictionary = session.apply(data)
-	message.text = "Regras salvas. Reimporte a peça nos mapas que devem usar esta revisão." if result.ok else "Não foi possível salvar: "+str(result.get("code","context_invalid"))
-	if result.ok: refresh()
+	var selected_surface: String = socket_surface.get_item_metadata(socket_surface.selected) if socket_surface.selected >= 0 else terrain.selected_layer
+	socket_surface.clear(); socket_list.clear()
+	for entry: Dictionary in data.layers:
+		socket_surface.add_item(entry.name); socket_surface.set_item_metadata(socket_surface.item_count-1,entry.layer_id)
+		if entry.layer_id == selected_surface: socket_surface.select(socket_surface.item_count-1)
+	for entry: Dictionary in data.special_surfaces:
+		socket_surface.add_item("Piso especial · "+entry.surface_id); socket_surface.set_item_metadata(socket_surface.item_count-1,entry.surface_id)
+		if entry.surface_id == selected_surface: socket_surface.select(socket_surface.item_count-1)
+	for entry: Dictionary in data.sockets: socket_list.add_item(entry.socket_id)
+func apply_operation(operation: String, parameters: Dictionary) -> Dictionary:
+	var proposal := Operations.propose(session.document().to_data(),operation,parameters)
+	if not proposal.ok:
+		var messages := {"layer_locked":"Destrave a camada para editar esta área ou marcador.","region_protected":"Este nome pertence a uma região de outro propósito.","socket_invalid":"O marcador precisa estar sobre o piso escolhido.","context_species":"Escolha espécies presentes no catálogo.","context_reserved":"Escolha um encontro presente no catálogo."}
+		message.text = messages.get(proposal.get("code",""),"A operação foi recusada. Confira os parâmetros e os diagnósticos da peça.")
+		return proposal
+	if proposal.no_op: return proposal
+	var applied: Dictionary = session.apply(proposal.data)
+	applied.entity_id = proposal.entity_id
+	message.text = "Regras salvas. Reimporte a peça nos mapas que devem usar esta revisão." if applied.ok else "Não foi possível salvar as regras da peça."
+	if applied.ok: refresh()
+	return applied
+
 func save_piece() -> void:
-	var data: Dictionary = session.document().to_data(); var context: Dictionary = data.get("context",Context.empty()).duplicate(true)
-	context.biome_ids = []
-	for id: String in biomes.text.split(",",false): context.biome_ids.append(id.strip_edges())
-	context.allowed_species = selected(species); context.allow_rare = rare.button_pressed; data.context = context; apply(data)
+	var ids: Array = []
+	for id: String in biomes.text.split(",",false): ids.append(id.strip_edges())
+	apply_operation("rules/set",{"biome_ids":ids,"allowed_species":selected(species),"allow_rare":rare.button_pressed})
+
 func select_area(index: int) -> void:
 	var data: Dictionary = session.document().to_data(); var area: Dictionary = data.context.areas[index]
 	var region := Context._find(data.regions,"region_id",area.region_id)
@@ -115,20 +153,28 @@ func select_area(index: int) -> void:
 			if options[i].species_id == record.species_id and options[i].category == record.category and options[i].origin_id == record.origin_id: occurrence.select(i)
 func save_area() -> void:
 	if layer.selected < 0: message.text = "Crie uma camada antes da área."; return
-	if bounds[0].value >= bounds[2].value or bounds[1].value >= bounds[3].value: message.text = "O retângulo precisa ter largura e comprimento positivos."; return
-	var id := area_id.text.strip_edges(); var data: Dictionary = session.document().to_data(); var context: Dictionary = data.get("context",Context.empty()).duplicate(true)
-	var region := {"region_id":id,"layer_id":layer.get_item_metadata(layer.selected),"polygon_xz":[[bounds[0].value,bounds[1].value],[bounds[2].value,bounds[1].value],[bounds[2].value,bounds[3].value],[bounds[0].value,bounds[3].value]],"purpose":"encounter"}
-	var previous := Context._find(data.regions,"region_id",id)
-	if not previous.is_empty() and previous.purpose != "encounter": message.text = "Este nome pertence a uma região protegida. Escolha outro."; return
-	data.regions = data.regions.filter(func(item: Dictionary) -> bool: return item.region_id != id); data.regions.append(region)
-	var area := {"region_id":id,"allowed_species":selected(area_species),"allow_rare":area_rare.button_pressed,"reserved":[]}
+	var records: Array = []
 	if reserved.button_pressed:
 		if occurrence.selected < 0: message.text = "Selecione um monstro do catálogo."; return
-		var record: Dictionary = options[occurrence.selected].duplicate(true); record.erase("label"); record.erase("weight"); record.encounter_id = encounter.text.strip_edges(); record.quest_id = quest.text.strip_edges(); area.reserved = [record]
-	context.areas = context.areas.filter(func(item: Dictionary) -> bool: return item.region_id != id); context.areas.append(area); data.context = context; apply(data)
+		var record: Dictionary = options[occurrence.selected].duplicate(true); record.erase("label"); record.erase("weight"); record.encounter_id = encounter.text.strip_edges(); record.quest_id = quest.text.strip_edges(); records.append(record)
+	apply_operation("area/upsert",{"region_id":area_id.text.strip_edges(),"layer_id":layer.get_item_metadata(layer.selected),"min_xz":[bounds[0].value,bounds[1].value],"max_xz":[bounds[2].value,bounds[3].value],"allowed_species":selected(area_species),"allow_rare":area_rare.button_pressed,"reserved":records})
+
 func remove_area() -> void:
-	var chosen := areas.get_selected_items(); if chosen.is_empty(): return
-	var data: Dictionary = session.document().to_data(); var id: String = data.context.areas[chosen[0]].region_id
-	data.context.areas.remove_at(chosen[0]); data.regions = data.regions.filter(func(item: Dictionary) -> bool: return item.region_id != id)
-	for grid: Dictionary in data.layers: grid.protected_regions.erase(id)
-	apply(data)
+	var chosen := areas.get_selected_items()
+	if chosen.is_empty(): return
+	apply_operation("area/remove",{"region_id":session.document().to_data().context.areas[chosen[0]].region_id})
+
+func select_socket(index: int) -> void:
+	var value: Dictionary = session.document().to_data().sockets[index]
+	socket_id.text = value.socket_id
+	for i: int in socket_surface.item_count:
+		if socket_surface.get_item_metadata(i) == value.surface_id: socket_surface.select(i)
+	socket_kind.select(SOCKET_KINDS.find(value.kind))
+	for i: int in 3: socket_position[i].value = value.position_xyz[i]
+
+func save_socket() -> void:
+	if socket_surface.selected < 0: message.text = "Escolha o piso do marcador."; return
+	apply_operation("socket/upsert",{"socket_id":socket_id.text.strip_edges(),"surface_id":socket_surface.get_item_metadata(socket_surface.selected),"position_xyz":[socket_position[0].value,socket_position[1].value,socket_position[2].value],"kind":SOCKET_KINDS[socket_kind.selected]})
+
+func remove_socket() -> void:
+	apply_operation("socket/remove",{"socket_id":socket_id.text.strip_edges()})

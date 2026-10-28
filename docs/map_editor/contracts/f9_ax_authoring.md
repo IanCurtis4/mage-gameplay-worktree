@@ -3,7 +3,7 @@
 Escopo autorizado F9-01/07/09/12, meta humana28/10. Código Sol; Terra cria
 mapas somente por comandos AX do editor, sem escrever fontes prontas. Luna
 prepara provas e acompanha execuções congeladas. Primeiro consumidor é o
-[Bosque do Santuário](../delivery/f9_area_design.md), ainda não construído.
+[Bosque do Santuário](../delivery/f9_area_design.md), com dois terrenos criados.
 Base do produtor validado17516a20f959fabdecf0af76777824d379d98f42. Primeira fatia
 implementada:30 checks de autoria e15 nativos, cliente/roundtrip/negativos e
 importação aprovados por impacto. Terra criou duas fontes pelo editor AX; demais
@@ -110,3 +110,41 @@ vazios. Aguarda o worker normal do painel e retorna seu resultado canônico ante
 de continuar (proteção300s), mantendo cancelamento/stale/diagnóstico do produtor.
 Não retorna uma compilação iniciada como se já tivesse sido concluída. Resultados
 por ação omitem cópias integrais data/package; o snapshot final contém a fonte.
+
+
+## Segunda fatia — objetos, contexto e marcadores (base8601af84)
+
+Sol código; Luna testes; Terra acrescentará conteúdo após a validação. Objetos
+parametrizados chamam ObjectPanel.apply_operation/ObjectOperations.propose. IDs:
+objects/place, move, translate, rotate, duplicate, remove, group, ungroup, lock,
+hide e group/state; parâmetros e defaults do produtor, agora com forma fechada.
+objects/select {ids} e objects/surface/select {surface_id} são estado editorial.
+objects/scatter/preview recebe parâmetros de scatter; objects/scatter/apply exige
+proposal_hash, confere base atual e recalcula pela mesma autoridade; discard {}.
+GUI mantém o mesmo fluxo de prévia/confirm e operações. IDs novos retornados em
+added_ids/removed_ids; dados completos continuam nos snapshots, sem copiar fonte
+por ação. Nenhum comando aplica fonte JSON genérica.
+
+ContextOperations propõe sobre snapshot validado. piece/context/rules/set recebe
+biome_ids,allowed_species,allow_rare; preserva áreas. piece/context/area/upsert
+recebe region_id,layer_id,min_xz,max_xz,allowed_species,allow_rare,reserved (0/1
+record completo de PieceContext.RESERVED). Retângulo positivo no intervalo±8192,
+sem sobrescrever região de outro propósito; locks da camada origem/destino.
+area/remove {region_id} limpa as referências de proteção da região removida.
+Seleções de espécies/reservas usam catálogo existente. piece/context/options {}
+expõe as opções passivas para o agente. piece/socket/upsert usa os campos atuais
+SourceSchema.FIELDS.sockets e valida a geometria pelo compilador existente;
+piece/socket/remove {socket_id}. Formulários GUI chamam os mesmos produtores.
+O contexto global pode mudar sem alterar geometria; áreas/marcadores obedecem locks.
+
+Shell anuncia/roteia o contexto de sua peça. O cliente AX amplia screen para
+objects, abrindo a janela real pela ação existente piece/open_objects e roteando
+pela Presentation correspondente; nenhuma instanciação paralela de sessão nem
+bypass de AX. A captura mostra a tela de objetos quando usada por último.
+
+Provas: equivalência GUI/AX com IDs e revisão iguais; catálogo/seleção explícita;
+assentamento em rampa/piso superior; place/move/rotate/duplicate/remove/groups;
+lock/proteção/IDs/argumentos ruins sem histórico parcial; scatter preview/hash/
+stale/discard/undo; regras/áreas/reservas/marcadores/locks, arquivo e reabertura;
+cliente headless/nativo sobre o editor real; regressões de objetos/contexto por
+impacto. Sem encerrar composição/população/patrulha ou F9 por esta fatia.

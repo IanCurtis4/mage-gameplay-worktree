@@ -7,9 +7,36 @@ const Catalog = preload("res://scripts/map_authoring/objects/prop_catalog.gd")
 const Compiler = preload("res://scripts/map_authoring/objects/object_compiler.gd")
 const Metadata = preload("res://scripts/map_authoring/objects/object_schema.gd")
 
+const PARAMETERS := {
+	"place":{"required":{"definition_id":"id","surface_id":"id","position_xz":"v2"},"optional":{"placement_id":"id","rotation_y":"number","snap":"number"}},
+	"move":{"required":{"ids":"strings","position_xz":"v2"},"optional":{"surface_id":"id","snap":"number"}},
+	"translate":{"required":{"ids":"strings","delta_xz":"v2"},"optional":{"snap":"number"}},
+	"rotate":{"required":{"ids":"strings","degrees":"number"},"optional":{"snap":"number"}},
+	"duplicate":{"required":{"ids":"strings","delta_xz":"v2"},"optional":{"snap":"number"}},
+	"remove":{"required":{"ids":"strings"},"optional":{}},
+	"group":{"required":{"ids":"strings","group_id":"id"},"optional":{"name":"string"}},
+	"ungroup":{"required":{"ids":"strings"},"optional":{}},
+	"lock":{"required":{"ids":"strings","value":"bool"},"optional":{}},
+	"hide":{"required":{"ids":"strings","value":"bool"},"optional":{}},
+	"group_state":{"required":{"group_id":"id"},"optional":{"locked":"bool","hidden":"bool"}},
+	"scatter":{"required":{"definition_id":"id","surface_id":"id","center_xz":"v2","radius":"number","count":"int"},"optional":{"spacing":"number","seed_text":"string","snap":"number","exclusions":"array"}}}
+
+static func valid_parameters(operation: String, params: Dictionary) -> bool:
+	if not PARAMETERS.has(operation): return false
+	var fields: Dictionary = PARAMETERS[operation]
+	for key: Variant in params:
+		if not fields.required.has(key) and not fields.optional.has(key): return false
+	for key: String in fields.required:
+		if not params.has(key) or not Schema._type(params[key],fields.required[key]): return false
+	for key: String in fields.optional:
+		if params.has(key) and not Schema._type(params[key],fields.optional[key]): return false
+	return true
+
 static func fail(code: String, id: String = "") -> Dictionary: return Compiler.fail(code,id)
 
 static func propose(source: Dictionary, operation: String, params: Dictionary) -> Dictionary:
+	if not PARAMETERS.has(operation): return fail("object_operation_unknown")
+	if not valid_parameters(operation,params): return fail("object_parameters_invalid")
 	var read := Schema.read(JSON.stringify(source,"",true,true).to_utf8_buffer())
 	if not read.ok or not read.valid: return fail("source_invalid")
 	if operation not in ["place","move","translate","rotate","duplicate","remove","group","ungroup","group_state","lock","hide","scatter"]: return fail("object_operation_unknown")

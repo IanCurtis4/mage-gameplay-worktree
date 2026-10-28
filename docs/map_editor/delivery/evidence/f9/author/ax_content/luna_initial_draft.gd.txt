@@ -1,0 +1,304 @@
+extends SceneTree
+## Headless AX/GUI consumer proof for object, context and socket authoring.
+const Shell = preload("res://addons/ragrpg_map_editor/shell.gd")
+const Presentation = preload("res://addons/ragrpg_map_editor/presentation.gd")
+const Document = preload("res://scripts/map_authoring/document/source_document.gd")
+const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
+const TerrainPanel = preload("res://scripts/map_authoring/terrain/terrain_panel.gd")
+const Terrain = preload("res://scripts/map_authoring/compiler/terrain_compiler.gd")
+const Store = preload("res://scripts/map_authoring/io/source_store.gd")
+const Objects = preload("res://scripts/map_authoring/objects/object_operations.gd")
+const Metadata = preload("res://scripts/map_authoring/objects/object_schema.gd")
+const Context = preload("res://scripts/map_authoring/context/piece_context.gd")
+const ContextPanel = preload("res://scripts/map_authoring/context/context_panel.gd")
+const CandidateFixture = preload("res://tests/map_editor_candidate_test.gd")
+
+const EXPECTED_COUNT := 32
+const OBJECT_COMMANDS: Array[String] = [
+	"objects/place","objects/move","objects/translate","objects/rotate","objects/duplicate",
+	"objects/remove","objects/group","objects/ungroup","objects/lock","objects/hide",
+	"objects/group/state","objects/select","objects/surface/select",
+	"objects/scatter/preview","objects/scatter/apply","objects/scatter/discard"]
+const CONTEXT_COMMANDS: Array[String] = [
+	"piece/context/options","piece/context/rules/set","piece/context/area/upsert",
+	"piece/context/area/remove","piece/socket/upsert","piece/socket/remove"]
+
+var checks: Array[Dictionary] = []
+var gui_shell: Variant
+var ax_shell: Variant
+var gui_panel: Variant
+var ax_panel: Variant
+var gui_objects: Variant
+var ax_objects: Variant
+var gui_piece_presentation: Variant
+var ax_piece_presentation: Variant
+var gui_objects_presentation: Variant
+var ax_objects_presentation: Variant
+
+func _initialize() -> void:
+	run.call_deferred()
+
+func check(id: String, ok: bool, detail: Dictionary = {}) -> void:
+	checks.append({"id":id,"ok":ok,"detail":detail})
+	print("F9_AX_CONTENT_CHECK "+id+" "+str(ok))
+	if not ok and not detail.is_empty(): print("F9_AX_CONTENT_DIAGNOSTIC "+id+" "+JSON.stringify(detail))
+
+func frames(count: int = 2) -> void:
+	for _index: int in count: await process_frame
+
+func run() -> void:
+	Presentation.active_mode = "ux"
+	root.size = Vector2i(1280,900)
+	gui_shell = Shell.new(); gui_shell.name = "GuiContentShell"; root.add_child(gui_shell)
+	ax_shell = Shell.new(); ax_shell.name = "AxContentShell"; root.add_child(ax_shell)
+	await frames(3)
+	gui_piece_presentation = gui_shell.get_node_or_null("AuthoringPresentation")
+	ax_piece_presentation = ax_shell.get_node_or_null("AuthoringPresentation")
+	var initial_source: Dictionary = fixture_source()
+	var gui_loaded: Dictionary = gui_shell.session.replace(initial_source)
+	var ax_loaded: Dictionary = ax_shell.session.replace(initial_source)
+	gui_shell.session.saved_hash = gui_shell.session.document().semantic_hash()
+	ax_shell.session.saved_hash = ax_shell.session.document().semantic_hash()
+	var gui_ux_reject: Dictionary = gui_piece_presentation.ax_invoke("piece/open_objects",{}) if gui_piece_presentation != null else {"ok":false}
+	check("real_shells_load_same_editor_source_and_object_ax_requires_explicit_mode",gui_loaded.ok and ax_loaded.ok and gui_piece_presentation != null and ax_piece_presentation != null and not gui_ux_reject.ok and gui_ux_reject.code == "ax_mode_required")
+	var gui_mode: Dictionary = gui_piece_presentation.set_mode("ax") if gui_piece_presentation != null else {"ok":false}
+	var ax_mode: Dictionary = ax_piece_presentation.set_mode("ax") if ax_piece_presentation != null else {"ok":false}
+	var gui_open: Dictionary = gui_piece_presentation.ax_invoke("piece/open_objects",{}) if gui_piece_presentation != null else {"ok":false}
+	var ax_open: Dictionary = ax_piece_presentation.ax_invoke("piece/open_objects",{}) if ax_piece_presentation != null else {"ok":false}
+	await frames(4)
+	var gui_window: Window = gui_shell.objects_window
+	var ax_window: Window = ax_shell.objects_window
+	gui_panel = gui_window.get_child(0) if gui_window != null and gui_window.get_child_count() > 0 else null
+	ax_panel = ax_window.get_child(0) if ax_window != null and ax_window.get_child_count() > 0 else null
+	gui_objects_presentation = gui_panel.get_node_or_null("AuthoringPresentation") if gui_panel != null else null
+	ax_objects_presentation = ax_panel.get_node_or_null("AuthoringPresentation") if ax_panel != null else null
+	gui_objects = gui_objects_presentation
+	ax_objects = ax_objects_presentation
+	check("piece_action_opens_each_real_objects_window_and_routes_its_own_presentation",gui_mode.ok and ax_mode.ok and gui_open.ok and ax_open.ok and gui_window != null and gui_window.visible and ax_window != null and ax_window.visible and gui_panel != null and ax_panel != null and gui_objects != null and ax_objects != null)
+	var advertised: Array[String] = []
+	if ax_objects_presentation != null:
+		for command: Dictionary in ax_objects_presentation.ax_snapshot().commands: advertised.append(command.id)
+	var piece_advertised: Array[String] = []
+	if ax_piece_presentation != null:
+		for command: Dictionary in ax_piece_presentation.ax_snapshot().commands: piece_advertised.append(command.id)
+	check("object_and_piece_presentations_advertise_the_closed_content_command_surface",OBJECT_COMMANDS.all(func(id: String) -> bool: return id in advertised) and CONTEXT_COMMANDS.all(func(id: String) -> bool: return id in piece_advertised))
+	var initial_hash: String = ax_shell.session.document().semantic_hash()
+	var initial_revision: int = int(ax_shell.session.document().to_data().revision)
+	var query: Dictionary = ax_objects_presentation.ax_invoke("objects/library/query",{}) if ax_objects_presentation != null else {"ok":false}
+	var selected_definition: Dictionary = ax_objects_presentation.ax_invoke("objects/library/select",{"definition_id":"oak_tree"}) if ax_objects_presentation != null else {"ok":false}
+	var select_ids: Dictionary = ax_objects_presentation.ax_invoke("objects/select",{"ids":[]}) if ax_objects_presentation != null else {"ok":false}
+	var select_surface: Dictionary = ax_objects_presentation.ax_invoke("objects/surface/select",{"surface_id":"lower"}) if ax_objects_presentation != null else {"ok":false}
+	check("catalog_lookup_and_editor_selections_do_not_change_source_revision",query.ok and query.entries.size() > 0 and selected_definition.ok and selected_definition.definition_id == "oak_tree" and select_ids.ok and select_surface.ok and ax_panel.surface_id() == "lower" and ax_shell.session.document().semantic_hash() == initial_hash and int(ax_shell.session.document().to_data().revision) == initial_revision and ax_shell.session._undo.is_empty())
+	var place_params: Dictionary = {"placement_id":"content_tree","definition_id":"oak_tree","surface_id":"lower","position_xz":[50.0,150.0],"snap":0.0}
+	var gui_place: Dictionary = gui_panel.apply_operation("place",place_params)
+	var ax_place: Dictionary = ax_objects_presentation.ax_invoke("objects/place",place_params)
+	var gui_place_hash: String = gui_shell.session.document().semantic_hash()
+	var ax_place_hash: String = ax_shell.session.document().semantic_hash()
+	check("gui_and_ax_place_commit_same_explicit_identity_revision_and_hash",gui_place.ok and ax_place.ok and gui_place.entity_id == "content_tree" and ax_place.added_ids == ["content_tree"] and gui_place_hash == ax_place_hash and gui_place_hash == ax_place.output_hash and int(gui_shell.session.document().to_data().revision) == int(ax_shell.session.document().to_data().revision)+0)
+	var move_params: Dictionary = {"ids":["content_tree"],"surface_id":"bridge","position_xz":[100.0,150.0],"snap":0.0}
+	var gui_move: Dictionary = gui_panel.apply_operation("move",move_params)
+	var ax_move: Dictionary = ax_objects_presentation.ax_invoke("objects/move",move_params)
+	var gui_tree: Dictionary = find_placement(gui_shell.session.document().to_data(),"content_tree")
+	var ax_tree: Dictionary = find_placement(ax_shell.session.document().to_data(),"content_tree")
+	check("gui_and_ax_move_reseats_object_on_the_real_upper_bridge_surface",gui_move.ok and ax_move.ok and ax_move.output_hash == ax_shell.session.document().semantic_hash() and gui_shell.session.document().semantic_hash() == ax_shell.session.document().semantic_hash() and gui_tree.surface_id == "bridge" and ax_tree.surface_id == "bridge" and is_equal_approx(float(gui_tree.position_xyz[1]),40.0) and gui_tree.position_xyz == ax_tree.position_xyz)
+	var select_object_hash: String = ax_shell.session.document().semantic_hash()
+	var select_object_revision: int = int(ax_shell.session.document().to_data().revision)
+	var select_object: Dictionary = ax_objects_presentation.ax_invoke("objects/select",{"ids":["content_tree"]})
+	var duplicate_selection: Dictionary = ax_objects_presentation.ax_invoke("objects/select",{"ids":["content_tree","content_tree"]})
+	check("object_selection_targets_real_identity_without_source_mutation_and_rejects_duplicate_ids",select_object.ok and not duplicate_selection.ok and ax_shell.session.document().semantic_hash() == select_object_hash and int(ax_shell.session.document().to_data().revision) == select_object_revision and ax_panel.selected_ids == ["content_tree"])
+	var second_params: Dictionary = {"placement_id":"content_rock","definition_id":"moss_boulder","surface_id":"plateau","position_xz":[250.0,150.0],"snap":0.0}
+	var gui_second: Dictionary = gui_panel.apply_operation("place",second_params)
+	var ax_second: Dictionary = ax_objects_presentation.ax_invoke("objects/place",second_params)
+	var translate_params: Dictionary = {"ids":["content_rock"],"delta_xz":[40.0,0.0],"snap":0.0}
+	var gui_translate: Dictionary = gui_panel.apply_operation("translate",translate_params)
+	var ax_translate: Dictionary = ax_objects_presentation.ax_invoke("objects/translate",translate_params)
+	var rotate_params: Dictionary = {"ids":["content_rock"],"degrees":90.0}
+	var gui_rotate: Dictionary = gui_panel.apply_operation("rotate",rotate_params)
+	var ax_rotate: Dictionary = ax_objects_presentation.ax_invoke("objects/rotate",rotate_params)
+	check("translate_and_rotate_use_same_gui_ax_producers",gui_second.ok and ax_second.ok and gui_translate.ok and ax_translate.ok and gui_rotate.ok and ax_rotate.ok and gui_shell.session.document().semantic_hash() == ax_shell.session.document().semantic_hash() and is_equal_approx(float(find_placement(ax_shell.session.document().to_data(),"content_rock").rotation_y),90.0))
+	var depth_before_duplicate: int = ax_shell.session._undo.size()
+	var duplicated: Dictionary = ax_objects_presentation.ax_invoke("objects/duplicate",{"ids":["content_rock"],"delta_xz":[40.0,0.0],"snap":0.0})
+	var duplicate_ids: Array = duplicated.get("added_ids",[])
+	var duplicated_id: String = str(duplicate_ids[0]) if not duplicate_ids.is_empty() else ""
+	check("duplicate_returns_new_stable_identity_and_one_atomic_history_entry",duplicated.ok and duplicate_ids.size() == 1 and duplicated_id != "content_rock" and find_placement(ax_shell.session.document().to_data(),duplicated_id).size() > 0 and ax_shell.session._undo.size() == depth_before_duplicate+1)
+	var group: Dictionary = ax_objects_presentation.ax_invoke("objects/group",{"ids":["content_rock",duplicated_id],"group_id":"landmark_group","name":"Marcos do bosque"})
+	var group_state: Dictionary = ax_objects_presentation.ax_invoke("objects/group/state",{"group_id":"landmark_group","locked":true,"hidden":true})
+	var group_blocked: Dictionary = ax_objects_presentation.ax_invoke("objects/rotate",{"ids":["content_rock",duplicated_id],"degrees":90.0})
+	var group_unchanged: String = ax_shell.session.document().semantic_hash()
+	var group_unlock: Dictionary = ax_objects_presentation.ax_invoke("objects/group/state",{"group_id":"landmark_group","locked":false,"hidden":false})
+	var ungroup: Dictionary = ax_objects_presentation.ax_invoke("objects/ungroup",{"ids":["content_rock",duplicated_id]})
+	check("group_state_lock_and_visibility_are_atomic_and_members_can_be_ungrouped",group.ok and group_state.ok and Metadata.state(ax_shell.session.document().to_data(),"content_rock").locked and Metadata.state(ax_shell.session.document().to_data(),"content_rock").hidden and not group_blocked.ok and ax_shell.session.document().semantic_hash() == group_unchanged and group_unlock.ok and ungroup.ok and Metadata.state(ax_shell.session.document().to_data(),"content_rock").group_id.is_empty())
+	var lock_tree: Dictionary = ax_objects_presentation.ax_invoke("objects/lock",{"ids":["content_tree"],"value":true})
+	var locked_hash: String = ax_shell.session.document().semantic_hash()
+	var locked_depth: int = ax_shell.session._undo.size()
+	var locked_move: Dictionary = ax_objects_presentation.ax_invoke("objects/move",{"ids":["content_tree"],"surface_id":"lower","position_xz":[50.0,150.0]})
+	var locked_remove: Dictionary = ax_objects_presentation.ax_invoke("objects/remove",{"ids":["content_tree"]})
+	var unlock_tree: Dictionary = ax_objects_presentation.ax_invoke("objects/lock",{"ids":["content_tree"],"value":false})
+	var hide_tree: Dictionary = ax_objects_presentation.ax_invoke("objects/hide",{"ids":["content_tree"],"value":true})
+	var lock_noop_depth: int = ax_shell.session._undo.size()
+	var lock_noop: Dictionary = ax_objects_presentation.ax_invoke("objects/lock",{"ids":["content_tree"],"value":false})
+	var remove_depth: int = ax_shell.session._undo.size()
+	var remove_duplicate: Dictionary = ax_objects_presentation.ax_invoke("objects/remove",{"ids":[duplicated_id]})
+	var undo_remove: Dictionary = ax_piece_presentation.ax_invoke("piece/history/undo",{})
+	var redo_remove: Dictionary = ax_piece_presentation.ax_invoke("piece/history/redo",{})
+	var compiled_hidden: Dictionary = Terrain.compile(ax_shell.session.document().to_data())
+	check("individual_lock_blocks_mutations_without_partial_history_and_hide_stays_authorship_only",lock_tree.ok and not locked_move.ok and locked_move.code == "object_locked" and not locked_remove.ok and ax_shell.session.document().semantic_hash() == locked_hash and ax_shell.session._undo.size() == locked_depth and unlock_tree.ok and hide_tree.ok and Metadata.state(ax_shell.session.document().to_data(),"content_tree").hidden and compiled_hidden.ok and compiled_hidden.package.objects.size() == 3)
+	check("no_op_metadata_preserves_history_and_remove_reports_ids_with_undo_redo",lock_noop.ok and lock_noop.get("no_op",false) and ax_shell.session._undo.size() == lock_noop_depth and remove_duplicate.ok and remove_duplicate.removed_ids == [duplicated_id] and ax_shell.session._undo.size() == remove_depth+1 and undo_remove.ok and not find_placement(ax_shell.session.document().to_data(),duplicated_id).is_empty() and redo_remove.ok and find_placement(ax_shell.session.document().to_data(),duplicated_id).is_empty())
+	var malformed_before: String = ax_shell.session.document().semantic_hash()
+	var malformed_depth: int = ax_shell.session._undo.size()
+	var malformed: Dictionary = ax_objects_presentation.ax_invoke("objects/place",{"placement_id":"bad","definition_id":"oak_tree","surface_id":"lower","position_xz":[200,300],"unexpected":true})
+	var duplicate_id: Dictionary = ax_objects_presentation.ax_invoke("objects/place",place_params)
+	var invalid_selection: Dictionary = ax_objects_presentation.ax_invoke("objects/remove",{"ids":["missing_object"]})
+	check("unknown_parameters_duplicate_ids_and_missing_selection_fail_atomically",not malformed.ok and not duplicate_id.ok and not invalid_selection.ok and ax_shell.session.document().semantic_hash() == malformed_before and ax_shell.session._undo.size() == malformed_depth)
+	var duplicate_selection_mutation: Dictionary = ax_objects_presentation.ax_invoke("objects/remove",{"ids":["content_rock","content_rock"]})
+	check("duplicate_mutation_selection_is_rejected_without_partial_history",not duplicate_selection_mutation.ok and ax_shell.session.document().semantic_hash() == malformed_before and ax_shell.session._undo.size() == malformed_depth)
+	var terrain_presentation: Variant = ax_shell.terrain.get_node_or_null("AuthoringPresentation")
+	var lock_plateau: Dictionary = terrain_presentation.ax_invoke("terrain/layer/lock",{"layer_id":"plateau","locked":true}) if terrain_presentation != null else {"ok":false}
+	var locked_destination: Dictionary = ax_objects_presentation.ax_invoke("objects/move",{"ids":["content_tree"],"surface_id":"plateau","position_xz":[250.0,150.0]})
+	var lock_lower: Dictionary = terrain_presentation.ax_invoke("terrain/layer/lock",{"layer_id":"lower","locked":true}) if terrain_presentation != null else {"ok":false}
+	var locked_origin: Dictionary = ax_objects_presentation.ax_invoke("objects/move",{"ids":["content_tree"],"surface_id":"bridge","position_xz":[100.0,150.0]})
+	var locked_place: Dictionary = ax_objects_presentation.ax_invoke("objects/place",{"placement_id":"locked_layer_tree","definition_id":"woodland_shrub","surface_id":"lower","position_xz":[50.0,100.0]})
+	check("source_and_destination_layer_locks_reject_object_transfer_and_placement",lock_plateau.ok and not locked_destination.ok and lock_lower.ok and not locked_origin.ok and not locked_place.ok and find_placement(ax_shell.session.document().to_data(),"locked_layer_tree").is_empty())
+	var unlock_layers_one: Dictionary = terrain_presentation.ax_invoke("terrain/layer/lock",{"layer_id":"lower","locked":false}) if terrain_presentation != null else {"ok":false}
+	var unlock_layers_two: Dictionary = terrain_presentation.ax_invoke("terrain/layer/lock",{"layer_id":"plateau","locked":false}) if terrain_presentation != null else {"ok":false}
+	var protection: Dictionary = terrain_presentation.ax_invoke("terrain/layer/protection",{"layer_id":"lower","region_ids":["protected_plot"]}) if terrain_presentation != null else {"ok":false}
+	var protected_hash: String = ax_shell.session.document().semantic_hash()
+	var protected_place: Dictionary = ax_objects_presentation.ax_invoke("objects/place",{"placement_id":"inside_protected_plot","definition_id":"woodland_shrub","surface_id":"lower","position_xz":[50.0,50.0]})
+	check("protected_region_prevents_object_placement_without_source_or_history_change",unlock_layers_one.ok and unlock_layers_two.ok and protection.ok and not protected_place.ok and protected_place.code == "object_protected" and ax_shell.session.document().semantic_hash() == protected_hash)
+	var locked_area_layer: Dictionary = terrain_presentation.ax_invoke("terrain/layer/lock",{"layer_id":"lower","locked":true}) if terrain_presentation != null else {"ok":false}
+	var locked_area_before: String = ax_shell.session.document().semantic_hash()
+	var locked_area_result: Dictionary = ax_piece_presentation.ax_invoke("piece/context/area/upsert",{"region_id":"locked_area","layer_id":"lower","min_xz":[1.0,1.0],"max_xz":[9.0,9.0],"allowed_species":[],"allow_rare":false,"reserved":[]}) if ax_piece_presentation != null else {"ok":false}
+	var unlock_area_layer: Dictionary = terrain_presentation.ax_invoke("terrain/layer/lock",{"layer_id":"lower","locked":false}) if terrain_presentation != null else {"ok":false}
+	check("area_creation_rejects_locked_destination_layer_atomically",locked_area_layer.ok and not locked_area_result.ok and locked_area_result.code == "layer_locked" and ax_shell.session.document().semantic_hash() == locked_area_before and unlock_area_layer.ok)
+	var context_options: Dictionary = ax_piece_presentation.ax_invoke("piece/context/options",{}) if ax_piece_presentation != null else {"ok":false}
+	var context_entries: Array = context_options.get("options",[])
+	var first_option: Dictionary = context_entries[0].duplicate(true) if not context_entries.is_empty() else {}
+	var context_species: String = str(first_option.get("species_id",""))
+	check("context_options_are_passive_and_come_from_the_existing_occurrence_catalog",context_options.ok and not context_entries.is_empty() and not context_species.is_empty() and first_option.has_all(["species_id","category","origin_id"]))
+	var rules_params: Dictionary = {"biome_ids":["forest"],"allowed_species":[context_species],"allow_rare":true}
+	var gui_context_panel: Variant = find_script(gui_shell,ContextPanel)
+	var gui_rules: Dictionary = gui_context_panel.apply_operation("rules/set",rules_params) if gui_context_panel != null else {"ok":false}
+	var ax_rules: Dictionary = ax_piece_presentation.ax_invoke("piece/context/rules/set",rules_params) if ax_piece_presentation != null else {"ok":false}
+	check("context_rules_gui_and_ax_share_the_same_atomic_source_apply",gui_rules.ok and ax_rules.ok and gui_shell.session.document().semantic_hash() == ax_shell.session.document().semantic_hash() and ax_shell.session.document().to_data().context.biome_ids == ["forest"] and ax_shell.session.document().to_data().context.allowed_species == [context_species])
+	var reservation: Dictionary = first_option.duplicate(true); reservation.erase("label"); reservation.erase("weight"); reservation["encounter_id"] = "woods_guardian"; reservation["quest_id"] = "find_guardian"
+	var area_params: Dictionary = {"region_id":"encounter_plot","layer_id":"lower","min_xz":[5.0,5.0],"max_xz":[15.0,15.0],"allowed_species":[context_species],"allow_rare":false,"reserved":[reservation]}
+	var gui_area: Dictionary = gui_context_panel.apply_operation("area/upsert",area_params) if gui_context_panel != null else {"ok":false}
+	var ax_area: Dictionary = ax_piece_presentation.ax_invoke("piece/context/area/upsert",area_params) if ax_piece_presentation != null else {"ok":false}
+	var area_data: Dictionary = ax_shell.session.document().to_data()
+	var area_index: int = find_record_index(area_data.context.areas,"region_id","encounter_plot")
+	check("gui_and_ax_area_upsert_preserves_catalog_reservation_and_creates_encounter_region",gui_area.ok and ax_area.ok and gui_shell.session.document().semantic_hash() == ax_shell.session.document().semantic_hash() and area_index >= 0 and area_data.context.areas[area_index].reserved == [reservation] and not find_record(area_data.regions,"region_id","encounter_plot").is_empty())
+	var options_after_area: Dictionary = ax_piece_presentation.ax_invoke("piece/context/rules/set",rules_params)
+	var area_survived_rules: bool = find_record_index(ax_shell.session.document().to_data().context.areas,"region_id","encounter_plot") >= 0
+	var bad_area_hash: String = ax_shell.session.document().semantic_hash()
+	var missing_area: Dictionary = ax_piece_presentation.ax_invoke("piece/context/area/upsert",{"region_id":"missing_area","layer_id":"missing_layer","min_xz":[1.0,1.0],"max_xz":[10.0,10.0],"allowed_species":[],"allow_rare":false,"reserved":[]})
+	var collision_area: Dictionary = ax_piece_presentation.ax_invoke("piece/context/area/upsert",{"region_id":"protected_plot","layer_id":"lower","min_xz":[20.0,20.0],"max_xz":[40.0,40.0],"allowed_species":[],"allow_rare":false,"reserved":[]})
+	var malformed_context: Dictionary = ax_piece_presentation.ax_invoke("piece/context/rules/set",{"biome_ids":["forest"],"allowed_species":["missing_species"],"allow_rare":true})
+	check("rules_preserve_areas_and_invalid_area_or_catalog_values_fail_without_partial_change",options_after_area.ok and area_survived_rules and not missing_area.ok and not collision_area.ok and not malformed_context.ok and ax_shell.session.document().semantic_hash() == bad_area_hash)
+	var bad_reservations: Dictionary = ax_piece_presentation.ax_invoke("piece/context/area/upsert",{"region_id":"bad_reservation","layer_id":"lower","min_xz":[30.0,30.0],"max_xz":[40.0,40.0],"allowed_species":[],"allow_rare":false,"reserved":[reservation,reservation]}) if ax_piece_presentation != null else {"ok":false}
+	var bad_socket_kind: Dictionary = ax_piece_presentation.ax_invoke("piece/socket/upsert",{"socket_id":"bad_kind","surface_id":"lower","position_xyz":[50.0,0.0,100.0],"kind":"unknown"}) if ax_piece_presentation != null else {"ok":false}
+	check("context_rejects_multiple_reservations_and_unknown_socket_kind_atomically",not bad_reservations.ok and not bad_socket_kind.ok and ax_shell.session.document().semantic_hash() == bad_area_hash)
+	var protect_area: Dictionary = terrain_presentation.ax_invoke("terrain/layer/protection",{"layer_id":"lower","region_ids":["encounter_plot"]}) if terrain_presentation != null else {"ok":false}
+	var lock_area_source: Dictionary = terrain_presentation.ax_invoke("terrain/layer/lock",{"layer_id":"lower","locked":true}) if terrain_presentation != null else {"ok":false}
+	var locked_remove_area_hash: String = ax_shell.session.document().semantic_hash()
+	var locked_remove_area: Dictionary = ax_piece_presentation.ax_invoke("piece/context/area/remove",{"region_id":"encounter_plot"}) if ax_piece_presentation != null else {"ok":false}
+	var unlock_area_source: Dictionary = terrain_presentation.ax_invoke("terrain/layer/lock",{"layer_id":"lower","locked":false}) if terrain_presentation != null else {"ok":false}
+	check("area_removal_respects_locked_source_layer_without_partial_change",lock_area_source.ok and not locked_remove_area.ok and locked_remove_area.code == "layer_locked" and ax_shell.session.document().semantic_hash() == locked_remove_area_hash and unlock_area_source.ok)
+	var remove_area: Dictionary = ax_piece_presentation.ax_invoke("piece/context/area/remove",{"region_id":"encounter_plot"}) if ax_piece_presentation != null else {"ok":false}
+	var removed_area_data: Dictionary = ax_shell.session.document().to_data()
+	check("area_remove_clears_region_and_existing_protection_reference",protect_area.ok and remove_area.ok and find_record_index(removed_area_data.context.areas,"region_id","encounter_plot") < 0 and find_record_index(removed_area_data.regions,"region_id","encounter_plot") < 0 and "encounter_plot" not in removed_area_data.layers[0].protected_regions)
+	var socket: Dictionary = {"socket_id":"ax_objective","surface_id":"lower","position_xyz":[50.0,0.0,100.0],"kind":"objective"}
+	var socket_upsert: Dictionary = ax_piece_presentation.ax_invoke("piece/socket/upsert",socket) if ax_piece_presentation != null else {"ok":false}
+	var socket_compile: Dictionary = Terrain.compile(ax_shell.session.document().to_data())
+	var socket_bad_hash: String = ax_shell.session.document().semantic_hash()
+	var bad_socket: Dictionary = ax_piece_presentation.ax_invoke("piece/socket/upsert",{"socket_id":"bad_socket","surface_id":"lower","position_xyz":[9000.0,0.0,9000.0],"kind":"objective"}) if ax_piece_presentation != null else {"ok":false}
+	var socket_remove: Dictionary = ax_piece_presentation.ax_invoke("piece/socket/remove",{"socket_id":"ax_objective"}) if ax_piece_presentation != null else {"ok":false}
+	check("socket_upsert_compiles_on_real_surface_and_bad_socket_is_atomic_before_removal",socket_upsert.ok and socket_compile.ok and not bad_socket.ok and ax_shell.session.document().semantic_hash() != socket_bad_hash and socket_remove.ok and find_record(ax_shell.session.document().to_data().sockets,"socket_id","ax_objective").is_empty())
+	var socket_restore: Dictionary = ax_piece_presentation.ax_invoke("piece/socket/upsert",socket)
+	var socket_lock: Dictionary = terrain_presentation.ax_invoke("terrain/layer/lock",{"layer_id":"lower","locked":true}) if terrain_presentation != null else {"ok":false}
+	var locked_socket_hash: String = ax_shell.session.document().semantic_hash()
+	var locked_socket_remove: Dictionary = ax_piece_presentation.ax_invoke("piece/socket/remove",{"socket_id":"ax_objective"}) if ax_piece_presentation != null else {"ok":false}
+	var socket_unlock: Dictionary = terrain_presentation.ax_invoke("terrain/layer/lock",{"layer_id":"lower","locked":false}) if terrain_presentation != null else {"ok":false}
+	check("socket_mutations_respect_surface_locks_without_partial_source_changes",socket_restore.ok and socket_lock.ok and not locked_socket_remove.ok and locked_socket_remove.code == "layer_locked" and ax_shell.session.document().semantic_hash() == locked_socket_hash and socket_unlock.ok)
+	var scatter_shell: Variant = Shell.new(); scatter_shell.name = "ScatterContentShell"; root.add_child(scatter_shell)
+	await frames(2)
+	var scatter_piece: Variant = scatter_shell.get_node_or_null("AuthoringPresentation")
+	var scatter_new: Dictionary = scatter_piece.ax_invoke("piece/document/new",{"document_id":"ax_scatter_piece","name":"Prévia determinística","confirm_discard":true}) if scatter_piece != null else {"ok":false}
+	var flat_source: Dictionary = Document.empty("ax_scatter_piece")
+	flat_source.layers = [{"layer_id":"scatter_floor","name":"Piso amplo","origin_xz":[0.0,0.0],"sample_spacing":800.0,"columns":2,"rows":2,"heights":[0.0,0.0,0.0,0.0],"material_masks":{},"locked":false,"protected_regions":[]}]
+	var scatter_replaced: Dictionary = scatter_shell.session.replace(flat_source)
+	var scatter_open: Dictionary = scatter_piece.ax_invoke("piece/open_objects",{}) if scatter_piece != null else {"ok":false}
+	await frames(3)
+	var scatter_objects: Variant = scatter_shell.objects_window.get_child(0).get_node_or_null("AuthoringPresentation") if scatter_shell.objects_window != null else null
+	var scatter_mode: Dictionary = scatter_objects.set_mode("ax") if scatter_objects != null else {"ok":false}
+	var scatter_base: String = scatter_shell.session.document().semantic_hash()
+	var scatter_depth: int = scatter_shell.session._undo.size()
+	var scatter_params: Dictionary = {"definition_id":"woodland_shrub","surface_id":"scatter_floor","center_xz":[400.0,400.0],"radius":250.0,"count":8,"spacing":12.0,"seed_text":"-9223372036854775808","exclusions":[]}
+	var preview: Dictionary = scatter_objects.ax_invoke("objects/scatter/preview",scatter_params) if scatter_objects != null else {"ok":false}
+	var preview_ids: Array = preview.get("added_ids",[])
+	var preview_hash: String = str(preview.get("proposal_hash",""))
+	var preview_is_pure: bool = scatter_shell.session.document().semantic_hash() == scatter_base and scatter_shell.session._undo.size() == scatter_depth and scatter_shell.objects_window.get_child(0).canvas.source.placements.size() == 8
+	var discard: Dictionary = scatter_objects.ax_invoke("objects/scatter/discard",{}) if scatter_objects != null else {"ok":false}
+	var discard_pure: bool = scatter_shell.session.document().semantic_hash() == scatter_base and scatter_shell.session._undo.size() == scatter_depth and scatter_shell.objects_window.get_child(0).canvas.source.placements.is_empty()
+	check("scatter_preview_is_deterministic_visual_only_and_discard_has_no_source_history",scatter_new.ok and scatter_replaced.ok and scatter_open.ok and scatter_mode.ok and preview.ok and preview_ids.size() == 8 and not preview_hash.is_empty() and preview_is_pure and discard.ok and discard_pure)
+	var second_preview: Dictionary = scatter_objects.ax_invoke("objects/scatter/preview",scatter_params) if scatter_objects != null else {"ok":false}
+	var second_hash: String = str(second_preview.get("proposal_hash",""))
+	var scatter_apply: Dictionary = scatter_objects.ax_invoke("objects/scatter/apply",{"proposal_hash":second_hash}) if scatter_objects != null else {"ok":false}
+	var applied_hash: String = scatter_shell.session.document().semantic_hash()
+	var undo_scatter: Dictionary = scatter_piece.ax_invoke("piece/history/undo",{}) if scatter_piece != null else {"ok":false}
+	var stale_preview: Dictionary = scatter_objects.ax_invoke("objects/scatter/preview",scatter_params) if scatter_objects != null else {"ok":false}
+	var unrelated_add: Dictionary = scatter_objects.ax_invoke("objects/place",{"placement_id":"changes_scatter_base","definition_id":"oak_tree","surface_id":"scatter_floor","position_xz":[40.0,40.0]}) if scatter_objects != null else {"ok":false}
+	var stale_apply: Dictionary = scatter_objects.ax_invoke("objects/scatter/apply",{"proposal_hash":str(stale_preview.get("proposal_hash",""))}) if scatter_objects != null else {"ok":false}
+	check("scatter_apply_returns_ids_undo_restores_source_and_stale_hash_is_rejected",second_preview.ok and second_hash == preview_hash and scatter_apply.ok and scatter_apply.added_ids.size() == 8 and scatter_shell.session.document().to_data().placements.size() == 8 and undo_scatter.ok and scatter_shell.session.document().semantic_hash() == scatter_base and stale_preview.ok and unrelated_add.ok and not stale_apply.ok and stale_apply.code == "stale_source" and scatter_shell.session.document().to_data().placements.size() == 1 and scatter_shell.session.document().semantic_hash() != applied_hash)
+	var save_root: String = ProjectSettings.globalize_path("res://.godot/f9_ax_content")
+	DirAccess.make_dir_recursive_absolute(save_root)
+	var source_path: String = save_root.path_join("content_roundtrip_"+str(Time.get_ticks_usec())+".json")
+	var before_save: String = ax_shell.session.document().semantic_hash()
+	var saved: Dictionary = ax_piece_presentation.ax_invoke("piece/document/save",{"path":source_path}) if ax_piece_presentation != null else {"ok":false}
+	var loaded: Dictionary = Store.load_source(source_path)
+	var changed: Dictionary = ax_piece_presentation.ax_invoke("piece/document/name",{"name":"Changed after save"}) if ax_piece_presentation != null else {"ok":false}
+	var reopened: Dictionary = ax_piece_presentation.ax_invoke("piece/document/open",{"path":source_path,"confirm_discard":true}) if ax_piece_presentation != null else {"ok":false}
+	check("canonical_save_and_reopen_preserve_objects_context_reservation_socket_and_source_hash",saved.ok and loaded.ok and changed.ok and reopened.ok and reopened.output_hash == before_save and ax_shell.session.document().semantic_hash() == before_save and Store.disk_hash(source_path) == loaded.byte_hash and not find_record(ax_shell.session.document().to_data().sockets,"socket_id","ax_objective").is_empty())
+	finish()
+
+func both_object_operation(operation: String, parameters: Dictionary) -> Dictionary:
+	var gui_result: Dictionary = gui_panel.apply_operation(operation,parameters)
+	var ax_result: Dictionary = ax_objects_presentation.ax_invoke("objects/"+operation,parameters)
+	return {"gui":gui_result,"ax":ax_result}
+
+func fixture_source() -> Dictionary:
+	var source: Dictionary = TerrainPanel.sample_source(Document.empty("ax_content_fixture"))
+	source.regions = [{"region_id":"protected_plot","layer_id":"lower","polygon_xz":[[20.0,20.0],[80.0,20.0],[80.0,80.0],[20.0,80.0]],"purpose":"protected"}]
+	source.layers[0].protected_regions = ["protected_plot"]
+	return source
+
+
+func find_placement(source: Dictionary, placement_id: String) -> Dictionary:
+	for placement: Dictionary in source.get("placements",[]):
+		if placement.placement_id == placement_id: return placement
+	return {}
+
+func find_record(records: Array, key: String, id: String) -> Dictionary:
+	for record: Dictionary in records:
+		if str(record.get(key,"")) == id: return record
+	return {}
+
+func find_record_index(records: Array, key: String, id: String) -> int:
+	for index: int in records.size():
+		if str(records[index].get(key,"")) == id: return index
+	return -1
+
+func find_script(parent: Node, script: Script) -> Variant:
+	if parent.get_script() == script: return parent
+	for child: Node in parent.get_children():
+		var found: Variant = find_script(child,script)
+		if found != null: return found
+	return null
+
+func finish() -> void:
+	Presentation.active_mode = "ux"
+	var ok: bool = checks.size() == EXPECTED_COUNT and checks.all(func(item: Dictionary) -> bool: return item.ok)
+	var hashes := {"gui":gui_shell.session.document().semantic_hash() if is_instance_valid(gui_shell) else "","ax":ax_shell.session.document().semantic_hash() if is_instance_valid(ax_shell) else ""}
+	for shell: Variant in [gui_shell,ax_shell]:
+		if is_instance_valid(shell): shell.free()
+	print("F9_AX_CONTENT_RESULT "+JSON.stringify({"ok":ok,"count":checks.size(),"expected_count":EXPECTED_COUNT,"checks":checks,"source_hashes":hashes}))
+	quit(0 if ok else 1)
