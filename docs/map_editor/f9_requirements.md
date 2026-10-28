@@ -85,3 +85,12 @@ de02/11/12. [Diagnóstico](contracts/f9_snapshot_density.md); limites/corpo/amos
 preservados. Bosque do Santuário é desenho Terra, não mapa entregue. Meta humana
 renovada cobre TODO F9; Sol código/Terra autoria AX/Luna testes. Permanecem todos
 os pendentes; próxima autoridadeAX em contrato próprio, sem empurrar paraF10.
+
+
+Checkpoint21: snapshot denso dentro dos4MiB préDEFLATE(3.594.152B), Density33 e
+Native20 +4oficiais PASS. Colina real foi percorrida com corpo20x32; não fecha área
+final nem todos os itens02/11/12. Novo aberto04/11: pick emXZ780/780 retorna
+ambiguous_surface após restauração correta do estado. Resolver emenda de faces
+sem deslocar o alvo ou enfraquecer múltiplos pisos/oclusão. App.open50s/início30s
+continuam pendência10, apesar de pedido44ms/frames mediana17,4ms nesta única rota.
+Matriz completa permanece exigida; ver conferência de snapshot_encoding no recibo.

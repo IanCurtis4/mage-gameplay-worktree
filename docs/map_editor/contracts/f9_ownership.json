@@ -2573,6 +2573,18 @@
       "owner": "Luna F9 — dense gameplay continuation proof",
       "previous_owner": "new test; draft outside input freeze first",
       "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/snapshot_encoding/consolidation.md",
+      "owner": "Sol F9 — compact snapshot integration evidence",
+      "previous_owner": "new author receipt",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/snapshot_encoding/dense_profile_metadata.json",
+      "owner": "Sol F9 — compact snapshot integration evidence",
+      "previous_owner": "new author receipt",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -2583,7 +2595,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "f9_snapshot_encoding_implementation_and_density_tests_authoring_no_freeze",
+    "state": "f9_compact_snapshot_validated_gameplay_walk_pass_resume_pick_ambiguity_open_fixture_released",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -2750,6 +2762,28 @@
         193
       ],
       "real_gameplay": "FAIL snapshot_too_large before picking/walk",
+      "fixture_released": true
+    },
+    "compact_snapshot": {
+      "runtime_head": "44a0b36439de030ab48a64aff2a26adc856fbadd",
+      "test_head": "fac5db2f228d1f5bf11cf31a17e0b89709e730d8",
+      "density": 33,
+      "native": 20,
+      "resume": {
+        "emitted": 9,
+        "passed": 7,
+        "expected": 13,
+        "error_code": "ambiguous_surface"
+      },
+      "official": [
+        "e07_f6_snapshot_test:40",
+        "e07_f3_snapshot_test:50",
+        "e07_f3_continuation_test:2743/30 scenarios",
+        "e07_f3_lifecycle_test:90"
+      ],
+      "checkpoint_bytes": 3594152,
+      "limit_bytes": 4194304,
+      "report_sha256": "5192E3832E7A44E9458FE076CF6C77DFCDD7EF4F758EA9B4E8EC97E0776D8983",
       "fixture_released": true
     }
   },

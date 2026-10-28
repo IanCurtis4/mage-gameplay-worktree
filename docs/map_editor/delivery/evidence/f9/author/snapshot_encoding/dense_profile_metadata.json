@@ -1,0 +1,16 @@
+{
+  "source_head": "44a0b36439de030ab48a64aff2a26adc856fbadd",
+  "scope": "disposable test profile only; metadata after native walk and suspend",
+  "profile_path": ".godot\\verification\\e07_f1\\fixture_project\\.godot\\map_authoring\\play\\sessions\\8c010985fe04154b212ead28\\profile\\profile.json",
+  "profile_sha256": "1ea90d73bd7fd73da9a7dfc110f7ea8e183ecd5582b4a3c8c1889148e09bb303",
+  "checkpoints": [
+    {
+      "lifecycle": "suspended",
+      "format": 2,
+      "byte_count": 3594152,
+      "sha256": "2e49aa6f9dd809fcd3c512fca0eeed78ccf55d339352034ee935257de5c914f8",
+      "compressed_sha256": "8fea27867a8ebf1fd1e4032ab89185e4332c2941d1596f933496174c3d146978"
+    }
+  ],
+  "limit_bytes": 4194304
+}

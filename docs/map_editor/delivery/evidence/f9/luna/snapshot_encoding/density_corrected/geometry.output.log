@@ -1,0 +1,21 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_SNAPSHOT_DENSITY_CHECK real_player_actor_run_state_acquires_cut true
+F9_SNAPSHOT_DENSITY_CHECK one_thousand_cell_metadata_graph_captures_under_four_mib true
+F9_SNAPSHOT_DENSITY_CHECK capture_preserves_source_metadata_graph true
+F9_SNAPSHOT_DENSITY_CHECK snapshot_payload_validates true
+F9_SNAPSHOT_DENSITY_CHECK capture_metrics_separate_encoded_and_logical_sizes true
+F9_SNAPSHOT_DENSITY_CHECK structural_encoding_is_uncompressed_and_within_budget true
+F9_SNAPSHOT_DENSITY_CHECK structural_encoding_round_trips_exact_logical_bytes true
+F9_SNAPSHOT_DENSITY_CHECK structural_encoding_rejects_dangling_container_reference true
+F9_SNAPSHOT_DENSITY_CHECK codec_writes_transport_format_two_with_encoded_byte_count true
+F9_SNAPSHOT_DENSITY_CHECK codec_v2_pack_unpack_preserves_exact_var_bytes true
+F9_SNAPSHOT_DENSITY_CHECK legacy_format_one_deflate_bytes_still_restore true
+F9_SNAPSHOT_DENSITY_CHECK transport_format_three_is_rejected true
+F9_SNAPSHOT_DENSITY_CHECK truncated_transport_payload_is_rejected true
+ERROR: Condition "err != 1" is true. Returning: -1
+   at: decompress (core/io/compression.cpp:196)
+   GDScript backtrace (most recent call first):
+       [0] validate_record (res://scripts/core/expedition/persistence/expedition_checkpoint_codec.gd:29)
+       [1] unpack (res://scripts/core/expedition/persistence/expedition_checkpoint_codec.gd:50)
+       [2] _run (res://tests/map_editor_snapshot_density_test.gd:84)
