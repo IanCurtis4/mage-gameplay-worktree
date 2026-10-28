@@ -74,14 +74,17 @@ func run() -> void:
 	check("move_settles_on_explicit_upper_surface",a.ok and b.ok and same_sources() and placement("tree").surface_id == "bridge" and placement("tree").position_xyz[1] == 40,{"ax":b.get("code")})
 	params = {"placement_id":"rock","definition_id":"moss_boulder","surface_id":"plateau","position_xz":[250,50],"snap":0}
 	a = gui_panel.apply_operation("place",params); b = invoke("objects/place",params)
-	var translated: Dictionary = invoke("objects/translate",{"ids":["rock"],"delta_xz":[0,40],"snap":0})
-	gui_panel.apply_operation("translate",{"ids":["rock"],"delta_xz":[0,40],"snap":0})
+	var translated: Dictionary = invoke("objects/translate",{"ids":["rock"],"delta_xz":[0,10],"snap":0})
+	gui_panel.apply_operation("translate",{"ids":["rock"],"delta_xz":[0,10],"snap":0})
 	var rotated: Dictionary = invoke("objects/rotate",{"ids":["rock"],"degrees":90})
 	gui_panel.apply_operation("rotate",{"ids":["rock"],"degrees":90})
-	check("translate_rotate_share_gui_producer",a.ok and b.ok and translated.ok and rotated.ok and same_sources() and placement("rock").position_xyz[2] == 90 and placement("rock").rotation_y == 90,{"translate":translated.get("code"),"rotate":rotated.get("code")})
+	check("translate_rotate_share_gui_producer",a.ok and b.ok and translated.ok and rotated.ok and same_sources() and placement("rock").position_xyz[2] == 60 and placement("rock").rotation_y == 90,{"translate":translated.get("code"),"rotate":rotated.get("code")})
+	before = hash_value(); var copy_depth := depth()
+	var outside_copy: Dictionary = invoke("objects/duplicate",{"ids":["rock"],"delta_xz":[0,110],"snap":0})
+	var outside_rejected: bool = not outside_copy.ok and outside_copy.code == "object_support_missing" and hash_value() == before and depth() == copy_depth
 	var copied: Dictionary = invoke("objects/duplicate",{"ids":["rock"],"delta_xz":[0,80],"snap":0})
 	var duplicate_id := str(copied.get("added_ids",[""])[0]) if copied.ok else ""
-	check("duplicate_returns_new_identity",copied.ok and not duplicate_id.is_empty() and duplicate_id != "rock" and not placement(duplicate_id).is_empty(),copied.get("diagnostics",{}))
+	check("duplicate_rejects_outside_support_and_returns_new_identity",outside_rejected and copied.ok and not duplicate_id.is_empty() and duplicate_id != "rock" and not placement(duplicate_id).is_empty(),copied.get("diagnostics",{}))
 	var group: Dictionary = invoke("objects/group",{"ids":["rock",duplicate_id],"group_id":"landmarks","name":"Marcos"})
 	var group_lock: Dictionary = invoke("objects/group/state",{"group_id":"landmarks","locked":true,"hidden":true})
 	before = hash_value(); var history := depth()
@@ -147,7 +150,7 @@ func run() -> void:
 	var denied_area_move: Dictionary = invoke("piece/context/area/upsert",denied_move)
 	check("area_source_layer_lock_prevents_remove_and_transfer",not denied_area.ok and not denied_area_move.ok and hash_value() == before and depth() == history)
 	invoke("terrain/layer/lock",{"layer_id":"lower","locked":false})
-	var moved_area: Dictionary = area.duplicate(true); moved_area.layer_id = "plateau"; moved_area.min_xz = [210,10]; moved_area.max_xz = [230,40]
+	var moved_area: Dictionary = area.duplicate(true); moved_area.layer_id = "plateau"; moved_area.min_xz = [205,155]; moved_area.max_xz = [225,175]
 	var moved: Dictionary = invoke("piece/context/area/upsert",moved_area)
 	check("area_transfer_preserves_protection_on_new_owner",moved.ok and "arena" not in source().layers[0].protected_regions and "arena" in source().layers[2].protected_regions)
 	var deleted_area: Dictionary = invoke("piece/context/area/remove",{"region_id":"arena"})
