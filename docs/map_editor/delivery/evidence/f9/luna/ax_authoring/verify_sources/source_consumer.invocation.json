@@ -1,0 +1,78 @@
+{
+  "executable": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+  "arguments": [
+    "--path",
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+    "--headless",
+    "--log-file",
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\luna\\ax_authoring\\verify_sources\\source_consumer.engine.log",
+    "--script",
+    "res://.godot/f9_terra_source_consumer_test.gd"
+  ],
+  "working_directory": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+  "environment": {
+    "APPDATA": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile\\Roaming",
+    "LOCALAPPDATA": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile\\Local"
+  },
+  "exit_code": 1,
+  "timed_out": false,
+  "elapsed_seconds": 5.701,
+  "source_file_sha256": {
+    "sanctuary_woods_clearing.source.json": "65a26754c437695d7e7d60e93980c187371fddeec4fb71f78323104dbb55ced5",
+    "sanctuary_woods_overpass.source.json": "d0071096addfefcefad1f1df849c3977064a741b4ed1446ffaf50a3f25a95d7e"
+  },
+  "result": {
+    "body_profile": {
+      "height": 32.0,
+      "radius": 20.0
+    },
+    "count": 1,
+    "expected_count": 2,
+    "ok": false,
+    "records": [
+      {
+        "bytes_sha256": "65a26754c437695d7e7d60e93980c187371fddeec4fb71f78323104dbb55ced5",
+        "detail": {
+          "code": "opening_unlinked",
+          "diagnostics": [
+            {
+              "code": "opening_unlinked",
+              "entity_id": "terrain/a_east",
+              "field": "composition",
+              "location": "(1280.0, 0.0, 640.0)",
+              "message": "Esta abertura nÃ£o tem destino. Vincule-a ou remova-a na peÃ§a.",
+              "severity": "error",
+              "suggestion": "Selecione a regiÃ£o indicada e corrija a fonte."
+            }
+          ],
+          "ok": false
+        },
+        "document_id": "sanctuary_woods_clearing",
+        "expected_source_hash": "93a5d99c3110ec054fca292b3efe3778b4d4745003f35390ade9c3d6d307ba38",
+        "expected_terrain_package_hash": "aa762ada7df22b49c8ece77f95c9104791e8fc8138adecbdadd545651838bc12",
+        "file": "sanctuary_woods_clearing.source.json",
+        "map_compile_code": "opening_unlinked",
+        "map_compile_metrics": {},
+        "map_compile_ok": false,
+        "map_compile_source_hash": "",
+        "map_hash_matches_ephemeral_source": false,
+        "map_source_hash": "9c14a3f5f87842f75b2724391d6b4e533cc1a5e5dd217d4618251c2e31c0fdf2",
+        "ok": false,
+        "source_code": "",
+        "source_hash": "93a5d99c3110ec054fca292b3efe3778b4d4745003f35390ade9c3d6d307ba38",
+        "source_hash_matches_clean_terra": true,
+        "source_ok": true,
+        "terrain_compile_code": "",
+        "terrain_compile_ok": true,
+        "terrain_hash_matches_clean_terra": true,
+        "terrain_package_hash": "aa762ada7df22b49c8ece77f95c9104791e8fc8138adecbdadd545651838bc12",
+        "timings_ms": {
+          "map_compile": 227.945,
+          "source_load": 27.349,
+          "terrain_compile": 204.091
+        }
+      }
+    ],
+    "scope": "source validation, terrain/map compilation and Candidate.prepare only; no App/gameplay, movement, walk or FPS claim; map compositions are ephemeral test inputs and are not persisted"
+  }
+}

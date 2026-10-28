@@ -1,2 +1,5 @@
 *.history_2026_10_17.md -text
 skills/** text eol=lf
+
+# Terrain dependency digests use exact import bytes across native checkouts.
+assets/art/map_authoring/*.png.import text eol=lf

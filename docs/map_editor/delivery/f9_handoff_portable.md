@@ -1,5 +1,66 @@
 # RagRPG — handoff portátil de F9
 
+<!-- f9-current-ax -->
+## Checkpoint vigente — 28/10: autoria AX integrada e dois terrenos criados
+
+Candidato de código: `17516a20f959fabdecf0af76777824d379d98f42`.
+Candidato com os dados Terra: `0acc94ef6530d560eb1695de699b40b53dd8cdb2`.
+Branch `codex/map-editor-f9`; checkout
+`C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5`.
+A meta é TODO F9, ainda em execução. F10 permanece separado.
+
+Sol implementou comandos AX de peça/grade/camada/ponte/conector com os mesmos
+operadores da GUI, histórico, proteção, confirmação e Store. O cliente real
+`res://scripts/map_authoring/agent/ax_session.gd` aceita ações passivas, aguarda
+compilação e retorna estado/hashes/diagnósticos. Não recebe fonte pronta.
+Objetos, contexto, composição, população e patrulha ainda precisam dos seus
+comandos parametrizados para Terra completar o conteúdo.
+
+Luna: Authoring30 PASS, Native15 PASS, CLI nativo10/10, headless/novo processo/
+negativos PASS; `verify.ps1 editor_import` PASS, inclusive após integrar os dados.
+Sol conferiu hashes e imagens. Os dois terrenos foram criados por Terra via AX
+(8/27 ações), salvos, reabertos e recompilados sem erros; replay byte a byte igual.
+Fonte A: `data/map_authoring/sanctuary_woods_clearing.source.json` (15.116B).
+Fonte B: `data/map_authoring/sanctuary_woods_overpass.source.json` (8.142B).
+Receitas, hashes completos e imagens: `docs/map_editor/delivery/evidence/f9/terra/area_terrain/clean_replay/`.
+
+Prova dirigida do consumidor: os dois dados ligados pela emenda prevista passaram
+Maps.compile, Candidate.create e Candidate.prepare, com raio20/altura32 e gate
+de todos os apoios acessíveis. Foi composição efêmera de TESTE; não é composição
+de produto criada por AX. Não houve App, caminhada, combate ou medição de FPS.
+Custo de uma execução: terrenos229/97ms, mapa15,518s e preparo18,914s (navegação
+14,715/17,324s). São fases canônicas de preparação, não fluidez durante o jogo.
+Continuam pendência de responsividade/cancelamento; não otimizar duração de suíte.
+
+Fixture ÚNICA e obrigatória em qualquer --path:
+`C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project`.
+Engine `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/godot/Godot_v4.7.2-stable_win64.exe`.
+NÃO executar o cliente contra o checkout não importado: a primeira autoria Terra
+fez isso e emitiu erros de classe; foi preservada e substituída por replays limpos.
+Logs com Script/Parse/ERROR não aprovam nada, mesmo com exit0/ok no JSON.
+UIDs já versionadas foram geradas pelo engine. Nenhum processo segue ativo.
+
+A política LF em `.gitattributes` uniformiza os quatro *.png.import de terreno.
+Os bytes deste checkout agora são iguais aos blobs Git e à fixture testada, sem
+alterar configurações de textura. Antes, CRLF/LF mudava o digest do pacote.
+Em checkout antigo, conferir/normalizar somente esses quatro metadados antes de
+comparar pacotes; não adulterar hash de pacote/perfil antigo. Ainda faltam bundle
+de assets/ambiente limpo/export e os demais requisitos F9-09/11.
+
+Próximo: expor ObjectOperations/contexto e composição/população/patrulha por AX;
+Terra coloca conteúdo e monta área pelo editor; Luna prova ida/volta e gameplay.
+Síntese/regeneração regional, reconciliação, recuperação, fluidez e release seguem
+obrigatórios em F9. Não fechar a meta por esta fatia nem mover requisitos a F10.
+Source/fixture estão sincronizados pelo Import09; há2020 inputs primários nesse
+manifesto (imports têm recibos próprios). Sem mudanças no playtest/save pessoal,
+master, push ou aceite humano. Resumos/documentação posteriores não alteram dados.
+
+Detalhes: `docs/map_editor/delivery/evidence/f9/author/ax_authoring/consolidation.md`;
+consumidor: `docs/map_editor/delivery/evidence/f9/luna/ax_authoring/verify_sources/consumer_02/source_consumer_report.md`.
+Os blocos abaixo são históricos e não substituem este estado vigente.
+<!-- /f9-current-ax -->
+
+
 ## Vigente28/10 — emenda corrigida e retomada13 PASS
 
 Código58350cab28da7053eba9151d448911abd5b32a5c; tudo executado na fixture única.

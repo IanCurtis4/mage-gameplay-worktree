@@ -64,19 +64,29 @@ permanecem para diagnóstico. As fontes idênticas passaram roundtrip limpo.
 
 ## Limites e continuidade
 
-Peças ainda sem props, composição, encontros/patrulhas/interação ou movimento real
-20x32. Próximo: comandos AX desses produtores e prova de acesso de todos os apoios
-antes de preencher conteúdo. F9 integral continua aberto, incluindo síntese/
+Peças ainda sem props, composição de produto, encontros/patrulhas/interação ou
+movimento real. A prova adicional no candidato de dados0acc94ef ligou os dois
+terrenos numa composição efêmera de TESTE: Maps.compile, Candidate.create e
+Candidate.prepare PASS, perfil real20x32, todos os apoios acessíveis. A tentativa
+de isolar uma peça com abertura solta foi preservada como negativo opening_unlinked.
+Luna supervisionou; Sol conferiu resultado/código e fontes. Não houve App/caminhada.
+Custos de uma execução: mapa15,518s (navegação14,715s) e preparo18,914s (navegação
+17,324s); terreno229/97ms. Isso expõe custo de preparação canônica, sem provar FPS.
+Verify editor_import PASS também após Import09 sincronizar os dados (2020 inputs
+primários conferidos por Sol, sem diferenças). Próximo: APIs AX dos demais produtores. F9 integral continua aberto, incluindo síntese/
 regeneração/reconciliação, assets, recuperação/fluidez/release e área jogável.
 Nenhuma medição nova de desempenho in-game; o código do jogo não mudou nesta fatia.
 As provas anteriores de T01/retomada continuam somente no seu escopo.
 
-Há uma limitação concreta a resolver em assets/intercâmbio: grass_tile.png.import
-e earth_tile.png.import têm bytes diferentes no source e na fixture. O compilador
-inclui esses arquivos no digest das dependências; isso explica a diferença entre
-pacotes dos dois projetos. Eles ficam fora do manifesto principal legado do runner.
-Import09 sincroniza as novas fontes, não corrige essa política de imports. Não
-alegar equivalência de pacote/ambiente limpo nem fechar F9-09/11 por esta entrega.
+A comparação de dependências encontrou CRLF no source e LF na fixture para
+os imports Grama/Terra. O texto/configurações e os blobs Git já eram iguais após
+normalizar EOL. `.gitattributes` agora exige LF nos quatro imports de terreno e
+os bytes locais foram alinhados aos blobs Git e à fixture aprovada. Nenhum shader,
+PNG, UID ou parâmetro de textura mudou. Recibos import_metadata_differences.json
+e import_metadata_normalization.json preservam antes/depois. Em checkouts antigos,
+conferir essa normalização ao preparar candidato/playtest, sem mexer no save.
+Isso elimina a divergência observada deste candidato; bundle de assets, ambiente
+limpo e export ainda não foram entregues. Não fechar F9-09/11 por esta correção.
 
 Falhas preservadas e corrigidas: tipagem dos testes; comparação de arrays int/float
 no produtor; fixture positiva desconectada (agora também negativo); argv/points do
@@ -85,3 +95,10 @@ Nenhum oráculo de geometria/corpo/folga, cap de snapshot ou expectativa de suce
 foi reduzido para ocultar falha. Testes de outros domínios não foram repetidos.
 
 Sem master/push/aceite humano/F10 ou atualização do playtest/save pessoal.
+
+
+## Referências da consolidação
+
+- [Supervisão Luna e histórico de falhas](../../luna/ax_authoring/report.md).
+- [Consumo dos dois terrenos e perfil20x32](../../luna/ax_authoring/verify_sources/consumer_02/source_consumer_report.md).
+- [Autoria Terra, receitas e roundtrip](../../terra/area_terrain/clean_replay/report.md).

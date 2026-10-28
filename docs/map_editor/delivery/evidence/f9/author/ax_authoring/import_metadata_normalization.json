@@ -1,0 +1,34 @@
+[
+  {
+    "path": "assets/art/map_authoring/grass_tile.png.import",
+    "original_worktree_sha256": "52d8f47ded3002ea1d92cfa75521439d8956dc230663decde72a711514d846cc",
+    "current_sha256": "5a080026fe6e9c15a3039019ecb24607eaa4e76e00a4694b3563610d194df66b",
+    "equals_git_blob": true,
+    "equals_fixture": true,
+    "semantic_settings_unchanged": true
+  },
+  {
+    "path": "assets/art/map_authoring/earth_tile.png.import",
+    "original_worktree_sha256": "94ce39a14b28c3653e62de11b039131a11a717221cff947118d029dbb21bd34d",
+    "current_sha256": "8a7fb5de02a0d061c99e6c88e875b8f5582eb83be134bb0941f6e4863c2bb117",
+    "equals_git_blob": true,
+    "equals_fixture": true,
+    "semantic_settings_unchanged": true
+  },
+  {
+    "path": "assets/art/map_authoring/sand_tile.png.import",
+    "original_worktree_sha256": "cf7ed2a0c76756b2504132f520640a252829165a1dad4f7ef10389de7f577a7e",
+    "current_sha256": "cf7ed2a0c76756b2504132f520640a252829165a1dad4f7ef10389de7f577a7e",
+    "equals_git_blob": true,
+    "equals_fixture": true,
+    "semantic_settings_unchanged": true
+  },
+  {
+    "path": "assets/art/map_authoring/cliff_tile.png.import",
+    "original_worktree_sha256": "fe0ef36b6f3f791b157b36a735f217bf0dfd2b49a2d4ec36a415f692b32f312d",
+    "current_sha256": "fe0ef36b6f3f791b157b36a735f217bf0dfd2b49a2d4ec36a415f692b32f312d",
+    "equals_git_blob": true,
+    "equals_fixture": true,
+    "semantic_settings_unchanged": true
+  }
+]

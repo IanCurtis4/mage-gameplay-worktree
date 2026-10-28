@@ -2693,6 +2693,12 @@
       "owner": "Terra F9 area",
       "previous_owner": "new map content; only AX authoring after producer validation",
       "base_sha256": null
+    },
+    {
+      "path": ".gitattributes",
+      "owner": "Sol F9",
+      "previous_owner": "repository integration metadata; terrain import checkout normalization",
+      "base_sha256": "2163907a8f15fc285bd37bc9a715c606d7809620600250abbda065f94fbef809"
     }
   ],
   "read_only_shared": [
@@ -2912,7 +2918,7 @@
       "roles": "Luna executed all stages; usage limit interrupted agents after execution; Sol independently inspected outputs/hashes and wrote final consolidation"
     },
     "ax_authoring": {
-      "state": "producer_validated_content_integration",
+      "state": "validated_increment_integrated",
       "base": "0b80ca6",
       "runtime_owner": "Sol F9",
       "tests_owner": "Luna F9 AX",
@@ -2944,7 +2950,13 @@
         2
       ],
       "gameplay_for_new_sources": "not yet exercised",
-      "import_metadata_limit": "grass/earth .import differ source vs fixture; asset portability remains open"
+      "import_metadata_limit": "four terrain import bytes normalized LF, equal Git blobs/tested fixture; asset bundles/clean-env export remain open",
+      "data_head": "0acc94ef6530d560eb1695de699b40b53dd8cdb2",
+      "fixture_released": true,
+      "primary_import09_inputs": 2020,
+      "body_consumer": "two linked sources; Maps/Candidate/prepare20x32/all supports PASS; no live walking",
+      "body_prepare_ms": 18914.186,
+      "map_compile_ms": 15518.45
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

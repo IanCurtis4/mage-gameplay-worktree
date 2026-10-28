@@ -1,0 +1,20 @@
+[
+  {
+    "path": "assets/art/map_authoring/grass_tile.png.import",
+    "source_sha256": "52d8f47ded3002ea1d92cfa75521439d8956dc230663decde72a711514d846cc",
+    "fixture_sha256": "5a080026fe6e9c15a3039019ecb24607eaa4e76e00a4694b3563610d194df66b",
+    "diff": [],
+    "equal_after_crlf_to_lf": true,
+    "source_crlf_count": 40,
+    "fixture_crlf_count": 0
+  },
+  {
+    "path": "assets/art/map_authoring/earth_tile.png.import",
+    "source_sha256": "94ce39a14b28c3653e62de11b039131a11a717221cff947118d029dbb21bd34d",
+    "fixture_sha256": "8a7fb5de02a0d061c99e6c88e875b8f5582eb83be134bb0941f6e4863c2bb117",
+    "diff": [],
+    "equal_after_crlf_to_lf": true,
+    "source_crlf_count": 40,
+    "fixture_crlf_count": 0
+  }
+]

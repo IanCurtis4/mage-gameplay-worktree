@@ -1,0 +1,91 @@
+extends SceneTree
+const Store = preload("res://scripts/map_authoring/io/source_store.gd")
+const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
+const Terrain = preload("res://scripts/map_authoring/compiler/terrain_compiler.gd")
+const MapDocument = preload("res://scripts/map_authoring/composition/map_document.gd")
+const Maps = preload("res://scripts/map_authoring/composition/map_compiler.gd")
+const Candidate = preload("res://scripts/map_authoring/preview/gameplay_candidate.gd")
+const Phase = preload("res://data/expedition/phases/ruined_crossing.gd")
+const INPUTS: Array[Dictionary] = [
+	{"file":"sanctuary_woods_clearing.source.json","id":"sanctuary_woods_clearing","source_hash":"93a5d99c3110ec054fca292b3efe3778b4d4745003f35390ade9c3d6d307ba38","terrain_package_hash":"aa762ada7df22b49c8ece77f95c9104791e8fc8138adecbdadd545651838bc12","bytes_sha256":"65a26754c437695d7e7d60e93980c187371fddeec4fb71f78323104dbb55ced5"},
+	{"file":"sanctuary_woods_overpass.source.json","id":"sanctuary_woods_overpass","source_hash":"d0d0f5ba826a167facc6f703ef0e85d97ba74b1dcb75270de834f294c02ed94a","terrain_package_hash":"dd2da0720ecc3757d42378e5be0e97865fba979d637517f1513bf666ee490a88","bytes_sha256":"d0071096addfefcefad1f1df849c3977064a741b4ed1446ffaf50a3f25a95d7e"}
+]
+var records: Array[Dictionary] = []
+func _initialize() -> void:
+	run.call_deferred()
+func run() -> void:
+	var overall_ok: bool = true
+	var profile_owner: Variant = Phase.input("map_authoring_preview")
+	var body_profile: Dictionary = profile_owner.traversal.to_data()
+	var body_radius: float = float(body_profile.get("radius",-1.0))
+	var body_height: float = float(body_profile.get("height",-1.0))
+	for expected: Dictionary in INPUTS:
+		var row: Dictionary = {"file":expected.file,"document_id":expected.id,"ok":false,"timings_ms":{}}
+		var source_path: String = "res://data/map_authoring/"+expected.file
+		var disk_started: int = Time.get_ticks_usec()
+		var loaded: Dictionary = Store.load_source(source_path)
+		row.timings_ms.source_load = float(Time.get_ticks_usec()-disk_started)/1000.0
+		row.source_ok = bool(loaded.get("ok",false)) and bool(loaded.get("valid",false))
+		row.source_code = str(loaded.get("code",""))
+		if not row.source_ok:
+			row.detail = loaded
+			records.append(row); overall_ok = false; break
+		var source: Dictionary = loaded.data
+		row.bytes_sha256 = Store.disk_hash(source_path)
+		row.source_hash = str(loaded.get("output_hash",""))
+		row.expected_source_hash = str(expected.source_hash)
+		row.source_hash_matches_clean_terra = row.source_hash == expected.source_hash and row.bytes_sha256 == expected.bytes_sha256
+		var terrain_started: int = Time.get_ticks_usec()
+		var terrain_built: Dictionary = Terrain.compile(source)
+		row.timings_ms.terrain_compile = float(Time.get_ticks_usec()-terrain_started)/1000.0
+		row.terrain_compile_ok = bool(terrain_built.get("ok",false))
+		row.terrain_compile_code = str(terrain_built.get("code",""))
+		row.terrain_package_hash = str(terrain_built.get("output_hash",""))
+		row.expected_terrain_package_hash = str(expected.terrain_package_hash)
+		row.terrain_hash_matches_clean_terra = row.terrain_package_hash == expected.terrain_package_hash
+		if not row.source_hash_matches_clean_terra or not row.terrain_compile_ok or not row.terrain_hash_matches_clean_terra:
+			row.detail = terrain_built
+			records.append(row); overall_ok = false; break
+		var source_piece_hash: String = Schema.semantic_hash(source)
+		var map_source: Dictionary = MapDocument.empty(str(expected.id)+"_consumer_probe")
+		map_source.name = "Probe consumidor de dados · " + str(expected.id)
+		map_source.pieces = [{"piece_hash":source_piece_hash,"source":source.duplicate(true)}]
+		map_source.instances = [{"instance_id":"terrain","piece_hash":source_piece_hash,"position_xyz":[0,0,0],"rotation_quarters":0}]
+		var map_started: int = Time.get_ticks_usec()
+		var map_built: Dictionary = Maps.compile(map_source)
+		row.timings_ms.map_compile = float(Time.get_ticks_usec()-map_started)/1000.0
+		row.map_compile_ok = bool(map_built.get("ok",false))
+		row.map_compile_code = str(map_built.get("code",""))
+		row.map_compile_source_hash = str(map_built.get("package",{}).get("source_hash",""))
+		row.map_source_hash = MapDocument.hash_source(map_source)
+		row.map_hash_matches_ephemeral_source = row.map_compile_source_hash == row.map_source_hash
+		row.map_compile_metrics = map_built.get("metrics",{})
+		if not row.map_compile_ok:
+			row.detail = map_built
+			records.append(row); overall_ok = false; break
+		var candidate_started: int = Time.get_ticks_usec()
+		var created: Dictionary = Candidate.create("map",map_built.package,map_built.package.source_hash)
+		row.timings_ms.candidate_create = float(Time.get_ticks_usec()-candidate_started)/1000.0
+		row.candidate_create_ok = bool(created.get("ok",false))
+		row.candidate_hash = str(created.get("candidate",{}).get("candidate_hash",""))
+		if not row.candidate_create_ok:
+			row.detail = created
+			records.append(row); overall_ok = false; break
+		var prepare_started: int = Time.get_ticks_usec()
+		var prepared: Dictionary = Candidate.prepare(created.candidate)
+		row.timings_ms.candidate_prepare = float(Time.get_ticks_usec()-prepare_started)/1000.0
+		row.candidate_prepare_ok = bool(prepared.get("ok",false))
+		row.candidate_prepare_code = str(prepared.get("code",""))
+		row.candidate_prepare_metrics = prepared.get("metrics",{})
+		row.body_profile = {"radius":body_radius,"height":body_height}
+		row.body_profile_matches_contract = body_radius == 20.0 and body_height == 32.0
+		row.support_accessibility_gate = "Candidate.prepare success requires a safe entrance, every compiled map surface to have a real-body walkable point, and complete reachable connectivity for the body profile."
+		row.detail = {} if row.candidate_prepare_ok else prepared
+		row.ok = row.source_hash_matches_clean_terra and row.terrain_compile_ok and row.terrain_hash_matches_clean_terra and row.map_compile_ok and row.map_hash_matches_ephemeral_source and row.candidate_create_ok and row.candidate_prepare_ok and row.body_profile_matches_contract
+		records.append(row)
+		if not row.ok: overall_ok = false; break
+	var result: Dictionary = {"ok":overall_ok and records.size() == INPUTS.size(),"count":records.size(),"expected_count":INPUTS.size(),"body_profile":{"radius":body_radius,"height":body_height},"records":records,"scope":"source validation, terrain/map compilation and Candidate.prepare only; no App/gameplay, movement, walk or FPS claim; map compositions are ephemeral test inputs and are not persisted"}
+	print("F9_TERRA_SOURCE_CONSUMER_RESULT "+JSON.stringify(result))
+	quit(0 if result.ok else 1)
+
+

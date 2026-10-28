@@ -1,0 +1,163 @@
+{
+  "head_expected": "0acc94ef6530d560eb1695de699b40b53dd8cdb2",
+  "executable": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+  "arguments": [
+    "--path",
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+    "--headless",
+    "--log-file",
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\luna\\ax_authoring\\verify_sources\\consumer_02\\source_consumer.engine.log",
+    "--script",
+    "res://.godot/f9_terra_source_consumer_test_02.gd"
+  ],
+  "working_directory": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+  "environment": {
+    "APPDATA": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile\\Roaming",
+    "LOCALAPPDATA": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile\\Local"
+  },
+  "exit_code": 0,
+  "timed_out": false,
+  "elapsed_seconds": 42.021,
+  "source_file_sha256": {
+    "sanctuary_woods_clearing.source.json": "65a26754c437695d7e7d60e93980c187371fddeec4fb71f78323104dbb55ced5",
+    "sanctuary_woods_overpass.source.json": "d0071096addfefcefad1f1df849c3977064a741b4ed1446ffaf50a3f25a95d7e"
+  },
+  "result": {
+    "body_profile": {
+      "height": 32.0,
+      "radius": 20.0
+    },
+    "count": 2,
+    "expected_count": 2,
+    "isolated_opening_negative": {
+      "actual_code": "opening_unlinked",
+      "diagnostics": [
+        {
+          "code": "opening_unlinked",
+          "entity_id": "terrain/a_east",
+          "field": "composition",
+          "location": "(1280.0, 0.0, 640.0)",
+          "message": "Esta abertura nÃ£o tem destino. Vincule-a ou remova-a na peÃ§a.",
+          "severity": "error",
+          "suggestion": "Selecione a regiÃ£o indicada e corrija a fonte."
+        }
+      ],
+      "duration_ms": 257.701,
+      "expected_rejection": "opening_unlinked",
+      "ok": true
+    },
+    "linked_composition": {
+      "all_compiled_supports_accessible_for_real_body": true,
+      "body_profile": {
+        "height": 32.0,
+        "radius": 20.0
+      },
+      "body_profile_matches_contract": true,
+      "candidate_code": "",
+      "candidate_create_ok": true,
+      "candidate_hash": "64c2c676cfa22f89536d758ecaab3db7aa11c504d83cbd9c72c6908303b6cb4a",
+      "candidate_prepare_code": "",
+      "candidate_prepare_detail": {},
+      "candidate_prepare_metrics": {
+        "connections": 131,
+        "direct_pairs": 166,
+        "edge_tests": 14560,
+        "elapsed_ms": 17323.562,
+        "endpoint_checks": 262,
+        "expansions": 14894,
+        "landmark_checks": 44657,
+        "offset_checks": 382644,
+        "operations": 1,
+        "pair_candidates": 319200,
+        "peak_storage_bytes": 86177140,
+        "portal_checks": 3448,
+        "portal_pairs": 21746,
+        "reconstruction_steps": 222,
+        "snapshot_storage_units": 3907104,
+        "states": 7487,
+        "storage_bytes": 85986684,
+        "terminal_checks": 84,
+        "witness_points": 2937,
+        "witness_segments": 2769
+      },
+      "candidate_prepare_ok": true,
+      "map_compile_code": "",
+      "map_compile_metrics": {
+        "elapsed_ms": 15491.989,
+        "navigation": {
+          "connections": 131,
+          "direct_pairs": 166,
+          "edge_tests": 14616,
+          "elapsed_ms": 14714.929,
+          "endpoint_checks": 262,
+          "expansions": 14918,
+          "landmark_checks": 44657,
+          "offset_checks": 382976,
+          "operations": 1,
+          "pair_candidates": 311736,
+          "peak_storage_bytes": 86323144,
+          "portal_checks": 3406,
+          "portal_pairs": 21746,
+          "reconstruction_steps": 204,
+          "snapshot_storage_units": 3900408,
+          "states": 7485,
+          "storage_bytes": 86132688,
+          "terminal_checks": 84,
+          "witness_points": 2903,
+          "witness_segments": 2735
+        }
+      },
+      "map_compile_ok": true,
+      "map_hash_matches_ephemeral_source": true,
+      "map_package_hash": "e99ea76bb86094425bb27d0512de7a837705f62ab23a1fa9d4013382615c9fa2",
+      "map_package_source_hash": "84bc976cf8d44c237806656aa461cd6097426a999c56f2193d319f834272e2ae",
+      "map_source_hash": "84bc976cf8d44c237806656aa461cd6097426a999c56f2193d319f834272e2ae",
+      "ok": true,
+      "timings_ms": {
+        "candidate_create": 787.834,
+        "candidate_prepare": 18914.186,
+        "map_compile": 15518.45
+      }
+    },
+    "ok": true,
+    "records": [
+      {
+        "bytes_sha256": "65a26754c437695d7e7d60e93980c187371fddeec4fb71f78323104dbb55ced5",
+        "document_id": "sanctuary_woods_clearing",
+        "file": "sanctuary_woods_clearing.source.json",
+        "ok": true,
+        "source_code": "",
+        "source_hash": "93a5d99c3110ec054fca292b3efe3778b4d4745003f35390ade9c3d6d307ba38",
+        "source_hash_matches_clean_terra": true,
+        "source_ok": true,
+        "terrain_compile_code": "",
+        "terrain_compile_ok": true,
+        "terrain_hash_matches_clean_terra": true,
+        "terrain_package_hash": "aa762ada7df22b49c8ece77f95c9104791e8fc8138adecbdadd545651838bc12",
+        "timings_ms": {
+          "source_load": 26.571,
+          "terrain_compile": 228.647
+        }
+      },
+      {
+        "bytes_sha256": "d0071096addfefcefad1f1df849c3977064a741b4ed1446ffaf50a3f25a95d7e",
+        "document_id": "sanctuary_woods_overpass",
+        "file": "sanctuary_woods_overpass.source.json",
+        "ok": true,
+        "source_code": "",
+        "source_hash": "d0d0f5ba826a167facc6f703ef0e85d97ba74b1dcb75270de834f294c02ed94a",
+        "source_hash_matches_clean_terra": true,
+        "source_ok": true,
+        "terrain_compile_code": "",
+        "terrain_compile_ok": true,
+        "terrain_hash_matches_clean_terra": true,
+        "terrain_package_hash": "dd2da0720ecc3757d42378e5be0e97865fba979d637517f1513bf666ee490a88",
+        "timings_ms": {
+          "source_load": 13.341,
+          "terrain_compile": 97.39
+        }
+      }
+    ],
+    "scope": "Source validation, terrain/map compilation, candidate and real-body access preparation only. No App/gameplay/movement/walk/FPS claim. Test map was ephemeral and not persisted."
+  }
+}

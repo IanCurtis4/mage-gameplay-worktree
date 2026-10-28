@@ -102,3 +102,13 @@ Processo novo restaura estado e aceita nova caminhada/re-suspend3.589.468B<4MiB.
 Fecha o bloqueio concreto04/11 do checkpoint21; não remove demais requisitos.
 Carregamento≈49s/início31s continuam pendência10. PróximoAXparametrizado e
 criaçãoTerra noeditorAX; mapa/áreafinal/síntese/intercâmbio/release ainda exigidos.
+
+
+Checkpoint23: peça/terreno AX e cliente aprovados17516a20; duas fontes Terra
+integradas0acc94ef, replay8/27 e abertura/compilação iguais. Consumidor ligado
+PASS para20x32 e acesso a todos os apoios, sem App/caminhada ou composição AX
+persistida.30/15 checks, CLI e importação documentados no recibo. Arte/props,
+contexto, composição/população/patrulha AX e prova de gameplay continuam exigidos.
+Política LF elimina divergência de bytes dos imports de terreno deste candidato;
+assets em bundle/ambiente limpo/export não foram fechados. Custos15,5s/18,9s de
+mapa/preparo são canônicos, ainda pendência10, sem inferência de FPS.
