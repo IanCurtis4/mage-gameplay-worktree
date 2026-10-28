@@ -1,0 +1,16 @@
+extends SceneTree
+const O = preload("res://scripts/map_authoring/terrain/terrain_operations.gd")
+const P = preload("res://scripts/map_authoring/terrain/terrain_panel.gd")
+const D = preload("res://scripts/map_authoring/document/source_document.gd")
+const C = preload("res://scripts/map_authoring/compiler/terrain_compiler.gd")
+func _initialize() -> void:
+	var base := P.sample_source(D.empty("ax_gui_shared_piece"))
+	var distant := O.propose(base,"grid/create",{"layer_id":"shared_ax_grid","name":"Camada 4","origin_xz":[5000,5000],"columns":5,"rows":5,"sample_spacing":32,"height":0})
+	var distant_compile := C.compile(distant.data)
+	var connected := O.propose(base,"grid/create",{"layer_id":"shared_ax_grid","name":"Camada 4","origin_xz":[300,0],"columns":5,"rows":5,"sample_spacing":32,"height":40})
+	var connected_compile := C.compile(connected.data)
+	var bridge := O.propose(connected.data,"bridge/create",{"surface_id":"shared_ax_bridge","layer_id":"shared_ax_grid","origin_xz":[300,128],"width":128,"length":72,"height":40})
+	var connector := O.propose(bridge.data,"connector/upsert",{"connector_id":"shared_ax_gate","surface_id":"shared_ax_grid","position_xyz":[428,40,64],"normal_xyz":[1,0,0],"kind":"walk","width":32,"headroom":100,"tags":["map_editor"],"direction":"both"})
+	var complete := C.compile(connector.data)
+	print("AX_CONNECTIVITY_PROBE "+JSON.stringify({"isolated_code":distant_compile.code,"isolated_ok":distant_compile.ok,"connected_ok":connected_compile.ok,"connected_code":connected_compile.code,"complete_ok":complete.ok,"complete_code":complete.code,"full_hash":complete.output_hash}))
+	quit()

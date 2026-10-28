@@ -66,33 +66,46 @@ func run() -> void:
 	if not compiled_gui.ok or not compiled_ax.ok:
 		print("F9_AX_AUTHORING_UI_COMPILE "+JSON.stringify({"gui":compiled_gui,"ax":compiled_ax}))
 		finish(); return
+	var far_grid_source: Dictionary = base.duplicate(true)
+	var far_heights: Array[float] = []; far_heights.resize(25); far_heights.fill(0.0)
+	far_grid_source.layers.append({"layer_id":"far_grid","name":"Grade distante","origin_xz":[5000.0,5000.0],"sample_spacing":32.0,"columns":5,"rows":5,"heights":far_heights,"material_masks":{},"locked":false,"protected_regions":[]})
+	var far_grid_compile: Dictionary = Compiler.compile(far_grid_source)
+	check("compiler_rejects_disconnected_far_grid_with_route_unreachable",not far_grid_compile.ok and far_grid_compile.code == "route_unreachable")
 	var source_before_grid: String = gui_shell.session.document().semantic_hash()
-	gui_shell.terrain.grid_x.value = 5000.0; gui_shell.terrain.grid_z.value = 5000.0
+	gui_shell.terrain.grid_x.value = 300.0; gui_shell.terrain.grid_z.value = 0.0; gui_shell.terrain.grid_y.value = 40.0
 	gui_shell.terrain.add_grid("shared_ax_grid")
 	var ax_mode: Dictionary = ax_presentation.set_mode("ax") if ax_presentation != null else {"ok":false}
-	var ax_grid: Dictionary = ax_terrain_presentation.ax_invoke("terrain/grid/create",{"layer_id":"shared_ax_grid","name":"Camada 4","origin_xz":[5000.0,5000.0],"columns":5,"rows":5,"sample_spacing":32.0,"height":0.0}) if ax_terrain_presentation != null else {"ok":false}
+	var ax_grid: Dictionary = ax_terrain_presentation.ax_invoke("terrain/grid/create",{"layer_id":"shared_ax_grid","name":"Camada 4","origin_xz":[300.0,0.0],"columns":5,"rows":5,"sample_spacing":32.0,"height":40.0}) if ax_terrain_presentation != null else {"ok":false}
 	var gui_grid_hash: String = gui_shell.session.document().semantic_hash()
 	check("gui_and_ax_grid_share_producer_and_explicit_identity",gui_grid_hash != source_before_grid and ax_mode.ok and ax_grid.ok and gui_grid_hash == ax_shell.session.document().semantic_hash() and ax_grid.entity_id == "shared_ax_grid")
 	var ax_compiled_grid: Dictionary = Compiler.compile(ax_shell.session.document().to_data())
 	var gui_compiled_grid: Dictionary = Compiler.compile(gui_shell.session.document().to_data())
 	check("identical_gui_ax_grid_inputs_have_identical_headless_compilation",ax_compiled_grid.ok and gui_compiled_grid.ok and ax_compiled_grid.package.package_hash == gui_compiled_grid.package.package_hash and ax_compiled_grid.package.source_hash == gui_grid_hash)
-	gui_shell.terrain.bridge_x.value = 5000.0; gui_shell.terrain.bridge_z.value = 5200.0
-	gui_shell.terrain.bridge_width.value = 100.0; gui_shell.terrain.bridge_length.value = 100.0; gui_shell.terrain.bridge_height.value = 40.0
+	gui_shell.terrain.bridge_x.value = 300.0; gui_shell.terrain.bridge_z.value = 128.0
+	gui_shell.terrain.bridge_width.value = 128.0; gui_shell.terrain.bridge_length.value = 72.0; gui_shell.terrain.bridge_height.value = 40.0
 	gui_shell.terrain.add_bridge("shared_ax_bridge")
-	var ax_bridge: Dictionary = ax_terrain_presentation.ax_invoke("terrain/bridge/create",{"surface_id":"shared_ax_bridge","layer_id":"shared_ax_grid","origin_xz":[5000.0,5200.0],"width":100.0,"length":100.0,"height":40.0})
+	var ax_bridge: Dictionary = ax_terrain_presentation.ax_invoke("terrain/bridge/create",{"surface_id":"shared_ax_bridge","layer_id":"shared_ax_grid","origin_xz":[300.0,128.0],"width":128.0,"length":72.0,"height":40.0})
 	check("gui_and_ax_bridge_use_same_semantic_operation",ax_bridge.ok and ax_bridge.entity_id == "shared_ax_bridge" and gui_shell.session.document().semantic_hash() == ax_shell.session.document().semantic_hash())
-	var gate := {"connector_id":"shared_ax_gate","surface_id":"shared_ax_grid","position_xyz":[5000.0,0.0,5050.0],"kind":"walk","normal_xyz":[-1,0,0],"width":32.0,"headroom":100.0,"tags":["map_editor"],"direction":"both"}
+	var gate := {"connector_id":"shared_ax_gate","surface_id":"shared_ax_grid","position_xyz":[428.0,40.0,64.0],"kind":"walk","normal_xyz":[1,0,0],"width":32.0,"headroom":100.0,"tags":["map_editor"],"direction":"both"}
 	gui_shell.terrain.connector_id.text = "shared_ax_gate"
-	gui_shell.terrain.connector_x.value = 5000.0; gui_shell.terrain.connector_y.value = 0.0; gui_shell.terrain.connector_z.value = 5050.0
+	gui_shell.terrain.connector_x.value = 428.0; gui_shell.terrain.connector_y.value = 40.0; gui_shell.terrain.connector_z.value = 64.0
 	gui_shell.terrain.connector_width.value = 32.0; gui_shell.terrain.connector_headroom.value = 100.0
-	gui_shell.terrain.connector_side.select(0); gui_shell.terrain.connector_direction.select(0); gui_shell.terrain.connector_tags.text = "map_editor"
+	gui_shell.terrain.connector_side.select(1); gui_shell.terrain.connector_direction.select(0); gui_shell.terrain.connector_tags.text = "map_editor"
 	var gui_connector_surface := find_surface_index(gui_shell.terrain,"shared_ax_grid")
 	if gui_connector_surface >= 0: gui_shell.terrain.connector_surface.select(gui_connector_surface)
 	gui_shell.terrain.save_connector()
 	var ax_connector: Dictionary = ax_terrain_presentation.ax_invoke("terrain/connector/upsert",gate)
 	check("gui_and_ax_connector_share_full_canonical_parameters",gui_connector_surface >= 0 and ax_connector.ok and gui_shell.session.document().to_data().connectors.size() == 1 and gui_shell.session.document().semantic_hash() == ax_shell.session.document().semantic_hash())
 	check("shared_authoring_hash_matches_across_complete_gui_and_ax_sources",gui_shell.session.document().semantic_hash() == ax_shell.session.document().semantic_hash() and gui_shell.session.document().to_data() == ax_shell.session.document().to_data())
+	var full_gui_compile: Dictionary = Compiler.compile(gui_shell.session.document().to_data())
+	var full_ax_compile: Dictionary = Compiler.compile(ax_shell.session.document().to_data())
+	check("completed_grid_bridge_connector_compiles_identically_in_gui_and_ax",full_gui_compile.ok and full_ax_compile.ok and full_gui_compile.package.package_hash == full_ax_compile.package.package_hash and full_gui_compile.package.source_hash == gui_shell.session.document().semantic_hash() and full_ax_compile.package.source_hash == ax_shell.session.document().semantic_hash())
+	if not full_gui_compile.ok or not full_ax_compile.ok:
+		print("F9_AX_AUTHORING_UI_FULL_COMPILE "+JSON.stringify({"gui":full_gui_compile,"ax":full_ax_compile}))
 	await frames(3)
+	gui_shell.hide()
+	ax_shell.position = Vector2.ZERO; ax_shell.size = Vector2(1600,960); ax_shell.terrain.canvas.fit()
+	await frames(2)
 	var image := root.get_texture().get_image()
 	var capture := image.save_png(evidence_dir.path_join("ax_gui_shared_authorship.png")) if image != null else FAILED
 	check("native_ax_authoring_capture_written",capture == OK and image.get_size().x >= 1280 and image.get_size().y >= 720)
@@ -122,9 +135,9 @@ func compiled_grid_hash(result: Dictionary) -> String:
 
 func finish() -> void:
 	Presentation.active_mode = "ux"
-	var ok: bool = checks.size() == 10 and checks.all(func(item: Dictionary) -> bool: return item.ok)
+	var ok: bool = checks.size() == 12 and checks.all(func(item: Dictionary) -> bool: return item.ok)
 	var source_hash: String = gui_shell.session.document().semantic_hash() if is_instance_valid(gui_shell) else ""
 	if ax_shell != null and is_instance_valid(ax_shell): ax_shell.free()
 	if gui_shell != null and is_instance_valid(gui_shell): gui_shell.free()
-	print("F9_AX_AUTHORING_UI_RESULT "+JSON.stringify({"ok":ok,"count":checks.size(),"expected_count":10,"checks":checks,"source_hash":source_hash}))
+	print("F9_AX_AUTHORING_UI_RESULT "+JSON.stringify({"ok":ok,"count":checks.size(),"expected_count":12,"checks":checks,"source_hash":source_hash}))
 	quit(0 if ok else 1)

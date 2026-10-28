@@ -2675,6 +2675,24 @@
       "owner": "Luna F9 AX",
       "previous_owner": "new evidence directory, exclusive prefix",
       "base_sha256": null
+    },
+    {
+      "path": "data/map_authoring/sanctuary_woods_clearing.source.json",
+      "owner": "Terra F9 area",
+      "previous_owner": "new map content; only AX authoring after producer validation",
+      "base_sha256": null
+    },
+    {
+      "path": "data/map_authoring/sanctuary_woods_overpass.source.json",
+      "owner": "Terra F9 area",
+      "previous_owner": "new map content; only AX authoring after producer validation",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/terra/area_terrain/",
+      "owner": "Terra F9 area",
+      "previous_owner": "new map content; only AX authoring after producer validation",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -2894,7 +2912,7 @@
       "roles": "Luna executed all stages; usage limit interrupted agents after execution; Sol independently inspected outputs/hashes and wrote final consolidation"
     },
     "ax_authoring": {
-      "state": "implementation_preparing_freeze",
+      "state": "frozen_validation_in_progress",
       "base": "0b80ca6",
       "runtime_owner": "Sol F9",
       "tests_owner": "Luna F9 AX",
@@ -2905,7 +2923,8 @@
         "verify editor_import"
       ],
       "fixture": ".godot/verification/e07_f1/fixture_project",
-      "uid_origin": "Godot import01; four generated sidecars copied before freeze"
+      "uid_origin": "Godot import01; four generated sidecars copied before freeze",
+      "freeze": "da0e620829983c5948371cec9c36a983afa76613"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"
