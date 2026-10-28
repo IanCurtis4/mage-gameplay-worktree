@@ -1,0 +1,19 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+F9_ROUNDED_UI_CHECK native_empty_session_replaced true
+F9_ROUNDED_UI_CHECK real_terrain_panel_and_gui_action_present false
+F9_ROUNDED_UI_CHECK panel_toolbar_fits_without_horizontal_overflow true
+F9_ROUNDED_UI_CHECK gui_example_is_one_atomic_session_apply true
+F9_ROUNDED_UI_CHECK gui_apply_undo_redo_restores_exact_source true
+F9_ROUNDED_UI_CHECK ax_example_uses_same_real_command_provider true
+F9_ROUNDED_UI_CHECK ax_and_gui_publish_identical_piece_and_curve true
+F9_ROUNDED_UI_CHECK same_gui_authored_piece_compiles_and_is_published_to_canvas true
+F9_ROUNDED_UI_CHECK native_curve_and_path_capture_written true
+F9_ROUNDED_UI_CHECK same_gui_ax_authored_piece_compiles_as_map true
+F9_ROUNDED_UI_CHECK compiled_gui_piece_becomes_candidate true
+F9_ROUNDED_UI_CHECK candidate_is_published_to_disposable_session true
+F9_ROUNDED_UI_CHECK real_preview_app_opens_published_candidate true
+F9_ROUNDED_UI_CHECK real_preview_app_starts_without_duplicate_prepare false
+F9_ROUNDED_APP_START {"detail":"","error_code":"snapshot_too_large","ok":false}
+F9_ROUNDED_UI_RESULT {"checks":[{"id":"native_empty_session_replaced","ok":true},{"id":"real_terrain_panel_and_gui_action_present","ok":false},{"id":"panel_toolbar_fits_without_horizontal_overflow","ok":true},{"id":"gui_example_is_one_atomic_session_apply","ok":true},{"id":"gui_apply_undo_redo_restores_exact_source","ok":true},{"id":"ax_example_uses_same_real_command_provider","ok":true},{"id":"ax_and_gui_publish_identical_piece_and_curve","ok":true},{"id":"same_gui_authored_piece_compiles_and_is_published_to_canvas","ok":true},{"id":"native_curve_and_path_capture_written","ok":true},{"id":"same_gui_ax_authored_piece_compiles_as_map","ok":true},{"id":"compiled_gui_piece_becomes_candidate","ok":true},{"id":"candidate_is_published_to_disposable_session","ok":true},{"id":"real_preview_app_opens_published_candidate","ok":true},{"id":"real_preview_app_starts_without_duplicate_prepare","ok":false}],"count":14,"ok":false,"timings":{"app_open_ms":47021.966,"app_start_ms":78421.511,"compile_prepare_ms":3819.211,"map_publish_ms":26722.433}}

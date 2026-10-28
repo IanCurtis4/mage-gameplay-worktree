@@ -2525,6 +2525,18 @@
       "owner": "Luna F9 — bounded snapshot density proof",
       "previous_owner": "new F9 test; author draft outside inputs during freeze",
       "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/snapshot_density_draft_01.gd.txt",
+      "owner": "Sol F9 — portable consolidation",
+      "previous_owner": "new evidence artifact; inert test draft",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/rounded_hill_consolidation.md",
+      "owner": "Sol F9 — portable consolidation",
+      "previous_owner": "new evidence artifact; inert test draft",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -2535,7 +2547,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "f9_t01_real_app_blocked_snapshot_too_large_diagnostic_in_progress",
+    "state": "f9_t01_foundation_pass_gameplay_snapshot_density_failure_fixture_released",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -2683,7 +2695,27 @@
       "docs/map_editor/delivery/evidence/f9/luna/rounded_hill/library_native",
       "docs/map_editor/delivery/evidence/f9/luna/rounded_hill/official",
       "docs/map_editor/delivery/evidence/f9/luna/rounded_hill/import"
-    ]
+    ],
+    "rounded_hill": {
+      "frozen_head": "0b2d57a39a55c84ae2b3380714830f41440c6ce5",
+      "report": "docs/map_editor/delivery/evidence/f9/luna/rounded_hill/report.md",
+      "report_sha256": "B247BDE44DF129CF66B314A32CF6CA1EC104354BE9064F22BBAB6D3E4A2CE39C",
+      "model": 19,
+      "library": 50,
+      "library_native": 53,
+      "official_ids": [
+        "e07_f3_snapshot_test",
+        "e07_f1_geometry_test",
+        "e07_f1_actor_integration_test"
+      ],
+      "official_internal_checks": [
+        50,
+        33,
+        193
+      ],
+      "real_gameplay": "FAIL snapshot_too_large before picking/walk",
+      "fixture_released": true
+    }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"
 }

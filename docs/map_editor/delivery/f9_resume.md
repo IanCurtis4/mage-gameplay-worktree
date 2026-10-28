@@ -4,7 +4,7 @@
 
 Meta continua TODO F9 e mapa para testar. Sol código; Terra mapas via editorAX;
 Luna testes. [Desenho do Bosque](f9_area_design.md) está pronto, ainda não autorado.
-HEAD82cc23d17eb472f1bc21bdab0591678d4a2c2f4a, branchcodex/map-editor-f9 no mesmo
+Código diagnóstico82cc23d17eb472f1bc21bdab0591678d4a2c2f4a, branchcodex/map-editor-f9 no mesmo
 checkout .tools/map-editor-m5. Aplicação T01 de5e6f6cc; modelo19 PASS em57ffdc2;
 provaGUI/menu/AX/undo/relevo nativo passou em82cc23d, mas a etapaNative FALHA:
 App.start snapshot_too_large,13/14 checks PASS (20 esperados). Sem caminhada,
@@ -15,8 +15,8 @@ correção no [contrato de densidade](../contracts/f9_snapshot_density.md).
 Engine4.7.2 e fixture única preservadas; logs completos rounded_hill/. Não elevar
 caps, reduzir33x33/220/420 ou corpo20/32. AX parametrizado ainda falta;
 [próxima fatia](../contracts/f9_ax_authoring.md) prepara sua autoridade real.
-Luna executa biblioteca/oficiais proporcionais no freeze82cc23d, confirmar
-report/handles antes de editar inputs/HEAD. TesteSnapshotDensity ainda rascunho
+Luna concluiu biblioteca/oficiais no congelamento0b2d57a; fixture liberada.
+Consultar a consolidação no fim deste documento para resultados e hashes. TesteSnapshotDensity ainda rascunho
 ignorado, sem UID/import/teste. Não reaplicar propostaTerra antiga nem iniciarF10.
 
 
@@ -126,3 +126,23 @@ T01 importado com Godot4.7.2, sem Script/Parse/ERROR. UID do módulo gerado pela
 engine; sidecars dos testes preparados por Luna e aceitos na importação.
 Inputs serão congelados no commit desta integração, antes dos testes dirigidos.
 Ainda não declarar PASS de modelo/nativo nem conclusão de F9-02/12.
+
+
+### Consolidação vigente28/10 — lote encerrado, correção estrutural pendente
+
+Último código congelado0b2d57a39a55c84ae2b3380714830f41440c6ce5; o SHA atual de
+Git pode ser checkpoint documental posterior. Model19, Library50 e LibraryNative53
+PASS; tools/verify selecionou snapshotF3(50), geometriaF1(33) e atorF1(193), todos
+PASS, sem erro/timeout. [Relatório Luna](evidence/f9/luna/rounded_hill/report.md)
+e [conferência Sol](evidence/f9/author/rounded_hill_consolidation.md). Rehash Sol
+confirma fonte/fixture atuais sem divergência nos2008 inputs de cada manifesto;
+reuso histórico tem deltas explícitos na conferência. Nenhum processo ativo;
+fixture liberada. Não repetir este lote por hábito antes de uma mudança nova.
+
+Runtime T01 ainda não jogável: NativeFAIL snapshot10.308.936B >4MiB antes de
+picking/caminhada. Resolver encoding exato do grafo com caps/identidade/ciclos/tipos,
+provar roundtrip/continuidade e a mesma App33x33/20x32 antes de consumidores.
+Rascunho de17 testes preservado como texto inerte em
+[evidência portátil](evidence/f9/author/snapshot_density_draft_01.gd.txt); não rodado.
+Depois completar AX parametrizado, autoria Terra do Bosque e TODOS os pendentes
+F9-01–12. F10 depende de conclusão e autorização própria; não transferir faltas.

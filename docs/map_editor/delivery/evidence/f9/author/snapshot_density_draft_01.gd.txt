@@ -1,0 +1,99 @@
+extends SceneTree
+## Draft only: density, identity and type preservation in snapshot metadata graphs.
+var checks: Array[Dictionary] = []
+func _initialize() -> void: _run.call_deferred()
+func check(id: String, ok: bool) -> void:
+	checks.append({"id":id,"ok":ok}); print("F9_SNAPSHOT_DENSITY_CHECK "+id+" "+str(ok))
+
+func _run() -> void:
+	var navigation := ArenaNavigation.new()
+	navigation.configure(Rect2(0,0,800,800),[],18)
+	var actor := PlayerActor.new()
+	actor.configure(navigation,RunState.new(&"mage"))
+	var shared_vertices: Array[Vector3] = []
+	for index: int in 24: shared_vertices.append(Vector3(index,0,index*2))
+	var shared_names: Array[String] = ["shared", "terrain", "fixture"]
+	var cells: Array[Dictionary] = []
+	for cell_index: int in 1000:
+		var vertices: Array[Vector3] = []
+		for vertex_index: int in 8:
+			vertices.append(Vector3(cell_index,vertex_index,cell_index+vertex_index))
+		var adjacency: Dictionary[String,int] = {}
+		adjacency["west"] = (cell_index+999)%1000
+		adjacency["east"] = (cell_index+1)%1000
+		adjacency["north"] = (cell_index+997)%1000
+		adjacency["south"] = (cell_index+3)%1000
+		cells.append({"id":"cell_%04d"%cell_index,"name":"tile_%04d"%cell_index,"vertices":vertices,"adjacency":adjacency,"tags":shared_names,"shared_vertices":shared_vertices})
+	var equal_left: Array[int] = [1,2,3,5,8]
+	var equal_right: Array[int] = equal_left.duplicate()
+	var legacy_values: Array = ["legacy_a", "legacy_b"]
+	var legacy_counts: Dictionary = {"legacy_a":1,"legacy_b":2}
+	var graph: Dictionary = {"cells":cells,"shared_a":shared_vertices,"shared_b":shared_vertices,"equal_left":equal_left,"equal_right":equal_right,"legacy_values":legacy_values,"legacy_counts":legacy_counts}
+	graph["self"] = graph
+	actor.set_meta("snapshot_density_graph",graph)
+	var barrier := SnapshotTickBarrier.new()
+	check("real_player_actor_run_state_acquires_cut",barrier.acquire(actor).get("ok",false))
+	var registry := SnapshotRegistry.new()
+	var captured: Dictionary = registry.capture(actor,barrier)
+	check("one_thousand_cell_metadata_graph_captures_under_four_mib",captured.get("ok",false) and captured.get("bytes",SnapshotRegistry.MAX_BYTES+1) <= SnapshotRegistry.MAX_BYTES)
+	if not captured.get("ok",false):
+		print("F9_SNAPSHOT_DENSITY_CAPTURE "+JSON.stringify({"error_code":captured.get("error_code",""),"detail":captured.get("detail",""),"snapshot_metrics":captured.get("snapshot_metrics",{})}))
+		barrier.release(); actor.free(); _finish(); return
+	var payload: Dictionary = captured.snapshot
+	var original_bytes: PackedByteArray = var_to_bytes(payload)
+	check("capture_preserves_source_metadata_graph",actor.get_meta("snapshot_density_graph") == graph and is_same(graph,graph.self) and is_same(graph.shared_a,graph.shared_b))
+	check("capture_metrics_report_graph_size_and_limit",captured.bytes == var_to_bytes(payload).size() and captured.bytes <= SnapshotRegistry.MAX_BYTES)
+	check("snapshot_payload_validates",registry.validate(payload).get("ok",false))
+	var restored: Dictionary = SnapshotRegistry.new().restore(payload)
+	check("metadata_graph_restores_with_actor_and_run_state",restored.get("ok",false) and restored.get("root") is PlayerActor)
+	if restored.get("ok",false):
+		var copy: PlayerActor = restored.root
+		var graph_copy: Dictionary = copy.get_meta("snapshot_density_graph")
+		check("one_thousand_cells_round_trip",graph_copy.cells is Array and graph_copy.cells.size() == 1000 and graph_copy.cells[999].id == "cell_0999")
+		check("typed_vector_arrays_keep_builtin_type",graph_copy.cells[0].vertices is Array and graph_copy.cells[0].vertices.get_typed_builtin() == TYPE_VECTOR3 and graph_copy.cells[0].vertices[0] is Vector3)
+		check("typed_string_int_dictionary_keeps_both_types",graph_copy.cells[0].adjacency.get_typed_key_builtin() == TYPE_STRING and graph_copy.cells[0].adjacency.get_typed_value_builtin() == TYPE_INT and graph_copy.cells[0].adjacency["east"] == 1)
+		check("cyclic_metadata_reference_is_preserved",is_same(graph_copy,graph_copy.self))
+		check("repeated_shared_container_alias_is_preserved",is_same(graph_copy.shared_a,graph_copy.shared_b) and is_same(graph_copy.shared_a,graph_copy.cells[0].shared_vertices) and is_same(graph_copy.shared_a,graph_copy.cells[999].shared_vertices))
+		check("equal_but_distinct_arrays_stay_distinct",graph_copy.equal_left == graph_copy.equal_right and not is_same(graph_copy.equal_left,graph_copy.equal_right))
+		check("full_untyped_legacy_descriptors_validate_and_restore",graph_copy.legacy_values == legacy_values and graph_copy.legacy_counts == legacy_counts)
+		var partial: Dictionary = payload.duplicate(true)
+		var legacy_array_id := _find_array_descriptor(partial.containers,["legacy_a","legacy_b"])
+		var partial_rejected := false
+		if not legacy_array_id.is_empty():
+			partial.containers[legacy_array_id].erase("script")
+			partial_rejected = not SnapshotRegistry.new().validate(partial).get("ok",false)
+		check("partial_legacy_descriptor_is_rejected",partial_rejected)
+		var malformed: Dictionary = payload.duplicate(true)
+		var typed_array_id := _find_vector_array_descriptor(malformed.containers)
+		var malformed_rejected := false
+		if not typed_array_id.is_empty():
+			malformed.containers[typed_array_id].type = TYPE_STRING
+			malformed_rejected = SnapshotRegistry.new().restore(malformed).get("error_code") == &"invalid_payload"
+		check("malformed_typed_container_is_rejected",malformed_rejected)
+		var immutable_capture: bool = var_to_bytes(payload) == original_bytes
+		var recaptured: Dictionary = SnapshotRegistry.new().capture(actor,barrier)
+		check("later_capture_does_not_mutate_earlier_payload",immutable_capture and recaptured.get("ok",false) and var_to_bytes(payload) == original_bytes)
+		copy.free()
+	graph["oversized_probe"] = "x".repeat(SnapshotRegistry.MAX_BYTES+1024)
+	actor.set_meta("snapshot_density_graph",graph)
+	var oversize: Dictionary = SnapshotRegistry.new().capture(actor,barrier)
+	check("oversized_graph_still_fails_four_mib_budget",oversize.get("error_code") == &"snapshot_too_large" and oversize.get("snapshot_metrics",{}).get("limit_bytes",0) == SnapshotRegistry.MAX_BYTES)
+	barrier.release(); actor.free()
+	_finish()
+
+func _find_array_descriptor(containers: Dictionary, expected_items: Array) -> String:
+	for id: String in containers:
+		var descriptor: Dictionary = containers[id]
+		if descriptor.get("$") == "array" and descriptor.get("items") == expected_items: return id
+	return ""
+
+func _find_vector_array_descriptor(containers: Dictionary) -> String:
+	for id: String in containers:
+		var descriptor: Dictionary = containers[id]
+		if descriptor.get("$") == "array" and descriptor.get("type") == TYPE_VECTOR3: return id
+	return ""
+
+func _finish() -> void:
+	var ok: bool = checks.all(func(item: Dictionary) -> bool: return item.ok)
+	print("F9_SNAPSHOT_DENSITY_RESULT "+JSON.stringify({"ok":ok,"count":checks.size(),"checks":checks}))
+	quit(0 if ok else 1)

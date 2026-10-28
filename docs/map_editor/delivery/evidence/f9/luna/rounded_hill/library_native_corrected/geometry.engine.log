@@ -1,0 +1,60 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+F9_LIBRARY_UI_CHECK native_shell true
+F9_LIBRARY_UI_CHECK native_project_metadata_storage_bound true
+F9_LIBRARY_UI_CHECK editor_settings_use_discardable_profile true
+F9_LIBRARY_UI_CHECK six_catalog_thumbnails true
+F9_LIBRARY_UI_CHECK favorite_button_writes_project_metadata true
+F9_LIBRARY_UI_CHECK favorite_filter_matches_current_palette true
+F9_LIBRARY_UI_CHECK gui_and_ax_share_favorite_query true
+F9_LIBRARY_UI_CHECK object_library_commands_bound_to_ax_presentation true
+F9_LIBRARY_UI_CHECK library_controls_leave_source_and_history true
+F9_LIBRARY_UI_CHECK capture_library_favorite_palette true
+F9_LIBRARY_UI_CHECK portuguese_accent_search_in_native_palette true
+F9_LIBRARY_UI_CHECK category_control_filters_structure true
+F9_LIBRARY_UI_CHECK parameterized_selection_uses_existing_tool true
+F9_LIBRARY_UI_CHECK malformed_library_arguments_rejected true
+F9_LIBRARY_UI_CHECK favorite_toggle_returns_to_previous_state true
+F9_LIBRARY_UI_CHECK preset_control_applies_exact_brush_options true
+F9_LIBRARY_UI_CHECK preset_control_preserves_source_and_history true
+F9_LIBRARY_UI_CHECK native_named_preset_saved true
+F9_LIBRARY_UI_CHECK semantic_ax_commands_are_inspectable true
+F9_LIBRARY_UI_CHECK ax_apply_matches_gui_preset true
+F9_LIBRARY_UI_CHECK ax_bad_preset_preserves_preferences true
+F9_LIBRARY_UI_CHECK ax_arguments_are_closed true
+F9_LIBRARY_UI_CHECK ax_fractional_preset_saved true
+F9_LIBRARY_UI_CHECK fractional_preset_applies_without_quantization true
+F9_LIBRARY_UI_CHECK fractional_strength_is_visible_in_field true
+F9_LIBRARY_UI_CHECK capture_library_brush_presets true
+F9_LIBRARY_UI_CHECK mode_switch_preserves_source_and_history true
+F9_LIBRARY_UI_CHECK remove_custom_keeps_current_brush true
+F9_LIBRARY_UI_CHECK browser_sources_registered_passively true
+F9_LIBRARY_UI_CHECK native_library_window_and_categories true
+F9_LIBRARY_UI_CHECK browser_commands_bound_to_ax_presentation true
+F9_LIBRARY_UI_CHECK favorite_update_reaches_existing_objects_window true
+F9_LIBRARY_UI_CHECK shared_presets_refresh_without_applying_or_restarting_preview true
+F9_LIBRARY_UI_CHECK background_thumbnails_complete true
+F9_LIBRARY_UI_CHECK piece_and_map_have_validated_thumbnail_stamps true
+F9_LIBRARY_UI_CHECK thumbnail_dimensions_are_bounded true
+F9_LIBRARY_UI_CHECK thumbnail_jobs_preserve_editor_source true
+F9_LIBRARY_UI_CHECK library_ax_query_matches_source_registry true
+F9_LIBRARY_UI_CHECK selected_source_gets_real_preview true
+F9_LIBRARY_UI_CHECK capture_library_browser true
+F9_LIBRARY_UI_CHECK preview_job_started_before_external_change true
+F9_LIBRARY_UI_CHECK obsolete_source_result_is_discarded true
+F9_LIBRARY_UI_CHECK cancel_drains_worker_without_partial_preferences true
+F9_LIBRARY_UI_CHECK copy_uses_existing_dirty_document_confirmation true
+F9_LIBRARY_UI_CHECK copy_preserves_previous_unsaved_document true
+F9_LIBRARY_UI_CHECK copy_is_detached_with_new_identity true
+F9_LIBRARY_UI_CHECK copy_does_not_overwrite_library_source true
+F9_LIBRARY_MAP_OPEN_STATE {"actual_document_id":"two_rooms","actual_source_path":"C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/docs/map_editor/delivery/evidence/f9/luna/rounded_hill/library_native_corrected/browser_map.json","autosave":"C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project/.godot/map_authoring/composition_7d98aad85ae1834fd46152ae.json","expected_source_path":"C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\luna\\rounded_hill\\library_native_corrected/browser_map.json","request":{"copy":false,"ok":true,"state":"applied"},"status":"Rascunho alterado; compile para validar emendas e testar."}
+F9_LIBRARY_UI_CHECK saved_map_opens_in_its_existing_producer true
+F9_LIBRARY_UI_CHECK failed_draft_preservation_refuses_replacement true
+F9_LIBRARY_UI_CHECK invalid_project_metadata_is_preserved_until_recovery true
+F9_LIBRARY_UI_CHECK recovery_dialog_reviews_last_valid_counts_without_writing true
+F9_LIBRARY_UI_CHECK native_recovery_restores_valid_preferences_and_preserves_bad_copy true
+F9_LIBRARY_UI_CHECK project_metadata_restored true
+F9_LIBRARY_UI_RESULT {"checks":[{"id":"native_shell","ok":true},{"id":"native_project_metadata_storage_bound","ok":true},{"id":"editor_settings_use_discardable_profile","ok":true},{"id":"six_catalog_thumbnails","ok":true},{"id":"favorite_button_writes_project_metadata","ok":true},{"id":"favorite_filter_matches_current_palette","ok":true},{"id":"gui_and_ax_share_favorite_query","ok":true},{"id":"object_library_commands_bound_to_ax_presentation","ok":true},{"id":"library_controls_leave_source_and_history","ok":true},{"id":"capture_library_favorite_palette","ok":true},{"id":"portuguese_accent_search_in_native_palette","ok":true},{"id":"category_control_filters_structure","ok":true},{"id":"parameterized_selection_uses_existing_tool","ok":true},{"id":"malformed_library_arguments_rejected","ok":true},{"id":"favorite_toggle_returns_to_previous_state","ok":true},{"id":"preset_control_applies_exact_brush_options","ok":true},{"id":"preset_control_preserves_source_and_history","ok":true},{"id":"native_named_preset_saved","ok":true},{"id":"semantic_ax_commands_are_inspectable","ok":true},{"id":"ax_apply_matches_gui_preset","ok":true},{"id":"ax_bad_preset_preserves_preferences","ok":true},{"id":"ax_arguments_are_closed","ok":true},{"id":"ax_fractional_preset_saved","ok":true},{"id":"fractional_preset_applies_without_quantization","ok":true},{"id":"fractional_strength_is_visible_in_field","ok":true},{"id":"capture_library_brush_presets","ok":true},{"id":"mode_switch_preserves_source_and_history","ok":true},{"id":"remove_custom_keeps_current_brush","ok":true},{"id":"browser_sources_registered_passively","ok":true},{"id":"native_library_window_and_categories","ok":true},{"id":"browser_commands_bound_to_ax_presentation","ok":true},{"id":"favorite_update_reaches_existing_objects_window","ok":true},{"id":"shared_presets_refresh_without_applying_or_restarting_preview","ok":true},{"id":"background_thumbnails_complete","ok":true},{"id":"piece_and_map_have_validated_thumbnail_stamps","ok":true},{"id":"thumbnail_dimensions_are_bounded","ok":true},{"id":"thumbnail_jobs_preserve_editor_source","ok":true},{"id":"library_ax_query_matches_source_registry","ok":true},{"id":"selected_source_gets_real_preview","ok":true},{"id":"capture_library_browser","ok":true},{"id":"preview_job_started_before_external_change","ok":true},{"id":"obsolete_source_result_is_discarded","ok":true},{"id":"cancel_drains_worker_without_partial_preferences","ok":true},{"id":"copy_uses_existing_dirty_document_confirmation","ok":true},{"id":"copy_preserves_previous_unsaved_document","ok":true},{"id":"copy_is_detached_with_new_identity","ok":true},{"id":"copy_does_not_overwrite_library_source","ok":true},{"id":"saved_map_opens_in_its_existing_producer","ok":true},{"id":"failed_draft_preservation_refuses_replacement","ok":true},{"id":"invalid_project_metadata_is_preserved_until_recovery","ok":true},{"id":"recovery_dialog_reviews_last_valid_counts_without_writing","ok":true},{"id":"native_recovery_restores_valid_preferences_and_preserves_bad_copy","ok":true},{"id":"project_metadata_restored","ok":true}],"count":53,"ok":true}

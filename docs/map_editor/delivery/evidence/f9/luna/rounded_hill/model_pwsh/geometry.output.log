@@ -1,0 +1,22 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_ROUNDED_CHECK organic_example_created_without_mutating_empty_source true
+F9_ROUNDED_CHECK organic_example_valid_source true
+F9_ROUNDED_CHECK prescribed_grid_and_domain true
+F9_ROUNDED_CHECK two_frozen_110_hill_strokes_reach_220_cap true
+F9_ROUNDED_CHECK rounded_profile_is_radial_and_symmetric true
+F9_ROUNDED_CHECK rounded_profile_has_soft_outer_edge true
+F9_ROUNDED_CHECK curved_material_path_is_painted_without_global_fill true
+F9_ROUNDED_CHECK profile_and_resource_caps_remain_unchanged true
+F9_ROUNDED_CHECK grid_and_stroke_strength_remain_under_existing_caps true
+F9_ROUNDED_CHECK repeated_pointer_events_do_not_accumulate true
+F9_ROUNDED_CHECK collinear_events_preserve_frozen_stroke_result true
+F9_ROUNDED_CHECK locked_layer_refuses_rounded_hill true
+F9_ROUNDED_CHECK protected_region_is_preserved true
+F9_ROUNDED_CHECK connector_clearance_is_preserved false
+F9_ROUNDED_CHECK invalid_shape_parameters_are_rejected true
+F9_ROUNDED_CHECK preference_limits_reject_strength_above_existing_cap true
+F9_ROUNDED_CHECK occupied_example_source_is_refused_without_mutation true
+F9_ROUNDED_CHECK rounded_builtin_preset_is_appended_after_legacy_presets true
+F9_ROUNDED_CHECK rounded_builtin_preset_options_obey_existing_caps true
+F9_ROUNDED_RESULT {"checks":[{"id":"organic_example_created_without_mutating_empty_source","ok":true},{"id":"organic_example_valid_source","ok":true},{"id":"prescribed_grid_and_domain","ok":true},{"id":"two_frozen_110_hill_strokes_reach_220_cap","ok":true},{"id":"rounded_profile_is_radial_and_symmetric","ok":true},{"id":"rounded_profile_has_soft_outer_edge","ok":true},{"id":"curved_material_path_is_painted_without_global_fill","ok":true},{"id":"profile_and_resource_caps_remain_unchanged","ok":true},{"id":"grid_and_stroke_strength_remain_under_existing_caps","ok":true},{"id":"repeated_pointer_events_do_not_accumulate","ok":true},{"id":"collinear_events_preserve_frozen_stroke_result","ok":true},{"id":"locked_layer_refuses_rounded_hill","ok":true},{"id":"protected_region_is_preserved","ok":true},{"id":"connector_clearance_is_preserved","ok":false},{"id":"invalid_shape_parameters_are_rejected","ok":true},{"id":"preference_limits_reject_strength_above_existing_cap","ok":true},{"id":"occupied_example_source_is_refused_without_mutation","ok":true},{"id":"rounded_builtin_preset_is_appended_after_legacy_presets","ok":true},{"id":"rounded_builtin_preset_options_obey_existing_caps","ok":true}],"count":19,"ok":false}
