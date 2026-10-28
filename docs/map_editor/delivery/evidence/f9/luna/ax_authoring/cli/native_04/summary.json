@@ -1,0 +1,48 @@
+{
+  "head": "17516a20f959fabdecf0af76777824d379d98f42",
+  "head_after": "17516a20f959fabdecf0af76777824d379d98f42",
+  "stage": "AuthoringNative",
+  "native_ok": true,
+  "native_check_count": 15,
+  "native_expected_count": 15,
+  "native_capture": "native_ax_capture_has_visible_terrain_and_real_window_dimensions",
+  "capture_predicates": {
+    "canvas_minimum": true,
+    "canvas_size": "(1300.0, 440.0)",
+    "canvas_visible": true,
+    "capture_written": true,
+    "image_matches_window": true,
+    "image_size": "(1600, 1000)",
+    "mesh_count": 22,
+    "rendered_colors": 54,
+    "visible_auxiliary_windows": false,
+    "window_minimum": true,
+    "window_size": "(1600, 1000)"
+  },
+  "cli_native": {
+    "saved_source_sha256": "9f327dc24bad60ab0323da8bf0638bf4899e0bd042a7588d6ae0125b77aee39c",
+    "completed_actions": 10,
+    "requested_actions": 10,
+    "invocation": "positive_native_04.invocation.json",
+    "saved_source_matches_previous_cli": true,
+    "compile_hash": "169c09d144ef58f1cda13fe66faeebfcdff0819ff7822b115b4482bc5fc1875b",
+    "capture": "positive_native_04_capture.png",
+    "source_hash": "87abe8373a53fbf7c53c15c6dae2e0e6022336ce1df6995ea6494696aa89c99a",
+    "ok": true
+  },
+  "verify_editor_import": {
+    "failed": false,
+    "timeout_seconds": 300,
+    "selected_checks": 1,
+    "check": "editor_import",
+    "environment_isolated": true,
+    "exit_code": 0,
+    "warning": "Godot ignored nested project.godot at res://tools/map_editor_probe/hosting."
+  },
+  "artifacts": {
+    "cli_capture_sha256": "B32E6430C2E985BA9C3B510E78B3858D1871B587BAF13D13A1ADAF105A4FE520",
+    "cli_request_sha256": "E6B312087C139B776DF390D6F3D797A2239CB3EC8276EA0F04E8ECF41B47ABC0",
+    "native_capture_sha256": "4AD03117446591DDEBCCF9DEEFC1070E74E4C3AFBE072FE79AA956832855F188",
+    "cli_result_sha256": "37EB168853E66724B48B0380651881FDB8CB537EE7B721543D7904584F993EB3"
+  }
+}

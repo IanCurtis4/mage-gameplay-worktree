@@ -4,8 +4,10 @@ Escopo autorizado F9-01/07/09/12, meta humana28/10. Código Sol; Terra cria
 mapas somente por comandos AX do editor, sem escrever fontes prontas. Luna
 prepara provas e acompanha execuções congeladas. Primeiro consumidor é o
 [Bosque do Santuário](../delivery/f9_area_design.md), ainda não construído.
-Base atual58350cab28da7053eba9151d448911abd5b32a5c, T01econtinuidade validados
-porimpacto; fixture liberada. Esta nota não declaraAXnovo implementado/validado.
+Base do produtor validado17516a20f959fabdecf0af76777824d379d98f42. Primeira fatia
+implementada:30 checks de autoria e15 nativos, cliente/roundtrip/negativos e
+importação aprovados por impacto. Terra criou duas fontes pelo editor AX; demais
+produtores continuam pendentes. Ver delivery/evidence/f9/author/ax_authoring/consolidation.md.
 
 ## Resultado e autoridade
 

@@ -1,0 +1,38 @@
+{
+  "actions": [
+    {
+      "parameters": {
+        "name": "Before invalid action",
+        "document_id": "cli_stop_piece",
+        "confirm_discard": true
+      },
+      "screen": "piece",
+      "id": "piece/document/new"
+    },
+    {
+      "parameters": {
+        "height": 0.0,
+        "rows": 5,
+        "columns": 5,
+        "layer_id": "bad_layer",
+        "name": "Bad",
+        "origin_xz": [
+          0.0,
+          0.0
+        ],
+        "unexpected": "must reject",
+        "sample_spacing": 32.0
+      },
+      "screen": "terrain",
+      "id": "terrain/grid/create"
+    },
+    {
+      "parameters": {
+        "name": "MUST_NOT_RUN"
+      },
+      "screen": "piece",
+      "id": "piece/document/name"
+    }
+  ],
+  "ax_version": 1
+}

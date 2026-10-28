@@ -1,6 +1,6 @@
 # F9 — desenho da área de aceite: Bosque do Santuário
 
-Estado: **projeto**, não construído nem testado. Atende ao alvo F9-12 e à [amostra de validação](../validation.md); produzir depois dois arquivos de peça exclusivamente no editor AX, sem escrever fonte JSON e sem tomar exemplos como mapa final. F10 depende de autorização própria.
+Estado: **terreno das duas peças criado via AX, compilado e reaberto**: [clareira](../../../data/map_authoring/sanctuary_woods_clearing.source.json) e [passagem](../../../data/map_authoring/sanctuary_woods_overpass.source.json), com [recibo do replay limpo](evidence/f9/terra/area_terrain/clean_replay/report.md). Arte, props, composição, encontros, travessia com corpo de raio 20 e altura 32 e gameplay permanecem pendentes. O alvo é F9-12 e a [amostra de validação](../validation.md); F10 depende de autorização própria.
 
 ## Planta e coordenadas
 
@@ -58,3 +58,7 @@ Conservar entrada, emenda, rampa e bordas da ponte livres, com largura útil pla
 Inspeção estática em andamento: `terrain_panel.gd` anuncia `terrain/grid/create`, `terrain/layer/select`, `terrain/bridge/create`, `terrain/connector/upsert` e `terrain/brush/stroke`; as primeiras operações estão em implementação/validação, não presumir que estejam liberadas ou aprovadas. `objects/library/query` e `objects/library/select` existem, mas consulta e seleção não posicionam um objeto. Faltam verificar na versão integrada operações semânticas com parâmetros de colocação/movimento e seleção de superfície; inserção/posicionamento e ligação de peças; caminhos e confirmações de arquivo; pintura de entrada/pincel/slot/interação; seleção e configuração de rota, pontos e vínculo de slot; geração e intercâmbio. Botões genéricos sem parâmetros dependem de campos, seleções, diálogos ou cliques e não provam essas capacidades. Conferir `ax_snapshot()` e contrato efetivo antes de autoria; nenhuma fonte deve ser alterada diretamente para contornar lacuna.
 
 Conferidos [sólidos](../contracts/f9_terrain_solids.md), [relevo misto](../contracts/f9_mixed_relief.md), implementação de operações de terreno, amostra de rampa/ponte e consumidor `Candidate.prepare`. O exemplo serviu apenas para entender superfícies, nunca como mapa final. Inspeção estática, sem engine/processo, criação de mapa ou suíte de gameplay; travessia, aparência, desempenho e aceite humano permanecem pendentes.
+
+## Estado do terreno — replay limpo
+
+As duas fontes de terreno foram criadas via AX e preservadas em `data/map_authoring/sanctuary_woods_clearing.source.json` e `sanctuary_woods_overpass.source.json`. Replay na fixture importada reproduziu seus bytes; reabertura das fontes originais na mesma fixture reproduziu hashes de fonte e compilação. Detalhes, comandos e ressalvas em [recibo de terreno](evidence/f9/terra/area_terrain/clean_replay/report.md). **Terreno criado**, ainda sem props, população, composição entre peças, teste jogável de corpo raio 20/altura 32 ou aceite visual. As coordenadas acima permanecem intenções sujeitas à comprovação de navegabilidade.

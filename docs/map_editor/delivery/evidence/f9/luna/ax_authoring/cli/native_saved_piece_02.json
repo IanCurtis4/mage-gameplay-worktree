@@ -1,0 +1,120 @@
+{
+	"composition": null,
+	"connectors": [
+		{
+			"connector_id": "cli_gate",
+			"direction": "both",
+			"headroom": 100.0,
+			"kind": "walk",
+			"normal_xyz": [
+				-1,
+				0,
+				0
+			],
+			"position_xyz": [
+				0.0,
+				0.0,
+				64.0
+			],
+			"surface_id": "cli_grid_a",
+			"tags": [
+				"map_editor"
+			],
+			"width": 32.0
+		}
+	],
+	"dependencies": [],
+	"document_id": "cli_shared_piece",
+	"layers": [
+		{
+			"columns": 5,
+			"heights": [
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				8.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"layer_id": "cli_grid_a",
+			"locked": false,
+			"material_masks": {},
+			"name": "Grade A",
+			"origin_xz": [
+				0.0,
+				0.0
+			],
+			"protected_regions": [],
+			"rows": 5,
+			"sample_spacing": 32.0
+		},
+		{
+			"columns": 5,
+			"heights": [
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			],
+			"layer_id": "cli_grid_b",
+			"locked": false,
+			"material_masks": {},
+			"name": "Grade B",
+			"origin_xz": [
+				128.0,
+				0.0
+			],
+			"protected_regions": [],
+			"rows": 5,
+			"sample_spacing": 32.0
+		}
+	],
+	"name": "Peça CLI",
+	"placements": [],
+	"regions": [],
+	"revision": 5,
+	"schema_version": 1,
+	"sockets": [],
+	"special_surfaces": [],
+	"units": "e07_world"
+}

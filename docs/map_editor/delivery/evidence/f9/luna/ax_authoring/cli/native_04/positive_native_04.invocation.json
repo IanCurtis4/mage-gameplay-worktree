@@ -1,0 +1,27 @@
+{
+  "executable": "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+  "arguments": [
+    "--path",
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+    "--rendering-method",
+    "gl_compatibility",
+    "--script",
+    "res://scripts/map_authoring/agent/ax_session.gd",
+    "--",
+    "--ax-request=C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\luna\\ax_authoring\\cli\\native_04\\positive_native_04.request.json",
+    "--ax-result=C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\luna\\ax_authoring\\cli\\native_04\\positive_native_04.result.json",
+    "--ax-capture=C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\luna\\ax_authoring\\cli\\native_04\\positive_native_04_capture.png"
+  ],
+  "working_directory": "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+  "environment": {
+    "APPDATA": "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile\\Roaming",
+    "LOCALAPPDATA": "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile\\Local"
+  },
+  "exit_code": 0,
+  "timed_out": false,
+  "elapsed_seconds": 11.986,
+  "result_exists": true,
+  "capture_exists": true,
+  "saved_source_exists": true,
+  "request_sha256": "e6b312087c139b776df390d6f3d797a2239cb3ec8276ea0f04e8ecf41b47abc0"
+}

@@ -1,0 +1,442 @@
+{
+  "ax_version": 1,
+  "actions": [
+    {
+      "screen": "piece",
+      "id": "piece/document/new",
+      "parameters": {
+        "document_id": "sanctuary_woods_overpass",
+        "name": "Bosque do Santuário — Passagem",
+        "confirm_discard": true
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/grid/create",
+      "parameters": {
+        "layer_id": "b_west",
+        "name": "Bosque oeste",
+        "origin_xz": [
+          0,
+          0
+        ],
+        "columns": 5,
+        "rows": 11,
+        "sample_spacing": 128,
+        "height": 0
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/grid/create",
+      "parameters": {
+        "layer_id": "b_low",
+        "name": "Passagem inferior",
+        "origin_xz": [
+          512,
+          384
+        ],
+        "columns": 7,
+        "rows": 5,
+        "sample_spacing": 128,
+        "height": 0
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/grid/create",
+      "parameters": {
+        "layer_id": "b_north_ramp",
+        "name": "Rampa norte",
+        "origin_xz": [
+          512,
+          0
+        ],
+        "columns": 3,
+        "rows": 4,
+        "sample_spacing": 128,
+        "height": 0
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/layer/select",
+      "parameters": {
+        "layer_id": "b_north_ramp"
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/brush/stroke",
+      "parameters": {
+        "points": [
+          [
+            512,
+            192
+          ],
+          [
+            768,
+            192
+          ]
+        ],
+        "options": {
+          "mode": "ramp",
+          "shape": "square",
+          "material": "earth",
+          "radius": 512,
+          "strength": 1,
+          "hardness": 1,
+          "target": 0,
+          "end_height": 128
+        }
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/grid/create",
+      "parameters": {
+        "layer_id": "b_north_top",
+        "name": "Platô norte",
+        "origin_xz": [
+          768,
+          0
+        ],
+        "columns": 5,
+        "rows": 4,
+        "sample_spacing": 128,
+        "height": 128
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/grid/create",
+      "parameters": {
+        "layer_id": "b_south_ramp",
+        "name": "Rampa sul",
+        "origin_xz": [
+          512,
+          896
+        ],
+        "columns": 3,
+        "rows": 4,
+        "sample_spacing": 128,
+        "height": 0
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/layer/select",
+      "parameters": {
+        "layer_id": "b_south_ramp"
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/brush/stroke",
+      "parameters": {
+        "points": [
+          [
+            512,
+            1088
+          ],
+          [
+            768,
+            1088
+          ]
+        ],
+        "options": {
+          "mode": "ramp",
+          "shape": "square",
+          "material": "earth",
+          "radius": 512,
+          "strength": 1,
+          "hardness": 1,
+          "target": 0,
+          "end_height": 128
+        }
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/grid/create",
+      "parameters": {
+        "layer_id": "b_south_top",
+        "name": "Platô sul",
+        "origin_xz": [
+          768,
+          896
+        ],
+        "columns": 5,
+        "rows": 4,
+        "sample_spacing": 128,
+        "height": 128
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/bridge/create",
+      "parameters": {
+        "surface_id": "b_bridge",
+        "layer_id": "b_north_top",
+        "origin_xz": [
+          896,
+          384
+        ],
+        "width": 256,
+        "length": 512,
+        "height": 128
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/layer/select",
+      "parameters": {
+        "layer_id": "b_west"
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/brush/stroke",
+      "parameters": {
+        "points": [
+          [
+            0,
+            640
+          ],
+          [
+            256,
+            640
+          ],
+          [
+            384,
+            768
+          ],
+          [
+            384,
+            1088
+          ]
+        ],
+        "options": {
+          "mode": "material",
+          "shape": "circle",
+          "material": "earth",
+          "radius": 112,
+          "strength": 0.85,
+          "hardness": 0.25,
+          "target": 0,
+          "end_height": 0
+        }
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/layer/select",
+      "parameters": {
+        "layer_id": "b_low"
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/brush/stroke",
+      "parameters": {
+        "points": [
+          [
+            512,
+            640
+          ],
+          [
+            1180,
+            640
+          ]
+        ],
+        "options": {
+          "mode": "material",
+          "shape": "circle",
+          "material": "earth",
+          "radius": 112,
+          "strength": 0.85,
+          "hardness": 0.25,
+          "target": 0,
+          "end_height": 0
+        }
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/layer/select",
+      "parameters": {
+        "layer_id": "b_north_ramp"
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/brush/stroke",
+      "parameters": {
+        "points": [
+          [
+            512,
+            192
+          ],
+          [
+            768,
+            192
+          ]
+        ],
+        "options": {
+          "mode": "material",
+          "shape": "circle",
+          "material": "earth",
+          "radius": 112,
+          "strength": 0.85,
+          "hardness": 0.25,
+          "target": 0,
+          "end_height": 0
+        }
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/layer/select",
+      "parameters": {
+        "layer_id": "b_south_ramp"
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/brush/stroke",
+      "parameters": {
+        "points": [
+          [
+            512,
+            1088
+          ],
+          [
+            768,
+            1088
+          ]
+        ],
+        "options": {
+          "mode": "material",
+          "shape": "circle",
+          "material": "earth",
+          "radius": 112,
+          "strength": 0.85,
+          "hardness": 0.25,
+          "target": 0,
+          "end_height": 0
+        }
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/layer/select",
+      "parameters": {
+        "layer_id": "b_north_top"
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/brush/stroke",
+      "parameters": {
+        "points": [
+          [
+            768,
+            192
+          ],
+          [
+            1024,
+            192
+          ],
+          [
+            1024,
+            384
+          ]
+        ],
+        "options": {
+          "mode": "material",
+          "shape": "circle",
+          "material": "earth",
+          "radius": 112,
+          "strength": 0.85,
+          "hardness": 0.25,
+          "target": 0,
+          "end_height": 0
+        }
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/layer/select",
+      "parameters": {
+        "layer_id": "b_south_top"
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/brush/stroke",
+      "parameters": {
+        "points": [
+          [
+            768,
+            1088
+          ],
+          [
+            1024,
+            1088
+          ],
+          [
+            1024,
+            896
+          ]
+        ],
+        "options": {
+          "mode": "material",
+          "shape": "circle",
+          "material": "earth",
+          "radius": 112,
+          "strength": 0.85,
+          "hardness": 0.25,
+          "target": 0,
+          "end_height": 0
+        }
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/connector/upsert",
+      "parameters": {
+        "connector_id": "b_west_gate",
+        "surface_id": "b_west",
+        "position_xyz": [
+          0,
+          0,
+          640
+        ],
+        "normal_xyz": [
+          -1,
+          0,
+          0
+        ],
+        "width": 256,
+        "headroom": 128,
+        "kind": "walk",
+        "direction": "both",
+        "tags": [
+          "map_editor"
+        ]
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/compile_piece",
+      "parameters": {}
+    },
+    {
+      "screen": "piece",
+      "id": "piece/document/save",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\terra\\area_terrain\\clean_replay\\sanctuary_woods_overpass.source.json"
+      }
+    }
+  ]
+}

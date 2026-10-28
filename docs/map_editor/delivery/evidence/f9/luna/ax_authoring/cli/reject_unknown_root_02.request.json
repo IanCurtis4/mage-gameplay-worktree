@@ -1,0 +1,15 @@
+{
+  "ax_version": 1,
+  "actions": [
+    {
+      "screen": "piece",
+      "id": "piece/document/new",
+      "parameters": {
+        "confirm_discard": true,
+        "document_id": "must_not_apply",
+        "name": "No edit"
+      }
+    }
+  ],
+  "unexpected": "reject-before-mount"
+}

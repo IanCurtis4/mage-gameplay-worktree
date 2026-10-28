@@ -1,0 +1,338 @@
+{
+  "head": "beb8dc740bede1fb8c5e48a4389417f5cc535eaa",
+  "fixture": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+  "engine": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/godot/Godot_v4.7.2-stable_win64.exe",
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+  "profile": {
+    "APPDATA": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile\\Roaming",
+    "LOCALAPPDATA": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile\\Local"
+  },
+  "reused_headless": {
+    "stage": "Authoring",
+    "head": "da0e620829983c5948371cec9c36a983afa76613",
+    "ok": true,
+    "count": 30,
+    "notes": "same headless test/runtime input hashes as current native freeze; runtime untouched across beb8"
+  },
+  "native": {
+    "capture": "cli/../cli/positive_native_02_capture.png",
+    "visual_review": "The editor capture in native_02 showed the context/exchange auxiliary windows covering the terrain canvas; Root is correcting initial window visibility and will repeat only affected native proof.",
+    "stage": "AuthoringNative",
+    "count": 12,
+    "head": "beb8dc740bede1fb8c5e48a4389417f5cc535eaa",
+    "ok": true,
+    "source_hash": "87abe8373a53fbf7c53c15c6dae2e0e6022336ce1df6995ea6494696aa89c99a"
+  },
+  "cli": {
+    "stop_after_invalid_action": {
+      "requested": 3,
+      "expected_rejection": true,
+      "completed": 2,
+      "ok": false,
+      "unchanged_name": "Before invalid action"
+    },
+    "positive_headless": {
+      "source_hash": "87abe8373a53fbf7c53c15c6dae2e0e6022336ce1df6995ea6494696aa89c99a",
+      "compile_hash": "169c09d144ef58f1cda13fe66faeebfcdff0819ff7822b115b4482bc5fc1875b",
+      "completed": 10,
+      "ok": true,
+      "saved_source_sha256": "9F327DC24BAD60AB0323DA8BF0638BF4899E0BD042A7588D6AE0125B77AEE39C",
+      "requested": 10
+    },
+    "reopen_new_process": {
+      "compile_hash": "169c09d144ef58f1cda13fe66faeebfcdff0819ff7822b115b4482bc5fc1875b",
+      "completed": 2,
+      "ok": true,
+      "source_hash": "87abe8373a53fbf7c53c15c6dae2e0e6022336ce1df6995ea6494696aa89c99a"
+    },
+    "initial_unknown_root_argv": {
+      "expected": false,
+      "notes": "PowerShell array expression split --ax-request= and --ax-result= from their values; stdout reported arguments_invalid and no result file. Corrected with individual ArgumentList.Add in _02."
+    },
+    "positive_native": {
+      "source_hash": "87abe8373a53fbf7c53c15c6dae2e0e6022336ce1df6995ea6494696aa89c99a",
+      "compile_hash": "169c09d144ef58f1cda13fe66faeebfcdff0819ff7822b115b4482bc5fc1875b",
+      "completed": 10,
+      "ok": true,
+      "saved_source_sha256": "9F327DC24BAD60AB0323DA8BF0638BF4899E0BD042A7588D6AE0125B77AEE39C",
+      "requested": 10
+    },
+    "unknown_root": {
+      "completed_actions": 0,
+      "snapshot_absent": true,
+      "exit_code": 1,
+      "result": "arguments_invalid",
+      "notes": "returns Schema result without snapshot/count; initial missing result was due PowerShell argv array expansion, corrected in _02"
+    },
+    "initial_recipe_flattened_points": {
+      "expected": false,
+      "completed": 5,
+      "result": "arguments_invalid",
+      "notes": "PowerShell ConvertTo-Json collapsed points to [64,64]; preserved original failure. Corrected nested list in _02."
+    },
+    "existing_result_target": {
+      "code": "io_conflict",
+      "sentinel_preserved": true,
+      "exit_code": 1
+    }
+  },
+  "verify": {
+    "warning": "Godot ignored nested project.godot at res://tools/map_editor_probe/hosting.",
+    "total_steps": 299,
+    "exit_code": 0,
+    "check": "editor_import",
+    "selected_checks": 1,
+    "f1_fixture": true,
+    "manifest": "cli/../verify_editor_import_02/checks.jsonl",
+    "profile_isolated": true
+  },
+  "inputs": [
+    {
+      "fixture_sha256": "0616AB800576D537CAF66615141D95DCC7622CF07624990FF139095567BF1416",
+      "path": "addons/ragrpg_map_editor/shell.gd",
+      "source_sha256": "0616AB800576D537CAF66615141D95DCC7622CF07624990FF139095567BF1416"
+    },
+    {
+      "fixture_sha256": "D0AA6984699E065F0AA500CF839083909E68DDBC41D22E9EDF99E3D04A14AFA7",
+      "path": "addons/ragrpg_map_editor/presentation.gd",
+      "source_sha256": "D0AA6984699E065F0AA500CF839083909E68DDBC41D22E9EDF99E3D04A14AFA7"
+    },
+    {
+      "fixture_sha256": "ED6AABE03E2DD6702489EA8B25841DE280889CBCD1F886B134AA84A09F1B19C8",
+      "path": "scripts/map_authoring/terrain/terrain_panel.gd",
+      "source_sha256": "ED6AABE03E2DD6702489EA8B25841DE280889CBCD1F886B134AA84A09F1B19C8"
+    },
+    {
+      "fixture_sha256": "1556601D49997CCEA32223A250C499314B817EA9F32CDB9BF6A0D1DD94393614",
+      "path": "scripts/map_authoring/terrain/terrain_operations.gd",
+      "source_sha256": "1556601D49997CCEA32223A250C499314B817EA9F32CDB9BF6A0D1DD94393614"
+    },
+    {
+      "fixture_sha256": "D994F3169CA03F3337ED94119A53F79B716D44AAD5E84A2568D1D99B8387CD31",
+      "path": "scripts/map_authoring/agent/ax_session.gd",
+      "source_sha256": "D994F3169CA03F3337ED94119A53F79B716D44AAD5E84A2568D1D99B8387CD31"
+    },
+    {
+      "fixture_sha256": "5DAA803D6B6EBB3B6503A06B2BA57B1DB897EEEDCAE08DBDE273114BA4F99329",
+      "path": "tests/map_editor_ax_authoring_test.gd",
+      "source_sha256": "5DAA803D6B6EBB3B6503A06B2BA57B1DB897EEEDCAE08DBDE273114BA4F99329"
+    },
+    {
+      "fixture_sha256": "E0B7E25EF44DC6227A2BCBD1A437668870CB4181A30FFF1360315F99DB8CB523",
+      "path": "tests/map_editor_ax_authoring_ui_test.gd",
+      "source_sha256": "E0B7E25EF44DC6227A2BCBD1A437668870CB4181A30FFF1360315F99DB8CB523"
+    },
+    {
+      "fixture_sha256": "422D2644CCDB737ADDB225D614897A9113858825CF3A3C4AAC43E6F7964A79A3",
+      "path": "tools/map_editor_completion/run.ps1",
+      "source_sha256": "422D2644CCDB737ADDB225D614897A9113858825CF3A3C4AAC43E6F7964A79A3"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "cli/headless_saved_piece_02.json",
+      "sha256": "9F327DC24BAD60AB0323DA8BF0638BF4899E0BD042A7588D6AE0125B77AEE39C",
+      "bytes": 1521
+    },
+    {
+      "path": "cli/native_saved_piece_02.json",
+      "sha256": "9F327DC24BAD60AB0323DA8BF0638BF4899E0BD042A7588D6AE0125B77AEE39C",
+      "bytes": 1521
+    },
+    {
+      "path": "cli/positive_headless_02.invocation.json",
+      "sha256": "923C5297AC0A2989CDB5CE78F54E778A3FB12258E13DF1B86F2F0FCB6808C7FF",
+      "bytes": 1067
+    },
+    {
+      "path": "cli/positive_headless_02.request.json",
+      "sha256": "226CCBA52920DCBAB3AC61F41E3BBCABBDA229CA5592B0BAB068D0BFA356AAF1",
+      "bytes": 2678
+    },
+    {
+      "path": "cli/positive_headless_02.result.json",
+      "sha256": "E72FA98226A92735B350D837042BF15789A071B8D3F03FBF1F1FCF7B676A247B",
+      "bytes": 14735
+    },
+    {
+      "path": "cli/positive_headless_02.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0
+    },
+    {
+      "path": "cli/positive_headless_02.stdout.log",
+      "sha256": "F9F2272FBD0AFF3E940CDD5539EDBFC8C15F3FCD054654DEE9DDD123DD29BC24",
+      "bytes": 223
+    },
+    {
+      "path": "cli/positive_headless.request.json",
+      "sha256": "D114F159EB51DDB4D6F6525C74186382E8CDDC2FC13CBACBDDBD01E9D2140073",
+      "bytes": 2645
+    },
+    {
+      "path": "cli/positive_headless.result.json",
+      "sha256": "FE5D008DA31A30E64FEBDA4247DF74139728D4DB6C708EA30DD1AAF0030BBEE5",
+      "bytes": 11336
+    },
+    {
+      "path": "cli/positive_headless.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0
+    },
+    {
+      "path": "cli/positive_headless.stdout.log",
+      "sha256": "30418CBB36D399D17F066E5848E98A1817736B3AB221E39F7CF718B1399F51B4",
+      "bytes": 238
+    },
+    {
+      "path": "cli/positive_native_02_capture.png",
+      "sha256": "82E7847A193A23095F9FD14242D23F0CDA5745C99343878134221F7771926D33",
+      "bytes": 213712
+    },
+    {
+      "path": "cli/positive_native_02.invocation.json",
+      "sha256": "CD847F9B5930A8F9AF3A4660002363DA27A9169D7A3AD901C5773895BFEE9594",
+      "bytes": 1236
+    },
+    {
+      "path": "cli/positive_native_02.request.json",
+      "sha256": "4DF5F10E7FA6A5F17C8E1071985B52FD6901FA308C4004BD5CC698BBA51B72D2",
+      "bytes": 2676
+    },
+    {
+      "path": "cli/positive_native_02.result.json",
+      "sha256": "B5FAEB19E620288872A49857A3D104A6CB2CF632DA7D17B5A01DF473230F13DC",
+      "bytes": 14733
+    },
+    {
+      "path": "cli/positive_native_02.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0
+    },
+    {
+      "path": "cli/positive_native_02.stdout.log",
+      "sha256": "9BBDA33E5BF4A9D40F29001B62DCB183B520736DE831BA905B23EC79963B6529",
+      "bytes": 320
+    },
+    {
+      "path": "cli/reject_action_stop_02.invocation.json",
+      "sha256": "464623E857718CF044FF58A235B4F18AA0475522021AFB5591E3558C9B4207D2",
+      "bytes": 1454
+    },
+    {
+      "path": "cli/reject_action_stop_02.request.json",
+      "sha256": "34993E7DEFDA2C2ADAEDC4B240AD692778241DF39EB84DC0F8B013331F650B20",
+      "bytes": 783
+    },
+    {
+      "path": "cli/reject_action_stop_02.result.json",
+      "sha256": "4E12885B02EBF76DA8C95157D22A4D5E03E831F7F64F6FADF8C80125FAC2B11B",
+      "bytes": 8938
+    },
+    {
+      "path": "cli/reject_action_stop_02.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0
+    },
+    {
+      "path": "cli/reject_action_stop_02.stdout.log",
+      "sha256": "4B3FFD8C9D1AB3A6957293BABB2866F2C8705A953BE076D13E90912FEC8AFB05",
+      "bytes": 238
+    },
+    {
+      "path": "cli/reject_existing_result_02.invocation.json",
+      "sha256": "AFEA09B30F0F188E830F2E8D6AE6925E97E9AFEAE8C68A0DB3E45394996ED855",
+      "bytes": 1462
+    },
+    {
+      "path": "cli/reject_existing_result_02.request.json",
+      "sha256": "AD6F0C0343272F62AE76034889351914A413E683260028520A783F42974A39BA",
+      "bytes": 271
+    },
+    {
+      "path": "cli/reject_existing_result_02.result.json",
+      "sha256": "DD65039D01F2678DE6105ACF0AC3D5E8BAAEB17CD3BF2C117D2D6229CAB101BC",
+      "bytes": 35
+    },
+    {
+      "path": "cli/reject_existing_result_02.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0
+    },
+    {
+      "path": "cli/reject_existing_result_02.stdout.log",
+      "sha256": "57ADD112B1229101E92D86250D9ADC2D7AF13F7E99A0302DEE73D70440ED7925",
+      "bytes": 131
+    },
+    {
+      "path": "cli/reject_unknown_root_02.invocation.json",
+      "sha256": "718EF03F34804A0CF3D06A69A117164308193EFE3CCD471286C3C926AA073D40",
+      "bytes": 1456
+    },
+    {
+      "path": "cli/reject_unknown_root_02.request.json",
+      "sha256": "B03BBE71C1DC6636A365575D80DF8363DE555E3A58247047D6ADC0E1F627C90D",
+      "bytes": 295
+    },
+    {
+      "path": "cli/reject_unknown_root_02.result.json",
+      "sha256": "6650525261EC34A2BA3189B3436CA19D77D4DCB341BFDA4F6E28448EF2A8378D",
+      "bytes": 46
+    },
+    {
+      "path": "cli/reject_unknown_root_02.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0
+    },
+    {
+      "path": "cli/reject_unknown_root_02.stdout.log",
+      "sha256": "44310B023B81A10BBE60020C74BC1F4932264E47932AAA3814E8382077615A56",
+      "bytes": 176
+    },
+    {
+      "path": "cli/reject_unknown_root.invocation.json",
+      "sha256": "E391031C8B6F43EC0F7771A2B8C519C76CF7D631CB032A55894E521655AAE739",
+      "bytes": 1587
+    },
+    {
+      "path": "cli/reject_unknown_root.request.json",
+      "sha256": "24C0B5972C946ADEAC5918693E5B08C2F7A55867CC8FE36AB19C3A9DC9A5DAF0",
+      "bytes": 295
+    },
+    {
+      "path": "cli/reject_unknown_root.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0
+    },
+    {
+      "path": "cli/reject_unknown_root.stdout.log",
+      "sha256": "44310B023B81A10BBE60020C74BC1F4932264E47932AAA3814E8382077615A56",
+      "bytes": 176
+    },
+    {
+      "path": "cli/reopen_02.request.json",
+      "sha256": "73E86142051006961F48A784D1AE093649DE1189375CD3041E5F889B8222750D",
+      "bytes": 482
+    },
+    {
+      "path": "cli/reopen_02.result.json",
+      "sha256": "B48C17A8D36052BFB4309A1CA8CF2A40D1799E35ACB92AAF312E457814AFE825",
+      "bytes": 10380
+    },
+    {
+      "path": "cli/reopen_headless_02.invocation.json",
+      "sha256": "9F2B289E75EE2BEEB861954E15F05CD66F322239867F3C583E6AB11593817CF4",
+      "bytes": 1056
+    },
+    {
+      "path": "cli/reopen_headless_02.stderr.log",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0
+    },
+    {
+      "path": "cli/reopen_headless_02.stdout.log",
+      "sha256": "522390D81C0CBE42B48FEF63D6317878FD091A12CB95981DC029F4B382F8B68E",
+      "bytes": 222
+    }
+  ]
+}

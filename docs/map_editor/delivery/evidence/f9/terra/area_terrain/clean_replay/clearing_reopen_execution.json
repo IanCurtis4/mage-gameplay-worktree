@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+    "--path",
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+    "--script",
+    "res://scripts/map_authoring/agent/ax_session.gd",
+    "--",
+    "--ax-request=C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\terra\\area_terrain\\clean_replay\\clearing_reopen_actions.json",
+    "--ax-result=C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\terra\\area_terrain\\clean_replay\\clearing_reopen_result.json"
+  ],
+  "env": {
+    "APPDATA": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile",
+    "LOCALAPPDATA": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile"
+  },
+  "exit": 0,
+  "errors_in_log": false,
+  "actions": 2,
+  "ok": true,
+  "source_hash": "93a5d99c3110ec054fca292b3efe3778b4d4745003f35390ade9c3d6d307ba38",
+  "compile_hash": "aa762ada7df22b49c8ece77f95c9104791e8fc8138adecbdadd545651838bc12",
+  "source_sha256": "65a26754c437695d7e7d60e93980c187371fddeec4fb71f78323104dbb55ced5",
+  "source_bytes": 15116,
+  "matches_replay": true
+}

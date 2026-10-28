@@ -38,14 +38,14 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 06 minimap/árvore de objetos/camadas | arquitetura, F8 | minimapaXZ/câmera e busca/foco por camada/objeto/apoio/rota integrados às5 telas; árvore/listas dos produtores preservadas | validado6d72972: Luna20/52/53/28,Core639 e5 oficiais;9799 inputs conferidos; custos e fluxo final seguem em10/12 |
 | 06 overlays/foco/atalhos/diagnóstico localizado | arquitetura | altura/cotas, apoio, corpo, aberturas, encontros e rotas com flags; folga/LoS/ocupação reais, foco e atalhos no quadro; apoio explícito para seção editorial entre andares | validado6d72972: Native52 e5 oficiais Luna; diagnóstico/custos/UX integrada/área final ainda exigidos no conjunto12 |
 | 07 UX coerente/guiada | autoria F8 | menus e seletores existem; fechar fluxo humano inteiro | pendente |
-| 07 AX IDs/ações parametrizadas/estado/diagnóstico | autoria F8 | ax_invoke só botão; entregar operações com parâmetros | pendente |
+| 07 AX IDs/ações parametrizadas/estado/diagnóstico | autoria F8 | peça/terreno parametrizados e cliente sobre Shell real; objetos/composição/população/geração ainda faltam | fatia validada17516a20: Authoring30, Native15, CLI/roundtrip/negativos; sem fechamento global |
 | 07 histórico/hash/confirmação/modos | F8 | entregue; preservar invariantes | pendente de regressão |
 | 08 biomas/espécies/chances/pesos/reservas | autoria F8 | contexto/reservas e pesos existem; conferir chances e fluxos | pendente |
 | 08 raro manual sem palco/sorteio | decisão F8 | entregue com53 checks; preservar | pendente de regressão |
 | 08 exceção instância/regra/motivo/aviso | decisão F8 | entregue; preservar em novos consumidores | pendente de regressão |
 | 08 quest passiva/origem/recompensa canônica | F8, PRODUCT_DIRECTION | entregue; nenhuma engine inferida | pendente de regressão |
 | 08 stale/revisão/reconciliação sem perda | F6, F8 | snapshots separados, reimportação explícita limitada | pendente |
-| 09 GUI/AX/CLI equivalentes | F7, F8 | GUI/headless parcial; AX sem parâmetros | pendente |
+| 09 GUI/AX/CLI equivalentes | F7, F8 | equivalência comprovada para peça/terreno, compilação e Store; demais produtores e bundles faltam | primeira fatia17516a20 aprovada; restante pendente |
 | 09 diff/preview/undo/proteção espacial/rebase | F7 | camada protegida inteira e base divergente; completar região/reconciliação | pendente |
 | 09 assets passivos/ambiente limpo/segurança | F7 | referências locais apenas; transporte faltante | pendente |
 | 09 fontes de skills/guias | F7 | três fontes versionadas existentes; atualizar sem instalar | pendente |

@@ -1,0 +1,10 @@
+{"ax_version":1,"actions":[
+{"screen":"piece","id":"piece/document/new","parameters":{"document_id":"sanctuary_woods_clearing","name":"Bosque do Santuário — Clareira","confirm_discard":true}},
+{"screen":"terrain","id":"terrain/grid/create","parameters":{"layer_id":"a_ground","name":"Clareira","origin_xz":[0,0],"columns":21,"rows":21,"sample_spacing":64,"height":0}},
+{"screen":"terrain","id":"terrain/layer/select","parameters":{"layer_id":"a_ground"}},
+{"screen":"terrain","id":"terrain/brush/stroke","parameters":{"points":[[320,224]],"options":{"mode":"rounded_hill","shape":"circle","material":"earth","radius":192,"strength":24,"hardness":0,"target":0,"end_height":0}}},
+{"screen":"terrain","id":"terrain/brush/stroke","parameters":{"points":[[160,640],[320,640],[576,512],[832,512],[1088,576],[1280,640]],"options":{"mode":"material","shape":"circle","material":"earth","radius":112,"strength":0.85,"hardness":0.25,"target":0,"end_height":0}}},
+{"screen":"terrain","id":"terrain/connector/upsert","parameters":{"connector_id":"a_east","surface_id":"a_ground","position_xyz":[1280,0,640],"normal_xyz":[1,0,0],"width":256,"headroom":128,"kind":"walk","direction":"both","tags":["map_editor"]}},
+{"screen":"terrain","id":"terrain/compile_piece","parameters":{}},
+{"screen":"piece","id":"piece/document/save","parameters":{"path":"C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/data/map_authoring/sanctuary_woods_clearing.source.json"}}
+]}

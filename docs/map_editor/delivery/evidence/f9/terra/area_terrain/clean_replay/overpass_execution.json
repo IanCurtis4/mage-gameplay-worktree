@@ -1,0 +1,28 @@
+{
+  "argv": [
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+    "--path",
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+    "--script",
+    "res://scripts/map_authoring/agent/ax_session.gd",
+    "--",
+    "--ax-request=C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\terra\\area_terrain\\clean_replay\\overpass_actions.json",
+    "--ax-result=C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\terra\\area_terrain\\clean_replay\\overpass_result.json",
+    "--ax-capture=C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\terra\\area_terrain\\clean_replay\\overpass.png"
+  ],
+  "env": {
+    "APPDATA": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile",
+    "LOCALAPPDATA": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile"
+  },
+  "exit": 0,
+  "errors_in_log": false,
+  "actions": 27,
+  "source_hash": "d0d0f5ba826a167facc6f703ef0e85d97ba74b1dcb75270de834f294c02ed94a",
+  "compile_hash": "dd2da0720ecc3757d42378e5be0e97865fba979d637517f1513bf666ee490a88",
+  "old_source_hash": "d0d0f5ba826a167facc6f703ef0e85d97ba74b1dcb75270de834f294c02ed94a",
+  "old_compile_hash": "3a6300d644c76a9cd3d5fa3067783fa3f037df5fa5c01be9866e6667059c1fb6",
+  "target_bytes": 8142,
+  "target_sha256": "d0071096addfefcefad1f1df849c3977064a741b4ed1446ffaf50a3f25a95d7e",
+  "original_sha256": "d0071096addfefcefad1f1df849c3977064a741b4ed1446ffaf50a3f25a95d7e",
+  "identical_bytes": true
+}

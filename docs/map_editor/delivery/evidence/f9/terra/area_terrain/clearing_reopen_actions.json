@@ -1,0 +1,18 @@
+{
+  "ax_version": 1,
+  "actions": [
+    {
+      "screen": "piece",
+      "id": "piece/document/open",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods_clearing.source.json",
+        "confirm_discard": true
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/compile_piece",
+      "parameters": {}
+    }
+  ]
+}

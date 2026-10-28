@@ -1,0 +1,18 @@
+{
+  "actions": [
+    {
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\luna\\ax_authoring\\cli\\headless_saved_piece_02.json",
+        "confirm_discard": true
+      },
+      "id": "piece/document/open",
+      "screen": "piece"
+    },
+    {
+      "parameters": {},
+      "id": "terrain/compile_piece",
+      "screen": "terrain"
+    }
+  ],
+  "ax_version": 1
+}

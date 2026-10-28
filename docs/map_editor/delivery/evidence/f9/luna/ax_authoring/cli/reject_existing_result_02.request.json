@@ -1,0 +1,14 @@
+{
+  "actions": [
+    {
+      "parameters": {
+        "name": "No overwrite",
+        "document_id": "conflict_should_not_apply",
+        "confirm_discard": true
+      },
+      "screen": "piece",
+      "id": "piece/document/new"
+    }
+  ],
+  "ax_version": 1
+}

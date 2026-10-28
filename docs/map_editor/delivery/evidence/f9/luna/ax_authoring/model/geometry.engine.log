@@ -1,0 +1,34 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Cannot infer the type of "entered" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_ax_authoring_test.gd:41)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "new_piece" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_ax_authoring_test.gd:44)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "region_seeded" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_ax_authoring_test.gd:72)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "named" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_ax_authoring_test.gd:112)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "saved" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_ax_authoring_test.gd:118)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "failed_save" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_ax_authoring_test.gd:125)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "changed_name" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_ax_authoring_test.gd:127)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "save_conflict" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_ax_authoring_test.gd:135)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "denied_open" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_ax_authoring_test.gd:137)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "opened" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_ax_authoring_test.gd:138)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "dirty_name" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_ax_authoring_test.gd:140)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "denied_new" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_ax_authoring_test.gd:141)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "failed_preserve_new" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_ax_authoring_test.gd:150)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "accepted_new" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_ax_authoring_test.gd:154)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "malformed_name" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://tests/map_editor_ax_authoring_test.gd:158)
+ERROR: Failed to load script "res://tests/map_editor_ax_authoring_test.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

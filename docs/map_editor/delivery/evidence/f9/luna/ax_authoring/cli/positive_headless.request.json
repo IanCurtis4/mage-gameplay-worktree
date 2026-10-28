@@ -1,0 +1,120 @@
+{
+  "actions": [
+    {
+      "screen": "piece",
+      "parameters": {
+        "name": "Peça CLI",
+        "confirm_discard": true,
+        "document_id": "cli_shared_piece"
+      },
+      "id": "piece/document/new"
+    },
+    {
+      "screen": "terrain",
+      "parameters": {
+        "columns": 5,
+        "height": 0.0,
+        "sample_spacing": 32.0,
+        "layer_id": "cli_grid_a",
+        "name": "Grade A",
+        "rows": 5,
+        "origin_xz": [
+          0.0,
+          0.0
+        ]
+      },
+      "id": "terrain/grid/create"
+    },
+    {
+      "screen": "terrain",
+      "parameters": {
+        "columns": 5,
+        "height": 0.0,
+        "sample_spacing": 32.0,
+        "layer_id": "cli_grid_b",
+        "name": "Grade B",
+        "rows": 5,
+        "origin_xz": [
+          128.0,
+          0.0
+        ]
+      },
+      "id": "terrain/grid/create"
+    },
+    {
+      "screen": "terrain",
+      "parameters": {
+        "layer_id": "cli_grid_a"
+      },
+      "id": "terrain/layer/select"
+    },
+    {
+      "screen": "terrain",
+      "parameters": {
+        "options": {
+          "material": "earth",
+          "strength": 8.0,
+          "target": 0.0,
+          "radius": 32.0,
+          "mode": "raise",
+          "shape": "circle",
+          "end_height": 40.0,
+          "hardness": 0.5
+        },
+        "points": [
+          64.0,
+          64.0
+        ]
+      },
+      "id": "terrain/brush/stroke"
+    },
+    {
+      "screen": "piece",
+      "parameters": {},
+      "id": "piece/history/undo"
+    },
+    {
+      "screen": "piece",
+      "parameters": {},
+      "id": "piece/history/redo"
+    },
+    {
+      "screen": "terrain",
+      "parameters": {
+        "kind": "walk",
+        "direction": "both",
+        "tags": [
+          "map_editor"
+        ],
+        "width": 32.0,
+        "connector_id": "cli_gate",
+        "headroom": 100.0,
+        "normal_xyz": [
+          -1,
+          0,
+          0
+        ],
+        "position_xyz": [
+          0.0,
+          0.0,
+          64.0
+        ],
+        "surface_id": "cli_grid_a"
+      },
+      "id": "terrain/connector/upsert"
+    },
+    {
+      "screen": "terrain",
+      "parameters": {},
+      "id": "terrain/compile_piece"
+    },
+    {
+      "screen": "piece",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\luna\\ax_authoring\\cli\\headless_saved_piece.json"
+      },
+      "id": "piece/document/save"
+    }
+  ],
+  "ax_version": 1
+}

@@ -2912,7 +2912,7 @@
       "roles": "Luna executed all stages; usage limit interrupted agents after execution; Sol independently inspected outputs/hashes and wrote final consolidation"
     },
     "ax_authoring": {
-      "state": "frozen_validation_in_progress",
+      "state": "producer_validated_content_integration",
       "base": "0b80ca6",
       "runtime_owner": "Sol F9",
       "tests_owner": "Luna F9 AX",
@@ -2924,7 +2924,27 @@
       ],
       "fixture": ".godot/verification/e07_f1/fixture_project",
       "uid_origin": "Godot import01; four generated sidecars copied before freeze",
-      "freeze": "da0e620829983c5948371cec9c36a983afa76613"
+      "freeze": "da0e620829983c5948371cec9c36a983afa76613",
+      "runtime_head": "17516a20f959fabdecf0af76777824d379d98f42",
+      "authoring": 30,
+      "native": 15,
+      "cli_native_actions": 10,
+      "verify": [
+        "editor_import:1/299"
+      ],
+      "input_count": 2024,
+      "source_fixture_manifest_mismatches": 0,
+      "terrain_sources": 2,
+      "terrain_actions": [
+        8,
+        27
+      ],
+      "terrain_reopen": [
+        2,
+        2
+      ],
+      "gameplay_for_new_sources": "not yet exercised",
+      "import_metadata_limit": "grass/earth .import differ source vs fixture; asset portability remains open"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"
