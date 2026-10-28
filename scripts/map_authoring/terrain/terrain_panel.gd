@@ -1,5 +1,6 @@
 @tool
 extends VBoxContainer
+const Operations = preload("res://scripts/map_authoring/terrain/terrain_operations.gd")
 const OrganicExample = preload("res://scripts/map_authoring/terrain/organic_example.gd")
 const Brush = preload("res://scripts/map_authoring/terrain/brush.gd")
 const Compiler = preload("res://scripts/map_authoring/compiler/terrain_compiler.gd")
@@ -245,9 +246,23 @@ func remove_preset() -> void:
 	else: status.text = "Escolha uma predefinição pessoal para remover. As predefinições do projeto são preservadas."
 
 func authoring_commands() -> Array:
-	return [{"id":"terrain/example/organic","parameters":{}},{"id":"terrain/brush/stroke","parameters":{"points":"number[2][]","options":"brush_options"}},{"id":"terrain/presets/list","parameters":{}},{"id":"terrain/presets/apply","parameters":{"preset_id":"string"}},{"id":"terrain/presets/save","parameters":{"name":"string","options":"brush_options"}}]
+	return [{"id":"terrain/example/organic","parameters":{}},{"id":"terrain/brush/stroke","parameters":{"points":"number[2][]","options":"brush_options"}},{"id":"terrain/presets/list","parameters":{}},{"id":"terrain/presets/apply","parameters":{"preset_id":"string"}},{"id":"terrain/presets/save","parameters":{"name":"string","options":"brush_options"}},
+		{"id":"terrain/grid/create","parameters":{"layer_id":"id","name":"string","origin_xz":"number[2]","columns":"integer 2..257","rows":"integer 2..257","sample_spacing":"number 4..256","height":"number -512..512"}},
+		{"id":"terrain/layer/select","parameters":{"layer_id":"id"}},
+		{"id":"terrain/layer/lock","parameters":{"layer_id":"id","locked":"boolean"}},
+		{"id":"terrain/layer/protection","parameters":{"layer_id":"id","region_ids":"existing region IDs[]"}},
+		{"id":"terrain/bridge/create","parameters":{"surface_id":"id","layer_id":"id","origin_xz":"number[2]","width":"number 4..1024","length":"number 4..1024","height":"number 4..1024"}},
+		{"id":"terrain/connector/upsert","parameters":Operations.Schema.FIELDS.connectors.duplicate()},
+		{"id":"terrain/connector/remove","parameters":{"connector_id":"id"}}]
 
 func ax_command(id: String, parameters: Dictionary) -> Dictionary:
+	if id == "terrain/layer/select":
+		if not Preferences._keys(parameters,["layer_id"]) or not Operations.Schema._type(parameters.layer_id,"id"): return {"ok":false,"code":"arguments_invalid"}
+		if Operations._layer(session.document().to_data(),parameters.layer_id).is_empty(): return {"ok":false,"code":"source_reference_missing"}
+		select_layer(parameters.layer_id)
+		return {"ok":true,"entity_id":selected_layer,"output_hash":session.document().semantic_hash()}
+	if id.trim_prefix("terrain/") in ["grid/create","bridge/create","connector/upsert","connector/remove","layer/lock","layer/protection"]:
+		return apply_operation(id.trim_prefix("terrain/"),parameters)
 	if id == "terrain/example/organic":
 		if not parameters.is_empty(): return {"ok":false,"code":"arguments_invalid"}
 		return create_organic_example()
@@ -276,25 +291,28 @@ func apply_stroke(points: Array, options: Dictionary) -> Dictionary:
 	if not proposal.ok: status.text = "Destrave a camada para editar." if proposal.code == "layer_locked" else "O traço não pôde ser aplicado. Confira a camada e os parâmetros."
 	return proposal
 
-func add_bridge() -> void:
-	if selected_layer.is_empty(): return
-	var data: Dictionary = session.document().to_data()
-	for layer: Dictionary in data.layers:
-		if layer.layer_id == selected_layer and layer.locked: status.text = "Destrave a camada para adicionar a ponte."; return
-	var x := bridge_x.value; var z := bridge_z.value; var y := bridge_height.value
-	data.special_surfaces.append({"surface_id":"bridge_"+Crypto.new().generate_random_bytes(8).hex_encode(),"layer_id":selected_layer,"vertices_xyz":[[x,y,z],[x+bridge_width.value,y,z],[x+bridge_width.value,y,z+bridge_length.value],[x,y,z+bridge_length.value]],"headroom":100.0})
-	var applied: Dictionary = session.apply(data)
-	if not applied.ok: status.text = "A ponte não pôde ser adicionada. Confira a fonte."
-	else: canvas.fit()
+func apply_operation(operation: String, parameters: Dictionary) -> Dictionary:
+	var proposal := Operations.propose(session.document().to_data(),operation,parameters)
+	if not proposal.ok:
+		status.text = "Destrave a camada para editar." if proposal.code == "layer_locked" else "A operação não pôde ser aplicada. Confira os parâmetros e as regiões protegidas."
+		return proposal
+	if not proposal.changed: return proposal
+	var applied: Dictionary = session.apply(proposal.data)
+	applied.entity_id = proposal.entity_id
+	if applied.ok:
+		if operation == "grid/create": select_layer(proposal.entity_id)
+		if operation in ["grid/create","bridge/create"]: canvas.fit()
+		status.text = "Alteração aplicada. Compile a peça para conferir a geometria."
+	return applied
 
-func add_grid() -> void:
-	var data: Dictionary = session.document().to_data()
-	var heights: Array = []; heights.resize(int(grid_columns.value)*int(grid_rows.value)); heights.fill(grid_y.value)
-	var id := "layer_"+Crypto.new().generate_random_bytes(8).hex_encode()
-	data.layers.append({"layer_id":id,"name":"Camada %d"%(data.layers.size()+1),"origin_xz":[grid_x.value,grid_z.value],"sample_spacing":grid_spacing.value,"columns":int(grid_columns.value),"rows":int(grid_rows.value),"heights":heights,"material_masks":{},"locked":false,"protected_regions":[]})
-	var applied: Dictionary = session.apply(data)
-	if applied.ok: select_layer(id); canvas.fit()
-	else: status.text = "A grade não pôde ser adicionada. Confira a fonte."
+func add_bridge(surface_id: String = "") -> void:
+	if selected_layer.is_empty(): return
+	if surface_id.is_empty(): surface_id = "bridge_"+Crypto.new().generate_random_bytes(8).hex_encode()
+	apply_operation("bridge/create",{"surface_id":surface_id,"layer_id":selected_layer,"origin_xz":[bridge_x.value,bridge_z.value],"width":bridge_width.value,"length":bridge_length.value,"height":bridge_height.value})
+
+func add_grid(layer_id: String = "") -> void:
+	if layer_id.is_empty(): layer_id = "layer_"+Crypto.new().generate_random_bytes(8).hex_encode()
+	apply_operation("grid/create",{"layer_id":layer_id,"name":"Camada %d"%(session.document().to_data().layers.size()+1),"origin_xz":[grid_x.value,grid_z.value],"columns":int(grid_columns.value),"rows":int(grid_rows.value),"sample_spacing":grid_spacing.value,"height":grid_y.value})
 
 static func sample_source(data: Dictionary) -> Dictionary:
 	var source := data.duplicate(true)
@@ -370,39 +388,19 @@ func _select_connector(index: int) -> void:
 	connector_tags.text = ", ".join(connector.tags)
 
 func _surface_locked(data: Dictionary, id: String) -> bool:
-	var layer_id := id
-	for special: Dictionary in data.special_surfaces:
-		if special.surface_id == id: layer_id = special.layer_id
-	for layer: Dictionary in data.layers:
-		if layer.layer_id == layer_id: return layer.locked
-	return true
+	return Operations.surface_locked(data,id)
 
 func save_connector() -> void:
 	if connector_surface.selected < 0: return
-	var data: Dictionary = session.document().to_data()
-	var surface_id: String = connector_surface.get_item_metadata(connector_surface.selected)
-	if _surface_locked(data,surface_id): status.text = "Destrave a camada para editar a conexão."; return
 	var normals: Array = [[-1,0,0],[1,0,0],[0,0,-1],[0,0,1]]
-	var next := {"connector_id":connector_id.text.strip_edges(),"surface_id":surface_id,"position_xyz":[connector_x.value,connector_y.value,connector_z.value],"normal_xyz":normals[connector_side.selected],"width":connector_width.value,"headroom":connector_headroom.value,"kind":"walk","tags":["map_editor"],"direction":["both","in","out"][connector_direction.selected]}
-	next.tags = []
+	var next := {"connector_id":connector_id.text.strip_edges(),"surface_id":connector_surface.get_item_metadata(connector_surface.selected),"position_xyz":[connector_x.value,connector_y.value,connector_z.value],"normal_xyz":normals[connector_side.selected],"width":connector_width.value,"headroom":connector_headroom.value,"kind":"walk","tags":[],"direction":["both","in","out"][connector_direction.selected]}
 	for tag: String in connector_tags.text.split(",",false):
 		var value := tag.strip_edges()
 		if value not in next.tags: next.tags.append(value)
-	for i: int in data.connectors.size():
-		if data.connectors[i].connector_id == next.connector_id:
-			if _surface_locked(data,data.connectors[i].surface_id): status.text = "Destrave a camada de origem da conexão."; return
-			data.connectors.remove_at(i); break
-	data.connectors.append(next)
-	var applied: Dictionary = session.apply(data)
-	if not applied.ok: status.text = "A conexão não pôde ser aplicada. Use um ID técnico e confira os parâmetros."
-	else: status.text = "Conexão atualizada. Compile para conferir a abertura geométrica."
+	apply_operation("connector/upsert",next)
 
 func remove_connector() -> void:
-	var data: Dictionary = session.document().to_data()
-	for i: int in data.connectors.size():
-		if data.connectors[i].connector_id != connector_id.text: continue
-		if _surface_locked(data,data.connectors[i].surface_id): status.text = "Destrave a camada para remover a conexão."; return
-		data.connectors.remove_at(i); session.apply(data); return
+	apply_operation("connector/remove",{"connector_id":connector_id.text})
 
 func create_sample() -> void:
 	if not session.document().to_data().layers.is_empty():

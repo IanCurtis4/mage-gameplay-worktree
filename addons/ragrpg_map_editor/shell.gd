@@ -27,6 +27,7 @@ var redo_button: Button
 var recovery_kind: OptionButton
 var _dialog: ConfirmationDialog
 var _pending_action: Callable
+var _ax_replace_error := ""
 
 var exchange_panel: Control
 func _ready() -> void:
@@ -244,29 +245,73 @@ func _confirm(action: Callable) -> void:
 
 func request_new() -> void: _confirm(_new_document)
 
-func _new_document() -> void:
+func _new_document(document_id: String = "", caption: String = "Peça sem título") -> void:
 	source_path = ""
 	expected_hash = ""
 	path_edit.text = ""
 	session.saved_hash = ""
-	session.replace(Document.empty(_id("piece")))
+	var data := Document.empty(_id("piece") if document_id.is_empty() else document_id)
+	data.name = caption
+	session.replace(data)
 
-func rename_document(value: String) -> void:
+func rename_document(value: String) -> Dictionary:
 	var data: Dictionary = session.document().to_data()
-	if data.name == value: return
+	if data.name == value: return {"ok":true,"output_hash":session.document().semantic_hash()}
 	data.name = value
-	_show(session.apply(data))
+	var result: Dictionary = session.apply(data)
+	_show(result)
+	return result
+
+func authoring_commands() -> Array:
+	return [{"id":"piece/document/new","parameters":{"document_id":"id","name":"string","confirm_discard":"boolean"}},
+		{"id":"piece/document/name","parameters":{"name":"string"}},
+		{"id":"piece/document/open","parameters":{"path":"string","confirm_discard":"boolean"}},
+		{"id":"piece/document/save","parameters":{"path":"string"}},
+		{"id":"piece/history/undo","parameters":{}},{"id":"piece/history/redo","parameters":{}}]
+
+func ax_command(id: String, parameters: Dictionary) -> Dictionary:
+	var fields := {"piece/document/new":{"document_id":"id","name":"string","confirm_discard":"bool"},"piece/document/name":{"name":"string"},"piece/document/open":{"path":"string","confirm_discard":"bool"},"piece/document/save":{"path":"string"},"piece/history/undo":{},"piece/history/redo":{}}
+	if not fields.has(id): return Schema.result(false,"action_missing")
+	var errors: Array = []
+	Schema._shape(parameters,fields[id],"parameters",errors)
+	if not errors.is_empty(): return Schema.result(false,"arguments_invalid",errors)
+	if parameters.has("path") and (parameters.path.strip_edges().is_empty() or parameters.path.to_utf8_buffer().has(0)): return Schema.result(false,"arguments_invalid")
+	match id:
+		"piece/document/name": return rename_document(parameters.name)
+		"piece/document/save": return save_path(parameters.path)
+		"piece/document/new":
+			if not _confirm_ax_replace(parameters.confirm_discard): return Schema.result(false,_ax_replace_error)
+			_new_document(parameters.document_id,parameters.name)
+		"piece/document/open":
+			var loaded := Store.load_source(parameters.path)
+			if not loaded.ok: return loaded
+			if not _confirm_ax_replace(parameters.confirm_discard): return Schema.result(false,_ax_replace_error)
+			_accept_open(parameters.path,loaded)
+		"piece/history/undo":
+			if not session.undo(): return Schema.result(false,"history_empty")
+		"piece/history/redo":
+			if not session.redo(): return Schema.result(false,"history_empty")
+	var result := Schema.result(true)
+	result.output_hash = session.document().semantic_hash()
+	result.entity_id = session.document().to_data().document_id
+	return result
+
+func _confirm_ax_replace(confirmed: bool) -> bool:
+	_ax_replace_error = ""
+	if not session.dirty() and title_edit.text == session.document().to_data().name: return true
+	if not confirmed:
+		_ax_replace_error = "confirmation_required"
+		return false
+	if not preserve_draft():
+		_ax_replace_error = "io_recovery_required"
+		return false
+	return true
 
 func _commit_name() -> void:
 	if session.document() != null: rename_document(title_edit.text)
 
 func add_layer() -> void:
-	var data: Dictionary = session.document().to_data()
-	var heights: Array = []; heights.resize(81); heights.fill(0.0)
-	data.layers.append({"layer_id": _id("layer"), "name": "Camada %d" % (data.layers.size() + 1), "origin_xz": [0, 0], "sample_spacing": 32, "columns": 9, "rows": 9, "heights": heights, "material_masks": {}, "locked": false, "protected_regions": []})
-	_show(session.apply(data))
-	terrain.select_layer(data.layers[-1].layer_id)
-	terrain.canvas.fit()
+	_show(terrain.apply_operation("grid/create",{"layer_id":_id("layer"),"name":"Camada %d"%(session.document().to_data().layers.size()+1),"origin_xz":[0,0],"sample_spacing":32,"columns":9,"rows":9,"height":0.0}))
 
 func duplicate_layer() -> void:
 	var selected := layers.get_selected_items()
@@ -277,9 +322,8 @@ func duplicate_layer() -> void:
 func toggle_layer_lock() -> void:
 	var selected := layers.get_selected_items()
 	if selected.is_empty(): return
-	var data: Dictionary = session.document().to_data()
-	data.layers[selected[0]].locked = not data.layers[selected[0]].locked
-	_show(session.apply(data))
+	var layer: Dictionary = session.document().to_data().layers[selected[0]]
+	_show(terrain.apply_operation("layer/lock",{"layer_id":layer.layer_id,"locked":not layer.locked}))
 
 func _refresh() -> void:
 	if session.document() == null: return
@@ -310,31 +354,54 @@ func _select_problem(index: int) -> void:
 func _draft_path() -> String:
 	return source_path if not source_path.is_empty() else recovery_root.path_join(session.document().to_data().document_id + ".json")
 
+func _pending_document() -> Dictionary:
+	var data: Dictionary = session.document().to_data()
+	if title_edit.text != data.name:
+		data.name = title_edit.text
+		data.revision = int(data.revision)+1
+	return data
+
+func _check_pending_name(data: Dictionary) -> Dictionary:
+	if data.name == session.document().to_data().name: return Schema.result(true)
+	var checked := Schema.read(JSON.stringify(data,"",true,true).to_utf8_buffer())
+	if not checked.ok: return checked
+	return checked if checked.valid else Schema.result(false,checked.diagnostics[0].code,checked.diagnostics)
+
 func preserve_draft() -> bool:
-	_commit_name()
-	if session.document() == null or not session.dirty(): return true
-	var result := Store.autosave(_draft_path(), session.document().to_data(), expected_hash)
-	if not result.ok: _show(result)
+	if session.document() == null: return true
+	var data := _pending_document()
+	var checked := _check_pending_name(data)
+	if not checked.ok: _show(checked); return false
+	if Schema.semantic_hash(data) == session.saved_hash: return true
+	# Persist before committing a pending text edit: a failed write keeps history intact.
+	var result := Store.autosave(_draft_path(),data,expected_hash)
+	if result.ok: _commit_name()
+	else: _show(result)
 	return result.ok
+
+func _accept_open(path: String, result: Dictionary) -> void:
+	source_path = path
+	expected_hash = result.byte_hash
+	session.saved_hash = result.output_hash
+	path_edit.text = path
+	session.replace(result.data)
+	terrain.canvas.fit()
+	Library.register_source(path,"piece")
 
 func open_path(path: String) -> Dictionary:
 	var result := Store.load_source(path)
-	if result.ok:
-		source_path = path
-		expected_hash = result.byte_hash
-		session.saved_hash = result.output_hash
-		path_edit.text = path
-		session.replace(result.data)
-		terrain.canvas.fit()
-		Library.register_source(path,"piece")
+	if result.ok: _accept_open(path,result)
 	_show(result)
 	return result
 
 func save_path(path: String) -> Dictionary:
-	_commit_name()
 	var expected := expected_hash if path == source_path else ""
-	var result := Store.save_source(path, session.document().to_data(), expected)
+	var data := _pending_document()
+	var checked := _check_pending_name(data)
+	if not checked.ok: _show(checked); return checked
+	var result := Store.save_source(path,data,expected)
 	if result.ok:
+		_commit_name()
 		source_path = path
 		expected_hash = result.byte_hash
 		session.saved_hash = result.output_hash

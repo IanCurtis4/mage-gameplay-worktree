@@ -61,3 +61,50 @@ GUI/AX/CLI de mesma fonte (IDs explícitos), nativo/roundtrip, consumidor Terra
 sem edição de JSON. Cobertura/regressões escolhidas por impacto. Medir ações
 no jogo separadamente da preparação. Atualizar matriz sem fechar F9 inteiro
 até comprovar seus demais requisitos.
+
+## Especificação executável da fatia AX01 —28/10
+
+Produtores Sol sobre0b80ca6, checkout/branch preservados. Ownership em
+f9_ownership.json; testes novos Luna. Comandos terrain recebem exatamente:
+
+- grid/create: layer_id, name, origin_xz[2], columns, rows, sample_spacing, height.
+- layer/select: layer_id; layer/lock: layer_id, locked (destravar é explícito).
+- layer/protection: layer_id, region_ids de regiões já existentes nessa camada.
+- bridge/create: surface_id, layer_id, origin_xz[2], width, length, height.
+- connector/upsert: todos os campos de SourceSchema.FIELDS.connectors.
+- connector/remove: connector_id.
+
+Propostas são puras e fechadas. Grade usa limites dos controles2..257, passo4..256,
+origem±8192 e altura±512. Ponte4..1024 em largura/comprimento/cota, folga100.
+Conector tem normal cardinal e kind walk do formulário atual; largura4..8192,
+folga12..8192, posição±8192. IDs de camada/piso não podem colidir. No-op não
+acrescenta undo. Conector verifica locks de destino e origem ao ser transferido.
+Proteção usa as regiões existentes e o mesmo pincel; ponte recusa interseção com
+região protegida. Máscaras por canal e criação/reconciliação regional continuam
+nos escopos05/09; não afirmar que este setter as implementa.
+
+Piece/document/new exige document_id,name,confirm_discard; name exige name;
+open exige path,confirm_discard; save exige path; undo/redo não têm argumentos.
+Campo desconhecido/ID inválido falha antes da preservação. Gravação do nome ainda
+em edição é persistida antes de entrar no histórico; falha de gravação preserva
+fonte/histórico. Open lê candidato antes de substituir e não descarta por erro.
+Fontes semanticamente inválidas continuam abríveis para diagnóstico/reparo na
+mesma autoridade; compilação continua obrigatória para publicação.
+
+Transporte: scripts/map_authoring/agent/ax_session.gd é SceneTree e monta Shell
+real. Godot --path FIXTURE --headless --script res://scripts/map_authoring/agent/ax_session.gd
+-- --ax-request=RECEITA --ax-result=RESULTADO. Para captura nativa, omitir headless,
+usar gl_compatibility e --ax-capture=PNG. Resultados/capturas exigem destino novo.
+Receita passiva fechada: {"ax_version":1,"actions":[{"screen":"piece" ou "terrain",
+"id":"ID do comando","parameters":{...}}]}; no máximo4096ações e teto StrictJSON.
+Nenhuma execução de script recebida ou substituição genérica da fonte.
+Resposta contém resultado/hashes por ação, snapshot real e diagnósticos; primeiro
+erro encerra o lote. Alterações anteriores seguem no histórico; atomicidade é por
+comando, não pelo lote inteiro. Objetos/composição/populações não estão expostos
+por este cliente ainda. Esta descrição é contrato, não alegação de testes PASS.
+
+O cliente também aceita a ação existente terrain/compile_piece com parâmetros
+vazios. Aguarda o worker normal do painel e retorna seu resultado canônico antes
+de continuar (proteção300s), mantendo cancelamento/stale/diagnóstico do produtor.
+Não retorna uma compilação iniciada como se já tivesse sido concluída. Resultados
+por ação omitem cópias integrais data/package; o snapshot final contém a fonte.

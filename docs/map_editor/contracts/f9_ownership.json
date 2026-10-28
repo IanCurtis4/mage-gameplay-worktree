@@ -2480,25 +2480,25 @@
     },
     {
       "path": "scripts/map_authoring/terrain/terrain_operations.gd",
-      "owner": "Sol F9 — semantic AX authoring vertical",
+      "owner": "Sol F9",
       "previous_owner": "new F9 file",
       "base_sha256": null
     },
     {
       "path": "scripts/map_authoring/terrain/terrain_operations.gd.uid",
-      "owner": "Sol F9 — semantic AX authoring vertical",
+      "owner": "Sol F9",
       "previous_owner": "new F9 file",
       "base_sha256": null
     },
     {
       "path": "scripts/map_authoring/agent/ax_session.gd",
-      "owner": "Sol F9 — semantic AX authoring vertical",
+      "owner": "Sol F9",
       "previous_owner": "new F9 file",
       "base_sha256": null
     },
     {
       "path": "scripts/map_authoring/agent/ax_session.gd.uid",
-      "owner": "Sol F9 — semantic AX authoring vertical",
+      "owner": "Sol F9",
       "previous_owner": "new F9 file",
       "base_sha256": null
     },
@@ -2638,6 +2638,42 @@
       "path": "docs/map_editor/delivery/evidence/f9/author/surface_pick/probe_more.gd.txt",
       "owner": "Sol F9 — seam correction consolidation",
       "previous_owner": "new author receipt",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_ax_authoring_test.gd",
+      "owner": "Luna F9 AX",
+      "previous_owner": "new AX vertical, sequential after surface pick validation",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_ax_authoring_test.gd.uid",
+      "owner": "Luna F9 AX",
+      "previous_owner": "new AX vertical, sequential after surface pick validation",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_ax_authoring_ui_test.gd",
+      "owner": "Luna F9 AX",
+      "previous_owner": "new AX vertical, sequential after surface pick validation",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_ax_authoring_ui_test.gd.uid",
+      "owner": "Luna F9 AX",
+      "previous_owner": "new AX vertical, sequential after surface pick validation",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/ax_authoring/",
+      "owner": "Sol F9",
+      "previous_owner": "new evidence directory, exclusive prefix",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/ax_authoring/",
+      "owner": "Luna F9 AX",
+      "previous_owner": "new evidence directory, exclusive prefix",
       "base_sha256": null
     }
   ],
@@ -2856,6 +2892,20 @@
       "resuspended_checkpoint_bytes": 3589468,
       "fixture_released": true,
       "roles": "Luna executed all stages; usage limit interrupted agents after execution; Sol independently inspected outputs/hashes and wrote final consolidation"
+    },
+    "ax_authoring": {
+      "state": "implementation_preparing_freeze",
+      "base": "0b80ca6",
+      "runtime_owner": "Sol F9",
+      "tests_owner": "Luna F9 AX",
+      "stages": [
+        "Authoring",
+        "AuthoringNative",
+        "CLI headless/native positive and negative",
+        "verify editor_import"
+      ],
+      "fixture": ".godot/verification/e07_f1/fixture_project",
+      "uid_origin": "Godot import01; four generated sidecars copied before freeze"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

@@ -3,7 +3,7 @@ param(
     [Parameter(Mandatory)][string]$EvidenceDirectory,
     [switch]$SkipImport,
     [string]$ResumeSession="",
-    [ValidateSet('Geometry','Objects','ObjectsNative','Mesh','Relief','Ports','Batch','Materials','MaterialsNative','Scale','Cliff','CliffNative','BiomeProps','BiomePropsNative','Borders','BordersNative','Shadows','ShadowsNative','CanvasOrder','Library','LibraryNative','Viewport','ViewportNative','RuntimeView','GameplayNative','GameplayWindow','GameplayControls','GameplayEditorNative','GameplayCli','FieldsNative','Organic','NavigationLazy','NavigationDense','NavigationContext','Rounded','RoundedNative','SnapshotDensity','RoundedResume','SurfacePick')][string]$Stage='Geometry'
+    [ValidateSet('Geometry','Objects','ObjectsNative','Mesh','Relief','Ports','Batch','Materials','MaterialsNative','Scale','Cliff','CliffNative','BiomeProps','BiomePropsNative','Borders','BordersNative','Shadows','ShadowsNative','CanvasOrder','Library','LibraryNative','Viewport','ViewportNative','RuntimeView','GameplayNative','GameplayWindow','GameplayControls','GameplayEditorNative','GameplayCli','FieldsNative','Organic','NavigationLazy','NavigationDense','NavigationContext','Rounded','RoundedNative','SnapshotDensity','RoundedResume','SurfacePick','Authoring','AuthoringNative')][string]$Stage='Geometry'
 )
 $ErrorActionPreference='Stop'
 $f9Root=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
@@ -45,6 +45,7 @@ $f9Marker=if($Stage -eq 'Geometry'){'F9_GEOMETRY_RESULT'}else{'F9_OBJECTS_RESULT
 if($Stage -eq 'NavigationContext'){$f9Script='res://tests/map_editor_navigation_context_test.gd';$f9Marker='F9_CONTEXT_RESULT'}
 if($Stage -eq 'NavigationDense'){$f9Script='res://tests/map_editor_navigation_dense_test.gd';$f9Marker='F9_DENSE_RESULT'}
 if($Stage -eq 'NavigationLazy'){$f9Script='res://tests/map_editor_navigation_lazy_test.gd';$f9Marker='F9_LAZY_RESULT'}
+if($Stage -eq 'Authoring'){$f9Script='res://tests/map_editor_ax_authoring_test.gd';$f9Marker='F9_AX_AUTHORING_RESULT'}
 if($Stage -eq 'SurfacePick'){$f9Script='res://tests/map_editor_surface_pick_test.gd';$f9Marker='F9_PICK_RESULT'}
 if($Stage -eq 'SnapshotDensity'){$f9Script='res://tests/map_editor_snapshot_density_test.gd';$f9Marker='F9_SNAPSHOT_DENSITY_RESULT'}
 if($Stage -eq 'Rounded'){$f9Script='res://tests/map_editor_rounded_hill_test.gd';$f9Marker='F9_ROUNDED_RESULT'}
@@ -67,9 +68,9 @@ if($Stage -eq 'BiomeProps'){$f9Script='res://tests/map_editor_biome_props_test.g
 if($Stage -eq 'Cliff'){$f9Script='res://tests/map_editor_cliff_test.gd';$f9Marker='F9_CLIFF_RESULT'}
 if($Stage -eq 'Scale'){$f9Script='res://tests/map_editor_terrain_scale_test.gd';$f9Marker='M2_SCALE_RESULT'}
 $f9Arguments=@('--path',$f9Fixture,'--headless','--log-file',(Join-Path $f9Evidence 'geometry.engine.log'),'--script',$f9Script)
-if($Stage -in @('GameplayNative','FieldsNative','RoundedNative','RoundedResume')){
-    $f9Marker=if($Stage -eq 'RoundedResume'){'F9_ROUNDED_RESUME_RESULT'}elseif($Stage -eq 'RoundedNative'){'F9_ROUNDED_UI_RESULT'}elseif($Stage -eq 'FieldsNative'){'F9_FIELDS_UI_RESULT'}else{'F9_GAMEPLAY_RESULT'}
-    $f9GraphicsScript=if($Stage -eq 'RoundedResume'){'res://tests/map_editor_rounded_hill_resume_test.gd'}elseif($Stage -eq 'RoundedNative'){'res://tests/map_editor_rounded_hill_ui_test.gd'}elseif($Stage -eq 'FieldsNative'){'res://tests/map_editor_fields_ui_test.gd'}else{'res://tests/map_editor_gameplay_ui_test.gd'}
+if($Stage -in @('GameplayNative','FieldsNative','RoundedNative','RoundedResume','AuthoringNative')){
+    $f9Marker=if($Stage -eq 'AuthoringNative'){'F9_AX_AUTHORING_UI_RESULT'}elseif($Stage -eq 'RoundedResume'){'F9_ROUNDED_RESUME_RESULT'}elseif($Stage -eq 'RoundedNative'){'F9_ROUNDED_UI_RESULT'}elseif($Stage -eq 'FieldsNative'){'F9_FIELDS_UI_RESULT'}else{'F9_GAMEPLAY_RESULT'}
+    $f9GraphicsScript=if($Stage -eq 'AuthoringNative'){'res://tests/map_editor_ax_authoring_ui_test.gd'}elseif($Stage -eq 'RoundedResume'){'res://tests/map_editor_rounded_hill_resume_test.gd'}elseif($Stage -eq 'RoundedNative'){'res://tests/map_editor_rounded_hill_ui_test.gd'}elseif($Stage -eq 'FieldsNative'){'res://tests/map_editor_fields_ui_test.gd'}else{'res://tests/map_editor_gameplay_ui_test.gd'}
     $f9Arguments=@('--path',$f9Fixture,'--rendering-method','gl_compatibility','--log-file',(Join-Path $f9Evidence 'geometry.engine.log'),'--script',$f9GraphicsScript)
 }
 $f9RestoreProject=$null
@@ -104,7 +105,7 @@ $f9EngineText=Get-Content -LiteralPath (Join-Path $f9Evidence 'geometry.engine.l
 $f9Match=[regex]::Match($f9Text,'(?m)^'+$f9Marker+' (.+)$')
 $f9Result=if($f9Match.Success){ConvertFrom-Json $f9Match.Groups[1].Value}else{$null}
 $f9Pass=-not $f9Timeout -and -not $f9Aborted -and $f9Process.ExitCode -eq 0 -and $null -ne $f9Result -and $f9Result.ok -and $f9Result.count -gt 0 -and @($f9Result.checks).Count -eq $f9Result.count -and @($f9Result.checks | Where-Object {-not $_.ok}).Count -eq 0 -and $f9Text -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:' -and $f9EngineText -notmatch 'SCRIPT ERROR:|Parse Error:|ERROR:'
-$f9Expected=@{Geometry=46;Objects=53;ObjectsNative=25;Mesh=34;Relief=58;Ports=92;Batch=36;Materials=35;MaterialsNative=20;Scale=46;Cliff=61;CliffNative=17;BiomeProps=30;BiomePropsNative=23;Borders=93;BordersNative=32;Shadows=28;ShadowsNative=90;CanvasOrder=43;Library=50;LibraryNative=53;Viewport=20;ViewportNative=52;RuntimeView=12;GameplayNative=52;GameplayWindow=33;GameplayControls=29;GameplayEditorNative=22;GameplayCli=18;FieldsNative=73;Organic=15;NavigationLazy=24;NavigationDense=5;NavigationContext=11;Rounded=19;RoundedNative=20;SnapshotDensity=33;RoundedResume=13;SurfacePick=24}
+$f9Expected=@{Geometry=46;Objects=53;ObjectsNative=25;Mesh=34;Relief=58;Ports=92;Batch=36;Materials=35;MaterialsNative=20;Scale=46;Cliff=61;CliffNative=17;BiomeProps=30;BiomePropsNative=23;Borders=93;BordersNative=32;Shadows=28;ShadowsNative=90;CanvasOrder=43;Library=50;LibraryNative=53;Viewport=20;ViewportNative=52;RuntimeView=12;GameplayNative=52;GameplayWindow=33;GameplayControls=29;GameplayEditorNative=22;GameplayCli=18;FieldsNative=73;Organic=15;NavigationLazy=24;NavigationDense=5;NavigationContext=11;Rounded=19;RoundedNative=20;SnapshotDensity=33;RoundedResume=13;SurfacePick=24;Authoring=30;AuthoringNative=10}
 $f9Pass=$f9Pass -and $f9Result.count -eq $f9Expected[$Stage]
 $f9PreviewExit=$null
 if($Stage -eq 'GameplayCli'){
