@@ -1,0 +1,76 @@
+{
+  "scope": "Six prop imports in prior Objects53 plus four terrain imports from normalization receipt; checked during current consumer execution. Consumer primary manifest excludes .import files. All declared metadata bytes match prior tested source and current fixture.",
+  "ok": true,
+  "dependencies": [
+    {
+      "path": "assets/art/map_authoring/props/broken_pillar.png.import",
+      "source_sha256": "f169c92346ae633eda7152e0c31937e0889b1e5f08803bf25077ca9ef0dff2d6",
+      "fixture_sha256": "f169c92346ae633eda7152e0c31937e0889b1e5f08803bf25077ca9ef0dff2d6",
+      "previous_tested_sha256": "f169c92346ae633eda7152e0c31937e0889b1e5f08803bf25077ca9ef0dff2d6",
+      "ok": true
+    },
+    {
+      "path": "assets/art/map_authoring/props/desert_cactus.png.import",
+      "source_sha256": "06ea0f3f178a90652383379e03e08f132698fc073f316f7446140989d1d62791",
+      "fixture_sha256": "06ea0f3f178a90652383379e03e08f132698fc073f316f7446140989d1d62791",
+      "previous_tested_sha256": "06ea0f3f178a90652383379e03e08f132698fc073f316f7446140989d1d62791",
+      "ok": true
+    },
+    {
+      "path": "assets/art/map_authoring/props/moss_boulder.png.import",
+      "source_sha256": "194218352993faa2203dae2fec0f4b8b1556ab09373aa1b0b2bb8bddfdb29bae",
+      "fixture_sha256": "194218352993faa2203dae2fec0f4b8b1556ab09373aa1b0b2bb8bddfdb29bae",
+      "previous_tested_sha256": "194218352993faa2203dae2fec0f4b8b1556ab09373aa1b0b2bb8bddfdb29bae",
+      "ok": true
+    },
+    {
+      "path": "assets/art/map_authoring/props/oak_tree.png.import",
+      "source_sha256": "3e60ef3caf546d0d96ed6bfcc0a987775087fbffd95346be297c5a5cff20020b",
+      "fixture_sha256": "3e60ef3caf546d0d96ed6bfcc0a987775087fbffd95346be297c5a5cff20020b",
+      "previous_tested_sha256": "3e60ef3caf546d0d96ed6bfcc0a987775087fbffd95346be297c5a5cff20020b",
+      "ok": true
+    },
+    {
+      "path": "assets/art/map_authoring/props/sandstone_boulder.png.import",
+      "source_sha256": "3339b644143127b0e00d6ed6afe70ae2f4c6499ab51407f39482141d21ec54b5",
+      "fixture_sha256": "3339b644143127b0e00d6ed6afe70ae2f4c6499ab51407f39482141d21ec54b5",
+      "previous_tested_sha256": "3339b644143127b0e00d6ed6afe70ae2f4c6499ab51407f39482141d21ec54b5",
+      "ok": true
+    },
+    {
+      "path": "assets/art/map_authoring/props/woodland_shrub.png.import",
+      "source_sha256": "3a543032d3eb98e2180bb1b1cde3f378a9a0e6ddccdd8594576b7a86aacd456f",
+      "fixture_sha256": "3a543032d3eb98e2180bb1b1cde3f378a9a0e6ddccdd8594576b7a86aacd456f",
+      "previous_tested_sha256": "3a543032d3eb98e2180bb1b1cde3f378a9a0e6ddccdd8594576b7a86aacd456f",
+      "ok": true
+    },
+    {
+      "path": "assets/art/map_authoring/grass_tile.png.import",
+      "source_sha256": "5a080026fe6e9c15a3039019ecb24607eaa4e76e00a4694b3563610d194df66b",
+      "fixture_sha256": "5a080026fe6e9c15a3039019ecb24607eaa4e76e00a4694b3563610d194df66b",
+      "previous_tested_sha256": "5a080026fe6e9c15a3039019ecb24607eaa4e76e00a4694b3563610d194df66b",
+      "ok": true
+    },
+    {
+      "path": "assets/art/map_authoring/earth_tile.png.import",
+      "source_sha256": "8a7fb5de02a0d061c99e6c88e875b8f5582eb83be134bb0941f6e4863c2bb117",
+      "fixture_sha256": "8a7fb5de02a0d061c99e6c88e875b8f5582eb83be134bb0941f6e4863c2bb117",
+      "previous_tested_sha256": "8a7fb5de02a0d061c99e6c88e875b8f5582eb83be134bb0941f6e4863c2bb117",
+      "ok": true
+    },
+    {
+      "path": "assets/art/map_authoring/sand_tile.png.import",
+      "source_sha256": "cf7ed2a0c76756b2504132f520640a252829165a1dad4f7ef10389de7f577a7e",
+      "fixture_sha256": "cf7ed2a0c76756b2504132f520640a252829165a1dad4f7ef10389de7f577a7e",
+      "previous_tested_sha256": "cf7ed2a0c76756b2504132f520640a252829165a1dad4f7ef10389de7f577a7e",
+      "ok": true
+    },
+    {
+      "path": "assets/art/map_authoring/cliff_tile.png.import",
+      "source_sha256": "fe0ef36b6f3f791b157b36a735f217bf0dfd2b49a2d4ec36a415f692b32f312d",
+      "fixture_sha256": "fe0ef36b6f3f791b157b36a735f217bf0dfd2b49a2d4ec36a415f692b32f312d",
+      "previous_tested_sha256": "fe0ef36b6f3f791b157b36a735f217bf0dfd2b49a2d4ec36a415f692b32f312d",
+      "ok": true
+    }
+  ]
+}

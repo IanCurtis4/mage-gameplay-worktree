@@ -2468,8 +2468,8 @@
     },
     {
       "path": "docs/map_editor/delivery/f9_area_design.md",
-      "owner": "Terra F9 — AX map design and later authoring",
-      "previous_owner": "new design note; no runtime ownership",
+      "owner": "Sol F9 documentation integration",
+      "previous_owner": "Terra F9 — AX map design and later authoring; sequential integration after completed AX content delivery",
       "base_sha256": null
     },
     {
@@ -3013,12 +3013,28 @@
       "map_compile_ms": 15518.45
     },
     "ax_content": {
-      "state": "implementation",
+      "state": "validated_increment_F9_still_open",
       "base": "8601af84",
       "runtime_owner": "Sol F9",
-      "test_owner": "Luna F9 AX content",
+      "test_owner": "Sol F9 temporary validation",
       "scope": "parameterized objects/context/sockets and actual editor client routing; no source replacement",
-      "validation_role": "Luna drafted model test; usage limit interrupted before native test; Sol completed and executes checks temporarily, no independent supervision claim"
+      "validation_role": "Luna drafted model test; usage limit interrupted before native test; Sol completed and executes checks temporarily, no independent supervision claim",
+      "code_head": "52798508efb7f274fdc3a42959c7af9b2da31c1b",
+      "content_head": "b14ea3dc9f46bd3f072f41a51cbba5e8053a725a",
+      "checks": {
+        "Content": 28,
+        "ContentNative": 30,
+        "Objects": 53,
+        "client_actions_each_mode": 12,
+        "consumer_sources": 2
+      },
+      "consumer": "docs/map_editor/delivery/evidence/f9/author/ax_content/consumer_02/consumer.manifest.json",
+      "consumer_ok": true,
+      "authored_entry": "exact socket preserved, real body query and forward/return paths PASS; map-only preview still uses provisional entry until population",
+      "fixture_released": true,
+      "primary_consumer_inputs": 2028,
+      "import_dependencies_audited": 10,
+      "limitations": "no App/live walking/combat/FPS; canonical preparation and individual paths remain expensive; composition/population/patrol AX and rest of F9 still open"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

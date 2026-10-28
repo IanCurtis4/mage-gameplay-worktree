@@ -1,0 +1,21 @@
+{
+  "data_head": "b14ea3dc9f46bd3f072f41a51cbba5e8053a725a",
+  "consumer_head": "52798508efb7f274fdc3a42959c7af9b2da31c1b",
+  "consumer_ok": true,
+  "primary_count": 2028,
+  "imports_audited": 10,
+  "source_fixture_changes_after_consumer": [],
+  "documents_checked": [
+    "docs/map_editor/delivery/f9_resume.md",
+    "docs/map_editor/delivery/f9_handoff_portable.md",
+    "docs/map_editor/delivery/f9.md",
+    "docs/map_editor/f9_requirements.md",
+    "docs/map_editor/delivery/f9_area_design.md",
+    "docs/map_editor/delivery/evidence/f9/author/ax_content/consolidation.md",
+    "docs/map_editor/delivery/evidence/f9/author/ax_content/consumer_02/report.md"
+  ],
+  "missing_links": [],
+  "scope": "Final document/reference and unchanged-input audit only. Gameplay suite not repeated. Historical receipts preserved.",
+  "ok": true,
+  "process_closure": "Runner-owned engine processes and tool sessions completed; system-wide process inventory unavailable (access denied), no global count certified."
+}

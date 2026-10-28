@@ -1,0 +1,78 @@
+{
+  "records": [
+    {
+      "stage": "model_02",
+      "head": "4fde240a58a59b681245eab66fd20d6feb56229b",
+      "head_stable": true,
+      "count": 2032,
+      "ok": true,
+      "passed": 28,
+      "checks": 28,
+      "changes_to_current": [
+        {
+          "path": "scripts/map_authoring/objects/object_operations.gd",
+          "tested_sha256": "348ae6d11f30d8611be143f8e87fba1e51c1a64455b1855c3c15c64d84240383",
+          "current_sha256": "632516d3d19067e9fb608a52c2997128e128a6e3e2758c9b733fea7eb22840e1"
+        },
+        {
+          "path": "data/map_authoring/sanctuary_woods_clearing.source.json",
+          "tested_sha256": "65a26754c437695d7e7d60e93980c187371fddeec4fb71f78323104dbb55ced5",
+          "current_sha256": "150509026fddc323396d20fdd015fee47c1dacb47685c1f326842b77260484ab"
+        },
+        {
+          "path": "data/map_authoring/sanctuary_woods_overpass.source.json",
+          "tested_sha256": "d0071096addfefcefad1f1df849c3977064a741b4ed1446ffaf50a3f25a95d7e",
+          "current_sha256": "1501a98d8e201ce10017c0f410d137da5bad0c21fbd97039c9e52a9d693341c9"
+        }
+      ]
+    },
+    {
+      "stage": "native_01",
+      "head": "4fde240a58a59b681245eab66fd20d6feb56229b",
+      "head_stable": true,
+      "count": 2032,
+      "ok": true,
+      "passed": 30,
+      "checks": 30,
+      "changes_to_current": [
+        {
+          "path": "scripts/map_authoring/objects/object_operations.gd",
+          "tested_sha256": "348ae6d11f30d8611be143f8e87fba1e51c1a64455b1855c3c15c64d84240383",
+          "current_sha256": "632516d3d19067e9fb608a52c2997128e128a6e3e2758c9b733fea7eb22840e1"
+        },
+        {
+          "path": "data/map_authoring/sanctuary_woods_clearing.source.json",
+          "tested_sha256": "65a26754c437695d7e7d60e93980c187371fddeec4fb71f78323104dbb55ced5",
+          "current_sha256": "150509026fddc323396d20fdd015fee47c1dacb47685c1f326842b77260484ab"
+        },
+        {
+          "path": "data/map_authoring/sanctuary_woods_overpass.source.json",
+          "tested_sha256": "d0071096addfefcefad1f1df849c3977064a741b4ed1446ffaf50a3f25a95d7e",
+          "current_sha256": "1501a98d8e201ce10017c0f410d137da5bad0c21fbd97039c9e52a9d693341c9"
+        }
+      ]
+    },
+    {
+      "stage": "objects_regression_02",
+      "head": "52798508efb7f274fdc3a42959c7af9b2da31c1b",
+      "head_stable": true,
+      "count": 2032,
+      "ok": true,
+      "passed": 53,
+      "checks": 53,
+      "changes_to_current": [
+        {
+          "path": "data/map_authoring/sanctuary_woods_clearing.source.json",
+          "tested_sha256": "65a26754c437695d7e7d60e93980c187371fddeec4fb71f78323104dbb55ced5",
+          "current_sha256": "150509026fddc323396d20fdd015fee47c1dacb47685c1f326842b77260484ab"
+        },
+        {
+          "path": "data/map_authoring/sanctuary_woods_overpass.source.json",
+          "tested_sha256": "d0071096addfefcefad1f1df849c3977064a741b4ed1446ffaf50a3f25a95d7e",
+          "current_sha256": "1501a98d8e201ce10017c0f410d137da5bad0c21fbd97039c9e52a9d693341c9"
+        }
+      ]
+    }
+  ],
+  "scope": "Historical inputs differ only in the declared diagnostic fix and new Terra content. Decorated-source proof has its own frozen manifest. No claim of all historical manifests matching current data."
+}

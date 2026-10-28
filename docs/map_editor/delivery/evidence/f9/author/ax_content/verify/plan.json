@@ -1,0 +1,43 @@
+{
+  "created_utc": "2026-10-28T23:02:18.1532418Z",
+  "f1_native_fixture": true,
+  "source_commit": "52798508efb7f274fdc3a42959c7af9b2da31c1b",
+  "working_tree_status": [
+    "?? docs/map_editor/delivery/evidence/f9/author/ax_content/cli/",
+    "?? docs/map_editor/delivery/evidence/f9/author/ax_content/model_01/",
+    "?? docs/map_editor/delivery/evidence/f9/author/ax_content/model_02/",
+    "?? docs/map_editor/delivery/evidence/f9/author/ax_content/native_01/",
+    "?? docs/map_editor/delivery/evidence/f9/author/ax_content/objects_regression/",
+    "?? docs/map_editor/delivery/evidence/f9/author/ax_content/objects_regression_02/",
+    "?? docs/map_editor/delivery/evidence/f9/terra/area_content/"
+  ],
+  "runner_sha256": "9D92A48A613127B6DA109F42E53B7D78E167FC484051BC3F0E985729F2F8E27D",
+  "engine_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+  "engine_sha256": "AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424",
+  "timeout_seconds": 120,
+  "selection": {
+    "test": [
+      "editor_import"
+    ],
+    "test_filter_specified": true,
+    "from_step": 1,
+    "to_step": 299,
+    "skip_editor_import": false
+  },
+  "total_steps": 299,
+  "selected_steps": 1,
+  "checks": [
+    {
+      "index": 1,
+      "name": "editor_import",
+      "arguments": [
+        "--headless",
+        "--path",
+        "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+        "--editor",
+        "--import",
+        "--quit"
+      ]
+    }
+  ]
+}

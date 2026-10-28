@@ -1,0 +1,146 @@
+{
+	"composition": null,
+	"connectors": [],
+	"context": {
+		"allow_rare": false,
+		"allowed_species": [],
+		"areas": [
+			{
+				"allow_rare": false,
+				"allowed_species": [],
+				"region_id": "arena",
+				"reserved": []
+			}
+		],
+		"biome_ids": [
+			"forest"
+		],
+		"version": 1
+	},
+	"dependencies": [
+		{
+			"definition_id": "oak_tree",
+			"kind": "prop",
+			"revision": 1,
+			"sha256": "cfa38bd7632f300a14333c077e71152e58f65bc88754a2fac3347661c4b024cc"
+		},
+		{
+			"definition_id": "woodland_shrub",
+			"kind": "prop",
+			"revision": 1,
+			"sha256": "e2e6fc9af59b1ab2820e21239d87c28b48ebc94b7489d12eb1fd9106187ed7bb"
+		}
+	],
+	"document_id": "content_cli",
+	"layers": [
+		{
+			"columns": 5,
+			"heights": [
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0
+			],
+			"layer_id": "floor",
+			"locked": false,
+			"material_masks": {},
+			"name": "Chão",
+			"origin_xz": [
+				0,
+				0
+			],
+			"protected_regions": [],
+			"rows": 5,
+			"sample_spacing": 100
+		}
+	],
+	"name": "Conteúdo pelo AX",
+	"placements": [
+		{
+			"definition_id": "oak_tree",
+			"placement_id": "tree",
+			"position_xyz": [
+				100.0,
+				0.0,
+				100.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "floor"
+		},
+		{
+			"definition_id": "woodland_shrub",
+			"placement_id": "shrub",
+			"position_xyz": [
+				220.0,
+				0.0,
+				200.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "floor"
+		}
+	],
+	"regions": [
+		{
+			"layer_id": "floor",
+			"polygon_xz": [
+				[
+					220,
+					220
+				],
+				[
+					360,
+					220
+				],
+				[
+					360,
+					360
+				],
+				[
+					220,
+					360
+				]
+			],
+			"purpose": "encounter",
+			"region_id": "arena"
+		}
+	],
+	"revision": 7,
+	"schema_version": 1,
+	"sockets": [
+		{
+			"kind": "entrance",
+			"position_xyz": [
+				320,
+				0,
+				100
+			],
+			"socket_id": "entry",
+			"surface_id": "floor"
+		}
+	],
+	"special_surfaces": [],
+	"units": "e07_world"
+}

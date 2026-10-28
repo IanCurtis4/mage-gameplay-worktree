@@ -1,0 +1,135 @@
+extends SceneTree
+const Store = preload("res://scripts/map_authoring/io/source_store.gd")
+const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
+const Terrain = preload("res://scripts/map_authoring/compiler/terrain_compiler.gd")
+const MapDocument = preload("res://scripts/map_authoring/composition/map_document.gd")
+const Maps = preload("res://scripts/map_authoring/composition/map_compiler.gd")
+const Candidate = preload("res://scripts/map_authoring/preview/gameplay_candidate.gd")
+const Phase = preload("res://data/expedition/phases/ruined_crossing.gd")
+const INPUTS: Array[Dictionary] = [
+	{"file":"sanctuary_woods_clearing.source.json","id":"sanctuary_woods_clearing","source_hash":"e2172d1928ad5f83188fdba6e89b445bdf37e207af10f4e639a6b1ba44f8ad4f","terrain_package_hash":"0d4756a1176e63776a2bf1cf2014a54855ac71b63ed3ef0ec0ea198a8dc8f597","bytes_sha256":"150509026fddc323396d20fdd015fee47c1dacb47685c1f326842b77260484ab"},
+	{"file":"sanctuary_woods_overpass.source.json","id":"sanctuary_woods_overpass","source_hash":"1cae62332c2fbb490982dc6cbcda7d13f4f12a39f77303b6e4056c7382255fb4","terrain_package_hash":"34a235bcd4f410059b945a3ae90bfb2773e45c57d313fcc63bcb028b9178718d","bytes_sha256":"1501a98d8e201ce10017c0f410d137da5bad0c21fbd97039c9e52a9d693341c9"}
+]
+func _initialize() -> void:
+	run.call_deferred()
+func run() -> void:
+	var records: Array[Dictionary] = []
+	var sources: Dictionary = {}
+	var hashes: Dictionary = {}
+	var profile_owner: Variant = Phase.input("map_authoring_preview")
+	var body_profile: Dictionary = profile_owner.traversal.to_data()
+	var body_radius: float = float(body_profile.get("radius",-1.0))
+	var body_height: float = float(body_profile.get("height",-1.0))
+	var overall_ok: bool = body_radius == 20.0 and body_height == 32.0
+	for expected: Dictionary in INPUTS:
+		var row: Dictionary = {"file":expected.file,"document_id":expected.id,"timings_ms":{}}
+		var path: String = "res://data/map_authoring/"+str(expected.file)
+		var started: int = Time.get_ticks_usec()
+		var loaded: Dictionary = Store.load_source(path)
+		row.timings_ms.source_load = float(Time.get_ticks_usec()-started)/1000.0
+		row.source_ok = bool(loaded.get("ok",false)) and bool(loaded.get("valid",false))
+		row.source_code = str(loaded.get("code",""))
+		if not row.source_ok:
+			row.detail = loaded; records.append(row); overall_ok = false; break
+		var source: Dictionary = loaded.data
+		row.placement_count = source.placements.size()
+		row.placement_count_matches = row.placement_count == (24 if expected.id == "sanctuary_woods_clearing" else 23)
+		var source_hash: String = str(loaded.get("output_hash",""))
+		var bytes_hash: String = Store.disk_hash(path)
+		row.source_hash = source_hash; row.bytes_sha256 = bytes_hash
+		row.source_hash_matches_terra_content = source_hash == str(expected.source_hash) and bytes_hash == str(expected.bytes_sha256)
+		started = Time.get_ticks_usec()
+		var terrain_built: Dictionary = Terrain.compile(source)
+		row.timings_ms.terrain_compile = float(Time.get_ticks_usec()-started)/1000.0
+		row.terrain_compile_ok = bool(terrain_built.get("ok",false))
+		row.terrain_compile_code = str(terrain_built.get("code",""))
+		row.terrain_package_hash = str(terrain_built.get("output_hash",""))
+		row.terrain_hash_matches_terra_content = row.terrain_package_hash == str(expected.terrain_package_hash)
+		if not row.placement_count_matches or not row.source_hash_matches_terra_content or not row.terrain_compile_ok or not row.terrain_hash_matches_terra_content:
+			row.detail = terrain_built; records.append(row); overall_ok = false; break
+		sources[expected.id] = source.duplicate(true)
+		hashes[expected.id] = source_hash
+		row.ok = true; records.append(row)
+	if not overall_ok or sources.size() != 2:
+		print("F9_TERRA_SOURCE_CONSUMER_RESULT "+JSON.stringify({"ok":false,"count":records.size(),"expected_count":2,"body_profile":{"radius":body_radius,"height":body_height},"records":records,"phase":"source_load_and_terrain_compile"}))
+		quit(1); return
+	var clearing_hash: String = str(hashes["sanctuary_woods_clearing"])
+	var clearing_source: Dictionary = sources["sanctuary_woods_clearing"]
+	var isolated: Dictionary = MapDocument.empty("sanctuary_woods_isolated_negative")
+	isolated.context = {"version":1,"biome_id":"forest","overrides":[]}
+	isolated.pieces = [{"piece_hash":clearing_hash,"source":clearing_source.duplicate(true)}]
+	isolated.instances = [{"instance_id":"terrain","piece_hash":clearing_hash,"position_xyz":[0,0,0],"rotation_quarters":0}]
+	var isolated_started: int = Time.get_ticks_usec()
+	var isolated_result: Dictionary = Maps.compile(isolated)
+	var isolated_negative: Dictionary = {"expected_rejection":"opening_unlinked","actual_code":str(isolated_result.get("code","")),"ok":not isolated_result.get("ok",false) and isolated_result.get("code","") == "opening_unlinked","duration_ms":float(Time.get_ticks_usec()-isolated_started)/1000.0,"diagnostics":isolated_result.get("diagnostics",[])}
+	if not isolated_negative.ok:
+		print("F9_TERRA_SOURCE_CONSUMER_RESULT "+JSON.stringify({"ok":false,"count":records.size(),"expected_count":2,"body_profile":{"radius":body_radius,"height":body_height},"records":records,"isolated_opening_negative":isolated_negative,"phase":"isolated_negative"}))
+		quit(1); return
+	var map_source: Dictionary = MapDocument.empty("sanctuary_woods_decorated_consumer")
+	map_source.context = {"version":1,"biome_id":"forest","overrides":[]}
+	map_source.name = "Teste consumidor · Bosque decorado"
+	map_source.pieces = [
+		{"piece_hash":clearing_hash,"source":clearing_source.duplicate(true)},
+		{"piece_hash":str(hashes["sanctuary_woods_overpass"]),"source":sources["sanctuary_woods_overpass"].duplicate(true)}
+	]
+	map_source.instances = [
+		{"instance_id":"clearing","piece_hash":clearing_hash,"position_xyz":[0,0,0],"rotation_quarters":0},
+		{"instance_id":"overpass","piece_hash":str(hashes["sanctuary_woods_overpass"]),"position_xyz":[1280,0,0],"rotation_quarters":0}
+	]
+	map_source.links = [{"link_id":"woods_seam","a_instance":"clearing","a_connector":"a_east","b_instance":"overpass","b_connector":"b_west_gate"}]
+	var map_started: int = Time.get_ticks_usec()
+	var map_built: Dictionary = Maps.compile(map_source)
+	var map_compile_ms: float = float(Time.get_ticks_usec()-map_started)/1000.0
+	var valid_record: Dictionary = {"timings_ms":{"map_compile":map_compile_ms},"map_source_hash":MapDocument.hash_source(map_source),"map_compile_ok":bool(map_built.get("ok",false)),"map_compile_code":str(map_built.get("code","")),"map_compile_metrics":map_built.get("metrics",{}),"body_profile":{"radius":body_radius,"height":body_height},"body_profile_matches_contract":body_radius == 20.0 and body_height == 32.0}
+	if not valid_record.map_compile_ok:
+		valid_record.detail = map_built
+		print("F9_TERRA_SOURCE_CONSUMER_RESULT "+JSON.stringify({"ok":false,"count":records.size(),"expected_count":2,"body_profile":{"radius":body_radius,"height":body_height},"records":records,"isolated_opening_negative":isolated_negative,"linked_composition":valid_record,"phase":"linked_map_compile"}))
+		quit(1); return
+	valid_record.map_package_hash = str(map_built.package.get("package_hash",""))
+	valid_record.map_package_source_hash = str(map_built.package.get("source_hash",""))
+	valid_record.map_hash_matches_ephemeral_source = valid_record.map_package_source_hash == valid_record.map_source_hash
+	var candidate_started: int = Time.get_ticks_usec()
+	var created: Dictionary = Candidate.create("map",map_built.package,map_built.package.source_hash)
+	valid_record.timings_ms.candidate_create = float(Time.get_ticks_usec()-candidate_started)/1000.0
+	valid_record.candidate_create_ok = bool(created.get("ok",false))
+	valid_record.candidate_code = str(created.get("code",""))
+	if not valid_record.candidate_create_ok:
+		valid_record.candidate_detail = created
+		print("F9_TERRA_SOURCE_CONSUMER_RESULT "+JSON.stringify({"ok":false,"count":records.size(),"expected_count":2,"body_profile":{"radius":body_radius,"height":body_height},"records":records,"isolated_opening_negative":isolated_negative,"linked_composition":valid_record,"phase":"candidate_create"}))
+		quit(1); return
+	valid_record.candidate_hash = str(created.candidate.get("candidate_hash",""))
+	candidate_started = Time.get_ticks_usec()
+	var prepared: Dictionary = Candidate.prepare(created.candidate)
+	valid_record.timings_ms.candidate_prepare = float(Time.get_ticks_usec()-candidate_started)/1000.0
+	valid_record.candidate_prepare_ok = bool(prepared.get("ok",false))
+	valid_record.entry = prepared.get("entry",{})
+	valid_record.ephemeral_entry = prepared.get("ephemeral_entry",true)
+	valid_record.candidate_prepare_code = str(prepared.get("code",""))
+	valid_record.candidate_prepare_metrics = prepared.get("metrics",{})
+	valid_record.all_compiled_supports_accessible_for_real_body = valid_record.candidate_prepare_ok
+	valid_record.candidate_prepare_detail = {} if valid_record.candidate_prepare_ok else prepared
+	# Map-only preview deliberately chooses an ephemeral spawn; authored entry is a
+	# passive socket until population authoring. Prove the exact authored socket too.
+	var authored_socket: Dictionary = {}
+	var expected_socket_id: String = "clearing/socket_"+"woods_entry".sha256_text().substr(0,20)
+	for socket: Dictionary in map_built.package.manifest.stages[0].sockets:
+		if socket.socket_id == expected_socket_id: authored_socket = socket
+	var entrance_checks: Dictionary = {"socket_preserved":not authored_socket.is_empty(),"position_exact":not authored_socket.is_empty() and authored_socket.position == Vector3(160,0,640),"kind_exact":authored_socket.get("kind","") == "entrance","query_ok":false,"forward_ok":false,"return_ok":false}
+	if prepared.ok and entrance_checks.socket_preserved and entrance_checks.position_exact and entrance_checks.kind_exact:
+		var world := WorldGeometry.new()
+		var configured: Dictionary = world.configure(prepared.manifest,"map_preview")
+		entrance_checks.configured = configured.ok
+		if configured.ok:
+			var authored_entry := ExpeditionWorldPoint.create("map_preview",authored_socket.surface_id,authored_socket.position)
+			var preview_entry := ExpeditionPopulationPlanner.point(prepared.entry)
+			var query: Dictionary = world.position_query(authored_entry,body_profile,world.geometry_revision)
+			var forward: Dictionary = world.path(authored_entry,preview_entry,body_profile,world.geometry_revision)
+			var backward: Dictionary = world.path(preview_entry,authored_entry,body_profile,world.geometry_revision)
+			entrance_checks.query_ok = query.ok; entrance_checks.forward_ok = forward.ok; entrance_checks.return_ok = backward.ok
+			entrance_checks.codes = [query.get("code",""),forward.get("code",""),backward.get("code","")]
+	entrance_checks.ok = entrance_checks.socket_preserved and entrance_checks.position_exact and entrance_checks.kind_exact and entrance_checks.query_ok and entrance_checks.forward_ok and entrance_checks.return_ok
+	valid_record.authored_entrance_checks = entrance_checks
+	valid_record.ok = valid_record.map_hash_matches_ephemeral_source and valid_record.candidate_create_ok and valid_record.candidate_prepare_ok and valid_record.body_profile_matches_contract and entrance_checks.ok
+	var result: Dictionary = {"ok":valid_record.ok and records.size() == 2,"count":records.size(),"expected_count":2,"body_profile":{"radius":body_radius,"height":body_height},"records":records,"isolated_opening_negative":isolated_negative,"linked_composition":valid_record,"scope":"Source validation, terrain/map compilation, candidate and real-body access preparation only. No App/gameplay/movement/walk/FPS claim. Test map was ephemeral and not persisted."}
+	print("F9_TERRA_SOURCE_CONSUMER_RESULT "+JSON.stringify(result))
+	quit(0 if result.ok else 1)

@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "head": "52798508efb7f274fdc3a42959c7af9b2da31c1b",
+  "results": {
+    "headless": {
+      "source_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+      "compile_hash": "56ffa85eaf79bab0edf37820d99d73af212465c4d07441046ad600c01e16669d",
+      "source_sha256": "060ca259a10d7948dd6cb89aae3c00b38a08d5f15b72d6b9ac97ae08108fa9c1"
+    },
+    "native": {
+      "source_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+      "compile_hash": "56ffa85eaf79bab0edf37820d99d73af212465c4d07441046ad600c01e16669d",
+      "source_sha256": "060ca259a10d7948dd6cb89aae3c00b38a08d5f15b72d6b9ac97ae08108fa9c1"
+    }
+  },
+  "reopen": true
+}

@@ -1,0 +1,135 @@
+{
+  "ax_version": 1,
+  "actions": [
+    {
+      "screen": "piece",
+      "id": "piece/document/new",
+      "parameters": {
+        "document_id": "content_cli",
+        "name": "Conteúdo pelo AX",
+        "confirm_discard": true
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/grid/create",
+      "parameters": {
+        "layer_id": "floor",
+        "name": "Chão",
+        "origin_xz": [
+          0,
+          0
+        ],
+        "columns": 5,
+        "rows": 5,
+        "sample_spacing": 100,
+        "height": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/library/select",
+      "parameters": {
+        "definition_id": "oak_tree"
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "tree",
+        "definition_id": "oak_tree",
+        "surface_id": "floor",
+        "position_xz": [
+          100,
+          100
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "shrub",
+        "definition_id": "woodland_shrub",
+        "surface_id": "floor",
+        "position_xz": [
+          220,
+          200
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "piece",
+      "id": "piece/context/rules/set",
+      "parameters": {
+        "biome_ids": [
+          "forest"
+        ],
+        "allowed_species": [],
+        "allow_rare": false
+      }
+    },
+    {
+      "screen": "piece",
+      "id": "piece/context/area/upsert",
+      "parameters": {
+        "region_id": "arena",
+        "layer_id": "floor",
+        "min_xz": [
+          220,
+          220
+        ],
+        "max_xz": [
+          360,
+          360
+        ],
+        "allowed_species": [],
+        "allow_rare": false,
+        "reserved": []
+      }
+    },
+    {
+      "screen": "piece",
+      "id": "piece/socket/upsert",
+      "parameters": {
+        "socket_id": "entry",
+        "surface_id": "floor",
+        "position_xyz": [
+          320,
+          0,
+          100
+        ],
+        "kind": "entrance"
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/select",
+      "parameters": {
+        "ids": [
+          "tree"
+        ]
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/compile_piece",
+      "parameters": {}
+    },
+    {
+      "screen": "objects",
+      "id": "objects/library/query",
+      "parameters": {}
+    },
+    {
+      "screen": "piece",
+      "id": "piece/document/save",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\author\\ax_content\\cli\\native.source.json"
+      }
+    }
+  ]
+}

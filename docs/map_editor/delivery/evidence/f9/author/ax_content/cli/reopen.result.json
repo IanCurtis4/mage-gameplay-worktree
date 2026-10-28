@@ -1,0 +1,610 @@
+{
+	"actions": [
+		{
+			"id": "piece/document/open",
+			"input_hash": "a116162b418024456adcbb093a238868c71a50887a458b89265c9656f51df545",
+			"output_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+			"result": {
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "content_cli",
+				"input_hash": "",
+				"ok": true,
+				"output_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea"
+			},
+			"screen": "piece"
+		},
+		{
+			"id": "terrain/compile_piece",
+			"input_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+			"output_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+			"result": {
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+				"ok": true,
+				"output_hash": "56ffa85eaf79bab0edf37820d99d73af212465c4d07441046ad600c01e16669d"
+			},
+			"screen": "terrain"
+		}
+	],
+	"code": "",
+	"completed_actions": 2,
+	"diagnostics": [],
+	"objects_snapshot": {},
+	"ok": true,
+	"requested_actions": 2,
+	"snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "piece/exchange",
+				"label": "Intercâmbio com skills…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/new_piece",
+				"label": "Nova peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/compose_map",
+				"label": "Compor mapa…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open_objects",
+				"label": "Objetos e vegetação…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open_library",
+				"label": "Biblioteca…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open",
+				"label": "Abrir…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/save",
+				"label": "Salvar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/save_as",
+				"label": "Salvar como…",
+				"test_only": false
+			},
+			{
+				"enabled": false,
+				"id": "piece/undo",
+				"label": "Desfazer",
+				"test_only": false
+			},
+			{
+				"enabled": false,
+				"id": "piece/redo",
+				"label": "Refazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/recover_copy",
+				"label": "Recuperar cópia",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/browse_draft",
+				"label": "Buscar rascunho…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/add_layer",
+				"label": "Adicionar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/duplicate_layer",
+				"label": "Duplicar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/toggle_layer_lock",
+				"label": "Travar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/apply_name",
+				"label": "Aplicar nome",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/piece_context",
+				"label": "Contexto da peça…",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "piece/document/new",
+				"parameters": {
+					"confirm_discard": "boolean",
+					"document_id": "id",
+					"name": "string"
+				}
+			},
+			{
+				"id": "piece/document/name",
+				"parameters": {
+					"name": "string"
+				}
+			},
+			{
+				"id": "piece/document/open",
+				"parameters": {
+					"confirm_discard": "boolean",
+					"path": "string"
+				}
+			},
+			{
+				"id": "piece/document/save",
+				"parameters": {
+					"path": "string"
+				}
+			},
+			{
+				"id": "piece/history/undo",
+				"parameters": {}
+			},
+			{
+				"id": "piece/history/redo",
+				"parameters": {}
+			},
+			{
+				"id": "piece/context/options",
+				"parameters": {}
+			},
+			{
+				"id": "piece/context/rules/set",
+				"parameters": {
+					"allow_rare": "bool",
+					"allowed_species": "strings",
+					"biome_ids": "strings"
+				}
+			},
+			{
+				"id": "piece/context/area/upsert",
+				"parameters": {
+					"allow_rare": "bool",
+					"allowed_species": "strings",
+					"layer_id": "id",
+					"max_xz": "v2",
+					"min_xz": "v2",
+					"region_id": "id",
+					"reserved": "array"
+				}
+			},
+			{
+				"id": "piece/context/area/remove",
+				"parameters": {
+					"region_id": "id"
+				}
+			},
+			{
+				"id": "piece/socket/upsert",
+				"parameters": {
+					"kind": "id",
+					"position_xyz": "v3",
+					"socket_id": "id",
+					"surface_id": "id"
+				}
+			},
+			{
+				"id": "piece/socket/remove",
+				"parameters": {
+					"socket_id": "id"
+				}
+			}
+		],
+		"mode": "ax",
+		"screen": "piece",
+		"source": {
+			"composition": null,
+			"connectors": [],
+			"context": {
+				"allow_rare": false,
+				"allowed_species": [],
+				"areas": [
+					{
+						"allow_rare": false,
+						"allowed_species": [],
+						"region_id": "arena",
+						"reserved": []
+					}
+				],
+				"biome_ids": [
+					"forest"
+				],
+				"version": 1
+			},
+			"dependencies": [
+				{
+					"definition_id": "oak_tree",
+					"kind": "prop",
+					"revision": 1,
+					"sha256": "cfa38bd7632f300a14333c077e71152e58f65bc88754a2fac3347661c4b024cc"
+				},
+				{
+					"definition_id": "woodland_shrub",
+					"kind": "prop",
+					"revision": 1,
+					"sha256": "e2e6fc9af59b1ab2820e21239d87c28b48ebc94b7489d12eb1fd9106187ed7bb"
+				}
+			],
+			"document_id": "content_cli",
+			"layers": [
+				{
+					"columns": 5,
+					"heights": [
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0
+					],
+					"layer_id": "floor",
+					"locked": false,
+					"material_masks": {},
+					"name": "Chão",
+					"origin_xz": [
+						0,
+						0
+					],
+					"protected_regions": [],
+					"rows": 5,
+					"sample_spacing": 100
+				}
+			],
+			"name": "Conteúdo pelo AX",
+			"placements": [
+				{
+					"definition_id": "oak_tree",
+					"placement_id": "tree",
+					"position_xyz": [
+						100.0,
+						0.0,
+						100.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "floor"
+				},
+				{
+					"definition_id": "woodland_shrub",
+					"placement_id": "shrub",
+					"position_xyz": [
+						220.0,
+						0.0,
+						200.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "floor"
+				}
+			],
+			"regions": [
+				{
+					"layer_id": "floor",
+					"polygon_xz": [
+						[
+							220,
+							220
+						],
+						[
+							360,
+							220
+						],
+						[
+							360,
+							360
+						],
+						[
+							220,
+							360
+						]
+					],
+					"purpose": "encounter",
+					"region_id": "arena"
+				}
+			],
+			"revision": 7,
+			"schema_version": 1,
+			"sockets": [
+				{
+					"kind": "entrance",
+					"position_xyz": [
+						320,
+						0,
+						100
+					],
+					"socket_id": "entry",
+					"surface_id": "floor"
+				}
+			],
+			"special_surfaces": [],
+			"units": "e07_world"
+		}
+	},
+	"source_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+	"state": {
+		"can_redo": false,
+		"can_undo": false,
+		"dirty": false,
+		"selected_layer": "floor",
+		"source_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\author\\ax_content\\cli\\native.source.json"
+	},
+	"terrain_snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "terrain/save_brush_preset",
+				"label": "Salvar predefinição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/remove_brush_preset",
+				"label": "Remover predefinição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/fit_view",
+				"label": "Enquadrar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/compile_piece",
+				"label": "Compilar peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/cancel",
+				"label": "Cancelar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/ramp_bridge_sample",
+				"label": "Exemplo rampa/ponte",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/large_piece_sample",
+				"label": "Exemplo de peça grande",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/action_10a98dc5c4c2",
+				"label": "Exemplo orgânico",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/add_grid",
+				"label": "Nova grade",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/focus_view_selection",
+				"label": "Focar seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/add_bridge",
+				"label": "Adicionar ponte",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/save_connector",
+				"label": "Adicionar / atualizar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/remove_connector",
+				"label": "Remover",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "terrain/example/organic",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/brush/stroke",
+				"parameters": {
+					"options": "brush_options",
+					"points": "number[2][]"
+				}
+			},
+			{
+				"id": "terrain/presets/list",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/presets/apply",
+				"parameters": {
+					"preset_id": "string"
+				}
+			},
+			{
+				"id": "terrain/presets/save",
+				"parameters": {
+					"name": "string",
+					"options": "brush_options"
+				}
+			},
+			{
+				"id": "terrain/grid/create",
+				"parameters": {
+					"columns": "integer 2..257",
+					"height": "number -512..512",
+					"layer_id": "id",
+					"name": "string",
+					"origin_xz": "number[2]",
+					"rows": "integer 2..257",
+					"sample_spacing": "number 4..256"
+				}
+			},
+			{
+				"id": "terrain/layer/select",
+				"parameters": {
+					"layer_id": "id"
+				}
+			},
+			{
+				"id": "terrain/layer/lock",
+				"parameters": {
+					"layer_id": "id",
+					"locked": "boolean"
+				}
+			},
+			{
+				"id": "terrain/layer/protection",
+				"parameters": {
+					"layer_id": "id",
+					"region_ids": "existing region IDs[]"
+				}
+			},
+			{
+				"id": "terrain/bridge/create",
+				"parameters": {
+					"height": "number 4..1024",
+					"layer_id": "id",
+					"length": "number 4..1024",
+					"origin_xz": "number[2]",
+					"surface_id": "id",
+					"width": "number 4..1024"
+				}
+			},
+			{
+				"id": "terrain/connector/upsert",
+				"parameters": {
+					"connector_id": "id",
+					"direction": "id",
+					"headroom": "number",
+					"kind": "id",
+					"normal_xyz": "v3",
+					"position_xyz": "v3",
+					"surface_id": "id",
+					"tags": "strings",
+					"width": "number"
+				}
+			},
+			{
+				"id": "terrain/connector/remove",
+				"parameters": {
+					"connector_id": "id"
+				}
+			},
+			{
+				"id": "terrain/viewport/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/viewport/focus_world",
+				"parameters": {
+					"position_xyz": "number[3]",
+					"zoom": "number?"
+				}
+			},
+			{
+				"id": "terrain/viewport/focus_entity",
+				"parameters": {
+					"entity_id": "string"
+				}
+			},
+			{
+				"id": "terrain/viewport/set_overlays",
+				"parameters": {
+					"layers": "overlay:boolean dictionary"
+				}
+			},
+			{
+				"id": "terrain/viewport/search",
+				"parameters": {
+					"query": "string"
+				}
+			},
+			{
+				"id": "terrain/viewport/set_probe",
+				"parameters": {
+					"height": "number",
+					"mode": "navigate|clearance|los",
+					"radius": "number",
+					"surface_id": "string?"
+				}
+			},
+			{
+				"id": "terrain/viewport/probe_point",
+				"parameters": {
+					"point": "WorldPoint"
+				}
+			},
+			{
+				"id": "terrain/viewport/probe_los",
+				"parameters": {
+					"from": "WorldPoint",
+					"to": "WorldPoint"
+				}
+			}
+		],
+		"mode": "ax",
+		"screen": "terrain",
+		"source_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea"
+	}
+}

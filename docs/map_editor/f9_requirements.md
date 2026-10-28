@@ -13,7 +13,7 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 |---|---|---|---|
 | 01/11/12 sombras e profundidade visual | adendo humano26/10 | personagens já têm elipse de contato; props/prévia precisam acabamento coerente e prova em pisos/cotas reais | [contrato e opções da engine](contracts/f9_contact_shadows.md); contato e ordem de desenho validados04a7dfc:242 verificações e3 etapas oficiais Luna; desempenho em escala e preview integral continuam em10/11 |
 | 01 catálogo/origem/licença/dependências | arquitetura, recibo F8 | catálogo passivo de6 definições, PNGs/proveniência e hashes; três originais imutáveis e cacto/pilar/arenito integrados |expansão validada a44cfb1:30/23/53/25 e2 oficiais Luna; transporte limpo pendente |
-| 01 colocar/mover/rotacionar/duplicar/remover | arquitetura | API comum e GUI implementadas; AX/CLI parametrizados faltam | checkpoint18fa57f:53 checks,25 nativos e supervisão |
+| 01 colocar/mover/rotacionar/duplicar/remover | arquitetura | API comum, GUI e AX/CLI parametrizados implementados | checkpoint24: Content28/Native30, Objects53, cliente12/12+reabertura; Sol temporariamente executou após quota Luna |
 | 01 seleção/inspector/grupo/camadas/travas | arquitetura | seleção alpha, inspector e grupos editoriais com travas e cópia de IDs | comprovado no checkpoint de objetos; restante da biblioteca em06 |
 | 01 snap/assentamento/inclinação | arquitetura | snap numérico, inclinação por catálogo e escolha explícita do piso superior |53 checks de objetos, incluindo ponte e piso travado |
 | 01 decoração/corpo/ataque/LoS/oclusão | arquitetura, emendas | rocha/tronco sólidos e arbusto decorativo usam capacidades explícitas; combinação não suportada falha | movimento/ataque comprovados; prova final de oclusão/apresentação pendente |
@@ -38,14 +38,14 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 06 minimap/árvore de objetos/camadas | arquitetura, F8 | minimapaXZ/câmera e busca/foco por camada/objeto/apoio/rota integrados às5 telas; árvore/listas dos produtores preservadas | validado6d72972: Luna20/52/53/28,Core639 e5 oficiais;9799 inputs conferidos; custos e fluxo final seguem em10/12 |
 | 06 overlays/foco/atalhos/diagnóstico localizado | arquitetura | altura/cotas, apoio, corpo, aberturas, encontros e rotas com flags; folga/LoS/ocupação reais, foco e atalhos no quadro; apoio explícito para seção editorial entre andares | validado6d72972: Native52 e5 oficiais Luna; diagnóstico/custos/UX integrada/área final ainda exigidos no conjunto12 |
 | 07 UX coerente/guiada | autoria F8 | menus e seletores existem; fechar fluxo humano inteiro | pendente |
-| 07 AX IDs/ações parametrizadas/estado/diagnóstico | autoria F8 | peça/terreno parametrizados e cliente sobre Shell real; objetos/composição/população/geração ainda faltam | fatia validada17516a20: Authoring30, Native15, CLI/roundtrip/negativos; sem fechamento global |
+| 07 AX IDs/ações parametrizadas/estado/diagnóstico | autoria F8 | peça/terreno/objetos/contexto/marcadores parametrizados sobre telas reais; composição/população/patrulha/geração ainda faltam | checkpoint24 em527+b14ea3dc:28/30/53, cliente/roundtrip e consumidor dos dados PASS; sem fechamento global |
 | 07 histórico/hash/confirmação/modos | F8 | entregue; preservar invariantes | pendente de regressão |
-| 08 biomas/espécies/chances/pesos/reservas | autoria F8 | contexto/reservas e pesos existem; conferir chances e fluxos | pendente |
+| 08 biomas/espécies/chances/pesos/reservas | autoria F8 | contexto de peça/reservas/marcadores agora parametrizados; pesos existem; conferir chances e fluxos integrados | Content28/Native30 e floresta/áreas Terra comprovados; não fecha população/exceções/reconciliação |
 | 08 raro manual sem palco/sorteio | decisão F8 | entregue com53 checks; preservar | pendente de regressão |
 | 08 exceção instância/regra/motivo/aviso | decisão F8 | entregue; preservar em novos consumidores | pendente de regressão |
 | 08 quest passiva/origem/recompensa canônica | F8, PRODUCT_DIRECTION | entregue; nenhuma engine inferida | pendente de regressão |
 | 08 stale/revisão/reconciliação sem perda | F6, F8 | snapshots separados, reimportação explícita limitada | pendente |
-| 09 GUI/AX/CLI equivalentes | F7, F8 | equivalência comprovada para peça/terreno, compilação e Store; demais produtores e bundles faltam | primeira fatia17516a20 aprovada; restante pendente |
+| 09 GUI/AX/CLI equivalentes | F7, F8 | equivalência comprovada para peça/terreno/objetos/contexto/marcadores, compilação e Store; demais produtores e bundles faltam | checkpoint24 Content28/Native30 e cliente12/12/reabertura; restante pendente |
 | 09 diff/preview/undo/proteção espacial/rebase | F7 | camada protegida inteira e base divergente; completar região/reconciliação | pendente |
 | 09 assets passivos/ambiente limpo/segurança | F7 | referências locais apenas; transporte faltante | pendente |
 | 09 fontes de skills/guias | F7 | três fontes versionadas existentes; atualizar sem instalar | pendente |
@@ -57,7 +57,7 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 11 preview real/apresentação de jogo | F8 | pacote rico compartilhado e Player/Enemy/Campaign/HUD reais; quatro campos com apoio/cota/ordem em validação | pele81e2f42 e app/janela/controles581dae4 supervisionados; campos73 autorais e regressão52/29 PASS, demais VFX/área/release pendentes |
 | 11 restart/continuidade/compatibilidade | F5, validação | janela estável, RUN nova no restart, revisão antiga preservada, stop tokenizado sem kill e corte canônico | fonte581dae4 supervisionada52/33/29 e clientes7f723ac; revisão/export/recuperação/área final continuam no conjunto |
 | 11 export limpo/dependências/API | F8 | release técnico existe; ampliar aos consumidores F9 | pendente |
-| 12 área temática/fluxo humano sem código | validação, F8 | amostra técnica; caminho curvo/bifurcação/vegetação/rocha/arte faltantes | pendente |
+| 12 área temática/fluxo humano sem código | validação, F8 | duas peças Terra com trilha/colina/ponte/47props e áreas floresta criadas via AX; composição de produto/fluxo humano e acabamento final faltam | checkpoint24: fontes e consumidor20x32 PASS; sem App/caminhada/combate do Bosque |
 | 12 clareira/rampa/platô/ponte/rota inferior/santuário/emenda | validação, F8 | amostra técnica existente; demonstrar produto final | pendente |
 | 12 disperso/grupo/patrulha/interação | validação, F8 | amostra sete atores; preservar e apresentar no jogo | pendente |
 
@@ -112,3 +112,14 @@ contexto, composição/população/patrulha AX e prova de gameplay continuam exi
 Política LF elimina divergência de bytes dos imports de terreno deste candidato;
 assets em bundle/ambiente limpo/export não foram fechados. Custos15,5s/18,9s de
 mapa/preparo são canônicos, ainda pendência10, sem inferência de FPS.
+
+
+Checkpoint24: código52798508, conteúdo Terra b14ea3dc. Content28/Native30,
+Objects53, cliente12/12/reabertura e editor_import PASS; Sol executou após quota
+interromper Luna.24+23props/contexto/áreas/entrada por AX; consumidor decorado
+20x32, apoios e marcador exato com ida/volta PASS. Composição foi efêmera de teste,
+map-only preview com início provisório; não há App/caminhada/combate/FPS. Custos
+canônicos mapa26,056s/preparo23,557s e consultas adicionais mantêm10 aberto.
+[Recibo](delivery/evidence/f9/author/ax_content/consolidation.md); restante integral
+mantido, próximo composição/contexto de mapa AX, depois população/patrulha e
+perfil das buscas antes do uso real. Sem fecharF9 ou mover lacunas aF10.

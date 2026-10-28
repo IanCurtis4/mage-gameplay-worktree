@@ -3,3 +3,7 @@ skills/** text eol=lf
 
 # Terrain dependency digests use exact import bytes across native checkouts.
 assets/art/map_authoring/*.png.import text eol=lf
+
+# Preserve exact bytes of this AX increment for portable evidence checks.
+docs/map_editor/delivery/evidence/f9/author/ax_content/** -text
+docs/map_editor/delivery/evidence/f9/terra/area_content/** -text

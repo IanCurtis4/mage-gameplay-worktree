@@ -53,7 +53,7 @@ Conservar entrada, emenda, rampa e bordas da ponte livres, com largura útil pla
 4. Criar composição manual, adicionar as duas fontes, posicionar B e vincular os conectores; compilar e demonstrar ida/volta através da emenda e nas rotas superior e inferior. Inspecionar alcance de todos os apoios, corpo e teto, não apenas os endpoints ilustrativos.
 5. Criar entrada em A, população dispersa no entorno da clareira, grupo concentrado no oeste de B e slot fixo em rota ida/volta perto do beco, sem ocupar corredores. Escolher espécie/categoria/origem disponíveis e verificar corpo e leash; incluir `phase_completion` no santuário. Preparar/aplicar prévia, configurar patrulha, compilar, salvar/reabrir e testar pacote real com perfil descartável. Conferir navegação, combate e retorno. A geração com pins exige variantes reais compatíveis; demonstrar também intercâmbio em clone e rejeição sem perda conforme a amostra de validação.
 
-## Estado das operações AX e lacunas
+## Estado das operações AX na inspeção inicial — histórico
 
 Inspeção estática em andamento: `terrain_panel.gd` anuncia `terrain/grid/create`, `terrain/layer/select`, `terrain/bridge/create`, `terrain/connector/upsert` e `terrain/brush/stroke`; as primeiras operações estão em implementação/validação, não presumir que estejam liberadas ou aprovadas. `objects/library/query` e `objects/library/select` existem, mas consulta e seleção não posicionam um objeto. Faltam verificar na versão integrada operações semânticas com parâmetros de colocação/movimento e seleção de superfície; inserção/posicionamento e ligação de peças; caminhos e confirmações de arquivo; pintura de entrada/pincel/slot/interação; seleção e configuração de rota, pontos e vínculo de slot; geração e intercâmbio. Botões genéricos sem parâmetros dependem de campos, seleções, diálogos ou cliques e não provam essas capacidades. Conferir `ax_snapshot()` e contrato efetivo antes de autoria; nenhuma fonte deve ser alterada diretamente para contornar lacuna.
 
@@ -62,3 +62,16 @@ Conferidos [sólidos](../contracts/f9_terrain_solids.md), [relevo misto](../cont
 ## Estado do terreno — replay limpo
 
 As duas fontes de terreno foram criadas via AX e preservadas em `data/map_authoring/sanctuary_woods_clearing.source.json` e `sanctuary_woods_overpass.source.json`. Replay na fixture importada reproduziu seus bytes; reabertura das fontes originais na mesma fixture reproduziu hashes de fonte e compilação. Detalhes, comandos e ressalvas em [recibo de terreno](evidence/f9/terra/area_terrain/clean_replay/report.md). **Terreno criado**; props e contexto foram acrescentados posteriormente. Permanecem população, composição entre peças, teste jogável de corpo raio 20/altura 32 e aceite visual. As coordenadas acima permanecem intenções sujeitas à comprovação de navegabilidade.
+
+
+## Integração de conteúdo — checkpoint24
+
+Sol recebeu sequencialmente esta nota após entrega Terra. Objetos/contexto/
+marcadores e cliente AX estão agora validados; as ressalvas da inspeção inicial
+acima são históricas. Clareira24props e passagem23props, áreas floresta e entrada
+foram salvas/reabertas pelo editor, integradas em b14ea3dc. A composição efêmera
+de teste20x32 alcançou apoios e verificou o marcador exato com ida/volta.
+[Prova](evidence/f9/author/ax_content/consumer_02/report.md). Não é composição de
+produto nem gameplay: AX de composição/população/patrulha, interação, caminhada/
+combate/apresentação e desempenho continuam pendentes. O início da prévia de mapa
+é provisório até escolher entrada na população; o marcador permanece preservado.

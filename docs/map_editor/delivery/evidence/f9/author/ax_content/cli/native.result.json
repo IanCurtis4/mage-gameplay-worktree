@@ -1,0 +1,1202 @@
+{
+	"actions": [
+		{
+			"id": "piece/document/new",
+			"input_hash": "682c875a396c64b3837247969c2bcdc3c315fda3ed902e15af297c96eee3bd0d",
+			"output_hash": "c821b519cf90ab51a0853c29179219d32b6757eb3a5e3e6f2d5985aaa0ae99e3",
+			"result": {
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "content_cli",
+				"input_hash": "",
+				"ok": true,
+				"output_hash": "c821b519cf90ab51a0853c29179219d32b6757eb3a5e3e6f2d5985aaa0ae99e3"
+			},
+			"screen": "piece"
+		},
+		{
+			"id": "terrain/grid/create",
+			"input_hash": "c821b519cf90ab51a0853c29179219d32b6757eb3a5e3e6f2d5985aaa0ae99e3",
+			"output_hash": "4848cf5d4262d7878462c75956285299b070264733402fc9e9146210c68560de",
+			"result": {
+				"byte_hash": "c4d728f717087f16c1f59c5c6353f0fa04bbff0c7484a1090d49bec66d1f37fe",
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "floor",
+				"input_hash": "c821b519cf90ab51a0853c29179219d32b6757eb3a5e3e6f2d5985aaa0ae99e3",
+				"ok": true,
+				"output_hash": "4848cf5d4262d7878462c75956285299b070264733402fc9e9146210c68560de",
+				"valid": true
+			},
+			"screen": "terrain"
+		},
+		{
+			"id": "objects/library/select",
+			"input_hash": "4848cf5d4262d7878462c75956285299b070264733402fc9e9146210c68560de",
+			"output_hash": "4848cf5d4262d7878462c75956285299b070264733402fc9e9146210c68560de",
+			"result": {
+				"definition_id": "oak_tree",
+				"ok": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "4848cf5d4262d7878462c75956285299b070264733402fc9e9146210c68560de",
+			"output_hash": "1518190340ad00eef98efc2431f81d881a108649c4a7bacfb64b7400b355a6a6",
+			"result": {
+				"added_ids": [
+					"tree"
+				],
+				"byte_hash": "401d6246503a1028d8cc79dd7a75ee26188165c21dc2e9ba6366343beb2e5fe2",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "4848cf5d4262d7878462c75956285299b070264733402fc9e9146210c68560de",
+				"ok": true,
+				"output_hash": "1518190340ad00eef98efc2431f81d881a108649c4a7bacfb64b7400b355a6a6",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "1518190340ad00eef98efc2431f81d881a108649c4a7bacfb64b7400b355a6a6",
+			"output_hash": "0e64c793841945718c651e76997229e14c7040b3d9a37559477ebed42f7a4a8d",
+			"result": {
+				"added_ids": [
+					"shrub"
+				],
+				"byte_hash": "24f852bc3cb1b0b32e651226a2b565d5ef0e3d2482f6400cf40a4da65b11dbae",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "1518190340ad00eef98efc2431f81d881a108649c4a7bacfb64b7400b355a6a6",
+				"ok": true,
+				"output_hash": "0e64c793841945718c651e76997229e14c7040b3d9a37559477ebed42f7a4a8d",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "piece/context/rules/set",
+			"input_hash": "0e64c793841945718c651e76997229e14c7040b3d9a37559477ebed42f7a4a8d",
+			"output_hash": "d53a7f1660e006e2f81116f48675325d1ab8d98e14314957d0b743bdf73ec17e",
+			"result": {
+				"byte_hash": "6071301773aad89af77294eb6017f8a71adf847275f1e4d9af7567693f73815f",
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "content_cli",
+				"input_hash": "0e64c793841945718c651e76997229e14c7040b3d9a37559477ebed42f7a4a8d",
+				"ok": true,
+				"output_hash": "d53a7f1660e006e2f81116f48675325d1ab8d98e14314957d0b743bdf73ec17e",
+				"valid": true
+			},
+			"screen": "piece"
+		},
+		{
+			"id": "piece/context/area/upsert",
+			"input_hash": "d53a7f1660e006e2f81116f48675325d1ab8d98e14314957d0b743bdf73ec17e",
+			"output_hash": "4a9f43ceb6a28edea12bf9e5503191a5e4c2b93dcff7f6e040993e44e5cbcf50",
+			"result": {
+				"byte_hash": "45e0ded55955064440e60f29d408d38a15f6ea4276b05ed1c3ac07de69a24c99",
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "arena",
+				"input_hash": "d53a7f1660e006e2f81116f48675325d1ab8d98e14314957d0b743bdf73ec17e",
+				"ok": true,
+				"output_hash": "4a9f43ceb6a28edea12bf9e5503191a5e4c2b93dcff7f6e040993e44e5cbcf50",
+				"valid": true
+			},
+			"screen": "piece"
+		},
+		{
+			"id": "piece/socket/upsert",
+			"input_hash": "4a9f43ceb6a28edea12bf9e5503191a5e4c2b93dcff7f6e040993e44e5cbcf50",
+			"output_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+			"result": {
+				"byte_hash": "9ec151c22bc0c4d90ee884c6b7f780a5dbbe67e8801fb732cfc20cb61b05bdc6",
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "entry",
+				"input_hash": "4a9f43ceb6a28edea12bf9e5503191a5e4c2b93dcff7f6e040993e44e5cbcf50",
+				"ok": true,
+				"output_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+				"valid": true
+			},
+			"screen": "piece"
+		},
+		{
+			"id": "objects/select",
+			"input_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+			"output_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+			"result": {
+				"ok": true,
+				"output_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+				"selected_ids": [
+					"tree"
+				]
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "terrain/compile_piece",
+			"input_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+			"output_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+			"result": {
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+				"ok": true,
+				"output_hash": "56ffa85eaf79bab0edf37820d99d73af212465c4d07441046ad600c01e16669d"
+			},
+			"screen": "terrain"
+		},
+		{
+			"id": "objects/library/query",
+			"input_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+			"output_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+			"result": {
+				"entries": [
+					{
+						"category": "structures",
+						"definition_id": "broken_pillar",
+						"id": "prop:broken_pillar",
+						"name": "Pilar quebrado",
+						"tags": [
+							"ruin",
+							"forest"
+						]
+					},
+					{
+						"category": "vegetation",
+						"definition_id": "desert_cactus",
+						"id": "prop:desert_cactus",
+						"name": "Cacto adulto",
+						"tags": [
+							"desert"
+						]
+					},
+					{
+						"category": "rocks",
+						"definition_id": "moss_boulder",
+						"id": "prop:moss_boulder",
+						"name": "Rocha musgosa",
+						"tags": [
+							"forest",
+							"meadow",
+							"ruin"
+						]
+					},
+					{
+						"category": "trees",
+						"definition_id": "oak_tree",
+						"id": "prop:oak_tree",
+						"name": "Carvalho",
+						"tags": [
+							"forest",
+							"meadow",
+							"ruin"
+						]
+					},
+					{
+						"category": "rocks",
+						"definition_id": "sandstone_boulder",
+						"id": "prop:sandstone_boulder",
+						"name": "Rocha de arenito",
+						"tags": [
+							"desert",
+							"meadow"
+						]
+					},
+					{
+						"category": "vegetation",
+						"definition_id": "woodland_shrub",
+						"id": "prop:woodland_shrub",
+						"name": "Arbusto florido",
+						"tags": [
+							"forest",
+							"meadow",
+							"ruin"
+						]
+					}
+				],
+				"ok": true,
+				"preferences_hash": "e95ab8c9cd0bf5789f8e414a830c15ffb6e86fd64acfd579339cbd95b886b9b3"
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "piece/document/save",
+			"input_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+			"output_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+			"result": {
+				"byte_hash": "060ca259a10d7948dd6cb89aae3c00b38a08d5f15b72d6b9ac97ae08108fa9c1",
+				"code": "",
+				"diagnostics": [],
+				"expected_byte_hash": "",
+				"input_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+				"ok": true,
+				"output_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+				"valid": true
+			},
+			"screen": "piece"
+		}
+	],
+	"code": "",
+	"completed_actions": 12,
+	"diagnostics": [],
+	"objects_snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "objects/undo",
+				"label": "Desfazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/redo",
+				"label": "Refazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/fit_view",
+				"label": "Enquadrar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/compile_piece",
+				"label": "Compilar peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_e56f4ddfdeb1",
+				"label": "Favoritar selecionado",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/focus_view_selection",
+				"label": "Focar seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_529dabe3d88f",
+				"label": "Colocar nas coordenadas",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_4755bd5b771b",
+				"label": "Mover seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_7f91e3dbaf52",
+				"label": "Girar90°",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_64657fb07c8c",
+				"label": "Duplicar seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_f11c0077aac8",
+				"label": "Remover seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_387cc4667887",
+				"label": "Agrupar seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_e9181b97926a",
+				"label": "Desagrupar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_0e17c1b4c291",
+				"label": "Selecionar grupo",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_5c613324fcde",
+				"label": "Travar / destravar grupo",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_4abdd24ae1d4",
+				"label": "Ocultar / mostrar grupo",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_b67b92d6e9ac",
+				"label": "Travar / destravar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_44cfb364edb5",
+				"label": "Ocultar / mostrar na autoria",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_1ce9e69bd1a5",
+				"label": "Preparar scatter",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/apply_preview",
+				"label": "Aplicar prévia…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_eade13b2fd02",
+				"label": "Descartar prévia",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "objects/library/query",
+				"parameters": {
+					"category": "string?",
+					"favorites_only": "bool?",
+					"query": "string?"
+				}
+			},
+			{
+				"id": "objects/library/favorite",
+				"parameters": {
+					"definition_id": "string",
+					"enabled": "bool"
+				}
+			},
+			{
+				"id": "objects/library/select",
+				"parameters": {
+					"definition_id": "string"
+				}
+			},
+			{
+				"id": "objects/select",
+				"parameters": {
+					"ids": "id[]"
+				}
+			},
+			{
+				"id": "objects/surface/select",
+				"parameters": {
+					"surface_id": "id"
+				}
+			},
+			{
+				"id": "objects/scatter/preview",
+				"parameters": {
+					"optional": {
+						"exclusions": "array",
+						"seed_text": "string",
+						"snap": "number",
+						"spacing": "number"
+					},
+					"required": {
+						"center_xz": "v2",
+						"count": "int",
+						"definition_id": "id",
+						"radius": "number",
+						"surface_id": "id"
+					}
+				}
+			},
+			{
+				"id": "objects/scatter/apply",
+				"parameters": {
+					"proposal_hash": "sha256"
+				}
+			},
+			{
+				"id": "objects/scatter/discard",
+				"parameters": {}
+			},
+			{
+				"id": "objects/place",
+				"parameters": {
+					"optional": {
+						"placement_id": "id",
+						"rotation_y": "number",
+						"snap": "number"
+					},
+					"required": {
+						"definition_id": "id",
+						"position_xz": "v2",
+						"surface_id": "id"
+					}
+				}
+			},
+			{
+				"id": "objects/move",
+				"parameters": {
+					"optional": {
+						"snap": "number",
+						"surface_id": "id"
+					},
+					"required": {
+						"ids": "strings",
+						"position_xz": "v2"
+					}
+				}
+			},
+			{
+				"id": "objects/translate",
+				"parameters": {
+					"optional": {
+						"snap": "number"
+					},
+					"required": {
+						"delta_xz": "v2",
+						"ids": "strings"
+					}
+				}
+			},
+			{
+				"id": "objects/rotate",
+				"parameters": {
+					"optional": {
+						"snap": "number"
+					},
+					"required": {
+						"degrees": "number",
+						"ids": "strings"
+					}
+				}
+			},
+			{
+				"id": "objects/duplicate",
+				"parameters": {
+					"optional": {
+						"snap": "number"
+					},
+					"required": {
+						"delta_xz": "v2",
+						"ids": "strings"
+					}
+				}
+			},
+			{
+				"id": "objects/remove",
+				"parameters": {
+					"optional": {},
+					"required": {
+						"ids": "strings"
+					}
+				}
+			},
+			{
+				"id": "objects/group",
+				"parameters": {
+					"optional": {
+						"name": "string"
+					},
+					"required": {
+						"group_id": "id",
+						"ids": "strings"
+					}
+				}
+			},
+			{
+				"id": "objects/ungroup",
+				"parameters": {
+					"optional": {},
+					"required": {
+						"ids": "strings"
+					}
+				}
+			},
+			{
+				"id": "objects/lock",
+				"parameters": {
+					"optional": {},
+					"required": {
+						"ids": "strings",
+						"value": "bool"
+					}
+				}
+			},
+			{
+				"id": "objects/hide",
+				"parameters": {
+					"optional": {},
+					"required": {
+						"ids": "strings",
+						"value": "bool"
+					}
+				}
+			},
+			{
+				"id": "objects/group/state",
+				"parameters": {
+					"optional": {
+						"hidden": "bool",
+						"locked": "bool"
+					},
+					"required": {
+						"group_id": "id"
+					}
+				}
+			},
+			{
+				"id": "objects/viewport/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "objects/viewport/focus_world",
+				"parameters": {
+					"position_xyz": "number[3]",
+					"zoom": "number?"
+				}
+			},
+			{
+				"id": "objects/viewport/focus_entity",
+				"parameters": {
+					"entity_id": "string"
+				}
+			},
+			{
+				"id": "objects/viewport/set_overlays",
+				"parameters": {
+					"layers": "overlay:boolean dictionary"
+				}
+			},
+			{
+				"id": "objects/viewport/search",
+				"parameters": {
+					"query": "string"
+				}
+			},
+			{
+				"id": "objects/viewport/set_probe",
+				"parameters": {
+					"height": "number",
+					"mode": "navigate|clearance|los",
+					"radius": "number",
+					"surface_id": "string?"
+				}
+			},
+			{
+				"id": "objects/viewport/probe_point",
+				"parameters": {
+					"point": "WorldPoint"
+				}
+			},
+			{
+				"id": "objects/viewport/probe_los",
+				"parameters": {
+					"from": "WorldPoint",
+					"to": "WorldPoint"
+				}
+			}
+		],
+		"mode": "ax",
+		"preview_hash": "",
+		"screen": "objects",
+		"selected_ids": [
+			"tree"
+		],
+		"selected_surface": "floor",
+		"source_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea"
+	},
+	"ok": true,
+	"requested_actions": 12,
+	"snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "piece/exchange",
+				"label": "Intercâmbio com skills…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/new_piece",
+				"label": "Nova peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/compose_map",
+				"label": "Compor mapa…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open_objects",
+				"label": "Objetos e vegetação…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open_library",
+				"label": "Biblioteca…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open",
+				"label": "Abrir…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/save",
+				"label": "Salvar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/save_as",
+				"label": "Salvar como…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/undo",
+				"label": "Desfazer",
+				"test_only": false
+			},
+			{
+				"enabled": false,
+				"id": "piece/redo",
+				"label": "Refazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/recover_copy",
+				"label": "Recuperar cópia",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/browse_draft",
+				"label": "Buscar rascunho…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/add_layer",
+				"label": "Adicionar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/duplicate_layer",
+				"label": "Duplicar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/toggle_layer_lock",
+				"label": "Travar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/apply_name",
+				"label": "Aplicar nome",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/piece_context",
+				"label": "Contexto da peça…",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "piece/document/new",
+				"parameters": {
+					"confirm_discard": "boolean",
+					"document_id": "id",
+					"name": "string"
+				}
+			},
+			{
+				"id": "piece/document/name",
+				"parameters": {
+					"name": "string"
+				}
+			},
+			{
+				"id": "piece/document/open",
+				"parameters": {
+					"confirm_discard": "boolean",
+					"path": "string"
+				}
+			},
+			{
+				"id": "piece/document/save",
+				"parameters": {
+					"path": "string"
+				}
+			},
+			{
+				"id": "piece/history/undo",
+				"parameters": {}
+			},
+			{
+				"id": "piece/history/redo",
+				"parameters": {}
+			},
+			{
+				"id": "piece/context/options",
+				"parameters": {}
+			},
+			{
+				"id": "piece/context/rules/set",
+				"parameters": {
+					"allow_rare": "bool",
+					"allowed_species": "strings",
+					"biome_ids": "strings"
+				}
+			},
+			{
+				"id": "piece/context/area/upsert",
+				"parameters": {
+					"allow_rare": "bool",
+					"allowed_species": "strings",
+					"layer_id": "id",
+					"max_xz": "v2",
+					"min_xz": "v2",
+					"region_id": "id",
+					"reserved": "array"
+				}
+			},
+			{
+				"id": "piece/context/area/remove",
+				"parameters": {
+					"region_id": "id"
+				}
+			},
+			{
+				"id": "piece/socket/upsert",
+				"parameters": {
+					"kind": "id",
+					"position_xyz": "v3",
+					"socket_id": "id",
+					"surface_id": "id"
+				}
+			},
+			{
+				"id": "piece/socket/remove",
+				"parameters": {
+					"socket_id": "id"
+				}
+			}
+		],
+		"mode": "ax",
+		"screen": "piece",
+		"source": {
+			"composition": null,
+			"connectors": [],
+			"context": {
+				"allow_rare": false,
+				"allowed_species": [],
+				"areas": [
+					{
+						"allow_rare": false,
+						"allowed_species": [],
+						"region_id": "arena",
+						"reserved": []
+					}
+				],
+				"biome_ids": [
+					"forest"
+				],
+				"version": 1
+			},
+			"dependencies": [
+				{
+					"definition_id": "oak_tree",
+					"kind": "prop",
+					"revision": 1,
+					"sha256": "cfa38bd7632f300a14333c077e71152e58f65bc88754a2fac3347661c4b024cc"
+				},
+				{
+					"definition_id": "woodland_shrub",
+					"kind": "prop",
+					"revision": 1,
+					"sha256": "e2e6fc9af59b1ab2820e21239d87c28b48ebc94b7489d12eb1fd9106187ed7bb"
+				}
+			],
+			"document_id": "content_cli",
+			"layers": [
+				{
+					"columns": 5,
+					"heights": [
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0
+					],
+					"layer_id": "floor",
+					"locked": false,
+					"material_masks": {},
+					"name": "Chão",
+					"origin_xz": [
+						0,
+						0
+					],
+					"protected_regions": [],
+					"rows": 5,
+					"sample_spacing": 100
+				}
+			],
+			"name": "Conteúdo pelo AX",
+			"placements": [
+				{
+					"definition_id": "oak_tree",
+					"placement_id": "tree",
+					"position_xyz": [
+						100.0,
+						0.0,
+						100.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "floor"
+				},
+				{
+					"definition_id": "woodland_shrub",
+					"placement_id": "shrub",
+					"position_xyz": [
+						220.0,
+						0.0,
+						200.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "floor"
+				}
+			],
+			"regions": [
+				{
+					"layer_id": "floor",
+					"polygon_xz": [
+						[
+							220,
+							220
+						],
+						[
+							360,
+							220
+						],
+						[
+							360,
+							360
+						],
+						[
+							220,
+							360
+						]
+					],
+					"purpose": "encounter",
+					"region_id": "arena"
+				}
+			],
+			"revision": 7,
+			"schema_version": 1,
+			"sockets": [
+				{
+					"kind": "entrance",
+					"position_xyz": [
+						320,
+						0,
+						100
+					],
+					"socket_id": "entry",
+					"surface_id": "floor"
+				}
+			],
+			"special_surfaces": [],
+			"units": "e07_world"
+		}
+	},
+	"source_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea",
+	"state": {
+		"can_redo": false,
+		"can_undo": true,
+		"dirty": false,
+		"selected_layer": "floor",
+		"source_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\author\\ax_content\\cli\\native.source.json"
+	},
+	"terrain_snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "terrain/save_brush_preset",
+				"label": "Salvar predefinição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/remove_brush_preset",
+				"label": "Remover predefinição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/fit_view",
+				"label": "Enquadrar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/compile_piece",
+				"label": "Compilar peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/cancel",
+				"label": "Cancelar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/ramp_bridge_sample",
+				"label": "Exemplo rampa/ponte",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/large_piece_sample",
+				"label": "Exemplo de peça grande",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/action_10a98dc5c4c2",
+				"label": "Exemplo orgânico",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/add_grid",
+				"label": "Nova grade",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/focus_view_selection",
+				"label": "Focar seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/add_bridge",
+				"label": "Adicionar ponte",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/save_connector",
+				"label": "Adicionar / atualizar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/remove_connector",
+				"label": "Remover",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "terrain/example/organic",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/brush/stroke",
+				"parameters": {
+					"options": "brush_options",
+					"points": "number[2][]"
+				}
+			},
+			{
+				"id": "terrain/presets/list",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/presets/apply",
+				"parameters": {
+					"preset_id": "string"
+				}
+			},
+			{
+				"id": "terrain/presets/save",
+				"parameters": {
+					"name": "string",
+					"options": "brush_options"
+				}
+			},
+			{
+				"id": "terrain/grid/create",
+				"parameters": {
+					"columns": "integer 2..257",
+					"height": "number -512..512",
+					"layer_id": "id",
+					"name": "string",
+					"origin_xz": "number[2]",
+					"rows": "integer 2..257",
+					"sample_spacing": "number 4..256"
+				}
+			},
+			{
+				"id": "terrain/layer/select",
+				"parameters": {
+					"layer_id": "id"
+				}
+			},
+			{
+				"id": "terrain/layer/lock",
+				"parameters": {
+					"layer_id": "id",
+					"locked": "boolean"
+				}
+			},
+			{
+				"id": "terrain/layer/protection",
+				"parameters": {
+					"layer_id": "id",
+					"region_ids": "existing region IDs[]"
+				}
+			},
+			{
+				"id": "terrain/bridge/create",
+				"parameters": {
+					"height": "number 4..1024",
+					"layer_id": "id",
+					"length": "number 4..1024",
+					"origin_xz": "number[2]",
+					"surface_id": "id",
+					"width": "number 4..1024"
+				}
+			},
+			{
+				"id": "terrain/connector/upsert",
+				"parameters": {
+					"connector_id": "id",
+					"direction": "id",
+					"headroom": "number",
+					"kind": "id",
+					"normal_xyz": "v3",
+					"position_xyz": "v3",
+					"surface_id": "id",
+					"tags": "strings",
+					"width": "number"
+				}
+			},
+			{
+				"id": "terrain/connector/remove",
+				"parameters": {
+					"connector_id": "id"
+				}
+			},
+			{
+				"id": "terrain/viewport/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/viewport/focus_world",
+				"parameters": {
+					"position_xyz": "number[3]",
+					"zoom": "number?"
+				}
+			},
+			{
+				"id": "terrain/viewport/focus_entity",
+				"parameters": {
+					"entity_id": "string"
+				}
+			},
+			{
+				"id": "terrain/viewport/set_overlays",
+				"parameters": {
+					"layers": "overlay:boolean dictionary"
+				}
+			},
+			{
+				"id": "terrain/viewport/search",
+				"parameters": {
+					"query": "string"
+				}
+			},
+			{
+				"id": "terrain/viewport/set_probe",
+				"parameters": {
+					"height": "number",
+					"mode": "navigate|clearance|los",
+					"radius": "number",
+					"surface_id": "string?"
+				}
+			},
+			{
+				"id": "terrain/viewport/probe_point",
+				"parameters": {
+					"point": "WorldPoint"
+				}
+			},
+			{
+				"id": "terrain/viewport/probe_los",
+				"parameters": {
+					"from": "WorldPoint",
+					"to": "WorldPoint"
+				}
+			}
+		],
+		"mode": "ax",
+		"screen": "terrain",
+		"source_hash": "52c980cc6335d708b3dbb43e69120624521c1648c64b17cfc5f82eb6482bb9ea"
+	}
+}
