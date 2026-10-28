@@ -36,7 +36,11 @@ static func fail(code: String, id: String = "") -> Dictionary: return Compiler.f
 
 static func propose(source: Dictionary, operation: String, params: Dictionary) -> Dictionary:
 	if not PARAMETERS.has(operation): return fail("object_operation_unknown")
-	if not valid_parameters(operation,params): return fail("object_parameters_invalid")
+	if not valid_parameters(operation,params):
+		# Keep the existing public selection diagnostic while closing the rest
+		# of the parameter shape for GUI and AX alike.
+		if PARAMETERS[operation].required.has("ids") and not Schema._type(params.get("ids"),"strings"): return fail("object_selection_invalid")
+		return fail("object_parameters_invalid")
 	var read := Schema.read(JSON.stringify(source,"",true,true).to_utf8_buffer())
 	if not read.ok or not read.valid: return fail("source_invalid")
 	if operation not in ["place","move","translate","rotate","duplicate","remove","group","ungroup","group_state","lock","hide","scatter"]: return fail("object_operation_unknown")
