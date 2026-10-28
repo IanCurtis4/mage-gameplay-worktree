@@ -1,0 +1,410 @@
+{
+  "ax_version": 1,
+  "actions": [
+    {
+      "screen": "piece",
+      "id": "piece/document/open",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods_clearing.source.json",
+        "confirm_discard": true
+      }
+    },
+    {
+      "screen": "piece",
+      "id": "piece/context/rules/set",
+      "parameters": {
+        "biome_ids": [
+          "forest"
+        ],
+        "allowed_species": [],
+        "allow_rare": false
+      }
+    },
+    {
+      "screen": "piece",
+      "id": "piece/context/area/upsert",
+      "parameters": {
+        "region_id": "woods_clearing",
+        "layer_id": "a_ground",
+        "min_xz": [
+          192,
+          448
+        ],
+        "max_xz": [
+          576,
+          832
+        ],
+        "allowed_species": [],
+        "allow_rare": false,
+        "reserved": []
+      }
+    },
+    {
+      "screen": "piece",
+      "id": "piece/socket/upsert",
+      "parameters": {
+        "socket_id": "woods_entry",
+        "surface_id": "a_ground",
+        "position_xyz": [
+          160,
+          0,
+          640
+        ],
+        "kind": "entrance"
+      }
+    },
+    {
+      "screen": "piece",
+      "id": "piece/open_objects",
+      "parameters": {}
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_oak_tree_01",
+        "definition_id": "oak_tree",
+        "surface_id": "a_ground",
+        "position_xz": [
+          128,
+          160
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_oak_tree_02",
+        "definition_id": "oak_tree",
+        "surface_id": "a_ground",
+        "position_xz": [
+          384,
+          96
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_oak_tree_03",
+        "definition_id": "oak_tree",
+        "surface_id": "a_ground",
+        "position_xz": [
+          640,
+          128
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_oak_tree_04",
+        "definition_id": "oak_tree",
+        "surface_id": "a_ground",
+        "position_xz": [
+          896,
+          128
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_oak_tree_05",
+        "definition_id": "oak_tree",
+        "surface_id": "a_ground",
+        "position_xz": [
+          1120,
+          192
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_oak_tree_06",
+        "definition_id": "oak_tree",
+        "surface_id": "a_ground",
+        "position_xz": [
+          128,
+          1088
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_oak_tree_07",
+        "definition_id": "oak_tree",
+        "surface_id": "a_ground",
+        "position_xz": [
+          384,
+          1152
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_oak_tree_08",
+        "definition_id": "oak_tree",
+        "surface_id": "a_ground",
+        "position_xz": [
+          704,
+          1088
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_oak_tree_09",
+        "definition_id": "oak_tree",
+        "surface_id": "a_ground",
+        "position_xz": [
+          992,
+          1152
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_oak_tree_10",
+        "definition_id": "oak_tree",
+        "surface_id": "a_ground",
+        "position_xz": [
+          1184,
+          1024
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_woodland_shrub_01",
+        "definition_id": "woodland_shrub",
+        "surface_id": "a_ground",
+        "position_xz": [
+          192,
+          256
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_woodland_shrub_02",
+        "definition_id": "woodland_shrub",
+        "surface_id": "a_ground",
+        "position_xz": [
+          512,
+          192
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_woodland_shrub_03",
+        "definition_id": "woodland_shrub",
+        "surface_id": "a_ground",
+        "position_xz": [
+          768,
+          256
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_woodland_shrub_04",
+        "definition_id": "woodland_shrub",
+        "surface_id": "a_ground",
+        "position_xz": [
+          1088,
+          320
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_woodland_shrub_05",
+        "definition_id": "woodland_shrub",
+        "surface_id": "a_ground",
+        "position_xz": [
+          192,
+          960
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_woodland_shrub_06",
+        "definition_id": "woodland_shrub",
+        "surface_id": "a_ground",
+        "position_xz": [
+          544,
+          1024
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_woodland_shrub_07",
+        "definition_id": "woodland_shrub",
+        "surface_id": "a_ground",
+        "position_xz": [
+          832,
+          960
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_woodland_shrub_08",
+        "definition_id": "woodland_shrub",
+        "surface_id": "a_ground",
+        "position_xz": [
+          1120,
+          960
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_moss_boulder_01",
+        "definition_id": "moss_boulder",
+        "surface_id": "a_ground",
+        "position_xz": [
+          96,
+          384
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_moss_boulder_02",
+        "definition_id": "moss_boulder",
+        "surface_id": "a_ground",
+        "position_xz": [
+          640,
+          320
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_moss_boulder_03",
+        "definition_id": "moss_boulder",
+        "surface_id": "a_ground",
+        "position_xz": [
+          960,
+          320
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_moss_boulder_04",
+        "definition_id": "moss_boulder",
+        "surface_id": "a_ground",
+        "position_xz": [
+          128,
+          832
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_moss_boulder_05",
+        "definition_id": "moss_boulder",
+        "surface_id": "a_ground",
+        "position_xz": [
+          704,
+          896
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "clearing_moss_boulder_06",
+        "definition_id": "moss_boulder",
+        "surface_id": "a_ground",
+        "position_xz": [
+          1088,
+          832
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/compile_piece",
+      "parameters": {}
+    },
+    {
+      "screen": "piece",
+      "id": "piece/document/save",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods_clearing.source.json"
+      }
+    }
+  ]
+}

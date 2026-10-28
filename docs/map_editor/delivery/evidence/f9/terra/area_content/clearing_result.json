@@ -1,0 +1,3110 @@
+{
+	"actions": [
+		{
+			"id": "piece/document/open",
+			"input_hash": "5ad449e569e9d87206eb17691b47c8d17d99379e7c762f954ea6447a1d185b7c",
+			"output_hash": "93a5d99c3110ec054fca292b3efe3778b4d4745003f35390ade9c3d6d307ba38",
+			"result": {
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "sanctuary_woods_clearing",
+				"input_hash": "",
+				"ok": true,
+				"output_hash": "93a5d99c3110ec054fca292b3efe3778b4d4745003f35390ade9c3d6d307ba38"
+			},
+			"screen": "piece"
+		},
+		{
+			"id": "piece/context/rules/set",
+			"input_hash": "93a5d99c3110ec054fca292b3efe3778b4d4745003f35390ade9c3d6d307ba38",
+			"output_hash": "decffc87b99fea42102b3cc25ae9ec42b7ccb522acab875cbe84426a8f88b5f8",
+			"result": {
+				"byte_hash": "676bad88278628653b3b8acfbc6cd3ebe68230923dc16840595b0510bfe19a06",
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "sanctuary_woods_clearing",
+				"input_hash": "93a5d99c3110ec054fca292b3efe3778b4d4745003f35390ade9c3d6d307ba38",
+				"ok": true,
+				"output_hash": "decffc87b99fea42102b3cc25ae9ec42b7ccb522acab875cbe84426a8f88b5f8",
+				"valid": true
+			},
+			"screen": "piece"
+		},
+		{
+			"id": "piece/context/area/upsert",
+			"input_hash": "decffc87b99fea42102b3cc25ae9ec42b7ccb522acab875cbe84426a8f88b5f8",
+			"output_hash": "5eb2c5775dc82dfd232558e53393c9e4de130fc58f3b31bba8e417be39f05673",
+			"result": {
+				"byte_hash": "bde1c08bc7b7306941fb9b4f12298f52c3d32603a08ec1e12bce06b8273b26d6",
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "woods_clearing",
+				"input_hash": "decffc87b99fea42102b3cc25ae9ec42b7ccb522acab875cbe84426a8f88b5f8",
+				"ok": true,
+				"output_hash": "5eb2c5775dc82dfd232558e53393c9e4de130fc58f3b31bba8e417be39f05673",
+				"valid": true
+			},
+			"screen": "piece"
+		},
+		{
+			"id": "piece/socket/upsert",
+			"input_hash": "5eb2c5775dc82dfd232558e53393c9e4de130fc58f3b31bba8e417be39f05673",
+			"output_hash": "814fe02876b7ffec4d17831b6fce36b27a329a7b1f2f06b60926754d34c07e6e",
+			"result": {
+				"byte_hash": "17141b37c8388e00790e20a3674ec31a87de92dd35facdd7605a70705558b786",
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "woods_entry",
+				"input_hash": "5eb2c5775dc82dfd232558e53393c9e4de130fc58f3b31bba8e417be39f05673",
+				"ok": true,
+				"output_hash": "814fe02876b7ffec4d17831b6fce36b27a329a7b1f2f06b60926754d34c07e6e",
+				"valid": true
+			},
+			"screen": "piece"
+		},
+		{
+			"id": "piece/open_objects",
+			"input_hash": "814fe02876b7ffec4d17831b6fce36b27a329a7b1f2f06b60926754d34c07e6e",
+			"output_hash": "814fe02876b7ffec4d17831b6fce36b27a329a7b1f2f06b60926754d34c07e6e",
+			"result": {
+				"action_id": "piece/open_objects",
+				"ok": true
+			},
+			"screen": "piece"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "814fe02876b7ffec4d17831b6fce36b27a329a7b1f2f06b60926754d34c07e6e",
+			"output_hash": "ba21d55ae001b3d1fb9d9c598a8b0ad1cdf53d7cd709ed1d364f5c890a4fa54c",
+			"result": {
+				"added_ids": [
+					"clearing_oak_tree_01"
+				],
+				"byte_hash": "58f5e591e5a0fd89e79e9b7def9fe39e689a88b83dd71db627f6defdfbaf4a7b",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "814fe02876b7ffec4d17831b6fce36b27a329a7b1f2f06b60926754d34c07e6e",
+				"ok": true,
+				"output_hash": "ba21d55ae001b3d1fb9d9c598a8b0ad1cdf53d7cd709ed1d364f5c890a4fa54c",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "ba21d55ae001b3d1fb9d9c598a8b0ad1cdf53d7cd709ed1d364f5c890a4fa54c",
+			"output_hash": "0566a72c08df8989395b70777e5291d366b28f31219086d759ff3bc7a357be58",
+			"result": {
+				"added_ids": [
+					"clearing_oak_tree_02"
+				],
+				"byte_hash": "c9369efdbfbb2264314c7481ef432e7c16df6543d6d09fcdf285a56d95834429",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "ba21d55ae001b3d1fb9d9c598a8b0ad1cdf53d7cd709ed1d364f5c890a4fa54c",
+				"ok": true,
+				"output_hash": "0566a72c08df8989395b70777e5291d366b28f31219086d759ff3bc7a357be58",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "0566a72c08df8989395b70777e5291d366b28f31219086d759ff3bc7a357be58",
+			"output_hash": "abc37f3e7ec0f1b9869594c4665980e9db334c39954f19e0e560de46f62922af",
+			"result": {
+				"added_ids": [
+					"clearing_oak_tree_03"
+				],
+				"byte_hash": "ca550ade2caa9f5ae8f281687484a87fb838e6b186c180bc41ef2e71d0891643",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "0566a72c08df8989395b70777e5291d366b28f31219086d759ff3bc7a357be58",
+				"ok": true,
+				"output_hash": "abc37f3e7ec0f1b9869594c4665980e9db334c39954f19e0e560de46f62922af",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "abc37f3e7ec0f1b9869594c4665980e9db334c39954f19e0e560de46f62922af",
+			"output_hash": "ad536519d5de7313c16358221801bada11c40c1a6f8e19066cca88c040364469",
+			"result": {
+				"added_ids": [
+					"clearing_oak_tree_04"
+				],
+				"byte_hash": "6f418e7297790220f464f87c1f490b25405f4664e6fc71f3b4cc27e0b22ceae8",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "abc37f3e7ec0f1b9869594c4665980e9db334c39954f19e0e560de46f62922af",
+				"ok": true,
+				"output_hash": "ad536519d5de7313c16358221801bada11c40c1a6f8e19066cca88c040364469",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "ad536519d5de7313c16358221801bada11c40c1a6f8e19066cca88c040364469",
+			"output_hash": "248e0634e1617ae42905b8afbb7c6deb29f876a1deef00d34351628fea722ccf",
+			"result": {
+				"added_ids": [
+					"clearing_oak_tree_05"
+				],
+				"byte_hash": "5f7ab054edaec67bb539cebf213e9ef89fbfa9e6eece577f5f726b49a2f3102c",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "ad536519d5de7313c16358221801bada11c40c1a6f8e19066cca88c040364469",
+				"ok": true,
+				"output_hash": "248e0634e1617ae42905b8afbb7c6deb29f876a1deef00d34351628fea722ccf",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "248e0634e1617ae42905b8afbb7c6deb29f876a1deef00d34351628fea722ccf",
+			"output_hash": "64dfc71d13e78d3f425fc2c0c6a6175769d477a1e0454c343e9913a4470d79f8",
+			"result": {
+				"added_ids": [
+					"clearing_oak_tree_06"
+				],
+				"byte_hash": "96212586e8daa5a88c1a2d8ba10c55e4d50bf9a45fe2f3abdd6ddc46a23ea16a",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "248e0634e1617ae42905b8afbb7c6deb29f876a1deef00d34351628fea722ccf",
+				"ok": true,
+				"output_hash": "64dfc71d13e78d3f425fc2c0c6a6175769d477a1e0454c343e9913a4470d79f8",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "64dfc71d13e78d3f425fc2c0c6a6175769d477a1e0454c343e9913a4470d79f8",
+			"output_hash": "679f6e53941e9f0d1e6646f9c38b5a6b29713702982caefc593520e51bd34c58",
+			"result": {
+				"added_ids": [
+					"clearing_oak_tree_07"
+				],
+				"byte_hash": "b8c3858754385247244e29460a05cc829ee7a49611ead50d7c095f78a3bfbfc8",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "64dfc71d13e78d3f425fc2c0c6a6175769d477a1e0454c343e9913a4470d79f8",
+				"ok": true,
+				"output_hash": "679f6e53941e9f0d1e6646f9c38b5a6b29713702982caefc593520e51bd34c58",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "679f6e53941e9f0d1e6646f9c38b5a6b29713702982caefc593520e51bd34c58",
+			"output_hash": "e58d1b587a5ad7f112f80884c5441cb023fe1c8ffd183a7a76cc411bd1628e39",
+			"result": {
+				"added_ids": [
+					"clearing_oak_tree_08"
+				],
+				"byte_hash": "c6ad5868f73cd7497053122b262f017c3c75931e7533c90f1aee299ebcf05e06",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "679f6e53941e9f0d1e6646f9c38b5a6b29713702982caefc593520e51bd34c58",
+				"ok": true,
+				"output_hash": "e58d1b587a5ad7f112f80884c5441cb023fe1c8ffd183a7a76cc411bd1628e39",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "e58d1b587a5ad7f112f80884c5441cb023fe1c8ffd183a7a76cc411bd1628e39",
+			"output_hash": "d7f83bf3afa412bfba579f81042f6ad3efbcce1c08dbc9b5d3dc2c2dfb71ef8e",
+			"result": {
+				"added_ids": [
+					"clearing_oak_tree_09"
+				],
+				"byte_hash": "718b0a31c7d85b925516c6ed6e859b38f0d25b5d1d0f3eebc0274e77cde4f67a",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "e58d1b587a5ad7f112f80884c5441cb023fe1c8ffd183a7a76cc411bd1628e39",
+				"ok": true,
+				"output_hash": "d7f83bf3afa412bfba579f81042f6ad3efbcce1c08dbc9b5d3dc2c2dfb71ef8e",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "d7f83bf3afa412bfba579f81042f6ad3efbcce1c08dbc9b5d3dc2c2dfb71ef8e",
+			"output_hash": "b03bc71657c34de5a4c90de4bcb71e1326c2df6b3a52b5d6b4f7e0d9c2709e59",
+			"result": {
+				"added_ids": [
+					"clearing_oak_tree_10"
+				],
+				"byte_hash": "b8525f81b0c311854fc6afec469cf69dc59b34bcf6edb32183eeddd4ecf84dc4",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "d7f83bf3afa412bfba579f81042f6ad3efbcce1c08dbc9b5d3dc2c2dfb71ef8e",
+				"ok": true,
+				"output_hash": "b03bc71657c34de5a4c90de4bcb71e1326c2df6b3a52b5d6b4f7e0d9c2709e59",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "b03bc71657c34de5a4c90de4bcb71e1326c2df6b3a52b5d6b4f7e0d9c2709e59",
+			"output_hash": "b40dc5ea1199d231f6780ef02c7867ed2b80055e0355a012bb7eaf8354ff3b3e",
+			"result": {
+				"added_ids": [
+					"clearing_woodland_shrub_01"
+				],
+				"byte_hash": "bc5be1ee7a9be31b698d1b666a513e6e8fe90af5edadae71a67595e5db7b4876",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "b03bc71657c34de5a4c90de4bcb71e1326c2df6b3a52b5d6b4f7e0d9c2709e59",
+				"ok": true,
+				"output_hash": "b40dc5ea1199d231f6780ef02c7867ed2b80055e0355a012bb7eaf8354ff3b3e",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "b40dc5ea1199d231f6780ef02c7867ed2b80055e0355a012bb7eaf8354ff3b3e",
+			"output_hash": "5a785569e28db3c061b07a939301bb7917ef59c3a12fe32c413415bbaf87e938",
+			"result": {
+				"added_ids": [
+					"clearing_woodland_shrub_02"
+				],
+				"byte_hash": "1c2b5661e9beabd7c4a5e020b7d04a4fa7cea40afec9d8d8d8e23ce8a42614c1",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "b40dc5ea1199d231f6780ef02c7867ed2b80055e0355a012bb7eaf8354ff3b3e",
+				"ok": true,
+				"output_hash": "5a785569e28db3c061b07a939301bb7917ef59c3a12fe32c413415bbaf87e938",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "5a785569e28db3c061b07a939301bb7917ef59c3a12fe32c413415bbaf87e938",
+			"output_hash": "87791be0bc59430440c633d1ebe74078c13250c1db69d3961ab01f6327fa95df",
+			"result": {
+				"added_ids": [
+					"clearing_woodland_shrub_03"
+				],
+				"byte_hash": "b2ff800a720f5bdf29ebf814593338dfeb9735ff0e5c723d71646714142c19cc",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "5a785569e28db3c061b07a939301bb7917ef59c3a12fe32c413415bbaf87e938",
+				"ok": true,
+				"output_hash": "87791be0bc59430440c633d1ebe74078c13250c1db69d3961ab01f6327fa95df",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "87791be0bc59430440c633d1ebe74078c13250c1db69d3961ab01f6327fa95df",
+			"output_hash": "88781e16c1d816463b9083a2a4b940a38163f7ca6084110865b338748c2b9b6d",
+			"result": {
+				"added_ids": [
+					"clearing_woodland_shrub_04"
+				],
+				"byte_hash": "22b95e882bf87fa859fa039d58f4168002932013ce0ab235ad11ba17fa4dfe28",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "87791be0bc59430440c633d1ebe74078c13250c1db69d3961ab01f6327fa95df",
+				"ok": true,
+				"output_hash": "88781e16c1d816463b9083a2a4b940a38163f7ca6084110865b338748c2b9b6d",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "88781e16c1d816463b9083a2a4b940a38163f7ca6084110865b338748c2b9b6d",
+			"output_hash": "e1cd90a136bbc30f5f34af1c0e8834890f95930f60d5e04b038a6ea9c56d5052",
+			"result": {
+				"added_ids": [
+					"clearing_woodland_shrub_05"
+				],
+				"byte_hash": "df4b7c04972086652b44a4bf284972849f5adbccc0515055f93abac979e9cbc2",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "88781e16c1d816463b9083a2a4b940a38163f7ca6084110865b338748c2b9b6d",
+				"ok": true,
+				"output_hash": "e1cd90a136bbc30f5f34af1c0e8834890f95930f60d5e04b038a6ea9c56d5052",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "e1cd90a136bbc30f5f34af1c0e8834890f95930f60d5e04b038a6ea9c56d5052",
+			"output_hash": "5aaf14bd8d963c9f8269ac2f27f66347badf649ab28cb1f072a3b83d870be9f0",
+			"result": {
+				"added_ids": [
+					"clearing_woodland_shrub_06"
+				],
+				"byte_hash": "67d1727ab333d3b173411286352d16ce7234b5ae4b151dba548badd734503f16",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "e1cd90a136bbc30f5f34af1c0e8834890f95930f60d5e04b038a6ea9c56d5052",
+				"ok": true,
+				"output_hash": "5aaf14bd8d963c9f8269ac2f27f66347badf649ab28cb1f072a3b83d870be9f0",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "5aaf14bd8d963c9f8269ac2f27f66347badf649ab28cb1f072a3b83d870be9f0",
+			"output_hash": "11ba75c9829aaba0d11fd2c5618c5e32e5e559dcbe1f68c3f7e4d515313829f2",
+			"result": {
+				"added_ids": [
+					"clearing_woodland_shrub_07"
+				],
+				"byte_hash": "35d6aacef0f644215ce29cc6d4db61ccb2fe2204608008739cc757e6391d9d64",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "5aaf14bd8d963c9f8269ac2f27f66347badf649ab28cb1f072a3b83d870be9f0",
+				"ok": true,
+				"output_hash": "11ba75c9829aaba0d11fd2c5618c5e32e5e559dcbe1f68c3f7e4d515313829f2",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "11ba75c9829aaba0d11fd2c5618c5e32e5e559dcbe1f68c3f7e4d515313829f2",
+			"output_hash": "69f0d079535ad5e6b3c347223304115b798c4f39553c3dd395c8c0f6ff1cbfa7",
+			"result": {
+				"added_ids": [
+					"clearing_woodland_shrub_08"
+				],
+				"byte_hash": "73ceeb692177862baeff76914fa0469516b75d820f5a8684b525184543902ed0",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "11ba75c9829aaba0d11fd2c5618c5e32e5e559dcbe1f68c3f7e4d515313829f2",
+				"ok": true,
+				"output_hash": "69f0d079535ad5e6b3c347223304115b798c4f39553c3dd395c8c0f6ff1cbfa7",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "69f0d079535ad5e6b3c347223304115b798c4f39553c3dd395c8c0f6ff1cbfa7",
+			"output_hash": "548d1108e62ae03c21be451905c5065141e0d8c38ee42b35cbcb84066fe9baaf",
+			"result": {
+				"added_ids": [
+					"clearing_moss_boulder_01"
+				],
+				"byte_hash": "c4b7d77105859cffa73abfa017dae4f587c2d8e7f34a1cdf16ebe63625d35e96",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "69f0d079535ad5e6b3c347223304115b798c4f39553c3dd395c8c0f6ff1cbfa7",
+				"ok": true,
+				"output_hash": "548d1108e62ae03c21be451905c5065141e0d8c38ee42b35cbcb84066fe9baaf",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "548d1108e62ae03c21be451905c5065141e0d8c38ee42b35cbcb84066fe9baaf",
+			"output_hash": "aceb882f372ac50d570bc6159face545989365c273c1a750eb0510f55176c15d",
+			"result": {
+				"added_ids": [
+					"clearing_moss_boulder_02"
+				],
+				"byte_hash": "690fa4eec3848df4dadbd9b59de6f5b575834703143ce727c85a3aa72c83d6f2",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "548d1108e62ae03c21be451905c5065141e0d8c38ee42b35cbcb84066fe9baaf",
+				"ok": true,
+				"output_hash": "aceb882f372ac50d570bc6159face545989365c273c1a750eb0510f55176c15d",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "aceb882f372ac50d570bc6159face545989365c273c1a750eb0510f55176c15d",
+			"output_hash": "cdfd447f6346daaa30ce1d11f7d1daa6abc16fd3d1563c8cf0e2c18564251aa6",
+			"result": {
+				"added_ids": [
+					"clearing_moss_boulder_03"
+				],
+				"byte_hash": "407a29dca92288e21395e702761f1f6c3faf3faa5cc2c3caaf1f853fc578849b",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "aceb882f372ac50d570bc6159face545989365c273c1a750eb0510f55176c15d",
+				"ok": true,
+				"output_hash": "cdfd447f6346daaa30ce1d11f7d1daa6abc16fd3d1563c8cf0e2c18564251aa6",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "cdfd447f6346daaa30ce1d11f7d1daa6abc16fd3d1563c8cf0e2c18564251aa6",
+			"output_hash": "8cbcbc82bda4475b5ffbbd82c53fc65656ac973c56b4e1ba711e4451684f1978",
+			"result": {
+				"added_ids": [
+					"clearing_moss_boulder_04"
+				],
+				"byte_hash": "300fd6048811ae1584746e6d9417a7df95609f381d92e7f2624273c573b491db",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "cdfd447f6346daaa30ce1d11f7d1daa6abc16fd3d1563c8cf0e2c18564251aa6",
+				"ok": true,
+				"output_hash": "8cbcbc82bda4475b5ffbbd82c53fc65656ac973c56b4e1ba711e4451684f1978",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "8cbcbc82bda4475b5ffbbd82c53fc65656ac973c56b4e1ba711e4451684f1978",
+			"output_hash": "2f52a223cb704eb50e3e91d811a908510dd40dcce5e034e73e7f7a87b770306a",
+			"result": {
+				"added_ids": [
+					"clearing_moss_boulder_05"
+				],
+				"byte_hash": "396471ca6c5bcdeacc751f4417ad34e222da0c80f33654c889a4ba4b66b33b68",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "8cbcbc82bda4475b5ffbbd82c53fc65656ac973c56b4e1ba711e4451684f1978",
+				"ok": true,
+				"output_hash": "2f52a223cb704eb50e3e91d811a908510dd40dcce5e034e73e7f7a87b770306a",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "2f52a223cb704eb50e3e91d811a908510dd40dcce5e034e73e7f7a87b770306a",
+			"output_hash": "e2172d1928ad5f83188fdba6e89b445bdf37e207af10f4e639a6b1ba44f8ad4f",
+			"result": {
+				"added_ids": [
+					"clearing_moss_boulder_06"
+				],
+				"byte_hash": "55588e3f521d049d6306cfe8c8a5369e0745c05e66e1849b9ad0beaa138f5d1b",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "2f52a223cb704eb50e3e91d811a908510dd40dcce5e034e73e7f7a87b770306a",
+				"ok": true,
+				"output_hash": "e2172d1928ad5f83188fdba6e89b445bdf37e207af10f4e639a6b1ba44f8ad4f",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "terrain/compile_piece",
+			"input_hash": "e2172d1928ad5f83188fdba6e89b445bdf37e207af10f4e639a6b1ba44f8ad4f",
+			"output_hash": "e2172d1928ad5f83188fdba6e89b445bdf37e207af10f4e639a6b1ba44f8ad4f",
+			"result": {
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "e2172d1928ad5f83188fdba6e89b445bdf37e207af10f4e639a6b1ba44f8ad4f",
+				"ok": true,
+				"output_hash": "0d4756a1176e63776a2bf1cf2014a54855ac71b63ed3ef0ec0ea198a8dc8f597"
+			},
+			"screen": "terrain"
+		},
+		{
+			"id": "piece/document/save",
+			"input_hash": "e2172d1928ad5f83188fdba6e89b445bdf37e207af10f4e639a6b1ba44f8ad4f",
+			"output_hash": "e2172d1928ad5f83188fdba6e89b445bdf37e207af10f4e639a6b1ba44f8ad4f",
+			"result": {
+				"byte_hash": "150509026fddc323396d20fdd015fee47c1dacb47685c1f326842b77260484ab",
+				"code": "",
+				"diagnostics": [],
+				"expected_byte_hash": "65a26754c437695d7e7d60e93980c187371fddeec4fb71f78323104dbb55ced5",
+				"input_hash": "e2172d1928ad5f83188fdba6e89b445bdf37e207af10f4e639a6b1ba44f8ad4f",
+				"ok": true,
+				"output_hash": "e2172d1928ad5f83188fdba6e89b445bdf37e207af10f4e639a6b1ba44f8ad4f",
+				"valid": true
+			},
+			"screen": "piece"
+		}
+	],
+	"code": "",
+	"completed_actions": 31,
+	"diagnostics": [],
+	"objects_snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "objects/undo",
+				"label": "Desfazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/redo",
+				"label": "Refazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/fit_view",
+				"label": "Enquadrar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/compile_piece",
+				"label": "Compilar peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_e56f4ddfdeb1",
+				"label": "Favoritar selecionado",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/focus_view_selection",
+				"label": "Focar seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_529dabe3d88f",
+				"label": "Colocar nas coordenadas",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_4755bd5b771b",
+				"label": "Mover seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_7f91e3dbaf52",
+				"label": "Girar90°",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_64657fb07c8c",
+				"label": "Duplicar seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_f11c0077aac8",
+				"label": "Remover seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_387cc4667887",
+				"label": "Agrupar seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_e9181b97926a",
+				"label": "Desagrupar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_0e17c1b4c291",
+				"label": "Selecionar grupo",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_5c613324fcde",
+				"label": "Travar / destravar grupo",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_4abdd24ae1d4",
+				"label": "Ocultar / mostrar grupo",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_b67b92d6e9ac",
+				"label": "Travar / destravar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_44cfb364edb5",
+				"label": "Ocultar / mostrar na autoria",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_1ce9e69bd1a5",
+				"label": "Preparar scatter",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/apply_preview",
+				"label": "Aplicar prévia…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_eade13b2fd02",
+				"label": "Descartar prévia",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "objects/library/query",
+				"parameters": {
+					"category": "string?",
+					"favorites_only": "bool?",
+					"query": "string?"
+				}
+			},
+			{
+				"id": "objects/library/favorite",
+				"parameters": {
+					"definition_id": "string",
+					"enabled": "bool"
+				}
+			},
+			{
+				"id": "objects/library/select",
+				"parameters": {
+					"definition_id": "string"
+				}
+			},
+			{
+				"id": "objects/select",
+				"parameters": {
+					"ids": "id[]"
+				}
+			},
+			{
+				"id": "objects/surface/select",
+				"parameters": {
+					"surface_id": "id"
+				}
+			},
+			{
+				"id": "objects/scatter/preview",
+				"parameters": {
+					"optional": {
+						"exclusions": "array",
+						"seed_text": "string",
+						"snap": "number",
+						"spacing": "number"
+					},
+					"required": {
+						"center_xz": "v2",
+						"count": "int",
+						"definition_id": "id",
+						"radius": "number",
+						"surface_id": "id"
+					}
+				}
+			},
+			{
+				"id": "objects/scatter/apply",
+				"parameters": {
+					"proposal_hash": "sha256"
+				}
+			},
+			{
+				"id": "objects/scatter/discard",
+				"parameters": {}
+			},
+			{
+				"id": "objects/place",
+				"parameters": {
+					"optional": {
+						"placement_id": "id",
+						"rotation_y": "number",
+						"snap": "number"
+					},
+					"required": {
+						"definition_id": "id",
+						"position_xz": "v2",
+						"surface_id": "id"
+					}
+				}
+			},
+			{
+				"id": "objects/move",
+				"parameters": {
+					"optional": {
+						"snap": "number",
+						"surface_id": "id"
+					},
+					"required": {
+						"ids": "strings",
+						"position_xz": "v2"
+					}
+				}
+			},
+			{
+				"id": "objects/translate",
+				"parameters": {
+					"optional": {
+						"snap": "number"
+					},
+					"required": {
+						"delta_xz": "v2",
+						"ids": "strings"
+					}
+				}
+			},
+			{
+				"id": "objects/rotate",
+				"parameters": {
+					"optional": {
+						"snap": "number"
+					},
+					"required": {
+						"degrees": "number",
+						"ids": "strings"
+					}
+				}
+			},
+			{
+				"id": "objects/duplicate",
+				"parameters": {
+					"optional": {
+						"snap": "number"
+					},
+					"required": {
+						"delta_xz": "v2",
+						"ids": "strings"
+					}
+				}
+			},
+			{
+				"id": "objects/remove",
+				"parameters": {
+					"optional": {},
+					"required": {
+						"ids": "strings"
+					}
+				}
+			},
+			{
+				"id": "objects/group",
+				"parameters": {
+					"optional": {
+						"name": "string"
+					},
+					"required": {
+						"group_id": "id",
+						"ids": "strings"
+					}
+				}
+			},
+			{
+				"id": "objects/ungroup",
+				"parameters": {
+					"optional": {},
+					"required": {
+						"ids": "strings"
+					}
+				}
+			},
+			{
+				"id": "objects/lock",
+				"parameters": {
+					"optional": {},
+					"required": {
+						"ids": "strings",
+						"value": "bool"
+					}
+				}
+			},
+			{
+				"id": "objects/hide",
+				"parameters": {
+					"optional": {},
+					"required": {
+						"ids": "strings",
+						"value": "bool"
+					}
+				}
+			},
+			{
+				"id": "objects/group/state",
+				"parameters": {
+					"optional": {
+						"hidden": "bool",
+						"locked": "bool"
+					},
+					"required": {
+						"group_id": "id"
+					}
+				}
+			},
+			{
+				"id": "objects/viewport/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "objects/viewport/focus_world",
+				"parameters": {
+					"position_xyz": "number[3]",
+					"zoom": "number?"
+				}
+			},
+			{
+				"id": "objects/viewport/focus_entity",
+				"parameters": {
+					"entity_id": "string"
+				}
+			},
+			{
+				"id": "objects/viewport/set_overlays",
+				"parameters": {
+					"layers": "overlay:boolean dictionary"
+				}
+			},
+			{
+				"id": "objects/viewport/search",
+				"parameters": {
+					"query": "string"
+				}
+			},
+			{
+				"id": "objects/viewport/set_probe",
+				"parameters": {
+					"height": "number",
+					"mode": "navigate|clearance|los",
+					"radius": "number",
+					"surface_id": "string?"
+				}
+			},
+			{
+				"id": "objects/viewport/probe_point",
+				"parameters": {
+					"point": "WorldPoint"
+				}
+			},
+			{
+				"id": "objects/viewport/probe_los",
+				"parameters": {
+					"from": "WorldPoint",
+					"to": "WorldPoint"
+				}
+			}
+		],
+		"mode": "ax",
+		"preview_hash": "",
+		"screen": "objects",
+		"selected_ids": [],
+		"selected_surface": "a_ground",
+		"source_hash": "e2172d1928ad5f83188fdba6e89b445bdf37e207af10f4e639a6b1ba44f8ad4f"
+	},
+	"ok": true,
+	"requested_actions": 31,
+	"snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "piece/exchange",
+				"label": "Intercâmbio com skills…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/new_piece",
+				"label": "Nova peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/compose_map",
+				"label": "Compor mapa…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open_objects",
+				"label": "Objetos e vegetação…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open_library",
+				"label": "Biblioteca…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open",
+				"label": "Abrir…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/save",
+				"label": "Salvar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/save_as",
+				"label": "Salvar como…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/undo",
+				"label": "Desfazer",
+				"test_only": false
+			},
+			{
+				"enabled": false,
+				"id": "piece/redo",
+				"label": "Refazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/recover_copy",
+				"label": "Recuperar cópia",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/browse_draft",
+				"label": "Buscar rascunho…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/add_layer",
+				"label": "Adicionar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/duplicate_layer",
+				"label": "Duplicar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/toggle_layer_lock",
+				"label": "Travar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/apply_name",
+				"label": "Aplicar nome",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/piece_context",
+				"label": "Contexto da peça…",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "piece/document/new",
+				"parameters": {
+					"confirm_discard": "boolean",
+					"document_id": "id",
+					"name": "string"
+				}
+			},
+			{
+				"id": "piece/document/name",
+				"parameters": {
+					"name": "string"
+				}
+			},
+			{
+				"id": "piece/document/open",
+				"parameters": {
+					"confirm_discard": "boolean",
+					"path": "string"
+				}
+			},
+			{
+				"id": "piece/document/save",
+				"parameters": {
+					"path": "string"
+				}
+			},
+			{
+				"id": "piece/history/undo",
+				"parameters": {}
+			},
+			{
+				"id": "piece/history/redo",
+				"parameters": {}
+			},
+			{
+				"id": "piece/context/options",
+				"parameters": {}
+			},
+			{
+				"id": "piece/context/rules/set",
+				"parameters": {
+					"allow_rare": "bool",
+					"allowed_species": "strings",
+					"biome_ids": "strings"
+				}
+			},
+			{
+				"id": "piece/context/area/upsert",
+				"parameters": {
+					"allow_rare": "bool",
+					"allowed_species": "strings",
+					"layer_id": "id",
+					"max_xz": "v2",
+					"min_xz": "v2",
+					"region_id": "id",
+					"reserved": "array"
+				}
+			},
+			{
+				"id": "piece/context/area/remove",
+				"parameters": {
+					"region_id": "id"
+				}
+			},
+			{
+				"id": "piece/socket/upsert",
+				"parameters": {
+					"kind": "id",
+					"position_xyz": "v3",
+					"socket_id": "id",
+					"surface_id": "id"
+				}
+			},
+			{
+				"id": "piece/socket/remove",
+				"parameters": {
+					"socket_id": "id"
+				}
+			}
+		],
+		"mode": "ax",
+		"screen": "piece",
+		"source": {
+			"composition": null,
+			"connectors": [
+				{
+					"connector_id": "a_east",
+					"direction": "both",
+					"headroom": 128,
+					"kind": "walk",
+					"normal_xyz": [
+						1,
+						0,
+						0
+					],
+					"position_xyz": [
+						1280,
+						0,
+						640
+					],
+					"surface_id": "a_ground",
+					"tags": [
+						"map_editor"
+					],
+					"width": 256
+				}
+			],
+			"context": {
+				"allow_rare": false,
+				"allowed_species": [],
+				"areas": [
+					{
+						"allow_rare": false,
+						"allowed_species": [],
+						"region_id": "woods_clearing",
+						"reserved": []
+					}
+				],
+				"biome_ids": [
+					"forest"
+				],
+				"version": 1
+			},
+			"dependencies": [
+				{
+					"definition_id": "oak_tree",
+					"kind": "prop",
+					"revision": 1,
+					"sha256": "cfa38bd7632f300a14333c077e71152e58f65bc88754a2fac3347661c4b024cc"
+				},
+				{
+					"definition_id": "woodland_shrub",
+					"kind": "prop",
+					"revision": 1,
+					"sha256": "e2e6fc9af59b1ab2820e21239d87c28b48ebc94b7489d12eb1fd9106187ed7bb"
+				},
+				{
+					"definition_id": "moss_boulder",
+					"kind": "prop",
+					"revision": 1,
+					"sha256": "33fb787d661d8c1378e69776b346e32f49f0be9fa15b6330d4039676587f947d"
+				}
+			],
+			"document_id": "sanctuary_woods_clearing",
+			"layers": [
+				{
+					"columns": 21,
+					"heights": [
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0.17644038576602156,
+						0.6846707818930036,
+						0.17644038576602156,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0.6846707818930036,
+						6.2587450480878,
+						10.125,
+						6.2587450480878,
+						0.6846707818930036,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						3.528292638844645,
+						15.324588259625514,
+						22.05504115226337,
+						15.324588259625514,
+						3.528292638844645,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						3.528292638844645,
+						15.324588259625514,
+						22.05504115226337,
+						15.324588259625514,
+						3.528292638844645,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0.6846707818930036,
+						6.2587450480878,
+						10.125,
+						6.2587450480878,
+						0.6846707818930036,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0.17644038576602156,
+						0.6846707818930036,
+						0.17644038576602156,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0,
+						0,
+						0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0,
+						0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0.0,
+						0.0,
+						0.0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0
+					],
+					"layer_id": "a_ground",
+					"locked": false,
+					"material_masks": {
+						"earth": [
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.26446117673601427,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.34797975903465633,
+							0.19090893609183174,
+							0.03383880796886626,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.26446133114042736,
+							0.5540851002647763,
+							0.8437095642089844,
+							0.85,
+							0.85,
+							0.85,
+							0.85,
+							0.85,
+							0.85,
+							0.8191916488465809,
+							0.6621214049203055,
+							0.5050505819774809,
+							0.31415299461001445,
+							0.10935769762311663,
+							0.0,
+							0.0,
+							0.0,
+							0.40927321570260183,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.5540851002647763,
+							0.8437095642089844,
+							0.85,
+							0.8437095642089844,
+							0.5540852546691895,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.5050505819774809,
+							0.6621214049203055,
+							0.8191916488465809,
+							0.85,
+							0.85,
+							0.85,
+							0.7237427007584345,
+							0.5189483687991188,
+							0.0,
+							0.16190476190476188,
+							0.8095238095238094,
+							0.85,
+							0.85,
+							0.85,
+							0.8437095642089844,
+							0.5540851002647763,
+							0.26446133114042736,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.033838653564453126,
+							0.19090893609183174,
+							0.3479799134390695,
+							0.5189483687991188,
+							0.7237427007584345,
+							0.85,
+							0.85,
+							0.0,
+							0.0,
+							0.40927321570260183,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.26446133114042736,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.10935769762311663,
+							0.31415299461001445,
+							0.48571428571428565,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0
+						],
+						"grass": [
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							0.7355388232639857,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.6520202409653437,
+							0.8090910639081683,
+							0.9661611920311337,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							0.7355386688595726,
+							0.4459148997352237,
+							0.15629043579101565,
+							0.15000000000000002,
+							0.15000000000000002,
+							0.15000000000000002,
+							0.15000000000000002,
+							0.15000000000000002,
+							0.15000000000000002,
+							0.1808083511534191,
+							0.33787859507969453,
+							0.4949494180225191,
+							0.6858470053899856,
+							0.8906423023768834,
+							1.0,
+							1.0,
+							1.0,
+							0.5907267842973982,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.4459148997352237,
+							0.15629043579101565,
+							0.15000000000000002,
+							0.15629043579101565,
+							0.44591474533081055,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.4949494180225191,
+							0.33787859507969453,
+							0.1808083511534191,
+							0.15000000000000002,
+							0.15000000000000002,
+							0.15000000000000002,
+							0.2762572992415655,
+							0.48105163120088124,
+							1.0,
+							0.8380952380952381,
+							0.19047619047619058,
+							0.15000000000000002,
+							0.15000000000000002,
+							0.15000000000000002,
+							0.15629043579101565,
+							0.4459148997352237,
+							0.7355386688595726,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							0.9661613464355469,
+							0.8090910639081683,
+							0.6520200865609305,
+							0.48105163120088124,
+							0.2762572992415655,
+							0.15000000000000002,
+							0.15000000000000002,
+							1.0,
+							1.0,
+							0.5907267842973982,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.7355386688595726,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							0.8906423023768834,
+							0.6858470053899856,
+							0.5142857142857143,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0
+						]
+					},
+					"name": "Clareira",
+					"origin_xz": [
+						0,
+						0
+					],
+					"protected_regions": [],
+					"rows": 21,
+					"sample_spacing": 64
+				}
+			],
+			"name": "Bosque do Santuário — Clareira",
+			"placements": [
+				{
+					"definition_id": "oak_tree",
+					"placement_id": "clearing_oak_tree_01",
+					"position_xyz": [
+						128.0,
+						0.0,
+						160.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "oak_tree",
+					"placement_id": "clearing_oak_tree_02",
+					"position_xyz": [
+						384.0,
+						3.217592716217041,
+						96.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "oak_tree",
+					"placement_id": "clearing_oak_tree_03",
+					"position_xyz": [
+						640.0,
+						0.0,
+						128.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "oak_tree",
+					"placement_id": "clearing_oak_tree_04",
+					"position_xyz": [
+						896.0,
+						0.0,
+						128.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "oak_tree",
+					"placement_id": "clearing_oak_tree_05",
+					"position_xyz": [
+						1120.0,
+						0.0,
+						192.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "oak_tree",
+					"placement_id": "clearing_oak_tree_06",
+					"position_xyz": [
+						128.0,
+						0.0,
+						1088.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "oak_tree",
+					"placement_id": "clearing_oak_tree_07",
+					"position_xyz": [
+						384.0,
+						0.0,
+						1152.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "oak_tree",
+					"placement_id": "clearing_oak_tree_08",
+					"position_xyz": [
+						704.0,
+						0.0,
+						1088.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "oak_tree",
+					"placement_id": "clearing_oak_tree_09",
+					"position_xyz": [
+						992.0,
+						0.0,
+						1152.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "oak_tree",
+					"placement_id": "clearing_oak_tree_10",
+					"position_xyz": [
+						1184.0,
+						0.0,
+						1024.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "woodland_shrub",
+					"placement_id": "clearing_woodland_shrub_01",
+					"position_xyz": [
+						192.0,
+						3.528292655944824,
+						256.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "woodland_shrub",
+					"placement_id": "clearing_woodland_shrub_02",
+					"position_xyz": [
+						512.0,
+						0.0,
+						192.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "woodland_shrub",
+					"placement_id": "clearing_woodland_shrub_03",
+					"position_xyz": [
+						768.0,
+						0.0,
+						256.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "woodland_shrub",
+					"placement_id": "clearing_woodland_shrub_04",
+					"position_xyz": [
+						1088.0,
+						0.0,
+						320.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "woodland_shrub",
+					"placement_id": "clearing_woodland_shrub_05",
+					"position_xyz": [
+						192.0,
+						0.0,
+						960.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "woodland_shrub",
+					"placement_id": "clearing_woodland_shrub_06",
+					"position_xyz": [
+						544.0,
+						0.0,
+						1024.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "woodland_shrub",
+					"placement_id": "clearing_woodland_shrub_07",
+					"position_xyz": [
+						832.0,
+						0.0,
+						960.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "woodland_shrub",
+					"placement_id": "clearing_woodland_shrub_08",
+					"position_xyz": [
+						1120.0,
+						0.0,
+						960.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "moss_boulder",
+					"placement_id": "clearing_moss_boulder_01",
+					"position_xyz": [
+						96.0,
+						0.0,
+						384.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "moss_boulder",
+					"placement_id": "clearing_moss_boulder_02",
+					"position_xyz": [
+						640.0,
+						0.0,
+						320.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "moss_boulder",
+					"placement_id": "clearing_moss_boulder_03",
+					"position_xyz": [
+						960.0,
+						0.0,
+						320.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "moss_boulder",
+					"placement_id": "clearing_moss_boulder_04",
+					"position_xyz": [
+						128.0,
+						0.0,
+						832.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "moss_boulder",
+					"placement_id": "clearing_moss_boulder_05",
+					"position_xyz": [
+						704.0,
+						0.0,
+						896.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				},
+				{
+					"definition_id": "moss_boulder",
+					"placement_id": "clearing_moss_boulder_06",
+					"position_xyz": [
+						1088.0,
+						0.0,
+						832.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "a_ground"
+				}
+			],
+			"regions": [
+				{
+					"layer_id": "a_ground",
+					"polygon_xz": [
+						[
+							192,
+							448
+						],
+						[
+							576,
+							448
+						],
+						[
+							576,
+							832
+						],
+						[
+							192,
+							832
+						]
+					],
+					"purpose": "encounter",
+					"region_id": "woods_clearing"
+				}
+			],
+			"revision": 32,
+			"schema_version": 1,
+			"sockets": [
+				{
+					"kind": "entrance",
+					"position_xyz": [
+						160,
+						0,
+						640
+					],
+					"socket_id": "woods_entry",
+					"surface_id": "a_ground"
+				}
+			],
+			"special_surfaces": [],
+			"units": "e07_world"
+		}
+	},
+	"source_hash": "e2172d1928ad5f83188fdba6e89b445bdf37e207af10f4e639a6b1ba44f8ad4f",
+	"state": {
+		"can_redo": false,
+		"can_undo": true,
+		"dirty": false,
+		"selected_layer": "a_ground",
+		"source_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods_clearing.source.json"
+	},
+	"terrain_snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "terrain/save_brush_preset",
+				"label": "Salvar predefinição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/remove_brush_preset",
+				"label": "Remover predefinição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/fit_view",
+				"label": "Enquadrar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/compile_piece",
+				"label": "Compilar peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/cancel",
+				"label": "Cancelar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/ramp_bridge_sample",
+				"label": "Exemplo rampa/ponte",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/large_piece_sample",
+				"label": "Exemplo de peça grande",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/action_10a98dc5c4c2",
+				"label": "Exemplo orgânico",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/add_grid",
+				"label": "Nova grade",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/focus_view_selection",
+				"label": "Focar seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/add_bridge",
+				"label": "Adicionar ponte",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/save_connector",
+				"label": "Adicionar / atualizar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/remove_connector",
+				"label": "Remover",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "terrain/example/organic",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/brush/stroke",
+				"parameters": {
+					"options": "brush_options",
+					"points": "number[2][]"
+				}
+			},
+			{
+				"id": "terrain/presets/list",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/presets/apply",
+				"parameters": {
+					"preset_id": "string"
+				}
+			},
+			{
+				"id": "terrain/presets/save",
+				"parameters": {
+					"name": "string",
+					"options": "brush_options"
+				}
+			},
+			{
+				"id": "terrain/grid/create",
+				"parameters": {
+					"columns": "integer 2..257",
+					"height": "number -512..512",
+					"layer_id": "id",
+					"name": "string",
+					"origin_xz": "number[2]",
+					"rows": "integer 2..257",
+					"sample_spacing": "number 4..256"
+				}
+			},
+			{
+				"id": "terrain/layer/select",
+				"parameters": {
+					"layer_id": "id"
+				}
+			},
+			{
+				"id": "terrain/layer/lock",
+				"parameters": {
+					"layer_id": "id",
+					"locked": "boolean"
+				}
+			},
+			{
+				"id": "terrain/layer/protection",
+				"parameters": {
+					"layer_id": "id",
+					"region_ids": "existing region IDs[]"
+				}
+			},
+			{
+				"id": "terrain/bridge/create",
+				"parameters": {
+					"height": "number 4..1024",
+					"layer_id": "id",
+					"length": "number 4..1024",
+					"origin_xz": "number[2]",
+					"surface_id": "id",
+					"width": "number 4..1024"
+				}
+			},
+			{
+				"id": "terrain/connector/upsert",
+				"parameters": {
+					"connector_id": "id",
+					"direction": "id",
+					"headroom": "number",
+					"kind": "id",
+					"normal_xyz": "v3",
+					"position_xyz": "v3",
+					"surface_id": "id",
+					"tags": "strings",
+					"width": "number"
+				}
+			},
+			{
+				"id": "terrain/connector/remove",
+				"parameters": {
+					"connector_id": "id"
+				}
+			},
+			{
+				"id": "terrain/viewport/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/viewport/focus_world",
+				"parameters": {
+					"position_xyz": "number[3]",
+					"zoom": "number?"
+				}
+			},
+			{
+				"id": "terrain/viewport/focus_entity",
+				"parameters": {
+					"entity_id": "string"
+				}
+			},
+			{
+				"id": "terrain/viewport/set_overlays",
+				"parameters": {
+					"layers": "overlay:boolean dictionary"
+				}
+			},
+			{
+				"id": "terrain/viewport/search",
+				"parameters": {
+					"query": "string"
+				}
+			},
+			{
+				"id": "terrain/viewport/set_probe",
+				"parameters": {
+					"height": "number",
+					"mode": "navigate|clearance|los",
+					"radius": "number",
+					"surface_id": "string?"
+				}
+			},
+			{
+				"id": "terrain/viewport/probe_point",
+				"parameters": {
+					"point": "WorldPoint"
+				}
+			},
+			{
+				"id": "terrain/viewport/probe_los",
+				"parameters": {
+					"from": "WorldPoint",
+					"to": "WorldPoint"
+				}
+			}
+		],
+		"mode": "ax",
+		"screen": "terrain",
+		"source_hash": "e2172d1928ad5f83188fdba6e89b445bdf37e207af10f4e639a6b1ba44f8ad4f"
+	}
+}

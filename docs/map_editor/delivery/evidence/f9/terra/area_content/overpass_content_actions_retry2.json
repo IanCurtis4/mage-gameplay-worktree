@@ -1,0 +1,401 @@
+{
+  "ax_version": 1,
+  "actions": [
+    {
+      "screen": "piece",
+      "id": "piece/document/open",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods_overpass.source.json",
+        "confirm_discard": true
+      }
+    },
+    {
+      "screen": "piece",
+      "id": "piece/context/rules/set",
+      "parameters": {
+        "biome_ids": [
+          "forest"
+        ],
+        "allowed_species": [],
+        "allow_rare": false
+      }
+    },
+    {
+      "screen": "piece",
+      "id": "piece/context/area/upsert",
+      "parameters": {
+        "region_id": "woods_west",
+        "layer_id": "b_west",
+        "min_xz": [
+          192,
+          768
+        ],
+        "max_xz": [
+          480,
+          1120
+        ],
+        "allowed_species": [],
+        "allow_rare": false,
+        "reserved": []
+      }
+    },
+    {
+      "screen": "piece",
+      "id": "piece/context/area/upsert",
+      "parameters": {
+        "region_id": "woods_shrine",
+        "layer_id": "b_north_top",
+        "min_xz": [
+          832,
+          64
+        ],
+        "max_xz": [
+          1216,
+          320
+        ],
+        "allowed_species": [],
+        "allow_rare": false,
+        "reserved": []
+      }
+    },
+    {
+      "screen": "piece",
+      "id": "piece/open_objects",
+      "parameters": {}
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_oak_tree_01",
+        "definition_id": "oak_tree",
+        "surface_id": "b_west",
+        "position_xz": [
+          128,
+          128
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_oak_tree_02",
+        "definition_id": "oak_tree",
+        "surface_id": "b_west",
+        "position_xz": [
+          320,
+          128
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_oak_tree_03",
+        "definition_id": "oak_tree",
+        "surface_id": "b_west",
+        "position_xz": [
+          128,
+          384
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_oak_tree_04",
+        "definition_id": "oak_tree",
+        "surface_id": "b_west",
+        "position_xz": [
+          128,
+          896
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_oak_tree_05",
+        "definition_id": "oak_tree",
+        "surface_id": "b_west",
+        "position_xz": [
+          128,
+          1184
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_oak_tree_06",
+        "definition_id": "oak_tree",
+        "surface_id": "b_west",
+        "position_xz": [
+          384,
+          1184
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_woodland_shrub_01",
+        "definition_id": "woodland_shrub",
+        "surface_id": "b_west",
+        "position_xz": [
+          256,
+          256
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_woodland_shrub_02",
+        "definition_id": "woodland_shrub",
+        "surface_id": "b_west",
+        "position_xz": [
+          448,
+          320
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_woodland_shrub_03",
+        "definition_id": "woodland_shrub",
+        "surface_id": "b_west",
+        "position_xz": [
+          160,
+          800
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_woodland_shrub_04",
+        "definition_id": "woodland_shrub",
+        "surface_id": "b_west",
+        "position_xz": [
+          448,
+          960
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_moss_boulder_01",
+        "definition_id": "moss_boulder",
+        "surface_id": "b_west",
+        "position_xz": [
+          128,
+          480
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_moss_boulder_02",
+        "definition_id": "moss_boulder",
+        "surface_id": "b_west",
+        "position_xz": [
+          160,
+          1056
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_moss_boulder_03",
+        "definition_id": "moss_boulder",
+        "surface_id": "b_west",
+        "position_xz": [
+          448,
+          1184
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_broken_pillar_01",
+        "definition_id": "broken_pillar",
+        "surface_id": "b_north_top",
+        "position_xz": [
+          896,
+          96
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_broken_pillar_02",
+        "definition_id": "broken_pillar",
+        "surface_id": "b_north_top",
+        "position_xz": [
+          1120,
+          96
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_broken_pillar_03",
+        "definition_id": "broken_pillar",
+        "surface_id": "b_north_top",
+        "position_xz": [
+          1216,
+          256
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_broken_pillar_04",
+        "definition_id": "broken_pillar",
+        "surface_id": "b_south_top",
+        "position_xz": [
+          896,
+          1184
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_broken_pillar_05",
+        "definition_id": "broken_pillar",
+        "surface_id": "b_south_top",
+        "position_xz": [
+          1120,
+          1184
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_broken_pillar_06",
+        "definition_id": "broken_pillar",
+        "surface_id": "b_south_top",
+        "position_xz": [
+          1216,
+          1024
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_woodland_shrub_01_low",
+        "definition_id": "woodland_shrub",
+        "surface_id": "b_low",
+        "position_xz": [
+          640,
+          448
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_woodland_shrub_02_low",
+        "definition_id": "woodland_shrub",
+        "surface_id": "b_low",
+        "position_xz": [
+          768,
+          832
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_woodland_shrub_03_low",
+        "definition_id": "woodland_shrub",
+        "surface_id": "b_low",
+        "position_xz": [
+          1184,
+          448
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "objects",
+      "id": "objects/place",
+      "parameters": {
+        "placement_id": "overpass_woodland_shrub_04_low",
+        "definition_id": "woodland_shrub",
+        "surface_id": "b_low",
+        "position_xz": [
+          1184,
+          832
+        ],
+        "snap": 0
+      }
+    },
+    {
+      "screen": "terrain",
+      "id": "terrain/compile_piece",
+      "parameters": {}
+    },
+    {
+      "screen": "piece",
+      "id": "piece/document/save",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods_overpass.source.json"
+      }
+    }
+  ]
+}

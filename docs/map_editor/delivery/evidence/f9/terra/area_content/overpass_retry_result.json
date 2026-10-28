@@ -1,0 +1,2243 @@
+{
+	"actions": [
+		{
+			"id": "piece/document/open",
+			"input_hash": "980543bc3a888117c6e88059d2939f068e497db8ae04395700d91a95df5b7639",
+			"output_hash": "d0d0f5ba826a167facc6f703ef0e85d97ba74b1dcb75270de834f294c02ed94a",
+			"result": {
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "sanctuary_woods_overpass",
+				"input_hash": "",
+				"ok": true,
+				"output_hash": "d0d0f5ba826a167facc6f703ef0e85d97ba74b1dcb75270de834f294c02ed94a"
+			},
+			"screen": "piece"
+		},
+		{
+			"id": "piece/context/rules/set",
+			"input_hash": "d0d0f5ba826a167facc6f703ef0e85d97ba74b1dcb75270de834f294c02ed94a",
+			"output_hash": "3f5b3617279ceb325961aa8704e8bdf4b8af6edc2202b32ad4d56f6e3030a5e6",
+			"result": {
+				"byte_hash": "66fc357ab03237f53b4405aec745ad1a90bf87f4805f23cd94a0ea46eab42688",
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "sanctuary_woods_overpass",
+				"input_hash": "d0d0f5ba826a167facc6f703ef0e85d97ba74b1dcb75270de834f294c02ed94a",
+				"ok": true,
+				"output_hash": "3f5b3617279ceb325961aa8704e8bdf4b8af6edc2202b32ad4d56f6e3030a5e6",
+				"valid": true
+			},
+			"screen": "piece"
+		},
+		{
+			"id": "piece/context/area/upsert",
+			"input_hash": "3f5b3617279ceb325961aa8704e8bdf4b8af6edc2202b32ad4d56f6e3030a5e6",
+			"output_hash": "37452e2525f3bc7ac7171dfe718bfe77709db92a5228e29a0184c8aeee93e177",
+			"result": {
+				"byte_hash": "5092a6f81b1f7789e9573e2039dea38d2654c95db41dbf3af8dfe683d73cfe86",
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "woods_west",
+				"input_hash": "3f5b3617279ceb325961aa8704e8bdf4b8af6edc2202b32ad4d56f6e3030a5e6",
+				"ok": true,
+				"output_hash": "37452e2525f3bc7ac7171dfe718bfe77709db92a5228e29a0184c8aeee93e177",
+				"valid": true
+			},
+			"screen": "piece"
+		},
+		{
+			"id": "piece/context/area/upsert",
+			"input_hash": "37452e2525f3bc7ac7171dfe718bfe77709db92a5228e29a0184c8aeee93e177",
+			"output_hash": "e7d0a33516574b20a498742ded3b469b19ab5187b7334e0aca36c0796c5478a4",
+			"result": {
+				"byte_hash": "c9e6af36e17cb12b891b77db06f9f9ac424a4507c8570d4130cc06c95c73a9a8",
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "woods_shrine",
+				"input_hash": "37452e2525f3bc7ac7171dfe718bfe77709db92a5228e29a0184c8aeee93e177",
+				"ok": true,
+				"output_hash": "e7d0a33516574b20a498742ded3b469b19ab5187b7334e0aca36c0796c5478a4",
+				"valid": true
+			},
+			"screen": "piece"
+		},
+		{
+			"id": "piece/open_objects",
+			"input_hash": "e7d0a33516574b20a498742ded3b469b19ab5187b7334e0aca36c0796c5478a4",
+			"output_hash": "e7d0a33516574b20a498742ded3b469b19ab5187b7334e0aca36c0796c5478a4",
+			"result": {
+				"action_id": "piece/open_objects",
+				"ok": true
+			},
+			"screen": "piece"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "e7d0a33516574b20a498742ded3b469b19ab5187b7334e0aca36c0796c5478a4",
+			"output_hash": "96a80199944f95e37f6e1cd83ae7514110c34f81844cb4fa780a9e1f20a5e9ff",
+			"result": {
+				"added_ids": [
+					"overpass_oak_tree_01"
+				],
+				"byte_hash": "7eab0eb3c1cd8881252b39c9bd3bf34112a620e301b6ffb7e1754e6b2fac22f1",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "e7d0a33516574b20a498742ded3b469b19ab5187b7334e0aca36c0796c5478a4",
+				"ok": true,
+				"output_hash": "96a80199944f95e37f6e1cd83ae7514110c34f81844cb4fa780a9e1f20a5e9ff",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "96a80199944f95e37f6e1cd83ae7514110c34f81844cb4fa780a9e1f20a5e9ff",
+			"output_hash": "2b46fdc240ed027aad0e703b67c1ceec6e4194718836934c9cae6229ecaf407e",
+			"result": {
+				"added_ids": [
+					"overpass_oak_tree_02"
+				],
+				"byte_hash": "cd3b21a3063c6ec439cdd0baaba85ef24cc60be694cbd2600a64a7ca8912bbe0",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "96a80199944f95e37f6e1cd83ae7514110c34f81844cb4fa780a9e1f20a5e9ff",
+				"ok": true,
+				"output_hash": "2b46fdc240ed027aad0e703b67c1ceec6e4194718836934c9cae6229ecaf407e",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "2b46fdc240ed027aad0e703b67c1ceec6e4194718836934c9cae6229ecaf407e",
+			"output_hash": "5f354dbc3aabbb50526d54d02750bbac53e5ca177072efc8fe217677e3977064",
+			"result": {
+				"added_ids": [
+					"overpass_oak_tree_03"
+				],
+				"byte_hash": "6439814e4828b48a6a3007f368a33b76093d2a1179c67570c648ed0f798cb798",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "2b46fdc240ed027aad0e703b67c1ceec6e4194718836934c9cae6229ecaf407e",
+				"ok": true,
+				"output_hash": "5f354dbc3aabbb50526d54d02750bbac53e5ca177072efc8fe217677e3977064",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "5f354dbc3aabbb50526d54d02750bbac53e5ca177072efc8fe217677e3977064",
+			"output_hash": "4ae843031bffc39f3184112ba6ce78023173d15e385148492b44d2054703a2a7",
+			"result": {
+				"added_ids": [
+					"overpass_oak_tree_04"
+				],
+				"byte_hash": "45a234a4dd50d806c01868482b947b4b378cdd650fa1db22c02dd932f8f8a8c4",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "5f354dbc3aabbb50526d54d02750bbac53e5ca177072efc8fe217677e3977064",
+				"ok": true,
+				"output_hash": "4ae843031bffc39f3184112ba6ce78023173d15e385148492b44d2054703a2a7",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "4ae843031bffc39f3184112ba6ce78023173d15e385148492b44d2054703a2a7",
+			"output_hash": "447f1e0201d5a9a4782d06a7813398a4fdd7a077a4c23ff667310c67d1fbc6f7",
+			"result": {
+				"added_ids": [
+					"overpass_oak_tree_05"
+				],
+				"byte_hash": "1692f4ddb52ee9e6187ed61f3640971b152eecb5f48df6a61a1add272e6fa338",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "4ae843031bffc39f3184112ba6ce78023173d15e385148492b44d2054703a2a7",
+				"ok": true,
+				"output_hash": "447f1e0201d5a9a4782d06a7813398a4fdd7a077a4c23ff667310c67d1fbc6f7",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "447f1e0201d5a9a4782d06a7813398a4fdd7a077a4c23ff667310c67d1fbc6f7",
+			"output_hash": "8d7bf330d7b4206e70ece63dd2de0f19ec67ec1c671727ba1d3e35702941f4ae",
+			"result": {
+				"added_ids": [
+					"overpass_oak_tree_06"
+				],
+				"byte_hash": "c4b857df7b6a7b1da27842aead9901b6333aeb225725363bdbf52a4263179755",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "447f1e0201d5a9a4782d06a7813398a4fdd7a077a4c23ff667310c67d1fbc6f7",
+				"ok": true,
+				"output_hash": "8d7bf330d7b4206e70ece63dd2de0f19ec67ec1c671727ba1d3e35702941f4ae",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "8d7bf330d7b4206e70ece63dd2de0f19ec67ec1c671727ba1d3e35702941f4ae",
+			"output_hash": "887e16f0b8b6f74d5c74b12579546b6474d3247985d71d7235571aafa657fabc",
+			"result": {
+				"added_ids": [
+					"overpass_woodland_shrub_01"
+				],
+				"byte_hash": "bee3bdb30c1fefa2b96dca396aa648355f4317072ee3e2b90c0fa1455034af0b",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "8d7bf330d7b4206e70ece63dd2de0f19ec67ec1c671727ba1d3e35702941f4ae",
+				"ok": true,
+				"output_hash": "887e16f0b8b6f74d5c74b12579546b6474d3247985d71d7235571aafa657fabc",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "887e16f0b8b6f74d5c74b12579546b6474d3247985d71d7235571aafa657fabc",
+			"output_hash": "9681959da8efc1536ef13954778f40184f219096f60630eb7d4201c3e77c9170",
+			"result": {
+				"added_ids": [
+					"overpass_woodland_shrub_02"
+				],
+				"byte_hash": "42bc02f526e49bb8582ae3eb54ebd2fa8d2e0d6973ba0515fd35a752e185fded",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "887e16f0b8b6f74d5c74b12579546b6474d3247985d71d7235571aafa657fabc",
+				"ok": true,
+				"output_hash": "9681959da8efc1536ef13954778f40184f219096f60630eb7d4201c3e77c9170",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "9681959da8efc1536ef13954778f40184f219096f60630eb7d4201c3e77c9170",
+			"output_hash": "861fbaa5642b4f60de53c12530e1dfd2d73aceb0694c386822631a3c4deabcfd",
+			"result": {
+				"added_ids": [
+					"overpass_woodland_shrub_03"
+				],
+				"byte_hash": "9c934826453088f098cd54c37ce748ff00d5ede8de960ad0662b9dd35fbcc938",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "9681959da8efc1536ef13954778f40184f219096f60630eb7d4201c3e77c9170",
+				"ok": true,
+				"output_hash": "861fbaa5642b4f60de53c12530e1dfd2d73aceb0694c386822631a3c4deabcfd",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "861fbaa5642b4f60de53c12530e1dfd2d73aceb0694c386822631a3c4deabcfd",
+			"output_hash": "0ce98ed875d615813fdef7c1a5b5f7a2377971d835c69fa2f1463a0e4f78cc53",
+			"result": {
+				"added_ids": [
+					"overpass_woodland_shrub_04"
+				],
+				"byte_hash": "ad0ce91bb89b8f37d54d6143d630dba28e8eabfd739d918aa1afb6af63c644e5",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "861fbaa5642b4f60de53c12530e1dfd2d73aceb0694c386822631a3c4deabcfd",
+				"ok": true,
+				"output_hash": "0ce98ed875d615813fdef7c1a5b5f7a2377971d835c69fa2f1463a0e4f78cc53",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "0ce98ed875d615813fdef7c1a5b5f7a2377971d835c69fa2f1463a0e4f78cc53",
+			"output_hash": "78ac982565a73af342747b39e2f9481ef8bcb00a87b37b0887b62999dccda594",
+			"result": {
+				"added_ids": [
+					"overpass_moss_boulder_01"
+				],
+				"byte_hash": "bac366f78cc492ae2ddd2f99cc5e3471a52c71286764c935bba1b5151f048fc3",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "0ce98ed875d615813fdef7c1a5b5f7a2377971d835c69fa2f1463a0e4f78cc53",
+				"ok": true,
+				"output_hash": "78ac982565a73af342747b39e2f9481ef8bcb00a87b37b0887b62999dccda594",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "78ac982565a73af342747b39e2f9481ef8bcb00a87b37b0887b62999dccda594",
+			"output_hash": "b4723ee30043d4a78c58c9105865eb3bacc60aebb53c511561dcb15455a04a28",
+			"result": {
+				"added_ids": [
+					"overpass_moss_boulder_02"
+				],
+				"byte_hash": "7b9a70d6c132b21c0c4c82ab4eedb7fda671161d3c79f8b0dfc98a3ebf054643",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "78ac982565a73af342747b39e2f9481ef8bcb00a87b37b0887b62999dccda594",
+				"ok": true,
+				"output_hash": "b4723ee30043d4a78c58c9105865eb3bacc60aebb53c511561dcb15455a04a28",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "b4723ee30043d4a78c58c9105865eb3bacc60aebb53c511561dcb15455a04a28",
+			"output_hash": "200c6bcc093c6afbdd4f94bcaf5baa080c05df3f90bad2e61113aed4e77b1748",
+			"result": {
+				"added_ids": [
+					"overpass_moss_boulder_03"
+				],
+				"byte_hash": "2ca972db078a536858c438783e68a9060ebebb27ad814feb95ae00eae9616707",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "b4723ee30043d4a78c58c9105865eb3bacc60aebb53c511561dcb15455a04a28",
+				"ok": true,
+				"output_hash": "200c6bcc093c6afbdd4f94bcaf5baa080c05df3f90bad2e61113aed4e77b1748",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "200c6bcc093c6afbdd4f94bcaf5baa080c05df3f90bad2e61113aed4e77b1748",
+			"output_hash": "11aa8d810af0a97eb88cf9c3e2122b7ebe31655370f7b068d9ce6bb2e2817aaf",
+			"result": {
+				"added_ids": [
+					"overpass_broken_pillar_01"
+				],
+				"byte_hash": "34cfc0cfe30911401eff24c083042c83ad8201c51177e3602b72bbae24a35c7a",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "200c6bcc093c6afbdd4f94bcaf5baa080c05df3f90bad2e61113aed4e77b1748",
+				"ok": true,
+				"output_hash": "11aa8d810af0a97eb88cf9c3e2122b7ebe31655370f7b068d9ce6bb2e2817aaf",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "11aa8d810af0a97eb88cf9c3e2122b7ebe31655370f7b068d9ce6bb2e2817aaf",
+			"output_hash": "fad1378a4c461a1c7263fb705885ae980d77cab9eb0555d794bc07d807bd2cd6",
+			"result": {
+				"added_ids": [
+					"overpass_broken_pillar_02"
+				],
+				"byte_hash": "54c1b4988fc5abf30ead14a86f8a7806648261131e0f252fd44fe55c3cdfe1f1",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "11aa8d810af0a97eb88cf9c3e2122b7ebe31655370f7b068d9ce6bb2e2817aaf",
+				"ok": true,
+				"output_hash": "fad1378a4c461a1c7263fb705885ae980d77cab9eb0555d794bc07d807bd2cd6",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "fad1378a4c461a1c7263fb705885ae980d77cab9eb0555d794bc07d807bd2cd6",
+			"output_hash": "96db267ae16a9f35287a13edb5a19a565ba9c1ba3449326e25dfcd31ecf36d6d",
+			"result": {
+				"added_ids": [
+					"overpass_broken_pillar_03"
+				],
+				"byte_hash": "6df71adf17015fcc63d3fd0646cfe8ac8c29a6d07d5c4bf0ad6bea4c10a776d2",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "fad1378a4c461a1c7263fb705885ae980d77cab9eb0555d794bc07d807bd2cd6",
+				"ok": true,
+				"output_hash": "96db267ae16a9f35287a13edb5a19a565ba9c1ba3449326e25dfcd31ecf36d6d",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "96db267ae16a9f35287a13edb5a19a565ba9c1ba3449326e25dfcd31ecf36d6d",
+			"output_hash": "618c8b1be717c585516e0549121fd0e25892bba212cb085b9315915b12b59ff1",
+			"result": {
+				"added_ids": [
+					"overpass_broken_pillar_04"
+				],
+				"byte_hash": "5c7e0db1b48791fe68b2fd7c98892a4de42e65a79194b54fa75f3d46d308e20d",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "96db267ae16a9f35287a13edb5a19a565ba9c1ba3449326e25dfcd31ecf36d6d",
+				"ok": true,
+				"output_hash": "618c8b1be717c585516e0549121fd0e25892bba212cb085b9315915b12b59ff1",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "618c8b1be717c585516e0549121fd0e25892bba212cb085b9315915b12b59ff1",
+			"output_hash": "ae72f1715fa99ece9974f4aa75a4c47fff260914b8114b72d9c04f17e485ed64",
+			"result": {
+				"added_ids": [
+					"overpass_broken_pillar_05"
+				],
+				"byte_hash": "e5eb50af5124859a483473254c06f72777763138772fb1e6ae2956c1080b0807",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "618c8b1be717c585516e0549121fd0e25892bba212cb085b9315915b12b59ff1",
+				"ok": true,
+				"output_hash": "ae72f1715fa99ece9974f4aa75a4c47fff260914b8114b72d9c04f17e485ed64",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "ae72f1715fa99ece9974f4aa75a4c47fff260914b8114b72d9c04f17e485ed64",
+			"output_hash": "dfe021d64ce0b08b1a93342529d5c99d03f42cc2f066e01e6540a703408119fd",
+			"result": {
+				"added_ids": [
+					"overpass_broken_pillar_06"
+				],
+				"byte_hash": "7ac7dfe6198f3da2d715b971ad4947d1e9709408a2bae62b5feb8e3686ce8328",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "ae72f1715fa99ece9974f4aa75a4c47fff260914b8114b72d9c04f17e485ed64",
+				"ok": true,
+				"output_hash": "dfe021d64ce0b08b1a93342529d5c99d03f42cc2f066e01e6540a703408119fd",
+				"removed_ids": [],
+				"valid": true
+			},
+			"screen": "objects"
+		},
+		{
+			"id": "objects/place",
+			"input_hash": "dfe021d64ce0b08b1a93342529d5c99d03f42cc2f066e01e6540a703408119fd",
+			"output_hash": "dfe021d64ce0b08b1a93342529d5c99d03f42cc2f066e01e6540a703408119fd",
+			"result": {
+				"code": "object_duplicate_id",
+				"diagnostics": [
+					{
+						"code": "object_duplicate_id",
+						"entity_id": "overpass_woodland_shrub_01",
+						"field": "placements",
+						"location": "(0.0, 0.0, 0.0)",
+						"message": "Revise o objeto indicado.",
+						"severity": "error",
+						"suggestion": "Ajuste o objeto, o piso ou a proteção indicada."
+					}
+				],
+				"ok": false
+			},
+			"screen": "objects"
+		}
+	],
+	"code": "action_rejected",
+	"completed_actions": 25,
+	"diagnostics": [],
+	"objects_snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "objects/undo",
+				"label": "Desfazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/redo",
+				"label": "Refazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/fit_view",
+				"label": "Enquadrar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/compile_piece",
+				"label": "Compilar peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_e56f4ddfdeb1",
+				"label": "Favoritar selecionado",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/focus_view_selection",
+				"label": "Focar seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_529dabe3d88f",
+				"label": "Colocar nas coordenadas",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_4755bd5b771b",
+				"label": "Mover seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_7f91e3dbaf52",
+				"label": "Girar90°",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_64657fb07c8c",
+				"label": "Duplicar seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_f11c0077aac8",
+				"label": "Remover seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_387cc4667887",
+				"label": "Agrupar seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_e9181b97926a",
+				"label": "Desagrupar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_0e17c1b4c291",
+				"label": "Selecionar grupo",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_5c613324fcde",
+				"label": "Travar / destravar grupo",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_4abdd24ae1d4",
+				"label": "Ocultar / mostrar grupo",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_b67b92d6e9ac",
+				"label": "Travar / destravar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_44cfb364edb5",
+				"label": "Ocultar / mostrar na autoria",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_1ce9e69bd1a5",
+				"label": "Preparar scatter",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/apply_preview",
+				"label": "Aplicar prévia…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "objects/action_eade13b2fd02",
+				"label": "Descartar prévia",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "objects/library/query",
+				"parameters": {
+					"category": "string?",
+					"favorites_only": "bool?",
+					"query": "string?"
+				}
+			},
+			{
+				"id": "objects/library/favorite",
+				"parameters": {
+					"definition_id": "string",
+					"enabled": "bool"
+				}
+			},
+			{
+				"id": "objects/library/select",
+				"parameters": {
+					"definition_id": "string"
+				}
+			},
+			{
+				"id": "objects/select",
+				"parameters": {
+					"ids": "id[]"
+				}
+			},
+			{
+				"id": "objects/surface/select",
+				"parameters": {
+					"surface_id": "id"
+				}
+			},
+			{
+				"id": "objects/scatter/preview",
+				"parameters": {
+					"optional": {
+						"exclusions": "array",
+						"seed_text": "string",
+						"snap": "number",
+						"spacing": "number"
+					},
+					"required": {
+						"center_xz": "v2",
+						"count": "int",
+						"definition_id": "id",
+						"radius": "number",
+						"surface_id": "id"
+					}
+				}
+			},
+			{
+				"id": "objects/scatter/apply",
+				"parameters": {
+					"proposal_hash": "sha256"
+				}
+			},
+			{
+				"id": "objects/scatter/discard",
+				"parameters": {}
+			},
+			{
+				"id": "objects/place",
+				"parameters": {
+					"optional": {
+						"placement_id": "id",
+						"rotation_y": "number",
+						"snap": "number"
+					},
+					"required": {
+						"definition_id": "id",
+						"position_xz": "v2",
+						"surface_id": "id"
+					}
+				}
+			},
+			{
+				"id": "objects/move",
+				"parameters": {
+					"optional": {
+						"snap": "number",
+						"surface_id": "id"
+					},
+					"required": {
+						"ids": "strings",
+						"position_xz": "v2"
+					}
+				}
+			},
+			{
+				"id": "objects/translate",
+				"parameters": {
+					"optional": {
+						"snap": "number"
+					},
+					"required": {
+						"delta_xz": "v2",
+						"ids": "strings"
+					}
+				}
+			},
+			{
+				"id": "objects/rotate",
+				"parameters": {
+					"optional": {
+						"snap": "number"
+					},
+					"required": {
+						"degrees": "number",
+						"ids": "strings"
+					}
+				}
+			},
+			{
+				"id": "objects/duplicate",
+				"parameters": {
+					"optional": {
+						"snap": "number"
+					},
+					"required": {
+						"delta_xz": "v2",
+						"ids": "strings"
+					}
+				}
+			},
+			{
+				"id": "objects/remove",
+				"parameters": {
+					"optional": {},
+					"required": {
+						"ids": "strings"
+					}
+				}
+			},
+			{
+				"id": "objects/group",
+				"parameters": {
+					"optional": {
+						"name": "string"
+					},
+					"required": {
+						"group_id": "id",
+						"ids": "strings"
+					}
+				}
+			},
+			{
+				"id": "objects/ungroup",
+				"parameters": {
+					"optional": {},
+					"required": {
+						"ids": "strings"
+					}
+				}
+			},
+			{
+				"id": "objects/lock",
+				"parameters": {
+					"optional": {},
+					"required": {
+						"ids": "strings",
+						"value": "bool"
+					}
+				}
+			},
+			{
+				"id": "objects/hide",
+				"parameters": {
+					"optional": {},
+					"required": {
+						"ids": "strings",
+						"value": "bool"
+					}
+				}
+			},
+			{
+				"id": "objects/group/state",
+				"parameters": {
+					"optional": {
+						"hidden": "bool",
+						"locked": "bool"
+					},
+					"required": {
+						"group_id": "id"
+					}
+				}
+			},
+			{
+				"id": "objects/viewport/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "objects/viewport/focus_world",
+				"parameters": {
+					"position_xyz": "number[3]",
+					"zoom": "number?"
+				}
+			},
+			{
+				"id": "objects/viewport/focus_entity",
+				"parameters": {
+					"entity_id": "string"
+				}
+			},
+			{
+				"id": "objects/viewport/set_overlays",
+				"parameters": {
+					"layers": "overlay:boolean dictionary"
+				}
+			},
+			{
+				"id": "objects/viewport/search",
+				"parameters": {
+					"query": "string"
+				}
+			},
+			{
+				"id": "objects/viewport/set_probe",
+				"parameters": {
+					"height": "number",
+					"mode": "navigate|clearance|los",
+					"radius": "number",
+					"surface_id": "string?"
+				}
+			},
+			{
+				"id": "objects/viewport/probe_point",
+				"parameters": {
+					"point": "WorldPoint"
+				}
+			},
+			{
+				"id": "objects/viewport/probe_los",
+				"parameters": {
+					"from": "WorldPoint",
+					"to": "WorldPoint"
+				}
+			}
+		],
+		"mode": "ax",
+		"preview_hash": "",
+		"screen": "objects",
+		"selected_ids": [],
+		"selected_surface": "b_west",
+		"source_hash": "dfe021d64ce0b08b1a93342529d5c99d03f42cc2f066e01e6540a703408119fd"
+	},
+	"ok": false,
+	"requested_actions": 30,
+	"snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "piece/exchange",
+				"label": "Intercâmbio com skills…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/new_piece",
+				"label": "Nova peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/compose_map",
+				"label": "Compor mapa…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open_objects",
+				"label": "Objetos e vegetação…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open_library",
+				"label": "Biblioteca…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open",
+				"label": "Abrir…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/save",
+				"label": "Salvar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/save_as",
+				"label": "Salvar como…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/undo",
+				"label": "Desfazer",
+				"test_only": false
+			},
+			{
+				"enabled": false,
+				"id": "piece/redo",
+				"label": "Refazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/recover_copy",
+				"label": "Recuperar cópia",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/browse_draft",
+				"label": "Buscar rascunho…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/add_layer",
+				"label": "Adicionar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/duplicate_layer",
+				"label": "Duplicar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/toggle_layer_lock",
+				"label": "Travar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/apply_name",
+				"label": "Aplicar nome",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/piece_context",
+				"label": "Contexto da peça…",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "piece/document/new",
+				"parameters": {
+					"confirm_discard": "boolean",
+					"document_id": "id",
+					"name": "string"
+				}
+			},
+			{
+				"id": "piece/document/name",
+				"parameters": {
+					"name": "string"
+				}
+			},
+			{
+				"id": "piece/document/open",
+				"parameters": {
+					"confirm_discard": "boolean",
+					"path": "string"
+				}
+			},
+			{
+				"id": "piece/document/save",
+				"parameters": {
+					"path": "string"
+				}
+			},
+			{
+				"id": "piece/history/undo",
+				"parameters": {}
+			},
+			{
+				"id": "piece/history/redo",
+				"parameters": {}
+			},
+			{
+				"id": "piece/context/options",
+				"parameters": {}
+			},
+			{
+				"id": "piece/context/rules/set",
+				"parameters": {
+					"allow_rare": "bool",
+					"allowed_species": "strings",
+					"biome_ids": "strings"
+				}
+			},
+			{
+				"id": "piece/context/area/upsert",
+				"parameters": {
+					"allow_rare": "bool",
+					"allowed_species": "strings",
+					"layer_id": "id",
+					"max_xz": "v2",
+					"min_xz": "v2",
+					"region_id": "id",
+					"reserved": "array"
+				}
+			},
+			{
+				"id": "piece/context/area/remove",
+				"parameters": {
+					"region_id": "id"
+				}
+			},
+			{
+				"id": "piece/socket/upsert",
+				"parameters": {
+					"kind": "id",
+					"position_xyz": "v3",
+					"socket_id": "id",
+					"surface_id": "id"
+				}
+			},
+			{
+				"id": "piece/socket/remove",
+				"parameters": {
+					"socket_id": "id"
+				}
+			}
+		],
+		"mode": "ax",
+		"screen": "piece",
+		"source": {
+			"composition": null,
+			"connectors": [
+				{
+					"connector_id": "b_west_gate",
+					"direction": "both",
+					"headroom": 128,
+					"kind": "walk",
+					"normal_xyz": [
+						-1,
+						0,
+						0
+					],
+					"position_xyz": [
+						0,
+						0,
+						640
+					],
+					"surface_id": "b_west",
+					"tags": [
+						"map_editor"
+					],
+					"width": 256
+				}
+			],
+			"context": {
+				"allow_rare": false,
+				"allowed_species": [],
+				"areas": [
+					{
+						"allow_rare": false,
+						"allowed_species": [],
+						"region_id": "woods_west",
+						"reserved": []
+					},
+					{
+						"allow_rare": false,
+						"allowed_species": [],
+						"region_id": "woods_shrine",
+						"reserved": []
+					}
+				],
+				"biome_ids": [
+					"forest"
+				],
+				"version": 1
+			},
+			"dependencies": [
+				{
+					"definition_id": "oak_tree",
+					"kind": "prop",
+					"revision": 1,
+					"sha256": "cfa38bd7632f300a14333c077e71152e58f65bc88754a2fac3347661c4b024cc"
+				},
+				{
+					"definition_id": "woodland_shrub",
+					"kind": "prop",
+					"revision": 1,
+					"sha256": "e2e6fc9af59b1ab2820e21239d87c28b48ebc94b7489d12eb1fd9106187ed7bb"
+				},
+				{
+					"definition_id": "moss_boulder",
+					"kind": "prop",
+					"revision": 1,
+					"sha256": "33fb787d661d8c1378e69776b346e32f49f0be9fa15b6330d4039676587f947d"
+				},
+				{
+					"definition_id": "broken_pillar",
+					"kind": "prop",
+					"revision": 1,
+					"sha256": "3f55b4be449281a51e91dac3616972c990baac76f7effd51a6564c1d941a17f5"
+				}
+			],
+			"document_id": "sanctuary_woods_overpass",
+			"layers": [
+				{
+					"columns": 5,
+					"heights": [
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0,
+						0,
+						0,
+						0.0,
+						0.0,
+						0,
+						0,
+						0,
+						0,
+						0.0,
+						0,
+						0,
+						0,
+						0,
+						0.0,
+						0,
+						0,
+						0,
+						0,
+						0.0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0
+					],
+					"layer_id": "b_west",
+					"locked": false,
+					"material_masks": {
+						"earth": [
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.85,
+							0.85,
+							0.85,
+							0.21746170861380443,
+							0.0,
+							0.0,
+							0.0,
+							0.21746170861380443,
+							0.85,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.85,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.85,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.48571428571428565,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0
+						],
+						"grass": [
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							0.15000000000000002,
+							0.15000000000000002,
+							0.15000000000000002,
+							0.7825382913861956,
+							1.0,
+							1.0,
+							1.0,
+							0.7825382913861956,
+							0.15000000000000002,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							0.15000000000000002,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							0.15000000000000002,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							0.5142857142857143,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0
+						]
+					},
+					"name": "Bosque oeste",
+					"origin_xz": [
+						0,
+						0
+					],
+					"protected_regions": [],
+					"rows": 11,
+					"sample_spacing": 128
+				},
+				{
+					"columns": 7,
+					"heights": [
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0
+					],
+					"layer_id": "b_low",
+					"locked": false,
+					"material_masks": {
+						"earth": [
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.85,
+							0.85,
+							0.85,
+							0.85,
+							0.85,
+							0.85,
+							0.12142857142857141,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0
+						],
+						"grass": [
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							0.15000000000000002,
+							0.15000000000000002,
+							0.15000000000000002,
+							0.15000000000000002,
+							0.15000000000000002,
+							0.15000000000000002,
+							0.8785714285714286,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0
+						]
+					},
+					"name": "Passagem inferior",
+					"origin_xz": [
+						512,
+						384
+					],
+					"protected_regions": [],
+					"rows": 5,
+					"sample_spacing": 128
+				},
+				{
+					"columns": 3,
+					"heights": [
+						0.0,
+						64.0,
+						128.0,
+						0.0,
+						64.0,
+						128.0,
+						0.0,
+						64.0,
+						128.0,
+						0.0,
+						64.0,
+						128.0
+					],
+					"layer_id": "b_north_ramp",
+					"locked": false,
+					"material_masks": {
+						"earth": [
+							0.0,
+							0.0,
+							0.0,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.0,
+							0.0,
+							0.0
+						],
+						"grass": [
+							1.0,
+							1.0,
+							1.0,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.5142857142857143,
+							1.0,
+							1.0,
+							1.0
+						]
+					},
+					"name": "Rampa norte",
+					"origin_xz": [
+						512,
+						0
+					],
+					"protected_regions": [],
+					"rows": 4,
+					"sample_spacing": 128
+				},
+				{
+					"columns": 5,
+					"heights": [
+						128,
+						128,
+						128,
+						128,
+						128,
+						128.0,
+						128.0,
+						128.0,
+						128,
+						128,
+						128.0,
+						128.0,
+						128.0,
+						128,
+						128,
+						128,
+						128,
+						128.0,
+						128,
+						128
+					],
+					"layer_id": "b_north_top",
+					"locked": false,
+					"material_masks": {
+						"earth": [
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.0,
+							0.0,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.85,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.85,
+							0.0,
+							0.0
+						],
+						"grass": [
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.5142857142857143,
+							1.0,
+							1.0,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.15000000000000002,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							0.15000000000000002,
+							1.0,
+							1.0
+						]
+					},
+					"name": "Platô norte",
+					"origin_xz": [
+						768,
+						0
+					],
+					"protected_regions": [],
+					"rows": 4,
+					"sample_spacing": 128
+				},
+				{
+					"columns": 3,
+					"heights": [
+						0.0,
+						64.0,
+						128.0,
+						0.0,
+						64.0,
+						128.0,
+						0.0,
+						64.0,
+						128.0,
+						0.0,
+						64.0,
+						128.0
+					],
+					"layer_id": "b_south_ramp",
+					"locked": false,
+					"material_masks": {
+						"earth": [
+							0.0,
+							0.0,
+							0.0,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.0,
+							0.0,
+							0.0
+						],
+						"grass": [
+							1.0,
+							1.0,
+							1.0,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.5142857142857143,
+							1.0,
+							1.0,
+							1.0
+						]
+					},
+					"name": "Rampa sul",
+					"origin_xz": [
+						512,
+						896
+					],
+					"protected_regions": [],
+					"rows": 4,
+					"sample_spacing": 128
+				},
+				{
+					"columns": 5,
+					"heights": [
+						128,
+						128,
+						128.0,
+						128,
+						128,
+						128.0,
+						128.0,
+						128.0,
+						128,
+						128,
+						128.0,
+						128.0,
+						128.0,
+						128,
+						128,
+						128,
+						128,
+						128,
+						128,
+						128
+					],
+					"layer_id": "b_south_top",
+					"locked": false,
+					"material_masks": {
+						"earth": [
+							0.0,
+							0.0,
+							0.85,
+							0.0,
+							0.0,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.85,
+							0.0,
+							0.0,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.48571428571428565,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0,
+							0.0
+						],
+						"grass": [
+							1.0,
+							1.0,
+							0.15000000000000002,
+							1.0,
+							1.0,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.15000000000000002,
+							1.0,
+							1.0,
+							0.5142857142857143,
+							0.5142857142857143,
+							0.5142857142857143,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0,
+							1.0
+						]
+					},
+					"name": "Platô sul",
+					"origin_xz": [
+						768,
+						896
+					],
+					"protected_regions": [],
+					"rows": 4,
+					"sample_spacing": 128
+				}
+			],
+			"name": "Bosque do Santuário — Passagem",
+			"placements": [
+				{
+					"definition_id": "oak_tree",
+					"placement_id": "overpass_oak_tree_01",
+					"position_xyz": [
+						128.0,
+						0.0,
+						128.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "b_west"
+				},
+				{
+					"definition_id": "oak_tree",
+					"placement_id": "overpass_oak_tree_02",
+					"position_xyz": [
+						320.0,
+						0.0,
+						128.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "b_west"
+				},
+				{
+					"definition_id": "oak_tree",
+					"placement_id": "overpass_oak_tree_03",
+					"position_xyz": [
+						128.0,
+						0.0,
+						384.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "b_west"
+				},
+				{
+					"definition_id": "oak_tree",
+					"placement_id": "overpass_oak_tree_04",
+					"position_xyz": [
+						128.0,
+						0.0,
+						896.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "b_west"
+				},
+				{
+					"definition_id": "oak_tree",
+					"placement_id": "overpass_oak_tree_05",
+					"position_xyz": [
+						128.0,
+						0.0,
+						1184.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "b_west"
+				},
+				{
+					"definition_id": "oak_tree",
+					"placement_id": "overpass_oak_tree_06",
+					"position_xyz": [
+						384.0,
+						0.0,
+						1184.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "b_west"
+				},
+				{
+					"definition_id": "woodland_shrub",
+					"placement_id": "overpass_woodland_shrub_01",
+					"position_xyz": [
+						256.0,
+						0.0,
+						256.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "b_west"
+				},
+				{
+					"definition_id": "woodland_shrub",
+					"placement_id": "overpass_woodland_shrub_02",
+					"position_xyz": [
+						448.0,
+						0.0,
+						320.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "b_west"
+				},
+				{
+					"definition_id": "woodland_shrub",
+					"placement_id": "overpass_woodland_shrub_03",
+					"position_xyz": [
+						160.0,
+						0.0,
+						800.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "b_west"
+				},
+				{
+					"definition_id": "woodland_shrub",
+					"placement_id": "overpass_woodland_shrub_04",
+					"position_xyz": [
+						448.0,
+						0.0,
+						960.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "b_west"
+				},
+				{
+					"definition_id": "moss_boulder",
+					"placement_id": "overpass_moss_boulder_01",
+					"position_xyz": [
+						128.0,
+						0.0,
+						480.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "b_west"
+				},
+				{
+					"definition_id": "moss_boulder",
+					"placement_id": "overpass_moss_boulder_02",
+					"position_xyz": [
+						160.0,
+						0.0,
+						1056.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "b_west"
+				},
+				{
+					"definition_id": "moss_boulder",
+					"placement_id": "overpass_moss_boulder_03",
+					"position_xyz": [
+						448.0,
+						0.0,
+						1184.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "b_west"
+				},
+				{
+					"definition_id": "broken_pillar",
+					"placement_id": "overpass_broken_pillar_01",
+					"position_xyz": [
+						896.0,
+						128.0,
+						96.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "b_north_top"
+				},
+				{
+					"definition_id": "broken_pillar",
+					"placement_id": "overpass_broken_pillar_02",
+					"position_xyz": [
+						1120.0,
+						128.0,
+						96.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "b_north_top"
+				},
+				{
+					"definition_id": "broken_pillar",
+					"placement_id": "overpass_broken_pillar_03",
+					"position_xyz": [
+						1216.0,
+						128.0,
+						256.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "b_north_top"
+				},
+				{
+					"definition_id": "broken_pillar",
+					"placement_id": "overpass_broken_pillar_04",
+					"position_xyz": [
+						896.0,
+						128.0,
+						1184.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "b_south_top"
+				},
+				{
+					"definition_id": "broken_pillar",
+					"placement_id": "overpass_broken_pillar_05",
+					"position_xyz": [
+						1120.0,
+						128.0,
+						1184.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "b_south_top"
+				},
+				{
+					"definition_id": "broken_pillar",
+					"placement_id": "overpass_broken_pillar_06",
+					"position_xyz": [
+						1216.0,
+						128.0,
+						1024.0
+					],
+					"revision": 1,
+					"rotation_y": 0,
+					"surface_id": "b_south_top"
+				}
+			],
+			"regions": [
+				{
+					"layer_id": "b_west",
+					"polygon_xz": [
+						[
+							192,
+							768
+						],
+						[
+							480,
+							768
+						],
+						[
+							480,
+							1120
+						],
+						[
+							192,
+							1120
+						]
+					],
+					"purpose": "encounter",
+					"region_id": "woods_west"
+				},
+				{
+					"layer_id": "b_north_top",
+					"polygon_xz": [
+						[
+							832,
+							64
+						],
+						[
+							1216,
+							64
+						],
+						[
+							1216,
+							320
+						],
+						[
+							832,
+							320
+						]
+					],
+					"purpose": "encounter",
+					"region_id": "woods_shrine"
+				}
+			],
+			"revision": 39,
+			"schema_version": 1,
+			"sockets": [],
+			"special_surfaces": [
+				{
+					"headroom": 100.0,
+					"layer_id": "b_north_top",
+					"surface_id": "b_bridge",
+					"vertices_xyz": [
+						[
+							896.0,
+							128.0,
+							384.0
+						],
+						[
+							1152.0,
+							128.0,
+							384.0
+						],
+						[
+							1152.0,
+							128.0,
+							896.0
+						],
+						[
+							896.0,
+							128.0,
+							896.0
+						]
+					]
+				}
+			],
+			"units": "e07_world"
+		}
+	},
+	"source_hash": "dfe021d64ce0b08b1a93342529d5c99d03f42cc2f066e01e6540a703408119fd",
+	"state": {
+		"can_redo": false,
+		"can_undo": true,
+		"dirty": true,
+		"selected_layer": "b_west",
+		"source_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods_overpass.source.json"
+	},
+	"terrain_snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "terrain/save_brush_preset",
+				"label": "Salvar predefinição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/remove_brush_preset",
+				"label": "Remover predefinição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/fit_view",
+				"label": "Enquadrar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/compile_piece",
+				"label": "Compilar peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/cancel",
+				"label": "Cancelar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/ramp_bridge_sample",
+				"label": "Exemplo rampa/ponte",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/large_piece_sample",
+				"label": "Exemplo de peça grande",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/action_10a98dc5c4c2",
+				"label": "Exemplo orgânico",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/add_grid",
+				"label": "Nova grade",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/focus_view_selection",
+				"label": "Focar seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/add_bridge",
+				"label": "Adicionar ponte",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/save_connector",
+				"label": "Adicionar / atualizar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/remove_connector",
+				"label": "Remover",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "terrain/example/organic",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/brush/stroke",
+				"parameters": {
+					"options": "brush_options",
+					"points": "number[2][]"
+				}
+			},
+			{
+				"id": "terrain/presets/list",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/presets/apply",
+				"parameters": {
+					"preset_id": "string"
+				}
+			},
+			{
+				"id": "terrain/presets/save",
+				"parameters": {
+					"name": "string",
+					"options": "brush_options"
+				}
+			},
+			{
+				"id": "terrain/grid/create",
+				"parameters": {
+					"columns": "integer 2..257",
+					"height": "number -512..512",
+					"layer_id": "id",
+					"name": "string",
+					"origin_xz": "number[2]",
+					"rows": "integer 2..257",
+					"sample_spacing": "number 4..256"
+				}
+			},
+			{
+				"id": "terrain/layer/select",
+				"parameters": {
+					"layer_id": "id"
+				}
+			},
+			{
+				"id": "terrain/layer/lock",
+				"parameters": {
+					"layer_id": "id",
+					"locked": "boolean"
+				}
+			},
+			{
+				"id": "terrain/layer/protection",
+				"parameters": {
+					"layer_id": "id",
+					"region_ids": "existing region IDs[]"
+				}
+			},
+			{
+				"id": "terrain/bridge/create",
+				"parameters": {
+					"height": "number 4..1024",
+					"layer_id": "id",
+					"length": "number 4..1024",
+					"origin_xz": "number[2]",
+					"surface_id": "id",
+					"width": "number 4..1024"
+				}
+			},
+			{
+				"id": "terrain/connector/upsert",
+				"parameters": {
+					"connector_id": "id",
+					"direction": "id",
+					"headroom": "number",
+					"kind": "id",
+					"normal_xyz": "v3",
+					"position_xyz": "v3",
+					"surface_id": "id",
+					"tags": "strings",
+					"width": "number"
+				}
+			},
+			{
+				"id": "terrain/connector/remove",
+				"parameters": {
+					"connector_id": "id"
+				}
+			},
+			{
+				"id": "terrain/viewport/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/viewport/focus_world",
+				"parameters": {
+					"position_xyz": "number[3]",
+					"zoom": "number?"
+				}
+			},
+			{
+				"id": "terrain/viewport/focus_entity",
+				"parameters": {
+					"entity_id": "string"
+				}
+			},
+			{
+				"id": "terrain/viewport/set_overlays",
+				"parameters": {
+					"layers": "overlay:boolean dictionary"
+				}
+			},
+			{
+				"id": "terrain/viewport/search",
+				"parameters": {
+					"query": "string"
+				}
+			},
+			{
+				"id": "terrain/viewport/set_probe",
+				"parameters": {
+					"height": "number",
+					"mode": "navigate|clearance|los",
+					"radius": "number",
+					"surface_id": "string?"
+				}
+			},
+			{
+				"id": "terrain/viewport/probe_point",
+				"parameters": {
+					"point": "WorldPoint"
+				}
+			},
+			{
+				"id": "terrain/viewport/probe_los",
+				"parameters": {
+					"from": "WorldPoint",
+					"to": "WorldPoint"
+				}
+			}
+		],
+		"mode": "ax",
+		"screen": "terrain",
+		"source_hash": "dfe021d64ce0b08b1a93342529d5c99d03f42cc2f066e01e6540a703408119fd"
+	}
+}

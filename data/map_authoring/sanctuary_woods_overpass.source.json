@@ -23,7 +23,54 @@
 			"width": 256
 		}
 	],
-	"dependencies": [],
+	"context": {
+		"allow_rare": false,
+		"allowed_species": [],
+		"areas": [
+			{
+				"allow_rare": false,
+				"allowed_species": [],
+				"region_id": "woods_west",
+				"reserved": []
+			},
+			{
+				"allow_rare": false,
+				"allowed_species": [],
+				"region_id": "woods_shrine",
+				"reserved": []
+			}
+		],
+		"biome_ids": [
+			"forest"
+		],
+		"version": 1
+	},
+	"dependencies": [
+		{
+			"definition_id": "oak_tree",
+			"kind": "prop",
+			"revision": 1,
+			"sha256": "cfa38bd7632f300a14333c077e71152e58f65bc88754a2fac3347661c4b024cc"
+		},
+		{
+			"definition_id": "woodland_shrub",
+			"kind": "prop",
+			"revision": 1,
+			"sha256": "e2e6fc9af59b1ab2820e21239d87c28b48ebc94b7489d12eb1fd9106187ed7bb"
+		},
+		{
+			"definition_id": "moss_boulder",
+			"kind": "prop",
+			"revision": 1,
+			"sha256": "33fb787d661d8c1378e69776b346e32f49f0be9fa15b6330d4039676587f947d"
+		},
+		{
+			"definition_id": "broken_pillar",
+			"kind": "prop",
+			"revision": 1,
+			"sha256": "3f55b4be449281a51e91dac3616972c990baac76f7effd51a6564c1d941a17f5"
+		}
+	],
 	"document_id": "sanctuary_woods_overpass",
 	"layers": [
 		{
@@ -616,9 +663,333 @@
 		}
 	],
 	"name": "Bosque do Santuário — Passagem",
-	"placements": [],
-	"regions": [],
-	"revision": 17,
+	"placements": [
+		{
+			"definition_id": "oak_tree",
+			"placement_id": "overpass_oak_tree_01",
+			"position_xyz": [
+				128.0,
+				0.0,
+				128.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_west"
+		},
+		{
+			"definition_id": "oak_tree",
+			"placement_id": "overpass_oak_tree_02",
+			"position_xyz": [
+				320.0,
+				0.0,
+				128.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_west"
+		},
+		{
+			"definition_id": "oak_tree",
+			"placement_id": "overpass_oak_tree_03",
+			"position_xyz": [
+				128.0,
+				0.0,
+				384.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_west"
+		},
+		{
+			"definition_id": "oak_tree",
+			"placement_id": "overpass_oak_tree_04",
+			"position_xyz": [
+				128.0,
+				0.0,
+				896.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_west"
+		},
+		{
+			"definition_id": "oak_tree",
+			"placement_id": "overpass_oak_tree_05",
+			"position_xyz": [
+				128.0,
+				0.0,
+				1184.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_west"
+		},
+		{
+			"definition_id": "oak_tree",
+			"placement_id": "overpass_oak_tree_06",
+			"position_xyz": [
+				384.0,
+				0.0,
+				1184.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_west"
+		},
+		{
+			"definition_id": "woodland_shrub",
+			"placement_id": "overpass_woodland_shrub_01",
+			"position_xyz": [
+				256.0,
+				0.0,
+				256.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_west"
+		},
+		{
+			"definition_id": "woodland_shrub",
+			"placement_id": "overpass_woodland_shrub_02",
+			"position_xyz": [
+				448.0,
+				0.0,
+				320.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_west"
+		},
+		{
+			"definition_id": "woodland_shrub",
+			"placement_id": "overpass_woodland_shrub_03",
+			"position_xyz": [
+				160.0,
+				0.0,
+				800.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_west"
+		},
+		{
+			"definition_id": "woodland_shrub",
+			"placement_id": "overpass_woodland_shrub_04",
+			"position_xyz": [
+				448.0,
+				0.0,
+				960.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_west"
+		},
+		{
+			"definition_id": "moss_boulder",
+			"placement_id": "overpass_moss_boulder_01",
+			"position_xyz": [
+				128.0,
+				0.0,
+				480.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_west"
+		},
+		{
+			"definition_id": "moss_boulder",
+			"placement_id": "overpass_moss_boulder_02",
+			"position_xyz": [
+				160.0,
+				0.0,
+				1056.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_west"
+		},
+		{
+			"definition_id": "moss_boulder",
+			"placement_id": "overpass_moss_boulder_03",
+			"position_xyz": [
+				448.0,
+				0.0,
+				1184.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_west"
+		},
+		{
+			"definition_id": "broken_pillar",
+			"placement_id": "overpass_broken_pillar_01",
+			"position_xyz": [
+				896.0,
+				128.0,
+				96.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_north_top"
+		},
+		{
+			"definition_id": "broken_pillar",
+			"placement_id": "overpass_broken_pillar_02",
+			"position_xyz": [
+				1120.0,
+				128.0,
+				96.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_north_top"
+		},
+		{
+			"definition_id": "broken_pillar",
+			"placement_id": "overpass_broken_pillar_03",
+			"position_xyz": [
+				1216.0,
+				128.0,
+				256.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_north_top"
+		},
+		{
+			"definition_id": "broken_pillar",
+			"placement_id": "overpass_broken_pillar_04",
+			"position_xyz": [
+				896.0,
+				128.0,
+				1184.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_south_top"
+		},
+		{
+			"definition_id": "broken_pillar",
+			"placement_id": "overpass_broken_pillar_05",
+			"position_xyz": [
+				1120.0,
+				128.0,
+				1184.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_south_top"
+		},
+		{
+			"definition_id": "broken_pillar",
+			"placement_id": "overpass_broken_pillar_06",
+			"position_xyz": [
+				1216.0,
+				128.0,
+				1024.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_south_top"
+		},
+		{
+			"definition_id": "woodland_shrub",
+			"placement_id": "overpass_woodland_shrub_01_low",
+			"position_xyz": [
+				640.0,
+				0.0,
+				448.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_low"
+		},
+		{
+			"definition_id": "woodland_shrub",
+			"placement_id": "overpass_woodland_shrub_02_low",
+			"position_xyz": [
+				768.0,
+				0.0,
+				832.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_low"
+		},
+		{
+			"definition_id": "woodland_shrub",
+			"placement_id": "overpass_woodland_shrub_03_low",
+			"position_xyz": [
+				1184.0,
+				0.0,
+				448.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_low"
+		},
+		{
+			"definition_id": "woodland_shrub",
+			"placement_id": "overpass_woodland_shrub_04_low",
+			"position_xyz": [
+				1184.0,
+				0.0,
+				832.0
+			],
+			"revision": 1,
+			"rotation_y": 0,
+			"surface_id": "b_low"
+		}
+	],
+	"regions": [
+		{
+			"layer_id": "b_west",
+			"polygon_xz": [
+				[
+					192,
+					768
+				],
+				[
+					480,
+					768
+				],
+				[
+					480,
+					1120
+				],
+				[
+					192,
+					1120
+				]
+			],
+			"purpose": "encounter",
+			"region_id": "woods_west"
+		},
+		{
+			"layer_id": "b_north_top",
+			"polygon_xz": [
+				[
+					832,
+					64
+				],
+				[
+					1216,
+					64
+				],
+				[
+					1216,
+					320
+				],
+				[
+					832,
+					320
+				]
+			],
+			"purpose": "encounter",
+			"region_id": "woods_shrine"
+		}
+	],
+	"revision": 43,
 	"schema_version": 1,
 	"sockets": [],
 	"special_surfaces": [

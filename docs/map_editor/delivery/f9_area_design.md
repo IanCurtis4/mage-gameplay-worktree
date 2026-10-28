@@ -1,6 +1,6 @@
 # F9 — desenho da área de aceite: Bosque do Santuário
 
-Estado: **terreno das duas peças criado via AX, compilado e reaberto**: [clareira](../../../data/map_authoring/sanctuary_woods_clearing.source.json) e [passagem](../../../data/map_authoring/sanctuary_woods_overpass.source.json), com [recibo do replay limpo](evidence/f9/terra/area_terrain/clean_replay/report.md). Arte, props, composição, encontros, travessia com corpo de raio 20 e altura 32 e gameplay permanecem pendentes. O alvo é F9-12 e a [amostra de validação](../validation.md); F10 depende de autorização própria.
+Estado: **terreno das duas peças criado via AX, compilado e reaberto**: [clareira](../../../data/map_authoring/sanctuary_woods_clearing.source.json) e [passagem](../../../data/map_authoring/sanctuary_woods_overpass.source.json), com [recibo do replay limpo](evidence/f9/terra/area_terrain/clean_replay/report.md). Props, contexto e entrada foram adicionados por AX e reabertos; [recibo de conteúdo](evidence/f9/terra/area_content/README.md). Avaliação artística, composição, encontros, travessia com corpo de raio 20 e altura 32 e gameplay permanecem pendentes. O alvo é F9-12 e a [amostra de validação](../validation.md); F10 depende de autorização própria.
 
 ## Planta e coordenadas
 
@@ -61,4 +61,4 @@ Conferidos [sólidos](../contracts/f9_terrain_solids.md), [relevo misto](../cont
 
 ## Estado do terreno — replay limpo
 
-As duas fontes de terreno foram criadas via AX e preservadas em `data/map_authoring/sanctuary_woods_clearing.source.json` e `sanctuary_woods_overpass.source.json`. Replay na fixture importada reproduziu seus bytes; reabertura das fontes originais na mesma fixture reproduziu hashes de fonte e compilação. Detalhes, comandos e ressalvas em [recibo de terreno](evidence/f9/terra/area_terrain/clean_replay/report.md). **Terreno criado**, ainda sem props, população, composição entre peças, teste jogável de corpo raio 20/altura 32 ou aceite visual. As coordenadas acima permanecem intenções sujeitas à comprovação de navegabilidade.
+As duas fontes de terreno foram criadas via AX e preservadas em `data/map_authoring/sanctuary_woods_clearing.source.json` e `sanctuary_woods_overpass.source.json`. Replay na fixture importada reproduziu seus bytes; reabertura das fontes originais na mesma fixture reproduziu hashes de fonte e compilação. Detalhes, comandos e ressalvas em [recibo de terreno](evidence/f9/terra/area_terrain/clean_replay/report.md). **Terreno criado**; props e contexto foram acrescentados posteriormente. Permanecem população, composição entre peças, teste jogável de corpo raio 20/altura 32 e aceite visual. As coordenadas acima permanecem intenções sujeitas à comprovação de navegabilidade.
