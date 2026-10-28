@@ -94,3 +94,11 @@ ambiguous_surface após restauração correta do estado. Resolver emenda de face
 sem deslocar o alvo ou enfraquecer múltiplos pisos/oclusão. App.open50s/início30s
 continuam pendência10, apesar de pedido44ms/frames mediana17,4ms nesta única rota.
 Matriz completa permanece exigida; ver conferência de snapshot_encoding no recibo.
+
+
+Checkpoint22: pick de emenda corrigido semmoveralvo780/780 ouaumentarEPS/caps.
+SurfacePick24,Geometry46,Ports92,Native20,Resume13 e2oficiais isolados PASS.
+Processo novo restaura estado e aceita nova caminhada/re-suspend3.589.468B<4MiB.
+Fecha o bloqueio concreto04/11 do checkpoint21; não remove demais requisitos.
+Carregamento≈49s/início31s continuam pendência10. PróximoAXparametrizado e
+criaçãoTerra noeditorAX; mapa/áreafinal/síntese/intercâmbio/release ainda exigidos.

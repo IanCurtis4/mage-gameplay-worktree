@@ -1,0 +1,49 @@
+extends SceneTree
+const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
+const View = preload("res://scripts/world/expedition_geometry_view.gd")
+const Patch = preload("res://scripts/core/expedition/spatial/world_support_patch.gd")
+func _initialize() -> void: run.call_deferred()
+func xyz(v: Vector3) -> Array: return [v.x,v.y,v.z]
+func run() -> void:
+	var base := ProjectSettings.globalize_path("res://.godot/map_authoring/play")
+	var session: Dictionary = bytes_to_var(FileAccess.get_file_as_bytes(base.path_join("sessions/8c010985fe04154b212ead28/session.bin")))
+	var candidate: Dictionary = bytes_to_var(FileAccess.get_file_as_bytes(base.path_join("candidates/"+session.candidate_hash+".bin")))
+	var manifest := ExpeditionManifest.new(); manifest._data = candidate.package.manifest
+	var world := WorldGeometry.new(); var configured := world.configure(manifest,manifest._data.stages[0].stage_id)
+	if not configured.ok: print(JSON.stringify(configured)); quit(1); return
+	for horizontal: Vector2 in [Vector2(780,780),Vector2(750,780),Vector2(775,780),Vector2(780,775)]:
+		trace_point(world,session.candidate_hash,horizontal)
+	quit()
+func trace_point(world: WorldGeometry, candidate_hash: String, horizontal: Vector2) -> void:
+	var target := Vector3.ZERO
+	for cell: Dictionary in world._stage.surfaces:
+		var q := world.support_at(cell.surface_id,horizontal,world.geometry_revision)
+		if q.ok: target = q.data.point.position; break
+	var cast := View.ray(View.project(target))
+	var origin: Vector3 = cast.origin; var direction: Vector3 = cast.direction
+	var hits: Array[Dictionary] = []; var nearest := INF
+	for cell: Dictionary in world._stage.surfaces:
+		var normal := Kernel.plane_normal(cell.vertices)
+		var denominator := normal.dot(direction)
+		if absf(denominator) < world.EPS: continue
+		var t: float = normal.dot(Vector3(cell.vertices[0])-origin)/denominator
+		if t < 0: continue
+		var point := Kernel.support_y(cell,origin+direction*t)
+		var tolerance := WorldGeometry.point_tolerance(origin,point)
+		if not WorldGeometry._ray_contains(cell,point,tolerance): continue
+		hits.append({"id":cell.surface_id,"t":t,"p":point,"tol":tolerance,"normal":normal})
+		nearest = minf(nearest,t)
+	var tied := {}; var printed: Array = []
+	for hit: Dictionary in hits:
+		if absf(hit.t-nearest) <= hit.tol/direction.length():
+			tied[hit.id] = hit
+			printed.append({"id":hit.id,"t":hit.t,"point":xyz(hit.p),"normal":xyz(hit.normal),"tolerance":hit.tol})
+	var index := Patch.index(world._stage); var links: Array = []
+	for link: Dictionary in world._stage.connections:
+		var a: Dictionary = index.endpoints[link.a_connector]; var b: Dictionary = index.endpoints[link.b_connector]
+		if not tied.has(a.surface_id) or not tied.has(b.surface_id): continue
+		links.append({"link":link,"a_surface":a.surface_id,"b_surface":b.surface_id,"position":xyz(a.position),"width":a.width,"a_on_opening":Patch.on_opening(a.surface_id,a.connector_id,tied[a.surface_id].p,index),"b_on_opening":Patch.on_opening(b.surface_id,b.connector_id,tied[b.surface_id].p,index)})
+	var visible: Array[String] = []
+	for cell: Dictionary in world._stage.surfaces: visible.append(cell.surface_id)
+	var resolved := world.resolve_surface(origin,direction,visible,world.geometry_revision)
+	print("F9_PICK_TRACE "+JSON.stringify({"candidate_hash":candidate_hash,"target":xyz(target),"origin":xyz(origin),"direction":xyz(direction),"nearest":nearest,"resolved_ok":resolved.ok,"resolved_code":resolved.error_code,"hits":printed,"links":links}))

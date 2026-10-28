@@ -1,0 +1,18 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+F9_ROUNDED_RESUME_CHECK persisted_resume_session_path_is_provided true
+F9_ROUNDED_RESUME_CHECK existing_candidate_session_opens_in_fresh_app true
+F9_ROUNDED_RESUME_CHECK existing_suspended_run_resumes_in_new_process true
+F9_ROUNDED_RESUME_CHECK same_candidate_and_dense_geometry_are_restored true
+F9_ROUNDED_RESUME_CHECK player_resumes_on_saved_raised_hill_position true
+F9_ROUNDED_RESUME_CHECK restored_player_keeps_original_20_by_32_body true
+F9_ROUNDED_RESUME_CHECK resumed_game_has_nearby_raised_support true
+F9_ROUNDED_RESUME_CHECK resumed_authored_view_picks_raised_support true
+F9_ROUNDED_RESUME_CHECK resumed_player_accepts_canonical_short_walk true
+F9_ROUNDED_RESUME_CHECK resumed_player_walks_across_raised_hill true
+F9_ROUNDED_RESUME_CHECK resumed_player_remains_inside_original_body_clearance true
+F9_ROUNDED_RESUME_CHECK fresh_process_gameplay_capture_written true
+F9_ROUNDED_RESUME_CHECK resuspend_saves_format_two_checkpoint_under_original_four_mib true
+F9_ROUNDED_RESUME_TIMING {"app_open_ms":49118.114,"in_game_frame_sample":{"count":2,"max_ms":62.02,"p50_ms":38.048,"p95_ms":38.048},"movement_request_ms":8.775,"resume_start_ms":30111.274,"resuspend_checkpoint_bytes":3589468,"scope":"fresh-process persisted resume, one saved rounded-hill session, one nearby walk; no general FPS claim","short_hill_walk_ms":109.024}
+F9_ROUNDED_RESUME_RESULT {"checks":[{"id":"persisted_resume_session_path_is_provided","ok":true},{"id":"existing_candidate_session_opens_in_fresh_app","ok":true},{"id":"existing_suspended_run_resumes_in_new_process","ok":true},{"id":"same_candidate_and_dense_geometry_are_restored","ok":true},{"id":"player_resumes_on_saved_raised_hill_position","ok":true},{"id":"restored_player_keeps_original_20_by_32_body","ok":true},{"id":"resumed_game_has_nearby_raised_support","ok":true},{"id":"resumed_authored_view_picks_raised_support","ok":true},{"id":"resumed_player_accepts_canonical_short_walk","ok":true},{"id":"resumed_player_walks_across_raised_hill","ok":true},{"id":"resumed_player_remains_inside_original_body_clearance","ok":true},{"id":"fresh_process_gameplay_capture_written","ok":true},{"id":"resuspend_saves_format_two_checkpoint_under_original_four_mib","ok":true}],"count":13,"ok":true,"timings":{"app_open_ms":49118.114,"in_game_frame_sample":{"count":2,"max_ms":62.02,"p50_ms":38.048,"p95_ms":38.048},"movement_request_ms":8.775,"resume_start_ms":30111.274,"resuspend_checkpoint_bytes":3589468,"scope":"fresh-process persisted resume, one saved rounded-hill session, one nearby walk; no general FPS claim","short_hill_walk_ms":109.024}}

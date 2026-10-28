@@ -4,8 +4,8 @@ Escopo autorizado F9-01/07/09/12, meta humana28/10. Código Sol; Terra cria
 mapas somente por comandos AX do editor, sem escrever fontes prontas. Luna
 prepara provas e acompanha execuções congeladas. Primeiro consumidor é o
 [Bosque do Santuário](../delivery/f9_area_design.md), ainda não construído.
-Base executável atual57ffdc2778d9789cf7f7ce1e0c8905a1b41b87c9. Esta nota
-não declara implementação/validação. Freeze T01 deve terminar antes de código.
+Base atual58350cab28da7053eba9151d448911abd5b32a5c, T01econtinuidade validados
+porimpacto; fixture liberada. Esta nota não declaraAXnovo implementado/validado.
 
 ## Resultado e autoridade
 

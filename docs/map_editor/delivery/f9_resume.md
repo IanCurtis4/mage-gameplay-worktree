@@ -1,5 +1,29 @@
 # Retomada F9 —27/10/2026
 
+## Vigente28/10 — emenda corrigida e retomada13 PASS
+
+Código58350cab28da7053eba9151d448911abd5b32a5c; tudo executado na fixture única.
+SurfacePick24, Geometry46, Ports92, Native20, Resume13 e2 oficiais isolados PASS.
+Sol conferiu2016inputs por etapa, zero diferenças source/fixture/manifest, e viu
+captura real. Não há processo/handle ativo. Nova sessão d82baa96dfdc98bcf7e74806
+andou no alvo original780/780 após processo novo e re-suspendeu em3.589.468B<4MiB.
+Os bloqueios anteriores de snapshot e pick foram corrigidos; seus recibos abaixo
+são históricos. [Consolidação](evidence/f9/author/surface_pick/consolidation.md).
+
+App.open/início/retomada ainda custam cerca de49s/31s/30s nesta peça e permanecem
+pendência10. Uma rotaNative:46ms para pedido,120frames mediana19,2ms/p9529,4ms,
+máximo115,9ms; na retomada só2frames, sem percentis úteis ou FPS geral.
+RestanteF9 continua integralmente exigido. Próximo é implementar
+[AX parametrizado](../contracts/f9_ax_authoring.md), depois Terra criar o Bosque
+pelo editorAX. Síntese/reconciliação/assets/intercâmbio/release/recuperação e área
+final não estão fechados. F10 separado; nenhum main/playtest/push/aceite implícito.
+
+Luna executou todas as etapas antes de falhar por limite de uso, sem relatório
+final; Sol consolidou a evidência. Terra também foi limitado ao tentar refinar
+seu desenho, sem nova alteração ou mapa criado. Não reiniciar testes finalizados.
+Código pode avançar porSol; próximos pacotesLuna/Terra retomam quando disponíveis.
+
+
 ## Vigente28/10 — snapshot resolvido; clique de emenda em correção
 
 Código44a0b36439de030ab48a64aff2a26adc856fbadd, testes fac5db2f228d1f5bf11cf31a17e0b89709e730d8.

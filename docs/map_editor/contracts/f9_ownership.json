@@ -2621,6 +2621,24 @@
       "owner": "Sol F9 — actual surface hit reproduction",
       "previous_owner": "new author evidence",
       "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/surface_pick/consolidation.md",
+      "owner": "Sol F9 — seam correction consolidation",
+      "previous_owner": "new author receipt",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/surface_pick/trace_more.engine.log",
+      "owner": "Sol F9 — seam correction consolidation",
+      "previous_owner": "new author receipt",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/surface_pick/probe_more.gd.txt",
+      "owner": "Sol F9 — seam correction consolidation",
+      "previous_owner": "new author receipt",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -2631,7 +2649,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "f9_seam_pick_trace_and_regression_authoring_no_execution_freeze",
+    "state": "f9_seam_picking_validated_native_and_fresh_resume_pass_fixture_released",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -2821,6 +2839,23 @@
       "limit_bytes": 4194304,
       "report_sha256": "5192E3832E7A44E9458FE076CF6C77DFCDD7EF4F758EA9B4E8EC97E0776D8983",
       "fixture_released": true
+    },
+    "surface_pick": {
+      "runtime_head": "58350cab28da7053eba9151d448911abd5b32a5c",
+      "pick": 24,
+      "geometry": 46,
+      "ports": 92,
+      "native": 20,
+      "resume": 13,
+      "official_isolated": [
+        "e07_f1_geometry_test:33",
+        "e07_f1_actor_integration_test:193"
+      ],
+      "input_count": 2016,
+      "source_fixture_mismatches": 0,
+      "resuspended_checkpoint_bytes": 3589468,
+      "fixture_released": true,
+      "roles": "Luna executed all stages; usage limit interrupted agents after execution; Sol independently inspected outputs/hashes and wrote final consolidation"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"
