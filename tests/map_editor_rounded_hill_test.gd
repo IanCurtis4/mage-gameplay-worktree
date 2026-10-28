@@ -53,7 +53,7 @@ func run() -> void:
 	check("protected_region_is_preserved",protected_result.ok and protected_result.data.layers[0].heights[2*5+2] == 0.0)
 	var connected := flat.duplicate(true)
 	connected.connectors = [{"connector_id":"door","surface_id":"field","position_xyz":[100,0,0],"normal_xyz":[0,0,-1],"width":50,"headroom":100,"tags":["walk"],"kind":"walk","direction":"both"}]
-	var connector_result := Brush.stroke(connected,"field",[Vector2(100,0)],options)
+	var connector_result := Brush.stroke(connected,"field",[Vector2(100,100)],options)
 	check("connector_clearance_is_preserved",connector_result.ok and Schema.validate(connector_result.data).is_empty() and connector_result.data.connectors == connected.connectors and connector_result.data.layers[0].heights[2] == 0.0 and connector_result.data.layers[0].heights[2*5+2] == 110.0)
 	var invalid := options.duplicate(true); invalid.radius = -1.0
 	check("invalid_shape_parameters_are_rejected",not Brush.stroke(flat,"field",[Vector2(100,100)],invalid).ok)
