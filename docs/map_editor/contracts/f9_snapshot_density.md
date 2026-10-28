@@ -100,3 +100,13 @@ cada candidato. Não usa hash recursivo, não segue ciclos, não unifica conteú
 iguais e não serializa o índice. Containers são estáveis durante o TickBarrier;
 colisões mantêm busca exata. Os dois índices locais são limpos a cada captura.
 O ganho atinge captura/checkpoint in-game, não só cronômetro de testes.
+
+
+Primeira execução2180fef provou roundtrip estrutural e transportev2/v1, mas o
+negative de truncamento expôs errors nativos: base64 inválido e, após guard de
+alfabeto/padding/bits, fluxoDEFLATE truncado com base64 canônico. Corrigidos no
+runtime, sem trocar o teste: formato2 tem7campos com compressed_sha256, conferido
+antes de inflate, além do sha256 original dosbytes semcompressão. Formato1 legado
+mantém6campos/protocolo anterior. SHA é integridade, não autenticação. Isto evita
+passar corrupção de transporte ao inflater; validações de payload canônico e
+source/owner continuam obrigatórias. Leitura antiga permanece limitada aos4MiB.

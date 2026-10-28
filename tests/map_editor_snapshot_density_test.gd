@@ -88,7 +88,7 @@ func _run() -> void:
 	var malformed_encoding: Dictionary = GraphEncoding.encode_snapshot(malformed_payload)
 	var malformed_raw: PackedByteArray = malformed_encoding.get("encoding",PackedByteArray())
 	var malformed_compressed: PackedByteArray = malformed_raw.compress(FileAccess.COMPRESSION_DEFLATE)
-	var malformed_record := {"format":2,"snapshot":Marshalls.raw_to_base64(malformed_compressed),"byte_count":malformed_raw.size(),"sha256":CheckpointCodec.digest_bytes(malformed_raw),"owner_digest":"c".repeat(64),"session":session}
+	var malformed_record := {"format":2,"snapshot":Marshalls.raw_to_base64(malformed_compressed),"byte_count":malformed_raw.size(),"sha256":CheckpointCodec.digest_bytes(malformed_raw),"compressed_sha256":CheckpointCodec.digest_bytes(malformed_compressed),"owner_digest":"c".repeat(64),"session":session}
 	check("well_hashed_invalid_snapshot_payload_is_rejected",malformed_encoding.get("ok",false) and not CheckpointCodec.unpack(malformed_record).get("ok",false))
 	var restored: Dictionary = SnapshotRegistry.new().restore(unpacked.snapshot) if unpacked.get("ok",false) else {"ok":false}
 	check("metadata_graph_restores_with_actor_and_run_state",restored.get("ok",false) and restored.get("root") is PlayerActor)

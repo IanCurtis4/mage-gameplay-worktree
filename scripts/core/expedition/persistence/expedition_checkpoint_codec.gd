@@ -12,11 +12,13 @@ static func pack(snapshot: Dictionary, owner_digest: String, session: Dictionary
 	var bytes: PackedByteArray = checked.encoding
 	if bytes.size() > MAX_BYTES: return fail(&"snapshot_too_large")
 	var compressed := bytes.compress(FileAccess.COMPRESSION_DEFLATE)
-	return {"ok":true,"checkpoint":{"format":FORMAT,"snapshot":Marshalls.raw_to_base64(compressed),"byte_count":bytes.size(),"sha256":digest_bytes(bytes),"owner_digest":owner_digest,"session":session.duplicate(true)}}
+	return {"ok":true,"checkpoint":{"format":FORMAT,"snapshot":Marshalls.raw_to_base64(compressed),"byte_count":bytes.size(),"sha256":digest_bytes(bytes),"compressed_sha256":digest_bytes(compressed),"owner_digest":owner_digest,"session":session.duplicate(true)}}
 
 static func validate_record(raw: Variant) -> Dictionary:
-	if not raw is Dictionary or raw.size() != 6: return fail(&"invalid_checkpoint")
+	if not raw is Dictionary: return fail(&"invalid_checkpoint")
 	if not EquipmentRules.exact_integer(raw.get("format"),1) or int(raw["format"]) not in [1,FORMAT]: return fail(&"checkpoint_version_unavailable")
+	if raw.size() != (6 if int(raw["format"]) == 1 else 7): return fail(&"invalid_checkpoint")
+	if int(raw["format"]) == FORMAT and not CharacterAssets.valid_digest(raw.get("compressed_sha256")): return fail(&"invalid_checkpoint")
 	if not raw.get("snapshot") is String or raw["snapshot"].is_empty() or raw["snapshot"].length() > MAX_ENCODED: return fail(&"snapshot_too_large")
 	if not EquipmentRules.exact_integer(raw.get("byte_count"),1,MAX_BYTES): return fail(&"snapshot_too_large")
 	if not CharacterAssets.valid_digest(raw.get("sha256")) or not CharacterAssets.valid_digest(raw.get("owner_digest")): return fail(&"invalid_checkpoint")
@@ -26,6 +28,8 @@ static func validate_record(raw: Variant) -> Dictionary:
 	if not _canonical_base64(encoded): return fail(&"invalid_checkpoint")
 	var compressed := Marshalls.base64_to_raw(encoded)
 	if compressed.is_empty() or Marshalls.raw_to_base64(compressed) != encoded: return fail(&"invalid_checkpoint")
+	# Version 2 rejects damaged transport before calling the native inflater.
+	if int(raw["format"]) == FORMAT and digest_bytes(compressed) != raw["compressed_sha256"]: return fail(&"invalid_checkpoint")
 	var bytes := compressed.decompress(int(raw["byte_count"]),FileAccess.COMPRESSION_DEFLATE)
 	if bytes.size() != int(raw["byte_count"]) or digest_bytes(bytes) != raw["sha256"]: return fail(&"invalid_checkpoint")
 	return {"ok":true,"bytes":bytes}
