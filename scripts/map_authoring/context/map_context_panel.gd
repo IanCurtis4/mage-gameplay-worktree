@@ -10,6 +10,7 @@ var warnings: Label
 
 static func mount(parent: Control, document_session: RefCounted) -> void:
 	var window := Window.new(); window.title = "Contexto do mapa · Exceções manuais"; window.size = Vector2i(650,440)
+	window.hide()
 	parent.add_child(window); window.close_requested.connect(window.hide)
 	var panel := load("res://scripts/map_authoring/context/map_context_panel.gd").new() as Control
 	panel.session = document_session; window.add_child(panel); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)

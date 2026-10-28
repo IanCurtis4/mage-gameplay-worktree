@@ -23,6 +23,7 @@ var _species: Array = []
 
 static func mount(parent: Control, document_session: RefCounted, terrain_panel: Control) -> void:
 	var window := Window.new(); window.title = "Contexto da peça · Biomas e encontros"; window.size = Vector2i(750,820)
+	window.hide()
 	parent.add_child(window); window.close_requested.connect(window.hide)
 	var scroll := ScrollContainer.new(); window.add_child(scroll); scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var panel := load("res://scripts/map_authoring/context/context_panel.gd").new() as Control

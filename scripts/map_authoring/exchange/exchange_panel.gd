@@ -35,6 +35,7 @@ var confirmation: ConfirmationDialog
 
 static func mount(parent: Control, source_kind: String, getter: Callable, setter: Callable) -> Control:
 	var window := Window.new(); window.title = "Intercâmbio · Revisar proposta"; window.size = Vector2i(1220,820); window.min_size = Vector2i(1080,740)
+	window.hide()
 	parent.add_child(window)
 	var panel: Control = load("res://scripts/map_authoring/exchange/exchange_panel.gd").new(); panel.kind = source_kind; panel.get_source = getter; panel.commit_source = setter
 	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); window.add_child(panel)

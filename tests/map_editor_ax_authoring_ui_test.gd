@@ -12,6 +12,9 @@ var ax_shell: Control
 var gui_presentation: Variant
 var ax_presentation: Variant
 var evidence_dir := ""
+const PIECE_CONTEXT_TITLE := "Contexto da peça · Biomas e encontros"
+const PIECE_EXCHANGE_TITLE := "Intercâmbio · Revisar proposta"
+const MAP_CONTEXT_TITLE := "Contexto do mapa · Exceções manuais"
 
 func _initialize() -> void:
 	run.call_deferred()
@@ -41,7 +44,11 @@ func run() -> void:
 	ax_presentation = ax_shell.get_node_or_null("AuthoringPresentation")
 	var gui_terrain_presentation: Variant = gui_shell.terrain.get_node_or_null("AuthoringPresentation") if gui_shell.terrain != null else null
 	var ax_terrain_presentation: Variant = ax_shell.terrain.get_node_or_null("AuthoringPresentation") if ax_shell.terrain != null else null
-	check("two_real_shells_mount_gui_and_ax_terrain_panels",gui_presentation != null and ax_presentation != null and gui_terrain_presentation != null and ax_terrain_presentation != null)
+	var gui_piece_context_window: Window = find_window(gui_shell,PIECE_CONTEXT_TITLE)
+	var gui_piece_exchange_window: Window = find_window(gui_shell,PIECE_EXCHANGE_TITLE)
+	var ax_piece_context_window: Window = find_window(ax_shell,PIECE_CONTEXT_TITLE)
+	var ax_piece_exchange_window: Window = find_window(ax_shell,PIECE_EXCHANGE_TITLE)
+	check("two_real_shells_mount_presentations_with_auxiliary_windows_initially_hidden",gui_presentation != null and ax_presentation != null and gui_terrain_presentation != null and ax_terrain_presentation != null and gui_piece_context_window != null and not gui_piece_context_window.visible and gui_piece_exchange_window != null and not gui_piece_exchange_window.visible and ax_piece_context_window != null and not ax_piece_context_window.visible and ax_piece_exchange_window != null and not ax_piece_exchange_window.visible)
 	var gui_grid_button := find_button(gui_shell.terrain,"Nova grade")
 	var create_menu: MenuButton = gui_terrain_presentation.menus.get("Criar") if gui_terrain_presentation != null else null
 	var create_popup: PopupMenu = create_menu.get_popup() if create_menu != null else null
@@ -78,6 +85,17 @@ func run() -> void:
 	var ax_grid: Dictionary = ax_terrain_presentation.ax_invoke("terrain/grid/create",{"layer_id":"shared_ax_grid","name":"Camada 4","origin_xz":[300.0,0.0],"columns":5,"rows":5,"sample_spacing":32.0,"height":40.0}) if ax_terrain_presentation != null else {"ok":false}
 	var gui_grid_hash: String = gui_shell.session.document().semantic_hash()
 	check("gui_and_ax_grid_share_producer_and_explicit_identity",gui_grid_hash != source_before_grid and ax_mode.ok and ax_grid.ok and gui_grid_hash == ax_shell.session.document().semantic_hash() and ax_grid.entity_id == "shared_ax_grid")
+	var piece_hash_before_aux: String = ax_shell.session.document().semantic_hash()
+	var opened_piece_context: Dictionary = ax_presentation.ax_invoke("piece/piece_context",{}) if ax_presentation != null else {"ok":false}
+	await frames(2)
+	var piece_context_open: bool = ax_piece_context_window != null and ax_piece_context_window.visible
+	var opened_piece_exchange: Dictionary = ax_presentation.ax_invoke("piece/exchange",{}) if ax_presentation != null else {"ok":false}
+	await frames(2)
+	var piece_exchange_open: bool = ax_piece_exchange_window != null and ax_piece_exchange_window.visible
+	if ax_piece_context_window != null: ax_piece_context_window.close_requested.emit()
+	if ax_piece_exchange_window != null: ax_piece_exchange_window.close_requested.emit()
+	await frames(2)
+	check("piece_context_and_exchange_ax_windows_open_close_without_source_changes",opened_piece_context.ok and piece_context_open and opened_piece_exchange.ok and piece_exchange_open and not ax_piece_context_window.visible and not ax_piece_exchange_window.visible and ax_shell.session.document().semantic_hash() == piece_hash_before_aux)
 	var ax_compiled_grid: Dictionary = Compiler.compile(ax_shell.session.document().to_data())
 	var gui_compiled_grid: Dictionary = Compiler.compile(gui_shell.session.document().to_data())
 	check("identical_gui_ax_grid_inputs_have_identical_headless_compilation",ax_compiled_grid.ok and gui_compiled_grid.ok and ax_compiled_grid.package.package_hash == gui_compiled_grid.package.package_hash and ax_compiled_grid.package.source_hash == gui_grid_hash)
@@ -102,13 +120,37 @@ func run() -> void:
 	check("completed_grid_bridge_connector_compiles_identically_in_gui_and_ax",full_gui_compile.ok and full_ax_compile.ok and full_gui_compile.package.package_hash == full_ax_compile.package.package_hash and full_gui_compile.package.source_hash == gui_shell.session.document().semantic_hash() and full_ax_compile.package.source_hash == ax_shell.session.document().semantic_hash())
 	if not full_gui_compile.ok or not full_ax_compile.ok:
 		print("F9_AX_AUTHORING_UI_FULL_COMPILE "+JSON.stringify({"gui":full_gui_compile,"ax":full_ax_compile}))
+	var piece_hash_before_composition: String = ax_shell.session.document().semantic_hash()
+	var composed: Dictionary = ax_presentation.ax_invoke("piece/compose_map",{}) if ax_presentation != null else {"ok":false}
+	await frames(3)
+	var composition_window: Window = ax_shell.composition_window
+	var map_panel: Control = composition_window.get_child(0) as Control if composition_window != null and composition_window.get_child_count() > 0 else null
+	var map_presentation: Variant = map_panel.get_node_or_null("AuthoringPresentation") if map_panel != null else null
+	var map_context_window: Window = find_window(map_panel,MAP_CONTEXT_TITLE) if map_panel != null else null
+	var map_exchange_window: Window = find_window(map_panel,PIECE_EXCHANGE_TITLE) if map_panel != null else null
+	var composition_hash_unchanged: bool = ax_shell.session.document().semantic_hash() == piece_hash_before_composition
+	check("composition_ax_action_mounts_map_with_auxiliary_windows_closed_and_preserves_piece_hash",composed.ok and composition_window != null and composition_window.visible and map_panel != null and map_presentation != null and map_context_window != null and not map_context_window.visible and map_exchange_window != null and not map_exchange_window.visible and composition_hash_unchanged)
+	var opened_map_context: Dictionary = map_presentation.ax_invoke("map/map_context",{}) if map_presentation != null else {"ok":false}
+	await frames(2)
+	var map_context_open: bool = map_context_window != null and map_context_window.visible
+	if map_context_window != null: map_context_window.close_requested.emit()
+	await frames(2)
+	var map_context_closed: bool = map_context_window != null and not map_context_window.visible
+	if composition_window != null: composition_window.close_requested.emit()
+	await frames(2)
+	check("map_context_ax_window_closes_with_map_and_preserves_piece_hash",opened_map_context.ok and map_context_open and map_context_closed and composition_window != null and not composition_window.visible and ax_shell.session.document().semantic_hash() == piece_hash_before_composition)
 	await frames(3)
 	gui_shell.hide()
 	ax_shell.position = Vector2.ZERO; ax_shell.size = Vector2(1600,960); ax_shell.terrain.canvas.fit()
 	await frames(2)
-	var image := root.get_texture().get_image()
+	var image: Image = root.get_texture().get_image()
 	var capture := image.save_png(evidence_dir.path_join("ax_gui_shared_authorship.png")) if image != null else FAILED
-	check("native_ax_authoring_capture_written",capture == OK and image.get_size().x >= 1280 and image.get_size().y >= 720)
+	var canvas: Variant = ax_shell.terrain.canvas
+	var canvas_rect: Rect2 = canvas.get_global_rect() if is_instance_valid(canvas) else Rect2()
+	var rendered_colors: int = sample_canvas_colors(image,canvas_rect) if image != null else 0
+	var actual_size: Vector2i = DisplayServer.window_get_size()
+	var visible_windows := has_visible_auxiliary_windows(ax_shell)
+	check("native_ax_capture_has_visible_terrain_and_real_window_dimensions",capture == OK and image.get_size() == actual_size and image.get_size().x >= 1280 and image.get_size().y >= 720 and not visible_windows and canvas.is_visible_in_tree() and canvas.size.x >= 600.0 and canvas.size.y >= 400.0 and canvas._mesh_root.get_child_count() > 0 and rendered_colors >= 4)
 	Presentation.active_mode = "ux"
 	finish()
 
@@ -135,9 +177,38 @@ func compiled_grid_hash(result: Dictionary) -> String:
 
 func finish() -> void:
 	Presentation.active_mode = "ux"
-	var ok: bool = checks.size() == 12 and checks.all(func(item: Dictionary) -> bool: return item.ok)
+	var ok: bool = checks.size() == 15 and checks.all(func(item: Dictionary) -> bool: return item.ok)
 	var source_hash: String = gui_shell.session.document().semantic_hash() if is_instance_valid(gui_shell) else ""
 	if ax_shell != null and is_instance_valid(ax_shell): ax_shell.free()
 	if gui_shell != null and is_instance_valid(gui_shell): gui_shell.free()
-	print("F9_AX_AUTHORING_UI_RESULT "+JSON.stringify({"ok":ok,"count":checks.size(),"expected_count":12,"checks":checks,"source_hash":source_hash}))
+	print("F9_AX_AUTHORING_UI_RESULT "+JSON.stringify({"ok":ok,"count":checks.size(),"expected_count":15,"checks":checks,"source_hash":source_hash}))
 	quit(0 if ok else 1)
+
+func find_window(parent: Node, caption: String) -> Window:
+	if parent == null: return null
+	for child: Node in parent.get_children():
+		if child is Window and child.title == caption: return child as Window
+		var nested: Window = find_window(child,caption)
+		if nested != null: return nested
+	return null
+
+func has_visible_auxiliary_windows(parent: Node) -> bool:
+	if parent == null: return false
+	for child: Node in parent.get_children():
+		if child is Window and child.visible: return true
+		if has_visible_auxiliary_windows(child): return true
+	return false
+
+func sample_canvas_colors(image: Image, rect: Rect2) -> int:
+	if image == null or rect.size.x <= 0.0 or rect.size.y <= 0.0: return 0
+	var left: int = clampi(floori(rect.position.x+rect.size.x*0.25),0,image.get_width()-1)
+	var right: int = clampi(floori(rect.position.x+rect.size.x*0.75),0,image.get_width()-1)
+	var top: int = clampi(floori(rect.position.y+rect.size.y*0.25),0,image.get_height()-1)
+	var bottom: int = clampi(floori(rect.position.y+rect.size.y*0.75),0,image.get_height()-1)
+	var colors: Dictionary = {}
+	for yi: int in 9:
+		for xi: int in 9:
+			var x: int = roundi(lerpf(float(left),float(right),float(xi)/8.0))
+			var y: int = roundi(lerpf(float(top),float(bottom),float(yi)/8.0))
+			colors[image.get_pixel(x,y).to_html(false)] = true
+	return colors.size()
