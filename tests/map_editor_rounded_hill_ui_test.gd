@@ -62,7 +62,7 @@ func run() -> void:
 	gui_button.pressed.emit()
 	await frames(2)
 	var gui_hash := session.document().semantic_hash()
-	var gui_applied := session.document().to_data().revision == 2 and gui_hash != empty_hash and session.can_undo()
+	var gui_applied: bool = session.document().to_data().revision == 2 and gui_hash != empty_hash and session.can_undo()
 	check("gui_example_is_one_atomic_session_apply",gui_applied)
 	check("gui_apply_undo_redo_restores_exact_source",session.undo() and session.document().semantic_hash() == empty_hash and session.redo() and session.document().semantic_hash() == gui_hash and session.undo() and session.document().semantic_hash() == empty_hash)
 	presentation = panel.get_node_or_null("AuthoringPresentation")
@@ -75,8 +75,8 @@ func run() -> void:
 
 	var preparation_started := Time.get_ticks_usec()
 	panel.bake()
-	var movement_deadline := Time.get_ticks_msec()+45000
-	while panel.job != null and Time.get_ticks_msec() < deadline: await process_frame
+	var bake_deadline := Time.get_ticks_msec()+45000
+	while panel.job != null and Time.get_ticks_msec() < bake_deadline: await process_frame
 	timings.compile_prepare_ms = float(Time.get_ticks_usec()-preparation_started)/1000.0
 	var compiled: bool = panel.job == null and panel.result.get("ok",false) and not panel.result.get("package",{}).is_empty()
 	check("same_gui_authored_piece_compiles_and_is_published_to_canvas",compiled and canvas.package.get("package_hash","") == panel.result.package.get("package_hash","") and panel.result.package.source_hash == session.document().semantic_hash())
@@ -131,7 +131,7 @@ func run() -> void:
 	check("real_game_pointer_starts_canonical_walk",moved.ok)
 	if not moved.ok: print("F9_ROUNDED_MOVE "+JSON.stringify(moved)); await close_app(); finish(); return
 	var frame_samples: Array[float] = []
-	var deadline := Time.get_ticks_msec()+45000
+	var movement_deadline := Time.get_ticks_msec()+45000
 	var start_point: Vector3 = host.player.world_point().position
 	var arrived := false
 	while Time.get_ticks_msec() < movement_deadline and host.player.world_point().position.distance_to(target.position) > 5.0:
