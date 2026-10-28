@@ -81,3 +81,28 @@ esse estado pela evidência antes de retomar, sem repetir os nativos concluídos
 Conclusão posterior: seleção Luna completa,12 etapas oficiais/3649 checks PASS,
 além de639 Core e154 nativos; congelamento liberado. Os registros de pendência
 acima são históricos e foram substituídos por esta conclusão e pela seção vigente.
+
+
+## Integração T01 em curso — autorização posterior do usuário
+
+O usuário autorizou esta integração após91dfa48731e92640f80abac7b9548300ff7876ff.
+Terra aplicou os cinco arquivos reais permitidos; os três presets antigos mantêm
+ordem e parâmetros. Revisão estática/diff concluída; Godot/compilação/nativo ainda
+não executados nesta fatia. Novo módulo sem UID gerado até a importação coordenada.
+Luna está criando tests/map_editor_rounded_hill_test.gd e
+map_editor_rounded_hill_ui_test.gd e atualizando a expectativa legítima de4 presets
+no teste de biblioteca. Ownership/contrato registram donos separados. Não atribuir
+PASS antes de execução. Seleção prevista é modelo+nativo, biblioteca e oficiais
+geometria/ator por impacto; restante do F9 permanece aberto.
+
+
+## Meta ativa28/10 e congelamento T01
+
+A meta humana agora é entregar todo o restante de F9 e um mapa para testar.
+Sol assume código; Terra cria mapas exclusivamente via editor AX; Luna cria e
+supervisiona testes. O limite anterior de mais uma integração foi substituído
+pela meta explícita. F10 e aceite/merge humano continuam separados.
+T01 importado com Godot4.7.2, sem Script/Parse/ERROR. UID do módulo gerado pela
+engine; sidecars dos testes preparados por Luna e aceitos na importação.
+Inputs serão congelados no commit desta integração, antes dos testes dirigidos.
+Ainda não declarar PASS de modelo/nativo nem conclusão de F9-02/12.

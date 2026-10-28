@@ -13,8 +13,9 @@ const MATERIAL_NAMES := {"grass":"Grama","earth":"Terra","sand":"Areia","stone":
 static func builtin_presets() -> Array:
 	var base := {"mode":"raise","shape":"circle","material":"earth","radius":120.0,"strength":12.0,"hardness":0.0,"target":0.0,"end_height":40.0}
 	var soft := base.duplicate(true); soft.mode = "smooth"; soft.strength = 0.5; soft.radius = 80.0
+	var rounded := base.duplicate(true); rounded.mode = "rounded_hill"; rounded.hardness = 0.0
 	var path := base.duplicate(true); path.mode = "material"; path.strength = 0.65; path.radius = 28.0; path.hardness = 0.35
-	return [{"id":"builtin_soft_hill","name":"Colina suave","options":base},{"id":"builtin_smooth_ground","name":"Suavizar relevo","options":soft},{"id":"builtin_earth_path","name":"Caminho de terra","options":path}]
+	return [{"id":"builtin_soft_hill","name":"Colina suave","options":base},{"id":"builtin_smooth_ground","name":"Suavizar relevo","options":soft},{"id":"builtin_earth_path","name":"Caminho de terra","options":path},{"id":"builtin_rounded_hill","name":"Colina arredondada","options":rounded}]
 
 static func presets(data: Dictionary) -> Array:
 	if not Preferences.validate(data): return []

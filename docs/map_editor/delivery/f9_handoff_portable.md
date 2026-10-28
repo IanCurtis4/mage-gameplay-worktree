@@ -166,7 +166,18 @@ Se falhar, preservar logs e corrigir causa; não mudar expectativa para escondê
 Registrar hashes/HEAD antes/depois e escopo realmente executado. A etapa de teste
 pode demorar: não é motivo para enfraquecer a validação.
 
-## Próxima implementação pronta como proposta — F9-T01
+## Integração atual — F9-T01
+
+Atualização posterior ao checkpoint91dfa48: usuário autorizou a integração.
+Terra já aplicou os cinco arquivos reais permitidos, preservando a ordem dos três
+presets antigos e acrescentando o quarto. Código ainda não importado/compilado/
+testado nesta fatia. Luna prepara dois testes novos e atualização legítima da
+biblioteca. Existem mudanças de aplicação e documentos na árvore; conferir Git
+antes de aplicar novamente o patch (NÃO reaplicar cegamente). Ownership/contrato
+foram atualizados. Aguardar testes prontos, importação/UIDs e congelamento para a
+execução coordenada na fixture única. Não há teste em execução até esse ponto.
+
+### Proveniência da proposta inicial (agora aplicada, sem validação ainda)
 
 Terra6.1 entregou rascunho de cinco arquivos; NÃO integrado, compilado, testado ou
 aprovado visualmente. A revisão inicial de Sol conferiu localização, preservação
@@ -226,3 +237,15 @@ na importação. Contrato ainda não entrega consumidores; particionar antes de 
 Nenhuma autodeclaração de modelo substitui aceitação verificável. Se um item não
 foi implementado ou não foi validado, registrar precisamente e continuar quando
 possível. Não inventar PASS, completude, benchmark ou cronograma de reset.
+
+
+## Meta ativa28/10 e congelamento T01
+
+A meta humana agora é entregar todo o restante de F9 e um mapa para testar.
+Sol assume código; Terra cria mapas exclusivamente via editor AX; Luna cria e
+supervisiona testes. O limite anterior de mais uma integração foi substituído
+pela meta explícita. F10 e aceite/merge humano continuam separados.
+T01 importado com Godot4.7.2, sem Script/Parse/ERROR. UID do módulo gerado pela
+engine; sidecars dos testes preparados por Luna e aceitos na importação.
+Inputs serão congelados no commit desta integração, antes dos testes dirigidos.
+Ainda não declarar PASS de modelo/nativo nem conclusão de F9-02/12.

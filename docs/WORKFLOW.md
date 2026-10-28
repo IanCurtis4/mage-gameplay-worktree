@@ -1,5 +1,16 @@
 # Desenvolvimento, revisão e playtest
 
+## Atualização humana de28/10/2026 — meta de conclusão F9
+
+Meta ativa: entregar o restante de F9, com mapa possível de testar; F10 reunirá
+os mapas em uma fase completa após sua própria abertura. Sol assume código e
+integração por ora; Terra cria mapas usando sempre o editor no modo AX; Luna
+cuida dos testes automatizados e código fácil ou repetitivo delimitado. Esta
+preferência substitui a distribuição anterior nos próximos pacotes. O código
+T01 já aplicado por Terra é preservado, com manutenção transferida a Sol.
+Prioridade continua desempenho in-game, AX útil e robustez; duração dos testes
+não é uma meta. Não reduzir F9 ao incremento atual nem mover lacunas para F10.
+
 ## Atualização humana de27/10/2026 — Terra6.1
 
 Decisão explícita na retomada F9: aproveitar Terra6.1 como subagente para o máximo

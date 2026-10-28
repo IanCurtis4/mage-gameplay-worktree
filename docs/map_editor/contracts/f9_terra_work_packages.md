@@ -48,3 +48,30 @@ Se parar antes de cumprir algum item, declarar PARCIAL e exatamente o faltante.
 
 Próximas fatias só serão despachadas com escopo/base/arquivos concretos; geração
 regional segue f9_regional_synthesis.md, sem delegar a árvore inteira de uma vez.
+
+
+### F9-T01 — autorização de integração após checkpoint91dfa48
+
+O usuário autorizou mais esta integração, com validação proporcional e foco no
+jogo/AX. Runtime4642dbf tecnicamente verificado; metadados91dfa48731e92640f80abac7b9548300ff7876ff;
+fixture liberada. Transferência nominal no ownership: Terra escreve os cinco
+arquivos da aplicação; Sol integra metadados/runner e .uid do módulo; Luna escreve
+os dois novos testes/.uids e ajusta somente a expectativa legítima dos quatro
+presets em map_editor_library_test.gd, preservando os anteriores.
+
+A regra anterior de somente rascunho foi satisfeita e fica histórica. Agora Terra
+pode aplicar a proposta conferindo os SHA-base, corrigir dentro desses cinco
+arquivos e concluir o código da fatia, sem testar/editar outros caminhos ou
+commitar enquanto Luna prepara testes. Manter os três presets antigos na mesma
+ordem e acrescentar o novo. Luna pode escrever testes em paralelo sobre o contrato
+estável; nenhuma execução/fixture até Sol congelar os inputs. Falha local volta
+à mesma fatia Terra. Não repetir a bateria inteira de navegação do checkpoint19.
+
+Prova dirigida mínima: modelo (fonte e caps, alturas/caminho, stroke/proteção,
+preset/ocupado); UI real GUI/AX/undo/layout e gameplay da mesma peça com corpo20/32,
+apoio/picking e caminhada em elevação. Registrar tempos de preparação separadamente
+de frames/ações em gameplay (não inferir FPS do tempo do teste). Library50 e
+LibraryNative53 por impacto; seleção tools/verify de geometria/ator. Ampliação só
+se falha/delta demonstrar necessidade. Contagens dos novos testes serão registradas
+no runner após autoria, sem fragilizar oráculos. Compilação/validação continuam
+com orçamento/forma/corpo originais; não reduzir33x33/220/420 para obter PASS.

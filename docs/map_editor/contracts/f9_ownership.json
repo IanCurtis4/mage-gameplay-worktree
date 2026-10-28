@@ -1244,8 +1244,8 @@
     },
     {
       "path": "scripts/map_authoring/terrain/brush.gd",
-      "owner": "Sol F9",
-      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "owner": "Sol F9 — human28/10 code maintenance transfer after Terra T01 application",
+      "previous_owner": "Terra6.1 F9-T01",
       "base_sha256": "b929a01a373ece4fe305842a2ad3b9011184dfc6ac1446561ca3f0934d144375"
     },
     {
@@ -1292,8 +1292,8 @@
     },
     {
       "path": "scripts/map_authoring/terrain/terrain_panel.gd",
-      "owner": "Sol F9",
-      "previous_owner": "F0-F8 producers; sequential transfer or new F9 file",
+      "owner": "Sol F9 — human28/10 code maintenance transfer after Terra T01 application",
+      "previous_owner": "Terra6.1 F9-T01",
       "base_sha256": "2c018e3aeae577d1771228f095dde425e2f3a2a58952fe77e98c92603676bd8a"
     },
     {
@@ -2006,8 +2006,8 @@
     },
     {
       "path": "scripts/map_authoring/library/editor_preferences.gd",
-      "owner": "Sol F9",
-      "previous_owner": "sequential F9-06/07 library and viewport navigation, after frozen canvas checkpoint",
+      "owner": "Sol F9 — human28/10 code maintenance transfer after Terra T01 application",
+      "previous_owner": "Terra6.1 F9-T01",
       "base_sha256": null
     },
     {
@@ -2018,8 +2018,8 @@
     },
     {
       "path": "scripts/map_authoring/library/library_model.gd",
-      "owner": "Sol F9",
-      "previous_owner": "sequential F9-06/07 library and viewport navigation, after frozen canvas checkpoint",
+      "owner": "Sol F9 — human28/10 code maintenance transfer after Terra T01 application",
+      "previous_owner": "Terra6.1 F9-T01",
       "base_sha256": null
     },
     {
@@ -2054,8 +2054,8 @@
     },
     {
       "path": "tests/map_editor_library_test.gd",
-      "owner": "Sol F9",
-      "previous_owner": "sequential F9-06/07 library and viewport navigation, after frozen canvas checkpoint",
+      "owner": "Luna F9-T01 tests",
+      "previous_owner": "Sol F9; sequential transfer27/10 after freeze4642dbf concluded",
       "base_sha256": null
     },
     {
@@ -2429,6 +2429,48 @@
       "owner": "Sol F9",
       "previous_owner": "new human request27/10 for portable incremental handoff and gameplay-performance priority",
       "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/terrain/organic_example.gd",
+      "owner": "Sol F9 — human28/10 code maintenance transfer after Terra T01 application",
+      "previous_owner": "Terra6.1 F9-T01",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_rounded_hill_test.gd",
+      "owner": "Luna F9-T01 tests",
+      "previous_owner": "new F9-T01; explicit integration authorized27/10",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_rounded_hill_test.gd.uid",
+      "owner": "Luna F9-T01 tests",
+      "previous_owner": "new F9-T01; explicit integration authorized27/10",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_rounded_hill_ui_test.gd",
+      "owner": "Luna F9-T01 tests",
+      "previous_owner": "new F9-T01; explicit integration authorized27/10",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_rounded_hill_ui_test.gd.uid",
+      "owner": "Luna F9-T01 tests",
+      "previous_owner": "new F9-T01; explicit integration authorized27/10",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/terrain/organic_example.gd.uid",
+      "owner": "Sol F9 integration",
+      "previous_owner": "new F9-T01; explicit integration authorized27/10",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/f9_area_design.md",
+      "owner": "Terra F9 — AX map design and later authoring",
+      "previous_owner": "new design note; no runtime ownership",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -2439,7 +2481,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "navigation_and_fields_complete_on_4642dbf_f9_remains_open",
+    "state": "f9_t01_import_pass_inputs_frozen_for_luna_directed_tests",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -2461,7 +2503,8 @@
       "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/gameplay_clients/report_final.md",
       "docs/map_editor/delivery/evidence/f9/luna/world_fields/report.md",
-      "docs/map_editor/delivery/evidence/f9/luna/navigation_and_fields/report.md"
+      "docs/map_editor/delivery/evidence/f9/luna/navigation_and_fields/report.md",
+      "docs/map_editor/delivery/evidence/f9/luna/rounded_hill/report.md"
     ],
     "generated_evidence_roots": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/authorities",
@@ -2579,7 +2622,14 @@
       "docs/map_editor/delivery/evidence/f9/luna/navigation_and_fields/official",
       "docs/map_editor/delivery/evidence/f9/luna/navigation_and_fields/fields_native",
       "docs/map_editor/delivery/evidence/f9/luna/navigation_and_fields/gameplay_native",
-      "docs/map_editor/delivery/evidence/f9/luna/navigation_and_fields/controls"
+      "docs/map_editor/delivery/evidence/f9/luna/navigation_and_fields/controls",
+      "docs/map_editor/delivery/evidence/f9/luna/rounded_hill/model",
+      "docs/map_editor/delivery/evidence/f9/luna/rounded_hill/native",
+      "docs/map_editor/delivery/evidence/f9/luna/rounded_hill/library",
+      "docs/map_editor/delivery/evidence/f9/luna/rounded_hill/library_native",
+      "docs/map_editor/delivery/evidence/f9/luna/rounded_hill/official",
+      "docs/map_editor/delivery/evidence/f9/luna/rounded_hill/import"
     ]
-  }
+  },
+  "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"
 }

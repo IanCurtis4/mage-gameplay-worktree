@@ -20,7 +20,7 @@ static func stroke(source: Dictionary, layer_id: String, points: Array, options:
 	var radius: float = options.get("radius", 32.0)
 	var strength: float = options.get("strength", 8.0)
 	var hardness: float = options.get("hardness", 0.5)
-	if mode not in ["raise", "lower", "flatten", "smooth", "material", "ramp"] or not is_finite(radius) or radius <= 0 or not is_finite(strength) or strength < 0 or not is_finite(hardness) or hardness < 0 or hardness > 1 or points.is_empty(): return Schema.result(false, "brush_invalid")
+	if mode not in ["raise", "lower", "flatten", "smooth", "material", "ramp", "rounded_hill"] or not is_finite(radius) or radius <= 0 or not is_finite(strength) or strength < 0 or not is_finite(hardness) or hardness < 0 or hardness > 1 or points.is_empty(): return Schema.result(false, "brush_invalid")
 	for point: Variant in points:
 		if not point is Vector2 or not point.is_finite(): return Schema.result(false, "brush_invalid")
 	if options.get("shape", "circle") not in ["circle", "square"]: return Schema.result(false, "brush_invalid")
@@ -56,10 +56,14 @@ static func stroke(source: Dictionary, layer_id: String, points: Array, options:
 					distance = minf(distance, _distance(at-nearest, options.get("shape", "circle")))
 			if distance > radius: continue
 			var weight := 1.0 if distance <= radius*hardness or hardness == 1.0 else (radius-distance)/(radius*(1.0-hardness))
+			if mode == "rounded_hill":
+				# A smooth radial shoulder, with optional flat core controlled by hardness.
+				var u := 0.0 if hardness == 1.0 else clampf((distance / radius - hardness) / (1.0 - hardness), 0.0, 1.0)
+				weight = pow(1.0 - u * u, 3.0)
 			if weight <= 0: continue
 			var value: float = original[index]
 			match mode:
-				"raise": value += strength * weight
+				"raise", "rounded_hill": value += strength * weight
 				"lower": value -= strength * weight
 				"flatten": value = lerpf(value, target, minf(strength, 1.0)*weight)
 				"ramp":

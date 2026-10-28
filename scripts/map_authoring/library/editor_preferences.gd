@@ -5,7 +5,7 @@ const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 const SECTION := "ragrpg_map_editor"
 const KEY := "authoring_library_v1"
 const OPTIONS := ["mode","radius","strength","hardness","shape","material","target","end_height"]
-const MODES := ["raise","lower","flatten","smooth","material","ramp"]
+const MODES := ["raise","lower","flatten","smooth","material","ramp","rounded_hill"]
 const RECOVERY_LIMIT := 16
 static var _memory: Dictionary = {}
 static var _reader: Callable

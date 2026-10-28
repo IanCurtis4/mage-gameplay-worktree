@@ -1,5 +1,6 @@
 @tool
 extends VBoxContainer
+const OrganicExample = preload("res://scripts/map_authoring/terrain/organic_example.gd")
 const Brush = preload("res://scripts/map_authoring/terrain/brush.gd")
 const Compiler = preload("res://scripts/map_authoring/compiler/terrain_compiler.gd")
 const Canvas = preload("res://scripts/map_authoring/terrain/terrain_canvas.gd")
@@ -53,9 +54,9 @@ var _preferences_seen := ""
 
 func _ready() -> void:
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
-	var row := HBoxContainer.new(); add_child(row)
+	var row := HFlowContainer.new(); add_child(row)
 	mode = OptionButton.new()
-	for caption: String in ["Elevar","Baixar","Nivelar","Suavizar","Pintar material","Rampa (arraste início → fim)"]: mode.add_item(caption)
+	for caption: String in ["Elevar","Baixar","Nivelar","Suavizar","Pintar material","Rampa (arraste início → fim)","Colina arredondada"]: mode.add_item(caption)
 	row.add_child(mode)
 	shape = OptionButton.new(); shape.add_item("Círculo"); shape.add_item("Quadrado"); row.add_child(shape)
 	material_choice = OptionButton.new()
@@ -87,7 +88,7 @@ func _ready() -> void:
 	preset_name = LineEdit.new(); preset_name.placeholder_text = "Nome da predefinição"; preset_name.max_length = 80; preset_name.custom_minimum_size.x = 180; preset_row.add_child(preset_name)
 	_button(preset_row,"Salvar predefinição",save_preset).set_meta("authoring_keep_visible",true)
 	_button(preset_row,"Remover predefinição",remove_preset).set_meta("authoring_keep_visible",true)
-	var toolbar := HBoxContainer.new(); add_child(toolbar)
+	var toolbar := HFlowContainer.new(); add_child(toolbar)
 	_button(toolbar,"Enquadrar",func() -> void: canvas.fit())
 	_button(toolbar,"Compilar peça",bake)
 	_button(toolbar,"Cancelar",func() -> void:
@@ -95,6 +96,7 @@ func _ready() -> void:
 		if job != null: job.cancel())
 	_button(toolbar,"Exemplo rampa/ponte",create_sample)
 	_button(toolbar,"Exemplo de peça grande",create_large_sample)
+	_button(toolbar,"Exemplo orgânico",create_organic_example)
 	progress_bar = ProgressBar.new(); progress_bar.custom_minimum_size.x = 150; toolbar.add_child(progress_bar)
 	status = Label.new(); status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; add_child(status)
 	var grid := HFlowContainer.new(); add_child(grid)
@@ -186,7 +188,7 @@ func refresh() -> void:
 func _options_changed() -> void:
 	if _applying_preset or not is_instance_valid(canvas): return
 	canvas.cancel_stroke()
-	canvas.options = {"mode":["raise","lower","flatten","smooth","material","ramp"][mode.selected],"shape":"circle" if shape.selected == 0 else "square","material":["earth","grass","sand","stone"][material_choice.selected],"radius":radius.value,"strength":strength.value,"hardness":hardness.value,"target":target.value,"end_height":end_height.value}
+	canvas.options = {"mode":Preferences.MODES[mode.selected],"shape":"circle" if shape.selected == 0 else "square","material":["earth","grass","sand","stone"][material_choice.selected],"radius":radius.value,"strength":strength.value,"hardness":hardness.value,"target":target.value,"end_height":end_height.value}
 	for field: SpinBox in [radius,strength,hardness,target,end_height]:
 		_display_brush_number(field); _display_brush_number.call_deferred(field)
 
@@ -243,9 +245,19 @@ func remove_preset() -> void:
 	else: status.text = "Escolha uma predefinição pessoal para remover. As predefinições do projeto são preservadas."
 
 func authoring_commands() -> Array:
-	return [{"id":"terrain/presets/list","parameters":{}},{"id":"terrain/presets/apply","parameters":{"preset_id":"string"}},{"id":"terrain/presets/save","parameters":{"name":"string","options":"brush_options"}}]
+	return [{"id":"terrain/example/organic","parameters":{}},{"id":"terrain/brush/stroke","parameters":{"points":"number[2][]","options":"brush_options"}},{"id":"terrain/presets/list","parameters":{}},{"id":"terrain/presets/apply","parameters":{"preset_id":"string"}},{"id":"terrain/presets/save","parameters":{"name":"string","options":"brush_options"}}]
 
 func ax_command(id: String, parameters: Dictionary) -> Dictionary:
+	if id == "terrain/example/organic":
+		if not parameters.is_empty(): return {"ok":false,"code":"arguments_invalid"}
+		return create_organic_example()
+	if id == "terrain/brush/stroke":
+		if not Preferences._keys(parameters,["points","options"]) or not parameters.points is Array or not Preferences.valid_options(parameters.options): return {"ok":false,"code":"arguments_invalid"}
+		var points: Array = []
+		for point: Variant in parameters.points:
+			if not point is Array or point.size() != 2 or not (point[0] is int or point[0] is float) or not (point[1] is int or point[1] is float): return {"ok":false,"code":"arguments_invalid"}
+			points.append(Vector2(point[0],point[1]))
+		return apply_stroke(points,parameters.options)
 	if id == "terrain/presets/list":
 		if not parameters.is_empty(): return {"ok":false,"code":"arguments_invalid"}
 		var prefs := Preferences.read()
@@ -315,6 +327,17 @@ static func large_sample_source(data: Dictionary, axis: int = 65) -> Dictionary:
 	source.special_surfaces = []; source.regions = []; source.dependencies = []; source.placements = []; source.sockets = []; source.composition = null
 	source.connectors = [{"connector_id":"west_gate","surface_id":"field","position_xyz":[0,0,3500],"kind":"walk","normal_xyz":[-1,0,0],"width":256,"headroom":100,"tags":["map_editor"],"direction":"both"}]
 	return source
+
+func create_organic_example() -> Dictionary:
+	var proposal := OrganicExample.create(session.document().to_data())
+	if not proposal.ok:
+		status.text = "Crie uma peça vazia para abrir o exemplo orgânico; seu conteúdo foi preservado." if proposal.code == "source_occupied" else "O exemplo orgânico não pôde ser preparado."
+		return proposal
+	var applied: Dictionary = session.apply(proposal.data)
+	if applied.ok:
+		select_layer("organic_field"); canvas.fit()
+	else: status.text = "O exemplo orgânico não pôde ser aplicado."
+	return applied
 
 func create_large_sample() -> void:
 	if not session.document().to_data().layers.is_empty(): status.text = "Crie uma peça vazia para abrir o exemplo grande; seu terreno foi preservado."; return

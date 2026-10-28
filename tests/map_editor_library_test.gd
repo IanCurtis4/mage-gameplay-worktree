@@ -26,10 +26,13 @@ func run() -> void:
 	check("duplicate_favorite_rejected",not Preferences.validate(bad))
 	check("favorite_unknown_parameter_rejected",not Preferences.apply(data,{"operation":"favorite","id":"prop:oak_tree","enabled":true,"path":"anything"}).ok)
 	var presets := Library.builtin_presets(); var options: Dictionary = presets[0].options
-	check("builtin_presets_use_existing_brush_options",presets.size() == 3 and presets.all(func(p: Dictionary) -> bool: return Preferences.valid_options(p.options)))
+	var preset_ids: Array[String] = []; var preset_modes: Array[String] = []
+	for preset: Dictionary in presets: preset_ids.append(preset.id); preset_modes.append(preset.options.mode)
+	check("builtin_presets_use_existing_brush_options",presets.size() == 4 and preset_ids == ["builtin_soft_hill","builtin_smooth_ground","builtin_earth_path","builtin_rounded_hill"] and preset_modes == ["raise","smooth","material","rounded_hill"] and presets.all(func(p: Dictionary) -> bool: return Preferences.valid_options(p.options)))
 	presets[0].options.radius = 3
-	check("builtin_preset_returns_immutable_copy",Library.builtin_presets()[0].options.radius == 120)
-	options = Library.builtin_presets()[0].options
+	presets[3].options.mode = "raise"
+	check("builtin_preset_returns_immutable_copy",Library.builtin_presets()[0].options.radius == 120 and Library.builtin_presets()[3].options.mode == "rounded_hill")
+	options = Library.builtin_presets()[3].options
 	var custom := {"id":"custom_hill","name":"Minha colina","options":options}
 	var changed := Preferences.apply(data,{"operation":"preset_save","preset":custom})
 	check("custom_preset_roundtrip",changed.ok and Library.preset("custom_hill",changed.data).preset == custom and data == original)
