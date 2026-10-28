@@ -53,6 +53,29 @@ func _run() -> void:
 	check("structural_encoding_is_uncompressed_and_within_budget",encoded.get("ok",false) and encoded.get("byte_count",SnapshotRegistry.MAX_BYTES+1) == encoded.get("encoding",PackedByteArray()).size() and encoded.get("byte_count",SnapshotRegistry.MAX_BYTES+1) <= SnapshotRegistry.MAX_BYTES)
 	var decoded_encoding: Dictionary = GraphEncoding.decode_snapshot(encoded.encoding) if encoded.get("ok",false) else {"ok":false}
 	check("structural_encoding_round_trips_exact_logical_bytes",decoded_encoding.get("ok",false) and var_to_bytes(decoded_encoding.snapshot) == original_bytes)
+	var wire_v2: Array = bytes_to_var(encoded.encoding) if encoded.get("ok",false) else []
+	var legacy_wire: Array = _wire_v1_expanded(wire_v2)
+	var legacy_wire_decoded: Dictionary = GraphEncoding.decode_snapshot(var_to_bytes(legacy_wire)) if not legacy_wire.is_empty() else {"ok":false}
+	check("wire_v1_expanded_dictionary_descriptors_remain_compatible",legacy_wire_decoded.get("ok",false) and var_to_bytes(legacy_wire_decoded.snapshot) == original_bytes)
+	var out_of_range_wire: Array = wire_v2.duplicate(true)
+	var pooled_record_index: int = _pooled_record_index(out_of_range_wire)
+	var valid_pool_record: bool = pooled_record_index >= 0
+	if valid_pool_record: out_of_range_wire[2][pooled_record_index][2] = out_of_range_wire[3].size()
+	check("wire_v2_rejects_out_of_range_key_layout_reference",valid_pool_record and not GraphEncoding.decode_snapshot(var_to_bytes(out_of_range_wire)).get("ok",false))
+	var bad_arity_wire: Array = wire_v2.duplicate(true)
+	pooled_record_index = _pooled_record_index(bad_arity_wire)
+	valid_pool_record = pooled_record_index >= 0 and bad_arity_wire[2][pooled_record_index].size() > 3
+	if valid_pool_record: bad_arity_wire[2][pooled_record_index].pop_back()
+	check("wire_v2_rejects_key_layout_arity_mismatch",valid_pool_record and not GraphEncoding.decode_snapshot(var_to_bytes(bad_arity_wire)).get("ok",false))
+	var duplicate_layout_wire: Array = wire_v2.duplicate(true)
+	pooled_record_index = _pooled_record_index(duplicate_layout_wire)
+	var layout_index: int = duplicate_layout_wire[2][pooled_record_index][2] if pooled_record_index >= 0 else -1
+	var duplicate_layout_valid: bool = layout_index >= 0 and duplicate_layout_wire[3][layout_index].size() >= 2
+	if duplicate_layout_valid: duplicate_layout_wire[3][layout_index][1] = duplicate_layout_wire[3][layout_index][0]
+	check("wire_v2_rejects_duplicate_key_layout_entries",duplicate_layout_valid and not GraphEncoding.decode_snapshot(var_to_bytes(duplicate_layout_wire)).get("ok",false))
+	var unsupported_wire: Array = wire_v2.duplicate(true)
+	if not unsupported_wire.is_empty(): unsupported_wire[0] = 99
+	check("wire_encoding_version_ninety_nine_is_rejected",not GraphEncoding.decode_snapshot(var_to_bytes(unsupported_wire)).get("ok",false))
 	var malformed_wire: Variant = bytes_to_var(encoded.encoding) if encoded.get("ok",false) else null
 	var reference_corrupted: bool = _corrupt_first_reference(malformed_wire)
 	var malformed_wire_bytes: PackedByteArray = var_to_bytes(malformed_wire) if reference_corrupted else PackedByteArray()
@@ -148,6 +171,29 @@ func _corrupt_first_reference(value: Variant) -> bool:
 	for index: int in value.size():
 		if _corrupt_first_reference(value[index]): return true
 	return false
+
+func _pooled_record_index(wire: Array) -> int:
+	if wire.size() != 4 or not wire[2] is Array: return -1
+	for index: int in wire[2].size():
+		var record: Variant = wire[2][index]
+		if record is Array and record.size() >= 3 and record[1] == 5: return index
+	return -1
+
+func _wire_v1_expanded(wire: Array) -> Array:
+	if wire.size() != 4 or not wire[2] is Array or not wire[3] is Array: return []
+	var legacy: Array = [1,wire[1],wire[2].duplicate(true)]
+	for record_index: int in legacy[2].size():
+		var record: Variant = legacy[2][record_index]
+		if not record is Array or record.size() < 3 or record[1] != 5: continue
+		var layout_index: int = record[2]
+		if layout_index < 0 or layout_index >= wire[3].size(): return []
+		var keys: Array = wire[3][layout_index]
+		if record.size() != 3+keys.size(): return []
+		var expanded: Array = [record[0],2]
+		for key_index: int in keys.size():
+			expanded.append(keys[key_index]); expanded.append(record[3+key_index])
+		legacy[2][record_index] = expanded
+	return legacy
 
 func _finish() -> void:
 	var ok: bool = checks.all(func(item: Dictionary) -> bool: return item.ok)

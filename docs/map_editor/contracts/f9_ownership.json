@@ -2555,6 +2555,24 @@
       "owner": "Sol F9 — exact compact snapshot transport",
       "previous_owner": "new helper or sequential E07 transfer; other project threads notLoaded28/10",
       "base_sha256": "a9e6168469268d2914280d444e5d17264423cec784224334a13fd269470fbf31"
+    },
+    {
+      "path": "tests/map_editor_rounded_hill_resume_test.gd",
+      "owner": "Luna F9 — dense gameplay continuation proof",
+      "previous_owner": "new test; draft outside input freeze first",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_rounded_hill_resume_test.gd.uid",
+      "owner": "Luna F9 — dense gameplay continuation proof",
+      "previous_owner": "new test; draft outside input freeze first",
+      "base_sha256": null
+    },
+    {
+      "path": ".godot/f9_shadow_draft/luna_snapshot_density/resume_test.gd",
+      "owner": "Luna F9 — dense gameplay continuation proof",
+      "previous_owner": "new test; draft outside input freeze first",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
