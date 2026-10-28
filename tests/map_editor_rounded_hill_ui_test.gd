@@ -53,19 +53,28 @@ func run() -> void:
 	check("native_empty_session_replaced",session.replace(empty).ok)
 	panel.bind(session)
 	await frames(3)
+	presentation = panel.get_node_or_null("AuthoringPresentation")
 	var gui_button := find_button(panel,"Exemplo orgânico")
-	check("real_terrain_panel_and_gui_action_present",canvas != null and gui_button != null and gui_button.is_visible_in_tree())
-	var button_rect := gui_button.get_global_rect() if gui_button != null else Rect2()
+	var create_menu: MenuButton = presentation.menus.get("Criar") if presentation != null else null
+	var create_popup: PopupMenu = create_menu.get_popup() if create_menu != null else null
+	var gui_action_id: String = str(gui_button.get_meta("authoring_action_id","")) if gui_button != null else ""
+	var organic_menu_index := -1
+	if create_popup != null:
+		for index: int in create_popup.item_count:
+			if create_popup.get_item_text(index) == "Exemplo orgânico" and create_popup.get_item_metadata(index) == gui_action_id:
+				organic_menu_index = index
+				break
+	check("real_terrain_panel_and_gui_action_present",canvas != null and gui_button != null and not gui_button.disabled and create_menu != null and create_menu.visible and organic_menu_index >= 0 and not create_popup.is_item_disabled(organic_menu_index))
+	var menu_rect := create_menu.get_global_rect() if create_menu != null else Rect2()
 	var viewport_rect := scroll.get_global_rect()
-	check("panel_toolbar_fits_without_horizontal_overflow",scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED and scroll.scroll_horizontal == 0 and panel.size.x <= scroll.size.x+1.0 and button_rect.position.x >= viewport_rect.position.x and button_rect.end.x <= viewport_rect.end.x)
-	if gui_button == null: finish(); return
-	gui_button.pressed.emit()
+	check("panel_toolbar_fits_without_horizontal_overflow",scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED and scroll.scroll_horizontal == 0 and panel.size.x <= scroll.size.x+1.0 and menu_rect.position.x >= viewport_rect.position.x and menu_rect.end.x <= viewport_rect.end.x)
+	if organic_menu_index < 0: finish(); return
+	create_popup.id_pressed.emit(organic_menu_index)
 	await frames(2)
 	var gui_hash := session.document().semantic_hash()
 	var gui_applied: bool = session.document().to_data().revision == 2 and gui_hash != empty_hash and session.can_undo()
 	check("gui_example_is_one_atomic_session_apply",gui_applied)
 	check("gui_apply_undo_redo_restores_exact_source",session.undo() and session.document().semantic_hash() == empty_hash and session.redo() and session.document().semantic_hash() == gui_hash and session.undo() and session.document().semantic_hash() == empty_hash)
-	presentation = panel.get_node_or_null("AuthoringPresentation")
 	var entered_ax: Dictionary = presentation.set_mode("ax") if presentation != null else {"ok":false}
 	var ax_result: Dictionary = presentation.ax_invoke("terrain/example/organic",{}) if presentation != null else {"ok":false}
 	await frames(2)

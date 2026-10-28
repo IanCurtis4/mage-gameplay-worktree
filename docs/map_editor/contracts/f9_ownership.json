@@ -2471,6 +2471,42 @@
       "owner": "Terra F9 — AX map design and later authoring",
       "previous_owner": "new design note; no runtime ownership",
       "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/contracts/f9_ax_authoring.md",
+      "owner": "Sol F9 — semantic AX authoring vertical",
+      "previous_owner": "new F9 file",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/terrain/terrain_operations.gd",
+      "owner": "Sol F9 — semantic AX authoring vertical",
+      "previous_owner": "new F9 file",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/terrain/terrain_operations.gd.uid",
+      "owner": "Sol F9 — semantic AX authoring vertical",
+      "previous_owner": "new F9 file",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/agent/ax_session.gd",
+      "owner": "Sol F9 — semantic AX authoring vertical",
+      "previous_owner": "new F9 file",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/agent/ax_session.gd.uid",
+      "owner": "Sol F9 — semantic AX authoring vertical",
+      "previous_owner": "new F9 file",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/contracts/f9_snapshot_density.md",
+      "owner": "Sol F9 — dense gameplay snapshot integration",
+      "previous_owner": "new F9 diagnostic contract",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -2481,7 +2517,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "f9_t01_import_pass_inputs_frozen_for_luna_directed_tests",
+    "state": "f9_t01_real_app_blocked_snapshot_too_large_diagnostic_in_progress",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",

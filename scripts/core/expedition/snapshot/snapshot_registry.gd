@@ -176,11 +176,28 @@ func capture(root: Node, barrier: SnapshotTickBarrier) -> Dictionary:
 	var has_world_view: bool = root is RunController and (root.expedition_view != null or (root.campaign_runtime != null and root.player.world_motion != null))
 	var envelope := {"format":FORMAT,"engine":Engine.get_version_info()["string"],"sources":_source_revisions(),"root":entities.stable_for(root.get_instance_id()),"objects":_records,"containers":_containers,"dead_references":_dead_references,"tombstones":_referenced_tombstones.keys(),"identity_generations":generations,"next_entity_serial":entities.next_serial(),"assets":_assets,"coverage":_coverage(),"authority":authority.duplicate(true),"world_view":has_world_view}
 	var bytes := var_to_bytes(envelope).size()
-	if bytes > MAX_BYTES: return StableEntityRegistry.failure(&"snapshot_too_large")
+	if bytes > MAX_BYTES:
+		var failed := StableEntityRegistry.failure(&"snapshot_too_large", "capture envelope byte budget")
+		failed["snapshot_metrics"] = _size_metrics(envelope,bytes)
+		return failed
 	var checked := validate(envelope)
 	if not checked["ok"]: return checked
 	_objects.clear(); _visited_containers.clear(); _container_values.clear()
 	return {"ok":true,"snapshot":envelope,"bytes":bytes,"capture_usec":Time.get_ticks_usec()-started}
+
+func _size_metrics(envelope: Dictionary, byte_count: int) -> Dictionary:
+	# Diagnostics contain counts only; no profile or source payload is exported.
+	var kinds := {}
+	for descriptor: Dictionary in _containers.values():
+		var kind: String = descriptor["$"]
+		if not kinds.has(kind): kinds[kind] = {"count":0,"bytes":0}
+		kinds[kind].count += 1
+		kinds[kind].bytes += var_to_bytes(descriptor).size()
+	var raw_geometry: Array = []
+	for value: Object in _objects:
+		if value is WorldGeometry:
+			raw_geometry.append({"stage_bytes":var_to_bytes(value._stage).size(),"surfaces":value._stage.get("surfaces",[]).size(),"connections":value._stage.get("connections",[]).size()})
+	return {"envelope_bytes":byte_count,"limit_bytes":MAX_BYTES,"object_count":_objects.size(),"object_record_bytes":var_to_bytes(envelope.objects).size(),"container_count":_containers.size(),"container_record_bytes":var_to_bytes(envelope.containers).size(),"container_kinds":kinds,"raw_geometry":raw_geometry}
 
 func _container_seen(value: Variant) -> bool:
 	for previous: Variant in _visited_containers:
