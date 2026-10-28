@@ -24,6 +24,10 @@ func _run() -> void:
 		print("F9_AX_SESSION_RESULT "+JSON.stringify({"ok":false,"code":"io_conflict"})); quit(1); return
 	var request := _read_request()
 	if not request.ok: _finish(request); return
+	# This is an editor host; the game's fixed rendering resolution must not
+	# shrink its UI texture independently of the native window dimensions.
+	root.content_scale_size = Vector2i.ZERO
+	root.content_scale_factor = 1.0
 	root.size = Vector2i(1440,1000)
 	shell = Shell.new()
 	root.add_child(shell)
@@ -62,6 +66,17 @@ func _run() -> void:
 	if not _capture_path.is_empty() and DisplayServer.get_name() == "headless":
 		response.ok = false; response.code = "capture_requires_display"
 	elif not _capture_path.is_empty():
+		var canvas: Control = shell.terrain.canvas
+		# Capture a useful terrain view through normal presentation controls.
+		# This affects this client's viewport only, never the authored source.
+		canvas.custom_minimum_size.y = maxf(canvas.custom_minimum_size.y,440.0)
+		await process_frame
+		var ancestor: Node = canvas.get_parent()
+		while ancestor != null:
+			if ancestor is ScrollContainer: ancestor.ensure_control_visible(canvas)
+			ancestor = ancestor.get_parent()
+		await process_frame
+		canvas.fit()
 		await process_frame
 		await RenderingServer.frame_post_draw
 		if root.get_texture().get_image().save_png(_capture_path) != OK: response.ok = false; response.code = "capture_failed"

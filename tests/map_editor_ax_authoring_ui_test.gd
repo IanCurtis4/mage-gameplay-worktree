@@ -29,6 +29,8 @@ func frames(count: int = 2) -> void:
 		RenderingServer.force_draw(false)
 
 func run() -> void:
+	root.content_scale_size = Vector2i.ZERO
+	root.content_scale_factor = 1.0
 	root.size = Vector2i(1600,1000)
 	DisplayServer.window_set_size(Vector2i(1600,1000))
 	evidence_dir = OS.get_environment("F9_EVIDENCE")
@@ -141,16 +143,27 @@ func run() -> void:
 	check("map_context_ax_window_closes_with_map_and_preserves_piece_hash",opened_map_context.ok and map_context_open and map_context_closed and composition_window != null and not composition_window.visible and ax_shell.session.document().semantic_hash() == piece_hash_before_composition)
 	await frames(3)
 	gui_shell.hide()
-	ax_shell.position = Vector2.ZERO; ax_shell.size = Vector2(1600,960); ax_shell.terrain.canvas.fit()
+	ax_shell.position = Vector2.ZERO; ax_shell.size = Vector2(1600,960)
+	var canvas: Variant = ax_shell.terrain.canvas
+	canvas.custom_minimum_size.y = 440.0
+	await frames(3)
+	var canvas_scroll: ScrollContainer = find_scroll_ancestor(canvas)
+	if canvas_scroll != null: canvas_scroll.ensure_control_visible(canvas)
+	await frames(2)
+	canvas.fit()
 	await frames(2)
 	var image: Image = root.get_texture().get_image()
 	var capture := image.save_png(evidence_dir.path_join("ax_gui_shared_authorship.png")) if image != null else FAILED
-	var canvas: Variant = ax_shell.terrain.canvas
 	var canvas_rect: Rect2 = canvas.get_global_rect() if is_instance_valid(canvas) else Rect2()
 	var rendered_colors: int = sample_canvas_colors(image,canvas_rect) if image != null else 0
 	var actual_size: Vector2i = DisplayServer.window_get_size()
 	var visible_windows := has_visible_auxiliary_windows(ax_shell)
-	check("native_ax_capture_has_visible_terrain_and_real_window_dimensions",capture == OK and image.get_size() == actual_size and image.get_size().x >= 1280 and image.get_size().y >= 720 and not visible_windows and canvas.is_visible_in_tree() and canvas.size.x >= 600.0 and canvas.size.y >= 400.0 and canvas._mesh_root.get_child_count() > 0 and rendered_colors >= 4)
+	var image_size: Vector2i = image.get_size() if image != null else Vector2i.ZERO
+	var mesh_count: int = canvas._mesh_root.get_child_count() if is_instance_valid(canvas) else 0
+	var canvas_visible: bool = canvas.is_visible_in_tree() if is_instance_valid(canvas) else false
+	var capture_predicates := {"capture_written":capture == OK,"image_size":image_size,"window_size":actual_size,"image_matches_window":image_size == actual_size,"window_minimum":image_size.x >= 1280 and image_size.y >= 720,"visible_auxiliary_windows":visible_windows,"canvas_visible":canvas_visible,"canvas_size":canvas.size if is_instance_valid(canvas) else Vector2.ZERO,"canvas_minimum":is_instance_valid(canvas) and canvas.size.x >= 600.0 and canvas.size.y >= 400.0,"mesh_count":mesh_count,"rendered_colors":rendered_colors}
+	print("F9_AX_AUTHORING_UI_CAPTURE "+JSON.stringify(capture_predicates))
+	check("native_ax_capture_has_visible_terrain_and_real_window_dimensions",capture == OK and image != null and image_size == actual_size and image_size.x >= 1280 and image_size.y >= 720 and not visible_windows and canvas_visible and canvas.size.x >= 600.0 and canvas.size.y >= 400.0 and mesh_count > 0 and rendered_colors >= 4)
 	Presentation.active_mode = "ux"
 	finish()
 
@@ -198,6 +211,13 @@ func has_visible_auxiliary_windows(parent: Node) -> bool:
 		if child is Window and child.visible: return true
 		if has_visible_auxiliary_windows(child): return true
 	return false
+
+func find_scroll_ancestor(node: Node) -> ScrollContainer:
+	var ancestor: Node = node.get_parent() if node != null else null
+	while ancestor != null:
+		if ancestor is ScrollContainer: return ancestor as ScrollContainer
+		ancestor = ancestor.get_parent()
+	return null
 
 func sample_canvas_colors(image: Image, rect: Rect2) -> int:
 	if image == null or rect.size.x <= 0.0 or rect.size.y <= 0.0: return 0
