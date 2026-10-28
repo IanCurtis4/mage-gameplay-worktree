@@ -46,7 +46,11 @@ static func propose(source: Dictionary, operation: String, parameters: Dictionar
 			id = parameters.connector_id
 			if not _surface_exists(data,parameters.surface_id): return Schema.result(false,"source_reference_missing")
 			if surface_locked(data,parameters.surface_id): return Schema.result(false,"layer_locked")
-			if parameters.kind != "walk" or parameters.direction not in ["both","in","out"] or parameters.normal_xyz not in [[-1,0,0],[1,0,0],[0,0,-1],[0,0,1]] or not _range(parameters.width,4,8192) or not _range(parameters.headroom,12,8192): return Schema.result(false,"arguments_invalid")
+			# Array membership distinguishes int and float elements. JSON and GUI
+			# normals must use identical numeric rules, without vector32 rounding.
+			var nx: float = parameters.normal_xyz[0]; var ny: float = parameters.normal_xyz[1]; var nz: float = parameters.normal_xyz[2]
+			var cardinal := ny == 0.0 and (((nx == -1.0 or nx == 1.0) and nz == 0.0) or ((nz == -1.0 or nz == 1.0) and nx == 0.0))
+			if parameters.kind != "walk" or parameters.direction not in ["both","in","out"] or not cardinal or not _range(parameters.width,4,8192) or not _range(parameters.headroom,12,8192): return Schema.result(false,"arguments_invalid")
 			for coordinate: float in parameters.position_xyz:
 				if not _range(coordinate,-8192,8192): return Schema.result(false,"arguments_invalid")
 			for index: int in data.connectors.size():

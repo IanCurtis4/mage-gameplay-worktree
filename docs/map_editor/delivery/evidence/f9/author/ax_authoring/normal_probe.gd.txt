@@ -1,0 +1,13 @@
+extends SceneTree
+const Operations = preload("res://scripts/map_authoring/terrain/terrain_operations.gd")
+const Document = preload("res://scripts/map_authoring/document/source_document.gd")
+func _initialize() -> void:
+	var normal_float := [0.0,0.0,-1.0]
+	var normal_int := [0,0,-1]
+	var grid := Operations.propose(Document.empty("diagnostic"),"grid/create",{"layer_id":"ground","name":"Solo","origin_xz":[0,0],"columns":5,"rows":5,"sample_spacing":32,"height":0})
+	var connector := {"connector_id":"gate","surface_id":"ground","position_xyz":[0,0,50],"kind":"walk","normal_xyz":normal_float,"width":32,"headroom":100,"tags":["map_editor"],"direction":"both"}
+	var float_result := Operations.propose(grid.data,"connector/upsert",connector)
+	connector.normal_xyz = normal_int
+	var int_result := Operations.propose(grid.data,"connector/upsert",connector)
+	print("AX_NORMAL_PROBE "+JSON.stringify({"float_array_member":normal_float in [[-1,0,0],[1,0,0],[0,0,-1],[0,0,1]],"int_array_member":normal_int in [[-1,0,0],[1,0,0],[0,0,-1],[0,0,1]],"float_code":float_result.code,"float_ok":float_result.ok,"int_code":int_result.code,"int_ok":int_result.ok}))
+	quit()
