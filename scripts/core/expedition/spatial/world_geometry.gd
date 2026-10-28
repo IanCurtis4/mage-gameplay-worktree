@@ -1038,32 +1038,92 @@ func resolve_surface(origin: Vector3, direction: Vector3, visible_surfaces: Arra
 	# Pure logical ray query; the presentation adapter supplies the camera ray.
 	if not _current(revision): return _failure(&"stale_geometry")
 	if not origin.is_finite() or not direction.is_finite() or direction.is_zero_approx(): return _failure(&"invalid_ray")
+	var visible := {}
+	for id: String in visible_surfaces: visible[id] = true
 	var nearest := INF
-	var hit: Dictionary = {}
-	var ambiguous := false
+	var hits: Array[Dictionary] = []
 	for cell: Dictionary in _stage["surfaces"]:
-		if not cell["surface_id"] in visible_surfaces: continue
+		if not visible.has(cell["surface_id"]): continue
 		var normal := Kernel.plane_normal(cell["vertices"])
 		var denominator := normal.dot(direction)
 		if absf(denominator) < EPS: continue
 		var t: float = normal.dot(Vector3(cell["vertices"][0]) - origin) / denominator
-		if t < 0.0: continue
+		if not is_finite(t) or t < 0.0: continue
 		var point := Kernel.support_y(cell,origin + direction * t)
+		if not point.is_finite(): continue
 		var tolerance := point_tolerance(origin,point)
 		if not _ray_contains(cell,point,tolerance): continue
-		var time_tolerance := tolerance/direction.length()
-		if t > nearest+time_tolerance: continue
-		if absf(t - nearest) <= time_tolerance:
-			ambiguous = true
-			continue
-		ambiguous = false
-		nearest = t
-		hit = {"point": ExpeditionWorldPoint.create(_stage["stage_id"], cell["surface_id"], point).to_data(), "normal": normal if normal.y > 0 else -normal}
-	if hit.is_empty(): return _failure(&"hidden_or_missing_surface")
-	if ambiguous: return _failure(&"ambiguous_surface")
-	var obstruction := sweep(origin, hit["point"]["position"], {"radius": 0.0, "height": 0.0}, revision)
+		hits.append({"surface_id":cell.surface_id,"position":point,"normal":normal if normal.y > 0 else -normal,"t":t,"tolerance":tolerance/direction.length(),"precision":tolerance})
+		nearest = minf(nearest,t)
+	if hits.is_empty(): return _failure(&"hidden_or_missing_surface")
+	var candidates: Dictionary = {}
+	var owner: Dictionary = {}
+	for hit: Dictionary in hits:
+		if absf(float(hit.t)-nearest) > float(hit.tolerance): continue
+		candidates[hit.surface_id] = hit
+		if owner.is_empty() or String(hit.surface_id) < String(owner.surface_id): owner = hit
+	if owner.is_empty(): return _failure(&"hidden_or_missing_surface")
+	var position: Vector3 = owner.position
+	if candidates.size() > 1:
+		var seam := _pick_component(candidates,owner)
+		if not seam.ok: return _failure(&"ambiguous_surface")
+		position = seam.position
+	var resolved := {"point":ExpeditionWorldPoint.create(_stage["stage_id"],owner.surface_id,position).to_data(),"normal":owner.normal}
+	var obstruction := sweep(origin, resolved["point"]["position"], {"radius": 0.0, "height": 0.0}, revision)
 	if obstruction["data"]["hit"] and float(obstruction["data"]["fraction"]) < 1.0 - EPS: return _failure(&"occluded_surface")
-	return _success(hit)
+	return _success(resolved)
+
+func _pick_component(candidates: Dictionary, owner: Dictionary) -> Dictionary:
+	# A distant f32 camera ray can place its intersection just outside the edge.
+	# Find a common point on an authored opening inside the existing projection
+	# error budget, then prove that ALL candidates support that same point.
+	_ensure_support_index()
+	var start: String = owner.surface_id
+	var anchors: Array[Vector3] = [owner.position]
+	for edge: Dictionary in _support_index.outlines.get(start,[]):
+		for opening: Dictionary in edge.openings:
+			if not candidates.has(opening.neighbor): continue
+			var horizontal := Vector2(owner.position.x,owner.position.z)
+			var closest := Geometry2D.get_closest_point_to_segment(horizontal,opening.a,opening.b)
+			for at: Vector2 in [closest,opening.a,opening.b]:
+				var anchor := Kernel.support_y(_support_index.cells[start],Vector3(at.x,owner.position.y,at.y))
+				if anchor.distance_to(owner.position) <= float(owner.precision) and anchor not in anchors: anchors.append(anchor)
+	anchors.sort_custom(func(a: Vector3,b: Vector3) -> bool:
+		var da := a.distance_squared_to(owner.position); var db := b.distance_squared_to(owner.position)
+		if da != db: return da < db
+		if a.x != b.x: return a.x < b.x
+		if a.z != b.z: return a.z < b.z
+		return a.y < b.y)
+	for anchor: Vector3 in anchors:
+		if _pick_component_at(candidates,start,anchor): return {"ok":true,"position":anchor}
+	return {"ok":false}
+
+func _pick_component_at(candidates: Dictionary, start: String, anchor: Vector3) -> bool:
+	for id: String in candidates:
+		var hit: Dictionary = candidates[id]
+		if Vector3(hit.position).distance_to(anchor) > float(hit.precision): return false
+		# Plane/edge membership uses the canonical local coordinate budgets, not
+		# the far camera tolerance. Distinct heights cannot acquire a shared floor.
+		if not Kernel.contains(_support_index.cells[id],anchor): return false
+	var included := {start:true}
+	var queue: Array[String] = [start]
+	var cursor := 0
+	while cursor < queue.size():
+		var id := queue[cursor]; cursor += 1
+		for port: Dictionary in _support_index.ports.get(id,[]):
+			if port.kind != "walk" or not SupportPatch.on_opening(id,port.connector_id,anchor,_support_index): continue
+			for transition: Dictionary in _support_index.transitions.get(port.connector_id,[]):
+				if not transition.allowed: continue
+				var other: Dictionary = _support_index.endpoints[transition.other_id]
+				if other.kind != "walk" or included.has(other.surface_id) or not candidates.has(other.surface_id): continue
+				if not SupportPatch.on_opening(other.surface_id,other.connector_id,anchor,_support_index): continue
+				var reciprocal := false
+				for back: Dictionary in _support_index.transitions.get(other.connector_id,[]):
+					if back.other_id == port.connector_id and back.connection_id == transition.connection_id and back.allowed:
+						reciprocal = true; break
+				if reciprocal:
+					included[other.surface_id] = true; queue.append(other.surface_id)
+	return included.size() == candidates.size()
 
 func presentation_snapshot(revision: int) -> Dictionary:
 	if not _current(revision): return _failure(&"stale_geometry")
@@ -1072,7 +1132,7 @@ func presentation_snapshot(revision: int) -> Dictionary:
 
 static func _ray_contains(cell: Dictionary, point: Vector3, tolerance: float) -> bool:
 	# A projection ray far from its plane loses f32 ULPs. Conservatively refuse
-	# near-coincident edges instead of selecting a support by iteration order.
+	# near-coincident edges. resolve_surface proves connected ties explicitly.
 	var side := 0.0
 	var vertices: Array = cell["vertices"]
 	for index: int in vertices.size():

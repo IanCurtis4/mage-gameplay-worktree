@@ -2585,6 +2585,42 @@
       "owner": "Sol F9 — compact snapshot integration evidence",
       "previous_owner": "new author receipt",
       "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/contracts/f9_surface_picking.md",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 seam picking correction/proof",
+      "base_sha256": null
+    },
+    {
+      "path": ".godot/f9_shadow_draft/picking/probe.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 seam picking correction/proof",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_surface_pick_test.gd",
+      "owner": "Luna F9",
+      "previous_owner": "new F9 seam picking correction/proof",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_surface_pick_test.gd.uid",
+      "owner": "Luna F9",
+      "previous_owner": "new F9 seam picking correction/proof",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/surface_pick/trace.engine.log",
+      "owner": "Sol F9 — actual surface hit reproduction",
+      "previous_owner": "new author evidence",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/surface_pick/probe.gd.txt",
+      "owner": "Sol F9 — actual surface hit reproduction",
+      "previous_owner": "new author evidence",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -2595,7 +2631,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "f9_compact_snapshot_validated_gameplay_walk_pass_resume_pick_ambiguity_open_fixture_released",
+    "state": "f9_seam_pick_trace_and_regression_authoring_no_execution_freeze",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
