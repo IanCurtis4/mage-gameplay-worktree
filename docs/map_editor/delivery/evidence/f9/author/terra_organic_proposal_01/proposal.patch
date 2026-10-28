@@ -1,0 +1,165 @@
+--- a/scripts/map_authoring/library/editor_preferences.gd
++++ b/scripts/map_authoring/library/editor_preferences.gd
+@@ -5,7 +5,7 @@
+ const SECTION := "ragrpg_map_editor"
+ const KEY := "authoring_library_v1"
+ const OPTIONS := ["mode","radius","strength","hardness","shape","material","target","end_height"]
+-const MODES := ["raise","lower","flatten","smooth","material","ramp"]
++const MODES := ["raise","lower","flatten","smooth","material","ramp","rounded_hill"]
+ const RECOVERY_LIMIT := 16
+ static var _memory: Dictionary = {}
+ static var _reader: Callable
+--- a/scripts/map_authoring/library/library_model.gd
++++ b/scripts/map_authoring/library/library_model.gd
+@@ -13,8 +13,9 @@
+ static func builtin_presets() -> Array:
+ 	var base := {"mode":"raise","shape":"circle","material":"earth","radius":120.0,"strength":12.0,"hardness":0.0,"target":0.0,"end_height":40.0}
+ 	var soft := base.duplicate(true); soft.mode = "smooth"; soft.strength = 0.5; soft.radius = 80.0
++	var rounded := base.duplicate(true); rounded.mode = "rounded_hill"; rounded.hardness = 0.0
+ 	var path := base.duplicate(true); path.mode = "material"; path.strength = 0.65; path.radius = 28.0; path.hardness = 0.35
+-	return [{"id":"builtin_soft_hill","name":"Colina suave","options":base},{"id":"builtin_smooth_ground","name":"Suavizar relevo","options":soft},{"id":"builtin_earth_path","name":"Caminho de terra","options":path}]
++	return [{"id":"builtin_rounded_hill","name":"Colina arredondada","options":rounded},{"id":"builtin_soft_hill","name":"Colina suave","options":base},{"id":"builtin_smooth_ground","name":"Suavizar relevo","options":soft},{"id":"builtin_earth_path","name":"Caminho de terra","options":path}]
+ 
+ static func presets(data: Dictionary) -> Array:
+ 	if not Preferences.validate(data): return []
+--- a/scripts/map_authoring/terrain/brush.gd
++++ b/scripts/map_authoring/terrain/brush.gd
+@@ -20,7 +20,7 @@
+ 	var radius: float = options.get("radius", 32.0)
+ 	var strength: float = options.get("strength", 8.0)
+ 	var hardness: float = options.get("hardness", 0.5)
+-	if mode not in ["raise", "lower", "flatten", "smooth", "material", "ramp"] or not is_finite(radius) or radius <= 0 or not is_finite(strength) or strength < 0 or not is_finite(hardness) or hardness < 0 or hardness > 1 or points.is_empty(): return Schema.result(false, "brush_invalid")
++	if mode not in ["raise", "lower", "flatten", "smooth", "material", "ramp", "rounded_hill"] or not is_finite(radius) or radius <= 0 or not is_finite(strength) or strength < 0 or not is_finite(hardness) or hardness < 0 or hardness > 1 or points.is_empty(): return Schema.result(false, "brush_invalid")
+ 	for point: Variant in points:
+ 		if not point is Vector2 or not point.is_finite(): return Schema.result(false, "brush_invalid")
+ 	if options.get("shape", "circle") not in ["circle", "square"]: return Schema.result(false, "brush_invalid")
+@@ -56,10 +56,14 @@
+ 					distance = minf(distance, _distance(at-nearest, options.get("shape", "circle")))
+ 			if distance > radius: continue
+ 			var weight := 1.0 if distance <= radius*hardness or hardness == 1.0 else (radius-distance)/(radius*(1.0-hardness))
++			if mode == "rounded_hill":
++				# A smooth radial shoulder, with optional flat core controlled by hardness.
++				var u := 0.0 if hardness == 1.0 else clampf((distance / radius - hardness) / (1.0 - hardness), 0.0, 1.0)
++				weight = pow(1.0 - u * u, 3.0)
+ 			if weight <= 0: continue
+ 			var value: float = original[index]
+ 			match mode:
+-				"raise": value += strength * weight
++				"raise", "rounded_hill": value += strength * weight
+ 				"lower": value -= strength * weight
+ 				"flatten": value = lerpf(value, target, minf(strength, 1.0)*weight)
+ 				"ramp":
+--- /dev/null
++++ b/scripts/map_authoring/terrain/organic_example.gd
+@@ -0,0 +1,25 @@
++@tool
++extends RefCounted
++## Builds a proposal only; the caller commits it once through DocumentSession.
++const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
++const Brush = preload("res://scripts/map_authoring/terrain/brush.gd")
++
++static func create(data: Dictionary) -> Dictionary:
++	var read := Schema.read(JSON.stringify(data,"",true,true).to_utf8_buffer())
++	if not read.ok or not read.valid: return Schema.result(false,"source_invalid")
++	for key: String in ["dependencies","layers","special_surfaces","placements","regions","connectors","sockets"]:
++		if not data[key].is_empty(): return Schema.result(false,"source_occupied")
++	if data.composition != null: return Schema.result(false,"source_occupied")
++	var source: Dictionary = read.data
++	source.name = "Campo orgânico"
++	var heights: Array = []; heights.resize(33 * 33); heights.fill(0.0)
++	source.layers.append({"layer_id":"organic_field","name":"Campo orgânico","origin_xz":[0,0],"sample_spacing":50,"columns":33,"rows":33,"heights":heights,"material_masks":{},"locked":false,"protected_regions":[]})
++	var hill := {"mode":"rounded_hill","shape":"circle","radius":420.0,"strength":110.0,"hardness":0.0}
++	for iteration: int in 2:
++		var raised := Brush.stroke(source,"organic_field",[Vector2(800,800)],hill)
++		if not raised.ok: return raised
++		source = raised.data
++	var path := {"mode":"material","shape":"circle","material":"earth","radius":120.0,"strength":0.8,"hardness":0.15}
++	var painted := Brush.stroke(source,"organic_field",[Vector2(0,350),Vector2(250,390),Vector2(500,480),Vector2(750,610),Vector2(1000,660),Vector2(1300,620),Vector2(1600,500)],path)
++	if not painted.ok: return painted
++	return painted
+--- a/scripts/map_authoring/terrain/terrain_panel.gd
++++ b/scripts/map_authoring/terrain/terrain_panel.gd
+@@ -1,5 +1,6 @@
+ @tool
+ extends VBoxContainer
++const OrganicExample = preload("res://scripts/map_authoring/terrain/organic_example.gd")
+ const Brush = preload("res://scripts/map_authoring/terrain/brush.gd")
+ const Compiler = preload("res://scripts/map_authoring/compiler/terrain_compiler.gd")
+ const Canvas = preload("res://scripts/map_authoring/terrain/terrain_canvas.gd")
+@@ -53,9 +54,9 @@
+ 
+ func _ready() -> void:
+ 	size_flags_vertical = Control.SIZE_EXPAND_FILL
+-	var row := HBoxContainer.new(); add_child(row)
++	var row := HFlowContainer.new(); add_child(row)
+ 	mode = OptionButton.new()
+-	for caption: String in ["Elevar","Baixar","Nivelar","Suavizar","Pintar material","Rampa (arraste início → fim)"]: mode.add_item(caption)
++	for caption: String in ["Elevar","Baixar","Nivelar","Suavizar","Pintar material","Rampa (arraste início → fim)","Colina arredondada"]: mode.add_item(caption)
+ 	row.add_child(mode)
+ 	shape = OptionButton.new(); shape.add_item("Círculo"); shape.add_item("Quadrado"); row.add_child(shape)
+ 	material_choice = OptionButton.new()
+@@ -87,7 +88,7 @@
+ 	preset_name = LineEdit.new(); preset_name.placeholder_text = "Nome da predefinição"; preset_name.max_length = 80; preset_name.custom_minimum_size.x = 180; preset_row.add_child(preset_name)
+ 	_button(preset_row,"Salvar predefinição",save_preset).set_meta("authoring_keep_visible",true)
+ 	_button(preset_row,"Remover predefinição",remove_preset).set_meta("authoring_keep_visible",true)
+-	var toolbar := HBoxContainer.new(); add_child(toolbar)
++	var toolbar := HFlowContainer.new(); add_child(toolbar)
+ 	_button(toolbar,"Enquadrar",func() -> void: canvas.fit())
+ 	_button(toolbar,"Compilar peça",bake)
+ 	_button(toolbar,"Cancelar",func() -> void:
+@@ -95,6 +96,7 @@
+ 		if job != null: job.cancel())
+ 	_button(toolbar,"Exemplo rampa/ponte",create_sample)
+ 	_button(toolbar,"Exemplo de peça grande",create_large_sample)
++	_button(toolbar,"Exemplo orgânico",create_organic_example)
+ 	progress_bar = ProgressBar.new(); progress_bar.custom_minimum_size.x = 150; toolbar.add_child(progress_bar)
+ 	status = Label.new(); status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; add_child(status)
+ 	var grid := HFlowContainer.new(); add_child(grid)
+@@ -186,7 +188,7 @@
+ func _options_changed() -> void:
+ 	if _applying_preset or not is_instance_valid(canvas): return
+ 	canvas.cancel_stroke()
+-	canvas.options = {"mode":["raise","lower","flatten","smooth","material","ramp"][mode.selected],"shape":"circle" if shape.selected == 0 else "square","material":["earth","grass","sand","stone"][material_choice.selected],"radius":radius.value,"strength":strength.value,"hardness":hardness.value,"target":target.value,"end_height":end_height.value}
++	canvas.options = {"mode":Preferences.MODES[mode.selected],"shape":"circle" if shape.selected == 0 else "square","material":["earth","grass","sand","stone"][material_choice.selected],"radius":radius.value,"strength":strength.value,"hardness":hardness.value,"target":target.value,"end_height":end_height.value}
+ 	for field: SpinBox in [radius,strength,hardness,target,end_height]:
+ 		_display_brush_number(field); _display_brush_number.call_deferred(field)
+ 
+@@ -243,9 +245,19 @@
+ 	else: status.text = "Escolha uma predefinição pessoal para remover. As predefinições do projeto são preservadas."
+ 
+ func authoring_commands() -> Array:
+-	return [{"id":"terrain/presets/list","parameters":{}},{"id":"terrain/presets/apply","parameters":{"preset_id":"string"}},{"id":"terrain/presets/save","parameters":{"name":"string","options":"brush_options"}}]
++	return [{"id":"terrain/example/organic","parameters":{}},{"id":"terrain/brush/stroke","parameters":{"points":"number[2][]","options":"brush_options"}},{"id":"terrain/presets/list","parameters":{}},{"id":"terrain/presets/apply","parameters":{"preset_id":"string"}},{"id":"terrain/presets/save","parameters":{"name":"string","options":"brush_options"}}]
+ 
+ func ax_command(id: String, parameters: Dictionary) -> Dictionary:
++	if id == "terrain/example/organic":
++		if not parameters.is_empty(): return {"ok":false,"code":"arguments_invalid"}
++		return create_organic_example()
++	if id == "terrain/brush/stroke":
++		if not Preferences._keys(parameters,["points","options"]) or not parameters.points is Array or not Preferences.valid_options(parameters.options): return {"ok":false,"code":"arguments_invalid"}
++		var points: Array = []
++		for point: Variant in parameters.points:
++			if not point is Array or point.size() != 2 or not (point[0] is int or point[0] is float) or not (point[1] is int or point[1] is float): return {"ok":false,"code":"arguments_invalid"}
++			points.append(Vector2(point[0],point[1]))
++		return apply_stroke(points,parameters.options)
+ 	if id == "terrain/presets/list":
+ 		if not parameters.is_empty(): return {"ok":false,"code":"arguments_invalid"}
+ 		var prefs := Preferences.read()
+@@ -315,6 +327,17 @@
+ 	source.special_surfaces = []; source.regions = []; source.dependencies = []; source.placements = []; source.sockets = []; source.composition = null
+ 	source.connectors = [{"connector_id":"west_gate","surface_id":"field","position_xyz":[0,0,3500],"kind":"walk","normal_xyz":[-1,0,0],"width":256,"headroom":100,"tags":["map_editor"],"direction":"both"}]
+ 	return source
++
++func create_organic_example() -> Dictionary:
++	var proposal := OrganicExample.create(session.document().to_data())
++	if not proposal.ok:
++		status.text = "Crie uma peça vazia para abrir o exemplo orgânico; seu conteúdo foi preservado." if proposal.code == "source_occupied" else "O exemplo orgânico não pôde ser preparado."
++		return proposal
++	var applied: Dictionary = session.apply(proposal.data)
++	if applied.ok:
++		select_layer("organic_field"); canvas.fit()
++	else: status.text = "O exemplo orgânico não pôde ser aplicado."
++	return applied
+ 
+ func create_large_sample() -> void:
+ 	if not session.document().to_data().layers.is_empty(): status.text = "Crie uma peça vazia para abrir o exemplo grande; seu terreno foi preservado."; return

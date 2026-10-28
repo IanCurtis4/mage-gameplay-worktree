@@ -70,3 +70,9 @@ consulta individual preparada e provas Context11/Lazy24/Geometry46/Ports92/Batch
 A comparação densa atual preserva resultado integral e reduz160389ms para100731ms;
 continua limitação concreta de10 e não certifica fluidez. Core/oficiais/supervisão
 integrada ainda pendentes no congelamento, conforme recibo. Nenhuma linha é removida.
+
+Atualização27/10 posterior: Luna navigation_and_fields concluiu Core639,
+FieldsNative73/GameplayNative52/Controls29 e12 oficiais/3649 checks no4642dbf,
+sem erros/timeouts; supervisão integrada pendente acima foi satisfeita. Fixture
+liberada. Performance in-game, autoria AX útil e robustez são prioridades humanas;
+cronômetro de suíte não é meta. Restante F9 continua exigido; T01 é só proposta.

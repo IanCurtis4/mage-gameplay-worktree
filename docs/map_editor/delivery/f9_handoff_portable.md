@@ -1,0 +1,228 @@
+# RagRPG — handoff portátil de F9
+
+Atualização27/10/2026. Este documento permite continuar em outro modelo/provedor,
+sem depender do histórico do chat ou das ferramentas internas do Codex.
+Estado: F9 EM EXECUÇÃO; não entregue integralmente e sem aceite de produto.
+
+## O que o usuário autorizou e prioriza
+
+“F8 terminou. Podemos começar F9.” F9 deve fechar todos os pendentes do editor,
+conforme seu contrato, sem empurrá-los para F10. Adendo: sombras e acabamento que
+melhorem a imersão, aproveitando a engine existente. Nenhum épico E08+ foi aberto.
+
+Em27/10 o usuário esclareceu: duração dos testes não importa por si só. Importam
+performance durante o jogo, modo AX que facilite o desenvolvimento agêntico e
+mapas robustos consumidos pelo jogo. Não otimizar cronômetro de suíte como meta,
+reduzir cobertura ou alterar amostra/corpo/oráculo para aparentar velocidade.
+Se a rotina medida também roda no jogo, registrar perfil/escala/fase e comprovar
+impacto em gameplay representativo; o tempo de um teste não é FPS.
+
+O usuário prefere incrementos e resumos portáteis para poder trocar de modelo.
+Não presumir nem aguardar um reset de cota. Os papéis podem ser assumidos pelos
+executores que ele escolher: Terra6.1 implementa fatias pequenas/médias completas;
+Sol decompõe, analisa, integra e trata complexidade transversal; Luna pode criar
+os testes e gerenciar execução/triagem separadamente. Revisão ampla com Astra só
+após terminar o editor, por iniciativa humana. Não criar chats/experimentos por
+inferência. O anexo de workflow é referência, não uma ordem para abrir benchmarks.
+
+## Localização, base e preservação
+
+- Checkout de trabalho: `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5`.
+- Branch: `codex/map-editor-f9`.
+- Runtime testado neste incremento: `4642dbf878fab4004f98141c7e2437ee11e22bd5`.
+- Principal/playtest: `C:/Users/João Pedro/Documents/ChatGPT/RagRPG`.
+  Possui trabalho/imports/exports/save pessoais; NÃO usar como cwd de implementação.
+- Engine: `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/godot/Godot_v4.7.2-stable_win64.exe`.
+- Engine SHA256: `AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424`.
+- Única fixture: `<checkout>/.godot/verification/e07_f1/fixture_project`.
+  Reutilizar sequencialmente; sem terceiro checkout/projeto.
+
+Usar SEMPRE o checkout explícito. Não resetar/limpar arquivos do usuário. Não
+commitar .godot/.tools/builds. Sem push automático. Merge em master depende de
+aceite humano explícito do candidato testado. Um PASS técnico não autoriza produto.
+Não encerrar F9 ou iniciar F10 por ter terminado uma fatia.
+
+Este checkpoint documental consolida as mudanças feitas enquanto o runtime estava
+congelado; o congelamento foi LIBERADO após conclusão Luna. Seu commit é posterior
+ao runtime4642dbf e não representa outra execução de testes. Inclui:
+`docs/WORKFLOW.md`, `docs/map_editor/contracts/f9_ownership.json`,
+`docs/map_editor/contracts/f9_terra_work_packages.md`,
+`docs/map_editor/delivery/f9_resume.md` e este handoff; além do empacotamento da
+proposta Terra e recibos novos de Luna. Conferir Git de novo para identificar o commit documental e deltas posteriores. Não tratar essas mudanças como lixo do worktree.
+
+## Fontes contratuais antes de editar
+
+Na raiz do checkout: AGENTS.md, docs/WORKFLOW.md (norma única atualizada),
+docs/REVIEW_WORK_PACKAGES.md, docs/MVP.md e docs/ARCHITECTURE.md.
+Depois: docs/map_editor/contracts/f9_completion.md, f9_ownership.json,
+docs/map_editor/f9_requirements.md e docs/map_editor/delivery/f9.md.
+Para a próxima fatia: f9_terra_work_packages.md e terrain_piece_semantics.md.
+Para síntese futura: f9_regional_synthesis.md. Para a correção atual de navegação:
+f9_navigation_performance.md. Todos os nomes de contratos acima ficam em
+`docs/map_editor/contracts/`.
+
+CLI de workflow e WORKFLOW_TOOLING estavam ausentes nesta base. Não adivinhar
+instalação nem copiar tooling externo. A retomada foi diagnosticada com Git,
+project.godot, contratos e recibos. Godot4.7.2 standard, GDScript tipado, UI pt-BR,
+IDs/código inglês; sem plugin externo. Catálogo imutável, estado separado da run.
+
+## O que existe e foi comprovado por componente
+
+Sombras suaves de contato para atores/props; oclusão/ordem por cotas; materiais,
+biomas/bordas; biblioteca/presets/favoritos; minimapa/overlays; prévia jogável real
+em perfil descartável com restart/continuidade e comandos GUI/AX/CLI. Renderer
+compartilhado entre editor e runtime. Campos Fire/Lightning/Phantom/Ice seguem
+apoios e ordenação reais. Não generalizar isso para “toda a apresentação pronta”.
+O recibo F9 distingue autoria, supervisão e pendência de cada componente.
+
+Último código, checkpoint19: lote ALL_DIRECT compartilha prova privada de rotas
+já aceitas pela autoridade, mantendo endpoints exatos, ida/volta independentes,
+orçamentos e validação pública. Gauss17/512 original passou publicação no orçamento
+original, corpo20/32 e1024 testemunhas públicas/movimento autorais. Pico105254480
+unidades contabilizadas contra268435456; não é medição de heap/RSS. Publicação33,8s
+e preparo do corpo43,5s são fases de preparação, não tempos por frame.
+
+Consulta individual conserva Dijkstra/heap/relaxaçãoEPS/custos/desempate, completa
+superfícies sob demanda, usa preparação privada e seleção conservadora de sólidos.
+No cenário denso HISTÓRICO de perfil2/12: eager160389ms, preparado100731ms, mesmo
+resultado integral/digest nas duas rotas, mesmos8683 estados expandidos/524360
+testes no desvio. Não é o perfil do jogador20/32, nem prova de FPS ou mapa final.
+Essa API também é usada pelo runtime: verificar o impacto real em jogo antes de
+considerar a prioridade de performance cumprida. Não ignorar um travamento só
+porque foi descoberto por teste; não otimizar a suíte por si só.
+
+Provas autorais finais: Context11, Lazy24, Geometry46, Ports92, Batch36, Dense5
+preparado e Dense5 eager. Sete recibos com2002 inputs cada,14014 sem divergência;
+fixture igual, project.godot somente com VCS desativado. Organic15 é anterior:
+4 inputs mudaram e7 testes/UIDs foram adicionados; compatibilidade foi documentada,
+sem fingir nova execução de1024 testemunhas no hash atual.
+Auditoria: `docs/map_editor/delivery/evidence/f9/author/navigation_audit.json`.
+Falhas e tentativas anteriores permanecem; não apagá-las nem atribuir-lhes PASS.
+
+## Validação concluída e reprodução
+
+Caminho: `docs/map_editor/delivery/evidence/f9/luna/navigation_and_fields/`.
+Luna concluiu no runtime4642dbf: Core8/639; FieldsNative73; GameplayNative52;
+GameplayControls29;12/12 etapas oficiais/3649 checks. Tudo PASS, sem falha, timeout,
+parse/script error ou exit não zero. HEAD antes/depois igual. Fonte/fixture:
+14014 hashes autorais de cada lado e9998 referências atuais sem divergência.
+
+Relatório `report.md`, SHA256
+`EEB082D4CFDF3AF23A86009049773A07F5294DC797DCC7D81C01C0F68A2FF8F5`.
+Os recibos autorais preservam seu HEAD f21709ae e inputs; não foram reatribuídos.
+Não repetir etapas concluídas com os mesmos inputs apenas por trocar de modelo.
+A supervisão não é auditoria semântica independente, FPS ou aceite de produto.
+
+Fixture LIBERADA para a próxima tarefa autorizada. Em nova retomada, conferir se
+outro trabalho começou depois deste arquivo. Nunca executar dois runners na mesma
+fixture nem encerrar PID opaco/jogo pessoal. Não tocar o principal/playtest.
+Os comandos abaixo são referência de reprodução; rodar novamente só por impacto
+de novo delta, falha ou evidência insuficiente. Nenhuma dependência de Codex é
+necessária para executá-los em PowerShell comum.
+
+Roteiro reproduzível em PowerShell comum (substituir só nomes de evidência por
+pastas novas ausentes; não reutilizar/sobrescrever recibos):
+
+```powershell
+$f9Root = 'C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5'
+$f9Engine = 'C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/godot/Godot_v4.7.2-stable_win64.exe'
+Set-Location -LiteralPath $f9Root
+ git rev-parse --show-toplevel
+ git rev-parse HEAD
+ git status --short
+```
+
+Para uma reprodução justificada dos nativos, sem execução concorrente, usar
+`tools/map_editor_completion/run.ps1 -GodotPath $f9Engine -Stage FieldsNative
+-EvidenceDirectory <nova pasta absoluta>` com importação normal; depois
+GameplayNative e GameplayControls, cada qual com sua pasta nova. `-SkipImport`
+só quando source/fixture já importadas e conferidas idênticas. Não é sync geral:
+esse modo copia apenas quatro arquivos legados.
+
+A seleção oficial concluída usou `tools/verify.ps1 -GodotPath $f9Engine -F1Fixture
+-SkipEditorImport -CheckTimeoutSeconds 300 -VerificationDirectory <nova pasta>
+-Test @(...)`, com estes12 IDs exatos:
+
+```text
+e07_f1_geometry_test
+e07_f1_actor_integration_test
+e07_f1_adversarial_test
+e07_f1_consumer_test
+e07_f1_guard_travel_test
+e07_f1_fields_test
+e07_f1_ice_test
+e07_f1_geometer_trace_test
+e07_f1_geometer_full_test
+e07_f1_non_planar_test
+e07_f1_composition_test
+e07_f1_presentation_test
+```
+
+Durante verificação, APPDATA e LOCALAPPDATA devem apontar para o perfil descartável
+`<fixture>/.godot/discardable_profile`, restaurados por try/finally. Não usar save
+pessoal. Ignorar somente linhas vazias em checks.jsonl. SCRIPT ERROR, Parse Error,
+ERROR, timeout, contagem incompleta ou input divergente impedem PASS mesmo com exit0.
+Se falhar, preservar logs e corrigir causa; não mudar expectativa para escondê-la.
+Registrar hashes/HEAD antes/depois e escopo realmente executado. A etapa de teste
+pode demorar: não é motivo para enfraquecer a validação.
+
+## Próxima implementação pronta como proposta — F9-T01
+
+Terra6.1 entregou rascunho de cinco arquivos; NÃO integrado, compilado, testado ou
+aprovado visualmente. A revisão inicial de Sol conferiu localização, preservação
+do candidato e que o patch se aplica sem conflito, sem aplicá-lo.
+
+Cópia portátil em
+`docs/map_editor/delivery/evidence/f9/author/terra_organic_proposal_01/`:
+`manifest.json` com SHA-base/proposto; `delivery.md`; cinco cópias `.gd.txt`; e
+`proposal.patch`. Esse pacote não depende da pasta ignorada original
+`.godot/f9_shadow_draft/terra_organic/`. Não importar/executar esses textos como
+código antes de revisar, conferir que a fixture continua livre e transferir propriedade.
+
+Alvos: terrain/brush.gd, terrain/terrain_panel.gd, terrain/organic_example.gd novo,
+library/editor_preferences.gd e library/library_model.gd, sob scripts/map_authoring.
+Novo modo rounded_hill com peso(1-u²)^3 e preset; exemplo uma camada33x33/passo50,
+domínio1600, centro800/800, raio420, altura220 em DOIS traços110 sem aumentar força
+máxima128. Pinta caminho curvo pelo Brush existente. GUI/AX compartilham operação;
+aplica uma vez pela Session/undo e recusa documento ocupado. Sem novo shader,
+asset obrigatório, schema/compilador/física ou construção manual de polígonos.
+
+Congelamento liberado: conferir SHA-base no manifesto, registrar dono
+nominal das fontes/novo .uid, revisar o patch e integrar sem sobrepor mudanças
+concorrentes. Gerar/copiar somente UID autorizado pela fixture. Luna cria testes
+fechados da fatia, Terra corrige falhas locais e Sol confere cobertura/integração.
+A especificação está em delivery.md: perfil/centro/proteções/stroke/preset, conteúdo
+ocupado, undo, equivalência GUI/AX, compilação real, apoio/clique/navegação e inspeção
+nativa. Não chamar proposta de entrega runtime nem encerrar F9-02/12 só por isso.
+
+## Restante obrigatório e limitações concretas
+
+A matriz F9-01–12 e o contrato continuam íntegros. Ainda falta acabamento orgânico
+integrado/humano; síntese regional por seed com máscaras e conservação de entidades;
+AX/CLI e UX completos; encontros/reconciliação; bundle/dependências em ambiente
+limpo; recuperação/cancelamento; responsividade de gameplay/preparação acionável;
+apresentação restante, export release/continuidade e área temática final completa.
+
+Não esquecer: algumas mortes/VFX vinculados ao mundo ainda usam caminhos legados
+ou suprimidos; sync de atores pode tornar morto visível de novo. Transações de
+checkpoint medidas em8–15s e preparação corporal43s precisam ser avaliadas por
+seu efeito perceptível, com feedback/cancelamento e sem travar a partida. São
+pendências, não prova de defeito em todo mapa ou autorização de nova mecânica.
+
+Geração regional tem contrato em f9_regional_synthesis.md: proposta sobre a raiz
+inteira piece/map/population/patrol, máscara compartilhada, preservação por
+influência geométrica/footprint/segmento e clone de peça por instância. Reconciliar
+referências sem escolher piso global mais próximo. Receita passiva não executa
+na importação. Contrato ainda não entrega consumidores; particionar antes de delegar.
+
+## Próximo incremento e regra de encerramento
+
+1. Conferir o relatório Luna concluído e o Git atual, sem repetir testes sem motivo.
+2. Preservar o checkpoint documental e a referência ao runtime4642dbf testado.
+3. Transferir propriedade, integrar/verificar F9-T01 e medir o resultado no jogo.
+4. Continuar a matriz com fatias delimitadas, sem redefinir falta como opcional.
+5. A cada incremento atualizar resumo, base/hash, arquivos, verificações e pendências.
+
+Nenhuma autodeclaração de modelo substitui aceitação verificável. Se um item não
+foi implementado ou não foi validado, registrar precisamente e continuar quando
+possível. Não inventar PASS, completude, benchmark ou cronograma de reset.

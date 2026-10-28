@@ -1,0 +1,38 @@
+{
+  "status": "draft_not_integrated_not_compiled_not_tested",
+  "runtime_base": "4642dbf878fab4004f98141c7e2437ee11e22bd5",
+  "author": "terra_organic_brush gpt-6.1-terra medium",
+  "custody": "Sol text packaging for human-requested portable checkpoint",
+  "files": [
+    {
+      "target": "scripts/map_authoring/library/editor_preferences.gd",
+      "base_sha256": "b837895351bc98f440d3c3f2a27dfc14161aba8f464e8d200c8d14cd16c35e88",
+      "proposed_sha256": "080f2641c3d415520a5cb8e374e0aaa37e8a7bc7e3d1554f8fc951a7d0c23bb8",
+      "stored_as": "scripts/map_authoring/library/editor_preferences.gd.txt"
+    },
+    {
+      "target": "scripts/map_authoring/library/library_model.gd",
+      "base_sha256": "8d877dc4aeeeeb47be49237590e3ec4164bd384087892a8a9eef856819e16a92",
+      "proposed_sha256": "6ef264d36e7bcdc868a467a65c003ceb976faad54715c5f9482b75ddb53e355c",
+      "stored_as": "scripts/map_authoring/library/library_model.gd.txt"
+    },
+    {
+      "target": "scripts/map_authoring/terrain/brush.gd",
+      "base_sha256": "c9639a248d37cf9a61c5d213899a510c60977f26b1380bb4b013cd8e61368537",
+      "proposed_sha256": "2ee26a0ecd1bfeafe7e67e3ff3d1bbe6410c9b86c6c2e351ce3bd8905933fb4c",
+      "stored_as": "scripts/map_authoring/terrain/brush.gd.txt"
+    },
+    {
+      "target": "scripts/map_authoring/terrain/organic_example.gd",
+      "base_sha256": null,
+      "proposed_sha256": "a3b96f2ab197474a2f057bd56d6dbad55db1bf0bb15378e35f88af1f44764dd1",
+      "stored_as": "scripts/map_authoring/terrain/organic_example.gd.txt"
+    },
+    {
+      "target": "scripts/map_authoring/terrain/terrain_panel.gd",
+      "base_sha256": "e93edefc52425db42b48ad5617daeda039bd5bc2021e63b3e3c369177eacdc72",
+      "proposed_sha256": "bce7ddfdfb872f759555e80c17a19734ecea16096f1e5d273b603f6aff592ecd",
+      "stored_as": "scripts/map_authoring/terrain/terrain_panel.gd.txt"
+    }
+  ]
+}

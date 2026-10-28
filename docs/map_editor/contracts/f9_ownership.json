@@ -2405,6 +2405,30 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 regional synthesis contract; bounded read-only Astra consultation",
       "base_sha256": null
+    },
+    {
+      "path": "docs/WORKFLOW.md",
+      "owner": "Sol F9",
+      "previous_owner": "human routing update27/10 and explicit resume summary; documentation only during runtime freeze",
+      "base_sha256": "af748be11fbfd8e32d31c86bfa3940b0df59483c5ee21d1eae5a1054eb1f291a"
+    },
+    {
+      "path": "docs/map_editor/delivery/f9_resume.md",
+      "owner": "Sol F9",
+      "previous_owner": "human routing update27/10 and explicit resume summary; documentation only during runtime freeze",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/contracts/f9_terra_work_packages.md",
+      "owner": "Sol F9",
+      "previous_owner": "human routing update27/10 and explicit resume summary; documentation only during runtime freeze",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/f9_handoff_portable.md",
+      "owner": "Sol F9",
+      "previous_owner": "new human request27/10 for portable incremental handoff and gameplay-performance priority",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -2415,7 +2439,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "navigation_and_fields_pending_frozen_candidate",
+    "state": "navigation_and_fields_complete_on_4642dbf_f9_remains_open",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",

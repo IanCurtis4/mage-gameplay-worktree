@@ -1,5 +1,58 @@
 # Desenvolvimento, revisão e playtest
 
+## Atualização humana de27/10/2026 — Terra6.1
+
+Decisão explícita na retomada F9: aproveitar Terra6.1 como subagente para o máximo
+de implementações generalistas e criação artística que possam ser particionadas
+em entregas pequenas ou médias, completas e verificáveis. Sol decompõe, analisa,
+integra e extrapola resultados; conserva algoritmos sensíveis, problemas sistêmicos
+e fronteiras de risco elevado. A preferência substitui a restrição anterior de
+Terra somente a UI/conteúdo sobre APIs prontas. Contratos e dependências ainda
+precisam estar concretos antes de cada consumidor.
+
+Cada fatia entrega comportamento observável, arquivos de dono exclusivo,
+critérios de aceitação e evidência; não é microtarefa desconectada nem delegação
+do editor inteiro. Usar gpt-6.1-terra com esforço proporcional, inicialmente médio;
+não presumir autonomia/completude superior nem economia de quota sem dados.
+Falha local retorna à mesma fatia/Terra; Sol assume análise de falha persistente
+ou sistêmica. Declaração do executor não substitui conferência do contrato.
+
+Luna pode criar testes e fixtures delimitados e gerenciar sua execução/triagem
+separadamente. Não altera expectativas para ocultar falhas nem declara sozinho
+correção de um sistema complexo. Durante um congelamento, criação de testes novos
+também aguarda ou ocorre em rascunho fora dos inputs. Sol consolida a validação.
+
+O usuário revisará a arquitetura com Astra após terminar a construção do editor.
+Não antecipar essa revisão ampla nem criar chats/gates por essa preferência.
+Demais regras de autorização, preservação, propriedade e aceite humano continuam.
+
+O anexo workflow_multimodelos_terra61_sol.md foi lido como proposta de referência.
+Sua lista de rubrica/benchmark/experimentos não vira uma nova tarefa autorizada
+por estar no documento. Não introduzir um benchmark paralelo ou novos sistemas
+para experimentar modelos. Registrar completude/intervenções nos pacotes reais
+já autorizados; ampliar o tamanho conforme os resultados observados.
+
+
+## Prioridade humana de27/10/2026 — execução no jogo e checkpoints portáteis
+
+O tempo total dos testes não é uma meta de produto. Priorizar desempenho durante
+o jogo, autoria AX que facilite o desenvolvimento agêntico e mapas robustos na
+mesma autoridade usada pelo runtime. Medir fluidez, pausas/latência de ações e
+comportamento em cenário representativo real; não inferir FPS de um tempo de suíte.
+Um teste que chama navegação/colisão de gameplay pode revelar custo relevante,
+mas seu perfil, escala e fase precisam ser identificados antes de extrapolar.
+
+Não investir em encurtar testes por si só, reduzir cobertura, mudar amostras/perfis
+ou relaxar oráculos para parecer mais rápido. Orçamentos de memória, cancelamento
+e timeouts de proteção seguem técnicos; excedê-los continua diagnóstico.
+
+Entregar incrementos com resumo Markdown autossuficiente e evidências. Cada
+retomada portátil registra base/branch/checkout, alterações ainda não commitadas,
+resultado por etapa, pendências e próximo passo reproduzível em shell comum.
+O usuário pode levar o trabalho a outro provedor/modelo: os papéis não exigem
+ferramentas exclusivas do Codex. Preservar propriedade, critérios e histórico.
+Não presumir calendário/reset de modelos nem esperar por ele para salvar estado.
+
 ## Norma vigente — atualização humana de 12/10/2026
 
 O usuário autorizou iniciar E06 em08/10 e atualizou o fluxo em 12/10/2026: Luna
