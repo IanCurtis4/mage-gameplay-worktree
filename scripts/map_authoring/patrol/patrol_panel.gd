@@ -8,7 +8,10 @@ const Canvas = preload("res://scripts/map_authoring/patrol/patrol_canvas.gd")
 const Population = preload("res://scripts/map_authoring/population/population_compiler.gd")
 const PopulationStore = preload("res://scripts/map_authoring/population/population_store.gd")
 const IO = preload("res://scripts/map_authoring/io/source_store.gd")
+const Operations = preload("res://scripts/map_authoring/patrol/patrol_operations.gd")
+const Common = preload("res://scripts/map_authoring/population/population_operations.gd")
 var gameplay_tools: Control
+var name_edit: LineEdit
 var session := Session.new()
 var canvas: Control
 var routes: ItemList
@@ -37,8 +40,10 @@ func _ready() -> void:
 	exchange_panel = preload("res://scripts/map_authoring/exchange/exchange_panel.gd").mount(self,"patrol",func() -> Dictionary: return session.data.duplicate(true),session.apply)
 	size_flags_vertical = SIZE_EXPAND_FILL; size_flags_horizontal = SIZE_EXPAND_FILL
 	var heading := Label.new(); heading.text = "Patrulhas · rotas, espera e continuidade"; heading.add_theme_font_size_override("font_size",22); add_child(heading)
+	var name_row := HBoxContainer.new(); add_child(name_row); name_edit = LineEdit.new(); name_edit.size_flags_horizontal = SIZE_EXPAND_FILL; name_row.add_child(name_edit)
+	button(name_row,"Aplicar nome",func() -> void: apply_operation("name",{"name":name_edit.text}))
 	var toolbar := HBoxContainer.new(); add_child(toolbar)
-	for entry: Array in [["Novo",new_document],["Importar encontros…",func() -> void: choose("population")],["Abrir…",func() -> void: choose("open")],["Salvar como…",func() -> void: choose("save")],["Desfazer",func() -> void: session.undo()],["Refazer",func() -> void: session.redo()],["Recuperar…",func() -> void: choose("recover")]]: button(toolbar,entry[0],entry[1])
+	for entry: Array in [["Novo",new_document],["Importar encontros…",func() -> void: choose("population")],["Abrir…",func() -> void: choose("open")],["Salvar como…",func() -> void: choose("save")],["Desfazer",func() -> void: history(false)],["Refazer",func() -> void: history(true)],["Recuperar…",func() -> void: choose("recover")]]: button(toolbar,entry[0],entry[1])
 	var commands := HBoxContainer.new(); add_child(commands)
 	for entry: Array in [["Compilar",bake],["Cancelar",cancel],["Testar atores",func() -> void: test(false)],["Retomar teste",func() -> void: test(true)],["Publicar localmente…",func() -> void: choose("publish")]]: button(commands,entry[0],entry[1])
 	var split := HSplitContainer.new(); split.size_flags_vertical = SIZE_EXPAND_FILL; add_child(split)
@@ -75,39 +80,114 @@ func button(parent: Node, caption: String, callback: Callable) -> void:
 	var b := Button.new(); b.text = caption; b.pressed.connect(callback); parent.add_child(b)
 func _new_draft() -> void:
 	autosave = ProjectSettings.globalize_path("res://.godot/map_authoring/patrol_"+Crypto.new().generate_random_bytes(12).hex_encode()+".json"); DirAccess.make_dir_recursive_absolute(autosave.get_base_dir())
-func preserve_draft() -> void:
-	if session.dirty() and autosave != "": Store.save_source(autosave,session.data,IO.disk_hash(autosave))
-func new_document() -> void:
-	preserve_draft(); _new_draft(); source_path = ""; expected_hash = ""; session.replace(Document.empty()); canvas.clear()
-func import_population(source: Dictionary) -> Dictionary:
+func _dirty() -> bool:
+	return session.dirty() or (name_edit != null and name_edit.text != session.data.name)
+func _pending_source() -> Dictionary:
+	return Operations.propose(session.data,"name",{"name":name_edit.text if name_edit != null else session.data.name})
+func preserve_draft() -> bool:
+	if not _dirty(): return true
+	if autosave.is_empty(): return false
+	var pending_source := _pending_source()
+	if not pending_source.ok: return false
+	return Store.save_source(autosave,pending_source.data,IO.disk_hash(autosave)).ok
+func _confirm_replace(confirmed: bool) -> Dictionary:
+	if not _dirty(): return {"ok":true}
+	if not confirmed: return Operations.fail("confirmation_required")
+	return {"ok":true} if preserve_draft() else Operations.fail("io_recovery_required")
+func new_document(document_id: String = "patrols", caption: String = "Patrulhas", confirmed: bool = true) -> Dictionary:
+	var data := Document.empty(document_id); data.name = caption
+	var checked := Document.validate(data)
+	if not checked.ok: return checked
+	var allowed := _confirm_replace(confirmed)
+	if not allowed.ok: return allowed
+	_new_draft(); source_path = ""; expected_hash = ""; session.saved_hash = ""; canvas.clear()
+	return session.replace(data)
+func _valid_path(path: String) -> bool:
+	return not path.strip_edges().is_empty() and not path.to_utf8_buffer().has(0)
+func open_document(path: String, confirmed: bool, recovery: bool = false) -> Dictionary:
+	if not _valid_path(path): return Operations.fail("arguments_invalid")
+	var loaded := Store.load_source(path)
+	if not loaded.ok: return loaded
+	var allowed := _confirm_replace(confirmed)
+	if not allowed.ok: return allowed
+	_new_draft(); source_path = "" if recovery else ProjectSettings.globalize_path(path).simplify_path(); expected_hash = "" if recovery else loaded.byte_hash
+	session.saved_hash = ""; canvas.clear(); var applied := session.replace(loaded.data)
+	if not recovery: session.saved_hash = Document.hash_source(session.data)
+	if not loaded.data.population.is_empty() and not loaded.data.population[0].map.is_empty():
+		var built := Population.MapCompiler.compile(loaded.data.population[0].map[0])
+		if built.ok: canvas.set_package(built.package); _surfaces()
+	return applied
+func save_document(path: String, overwrite_hash: String = "") -> Dictionary:
+	if not _valid_path(path): return Operations.fail("arguments_invalid")
+	var normalized := ProjectSettings.globalize_path(path).simplify_path()
+	var same: bool = normalized.to_lower() == source_path.to_lower() if OS.has_feature("windows") else normalized == source_path
+	var pending_source := _pending_source()
+	if not pending_source.ok: return pending_source
+	var saved := Store.save_source(normalized,pending_source.data,expected_hash if same else overwrite_hash)
+	if saved.ok:
+		session.apply(pending_source.data); source_path = normalized; expected_hash = saved.byte_hash; session.saved_hash = Document.hash_source(session.data)
+	return saved
+func history(redo: bool) -> Dictionary:
+	var pending_source := _pending_source()
+	if not pending_source.ok: return pending_source
+	if pending_source.output_hash != Document.hash_source(session.data):
+		if not preserve_draft(): return Operations.fail("io_recovery_required")
+		session.apply(pending_source.data)
+	var changed_history: bool = session.redo() if redo else session.undo()
+	return {"ok":true,"output_hash":Document.hash_source(session.data)} if changed_history else Operations.fail("history_empty")
+func import_population(source: Dictionary, confirmed: bool = true) -> Dictionary:
 	var checked := PopulationStore.Document.validate(source)
 	if not checked.ok: show_result(checked); return checked
-	var data := Document.empty(); data.population = [source.duplicate(true)]
-	preserve_draft(); _new_draft(); source_path = ""; expected_hash = ""; session.replace(data)
-	var map := Population.MapCompiler.compile(source.map[0]) if not source.map.is_empty() else {"ok":false}
-	if map.ok: canvas.set_package(map.package); _surfaces()
+	var map := Population.MapCompiler.compile(source.map[0]) if not source.map.is_empty() else {"ok":true}
+	if not map.ok: return map
+	var pending_source := _pending_source()
+	if not pending_source.ok: return pending_source
+	var data := Document.empty(session.data.document_id); data.name = pending_source.data.name; data.revision = session.data.revision; data.population = [source.duplicate(true)]
+	var allowed := _confirm_replace(confirmed)
+	if not allowed.ok: return allowed
+	_new_draft(); source_path = ""; expected_hash = ""; session.saved_hash = ""; canvas.clear(); session.replace(data)
+	if map.has("package"): canvas.set_package(map.package); _surfaces()
 	status.text = "Encontros importados. Crie uma rota e vincule slots."; return {"ok":true}
+func import_population_path(path: String, confirmed: bool) -> Dictionary:
+	if not _valid_path(path): return Operations.fail("arguments_invalid")
+	var loaded := PopulationStore.load_source(path)
+	return import_population(loaded.data,confirmed) if loaded.ok else loaded
+func apply_operation(operation: String, parameters: Dictionary) -> Dictionary:
+	var base := {"ok":true,"data":session.data} if operation == "name" else _pending_source()
+	if not base.ok: return base
+	var proposed := Operations.propose(base.data,operation,parameters)
+	if not proposed.ok: show_result(proposed); return proposed
+	var applied := session.apply(proposed.data)
+	if applied.ok:
+		applied.entity_id = proposed.entity_id; applied.added_ids = proposed.added_ids; applied.removed_ids = proposed.removed_ids; applied.output_hash = Document.hash_source(session.data)
+		if parameters.has("patrol_id"): select_route(parameters.patrol_id)
+		if parameters.has("point_id"):
+			var route := current_route()
+			for index: int in route.get("waypoints",[]).size():
+				if route.waypoints[index].point_id == parameters.point_id: points.select(index); wait_time.value = route.waypoints[index].wait_seconds
+	show_result(applied); return applied
+func select_route(id: String) -> void:
+	for index: int in session.data.patrols.size():
+		if session.data.patrols[index].patrol_id == id: routes.select(index); refresh_route(); return
 func changed() -> void:
 	result = {}; refresh(); status.text = "Alterações pendentes de compilação."
 func refresh() -> void:
 	if routes == null: return
+	name_edit.text = session.data.name
 	var selected := routes.get_selected_items(); var index := selected[0] if not selected.is_empty() else 0
 	routes.clear()
 	for route: Dictionary in session.data.patrols: routes.add_item(route.patrol_id)
 	if routes.item_count > 0: routes.select(mini(index,routes.item_count-1))
 	slots.clear()
+	canvas.source = {} if session.data.population.is_empty() else session.data.population[0].duplicate(true)
 	if not session.data.population.is_empty():
-		canvas.source = session.data.population[0].duplicate(true)
 		for slot: Dictionary in session.data.population[0].slots: slots.add_item(slot.slot_id+" · "+slot.species_id)
 	canvas.patrol_source = session.data.duplicate(true); refresh_route(); canvas.redraw()
 func current_route() -> Dictionary:
 	var selected := routes.get_selected_items()
 	return session.data.patrols[selected[0]].duplicate(true) if not selected.is_empty() else {}
 func replace_route(route: Dictionary) -> void:
-	var data: Dictionary = session.data.duplicate(true)
-	for i: int in data.patrols.size():
-		if data.patrols[i].patrol_id == route.patrol_id: data.patrols[i] = route
-	show_result(session.apply(data))
+	apply_operation("route/upsert",route)
 func refresh_route() -> void:
 	points.clear(); slots.deselect_all(); var route := current_route(); canvas.selected_route = route.get("patrol_id","")
 	if route.is_empty(): return
@@ -118,13 +198,13 @@ func refresh_route() -> void:
 			if session.data.population[0].slots[i].slot_id in route.slot_ids: slots.select(i,false)
 	canvas.redraw()
 func add_route() -> void:
-	var data: Dictionary = session.data.duplicate(true); var id := "patrol_"+Crypto.new().generate_random_bytes(4).hex_encode()
-	data.patrols.append({"patrol_id":id,"revision":1,"mode":"loop","slot_ids":[],"waypoints":[]}); show_result(session.apply(data)); routes.select(routes.item_count-1); refresh_route()
+	var id := "patrol_"+Crypto.new().generate_random_bytes(4).hex_encode()
+	apply_operation("route/upsert",{"patrol_id":id,"revision":1,"mode":"loop","slot_ids":[],"waypoints":[]})
 func add_point(point: Dictionary) -> void:
 	var route := current_route()
 	if route.is_empty(): status.text = "Crie ou selecione uma rota."; return
 	var waypoint := point.duplicate(true); waypoint["point_id"] = "point_"+Crypto.new().generate_random_bytes(4).hex_encode(); waypoint["wait_seconds"] = wait_time.value
-	route.waypoints.append(waypoint); replace_route(route)
+	waypoint.patrol_id = route.patrol_id; apply_operation("waypoint/upsert",waypoint)
 func apply_mode() -> void:
 	var route := current_route()
 	if not route.is_empty(): route.mode = "loop" if mode.selected == 0 else "ping_pong"; replace_route(route)
@@ -135,9 +215,7 @@ func apply_wait() -> void:
 func move_point(direction: int) -> void:
 	var route := current_route(); var selected := points.get_selected_items()
 	if route.is_empty() or selected.is_empty(): return
-	var i := selected[0]; var j := i+direction
-	if j < 0 or j >= route.waypoints.size(): return
-	var p: Dictionary = route.waypoints[i]; route.waypoints[i] = route.waypoints[j]; route.waypoints[j] = p; replace_route(route); points.select(j)
+	apply_operation("waypoint/move",{"patrol_id":route.patrol_id,"point_id":route.waypoints[selected[0]].point_id,"direction":direction})
 func assign_slots() -> void:
 	var route := current_route()
 	if route.is_empty() or session.data.population.is_empty(): return
@@ -148,23 +226,28 @@ func request_remove(kind: String) -> void:
 	if current_route().is_empty() or (kind == "point" and points.get_selected_items().is_empty()): return
 	pending = kind; confirmation.dialog_text = "Remover "+("a rota e seus vínculos?" if kind == "route" else "o ponto selecionado?"); confirmation.popup_centered()
 func confirm_remove() -> void:
-	var data: Dictionary = session.data.duplicate(true); var index := routes.get_selected_items()[0]
-	if pending == "route": data.patrols.remove_at(index)
-	elif not points.get_selected_items().is_empty(): data.patrols[index].waypoints.remove_at(points.get_selected_items()[0])
-	show_result(session.apply(data))
+	var route := current_route()
+	if route.is_empty(): return
+	if pending == "route": apply_operation("route/remove",{"patrol_id":route.patrol_id,"confirm_remove":true})
+	elif not points.get_selected_items().is_empty(): apply_operation("waypoint/remove",{"patrol_id":route.patrol_id,"point_id":route.waypoints[points.get_selected_items()[0]].point_id,"confirm_remove":true})
 func _surfaces() -> void:
 	surface.clear(); surface.add_item("Todas as superfícies visíveis")
 	for cell: Dictionary in canvas.package.manifest.stages[0].surfaces: surface.add_item(cell.surface_id)
-func bake() -> void:
-	if job != null: return
+func bake() -> Dictionary:
+	if job != null: return Operations.fail("job_running")
+	var pending_source := _pending_source()
+	if not pending_source.ok: return pending_source
+	session.apply(pending_source.data)
 	result = {}; cancelled = false; var data: Dictionary = session.data.duplicate(true); var hash := Document.hash_source(data)
 	job = Thread.new(); job.start(func() -> Dictionary:
 		var output := Compiler.compile(data,func() -> bool:
 			mutex.lock(); var stopped := cancelled; mutex.unlock(); return stopped)
 		output["base_hash"] = hash; return output)
 	status.text = "Validando corpo, limite de retorno e todos os trechos…"
-func cancel() -> void:
+	return {"ok":true}
+func cancel() -> Dictionary:
 	mutex.lock(); cancelled = true; mutex.unlock()
+	return {"ok":true}
 func _process(_delta: float) -> void:
 	if job == null or job.is_alive(): return
 	result = job.wait_to_finish(); job = null
@@ -182,27 +265,56 @@ func choose(kind: String) -> void:
 	dialog.filters = PackedStringArray() if kind == "publish" else PackedStringArray(["*.json,*.pending,*.bak ; Fontes e recuperação"]); dialog.popup_centered_ratio(0.75)
 func file_selected(path: String) -> void:
 	if action == "population":
-		var loaded := PopulationStore.load_source(path)
-		if loaded.ok: import_population(loaded.data)
-		else: show_result(loaded)
+		show_result(import_population_path(path,true))
 	elif action in ["open","recover"]:
-		var loaded := Store.load_source(path)
-		if not loaded.ok: show_result(loaded); return
-		preserve_draft(); _new_draft(); session.replace(loaded.data)
-		source_path = path if action == "open" else ""; expected_hash = IO.disk_hash(path) if action == "open" else ""
-		if action == "open": session.saved_hash = Document.hash_source(session.data)
-		canvas.clear()
-		if not loaded.data.population.is_empty() and not loaded.data.population[0].map.is_empty():
-			var built := Population.MapCompiler.compile(loaded.data.population[0].map[0])
-			if built.ok: canvas.set_package(built.package); _surfaces()
+		show_result(open_document(path,true,action == "recover"))
 	elif action == "save":
-		var saved := Store.save_source(path,session.data,expected_hash if path == source_path else "")
-		show_result(saved)
-		if saved.ok: source_path = path; expected_hash = IO.disk_hash(path); session.saved_hash = Document.hash_source(session.data); status.text = "Patrulhas salvas."
+		var saved := save_document(path,IO.disk_hash(path)); show_result(saved)
+		if saved.ok: status.text = "Patrulhas salvas."
 	elif action == "publish":
 		if not result.get("ok",false): status.text = "Compile antes de publicar."; return
 		var published := Store.publish(path,result.package,Document.hash_source(session.data)); show_result(published)
 		if published.ok: status.text = "Pacote local publicado: "+published.path
+func map_query() -> Dictionary: return Common.query_package(canvas.package)
+func _ax_fields() -> Dictionary:
+	var fields := {"patrol/document/new":{"document_id":"id","name":"string","confirm_discard":"bool"},"patrol/document/name":Operations.FIELDS.name,"patrol/document/open":{"path":"string","confirm_discard":"bool"},"patrol/document/save":{"path":"string"},"patrol/history/undo":{},"patrol/history/redo":{},"patrol/population/import":{"path":"string","confirm_discard":"bool"},"patrol/map/query":{},"patrol/route/select":{"patrol_id":"id"},"patrol/surface/select":{"surface_id":"string"},"patrol/compile":{},"patrol/cancel":{}}
+	for operation: String in Operations.FIELDS:
+		if operation != "name": fields["patrol/"+operation] = Operations.FIELDS[operation]
+	return fields
+func authoring_commands() -> Array:
+	var commands: Array = []
+	for id: String in _ax_fields(): commands.append({"id":id,"parameters":_ax_fields()[id]})
+	return commands
+func ax_command(id: String, parameters: Dictionary) -> Dictionary:
+	var fields := _ax_fields()
+	if not fields.has(id): return Operations.fail("action_missing")
+	var errors: Array = []; Common.Schema._shape(parameters,fields[id],"parameters",errors)
+	if not errors.is_empty(): return Operations.fail("arguments_invalid")
+	var applied: Dictionary
+	match id:
+		"patrol/document/new": applied = new_document(parameters.document_id,parameters.name,parameters.confirm_discard)
+		"patrol/document/name": applied = apply_operation("name",parameters)
+		"patrol/document/open": applied = open_document(parameters.path,parameters.confirm_discard)
+		"patrol/document/save": applied = save_document(parameters.path)
+		"patrol/history/undo", "patrol/history/redo": applied = history(id == "patrol/history/redo")
+		"patrol/population/import": applied = import_population_path(parameters.path,parameters.confirm_discard)
+		"patrol/map/query": applied = map_query()
+		"patrol/compile": applied = bake()
+		"patrol/cancel": applied = cancel()
+		"patrol/route/select":
+			if Common.find(session.data.patrols,"patrol_id",parameters.patrol_id).is_empty(): return Operations.fail("entity_missing",parameters.patrol_id)
+			select_route(parameters.patrol_id); applied = {"ok":true}
+		"patrol/surface/select":
+			var selected := -1
+			for index: int in surface.item_count:
+				if (index == 0 and parameters.surface_id.is_empty()) or surface.get_item_text(index) == parameters.surface_id: selected = index; break
+			if selected < 0: return Operations.fail("entity_missing",parameters.surface_id)
+			surface.select(selected); canvas.selected_surface = parameters.surface_id; canvas.redraw(); applied = {"ok":true}
+		_: applied = apply_operation(id.trim_prefix("patrol/"),parameters)
+	if applied.ok:
+		applied.output_hash = Document.hash_source(session.data)
+		if not applied.has("entity_id"): applied.entity_id = session.data.document_id
+	show_result(applied); return applied
 func test(resume: bool) -> void:
 	var opened: Dictionary = gameplay_tools.resume() if resume else gameplay_tools.launch()
 	status.text = "Teste de jogo solicitado; use a janela para jogar ou suspender." if opened.ok else gameplay_tools.message.text

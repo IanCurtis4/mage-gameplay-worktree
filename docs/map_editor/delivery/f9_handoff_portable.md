@@ -1,5 +1,29 @@
 # RagRPG — handoff portátil de F9
 
+<!-- f9-encounter-active -->
+## Em implementação — AX de encontros e patrulhas
+
+Último checkpoint integrado: ff61b57b80a564a3244267ed3207c1663b490682 (abaixo).
+Há alterações de runtime ainda não validadas nesta worktree. Sol adicionou
+PopulationOperations/PatrolOperations, operações compartilhadas nos painéis,
+documentos/Stores com hash de bytes lidos, prévia assinada e cliente AX para
+population/patrol. O repasse síncrono do mapa validado evita compilação duplicada
+durante import_map. Nenhum novo conteúdo do Bosque foi criado nesta fatia.
+
+Luna escreveu drafts 27/25 nos dois tests map_editor_encounter_authoring*;
+revisão pré-execução pediu corrigir snapshots temporais, fixtures realizadas,
+conflitos via painel, igualdade das ações GUI/AX e capturas separadas. Import01/02 PASS, 2044/2048 entradas enumeradas sem os seis imports de props;
+quatro UIDs geradas pelo engine copiadas sem alteração. Ainda sem execução dos
+checks modelo/nativo desta fatia; não contar os drafts como PASS.
+Contrato: última seção f9_ax_authoring.md; propriedade nominal registrada em
+f9_ownership.json, supervision.encounter_authoring. Root é Sol para código;
+Luna só escreve seus dois testes e evidência. Import01/02 terminaram; nenhum engine/handle ativo antes do próximo lote.
+
+Próximo: registrar o candidato, manter source/tests/tools/HEAD congelados e
+executar o lote dirigido 27/25, regressões e verify por impacto. Só depois liberar Terra
+para encontros/patrulha/objetivo do Bosque pelo AX. Não usar o source checkout como
+--path. F9 integral e todos os limites do checkpoint26 continuam vigentes.
+<!-- /f9-encounter-active -->
 <!-- f9-current-ax -->
 ## Checkpoint 26 — 29/10: bioma e bordas florestais integrados
 

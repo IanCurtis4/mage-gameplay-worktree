@@ -1,0 +1,44 @@
+{
+  "ok": true,
+  "scope": "import and generated UID transport only; no model/native/gameplay PASS claimed",
+  "imports": [
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/import_01/manifest.json",
+      "primary_inputs_excluding_six_prop_imports": 2044,
+      "mismatches": 0,
+      "import_ok": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/import_02/manifest.json",
+      "primary_inputs_excluding_six_prop_imports": 2048,
+      "mismatches": 0,
+      "import_ok": true
+    }
+  ],
+  "uids": [
+    {
+      "path": "scripts/map_authoring/population/population_operations.gd.uid",
+      "uid": "uid://bhpdwsfrrnq7g",
+      "sha256": "ac93a4f9ece3bb7f3f9c89222c0b90417d93e320779eff57a0d6eff7e59ea85d",
+      "origin": "Godot Import01 in fixture, byte copy to source before Import02"
+    },
+    {
+      "path": "scripts/map_authoring/patrol/patrol_operations.gd.uid",
+      "uid": "uid://dkqt5dfbb5evw",
+      "sha256": "0163cda8436f597b84ef822aa75818144719e4371a4b6ad2db35b2bd32371267",
+      "origin": "Godot Import01 in fixture, byte copy to source before Import02"
+    },
+    {
+      "path": "tests/map_editor_encounter_authoring_test.gd.uid",
+      "uid": "uid://bak7y5mmyw066",
+      "sha256": "62ac0e9a8bdbb918ef596c6e8fe6f0af7bbc56517ef9fb9687c90aee8a85b03d",
+      "origin": "Godot Import01 in fixture, byte copy to source before Import02"
+    },
+    {
+      "path": "tests/map_editor_encounter_authoring_ui_test.gd.uid",
+      "uid": "uid://b8qg43urllenw",
+      "sha256": "4f57b904d4f629acc5ee9e26d2b58f3a51482a6f2536795845c9b4235874db81",
+      "origin": "Godot Import01 in fixture, byte copy to source before Import02"
+    }
+  ]
+}

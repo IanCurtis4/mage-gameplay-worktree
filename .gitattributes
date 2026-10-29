@@ -17,3 +17,8 @@ data/map_authoring/sanctuary_woods*.json text eol=lf
 docs/map_editor/delivery/evidence/f9/author/map_biome/** -text
 docs/map_editor/delivery/evidence/f9/luna/map_biome/** -text
 docs/map_editor/delivery/evidence/f9/terra/area_forest_borders/** -text
+
+# Closed encounter and patrol authoring receipts.
+docs/map_editor/delivery/evidence/f9/author/encounter_authoring/** -text
+docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/** -text
+docs/map_editor/delivery/evidence/f9/terra/area_encounters/** -text

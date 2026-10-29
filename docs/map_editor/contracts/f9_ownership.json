@@ -2867,6 +2867,84 @@
       "owner": "Terra F9 area",
       "previous_owner": "new forest border batch recipe and AX evidence only after validation",
       "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/population/population_operations.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new bounded encounter/patrol AX slice or sequential transfer after prior terminal delivery",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/population/population_operations.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new bounded encounter/patrol AX slice or sequential transfer after prior terminal delivery",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/patrol/patrol_operations.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new bounded encounter/patrol AX slice or sequential transfer after prior terminal delivery",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/patrol/patrol_operations.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new bounded encounter/patrol AX slice or sequential transfer after prior terminal delivery",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/",
+      "owner": "Sol F9",
+      "previous_owner": "new bounded encounter/patrol AX slice or sequential transfer after prior terminal delivery",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_encounter_authoring_test.gd",
+      "owner": "Luna F9 encounter authoring",
+      "previous_owner": "new bounded encounter/patrol AX slice or sequential transfer after prior terminal delivery",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_encounter_authoring_test.gd.uid",
+      "owner": "Luna F9 encounter authoring",
+      "previous_owner": "new bounded encounter/patrol AX slice or sequential transfer after prior terminal delivery",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_encounter_authoring_ui_test.gd",
+      "owner": "Luna F9 encounter authoring",
+      "previous_owner": "new bounded encounter/patrol AX slice or sequential transfer after prior terminal delivery",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_encounter_authoring_ui_test.gd.uid",
+      "owner": "Luna F9 encounter authoring",
+      "previous_owner": "new bounded encounter/patrol AX slice or sequential transfer after prior terminal delivery",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/",
+      "owner": "Luna F9 encounter authoring",
+      "previous_owner": "new bounded encounter/patrol AX slice or sequential transfer after prior terminal delivery",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/terra/area_encounters/",
+      "owner": "Terra F9 area",
+      "previous_owner": "new bounded encounter/patrol AX slice or sequential transfer after prior terminal delivery",
+      "base_sha256": null
+    },
+    {
+      "path": "data/map_authoring/sanctuary_woods.population.json",
+      "owner": "Terra F9 area",
+      "previous_owner": "new bounded encounter/patrol AX slice or sequential transfer after prior terminal delivery",
+      "base_sha256": null
+    },
+    {
+      "path": "data/map_authoring/sanctuary_woods.patrol.json",
+      "owner": "Terra F9 area",
+      "previous_owner": "new bounded encounter/patrol AX slice or sequential transfer after prior terminal delivery",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -3238,6 +3316,39 @@
         "addons/ragrpg_map_editor/presentation.gd",
         "tools/map_editor_completion/run.ps1"
       ]
+    },
+    "encounter_authoring": {
+      "state": "validation_candidate",
+      "base": "ff61b57b80a564a3244267ed3207c1663b490682",
+      "runtime_owner": "Sol F9",
+      "test_owner": "Luna F9 encounter authoring",
+      "content_owner": "Terra F9 area after explicit producer release",
+      "fixture_frozen": true,
+      "scope": "closed population/patrol operations; same GUI AX sessions stores and workers; no generic source setter or new gameplay rules",
+      "files": [
+        ".gitattributes",
+        "scripts/map_authoring/population/population_operations.gd",
+        "scripts/map_authoring/population/population_operations.gd.uid",
+        "scripts/map_authoring/population/population_panel.gd",
+        "scripts/map_authoring/population/population_session.gd",
+        "scripts/map_authoring/population/population_store.gd",
+        "scripts/map_authoring/patrol/patrol_operations.gd",
+        "scripts/map_authoring/patrol/patrol_operations.gd.uid",
+        "scripts/map_authoring/patrol/patrol_panel.gd",
+        "scripts/map_authoring/patrol/patrol_document.gd",
+        "scripts/map_authoring/patrol/patrol_session.gd",
+        "scripts/map_authoring/patrol/patrol_store.gd",
+        "scripts/map_authoring/agent/ax_session.gd",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "test_files": [
+        "tests/map_editor_encounter_authoring_test.gd",
+        "tests/map_editor_encounter_authoring_test.gd.uid",
+        "tests/map_editor_encounter_authoring_ui_test.gd",
+        "tests/map_editor_encounter_authoring_ui_test.gd.uid"
+      ],
+      "fixture_owner": "Luna execution to be released after candidate commit",
+      "uid_transport": "Sol copied four engine-generated UID files unchanged after Import01, before Import02"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

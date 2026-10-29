@@ -6,8 +6,8 @@ const Population = preload("res://scripts/map_authoring/population/population_do
 const ROOT := {"schema_version":"int","document_id":"id","revision":"int","name":"string","population":"array","patrols":"array"}
 const ROUTE := {"patrol_id":"id","revision":"int","mode":"id","slot_ids":"strings","waypoints":"array"}
 const WAYPOINT := {"point_id":"id","surface_id":"string","position_xyz":"v3","wait_seconds":"number"}
-static func empty() -> Dictionary:
-	return {"schema_version":1,"document_id":"patrols","revision":1,"name":"Patrulhas","population":[],"patrols":[]}
+static func empty(id: String = "patrols") -> Dictionary:
+	return {"schema_version":1,"document_id":id,"revision":1,"name":"Patrulhas","population":[],"patrols":[]}
 static func hash_source(data: Dictionary) -> String:
 	var copy := data.duplicate(true)
 	copy.patrols.sort_custom(func(a: Dictionary,b: Dictionary) -> bool: return a.patrol_id < b.patrol_id)

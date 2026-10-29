@@ -25,3 +25,5 @@ func redo() -> bool:
 	if _redo.is_empty(): return false
 	_undo.append(data); data = _redo.pop_back(); changed.emit(); return true
 func dirty() -> bool: return Document.hash_source(data) != saved_hash
+func can_undo() -> bool: return not _undo.is_empty()
+func can_redo() -> bool: return not _redo.is_empty()

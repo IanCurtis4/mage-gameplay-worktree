@@ -240,3 +240,85 @@ CLI legado mantém --border-command e acrescenta --border-batch com os mesmos
 contém expected_source_hash/commands e usa Session.apply_borders; leitura do
 pedido reutiliza o limite StrictJSON de SourceStore antes de alocar o arquivo.
 O cliente AX via CLI continua outra superfície equivalente sobre o mesmo painel.
+
+## Quarta fatia — encontros e patrulhas (base ff61b57b, 29/10)
+
+Sol implementa; Luna escreve testes de dono exclusivo. Terra consome somente
+após liberação técnica e sempre pelo AX real. Sem nova espécie, fórmula, quest,
+limite maior ou nova geometria. Os compiladores canônicos continuam a validar
+contexto, corpo, rota, origem/recompensa, plano aplicado e leash.
+
+PopulationOperations.propose e PatrolOperations.propose são propostas puras,
+fechadas por operação, seguidas de Document.validate e Session.apply uma vez.
+Invalid-last/nested/NaN/ref/confirm não podem alterar fonte ou histórico; no-op
+não cria undo. Retornam output_hash, entity_id e added_ids/removed_ids. GUI usa
+os mesmos produtores. Não existe comando para substituir o documento completo.
+
+População expõe os sufixos abaixo sob population/:
+
+- document/new {document_id,name,confirm_discard}, document/name {name},
+  document/open {path,confirm_discard}, document/save {path}, history/undo|redo {};
+- map/import {path}: snapshot validado pela MapStore/MapCompiler, apenas quando
+  ainda não há mapa. map/query {} devolve hash de mapa/pacote, bioma, apoios com
+  vertices_xyz e sockets com position_xyz, a partir do pacote real do canvas;
+  catalog/options {} devolve o catálogo existente;
+- entrance/set com PopulationDocument.ANCHOR;
+- brush/upsert, exclusion/upsert, interaction/upsert com os respectivos records
+  BRUSH/EXCLUSION/INTERACTION completos, IDs explícitos e nested fields fechados;
+- brush/remove {brush_id,confirm_remove} remove também seus slots, como a GUI;
+  exclusion/remove e interaction/remove usam o ID correspondente e confirmação.
+  Referências de portal/site após remover interação ficam para diagnóstico no
+  compilador, sem reparo inferido;
+- slot/upsert com SLOT completo exige fixed=true; criação/edição manual é fixa.
+  Slots gerados só vêm da prévia canônica. slot/pin {slot_id,fixed} e
+  slot/remove {slot_id,confirm_remove};
+- brush/select {brush_id}, slot/select {slot_id}, surface/select {surface_id}
+  são editoriais; surface_id vazio seleciona todos. IDs de apoio vêm da consulta;
+- plan/preview {}, plan/apply {expected_source_hash,proposal_hash,confirm_apply},
+  plan/discard {}, compile {}, cancel {}. Preview/compile iniciam os workers
+  existentes e recusam um segundo job. A assinatura privada da proposta liga
+  base_hash, hash da data e diff; apply confere assinatura fornecida, base atual,
+  confirmação e assinatura recalculada antes de um único Session.apply.
+  Resultado/snapshot expõe proposal_hash e diff, sem setter de proposta AX.
+
+Patrulha expõe sob patrol/: document/new/name/open/save e history/undo|redo com
+os mesmos campos; population/import {path,confirm_discard}, map/query {},
+route/upsert com PatrolDocument.ROUTE completo e waypoint arrays fechados,
+route/remove {patrol_id,confirm_remove}; waypoint/upsert com patrol_id mais
+WAYPOINT completo, waypoint/remove {patrol_id,point_id,confirm_remove},
+waypoint/move {patrol_id,point_id,direction} com direction inteiro -1 ou 1.
+Upsert de ponto novo acrescenta ao fim; edição preserva posição; move no limite
+é no-op. route/select {patrol_id}, surface/select {surface_id} são editoriais;
+compile {} e cancel {} usam a thread real e o hash de revisão já existentes.
+Modo, espera, ordem e atribuição de slots da GUI passam pelo mesmo produtor.
+
+Novos/abrir/importar substitutivo validam o candidato antes de descartar e
+exigem confirmação AX quando dirty; falha de preservação de rascunho interrompe
+substituição. Save usa o hash dos bytes realmente lidos pela Store; novo destino
+AX existente é recusado. GUI FileDialog pode confirmar sobrescrita pela mesma
+save_document com hash observado. Falhas não mudam caminho/saved_hash/histórico.
+Nome explícito aparece nos dois painéis. Sessões expõem can_undo/can_redo.
+
+O cliente AX aceita screen population/patrol, abre as janelas existentes por
+map/open_population e population/open_patrols e usa suas apresentações/sessões.
+Não instancia outro painel nem injeta fonte. Workers preview/compile são
+aguardados e o resultado final é retornado, com cancel/stale. Cada ação usa o
+hash da sessão correspondente; snapshots population_snapshot/patrol_snapshot
+incluem fonte, estado, diagnóstico e assinatura da proposta quando houver.
+Campos de topo continuam identificando a peça por compatibilidade. Captura
+mostra a última tela real e esconde janelas auxiliares acima dela.
+
+Provar modelo puro, GUI/AX, documentos/conflitos/rascunho, IDs/nested/refs,
+manual fixo/remoção de brush, undo integral, proposta stale/adulterada/confirm,
+rotas/espera/ordem/slots exclusivos, workers e consumidor. CLI nativo/headless e
+roundtrip devem ter os mesmos hashes. Luna é dona dos testes novos
+map_editor_encounter_authoring_test.gd e map_editor_encounter_authoring_ui_test.gd;
+UIDs somente geradas pelo engine. Regressão Population/Patrol/Context e
+verify.ps1 por impacto. Ainda não fecha reconciliação entre revisões, geração
+regional, performance, área final ou F9 integral.
+
+Campos concretos de map/query: map_source_hash, map_package_hash, biome,
+surfaces[{surface_id,vertices_xyz}] e sockets[{socket_id,kind,surface_id,position_xyz}].
+Na importação de mapa para encontros, o pacote recém-validado é repassado somente
+durante o Session.apply síncrono, com source_hash exato; refresh evita recompilar
+esse mesmo snapshot. Não é cache persistente ou fechamento de F9-10.
