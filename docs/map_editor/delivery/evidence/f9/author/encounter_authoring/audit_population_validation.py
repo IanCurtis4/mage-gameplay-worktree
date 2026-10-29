@@ -35,11 +35,11 @@ def audit_inputs(rows,props):
         assert sha(ROOT/r['path'])==r['sha256'].lower()==sha(FIXTURE/r['path']),r['path']
     return len(rows)
 assert head()==args.head and sha(ENGINE)==ENGINE_SHA
-direct_path=LUNA/'population_reachability_03/runs.json'; direct=read(direct_path)
+direct_path=LUNA/'population_reachability_04/runs.json'; direct=read(direct_path)
 assert direct['ok'] and direct['exit_code']==0 and not direct['timed_out'] and not direct['aborted']
 assert direct['head_before']==direct['head_after']==args.head and direct['engine_sha256'].lower()==ENGINE_SHA
 assert Path(direct['fixture']).resolve()==FIXTURE.resolve()
-assert direct['result']['ok'] and direct['result']['checks']==27 and len(direct['result']['details'])==27 and not direct['result']['failed'] and all(c['ok'] for c in direct['result']['details'])
+assert direct['result']['ok'] and direct['result']['count']==27 and len(direct['result']['checks'])==27 and not direct['result']['failed'] and all(c['ok'] for c in direct['result']['checks'])
 direct_count=audit_inputs(direct['inputs'],True)
 context_path=LUNA/'population_context_01/manifest.json'; context=read(context_path)
 assert context['head_before']==context['head_after']==args.head and context['engine_sha256'].lower()==ENGINE_SHA

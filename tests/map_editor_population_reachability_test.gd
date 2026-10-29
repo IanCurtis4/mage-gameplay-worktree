@@ -125,5 +125,5 @@ func _run() -> void:
 
 func finish() -> void:
 	var ok := failures.is_empty() and checks.size() == 27
-	print("F9_POPULATION_REACHABILITY_RESULT "+JSON.stringify({"ok":ok,"checks":checks.size(),"failed":failures,"details":checks,"expected_checks":27}))
+	print("F9_POPULATION_REACHABILITY_RESULT "+JSON.stringify({"ok":ok,"count":checks.size(),"failed":failures,"checks":checks,"expected_checks":27}))
 	quit(0 if ok else 1)
