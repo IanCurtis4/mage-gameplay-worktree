@@ -5,6 +5,8 @@ const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 const Catalog = preload("res://scripts/map_authoring/composition/border_profile_catalog.gd")
 const Canonical = preload("res://scripts/core/expedition/generation/canonical.gd")
 const LEGACY := "ruin_envelope_v1"
+# One update for every supported instance/transition and the decoration flag.
+const MAX_COMMANDS := 32+496+1
 
 static func empty() -> Dictionary:
 	return {"version":1,"instances":[],"transitions":[],"decorations":true}
@@ -64,7 +66,21 @@ static func apply(source: Dictionary, command: Dictionary) -> Dictionary:
 	var checked := validate(settings,source.instances)
 	if not checked.ok: return checked
 	copy["borders"] = normalized(settings)
-	return {"ok":true,"data":copy,"diff":{"before":source.get("borders",null),"after":copy.borders.duplicate(true)}}
+	return {"ok":true,"data":copy,"diff":_diff(source,copy.borders)}
+
+static func apply_batch(source: Dictionary, commands: Array) -> Dictionary:
+	if commands.is_empty() or commands.size() > MAX_COMMANDS: return Catalog.fail("profile_invalid")
+	var working := source.duplicate(true)
+	for command: Variant in commands:
+		if not command is Dictionary: return Catalog.fail("profile_invalid")
+		var proposed := apply(working,command)
+		if not proposed.ok: return proposed
+		working = proposed.data
+	return {"ok":true,"data":working,"diff":_diff(source,working.borders),"command_count":commands.size()}
+
+static func _diff(source: Dictionary, settings: Dictionary) -> Dictionary:
+	var before: Variant = source.get("borders",null)
+	return {"before":before.duplicate(true) if before is Dictionary else before,"after":settings.duplicate(true)}
 
 static func remove_references(source: Dictionary, instance_id: String) -> Dictionary:
 	var copy := source.duplicate(true)

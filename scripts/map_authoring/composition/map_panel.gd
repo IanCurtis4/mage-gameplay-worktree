@@ -47,6 +47,7 @@ var context_panel: Control
 var name_edit: LineEdit
 var _replace_confirmation: ConfirmationDialog
 var _replace_action: Callable
+var inspector_scroll: ScrollContainer
 func _ready() -> void:
 	exchange_panel = preload("res://scripts/map_authoring/exchange/exchange_panel.gd").mount(self,"map",func() -> Dictionary: return session.data.duplicate(true),session.apply)
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL; size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -70,7 +71,8 @@ func _ready() -> void:
 	_button(actions,"Encontros…",open_population)
 	_button(actions,"Geração assistida…",open_generation)
 	var split := HSplitContainer.new(); split.size_flags_vertical = Control.SIZE_EXPAND_FILL; add_child(split)
-	var inspector := VBoxContainer.new(); inspector.custom_minimum_size.x = 290; split.add_child(inspector)
+	inspector_scroll = ScrollContainer.new(); inspector_scroll.custom_minimum_size.x = 310; inspector_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; inspector_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL; split.add_child(inspector_scroll)
+	var inspector := VBoxContainer.new(); inspector.size_flags_horizontal = Control.SIZE_EXPAND_FILL; inspector.custom_minimum_size.x = 290; inspector_scroll.add_child(inspector)
 	instances = ItemList.new(); instances.custom_minimum_size.y = 100; inspector.add_child(instances); instances.item_selected.connect(select_instance)
 	var placement := HBoxContainer.new(); inspector.add_child(placement)
 	x = _number(placement,"X"); z = _number(placement,"Z")
@@ -86,6 +88,7 @@ func _ready() -> void:
 		for id: String in BorderCatalog.IDS:
 			border_choice.add_item(catalog.definitions[id].name); border_choice.set_item_metadata(border_choice.item_count-1,id)
 	inspector.add_child(border_choice); _button(inspector,"Aplicar borda à peça",apply_border_choice)
+	_button(inspector,"Aplicar borda a todas as peças",apply_all_borders)
 	border_decorations = CheckButton.new(); border_decorations.text = "Vegetação e escombros das bordas"; inspector.add_child(border_decorations)
 	border_decorations.toggled.connect(func(enabled: bool) -> void: _border_command({"operation":"set_decorations","enabled":enabled}))
 	transition_target = OptionButton.new(); inspector.add_child(transition_target)
@@ -311,17 +314,23 @@ func _border_command(command: Dictionary) -> Dictionary:
 	if applied.ok and not previous.is_empty(): select_id(previous)
 	return applied
 func apply_border(command: Dictionary, expected_source_hash: String) -> Dictionary:
-	if Document.hash_source(session.data) != expected_source_hash: return {"ok":false,"code":"stale_source"}
-	var pending := _pending_source()
-	if not pending.ok: return pending
-	var proposed := BorderOperations.apply(pending.data,command)
-	if not proposed.ok: return proposed
+	return apply_borders([command],expected_source_hash)
+func apply_borders(commands: Array, expected_source_hash: String) -> Dictionary:
 	var selected: String = canvas.selected_instance
-	var applied := session.apply(proposed.data)
+	var previous_choice: int = border_choice.selected
+	var applied := session.apply_borders(commands,expected_source_hash,name_edit.text)
 	if applied.ok:
-		applied.diff = proposed.diff; applied.source_hash = Document.hash_source(session.data)
 		if not selected.is_empty(): select_id(selected)
+		else: border_choice.select(previous_choice)
 	show_result(applied); return applied
+func apply_all_borders() -> Dictionary:
+	if session.data.instances.is_empty():
+		var empty := Compiler.fail("map_empty"); show_result(empty); return empty
+	var profile: String = border_choice.get_item_metadata(border_choice.selected)
+	var commands: Array = []
+	for instance: Dictionary in session.data.instances:
+		commands.append({"operation":"clear_instance_profile","instance_id":instance.instance_id} if profile.is_empty() else {"operation":"set_instance_profile","instance_id":instance.instance_id,"profile_id":profile})
+	return apply_borders(commands,Document.hash_source(session.data))
 func apply_border_choice() -> void:
 	var selected := instances.get_selected_items()
 	if selected.is_empty(): status.text = "Selecione a peça que receberá a borda."; return
@@ -333,6 +342,7 @@ func apply_border_transition() -> void:
 	_border_command({"operation":"set_transition","a_instance":session.data.instances[selected[0]].instance_id,"b_instance":transition_target.get_item_metadata(transition_target.selected),"profile_id":"transition_terrace_v1"})
 func authoring_commands() -> Array:
 	var commands: Array = [{"id":"map/borders/apply","label":"Editar perfil, transição ou decoração","parameters":{"expected_source_hash":"hash","command":{"operation":["set_instance_profile","clear_instance_profile","set_transition","set_decorations"],"fields":"closed_by_operation"}}}]
+	commands.append({"id":"map/borders/apply_batch","label":"Aplicar lote de bordas","parameters":{"expected_source_hash":"hash","commands":"closed border commands[1..529]"}})
 	for id: String in _ax_fields(): commands.append({"id":id,"parameters":_ax_fields()[id]})
 	return commands
 func _ax_fields() -> Dictionary:
@@ -341,10 +351,12 @@ func _ax_fields() -> Dictionary:
 	for operation: String in ["instance/transform","instance/remove","link/upsert","link/remove","context/set","mode/set"]: fields["map/"+operation] = Operations.FIELDS[operation]
 	return fields
 func ax_command(id: String, parameters: Dictionary) -> Dictionary:
-	if id == "map/borders/apply":
-		var errors: Array = []; Schema._shape(parameters,{"expected_source_hash":"hash","command":"object"},"border_request",errors)
+	if id in ["map/borders/apply","map/borders/apply_batch"]:
+		var fields: Dictionary = {"expected_source_hash":"hash","commands":"array"} if id == "map/borders/apply_batch" else {"expected_source_hash":"hash","command":"object"}
+		var errors: Array = []; Schema._shape(parameters,fields,"border_request",errors)
 		if not errors.is_empty(): return {"ok":false,"code":"arguments_invalid","diagnostics":errors}
-		var applied := apply_border(parameters.command,parameters.expected_source_hash); show_result(applied); return applied
+		var commands: Array = parameters.commands if id == "map/borders/apply_batch" else [parameters.command]
+		var applied := apply_borders(commands,parameters.expected_source_hash); show_result(applied); return applied
 	var fields := _ax_fields()
 	if not fields.has(id): return Operations.fail("action_missing")
 	var errors: Array = []; Schema._shape(parameters,fields[id],"parameters",errors)

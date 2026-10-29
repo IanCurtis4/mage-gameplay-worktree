@@ -107,6 +107,7 @@ static func compile(source: Dictionary, cancellation: Callable = Callable()) -> 
 				child.position_xyz = [offset.x,offset.y,offset.z]; fixed[child.instance_id] = true; changed = true
 		if fixed.size() != instances.size(): return fail("recipe_tree")
 	var stage := {"stage_id":"map_preview","biome":"ruin","entrance":"","part_instances":[],"surfaces":[],"connectors":[],"connections":[],"sockets":[],"volumes":[],"solid_prisms":[]}
+	stage.biome = _runtime_biome(source.get("context",Context.empty_map()))
 	var boundaries: Array = []; var endpoints: Dictionary = {}; var provenance: Dictionary = {}; var instantiated: Dictionary = {}; var logical_ports: Array = []
 	for instance: Dictionary in instances:
 		var package: Dictionary = packages[instance.piece_hash]; var part: Dictionary = package.part.duplicate(true)
@@ -367,6 +368,7 @@ static func validate_package(package: Dictionary) -> bool:
 	for part: Variant in package.manifest.input.parts:
 		if not part is Dictionary or not Ports.validate_groups(part).ok: return false
 	if not _logical_metadata_valid(package) or not _terrain_metadata_valid(package): return false
+	if not _context_metadata_valid(package): return false
 	var content := package.duplicate(true); content.erase("package_hash")
 	var expected := preload("res://scripts/map_authoring/terrain/terrain_material.gd").dependencies()
 	for span: Dictionary in package.border_spans:
@@ -378,6 +380,17 @@ static func validate_package(package: Dictionary) -> bool:
 		for dependency: Dictionary in dependencies.dependencies:
 			if dependency not in expected: expected.append(dependency)
 	return Canonical.digest(content) == package.package_hash and Objects.validate_dependencies(package.get("dependencies",[]),expected)
+
+static func _runtime_biome(context: Dictionary) -> String:
+	return "ruin" if str(context.get("biome_id","")).is_empty() else str(context.biome_id)
+
+static func _context_metadata_valid(package: Dictionary) -> bool:
+	# Format5 already carries this context; validate its meaning as well as its
+	# digest. Incoherent old packages fail read without modifying their files.
+	var context: Variant = package.get("authoring_context",Context.empty_map())
+	if not context is Dictionary: return false
+	if not Context.validate_map(context,package.realized_instances,"manual",Document.Schema).ok: return false
+	return package.manifest.stages[0].get("biome") == _runtime_biome(context)
 
 static func _terrain_metadata_valid(package: Dictionary) -> bool:
 	# A render record remains in piece coordinates. Rebuild its terrain topology,

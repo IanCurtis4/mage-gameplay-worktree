@@ -200,3 +200,43 @@ NaN/range/ID/ref/confirm/stale/conflicto de disco preservando fonte; fluxo nativ
 captura; regressão de composição/contexto/bordas pertinente e verify.ps1. Terra
 montará o Bosque no passo seguinte, com forest e entrada de população ainda pendente.
 Não fechar AX global, geração/regeneração, intercâmbio, desempenho ou F9 nesta fatia.
+
+
+## Bioma de runtime e bordas em lote — base0eb9b5c5,29/10
+
+Correção de contrato existente: MapCompiler propaga authoring_context.biome_id
+não vazio ao único stage do manifesto. Contexto ausente/vazio mantém ruin legado;
+não deduz bioma de arte/perfil nem restringe os IDs adicionais já permitidos.
+O validador de pacote confere shape/referências do contexto e coerência de biome.
+Pacotes anteriores com contexto forest e stage ruin são recusados como inválidos,
+sem apagar ou regravar bytes. Legados sem contexto continuam aceitos. Formato5 e
+compiler_revision v5 permanecem: corrige valor de um campo existente, sem mudar
+schema, geometria ou fórmula. Documentar o novo hash de pacote, fonte inalterada.
+
+BorderOperations.apply_batch(source,commands) propõe alterações fechadas pela
+mesma apply existente; lote1..529 (=32perfis+496transições+decoração) e entries
+Dictionary. Inválido em qualquer passo retorna falha sem mutar o source. Session
+apply_borders(commands,expected_source_hash,pending_name=null) valida base/nome e
+aplica uma vez; apply_border é wrapper de1. Diff before/after e command_count
+retornados. Undo/redo integral, no-op sem novo histórico, proposta e source separados.
+
+MapPanel.apply_borders(commands,expected_source_hash) compartilha Session e nome
+pendente com GUI/AX. Novo comando map/borders/apply_batch recebe exatamente
+{expected_source_hash:hash,commands:array}; singles preservam contrato anterior.
+GUI oferece Aplicar borda a todas as peças sobre o mesmo produtor; respeita a
+seleção Herdar por clear_instance_profile para cada instância. O inspector passa
+a ter rolagem própria para que os controles finais não fiquem cortados. Nenhum
+setter genérico de fonte, preview importado, novo perfil/asset ou colisão alternativa.
+
+Provar bioma explícito/fallback, tamper rehashed/legado incoerente rejeitado sem
+mutação, propagação ao consumidor de população; lote puro/diff/hash/invalid-last/
+shape/cap/stale/no-op/undo/redo/nome pendente e equivalência GUI/AX/CLI; nativo com
+controles/rolagem e mapa/bordas reais. Depois Terra aplica forest_rootbank_v1 às
+duas instâncias do Bosque em um lote AX, compila/salva/reabre e entrega hashes.
+Corpo real, apresentação e latências ainda exigem suas provas; sem fecharF9.
+
+CLI legado mantém --border-command e acrescenta --border-batch com os mesmos
+5argumentos (flag, fonte, pedido, destino, hash anterior ou -). Pedido de lote
+contém expected_source_hash/commands e usa Session.apply_borders; leitura do
+pedido reutiliza o limite StrictJSON de SourceStore antes de alocar o arquivo.
+O cliente AX via CLI continua outra superfície equivalente sobre o mesmo painel.

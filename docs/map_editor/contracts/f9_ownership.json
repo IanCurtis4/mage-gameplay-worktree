@@ -2813,6 +2813,48 @@
       "owner": "Terra F9 area",
       "previous_owner": "new map composition; passive recipe now, AX execution only after producer validation",
       "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/map_biome/",
+      "owner": "Sol F9",
+      "previous_owner": "new bounded map biome and atomic border batch slice",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_map_biome_test.gd",
+      "owner": "Luna F9 map biome",
+      "previous_owner": "new bounded map biome and atomic border batch slice",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_map_biome_test.gd.uid",
+      "owner": "Luna F9 map biome",
+      "previous_owner": "new bounded map biome and atomic border batch slice",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_map_biome_ui_test.gd",
+      "owner": "Luna F9 map biome",
+      "previous_owner": "new bounded map biome and atomic border batch slice",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_map_biome_ui_test.gd.uid",
+      "owner": "Luna F9 map biome",
+      "previous_owner": "new bounded map biome and atomic border batch slice",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/",
+      "owner": "Luna F9 map biome",
+      "previous_owner": "new bounded map biome and atomic border batch slice",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/terra/area_forest_borders/",
+      "owner": "Terra F9 area",
+      "previous_owner": "new forest border batch recipe and AX evidence only after validation",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -3126,6 +3168,23 @@
       "body_scope": "MapCandidate real20x32 preparation per support and exact marker fit, provisional map-preview entry; no App gameplay for this map",
       "consumer_primary_inputs": 2041,
       "content_head": "1bdc7301cd46ee40180b5c943f3fcfa10410dc5a"
+    },
+    "map_biome": {
+      "state": "implementation",
+      "base": "0eb9b5c59b6b26cd1e02a998abef3545fcd0ffe9",
+      "runtime_owner": "Sol F9",
+      "test_owner": "Luna F9 map biome",
+      "scope": "propagate authored biome to manifest; validate context coherence; atomic border transaction; reachable inspector controls",
+      "fixture_frozen": false,
+      "files": [
+        "scripts/map_authoring/composition/border_operations.gd",
+        "scripts/map_authoring/composition/map_session.gd",
+        "scripts/map_authoring/composition/map_panel.gd",
+        "scripts/map_authoring/composition/map_compiler.gd",
+        "scripts/map_authoring/composition/headless.gd",
+        "addons/ragrpg_map_editor/presentation.gd",
+        "tools/map_editor_completion/run.ps1"
+      ]
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

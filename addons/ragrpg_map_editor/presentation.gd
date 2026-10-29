@@ -11,6 +11,7 @@ const ACTION_IDS := {
 	"Recuperar preferências…":"recover_library_preferences",
 	"Registrar fonte…":"register_library_source","Atualizar biblioteca":"refresh_library","Abrir / usar seleção":"use_library_selection","Criar cópia da fonte":"copy_library_source","Favoritar / desfavoritar":"toggle_library_favorite","Esquecer registro":"forget_library_source","Cancelar miniaturas":"cancel_library_thumbnails",
 	"Aplicar borda à peça":"apply_border_profile","Ligar por talude de transição":"apply_border_transition",
+	"Aplicar borda a todas as peças":"apply_all_border_profiles",
 	"Objetos e vegetação…":"open_objects",
 	"Nova peça":"new_piece","Compor mapa…":"compose_map","Abrir…":"open","Salvar":"save","Salvar como…":"save_as","Desfazer":"undo","Refazer":"redo",
 	"Recuperar cópia":"recover_copy","Buscar rascunho…":"browse_draft","Adicionar":"add_layer","Duplicar":"duplicate_layer","Travar":"toggle_layer_lock","Aplicar nome":"apply_name",

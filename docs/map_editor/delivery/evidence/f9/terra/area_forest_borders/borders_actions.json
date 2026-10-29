@@ -1,0 +1,44 @@
+{
+  "ax_version": 1,
+  "actions": [
+    {
+      "screen": "map",
+      "id": "map/document/open",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods.map.json",
+        "confirm_discard": true
+      }
+    },
+    {
+      "screen": "map",
+      "id": "map/borders/apply_batch",
+      "parameters": {
+        "expected_source_hash": "2407588712870e8bd1b4820e2f82638fe29fb1ce955ae5541b14320e9a2cbe20",
+        "commands": [
+          {
+            "operation": "set_instance_profile",
+            "instance_id": "clearing",
+            "profile_id": "forest_rootbank_v1"
+          },
+          {
+            "operation": "set_instance_profile",
+            "instance_id": "overpass",
+            "profile_id": "forest_rootbank_v1"
+          }
+        ]
+      }
+    },
+    {
+      "screen": "map",
+      "id": "map/compile_map",
+      "parameters": {}
+    },
+    {
+      "screen": "map",
+      "id": "map/document/save",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods.map.json"
+      }
+    }
+  ]
+}
