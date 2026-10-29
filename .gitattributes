@@ -9,3 +9,6 @@ docs/map_editor/delivery/evidence/f9/author/ax_content/** -text
 docs/map_editor/delivery/evidence/f9/terra/area_content/** -text
 docs/map_editor/delivery/evidence/f9/author/ax_composition/** -text
 docs/map_editor/delivery/evidence/f9/terra/area_composition/** -text
+
+# Godot writes these AX-authored JSON sources with LF; keep portable byte receipts.
+data/map_authoring/sanctuary_woods*.json text eol=lf

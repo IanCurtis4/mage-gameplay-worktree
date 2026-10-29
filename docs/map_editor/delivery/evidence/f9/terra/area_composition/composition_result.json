@@ -1,0 +1,3794 @@
+{
+	"actions": [
+		{
+			"id": "map/document/new",
+			"input_hash": "286d415d49385cb580be675e4a9a506382ac4af90b73268018f53b5b4ce63122",
+			"output_hash": "895e2e1f3885e3287689a87c65aa8dcc5b08aec87a0e366f1b82a124781bbbc6",
+			"result": {
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "sanctuary_woods",
+				"input_hash": "",
+				"ok": true,
+				"output_hash": "895e2e1f3885e3287689a87c65aa8dcc5b08aec87a0e366f1b82a124781bbbc6"
+			},
+			"screen": "map"
+		},
+		{
+			"id": "map/piece/add",
+			"input_hash": "895e2e1f3885e3287689a87c65aa8dcc5b08aec87a0e366f1b82a124781bbbc6",
+			"output_hash": "c53abfbaf046d040636085114dfc5da9dabb3c7b21210b5facebad6ac9f2c7c0",
+			"result": {
+				"added_ids": [
+					"clearing"
+				],
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "clearing",
+				"input_hash": "",
+				"ok": true,
+				"output_hash": "c53abfbaf046d040636085114dfc5da9dabb3c7b21210b5facebad6ac9f2c7c0",
+				"removed_ids": []
+			},
+			"screen": "map"
+		},
+		{
+			"id": "map/piece/add",
+			"input_hash": "c53abfbaf046d040636085114dfc5da9dabb3c7b21210b5facebad6ac9f2c7c0",
+			"output_hash": "e653871bca3853c6296fde67b5d34343e35aeda8ada63395de8853cdaff65f60",
+			"result": {
+				"added_ids": [
+					"overpass"
+				],
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "overpass",
+				"input_hash": "",
+				"ok": true,
+				"output_hash": "e653871bca3853c6296fde67b5d34343e35aeda8ada63395de8853cdaff65f60",
+				"removed_ids": []
+			},
+			"screen": "map"
+		},
+		{
+			"id": "map/link/upsert",
+			"input_hash": "e653871bca3853c6296fde67b5d34343e35aeda8ada63395de8853cdaff65f60",
+			"output_hash": "8c2d9fd275f78583eb0865d7dc725a902bca9d34ca5268a7a93e2ab80ed12206",
+			"result": {
+				"added_ids": [
+					"woods_seam"
+				],
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "woods_seam",
+				"input_hash": "",
+				"ok": true,
+				"output_hash": "8c2d9fd275f78583eb0865d7dc725a902bca9d34ca5268a7a93e2ab80ed12206",
+				"removed_ids": []
+			},
+			"screen": "map"
+		},
+		{
+			"id": "map/context/set",
+			"input_hash": "8c2d9fd275f78583eb0865d7dc725a902bca9d34ca5268a7a93e2ab80ed12206",
+			"output_hash": "2407588712870e8bd1b4820e2f82638fe29fb1ce955ae5541b14320e9a2cbe20",
+			"result": {
+				"added_ids": [],
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "",
+				"input_hash": "",
+				"ok": true,
+				"output_hash": "2407588712870e8bd1b4820e2f82638fe29fb1ce955ae5541b14320e9a2cbe20",
+				"removed_ids": []
+			},
+			"screen": "map"
+		},
+		{
+			"id": "map/compile_map",
+			"input_hash": "2407588712870e8bd1b4820e2f82638fe29fb1ce955ae5541b14320e9a2cbe20",
+			"output_hash": "2407588712870e8bd1b4820e2f82638fe29fb1ce955ae5541b14320e9a2cbe20",
+			"result": {
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "2407588712870e8bd1b4820e2f82638fe29fb1ce955ae5541b14320e9a2cbe20",
+				"metrics": {
+					"elapsed_ms": 25712.078,
+					"navigation": {
+						"connections": 131,
+						"direct_pairs": 166,
+						"edge_tests": 38768,
+						"elapsed_ms": 23715.663,
+						"endpoint_checks": 262,
+						"expansions": 16688,
+						"landmark_checks": 75378,
+						"offset_checks": 456016,
+						"operations": 1,
+						"pair_candidates": 381456,
+						"peak_storage_bytes": 95041092,
+						"portal_checks": 3826,
+						"portal_pairs": 21746,
+						"reconstruction_steps": 366,
+						"snapshot_storage_units": 3914652,
+						"states": 8373,
+						"storage_bytes": 94824332,
+						"terminal_checks": 84,
+						"witness_points": 3184,
+						"witness_segments": 3016
+					}
+				},
+				"ok": true,
+				"output_hash": "68bd0caa6a9865067bc9a6b025aa34202ba63f4f003642f027b72d2ffded0ed6"
+			},
+			"screen": "map"
+		},
+		{
+			"id": "map/document/save",
+			"input_hash": "2407588712870e8bd1b4820e2f82638fe29fb1ce955ae5541b14320e9a2cbe20",
+			"output_hash": "2407588712870e8bd1b4820e2f82638fe29fb1ce955ae5541b14320e9a2cbe20",
+			"result": {
+				"byte_hash": "6b8d52095b0d98ba4a436fd5b192ff732b98a8f5da02855646e7e21b9792bb4f",
+				"code": "",
+				"entity_id": "sanctuary_woods",
+				"ok": true,
+				"output_hash": "2407588712870e8bd1b4820e2f82638fe29fb1ce955ae5541b14320e9a2cbe20"
+			},
+			"screen": "map"
+		}
+	],
+	"code": "",
+	"completed_actions": 7,
+	"diagnostics": [],
+	"map_snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "map/exchange",
+				"label": "Intercâmbio com skills…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/open_game",
+				"label": "Abrir jogo",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/resume_test",
+				"label": "Retomar teste",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/stop_game",
+				"label": "Suspender e fechar teste",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/new_map",
+				"label": "Novo mapa",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/open",
+				"label": "Abrir…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/save_as",
+				"label": "Salvar como…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/add_piece",
+				"label": "Adicionar peça…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/two_piece_sample",
+				"label": "Exemplo com duas peças",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/undo",
+				"label": "Desfazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/redo",
+				"label": "Refazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/apply_name",
+				"label": "Aplicar nome",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/compile_map",
+				"label": "Compilar mapa",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/cancel",
+				"label": "Cancelar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/toggle_test",
+				"label": "Testar / parar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/publish_local",
+				"label": "Publicar localmente…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/recover_draft",
+				"label": "Recuperar rascunho",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/open_population",
+				"label": "Encontros…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/open_generation",
+				"label": "Geração assistida…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/apply_placement",
+				"label": "Aplicar posição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/remove_selected",
+				"label": "Remover…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/apply_border_profile",
+				"label": "Aplicar borda à peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/apply_border_transition",
+				"label": "Ligar por talude de transição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/link_connectors",
+				"label": "Vincular aberturas",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/remove_link",
+				"label": "Remover vínculo selecionado",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/focus_view_selection",
+				"label": "Focar seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/map_context",
+				"label": "Contexto do mapa…",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "map/borders/apply",
+				"label": "Editar perfil, transição ou decoração",
+				"parameters": {
+					"command": {
+						"fields": "closed_by_operation",
+						"operation": [
+							"set_instance_profile",
+							"clear_instance_profile",
+							"set_transition",
+							"set_decorations"
+						]
+					},
+					"expected_source_hash": "hash"
+				}
+			},
+			{
+				"id": "map/document/new",
+				"parameters": {
+					"confirm_discard": "bool",
+					"document_id": "id",
+					"name": "string"
+				}
+			},
+			{
+				"id": "map/document/name",
+				"parameters": {
+					"name": "string"
+				}
+			},
+			{
+				"id": "map/document/open",
+				"parameters": {
+					"confirm_discard": "bool",
+					"path": "string"
+				}
+			},
+			{
+				"id": "map/document/save",
+				"parameters": {
+					"path": "string"
+				}
+			},
+			{
+				"id": "map/history/undo",
+				"parameters": {}
+			},
+			{
+				"id": "map/history/redo",
+				"parameters": {}
+			},
+			{
+				"id": "map/instance/select",
+				"parameters": {
+					"instance_id": "id"
+				}
+			},
+			{
+				"id": "map/compile_map",
+				"parameters": {}
+			},
+			{
+				"id": "map/piece/add",
+				"parameters": {
+					"instance_id": "id",
+					"path": "string",
+					"position_xz": "v2",
+					"rotation_quarters": "number"
+				}
+			},
+			{
+				"id": "map/instance/transform",
+				"parameters": {
+					"instance_id": "id",
+					"position_xz": "v2",
+					"rotation_quarters": "number"
+				}
+			},
+			{
+				"id": "map/instance/remove",
+				"parameters": {
+					"confirm_remove": "bool",
+					"instance_id": "id"
+				}
+			},
+			{
+				"id": "map/link/upsert",
+				"parameters": {
+					"a_connector": "id",
+					"a_instance": "id",
+					"b_connector": "id",
+					"b_instance": "id",
+					"link_id": "id"
+				}
+			},
+			{
+				"id": "map/link/remove",
+				"parameters": {
+					"link_id": "id"
+				}
+			},
+			{
+				"id": "map/context/set",
+				"parameters": {
+					"biome_id": "string",
+					"instance_id": "string",
+					"reason": "string",
+					"rules": "strings"
+				}
+			},
+			{
+				"id": "map/mode/set",
+				"parameters": {
+					"mode": "string"
+				}
+			},
+			{
+				"id": "map/gameplay/launch",
+				"parameters": {
+					"class_id": "base class?",
+					"headless": "boolean?"
+				}
+			},
+			{
+				"id": "map/gameplay/resume",
+				"parameters": {
+					"headless": "boolean?"
+				}
+			},
+			{
+				"id": "map/gameplay/stop",
+				"parameters": {}
+			},
+			{
+				"id": "map/gameplay/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "map/gameplay/select_class",
+				"parameters": {
+					"class_id": "base class"
+				}
+			},
+			{
+				"id": "map/gameplay/action",
+				"parameters": {
+					"action": "closed gameplay action",
+					"request_id": "token?",
+					"session_id": "token?"
+				}
+			},
+			{
+				"id": "map/gameplay/reply",
+				"parameters": {
+					"fingerprint": "hash?",
+					"request_id": "token",
+					"session_id": "token?"
+				}
+			},
+			{
+				"id": "map/viewport/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "map/viewport/focus_world",
+				"parameters": {
+					"position_xyz": "number[3]",
+					"zoom": "number?"
+				}
+			},
+			{
+				"id": "map/viewport/focus_entity",
+				"parameters": {
+					"entity_id": "string"
+				}
+			},
+			{
+				"id": "map/viewport/set_overlays",
+				"parameters": {
+					"layers": "overlay:boolean dictionary"
+				}
+			},
+			{
+				"id": "map/viewport/search",
+				"parameters": {
+					"query": "string"
+				}
+			},
+			{
+				"id": "map/viewport/set_probe",
+				"parameters": {
+					"height": "number",
+					"mode": "navigate|clearance|los",
+					"radius": "number",
+					"surface_id": "string?"
+				}
+			},
+			{
+				"id": "map/viewport/probe_point",
+				"parameters": {
+					"point": "WorldPoint"
+				}
+			},
+			{
+				"id": "map/viewport/probe_los",
+				"parameters": {
+					"from": "WorldPoint",
+					"to": "WorldPoint"
+				}
+			}
+		],
+		"diagnostics": [],
+		"mode": "ax",
+		"screen": "map",
+		"source": {
+			"barrier_profile": "ruin_envelope_v1",
+			"context": {
+				"biome_id": "forest",
+				"overrides": [],
+				"version": 1
+			},
+			"document_id": "sanctuary_woods",
+			"instances": [
+				{
+					"instance_id": "clearing",
+					"piece_hash": "e2172d1928ad5f83188fdba6e89b445bdf37e207af10f4e639a6b1ba44f8ad4f",
+					"position_xyz": [
+						0,
+						0,
+						0
+					],
+					"rotation_quarters": 0.0
+				},
+				{
+					"instance_id": "overpass",
+					"piece_hash": "1cae62332c2fbb490982dc6cbcda7d13f4f12a39f77303b6e4056c7382255fb4",
+					"position_xyz": [
+						1280,
+						0,
+						0
+					],
+					"rotation_quarters": 0.0
+				}
+			],
+			"links": [
+				{
+					"a_connector": "a_east",
+					"a_instance": "clearing",
+					"b_connector": "b_west_gate",
+					"b_instance": "overpass",
+					"link_id": "woods_seam"
+				}
+			],
+			"mode": "manual",
+			"name": "Bosque do Santuário",
+			"pieces": [
+				{
+					"piece_hash": "e2172d1928ad5f83188fdba6e89b445bdf37e207af10f4e639a6b1ba44f8ad4f",
+					"source": {
+						"composition": null,
+						"connectors": [
+							{
+								"connector_id": "a_east",
+								"direction": "both",
+								"headroom": 128,
+								"kind": "walk",
+								"normal_xyz": [
+									1,
+									0,
+									0
+								],
+								"position_xyz": [
+									1280,
+									0,
+									640
+								],
+								"surface_id": "a_ground",
+								"tags": [
+									"map_editor"
+								],
+								"width": 256
+							}
+						],
+						"context": {
+							"allow_rare": false,
+							"allowed_species": [],
+							"areas": [
+								{
+									"allow_rare": false,
+									"allowed_species": [],
+									"region_id": "woods_clearing",
+									"reserved": []
+								}
+							],
+							"biome_ids": [
+								"forest"
+							],
+							"version": 1
+						},
+						"dependencies": [
+							{
+								"definition_id": "oak_tree",
+								"kind": "prop",
+								"revision": 1,
+								"sha256": "cfa38bd7632f300a14333c077e71152e58f65bc88754a2fac3347661c4b024cc"
+							},
+							{
+								"definition_id": "woodland_shrub",
+								"kind": "prop",
+								"revision": 1,
+								"sha256": "e2e6fc9af59b1ab2820e21239d87c28b48ebc94b7489d12eb1fd9106187ed7bb"
+							},
+							{
+								"definition_id": "moss_boulder",
+								"kind": "prop",
+								"revision": 1,
+								"sha256": "33fb787d661d8c1378e69776b346e32f49f0be9fa15b6330d4039676587f947d"
+							}
+						],
+						"document_id": "sanctuary_woods_clearing",
+						"layers": [
+							{
+								"columns": 21,
+								"heights": [
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0.17644038576602156,
+									0.6846707818930036,
+									0.17644038576602156,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0.6846707818930036,
+									6.2587450480878,
+									10.125,
+									6.2587450480878,
+									0.6846707818930036,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									3.528292638844645,
+									15.324588259625514,
+									22.05504115226337,
+									15.324588259625514,
+									3.528292638844645,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									3.528292638844645,
+									15.324588259625514,
+									22.05504115226337,
+									15.324588259625514,
+									3.528292638844645,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0.6846707818930036,
+									6.2587450480878,
+									10.125,
+									6.2587450480878,
+									0.6846707818930036,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0.17644038576602156,
+									0.6846707818930036,
+									0.17644038576602156,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0,
+									0,
+									0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0,
+									0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0.0,
+									0.0,
+									0.0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0
+								],
+								"layer_id": "a_ground",
+								"locked": false,
+								"material_masks": {
+									"earth": [
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.26446117673601427,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.34797975903465633,
+										0.19090893609183174,
+										0.03383880796886626,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.26446133114042736,
+										0.5540851002647763,
+										0.8437095642089844,
+										0.85,
+										0.85,
+										0.85,
+										0.85,
+										0.85,
+										0.85,
+										0.8191916488465809,
+										0.6621214049203055,
+										0.5050505819774809,
+										0.31415299461001445,
+										0.10935769762311663,
+										0.0,
+										0.0,
+										0.0,
+										0.40927321570260183,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.5540851002647763,
+										0.8437095642089844,
+										0.85,
+										0.8437095642089844,
+										0.5540852546691895,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.5050505819774809,
+										0.6621214049203055,
+										0.8191916488465809,
+										0.85,
+										0.85,
+										0.85,
+										0.7237427007584345,
+										0.5189483687991188,
+										0.0,
+										0.16190476190476188,
+										0.8095238095238094,
+										0.85,
+										0.85,
+										0.85,
+										0.8437095642089844,
+										0.5540851002647763,
+										0.26446133114042736,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.033838653564453126,
+										0.19090893609183174,
+										0.3479799134390695,
+										0.5189483687991188,
+										0.7237427007584345,
+										0.85,
+										0.85,
+										0.0,
+										0.0,
+										0.40927321570260183,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.26446133114042736,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.10935769762311663,
+										0.31415299461001445,
+										0.48571428571428565,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0
+									],
+									"grass": [
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										0.7355388232639857,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.6520202409653437,
+										0.8090910639081683,
+										0.9661611920311337,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										0.7355386688595726,
+										0.4459148997352237,
+										0.15629043579101565,
+										0.15000000000000002,
+										0.15000000000000002,
+										0.15000000000000002,
+										0.15000000000000002,
+										0.15000000000000002,
+										0.15000000000000002,
+										0.1808083511534191,
+										0.33787859507969453,
+										0.4949494180225191,
+										0.6858470053899856,
+										0.8906423023768834,
+										1.0,
+										1.0,
+										1.0,
+										0.5907267842973982,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.4459148997352237,
+										0.15629043579101565,
+										0.15000000000000002,
+										0.15629043579101565,
+										0.44591474533081055,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.4949494180225191,
+										0.33787859507969453,
+										0.1808083511534191,
+										0.15000000000000002,
+										0.15000000000000002,
+										0.15000000000000002,
+										0.2762572992415655,
+										0.48105163120088124,
+										1.0,
+										0.8380952380952381,
+										0.19047619047619058,
+										0.15000000000000002,
+										0.15000000000000002,
+										0.15000000000000002,
+										0.15629043579101565,
+										0.4459148997352237,
+										0.7355386688595726,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										0.9661613464355469,
+										0.8090910639081683,
+										0.6520200865609305,
+										0.48105163120088124,
+										0.2762572992415655,
+										0.15000000000000002,
+										0.15000000000000002,
+										1.0,
+										1.0,
+										0.5907267842973982,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.7355386688595726,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										0.8906423023768834,
+										0.6858470053899856,
+										0.5142857142857143,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0
+									]
+								},
+								"name": "Clareira",
+								"origin_xz": [
+									0,
+									0
+								],
+								"protected_regions": [],
+								"rows": 21,
+								"sample_spacing": 64
+							}
+						],
+						"name": "Bosque do Santuário — Clareira",
+						"placements": [
+							{
+								"definition_id": "oak_tree",
+								"placement_id": "clearing_oak_tree_01",
+								"position_xyz": [
+									128.0,
+									0.0,
+									160.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "oak_tree",
+								"placement_id": "clearing_oak_tree_02",
+								"position_xyz": [
+									384.0,
+									3.217592716217041,
+									96.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "oak_tree",
+								"placement_id": "clearing_oak_tree_03",
+								"position_xyz": [
+									640.0,
+									0.0,
+									128.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "oak_tree",
+								"placement_id": "clearing_oak_tree_04",
+								"position_xyz": [
+									896.0,
+									0.0,
+									128.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "oak_tree",
+								"placement_id": "clearing_oak_tree_05",
+								"position_xyz": [
+									1120.0,
+									0.0,
+									192.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "oak_tree",
+								"placement_id": "clearing_oak_tree_06",
+								"position_xyz": [
+									128.0,
+									0.0,
+									1088.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "oak_tree",
+								"placement_id": "clearing_oak_tree_07",
+								"position_xyz": [
+									384.0,
+									0.0,
+									1152.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "oak_tree",
+								"placement_id": "clearing_oak_tree_08",
+								"position_xyz": [
+									704.0,
+									0.0,
+									1088.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "oak_tree",
+								"placement_id": "clearing_oak_tree_09",
+								"position_xyz": [
+									992.0,
+									0.0,
+									1152.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "oak_tree",
+								"placement_id": "clearing_oak_tree_10",
+								"position_xyz": [
+									1184.0,
+									0.0,
+									1024.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "woodland_shrub",
+								"placement_id": "clearing_woodland_shrub_01",
+								"position_xyz": [
+									192.0,
+									3.528292655944824,
+									256.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "woodland_shrub",
+								"placement_id": "clearing_woodland_shrub_02",
+								"position_xyz": [
+									512.0,
+									0.0,
+									192.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "woodland_shrub",
+								"placement_id": "clearing_woodland_shrub_03",
+								"position_xyz": [
+									768.0,
+									0.0,
+									256.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "woodland_shrub",
+								"placement_id": "clearing_woodland_shrub_04",
+								"position_xyz": [
+									1088.0,
+									0.0,
+									320.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "woodland_shrub",
+								"placement_id": "clearing_woodland_shrub_05",
+								"position_xyz": [
+									192.0,
+									0.0,
+									960.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "woodland_shrub",
+								"placement_id": "clearing_woodland_shrub_06",
+								"position_xyz": [
+									544.0,
+									0.0,
+									1024.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "woodland_shrub",
+								"placement_id": "clearing_woodland_shrub_07",
+								"position_xyz": [
+									832.0,
+									0.0,
+									960.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "woodland_shrub",
+								"placement_id": "clearing_woodland_shrub_08",
+								"position_xyz": [
+									1120.0,
+									0.0,
+									960.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "moss_boulder",
+								"placement_id": "clearing_moss_boulder_01",
+								"position_xyz": [
+									96.0,
+									0.0,
+									384.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "moss_boulder",
+								"placement_id": "clearing_moss_boulder_02",
+								"position_xyz": [
+									640.0,
+									0.0,
+									320.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "moss_boulder",
+								"placement_id": "clearing_moss_boulder_03",
+								"position_xyz": [
+									960.0,
+									0.0,
+									320.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "moss_boulder",
+								"placement_id": "clearing_moss_boulder_04",
+								"position_xyz": [
+									128.0,
+									0.0,
+									832.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "moss_boulder",
+								"placement_id": "clearing_moss_boulder_05",
+								"position_xyz": [
+									704.0,
+									0.0,
+									896.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							},
+							{
+								"definition_id": "moss_boulder",
+								"placement_id": "clearing_moss_boulder_06",
+								"position_xyz": [
+									1088.0,
+									0.0,
+									832.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "a_ground"
+							}
+						],
+						"regions": [
+							{
+								"layer_id": "a_ground",
+								"polygon_xz": [
+									[
+										192,
+										448
+									],
+									[
+										576,
+										448
+									],
+									[
+										576,
+										832
+									],
+									[
+										192,
+										832
+									]
+								],
+								"purpose": "encounter",
+								"region_id": "woods_clearing"
+							}
+						],
+						"revision": 32,
+						"schema_version": 1,
+						"sockets": [
+							{
+								"kind": "entrance",
+								"position_xyz": [
+									160,
+									0,
+									640
+								],
+								"socket_id": "woods_entry",
+								"surface_id": "a_ground"
+							}
+						],
+						"special_surfaces": [],
+						"units": "e07_world"
+					}
+				},
+				{
+					"piece_hash": "1cae62332c2fbb490982dc6cbcda7d13f4f12a39f77303b6e4056c7382255fb4",
+					"source": {
+						"composition": null,
+						"connectors": [
+							{
+								"connector_id": "b_west_gate",
+								"direction": "both",
+								"headroom": 128,
+								"kind": "walk",
+								"normal_xyz": [
+									-1,
+									0,
+									0
+								],
+								"position_xyz": [
+									0,
+									0,
+									640
+								],
+								"surface_id": "b_west",
+								"tags": [
+									"map_editor"
+								],
+								"width": 256
+							}
+						],
+						"context": {
+							"allow_rare": false,
+							"allowed_species": [],
+							"areas": [
+								{
+									"allow_rare": false,
+									"allowed_species": [],
+									"region_id": "woods_west",
+									"reserved": []
+								},
+								{
+									"allow_rare": false,
+									"allowed_species": [],
+									"region_id": "woods_shrine",
+									"reserved": []
+								}
+							],
+							"biome_ids": [
+								"forest"
+							],
+							"version": 1
+						},
+						"dependencies": [
+							{
+								"definition_id": "oak_tree",
+								"kind": "prop",
+								"revision": 1,
+								"sha256": "cfa38bd7632f300a14333c077e71152e58f65bc88754a2fac3347661c4b024cc"
+							},
+							{
+								"definition_id": "woodland_shrub",
+								"kind": "prop",
+								"revision": 1,
+								"sha256": "e2e6fc9af59b1ab2820e21239d87c28b48ebc94b7489d12eb1fd9106187ed7bb"
+							},
+							{
+								"definition_id": "moss_boulder",
+								"kind": "prop",
+								"revision": 1,
+								"sha256": "33fb787d661d8c1378e69776b346e32f49f0be9fa15b6330d4039676587f947d"
+							},
+							{
+								"definition_id": "broken_pillar",
+								"kind": "prop",
+								"revision": 1,
+								"sha256": "3f55b4be449281a51e91dac3616972c990baac76f7effd51a6564c1d941a17f5"
+							}
+						],
+						"document_id": "sanctuary_woods_overpass",
+						"layers": [
+							{
+								"columns": 5,
+								"heights": [
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0,
+									0,
+									0,
+									0.0,
+									0.0,
+									0,
+									0,
+									0,
+									0,
+									0.0,
+									0,
+									0,
+									0,
+									0,
+									0.0,
+									0,
+									0,
+									0,
+									0,
+									0.0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0
+								],
+								"layer_id": "b_west",
+								"locked": false,
+								"material_masks": {
+									"earth": [
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.85,
+										0.85,
+										0.85,
+										0.21746170861380443,
+										0.0,
+										0.0,
+										0.0,
+										0.21746170861380443,
+										0.85,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.85,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.85,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.48571428571428565,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0
+									],
+									"grass": [
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										0.15000000000000002,
+										0.15000000000000002,
+										0.15000000000000002,
+										0.7825382913861956,
+										1.0,
+										1.0,
+										1.0,
+										0.7825382913861956,
+										0.15000000000000002,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										0.15000000000000002,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										0.15000000000000002,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										0.5142857142857143,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0
+									]
+								},
+								"name": "Bosque oeste",
+								"origin_xz": [
+									0,
+									0
+								],
+								"protected_regions": [],
+								"rows": 11,
+								"sample_spacing": 128
+							},
+							{
+								"columns": 7,
+								"heights": [
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0.0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0,
+									0
+								],
+								"layer_id": "b_low",
+								"locked": false,
+								"material_masks": {
+									"earth": [
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.85,
+										0.85,
+										0.85,
+										0.85,
+										0.85,
+										0.85,
+										0.12142857142857141,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0
+									],
+									"grass": [
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										0.15000000000000002,
+										0.15000000000000002,
+										0.15000000000000002,
+										0.15000000000000002,
+										0.15000000000000002,
+										0.15000000000000002,
+										0.8785714285714286,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0
+									]
+								},
+								"name": "Passagem inferior",
+								"origin_xz": [
+									512,
+									384
+								],
+								"protected_regions": [],
+								"rows": 5,
+								"sample_spacing": 128
+							},
+							{
+								"columns": 3,
+								"heights": [
+									0.0,
+									64.0,
+									128.0,
+									0.0,
+									64.0,
+									128.0,
+									0.0,
+									64.0,
+									128.0,
+									0.0,
+									64.0,
+									128.0
+								],
+								"layer_id": "b_north_ramp",
+								"locked": false,
+								"material_masks": {
+									"earth": [
+										0.0,
+										0.0,
+										0.0,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.0,
+										0.0,
+										0.0
+									],
+									"grass": [
+										1.0,
+										1.0,
+										1.0,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.5142857142857143,
+										1.0,
+										1.0,
+										1.0
+									]
+								},
+								"name": "Rampa norte",
+								"origin_xz": [
+									512,
+									0
+								],
+								"protected_regions": [],
+								"rows": 4,
+								"sample_spacing": 128
+							},
+							{
+								"columns": 5,
+								"heights": [
+									128,
+									128,
+									128,
+									128,
+									128,
+									128.0,
+									128.0,
+									128.0,
+									128,
+									128,
+									128.0,
+									128.0,
+									128.0,
+									128,
+									128,
+									128,
+									128,
+									128.0,
+									128,
+									128
+								],
+								"layer_id": "b_north_top",
+								"locked": false,
+								"material_masks": {
+									"earth": [
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.0,
+										0.0,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.85,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.85,
+										0.0,
+										0.0
+									],
+									"grass": [
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.5142857142857143,
+										1.0,
+										1.0,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.15000000000000002,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										0.15000000000000002,
+										1.0,
+										1.0
+									]
+								},
+								"name": "Platô norte",
+								"origin_xz": [
+									768,
+									0
+								],
+								"protected_regions": [],
+								"rows": 4,
+								"sample_spacing": 128
+							},
+							{
+								"columns": 3,
+								"heights": [
+									0.0,
+									64.0,
+									128.0,
+									0.0,
+									64.0,
+									128.0,
+									0.0,
+									64.0,
+									128.0,
+									0.0,
+									64.0,
+									128.0
+								],
+								"layer_id": "b_south_ramp",
+								"locked": false,
+								"material_masks": {
+									"earth": [
+										0.0,
+										0.0,
+										0.0,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.0,
+										0.0,
+										0.0
+									],
+									"grass": [
+										1.0,
+										1.0,
+										1.0,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.5142857142857143,
+										1.0,
+										1.0,
+										1.0
+									]
+								},
+								"name": "Rampa sul",
+								"origin_xz": [
+									512,
+									896
+								],
+								"protected_regions": [],
+								"rows": 4,
+								"sample_spacing": 128
+							},
+							{
+								"columns": 5,
+								"heights": [
+									128,
+									128,
+									128.0,
+									128,
+									128,
+									128.0,
+									128.0,
+									128.0,
+									128,
+									128,
+									128.0,
+									128.0,
+									128.0,
+									128,
+									128,
+									128,
+									128,
+									128,
+									128,
+									128
+								],
+								"layer_id": "b_south_top",
+								"locked": false,
+								"material_masks": {
+									"earth": [
+										0.0,
+										0.0,
+										0.85,
+										0.0,
+										0.0,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.85,
+										0.0,
+										0.0,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.48571428571428565,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0,
+										0.0
+									],
+									"grass": [
+										1.0,
+										1.0,
+										0.15000000000000002,
+										1.0,
+										1.0,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.15000000000000002,
+										1.0,
+										1.0,
+										0.5142857142857143,
+										0.5142857142857143,
+										0.5142857142857143,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0,
+										1.0
+									]
+								},
+								"name": "Platô sul",
+								"origin_xz": [
+									768,
+									896
+								],
+								"protected_regions": [],
+								"rows": 4,
+								"sample_spacing": 128
+							}
+						],
+						"name": "Bosque do Santuário — Passagem",
+						"placements": [
+							{
+								"definition_id": "oak_tree",
+								"placement_id": "overpass_oak_tree_01",
+								"position_xyz": [
+									128.0,
+									0.0,
+									128.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_west"
+							},
+							{
+								"definition_id": "oak_tree",
+								"placement_id": "overpass_oak_tree_02",
+								"position_xyz": [
+									320.0,
+									0.0,
+									128.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_west"
+							},
+							{
+								"definition_id": "oak_tree",
+								"placement_id": "overpass_oak_tree_03",
+								"position_xyz": [
+									128.0,
+									0.0,
+									384.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_west"
+							},
+							{
+								"definition_id": "oak_tree",
+								"placement_id": "overpass_oak_tree_04",
+								"position_xyz": [
+									128.0,
+									0.0,
+									896.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_west"
+							},
+							{
+								"definition_id": "oak_tree",
+								"placement_id": "overpass_oak_tree_05",
+								"position_xyz": [
+									128.0,
+									0.0,
+									1184.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_west"
+							},
+							{
+								"definition_id": "oak_tree",
+								"placement_id": "overpass_oak_tree_06",
+								"position_xyz": [
+									384.0,
+									0.0,
+									1184.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_west"
+							},
+							{
+								"definition_id": "woodland_shrub",
+								"placement_id": "overpass_woodland_shrub_01",
+								"position_xyz": [
+									256.0,
+									0.0,
+									256.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_west"
+							},
+							{
+								"definition_id": "woodland_shrub",
+								"placement_id": "overpass_woodland_shrub_02",
+								"position_xyz": [
+									448.0,
+									0.0,
+									320.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_west"
+							},
+							{
+								"definition_id": "woodland_shrub",
+								"placement_id": "overpass_woodland_shrub_03",
+								"position_xyz": [
+									160.0,
+									0.0,
+									800.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_west"
+							},
+							{
+								"definition_id": "woodland_shrub",
+								"placement_id": "overpass_woodland_shrub_04",
+								"position_xyz": [
+									448.0,
+									0.0,
+									960.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_west"
+							},
+							{
+								"definition_id": "moss_boulder",
+								"placement_id": "overpass_moss_boulder_01",
+								"position_xyz": [
+									128.0,
+									0.0,
+									480.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_west"
+							},
+							{
+								"definition_id": "moss_boulder",
+								"placement_id": "overpass_moss_boulder_02",
+								"position_xyz": [
+									160.0,
+									0.0,
+									1056.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_west"
+							},
+							{
+								"definition_id": "moss_boulder",
+								"placement_id": "overpass_moss_boulder_03",
+								"position_xyz": [
+									448.0,
+									0.0,
+									1184.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_west"
+							},
+							{
+								"definition_id": "broken_pillar",
+								"placement_id": "overpass_broken_pillar_01",
+								"position_xyz": [
+									896.0,
+									128.0,
+									96.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_north_top"
+							},
+							{
+								"definition_id": "broken_pillar",
+								"placement_id": "overpass_broken_pillar_02",
+								"position_xyz": [
+									1120.0,
+									128.0,
+									96.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_north_top"
+							},
+							{
+								"definition_id": "broken_pillar",
+								"placement_id": "overpass_broken_pillar_03",
+								"position_xyz": [
+									1216.0,
+									128.0,
+									256.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_north_top"
+							},
+							{
+								"definition_id": "broken_pillar",
+								"placement_id": "overpass_broken_pillar_04",
+								"position_xyz": [
+									896.0,
+									128.0,
+									1184.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_south_top"
+							},
+							{
+								"definition_id": "broken_pillar",
+								"placement_id": "overpass_broken_pillar_05",
+								"position_xyz": [
+									1120.0,
+									128.0,
+									1184.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_south_top"
+							},
+							{
+								"definition_id": "broken_pillar",
+								"placement_id": "overpass_broken_pillar_06",
+								"position_xyz": [
+									1216.0,
+									128.0,
+									1024.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_south_top"
+							},
+							{
+								"definition_id": "woodland_shrub",
+								"placement_id": "overpass_woodland_shrub_01_low",
+								"position_xyz": [
+									640.0,
+									0.0,
+									448.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_low"
+							},
+							{
+								"definition_id": "woodland_shrub",
+								"placement_id": "overpass_woodland_shrub_02_low",
+								"position_xyz": [
+									768.0,
+									0.0,
+									832.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_low"
+							},
+							{
+								"definition_id": "woodland_shrub",
+								"placement_id": "overpass_woodland_shrub_03_low",
+								"position_xyz": [
+									1184.0,
+									0.0,
+									448.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_low"
+							},
+							{
+								"definition_id": "woodland_shrub",
+								"placement_id": "overpass_woodland_shrub_04_low",
+								"position_xyz": [
+									1184.0,
+									0.0,
+									832.0
+								],
+								"revision": 1,
+								"rotation_y": 0,
+								"surface_id": "b_low"
+							}
+						],
+						"regions": [
+							{
+								"layer_id": "b_west",
+								"polygon_xz": [
+									[
+										192,
+										768
+									],
+									[
+										480,
+										768
+									],
+									[
+										480,
+										1120
+									],
+									[
+										192,
+										1120
+									]
+								],
+								"purpose": "encounter",
+								"region_id": "woods_west"
+							},
+							{
+								"layer_id": "b_north_top",
+								"polygon_xz": [
+									[
+										832,
+										64
+									],
+									[
+										1216,
+										64
+									],
+									[
+										1216,
+										320
+									],
+									[
+										832,
+										320
+									]
+								],
+								"purpose": "encounter",
+								"region_id": "woods_shrine"
+							}
+						],
+						"revision": 43,
+						"schema_version": 1,
+						"sockets": [],
+						"special_surfaces": [
+							{
+								"headroom": 100.0,
+								"layer_id": "b_north_top",
+								"surface_id": "b_bridge",
+								"vertices_xyz": [
+									[
+										896.0,
+										128.0,
+										384.0
+									],
+									[
+										1152.0,
+										128.0,
+										384.0
+									],
+									[
+										1152.0,
+										128.0,
+										896.0
+									],
+									[
+										896.0,
+										128.0,
+										896.0
+									]
+								]
+							}
+						],
+						"units": "e07_world"
+					}
+				}
+			],
+			"revision": 1,
+			"schema_version": 1
+		},
+		"source_hash": "2407588712870e8bd1b4820e2f82638fe29fb1ce955ae5541b14320e9a2cbe20",
+		"state": {
+			"can_redo": false,
+			"can_undo": true,
+			"dirty": false,
+			"selected_instance": "",
+			"source_path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/data/map_authoring/sanctuary_woods.map.json"
+		}
+	},
+	"objects_snapshot": {},
+	"ok": true,
+	"requested_actions": 7,
+	"snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "piece/exchange",
+				"label": "Intercâmbio com skills…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/new_piece",
+				"label": "Nova peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/compose_map",
+				"label": "Compor mapa…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open_objects",
+				"label": "Objetos e vegetação…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open_library",
+				"label": "Biblioteca…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open",
+				"label": "Abrir…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/save",
+				"label": "Salvar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/save_as",
+				"label": "Salvar como…",
+				"test_only": false
+			},
+			{
+				"enabled": false,
+				"id": "piece/undo",
+				"label": "Desfazer",
+				"test_only": false
+			},
+			{
+				"enabled": false,
+				"id": "piece/redo",
+				"label": "Refazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/recover_copy",
+				"label": "Recuperar cópia",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/browse_draft",
+				"label": "Buscar rascunho…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/add_layer",
+				"label": "Adicionar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/duplicate_layer",
+				"label": "Duplicar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/toggle_layer_lock",
+				"label": "Travar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/apply_name",
+				"label": "Aplicar nome",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/piece_context",
+				"label": "Contexto da peça…",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "piece/document/new",
+				"parameters": {
+					"confirm_discard": "boolean",
+					"document_id": "id",
+					"name": "string"
+				}
+			},
+			{
+				"id": "piece/document/name",
+				"parameters": {
+					"name": "string"
+				}
+			},
+			{
+				"id": "piece/document/open",
+				"parameters": {
+					"confirm_discard": "boolean",
+					"path": "string"
+				}
+			},
+			{
+				"id": "piece/document/save",
+				"parameters": {
+					"path": "string"
+				}
+			},
+			{
+				"id": "piece/history/undo",
+				"parameters": {}
+			},
+			{
+				"id": "piece/history/redo",
+				"parameters": {}
+			},
+			{
+				"id": "piece/context/options",
+				"parameters": {}
+			},
+			{
+				"id": "piece/context/rules/set",
+				"parameters": {
+					"allow_rare": "bool",
+					"allowed_species": "strings",
+					"biome_ids": "strings"
+				}
+			},
+			{
+				"id": "piece/context/area/upsert",
+				"parameters": {
+					"allow_rare": "bool",
+					"allowed_species": "strings",
+					"layer_id": "id",
+					"max_xz": "v2",
+					"min_xz": "v2",
+					"region_id": "id",
+					"reserved": "array"
+				}
+			},
+			{
+				"id": "piece/context/area/remove",
+				"parameters": {
+					"region_id": "id"
+				}
+			},
+			{
+				"id": "piece/socket/upsert",
+				"parameters": {
+					"kind": "id",
+					"position_xyz": "v3",
+					"socket_id": "id",
+					"surface_id": "id"
+				}
+			},
+			{
+				"id": "piece/socket/remove",
+				"parameters": {
+					"socket_id": "id"
+				}
+			}
+		],
+		"mode": "ax",
+		"screen": "piece",
+		"source": {
+			"composition": null,
+			"connectors": [],
+			"dependencies": [],
+			"document_id": "piece_8a0f3396cc56862c3aad54a5",
+			"layers": [],
+			"name": "Peça sem título",
+			"placements": [],
+			"regions": [],
+			"revision": 1,
+			"schema_version": 1,
+			"sockets": [],
+			"special_surfaces": [],
+			"units": "e07_world"
+		}
+	},
+	"source_hash": "acf8f7296012eb89fe7e38b461ab26c0559d4b60e51bb2fd9ab2f9d561c49fd7",
+	"state": {
+		"can_redo": false,
+		"can_undo": false,
+		"dirty": true,
+		"selected_layer": "",
+		"source_path": ""
+	},
+	"terrain_snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "terrain/save_brush_preset",
+				"label": "Salvar predefinição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/remove_brush_preset",
+				"label": "Remover predefinição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/fit_view",
+				"label": "Enquadrar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/compile_piece",
+				"label": "Compilar peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/cancel",
+				"label": "Cancelar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/ramp_bridge_sample",
+				"label": "Exemplo rampa/ponte",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/large_piece_sample",
+				"label": "Exemplo de peça grande",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/action_10a98dc5c4c2",
+				"label": "Exemplo orgânico",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/add_grid",
+				"label": "Nova grade",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/focus_view_selection",
+				"label": "Focar seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/add_bridge",
+				"label": "Adicionar ponte",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/save_connector",
+				"label": "Adicionar / atualizar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/remove_connector",
+				"label": "Remover",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "terrain/example/organic",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/brush/stroke",
+				"parameters": {
+					"options": "brush_options",
+					"points": "number[2][]"
+				}
+			},
+			{
+				"id": "terrain/presets/list",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/presets/apply",
+				"parameters": {
+					"preset_id": "string"
+				}
+			},
+			{
+				"id": "terrain/presets/save",
+				"parameters": {
+					"name": "string",
+					"options": "brush_options"
+				}
+			},
+			{
+				"id": "terrain/grid/create",
+				"parameters": {
+					"columns": "integer 2..257",
+					"height": "number -512..512",
+					"layer_id": "id",
+					"name": "string",
+					"origin_xz": "number[2]",
+					"rows": "integer 2..257",
+					"sample_spacing": "number 4..256"
+				}
+			},
+			{
+				"id": "terrain/layer/select",
+				"parameters": {
+					"layer_id": "id"
+				}
+			},
+			{
+				"id": "terrain/layer/lock",
+				"parameters": {
+					"layer_id": "id",
+					"locked": "boolean"
+				}
+			},
+			{
+				"id": "terrain/layer/protection",
+				"parameters": {
+					"layer_id": "id",
+					"region_ids": "existing region IDs[]"
+				}
+			},
+			{
+				"id": "terrain/bridge/create",
+				"parameters": {
+					"height": "number 4..1024",
+					"layer_id": "id",
+					"length": "number 4..1024",
+					"origin_xz": "number[2]",
+					"surface_id": "id",
+					"width": "number 4..1024"
+				}
+			},
+			{
+				"id": "terrain/connector/upsert",
+				"parameters": {
+					"connector_id": "id",
+					"direction": "id",
+					"headroom": "number",
+					"kind": "id",
+					"normal_xyz": "v3",
+					"position_xyz": "v3",
+					"surface_id": "id",
+					"tags": "strings",
+					"width": "number"
+				}
+			},
+			{
+				"id": "terrain/connector/remove",
+				"parameters": {
+					"connector_id": "id"
+				}
+			},
+			{
+				"id": "terrain/viewport/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/viewport/focus_world",
+				"parameters": {
+					"position_xyz": "number[3]",
+					"zoom": "number?"
+				}
+			},
+			{
+				"id": "terrain/viewport/focus_entity",
+				"parameters": {
+					"entity_id": "string"
+				}
+			},
+			{
+				"id": "terrain/viewport/set_overlays",
+				"parameters": {
+					"layers": "overlay:boolean dictionary"
+				}
+			},
+			{
+				"id": "terrain/viewport/search",
+				"parameters": {
+					"query": "string"
+				}
+			},
+			{
+				"id": "terrain/viewport/set_probe",
+				"parameters": {
+					"height": "number",
+					"mode": "navigate|clearance|los",
+					"radius": "number",
+					"surface_id": "string?"
+				}
+			},
+			{
+				"id": "terrain/viewport/probe_point",
+				"parameters": {
+					"point": "WorldPoint"
+				}
+			},
+			{
+				"id": "terrain/viewport/probe_los",
+				"parameters": {
+					"from": "WorldPoint",
+					"to": "WorldPoint"
+				}
+			}
+		],
+		"mode": "ax",
+		"screen": "terrain",
+		"source_hash": "acf8f7296012eb89fe7e38b461ab26c0559d4b60e51bb2fd9ab2f9d561c49fd7"
+	}
+}
