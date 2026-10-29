@@ -112,7 +112,7 @@ func _run() -> void:
 
 	var planned := Compiler.regenerate(source)
 	var repeated_plan := Compiler.regenerate(source)
-	var differential := planned.ok and repeated_plan.ok and planned.data == repeated_plan.data and source == frozen_source
+	var differential: bool = planned.ok and repeated_plan.ok and planned.data == repeated_plan.data and source == frozen_source
 	if differential:
 		for slot: Dictionary in planned.data.slots:
 			var target: ExpeditionWorldPoint = Compiler.anchor(slot)
