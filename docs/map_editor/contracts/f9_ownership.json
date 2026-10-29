@@ -2753,6 +2753,66 @@
       "owner": "Terra F9 area",
       "previous_owner": "new passive AX content recipes and evidence",
       "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/composition/map_operations.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new bounded AX composition slice or sequential transfer",
+      "base_sha256": null
+    },
+    {
+      "path": "scripts/map_authoring/composition/map_operations.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new bounded AX composition slice or sequential transfer",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/ax_composition/",
+      "owner": "Sol F9",
+      "previous_owner": "new bounded AX composition slice or sequential transfer",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_ax_composition_test.gd",
+      "owner": "Sol F9 temporary validation",
+      "previous_owner": "Luna F9 AX composition; draft interrupted by usage limit, sequential transfer",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_ax_composition_test.gd.uid",
+      "owner": "Sol F9 temporary validation",
+      "previous_owner": "Luna F9 AX composition; draft interrupted by usage limit, sequential transfer",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_ax_composition_ui_test.gd",
+      "owner": "Sol F9 temporary validation",
+      "previous_owner": "Luna F9 AX composition; draft interrupted by usage limit, sequential transfer",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/map_editor_ax_composition_ui_test.gd.uid",
+      "owner": "Sol F9 temporary validation",
+      "previous_owner": "Luna F9 AX composition; draft interrupted by usage limit, sequential transfer",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/ax_composition/",
+      "owner": "Luna F9 AX composition",
+      "previous_owner": "new bounded AX composition slice or sequential transfer",
+      "base_sha256": null
+    },
+    {
+      "path": "data/map_authoring/sanctuary_woods.map.json",
+      "owner": "Terra F9 area",
+      "previous_owner": "new map composition; passive recipe now, AX execution only after producer validation",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/terra/area_composition/",
+      "owner": "Terra F9 area",
+      "previous_owner": "new map composition; passive recipe now, AX execution only after producer validation",
+      "base_sha256": null
     }
   ],
   "read_only_shared": [
@@ -3035,6 +3095,15 @@
       "primary_consumer_inputs": 2028,
       "import_dependencies_audited": 10,
       "limitations": "no App/live walking/combat/FPS; canonical preparation and individual paths remain expensive; composition/population/patrol AX and rest of F9 still open"
+    },
+    "ax_composition": {
+      "state": "implementation",
+      "base": "bbd3597b39ee8171aba348fcfc87541485bf85e2",
+      "runtime_owner": "Sol F9",
+      "test_owner": "Sol F9 temporary validation",
+      "scope": "parameterized map snapshot placement/link/context, document IO and real map AX client; no population/patrol/generation yet",
+      "fixture_frozen": false,
+      "validation_role": "Luna wrote unexecuted drafts then hit usage limit; Sol preserves drafts, completes and executes tests; no independent Luna supervision claim"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

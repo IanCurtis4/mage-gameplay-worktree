@@ -1,21 +1,26 @@
 @tool
 extends VBoxContainer
 const Context = preload("res://scripts/map_authoring/context/piece_context.gd")
+const Operations = preload("res://scripts/map_authoring/composition/map_operations.gd")
 var session: RefCounted
 var biome: LineEdit
 var instances: OptionButton
 var rules: ItemList
 var reason: LineEdit
 var warnings: Label
+var apply_context: Callable
 
-static func mount(parent: Control, document_session: RefCounted) -> void:
+static func mount(parent: Control, document_session: RefCounted) -> Control:
 	var window := Window.new(); window.title = "Contexto do mapa · Exceções manuais"; window.size = Vector2i(650,440)
 	window.hide()
 	parent.add_child(window); window.close_requested.connect(window.hide)
 	var panel := load("res://scripts/map_authoring/context/map_context_panel.gd").new() as Control
-	panel.session = document_session; window.add_child(panel); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	panel.session = document_session
+	if parent.has_method("apply_operation"): panel.apply_context = func(parameters: Dictionary) -> Dictionary: return parent.apply_operation("context/set",parameters)
+	window.add_child(panel); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var button := Button.new(); button.text = "Contexto do mapa…"; parent.add_child(button)
 	button.pressed.connect(func() -> void: panel.refresh(); window.popup_centered())
+	return panel
 func _ready() -> void:
 	var title := Label.new(); title.text = "Bioma de destino e exceções por instância"; add_child(title)
 	biome = LineEdit.new(); biome.placeholder_text = "Bioma de destino · ex.: ruin"; add_child(biome)
@@ -40,17 +45,18 @@ func select_instance() -> void:
 		for index: int in Context.RULES.size():
 			if Context.RULES[index] in exception.rules: rules.select(index,false)
 func save_context() -> void:
-	var data: Dictionary = session.data.duplicate(true); var context: Dictionary = data.get("context",Context.empty_map()).duplicate(true)
-	context.biome_id = biome.text.strip_edges()
-	if instances.selected >= 0:
-		var id := instances.get_item_text(instances.selected)
-		context.overrides = context.overrides.filter(func(item: Dictionary) -> bool: return item.instance_id != id)
-		var chosen: Array = []
-		for index: int in rules.get_selected_items(): chosen.append(Context.RULES[index])
-		if not chosen.is_empty(): context.overrides.append({"instance_id":id,"rules":chosen,"reason":reason.text.strip_edges()})
-	data.context = context; var result: Dictionary = session.apply(data)
+	var chosen: Array = []
+	for index: int in rules.get_selected_items(): chosen.append(Context.RULES[index])
+	apply_operation({"biome_id":biome.text,"instance_id":"" if instances.selected < 0 else instances.get_item_text(instances.selected),"rules":chosen,"reason":reason.text})
+func apply_operation(parameters: Dictionary) -> Dictionary:
+	var result: Dictionary
+	if apply_context.is_valid(): result = apply_context.call(parameters)
+	else:
+		result = Operations.propose(session.data,"context/set",parameters)
+		if result.ok: result = session.apply(result.data)
 	if result.ok: show_warnings()
 	else: warnings.text = "Não foi possível salvar: "+str(result.get("code","context_invalid"))
+	return result
 func show_warnings() -> void:
 	var lines := PackedStringArray(["Sem exceções. Geração por seed sempre respeita as regras da peça."])
 	if not Context.warnings(session.data).is_empty():

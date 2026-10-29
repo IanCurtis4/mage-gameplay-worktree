@@ -5,6 +5,7 @@ const Schema = preload("res://scripts/map_authoring/document/source_schema.gd")
 const StrictJSON = preload("res://scripts/map_authoring/io/strict_json.gd")
 var shell: Control
 var objects_panel: Control
+var map_panel: Control
 var _capture_screen := "terrain"
 var _request_path := ""
 var _result_path := ""
@@ -41,7 +42,6 @@ func _run() -> void:
 	var outcomes: Array = []
 	var ok := true
 	for action: Dictionary in request.actions:
-		var before: String = shell.session.document().semantic_hash()
 		var outcome: Dictionary = {"ok":true}
 		var presentation: Node = piece if action.screen == "piece" else terrain
 		if action.screen == "objects":
@@ -52,23 +52,35 @@ func _run() -> void:
 				elif outcome.ok: outcome = {"ok":false,"code":"screen_missing"}
 			if objects_panel != null: presentation = objects_panel.get_node("AuthoringPresentation")
 			_capture_screen = "objects"
+		elif action.screen == "map":
+			if map_panel == null:
+				outcome = piece.ax_invoke("piece/compose_map")
+				await process_frame
+				if outcome.ok and is_instance_valid(shell.composition_window): map_panel = shell.composition_window.get_child(0)
+				elif outcome.ok: outcome = {"ok":false,"code":"screen_missing"}
+			if map_panel != null: presentation = map_panel.get_node("AuthoringPresentation")
+			_capture_screen = "map"
 		elif action.screen == "terrain": _capture_screen = "terrain"
+		var before := _action_hash(action.screen)
 		if outcome.ok: outcome = presentation.ax_invoke(action.id,action.parameters)
-		if outcome.get("ok",false) and action.screen == "terrain" and action.id == "terrain/compile_piece":
+		var compile_owner: Control
+		if action.screen == "terrain" and action.id == "terrain/compile_piece": compile_owner = shell.terrain
+		elif action.screen == "map" and action.id == "map/compile_map": compile_owner = map_panel
+		if outcome.get("ok",false) and compile_owner != null:
 			# The GUI action starts its normal worker. Keep this client alive until
 			# the panel publishes that worker's canonical, revision-checked result.
 			var started := Time.get_ticks_msec()
-			while shell.terrain.job != null and Time.get_ticks_msec()-started < 300000:
+			while compile_owner.job != null and Time.get_ticks_msec()-started < 300000:
 				await process_frame
-			if shell.terrain.job != null:
-				shell.terrain.job.cancel()
+			if compile_owner.job != null:
+				compile_owner.job.cancel()
 				outcome = {"ok":false,"code":"compile_timeout"}
-			else: outcome = shell.terrain.result.duplicate(true)
+			else: outcome = compile_owner.result.duplicate(true)
 		# Only the final snapshot carries the full source; keeping one copy per
 		# stroke would make long, otherwise valid authoring batches grow quadratically.
 		outcome.erase("data")
 		outcome.erase("package")
-		outcomes.append({"screen":action.screen,"id":action.id,"input_hash":before,"output_hash":shell.session.document().semantic_hash(),"result":outcome})
+		outcomes.append({"screen":action.screen,"id":action.id,"input_hash":before,"output_hash":_action_hash(action.screen),"result":outcome})
 		if not outcome.get("ok",false): ok = false; break
 		await process_frame
 	var terrain_snapshot: Dictionary = terrain.ax_snapshot()
@@ -81,16 +93,27 @@ func _run() -> void:
 		objects_snapshot.selected_ids = objects_panel.selected_ids.duplicate()
 		objects_snapshot.selected_surface = objects_panel.surface_id()
 		objects_snapshot.preview_hash = objects_panel.pending.get("proposal",{}).get("output_hash","")
-	var response := {"objects_snapshot":objects_snapshot,"ok":ok,"code":"" if ok else "action_rejected","completed_actions":outcomes.size(),"requested_actions":request.actions.size(),"actions":outcomes,"source_hash":shell.session.document().semantic_hash(),"snapshot":piece.ax_snapshot(),"terrain_snapshot":terrain_snapshot,"state":{"selected_layer":shell.terrain.selected_layer,"can_undo":shell.session.can_undo(),"can_redo":shell.session.can_redo(),"dirty":shell.session.dirty(),"source_path":shell.source_path},"diagnostics":shell.session.document().diagnostics()}
+	var map_snapshot: Dictionary = {}
+	if map_panel != null:
+		map_snapshot = map_panel.get_node("AuthoringPresentation").ax_snapshot()
+		map_snapshot.source_hash = _action_hash("map")
+		map_snapshot.state = {"source_path":map_panel.source_path,"dirty":map_panel._dirty(),"can_undo":map_panel.session.can_undo(),"can_redo":map_panel.session.can_redo(),"selected_instance":map_panel.canvas.selected_instance}
+		map_snapshot.diagnostics = map_panel.result.get("diagnostics",[])
+	var response := {"map_snapshot":map_snapshot,"objects_snapshot":objects_snapshot,"ok":ok,"code":"" if ok else "action_rejected","completed_actions":outcomes.size(),"requested_actions":request.actions.size(),"actions":outcomes,"source_hash":shell.session.document().semantic_hash(),"snapshot":piece.ax_snapshot(),"terrain_snapshot":terrain_snapshot,"state":{"selected_layer":shell.terrain.selected_layer,"can_undo":shell.session.can_undo(),"can_redo":shell.session.can_redo(),"dirty":shell.session.dirty(),"source_path":shell.source_path},"diagnostics":shell.session.document().diagnostics()}
 	if not _capture_path.is_empty() and DisplayServer.get_name() == "headless":
 		response.ok = false; response.code = "capture_requires_display"
 	elif not _capture_path.is_empty():
-		var canvas: Control = objects_panel.canvas if _capture_screen == "objects" and objects_panel != null else shell.terrain.canvas
+		var canvas: Control = map_panel.canvas if _capture_screen == "map" and map_panel != null else (objects_panel.canvas if _capture_screen == "objects" and objects_panel != null else shell.terrain.canvas)
 		if _capture_screen != "objects" and is_instance_valid(shell.objects_window): shell.objects_window.hide()
+		if _capture_screen != "map" and is_instance_valid(shell.composition_window): shell.composition_window.hide()
 		if _capture_screen == "objects" and objects_panel != null:
 			shell.objects_window.show()
 			shell.objects_window.position = Vector2i.ZERO
 			shell.objects_window.size = root.size
+		elif _capture_screen == "map" and map_panel != null:
+			shell.composition_window.show()
+			shell.composition_window.position = Vector2i.ZERO
+			shell.composition_window.size = root.size
 		# Capture a useful terrain view through normal presentation controls.
 		# This affects this client's viewport only, never the authored source.
 		canvas.custom_minimum_size.y = maxf(canvas.custom_minimum_size.y,440.0)
@@ -105,6 +128,10 @@ func _run() -> void:
 		await RenderingServer.frame_post_draw
 		if root.get_texture().get_image().save_png(_capture_path) != OK: response.ok = false; response.code = "capture_failed"
 	_finish(response)
+
+func _action_hash(screen: String) -> String:
+	if screen == "map": return "" if map_panel == null else map_panel.Document.hash_source(map_panel.session.data)
+	return shell.session.document().semantic_hash()
 
 func _read_request() -> Dictionary:
 	if not FileAccess.file_exists(_request_path): return {"ok":false,"code":"io_missing"}
@@ -121,7 +148,7 @@ func _read_request() -> Dictionary:
 	if data.ax_version != 1 or data.actions.is_empty() or data.actions.size() > 4096: return {"ok":false,"code":"arguments_invalid"}
 	for action: Variant in data.actions:
 		Schema._shape(action,{"screen":"string","id":"string","parameters":"object"},"action",errors)
-		if not errors.is_empty() or action.screen not in ["piece","terrain","objects"]: return {"ok":false,"code":"arguments_invalid"}
+		if not errors.is_empty() or action.screen not in ["piece","terrain","objects","map"]: return {"ok":false,"code":"arguments_invalid"}
 	return {"ok":true,"actions":data.actions}
 
 func _finish(response: Dictionary) -> void:

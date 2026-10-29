@@ -148,3 +148,55 @@ lock/proteção/IDs/argumentos ruins sem histórico parcial; scatter preview/has
 stale/discard/undo; regras/áreas/reservas/marcadores/locks, arquivo e reabertura;
 cliente headless/nativo sobre o editor real; regressões de objetos/contexto por
 impacto. Sem encerrar composição/população/patrulha ou F9 por esta fatia.
+
+
+## Terceira fatia — composição e contexto de mapa (basebbd3597b)
+
+Sol código/integração; Luna novos testes de dono exclusivo; Terra só consome após
+liberação. MapOperations.propose(source,operation,parameters,piece_source={}) é puro,
+valida MapDocument e retorna data/output_hash/IDs sem modificar fonte. GUI e AX
+aplicam pela mesma MapSession. Snapshot de peça vem somente do PieceStore no painel;
+o argumento interno piece_source não é um setter público AX.
+
+IDs públicos/forma fechada:
+- map/document/new {document_id,name,confirm_discard}; document/name {name};
+  document/open {path,confirm_discard}; document/save {path}; history/undo|redo {}.
+- map/piece/add {path,instance_id,position_xz,rotation_quarters}. Snapshot lido e
+  validado, deduplicado pelo hash; identidade de instância explícita. Operação
+  interna instance/add omite path e recebe a peça já lida como quarto argumento.
+- map/instance/select {instance_id} é editorial; map/instance/transform recebe
+  {instance_id,position_xz,rotation_quarters}; map/instance/remove exige
+  {instance_id,confirm_remove}. Remove referências de vínculos/bordas/exceções,
+  preserva snapshots de biblioteca e permite undo completo.
+- map/link/upsert recebe todos os campos de MapDocument.LINK; map/link/remove
+  {link_id}. Ambas as instâncias e conectores devem existir. Compilação continua
+  autoridade de geometria/compatibilidade e vínculos conflitantes.
+- map/mode/set {mode} manual/recipe; map/context/set
+  {biome_id,instance_id,rules,reason}. instance_id vazio só muda bioma e exige
+  rules/reason vazios; caso contrário substitui exceção dessa instância ou remove
+  com rules vazias. Context.validate_map mantém regras/motivo/manual e warnings.
+- map/compile_map {} usa o worker real existente; cliente aguarda conclusão/stale.
+  map/borders/apply mantém seu contrato atual de hash esperado e comando fechado.
+
+IDs/source/fields desconhecidos, coordenada não finita/fora±16000, rotação não
+inteira0..3, referência ausente e confirmação falsa recusam sem histórico parcial.
+Posições usam o mesmo intervalo da GUI, preservando frações sem arredondamento de
+seleção. Forma interna de operação coincide com sufixo público, salvo piece/add
+→ instance/add e document/name → name. File/save usa hash esperado da abertura;
+novo destino AX existente falha, GUI só sobrescreve após FileDialog e hash lido.
+Novo/abrir AX alterados exigem confirm_discard e preservar rascunho com sucesso.
+Nome pendente deve sobreviver a falha de arquivo sem mutar histórico parcial.
+
+Cliente aceita screen=map, abre a janela existente por piece/compose_map, usa sua
+Presentation/MapSession real e retorna map_snapshot com fonte, source_hash e estado
+(caminho/dirty/histórico/seleção); cada ação recebe hashes da sessão correspondente.
+source_hash/snapshot/estado de topo continuam identificando a peça por compatibilidade;
+map_snapshot identifica a composição. Captura final escolhe o último viewer usado.
+Não substituir o documento do mapa com JSON arbitrário nem compilar fora do worker.
+
+Provar GUI/AX/CLI/roundtrip com IDs/hash iguais; duplicação de snapshot, transformação,
+vínculos/remoção/referências/undo, modos/contexto/exceções/warnings; campos inválidos,
+NaN/range/ID/ref/confirm/stale/conflicto de disco preservando fonte; fluxo nativo e
+captura; regressão de composição/contexto/bordas pertinente e verify.ps1. Terra
+montará o Bosque no passo seguinte, com forest e entrada de população ainda pendente.
+Não fechar AX global, geração/regeneração, intercâmbio, desempenho ou F9 nesta fatia.

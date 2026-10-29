@@ -1,0 +1,73 @@
+{
+  "ax_version": 1,
+  "actions": [
+    {
+      "screen": "map",
+      "id": "map/document/new",
+      "parameters": {
+        "document_id": "sanctuary_woods",
+        "name": "Bosque do Santuário",
+        "confirm_discard": true
+      }
+    },
+    {
+      "screen": "map",
+      "id": "map/piece/add",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods_clearing.source.json",
+        "instance_id": "clearing",
+        "position_xz": [
+          0,
+          0
+        ],
+        "rotation_quarters": 0
+      }
+    },
+    {
+      "screen": "map",
+      "id": "map/piece/add",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods_overpass.source.json",
+        "instance_id": "overpass",
+        "position_xz": [
+          1280,
+          0
+        ],
+        "rotation_quarters": 0
+      }
+    },
+    {
+      "screen": "map",
+      "id": "map/link/upsert",
+      "parameters": {
+        "link_id": "woods_seam",
+        "a_instance": "clearing",
+        "a_connector": "a_east",
+        "b_instance": "overpass",
+        "b_connector": "b_west_gate"
+      }
+    },
+    {
+      "screen": "map",
+      "id": "map/context/set",
+      "parameters": {
+        "biome_id": "forest",
+        "instance_id": "",
+        "rules": [],
+        "reason": ""
+      }
+    },
+    {
+      "screen": "map",
+      "id": "map/compile_map",
+      "parameters": {}
+    },
+    {
+      "screen": "map",
+      "id": "map/document/save",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods.map.json"
+      }
+    }
+  ]
+}
