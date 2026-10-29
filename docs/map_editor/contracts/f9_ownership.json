@@ -3385,7 +3385,7 @@
       "base": "bc52103eee28072d70243b42a002056bc0bf90fa",
       "runtime_owner": "Sol F9",
       "fixture_frozen": false,
-      "fixture_owner": "released after Luna parse failure; Sol explicit bool type only, no oracle change",
+      "fixture_owner": "released; Sol restored original individual _path reference for existing differential tests; production consumers remain batch",
       "draft": "docs/map_editor/delivery/evidence/f9/terra/area_encounters/population_draft_01.json",
       "draft_sha256": "4d64d6ffbce706a2917b2a1ad436decfd362b96575a7a4b4bbd001ededdb7cb1",
       "scope": "canonical population reachability/preparation cost; no smaller map/body/quota and no higher timeout/caps",
@@ -3407,7 +3407,8 @@
         "tests/map_editor_population_reachability_test.gd.uid"
       ],
       "initial_validation": {
-        "PopulationReachability": "parse failure before checks; differential type inference, 1780ee19; preserved"
+        "PopulationReachability01": "test parse failure before checks; fixed explicit bool type only",
+        "PopulationReachability02": "dependent tests use removed Compiler._path; restored unchanged reference; no oracle change"
       }
     }
   },

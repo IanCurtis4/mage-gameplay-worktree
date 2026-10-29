@@ -56,6 +56,9 @@ static func _spec(spec: Dictionary, catalog: MobCatalog) -> Dictionary:
 	if rule.is_empty(): return fail("policy_unresolved")
 	var profile := PROFILE.duplicate(true); profile.radius = maxf(PROFILE.radius,checked.definition.collision_radius)
 	return {"ok":true,"profile":profile,"rule":rule}
+# Preserve the individual reference used by differential regression fixtures.
+static func _path(world: WorldGeometry, entry: ExpeditionWorldPoint, destination: ExpeditionWorldPoint, profile: Dictionary) -> bool:
+	return world.position_query(destination,profile,world.geometry_revision).ok and world.path(entry,destination,profile,world.geometry_revision).ok and world.path(destination,entry,profile,world.geometry_revision).ok
 # Existence proofs only; witness costs never replace individual shortest paths.
 static func reachability(world: WorldGeometry, entry: ExpeditionWorldPoint, targets: Array[ExpeditionWorldPoint], profile: Dictionary, cancel: Callable = Callable(), budget: Dictionary = {}) -> Dictionary:
 	var checked := world.connectivity_batch(entry,targets,profile,world.geometry_revision,cancel,budget)

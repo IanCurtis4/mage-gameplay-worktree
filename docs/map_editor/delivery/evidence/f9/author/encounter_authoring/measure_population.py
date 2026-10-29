@@ -41,6 +41,8 @@ func run() -> void:
 \tquit(0 if result.ok else 1)
 '''.replace('SOURCE',json.dumps(str(source))).replace('COMPILER',json.dumps('res://.godot/'+name+'/population_trace.gd')).replace('RESULT',json.dumps(str(out/'result.json')))
 (scratch/'probe.gd').write_text(probe,encoding='utf-8')
+for filename in ['probe.gd','population_trace.gd']:
+    (out/(filename+'.txt')).write_bytes((scratch/filename).read_bytes())
 env = os.environ.copy(); profile = FIXTURE/'.godot/discardable_profile'
 env.update(APPDATA=str(profile/'Roaming'),LOCALAPPDATA=str(profile/'Local'))
 head = subprocess.check_output(['git','-C',str(ROOT),'rev-parse','HEAD'],text=True).strip()
