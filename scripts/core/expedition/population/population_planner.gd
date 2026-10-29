@@ -1,11 +1,13 @@
 class_name ExpeditionPopulationPlanner
 extends RefCounted
 ## Realized F0 slots are checked against F1 geometry and the canonical mob catalog.
-static func build(manifest: ExpeditionManifest, catalog: MobCatalog, rules: Dictionary) -> Dictionary:
+static func build(manifest: ExpeditionManifest, catalog: MobCatalog, rules: Dictionary, cancellation: Callable = Callable()) -> Dictionary:
 	if manifest == null or catalog == null: return BuildEffectCatalog.failure(&"invalid_manifest")
+	if cancellation.is_valid() and cancellation.call(): return BuildEffectCatalog.failure(&"cancelled")
 	var data := manifest.to_data()
 	var slots: Dictionary = {}
 	var worlds: Dictionary = {}
+	var groups: Dictionary = {}
 	var traversal: Dictionary = data["input"]["traversal"]
 	for stage: Dictionary in data["stages"]:
 		var geometry := WorldGeometry.new()
@@ -13,6 +15,7 @@ static func build(manifest: ExpeditionManifest, catalog: MobCatalog, rules: Dict
 		if not configured["ok"]: return configured
 		worlds[stage["stage_id"]] = geometry
 	for source: Dictionary in manifest.population_plan().slots():
+		if cancellation.is_valid() and cancellation.call(): return BuildEffectCatalog.failure(&"cancelled")
 		var id: String = source["slot_id"]
 		if slots.has(id) or not rules.has(id): return BuildEffectCatalog.failure(&"policy_unresolved")
 		var rule: Variant = rules[id]
@@ -36,13 +39,36 @@ static func build(manifest: ExpeditionManifest, catalog: MobCatalog, rules: Dict
 		var entry: Dictionary
 		for socket: Dictionary in geometry._stage["sockets"]:
 			if socket["socket_id"] == geometry._stage["entrance"]: entry = ExpeditionWorldPoint.create(source["stage_id"], socket["surface_id"], socket["position"]).to_data()
-		if entry.is_empty() or not geometry.path(point(entry), point(source["home"]), mob_profile, geometry.geometry_revision)["ok"]: return BuildEffectCatalog.failure(&"population_unreachable")
+		if entry.is_empty(): return BuildEffectCatalog.failure(&"population_unreachable")
+		# Admission needs existence, not a shortest movement or leash cost.
+		var group_id: String = source["stage_id"]+"/"+ExpeditionCanonical.digest(mob_profile)
+		if not groups.has(group_id):
+			var targets: Array[ExpeditionWorldPoint] = []
+			groups[group_id] = {"stage_id":source["stage_id"],"profile":mob_profile.duplicate(true),"entry":point(entry),"targets":targets}
+		groups[group_id].targets.append(point(source["home"]))
 		var slot := source.duplicate(true)
 		slot["traversal"] = mob_profile
 		slot.merge({"generation": 0, "life_state": "alive", "pending_wave": 0, "trash": rule["trash"], "base_xp": int(rule["base_xp"]), "job_xp": int(rule["job_xp"]), "initial_resolved": false, "deaths": {}}, true)
 		slots[id] = slot
 	if rules.size() != slots.size(): return BuildEffectCatalog.failure(&"invalid_population_policy")
-	return {"ok": true, "slots": slots, "worlds": worlds}
+	var navigation_metrics: Array = []
+	var ordered: Array = groups.keys(); ordered.sort()
+	for id: String in ordered:
+		if cancellation.is_valid() and cancellation.call(): return BuildEffectCatalog.failure(&"cancelled")
+		var group: Dictionary = groups[id]
+		var geometry: WorldGeometry = worlds[group.stage_id]
+		var certified := geometry.connectivity_batch(group.entry,group.targets,group.profile,geometry.geometry_revision,cancellation)
+		if not certified.ok:
+			var code: StringName = certified.error_code
+			var failed := BuildEffectCatalog.failure(&"population_unreachable" if code == &"invalid_support" else code)
+			failed["geometry_diagnostic"] = certified.data.duplicate(true)
+			return failed
+		if not certified.data.complete: return BuildEffectCatalog.failure(&"navigation_budget_exceeded")
+		for target: Dictionary in certified.data.targets:
+			if not target.outward_reachable: return BuildEffectCatalog.failure(&"population_unreachable")
+		navigation_metrics.append({"stage_id":group.stage_id,"profile":group.profile.duplicate(true),"targets":group.targets.size(),"metrics":certified.data.metrics.duplicate(true)})
+	if cancellation.is_valid() and cancellation.call(): return BuildEffectCatalog.failure(&"cancelled")
+	return {"ok": true, "slots": slots, "worlds": worlds, "navigation_metrics":navigation_metrics}
 
 static func point(record: Dictionary) -> ExpeditionWorldPoint:
 	return ExpeditionWorldPoint.create(record["stage_id"], record["surface_id"], record["position"])

@@ -1,5 +1,32 @@
 # RagRPG — handoff portátil de F9
 
+<!-- f9-terra-consumer-active -->
+## Consumo AX após checkpoint28 — população salva, compilação em andamento
+
+HEAD congelado d03b6d93872f969b0f6d87c70920916652acd1f5. Terra ocupa fixture
+única; não editar produção/testes/tools/HEAD nem iniciar outro engine.
+prepare_02 PASS2/2,207,125s. finalize_01 PASS4/4,191,750s, proposta
+ d2d1a549ee46a8997b4907460c722d9f9a61913ac3b55c96e6efe197da2f618e aplicada.
+Fonte real criada só via AX: data/map_authoring/sanctuary_woods.population.json,
+55.703bytes,SHA2563debc7674a1770702639e8bb33b1e6598c52929e9230395ccfbf505c1ed04889,
+semântico3af0a91b949012dc5acd0e37c1864d0f2df860ffd926baae78970b9692b22c9e,
+plan_hash142d3c817b47982b55e73c318c595b5ff0785346cfdaea99e67fbc78326021f8.
+Sol confrontou todos os campos da receita: só slots/plan_hash mudaram; guarda
+alley_guard exato preservado,6novos slots, quotas1/3/3. Mapa/peças protegidos iguais.
+compile_01 terminou compile_timeout e watchdog360,557s, exitnull, wrapper1.
+Não há processo desse job ativo. Patrulha ainda ausente. Sonda Sol
+population_compile_01 terminou guard300,472s: editor slots/pools concluíram159,533s;
+Planner entrou159,557s e permaneceu em busca individual. HEADd03 preservado.
+Sol registrou contrato f9_population_runtime_planner.md e implementou delta local
+NÃO VALIDADO no Planner canônico (lote porstage/perfil, regra sóida preservada) e
+propagação de cancel/erro no compiler. Luna escreve teste delimitado, sem engine.
+Próximo importar/UID/testes e repetir compilação inteira; depois Terra retoma AX.
+Não reiniciar jobs antigos. Todos os engines anteriores terminaram.
+Sem pacote de compilação final validado até este ponto, gameplay/FPS ou F9 fechado.
+Evidência: evidence/f9/terra/area_encounters/{prepare_02,finalize_01,compile_01}*.
+<!-- /f9-terra-consumer-active -->
+
+
 <!-- f9-population-batch -->
 ## Checkpoint28 — alcance de população validado; Terra pode retomar AX
 
@@ -67,8 +94,8 @@ PopulationCompiler.prepare/_path/pool, depois adotar prova de alcance canônica
 compartilhada onde só existência é exigida, conforme f9_navigation_batch.md.
 API connectivity_batch já retorna flags por terminal/sentido e testemunhas,
 max_targets4096/256MiB/240s. Não confundir testemunha BFS com menor custo; path
-individual/custos/leash e gameplay continuam exigidos. PopulationPlanner.build
-usa position_query (não busca global); PopulationCompiler.prepare interações,
+individual/custos/leash e gameplay continuam exigidos. Leitura inicial do Planner foi incompleta: ele também chama geometry.path por slot
+na admissão canônica, conforme diagnóstico de compilação01; PopulationCompiler.prepare interações,
 placement_code/pool e validação de slots chamam path ida/volta repetidamente.
 Reproduzir a fonte inteira original; sem reduzir mapa/corpo/quotas ou aumentar
 timeout/caps. Cancel/budget/stale não são negativos geométricos. Não há novo

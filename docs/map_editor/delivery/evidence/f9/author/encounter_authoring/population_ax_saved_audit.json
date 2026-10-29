@@ -1,0 +1,40 @@
+{
+  "source_authorship_ok": true,
+  "compilation_ok": false,
+  "head": "d03b6d93872f969b0f6d87c70920916652acd1f5",
+  "bytes": 55703,
+  "source_sha256": "3debc7674a1770702639e8bb33b1e6598c52929e9230395ccfbf505c1ed04889",
+  "source_hash": "3af0a91b949012dc5acd0e37c1864d0f2df860ffd926baae78970b9692b22c9e",
+  "recipe_and_guard_preserved": true,
+  "slots": 7,
+  "quotas": [
+    3,
+    3,
+    1
+  ],
+  "receipts": [
+    {
+      "name": "prepare_02",
+      "source_authorship_stage_ok": true,
+      "elapsed_seconds": 207.125,
+      "receipt_sha256": "6f04ac214220c0308f3ea90d662854f8e57131e4ab52ef339af6588dce07e606",
+      "result_sha256": "f0bf77ab9ea6c9cabae6421145464e9c47d2e9127657de34c198dbf403431a8c"
+    },
+    {
+      "name": "finalize_01",
+      "source_authorship_stage_ok": true,
+      "elapsed_seconds": 191.75,
+      "receipt_sha256": "07bf0f810c62762ddbc2207e6fa41eb75c8cced74740b1ceaac9e53191ca7bc1",
+      "result_sha256": "0e8ef81c4af7d4c255d9c02b54db2c3f76d942fc7e8dc7668b5103c6dd9e8514"
+    },
+    {
+      "name": "compile_01",
+      "source_authorship_stage_ok": false,
+      "elapsed_seconds": 360.557,
+      "receipt_sha256": "f25debbed401303308dbace5dab8fbbbd6f9272faa9f4375b32435f235ac91ba",
+      "result_sha256": "86def1a42227b3b39cbfc68d88518d25ec80bda543f1b83a10b8fa5d449e29fd"
+    }
+  ],
+  "patrol_exists": false,
+  "next": "canonical Planner batch delta pending validation; no approved final package/gameplay/FPS/F9 completion"
+}

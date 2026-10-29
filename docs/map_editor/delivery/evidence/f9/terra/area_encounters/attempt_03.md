@@ -1,0 +1,7 @@
+# Tentativa 03 — plano aplicado; compilação bloqueada
+
+HEAD d03b6d93872f969b0f6d87c70920916652acd1f5, engine SHA ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424, fixture e perfil privados registrados nos recibos. prepare_02 abriu o rascunho e gerou prévia em 207,125s, exit 0: base f7a6b516a76703c1d46419d052e112997de11db31b42f1a6633cceec0a50a19c; proposal d2d1a549ee46a8997b4907460c722d9f9a61913ac3b55c96e6efe197da2f618e. Diff adicionou seis slots, preservou alley_guard, sem alterar/remover outros; quotas 3/3/1. Resultado integral em prepare_02.result.json.
+
+finalize_01 reproduziu preview, aplicou confirmação com hashes exatos e salvou fonte por AX/Store; 4/4, exit 0, 191,750s. Fonte data/map_authoring/sanctuary_woods.population.json SHA256 3debc7674a1770702639e8bb33b1e6598c52929e9230395ccfbf505c1ed04889. Resultados, ações e hashes de sessão em finalize_01.result.json.
+
+compile_01 reabriu a fonte com sucesso, mas population/compile retornou compile_timeout. Wrapper: 360,557s, timed_out=true, exit Godot não capturado (null), exit wrapper 1. Não há pacote compilado aprovado; não iniciou patrulha nem criou fonte patrol. Não alterar quota, mapa, corpo ou guards; encaminhado a Sol. HEAD e mapa/peças protegidos permaneceram iguais segundo recibos. Nenhum processo Godot após encerramento; fixture liberada. Receitas, respostas e recibos com prefixos prepare_02, finalize_01 e compile_01 preservados. App/caminhada/combate/objetivo e performance in-game não foram testados.

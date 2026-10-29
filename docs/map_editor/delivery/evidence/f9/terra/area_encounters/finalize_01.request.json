@@ -1,0 +1,34 @@
+{
+  "actions": [
+    {
+      "screen": "population",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\terra\\area_encounters/population_draft_01.json",
+        "confirm_discard": true
+      },
+      "id": "population/document/open"
+    },
+    {
+      "screen": "population",
+      "parameters": {},
+      "id": "population/plan/preview"
+    },
+    {
+      "screen": "population",
+      "parameters": {
+        "expected_source_hash": "f7a6b516a76703c1d46419d052e112997de11db31b42f1a6633cceec0a50a19c",
+        "proposal_hash": "d2d1a549ee46a8997b4907460c722d9f9a61913ac3b55c96e6efe197da2f618e",
+        "confirm_apply": true
+      },
+      "id": "population/plan/apply"
+    },
+    {
+      "screen": "population",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods.population.json"
+      },
+      "id": "population/document/save"
+    }
+  ],
+  "ax_version": 1
+}

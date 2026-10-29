@@ -2945,6 +2945,12 @@
       "owner": "Terra F9 area",
       "previous_owner": "new bounded encounter/patrol AX slice or sequential transfer after prior terminal delivery",
       "base_sha256": null
+    },
+    {
+      "path": "scripts/core/expedition/population/population_planner.gd",
+      "owner": "Sol F9",
+      "previous_owner": "F5 canonical producer; sequential ownership, no active writer in this checkout",
+      "base_sha256": "9fe61222a3aa49e6e16d438315c32413aa9c59a0120abb939001a829c056d1cb"
     }
   ],
   "read_only_shared": [
@@ -3385,7 +3391,7 @@
       "base": "bc52103eee28072d70243b42a002056bc0bf90fa",
       "runtime_owner": "Sol F9",
       "fixture_frozen": false,
-      "fixture_owner": "released; actual draft generation measure01 complete, no engine active",
+      "fixture_owner": "released after diagnostic compile01 terminal; Sol implementing canonical Planner delta, Luna writing bounded test",
       "draft": "docs/map_editor/delivery/evidence/f9/terra/area_encounters/population_draft_01.json",
       "draft_sha256": "4d64d6ffbce706a2917b2a1ad436decfd362b96575a7a4b4bbd001ededdb7cb1",
       "scope": "canonical population reachability/preparation cost; no smaller map/body/quota and no higher timeout/caps",
@@ -3433,7 +3439,47 @@
           1
         ]
       },
-      "limitations": "instrumented actual draft generation only; actual AX apply and final compile pending; no FPS/gameplay proof; individual path and editor-worker180 remain performance obligations"
+      "limitations": "instrumented actual draft generation only; actual AX apply and final compile pending; no FPS/gameplay proof; individual path and editor-worker180 remain performance obligations",
+      "content_state": {
+        "head": "d03b6d93872f969b0f6d87c70920916652acd1f5",
+        "prepare_AX": "2/2 PASS207.125s",
+        "apply_save_AX": "4/4 PASS191.750s",
+        "population_sha256": "3debc7674a1770702639e8bb33b1e6598c52929e9230395ccfbf505c1ed04889",
+        "population_source_hash": "3af0a91b949012dc5acd0e37c1864d0f2df860ffd926baae78970b9692b22c9e",
+        "slots": 7,
+        "recipe_guard_preserved": true,
+        "compile": "Terra compile01 timeout300s/watchdog360.557s, no approved package; no engines left; Sol phase diagnostic started",
+        "patrol": "not yet authored"
+      }
+    },
+    "navigation_relaxation": {
+      "state": "analysis_only_not_implemented",
+      "base": "d03b6d93872f969b0f6d87c70920916652acd1f5",
+      "owner": "Sol F9",
+      "files": [
+        "docs/map_editor/contracts/f9_navigation_relaxation.md"
+      ],
+      "scope": "same-distance relaxation rejection before local geometry predicates; preserve Dijkstra EPS order costs candidates; runtime/test ownership and implementation await fixture release",
+      "fixture_owner": "Terra active AX consumer; no engine or input edits by this analysis"
+    },
+    "population_runtime_planner": {
+      "state": "implementing_after_diagnostic",
+      "base": "d03b6d93872f969b0f6d87c70920916652acd1f5",
+      "runtime_owner": "Sol F9",
+      "files": [
+        "scripts/core/expedition/population/population_planner.gd",
+        "scripts/map_authoring/population/population_compiler.gd",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "test_owner": "Luna F9 planner batch",
+      "test_files": [
+        "tests/map_editor_population_planner_batch_test.gd",
+        "tests/map_editor_population_planner_batch_test.gd.uid"
+      ],
+      "fixture_frozen": false,
+      "fixture_owner": "released after compile diagnostic01 guard300 terminal; all prior engines ended",
+      "scope": "canonical admission existence only, grouped by stage and entire profile, outward-only requirement unchanged; no movement/attack/leash/attribute rule changes",
+      "diagnostic": "all editor slot and pool checks finished at159.533s, canonical planner entered159.557s and did not finish at300s"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

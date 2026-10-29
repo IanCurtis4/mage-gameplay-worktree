@@ -1,0 +1,18 @@
+{
+  "ax_version": 1,
+  "actions": [
+    {
+      "id": "population/document/open",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\terra\\area_encounters/population_draft_01.json",
+        "confirm_discard": true
+      },
+      "screen": "population"
+    },
+    {
+      "id": "population/plan/preview",
+      "parameters": {},
+      "screen": "population"
+    }
+  ]
+}

@@ -353,8 +353,11 @@ static func compile(source: Dictionary, cancel: Callable = Callable()) -> Dictio
 		var sampled := pool(source,context,brush,cancel)
 		if not sampled.ok: return sampled
 		if counts.get(brush.brush_id,0) != sampled.quota: return fail("population_deficit",brush.brush_id,{"requested":sampled.quota,"realized":counts.get(brush.brush_id,0)})
-	var planned := ExpeditionPopulationPlanner.build(manifest,context.catalog,rules)
-	if not planned.ok: return fail("population_unreachable")
+	var planned := ExpeditionPopulationPlanner.build(manifest,context.catalog,rules,cancel)
+	if not planned.ok:
+		var failure := fail(str(planned.error_code))
+		if planned.has("geometry_diagnostic"): failure["geometry_diagnostic"] = planned.geometry_diagnostic.duplicate(true)
+		return failure
 	var package := {"format_version":1,"compiler_revision":REVISION,"source_hash":Document.hash_source(source),"catalog_hash":context.catalog_hash,"policy_hash":context.policy_hash,"map_package":context.map_package,"manifest":manifest.to_data(),"rules":rules,"profile":PROFILE.duplicate(true)}
 	package["package_hash"] = Canonical.digest(package)
 	if var_to_bytes(package).size() > 4*1024*1024: return fail("population_limit")

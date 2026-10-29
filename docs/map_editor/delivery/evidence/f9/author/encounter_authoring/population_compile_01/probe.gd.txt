@@ -1,0 +1,15 @@
+extends SceneTree
+func _initialize() -> void: call_deferred("run")
+func run() -> void:
+	var loaded: Dictionary = load("res://scripts/map_authoring/population/population_store.gd").load_source("C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods.population.json")
+	if not loaded.ok:
+		print("MEASURE invalid source ",loaded)
+		quit(2)
+		return
+	var frozen: Dictionary = loaded.data.duplicate(true)
+	var result: Dictionary = load("res://.godot/population_compile_01/population_trace.gd").compile(loaded.data)
+	var record := {"ok":result.ok,"code":result.get("code",""),"no_mutation":loaded.data == frozen,"slots":result.get("data",{}).get("slots",result.get("package",{}).get("manifest",{}).get("population",{}).get("slots",[])).size(),"output_hash":result.get("output_hash",""),"metrics":result.get("metrics",[]),"diagnostics":result.get("diagnostics",[]),"geometry_diagnostic":result.get("geometry_diagnostic",{})}
+	print("MEASURE result ",JSON.stringify(record))
+	var file := FileAccess.open("C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\author\\encounter_authoring\\population_compile_01\\result.json",FileAccess.WRITE)
+	file.store_string(JSON.stringify(record,"\t",true,true)); file.close()
+	quit(0 if result.ok else 1)
