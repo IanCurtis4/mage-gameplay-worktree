@@ -15,7 +15,7 @@ const PatrolCompiler = preload("res://scripts/map_authoring/patrol/patrol_compil
 const REVISION := "map_exchange_v1"
 const KINDS := ["piece","map","population","patrol","generation"]
 const IDS := ["placement_id","connector_id","socket_id","region_id","slot_id","patrol_id","point_id","brush_id","exclusion_id","interaction_id","instance_id","link_id","layer_id","definition_id","piece_hash","surface_id"]
-const REVISIONS := {"piece":"map_terrain_v2","map":"map_composition_v1","population":"map_population_v1","patrol":"map_patrol_v1","generation":"map_slot_wfc_v1"}
+const REVISIONS := {"piece":"map_terrain_v2","map":"map_composition_v1","population":PopulationCompiler.REVISION,"patrol":"map_patrol_v1","generation":"map_slot_wfc_v1"}
 
 static func fail(code: String) -> Dictionary:
 	return {"ok":false,"code":code,"diagnostics":[{"code":code,"message":"Intercâmbio recusado: "+code,"severity":"error"}]}

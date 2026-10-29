@@ -1,0 +1,7 @@
+extends SceneTree
+func _initialize() -> void: call_deferred("run")
+func run() -> void:
+	var source: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\terra\\area_encounters\\population_draft_01.json"))
+	var result: Dictionary = load("res://.godot/population_diagnostic_01/population_trace.gd").regenerate(source)
+	print("TRACE result ",result.get("ok")," ",result.get("code",""))
+	quit(0 if result.get("ok",false) else 1)

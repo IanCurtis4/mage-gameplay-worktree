@@ -1,0 +1,169 @@
+{
+  "ax_version": 1,
+  "actions": [
+    {
+      "screen": "population",
+      "id": "population/document/new",
+      "parameters": {
+        "document_id": "sanctuary_woods_encounters",
+        "name": "Bosque do Santuário",
+        "confirm_discard": true
+      }
+    },
+    {
+      "screen": "population",
+      "id": "population/map/import",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods.map.json"
+      }
+    },
+    {
+      "screen": "population",
+      "id": "population/entrance/set",
+      "parameters": {
+        "surface_id": "clearing/c_1c58e1b8efb1df2f_2_6_1_14",
+        "position_xyz": [
+          160,
+          0,
+          640
+        ]
+      }
+    },
+    {
+      "screen": "population",
+      "id": "population/brush/upsert",
+      "parameters": {
+        "brush_id": "clearing_dispersed",
+        "surface_id": "clearing/c_1c58e1b8efb1df2f_3_7_4_13",
+        "center_xyz": [
+          384,
+          0,
+          640
+        ],
+        "radius": 160,
+        "mode": "dispersed",
+        "quota_mode": "count",
+        "quantity": 3,
+        "density": 1,
+        "spacing": 24,
+        "group_radius": 120,
+        "seed": "0",
+        "round": 0,
+        "species": [
+          {
+            "species_id": "demo_chaser",
+            "category": "normal",
+            "origin_id": "trial_stage_1",
+            "weight": 1
+          }
+        ]
+      }
+    },
+    {
+      "screen": "population",
+      "id": "population/brush/upsert",
+      "parameters": {
+        "brush_id": "west_group",
+        "surface_id": "overpass/c_e33596bc5a5c9222_0_0_4_10",
+        "center_xyz": [
+          1580,
+          0,
+          1080
+        ],
+        "radius": 120,
+        "mode": "concentrated",
+        "quota_mode": "count",
+        "quantity": 3,
+        "density": 1,
+        "spacing": 24,
+        "group_radius": 80,
+        "seed": "0",
+        "round": 0,
+        "species": [
+          {
+            "species_id": "demo_chaser",
+            "category": "normal",
+            "origin_id": "trial_stage_1",
+            "weight": 1
+          }
+        ]
+      }
+    },
+    {
+      "screen": "population",
+      "id": "population/brush/upsert",
+      "parameters": {
+        "brush_id": "alley_patrol",
+        "surface_id": "overpass/c_e33596bc5a5c9222_0_0_4_10",
+        "center_xyz": [
+          1640,
+          0,
+          960
+        ],
+        "radius": 80,
+        "mode": "dispersed",
+        "quota_mode": "count",
+        "quantity": 1,
+        "density": 1,
+        "spacing": 24,
+        "group_radius": 60,
+        "seed": "0",
+        "round": 0,
+        "species": [
+          {
+            "species_id": "demo_chaser",
+            "category": "normal",
+            "origin_id": "trial_stage_1",
+            "weight": 1
+          }
+        ]
+      }
+    },
+    {
+      "screen": "population",
+      "id": "population/interaction/upsert",
+      "parameters": {
+        "interaction_id": "shrine_completion",
+        "kind": "phase_completion",
+        "surface_id": "overpass/c_d64888db90a489ab_0_0_4_3",
+        "position_xyz": [
+          2336,
+          128,
+          192
+        ],
+        "target_id": ""
+      }
+    },
+    {
+      "screen": "population",
+      "id": "population/slot/upsert",
+      "parameters": {
+        "slot_id": "alley_guard",
+        "brush_id": "alley_patrol",
+        "surface_id": "overpass/c_e33596bc5a5c9222_0_0_4_10",
+        "position_xyz": [
+          1640,
+          0,
+          960
+        ],
+        "species_id": "demo_chaser",
+        "category": "normal",
+        "origin_id": "trial_stage_1",
+        "fixed": true,
+        "site_id": ""
+      }
+    },
+    {
+      "screen": "population",
+      "id": "population/document/save",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\terra\\area_encounters\\population_draft_01.json"
+      }
+    },
+    {
+      "screen": "population",
+      "id": "population/plan/preview",
+      "parameters": {}
+    }
+  ]
+}

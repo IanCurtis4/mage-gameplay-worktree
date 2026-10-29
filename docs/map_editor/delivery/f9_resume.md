@@ -1,5 +1,66 @@
 # Retomada F9 —29/10/2026
 
+<!-- f9-population-batch -->
+## Delta em validação — alcance de população
+
+Sol implementou prova canônica por lote para interações, candidatos de pincel e
+slots; preserva path individual e custo, corpo, grid16, quotas e mapa real.
+Cancel/budget/stale propagam erro sem plano parcial. Revisão map_population_v2;
+bundles informam v2, pacotes antigos exigem recompilação da fonte, sem sobrescrita.
+Contrato: contracts/f9_population_reachability.md. Luna escreveu27checks no novo
+tests/map_editor_population_reachability_test.gd; NÃO executados ainda.
+Import01 PASS, UID copiado do engine. Próximo: Import02 com UID, testes dirigidos,
+medição da fonte AX original inteira; depois regressões/verify e Terra AX.
+Código ainda NÃO validado; fonte final população/patrulha continua ausente.
+Sonda02 confirmou mapa28,313s e busca individual até santuário ainda ativa aos120s.
+Sonda01 falhou por parser inadequado da sonda; não conta para performance.
+F9 integral permanece aberto; sem playtest/master/push/F10.
+<!-- /f9-population-batch -->
+
+
+<!-- f9-population-active -->
+## Bloqueio reproduzido — prévia do Bosque
+
+Base atual bc52103eee28072d70243b42a002056bc0bf90fa, mesmo checkout/branch.
+Produtor AX do checkpoint27 continua validado; o consumo no mapa real encontrou
+custo de navegação. Fonte final de população/patrulha ainda NÃO existe.
+
+Terra executou query_02 por AX:4/4, exit0,46,346s; forest/84apoios/catalog/socket
+reais retornados. Depois nove ações criaram e salvaram por AX o rascunho:
+evidence/f9/terra/area_encounters/population_draft_01.json,
+SHA2564d64d6ffbce706a2917b2a1ad436decfd362b96575a7a4b4bbd001ededdb7cb1,
+fontef7a6b516a76703c1d46419d052e112997de11db31b42f1a6633cceec0a50a19c.
+Quotas3/3/1, espécie demo_chaser normal trial_stage_1; fixoalley_guard e objetivo
+shrine_completion. Entrada[160,0,640], grupo[1580,0,1080], fixo[1640,0,960],
+santuário[2336,128,192]. Apoios reais constam na fonte/consulta, não inferir IDs.
+
+Décima ação plan/preview retornou compile_timeout. Wrapper encerrou após
+360,562s com timed_out=true/exit_code=null; processo externo terminou1. Plano não
+aprovado/aplicado, sem pacote válido; request/result/receipt/logs e attempt_02.md
+preservados na pasta Terra. Todos os engines terminaram; fixture liberada.
+Não reiniciar o processo antigo nem contar timeout como PASS.
+
+Primeiro intento foi só confirmation_required por confirm_discard=false na
+sessão inicialmente dirty. Essa confirmação já é autorizada nesta autoria;
+usar true em trocas intencionais com preservação de draft, sem perguntar ao humano.
+Sol criou wrapper síncrono run_ax_request.py em author/encounter_authoring para
+capturar exit/env/argv/logs e aguardar o processo real. Limites internos AX300s e
+worker editor180s não foram alterados. Mapa/duas peças protegidos permaneceram
+idênticos; não tocar playtest/save pessoal/master/push.
+
+Próximo Sol: instrumentar a mesma entrada/destinos para localizar o custo em
+PopulationCompiler.prepare/_path/pool, depois adotar prova de alcance canônica
+compartilhada onde só existência é exigida, conforme f9_navigation_batch.md.
+API connectivity_batch já retorna flags por terminal/sentido e testemunhas,
+max_targets4096/256MiB/240s. Não confundir testemunha BFS com menor custo; path
+individual/custos/leash e gameplay continuam exigidos. PopulationPlanner.build
+usa position_query (não busca global); PopulationCompiler.prepare interações,
+placement_code/pool e validação de slots chamam path ida/volta repetidamente.
+Reproduzir a fonte inteira original; sem reduzir mapa/corpo/quotas ou aumentar
+timeout/caps. Cancel/budget/stale não são negativos geométricos. Não há novo
+runtime implementado para esse gargalo ainda. F9 integral permanece ativo.
+<!-- /f9-population-active -->
+
 <!-- f9-current-ax -->
 ## Checkpoint 27 — AX de encontros e patrulhas validado
 

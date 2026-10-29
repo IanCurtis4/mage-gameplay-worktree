@@ -1,0 +1,23 @@
+{
+  "head": "bc52103eee28072d70243b42a002056bc0bf90fa",
+  "head_after": "bc52103eee28072d70243b42a002056bc0bf90fa",
+  "fixture": "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+  "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "compiler_sha256": "e004e9ddae871a17ede7f3fce3357876284ed5addff92c484006b7da985753ac",
+  "draft_sha256": "4d64d6ffbce706a2917b2a1ad436decfd362b96575a7a4b4bbd001ededdb7cb1",
+  "elapsed_seconds": 120.49371020001126,
+  "exit_code": null,
+  "timed_out": true,
+  "arguments": [
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+    "--headless",
+    "--path",
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+    "--log-file",
+    "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\author\\encounter_authoring\\population_diagnostic_02\\engine.log",
+    "--script",
+    "res://.godot/population_diagnostic_02/probe.gd"
+  ],
+  "instrumentation_only": true,
+  "diagnostic_guard_seconds": 120
+}

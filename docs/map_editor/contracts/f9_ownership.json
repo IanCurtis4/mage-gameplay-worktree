@@ -3379,6 +3379,33 @@
         "mismatches": 0
       },
       "limitations": "Producer/CLI on disposable fixtures; actual Bosque encounters/patrols/objective not authored; no new App/gameplay/FPS; remaining full F9 matrix active"
+    },
+    "population_performance": {
+      "state": "implemented_pending_validation",
+      "base": "bc52103eee28072d70243b42a002056bc0bf90fa",
+      "runtime_owner": "Sol F9",
+      "fixture_frozen": false,
+      "fixture_owner": "released after Import01; copying engine-generated test UID; next Import02 and directed tests",
+      "draft": "docs/map_editor/delivery/evidence/f9/terra/area_encounters/population_draft_01.json",
+      "draft_sha256": "4d64d6ffbce706a2917b2a1ad436decfd362b96575a7a4b4bbd001ededdb7cb1",
+      "scope": "canonical population reachability/preparation cost; no smaller map/body/quota and no higher timeout/caps",
+      "known_calls": [
+        "PopulationCompiler.prepare interactions _path",
+        "placement_code/pool every sampled point _path",
+        "validate_slot _path"
+      ],
+      "next": "trace actual draft, then bounded canonical reachability reuse with directed witnesses; individual shortest-cost path/leash contract retained",
+      "files": [
+        "scripts/map_authoring/population/population_compiler.gd",
+        "scripts/map_authoring/context/population_context.gd",
+        "scripts/map_authoring/exchange/exchange.gd",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "test_owner": "Luna F9 population reachability",
+      "test_files": [
+        "tests/map_editor_population_reachability_test.gd",
+        "tests/map_editor_population_reachability_test.gd.uid"
+      ]
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

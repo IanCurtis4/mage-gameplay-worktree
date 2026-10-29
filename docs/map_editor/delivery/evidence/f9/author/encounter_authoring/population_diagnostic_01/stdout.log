@@ -1,0 +1,5 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+TRACE prepare begin 5821
+TRACE prepare end 5844 ok=false
+TRACE result false piece_hash_mismatch

@@ -9,7 +9,7 @@ const Point = preload("res://scripts/core/expedition/model/world_point.gd")
 const Kernel = preload("res://scripts/core/expedition/generation/fixture_geometry.gd")
 const Worker = preload("res://scripts/map_authoring/population/population_worker.gd")
 const Context = preload("res://scripts/map_authoring/context/population_context.gd")
-const REVISION := "map_population_v1"
+const REVISION := "map_population_v2"
 const PROFILE := {"profile_id":"ruins_player","revision":1,"radius":20.0,"height":32.0,"connector_kinds":["walk"]}
 const STEP := 16.0
 var _thread: Thread
@@ -34,6 +34,8 @@ func close() -> void:
 static func fail(code: String, id: String = "", counts: Dictionary = {}, location: Vector3 = Vector3.ZERO) -> Dictionary:
 	var messages := {"population_empty":"Importe uma composição e marque a entrada.","entrance_invalid":"A entrada não tem suporte ou folga para o jogador.","species_invalid":"Espécie, categoria ou origem não permitida no catálogo.","policy_unresolved":"A origem não tem política de recompensa publicada.","population_unreachable":"O corpo real não cabe aqui ou não alcança a entrada e o retorno.","population_excluded":"O slot invade uma exclusão, entrada, abertura ou interação.","population_overlap":"Dois corpos não respeitam o espaçamento solicitado.","population_deficit":"Não há espaço para a quota solicitada.","fixed_excess":"Há mais slots fixados que a quota; ajuste explicitamente.","plan_stale":"Prepare e aplique uma nova prévia após alterar a receita.","slot_invalid":"O slot não pertence à receita ou está fora da região.","thematic_site_required":"Memoráveis exigem um palco temático explícito e acessível.","interaction_invalid":"Interação sem destino válido, suporte ou rota de ida e volta.","population_limit":"O encontro excede o orçamento técnico.","cancelled":"Operação cancelada.","stale_source":"A fonte mudou; compile novamente."}
 	messages["map_package_invalid"] = "O pacote do mapa foi recusado. Recompile a composição antes de preparar encontros."
+	messages["navigation_budget_exceeded"] = "A prova de acesso atingiu o orçamento técnico. Nenhuma prévia foi aplicada."
+	messages["stale_geometry"] = "A geometria mudou durante a prova de acesso. Prepare a prévia novamente."
 	var message: String = messages.get(code,"Revise os dados do encontro: "+code)
 	if not counts.is_empty(): message += " Solicitados: %d; realizados: %d; déficit: %d."%[counts.requested,counts.realized,maxi(0,counts.requested-counts.realized)]
 	return {"ok":false,"code":code,"diagnostics":[{"code":code,"entity_id":id,"field":"population","surface_id":"","location":location,"severity":"error","message":message,"counts":counts,"suggestion":"Selecione o marcador e ajuste a fonte."}]}
@@ -54,8 +56,20 @@ static func _spec(spec: Dictionary, catalog: MobCatalog) -> Dictionary:
 	if rule.is_empty(): return fail("policy_unresolved")
 	var profile := PROFILE.duplicate(true); profile.radius = maxf(PROFILE.radius,checked.definition.collision_radius)
 	return {"ok":true,"profile":profile,"rule":rule}
-static func _path(world: WorldGeometry, entry: ExpeditionWorldPoint, destination: ExpeditionWorldPoint, profile: Dictionary) -> bool:
-	return world.position_query(destination,profile,world.geometry_revision).ok and world.path(entry,destination,profile,world.geometry_revision).ok and world.path(destination,entry,profile,world.geometry_revision).ok
+# Existence proofs only; witness costs never replace individual shortest paths.
+static func reachability(world: WorldGeometry, entry: ExpeditionWorldPoint, targets: Array[ExpeditionWorldPoint], profile: Dictionary, cancel: Callable = Callable(), budget: Dictionary = {}) -> Dictionary:
+	var checked := world.connectivity_batch(entry,targets,profile,world.geometry_revision,cancel,budget)
+	if not checked.ok:
+		var failure := fail(str(checked.error_code))
+		failure["geometry_diagnostic"] = checked.data.duplicate(true)
+		return failure
+	if not checked.data.complete: return fail("navigation_budget_exceeded")
+	var reachable: Array[bool] = []
+	for target: Dictionary in checked.data.targets:
+		reachable.append(target.outward_reachable and target.inward_reachable)
+	return {"ok":true,"reachable":reachable,"metrics":checked.data.metrics.duplicate(true)}
+static func operational(code: String) -> bool:
+	return code not in ["","population_excluded","population_unreachable"]
 static func prepare(source: Dictionary, cancel: Callable = Callable()) -> Dictionary:
 	var checked := Document.validate(source)
 	if not checked.ok: return checked
@@ -85,8 +99,18 @@ static func prepare(source: Dictionary, cancel: Callable = Callable()) -> Dictio
 				var invalid := fail("interaction_invalid",interaction.interaction_id)
 				invalid.diagnostics[0].message = "Este protótipo admite uma saída de conclusão por mapa. Mantenha as demais como saídas antecipadas ou rascunho."
 				return invalid
-	for interaction: Dictionary in _sorted(source.interactions,"interaction_id"):
-		if not _path(world,entry,anchor(interaction),PROFILE): return fail("interaction_invalid",interaction.interaction_id,{},vector(interaction.position_xyz))
+	var interactions := _sorted(source.interactions,"interaction_id")
+	var terminals: Array[ExpeditionWorldPoint] = []
+	for interaction: Dictionary in interactions:
+		var point := anchor(interaction)
+		if not world.position_query(point,PROFILE,world.geometry_revision).ok: return fail("interaction_invalid",interaction.interaction_id,{},point.position)
+		terminals.append(point)
+	if not terminals.is_empty():
+		var accessible := reachability(world,entry,terminals,PROFILE,cancel)
+		if not accessible.ok: return accessible
+		for index: int in interactions.size():
+			if not accessible.reachable[index]: return fail("interaction_invalid",interactions[index].interaction_id,{},terminals[index].position)
+	for interaction: Dictionary in interactions:
 		var socket_id: String = "interaction_"+interaction.interaction_id
 		stage.sockets.append({"socket_id":socket_id,"kind":"portal" if interaction.kind == "portal" else ("thematic_encounter" if interaction.kind == "thematic_encounter" else "exit"),"tags":[],"surface_id":interaction.surface_id,"position":vector(interaction.position_xyz)})
 		if interaction.kind == "portal":
@@ -97,7 +121,7 @@ static func prepare(source: Dictionary, cancel: Callable = Callable()) -> Dictio
 			manifest._data.objectives.append({"objective_id":interaction.interaction_id,"revision":1,"stage_id":"map_preview","instance_id":"authored","socket_id":socket_id,"required_tags":[],"outcome":interaction.kind,"required":interaction.kind == "phase_completion","point":anchor(interaction).to_data()})
 		manifest._data.witnesses["interaction/"+interaction.interaction_id] = {"point":anchor(interaction).to_data()}
 	# Reconfigure after adding sockets, keeping the same authoritative geometry.
-	world.configure(manifest,"map_preview")
+	if not world.configure(manifest,"map_preview").ok: return fail("map_package_invalid")
 	var families: Dictionary = {}; var family_cells: Dictionary = {}
 	for instance: Dictionary in built.package.render_instances:
 		for visual: Dictionary in instance.visuals:
@@ -131,7 +155,15 @@ static func excluded(source: Dictionary, point: ExpeditionWorldPoint, radius: fl
 	return false
 static func _legal(source: Dictionary, context: Dictionary, point: ExpeditionWorldPoint, profile: Dictionary, site: String = "") -> bool:
 	return placement_code(source,context,point,profile,site) == ""
-static func placement_code(source: Dictionary, context: Dictionary, point: ExpeditionWorldPoint, profile: Dictionary, site: String = "") -> String:
+static func placement_code(source: Dictionary, context: Dictionary, point: ExpeditionWorldPoint, profile: Dictionary, site: String = "", cancel: Callable = Callable()) -> String:
+	if cancel.is_valid() and cancel.call(): return "cancelled"
+	var local := _placement_local_code(source,context,point,profile,site)
+	if local != "": return local
+	var targets: Array[ExpeditionWorldPoint] = [point]
+	var accessible := reachability(context.world,context.entry,targets,profile,cancel)
+	if not accessible.ok: return accessible.code
+	return "" if accessible.reachable[0] else "population_unreachable"
+static func _placement_local_code(source: Dictionary, context: Dictionary, point: ExpeditionWorldPoint, profile: Dictionary, site: String = "") -> String:
 	if excluded(source,point,profile.radius,site,context): return "population_excluded"
 	for area: Dictionary in context.protected_areas:
 		if context.families.get(point.surface_id,point.surface_id) != area.family: continue
@@ -142,7 +174,7 @@ static func placement_code(source: Dictionary, context: Dictionary, point: Exped
 	for endpoint: Dictionary in context.world._stage.connectors:
 		if "/port_" not in endpoint.connector_id: continue
 		if same_layer(context,endpoint.surface_id,point.surface_id) and point.position.distance_to(endpoint.position) < endpoint.width*0.5+profile.radius: return "population_excluded"
-	return "" if _path(context.world,context.entry,point,profile) else "population_unreachable"
+	return "" if context.world.position_query(point,profile,context.world.geometry_revision).ok else "population_unreachable"
 static func _separated(point: ExpeditionWorldPoint, radius: float, spacing: float, accepted: Array) -> bool:
 	for other: Dictionary in accepted:
 		# Separate floors may overlap horizontally; check occupied vertical intervals.
@@ -150,6 +182,7 @@ static func _separated(point: ExpeditionWorldPoint, radius: float, spacing: floa
 		if Vector2(point.position.x,point.position.z).distance_to(Vector2(other.point.position.x,other.point.position.z)) < radius+other.radius+maxf(spacing,other.spacing): return false
 	return true
 static func pool(source: Dictionary, context: Dictionary, brush: Dictionary, cancel: Callable = Callable()) -> Dictionary:
+	if cancel.is_valid() and cancel.call(): return fail("cancelled")
 	var profile := PROFILE.duplicate(true)
 	for spec: Dictionary in brush.species:
 		var checked := _spec(spec,context.catalog)
@@ -159,7 +192,7 @@ static func pool(source: Dictionary, context: Dictionary, brush: Dictionary, can
 	var cells: Array = context.family_cells.get(family,[])
 	if cells.is_empty(): return fail("population_unreachable",brush.brush_id)
 	var center := vector(brush.center_xyz)
-	var candidates: Array = []; var count := 0; var rejected := {"population_excluded":0,"population_unreachable":0,"outside_support":0}
+	var candidates: Array = []; var pending: Array = []; var terminals: Array[ExpeditionWorldPoint] = []; var count := 0; var rejected := {"population_excluded":0,"population_unreachable":0,"outside_support":0}
 	var first_x := int(floor((center.x-brush.radius)/STEP)); var last_x := int(ceil((center.x+brush.radius)/STEP))
 	var first_z := int(floor((center.z-brush.radius)/STEP)); var last_z := int(ceil((center.z+brush.radius)/STEP))
 	for iz: int in range(first_z,last_z):
@@ -175,14 +208,26 @@ static func pool(source: Dictionary, context: Dictionary, brush: Dictionary, can
 				if not Kernel.contains(cell,position): continue
 				contained = true
 				var point := Point.create("map_preview",cell.surface_id,position)
-				var code := placement_code(source,context,point,profile)
+				var code := _placement_local_code(source,context,point,profile)
 				if code != "": rejected[code] += 1; continue
-				var eligible := false
-				for spec: Dictionary in brush.species:
-					if Context.policy(source,context,point,spec,profile.radius) == "": eligible = true; break
-				if not eligible: continue
-				count += 1; candidates.append(point); break
+				pending.append({"point":point,"sample":Vector2i(ix,iz)})
+				terminals.append(point)
 			if not contained: rejected.outside_support += 1
+	if not terminals.is_empty():
+		var accessible := reachability(context.world,context.entry,terminals,profile,cancel)
+		if not accessible.ok: return accessible
+		var accepted: Dictionary = {}
+		for index: int in pending.size():
+			if cancel.is_valid() and cancel.call(): return fail("cancelled")
+			var candidate: Dictionary = pending[index]
+			if accepted.has(candidate.sample): continue
+			if not accessible.reachable[index]: rejected.population_unreachable += 1; continue
+			var point: ExpeditionWorldPoint = candidate.point
+			var eligible := false
+			for spec: Dictionary in brush.species:
+				if Context.policy(source,context,point,spec,profile.radius) == "": eligible = true; break
+			if not eligible: continue
+			count += 1; candidates.append(point); accepted[candidate.sample] = true
 	var quota := int(brush.quantity) if brush.quota_mode == "count" else int(floor(count*STEP*STEP*brush.density/10000.0))
 	if quota > 128: return fail("population_limit",brush.brush_id)
 	return {"ok":true,"candidates":candidates,"quota":quota,"sampled_area":count*STEP*STEP,"profile":profile,"rejected":rejected}
@@ -199,7 +244,7 @@ static func regenerate(source: Dictionary, cancel: Callable = Callable()) -> Dic
 	# All pins reserve space before any brush draws candidates.
 	for slot: Dictionary in _sorted(source.slots,"slot_id"):
 		if not slot.fixed: continue
-		var valid := validate_slot(source,context,slot,occupied)
+		var valid := validate_slot(source,context,slot,occupied,cancel)
 		if not valid.ok: return valid
 		realized.append(slot.duplicate(true)); occupied.append(valid.reservation)
 	for brush: Dictionary in _sorted(source.brushes,"brush_id"):
@@ -259,7 +304,7 @@ static func regenerate(source: Dictionary, cancel: Callable = Callable()) -> Dic
 	var checked := Document.validate(proposed)
 	if not checked.ok: return checked
 	return {"ok":true,"code":"","data":proposed,"base_hash":original_hash,"diff":diff,"metrics":metrics}
-static func validate_slot(source: Dictionary, context: Dictionary, slot: Dictionary, occupied: Array) -> Dictionary:
+static func validate_slot(source: Dictionary, context: Dictionary, slot: Dictionary, occupied: Array, cancel: Callable = Callable()) -> Dictionary:
 	var spec := _spec(slot,context.catalog)
 	if not spec.ok: return spec
 	var brush := MapCompiler._find(source.brushes,"brush_id",slot.brush_id)
@@ -279,7 +324,7 @@ static func validate_slot(source: Dictionary, context: Dictionary, slot: Diction
 		var generated_rare: bool = not slot.fixed and Context.rare_allowed(source,context,slot,spec.profile.radius)
 		if not slot.fixed and not generated_rare: return fail("thematic_site_required",slot.slot_id)
 		if not slot.site_id.is_empty() and (site.is_empty() or site.kind != "thematic_encounter" or site.surface_id != slot.surface_id or vector(site.position_xyz).distance_to(point.position) > 0.001): return fail("thematic_site_required",slot.slot_id)
-	var code := placement_code(source,context,point,spec.profile,slot.site_id)
+	var code := placement_code(source,context,point,spec.profile,slot.site_id,cancel)
 	if code != "": return fail(code,slot.slot_id,{},point.position)
 	if not _separated(point,spec.profile.radius,brush.spacing,occupied): return fail("population_overlap",slot.slot_id,{},point.position)
 	return {"ok":true,"reservation":{"point":point,"radius":spec.profile.radius,"spacing":brush.spacing},"rule":spec.rule}
@@ -294,7 +339,7 @@ static func compile(source: Dictionary, cancel: Callable = Callable()) -> Dictio
 	var manifest: ExpeditionManifest = context.manifest
 	for slot: Dictionary in _sorted(source.slots,"slot_id"):
 		if cancel.is_valid() and cancel.call(): return fail("cancelled")
-		var checked := validate_slot(source,context,slot,occupied)
+		var checked := validate_slot(source,context,slot,occupied,cancel)
 		if not checked.ok: return checked
 		occupied.append(checked.reservation); counts[slot.brush_id] = counts.get(slot.brush_id,0)+1
 		var point := anchor(slot); var socket_id: String = "population_"+slot.slot_id

@@ -3,7 +3,7 @@ param(
     [Parameter(Mandatory)][string]$EvidenceDirectory,
     [switch]$SkipImport,
     [string]$ResumeSession="",
-    [ValidateSet('Geometry','Objects','ObjectsNative','Mesh','Relief','Ports','Batch','Materials','MaterialsNative','Scale','Cliff','CliffNative','BiomeProps','BiomePropsNative','Borders','BordersNative','Shadows','ShadowsNative','CanvasOrder','Library','LibraryNative','Viewport','ViewportNative','RuntimeView','GameplayNative','GameplayWindow','GameplayControls','GameplayEditorNative','GameplayCli','FieldsNative','Organic','NavigationLazy','NavigationDense','NavigationContext','Rounded','RoundedNative','SnapshotDensity','RoundedResume','SurfacePick','Authoring','AuthoringNative','Content','ContentNative','CompositionAX','CompositionAXNative','MapBiome','MapBiomeNative','EncounterAuthoring','EncounterAuthoringNative')][string]$Stage='Geometry'
+    [ValidateSet('Geometry','Objects','ObjectsNative','Mesh','Relief','Ports','Batch','Materials','MaterialsNative','Scale','Cliff','CliffNative','BiomeProps','BiomePropsNative','Borders','BordersNative','Shadows','ShadowsNative','CanvasOrder','Library','LibraryNative','Viewport','ViewportNative','RuntimeView','GameplayNative','GameplayWindow','GameplayControls','GameplayEditorNative','GameplayCli','FieldsNative','Organic','NavigationLazy','NavigationDense','NavigationContext','Rounded','RoundedNative','SnapshotDensity','RoundedResume','SurfacePick','Authoring','AuthoringNative','Content','ContentNative','CompositionAX','CompositionAXNative','MapBiome','MapBiomeNative','EncounterAuthoring','EncounterAuthoringNative','PopulationReachability')][string]$Stage='Geometry'
 )
 $ErrorActionPreference='Stop'
 $f9Root=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
@@ -45,6 +45,7 @@ $f9Marker=if($Stage -eq 'Geometry'){'F9_GEOMETRY_RESULT'}else{'F9_OBJECTS_RESULT
 if($Stage -eq 'NavigationContext'){$f9Script='res://tests/map_editor_navigation_context_test.gd';$f9Marker='F9_CONTEXT_RESULT'}
 if($Stage -eq 'NavigationDense'){$f9Script='res://tests/map_editor_navigation_dense_test.gd';$f9Marker='F9_DENSE_RESULT'}
 if($Stage -eq 'NavigationLazy'){$f9Script='res://tests/map_editor_navigation_lazy_test.gd';$f9Marker='F9_LAZY_RESULT'}
+if($Stage -eq 'PopulationReachability'){$f9Script='res://tests/map_editor_population_reachability_test.gd';$f9Marker='F9_POPULATION_REACHABILITY_RESULT'}
 if($Stage -eq 'EncounterAuthoring'){$f9Script='res://tests/map_editor_encounter_authoring_test.gd';$f9Marker='F9_ENCOUNTER_RESULT'}
 if($Stage -eq 'MapBiome'){$f9Script='res://tests/map_editor_map_biome_test.gd';$f9Marker='F9_MAP_BIOME_RESULT'}
 if($Stage -eq 'CompositionAX'){$f9Script='res://tests/map_editor_ax_composition_test.gd';$f9Marker='F9_AX_COMPOSITION_RESULT'}

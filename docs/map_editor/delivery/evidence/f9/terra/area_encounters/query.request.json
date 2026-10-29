@@ -1,0 +1,31 @@
+{
+  "ax_version": 1,
+  "actions": [
+    {
+      "screen": "population",
+      "parameters": {
+        "document_id": "sanctuary_woods_encounters",
+        "confirm_discard": false,
+        "name": "Bosque do Santuário"
+      },
+      "id": "population/document/new"
+    },
+    {
+      "screen": "population",
+      "parameters": {
+        "path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/data/map_authoring/sanctuary_woods.map.json"
+      },
+      "id": "population/map/import"
+    },
+    {
+      "screen": "population",
+      "parameters": {},
+      "id": "population/map/query"
+    },
+    {
+      "screen": "population",
+      "parameters": {},
+      "id": "population/catalog/options"
+    }
+  ]
+}

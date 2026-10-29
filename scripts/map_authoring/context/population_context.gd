@@ -102,7 +102,10 @@ static func realize(source: Dictionary, context: Dictionary, compiler: Script, c
 					var point := Point.create("map_preview",cell.surface_id,position)
 					var local := Kernel.rotate(position-MapCompiler._vector(requirement.instance.position_xyz),-int(requirement.instance.rotation_quarters))
 					if not _inside(requirement.region.polygon_xz,Vector2(local.x,local.z),checked.profile.radius): continue
-					if policy(result,context,point,spec,checked.profile.radius,id) != "" or compiler.placement_code(result,context,point,checked.profile,id) != "": continue
+					if policy(result,context,point,spec,checked.profile.radius,id) != "": continue
+					var code: String = compiler.placement_code(result,context,point,checked.profile,id,cancel)
+					if compiler.operational(code): return compiler.fail(code,id)
+					if code != "": continue
 					var separated := true
 					for existing: Dictionary in result.slots:
 						if not existing.fixed: continue

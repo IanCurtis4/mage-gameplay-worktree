@@ -1,0 +1,45 @@
+{
+  "head_before": "bc52103eee28072d70243b42a002056bc0bf90fa",
+  "head_after": "bc52103eee28072d70243b42a002056bc0bf90fa",
+  "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "fixture": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+  "arguments": [
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+    "--path",
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+    "--headless",
+    "--log-file",
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\terra\\area_encounters\\query_02.receipt.engine.log",
+    "--script",
+    "res://scripts/map_authoring/agent/ax_session.gd",
+    "--",
+    "--ax-request=C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\terra\\area_encounters\\query_02.request.json",
+    "--ax-result=C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\terra\\area_encounters\\query_02.result.json"
+  ],
+  "environment": {
+    "APPDATA": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile\\Roaming",
+    "LOCALAPPDATA": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile\\Local"
+  },
+  "request_sha256": "f19a92fac6c7deae975816dee4f79e2b797b2763462a78468951c4ff9bf5dabd",
+  "exit_code": 0,
+  "timed_out": false,
+  "elapsed_seconds": 46.346,
+  "generic_errors": false,
+  "response_ok": true,
+  "response_code": "",
+  "completed": 4,
+  "requested": 4,
+  "protected_before": {
+    "data/map_authoring/sanctuary_woods.map.json": "8e3f1c3c47709d204eeaf3061e3d98beabb0dfa987ed09ff24ad2ec79e6a631f",
+    "data/map_authoring/sanctuary_woods_clearing.source.json": "150509026fddc323396d20fdd015fee47c1dacb47685c1f326842b77260484ab",
+    "data/map_authoring/sanctuary_woods_overpass.source.json": "1501a98d8e201ce10017c0f410d137da5bad0c21fbd97039c9e52a9d693341c9"
+  },
+  "protected_after": {
+    "data/map_authoring/sanctuary_woods.map.json": "8e3f1c3c47709d204eeaf3061e3d98beabb0dfa987ed09ff24ad2ec79e6a631f",
+    "data/map_authoring/sanctuary_woods_clearing.source.json": "150509026fddc323396d20fdd015fee47c1dacb47685c1f326842b77260484ab",
+    "data/map_authoring/sanctuary_woods_overpass.source.json": "1501a98d8e201ce10017c0f410d137da5bad0c21fbd97039c9e52a9d693341c9"
+  },
+  "protected_unchanged": true,
+  "result_sha256": "12fdf1bd9f6d281f0850701c006b9f60600b63c5bdb1966aa9775b01f430f10f",
+  "ok": true
+}
