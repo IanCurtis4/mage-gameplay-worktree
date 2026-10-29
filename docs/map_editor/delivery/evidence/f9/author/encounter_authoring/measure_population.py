@@ -26,7 +26,7 @@ raw = raw.replace('\tvar built := MapCompiler.compile(', '\tprint("MEASURE map b
 raw = raw.replace('\tif not built.ok: return built', '\tprint("MEASURE map end ",Time.get_ticks_msec()," ok=",built.ok)\n\tif not built.ok: return built',1)
 raw = raw.replace('\t\tvar checked := validate_slot(source,context,slot,occupied,cancel)', '\t\tprint("MEASURE slot begin ",Time.get_ticks_msec()," ",slot.slot_id)\n\t\tvar checked := validate_slot(source,context,slot,occupied,cancel)\n\t\tprint("MEASURE slot end ",Time.get_ticks_msec()," ok=",checked.ok)',1)
 raw = raw.replace('\tvar planned := ExpeditionPopulationPlanner.build(', '\tprint("MEASURE planner begin ",Time.get_ticks_msec())\n\tvar planned := ExpeditionPopulationPlanner.build(',1)
-raw = raw.replace('\tif not planned.ok: return fail("population_unreachable")','\tprint("MEASURE planner end ",Time.get_ticks_msec()," ok=",planned.ok)\n\tif not planned.ok: return fail("population_unreachable")',1)
+raw = raw.replace('\tif not planned.ok: return fail("population_unreachable")','\tprint("MEASURE planner end ",Time.get_ticks_msec()," ok=",planned.ok," ",planned.get("navigation_metrics",[]))\n\tif not planned.ok: return fail("population_unreachable")',1)
 (scratch/'population_trace.gd').write_text(raw,encoding='utf-8')
 probe = '''extends SceneTree
 func _initialize() -> void: call_deferred("run")

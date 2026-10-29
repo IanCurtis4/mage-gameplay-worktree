@@ -3463,7 +3463,7 @@
       "fixture_owner": "Terra active AX consumer; no engine or input edits by this analysis"
     },
     "population_runtime_planner": {
-      "state": "implementing_after_diagnostic",
+      "state": "validated_increment_F9_still_open",
       "base": "d03b6d93872f969b0f6d87c70920916652acd1f5",
       "runtime_owner": "Sol F9",
       "files": [
@@ -3477,10 +3477,30 @@
         "tests/map_editor_population_planner_batch_test.gd.uid"
       ],
       "fixture_frozen": false,
-      "fixture_owner": "released after plannerImport01 PASS; engine UID copied unchanged; next frozen test candidate",
+      "fixture_owner": "released after full compile02 terminal and audit; next Terra AX",
       "scope": "canonical admission existence only, grouped by stage and entire profile, outward-only requirement unchanged; no movement/attack/leash/attribute rule changes",
       "diagnostic": "all editor slot and pool checks finished at159.533s, canonical planner entered159.557s and did not finish at300s",
-      "test_expected_checks": 20
+      "test_expected_checks": 20,
+      "code_head": "43a6a0c3f636da4b09cbba10c54e34b6c92375e8",
+      "test_head": "611324c19baca71bc479c1d08e8135e7c62f8669",
+      "validation": {
+        "Planner": 20,
+        "Candidate": 53,
+        "Population": 91,
+        "Patrol": 58,
+        "Exchange": 113,
+        "GameplayNative": 52,
+        "verify_selected": 6,
+        "verify_catalog": 299,
+        "completion_inputs": 2059
+      },
+      "validation_head": "611324c19baca71bc479c1d08e8135e7c62f8669",
+      "actual_compile_seconds": 183.97089440003037,
+      "actual_compile_hash": "543a125634b45cfa426b3340adee22349bb401586d6a18bc95c3f8b0e1cd0854",
+      "completion_inputs": 2059,
+      "context_inputs": 2053,
+      "mismatches": 0,
+      "limits": "no real AX rerun or patrol yet; no Bosque App/FPS; editor worker180 and GameplayCandidate individual access remain open"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

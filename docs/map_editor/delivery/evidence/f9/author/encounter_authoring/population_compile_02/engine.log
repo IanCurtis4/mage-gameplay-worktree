@@ -1,0 +1,42 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+MEASURE map begin 6131
+MEASURE map end 36679 ok=true
+MEASURE batch begin 41727 targets=1
+MEASURE batch end 56261 ok=true { "storage_bytes": 56185324, "peak_storage_bytes": 56344436, "snapshot_storage_units": 4190424, "terminal_checks": 1, "states": 5347, "direct_pairs": 2, "endpoint_checks": 262, "connections": 131, "landmark_checks": 81870, "portal_pairs": 262, "offset_checks": 5850, "pair_candidates": 5000, "portal_checks": 2500, "expansions": 8152, "edge_tests": 21376, "reconstruction_steps": 26, "witness_points": 52, "witness_segments": 50, "operations": 1, "elapsed_ms": 14453.468 }
+MEASURE slot begin 56372 alley_guard
+MEASURE batch begin 56388 targets=1
+MEASURE batch end 67779 ok=true { "storage_bytes": 51712228, "peak_storage_bytes": 51819312, "snapshot_storage_units": 4195596, "terminal_checks": 1, "states": 5353, "direct_pairs": 2, "endpoint_checks": 262, "connections": 131, "landmark_checks": 81870, "portal_pairs": 262, "offset_checks": 5850, "pair_candidates": 5008, "portal_checks": 2504, "expansions": 3758, "edge_tests": 17218, "reconstruction_steps": 18, "witness_points": 36, "witness_segments": 34, "operations": 1, "elapsed_ms": 11322.643 }
+MEASURE slot end 67789 ok=true
+MEASURE slot begin 67789 slot_297da45e94b3dc24f576d5e288acd7002e1f4a81
+MEASURE batch begin 67790 targets=1
+MEASURE batch end 78891 ok=true { "storage_bytes": 51856044, "peak_storage_bytes": 51963128, "snapshot_storage_units": 4195596, "terminal_checks": 1, "states": 5365, "direct_pairs": 2, "endpoint_checks": 262, "connections": 131, "landmark_checks": 81870, "portal_pairs": 262, "offset_checks": 5850, "pair_candidates": 5008, "portal_checks": 2509, "expansions": 3774, "edge_tests": 17504, "reconstruction_steps": 18, "witness_points": 36, "witness_segments": 34, "operations": 1, "elapsed_ms": 11048.557 }
+MEASURE slot end 78901 ok=true
+MEASURE slot begin 78901 slot_3fa5680f129a671cfaf7561f287b2dbaeeef50ed
+MEASURE batch begin 78902 targets=1
+MEASURE batch end 78978 ok=true { "storage_bytes": 8853592, "peak_storage_bytes": 8854028, "snapshot_storage_units": 4195596, "terminal_checks": 1, "states": 2, "direct_pairs": 2, "expansions": 2, "direct_witness_proofs_reused": 1, "operations": 1, "elapsed_ms": 68.7 }
+MEASURE slot end 78979 ok=true
+MEASURE slot begin 78979 slot_4780c394e81e0c43a07a441c03fccc7607571d7b
+MEASURE batch begin 78979 targets=1
+MEASURE batch end 89784 ok=true { "storage_bytes": 51745644, "peak_storage_bytes": 51852728, "snapshot_storage_units": 4195596, "terminal_checks": 1, "states": 5357, "direct_pairs": 2, "endpoint_checks": 262, "connections": 131, "landmark_checks": 81870, "portal_pairs": 262, "offset_checks": 5850, "pair_candidates": 5008, "portal_checks": 2505, "expansions": 3758, "edge_tests": 17214, "reconstruction_steps": 18, "witness_points": 36, "witness_segments": 34, "operations": 1, "elapsed_ms": 10747.223 }
+MEASURE slot end 89795 ok=true
+MEASURE slot begin 89795 slot_92097df2d2e2386a557e8c6497581666fdec56ec
+MEASURE batch begin 89796 targets=1
+MEASURE batch end 89879 ok=true { "storage_bytes": 8853592, "peak_storage_bytes": 8854028, "snapshot_storage_units": 4195596, "terminal_checks": 1, "states": 2, "direct_pairs": 2, "expansions": 2, "direct_witness_proofs_reused": 1, "operations": 1, "elapsed_ms": 74.695 }
+MEASURE slot end 89879 ok=true
+MEASURE slot begin 89879 slot_b039a81834959f2546d76cfd5b6cb8a0171be480
+MEASURE batch begin 89880 targets=1
+MEASURE batch end 89970 ok=true { "storage_bytes": 8853592, "peak_storage_bytes": 8854028, "snapshot_storage_units": 4195596, "terminal_checks": 1, "states": 2, "direct_pairs": 2, "expansions": 2, "direct_witness_proofs_reused": 1, "operations": 1, "elapsed_ms": 79.18 }
+MEASURE slot end 89970 ok=true
+MEASURE slot begin 89970 slot_d6d3911757d6c84ebd1f8a92ee90cb49feba7c66
+MEASURE batch begin 89971 targets=1
+MEASURE batch end 101689 ok=true { "storage_bytes": 52838476, "peak_storage_bytes": 52953184, "snapshot_storage_units": 4195596, "terminal_checks": 1, "states": 5357, "direct_pairs": 2, "endpoint_checks": 262, "connections": 131, "landmark_checks": 81870, "portal_pairs": 262, "offset_checks": 5850, "pair_candidates": 5008, "portal_checks": 2504, "expansions": 4898, "edge_tests": 18378, "reconstruction_steps": 20, "witness_points": 38, "witness_segments": 36, "operations": 1, "elapsed_ms": 11663.369 }
+MEASURE slot end 101703 ok=true
+MEASURE batch begin 101723 targets=78
+MEASURE batch end 125205 ok=true { "storage_bytes": 67406972, "peak_storage_bytes": 67514056, "snapshot_storage_units": 4195596, "terminal_checks": 78, "states": 6518, "direct_pairs": 156, "endpoint_checks": 262, "connections": 131, "landmark_checks": 81870, "portal_pairs": 20436, "offset_checks": 456300, "pair_candidates": 390614, "portal_checks": 3106, "expansions": 5350, "edge_tests": 48836, "reconstruction_steps": 1404, "witness_points": 2808, "witness_segments": 2652, "operations": 1, "elapsed_ms": 23409.11 }
+MEASURE batch begin 125517 targets=316
+MEASURE batch end 127759 ok=true { "storage_bytes": 17941924, "peak_storage_bytes": 17941924, "snapshot_storage_units": 4195596, "terminal_checks": 316, "states": 317, "direct_pairs": 632, "expansions": 2, "direct_witness_proofs_reused": 316, "operations": 1, "elapsed_ms": 2208.067 }
+MEASURE batch begin 127835 targets=165
+MEASURE batch end 169356 ok=true { "storage_bytes": 88015816, "peak_storage_bytes": 88124288, "snapshot_storage_units": 4195596, "terminal_checks": 165, "states": 7881, "direct_pairs": 330, "endpoint_checks": 262, "connections": 131, "landmark_checks": 81870, "portal_pairs": 43230, "offset_checks": 965250, "pair_candidates": 826220, "portal_checks": 3714, "expansions": 8304, "edge_tests": 95458, "reconstruction_steps": 3072, "witness_points": 6042, "witness_segments": 5712, "operations": 1, "elapsed_ms": 41410.801 }
+MEASURE planner begin 169382
+MEASURE result {"code":"","diagnostics":[],"geometry_diagnostic":{},"metrics":[],"no_mutation":true,"ok":true,"output_hash":"543a125634b45cfa426b3340adee22349bb401586d6a18bc95c3f8b0e1cd0854","slots":7}

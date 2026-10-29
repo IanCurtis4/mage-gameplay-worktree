@@ -1,31 +1,38 @@
 # RagRPG — handoff portátil de F9
 
 <!-- f9-terra-consumer-active -->
-## Após checkpoint28 — população salva, correção canônica em validação
+## Checkpoint29 — Bosque compila; retorno ao AX pendente
 
-Consumo Terra foi congelado emd03b6d93872f969b0f6d87c70920916652acd1f5 e terminou.
-HEAD atual43a6a0c3f636da4b09cbba10c54e34b6c92375e8 conserva a fonte salva e
-a correção canônica NÃO VALIDADA. Fixture liberada, nenhum engine ativo nesse
-checkpoint; Luna escreve teste exclusivo, antes do próximo import Sol.
-prepare_02 PASS2/2,207,125s. finalize_01 PASS4/4,191,750s, proposta
- d2d1a549ee46a8997b4907460c722d9f9a61913ac3b55c96e6efe197da2f618e aplicada.
-Fonte real criada só via AX: data/map_authoring/sanctuary_woods.population.json,
-55.703bytes,SHA2563debc7674a1770702639e8bb33b1e6598c52929e9230395ccfbf505c1ed04889,
-semântico3af0a91b949012dc5acd0e37c1864d0f2df860ffd926baae78970b9692b22c9e,
-plan_hash142d3c817b47982b55e73c318c595b5ff0785346cfdaea99e67fbc78326021f8.
-Sol confrontou todos os campos da receita: só slots/plan_hash mudaram; guarda
-alley_guard exato preservado,6novos slots, quotas1/3/3. Mapa/peças protegidos iguais.
-compile_01 terminou compile_timeout e watchdog360,557s, exitnull, wrapper1.
-Não há processo desse job ativo. Patrulha ainda ausente. Sonda Sol
-population_compile_01 terminou guard300,472s: editor slots/pools concluíram159,533s;
-Planner entrou159,557s e permaneceu em busca individual. HEADd03 preservado.
-Sol registrou contrato f9_population_runtime_planner.md e implementou delta local
-NÃO VALIDADO no Planner canônico (lote porstage/perfil, regra sóida preservada) e
-propagação de cancel/erro no compiler. Luna escreve teste delimitado, sem engine.
-Próximo importar/UID/testes e repetir compilação inteira; depois Terra retoma AX.
-Não reiniciar jobs antigos. Todos os engines anteriores terminaram.
-Sem pacote de compilação final validado até este ponto, gameplay/FPS ou F9 fechado.
-Evidência: evidence/f9/terra/area_encounters/{prepare_02,finalize_01,compile_01}*.
+Produção43a6a0c3f636da4b09cbba10c54e34b6c92375e8, validação
+611324c19baca71bc479c1d08e8135e7c62f8669. Mesmo checkout/branch. Recibo:
+evidence/f9/author/encounter_authoring/planner_consolidation.md e
+planner_audit_01.json. Fonte de população real salva APENAS via Terra AX,
+data/map_authoring/sanctuary_woods.population.json,55.703B,
+SHA2563debc7674a1770702639e8bb33b1e6598c52929e9230395ccfbf505c1ed04889,
+semântico3af0a91b949012dc5acd0e37c1864d0f2df860ffd926baae78970b9692b22c9e.
+Receita/guarda preservados,6novos slots/7total, quotas3/3/1. Mapa/peças idênticos.
+
+Core Planner também refazia geometry.path por slot (leitura inicial incompleta).
+Sonda compile01 terminou editor159,533s e travou Planner atéguard300. Sol trocou
+só existência por lote stage/perfil, mantém regra sóida e custos/movimento/leash.
+Cancel/stale/budget propagados sem parcial; métricas fora do pacote/save.
+Luna20dirigidos+Context315+GameplayNative52+verify6/299(350checks) PASS;
+2059/2053inputs auditados sem divergências. Pacote pequeno da regressão idêntico.
+Compilação integral real sonda02:183,971s,exit0,7slots,sem mutação/erro/timeout,
+pacote543a125634b45cfa426b3340adee22349bb401586d6a18bc95c3f8b0e1cd0854.
+
+Próximo Terra: repetir compile por AX em receita/saída nova, mesmo source salvo;
+se PASS, patrulha viaAX. Compile_01 AX histórico foi timeout360,557s, não PASS.
+Não escrever produto manualmente, reduzir fonte/corpo/quota ou ampliar guards.
+Todos os jobs anteriores terminaram; fixture liberada neste checkpoint, confirmar
+estado real antes de iniciar algo. Não reiniciar handles antigos.
+
+Sem Bosque App/percurso/combate/FPS, patrulha ou pacote AX final aprovado ainda.
+Worker editor180s exige medição/otimização, não PASS inferido do ensaio183,971s.
+GameplayCandidate._both ainda faz path na preparação; consulta individual e
+outros itens da matriz F9 abertos. Fonte da skill/guia, geração regional,
+reconciliação, assets/release/UX restantes não passam para F10 por esse checkpoint.
+Sem playtest/save pessoal/master/push/F10; meta integral F9 ativa.
 <!-- /f9-terra-consumer-active -->
 
 

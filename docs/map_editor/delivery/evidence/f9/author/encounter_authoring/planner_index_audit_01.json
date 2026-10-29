@@ -1,0 +1,307 @@
+{
+  "ok": true,
+  "scope": "staged raw evidence and encounter tests; excludes this generated receipt to avoid self-reference",
+  "count": 50,
+  "rows": [
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/audit_planner_validation.py",
+      "sha256": "efa1539924f83ed393359c9509f8278e39335bf9d325db6f0251fc200af7a127",
+      "index_sha256": "efa1539924f83ed393359c9509f8278e39335bf9d325db6f0251fc200af7a127",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/measure_population.py",
+      "sha256": "8e84ce1828dc8865769b4a296e0e896601576a18ad502792bbc92c8ccf35c78c",
+      "index_sha256": "8e84ce1828dc8865769b4a296e0e896601576a18ad502792bbc92c8ccf35c78c",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/planner_audit_01.json",
+      "sha256": "8dce4f0a816f02ea41f1200254151443bc63affa7bfeaae7dbad1368f87e4cb3",
+      "index_sha256": "8dce4f0a816f02ea41f1200254151443bc63affa7bfeaae7dbad1368f87e4cb3",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/planner_consolidation.md",
+      "sha256": "8a64d9993bd1b584c0ed345a8e486bba96da2e2e300085136b537e06eec0fc92",
+      "index_sha256": "8a64d9993bd1b584c0ed345a8e486bba96da2e2e300085136b537e06eec0fc92",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/population_compile_02/engine.log",
+      "sha256": "6b2c6382af4d85cd6904a4c4aa3594a9a479a86ff69b20cb5a38762f73f5a721",
+      "index_sha256": "6b2c6382af4d85cd6904a4c4aa3594a9a479a86ff69b20cb5a38762f73f5a721",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/population_compile_02/population_trace.gd.txt",
+      "sha256": "afebe4b6a70388c12d475cca93be9e64d74d826dda23ccfde2cdc1150a28b6a3",
+      "index_sha256": "afebe4b6a70388c12d475cca93be9e64d74d826dda23ccfde2cdc1150a28b6a3",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/population_compile_02/probe.gd.txt",
+      "sha256": "2fe1666bb6e92c54df46e6efefd6ba87a5cd8ec77b5f192311834c678ccca566",
+      "index_sha256": "2fe1666bb6e92c54df46e6efefd6ba87a5cd8ec77b5f192311834c678ccca566",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/population_compile_02/receipt.json",
+      "sha256": "8edd696d2d37acf32586cbd9046660d986fb28d81bd12b8d5c0029a350f97cfa",
+      "index_sha256": "8edd696d2d37acf32586cbd9046660d986fb28d81bd12b8d5c0029a350f97cfa",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/population_compile_02/result.json",
+      "sha256": "cf0a1b5eeaf18f43f55ba3daba2b21c2ab62d4204c1ec3eda12f3abd5501c93d",
+      "index_sha256": "cf0a1b5eeaf18f43f55ba3daba2b21c2ab62d4204c1ec3eda12f3abd5501c93d",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/population_compile_02/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "index_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/population_compile_02/stdout.log",
+      "sha256": "2039fa9cdf6ec3f3bc83bc242767b48a20f65c356929b034200ebf006f2641aa",
+      "index_sha256": "2039fa9cdf6ec3f3bc83bc242767b48a20f65c356929b034200ebf006f2641aa",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_context_01/candidate.engine.log",
+      "sha256": "48ce0e7fb7019b95b76af52b6b8a811fe10d0fcabe09dbb7d2167c54a6db15af",
+      "index_sha256": "48ce0e7fb7019b95b76af52b6b8a811fe10d0fcabe09dbb7d2167c54a6db15af",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_context_01/candidate.output.log",
+      "sha256": "f2989a4a0f2ad73bfe42c380c60b27e2f315615c873d3e20e6c6becf3326c79f",
+      "index_sha256": "f2989a4a0f2ad73bfe42c380c60b27e2f315615c873d3e20e6c6becf3326c79f",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_context_01/exchange.engine.log",
+      "sha256": "75734b2fc7c6c81dd6caa1821a1f64365c7f1f6aaa91c363dcbcd48cd4c52abf",
+      "index_sha256": "75734b2fc7c6c81dd6caa1821a1f64365c7f1f6aaa91c363dcbcd48cd4c52abf",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_context_01/exchange.output.log",
+      "sha256": "a998b74c840b1c7e41e6d99306803f1e1ae4b7114c1f75ac96c29f46f752d149",
+      "index_sha256": "a998b74c840b1c7e41e6d99306803f1e1ae4b7114c1f75ac96c29f46f752d149",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_context_01/import.engine.log",
+      "sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283",
+      "index_sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_context_01/import.output.log",
+      "sha256": "65266ecc51590d7e85010dab58e897ac1a8bd879079aa036bdfa5f18a05c9aa7",
+      "index_sha256": "65266ecc51590d7e85010dab58e897ac1a8bd879079aa036bdfa5f18a05c9aa7",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_context_01/manifest.json",
+      "sha256": "55241d3b1ba41d2a83284cfe94a6f58bd4fce21a97bb2f4f3719447bb5c0ec32",
+      "index_sha256": "55241d3b1ba41d2a83284cfe94a6f58bd4fce21a97bb2f4f3719447bb5c0ec32",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_context_01/patrol.engine.log",
+      "sha256": "99459c4742cb65ea3c88de645569a34aefdf23af1e20419f207233c9b877d813",
+      "index_sha256": "99459c4742cb65ea3c88de645569a34aefdf23af1e20419f207233c9b877d813",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_context_01/patrol.output.log",
+      "sha256": "468a988db59387b89157c703d02231d5120c99ae8a440e447b56534776f9d191",
+      "index_sha256": "468a988db59387b89157c703d02231d5120c99ae8a440e447b56534776f9d191",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_context_01/population.engine.log",
+      "sha256": "fb254fff397a5de92ce4a8c87406aee19610f0717cc6e4265afaab459495fbc3",
+      "index_sha256": "fb254fff397a5de92ce4a8c87406aee19610f0717cc6e4265afaab459495fbc3",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_context_01/population.output.log",
+      "sha256": "3eafdc5fab362faa822a5cc5a8a12883e7cb45874d653def1f68fff6fca1e512",
+      "index_sha256": "3eafdc5fab362faa822a5cc5a8a12883e7cb45874d653def1f68fff6fca1e512",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_context_01/runs.json",
+      "sha256": "ad2bc4b92725c828419a6286f6aa0831fba8b5d9d77a59dd2e87cd53292fe3c9",
+      "index_sha256": "ad2bc4b92725c828419a6286f6aa0831fba8b5d9d77a59dd2e87cd53292fe3c9",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_gameplay_native_01/gameplay_bridge.png",
+      "sha256": "1e6010117ce42fb02e4b886f1e3cab8fd7cb798f42388e0ce5c799dbf5550bd9",
+      "index_sha256": "1e6010117ce42fb02e4b886f1e3cab8fd7cb798f42388e0ce5c799dbf5550bd9",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_gameplay_native_01/gameplay_combat.png",
+      "sha256": "4c3123b52c8d987e9bbe14169c95993335f83484b078de29165f5332d7115fbc",
+      "index_sha256": "4c3123b52c8d987e9bbe14169c95993335f83484b078de29165f5332d7115fbc",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_gameplay_native_01/gameplay_start.png",
+      "sha256": "c42e10603e3a5088f9aaf79631bb567319bfdabd01a7cdf03fef696b7a4ec884",
+      "index_sha256": "c42e10603e3a5088f9aaf79631bb567319bfdabd01a7cdf03fef696b7a4ec884",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_gameplay_native_01/geometry.engine.log",
+      "sha256": "c9acee605b3e11bfa7cdadc8437771ffb99be3b22b157b881182708e95c64c69",
+      "index_sha256": "c9acee605b3e11bfa7cdadc8437771ffb99be3b22b157b881182708e95c64c69",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_gameplay_native_01/geometry.output.log",
+      "sha256": "6b1a620ffec3f7f3ef674991dcb7825107fe2ff89e4222473b59ca63e1c155fa",
+      "index_sha256": "6b1a620ffec3f7f3ef674991dcb7825107fe2ff89e4222473b59ca63e1c155fa",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_gameplay_native_01/runs.json",
+      "sha256": "56a00bccf73b6729f730acaf70c26e8d423a47b0c3772ba62da78ba39fb38732",
+      "index_sha256": "56a00bccf73b6729f730acaf70c26e8d423a47b0c3772ba62da78ba39fb38732",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_model_01/geometry.engine.log",
+      "sha256": "0e2c86199b02a9f7d67469be1c38a48d44a47522ea67aa409f7416336b845dc4",
+      "index_sha256": "0e2c86199b02a9f7d67469be1c38a48d44a47522ea67aa409f7416336b845dc4",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_model_01/geometry.output.log",
+      "sha256": "4f5abd032a1de598ae1ce3d2440bae4d7e1d441d1384957143c0bb598cc267f6",
+      "index_sha256": "4f5abd032a1de598ae1ce3d2440bae4d7e1d441d1384957143c0bb598cc267f6",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_model_01/import/import.engine.log",
+      "sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283",
+      "index_sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_model_01/import/import.output.log",
+      "sha256": "65266ecc51590d7e85010dab58e897ac1a8bd879079aa036bdfa5f18a05c9aa7",
+      "index_sha256": "65266ecc51590d7e85010dab58e897ac1a8bd879079aa036bdfa5f18a05c9aa7",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_model_01/import/manifest.json",
+      "sha256": "90df687ebf8fe9bb89c7529008ca5e546c24030009a1f545403d09890b98c910",
+      "index_sha256": "90df687ebf8fe9bb89c7529008ca5e546c24030009a1f545403d09890b98c910",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_model_01/import/runs.json",
+      "sha256": "a077e79938942198123072cd94059566062edf0c68d80497ec09caff43d62a7b",
+      "index_sha256": "a077e79938942198123072cd94059566062edf0c68d80497ec09caff43d62a7b",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_model_01/runs.json",
+      "sha256": "1121cab52200fa5e3a021bcbe8d693eda80af56cf12f80c58ae6834e9f9c3e9c",
+      "index_sha256": "1121cab52200fa5e3a021bcbe8d693eda80af56cf12f80c58ae6834e9f9c3e9c",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_verify_01/001.engine.log",
+      "sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283",
+      "index_sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_verify_01/001.output.log",
+      "sha256": "25fca8a857a8124f4ce408cd0c0220024ce77463c49cfc70dbd6de33a5ef97f0",
+      "index_sha256": "25fca8a857a8124f4ce408cd0c0220024ce77463c49cfc70dbd6de33a5ef97f0",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_verify_01/237-e07_f0_consumer_test.engine.log",
+      "sha256": "6e4818088c7eb110ac73ae4df549092754b002f6c24829e19395aeb6916e9042",
+      "index_sha256": "6e4818088c7eb110ac73ae4df549092754b002f6c24829e19395aeb6916e9042",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_verify_01/237-e07_f0_consumer_test.output.log",
+      "sha256": "0823b340f29063061f943614fb90b279e1e31aed40da3ef2aaa54859adeaed25",
+      "index_sha256": "0823b340f29063061f943614fb90b279e1e31aed40da3ef2aaa54859adeaed25",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_verify_01/258-e07_f5_population_test.engine.log",
+      "sha256": "254d6844b0e192e4a55d970f8e095b5678c0a624cbe02d33ec78cbefa06c4f2d",
+      "index_sha256": "254d6844b0e192e4a55d970f8e095b5678c0a624cbe02d33ec78cbefa06c4f2d",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_verify_01/258-e07_f5_population_test.output.log",
+      "sha256": "594087c5e4379bfe40e94245662ede8e2711513b7b919e9f8cd4f2de30d6b364",
+      "index_sha256": "594087c5e4379bfe40e94245662ede8e2711513b7b919e9f8cd4f2de30d6b364",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_verify_01/259-e07_f5_campaign_test.engine.log",
+      "sha256": "8f3d8d3ed81d07ce21d4bd911d8d2df539af3322962bc89a0058c606f0580177",
+      "index_sha256": "8f3d8d3ed81d07ce21d4bd911d8d2df539af3322962bc89a0058c606f0580177",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_verify_01/259-e07_f5_campaign_test.output.log",
+      "sha256": "4c2dbb4bac308676949499d1e8ceb6328039e761d75ccf82bfedaecb15c5a800",
+      "index_sha256": "4c2dbb4bac308676949499d1e8ceb6328039e761d75ccf82bfedaecb15c5a800",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_verify_01/260-e07_f5_recovery_test.engine.log",
+      "sha256": "628af26a0a369c5c9d9f7ef37cc17b60019bbf84bef626cca3682ea8bec0aafc",
+      "index_sha256": "628af26a0a369c5c9d9f7ef37cc17b60019bbf84bef626cca3682ea8bec0aafc",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_verify_01/260-e07_f5_recovery_test.output.log",
+      "sha256": "d180fe1dc9662f6019cceabd48750654c459a2fb15f9336bdaaeef40c062602b",
+      "index_sha256": "d180fe1dc9662f6019cceabd48750654c459a2fb15f9336bdaaeef40c062602b",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_verify_01/268-e07_f3_snapshot_test.engine.log",
+      "sha256": "97c338dc60ffad6a192e2dc955b139b33733a2710287075740232ff792af1e1b",
+      "index_sha256": "97c338dc60ffad6a192e2dc955b139b33733a2710287075740232ff792af1e1b",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_verify_01/268-e07_f3_snapshot_test.output.log",
+      "sha256": "d4e8b993059d8e4c12243f8e997de5174ea51aff610cff1b014f25d06ab2cf3d",
+      "index_sha256": "d4e8b993059d8e4c12243f8e997de5174ea51aff610cff1b014f25d06ab2cf3d",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_verify_01/checks.jsonl",
+      "sha256": "b06cc890eba5b2f2ee774f4e3df67c59d40564dfbec37a8a2f324d0c845a2a34",
+      "index_sha256": "b06cc890eba5b2f2ee774f4e3df67c59d40564dfbec37a8a2f324d0c845a2a34",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_verify_01/plan.json",
+      "sha256": "13f081309ee421cdf6fd9512df29db704700b56043780a829c95814e983abb56",
+      "index_sha256": "13f081309ee421cdf6fd9512df29db704700b56043780a829c95814e983abb56",
+      "equal": true
+    }
+  ]
+}

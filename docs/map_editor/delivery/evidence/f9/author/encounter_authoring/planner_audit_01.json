@@ -1,0 +1,35 @@
+{
+  "ok": true,
+  "head": "611324c19baca71bc479c1d08e8135e7c62f8669",
+  "role": "Luna execution supervision; Sol semantic/byte consolidation, not independent semantic audit",
+  "directed": 20,
+  "gameplay_fixture": 52,
+  "context": 315,
+  "verify_selected": 6,
+  "verify_catalog": 299,
+  "completion_inputs": 2059,
+  "context_inputs": 2053,
+  "mismatches": 0,
+  "compile_seconds": 183.97089440003037,
+  "population_source_sha256": "3debc7674a1770702639e8bb33b1e6598c52929e9230395ccfbf505c1ed04889",
+  "compiled_hash": "543a125634b45cfa426b3340adee22349bb401586d6a18bc95c3f8b0e1cd0854",
+  "slots": 7,
+  "receipts": [
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_model_01/runs.json",
+      "sha256": "1121cab52200fa5e3a021bcbe8d693eda80af56cf12f80c58ae6834e9f9c3e9c",
+      "checks": 20
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_gameplay_native_01/runs.json",
+      "sha256": "56a00bccf73b6729f730acaf70c26e8d423a47b0c3772ba62da78ba39fb38732",
+      "checks": 52
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/planner_context_01/manifest.json",
+      "sha256": "55241d3b1ba41d2a83284cfe94a6f58bd4fce21a97bb2f4f3719447bb5c0ec32",
+      "checks": 315
+    }
+  ],
+  "limits": "instrumented complete forest compile, not yet real AX rerun or patrol; no Bosque App/live movement/combat/FPS, no full F9 completion; native editor worker180 remains a measured obligation"
+}
