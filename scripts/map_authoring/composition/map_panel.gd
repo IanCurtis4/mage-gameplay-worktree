@@ -196,7 +196,7 @@ func add_piece(path: String, instance_id: String, position_xz: Array, rotation_q
 	if not loaded.ok: show_result(loaded); return loaded
 	return apply_operation("instance/add",{"instance_id":instance_id,"position_xz":position_xz,"rotation_quarters":rotation_quarters},loaded.data)
 func apply_operation(operation: String, parameters: Dictionary, piece_source: Dictionary = {}) -> Dictionary:
-	var selected := canvas.selected_instance
+	var selected: String = canvas.selected_instance
 	var base := {"ok":true,"data":session.data} if operation == "name" else _pending_source()
 	if not base.ok: return base
 	var proposed := Operations.propose(base.data,operation,parameters,piece_source)
@@ -316,7 +316,7 @@ func apply_border(command: Dictionary, expected_source_hash: String) -> Dictiona
 	if not pending.ok: return pending
 	var proposed := BorderOperations.apply(pending.data,command)
 	if not proposed.ok: return proposed
-	var selected := canvas.selected_instance
+	var selected: String = canvas.selected_instance
 	var applied := session.apply(proposed.data)
 	if applied.ok:
 		applied.diff = proposed.diff; applied.source_hash = Document.hash_source(session.data)
