@@ -1,5 +1,5 @@
 """Check execution receipts against the exact source, fixture and Git bytes."""
-import argparse, hashlib, json, subprocess
+import argparse, hashlib, json, re, subprocess
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
@@ -56,6 +56,8 @@ assert len(executed)==2 and all(not r['failed'] and r['exit_code']==0 and not r[
 measure_path=HERE/('population_measure_'+args.measure)
 measure=read(measure_path/'receipt.json'); result=read(measure_path/'result.json')
 assert measure['head']==measure['head_after']==args.head and measure['engine_sha256']==ENGINE_SHA and measure['exit_code']==0 and not measure['timed_out']
+for filename in ['engine.log','stdout.log','stderr.log']:
+    assert not re.search(r'SCRIPT ERROR:|Parse Error:|(?m:^ERROR:)',(measure_path/filename).read_text(encoding='utf-8',errors='replace')),filename
 assert measure['compiler_sha256']==sha(ROOT/'scripts/map_authoring/population/population_compiler.gd')
 assert measure['draft_sha256']==sha(ROOT/'docs/map_editor/delivery/evidence/f9/terra/area_encounters/population_draft_01.json')=='4d64d6ffbce706a2917b2a1ad436decfd362b96575a7a4b4bbd001ededdb7cb1'
 assert result['ok'] and result['no_mutation'] and result['slots']==7

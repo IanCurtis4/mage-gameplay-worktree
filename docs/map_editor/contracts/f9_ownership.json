@@ -3381,11 +3381,11 @@
       "limitations": "Producer/CLI on disposable fixtures; actual Bosque encounters/patrols/objective not authored; no new App/gameplay/FPS; remaining full F9 matrix active"
     },
     "population_performance": {
-      "state": "implemented_pending_validation",
+      "state": "validated_increment_F9_still_open",
       "base": "bc52103eee28072d70243b42a002056bc0bf90fa",
       "runtime_owner": "Sol F9",
       "fixture_frozen": false,
-      "fixture_owner": "released; Sol restored original individual _path reference for existing differential tests; production consumers remain batch",
+      "fixture_owner": "released; actual draft generation measure01 complete, no engine active",
       "draft": "docs/map_editor/delivery/evidence/f9/terra/area_encounters/population_draft_01.json",
       "draft_sha256": "4d64d6ffbce706a2917b2a1ad436decfd362b96575a7a4b4bbd001ededdb7cb1",
       "scope": "canonical population reachability/preparation cost; no smaller map/body/quota and no higher timeout/caps",
@@ -3394,22 +3394,46 @@
         "placement_code/pool every sampled point _path",
         "validate_slot _path"
       ],
-      "next": "trace actual draft, then bounded canonical reachability reuse with directed witnesses; individual shortest-cost path/leash contract retained",
+      "next": "Terra actual AX preview/apply/save/compile then patrol; full F9 remains open",
       "files": [
         "scripts/map_authoring/population/population_compiler.gd",
         "scripts/map_authoring/context/population_context.gd",
         "scripts/map_authoring/exchange/exchange.gd",
         "tools/map_editor_completion/run.ps1"
       ],
-      "test_owner": "Luna F9 population reachability; Sol temporary single-line type correction",
+      "test_owner": "Luna F9 population reachability; Sol consolidated semantics and bytes",
       "test_files": [
         "tests/map_editor_population_reachability_test.gd",
         "tests/map_editor_population_reachability_test.gd.uid"
       ],
       "initial_validation": {
         "PopulationReachability01": "test parse failure before checks; fixed explicit bool type only",
-        "PopulationReachability02": "dependent tests use removed Compiler._path; restored unchanged reference; no oracle change"
-      }
+        "PopulationReachability02": "dependent tests use removed Compiler._path; restored unchanged reference; no oracle change",
+        "PopulationReachability03": "27 checks true but runner receipt protocol/count mismatch; fixed protocol/tabled count only, pass04"
+      },
+      "code_head": "956d38dd05954f0f6093d5f26e802b82b4caf798",
+      "validation_head": "9c8185c6cedbfd1ef48dfa88821268fb9afb0677",
+      "validation": {
+        "PopulationReachability": 27,
+        "Candidate": 53,
+        "Population": 91,
+        "Patrol": 58,
+        "Exchange": 113,
+        "verify_selected": 2,
+        "verify_catalog": 299,
+        "F5Population": 40,
+        "completion_inputs": 2056,
+        "context_inputs": 2050,
+        "mismatches": 0,
+        "actual_draft_generation_seconds": 157.13017180003226,
+        "slots": 7,
+        "quotas": [
+          3,
+          3,
+          1
+        ]
+      },
+      "limitations": "instrumented actual draft generation only; actual AX apply and final compile pending; no FPS/gameplay proof; individual path and editor-worker180 remain performance obligations"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

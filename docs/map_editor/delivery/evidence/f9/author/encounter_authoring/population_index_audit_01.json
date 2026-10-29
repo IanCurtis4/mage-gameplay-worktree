@@ -1,0 +1,217 @@
+{
+  "ok": true,
+  "scope": "staged raw evidence and encounter tests; excludes this generated receipt to avoid self-reference",
+  "count": 35,
+  "rows": [
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/audit_population_validation.py",
+      "sha256": "bbb4aba0e6d370c82dfc395fe8167303d42ee6d46a0163acfd20682b7529bfd0",
+      "index_sha256": "bbb4aba0e6d370c82dfc395fe8167303d42ee6d46a0163acfd20682b7529bfd0",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/population_audit_01.json",
+      "sha256": "ab03fa31daaa4438b3642f10eb8f14fb8b4ce4bc376f8322a444d4f5e4017630",
+      "index_sha256": "ab03fa31daaa4438b3642f10eb8f14fb8b4ce4bc376f8322a444d4f5e4017630",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/population_consolidation.md",
+      "sha256": "883b1ca3e20f0629da2ac8e611987ce7229efaa00fc1cf23a5d526f1b25b2461",
+      "index_sha256": "883b1ca3e20f0629da2ac8e611987ce7229efaa00fc1cf23a5d526f1b25b2461",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/population_measure_01/engine.log",
+      "sha256": "722a8af6e60213913abb437433426b2a0a427e7ff7080b86dbc6a6f12f33a58a",
+      "index_sha256": "722a8af6e60213913abb437433426b2a0a427e7ff7080b86dbc6a6f12f33a58a",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/population_measure_01/population_trace.gd.txt",
+      "sha256": "b2385fb3ee95759db3505625c0769817d43d42351a5948e30530d960234d175f",
+      "index_sha256": "b2385fb3ee95759db3505625c0769817d43d42351a5948e30530d960234d175f",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/population_measure_01/probe.gd.txt",
+      "sha256": "e5e401ee5086d8083a72f7ef8b09dfb192053331fddce7379b1f57e10714dfbd",
+      "index_sha256": "e5e401ee5086d8083a72f7ef8b09dfb192053331fddce7379b1f57e10714dfbd",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/population_measure_01/receipt.json",
+      "sha256": "a3ffa6bd561625d518e846bbf12e8ee23d112ed83908a4abedb3e3ba6118c3e0",
+      "index_sha256": "a3ffa6bd561625d518e846bbf12e8ee23d112ed83908a4abedb3e3ba6118c3e0",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/population_measure_01/result.json",
+      "sha256": "93fa26f2fe7d240e8c7f6e60d0080846ea4dcffcfa1cb9bfb0b97fc145d93805",
+      "index_sha256": "93fa26f2fe7d240e8c7f6e60d0080846ea4dcffcfa1cb9bfb0b97fc145d93805",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/population_measure_01/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "index_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/population_measure_01/stdout.log",
+      "sha256": "468eb8509ddd7ed822b03da8106712891534fb4e03a32ae29c3b02fd82556275",
+      "index_sha256": "468eb8509ddd7ed822b03da8106712891534fb4e03a32ae29c3b02fd82556275",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_context_01/candidate.engine.log",
+      "sha256": "48ce0e7fb7019b95b76af52b6b8a811fe10d0fcabe09dbb7d2167c54a6db15af",
+      "index_sha256": "48ce0e7fb7019b95b76af52b6b8a811fe10d0fcabe09dbb7d2167c54a6db15af",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_context_01/candidate.output.log",
+      "sha256": "f2989a4a0f2ad73bfe42c380c60b27e2f315615c873d3e20e6c6becf3326c79f",
+      "index_sha256": "f2989a4a0f2ad73bfe42c380c60b27e2f315615c873d3e20e6c6becf3326c79f",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_context_01/exchange.engine.log",
+      "sha256": "75734b2fc7c6c81dd6caa1821a1f64365c7f1f6aaa91c363dcbcd48cd4c52abf",
+      "index_sha256": "75734b2fc7c6c81dd6caa1821a1f64365c7f1f6aaa91c363dcbcd48cd4c52abf",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_context_01/exchange.output.log",
+      "sha256": "a998b74c840b1c7e41e6d99306803f1e1ae4b7114c1f75ac96c29f46f752d149",
+      "index_sha256": "a998b74c840b1c7e41e6d99306803f1e1ae4b7114c1f75ac96c29f46f752d149",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_context_01/import.engine.log",
+      "sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283",
+      "index_sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_context_01/import.output.log",
+      "sha256": "65266ecc51590d7e85010dab58e897ac1a8bd879079aa036bdfa5f18a05c9aa7",
+      "index_sha256": "65266ecc51590d7e85010dab58e897ac1a8bd879079aa036bdfa5f18a05c9aa7",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_context_01/manifest.json",
+      "sha256": "a4a6e1c6bd99a067bb447e04cfa6c8fd421b064a9afe1e8fe3f0487273bfef42",
+      "index_sha256": "a4a6e1c6bd99a067bb447e04cfa6c8fd421b064a9afe1e8fe3f0487273bfef42",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_context_01/patrol.engine.log",
+      "sha256": "99459c4742cb65ea3c88de645569a34aefdf23af1e20419f207233c9b877d813",
+      "index_sha256": "99459c4742cb65ea3c88de645569a34aefdf23af1e20419f207233c9b877d813",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_context_01/patrol.output.log",
+      "sha256": "468a988db59387b89157c703d02231d5120c99ae8a440e447b56534776f9d191",
+      "index_sha256": "468a988db59387b89157c703d02231d5120c99ae8a440e447b56534776f9d191",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_context_01/population.engine.log",
+      "sha256": "cd3a4b72b60abe18a746c5e9d79f5c967681e1e121d488b2dde1d57061d2abda",
+      "index_sha256": "cd3a4b72b60abe18a746c5e9d79f5c967681e1e121d488b2dde1d57061d2abda",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_context_01/population.output.log",
+      "sha256": "b6ef7e411b3da25115c45ea167a1765bfd2b11fbd3524f1c9b6c854e1f3b461e",
+      "index_sha256": "b6ef7e411b3da25115c45ea167a1765bfd2b11fbd3524f1c9b6c854e1f3b461e",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_context_01/runs.json",
+      "sha256": "b970664916b2887b8ad30e24e8a229658897a0bc338bd49dd6bf62c0d369f617",
+      "index_sha256": "b970664916b2887b8ad30e24e8a229658897a0bc338bd49dd6bf62c0d369f617",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_reachability_04/geometry.engine.log",
+      "sha256": "b6a4cac5891c22d0ce1a9c117d2b823a1bca45135a72d17467b92cfae6fdb553",
+      "index_sha256": "b6a4cac5891c22d0ce1a9c117d2b823a1bca45135a72d17467b92cfae6fdb553",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_reachability_04/geometry.output.log",
+      "sha256": "dba49aab13cc5835c3a86e4f07d0e18e188f2dd029e48e225f24510df0ff14f7",
+      "index_sha256": "dba49aab13cc5835c3a86e4f07d0e18e188f2dd029e48e225f24510df0ff14f7",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_reachability_04/import/import.engine.log",
+      "sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283",
+      "index_sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_reachability_04/import/import.output.log",
+      "sha256": "65266ecc51590d7e85010dab58e897ac1a8bd879079aa036bdfa5f18a05c9aa7",
+      "index_sha256": "65266ecc51590d7e85010dab58e897ac1a8bd879079aa036bdfa5f18a05c9aa7",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_reachability_04/import/manifest.json",
+      "sha256": "b03d9c1b8de25e8cb06f774eec078e3aa04b9675b6da694efafdcc5f5b3177fb",
+      "index_sha256": "b03d9c1b8de25e8cb06f774eec078e3aa04b9675b6da694efafdcc5f5b3177fb",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_reachability_04/import/runs.json",
+      "sha256": "a70d6bf6ad3211a66679bde3a39592dc2743601218dd04b81bd23f984a863bee",
+      "index_sha256": "a70d6bf6ad3211a66679bde3a39592dc2743601218dd04b81bd23f984a863bee",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_reachability_04/runs.json",
+      "sha256": "36c867dc110f72ebc31325e75ad12b89367614235d8c8ca02266108c7dbc1958",
+      "index_sha256": "36c867dc110f72ebc31325e75ad12b89367614235d8c8ca02266108c7dbc1958",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_verify_01/001.engine.log",
+      "sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283",
+      "index_sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_verify_01/001.output.log",
+      "sha256": "25fca8a857a8124f4ce408cd0c0220024ce77463c49cfc70dbd6de33a5ef97f0",
+      "index_sha256": "25fca8a857a8124f4ce408cd0c0220024ce77463c49cfc70dbd6de33a5ef97f0",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_verify_01/258-e07_f5_population_test.engine.log",
+      "sha256": "254d6844b0e192e4a55d970f8e095b5678c0a624cbe02d33ec78cbefa06c4f2d",
+      "index_sha256": "254d6844b0e192e4a55d970f8e095b5678c0a624cbe02d33ec78cbefa06c4f2d",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_verify_01/258-e07_f5_population_test.output.log",
+      "sha256": "594087c5e4379bfe40e94245662ede8e2711513b7b919e9f8cd4f2de30d6b364",
+      "index_sha256": "594087c5e4379bfe40e94245662ede8e2711513b7b919e9f8cd4f2de30d6b364",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_verify_01/checks.jsonl",
+      "sha256": "b698af9d876bba1fcf869d3aa955e5afb7a583a49d58e4cd2e25a3964d136495",
+      "index_sha256": "b698af9d876bba1fcf869d3aa955e5afb7a583a49d58e4cd2e25a3964d136495",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_verify_01/plan.json",
+      "sha256": "44a05becfbab808a7ad8a171190febac7a382b5f2d94ed170baa9684a1d143ec",
+      "index_sha256": "44a05becfbab808a7ad8a171190febac7a382b5f2d94ed170baa9684a1d143ec",
+      "equal": true
+    }
+  ]
+}

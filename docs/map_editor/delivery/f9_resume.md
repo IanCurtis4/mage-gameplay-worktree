@@ -1,25 +1,39 @@
 # Retomada F9 —29/10/2026
 
 <!-- f9-population-batch -->
-## Delta em validação — alcance de população
+## Checkpoint28 — alcance de população validado; Terra pode retomar AX
 
-Sol implementou prova canônica por lote para interações, candidatos de pincel e
-slots; preserva path individual e custo, corpo, grid16, quotas e mapa real.
-Cancel/budget/stale propagam erro sem plano parcial. Revisão map_population_v2;
-bundles informam v2, pacotes antigos exigem recompilação da fonte, sem sobrescrita.
-Contrato: contracts/f9_population_reachability.md. Luna escreveu27checks no novo
-tests/map_editor_population_reachability_test.gd; NÃO executados ainda.
-Import01 PASS, UID copiado do engine. Próximo: Import02 com UID, testes dirigidos,
-medição da fonte AX original inteira; depois regressões/verify e Terra AX.
-Código ainda NÃO validado; fonte final população/patrulha continua ausente.
-Sonda02 confirmou mapa28,313s e busca individual até santuário ainda ativa aos120s.
-Sonda01 falhou por parser inadequado da sonda; não conta para performance.
-F9 integral permanece aberto; sem playtest/master/push/F10.
+Candidato validado9c8185c6cedbfd1ef48dfa88821268fb9afb0677; produção956d38dd,
+branch codex/map-editor-f9 no checkout .tools/map-editor-m5. Detalhes/recibos:
+evidence/f9/author/encounter_authoring/population_consolidation.md e
+population_audit_01.json. Luna27dirigidos + Context53/91/58/113 PASS;
+verify2/299 (import/população F5) PASS.2056/2050inputs auditados, zero divergências.
+
+Fonte AX real original inteira concluiu geração em157,130s, exit0/sem timeout,
+sem mutação,7slots, quotas3/3/1. Prova do santuário15,472s; mapa33,156s;
+pools78/316/165pontos em28,087/2,571/50,569s. Corpo20x32, mapa, pontos, guards
+AX300s/editor180s e caps canônicos inalterados. Não afirmar fator preciso contra
+timeout anterior ou performance in-game/FPS. Ainda NÃO houve aplicação AX ou
+compilação das fontes finais de população/patrulha. Fixture liberada, engine0.
+
+Próximo Terra: abrir rascunho via AX, preview, conferir proposta/diff, aplicar com
+hashes exatos e salvar população; compile em processo separado, depois patrulha.
+Fonte de produto sempre via editor. Sol integra, sem novo gate humano para esse
+consumo autorizado. Guards não aumentam; falhas preservam draft/diagnóstico.
+PopulationCompiler usa lote só para existência; path individual/custos/leash
+inalterados. Revisão map_population_v2 e intercâmbio v2, fontes antigas aceitas,
+pacotes v1 exigem recompilação sem sobrescrita. `_path` original mantido para
+diferenciais. Falhas de sonda/parser, tipo do teste, referência e protocolo do
+runner preservadas;27oráculos não foram enfraquecidos.
+
+F9 integral ativo, sem aceite de produto/playtest/master/push/F10. Restam mapa
+final em jogo, performance individual/preparação, geração regional, reconciliação,
+UX/AX/publicação, assets/export/release/guias e demais itens da matriz.
 <!-- /f9-population-batch -->
 
 
 <!-- f9-population-active -->
-## Bloqueio reproduzido — prévia do Bosque
+## Histórico do bloqueio — geração resolvida no checkpoint28
 
 Base atual bc52103eee28072d70243b42a002056bc0bf90fa, mesmo checkout/branch.
 Produtor AX do checkpoint27 continua validado; o consumo no mapa real encontrou

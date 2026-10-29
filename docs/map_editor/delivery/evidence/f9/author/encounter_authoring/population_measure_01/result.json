@@ -1,0 +1,25 @@
+{
+	"code": "",
+	"diagnostics": [],
+	"geometry_diagnostic": {},
+	"metrics": [
+		{
+			"brush_id": "alley_patrol",
+			"quantity": 1,
+			"sampled_area": 19968.0
+		},
+		{
+			"brush_id": "clearing_dispersed",
+			"quantity": 3,
+			"sampled_area": 80896.0
+		},
+		{
+			"brush_id": "west_group",
+			"quantity": 3,
+			"sampled_area": 42240.0
+		}
+	],
+	"no_mutation": true,
+	"ok": true,
+	"slots": 7
+}

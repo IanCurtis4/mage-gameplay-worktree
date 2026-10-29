@@ -1,0 +1,38 @@
+{
+  "ok": true,
+  "head": "9c8185c6cedbfd1ef48dfa88821268fb9afb0677",
+  "role": "Luna execution supervision; Sol semantic and byte consolidation, not independent semantic audit",
+  "directed_checks": 27,
+  "completion_inputs": 2056,
+  "context_inputs": 2050,
+  "context_checks": 315,
+  "verify_selected": 2,
+  "verify_catalog": 299,
+  "measure_seconds": 157.13017180003226,
+  "measure_slots": 7,
+  "measure_quotas": [
+    3,
+    3,
+    1
+  ],
+  "mismatches": 0,
+  "receipts": [
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_reachability_04/runs.json",
+      "sha256": "36c867dc110f72ebc31325e75ad12b89367614235d8c8ca02266108c7dbc1958"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/population_context_01/manifest.json",
+      "sha256": "a4a6e1c6bd99a067bb447e04cfa6c8fd421b064a9afe1e8fe3f0487273bfef42"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/population_measure_01/receipt.json",
+      "sha256": "a3ffa6bd561625d518e846bbf12e8ee23d112ed83908a4abedb3e3ba6118c3e0"
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/population_measure_01/result.json",
+      "sha256": "93fa26f2fe7d240e8c7f6e60d0080846ea4dcffcfa1cb9bfb0b97fc145d93805"
+    }
+  ],
+  "limits": "instrumented actual draft generation only; no AX apply/compiled final population/patrol product yet, no in-game FPS or full F9 completion"
+}

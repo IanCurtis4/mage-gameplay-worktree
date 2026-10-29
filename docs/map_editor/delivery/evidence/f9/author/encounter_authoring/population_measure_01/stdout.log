@@ -1,0 +1,15 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+MEASURE map begin 6008
+MEASURE map end 39164 ok=true
+MEASURE batch begin 44379 targets=1
+MEASURE batch end 59940 ok=true { "storage_bytes": 56185324, "peak_storage_bytes": 56344436, "snapshot_storage_units": 4190424, "terminal_checks": 1, "states": 5347, "direct_pairs": 2, "endpoint_checks": 262, "connections": 131, "landmark_checks": 81870, "portal_pairs": 262, "offset_checks": 5850, "pair_candidates": 5000, "portal_checks": 2500, "expansions": 8152, "edge_tests": 21376, "reconstruction_steps": 26, "witness_points": 52, "witness_segments": 50, "operations": 1, "elapsed_ms": 15471.693 }
+MEASURE batch begin 60111 targets=1
+MEASURE batch end 74306 ok=true { "storage_bytes": 51712228, "peak_storage_bytes": 51819312, "snapshot_storage_units": 4195596, "terminal_checks": 1, "states": 5353, "direct_pairs": 2, "endpoint_checks": 262, "connections": 131, "landmark_checks": 81870, "portal_pairs": 262, "offset_checks": 5850, "pair_candidates": 5008, "portal_checks": 2504, "expansions": 3758, "edge_tests": 17218, "reconstruction_steps": 18, "witness_points": 36, "witness_segments": 34, "operations": 1, "elapsed_ms": 14138.582 }
+MEASURE batch begin 74346 targets=78
+MEASURE batch end 102515 ok=true { "storage_bytes": 67406972, "peak_storage_bytes": 67514056, "snapshot_storage_units": 4195596, "terminal_checks": 78, "states": 6518, "direct_pairs": 156, "endpoint_checks": 262, "connections": 131, "landmark_checks": 81870, "portal_pairs": 20436, "offset_checks": 456300, "pair_candidates": 390614, "portal_checks": 3106, "expansions": 5350, "edge_tests": 48836, "reconstruction_steps": 1404, "witness_points": 2808, "witness_segments": 2652, "operations": 1, "elapsed_ms": 28086.972 }
+MEASURE batch begin 102886 targets=316
+MEASURE batch end 105479 ok=true { "storage_bytes": 17941924, "peak_storage_bytes": 17941924, "snapshot_storage_units": 4195596, "terminal_checks": 316, "states": 317, "direct_pairs": 632, "expansions": 2, "direct_witness_proofs_reused": 316, "operations": 1, "elapsed_ms": 2571.175 }
+MEASURE batch begin 105628 targets=165
+MEASURE batch end 156321 ok=true { "storage_bytes": 88015816, "peak_storage_bytes": 88124288, "snapshot_storage_units": 4195596, "terminal_checks": 165, "states": 7881, "direct_pairs": 330, "endpoint_checks": 262, "connections": 131, "landmark_checks": 81870, "portal_pairs": 43230, "offset_checks": 965250, "pair_candidates": 826220, "portal_checks": 3714, "expansions": 8304, "edge_tests": 95458, "reconstruction_steps": 3072, "witness_points": 6042, "witness_segments": 5712, "operations": 1, "elapsed_ms": 50568.936 }
+MEASURE result {"code":"","diagnostics":[],"geometry_diagnostic":{},"metrics":[{"brush_id":"alley_patrol","quantity":1,"sampled_area":19968.0},{"brush_id":"clearing_dispersed","quantity":3,"sampled_area":80896.0},{"brush_id":"west_group","quantity":3,"sampled_area":42240.0}],"no_mutation":true,"ok":true,"slots":7}
