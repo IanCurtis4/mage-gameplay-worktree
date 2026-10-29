@@ -1,0 +1,33 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+M8_CHECK legacy_hash_unchanged true
+M8_CHECK context_source_valid true
+M8_CHECK context_compile true
+M8_CHECK context_roundtrip true
+M8_CHECK textual_key_identity true
+M8_CHECK malformed_instance_rejects_without_script_error true
+M8_CHECK future_context_rejected true
+M8_CHECK biome_rejected true
+M8_CHECK manual_override_compiles true
+M8_CHECK manual_override_warns true
+M8_CHECK manual_override_exported true
+M8_CHECK override_exact_payload true
+M8_CHECK override_is_per_instance true
+M8_CHECK override_is_per_rule true
+M8_CHECK override_never_bypasses_seam true
+M8_CHECK override_bundle_preserved true
+M8_CHECK override_import_roundtrip true
+M8_CHECK solver_does_not_inherit_override true
+M8_CHECK assembler_does_not_inherit_override true
+M8_CHECK override_reason_required true
+M8_CHECK recipe_override_rejected true
+M8_CHECK seed_context_contradiction true
+M8_CHECK seed_0 true
+M8_CHECK seed_-1 true
+M8_CHECK seed_9223372036854775807 true
+M8_CHECK seed_-9223372036854775808 true
+M8_CHECK population_context_plan true
+M8_CHECK no_input_mutation true
+M8_CHECK population_context_compile true
+M8_CHECK species_policy_enforced true
+M8_CHECK manual_species_exception true

@@ -44,7 +44,7 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 08 raro manual sem palco/sorteio | decisão F8 | entregue com53 checks; preservar | pendente de regressão |
 | 08 exceção instância/regra/motivo/aviso | decisão F8 | entregue; preservar em novos consumidores | pendente de regressão |
 | 08 quest passiva/origem/recompensa canônica | F8, PRODUCT_DIRECTION | entregue; nenhuma engine inferida | pendente de regressão |
-| 08 bioma de autoria no manifesto final | descoberta checkpoint25 | fonte forest preservada; MapCompiler ainda fixa stage.biome=ruin e Population copia | corrigir propagação/fallback/compatibilidade e provar no jogo antes de fechamento |
+| 08 bioma de autoria no manifesto final | descoberta checkpoint25 | corrigido em4e3a3788: bioma explícito propagado, fallback ruin e pacote incoerente recusado sem regravar | checkpoint26: MapBiome15/Native13, consumidor de população e BosqueForest12 PASS; App/gameplay final do Bosque ainda exigido |
 | 08 stale/revisão/reconciliação sem perda | F6, F8 | snapshots separados, reimportação explícita limitada | pendente |
 | 09 GUI/AX/CLI equivalentes | F7, F8 | equivalência comprovada também para composição/contexto de mapa, compilação e Store; demais produtores e bundles faltam | checkpoint25:31/13 e cliente10/10/reabertura com fonte/pacote/bytes iguais; restante pendente |
 | 09 diff/preview/undo/proteção espacial/rebase | F7 | camada protegida inteira e base divergente; completar região/reconciliação | pendente |
@@ -58,7 +58,7 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 11 preview real/apresentação de jogo | F8 | pacote rico compartilhado e Player/Enemy/Campaign/HUD reais; quatro campos com apoio/cota/ordem em validação | pele81e2f42 e app/janela/controles581dae4 supervisionados; campos73 autorais e regressão52/29 PASS, demais VFX/área/release pendentes |
 | 11 restart/continuidade/compatibilidade | F5, validação | janela estável, RUN nova no restart, revisão antiga preservada, stop tokenizado sem kill e corte canônico | fonte581dae4 supervisionada52/33/29 e clientes7f723ac; revisão/export/recuperação/área final continuam no conjunto |
 | 11 export limpo/dependências/API | F8 | release técnico existe; ampliar aos consumidores F9 | pendente |
-| 12 área temática/fluxo humano sem código | validação, F8 | mapa Terra composto viaAX com2peças/trilha/colina/ponte/47props/forest/emenda; bordas/contexto runtime/fluxo humano/área final faltam | checkpoint25: fonte45.355B,7/2ações e consumidor10 corpo20x32 PASS; sem App/caminhada/combate do Bosque |
+| 12 área temática/fluxo humano sem código | validação, F8 | mapa Terra viaAX com2peças/trilha/colina/ponte/47props/emenda e bordas/contexto runtime florestais; fluxo humano/área final faltam | checkpoint26: fonte45.615B, lote AX4/2 e consumidor12 corpo20x32/84apoios PASS; sem App/caminhada/combate/FPS do Bosque |
 | 12 clareira/rampa/platô/ponte/rota inferior/santuário/emenda | validação, F8 | amostra técnica existente; demonstrar produto final | pendente |
 | 12 disperso/grupo/patrulha/interação | validação, F8 | amostra sete atores; preservar e apresentar no jogo | pendente |
 
@@ -134,3 +134,16 @@ PASS corpo20x32; não houve gameplay do Bosque. Contextoforest ainda não se pro
 para stage.biome e bordas são legadas; custos canônicos≈28/24s e UX/fluxo final
 mantidos pendentes. [Consolidação](delivery/evidence/f9/author/ax_composition/consolidation.md).
 Nenhuma linha anterior removida; meta completaF9 permanece ativa.
+
+Checkpoint26: código4e3a3788 e conteúdo86359e3d corrigem bioma de runtime,
+adicionam lote atômico de bordas GUI/AX/CLI e rolagem no inspector. Luna15/13,
+Borders93/Native32, Gameplay52, Candidate53/Population91/Patrol58/Exchange113
+e verify editor_import PASS. Terra aplicou ambos perfis forest_rootbank_v1 por
+AX4/2; somente borders mudou, com47props/snapshots/vínculo preservados.
+ForestConsumer12 PASS do arquivo final: stage/context forest,35spans sem legado,
+corpo20x32 com acesso aos84apoios/131conexões e marcador autorado exato válido.
+Sem App/jogabilidade/FPS do Bosque; mapa28,516s/preparo30,441s são custos canônicos
+e mantêm10aberto. [Consolidação](delivery/evidence/f9/author/map_biome/consolidation.md).
+Próximo: população/patrulha parametrizadas e conteúdoAX; restante integral de
+F9 preservado, incluindo desempenho real, síntese/reconciliação/assets/release,
+UX final e migração do teste M3Native24 histórico. Sem transferência aF10.

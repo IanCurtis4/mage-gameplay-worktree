@@ -1,0 +1,16 @@
+{
+  "ok": true,
+  "scope": "checkpoint26 header coherence, JSON syntax, local links in new consolidation, Python probe/audit syntax; no new gameplay suite",
+  "matching_portable_headers": 2,
+  "consolidation_references": [
+    "../../luna/map_biome/report.md",
+    "producer_audit.json",
+    "invalid_fixture_archive.json",
+    "../../terra/area_forest_borders/README.md",
+    "content_audit.json",
+    "../../luna/map_biome/forest_consumer/report.md",
+    "consumer_audit.json"
+  ],
+  "python_syntax_files": 4,
+  "ownership_json_valid": true
+}

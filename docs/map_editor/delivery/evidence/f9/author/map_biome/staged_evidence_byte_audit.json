@@ -1,0 +1,415 @@
+{
+  "ok": true,
+  "scope": "staged raw evidence plus final map source; excludes this generated receipt to avoid self-reference; prose docs outside raw evidence may use Git text normalization",
+  "count": 68,
+  "rows": [
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/map_biome/audit_content.py",
+      "worktree_sha256": "3b0eeaf159476c501d5fa6eb5a815e003ff571aa6dbe601d2cea51062a6aaf89",
+      "git_index_sha256": "3b0eeaf159476c501d5fa6eb5a815e003ff571aa6dbe601d2cea51062a6aaf89",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/map_biome/audit_producer.py",
+      "worktree_sha256": "97e886207a9b25f50318119d49a9ad8a550a94c4677ca3d97e491015c3a79c15",
+      "git_index_sha256": "97e886207a9b25f50318119d49a9ad8a550a94c4677ca3d97e491015c3a79c15",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/map_biome/audit_staged_evidence.py",
+      "worktree_sha256": "4d35fdd25f58d70dab9e070b625a7745e3e5ae7315cd0e30b8f0a0befde020a0",
+      "git_index_sha256": "4d35fdd25f58d70dab9e070b625a7745e3e5ae7315cd0e30b8f0a0befde020a0",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/map_biome/consolidation.md",
+      "worktree_sha256": "6f47ee3c11387ef26461f753937a1b893ce6eedc6b826e207c54eb389ad651d6",
+      "git_index_sha256": "6f47ee3c11387ef26461f753937a1b893ce6eedc6b826e207c54eb389ad651d6",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/map_biome/consumer_audit.json",
+      "worktree_sha256": "f92eb00fda5bc5ab857819ebaab6113c6d8db20fad5a094d1dc2db8671a2e9dd",
+      "git_index_sha256": "f92eb00fda5bc5ab857819ebaab6113c6d8db20fad5a094d1dc2db8671a2e9dd",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/map_biome/content_audit.json",
+      "worktree_sha256": "f5d82ade6c3413c06a17a199314454835abedbfb1872972884c144db12bdc330",
+      "git_index_sha256": "f5d82ade6c3413c06a17a199314454835abedbfb1872972884c144db12bdc330",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/map_biome/content_import_01/import.engine.log",
+      "worktree_sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283",
+      "git_index_sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/map_biome/content_import_01/import.output.log",
+      "worktree_sha256": "65266ecc51590d7e85010dab58e897ac1a8bd879079aa036bdfa5f18a05c9aa7",
+      "git_index_sha256": "65266ecc51590d7e85010dab58e897ac1a8bd879079aa036bdfa5f18a05c9aa7",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/map_biome/content_import_01/manifest.json",
+      "worktree_sha256": "8f45c50c822b26d5a3805ace35282be29f4e0a563676140c077928ccebf752a1",
+      "git_index_sha256": "8f45c50c822b26d5a3805ace35282be29f4e0a563676140c077928ccebf752a1",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/map_biome/content_import_01/runs.json",
+      "worktree_sha256": "b1430062f60ee33bd3788b0dcd10b872f174d96808675f75a28ee3e13153f6a4",
+      "git_index_sha256": "b1430062f60ee33bd3788b0dcd10b872f174d96808675f75a28ee3e13153f6a4",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/map_biome/documentation_audit.json",
+      "worktree_sha256": "cef7d2ee815d49f47ed73156819419bca41d79cebcdf10ff69f62faf49163b88",
+      "git_index_sha256": "cef7d2ee815d49f47ed73156819419bca41d79cebcdf10ff69f62faf49163b88",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/map_biome/invalid_fixture_archive.json",
+      "worktree_sha256": "23255881c9a38db49935cfae86ae61db835b4aa083f3aa654733eba9ab8fd6b8",
+      "git_index_sha256": "23255881c9a38db49935cfae86ae61db835b4aa083f3aa654733eba9ab8fd6b8",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/map_biome/producer_audit.json",
+      "worktree_sha256": "f1a4f1bcb14ee25f98a248c56dcb67a117a2b08a745b3f90cfb81db684bf1d8a",
+      "git_index_sha256": "f1a4f1bcb14ee25f98a248c56dcb67a117a2b08a745b3f90cfb81db684bf1d8a",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/borders/geometry.engine.log",
+      "worktree_sha256": "a1caecc0517f9de598ff550e9a6e10baaaa80e6a708827127627cfd3cf296373",
+      "git_index_sha256": "a1caecc0517f9de598ff550e9a6e10baaaa80e6a708827127627cfd3cf296373",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/borders/geometry.output.log",
+      "worktree_sha256": "5df3f2a5c137fe92a25e60d11c32f90159c95e999f8f84f52af384214bba98a4",
+      "git_index_sha256": "5df3f2a5c137fe92a25e60d11c32f90159c95e999f8f84f52af384214bba98a4",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/borders/runs.json",
+      "worktree_sha256": "968e8a66ee720dece3b035738d6e38884afa030432e59dec8bdd6a0f0ae4a3fa",
+      "git_index_sha256": "968e8a66ee720dece3b035738d6e38884afa030432e59dec8bdd6a0f0ae4a3fa",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/borders_native/cli_input.json",
+      "worktree_sha256": "48bba1916ba61d635b76433f78635a3b47616feb1f2f41e4f28704a3cb5ec073",
+      "git_index_sha256": "48bba1916ba61d635b76433f78635a3b47616feb1f2f41e4f28704a3cb5ec073",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/borders_native/cli_output.json",
+      "worktree_sha256": "3a6f20e89d704c4051c3d5ee598fdc8a643b89aceb181fdf8f17255bebfd67b5",
+      "git_index_sha256": "3a6f20e89d704c4051c3d5ee598fdc8a643b89aceb181fdf8f17255bebfd67b5",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/borders_native/cli_request.json",
+      "worktree_sha256": "ad090ae7cd7c54a103b2f6475e794d59e1333e5953e9cbd0d057317d14b46ca0",
+      "git_index_sha256": "ad090ae7cd7c54a103b2f6475e794d59e1333e5953e9cbd0d057317d14b46ca0",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/borders_native/desert_ridge_v1.png",
+      "worktree_sha256": "c32b67d8caa4f3b15cfcb627e1f1713d8375b9083595ab426e5336fb569c4191",
+      "git_index_sha256": "c32b67d8caa4f3b15cfcb627e1f1713d8375b9083595ab426e5336fb569c4191",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/borders_native/forest_rootbank_v1.png",
+      "worktree_sha256": "186cf2e4a109e02a8a54991e6c08431896cfd0df60c52f6a076b7c63e8bea825",
+      "git_index_sha256": "186cf2e4a109e02a8a54991e6c08431896cfd0df60c52f6a076b7c63e8bea825",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/borders_native/geometry.engine.log",
+      "worktree_sha256": "c3e38088aea450ef8567bd8c932ec2d44214a5c5ae8856d47cdfd00aee8d84dc",
+      "git_index_sha256": "c3e38088aea450ef8567bd8c932ec2d44214a5c5ae8856d47cdfd00aee8d84dc",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/borders_native/geometry.output.log",
+      "worktree_sha256": "78a6276965d1b8067110ffaf8eaa7c716811b905f0f286cdd7e848c3e4d1a751",
+      "git_index_sha256": "78a6276965d1b8067110ffaf8eaa7c716811b905f0f286cdd7e848c3e4d1a751",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/borders_native/meadow_stream_v1.png",
+      "worktree_sha256": "de418e0589bc2f6b62f9c41339ee6bd57982e76b39f48ee1801969a707f0f810",
+      "git_index_sha256": "de418e0589bc2f6b62f9c41339ee6bd57982e76b39f48ee1801969a707f0f810",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/borders_native/ruin_rubble_v1.png",
+      "worktree_sha256": "c36f1376ecac5f53b1bf1fbbda2c582d208665a1ea238f460b6442e8588580aa",
+      "git_index_sha256": "c36f1376ecac5f53b1bf1fbbda2c582d208665a1ea238f460b6442e8588580aa",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/borders_native/runs.json",
+      "worktree_sha256": "5db6e2c687280666520fb97e9e1df2a5b0ea1f73b403a4f73b644cef011bea8a",
+      "git_index_sha256": "5db6e2c687280666520fb97e9e1df2a5b0ea1f73b403a4f73b644cef011bea8a",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/context/candidate.engine.log",
+      "worktree_sha256": "d1c7ae6580085dd26724b3d25c75ecc04d37a1e63e1cdbde22eb12398365fc12",
+      "git_index_sha256": "d1c7ae6580085dd26724b3d25c75ecc04d37a1e63e1cdbde22eb12398365fc12",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/context/import.engine.log",
+      "worktree_sha256": "4c9f80f3a8b2e159e666cd4bad07701245126b1dc23265baa2e14f1fc85005c4",
+      "git_index_sha256": "4c9f80f3a8b2e159e666cd4bad07701245126b1dc23265baa2e14f1fc85005c4",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/context/import.output.log",
+      "worktree_sha256": "890d4649c1e647a11b4d5f8ba24e39db4c5589b76ba761e96b9560f67d66eaa5",
+      "git_index_sha256": "890d4649c1e647a11b4d5f8ba24e39db4c5589b76ba761e96b9560f67d66eaa5",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/context/runs.json",
+      "worktree_sha256": "1ad2003da74d4f457d9e63003f20d5cdae5e7459069979107f0a0fcb37c02e2e",
+      "git_index_sha256": "1ad2003da74d4f457d9e63003f20d5cdae5e7459069979107f0a0fcb37c02e2e",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/context_02/candidate.engine.log",
+      "worktree_sha256": "48ce0e7fb7019b95b76af52b6b8a811fe10d0fcabe09dbb7d2167c54a6db15af",
+      "git_index_sha256": "48ce0e7fb7019b95b76af52b6b8a811fe10d0fcabe09dbb7d2167c54a6db15af",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/context_02/candidate.output.log",
+      "worktree_sha256": "f2989a4a0f2ad73bfe42c380c60b27e2f315615c873d3e20e6c6becf3326c79f",
+      "git_index_sha256": "f2989a4a0f2ad73bfe42c380c60b27e2f315615c873d3e20e6c6becf3326c79f",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/context_02/exchange.engine.log",
+      "worktree_sha256": "75734b2fc7c6c81dd6caa1821a1f64365c7f1f6aaa91c363dcbcd48cd4c52abf",
+      "git_index_sha256": "75734b2fc7c6c81dd6caa1821a1f64365c7f1f6aaa91c363dcbcd48cd4c52abf",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/context_02/exchange.output.log",
+      "worktree_sha256": "a998b74c840b1c7e41e6d99306803f1e1ae4b7114c1f75ac96c29f46f752d149",
+      "git_index_sha256": "a998b74c840b1c7e41e6d99306803f1e1ae4b7114c1f75ac96c29f46f752d149",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/context_02/import.engine.log",
+      "worktree_sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283",
+      "git_index_sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/context_02/import.output.log",
+      "worktree_sha256": "65266ecc51590d7e85010dab58e897ac1a8bd879079aa036bdfa5f18a05c9aa7",
+      "git_index_sha256": "65266ecc51590d7e85010dab58e897ac1a8bd879079aa036bdfa5f18a05c9aa7",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/context_02/manifest.json",
+      "worktree_sha256": "a0ae275b961216523b4e3ad96d36b758ea53d56549f9b4879a2b968b05f9a9b3",
+      "git_index_sha256": "a0ae275b961216523b4e3ad96d36b758ea53d56549f9b4879a2b968b05f9a9b3",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/context_02/patrol.engine.log",
+      "worktree_sha256": "6d03d81d2f7bac7234ded981d6206c1528516691fca02ee71c9d1f89dd2c63cf",
+      "git_index_sha256": "6d03d81d2f7bac7234ded981d6206c1528516691fca02ee71c9d1f89dd2c63cf",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/context_02/patrol.output.log",
+      "worktree_sha256": "f32185729b282cd7c8e202504f61d52266e2276efdf1ec25f71bb99014620f0e",
+      "git_index_sha256": "f32185729b282cd7c8e202504f61d52266e2276efdf1ec25f71bb99014620f0e",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/context_02/population.engine.log",
+      "worktree_sha256": "3e8140dc7d4a7ac4bf57fd9e413eb46028c2235b39f2ac4b967ac72d640f2ce8",
+      "git_index_sha256": "3e8140dc7d4a7ac4bf57fd9e413eb46028c2235b39f2ac4b967ac72d640f2ce8",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/context_02/population.output.log",
+      "worktree_sha256": "997a61c6378ca05a35c6623772db97c3eb6619632efd2c0d836faf118fd4f742",
+      "git_index_sha256": "997a61c6378ca05a35c6623772db97c3eb6619632efd2c0d836faf118fd4f742",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/context_02/runs.json",
+      "worktree_sha256": "c29e74fe2dbaa2c701d5b56072a8370cc22ef29ca1361575e3bf30c5904e58d3",
+      "git_index_sha256": "c29e74fe2dbaa2c701d5b56072a8370cc22ef29ca1361575e3bf30c5904e58d3",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/forest_consumer/forest_consumer.engine.log",
+      "worktree_sha256": "ebb9f48c7bc5e0b1cae9ed46d759b52af4094812ba820d3585779e923681792a",
+      "git_index_sha256": "ebb9f48c7bc5e0b1cae9ed46d759b52af4094812ba820d3585779e923681792a",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/forest_consumer/forest_consumer.manifest.json",
+      "worktree_sha256": "2ab36ca3a5e5be9b766c14e2920fb1d2954084369f6456306418483e783623d4",
+      "git_index_sha256": "2ab36ca3a5e5be9b766c14e2920fb1d2954084369f6456306418483e783623d4",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/forest_consumer/forest_consumer.stderr.log",
+      "worktree_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_index_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/forest_consumer/forest_consumer.stdout.log",
+      "worktree_sha256": "8525a5e893629298dec9d0f4101ca843c7560e2cde0f4cb33ececed7b9bc595d",
+      "git_index_sha256": "8525a5e893629298dec9d0f4101ca843c7560e2cde0f4cb33ececed7b9bc595d",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/forest_consumer/map_source_consumer_forest.gd.txt",
+      "worktree_sha256": "8d9788bd8d70159e7c33aac6b1d552bd4def4c8e78f6cdb9eb4ac0b15529e899",
+      "git_index_sha256": "8d9788bd8d70159e7c33aac6b1d552bd4def4c8e78f6cdb9eb4ac0b15529e899",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/forest_consumer/report.md",
+      "worktree_sha256": "436fbebc21755be26e0d851d5e77bbec75845507733cfad0c16fd27d2b16af37",
+      "git_index_sha256": "436fbebc21755be26e0d851d5e77bbec75845507733cfad0c16fd27d2b16af37",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/forest_consumer/run_forest_consumer.py",
+      "worktree_sha256": "73328aab1cdc56b5d93460f748bebf0fca72c0478cd707655690007d44068fdc",
+      "git_index_sha256": "73328aab1cdc56b5d93460f748bebf0fca72c0478cd707655690007d44068fdc",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/gameplay_native/gameplay_bridge.png",
+      "worktree_sha256": "88a34793de66fe329cdd2eae637119440039dabe75079f9676626b6e5efbc43a",
+      "git_index_sha256": "88a34793de66fe329cdd2eae637119440039dabe75079f9676626b6e5efbc43a",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/gameplay_native/gameplay_combat.png",
+      "worktree_sha256": "a2981519a7c42feed75cbcb070ebd87c55c3d32de537a2d19265eca95a1aaa38",
+      "git_index_sha256": "a2981519a7c42feed75cbcb070ebd87c55c3d32de537a2d19265eca95a1aaa38",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/gameplay_native/gameplay_start.png",
+      "worktree_sha256": "5aa5e12ea2b3dc4758382f366aabed50224d8a0f75377833bf231d45e1a6fa9f",
+      "git_index_sha256": "5aa5e12ea2b3dc4758382f366aabed50224d8a0f75377833bf231d45e1a6fa9f",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/gameplay_native/geometry.engine.log",
+      "worktree_sha256": "c9acee605b3e11bfa7cdadc8437771ffb99be3b22b157b881182708e95c64c69",
+      "git_index_sha256": "c9acee605b3e11bfa7cdadc8437771ffb99be3b22b157b881182708e95c64c69",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/gameplay_native/geometry.output.log",
+      "worktree_sha256": "6b1a620ffec3f7f3ef674991dcb7825107fe2ff89e4222473b59ca63e1c155fa",
+      "git_index_sha256": "6b1a620ffec3f7f3ef674991dcb7825107fe2ff89e4222473b59ca63e1c155fa",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/gameplay_native/runs.json",
+      "worktree_sha256": "11e66449a0e1091f7e3f81ec24c00ff9b6e51a5e2acc705035e2e18b45ac6ed1",
+      "git_index_sha256": "11e66449a0e1091f7e3f81ec24c00ff9b6e51a5e2acc705035e2e18b45ac6ed1",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/model_01/geometry.engine.log",
+      "worktree_sha256": "c05629e95833f0c9f76f33b5823abf3337c3977d6582ac026d34be36980d0115",
+      "git_index_sha256": "c05629e95833f0c9f76f33b5823abf3337c3977d6582ac026d34be36980d0115",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/model_01/geometry.output.log",
+      "worktree_sha256": "70e5dac9a7efb31c0caa2be9cccec29c71d889db0156866bfff194fe70accfa2",
+      "git_index_sha256": "70e5dac9a7efb31c0caa2be9cccec29c71d889db0156866bfff194fe70accfa2",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/model_01/runs.json",
+      "worktree_sha256": "dae4a6d63a757c5503de32b61ff5bd599aa744826a902db6d611d81ecd01ee2d",
+      "git_index_sha256": "dae4a6d63a757c5503de32b61ff5bd599aa744826a902db6d611d81ecd01ee2d",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/native_01/forest_border_batch_native.png",
+      "worktree_sha256": "56a20964ada9c2345a9efa9f6ca9f4b2db2c91898d725ea1bbc3c41b238decec",
+      "git_index_sha256": "56a20964ada9c2345a9efa9f6ca9f4b2db2c91898d725ea1bbc3c41b238decec",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/native_01/geometry.engine.log",
+      "worktree_sha256": "e40c92b5d0511c2b519b068cd12216f6c76b75d47dad9c4949f4c83bfa745378",
+      "git_index_sha256": "e40c92b5d0511c2b519b068cd12216f6c76b75d47dad9c4949f4c83bfa745378",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/native_01/geometry.output.log",
+      "worktree_sha256": "e6160baa3cd9a52a32b098f44779013f34a765a6315cf3b149e3fc4328a99a67",
+      "git_index_sha256": "e6160baa3cd9a52a32b098f44779013f34a765a6315cf3b149e3fc4328a99a67",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/native_01/runs.json",
+      "worktree_sha256": "020bd5ba1abb898ec64e50f35d1df2dec702243d2d235ca9c386f2bb83b84b8d",
+      "git_index_sha256": "020bd5ba1abb898ec64e50f35d1df2dec702243d2d235ca9c386f2bb83b84b8d",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/report.md",
+      "worktree_sha256": "41d0ca1ed89af01de8bedc870cf32b64bc3a6383c5f7f21b60d0344335e80094",
+      "git_index_sha256": "41d0ca1ed89af01de8bedc870cf32b64bc3a6383c5f7f21b60d0344335e80094",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/verify/001.engine.log",
+      "worktree_sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283",
+      "git_index_sha256": "5fadbfdee9d3b8366eb72e65bd33c2d4fe56db9ac49c87e052255e678f4fa283",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/verify/001.output.log",
+      "worktree_sha256": "25fca8a857a8124f4ce408cd0c0220024ce77463c49cfc70dbd6de33a5ef97f0",
+      "git_index_sha256": "25fca8a857a8124f4ce408cd0c0220024ce77463c49cfc70dbd6de33a5ef97f0",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/verify/checks.jsonl",
+      "worktree_sha256": "f6419783d469871d751820a27f4a53440a4a8f0154ffa1d0ebfe5a7b45bd2cb4",
+      "git_index_sha256": "f6419783d469871d751820a27f4a53440a4a8f0154ffa1d0ebfe5a7b45bd2cb4",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/verify/plan.json",
+      "worktree_sha256": "1bf38dd2333936b90e5a3390aa2d51738f629e1ad65c2e5a85182230f3b5b471",
+      "git_index_sha256": "1bf38dd2333936b90e5a3390aa2d51738f629e1ad65c2e5a85182230f3b5b471",
+      "equal": true
+    },
+    {
+      "path": "data/map_authoring/sanctuary_woods.map.json",
+      "worktree_sha256": "8e3f1c3c47709d204eeaf3061e3d98beabb0dfa987ed09ff24ad2ec79e6a631f",
+      "git_index_sha256": "8e3f1c3c47709d204eeaf3061e3d98beabb0dfa987ed09ff24ad2ec79e6a631f",
+      "equal": true
+    }
+  ]
+}

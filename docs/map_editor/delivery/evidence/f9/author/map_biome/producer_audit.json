@@ -1,0 +1,124 @@
+{
+  "ok": true,
+  "scope": "producer validation before AX forest-border content mutation; execution supervision by Luna and semantic consolidation by Sol, not independent semantic audit",
+  "head": "4e3a3788878c7520552c7815d0c2915301857f5f",
+  "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "fixture": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+  "receipts": [
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/model_01/runs.json",
+      "sha256": "dae4a6d63a757c5503de32b61ff5bd599aa744826a902db6d611d81ecd01ee2d",
+      "checks": 15,
+      "inputs": {
+        "count": 2045,
+        "mismatches": []
+      }
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/native_01/runs.json",
+      "sha256": "020bd5ba1abb898ec64e50f35d1df2dec702243d2d235ca9c386f2bb83b84b8d",
+      "checks": 13,
+      "inputs": {
+        "count": 2045,
+        "mismatches": []
+      }
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/borders/runs.json",
+      "sha256": "968e8a66ee720dece3b035738d6e38884afa030432e59dec8bdd6a0f0ae4a3fa",
+      "checks": 93,
+      "inputs": {
+        "count": 2045,
+        "mismatches": []
+      }
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/borders_native/runs.json",
+      "sha256": "5db6e2c687280666520fb97e9e1df2a5b0ea1f73b403a4f73b644cef011bea8a",
+      "checks": 32,
+      "inputs": {
+        "count": 2045,
+        "mismatches": []
+      }
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/gameplay_native/runs.json",
+      "sha256": "11e66449a0e1091f7e3f81ec24c00ff9b6e51a5e2acc705035e2e18b45ac6ed1",
+      "checks": 52,
+      "inputs": {
+        "count": 2045,
+        "mismatches": []
+      }
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/context_02/manifest.json",
+      "sha256": "a0ae275b961216523b4e3ad96d36b758ea53d56549f9b4879a2b968b05f9a9b3",
+      "checks": 315,
+      "inputs": {
+        "count": 2039,
+        "mismatches": []
+      }
+    }
+  ],
+  "completion_only_imports": [
+    "assets/art/map_authoring/props/broken_pillar.png.import",
+    "assets/art/map_authoring/props/desert_cactus.png.import",
+    "assets/art/map_authoring/props/moss_boulder.png.import",
+    "assets/art/map_authoring/props/oak_tree.png.import",
+    "assets/art/map_authoring/props/sandstone_boulder.png.import",
+    "assets/art/map_authoring/props/woodland_shrub.png.import"
+  ],
+  "additional_import_audit": [
+    {
+      "path": "assets/art/map_authoring/cliff_tile.png.import",
+      "source": "fe0ef36b6f3f791b157b36a735f217bf0dfd2b49a2d4ec36a415f692b32f312d",
+      "fixture": "fe0ef36b6f3f791b157b36a735f217bf0dfd2b49a2d4ec36a415f692b32f312d"
+    },
+    {
+      "path": "assets/art/map_authoring/earth_tile.png.import",
+      "source": "8a7fb5de02a0d061c99e6c88e875b8f5582eb83be134bb0941f6e4863c2bb117",
+      "fixture": "8a7fb5de02a0d061c99e6c88e875b8f5582eb83be134bb0941f6e4863c2bb117"
+    },
+    {
+      "path": "assets/art/map_authoring/grass_tile.png.import",
+      "source": "5a080026fe6e9c15a3039019ecb24607eaa4e76e00a4694b3563610d194df66b",
+      "fixture": "5a080026fe6e9c15a3039019ecb24607eaa4e76e00a4694b3563610d194df66b"
+    },
+    {
+      "path": "assets/art/map_authoring/props/broken_pillar.png.import",
+      "source": "f169c92346ae633eda7152e0c31937e0889b1e5f08803bf25077ca9ef0dff2d6",
+      "fixture": "f169c92346ae633eda7152e0c31937e0889b1e5f08803bf25077ca9ef0dff2d6"
+    },
+    {
+      "path": "assets/art/map_authoring/props/desert_cactus.png.import",
+      "source": "06ea0f3f178a90652383379e03e08f132698fc073f316f7446140989d1d62791",
+      "fixture": "06ea0f3f178a90652383379e03e08f132698fc073f316f7446140989d1d62791"
+    },
+    {
+      "path": "assets/art/map_authoring/props/moss_boulder.png.import",
+      "source": "194218352993faa2203dae2fec0f4b8b1556ab09373aa1b0b2bb8bddfdb29bae",
+      "fixture": "194218352993faa2203dae2fec0f4b8b1556ab09373aa1b0b2bb8bddfdb29bae"
+    },
+    {
+      "path": "assets/art/map_authoring/props/oak_tree.png.import",
+      "source": "3e60ef3caf546d0d96ed6bfcc0a987775087fbffd95346be297c5a5cff20020b",
+      "fixture": "3e60ef3caf546d0d96ed6bfcc0a987775087fbffd95346be297c5a5cff20020b"
+    },
+    {
+      "path": "assets/art/map_authoring/props/sandstone_boulder.png.import",
+      "source": "3339b644143127b0e00d6ed6afe70ae2f4c6499ab51407f39482141d21ec54b5",
+      "fixture": "3339b644143127b0e00d6ed6afe70ae2f4c6499ab51407f39482141d21ec54b5"
+    },
+    {
+      "path": "assets/art/map_authoring/props/woodland_shrub.png.import",
+      "source": "3a543032d3eb98e2180bb1b1cde3f378a9a0e6ddccdd8594576b7a86aacd456f",
+      "fixture": "3a543032d3eb98e2180bb1b1cde3f378a9a0e6ddccdd8594576b7a86aacd456f"
+    },
+    {
+      "path": "assets/art/map_authoring/sand_tile.png.import",
+      "source": "cf7ed2a0c76756b2504132f520640a252829165a1dad4f7ef10389de7f577a7e",
+      "fixture": "cf7ed2a0c76756b2504132f520640a252829165a1dad4f7ef10389de7f577a7e"
+    }
+  ],
+  "invalid_attempt": "luna/map_biome/context used literalF1; interrupted, excluded from all PASS counts; preserved"
+}

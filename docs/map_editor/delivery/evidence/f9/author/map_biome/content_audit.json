@@ -1,0 +1,43 @@
+{
+  "ok": true,
+  "head": "4e3a3788878c7520552c7815d0c2915301857f5f",
+  "file_sha256_before": "6b8d52095b0d98ba4a436fd5b192ff732b98a8f5da02855646e7e21b9792bb4f",
+  "file_sha256_after": "8e3f1c3c47709d204eeaf3061e3d98beabb0dfa987ed09ff24ad2ec79e6a631f",
+  "bytes_after": 45615,
+  "only_borders_changed": true,
+  "piece_sources": [
+    {
+      "path": "data/map_authoring/sanctuary_woods_clearing.source.json",
+      "sha256": "150509026fddc323396d20fdd015fee47c1dacb47685c1f326842b77260484ab"
+    },
+    {
+      "path": "data/map_authoring/sanctuary_woods_overpass.source.json",
+      "sha256": "1501a98d8e201ce10017c0f410d137da5bad0c21fbd97039c9e52a9d693341c9"
+    }
+  ],
+  "pieces": 2,
+  "instances": 2,
+  "links": 1,
+  "props": 47,
+  "receipts": [
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/terra/area_forest_borders/borders_execution.json",
+      "sha256": "5ccd7d9f2bc20155a70ee6a29bc7870445fe9bc2a2ed61d09df902c1cafdf084",
+      "actions": 4
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/terra/area_forest_borders/reopen_execution.json",
+      "sha256": "e809e6b4e455bb44fe325e23063054aaf1eb640ecc9dbeba261d9a8e544bfafb",
+      "actions": 2
+    }
+  ],
+  "native_capture": {
+    "path": "docs/map_editor/delivery/evidence/f9/terra/area_forest_borders/borders.png",
+    "sha256": "c7d9b1db4d698f64e513bd02f99fa8b3143f47094dd867676d92d12db5d60d8b",
+    "dimensions": [
+      1440,
+      1000
+    ],
+    "sol_visual_inspection": "forest border dressing visible; composition and props preserved; AX controls occupy upper canvas; full UX and App gameplay remain pending"
+  }
+}

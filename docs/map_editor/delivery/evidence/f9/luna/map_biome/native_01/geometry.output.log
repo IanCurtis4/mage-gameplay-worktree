@@ -1,0 +1,18 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+F9_MAP_BIOME_UI_CHECK two_real_shells_open_independent_composition_sessions_and_screen_specific_presentations true
+F9_MAP_BIOME_UI_CHECK gui_and_ax_set_explicit_forest_context_with_equal_map_source_hashes true
+F9_MAP_BIOME_UI_CHECK forest_profile_and_gui_apply_all_control_exist_and_ax_batch_is_advertised true
+F9_MAP_BIOME_UI_CHECK gui_apply_all_and_ax_batch_apply_one_profile_per_instance_as_one_session_action true
+F9_MAP_BIOME_UI_CHECK apply_all_respects_each_existing_instance_identity_without_changing_link_graph true
+F9_MAP_BIOME_UI_CHECK ax_apply_all_button_action_uses_the_same_batch_producer_without_duplicate_history true
+F9_MAP_BIOME_UI_CHECK single_command_border_contract_remains_available_and_no_op_adds_no_history true
+F9_MAP_BIOME_UI_CHECK invalid_last_and_stale_batches_preserve_authored_border_state_and_history true
+F9_MAP_BIOME_UI_CHECK native_inspector_scroll_reaches_the_apply_all_border_footer true
+F9_MAP_BIOME_UI_CHECK gui_and_ax_compilers_finish_and_write_forest_to_the_runtime_stage true
+F9_MAP_BIOME_UI_CHECK compiled_runtime_package_keeps_the_selected_forest_border_and_identical_gui_ax_package_hash true
+F9_MAP_BIOME_UI_CAPTURE {"canvas_size":"(1269.0, 632.0)","canvas_visible":true,"colors":19,"forest_spans":8,"image_size":"(1600, 1000)","matching_dimensions":true,"mesh_count":44,"package_hash":"f11eb8065e1512f0479746a905d502224978c4153577258f1ff9884b4c633088","physical_window":"(1600, 1000)","saved":true,"source_hash":"8672bb93057f3adedd3b6941671646eebbfc87f53b14839fff19c4ef8da2fb04","visible_auxiliary":false}
+F9_MAP_BIOME_UI_CHECK native_capture_contains_compiled_forest_borders_and_matches_the_real_window true
+F9_MAP_BIOME_UI_CHECK final_gui_ax_snapshots_and_rendered_maps_keep_equal_forest_authorship true
+F9_MAP_BIOME_UI_RESULT {"checks":[{"detail":{},"id":"two_real_shells_open_independent_composition_sessions_and_screen_specific_presentations","ok":true},{"detail":{},"id":"gui_and_ax_set_explicit_forest_context_with_equal_map_source_hashes","ok":true},{"detail":{},"id":"forest_profile_and_gui_apply_all_control_exist_and_ax_batch_is_advertised","ok":true},{"detail":{},"id":"gui_apply_all_and_ax_batch_apply_one_profile_per_instance_as_one_session_action","ok":true},{"detail":{},"id":"apply_all_respects_each_existing_instance_identity_without_changing_link_graph","ok":true},{"detail":{},"id":"ax_apply_all_button_action_uses_the_same_batch_producer_without_duplicate_history","ok":true},{"detail":{},"id":"single_command_border_contract_remains_available_and_no_op_adds_no_history","ok":true},{"detail":{},"id":"invalid_last_and_stale_batches_preserve_authored_border_state_and_history","ok":true},{"detail":{},"id":"native_inspector_scroll_reaches_the_apply_all_border_footer","ok":true},{"detail":{},"id":"gui_and_ax_compilers_finish_and_write_forest_to_the_runtime_stage","ok":true},{"detail":{},"id":"compiled_runtime_package_keeps_the_selected_forest_border_and_identical_gui_ax_package_hash","ok":true},{"detail":{},"id":"native_capture_contains_compiled_forest_borders_and_matches_the_real_window","ok":true},{"detail":{},"id":"final_gui_ax_snapshots_and_rendered_maps_keep_equal_forest_authorship","ok":true}],"count":13,"evidence_dir":"C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\luna\\map_biome\\native_01","expected_count":13,"ok":true,"source_hash":"8672bb93057f3adedd3b6941671646eebbfc87f53b14839fff19c4ef8da2fb04"}

@@ -1,0 +1,8 @@
+{
+  "deleted": false,
+  "to": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\f9_invalid_literalF1_20261029",
+  "reason": "Invalid Context attempt used relative literalF1; preserved after terminal process confirmation, excluded from PASS",
+  "files_preserved": 2824,
+  "project_sha256": "33726AFE86093A0D6F580114F803045E4F6624DC94528ECBEBD61FB199A06517",
+  "from": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\literalF1"
+}

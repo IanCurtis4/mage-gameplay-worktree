@@ -2851,6 +2851,18 @@
       "base_sha256": null
     },
     {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/report.md",
+      "owner": "Sol F9 documentation consolidation",
+      "previous_owner": "Luna execution terminal; clarify import scope and archived invalid fixture only",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/map_biome/forest_consumer/report.md",
+      "owner": "Sol F9 documentation consolidation",
+      "previous_owner": "Luna execution terminal; correct marker versus provisional spawn, units and absent records field only; no logs or oracles changed",
+      "base_sha256": null
+    },
+    {
       "path": "docs/map_editor/delivery/evidence/f9/terra/area_forest_borders/",
       "owner": "Terra F9 area",
       "previous_owner": "new forest border batch recipe and AX evidence only after validation",
@@ -2865,7 +2877,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "f9_seam_picking_validated_native_and_fresh_resume_pass_fixture_released",
+    "state": "f9_map_biome_and_forest_borders_increment_validated_fixture_released_full_F9_open",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -3170,12 +3182,53 @@
       "content_head": "1bdc7301cd46ee40180b5c943f3fcfa10410dc5a"
     },
     "map_biome": {
-      "state": "implementation",
+      "state": "validated_increment_F9_still_open",
       "base": "0eb9b5c59b6b26cd1e02a998abef3545fcd0ffe9",
       "runtime_owner": "Sol F9",
       "test_owner": "Luna F9 map biome",
       "scope": "propagate authored biome to manifest; validate context coherence; atomic border transaction; reachable inspector controls",
       "fixture_frozen": false,
+      "fixture_owner": "released; no engine active",
+      "code_head": "4e3a3788878c7520552c7815d0c2915301857f5f",
+      "content_head": "86359e3ddc33ff3dd5ef5a9f009dd7bc0ca306f2",
+      "validation_role": "Luna tests and execution supervision; Sol semantic consolidation and byte audits; not independent semantic audit",
+      "validation": {
+        "MapBiome": 15,
+        "MapBiomeNative": 13,
+        "Borders": 93,
+        "BordersNative": 32,
+        "GameplayNative": 52,
+        "Candidate": 53,
+        "Population": 91,
+        "Patrol": 58,
+        "Exchange": 113,
+        "verify_editor_import": "1/299",
+        "ForestConsumer": 12,
+        "completion_inputs": 2045,
+        "context_inputs_excluding_prop_imports": 2039,
+        "final_consumer_inputs_including_new_map_backup": 2046,
+        "dependency_imports": 10,
+        "source_fixture_manifest_mismatches": 0
+      },
+      "content": {
+        "path": "data/map_authoring/sanctuary_woods.map.json",
+        "source_hash": "8a9051f8a416a58890365e1b262cea309053ff52c5ce20725d0598ef7875ed55",
+        "file_sha256": "8e3f1c3c47709d204eeaf3061e3d98beabb0dfa987ed09ff24ad2ec79e6a631f",
+        "package_hash": "098aa6b630015504ec47abfa45257fb0c7b571efabad590016dcc34acfc71fdc",
+        "bytes": 45615,
+        "border_profiles": "forest_rootbank_v1 for clearing and overpass",
+        "only_borders_changed": true,
+        "runtime_biome": "forest",
+        "forest_spans": 35,
+        "legacy_spans": 0,
+        "supports": 84,
+        "connections": 131,
+        "props_preserved": 47,
+        "body_profile": "radius20 height32; canonical preparation reaches every support",
+        "map_compile_ms": 28515.919,
+        "candidate_prepare_ms": 30441.099
+      },
+      "limits": "No App/walking/combat/FPS for actual Bosque; canonical compile/preparation remain slow; population/patrol AX and full F9 matrix remain open; legacy M3Native24 tooling migration pending",
       "files": [
         "scripts/map_authoring/composition/border_operations.gd",
         "scripts/map_authoring/composition/map_session.gd",

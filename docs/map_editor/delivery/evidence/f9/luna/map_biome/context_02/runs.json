@@ -1,0 +1,1367 @@
+[
+  {
+    "output_sha256": "65266ECC51590D7E85010DAB58E897AC1A8BD879079AA036BDFA5F18A05C9AA7",
+    "started_utc": "2026-10-29T04:49:05.8564179Z",
+    "aborted": false,
+    "result": null,
+    "finished_utc": "2026-10-29T04:49:18.4841511Z",
+    "arguments": [
+      "--headless",
+      "--editor",
+      "--import",
+      "--quit"
+    ],
+    "timed_out": false,
+    "ok": true,
+    "exit_code": 0,
+    "name": "import"
+  },
+  {
+    "output_sha256": "F2989A4A0F2AD73BFE42C380C60B27E2F315615C873D3E20E6C6BECF3326C79F",
+    "started_utc": "2026-10-29T04:49:18.5352787Z",
+    "aborted": false,
+    "result": {
+      "checks": [
+        {
+          "id": "legacy_hash_unchanged",
+          "ok": true
+        },
+        {
+          "id": "context_source_valid",
+          "ok": true
+        },
+        {
+          "id": "context_compile",
+          "ok": true
+        },
+        {
+          "id": "context_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "textual_key_identity",
+          "ok": true
+        },
+        {
+          "id": "malformed_instance_rejects_without_script_error",
+          "ok": true
+        },
+        {
+          "id": "future_context_rejected",
+          "ok": true
+        },
+        {
+          "id": "biome_rejected",
+          "ok": true
+        },
+        {
+          "id": "manual_override_compiles",
+          "ok": true
+        },
+        {
+          "id": "manual_override_warns",
+          "ok": true
+        },
+        {
+          "id": "manual_override_exported",
+          "ok": true
+        },
+        {
+          "id": "override_exact_payload",
+          "ok": true
+        },
+        {
+          "id": "override_is_per_instance",
+          "ok": true
+        },
+        {
+          "id": "override_is_per_rule",
+          "ok": true
+        },
+        {
+          "id": "override_never_bypasses_seam",
+          "ok": true
+        },
+        {
+          "id": "override_bundle_preserved",
+          "ok": true
+        },
+        {
+          "id": "override_import_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "solver_does_not_inherit_override",
+          "ok": true
+        },
+        {
+          "id": "assembler_does_not_inherit_override",
+          "ok": true
+        },
+        {
+          "id": "override_reason_required",
+          "ok": true
+        },
+        {
+          "id": "recipe_override_rejected",
+          "ok": true
+        },
+        {
+          "id": "seed_context_contradiction",
+          "ok": true
+        },
+        {
+          "id": "seed_0",
+          "ok": true
+        },
+        {
+          "id": "seed_-1",
+          "ok": true
+        },
+        {
+          "id": "seed_9223372036854775807",
+          "ok": true
+        },
+        {
+          "id": "seed_-9223372036854775808",
+          "ok": true
+        },
+        {
+          "id": "population_context_plan",
+          "ok": true
+        },
+        {
+          "id": "no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "population_context_compile",
+          "ok": true
+        },
+        {
+          "id": "species_policy_enforced",
+          "ok": true
+        },
+        {
+          "id": "manual_species_exception",
+          "ok": true
+        },
+        {
+          "id": "rare_generation_allowed",
+          "ok": true
+        },
+        {
+          "id": "rare_theme_is_not_gate",
+          "ok": true
+        },
+        {
+          "id": "rare_policy_enforced",
+          "ok": true
+        },
+        {
+          "id": "manual_rare_exception",
+          "ok": true
+        },
+        {
+          "id": "manual_rare_without_theme_allowed",
+          "ok": true
+        },
+        {
+          "id": "manual_rare_ignores_random_permission",
+          "ok": true
+        },
+        {
+          "id": "reservation_realized",
+          "ok": true
+        },
+        {
+          "id": "reservation_compiles",
+          "ok": true
+        },
+        {
+          "id": "reservation_fixed_unique",
+          "ok": true
+        },
+        {
+          "id": "reservation_quest_passive",
+          "ok": true
+        },
+        {
+          "id": "quest_does_not_change_objectives_or_rewards",
+          "ok": true
+        },
+        {
+          "id": "reservation_regeneration_idempotent",
+          "ok": true
+        },
+        {
+          "id": "reservation_required_on_compile",
+          "ok": true
+        },
+        {
+          "id": "ordinary_spawn_cannot_take_reserved_area",
+          "ok": true
+        },
+        {
+          "id": "ordinary_pool_excludes_reservation_directly",
+          "ok": true
+        },
+        {
+          "id": "ordinary_population_stays_outside_reservation",
+          "ok": true
+        },
+        {
+          "id": "reservation_editorial_reference_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "missing_region_rejected",
+          "ok": true
+        },
+        {
+          "id": "representative_geometry",
+          "ok": true
+        },
+        {
+          "id": "representative_encounters",
+          "ok": true
+        },
+        {
+          "id": "representative_patrol",
+          "ok": true
+        },
+        {
+          "id": "representative_package_published",
+          "ok": true
+        }
+      ],
+      "count": 53,
+      "ok": true
+    },
+    "finished_utc": "2026-10-29T04:51:11.3847095Z",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_candidate_test.gd"
+    ],
+    "timed_out": false,
+    "ok": true,
+    "exit_code": 0,
+    "name": "candidate"
+  },
+  {
+    "output_sha256": "997A61C6378CA05A35C6623772DB97C3EB6619632EFD2C0D836FAF118FD4F742",
+    "started_utc": "2026-10-29T04:51:11.3992251Z",
+    "aborted": false,
+    "result": {
+      "checks": [
+        {
+          "id": "fixture_two_rooms",
+          "ok": true
+        },
+        {
+          "id": "canonical_catalog",
+          "ok": true
+        },
+        {
+          "id": "catalog_offers_real_species_and_origins",
+          "ok": true
+        },
+        {
+          "id": "summon_not_offered",
+          "ok": true
+        },
+        {
+          "id": "both_brushes_realize",
+          "ok": true
+        },
+        {
+          "id": "no_mutation_before_apply",
+          "ok": true
+        },
+        {
+          "id": "explicit_diff_seven_births",
+          "ok": true
+        },
+        {
+          "id": "deterministic_regeneration",
+          "ok": true
+        },
+        {
+          "id": "dispersed_and_concentrated_counts",
+          "ok": true
+        },
+        {
+          "id": "canonical_compilation",
+          "ok": true
+        },
+        {
+          "id": "canonical_manifest_seven_slots",
+          "ok": true
+        },
+        {
+          "id": "canonical_interaction_records",
+          "ok": true
+        },
+        {
+          "id": "repeated_compile_same_hash",
+          "ok": true
+        },
+        {
+          "id": "array_order_not_identity",
+          "ok": true
+        },
+        {
+          "id": "strict_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "roundtrip_compiles_identically",
+          "ok": true
+        },
+        {
+          "id": "seed_0",
+          "ok": true
+        },
+        {
+          "id": "seed_-1",
+          "ok": true
+        },
+        {
+          "id": "seed_9223372036854775807",
+          "ok": true
+        },
+        {
+          "id": "seed_-9223372036854775808",
+          "ok": true
+        },
+        {
+          "id": "overflow_seed_rejected",
+          "ok": true
+        },
+        {
+          "id": "unknown_field_rejected",
+          "ok": true
+        },
+        {
+          "id": "duplicate_id_rejected",
+          "ok": true
+        },
+        {
+          "id": "nan_rejected",
+          "ok": true
+        },
+        {
+          "id": "truncated_json_rejected",
+          "ok": true
+        },
+        {
+          "id": "summon_rejected",
+          "ok": true
+        },
+        {
+          "id": "unknown_origin_rejected",
+          "ok": true
+        },
+        {
+          "id": "illegal_category_rejected",
+          "ok": true
+        },
+        {
+          "id": "memorable_requires_fixed_site",
+          "ok": true
+        },
+        {
+          "id": "impossible_quota_explicit_deficit",
+          "ok": true
+        },
+        {
+          "id": "deficit_reports_actual_constraint_counts",
+          "ok": true
+        },
+        {
+          "id": "deficit_preserves_prior_plan",
+          "ok": true
+        },
+        {
+          "id": "pinned_reroll_succeeds",
+          "ok": true
+        },
+        {
+          "id": "pin_exact_identity_and_home",
+          "ok": true
+        },
+        {
+          "id": "reroll_explicit_removals",
+          "ok": true
+        },
+        {
+          "id": "pinned_plan_compiles",
+          "ok": true
+        },
+        {
+          "id": "pin_above_quota_rejected",
+          "ok": true
+        },
+        {
+          "id": "excluded_pin_never_silently_deleted",
+          "ok": true
+        },
+        {
+          "id": "stale_recipe_blocks_publication",
+          "ok": true
+        },
+        {
+          "id": "entry_occupied_rejected",
+          "ok": true
+        },
+        {
+          "id": "overlapping_bodies_rejected",
+          "ok": true
+        },
+        {
+          "id": "unsafe_entry_rejected",
+          "ok": true
+        },
+        {
+          "id": "broken_portal_rejected",
+          "ok": true
+        },
+        {
+          "id": "unreachable_exit_rejected",
+          "ok": true
+        },
+        {
+          "id": "mutually_required_terminal_exits_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_layer_rejected",
+          "ok": true
+        },
+        {
+          "id": "density_counts_navigable_samples",
+          "ok": true
+        },
+        {
+          "id": "weighted_catalog_choices",
+          "ok": true
+        },
+        {
+          "id": "same_identity_content_change_is_in_diff",
+          "ok": true
+        },
+        {
+          "id": "weight_enumeration_stable",
+          "ok": true
+        },
+        {
+          "id": "cancelled_no_package",
+          "ok": true
+        },
+        {
+          "id": "undo_atomic_plan",
+          "ok": true
+        },
+        {
+          "id": "redo_atomic_plan",
+          "ok": true
+        },
+        {
+          "id": "obsolete_worker_discarded",
+          "ok": true
+        },
+        {
+          "id": "source_safe_save",
+          "ok": true
+        },
+        {
+          "id": "reopen_preserves_realization",
+          "ok": true
+        },
+        {
+          "id": "external_edit_conflict",
+          "ok": true
+        },
+        {
+          "id": "local_publish",
+          "ok": true
+        },
+        {
+          "id": "immutable_idempotent",
+          "ok": true
+        },
+        {
+          "id": "package_real_reload",
+          "ok": true
+        },
+        {
+          "id": "stale_publish_rejected",
+          "ok": true
+        },
+        {
+          "id": "tampered_package_rejected",
+          "ok": true
+        },
+        {
+          "id": "catalog_not_mutated",
+          "ok": true
+        },
+        {
+          "id": "real_body_radius_cannot_fit",
+          "ok": true
+        },
+        {
+          "id": "giant_fixture_catalog_isolated",
+          "ok": true
+        },
+        {
+          "id": "narrow_source_rejected",
+          "ok": true
+        },
+        {
+          "id": "canonical_mob_profile_blocks_narrow_route",
+          "ok": true
+        },
+        {
+          "id": "fixed_memorable_on_authored_site",
+          "ok": true
+        },
+        {
+          "id": "memorable_compiles_with_policy",
+          "ok": true
+        },
+        {
+          "id": "canonical_boss_never_respawns",
+          "ok": true
+        },
+        {
+          "id": "inaccessible_memorable_site_rejected",
+          "ok": true
+        },
+        {
+          "id": "relief_has_connected_logical_cells",
+          "ok": true
+        },
+        {
+          "id": "brush_crosses_cells_in_selected_layer",
+          "ok": true
+        },
+        {
+          "id": "layer_brush_uses_multiple_heights_and_cells",
+          "ok": true
+        },
+        {
+          "id": "relief_plan_compiles",
+          "ok": true
+        },
+        {
+          "id": "protected_route_realizes_without_spawns",
+          "ok": true
+        },
+        {
+          "id": "protected_route_keeps_body_clearance",
+          "ok": true
+        },
+        {
+          "id": "runtime_planner_accepts_exported_manifest",
+          "ok": true
+        },
+        {
+          "id": "entry_grants_once",
+          "ok": true
+        },
+        {
+          "id": "canonical_state_valid",
+          "ok": true
+        },
+        {
+          "id": "clear_and_clock",
+          "ok": true
+        },
+        {
+          "id": "wave_queues_only_trash",
+          "ok": true
+        },
+        {
+          "id": "one_generation_only",
+          "ok": true
+        },
+        {
+          "id": "existing_reward_policy",
+          "ok": true
+        },
+        {
+          "id": "death_return_anchor_unchanged",
+          "ok": true
+        },
+        {
+          "id": "local_portal_canonical_view",
+          "ok": true
+        },
+        {
+          "id": "real_runtime_configures_actors",
+          "ok": true
+        },
+        {
+          "id": "real_actor_count",
+          "ok": true
+        },
+        {
+          "id": "real_player_at_authored_entry",
+          "ok": true
+        },
+        {
+          "id": "real_canonical_portal_arrival",
+          "ok": true
+        },
+        {
+          "id": "return_keeps_existing_actors",
+          "ok": true
+        }
+      ],
+      "count": 91,
+      "ok": true,
+      "package_hash": "3d539c31f65a2fc3d2f05d70aca80e00f7cb18f5f756d1f3be47949fd45a9133",
+      "source_path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project/.godot/m4_test_cb69e325f3/encounters.json"
+    },
+    "finished_utc": "2026-10-29T04:52:56.1533173Z",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_population_test.gd"
+    ],
+    "timed_out": false,
+    "ok": true,
+    "exit_code": 0,
+    "name": "population"
+  },
+  {
+    "output_sha256": "F32185729B282CD7C8E202504F61D52266E2276EFDF1EC25F71BB99014620F0E",
+    "started_utc": "2026-10-29T04:52:56.1636678Z",
+    "aborted": false,
+    "result": {
+      "checks": [
+        {
+          "id": "strict_source",
+          "ok": true
+        },
+        {
+          "id": "compile_canonical_body_route",
+          "ok": true
+        },
+        {
+          "id": "immutable_source",
+          "ok": true
+        },
+        {
+          "id": "repeat_hash",
+          "ok": true
+        },
+        {
+          "id": "json_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "future_source_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_slot",
+          "ok": true
+        },
+        {
+          "id": "duplicate_assignment",
+          "ok": true
+        },
+        {
+          "id": "nan_rejected",
+          "ok": true
+        },
+        {
+          "id": "missing_support",
+          "ok": true
+        },
+        {
+          "id": "outside_leash",
+          "ok": true
+        },
+        {
+          "id": "unfinished_route_draft_allowed",
+          "ok": true
+        },
+        {
+          "id": "unfinished_route_cannot_publish",
+          "ok": true
+        },
+        {
+          "id": "cancelled_no_package",
+          "ok": true
+        },
+        {
+          "id": "undo_whole_route",
+          "ok": true
+        },
+        {
+          "id": "redo_whole_route",
+          "ok": true
+        },
+        {
+          "id": "reject_without_mutation",
+          "ok": true
+        },
+        {
+          "id": "source_saved",
+          "ok": true
+        },
+        {
+          "id": "source_reopened",
+          "ok": true
+        },
+        {
+          "id": "external_conflict",
+          "ok": true
+        },
+        {
+          "id": "publish_local",
+          "ok": true
+        },
+        {
+          "id": "immutable_repeat",
+          "ok": true
+        },
+        {
+          "id": "package_reload",
+          "ok": true
+        },
+        {
+          "id": "stale_refused",
+          "ok": true
+        },
+        {
+          "id": "hash_integrity",
+          "ok": true
+        },
+        {
+          "id": "forged_hash_does_not_bypass_geometry",
+          "ok": true
+        },
+        {
+          "id": "real_actors_bind",
+          "ok": true
+        },
+        {
+          "id": "wait_begins_at_first_point",
+          "ok": true
+        },
+        {
+          "id": "zero_delta_frozen",
+          "ok": true
+        },
+        {
+          "id": "root_freezes_wait",
+          "ok": true
+        },
+        {
+          "id": "stun_freezes_wait",
+          "ok": true
+        },
+        {
+          "id": "tree_pause_freezes_wait",
+          "ok": true
+        },
+        {
+          "id": "dead_does_not_advance",
+          "ok": true
+        },
+        {
+          "id": "loop_next_cursor",
+          "ok": true
+        },
+        {
+          "id": "real_movement_from_home",
+          "ok": true
+        },
+        {
+          "id": "fixed_home_preserved",
+          "ok": true
+        },
+        {
+          "id": "patrol_reaches_later_points",
+          "ok": true
+        },
+        {
+          "id": "aggro_interrupts_wait",
+          "ok": true
+        },
+        {
+          "id": "leash_starts_return",
+          "ok": true
+        },
+        {
+          "id": "returns_and_resumes",
+          "ok": true
+        },
+        {
+          "id": "blocked_diagnosed_without_teleport",
+          "ok": true
+        },
+        {
+          "id": "temporary_blocker_does_not_refuse_birth_binding",
+          "ok": true
+        },
+        {
+          "id": "retry_budget",
+          "ok": true
+        },
+        {
+          "id": "blocked_snapshot_valid",
+          "ok": true
+        },
+        {
+          "id": "obstacle_removed_route_recalculated",
+          "ok": true
+        },
+        {
+          "id": "blocked_graph_restores",
+          "ok": true
+        },
+        {
+          "id": "blocked_state_exact",
+          "ok": true
+        },
+        {
+          "id": "invalid_cursor_blocks_snapshot",
+          "ok": true
+        },
+        {
+          "id": "released_actor_binding_refused",
+          "ok": true
+        },
+        {
+          "id": "ping_pong_expected_sequence",
+          "ok": true
+        },
+        {
+          "id": "canonical_ramp_bridge_fixture",
+          "ok": true
+        },
+        {
+          "id": "ramp_route_valid_for_real_body",
+          "ok": true
+        },
+        {
+          "id": "body_too_large_refused",
+          "ok": true
+        },
+        {
+          "id": "actual_actor_reaches_mid_ramp",
+          "ok": true
+        },
+        {
+          "id": "aggro_on_ramp_preserves_cursor",
+          "ok": true
+        },
+        {
+          "id": "blocked_return_has_diagnostic_no_teleport",
+          "ok": true
+        },
+        {
+          "id": "blocked_return_captures",
+          "ok": true
+        },
+        {
+          "id": "return_from_ramp_resumes_legal_waypoint",
+          "ok": true
+        }
+      ],
+      "count": 58,
+      "ok": true,
+      "package_hash": "9b1b61da4667024e20dc7bf849fd04490a29e6792a63db1f84b4c19c588e958c"
+    },
+    "finished_utc": "2026-10-29T04:53:52.6855670Z",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_patrol_test.gd"
+    ],
+    "timed_out": false,
+    "ok": true,
+    "exit_code": 0,
+    "name": "patrol"
+  },
+  {
+    "output_sha256": "A998B74C840B1C7E41E6D99306803F1E1AE4B7114C1F75AC96C29F46F752D149",
+    "started_utc": "2026-10-29T04:53:52.6969650Z",
+    "aborted": false,
+    "result": {
+      "checks": [
+        {
+          "id": "piece_export",
+          "ok": true
+        },
+        {
+          "id": "piece_safe_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "piece_propose",
+          "ok": true
+        },
+        {
+          "id": "piece_prepare",
+          "ok": true
+        },
+        {
+          "id": "piece_authority_hash",
+          "ok": true
+        },
+        {
+          "id": "piece_no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "piece_idempotent",
+          "ok": true
+        },
+        {
+          "id": "piece_io_request",
+          "ok": true
+        },
+        {
+          "id": "piece_io_proposal",
+          "ok": true
+        },
+        {
+          "id": "piece_io_source",
+          "ok": true
+        },
+        {
+          "id": "piece_io_candidate",
+          "ok": true
+        },
+        {
+          "id": "piece_disk_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "map_export",
+          "ok": true
+        },
+        {
+          "id": "map_safe_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "map_propose",
+          "ok": true
+        },
+        {
+          "id": "map_prepare",
+          "ok": true
+        },
+        {
+          "id": "map_authority_hash",
+          "ok": true
+        },
+        {
+          "id": "map_no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "map_idempotent",
+          "ok": true
+        },
+        {
+          "id": "map_io_request",
+          "ok": true
+        },
+        {
+          "id": "map_io_proposal",
+          "ok": true
+        },
+        {
+          "id": "map_io_source",
+          "ok": true
+        },
+        {
+          "id": "map_io_candidate",
+          "ok": true
+        },
+        {
+          "id": "map_disk_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "population_export",
+          "ok": true
+        },
+        {
+          "id": "population_safe_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "population_propose",
+          "ok": true
+        },
+        {
+          "id": "population_prepare",
+          "ok": true
+        },
+        {
+          "id": "population_authority_hash",
+          "ok": true
+        },
+        {
+          "id": "population_no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "population_idempotent",
+          "ok": true
+        },
+        {
+          "id": "population_io_request",
+          "ok": true
+        },
+        {
+          "id": "population_io_proposal",
+          "ok": true
+        },
+        {
+          "id": "population_io_source",
+          "ok": true
+        },
+        {
+          "id": "population_io_candidate",
+          "ok": true
+        },
+        {
+          "id": "population_disk_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "patrol_export",
+          "ok": true
+        },
+        {
+          "id": "patrol_safe_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "patrol_propose",
+          "ok": true
+        },
+        {
+          "id": "patrol_prepare",
+          "ok": true
+        },
+        {
+          "id": "patrol_authority_hash",
+          "ok": true
+        },
+        {
+          "id": "patrol_no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "patrol_idempotent",
+          "ok": true
+        },
+        {
+          "id": "patrol_io_request",
+          "ok": true
+        },
+        {
+          "id": "patrol_io_proposal",
+          "ok": true
+        },
+        {
+          "id": "patrol_io_source",
+          "ok": true
+        },
+        {
+          "id": "patrol_io_candidate",
+          "ok": true
+        },
+        {
+          "id": "patrol_disk_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "generation_export",
+          "ok": true
+        },
+        {
+          "id": "generation_safe_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "generation_propose",
+          "ok": true
+        },
+        {
+          "id": "generation_prepare",
+          "ok": true
+        },
+        {
+          "id": "generation_authority_hash",
+          "ok": true
+        },
+        {
+          "id": "generation_no_input_mutation",
+          "ok": true
+        },
+        {
+          "id": "generation_idempotent",
+          "ok": true
+        },
+        {
+          "id": "generation_io_request",
+          "ok": true
+        },
+        {
+          "id": "generation_io_proposal",
+          "ok": true
+        },
+        {
+          "id": "generation_io_source",
+          "ok": true
+        },
+        {
+          "id": "generation_io_candidate",
+          "ok": true
+        },
+        {
+          "id": "generation_disk_roundtrip",
+          "ok": true
+        },
+        {
+          "id": "atomic_apply",
+          "ok": true
+        },
+        {
+          "id": "undo_preserves_authorship",
+          "ok": true
+        },
+        {
+          "id": "redo",
+          "ok": true
+        },
+        {
+          "id": "reapply_noop",
+          "ok": true
+        },
+        {
+          "id": "base_diverged",
+          "ok": true
+        },
+        {
+          "id": "section_denied",
+          "ok": true
+        },
+        {
+          "id": "untrusted_permissions",
+          "ok": true
+        },
+        {
+          "id": "base_integrity",
+          "ok": true
+        },
+        {
+          "id": "file_integrity",
+          "ok": true
+        },
+        {
+          "id": "bundle_integrity",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_../source.json",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_C:/source.json",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_/tmp/source.json",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_source.gd",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_scene.tscn",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_assets/evil.svg",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_https://example.com/x",
+          "ok": true
+        },
+        {
+          "id": "unsafe_path_a\\b.json",
+          "ok": true
+        },
+        {
+          "id": "duplicate_file",
+          "ok": true
+        },
+        {
+          "id": "compiled_integrity",
+          "ok": true
+        },
+        {
+          "id": "duplicate_identity",
+          "ok": true
+        },
+        {
+          "id": "unknown_version",
+          "ok": true
+        },
+        {
+          "id": "duplicate_json_key",
+          "ok": true
+        },
+        {
+          "id": "truncated_json",
+          "ok": true
+        },
+        {
+          "id": "size_limit",
+          "ok": true
+        },
+        {
+          "id": "depth_limit",
+          "ok": true
+        },
+        {
+          "id": "unknown_source_field",
+          "ok": true
+        },
+        {
+          "id": "io_conflict",
+          "ok": true
+        },
+        {
+          "id": "pending_preserved",
+          "ok": true
+        },
+        {
+          "id": "pending_intact",
+          "ok": true
+        },
+        {
+          "id": "ids_denied",
+          "ok": true
+        },
+        {
+          "id": "semantic_entity_diff",
+          "ok": true
+        },
+        {
+          "id": "change_budget",
+          "ok": true
+        },
+        {
+          "id": "protected_path",
+          "ok": true
+        },
+        {
+          "id": "locked_layer",
+          "ok": true
+        },
+        {
+          "id": "fixed_slot",
+          "ok": true
+        },
+        {
+          "id": "pinned_region",
+          "ok": true
+        },
+        {
+          "id": "missing_asset",
+          "ok": true
+        },
+        {
+          "id": "invalid_apply_no_mutation",
+          "ok": true
+        },
+        {
+          "id": "new_identity_denied",
+          "ok": true
+        },
+        {
+          "id": "policy_invalid",
+          "ok": true
+        },
+        {
+          "id": "not_request",
+          "ok": true
+        },
+        {
+          "id": "material_proposal",
+          "ok": true
+        },
+        {
+          "id": "piece_revision_matches_session",
+          "ok": true
+        },
+        {
+          "id": "piece_package_matches_preview",
+          "ok": true
+        },
+        {
+          "id": "piece_undo",
+          "ok": true
+        },
+        {
+          "id": "route_wait_proposal",
+          "ok": true
+        },
+        {
+          "id": "route_wait_compiled",
+          "ok": true
+        },
+        {
+          "id": "protected_region_exports",
+          "ok": true
+        },
+        {
+          "id": "protected_region_geometry",
+          "ok": true
+        },
+        {
+          "id": "broken_seam_not_importable",
+          "ok": true
+        },
+        {
+          "id": "semantic_diff_stable_ids",
+          "ok": true
+        },
+        {
+          "id": "cancelled_export",
+          "ok": true
+        }
+      ],
+      "count": 113,
+      "ok": true,
+      "package_hash": "4e9ac6bc9a8f9c5d105dbb37cd99ad25c9d12ee3324f42703342edc3416c9863"
+    },
+    "finished_utc": "2026-10-29T04:54:21.3756007Z",
+    "arguments": [
+      "--headless",
+      "--script",
+      "res://tests/map_editor_exchange_test.gd"
+    ],
+    "timed_out": false,
+    "ok": true,
+    "exit_code": 0,
+    "name": "exchange"
+  }
+]

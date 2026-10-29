@@ -1,0 +1,109 @@
+extends SceneTree
+## Directed consumer probe for Terra's forest-authored Sanctuary Woods map.
+## Replace the three PENDING pins only from Terra's final source/package receipt.
+const Store = preload("res://scripts/map_authoring/composition/map_store.gd")
+const Maps = preload("res://scripts/map_authoring/composition/map_compiler.gd")
+const MapDocument = preload("res://scripts/map_authoring/composition/map_document.gd")
+const Candidate = preload("res://scripts/map_authoring/preview/gameplay_candidate.gd")
+const PieceStore = preload("res://scripts/map_authoring/io/source_store.gd")
+const Phase = preload("res://data/expedition/phases/ruined_crossing.gd")
+const PATH := "res://data/map_authoring/sanctuary_woods.map.json"
+const EXPECTED_MAP_BYTES_SHA256 := "8e3f1c3c47709d204eeaf3061e3d98beabb0dfa987ed09ff24ad2ec79e6a631f"
+const EXPECTED_MAP_SOURCE_HASH := "8a9051f8a416a58890365e1b262cea309053ff52c5ce20725d0598ef7875ed55"
+const EXPECTED_MAP_PACKAGE_HASH := "098aa6b630015504ec47abfa45257fb0c7b571efabad590016dcc34acfc71fdc"
+const INSTANCE_PROFILES := {"clearing":"forest_rootbank_v1","overpass":"forest_rootbank_v1"}
+var checks: Array[Dictionary] = []
+var metrics: Dictionary = {}
+var source_file_sha256 := ""
+
+func _initialize() -> void:
+	run.call_deferred()
+
+func check(id: String, ok: bool, detail: Dictionary = {}) -> void:
+	checks.append({"id":id,"ok":ok,"detail":detail})
+	print("F9_MAP_SOURCE_CONSUMER_CHECK "+id+" "+str(ok))
+	if not ok and not detail.is_empty(): print("F9_MAP_SOURCE_CONSUMER_DIAGNOSTIC "+id+" "+JSON.stringify(detail))
+
+func run() -> void:
+	var loaded: Dictionary = Store.load_source(PATH)
+	source_file_sha256 = PieceStore.disk_hash(PATH)
+	check("exact_ax_map_file_loaded",loaded.ok and source_file_sha256 == EXPECTED_MAP_BYTES_SHA256,{"code":loaded.get("code",""),"bytes_sha256":source_file_sha256,"expected_bytes_sha256":EXPECTED_MAP_BYTES_SHA256})
+	if not loaded.ok: finish(); return
+	var source: Dictionary = loaded.data
+	check("map_semantic_hash_matches_terra",loaded.output_hash == EXPECTED_MAP_SOURCE_HASH,{"source_hash":loaded.output_hash,"expected_source_hash":EXPECTED_MAP_SOURCE_HASH})
+	var expected_pieces: Dictionary = {"sanctuary_woods_clearing":"e2172d1928ad5f83188fdba6e89b445bdf37e207af10f4e639a6b1ba44f8ad4f","sanctuary_woods_overpass":"1cae62332c2fbb490982dc6cbcda7d13f4f12a39f77303b6e4056c7382255fb4"}
+	var snapshots_ok: bool = source.pieces.size() == 2
+	var total_props: int = 0
+	for piece: Dictionary in source.pieces:
+		var id: String = piece.source.document_id
+		var original: Dictionary = PieceStore.load_source("res://data/map_authoring/"+id+".source.json")
+		snapshots_ok = snapshots_ok and expected_pieces.get(id,"") == piece.piece_hash and original.ok and original.output_hash == piece.piece_hash
+		total_props += piece.source.placements.size()
+	check("immutable_original_snapshots_and_47_props_preserved",snapshots_ok and total_props == 47,{"piece_count":source.pieces.size(),"placement_count":total_props,"piece_hashes":expected_pieces})
+	var transforms_ok: bool = source.instances.size() == 2
+	for instance: Dictionary in source.instances:
+		var position: Array = instance.position_xyz
+		transforms_ok = transforms_ok and instance.instance_id in ["clearing","overpass"] and int(instance.rotation_quarters) == 0 and Vector3(position[0],position[1],position[2]) == (Vector3.ZERO if instance.instance_id == "clearing" else Vector3(1280,0,0))
+	check("authored_transform_and_seam_are_exact",transforms_ok and source.links == [{"link_id":"woods_seam","a_instance":"clearing","a_connector":"a_east","b_instance":"overpass","b_connector":"b_west_gate"}],{"instances":source.instances,"links":source.links})
+	check("forest_context_has_no_override",source.mode == "manual" and source.context.biome_id == "forest" and source.context.overrides.is_empty(),{"mode":source.get("mode",""),"context":source.get("context",{})})
+	var started: int = Time.get_ticks_usec()
+	var compiled: Dictionary = Maps.compile(source)
+	metrics.map_compile_ms = float(Time.get_ticks_usec()-started)/1000.0
+	metrics.map_compile = compiled.get("metrics",{})
+	check("canonical_map_package_matches_terra_compile",compiled.get("ok",false) and compiled.get("output_hash","") == EXPECTED_MAP_PACKAGE_HASH,{"code":compiled.get("code",""),"package_hash":compiled.get("output_hash",""),"expected_package_hash":EXPECTED_MAP_PACKAGE_HASH})
+	if not compiled.get("ok",false): finish(); return
+	var package: Dictionary = compiled.package
+	var stage: Dictionary = package.manifest.stages[0] if not package.manifest.stages.is_empty() else {}
+	check("runtime_stage_and_authoring_context_are_forest",not stage.is_empty() and stage.get("biome","") == "forest" and package.get("authoring_context",{}).get("biome_id","") == "forest",{"stage_biome":stage.get("biome",""),"authoring_biome":package.get("authoring_context",{}).get("biome_id","")})
+	var border_owners: Dictionary = {}
+	var border_source_ok: bool = source.get("borders",{}).get("instances",[]).size() == 2
+	for border: Dictionary in source.get("borders",{}).get("instances",[]):
+		border_owners[border.instance_id] = border.profile_id
+	var forest_span_owners: Dictionary = {}
+	var forest_span_count: int = 0
+	var legacy_span_count: int = 0
+	for span: Dictionary in package.get("border_spans",[]):
+		if span.get("profile_id","") == "forest_rootbank_v1":
+			forest_span_count += 1
+			forest_span_owners[span.get("instance_id","")] = true
+		if span.get("profile_id","") == "ruin_envelope_v1": legacy_span_count += 1
+	border_source_ok = border_source_ok and border_owners == INSTANCE_PROFILES
+	check("both_instances_use_forest_borders_and_compiled_spans_have_no_legacy_profile",border_source_ok and forest_span_count > 0 and forest_span_owners.has("clearing") and forest_span_owners.has("overpass") and legacy_span_count == 0,{"authored_border_profiles":border_owners,"forest_span_count":forest_span_count,"forest_span_owners":forest_span_owners,"legacy_span_count":legacy_span_count})
+	var created: Dictionary = Candidate.create("map",package,loaded.output_hash)
+	check("immutable_candidate_binds_current_map",created.ok and Candidate.valid(created.get("candidate",{})),{"code":created.get("code","")})
+	if not created.ok: finish(); return
+	var owner: Variant = Phase.input("map_authoring_preview")
+	var profile: Dictionary = owner.traversal.to_data()
+	check("actual_player_body_20_by_32",float(profile.radius) == 20.0 and float(profile.height) == 32.0,{"profile":profile})
+	started = Time.get_ticks_usec()
+	var prepared: Dictionary = Candidate.prepare(created.candidate)
+	metrics.candidate_prepare_ms = float(Time.get_ticks_usec()-started)/1000.0
+	metrics.prepare = prepared.get("metrics",{})
+	check("candidate_prepares_access_to_each_support",prepared.ok,{"code":prepared.get("code",""),"metrics":prepared.get("metrics",{})})
+	var exact_entry_ok: bool = false
+	if prepared.ok:
+		var wanted: String = "clearing/socket_"+"woods_entry".sha256_text().substr(0,20)
+		var world := WorldGeometry.new()
+		var configured: Dictionary = world.configure(prepared.manifest,"map_preview")
+		for socket: Dictionary in package.manifest.stages[0].sockets:
+			if socket.socket_id != wanted: continue
+			var point := ExpeditionWorldPoint.create("map_preview",socket.surface_id,socket.position)
+			exact_entry_ok = configured.ok and socket.kind == "entrance" and socket.position == Vector3(160,0,640) and world.position_query(point,profile,world.geometry_revision).ok
+	metrics.ephemeral_preview_entry = prepared.get("ephemeral_entry",true)
+	metrics.runtime_biome = stage.get("biome","")
+	metrics.authoring_biome = package.get("authoring_context",{}).get("biome_id","")
+	metrics.map_source_hash = MapDocument.hash_source(source)
+	metrics.map_package_hash = package.get("package_hash","")
+	metrics.piece_count = package.get("piece_count",0)
+	metrics.render_instance_count = package.get("render_instances",[]).size()
+	metrics.stage_surface_count = stage.get("surfaces",[]).size()
+	metrics.stage_connection_count = stage.get("connections",[]).size()
+	metrics.border_span_count = package.get("border_spans",[]).size()
+	metrics.total_piece_placements = total_props
+	check("authored_marker_preserved_and_real_body_fits",exact_entry_ok,{"ephemeral_entry":metrics.ephemeral_preview_entry,"expected_entry_xyz":[160,0,640]})
+	finish()
+
+func finish() -> void:
+	var all_ok: bool = checks.size() == 12 and checks.all(func(row: Dictionary) -> bool: return row.ok)
+	print("F9_MAP_SOURCE_CONSUMER_RESULT "+JSON.stringify({"ok":all_ok,"count":checks.size(),"expected_count":12,"checks":checks,"source_file_sha256":source_file_sha256,"metrics":metrics,"scope":"The AX-authored forest composition is persisted product source. This consumer probe verifies its pinned bytes, immutable piece snapshots, map compile, forest runtime metadata/border geometry, candidate and real-body support access only; the prepared test candidate is ephemeral, and this probe does not save product source. Provisional map-preview spawn; no App, walking, combat or FPS claim."}))
+	quit(0 if all_ok else 1)

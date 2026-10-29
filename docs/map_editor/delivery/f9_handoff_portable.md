@@ -1,86 +1,77 @@
 # RagRPG — handoff portátil de F9
 
 <!-- f9-current-ax -->
-## Checkpoint vigente —29/10: composição AX e mapa do Bosque integrados
+## Checkpoint 26 — 29/10: bioma e bordas florestais integrados
 
-Código2248ee724c7cec6b13396eaa99f56e6cfa3e5203; dados `1bdc7301cd46ee40180b5c943f3fcfa10410dc5a`.
-Branch codex/map-editor-f9; checkout
-`C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5`.
-Meta integral F9 ativa. Este incremento está validado; o editor e a área final
-não estão concluídos. Não aplicar ao playtest nem marcar aceite humano/F10.
+Código 4e3a3788878c7520552c7815d0c2915301857f5f; conteúdo
+86359e3ddc33ff3dd5ef5a9f009dd7bc0ca306f2, branch codex/map-editor-f9.
+Checkout: C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5.
+O commit documental deste checkpoint sucede o conteúdo. Meta integral F9 ativa;
+este incremento não fecha F9 nem libera F10, master, push ou aceite de produto.
 
-MapOperations/MapPanel compartilham GUI/AX/MapSession/Store para snapshots,
-instâncias, transformações, vínculos, contexto/exceções, modos, histórico e IO.
-Cliente real aceita screen=map, abre a janela existente, aguarda worker e retorna
-map_snapshot com fonte/hash/estado. Top snapshot/source_hash continuam da peça;
-hashes por ação correspondem à sessão usada. Sem setter de fonte arbitrária.
-Nome pendente e histórico são preservados em falha de arquivo/rascunho/conflito.
+Sol corrigiu o bioma do manifesto a partir do contexto de autoria, mantendo
+fallback ruin e recusando pacotes incoerentes sem regravá-los. Bordas em lote
+compartilham Session/GUI/AX/CLI, com hash esperado, rollback integral e um undo;
+limite 529 derivado de 32 instâncias, 496 transições e uma flag. O inspector
+agora tem rolagem e botão para aplicar perfil a todas as peças. Formato/revision
+5 mantidos como correção de campo existente. Contrato: f9_ax_authoring.md;
+propriedade: f9_ownership.json, pacote map_biome.
 
-Terra montou o arquivo `data/map_authoring/sanctuary_woods.map.json`,45.355B,
-por7ações AX; reabertura/recompile2ações em outro processo, ambos exit0/log limpo.
-Duas peças,47props, clearing@[0,0,0], overpass@[1280,0,0], woods_seam, forest sem
-exceções. Snapshots e fontes originais intactos. Arquivo SHA256
-6b8d52095b0d98ba4a436fd5b192ff732b98a8f5da02855646e7e21b9792bb4f;
-fonte2407588712870e8bd1b4820e2f82638fe29fb1ce955ae5541b14320e9a2cbe20;
-compilação68bd0caa6a9865067bc9a6b025aa34202ba63f4f003642f027b72d2ffded0ed6.
-Captura real e recibos em delivery/evidence/f9/terra/area_composition/.
-Fontes e evidências desta família preservam LF/bytes via .gitattributes.
+Luna: MapBiome15/Native13, Borders93/Native32, GameplayNative52,
+Candidate53/Population91/Patrol58/Exchange113 e verify editor_import1/299 PASS.
+Source/tests/tools/HEAD ficaram congelados nas execuções; Sol leu o delta,
+conferiu os recibos e inspecionou capturas. Supervisão de execução Luna e
+consolidação Sol não são auditoria semântica independente.
 
-Provas: CompositionAX31 PASS em6e; Native13 PASS em2248; CLI10/10 por modo,
-reabertura2/2 e negativo que interrompe lote PASS; BordersNative32 e GameplayNative52
-PASS. Regressões Composition63/CLI2/Document70 PASS; verify.ps1 editor_import1/299
-PASS. As52 verificações de gameplay são de amostras existentes (ator/ponte/combate/
-retomada), não do Bosque. Fonte/compilação/bytes do cliente headless e nativo iguais.
+Terra aplicou forest_rootbank_v1 nas duas instâncias do Bosque pelo editor AX:
+4/4 ações e reabertura 2/2, compile antes de save, hashes coincidentes, logs
+limpos. Somente borders mudou: dois snapshots, poses, vínculo e 47 props intactos.
+Fonte data/map_authoring/sanctuary_woods.map.json, 45.615 bytes:
+- arquivo 8e3f1c3c47709d204eeaf3061e3d98beabb0dfa987ed09ff24ad2ec79e6a631f;
+- fonte 8a9051f8a416a58890365e1b262cea309053ff52c5ce20725d0598ef7875ed55;
+- pacote 098aa6b630015504ec47abfa45257fb0c7b571efabad590016dcc34acfc71fdc.
 
-Luna escreveu rascunhos e foi interrompida por quota antes de executar. Sol recebeu
-os testes por transferência, completou fixtures/oráculos e executou as provas.
-Rascunhos preservados; não alegar supervisão independente Luna. Mapas só por Terra
-no editor AX. UID3 novas geradas pelo engine e versionadas antes do congelamento.
+Após sync/import completo, ForestConsumer12 PASS do arquivo final: runtime
+forest, 35 spans florestais sem legado, 84 apoios/131 conexões e corpo canônico
+raio20/altura32 com acesso a cada apoio. Marcador autorado [160,0,640] preservado
+e comporta o corpo; entrada de preview somente de mapa continua provisória.
+A prova não registrou a posição efetiva desse spawn nem escolheu o marcador.
+Sem App/caminhada/combate/oclusão/restart/FPS do Bosque nesta fatia.
 
-Consumidor10/10 PASS do mapa real: bytes/hashes/snapshots/poses/emenda, compilação,
-candidato imutável, corpo20x32, acesso a um ponto de cada apoio e marcador exato
-[160,0,640] com espaço para o corpo. A prévia map-only usa início provisório até
-configurar população. Não houve App/caminhada/combate/FPS do Bosque nesta entrega.
-Uma execução: mapa27,846s/nav25,924s; preparo24,354s/nav22,454s; total63,547s com
-hashes/IO. Custos canônicos continuam pendência real10, sem otimizar duração de suíte.
+Uma amostra: mapa28,516s (navegação26,275s), preparo30,441s (navegação24,581s);
+autoria AX compilou39,375s. São custos canônicos reais, não apenas sobrecarga
+de testes. Responsividade in-game continua pendência F9-10; não inferir FPS.
 
-Limitações concretas antes do uso final: bordas ainda legadas; authoring_context
-forest não é propagado por MapCompiler ao stage.biome (ainda ruin). Sol precisa
-corrigir metadado com invariantes/compatibilidade e aplicar bordas florestais em
-transação AX revisável, sem estado intermediário inválido ou hash inventado.
-Layout do inspector precisa rolagem/acabamento em janela1000px. M3Native24 histórico
-falha por canvas.motion/testing e2malhas retirados antes desta fatia; falha/timeout
-preservados, baseline auditada. Atualizar/retirar fixture no tooling final, sem
-contá-la como PASS ou perder cobertura atual. Native13/Gameplay52 cobrem os contratos
-atuais escolhidos. O atalho órfão two_rooms da fixture foi arquivado após verificar
-0processos desse engine; sessões/perfis preservados, sem mexer em save pessoal.
+Auditorias: completion2045 entradas, Context2039 (menos6imports de props);
+10imports conferidos à parte. Novo consumidor2046 inclui o backup local do mapa;
+sync/import2040 exclui os6imports. Zero diferenças source/fixture/manifest.
+HEAD de validação4e; conteúdo com bytes idênticos integrado em86359e3d.
+Consolidação: evidence/f9/author/map_biome/consolidation.md.
+Recibos: evidence/f9/luna/map_biome e evidence/f9/terra/area_forest_borders.
 
-Fixture ÚNICA para --path:
-`C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project`.
-Engine `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/godot/Godot_v4.7.2-stable_win64.exe`,
+Fixture única --path:
+C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project.
+Engine:
+C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/godot/Godot_v4.7.2-stable_win64.exe.
 SHA256 AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424.
-Python C:/Python314/python.exe; PowerShell7.6.5. APPDATA/LOCALAPPDATA descartáveis
-na fixture. Source/tests/tools/HEAD congelados em cada prova. Import07 sincronizou
-mapa;2041 primários iguais source/fixture antes/depois,6imports de props incluídos
-mais4imports de terreno auditados. Testes do produtor tinham2040, sem o mapa novo.
-Não confundir conjuntos. Todos os processos/handles próprios terminaram.
+Perfil descartável dentro da fixture. Não usar checkout como --path; SkipImport
+não sincroniza o projeto inteiro. Nenhum engine/handle ativo; fixture liberada.
+Dois backups de peças e novo .map.json.bak locais preservados, fora do Git.
+Tentativa Context com caminho relativo literalF1 foi inválida/interrompida;
+cópia preservada em .godot/verification/f9_invalid_literalF1_20261029.
+CLI de workflow e WORKFLOW_TOOLING.md ausentes nesta worktree; não adivinhar
+instalação nem copiar tooling externo. Playtest/save pessoal intactos.
 
-Estado esperado após commit documental: só2backups de terreno .source.json.bak
-locais não versionados; preservar. CLI de workflow/WORKFLOW_TOOLING continuam ausentes;
-não copiar/adivinhar tooling externo. Antes de nova prova, Import normal em pasta
-de evidência nova; -SkipImport não sincroniza o projeto inteiro. Nunca usar checkout
-como --path nem sobrescrever recibos existentes. Logs com Script/Parse/ERROR falham,
-mesmo com exit0. Perfil pessoal, codex/playtest, master e push ficaram intocados.
+Próximo autorizado: parametrizar população/patrulha no mesmo fluxo UI/AX/Session/
+Store e Terra criar os encontros/objetivo pelo AX; medir e corrigir custos reais
+dos produtores/rotas antes do candidato final. Continuam integrais: síntese/
+regeneração regional, proteção/reconciliação, assets/bundles/ambiente limpo/
+export/release, cancelamento/cache/recuperação e UX final, gameplay real do
+Bosque, medição representativa in-game e toda matriz F9. M3Native24 histórico
+precisa migrar ou sair do tooling com cobertura atual preservada; sua falha
+anterior não conta como PASS. Nada transferido a F10.
 
-Próximo: Sol corrige metadado/bordas e expõe população/patrulha/objetivo existentes
-para Terra completar o mapa viaAX. Depois prova real de jogo e latências. Síntese/
-regeneração regional, reconciliação, assets passivos/ambiente limpo, recuperação,
-layout/release e toda matriz F9 permanecem exigidos; nada foi transferido aF10.
-Consolidação e pendências reproduzíveis:
-`docs/map_editor/delivery/evidence/f9/author/ax_composition/consolidation.md` e
-`open_findings.md` na mesma pasta. Receita/argv de Terra em area_composition;
-consumer/run_consumer.py lê o arquivo real sem persistir fonte, usar cópia em nova
-pasta para não sobrescrever o recibo. Blocos abaixo são históricos.
+Blocos abaixo são históricos; este cabeçalho prevalece para a retomada.
 <!-- /f9-current-ax -->
 
 
