@@ -1,10 +1,12 @@
 # Retomada F9 —29/10/2026
 
 <!-- f9-terra-consumer-active -->
-## Consumo AX após checkpoint28 — população salva, compilação em andamento
+## Após checkpoint28 — população salva, correção canônica em validação
 
-HEAD congelado d03b6d93872f969b0f6d87c70920916652acd1f5. Terra ocupa fixture
-única; não editar produção/testes/tools/HEAD nem iniciar outro engine.
+Consumo Terra foi congelado emd03b6d93872f969b0f6d87c70920916652acd1f5 e terminou.
+HEAD atual43a6a0c3f636da4b09cbba10c54e34b6c92375e8 conserva a fonte salva e
+a correção canônica NÃO VALIDADA. Fixture liberada, nenhum engine ativo nesse
+checkpoint; Luna escreve teste exclusivo, antes do próximo import Sol.
 prepare_02 PASS2/2,207,125s. finalize_01 PASS4/4,191,750s, proposta
  d2d1a549ee46a8997b4907460c722d9f9a61913ac3b55c96e6efe197da2f618e aplicada.
 Fonte real criada só via AX: data/map_authoring/sanctuary_woods.population.json,
@@ -28,7 +30,7 @@ Evidência: evidence/f9/terra/area_encounters/{prepare_02,finalize_01,compile_01
 
 
 <!-- f9-population-batch -->
-## Checkpoint28 — alcance de população validado; Terra pode retomar AX
+## Histórico checkpoint28 — alcance de população validado
 
 Candidato validado9c8185c6cedbfd1ef48dfa88821268fb9afb0677; produção956d38dd,
 branch codex/map-editor-f9 no checkout .tools/map-editor-m5. Detalhes/recibos:

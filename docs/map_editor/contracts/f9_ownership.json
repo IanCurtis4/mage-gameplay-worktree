@@ -3477,9 +3477,10 @@
         "tests/map_editor_population_planner_batch_test.gd.uid"
       ],
       "fixture_frozen": false,
-      "fixture_owner": "released after compile diagnostic01 guard300 terminal; all prior engines ended",
+      "fixture_owner": "released after plannerImport01 PASS; engine UID copied unchanged; next frozen test candidate",
       "scope": "canonical admission existence only, grouped by stage and entire profile, outward-only requirement unchanged; no movement/attack/leash/attribute rule changes",
-      "diagnostic": "all editor slot and pool checks finished at159.533s, canonical planner entered159.557s and did not finish at300s"
+      "diagnostic": "all editor slot and pool checks finished at159.533s, canonical planner entered159.557s and did not finish at300s",
+      "test_expected_checks": 20
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"
