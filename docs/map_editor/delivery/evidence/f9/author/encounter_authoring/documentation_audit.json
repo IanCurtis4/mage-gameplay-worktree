@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "matching_headers": 2,
+  "references": [
+    "../../luna/encounter_authoring/README.md",
+    "native_diagnostic_01/diagnostic.manifest.json",
+    "validation_audit.json",
+    "cli_01/manifest.json",
+    "../../terra/area_encounters/plan.md"
+  ],
+  "ownership_json_valid": true,
+  "python_syntax_valid": true,
+  "scope": "documentation coherence, not another gameplay run"
+}

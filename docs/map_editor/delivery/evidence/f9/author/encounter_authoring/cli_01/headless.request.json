@@ -1,0 +1,89 @@
+{
+  "ax_version": 1,
+  "actions": [
+    {
+      "screen": "population",
+      "id": "population/document/open",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\f9_encounter_authoring\\b9fc494ccde5f75c4c593ffb\\population.json",
+        "confirm_discard": true
+      }
+    },
+    {
+      "screen": "population",
+      "id": "population/catalog/options",
+      "parameters": {}
+    },
+    {
+      "screen": "population",
+      "id": "population/map/query",
+      "parameters": {}
+    },
+    {
+      "screen": "population",
+      "id": "population/plan/preview",
+      "parameters": {}
+    },
+    {
+      "screen": "population",
+      "id": "population/plan/apply",
+      "parameters": {
+        "expected_source_hash": "21001f50cfc295d5f28e34a518023726b5528d1299290639b2901129de623c42",
+        "proposal_hash": "71c81a35d543b6eceb18b84e03714c11d592435fac2198c5e599fa6eba5a1802",
+        "confirm_apply": true
+      }
+    },
+    {
+      "screen": "population",
+      "id": "population/compile",
+      "parameters": {}
+    },
+    {
+      "screen": "population",
+      "id": "population/document/save",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\author\\encounter_authoring\\cli_01\\headless.population.json"
+      }
+    },
+    {
+      "screen": "patrol",
+      "id": "patrol/document/open",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\f9_encounter_authoring\\b9fc494ccde5f75c4c593ffb\\patrol.json",
+        "confirm_discard": true
+      }
+    },
+    {
+      "screen": "patrol",
+      "id": "patrol/map/query",
+      "parameters": {}
+    },
+    {
+      "screen": "patrol",
+      "id": "patrol/waypoint/upsert",
+      "parameters": {
+        "point_id": "north",
+        "position_xyz": [
+          300,
+          0,
+          260
+        ],
+        "surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1",
+        "wait_seconds": 1.75,
+        "patrol_id": "guard_route"
+      }
+    },
+    {
+      "screen": "patrol",
+      "id": "patrol/compile",
+      "parameters": {}
+    },
+    {
+      "screen": "patrol",
+      "id": "patrol/document/save",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\author\\encounter_authoring\\cli_01\\headless.patrol.json"
+      }
+    }
+  ]
+}

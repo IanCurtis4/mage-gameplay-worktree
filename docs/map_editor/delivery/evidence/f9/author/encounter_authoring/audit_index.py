@@ -1,9 +1,10 @@
 """Check exact index bytes of staged evidence and encounter tests."""
-import hashlib, json, subprocess
+import hashlib, json, subprocess, sys
 from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[6]
-output = HERE / 'index_byte_audit.json'
+output = HERE / (sys.argv[1] if len(sys.argv) > 1 else 'index_byte_audit.json')
+assert output.parent == HERE and output.suffix == '.json'
 relative_output = output.relative_to(ROOT).as_posix()
 paths = subprocess.check_output(['git','-C',str(ROOT),'diff','--cached','--name-only','-z']).decode('utf-8').split('\0')
 paths = [p for p in paths if p and p != relative_output and (p.startswith('docs/map_editor/delivery/evidence/f9/') or p.startswith('tests/map_editor_encounter_authoring'))]

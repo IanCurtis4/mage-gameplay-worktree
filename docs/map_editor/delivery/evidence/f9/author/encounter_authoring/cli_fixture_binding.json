@@ -1,0 +1,15 @@
+{
+  "scope": "passive binding of the actual disposable canonical Model02 fixture; no engine launched",
+  "head": "3a5bff35a573cce3ac76439d68d59eaed87c7974",
+  "model_receipt_sha256": "d3d989234058f566de9f0a7dd79c2cea9d797be117a234f52d988e3ca20158d6",
+  "files": [
+    {
+      "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\f9_encounter_authoring\\b9fc494ccde5f75c4c593ffb\\population.json",
+      "sha256": "b53d9a7aca79eba6ccdfe06adec7b36f43f97bdda188e260cd78621faca1dcf3"
+    },
+    {
+      "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\f9_encounter_authoring\\b9fc494ccde5f75c4c593ffb\\patrol.json",
+      "sha256": "ff4aa952412371be21ce51ff72c23a36bb8bbaaa2621c95afce7db9cd8a11e56"
+    }
+  ]
+}

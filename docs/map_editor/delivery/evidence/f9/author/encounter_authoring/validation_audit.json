@@ -1,0 +1,118 @@
+{
+  "ok": true,
+  "scope": "Luna execution and Sol consolidation; not independent semantic audit; native01 failure and instrumented diagnostic preserved separately, not counted as PASS",
+  "head": "3a5bff35a573cce3ac76439d68d59eaed87c7974",
+  "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "receipts": [
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/model_02/runs.json",
+      "sha256": "d3d989234058f566de9f0a7dd79c2cea9d797be117a234f52d988e3ca20158d6",
+      "checks": 27,
+      "inputs": 2054,
+      "mismatches": 0
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/native_02/runs.json",
+      "sha256": "a5eca5bf579734ccc69d3e4389ef3a782d9f904b1d637228d98ad5a977a3eb7f",
+      "checks": 25,
+      "inputs": 2054,
+      "mismatches": 0
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/gameplay_native/runs.json",
+      "sha256": "2710de4cd5a9573ea215192f14fd591b4fbc9d97978b63b81d1626e10a8d8d77",
+      "checks": 52,
+      "inputs": 2054,
+      "mismatches": 0
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/context_01/manifest.json",
+      "sha256": "f6b44b53db1efbac2f22d7c9b1f10725aec364409b961afb883908bf7fb6a55b",
+      "checks": 315,
+      "inputs": 2048,
+      "mismatches": 0
+    }
+  ],
+  "completion_only_imports": [
+    "assets/art/map_authoring/props/broken_pillar.png.import",
+    "assets/art/map_authoring/props/desert_cactus.png.import",
+    "assets/art/map_authoring/props/moss_boulder.png.import",
+    "assets/art/map_authoring/props/oak_tree.png.import",
+    "assets/art/map_authoring/props/sandstone_boulder.png.import",
+    "assets/art/map_authoring/props/woodland_shrub.png.import"
+  ],
+  "dependency_imports": [
+    {
+      "path": "assets/art/map_authoring/cliff_tile.png.import",
+      "sha256": "fe0ef36b6f3f791b157b36a735f217bf0dfd2b49a2d4ec36a415f692b32f312d"
+    },
+    {
+      "path": "assets/art/map_authoring/earth_tile.png.import",
+      "sha256": "8a7fb5de02a0d061c99e6c88e875b8f5582eb83be134bb0941f6e4863c2bb117"
+    },
+    {
+      "path": "assets/art/map_authoring/grass_tile.png.import",
+      "sha256": "5a080026fe6e9c15a3039019ecb24607eaa4e76e00a4694b3563610d194df66b"
+    },
+    {
+      "path": "assets/art/map_authoring/props/broken_pillar.png.import",
+      "sha256": "f169c92346ae633eda7152e0c31937e0889b1e5f08803bf25077ca9ef0dff2d6"
+    },
+    {
+      "path": "assets/art/map_authoring/props/desert_cactus.png.import",
+      "sha256": "06ea0f3f178a90652383379e03e08f132698fc073f316f7446140989d1d62791"
+    },
+    {
+      "path": "assets/art/map_authoring/props/moss_boulder.png.import",
+      "sha256": "194218352993faa2203dae2fec0f4b8b1556ab09373aa1b0b2bb8bddfdb29bae"
+    },
+    {
+      "path": "assets/art/map_authoring/props/oak_tree.png.import",
+      "sha256": "3e60ef3caf546d0d96ed6bfcc0a987775087fbffd95346be297c5a5cff20020b"
+    },
+    {
+      "path": "assets/art/map_authoring/props/sandstone_boulder.png.import",
+      "sha256": "3339b644143127b0e00d6ed6afe70ae2f4c6499ab51407f39482141d21ec54b5"
+    },
+    {
+      "path": "assets/art/map_authoring/props/woodland_shrub.png.import",
+      "sha256": "3a543032d3eb98e2180bb1b1cde3f378a9a0e6ddccdd8594576b7a86aacd456f"
+    },
+    {
+      "path": "assets/art/map_authoring/sand_tile.png.import",
+      "sha256": "cf7ed2a0c76756b2504132f520640a252829165a1dad4f7ef10389de7f577a7e"
+    }
+  ],
+  "verify": {
+    "selected_steps": 1,
+    "catalog_steps": 299,
+    "test": "editor_import",
+    "ok": true
+  },
+  "limits": "Producer and real CLI validated on disposable fixtures; no Bosque population/patrol product sources or new App/gameplay/FPS proof; full F9 remains open",
+  "cli": {
+    "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/cli_01/manifest.json",
+    "sha256": "2c472eb68a836d1fb6741f93178640ebe047d9577e85ca03ae8a5924538fd4c7",
+    "ok": true,
+    "inputs": 2054,
+    "processes": 5,
+    "equivalence": {
+      "headless": {
+        "population_source": "0700db5d8682478a63e53d0c5844fb74fb6fb628c12b4d18e3d356d137726261",
+        "patrol_source": "c9f485ce973cf00a4df085a6163466c39092b75966e6cbeb7abce64ddfb74758",
+        "population_package": "3d539c31f65a2fc3d2f05d70aca80e00f7cb18f5f756d1f3be47949fd45a9133",
+        "patrol_package": "3844c99bbd11b68a0c01db693a5dd9286efc81e90c20834c85f1e22ce9bc962f",
+        "population_bytes": "eb46c2c669149d58eaefc9d74083c157dfe89a6a24fb7e6d5a25a5e236db3b27",
+        "patrol_bytes": "a749059483c63f5f718bef8fe927c544f7985102e7b77a5e5c1475cbfff5e233"
+      },
+      "native": {
+        "population_source": "0700db5d8682478a63e53d0c5844fb74fb6fb628c12b4d18e3d356d137726261",
+        "patrol_source": "c9f485ce973cf00a4df085a6163466c39092b75966e6cbeb7abce64ddfb74758",
+        "population_package": "3d539c31f65a2fc3d2f05d70aca80e00f7cb18f5f756d1f3be47949fd45a9133",
+        "patrol_package": "3844c99bbd11b68a0c01db693a5dd9286efc81e90c20834c85f1e22ce9bc962f",
+        "population_bytes": "eb46c2c669149d58eaefc9d74083c157dfe89a6a24fb7e6d5a25a5e236db3b27",
+        "patrol_bytes": "a749059483c63f5f718bef8fe927c544f7985102e7b77a5e5c1475cbfff5e233"
+      }
+    }
+  }
+}

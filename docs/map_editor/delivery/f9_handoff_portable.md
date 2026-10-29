@@ -1,38 +1,74 @@
 # RagRPG — handoff portátil de F9
 
-<!-- f9-encounter-active -->
-## Em validação — AX de encontros e patrulhas
-
-Último checkpoint integrado: ff61b57b80a564a3244267ed3207c1663b490682 (abaixo).
-Candidato de runtime: 5a97f7d7e095b36d65795140bae82a7178b73d6b. Sol implementou
-PopulationOperations/PatrolOperations, painéis e documentos compartilhados,
-Store com hash dos bytes lidos, prévia assinada e cliente AX population/patrol.
-O repasse síncrono do mapa validado evita compilação duplicada em import_map.
-
-Import01/02 PASS; quatro UIDs geradas pelo engine copiadas sem alteração.
-Luna executou EncounterAuthoring27 PASS e Native24/25, parando na primeira
-falha. O diagnóstico Sol preservou todos os oráculos: única diferença foi
-espera1,75 contra1,8 do controle com passo0,1; GUI/AX, modo, ordem, slots e
-documento eram iguais. Produção não mudou. Falha e cópia instrumentada
-preservadas em author/encounter_authoring/native_diagnostic_01 e recibos Luna.
-
-Luna corrigiu a fixture UI para valor1,8 suportado pelo controle e fortaleceu
-o modelo para valor fracionário1,75 em waypoint novo/editado, com ordem exata.
-Os checks permanecem27/25. Estas correções ainda aguardam execução.
-Import03/sync terminou PASS, com2048 entradas enumeradas e os testes corrigidos
-sincronizados. Handle56553 terminal; nenhum engine ativo. O próximo candidato
-sucede5a97 somente com correção de fixture/teste e evidências; runtime intacto.
-
-Após Import03: registrar a correção de teste/evidência, congelar o novo HEAD
-e Luna executar model_02/native_02, Gameplay52, Context e verify editor_import.
-Cliente CLI/headless/nativo e conteúdo Terra vêm depois da aprovação do produtor.
-Terra preparou somente plan.md/receitas.md em terra/area_encounters, sem executar
-engine ou escrever fontes de produto. F9 integral continua ativo; não há pacote
-do Bosque com encontros/patrulha nem nova prova de App/gameplay/FPS ainda.
-Contrato/propriedade: última seção f9_ax_authoring.md e
-f9_ownership.json, supervision.encounter_authoring. Playtest/save pessoal intactos.
-<!-- /f9-encounter-active -->
 <!-- f9-current-ax -->
+## Checkpoint 27 — AX de encontros e patrulhas validado
+
+Runtime5a97f7d7e095b36d65795140bae82a7178b73d6b; validação e fixtures
+3a5bff35a573cce3ac76439d68d59eaed87c7974. Branch codex/map-editor-f9 no checkout
+C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5.
+O commit documental sucede3a5. Meta integral F9 ativa, sem aceite de produto,
+playtest pessoal, master/push ou abertura F10.
+
+Sol entregou PopulationOperations/PatrolOperations compartilhados entre GUI/AX,
+documentos/Stores com conflito por bytes lidos, entrada/brushes/espécies/pesos/
+exclusões/interações/slots fixos, prévia assinada com base/diff/hash/confirm,
+rotas/pontos/ordem/espera/slots exclusivos e consultas de catálogo/apoios/sockets.
+Não há setter de fonte completa. Workers/compiladores canônicos preservam
+corpo, suporte, origem/recompensa e leash. Cliente abre janelas reais e retorna
+population_snapshot/patrol_snapshot; hashes por ação usam a sessão correta.
+Import_map evita uma compilação duplicada por repasse síncrono do pacote validado,
+sem cache persistente ou fechamento de F9-10.
+
+Luna27/25, Gameplay52, Candidate53/Population91/Patrol58/Exchange113 e
+verify editor_import (1 ID de299) PASS. CLI real passou em5processos:
+preview2/2, headless12/12, nativo12/12, reabertura4/4 e negativo2/3 com exit1
+esperado, sem salvar após falha. Fontes/pacotes/bytes iguais entre modos.
+Dados originais descartáveis intactos; nenhuma fonte do produto criada aqui.
+
+Primeiro Native24/25 foi preservado. Diagnóstico manteve25oráculos: UI tinha
+passo0,1 e recebeu1,75, armazenando1,8; GUI/AX e demais flags eram iguais.
+Produção não mudou. Fixture UI passou a1,8 exato; modelo e CLI cobrem1,75
+fracionário exato. Não houve relaxamento de corpo/rota/caps nem erros ocultados.
+Consolidação: evidence/f9/author/encounter_authoring/consolidation.md.
+Recibos: evidence/f9/luna/encounter_authoring e author/encounter_authoring/cli_01.
+
+Auditoria Sol:2054inputs completion/CLI,2048Context, diferença dos6imports de props;
+10imports conferidos e zero divergências source/fixture/manifest. Quatro UIDs
+geradas pelo engine. Nenhum engine/handle ativo; fixture liberada.
+Fixture única --path:
+C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project.
+Engine C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/godot/Godot_v4.7.2-stable_win64.exe.
+SHA256 AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424.
+APPDATA/LOCALAPPDATA privados na fixture; não usar source checkout como --path.
+SkipImport não é sync geral. Três backups locais preservados, fora do Git.
+
+Bosque de produto ainda é o mapa do checkpoint26, conteúdo86359e3d:
+data/map_authoring/sanctuary_woods.map.json,45.615B,
+arquivo8e3f1c3c47709d204eeaf3061e3d98beabb0dfa987ed09ff24ad2ec79e6a631f,
+fonte8a9051f8a416a58890365e1b262cea309053ff52c5ce20725d0598ef7875ed55,
+pacote098aa6b630015504ec47abfa45257fb0c7b571efabad590016dcc34acfc71fdc.
+2peças/47props/84apoios/131conexões/35spans forest; corpo20x32 preparado.
+Sem sanctuary_woods.population.json ou .patrol.json ainda, sem App/caminhada/
+combate/objetivo/FPS do Bosque. Custos canônicos anteriores28,5s/30,4s continuam
+pendência de runtime, não apenas sobrecarga de testes.
+
+Próximo autorizado: Terra executar autoria de encontros/patrulhas/phase_completion
+pelo AX real, consultando catálogo/apoios e respeitando contexto/body/leash.
+Plano passivo em evidence/f9/terra/area_encounters. Não escrever fonte JSON pronta.
+Medir preparação/geração e caminhos reais; PopulationCompiler.pool ainda chama
+path individual por candidato e pode exigir otimização comprovada por impacto.
+Sem aumentar timeout/caps ou reduzir mapa/corpo para fazê-lo passar.
+
+Continuam integrais: reconciliação de revisões; síntese/regeneração regional e
+proteções; assets/bundles/ambiente limpo/export/release; recuperação, progresso,
+cancelamento/cache/invalidação integral; UX final; gameplay real e medição
+representativa in-game; área final e toda matriz F9. M3Native24 histórico precisa
+migração/retirada com cobertura atual preservada. Nada foi movido para F10.
+CLI de workflow e WORKFLOW_TOOLING.md ausentes nesta worktree; não inventar instalação.
+<!-- /f9-current-ax -->
+
+<!-- f9-checkpoint26-history -->
+Nota histórica preservada: o checkpoint27 acima rege a retomada.
 ## Checkpoint 26 — 29/10: bioma e bordas florestais integrados
 
 Código 4e3a3788878c7520552c7815d0c2915301857f5f; conteúdo
@@ -104,7 +140,7 @@ precisa migrar ou sair do tooling com cobertura atual preservada; sua falha
 anterior não conta como PASS. Nada transferido a F10.
 
 Blocos abaixo são históricos; este cabeçalho prevalece para a retomada.
-<!-- /f9-current-ax -->
+<!-- /f9-checkpoint26-history -->
 
 
 ## Vigente28/10 — emenda corrigida e retomada13 PASS

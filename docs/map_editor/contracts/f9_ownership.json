@@ -2955,7 +2955,7 @@
     "owner": "Luna",
     "model": "gpt-6-luna",
     "effort": "low",
-    "state": "f9_map_biome_and_forest_borders_increment_validated_fixture_released_full_F9_open",
+    "state": "f9_encounter_patrol_AX_producer_validated_fixture_released_full_F9_open",
     "files": [
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report.md",
       "docs/map_editor/delivery/evidence/f9/luna/geometry/report_final.md",
@@ -3318,7 +3318,7 @@
       ]
     },
     "encounter_authoring": {
-      "state": "validation_candidate",
+      "state": "validated_increment_F9_still_open",
       "base": "ff61b57b80a564a3244267ed3207c1663b490682",
       "runtime_owner": "Sol F9",
       "test_owner": "Luna F9 encounter authoring",
@@ -3347,14 +3347,38 @@
         "tests/map_editor_encounter_authoring_ui_test.gd",
         "tests/map_editor_encounter_authoring_ui_test.gd.uid"
       ],
-      "fixture_owner": "released after Import03; awaiting corrected test commit and Luna rerun",
+      "fixture_owner": "released; no engine active",
       "uid_transport": "Sol copied four engine-generated UID files unchanged after Import01, before Import02",
       "code_head": "5a97f7d7e095b36d65795140bae82a7178b73d6b",
       "initial_results": {
         "EncounterAuthoring": 27,
         "EncounterAuthoringNative": "24/25; unsupported fixture wait1.75 with step0.1, actual1.8; all other diagnostic flags true",
         "diagnostic": "native_diagnostic_01 preserves all25 oracles and production; corrected fixture pending rerun"
-      }
+      },
+      "validation_head": "3a5bff35a573cce3ac76439d68d59eaed87c7974",
+      "validation": {
+        "EncounterAuthoring": 27,
+        "EncounterAuthoringNative": 25,
+        "GameplayNative": 52,
+        "Candidate": 53,
+        "Population": 91,
+        "Patrol": 58,
+        "Exchange": 113,
+        "verify_editor_import": "1/299",
+        "cli_process_actions": [
+          2,
+          12,
+          12,
+          4,
+          2
+        ],
+        "cli_rejected_requested": 3,
+        "completion_cli_inputs": 2054,
+        "context_inputs": 2048,
+        "dependency_imports": 10,
+        "mismatches": 0
+      },
+      "limitations": "Producer/CLI on disposable fixtures; actual Bosque encounters/patrols/objective not authored; no new App/gameplay/FPS; remaining full F9 matrix active"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

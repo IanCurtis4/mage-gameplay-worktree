@@ -1,0 +1,31 @@
+{
+  "ax_version": 1,
+  "actions": [
+    {
+      "screen": "population",
+      "id": "population/document/open",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\author\\encounter_authoring\\cli_01\\native.population.json",
+        "confirm_discard": true
+      }
+    },
+    {
+      "screen": "population",
+      "id": "population/compile",
+      "parameters": {}
+    },
+    {
+      "screen": "patrol",
+      "id": "patrol/document/open",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\author\\encounter_authoring\\cli_01\\native.patrol.json",
+        "confirm_discard": true
+      }
+    },
+    {
+      "screen": "patrol",
+      "id": "patrol/compile",
+      "parameters": {}
+    }
+  ]
+}

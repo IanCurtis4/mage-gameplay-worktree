@@ -1,0 +1,3572 @@
+{
+	"actions": [
+		{
+			"id": "population/document/open",
+			"input_hash": "a559934f892b7411a69db9c63970bd79b675a755945217414dc93a004adfcc1d",
+			"output_hash": "21001f50cfc295d5f28e34a518023726b5528d1299290639b2901129de623c42",
+			"result": {
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "encounters",
+				"input_hash": "",
+				"ok": true,
+				"output_hash": "21001f50cfc295d5f28e34a518023726b5528d1299290639b2901129de623c42"
+			},
+			"screen": "population"
+		},
+		{
+			"id": "population/catalog/options",
+			"input_hash": "21001f50cfc295d5f28e34a518023726b5528d1299290639b2901129de623c42",
+			"output_hash": "21001f50cfc295d5f28e34a518023726b5528d1299290639b2901129de623c42",
+			"result": {
+				"entity_id": "encounters",
+				"ok": true,
+				"options": [
+					{
+						"category": "normal",
+						"label": "Arqueiro · Comum · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "demo_archer",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Arqueiro · Comum · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "demo_archer",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Arqueiro · Comum · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "demo_archer",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Arqueiro · Comum · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "demo_archer",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Guerreiro · Comum · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "demo_chaser",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Guerreiro · Comum · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "demo_chaser",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Guerreiro · Comum · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "demo_chaser",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Guerreiro · Comum · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "demo_chaser",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Guardião do Baluarte · Elite · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_bulwark_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Guardião do Baluarte · Elite · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_bulwark_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Guardião do Baluarte · Elite · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_bulwark_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Guardião do Baluarte · Elite · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_bulwark_species",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Guardião do Baluarte · Comum · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_bulwark_species",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Guardião do Baluarte · Comum · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_bulwark_species",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Guardião do Baluarte · Comum · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_bulwark_species",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Guardião do Baluarte · Comum · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_bulwark_species",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Guardião do Baluarte · Raro · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_bulwark_species",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Guardião do Baluarte · Raro · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_bulwark_species",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Guardião do Baluarte · Raro · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_bulwark_species",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Guardião do Baluarte · Raro · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_bulwark_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Guardião do Baluarte · Elite raro · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_bulwark_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Guardião do Baluarte · Elite raro · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_bulwark_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Guardião do Baluarte · Elite raro · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_bulwark_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Guardião do Baluarte · Elite raro · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_bulwark_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Eco da Arena · Elite · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_echo_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Eco da Arena · Elite · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_echo_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Eco da Arena · Elite · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_echo_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Eco da Arena · Elite · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_echo_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Eco da Arena · Elite raro · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_echo_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Eco da Arena · Elite raro · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_echo_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Eco da Arena · Elite raro · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_echo_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Eco da Arena · Elite raro · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_echo_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Batedor da Brasa · Elite · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_ember_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Batedor da Brasa · Elite · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_ember_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Batedor da Brasa · Elite · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_ember_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Batedor da Brasa · Elite · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_ember_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Batedor da Brasa · Elite raro · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_ember_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Batedor da Brasa · Elite raro · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_ember_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Batedor da Brasa · Elite raro · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_ember_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Batedor da Brasa · Elite raro · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_ember_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Vigia Invernal · Elite · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_frost_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Vigia Invernal · Elite · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_frost_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Vigia Invernal · Elite · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_frost_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Vigia Invernal · Elite · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_frost_species",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Vigia Invernal · Comum · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_frost_species",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Vigia Invernal · Comum · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_frost_species",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Vigia Invernal · Comum · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_frost_species",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Vigia Invernal · Comum · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_frost_species",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Vigia Invernal · Raro · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_frost_species",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Vigia Invernal · Raro · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_frost_species",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Vigia Invernal · Raro · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_frost_species",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Vigia Invernal · Raro · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_frost_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Vigia Invernal · Elite raro · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_frost_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Vigia Invernal · Elite raro · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_frost_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Vigia Invernal · Elite raro · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_frost_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Vigia Invernal · Elite raro · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_frost_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Atirador Preciso · Elite · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_precision_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Atirador Preciso · Elite · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_precision_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Atirador Preciso · Elite · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_precision_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Atirador Preciso · Elite · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_precision_species",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Atirador Preciso · Comum · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_precision_species",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Atirador Preciso · Comum · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_precision_species",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Atirador Preciso · Comum · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_precision_species",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Atirador Preciso · Comum · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_precision_species",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Atirador Preciso · Raro · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_precision_species",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Atirador Preciso · Raro · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_precision_species",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Atirador Preciso · Raro · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_precision_species",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Atirador Preciso · Raro · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_precision_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Atirador Preciso · Elite raro · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_precision_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Atirador Preciso · Elite raro · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_precision_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Atirador Preciso · Elite raro · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_precision_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Atirador Preciso · Elite raro · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_precision_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Mateiro da Trilha · Elite · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_trail_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Mateiro da Trilha · Elite · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_trail_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Mateiro da Trilha · Elite · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_trail_species",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Mateiro da Trilha · Elite · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_trail_species",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Mateiro da Trilha · Comum · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_trail_species",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Mateiro da Trilha · Comum · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_trail_species",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Mateiro da Trilha · Comum · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_trail_species",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Mateiro da Trilha · Comum · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_trail_species",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Mateiro da Trilha · Raro · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_trail_species",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Mateiro da Trilha · Raro · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_trail_species",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Mateiro da Trilha · Raro · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_trail_species",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Mateiro da Trilha · Raro · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_trail_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Mateiro da Trilha · Elite raro · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "pilot_trail_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Mateiro da Trilha · Elite raro · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "pilot_trail_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Mateiro da Trilha · Elite raro · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "pilot_trail_species",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Mateiro da Trilha · Elite raro · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "pilot_trail_species",
+						"weight": 1
+					},
+					{
+						"category": "boss",
+						"label": "Mestre das Feras · Chefe · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "test_beast_master",
+						"weight": 1
+					},
+					{
+						"category": "boss",
+						"label": "Mestre das Feras · Chefe · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "test_beast_master",
+						"weight": 1
+					},
+					{
+						"category": "boss",
+						"label": "Mestre das Feras · Chefe · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "test_beast_master",
+						"weight": 1
+					},
+					{
+						"category": "boss",
+						"label": "Mestre das Feras · Chefe · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "test_beast_master",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Mestre das Feras · Elite · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "test_beast_master",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Mestre das Feras · Elite · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "test_beast_master",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Mestre das Feras · Elite · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "test_beast_master",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Mestre das Feras · Elite · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "test_beast_master",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Mestre das Feras · Raro · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "test_beast_master",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Mestre das Feras · Raro · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "test_beast_master",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Mestre das Feras · Raro · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "test_beast_master",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Mestre das Feras · Raro · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "test_beast_master",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Mestre das Feras · Elite raro · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "test_beast_master",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Mestre das Feras · Elite raro · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "test_beast_master",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Mestre das Feras · Elite raro · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "test_beast_master",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Mestre das Feras · Elite raro · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "test_beast_master",
+						"weight": 1
+					},
+					{
+						"category": "boss",
+						"label": "Gel · Chefe · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "test_gel",
+						"weight": 1
+					},
+					{
+						"category": "boss",
+						"label": "Gel · Chefe · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "test_gel",
+						"weight": 1
+					},
+					{
+						"category": "boss",
+						"label": "Gel · Chefe · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "test_gel",
+						"weight": 1
+					},
+					{
+						"category": "boss",
+						"label": "Gel · Chefe · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "test_gel",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Gel · Elite · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "test_gel",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Gel · Elite · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "test_gel",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Gel · Elite · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "test_gel",
+						"weight": 1
+					},
+					{
+						"category": "elite",
+						"label": "Gel · Elite · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "test_gel",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Gel · Comum · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "test_gel",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Gel · Comum · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "test_gel",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Gel · Comum · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "test_gel",
+						"weight": 1
+					},
+					{
+						"category": "normal",
+						"label": "Gel · Comum · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "test_gel",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Gel · Raro · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "test_gel",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Gel · Raro · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "test_gel",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Gel · Raro · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "test_gel",
+						"weight": 1
+					},
+					{
+						"category": "rare",
+						"label": "Gel · Raro · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "test_gel",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Gel · Elite raro · origem 1",
+						"origin_id": "trial_stage_1",
+						"species_id": "test_gel",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Gel · Elite raro · origem 2",
+						"origin_id": "trial_stage_2",
+						"species_id": "test_gel",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Gel · Elite raro · origem 3",
+						"origin_id": "trial_stage_3",
+						"species_id": "test_gel",
+						"weight": 1
+					},
+					{
+						"category": "rare_elite",
+						"label": "Gel · Elite raro · origem 4",
+						"origin_id": "trial_stage_4",
+						"species_id": "test_gel",
+						"weight": 1
+					}
+				],
+				"output_hash": "21001f50cfc295d5f28e34a518023726b5528d1299290639b2901129de623c42"
+			},
+			"screen": "population"
+		},
+		{
+			"id": "population/map/query",
+			"input_hash": "21001f50cfc295d5f28e34a518023726b5528d1299290639b2901129de623c42",
+			"output_hash": "21001f50cfc295d5f28e34a518023726b5528d1299290639b2901129de623c42",
+			"result": {
+				"biome": "ruin",
+				"entity_id": "encounters",
+				"map_package_hash": "981a4e7b3bc5285b1c911a1858532a80e8a6e09971e9260dc8e75c7a0f8e4eef",
+				"map_source_hash": "f5c4db35c526022eeffc18977017fa777cc6cd654e5ef843fd8f49b533c898b5",
+				"ok": true,
+				"output_hash": "21001f50cfc295d5f28e34a518023726b5528d1299290639b2901129de623c42",
+				"sockets": [],
+				"surfaces": [
+					{
+						"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1",
+						"vertices_xyz": [
+							[
+								0.0,
+								0.0,
+								0.0
+							],
+							[
+								400.0,
+								0.0,
+								0.0
+							],
+							[
+								400.0,
+								0.0,
+								400.0
+							],
+							[
+								0.0,
+								0.0,
+								400.0
+							]
+						]
+					},
+					{
+						"surface_id": "right/c_a3e1f4935b0919b3_0_0_1_1",
+						"vertices_xyz": [
+							[
+								400.0,
+								0.0,
+								0.0
+							],
+							[
+								800.0,
+								0.0,
+								0.0
+							],
+							[
+								800.0,
+								0.0,
+								400.0
+							],
+							[
+								400.0,
+								0.0,
+								400.0
+							]
+						]
+					}
+				]
+			},
+			"screen": "population"
+		},
+		{
+			"id": "population/plan/preview",
+			"input_hash": "21001f50cfc295d5f28e34a518023726b5528d1299290639b2901129de623c42",
+			"output_hash": "21001f50cfc295d5f28e34a518023726b5528d1299290639b2901129de623c42",
+			"result": {
+				"base_hash": "21001f50cfc295d5f28e34a518023726b5528d1299290639b2901129de623c42",
+				"code": "",
+				"diff": {
+					"added": [
+						"slot_01ca18138c0920eda4c41fb3cec47fc582a1fc89",
+						"slot_10849e319b4e502e6e198f80f351dc00b422e6c3",
+						"slot_58f9b2d56b8fb7098a3ae46f17c2559ecfd12f18",
+						"slot_61a62869afde01218a24fe234bec84e36b9d26ec",
+						"slot_8676fecf60b92169cc03d57e07575c156e949193",
+						"slot_9b2257bba48e7650cb21371a4063ac8b2599f1ea",
+						"slot_e2923845b292debba4066824948f5ecf39c329eb"
+					],
+					"changed": [],
+					"preserved": [],
+					"removed": []
+				},
+				"metrics": [
+					{
+						"brush_id": "field",
+						"quantity": 4,
+						"sampled_area": 32768.0
+					},
+					{
+						"brush_id": "group",
+						"quantity": 3,
+						"sampled_area": 38144.0
+					}
+				],
+				"ok": true,
+				"proposal_hash": "71c81a35d543b6eceb18b84e03714c11d592435fac2198c5e599fa6eba5a1802"
+			},
+			"screen": "population"
+		},
+		{
+			"id": "population/plan/apply",
+			"input_hash": "21001f50cfc295d5f28e34a518023726b5528d1299290639b2901129de623c42",
+			"output_hash": "0700db5d8682478a63e53d0c5844fb74fb6fb628c12b4d18e3d356d137726261",
+			"result": {
+				"code": "",
+				"diagnostics": [],
+				"diff": {
+					"added": [
+						"slot_01ca18138c0920eda4c41fb3cec47fc582a1fc89",
+						"slot_10849e319b4e502e6e198f80f351dc00b422e6c3",
+						"slot_58f9b2d56b8fb7098a3ae46f17c2559ecfd12f18",
+						"slot_61a62869afde01218a24fe234bec84e36b9d26ec",
+						"slot_8676fecf60b92169cc03d57e07575c156e949193",
+						"slot_9b2257bba48e7650cb21371a4063ac8b2599f1ea",
+						"slot_e2923845b292debba4066824948f5ecf39c329eb"
+					],
+					"changed": [],
+					"preserved": [],
+					"removed": []
+				},
+				"entity_id": "encounters",
+				"input_hash": "",
+				"ok": true,
+				"output_hash": "0700db5d8682478a63e53d0c5844fb74fb6fb628c12b4d18e3d356d137726261"
+			},
+			"screen": "population"
+		},
+		{
+			"id": "population/compile",
+			"input_hash": "0700db5d8682478a63e53d0c5844fb74fb6fb628c12b4d18e3d356d137726261",
+			"output_hash": "0700db5d8682478a63e53d0c5844fb74fb6fb628c12b4d18e3d356d137726261",
+			"result": {
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "0700db5d8682478a63e53d0c5844fb74fb6fb628c12b4d18e3d356d137726261",
+				"ok": true,
+				"output_hash": "3d539c31f65a2fc3d2f05d70aca80e00f7cb18f5f756d1f3be47949fd45a9133"
+			},
+			"screen": "population"
+		},
+		{
+			"id": "population/document/save",
+			"input_hash": "0700db5d8682478a63e53d0c5844fb74fb6fb628c12b4d18e3d356d137726261",
+			"output_hash": "0700db5d8682478a63e53d0c5844fb74fb6fb628c12b4d18e3d356d137726261",
+			"result": {
+				"byte_hash": "eb46c2c669149d58eaefc9d74083c157dfe89a6a24fb7e6d5a25a5e236db3b27",
+				"code": "",
+				"entity_id": "encounters",
+				"ok": true,
+				"output_hash": "0700db5d8682478a63e53d0c5844fb74fb6fb628c12b4d18e3d356d137726261"
+			},
+			"screen": "population"
+		},
+		{
+			"id": "patrol/document/open",
+			"input_hash": "f7ccaed0c1abcbf03e9d3cc424e5acf664fffc78e5c5580a3da3a1ab16e546be",
+			"output_hash": "089a4ae00de2abf5da3c4d62f61bf6c702a9e713200c7e35d5ba17ef51244696",
+			"result": {
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "patrols",
+				"input_hash": "",
+				"ok": true,
+				"output_hash": "089a4ae00de2abf5da3c4d62f61bf6c702a9e713200c7e35d5ba17ef51244696"
+			},
+			"screen": "patrol"
+		},
+		{
+			"id": "patrol/map/query",
+			"input_hash": "089a4ae00de2abf5da3c4d62f61bf6c702a9e713200c7e35d5ba17ef51244696",
+			"output_hash": "089a4ae00de2abf5da3c4d62f61bf6c702a9e713200c7e35d5ba17ef51244696",
+			"result": {
+				"biome": "ruin",
+				"entity_id": "patrols",
+				"map_package_hash": "981a4e7b3bc5285b1c911a1858532a80e8a6e09971e9260dc8e75c7a0f8e4eef",
+				"map_source_hash": "f5c4db35c526022eeffc18977017fa777cc6cd654e5ef843fd8f49b533c898b5",
+				"ok": true,
+				"output_hash": "089a4ae00de2abf5da3c4d62f61bf6c702a9e713200c7e35d5ba17ef51244696",
+				"sockets": [],
+				"surfaces": [
+					{
+						"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1",
+						"vertices_xyz": [
+							[
+								0.0,
+								0.0,
+								0.0
+							],
+							[
+								400.0,
+								0.0,
+								0.0
+							],
+							[
+								400.0,
+								0.0,
+								400.0
+							],
+							[
+								0.0,
+								0.0,
+								400.0
+							]
+						]
+					},
+					{
+						"surface_id": "right/c_a3e1f4935b0919b3_0_0_1_1",
+						"vertices_xyz": [
+							[
+								400.0,
+								0.0,
+								0.0
+							],
+							[
+								800.0,
+								0.0,
+								0.0
+							],
+							[
+								800.0,
+								0.0,
+								400.0
+							],
+							[
+								400.0,
+								0.0,
+								400.0
+							]
+						]
+					}
+				]
+			},
+			"screen": "patrol"
+		},
+		{
+			"id": "patrol/waypoint/upsert",
+			"input_hash": "089a4ae00de2abf5da3c4d62f61bf6c702a9e713200c7e35d5ba17ef51244696",
+			"output_hash": "c9f485ce973cf00a4df085a6163466c39092b75966e6cbeb7abce64ddfb74758",
+			"result": {
+				"added_ids": [],
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "north",
+				"input_hash": "",
+				"ok": true,
+				"output_hash": "c9f485ce973cf00a4df085a6163466c39092b75966e6cbeb7abce64ddfb74758",
+				"removed_ids": []
+			},
+			"screen": "patrol"
+		},
+		{
+			"id": "patrol/compile",
+			"input_hash": "c9f485ce973cf00a4df085a6163466c39092b75966e6cbeb7abce64ddfb74758",
+			"output_hash": "c9f485ce973cf00a4df085a6163466c39092b75966e6cbeb7abce64ddfb74758",
+			"result": {
+				"base_hash": "c9f485ce973cf00a4df085a6163466c39092b75966e6cbeb7abce64ddfb74758",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "c9f485ce973cf00a4df085a6163466c39092b75966e6cbeb7abce64ddfb74758",
+				"ok": true,
+				"output_hash": "3844c99bbd11b68a0c01db693a5dd9286efc81e90c20834c85f1e22ce9bc962f"
+			},
+			"screen": "patrol"
+		},
+		{
+			"id": "patrol/document/save",
+			"input_hash": "c9f485ce973cf00a4df085a6163466c39092b75966e6cbeb7abce64ddfb74758",
+			"output_hash": "c9f485ce973cf00a4df085a6163466c39092b75966e6cbeb7abce64ddfb74758",
+			"result": {
+				"byte_hash": "a749059483c63f5f718bef8fe927c544f7985102e7b77a5e5c1475cbfff5e233",
+				"code": "",
+				"entity_id": "patrols",
+				"ok": true,
+				"output_hash": "c9f485ce973cf00a4df085a6163466c39092b75966e6cbeb7abce64ddfb74758"
+			},
+			"screen": "patrol"
+		}
+	],
+	"code": "",
+	"completed_actions": 12,
+	"diagnostics": [],
+	"map_snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "map/exchange",
+				"label": "Intercâmbio com skills…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/open_game",
+				"label": "Abrir jogo",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/resume_test",
+				"label": "Retomar teste",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/stop_game",
+				"label": "Suspender e fechar teste",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/new_map",
+				"label": "Novo mapa",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/open",
+				"label": "Abrir…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/save_as",
+				"label": "Salvar como…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/add_piece",
+				"label": "Adicionar peça…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/two_piece_sample",
+				"label": "Exemplo com duas peças",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/undo",
+				"label": "Desfazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/redo",
+				"label": "Refazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/apply_name",
+				"label": "Aplicar nome",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/compile_map",
+				"label": "Compilar mapa",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/cancel",
+				"label": "Cancelar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/toggle_test",
+				"label": "Testar / parar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/publish_local",
+				"label": "Publicar localmente…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/recover_draft",
+				"label": "Recuperar rascunho",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/open_population",
+				"label": "Encontros…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/open_generation",
+				"label": "Geração assistida…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/apply_placement",
+				"label": "Aplicar posição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/remove_selected",
+				"label": "Remover…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/apply_border_profile",
+				"label": "Aplicar borda à peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/apply_all_border_profiles",
+				"label": "Aplicar borda a todas as peças",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/apply_border_transition",
+				"label": "Ligar por talude de transição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/link_connectors",
+				"label": "Vincular aberturas",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/remove_link",
+				"label": "Remover vínculo selecionado",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/focus_view_selection",
+				"label": "Focar seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/map_context",
+				"label": "Contexto do mapa…",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "map/borders/apply",
+				"label": "Editar perfil, transição ou decoração",
+				"parameters": {
+					"command": {
+						"fields": "closed_by_operation",
+						"operation": [
+							"set_instance_profile",
+							"clear_instance_profile",
+							"set_transition",
+							"set_decorations"
+						]
+					},
+					"expected_source_hash": "hash"
+				}
+			},
+			{
+				"id": "map/borders/apply_batch",
+				"label": "Aplicar lote de bordas",
+				"parameters": {
+					"commands": "closed border commands[1..529]",
+					"expected_source_hash": "hash"
+				}
+			},
+			{
+				"id": "map/document/new",
+				"parameters": {
+					"confirm_discard": "bool",
+					"document_id": "id",
+					"name": "string"
+				}
+			},
+			{
+				"id": "map/document/name",
+				"parameters": {
+					"name": "string"
+				}
+			},
+			{
+				"id": "map/document/open",
+				"parameters": {
+					"confirm_discard": "bool",
+					"path": "string"
+				}
+			},
+			{
+				"id": "map/document/save",
+				"parameters": {
+					"path": "string"
+				}
+			},
+			{
+				"id": "map/history/undo",
+				"parameters": {}
+			},
+			{
+				"id": "map/history/redo",
+				"parameters": {}
+			},
+			{
+				"id": "map/instance/select",
+				"parameters": {
+					"instance_id": "id"
+				}
+			},
+			{
+				"id": "map/compile_map",
+				"parameters": {}
+			},
+			{
+				"id": "map/piece/add",
+				"parameters": {
+					"instance_id": "id",
+					"path": "string",
+					"position_xz": "v2",
+					"rotation_quarters": "number"
+				}
+			},
+			{
+				"id": "map/instance/transform",
+				"parameters": {
+					"instance_id": "id",
+					"position_xz": "v2",
+					"rotation_quarters": "number"
+				}
+			},
+			{
+				"id": "map/instance/remove",
+				"parameters": {
+					"confirm_remove": "bool",
+					"instance_id": "id"
+				}
+			},
+			{
+				"id": "map/link/upsert",
+				"parameters": {
+					"a_connector": "id",
+					"a_instance": "id",
+					"b_connector": "id",
+					"b_instance": "id",
+					"link_id": "id"
+				}
+			},
+			{
+				"id": "map/link/remove",
+				"parameters": {
+					"link_id": "id"
+				}
+			},
+			{
+				"id": "map/context/set",
+				"parameters": {
+					"biome_id": "string",
+					"instance_id": "string",
+					"reason": "string",
+					"rules": "strings"
+				}
+			},
+			{
+				"id": "map/mode/set",
+				"parameters": {
+					"mode": "string"
+				}
+			},
+			{
+				"id": "map/gameplay/launch",
+				"parameters": {
+					"class_id": "base class?",
+					"headless": "boolean?"
+				}
+			},
+			{
+				"id": "map/gameplay/resume",
+				"parameters": {
+					"headless": "boolean?"
+				}
+			},
+			{
+				"id": "map/gameplay/stop",
+				"parameters": {}
+			},
+			{
+				"id": "map/gameplay/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "map/gameplay/select_class",
+				"parameters": {
+					"class_id": "base class"
+				}
+			},
+			{
+				"id": "map/gameplay/action",
+				"parameters": {
+					"action": "closed gameplay action",
+					"request_id": "token?",
+					"session_id": "token?"
+				}
+			},
+			{
+				"id": "map/gameplay/reply",
+				"parameters": {
+					"fingerprint": "hash?",
+					"request_id": "token",
+					"session_id": "token?"
+				}
+			},
+			{
+				"id": "map/viewport/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "map/viewport/focus_world",
+				"parameters": {
+					"position_xyz": "number[3]",
+					"zoom": "number?"
+				}
+			},
+			{
+				"id": "map/viewport/focus_entity",
+				"parameters": {
+					"entity_id": "string"
+				}
+			},
+			{
+				"id": "map/viewport/set_overlays",
+				"parameters": {
+					"layers": "overlay:boolean dictionary"
+				}
+			},
+			{
+				"id": "map/viewport/search",
+				"parameters": {
+					"query": "string"
+				}
+			},
+			{
+				"id": "map/viewport/set_probe",
+				"parameters": {
+					"height": "number",
+					"mode": "navigate|clearance|los",
+					"radius": "number",
+					"surface_id": "string?"
+				}
+			},
+			{
+				"id": "map/viewport/probe_point",
+				"parameters": {
+					"point": "WorldPoint"
+				}
+			},
+			{
+				"id": "map/viewport/probe_los",
+				"parameters": {
+					"from": "WorldPoint",
+					"to": "WorldPoint"
+				}
+			}
+		],
+		"diagnostics": [],
+		"mode": "ax",
+		"screen": "map",
+		"source": {
+			"barrier_profile": "ruin_envelope_v1",
+			"document_id": "map",
+			"instances": [],
+			"links": [],
+			"mode": "manual",
+			"name": "Novo mapa",
+			"pieces": [],
+			"revision": 1,
+			"schema_version": 1
+		},
+		"source_hash": "286d415d49385cb580be675e4a9a506382ac4af90b73268018f53b5b4ce63122",
+		"state": {
+			"can_redo": false,
+			"can_undo": false,
+			"dirty": true,
+			"selected_instance": "",
+			"source_path": ""
+		}
+	},
+	"objects_snapshot": {},
+	"ok": true,
+	"patrol_snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "patrol/exchange",
+				"label": "Intercâmbio com skills…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/open_game",
+				"label": "Abrir jogo",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/resume_test",
+				"label": "Retomar teste",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/stop_game",
+				"label": "Suspender e fechar teste",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/apply_name",
+				"label": "Aplicar nome",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/new_document",
+				"label": "Novo",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/import_population",
+				"label": "Importar encontros…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/open",
+				"label": "Abrir…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/save_as",
+				"label": "Salvar como…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/undo",
+				"label": "Desfazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/redo",
+				"label": "Refazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/action_64ef4a82e6fb",
+				"label": "Recuperar…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/compile",
+				"label": "Compilar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/cancel",
+				"label": "Cancelar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/test_actors",
+				"label": "Testar atores",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/resume_test_2",
+				"label": "Retomar teste",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/publish_local",
+				"label": "Publicar localmente…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/add_route",
+				"label": "Nova rota",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/remove_selected",
+				"label": "Remover…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/apply_wait",
+				"label": "Aplicar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/move_waypoint_up",
+				"label": "↑",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/move_waypoint_down",
+				"label": "↓",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/remove_waypoint",
+				"label": "Remover ponto…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/assign_slots",
+				"label": "Vincular slots selecionados",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "patrol/focus_view_selection",
+				"label": "Focar seleção",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "patrol/document/new",
+				"parameters": {
+					"confirm_discard": "bool",
+					"document_id": "id",
+					"name": "string"
+				}
+			},
+			{
+				"id": "patrol/document/name",
+				"parameters": {
+					"name": "string"
+				}
+			},
+			{
+				"id": "patrol/document/open",
+				"parameters": {
+					"confirm_discard": "bool",
+					"path": "string"
+				}
+			},
+			{
+				"id": "patrol/document/save",
+				"parameters": {
+					"path": "string"
+				}
+			},
+			{
+				"id": "patrol/history/undo",
+				"parameters": {}
+			},
+			{
+				"id": "patrol/history/redo",
+				"parameters": {}
+			},
+			{
+				"id": "patrol/population/import",
+				"parameters": {
+					"confirm_discard": "bool",
+					"path": "string"
+				}
+			},
+			{
+				"id": "patrol/map/query",
+				"parameters": {}
+			},
+			{
+				"id": "patrol/route/select",
+				"parameters": {
+					"patrol_id": "id"
+				}
+			},
+			{
+				"id": "patrol/surface/select",
+				"parameters": {
+					"surface_id": "string"
+				}
+			},
+			{
+				"id": "patrol/compile",
+				"parameters": {}
+			},
+			{
+				"id": "patrol/cancel",
+				"parameters": {}
+			},
+			{
+				"id": "patrol/route/upsert",
+				"parameters": {
+					"mode": "id",
+					"patrol_id": "id",
+					"revision": "int",
+					"slot_ids": "strings",
+					"waypoints": "array"
+				}
+			},
+			{
+				"id": "patrol/route/remove",
+				"parameters": {
+					"confirm_remove": "bool",
+					"patrol_id": "id"
+				}
+			},
+			{
+				"id": "patrol/waypoint/upsert",
+				"parameters": {
+					"patrol_id": "id",
+					"point_id": "id",
+					"position_xyz": "v3",
+					"surface_id": "string",
+					"wait_seconds": "number"
+				}
+			},
+			{
+				"id": "patrol/waypoint/remove",
+				"parameters": {
+					"confirm_remove": "bool",
+					"patrol_id": "id",
+					"point_id": "id"
+				}
+			},
+			{
+				"id": "patrol/waypoint/move",
+				"parameters": {
+					"direction": "number",
+					"patrol_id": "id",
+					"point_id": "id"
+				}
+			},
+			{
+				"id": "patrol/gameplay/launch",
+				"parameters": {
+					"class_id": "base class?",
+					"headless": "boolean?"
+				}
+			},
+			{
+				"id": "patrol/gameplay/resume",
+				"parameters": {
+					"headless": "boolean?"
+				}
+			},
+			{
+				"id": "patrol/gameplay/stop",
+				"parameters": {}
+			},
+			{
+				"id": "patrol/gameplay/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "patrol/gameplay/select_class",
+				"parameters": {
+					"class_id": "base class"
+				}
+			},
+			{
+				"id": "patrol/gameplay/action",
+				"parameters": {
+					"action": "closed gameplay action",
+					"request_id": "token?",
+					"session_id": "token?"
+				}
+			},
+			{
+				"id": "patrol/gameplay/reply",
+				"parameters": {
+					"fingerprint": "hash?",
+					"request_id": "token",
+					"session_id": "token?"
+				}
+			},
+			{
+				"id": "patrol/viewport/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "patrol/viewport/focus_world",
+				"parameters": {
+					"position_xyz": "number[3]",
+					"zoom": "number?"
+				}
+			},
+			{
+				"id": "patrol/viewport/focus_entity",
+				"parameters": {
+					"entity_id": "string"
+				}
+			},
+			{
+				"id": "patrol/viewport/set_overlays",
+				"parameters": {
+					"layers": "overlay:boolean dictionary"
+				}
+			},
+			{
+				"id": "patrol/viewport/search",
+				"parameters": {
+					"query": "string"
+				}
+			},
+			{
+				"id": "patrol/viewport/set_probe",
+				"parameters": {
+					"height": "number",
+					"mode": "navigate|clearance|los",
+					"radius": "number",
+					"surface_id": "string?"
+				}
+			},
+			{
+				"id": "patrol/viewport/probe_point",
+				"parameters": {
+					"point": "WorldPoint"
+				}
+			},
+			{
+				"id": "patrol/viewport/probe_los",
+				"parameters": {
+					"from": "WorldPoint",
+					"to": "WorldPoint"
+				}
+			}
+		],
+		"diagnostics": [],
+		"mode": "ax",
+		"screen": "patrol",
+		"source": {
+			"document_id": "patrols",
+			"name": "Patrulhas",
+			"patrols": [
+				{
+					"mode": "loop",
+					"patrol_id": "guard_route",
+					"revision": 1,
+					"slot_ids": [
+						"guard"
+					],
+					"waypoints": [
+						{
+							"point_id": "west",
+							"position_xyz": [
+								240,
+								0,
+								200
+							],
+							"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1",
+							"wait_seconds": 2.0
+						},
+						{
+							"point_id": "north",
+							"position_xyz": [
+								300,
+								0,
+								260
+							],
+							"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1",
+							"wait_seconds": 1.75
+						},
+						{
+							"point_id": "south",
+							"position_xyz": [
+								300,
+								0,
+								140
+							],
+							"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1",
+							"wait_seconds": 0.5
+						}
+					]
+				}
+			],
+			"population": [
+				{
+					"brushes": [
+						{
+							"brush_id": "field",
+							"center_xyz": [
+								240.0,
+								0.0,
+								200.0
+							],
+							"density": 1.0,
+							"group_radius": 100,
+							"mode": "dispersed",
+							"quantity": 1,
+							"quota_mode": "count",
+							"radius": 112,
+							"round": 0,
+							"seed": "0",
+							"spacing": 8,
+							"species": [
+								{
+									"category": "normal",
+									"origin_id": "trial_stage_1",
+									"species_id": "test_gel",
+									"weight": 1
+								}
+							],
+							"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+						}
+					],
+					"document_id": "encounters",
+					"entrance": [
+						{
+							"position_xyz": [
+								64,
+								0,
+								200
+							],
+							"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+						}
+					],
+					"exclusions": [],
+					"interactions": [],
+					"map": [
+						{
+							"barrier_profile": "ruin_envelope_v1",
+							"document_id": "two_rooms",
+							"instances": [
+								{
+									"instance_id": "left",
+									"piece_hash": "889bfb2aeab9478cbeb1c24e81b46bb9bd9db1b0ac7eb7e2061ebabfd6de4ddd",
+									"position_xyz": [
+										0,
+										0,
+										0
+									],
+									"rotation_quarters": 0
+								},
+								{
+									"instance_id": "right",
+									"piece_hash": "b716f4200946e61096d0824d1f1bbf46fddbcdb54ecbacad57f3091bd5185122",
+									"position_xyz": [
+										400,
+										0,
+										0
+									],
+									"rotation_quarters": 0
+								}
+							],
+							"links": [
+								{
+									"a_connector": "east",
+									"a_instance": "left",
+									"b_connector": "west",
+									"b_instance": "right",
+									"link_id": "door"
+								}
+							],
+							"mode": "manual",
+							"name": "Duas peças · Ruína",
+							"pieces": [
+								{
+									"piece_hash": "889bfb2aeab9478cbeb1c24e81b46bb9bd9db1b0ac7eb7e2061ebabfd6de4ddd",
+									"source": {
+										"composition": null,
+										"connectors": [
+											{
+												"connector_id": "east",
+												"direction": "both",
+												"headroom": 100,
+												"kind": "walk",
+												"normal_xyz": [
+													1,
+													0,
+													0
+												],
+												"position_xyz": [
+													400,
+													0,
+													200
+												],
+												"surface_id": "floor",
+												"tags": [
+													"ruin"
+												],
+												"width": 120
+											}
+										],
+										"dependencies": [],
+										"document_id": "room_left",
+										"layers": [
+											{
+												"columns": 2,
+												"heights": [
+													0,
+													0,
+													0,
+													0
+												],
+												"layer_id": "floor",
+												"locked": false,
+												"material_masks": {},
+												"name": "Chão",
+												"origin_xz": [
+													0,
+													0
+												],
+												"protected_regions": [],
+												"rows": 2,
+												"sample_spacing": 400
+											}
+										],
+										"name": "Peça sem título",
+										"placements": [],
+										"regions": [],
+										"revision": 1,
+										"schema_version": 1,
+										"sockets": [],
+										"special_surfaces": [],
+										"units": "e07_world"
+									}
+								},
+								{
+									"piece_hash": "b716f4200946e61096d0824d1f1bbf46fddbcdb54ecbacad57f3091bd5185122",
+									"source": {
+										"composition": null,
+										"connectors": [
+											{
+												"connector_id": "west",
+												"direction": "both",
+												"headroom": 100,
+												"kind": "walk",
+												"normal_xyz": [
+													-1,
+													0,
+													0
+												],
+												"position_xyz": [
+													0,
+													0,
+													200
+												],
+												"surface_id": "floor",
+												"tags": [
+													"ruin"
+												],
+												"width": 120
+											}
+										],
+										"dependencies": [],
+										"document_id": "room_right",
+										"layers": [
+											{
+												"columns": 2,
+												"heights": [
+													0,
+													0,
+													0,
+													0
+												],
+												"layer_id": "floor",
+												"locked": false,
+												"material_masks": {},
+												"name": "Chão",
+												"origin_xz": [
+													0,
+													0
+												],
+												"protected_regions": [],
+												"rows": 2,
+												"sample_spacing": 400
+											}
+										],
+										"name": "Peça sem título",
+										"placements": [],
+										"regions": [],
+										"revision": 1,
+										"schema_version": 1,
+										"sockets": [],
+										"special_surfaces": [],
+										"units": "e07_world"
+									}
+								}
+							],
+							"revision": 1,
+							"schema_version": 1
+						}
+					],
+					"name": "Encontros",
+					"plan_hash": "a188f042a78866d39bac86f3b97c46378229f24a2e20943a8ae716a7a46caa6d",
+					"revision": 1,
+					"schema_version": 1,
+					"slots": [
+						{
+							"brush_id": "field",
+							"category": "normal",
+							"fixed": true,
+							"origin_id": "trial_stage_1",
+							"position_xyz": [
+								240,
+								0,
+								200
+							],
+							"site_id": "",
+							"slot_id": "guard",
+							"species_id": "test_gel",
+							"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+						}
+					]
+				}
+			],
+			"revision": 1,
+			"schema_version": 1
+		},
+		"source_hash": "c9f485ce973cf00a4df085a6163466c39092b75966e6cbeb7abce64ddfb74758",
+		"state": {
+			"can_redo": false,
+			"can_undo": true,
+			"dirty": false,
+			"pending_name": "Patrulhas",
+			"selected_surface": "",
+			"source_path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/docs/map_editor/delivery/evidence/f9/author/encounter_authoring/cli_01/native.patrol.json"
+		}
+	},
+	"population_snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "population/exchange",
+				"label": "Intercâmbio com skills…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/open_game",
+				"label": "Abrir jogo",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/resume_test",
+				"label": "Retomar teste",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/stop_game",
+				"label": "Suspender e fechar teste",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/apply_name",
+				"label": "Aplicar nome",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/new_document",
+				"label": "Novo",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/import_map",
+				"label": "Importar mapa…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/open",
+				"label": "Abrir…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/save_as",
+				"label": "Salvar como…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/undo",
+				"label": "Desfazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/redo",
+				"label": "Refazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/recover",
+				"label": "Recuperar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/prepare_preview",
+				"label": "Preparar prévia",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/toggle_preview",
+				"label": "Atual / prévia",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/apply_preview",
+				"label": "Aplicar prévia…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/compile",
+				"label": "Compilar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/cancel",
+				"label": "Cancelar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/toggle_test",
+				"label": "Testar / parar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/publish_local",
+				"label": "Publicar localmente…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/open_patrols",
+				"label": "Patrulhas…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/apply_brush",
+				"label": "Aplicar parâmetros ao pincel",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/save_species_weight",
+				"label": "Adicionar / atualizar peso",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/remove_species",
+				"label": "Remover espécie",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/toggle_slot_pin",
+				"label": "Fixar / liberar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/remove_slot",
+				"label": "Remover slot…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/link_portal",
+				"label": "Vincular portal selecionado ao destino",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/remove_marker",
+				"label": "Remover marcador / pincel…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "population/simulate_death",
+				"label": "Simular morte do slot selecionado",
+				"test_only": true
+			},
+			{
+				"enabled": true,
+				"id": "population/advance_respawn_wave",
+				"label": "Avançar uma onda de respawn",
+				"test_only": true
+			},
+			{
+				"enabled": true,
+				"id": "population/focus_view_selection",
+				"label": "Focar seleção",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "population/document/new",
+				"parameters": {
+					"confirm_discard": "bool",
+					"document_id": "id",
+					"name": "string"
+				}
+			},
+			{
+				"id": "population/document/name",
+				"parameters": {
+					"name": "string"
+				}
+			},
+			{
+				"id": "population/document/open",
+				"parameters": {
+					"confirm_discard": "bool",
+					"path": "string"
+				}
+			},
+			{
+				"id": "population/document/save",
+				"parameters": {
+					"path": "string"
+				}
+			},
+			{
+				"id": "population/history/undo",
+				"parameters": {}
+			},
+			{
+				"id": "population/history/redo",
+				"parameters": {}
+			},
+			{
+				"id": "population/map/import",
+				"parameters": {
+					"path": "string"
+				}
+			},
+			{
+				"id": "population/map/query",
+				"parameters": {}
+			},
+			{
+				"id": "population/catalog/options",
+				"parameters": {}
+			},
+			{
+				"id": "population/brush/select",
+				"parameters": {
+					"brush_id": "id"
+				}
+			},
+			{
+				"id": "population/slot/select",
+				"parameters": {
+					"slot_id": "id"
+				}
+			},
+			{
+				"id": "population/surface/select",
+				"parameters": {
+					"surface_id": "string"
+				}
+			},
+			{
+				"id": "population/plan/preview",
+				"parameters": {}
+			},
+			{
+				"id": "population/plan/apply",
+				"parameters": {
+					"confirm_apply": "bool",
+					"expected_source_hash": "hash",
+					"proposal_hash": "hash"
+				}
+			},
+			{
+				"id": "population/plan/discard",
+				"parameters": {}
+			},
+			{
+				"id": "population/compile",
+				"parameters": {}
+			},
+			{
+				"id": "population/cancel",
+				"parameters": {}
+			},
+			{
+				"id": "population/entrance/set",
+				"parameters": {
+					"position_xyz": "v3",
+					"surface_id": "string"
+				}
+			},
+			{
+				"id": "population/brush/upsert",
+				"parameters": {
+					"brush_id": "id",
+					"center_xyz": "v3",
+					"density": "number",
+					"group_radius": "number",
+					"mode": "id",
+					"quantity": "number",
+					"quota_mode": "id",
+					"radius": "number",
+					"round": "number",
+					"seed": "string",
+					"spacing": "number",
+					"species": "array",
+					"surface_id": "string"
+				}
+			},
+			{
+				"id": "population/brush/remove",
+				"parameters": {
+					"brush_id": "id",
+					"confirm_remove": "bool"
+				}
+			},
+			{
+				"id": "population/exclusion/upsert",
+				"parameters": {
+					"center_xyz": "v3",
+					"exclusion_id": "id",
+					"radius": "number",
+					"surface_id": "string"
+				}
+			},
+			{
+				"id": "population/exclusion/remove",
+				"parameters": {
+					"confirm_remove": "bool",
+					"exclusion_id": "id"
+				}
+			},
+			{
+				"id": "population/interaction/upsert",
+				"parameters": {
+					"interaction_id": "id",
+					"kind": "id",
+					"position_xyz": "v3",
+					"surface_id": "string",
+					"target_id": "string"
+				}
+			},
+			{
+				"id": "population/interaction/remove",
+				"parameters": {
+					"confirm_remove": "bool",
+					"interaction_id": "id"
+				}
+			},
+			{
+				"id": "population/slot/upsert",
+				"parameters": {
+					"brush_id": "id",
+					"category": "id",
+					"fixed": "bool",
+					"origin_id": "id",
+					"position_xyz": "v3",
+					"site_id": "string",
+					"slot_id": "id",
+					"species_id": "id",
+					"surface_id": "string"
+				}
+			},
+			{
+				"id": "population/slot/pin",
+				"parameters": {
+					"fixed": "bool",
+					"slot_id": "id"
+				}
+			},
+			{
+				"id": "population/slot/remove",
+				"parameters": {
+					"confirm_remove": "bool",
+					"slot_id": "id"
+				}
+			},
+			{
+				"id": "population/gameplay/launch",
+				"parameters": {
+					"class_id": "base class?",
+					"headless": "boolean?"
+				}
+			},
+			{
+				"id": "population/gameplay/resume",
+				"parameters": {
+					"headless": "boolean?"
+				}
+			},
+			{
+				"id": "population/gameplay/stop",
+				"parameters": {}
+			},
+			{
+				"id": "population/gameplay/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "population/gameplay/select_class",
+				"parameters": {
+					"class_id": "base class"
+				}
+			},
+			{
+				"id": "population/gameplay/action",
+				"parameters": {
+					"action": "closed gameplay action",
+					"request_id": "token?",
+					"session_id": "token?"
+				}
+			},
+			{
+				"id": "population/gameplay/reply",
+				"parameters": {
+					"fingerprint": "hash?",
+					"request_id": "token",
+					"session_id": "token?"
+				}
+			},
+			{
+				"id": "population/viewport/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "population/viewport/focus_world",
+				"parameters": {
+					"position_xyz": "number[3]",
+					"zoom": "number?"
+				}
+			},
+			{
+				"id": "population/viewport/focus_entity",
+				"parameters": {
+					"entity_id": "string"
+				}
+			},
+			{
+				"id": "population/viewport/set_overlays",
+				"parameters": {
+					"layers": "overlay:boolean dictionary"
+				}
+			},
+			{
+				"id": "population/viewport/search",
+				"parameters": {
+					"query": "string"
+				}
+			},
+			{
+				"id": "population/viewport/set_probe",
+				"parameters": {
+					"height": "number",
+					"mode": "navigate|clearance|los",
+					"radius": "number",
+					"surface_id": "string?"
+				}
+			},
+			{
+				"id": "population/viewport/probe_point",
+				"parameters": {
+					"point": "WorldPoint"
+				}
+			},
+			{
+				"id": "population/viewport/probe_los",
+				"parameters": {
+					"from": "WorldPoint",
+					"to": "WorldPoint"
+				}
+			}
+		],
+		"diagnostics": [],
+		"mode": "ax",
+		"proposal_hash": "",
+		"screen": "population",
+		"source": {
+			"brushes": [
+				{
+					"brush_id": "field",
+					"center_xyz": [
+						240.0,
+						0.0,
+						200.0
+					],
+					"density": 1.0,
+					"group_radius": 100,
+					"mode": "dispersed",
+					"quantity": 4,
+					"quota_mode": "count",
+					"radius": 112,
+					"round": 0,
+					"seed": "0",
+					"spacing": 8,
+					"species": [
+						{
+							"category": "normal",
+							"origin_id": "trial_stage_1",
+							"species_id": "test_gel",
+							"weight": 1
+						}
+					],
+					"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+				},
+				{
+					"brush_id": "group",
+					"center_xyz": [
+						600.0,
+						0.0,
+						200.0
+					],
+					"density": 1.0,
+					"group_radius": 100,
+					"mode": "concentrated",
+					"quantity": 3,
+					"quota_mode": "count",
+					"radius": 112,
+					"round": 0,
+					"seed": "0",
+					"spacing": 8,
+					"species": [
+						{
+							"category": "normal",
+							"origin_id": "trial_stage_1",
+							"species_id": "test_gel",
+							"weight": 1
+						}
+					],
+					"surface_id": "right/c_a3e1f4935b0919b3_0_0_1_1"
+				}
+			],
+			"document_id": "encounters",
+			"entrance": [
+				{
+					"position_xyz": [
+						64,
+						0,
+						200
+					],
+					"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+				}
+			],
+			"exclusions": [
+				{
+					"center_xyz": [
+						210,
+						0,
+						160
+					],
+					"exclusion_id": "safe",
+					"radius": 16,
+					"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+				}
+			],
+			"interactions": [
+				{
+					"interaction_id": "finish",
+					"kind": "phase_completion",
+					"position_xyz": [
+						736,
+						0,
+						320
+					],
+					"surface_id": "right/c_a3e1f4935b0919b3_0_0_1_1",
+					"target_id": ""
+				},
+				{
+					"interaction_id": "rest",
+					"kind": "early_exit",
+					"position_xyz": [
+						64,
+						0,
+						320
+					],
+					"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1",
+					"target_id": ""
+				},
+				{
+					"interaction_id": "gate_a",
+					"kind": "portal",
+					"position_xyz": [
+						64,
+						0,
+						80
+					],
+					"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1",
+					"target_id": "gate_b"
+				},
+				{
+					"interaction_id": "gate_b",
+					"kind": "portal",
+					"position_xyz": [
+						736,
+						0,
+						80
+					],
+					"surface_id": "right/c_a3e1f4935b0919b3_0_0_1_1",
+					"target_id": "gate_a"
+				}
+			],
+			"map": [
+				{
+					"barrier_profile": "ruin_envelope_v1",
+					"document_id": "two_rooms",
+					"instances": [
+						{
+							"instance_id": "left",
+							"piece_hash": "889bfb2aeab9478cbeb1c24e81b46bb9bd9db1b0ac7eb7e2061ebabfd6de4ddd",
+							"position_xyz": [
+								0,
+								0,
+								0
+							],
+							"rotation_quarters": 0
+						},
+						{
+							"instance_id": "right",
+							"piece_hash": "b716f4200946e61096d0824d1f1bbf46fddbcdb54ecbacad57f3091bd5185122",
+							"position_xyz": [
+								400,
+								0,
+								0
+							],
+							"rotation_quarters": 0
+						}
+					],
+					"links": [
+						{
+							"a_connector": "east",
+							"a_instance": "left",
+							"b_connector": "west",
+							"b_instance": "right",
+							"link_id": "door"
+						}
+					],
+					"mode": "manual",
+					"name": "Duas peças · Ruína",
+					"pieces": [
+						{
+							"piece_hash": "889bfb2aeab9478cbeb1c24e81b46bb9bd9db1b0ac7eb7e2061ebabfd6de4ddd",
+							"source": {
+								"composition": null,
+								"connectors": [
+									{
+										"connector_id": "east",
+										"direction": "both",
+										"headroom": 100,
+										"kind": "walk",
+										"normal_xyz": [
+											1,
+											0,
+											0
+										],
+										"position_xyz": [
+											400,
+											0,
+											200
+										],
+										"surface_id": "floor",
+										"tags": [
+											"ruin"
+										],
+										"width": 120
+									}
+								],
+								"dependencies": [],
+								"document_id": "room_left",
+								"layers": [
+									{
+										"columns": 2,
+										"heights": [
+											0,
+											0,
+											0,
+											0
+										],
+										"layer_id": "floor",
+										"locked": false,
+										"material_masks": {},
+										"name": "Chão",
+										"origin_xz": [
+											0,
+											0
+										],
+										"protected_regions": [],
+										"rows": 2,
+										"sample_spacing": 400
+									}
+								],
+								"name": "Peça sem título",
+								"placements": [],
+								"regions": [],
+								"revision": 1,
+								"schema_version": 1,
+								"sockets": [],
+								"special_surfaces": [],
+								"units": "e07_world"
+							}
+						},
+						{
+							"piece_hash": "b716f4200946e61096d0824d1f1bbf46fddbcdb54ecbacad57f3091bd5185122",
+							"source": {
+								"composition": null,
+								"connectors": [
+									{
+										"connector_id": "west",
+										"direction": "both",
+										"headroom": 100,
+										"kind": "walk",
+										"normal_xyz": [
+											-1,
+											0,
+											0
+										],
+										"position_xyz": [
+											0,
+											0,
+											200
+										],
+										"surface_id": "floor",
+										"tags": [
+											"ruin"
+										],
+										"width": 120
+									}
+								],
+								"dependencies": [],
+								"document_id": "room_right",
+								"layers": [
+									{
+										"columns": 2,
+										"heights": [
+											0,
+											0,
+											0,
+											0
+										],
+										"layer_id": "floor",
+										"locked": false,
+										"material_masks": {},
+										"name": "Chão",
+										"origin_xz": [
+											0,
+											0
+										],
+										"protected_regions": [],
+										"rows": 2,
+										"sample_spacing": 400
+									}
+								],
+								"name": "Peça sem título",
+								"placements": [],
+								"regions": [],
+								"revision": 1,
+								"schema_version": 1,
+								"sockets": [],
+								"special_surfaces": [],
+								"units": "e07_world"
+							}
+						}
+					],
+					"revision": 1,
+					"schema_version": 1
+				}
+			],
+			"name": "Encontros",
+			"plan_hash": "21001f50cfc295d5f28e34a518023726b5528d1299290639b2901129de623c42",
+			"revision": 1,
+			"schema_version": 1,
+			"slots": [
+				{
+					"brush_id": "field",
+					"category": "normal",
+					"fixed": false,
+					"origin_id": "trial_stage_1",
+					"position_xyz": [
+						232.0,
+						0.0,
+						200.0
+					],
+					"site_id": "",
+					"slot_id": "slot_01ca18138c0920eda4c41fb3cec47fc582a1fc89",
+					"species_id": "test_gel",
+					"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+				},
+				{
+					"brush_id": "field",
+					"category": "normal",
+					"fixed": false,
+					"origin_id": "trial_stage_1",
+					"position_xyz": [
+						264.0,
+						0.0,
+						296.0
+					],
+					"site_id": "",
+					"slot_id": "slot_10849e319b4e502e6e198f80f351dc00b422e6c3",
+					"species_id": "test_gel",
+					"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+				},
+				{
+					"brush_id": "field",
+					"category": "normal",
+					"fixed": false,
+					"origin_id": "trial_stage_1",
+					"position_xyz": [
+						312.0,
+						0.0,
+						264.0
+					],
+					"site_id": "",
+					"slot_id": "slot_58f9b2d56b8fb7098a3ae46f17c2559ecfd12f18",
+					"species_id": "test_gel",
+					"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+				},
+				{
+					"brush_id": "group",
+					"category": "normal",
+					"fixed": false,
+					"origin_id": "trial_stage_1",
+					"position_xyz": [
+						680.0,
+						0.0,
+						248.0
+					],
+					"site_id": "",
+					"slot_id": "slot_61a62869afde01218a24fe234bec84e36b9d26ec",
+					"species_id": "test_gel",
+					"surface_id": "right/c_a3e1f4935b0919b3_0_0_1_1"
+				},
+				{
+					"brush_id": "group",
+					"category": "normal",
+					"fixed": false,
+					"origin_id": "trial_stage_1",
+					"position_xyz": [
+						648.0,
+						0.0,
+						152.0
+					],
+					"site_id": "",
+					"slot_id": "slot_8676fecf60b92169cc03d57e07575c156e949193",
+					"species_id": "test_gel",
+					"surface_id": "right/c_a3e1f4935b0919b3_0_0_1_1"
+				},
+				{
+					"brush_id": "group",
+					"category": "normal",
+					"fixed": false,
+					"origin_id": "trial_stage_1",
+					"position_xyz": [
+						712.0,
+						0.0,
+						200.0
+					],
+					"site_id": "",
+					"slot_id": "slot_9b2257bba48e7650cb21371a4063ac8b2599f1ea",
+					"species_id": "test_gel",
+					"surface_id": "right/c_a3e1f4935b0919b3_0_0_1_1"
+				},
+				{
+					"brush_id": "field",
+					"category": "normal",
+					"fixed": false,
+					"origin_id": "trial_stage_1",
+					"position_xyz": [
+						232.0,
+						0.0,
+						248.0
+					],
+					"site_id": "",
+					"slot_id": "slot_e2923845b292debba4066824948f5ecf39c329eb",
+					"species_id": "test_gel",
+					"surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1"
+				}
+			]
+		},
+		"source_hash": "0700db5d8682478a63e53d0c5844fb74fb6fb628c12b4d18e3d356d137726261",
+		"state": {
+			"can_redo": false,
+			"can_undo": true,
+			"dirty": false,
+			"pending_name": "Encontros",
+			"selected_surface": "",
+			"source_path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/docs/map_editor/delivery/evidence/f9/author/encounter_authoring/cli_01/native.population.json"
+		}
+	},
+	"requested_actions": 12,
+	"snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "piece/exchange",
+				"label": "Intercâmbio com skills…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/new_piece",
+				"label": "Nova peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/compose_map",
+				"label": "Compor mapa…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open_objects",
+				"label": "Objetos e vegetação…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open_library",
+				"label": "Biblioteca…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open",
+				"label": "Abrir…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/save",
+				"label": "Salvar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/save_as",
+				"label": "Salvar como…",
+				"test_only": false
+			},
+			{
+				"enabled": false,
+				"id": "piece/undo",
+				"label": "Desfazer",
+				"test_only": false
+			},
+			{
+				"enabled": false,
+				"id": "piece/redo",
+				"label": "Refazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/recover_copy",
+				"label": "Recuperar cópia",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/browse_draft",
+				"label": "Buscar rascunho…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/add_layer",
+				"label": "Adicionar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/duplicate_layer",
+				"label": "Duplicar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/toggle_layer_lock",
+				"label": "Travar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/apply_name",
+				"label": "Aplicar nome",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/piece_context",
+				"label": "Contexto da peça…",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "piece/document/new",
+				"parameters": {
+					"confirm_discard": "boolean",
+					"document_id": "id",
+					"name": "string"
+				}
+			},
+			{
+				"id": "piece/document/name",
+				"parameters": {
+					"name": "string"
+				}
+			},
+			{
+				"id": "piece/document/open",
+				"parameters": {
+					"confirm_discard": "boolean",
+					"path": "string"
+				}
+			},
+			{
+				"id": "piece/document/save",
+				"parameters": {
+					"path": "string"
+				}
+			},
+			{
+				"id": "piece/history/undo",
+				"parameters": {}
+			},
+			{
+				"id": "piece/history/redo",
+				"parameters": {}
+			},
+			{
+				"id": "piece/context/options",
+				"parameters": {}
+			},
+			{
+				"id": "piece/context/rules/set",
+				"parameters": {
+					"allow_rare": "bool",
+					"allowed_species": "strings",
+					"biome_ids": "strings"
+				}
+			},
+			{
+				"id": "piece/context/area/upsert",
+				"parameters": {
+					"allow_rare": "bool",
+					"allowed_species": "strings",
+					"layer_id": "id",
+					"max_xz": "v2",
+					"min_xz": "v2",
+					"region_id": "id",
+					"reserved": "array"
+				}
+			},
+			{
+				"id": "piece/context/area/remove",
+				"parameters": {
+					"region_id": "id"
+				}
+			},
+			{
+				"id": "piece/socket/upsert",
+				"parameters": {
+					"kind": "id",
+					"position_xyz": "v3",
+					"socket_id": "id",
+					"surface_id": "id"
+				}
+			},
+			{
+				"id": "piece/socket/remove",
+				"parameters": {
+					"socket_id": "id"
+				}
+			}
+		],
+		"mode": "ax",
+		"screen": "piece",
+		"source": {
+			"composition": null,
+			"connectors": [],
+			"dependencies": [],
+			"document_id": "piece_24b917f973a1a962262ebc3f",
+			"layers": [],
+			"name": "Peça sem título",
+			"placements": [],
+			"regions": [],
+			"revision": 1,
+			"schema_version": 1,
+			"sockets": [],
+			"special_surfaces": [],
+			"units": "e07_world"
+		}
+	},
+	"source_hash": "4fee8feb9d75ff4db99ee2b09b3a9f9997bbee5fae80260ce03e56a6a9800986",
+	"state": {
+		"can_redo": false,
+		"can_undo": false,
+		"dirty": true,
+		"selected_layer": "",
+		"source_path": ""
+	},
+	"terrain_snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "terrain/save_brush_preset",
+				"label": "Salvar predefinição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/remove_brush_preset",
+				"label": "Remover predefinição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/fit_view",
+				"label": "Enquadrar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/compile_piece",
+				"label": "Compilar peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/cancel",
+				"label": "Cancelar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/ramp_bridge_sample",
+				"label": "Exemplo rampa/ponte",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/large_piece_sample",
+				"label": "Exemplo de peça grande",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/action_10a98dc5c4c2",
+				"label": "Exemplo orgânico",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/add_grid",
+				"label": "Nova grade",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/focus_view_selection",
+				"label": "Focar seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/add_bridge",
+				"label": "Adicionar ponte",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/save_connector",
+				"label": "Adicionar / atualizar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/remove_connector",
+				"label": "Remover",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "terrain/example/organic",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/brush/stroke",
+				"parameters": {
+					"options": "brush_options",
+					"points": "number[2][]"
+				}
+			},
+			{
+				"id": "terrain/presets/list",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/presets/apply",
+				"parameters": {
+					"preset_id": "string"
+				}
+			},
+			{
+				"id": "terrain/presets/save",
+				"parameters": {
+					"name": "string",
+					"options": "brush_options"
+				}
+			},
+			{
+				"id": "terrain/grid/create",
+				"parameters": {
+					"columns": "integer 2..257",
+					"height": "number -512..512",
+					"layer_id": "id",
+					"name": "string",
+					"origin_xz": "number[2]",
+					"rows": "integer 2..257",
+					"sample_spacing": "number 4..256"
+				}
+			},
+			{
+				"id": "terrain/layer/select",
+				"parameters": {
+					"layer_id": "id"
+				}
+			},
+			{
+				"id": "terrain/layer/lock",
+				"parameters": {
+					"layer_id": "id",
+					"locked": "boolean"
+				}
+			},
+			{
+				"id": "terrain/layer/protection",
+				"parameters": {
+					"layer_id": "id",
+					"region_ids": "existing region IDs[]"
+				}
+			},
+			{
+				"id": "terrain/bridge/create",
+				"parameters": {
+					"height": "number 4..1024",
+					"layer_id": "id",
+					"length": "number 4..1024",
+					"origin_xz": "number[2]",
+					"surface_id": "id",
+					"width": "number 4..1024"
+				}
+			},
+			{
+				"id": "terrain/connector/upsert",
+				"parameters": {
+					"connector_id": "id",
+					"direction": "id",
+					"headroom": "number",
+					"kind": "id",
+					"normal_xyz": "v3",
+					"position_xyz": "v3",
+					"surface_id": "id",
+					"tags": "strings",
+					"width": "number"
+				}
+			},
+			{
+				"id": "terrain/connector/remove",
+				"parameters": {
+					"connector_id": "id"
+				}
+			},
+			{
+				"id": "terrain/viewport/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/viewport/focus_world",
+				"parameters": {
+					"position_xyz": "number[3]",
+					"zoom": "number?"
+				}
+			},
+			{
+				"id": "terrain/viewport/focus_entity",
+				"parameters": {
+					"entity_id": "string"
+				}
+			},
+			{
+				"id": "terrain/viewport/set_overlays",
+				"parameters": {
+					"layers": "overlay:boolean dictionary"
+				}
+			},
+			{
+				"id": "terrain/viewport/search",
+				"parameters": {
+					"query": "string"
+				}
+			},
+			{
+				"id": "terrain/viewport/set_probe",
+				"parameters": {
+					"height": "number",
+					"mode": "navigate|clearance|los",
+					"radius": "number",
+					"surface_id": "string?"
+				}
+			},
+			{
+				"id": "terrain/viewport/probe_point",
+				"parameters": {
+					"point": "WorldPoint"
+				}
+			},
+			{
+				"id": "terrain/viewport/probe_los",
+				"parameters": {
+					"from": "WorldPoint",
+					"to": "WorldPoint"
+				}
+			}
+		],
+		"mode": "ax",
+		"screen": "terrain",
+		"source_hash": "4fee8feb9d75ff4db99ee2b09b3a9f9997bbee5fae80260ce03e56a6a9800986"
+	}
+}

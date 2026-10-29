@@ -1,0 +1,39 @@
+{
+  "ax_version": 1,
+  "actions": [
+    {
+      "screen": "population",
+      "id": "population/document/open",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\f9_encounter_authoring\\b9fc494ccde5f75c4c593ffb\\population.json",
+        "confirm_discard": true
+      }
+    },
+    {
+      "screen": "population",
+      "id": "population/slot/upsert",
+      "parameters": {
+        "slot_id": "forbidden_generated",
+        "brush_id": "field",
+        "surface_id": "left/c_a3e1f4935b0919b3_0_0_1_1",
+        "position_xyz": [
+          240.0,
+          0.0,
+          200.0
+        ],
+        "species_id": "test_gel",
+        "category": "normal",
+        "origin_id": "trial_stage_1",
+        "fixed": false,
+        "site_id": ""
+      }
+    },
+    {
+      "screen": "population",
+      "id": "population/document/save",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\author\\encounter_authoring\\cli_01\\must_not_exist.population.json"
+      }
+    }
+  ]
+}

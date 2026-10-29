@@ -38,7 +38,7 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 06 minimap/árvore de objetos/camadas | arquitetura, F8 | minimapaXZ/câmera e busca/foco por camada/objeto/apoio/rota integrados às5 telas; árvore/listas dos produtores preservadas | validado6d72972: Luna20/52/53/28,Core639 e5 oficiais;9799 inputs conferidos; custos e fluxo final seguem em10/12 |
 | 06 overlays/foco/atalhos/diagnóstico localizado | arquitetura | altura/cotas, apoio, corpo, aberturas, encontros e rotas com flags; folga/LoS/ocupação reais, foco e atalhos no quadro; apoio explícito para seção editorial entre andares | validado6d72972: Native52 e5 oficiais Luna; diagnóstico/custos/UX integrada/área final ainda exigidos no conjunto12 |
 | 07 UX coerente/guiada | autoria F8 | menus e seletores existem; fechar fluxo humano inteiro | pendente |
-| 07 AX IDs/ações parametrizadas/estado/diagnóstico | autoria F8 | peça/terreno/objetos/contexto/marcadores e composição parametrizados sobre telas reais; população/patrulha/geração/intercâmbio ainda faltam | checkpoint25:31/13, cliente10/10+reabertura; mapa Terra7/2 e consumidor10 PASS; sem fechamento global |
+| 07 AX IDs/ações parametrizadas/estado/diagnóstico | autoria F8 | peça/terreno/objetos/contexto/marcadores/composição e população/patrulha parametrizados sobre telas reais; geração/intercâmbio e fluxo integral ainda faltam | checkpoint27: encontros27/25, cliente12/12+reabertura4/negativo; conteúdo real do Bosque e fechamento global pendentes |
 | 07 histórico/hash/confirmação/modos | F8 | entregue; preservar invariantes | pendente de regressão |
 | 08 biomas/espécies/chances/pesos/reservas | autoria F8 | contexto de peça/reservas/marcadores agora parametrizados; pesos existem; conferir chances e fluxos integrados | Content28/Native30 e floresta/áreas Terra comprovados; não fecha população/exceções/reconciliação |
 | 08 raro manual sem palco/sorteio | decisão F8 | entregue com53 checks; preservar | pendente de regressão |
@@ -46,7 +46,7 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 08 quest passiva/origem/recompensa canônica | F8, PRODUCT_DIRECTION | entregue; nenhuma engine inferida | pendente de regressão |
 | 08 bioma de autoria no manifesto final | descoberta checkpoint25 | corrigido em4e3a3788: bioma explícito propagado, fallback ruin e pacote incoerente recusado sem regravar | checkpoint26: MapBiome15/Native13, consumidor de população e BosqueForest12 PASS; App/gameplay final do Bosque ainda exigido |
 | 08 stale/revisão/reconciliação sem perda | F6, F8 | snapshots separados, reimportação explícita limitada | pendente |
-| 09 GUI/AX/CLI equivalentes | F7, F8 | equivalência comprovada também para composição/contexto de mapa, compilação e Store; demais produtores e bundles faltam | checkpoint25:31/13 e cliente10/10/reabertura com fonte/pacote/bytes iguais; restante pendente |
+| 09 GUI/AX/CLI equivalentes | F7, F8 | equivalência comprovada para composição/contexto e encontros/patrulhas, compilação e Store; geração/intercâmbio/bundles finais faltam | checkpoint27:27/25, cliente12/12/reabertura4 com fonte/pacote/bytes iguais e erro que interrompe antes de save; restante pendente |
 | 09 diff/preview/undo/proteção espacial/rebase | F7 | camada protegida inteira e base divergente; completar região/reconciliação | pendente |
 | 09 assets passivos/ambiente limpo/segurança | F7 | referências locais apenas; transporte faltante | pendente |
 | 09 fontes de skills/guias | F7 | três fontes versionadas existentes; atualizar sem instalar | pendente |
@@ -147,3 +147,15 @@ e mantêm10aberto. [Consolidação](delivery/evidence/f9/author/map_biome/consol
 Próximo: população/patrulha parametrizadas e conteúdoAX; restante integral de
 F9 preservado, incluindo desempenho real, síntese/reconciliação/assets/release,
 UX final e migração do teste M3Native24 histórico. Sem transferência aF10.
+
+Checkpoint27: runtime5a97f7d7, fixture corrigida/validação3a5bff35. Produtores
+de encontros/patrulhas, documentos/Stores, proposta assinada e cliente AX real
+passaram27/25, Gameplay52, Context53/91/58/113 e verify editor_import1/299.
+CLI em5processos: preview2,headless12,nativo12,reopen4,negativo2/3esperado;
+fontes/pacotes/bytes iguais. Primeira falha24/25 foi fixture de espera1,75 num
+controle com passo0,1; diagnóstico preservou todos os oráculos e runtime, mostrou
+valor1,8 igual na GUI/AX. Fixture corrigida e precisão1,75 da API coberta em
+modelo/CLI. [Consolidação](delivery/evidence/f9/author/encounter_authoring/consolidation.md).
+Não cria ainda população/patrulha de produto no Bosque nem prova App/FPS.
+Próximo é Terra autorar encontros/objetivo pelo AX; reconciliação, síntese,
+assets/release, desempenho real, UX e toda área final permanecem exigidos em F9.
