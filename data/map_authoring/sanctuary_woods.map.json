@@ -1,5 +1,20 @@
 {
 	"barrier_profile": "ruin_envelope_v1",
+	"borders": {
+		"decorations": true,
+		"instances": [
+			{
+				"instance_id": "clearing",
+				"profile_id": "forest_rootbank_v1"
+			},
+			{
+				"instance_id": "overpass",
+				"profile_id": "forest_rootbank_v1"
+			}
+		],
+		"transitions": [],
+		"version": 1
+	},
 	"context": {
 		"biome_id": "forest",
 		"overrides": [],

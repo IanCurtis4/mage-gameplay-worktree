@@ -1,9 +1,15 @@
 # Bosque — lote AX de bordas florestais
 
-Estado: receitas preparadas, **não executadas**. Base `0eb9b5c59b6b26cd1e02a998abef3545fcd0ffe9`; produtor e provas ainda em andamento. Autoria somente pela janela real AX após liberação de Sol; não escrever fonte pronta nem alterar peças, props, população ou patrulhas nesta etapa.
+Estado: **bordas aplicadas via AX, compiladas e reabertas**. Base `0eb9b5c59b6b26cd1e02a998abef3545fcd0ffe9`; produtor liberado por Sol em `4e3a3788878c7520552c7815d0c2915301857f5f`. Autoria somente pela janela real AX após liberação de Sol; não escrever fonte pronta nem alterar peças, props, população ou patrulhas nesta etapa.
 
 `borders_actions.json` abre o mapa original, aplica os dois perfis `forest_rootbank_v1` em um único `map/borders/apply_batch` com hash semântico esperado `2407588712870e8bd1b4820e2f82638fe29fb1ce955ae5541b14320e9a2cbe20`, compila e salva pela Store. O lote é uma transação e um undo, sem estágio intermediário de bordas incompatíveis. Antes de qualquer execução conferir que o SHA256 do arquivo original permanece `6b8d52095b0d98ba4a436fd5b192ff732b98a8f5da02855646e7e21b9792bb4f`; caso contrário parar e reconciliar. Compilação ocorre antes do save, e a primeira ação rejeitada encerra o lote. `reopen_actions.json` abre e recompila a fonte salva em outro processo. Conferir resultado, contagens, logs, hashes de fonte, compilado e bytes; registrar argv, ambiente, exit e captura nativa.
 
 Engine Godot 4.7.2 standard; `--path C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project`, com APPDATA/LOCALAPPDATA no perfil descartável da fixture. Sem importação por conta própria. O código novo corrige o bioma compilado e o lote muda as bordas; o hash compilado antigo `68bd0caa6a9865067bc9a6b025aa34202ba63f4f003642f027b72d2ffded0ed6` não é valor esperado desta nova compilação. Comparar entre o save e a reabertura na mesma versão validada.
 
 A geometria, a travessia do corpo real, bioma efetivo, apresentação e latências permanecem para provas próprias; Sol verificará corpo e bioma. Não afirmar gameplay ou FPS nesta preparação.
+
+## Resultado
+
+Aplicação 4/4 e reabertura 2/2 terminaram com exit 0 e logs sem SCRIPT ERROR/Parse Error/ERROR; compilação precedeu save e reabertura reproduziu os três hashes. Mapa: 45.615 bytes, SHA256 `8e3f1c3c47709d204eeaf3061e3d98beabb0dfa987ed09ff24ad2ec79e6a631f`, fonte semântica `8a9051f8a416a58890365e1b262cea309053ff52c5ce20725d0598ef7875ed55`, compilação `098aa6b630015504ec47abfa45257fb0c7b571efabad590016dcc34acfc71fdc`. O lote retornou `command_count=2` e ambos os perfis. Comparando snapshots anterior e posterior após remover apenas o campo de bordas, os demais campos são idênticos: duas peças, duas instâncias, um vínculo e 47 props. SHA das fontes de peça também permaneceu igual.
+
+`borders_execution.json` e `reopen_execution.json` registram argv, ambiente, exit e hashes; resultados completos, logs e captura nativa estão neste diretório. A compilação de autoria reportou 39,375 s e pico de armazenamento da navegação 98.774.456 bytes nessa execução única; não são percentis nem FPS. Todos os processos terminaram e a fixture está liberada. Prova de corpo real, bioma compilado e avaliação visual continuam com Sol; população, patrulha e gameplay permanecem pendentes.
