@@ -80,7 +80,9 @@ func run() -> void:
 	map_panel.apply_placement()
 	var gui_changed_hash: String = MapDocument.hash_source(map_panel.session.data)
 	var ax_restore: Dictionary = presentation.ax_invoke("map/instance/transform",{"instance_id":"native_right","position_xz":[100.0,0.0],"rotation_quarters":0})
-	check("visible_gui_placement_control_and_ax_transform_share_map_session",gui_changed_hash != gui_baseline and ax_restore.ok and MapDocument.hash_source(map_panel.session.data) == gui_baseline and map_panel.session.data.instances[1].position_xyz == [100.0,0.0,0.0])
+	var restored_position: Array = map_panel.session.data.instances[1].position_xyz
+	var restored_point := Vector3(restored_position[0],restored_position[1],restored_position[2])
+	check("visible_gui_placement_control_and_ax_transform_share_map_session",gui_changed_hash != gui_baseline and ax_restore.ok and MapDocument.hash_source(map_panel.session.data) == gui_baseline and restored_point == Vector3(100,0,0),{"baseline":gui_baseline,"gui_changed":gui_changed_hash,"restored":MapDocument.hash_source(map_panel.session.data),"position":restored_position,"restore_ok":ax_restore.ok})
 	var invalid_hash: String = MapDocument.hash_source(map_panel.session.data)
 	var invalid_depth: int = map_panel.session._undo.size()
 	var invalid_transform: Dictionary = presentation.ax_invoke("map/instance/transform",{"instance_id":"native_right","position_xz":[16001.0,0.0],"rotation_quarters":0})
