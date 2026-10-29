@@ -31,6 +31,9 @@ func _run() -> void:
 	# shrink its UI texture independently of the native window dimensions.
 	root.content_scale_size = Vector2i.ZERO
 	root.content_scale_factor = 1.0
+	# A headless display has no usable desktop for centering child windows.
+	# Keep the same real windows embedded in the editor host in both modes.
+	root.gui_embed_subwindows = true
 	root.size = Vector2i(1440,1000)
 	shell = Shell.new()
 	root.add_child(shell)

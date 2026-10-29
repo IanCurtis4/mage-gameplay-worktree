@@ -9,7 +9,7 @@ const Context = preload("res://scripts/map_authoring/context/piece_context.gd")
 const MapContext = preload("res://scripts/map_authoring/context/piece_context.gd")
 const Operations = preload("res://scripts/map_authoring/composition/map_operations.gd")
 
-const EXPECTED_COUNT := 30
+const EXPECTED_COUNT := 31
 const COMPOSITION_COMMANDS: Array[String] = [
 	"map/document/new", "map/document/name", "map/document/open", "map/document/save",
 	"map/history/undo", "map/history/redo", "map/piece/add", "map/instance/select",
@@ -38,7 +38,8 @@ func frames(count: int = 2) -> void:
 
 func run() -> void:
 	Presentation.active_mode = "ux"
-	root.size = Vector2i(1440,900)
+	root.content_scale_size = Vector2i.ZERO; root.content_scale_factor = 1.0
+	root.gui_embed_subwindows = true; root.size = Vector2i(1440,1000)
 	work_dir = ProjectSettings.globalize_path("res://.godot/f9_ax_composition/"+str(Time.get_ticks_usec()))
 	DirAccess.make_dir_recursive_absolute(work_dir)
 	gui_shell = Shell.new(); gui_shell.name = "GuiCompositionShell"; root.add_child(gui_shell)
@@ -210,6 +211,12 @@ func run() -> void:
 	check("dirty_new_and_open_require_confirmation_without_partial_mutation",not declined_new.ok and not declined_open.ok and MapDocument.hash_source(ax_panel.session.data) == dirty_hash and ax_panel.session._undo.size() == dirty_depth)
 	var failed_save: Dictionary = ax_presentation.ax_invoke("map/document/save",{"path":work_dir.path_join("absent" ).path_join("failed.json")})
 	check("failed_save_path_preserves_session_source_and_undo_stack",not failed_save.ok and MapDocument.hash_source(ax_panel.session.data) == dirty_hash and ax_panel.session._undo.size() == dirty_depth and ax_panel.name_edit.text == "Nome ainda em edição")
+	var draft_lock: String = str(ax_panel._autosave)+".writer_lock"
+	var locked: bool = DirAccess.make_dir_absolute(draft_lock) == OK
+	var failed_new: Dictionary = ax_presentation.ax_invoke("map/document/new",{"document_id":"blocked","name":"Não deve substituir","confirm_discard":true})
+	var failed_open: Dictionary = ax_presentation.ax_invoke("map/document/open",{"path":map_path,"confirm_discard":true})
+	DirAccess.remove_absolute(draft_lock)
+	check("draft_failure_blocks_confirmed_new_and_open_without_losing_pending_name",locked and not failed_new.ok and failed_new.code == "io_recovery_required" and not failed_open.ok and failed_open.code == "io_recovery_required" and MapDocument.hash_source(ax_panel.session.data) == dirty_hash and ax_panel.session._undo.size() == dirty_depth and ax_panel.name_edit.text == "Nome ainda em edição")
 	var old_draft_path: String = ax_panel._autosave
 	var new_confirmed: Dictionary = ax_presentation.ax_invoke("map/document/new",{"document_id":"new_map_id","name":"Novo mapa de teste","confirm_discard":true})
 	var old_recovered: Dictionary = MapStore.load_source(old_draft_path)
