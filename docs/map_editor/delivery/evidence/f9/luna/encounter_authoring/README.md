@@ -42,6 +42,21 @@ engine. A execução, importação e geração de UIDs aguardam liberação expl
   `surfaces[].vertices_xyz` e `sockets[].position_xyz`, incluindo a rota AX de
   patrulha compartilhada.
 
+## Diagnóstico nativo prévio e ajuste de fixture
+
+A primeira execução nativa ficou em 24/25: somente
+`real_patrol_controls_mode_wait_move_and_slot_assignment_match_ax` falhou.
+Diagnóstico instrumentado preservou os mesmos 25 oráculos e mostrou chamadas,
+rota, ordem, slots e modo corretos; o valor persistido foi 1.8, enquanto o teste
+pedia 1.75 com `SpinBox` de passo 0.1. A fixture UI agora digita/confere 1.8. O
+teste puro exige 1.75 em waypoint novo e edição fracionária de waypoint existente,
+preservando a posição na ordem.
+
+- SHA-256 do teste UI original: `DA98D5B251EA721BC49B5FAD614B89A3F7A2C55FA2F45D9F3FB848E9792BC5B9`.
+- SHA-256 do manifesto de diagnóstico: `DCED7676ECA4B44432D47B2C9D705D75F8443C83419561C4FB1C149084EC87E6`.
+- SHA-256 da cópia instrumentada: `DABA87A24ED22A3D3D4CA81CBD7EC73BF66B5F3B868AABEA0880E35824F480D0`.
+- Diagnóstico e logs originais permanecem em `docs/map_editor/delivery/evidence/f9/author/encounter_authoring/native_diagnostic_01/`.
+
 ## Limite atual
 
 Este registro descreve a cobertura pretendida; não constitui evidência de PASS,

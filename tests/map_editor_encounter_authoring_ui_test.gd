@@ -165,7 +165,7 @@ func _run() -> void:
 	gui_patrol.mode.select(1); gui_patrol.apply_mode()
 	var ax_mode_route: Dictionary = gui_patrol.current_route()
 	var ax_mode_route_result: Dictionary = ax_patrol_presentation.ax_invoke("patrol/route/upsert",ax_mode_route)
-	gui_patrol.points.select(1); gui_patrol.wait_time.value = 1.75; gui_patrol.apply_wait()
+	gui_patrol.points.select(1); gui_patrol.wait_time.value = 1.8; gui_patrol.apply_wait()
 	var ax_wait_route: Dictionary = gui_patrol.current_route()
 	var ax_wait: Dictionary = ax_patrol_presentation.ax_invoke("patrol/route/upsert",ax_wait_route)
 	var wait_point_id: String = gui_patrol.current_route().waypoints[1].point_id
@@ -179,7 +179,7 @@ func _run() -> void:
 	gui_patrol.slots.select(0); gui_patrol.assign_slots()
 	var ax_assign_route: Dictionary = gui_patrol.current_route()
 	var ax_assign: Dictionary = ax_patrol_presentation.ax_invoke("patrol/route/upsert",ax_assign_route)
-	check("real_patrol_controls_mode_wait_move_and_slot_assignment_match_ax",gui_route_data.mode == "loop" and ax_mode_route_result.ok and ax_wait.ok and ax_move.ok and ax_assign.ok and route_before_move == gui_route_before_move and route_before_move == ax_route_before_move and gui_patrol.session.data.patrols[0] == ax_patrol.session.data.patrols[0] and gui_patrol.session.data.patrols[0].mode == "ping_pong" and gui_patrol.session.data.patrols[0].waypoints[2].point_id == wait_point_id and gui_patrol.session.data.patrols[0].waypoints[2].wait_seconds == 1.75 and gui_patrol.session.data.patrols[0].slot_ids == ["guard"] and PatrolDocument.validate(gui_patrol.session.data).ok)
+	check("real_patrol_controls_mode_wait_move_and_slot_assignment_match_ax",gui_route_data.mode == "loop" and ax_mode_route_result.ok and ax_wait.ok and ax_move.ok and ax_assign.ok and route_before_move == gui_route_before_move and route_before_move == ax_route_before_move and gui_patrol.session.data.patrols[0] == ax_patrol.session.data.patrols[0] and gui_patrol.session.data.patrols[0].mode == "ping_pong" and gui_patrol.session.data.patrols[0].waypoints[2].point_id == wait_point_id and gui_patrol.session.data.patrols[0].waypoints[2].wait_seconds == 1.8 and gui_patrol.session.data.patrols[0].slot_ids == ["guard"] and PatrolDocument.validate(gui_patrol.session.data).ok)
 	var patrol_bad: Dictionary = ax_patrol_presentation.ax_invoke("patrol/waypoint/upsert",{"patrol_id":route.patrol_id,"point_id":"bad","surface_id":"missing","position_xyz":[NAN,0,0],"wait_seconds":0})
 	check("patrol_nested_nan_and_unknown_references_reject_without_history",not patrol_bad.ok and PatrolDocument.hash_source(ax_patrol.session.data) == PatrolDocument.hash_source(gui_patrol.session.data))
 	var route_hash_before_history: String = PatrolDocument.hash_source(ax_patrol.session.data)

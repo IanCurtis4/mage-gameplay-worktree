@@ -1,0 +1,42 @@
+{
+  "scope": "diagnostic copy; same original 25 oracles, only one JSON print inserted; no expectation or production changes",
+  "head": "5a97f7d7e095b36d65795140bae82a7178b73d6b",
+  "arguments": [
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+    "--path",
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+    "--rendering-method",
+    "gl_compatibility",
+    "--log-file",
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\author\\encounter_authoring\\native_diagnostic_01\\native.engine.log",
+    "--script",
+    "res://.godot/f9_encounter_native_diagnostic.gd"
+  ],
+  "environment": {
+    "APPDATA": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile",
+    "LOCALAPPDATA": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile",
+    "F9_EVIDENCE": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\author\\encounter_authoring\\native_diagnostic_01"
+  },
+  "original_test_sha256": "da98d5b251ea721bc49b5fad614b89a3f7a2c55fa2f45d9f3fb848e9792bc5b9",
+  "instrumented_sha256": "daba87a24ed22a3d3d4ca81cbd7ec73bf66b5f3b868aabea0880e35824f480d0",
+  "exit_code": 1,
+  "generic_errors": false,
+  "source_and_head_unchanged": true,
+  "diagnostic": {
+    "actual_wait": 1.8,
+    "assign_call_ok": true,
+    "before_mode_loop": true,
+    "before_route_ax": true,
+    "before_route_gui": true,
+    "control_step": 0.1,
+    "document_valid": true,
+    "expected_wait": 1.75,
+    "mode_call_ok": true,
+    "mode_is_ping_pong": true,
+    "move_call_ok": true,
+    "point_id_match": true,
+    "same_route": true,
+    "slots_ok": true,
+    "wait_call_ok": true
+  }
+}

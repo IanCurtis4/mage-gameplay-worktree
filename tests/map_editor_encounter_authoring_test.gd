@@ -85,9 +85,11 @@ func _run() -> void:
 	var route: Dictionary = patrol.patrols[0].duplicate(true); route.mode = "ping_pong"
 	var route_proposal: Dictionary = PatrolOperations.propose(patrol,"route/upsert",route)
 	check("patrol_route_upsert_is_pure_and_hash_identified",route_proposal.ok and route_proposal.input_hash == patrol_hash and PatrolDocument.hash_source(patrol) == patrol_hash and route_proposal.data.patrols[0].mode == "ping_pong")
-	var point_params: Dictionary = {"patrol_id":route.patrol_id,"point_id":"last","surface_id":route.waypoints[0].surface_id,"position_xyz":route.waypoints[0].position_xyz,"wait_seconds":1.0}
+	var point_params: Dictionary = {"patrol_id":route.patrol_id,"point_id":"last","surface_id":route.waypoints[0].surface_id,"position_xyz":route.waypoints[0].position_xyz,"wait_seconds":1.75}
 	var point_added: Dictionary = PatrolOperations.propose(patrol,"waypoint/upsert",point_params)
-	check("new_waypoint_appends_and_existing_edit_keeps_position",point_added.ok and point_added.data.patrols[0].waypoints[-1].point_id == "last" and point_added.data.patrols[0].waypoints[0].point_id == route.waypoints[0].point_id)
+	var edit_existing: Dictionary = point_params.duplicate(true); edit_existing.point_id = "north"; edit_existing.position_xyz = patrol.patrols[0].waypoints[1].position_xyz
+	var point_edited: Dictionary = PatrolOperations.propose(patrol,"waypoint/upsert",edit_existing)
+	check("new_waypoint_appends_and_fractional_edit_preserves_existing_order",point_added.ok and point_added.data.patrols[0].waypoints[-1].point_id == "last" and point_added.data.patrols[0].waypoints[-1].wait_seconds == 1.75 and point_added.data.patrols[0].waypoints[0].point_id == route.waypoints[0].point_id and point_edited.ok and point_edited.data.patrols[0].waypoints[1].point_id == "north" and point_edited.data.patrols[0].waypoints[1].wait_seconds == 1.75 and point_edited.data.patrols[0].waypoints[2].point_id == "south")
 	var moved: Dictionary = PatrolOperations.propose(patrol,"waypoint/move",{"patrol_id":route.patrol_id,"point_id":"north","direction":1})
 	var boundary: Dictionary = PatrolOperations.propose(patrol,"waypoint/move",{"patrol_id":route.patrol_id,"point_id":"west","direction":-1})
 	check("waypoint_order_move_and_boundary_are_deterministic",moved.ok and moved.data.patrols[0].waypoints[2].point_id == "north" and boundary.ok and boundary.output_hash == PatrolDocument.hash_source(patrol))

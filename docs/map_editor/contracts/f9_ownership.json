@@ -3323,7 +3323,7 @@
       "runtime_owner": "Sol F9",
       "test_owner": "Luna F9 encounter authoring",
       "content_owner": "Terra F9 area after explicit producer release",
-      "fixture_frozen": true,
+      "fixture_frozen": false,
       "scope": "closed population/patrol operations; same GUI AX sessions stores and workers; no generic source setter or new gameplay rules",
       "files": [
         ".gitattributes",
@@ -3347,8 +3347,14 @@
         "tests/map_editor_encounter_authoring_ui_test.gd",
         "tests/map_editor_encounter_authoring_ui_test.gd.uid"
       ],
-      "fixture_owner": "Luna execution to be released after candidate commit",
-      "uid_transport": "Sol copied four engine-generated UID files unchanged after Import01, before Import02"
+      "fixture_owner": "released after Import03; awaiting corrected test commit and Luna rerun",
+      "uid_transport": "Sol copied four engine-generated UID files unchanged after Import01, before Import02",
+      "code_head": "5a97f7d7e095b36d65795140bae82a7178b73d6b",
+      "initial_results": {
+        "EncounterAuthoring": 27,
+        "EncounterAuthoringNative": "24/25; unsupported fixture wait1.75 with step0.1, actual1.8; all other diagnostic flags true",
+        "diagnostic": "native_diagnostic_01 preserves all25 oracles and production; corrected fixture pending rerun"
+      }
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

@@ -1,0 +1,145 @@
+{
+  "ok": true,
+  "scope": "staged raw evidence and encounter tests; excludes this generated receipt to avoid self-reference",
+  "count": 23,
+  "rows": [
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/diagnose_native.py",
+      "sha256": "f614edcd697bc676dd498a93df7bb2d57d6a3d9e6aff92f12f117de5eb919c9e",
+      "index_sha256": "f614edcd697bc676dd498a93df7bb2d57d6a3d9e6aff92f12f117de5eb919c9e",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/import_03/import.engine.log",
+      "sha256": "b66b2ddf5dda15b8cf3768a68ae2974dcf333258914f31642ee9c0010606847f",
+      "index_sha256": "b66b2ddf5dda15b8cf3768a68ae2974dcf333258914f31642ee9c0010606847f",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/import_03/import.output.log",
+      "sha256": "cc03a15c5a832fc22f75f41eb2f5ec800da02b944eda85e00dd7155926320b5d",
+      "index_sha256": "cc03a15c5a832fc22f75f41eb2f5ec800da02b944eda85e00dd7155926320b5d",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/import_03/manifest.json",
+      "sha256": "cd41ec9207ce4901e6a06b12ff4c7537ab020d1ec4909472052f7632230b42b8",
+      "index_sha256": "cd41ec9207ce4901e6a06b12ff4c7537ab020d1ec4909472052f7632230b42b8",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/import_03/runs.json",
+      "sha256": "32f752e945386cca452aca684e6947c9af104aab8ec16ffda6a820155da25008",
+      "index_sha256": "32f752e945386cca452aca684e6947c9af104aab8ec16ffda6a820155da25008",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/native_diagnostic_01/diagnostic.manifest.json",
+      "sha256": "dced7676eca4b44432d47b2c9d705d75f8443c83419561c4fb1c149084ec87e6",
+      "index_sha256": "dced7676eca4b44432d47b2c9d705d75f8443c83419561c4fb1c149084ec87e6",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/native_diagnostic_01/encounter_patrol_native.png",
+      "sha256": "345e7e622f3cd8173b2c634d0ddb426738925208706843fc45c235042ee71705",
+      "index_sha256": "345e7e622f3cd8173b2c634d0ddb426738925208706843fc45c235042ee71705",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/native_diagnostic_01/encounter_population_native.png",
+      "sha256": "70244372521e08dd8ff036ce63292f0400cff2ad4e38442562481ee2737d76cf",
+      "index_sha256": "70244372521e08dd8ff036ce63292f0400cff2ad4e38442562481ee2737d76cf",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/native_diagnostic_01/native.engine.log",
+      "sha256": "72b60e951d4d473b03ce615d625396b4c2221c399875fa8d281e9af1eda4e556",
+      "index_sha256": "72b60e951d4d473b03ce615d625396b4c2221c399875fa8d281e9af1eda4e556",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/native_diagnostic_01/native.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "index_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/native_diagnostic_01/native.stdout.log",
+      "sha256": "07f18b5adc72f6ec0b5c11a4de61a8331c7a9e2c4b87e10f158ebdb48febb5c8",
+      "index_sha256": "07f18b5adc72f6ec0b5c11a4de61a8331c7a9e2c4b87e10f158ebdb48febb5c8",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/author/encounter_authoring/native_diagnostic_01/native_instrumented.gd.txt",
+      "sha256": "daba87a24ed22a3d3d4ca81cbd7ec73bf66b5f3b868aabea0880e35824f480d0",
+      "index_sha256": "daba87a24ed22a3d3d4ca81cbd7ec73bf66b5f3b868aabea0880e35824f480d0",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/README.md",
+      "sha256": "33600b052769e9d1a18d8d5d7467c5e004932841f35765752aaba56f5141d622",
+      "index_sha256": "33600b052769e9d1a18d8d5d7467c5e004932841f35765752aaba56f5141d622",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/model_01/geometry.engine.log",
+      "sha256": "8b9c4342a3572209496ee847d49c7bf1430d6b725a13cabb8af177964821097c",
+      "index_sha256": "8b9c4342a3572209496ee847d49c7bf1430d6b725a13cabb8af177964821097c",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/model_01/geometry.output.log",
+      "sha256": "b3a47a67b771c27d404495fb2fd2a040811dea484c46b06f41830812640ab1b4",
+      "index_sha256": "b3a47a67b771c27d404495fb2fd2a040811dea484c46b06f41830812640ab1b4",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/model_01/runs.json",
+      "sha256": "a3c87df9a148d20670bdf627d2dd1b105effd36d5442295d092d1ce898b4fe9b",
+      "index_sha256": "a3c87df9a148d20670bdf627d2dd1b105effd36d5442295d092d1ce898b4fe9b",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/native_01/encounter_patrol_native.png",
+      "sha256": "345e7e622f3cd8173b2c634d0ddb426738925208706843fc45c235042ee71705",
+      "index_sha256": "345e7e622f3cd8173b2c634d0ddb426738925208706843fc45c235042ee71705",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/native_01/encounter_population_native.png",
+      "sha256": "70244372521e08dd8ff036ce63292f0400cff2ad4e38442562481ee2737d76cf",
+      "index_sha256": "70244372521e08dd8ff036ce63292f0400cff2ad4e38442562481ee2737d76cf",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/native_01/geometry.engine.log",
+      "sha256": "c921f02c10548d01877ec0f1a0cde4990a925e0965f48bb756ce79ffb860b558",
+      "index_sha256": "c921f02c10548d01877ec0f1a0cde4990a925e0965f48bb756ce79ffb860b558",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/native_01/geometry.output.log",
+      "sha256": "a115996a4fa971735fe5142d304c52f4bd687ce15c31039533944a3427cc4812",
+      "index_sha256": "a115996a4fa971735fe5142d304c52f4bd687ce15c31039533944a3427cc4812",
+      "equal": true
+    },
+    {
+      "path": "docs/map_editor/delivery/evidence/f9/luna/encounter_authoring/native_01/runs.json",
+      "sha256": "70af1db6414a8a77d01c10afb1714acf4ccbdcb9f036eedf67fe68205da52848",
+      "index_sha256": "70af1db6414a8a77d01c10afb1714acf4ccbdcb9f036eedf67fe68205da52848",
+      "equal": true
+    },
+    {
+      "path": "tests/map_editor_encounter_authoring_test.gd",
+      "sha256": "0750098d5e22da29e56706bbbf3c41f05b18a8bff60fae038dcff3f655b97194",
+      "index_sha256": "0750098d5e22da29e56706bbbf3c41f05b18a8bff60fae038dcff3f655b97194",
+      "equal": true
+    },
+    {
+      "path": "tests/map_editor_encounter_authoring_ui_test.gd",
+      "sha256": "062ebc3e7a13f7192159f12c8f79ef97073e8d3d9c7351ad2c4c05d51daff6df",
+      "index_sha256": "062ebc3e7a13f7192159f12c8f79ef97073e8d3d9c7351ad2c4c05d51daff6df",
+      "equal": true
+    }
+  ]
+}
