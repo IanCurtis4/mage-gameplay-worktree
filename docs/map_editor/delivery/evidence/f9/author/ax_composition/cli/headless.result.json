@@ -1,0 +1,1176 @@
+{
+	"actions": [
+		{
+			"id": "map/document/new",
+			"input_hash": "286d415d49385cb580be675e4a9a506382ac4af90b73268018f53b5b4ce63122",
+			"output_hash": "eb0017f81bd2173790aa24b8ef7f3b1238faafe0287ae315afa08a59f2c042a7",
+			"result": {
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "ax_client_map",
+				"input_hash": "",
+				"ok": true,
+				"output_hash": "eb0017f81bd2173790aa24b8ef7f3b1238faafe0287ae315afa08a59f2c042a7"
+			},
+			"screen": "map"
+		},
+		{
+			"id": "map/piece/add",
+			"input_hash": "eb0017f81bd2173790aa24b8ef7f3b1238faafe0287ae315afa08a59f2c042a7",
+			"output_hash": "174028c88620dd23f2b50f1cc113c0cf8ad7af5fea6e030af5e4cda6f6d63b11",
+			"result": {
+				"added_ids": [
+					"left"
+				],
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "left",
+				"input_hash": "",
+				"ok": true,
+				"output_hash": "174028c88620dd23f2b50f1cc113c0cf8ad7af5fea6e030af5e4cda6f6d63b11",
+				"removed_ids": []
+			},
+			"screen": "map"
+		},
+		{
+			"id": "map/piece/add",
+			"input_hash": "174028c88620dd23f2b50f1cc113c0cf8ad7af5fea6e030af5e4cda6f6d63b11",
+			"output_hash": "dc50042f63c45cb3f8fa664655c7fc8949b9226b5be4209935655ce3d9f4c20d",
+			"result": {
+				"added_ids": [
+					"right"
+				],
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "right",
+				"input_hash": "",
+				"ok": true,
+				"output_hash": "dc50042f63c45cb3f8fa664655c7fc8949b9226b5be4209935655ce3d9f4c20d",
+				"removed_ids": []
+			},
+			"screen": "map"
+		},
+		{
+			"id": "map/link/upsert",
+			"input_hash": "dc50042f63c45cb3f8fa664655c7fc8949b9226b5be4209935655ce3d9f4c20d",
+			"output_hash": "5439c0aed764f9e8a6351ab9e7fffd964c34b35c84bc68e1e6e8f9850ab082fa",
+			"result": {
+				"added_ids": [
+					"door"
+				],
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "door",
+				"input_hash": "",
+				"ok": true,
+				"output_hash": "5439c0aed764f9e8a6351ab9e7fffd964c34b35c84bc68e1e6e8f9850ab082fa",
+				"removed_ids": []
+			},
+			"screen": "map"
+		},
+		{
+			"id": "map/mode/set",
+			"input_hash": "5439c0aed764f9e8a6351ab9e7fffd964c34b35c84bc68e1e6e8f9850ab082fa",
+			"output_hash": "5439c0aed764f9e8a6351ab9e7fffd964c34b35c84bc68e1e6e8f9850ab082fa",
+			"result": {
+				"added_ids": [],
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "ax_client_map",
+				"input_hash": "",
+				"ok": true,
+				"output_hash": "5439c0aed764f9e8a6351ab9e7fffd964c34b35c84bc68e1e6e8f9850ab082fa",
+				"removed_ids": []
+			},
+			"screen": "map"
+		},
+		{
+			"id": "map/context/set",
+			"input_hash": "5439c0aed764f9e8a6351ab9e7fffd964c34b35c84bc68e1e6e8f9850ab082fa",
+			"output_hash": "973383a93450959f7d14efca14633ece8d5b2bdf0e9a4fbfd232cb7707ddfc55",
+			"result": {
+				"added_ids": [],
+				"code": "",
+				"diagnostics": [],
+				"entity_id": "",
+				"input_hash": "",
+				"ok": true,
+				"output_hash": "973383a93450959f7d14efca14633ece8d5b2bdf0e9a4fbfd232cb7707ddfc55",
+				"removed_ids": []
+			},
+			"screen": "map"
+		},
+		{
+			"id": "map/instance/select",
+			"input_hash": "973383a93450959f7d14efca14633ece8d5b2bdf0e9a4fbfd232cb7707ddfc55",
+			"output_hash": "973383a93450959f7d14efca14633ece8d5b2bdf0e9a4fbfd232cb7707ddfc55",
+			"result": {
+				"entity_id": "ax_client_map",
+				"ok": true,
+				"output_hash": "973383a93450959f7d14efca14633ece8d5b2bdf0e9a4fbfd232cb7707ddfc55"
+			},
+			"screen": "map"
+		},
+		{
+			"id": "map/compile_map",
+			"input_hash": "973383a93450959f7d14efca14633ece8d5b2bdf0e9a4fbfd232cb7707ddfc55",
+			"output_hash": "973383a93450959f7d14efca14633ece8d5b2bdf0e9a4fbfd232cb7707ddfc55",
+			"result": {
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "973383a93450959f7d14efca14633ece8d5b2bdf0e9a4fbfd232cb7707ddfc55",
+				"metrics": {
+					"elapsed_ms": 177.379,
+					"navigation": {
+						"direct_pairs": 2,
+						"direct_witness_proofs_reused": 2,
+						"elapsed_ms": 4.945,
+						"expansions": 2,
+						"operations": 1,
+						"peak_storage_bytes": 166784,
+						"snapshot_storage_units": 71016,
+						"states": 2,
+						"storage_bytes": 166784,
+						"terminal_checks": 2
+					}
+				},
+				"ok": true,
+				"output_hash": "d155766188ced8d979b4ff6438b3ec0a5e485de4cfc35cb328851af7fe60eb8f"
+			},
+			"screen": "map"
+		},
+		{
+			"id": "piece/document/name",
+			"input_hash": "676438b299d45335b67e5afd4a22f34f4008d7681169d6f8af457f3921600324",
+			"output_hash": "ebe7358d16f8aa9de1b7961d1fe250f5d865e56de3be1eb16fa6a9072fd82287",
+			"result": {
+				"byte_hash": "8e59752157def5a7b8ca4627861a55aba602040235260ca8c6f1c839e50eb1ff",
+				"code": "",
+				"diagnostics": [],
+				"input_hash": "676438b299d45335b67e5afd4a22f34f4008d7681169d6f8af457f3921600324",
+				"ok": true,
+				"output_hash": "ebe7358d16f8aa9de1b7961d1fe250f5d865e56de3be1eb16fa6a9072fd82287",
+				"valid": true
+			},
+			"screen": "piece"
+		},
+		{
+			"id": "map/document/save",
+			"input_hash": "973383a93450959f7d14efca14633ece8d5b2bdf0e9a4fbfd232cb7707ddfc55",
+			"output_hash": "973383a93450959f7d14efca14633ece8d5b2bdf0e9a4fbfd232cb7707ddfc55",
+			"result": {
+				"byte_hash": "c8392218259a60c960bec84edf3e45b5bd8f43ca601b6f21920d2010b46b595d",
+				"code": "",
+				"entity_id": "ax_client_map",
+				"ok": true,
+				"output_hash": "973383a93450959f7d14efca14633ece8d5b2bdf0e9a4fbfd232cb7707ddfc55"
+			},
+			"screen": "map"
+		}
+	],
+	"code": "",
+	"completed_actions": 10,
+	"diagnostics": [],
+	"map_snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "map/exchange",
+				"label": "Intercâmbio com skills…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/open_game",
+				"label": "Abrir jogo",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/resume_test",
+				"label": "Retomar teste",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/stop_game",
+				"label": "Suspender e fechar teste",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/new_map",
+				"label": "Novo mapa",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/open",
+				"label": "Abrir…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/save_as",
+				"label": "Salvar como…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/add_piece",
+				"label": "Adicionar peça…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/two_piece_sample",
+				"label": "Exemplo com duas peças",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/undo",
+				"label": "Desfazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/redo",
+				"label": "Refazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/apply_name",
+				"label": "Aplicar nome",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/compile_map",
+				"label": "Compilar mapa",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/cancel",
+				"label": "Cancelar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/toggle_test",
+				"label": "Testar / parar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/publish_local",
+				"label": "Publicar localmente…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/recover_draft",
+				"label": "Recuperar rascunho",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/open_population",
+				"label": "Encontros…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/open_generation",
+				"label": "Geração assistida…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/apply_placement",
+				"label": "Aplicar posição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/remove_selected",
+				"label": "Remover…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/apply_border_profile",
+				"label": "Aplicar borda à peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/apply_border_transition",
+				"label": "Ligar por talude de transição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/link_connectors",
+				"label": "Vincular aberturas",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/remove_link",
+				"label": "Remover vínculo selecionado",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/focus_view_selection",
+				"label": "Focar seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "map/map_context",
+				"label": "Contexto do mapa…",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "map/borders/apply",
+				"label": "Editar perfil, transição ou decoração",
+				"parameters": {
+					"command": {
+						"fields": "closed_by_operation",
+						"operation": [
+							"set_instance_profile",
+							"clear_instance_profile",
+							"set_transition",
+							"set_decorations"
+						]
+					},
+					"expected_source_hash": "hash"
+				}
+			},
+			{
+				"id": "map/document/new",
+				"parameters": {
+					"confirm_discard": "bool",
+					"document_id": "id",
+					"name": "string"
+				}
+			},
+			{
+				"id": "map/document/name",
+				"parameters": {
+					"name": "string"
+				}
+			},
+			{
+				"id": "map/document/open",
+				"parameters": {
+					"confirm_discard": "bool",
+					"path": "string"
+				}
+			},
+			{
+				"id": "map/document/save",
+				"parameters": {
+					"path": "string"
+				}
+			},
+			{
+				"id": "map/history/undo",
+				"parameters": {}
+			},
+			{
+				"id": "map/history/redo",
+				"parameters": {}
+			},
+			{
+				"id": "map/instance/select",
+				"parameters": {
+					"instance_id": "id"
+				}
+			},
+			{
+				"id": "map/compile_map",
+				"parameters": {}
+			},
+			{
+				"id": "map/piece/add",
+				"parameters": {
+					"instance_id": "id",
+					"path": "string",
+					"position_xz": "v2",
+					"rotation_quarters": "number"
+				}
+			},
+			{
+				"id": "map/instance/transform",
+				"parameters": {
+					"instance_id": "id",
+					"position_xz": "v2",
+					"rotation_quarters": "number"
+				}
+			},
+			{
+				"id": "map/instance/remove",
+				"parameters": {
+					"confirm_remove": "bool",
+					"instance_id": "id"
+				}
+			},
+			{
+				"id": "map/link/upsert",
+				"parameters": {
+					"a_connector": "id",
+					"a_instance": "id",
+					"b_connector": "id",
+					"b_instance": "id",
+					"link_id": "id"
+				}
+			},
+			{
+				"id": "map/link/remove",
+				"parameters": {
+					"link_id": "id"
+				}
+			},
+			{
+				"id": "map/context/set",
+				"parameters": {
+					"biome_id": "string",
+					"instance_id": "string",
+					"reason": "string",
+					"rules": "strings"
+				}
+			},
+			{
+				"id": "map/mode/set",
+				"parameters": {
+					"mode": "string"
+				}
+			},
+			{
+				"id": "map/gameplay/launch",
+				"parameters": {
+					"class_id": "base class?",
+					"headless": "boolean?"
+				}
+			},
+			{
+				"id": "map/gameplay/resume",
+				"parameters": {
+					"headless": "boolean?"
+				}
+			},
+			{
+				"id": "map/gameplay/stop",
+				"parameters": {}
+			},
+			{
+				"id": "map/gameplay/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "map/gameplay/select_class",
+				"parameters": {
+					"class_id": "base class"
+				}
+			},
+			{
+				"id": "map/gameplay/action",
+				"parameters": {
+					"action": "closed gameplay action",
+					"request_id": "token?",
+					"session_id": "token?"
+				}
+			},
+			{
+				"id": "map/gameplay/reply",
+				"parameters": {
+					"fingerprint": "hash?",
+					"request_id": "token",
+					"session_id": "token?"
+				}
+			},
+			{
+				"id": "map/viewport/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "map/viewport/focus_world",
+				"parameters": {
+					"position_xyz": "number[3]",
+					"zoom": "number?"
+				}
+			},
+			{
+				"id": "map/viewport/focus_entity",
+				"parameters": {
+					"entity_id": "string"
+				}
+			},
+			{
+				"id": "map/viewport/set_overlays",
+				"parameters": {
+					"layers": "overlay:boolean dictionary"
+				}
+			},
+			{
+				"id": "map/viewport/search",
+				"parameters": {
+					"query": "string"
+				}
+			},
+			{
+				"id": "map/viewport/set_probe",
+				"parameters": {
+					"height": "number",
+					"mode": "navigate|clearance|los",
+					"radius": "number",
+					"surface_id": "string?"
+				}
+			},
+			{
+				"id": "map/viewport/probe_point",
+				"parameters": {
+					"point": "WorldPoint"
+				}
+			},
+			{
+				"id": "map/viewport/probe_los",
+				"parameters": {
+					"from": "WorldPoint",
+					"to": "WorldPoint"
+				}
+			}
+		],
+		"diagnostics": [],
+		"mode": "ax",
+		"screen": "map",
+		"source": {
+			"barrier_profile": "ruin_envelope_v1",
+			"context": {
+				"biome_id": "forest",
+				"overrides": [],
+				"version": 1
+			},
+			"document_id": "ax_client_map",
+			"instances": [
+				{
+					"instance_id": "left",
+					"piece_hash": "6d35f3e8a2658ee5fce52b86f5c14209ee51f6bc6c18a4b9e3670c57be227699",
+					"position_xyz": [
+						0,
+						0,
+						0
+					],
+					"rotation_quarters": 0.0
+				},
+				{
+					"instance_id": "right",
+					"piece_hash": "f0f37f6317453f8514551e14fd0df5b877036ab9e90f98d6bed84dbebbe01f68",
+					"position_xyz": [
+						100,
+						0,
+						0
+					],
+					"rotation_quarters": 0.0
+				}
+			],
+			"links": [
+				{
+					"a_connector": "east",
+					"a_instance": "left",
+					"b_connector": "west",
+					"b_instance": "right",
+					"link_id": "door"
+				}
+			],
+			"mode": "manual",
+			"name": "Mapa de teste AX",
+			"pieces": [
+				{
+					"piece_hash": "6d35f3e8a2658ee5fce52b86f5c14209ee51f6bc6c18a4b9e3670c57be227699",
+					"source": {
+						"composition": null,
+						"connectors": [
+							{
+								"connector_id": "east",
+								"direction": "both",
+								"headroom": 100,
+								"kind": "walk",
+								"normal_xyz": [
+									1,
+									0,
+									0
+								],
+								"position_xyz": [
+									100,
+									0,
+									50
+								],
+								"surface_id": "floor",
+								"tags": [
+									"ruin"
+								],
+								"width": 80
+							}
+						],
+						"dependencies": [],
+						"document_id": "room_left",
+						"layers": [
+							{
+								"columns": 2,
+								"heights": [
+									0,
+									0,
+									0,
+									0
+								],
+								"layer_id": "floor",
+								"locked": false,
+								"material_masks": {},
+								"name": "Chão",
+								"origin_xz": [
+									0,
+									0
+								],
+								"protected_regions": [],
+								"rows": 2,
+								"sample_spacing": 100
+							}
+						],
+						"name": "Peça sem título",
+						"placements": [],
+						"regions": [],
+						"revision": 1,
+						"schema_version": 1,
+						"sockets": [],
+						"special_surfaces": [],
+						"units": "e07_world"
+					}
+				},
+				{
+					"piece_hash": "f0f37f6317453f8514551e14fd0df5b877036ab9e90f98d6bed84dbebbe01f68",
+					"source": {
+						"composition": null,
+						"connectors": [
+							{
+								"connector_id": "west",
+								"direction": "both",
+								"headroom": 100,
+								"kind": "walk",
+								"normal_xyz": [
+									-1,
+									0,
+									0
+								],
+								"position_xyz": [
+									0,
+									0,
+									50
+								],
+								"surface_id": "floor",
+								"tags": [
+									"ruin"
+								],
+								"width": 80
+							}
+						],
+						"dependencies": [],
+						"document_id": "room_right",
+						"layers": [
+							{
+								"columns": 2,
+								"heights": [
+									0,
+									0,
+									0,
+									0
+								],
+								"layer_id": "floor",
+								"locked": false,
+								"material_masks": {},
+								"name": "Chão",
+								"origin_xz": [
+									0,
+									0
+								],
+								"protected_regions": [],
+								"rows": 2,
+								"sample_spacing": 100
+							}
+						],
+						"name": "Peça sem título",
+						"placements": [],
+						"regions": [],
+						"revision": 1,
+						"schema_version": 1,
+						"sockets": [],
+						"special_surfaces": [],
+						"units": "e07_world"
+					}
+				}
+			],
+			"revision": 1,
+			"schema_version": 1
+		},
+		"source_hash": "973383a93450959f7d14efca14633ece8d5b2bdf0e9a4fbfd232cb7707ddfc55",
+		"state": {
+			"can_redo": false,
+			"can_undo": true,
+			"dirty": false,
+			"selected_instance": "right",
+			"source_path": "C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/docs/map_editor/delivery/evidence/f9/author/ax_composition/cli/headless.map.json"
+		}
+	},
+	"objects_snapshot": {},
+	"ok": true,
+	"requested_actions": 10,
+	"snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "piece/exchange",
+				"label": "Intercâmbio com skills…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/new_piece",
+				"label": "Nova peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/compose_map",
+				"label": "Compor mapa…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open_objects",
+				"label": "Objetos e vegetação…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open_library",
+				"label": "Biblioteca…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/open",
+				"label": "Abrir…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/save",
+				"label": "Salvar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/save_as",
+				"label": "Salvar como…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/undo",
+				"label": "Desfazer",
+				"test_only": false
+			},
+			{
+				"enabled": false,
+				"id": "piece/redo",
+				"label": "Refazer",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/recover_copy",
+				"label": "Recuperar cópia",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/browse_draft",
+				"label": "Buscar rascunho…",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/add_layer",
+				"label": "Adicionar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/duplicate_layer",
+				"label": "Duplicar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/toggle_layer_lock",
+				"label": "Travar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/apply_name",
+				"label": "Aplicar nome",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "piece/piece_context",
+				"label": "Contexto da peça…",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "piece/document/new",
+				"parameters": {
+					"confirm_discard": "boolean",
+					"document_id": "id",
+					"name": "string"
+				}
+			},
+			{
+				"id": "piece/document/name",
+				"parameters": {
+					"name": "string"
+				}
+			},
+			{
+				"id": "piece/document/open",
+				"parameters": {
+					"confirm_discard": "boolean",
+					"path": "string"
+				}
+			},
+			{
+				"id": "piece/document/save",
+				"parameters": {
+					"path": "string"
+				}
+			},
+			{
+				"id": "piece/history/undo",
+				"parameters": {}
+			},
+			{
+				"id": "piece/history/redo",
+				"parameters": {}
+			},
+			{
+				"id": "piece/context/options",
+				"parameters": {}
+			},
+			{
+				"id": "piece/context/rules/set",
+				"parameters": {
+					"allow_rare": "bool",
+					"allowed_species": "strings",
+					"biome_ids": "strings"
+				}
+			},
+			{
+				"id": "piece/context/area/upsert",
+				"parameters": {
+					"allow_rare": "bool",
+					"allowed_species": "strings",
+					"layer_id": "id",
+					"max_xz": "v2",
+					"min_xz": "v2",
+					"region_id": "id",
+					"reserved": "array"
+				}
+			},
+			{
+				"id": "piece/context/area/remove",
+				"parameters": {
+					"region_id": "id"
+				}
+			},
+			{
+				"id": "piece/socket/upsert",
+				"parameters": {
+					"kind": "id",
+					"position_xyz": "v3",
+					"socket_id": "id",
+					"surface_id": "id"
+				}
+			},
+			{
+				"id": "piece/socket/remove",
+				"parameters": {
+					"socket_id": "id"
+				}
+			}
+		],
+		"mode": "ax",
+		"screen": "piece",
+		"source": {
+			"composition": null,
+			"connectors": [],
+			"dependencies": [],
+			"document_id": "piece_cb859da0b49a352454f2de6d",
+			"layers": [],
+			"name": "Peça auxiliar",
+			"placements": [],
+			"regions": [],
+			"revision": 2,
+			"schema_version": 1,
+			"sockets": [],
+			"special_surfaces": [],
+			"units": "e07_world"
+		}
+	},
+	"source_hash": "ebe7358d16f8aa9de1b7961d1fe250f5d865e56de3be1eb16fa6a9072fd82287",
+	"state": {
+		"can_redo": false,
+		"can_undo": true,
+		"dirty": true,
+		"selected_layer": "",
+		"source_path": ""
+	},
+	"terrain_snapshot": {
+		"actions": [
+			{
+				"enabled": true,
+				"id": "terrain/save_brush_preset",
+				"label": "Salvar predefinição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/remove_brush_preset",
+				"label": "Remover predefinição",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/fit_view",
+				"label": "Enquadrar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/compile_piece",
+				"label": "Compilar peça",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/cancel",
+				"label": "Cancelar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/ramp_bridge_sample",
+				"label": "Exemplo rampa/ponte",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/large_piece_sample",
+				"label": "Exemplo de peça grande",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/action_10a98dc5c4c2",
+				"label": "Exemplo orgânico",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/add_grid",
+				"label": "Nova grade",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/focus_view_selection",
+				"label": "Focar seleção",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/add_bridge",
+				"label": "Adicionar ponte",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/save_connector",
+				"label": "Adicionar / atualizar",
+				"test_only": false
+			},
+			{
+				"enabled": true,
+				"id": "terrain/remove_connector",
+				"label": "Remover",
+				"test_only": false
+			}
+		],
+		"commands": [
+			{
+				"id": "terrain/example/organic",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/brush/stroke",
+				"parameters": {
+					"options": "brush_options",
+					"points": "number[2][]"
+				}
+			},
+			{
+				"id": "terrain/presets/list",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/presets/apply",
+				"parameters": {
+					"preset_id": "string"
+				}
+			},
+			{
+				"id": "terrain/presets/save",
+				"parameters": {
+					"name": "string",
+					"options": "brush_options"
+				}
+			},
+			{
+				"id": "terrain/grid/create",
+				"parameters": {
+					"columns": "integer 2..257",
+					"height": "number -512..512",
+					"layer_id": "id",
+					"name": "string",
+					"origin_xz": "number[2]",
+					"rows": "integer 2..257",
+					"sample_spacing": "number 4..256"
+				}
+			},
+			{
+				"id": "terrain/layer/select",
+				"parameters": {
+					"layer_id": "id"
+				}
+			},
+			{
+				"id": "terrain/layer/lock",
+				"parameters": {
+					"layer_id": "id",
+					"locked": "boolean"
+				}
+			},
+			{
+				"id": "terrain/layer/protection",
+				"parameters": {
+					"layer_id": "id",
+					"region_ids": "existing region IDs[]"
+				}
+			},
+			{
+				"id": "terrain/bridge/create",
+				"parameters": {
+					"height": "number 4..1024",
+					"layer_id": "id",
+					"length": "number 4..1024",
+					"origin_xz": "number[2]",
+					"surface_id": "id",
+					"width": "number 4..1024"
+				}
+			},
+			{
+				"id": "terrain/connector/upsert",
+				"parameters": {
+					"connector_id": "id",
+					"direction": "id",
+					"headroom": "number",
+					"kind": "id",
+					"normal_xyz": "v3",
+					"position_xyz": "v3",
+					"surface_id": "id",
+					"tags": "strings",
+					"width": "number"
+				}
+			},
+			{
+				"id": "terrain/connector/remove",
+				"parameters": {
+					"connector_id": "id"
+				}
+			},
+			{
+				"id": "terrain/viewport/inspect",
+				"parameters": {}
+			},
+			{
+				"id": "terrain/viewport/focus_world",
+				"parameters": {
+					"position_xyz": "number[3]",
+					"zoom": "number?"
+				}
+			},
+			{
+				"id": "terrain/viewport/focus_entity",
+				"parameters": {
+					"entity_id": "string"
+				}
+			},
+			{
+				"id": "terrain/viewport/set_overlays",
+				"parameters": {
+					"layers": "overlay:boolean dictionary"
+				}
+			},
+			{
+				"id": "terrain/viewport/search",
+				"parameters": {
+					"query": "string"
+				}
+			},
+			{
+				"id": "terrain/viewport/set_probe",
+				"parameters": {
+					"height": "number",
+					"mode": "navigate|clearance|los",
+					"radius": "number",
+					"surface_id": "string?"
+				}
+			},
+			{
+				"id": "terrain/viewport/probe_point",
+				"parameters": {
+					"point": "WorldPoint"
+				}
+			},
+			{
+				"id": "terrain/viewport/probe_los",
+				"parameters": {
+					"from": "WorldPoint",
+					"to": "WorldPoint"
+				}
+			}
+		],
+		"mode": "ax",
+		"screen": "terrain",
+		"source_hash": "ebe7358d16f8aa9de1b7961d1fe250f5d865e56de3be1eb16fa6a9072fd82287"
+	}
+}

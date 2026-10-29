@@ -1,0 +1,32 @@
+{
+  "ax_version": 1,
+  "actions": [
+    {
+      "screen": "map",
+      "id": "map/document/open",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\author\\ax_composition\\cli\\native.map.json",
+        "confirm_discard": true
+      }
+    },
+    {
+      "screen": "map",
+      "id": "map/instance/transform",
+      "parameters": {
+        "instance_id": "right",
+        "position_xz": [
+          100,
+          0
+        ],
+        "rotation_quarters": 0.5
+      }
+    },
+    {
+      "screen": "map",
+      "id": "map/document/name",
+      "parameters": {
+        "name": "Must not run"
+      }
+    }
+  ]
+}

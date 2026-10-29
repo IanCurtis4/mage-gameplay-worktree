@@ -1,0 +1,94 @@
+{
+  "ax_version": 1,
+  "actions": [
+    {
+      "screen": "map",
+      "id": "map/document/new",
+      "parameters": {
+        "document_id": "ax_client_map",
+        "name": "Mapa de teste AX",
+        "confirm_discard": true
+      }
+    },
+    {
+      "screen": "map",
+      "id": "map/piece/add",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\f9_ax_composition\\6247517\\room_left.source.json",
+        "instance_id": "left",
+        "position_xz": [
+          0,
+          0
+        ],
+        "rotation_quarters": 0
+      }
+    },
+    {
+      "screen": "map",
+      "id": "map/piece/add",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\f9_ax_composition\\6247517\\room_right.source.json",
+        "instance_id": "right",
+        "position_xz": [
+          100,
+          0
+        ],
+        "rotation_quarters": 0
+      }
+    },
+    {
+      "screen": "map",
+      "id": "map/link/upsert",
+      "parameters": {
+        "link_id": "door",
+        "a_instance": "left",
+        "a_connector": "east",
+        "b_instance": "right",
+        "b_connector": "west"
+      }
+    },
+    {
+      "screen": "map",
+      "id": "map/mode/set",
+      "parameters": {
+        "mode": "manual"
+      }
+    },
+    {
+      "screen": "map",
+      "id": "map/context/set",
+      "parameters": {
+        "biome_id": "forest",
+        "instance_id": "",
+        "rules": [],
+        "reason": ""
+      }
+    },
+    {
+      "screen": "map",
+      "id": "map/instance/select",
+      "parameters": {
+        "instance_id": "right"
+      }
+    },
+    {
+      "screen": "map",
+      "id": "map/compile_map",
+      "parameters": {}
+    },
+    {
+      "screen": "piece",
+      "id": "piece/document/name",
+      "parameters": {
+        "name": "Peça auxiliar"
+      }
+    },
+    {
+      "screen": "map",
+      "id": "map/document/save",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\author\\ax_composition\\cli\\native.map.json"
+      }
+    }
+  ]
+}

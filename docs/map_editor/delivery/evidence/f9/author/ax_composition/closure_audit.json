@@ -1,0 +1,42 @@
+{
+  "ok": true,
+  "data_head": "1bdc7301cd46ee40180b5c943f3fcfa10410dc5a",
+  "consumer_head": "2248ee724c7cec6b13396eaa99f56e6cfa3e5203",
+  "consumer_ok": true,
+  "primary_count": 2041,
+  "imports_separate": 4,
+  "current_source_fixture_changes_after_consumer": [],
+  "headless_m3_input_count": 307,
+  "headless_m3_changes": [],
+  "documents_checked": [
+    "docs/map_editor/delivery/f9_resume.md",
+    "docs/map_editor/delivery/f9_handoff_portable.md",
+    "docs/map_editor/delivery/f9.md",
+    "docs/map_editor/f9_requirements.md",
+    "docs/map_editor/delivery/evidence/f9/author/ax_composition/consolidation.md",
+    "docs/map_editor/delivery/evidence/f9/author/ax_composition/open_findings.md",
+    "docs/map_editor/delivery/evidence/f9/terra/area_composition/README.md"
+  ],
+  "missing_links": [],
+  "source_bytes": [
+    {
+      "path": "data/map_authoring/sanctuary_woods.map.json",
+      "sha256": "6b8d52095b0d98ba4a436fd5b192ff732b98a8f5da02855646e7e21b9792bb4f",
+      "git_blob_equal": true,
+      "lf_only": true
+    },
+    {
+      "path": "data/map_authoring/sanctuary_woods_clearing.source.json",
+      "sha256": "150509026fddc323396d20fdd015fee47c1dacb47685c1f326842b77260484ab",
+      "git_blob_equal": true,
+      "lf_only": true
+    },
+    {
+      "path": "data/map_authoring/sanctuary_woods_overpass.source.json",
+      "sha256": "1501a98d8e201ce10017c0f410d137da5bad0c21fbd97039c9e52a9d693341c9",
+      "git_blob_equal": true,
+      "lf_only": true
+    }
+  ],
+  "scope": "Final unchanged-input, documentation/reference and source-byte audit. Runtime checks are the recorded terminal runs; no gameplay repeated for document edits."
+}

@@ -1,0 +1,4 @@
+extends SceneTree
+func _initialize() -> void:
+	print("NUMERIC_ARRAY_PROBE "+JSON.stringify({"array_equal":[100.0,0,0.0] == [100.0,0.0,0.0],"scalar_equal":0 == 0.0,"vector_equal":Vector3(100,0,0) == Vector3(100.0,0.0,0.0)}))
+	quit()

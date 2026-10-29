@@ -1,0 +1,168 @@
+{
+	"barrier_profile": "ruin_envelope_v1",
+	"context": {
+		"biome_id": "forest",
+		"overrides": [],
+		"version": 1
+	},
+	"document_id": "ax_client_map",
+	"instances": [
+		{
+			"instance_id": "left",
+			"piece_hash": "6d35f3e8a2658ee5fce52b86f5c14209ee51f6bc6c18a4b9e3670c57be227699",
+			"position_xyz": [
+				0,
+				0,
+				0
+			],
+			"rotation_quarters": 0.0
+		},
+		{
+			"instance_id": "right",
+			"piece_hash": "f0f37f6317453f8514551e14fd0df5b877036ab9e90f98d6bed84dbebbe01f68",
+			"position_xyz": [
+				100,
+				0,
+				0
+			],
+			"rotation_quarters": 0.0
+		}
+	],
+	"links": [
+		{
+			"a_connector": "east",
+			"a_instance": "left",
+			"b_connector": "west",
+			"b_instance": "right",
+			"link_id": "door"
+		}
+	],
+	"mode": "manual",
+	"name": "Mapa de teste AX",
+	"pieces": [
+		{
+			"piece_hash": "6d35f3e8a2658ee5fce52b86f5c14209ee51f6bc6c18a4b9e3670c57be227699",
+			"source": {
+				"composition": null,
+				"connectors": [
+					{
+						"connector_id": "east",
+						"direction": "both",
+						"headroom": 100,
+						"kind": "walk",
+						"normal_xyz": [
+							1,
+							0,
+							0
+						],
+						"position_xyz": [
+							100,
+							0,
+							50
+						],
+						"surface_id": "floor",
+						"tags": [
+							"ruin"
+						],
+						"width": 80
+					}
+				],
+				"dependencies": [],
+				"document_id": "room_left",
+				"layers": [
+					{
+						"columns": 2,
+						"heights": [
+							0,
+							0,
+							0,
+							0
+						],
+						"layer_id": "floor",
+						"locked": false,
+						"material_masks": {},
+						"name": "Chão",
+						"origin_xz": [
+							0,
+							0
+						],
+						"protected_regions": [],
+						"rows": 2,
+						"sample_spacing": 100
+					}
+				],
+				"name": "Peça sem título",
+				"placements": [],
+				"regions": [],
+				"revision": 1,
+				"schema_version": 1,
+				"sockets": [],
+				"special_surfaces": [],
+				"units": "e07_world"
+			}
+		},
+		{
+			"piece_hash": "f0f37f6317453f8514551e14fd0df5b877036ab9e90f98d6bed84dbebbe01f68",
+			"source": {
+				"composition": null,
+				"connectors": [
+					{
+						"connector_id": "west",
+						"direction": "both",
+						"headroom": 100,
+						"kind": "walk",
+						"normal_xyz": [
+							-1,
+							0,
+							0
+						],
+						"position_xyz": [
+							0,
+							0,
+							50
+						],
+						"surface_id": "floor",
+						"tags": [
+							"ruin"
+						],
+						"width": 80
+					}
+				],
+				"dependencies": [],
+				"document_id": "room_right",
+				"layers": [
+					{
+						"columns": 2,
+						"heights": [
+							0,
+							0,
+							0,
+							0
+						],
+						"layer_id": "floor",
+						"locked": false,
+						"material_masks": {},
+						"name": "Chão",
+						"origin_xz": [
+							0,
+							0
+						],
+						"protected_regions": [],
+						"rows": 2,
+						"sample_spacing": 100
+					}
+				],
+				"name": "Peça sem título",
+				"placements": [],
+				"regions": [],
+				"revision": 1,
+				"schema_version": 1,
+				"sockets": [],
+				"special_surfaces": [],
+				"units": "e07_world"
+			}
+		}
+	],
+	"revision": 1,
+	"schema_version": 1
+}

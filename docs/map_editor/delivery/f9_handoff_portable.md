@@ -1,88 +1,86 @@
 # RagRPG — handoff portátil de F9
 
 <!-- f9-current-ax -->
-## Checkpoint vigente — 28/10: objetos/contexto AX e Bosque decorado integrados
+## Checkpoint vigente —29/10: composição AX e mapa do Bosque integrados
 
-Código `52798508efb7f274fdc3a42959c7af9b2da31c1b`; conteúdo Terra
-`b14ea3dc9f46bd3f072f41a51cbba5e8053a725a`. Commits documentais posteriores
-preservam esses inputs. Branch `codex/map-editor-f9`, checkout
+Código2248ee724c7cec6b13396eaa99f56e6cfa3e5203; dados `1bdc7301cd46ee40180b5c943f3fcfa10410dc5a`.
+Branch codex/map-editor-f9; checkout
 `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5`.
-A meta continua TODO F9. Esta fatia está integrada; F9 integral não está concluído.
-F10 depende de autorização própria. Sem master/push ou mudança no playtest/save pessoal.
+Meta integral F9 ativa. Este incremento está validado; o editor e a área final
+não estão concluídos. Não aplicar ao playtest nem marcar aceite humano/F10.
 
-Sol implementou objetos parametrizados, seleção/grupos/travas, scatter revisável,
-regras/áreas/marcadores de peça e cliente AX na janela real de objetos. GUI e AX
-usam os mesmos produtores/sessão/histórico/Store; nenhum setter de fonte arbitrária.
-Peça/terreno já estavam aprovados. Composição/população/patrulha/geração/intercâmbio
-parametrizados ainda precisam da sua fatia antes dos consumidores Terra.
+MapOperations/MapPanel compartilham GUI/AX/MapSession/Store para snapshots,
+instâncias, transformações, vínculos, contexto/exceções, modos, histórico e IO.
+Cliente real aceita screen=map, abre a janela existente, aguarda worker e retorna
+map_snapshot com fonte/hash/estado. Top snapshot/source_hash continuam da peça;
+hashes por ação correspondem à sessão usada. Sem setter de fonte arbitrária.
+Nome pendente e histórico são preservados em falha de arquivo/rascunho/conflito.
 
-Terra criou conteúdo pelo editor AX: clareira31/31ações,24props; passagem30/30,
-23props; floresta, áreas e entrada `woods_entry` em[160,0,640]. Dois conflitos de ID
-na receita B foram corrigidos antes de salvar; nenhuma posição/capacidade alterada.
-Ambas compilaram antes do save e reabriram em processos novos com os mesmos hashes.
-Fontes em `data/map_authoring/sanctuary_woods_{clearing,overpass}.source.json`.
-SHA256 dos bytes A `150509026fddc323396d20fdd015fee47c1dacb47685c1f326842b77260484ab`;
-B `1501a98d8e201ce10017c0f410d137da5bad0c21fbd97039c9e52a9d693341c9`.
-Receitas, capturas e recibos: `docs/map_editor/delivery/evidence/f9/terra/area_content/`.
+Terra montou o arquivo `data/map_authoring/sanctuary_woods.map.json`,45.355B,
+por7ações AX; reabertura/recompile2ações em outro processo, ambos exit0/log limpo.
+Duas peças,47props, clearing@[0,0,0], overpass@[1280,0,0], woods_seam, forest sem
+exceções. Snapshots e fontes originais intactos. Arquivo SHA256
+6b8d52095b0d98ba4a436fd5b192ff732b98a8f5da02855646e7e21b9792bb4f;
+fonte2407588712870e8bd1b4820e2f82638fe29fb1ce955ae5541b14320e9a2cbe20;
+compilação68bd0caa6a9865067bc9a6b025aa34202ba63f4f003642f027b72d2ffded0ed6.
+Captura real e recibos em delivery/evidence/f9/terra/area_composition/.
+Fontes e evidências desta família preservam LF/bytes via .gitattributes.
 
-Content28 e ContentNative30 PASS em4fde; Objects53 PASS em527; cliente12/12ações
-headless/nativo e reabertura2/2 PASS; verify.ps1 editor_import PASS. Sol completou
-os testes após quota interromper o rascunho Luna e executou as provas. Não alegar
-supervisão Luna independente nesta fatia. Capturas nativas inspecionadas por Sol.
+Provas: CompositionAX31 PASS em6e; Native13 PASS em2248; CLI10/10 por modo,
+reabertura2/2 e negativo que interrompe lote PASS; BordersNative32 e GameplayNative52
+PASS. Regressões Composition63/CLI2/Document70 PASS; verify.ps1 editor_import1/299
+PASS. As52 verificações de gameplay são de amostras existentes (ator/ponte/combate/
+retomada), não do Bosque. Fonte/compilação/bytes do cliente headless e nativo iguais.
 
-Consumidor com os dados decorados: fontes/hashes, duas peças ligadas, compilação,
-candidato e preparo de corpo20x32 PASS; um ponto caminhável de cada apoio alcançado.
-Marcador exato preservado; corpo cabe e paths de ida/volta à entrada provisória PASS.
-Composição efêmera de TESTE, com `context.biome_id=forest`; não é mapa de produto
-criado por AX. Map-only preview mantém início provisório até configurar população;
-não presumir que socket de peça seleciona sozinho a entrada de gameplay.
-Primeiro diagnóstico fez essa suposição indevida e foi preservado; o segundo
-conferiu socket/corpo/rotas diretamente. Nenhum produtor/limite relaxado.
-Não houve App, caminhada de ator, combate, restart ou medição de FPS do Bosque.
+Luna escreveu rascunhos e foi interrompida por quota antes de executar. Sol recebeu
+os testes por transferência, completou fixtures/oráculos e executou as provas.
+Rascunhos preservados; não alegar supervisão independente Luna. Mapas só por Terra
+no editor AX. UID3 novas geradas pelo engine e versionadas antes do congelamento.
 
-Uma execução: mapa26,056s/preparo23,557s; navegação24,078/21,681s. Lote completo
-187,726s incluindo consultas extras de entrada e hashes/IO, sem cronômetro por
-consulta individual. Esses custos canônicos precisam de perfil/correção para uso
-real em F9-10; duração da suíte em si não é meta e não equivale a fluidez/FPS.
+Consumidor10/10 PASS do mapa real: bytes/hashes/snapshots/poses/emenda, compilação,
+candidato imutável, corpo20x32, acesso a um ponto de cada apoio e marcador exato
+[160,0,640] com espaço para o corpo. A prévia map-only usa início provisório até
+configurar população. Não houve App/caminhada/combate/FPS do Bosque nesta entrega.
+Uma execução: mapa27,846s/nav25,924s; preparo24,354s/nav22,454s; total63,547s com
+hashes/IO. Custos canônicos continuam pendência real10, sem otimizar duração de suíte.
 
-Fixture ÚNICA para qualquer --path:
+Limitações concretas antes do uso final: bordas ainda legadas; authoring_context
+forest não é propagado por MapCompiler ao stage.biome (ainda ruin). Sol precisa
+corrigir metadado com invariantes/compatibilidade e aplicar bordas florestais em
+transação AX revisável, sem estado intermediário inválido ou hash inventado.
+Layout do inspector precisa rolagem/acabamento em janela1000px. M3Native24 histórico
+falha por canvas.motion/testing e2malhas retirados antes desta fatia; falha/timeout
+preservados, baseline auditada. Atualizar/retirar fixture no tooling final, sem
+contá-la como PASS ou perder cobertura atual. Native13/Gameplay52 cobrem os contratos
+atuais escolhidos. O atalho órfão two_rooms da fixture foi arquivado após verificar
+0processos desse engine; sessões/perfis preservados, sem mexer em save pessoal.
+
+Fixture ÚNICA para --path:
 `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project`.
 Engine `C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/godot/Godot_v4.7.2-stable_win64.exe`,
-SHA256 `AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424`.
-Python local `C:/Python314/python.exe`; PowerShell7.6.5. APPDATA/LOCALAPPDATA sempre
-na fixture descartável. Não executar cliente no checkout não importado. Qualquer
-SCRIPT ERROR/Parse Error/ERROR genérico invalida o recibo, mesmo com exit0.
-UIDs de produção já geradas pelo engine e versionadas. Todos os processos terminaram.
+SHA256 AB1824F85BFD8E0E4128182C000C4003A3E042245B2967848D089B2A04B22424.
+Python C:/Python314/python.exe; PowerShell7.6.5. APPDATA/LOCALAPPDATA descartáveis
+na fixture. Source/tests/tools/HEAD congelados em cada prova. Import07 sincronizou
+mapa;2041 primários iguais source/fixture antes/depois,6imports de props incluídos
+mais4imports de terreno auditados. Testes do produtor tinham2040, sem o mapa novo.
+Não confundir conjuntos. Todos os processos/handles próprios terminaram.
 
-Import05 sincronizou os dados. Consumidor conferiu2028 inputs primários iguais
-source/fixture antes/depois, incluindo2backups locais e excluindo *.import;
-10 imports relevantes conferidos separadamente com os bytes já testados. Os
-manifests28/30/53 antigos têm2032 inputs, incluindo6imports de props e sem os
-2backups; diferenças declaradas na auditoria. Não alegar igualdade integral
-entre todos os manifests históricos e os novos dados. Política LF dos imports de
-terreno segue vigente. As duas pastas de evidência desta fatia usam -text em
-.gitattributes para preservar seus bytes nos próximos checkouts. Bundle de assets/
-ambiente limpo/export continua pendente.
+Estado esperado após commit documental: só2backups de terreno .source.json.bak
+locais não versionados; preservar. CLI de workflow/WORKFLOW_TOOLING continuam ausentes;
+não copiar/adivinhar tooling externo. Antes de nova prova, Import normal em pasta
+de evidência nova; -SkipImport não sincroniza o projeto inteiro. Nunca usar checkout
+como --path nem sobrescrever recibos existentes. Logs com Script/Parse/ERROR falham,
+mesmo com exit0. Perfil pessoal, codex/playtest, master e push ficaram intocados.
 
-Estado esperado ao retomar: nenhum rastreado modificado; dois .source.json.bak
-locais não versionados, preservados. Eles contêm o terreno anterior à decoração.
-Não apagar, adicionar ao Git ou sobrescrever por limpeza genérica. CLI versionado
-de workflow e docs/WORKFLOW_TOOLING.md continuam ausentes nesta worktree; não
-copiar/adivinhar tooling externo. Diagnóstico Git/contratos não é aprovação.
-
-Próximo: Sol entrega composição/contexto de mapa parametrizados na mesma sessão;
-Terra monta as duas peças via AX; Luna supervisiona o lote quando disponível.
-População/patrulha e interação existente vêm a seguir. Perfilar buscas lentas e
-preparo antes da prova App. Síntese/regeneração regional, reconciliação, assets,
-recuperação/fluidez/release e área final permanecem obrigatórios em F9, sem mover
-a F10. Não considerar este checkpoint aceite humano ou mapa pronto para jogar.
-
-Detalhes: `docs/map_editor/delivery/evidence/f9/author/ax_content/consolidation.md`;
-prova e reprodução: `docs/map_editor/delivery/evidence/f9/author/ax_content/consumer_02/report.md`;
-matriz completa: `docs/map_editor/f9_requirements.md`. A reprodução copia os dois
-arquivos do diagnóstico para pasta nova, sincroniza com Import normal e usa somente
-a fixture. Não sobrescrever evidências existentes nem usar -SkipImport como sync geral.
-Os blocos abaixo são históricos e não substituem este estado vigente.
+Próximo: Sol corrige metadado/bordas e expõe população/patrulha/objetivo existentes
+para Terra completar o mapa viaAX. Depois prova real de jogo e latências. Síntese/
+regeneração regional, reconciliação, assets passivos/ambiente limpo, recuperação,
+layout/release e toda matriz F9 permanecem exigidos; nada foi transferido aF10.
+Consolidação e pendências reproduzíveis:
+`docs/map_editor/delivery/evidence/f9/author/ax_composition/consolidation.md` e
+`open_findings.md` na mesma pasta. Receita/argv de Terra em area_composition;
+consumer/run_consumer.py lê o arquivo real sem persistir fonte, usar cópia em nova
+pasta para não sobrescrever o recibo. Blocos abaixo são históricos.
 <!-- /f9-current-ax -->
 
 

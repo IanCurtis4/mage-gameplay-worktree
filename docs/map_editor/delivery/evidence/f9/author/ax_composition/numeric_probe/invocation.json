@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+    "--path",
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+    "--headless",
+    "--script",
+    "res://.godot/f9_numeric_array_probe.gd"
+  ],
+  "exit": 0,
+  "APPDATA": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile\\Roaming",
+  "LOCALAPPDATA": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile\\Local"
+}

@@ -1,0 +1,23 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 582.66 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1080
+
+WARNING: Detected another project.godot at res://tools/map_editor_probe/hosting. The folder will be ignored.
+   at: _should_skip_directory (editor/file_system/editor_file_system.cpp:3497)
+M3_UI_CHECK native_shell_visible true
+M3_UI_CHECK composition_window_visible true
+M3_UI_CHECK sample_preserves_nonempty_map true
+M3_UI_CHECK native_worker_completed true
+M3_UI_CHECK native_headless_same_package true
+M3_UI_CHECK render_two_piece_layers false
+M3_UI_CHECK visible_closed_perimeter true
+M3_UI_CHECK ui_placement_edit true
+M3_UI_CHECK edit_invalidates_preview true
+M3_UI_CHECK ui_undo_restores_links true
+M3_UI_CHECK recompile_after_undo true
+M3_UI_CHECK discardable_profile_starts false
+M3_UI_CHECK wall_occludes_hidden_floor true
+M3_UI_CHECK click_resolves_canonical_support true
+SCRIPT ERROR: Invalid call. Nonexistent function 'has_route' in base 'Nil'.
+   at: _run (res://addons/m3_driver/plugin.gd:52)
+   GDScript backtrace (most recent call first):
+       [0] _run (res://addons/m3_driver/plugin.gd:52)

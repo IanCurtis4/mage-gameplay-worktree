@@ -38,14 +38,15 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 06 minimap/árvore de objetos/camadas | arquitetura, F8 | minimapaXZ/câmera e busca/foco por camada/objeto/apoio/rota integrados às5 telas; árvore/listas dos produtores preservadas | validado6d72972: Luna20/52/53/28,Core639 e5 oficiais;9799 inputs conferidos; custos e fluxo final seguem em10/12 |
 | 06 overlays/foco/atalhos/diagnóstico localizado | arquitetura | altura/cotas, apoio, corpo, aberturas, encontros e rotas com flags; folga/LoS/ocupação reais, foco e atalhos no quadro; apoio explícito para seção editorial entre andares | validado6d72972: Native52 e5 oficiais Luna; diagnóstico/custos/UX integrada/área final ainda exigidos no conjunto12 |
 | 07 UX coerente/guiada | autoria F8 | menus e seletores existem; fechar fluxo humano inteiro | pendente |
-| 07 AX IDs/ações parametrizadas/estado/diagnóstico | autoria F8 | peça/terreno/objetos/contexto/marcadores parametrizados sobre telas reais; composição/população/patrulha/geração ainda faltam | checkpoint24 em527+b14ea3dc:28/30/53, cliente/roundtrip e consumidor dos dados PASS; sem fechamento global |
+| 07 AX IDs/ações parametrizadas/estado/diagnóstico | autoria F8 | peça/terreno/objetos/contexto/marcadores e composição parametrizados sobre telas reais; população/patrulha/geração/intercâmbio ainda faltam | checkpoint25:31/13, cliente10/10+reabertura; mapa Terra7/2 e consumidor10 PASS; sem fechamento global |
 | 07 histórico/hash/confirmação/modos | F8 | entregue; preservar invariantes | pendente de regressão |
 | 08 biomas/espécies/chances/pesos/reservas | autoria F8 | contexto de peça/reservas/marcadores agora parametrizados; pesos existem; conferir chances e fluxos integrados | Content28/Native30 e floresta/áreas Terra comprovados; não fecha população/exceções/reconciliação |
 | 08 raro manual sem palco/sorteio | decisão F8 | entregue com53 checks; preservar | pendente de regressão |
 | 08 exceção instância/regra/motivo/aviso | decisão F8 | entregue; preservar em novos consumidores | pendente de regressão |
 | 08 quest passiva/origem/recompensa canônica | F8, PRODUCT_DIRECTION | entregue; nenhuma engine inferida | pendente de regressão |
+| 08 bioma de autoria no manifesto final | descoberta checkpoint25 | fonte forest preservada; MapCompiler ainda fixa stage.biome=ruin e Population copia | corrigir propagação/fallback/compatibilidade e provar no jogo antes de fechamento |
 | 08 stale/revisão/reconciliação sem perda | F6, F8 | snapshots separados, reimportação explícita limitada | pendente |
-| 09 GUI/AX/CLI equivalentes | F7, F8 | equivalência comprovada para peça/terreno/objetos/contexto/marcadores, compilação e Store; demais produtores e bundles faltam | checkpoint24 Content28/Native30 e cliente12/12/reabertura; restante pendente |
+| 09 GUI/AX/CLI equivalentes | F7, F8 | equivalência comprovada também para composição/contexto de mapa, compilação e Store; demais produtores e bundles faltam | checkpoint25:31/13 e cliente10/10/reabertura com fonte/pacote/bytes iguais; restante pendente |
 | 09 diff/preview/undo/proteção espacial/rebase | F7 | camada protegida inteira e base divergente; completar região/reconciliação | pendente |
 | 09 assets passivos/ambiente limpo/segurança | F7 | referências locais apenas; transporte faltante | pendente |
 | 09 fontes de skills/guias | F7 | três fontes versionadas existentes; atualizar sem instalar | pendente |
@@ -57,7 +58,7 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 11 preview real/apresentação de jogo | F8 | pacote rico compartilhado e Player/Enemy/Campaign/HUD reais; quatro campos com apoio/cota/ordem em validação | pele81e2f42 e app/janela/controles581dae4 supervisionados; campos73 autorais e regressão52/29 PASS, demais VFX/área/release pendentes |
 | 11 restart/continuidade/compatibilidade | F5, validação | janela estável, RUN nova no restart, revisão antiga preservada, stop tokenizado sem kill e corte canônico | fonte581dae4 supervisionada52/33/29 e clientes7f723ac; revisão/export/recuperação/área final continuam no conjunto |
 | 11 export limpo/dependências/API | F8 | release técnico existe; ampliar aos consumidores F9 | pendente |
-| 12 área temática/fluxo humano sem código | validação, F8 | duas peças Terra com trilha/colina/ponte/47props e áreas floresta criadas via AX; composição de produto/fluxo humano e acabamento final faltam | checkpoint24: fontes e consumidor20x32 PASS; sem App/caminhada/combate do Bosque |
+| 12 área temática/fluxo humano sem código | validação, F8 | mapa Terra composto viaAX com2peças/trilha/colina/ponte/47props/forest/emenda; bordas/contexto runtime/fluxo humano/área final faltam | checkpoint25: fonte45.355B,7/2ações e consumidor10 corpo20x32 PASS; sem App/caminhada/combate do Bosque |
 | 12 clareira/rampa/platô/ponte/rota inferior/santuário/emenda | validação, F8 | amostra técnica existente; demonstrar produto final | pendente |
 | 12 disperso/grupo/patrulha/interação | validação, F8 | amostra sete atores; preservar e apresentar no jogo | pendente |
 
@@ -123,3 +124,13 @@ canônicos mapa26,056s/preparo23,557s e consultas adicionais mantêm10 aberto.
 [Recibo](delivery/evidence/f9/author/ax_content/consolidation.md); restante integral
 mantido, próximo composição/contexto de mapa AX, depois população/patrulha e
 perfil das buscas antes do uso real. Sem fecharF9 ou mover lacunas aF10.
+
+
+Checkpoint25: produtor2248ee72 e mapa1bdc7301.31/13, cliente10/10/reabertura,
+Borders32/Gameplay52, Composition63/Document70/CLI2 e editor_import PASS. M3Native24
+histórico falhou por preview retirado, baseline auditada; migração do tooling
+pendente e sem contagem como PASS. Terra montou2peças/47props viaAX7/2 e consumidor10
+PASS corpo20x32; não houve gameplay do Bosque. Contextoforest ainda não se propaga
+para stage.biome e bordas são legadas; custos canônicos≈28/24s e UX/fluxo final
+mantidos pendentes. [Consolidação](delivery/evidence/f9/author/ax_composition/consolidation.md).
+Nenhuma linha anterior removida; meta completaF9 permanece ativa.

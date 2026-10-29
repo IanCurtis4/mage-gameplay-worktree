@@ -1,0 +1,31 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: Window 0 spawned at invalid position: (-40, -65).
+   at: _popup_base (scene/main/window.cpp:2282)
+   GDScript backtrace (most recent call first):
+       [0] open_composition (res://addons/ragrpg_map_editor/shell.gd:154)
+       [1] _invoke (res://addons/ragrpg_map_editor/presentation.gd:145)
+       [2] ax_invoke (res://addons/ragrpg_map_editor/presentation.gd:159)
+       [3] run (res://tests/map_editor_ax_composition_test.gd:51)
+       [4] frames (res://tests/map_editor_ax_composition_test.gd:37)
+ERROR: Window 0 spawned at invalid position: (-40, -65).
+   at: _popup_base (scene/main/window.cpp:2282)
+   GDScript backtrace (most recent call first):
+       [0] open_composition (res://addons/ragrpg_map_editor/shell.gd:154)
+       [1] _invoke (res://addons/ragrpg_map_editor/presentation.gd:145)
+       [2] ax_invoke (res://addons/ragrpg_map_editor/presentation.gd:159)
+       [3] run (res://tests/map_editor_ax_composition_test.gd:52)
+       [4] frames (res://tests/map_editor_ax_composition_test.gd:37)
+F9_AX_COMPOSITION_CHECK real_shell_action_opens_real_map_panel_and_map_specific_presentations true
+F9_AX_COMPOSITION_CHECK map_presentation_advertises_closed_composition_surface true
+F9_AX_COMPOSITION_CHECK ux_mode_refuses_ax_mutation true
+F9_AX_COMPOSITION_CHECK two_terminal_fixture_sources_are_canonical_disk_inputs_for_the_shared_map_consumers true
+F9_AX_COMPOSITION_CHECK gui_and_ax_add_use_same_loaded_snapshots_explicit_ids_and_semantic_hash true
+F9_AX_COMPOSITION_CHECK same_piece_hash_is_deduplicated_while_each_added_instance_keeps_its_identity true
+F9_AX_COMPOSITION_CHECK remove_returns_identity_and_undo_redo_restores_instance_without_duplicate_snapshot true
+F9_AX_COMPOSITION_CHECK instance_selection_is_editor_state_and_missing_identity_is_rejected true
+F9_AX_COMPOSITION_CHECK instance_transform_uses_same_gui_and_ax_proposal_and_preserves_fractional_coordinates true
+F9_AX_COMPOSITION_CHECK pure_proposal_does_not_mutate_its_input true
+F9_AX_COMPOSITION_CHECK nonintegral_rotation_nonfinite_range_and_unknown_fields_fail_atomically true
+F9_AX_COMPOSITION_CHECK missing_piece_file_and_duplicate_instance_id_do_not_mutate_composition true
+F9_AX_COMPOSITION_CHECK gui_and_ax_link_upsert_share_closed_fields_and_hash true

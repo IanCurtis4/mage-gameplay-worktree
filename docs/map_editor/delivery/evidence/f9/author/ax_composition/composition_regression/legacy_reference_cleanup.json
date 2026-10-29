@@ -1,0 +1,7 @@
+{
+  "reason": "Legacy M3 native fixture timed out after dereferencing retired canvas.motion; preserve and unlink its disposable App shortcut. Session/window/profile artifacts retained.",
+  "archived_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\author\\ax_composition\\composition_regression\\legacy_two_rooms_reference.json",
+  "engine_process_count_before": 0,
+  "original_path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\map_authoring\\play\\references\\7e914fb61de682aa97a8b93b5ee5e0977cbed89195cd8225d8a2db4f4e5f9b7d.json",
+  "sha256": "8C5E9D371B8B1CB7BF4EF1D3E4545AEA62D9EFBB8DF0AC39366FFEE1978838D5"
+}

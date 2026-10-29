@@ -3097,13 +3097,35 @@
       "limitations": "no App/live walking/combat/FPS; canonical preparation and individual paths remain expensive; composition/population/patrol AX and rest of F9 still open"
     },
     "ax_composition": {
-      "state": "implementation",
+      "state": "validated_increment_F9_still_open",
       "base": "bbd3597b39ee8171aba348fcfc87541485bf85e2",
       "runtime_owner": "Sol F9",
       "test_owner": "Sol F9 temporary validation",
       "scope": "parameterized map snapshot placement/link/context, document IO and real map AX client; no population/patrol/generation yet",
       "fixture_frozen": false,
-      "validation_role": "Luna wrote unexecuted drafts then hit usage limit; Sol preserves drafts, completes and executes tests; no independent Luna supervision claim"
+      "validation_role": "Luna wrote unexecuted drafts then hit usage limit; Sol preserves drafts, completes and executes tests; no independent Luna supervision claim",
+      "code_head": "2248ee724c7cec6b13396eaa99f56e6cfa3e5203",
+      "validation": {
+        "CompositionAX": 31,
+        "CompositionAXNative": 13,
+        "client_actions_each_mode": 10,
+        "client_reopen": 2,
+        "BordersNative": 32,
+        "GameplayNative": 52,
+        "CompositionRegression": 63,
+        "DocumentRegression": 70,
+        "verify_editor_import": "1/299"
+      },
+      "legacy_native": "M3 Native24 obsolete canvas.motion/mesh assumptions; failed/timed out, baseline-confirmed and preserved; current Native13/Gameplay52 used, tooling migration still open",
+      "fixture_owner": "released",
+      "limits": "Bioma authoring_context does not yet propagate to stage.biome; final layout/legacy tooling, full content and runtime performance remain F9 work",
+      "content": "data/map_authoring/sanctuary_woods.map.json",
+      "content_body_checks": 10,
+      "content_source_hash": "2407588712870e8bd1b4820e2f82638fe29fb1ce955ae5541b14320e9a2cbe20",
+      "content_file_sha256": "6b8d52095b0d98ba4a436fd5b192ff732b98a8f5da02855646e7e21b9792bb4f",
+      "body_scope": "MapCandidate real20x32 preparation per support and exact marker fit, provisional map-preview entry; no App gameplay for this map",
+      "consumer_primary_inputs": 2041,
+      "content_head": "1bdc7301cd46ee40180b5c943f3fcfa10410dc5a"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"

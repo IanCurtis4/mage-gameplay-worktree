@@ -1,0 +1,52 @@
+{
+  "ok": true,
+  "records": [
+    {
+      "stage": "model_03",
+      "head": "6e506dc0fc7c406fd83225e93aadce59731d1f6a",
+      "head_stable": true,
+      "ok": true,
+      "passed": 31,
+      "count": 31,
+      "primary_count": 2040,
+      "changes_to_current": [
+        "tests/map_editor_ax_composition_ui_test.gd"
+      ],
+      "current_source_fixture_differences": []
+    },
+    {
+      "stage": "native_02",
+      "head": "2248ee724c7cec6b13396eaa99f56e6cfa3e5203",
+      "head_stable": true,
+      "ok": true,
+      "passed": 13,
+      "count": 13,
+      "primary_count": 2040,
+      "changes_to_current": [],
+      "current_source_fixture_differences": []
+    }
+  ],
+  "terrain_imports": [
+    {
+      "path": "assets/art/map_authoring/grass_tile.png.import",
+      "source_sha256": "5a080026fe6e9c15a3039019ecb24607eaa4e76e00a4694b3563610d194df66b",
+      "fixture_sha256": "5a080026fe6e9c15a3039019ecb24607eaa4e76e00a4694b3563610d194df66b"
+    },
+    {
+      "path": "assets/art/map_authoring/earth_tile.png.import",
+      "source_sha256": "8a7fb5de02a0d061c99e6c88e875b8f5582eb83be134bb0941f6e4863c2bb117",
+      "fixture_sha256": "8a7fb5de02a0d061c99e6c88e875b8f5582eb83be134bb0941f6e4863c2bb117"
+    },
+    {
+      "path": "assets/art/map_authoring/sand_tile.png.import",
+      "source_sha256": "cf7ed2a0c76756b2504132f520640a252829165a1dad4f7ef10389de7f577a7e",
+      "fixture_sha256": "cf7ed2a0c76756b2504132f520640a252829165a1dad4f7ef10389de7f577a7e"
+    },
+    {
+      "path": "assets/art/map_authoring/cliff_tile.png.import",
+      "source_sha256": "fe0ef36b6f3f791b157b36a735f217bf0dfd2b49a2d4ec36a415f692b32f312d",
+      "fixture_sha256": "fe0ef36b6f3f791b157b36a735f217bf0dfd2b49a2d4ec36a415f692b32f312d"
+    }
+  ],
+  "scope": "Model31 reused across native-test-only numeric oracle correction; production inputs unchanged. Native13 is at current code/test HEAD. Six prop imports included among primary inputs, four terrain imports audited separately."
+}

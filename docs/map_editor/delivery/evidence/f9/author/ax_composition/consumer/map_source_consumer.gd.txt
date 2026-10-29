@@ -1,0 +1,69 @@
+extends SceneTree
+const Store = preload("res://scripts/map_authoring/composition/map_store.gd")
+const Maps = preload("res://scripts/map_authoring/composition/map_compiler.gd")
+const Candidate = preload("res://scripts/map_authoring/preview/gameplay_candidate.gd")
+const PieceStore = preload("res://scripts/map_authoring/io/source_store.gd")
+const Phase = preload("res://data/expedition/phases/ruined_crossing.gd")
+const PATH := "res://data/map_authoring/sanctuary_woods.map.json"
+var checks: Array[Dictionary] = []
+var metrics: Dictionary = {}
+func _initialize() -> void: run.call_deferred()
+func check(id: String, ok: bool, detail: Dictionary = {}) -> void:
+	checks.append({"id":id,"ok":ok,"detail":detail})
+	print("F9_MAP_SOURCE_CONSUMER_CHECK "+id+" "+str(ok))
+func run() -> void:
+	var loaded: Dictionary = Store.load_source(PATH)
+	check("exact_ax_map_file_loaded",loaded.ok and PieceStore.disk_hash(PATH) == "6b8d52095b0d98ba4a436fd5b192ff732b98a8f5da02855646e7e21b9792bb4f")
+	if not loaded.ok: finish(); return
+	var source: Dictionary = loaded.data
+	check("map_semantic_hash_matches_terra",loaded.output_hash == "2407588712870e8bd1b4820e2f82638fe29fb1ce955ae5541b14320e9a2cbe20")
+	var expected: Dictionary = {"sanctuary_woods_clearing":"e2172d1928ad5f83188fdba6e89b445bdf37e207af10f4e639a6b1ba44f8ad4f","sanctuary_woods_overpass":"1cae62332c2fbb490982dc6cbcda7d13f4f12a39f77303b6e4056c7382255fb4"}
+	var snapshots_ok: bool = source.pieces.size() == 2
+	var total_props: int = 0
+	for piece: Dictionary in source.pieces:
+		var id: String = piece.source.document_id
+		var original: Dictionary = PieceStore.load_source("res://data/map_authoring/"+id+".source.json")
+		snapshots_ok = snapshots_ok and expected.get(id,"") == piece.piece_hash and original.ok and original.output_hash == piece.piece_hash
+		total_props += piece.source.placements.size()
+	check("immutable_original_snapshots_and_47_props_preserved",snapshots_ok and total_props == 47)
+	var transforms_ok: bool = source.instances.size() == 2
+	for instance: Dictionary in source.instances:
+		var p: Array = instance.position_xyz
+		transforms_ok = transforms_ok and instance.instance_id in ["clearing","overpass"] and int(instance.rotation_quarters) == 0 and Vector3(p[0],p[1],p[2]) == (Vector3.ZERO if instance.instance_id == "clearing" else Vector3(1280,0,0))
+	check("authored_transform_and_seam_are_exact",transforms_ok and source.links == [{"link_id":"woods_seam","a_instance":"clearing","a_connector":"a_east","b_instance":"overpass","b_connector":"b_west_gate"}])
+	check("forest_context_has_no_override",source.mode == "manual" and source.context.biome_id == "forest" and source.context.overrides.is_empty())
+	var started: int = Time.get_ticks_usec()
+	var compiled: Dictionary = Maps.compile(source)
+	metrics.map_compile_ms = float(Time.get_ticks_usec()-started)/1000.0
+	metrics.map_compile = compiled.get("metrics",{})
+	check("canonical_map_package_matches_terra_compile",compiled.get("ok",false) and compiled.get("output_hash","") == "68bd0caa6a9865067bc9a6b025aa34202ba63f4f003642f027b72d2ffded0ed6")
+	if not compiled.get("ok",false): finish(); return
+	var created: Dictionary = Candidate.create("map",compiled.package,loaded.output_hash)
+	check("immutable_candidate_binds_current_map",created.ok and Candidate.valid(created.get("candidate",{})))
+	if not created.ok: finish(); return
+	var owner: Variant = Phase.input("map_authoring_preview")
+	var profile: Dictionary = owner.traversal.to_data()
+	check("actual_player_body_20_by_32",float(profile.radius) == 20.0 and float(profile.height) == 32.0)
+	started = Time.get_ticks_usec()
+	var prepared: Dictionary = Candidate.prepare(created.candidate)
+	metrics.candidate_prepare_ms = float(Time.get_ticks_usec()-started)/1000.0
+	metrics.prepare = prepared.get("metrics",{})
+	check("candidate_prepares_access_to_each_support",prepared.ok,{"code":prepared.get("code","")})
+	var exact_entry_ok: bool = false
+	if prepared.ok:
+		var wanted: String = "clearing/socket_"+"woods_entry".sha256_text().substr(0,20)
+		var world := WorldGeometry.new()
+		var configured: Dictionary = world.configure(prepared.manifest,"map_preview")
+		for socket: Dictionary in compiled.package.manifest.stages[0].sockets:
+			if socket.socket_id != wanted: continue
+			var point := ExpeditionWorldPoint.create("map_preview",socket.surface_id,socket.position)
+			exact_entry_ok = configured.ok and socket.kind == "entrance" and socket.position == Vector3(160,0,640) and world.position_query(point,profile,world.geometry_revision).ok
+	metrics.ephemeral_preview_entry = prepared.get("ephemeral_entry",true)
+	metrics.runtime_biome_actual = compiled.package.manifest.stages[0].biome
+	metrics.runtime_biome_final_expected = "forest"
+	check("authored_marker_preserved_and_real_body_fits",exact_entry_ok)
+	finish()
+func finish() -> void:
+	var ok: bool = checks.size() == 10 and checks.all(func(row: Dictionary) -> bool: return row.ok)
+	print("F9_MAP_SOURCE_CONSUMER_RESULT "+JSON.stringify({"ok":ok,"count":checks.size(),"expected_count":10,"checks":checks,"metrics":metrics,"scope":"AX-authored map source, immutable snapshots, canonical compile and real-body preparation only. Provisional map-preview spawn, no App/walking/combat/FPS for this map. Legacy border profile and runtime biome metadata remain known pending F9 work."}))
+	quit(0 if ok else 1)

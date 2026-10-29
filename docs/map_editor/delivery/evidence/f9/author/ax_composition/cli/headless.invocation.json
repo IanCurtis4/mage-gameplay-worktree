@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\godot\\Godot_v4.7.2-stable_win64.exe",
+    "--path",
+    "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project",
+    "--headless",
+    "--script",
+    "res://scripts/map_authoring/agent/ax_session.gd",
+    "--",
+    "--ax-request=C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\author\\ax_composition\\cli\\headless.request.json",
+    "--ax-result=C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\docs\\map_editor\\delivery\\evidence\\f9\\author\\ax_composition\\cli\\headless.result.json"
+  ],
+  "head": "2248ee724c7cec6b13396eaa99f56e6cfa3e5203",
+  "APPDATA": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile\\Roaming",
+  "LOCALAPPDATA": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile\\Local",
+  "exit_code": 0,
+  "elapsed_seconds": 8.857808200002182,
+  "generic_errors": false
+}
