@@ -1,0 +1,83 @@
+{
+  "ax_version": 1,
+  "actions": [
+    {
+      "screen": "population",
+      "id": "population/document/open",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods.population.json",
+        "confirm_discard": true
+      }
+    },
+    {
+      "screen": "population",
+      "id": "population/brush/upsert",
+      "parameters": {
+        "brush_id": "alley_patrol",
+        "center_xyz": [
+          1640,
+          0,
+          960
+        ],
+        "density": 1,
+        "group_radius": 60,
+        "mode": "dispersed",
+        "quantity": 1,
+        "quota_mode": "count",
+        "radius": 80,
+        "round": 0,
+        "seed": "0",
+        "spacing": 24,
+        "species": [
+          {
+            "species_id": "pilot_bulwark_species",
+            "category": "normal",
+            "origin_id": "trial_stage_1",
+            "weight": 1
+          }
+        ],
+        "surface_id": "overpass/c_e33596bc5a5c9222_0_0_4_10"
+      }
+    },
+    {
+      "screen": "population",
+      "id": "population/slot/upsert",
+      "parameters": {
+        "brush_id": "alley_patrol",
+        "category": "normal",
+        "fixed": true,
+        "origin_id": "trial_stage_1",
+        "position_xyz": [
+          1640,
+          0,
+          960
+        ],
+        "site_id": "",
+        "slot_id": "alley_guard",
+        "species_id": "pilot_bulwark_species",
+        "surface_id": "overpass/c_e33596bc5a5c9222_0_0_4_10"
+      }
+    },
+    {
+      "screen": "population",
+      "id": "population/plan/preview",
+      "parameters": {}
+    },
+    {
+      "screen": "population",
+      "id": "population/plan/apply",
+      "parameters": {
+        "expected_source_hash": "a061a1af7f05ff9bba30d553b5bcb26d2994e2b1595270b67ec4b92d2cb9646d",
+        "proposal_hash": "3e4bb09cf72d4135853690c94d3ce13277214082d1620d641dbe8528bff91720",
+        "confirm_apply": true
+      }
+    },
+    {
+      "screen": "population",
+      "id": "population/document/save",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods.population.json"
+      }
+    }
+  ]
+}

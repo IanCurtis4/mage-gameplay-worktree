@@ -1,0 +1,74 @@
+PASS  population_update_preview.request.json: JSON válido, ax_version 1
+PASS  population_update_preview.request.json: ações com screen/id/parameters
+PASS  population_update_preview.request.json: caminhos Windows absolutos com barra invertida
+PASS  population_update_apply.request.json: JSON válido, ax_version 1
+PASS  population_update_apply.request.json: ações com screen/id/parameters
+PASS  population_update_apply.request.json: caminhos Windows absolutos com barra invertida
+PASS  patrol_author.request.json: JSON válido, ax_version 1
+PASS  patrol_author.request.json: ações com screen/id/parameters
+PASS  patrol_author.request.json: caminhos Windows absolutos com barra invertida
+PASS  patrol_compile_launch.request.json: JSON válido, ax_version 1
+PASS  patrol_compile_launch.request.json: ações com screen/id/parameters
+PASS  patrol_compile_launch.request.json: caminhos Windows absolutos com barra invertida
+PASS  preview: sequência open, brush, slot, preview
+PASS  preview: open na fonte real com confirm_discard
+PASS  brush alley_patrol: 13 campos exatos e tipos corretos
+PASS  slot alley_guard: 9 campos exatos e tipos corretos
+PASS  SPEC do brush: 4 campos exatos e tipos corretos
+PASS  brush: 12 campos não-species idênticos aos atuais
+PASS  brush: species = bulwark/normal/trial_stage_1/1
+PASS  slot: id/brush/surface/posição/site/fixed idênticos aos atuais (fixed true)
+PASS  slot: espécie bulwark/normal/trial_stage_1
+PASS  slot: surface_id existe em map_query
+PASS  apply: 4 primeiras ações idênticas ao preview
+PASS  apply: termina com plan/apply e document/save
+PASS  apply: placeholders literais e confirm_apply true
+PASS  apply: save no mesmo caminho da fonte
+PASS  patrol_author: screen patrol
+PASS  patrol_author: sequência new, import, query, route/upsert, save
+PASS  patrol_author: document/new
+PASS  patrol_author: import da fonte de população
+PASS  patrol_author: map/query {}
+PASS  patrol_author: save em sanctuary_woods.patrol.json
+PASS  ROUTE alley_watch: 5 campos exatos e tipos corretos
+PASS  ROUTE: id, revision 1, ping_pong, slot alley_guard
+PASS  ROUTE: 2 waypoints (2 a 4)
+PASS  ROUTE: point_id únicos
+PASS  WAYPOINT alley_north: 4 campos exatos e tipos corretos
+PASS  alley_north: espera 2.5 s (1,5-3)
+PASS  WAYPOINT alley_south: 4 campos exatos e tipos corretos
+PASS  alley_south: espera 2.0 s (1,5-3)
+PASS  compile_launch: sequência open, compile, launch
+PASS  compile_launch: parâmetros
+PASS  entradas: 31 props sólidos, 3 slots west_group
+
+--- Tabela de folgas (centro do ponto; mínimo sobre o trecho em parênteses) ---
+PASS  alley_north: surface_id existe em map_query
+PASS  alley_north: mesmo apoio do home
+PASS  alley_north: dentro do polígono (XZ)
+PASS  alley_north: Y=0 coerente com o apoio (Y apoio=0.0)
+PASS  alley_north: borda do apoio 152.0 >= 40
+PASS  alley_north: leash 120.0 <= 850
+PASS  alley_north: prop sólido mais próximo 238.7 (overpass_oak_tree_04) >= 64
+PASS  alley_north: slot west_group mais próximo 157.6 (slot_297da45e) >= 48
+PASS  alley_north: faixa da emenda/corredor (z 512-768) 72.0 >= 64
+      tabela alley_north: pos=(1640, 840) borda=152.0 leash=120.0 prop_min=238.7[overpass_oak_tree_04] slot_min=157.6[slot_297da45e] faixa=72.0
+PASS  alley_south: surface_id existe em map_query
+PASS  alley_south: mesmo apoio do home
+PASS  alley_south: dentro do polígono (XZ)
+PASS  alley_south: Y=0 coerente com o apoio (Y apoio=0.0)
+PASS  alley_south: borda do apoio 152.0 >= 40
+PASS  alley_south: leash 140.0 <= 850
+PASS  alley_south: prop sólido mais próximo 87.4 (overpass_oak_tree_06) >= 64
+PASS  alley_south: slot west_group mais próximo 132.5 (slot_297da45e) >= 48
+PASS  alley_south: faixa da emenda/corredor (z 512-768) 332.0 >= 64
+      tabela alley_south: pos=(1640, 1100) borda=152.0 leash=140.0 prop_min=87.4[overpass_oak_tree_06] slot_min=132.5[slot_297da45e] faixa=332.0
+PASS  trechos (home<->pontos e entre pontos): todas as amostras dentro do mesmo apoio convexo, logo transitáveis sem sair do leash
+PASS  trechos: menor distância a prop sólido 87.4 (overpass_oak_tree_06) >= 64
+PASS  trechos: menor distância a slot west_group 64.0 (slot_297da45e) >= 48
+PASS  trechos: menor distância à borda 152.0 >= 40
+PASS  trechos: maior distância ao home 140.0 <= 850
+PASS  trechos: menor distância à faixa da emenda 72.0 >= 64
+PASS  extensão entre waypoints 260 (250-400)
+
+RESULTADO: PASS

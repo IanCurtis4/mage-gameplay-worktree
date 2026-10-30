@@ -72,7 +72,7 @@
 				{
 					"category": "normal",
 					"origin_id": "trial_stage_1",
-					"species_id": "demo_chaser",
+					"species_id": "pilot_bulwark_species",
 					"weight": 1
 				}
 			],
@@ -2940,7 +2940,7 @@
 		}
 	],
 	"name": "Bosque do Santuário",
-	"plan_hash": "142d3c817b47982b55e73c318c595b5ff0785346cfdaea99e67fbc78326021f8",
+	"plan_hash": "9a2ce117d872d202e28ee56507f60bfff68bd73d58b1d2223ce70b6ddbe70e04",
 	"revision": 1,
 	"schema_version": 1,
 	"slots": [
@@ -2956,7 +2956,7 @@
 			],
 			"site_id": "",
 			"slot_id": "alley_guard",
-			"species_id": "demo_chaser",
+			"species_id": "pilot_bulwark_species",
 			"surface_id": "overpass/c_e33596bc5a5c9222_0_0_4_10"
 		},
 		{

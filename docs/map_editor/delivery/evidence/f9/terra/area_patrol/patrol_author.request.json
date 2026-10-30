@@ -1,0 +1,68 @@
+{
+  "ax_version": 1,
+  "actions": [
+    {
+      "screen": "patrol",
+      "id": "patrol/document/new",
+      "parameters": {
+        "document_id": "sanctuary_woods_patrols",
+        "name": "Bosque do Santuário — Patrulhas",
+        "confirm_discard": true
+      }
+    },
+    {
+      "screen": "patrol",
+      "id": "patrol/population/import",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods.population.json",
+        "confirm_discard": true
+      }
+    },
+    {
+      "screen": "patrol",
+      "id": "patrol/map/query",
+      "parameters": {}
+    },
+    {
+      "screen": "patrol",
+      "id": "patrol/route/upsert",
+      "parameters": {
+        "patrol_id": "alley_watch",
+        "revision": 1,
+        "mode": "ping_pong",
+        "slot_ids": [
+          "alley_guard"
+        ],
+        "waypoints": [
+          {
+            "point_id": "alley_north",
+            "surface_id": "overpass/c_e33596bc5a5c9222_0_0_4_10",
+            "position_xyz": [
+              1640,
+              0,
+              840
+            ],
+            "wait_seconds": 2.5
+          },
+          {
+            "point_id": "alley_south",
+            "surface_id": "overpass/c_e33596bc5a5c9222_0_0_4_10",
+            "position_xyz": [
+              1640,
+              0,
+              1100
+            ],
+            "wait_seconds": 2.0
+          }
+        ]
+      }
+    },
+    {
+      "screen": "patrol",
+      "id": "patrol/document/save",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods.patrol.json"
+      }
+    }
+  ]
+}

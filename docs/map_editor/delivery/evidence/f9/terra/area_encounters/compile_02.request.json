@@ -1,0 +1,18 @@
+{
+  "actions": [
+    {
+      "parameters": {
+        "confirm_discard": true,
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods.population.json"
+      },
+      "screen": "population",
+      "id": "population/document/open"
+    },
+    {
+      "parameters": {},
+      "screen": "population",
+      "id": "population/compile"
+    }
+  ],
+  "ax_version": 1
+}
