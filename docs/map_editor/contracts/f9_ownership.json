@@ -2987,6 +2987,12 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 file (checkpoint32 world targeting)",
       "base_sha256": "cbfd7b2cfe58fe547fafd6f6de6544a370db016910742ce8b6379b8f7df48c89"
+    },
+    {
+      "path": "tests/map_editor_world_targeting_test.gd.uid",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint32 world targeting; engine-generated in shared fixture)",
+      "base_sha256": "6a7124370169fc114dd46e0397ba6cd9fa64146a9f0bc6861163b21dbfcb2b37"
     }
   ],
   "read_only_shared": [
