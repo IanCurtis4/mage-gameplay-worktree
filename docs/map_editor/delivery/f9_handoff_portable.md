@@ -1,7 +1,40 @@
 # RagRPG — handoff portátil de F9
 
 <!-- f9-patrol-gameplay-active -->
-## Checkpoint30 — patrulha autorada; Bosque abre e roda no jogo
+## Checkpoint32 — portão "Iniciar teste", diagnóstico de lag e mira no mundo
+
+30/10/2026. Mesmo checkout `.tools/map-editor-m5`, branch `codex/map-editor-f9`.
+Base 7452c2fc; um commit de código por checkpoint (31, 32) e um documental.
+Papéis inalterados: Sol/Astra = Claude Opus, Terra = Claude Sonnet, Luna =
+Claude Haiku. Executor de arquivos `RagRPG/.tools/claude_bridge` como no 30.
+
+- Checkpoint31, a pedido humano (tela travada carregando, personagem já morto,
+  "Reiniciar" preto): carregamento em thread e portão `held` com botão "Iniciar
+  teste"; `begin` no protocolo; `restart` assíncrono; `timings.json` e
+  `metrics.jsonl` por janela. GameplayGate24 novo PASS, e Window33, Cli18,
+  Controls29, Native52, EditorNative22 e CandidateBatch18 PASS. Bosque: prepare
+  93,5 s em thread, `start()` 31,8 s ainda na principal, 18–24 FPS ativo.
+  Consolidação: evidence/f9/author/gameplay_gate/consolidation.md.
+- Diagnóstico: não é o debug (release ≤1,3×). `WorldGeometry.path` em rota longa
+  pela emenda leva 55–87 s e não tem reuso; a IA replaneja a cada 0,45/1 s.
+  Opções em contracts/f9_runtime_navigation.md. Decisão humana: grafo de
+  navegação reutilizável (opção 1), em fatias com contrato antes de código.
+- Checkpoint32, a pedido humano ("difícil dar target"): o mundo usava um círculo
+  de 32 px sem a "Trava inteligente" do modo plano. Agora a seleção usa o corpo
+  desenhado (`pick_body_rect`, só apresentação; `collision_radius` intacto) mais
+  a assistência de 68 px e a trava de 80 px do modo plano, só para alvo único, e
+  respeita a opção. WorldTargeting16 novo PASS. GameplayNative desliga a trava
+  só no clique de chão. Consolidação:
+  evidence/f9/author/world_targeting/consolidation.md.
+
+Pendente: aceite humano da mira e do Bosque; grafo reutilizável (contrato
+Astra, depois fatias Sol/Terra com diferenciais); `start()` na principal;
+validação duplicada no `prepare`; worker GUI 180 s; demais linhas da matriz. Sem
+playtest/save pessoal/master/push/F10. Atalhos: `claude_bridge/Jogar Bosque -
+novo teste.cmd` (abre parado em "Iniciar teste") e `… - retomar.cmd`.
+<!-- /f9-patrol-gameplay-active -->
+
+## Histórico checkpoint30 — patrulha autorada; Bosque abre e roda no jogo
 
 30/10/2026. Mesmo checkout `.tools/map-editor-m5`, branch `codex/map-editor-f9`.
 Base 0bef9d53; conteúdo e5fddf84; código 01ffd228; commit documental posterior.
@@ -40,7 +73,6 @@ tempo de preparação ~108–138s; FPS não medido; reconciliação, síntese re
 assets/export/release, UX final e demais linhas da matriz. Sem playtest/save
 pessoal/master/push/F10. Atalhos de teste humano: `claude_bridge/Jogar Bosque -
 retomar.cmd` e `Jogar Bosque - novo teste.cmd`.
-<!-- /f9-patrol-gameplay-active -->
 
 <!-- f9-terra-consumer-active -->
 ## Histórico checkpoint29 — Bosque compila; retorno ao AX resolvido no checkpoint30

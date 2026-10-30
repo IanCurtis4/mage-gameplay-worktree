@@ -1,0 +1,15 @@
+﻿candidate exists: True
+wall 546s
+TP2 player (160.0, 0.0, 640.0) surface clearing/c_1c58e1b8efb1df2f_2_6_1_14 class swordsman
+TP2 path {"code":"","cost":1561.42937469482,"dist":1514.0,"enemy":"GuardiÃ£o do Baluarte","ms":85145.1,"ok":true}
+TP2 path {"code":"","cost":1533.3161239624,"dist":1457.2,"enemy":"Guerreiro","ms":85045.2,"ok":true}
+TP2 path {"code":"","cost":272.467361450195,"dist":272.5,"enemy":"Guerreiro","ms":2.8,"ok":true}
+TP2 path {"code":"","cost":1497.05970001221,"dist":1395.1,"enemy":"Guerreiro","ms":84087.7,"ok":true}
+TP2 path {"code":"","cost":196.410667419434,"dist":196.4,"enemy":"Guerreiro","ms":2.7,"ok":true}
+TP2 path {"code":"","cost":292.328227996826,"dist":292.3,"enemy":"Guerreiro","ms":3.4,"ok":true}
+TP2 path {"code":"","cost":1555.95723724365,"dist":1412.2,"enemy":"Guerreiro","ms":86881.9,"ok":true}
+TP2 moving_clicks {"frames":247,"hits":1729,"samples":1729,"worst_frame_ms":81.2}
+TP2 click {"has_route":false,"ms":1.9,"ok":true,"target_set":true}
+TP2 pursue {"dist":50.2,"engaged":true,"hp":42.0,"player_alive":true,"route":false,"t":25,"target":true,"worst_ms":24.8}
+TP2 pursue {"dist":50.2,"engaged":true,"hp":16.0,"player_alive":true,"route":false,"t":1053,"target":true,"worst_ms":93.0}
+TP2_RESULT {"first_damage_ms":25}

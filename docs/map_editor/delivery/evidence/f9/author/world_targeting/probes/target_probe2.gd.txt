@@ -1,0 +1,62 @@
+extends SceneTree
+## Diagnostic (Sol, checkpoint32): dynamic click-to-attack on the real Bosque candidate.
+const Launcher = preload("res://scripts/map_authoring/preview/gameplay_launcher.gd")
+const App = preload("res://scripts/map_authoring/preview/gameplay_app.gd")
+func _initialize() -> void: run.call_deferred()
+func ms(t: int) -> float: return snappedf((Time.get_ticks_usec()-t)/1000.0,0.1)
+func run() -> void:
+	var path := ""
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--candidate="): path = arg.trim_prefix("--candidate=")
+	var candidate: Variant = bytes_to_var(FileAccess.get_file_as_bytes(path))
+	var created := Launcher.create_session(candidate)
+	var window := Launcher.create_window(created.path) if created.ok else {"ok":false}
+	if not window.ok: print("TP2 no_window"); quit(1); return
+	var app := App.new(); app.quit_on_close = false; app.hold_start = true; root.add_child(app); current_scene = app
+	var opened: Dictionary = await app.open_window_async(window.path)
+	var started: Dictionary = await app._start_with_gate() if opened.ok else {"ok":false}
+	if not started.ok: print("TP2 start_failed"); quit(1); return
+	var main = app.host; var view = main.expedition_view; var player: PlayerActor = main.player
+	var geo: WorldGeometry = view.geometry
+	print("TP2 player "+str(player.world_point().position)+" surface "+player.world_point().surface_id+" class "+String(player.class_id))
+	# 1. Path cost and outcome player -> each enemy's occupied point (what pursue() plans every 0.22 s).
+	var nearest: CombatActor; var best := INF
+	for enemy: CombatActor in main.enemies:
+		var t := Time.get_ticks_usec()
+		var route := geo.path(player.world_point(),enemy.world_point(),player.world_motion.profile(),geo.geometry_revision)
+		var d := player.world_point().position.distance_to(enemy.world_point().position)
+		print("TP2 path "+JSON.stringify({"enemy":enemy.actor_name,"dist":snappedf(d,0.1),"ms":ms(t),"ok":route.ok,"code":String(route.get("error_code",route.get("code",""))),"cost":route.get("data",{}).get("cost",-1)}))
+		if d < best: best = d; nearest = enemy
+	# 2. Unpause, then measure click hit-rate on drawn sprites while actors move, plus frame cost.
+	app.begin()
+	var samples := 0; var hits := 0; var worst := 0.0; var frames := 0; var deadline := Time.get_ticks_msec()+8000
+	var last := Time.get_ticks_usec()
+	while Time.get_ticks_msec() < deadline:
+		await process_frame
+		var dt := (Time.get_ticks_usec()-last)/1000.0; last = Time.get_ticks_usec(); worst = maxf(worst,dt); frames += 1
+		for enemy: CombatActor in main.enemies:
+			if not is_instance_valid(enemy) or not enemy.is_alive() or not enemy.visible: continue
+			samples += 1
+			if view.actor_at(enemy.global_position+Vector2(0,-26),main.enemies) == enemy: hits += 1
+	print("TP2 moving_clicks "+JSON.stringify({"samples":samples,"hits":hits,"frames":frames,"worst_frame_ms":snappedf(worst,0.1)}))
+	# 3. Click the nearest enemy and follow pursuit for 12 s.
+	if nearest == null or not is_instance_valid(nearest) or not nearest.is_alive(): print("TP2 no_target"); quit(0); return
+	var hp0: float = float(nearest.health.current_hp)
+	var t0 := Time.get_ticks_usec()
+	var clicked: Dictionary = main.spatial_pointer_move(nearest.global_position+Vector2(0,-26))
+	print("TP2 click "+JSON.stringify({"ok":clicked.ok,"ms":ms(t0),"target_set":player.target == nearest,"has_route":player.world_motion.has_route()}))
+	var start := Time.get_ticks_msec(); var next_log := 0; worst = 0.0; last = Time.get_ticks_usec()
+	var first_attack := -1
+	while Time.get_ticks_msec()-start < 12000:
+		await process_frame
+		var dt := (Time.get_ticks_usec()-last)/1000.0; last = Time.get_ticks_usec(); worst = maxf(worst,dt)
+		var el := Time.get_ticks_msec()-start
+		if not is_instance_valid(nearest): break
+		var hp: float = float(nearest.health.current_hp)
+		if first_attack < 0 and hp < hp0: first_attack = el
+		if el >= next_log:
+			next_log += 1000
+			print("TP2 pursue "+JSON.stringify({"t":el,"target":player.target == nearest,"route":player.world_motion.has_route(),"dist":snappedf(player.world_point().position.distance_to(nearest.world_point().position),0.1),"hp":hp,"worst_ms":snappedf(worst,0.1),"engaged":player._attack_engaged,"player_alive":player.is_alive()}))
+			worst = 0.0
+	print("TP2_RESULT "+JSON.stringify({"first_damage_ms":first_attack}))
+	quit(0)

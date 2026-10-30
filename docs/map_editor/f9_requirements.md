@@ -60,7 +60,7 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 11 export limpo/dependências/API | F8 | release técnico existe; ampliar aos consumidores F9 | pendente |
 | 12 área temática/fluxo humano sem código | validação, F8 | mapa Terra viaAX com2peças/trilha/colina/ponte/47props/emenda e bordas/contexto runtime florestais; fluxo humano/área final faltam | checkpoint26: fonte45.615B, lote AX4/2 e consumidor12 corpo20x32/84apoios PASS; sem App/caminhada/combate/FPS do Bosque |
 | 12 clareira/rampa/platô/ponte/rota inferior/santuário/emenda | validação, F8 | amostra técnica existente; demonstrar produto final | pendente |
-| 12 disperso/grupo/patrulha/interação | validação, F8 | Bosque: 3 dispersos, grupo de 3, guarda fixo com patrulha `alley_watch` e `shrine_completion`, todos via AX; App abre e patrulha anda no jogo | checkpoint30: patrol AX 211s PASS, janela ativa 138s, guarda chegou ao 1º ponto; aceite humano e combate/objetivo jogados pendentes |
+| 12 disperso/grupo/patrulha/interação | validação, F8 | Bosque: 3 dispersos, grupo de 3, guarda fixo com patrulha `alley_watch` e `shrine_completion`, todos via AX; App abre e patrulha anda no jogo | checkpoint30: patrol AX 211s PASS, janela ativa 138s, guarda chegou ao 1º ponto; checkpoint31 portão "Iniciar teste" (GameplayGate24); checkpoint32 mira por corpo desenhado + trava inteligente (WorldTargeting16); lag de rota longa (55–87 s) aguarda grafo reutilizável; aceite humano pendente |
 
 Medições antigas não certificam mudanças F9. Limites defensivos medidos não são
 requisitos adiados; exclusões explícitas continuam as do contrato (campanha,
@@ -172,3 +172,14 @@ patrulha real em movimento. Achado: 3 Guerreiros da clareira perseguem desde o
 início e mataram o personagem parado em ~2min (conteúdo, decisão pendente).
 Worker GUI180s, busca individual, FPS, aceite humano e demais linhas seguem abertos.
 [Consolidação](delivery/evidence/f9/author/patrol_gameplay/consolidation.md).
+
+Checkpoint31–32 (30/10, Sol/Astra Opus, Luna Haiku): a pedido humano, a janela
+de teste carrega em thread e para em "Iniciar teste" (GameplayGate24 PASS;
+prepare 93,5 s fora da principal, `start()` 31,8 s ainda nela). O lag não é do
+modo debug: `WorldGeometry.path` de rota longa leva 55–87 s sem reuso; o usuário
+escolheu o grafo de navegação reutilizável
+([diagnóstico](contracts/f9_runtime_navigation.md)). A mira no mundo autorado
+passou a usar o corpo desenhado e a mesma trava inteligente do modo plano
+(WorldTargeting16 PASS; `collision_radius` intacto).
+[Portão](delivery/evidence/f9/author/gameplay_gate/consolidation.md) ·
+[Mira](delivery/evidence/f9/author/world_targeting/consolidation.md).

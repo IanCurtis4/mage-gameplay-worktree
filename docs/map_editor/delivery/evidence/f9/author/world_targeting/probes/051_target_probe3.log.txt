@@ -1,0 +1,5 @@
+﻿candidate exists: False
+wall 18s
+TP3 started true view true enemies 0
+TP3 describe {"enemies":[],"geometry_revision":1,"interactions":[],"lifecycle":"active","player":{"active_cast":"","cast_remaining":0.0,"hp":180.0,"max_hp":180.0,"max_sp":50.0,"point":{"position_xyz":[200.0,0.0,200.0],"stage_id":"map_preview","surface_id":"left/c_a3e1f4935b0919b3_0_0_1_1"},"sp":50.0},"ready":true,"reward_ticket_id":"","run_id":"99581229-b901-4668-8799-097f57708942_1","session_id":"306079ee6c98a3bcf7ac47e1","skills":[]}
+TP3 after_begin enemies 0

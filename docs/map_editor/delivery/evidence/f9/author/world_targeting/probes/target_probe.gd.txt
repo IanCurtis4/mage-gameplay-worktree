@@ -1,0 +1,48 @@
+extends SceneTree
+## Diagnostic (Sol, checkpoint32): why clicking an enemy sprite fails in the authored world view.
+const Launcher = preload("res://scripts/map_authoring/preview/gameplay_launcher.gd")
+const App = preload("res://scripts/map_authoring/preview/gameplay_app.gd")
+func _initialize() -> void: run.call_deferred()
+func run() -> void:
+	var path := ""
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--candidate="): path = arg.trim_prefix("--candidate=")
+	var candidate: Variant = bytes_to_var(FileAccess.get_file_as_bytes(path))
+	var created := Launcher.create_session(candidate)
+	var window := Launcher.create_window(created.path) if created.ok else {"ok":false}
+	if not window.ok: print("TARGET_PROBE no_window "+JSON.stringify(created)); quit(1); return
+	var app := App.new(); app.quit_on_close = false; app.hold_start = true; root.add_child(app); current_scene = app
+	var opened: Dictionary = await app.open_window_async(window.path)
+	if not opened.ok: print("TARGET_PROBE open "+JSON.stringify(opened)); quit(1); return
+	var started: Dictionary = await app._start_with_gate()
+	if not started.ok: print("TARGET_PROBE start "+JSON.stringify(started)); quit(1); return
+	var main = app.host
+	var view = main.expedition_view
+	view.sync()
+	print("TARGET_PROBE view_transform "+str(view.global_transform)+" canvas "+str(main.get_canvas_transform()))
+	var rows: Array = []
+	for enemy: CombatActor in main.enemies:
+		if not is_instance_valid(enemy) or enemy.world_motion == null: continue
+		var wp: ExpeditionWorldPoint = enemy.world_point()
+		var foot_local: Vector2 = view.project(wp.position)
+		var foot: Vector2 = view.to_global(foot_local)
+		var vis: Dictionary = view.pick(foot,view.geometry.geometry_revision)
+		var scale := enemy.sprite_visual_scale
+		var hits := 0; var samples := 0; var hit_cells: Array = []
+		for dy: int in range(0,int(56.0*scale)+1,8):
+			for dx: int in [-16,-8,0,8,16]:
+				samples += 1
+				var probe := enemy.global_position+Vector2(dx,-dy)
+				if view.actor_at(probe,main.enemies) == enemy: hits += 1; hit_cells.append([dx,-dy])
+		rows.append({"name":enemy.actor_name,"surface":wp.surface_id,"pos":[snappedf(wp.position.x,0.01),snappedf(wp.position.y,0.01),snappedf(wp.position.z,0.01)],
+			"global":[snappedf(enemy.global_position.x,0.1),snappedf(enemy.global_position.y,0.1)],"foot_global":[snappedf(foot.x,0.1),snappedf(foot.y,0.1)],
+			"visible_ok":vis.get("ok",false),"visible_code":String(vis.get("code",vis.get("error_code",""))),
+			"visible_surface":String(vis.get("data",{}).get("point",{}).get("surface_id","")) if vis.get("ok",false) else "",
+			"radius":enemy.collision_radius,"visual_scale":scale,"sprite_h":enemy._sprite_visible_height,"hits":hits,"samples":samples,"actor_visible":enemy.visible})
+	var unclickable := 0
+	for row: Dictionary in rows:
+		if row.hits == 0: unclickable += 1
+		print("TARGET_PROBE enemy "+JSON.stringify(row))
+	print("TARGET_PROBE_RESULT "+JSON.stringify({"enemies":rows.size(),"unclickable":unclickable}))
+	await app.suspend()
+	quit(0)
