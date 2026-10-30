@@ -1,5 +1,16 @@
 # Desenvolvimento, revisão e playtest
 
+## Atualização humana de30/10/2026 — papéis em modelos Claude
+
+Para concluir o escopo F9 desta rodada (patrulha e mapa jogável para checagem
+humana), o usuário trocou os executores: Sol → Claude Opus; Terra → Claude
+Sonnet; Luna → Claude Haiku, quando convier; o papel Astra de arquitetura e
+planejamento também fica com Claude Opus. Responsabilidades, autorização,
+propriedade, evidência, aceite humano e proibições de master/push continuam as
+desta norma. Sem acesso a shell Linux no computador do usuário, a execução usa
+um executor de arquivos fora do Git em `.tools/claude_bridge` (watcher PowerShell
+iniciado uma vez pelo usuário/computer use), com engine/fixture oficiais.
+
 ## Atualização humana de28/10/2026 — meta de conclusão F9
 
 Meta ativa: entregar o restante de F9, com mapa possível de testar; F10 reunirá

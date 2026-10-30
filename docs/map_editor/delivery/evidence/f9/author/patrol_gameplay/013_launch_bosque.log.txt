@@ -1,0 +1,15 @@
+﻿RUN patrol_launch_01 2026-10-30T15:07:25.2869580-03:00
+{"head_before": "01ffd228dd1b2941980ccbef707e189bb1c26410", "head_after": "01ffd228dd1b2941980ccbef707e189bb1c26410", "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424", "fixture": "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project", "environment": {"APPDATA": "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile\\Roaming", "LOCALAPPDATA": "C:\\Users\\Jo\u00e3o Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\.godot\\verification\\e07_f1\\fixture_project\\.godot\\discardable_profile\\Local"}, "request_sha256": "bff5e6f44cec2c106b486a4654818a9eae7ec9b2a282aa0f225a551b3de2958d", "exit_code": 0, "timed_out": false, "elapsed_seconds": 308.673, "generic_errors": false, "response_ok": true, "response_code": "", "completed": 3, "requested": 3, "protected_unchanged": true, "result_sha256": "3ca5285b1d5f4c4e6558318fb2bca49dd751ff14d135430c4f931e42ae6ecb31", "ok": true}
+EXIT 0 2026-10-30T15:12:34.5710378-03:00
+LAUNCH {"ok":true,"process_id":49952,"session_path":"C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project/.godot/map_authoring/play/sessions/88843e1c722e4e9edd252ad3/session.bin","window_path":"C:/Users/João Pedro/Documents/ChatGPT/RagRPG/.tools/map-editor-m5/.godot/verification/e07_f1/fixture_project/.godot/map_authoring/play/windows/b3983789efe2769ab16d2d25/window.bin"}
+WINDOW_DIR C:\Users\João Pedro\Documents\ChatGPT\RagRPG\.tools\map-editor-m5\.godot\verification\e07_f1\fixture_project\.godot\map_authoring\play\windows\b3983789efe2769ab16d2d25
+107,6s since launch-return: state=ready|False|
+138,4s since launch-return: state=active|False|
+TOTAL since job start 447,9s
+
+   Id ProcessName               StartTime           MainWindowTitle                                
+   -- -----------               ---------           ---------------                                
+49952 Godot_v4.7.2-stable_win64 30/10/2026 15:12:33 RagRPG · Teste descartável · 9597a8323d (DEBUG)
+
+
+

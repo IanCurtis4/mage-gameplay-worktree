@@ -1,0 +1,26 @@
+{
+  "ax_version": 1,
+  "actions": [
+    {
+      "screen": "patrol",
+      "id": "patrol/document/open",
+      "parameters": {
+        "path": "C:\\Users\\João Pedro\\Documents\\ChatGPT\\RagRPG\\.tools\\map-editor-m5\\data\\map_authoring\\sanctuary_woods.patrol.json",
+        "confirm_discard": true
+      }
+    },
+    {
+      "screen": "patrol",
+      "id": "patrol/compile",
+      "parameters": {}
+    },
+    {
+      "screen": "patrol",
+      "id": "patrol/gameplay/launch",
+      "parameters": {
+        "class_id": "swordsman",
+        "headless": false
+      }
+    }
+  ]
+}

@@ -60,7 +60,7 @@ para ocultar uma falta. Fonte primária comum: [arquitetura](architecture.md),
 | 11 export limpo/dependências/API | F8 | release técnico existe; ampliar aos consumidores F9 | pendente |
 | 12 área temática/fluxo humano sem código | validação, F8 | mapa Terra viaAX com2peças/trilha/colina/ponte/47props/emenda e bordas/contexto runtime florestais; fluxo humano/área final faltam | checkpoint26: fonte45.615B, lote AX4/2 e consumidor12 corpo20x32/84apoios PASS; sem App/caminhada/combate/FPS do Bosque |
 | 12 clareira/rampa/platô/ponte/rota inferior/santuário/emenda | validação, F8 | amostra técnica existente; demonstrar produto final | pendente |
-| 12 disperso/grupo/patrulha/interação | validação, F8 | amostra sete atores; preservar e apresentar no jogo | pendente |
+| 12 disperso/grupo/patrulha/interação | validação, F8 | Bosque: 3 dispersos, grupo de 3, guarda fixo com patrulha `alley_watch` e `shrine_completion`, todos via AX; App abre e patrulha anda no jogo | checkpoint30: patrol AX 211s PASS, janela ativa 138s, guarda chegou ao 1º ponto; aceite humano e combate/objetivo jogados pendentes |
 
 Medições antigas não certificam mudanças F9. Limites defensivos medidos não são
 requisitos adiados; exclusões explícitas continuam as do contrato (campanha,
@@ -159,3 +159,16 @@ modelo/CLI. [Consolidação](delivery/evidence/f9/author/encounter_authoring/con
 Não cria ainda população/patrulha de produto no Bosque nem prova App/FPS.
 Próximo é Terra autorar encontros/objetivo pelo AX; reconciliação, síntese,
 assets/release, desempenho real, UX e toda área final permanecem exigidos em F9.
+
+
+Checkpoint30 (30/10, Sol/Astra Opus, Terra Sonnet, Luna Haiku): conteúdo e5fddf84
+e código 01ffd228. Terra autorou pelo AX a troca do guarda para espécie com
+engajamento (demo_chaser tem aggro0 e é patrol_unsupported), prévia sem mudança de
+slots e a patrulha `alley_watch`; patrol/compile AX PASS 211,333s. GameplayCandidate
+prova ida/volta por connectivity_batch por estágio/perfil; CandidateBatch18,
+GameplayWindow33, GameplayCli18, GameplayControls29 e GameplayNative52 PASS.
+Bosque abriu no jogo por AX nativo: preparo ready107,6s/active138,4s, log limpo,
+patrulha real em movimento. Achado: 3 Guerreiros da clareira perseguem desde o
+início e mataram o personagem parado em ~2min (conteúdo, decisão pendente).
+Worker GUI180s, busca individual, FPS, aceite humano e demais linhas seguem abertos.
+[Consolidação](delivery/evidence/f9/author/patrol_gameplay/consolidation.md).

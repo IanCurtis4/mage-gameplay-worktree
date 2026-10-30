@@ -1,7 +1,49 @@
-# Retomada F9 —29/10/2026
+# Retomada F9 —30/10/2026
+
+<!-- f9-patrol-gameplay-active -->
+## Checkpoint30 — patrulha autorada; Bosque abre e roda no jogo
+
+30/10/2026. Mesmo checkout `.tools/map-editor-m5`, branch `codex/map-editor-f9`.
+Base 0bef9d53; conteúdo e5fddf84; código 01ffd228; commit documental posterior.
+Papéis por decisão humana desta data: Sol e Astra = Claude Opus; Terra = Claude
+Sonnet; Luna = Claude Haiku (ver WORKFLOW). Escopo humano desta rodada: patrulha
+e mapa jogável para checagem humana; demais itens da matriz seguem abertos.
+
+Execução no Windows por executor de arquivos fora do Git em
+`RagRPG/.tools/claude_bridge` (watcher PowerShell; jobs `inbox/*.ps1`, logs
+`outbox/`). Engine/fixture únicos de sempre, SHA AB1824F8…; pwsh para o runner.
+Consolidação: evidence/f9/author/patrol_gameplay/consolidation.md.
+
+- compile_02 Terra AX (fonte do checkpoint29): PASS 234,363s, pacote 543a1256….
+- `demo_chaser` tem aggro_radius 0 → `patrol_unsupported`. `alley_guard` e o
+  brush `alley_patrol` passaram a `pilot_bulwark_species`/normal/trial_stage_1,
+  opção já existente no catálogo. Prévia 167,725s: diff 7 preservados, nenhum
+  adicionado/alterado/removido; apply+save 161,708s; fonte 1404da19….
+- Patrulha `sanctuary_woods.patrol.json` via AX (43,021s): `alley_watch`
+  ping_pong, alley_north [1640,0,840] 2,5s, alley_south [1640,0,1100] 2,0s.
+  patrol/compile AX PASS 211,333s, pacote f3cdb460…. Mapa/peças intactos.
+- Sol: `GameplayCandidate.prepare` trocou `_both` (path individual ida/volta) por
+  `connectivity_batch` agrupado por estágio/perfil inteiro, mesmo relato do
+  primeiro item falho; `_both` mantido como referência. Luna criou
+  CandidateBatch18; CandidateBatch18, GameplayWindow33, GameplayCli18,
+  GameplayControls29, GameplayNative52 PASS, 2063 inputs iguais entre etapas.
+- Bosque no jogo (AX nativo, HEAD 01ffd228): open+compile+launch 308,673s;
+  janela `ready` 107,6s e `active` 138,4s após o retorno; log limpo. 7 inimigos
+  vivos; guarda saiu de z960 e chegou ao primeiro ponto z840 (patrulha real).
+- Achado: personagem parado na entrada morreu em ~2min; os 3 Guerreiros da
+  clareira (sem aggro, perseguição legada) partem de 140–280 da entrada. É
+  conteúdo/espécie, não erro de engine; decisão de produto pendente.
+
+Pendente: aceite humano do Bosque; worker GUI editor180s para compilar
+população/patrulha (inline AX ~200s); busca individual (f9_navigation_relaxation);
+tempo de preparação ~108–138s; FPS não medido; reconciliação, síntese regional,
+assets/export/release, UX final e demais linhas da matriz. Sem playtest/save
+pessoal/master/push/F10. Atalhos de teste humano: `claude_bridge/Jogar Bosque -
+retomar.cmd` e `Jogar Bosque - novo teste.cmd`.
+<!-- /f9-patrol-gameplay-active -->
 
 <!-- f9-terra-consumer-active -->
-## Checkpoint29 — Bosque compila; retorno ao AX pendente
+## Histórico checkpoint29 — Bosque compila; retorno ao AX resolvido no checkpoint30
 
 Produção43a6a0c3f636da4b09cbba10c54e34b6c92375e8, validação
 611324c19baca71bc479c1d08e8135e7c62f8669. Mesmo checkout/branch. Recibo:
