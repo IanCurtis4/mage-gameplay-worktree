@@ -80,19 +80,37 @@ static func prepare(candidate: Dictionary) -> Dictionary:
 	var access := world.connectivity_batch(entry,destinations,profile,world.geometry_revision)
 	if not access.ok: return access
 	if not access.data.complete or not access.data.all_reachable: return fail("body_unreachable","",access.data)
+	# Preparation needs round-trip existence, never a shortest movement cost.
+	var interactions: Array[ExpeditionWorldPoint] = []; var interaction_ids: Array[String] = []
 	for objective: Dictionary in raw.objectives:
-		var point := ExpeditionPopulationPlanner.point(objective.point)
-		if not _both(world,entry,point,profile): return fail("interaction_unreachable",objective.objective_id)
+		interactions.append(ExpeditionPopulationPlanner.point(objective.point)); interaction_ids.append(String(objective.objective_id))
 	for portal: Dictionary in raw.portals:
 		for anchor: String in ["from_anchor","to_anchor"]:
-			if not _both(world,entry,ExpeditionPopulationPlanner.point(portal[anchor]),profile): return fail("interaction_unreachable",portal.portal_id)
+			interactions.append(ExpeditionPopulationPlanner.point(portal[anchor])); interaction_ids.append(String(portal.portal_id))
+	var reached := _round_trips(world,entry,interactions,profile,interaction_ids,"interaction_unreachable")
+	if not reached.ok: return reached
 	var loaded := Catalog.load_current()
 	if not loaded.ok: return loaded
 	var planned := ExpeditionPopulationPlanner.build(manifest,loaded.catalog,rules)
 	if not planned.ok: return planned
+	# Group slot homes by stage authority and entire traversal profile, keeping slot order.
+	var groups: Dictionary = {}; var group_order: Array[String] = []
+	for slot: Dictionary in planned.slots.values():
+		var key: String = String(slot.stage_id)+"/"+ExpeditionCanonical.digest(slot.traversal)
+		if not groups.has(key):
+			var homes: Array[ExpeditionWorldPoint] = []; var ids: Array[String] = []
+			groups[key] = {"stage_id":slot.stage_id,"profile":slot.traversal,"homes":homes,"ids":ids}; group_order.append(key)
+		groups[key].homes.append(ExpeditionPopulationPlanner.point(slot.home)); groups[key].ids.append(String(slot.slot_id))
+	var failures: Dictionary = {}
+	for key: String in group_order:
+		var group: Dictionary = groups[key]
+		var checked := _round_trips(planned.worlds[group.stage_id],entry,group.homes,group.profile,group.ids,"body_unreachable")
+		if not checked.ok:
+			if checked.code != "body_unreachable": return checked
+			failures[checked.entity] = checked
 	for slot: Dictionary in planned.slots.values():
 		var authority: WorldGeometry = planned.worlds[slot.stage_id]
-		if not _both(authority,entry,ExpeditionPopulationPlanner.point(slot.home),slot.traversal): return fail("body_unreachable",slot.slot_id)
+		if failures.has(String(slot.slot_id)): return failures[String(slot.slot_id)]
 		if slot.has("patrol"):
 			var mob: MobDefinition = loaded.catalog.get_definition(StringName(slot.species_id))
 			var route := Patrols.Patrol.validate_route(slot.patrol,authority,ExpeditionPopulationPlanner.point(slot.home),slot.traversal,mob.leash_radius)
@@ -100,7 +118,28 @@ static func prepare(candidate: Dictionary) -> Dictionary:
 	return {"ok":true,"manifest":manifest,"rules":rules,"map_package":map_package(candidate),"entry":entry.to_data(),"ephemeral_entry":ephemeral,"candidate_hash":candidate.candidate_hash,"metrics":access.data.metrics}
 
 static func _both(world: WorldGeometry, a: ExpeditionWorldPoint, b: ExpeditionWorldPoint, profile: Dictionary) -> bool:
+	# Individual reference kept for differential tests; preparation uses _round_trips.
 	return world.position_query(b,profile,world.geometry_revision).ok and world.path(a,b,profile,world.geometry_revision).ok and world.path(b,a,profile,world.geometry_revision).ok
+
+static func _round_trips(world: WorldGeometry, entry: ExpeditionWorldPoint, points: Array[ExpeditionWorldPoint], profile: Dictionary, ids: Array[String], negative: String) -> Dictionary:
+	# First failing item in original order is reported, as with the individual checks.
+	var legal: Array[bool] = []; var targets: Array[ExpeditionWorldPoint] = []; var indexes: Array[int] = []
+	for index: int in points.size():
+		var valid_point: bool = world.position_query(points[index],profile,world.geometry_revision).ok
+		legal.append(valid_point)
+		if valid_point: indexes.append(index); targets.append(points[index])
+	var reachable: Dictionary = {}
+	if not targets.is_empty():
+		var certified := world.connectivity_batch(entry,targets,profile,world.geometry_revision)
+		if not certified.ok:
+			if certified.error_code == &"invalid_support": return fail(negative,"",{"geometry_diagnostic":certified.get("data",{}).duplicate(true) if certified.get("data") is Dictionary else {}})
+			return fail(String(certified.error_code),"",{"geometry_diagnostic":certified.get("data",{}).duplicate(true) if certified.get("data") is Dictionary else {}})
+		if not certified.data.complete: return fail("navigation_budget_exceeded")
+		for target: Dictionary in certified.data.targets:
+			if target.outward_reachable and target.inward_reachable: reachable[indexes[int(target.input_index)]] = true
+	for index: int in points.size():
+		if not legal[index] or not reachable.has(index): return fail(negative,ids[index])
+	return {"ok":true}
 
 static func publish(candidate: Dictionary, directory: String) -> Dictionary:
 	if not valid(candidate): return fail("candidate_invalid")
