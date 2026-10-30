@@ -1,0 +1,20 @@
+ERROR: Falha SWI: dois presets manuais persistem
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tests/e04_swordsman_integrated_closure_test.gd:235)
+       [1] _run (res://tests/e04_swordsman_integrated_closure_test.gd:84)
+ERROR: Falha SWI: reload preserva arrays legados ativos distintos
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tests/e04_swordsman_integrated_closure_test.gd:235)
+       [1] _run (res://tests/e04_swordsman_integrated_closure_test.gd:91)
+ERROR: Falha SWI: reload preserva arrays legados passivos distintos
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tests/e04_swordsman_integrated_closure_test.gd:235)
+       [1] _run (res://tests/e04_swordsman_integrated_closure_test.gd:92)
+ERROR: Falha SWI: run 1 preserva arrays legados e disponibiliza cinco ativas/duas passivas aprendidas
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _check (res://tests/e04_swordsman_integrated_closure_test.gd:235)
+       [1] _run_build (res://tests/e04_swordsman_integrated_closure_test.gd:133)

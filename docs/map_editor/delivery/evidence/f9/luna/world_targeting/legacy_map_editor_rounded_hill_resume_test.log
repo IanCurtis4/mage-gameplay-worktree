@@ -1,0 +1,4 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_ROUNDED_RESUME_CHECK persisted_resume_session_path_is_provided false
+F9_ROUNDED_RESUME_RESULT {"checks":[{"id":"persisted_resume_session_path_is_provided","ok":false}],"count":1,"ok":false,"timings":{}}

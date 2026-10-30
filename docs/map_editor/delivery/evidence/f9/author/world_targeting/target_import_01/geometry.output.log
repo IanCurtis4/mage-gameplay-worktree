@@ -1,0 +1,5 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_TARGET_CHECK fixture_campaign_held true
+F9_TARGET_CHECK live_enemy_available false
+F9_TARGET_RESULT {"checks":[{"detail":null,"id":"fixture_campaign_held","ok":true},{"detail":null,"id":"live_enemy_available","ok":false}],"count":2,"expected_count":16,"ok":false}

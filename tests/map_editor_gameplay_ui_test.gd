@@ -81,6 +81,8 @@ func run() -> void:
 	check("shared_ordering_runs_over_foreign_actors",host.expedition_view.ordering.ok and not host.player.z_as_relative)
 	await capture("gameplay_start")
 	var point := host.player.world_point().position
+	# Ground-move intent: smart-lock assist near the enemy is covered by WorldTargeting (checkpoint32).
+	host.control_preferences.smart_lock = false
 	var clicked := host.spatial_pointer_move(View.project(Vector3(120,0,200)))
 	check("canonical_pointer_starts_real_movement",clicked.ok)
 	var deadline := Time.get_ticks_msec()+4000

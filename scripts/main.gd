@@ -2882,10 +2882,17 @@ func _select_class(new_class_id: StringName) -> void:
 	get_tree().reload_current_scene()
 
 func _enemy_at(point: Vector2) -> CombatActor:
-	if expedition_view != null: return expedition_view.actor_at(point,enemies)
+	if expedition_view != null: return _world_enemy_at(point,cast_intent.active_skill)
 	if GeometerCastCommand.is_trace_skill(cast_intent.active_skill):
 		return BattleTargeting.pick(point, enemies, null, false)
 	return BattleTargeting.pick(point, enemies, _hovered_enemy, control_preferences.smart_lock)
+
+## World picking keeps the flat-mode contract: assist and lock only for single-target intents.
+func _world_enemy_at(point: Vector2, skill: StringName = &"") -> CombatActor:
+	if GeometerCastCommand.is_trace_skill(skill): return expedition_view.actor_at(point,enemies)
+	var definition: SkillDefinition = ClassCatalog.skill_definition(skill) if skill != &"" else null
+	var single := skill == &"" or (definition != null and definition.targeting == SkillDefinition.Targeting.SINGLE_TARGET)
+	return expedition_view.actor_at(point,enemies,_hovered_enemy if single else null,single and control_preferences.smart_lock)
 
 func _handle_world_click(point: Vector2) -> void:
 	if player.world_motion != null:
@@ -4047,7 +4054,7 @@ func attach_expedition_view(view: ExpeditionGeometryView, field_height: float) -
 	return {"ok":true,"error_code":&""}
 func spatial_pointer_move(point: Vector2) -> Dictionary:
 	if expedition_view == null or get_tree().paused or run_finished or not player.is_alive(): return WorldSkillCast.failure(&"pointer_unavailable")
-	var victim := expedition_view.actor_at(point,enemies)
+	var victim := _world_enemy_at(point)
 	if victim != null:
 		player.pursue(victim); _select_enemy(victim)
 		expedition_view.indicate(victim.world_point(),true)
@@ -4070,7 +4077,7 @@ func spatial_pointer_move(point: Vector2) -> Dictionary:
 func spatial_pointer_skill(skill: StringName, point: Vector2, preview: bool) -> Dictionary:
 	if expedition_view == null or not expedition_view.current() or get_tree().paused or run_finished or not player.is_alive(): return WorldSkillCast.failure(&"pointer_unavailable")
 	var revision := expedition_view.geometry.geometry_revision
-	var victim := expedition_view.actor_at(point,enemies)
+	var victim := _world_enemy_at(point,skill)
 	var result := expedition_view.pick(point,revision)
 	var anchor: ExpeditionWorldPoint
 	if victim != null and not Input.is_key_pressed(KEY_SHIFT): anchor = victim.world_point()

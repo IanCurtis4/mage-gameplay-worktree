@@ -4,6 +4,9 @@ extends Node2D
 const ProjectionMath = preload("res://scripts/world/expedition_projection.gd")
 const FieldViews = preload("res://scripts/world/world_field_view.gd")
 const AXIS := ProjectionMath.AXIS
+const PICK_PADDING := 6.0
+const ASSIST_RADIUS := 68.0
+const LOCK_RADIUS := 80.0
 var field_views := FieldViews.new()
 var geometry: WorldGeometry
 var _epoch := 0
@@ -107,18 +110,39 @@ func sync() -> void:
 			var record: Dictionary = part.get_meta("canvas_order_record")
 			part.z_index = clampi(floori(float(record.anchor.y)*4)+2,-4000,4000)
 	if _effects != null: _effects.queue_redraw()
-func actor_at(canvas_point: Vector2, candidates: Array[CombatActor]) -> CombatActor:
-	var selected: CombatActor; var nearest := INF; var ambiguous := false
+## Picks what the player sees: the drawn body, then (assist) the nearest body or the held lock.
+## Same radii as flat BattleTargeting so both modes honor the "Trava inteligente" preference alike.
+func actor_at(canvas_point: Vector2, candidates: Array[CombatActor], previous: CombatActor = null, assist: bool = false) -> CombatActor:
+	var direct: CombatActor; var direct_distance := INF; var direct_tie := false
+	var nearby: CombatActor; var nearby_distance := INF; var nearby_tie := false
+	var lock_ok := false; var previous_inside := false
 	for actor: CombatActor in candidates:
-		if not is_instance_valid(actor) or not actor.is_alive() or actor.world_motion == null or actor.world_motion.geometry != geometry: continue
-		var foot := project(actor.world_point().position)
-		var distance := canvas_point.distance_to(foot+Vector2(0,-24))
-		if distance > 32: continue
-		var visible := pick(foot,geometry.geometry_revision)
-		if not visible["ok"] or visible["data"]["point"]["surface_id"] != actor.world_point().surface_id: continue
-		if distance < nearest-WorldGeometry.EPS: nearest = distance; selected = actor; ambiguous = false
-		elif absf(distance-nearest) <= WorldGeometry.EPS: ambiguous = true
-	return null if ambiguous else selected
+		if not _pickable(actor): continue
+		var body := actor.pick_body_rect()
+		var foot := to_global(project(actor.world_point().position))
+		var center := foot+Vector2(0,body.position.y*0.5)
+		var distance := canvas_point.distance_to(center)
+		var inside := Rect2(foot+body.position,body.size).grow(PICK_PADDING).has_point(canvas_point)
+		if not inside and not (assist and distance <= LOCK_RADIUS): continue
+		if not _actor_visible(actor,foot): continue
+		if inside:
+			if distance < direct_distance-WorldGeometry.EPS: direct = actor; direct_distance = distance; direct_tie = false
+			elif absf(distance-direct_distance) <= WorldGeometry.EPS: direct_tie = true
+		if actor == previous: lock_ok = distance <= LOCK_RADIUS; previous_inside = inside
+		if assist and distance <= ASSIST_RADIUS:
+			if distance < nearby_distance-WorldGeometry.EPS: nearby = actor; nearby_distance = distance; nearby_tie = false
+			elif absf(distance-nearby_distance) <= WorldGeometry.EPS: nearby_tie = true
+	if direct != null: return direct if not direct_tie else (previous if previous_inside else null)
+	if not assist: return null
+	if lock_ok: return previous
+	return null if nearby_tie else nearby
+func _pickable(actor: CombatActor) -> bool:
+	return is_instance_valid(actor) and actor.is_alive() and actor.visible and actor.world_motion != null and actor.world_motion.geometry == geometry and actor.world_motion.is_current_world()
+func _actor_visible(actor: CombatActor, foot: Vector2) -> bool:
+	# Seams between authored cells can resolve the foot pixel to a neighbour cell; fall back to an occlusion sweep.
+	var seen := pick(to_local(foot),geometry.geometry_revision)
+	if seen["ok"] and seen["data"]["point"]["surface_id"] == actor.world_point().surface_id: return true
+	return point_visible(actor.world_point().position+Vector3.UP*float(actor.world_motion.profile().get("height",0.0))*0.5)
 func indicate(point: ExpeditionWorldPoint, valid: bool, points: Array = []) -> void:
 	marker = ExpeditionWorldPoint.create(point.stage_id,point.surface_id,point.position) if point != null else null
 	marker_valid = valid; route = points.duplicate(true)

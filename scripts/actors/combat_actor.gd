@@ -363,6 +363,12 @@ func advance_statuses(delta: float, simulation_paused: bool = false) -> void:
 			bleed_streams.erase(key)
 			queue_redraw()
 
+## Screen-space body the player sees (local canvas units); picking only, never collision or reach.
+func pick_body_rect() -> Rect2:
+	var height := maxf(40.0, (_sprite_visible_height if _sprite_visible_height > 0.0 else 52.0) * sprite_visual_scale)
+	var half_width := maxf(collision_radius + 4.0, height * 0.4)
+	return Rect2(Vector2(-half_width, -height), Vector2(half_width * 2.0, height + 8.0))
+
 func set_hovered(value: bool) -> void:
 	if is_hovered == value:
 		return

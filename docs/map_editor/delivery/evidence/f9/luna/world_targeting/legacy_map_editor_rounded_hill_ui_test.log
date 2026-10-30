@@ -1,0 +1,6 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+F9_ROUNDED_UI_CHECK native_empty_session_replaced true
+F9_ROUNDED_UI_CHECK real_terrain_panel_and_gui_action_present true
+F9_ROUNDED_UI_CHECK panel_toolbar_fits_without_horizontal_overflow true
+F9_ROUNDED_UI_CHECK gui_example_is_one_atomic_session_apply true

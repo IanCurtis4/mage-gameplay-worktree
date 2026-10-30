@@ -2975,6 +2975,18 @@
       "owner": "Sol F9",
       "previous_owner": "new F9 file (checkpoint31 start gate)",
       "base_sha256": "d934c7fb27b867c8089e0b7a686117b63de2fbaad872a047ae23c842fba7a2e5"
+    },
+    {
+      "path": "scripts/main.gd",
+      "owner": "Sol F9",
+      "previous_owner": "game runtime; sequential transfer for world picking parity only (checkpoint32); base is HEAD blob",
+      "base_sha256": "8e2b81b345d9a91365f685f9f04f760e057d99675c608c1edfa1a6f3a6fe0c4d"
+    },
+    {
+      "path": "tests/map_editor_world_targeting_test.gd",
+      "owner": "Sol F9",
+      "previous_owner": "new F9 file (checkpoint32 world targeting)",
+      "base_sha256": "cbfd7b2cfe58fe547fafd6f6de6544a370db016910742ce8b6379b8f7df48c89"
     }
   ],
   "read_only_shared": [
@@ -3621,6 +3633,39 @@
       },
       "decision": "lag is not debug mode; long cross-seam WorldGeometry.path (55-87 s, no reuse) replanned by AI; human chose reusable navigation graph (contracts/f9_runtime_navigation.md option 1)",
       "limits": "start() still on main thread; prepare revalidates candidate (~18 s); no navigation change in this increment"
+    },
+    "world_targeting": {
+      "state": "validated_increment_F9_still_open",
+      "base": "7452c2fc",
+      "human_request": "30/10: enemies very hard to target even clicking on them; weigh target binding (aim assist) against a larger hitbox",
+      "runtime_owner": "Sol F9 (Claude Opus)",
+      "files": [
+        "scripts/world/expedition_geometry_view.gd",
+        "scripts/actors/combat_actor.gd",
+        "scripts/main.gd",
+        "tools/map_editor_completion/run.ps1"
+      ],
+      "test_files": [
+        "tests/map_editor_world_targeting_test.gd",
+        "tests/map_editor_world_targeting_test.gd.uid",
+        "tests/map_editor_gameplay_ui_test.gd"
+      ],
+      "scope": "world actor_at picks the drawn body (CombatActor.pick_body_rect, presentation only) plus flat BattleTargeting radii: assist 68 px and lock 80 px for single-target intent, honoring control_preferences.smart_lock; trace/area skills stay direct; occlusion sweep fallback at cell seams; hidden actors not pickable",
+      "decision": "collision_radius, reach and navigation bodies unchanged; parity with flat smart lock instead of a new magnet; ground click within assist of an enemy pursues it, as in flat mode",
+      "test_expected_checks": 16,
+      "validation": {
+        "WorldTargeting": 16,
+        "GameplayNative": 52,
+        "RuntimeView": 12,
+        "SurfacePick": 24,
+        "CanvasOrder": 43,
+        "FieldsNative": 73,
+        "GameplayControls": 29,
+        "GameplayWindow": 33,
+        "GameplayGate": 24
+      },
+      "probes": "Bosque real: static 36/40 sprite samples hit with old circle, 7/7 visible; moving centre clicks 1729/1729; click to first damage 25 ms",
+      "limits": "GameplayNative ground-move step disables smart lock for that click only; E04 swordsman 4/93 preset failures identical on HEAD; human acceptance pending"
     }
   },
   "latest_human_direction": "28/10 full F9 goal: Sol code; Terra map creation via editor AX; Luna automated tests; no F10 opening"
